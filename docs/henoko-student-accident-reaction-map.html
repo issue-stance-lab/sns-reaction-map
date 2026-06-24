@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>辺野古高校生死亡事故 SNS反応まっぷ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f5f8;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce6;
+      --panel: #ffffff;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --shadow: 0 10px 28px rgba(16, 24, 40, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+    header {
+      padding: 34px min(5vw, 56px) 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .top-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 5px 10px;
+      background: #fbfcfe;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: 0; }
+    h2 { margin: 0 0 16px; font-size: 20px; }
+    h3 { margin: 0 0 12px; font-size: 16px; }
+    .lead { margin: 0; color: var(--muted); max-width: 960px; }
+    main { padding: 22px min(5vw, 56px) 48px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .stat span { display: block; color: var(--muted); font-size: 13px; }
+    .stat strong { display: block; font-size: 24px; margin-top: 4px; }
+    .panel, .note-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+    }
+    .panel-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .panel-title h2 { margin: 0; }
+    .panel-title span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
+    table.compact { min-width: 420px; max-width: 760px; }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    th:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #fff;
+      z-index: 1;
+      min-width: 240px;
+      max-width: 340px;
+      white-space: normal;
+      line-height: 1.45;
+    }
+    .row-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      margin-right: 8px;
+      background: #98a2b3;
+      vertical-align: 1px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #eef2f7;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+      white-space: normal;
+      min-width: 112px;
+    }
+    thead th:first-child { z-index: 3; background: #eef2f7; }
+    td { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .heat-cell {
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .heat-cell span {
+      display: inline-flex;
+      min-width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+    }
+    .heat-cell:hover {
+      transform: scale(1.03);
+      box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .28);
+    }
+    .heat-cell.zero {
+      color: #98a2b3 !important;
+      font-weight: 600;
+    }
+    .heat-cell.zero span { background: transparent; }
+    .total {
+      background: #f2f4f7;
+      color: var(--ink);
+      font-weight: 900;
+      min-width: 72px;
+    }
+    .bar-list {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+    }
+    .bar-row {
+      display: grid;
+      gap: 6px;
+    }
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .bar-meta span { color: #344054; }
+    .bar-meta strong { font-variant-numeric: tabular-nums; }
+    .bar-track {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #eef2f7;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9fd0ff, #1769d1);
+    }
+    .axis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .axis-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: linear-gradient(180deg, #ffffff, #fbfcfe);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .axis-kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .axis-card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+    .axis-count {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 34px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+    }
+    .axis-count span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .axis-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .axis-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .axis-tags span {
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0f4e9d;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    [data-category="文科省判断支持・政治的中立性違反を指摘"] th { border-left: 5px solid #1769d1; }
+[data-category="文科省判断支持・政治的中立性違反を指摘"] .row-dot { background: #1769d1; }
+[data-category="文科省判断支持・政治的中立性違反を指摘"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="文科省判断支持・政治的中立性違反を指摘"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="文科省判断への反発・平和教育萎縮を懸念"] th { border-left: 5px solid #b54708; }
+[data-category="文科省判断への反発・平和教育萎縮を懸念"] .row-dot { background: #b54708; }
+[data-category="文科省判断への反発・平和教育萎縮を懸念"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="文科省判断への反発・平和教育萎縮を懸念"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="安全管理・引率責任を問題視"] th { border-left: 5px solid #16885a; }
+[data-category="安全管理・引率責任を問題視"] .row-dot { background: #16885a; }
+[data-category="安全管理・引率責任を問題視"] .bar-fill { background: linear-gradient(90deg, #e8f7ef, #16885a); }
+[data-category="安全管理・引率責任を問題視"] .bar-meta span { color: #0f6845; font-weight: 700; }
+[data-category="事故原因・再発防止への関心"] th { border-left: 5px solid #16885a; }
+[data-category="事故原因・再発防止への関心"] .row-dot { background: #16885a; }
+[data-category="事故原因・再発防止への関心"] .bar-fill { background: linear-gradient(90deg, #e8f7ef, #16885a); }
+[data-category="事故原因・再発防止への関心"] .bar-meta span { color: #0f6845; font-weight: 700; }
+[data-category="学校・教育委員会批判"] th { border-left: 5px solid #16885a; }
+[data-category="学校・教育委員会批判"] .row-dot { background: #16885a; }
+[data-category="学校・教育委員会批判"] .bar-fill { background: linear-gradient(90deg, #e8f7ef, #16885a); }
+[data-category="学校・教育委員会批判"] .bar-meta span { color: #0f6845; font-weight: 700; }
+[data-category="政治利用・反基地運動批判"] th { border-left: 5px solid #1769d1; }
+[data-category="政治利用・反基地運動批判"] .row-dot { background: #1769d1; }
+[data-category="政治利用・反基地運動批判"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="政治利用・反基地運動批判"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="追悼・慰霊への共感"] th { border-left: 5px solid #b54708; }
+[data-category="追悼・慰霊への共感"] .row-dot { background: #b54708; }
+[data-category="追悼・慰霊への共感"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="追悼・慰霊への共感"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="未確認・過激表現"] th { border-left: 5px solid #7a4cc2; }
+[data-category="未確認・過激表現"] .row-dot { background: #7a4cc2; }
+[data-category="未確認・過激表現"] .bar-fill { background: linear-gradient(90deg, #f2ecff, #7a4cc2); }
+[data-category="未確認・過激表現"] .bar-meta span { color: #55348a; font-weight: 700; }
+[data-category="その他・分類保留"] th { border-left: 5px solid #667085; }
+[data-category="その他・分類保留"] .row-dot { background: #667085; }
+[data-category="その他・分類保留"] .bar-fill { background: linear-gradient(90deg, #f2f4f7, #667085); }
+[data-category="その他・分類保留"] .bar-meta span { color: #344054; font-weight: 700; }
+[data-category="報道・行政対応批判"] th { border-left: 5px solid #667085; }
+[data-category="報道・行政対応批判"] .row-dot { background: #667085; }
+[data-category="報道・行政対応批判"] .bar-fill { background: linear-gradient(90deg, #f2f4f7, #667085); }
+[data-category="報道・行政対応批判"] .bar-meta span { color: #344054; font-weight: 700; }
+[data-category="基地問題・反基地論への接続"] th { border-left: 5px solid #0f7490; }
+[data-category="基地問題・反基地論への接続"] .row-dot { background: #0f7490; }
+[data-category="基地問題・反基地論への接続"] .bar-fill { background: linear-gradient(90deg, #e5f7fb, #0f7490); }
+[data-category="基地問題・反基地論への接続"] .bar-meta span { color: #0b586d; font-weight: 700; }
+[data-category="事実確認・情報共有"] th { border-left: 5px solid #667085; }
+[data-category="事実確認・情報共有"] .row-dot { background: #667085; }
+[data-category="事実確認・情報共有"] .bar-fill { background: linear-gradient(90deg, #f2f4f7, #667085); }
+[data-category="事実確認・情報共有"] .bar-meta span { color: #344054; font-weight: 700; }
+.axis-card[data-tone="positive"] { border-top: 5px solid #1769d1; background: linear-gradient(180deg, #fff, #e7f1ff); }
+.axis-card[data-tone="positive"] .axis-kicker { color: #0f4e9d; }
+.axis-card[data-tone="positive"] .axis-tags span { background: #e7f1ff; color: #0f4e9d; }
+.axis-card[data-tone="negative"] { border-top: 5px solid #b54708; background: linear-gradient(180deg, #fff, #fff1e8); }
+.axis-card[data-tone="negative"] .axis-kicker { color: #8a3206; }
+.axis-card[data-tone="negative"] .axis-tags span { background: #fff1e8; color: #8a3206; }
+.axis-card[data-tone="safety"] { border-top: 5px solid #16885a; background: linear-gradient(180deg, #fff, #e8f7ef); }
+.axis-card[data-tone="safety"] .axis-kicker { color: #0f6845; }
+.axis-card[data-tone="safety"] .axis-tags span { background: #e8f7ef; color: #0f6845; }
+.axis-card[data-tone="neutral"] { border-top: 5px solid #667085; background: linear-gradient(180deg, #fff, #f2f4f7); }
+.axis-card[data-tone="neutral"] .axis-kicker { color: #344054; }
+.axis-card[data-tone="neutral"] .axis-tags span { background: #f2f4f7; color: #344054; }
+.axis-card[data-tone="warning"] { border-top: 5px solid #7a4cc2; background: linear-gradient(180deg, #fff, #f2ecff); }
+.axis-card[data-tone="warning"] .axis-kicker { color: #55348a; }
+.axis-card[data-tone="warning"] .axis-tags span { background: #f2ecff; color: #55348a; }
+.axis-card[data-tone="derived"] { border-top: 5px solid #0f7490; background: linear-gradient(180deg, #fff, #e5f7fb); }
+.axis-card[data-tone="derived"] .axis-kicker { color: #0b586d; }
+.axis-card[data-tone="derived"] .axis-tags span { background: #e5f7fb; color: #0b586d; }
+    .legend {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .sample-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+    .sample { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+    .meta { color: var(--accent); font-size: 12px; font-weight: 700; }
+    blockquote {
+      margin: 8px 0;
+      padding-left: 10px;
+      border-left: 3px solid var(--line);
+      color: #344054;
+      font-size: 13px;
+    }
+    .reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    a { color: var(--accent); font-size: 13px; }
+    .note-panel h2 { font-size: 16px; }
+    .note-panel ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding-inline: 14px; }
+      header { padding-inline: 14px; }
+      .panel-title { align-items: flex-start; flex-direction: column; gap: 2px; }
+      th:first-child { min-width: 180px; }
+      table { min-width: 760px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="top-nav"><a href="index.html">トップ</a><a href="henoko-summary.html">まとめUI</a><a href="takaichi-reaction-heatmap.html">高市事例</a></nav>
+    <h1>辺野古高校生死亡事故 SNS反応まっぷ</h1>
+    <p class="lead">Yahooリアルタイム検索で取得した投稿サンプルを、教育基本法違反認定、追悼・慰霊、政治利用批判、事故原因、安全管理などの論点で整理した編集用ビューです。世論調査ではありません。</p>
+  </header>
+  <main>
+    <section class="stats">
+      <div class="stat"><span>総サンプル</span><strong>311</strong></div>
+      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+      <div class="stat"><span>最多カテゴリ</span><strong>教育基本法違反視 81</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>批判 190</strong></div>
+    </section>
+    <section class="panel" id="vote-section">
+<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">沖縄・辺野古での修学旅行中に高校生が死亡した事故をめぐり、文科省が「教育基本法違反」と認定。平和教育の萎縮を懸念する声と、政治的中立性の問題を指摘する声が対立しています。</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「辺野古」「高校生」「死亡事故」「教育基本法」などのキーワードで、Yahooリアルタイム検索からSNS投稿311件を取得し、AIが自動分類しました。</div>
+<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
+<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
+<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票はブラウザに保存されます。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+  </div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
+  <div id="vote-bars" style="margin-bottom:16px;"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+    <a id="share-x" href="#" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
+      𝕏 でシェア
+    </a>
+    <button id="vote-redo-btn"
+       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
+      投票をやり直す
+    </button>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
+</div>
+</section>
+<script>
+(function(){
+  var TOPIC="辺野古高校生死亡事故_SNS反応まっぷ";
+  var axes=[{"kicker": "事故本体", "label": "安全管理の問題が一番大きい", "origLabel": "安全管理を問う", "tone": "safety", "color": "#16885a"}, {"kicker": "文科省判断を評価", "label": "文科省の判断は妥当だと思う", "origLabel": "政治的中立性違反を指摘", "tone": "positive", "color": "#4a90d9"}, {"kicker": "文科省判断を疑問視", "label": "平和教育が萎縮しないか心配", "origLabel": "平和教育の萎縮を懸念", "tone": "negative", "color": "#e07040"}, {"kicker": "ノイズ・注意領域", "label": "よくわからない・情報不足", "origLabel": "未確認・過激化した反応", "tone": "warning", "color": "#7a4cc2"}];
+  var TITLE="辺野古高校生死亡事故 SNS反応まっぷ";
+  var KEY="sns_vote_"+TOPIC;
+  var stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+  var myVote=localStorage.getItem(KEY+"_my");
+
+  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
+  function applyBlur(){
+    var chartPanel=document.getElementById("semicircle-chart");
+    if(chartPanel){
+      var wrap=chartPanel.closest(".panel");
+      if(wrap && myVote===null){
+        wrap.id="chart-panel";
+        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
+        wrap.style.position="relative";
+        var overlay=document.createElement("div");
+        overlay.id="chart-overlay";
+        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
+        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
+        wrap.appendChild(overlay);
+      }
+    }
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",applyBlur)}else{setTimeout(applyBlur,0)}
+
+  var btnWrap=document.getElementById("vote-buttons");
+  axes.forEach(function(a,i){
+    var btn=document.createElement("button");
+    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
+    btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
+    btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
+    btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
+    btn.onclick=function(){castVote(i)};
+    btnWrap.appendChild(btn);
+  });
+
+  document.getElementById("vote-redo-btn").onclick=function(){
+    localStorage.removeItem(KEY+"_my");
+    location.reload();
+  };
+
+  if(myVote!==null){showResults(parseInt(myVote))}
+
+  function revealChart(){
+    var wrap=document.getElementById("chart-panel");
+    if(wrap){
+      wrap.style.transition="filter .6s ease";
+      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
+      var ov=document.getElementById("chart-overlay");
+      if(ov)ov.remove();
+    }
+  }
+
+  function castVote(idx){
+    stored[idx]=(stored[idx]||0)+1;
+    if(myVote!==null){stored[parseInt(myVote)]=(stored[parseInt(myVote)]||1)-1}
+    localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+    localStorage.setItem(KEY+"_my",""+idx);
+    myVote=""+idx;
+    revealChart();
+    showResults(idx);
+  }
+
+  function showResults(myIdx){
+    var total=0;
+    axes.forEach(function(_,i){total+=(stored[i]||0)});
+    if(total===0)total=1;
+
+    var myAxis=axes[myIdx];
+    var posLabel=document.getElementById("vote-position-label");
+    var posText=document.getElementById("vote-position-text");
+    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
+    posLabel.style.color=myAxis.color;
+    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
+
+    var barsEl=document.getElementById("vote-bars");
+    barsEl.innerHTML="";
+    axes.forEach(function(a,i){
+      var c=stored[i]||0;
+      var pct=Math.round(c/total*100);
+      var isMine=i===myIdx;
+      var row=document.createElement("div");
+      row.style.cssText="margin-bottom:8px;";
+      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
+        +(isMine?'✓ ':'')+a.label+'</span>'
+        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'%</span></div>'
+        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
+        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+      barsEl.appendChild(row);
+    });
+
+    var shareBtn=document.getElementById("share-x");
+    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
+    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
+    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
+    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
+
+    document.getElementById("vote-result").style.display="block";
+    document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+})();
+</script>
+    <section class="panel">
+<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#16885a12;border:2px solid #16885a;"><div style="font-size:12px;font-weight:700;color:#16885a">安全管理を問う</div><div style="font-size:32px;font-weight:800;color:#16885a;line-height:1.2">53</div></div>
+  <div style="text-align:center;color:var(--muted);font-size:12px;">
+    <div style="font-size:11px;">過半数</div>
+    <div style="font-weight:800;font-size:16px;color:var(--ink);">156</div>
+    <div style="font-size:18px;">▼</div>
+  </div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">政治的中立性違反を指摘</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">37</div></div>
+</div>
+<div style="position:relative;max-width:660px;margin:0 auto;">
+  <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
+  <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
+    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">311</div>
+    <div style="font-size:14px;color:var(--muted);">サンプル</div>
+  </div>
+</div>
+<div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
+<script>
+(function(){
+  var data=[{"label": "安全管理を問う", "count": 53, "color": "#16885a", "cats": "安全管理・引率責任を問題視, 事故原因・再発防止への関心, 学校・教育委員会批判"}, {"label": "平和教育の萎縮を懸念", "count": 31, "color": "#e07040", "cats": "文科省判断への反発・平和教育萎縮を懸念, 追悼・慰霊への共感"}, {"label": "未確認・過激化した反応", "count": 34, "color": "#7a4cc2", "cats": "未確認・過激表現, その他・分類保留"}, {"label": "その他", "count": 156, "color": "#cbd5e1", "cats": "教育基本法違反視, 報道・行政対応批判, 事実確認・情報共有, 基地問題・反基地論への接続, 事故原因・安全管理への関心"}, {"label": "政治的中立性違反を指摘", "count": 37, "color": "#4a90d9", "cats": "文科省判断支持・政治的中立性違反を指摘, 政治利用・反基地運動批判"}];
+  var total=data.reduce(function(s,d){return s+d.count},0);
+  var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
+  var svg=document.getElementById("semicircle-chart");
+  var startAngle=Math.PI;
+  data.forEach(function(d,idx){
+    var sweep=(d.count/total)*Math.PI-gap;
+    var endAngle=startAngle+sweep;
+    var x1o=cx+outerR*Math.cos(startAngle),y1o=cy+outerR*Math.sin(startAngle);
+    var x2o=cx+outerR*Math.cos(endAngle),y2o=cy+outerR*Math.sin(endAngle);
+    var x1i=cx+innerR*Math.cos(endAngle),y1i=cy+innerR*Math.sin(endAngle);
+    var x2i=cx+innerR*Math.cos(startAngle),y2i=cy+innerR*Math.sin(startAngle);
+    var la=sweep>Math.PI?1:0;
+    var path="M "+x1o+" "+y1o+" A "+outerR+" "+outerR+" 0 "+la+" 1 "+x2o+" "+y2o+" L "+x1i+" "+y1i+" A "+innerR+" "+innerR+" 0 "+la+" 0 "+x2i+" "+y2i+" Z";
+    var el=document.createElementNS("http://www.w3.org/2000/svg","path");
+    el.setAttribute("d",path);el.setAttribute("fill",d.color);
+    el.style.transition="opacity .15s";el.style.cursor="pointer";
+    el.onmouseenter=function(){el.style.opacity="0.75"};
+    el.onmouseleave=function(){el.style.opacity="1"};
+    var t=document.createElementNS("http://www.w3.org/2000/svg","title");
+    t.textContent=d.label+": "+d.count+"件 ("+(d.count/total*100).toFixed(1)+"%)"+"\n"+d.cats;
+    el.appendChild(t);svg.appendChild(el);
+    var mid=startAngle+sweep/2,lr=(outerR+innerR)/2;
+    if(d.count>=5){
+      var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
+      tx.setAttribute("x",cx+lr*Math.cos(mid));
+      tx.setAttribute("y",cy+lr*Math.sin(mid)-8);
+      tx.setAttribute("text-anchor","middle");tx.setAttribute("dominant-baseline","central");
+      tx.setAttribute("font-size","26");tx.setAttribute("font-weight","800");
+      tx.setAttribute("fill","#fff");tx.setAttribute("pointer-events","none");
+      tx.textContent=d.count;svg.appendChild(tx);
+    }
+    if(sweep>0.25){
+      var tx2=document.createElementNS("http://www.w3.org/2000/svg","text");
+      var short=d.label.length>12?d.label.substring(0,12)+"…":d.label;
+      tx2.setAttribute("x",cx+lr*Math.cos(mid));
+      tx2.setAttribute("y",cy+lr*Math.sin(mid)+14);
+      tx2.setAttribute("text-anchor","middle");tx2.setAttribute("dominant-baseline","central");
+      tx2.setAttribute("font-size","11");tx2.setAttribute("font-weight","600");
+      tx2.setAttribute("fill","rgba(255,255,255,.85)");tx2.setAttribute("pointer-events","none");
+      tx2.textContent=short;svg.appendChild(tx2);
+    }
+    startAngle=endAngle+gap;
+  });
+  // Center line (majority marker)
+  var lineX=cx;
+  var el=document.createElementNS("http://www.w3.org/2000/svg","line");
+  el.setAttribute("x1",lineX);el.setAttribute("y1",cy-outerR-5);
+  el.setAttribute("x2",lineX);el.setAttribute("y2",cy-innerR+5);
+  el.setAttribute("stroke","var(--ink,#172033)");el.setAttribute("stroke-width","2");
+  el.setAttribute("stroke-dasharray","4,3");el.setAttribute("opacity","0.4");
+  svg.appendChild(el);
+
+  var leg=document.getElementById("semicircle-legend");
+  data.forEach(function(d){
+    var item=document.createElement("div");
+    item.style.cssText="display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:6px 0;";
+    item.innerHTML='<span style="width:14px;height:14px;border-radius:4px;background:'+d.color+';flex-shrink:0;margin-top:2px"></span><div><strong style="font-size:14px">'+d.label+'</strong> <span style="color:var(--accent);font-weight:800;font-size:16px;margin-left:4px">'+d.count+'</span><span style="color:var(--muted);font-size:11px;margin-left:2px">件</span><div style="color:var(--muted);font-size:11px;margin-top:2px">'+d.cats+'</div></div>';
+    leg.appendChild(item);
+  });
+})();
+</script>
+</section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="safety"><div class="axis-kicker">事故本体</div><h3>安全管理を問う</h3><div class="axis-count">53<span>件</span></div><p>教育内容よりも、未成年を危険な現場に連れて行った引率・安全管理・再発防止を重く見る立場。</p><div class="axis-tags"><span>安全管理・引率責任を問題視</span><span>事故原因・再発防止への関心</span><span>学校・教育委員会批判</span></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">文科省判断を評価</div><h3>政治的中立性違反を指摘</h3><div class="axis-count">37<span>件</span></div><p>平和学習や修学旅行の範囲を超え、特定の政治活動に関わらせたのではないかと見る立場。</p><div class="axis-tags"><span>文科省判断支持・政治的中立性違反を指摘</span><span>政治利用・反基地運動批判</span></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">文科省判断を疑問視</div><h3>平和教育の萎縮を懸念</h3><div class="axis-count">31<span>件</span></div><p>教育基本法違反認定が行きすぎで、基地問題や平和教育を扱う教育現場が萎縮すると見る立場。</p><div class="axis-tags"><span>文科省判断への反発・平和教育萎縮を懸念</span><span>追悼・慰霊への共感</span></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">ノイズ・注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">34<span>件</span></div><p>断定、罵倒、未確認情報が混ざり、記事化には要約・確認が必要な反応。</p><div class="axis-tags"><span>未確認・過激表現</span><span>その他・分類保留</span></div></article></div></section>
+    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
+<div class="bar-list">
+<div class="bar-row" data-category="政治利用・反基地運動批判"><div class="bar-meta"><span>政治利用・反基地運動批判</span><strong>37</strong></div><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div></div>
+<div class="bar-row" data-category="追悼・慰霊への共感"><div class="bar-meta"><span>追悼・慰霊への共感</span><strong>31</strong></div><div class="bar-track"><div class="bar-fill" style="width:38%"></div></div></div>
+<div class="bar-row" data-category="未確認・過激表現"><div class="bar-meta"><span>未確認・過激表現</span><strong>20</strong></div><div class="bar-track"><div class="bar-fill" style="width:25%"></div></div></div>
+<div class="bar-row" data-category="報道・行政対応批判"><div class="bar-meta"><span>報道・行政対応批判</span><strong>20</strong></div><div class="bar-track"><div class="bar-fill" style="width:25%"></div></div></div>
+<div class="bar-row" data-category="基地問題・反基地論への接続"><div class="bar-meta"><span>基地問題・反基地論への接続</span><strong>4</strong></div><div class="bar-track"><div class="bar-fill" style="width:5%"></div></div></div>
+<div class="bar-row" data-category="学校・教育委員会批判"><div class="bar-meta"><span>学校・教育委員会批判</span><strong>53</strong></div><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div></div>
+<div class="bar-row" data-category="事実確認・情報共有"><div class="bar-meta"><span>事実確認・情報共有</span><strong>38</strong></div><div class="bar-track"><div class="bar-fill" style="width:47%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>14</strong></div><div class="bar-track"><div class="bar-fill" style="width:17%"></div></div></div>
+<div class="bar-row" data-category="事故原因・安全管理への関心"><div class="bar-meta"><span>事故原因・安全管理への関心</span><strong>13</strong></div><div class="bar-track"><div class="bar-fill" style="width:16%"></div></div></div>
+<div class="bar-row" data-category="教育基本法違反視"><div class="bar-meta"><span>教育基本法違反視</span><strong>81</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+</div></section>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>同志社国際高校 辺野古 転覆事故 -rt</th><th>沖縄 高校生 死亡事故 辺野古 -rt</th><th>辺野古 修学旅行 抗議船 高校生 -rt</th><th>辺野古 抗議船 転覆 高校生 -rt</th><th>辺野古 転覆事故 安全管理 高校生 -rt</th><th>辺野古 高校生 教育基本法 -rt</th><th>辺野古 高校生 死亡 文科省 -rt</th><th>辺野古 高校生 死亡事故 -rt</th><th>辺野古 高校生 死亡事故 教育基本法 -rt</th><th>辺野古 高校生 追悼 -rt</th><th>辺野古 高校生 黙祷 -rt</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="政治利用・反基地運動批判"><th><span class="row-dot"></span>政治利用・反基地運動批判</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 同志社国際高校 辺野古 転覆事故 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 沖縄 高校生 死亡事故 辺野古 -rt: 7件"><span>7</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 辺野古 修学旅行 抗議船 高校生 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="政治利用・反基地運動批判 / 辺野古 抗議船 転覆 高校生 -rt: 12件"><span>12</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 辺野古 転覆事故 安全管理 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 辺野古 高校生 教育基本法 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 辺野古 高校生 死亡 文科省 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 辺野古 高校生 死亡事故 -rt: 6件"><span>6</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 辺野古 高校生 死亡事故 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 辺野古 高校生 追悼 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">37</td></tr>
+<tr data-category="追悼・慰霊への共感"><th><span class="row-dot"></span>追悼・慰霊への共感</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 同志社国際高校 辺野古 転覆事故 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 沖縄 高校生 死亡事故 辺野古 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 修学旅行 抗議船 高校生 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 抗議船 転覆 高校生 -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 転覆事故 安全管理 高校生 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 高校生 教育基本法 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 高校生 死亡 文科省 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 高校生 死亡事故 -rt: 5件"><span>5</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="追悼・慰霊への共感 / 辺野古 高校生 死亡事故 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 辺野古 高校生 追悼 -rt: 4件"><span>4</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="追悼・慰霊への共感 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">31</td></tr>
+<tr data-category="未確認・過激表現"><th><span class="row-dot"></span>未確認・過激表現</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 同志社国際高校 辺野古 転覆事故 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 沖縄 高校生 死亡事故 辺野古 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 辺野古 修学旅行 抗議船 高校生 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 辺野古 抗議船 転覆 高校生 -rt: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 辺野古 転覆事故 安全管理 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 辺野古 高校生 教育基本法 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 辺野古 高校生 死亡 文科省 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="未確認・過激表現 / 辺野古 高校生 死亡事故 -rt: 8件"><span>8</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 辺野古 高校生 死亡事故 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 辺野古 高校生 追悼 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 辺野古 高校生 黙祷 -rt: 1件"><span>1</span></td>
+<td class="total">20</td></tr>
+<tr data-category="報道・行政対応批判"><th><span class="row-dot"></span>報道・行政対応批判</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 同志社国際高校 辺野古 転覆事故 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 沖縄 高校生 死亡事故 辺野古 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 修学旅行 抗議船 高校生 -rt: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="報道・行政対応批判 / 辺野古 抗議船 転覆 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 転覆事故 安全管理 高校生 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 高校生 教育基本法 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 高校生 死亡 文科省 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 高校生 死亡事故 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 高校生 死亡事故 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 辺野古 高校生 追悼 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="報道・行政対応批判 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">20</td></tr>
+<tr data-category="基地問題・反基地論への接続"><th><span class="row-dot"></span>基地問題・反基地論への接続</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="基地問題・反基地論への接続 / 同志社国際高校 辺野古 転覆事故 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 沖縄 高校生 死亡事故 辺野古 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="基地問題・反基地論への接続 / 辺野古 修学旅行 抗議船 高校生 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 辺野古 抗議船 転覆 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 辺野古 転覆事故 安全管理 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="基地問題・反基地論への接続 / 辺野古 高校生 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 辺野古 高校生 死亡 文科省 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="基地問題・反基地論への接続 / 辺野古 高校生 死亡事故 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 辺野古 高校生 死亡事故 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 辺野古 高校生 追悼 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">4</td></tr>
+<tr data-category="学校・教育委員会批判"><th><span class="row-dot"></span>学校・教育委員会批判</th>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="学校・教育委員会批判 / 同志社国際高校 辺野古 転覆事故 -rt: 17件"><span>17</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 沖縄 高校生 死亡事故 辺野古 -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 修学旅行 抗議船 高校生 -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 抗議船 転覆 高校生 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 転覆事故 安全管理 高校生 -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 高校生 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 高校生 死亡 文科省 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 高校生 死亡事故 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 高校生 死亡事故 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 高校生 追悼 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="学校・教育委員会批判 / 辺野古 高校生 黙祷 -rt: 2件"><span>2</span></td>
+<td class="total">53</td></tr>
+<tr data-category="事実確認・情報共有"><th><span class="row-dot"></span>事実確認・情報共有</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="事実確認・情報共有 / 同志社国際高校 辺野古 転覆事故 -rt: 11件"><span>11</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 沖縄 高校生 死亡事故 辺野古 -rt: 6件"><span>6</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 辺野古 修学旅行 抗議船 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 辺野古 抗議船 転覆 高校生 -rt: 7件"><span>7</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 辺野古 転覆事故 安全管理 高校生 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 辺野古 高校生 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 辺野古 高校生 死亡 文科省 -rt: 7件"><span>7</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 辺野古 高校生 死亡事故 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 辺野古 高校生 死亡事故 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事実確認・情報共有 / 辺野古 高校生 追悼 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">38</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 同志社国際高校 辺野古 転覆事故 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 沖縄 高校生 死亡事故 辺野古 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 辺野古 修学旅行 抗議船 高校生 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 辺野古 抗議船 転覆 高校生 -rt: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 辺野古 転覆事故 安全管理 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 辺野古 高校生 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 辺野古 高校生 死亡 文科省 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 辺野古 高校生 死亡事故 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 辺野古 高校生 死亡事故 教育基本法 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 辺野古 高校生 追悼 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">14</td></tr>
+<tr data-category="事故原因・安全管理への関心"><th><span class="row-dot"></span>事故原因・安全管理への関心</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 同志社国際高校 辺野古 転覆事故 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 沖縄 高校生 死亡事故 辺野古 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 辺野古 修学旅行 抗議船 高校生 -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 辺野古 抗議船 転覆 高校生 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 辺野古 転覆事故 安全管理 高校生 -rt: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 辺野古 高校生 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 辺野古 高校生 死亡 文科省 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 辺野古 高校生 死亡事故 -rt: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 辺野古 高校生 死亡事故 教育基本法 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 辺野古 高校生 追悼 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">13</td></tr>
+<tr data-category="教育基本法違反視"><th><span class="row-dot"></span>教育基本法違反視</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 同志社国際高校 辺野古 転覆事故 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 沖縄 高校生 死亡事故 辺野古 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 辺野古 修学旅行 抗議船 高校生 -rt: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育基本法違反視 / 辺野古 抗議船 転覆 高校生 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 辺野古 転覆事故 安全管理 高校生 -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="教育基本法違反視 / 辺野古 高校生 教育基本法 -rt: 19件"><span>19</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="教育基本法違反視 / 辺野古 高校生 死亡 文科省 -rt: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 辺野古 高校生 死亡事故 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="教育基本法違反視 / 辺野古 高校生 死亡事故 教育基本法 -rt: 36件"><span>36</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 辺野古 高校生 追悼 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育基本法違反視 / 辺野古 高校生 黙祷 -rt: 0件"><span>0</span></td>
+<td class="total">81</td></tr>
+</tbody></table></div></section>
+    <div class="legend">
+      <span>少</span>
+      <span class="chip" style="background:#f5f6f8"></span>
+      <span class="chip" style="background:#dceeff"></span>
+      <span class="chip" style="background:#9fd0ff"></span>
+      <span class="chip" style="background:#4da3ff"></span>
+      <span class="chip" style="background:#1769d1"></span>
+      <span class="chip" style="background:#0a3d91"></span>
+      <span>多</span>
+    </div>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>反発</th><th>批判</th><th>追悼支持</th><th>中立</th><th>未確認</th><th>保留</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="政治利用・反基地運動批判"><th><span class="row-dot"></span>政治利用・反基地運動批判</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政治利用・反基地運動批判 / 反発: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="政治利用・反基地運動批判 / 批判: 33件"><span>33</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政治利用・反基地運動批判 / 保留: 0件"><span>0</span></td>
+<td class="total">37</td></tr>
+<tr data-category="追悼・慰霊への共感"><th><span class="row-dot"></span>追悼・慰霊への共感</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 反発: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="追悼・慰霊への共感 / 批判: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="追悼・慰霊への共感 / 追悼支持: 28件"><span>28</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="追悼・慰霊への共感 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="追悼・慰霊への共感 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="追悼・慰霊への共感 / 保留: 0件"><span>0</span></td>
+<td class="total">31</td></tr>
+<tr data-category="未確認・過激表現"><th><span class="row-dot"></span>未確認・過激表現</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 反発: 13件"><span>13</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 批判: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・過激表現 / 未確認: 5件"><span>5</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・過激表現 / 保留: 0件"><span>0</span></td>
+<td class="total">20</td></tr>
+<tr data-category="報道・行政対応批判"><th><span class="row-dot"></span>報道・行政対応批判</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="報道・行政対応批判 / 反発: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="報道・行政対応批判 / 批判: 19件"><span>19</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="報道・行政対応批判 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="報道・行政対応批判 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="報道・行政対応批判 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="報道・行政対応批判 / 保留: 0件"><span>0</span></td>
+<td class="total">20</td></tr>
+<tr data-category="基地問題・反基地論への接続"><th><span class="row-dot"></span>基地問題・反基地論への接続</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="基地問題・反基地論への接続 / 反発: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="基地問題・反基地論への接続 / 批判: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="基地問題・反基地論への接続 / 保留: 0件"><span>0</span></td>
+<td class="total">4</td></tr>
+<tr data-category="学校・教育委員会批判"><th><span class="row-dot"></span>学校・教育委員会批判</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="学校・教育委員会批判 / 反発: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="学校・教育委員会批判 / 批判: 53件"><span>53</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="学校・教育委員会批判 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="学校・教育委員会批判 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="学校・教育委員会批判 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="学校・教育委員会批判 / 保留: 0件"><span>0</span></td>
+<td class="total">53</td></tr>
+<tr data-category="事実確認・情報共有"><th><span class="row-dot"></span>事実確認・情報共有</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 反発: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 批判: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="事実確認・情報共有 / 中立: 38件"><span>38</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事実確認・情報共有 / 保留: 0件"><span>0</span></td>
+<td class="total">38</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 反発: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 批判: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 中立: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 未確認: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 保留: 8件"><span>8</span></td>
+<td class="total">14</td></tr>
+<tr data-category="事故原因・安全管理への関心"><th><span class="row-dot"></span>事故原因・安全管理への関心</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 反発: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 批判: 7件"><span>7</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="事故原因・安全管理への関心 / 中立: 5件"><span>5</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="事故原因・安全管理への関心 / 保留: 0件"><span>0</span></td>
+<td class="total">13</td></tr>
+<tr data-category="教育基本法違反視"><th><span class="row-dot"></span>教育基本法違反視</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 反発: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="教育基本法違反視 / 批判: 71件"><span>71</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育基本法違反視 / 追悼支持: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育基本法違反視 / 中立: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育基本法違反視 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育基本法違反視 / 保留: 0件"><span>0</span></td>
+<td class="total">81</td></tr>
+</tbody></table></div></section>
+    <section class="panel"><h2>代表サンプル</h2>
+<div class="sample-grid">
+<article class="sample-card"><h3>政治利用・反基地運動批判</h3>
+<div class="sample"><div class="meta">反発 / 信頼度 1.00</div><p>辺野古転覆事故と教育基本法違反を結びつけ、自衛隊や日米軍事企業への怒りを表現。</p>
+<blockquote>https://t.co/I57gQkhW2x #辺野古転覆事故 #平和学習　#教育基本法 #ひめゆり学徒隊 #戦争動員 #赤旗 「20万遺骨が眠る鎮魂の沖縄に辺野古基地建設を強行した日米軍産・自衛隊沖縄防衛局が辺野古転覆事故の源である、絶対許せない」と、 自衛隊米軍・日米軍事企業に対する全国の高校生の怒りは凄まじい https://t.co/T6G3...</blockquote>
+<a href="https://x.com/shibuyahatiko/status/2061418914396209616">投稿URL</a>
+<div class="reason">理由: 反基地運動批判の主眼あり</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>活動家が子ども達を不幸にしていると批判。</p>
+<blockquote>たかまつなな 現実を見ろ！！ 沖縄県で活動している 似非平和活動家は 子ども達を不幸にしている。 普天間高校生の声を聞け！ 辺野古沖転覆死亡事故は 日本基督教団と 共産主義者の先生方が 招いた　悲劇だ！ 今回は、文科省が正しい！ https://t.co/kLItXgB6QD</blockquote>
+<a href="https://x.com/JudgeBob35/status/2061382120380186734">投稿URL</a>
+<div class="reason">理由: 投稿は「似非平和活動家」に対する批判で、辺野古沖事故と関連させている。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>知事が反基地活動家による事故への対応が不適切であると批判。</p>
+<blockquote>デニー氏が知事でなければ、反基地活動家達が無法かつ暴力的にのさばることはなかった。今回の辺野古基地の活動家による高校生の死亡事故も発生してなかったと考えると、罪深いよな。</blockquote>
+<a href="https://x.com/shrmru/status/2065294367997542817">投稿URL</a>
+<div class="reason">理由: 皮肉・揶揄で知事への批判を含む。</div>
+</div>
+</article>
+<article class="sample-card"><h3>追悼・慰霊への共感</h3>
+<div class="sample"><div class="meta">追悼支持 / 信頼度 1.00</div><p>高校2年生の追悼歌について説明。</p>
+<blockquote>Xiziさん　この曲は 研修旅行（修学旅行）中だった高校2年生（17歳）が沖縄県名護市辺野古沖で発生した小型船転覆事故で亡くなられた「追悼歌（ついとうか）」です 2026年3月16日 女子高校生は校外勉強で「見るだけ」なら良かったのですが、「何も知らされず」小型船に乗せられ事故に会われたのです。</blockquote>
+<a href="https://x.com/yumi777zx/status/2060961480900771867">投稿URL</a>
+<div class="reason">理由: 投稿は追悼歌に関する内容で、追悼を支持する。</div>
+</div>
+<div class="sample"><div class="meta">追悼支持 / 信頼度 1.00</div><p>辺野古の海で亡くなった高校生の追悼集会を理解できる。</p>
+<blockquote>辺野古の海で亡くなられた高校生の追悼集会ならば理解できるが！</blockquote>
+<a href="https://x.com/TanukidaPonkiti/status/2060658363143475634">投稿URL</a>
+<div class="reason">理由: 投稿は追悼集会に対する理解と共感を示す。</div>
+</div>
+<div class="sample"><div class="meta">追悼支持 / 信頼度 1.00</div><p>辺野古沖ボート転覆事故で死亡した同志社国際高校の生徒武石知華さんを追悼。</p>
+<blockquote>え？船長による性暴力が行われていた⁉️ 辺野古沖ボート転覆事故 3月に発生した事故で死亡したのは同志社国際高校の生徒・武石知華さん(17)と抗議船「不屈」の船長男性。</blockquote>
+<a href="https://x.com/saylonmusk/status/2067345730306736319">投稿URL</a>
+<div class="reason">理由: 亡くなった高校生への追悼、黙祷、慰霊を支持・共感する投稿。</div>
+</div>
+</article>
+<article class="sample-card"><h3>未確認・過激表現</h3>
+<div class="sample"><div class="meta">反発 / 信頼度 0.80</div><p>被爆者団体や名前が似た組織の活動を皮肉り、批判。</p>
+<blockquote>9条ネットワークも北大職組@hokudai_jimuも被爆者団体も名前が違うだけで同じですね この時期に「あの日 あの時 あの海で」って辺野古じゃないのかよ しかもこの猿田佐世のイベントに高校生が動員されてるけど教育基本法違反って言われないんですかね https://t.co/MBo5So0zsr https://t.co/mGuaf2LC5G htt...</blockquote>
+<a href="https://x.com/pj1EyUnlZAaxSlh/status/2064998767343042983">投稿URL</a>
+<div class="reason">理由: 攻撃的表現と皮肉・揶揄。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.80</div><p>共産党や社民党を非難し、高校生の死亡事故と平和教育の関連性を否定。</p>
+<blockquote>現役教師が平和教育「萎縮を懸念」　辺野古転覆事故で社会起業家たかまつななさんら会見　文科省「教育基本法違反」指摘受け(FNNプライムオンライン（フジテレビ系）) #Yahooニュース 共産社民など左側の団体が高校生殺したんだぞ。何が平和教育だ。 https://t.co/DMT0gJrOLk</blockquote>
+<a href="https://x.com/USrYdeuUfm6685/status/2061390287763820880">投稿URL</a>
+<div class="reason">理由: 陰謀論的で根拠薄い断定あり</div>
+</div>
+<div class="sample"><div class="meta">反発 / 信頼度 0.80</div><p>琉球新報の記事を皮肉り、共産党幹部への批判。</p>
+<blockquote>琉球新報の性暴力犯金井についての記事、＞辺野古の船でも、かなりの速度を出していたと聞きました・・この部分には、抗議船「不屈」の転覆原因を全て金井に被せようという意図が見える。だが高校生を死なせたのは「平和丸」。まず共産党幹部諸喜田船長を早く出して謝罪させるべき、これは不動の真理 https://t.co/LXQP4hR3Bn</blockquote>
+<a href="https://x.com/cnakayama1958/status/2067342499107287375">投稿URL</a>
+<div class="reason">理由: 攻撃的表現と皮肉が含まれており、事実確認不足。</div>
+</div>
+</article>
+<article class="sample-card"><h3>報道・行政対応批判</h3>
+<div class="sample"><div class="meta">批判 / 信頼度 1.00</div><p>NHKが辺野古反対活動家を積極的に報道せず、文科省の報告書を引用して批判。</p>
+<blockquote>@nhk_news #NHKニュース なぜこう言う文句をつける団体の話は取り上げるのか！ 辺野古反対活動家が高校生死亡事故起こした時は積極的に報道せず。 文科省の報告書を読め。 明白な教育基本法違反だ！ NHK左翼日教組側に立つ。 偏向報道ではないか！ https://t.co/HdSvIwVE7m</blockquote>
+<a href="https://x.com/otonanokensiki/status/2061546696744874123">投稿URL</a>
+<div class="reason">理由: 主眼はNHKの偏向報道への批判。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 1.00</div><p>松本文科相が同志社国際高の計画や対応を「著しく不適切」と指摘。</p>
+<blockquote>辺野古転覆事故から3カ月　同志社国際高の計画や対応「著しく不適切」　松本文科相が指摘 - 産経ニュース https://t.co/zdL8I35Co1 https://t.co/93e3ajuPyq #辺野古転覆事件 #辺野古転覆事故 #玉城デニー #ヘリ基地反対協議会 #同志社国際高校 #辺野古沖転覆 #辺野古抗議船転覆事件 #オール沖縄</blockquote>
+<a href="https://x.com/YuuKuni/status/2067186883122299305">投稿URL</a>
+<div class="reason">理由: 文科省、行政、政治家の対応への批判が主眼。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>メディアは辺野古事故を大きく報じなかった理由について指摘。</p>
+<blockquote>メディアは辺野古転覆事故をなぜ大きく報じなかったのか――高校生死亡、文科省判断で露わになった「平和教育」の闇　https://t.co/oZPBps0itR　spotifyより</blockquote>
+<a href="https://x.com/yutakarlson/status/2062112056174612506">投稿URL</a>
+<div class="reason">理由: 報道機関の対応を批判</div>
+</div>
+</article>
+<article class="sample-card"><h3>基地問題・反基地論への接続</h3>
+<div class="sample"><div class="meta">反発 / 信頼度 0.80</div><p>辺野古転覆事故と沖縄の闇を結びつけ、平和学習が抗議学習であると批判。</p>
+<blockquote>【4/15沖縄県議会】11年間で逮捕者160人超...報道されない沖縄の闇...【辺野古転覆事故|オール沖縄|同志社国際高校|玉城デニー】 https://t.co/9Srg0SHzxw 平和学習ではなく、抗議学習。</blockquote>
+<a href="https://x.com/simo_yan/status/2067681264308814216">投稿URL</a>
+<div class="reason">理由: 投稿は事故と政治的背景を結びつけて批判。</div>
+</div>
+<div class="sample"><div class="meta">反発 / 信頼度 0.80</div><p>修学旅行で「平和学習」をすべきでないとして、辺野古抗議に関連した教育活動に疑問を呈する。</p>
+<blockquote>とりあえず、「平和学習」と称して、何も知らない修学旅行の高校生を辺野古抗議船に乗せる危険な事は、今後止めるべきだと思います。 沖縄戦の歴史を学ぶ「安全な」平和学習なら、とりあえず別に問題もないと思いますが、何故「平和学習が後退しないか」という議論が出てくるんだろう💦</blockquote>
+<a href="https://x.com/mWleeLYURuuEFhv/status/2059978379651338637">投稿URL</a>
+<div class="reason">理由: 投稿は辺野古の抗議船と修学旅行との関連性について批判しています。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.70</div><p>共産党の対応と辺野古ヘリ基地反対協議会との関係を疑問視。</p>
+<blockquote>辺野古の高校生死亡事故の件の共産党の対応と辺野古ヘリ基地反対協議会の関係は？</blockquote>
+<a href="https://x.com/popo8366/status/2064632422176784457">投稿URL</a>
+<div class="reason">理由: 投稿は基地反対運動に関連する行動を指摘。</div>
+</div>
+</article>
+<article class="sample-card"><h3>学校・教育委員会批判</h3>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>左派の活動家組織と同志社国際高校の非を認めることを求めている。</p>
+<blockquote>辺野古の高校生死亡事故問題で左派がやるべきなのは、活動家組織と同志社国際高校の「非」をまず認めることなんですよ。それをせずに逃げ続けて、教育基本法が出てきた途端に饒舌になるのでは、誰からも支持されない。仲間うちの結束を固めることにだけ汲々とするのは、組織の終焉が近いということ</blockquote>
+<a href="https://x.com/kikumaco/status/2058755459604226156">投稿URL</a>
+<div class="reason">理由: 人物・政党の行動批判</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>学校法人が安全管理不適切を認め謝罪したことを批判し、教員や校長の責任追及を求めている。</p>
+<blockquote>辺野古転覆女子高校生死亡事故の同志社国際高校高校を運営学校法人が 安全管理が著しく不適切だったと指摘した文部科学省の調査結果を受け 「極めて重大な責任を痛感している」と謝罪 担当教員、校長の責任と処分も公表しろ🤬🤬💢💢💢💢</blockquote>
+<a href="https://x.com/Wahaha11zo/status/2061597702484607045">投稿URL</a>
+<div class="reason">理由: 主眼は学校側の対応への批判。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>京都教職員組合の声明を皮肉って、文科省と組合の左傾性を批判。</p>
+<blockquote>&quot;「極めて恣意的、撤回求める」辺野古事故の文科省調査結果に京都教職員組合が声明&quot; https://t.co/B766uBXz7M 高校生が1名死亡してるんだぞ。そんな事言うのは、京都教職員組合も左だよな。</blockquote>
+<a href="https://x.com/1rlcxV7SHU78175/status/2059606755169259989">投稿URL</a>
+<div class="reason">理由: 皮肉な投稿で批判的</div>
+</div>
+</article>
+<article class="sample-card"><h3>事実確認・情報共有</h3>
+<div class="sample"><div class="meta">中立 / 信頼度 0.90</div><p>文部科学省が死亡した生徒の高校の教育内容が教育基本法に違反すると判断したことについてのニュースを共有しました。</p>
+<blockquote>【きょうの #おきなわHOTeye】 辺野古沖で船が転覆し高校生などが死亡した事故の後、沖縄の平和学習の現場で変化も起きています。文部科学省が、死亡した生徒の高校の教育内容が政治的中立性を定めた教育基本法に違反すると判断したことについて、東京で教員などが開いた会見もあわせてお伝えします。 https://t.co/CSFmupvYXA</blockquote>
+<a href="https://x.com/okinawa_nhk/status/2062321648452436354">投稿URL</a>
+<div class="reason">理由: ニュース共有と事実確認中心。</div>
+</div>
+<div class="sample"><div class="meta">中立 / 信頼度 0.90</div><p>文部科学省が全国の学校に安全確保と適切な教育活動に関する通知を出したことを報告しました。</p>
+<blockquote>以下、記者会見の文字起こし。23：10過ぎから。 時事通信ヒラハラ：平和教育に関して2点。沖縄県の辺野古沖で研修旅行中の高校生が死亡した事故で、文科省が全国の学校に安全確保の徹底とか適切な教育活動に関する通知を出した。市からすでに各学校に通知を出していると思うが、市として何らかのこれ</blockquote>
+<a href="https://x.com/tsukuba_tsasaki/status/2062194425804296548">投稿URL</a>
+<div class="reason">理由: ニュース共有と事実確認中心。</div>
+</div>
+<div class="sample"><div class="meta">中立 / 信頼度 0.90</div><p>国会質問を取り上げたニュースを共有しました。</p>
+<blockquote>国民民主伊藤孝恵議員が 辺野古沖で起きた 高校生死亡事故をめぐり、 研修旅行の安全管理や学校教育の政治的中立性について質問した 国会質疑を取り上げます ⏬️ ⏬️♦NHKで放映されました♦ ⏬️#辺野古転覆事故　#沖縄 ⏬️#ヘリ基地反対協議会 ⏬️#抗議船 ⏬️ https://t.co/EGnTUIVSWy</blockquote>
+<a href="https://x.com/animals_earth1/status/2063209812956250618">投稿URL</a>
+<div class="reason">理由: ニュース共有と事実確認のため。</div>
+</div>
+</article>
+<article class="sample-card"><h3>その他・分類保留</h3>
+<div class="sample"><div class="meta">中立 / 信頼度 0.60</div><p>事故に関する動画を共有しました。</p>
+<blockquote>【ライブ】沖縄・辺野古沖の船転覆事故 同志社国際高校会見 研修旅行中に“小型船”転覆… 女子高校生死亡【LIVE】(2026年3月17日) AN... https://t.co/4sDrLJMl3i @YouTubeより 更問されたく無い質問を、更問無しで乗り切った時の校長から滲み出るニヤけた表情。</blockquote>
+<a href="https://x.com/Jcgt64InEY1172/status/2067758578711359669">投稿URL</a>
+<div class="reason">理由: 明確な立場表明が見られません。</div>
+</div>
+<div class="sample"><div class="meta">中立 / 信頼度 0.50</div><p>事故調査に関する委員会招致情報。</p>
+<blockquote>2026年3月に発生した沖縄県名護市辺野古沖でのボート転覆死亡事故を巡り、参議院沖縄及び北方問題に関する特別委員会における「参考人招致（拒否された場合は証人喚問）」 招致対象: 研修旅行中の高校生らを乗せて転覆した船を運航していた「ヘリ基地反対協議会」の代表、および「平和丸」の船長 https://t.co/LjOUMJnXx4</blockquote>
+<a href="https://x.com/syouhos0/status/2065143289939111988">投稿URL</a>
+<div class="reason">理由: 具体的な分類基準に該当せず、追悼や批判の要素が見当たらない。</div>
+</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.00</div><p>事故に関する報道について言及しています。</p>
+<blockquote>辺野古の抗議船転覆による修学旅行高校生死亡について、どう落とし前をつけるのですか https://t.co/i8nH2JopOd</blockquote>
+<a href="https://x.com/Lovelyhoneybees/status/2061444177972584849">投稿URL</a>
+<div class="reason">理由: 対象外の短い投稿</div>
+</div>
+</article>
+<article class="sample-card"><h3>事故原因・安全管理への関心</h3>
+<div class="sample"><div class="meta">批判 / 信頼度 1.00</div><p>辺野古沖の事故で学校と市民団体の責任を指摘。</p>
+<blockquote>拝読 記事抜粋 この社説のポイント ●辺野古沖で高校生らが死亡した事故で、安全管理のずさんさが明らかに。学校、市民団体の責任は極めて重い ●文科省が教育内容を教育基本法違反としたことは疑問 ●違法認定は政治色の濃い判断で、教育現場の萎縮も懸念される 【社説】 https://t.co/SQLd4NlniN</blockquote>
+<a href="https://x.com/pkvaFziHVOuZaIk/status/2059645168501088647">投稿URL</a>
+<div class="reason">理由: 主眼は安全管理の問題である。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>高校生が抗議船に乗せられた理由と、学校側の責任について疑問を呈している。</p>
+<blockquote>おかしいおかしい！民間人であってもロッキード事件では児玉誉士夫はじめ3人の民間人が証人喚問されている。修学旅行の高校生がなぜ学校側の下見もなく事業登録もない抗議船に乗せられたのか、辺野古転覆事件においては民間人招致か否かよりその解明が1番大事！</blockquote>
+<a href="https://x.com/uverpride1/status/2058922295087997036">投稿URL</a>
+<div class="reason">理由: 投稿は事故の背景や原因に焦点を当てており、安全管理に対する懸念も含んでいる。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.80</div><p>辺野古の高校生死亡事故について解明と再発防止を求めている。</p>
+<blockquote>徹底解明と再発防止が必要なのは辺野古の高校生死亡事故だよ。ヘリ基地反対協議会の責任追求と船長の業務上過失致死の解明が必要だよ。</blockquote>
+<a href="https://x.com/66etam/status/2064578114269872323">投稿URL</a>
+<div class="reason">理由: 事故原因や再発防止に焦点を当てている。</div>
+</div>
+</article>
+<article class="sample-card"><h3>教育基本法違反視</h3>
+<div class="sample"><div class="meta">批判 / 信頼度 1.00</div><p>文部科学省が辺野古沖の事故を教育基本法違反と認定したことに抗議する。</p>
+<blockquote>1人の未来ある高校生が亡くなってるのに何が萎縮させる危険やねん！！ 寧ろ萎縮しろ！！！ 辺野古沖の転覆死亡事故、文部科学省の教育基本法違反認定に抗議声明…被爆者団体など「平和教育活動を萎縮させる危険」(読売新聞オンライン) #Yahooニュース https://t.co/OMnRyMcw4l</blockquote>
+<a href="https://x.com/FwlpAj/status/2064205114018328990">投稿URL</a>
+<div class="reason">理由: 主眼は教育基本法違反への批判。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 1.00</div><p>文部科学省が辺野古沖の事故を教育基本法違反と認定したことを指摘。</p>
+<blockquote>【青木理】2026年5月28日　辺野古沖高校生ボート転覆死亡事故 文科省は政治的中立性を欠いているとし教育基本法違反に初めて認定（平和教育が委縮... https://t.co/clAa03c39k @YouTubeより</blockquote>
+<a href="https://x.com/rsd77734/status/2061796139855495436">投稿URL</a>
+<div class="reason">理由: 主眼は教育基本法違反への批判。</div>
+</div>
+<div class="sample"><div class="meta">批判 / 信頼度 1.00</div><p>文科省が辺野古沖の高校生ボート事故で政治的中立性を欠いているとし、教育基本法違反に初めて認定した。</p>
+<blockquote>【青木理】2026年5月28日　辺野古沖高校生ボート転覆死亡事故 文科省は政治的中立性を欠いているとし教育基本法違反に初めて認定（平和教育が委縮... https://t.co/XfmmwW4Ry5 @YouTubeより</blockquote>
+<a href="https://x.com/WinD_8_2_1/status/2059951053932822626">投稿URL</a>
+<div class="reason">理由: 主眼は「教育基本法違反」。</div>
+</div>
+</article>
+</div></section>
+    <section class="note-panel"><h2>注意</h2><ul>
+<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
+<li>今回の検索語は「辺野古」「高校生」「死亡事故」「教育基本法」に寄っているため、教育基本法違反認定をめぐる反応が多く出やすいです。</li>
+<li>文科省・慰霊を直接含む検索語では取得件数が少なく、実際の反応軸は教育基本法認定への賛否に寄っています。</li>
+<li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li>
+<li>代表投稿は公開前に人間が確認する前提です。</li>
+</ul></section>
+  </main>
+  <footer style="border-top:1px solid var(--line);padding:20px min(5vw,56px);text-align:center;color:var(--muted);font-size:12px;line-height:1.8;">
+    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
+    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <div style="margin-top:10px;">
+      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
+        ☕ このプロジェクトを応援
+      </a>
+    </div>
+  </footer>
+</body>
+</html>

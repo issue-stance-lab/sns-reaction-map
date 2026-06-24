@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学校でのあだ名禁止の是非 SNS反応まっぷ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f5f8;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce6;
+      --panel: #ffffff;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --shadow: 0 10px 28px rgba(16, 24, 40, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+    header {
+      padding: 34px min(5vw, 56px) 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .top-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 5px 10px;
+      background: #fbfcfe;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: 0; }
+    h2 { margin: 0 0 16px; font-size: 20px; }
+    h3 { margin: 0 0 12px; font-size: 16px; }
+    .lead { margin: 0; color: var(--muted); max-width: 960px; }
+    main { padding: 22px min(5vw, 56px) 48px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .stat span { display: block; color: var(--muted); font-size: 13px; }
+    .stat strong { display: block; font-size: 24px; margin-top: 4px; }
+    .panel, .note-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+    }
+    .panel-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .panel-title h2 { margin: 0; }
+    .panel-title span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
+    table.compact { min-width: 420px; max-width: 760px; }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    th:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #fff;
+      z-index: 1;
+      min-width: 240px;
+      max-width: 340px;
+      white-space: normal;
+      line-height: 1.45;
+    }
+    .row-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      margin-right: 8px;
+      background: #98a2b3;
+      vertical-align: 1px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #eef2f7;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+      white-space: normal;
+      min-width: 112px;
+    }
+    thead th:first-child { z-index: 3; background: #eef2f7; }
+    td { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .heat-cell {
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .heat-cell span {
+      display: inline-flex;
+      min-width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+    }
+    .heat-cell:hover {
+      transform: scale(1.03);
+      box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .28);
+    }
+    .heat-cell.zero {
+      color: #98a2b3 !important;
+      font-weight: 600;
+    }
+    .heat-cell.zero span { background: transparent; }
+    .total {
+      background: #f2f4f7;
+      color: var(--ink);
+      font-weight: 900;
+      min-width: 72px;
+    }
+    .bar-list {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+    }
+    .bar-row {
+      display: grid;
+      gap: 6px;
+    }
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .bar-meta span { color: #344054; }
+    .bar-meta strong { font-variant-numeric: tabular-nums; }
+    .bar-track {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #eef2f7;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9fd0ff, #1769d1);
+    }
+    .axis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .axis-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: linear-gradient(180deg, #ffffff, #fbfcfe);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .axis-kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .axis-card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+    .axis-count {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 34px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+    }
+    .axis-count span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .axis-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .axis-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .axis-tags span {
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0f4e9d;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    [data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] th { border-left: 5px solid #1769d1; }
+[data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] .row-dot { background: #1769d1; }
+[data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"] th { border-left: 5px solid #1769d1; }
+[data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"] .row-dot { background: #1769d1; }
+[data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"] th { border-left: 5px solid #b54708; }
+[data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"] .row-dot { background: #b54708; }
+[data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"] th { border-left: 5px solid #b54708; }
+[data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"] .row-dot { background: #b54708; }
+[data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"] th { border-left: 5px solid #0f7490; }
+[data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"] .row-dot { background: #0f7490; }
+[data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"] .bar-fill { background: linear-gradient(90deg, #e5f7fb, #0f7490); }
+[data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"] .bar-meta span { color: #0b586d; font-weight: 700; }
+[data-category="その他・分類保留"] th { border-left: 5px solid #667085; }
+[data-category="その他・分類保留"] .row-dot { background: #667085; }
+[data-category="その他・分類保留"] .bar-fill { background: linear-gradient(90deg, #f2f4f7, #667085); }
+[data-category="その他・分類保留"] .bar-meta span { color: #344054; font-weight: 700; }
+.axis-card[data-tone="positive"] { border-top: 5px solid #1769d1; background: linear-gradient(180deg, #fff, #e7f1ff); }
+.axis-card[data-tone="positive"] .axis-kicker { color: #0f4e9d; }
+.axis-card[data-tone="positive"] .axis-tags span { background: #e7f1ff; color: #0f4e9d; }
+.axis-card[data-tone="negative"] { border-top: 5px solid #b54708; background: linear-gradient(180deg, #fff, #fff1e8); }
+.axis-card[data-tone="negative"] .axis-kicker { color: #8a3206; }
+.axis-card[data-tone="negative"] .axis-tags span { background: #fff1e8; color: #8a3206; }
+.axis-card[data-tone="safety"] { border-top: 5px solid #16885a; background: linear-gradient(180deg, #fff, #e8f7ef); }
+.axis-card[data-tone="safety"] .axis-kicker { color: #0f6845; }
+.axis-card[data-tone="safety"] .axis-tags span { background: #e8f7ef; color: #0f6845; }
+.axis-card[data-tone="neutral"] { border-top: 5px solid #667085; background: linear-gradient(180deg, #fff, #f2f4f7); }
+.axis-card[data-tone="neutral"] .axis-kicker { color: #344054; }
+.axis-card[data-tone="neutral"] .axis-tags span { background: #f2f4f7; color: #344054; }
+.axis-card[data-tone="warning"] { border-top: 5px solid #7a4cc2; background: linear-gradient(180deg, #fff, #f2ecff); }
+.axis-card[data-tone="warning"] .axis-kicker { color: #55348a; }
+.axis-card[data-tone="warning"] .axis-tags span { background: #f2ecff; color: #55348a; }
+.axis-card[data-tone="derived"] { border-top: 5px solid #0f7490; background: linear-gradient(180deg, #fff, #e5f7fb); }
+.axis-card[data-tone="derived"] .axis-kicker { color: #0b586d; }
+.axis-card[data-tone="derived"] .axis-tags span { background: #e5f7fb; color: #0b586d; }
+    .legend {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .sample-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+    .sample { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+    .meta { color: var(--accent); font-size: 12px; font-weight: 700; }
+    blockquote {
+      margin: 8px 0;
+      padding-left: 10px;
+      border-left: 3px solid var(--line);
+      color: #344054;
+      font-size: 13px;
+    }
+    .reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    a { color: var(--accent); font-size: 13px; }
+    .note-panel h2 { font-size: 16px; }
+    .note-panel ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding-inline: 14px; }
+      header { padding-inline: 14px; }
+      .panel-title { align-items: flex-start; flex-direction: column; gap: 2px; }
+      th:first-child { min-width: 180px; }
+      table { min-width: 760px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="top-nav"><a href="index.html">トップ</a><a href="takaichi-reaction-map-standard.html">高市文春問題</a><a href="henoko-student-accident-reaction-map.html">辺野古事例</a></nav>
+    <h1>学校でのあだ名禁止の是非 SNS反応まっぷ</h1>
+    <p class="lead">Yahooリアルタイム検索で取得した投稿サンプルを、論点カテゴリ・検索クエリ・立場で可視化した編集用ビューです。世論調査ではなく、反応の偏りと論点の広がりを見るために使います。</p>
+  </header>
+  <main>
+    <section class="stats">
+      <div class="stat"><span>総サンプル</span><strong>201</strong></div>
+      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+      <div class="stat"><span>最多カテゴリ</span><strong>その他・分類保留 167</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>保留 166</strong></div>
+    </section>
+    <section class="panel" id="vote-section">
+<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">いじめ防止やジェンダー平等の推進を目的として、小中学校などで「あだ名禁止」や「さん付け」を指導する動きが広がっています。からかいを防ぎ心理的安全性を高めると肯定する意見と、親しみが薄れることやいじめの根本解決にならないと懸念する意見が対立しています。</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「学校 あだ名」「あだ名禁止」「さん付け」などのキーワードで、Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
+<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
+<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
+<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+  </div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
+  <div id="vote-bars" style="margin-bottom:16px;"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+    <a id="share-x" href="#" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
+      𝕏 でシェア
+    </a>
+    <button id="vote-redo-btn"
+       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
+      投票をやり直す
+    </button>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
+</div>
+</section>
+<script>
+(function(){
+  var TOPIC="学校でのあだ名禁止の是非_SNS反応まっ";
+  var axes=[{"kicker": "禁止支持", "label": "いじめ防止のためにあだ名禁止やさん付けを支持する", "origLabel": "あだ名禁止やさん付けを支持する", "tone": "positive", "color": "#4a90d9"}, {"kicker": "禁止反対", "label": "親しみが薄れるのであだ名禁止やさん付けに反対する", "origLabel": "一律のあだ名禁止に反対する", "tone": "negative", "color": "#e07040"}, {"kicker": "ルール運用", "label": "嫌なあだ名だけ禁止するなど柔軟に対応すべき", "origLabel": "嫌なあだ名のみ規制など柔軟な運用を求める", "tone": "derived", "color": "#0f7490"}];
+  var TITLE="学校でのあだ名禁止の是非 SNS反応まっぷ";
+  var KEY="sns_vote_"+TOPIC;
+
+  var supabaseUrl="";
+  var supabaseAnonKey="";
+  var supabaseClient=null;
+
+  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
+    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
+  }
+
+  var stored={};
+  var myVote=localStorage.getItem(KEY+"_my");
+
+  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
+  function applyBlur(){
+    var chartPanel=document.getElementById("semicircle-chart");
+    if(chartPanel){
+      var wrap=chartPanel.closest(".panel");
+      if(wrap && myVote===null){
+        wrap.id="chart-panel";
+        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
+        wrap.style.position="relative";
+        var overlay=document.createElement("div");
+        overlay.id="chart-overlay";
+        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
+        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
+        wrap.appendChild(overlay);
+      }
+    }
+  }
+  
+  async function fetchVotes(){
+    if(supabaseClient){
+      try{
+        var res=await supabaseClient
+          .from("votes")
+          .select("choice_idx")
+          .eq("topic_id", TOPIC);
+        if(res.error) throw res.error;
+        stored={};
+        (res.data||[]).forEach(function(row){
+          var idx=row.choice_idx;
+          stored[idx]=(stored[idx]||0)+1;
+        });
+      }catch(err){
+        console.error("Error fetching votes from Supabase:", err);
+        stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+      }
+    }else{
+      stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+    }
+    if(myVote!==null){
+      showResults(parseInt(myVote));
+    }
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
+  }else{
+    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
+  }
+
+  var btnWrap=document.getElementById("vote-buttons");
+  axes.forEach(function(a,i){
+    var btn=document.createElement("button");
+    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
+    btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
+    btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
+    btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
+    btn.onclick=function(){castVote(i)};
+    btnWrap.appendChild(btn);
+  });
+
+  document.getElementById("vote-redo-btn").onclick=function(){
+    localStorage.removeItem(KEY+"_my");
+    location.reload();
+  };
+
+  function revealChart(){
+    var wrap=document.getElementById("chart-panel");
+    if(wrap){
+      wrap.style.transition="filter .6s ease";
+      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
+      var ov=document.getElementById("chart-overlay");
+      if(ov)ov.remove();
+    }
+  }
+
+  async function castVote(idx){
+    if(myVote!==null) return;
+    
+    var btns=btnWrap.querySelectorAll("button");
+    btns.forEach(function(b){b.disabled=true; b.style.opacity="0.5"});
+
+    if(supabaseClient){
+      try{
+        var res=await supabaseClient
+          .from("votes")
+          .insert([{ topic_id: TOPIC, choice_idx: idx }]);
+        if(res.error) throw res.error;
+      }catch(err){
+        console.error("Error casting vote to Supabase:", err);
+        var msg=err.message||"";
+        var details=err.details||"";
+        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
+          alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
+        }else{
+          alert("投票データの送信中にエラーが発生しました。");
+          // Local fallback in case of connection failure
+          stored[idx]=(stored[idx]||0)+1;
+          localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+        }
+      }
+      await fetchVotes();
+    }else{
+      // Pure local fallback
+      stored[idx]=(stored[idx]||0)+1;
+      localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+    }
+
+    localStorage.setItem(KEY+"_my",""+idx);
+    myVote=""+idx;
+    revealChart();
+    showResults(idx);
+  }
+
+  function showResults(myIdx){
+    var total=0;
+    axes.forEach(function(_,i){total+=(stored[i]||0)});
+    if(total===0)total=1;
+
+    var myAxis=axes[myIdx];
+    var posLabel=document.getElementById("vote-position-label");
+    var posText=document.getElementById("vote-position-text");
+    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
+    posLabel.style.color=myAxis.color;
+    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
+
+    var barsEl=document.getElementById("vote-bars");
+    barsEl.innerHTML="";
+    axes.forEach(function(a,i){
+      var c=stored[i]||0;
+      var pct=Math.round(c/total*100);
+      var isMine=i===myIdx;
+      var row=document.createElement("div");
+      row.style.cssText="margin-bottom:8px;";
+      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
+        +(isMine?'✓ ':'')+a.label+'</span>'
+        +'<span style="font-size:14px;font-weight:800;color='+a.color+'">'+pct+'% ('+c+'票)</span></div>'
+        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
+        +'<div style="height:100%;width='+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+      barsEl.appendChild(row);
+    });
+
+    // Improved X share text with dynamic percentages
+    var shareBtn=document.getElementById("share-x");
+    var pctList=axes.map(function(a,i){
+      var c=stored[i]||0;
+      var pct=Math.round(c/total*100);
+      return a.label+" "+pct+"%";
+    }).join(" / ");
+    
+    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
+    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
+    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
+    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
+
+    document.getElementById("vote-result").style.display="block";
+    document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+})();
+</script>'')+a.label+'</span>'
+        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'%</span></div>'
+        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
+        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+      barsEl.appendChild(row);
+    });
+
+    var shareBtn=document.getElementById("share-x");
+    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
+    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
+    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
+    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
+
+    document.getElementById("vote-result").style.display="block";
+    document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+})();
+</script>
+    <section class="panel">
+<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">あだ名禁止やさん付けを支持する</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">13</div></div>
+  <div style="text-align:center;color:var(--muted);font-size:12px;">
+    <div style="font-size:11px;">過半数</div>
+    <div style="font-weight:800;font-size:16px;color:var(--ink);">101</div>
+    <div style="font-size:18px;">▼</div>
+  </div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">一律のあだ名禁止に反対する</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">19</div></div>
+</div>
+<div style="position:relative;max-width:660px;margin:0 auto;">
+  <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
+  <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
+    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">201</div>
+    <div style="font-size:14px;color:var(--muted);">サンプル</div>
+  </div>
+</div>
+<div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
+<script>
+(function(){
+  var data=[{"label": "あだ名禁止やさん付けを支持する", "count": 13, "color": "#4a90d9", "cats": "いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成, 男女平等の推進やジェンダー配慮の観点からさん付けに賛成"}, {"label": "嫌なあだ名のみ規制など柔軟な運用を求める", "count": 2, "color": "#0f7490", "cats": "嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"}, {"label": "その他", "count": 167, "color": "#cbd5e1", "cats": "その他・分類保留"}, {"label": "一律のあだ名禁止に反対する", "count": 19, "color": "#e07040", "cats": "親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対, 表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"}];
+  var total=data.reduce(function(s,d){return s+d.count},0);
+  var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
+  var svg=document.getElementById("semicircle-chart");
+  var startAngle=Math.PI;
+  data.forEach(function(d,idx){
+    var sweep=(d.count/total)*Math.PI-gap;
+    var endAngle=startAngle+sweep;
+    var x1o=cx+outerR*Math.cos(startAngle),y1o=cy+outerR*Math.sin(startAngle);
+    var x2o=cx+outerR*Math.cos(endAngle),y2o=cy+outerR*Math.sin(endAngle);
+    var x1i=cx+innerR*Math.cos(endAngle),y1i=cy+innerR*Math.sin(endAngle);
+    var x2i=cx+innerR*Math.cos(startAngle),y2i=cy+innerR*Math.sin(startAngle);
+    var la=sweep>Math.PI?1:0;
+    var path="M "+x1o+" "+y1o+" A "+outerR+" "+outerR+" 0 "+la+" 1 "+x2o+" "+y2o+" L "+x1i+" "+y1i+" A "+innerR+" "+innerR+" 0 "+la+" 0 "+x2i+" "+y2i+" Z";
+    var el=document.createElementNS("http://www.w3.org/2000/svg","path");
+    el.setAttribute("d",path);el.setAttribute("fill",d.color);
+    el.style.transition="opacity .15s";el.style.cursor="pointer";
+    el.onmouseenter=function(){el.style.opacity="0.75"};
+    el.onmouseleave=function(){el.style.opacity="1"};
+    var t=document.createElementNS("http://www.w3.org/2000/svg","title");
+    t.textContent=d.label+": "+d.count+"件 ("+(d.count/total*100).toFixed(1)+"%)"+"\n"+d.cats;
+    el.appendChild(t);svg.appendChild(el);
+    var mid=startAngle+sweep/2,lr=(outerR+innerR)/2;
+    if(d.count>=5){
+      var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
+      tx.setAttribute("x",cx+lr*Math.cos(mid));
+      tx.setAttribute("y",cy+lr*Math.sin(mid)-8);
+      tx.setAttribute("text-anchor","middle");tx.setAttribute("dominant-baseline","central");
+      tx.setAttribute("font-size","26");tx.setAttribute("font-weight","800");
+      tx.setAttribute("fill","#fff");tx.setAttribute("pointer-events","none");
+      tx.textContent=d.count;svg.appendChild(tx);
+    }
+    if(sweep>0.25){
+      var tx2=document.createElementNS("http://www.w3.org/2000/svg","text");
+      var short=d.label.length>12?d.label.substring(0,12)+"…":d.label;
+      tx2.setAttribute("x",cx+lr*Math.cos(mid));
+      tx2.setAttribute("y",cy+lr*Math.sin(mid)+14);
+      tx2.setAttribute("text-anchor","middle");tx2.setAttribute("dominant-baseline","central");
+      tx2.setAttribute("font-size","11");tx2.setAttribute("font-weight","600");
+      tx2.setAttribute("fill","rgba(255,255,255,.85)");tx2.setAttribute("pointer-events","none");
+      tx2.textContent=short;svg.appendChild(tx2);
+    }
+    startAngle=endAngle+gap;
+  });
+  // Center line (majority marker)
+  var lineX=cx;
+  var el=document.createElementNS("http://www.w3.org/2000/svg","line");
+  el.setAttribute("x1",lineX);el.setAttribute("y1",cy-outerR-5);
+  el.setAttribute("x2",lineX);el.setAttribute("y2",cy-innerR+5);
+  el.setAttribute("stroke","var(--ink,#172033)");el.setAttribute("stroke-width","2");
+  el.setAttribute("stroke-dasharray","4,3");el.setAttribute("opacity","0.4");
+  svg.appendChild(el);
+
+  var leg=document.getElementById("semicircle-legend");
+  data.forEach(function(d){
+    var item=document.createElement("div");
+    item.style.cssText="display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:6px 0;";
+    item.innerHTML='<span style="width:14px;height:14px;border-radius:4px;background:'+d.color+';flex-shrink:0;margin-top:2px"></span><div><strong style="font-size:14px">'+d.label+'</strong> <span style="color:var(--accent);font-weight:800;font-size:16px;margin-left:4px">'+d.count+'</span><span style="color:var(--muted);font-size:11px;margin-left:2px">件</span><div style="color:var(--muted);font-size:11px;margin-top:2px">'+d.cats+'</div></div>';
+    leg.appendChild(item);
+  });
+})();
+</script>
+</section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">禁止支持</div><h3>あだ名禁止やさん付けを支持する</h3><div class="axis-count">13<span>件</span></div><p>あだ名によるいじめの防止、ジェンダーへの配慮、心理的安全性や教室内の落ち着いた人間関係づくりを評価する立場。</p><div class="axis-tags"><span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</span><span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</span></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">禁止反対</div><h3>一律のあだ名禁止に反対する</h3><div class="axis-count">19<span>件</span></div><p>親しみが薄れて人間関係がギスギスする懸念や、言葉を規制してもいじめの根本的な解決にはならないと指摘する立場。</p><div class="axis-tags"><span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</span><span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">ルール運用</div><h3>嫌なあだ名のみ規制など柔軟な運用を求める</h3><div class="axis-count">2<span>件</span></div><p>親しみのある良いあだ名まで禁止するのではなく、「本人が嫌がるあだ名のみを指導する」などの弾力的な運用を支持する立場。</p><div class="axis-tags"><span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</span></div></article></div></section>
+    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
+<div class="bar-list">
+<div class="bar-row" data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"><div class="bar-meta"><span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</span><strong>6</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
+<div class="bar-row" data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><div class="bar-meta"><span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</span><strong>7</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
+<div class="bar-row" data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><div class="bar-meta"><span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</span><strong>13</strong></div><div class="bar-track"><div class="bar-fill" style="width:8%"></div></div></div>
+<div class="bar-row" data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><div class="bar-meta"><span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</span><strong>6</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
+<div class="bar-row" data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"><div class="bar-meta"><span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</span><strong>2</strong></div><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>167</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+</div></section>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>あだ名 さん付け</th><th>あだ名 廃止</th><th>あだ名禁止</th><th>さん付け</th><th>さん付け指導</th><th>学校 あだ名</th><th>学校 あだ名禁止</th><th>小学校 あだ名</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"><th><span class="row-dot"></span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / あだ名 さん付け: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / あだ名 廃止: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / あだ名禁止: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / さん付け: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / さん付け指導: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 学校 あだ名: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 学校 あだ名禁止: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 小学校 あだ名: 0件"><span>0</span></td>
+<td class="total">6</td></tr>
+<tr data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><th><span class="row-dot"></span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名 さん付け: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名 廃止: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名禁止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / さん付け: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / さん付け指導: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 学校 あだ名: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 学校 あだ名禁止: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 小学校 あだ名: 0件"><span>0</span></td>
+<td class="total">7</td></tr>
+<tr data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><th><span class="row-dot"></span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名 さん付け: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名 廃止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名禁止: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / さん付け: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / さん付け指導: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 学校 あだ名: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 学校 あだ名禁止: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 小学校 あだ名: 1件"><span>1</span></td>
+<td class="total">13</td></tr>
+<tr data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><th><span class="row-dot"></span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / あだ名 さん付け: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / あだ名 廃止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / あだ名禁止: 4件"><span>4</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / さん付け: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / さん付け指導: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 学校 あだ名: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 学校 あだ名禁止: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 小学校 あだ名: 0件"><span>0</span></td>
+<td class="total">6</td></tr>
+<tr data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"><th><span class="row-dot"></span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / あだ名 さん付け: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / あだ名 廃止: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / あだ名禁止: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / さん付け: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / さん付け指導: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 学校 あだ名: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 学校 あだ名禁止: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 小学校 あだ名: 0件"><span>0</span></td>
+<td class="total">2</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="その他・分類保留 / あだ名 さん付け: 30件"><span>30</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / あだ名 廃止: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="その他・分類保留 / あだ名禁止: 20件"><span>20</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / さん付け: 40件"><span>40</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / さん付け指導: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 学校 あだ名: 37件"><span>37</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 学校 あだ名禁止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 小学校 あだ名: 32件"><span>32</span></td>
+<td class="total">167</td></tr>
+</tbody></table></div></section>
+    <div class="legend">
+      <span>少</span>
+      <span class="chip" style="background:#f5f6f8"></span>
+      <span class="chip" style="background:#dceeff"></span>
+      <span class="chip" style="background:#9fd0ff"></span>
+      <span class="chip" style="background:#4da3ff"></span>
+      <span class="chip" style="background:#1769d1"></span>
+      <span class="chip" style="background:#0a3d91"></span>
+      <span>多</span>
+    </div>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>賛成</th><th>反対</th><th>条件付き容認</th><th>保留</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"><th><span class="row-dot"></span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 賛成: 6件"><span>6</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 条件付き容認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 保留: 0件"><span>0</span></td>
+<td class="total">6</td></tr>
+<tr data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><th><span class="row-dot"></span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 賛成: 7件"><span>7</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 条件付き容認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 保留: 0件"><span>0</span></td>
+<td class="total">7</td></tr>
+<tr data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><th><span class="row-dot"></span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 反対: 13件"><span>13</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 条件付き容認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 保留: 0件"><span>0</span></td>
+<td class="total">13</td></tr>
+<tr data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><th><span class="row-dot"></span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 反対: 6件"><span>6</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 条件付き容認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 保留: 0件"><span>0</span></td>
+<td class="total">6</td></tr>
+<tr data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"><th><span class="row-dot"></span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 条件付き容認: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 保留: 0件"><span>0</span></td>
+<td class="total">2</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 反対: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 条件付き容認: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 保留: 166件"><span>166</span></td>
+<td class="total">167</td></tr>
+</tbody></table></div></section>
+    <section class="panel"><h2>代表サンプル</h2>
+<div class="sample-grid">
+<article class="sample-card"><h3>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</h3>
+<div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>小学校であだ名禁止、さん付け指導が広がる。</p>
+<blockquote>｢小学校で あだ名禁止 ｣日本の&quot;息苦しさ&quot;の象徴だ あだ名は｢メリット｣も大きいのに https://t.co/PuwlyShXM0 「あだ名」「呼び捨て」は禁止、小学校で「さん付け」指導が広がる https://t.co/Lygx3DZEER</blockquote>
+<a href="https://x.com/ryohin_jp/status/2068199514016714987">投稿URL</a>
+<div class="reason">理由: 規則を肯定し、いじめ防止や心理的安全確保の観点から賛成</div>
+</div>
+<div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>小学校時代の経験を踏まえ、あだ名禁止は虐め防止のために行われていると主張。</p>
+<blockquote>中学生の頃テレビ番組に出てくるモンスター名があだ名になっている生徒がいて学級委員の選挙のときまでそのモンスター名で投票され一位になったが担任が激怒したという出来事を思い出しました。その生徒は虐められていたわけではありませんが あだ名禁止 というのは虐め防止のつもりなのかもしれません。 https://t.co/fV6OI2Kcmm</blockquote>
+<a href="https://x.com/tkbei/status/2067979902159294633">投稿URL</a>
+<div class="reason">理由: 虐め防止の観点からあだ名禁止を肯定。</div>
+</div>
+<div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>親しみを込めたあだ名も禁止すべきと主張。</p>
+<blockquote>たぶん長谷川さんも自分を貶めるあだ名はやめてほしいと思いますよ。親しみを込めたあだ名で呼ばれたかったんでしょう？私は あだ名禁止 を支持します。</blockquote>
+<a href="https://x.com/pumousuallife/status/2067967272703180860">投稿URL</a>
+<div class="reason">理由: あだ名禁止を支持し、親しみのある呼び方まで禁止すべき</div>
+</div>
+</article>
+<article class="sample-card"><h3>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</h3>
+<div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>保育士はあだ名禁止だが、現場仕事にはさん付けが適している</p>
+<blockquote>みんな頭脳労働しかやりたがらないからな。ずっと少子化だし今の子供達は特に温室育ち。名前にさん付けしかダメ( あだ名禁止 )とか優しい世界で生きてきたんだ。現場仕事出来る子なかなかいないかも。今後日本のインフラ維持できるんか...</blockquote>
+<a href="https://x.com/teijidekaerita1/status/2065642109257105703">投稿URL</a>
+<div class="reason">理由: 保育士への呼び方についてさん付けを推奨</div>
+</div>
+<div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>ぴすさんと呼ばれるようにするという内容。</p>
+<blockquote>では､これからぴすさんとお呼びさせていただきますね! さん付け ですねφ(..)ﾒﾓﾒﾓ　かしこまりました!</blockquote>
+<a href="https://x.com/riku89280/status/2069050683379302779">投稿URL</a>
+<div class="reason">理由: さん付けによる尊重を肯定。</div>
+</div>
+<div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>さん付けは敬意を表すため必要。</p>
+<blockquote>さん付け ないと失礼だからです。 年とか関係ない。</blockquote>
+<a href="https://x.com/masterg82512494/status/2069047066383556901">投稿URL</a>
+<div class="reason">理由: さん付けが敬意を表すという理由で賛成。</div>
+</div>
+</article>
+<article class="sample-card"><h3>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</h3>
+<div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>小学校での二分の一成人式ではあだ名禁止は賛成だが、全生徒へのさん付けは断固反対。</p>
+<blockquote>小学校の「二分の一成人式」と（ あだ名禁止 は良いが）「全生徒にさん付け」は、断固反対。</blockquote>
+<a href="https://x.com/seiro10/status/2064292094152413689">投稿URL</a>
+<div class="reason">理由: 親しみが薄れることを懸念</div>
+</div>
+<div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>店の名前についての個人的な意見</p>
+<blockquote>なんで一般人が店の名前を さん付け するんだろ… 普通に呼び捨てでいいのでは🤔芸能人みたいにコラボとかお金発生してたらありかもだけど</blockquote>
+<a href="https://x.com/niniseiritsurai/status/2069053048497021067">投稿URL</a>
+<div class="reason">理由: 単なる個人的感想</div>
+</div>
+<div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>あだ名は自由で呼び捨てでも良い。</p>
+<blockquote>さん付け は嫌だから あだ名 つけるか呼び捨てでいいよー！</blockquote>
+<a href="https://x.com/tensai071322/status/2068877956408283581">投稿URL</a>
+<div class="reason">理由: コミュニケーションの制限を懸念し、あだ名禁止に反対。</div>
+</div>
+</article>
+<article class="sample-card"><h3>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</h3>
+<div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>あだ名禁止はいじめと混同され、言語道断だと批判。</p>
+<blockquote>私は あだ名禁止 は絶対に反対です。いじめとあだ名は別問題。これを一緒くたにするなど言語道断。あだ名があって、「いじめに結び付けるな」こうであるべきですね</blockquote>
+<a href="https://x.com/ryohin_jp/status/2067969229413040502">投稿URL</a>
+<div class="reason">理由: いじめとあだ名禁止を別問題として分けるべき。</div>
+</div>
+<div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>あだ名禁止は差別やいじめの温床になる可能性があると批判。</p>
+<blockquote>あだ名禁止 ：いじめ・差別の温床になるケースがあった →「さん付け統一」でフラットに 行事縮小：共働き・ひとり親・経済格差・宗教・発達特性… 全員が同じ条件で参加できない行事は不公平になる 「みんな一緒」をやると「参加できない子」が可哀想になる時代。</blockquote>
+<a href="https://x.com/ibrahim_kh21712/status/2064315852036456507">投稿URL</a>
+<div class="reason">理由: 差別の温床になる可能性を指摘</div>
+</div>
+<div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>学校があだ名禁止を推奨しているが、これは安全や公平性を犠牲にするためのものだと批判。</p>
+<blockquote>「えっ、そこまで？」が正直な感想やわ😂 *安全・公平・炎上回避の三重苦*やね 熱中症→午前終了、事故責任→組体操廃止、差別問題→ あだ名禁止 、格差→おやつ制限 親から見えんのは「 学校 のリスク管理」 昔は美談で済んだのが、今はモンペ・SNS・裁判の時代</blockquote>
+<a href="https://x.com/TUsman27906/status/2064175175349006385">投稿URL</a>
+<div class="reason">理由: 表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対。</div>
+</div>
+</article>
+<article class="sample-card"><h3>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</h3>
+<div class="sample"><div class="meta">条件付き容認 / 信頼度 0.80</div><p>あだ名の使用を廃止し、散兵のボイス追加を求めている。</p>
+<blockquote>個人的にプラーナに望んでるもの→世界樹ファイヤーで散兵バレ、ちゃんとスメール以外を放浪する放浪者、五箇伝の末裔に贖罪をしに向かう放浪者、 あだ名 呼び 廃止 、散兵についてボイス復活&amp;追加、博士との因縁にはケリをつけるけどなんやかんやあって博士実装</blockquote>
+<a href="https://x.com/yomogi_833/status/2056769969841733800">投稿URL</a>
+<div class="reason">理由: あだ名禁止に反対する立場だが、嫌なあだ名だけを禁止する柔軟な運用を支持。</div>
+</div>
+<div class="sample"><div class="meta">条件付き容認 / 信頼度 0.00</div><p>親しみのあるあだ名と悪意あるあだ名の区別を主張。</p>
+<blockquote>今の 学校 は あだ名 禁止ときいて私もびっくりしたし、この方のおっしゃることに全面的に賛成だな。 それに親しみを込めただけの あだ名 と悪意ある あだ名 なんて子供でもちゃんと区別できるよ。いい あだ名 をもらった私は高校まで自主的に使い続けて、今でもそう呼んでくれる友達がいるよ。 https://t.co/Ec3Z6jqn7D</blockquote>
+<a href="https://x.com/kinakina35/status/2068167994224824357">投稿URL</a>
+<div class="reason">理由: 良いあだ名は容認すべきという立場。</div>
+</div>
+</article>
+<article class="sample-card"><h3>その他・分類保留</h3>
+<div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>さん付けは良くないという立場。</p>
+<blockquote>さん付け 良くないよ（？） 仲良いし呼び捨てか あだ名 付けていいんだから</blockquote>
+<a href="https://x.com/Mizinko124649/status/2068682265086078976">投稿URL</a>
+<div class="reason">理由: 呼び捨てやあだ名の方が良いと主張</div>
+</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.00</div><p>学校での呼び方についての経験を述べているが、明確な立場は示していない。</p>
+<blockquote>坊ちゃんの 学校 というか市内の 学校 全体的に、友達同士は下の名前で呼び捨てにする習慣。先生は、下の名前にさん付け。これは全国的になものなんだろうか。面白いよねえ。私が小学生の時は、下の名前や あだ名 はNGで、苗字にさんか君付けじゃないとヒステリック教師に怒られてた。</blockquote>
+<a href="https://x.com/fiofio710/status/2069031433692484083">投稿URL</a>
+<div class="reason">理由: 単なる経験談で意見がないため</div>
+</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.00</div><p>小学生時代の経験を述べているが、明確な立場は示していない。</p>
+<blockquote>だから小学生の頃、ほぼ 学校 で喋れない訳だよね。超あがり症で赤面しちゃうから、焼きリンゴって あだ名 付いてたわ😆何か話しても教師にいつも声が小さい！とか言われてたな。そういえば結構最近も「その時言えば良かったじゃん」って言われたな。こっちはその場の空気読んで言わなかっただけだがね。 https://t.co/Wqm6TO6Okx</blockquote>
+<a href="https://x.com/MiuMiufrog/status/2069029287425106104">投稿URL</a>
+<div class="reason">理由: 単なる経験談で意見がないため</div>
+</div>
+</article>
+</div></section>
+    <section class="note-panel"><h2>注意</h2><ul>
+<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
+<li>検索語、取得時点、Yahooリアルタイム検索の表示仕様によって偏りがあります。</li>
+<li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li>
+<li>代表投稿は公開前に人間が確認する前提です。</li>
+</ul></section>
+  </main>
+  <footer style="border-top:1px solid var(--line);padding:20px min(5vw,56px);text-align:center;color:var(--muted);font-size:12px;line-height:1.8;">
+    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
+    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <div style="margin-top:10px;">
+      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
+        ☕ このプロジェクトを応援
+      </a>
+    </div>
+  </footer>
+</body>
+</html>

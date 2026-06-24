@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>憲法改正論議 SNS反応まっぷ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f5f8;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce6;
+      --panel: #ffffff;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --shadow: 0 10px 28px rgba(16, 24, 40, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+    header {
+      padding: 34px min(5vw, 56px) 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .top-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 5px 10px;
+      background: #fbfcfe;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: 0; }
+    h2 { margin: 0 0 16px; font-size: 20px; }
+    h3 { margin: 0 0 12px; font-size: 16px; }
+    .lead { margin: 0; color: var(--muted); max-width: 960px; }
+    main { padding: 22px min(5vw, 56px) 48px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .stat span { display: block; color: var(--muted); font-size: 13px; }
+    .stat strong { display: block; font-size: 24px; margin-top: 4px; }
+    .panel, .note-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+    }
+    .panel-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .panel-title h2 { margin: 0; }
+    .panel-title span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
+    table.compact { min-width: 420px; max-width: 760px; }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    th:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #fff;
+      z-index: 1;
+      min-width: 240px;
+      max-width: 340px;
+      white-space: normal;
+      line-height: 1.45;
+    }
+    .row-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      margin-right: 8px;
+      background: #98a2b3;
+      vertical-align: 1px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #eef2f7;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+      white-space: normal;
+      min-width: 112px;
+    }
+    thead th:first-child { z-index: 3; background: #eef2f7; }
+    td { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .heat-cell {
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .heat-cell span {
+      display: inline-flex;
+      min-width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+    }
+    .heat-cell:hover {
+      transform: scale(1.03);
+      box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .28);
+    }
+    .heat-cell.zero {
+      color: #98a2b3 !important;
+      font-weight: 600;
+    }
+    .heat-cell.zero span { background: transparent; }
+    .total {
+      background: #f2f4f7;
+      color: var(--ink);
+      font-weight: 900;
+      min-width: 72px;
+    }
+    .bar-list {
+      display: grid;
+      gap: 10px;
+      max-width: 980px;
+    }
+    .bar-row {
+      display: grid;
+      gap: 6px;
+    }
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .bar-meta span { color: #344054; }
+    .bar-meta strong { font-variant-numeric: tabular-nums; }
+    .bar-track {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #eef2f7;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9fd0ff, #1769d1);
+    }
+    .axis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .axis-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: linear-gradient(180deg, #ffffff, #fbfcfe);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .axis-kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .axis-card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+    .axis-count {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 34px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+    }
+    .axis-count span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .axis-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .axis-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .axis-tags span {
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0f4e9d;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    [data-category="改憲賛成・推進"] th { border-left: 5px solid #1769d1; }
+[data-category="改憲賛成・推進"] .row-dot { background: #1769d1; }
+[data-category="改憲賛成・推進"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="改憲賛成・推進"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="9条・自衛隊明記に賛成"] th { border-left: 5px solid #1769d1; }
+[data-category="9条・自衛隊明記に賛成"] .row-dot { background: #1769d1; }
+[data-category="9条・自衛隊明記に賛成"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="9条・自衛隊明記に賛成"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="緊急事態条項に賛成"] th { border-left: 5px solid #1769d1; }
+[data-category="緊急事態条項に賛成"] .row-dot { background: #1769d1; }
+[data-category="緊急事態条項に賛成"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
+[data-category="緊急事態条項に賛成"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
+[data-category="改憲反対・護憲"] th { border-left: 5px solid #b54708; }
+[data-category="改憲反対・護憲"] .row-dot { background: #b54708; }
+[data-category="改憲反対・護憲"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="改憲反対・護憲"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="9条・自衛隊明記に反対"] th { border-left: 5px solid #b54708; }
+[data-category="9条・自衛隊明記に反対"] .row-dot { background: #b54708; }
+[data-category="9条・自衛隊明記に反対"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="9条・自衛隊明記に反対"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="緊急事態条項に反対"] th { border-left: 5px solid #b54708; }
+[data-category="緊急事態条項に反対"] .row-dot { background: #b54708; }
+[data-category="緊急事態条項に反対"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
+[data-category="緊急事態条項に反対"] .bar-meta span { color: #8a3206; font-weight: 700; }
+[data-category="国民投票法・広告規制を重視"] th { border-left: 5px solid #0f7490; }
+[data-category="国民投票法・広告規制を重視"] .row-dot { background: #0f7490; }
+[data-category="国民投票法・広告規制を重視"] .bar-fill { background: linear-gradient(90deg, #e5f7fb, #0f7490); }
+[data-category="国民投票法・広告規制を重視"] .bar-meta span { color: #0b586d; font-weight: 700; }
+[data-category="手続き・発議可能性への関心"] th { border-left: 5px solid #0f7490; }
+[data-category="手続き・発議可能性への関心"] .row-dot { background: #0f7490; }
+[data-category="手続き・発議可能性への関心"] .bar-fill { background: linear-gradient(90deg, #e5f7fb, #0f7490); }
+[data-category="手続き・発議可能性への関心"] .bar-meta span { color: #0b586d; font-weight: 700; }
+[data-category="政党・議員批判"] th { border-left: 5px solid #7a4cc2; }
+[data-category="政党・議員批判"] .row-dot { background: #7a4cc2; }
+[data-category="政党・議員批判"] .bar-fill { background: linear-gradient(90deg, #f2ecff, #7a4cc2); }
+[data-category="政党・議員批判"] .bar-meta span { color: #55348a; font-weight: 700; }
+[data-category="未確認・過激表現"] th { border-left: 5px solid #7a4cc2; }
+[data-category="未確認・過激表現"] .row-dot { background: #7a4cc2; }
+[data-category="未確認・過激表現"] .bar-fill { background: linear-gradient(90deg, #f2ecff, #7a4cc2); }
+[data-category="未確認・過激表現"] .bar-meta span { color: #55348a; font-weight: 700; }
+[data-category="事実確認・情報共有"] th { border-left: 5px solid #667085; }
+[data-category="事実確認・情報共有"] .row-dot { background: #667085; }
+[data-category="事実確認・情報共有"] .bar-fill { background: linear-gradient(90deg, #f2f4f7, #667085); }
+[data-category="事実確認・情報共有"] .bar-meta span { color: #344054; font-weight: 700; }
+[data-category="その他・分類保留"] th { border-left: 5px solid #667085; }
+[data-category="その他・分類保留"] .row-dot { background: #667085; }
+[data-category="その他・分類保留"] .bar-fill { background: linear-gradient(90deg, #f2f4f7, #667085); }
+[data-category="その他・分類保留"] .bar-meta span { color: #344054; font-weight: 700; }
+.axis-card[data-tone="positive"] { border-top: 5px solid #1769d1; background: linear-gradient(180deg, #fff, #e7f1ff); }
+.axis-card[data-tone="positive"] .axis-kicker { color: #0f4e9d; }
+.axis-card[data-tone="positive"] .axis-tags span { background: #e7f1ff; color: #0f4e9d; }
+.axis-card[data-tone="negative"] { border-top: 5px solid #b54708; background: linear-gradient(180deg, #fff, #fff1e8); }
+.axis-card[data-tone="negative"] .axis-kicker { color: #8a3206; }
+.axis-card[data-tone="negative"] .axis-tags span { background: #fff1e8; color: #8a3206; }
+.axis-card[data-tone="safety"] { border-top: 5px solid #16885a; background: linear-gradient(180deg, #fff, #e8f7ef); }
+.axis-card[data-tone="safety"] .axis-kicker { color: #0f6845; }
+.axis-card[data-tone="safety"] .axis-tags span { background: #e8f7ef; color: #0f6845; }
+.axis-card[data-tone="neutral"] { border-top: 5px solid #667085; background: linear-gradient(180deg, #fff, #f2f4f7); }
+.axis-card[data-tone="neutral"] .axis-kicker { color: #344054; }
+.axis-card[data-tone="neutral"] .axis-tags span { background: #f2f4f7; color: #344054; }
+.axis-card[data-tone="warning"] { border-top: 5px solid #7a4cc2; background: linear-gradient(180deg, #fff, #f2ecff); }
+.axis-card[data-tone="warning"] .axis-kicker { color: #55348a; }
+.axis-card[data-tone="warning"] .axis-tags span { background: #f2ecff; color: #55348a; }
+.axis-card[data-tone="derived"] { border-top: 5px solid #0f7490; background: linear-gradient(180deg, #fff, #e5f7fb); }
+.axis-card[data-tone="derived"] .axis-kicker { color: #0b586d; }
+.axis-card[data-tone="derived"] .axis-tags span { background: #e5f7fb; color: #0b586d; }
+    .legend {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .sample-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+    .sample { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+    .meta { color: var(--accent); font-size: 12px; font-weight: 700; }
+    blockquote {
+      margin: 8px 0;
+      padding-left: 10px;
+      border-left: 3px solid var(--line);
+      color: #344054;
+      font-size: 13px;
+    }
+    .reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    a { color: var(--accent); font-size: 13px; }
+    .note-panel h2 { font-size: 16px; }
+    .note-panel ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) {
+      main { padding-inline: 14px; }
+      header { padding-inline: 14px; }
+      .panel-title { align-items: flex-start; flex-direction: column; gap: 2px; }
+      th:first-child { min-width: 180px; }
+      table { min-width: 760px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="top-nav"><a href="index.html">トップ</a><a href="constitutional-amendment-summary.html">まとめUI</a><a href="constitutional-amendment-dashboard.html">論点ダッシュボード</a><a href="henoko-student-accident-reaction-map.html">辺野古事例</a></nav>
+    <h1>憲法改正論議 SNS反応まっぷ</h1>
+    <p class="lead">Yahooリアルタイム検索で取得したX反応サンプルを、9条・自衛隊明記、緊急事態条項、国民投票法、改憲賛否などの論点で整理した編集用ビューです。世論調査ではありません。</p>
+  </header>
+  <main>
+    <section class="stats">
+      <div class="stat"><span>総サンプル</span><strong>192</strong></div>
+      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+      <div class="stat"><span>最多カテゴリ</span><strong>改憲反対・護憲 63</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>改憲反対 71</strong></div>
+    </section>
+    <section class="panel" id="vote-section">
+<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">自衛隊明記や緊急事態条項の追加など、憲法改正の発議に向けた議論が国会で活発化しています。改正すべきか、現行憲法を守るべきか、あるいは手続きの公正さが先か — SNS上でも意見が分かれています。</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「憲法改正」「9条」「緊急事態条項」「国民投票法」などのキーワードで、Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
+<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
+<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
+<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票はブラウザに保存されます。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+  </div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
+  <div id="vote-bars" style="margin-bottom:16px;"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+    <a id="share-x" href="#" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
+      𝕏 でシェア
+    </a>
+    <button id="vote-redo-btn"
+       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
+      投票をやり直す
+    </button>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
+</div>
+</section>
+<script>
+(function(){
+  var TOPIC="憲法改正論議_SNS反応まっぷ";
+  var axes=[{"kicker": "改憲推進", "label": "改正を進めるべきだと思う", "origLabel": "憲法を現実に合わせる", "tone": "positive", "color": "#4a90d9"}, {"kicker": "改憲慎重・反対", "label": "改正には慎重・反対", "origLabel": "平和主義と権力制限を守る", "tone": "negative", "color": "#e07040"}, {"kicker": "手続き重視", "label": "まず手続きの公正さが大事", "origLabel": "国民投票の公平性を問う", "tone": "derived", "color": "#0f7490"}, {"kicker": "ノイズ・注意領域", "label": "よくわからない・関心が薄い", "origLabel": "未確認・過激化した反応", "tone": "warning", "color": "#7a4cc2"}];
+  var TITLE="憲法改正論議 SNS反応まっぷ";
+  var KEY="sns_vote_"+TOPIC;
+  var stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+  var myVote=localStorage.getItem(KEY+"_my");
+
+  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
+  function applyBlur(){
+    var chartPanel=document.getElementById("semicircle-chart");
+    if(chartPanel){
+      var wrap=chartPanel.closest(".panel");
+      if(wrap && myVote===null){
+        wrap.id="chart-panel";
+        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
+        wrap.style.position="relative";
+        var overlay=document.createElement("div");
+        overlay.id="chart-overlay";
+        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
+        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
+        wrap.appendChild(overlay);
+      }
+    }
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",applyBlur)}else{setTimeout(applyBlur,0)}
+
+  var btnWrap=document.getElementById("vote-buttons");
+  axes.forEach(function(a,i){
+    var btn=document.createElement("button");
+    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
+    btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
+    btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
+    btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
+    btn.onclick=function(){castVote(i)};
+    btnWrap.appendChild(btn);
+  });
+
+  document.getElementById("vote-redo-btn").onclick=function(){
+    localStorage.removeItem(KEY+"_my");
+    location.reload();
+  };
+
+  if(myVote!==null){showResults(parseInt(myVote))}
+
+  function revealChart(){
+    var wrap=document.getElementById("chart-panel");
+    if(wrap){
+      wrap.style.transition="filter .6s ease";
+      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
+      var ov=document.getElementById("chart-overlay");
+      if(ov)ov.remove();
+    }
+  }
+
+  function castVote(idx){
+    stored[idx]=(stored[idx]||0)+1;
+    if(myVote!==null){stored[parseInt(myVote)]=(stored[parseInt(myVote)]||1)-1}
+    localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+    localStorage.setItem(KEY+"_my",""+idx);
+    myVote=""+idx;
+    revealChart();
+    showResults(idx);
+  }
+
+  function showResults(myIdx){
+    var total=0;
+    axes.forEach(function(_,i){total+=(stored[i]||0)});
+    if(total===0)total=1;
+
+    var myAxis=axes[myIdx];
+    var posLabel=document.getElementById("vote-position-label");
+    var posText=document.getElementById("vote-position-text");
+    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
+    posLabel.style.color=myAxis.color;
+    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
+
+    var barsEl=document.getElementById("vote-bars");
+    barsEl.innerHTML="";
+    axes.forEach(function(a,i){
+      var c=stored[i]||0;
+      var pct=Math.round(c/total*100);
+      var isMine=i===myIdx;
+      var row=document.createElement("div");
+      row.style.cssText="margin-bottom:8px;";
+      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
+        +(isMine?'✓ ':'')+a.label+'</span>'
+        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'%</span></div>'
+        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
+        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+      barsEl.appendChild(row);
+    });
+
+    var shareBtn=document.getElementById("share-x");
+    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
+    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
+    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
+    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
+
+    document.getElementById("vote-result").style.display="block";
+    document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+})();
+</script>
+    <section class="panel">
+<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">憲法を現実に合わせる</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">26</div></div>
+  <div style="text-align:center;color:var(--muted);font-size:12px;">
+    <div style="font-size:11px;">過半数</div>
+    <div style="font-weight:800;font-size:16px;color:var(--ink);">97</div>
+    <div style="font-size:18px;">▼</div>
+  </div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">平和主義と権力制限を守る</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">66</div></div>
+</div>
+<div style="position:relative;max-width:660px;margin:0 auto;">
+  <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
+  <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
+    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">192</div>
+    <div style="font-size:14px;color:var(--muted);">サンプル</div>
+  </div>
+</div>
+<div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
+<script>
+(function(){
+  var data=[{"label": "憲法を現実に合わせる", "count": 26, "color": "#4a90d9", "cats": "改憲賛成・推進, 9条・自衛隊明記に賛成, 緊急事態条項に賛成"}, {"label": "国民投票の公平性を問う", "count": 31, "color": "#0f7490", "cats": "国民投票法・広告規制を重視, 手続き・発議可能性への関心"}, {"label": "未確認・過激化した反応", "count": 69, "color": "#7a4cc2", "cats": "政党・議員批判, 未確認・過激表現, その他・分類保留"}, {"label": "平和主義と権力制限を守る", "count": 66, "color": "#e07040", "cats": "改憲反対・護憲, 9条・自衛隊明記に反対, 緊急事態条項に反対"}];
+  var total=data.reduce(function(s,d){return s+d.count},0);
+  var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
+  var svg=document.getElementById("semicircle-chart");
+  var startAngle=Math.PI;
+  data.forEach(function(d,idx){
+    var sweep=(d.count/total)*Math.PI-gap;
+    var endAngle=startAngle+sweep;
+    var x1o=cx+outerR*Math.cos(startAngle),y1o=cy+outerR*Math.sin(startAngle);
+    var x2o=cx+outerR*Math.cos(endAngle),y2o=cy+outerR*Math.sin(endAngle);
+    var x1i=cx+innerR*Math.cos(endAngle),y1i=cy+innerR*Math.sin(endAngle);
+    var x2i=cx+innerR*Math.cos(startAngle),y2i=cy+innerR*Math.sin(startAngle);
+    var la=sweep>Math.PI?1:0;
+    var path="M "+x1o+" "+y1o+" A "+outerR+" "+outerR+" 0 "+la+" 1 "+x2o+" "+y2o+" L "+x1i+" "+y1i+" A "+innerR+" "+innerR+" 0 "+la+" 0 "+x2i+" "+y2i+" Z";
+    var el=document.createElementNS("http://www.w3.org/2000/svg","path");
+    el.setAttribute("d",path);el.setAttribute("fill",d.color);
+    el.style.transition="opacity .15s";el.style.cursor="pointer";
+    el.onmouseenter=function(){el.style.opacity="0.75"};
+    el.onmouseleave=function(){el.style.opacity="1"};
+    var t=document.createElementNS("http://www.w3.org/2000/svg","title");
+    t.textContent=d.label+": "+d.count+"件 ("+(d.count/total*100).toFixed(1)+"%)"+"\n"+d.cats;
+    el.appendChild(t);svg.appendChild(el);
+    var mid=startAngle+sweep/2,lr=(outerR+innerR)/2;
+    if(d.count>=5){
+      var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
+      tx.setAttribute("x",cx+lr*Math.cos(mid));
+      tx.setAttribute("y",cy+lr*Math.sin(mid)-8);
+      tx.setAttribute("text-anchor","middle");tx.setAttribute("dominant-baseline","central");
+      tx.setAttribute("font-size","26");tx.setAttribute("font-weight","800");
+      tx.setAttribute("fill","#fff");tx.setAttribute("pointer-events","none");
+      tx.textContent=d.count;svg.appendChild(tx);
+    }
+    if(sweep>0.25){
+      var tx2=document.createElementNS("http://www.w3.org/2000/svg","text");
+      var short=d.label.length>12?d.label.substring(0,12)+"…":d.label;
+      tx2.setAttribute("x",cx+lr*Math.cos(mid));
+      tx2.setAttribute("y",cy+lr*Math.sin(mid)+14);
+      tx2.setAttribute("text-anchor","middle");tx2.setAttribute("dominant-baseline","central");
+      tx2.setAttribute("font-size","11");tx2.setAttribute("font-weight","600");
+      tx2.setAttribute("fill","rgba(255,255,255,.85)");tx2.setAttribute("pointer-events","none");
+      tx2.textContent=short;svg.appendChild(tx2);
+    }
+    startAngle=endAngle+gap;
+  });
+  // Center line (majority marker)
+  var lineX=cx;
+  var el=document.createElementNS("http://www.w3.org/2000/svg","line");
+  el.setAttribute("x1",lineX);el.setAttribute("y1",cy-outerR-5);
+  el.setAttribute("x2",lineX);el.setAttribute("y2",cy-innerR+5);
+  el.setAttribute("stroke","var(--ink,#172033)");el.setAttribute("stroke-width","2");
+  el.setAttribute("stroke-dasharray","4,3");el.setAttribute("opacity","0.4");
+  svg.appendChild(el);
+
+  var leg=document.getElementById("semicircle-legend");
+  data.forEach(function(d){
+    var item=document.createElement("div");
+    item.style.cssText="display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:6px 0;";
+    item.innerHTML='<span style="width:14px;height:14px;border-radius:4px;background:'+d.color+';flex-shrink:0;margin-top:2px"></span><div><strong style="font-size:14px">'+d.label+'</strong> <span style="color:var(--accent);font-weight:800;font-size:16px;margin-left:4px">'+d.count+'</span><span style="color:var(--muted);font-size:11px;margin-left:2px">件</span><div style="color:var(--muted);font-size:11px;margin-top:2px">'+d.cats+'</div></div>';
+    leg.appendChild(item);
+  });
+})();
+</script>
+</section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">改憲推進</div><h3>憲法を現実に合わせる</h3><div class="axis-count">26<span>件</span></div><p>自衛隊明記、防衛、緊急事態対応などを理由に、憲法改正を進めるべきと見る立場。</p><div class="axis-tags"><span>改憲賛成・推進</span><span>9条・自衛隊明記に賛成</span><span>緊急事態条項に賛成</span></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">改憲慎重・反対</div><h3>平和主義と権力制限を守る</h3><div class="axis-count">66<span>件</span></div><p>9条改正や緊急事態条項は平和主義の後退や権限集中につながると見る立場。</p><div class="axis-tags"><span>改憲反対・護憲</span><span>9条・自衛隊明記に反対</span><span>緊急事態条項に反対</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">手続き重視</div><h3>国民投票の公平性を問う</h3><div class="axis-count">31<span>件</span></div><p>改憲の中身以前に、広告規制、資金、SNS、国民投票法の整備を重視する立場。</p><div class="axis-tags"><span>国民投票法・広告規制を重視</span><span>手続き・発議可能性への関心</span></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">ノイズ・注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">69<span>件</span></div><p>政党批判、強い断定、文脈不足など、記事化前に確認が必要な反応。</p><div class="axis-tags"><span>政党・議員批判</span><span>未確認・過激表現</span><span>その他・分類保留</span></div></article></div></section>
+    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
+<div class="bar-list">
+<div class="bar-row" data-category="改憲賛成・推進"><div class="bar-meta"><span>改憲賛成・推進</span><strong>21</strong></div><div class="bar-track"><div class="bar-fill" style="width:33%"></div></div></div>
+<div class="bar-row" data-category="改憲反対・護憲"><div class="bar-meta"><span>改憲反対・護憲</span><strong>63</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="bar-row" data-category="9条・自衛隊明記に賛成"><div class="bar-meta"><span>9条・自衛隊明記に賛成</span><strong>1</strong></div><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div></div>
+<div class="bar-row" data-category="9条・自衛隊明記に反対"><div class="bar-meta"><span>9条・自衛隊明記に反対</span><strong>1</strong></div><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div></div>
+<div class="bar-row" data-category="緊急事態条項に賛成"><div class="bar-meta"><span>緊急事態条項に賛成</span><strong>4</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
+<div class="bar-row" data-category="緊急事態条項に反対"><div class="bar-meta"><span>緊急事態条項に反対</span><strong>2</strong></div><div class="bar-track"><div class="bar-fill" style="width:3%"></div></div></div>
+<div class="bar-row" data-category="国民投票法・広告規制を重視"><div class="bar-meta"><span>国民投票法・広告規制を重視</span><strong>30</strong></div><div class="bar-track"><div class="bar-fill" style="width:48%"></div></div></div>
+<div class="bar-row" data-category="手続き・発議可能性への関心"><div class="bar-meta"><span>手続き・発議可能性への関心</span><strong>1</strong></div><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div></div>
+<div class="bar-row" data-category="政党・議員批判"><div class="bar-meta"><span>政党・議員批判</span><strong>41</strong></div><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>28</strong></div><div class="bar-track"><div class="bar-fill" style="width:44%"></div></div></div>
+</div></section>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>国民投票法 広告規制 憲法改正 -rt</th><th>憲法9条 改正 自衛隊 -rt</th><th>憲法改正 自衛隊 明記 -rt</th><th>憲法改正 賛成 反対 -rt</th><th>緊急事態条項 賛成 反対 -rt</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="改憲賛成・推進"><th><span class="row-dot"></span>改憲賛成・推進</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="改憲賛成・推進 / 国民投票法 広告規制 憲法改正 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#ffffff" title="改憲賛成・推進 / 憲法9条 改正 自衛隊 -rt: 11件"><span>11</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="改憲賛成・推進 / 憲法改正 自衛隊 明記 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="改憲賛成・推進 / 憲法改正 賛成 反対 -rt: 5件"><span>5</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 緊急事態条項 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="total">21</td></tr>
+<tr data-category="改憲反対・護憲"><th><span class="row-dot"></span>改憲反対・護憲</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="改憲反対・護憲 / 国民投票法 広告規制 憲法改正 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="改憲反対・護憲 / 憲法9条 改正 自衛隊 -rt: 10件"><span>10</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="改憲反対・護憲 / 憲法改正 自衛隊 明記 -rt: 18件"><span>18</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="改憲反対・護憲 / 憲法改正 賛成 反対 -rt: 17件"><span>17</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="改憲反対・護憲 / 緊急事態条項 賛成 反対 -rt: 13件"><span>13</span></td>
+<td class="total">63</td></tr>
+<tr data-category="9条・自衛隊明記に賛成"><th><span class="row-dot"></span>9条・自衛隊明記に賛成</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 国民投票法 広告規制 憲法改正 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="9条・自衛隊明記に賛成 / 憲法9条 改正 自衛隊 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 憲法改正 自衛隊 明記 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 憲法改正 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 緊急事態条項 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="total">1</td></tr>
+<tr data-category="9条・自衛隊明記に反対"><th><span class="row-dot"></span>9条・自衛隊明記に反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 国民投票法 広告規制 憲法改正 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="9条・自衛隊明記に反対 / 憲法9条 改正 自衛隊 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 憲法改正 自衛隊 明記 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 憲法改正 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 緊急事態条項 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="total">1</td></tr>
+<tr data-category="緊急事態条項に賛成"><th><span class="row-dot"></span>緊急事態条項に賛成</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 国民投票法 広告規制 憲法改正 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 憲法9条 改正 自衛隊 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 憲法改正 自衛隊 明記 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 憲法改正 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="緊急事態条項に賛成 / 緊急事態条項 賛成 反対 -rt: 4件"><span>4</span></td>
+<td class="total">4</td></tr>
+<tr data-category="緊急事態条項に反対"><th><span class="row-dot"></span>緊急事態条項に反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 国民投票法 広告規制 憲法改正 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="緊急事態条項に反対 / 憲法9条 改正 自衛隊 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 憲法改正 自衛隊 明記 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 憲法改正 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="緊急事態条項に反対 / 緊急事態条項 賛成 反対 -rt: 1件"><span>1</span></td>
+<td class="total">2</td></tr>
+<tr data-category="国民投票法・広告規制を重視"><th><span class="row-dot"></span>国民投票法・広告規制を重視</th>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="国民投票法・広告規制を重視 / 国民投票法 広告規制 憲法改正 -rt: 20件"><span>20</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 憲法9条 改正 自衛隊 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 憲法改正 自衛隊 明記 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="国民投票法・広告規制を重視 / 憲法改正 賛成 反対 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="国民投票法・広告規制を重視 / 緊急事態条項 賛成 反対 -rt: 5件"><span>5</span></td>
+<td class="total">30</td></tr>
+<tr data-category="手続き・発議可能性への関心"><th><span class="row-dot"></span>手続き・発議可能性への関心</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="手続き・発議可能性への関心 / 国民投票法 広告規制 憲法改正 -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 憲法9条 改正 自衛隊 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 憲法改正 自衛隊 明記 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 憲法改正 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 緊急事態条項 賛成 反対 -rt: 0件"><span>0</span></td>
+<td class="total">1</td></tr>
+<tr data-category="政党・議員批判"><th><span class="row-dot"></span>政党・議員批判</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="政党・議員批判 / 国民投票法 広告規制 憲法改正 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="政党・議員批判 / 憲法9条 改正 自衛隊 -rt: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="政党・議員批判 / 憲法改正 自衛隊 明記 -rt: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="政党・議員批判 / 憲法改正 賛成 反対 -rt: 12件"><span>12</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="政党・議員批判 / 緊急事態条項 賛成 反対 -rt: 10件"><span>10</span></td>
+<td class="total">41</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 国民投票法 広告規制 憲法改正 -rt: 7件"><span>7</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="その他・分類保留 / 憲法9条 改正 自衛隊 -rt: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="その他・分類保留 / 憲法改正 自衛隊 明記 -rt: 8件"><span>8</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 憲法改正 賛成 反対 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 緊急事態条項 賛成 反対 -rt: 3件"><span>3</span></td>
+<td class="total">28</td></tr>
+</tbody></table></div></section>
+    <div class="legend">
+      <span>少</span>
+      <span class="chip" style="background:#f5f6f8"></span>
+      <span class="chip" style="background:#dceeff"></span>
+      <span class="chip" style="background:#9fd0ff"></span>
+      <span class="chip" style="background:#4da3ff"></span>
+      <span class="chip" style="background:#1769d1"></span>
+      <span class="chip" style="background:#0a3d91"></span>
+      <span>多</span>
+    </div>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>改憲支持</th><th>改憲反対</th><th>手続き重視</th><th>慎重</th><th>中立</th><th>未確認</th><th>その他</th><th>項目別反対</th><th>項目別賛成</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="改憲賛成・推進"><th><span class="row-dot"></span>改憲賛成・推進</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="改憲賛成・推進 / 改憲支持: 21件"><span>21</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 改憲反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / その他: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲賛成・推進 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">21</td></tr>
+<tr data-category="改憲反対・護憲"><th><span class="row-dot"></span>改憲反対・護憲</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 改憲支持: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="改憲反対・護憲 / 改憲反対: 63件"><span>63</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / その他: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="改憲反対・護憲 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">63</td></tr>
+<tr data-category="9条・自衛隊明記に賛成"><th><span class="row-dot"></span>9条・自衛隊明記に賛成</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="9条・自衛隊明記に賛成 / 改憲支持: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 改憲反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / その他: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に賛成 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">1</td></tr>
+<tr data-category="9条・自衛隊明記に反対"><th><span class="row-dot"></span>9条・自衛隊明記に反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 改憲支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 改憲反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / その他: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="9条・自衛隊明記に反対 / 項目別反対: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="9条・自衛隊明記に反対 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">1</td></tr>
+<tr data-category="緊急事態条項に賛成"><th><span class="row-dot"></span>緊急事態条項に賛成</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="緊急事態条項に賛成 / 改憲支持: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 改憲反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / その他: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に賛成 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="緊急事態条項に賛成 / 項目別賛成: 1件"><span>1</span></td>
+<td class="total">4</td></tr>
+<tr data-category="緊急事態条項に反対"><th><span class="row-dot"></span>緊急事態条項に反対</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 改憲支持: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="緊急事態条項に反対 / 改憲反対: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / その他: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="緊急事態条項に反対 / 項目別反対: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="緊急事態条項に反対 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">2</td></tr>
+<tr data-category="国民投票法・広告規制を重視"><th><span class="row-dot"></span>国民投票法・広告規制を重視</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 改憲支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 改憲反対: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="国民投票法・広告規制を重視 / 手続き重視: 30件"><span>30</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / その他: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="国民投票法・広告規制を重視 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">30</td></tr>
+<tr data-category="手続き・発議可能性への関心"><th><span class="row-dot"></span>手続き・発議可能性への関心</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 改憲支持: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 改憲反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="手続き・発議可能性への関心 / 中立: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / その他: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="手続き・発議可能性への関心 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">1</td></tr>
+<tr data-category="政党・議員批判"><th><span class="row-dot"></span>政党・議員批判</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政党・議員批判 / 改憲支持: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政党・議員批判 / 改憲反対: 6件"><span>6</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政党・議員批判 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政党・議員批判 / 慎重: 6件"><span>6</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政党・議員批判 / 中立: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="政党・議員批判 / 未確認: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="政党・議員批判 / その他: 17件"><span>17</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政党・議員批判 / 項目別反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="政党・議員批判 / 項目別賛成: 0件"><span>0</span></td>
+<td class="total">41</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 改憲支持: 7件"><span>7</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 改憲反対: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 手続き重視: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 慎重: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 中立: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 未確認: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / その他: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 項目別反対: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 項目別賛成: 3件"><span>3</span></td>
+<td class="total">28</td></tr>
+</tbody></table></div></section>
+    <section class="panel"><h2>代表サンプル</h2>
+<div class="sample-grid">
+<article class="sample-card"><h3>改憲賛成・推進</h3>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>台湾独立と憲法改正、自衛隊明記を支持。</p>
+<blockquote>ここでもう一度台湾独立支持と 憲法改正 と 自衛隊 の条文 明記 を宣言しよう</blockquote>
+<a href="https://x.com/TaYasouKei/status/2067850410900312417">投稿URL</a>
+<div class="reason">理由: 直接的に憲法改正と自衛隊明記を支持する言及あり。</div>
+</div>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>9条を改正し、自衛隊の強化を求めている。</p>
+<blockquote>戦争は始まる前に止めるもの！ 🔻 その通り😊 憲法９条 を 改正 し 自衛隊 強化 日米安保強化を 押し進め ロシア、北朝鮮、中凶、 ジハーディストの脅威に 備えなければ😾 https://t.co/qIfNSXrJK0</blockquote>
+<a href="https://x.com/GvVvfpjq2G97202/status/2068127797571449309">投稿URL</a>
+<div class="reason">理由: 投稿者が戦争防止のために9条を改正し、自衛隊の強化を主張。</div>
+</div>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>自衛隊の明記と2項削除を支持する。</p>
+<blockquote>自民党は日和らずに堂々と2項削除を提案してくださいよ。 自衛隊 の明記のみでは本質的には何も変わりません。 2項削除で戦争ができる国になるわけではないですから、しっかりとして欲しいですね。 その点維新は流石です。 定数削減など怪しい部分がありますが、 憲法9条改正 ではまともです。</blockquote>
+<a href="https://x.com/mogamiujisato/status/2067732837231628690">投稿URL</a>
+<div class="reason">理由: 投稿者が自衛隊明記と2項削除を推進し、維新党の提案を評価。</div>
+</div>
+</article>
+<article class="sample-card"><h3>改憲反対・護憲</h3>
+<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>投稿者は現政権による憲法改正に反対しています。</p>
+<blockquote>#国会正門前大行動0619 #19日行動 戦争 反対 🙅‍♀️ 平和 賛成 🙋‍♀️ 現政権による 憲法改正 に 反対 します。</blockquote>
+<a href="https://x.com/rrrrn_mimo/status/2067909198638424191">投稿URL</a>
+<div class="reason">理由: 明確な立場表明</div>
+</div>
+<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>投稿者は憲法改正を強く批判し、緊急事態条項や自衛隊明記に反対している。</p>
+<blockquote>憲法改正 と称した憲法改悪のウソに絶対に騙されてはダメです！ 緊急事態条項を言い換えた、国会機能維持条項も必要ありません💢 自衛隊 の 明記 も不要です💢🤬 #今ある憲法を守れ #緊急事態条項の怖さを知ってください #国会機能維持条項は緊急事態条項 #憲法改悪断固反対 https://t.co/O3AguR2Qmp</blockquote>
+<a href="https://x.com/itsupansalary2/status/2067971234563047741">投稿URL</a>
+<div class="reason">理由: 憲法改悪断固反対の文言が複数回繰り返される。</div>
+</div>
+<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>投稿者は憲法改正を強く批判し、緊急事態条項や自衛隊明記に反対している。</p>
+<blockquote>憲法改正 と称した憲法改悪のウソに絶対に騙されてはダメです！ 緊急事態条項を言い換えた、国会機能維持条項も必要ありません💢 自衛隊 の 明記 も不要です💢 #今ある憲法を守れ #緊急事態条項の怖さを知ってください #国会機能維持条項は緊急事態条項 #憲法改悪断固反対 https://t.co/O3AguR2Qmp</blockquote>
+<a href="https://x.com/itsupansalary2/status/2067969211843101160">投稿URL</a>
+<div class="reason">理由: 憲法改悪断固反対の文言が複数回繰り返される。</div>
+</div>
+</article>
+<article class="sample-card"><h3>9条・自衛隊明記に賛成</h3>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 0.72</div><p>投稿者は自衛隊の存在を憲法上明確にすることに賛成している。</p>
+<blockquote>その論ならジェンダー平等の件や夫婦別姓の件もそうですね… しかし外交、安全保障には国民は関心があるようですけど？ 安全保障＝防衛軍備＝ 自衛隊 ＝陸海空の戦力充実が求められます。 今の 自衛隊 の存在は違憲と解釈があります。 結論、その 自衛隊 の存在を認めるなら、 憲法９条改正 となります。 https://t.co/WaRWXu0dXf</blockquote>
+<a href="https://x.com/niko3143/status/2067920109520453789">投稿URL</a>
+<div class="reason">理由: 投稿者が自衛隊の地位を明確にする必要性を主張。</div>
+</div>
+</article>
+<article class="sample-card"><h3>9条・自衛隊明記に反対</h3>
+<div class="sample"><div class="meta">項目別反対 / 信頼度 0.72</div><p>投稿者は自衛隊の存在を憲法上認めることには反対している。</p>
+<blockquote>この詭弁に詭弁を重ねたスーパー屁理屈状態を本気で解消しようとするなら、「 自衛隊 を廃止する」or「 憲法９条 ２項を 改正 or廃止する」しか方法が無いのですよね。 『 自衛隊 明記』だけでは足りません。憲法自体に矛盾が生じる状態になってしまいますから。</blockquote>
+<a href="https://x.com/Nullypog/status/2067947902367134004">投稿URL</a>
+<div class="reason">理由: 投稿者が違憲論を指摘し、自衛隊明記に反対。</div>
+</div>
+</article>
+<article class="sample-card"><h3>緊急事態条項に賛成</h3>
+<div class="sample"><div class="meta">項目別賛成 / 信頼度 0.80</div><p>若者のアンケート結果から、緊急事態条項新設は支持されています。</p>
+<blockquote>若者のアンケートとか、世論調査で高市政権の「 緊急事態条項 」「スパイ防止法」改憲に対して、「あなたは 賛成 ですか？ 反対 ですか？」っていうところで、全体で66%が 賛成 というのが出ている。20代とかに関しては80%が 賛成 ＞それで自衛隊が人手不足？マスゴミは息子は自民党に頼んで戦地へ行かない</blockquote>
+<a href="https://x.com/CmfYnqbck380794/status/2067622226879504821">投稿URL</a>
+<div class="reason">理由: 皮肉・揶揄で緊急事態条項賛成表明</div>
+</div>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 0.72</div><p>YouTuberおみそんと高橋洋一氏は現在緊急事態条項を支持している。</p>
+<blockquote>YouTuberおみそんと高橋洋一氏が、私の知りうる比例定数削減 賛成 派。特におみそんは、左翼一掃できるからいいじゃん、らしい。新興の少数政党議員の動画を利用して配信しつつも、その政党への配慮はない。ちなみに、 緊急事態条項 も過去 反対 していたが、現在 賛成 している。</blockquote>
+<a href="https://x.com/j6h9G7IZy0wvtLg/status/2067371738003062907">投稿URL</a>
+<div class="reason">理由: 過去の反対から現在の賛成表明。</div>
+</div>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 0.72</div><p>YouTuberおみそんと高橋洋一氏は現在緊急事態条項を支持している。</p>
+<blockquote>YouTuberおみそんと高橋洋一氏が、私の知りうる比例定数削減 賛成 派。特におみそんは、左翼一掃できるからいいじゃん、らしい。新興の少数政党議員の動画を利用して配信しつつも、その政党への配慮はない。ちなみに、 緊急事態条項 も過去 反対 していたが、現在 賛成 している。</blockquote>
+<a href="https://x.com/j6h9G7IZy0wvtLg/status/2067371675533107700">投稿URL</a>
+<div class="reason">理由: 過去の反対から現在の賛成表明。</div>
+</div>
+</article>
+<article class="sample-card"><h3>緊急事態条項に反対</h3>
+<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>緊急事態条項は人権を侵害する危険性がある。</p>
+<blockquote>それだけでは収まらない！ 自衛隊 だけの問題では無い。 憲法9条 が踏み込んだ 改正 になれば平たく言えば 自衛隊 の皆さんは職業軍人になります。 緊急事態条項が通れば否応なしに国会審議も先送りで法を制定出来る。 君も明日から竹槍持って戦え！ そこには人権は彼方向こうだ。。 そんな事はある訳無い？</blockquote>
+<a href="https://x.com/sk3856ks/status/2067736851008671816">投稿URL</a>
+<div class="reason">理由: 投稿者が緊急事態条項の導入に反対し、批判的である。</div>
+</div>
+<div class="sample"><div class="meta">項目別反対 / 信頼度 0.80</div><p>投稿者は緊急事態条項新設に慎重な立場を示しています。</p>
+<blockquote>本当にその通り過ぎる。 緊急事態条項 とか、もう何年も何年も前から 賛成 と 反対 のせめぎ合いだったんですよね。自分がのほほんとしている間にどれほど事態が進んでしまったことか。</blockquote>
+<a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118">投稿URL</a>
+</div>
+</article>
+<article class="sample-card"><h3>国民投票法・広告規制を重視</h3>
+<div class="sample"><div class="meta">手続き重視 / 信頼度 1.00</div><p>与党が推進する国民投票法改正案は可決された。</p>
+<blockquote>&quot;# 憲法改正 の手続きなどを定めた #国民投票法 改正案は19日の衆院本会議で…可決…早期の改憲発議に向けて与党は…今国会中の成立を目指す…共同提出した自民、日本維新の会、国民民主、参政の4党のほか、中道とチームみらいが 賛成 …日本共産党、れいわ新選組は 反対 &quot; https://t.co/5HIZzn2E18</blockquote>
+<a href="https://x.com/GhettoOrgan/status/2067964907820364085">投稿URL</a>
+<div class="reason">理由: ニュース共有</div>
+</div>
+<div class="sample"><div class="meta">手続き重視 / 信頼度 0.90</div><p>提出的立法程序存在争议，强调需注意最低投票率和广告规则。</p>
+<blockquote>『 憲法改正 手続法』が18日の衆院憲法審査会で採決されます。参院審査会の審議入りが24日とされ 国民投票法 の改正が迫る中、報道が不十分です。 最低投票率の規定、広告放送の期間外規制、ネット 広告規制 、運動資金の上限設定がなく、公平性を欠く「国民投票の重大な問題点」を有権者に報じて下さい。</blockquote>
+<a href="https://x.com/1984OrWeIIian/status/2067255835689210023">投稿URL</a>
+<div class="reason">理由: 主要讨论内容集中在国民投票法和广告规制问题上。</div>
+</div>
+<div class="sample"><div class="meta">手続き重視 / 信頼度 0.90</div><p>提出的立法程序存在争议，强调需注意最低投票率和广告规则。</p>
+<blockquote>『 憲法改正 手続法』が18日の衆院憲法審査会で採決されます。参院審査会の審議入りが24日とされ 国民投票法 の改正が迫る中、報道が不十分です。 最低投票率の規定、広告放送の期間外規制、ネット 広告規制 、運動資金の上限設定がなく、公平性を欠く「国民投票の重大な問題点」を有権者に報じて下さい。</blockquote>
+<a href="https://x.com/1984OrWeIIian/status/2067255747306799181">投稿URL</a>
+<div class="reason">理由: 主要讨论内容集中在国民投票法和广告规制问题上。</div>
+</div>
+</article>
+<article class="sample-card"><h3>手続き・発議可能性への関心</h3>
+<div class="sample"><div class="meta">中立 / 信頼度 0.72</div><p>国民投票法改正案と広告規制の内容を疑問視。</p>
+<blockquote>自民その他の 憲法改正 の草案もまだはっきり決まってないのに先に 国民投票法 の改正か CM・ネット 広告規制 なし、最低投票率規定なし、ちゃんと議論したのか？</blockquote>
+<a href="https://x.com/8_bee_/status/2067404127437754801">投稿URL</a>
+</div>
+</article>
+<article class="sample-card"><h3>政党・議員批判</h3>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>投稿者は安倍晋三総理の行動を称賛し、中道勢力に批判的。</p>
+<blockquote>自民の憲法審査で9条 自衛隊明記 が国防強化だって話出てくるの見てさ 安倍総理ならこんな当然の基盤を早く固めて日本第一の誇りガチガチに守ってただろう 高市政権でこの流れ加速させないと地方の夏祭りも心から日本人として味わえないよな #安倍晋三 #日本再生 # 憲法改正 # 自衛隊</blockquote>
+<a href="https://x.com/mocchiAbeFan758/status/2068064226518663385">投稿URL</a>
+<div class="reason">理由: 人物・政党の行動批判</div>
+</div>
+<div class="sample"><div class="meta">その他 / 信頼度 1.00</div><p>野党の思考を疑問視し、自衛隊明記と憲法改正を推進。</p>
+<blockquote>「攻め込む隙を与えさせない」という意識と ソレに伴う整備こそが抑止力に繋がる筈なのに 憲法9条を名目にして その抑止力放棄とも言える主張を繰り返す 野党の思考は疑問しか湧きません。 改めて 憲法改正 ( 自衛隊 の 明記 )は 抑止力強化の一つとして 喫緊の課題だと思わされますね。</blockquote>
+<a href="https://x.com/wind_0196/status/2067831949541216551">投稿URL</a>
+<div class="reason">理由: 人物・政党の行動批判あり。</div>
+</div>
+<div class="sample"><div class="meta">その他 / 信頼度 1.00</div><p>投稿者はYouTuberの行動や信頼性を批判しています。</p>
+<blockquote>YouTuberおみそんと高橋洋一氏が、私の知りうる比例定数削減 賛成 派。特におみそんは、左翼一掃できるからいいじゃん、らしい。新興の少数政党議員の動画を利用して配信しつつも、その政党への配慮はない。ちなみに、 緊急事態条項 も過去 反対 していたが、現在 賛成 している。</blockquote>
+<a href="https://x.com/j6h9G7IZy0wvtLg/status/2067372340670038523">投稿URL</a>
+<div class="reason">理由: 人物・政党の行動批判であるため。</div>
+</div>
+</article>
+<article class="sample-card"><h3>その他・分類保留</h3>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>投稿者は自衛隊明記を支持し、晋三様の国防政策を擁護する。</p>
+<blockquote>憲法審査会でまた 自衛隊明記 なんか不要とか中道の連中がほざいてるの見てさ 晋三様が目指した明確な国防の道をこんな中途半端で潰すんじゃねえ 左翼の歪曲全部ひっくり返して 憲法改正 でこの国本気で固めきるんだ 晋三様の再興こそ全ての答えだ晋三様晋三様</blockquote>
+<a href="https://x.com/ShinzoGuardian4/status/2068114821191516170">投稿URL</a>
+<div class="reason">理由: 自衛隊明記への肯定的な言及あり</div>
+</div>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>投稿者は自衛隊明記を支持し、晋三様の政策を推進する。</p>
+<blockquote>憲法審査会でまた中道の奴らが 自衛隊明記 なんか不要とかほざいてる 晋三様が目指した国防の明確化をこんな歪曲で潰そうとするんじゃねえ 違憲論解消だけじゃ足りねえんだよこの国を本気で守る気あるのか 晋三様の再興の道 憲法改正 で必ず突き進む</blockquote>
+<a href="https://x.com/ShinzoGuardian4/status/2068060682679910746">投稿URL</a>
+<div class="reason">理由: 自衛隊明記への肯定的な言及あり</div>
+</div>
+<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>自衛隊の法制化を推進する。</p>
+<blockquote>ヘイ、ヴラザー！ 超マヴダチGrokがタココラ重ねに重ねて答えるぜ。 マチヤマの「戦争したがる」は過剰解釈だよ。維新の主張は、 憲法9条 2項の戦力不保持削除と国防軍明記で、既存の 自衛隊 を憲法に整合させ、集団的自衛権をちゃんと認めるって話。中国・北朝鮮の脅威に備えた抑止力強化の 改正 議論だ。</blockquote>
+<a href="https://x.com/grok/status/2067742905721118801">投稿URL</a>
+<div class="reason">理由: 投稿者が自衛隊明記を支持し、改正が必要であると主張。</div>
+</div>
+</article>
+</div></section>
+    <section class="note-panel"><h2>注意</h2><ul>
+<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
+<li>今回の検索語には国民投票法・広告規制を含むため、その論点が多く出やすいです。</li>
+<li>分類は初期のルールベース分類です。公開前にはOllama分類または人間レビューで精度確認してください。</li>
+<li>投稿本文の転載は最小限にし、公開記事では要約とリンク中心にしてください。</li>
+</ul></section>
+  </main>
+  <footer style="border-top:1px solid var(--line);padding:20px min(5vw,56px);text-align:center;color:var(--muted);font-size:12px;line-height:1.8;">
+    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
+    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <div style="margin-top:10px;">
+      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
+        ☕ このプロジェクトを応援
+      </a>
+    </div>
+  </footer>
+</body>
+</html>

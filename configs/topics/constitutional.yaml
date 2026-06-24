@@ -1,0 +1,111 @@
+name: "constitutional"
+title: "憲法改正論議"
+
+categories:
+  - "改憲賛成・推進"
+  - "改憲反対・護憲"
+  - "9条・自衛隊明記に賛成"
+  - "9条・自衛隊明記に反対"
+  - "緊急事態条項に賛成"
+  - "緊急事態条項に反対"
+  - "国民投票法・広告規制を重視"
+  - "手続き・発議可能性への関心"
+  - "政党・議員批判"
+  - "事実確認・情報共有"
+  - "未確認・過激表現"
+  - "その他・分類保留"
+
+stances:
+  - "改憲支持"
+  - "改憲反対"
+  - "項目別賛成"
+  - "項目別反対"
+  - "手続き重視"
+  - "慎重"
+  - "中立"
+  - "未確認"
+  - "その他"
+
+fetch_queries:
+  - "憲法改正 賛成"
+  - "憲法改正 反対"
+  - "改憲 賛成 OR 反対"
+  - "9条 改正"
+  - "緊急事態条項"
+  - "国民投票 改憲"
+
+# Extra dimension specific to this topic
+issues:
+  - "9条・自衛隊"
+  - "緊急事態条項"
+  - "国民投票法"
+  - "改憲全般"
+  - "手続き"
+  - "政党姿勢"
+  - "情報共有"
+  - "不明"
+
+prompt_intro: "あなたはSNS投稿の憲法改正論議分類器です。説明や思考は不要です。"
+
+prompt_theme: |
+  対象テーマ:
+  日本の憲法改正論議。9条・自衛隊明記、緊急事態条項、国民投票法・広告規制、改憲発議、政党姿勢をめぐるX反応。
+
+classification_rules: |
+  - Yahoo検索のハイライト文字列 START / END は無視する。
+  - 投稿本文に「賛成」「反対」の両方が入る場合、投稿者本人が最後に何へ賛成/反対しているかで判定する。
+  - 「憲法改正には賛成だが自民党草案には反対」は、改憲全般は支持だが草案慎重。category は文脈に応じて「改憲賛成・推進」または「政党・議員批判」。
+  - 「改憲反対」「憲法改悪」「今ある憲法を守れ」は改憲反対・護憲。
+  - 「自衛隊明記すべき」「違憲論争を終わらせる」「国防の現実」は9条・自衛隊明記に賛成。
+  - 「自衛隊明記不要」「9条改悪」「平和憲法を壊す」は9条・自衛隊明記に反対。
+  - 「緊急事態条項が必要」「災害・有事に備える」は緊急事態条項に賛成。
+  - 「緊急事態条項は危険」「権限集中」「人権制限」「独裁」は緊急事態条項に反対。
+  - 「国民投票法」「広告規制」「CM規制」「ネット広告」「運動資金」「外国人寄付」が主眼なら国民投票法・広告規制を重視。
+  - 単なるニュース共有や動画紹介は事実確認・情報共有。
+  - 攻撃的表現や陰謀論は summary で中和し、risk を high にする。
+  - 件数を世論比率として扱わないため、summary は中立的な1文にする。
+
+# Harmonization rules: fix stance/issue when they conflict with category
+harmonize_rules:
+  - categories: ["改憲賛成・推進"]
+    force_stance: "改憲支持"
+    valid_stances: ["改憲支持"]
+  - categories: ["9条・自衛隊明記に賛成", "緊急事態条項に賛成"]
+    force_stance: "項目別賛成"
+    valid_stances: ["改憲支持", "項目別賛成"]
+  - categories: ["改憲反対・護憲"]
+    force_stance: "改憲反対"
+    valid_stances: ["改憲反対"]
+  - categories: ["9条・自衛隊明記に反対", "緊急事態条項に反対"]
+    force_stance: "項目別反対"
+    valid_stances: ["改憲反対", "項目別反対", "慎重"]
+  - categories: ["国民投票法・広告規制を重視"]
+    force_stance: "手続き重視"
+    force_issue: "国民投票法"
+
+rule_overrides: []
+
+# Extra output fields beyond the base
+extra_output_fields:
+  - name: "issue"
+    values_key: "issues"
+    fallback: "不明"
+
+markdown_title: "憲法改正論議 X反応 Ollama分類"
+
+# High-risk word detection for fallback
+fallback_high_risk_words:
+  - "売国"
+  - "反日"
+  - "独裁"
+  - "陰謀"
+  - "ナチ"
+
+# Confidence floor: if confidence is 0 and category is not hold, set to this
+confidence_floor: 0.72
+
+ollama_options:
+  temperature: 0.05
+  num_predict: 2800
+
+text_max_length: 850

@@ -119,3 +119,66 @@ Markdownはカテゴリ別に並び替えた閲覧用ファイルになる。
 - 攻撃的表現や根拠不明の断定は、記事本文では要約して扱う。
 - `article_usable: true` は「代表意見として使いやすい」という意味であり、事実性の保証ではない。
 
+## 構造化分類 v2
+
+辺野古事故のように、記事見出し・引用元・投稿者本人の主張が混ざるテーマでは、単純な `category` / `stance` だけでは誤分類が起きやすい。
+
+今後の複雑なSNS反応分類では、次の軸を分ける。
+
+| フィールド | 役割 |
+| --- | --- |
+| `topic_target` | 大きな話題。例: 辺野古高校生死亡事故 |
+| `actor_target` | 評価対象になっている行為主体。例: 文科省判断、学校・引率 |
+| `criticized_target` | 実際に批判されている対象 |
+| `target` | UI互換用の主対象 |
+| `stance_to_target` | 主対象への態度 |
+| `issue` | 主論点 |
+| `quote_direction` | 旧互換用の引用方向 |
+| `stance_to_quoted_author` | 引用元の人物・媒体への態度 |
+| `stance_to_quoted_claim` | 引用元が示す主張内容への態度 |
+| `confidence_level` | `high` / `medium` / `low` |
+| `alternate_categories` | 第2候補以下の分類 |
+
+特に重要なのは、`stance_to_quoted_author` と `stance_to_quoted_claim` を分けること。
+
+例:
+
+```json
+{
+  "category": "文科省判断支持・政治的中立性違反を指摘",
+  "topic_target": "辺野古高校生死亡事故",
+  "actor_target": "文科省判断",
+  "criticized_target": "抗議声明側",
+  "target": "文科省判断",
+  "stance_to_target": "評価する",
+  "issue": "政治的中立性",
+  "quote_direction": "引用元に反対",
+  "stance_to_quoted_author": "反対",
+  "stance_to_quoted_claim": "反対",
+  "confidence": 0.88,
+  "confidence_level": "high",
+  "alternate_categories": [
+    {
+      "category": "政治利用・反基地運動批判",
+      "confidence": 0.22
+    }
+  ]
+}
+```
+
+`review_required` は最終判定ではなく、低信頼・高リスク投稿の確認用に限定する。引用元に反対しているだけで全件要確認にすると、運用が重くなりすぎる。
+
+辺野古向けの実装:
+
+```bash
+python3 scripts/classify_henoko_structured_ollama_batch.py \
+  --input social-samples/henoko/henoko_realtime_samples_expanded.json \
+  --output social-samples/henoko/henoko_structured_v2.json \
+  --markdown social-samples/henoko/henoko_structured_v2.md \
+  --model qwen2.5:7b \
+  --batch-size 3 \
+  --timeout 220 \
+  --sleep 0.2
+```
+
+このスクリプトは、OllamaのJSON出力が崩れた場合にバッチを1件ずつ再試行する。明確なルール一致がある場合は、カテゴリとスタンスの整合補正も行う。

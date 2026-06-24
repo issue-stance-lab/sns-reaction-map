@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Batch classify SNS reactions with Ollama.
-
-This is faster than one-request-per-post classification. It sends batches of
-posts and expects a JSON array with one classification per post.
-"""
+"""Classify Henoko high-school-student accident reactions with Ollama."""
 
 from __future__ import annotations
 
@@ -22,39 +18,45 @@ OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
 TAGS_URL = "http://127.0.0.1:11434/api/tags"
 
 CATEGORIES = [
-    "高市氏批判・責任追及",
-    "高市氏擁護・報道批判",
-    "玉木氏比較・説明責任",
-    "玉木氏擁護・貰い事故",
-    "サナエトークン関連",
-    "松井健氏を軸にした拡張",
-    "ネット選挙・透明性問題",
-    "未確認・陰謀寄り",
+    "追悼・慰霊への共感",
+    "学校・教育委員会批判",
+    "教育基本法違反視",
+    "政治利用・反基地運動批判",
+    "事故原因・安全管理への関心",
+    "基地問題・反基地論への接続",
+    "報道・行政対応批判",
+    "事実確認・情報共有",
+    "未確認・過激表現",
     "その他・分類保留",
 ]
 
-STANCE_LABELS = ["批判", "擁護", "比較", "保留", "未確認", "その他"]
-
+STANCE_LABELS = ["追悼支持", "批判", "反発", "制度論", "中立", "未確認", "保留", "その他"]
 
 PROMPT = """あなたはSNS投稿の論調分類器です。説明や思考は不要です。
 以下の投稿リストを分類し、JSON配列のみを返してください。
+
+対象テーマ:
+辺野古の高校生死亡事故、および学校・教育現場での追悼/慰霊/黙祷や、教育基本法違反ではないかという反応。
 
 カテゴリ:
 {categories}
 
 立場ラベル: {stance_labels}
 
-重要な分類ルール:
-- 「文春が捏造」「共同捏造」「事件はでっちあげ」「高市総理は無関係」「高市総理の指示ではない」は高市氏擁護・報道批判。
-- 「高市氏は説明すべき」「公設秘書が関与なら重大」「辞任すべき」は高市氏批判・責任追及。
-- 「玉木氏も同じでは」「玉木氏も説明すべき」は玉木氏比較・説明責任。
-- 「玉木氏は巻き込まれ」「同列視は雑」は玉木氏擁護・貰い事故。
-- 「サナエトークン」「暗号資産」「金融庁」「補償」はサナエトークン関連。
-- 「AI、外注、広告、発信主体、拡散、選挙の透明性」が主眼ならネット選挙・透明性問題。
+分類ルール:
+- 亡くなった高校生への追悼、黙祷、慰霊を支持・共感する投稿は「追悼・慰霊への共感」。
+- 学校、教師、教育委員会、校長、県教委などの対応を批判する投稿は「学校・教育委員会批判」。
+- 「教育基本法違反」「政治的中立性」「学校教育で扱うべきでない」が主眼なら「教育基本法違反視」。
+- 「死亡事故を反基地運動に利用している」「政治利用だ」が主眼なら「政治利用・反基地運動批判」。
+- 事故原因、警備、安全管理、道路、ダンプ、抗議現場の危険性が主眼なら「事故原因・安全管理への関心」。
+- 米軍基地、辺野古移設、反基地/基地容認の大きな政治論に接続する投稿は「基地問題・反基地論への接続」。
+- 報道機関、文科省、行政、政治家の対応への批判が主眼なら「報道・行政対応批判」。
+- ニュース共有、事実確認、リンク紹介中心なら「事実確認・情報共有」。
+- 根拠が薄い断定、陰謀論、強い個人攻撃、差別的/過激表現は「未確認・過激表現」。
+- 投稿本文が短すぎる、意味不明、対象外なら「その他・分類保留」。
 - 攻撃的表現はsummaryで中和する。
 - confidence は 0.0 から 1.0。
 - article_usable は代表意見として記事で使いやすい場合 true。
-{extra_rules}
 
 投稿リスト:
 {items}
@@ -80,31 +82,15 @@ def resolve_path(path: str) -> Path:
 
 
 def clean_text(text: str) -> str:
-    text = re.sub(r'\s*(?:START|END)\s*', ' ', text)
-    text = re.sub(r' {2,}', ' ', text)
-    return text.strip()
+    return text.replace("\tSTART\t", "").replace("\tEND\t", "").strip()
 
 
-def structure_rt(text: str) -> dict:
-    """Detect quote RT pattern and split into main and quoted portions."""
-    match = re.search(r'RT\s+@[\w]+:', text)
-    if match:
-        main = text[:match.start()].strip()
-        quoted = text[match.end():].strip()
-        if main and quoted:
-            return {"main": main, "quoted": quoted}
-        if quoted and not main:
-            return {"main": quoted}
-    return {"main": text}
-
-
-def check_ollama() -> list[str] | None:
+def check_ollama() -> bool:
     try:
-        with urllib.request.urlopen(TAGS_URL, timeout=5) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            return [m["name"] for m in data.get("models", [])]
+        with urllib.request.urlopen(TAGS_URL, timeout=5):
+            return True
     except Exception:
-        return None
+        return False
 
 
 def call_ollama(model: str, prompt: str, timeout: int) -> str:
@@ -159,110 +145,35 @@ def normalize(result: dict) -> dict:
     }
 
 
-def apply_rule_override(text: str, result: dict) -> dict:
-    defense_markers = [
-        "高市総理は無関係",
-        "高市氏は無関係",
-        "高市総理の指示ではない",
-        "高市首相の指示ではない",
-        "高市さんの指示ではない",
-        "文春、共同捏造",
-        "文春と共同",
-        "共同捏造",
-        "文春の捏造",
-        "事件はでっちあげ",
-        "疑惑は晴れ",
-        "捏造だった",
-        "でっちあげ",
-        "文春のあやふや証拠",
-        "高市政権追い詰める前に",
-        "立憲は今別の件",
-    ]
-    if any(marker in text for marker in defense_markers):
-        fixed = dict(result)
-        fixed["category"] = "高市氏擁護・報道批判"
-        fixed["stance"] = "擁護"
-        if not fixed.get("summary") or "指示が高市総理から出た" in fixed.get("summary", ""):
-            fixed["summary"] = "報道や疑惑を疑い、高市氏本人の関与を否定する主張。"
-        fixed["reason"] = "報道批判または高市氏本人の関与否定を明示しているため。"
-        fixed["confidence"] = max(float(fixed.get("confidence", 0.0)), 0.85)
-        return fixed
-    return result
-
-
-def classify_batch(model: str, rows: list[dict], timeout: int, avoid_hold: bool = False) -> list[dict]:
-    items = []
-    for i, row in enumerate(rows, 1):
-        cleaned = clean_text(row.get("text", ""))
-        parts = structure_rt(cleaned)
-        if "quoted" in parts:
-            display = f"[本文] {parts['main']} / [引用] {parts['quoted']}"
-        else:
-            display = parts["main"]
-        items.append({"id": i, "text": display[:700]})
+def classify_batch(model: str, rows: list[dict], timeout: int) -> list[dict]:
+    items = [{"id": i, "text": clean_text(row.get("text", ""))[:700]} for i, row in enumerate(rows, 1)]
     prompt = PROMPT.format(
         categories="\n".join(f"- {c}" for c in CATEGORIES),
         stance_labels=", ".join(STANCE_LABELS),
-        extra_rules=(
-            "\n保留再分類ルール:\n"
-            "- これは一度保留になった投稿の再分類です。文脈が少しでも読める場合は最も近いカテゴリへ寄せる。\n"
-            "- ニュース共有だけでも、共有対象が高市氏責任追及なら高市氏批判、報道懐疑なら高市氏擁護、サナエトークンならサナエトークン関連にする。\n"
-            "- 皮肉・揶揄は、攻撃対象を推定して分類する。\n"
-            "- その他・分類保留は、本文が短すぎる、意味不明、分類対象外の場合だけ使う。\n"
-            if avoid_hold
-            else ""
-        ),
         items=json.dumps(items, ensure_ascii=False, indent=2),
     )
-    response = call_ollama(model, prompt, timeout)
-    parsed = parse_array(response)
+    parsed = parse_array(call_ollama(model, prompt, timeout))
     by_id = {}
     for item in parsed:
         try:
             by_id[int(item.get("id"))] = normalize(item)
         except Exception:
             continue
-    results = []
-    for i in range(1, len(rows) + 1):
-        base = by_id.get(
-                i,
-                {
-                    "category": "その他・分類保留",
-                    "stance": "その他",
-                    "summary": "",
-                    "reason": "missing batch result",
-                    "confidence": 0.0,
-                    "article_usable": False,
-                    "risk": "medium",
-                },
+    return [
+        by_id.get(
+            i,
+            {
+                "category": "その他・分類保留",
+                "stance": "その他",
+                "summary": "",
+                "reason": "missing batch result",
+                "confidence": 0.0,
+                "article_usable": False,
+                "risk": "medium",
+            },
         )
-        results.append(apply_rule_override(clean_text(rows[i - 1].get("text", "")), base))
-    return results
-
-
-def classify_batch_with_retry(
-    model: str, rows: list[dict], timeout: int, avoid_hold: bool = False
-) -> tuple[list[dict], int]:
-    """Call classify_batch and retry once if any expected IDs are missing."""
-    expected_ids = set(range(1, len(rows) + 1))
-    retries = 0
-
-    results = classify_batch(model, rows, timeout, avoid_hold)
-
-    # Check which IDs came back with real results (not fallback "missing batch result")
-    present_ids = {
-        i + 1
-        for i, r in enumerate(results)
-        if r.get("reason") != "missing batch result"
-    }
-    missing_ids = expected_ids - present_ids
-
-    if missing_ids:
-        retries = 1
-        print(f"  ID欠落 {sorted(missing_ids)} を検出、リトライ中...", flush=True)
-        results = classify_batch(model, rows, timeout, avoid_hold)
-
-    return results, retries
+        for i in range(1, len(rows) + 1)
+    ]
 
 
 def write_markdown(rows: list[dict], output: Path) -> None:
@@ -270,7 +181,7 @@ def write_markdown(rows: list[dict], output: Path) -> None:
     for row in rows:
         buckets[row["classification"]["category"]].append(row)
     lines = [
-        "# SNS反応 Ollamaバッチ分類版",
+        "# 辺野古高校生死亡事故 SNS反応 Ollama分類",
         "",
         f"総件数: {len(rows)}",
         "",
@@ -306,39 +217,35 @@ def write_markdown(rows: list[dict], output: Path) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Batch classify SNS reactions with Ollama")
+    parser = argparse.ArgumentParser(description="Classify Henoko reactions with Ollama")
     parser.add_argument("--input", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--markdown", default="")
     parser.add_argument("--model", default="qwen2.5:7b")
-    parser.add_argument("--batch-size", type=int, default=3)
+    parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--sleep", type=float, default=0.0)
-    parser.add_argument("--avoid-hold", action="store_true", help="Treat hold/other as a last resort for reclassification")
     args = parser.parse_args()
 
     input_path = resolve_path(args.input)
-    output_path = resolve_path(args.output)
-    markdown_path = resolve_path(args.markdown) if args.markdown else None
     rows = json.loads(input_path.read_text(encoding="utf-8"))
     if args.limit:
         rows = rows[: args.limit]
     for row in rows:
         row["text"] = clean_text(row.get("text", ""))
     print(f"入力: {input_path} ({len(rows)}件)", flush=True)
-    if check_ollama() is None:
+    if not check_ollama():
         print("Ollamaに接続できません。ollama serve を確認してください。", flush=True)
         return 1
+
     classified = []
     errors = 0
-    total_retries = 0
     for start in range(0, len(rows), args.batch_size):
         batch = rows[start : start + args.batch_size]
         print(f"[{start + 1}-{start + len(batch)}/{len(rows)}] batch classify", flush=True)
         try:
-            results, retries = classify_batch_with_retry(args.model, batch, args.timeout, args.avoid_hold)
-            total_retries += retries
+            results = classify_batch(args.model, batch, args.timeout)
         except Exception as exc:
             errors += len(batch)
             print(f"  ERROR: {exc}", flush=True)
@@ -360,13 +267,14 @@ def main() -> int:
             classified.append(new_row)
         if args.sleep:
             time.sleep(args.sleep)
+
+    output_path = resolve_path(args.output)
     output_path.write_text(json.dumps(classified, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"JSON保存: {output_path}", flush=True)
-    if markdown_path:
+    if args.markdown:
+        markdown_path = resolve_path(args.markdown)
         write_markdown(classified, markdown_path)
         print(f"Markdown保存: {markdown_path}", flush=True)
-    if total_retries:
-        print(f"リトライ発生: {total_retries}回", flush=True)
     print(f"完了: {len(classified)}件 / エラー {errors}件", flush=True)
     return 0 if errors == 0 else 2
 

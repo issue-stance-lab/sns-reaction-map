@@ -1,0 +1,141 @@
+{
+  "site_title": "SNS反応まっぷ",
+  "site_subtitle": "ニュースやSNSで意見が割れる事例を、論点・賛否・根拠・注意点ごとに整理する編集用ポータル。",
+  "notes": [
+    "表示件数は収集サンプル内の分類件数であり、世論比率ではありません。",
+    "投稿本文は公開時に要約・リンク中心で扱い、代表投稿は人間が確認します。",
+    "AI分類は論点整理の補助であり、事実認定や政治的判定そのものではありません。"
+  ],
+  "cases": [
+    {
+      "id": "takaichi-bunshun",
+      "title": "高市文春・中傷動画問題",
+      "subtitle": "文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。",
+      "status": "分析済み",
+      "topic_type": "政治・ネット選挙",
+      "source_label": "Yahooリアルタイム検索",
+      "data_path": "social-samples/takaichi_realtime_ollama_final_reclassified_editorial.json",
+      "reaction_map_url": "takaichi-reaction-heatmap.html",
+      "standard_map_url": "takaichi-reaction-map-standard.html",
+      "summary_url": "takaichi-summary.html",
+      "article_urls": [
+        {
+          "label": "記事ドラフト",
+          "url": "../articles/takaichi-bunshun-smear-videos.md"
+        },
+        {
+          "label": "バトル風記事",
+          "url": "../articles/takaichi-smear-video-battle-editorial.md"
+        }
+      ],
+      "primary_axes": [
+        "高市氏側の説明責任",
+        "報道への疑義",
+        "松井健氏を軸にした比較",
+        "ネット選挙の透明性"
+      ]
+    },
+    {
+      "id": "henoko-student-accident",
+      "title": "辺野古高校生死亡事故",
+      "subtitle": "文科省の教育基本法違反認定、安全管理、政治的中立性、平和教育の萎縮をめぐる反応。",
+      "status": "分析中",
+      "topic_type": "教育・事故・基地問題",
+      "source_label": "Yahooリアルタイム検索",
+      "data_path": "social-samples/henoko/henoko_realtime_expanded_classified_editorial.json",
+      "structured_data_path": "social-samples/henoko/henoko_structured_classified.json",
+      "reaction_map_url": "henoko-student-accident-reaction-map.html",
+      "summary_url": "henoko-summary.html",
+      "research_urls": [
+        {
+          "label": "反応調査メモ",
+          "url": "../research/henoko-student-accident-reactions.md"
+        },
+        {
+          "label": "構造化分類レポート",
+          "url": "../research/henoko-structured-classification-report.md"
+        }
+      ],
+      "primary_axes": [
+        "文科省判断を評価する",
+        "文科省判断を評価しない",
+        "安全管理・引率責任",
+        "追悼・慰霊への共感",
+        "未確認・過激表現"
+      ]
+    },
+    {
+      "id": "constitutional-amendment",
+      "title": "憲法改正論議",
+      "subtitle": "国会議員・政党の賛否、改正項目、緊急事態条項、9条、発議条件などを整理する予定。",
+      "status": "企画中",
+      "topic_type": "政策・国会",
+      "source_label": "国会議員発言・政党資料",
+      "data_path": "social-samples/constitutional_amendment_structured_v2.json",
+      "reaction_map_url": "constitutional-amendment-reaction-map.html",
+      "summary_url": "constitutional-amendment-summary.html",
+      "research_urls": [
+        {
+          "label": "論点ダッシュボード",
+          "url": "constitutional-amendment-dashboard.html"
+        },
+        {
+          "label": "初期調査メモ",
+          "url": "../research/constitutional-amendment-research.md"
+        }
+      ],
+      "primary_axes": [
+        "改正賛成",
+        "改正反対",
+        "項目別賛否",
+        "政党別スタンス"
+      ]
+    },
+    {
+      "id": "diet-seat-reduction",
+      "title": "議員定数削減",
+      "subtitle": "政治改革、身を切る改革、民意の反映、多様性、地方代表性、比例代表をめぐる賛否を整理する予定。",
+      "status": "企画中",
+      "topic_type": "政治制度",
+      "source_label": "政党資料・国会発言・SNS反応",
+      "data_path": "",
+      "primary_axes": [
+        "コスト削減・改革支持",
+        "民意反映の低下を懸念",
+        "地方代表性",
+        "比例代表制度"
+      ]
+    },
+    {
+      "id": "school-nickname-ban",
+      "title": "学校でのあだ名禁止の是非",
+      "subtitle": "いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。",
+      "status": "分析済み",
+      "topic_type": "教育・日常論争",
+      "source_label": "Yahooリアルタイム検索",
+      "data_path": "social-samples/school-nickname-ban_classified_v2.json",
+      "reaction_map_url": "school-nickname-ban-reaction-map.html",
+      "primary_axes": [
+        "禁止支持",
+        "禁止反対",
+        "ルール運用"
+      ]
+    },
+    {
+      "id": "ai-copyright",
+      "title": "生成AIと著作権問題",
+      "subtitle": "AI学習による著作物の無断利用をめぐり、クリエイター保護と技術推進の間で意見が対立。",
+      "status": "分析済み",
+      "topic_type": "テック・著作権",
+      "source_label": "Yahooリアルタイム検索",
+      "data_path": "social-samples/ai-copyright_classified.json",
+      "reaction_map_url": "ai-copyright-reaction-map.html",
+      "primary_axes": [
+        "著作権保護",
+        "技術推進",
+        "共存模索",
+        "利用者モラル"
+      ]
+    }
+  ]
+}

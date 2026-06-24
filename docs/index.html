@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SNS反応まっぷ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce5;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --warn: #b54708;
+      --ok: #16885a;
+      --shadow: 0 12px 30px rgba(16, 24, 40, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 32px min(5vw, 56px) 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    p { margin: 10px 0 0; }
+    .lead {
+      max-width: 980px;
+      color: var(--muted);
+      margin: 0;
+    }
+    main {
+      padding: 22px min(5vw, 56px) 48px;
+    }
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 15px 16px;
+      box-shadow: var(--shadow);
+    }
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 26px;
+      font-variant-numeric: tabular-nums;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin: 18px 0 12px;
+    }
+    .section-head h2 { font-size: 18px; }
+    .section-head p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .case-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      min-height: 360px;
+    }
+    .case-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+    .kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 68px;
+      min-height: 28px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      background: #f2f4f7;
+      color: #344054;
+    }
+    .status.active {
+      background: #e8f7ef;
+      color: var(--ok);
+    }
+    .status.planned {
+      background: #fff1e8;
+      color: var(--warn);
+    }
+    .case-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .case-stats {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .case-stats div {
+      display: contents;
+    }
+    .case-stats span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .case-stats strong {
+      min-width: 0;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+    .axis-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .axis-list span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fbfcfe;
+      padding: 4px 9px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      border-radius: 8px;
+      padding: 6px 11px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .link-button.ghost {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--line);
+    }
+    .note-panel {
+      margin-top: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .note-panel h2 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .note-panel ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 720px) {
+      header, main { padding-inline: 14px; }
+      .section-head { display: block; }
+      .case-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SNS反応まっぷ</h1>
+    <p class="lead">ニュースやSNSで意見が割れる事例を、論点・賛否・根拠・注意点ごとに整理する編集用ポータル。</p>
+  </header>
+  <main>
+    <section class="top-grid">
+      <div class="stat"><span>登録テーマ</span><strong>6</strong></div>
+      <div class="stat"><span>データあり</span><strong>5</strong></div>
+      <div class="stat"><span>企画中</span><strong>2</strong></div>
+    </section>
+    <div class="section-head">
+      <h2>事例一覧</h2>
+      <p>各カードから、反応マップ・まとめUI・調査メモへ移動できます。</p>
+    </div>
+    <section class="case-grid">
+      
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">政治・ネット選挙</div>
+      <h2>高市文春・中傷動画問題</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>183</strong></div>
+    <div><span>最多分類</span><strong>高市氏批判・責任追及</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>高市氏側の説明責任</span><span>報道への疑義</span><span>松井健氏を軸にした比較</span><span>ネット選挙の透明性</span></div>
+  <div class="link-row"><a class="link-button" href="takaichi-reaction-heatmap.html">反応マップ</a><a class="link-button" href="takaichi-summary.html">まとめUI</a><a class="link-button ghost" href="takaichi-reaction-map-standard.html">標準マップ</a><a class="link-button ghost" href="../articles/takaichi-bunshun-smear-videos.md">記事ドラフト</a><a class="link-button ghost" href="../articles/takaichi-smear-video-battle-editorial.md">バトル風記事</a></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">教育・事故・基地問題</div>
+      <h2>辺野古高校生死亡事故</h2>
+    </div>
+    <span class="status active">分析中</span>
+  </div>
+  <p>文科省の教育基本法違反認定、安全管理、政治的中立性、平和教育の萎縮をめぐる反応。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>311</strong></div>
+    <div><span>最多分類</span><strong>安全管理・引率責任を問題視</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>文科省判断を評価する</span><span>文科省判断を評価しない</span><span>安全管理・引率責任</span><span>追悼・慰霊への共感</span><span>未確認・過激表現</span></div>
+  <div class="link-row"><a class="link-button" href="henoko-student-accident-reaction-map.html">反応マップ</a><a class="link-button" href="henoko-summary.html">まとめUI</a><a class="link-button ghost" href="../research/henoko-student-accident-reactions.md">反応調査メモ</a><a class="link-button ghost" href="../research/henoko-structured-classification-report.md">構造化分類レポート</a></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">政策・国会</div>
+      <h2>憲法改正論議</h2>
+    </div>
+    <span class="status planned">企画中</span>
+  </div>
+  <p>国会議員・政党の賛否、改正項目、緊急事態条項、9条、発議条件などを整理する予定。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>192</strong></div>
+    <div><span>最多分類</span><strong>国民投票法・広告規制を重視</strong></div>
+    <div><span>ソース</span><strong>国会議員発言・政党資料</strong></div>
+  </div>
+  <div class="axis-list"><span>改正賛成</span><span>改正反対</span><span>項目別賛否</span><span>政党別スタンス</span></div>
+  <div class="link-row"><a class="link-button" href="constitutional-amendment-reaction-map.html">反応マップ</a><a class="link-button" href="constitutional-amendment-summary.html">まとめUI</a><a class="link-button ghost" href="constitutional-amendment-dashboard.html">論点ダッシュボード</a><a class="link-button ghost" href="../research/constitutional-amendment-research.md">初期調査メモ</a></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">政治制度</div>
+      <h2>議員定数削減</h2>
+    </div>
+    <span class="status planned">企画中</span>
+  </div>
+  <p>政治改革、身を切る改革、民意の反映、多様性、地方代表性、比例代表をめぐる賛否を整理する予定。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>0</strong></div>
+    <div><span>最多分類</span><strong>未収集</strong></div>
+    <div><span>ソース</span><strong>政党資料・国会発言・SNS反応</strong></div>
+  </div>
+  <div class="axis-list"><span>コスト削減・改革支持</span><span>民意反映の低下を懸念</span><span>地方代表性</span><span>比例代表制度</span></div>
+  <div class="link-row"></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">教育・日常論争</div>
+      <h2>学校でのあだ名禁止の是非</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>201</strong></div>
+    <div><span>最多分類</span><strong>その他・分類保留</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>禁止支持</span><span>禁止反対</span><span>ルール運用</span></div>
+  <div class="link-row"><a class="link-button" href="school-nickname-ban-reaction-map.html">反応マップ</a></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">テック・著作権</div>
+      <h2>生成AIと著作権問題</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>AI学習による著作物の無断利用をめぐり、クリエイター保護と技術推進の間で意見が対立。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>475</strong></div>
+    <div><span>最多分類</span><strong>著作権厳格保護・クリエイターの権利回復を最優先</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>著作権保護</span><span>技術推進</span><span>共存模索</span><span>利用者モラル</span></div>
+  <div class="link-row"><a class="link-button" href="ai-copyright-reaction-map.html">反応マップ</a></div>
+</article>
+
+    </section>
+    <section class="note-panel">
+      <h2>表示上の注意</h2>
+      <ul><li>表示件数は収集サンプル内の分類件数であり、世論比率ではありません。</li><li>投稿本文は公開時に要約・リンク中心で扱い、代表投稿は人間が確認します。</li><li>AI分類は論点整理の補助であり、事実認定や政治的判定そのものではありません。</li></ul>
+    </section>
+  </main>
+</body>
+</html>

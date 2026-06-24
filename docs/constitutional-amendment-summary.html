@@ -1,0 +1,1987 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>憲法改正論議 反応まとめ</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --ink: #182033;
+      --muted: #667085;
+      --line: #d7dce5;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --warn: #b54708;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 26px min(5vw, 56px) 18px;
+    }
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .top-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 5px 10px;
+      background: #fbfcfe;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    h1 { margin: 0 0 6px; font-size: clamp(26px, 4vw, 42px); letter-spacing: 0; }
+    h2 { margin: 0 0 12px; font-size: 18px; }
+    h3 { margin: 0; font-size: 15px; }
+    .lead { margin: 0; color: var(--muted); max-width: 980px; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      padding: 18px min(5vw, 56px) 48px;
+      align-items: start;
+    }
+    .main, aside { min-width: 0; }
+    .panel, .post-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      background: rgba(245,246,248,.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      margin-bottom: 12px;
+    }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .post-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .num { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .badge, .stance {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge { background: var(--accent-soft); color: #0f4e9d; }
+    .stance { background: #f2f4f7; color: #344054; }
+    .summary { font-size: 16px; margin: 12px 0 8px; }
+    blockquote {
+      margin: 10px 0;
+      padding: 10px 12px;
+      border-left: 3px solid var(--line);
+      background: #fbfcfe;
+      color: #344054;
+      font-size: 13px;
+    }
+    .reason { color: var(--muted); font-size: 13px; }
+    .tweet-embed {
+      margin: 12px 0;
+      min-height: 72px;
+    }
+    .tweet-embed iframe {
+      max-width: 100% !important;
+    }
+    .embed-fallback {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fbfcfe;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .post-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .post-actions { margin-top: 10px; }
+    a { color: var(--accent); text-decoration: none; font-weight: 700; }
+    a:hover { text-decoration: underline; }
+    .stat-list { list-style: none; padding: 0; margin: 0; }
+    .stat-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding: 8px 0;
+      font-size: 13px;
+    }
+    .stat-list li:last-child { border-bottom: 0; }
+    .stat-list span { color: var(--muted); overflow-wrap: anywhere; }
+    .stat-list strong { white-space: nowrap; }
+    .scorecard table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .scorecard th, .scorecard td { border: 1px solid var(--line); padding: 8px; text-align: left; vertical-align: top; }
+    .scorecard thead th { background: #eef2f7; }
+    .versus-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .versus-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      margin-top: 14px;
+    }
+    .side {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+    .side-left { border-top: 4px solid #1769d1; }
+    .side-right { border-top: 4px solid #b54708; }
+    .side-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .side-title strong {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 32px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 16px;
+    }
+    .side-copy { margin: 8px 0 12px; color: var(--muted); font-size: 13px; }
+    .vs-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 96px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+    .mini-card {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .mini-meta { color: var(--accent); font-size: 12px; font-weight: 800; }
+    .mini-card p { margin: 6px 0 8px; font-size: 14px; }
+    .notice { color: var(--muted); font-size: 13px; }
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { order: -1; }
+      .toolbar { position: static; }
+      .versus-grid { grid-template-columns: 1fr; }
+      .vs-mark { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="top-nav"><a href="index.html">トップ</a><a href="constitutional-amendment-reaction-map.html">反応マップ</a><a href="constitutional-amendment-dashboard.html">論点ダッシュボード</a><a href="takaichi-summary.html">高市事例</a></nav>
+    <h1>憲法改正論議 反応まとめ</h1>
+    <p class="lead">9条・自衛隊明記、緊急事態条項、国民投票法・広告規制をめぐるX反応を論点ごとに整理。</p>
+  </header>
+  <div class="layout">
+    <main class="main">
+      <section class="panel">
+        <h2>まとめの前提</h2>
+        <p class="notice">Yahooリアルタイム検索で取得したX反応192件を初期分類したまとめビューです。投稿全文の転載ではなく、要旨・分類・URLを中心に表示します。</p>
+      </section>
+      
+<section class="versus panel">
+  <div class="versus-head">
+    <h2>改憲を進める VS 改憲に慎重・反対</h2>
+    <p>まず改憲推進側と改憲慎重・反対側に分け、そのうえで9条、緊急事態条項、国民投票法の論点を見ます。</p>
+  </div>
+  <div class="versus-grid">
+    <div class="side side-left">
+      <div class="side-title"><span>進める</span><strong>52</strong></div>
+      <p class="side-copy">自衛隊明記、防衛、緊急事態対応などを理由に改憲を進めるべきと見る反応。</p>
+      <article class="mini-card"><div class="mini-meta">9条・自衛隊明記に賛成 / 支持</div><p>自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p><div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/K5omyKUOte87912/status/2067466904877564329"></a></blockquote><div class="embed-fallback"><a href="https://x.com/K5omyKUOte87912/status/2067466904877564329" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div></article><article class="mini-card"><div class="mini-meta">9条・自衛隊明記に賛成 / 支持</div><p>投稿者が現行憲法の解釈が危険であると指摘し、9条改正を支持。</p><div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/tokumusocho/status/2067445721801146677"></a></blockquote><div class="embed-fallback"><a href="https://x.com/tokumusocho/status/2067445721801146677" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div></article><article class="mini-card"><div class="mini-meta">9条・自衛隊明記に賛成 / 支持</div><p>自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p><div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/akubikinako/status/2067441818783080941"></a></blockquote><div class="embed-fallback"><a href="https://x.com/akubikinako/status/2067441818783080941" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div></article>
+    </div>
+    <div class="vs-mark">VS</div>
+    <div class="side side-right">
+      <div class="side-title"><span>慎重・反対</span><strong>61</strong></div>
+      <p class="side-copy">9条改正や緊急事態条項が平和主義の後退や権限集中につながると見る反応。</p>
+      <article class="mini-card"><div class="mini-meta">緊急事態条項に反対 / 反対</div><p>緊急事態条項を権限集中や人権制限のリスクとして警戒する反応。</p><div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Dabrith/status/2067585548626415824"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Dabrith/status/2067585548626415824" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div></article><article class="mini-card"><div class="mini-meta">緊急事態条項に反対 / 反対</div><p>緊急事態条項を権限集中や人権制限のリスクとして警戒する反応。</p><div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118"></a></blockquote><div class="embed-fallback"><a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div></article><article class="mini-card"><div class="mini-meta">9条・自衛隊明記に反対 / 反対</div><p>投稿者が自衛隊の明記は不要であり、9条改正には反対。</p><div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/jijicoltdceo/status/2067442429939294255"></a></blockquote><div class="embed-fallback"><a href="https://x.com/jijicoltdceo/status/2067442429939294255" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div></article>
+    </div>
+  </div>
+</section>
+
+      
+      <div class="toolbar">
+        <h2>フィルタ</h2>
+        <div class="chip-row" id="categoryFilters"><button class="chip active" data-filter-category="all">すべて</button><button class="chip" data-filter-category="改憲賛成・推進">改憲賛成・推進</button><button class="chip" data-filter-category="9条・自衛隊明記に賛成">9条・自衛隊明記に賛成</button><button class="chip" data-filter-category="改憲反対・護憲">改憲反対・護憲</button><button class="chip" data-filter-category="9条・自衛隊明記に反対">9条・自衛隊明記に反対</button><button class="chip" data-filter-category="緊急事態条項に反対">緊急事態条項に反対</button><button class="chip" data-filter-category="国民投票法・広告規制を重視">国民投票法・広告規制を重視</button><button class="chip" data-filter-category="政党・議員批判">政党・議員批判</button><button class="chip" data-filter-category="その他・分類保留">その他・分類保留</button></div>
+        <div class="chip-row" id="stanceFilters"><button class="chip active" data-filter-stance="all">すべて</button><button class="chip" data-filter-stance="慎重">慎重</button><button class="chip" data-filter-stance="中立">中立</button><button class="chip" data-filter-stance="その他">その他</button><button class="chip" data-filter-stance="反対">反対</button><button class="chip" data-filter-stance="問題視">問題視</button><button class="chip" data-filter-stance="支持">支持</button><button class="chip" data-filter-stance="評価しない">評価しない</button></div>
+      </div>
+      <section id="cards">
+        
+<article class="post-card" data-category="改憲賛成・推進" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#1</span>
+    <span class="badge">改憲賛成・推進</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">憲法改正を進めるべきだとする反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/HARDLUC69070400/status/2067923273179136492"></a></blockquote><div class="embed-fallback"><a href="https://x.com/HARDLUC69070400/status/2067923273179136492" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲賛成・推進の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.90</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/HARDLUC69070400/status/2067923273179136492" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲賛成・推進" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#2</span>
+    <span class="badge">改憲賛成・推進</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">憲法改正を進めるべきだとする反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/frnXuWz00WuFE8R/status/2067876294105383303"></a></blockquote><div class="embed-fallback"><a href="https://x.com/frnXuWz00WuFE8R/status/2067876294105383303" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲賛成・推進の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.84</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/frnXuWz00WuFE8R/status/2067876294105383303" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲賛成・推進" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#3</span>
+    <span class="badge">改憲賛成・推進</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は戦争を防ぐために憲法改正が必要だと主張し、自衛隊の強化と日米安保の強化を推進している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/GvVvfpjq2G97202/status/2068127797571449309"></a></blockquote><div class="embed-fallback"><a href="https://x.com/GvVvfpjq2G97202/status/2068127797571449309" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が改憲全般に賛成表明したため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/GvVvfpjq2G97202/status/2068127797571449309" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲賛成・推進" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#4</span>
+    <span class="badge">改憲賛成・推進</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は国民投票による改憲を支持し、自民党の改憲案には反対している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/gofffwin/status/2067893607974293988"></a></blockquote><div class="embed-fallback"><a href="https://x.com/gofffwin/status/2067893607974293988" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が国民投票による改憲を推進する一方で、具体的な改憲案に対しては批判的である。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/gofffwin/status/2067893607974293988" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲賛成・推進" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#5</span>
+    <span class="badge">改憲賛成・推進</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条改正を支持するが、その前に自衛隊の徹底的な粛軍が必要だと主張。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/TJopqC5RgviqSK5/status/2067969099871986156"></a></blockquote><div class="embed-fallback"><a href="https://x.com/TJopqC5RgviqSK5/status/2067969099871986156" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「私自身は憲法9条の改正は賛成」は明確な支持表明。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/TJopqC5RgviqSK5/status/2067969099871986156" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#6</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/K5omyKUOte87912/status/2067466904877564329"></a></blockquote><div class="embed-fallback"><a href="https://x.com/K5omyKUOte87912/status/2067466904877564329" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 1.00</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/K5omyKUOte87912/status/2067466904877564329" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#7</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者が現行憲法の解釈が危険であると指摘し、9条改正を支持。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/tokumusocho/status/2067445721801146677"></a></blockquote><div class="embed-fallback"><a href="https://x.com/tokumusocho/status/2067445721801146677" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条改正を支持していることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 1.00</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/tokumusocho/status/2067445721801146677" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#8</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/akubikinako/status/2067441818783080941"></a></blockquote><div class="embed-fallback"><a href="https://x.com/akubikinako/status/2067441818783080941" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 1.00</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/akubikinako/status/2067441818783080941" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#9</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/FSNg7hpPtvnUjIF/status/2067624468340728067"></a></blockquote><div class="embed-fallback"><a href="https://x.com/FSNg7hpPtvnUjIF/status/2067624468340728067" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.90</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/FSNg7hpPtvnUjIF/status/2067624468340728067" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#10</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/AbeKentaSoul/status/2068182999129043218"></a></blockquote><div class="embed-fallback"><a href="https://x.com/AbeKentaSoul/status/2068182999129043218" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/AbeKentaSoul/status/2068182999129043218" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#11</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/8_bee_/status/2068182185207910763"></a></blockquote><div class="embed-fallback"><a href="https://x.com/8_bee_/status/2068182185207910763" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/8_bee_/status/2068182185207910763" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#12</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/famifami_don/status/2068145163659280427"></a></blockquote><div class="embed-fallback"><a href="https://x.com/famifami_don/status/2068145163659280427" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/famifami_don/status/2068145163659280427" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#13</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/mocchiAbeFan758/status/2068064226518663385"></a></blockquote><div class="embed-fallback"><a href="https://x.com/mocchiAbeFan758/status/2068064226518663385" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/mocchiAbeFan758/status/2068064226518663385" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#14</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/chinchixws5/status/2067982516276150769"></a></blockquote><div class="embed-fallback"><a href="https://x.com/chinchixws5/status/2067982516276150769" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/chinchixws5/status/2067982516276150769" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#15</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#16</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/xyukijix/status/2067898613356015823"></a></blockquote><div class="embed-fallback"><a href="https://x.com/xyukijix/status/2067898613356015823" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/xyukijix/status/2067898613356015823" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#17</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/haruyokoi1023/status/2067873373439558116"></a></blockquote><div class="embed-fallback"><a href="https://x.com/haruyokoi1023/status/2067873373439558116" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/haruyokoi1023/status/2067873373439558116" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#18</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/kamioka_u1/status/2067862126451159164"></a></blockquote><div class="embed-fallback"><a href="https://x.com/kamioka_u1/status/2067862126451159164" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/kamioka_u1/status/2067862126451159164" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#19</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/wind_0196/status/2067831949541216551"></a></blockquote><div class="embed-fallback"><a href="https://x.com/wind_0196/status/2067831949541216551" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/wind_0196/status/2067831949541216551" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#20</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/SDzpp8XtPmUsyN2/status/2067814737736524268"></a></blockquote><div class="embed-fallback"><a href="https://x.com/SDzpp8XtPmUsyN2/status/2067814737736524268" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/SDzpp8XtPmUsyN2/status/2067814737736524268" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#21</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/doriftbottle/status/2067774539774509546"></a></blockquote><div class="embed-fallback"><a href="https://x.com/doriftbottle/status/2067774539774509546" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/doriftbottle/status/2067774539774509546" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#22</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/koji19610103/status/2067772348594598095"></a></blockquote><div class="embed-fallback"><a href="https://x.com/koji19610103/status/2067772348594598095" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/koji19610103/status/2067772348594598095" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#23</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/koji19610103/status/2067765275324522502"></a></blockquote><div class="embed-fallback"><a href="https://x.com/koji19610103/status/2067765275324522502" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/koji19610103/status/2067765275324522502" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#24</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/yotuusb888/status/2067750011451109489"></a></blockquote><div class="embed-fallback"><a href="https://x.com/yotuusb888/status/2067750011451109489" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/yotuusb888/status/2067750011451109489" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#25</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/monozukuriman/status/2067746184924705132"></a></blockquote><div class="embed-fallback"><a href="https://x.com/monozukuriman/status/2067746184924705132" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/monozukuriman/status/2067746184924705132" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#26</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ryosmitisirube/status/2067742561981395056"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ryosmitisirube/status/2067742561981395056" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ryosmitisirube/status/2067742561981395056" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#27</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/buriki2025/status/2068213021131067816"></a></blockquote><div class="embed-fallback"><a href="https://x.com/buriki2025/status/2068213021131067816" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/buriki2025/status/2068213021131067816" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#28</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/y7m3389SorxeAi9/status/2068212493378560282"></a></blockquote><div class="embed-fallback"><a href="https://x.com/y7m3389SorxeAi9/status/2068212493378560282" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/y7m3389SorxeAi9/status/2068212493378560282" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#29</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/rightrighton4/status/2067994758203756843"></a></blockquote><div class="embed-fallback"><a href="https://x.com/rightrighton4/status/2067994758203756843" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/rightrighton4/status/2067994758203756843" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#30</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Nullypog/status/2067947902367134004"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Nullypog/status/2067947902367134004" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Nullypog/status/2067947902367134004" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#31</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ryudairou/status/2067822523992158268"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ryudairou/status/2067822523992158268" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ryudairou/status/2067822523992158268" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#32</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Kawa6raFriedman/status/2067757539203391852"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Kawa6raFriedman/status/2067757539203391852" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Kawa6raFriedman/status/2067757539203391852" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#33</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/grok/status/2067742905721118801"></a></blockquote><div class="embed-fallback"><a href="https://x.com/grok/status/2067742905721118801" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/grok/status/2067742905721118801" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#34</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/mogamiujisato/status/2067732837231628690"></a></blockquote><div class="embed-fallback"><a href="https://x.com/mogamiujisato/status/2067732837231628690" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/mogamiujisato/status/2067732837231628690" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#35</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/abe_keishi/status/2067572022868328558"></a></blockquote><div class="embed-fallback"><a href="https://x.com/abe_keishi/status/2067572022868328558" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/abe_keishi/status/2067572022868328558" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#36</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/subririn_b/status/2067563630259028414"></a></blockquote><div class="embed-fallback"><a href="https://x.com/subririn_b/status/2067563630259028414" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/subririn_b/status/2067563630259028414" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#37</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/shadow_work_miu/status/2067551310686335409"></a></blockquote><div class="embed-fallback"><a href="https://x.com/shadow_work_miu/status/2067551310686335409" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/shadow_work_miu/status/2067551310686335409" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#38</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/TVbancyo/status/2067487614270427457"></a></blockquote><div class="embed-fallback"><a href="https://x.com/TVbancyo/status/2067487614270427457" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.82</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/TVbancyo/status/2067487614270427457" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#39</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は、憲法改正の手続きについて議論しているが、具体的な目標は9条・自衛隊明記に支持する。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/mA4nilah/status/2067955404177572273"></a></blockquote><div class="embed-fallback"><a href="https://x.com/mA4nilah/status/2067955404177572273" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条・自衛隊明記に賛成していることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/mA4nilah/status/2067955404177572273" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#40</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条の歪曲を防ぐために自衛隊明記を支持し、晋三様の遺志を継いでいる。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ShinzoGuardian4/status/2068156079637241934"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ShinzoGuardian4/status/2068156079637241934" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「9条の歪曲守るために必死こいてる姿が逆に腹立つわ」という表現から9条・自衛隊明記への支持を推測。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ShinzoGuardian4/status/2068156079637241934" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#41</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条の改正と自衛隊の明記を支持し、法学者谷口真由美氏の主張に同意している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/G6rWL31oqWdlICj/status/2067410440918057413"></a></blockquote><div class="embed-fallback"><a href="https://x.com/G6rWL31oqWdlICj/status/2067410440918057413" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条改正と自衛隊明記を推進する立場であることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/G6rWL31oqWdlICj/status/2067410440918057413" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#42</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条改正と自衛隊の明記を支持し、自衛隊が国軍として正式に認証されるべきである。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/syohchikubuy/status/2067278406446907841"></a></blockquote><div class="embed-fallback"><a href="https://x.com/syohchikubuy/status/2067278406446907841" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条改正と自衛隊明記を推進する立場であることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/syohchikubuy/status/2067278406446907841" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#43</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は憲法9条の改正が必要であると主張し、その理由として学説の不一致を挙げています。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ayahana_ciel_bl/status/2067221684684505448"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ayahana_ciel_bl/status/2067221684684505448" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条の改正に賛成していることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ayahana_ciel_bl/status/2067221684684505448" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#44</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条2項の削除と自衛隊明記を支持し、高市政権が好影響を与えたと主張</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Tenhai_exp/status/2067761996892893325"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Tenhai_exp/status/2067761996892893325" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条改正と自衛隊明記の必要性を肯定しているため</div>
+  <div class="post-meta">
+    <span>信頼度 0.75</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Tenhai_exp/status/2067761996892893325" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#45</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は憲法改正を支持するが、自民党の改案には反対している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/jijy513573/status/2067997596426367232"></a></blockquote><div class="embed-fallback"><a href="https://x.com/jijy513573/status/2067997596426367232" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「憲法改正は賛成だが、自衛隊明記には賛成」</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/jijy513573/status/2067997596426367232" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#46</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">晋三様が目指した明確な国防の道を中道の連中がほざいてるの見てさ 晋三様の再興こそ全ての答えだ晋三様晋三様</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ShinzoGuardian4/status/2068114821191516170"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ShinzoGuardian4/status/2068114821191516170" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者本人は自衛隊明記に支持し、自民党改憲案には反対している。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ShinzoGuardian4/status/2068114821191516170" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#47</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">憲法審査会でまた中道の奴らが自衛隊明記なんか不要とかほざいてる 晋三様が目指した国防の明確化をこんな歪曲で潰そうとするんじゃねえ</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ShinzoGuardian4/status/2068060682679910746"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ShinzoGuardian4/status/2068060682679910746" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者本人は自衛隊明記に支持し、自民党改憲案には反対している。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ShinzoGuardian4/status/2068060682679910746" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#48</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は個別的自衛権を支持し、憲法改正が必要であると主張。ただし、具体的な改憲案については慎重な態度。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/mal1476488/status/2067911074532429956"></a></blockquote><div class="embed-fallback"><a href="https://x.com/mal1476488/status/2067911074532429956" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が個別的自衛権の重要性を強調したため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/mal1476488/status/2067911074532429956" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#49</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は自衛隊の存在を認めるためには憲法9条改正が必要であり、自衛隊の地位を明確に示す条文を加えるべきだと主張しています。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/niko3143/status/2067920109520453789"></a></blockquote><div class="embed-fallback"><a href="https://x.com/niko3143/status/2067920109520453789" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「自衛隊の存在を認めるなら、憲法９条改正となります」等の表現から分類。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/niko3143/status/2067920109520453789" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#50</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は憲法改正と自衛隊強化を支持し、反日政党の撲滅にも賛成しています。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/yknh08/status/2067877284556759302"></a></blockquote><div class="embed-fallback"><a href="https://x.com/yknh08/status/2067877284556759302" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「憲法９条改正 自衛隊強化」等の表現から分類。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/yknh08/status/2067877284556759302" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#51</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条の改正と自衛隊の明記を支持し、職員組合に対して批判的である。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/motoyama1982/status/2067575858685190288"></a></blockquote><div class="embed-fallback"><a href="https://x.com/motoyama1982/status/2067575858685190288" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「強く思います」という表現から分類。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/motoyama1982/status/2067575858685190288" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に賛成" data-stance="支持">
+  <div class="post-head">
+    <span class="num">#52</span>
+    <span class="badge">9条・自衛隊明記に賛成</span>
+    <span class="stance">支持</span>
+  </div>
+  <p class="summary">投稿者は9条・自衛隊明記を支持するが、その具体的内容について慎重な態度を示している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/kouzie01/status/2067512844866978127"></a></blockquote><div class="embed-fallback"><a href="https://x.com/kouzie01/status/2067512844866978127" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">文中で「自衛隊の場合は専守防衛の『自衛』力」と述べており、改憲案の内容に批判的だが、最終的に9条・自衛隊明記自体は支持する立場。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/kouzie01/status/2067512844866978127" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#53</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は自民党の改憲案を批判し、憲法改正全体に対して否定的な見解を持っている。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/7Gg2LbS2225/status/2068205623427408241"></a></blockquote><div class="embed-fallback"><a href="https://x.com/7Gg2LbS2225/status/2068205623427408241" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「狂ってるよ全てが狂ってる自民党。もうただのカルト集団だよこいつら。」と過激な表現を使用しています。</div>
+  <div class="post-meta">
+    <span>信頼度 0.90</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/7Gg2LbS2225/status/2068205623427408241" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#54</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ayuremufo369/status/2068150263819764032"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ayuremufo369/status/2068150263819764032" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ayuremufo369/status/2068150263819764032" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#55</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/mayaring/status/2068144903893430435"></a></blockquote><div class="embed-fallback"><a href="https://x.com/mayaring/status/2068144903893430435" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/mayaring/status/2068144903893430435" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#56</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ke1ties/status/2067988934114869267"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ke1ties/status/2067988934114869267" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ke1ties/status/2067988934114869267" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#57</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/crossing_9/status/2067974311579926926"></a></blockquote><div class="embed-fallback"><a href="https://x.com/crossing_9/status/2067974311579926926" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/crossing_9/status/2067974311579926926" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#58</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/La_Rumba_Buena/status/2067947167487303855"></a></blockquote><div class="embed-fallback"><a href="https://x.com/La_Rumba_Buena/status/2067947167487303855" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/La_Rumba_Buena/status/2067947167487303855" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#59</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/mistyminds/status/2067916967013650858"></a></blockquote><div class="embed-fallback"><a href="https://x.com/mistyminds/status/2067916967013650858" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/mistyminds/status/2067916967013650858" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#60</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">憲法改正に反対し、現行憲法の維持を求める反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/monmon_wiz/status/2068147516701569094"></a></blockquote><div class="embed-fallback"><a href="https://x.com/monmon_wiz/status/2068147516701569094" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">改憲反対・護憲の表現が明示されているため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.86</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/monmon_wiz/status/2068147516701569094" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#61</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は中学の社会科の先生の意見を引き合いに出し、9条改正は絶対にダメと主張</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/paris0326/status/2067815785100427757"></a></blockquote><div class="embed-fallback"><a href="https://x.com/paris0326/status/2067815785100427757" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条改正に対する否定的な見解を明確に表明しているため</div>
+  <div class="post-meta">
+    <span>信頼度 0.85</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/paris0326/status/2067815785100427757" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#62</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は現政権の憲法改正を強く反対し、反対意見の浸透拡大のみが重要と述べた。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/ema_credo/status/2068173526709018800"></a></blockquote><div class="embed-fallback"><a href="https://x.com/ema_credo/status/2068173526709018800" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">直接的に改憲反対の立場を表明している。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/ema_credo/status/2068173526709018800" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#63</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は国民投票法の改正が憲法改正の発議に向けた環境を整える可能性があるため、反対している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/yukinashi00/status/2068003355394515253"></a></blockquote><div class="embed-fallback"><a href="https://x.com/yukinashi00/status/2068003355394515253" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が主に国民投票法の改正に対する懸念を表明しており、その立場は明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/yukinashi00/status/2068003355394515253" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#64</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は憲法改正には慎重であり、現憲法を守るべきだという立場。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/in_00_/status/2067942074750755090"></a></blockquote><div class="embed-fallback"><a href="https://x.com/in_00_/status/2067942074750755090" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「無関心が罪です」「TV推しの芸能人のヨイショに騙されず」から推測。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/in_00_/status/2067942074750755090" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#65</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は憲法改正に反対し、特に現政権による憲法改正に反対している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/rrrrn_mimo/status/2067909198638424191"></a></blockquote><div class="embed-fallback"><a href="https://x.com/rrrrn_mimo/status/2067909198638424191" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が直接憲法改正に反対しており、その理由は現政権による改憲に反対である。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/rrrrn_mimo/status/2067909198638424191" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#66</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は現在の日本国憲法を維持すべきであり、非核三原則や原発保有などについても批判的である。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/yokohamaikka/status/2067285000735850873"></a></blockquote><div class="embed-fallback"><a href="https://x.com/yokohamaikka/status/2067285000735850873" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が憲法改正に反対し、現行憲法の維持を主張していることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/yokohamaikka/status/2067285000735850873" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#67</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は公明党や中道政党が定数削減に反対しているにもかかわらず、なぜ憲法改正を賛成するのか疑問を持っている。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/sai1292090/status/2068079820760903684"></a></blockquote><div class="embed-fallback"><a href="https://x.com/sai1292090/status/2068079820760903684" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者の主張は改憲全般への態度であり、具体的な目標物が不明瞭。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/sai1292090/status/2068079820760903684" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#68</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は国民投票による改憲を支持し、護憲派の意見には反対している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/miyukinishio_10/status/2067887260373233753"></a></blockquote><div class="embed-fallback"><a href="https://x.com/miyukinishio_10/status/2067887260373233753" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が国民投票による改憲を推進する一方で、具体的な改憲案に対しては批判的である。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/miyukinishio_10/status/2067887260373233753" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#69</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は護憲派の主張に反対し、改憲全般を支持している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/gjtpwmda15937/status/2067885143206121665"></a></blockquote><div class="embed-fallback"><a href="https://x.com/gjtpwmda15937/status/2067885143206121665" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が護憲派の主張に対して批判的であり、改憲全般を推進する立場である。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/gjtpwmda15937/status/2067885143206121665" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#70</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は憲法改正に慎重な態度を示している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/EudMe64/status/2067747932670161342"></a></blockquote><div class="embed-fallback"><a href="https://x.com/EudMe64/status/2067747932670161342" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「今後、今の日本人は年30万人産まれるかどうかの未来」という表現から改憲全般への反対を推測。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 自衛隊 明記 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/EudMe64/status/2067747932670161342" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="評価しない">
+  <div class="post-head">
+    <span class="num">#71</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">評価しない</span>
+  </div>
+  <p class="summary">投稿者は自民党の改憲案には反対しており、自衛隊を軍隊とすることには賛成していない。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/dZFoZ835aWMMURR/status/2067914478537375828"></a></blockquote><div class="embed-fallback"><a href="https://x.com/dZFoZ835aWMMURR/status/2067914478537375828" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「自衛隊は軍隊ではなく、違憲論の解消を目的とした改正では無く」等の表現から分類。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/dZFoZ835aWMMURR/status/2067914478537375828" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#72</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は護憲派に対して批判的であり、自衛隊の存在を完全に廃止するか、憲法9条改正して自衛隊を軍隊として合憲化すべきだと主張しています。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Nullypog/status/2067895002936868915"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Nullypog/status/2067895002936868915" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">「護憲派やっているのか？」等の表現から分類。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Nullypog/status/2067895002936868915" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#73</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は、憲法改正に反対しており、特に自民党の案には批判的。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/seigo84880901/status/2067948948179059010"></a></blockquote><div class="embed-fallback"><a href="https://x.com/seigo84880901/status/2067948948179059010" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が憲法改正全般に対して否定的な態度を示している。</div>
+  <div class="post-meta">
+    <span>信頼度 0.70</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/seigo84880901/status/2067948948179059010" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="改憲反対・護憲" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#74</span>
+    <span class="badge">改憲反対・護憲</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は議論の質に不満を示し、憲法改正や法案審議に対する批判的見方を示している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Coulerpapier/status/2067897422978888117"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Coulerpapier/status/2067897422978888117" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が議会運営や法案審議について批判しており、その理由は議論の質が低いからである。</div>
+  <div class="post-meta">
+    <span>信頼度 0.70</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法改正 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Coulerpapier/status/2067897422978888117" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に反対" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#75</span>
+    <span class="badge">9条・自衛隊明記に反対</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者が自衛隊の明記は不要であり、9条改正には反対。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/jijicoltdceo/status/2067442429939294255"></a></blockquote><div class="embed-fallback"><a href="https://x.com/jijicoltdceo/status/2067442429939294255" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が自衛隊明記を反対していることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 1.00</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/jijicoltdceo/status/2067442429939294255" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に反対" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#76</span>
+    <span class="badge">9条・自衛隊明記に反対</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は日本の自衛隊が米国の奴隷部隊であると批判し、憲法9条の維持を主張している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/tom10644324280/status/2068204274467872792"></a></blockquote><div class="embed-fallback"><a href="https://x.com/tom10644324280/status/2068204274467872792" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条の改正に反対表明したため。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/tom10644324280/status/2068204274467872792" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に反対" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#77</span>
+    <span class="badge">9条・自衛隊明記に反対</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は9条改正と自衛隊の明記を反対し、戦前回帰を避けるために9条改正は必要ない。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/MaTsu0_00/status/2067260313490313443"></a></blockquote><div class="embed-fallback"><a href="https://x.com/MaTsu0_00/status/2067260313490313443" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">投稿者が9条改正と自衛隊明記に反対する立場であることが明確。</div>
+  <div class="post-meta">
+    <span>信頼度 0.80</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/MaTsu0_00/status/2067260313490313443" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="9条・自衛隊明記に反対" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#78</span>
+    <span class="badge">9条・自衛隊明記に反対</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">投稿者は中道改革連合の国重徹氏の主張を引用し、自衛隊明記は不要と批判している。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/BucchoJ/status/2067497889933541868"></a></blockquote><div class="embed-fallback"><a href="https://x.com/BucchoJ/status/2067497889933541868" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">文中で「違憲論の解消だけを目的とした憲法改正は不要」と述べており、自衛隊明記に反対する立場。</div>
+  <div class="post-meta">
+    <span>信頼度 0.72</span>
+    <span>記事向き</span>
+    <span>検索語: 憲法9条 改正 自衛隊 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/BucchoJ/status/2067497889933541868" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="緊急事態条項に反対" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#79</span>
+    <span class="badge">緊急事態条項に反対</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">緊急事態条項を権限集中や人権制限のリスクとして警戒する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/Dabrith/status/2067585548626415824"></a></blockquote><div class="embed-fallback"><a href="https://x.com/Dabrith/status/2067585548626415824" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">緊急事態条項への反対・危険視が主眼のため。</div>
+  <div class="post-meta">
+    <span>信頼度 1.00</span>
+    <span>記事向き</span>
+    <span>検索語: 緊急事態条項 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/Dabrith/status/2067585548626415824" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+
+<article class="post-card" data-category="緊急事態条項に反対" data-stance="反対">
+  <div class="post-head">
+    <span class="num">#80</span>
+    <span class="badge">緊急事態条項に反対</span>
+    <span class="stance">反対</span>
+  </div>
+  <p class="summary">緊急事態条項を権限集中や人権制限のリスクとして警戒する反応。</p>
+  
+  <div class="tweet-embed"><blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118"></a></blockquote><div class="embed-fallback"><a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div></div>
+  <div class="reason">緊急事態条項への反対・危険視が主眼のため。</div>
+  <div class="post-meta">
+    <span>信頼度 1.00</span>
+    <span>記事向き</span>
+    <span>検索語: 緊急事態条項 賛成 反対 -rt</span>
+  </div>
+  <div class="post-actions">
+    <a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118" target="_blank" rel="noopener noreferrer">元投稿を開く</a>
+  </div>
+</article>
+
+      </section>
+    </main>
+    <aside>
+      <section class="panel">
+        <h2>全体</h2>
+        <ul class="stat-list">
+          <li><span>投稿サンプル</span><strong>192</strong></li>
+          <li><span>表示カード</span><strong>80</strong></li>
+        </ul>
+      </section>
+      <section class="panel">
+        <h2>分類別</h2>
+        <ul class="stat-list"><li><span>国民投票法・広告規制を重視</span><strong>71</strong></li><li><span>9条・自衛隊明記に賛成</span><strong>47</strong></li><li><span>緊急事態条項に反対</span><strong>35</strong></li><li><span>改憲反対・護憲</span><strong>22</strong></li><li><span>その他・分類保留</span><strong>5</strong></li><li><span>改憲賛成・推進</span><strong>5</strong></li><li><span>9条・自衛隊明記に反対</span><strong>4</strong></li><li><span>政党・議員批判</span><strong>3</strong></li></ul>
+      </section>
+      <section class="panel">
+        <h2>立場別</h2>
+        <ul class="stat-list"><li><span>反対</span><strong>62</strong></li><li><span>問題視</span><strong>53</strong></li><li><span>支持</span><strong>52</strong></li><li><span>慎重</span><strong>18</strong></li><li><span>評価しない</span><strong>5</strong></li><li><span>中立</span><strong>1</strong></li><li><span>その他</span><strong>1</strong></li></ul>
+      </section>
+      <section class="panel">
+        <h2>検索語</h2>
+        <ul class="stat-list"><li><span>憲法改正 賛成 反対 -rt</span><strong>40</strong></li><li><span>憲法改正 自衛隊 明記 -rt</span><strong>39</strong></li><li><span>国民投票法 広告規制 憲法改正 -rt</span><strong>39</strong></li><li><span>憲法9条 改正 自衛隊 -rt</span><strong>38</strong></li><li><span>緊急事態条項 賛成 反対 -rt</span><strong>36</strong></li></ul>
+      </section>
+    </aside>
+  </div>
+  <script>
+    let categoryFilter = "all";
+    let stanceFilter = "all";
+    function updateCards() {
+      document.querySelectorAll(".post-card").forEach(card => {
+        const okCategory = categoryFilter === "all" || card.dataset.category === categoryFilter;
+        const okStance = stanceFilter === "all" || card.dataset.stance === stanceFilter;
+        card.style.display = okCategory && okStance ? "" : "none";
+      });
+    }
+    function bindFilters(containerId, attr, setter) {
+      document.querySelectorAll(`#${containerId} .chip`).forEach(button => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(`#${containerId} .chip`).forEach(item => item.classList.remove("active"));
+          button.classList.add("active");
+          setter(button.dataset[`filter${attr}`]);
+          updateCards();
+        });
+      });
+    }
+    bindFilters("categoryFilters", "Category", value => categoryFilter = value);
+    bindFilters("stanceFilters", "Stance", value => stanceFilter = value);
+  </script>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>

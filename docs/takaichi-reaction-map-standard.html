@@ -355,32 +355,249 @@
     <section class="stats">
       <div class="stat"><span>総サンプル</span><strong>183</strong></div>
       <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>高市氏批判・責任追及 70</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>批判 76</strong></div>
+      <div class="stat"><span>最多カテゴリ</span><strong>高市氏批判・責任追及 68</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>批判 72</strong></div>
     </section>
-    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="negative"><div class="axis-kicker">責任追及</div><h3>高市氏側の説明責任を問う</h3><div class="axis-count">74<span>件</span></div><p>陣営・秘書・外部制作者の関与が事実なら、本人にも説明責任があると見る立場。</p><div class="axis-tags"><span>高市氏批判・責任追及</span><span>ネット選挙・透明性問題</span></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">報道への疑義</div><h3>本人関与の断定を避ける</h3><div class="axis-count">55<span>件</span></div><p>本人の直接指示が未確認なら、文春報道や追及の仕方を慎重に見るべきという立場。</p><div class="axis-tags"><span>高市氏擁護・報道批判</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">派生論点</div><h3>松井健氏・玉木氏比較へ広がる</h3><div class="axis-count">14<span>件</span></div><p>松井健氏を軸に、玉木代表や他の政治家との接点まで話題が拡張する反応。</p><div class="axis-tags"><span>松井健氏を軸にした拡張</span><span>玉木氏比較・説明責任</span></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">別論点接続</div><h3>サナエトークンへ接続</h3><div class="axis-count">37<span>件</span></div><p>中傷動画問題から、サナエトークンなど周辺の別論点へ接続する反応。</p><div class="axis-tags"><span>サナエトークン関連</span><span>未確認・陰謀寄り</span></div></article></div></section>
+    <section class="panel" id="vote-section">
+<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">2025年、週刊文春が「高市早苗氏の陣営が、対立候補への中傷動画をネット業者に依頼していた」と報道。高市氏側は関与を否定しましたが、秘書や外部制作者との関係が焦点になっています。</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「高市 文春」「高市 中傷動画」などのキーワードで、Yahooリアルタイム検索からSNS投稿183件を取得し、AIが自動分類しました。</div>
+<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
+<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
+<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票はブラウザに保存されます。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+  </div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
+  <div id="vote-bars" style="margin-bottom:16px;"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+    <a id="share-x" href="#" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
+      𝕏 でシェア
+    </a>
+    <button id="vote-redo-btn"
+       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
+      投票をやり直す
+    </button>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
+</div>
+</section>
+<script>
+(function(){
+  var TOPIC="高市文春問題_SNS反応まっぷ";
+  var axes=[{"kicker": "責任追及", "label": "説明責任があると思う", "origLabel": "高市氏側の説明責任を問う", "tone": "negative", "color": "#e07040"}, {"kicker": "報道への疑義", "label": "報道が先走っていると思う", "origLabel": "本人関与の断定を避ける", "tone": "positive", "color": "#4a90d9"}, {"kicker": "派生論点", "label": "別の論点が気になる", "origLabel": "松井健氏・玉木氏比較へ広がる", "tone": "derived", "color": "#0f7490"}, {"kicker": "別論点接続", "label": "まだ判断できない", "origLabel": "サナエトークンへ接続", "tone": "warning", "color": "#7a4cc2"}];
+  var TITLE="高市文春問題 SNS反応まっぷ";
+  var KEY="sns_vote_"+TOPIC;
+  var stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+  var myVote=localStorage.getItem(KEY+"_my");
+
+  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
+  function applyBlur(){
+    var chartPanel=document.getElementById("semicircle-chart");
+    if(chartPanel){
+      var wrap=chartPanel.closest(".panel");
+      if(wrap && myVote===null){
+        wrap.id="chart-panel";
+        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
+        wrap.style.position="relative";
+        var overlay=document.createElement("div");
+        overlay.id="chart-overlay";
+        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
+        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
+        wrap.appendChild(overlay);
+      }
+    }
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",applyBlur)}else{setTimeout(applyBlur,0)}
+
+  var btnWrap=document.getElementById("vote-buttons");
+  axes.forEach(function(a,i){
+    var btn=document.createElement("button");
+    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
+    btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
+    btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
+    btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
+    btn.onclick=function(){castVote(i)};
+    btnWrap.appendChild(btn);
+  });
+
+  document.getElementById("vote-redo-btn").onclick=function(){
+    localStorage.removeItem(KEY+"_my");
+    location.reload();
+  };
+
+  if(myVote!==null){showResults(parseInt(myVote))}
+
+  function revealChart(){
+    var wrap=document.getElementById("chart-panel");
+    if(wrap){
+      wrap.style.transition="filter .6s ease";
+      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
+      var ov=document.getElementById("chart-overlay");
+      if(ov)ov.remove();
+    }
+  }
+
+  function castVote(idx){
+    stored[idx]=(stored[idx]||0)+1;
+    if(myVote!==null){stored[parseInt(myVote)]=(stored[parseInt(myVote)]||1)-1}
+    localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+    localStorage.setItem(KEY+"_my",""+idx);
+    myVote=""+idx;
+    revealChart();
+    showResults(idx);
+  }
+
+  function showResults(myIdx){
+    var total=0;
+    axes.forEach(function(_,i){total+=(stored[i]||0)});
+    if(total===0)total=1;
+
+    var myAxis=axes[myIdx];
+    var posLabel=document.getElementById("vote-position-label");
+    var posText=document.getElementById("vote-position-text");
+    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
+    posLabel.style.color=myAxis.color;
+    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
+
+    var barsEl=document.getElementById("vote-bars");
+    barsEl.innerHTML="";
+    axes.forEach(function(a,i){
+      var c=stored[i]||0;
+      var pct=Math.round(c/total*100);
+      var isMine=i===myIdx;
+      var row=document.createElement("div");
+      row.style.cssText="margin-bottom:8px;";
+      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
+        +(isMine?'✓ ':'')+a.label+'</span>'
+        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'%</span></div>'
+        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
+        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+      barsEl.appendChild(row);
+    });
+
+    var shareBtn=document.getElementById("share-x");
+    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
+    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
+    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
+    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
+
+    document.getElementById("vote-result").style.display="block";
+    document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+})();
+</script>
+    <section class="panel">
+<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">高市氏側の説明責任を問う</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">72</div></div>
+  <div style="text-align:center;color:var(--muted);font-size:12px;">
+    <div style="font-size:11px;">過半数</div>
+    <div style="font-weight:800;font-size:16px;color:var(--ink);">92</div>
+    <div style="font-size:18px;">▼</div>
+  </div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">本人関与の断定を避ける</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">55</div></div>
+</div>
+<div style="position:relative;max-width:660px;margin:0 auto;">
+  <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
+  <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
+    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">183</div>
+    <div style="font-size:14px;color:var(--muted);">サンプル</div>
+  </div>
+</div>
+<div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
+<script>
+(function(){
+  var data=[{"label": "高市氏側の説明責任を問う", "count": 72, "color": "#e07040", "cats": "高市氏批判・責任追及, ネット選挙・透明性問題"}, {"label": "松井健氏・玉木氏比較へ広がる", "count": 13, "color": "#0f7490", "cats": "松井健氏を軸にした拡張, 玉木氏比較・説明責任"}, {"label": "サナエトークンへ接続", "count": 34, "color": "#7a4cc2", "cats": "サナエトークン関連, 未確認・陰謀寄り"}, {"label": "その他", "count": 9, "color": "#cbd5e1", "cats": "その他・分類保留"}, {"label": "本人関与の断定を避ける", "count": 55, "color": "#4a90d9", "cats": "高市氏擁護・報道批判"}];
+  var total=data.reduce(function(s,d){return s+d.count},0);
+  var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
+  var svg=document.getElementById("semicircle-chart");
+  var startAngle=Math.PI;
+  data.forEach(function(d,idx){
+    var sweep=(d.count/total)*Math.PI-gap;
+    var endAngle=startAngle+sweep;
+    var x1o=cx+outerR*Math.cos(startAngle),y1o=cy+outerR*Math.sin(startAngle);
+    var x2o=cx+outerR*Math.cos(endAngle),y2o=cy+outerR*Math.sin(endAngle);
+    var x1i=cx+innerR*Math.cos(endAngle),y1i=cy+innerR*Math.sin(endAngle);
+    var x2i=cx+innerR*Math.cos(startAngle),y2i=cy+innerR*Math.sin(startAngle);
+    var la=sweep>Math.PI?1:0;
+    var path="M "+x1o+" "+y1o+" A "+outerR+" "+outerR+" 0 "+la+" 1 "+x2o+" "+y2o+" L "+x1i+" "+y1i+" A "+innerR+" "+innerR+" 0 "+la+" 0 "+x2i+" "+y2i+" Z";
+    var el=document.createElementNS("http://www.w3.org/2000/svg","path");
+    el.setAttribute("d",path);el.setAttribute("fill",d.color);
+    el.style.transition="opacity .15s";el.style.cursor="pointer";
+    el.onmouseenter=function(){el.style.opacity="0.75"};
+    el.onmouseleave=function(){el.style.opacity="1"};
+    var t=document.createElementNS("http://www.w3.org/2000/svg","title");
+    t.textContent=d.label+": "+d.count+"件 ("+(d.count/total*100).toFixed(1)+"%)"+"\n"+d.cats;
+    el.appendChild(t);svg.appendChild(el);
+    var mid=startAngle+sweep/2,lr=(outerR+innerR)/2;
+    if(d.count>=5){
+      var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
+      tx.setAttribute("x",cx+lr*Math.cos(mid));
+      tx.setAttribute("y",cy+lr*Math.sin(mid)-8);
+      tx.setAttribute("text-anchor","middle");tx.setAttribute("dominant-baseline","central");
+      tx.setAttribute("font-size","26");tx.setAttribute("font-weight","800");
+      tx.setAttribute("fill","#fff");tx.setAttribute("pointer-events","none");
+      tx.textContent=d.count;svg.appendChild(tx);
+    }
+    if(sweep>0.25){
+      var tx2=document.createElementNS("http://www.w3.org/2000/svg","text");
+      var short=d.label.length>12?d.label.substring(0,12)+"…":d.label;
+      tx2.setAttribute("x",cx+lr*Math.cos(mid));
+      tx2.setAttribute("y",cy+lr*Math.sin(mid)+14);
+      tx2.setAttribute("text-anchor","middle");tx2.setAttribute("dominant-baseline","central");
+      tx2.setAttribute("font-size","11");tx2.setAttribute("font-weight","600");
+      tx2.setAttribute("fill","rgba(255,255,255,.85)");tx2.setAttribute("pointer-events","none");
+      tx2.textContent=short;svg.appendChild(tx2);
+    }
+    startAngle=endAngle+gap;
+  });
+  // Center line (majority marker)
+  var lineX=cx;
+  var el=document.createElementNS("http://www.w3.org/2000/svg","line");
+  el.setAttribute("x1",lineX);el.setAttribute("y1",cy-outerR-5);
+  el.setAttribute("x2",lineX);el.setAttribute("y2",cy-innerR+5);
+  el.setAttribute("stroke","var(--ink,#172033)");el.setAttribute("stroke-width","2");
+  el.setAttribute("stroke-dasharray","4,3");el.setAttribute("opacity","0.4");
+  svg.appendChild(el);
+
+  var leg=document.getElementById("semicircle-legend");
+  data.forEach(function(d){
+    var item=document.createElement("div");
+    item.style.cssText="display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:6px 0;";
+    item.innerHTML='<span style="width:14px;height:14px;border-radius:4px;background:'+d.color+';flex-shrink:0;margin-top:2px"></span><div><strong style="font-size:14px">'+d.label+'</strong> <span style="color:var(--accent);font-weight:800;font-size:16px;margin-left:4px">'+d.count+'</span><span style="color:var(--muted);font-size:11px;margin-left:2px">件</span><div style="color:var(--muted);font-size:11px;margin-top:2px">'+d.cats+'</div></div>';
+    leg.appendChild(item);
+  });
+})();
+</script>
+</section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="negative"><div class="axis-kicker">責任追及</div><h3>高市氏側の説明責任を問う</h3><div class="axis-count">72<span>件</span></div><p>陣営・秘書・外部制作者の関与が事実なら、本人にも説明責任があると見る立場。</p><div class="axis-tags"><span>高市氏批判・責任追及</span><span>ネット選挙・透明性問題</span></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">報道への疑義</div><h3>本人関与の断定を避ける</h3><div class="axis-count">55<span>件</span></div><p>本人の直接指示が未確認なら、文春報道や追及の仕方を慎重に見るべきという立場。</p><div class="axis-tags"><span>高市氏擁護・報道批判</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">派生論点</div><h3>松井健氏・玉木氏比較へ広がる</h3><div class="axis-count">13<span>件</span></div><p>松井健氏を軸に、玉木代表や他の政治家との接点まで話題が拡張する反応。</p><div class="axis-tags"><span>松井健氏を軸にした拡張</span><span>玉木氏比較・説明責任</span></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">別論点接続</div><h3>サナエトークンへ接続</h3><div class="axis-count">34<span>件</span></div><p>中傷動画問題から、サナエトークンなど周辺の別論点へ接続する反応。</p><div class="axis-tags"><span>サナエトークン関連</span><span>未確認・陰謀寄り</span></div></article></div></section>
     <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
 <div class="bar-list">
-<div class="bar-row" data-category="高市氏批判・責任追及"><div class="bar-meta"><span>高市氏批判・責任追及</span><strong>70</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
-<div class="bar-row" data-category="高市氏擁護・報道批判"><div class="bar-meta"><span>高市氏擁護・報道批判</span><strong>55</strong></div><div class="bar-track"><div class="bar-fill" style="width:79%"></div></div></div>
-<div class="bar-row" data-category="サナエトークン関連"><div class="bar-meta"><span>サナエトークン関連</span><strong>33</strong></div><div class="bar-track"><div class="bar-fill" style="width:47%"></div></div></div>
-<div class="bar-row" data-category="松井健氏を軸にした拡張"><div class="bar-meta"><span>松井健氏を軸にした拡張</span><strong>9</strong></div><div class="bar-track"><div class="bar-fill" style="width:13%"></div></div></div>
+<div class="bar-row" data-category="高市氏批判・責任追及"><div class="bar-meta"><span>高市氏批判・責任追及</span><strong>68</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="bar-row" data-category="高市氏擁護・報道批判"><div class="bar-meta"><span>高市氏擁護・報道批判</span><strong>55</strong></div><div class="bar-track"><div class="bar-fill" style="width:81%"></div></div></div>
+<div class="bar-row" data-category="サナエトークン関連"><div class="bar-meta"><span>サナエトークン関連</span><strong>30</strong></div><div class="bar-track"><div class="bar-fill" style="width:44%"></div></div></div>
+<div class="bar-row" data-category="松井健氏を軸にした拡張"><div class="bar-meta"><span>松井健氏を軸にした拡張</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div></div>
 <div class="bar-row" data-category="玉木氏比較・説明責任"><div class="bar-meta"><span>玉木氏比較・説明責任</span><strong>5</strong></div><div class="bar-track"><div class="bar-fill" style="width:7%"></div></div></div>
 <div class="bar-row" data-category="ネット選挙・透明性問題"><div class="bar-meta"><span>ネット選挙・透明性問題</span><strong>4</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
 <div class="bar-row" data-category="未確認・陰謀寄り"><div class="bar-meta"><span>未確認・陰謀寄り</span><strong>4</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
-<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>3</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>9</strong></div><div class="bar-track"><div class="bar-fill" style="width:13%"></div></div></div>
 </div></section>
     <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
 <div class="table-wrap"><table class="heat-table">
 <thead><tr><th>分類</th><th>サナエトークン -rt</th><th>高市 中傷動画 -rt</th><th>高市 文春 中傷動画 -rt</th><th>高市 松井健 -rt</th><th>高市 玉木 松井健 -rt</th><th>合計</th></tr></thead>
 <tbody>
 <tr data-category="高市氏批判・責任追及"><th><span class="row-dot"></span>高市氏批判・責任追及</th>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="高市氏批判・責任追及 / サナエトークン -rt: 10件"><span>10</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="高市氏批判・責任追及 / サナエトークン -rt: 9件"><span>9</span></td>
 <td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏批判・責任追及 / 高市 中傷動画 -rt: 20件"><span>20</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏批判・責任追及 / 高市 文春 中傷動画 -rt: 6件"><span>6</span></td>
-<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏批判・責任追及 / 高市 松井健 -rt: 26件"><span>26</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏批判・責任追及 / 高市 松井健 -rt: 25件"><span>25</span></td>
 <td class="heat-cell" style="background:#9fd0ff;color:#172033" title="高市氏批判・責任追及 / 高市 玉木 松井健 -rt: 8件"><span>8</span></td>
-<td class="total">70</td></tr>
+<td class="total">68</td></tr>
 <tr data-category="高市氏擁護・報道批判"><th><span class="row-dot"></span>高市氏擁護・報道批判</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / サナエトークン -rt: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#4da3ff;color:#172033" title="高市氏擁護・報道批判 / 高市 中傷動画 -rt: 14件"><span>14</span></td>
@@ -389,19 +606,19 @@
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏擁護・報道批判 / 高市 玉木 松井健 -rt: 2件"><span>2</span></td>
 <td class="total">55</td></tr>
 <tr data-category="サナエトークン関連"><th><span class="row-dot"></span>サナエトークン関連</th>
-<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="サナエトークン関連 / サナエトークン -rt: 23件"><span>23</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="サナエトークン関連 / サナエトークン -rt: 20件"><span>20</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 高市 中傷動画 -rt: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 高市 松井健 -rt: 5件"><span>5</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 高市 玉木 松井健 -rt: 4件"><span>4</span></td>
-<td class="total">33</td></tr>
+<td class="total">30</td></tr>
 <tr data-category="松井健氏を軸にした拡張"><th><span class="row-dot"></span>松井健氏を軸にした拡張</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / サナエトークン -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 高市 中傷動画 -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 高市 松井健 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 高市 松井健 -rt: 1件"><span>1</span></td>
 <td class="heat-cell" style="background:#9fd0ff;color:#172033" title="松井健氏を軸にした拡張 / 高市 玉木 松井健 -rt: 7件"><span>7</span></td>
-<td class="total">9</td></tr>
+<td class="total">8</td></tr>
 <tr data-category="玉木氏比較・説明責任"><th><span class="row-dot"></span>玉木氏比較・説明責任</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / サナエトークン -rt: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 高市 中傷動画 -rt: 3件"><span>3</span></td>
@@ -424,12 +641,12 @@
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 高市 玉木 松井健 -rt: 0件"><span>0</span></td>
 <td class="total">4</td></tr>
 <tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / サナエトークン -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / サナエトークン -rt: 7件"><span>7</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 中傷動画 -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 松井健 -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 高市 松井健 -rt: 2件"><span>2</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 玉木 松井健 -rt: 0件"><span>0</span></td>
-<td class="total">3</td></tr>
+<td class="total">9</td></tr>
 </tbody></table></div></section>
     <div class="legend">
       <span>少</span>
@@ -443,64 +660,56 @@
     </div>
     <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
 <div class="table-wrap"><table class="heat-table">
-<thead><tr><th>分類</th><th>批判</th><th>擁護</th><th>比較</th><th>未確認</th><th>保留</th><th>合計</th></tr></thead>
+<thead><tr><th>分類</th><th>批判</th><th>擁護</th><th>比較</th><th>保留</th><th>合計</th></tr></thead>
 <tbody>
 <tr data-category="高市氏批判・責任追及"><th><span class="row-dot"></span>高市氏批判・責任追及</th>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏批判・責任追及 / 批判: 70件"><span>70</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏批判・責任追及 / 批判: 68件"><span>68</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 保留: 0件"><span>0</span></td>
-<td class="total">70</td></tr>
+<td class="total">68</td></tr>
 <tr data-category="高市氏擁護・報道批判"><th><span class="row-dot"></span>高市氏擁護・報道批判</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 批判: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏擁護・報道批判 / 擁護: 55件"><span>55</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏擁護・報道批判 / 擁護: 55件"><span>55</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 保留: 0件"><span>0</span></td>
 <td class="total">55</td></tr>
 <tr data-category="サナエトークン関連"><th><span class="row-dot"></span>サナエトークン関連</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 批判: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 批判: 2件"><span>2</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 擁護: 9件"><span>9</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / 未確認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="サナエトークン関連 / 保留: 20件"><span>20</span></td>
-<td class="total">33</td></tr>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="サナエトークン関連 / 保留: 19件"><span>19</span></td>
+<td class="total">30</td></tr>
 <tr data-category="松井健氏を軸にした拡張"><th><span class="row-dot"></span>松井健氏を軸にした拡張</th>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 批判: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 未確認: 1件"><span>1</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 保留: 7件"><span>7</span></td>
-<td class="total">9</td></tr>
+<td class="total">8</td></tr>
 <tr data-category="玉木氏比較・説明責任"><th><span class="row-dot"></span>玉木氏比較・説明責任</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 批判: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 比較: 5件"><span>5</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 保留: 0件"><span>0</span></td>
 <td class="total">5</td></tr>
 <tr data-category="ネット選挙・透明性問題"><th><span class="row-dot"></span>ネット選挙・透明性問題</th>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 批判: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 保留: 3件"><span>3</span></td>
 <td class="total">4</td></tr>
 <tr data-category="未確認・陰謀寄り"><th><span class="row-dot"></span>未確認・陰謀寄り</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 批判: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / 保留: 4件"><span>4</span></td>
 <td class="total">4</td></tr>
 <tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 批判: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 未確認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 保留: 3件"><span>3</span></td>
-<td class="total">3</td></tr>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 保留: 9件"><span>9</span></td>
+<td class="total">9</td></tr>
 </tbody></table></div></section>
     <section class="panel"><h2>代表サンプル</h2>
 <div class="sample-grid">
@@ -624,20 +833,20 @@
 </div>
 </article>
 <article class="sample-card"><h3>その他・分類保留</h3>
+<div class="sample"><div class="meta">保留 / 信頼度 0.40</div><p>サナエトークンについての否定的な見解を示しています。</p>
+<blockquote>サナエトークンなんてもんにお金入れてる段階で人みお金稼ぎもセンスないから俺はそういう人間だって思った方がいいよ</blockquote>
+<a href="https://x.com/hutuuno_occhan/status/2065810661335355806">投稿URL</a>
+<div class="reason">理由: 文脈が不明瞭で、直接的分類に該当しない。</div>
+</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.40</div><p>複数の話題を含むが、明確な立場は不明。</p>
+<blockquote>中傷動画作成、サナエトークン、</blockquote>
+<a href="https://x.com/JJPochi/status/2065803905259450784">投稿URL</a>
+<div class="reason">理由: 文脈不足で分類困難。</div>
+</div>
 <div class="sample"><div class="meta">保留 / 信頼度 0.40</div><p>複数の話題を含むが、明確な立場は不明。</p>
 <blockquote>誹謗中傷と思ったらしい  伊藤忠商やった♪  サナエトークンやと思ったら  早苗とトーク♪やった  統一教会やと思ったら  糖質学会やった♪  （・∀・）ねっ！</blockquote>
 <a href="https://x.com/by8FVkuWkO49886/status/2065802602672238789">投稿URL</a>
 <div class="reason">理由: 文脈不足で分類困難。</div>
-</div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.20</div><p>サナエトークン詐欺の被害経験を共有。</p>
-<blockquote>うっ… 今話題ダゾーン詐欺に引っ掛かってしまった…  まだ登録して3日目やからクーリングオフ効くかな… 年間契約とかエグいて… Xはやっぱり見とかなあかんなぁ… #サナエトークン #ワールドカップ #Worldcup #DAZN https://t.co/o9amXV3RfF</blockquote>
-<a href="https://x.com/on02103/status/2065806959404781820">投稿URL</a>
-<div class="reason">理由: 具体的な立場が不明瞭で、意味が不明確。</div>
-</div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.20</div><p>サナエトークン詐欺の被害経験を共有。</p>
-<blockquote>うっ… 今話題ダゾーン詐欺に引っ掛かってしまった…  まだ登録して3日目やからクーリングオフ効くかな… 年間契約とかエグいて… Xはやっぱり見とかなあかんなぁ… #サナエトークン #ワールドカップ #Worldcup #DAZN https://t.co/V83mjet8oY</blockquote>
-<a href="https://x.com/on02103/status/2065806572312481871">投稿URL</a>
-<div class="reason">理由: 具体的な立場が不明瞭で、意味が不明確。</div>
 </div>
 </article>
 </div></section>
@@ -648,5 +857,15 @@
 <li>代表投稿は公開前に人間が確認する前提です。</li>
 </ul></section>
   </main>
+  <footer style="border-top:1px solid var(--line);padding:20px min(5vw,56px);text-align:center;color:var(--muted);font-size:12px;line-height:1.8;">
+    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
+    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <div style="margin-top:10px;">
+      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
+        ☕ このプロジェクトを応援
+      </a>
+    </div>
+  </footer>
 </body>
 </html>
