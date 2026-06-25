@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>免責事項 — SNS反応まっぷ</title>
+  <meta name="description" content="SNS反応まっぷの免責事項。本サイトは世論調査ではなく、AI分類には限界があります。">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce5;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --warn: #b54708;
+      --shadow: 0 12px 30px rgba(16, 24, 40, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.7;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 28px min(5vw, 56px) 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 3.2vw, 36px);
+    }
+    .lead { color: var(--muted); margin: 0; }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px min(5vw, 56px) 48px;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 32px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-soft);
+    }
+    h3 {
+      font-size: 16px;
+      margin: 22px 0 8px;
+      color: var(--accent);
+    }
+    p, ul { margin: 0 0 14px; color: var(--muted); }
+    ul { padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .back::before { content: "←"; }
+    .callout {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin: 20px 0;
+      box-shadow: var(--shadow);
+    }
+    .callout.warn {
+      border-left: 4px solid var(--warn);
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 720px) {
+      header, main { padding-inline: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>免責事項</h1>
+    <p class="lead">SNS反応まっぷをご利用いただくにあたっての注意事項</p>
+  </header>
+  <main>
+    <a class="back" href="index.html">トップに戻る</a>
+
+    <div class="callout warn">
+      <p style="margin:0; color: var(--warn); font-weight: 700;">本サイトは世論調査ではありません。</p>
+    </div>
+
+    <h2>1. データの性質について</h2>
+    <p>本サイトで表示される意見分布・分類結果は、Yahooリアルタイム検索から収集したSNS投稿の<strong>サンプル内の傾向</strong>です。統計的に厳密な世論調査ではなく、特定の時間帯・キーワードで取得した投稿をAIが分類したものです。</p>
+    <ul>
+      <li>表示件数は「世論の比率」を示すものではありません。</li>
+      <li>検索クエリの選び方や収集時期によって、結果は大きく変わる可能性があります。</li>
+      <li>同じトピックでも、再収集・再分類を行えば異なる分布になることがあります。</li>
+    </ul>
+
+    <h2>2. AI分類の限界</h2>
+    <p>本サイトの分類は、ローカル環境で動作する大規模言語モデル（Ollama / qwen2.5:7b）による自動処理です。以下の限界があります。</p>
+    <ul>
+      <li><strong>誤分類の可能性</strong>：皮肉や婉曲表現、文脈依存の投稿は正しく分類できないことがあります。</li>
+      <li><strong>「その他・分類保留」の存在</strong>：AIが判断に自信を持てない投稿は保留として扱われ、勢力図に含まれません。</li>
+      <li><strong>偏りの可能性</strong>：モデルの学習データに含まれるバイアスが、分類結果に影響を与える可能性があります。</li>
+      <li><strong>事実認定ではない</strong>：分類は「意見の整理」であり、投稿内容の真偽や適法性を保証するものではありません。</li>
+    </ul>
+
+    <h2>3. SNS投稿の引用ポリシー</h2>
+    <p>本サイトでは、SNS投稿の全文をそのまま転載することを避け、以下の方針で扱っています。</p>
+    <ul>
+      <li>投稿内容は<strong>要約・リンク中心</strong>で表示します。</li>
+      <li>「代表投稿」として掲載するものは、公開前に人間が確認しています。</li>
+      <li>個人を特定できる情報（ユーザー名の完全表示など）は、必要に応じて加工しています。</li>
+      <li>削除依頼や掲載に関するお問い合わせは、運営者までご連絡ください。</li>
+    </ul>
+
+    <h2>4. 投票機能について</h2>
+    <p>各ページの投票機能は、閲覧者自身の意見を気軽に表明するためのものです。</p>
+    <ul>
+      <li>投票データはブラウザのlocalStorageに保存され、サーバーには送信されません。</li>
+      <li>同一ブラウザでのみ結果を確認できます。</li>
+      <li>多重投票の防止機能はありません（信頼性の高い調査を目的としていないため）。</li>
+    </ul>
+
+    <h2>5. リンク先の責任範囲</h2>
+    <p>本サイトからリンクされている外部サイト（SNS投稿元、ニュース記事など）の内容について、運営者は責任を負いません。リンク先の内容や個人情報保護方針については、各サイトの規約をご確認ください。</p>
+
+    <h2>6. 情報の正確性</h2>
+    <p>本サイトに掲載されている情報には万全を期していますが、その正確性・完全性を保証するものではありません。掲載情報に基づいて行われた判断や行動について、運営者は一切の責任を負いません。</p>
+
+    <p style="margin-top: 28px; font-size: 13px; color: var(--muted);">最終更新日: 2026年6月25日</p>
+
+    <footer class="footer">
+      <p>© 2026 SNS反応まっぷ — <a href="index.html">トップ</a> · <a href="privacy.html">プライバシーポリシー</a></p>
+    </footer>
+  </main>
+</body>
+</html>
