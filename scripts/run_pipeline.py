@@ -252,14 +252,15 @@ def step_stats(slug: str) -> None:
         print(f"    {count:4d} ({pct:2d}%) {bar} {cat}")
 
     print()
+    print(f"  分類済み率（保留を除く）: {rate}%")
     if rate >= 60:
-        log("分類率 60%以上 ◎ — そのまま公開できます", level="ok")
+        log("◎ そのまま公開できます", level="ok")
     elif rate >= 30:
-        log("分類率 30-59% ○ — 公開可。クエリ追加で改善余地あり", level="ok")
+        log("○ 公開可。クエリ追加で改善余地あり", level="ok")
     elif rate >= 10:
-        log("分類率 10-29% △ — クエリ設計を見直すか、Few-shot例を追加", level="warn")
+        log("△ クエリ設計を見直すか、Few-shot例を追加", level="warn")
     else:
-        log("分類率 10%未満 ✗ — トピックかクエリを根本的に変更してください", level="err")
+        log("✗ トピックかクエリを根本的に変更してください", level="err")
 
 
 # ---------------------------------------------------------------------------
@@ -482,46 +483,47 @@ def step_judge(slug: str, queries: list[str], *, dry_run: bool = False) -> str:
         fetch_cmd += ["--query", q]
     fetch_cmd += ["--dedupe", "--output", str(tmp_output)]
 
-    rc = run_cmd(fetch_cmd, dry_run=dry_run, label="判定用サンプル取得中...")
-    if rc != 0 or dry_run:
-        return "GO" if dry_run else "ERR"
-
-    judge_cmd = [
-        sys.executable, str(SCRIPTS_DIR / "trend_judge.py"),
-        "--topic", slug,
-        "--slug", slug,
-        "--input", str(tmp_output),
-        "--limit", "50",
-    ]
-    result = subprocess.run(judge_cmd, capture_output=True, text=True, cwd=str(PROJECT_ROOT))
-    if result.returncode != 0:
-        log(f"trend_judge.py 失敗: {result.stderr[:200]}", level="err")
-        return "ERR"
-
     try:
-        report = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        log("判定結果のパースに失敗", level="err")
-        return "ERR"
+        rc = run_cmd(fetch_cmd, dry_run=dry_run, label="判定用サンプル取得中...")
+        if rc != 0 or dry_run:
+            return "GO" if dry_run else "ERR"
 
-    decision = report.get("decision", "?")
-    reason = report.get("reason", "")
-    score = report.get("total_score", "?")
-    opinion = report.get("opinion_ratio_value", 0)
+        judge_cmd = [
+            sys.executable, str(SCRIPTS_DIR / "trend_judge.py"),
+            "--topic", slug,
+            "--slug", slug,
+            "--input", str(tmp_output),
+            "--limit", "50",
+        ]
+        result = subprocess.run(judge_cmd, capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+        if result.returncode != 0:
+            log(f"trend_judge.py 失敗: {result.stderr[:200]}", level="err")
+            return "ERR"
 
-    print()
-    if decision == "GO":
-        log(f"判定: GO (スコア {score}/10, 意見率 {opinion:.0%})", level="ok")
-    elif decision == "HOLD":
-        log(f"判定: HOLD (スコア {score}/10, 意見率 {opinion:.0%})", level="warn")
-    else:
-        log(f"判定: NG (スコア {score}/10, 意見率 {opinion:.0%})", level="err")
-    log(f"理由: {reason}")
+        try:
+            report = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            log("判定結果のパースに失敗", level="err")
+            return "ERR"
 
-    if tmp_output.exists():
-        tmp_output.unlink()
+        decision = report.get("decision", "?")
+        reason = report.get("reason", "")
+        score = report.get("total_score", "?")
+        opinion = report.get("opinion_ratio_value", 0)
 
-    return decision
+        print()
+        if decision == "GO":
+            log(f"判定: GO (スコア {score}/10, 意見率 {opinion:.0%})", level="ok")
+        elif decision == "HOLD":
+            log(f"判定: HOLD (スコア {score}/10, 意見率 {opinion:.0%})", level="warn")
+        else:
+            log(f"判定: NG (スコア {score}/10, 意見率 {opinion:.0%})", level="err")
+        log(f"理由: {reason}")
+
+        return decision
+    finally:
+        if tmp_output.exists():
+            tmp_output.unlink()
 
 
 # ---------------------------------------------------------------------------
@@ -535,15 +537,34 @@ def step_reclassify(slug: str, *, dry_run: bool = False, model: str = "qwen2.5:7
         log(f"{classified_file.name} が見つかりません", level="err")
         return 1
 
+    tmp_file = SAMPLES_DIR / f"{slug}_classified.reclassify.tmp.json"
+    bak_file = SAMPLES_DIR / f"{slug}_classified.bak.json"
+
     cmd = [
         sys.executable, str(SCRIPTS_DIR / "classify_unified.py"),
         "--topic", slug,
         "--input", str(classified_file),
-        "--output", str(classified_file),
+        "--output", str(tmp_file),
         "--model", model,
         "--avoid-hold",
     ]
-    return run_cmd(cmd, dry_run=dry_run, label=f"再分類: {classified_file.name}")
+    rc = run_cmd(cmd, dry_run=dry_run, label=f"再分類: {classified_file.name}")
+
+    if dry_run:
+        return 0
+
+    if rc == 0 or (rc == 2 and tmp_file.exists()):
+        if classified_file.exists():
+            import shutil as _shutil
+            _shutil.copy2(str(classified_file), str(bak_file))
+            log(f"バックアップ: {bak_file.name}", level="ok")
+        tmp_file.replace(classified_file)
+        log(f"置換: {tmp_file.name} → {classified_file.name}", level="ok")
+        return 0
+    else:
+        if tmp_file.exists():
+            tmp_file.unlink()
+        return rc
 
 
 # ---------------------------------------------------------------------------
@@ -638,7 +659,14 @@ def main() -> int:
     if not args.skip_classify:
         rc = step_classify(slug, dry_run=args.dry_run, model=args.model,
                            batch_size=args.batch_size, timeout=args.timeout)
-        if rc != 0:
+        if rc == 2:
+            classified_file = SAMPLES_DIR / f"{slug}_classified.json"
+            if classified_file.exists():
+                log("部分失敗がありましたが、フォールバックJSONが保存済みのため後段へ続行します", level="warn")
+            else:
+                log("分類が部分失敗し、出力JSONも見つかりません", level="err")
+                return rc
+        elif rc != 0:
             return rc
 
     if not args.skip_build:

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -375,6 +376,9 @@ def vote_ui_html(config: dict[str, Any]) -> str:
 
   if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){{
     supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
+    // Supabase mode: hide the redo button to prevent abuse and desync
+    var redoBtn=document.getElementById("vote-redo-btn");
+    if(redoBtn) redoBtn.style.display="none";
   }}
 
   var stored={{}};
@@ -462,17 +466,20 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     btns.forEach(function(b){{b.disabled=true; b.style.opacity="0.5"}});
 
     if(supabaseClient){{
+      var success=false;
       try{{
         var res=await supabaseClient
           .from("votes")
           .insert([{{ topic_id: TOPIC, choice_idx: idx }}]);
         if(res.error) throw res.error;
+        success=true;
       }}catch(err){{
         console.error("Error casting vote to Supabase:", err);
         var msg=err.message||"";
         var details=err.details||"";
         if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){{
           alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
+          success=true;
         }}else{{
           alert("投票データの送信中にエラーが発生しました。");
           // Local fallback in case of connection failure
@@ -480,7 +487,9 @@ def vote_ui_html(config: dict[str, Any]) -> str:
           localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
         }}
       }}
-      await fetchVotes();
+      if(success){{
+        await fetchVotes();
+      }}
     }}else{{
       // Pure local fallback
       stored[idx]=(stored[idx]||0)+1;
@@ -516,9 +525,9 @@ def vote_ui_html(config: dict[str, Any]) -> str:
       row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
         +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
         +(isMine?'✓ ':'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color='+a.color+'">'+pct+'% ('+c+'票)</span></div>'
+        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
         +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width='+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
       barsEl.appendChild(row);
     }});
 
@@ -531,23 +540,6 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     }}).join(" / ");
     
     var text="【"+TITLE+"】\\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\\nSNSの声の分布と自分の感覚、あなたも比べてみて。\\n\\n#SNS反応まっぷ";
-    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
-    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
-    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
-
-    document.getElementById("vote-result").style.display="block";
-    document.getElementById("vote-result").scrollIntoView({{behavior:"smooth",block:"nearest"}});
-  }}
-}})();
-</script>'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'%</span></div>'
-        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
-      barsEl.appendChild(row);
-    }});
-
-    var shareBtn=document.getElementById("share-x");
-    var text="【"+TITLE+"】\\nこの話題、私は「"+myAxis.label+"」\\nSNSの声の分布と自分の感覚、あなたも比べてみて。\\n\\n#SNS反応まっぷ";
     shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
     var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
     shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
@@ -741,14 +733,17 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
     source_label = str(config.get("source_label") or "SNSサンプル")
     tone_css = build_tone_css(config)
 
+    supabase_script = ""
+    if config.get("supabase_url") and config.get("supabase_anon_key"):
+        supabase_script = '  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n'
+
     return f"""<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
+{supabase_script}  <style>
     :root {{
       color-scheme: light;
       --bg: #f3f5f8;
@@ -1094,7 +1089,6 @@ def main() -> int:
     parser.add_argument("--config", default="", help="Optional reaction map config JSON")
     args = parser.parse_args()
 
-    import os
     rows = read_json(args.input)
     config = merge_config(args.config or None)
     config["supabase_url"] = os.environ.get("SUPABASE_URL", "")

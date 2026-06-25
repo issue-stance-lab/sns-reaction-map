@@ -83,9 +83,15 @@ def page_meta(config: dict[str, Any]) -> dict[str, dict[str, str]]:
     return pages
 
 
-def meta_block(base_url: str, page: str, meta: dict[str, str], site_name: str, og_image: str) -> str:
+def meta_block(
+    base_url: str,
+    page: str,
+    meta: dict[str, str],
+    site_name: str,
+    og_image: str,
+    include_image: bool,
+) -> str:
     page_url = urljoin(base_url, page)
-    image_url = urljoin(base_url, og_image.lstrip("/"))
     lines = [
         MARKER_START,
         f'  <meta name="description" content="{esc_attr(meta.get("description"))}">',
@@ -95,12 +101,14 @@ def meta_block(base_url: str, page: str, meta: dict[str, str], site_name: str, o
         f'  <meta property="og:title" content="{esc_attr(meta.get("title"))}">',
         f'  <meta property="og:description" content="{esc_attr(meta.get("description"))}">',
         f'  <meta property="og:url" content="{esc_attr(page_url)}">',
-        f'  <meta property="og:image" content="{esc_attr(image_url)}">',
         '  <meta name="twitter:card" content="summary_large_image">',
         f'  <meta name="twitter:title" content="{esc_attr(meta.get("title"))}">',
         f'  <meta name="twitter:description" content="{esc_attr(meta.get("description"))}">',
-        f'  <meta name="twitter:image" content="{esc_attr(image_url)}">',
     ]
+    if include_image:
+        image_url = urljoin(base_url, og_image.lstrip("/"))
+        lines.insert(8, f'  <meta property="og:image" content="{esc_attr(image_url)}">')
+        lines.append(f'  <meta name="twitter:image" content="{esc_attr(image_url)}">')
     if meta.get("section"):
         lines.append(f'  <meta property="article:section" content="{esc_attr(meta.get("section"))}">')
     lines.append(MARKER_END)
@@ -138,6 +146,7 @@ def main() -> int:
     docs_dir = resolve(args.docs_dir)
     site_name = str(config.get("site_title") or "SNS反応まっぷ")
     pages = page_meta(config)
+    include_image = (docs_dir / args.og_image).exists()
 
     changed: list[str] = []
     missing: list[str] = []
@@ -147,7 +156,7 @@ def main() -> int:
             missing.append(page)
             continue
         content = path.read_text(encoding="utf-8")
-        updated = replace_or_insert_seo(content, meta_block(base_url, page, meta, site_name, args.og_image))
+        updated = replace_or_insert_seo(content, meta_block(base_url, page, meta, site_name, args.og_image, include_image))
         if updated != content:
             changed.append(page)
             if not args.dry_run:
@@ -157,6 +166,8 @@ def main() -> int:
     print(f"{action}: {len(changed)} HTML files")
     for page in changed:
         print(f"- {page}")
+    if not include_image:
+        print(f"Skipped og:image because {docs_dir / args.og_image} does not exist")
     if missing:
         print(f"Missing: {len(missing)} configured files")
         for page in missing:

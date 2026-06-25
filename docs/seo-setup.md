@@ -7,14 +7,14 @@
 GitHub Pagesなどの公開URLが決まったら、次のコマンドで `robots.txt` と `sitemap.xml` を生成します。
 
 ```bash
-python3 tools/seo/generate_seo_assets.py \
+python3 scripts/seo/generate_seo_assets.py \
   --site-url "https://YOUR_DOMAIN_OR_GITHUB_PAGES_URL/"
 ```
 
 例:
 
 ```bash
-python3 tools/seo/generate_seo_assets.py \
+python3 scripts/seo/generate_seo_assets.py \
   --site-url "https://example.github.io/issue-stance-aggregator/"
 ```
 
@@ -42,22 +42,33 @@ python3 tools/seo/generate_seo_assets.py \
 <meta property="og:title" content="ページタイトル">
 <meta property="og:description" content="ページごとの説明文">
 <meta property="og:url" content="https://公開URL/ページ.html">
-<meta property="og:image" content="https://公開URL/ogp/default.png">
 <meta name="twitter:card" content="summary_large_image">
 ```
 
-OGP画像が未作成の場合は、まず共通画像 `docs/ogp/default.png` を作って全ページで使い、主要ページから個別画像に差し替えます。
+OGP画像が未作成の場合、スクリプトは `og:image` と `twitter:image` を出力しません。共通画像 `docs/ogp/default.png` を作成すると、自動で画像メタタグも出力されます。
 
 公開URLが決まった後、生成済みHTMLにメタタグを一括適用する場合は次を実行します。
 
 ```bash
-python3 tools/seo/apply_meta_tags.py \
+python3 scripts/seo/apply_meta_tags.py \
   --site-url "https://YOUR_DOMAIN_OR_GITHUB_PAGES_URL/" \
   --dry-run
 ```
 
 表示された対象に問題がなければ `--dry-run` を外します。
 
-## 4. 現時点の注意
+## 4. Google Analytics
+
+GA4の測定IDが発行できたら、次のコマンドで全HTMLへタグを追加します。
+
+```bash
+python3 scripts/seo/apply_ga_tags.py \
+  --measurement-id "G-XXXXXXXXXX" \
+  --dry-run
+```
+
+表示された対象に問題がなければ `--dry-run` を外します。
+
+## 5. 現時点の注意
 
 `sitemap.xml` のURLは絶対URLである必要があります。公開URLが未確定のまま仮URLで作ると、Google Search Console登録時に間違ったURLを送る事故につながるため、公開URL確定後に生成します。
