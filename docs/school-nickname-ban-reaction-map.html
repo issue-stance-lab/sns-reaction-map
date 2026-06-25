@@ -343,6 +343,7 @@
       table { min-width: 760px; }
     }
   </style>
+  <!-- AdSense: 審査通過後にここにスクリプトを挿入 -->
 </head>
 <body>
   <header>
@@ -391,16 +392,10 @@
   var TITLE="学校でのあだ名禁止の是非 SNS反応まっぷ";
   var KEY="sns_vote_"+TOPIC;
 
+  // Supabase設定（本番ビルド・デプロイ時に値を設定）
   var supabaseUrl="";
   var supabaseAnonKey="";
   var supabaseClient=null;
-
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
-    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-    // Supabase mode: hide the redo button to prevent abuse and desync
-    var redoBtn=document.getElementById("vote-redo-btn");
-    if(redoBtn) redoBtn.style.display="none";
-  }
 
   var stored={};
   var myVote=localStorage.getItem(KEY+"_my");
@@ -448,10 +443,39 @@
     }
   }
 
+  // Supabase CDNの動的読み込みと初期化
+  function initVoting(){
+    applyBlur();
+
+    if(supabaseUrl && supabaseAnonKey){
+      // Supabase mode: hide the redo button to prevent abuse and desync
+      var redoBtn=document.getElementById("vote-redo-btn");
+      if(redoBtn) redoBtn.style.display="none";
+
+      // Dynamically load Supabase script
+      var script=document.createElement("script");
+      script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.onload=function(){
+        if(typeof supabase!=="undefined"){
+          supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
+        }
+        fetchVotes();
+      };
+      script.onerror=function(){
+        console.error("Failed to load Supabase SDK, falling back to localStorage");
+        fetchVotes();
+      };
+      document.head.appendChild(script);
+    }else{
+      // localStorageフォールバック
+      fetchVotes();
+    }
+  }
+
   if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
+    document.addEventListener("DOMContentLoaded", initVoting);
   }else{
-    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
+    setTimeout(initVoting,0);
   }
 
   var btnWrap=document.getElementById("vote-buttons");
@@ -895,6 +919,9 @@
          style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
         ☕ このプロジェクトを応援
       </a>
+    </div>
+    <div style="margin-top:8px;">
+      <a href="privacy.html" style="color:var(--accent);text-decoration:none;font-size:12px;">プライバシーポリシー</a> · <a href="disclaimer.html" style="color:var(--accent);text-decoration:none;font-size:12px;">免責事項</a>
     </div>
   </footer>
 </body>

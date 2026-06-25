@@ -230,7 +230,7 @@ def main():
         slug = issue_title[:30].replace(" ", "_").replace("/", "_")
     else:
         issue_title = args.custom
-        issue_body = f"**課題**: {args.custom}\n\n上記の課題を分析し、必要なサブタスクを洗い出して実装してください。"
+        issue_body = "上記の課題を分析し、必要なサブタスクを洗い出して実装してください。"
         prompt = generate_prompt(args.ai, issue_title, issue_body)
         mode = "assign"
         slug = issue_title[:30].replace(" ", "_").replace("/", "_")

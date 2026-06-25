@@ -347,6 +347,7 @@
       table { min-width: 760px; }
     }
   </style>
+  <!-- AdSense: 審査通過後にここにスクリプトを挿入 -->
 </head>
 <body>
   <header>
@@ -394,7 +395,13 @@
   var axes=[{"kicker": "権利保護", "label": "クリエイターを守るためAI規制を強化すべき", "origLabel": "クリエイターの著作権を最優先に守る", "tone": "negative", "color": "#e07040"}, {"kicker": "技術推進", "label": "技術革新を止めないよう規制は最小限に", "origLabel": "AI技術の発展と表現の自由を守る", "tone": "positive", "color": "#4a90d9"}, {"kicker": "共存模索", "label": "オプトアウトや対価支払いなど条件付きで共存", "origLabel": "条件付きで共存の仕組みを作る", "tone": "derived", "color": "#0f7490"}, {"kicker": "ノイズ・注意領域", "label": "よくわからない・まだ判断できない", "origLabel": "未確認・過激化した反応", "tone": "warning", "color": "#7a4cc2"}];
   var TITLE="生成AIと著作権問題 SNS反応まっぷ";
   var KEY="sns_vote_"+TOPIC;
-  var stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+
+  // Supabase設定（本番ビルド・デプロイ時に値を設定）
+  var supabaseUrl="";
+  var supabaseAnonKey="";
+  var supabaseClient=null;
+
+  var stored={};
   var myVote=localStorage.getItem(KEY+"_my");
 
   // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
@@ -414,7 +421,66 @@
       }
     }
   }
-  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",applyBlur)}else{setTimeout(applyBlur,0)}
+
+  async function fetchVotes(){
+    if(supabaseClient){
+      try{
+        var res=await supabaseClient
+          .from("votes")
+          .select("choice_idx")
+          .eq("topic_id", TOPIC);
+        if(res.error) throw res.error;
+        stored={};
+        (res.data||[]).forEach(function(row){
+          var idx=row.choice_idx;
+          stored[idx]=(stored[idx]||0)+1;
+        });
+      }catch(err){
+        console.error("Error fetching votes from Supabase:", err);
+        stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+      }
+    }else{
+      stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
+    }
+    if(myVote!==null){
+      showResults(parseInt(myVote));
+    }
+  }
+
+  // Supabase CDNの動的読み込みと初期化
+  function initVoting(){
+    applyBlur();
+
+    if(supabaseUrl && supabaseAnonKey){
+      // Supabase mode: hide the redo button to prevent abuse and desync
+      var redoBtn=document.getElementById("vote-redo-btn");
+      if(redoBtn) redoBtn.style.display="none";
+
+      // Dynamically load Supabase script
+      var script=document.createElement("script");
+      script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.onload=function(){
+        if(typeof supabase!=="undefined"){
+          supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
+        }
+        fetchVotes();
+      };
+      script.onerror=function(){
+        console.error("Failed to load Supabase SDK, falling back to localStorage");
+        fetchVotes();
+      };
+      document.head.appendChild(script);
+    }else{
+      // localStorageフォールバック
+      fetchVotes();
+    }
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded", initVoting);
+  }else{
+    setTimeout(initVoting,0);
+  }
 
   var btnWrap=document.getElementById("vote-buttons");
   axes.forEach(function(a,i){
@@ -432,8 +498,6 @@
     location.reload();
   };
 
-  if(myVote!==null){showResults(parseInt(myVote))}
-
   function revealChart(){
     var wrap=document.getElementById("chart-panel");
     if(wrap){
@@ -444,10 +508,43 @@
     }
   }
 
-  function castVote(idx){
-    stored[idx]=(stored[idx]||0)+1;
-    if(myVote!==null){stored[parseInt(myVote)]=(stored[parseInt(myVote)]||1)-1}
-    localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+  async function castVote(idx){
+    if(myVote!==null) return;
+    
+    var btns=btnWrap.querySelectorAll("button");
+    btns.forEach(function(b){b.disabled=true; b.style.opacity="0.5"});
+
+    if(supabaseClient){
+      var success=false;
+      try{
+        var res=await supabaseClient
+          .from("votes")
+          .insert([{ topic_id: TOPIC, choice_idx: idx }]);
+        if(res.error) throw res.error;
+        success=true;
+      }catch(err){
+        console.error("Error casting vote to Supabase:", err);
+        var msg=err.message||"";
+        var details=err.details||"";
+        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
+          alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
+          success=true;
+        }else{
+          alert("投票データの送信中にエラーが発生しました。");
+          // Local fallback in case of connection failure
+          stored[idx]=(stored[idx]||0)+1;
+          localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+        }
+      }
+      if(success){
+        await fetchVotes();
+      }
+    }else{
+      // Pure local fallback
+      stored[idx]=(stored[idx]||0)+1;
+      localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+    }
+
     localStorage.setItem(KEY+"_my",""+idx);
     myVote=""+idx;
     revealChart();
@@ -477,14 +574,21 @@
       row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
         +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
         +(isMine?'✓ ':'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'%</span></div>'
+        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
         +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
         +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
       barsEl.appendChild(row);
     });
 
+    // Improved X share text with dynamic percentages
     var shareBtn=document.getElementById("share-x");
-    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
+    var pctList=axes.map(function(a,i){
+      var c=stored[i]||0;
+      var pct=Math.round(c/total*100);
+      return a.label+" "+pct+"%";
+    }).join(" / ");
+    
+    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
     shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
     var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
     shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
@@ -893,6 +997,9 @@
          style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
         ☕ このプロジェクトを応援
       </a>
+    </div>
+    <div style="margin-top:8px;">
+      <a href="privacy.html" style="color:var(--accent);text-decoration:none;font-size:12px;">プライバシーポリシー</a> · <a href="disclaimer.html" style="color:var(--accent);text-decoration:none;font-size:12px;">免責事項</a>
     </div>
   </footer>
 </body>
