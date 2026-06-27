@@ -9,7 +9,7 @@
 SNSの反応、賛否だけで追うと見落としがち。
 話題ごとの論点・立場・気になる点を1ページで見比べられる「SNS反応まっぷ」を公開しました。
 あなたの見方も投票で参加できます👇
-https://kart100sd-two.github.io/sns-reaction-map/
+https://issue-stance-lab.github.io/sns-reaction-map/
 #SNS反応まっぷ #SNS分析
 
 X換算: 128文字
@@ -22,7 +22,7 @@ X換算: 128文字
 
 生成AIと著作権、どこからが問題だと思いますか？
 クリエイター側・利用者側・制度面の反応を並べて見られます。投票も受付中👇
-https://kart100sd-two.github.io/sns-reaction-map/ai-copyright-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/ai-copyright-reaction-map.html
 #SNS反応まっぷ #生成AI #著作権
 
 X換算: 106文字
@@ -31,7 +31,7 @@ X換算: 106文字
 
 生成AIと著作権の反応を整理すると、「全面賛成/反対」だけではない論点が見えてきました。
 あなたはどの立場に近いですか？
-https://kart100sd-two.github.io/sns-reaction-map/ai-copyright-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/ai-copyright-reaction-map.html
 #SNS反応まっぷ #生成AI #著作権
 
 X換算: 105文字
@@ -42,7 +42,7 @@ X換算: 105文字
 
 学校で「あだ名禁止」は必要？それとも行き過ぎ？
 いじめ防止、自由な関係づくり、先生の負担など、反応を整理しました。投票できます👇
-https://kart100sd-two.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html
 #SNS反応まっぷ #教育 #学校
 
 X換算: 106文字
@@ -51,7 +51,7 @@ X換算: 106文字
 
 あだ名禁止への反応は、賛否よりも「運用次第」という声が目立ちます。
 どの論点に共感するか、マップで見比べて投票してみてください。
-https://kart100sd-two.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html
 #SNS反応まっぷ #教育 #学校
 
 X換算: 106文字
@@ -62,7 +62,7 @@ X換算: 106文字
 
 高市早苗氏と文春報道、SNSでは何が争点になっている？
 報道の受け止め、政治的評価、慎重論を整理しました。あなたの見方は？
-https://kart100sd-two.github.io/sns-reaction-map/takaichi-reaction-map-standard.html
+https://issue-stance-lab.github.io/sns-reaction-map/takaichi-reaction-map-standard.html
 #SNS反応まっぷ #高市早苗 #文春
 
 X換算: 105文字
@@ -71,7 +71,7 @@ X換算: 105文字
 
 高市早苗氏と文春報道の反応を並べると、支持/批判だけでなく「根拠を見たい」という慎重な声も。
 投票で立場を教えてください。
-https://kart100sd-two.github.io/sns-reaction-map/takaichi-reaction-map-standard.html
+https://issue-stance-lab.github.io/sns-reaction-map/takaichi-reaction-map-standard.html
 #SNS反応まっぷ #高市早苗 #文春
 
 X換算: 105文字
@@ -82,7 +82,7 @@ X換算: 105文字
 
 辺野古の高校生死亡事故、SNSでは何が問われているのか。
 事故原因、報道、基地問題との関係など、反応を整理しました。あなたはどう見る？
-https://kart100sd-two.github.io/sns-reaction-map/henoko-student-accident-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/henoko-student-accident-reaction-map.html
 #SNS反応まっぷ #辺野古 #沖縄
 
 X換算: 110文字
@@ -91,7 +91,7 @@ X換算: 110文字
 
 辺野古の事故への反応は、事実確認を求める声と政治的背景を見る声に分かれています。
 論点を見比べて、投票で参加してください。
-https://kart100sd-two.github.io/sns-reaction-map/henoko-student-accident-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/henoko-student-accident-reaction-map.html
 #SNS反応まっぷ #辺野古 #沖縄
 
 X換算: 104文字
@@ -102,7 +102,7 @@ X換算: 104文字
 
 憲法改正、あなたはどの論点を重視しますか？
 安全保障、緊急事態条項、基本的人権など、SNSの反応を整理。投票できます👇
-https://kart100sd-two.github.io/sns-reaction-map/constitutional-amendment-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/constitutional-amendment-reaction-map.html
 #SNS反応まっぷ #憲法改正 #政治
 
 X換算: 103文字
@@ -111,7 +111,7 @@ X換算: 103文字
 
 憲法改正論議の反応を集めると、賛否の前に「何を変えるのか」を問う声が目立ちます。
 あなたの立場も投票で参加できます。
-https://kart100sd-two.github.io/sns-reaction-map/constitutional-amendment-reaction-map.html
+https://issue-stance-lab.github.io/sns-reaction-map/constitutional-amendment-reaction-map.html
 #SNS反応まっぷ #憲法改正 #政治
 
 X換算: 102文字
