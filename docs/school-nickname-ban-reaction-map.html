@@ -2,159 +2,41 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="google-site-verification" content="m7TnCK7r49LynKemf0lmuJkzY4MoTTHDFgL3fW2bPlc" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- SEO_META_START -->
-  <meta name="description" content="いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。">
-  <link rel="canonical" href="https://issue-stance-lab.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html">
-  <meta property="og:site_name" content="SNS反応まっぷ">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="学校でのあだ名禁止の是非 | SNS反応まっぷ">
-  <meta property="og:description" content="いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。">
-  <meta property="og:url" content="https://issue-stance-lab.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html">
-  <meta property="og:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="学校でのあだ名禁止の是非 | SNS反応まっぷ">
-  <meta name="twitter:description" content="いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。">
-  <meta name="twitter:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
-  <meta property="article:section" content="教育・日常論争">
-<!-- SEO_META_END -->
-  <meta name="description" content="Yahooリアルタイム検索で収集したSNS投稿をAIが自動分類。学校でのあだ名禁止の是非であなたはどっち？">
-  <link rel="icon" href="favicon.ico">
-  <meta property="og:title" content="学校でのあだ名禁止の是非 SNS反応まっぷ">
-  <meta property="og:description" content="Yahooリアルタイム検索で収集したSNS投稿をAIが自動分類。学校でのあだ名禁止の是非であなたはどっち？">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
   <title>学校でのあだ名禁止の是非 SNS反応まっぷ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
-
     :root {
       color-scheme: light;
-      --bg: #f0fdf4;
-      --ink: #1c1917;
-      --muted: #374151;
-      --line: #e2e8f0;
+      --bg: #f3f5f8;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce6;
       --panel: #ffffff;
-      --accent: #059669;
-      --accent-soft: #ecfdf5;
-      --grad-1: #059669;
-      --grad-2: #064e3b;
-      --shadow: 0 4px 20px rgba(0,0,0,.08);
-      --section-bg1: #ecfdf5;
-      --section-bg2: #fffbeb;
-      --section-bg3: #f0f9ff;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --shadow: 0 10px 28px rgba(16, 24, 40, .06);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 16px;
-      line-height: 1.8;
-      -webkit-font-smoothing: antialiased;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
     }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, var(--grad-1) 0%, var(--grad-2) 100%);
-      padding: 0;
-      min-height: 320px;
-      display: flex;
-      align-items: center;
+    header {
+      padding: 34px min(5vw, 56px) 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(255,255,255,.12) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(255,255,255,.08) 0%, transparent 40%);
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('images/school-nickname-hero.webp');
-      background-size: cover;
-      background-position: center;
-      opacity: .28;
-      mix-blend-mode: luminosity;
-      z-index: 0;
-    }
-    .hero-inner {
-      z-index: 2;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 48px 24px 40px;
-      color: #fff;
-    }
-    .hero .top-nav {
+    .top-nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 20px;
-    }
-    .hero .top-nav a {
-      display: inline-flex;
-      align-items: center;
-      min-height: 32px;
-      border: 1px solid rgba(255,255,255,.3);
-      border-radius: 8px;
-      padding: 5px 12px;
-      background: rgba(255,255,255,.15);
-      backdrop-filter: blur(8px);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 13px;
-      transition: background .2s;
-    }
-    .hero .top-nav a:hover { background: rgba(255,255,255,.25); }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,.18);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 999px;
-      padding: 5px 14px;
-      font-size: 12px;
-      font-weight: 700;
       margin-bottom: 16px;
     }
-    .hero h1 {
-      margin: 0 0 12px;
-      font-size: clamp(28px, 5vw, 44px);
-      font-weight: 900;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-      text-shadow: 0 2px 16px rgba(0,0,0,.15);
-    }
-    .hero .lead {
-      margin: 0;
-      font-size: clamp(14px, 2vw, 16px);
-      opacity: .9;
-      max-width: 700px;
-      line-height: 1.8;
-      color: #fff;
-    }
-    .wave-divider {
-      display: block;
-      width: 100%;
-      height: 50px;
-      margin-top: -1px;
-    }
-
-.top-nav a {
+    .top-nav a {
       display: inline-flex;
       align-items: center;
       min-height: 32px;
@@ -166,40 +48,77 @@
       text-decoration: none;
       font-weight: 800;
     }
-h3 { margin: 0 0 12px; font-size: 20px; }
-main { padding: 22px min(5vw, 56px) 48px; max-width: 1100px; margin: 0 auto; }
-.stat {
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: 0; }
+    h2 { margin: 0 0 16px; font-size: 20px; }
+    h3 { margin: 0 0 12px; font-size: 16px; }
+    .lead { margin: 0; color: var(--muted); max-width: 960px; }
+    main { padding: 22px min(5vw, 56px) 48px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 14px 16px;
       box-shadow: var(--shadow);
     }
-.stat strong { display: block; font-size: 24px; margin-top: 4px; }
-.panel-title {
+    .stat span { display: block; color: var(--muted); font-size: 13px; }
+    .stat strong { display: block; font-size: 24px; margin-top: 4px; }
+    .panel, .note-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+    }
+    .panel-title {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 14px;
     }
-.panel-title span:not(.section-icon) {
+    .panel-title h2 { margin: 0; }
+    .panel-title span {
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
     }
-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
-th, td {
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
+    table.compact { min-width: 420px; max-width: 760px; }
+    th, td {
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-      padding: 12px 14px;
+      padding: 10px 12px;
       text-align: center;
       vertical-align: middle;
       white-space: nowrap;
-      font-size: 15px;
     }
-th:last-child, td:last-child { border-right: 0; }
-.row-dot {
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    th:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #fff;
+      z-index: 1;
+      min-width: 240px;
+      max-width: 340px;
+      white-space: normal;
+      line-height: 1.45;
+    }
+    .row-dot {
       display: inline-block;
       width: 9px;
       height: 9px;
@@ -208,11 +127,33 @@ th:last-child, td:last-child { border-right: 0; }
       background: #98a2b3;
       vertical-align: 1px;
     }
-thead th:first-child { z-index: 3; background: #eef2f7; }
-.heat-cell {
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #eef2f7;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+      white-space: normal;
+      min-width: 112px;
+    }
+    thead th:first-child { z-index: 3; background: #eef2f7; }
+    td { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .heat-cell {
       transition: transform .12s ease, box-shadow .12s ease;
     }
-.heat-cell:hover {
+    .heat-cell span {
+      display: inline-flex;
+      min-width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+    }
+    .heat-cell:hover {
       transform: scale(1.03);
       box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .28);
     }
@@ -221,24 +162,46 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
       font-weight: 600;
     }
     .heat-cell.zero span { background: transparent; }
-.bar-list {
+    .total {
+      background: #f2f4f7;
+      color: var(--ink);
+      font-weight: 900;
+      min-width: 72px;
+    }
+    .bar-list {
       display: grid;
       gap: 10px;
       max-width: 980px;
     }
-.bar-meta {
+    .bar-row {
+      display: grid;
+      gap: 6px;
+    }
+    .bar-meta {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      font-size: 16px;
+      font-size: 14px;
     }
-.bar-meta strong { font-variant-numeric: tabular-nums; }
-.bar-fill {
+    .bar-meta span { color: #344054; }
+    .bar-meta strong { font-variant-numeric: tabular-nums; }
+    .bar-track {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #eef2f7;
+    }
+    .bar-fill {
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, #9fd0ff, #1769d1);
     }
-.axis-card {
+    .axis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .axis-card {
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 16px;
@@ -248,23 +211,50 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
       flex-direction: column;
       gap: 8px;
     }
-.axis-card h3 {
+    .axis-kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .axis-card h3 {
       margin: 0;
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1.35;
     }
-.axis-count span {
+    .axis-count {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 34px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+    }
+    .axis-count span {
       color: var(--muted);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
     }
-.axis-tags {
+    .axis-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .axis-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-top: auto;
     }
-[data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] th { border-left: 5px solid #1769d1; }
+    .axis-tags span {
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0f4e9d;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    [data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] th { border-left: 5px solid #1769d1; }
 [data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] .row-dot { background: #1769d1; }
 [data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] .bar-fill { background: linear-gradient(90deg, #e7f1ff, #1769d1); }
 [data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"] .bar-meta span { color: #0f4e9d; font-weight: 700; }
@@ -306,861 +296,65 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
 .axis-card[data-tone="derived"] { border-top: 5px solid #0f7490; background: linear-gradient(180deg, #fff, #e5f7fb); }
 .axis-card[data-tone="derived"] .axis-kicker { color: #0b586d; }
 .axis-card[data-tone="derived"] .axis-tags span { background: #e5f7fb; color: #0b586d; }
-.chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
-.sample-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      background: #fbfcfe;
-    }
-.meta { color: var(--accent); font-size: 12px; font-weight: 700; }
-.reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
-.note-panel h2 { font-size: 16px; }
-/* === UI/UX改善 2026-06-26 === */
-    /* Sticky Header */
-
-    /* フェードインアニメーション */
-    .fade-in { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-    /* 投票ボタンリップルエフェクト */
-    .vote-option { position: relative; overflow: hidden; }
-    .vote-option .ripple {
-      position: absolute; border-radius: 50%; background: rgba(255,255,255,.35);
-      transform: scale(0); animation: ripple-anim .55s linear; pointer-events: none;
-    }
-    @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
-
-    /* 結果バースライドイン */
-    .result-bar-fill { transform: translateX(-101%); transition: transform .9s cubic-bezier(.22,1,.36,1); }
-    .result-bar-fill.visible { transform: translateX(0); }
-
-    /* 投票完了チェックマーク */
-    @keyframes check-pop {
-      0% { transform: scale(0); opacity: 0; }
-      60% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .vote-check { display: none; margin-left: 8px; animation: check-pop .4s ease; }
-    .vote-check.show { display: inline-block; }
-
-    /* 半円チャートセグメント描画 */
-    @keyframes chart-segment {
-      from { stroke-dashoffset: var(--dash); }
-      to   { stroke-dashoffset: 0; }
-    }
-
-    /* 巡回導線カード */
-.topic-card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(16,24,40,.08); }
-.topic-card .tc-desc { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
-.topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-
-    /* 投票進捗 */
-.progress-bar > div { height: 100%; background: var(--accent); border-radius: 999px; transition: width .6s ease; }
-    .voted-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: #e8f7ef; color: #16885a; font-size: 11px; font-weight: 800;
-      padding: 2px 8px; border-radius: 999px;
-    }
-
-    /* X埋め込みフォールバック */
-    .tweet-embed-fallback {
-      background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-      padding: 12px; margin-top: 8px; font-size: 13px; color: #344054;
-    }
-    .tweet-embed-fallback a { color: var(--accent); font-weight: 700; }
-
-    /* 接続セクション */
-.cross-vote-section h2 { font-size: 24px; margin: 0 0 18px; }
-
-    /* reduced-motion */
-    @media (prefers-reduced-motion: reduce) {
-      .fade-in, .result-bar-fill, .vote-check { transition: none !important; animation: none !important; }
-      .topic-card { transition: none !important; }
-    }
-
-    @media (max-width: 720px) {
-      main { padding-inline: 14px; }
-      .hero-inner { padding: 36px 16px 32px; }
-      .panel-title { align-items: flex-start; flex-direction: column; gap: 2px; }
-      th:first-child { min-width: 180px; }
-      table { min-width: 760px; }
-    }
-
-    
-    /* ===== MAGAZINE REDESIGN v2 ===== */
-
-    /* --- Page rhythm: alternating colored sections --- */
-    main {
-      padding: 0 !important;
-      max-width: none !important;
-      margin: 0 !important;
-    }
-
-    /* --- Stats section: full-width colored band --- */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0;
-      margin: 0;
-      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
-      position: relative;
-    }
-    .stat {
-      position: relative;
-      padding: 28px 24px;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-      background: transparent;
-      color: #fff;
-      border-right: 1px solid rgba(255,255,255,.15);
-      transition: background .2s;
-      overflow: visible;
-    }
-    .stat:last-child { border-right: none; }
-    .stat:hover { background: rgba(255,255,255,.08); }
-    .stat::before { display: none; }
-    .stat span {
-      display: block;
-      color: rgba(255,255,255,.85);
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-bottom: 6px;
-    }
-    .stat strong {
-      display: block;
-      font-size: 28px;
-      font-weight: 900;
-      color: #fff;
-      line-height: 1.3;
-    }
-
-    /* --- Section panels → full-width magazine sections --- */
-    .panel, .note-panel {
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      padding: 48px min(6vw, 72px);
-      margin: 0;
-      box-shadow: none;
-      position: relative;
-      max-width: none;
-    }
-
-    /* Alternating backgrounds via nth-child */
-    .panel:nth-of-type(odd) {
-      background: var(--section-bg1, #f8fafc);
-    }
-    .panel:nth-of-type(even) {
-      background: #fff;
-    }
-
-    /* Vote section special treatment */
-    #vote-section {
-      background: #fff !important;
-      border-bottom: 1px solid var(--line);
-    }
-
-    /* Content container inside panels */
-    .panel > *,
-    .note-panel > * {
-      max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .panel > .panel-title,
-    .panel > .axis-grid,
-    .panel > .bar-list,
-    .panel > .table-wrap,
-    .panel > .sample-grid,
-    .panel > h2,
-    .panel > ul,
-    .panel > p,
-    .panel > div,
-    .panel > script,
-    .note-panel > h2,
-    .note-panel > ul {
-      max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* --- Section title redesign --- */
-    .panel-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 32px;
-      padding-bottom: 0;
-      border-bottom: none;
-      position: relative;
-    }
-    .panel-title::after { display: none; }
-    .panel-title h2 {
-      margin: 0;
-      font-size: 30px;
-      font-weight: 900;
-      letter-spacing: -.02em;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .panel-title h2::before {
-      content: '';
-      display: inline-block;
-      width: 5px;
-      height: 32px;
-      background: linear-gradient(180deg, var(--grad-1), var(--grad-2));
-      border-radius: 3px;
-      flex-shrink: 0;
-    }
-    .panel-title span:not(.section-icon) {
-      color: var(--muted);
-      font-size: 14px;
-      white-space: nowrap;
-      background: rgba(0,0,0,.04);
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-weight: 700;
-      border: 1px solid rgba(0,0,0,.06);
-    }
-
-    /* --- Section divider waves --- */
-    .section-wave {
-      display: block;
-      width: 100%;
-      height: 40px;
-      position: relative;
-      z-index: 1;
-      margin: -1px 0;
-    }
-
-    /* --- h2 general --- */
-    h2 {
-      margin: 0 0 24px;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -.02em;
-    }
-
-    /* --- Axis cards: larger, more dramatic --- */
-    .axis-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-    .axis-card {
-      border: none;
-      border-radius: 20px;
-      padding: 28px;
-      min-height: 240px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
-      border-top: none;
-      box-shadow: 0 4px 20px rgba(0,0,0,.06);
-      position: relative;
-      overflow: hidden;
-    }
-    .axis-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      border-radius: 20px 20px 0 0;
-    }
-    .axis-card:hover {
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 20px 50px rgba(0,0,0,.12);
-    }
-    .axis-kicker {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .axis-card h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 900;
-      line-height: 1.35;
-    }
-    .axis-count {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 4px;
-      font-size: 44px;
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-    }
-    .axis-count span { font-size: 14px; font-weight: 700; }
-    .axis-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-    .axis-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: auto;
-    }
-    .axis-tags span {
-      border-radius: 8px;
-      padding: 5px 12px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    /* --- Bar chart: magazine infographic style --- */
-    .bar-list {
-      display: grid;
-      gap: 4px;
-      max-width: 1000px;
-    }
-    .bar-row {
-      display: grid;
-      gap: 8px;
-      padding: 16px 20px;
-      background: rgba(255,255,255,.7);
-      border-radius: 14px;
-      transition: all .2s;
-      border: 1px solid rgba(0,0,0,.04);
-      backdrop-filter: blur(4px);
-    }
-    .bar-row:hover {
-      background: #fff;
-      box-shadow: 0 8px 24px rgba(0,0,0,.06);
-      transform: translateX(4px);
-    }
-    .bar-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 14px;
-    }
-    .bar-meta span { color: var(--ink); font-weight: 700; }
-    .bar-meta strong {
-      font-variant-numeric: tabular-nums;
-      font-size: 18px;
-      font-weight: 900;
-    }
-    .bar-track {
-      height: 14px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(0,0,0,.06);
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: inherit;
-      transition: width .8s cubic-bezier(.22,1,.36,1);
-    }
-
-    /* --- Tables: cleaner with accent header --- */
-    .table-wrap {
-      overflow-x: auto;
-      border: none;
-      border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 4px 24px rgba(0,0,0,.06);
-    }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
-    table.compact { min-width: 420px; max-width: 760px; }
-    th, td {
-      border-right: 1px solid rgba(0,0,0,.04);
-      border-bottom: 1px solid rgba(0,0,0,.04);
-      padding: 14px 14px;
-      text-align: center;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-    tr:last-child th, tr:last-child td { border-bottom: 0; }
-    th:last-child, td:last-child { border-right: 0; }
-    th:first-child {
-      text-align: left;
-      position: sticky;
-      left: 0;
-      background: #fff;
-      z-index: 1;
-      min-width: 240px;
-      max-width: 340px;
-      white-space: normal;
-      line-height: 1.45;
-    }
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: linear-gradient(180deg, var(--grad-1), var(--grad-2));
-      color: #fff;
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.35;
-      white-space: normal;
-      min-width: 112px;
-      padding: 16px 14px;
-    }
-    thead th:first-child {
-      z-index: 3;
-      background: linear-gradient(180deg, var(--grad-1), var(--grad-2));
-      color: #fff;
-    }
-    td { font-weight: 800; font-variant-numeric: tabular-nums; }
-    tbody tr { transition: background .12s; }
-    tbody tr:hover { background: var(--accent-soft); }
-    .heat-cell {
-      transition: transform .12s ease, box-shadow .12s ease;
-    }
-    .heat-cell span {
-      display: inline-flex;
-      min-width: 34px;
-      height: 34px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, .2);
-      font-size: 14px;
-    }
-    .heat-cell:hover {
-      transform: scale(1.08);
-      box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .3);
-    }
-    .total {
-      background: rgba(0,0,0,.03);
-      font-weight: 900;
-      min-width: 72px;
-      font-size: 15px;
-    }
-
-    /* --- Legend --- */
     .legend {
       display: flex;
       gap: 8px;
       align-items: center;
       color: var(--muted);
-      font-size: 12px;
-      margin-top: 16px;
-      padding: 12px 18px;
-      background: rgba(255,255,255,.6);
-      border-radius: 12px;
-      border: 1px solid rgba(0,0,0,.04);
+      font-size: 13px;
+      margin-top: 12px;
     }
-    .chip {
-      width: 28px;
-      height: 14px;
-      border-radius: 4px;
-      border: 1px solid rgba(0,0,0,.06);
-    }
-
-    /* --- Sample cards: editorial magazine style --- */
+    .chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
     .sample-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
     }
     .sample-card {
-      border: none;
-      border-radius: 20px;
-      padding: 0;
-      background: #fff;
-      overflow: hidden;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
-      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
     }
-    .sample-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.1);
-    }
-    .sample-card > h3 {
-      margin: 0;
-      padding: 18px 22px 14px;
-      font-size: 15px;
-      font-weight: 800;
-      border-bottom: none;
-      position: relative;
-    }
-    .sample-card > h3::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 22px;
-      right: 22px;
-      height: 1px;
-      background: linear-gradient(90deg, var(--line), transparent);
-    }
-    .sample-card > div {
-      padding: 16px 22px 20px;
-    }
-    .sample-card blockquote {
-      margin: 0 0 10px;
-      padding: 14px 18px;
-      border-left: 4px solid var(--accent);
-      background: var(--accent-soft);
-      border-radius: 0 12px 12px 0;
-      font-size: 16px;
-      line-height: 1.75;
-      color: var(--ink);
-    }
-    .meta {
-      color: var(--accent);
+    .sample { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+    .meta { color: var(--accent); font-size: 12px; font-weight: 700; }
+    blockquote {
+      margin: 8px 0;
+      padding-left: 10px;
+      border-left: 3px solid var(--line);
+      color: #344054;
       font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .04em;
     }
-    .reason {
-      color: var(--ink);
-      font-size: 14px;
-      margin-top: 8px;
-      line-height: 1.6;
-    }
-
-    /* --- Note panel: callout style --- */
-    .note-panel {
-      background: linear-gradient(135deg, var(--accent-soft), #fff) !important;
-      border-left: 5px solid var(--accent) !important;
-      padding: 36px min(6vw, 72px) !important;
-    }
-    .note-panel h2 {
-      font-size: 22px;
-      color: var(--accent);
-    }
-    .note-panel ul {
-      margin: 0;
-      padding-left: 20px;
-    }
-    .note-panel li {
-      margin-bottom: 8px;
-      font-size: 15px;
-      line-height: 1.8;
-    }
-
-    /* --- Topic cards (次に読む / Cross-vote) --- */
-    .topic-card {
-      background: #fff;
-      border: none;
-      border-radius: 16px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: all .25s cubic-bezier(.22,1,.36,1);
-      box-shadow: 0 2px 12px rgba(0,0,0,.05);
-      position: relative;
-      overflow: hidden;
-    }
-    .topic-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
-      opacity: 0;
-      transition: opacity .25s;
-    }
-    .topic-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.1);
-    }
-    .topic-card:hover::before { opacity: 1; }
-    .topic-card .tc-title {
-      font-weight: 900;
-      font-size: 15px;
-      color: var(--ink);
-    }
-    .topic-card .tc-desc {
-      color: var(--muted);
-      font-size: 12px;
-      margin: 0 0 10px;
-      line-height: 1.6;
-    }
-    .topic-card .tc-link {
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 13px;
-      text-decoration: none;
-      transition: transform .2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .topic-card .tc-link:hover {
-      transform: translateX(4px);
-    }
-    .topic-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    /* --- Cross-vote section --- */
-    .cross-vote-section {
-      background: linear-gradient(135deg, var(--section-bg2, var(--accent-soft)), #fff);
-      border: none;
-      border-radius: 0;
-      padding: 48px min(6vw, 72px);
-      margin: 0;
-      box-shadow: none;
-      max-width: none !important;
-    }
-    .cross-vote-section h2 {
-      font-size: 22px;
-      font-weight: 900;
-      margin: 0 0 16px;
-      max-width: 1000px;
-    }
-    .cross-vote-section p,
-    .cross-vote-section .progress-bar,
-    .cross-vote-section .topic-grid {
-      max-width: 1000px;
-    }
-
-    /* --- Progress bar --- */
-    .progress-bar {
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.08);
-      overflow: hidden;
-    }
-    .progress-bar > div {
-      height: 100%;
-      background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
-      border-radius: 999px;
-      transition: width .6s ease;
-    }
-
-    /* --- Vote buttons: more dramatic --- */
-    .vote-option {
-      position: relative;
-      overflow: hidden;
-      border-radius: 16px !important;
-      transition: all .25s cubic-bezier(.22,1,.36,1) !important;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    }
-    .vote-option:hover {
-      box-shadow: 0 12px 32px rgba(0,0,0,.14) !important;
-      transform: translateY(-3px) !important;
-    }
-
-    /* --- 次に読む wrapper --- */
-    section[style*="max-width:980px"] {
-      max-width: none !important;
-      padding: 0 !important;
-    }
-    section[style*="max-width:980px"] > div[style*="background:var(--panel)"] {
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      padding: 48px min(6vw, 72px) !important;
-      max-width: none !important;
-      background: var(--section-bg3, #f8fafc) !important;
-    }
-
-    /* --- Footer: gradient band --- */
-    footer {
-      background: linear-gradient(135deg, var(--grad-2), var(--grad-1)) !important;
-      border-top: none !important;
-      padding: 48px 24px !important;
-      color: #fff !important;
-    }
-    footer a { color: rgba(255,255,255,.85) !important; }
-    footer a:hover { color: #fff !important; }
-    footer div[style*="margin-top:8px"] { color: rgba(255,255,255,.6) !important; }
-
-    /* --- Smooth scrollbar --- */
-    html { scroll-behavior: smooth; }
-
-    /* --- Selection color --- */
-    ::selection { background: var(--accent); color: #fff; }
-
-    /* --- Decorative background pattern for odd sections --- */
-    .panel:nth-of-type(odd)::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-      opacity: .03;
-      pointer-events: none;
-    }
-    .panel:nth-of-type(even)::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, var(--grad-2) 0%, transparent 70%);
-      opacity: .02;
-      pointer-events: none;
-    }
-
-    /* --- Mobile enhancements --- */
+    .reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    a { color: var(--accent); font-size: 13px; }
+    .note-panel h2 { font-size: 16px; }
+    .note-panel ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
     @media (max-width: 720px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .stat { padding: 20px 16px; }
-      .stat strong { font-size: 18px; }
-      .panel, .note-panel { padding: 32px 16px !important; }
-      .axis-card { padding: 20px; min-height: auto; }
-      .axis-count { font-size: 32px; }
-      .sample-grid { grid-template-columns: 1fr; }
-      .topic-grid { grid-template-columns: 1fr; }
-      .bar-row { padding: 12px 14px; }
-      .panel-title { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .panel-title h2 { font-size: 26px; }
-      .cross-vote-section { padding: 32px 16px; }
+      main { padding-inline: 14px; }
+      header { padding-inline: 14px; }
+      .panel-title { align-items: flex-start; flex-direction: column; gap: 2px; }
+      th:first-child { min-width: 180px; }
+      table { min-width: 760px; }
     }
-
-
-
-    /* ===== DECORATIVE ELEMENTS ===== */
-    .deco-wave {
-      display: block;
-      width: 100%;
-      height: 60px;
-      margin: 0;
-      position: relative;
-      z-index: 0;
-    }
-
-    /* Floating decorative circles */
-    .deco-circles {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .deco-circles .c {
-      position: absolute;
-      border-radius: 50%;
-      opacity: .04;
-    }
-    .deco-circles .c1 { width: 300px; height: 300px; background: var(--grad-1); top: -80px; right: -60px; }
-    .deco-circles .c2 { width: 200px; height: 200px; background: var(--grad-2); bottom: -40px; left: -40px; }
-    .deco-circles .c3 { width: 150px; height: 150px; background: var(--accent); top: 40%; left: 60%; }
-
-    /* Section header SVG icons */
-    .section-icon {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 52px !important;
-      height: 52px !important;
-      border-radius: 14px !important;
-      background: linear-gradient(135deg, var(--grad-1), var(--grad-2)) !important;
-      flex-shrink: 0 !important;
-      margin-right: 8px !important;
-      padding: 0 !important;
-      border: none !important;
-      white-space: normal !important;
-      color: #fff !important;
-      box-shadow: 0 6px 18px rgba(0,0,0,.18);
-    }
-    .section-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: #fff;
-    }
-
-    /* Accent stripe */
-    .accent-stripe {
-      height: 4px;
-      background: linear-gradient(90deg, var(--grad-1), var(--grad-2), var(--grad-1));
-      opacity: .3;
-      border-radius: 2px;
-    }
-
-    /* Stats decorative background pattern */
-    .stats::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background:
-        radial-gradient(circle at 10% 50%, rgba(255,255,255,.15) 0%, transparent 50%),
-        radial-gradient(circle at 90% 30%, rgba(255,255,255,.1) 0%, transparent 40%),
-        radial-gradient(circle at 50% 80%, rgba(255,255,255,.08) 0%, transparent 30%);
-      pointer-events: none;
-    }
-
-    /* Dotted pattern for odd sections */
-    .panel:nth-of-type(odd) {
-      background-image: radial-gradient(circle, var(--accent) .5px, transparent .5px) !important;
-      background-size: 24px 24px !important;
-      background-position: 12px 12px !important;
-    }
-
-    /* Sample section special bg */
-    .panel:has(.sample-grid) {
-      background: linear-gradient(180deg, var(--section-bg1) 0%, #fff 100%) !important;
-      background-image: none !important;
-    }
-
-    /* Conflict panel decorative top border */
-    .conflict-panel {
-      border-top: 4px solid transparent !important;
-      border-image: linear-gradient(90deg, var(--grad-1), var(--grad-2)) 1 !important;
-      border-image-slice: 1 !important;
-    }
-
-    /* Note panel icon */
-    .note-icon-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
   </style>
-<!-- ADSENSE_TAG_START -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
-<!-- ADSENSE_TAG_END -->
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "学校でのあだ名禁止の是非 SNS反応まっぷ",
-  "description": "学校でのあだ名禁止の是非についてSNSの意見分布を可視化。投票参加型で今の世論を確認。",
-  "url": "https://issue-stance-lab.github.io/sns-reaction-map/school-nickname-ban-reaction-map.html",
-  "image": "https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png",
-  "publisher": {
-    "@type": "Organization",
-    "name": "SNS反応まっぷ"
-  },
-  "datePublished": "2026-06-24",
-  "dateModified": "2026-06-25"
-}
-  </script>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero-inner">
-      <nav class="top-nav"><a href="index.html">← トップへ戻る</a></nav>
-      <div class="hero-badge">教育・日常論争</div>
-      <h1>学校でのあだ名禁止の是非 SNS反応まっぷ</h1>
-      <p class="lead">Yahooリアルタイム検索で取得した投稿サンプルを、論点カテゴリ・検索クエリ・立場で可視化した編集用ビューです。世論調査ではなく、反応の偏りと論点の広がりを見るために使います。</p>
-    </div>
-  </section>
-  <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
-    <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
-  </svg>
+  <header>
+    <nav class="top-nav"><a href="index.html">トップ</a><a href="takaichi-reaction-map-standard.html">高市文春問題</a><a href="henoko-student-accident-reaction-map.html">辺野古事例</a></nav>
+    <h1>学校でのあだ名禁止の是非 SNS反応まっぷ</h1>
+    <p class="lead">Yahooリアルタイム検索で取得した投稿サンプルを、論点カテゴリ・検索クエリ・立場で可視化した編集用ビューです。世論調査ではなく、反応の偏りと論点の広がりを見るために使います。</p>
+  </header>
   <main>
     <section class="stats">
-      <div class="stat"><span>総サンプル</span><strong>201</strong></div>
+      <div class="stat"><span>総サンプル</span><strong>344</strong></div>
       <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>その他・分類保留 167</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>保留 166</strong></div>
+      <div class="stat"><span>最多カテゴリ</span><strong>その他・分類保留 303</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>保留 302</strong></div>
     </section>
-    <section class="panel" id="vote-section" style="background:#fff;">
-<div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span> この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+    <section class="panel" id="vote-section">
+<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">いじめ防止やジェンダー平等の推進を目的として、小中学校などで「あだ名禁止」や「さん付け」を指導する動きが広がっています。からかいを防ぎ心理的安全性を高めると肯定する意見と、親しみが薄れることやいじめの根本解決にならないと懸念する意見が対立しています。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「学校 あだ名」「あだ名禁止」「さん付け」などのキーワードで、Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「学校 あだ名」「あだ名禁止」「さん付け」などのキーワードで、Yahooリアルタイム検索からSNS投稿344件を取得し、AIが自動分類しました。</div>
 <p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
 <div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
 <p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
@@ -1191,10 +385,16 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
   var TITLE="学校でのあだ名禁止の是非 SNS反応まっぷ";
   var KEY="sns_vote_"+TOPIC;
 
-  // Supabase設定（本番ビルド・デプロイ時に値を設定）
   var supabaseUrl="https://qslrlprzoucrlptnhsmi.supabase.co";
   var supabaseAnonKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzbHJscHJ6b3VjcmxwdG5oc21pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTIxNDYsImV4cCI6MjA5Nzk2ODE0Nn0.kKubYfLww_hr2fgL0r7xK6dnuemIOlQIkQpoOV20ybY";
   var supabaseClient=null;
+
+  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
+    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
+    // Supabase mode: hide the redo button to prevent abuse and desync
+    var redoBtn=document.getElementById("vote-redo-btn");
+    if(redoBtn) redoBtn.style.display="none";
+  }
 
   var stored={};
   var myVote=localStorage.getItem(KEY+"_my");
@@ -1242,63 +442,22 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
     }
   }
 
-  // Supabase CDNの動的読み込みと初期化
-  function initVoting(){
-    applyBlur();
-
-    if(supabaseUrl && supabaseAnonKey){
-      // Supabase mode: hide the redo button to prevent abuse and desync
-      var redoBtn=document.getElementById("vote-redo-btn");
-      if(redoBtn) redoBtn.style.display="none";
-
-      // Dynamically load Supabase script
-      var script=document.createElement("script");
-      script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-      script.onload=function(){
-        if(typeof supabase!=="undefined"){
-          supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-        }
-        fetchVotes();
-      };
-      script.onerror=function(){
-        console.error("Failed to load Supabase SDK, falling back to localStorage");
-        fetchVotes();
-      };
-      document.head.appendChild(script);
-    }else{
-      // localStorageフォールバック
-      fetchVotes();
-    }
-  }
-
   if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded", initVoting);
+    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
   }else{
-    setTimeout(initVoting,0);
+    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
   }
 
   var btnWrap=document.getElementById("vote-buttons");
   axes.forEach(function(a,i){
     var btn=document.createElement("button");
-    btn.className="vote-option";
-    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;position:relative;overflow:hidden;";
+    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
     btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
     btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
     btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
-    btn.onclick=function(e){createRipple(e,btn);castVote(i)};
+    btn.onclick=function(){castVote(i)};
     btnWrap.appendChild(btn);
   });
-
-  function createRipple(e,btn){
-    var r=document.createElement("span");r.className="ripple";
-    var rect=btn.getBoundingClientRect();
-    var size=Math.max(rect.width,rect.height);
-    r.style.width=r.style.height=size+"px";
-    r.style.left=(e.clientX-rect.left-size/2)+"px";
-    r.style.top=(e.clientY-rect.top-size/2)+"px";
-    btn.appendChild(r);
-    setTimeout(function(){r.remove()},550);
-  }
 
   document.getElementById("vote-redo-btn").onclick=function(){
     localStorage.removeItem(KEY+"_my");
@@ -1333,7 +492,7 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
         console.error("Error casting vote to Supabase:", err);
         var msg=err.message||"";
         var details=err.details||"";
-        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1 || (err.code==="23505")){
+        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
           alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
           success=true;
         }else{
@@ -1380,17 +539,12 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
       row.style.cssText="margin-bottom:8px;";
       row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
         +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
-        +(isMine?'<span class="vote-check show">✓</span> ':'')+a.label+'</span>'
+        +(isMine?'✓ ':'')+a.label+'</span>'
         +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
         +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div class="result-bar-fill" style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;"></div></div>';
+        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
       barsEl.appendChild(row);
     });
-
-    setTimeout(function(){
-      barsEl.querySelectorAll(".result-bar-fill").forEach(function(bar){bar.classList.add("visible");});
-    },80);
-    showCrossVote();
 
     // Improved X share text with dynamic percentages
     var shareBtn=document.getElementById("share-x");
@@ -1408,64 +562,30 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
     document.getElementById("vote-result").style.display="block";
     document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
   }
-
-  function showCrossVote(){
-    var topics=[
-      {slug:"ai-copyright-reaction-map.html",title:"生成AIと著作権問題",desc:"AI学習による著作物の無断利用をめぐる話題",key:"生成AIと著作権問題_SNS反応まっぷ"},
-      {slug:"school-nickname-ban-reaction-map.html",title:"学校でのあだ名禁止の是非",desc:"いじめ防止・ジェンダー配慮のための指導の是非",key:"学校でのあだ名禁止の是非_SNS反応まっぷ"},
-      {slug:"takaichi-reaction-map-standard.html",title:"高市文春・中傷動画問題",desc:"文春報道、ネット選挙の透明性をめぐる話題",key:"高市文春・中傷動画問題_SNS反応まっぷ"},
-      {slug:"henoko-student-accident-reaction-map.html",title:"辺野古高校生死亡事故",desc:"安全管理・和平教育をめぐる話題",key:"辺野古高校生死亡事故_SNS反応まっぷ"},
-      {slug:"constitutional-amendment-reaction-map.html",title:"憲法改正論議",desc:"緊急事態条項・9条などをめぐる話題",key:"憲法改正論議_SNS反応まっぷ"}
-    ];
-    var currentKey=KEY;
-    var unvoted=topics.filter(function(t){return t.key!==currentKey && !localStorage.getItem("sns_vote_"+t.key+"_my");});
-    var allCount=topics.length;
-    var votedCount=allCount-unvoted.length-(localStorage.getItem(currentKey+"_my")?0:1);
-    var section=document.getElementById("cross-vote-section");
-    if(!section) return;
-    section.style.display="block";
-    var html='<h2>📊 他のトピックにも投票しよう！</h2>';
-    if(unvoted.length===0){
-      html+='<p style="color:var(--muted);margin:0 0 12px;">🎉 全トピックの投票をコンプリートしました！</p>';
-    }else{
-      html+='<p style="color:var(--muted);margin:0 0 12px;">まだ投票していないトピックが <strong>'+unvoted.length+'件</strong> あります。</p>';
-      html+='<div class="progress-bar" style="margin-bottom:16px;max-width:320px;"><div style="width:'+(votedCount/allCount*100)+'%"></div></div>';
-      html+='<div class="topic-grid">';
-      unvoted.slice(0,3).forEach(function(t){
-        html+='<div class="topic-card">'
-          +'<div class="tc-title">'+t.title+'</div>'
-          +'<div class="tc-desc">'+t.desc+'</div>'
-          +'<a class="tc-link" href="'+t.slug+'">反応マップを見る →</a>'
-          +'</div>';
-      });
-      html+='</div>';
-    }
-    section.innerHTML=html;
-  }
 })();
 </script>
     <section class="panel">
-<div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2 0v9h9c-.47-4.68-4.32-8.53-9-9zm0 11v9c4.68-.47 8.53-4.32 9-9h-9z"/></svg></span> 反応の勢力図</h2><span>対立軸ごとの比率</span></div>
+<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
 <div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">あだ名禁止やさん付けを支持する</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">13</div></div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">あだ名禁止やさん付けを支持する</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">14</div></div>
   <div style="text-align:center;color:var(--muted);font-size:12px;">
     <div style="font-size:11px;">過半数</div>
-    <div style="font-weight:800;font-size:16px;color:var(--ink);">101</div>
+    <div style="font-weight:800;font-size:16px;color:var(--ink);">173</div>
     <div style="font-size:18px;">▼</div>
   </div>
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">一律のあだ名禁止に反対する</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">19</div></div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">一律のあだ名禁止に反対する</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">25</div></div>
 </div>
 <div style="position:relative;max-width:660px;margin:0 auto;">
   <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
   <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
-    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">201</div>
+    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">344</div>
     <div style="font-size:14px;color:var(--muted);">サンプル</div>
   </div>
 </div>
 <div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
 <script>
 (function(){
-  var data=[{"label": "あだ名禁止やさん付けを支持する", "count": 13, "color": "#4a90d9", "cats": "いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成, 男女平等の推進やジェンダー配慮の観点からさん付けに賛成"}, {"label": "嫌なあだ名のみ規制など柔軟な運用を求める", "count": 2, "color": "#0f7490", "cats": "嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"}, {"label": "その他", "count": 167, "color": "#cbd5e1", "cats": "その他・分類保留"}, {"label": "一律のあだ名禁止に反対する", "count": 19, "color": "#e07040", "cats": "親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対, 表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"}];
+  var data=[{"label": "あだ名禁止やさん付けを支持する", "count": 14, "color": "#4a90d9", "cats": "いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成, 男女平等の推進やジェンダー配慮の観点からさん付けに賛成"}, {"label": "嫌なあだ名のみ規制など柔軟な運用を求める", "count": 2, "color": "#0f7490", "cats": "嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"}, {"label": "その他", "count": 303, "color": "#cbd5e1", "cats": "その他・分類保留"}, {"label": "一律のあだ名禁止に反対する", "count": 25, "color": "#e07040", "cats": "親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対, 表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"}];
   var total=data.reduce(function(s,d){return s+d.count},0);
   var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
   var svg=document.getElementById("semicircle-chart");
@@ -1527,30 +647,18 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
   });
 })();
 </script>
-<script>
-/* フェードインアニメーション */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){ entry.target.classList.add('visible'); obs.unobserve(entry.target); }
-    });
-  },{threshold:0.1});
-  document.querySelectorAll('.panel, .sample-card, .axis-card, .bar-row, .note-panel, .topic-card').forEach(function(el){el.classList.add('fade-in');obs.observe(el);});
-})();
-</script>
 </section>
-    <section class="panel conflict-panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></span> 対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">禁止支持</div><h3>あだ名禁止やさん付けを支持する</h3><div class="axis-count">13<span>件</span></div><p>あだ名によるいじめの防止、ジェンダーへの配慮、心理的安全性や教室内の落ち着いた人間関係づくりを評価する立場。</p><div class="axis-tags"><span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</span><span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</span></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">禁止反対</div><h3>一律のあだ名禁止に反対する</h3><div class="axis-count">19<span>件</span></div><p>親しみが薄れて人間関係がギスギスする懸念や、言葉を規制してもいじめの根本的な解決にはならないと指摘する立場。</p><div class="axis-tags"><span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</span><span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">ルール運用</div><h3>嫌なあだ名のみ規制など柔軟な運用を求める</h3><div class="axis-count">2<span>件</span></div><p>親しみのある良いあだ名まで禁止するのではなく、「本人が嫌がるあだ名のみを指導する」などの弾力的な運用を支持する立場。</p><div class="axis-tags"><span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</span></div></article></div></section>
-    <section class="panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg></span> 分類別件数</h2><span>論点の量感</span></div>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">禁止支持</div><h3>あだ名禁止やさん付けを支持する</h3><div class="axis-count">14<span>件</span></div><p>あだ名によるいじめの防止、ジェンダーへの配慮、心理的安全性や教室内の落ち着いた人間関係づくりを評価する立場。</p><div class="axis-tags"><span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</span><span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</span></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">禁止反対</div><h3>一律のあだ名禁止に反対する</h3><div class="axis-count">25<span>件</span></div><p>親しみが薄れて人間関係がギスギスする懸念や、言葉を規制してもいじめの根本的な解決にはならないと指摘する立場。</p><div class="axis-tags"><span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</span><span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">ルール運用</div><h3>嫌なあだ名のみ規制など柔軟な運用を求める</h3><div class="axis-count">2<span>件</span></div><p>親しみのある良いあだ名まで禁止するのではなく、「本人が嫌がるあだ名のみを指導する」などの弾力的な運用を支持する立場。</p><div class="axis-tags"><span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</span></div></article></div></section>
+    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
 <div class="bar-list">
-<div class="bar-row" data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"><div class="bar-meta"><span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</span><strong>6</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
-<div class="bar-row" data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><div class="bar-meta"><span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</span><strong>7</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
-<div class="bar-row" data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><div class="bar-meta"><span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</span><strong>13</strong></div><div class="bar-track"><div class="bar-fill" style="width:8%"></div></div></div>
-<div class="bar-row" data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><div class="bar-meta"><span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</span><strong>6</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
+<div class="bar-row" data-category="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成"><div class="bar-meta"><span>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</span><strong>6</strong></div><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div></div>
+<div class="bar-row" data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><div class="bar-meta"><span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:3%"></div></div></div>
+<div class="bar-row" data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><div class="bar-meta"><span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</span><strong>18</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
+<div class="bar-row" data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><div class="bar-meta"><span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</span><strong>7</strong></div><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div></div>
 <div class="bar-row" data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"><div class="bar-meta"><span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</span><strong>2</strong></div><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div></div>
-<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>167</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>303</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
 </div></section>
-    <section class="panel heat-panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg></span> カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
 <div class="table-wrap"><table class="heat-table">
 <thead><tr><th>分類</th><th>あだ名 さん付け</th><th>あだ名 廃止</th><th>あだ名禁止</th><th>さん付け</th><th>さん付け指導</th><th>学校 あだ名</th><th>学校 あだ名禁止</th><th>小学校 あだ名</th><th>合計</th></tr></thead>
 <tbody>
@@ -1565,7 +673,7 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 小学校 あだ名: 0件"><span>0</span></td>
 <td class="total">6</td></tr>
 <tr data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><th><span class="row-dot"></span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名 さん付け: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名 さん付け: 2件"><span>2</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名 廃止: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / あだ名禁止: 1件"><span>1</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / さん付け: 3件"><span>3</span></td>
@@ -1573,27 +681,27 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 学校 あだ名: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 学校 あだ名禁止: 2件"><span>2</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 小学校 あだ名: 0件"><span>0</span></td>
-<td class="total">7</td></tr>
+<td class="total">8</td></tr>
 <tr data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><th><span class="row-dot"></span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名 さん付け: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名 さん付け: 5件"><span>5</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名 廃止: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名禁止: 4件"><span>4</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / さん付け: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / あだ名禁止: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / さん付け: 5件"><span>5</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / さん付け指導: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 学校 あだ名: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 学校 あだ名禁止: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 小学校 あだ名: 1件"><span>1</span></td>
-<td class="total">13</td></tr>
+<td class="total">18</td></tr>
 <tr data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><th><span class="row-dot"></span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / あだ名 さん付け: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / あだ名 廃止: 1件"><span>1</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / あだ名禁止: 4件"><span>4</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / さん付け: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / さん付け: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / さん付け指導: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 学校 あだ名: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 学校 あだ名禁止: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 小学校 あだ名: 0件"><span>0</span></td>
-<td class="total">6</td></tr>
+<td class="total">7</td></tr>
 <tr data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"><th><span class="row-dot"></span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / あだ名 さん付け: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / あだ名 廃止: 1件"><span>1</span></td>
@@ -1605,15 +713,15 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 小学校 あだ名: 0件"><span>0</span></td>
 <td class="total">2</td></tr>
 <tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
-<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="その他・分類保留 / あだ名 さん付け: 30件"><span>30</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / あだ名 廃止: 5件"><span>5</span></td>
-<td class="heat-cell" style="background:#4da3ff;color:#172033" title="その他・分類保留 / あだ名禁止: 20件"><span>20</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / さん付け: 40件"><span>40</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="その他・分類保留 / あだ名 さん付け: 56件"><span>56</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / あだ名 廃止: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / あだ名禁止: 24件"><span>24</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / さん付け: 75件"><span>75</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / さん付け指導: 2件"><span>2</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 学校 あだ名: 37件"><span>37</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 学校 あだ名禁止: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 小学校 あだ名: 32件"><span>32</span></td>
-<td class="total">167</td></tr>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 学校 あだ名: 76件"><span>76</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 学校 あだ名禁止: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 小学校 あだ名: 62件"><span>62</span></td>
+<td class="total">303</td></tr>
 </tbody></table></div></section>
     <div class="legend">
       <span>少</span>
@@ -1625,7 +733,7 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
       <span class="chip" style="background:#0a3d91"></span>
       <span>多</span>
     </div>
-    <section class="panel heat-panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M10 10.02h5V21h-5zM17 21h3c1.1 0 2-.9 2-2v-9h-5v11zm3-18H5c-1.1 0-2 .9-2 2v3h19V5c0-1.1-.9-2-2-2zM3 19c0 1.1.9 2 2 2h3V10H3v9z"/></svg></span> カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
 <div class="table-wrap"><table class="heat-table">
 <thead><tr><th>分類</th><th>賛成</th><th>反対</th><th>条件付き容認</th><th>保留</th><th>合計</th></tr></thead>
 <tbody>
@@ -1636,23 +744,23 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成 / 保留: 0件"><span>0</span></td>
 <td class="total">6</td></tr>
 <tr data-category="男女平等の推進やジェンダー配慮の観点からさん付けに賛成"><th><span class="row-dot"></span>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 賛成: 7件"><span>7</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 賛成: 8件"><span>8</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 反対: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 条件付き容認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="男女平等の推進やジェンダー配慮の観点からさん付けに賛成 / 保留: 0件"><span>0</span></td>
-<td class="total">7</td></tr>
+<td class="total">8</td></tr>
 <tr data-category="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対"><th><span class="row-dot"></span>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 反対: 13件"><span>13</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 反対: 18件"><span>18</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 条件付き容認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対 / 保留: 0件"><span>0</span></td>
-<td class="total">13</td></tr>
+<td class="total">18</td></tr>
 <tr data-category="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対"><th><span class="row-dot"></span>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 反対: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 反対: 7件"><span>7</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 条件付き容認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対 / 保留: 0件"><span>0</span></td>
-<td class="total">6</td></tr>
+<td class="total">7</td></tr>
 <tr data-category="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持"><th><span class="row-dot"></span>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 賛成: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持 / 反対: 0件"><span>0</span></td>
@@ -1663,168 +771,125 @@ thead th:first-child { z-index: 3; background: #eef2f7; }
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 賛成: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 反対: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 条件付き容認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 保留: 166件"><span>166</span></td>
-<td class="total">167</td></tr>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="その他・分類保留 / 保留: 302件"><span>302</span></td>
+<td class="total">303</td></tr>
 </tbody></table></div></section>
-    <section class="panel"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></span> 代表サンプル</h2>
+    <section class="panel"><h2>代表サンプル</h2>
 <div class="sample-grid">
 <article class="sample-card"><h3>いじめ防止や心理的安全確保の観点からあだ名禁止・さん付けに賛成</h3>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>小学校であだ名禁止、さん付け指導が広がる。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/ryohin_jp/status/2068199514016714987"></a></blockquote>
+<blockquote>｢小学校で あだ名禁止 ｣日本の&quot;息苦しさ&quot;の象徴だ あだ名は｢メリット｣も大きいのに https://t.co/PuwlyShXM0 「あだ名」「呼び捨て」は禁止、小学校で「さん付け」指導が広がる https://t.co/Lygx3DZEER</blockquote>
+<a href="https://x.com/ryohin_jp/status/2068199514016714987">投稿URL</a>
 <div class="reason">理由: 規則を肯定し、いじめ防止や心理的安全確保の観点から賛成</div>
 </div>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>小学校時代の経験を踏まえ、あだ名禁止は虐め防止のために行われていると主張。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/tkbei/status/2067979902159294633"></a></blockquote>
+<blockquote>中学生の頃テレビ番組に出てくるモンスター名があだ名になっている生徒がいて学級委員の選挙のときまでそのモンスター名で投票され一位になったが担任が激怒したという出来事を思い出しました。その生徒は虐められていたわけではありませんが あだ名禁止 というのは虐め防止のつもりなのかもしれません。 https://t.co/fV6OI2Kcmm</blockquote>
+<a href="https://x.com/tkbei/status/2067979902159294633">投稿URL</a>
 <div class="reason">理由: 虐め防止の観点からあだ名禁止を肯定。</div>
 </div>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>親しみを込めたあだ名も禁止すべきと主張。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/pumousuallife/status/2067967272703180860"></a></blockquote>
+<blockquote>たぶん長谷川さんも自分を貶めるあだ名はやめてほしいと思いますよ。親しみを込めたあだ名で呼ばれたかったんでしょう？私は あだ名禁止 を支持します。</blockquote>
+<a href="https://x.com/pumousuallife/status/2067967272703180860">投稿URL</a>
 <div class="reason">理由: あだ名禁止を支持し、親しみのある呼び方まで禁止すべき</div>
 </div>
 </article>
 <article class="sample-card"><h3>男女平等の推進やジェンダー配慮の観点からさん付けに賛成</h3>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>保育士はあだ名禁止だが、現場仕事にはさん付けが適している</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/teijidekaerita1/status/2065642109257105703"></a></blockquote>
+<blockquote>みんな頭脳労働しかやりたがらないからな。ずっと少子化だし今の子供達は特に温室育ち。名前にさん付けしかダメ( あだ名禁止 )とか優しい世界で生きてきたんだ。現場仕事出来る子なかなかいないかも。今後日本のインフラ維持できるんか...</blockquote>
+<a href="https://x.com/teijidekaerita1/status/2065642109257105703">投稿URL</a>
 <div class="reason">理由: 保育士への呼び方についてさん付けを推奨</div>
 </div>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>ぴすさんと呼ばれるようにするという内容。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/riku89280/status/2069050683379302779"></a></blockquote>
+<blockquote>では､これからぴすさんとお呼びさせていただきますね! さん付け ですねφ(..)ﾒﾓﾒﾓ　かしこまりました!</blockquote>
+<a href="https://x.com/riku89280/status/2069050683379302779">投稿URL</a>
 <div class="reason">理由: さん付けによる尊重を肯定。</div>
 </div>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.80</div><p>さん付けは敬意を表すため必要。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/masterg82512494/status/2069047066383556901"></a></blockquote>
+<blockquote>さん付け ないと失礼だからです。 年とか関係ない。</blockquote>
+<a href="https://x.com/masterg82512494/status/2069047066383556901">投稿URL</a>
 <div class="reason">理由: さん付けが敬意を表すという理由で賛成。</div>
 </div>
 </article>
 <article class="sample-card"><h3>親しみが薄れることやコミュニケーションの制限を懸念しあだ名禁止・さん付けに反対</h3>
 <div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>小学校での二分の一成人式ではあだ名禁止は賛成だが、全生徒へのさん付けは断固反対。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/seiro10/status/2064292094152413689"></a></blockquote>
+<blockquote>小学校の「二分の一成人式」と（ あだ名禁止 は良いが）「全生徒にさん付け」は、断固反対。</blockquote>
+<a href="https://x.com/seiro10/status/2064292094152413689">投稿URL</a>
 <div class="reason">理由: 親しみが薄れることを懸念</div>
 </div>
 <div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>店の名前についての個人的な意見</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/niniseiritsurai/status/2069053048497021067"></a></blockquote>
+<blockquote>なんで一般人が店の名前を さん付け するんだろ… 普通に呼び捨てでいいのでは🤔芸能人みたいにコラボとかお金発生してたらありかもだけど</blockquote>
+<a href="https://x.com/niniseiritsurai/status/2069053048497021067">投稿URL</a>
 <div class="reason">理由: 単なる個人的感想</div>
 </div>
 <div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>あだ名は自由で呼び捨てでも良い。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/tensai071322/status/2068877956408283581"></a></blockquote>
+<blockquote>さん付け は嫌だから あだ名 つけるか呼び捨てでいいよー！</blockquote>
+<a href="https://x.com/tensai071322/status/2068877956408283581">投稿URL</a>
 <div class="reason">理由: コミュニケーションの制限を懸念し、あだ名禁止に反対。</div>
 </div>
 </article>
 <article class="sample-card"><h3>表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対</h3>
 <div class="sample"><div class="meta">反対 / 信頼度 0.90</div><p>あだ名禁止はいじめと混同され、言語道断だと批判。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/ryohin_jp/status/2067969229413040502"></a></blockquote>
+<blockquote>私は あだ名禁止 は絶対に反対です。いじめとあだ名は別問題。これを一緒くたにするなど言語道断。あだ名があって、「いじめに結び付けるな」こうであるべきですね</blockquote>
+<a href="https://x.com/ryohin_jp/status/2067969229413040502">投稿URL</a>
 <div class="reason">理由: いじめとあだ名禁止を別問題として分けるべき。</div>
 </div>
 <div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>あだ名禁止は差別やいじめの温床になる可能性があると批判。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/ibrahim_kh21712/status/2064315852036456507"></a></blockquote>
+<blockquote>あだ名禁止 ：いじめ・差別の温床になるケースがあった →「さん付け統一」でフラットに 行事縮小：共働き・ひとり親・経済格差・宗教・発達特性… 全員が同じ条件で参加できない行事は不公平になる 「みんな一緒」をやると「参加できない子」が可哀想になる時代。</blockquote>
+<a href="https://x.com/ibrahim_kh21712/status/2064315852036456507">投稿URL</a>
 <div class="reason">理由: 差別の温床になる可能性を指摘</div>
 </div>
 <div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>学校があだ名禁止を推奨しているが、これは安全や公平性を犠牲にするためのものだと批判。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/TUsman27906/status/2064175175349006385"></a></blockquote>
+<blockquote>「えっ、そこまで？」が正直な感想やわ😂 *安全・公平・炎上回避の三重苦*やね 熱中症→午前終了、事故責任→組体操廃止、差別問題→ あだ名禁止 、格差→おやつ制限 親から見えんのは「 学校 のリスク管理」 昔は美談で済んだのが、今はモンペ・SNS・裁判の時代</blockquote>
+<a href="https://x.com/TUsman27906/status/2064175175349006385">投稿URL</a>
 <div class="reason">理由: 表面的な禁止はいじめの根本解決にならないとして一律の禁止に反対。</div>
 </div>
 </article>
 <article class="sample-card"><h3>嫌なあだ名のみを禁止し親しい呼び方は容認するなどルール運用や柔軟な対応を支持</h3>
 <div class="sample"><div class="meta">条件付き容認 / 信頼度 0.80</div><p>あだ名の使用を廃止し、散兵のボイス追加を求めている。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/yomogi_833/status/2056769969841733800"></a></blockquote>
+<blockquote>個人的にプラーナに望んでるもの→世界樹ファイヤーで散兵バレ、ちゃんとスメール以外を放浪する放浪者、五箇伝の末裔に贖罪をしに向かう放浪者、 あだ名 呼び 廃止 、散兵についてボイス復活&amp;追加、博士との因縁にはケリをつけるけどなんやかんやあって博士実装</blockquote>
+<a href="https://x.com/yomogi_833/status/2056769969841733800">投稿URL</a>
 <div class="reason">理由: あだ名禁止に反対する立場だが、嫌なあだ名だけを禁止する柔軟な運用を支持。</div>
 </div>
 <div class="sample"><div class="meta">条件付き容認 / 信頼度 0.00</div><p>親しみのあるあだ名と悪意あるあだ名の区別を主張。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/kinakina35/status/2068167994224824357"></a></blockquote>
+<blockquote>今の 学校 は あだ名 禁止ときいて私もびっくりしたし、この方のおっしゃることに全面的に賛成だな。 それに親しみを込めただけの あだ名 と悪意ある あだ名 なんて子供でもちゃんと区別できるよ。いい あだ名 をもらった私は高校まで自主的に使い続けて、今でもそう呼んでくれる友達がいるよ。 https://t.co/Ec3Z6jqn7D</blockquote>
+<a href="https://x.com/kinakina35/status/2068167994224824357">投稿URL</a>
 <div class="reason">理由: 良いあだ名は容認すべきという立場。</div>
 </div>
 </article>
 <article class="sample-card"><h3>その他・分類保留</h3>
 <div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>さん付けは良くないという立場。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/Mizinko124649/status/2068682265086078976"></a></blockquote>
+<blockquote>さん付け 良くないよ（？） 仲良いし呼び捨てか あだ名 付けていいんだから</blockquote>
+<a href="https://x.com/Mizinko124649/status/2068682265086078976">投稿URL</a>
 <div class="reason">理由: 呼び捨てやあだ名の方が良いと主張</div>
 </div>
 <div class="sample"><div class="meta">保留 / 信頼度 0.00</div><p>学校での呼び方についての経験を述べているが、明確な立場は示していない。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/fiofio710/status/2069031433692484083"></a></blockquote>
+<blockquote>坊ちゃんの 学校 というか市内の 学校 全体的に、友達同士は下の名前で呼び捨てにする習慣。先生は、下の名前にさん付け。これは全国的になものなんだろうか。面白いよねえ。私が小学生の時は、下の名前や あだ名 はNGで、苗字にさんか君付けじゃないとヒステリック教師に怒られてた。</blockquote>
+<a href="https://x.com/fiofio710/status/2069031433692484083">投稿URL</a>
 <div class="reason">理由: 単なる経験談で意見がないため</div>
 </div>
 <div class="sample"><div class="meta">保留 / 信頼度 0.00</div><p>小学生時代の経験を述べているが、明確な立場は示していない。</p>
-<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/MiuMiufrog/status/2069029287425106104"></a></blockquote>
+<blockquote>だから小学生の頃、ほぼ 学校 で喋れない訳だよね。超あがり症で赤面しちゃうから、焼きリンゴって あだ名 付いてたわ😆何か話しても教師にいつも声が小さい！とか言われてたな。そういえば結構最近も「その時言えば良かったじゃん」って言われたな。こっちはその場の空気読んで言わなかっただけだがね。 https://t.co/Wqm6TO6Okx</blockquote>
+<a href="https://x.com/MiuMiufrog/status/2069029287425106104">投稿URL</a>
 <div class="reason">理由: 単なる経験談で意見がないため</div>
 </div>
 </article>
 </div></section>
-    <section class="note-panel"><h2><span class="section-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span> 意</h2><ul>
+    <section class="note-panel"><h2>注意</h2><ul>
 <li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
 <li>検索語、取得時点、Yahooリアルタイム検索の表示仕様によって偏りがあります。</li>
 <li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li>
 <li>代表投稿は公開前に人間が確認する前提です。</li>
 </ul></section>
   </main>
-
-  <!-- 巡回導線: 投票後に表示 -->
-  <div id="cross-vote-section" class="cross-vote-section" style="display:none;"></div>
-
-  <!-- 次に読む -->
-  <section style="max-width:none;margin:0;padding:0;">
-    <div style="background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06);">
-      <h2 style="font-size:18px;margin:0 0 14px;">次に読む</h2>
-      <div class="topic-grid">
-        <div class="topic-card">
-          <div class="tc-title">高市文春・中傷動画問題</div>
-          <div class="tc-desc">文春報道、ネット選挙の透明性をめぐる話題</div>
-          <a class="tc-link" href="takaichi-reaction-map-standard.html">反応マップを見る →</a>
-        </div>
-        <div class="topic-card">
-          <div class="tc-title">辺野古高校生死亡事故</div>
-          <div class="tc-desc">安全管理・平和教育をめぐる話題</div>
-          <a class="tc-link" href="henoko-student-accident-reaction-map.html">反応マップを見る →</a>
-        </div>
-        <div class="topic-card">
-          <div class="tc-title">憲法改正論議</div>
-          <div class="tc-desc">緊急事態条項・9条などをめぐる話題</div>
-          <a class="tc-link" href="constitutional-amendment-reaction-map.html">反応マップを見る →</a>
-        </div>
-        </div>
-    </div>
-  </section>
-
-  <footer style="text-align:center;padding:32px 20px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);">
-    <div style="margin-bottom:12px;">
-      <a href="https://buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:12px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:14px;font-weight:800;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;">
+  <footer style="border-top:1px solid var(--line);padding:20px min(5vw,56px);text-align:center;color:var(--muted);font-size:12px;line-height:1.8;">
+    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
+    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <div style="margin-top:10px;">
+      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
         ☕ このプロジェクトを応援
       </a>
     </div>
-    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
-    <div style="margin-top:8px;">
-      <a href="privacy.html" style="color:var(--accent);text-decoration:none;font-size:12px;">プライバシーポリシー</a> · <a href="disclaimer.html" style="color:var(--accent);text-decoration:none;font-size:12px;">免責事項</a>
-    </div>
-    <div style="margin-top:8px;font-size:11px;">Powered by Yahooリアルタイム検索 + AI分類</div>
   </footer>
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<script>
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var statsObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        entry.target.querySelectorAll('strong').forEach(function(el){
-          var txt = el.textContent;
-          var num = parseInt(txt);
-          if(!isNaN(num) && num > 0 && num < 10000){
-            var target = num;
-            var current = 0;
-            var step = Math.max(1, Math.floor(target / 30));
-            var timer = setInterval(function(){
-              current += step;
-              if(current >= target){ current = target; clearInterval(timer); }
-              el.textContent = current;
-            }, 25);
-          }
-        });
-        statsObs.disconnect();
-      }
-    });
-  }, {threshold: 0.3});
-  var statsEl = document.querySelector('.stats');
-  if(statsEl) statsObs.observe(statsEl);
-})();
-</script>
 </body>
 </html>
