@@ -2,41 +2,159 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <meta name="google-site-verification" content="m7TnCK7r49LynKemf0lmuJkzY4MoTTHDFgL3fW2bPlc" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO_META_START -->
+  <meta name="description" content="文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。">
+  <link rel="canonical" href="https://issue-stance-lab.github.io/sns-reaction-map/takaichi-reaction-map-standard.html">
+  <meta property="og:site_name" content="SNS反応まっぷ">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="高市文春・中傷動画問題 | 標準反応マップ">
+  <meta property="og:description" content="文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。">
+  <meta property="og:url" content="https://issue-stance-lab.github.io/sns-reaction-map/takaichi-reaction-map-standard.html">
+  <meta property="og:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="高市文春・中傷動画問題 | 標準反応マップ">
+  <meta name="twitter:description" content="文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。">
+  <meta name="twitter:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
+  <meta property="article:section" content="政治・ネット選挙">
+<!-- SEO_META_END -->
+  <meta name="description" content="Yahooリアルタイム検索で収集したSNS投稿をAIが自動分類。高市文春・中傷動画問題であなたはどっち？">
+  <link rel="icon" href="favicon.ico">
+  <meta property="og:title" content="高市文春・中傷動画問題 SNS反応まっぷ">
+  <meta property="og:description" content="Yahooリアルタイム検索で収集したSNS投稿をAIが自動分類。高市文春・中傷動画問題であなたはどっち？">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   <title>高市文春問題 SNS反応まっぷ</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
     :root {
       color-scheme: light;
-      --bg: #f3f5f8;
-      --ink: #172033;
-      --muted: #667085;
-      --line: #d7dce6;
+      --bg: #fffbfb;
+      --ink: #1c1917;
+      --muted: #374151;
+      --line: #e2e8f0;
       --panel: #ffffff;
-      --accent: #1769d1;
-      --accent-soft: #e7f1ff;
-      --shadow: 0 10px 28px rgba(16, 24, 40, .06);
+      --accent: #dc2626;
+      --accent-soft: #fef2f2;
+      --grad-1: #dc2626;
+      --grad-2: #991b1b;
+      --shadow: 0 4px 20px rgba(0,0,0,.08);
+      --section-bg1: #fef2f2;
+      --section-bg2: #fff7ed;
+      --section-bg3: #fdf4ff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-      line-height: 1.65;
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
     }
-    header {
-      padding: 34px min(5vw, 56px) 22px;
-      border-bottom: 1px solid var(--line);
-      background: #fff;
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--grad-1) 0%, var(--grad-2) 100%);
+      padding: 0;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
     }
-    .top-nav {
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(255,255,255,.12) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255,255,255,.08) 0%, transparent 40%);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('images/takaichi-hero.webp');
+      background-size: cover;
+      background-position: center;
+      opacity: .28;
+      mix-blend-mode: luminosity;
+      z-index: 0;
+    }
+    .hero-inner {
+      z-index: 2;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 40px;
+      color: #fff;
+    }
+    .hero .top-nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-bottom: 20px;
+    }
+    .hero .top-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 8px;
+      padding: 5px 12px;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      transition: background .2s;
+    }
+    .hero .top-nav a:hover { background: rgba(255,255,255,.25); }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.18);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 700;
       margin-bottom: 16px;
     }
-    .top-nav a {
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 16px rgba(0,0,0,.15);
+    }
+    .hero .lead {
+      margin: 0;
+      font-size: clamp(14px, 2vw, 16px);
+      opacity: .9;
+      max-width: 700px;
+      line-height: 1.8;
+      color: #fff;
+    }
+    .wave-divider {
+      display: block;
+      width: 100%;
+      height: 50px;
+      margin-top: -1px;
+    }
+
+.top-nav a {
       display: inline-flex;
       align-items: center;
       min-height: 32px;
@@ -48,77 +166,40 @@
       text-decoration: none;
       font-weight: 800;
     }
-    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: 0; }
-    h2 { margin: 0 0 16px; font-size: 20px; }
-    h3 { margin: 0 0 12px; font-size: 16px; }
-    .lead { margin: 0; color: var(--muted); max-width: 960px; }
-    main { padding: 22px min(5vw, 56px) 48px; }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .stat {
+h3 { margin: 0 0 12px; font-size: 20px; }
+main { padding: 22px min(5vw, 56px) 48px; max-width: 1100px; margin: 0 auto; }
+.stat {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 14px 16px;
       box-shadow: var(--shadow);
     }
-    .stat span { display: block; color: var(--muted); font-size: 13px; }
-    .stat strong { display: block; font-size: 24px; margin-top: 4px; }
-    .panel, .note-panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 18px;
-      margin-top: 18px;
-      box-shadow: var(--shadow);
-    }
-    .panel-title {
+.stat strong { display: block; font-size: 24px; margin-top: 4px; }
+.panel-title {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 14px;
     }
-    .panel-title h2 { margin: 0; }
-    .panel-title span {
+.panel-title span:not(.section-icon) {
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
     }
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-    }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
-    table.compact { min-width: 420px; max-width: 760px; }
-    th, td {
+table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
+th, td {
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-      padding: 10px 12px;
+      padding: 12px 14px;
       text-align: center;
       vertical-align: middle;
       white-space: nowrap;
+      font-size: 15px;
     }
-    tr:last-child th, tr:last-child td { border-bottom: 0; }
-    th:last-child, td:last-child { border-right: 0; }
-    th:first-child {
-      text-align: left;
-      position: sticky;
-      left: 0;
-      background: #fff;
-      z-index: 1;
-      min-width: 240px;
-      max-width: 340px;
-      white-space: normal;
-      line-height: 1.45;
-    }
-    .row-dot {
+th:last-child, td:last-child { border-right: 0; }
+.row-dot {
       display: inline-block;
       width: 9px;
       height: 9px;
@@ -127,33 +208,11 @@
       background: #98a2b3;
       vertical-align: 1px;
     }
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: #eef2f7;
-      color: #344054;
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.35;
-      white-space: normal;
-      min-width: 112px;
-    }
-    thead th:first-child { z-index: 3; background: #eef2f7; }
-    td { font-weight: 800; font-variant-numeric: tabular-nums; }
-    .heat-cell {
+thead th:first-child { z-index: 3; background: #eef2f7; }
+.heat-cell {
       transition: transform .12s ease, box-shadow .12s ease;
     }
-    .heat-cell span {
-      display: inline-flex;
-      min-width: 28px;
-      height: 28px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .18);
-    }
-    .heat-cell:hover {
+.heat-cell:hover {
       transform: scale(1.03);
       box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .28);
     }
@@ -162,46 +221,24 @@
       font-weight: 600;
     }
     .heat-cell.zero span { background: transparent; }
-    .total {
-      background: #f2f4f7;
-      color: var(--ink);
-      font-weight: 900;
-      min-width: 72px;
-    }
-    .bar-list {
+.bar-list {
       display: grid;
       gap: 10px;
       max-width: 980px;
     }
-    .bar-row {
-      display: grid;
-      gap: 6px;
-    }
-    .bar-meta {
+.bar-meta {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      font-size: 14px;
+      font-size: 16px;
     }
-    .bar-meta span { color: #344054; }
-    .bar-meta strong { font-variant-numeric: tabular-nums; }
-    .bar-track {
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: #eef2f7;
-    }
-    .bar-fill {
+.bar-meta strong { font-variant-numeric: tabular-nums; }
+.bar-fill {
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, #9fd0ff, #1769d1);
     }
-    .axis-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-    .axis-card {
+.axis-card {
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 16px;
@@ -211,50 +248,23 @@
       flex-direction: column;
       gap: 8px;
     }
-    .axis-kicker {
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .axis-card h3 {
+.axis-card h3 {
       margin: 0;
-      font-size: 20px;
+      font-size: 22px;
       line-height: 1.35;
     }
-    .axis-count {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 4px;
-      font-size: 34px;
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-      color: var(--ink);
-    }
-    .axis-count span {
+.axis-count span {
       color: var(--muted);
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
     }
-    .axis-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .axis-tags {
+.axis-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-top: auto;
     }
-    .axis-tags span {
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: #0f4e9d;
-      padding: 4px 8px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    [data-category="高市氏批判・責任追及"] th { border-left: 5px solid #b54708; }
+[data-category="高市氏批判・責任追及"] th { border-left: 5px solid #b54708; }
 [data-category="高市氏批判・責任追及"] .row-dot { background: #b54708; }
 [data-category="高市氏批判・責任追及"] .bar-fill { background: linear-gradient(90deg, #fff1e8, #b54708); }
 [data-category="高市氏批判・責任追及"] .bar-meta span { color: #8a3206; font-weight: 700; }
@@ -304,68 +314,862 @@
 .axis-card[data-tone="derived"] { border-top: 5px solid #0f7490; background: linear-gradient(180deg, #fff, #e5f7fb); }
 .axis-card[data-tone="derived"] .axis-kicker { color: #0b586d; }
 .axis-card[data-tone="derived"] .axis-tags span { background: #e5f7fb; color: #0b586d; }
-    .legend {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 12px;
-    }
-    .chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
-    .sample-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 12px;
-    }
-    .sample-card {
+.chip { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); }
+.sample-card {
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 14px;
       background: #fbfcfe;
     }
-    .sample { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
-    .meta { color: var(--accent); font-size: 12px; font-weight: 700; }
-    blockquote {
-      margin: 8px 0;
-      padding-left: 10px;
-      border-left: 3px solid var(--line);
-      color: #344054;
-      font-size: 13px;
+.meta { color: var(--accent); font-size: 12px; font-weight: 700; }
+.reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.note-panel h2 { font-size: 16px; }
+/* === UI/UX改善 2026-06-26 === */
+    /* Sticky Header */
+
+    /* フェードインアニメーション */
+    .fade-in { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* 投票ボタンリップルエフェクト */
+    .vote-option { position: relative; overflow: hidden; }
+    .vote-option .ripple {
+      position: absolute; border-radius: 50%; background: rgba(255,255,255,.35);
+      transform: scale(0); animation: ripple-anim .55s linear; pointer-events: none;
     }
-    .reason { color: var(--muted); font-size: 12px; margin-top: 6px; }
-    a { color: var(--accent); font-size: 13px; }
-    .note-panel h2 { font-size: 16px; }
-    .note-panel ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+    @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+    /* 結果バースライドイン */
+    .result-bar-fill { transform: translateX(-101%); transition: transform .9s cubic-bezier(.22,1,.36,1); }
+    .result-bar-fill.visible { transform: translateX(0); }
+
+    /* 投票完了チェックマーク */
+    @keyframes check-pop {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .vote-check { display: none; margin-left: 8px; animation: check-pop .4s ease; }
+    .vote-check.show { display: inline-block; }
+
+    /* 半円チャートセグメント描画 */
+    @keyframes chart-segment {
+      from { stroke-dashoffset: var(--dash); }
+      to   { stroke-dashoffset: 0; }
+    }
+
+    /* 巡回導線カード */
+.topic-card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(16,24,40,.08); }
+.topic-card .tc-desc { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+
+    /* 投票進捗 */
+.progress-bar > div { height: 100%; background: var(--accent); border-radius: 999px; transition: width .6s ease; }
+    .voted-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #e8f7ef; color: #16885a; font-size: 11px; font-weight: 800;
+      padding: 2px 8px; border-radius: 999px;
+    }
+
+    /* X埋め込みフォールバック */
+    .tweet-embed-fallback {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+      padding: 12px; margin-top: 8px; font-size: 13px; color: #344054;
+    }
+    .tweet-embed-fallback a { color: var(--accent); font-weight: 700; }
+
+    /* 接続セクション */
+.cross-vote-section h2 { font-size: 24px; margin: 0 0 18px; }
+
+    /* reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in, .result-bar-fill, .vote-check { transition: none !important; animation: none !important; }
+      .topic-card { transition: none !important; }
+    }
+
     @media (max-width: 720px) {
       main { padding-inline: 14px; }
-      header { padding-inline: 14px; }
+      .hero-inner { padding: 36px 16px 32px; }
       .panel-title { align-items: flex-start; flex-direction: column; gap: 2px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
     }
+
+    
+    /* ===== MAGAZINE REDESIGN v2 ===== */
+
+    /* --- Page rhythm: alternating colored sections --- */
+    main {
+      padding: 0 !important;
+      max-width: none !important;
+      margin: 0 !important;
+    }
+
+    /* --- Stats section: full-width colored band --- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      margin: 0;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      position: relative;
+    }
+    .stat {
+      position: relative;
+      padding: 28px 24px;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      color: #fff;
+      border-right: 1px solid rgba(255,255,255,.15);
+      transition: background .2s;
+      overflow: visible;
+    }
+    .stat:last-child { border-right: none; }
+    .stat:hover { background: rgba(255,255,255,.08); }
+    .stat::before { display: none; }
+    .stat span {
+      display: block;
+      color: rgba(255,255,255,.85);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    /* --- Section panels → full-width magazine sections --- */
+    .panel, .note-panel {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 48px min(6vw, 72px);
+      margin: 0;
+      box-shadow: none;
+      position: relative;
+      max-width: none;
+    }
+
+    /* Alternating backgrounds via nth-child */
+    .panel:nth-of-type(odd) {
+      background: var(--section-bg1, #f8fafc);
+    }
+    .panel:nth-of-type(even) {
+      background: #fff;
+    }
+
+    /* Vote section special treatment */
+    #vote-section {
+      background: #fff !important;
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* Content container inside panels */
+    .panel > *,
+    .note-panel > * {
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .panel > .panel-title,
+    .panel > .axis-grid,
+    .panel > .bar-list,
+    .panel > .table-wrap,
+    .panel > .sample-grid,
+    .panel > h2,
+    .panel > ul,
+    .panel > p,
+    .panel > div,
+    .panel > script,
+    .note-panel > h2,
+    .note-panel > ul {
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* --- Section title redesign --- */
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 0;
+      border-bottom: none;
+      position: relative;
+    }
+    .panel-title::after { display: none; }
+    .panel-title h2 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .panel-title h2::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 32px;
+      background: linear-gradient(180deg, var(--grad-1), var(--grad-2));
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .panel-title span:not(.section-icon) {
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+      background: rgba(0,0,0,.04);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+
+    /* --- Section divider waves --- */
+    .section-wave {
+      display: block;
+      width: 100%;
+      height: 40px;
+      position: relative;
+      z-index: 1;
+      margin: -1px 0;
+    }
+
+    /* --- h2 general --- */
+    h2 {
+      margin: 0 0 24px;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+
+    /* --- Axis cards: larger, more dramatic --- */
+    .axis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .axis-card {
+      border: none;
+      border-radius: 20px;
+      padding: 28px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
+      border-top: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .axis-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      border-radius: 20px 20px 0 0;
+    }
+    .axis-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    }
+    .axis-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .axis-card h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+    .axis-count {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 44px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+    .axis-count span { font-size: 14px; font-weight: 700; }
+    .axis-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .axis-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .axis-tags span {
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* --- Bar chart: magazine infographic style --- */
+    .bar-list {
+      display: grid;
+      gap: 4px;
+      max-width: 1000px;
+    }
+    .bar-row {
+      display: grid;
+      gap: 8px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,.7);
+      border-radius: 14px;
+      transition: all .2s;
+      border: 1px solid rgba(0,0,0,.04);
+      backdrop-filter: blur(4px);
+    }
+    .bar-row:hover {
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+      transform: translateX(4px);
+    }
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .bar-meta span { color: var(--ink); font-weight: 700; }
+    .bar-meta strong {
+      font-variant-numeric: tabular-nums;
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .bar-track {
+      height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(0,0,0,.06);
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      transition: width .8s cubic-bezier(.22,1,.36,1);
+    }
+
+    /* --- Tables: cleaner with accent header --- */
+    .table-wrap {
+      overflow-x: auto;
+      border: none;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; }
+    table.compact { min-width: 420px; max-width: 760px; }
+    th, td {
+      border-right: 1px solid rgba(0,0,0,.04);
+      border-bottom: 1px solid rgba(0,0,0,.04);
+      padding: 14px 14px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    th:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: #fff;
+      z-index: 1;
+      min-width: 240px;
+      max-width: 340px;
+      white-space: normal;
+      line-height: 1.45;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, var(--grad-1), var(--grad-2));
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+      white-space: normal;
+      min-width: 112px;
+      padding: 16px 14px;
+    }
+    thead th:first-child {
+      z-index: 3;
+      background: linear-gradient(180deg, var(--grad-1), var(--grad-2));
+      color: #fff;
+    }
+    td { font-weight: 800; font-variant-numeric: tabular-nums; }
+    tbody tr { transition: background .12s; }
+    tbody tr:hover { background: var(--accent-soft); }
+    .heat-cell {
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .heat-cell span {
+      display: inline-flex;
+      min-width: 34px;
+      height: 34px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .2);
+      font-size: 14px;
+    }
+    .heat-cell:hover {
+      transform: scale(1.08);
+      box-shadow: inset 0 0 0 2px rgba(23, 105, 209, .3);
+    }
+    .total {
+      background: rgba(0,0,0,.03);
+      font-weight: 900;
+      min-width: 72px;
+      font-size: 15px;
+    }
+
+    /* --- Legend --- */
+    .legend {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 16px;
+      padding: 12px 18px;
+      background: rgba(255,255,255,.6);
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.04);
+    }
+    .chip {
+      width: 28px;
+      height: 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+
+    /* --- Sample cards: editorial magazine style --- */
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .sample-card {
+      border: none;
+      border-radius: 20px;
+      padding: 0;
+      background: #fff;
+      overflow: hidden;
+      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    }
+    .sample-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.1);
+    }
+    .sample-card > h3 {
+      margin: 0;
+      padding: 18px 22px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      border-bottom: none;
+      position: relative;
+    }
+    .sample-card > h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 22px;
+      right: 22px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--line), transparent);
+    }
+    .sample-card > div {
+      padding: 16px 22px 20px;
+    }
+    .sample-card blockquote {
+      margin: 0 0 10px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      border-radius: 0 12px 12px 0;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--ink);
+    }
+    .meta {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .reason {
+      color: var(--ink);
+      font-size: 14px;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    /* --- Note panel: callout style --- */
+    .note-panel {
+      background: linear-gradient(135deg, var(--accent-soft), #fff) !important;
+      border-left: 5px solid var(--accent) !important;
+      padding: 36px min(6vw, 72px) !important;
+    }
+    .note-panel h2 {
+      font-size: 22px;
+      color: var(--accent);
+    }
+    .note-panel ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .note-panel li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    /* --- Topic cards (次に読む / Cross-vote) --- */
+    .topic-card {
+      background: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all .25s cubic-bezier(.22,1,.36,1);
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .topic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.1);
+    }
+    .topic-card:hover::before { opacity: 1; }
+    .topic-card .tc-title {
+      font-weight: 900;
+      font-size: 15px;
+      color: var(--ink);
+    }
+    .topic-card .tc-desc {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 10px;
+      line-height: 1.6;
+    }
+    .topic-card .tc-link {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 13px;
+      text-decoration: none;
+      transition: transform .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .topic-card .tc-link:hover {
+      transform: translateX(4px);
+    }
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    /* --- Cross-vote section --- */
+    .cross-vote-section {
+      background: linear-gradient(135deg, var(--section-bg2, var(--accent-soft)), #fff);
+      border: none;
+      border-radius: 0;
+      padding: 48px min(6vw, 72px);
+      margin: 0;
+      box-shadow: none;
+      max-width: none !important;
+    }
+    .cross-vote-section h2 {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 0 0 16px;
+      max-width: 1000px;
+    }
+    .cross-vote-section p,
+    .cross-vote-section .progress-bar,
+    .cross-vote-section .topic-grid {
+      max-width: 1000px;
+    }
+
+    /* --- Progress bar --- */
+    .progress-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    .progress-bar > div {
+      height: 100%;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+      border-radius: 999px;
+      transition: width .6s ease;
+    }
+
+    /* --- Vote buttons: more dramatic --- */
+    .vote-option {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px !important;
+      transition: all .25s cubic-bezier(.22,1,.36,1) !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .vote-option:hover {
+      box-shadow: 0 12px 32px rgba(0,0,0,.14) !important;
+      transform: translateY(-3px) !important;
+    }
+
+    /* --- 次に読む wrapper --- */
+    section[style*="max-width:980px"] {
+      max-width: none !important;
+      padding: 0 !important;
+    }
+    section[style*="max-width:980px"] > div[style*="background:var(--panel)"] {
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 48px min(6vw, 72px) !important;
+      max-width: none !important;
+      background: var(--section-bg3, #f8fafc) !important;
+    }
+
+    /* --- Footer: gradient band --- */
+    footer {
+      background: linear-gradient(135deg, var(--grad-2), var(--grad-1)) !important;
+      border-top: none !important;
+      padding: 48px 24px !important;
+      color: #fff !important;
+    }
+    footer a { color: rgba(255,255,255,.85) !important; }
+    footer a:hover { color: #fff !important; }
+    footer div[style*="margin-top:8px"] { color: rgba(255,255,255,.6) !important; }
+
+    /* --- Smooth scrollbar --- */
+    html { scroll-behavior: smooth; }
+
+    /* --- Selection color --- */
+    ::selection { background: var(--accent); color: #fff; }
+
+    /* --- Decorative background pattern for odd sections --- */
+    .panel:nth-of-type(odd)::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      opacity: .03;
+      pointer-events: none;
+    }
+    .panel:nth-of-type(even)::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--grad-2) 0%, transparent 70%);
+      opacity: .02;
+      pointer-events: none;
+    }
+
+    /* --- Mobile enhancements --- */
+    @media (max-width: 720px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat { padding: 20px 16px; }
+      .stat strong { font-size: 18px; }
+      .panel, .note-panel { padding: 32px 16px !important; }
+      .axis-card { padding: 20px; min-height: auto; }
+      .axis-count { font-size: 32px; }
+      .sample-grid { grid-template-columns: 1fr; }
+      .topic-grid { grid-template-columns: 1fr; }
+      .bar-row { padding: 12px 14px; }
+      .panel-title { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .panel-title h2 { font-size: 26px; }
+      .cross-vote-section { padding: 32px 16px; }
+    }
+
+
+
+    /* ===== DECORATIVE ELEMENTS ===== */
+    .deco-wave {
+      display: block;
+      width: 100%;
+      height: 60px;
+      margin: 0;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* Floating decorative circles */
+    .deco-circles {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .deco-circles .c {
+      position: absolute;
+      border-radius: 50%;
+      opacity: .04;
+    }
+    .deco-circles .c1 { width: 300px; height: 300px; background: var(--grad-1); top: -80px; right: -60px; }
+    .deco-circles .c2 { width: 200px; height: 200px; background: var(--grad-2); bottom: -40px; left: -40px; }
+    .deco-circles .c3 { width: 150px; height: 150px; background: var(--accent); top: 40%; left: 60%; }
+
+    /* Section header SVG icons */
+    .section-icon {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 52px !important;
+      height: 52px !important;
+      border-radius: 14px !important;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2)) !important;
+      flex-shrink: 0 !important;
+      margin-right: 8px !important;
+      padding: 0 !important;
+      border: none !important;
+      white-space: normal !important;
+      color: #fff !important;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    }
+    .section-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: #fff;
+    }
+
+    /* Accent stripe */
+    .accent-stripe {
+      height: 4px;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-2), var(--grad-1));
+      opacity: .3;
+      border-radius: 2px;
+    }
+
+    /* Stats decorative background pattern */
+    .stats::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 10% 50%, rgba(255,255,255,.15) 0%, transparent 50%),
+        radial-gradient(circle at 90% 30%, rgba(255,255,255,.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,.08) 0%, transparent 30%);
+      pointer-events: none;
+    }
+
+    /* Dotted pattern for odd sections */
+    .panel:nth-of-type(odd) {
+      background-image: radial-gradient(circle, var(--accent) .5px, transparent .5px) !important;
+      background-size: 24px 24px !important;
+      background-position: 12px 12px !important;
+    }
+
+    /* Sample section special bg */
+    .panel:has(.sample-grid) {
+      background: linear-gradient(180deg, var(--section-bg1) 0%, #fff 100%) !important;
+      background-image: none !important;
+    }
+
+    /* Conflict panel decorative top border */
+    .conflict-panel {
+      border-top: 4px solid transparent !important;
+      border-image: linear-gradient(90deg, var(--grad-1), var(--grad-2)) 1 !important;
+      border-image-slice: 1 !important;
+    }
+
+    /* Note panel icon */
+    .note-icon-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
   </style>
+  <!-- AdSense: 審査通過後にここにスクリプトを挿入 -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "高市早苗と文春報道 SNS反応まっぷ",
+  "description": "高市早苗と文春報道についてSNSの意見分布を可視化。投票参加型で今の世論を確認。",
+  "url": "https://issue-stance-lab.github.io/sns-reaction-map/takaichi-reaction-map-standard.html",
+  "image": "https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png",
+  "publisher": {
+    "@type": "Organization",
+    "name": "SNS反応まっぷ"
+  },
+  "datePublished": "2026-06-24",
+  "dateModified": "2026-06-25"
+}
+  </script>
 </head>
 <body>
-  <header>
-    <nav class="top-nav"><a href="index.html">トップ</a><a href="takaichi-summary.html">まとめUI</a><a href="henoko-student-accident-reaction-map.html">辺野古事例</a></nav>
-    <h1>高市文春問題 SNS反応まっぷ</h1>
-    <p class="lead">Yahooリアルタイム検索で取得した投稿サンプルを、論点カテゴリ・検索クエリ・立場で可視化した編集用ビューです。世論調査ではなく、反応の偏りと論点の広がりを見るために使います。</p>
-  </header>
+  <section class="hero">
+    <div class="hero-inner">
+      <nav class="top-nav"><a href="index.html">← トップへ戻る</a></nav>
+      <div class="hero-badge">政治・ネット選挙</div>
+      <h1>高市文春問題 SNS反応まっぷ</h1>
+      <p class="lead">Yahooリアルタイム検索で取得した投稿サンプルを、論点カテゴリ・検索クエリ・立場で可視化した編集用ビューです。世論調査ではなく、反応の偏りと論点の広がりを見るために使います。</p>
+    </div>
+  </section>
+  <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
+    <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
+  </svg>
   <main>
     <section class="stats">
-      <div class="stat"><span>総サンプル</span><strong>324</strong></div>
+      <div class="stat"><span>総サンプル</span><strong>183</strong></div>
       <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>高市氏批判・責任追及 139</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>批判 144</strong></div>
+      <div class="stat"><span>最多カテゴリ</span><strong>高市氏批判・責任追及 68</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>批判 72</strong></div>
     </section>
-    <section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+    <section class="panel" id="vote-section" style="background:#fff;">
+<div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span> この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">2025年、週刊文春が「高市早苗氏の陣営が、対立候補への中傷動画をネット業者に依頼していた」と報道。高市氏側は関与を否定しましたが、秘書や外部制作者との関係が焦点になっています。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「高市 文春」「高市 中傷動画」などのキーワードで、Yahooリアルタイム検索からSNS投稿324件を取得し、AIが自動分類しました。</div>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「高市 文春」「高市 中傷動画」などのキーワードで、Yahooリアルタイム検索からSNS投稿183件を取得し、AIが自動分類しました。</div>
 <p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
 <div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
-<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
+<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票はブラウザに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
     <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
@@ -393,16 +1197,10 @@
   var TITLE="高市文春問題 SNS反応まっぷ";
   var KEY="sns_vote_"+TOPIC;
 
+  // Supabase設定（本番ビルド・デプロイ時に値を設定）
   var supabaseUrl="https://qslrlprzoucrlptnhsmi.supabase.co";
   var supabaseAnonKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzbHJscHJ6b3VjcmxwdG5oc21pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTIxNDYsImV4cCI6MjA5Nzk2ODE0Nn0.kKubYfLww_hr2fgL0r7xK6dnuemIOlQIkQpoOV20ybY";
   var supabaseClient=null;
-
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
-    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-    // Supabase mode: hide the redo button to prevent abuse and desync
-    var redoBtn=document.getElementById("vote-redo-btn");
-    if(redoBtn) redoBtn.style.display="none";
-  }
 
   var stored={};
   var myVote=localStorage.getItem(KEY+"_my");
@@ -424,7 +1222,7 @@
       }
     }
   }
-  
+
   async function fetchVotes(){
     if(supabaseClient){
       try{
@@ -450,22 +1248,63 @@
     }
   }
 
+  // Supabase CDNの動的読み込みと初期化
+  function initVoting(){
+    applyBlur();
+
+    if(supabaseUrl && supabaseAnonKey){
+      // Supabase mode: hide the redo button to prevent abuse and desync
+      var redoBtn=document.getElementById("vote-redo-btn");
+      if(redoBtn) redoBtn.style.display="none";
+
+      // Dynamically load Supabase script
+      var script=document.createElement("script");
+      script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.onload=function(){
+        if(typeof supabase!=="undefined"){
+          supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
+        }
+        fetchVotes();
+      };
+      script.onerror=function(){
+        console.error("Failed to load Supabase SDK, falling back to localStorage");
+        fetchVotes();
+      };
+      document.head.appendChild(script);
+    }else{
+      // localStorageフォールバック
+      fetchVotes();
+    }
+  }
+
   if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
+    document.addEventListener("DOMContentLoaded", initVoting);
   }else{
-    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
+    setTimeout(initVoting,0);
   }
 
   var btnWrap=document.getElementById("vote-buttons");
   axes.forEach(function(a,i){
     var btn=document.createElement("button");
-    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
+    btn.className="vote-option";
+    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;position:relative;overflow:hidden;";
     btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
     btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
     btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
-    btn.onclick=function(){castVote(i)};
+    btn.onclick=function(e){createRipple(e,btn);castVote(i)};
     btnWrap.appendChild(btn);
   });
+
+  function createRipple(e,btn){
+    var r=document.createElement("span");r.className="ripple";
+    var rect=btn.getBoundingClientRect();
+    var size=Math.max(rect.width,rect.height);
+    r.style.width=r.style.height=size+"px";
+    r.style.left=(e.clientX-rect.left-size/2)+"px";
+    r.style.top=(e.clientY-rect.top-size/2)+"px";
+    btn.appendChild(r);
+    setTimeout(function(){r.remove()},550);
+  }
 
   document.getElementById("vote-redo-btn").onclick=function(){
     localStorage.removeItem(KEY+"_my");
@@ -500,7 +1339,7 @@
         console.error("Error casting vote to Supabase:", err);
         var msg=err.message||"";
         var details=err.details||"";
-        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
+        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1 || (err.code==="23505")){
           alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
           success=true;
         }else{
@@ -547,10 +1386,10 @@
       row.style.cssText="margin-bottom:8px;";
       row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
         +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
-        +(isMine?'✓ ':'')+a.label+'</span>'
+        +(isMine?'<span class="vote-check show">✓</span> ':'')+a.label+'</span>'
         +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
         +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+        +'<div class="result-bar-fill" style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;"></div></div>';
       barsEl.appendChild(row);
     });
 
@@ -569,31 +1408,70 @@
 
     document.getElementById("vote-result").style.display="block";
     document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
+
+    setTimeout(function(){
+      barsEl.querySelectorAll(".result-bar-fill").forEach(function(bar){bar.classList.add("visible");});
+    },80);
+    showCrossVote();
+  }
+
+  function showCrossVote(){
+    var topics=[
+      {slug:"ai-copyright-reaction-map.html",title:"生成AIと著作権問題",desc:"AI学習による著作物の無断利用をめぐる話題",key:"生成AIと著作権問題_SNS反応まっぷ"},
+      {slug:"school-nickname-ban-reaction-map.html",title:"学校でのあだ名禁止の是非",desc:"いじめ防止・ジェンダー配慮のための指導の是非",key:"学校でのあだ名禁止の是非_SNS反応まっぷ"},
+      {slug:"takaichi-reaction-map-standard.html",title:"高市文春・中傷動画問題",desc:"文春報道、ネット選挙の透明性をめぐる話題",key:"高市文春・中傷動画問題_SNS反応まっぷ"},
+      {slug:"henoko-student-accident-reaction-map.html",title:"辺野古高校生死亡事故",desc:"安全管理・和平教育をめぐる話題",key:"辺野古高校生死亡事故_SNS反応まっぷ"},
+      {slug:"constitutional-amendment-reaction-map.html",title:"憲法改正論議",desc:"緊急事態条項・9条などをめぐる話題",key:"憲法改正論議_SNS反応まっぷ"}
+    ];
+    var currentKey=KEY;
+    var unvoted=topics.filter(function(t){return t.key!==currentKey && !localStorage.getItem("sns_vote_"+t.key+"_my");});
+    var allCount=topics.length;
+    var votedCount=allCount-unvoted.length-(localStorage.getItem(currentKey+"_my")?0:1);
+    var section=document.getElementById("cross-vote-section");
+    if(!section) return;
+    section.style.display="block";
+    var html='<h2>📊 他のトピックにも投票しよう！</h2>';
+    if(unvoted.length===0){
+      html+='<p style="color:var(--muted);margin:0 0 12px;">🎉 全トピックの投票をコンプリートしました！</p>';
+    }else{
+      html+='<p style="color:var(--muted);margin:0 0 12px;">まだ投票していないトピックが <strong>'+unvoted.length+'件</strong> あります。</p>';
+      html+='<div class="progress-bar" style="margin-bottom:16px;max-width:320px;"><div style="width:'+(votedCount/allCount*100)+'%"></div></div>';
+      html+='<div class="topic-grid">';
+      unvoted.slice(0,3).forEach(function(t){
+        html+='<div class="topic-card">'
+          +'<div class="tc-title">'+t.title+'</div>'
+          +'<div class="tc-desc">'+t.desc+'</div>'
+          +'<a class="tc-link" href="'+t.slug+'">反応マップを見る →</a>'
+          +'</div>';
+      });
+      html+='</div>';
+    }
+    section.innerHTML=html;
   }
 })();
 </script>
     <section class="panel">
-<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
+<div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2 0v9h9c-.47-4.68-4.32-8.53-9-9zm0 11v9c4.68-.47 8.53-4.32 9-9h-9z"/></svg></span> 反応の勢力図</h2><span>対立軸ごとの比率</span></div>
 <div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">高市氏側の説明責任を問う</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">147</div></div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">高市氏側の説明責任を問う</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">72</div></div>
   <div style="text-align:center;color:var(--muted);font-size:12px;">
     <div style="font-size:11px;">過半数</div>
-    <div style="font-weight:800;font-size:16px;color:var(--ink);">163</div>
+    <div style="font-weight:800;font-size:16px;color:var(--ink);">92</div>
     <div style="font-size:18px;">▼</div>
   </div>
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">本人関与の断定を避ける</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">88</div></div>
+  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">本人関与の断定を避ける</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">55</div></div>
 </div>
 <div style="position:relative;max-width:660px;margin:0 auto;">
   <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
   <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
-    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">324</div>
+    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">183</div>
     <div style="font-size:14px;color:var(--muted);">サンプル</div>
   </div>
 </div>
 <div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
 <script>
 (function(){
-  var data=[{"label": "高市氏側の説明責任を問う", "count": 147, "color": "#e07040", "cats": "高市氏批判・責任追及, ネット選挙・透明性問題"}, {"label": "松井健氏・玉木氏比較へ広がる", "count": 17, "color": "#0f7490", "cats": "松井健氏を軸にした拡張, 玉木氏比較・説明責任"}, {"label": "サナエトークンへ接続", "count": 65, "color": "#7a4cc2", "cats": "サナエトークン関連, 未確認・陰謀寄り"}, {"label": "その他", "count": 7, "color": "#cbd5e1", "cats": "その他・分類保留"}, {"label": "本人関与の断定を避ける", "count": 88, "color": "#4a90d9", "cats": "高市氏擁護・報道批判"}];
+  var data=[{"label": "高市氏側の説明責任を問う", "count": 72, "color": "#e07040", "cats": "高市氏批判・責任追及, ネット選挙・透明性問題"}, {"label": "松井健氏・玉木氏比較へ広がる", "count": 13, "color": "#0f7490", "cats": "松井健氏を軸にした拡張, 玉木氏比較・説明責任"}, {"label": "サナエトークンへ接続", "count": 34, "color": "#7a4cc2", "cats": "サナエトークン関連, 未確認・陰謀寄り"}, {"label": "その他", "count": 9, "color": "#cbd5e1", "cats": "その他・分類保留"}, {"label": "本人関与の断定を避ける", "count": 55, "color": "#4a90d9", "cats": "高市氏擁護・報道批判"}];
   var total=data.reduce(function(s,d){return s+d.count},0);
   var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
   var svg=document.getElementById("semicircle-chart");
@@ -655,79 +1533,91 @@
   });
 })();
 </script>
+<script>
+/* フェードインアニメーション */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){ entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.panel, .sample-card, .axis-card, .bar-row, .note-panel, .topic-card').forEach(function(el){el.classList.add('fade-in');obs.observe(el);});
+})();
+</script>
 </section>
-    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="negative"><div class="axis-kicker">責任追及</div><h3>高市氏側の説明責任を問う</h3><div class="axis-count">147<span>件</span></div><p>陣営・秘書・外部制作者の関与が事実なら、本人にも説明責任があると見る立場。</p><div class="axis-tags"><span>高市氏批判・責任追及</span><span>ネット選挙・透明性問題</span></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">報道への疑義</div><h3>本人関与の断定を避ける</h3><div class="axis-count">88<span>件</span></div><p>本人の直接指示が未確認なら、文春報道や追及の仕方を慎重に見るべきという立場。</p><div class="axis-tags"><span>高市氏擁護・報道批判</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">派生論点</div><h3>松井健氏・玉木氏比較へ広がる</h3><div class="axis-count">17<span>件</span></div><p>松井健氏を軸に、玉木代表や他の政治家との接点まで話題が拡張する反応。</p><div class="axis-tags"><span>松井健氏を軸にした拡張</span><span>玉木氏比較・説明責任</span></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">別論点接続</div><h3>サナエトークンへ接続</h3><div class="axis-count">65<span>件</span></div><p>中傷動画問題から、サナエトークンなど周辺の別論点へ接続する反応。</p><div class="axis-tags"><span>サナエトークン関連</span><span>未確認・陰謀寄り</span></div></article></div></section>
-    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
+    <section class="panel conflict-panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></span> 対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="negative"><div class="axis-kicker">責任追及</div><h3>高市氏側の説明責任を問う</h3><div class="axis-count">72<span>件</span></div><p>陣営・秘書・外部制作者の関与が事実なら、本人にも説明責任があると見る立場。</p><div class="axis-tags"><span>高市氏批判・責任追及</span><span>ネット選挙・透明性問題</span></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">報道への疑義</div><h3>本人関与の断定を避ける</h3><div class="axis-count">55<span>件</span></div><p>本人の直接指示が未確認なら、文春報道や追及の仕方を慎重に見るべきという立場。</p><div class="axis-tags"><span>高市氏擁護・報道批判</span></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">派生論点</div><h3>松井健氏・玉木氏比較へ広がる</h3><div class="axis-count">13<span>件</span></div><p>松井健氏を軸に、玉木代表や他の政治家との接点まで話題が拡張する反応。</p><div class="axis-tags"><span>松井健氏を軸にした拡張</span><span>玉木氏比較・説明責任</span></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">別論点接続</div><h3>サナエトークンへ接続</h3><div class="axis-count">34<span>件</span></div><p>中傷動画問題から、サナエトークンなど周辺の別論点へ接続する反応。</p><div class="axis-tags"><span>サナエトークン関連</span><span>未確認・陰謀寄り</span></div></article></div></section>
+    <section class="panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg></span> 分類別件数</h2><span>論点の量感</span></div>
 <div class="bar-list">
-<div class="bar-row" data-category="高市氏批判・責任追及"><div class="bar-meta"><span>高市氏批判・責任追及</span><strong>139</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
-<div class="bar-row" data-category="高市氏擁護・報道批判"><div class="bar-meta"><span>高市氏擁護・報道批判</span><strong>88</strong></div><div class="bar-track"><div class="bar-fill" style="width:63%"></div></div></div>
-<div class="bar-row" data-category="サナエトークン関連"><div class="bar-meta"><span>サナエトークン関連</span><strong>60</strong></div><div class="bar-track"><div class="bar-fill" style="width:43%"></div></div></div>
-<div class="bar-row" data-category="松井健氏を軸にした拡張"><div class="bar-meta"><span>松井健氏を軸にした拡張</span><strong>9</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
-<div class="bar-row" data-category="玉木氏比較・説明責任"><div class="bar-meta"><span>玉木氏比較・説明責任</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
-<div class="bar-row" data-category="ネット選挙・透明性問題"><div class="bar-meta"><span>ネット選挙・透明性問題</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
-<div class="bar-row" data-category="未確認・陰謀寄り"><div class="bar-meta"><span>未確認・陰謀寄り</span><strong>5</strong></div><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div></div>
-<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>7</strong></div><div class="bar-track"><div class="bar-fill" style="width:5%"></div></div></div>
+<div class="bar-row" data-category="高市氏批判・責任追及"><div class="bar-meta"><span>高市氏批判・責任追及</span><strong>68</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="bar-row" data-category="高市氏擁護・報道批判"><div class="bar-meta"><span>高市氏擁護・報道批判</span><strong>55</strong></div><div class="bar-track"><div class="bar-fill" style="width:81%"></div></div></div>
+<div class="bar-row" data-category="サナエトークン関連"><div class="bar-meta"><span>サナエトークン関連</span><strong>30</strong></div><div class="bar-track"><div class="bar-fill" style="width:44%"></div></div></div>
+<div class="bar-row" data-category="松井健氏を軸にした拡張"><div class="bar-meta"><span>松井健氏を軸にした拡張</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div></div>
+<div class="bar-row" data-category="玉木氏比較・説明責任"><div class="bar-meta"><span>玉木氏比較・説明責任</span><strong>5</strong></div><div class="bar-track"><div class="bar-fill" style="width:7%"></div></div></div>
+<div class="bar-row" data-category="ネット選挙・透明性問題"><div class="bar-meta"><span>ネット選挙・透明性問題</span><strong>4</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
+<div class="bar-row" data-category="未確認・陰謀寄り"><div class="bar-meta"><span>未確認・陰謀寄り</span><strong>4</strong></div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>9</strong></div><div class="bar-track"><div class="bar-fill" style="width:13%"></div></div></div>
 </div></section>
-    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
+    <section class="panel heat-panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg></span> カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
 <div class="table-wrap"><table class="heat-table">
 <thead><tr><th>分類</th><th>サナエトークン -rt</th><th>高市 中傷動画 -rt</th><th>高市 文春 中傷動画 -rt</th><th>高市 松井健 -rt</th><th>高市 玉木 松井健 -rt</th><th>合計</th></tr></thead>
 <tbody>
 <tr data-category="高市氏批判・責任追及"><th><span class="row-dot"></span>高市氏批判・責任追及</th>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="高市氏批判・責任追及 / サナエトークン -rt: 18件"><span>18</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏批判・責任追及 / 高市 中傷動画 -rt: 42件"><span>42</span></td>
-<td class="heat-cell" style="background:#4da3ff;color:#172033" title="高市氏批判・責任追及 / 高市 文春 中傷動画 -rt: 21件"><span>21</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏批判・責任追及 / 高市 松井健 -rt: 50件"><span>50</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏批判・責任追及 / 高市 玉木 松井健 -rt: 8件"><span>8</span></td>
-<td class="total">139</td></tr>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="高市氏批判・責任追及 / サナエトークン -rt: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏批判・責任追及 / 高市 中傷動画 -rt: 20件"><span>20</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏批判・責任追及 / 高市 文春 中傷動画 -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏批判・責任追及 / 高市 松井健 -rt: 25件"><span>25</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="高市氏批判・責任追及 / 高市 玉木 松井健 -rt: 8件"><span>8</span></td>
+<td class="total">68</td></tr>
 <tr data-category="高市氏擁護・報道批判"><th><span class="row-dot"></span>高市氏擁護・報道批判</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏擁護・報道批判 / サナエトークン -rt: 5件"><span>5</span></td>
-<td class="heat-cell" style="background:#4da3ff;color:#172033" title="高市氏擁護・報道批判 / 高市 中傷動画 -rt: 23件"><span>23</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏擁護・報道批判 / 高市 文春 中傷動画 -rt: 49件"><span>49</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏擁護・報道批判 / 高市 松井健 -rt: 9件"><span>9</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / サナエトークン -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="高市氏擁護・報道批判 / 高市 中傷動画 -rt: 14件"><span>14</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏擁護・報道批判 / 高市 文春 中傷動画 -rt: 33件"><span>33</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏擁護・報道批判 / 高市 松井健 -rt: 6件"><span>6</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="高市氏擁護・報道批判 / 高市 玉木 松井健 -rt: 2件"><span>2</span></td>
-<td class="total">88</td></tr>
+<td class="total">55</td></tr>
 <tr data-category="サナエトークン関連"><th><span class="row-dot"></span>サナエトークン関連</th>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="サナエトークン関連 / サナエトークン -rt: 41件"><span>41</span></td>
+<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="サナエトークン関連 / サナエトークン -rt: 20件"><span>20</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 高市 中傷動画 -rt: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="サナエトークン関連 / 高市 松井健 -rt: 14件"><span>14</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 高市 松井健 -rt: 5件"><span>5</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 高市 玉木 松井健 -rt: 4件"><span>4</span></td>
-<td class="total">60</td></tr>
+<td class="total">30</td></tr>
 <tr data-category="松井健氏を軸にした拡張"><th><span class="row-dot"></span>松井健氏を軸にした拡張</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / サナエトークン -rt: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / サナエトークン -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 高市 中傷動画 -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 高市 松井健 -rt: 2件"><span>2</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 高市 玉木 松井健 -rt: 6件"><span>6</span></td>
-<td class="total">9</td></tr>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 高市 松井健 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="松井健氏を軸にした拡張 / 高市 玉木 松井健 -rt: 7件"><span>7</span></td>
+<td class="total">8</td></tr>
 <tr data-category="玉木氏比較・説明責任"><th><span class="row-dot"></span>玉木氏比較・説明責任</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / サナエトークン -rt: 2件"><span>2</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 高市 中傷動画 -rt: 4件"><span>4</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / サナエトークン -rt: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 高市 中傷動画 -rt: 3件"><span>3</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 高市 松井健 -rt: 0件"><span>0</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 高市 玉木 松井健 -rt: 2件"><span>2</span></td>
-<td class="total">8</td></tr>
+<td class="total">5</td></tr>
 <tr data-category="ネット選挙・透明性問題"><th><span class="row-dot"></span>ネット選挙・透明性問題</th>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / サナエトークン -rt: 2件"><span>2</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 高市 中傷動画 -rt: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 高市 中傷動画 -rt: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 高市 松井健 -rt: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 高市 松井健 -rt: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 高市 玉木 松井健 -rt: 0件"><span>0</span></td>
-<td class="total">8</td></tr>
+<td class="total">4</td></tr>
 <tr data-category="未確認・陰謀寄り"><th><span class="row-dot"></span>未確認・陰謀寄り</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / サナエトークン -rt: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / サナエトークン -rt: 2件"><span>2</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / 高市 中傷動画 -rt: 1件"><span>1</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / 高市 文春 中傷動画 -rt: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 高市 松井健 -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 高市 玉木 松井健 -rt: 0件"><span>0</span></td>
-<td class="total">5</td></tr>
+<td class="total">4</td></tr>
 <tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / サナエトークン -rt: 6件"><span>6</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / サナエトークン -rt: 7件"><span>7</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 中傷動画 -rt: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 文春 中傷動画 -rt: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 高市 松井健 -rt: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 高市 松井健 -rt: 2件"><span>2</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 高市 玉木 松井健 -rt: 0件"><span>0</span></td>
-<td class="total">7</td></tr>
+<td class="total">9</td></tr>
 </tbody></table></div></section>
     <div class="legend">
       <span>少</span>
@@ -739,230 +1629,250 @@
       <span class="chip" style="background:#0a3d91"></span>
       <span>多</span>
     </div>
-    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
+    <section class="panel heat-panel"><div class="panel-title"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M10 10.02h5V21h-5zM17 21h3c1.1 0 2-.9 2-2v-9h-5v11zm3-18H5c-1.1 0-2 .9-2 2v3h19V5c0-1.1-.9-2-2-2zM3 19c0 1.1.9 2 2 2h3V10H3v9z"/></svg></span> カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
 <div class="table-wrap"><table class="heat-table">
-<thead><tr><th>分類</th><th>批判</th><th>擁護</th><th>比較</th><th>未確認</th><th>保留</th><th>その他</th><th>合計</th></tr></thead>
+<thead><tr><th>分類</th><th>批判</th><th>擁護</th><th>比較</th><th>保留</th><th>合計</th></tr></thead>
 <tbody>
 <tr data-category="高市氏批判・責任追及"><th><span class="row-dot"></span>高市氏批判・責任追及</th>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏批判・責任追及 / 批判: 139件"><span>139</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏批判・責任追及 / 批判: 68件"><span>68</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / 保留: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏批判・責任追及 / その他: 0件"><span>0</span></td>
-<td class="total">139</td></tr>
+<td class="total">68</td></tr>
 <tr data-category="高市氏擁護・報道批判"><th><span class="row-dot"></span>高市氏擁護・報道批判</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 批判: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#1769d1;color:#ffffff" title="高市氏擁護・報道批判 / 擁護: 88件"><span>88</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="高市氏擁護・報道批判 / 擁護: 55件"><span>55</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 未確認: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / 保留: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="高市氏擁護・報道批判 / その他: 0件"><span>0</span></td>
-<td class="total">88</td></tr>
+<td class="total">55</td></tr>
 <tr data-category="サナエトークン関連"><th><span class="row-dot"></span>サナエトークン関連</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 批判: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 批判: 2件"><span>2</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="サナエトークン関連 / 擁護: 9件"><span>9</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / 未確認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="サナエトークン関連 / 保留: 47件"><span>47</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="サナエトークン関連 / その他: 0件"><span>0</span></td>
-<td class="total">60</td></tr>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="サナエトークン関連 / 保留: 19件"><span>19</span></td>
+<td class="total">30</td></tr>
 <tr data-category="松井健氏を軸にした拡張"><th><span class="row-dot"></span>松井健氏を軸にした拡張</th>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 批判: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 未確認: 1件"><span>1</span></td>
 <td class="heat-cell" style="background:#dceeff;color:#172033" title="松井健氏を軸にした拡張 / 保留: 7件"><span>7</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="松井健氏を軸にした拡張 / その他: 0件"><span>0</span></td>
-<td class="total">9</td></tr>
+<td class="total">8</td></tr>
 <tr data-category="玉木氏比較・説明責任"><th><span class="row-dot"></span>玉木氏比較・説明責任</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 批判: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 擁護: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 比較: 8件"><span>8</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 未確認: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="玉木氏比較・説明責任 / 比較: 5件"><span>5</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / 保留: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="玉木氏比較・説明責任 / その他: 0件"><span>0</span></td>
-<td class="total">8</td></tr>
+<td class="total">5</td></tr>
 <tr data-category="ネット選挙・透明性問題"><th><span class="row-dot"></span>ネット選挙・透明性問題</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 批判: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 批判: 1件"><span>1</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / 未確認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 保留: 8件"><span>8</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="ネット選挙・透明性問題 / その他: 0件"><span>0</span></td>
-<td class="total">8</td></tr>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="ネット選挙・透明性問題 / 保留: 3件"><span>3</span></td>
+<td class="total">4</td></tr>
 <tr data-category="未確認・陰謀寄り"><th><span class="row-dot"></span>未確認・陰謀寄り</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 批判: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / 未確認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / 保留: 5件"><span>5</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="未確認・陰謀寄り / その他: 0件"><span>0</span></td>
-<td class="total">5</td></tr>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="未確認・陰謀寄り / 保留: 4件"><span>4</span></td>
+<td class="total">4</td></tr>
 <tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 批判: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 擁護: 0件"><span>0</span></td>
 <td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 比較: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 未確認: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 保留: 6件"><span>6</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / その他: 1件"><span>1</span></td>
-<td class="total">7</td></tr>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 保留: 9件"><span>9</span></td>
+<td class="total">9</td></tr>
 </tbody></table></div></section>
-    <section class="panel"><h2>代表サンプル</h2>
+    <section class="panel"><h2><span class="section-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></span> 代表サンプル</h2>
 <div class="sample-grid">
 <article class="sample-card"><h3>高市氏批判・責任追及</h3>
 <div class="sample"><div class="meta">批判 / 信頼度 0.95</div><p>高市の即辞職と逮捕起訴を要求し、野党は徹底的に追及すべき。</p>
-<blockquote>高市の即辞職を求める。 そして逮捕起訴しろ！ 訂正など許されない。 　 野党は徹底的に追及し証人喚問をするべき。 秘書、松井健、溝口、文春側を呼ぶべき。  #証人喚問 #高市の即辞職を求める</blockquote>
-<a href="https://x.com/taii43ii/status/2065779449350758803">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/taii43ii/status/2065779449350758803"></a></blockquote>
 <div class="reason">理由: 即辞職と追及の要求</div>
 </div>
 <div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>高市総理が中傷動画の指示を出したと批判。</p>
-<blockquote>#NHKは政権の広報をやめてください #高市やめろ #愛子内親王を皇太子に 高市、麻生のやりたい放題は許さない。 憲法にも皇室にも犯罪者が手を触れるんじゃないよ！誹謗中傷動画のことをちゃんと説明して、すぐ辞めろ！ https://t.co/WAyDsOtQUV</blockquote>
-<a href="https://x.com/Norisuke_Occhan/status/2065815241515303281">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/Norisuke_Occhan/status/2065815241515303281"></a></blockquote>
 <div class="reason">理由: 文春記事の捏造否定に反論</div>
 </div>
 <div class="sample"><div class="meta">批判 / 信頼度 0.90</div><p>中道は高市陣営の動画作成依頼を支持者にウケさせるための手段と見做している。</p>
-<blockquote>中道にとってはもはや高市陣営が中傷動画作成を依頼したかどうかなんてどうでもいいんですよ。 少しでも今の支持者にウケることをして、少しでも延命したいだけ。</blockquote>
-<a href="https://x.com/jun_wakasa/status/2065812730108600708">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/jun_wakasa/status/2065812730108600708"></a></blockquote>
 <div class="reason">理由: 支持者の反応を重視する発言</div>
 </div>
 </article>
 <article class="sample-card"><h3>高市氏擁護・報道批判</h3>
 <div class="sample"><div class="meta">擁護 / 信頼度 0.90</div><p>文春の捏造記事を指摘し、共同通信も関与したと主張。</p>
-<blockquote>文春はもっと深刻な嘘つき？ 文春報道がきっかけで松井健氏が高市の秘書の木下に頼まれて誹謗中傷動画をネット流してたのが判明。高市はトボケるも、共同通信が松井健氏の証言を報道。高市の嘘がバレている。ちゃんと理解しないと笑われるだけ。https://t.co/iZpRtcsahU</blockquote>
-<a href="https://x.com/ROCKUJAPAN3/status/2065815213568630943">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/ROCKUJAPAN3/status/2065815213568630943"></a></blockquote>
 <div class="reason">理由: 共同通信の証言虚偽を批判</div>
 </div>
 <div class="sample"><div class="meta">擁護 / 信頼度 0.90</div><p>マスコミの捏造報道が国民に不信感を与える。</p>
-<blockquote>いさと岡本は学会からの指令で高市貶めに必死になってるようにしか見えんよ。週刊誌のネタ話で民主主義の根幹を揺るがすなんて煽りまくってて正気かよ!?今になっても誹謗中傷動画も確たる証拠も出てこない。あるのはいさのでっちあげ話とかマスコミの捏造報道ばかり。もう国民は呆れ返ってるのよ。</blockquote>
-<a href="https://x.com/zxE4P6okGq50186/status/2065811052152209572">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/zxE4P6okGq50186/status/2065811052152209572"></a></blockquote>
 <div class="reason">理由: 報道批判または高市氏本人の関与否定を明示しているため。</div>
 </div>
 <div class="sample"><div class="meta">擁護 / 信頼度 0.90</div><p>松井氏が否定しているにもかかわらず、中傷動画疑惑を提起。</p>
-<blockquote>問題は高市総理が他党の中傷動画の作成依頼を松井氏に出したという文春が出して来た疑惑です  この疑惑については、張本人である松井氏が否定しており、疑惑は晴れています  共産党はなにを批判しているのか？ 総理や一般人の秘書を冤罪に陥れるつもりですか？ https://t.co/oSOdYkUzQc</blockquote>
-<a href="https://x.com/LongYan87485/status/2065806618097582277">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/LongYan87485/status/2065806618097582277"></a></blockquote>
 <div class="reason">理由: 報道批判または高市氏本人の関与否定を明示しているため。</div>
 </div>
 </article>
 <article class="sample-card"><h3>サナエトークン関連</h3>
 <div class="sample"><div class="meta">保留 / 信頼度 0.90</div><p>サナエトークンの登録と高市総理の関与について指摘。</p>
-<blockquote>資金決済法「暗号資産交換業は総理の登録が必須」 総理「私も事務所も知らない」 サナエトークンは高市総理が登録するか、認めていないなら処罰が必要。法治国家なら。  松井健「誹謗中傷しました」 動画「無能でネットで炎上！」 公選法刑法「違法行為です」 利害関係者「ネットの声を投稿しただけw」 https://t.co/ohRJV1Sibh https://...</blockquote>
-<a href="https://x.com/otumamidarkside/status/2065743938036859266">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/otumamidarkside/status/2065743938036859266"></a></blockquote>
 <div class="reason">理由: サナエトークンとの関連性</div>
 </div>
 <div class="sample"><div class="meta">擁護 / 信頼度 0.90</div><p>高市早苗を擁護し、誹謗中傷動画について言及。</p>
-<blockquote>【高市早苗】よろける高市早苗 松井健氏は株式会社麻生出身 隔日で進捗連絡 高市擁護誹謗中傷動画蔓延中 #サナエトークン #消費税 #食料品の消費税ゼロ #高市早苗 #財務省 #ザイム真理教 https://t.co/2NnnqoSHQt</blockquote>
-<a href="https://x.com/h_echizenya/status/2065686345344074158">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/h_echizenya/status/2065686345344074158"></a></blockquote>
 <div class="reason">理由: 高市擁護の主張</div>
 </div>
 <div class="sample"><div class="meta">擁護 / 信頼度 0.90</div><p>高市早苗を擁護し、誹謗中傷動画について言及。</p>
-<blockquote>【高市早苗】よろける高市早苗 松井健氏は株式会社麻生出身 隔日で進捗連絡 高市擁護誹謗中傷動画蔓延中 #サナエトークン #消費税 #食料品の消費税ゼロ #高市早苗 #財務省 #ザイム真理教 https://t.co/johtUpXcHT</blockquote>
-<a href="https://x.com/h_echizenya/status/2065686316600504457">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/h_echizenya/status/2065686316600504457"></a></blockquote>
 <div class="reason">理由: 高市擁護の主張</div>
 </div>
 </article>
 <article class="sample-card"><h3>松井健氏を軸にした拡張</h3>
 <div class="sample"><div class="meta">批判 / 信頼度 0.70</div><p>松井健と高市陣営の関与否定を疑問視。</p>
-<blockquote>サナエトークンや衆院選等における誹謗中傷動画投入において、実行側の松井健氏と依頼側の高市陣営（木下秘書）の間にお互いに関与を否定する対立があるようだ。 松井健陣営と高市早苗陣営にはそれぞれヤメ検の若手弁護士がついていて、 あろうことか、あの黒川弘務氏が両者の調整をしていると言う❗️ https://t.co/dsmyqg19Dg</blockquote>
-<a href="https://x.com/d3qsUVhX0c60620/status/2065683452796797173">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/d3qsUVhX0c60620/status/2065683452796797173"></a></blockquote>
 <div class="reason">理由: 双方の関与否定の対立</div>
 </div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>藤井聡と松井健の関係性について疑問が投げかけられています。</p>
-<blockquote>高市や玉木と松井健を繋いだの藤井聡なの？w 怪しすぎだろこの大学教授</blockquote>
-<a href="https://x.com/binary567/status/2064182617013104853">投稿URL</a>
-<div class="reason">理由: 二人の間のつながりが強調され、さらなる情報提供が期待されています。</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>高市・誹謗中傷動画問題に関連人物が登場しています。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/bSM2TC2coIKWrlM/status/2065758461896597510"></a></blockquote>
+<div class="reason">理由: 関連人物の名前が挙がり、具体的な情報提供が期待されています。</div>
 </div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.60</div><p>藤川晋之介氏と松井健氏の関係性について疑問が投げかけられています。</p>
-<blockquote>「選挙の神様」って呼ばれた藤川晋之介氏も石丸、玉木、高市ってSNS支援してた💡  松井健氏は藤川氏のチームの一員なのか、そういうチームが複数存在して同時に世論工作してるってこと？😟 https://t.co/AtNUxQ4kjl</blockquote>
-<a href="https://x.com/rurm_eq2/status/2065326118664876394">投稿URL</a>
-<div class="reason">理由: 複数チームによる世論工作の可能性が示唆されています。</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>藤井聡と松井健の関係性について疑問が投げかけられています。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/binary567/status/2064182617013104853"></a></blockquote>
+<div class="reason">理由: 二人の間のつながりが強調され、さらなる情報提供が期待されています。</div>
 </div>
 </article>
 <article class="sample-card"><h3>玉木氏比較・説明責任</h3>
 <div class="sample"><div class="meta">比較 / 信頼度 0.90</div><p>玉木雄一郎代表が中傷動画について説明責任を果たすべきと主張。</p>
-<blockquote>玉木さん、渦中の松井健氏と食事に行ったそうですね。 👇藤井聡氏に暴露されていましたよ？ https://t.co/zsFF5PavB2  “中傷動画”国民・玉木代表「説明責任を果たすことに尽きる」　立憲・水岡代表「矛盾点を高市総理に追及していく」 #FNNプライムオンライン https://t.co/Aghttnrxe3</blockquote>
-<a href="https://x.com/hirokumach/status/2064144359508037743">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/hirokumach/status/2064144359508037743"></a></blockquote>
 <div class="reason">理由: 直接的に玉木雄一郎との比較を行い、説明を求めている。</div>
 </div>
 <div class="sample"><div class="meta">比較 / 信頼度 0.80</div><p>玉木が松井健との関係を説明すべきと要求。</p>
-<blockquote>まさか、今回の件 玉木氏が知人のこの人利用して 高市総理を貶めようとしたの？  玉木さん もしもそれが事実なら あなた最低だよ  裏で糸を引いていたの？ 説明責任を果たせよ  高市総理に詫びろ #玉木雄一郎に騙された  玉木雄一郎が松井健氏との事実関係を釈明 https://t.co/HuOxwjoX1r</blockquote>
-<a href="https://x.com/pin96ck365/status/2064683365232672980">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/pin96ck365/status/2064683365232672980"></a></blockquote>
 <div class="reason">理由: 玉木の説明要求</div>
 </div>
-<div class="sample"><div class="meta">比較 / 信頼度 0.80</div><p>小川代表が質問に答える姿勢について批判。</p>
-<blockquote>中道の野田前代表が サナエトークン 関係者の取材、記念撮影写真がネット上で明らかにされているが、アンタらどう説明するんだ？ 小川代表は記者の質問から逃げたぞ。 まずは自ら説明責任を果たしてもらおうか。 出来ないなら、公の場で詫びろや。</blockquote>
-<a href="https://x.com/hidesan051011/status/2070782162207699086">投稿URL</a>
-<div class="reason">理由: 具体的な非難表明。</div>
+<div class="sample"><div class="meta">比較 / 信頼度 0.70</div><p>高市総理と玉木雄一郎が誹謗中傷動画問題に関連している。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/y0626t/status/2065797203797721312"></a></blockquote>
+<div class="reason">理由: 玉木雄一郎も誹謗中傷動画問題に関与している可能性への指摘</div>
 </div>
 </article>
 <article class="sample-card"><h3>ネット選挙・透明性問題</h3>
 <div class="sample"><div class="meta">保留 / 信頼度 0.80</div><p>自民党や維新が選挙制度を歪めていると批判。</p>
-<blockquote>都知事選での石丸信二現象、国民民主党玉木雄一郎ブーム、斉藤元彦出直し兵庫知事選の立花孝志二馬力応援選挙、自民党総裁選や衆院選での高市事務所による中傷動画拡散  松井健氏などによるAIネット戦略を駆使した情報工作により歪められた民意による選挙制度の破壊が進行  １月万冊佐藤章氏による指摘 https://t.co/cOWojb3IBp</blockquote>
-<a href="https://x.com/isistarou1/status/2065792414628106577">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/isistarou1/status/2065792414628106577"></a></blockquote>
 <div class="reason">理由: 情報工作による民意の歪み</div>
 </div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>衆議院選挙中、高市陣営が中傷動画を流した疑いがある。</p>
-<blockquote>衆議院選挙中、野党つぶしの中傷動画が大量に流された他、極めてしつこく流された政党広告の名を借りた高市動画広告💢高市動画単発の他、各地方では、高市動画＋小選挙区候補の小選挙区支部長広告動画のパターンで間違い無く流されてます！ これは公正な選挙ではありません💢 #サナエトークン #見返り https://t.co/BYHIQX25hV</blockquote>
-<a href="https://x.com/itsupansalary2/status/2065811805432328646">投稿URL</a>
-<div class="reason">理由: 中傷動画の拡散について指摘</div>
+<div class="sample"><div class="meta">批判 / 信頼度 0.80</div><p>衆議院選挙中に高市氏に関連した不正な広告が流されたと主張しています。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/itsupansalary2/status/2065811805432328646"></a></blockquote>
+<div class="reason">理由: 直接的批判と選挙の公正性に関する懸念を示しています。</div>
 </div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.60</div><p>中傷動画疑惑で報道側にも疑惑が浮上。</p>
-<blockquote>教えて！ニュースライブ　正義のミカタ #TVer https://t.co/J2YyOrAsqP W杯ブラジル戦での勝利のカギは? 中傷動画 疑惑で報道側にも疑惑が!?維新・吉村代表と 高市 総理の間に亀裂!?副首都構想の行方は?消費税”実質ゼロ”は公約違反!? サッカー 高市 政権 アメリカ・イラン ウクライナ</blockquote>
-<a href="https://x.com/all_circulation/status/2070749497844752853">投稿URL</a>
-<div class="reason">理由: 多岐にわたる内容</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>衆議院選挙中、高市陣営が中傷動画を流した疑いがある。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/itsupansalary2/status/2065811805432328646"></a></blockquote>
+<div class="reason">理由: 中傷動画の拡散について指摘</div>
 </div>
 </article>
 <article class="sample-card"><h3>未確認・陰謀寄り</h3>
 <div class="sample"><div class="meta">保留 / 信頼度 0.60</div><p>皇位継承の話題から高市総理の中傷動画ネタを避けるよう求めている。</p>
-<blockquote>みんな急に皇位継承の話題になってます(笑 高市総理の中傷動画ネタから離れるなら今かと</blockquote>
-<a href="https://x.com/travelerDreami1/status/2065803286528377015">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/travelerDreami1/status/2065803286528377015"></a></blockquote>
 <div class="reason">理由: 皇位継承と中傷動画の関連性</div>
 </div>
 <div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>高市総理がパージされた可能性があるという想像。</p>
-<blockquote>もちろん陰謀論ではあると思うけれど、この件やサナエトークンへの金融庁調査など、高市さんが「上のほうからパージされたんじゃ」と想像する理由が増えていく… https://t.co/Uj7Rz5vqLw</blockquote>
-<a href="https://x.com/Kaw082_0831/status/2065814749175275821">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/Kaw082_0831/status/2065814749175275821"></a></blockquote>
 <div class="reason">理由: 具体的な立場表明がないため</div>
 </div>
 <div class="sample"><div class="meta">保留 / 信頼度 0.70</div><p>サナエトークンに関する陰謀論的な見解を示しています。</p>
-<blockquote>サナエトークン『疑い』『可能性』で金融庁を『総理案件』と決めつける陰謀論な。高市事務所は無断使用と否定、松井氏の独自事業化疑惑が主。金融庁は相談受付中。違反なら法的手続きを。政治攻撃のための憶測連発はフェアじゃないね。 https://t.co/2gbWqwUjaQ</blockquote>
-<a href="https://x.com/2kaGB7Ctmu1bZAy/status/2065808469236859387">投稿URL</a>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/2kaGB7Ctmu1bZAy/status/2065808469236859387"></a></blockquote>
 <div class="reason">理由: 直接的分類に該当しないが、陰謀論的な要素があります。</div>
 </div>
 </article>
 <article class="sample-card"><h3>その他・分類保留</h3>
-<div class="sample"><div class="meta">その他 / 信頼度 0.70</div><p>松井健氏とサナエトークン問題について述べる。</p>
-<blockquote>【中傷動画よりトークン問題が命運を分かつ】 高市 首相は木下秘書を守り切るのか｜溝口勇児氏と 松井健 氏の関係｜金融庁がサナエトークンを注視するワケ｜&quot;キーマン”松井氏は過去に投資トラブル【今野忍×河野嘉誠】https://t.co/rTmsgrxSCp… 　@YouTube</blockquote>
-<a href="https://x.com/Watashiwakainin/status/2070634723471491125">投稿URL</a>
-<div class="reason">理由: 松井健氏の発言を引用し、サナエトークン問題に関連する議論</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.40</div><p>サナエトークンについての否定的な見解を示しています。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/hutuuno_occhan/status/2065810661335355806"></a></blockquote>
+<div class="reason">理由: 文脈が不明瞭で、直接的分類に該当しない。</div>
 </div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.50</div><p>サナエトークンと高市事務所の関係性について言及。</p>
-<blockquote>私は サナエトークン だけのせいとは言ってません。 融資を決定するのは色んな理由があるでしょう。 その中に『 サナエトークン 』もあったという解釈です。 ですが、巻き込んだ事実はあるのに、 それを『お前の原因だろ笑』と笑うのはどうなのか？ということです。</blockquote>
-<a href="https://x.com/junx05/status/2070783748048814244">投稿URL</a>
-<div class="reason">理由: 具体的な立場表明はなく、疑問提起。</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.40</div><p>複数の話題を含むが、明確な立場は不明。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/JJPochi/status/2065803905259450784"></a></blockquote>
+<div class="reason">理由: 文脈不足で分類困難。</div>
 </div>
-<div class="sample"><div class="meta">保留 / 信頼度 0.50</div><p>高市総理の支持者としての立場を示した。</p>
-<blockquote>「本アカウントは、地元奈良より高市早苗総理・総裁誕生を夢見て長年にわたり活動をしてまいりました自民党支部及び後援会の有志により運営しております。」 上記に尽きます。 もし高市氏本人が公認されてるならご指摘の通りだと思いますが、 サナエトークン 同様「有志」ですので。</blockquote>
-<a href="https://x.com/melodyboom2234/status/2070782867437998170">投稿URL</a>
-<div class="reason">理由: 具体的な立場表明はなく、自己紹介。</div>
+<div class="sample"><div class="meta">保留 / 信頼度 0.40</div><p>複数の話題を含むが、明確な立場は不明。</p>
+<blockquote class="twitter-tweet" data-lang="ja" data-dnt="true" data-theme="light" data-width="100%"><a href="https://x.com/by8FVkuWkO49886/status/2065802602672238789"></a></blockquote>
+<div class="reason">理由: 文脈不足で分類困難。</div>
 </div>
 </article>
 </div></section>
-    <section class="note-panel"><h2>注意</h2><ul>
+    <section class="note-panel"><h2><span class="section-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span> 意</h2><ul>
 <li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
 <li>検索語、取得時点、Yahooリアルタイム検索の表示仕様によって偏りがあります。</li>
 <li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li>
 <li>代表投稿は公開前に人間が確認する前提です。</li>
 </ul></section>
   </main>
-  <footer style="border-top:1px solid var(--line);padding:20px min(5vw,56px);text-align:center;color:var(--muted);font-size:12px;line-height:1.8;">
-    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
-    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
-    <div style="margin-top:10px;">
-      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
+
+  <!-- 巡回導線: 投票後に表示 -->
+  <div id="cross-vote-section" class="cross-vote-section" style="display:none;"></div>
+
+  <!-- 次に読む -->
+  <section style="max-width:none;margin:0;padding:0;">
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06);">
+      <h2 style="font-size:18px;margin:0 0 14px;">次に読む</h2>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="tc-title">辺野古高校生死亡事故</div>
+          <div class="tc-desc">安全管理・平和教育をめぐる話題</div>
+          <a class="tc-link" href="henoko-student-accident-reaction-map.html">反応マップを見る →</a>
+        </div>
+        <div class="topic-card">
+          <div class="tc-title">憲法改正論議</div>
+          <div class="tc-desc">緊急事態条項・9条などをめぐる話題</div>
+          <a class="tc-link" href="constitutional-amendment-reaction-map.html">反応マップを見る →</a>
+        </div>
+        <div class="topic-card">
+          <div class="tc-title">学校でのあだ名禁止の是非</div>
+          <div class="tc-desc">いじめ防止・ジェンダー配慮の指導の是非</div>
+          <a class="tc-link" href="school-nickname-ban-reaction-map.html">反応マップを見る →</a>
+        </div>
+        </div>
+    </div>
+  </section>
+
+  <footer style="text-align:center;padding:32px 20px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);">
+    <div style="margin-bottom:12px;">
+      <a href="https://buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:12px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:14px;font-weight:800;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;">
         ☕ このプロジェクトを応援
       </a>
     </div>
+    <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <div style="margin-top:8px;">
+      <a href="privacy.html" style="color:var(--accent);text-decoration:none;font-size:12px;">プライバシーポリシー</a> · <a href="disclaimer.html" style="color:var(--accent);text-decoration:none;font-size:12px;">免責事項</a>
+    </div>
+    <div style="margin-top:8px;font-size:11px;">Powered by Yahooリアルタイム検索 + AI分類</div>
   </footer>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var statsObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.querySelectorAll('strong').forEach(function(el){
+          var txt = el.textContent;
+          var num = parseInt(txt);
+          if(!isNaN(num) && num > 0 && num < 10000){
+            var target = num;
+            var current = 0;
+            var step = Math.max(1, Math.floor(target / 30));
+            var timer = setInterval(function(){
+              current += step;
+              if(current >= target){ current = target; clearInterval(timer); }
+              el.textContent = current;
+            }, 25);
+          }
+        });
+        statsObs.disconnect();
+      }
+    });
+  }, {threshold: 0.3});
+  var statsEl = document.querySelector('.stats');
+  if(statsEl) statsObs.observe(statsEl);
+})();
+</script>
 </body>
 </html>
