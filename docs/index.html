@@ -2,1144 +2,402 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="google-site-verification" content="m7TnCK7r49LynKemf0lmuJkzY4MoTTHDFgL3fW2bPlc" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- SEO_META_START -->
-  <meta name="description" content="その話題、SNSでは実はどっちが多い？ニュースやSNSで意見が割れる話題を投票参加型で整理。あなたはどっち？">
-  <link rel="canonical" href="https://issue-stance-lab.github.io/sns-reaction-map/index.html">
-  <meta property="og:site_name" content="SNS反応まっぷ">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="SNS反応まっぷ — その話題、SNSでは実はどっちが多い？">
-  <meta property="og:description" content="SNSで意見が割れる話題を投票参加型で整理。あなたはどっち？投票してSNSの意見分布を一緒に見よう。">
-  <meta property="og:url" content="https://issue-stance-lab.github.io/sns-reaction-map/index.html">
-  <meta property="og:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SNS反応まっぷ — その話題、SNSでは実はどっちが多い？">
-  <meta name="twitter:description" content="SNSで意見が割れる話題を投票参加型で整理。あなたはどっち？投票してSNSの意見分布を一緒に見よう。">
-  <meta name="twitter:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
-<!-- SEO_META_END -->
-  <title>SNS反応まっぷ — その話題、SNSでは実はどっちが多い？</title>
-  <link rel="icon" href="favicon.ico">
+  <title>SNS反応まっぷ</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;900&display=swap');
-
     :root {
-      --bg: #f8f6f3;
-      --surface: #ffffff;
-      --ink: #1a1a1a;
-      --ink-secondary: #555555;
-      --muted: #888888;
-      --border: rgba(0,0,0,.08);
-      --accent: #e85d2b;
-      --accent-hover: #d14f20;
-      --accent-light: #fdf0eb;
-      --accent-glow: rgba(232,93,43,.15);
-      --success: #1a9a6b;
-      --success-light: #eafaf3;
-      --cat-politics: #c2255c;
-      --cat-education: #0c8599;
-      --cat-tech: #6741d9;
-      --cat-policy: #1971c2;
-      --cat-system: #d6336c;
-      --radius: 14px;
-      --radius-sm: 8px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.06);
-      --shadow-md: 0 4px 16px rgba(0,0,0,.07);
-      --shadow-lg: 0 8px 32px rgba(0,0,0,.1);
-      --shadow-card: 0 2px 8px rgba(0,0,0,.05), 0 0 1px rgba(0,0,0,.1);
-      --font: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce5;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --warn: #b54708;
+      --ok: #16885a;
+      --shadow: 0 12px 30px rgba(16, 24, 40, .06);
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
+    * { box-sizing: border-box; }
     body {
+      margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: var(--font);
-      line-height: 1.75;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
     }
-
-    /* ===== SITE HEADER ===== */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 20px;
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 32px min(5vw, 56px) 24px;
     }
-    .site-header-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0;
     }
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--ink);
+    h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.35;
+      letter-spacing: 0;
     }
-    .site-logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent), #f59e0b);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      flex-shrink: 0;
+    p { margin: 10px 0 0; }
+    .lead {
+      max-width: 980px;
+      color: var(--muted);
+      margin: 0;
     }
-    .site-logo-text {
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
+    main {
+      padding: 22px min(5vw, 56px) 48px;
     }
-    .header-actions {
-      display: flex;
-      align-items: center;
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 12px;
-    }
-    .header-x-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: var(--ink);
-      color: #fff;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      transition: opacity .2s;
-    }
-    .header-x-link:hover { opacity: .85; }
-
-    /* ===== HERO ===== */
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d1f14 40%, #3d2518 100%);
-      min-height: 420px;
-      display: flex;
-      align-items: center;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('images/index-hero.webp');
-      background-size: cover;
-      background-position: center;
-      opacity: .35;
-      z-index: 0;
-    }
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,.5) 100%);
-      z-index: 1;
-    }
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 72px 24px 56px;
-      text-align: center;
-      color: #fff;
-    }
-    .hero-kicker {
-      display: inline-block;
-      background: var(--accent);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      padding: 5px 14px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-size: clamp(28px, 5.5vw, 48px);
-      font-weight: 900;
-      line-height: 1.25;
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
-    }
-    .hero-lead {
-      font-size: clamp(14px, 2.2vw, 17px);
-      opacity: .85;
-      max-width: 560px;
-      margin: 0 auto 28px;
-      line-height: 1.8;
-    }
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 15px;
-      font-weight: 700;
-      padding: 13px 28px;
-      border-radius: 999px;
-      text-decoration: none;
-      transition: background .2s, transform .15s;
-    }
-    .hero-cta:hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-    }
-    .hero-cta svg { transition: transform .2s; }
-    .hero-cta:hover svg { transform: translateX(3px); }
-
-    .hero-metrics {
-      display: flex;
-      justify-content: center;
-      gap: 48px;
-      margin-top: 36px;
-      flex-wrap: wrap;
-    }
-    .hero-metric {
-      text-align: center;
-    }
-    .hero-metric-num {
-      display: block;
-      font-size: 32px;
-      font-weight: 900;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
-    }
-    .hero-metric-label {
-      font-size: 12px;
-      opacity: .7;
-      margin-top: 4px;
-      letter-spacing: .04em;
-    }
-
-    /* ===== CONTENT ===== */
-    .content {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
-    }
-
-    /* ===== PROGRESS ===== */
-    .progress-section {
-      margin-top: -28px;
-      position: relative;
-      z-index: 3;
-      margin-bottom: 40px;
-    }
-    .progress-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .progress-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--accent-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-    .progress-info {
-      flex: 1;
-      min-width: 200px;
-    }
-    .progress-info-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 6px;
-    }
-    .progress-label {
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .progress-count {
-      font-size: 13px;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-    }
-    .progress-bar-outer {
-      height: 8px;
-      background: #eee;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .progress-bar-inner {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), #f59e0b);
-      border-radius: 999px;
-      transition: width .8s cubic-bezier(.4,0,.2,1);
-    }
-    .progress-badge {
-      display: none;
-      align-items: center;
-      gap: 5px;
-      background: var(--success-light);
-      color: var(--success);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .progress-badge.show { display: inline-flex; }
-
-    .complete-banner {
-      display: none;
-      background: linear-gradient(135deg, #1a9a6b, #0d8a5e);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      text-align: center;
-      color: #fff;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 32px;
-      animation: pop-in .5s cubic-bezier(.34,1.56,.64,1);
-    }
-    .complete-banner.show { display: block; }
-    @keyframes pop-in {
-      0% { transform: scale(.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .complete-banner h2 { font-size: 18px; margin-bottom: 4px; }
-    .complete-banner p { font-size: 13px; opacity: .9; }
-
-    /* ===== SECTION HEADER ===== */
-    .section-header {
-      margin-bottom: 28px;
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding-top: 8px;
-    }
-    .section-header h2 {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-    }
-    .section-count {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    /* ===== TOPIC CARDS ===== */
-    .topic-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .topic-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-card);
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      transition: transform .2s, box-shadow .2s;
-      text-decoration: none;
-      color: inherit;
-    }
-    .topic-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .topic-card.featured {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-    .topic-card.featured .card-image {
-      height: 100%;
-      min-height: 260px;
-    }
-
-    .card-image {
-      position: relative;
-      height: 160px;
-      overflow: hidden;
-      background: #e0dcd7;
-    }
-    .card-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .3s;
-    }
-    .topic-card:hover .card-image img {
-      transform: scale(1.04);
-    }
-    .card-image-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.4) 100%);
-    }
-    .card-cat-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 4px;
-      color: #fff;
-      letter-spacing: .03em;
-      z-index: 1;
-    }
-    .card-cat-badge[data-cat="politics"] { background: var(--cat-politics); }
-    .card-cat-badge[data-cat="education"] { background: var(--cat-education); }
-    .card-cat-badge[data-cat="tech"] { background: var(--cat-tech); }
-    .card-cat-badge[data-cat="policy"] { background: var(--cat-policy); }
-    .card-cat-badge[data-cat="system"] { background: var(--cat-system); }
-
-    .card-status-pill {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 999px;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 1;
-    }
-    .card-status-pill.active {
-      background: rgba(26,154,107,.85);
-      color: #fff;
-    }
-    .card-status-pill.planned {
-      background: rgba(0,0,0,.5);
-      color: #fff;
-    }
-    .card-status-pill.collecting {
-      background: rgba(25,113,194,.85);
-      color: #fff;
-    }
-    .card-update-pill {
-      position: absolute;
-      top: 42px;
-      right: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(245,158,11,.92);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 999px;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 1;
-      box-shadow: 0 4px 12px rgba(0,0,0,.16);
-    }
-
-    .card-body {
-      padding: 18px 20px 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .card-title {
-      font-size: 17px;
-      font-weight: 900;
-      line-height: 1.4;
-      margin-bottom: 6px;
-      letter-spacing: -0.01em;
-    }
-    .topic-card.featured .card-title {
-      font-size: 22px;
-    }
-    .card-desc {
-      font-size: 13px;
-      color: var(--ink-secondary);
-      line-height: 1.7;
-      margin-bottom: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .card-voted-badge {
-      display: none;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--success);
-      margin-bottom: 10px;
-    }
-    .card-voted-badge.show { display: inline-flex; }
-
-    .card-footer {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 12px;
-      border-top: 1px solid #f0eeec;
-    }
-    .card-sample {
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .card-sample strong {
-      color: var(--ink);
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
-    .card-arrow {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--accent-light);
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background .2s, transform .2s;
-      flex-shrink: 0;
-    }
-    .topic-card:hover .card-arrow {
-      background: var(--accent);
-      color: #fff;
-      transform: translateX(2px);
-    }
-
-    .card-axes {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 12px;
-    }
-    .axis-tag {
-      background: #f5f3f1;
-      border-radius: 4px;
-      padding: 2px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--ink-secondary);
-    }
-
-    /* ===== NOTES ===== */
-    .notes-section {
-      margin-top: 48px;
-      padding: 20px 24px;
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-    }
-    .notes-section h3 {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--ink-secondary);
-    }
-    .notes-section ul {
-      list-style: none;
-      padding: 0;
-    }
-    .notes-section li {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.8;
-      padding-left: 16px;
-      position: relative;
-    }
-    .notes-section li::before {
-      content: '·';
-      position: absolute;
-      left: 4px;
-      font-weight: 900;
-    }
-
-    /* ===== FOOTER ===== */
-    .site-footer {
-      background: var(--ink);
-      color: rgba(255,255,255,.7);
-      padding: 48px 20px 32px;
-    }
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 40px;
-    }
-    .footer-brand h3 {
-      font-size: 18px;
-      font-weight: 900;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-    .footer-brand p {
-      font-size: 13px;
-      line-height: 1.8;
-      max-width: 340px;
-    }
-    .footer-social {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .footer-social a {
-      width: 36px;
-      height: 36px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(255,255,255,.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      text-decoration: none;
-      transition: background .2s;
+      padding: 15px 16px;
+      box-shadow: var(--shadow);
     }
-    .footer-social a:hover { background: rgba(255,255,255,.2); }
-
-    .footer-links h4 {
+    .stat span {
+      display: block;
+      color: var(--muted);
       font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 12px;
-      letter-spacing: .04em;
     }
-    .footer-links ul {
-      list-style: none;
-      padding: 0;
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 26px;
+      font-variant-numeric: tabular-nums;
     }
-    .footer-links li { margin-bottom: 6px; }
-    .footer-links a {
-      font-size: 13px;
-      color: rgba(255,255,255,.6);
-      text-decoration: none;
-      transition: color .2s;
-    }
-    .footer-links a:hover { color: #fff; }
-
-    .footer-bottom {
-      max-width: 1100px;
-      margin: 32px auto 0;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,.1);
+    .section-head {
       display: flex;
       justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin: 18px 0 12px;
+    }
+    .section-head h2 { font-size: 18px; }
+    .section-head p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .case-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      min-height: 360px;
+    }
+    .case-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+    .kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .status {
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
+      min-width: 68px;
+      min-height: 28px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      background: #f2f4f7;
+      color: #344054;
+    }
+    .status.active {
+      background: #e8f7ef;
+      color: var(--ok);
+    }
+    .status.planned {
+      background: #fff1e8;
+      color: var(--warn);
+    }
+    .case-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .case-stats {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .case-stats div {
+      display: contents;
+    }
+    .case-stats span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .case-stats strong {
+      min-width: 0;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+    .axis-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .axis-list span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fbfcfe;
+      padding: 4px 9px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .link-row {
+      display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      font-size: 11px;
+      margin-top: auto;
     }
-
-    /* ===== ANIMATIONS ===== */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity .5s ease, transform .5s ease;
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      border-radius: 8px;
+      padding: 6px 11px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .link-button.ghost {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--line);
     }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .hero { min-height: 340px; }
-      .hero-inner { padding: 56px 20px 44px; }
-      .hero-metrics { gap: 28px; }
-      .hero-metric-num { font-size: 26px; }
-      .topic-grid { grid-template-columns: 1fr; }
-      .topic-card.featured {
-        grid-column: auto;
-        display: flex;
-        flex-direction: column;
-      }
-      .topic-card.featured .card-image {
-        height: 180px;
-        min-height: auto;
-      }
-      .content { padding: 0 16px 60px; }
-      .progress-card { padding: 16px 18px; }
-      .footer-inner {
-        grid-template-columns: 1fr;
-        gap: 28px;
-      }
-      .site-header-inner { height: 48px; }
-      .site-logo-text { font-size: 14px; }
+    .note-panel {
+      margin-top: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--shadow);
     }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { transition: none !important; opacity: 1; transform: none; }
-      .hero-cta, .topic-card, .card-arrow { transition: none !important; }
+    .note-panel h2 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .note-panel ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 720px) {
+      header, main { padding-inline: 14px; }
+      .section-head { display: block; }
+      .case-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- ADSENSE_TAG_START -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
-<!-- ADSENSE_TAG_END -->
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "SNS反応まっぷ",
-  "url": "https://issue-stance-lab.github.io/sns-reaction-map/",
-  "description": "SNSで意見が割れる話題を投票参加型で整理。あなたはどっち？"
-}
-  </script>
-<!-- GA_TAG_START -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-K10S4YCZFH');
-  </script>
-<!-- GA_TAG_END -->
 </head>
 <body>
-
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="index.html" class="site-logo">
-        <div class="site-logo-icon">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/></svg>
-        </div>
-        <span class="site-logo-text">SNS反応まっぷ</span>
-      </a>
-      <div class="header-actions">
-        <a href="https://x.com/sns_hannou_ma" target="_blank" rel="noopener" class="header-x-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          @sns_hannou_ma
-        </a>
-      </div>
-    </div>
+  <header>
+    <h1>SNS反応まっぷ</h1>
+    <p class="lead">ニュースやSNSで意見が割れる事例を、論点・賛否・根拠・注意点ごとに整理する編集用ポータル。</p>
   </header>
-
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-inner">
-      <span class="hero-kicker">投票参加型 × AI自動分類</span>
-      <h1>その話題、SNSでは<br>どっちが多い？</h1>
-      <p class="hero-lead">ニュースやSNSで意見が割れるテーマを集めて可視化。<br>あなたの一票で、みんなの感覚を確かめよう。</p>
-      <a href="#topics" class="hero-cta">
-        テーマを見る
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <div class="hero-metrics">
-        <div class="hero-metric">
-          <span class="hero-metric-num" id="hero-total-samples">2,577</span>
-          <span class="hero-metric-label">SNS投稿を分析</span>
-        </div>
-        <div class="hero-metric">
-          <span class="hero-metric-num">7</span>
-          <span class="hero-metric-label">テーマ</span>
-        </div>
-        <div class="hero-metric">
-          <span class="hero-metric-num">5</span>
-          <span class="hero-metric-label">投票受付中</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="content">
-
-    <!-- ===== PROGRESS ===== -->
-    <div class="progress-section reveal">
-      <div class="progress-card">
-        <div class="progress-icon">🗳️</div>
-        <div class="progress-info">
-          <div class="progress-info-top">
-            <span class="progress-label">あなたの投票チャレンジ</span>
-            <span class="progress-count" id="vote-progress-text">0 / 6 投票済</span>
-          </div>
-          <div class="progress-bar-outer">
-            <div class="progress-bar-inner" id="vote-progress-bar" style="width:0%"></div>
-          </div>
-        </div>
-        <span class="progress-badge" id="vote-progress-badge"></span>
-      </div>
-    </div>
-
-    <div class="complete-banner" id="complete-banner">
-      <h2>🎉 全テーマ投票コンプリート！</h2>
-      <p>すべてのテーマに投票ありがとうございます。結果をXでシェアしよう！</p>
-    </div>
-
-    <!-- ===== TOPICS ===== -->
-    <div class="section-header reveal" id="topics">
-      <h2>話題のテーマ</h2>
-      <span class="section-count">6テーマ公開中 / 1テーマ企画中</span>
-    </div>
-
-    <section class="topic-grid">
-
-      <!-- Featured: AI著作権 -->
-      <a class="topic-card featured reveal" href="ai-copyright-reaction-map.html">
-        <div class="card-image">
-          <img src="images/ai-copyright-hero.webp" alt="生成AIと著作権問題" loading="lazy">
-          <div class="card-image-overlay"></div>
-          <span class="card-cat-badge" data-cat="tech">テック・著作権</span>
-          <span class="card-status-pill active">分析済み</span>
-          <span class="card-update-pill">情報追加</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">生成AIと著作権問題</h3>
-          <p class="card-desc">AI学習による著作物の無断利用をめぐり、クリエイター保護と技術推進の間で意見が対立。SNS上では規制派と推進派の声がぶつかり合う。</p>
-          <div class="card-voted-badge" data-vote-key="生成AIと著作権問題_SNS反応まっぷ">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            投票済み
-          </div>
-          <div class="card-axes">
-            <span class="axis-tag">著作権保護</span>
-            <span class="axis-tag">技術推進</span>
-            <span class="axis-tag">共存模索</span>
-            <span class="axis-tag">利用者モラル</span>
-          </div>
-          <div class="card-footer">
-            <span class="card-sample"><strong>904</strong>件のSNS投稿を分析</span>
-            <span class="card-arrow">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 高市文春 -->
-      <a class="topic-card reveal" href="takaichi-reaction-map-standard.html">
-        <div class="card-image">
-          <img src="images/takaichi-hero.webp" alt="高市文春・中傷動画問題" loading="lazy">
-          <div class="card-image-overlay"></div>
-          <span class="card-cat-badge" data-cat="politics">政治・ネット選挙</span>
-          <span class="card-status-pill active">分析済み</span>
-          <span class="card-update-pill">情報追加</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">高市文春・中傷動画問題</h3>
-          <p class="card-desc">文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。</p>
-          <div class="card-voted-badge" data-vote-key="高市文春・中傷動画問題_SNS反応まっぷ">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            投票済み
-          </div>
-          <div class="card-axes">
-            <span class="axis-tag">説明責任</span>
-            <span class="axis-tag">報道への疑義</span>
-            <span class="axis-tag">ネット選挙の透明性</span>
-          </div>
-          <div class="card-footer">
-            <span class="card-sample"><strong>324</strong>件を分析</span>
-            <span class="card-arrow">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 辺野古 -->
-      <a class="topic-card reveal" href="henoko-student-accident-reaction-map.html">
-        <div class="card-image">
-          <img src="images/henoko-hero.webp" alt="辺野古高校生死亡事故" loading="lazy">
-          <div class="card-image-overlay"></div>
-          <span class="card-cat-badge" data-cat="education">教育・事故・基地問題</span>
-          <span class="card-status-pill active">分析済み</span>
-          <span class="card-update-pill">情報追加</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">辺野古高校生死亡事故</h3>
-          <p class="card-desc">文科省の教育基本法違反認定、安全管理、政治的中立性、平和教育の萎縮をめぐる反応。</p>
-          <div class="card-voted-badge" data-vote-key="辺野古高校生死亡事故_SNS反応まっぷ">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            投票済み
-          </div>
-          <div class="card-axes">
-            <span class="axis-tag">安全管理</span>
-            <span class="axis-tag">文科省判断</span>
-            <span class="axis-tag">平和教育</span>
-          </div>
-          <div class="card-footer">
-            <span class="card-sample"><strong>403</strong>件を分析</span>
-            <span class="card-arrow">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- あだ名禁止 -->
-      <a class="topic-card reveal" href="school-nickname-ban-reaction-map.html">
-        <div class="card-image">
-          <img src="images/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy">
-          <div class="card-image-overlay"></div>
-          <span class="card-cat-badge" data-cat="education">教育・日常論争</span>
-          <span class="card-status-pill active">分析済み</span>
-          <span class="card-update-pill">情報追加</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">学校でのあだ名禁止の是非</h3>
-          <p class="card-desc">いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。</p>
-          <div class="card-voted-badge" data-vote-key="学校でのあだ名禁止の是非_SNS反応まっぷ">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            投票済み
-          </div>
-          <div class="card-axes">
-            <span class="axis-tag">禁止支持</span>
-            <span class="axis-tag">禁止反対</span>
-            <span class="axis-tag">柔軟対応</span>
-          </div>
-          <div class="card-footer">
-            <span class="card-sample"><strong>344</strong>件を分析</span>
-            <span class="card-arrow">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 憲法改正 -->
-      <a class="topic-card reveal" href="constitutional-amendment-reaction-map.html">
-        <div class="card-image">
-          <img src="images/constitutional-hero.webp" alt="憲法改正論議" loading="lazy">
-          <div class="card-image-overlay"></div>
-          <span class="card-cat-badge" data-cat="policy">政策・国会</span>
-          <span class="card-status-pill active">分析済み</span>
-          <span class="card-update-pill">情報追加</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">憲法改正論議</h3>
-          <p class="card-desc">自衛隊明記や緊急事態条項の追加など、改正賛否と手続きの公正さをめぐるSNSの声。</p>
-          <div class="card-voted-badge" data-vote-key="憲法改正論議_SNS反応まっぷ">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            投票済み
-          </div>
-          <div class="card-axes">
-            <span class="axis-tag">改正賛成</span>
-            <span class="axis-tag">改正反対</span>
-            <span class="axis-tag">手続き重視</span>
-          </div>
-          <div class="card-footer">
-            <span class="card-sample"><strong>422</strong>件を分析</span>
-            <span class="card-arrow">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 部活動 -->
-      <a class="topic-card reveal" href="bukatsu-chiiki-reaction-map.html">
-        <div class="card-image">
-          <img src="images/bukatsu-hero.webp" alt="部活動の地域移行の是非" loading="lazy">
-          <div class="card-image-overlay"></div>
-          <span class="card-cat-badge" data-cat="education">教育・スポーツ</span>
-          <span class="card-status-pill active">分析済み</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">部活動の地域移行の是非</h3>
-          <p class="card-desc">教員の負担軽減、地域格差、指導者確保、子どもの機会均等をめぐる賛否を収集中。</p>
-          <div class="card-voted-badge" data-vote-key="部活動の地域移行の是非_SNS反応まっぷ">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            投票済み
-          </div>
-          <div class="card-axes">
-            <span class="axis-tag">地域移行賛成</span>
-            <span class="axis-tag">地域移行反対</span>
-          </div>
-          <div class="card-footer">
-            <span class="card-sample"><strong>180</strong>件を分析</span>
-            <span class="card-arrow">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 議員定数 -->
-      <article class="topic-card reveal" style="opacity:.6; pointer-events:none;">
-        <div class="card-image" style="background:#ddd;">
-          <span class="card-cat-badge" data-cat="system">政治制度</span>
-          <span class="card-status-pill planned">企画中</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">議員定数削減</h3>
-          <p class="card-desc">政治改革、身を切る改革、民意の反映、多様性、地方代表性をめぐる賛否を整理する予定。</p>
-          <div class="card-footer">
-            <span class="card-sample">近日公開</span>
-            <span class="card-arrow" style="opacity:.3;">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-      </article>
-
+  <main>
+    <section class="top-grid">
+      <div class="stat"><span>登録テーマ</span><strong>8</strong></div>
+      <div class="stat"><span>データあり</span><strong>7</strong></div>
+      <div class="stat"><span>企画中</span><strong>1</strong></div>
     </section>
-
-    <!-- ===== NOTES ===== -->
-    <section class="notes-section reveal">
-      <h3>ご利用にあたって</h3>
-      <ul>
-        <li>表示件数は収集サンプル内の分類件数であり、世論比率ではありません。</li>
-        <li>投稿本文は公開時に要約・リンク中心で扱い、代表投稿は人間が確認します。</li>
-        <li>AI分類は論点整理の補助であり、事実認定や政治的判定そのものではありません。</li>
-      </ul>
-    </section>
+    <div class="section-head">
+      <h2>事例一覧</h2>
+      <p>各カードから、反応マップ・まとめUI・調査メモへ移動できます。</p>
+    </div>
+    <section class="case-grid">
+      
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">政治・ネット選挙</div>
+      <h2>高市文春・中傷動画問題</h2>
+    </div>
+    <span class="status active">分析済み</span>
   </div>
+  <p>文春報道、陣営関与、松井健氏、玉木代表比較、ネット選挙の透明性まで広がったSNS反応。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>324</strong></div>
+    <div><span>最多分類</span><strong>高市氏批判・責任追及</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>高市氏側の説明責任</span><span>報道への疑義</span><span>松井健氏を軸にした比較</span><span>ネット選挙の透明性</span></div>
+  <div class="link-row"><a class="link-button" href="takaichi-reaction-map-standard.html">反応マップ</a><a class="link-button" href="takaichi-summary.html">まとめUI</a><a class="link-button ghost" href="takaichi-reaction-map-standard.html">標準マップ</a><a class="link-button ghost" href="../articles/takaichi-bunshun-smear-videos.md">記事ドラフト</a><a class="link-button ghost" href="../articles/takaichi-smear-video-battle-editorial.md">バトル風記事</a></div>
+</article>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <h3>SNS反応まっぷ</h3>
-        <p>SNSで意見が割れる話題を、投票参加型×AI自動分類で可視化する独立メディアプロジェクト。あなたの一票が、議論の全体像を描き出します。</p>
-        <div class="footer-social">
-          <a href="https://x.com/sns_hannou_ma" target="_blank" rel="noopener" aria-label="X（旧Twitter）">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="https://buymeacoffee.com/kt100sd" target="_blank" rel="noopener" aria-label="Buy Me a Coffee">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.241-.152-.143-.196-.366-.231-.572-.065-.378-.125-.756-.192-1.133-.057-.325-.102-.69-.25-.987-.195-.4-.597-.634-.996-.788a5.723 5.723 0 00-.626-.194c-1-.263-2.05-.36-3.077-.416a25.834 25.834 0 00-3.7.062c-.915.083-1.88.184-2.75.5-.318.116-.646.256-.888.501-.297.302-.393.77-.177 1.146.154.267.415.456.692.58.36.162.737.284 1.123.366 1.075.238 2.189.331 3.287.37 1.218.05 2.437.01 3.65-.118.299-.033.598-.073.896-.119.352-.054.578-.513.474-.834-.124-.383-.457-.531-.834-.473-.466.074-.96.108-1.382.146-1.177.08-2.358.082-3.536.006a22.228 22.228 0 01-1.157-.107c.205-.035.41-.07.615-.11a8.736 8.736 0 001.07-.264c.473-.164.977-.4 1.252-.884.217-.382.145-.856-.191-1.135a2.028 2.028 0 00-.323-.196 1.624 1.624 0 01.107-.047l.033-.013zm-3.635 11.283c-.588 1.062-1.714 1.728-2.86 2.028-1.294.339-2.7.343-3.985-.037-1.108-.329-2.177-.999-2.763-2.028-.367-.642-.413-1.426-.038-2.072.378-.65 1.068-1.065 1.796-1.177.63-.096 1.278-.022 1.886.143.75.203 1.438.612 2.021 1.089.622.51 1.266 1.056 2.016 1.346a3.61 3.61 0 001.78.093 2.68 2.68 0 001.044-.506c.36-.292.566-.72.543-1.181a1.722 1.722 0 00-.44-1.07c-.376-.407-.883-.671-1.415-.831z"/></svg>
-          </a>
-        </div>
-      </div>
-      <div class="footer-links">
-        <h4>テーマ</h4>
-        <ul>
-          <li><a href="ai-copyright-reaction-map.html">生成AIと著作権</a></li>
-          <li><a href="takaichi-reaction-map-standard.html">高市文春問題</a></li>
-          <li><a href="henoko-student-accident-reaction-map.html">辺野古事故</a></li>
-          <li><a href="school-nickname-ban-reaction-map.html">あだ名禁止</a></li>
-          <li><a href="constitutional-amendment-reaction-map.html">憲法改正</a></li>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>サイト情報</h4>
-        <ul>
-          <li><a href="privacy.html">プライバシーポリシー</a></li>
-          <li><a href="disclaimer.html">免責事項</a></li>
-        </ul>
-      </div>
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">教育・事故・基地問題</div>
+      <h2>辺野古高校生死亡事故</h2>
     </div>
-    <div class="footer-bottom">
-      <span>&copy; 2025-2026 SNS反応まっぷ</span>
-      <span>投票参加型 × AI自動分類</span>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>文科省の教育基本法違反認定、安全管理、政治的中立性、平和教育の萎縮をめぐる反応。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>403</strong></div>
+    <div><span>最多分類</span><strong>政治利用・反基地運動批判</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>文科省判断を評価する</span><span>文科省判断を評価しない</span><span>安全管理・引率責任</span><span>追悼・慰霊への共感</span><span>未確認・過激表現</span></div>
+  <div class="link-row"><a class="link-button" href="henoko-student-accident-reaction-map.html">反応マップ</a><a class="link-button" href="henoko-summary.html">まとめUI</a><a class="link-button ghost" href="../research/henoko-student-accident-reactions.md">反応調査メモ</a><a class="link-button ghost" href="../research/henoko-structured-classification-report.md">構造化分類レポート</a></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">政策・国会</div>
+      <h2>憲法改正論議</h2>
     </div>
-  </footer>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>国会議員・政党の賛否、改正項目、緊急事態条項、9条、発議条件などを整理する予定。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>422</strong></div>
+    <div><span>最多分類</span><strong>改憲反対・護憲</strong></div>
+    <div><span>ソース</span><strong>国会議員発言・政党資料</strong></div>
+  </div>
+  <div class="axis-list"><span>改正賛成</span><span>改正反対</span><span>項目別賛否</span><span>政党別スタンス</span></div>
+  <div class="link-row"><a class="link-button" href="constitutional-amendment-reaction-map.html">反応マップ</a><a class="link-button" href="constitutional-amendment-summary.html">まとめUI</a><a class="link-button ghost" href="constitutional-amendment-dashboard.html">論点ダッシュボード</a><a class="link-button ghost" href="../research/constitutional-amendment-research.md">初期調査メモ</a></div>
+</article>
 
-  <script>
-  (function() {
-    // === Vote Progress ===
-    var topics = [
-      { key: '生成AIと著作権問題_SNS反応まっぷ' },
-      { key: '学校でのあだ名禁止の是非_SNS反応まっぷ' },
-      { key: '高市文春・中傷動画問題_SNS反応まっぷ' },
-      { key: '辺野古高校生死亡事故_SNS反応まっぷ' },
-      { key: '憲法改正論議_SNS反応まっぷ' },
-      { key: '部活動の地域移行の是非_SNS反応まっぷ' }
-    ];
 
-    var voted = 0;
-    topics.forEach(function(t) {
-      if (localStorage.getItem('sns_vote_' + t.key + '_my') !== null) voted++;
-    });
-    var total = topics.length;
-    var pct = Math.round(voted / total * 100);
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">政治制度</div>
+      <h2>議員定数削減</h2>
+    </div>
+    <span class="status planned">企画中</span>
+  </div>
+  <p>政治改革、身を切る改革、民意の反映、多様性、地方代表性、比例代表をめぐる賛否を整理する予定。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>0</strong></div>
+    <div><span>最多分類</span><strong>未収集</strong></div>
+    <div><span>ソース</span><strong>政党資料・国会発言・SNS反応</strong></div>
+  </div>
+  <div class="axis-list"><span>コスト削減・改革支持</span><span>民意反映の低下を懸念</span><span>地方代表性</span><span>比例代表制度</span></div>
+  <div class="link-row"></div>
+</article>
 
-    document.getElementById('vote-progress-text').textContent = voted + ' / ' + total + ' 投票済';
-    document.getElementById('vote-progress-bar').style.width = pct + '%';
 
-    var badge = document.getElementById('vote-progress-badge');
-    if (voted > 0 && voted < total) {
-      badge.classList.add('show');
-      badge.textContent = 'あと' + (total - voted) + 'テーマ！';
-    } else if (voted === total) {
-      badge.classList.add('show');
-      badge.textContent = '🎉 コンプリート！';
-      document.getElementById('complete-banner').classList.add('show');
-    }
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">教育・日常論争</div>
+      <h2>学校でのあだ名禁止の是非</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>いじめ防止やジェンダー配慮のための「あだ名禁止・さん付け」指導の是非をめぐる反応。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>344</strong></div>
+    <div><span>最多分類</span><strong>対象外・分類保留</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>禁止支持</span><span>禁止反対</span><span>ルール運用</span></div>
+  <div class="link-row"><a class="link-button" href="school-nickname-ban-reaction-map.html">反応マップ</a></div>
+</article>
 
-    // Card voted badges
-    document.querySelectorAll('.card-voted-badge').forEach(function(el) {
-      var key = el.getAttribute('data-vote-key');
-      if (key && localStorage.getItem('sns_vote_' + key + '_my') !== null) {
-        el.classList.add('show');
-      }
-    });
 
-    // === Scroll Reveal ===
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
-      document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
-    } else {
-      document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
-    }
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">テック・著作権</div>
+      <h2>生成AIと著作権問題</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>AI学習による著作物の無断利用をめぐり、クリエイター保護と技術推進の間で意見が対立。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>904</strong></div>
+    <div><span>最多分類</span><strong>その他・分類保留</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>著作権保護</span><span>技術推進</span><span>共存模索</span><span>利用者モラル</span></div>
+  <div class="link-row"><a class="link-button" href="ai-copyright-reaction-map.html">反応マップ</a></div>
+</article>
 
-    // === Counter Animation ===
-    function animateCounter(el, target) {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        el.textContent = target.toLocaleString();
-        return;
-      }
-      var duration = 1200;
-      var startTime = null;
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var p = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.floor(eased * target).toLocaleString();
-        if (p < 1) requestAnimationFrame(step);
-        else el.textContent = target.toLocaleString();
-      }
-      requestAnimationFrame(step);
-    }
 
-    var heroObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          animateCounter(document.getElementById('hero-total-samples'), 2577);
-          heroObs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    heroObs.observe(document.getElementById('hero-total-samples'));
-  })();
-  </script>
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">TODO: ジャンル</div>
+      <h2>部活動の地域移行の是非</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>TODO: 部活動の地域移行の是非に関するSNS反応の概要</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>180</strong></div>
+    <div><span>最多分類</span><strong>その他・分類保留</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"></div>
+  <div class="link-row"><a class="link-button" href="bukatsu-chiiki-reaction-map.html">反応マップ</a></div>
+</article>
+
+
+<article class="case-card">
+  <div class="case-head">
+    <div>
+      <div class="kicker">交通ルール・日常論争</div>
+      <h2>自転車の青切符導入の是非</h2>
+    </div>
+    <span class="status active">分析済み</span>
+  </div>
+  <p>事故防止やマナー改善のため取締りを支持する声と、車道走行の恐怖やインフラ未整備を訴える反対の対立。</p>
+  <div class="case-stats">
+    <div><span>サンプル</span><strong>177</strong></div>
+    <div><span>最多分類</span><strong>その他・分類保留</strong></div>
+    <div><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
+  </div>
+  <div class="axis-list"><span>取締り強化賛成</span><span>インフラ整備優先</span><span>安全面からの懸念</span><span>更なる厳格化（免許制）</span></div>
+  <div class="link-row"><a class="link-button" href="bike-blue-ticket-reaction-map.html">反応マップ</a></div>
+</article>
+
+    </section>
+    <section class="note-panel">
+      <h2>表示上の注意</h2>
+      <ul><li>表示件数は収集サンプル内の分類件数であり、世論比率ではありません。</li><li>投稿本文は公開時に要約・リンク中心で扱い、代表投稿は人間が確認します。</li><li>AI分類は論点整理の補助であり、事実認定や政治的判定そのものではありません。</li></ul>
+    </section>
+  </main>
 </body>
 </html>
