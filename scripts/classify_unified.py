@@ -296,20 +296,21 @@ def normalize(result: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
 def apply_harmonize(result: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
     """Apply harmonize_rules from config (e.g. fix stance when it conflicts with category)."""
     rules = config.get("harmonize_rules", [])
-    if not rules:
-        return result
     fixed = dict(result)
     category = fixed.get("category")
-    for rule in rules:
-        if category in rule.get("categories", []):
-            valid = set(rule.get("valid_stances", []))
-            if valid and fixed.get("stance") not in valid:
-                fixed["stance"] = rule["force_stance"]
-            elif not valid:
-                fixed["stance"] = rule["force_stance"]
-            if "force_issue" in rule:
-                fixed["issue"] = rule["force_issue"]
-            break
+    if rules:
+        for rule in rules:
+            if category in rule.get("categories", []):
+                valid = set(rule.get("valid_stances", []))
+                if valid and fixed.get("stance") not in valid:
+                    fixed["stance"] = rule["force_stance"]
+                elif not valid:
+                    fixed["stance"] = rule["force_stance"]
+                if "force_issue" in rule:
+                    fixed["issue"] = rule["force_issue"]
+                break
+    if category in set(config.get("article_unusable_categories", [])):
+        fixed["article_usable"] = False
     return fixed
 
 
@@ -329,6 +330,14 @@ def apply_rule_overrides(text: str, result: dict[str, Any], config: dict[str, An
                     fixed["summary"] = override["force_summary"]
             if "force_reason" in override:
                 fixed["reason"] = override["force_reason"]
+            if "force_article_usable" in override:
+                fixed["article_usable"] = bool(override["force_article_usable"])
+            if "force_risk" in override:
+                fixed["risk"] = override["force_risk"]
+            for field in config.get("extra_output_fields", []):
+                key = f"force_{field['name']}"
+                if key in override:
+                    fixed[field["name"]] = override[key]
             if "min_confidence" in override:
                 fixed["confidence"] = max(float(fixed.get("confidence", 0.0)), override["min_confidence"])
             return fixed
