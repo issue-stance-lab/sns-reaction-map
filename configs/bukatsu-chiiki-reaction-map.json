@@ -57,5 +57,122 @@
     "その他・分類保留": "neutral"
   },
   "topic_type": "教育・部活動改革",
-  "hero_image": "images/bukatsu-hero.webp"
+  "hero_image": "images/bukatsu-hero.webp",
+  "manga": {
+    "synopsis": "部活動の地域移行をめぐり、休日も部活指導に追われる若手教員と、地域クラブの費用や送迎に不安を抱える保護者が学校説明会で向き合う物語。教員の働き方改革と子どもの活動機会、どちらも切実であることを描き、読者に「学校だけで支えきれない部活を、誰がどう支えるのか」を問いかける。",
+    "disclaimer": "※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです",
+    "characters": [
+      {
+        "id": "ren",
+        "name": "片桐 蓮（かたぎり れん）",
+        "role": "中学校の若手教員・バスケットボール部顧問",
+        "age": 31,
+        "stance": "地域移行に賛成",
+        "emotion_base": {
+          "fear": "授業準備も生活も削られ、部活指導で教員が燃え尽きて子どもに向き合えなくなること",
+          "desire": "地域と役割を分け、教員も生徒も無理なく続けられる活動環境を作ること"
+        },
+        "appearance": "短い黒髪、少し疲れた目、紺色のジャージ、首からホイッスル、書類が入ったトートバッグを持つ。細身でまじめ、普段は穏やかだが限界を感じている。",
+        "character_sheet_prompt": "Character design reference sheet, white background, multiple expressions (tired smile, worried, determined, apologetic, relieved), full body and close-up face views. Japanese male junior high school teacher and basketball club advisor, age 31, short black hair, slightly tired eyes, navy tracksuit, whistle around his neck, carrying a tote bag full of papers. Slim build, earnest and gentle but visibly overworked. Anime-inspired semi-realistic manga style, clean line art, school color palette."
+      },
+      {
+        "id": "maki",
+        "name": "野口 真紀（のぐち まき）",
+        "role": "中学生の保護者",
+        "age": 43,
+        "stance": "地域移行に反対・費用負担懸念",
+        "emotion_base": {
+          "fear": "地域移行で月謝や送迎の負担が増え、家庭の事情で子どもが好きな部活を諦めること",
+          "desire": "家庭の収入や住む場所に関係なく、子どもが学校で仲間と活動できる機会を守ること"
+        },
+        "appearance": "肩までの栗色の髪、薄いグレーのカーディガン、白いブラウス、家計簿アプリを開いたスマートフォンを持つ。落ち着いた雰囲気だが、子どものことになると強い表情になる。",
+        "character_sheet_prompt": "Character design reference sheet, white background, multiple expressions (calm, anxious, frustrated, protective, thoughtful), full body and close-up face views. Japanese mother of a junior high school student, age 43, shoulder-length chestnut brown hair, light gray cardigan over a white blouse, holding a smartphone showing a household budget app. Warm but protective expression, composed posture with strong concern for her child. Anime-inspired semi-realistic manga style, clean line art, soft realistic color palette."
+      }
+    ],
+    "pages": [
+      {
+        "page_number": 1,
+        "title": "土曜の体育館",
+        "description": "【導入】休日の部活指導に追われる蓮の日常。地域移行への期待が生まれる。",
+        "layout": "上段1コマ大 + 下段2コマ",
+        "panels": [
+          {
+            "position": "上段・大コマ",
+            "direction": "土曜の朝の中学校体育館。蓮がバスケットボール部を指導しながら、片手に授業準備の書類を抱えている。生徒は楽しそうだが、蓮の目元には疲れがある。",
+            "dialogue": "もう土曜か……来週の授業準備、まだ終わってないな。",
+            "speaker": "ren"
+          },
+          {
+            "position": "下段・左コマ",
+            "direction": "体育館の壁時計が夕方を指している。蓮が一人でボールを片付け、スマートフォンには未読の学校連絡が並ぶ。",
+            "dialogue": "好きで始めた顧問だけど、このままじゃ続かない。",
+            "speaker": "ren"
+          },
+          {
+            "position": "下段・右コマ",
+            "direction": "職員室で蓮が地域移行の説明資料を見る。資料には「地域クラブとの連携」という文字。蓮の表情に少し希望が差す。",
+            "dialogue": "地域と分担できるなら、子どもにも先生にもいいはずだ。",
+            "speaker": "ren"
+          }
+        ],
+        "image_prompt": "A manga page with 3 panels layout (one large panel on top, two smaller panels on the bottom row). Anime-inspired semi-realistic manga style, clean line art, realistic Japanese school atmosphere.\n\n[TOP LARGE PANEL] Saturday morning in a junior high school gymnasium. A Japanese male teacher (short black hair, tired eyes, navy tracksuit, whistle around his neck) coaches a basketball club while holding lesson preparation papers under one arm. Students practice happily in the background, but the teacher looks exhausted. A speech bubble containing the Japanese text \"もう土曜か……来週の授業準備、まだ終わってないな。\"\n\n[BOTTOM LEFT PANEL] Evening in the gym. The wall clock shows late afternoon. The teacher cleans up basketballs alone, and his smartphone shows many unread school messages. Quiet tired atmosphere. A speech bubble containing the Japanese text \"好きで始めた顧問だけど、このままじゃ続かない。\"\n\n[BOTTOM RIGHT PANEL] In the teachers' room, the teacher reads a document about club activity regional transition. The document headline includes Japanese text: \"地域クラブとの連携\". A small hopeful light enters from the window. A speech bubble containing the Japanese text \"地域と分担できるなら、子どもにも先生にもいいはずだ。\""
+      },
+      {
+        "page_number": 2,
+        "title": "誰が支えるの？",
+        "description": "【対立】説明会で真紀が費用・送迎・受け皿不足への不安を訴える。",
+        "layout": "上段2コマ + 下段1コマ大",
+        "panels": [
+          {
+            "position": "上段・左コマ",
+            "direction": "学校説明会の教室。蓮が保護者に地域移行の資料を配り、教員の負担軽減と持続可能性を説明している。",
+            "dialogue": "先生だけで全部抱える形は、もう限界に近いんです。",
+            "speaker": "ren"
+          },
+          {
+            "position": "上段・右コマ",
+            "direction": "真紀がスマートフォンの家計簿画面を見ながら手を挙げる。表情は落ち着いているが切実。",
+            "dialogue": "でも、月謝や送迎が増えたら、続けられない家庭も出ますよね？",
+            "speaker": "maki"
+          },
+          {
+            "position": "下段・大コマ",
+            "direction": "蓮と真紀が教室の前方で向き合う。蓮の背後には積み上がる書類と夜の職員室、真紀の背後には家計簿、送迎車、子どものユニフォームが重なる。周囲の保護者も不安げに見ている。",
+            "dialogue_ren": "部活を残すためにも、学校の外の力が必要なんです。",
+            "dialogue_maki": "でも、地域に受け皿がなければ、子どもの機会が減るだけです。",
+            "speaker": "both"
+          }
+        ],
+        "image_prompt": "A manga page with 3 panels layout (two smaller panels on top row, one large panel on the bottom). Anime-inspired semi-realistic manga style, clean line art, tense but realistic school meeting atmosphere.\n\n[TOP LEFT PANEL] A classroom used for a school parent briefing. The young male teacher in a navy tracksuit hands out documents about regional transition of club activities to parents. He speaks earnestly about teacher workload and sustainability. A speech bubble containing the Japanese text \"先生だけで全部抱える形は、もう限界に近いんです。\"\n\n[TOP RIGHT PANEL] A Japanese mother (shoulder-length chestnut hair, light gray cardigan, white blouse) raises her hand while looking at a smartphone household budget app. Her expression is calm but urgent. A speech bubble containing the Japanese text \"でも、月謝や送迎が増えたら、続けられない家庭も出ますよね？\"\n\n[BOTTOM LARGE PANEL] The teacher and the mother face each other at the front of the classroom. Behind the teacher, show symbolic piles of documents and a late-night teachers' room; behind the mother, show a household budget screen, a car for transportation, and a child's sports uniform. Other parents watch with worried faces. Two speech bubbles: one from the teacher containing the Japanese text \"部活を残すためにも、学校の外の力が必要なんです。\" and one from the mother containing the Japanese text \"でも、地域に受け皿がなければ、子どもの機会が減るだけです。\""
+      },
+      {
+        "page_number": 3,
+        "title": "部活は誰のもの",
+        "description": "【余韻】二人が互いの切実さに気づく。結論を急がず、読者に問いを残すオープンエンド。",
+        "layout": "上段2コマ + 下段1コマ大（ワイド）",
+        "panels": [
+          {
+            "position": "上段・左コマ",
+            "direction": "説明会後の廊下。蓮が少し頭を下げ、保護者の不安を受け止めている。",
+            "dialogue": "費用や移動のことまで考えないと、本当の移行にはならないですね。",
+            "speaker": "ren"
+          },
+          {
+            "position": "上段・右コマ",
+            "direction": "真紀が体育館から聞こえる生徒の声に振り向き、蓮の疲れた表情にも気づく。少し表情が和らぐ。",
+            "dialogue": "先生たちだけに頼り続けるのも、違うのかもしれません。",
+            "speaker": "maki"
+          },
+          {
+            "position": "下段・ワイドコマ",
+            "direction": "夕方の校庭。体育館の明かりの中で生徒たちが活動し、蓮と真紀が少し距離を置いて同じ光景を見ている。学校の門の外には地域クラブの小さな看板、反対側には保護者の車列が見える。ナレーションが上下に入る。",
+            "narration_top": "教員の限界か、家庭の負担か——",
+            "narration_bottom": "子どもたちの居場所を、これから誰がどう支えるのでしょうか？",
+            "speaker": "narrator"
+          }
+        ],
+        "image_prompt": "A manga page with 3 panels layout (two smaller panels on top row, one wide cinematic panel on the bottom). Anime-inspired semi-realistic manga style, clean line art, warm reflective school evening atmosphere.\n\n[TOP LEFT PANEL] In the school hallway after the parent briefing, the young male teacher bows his head slightly and accepts the parent's concerns. He looks thoughtful rather than defensive. A speech bubble containing the Japanese text \"費用や移動のことまで考えないと、本当の移行にはならないですね。\"\n\n[TOP RIGHT PANEL] The mother turns toward the sound of students practicing in the gym and notices the teacher's tired face. Her protective expression softens. A speech bubble containing the Japanese text \"先生たちだけに頼り続けるのも、違うのかもしれません。\"\n\n[BOTTOM WIDE PANEL] Evening schoolyard. Students practice inside the lit gymnasium in the background. The teacher and the mother stand with some distance between them, both looking at the same scene. Outside the school gate, show a small sign for a local sports club; on the other side, show a line of parents' cars for pickup, symbolizing both possibility and burden. Gentle sunset colors, open-ended mood. A narrative text box at the top containing the Japanese text \"教員の限界か、家庭の負担か——\" and a larger narrative text box at the bottom containing the Japanese text \"子どもたちの居場所を、これから誰がどう支えるのでしょうか？\""
+      }
+    ]
+  }
 }
