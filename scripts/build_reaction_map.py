@@ -798,6 +798,34 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
     if hero_badge:
         hero_badge_html = f'<span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">{html.escape(hero_badge)}</span>'
 
+    ogp_title = str(config.get("ogp_title") or config.get("title") or title)
+    ogp_desc = str(config.get("ogp_description") or config.get("subtitle") or subtitle)
+    canonical_url = str(config.get("canonical_url") or "")
+    og_image = str(config.get("og_image") or "")
+
+    ogp_meta_html = ""
+    if ogp_title or ogp_desc or canonical_url or og_image:
+        meta_tags = []
+        if ogp_desc:
+            meta_tags.append(f'  <meta name="description" content="{html.escape(ogp_desc)}">')
+        if canonical_url:
+            meta_tags.append(f'  <link rel="canonical" href="{html.escape(canonical_url)}">')
+        meta_tags.append('  <meta property="og:site_name" content="SNS反応まっぷ">')
+        meta_tags.append('  <meta property="og:type" content="article">')
+        if ogp_title:
+            meta_tags.append(f'  <meta property="og:title" content="{html.escape(ogp_title)}">')
+            meta_tags.append(f'  <meta name="twitter:title" content="{html.escape(ogp_title)}">')
+        if ogp_desc:
+            meta_tags.append(f'  <meta property="og:description" content="{html.escape(ogp_desc)}">')
+            meta_tags.append(f'  <meta name="twitter:description" content="{html.escape(ogp_desc)}">')
+        if canonical_url:
+            meta_tags.append(f'  <meta property="og:url" content="{html.escape(canonical_url)}">')
+        if og_image:
+            meta_tags.append(f'  <meta property="og:image" content="{html.escape(og_image)}">')
+            meta_tags.append(f'  <meta name="twitter:image" content="{html.escape(og_image)}">')
+        meta_tags.append('  <meta name="twitter:card" content="summary_large_image">')
+        ogp_meta_html = "\n".join(meta_tags) + "\n"
+
     supabase_script = ""
     if config.get("supabase_url") and config.get("supabase_anon_key"):
         supabase_script = '  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n'
@@ -808,7 +836,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
-{supabase_script}  <link rel="preconnect" href="https://fonts.googleapis.com">
+{ogp_meta_html}{supabase_script}  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
