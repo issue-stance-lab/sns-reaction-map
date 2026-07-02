@@ -1352,7 +1352,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
       <a href="disclaimer.html" style="color:rgba(255,255,255,.7);">免責事項</a>
     </div>
     <div style="margin-top:10px;">
-      <a href="https://www.buymeacoffee.com/sns_hannou_map" target="_blank" rel="noopener"
+      <a href="https://buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener"
          style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#ffdd00;color:#0d0d0d;text-decoration:none;font-size:13px;font-weight:700;">
         ☕ このプロジェクトを応援
       </a>
