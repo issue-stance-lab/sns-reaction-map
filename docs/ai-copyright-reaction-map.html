@@ -559,9 +559,9 @@
 
 /* キャンバス */
 #wrap { position:relative; width:100%; margin:0 auto; }
-#stance-map-section canvas { display:block; width:100%; border:1px solid #e0e0e0; border-radius:8px; background:#fafafa; }
+#stance-map-section canvas { display:block; width:100%; border:1px solid #e0e0e0; border-radius:8px; }
 #canvasMain { cursor:crosshair; position:relative; z-index:2; background:transparent; }
-#canvasHeat { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px; pointer-events:none; z-index:1; }
+#canvasHeat { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px; pointer-events:none; z-index:1; background:#fafafa; }
 .ax { position:absolute; font-size:10px; font-weight:600; color:#444; white-space:nowrap; pointer-events:none; z-index:3; }
 
 /* ツールチップ */
@@ -1056,7 +1056,7 @@ function visible(p) {
 function drawHeatmap() {
   hCtx.clearRect(0, 0, W, H);
   if (!showHeat) return;
-  const vis = RAW.filter((p, i) => visible(p) && (animating ? i < animFrame : true));
+  const vis = RAW.filter(p => visible(p));
   if (!vis.length) return;
   const res = 3, gw = Math.ceil(W/res), gh = Math.ceil(H/res);
   const densAll = new Float32Array(gw * gh);
