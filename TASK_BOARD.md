@@ -408,6 +408,58 @@
 - `docs/*-reaction-map.html`（8ファイル）: `buymeacoffee.com/sns_hannou_map` → `buymeacoffee.com/issue.stance.lab`
 - `scripts/build_reaction_map.py`: 同様に修正（今後の新規テーマ生成にも反映）
 
+### 課題23: ai-copyright 2次元スタンスマップの実装
+**担当**: Claude Code
+**状態**: 進行中（試験分類完了、本実装未着手）
+**概要**: 現在の半円チャートは白黒つかない曖昧な表示になりがちという問題を解決するため、「生成AIと著作権」テーマを対象に2軸スコア分類を導入し、十字散布図として可視化する
+**背景**:
+- 50件の試験分類で象限分布を確認済み（規制賛成×個人優先:19件 / 規制反対×産業優先:9件）
+- 「規制賛成×産業優先」象限は0件であることも確認（仮説の検証に成功）
+- エラー率36%（gemma4:16kがJSON以外で返すケースが多い）→ プロンプト改善が必要
+**2軸定義**:
+- X軸 `stance_regulation`: -2（規制強く反対）〜 +2（規制強く賛成）
+- Y軸 `stance_beneficiary`: -2（産業・社会全体優先）〜 +2（クリエイター個人優先）
+**スコープ**:
+1. Ollamaプロンプト改善（JSON出力安定化、エラー率10%以下を目標）
+2. 904件全量再分類（`social-samples/ai-copyright_classified.json` に2軸スコアを追記）
+3. `docs/ai-copyright-reaction-map.html` に十字散布図を実装（既存半円チャートと併置または置換）
+**参照**:
+- 試験分類スクリプト: セッション内スクラッチパッドに保存済み（`classify_2d_test.py`）
+- 試験結果JSON: セッション内スクラッチパッドに保存済み（`ai_copyright_2d_test.json`）
+
+---
+
+### 課題24: 各テーマへの漫画コンテンツ追加（継続課題）
+**担当**: Claude Code（別セッション）
+**状態**: 進行中
+**概要**: 「SNS反応まっぷ」の各テーマに漫画（ショートコミック）コンテンツを追加する。AI著作権テーマで実装済みの仕組みを全テーマに展開する。新規テーマ追加・スタンスマップ完成・更新時も本課題で継続管理する。
+**ルール**:
+- 新規テーマのスタンスマップが完成したら、そのデータ（象限分布・代表発言）をもとに本課題で漫画を作成する
+- 新規テーマを作業するセッションでも「課題24の作業が必要」とTASK_BOARDに明記しリンクする
+**ワークフロー（テーマごとに繰り返す）**:
+1. **漫画データ作成（自動）** — スタンスマップの象限分布と代表投稿をもとにキャラ設計→ `configs/<topic>-reaction-map.json` に `manga` フィールド追記
+2. **GPTimage2プロンプト出力（自動）** — `manga-prompts/<topic>-prompts.md`（キャラシート2枚+ページ3枚）と `manga-prompts/<topic>-vote-prompts.md`（投票ボタン画像4枚）を作成
+3. **画像生成（手動）** — ユーザーがGPTimage2でプロンプトから生成し `docs/images/` に配置
+4. **HTML更新（自動）** — `docs/<topic>-reaction-map.html` に漫画セクション・投票画像カードを追加（`ai-copyright-reaction-map.html` の実装を踏襲）
+5. **画像変換（自動）** — 漫画ページ→WebP 100KB以下、投票画像→240×240 WebP 20KB以下に圧縮
+**テーマ別状態**:
+| テーマ | スタンスマップ | 漫画コンテンツ | 備考 |
+|--------|----------------|----------------|------|
+| ai-copyright | 未 | 完了 | 参考実装。漫画・投票画像カード実装済み |
+| elderly-license | ✅ 完了 (117件) | 未着手 | 義務化賛成79件/強制反対移動権21件。プロンプト作成対象 |
+| bike-blue-ticket | ✅ 完了 (116件) | 未着手 | 取締賛成55件/取締反対利用者優先25件 |
+| school-nickname-ban | 未 | 未着手 | スタンスマップ完成後に着手 |
+| bukatsu-chiiki | 未 | 未着手 | スタンスマップ完成後に着手 |
+| constitutional | 未 | 未着手 | スタンスマップ完成後に着手 |
+**参照ファイル**:
+- `templates/manga-content.schema.md` — データスキーマ定義
+- `templates/reaction-map-workflow.md` — ワークフロー（Step 3.5が漫画）
+- `manga-prompts/ai-copyright-prompts.md` — キャラシート+ページプロンプト例
+- `manga-prompts/ai-copyright-vote-prompts.md` — 投票ボタン画像プロンプト例
+- `configs/ai-copyright-reaction-map.json` — mangaフィールドの実データ例
+- `docs/ai-copyright-reaction-map.html` — HTML実装例
+- セッションプロンプト: `configs/prompts/claude-code/20260703_task24-manga-content.md`
+
 ---
 
 ## 担当割り当て履歴
@@ -436,6 +488,8 @@
 | 課題20: テーマ別問題提起LP | 未定 | - | 未着手 | 各テーマの問題提起に特化したLP |
 | 課題21: あだ名禁止・高齢者免許返納データ修正 | Hermes | 2026-07-02 | 完了 | school・elderly両テーマ完了 |
 | 課題22: Buy Me a Coffee URL修正 | Claude Code | 2026-07-02 | 完了 | 全ページ+ビルドスクリプトのURLをissue.stance.labに統一 |
+| 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
+| 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket優先。スタンスマップ完成テーマから順次展開 |
 
 ---
 

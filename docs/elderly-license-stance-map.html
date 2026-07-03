@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高齢者免許返納問題 — SNS意見スタンスマップ</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Hiragino Sans',sans-serif; background:#fff; color:#111; padding:16px; max-width:640px; margin:0 auto; }
+h1 { font-size:16px; font-weight:700; margin-bottom:3px; }
+.subtitle { font-size:11px; color:#888; margin-bottom:12px; }
+
+/* キャンバス */
+#wrap { position:relative; width:100%; margin:0 auto; }
+canvas { display:block; width:100%; border:1px solid #e0e0e0; border-radius:8px; background:#fafafa; }
+#canvasMain { cursor:crosshair; position:relative; z-index:2; background:transparent; }
+#canvasHeat { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px; pointer-events:none; z-index:1; }
+.ax { position:absolute; font-size:10px; font-weight:600; color:#444; white-space:nowrap; pointer-events:none; z-index:3; }
+
+/* ツールチップ */
+#tooltip { position:fixed; background:#111; color:#fff; padding:8px 12px; border-radius:6px; font-size:11px; pointer-events:none; opacity:0; transition:opacity .12s; max-width:260px; line-height:1.7; z-index:100; }
+
+/* ガイドツアーパネル */
+#tourPanel {
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+  color:#fff; border-radius:10px; padding:16px 18px; margin-top:12px;
+  display:none; position:relative;
+}
+#tourPanel.active { display:block; }
+#tourStep { font-size:10px; color:#aaa; margin-bottom:4px; }
+#tourTitle { font-size:14px; font-weight:700; margin-bottom:6px; color:#fff; }
+#tourDesc { font-size:12px; color:#ccc; line-height:1.7; margin-bottom:10px; }
+#tourEmbed {
+  margin-bottom:10px; display:none; border-radius:8px; overflow:hidden;
+  max-height:320px; overflow-y:auto;
+}
+#tourEmbed .twitter-tweet { margin:0 auto !important; }
+#tourEmbedLoading {
+  background:rgba(255,255,255,0.06); border-left:3px solid #2980b9;
+  padding:10px 12px; border-radius:4px; font-size:11px; color:#aaa;
+  display:none; margin-bottom:10px;
+}
+#tourQuoteFallback {
+  background:rgba(255,255,255,0.08); border-left:3px solid #2980b9;
+  padding:8px 12px; border-radius:4px; font-size:11px; color:#eee;
+  line-height:1.6; margin-bottom:10px; display:none; cursor:pointer;
+}
+#tourQuoteFallback:hover { background:rgba(255,255,255,0.13); }
+#tourQuoteFallback small { display:block; margin-top:4px; color:#888; font-size:10px; }
+.tour-nav { display:flex; gap:8px; align-items:center; }
+.tnav { padding:6px 14px; border:1px solid rgba(255,255,255,0.2); border-radius:16px; cursor:pointer; font-size:11px; color:#fff; background:transparent; transition:background .15s; }
+.tnav:hover { background:rgba(255,255,255,0.1); }
+.tnav.primary { background:#2980b9; border-color:#2980b9; font-weight:600; }
+.tnav.primary:hover { background:#1f6a99; }
+#tourProgress { flex:1; height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
+#tourProgressBar { height:100%; background:#2980b9; border-radius:2px; transition:width .3s; }
+
+/* コントロール */
+.controls { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.legend-emo { display:flex; align-items:center; gap:8px; font-size:10px; }
+.emo-bar { height:10px; width:160px; border-radius:3px; background:linear-gradient(to right,#4a90d9,#bbb,#e05c5c); flex-shrink:0; }
+.view-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.view-row label { font-size:10px; color:#555; display:flex; align-items:center; gap:4px; cursor:pointer; }
+.filters { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.fbtn { font-size:10px; padding:4px 10px; border:1px solid #ccc; border-radius:12px; cursor:pointer; background:#fff; transition:background .12s,color .12s; }
+.fbtn.active { background:#333; color:#fff; border-color:#333; }
+
+/* ツアー起動ボタン */
+#startTour { background:#2980b9; color:#fff; border:none; padding:6px 16px; border-radius:16px; font-size:11px; font-weight:600; cursor:pointer; margin-left:auto; }
+#startTour:hover { background:#1f6a99; }
+
+/* 統計カード */
+.stats { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:10px; }
+.sbox { background:#f5f5f5; border-radius:6px; padding:7px 10px; }
+.slabel { font-size:9px; color:#888; }
+.sval { font-size:18px; font-weight:700; }
+.sdesc { font-size:9px; color:#aaa; }
+</style>
+</head>
+<body>
+<h1>高齢者免許返納問題 — SNS意見スタンスマップ</h1>
+<div class="subtitle">117件 | ヒートマップ+ドット | 点の色=感情強度（青:冷静→赤:激怒）| ホバーで詳細 / クリックでXへ</div>
+
+<div id="wrap">
+  <canvas id="canvasHeat" width="600" height="600"></canvas>
+  <canvas id="canvasMain" width="600" height="600"></canvas>
+  <div class="ax" style="top:3px;left:50%;transform:translateX(-50%)">交通安全・被害者保護優先 ▲</div>
+  <div class="ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 高齢者の移動権・生活優先</div>
+  <div class="ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 強制不要（本人判断）</div>
+  <div class="ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">義務化・強制返納 ▶</div>
+</div>
+
+<!-- ガイドツアーパネル -->
+<div id="tourPanel">
+  <div id="tourStep"></div>
+  <div id="tourTitle"></div>
+  <div id="tourDesc"></div>
+  <div id="tourEmbedLoading">投稿を読み込み中…</div>
+  <div id="tourEmbed"></div>
+  <div id="tourQuoteFallback"><span id="tourQuoteText"></span><small id="tourQuoteLink">↗ Xで見る</small></div>
+  <div class="tour-nav">
+    <button class="tnav" id="btnPrev">← 前へ</button>
+    <div id="tourProgress"><div id="tourProgressBar"></div></div>
+    <button class="tnav primary" id="btnNext">次へ →</button>
+    <button class="tnav" id="btnClose" style="border-color:#666;color:#aaa">✕</button>
+  </div>
+</div>
+
+<div class="controls">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div class="legend-emo">
+      <span style="color:#555">感情強度:</span>
+      <span>冷静</span>
+      <div class="emo-bar"></div>
+      <span>激怒</span>
+    </div>
+    <button id="startTour">▶ ガイドツアーで読む</button>
+  </div>
+  <div class="view-row">
+    <label><input type="checkbox" id="chkHeat" checked> ヒートマップ</label>
+    <label><input type="checkbox" id="chkDots" checked> ドット</label>
+    <label style="color:#888">強度: <input type="range" id="heatIntensity" min="10" max="60" value="40" style="width:80px;vertical-align:middle"></label>
+  </div>
+  <div class="filters">
+    <span style="font-size:10px;color:#888">絞り込み:</span>
+    <button class="fbtn active" data-q="all">全件 (117)</button>
+    <button class="fbtn" data-q="q1">義務化賛成×安全優先 (79)</button>
+    <button class="fbtn" data-q="q3">強制反対×移動権優先 (21)</button>
+    <button class="fbtn" data-q="q2">強制反対×安全優先 (2)</button>
+    <button class="fbtn" data-q="q4">高感情 e≥1.5 (40)</button>
+    <button class="fbtn" data-q="calm">冷静 e≤0 (29)</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="sbox"><div class="slabel">義務化賛成 × 安全優先 (右上)</div><div class="sval" style="color:#c0392b">79件</div><div class="sdesc">強制返納・交通安全最優先派</div></div>
+  <div class="sbox"><div class="slabel">強制反対 × 移動権優先 (左下)</div><div class="sval" style="color:#2980b9">21件</div><div class="sdesc">地方の移動権・生活インフラ重視派</div></div>
+  <div class="sbox"><div class="slabel">強制反対 × 安全優先 (左上)</div><div class="sval" style="color:#27ae60">2件</div><div class="sdesc">「代替交通整備が先決」派</div></div>
+  <div class="sbox"><div class="slabel">高感情 (e ≥ 1.5)</div><div class="sval" style="color:#e67e22">40件</div><div class="sdesc">怒り・強い感情的反応</div></div>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+const RAW = [
+  {x:1.0,y:1.0,e:0.5,c:0.85,s:"重大事故後の免許返納義務化支持",u:"https://x.com/PsyDuckisking/status/2069316466042904934"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"８５歳以上の免許返納義務化を強く要望",u:"https://x.com/senchanpe/status/2067548872151634344"},
+  {x:2.0,y:1.5,e:1.0,c:0.90,s:"介護従事者が返納義務化を提案",u:"https://x.com/pGyPV4ZWUcdozJ1/status/2067239970751037498"},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"事故の恐怖から高齢者免許返納義務化を強く支持",u:"https://x.com/ebifry_away/status/2067182907178000531"},
+  {x:1.0,y:1.0,e:1.0,c:0.70,s:"政策批判と返納義務化求める投稿",u:"https://x.com/15milkoco/status/2067181921357156819"},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"運転能力低下者の免許返納義務化を求める怒りの投稿",u:"https://x.com/nish_i1106/status/2066740456185340235"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"義務返納と厳罰化を強く求める怒りの意見",u:"https://x.com/thinvn1/status/2064889145395384511"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"高齢者EV自動運転の法的義務化を強く主張",u:"https://x.com/minto_kun0617/status/2064654467111559494"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"78歳事故を契機に返納義務化を強く主張",u:"https://x.com/thinvn1/status/2063532471581585713"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"返納義務化支持、安全最優先の主張",u:"https://x.com/mu_xia31408/status/2062792816590459200"},
+  {x:2.0,y:1.0,e:1.0,c:0.70,s:"免許返納義務化の必要性を訴える安全重視の意見",u:"https://x.com/ZuoChuan90857/status/2062746738272927757"},
+  {x:2.0,y:2.0,e:1.0,c:0.95,s:"70歳以上返納義務化を主張",u:"https://x.com/Un90713/status/2061831742349267281"},
+  {x:2.0,y:1.0,e:2.0,c:0.70,s:"高齢者の免許返納義務化を強く支持する感情的な投稿",u:"https://x.com/Chokemaru_24/status/2061657556028936668"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"80歳以上無条件返納義務化を求め安全最優先",u:"https://x.com/teracho_g24/status/2061584797508731197"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"75歳に免許返納の法的義務化を求める主張",u:"https://x.com/junchi1029/status/2061343452156293543"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"年齢での免許返納義務化を提案する安全的意見",u:"https://x.com/_democrash/status/2061328042170233146"},
+  {x:2.0,y:1.5,e:1.5,c:0.85,s:"高齢者の免許返納強制を政府主導で進めるべきと強く主張",u:"https://x.com/gandamuotaku83/status/2061022537199542593"},
+  {x:1.5,y:2.0,e:1.0,c:0.85,s:"高齢事故の統計を示し、義務化による子供保護を求める意見",u:"https://x.com/sono_ayapi/status/2060863711800439172"},
+  {x:2.0,y:1.0,e:1.0,c:0.70,s:"義務化を強く望む切実な意見",u:"https://x.com/DoraShiba0909/status/2060855019784814635"},
+  {x:1.0,y:0.0,e:1.0,c:0.50,s:"事故防止へ義務化検討を支持する驚きの意見",u:"https://x.com/24chokemaru/status/2060853489312641161"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"免許返納義務化を支持、事故防止重視",u:"https://x.com/DoraShiba0909/status/2060833757150826800"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"返納義務化を強く求める感情的な投稿",u:"https://x.com/snowfff_/status/2060832634113282390"},
+  {x:2.0,y:1.5,e:1.5,c:0.85,s:"70歳以上の免許返納義務化を求める強い主張",u:"https://x.com/city5353/status/2060744506736333095"},
+  {x:2.0,y:1.0,e:0.5,c:0.85,s:"60歳での免許返納義務化を推進する意見",u:"https://x.com/ultra_Bocchi/status/2060741373863870868"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"高齢者の強制返納義務化を求める怒りの投稿",u:"https://x.com/wolf36732/status/2060635259990069757"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"年齢で返納を義務化すべきとの意見",u:"https://x.com/nobuko22128/status/2060620363378409966"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"返納義務化と安全最優先を明確に支持",u:"https://x.com/ideco_cat/status/2060581426144411823"},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"80歳で中型・大型の返納義務化を強く主張",u:"https://x.com/Quagsirelover11/status/2060563655725654136"},
+  {x:2.0,y:1.0,e:1.0,c:0.85,s:"80歳以上への免許返納義務化と社会支援を求める投稿",u:"https://x.com/intenti33310775/status/2060556926380024074"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"法的義務化を求め感情的に批判する投稿",u:"https://x.com/snowfff_/status/2060349575144313311"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"高齢者の免許返納義務化求め怒り示す",u:"https://x.com/snowfff_/status/2060348964772421968"},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"危険運転警告後に高齢者の免許返納義務化を求める",u:"https://x.com/bakusai_com/status/1738809260883190074"},
+  {x:2.0,y:2.0,e:1.0,c:0.95,s:"70歳返納義務化を強く支持、安全最優先",u:"https://x.com/GraffiasRear/status/1580374661178982400"},
+  {x:1.0,y:1.0,e:1.0,c:0.70,s:"高齢者の免許返納賛成表明",u:"https://x.com/Gk6Ams/status/2061773776921280838"},
+  {x:1.0,y:1.0,e:0.5,c:0.70,s:"高齢者免許返納賛成の個人的意見",u:"https://x.com/hagidaiki/status/2061745951119937868"},
+  {x:1.0,y:1.0,e:0.5,c:0.75,s:"地方高齢者の移動権認めつつ利用制限求める",u:"https://x.com/NRVYC5XYAkTDIHD/status/2060768487430373720"},
+  {x:-2.0,y:0.0,e:0.0,c:0.85,s:"年齢一律返納に反対。両者に過失の可能性がある。",u:"https://x.com/dare_iwan/status/2060626741530616094"},
+  {x:1.0,y:1.0,e:0.0,c:0.60,s:"高齢者の事故増加に懸念し年齢制限による返納を提案",u:"https://x.com/rZvt4IEQnj45472/status/2068577328616382626"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"自身の危険体験に基づく年齢制限・義務返納の熱い主張",u:"https://x.com/cP2ELZsMlRrDWQ1/status/2067493363344191518"},
+  {x:1.0,y:0.5,e:0.5,c:0.70,s:"高齢政治家の年齢制限を免許返納と関連付けて支持",u:"https://x.com/oekkdisk/status/2066363291761578319"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"老人ドライバーへの強い怒りと返納強制を求める怒号的投稿",u:"https://x.com/ponponzoo29/status/2065306811285262759"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"年齢ベース返納義務化支持、強く怒り",u:"https://x.com/OrkCRH7kaIosFS5/status/2062448624894951474"},
+  {x:1.0,y:1.0,e:0.0,c:0.75,s:"一律返納に慎重だが職業運転に年齢制限を支持",u:"https://x.com/Cu_the_3rd/status/2061589539723137076"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"年齢制限の法的義務化を強く支持、感情的に反対論を否定",u:"https://x.com/Andy_Moco2/status/2061586503197979009"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"85歳は事故ると批判し、免許年齢上限設定を求める",u:"https://x.com/ta_ninyo/status/2061423994344190072"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"轢き逃げ怒り、返納義務化求める",u:"https://x.com/toshiobeppu/status/2060462866944405620"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"高齢者運転事故への怒りと返納義務化の要求",u:"https://x.com/kinta20010101/status/2060355095318221196"},
+  {x:0.0,y:0.5,e:0.0,c:0.70,s:"自主返納を促す情報投稿。個人的支持下地あり",u:"https://x.com/homes9991/status/2069378113977680275"},
+  {x:1.0,y:1.0,e:0.5,c:0.60,s:"自主返納を促す問いかけ",u:"https://x.com/nanbe32058074/status/2066017339703992764"},
+  {x:1.0,y:1.0,e:0.0,c:0.60,s:"高齢者の免許自主返納・無効化を促す",u:"https://x.com/Lora6025243011/status/2065810429964943776"},
+  {x:-1.0,y:1.0,e:0.0,c:0.70,s:"自身は体調や視力の限界を自覚し自主返納を選択",u:"https://x.com/NICORIRIS/status/2063812497354973568"},
+  {x:0.0,y:0.0,e:0.0,c:0.80,s:"自主返納の体験を淡々と語る日記的投稿",u:"https://x.com/HonokaBoat/status/2063752310128583139"},
+  {x:0.0,y:0.0,e:0.0,c:0.50,s:"自主返納の個人的経験。政策論及ばず",u:"https://x.com/homes9991/status/2063407752043782200"},
+  {x:-1.0,y:-1.5,e:-0.5,c:0.85,s:"自主返納後の継続的代替交通の整備を指摘",u:"https://x.com/ayashii5/status/2062921201912263134"},
+  {x:1.0,y:0.5,e:0.5,c:0.75,s:"自主返納は維持しつつも年齢上限設定を支持",u:"https://x.com/175175__/status/2061583928390230124"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.60,s:"自主返納不進む現状への嘆きと軽い諦め",u:"https://x.com/KimResearch_/status/2060945922465599639"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.80,s:"移動手段の整備を先行させるべきとの意見",u:"https://x.com/hoho_desu/status/2070273120079138901"},
+  {x:0.0,y:0.0,e:0.0,c:0.60,s:"安全対策強化を願う穏当な意見、立場不明",u:"https://x.com/chama5714/status/2070155758424269285"},
+  {x:0.0,y:0.5,e:0.0,c:0.60,s:"安全対策重要と認めつつも強制には言及せず",u:"https://x.com/Blackhole260685/status/2070125427600044378"},
+  {x:0.5,y:1.0,e:0.0,c:0.75,s:"高齢者の安全対策を重要視し、実車試験の見直しを願っている",u:"https://x.com/Salamison/status/2070116967902593367"},
+  {x:1.0,y:1.0,e:0.0,c:0.60,s:"高齢者対策支持。違反による事故防止を正当化",u:"https://x.com/35vC43KbqwKDwe6/status/2070036693953261575"},
+  {x:-1.0,y:-1.0,e:0.5,c:0.70,s:"年齢線引きに慎重な立場から包括的な制度設計を主張",u:"https://x.com/Masaya02909344/status/2070023912885559385"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.80,s:"踏み間違いは年齢だけでなく誰にでも起き得るとし、技術導入や安全対策を重視する冷静な意見",u:"https://x.com/Ishaqsafdar76/status/2069065587612143849"},
+  {x:1.0,y:1.0,e:0.0,c:0.70,s:"安全対策強化を支持する冷静な意見",u:"https://x.com/iam_blackcat/status/2069049461377298903"},
+  {x:0.0,y:0.0,e:0.0,c:0.60,s:"返納強制・移動権に言及せず中立分析",u:"https://x.com/MJA_669/status/2067246164358132118"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"高齢者の強制返納求める強い批判的意見",u:"https://x.com/lucky7hrs4u/status/2061555622848647195"},
+  {x:0.0,y:1.5,e:1.0,c:0.70,s:"企業の雇用責任追及と事故防止策の実行を主張",u:"https://x.com/Shohei_TAKEDA1/status/2061454190220853573"},
+  {x:-2.0,y:-2.0,e:2.0,c:0.85,s:"地方在住者の移動権重視と返納反対の感情的な意見",u:"https://x.com/new_yamanjy_thd/status/2070818858425020700"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.85,s:"地方交通の未整備を指摘し、返納強制には慎重な意見",u:"https://x.com/phraephannita/status/2070003983486484494"},
+  {x:1.5,y:1.5,e:2.0,c:0.85,s:"厳格化支持・批判的で感情的",u:"https://x.com/resba_referee/status/2069975357151994271"},
+  {x:-1.0,y:-1.0,e:0.5,c:0.70,s:"地方の実情に共感しつつ、返納特典の情報を案内する投稿",u:"https://x.com/rupauni508/status/2069896952230379612"},
+  {x:0.5,y:0.5,e:0.5,c:0.80,s:"事故への怒りと車依存社会への疑問",u:"https://x.com/rinrintoyochan/status/2068338361849577558"},
+  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"地方在住者が返納強制に強く反対し移動権最優先で感情的な意見",u:"https://x.com/new_yamanjy_thd/status/2068281057674399848"},
+  {x:-1.0,y:-2.0,e:0.0,c:0.70,s:"地方の実情を考慮し返納難を示す共感投稿",u:"https://x.com/V5K8r/status/2066661714008146366"},
+  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"高齢者自主的な返納促進と街作り整備の提唱",u:"https://x.com/kouji20221/status/2066501067366621318"},
+  {x:-1.0,y:-1.0,e:-0.5,c:0.70,s:"高齢者視点の共感的振り返り。返納強制に慎重な立場",u:"https://x.com/shimakaze33/status/2065327314393833499"},
+  {x:0.0,y:-1.0,e:0.0,c:0.80,s:"父親返納体験語り地方と都市の車必要性違い指摘",u:"https://x.com/kaedenomoritomi/status/2065055896422797363"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.80,s:"地方高齢者の切実な状況に同情し社会問題放置を嘆く",u:"https://x.com/ikeamam/status/2064824596160004587"},
+  {x:-0.5,y:-1.0,e:0.5,c:0.70,s:"技術が普及すれば自然に返納できるとの消極的賛成",u:"https://x.com/taiyokomori_SRC/status/2064471684116349407"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.70,s:"返納推奨だが地方事情考慮すべきとの慎重な意見",u:"https://x.com/kankan_99810000/status/2063598686186389950"},
+  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"地方在住者が返納すれば生活不能と強く主張",u:"https://x.com/new_yamanjy_thd/status/2063208587544158384"},
+  {x:-1.0,y:0.0,e:0.5,c:0.75,s:"返納しやすい制度設計を推奨、地方の移動問題も認識",u:"https://x.com/Paroncarlease/status/2063075548985962967"},
+  {x:-1.5,y:-2.0,e:-1.0,c:0.85,s:"地方高齢者の生活手段として車の重要性を指摘",u:"https://x.com/nonevvo/status/2063054898485432525"},
+  {x:-1.5,y:-2.0,e:1.0,c:0.80,s:"地方高齢者、返納困難で生活困窮と支援不足を訴求",u:"https://x.com/angelsnow04/status/2062736909122884008"},
+  {x:-1.0,y:-1.5,e:0.0,c:0.70,s:"移動権を重視し強制返納に慎重な姿勢、地方の現実も考慮",u:"https://x.com/AnnarizuA/status/2060692752636199174"},
+  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"地方在住者が返納強制に強く反対し移動権優先の立場",u:"https://x.com/new_yamanjy_thd/status/2060669013341229424"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.80,s:"山間部の車は生活インフラで、返納強制は地方壊す",u:"https://x.com/mossusan/status/2060548569606840704"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.85,s:"技能検査の限界と社会的受け皿の必要性",u:"https://x.com/MikuLarenGt_r/status/2070013060744704490"},
+  {x:1.0,y:1.0,e:1.0,c:0.80,s:"危険運転の動画を見て双方に返納を促す意見",u:"https://x.com/jianzijun381019/status/2070109565195370851"},
+  {x:2.0,y:2.0,e:2.0,c:0.85,s:"危険運転への激怒と返納強制を主張する怒りの投稿",u:"https://x.com/catcat2921/status/2069966305705480367"},
+  {x:0.5,y:0.0,e:0.5,c:0.40,s:"クイズ番組感想とlicense返納冗談",u:"https://x.com/cynicalpink_/status/2069955495520325711"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"高齢者運転に激怒し法的返納求める意見",u:"https://x.com/kamekametroop/status/2068997186512363938"},
+  {x:1.5,y:1.0,e:1.5,c:0.85,s:"大阪での事故、加害者が被害者意識なら返納すべき",u:"https://x.com/33uramisis/status/2068989076104204687"},
+  {x:1.0,y:2.0,e:2.0,c:0.85,s:"危険な割り込みドライバーに怒り、返納を促す意見",u:"https://x.com/rnz_xx0/status/2068821692865294660"},
+  {x:0.0,y:0.0,e:1.0,c:0.50,s:"山中湖へのバス運行に疑問を呈する個人的意見",u:"https://x.com/shinamonkukki/status/2068660066673430853"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"逆走続ける高齢者の即返納を主張",u:"https://x.com/super_cubo/status/2068163647952884054"},
+  {x:0.5,y:1.0,e:1.5,c:0.65,s:"タクシー運転手の行動への批判と不安全状況への怒り",u:"https://x.com/New4141105/status/2068163535105081760"},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"速度超過の言い訳する人にlicense返納促す",u:"https://x.com/TNaka2011/status/2068126258182189518"},
+  {x:1.0,y:1.5,e:1.0,c:0.75,s:"止まれない行為に強く批判、高齢者の返納を支持",u:"https://x.com/kibunya_2ken/status/2068102500050505773"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"極めて強い怒りと侮蔑で返納強制・安全最優先を主張",u:"https://x.com/MODMAD_is_wuss/status/2067910293192380518"},
+  {x:1.0,y:1.0,e:2.0,c:0.85,s:"高齢ドライバーの危険運転への激怒と返納要求",u:"https://x.com/_thr0605/status/2067816842866102547"},
+  {x:2.0,y:2.0,e:2.0,c:0.85,s:"速度超過の不安全運転を批判し高齢者へ返納促す",u:"https://x.com/dRTPUnwE03lGZt4/status/2067736921787531770"},
+  {x:1.0,y:2.0,e:2.0,c:0.95,s:"高齢者の免許返納を強制的に促す、安全最優先の怒りの投稿",u:"https://x.com/mara2020zx/status/2067422686452879745"},
+  {x:1.5,y:1.5,e:1.5,c:0.80,s:"怒り・高齢者返納求める・事故への不満",u:"https://x.com/Katsu_Pawn/status/2067200923433353283"},
+  {x:1.0,y:2.0,e:2.0,c:0.85,s:"危険運転への強い怒りと免許返納促し",u:"https://x.com/akky03104/status/2066845061569298551"},
+  {x:1.0,y:1.0,e:1.5,c:0.70,s:"不安全運転を批判し返納を求める怒りの投稿",u:"https://x.com/Tama_555_Tama/status/2066361367180058996"},
+  {x:1.5,y:1.5,e:2.0,c:0.85,s:"マナー欠如のライダー全てに返納求める怒り投稿",u:"https://x.com/catcat2921/status/2065856256058015819"},
+  {x:1.0,y:1.0,e:1.0,c:0.70,s:"危険運転に不快感、返納を求める投稿",u:"https://x.com/nicestarguy/status/2065643464793178311"},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"操作困難になったら自主返納すべきとの意見",u:"https://x.com/bluesteel1990/status/2065385305788776580"},
+  {x:0.0,y:0.5,e:1.0,c:0.70,s:"市の予算優先順位を批判。返納者支援の充実を主張",u:"https://x.com/Ryudou_XX/status/2065351741252702703"},
+  {x:1.5,y:1.5,e:1.5,c:0.80,s:"危険運転を見て返納を促す感情的投稿",u:"https://x.com/jammer1120/status/2065054341455896753"},
+  {x:2.0,y:2.0,e:1.0,c:0.75,s:"高齢者運転の義務化支持、安全最優先の意見",u:"https://x.com/mn6u_/status/2066655278729494774"},
+  {x:1.0,y:1.0,e:0.5,c:0.75,s:"高齢者のマーク義務化を求め安全を重視する意見",u:"https://x.com/kn25q4hLPlICL2A/status/2066347382422610169"},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"高齢者の自動ブレーキ義務化を求め安全優先の意見",u:"https://x.com/Harukaze_ouri/status/2060705677589537128"},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"高齢者返納の義務化を強く主張",u:"https://x.com/bbkeimaster/status/2060346382016491761"},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"煽り運転体験を契機に高齢者の自動運行義務化を強く支持",u:"https://x.com/LuckySevenXrd/status/2060273956251373590"},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"高齢者運転の義務化を求め安全優先の意見",u:"https://x.com/uriwifjfio/status/2060246248700219875"}
+];
+
+const TOUR = [
+  {
+    title: "全体マップ: 義務化賛成が圧倒的多数",
+    desc: "117件のSNS投稿を分析。右上（義務化賛成×安全優先）に79件が集中。自転車青切符と異なり、高齢者免許問題では「強制返納すべき」という声が圧倒的に多い非対称分布となった。",
+    filter: "all"
+  },
+  {
+    title: "右上: 「義務化で安全を守れ」派（79件）",
+    desc: "年齢での強制返納・法的義務化を支持し、交通安全・被害者保護を最優先する層。「８５歳以上の免許返納義務化を強く要望」「70歳で一律返納すべき」など具体的な年齢制限を求める声が多い。",
+    filter: "q1",
+    highlight: [2.0, 2.0],
+    quote: "８５歳以上の免許返納義務化を強く要望",
+    quote_url: "https://x.com/senchanpe/status/2067548872151634344"
+  },
+  {
+    title: "左下: 「地方の移動権を守れ」派（21件）",
+    desc: "強制返納に反対し、高齢者の移動権・生活の自由を優先する層。地方在住者が多く「返納すれば生活不能」という切実な声が目立つ。代替交通インフラの整備なき義務化への強い反発。",
+    filter: "q3",
+    highlight: [-2.0, -2.0],
+    quote: "地方在住者が返納すれば生活不能と強く主張",
+    quote_url: "https://x.com/new_yamanjy_thd/status/2063208587544158384"
+  },
+  {
+    title: "左上: 「自主返納・整備が先決」派（2件）",
+    desc: "強制には反対しながら、交通安全は重視する少数派。「自身の体調や視力の限界を自覚し自主返納を選択」という当事者の声や、強制より代替交通の整備を求める意見がここに位置する。",
+    filter: "q2",
+    highlight: [-1.0, 1.0],
+    quote: "自身は体調や視力の限界を自覚し自主返納を選択",
+    quote_url: "https://x.com/NICORIRIS/status/2063812497354973568"
+  },
+  {
+    title: "高感情投稿（感情強度 e≥1.5）",
+    desc: "40件が強い感情を帯びた投稿。右上の「義務化賛成」派からの怒りが大多数を占めるが、左下「地方移動権優先」派の怒りも一定数存在。事故被害への恐怖と地方の生活不安が交錯している。",
+    filter: "q4"
+  },
+  {
+    title: "冷静な投稿（e≤0）",
+    desc: "29件が冷静・中立的な投稿。一律年齢制限の問題点の分析、技術的解決策（自動ブレーキ義務化等）の提案、自主返納体験の語りなどが含まれる。感情を抑えたロジカルな意見は主に中央付近に分布する。",
+    filter: "calm"
+  }
+];
+
+const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
+const IMG_ALPHA_START = 0.72, IMG_ALPHA_END = 0.30;
+let imgAlpha = IMG_ALPHA_END;
+let showHeat = true, showDots = true, heatRadius = 40;
+let activeFilter = 'all';
+let spotlightTarget = null;
+let animating = false, animFrame = 0;
+
+const canvasMain = document.getElementById('canvasMain');
+const ctx = canvasMain.getContext('2d');
+const canvasHeat = document.getElementById('canvasHeat');
+const hCtx = canvasHeat.getContext('2d');
+
+function toCanvas(x, y) {
+  return [
+    PAD + (x + 2) / 4 * INNER,
+    PAD + (2 - y) / 4 * INNER
+  ];
+}
+
+function emoRGB(e) {
+  const t = (e + 2) / 4;
+  if (t < 0.5) {
+    const s = t * 2;
+    return [Math.round(74 + (187-74)*s), Math.round(144 + (187-144)*s), Math.round(217 + (187-217)*s)];
+  } else {
+    const s = (t - 0.5) * 2;
+    return [Math.round(187 + (224-187)*s), Math.round(187 + (92-187)*s), Math.round(187 + (92-187)*s)];
+  }
+}
+
+function seededRand(seed) {
+  let s = seed ^ 0x12345678;
+  s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
+  s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
+  s = (s >>> 16) ^ s;
+  return (s >>> 0) / 0xffffffff;
+}
+
+const jCache = RAW.map((_, i) => [
+  (seededRand(i*2) - 0.5) * 14,
+  (seededRand(i*2+1) - 0.5) * 14
+]);
+
+function visible(p) {
+  if (activeFilter === 'all') return true;
+  const x = p.x, y = p.y, e = p.e;
+  if (activeFilter === 'q1') return x > 0 && y > 0;
+  if (activeFilter === 'q2') return x < 0 && y > 0;
+  if (activeFilter === 'q3') return x < 0 && y < 0;
+  if (activeFilter === 'q4') return e >= 1.5;
+  if (activeFilter === 'calm') return e <= 0;
+  return true;
+}
+
+function drawHeatmap() {
+  if (!showHeat) { hCtx.clearRect(0, 0, W, H); return; }
+  const res = 3;
+  const cols = Math.ceil(W / res), rows = Math.ceil(H / res);
+  const grid = new Float32Array(cols * rows);
+  const sigma = heatRadius / 2.5;
+  const sig2 = sigma * sigma * 2;
+  const r2 = heatRadius * heatRadius;
+
+  RAW.forEach(p => {
+    if (!visible(p)) return;
+    const [cx, cy] = toCanvas(p.x, p.y);
+    const gx0 = Math.max(0, Math.floor((cx - heatRadius) / res));
+    const gy0 = Math.max(0, Math.floor((cy - heatRadius) / res));
+    const gx1 = Math.min(cols - 1, Math.ceil((cx + heatRadius) / res));
+    const gy1 = Math.min(rows - 1, Math.ceil((cy + heatRadius) / res));
+    for (let gy = gy0; gy <= gy1; gy++) {
+      for (let gx = gx0; gx <= gx1; gx++) {
+        const dx = gx * res - cx, dy = gy * res - cy;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < r2) grid[gy * cols + gx] += Math.exp(-d2 / sig2);
+      }
+    }
+  });
+
+  const maxV = Math.max(...grid) || 1;
+  const imgData = hCtx.createImageData(cols * res, rows * res);
+
+  for (let gy = 0; gy < rows; gy++) {
+    for (let gx = 0; gx < cols; gx++) {
+      const v = grid[gy * cols + gx] / maxV;
+      if (v < 0.01) continue;
+      let r, g, b;
+      if (v < 0.5) {
+        const t = v * 2;
+        r = Math.round(41 + (255-41)*t); g = Math.round(128 + (255-128)*t); b = Math.round(185 + (150-185)*t);
+      } else {
+        const t = (v - 0.5) * 2;
+        r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
+      }
+      const alpha = Math.round(v * 230);
+      for (let dy = 0; dy < res; dy++) {
+        for (let dx = 0; dx < res; dx++) {
+          const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
+          const inPad = (gx*res+dx) >= PAD && (gx*res+dx) < PAD+INNER && (gy*res+dy) >= PAD && (gy*res+dy) < PAD+INNER;
+          if (!inPad) continue;
+          imgData.data[px] = r; imgData.data[px+1] = g; imgData.data[px+2] = b; imgData.data[px+3] = alpha;
+        }
+      }
+    }
+  }
+  hCtx.clearRect(0, 0, W, H);
+  hCtx.putImageData(imgData, 0, 0);
+}
+
+function drawBase() {
+  ctx.clearRect(0, 0, W, H);
+
+  // グリッド
+  ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
+  [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+    const [cx] = toCanvas(v, 0);
+    ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
+    const [,cy] = toCanvas(0, v);
+    ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
+  });
+
+  // 軸
+  ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
+  const [midX] = toCanvas(0, 0); const [,midY] = toCanvas(0, 0);
+  ctx.beginPath(); ctx.moveTo(PAD, midY); ctx.lineTo(PAD+INNER, midY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(midX, PAD); ctx.lineTo(midX, PAD+INNER); ctx.stroke();
+
+  // 象限ラベル
+  ctx.font = 'bold 13px -apple-system,sans-serif';
+  ctx.textAlign = 'center';
+  const quadLabels = [
+    ['義務化賛成×安全優先', PAD + INNER*0.75, PAD + 26],
+    ['強制反対×安全優先', PAD + INNER*0.25, PAD + 26],
+    ['強制反対×移動権優先', PAD + INNER*0.25, PAD + INNER - 10],
+    ['義務化賛成×移動権優先', PAD + INNER*0.75, PAD + INNER - 10],
+  ];
+  quadLabels.forEach(([text, lx, ly]) => {
+    const tw = ctx.measureText(text).width;
+    const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
+    ctx.fillStyle = 'rgba(0,0,0,0.62)';
+    ctx.beginPath();
+    ctx.moveTo(rx + r, ry);
+    ctx.lineTo(rx + pw - r, ry);
+    ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
+    ctx.lineTo(rx + pw, ry + ph - r);
+    ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
+    ctx.lineTo(rx + r, ry + ph);
+    ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
+    ctx.lineTo(rx, ry + r);
+    ctx.arcTo(rx, ry, rx + r, ry, r);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillText(text, lx, ly);
+  });
+
+  // 軸目盛り
+  ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
+  ctx.textAlign = 'right';
+  [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+    const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
+  });
+  ctx.textAlign = 'center';
+  [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+    const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
+  });
+
+  // ドット
+  if (showDots) {
+    const count = animating ? animFrame : RAW.length;
+    for (let i = 0; i < count; i++) {
+      const p = RAW[i];
+      const show = visible(p);
+      const [cx, cy] = toCanvas(p.x, p.y);
+      const [rr, gg, bb] = emoRGB(p.e);
+      ctx.beginPath();
+      ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
+      ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
+      ctx.fill();
+      if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
+    }
+  }
+
+  // スポットライト
+  if (spotlightTarget) {
+    const [sx, sy] = spotlightTarget;
+    ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI*2);
+    ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(41,128,185,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
+  }
+}
+
+function redraw() { drawHeatmap(); drawBase(); }
+
+function playIntro() {
+  animating = true; animFrame = 0; imgAlpha = IMG_ALPHA_START;
+  const total = RAW.length, duration = 1800, start = performance.now();
+  function tick(now) {
+    const elapsed = now - start, progress = Math.min(1, elapsed / duration);
+    animFrame = Math.min(total, Math.round(progress * total));
+    imgAlpha = progress < 0.5 ? IMG_ALPHA_START : IMG_ALPHA_START + (IMG_ALPHA_END - IMG_ALPHA_START) * ((progress - 0.5) / 0.5);
+    redraw();
+    if (progress < 1) requestAnimationFrame(tick);
+    else { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }
+  }
+  requestAnimationFrame(tick);
+}
+
+let tourActive = false, currentStep = 0;
+
+function showTourStep(idx) {
+  const step = TOUR[idx], total = TOUR.length;
+  document.getElementById('tourStep').textContent = `Step ${idx+1} / ${total}`;
+  document.getElementById('tourTitle').textContent = step.title;
+  document.getElementById('tourDesc').textContent = step.desc;
+  document.getElementById('tourProgressBar').style.width = ((idx+1)/total*100)+'%';
+
+  const embedEl = document.getElementById('tourEmbed');
+  const loadingEl = document.getElementById('tourEmbedLoading');
+  const fallbackEl = document.getElementById('tourQuoteFallback');
+  embedEl.style.display = 'none'; loadingEl.style.display = 'none'; fallbackEl.style.display = 'none';
+  embedEl.innerHTML = '';
+
+  if (step.quote && step.quote_url) {
+    loadingEl.style.display = 'block';
+    const tweetId = step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
+    if (tweetId) {
+      const doEmbed = () => {
+        window.twttr.widgets.createTweet(tweetId, embedEl, { theme:'dark', dnt:true, conversation:'none' });
+        let waited = 0;
+        const poll = setInterval(() => {
+          waited += 100;
+          if (embedEl.querySelector('iframe')) { clearInterval(poll); loadingEl.style.display='none'; embedEl.style.display='block'; }
+          else if (waited >= 4000) { clearInterval(poll); loadingEl.style.display='none'; showFallback(step, fallbackEl); }
+        }, 100);
+      };
+      if (window.twttr && window.twttr.widgets) {
+        window.twttr.ready(doEmbed);
+      } else {
+        let wt = 0;
+        const wpoll = setInterval(() => {
+          wt += 200;
+          if (window.twttr && window.twttr.widgets) { clearInterval(wpoll); window.twttr.ready(doEmbed); }
+          else if (wt >= 5000) { clearInterval(wpoll); loadingEl.style.display='none'; showFallback(step, fallbackEl); }
+        }, 200);
+      }
+    } else { loadingEl.style.display='none'; showFallback(step, fallbackEl); }
+  } else if (step.quote) { showFallback(step, fallbackEl); }
+
+  activeFilter = step.filter || 'all';
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.fbtn[data-q="${step.filter || 'all'}"]`);
+  if (btn) btn.classList.add('active');
+
+  spotlightTarget = step.highlight ? (() => { const [sx,sy]=toCanvas(step.highlight[0],step.highlight[1]); return [sx,sy]; })() : null;
+  redraw();
+}
+
+function showFallback(step, fallbackEl) {
+  document.getElementById('tourQuoteText').textContent = '「' + step.quote + '」';
+  const linkEl = document.getElementById('tourQuoteLink');
+  if (step.quote_url) { linkEl.style.display='block'; fallbackEl.onclick=()=>window.open(step.quote_url,'_blank'); }
+  else { linkEl.style.display='none'; fallbackEl.onclick=null; }
+  fallbackEl.style.display = 'block';
+}
+
+function startTour() { tourActive=true; currentStep=0; document.getElementById('tourPanel').classList.add('active'); showTourStep(0); }
+function closeTour() {
+  tourActive=false; document.getElementById('tourPanel').classList.remove('active');
+  spotlightTarget=null; activeFilter='all';
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.fbtn[data-q="all"]').classList.add('active');
+  redraw();
+}
+
+document.getElementById('startTour').addEventListener('click', startTour);
+document.getElementById('btnClose').addEventListener('click', closeTour);
+document.getElementById('btnNext').addEventListener('click', () => { if (currentStep < TOUR.length-1) { currentStep++; showTourStep(currentStep); } else closeTour(); });
+document.getElementById('btnPrev').addEventListener('click', () => { if (currentStep > 0) { currentStep--; showTourStep(currentStep); } });
+
+document.getElementById('chkHeat').addEventListener('change', e => { showHeat=e.target.checked; redraw(); });
+document.getElementById('chkDots').addEventListener('change', e => { showDots=e.target.checked; redraw(); });
+document.getElementById('heatIntensity').addEventListener('input', e => { heatRadius=+e.target.value; redraw(); });
+document.querySelector('.filters').addEventListener('click', e => {
+  const btn = e.target.closest('.fbtn'); if (!btn) return;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); activeFilter=btn.dataset.q; spotlightTarget=null; redraw();
+});
+
+const tooltip = document.getElementById('tooltip');
+canvasMain.addEventListener('mousemove', e => {
+  const rect = canvasMain.getBoundingClientRect();
+  const sx = W/rect.width, sy = H/rect.height;
+  const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
+  let found=null, minD=20;
+  RAW.forEach((p,i) => {
+    if (!visible(p)) return;
+    const [cx,cy] = toCanvas(p.x,p.y);
+    const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
+    if (d < minD) { minD=d; found={p,i}; }
+  });
+  if (found) {
+    const p = found.p;
+    const eLabel = p.e>=1.5?'😤 激怒':p.e>=0.5?'😠 感情的':p.e<=-1?'😒 皮肉・冷笑':'😐 冷静';
+    const tx = e.clientX+14+260>window.innerWidth ? e.clientX-270 : e.clientX+14;
+    tooltip.style.opacity='1'; tooltip.style.left=tx+'px'; tooltip.style.top=(e.clientY-10)+'px';
+    tooltip.innerHTML = `<b>${p.s}</b><br>強制: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u?'<br><small style="opacity:.5">クリックでXへ ↗</small>':''}`;
+  } else { tooltip.style.opacity='0'; }
+});
+canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
+canvasMain.addEventListener('click', e => {
+  const rect = canvasMain.getBoundingClientRect();
+  const sx = W/rect.width, sy = H/rect.height;
+  const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
+  let found=null, minD=20;
+  RAW.forEach((p,i) => {
+    if (!visible(p)||!p.u) return;
+    const [cx,cy] = toCanvas(p.x,p.y);
+    const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
+    if (d < minD) { minD=d; found=p; }
+  });
+  if (found) window.open(found.u,'_blank');
+});
+
+playIntro();
+// rAFがバックグラウンドでスロットリングされた場合のフォールバック
+setTimeout(() => {
+  animating = false;
+  imgAlpha = IMG_ALPHA_END;
+  redraw();
+}, 3000);
+</script>
+<script async src="https://platform.twitter.com/widgets.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K10S4YCZFH');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
+</body>
+</html>
