@@ -259,6 +259,152 @@
       font-weight: 600;
     }
 
+    /* ===== EDITORIAL ENTRANCES ===== */
+    .editorial-section {
+      margin-top: 40px;
+    }
+    .editorial-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid rgba(232,93,43,.2);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .03em;
+    }
+    .topic-card.pickup-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid rgba(232,93,43,.22);
+      box-shadow: var(--shadow-md);
+    }
+    .pickup-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(232,93,43,.08);
+    }
+    .pickup-card .card-image {
+      height: 100%;
+      min-height: 300px;
+    }
+    .pickup-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      background: rgba(232,93,43,.94);
+      color: #fff;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    }
+    .pickup-card .card-body {
+      padding: 24px;
+    }
+    .pickup-comment {
+      margin: 12px 0 16px;
+      padding: 14px 16px;
+      background: #fff8f5;
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius-sm);
+      color: var(--ink-secondary);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .ranking-list {
+      display: grid;
+      gap: 14px;
+    }
+    .ranking-card {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      text-decoration: none;
+      color: inherit;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .ranking-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .ranking-rank {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+    .ranking-title {
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+    .ranking-bars {
+      display: grid;
+      gap: 6px;
+    }
+    .ranking-bar {
+      display: grid;
+      grid-template-columns: minmax(86px, 128px) minmax(0, 1fr) 42px;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+      color: var(--ink-secondary);
+      min-width: 0;
+    }
+    .ranking-bar-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+    .ranking-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #eee9e4;
+      overflow: hidden;
+    }
+    .ranking-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), #f59e0b);
+    }
+    .ranking-percent {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .ranking-link {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
     /* ===== TOPIC CARDS ===== */
     .topic-grid {
       display: grid;
@@ -599,6 +745,35 @@
         height: 180px;
         min-height: auto;
       }
+      .editorial-section { margin-top: 32px; }
+      .topic-card.pickup-card {
+        grid-template-columns: 1fr;
+      }
+      .pickup-card .card-image {
+        height: 190px;
+        min-height: auto;
+      }
+      .pickup-card .card-body {
+        padding: 18px 20px 20px;
+      }
+      .ranking-card {
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 12px;
+        padding: 14px;
+      }
+      .ranking-rank {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+      }
+      .ranking-link {
+        grid-column: 2;
+        justify-self: start;
+      }
+      .ranking-bar {
+        grid-template-columns: minmax(72px, 96px) minmax(0, 1fr) 38px;
+        gap: 6px;
+      }
       .content { padding: 0 16px 60px; }
       .progress-card { padding: 16px 18px; }
       .footer-inner {
@@ -685,6 +860,117 @@
   </section>
 
   <div class="content">
+
+    <!-- ===== WEEKLY PICKUP ===== -->
+    <section class="editorial-section reveal" aria-labelledby="weekly-pickup-title">
+      <div class="section-header">
+        <h2 id="weekly-pickup-title">今週の注目テーマ</h2>
+        <span class="editorial-label">編集部ピックアップ</span>
+      </div>
+      <a class="topic-card pickup-card" href="elderly-license-revocation-reaction-map.html">
+        <div class="card-image">
+          <img src="images/elderly-license-revocation-hero.webp" alt="高齢者の運転免許返納義務化の是非" loading="lazy">
+          <div class="card-image-overlay"></div>
+          <span class="pickup-badge">注目ピックアップ</span>
+          <span class="card-status-pill active">分析済み</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">高齢者の運転免許返納義務化の是非</h3>
+          <p class="card-desc">事故防止を優先する声と、地方の生活維持を重視する声がぶつかる交通ルールの論点。</p>
+          <div class="pickup-comment">
+            <strong>なぜ今注目？</strong><br>
+            高齢ドライバーの事故が報じられるたびに、年齢で一律に区切るべきか、検査や移動支援を厚くすべきかが問われています。あなたの周りの高齢者はどう感じているか、投票して確かめよう。
+          </div>
+          <div class="card-axes">
+            <span class="axis-tag">義務化賛成</span>
+            <span class="axis-tag">義務化反対</span>
+            <span class="axis-tag">適性検査強化</span>
+            <span class="axis-tag">判断留保</span>
+          </div>
+          <div class="card-footer">
+            <span class="card-sample"><strong>183</strong>件のSNS投稿を分析</span>
+            <span class="card-arrow">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+    </section>
+
+    <!-- ===== SPLIT OPINION RANKING ===== -->
+    <section class="editorial-section reveal" aria-labelledby="split-ranking-title">
+      <div class="section-header">
+        <h2 id="split-ranking-title">意見が最も割れているテーマ</h2>
+        <span class="section-count">SNS分類分布から算出</span>
+      </div>
+      <div class="ranking-list">
+        <a class="ranking-card" href="constitutional-amendment-reaction-map.html">
+          <span class="ranking-rank">1</span>
+          <div>
+            <h3 class="ranking-title">憲法改正論議</h3>
+            <div class="ranking-bars" aria-label="憲法改正論議のSNS分類分布">
+              <div class="ranking-bar"><span class="ranking-bar-label">改正推進</span><span class="ranking-track"><span class="ranking-fill" style="width:24.8%"></span></span><span class="ranking-percent">24.8%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">慎重・反対</span><span class="ranking-track"><span class="ranking-fill" style="width:41.2%"></span></span><span class="ranking-percent">41.2%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">手続き重視</span><span class="ranking-track"><span class="ranking-fill" style="width:18.6%"></span></span><span class="ranking-percent">18.6%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">関心薄・保留</span><span class="ranking-track"><span class="ranking-fill" style="width:15.4%"></span></span><span class="ranking-percent">15.4%</span></div>
+            </div>
+          </div>
+          <span class="ranking-link">投票してみる →</span>
+        </a>
+        <a class="ranking-card" href="bike-blue-ticket-reaction-map.html">
+          <span class="ranking-rank">2</span>
+          <div>
+            <h3 class="ranking-title">自転車の青切符導入の是非</h3>
+            <div class="ranking-bars" aria-label="自転車の青切符導入の是非のSNS分類分布">
+              <div class="ranking-bar"><span class="ranking-bar-label">取締り強化</span><span class="ranking-track"><span class="ranking-fill" style="width:28.8%"></span></span><span class="ranking-percent">28.8%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">インフラ優先</span><span class="ranking-track"><span class="ranking-fill" style="width:26.3%"></span></span><span class="ranking-percent">26.3%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">免許制要求</span><span class="ranking-track"><span class="ranking-fill" style="width:34.7%"></span></span><span class="ranking-percent">34.7%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">混乱懸念</span><span class="ranking-track"><span class="ranking-fill" style="width:10.2%"></span></span><span class="ranking-percent">10.2%</span></div>
+            </div>
+          </div>
+          <span class="ranking-link">投票してみる →</span>
+        </a>
+        <a class="ranking-card" href="elderly-license-revocation-reaction-map.html">
+          <span class="ranking-rank">3</span>
+          <div>
+            <h3 class="ranking-title">高齢者の運転免許返納義務化の是非</h3>
+            <div class="ranking-bars" aria-label="高齢者の運転免許返納義務化の是非のSNS分類分布">
+              <div class="ranking-bar"><span class="ranking-bar-label">義務化賛成</span><span class="ranking-track"><span class="ranking-fill" style="width:37.2%"></span></span><span class="ranking-percent">37.2%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">義務化反対</span><span class="ranking-track"><span class="ranking-fill" style="width:10.4%"></span></span><span class="ranking-percent">10.4%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">代替・支援</span><span class="ranking-track"><span class="ranking-fill" style="width:18.0%"></span></span><span class="ranking-percent">18.0%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">注意領域</span><span class="ranking-track"><span class="ranking-fill" style="width:34.4%"></span></span><span class="ranking-percent">34.4%</span></div>
+            </div>
+          </div>
+          <span class="ranking-link">投票してみる →</span>
+        </a>
+        <a class="ranking-card" href="ai-copyright-reaction-map.html">
+          <span class="ranking-rank">4</span>
+          <div>
+            <h3 class="ranking-title">生成AIと著作権問題</h3>
+            <div class="ranking-bars" aria-label="生成AIと著作権問題のSNS分類分布">
+              <div class="ranking-bar"><span class="ranking-bar-label">規制強化</span><span class="ranking-track"><span class="ranking-fill" style="width:38.1%"></span></span><span class="ranking-percent">38.1%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">技術推進</span><span class="ranking-track"><span class="ranking-fill" style="width:25.7%"></span></span><span class="ranking-percent">25.7%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">共存模索</span><span class="ranking-track"><span class="ranking-fill" style="width:7.6%"></span></span><span class="ranking-percent">7.6%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">判断留保</span><span class="ranking-track"><span class="ranking-fill" style="width:28.6%"></span></span><span class="ranking-percent">28.6%</span></div>
+            </div>
+          </div>
+          <span class="ranking-link">投票してみる →</span>
+        </a>
+        <a class="ranking-card" href="bukatsu-chiiki-reaction-map.html">
+          <span class="ranking-rank">5</span>
+          <div>
+            <h3 class="ranking-title">部活動の地域移行の是非</h3>
+            <div class="ranking-bars" aria-label="部活動の地域移行の是非のSNS分類分布">
+              <div class="ranking-bar"><span class="ranking-bar-label">賛成</span><span class="ranking-track"><span class="ranking-fill" style="width:61.7%"></span></span><span class="ranking-percent">61.7%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">反対</span><span class="ranking-track"><span class="ranking-fill" style="width:13.6%"></span></span><span class="ranking-percent">13.6%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">条件付き</span><span class="ranking-track"><span class="ranking-fill" style="width:10.4%"></span></span><span class="ranking-percent">10.4%</span></div>
+              <div class="ranking-bar"><span class="ranking-bar-label">判断保留</span><span class="ranking-track"><span class="ranking-fill" style="width:14.3%"></span></span><span class="ranking-percent">14.3%</span></div>
+            </div>
+          </div>
+          <span class="ranking-link">投票してみる →</span>
+        </a>
+      </div>
+    </section>
 
     <!-- ===== TOPICS ===== -->
     <div class="section-header reveal" id="topics">
