@@ -385,6 +385,19 @@
 - 移行完了後、個人アドレスの権限を適切に縮小または削除
 **備考**: ブラウザ操作が必要な作業が多い。人間またはブラウザ操作可能なAI（Antigravity2等）が担当
 
+### 課題27: bukatsu-chiiki 漫画・投票画像の生成とHTML差し替え
+**担当**: 課題24担当AI（Claude Code 別セッション）
+**状態**: 未着手
+**概要**: Phase B-2（課題26）でbukatsu-chiikiをv3展開した際、漫画・投票専用画像が未生成だったため、漫画セクションはテキストカード・投票ボタンはヒーロー画像（`bukatsu-hero.webp`）で暫定実装している。本課題でGPTimage2による画像生成とHTMLへの差し替えを行う
+**背景**: `manga-prompts/bukatsu-chiidi-prompts.md`（キャラシート+漫画ページ3枚）および `manga-prompts/bukatsu-chiiki-vote-prompts.md`（投票ボタン画像4枚）はすでに課題24で作成済み。画像生成（手動）とHTML反映（自動）のみが残っている
+**スコープ**:
+1. `manga-prompts/bukatsu-chiiki-prompts.md` のプロンプトでGPTimage2を使い漫画ページ3枚・キャラシート2枚を生成 → `docs/images/` に WebP 100KB以下で配置
+2. `manga-prompts/bukatsu-chiiki-vote-prompts.md` のプロンプトで投票ボタン画像4枚を生成 → 240×240 WebP 20KB以下で配置
+3. `docs/bukatsu-chiiki-reaction-map.html` の漫画セクション（テキストカード）を実画像に差し替え、投票ボタンも専用画像に差し替え
+4. 画像には `loading="lazy"` を付ける
+**依存**: 課題24（プロンプト作成済み）、課題26 Phase B-2（v3構成済みのHTMLが土台）
+**注意**: `docs/bukatsu-chiiki-reaction-map.html` 変更時は GA4/AdSense/Supabase/OGPタグを維持すること
+
 ### 課題20: テーマ別問題提起LP
 **担当**: 未定
 **状態**: 未着手
@@ -545,7 +558,8 @@
 | 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
 | 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket完了。次はbukatsu-chiiki・constitutional等のスタンスマップ完成テーマへ順次展開 |
 | 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 完了 | 9c7db33で5テーマ統合済み。2026-07-04に全ページブラウザ検証合格を確認 |
-| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase A完了 | v3仕様書+ai-copyright試験実装マージ済み（37e09d5）。次はPhase B（残り4テーマ展開） |
+| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase B進行中（B-1/B-2完了） | B-1 bike✅ B-2 bukatsu✅ B-3 constitutional進行中 B-4 elderly未着手 |
+| 課題27: bukatsu-chiiki 漫画・投票画像生成 | 課題24担当AI | 2026-07-04 | 未着手 | manga-promptsは課題24で作成済み。画像生成（手動）→HTML差し替えのみ残 |
 
 ---
 
