@@ -503,7 +503,7 @@
 - Phase A: ✅ 完了（2026-07-04）。`templates/topic-page-v3.md` 策定 + `docs/ai-copyright-reaction-map.html` v3試験実装。ブランチ `task/26-phase-a-v3-format` をマージ済み（37e09d5）。ハブ検証: コンソールエラーなし、投票→比較表示→「あなたはこのあたり」マーカー動作OK、GA4/AdSense/Supabase/OGPタグ維持確認、canvas IDを正典（smCanvasMain/smCanvasHeat）へ統一済み。セッションプロンプト: `configs/prompts/hermes/20260704_task26-phase-a-v3-format.md`
 - Phase B: 残り4テーマ（bike / bukatsu / constitutional / elderly）へ展開。**テーマごとに1タスクへ分割し、1つずつ順に実施**（並行実施しない。各回答テーマは投票選択肢→2Dマップ座標の対応表を自分で考えて実装すること）
   - B-1 bike-blue-ticket: ✅ 完了（2026-07-04）。ブランチ `task/26-phaseb-1-bike` をマージ済み（de7cacb）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。セッションプロンプト: `configs/prompts/hermes/20260704_task26-phaseb-1-bike.md`
-  - B-2 bukatsu-chiiki: `configs/prompts/hermes/20260704_task26-phaseb-2-bukatsu.md`（ブランチ `task/26-phaseb-2-bukatsu`、B-1完了後に着手）
+  - B-2 bukatsu-chiiki: ✅ 完了（2026-07-04）。ブランチ `task/26-phaseb-2-bukatsu` をマージ済み（e6fce64）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。投票選択肢を課題10ガイドライン（`docs/voting_design_guideline.md`）の確定4択（賛成/反対/条件付き賛成/まだ判断できない）に整合させた（旧ページは2択のみで未反映だった）。漫画・投票専用画像が未生成のため、漫画はテキストカード・投票ボタンはヒーロー画像流用で代替（画像は課題24で別途生成予定）。セッションプロンプト: `configs/prompts/hermes/20260704_task26-phaseb-2-bukatsu.md`
   - B-3 constitutional-amendment: `configs/prompts/hermes/20260704_task26-phaseb-3-constitutional.md`（ブランチ `task/26-phaseb-3-constitutional`、B-2完了後に着手。dashboard/summaryページは変更対象外）
   - B-4 elderly-license-revocation: `configs/prompts/hermes/20260704_task26-phaseb-4-elderly.md`（ブランチ `task/26-phaseb-4-elderly`、B-3完了後に着手。Phase B最終テーマ）
 - Phase C: 旧3テーマ（takaichi / henoko / school）の扱い決定 — 2D分類を完成させてv3化するか、アーカイブ表記にして回遊から外すか
