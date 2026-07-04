@@ -462,7 +462,13 @@
 
 ### 課題25: スタンスマップ統一 — 半円図→2Dマップ一括移行
 **担当**: Claude Code（別セッション可）
-**状態**: 未着手
+**状態**: 完了（2026-07-04 検証済み）
+**検証結果（2026-07-04、オーケストレータセッション）**:
+- 対象5テーマ（ai-copyright / bike / bukatsu / constitutional / elderly）の reaction-map.html をローカルサーバーでブラウザ検証
+- 全ページで canvas背景（Main=transparent / Heat=#fafafa）、対立軸、ヒートマップ×2、代表サンプルの存在を確認。コンソールエラーなし
+- 独立 stance-map.html は全削除済み。index.html に stance-map リンク残存なし
+- 半円チャート（反応の勢力図）の残存なし
+- 注意: ai-copyright のみ canvas ID が旧式（`canvasMain`/`canvasHeat`、smプレフィックスなし）。ページ内に他のcanvasがないため衝突なし・動作正常。次回同ページを触る際に正典IDへ揃えると良い
 **概要**: 各テーマで個別に実装された2Dスタンスマップ（十字散布図）を統一テンプレートに揃え、独立stance-map.htmlを削除してreaction-map.html内に一本化する
 **背景**: テーマごとに異なるセッションが異なる方式で実装した結果、ページ重複(constitutional)・セクション消失(ai-copyright/elderly)・孤立ページ(bike/bukatsu)が発生
 **スコープ**:
@@ -503,7 +509,7 @@
 | 課題22: Buy Me a Coffee URL修正 | Claude Code | 2026-07-02 | 完了 | 全ページ+ビルドスクリプトのURLをissue.stance.labに統一 |
 | 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
 | 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket完了。次はbukatsu-chiiki・constitutional等のスタンスマップ完成テーマへ順次展開 |
-| 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 未着手 | 半円図→2Dマップ一括移行。重複ページ解消・消失セクション復旧・テンプレート統一 |
+| 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 完了 | 9c7db33で5テーマ統合済み。2026-07-04に全ページブラウザ検証合格を確認 |
 
 ---
 
