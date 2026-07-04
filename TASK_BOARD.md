@@ -385,6 +385,32 @@
 - 移行完了後、個人アドレスの権限を適切に縮小または削除
 **備考**: ブラウザ操作が必要な作業が多い。人間またはブラウザ操作可能なAI（Antigravity2等）が担当
 
+### 課題28: 旧3テーマ（takaichi / henoko / school）の2D分類 → v3化
+**担当**: Claude Code（2D分類担当）+ ワーカーAI（v3 HTML展開）
+**状態**: 未着手
+**概要**: 課題26 Phase Cとして、現在旧形式のまま残っている3テーマに2D分類データを構築し、v3フォーマットへ移行する。各テーマ独立に進め、2D分類が完成したテーマから随時着手する
+**背景**:
+- Phase Bで ai-copyright / bike / bukatsu / constitutional / elderly の5テーマをv3化完了
+- takaichi / henoko / school の3テーマは2Dスタンスマップデータがないため、一旦アーカイブ扱いにした（Phase C）
+- 2D分類が整い次第、本課題でv3化する
+- 課題23（ai-copyright 2D分類）はすでに試験分類済み。手法・プロンプトはこれを参照
+
+**テーマ別状態**:
+| テーマ | 2D分類データ | v3化 | 備考 |
+|--------|------------|------|------|
+| school-nickname-ban | ⚠️ 70%エラー（課題24記載） | 未着手 | 再実行後に着手 |
+| henoko | なし | 未着手 | 2D分類設計から |
+| takaichi | なし | 未着手 | 2D分類設計から |
+
+**各テーマの作業フロー**:
+1. 2D軸定義（X軸・Y軸の意味を決める）
+2. Ollamaで2D分類実行（エラー率10%以下を目標）
+3. 2D分類JSONを確定
+4. 課題26 Phase Bと同様にv3 HTMLを実装（`templates/topic-page-v3.md` 準拠）
+5. 投票選択肢→2D座標の対応表を自分で定義（他テーマの流用禁止）
+6. 漫画コンテンツが準備できていれば課題24と連携して追加
+**依存**: 課題23（2D分類手法の参考）、課題26（v3仕様書 `templates/topic-page-v3.md`）
+
 ### 課題27: bukatsu-chiiki 漫画・投票画像の生成とHTML差し替え
 **担当**: 課題24担当AI（Claude Code 別セッション）
 **状態**: 未着手
@@ -519,7 +545,7 @@
   - B-2 bukatsu-chiiki: ✅ 完了（2026-07-04）。ブランチ `task/26-phaseb-2-bukatsu` をマージ済み（e6fce64）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。投票選択肢を課題10ガイドライン（`docs/voting_design_guideline.md`）の確定4択（賛成/反対/条件付き賛成/まだ判断できない）に整合させた（旧ページは2択のみで未反映だった）。漫画・投票専用画像が未生成のため、漫画はテキストカード・投票ボタンはヒーロー画像流用で代替（画像は課題24で別途生成予定）。セッションプロンプト: `configs/prompts/hermes/20260704_task26-phaseb-2-bukatsu.md`
   - B-3 constitutional-amendment: ✅ 完了（2026-07-05）。ブランチ `task/26-phaseb-3-constitutional` をマージ済み（fc0fcc3）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。dashboard/summaryページ変更なし確認。ctx.filter不使用。
   - B-4 elderly-license-revocation: ✅ 完了（2026-07-05）。ブランチ `task/26-phaseb-4-elderly` をマージ済み（c55adfd）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。ctx.filter不使用。**Phase B全4テーマ完了。**
-- Phase C: 旧3テーマ（takaichi / henoko / school）の扱い決定 — 2D分類を完成させてv3化するか、アーカイブ表記にして回遊から外すか
+- Phase C: 旧3テーマ（takaichi / henoko / school）のアーカイブ化 — 各ページに「旧形式」バナーを追加し、ポータルの回遊カードから除外。2D分類完成後に課題28でv3化。**課題28の完成テーマから随時Phase C→v3化へ移行**
 - Phase D: ポータル刷新 — 「今日の注目テーマ」「意見割れ度ランキング」「投票コンプリート進捗」を編集面として追加
 - Phase E: 旧世代ページの整理（theme-preview / dashboard / summary / 旧heatmap のリダイレクトまたは削除、sitemap.xml更新）
 - Phase F: パフォーマンス統合対応 — 課題14をここに吸収。画像のlazy loading徹底、PNG重複削除、漫画画像の遅延読み込み、モバイルLighthouse 60以上
@@ -558,8 +584,9 @@
 | 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
 | 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket完了。次はbukatsu-chiiki・constitutional等のスタンスマップ完成テーマへ順次展開 |
 | 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 完了 | 9c7db33で5テーマ統合済み。2026-07-04に全ページブラウザ検証合格を確認 |
-| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase A・B完了、Phase C未着手 | B-1 bike✅ B-2 bukatsu✅ B-3 constitutional✅ B-4 elderly✅ 次はPhase C（旧3テーマの扱い決定） |
+| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase A・B完了、Phase C方針決定済み | B全4テーマ完了。旧3テーマはアーカイブ化（Phase C）→課題28で2D分類完成後にv3化 |
 | 課題27: bukatsu-chiiki 漫画・投票画像生成 | 課題24担当AI | 2026-07-04 | 未着手 | manga-promptsは課題24で作成済み。画像生成（手動）→HTML差し替えのみ残 |
+| 課題28: 旧3テーマ 2D分類→v3化 | Claude Code / ワーカーAI | 2026-07-05 | 未着手 | school⚠️再実行待ち / henoko・taikaichi 2D設計から。完成テーマから随時着手 |
 
 ---
 
