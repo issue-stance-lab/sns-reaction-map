@@ -494,7 +494,7 @@
 
 ### 課題26: サイト全体を「最高のページ」へ進化させる構成改革
 **担当**: 未定（Hermes / Claude Code 分担推奨。フェーズ単位で別セッション可）
-**状態**: Phase A完了（2026-07-04）、Phase B以降未着手
+**状態**: Phase A・B完了（2026-07-05）、Phase C以降未着手
 **概要**: 現サイトの強み（漫画×2Dスタンスマップ×投票の三点セット）を軸に、ページ構成・体験フロー・回遊設計を全面再構築し、「見て楽しい→参加したい→シェアしたい→また来たい」の循環を完成させる
 **現状分析（2026-07-04時点）**:
 - **強み**: 漫画導入→投票→2Dスタンスマップという独自フォーマットが5テーマで完成。他に類例のない体験
@@ -518,7 +518,7 @@
   - B-1 bike-blue-ticket: ✅ 完了（2026-07-04）。ブランチ `task/26-phaseb-1-bike` をマージ済み（de7cacb）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。セッションプロンプト: `configs/prompts/hermes/20260704_task26-phaseb-1-bike.md`
   - B-2 bukatsu-chiiki: ✅ 完了（2026-07-04）。ブランチ `task/26-phaseb-2-bukatsu` をマージ済み（e6fce64）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。投票選択肢を課題10ガイドライン（`docs/voting_design_guideline.md`）の確定4択（賛成/反対/条件付き賛成/まだ判断できない）に整合させた（旧ページは2択のみで未反映だった）。漫画・投票専用画像が未生成のため、漫画はテキストカード・投票ボタンはヒーロー画像流用で代替（画像は課題24で別途生成予定）。セッションプロンプト: `configs/prompts/hermes/20260704_task26-phaseb-2-bukatsu.md`
   - B-3 constitutional-amendment: ✅ 完了（2026-07-05）。ブランチ `task/26-phaseb-3-constitutional` をマージ済み（fc0fcc3）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。dashboard/summaryページ変更なし確認。ctx.filter不使用。
-  - B-4 elderly-license-revocation: `configs/prompts/hermes/20260704_task26-phaseb-4-elderly.md`（ブランチ `task/26-phaseb-4-elderly`、B-3完了後に着手。Phase B最終テーマ）
+  - B-4 elderly-license-revocation: ✅ 完了（2026-07-05）。ブランチ `task/26-phaseb-4-elderly` をマージ済み（c55adfd）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。ctx.filter不使用。**Phase B全4テーマ完了。**
 - Phase C: 旧3テーマ（takaichi / henoko / school）の扱い決定 — 2D分類を完成させてv3化するか、アーカイブ表記にして回遊から外すか
 - Phase D: ポータル刷新 — 「今日の注目テーマ」「意見割れ度ランキング」「投票コンプリート進捗」を編集面として追加
 - Phase E: 旧世代ページの整理（theme-preview / dashboard / summary / 旧heatmap のリダイレクトまたは削除、sitemap.xml更新）
@@ -558,7 +558,7 @@
 | 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
 | 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket完了。次はbukatsu-chiiki・constitutional等のスタンスマップ完成テーマへ順次展開 |
 | 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 完了 | 9c7db33で5テーマ統合済み。2026-07-04に全ページブラウザ検証合格を確認 |
-| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase B進行中（B-1/B-2完了） | B-1 bike✅ B-2 bukatsu✅ B-3 constitutional進行中 B-4 elderly未着手 |
+| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase A・B完了、Phase C未着手 | B-1 bike✅ B-2 bukatsu✅ B-3 constitutional✅ B-4 elderly✅ 次はPhase C（旧3テーマの扱い決定） |
 | 課題27: bukatsu-chiiki 漫画・投票画像生成 | 課題24担当AI | 2026-07-04 | 未着手 | manga-promptsは課題24で作成済み。画像生成（手動）→HTML差し替えのみ残 |
 
 ---
