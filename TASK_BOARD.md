@@ -547,7 +547,7 @@
   - B-4 elderly-license-revocation: ✅ 完了（2026-07-05）。ブランチ `task/26-phaseb-4-elderly` をマージ済み（c55adfd）。ハブ検証: コンソールエラーなし、投票→比較表示→マーカー動作OK、375px横スクロールなし、GA4/AdSense/Supabase/OGP/Buy Me a Coffeeタグ維持確認。ctx.filter不使用。**Phase B全4テーマ完了。**
 - Phase C: 旧3テーマ（takaichi / henoko / school）のアーカイブ化 — 各ページに「旧形式」バナーを追加し、ポータルの回遊カードから除外。2D分類完成後に課題28でv3化。**課題28の完成テーマから随時Phase C→v3化へ移行**
 - Phase D: ポータル刷新 — 「今週の注目テーマ」（編集ピックアップ）+ 「意見が最も割れているテーマ」ランキング。投票コンプリート進捗は削除済み（2026-07-05）。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phased-portal.md`（ブランチ `task/26-phased-portal`）
-- Phase E: 旧世代ページの整理（theme-preview / dashboard / summary / 旧heatmap のリダイレクトまたは削除、sitemap.xml更新）
+- Phase E: 旧世代ページの整理（theme-preview / dashboard / summary / 旧heatmap 削除 + sitemap.xml更新）。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phasee-cleanup.md`（ブランチ `task/26-phasee-cleanup`）
 - Phase F: パフォーマンス統合対応 — 課題14をここに吸収。画像のlazy loading徹底、PNG重複削除、漫画画像の遅延読み込み、モバイルLighthouse 60以上
 **成功指標**: 平均滞在時間、投票率（訪問→投票）、回遊率（1訪問あたり閲覧テーマ数）、モバイルLighthouse Performance 60以上
 **依存**: 課題25（完了済み・v3のベース）、課題24（漫画は現行資産をそのまま使用）
