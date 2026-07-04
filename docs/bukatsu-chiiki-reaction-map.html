@@ -529,6 +529,44 @@
       border-top: 4px solid transparent !important;
       border-image: linear-gradient(90deg, var(--grad-1), var(--grad-2)) 1 !important;
     }
+    /* === 2D Stance Map (embedded) === */
+    #stance-map-section { position: relative; }
+    #stance-map-inner { transition: filter .6s ease; }
+    #sm-wrap { position:relative; width:100%; max-width:660px; margin:0 auto; }
+    #stance-map-section canvas { display:block; width:100%; border:1px solid #e0e0e0; border-radius:8px; }
+    #smCanvasMain { cursor:crosshair; position:relative; z-index:2; background:transparent; }
+    #smCanvasHeat { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px; pointer-events:none; z-index:1; background:#fafafa; }
+    .sm-ax { position:absolute; font-size:10px; font-weight:600; color:#444; background:rgba(255,255,255,.85); padding:2px 6px; border-radius:4px; pointer-events:none; z-index:3; line-height:1.4; }
+    #sm-tooltip { position:fixed; background:#111; color:#fff; font-size:12px; padding:8px 12px; border-radius:8px; pointer-events:none; z-index:9999; max-width:280px; opacity:0; transition:opacity .15s; line-height:1.5; }
+    #smTourPanel { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); color:#e0e0e0; border-radius:12px; padding:16px; margin-top:10px; display:none; }
+    #smTourPanel.active { display:block; }
+    #smTourStep { font-size:10px; color:#888; margin-bottom:4px; }
+    #smTourTitle { font-size:16px; font-weight:800; color:#fff; margin-bottom:8px; }
+    #smTourDesc { font-size:13px; line-height:1.6; color:#ccc; margin-bottom:12px; }
+    #smTourEmbedLoading { font-size:12px; color:#888; display:none; margin-bottom:8px; }
+    #smTourEmbed { margin-bottom:8px; display:none; }
+    #smTourQuoteFallback { background:#0d1117; border-left:3px solid #1d9bf0; border-radius:6px; padding:10px 12px; margin-bottom:8px; font-size:13px; line-height:1.5; display:none; cursor:pointer; }
+    #smTourQuoteLink { color:#1d9bf0; margin-left:8px; }
+    .sm-tour-nav { display:flex; align-items:center; gap:8px; margin-top:10px; }
+    .sm-tnav { background:none; border:1px solid #444; color:#ccc; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; }
+    .sm-tnav.primary { background:#1d9bf0; border-color:#1d9bf0; color:#fff; }
+    .sm-tnav:hover { opacity:.8; }
+    #smTourProgress { flex:1; height:4px; background:#333; border-radius:2px; }
+    #smTourProgressBar { height:4px; background:#1d9bf0; border-radius:2px; transition:width .3s; }
+    .sm-controls { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+    .sm-view-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; font-size:13px; }
+    .sm-filters { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .sm-fbtn { font-size:11px; padding:4px 10px; border:1px solid #ccc; border-radius:20px; background:#fff; cursor:pointer; color:#555; }
+    .sm-fbtn.active { background:var(--accent,#2563eb); color:#fff; border-color:var(--accent,#2563eb); }
+    .sm-stat-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:10px; }
+    .sm-sbox { background:#f8f9fa; border-radius:8px; padding:10px 12px; }
+    .sm-slabel { font-size:11px; color:#666; margin-bottom:2px; }
+    .sm-sval { font-size:22px; font-weight:800; line-height:1.2; }
+    .sm-sdesc { font-size:11px; color:#888; margin-top:2px; }
+    .sm-legend-emo { display:flex; align-items:center; gap:6px; font-size:12px; }
+    .sm-emo-bar { width:60px; height:8px; border-radius:4px; background:linear-gradient(to right,#3498db,#e74c3c); }
+    #smStartTour { font-size:12px; padding:6px 14px; border:1px solid var(--accent,#2563eb); border-radius:6px; background:none; color:var(--accent,#2563eb); cursor:pointer; font-weight:600; }
+    #smStartTour:hover { background:var(--accent,#2563eb); color:#fff; }
     @media (max-width: 720px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stat { padding: 20px 16px; }
@@ -625,21 +663,20 @@
   var stored={};
   var myVote=localStorage.getItem(KEY+"_my");
 
-  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
+  // Blur the stance map until voted (deferred to ensure DOM is ready)
   function applyBlur(){
-    var chartPanel=document.getElementById("semicircle-chart");
-    if(chartPanel){
-      var wrap=chartPanel.closest(".panel");
-      if(wrap && myVote===null){
-        wrap.id="chart-panel";
-        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
-        wrap.style.position="relative";
-        var overlay=document.createElement("div");
-        overlay.id="chart-overlay";
-        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
-        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
-        wrap.appendChild(overlay);
+    var smSection=document.getElementById("stance-map-section");
+    if(smSection && myVote===null){
+      var inner=document.getElementById("stance-map-inner");
+      if(inner){
+        inner.style.filter="blur(8px)";inner.style.pointerEvents="none";inner.style.userSelect="none";
       }
+      smSection.style.position="relative";
+      var overlay=document.createElement("div");
+      overlay.id="chart-overlay";
+      overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
+      overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
+      smSection.appendChild(overlay);
     }
   }
   
@@ -691,13 +728,13 @@
   };
 
   function revealChart(){
-    var wrap=document.getElementById("chart-panel");
-    if(wrap){
-      wrap.style.transition="filter .6s ease";
-      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
-      var ov=document.getElementById("chart-overlay");
-      if(ov)ov.remove();
+    var inner=document.getElementById("stance-map-inner");
+    if(inner){
+      inner.style.transition="filter .6s ease";
+      inner.style.filter="none";inner.style.pointerEvents="auto";inner.style.userSelect="auto";
     }
+    var ov=document.getElementById("chart-overlay");
+    if(ov)ov.remove();
   }
 
   async function castVote(idx){
@@ -790,90 +827,529 @@
   }
 })();
 </script>
-    <section class="panel">
-<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
-<div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">教員の働き方改革と持続可能な部活動</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">95</div></div>
-  <div style="text-align:center;color:var(--muted);font-size:12px;">
-    <div style="font-size:11px;">過半数</div>
-    <div style="font-weight:800;font-size:16px;color:var(--ink);">91</div>
-    <div style="font-size:18px;">▼</div>
-  </div>
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#e0704012;border:2px solid #e07040;"><div style="font-size:12px;font-weight:700;color:#e07040">費用増と学校文化喪失への懸念</div><div style="font-size:32px;font-weight:800;color:#e07040;line-height:1.2">21</div></div>
+    <section class="panel" id="stance-map-section">
+<div id="stance-map-inner">
+<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>148件 | 点の色=感情強度（青:冷静→赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
+<div id="sm-wrap">
+  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
+  <canvas id="smCanvasMain" width="600" height="600"></canvas>
+  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">教員の負担軽減を最優先 ▲</div>
+  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 教育的価値・部活文化を重視</div>
+  <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 地域移行に反対・懐疑的</div>
+  <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">地域移行を推進 ▶</div>
 </div>
-<div style="position:relative;max-width:660px;margin:0 auto;">
-  <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
-  <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
-    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">180</div>
-    <div style="font-size:14px;color:var(--muted);">サンプル</div>
+<div id="smTourPanel">
+  <div id="smTourStep"></div>
+  <div id="smTourTitle"></div>
+  <div id="smTourDesc"></div>
+  <div id="smTourEmbedLoading">投稿を読み込み中…</div>
+  <div id="smTourEmbed"></div>
+  <div id="smTourQuoteFallback"><span id="smTourQuoteText"></span><small id="smTourQuoteLink">↗ Xで見る</small></div>
+  <div class="sm-tour-nav">
+    <button class="sm-tnav" id="smBtnPrev">← 前へ</button>
+    <div id="smTourProgress"><div id="smTourProgressBar"></div></div>
+    <button class="sm-tnav primary" id="smBtnNext">次へ →</button>
+    <button class="sm-tnav" id="smBtnClose" style="border-color:#666;color:#aaa">✕</button>
   </div>
 </div>
-<div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
+<div class="sm-controls">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div class="sm-legend-emo">
+      <span style="color:#555">感情強度:</span>
+      <span>冷静</span>
+      <div class="sm-emo-bar"></div>
+      <span>激怒</span>
+    </div>
+    <button id="smStartTour">▶ ガイドツアーで読む</button>
+  </div>
+  <div class="sm-view-row">
+    <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
+    <label><input type="checkbox" id="smChkDots" checked> ドット</label>
+    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="48" style="width:80px;vertical-align:middle"></label>
+  </div>
+  <div class="sm-filters">
+    <span style="font-size:10px;color:#888">絞り込み:</span>
+    <button class="sm-fbtn active" data-q="all">全件 (148)</button>
+    <button class="sm-fbtn" data-q="q2">移行反対×負担軽減 (27)</button>
+    <button class="sm-fbtn" data-q="q1">移行推進×負担軽減 (21)</button>
+    <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (16)</button>
+    <button class="sm-fbtn" data-q="calm">冷静 e≤0 (66)</button>
+  </div>
+</div>
+<div class="sm-stat-cards">
+  <div class="sm-sbox"><div class="sm-slabel">移行反対 × 負担軽減重視 (左上)</div><div class="sm-sval" style="color:#c0392b">27件</div><div class="sm-sdesc">「費用増・受け皿不足で教員にも保護者にも負担増」</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">移行推進 × 負担軽減重視 (右上)</div><div class="sm-sval" style="color:#2980b9">21件</div><div class="sm-sdesc">「教員の働き方改革と持続可能な部活動」</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">中立含む（X=0またはY=0）</div><div class="sm-sval" style="color:#7f8c8d">71件</div><div class="sm-sdesc">条件付き賛否・個別事情への言及</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">16件</div><div class="sm-sdesc">強い怒り・感情的な訴え（両陣営）</div></div>
+</div>
+<div id="sm-tooltip"></div>
+</div><!-- /stance-map-inner -->
+</section>
+<script>
+const SM_RAW = [
+  {x:2.0,y:0.0,e:1.0,c:0.80,s:"地域移行の月会費統一と市税補助を提案し強く支持",u:"https://x.com/TheMirageof0/status/2070624074506863002"},
+  {x:-1.0,y:-1.5,e:-2.0,c:0.85,s:"月額8000円の家計負担を嘆き地域移行に不支持",u:"https://x.com/TheMirageof0/status/2070621781757726855"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.80,s:"報酬低くするから指導者不足になる",u:"https://x.com/774nyannyan/status/2070491362882150454"},
+  {x:-0.5,y:1.5,e:1.0,c:0.70,s:"熊本市の新方式を批判。教育価値を強調し市民の無関心を非難",u:"https://x.com/774nyannyan/status/2070491361137357035"},
+  {x:-1.0,y:1.0,e:0.0,c:0.60,s:"中体連高体連が地域移行で追い詰められ教育課程に位置づけてほしい",u:"https://x.com/wu76jgS82zThc8u/status/2070462759238811989"},
+  {x:1.0,y:1.0,e:0.0,c:0.85,s:"地域移行を支持し持続可能な運営を求める",u:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
+  {x:0.0,y:0.0,e:0.0,c:0.60,s:"保護者が部活地域移行を思考中",u:"https://x.com/papakoya25/status/2070424396137910617"},
+  {x:0.5,y:0.5,e:0.0,c:0.70,s:"市への質問形式で地域移行の検討姿勢を示す",u:"https://x.com/wakohappy2023/status/2070372233567240572"},
+  {x:-1.0,y:1.0,e:1.0,c:0.75,s:"指導者の低報酬・責任の乖離を批判",u:"https://x.com/SIND_/status/2070325146372739488"},
+  {x:-0.5,y:1.0,e:0.5,c:0.80,s:"地域移行流れ容認も部活縮小と保護者憤りに懸念",u:"https://x.com/Miyabi14_Miyabi/status/2070276591167639853"},
+  {x:1.0,y:1.0,e:-1.0,c:0.70,s:"移行後の継続仕組み優先を提案、自校に部活ない皮肉",u:"https://x.com/nijimasufire/status/2070118138885312676"},
+  {x:1.0,y:0.5,e:-1.0,c:0.70,s:"地域移行支持を示しつつ矛盾を皮肉",u:"https://x.com/774nyannyan/status/2070117159511130290"},
+  {x:1.5,y:-1.0,e:0.0,c:0.75,s:"地域移行支持、教員以外も負担分散すべき",u:"https://x.com/haiyuepanda/status/2070098123440140672"},
+  {x:1.0,y:1.0,e:0.0,c:0.85,s:"地域移行実現には指導者に生活を保障できるコストが必要",u:"https://x.com/todoporzoy2012/status/2070092023512932832"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"地域移行に懐疑的で現状維持派、冷静だが皮肉を含む",u:"https://x.com/crypticsa/status/2070077324008341725"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"地域移行の失敗批判と政策批判を含む分析投稿",u:"https://x.com/wu76jgS82zThc8u/status/2070075708609859823"},
+  {x:1.0,y:1.0,e:1.0,c:0.85,s:"少子化で破綻前に地域移行で存続支持",u:"https://x.com/774nyannyan/status/2070058879938084997"},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"地域移行で不登校の子も参加しやすくなることを期待",u:"https://x.com/Mr_Peki_chan/status/2070029090003009670"},
+  {x:0.0,y:0.0,e:1.0,c:0.70,s:"クラブ化はチーム作成に留まり本質的理解が欠けると指摘",u:"https://x.com/chaw0501/status/2070020638383997407"},
+  {x:1.5,y:1.0,e:1.0,c:0.85,s:"地域移行を推進し具体的な改善案を主張",u:"https://x.com/tFwqQpA4kn3bwDn/status/2069879568618627305"},
+  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"団体数半減を嘆き地域移行の影響を指摘",u:"https://x.com/edamame_1219/status/2069742846606004286"},
+  {x:-1.5,y:2.0,e:1.5,c:0.85,s:"地域移行で夢を奪われる子への怒り",u:"https://x.com/No2lab150687/status/2069741426276233331"},
+  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"地域移行の持続困難を警告",u:"https://x.com/774nyannyan/status/2069730125340692943"},
+  {x:0.0,y:1.0,e:0.0,c:0.60,s:"地域移行後の決裁権の変化を冷静に分析",u:"https://x.com/Pansy_school/status/2069715403236954447"},
+  {x:1.0,y:0.0,e:0.0,c:0.60,s:"移行支持立場からやれなくなる論への疑問を呈する",u:"https://x.com/774nyannyan/status/2069694892037874163"},
+  {x:-1.0,y:1.0,e:1.0,c:0.85,s:"地域移行で野球の育成環境悪化を批判",u:"https://x.com/mamamam4949/status/2069589990011818183"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.80,s:"地域移行の課題追及と安全対策再不備を批判",u:"https://x.com/gi26ai/status/2069586455618523517"},
+  {x:-1.0,y:0.0,e:0.5,c:0.70,s:"地域移行の弊害を指摘、制度設計への疑問呈す",u:"https://x.com/suzuki_turitaro/status/2069580292386627898"},
+  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"移行の障壁である家族の移動困難と受入体制不足を指摘",u:"https://x.com/444sp/status/2069570277009490051"},
+  {x:0.0,y:0.0,e:-1.0,c:0.30,s:"マージャン登録への困惑・面白がる反応",u:"https://x.com/urya4432/status/2069543717686673480"},
+  {x:1.0,y:0.0,e:0.0,c:0.70,s:"地域移行は大多数賛成、教職員アンケートも支持",u:"https://x.com/tomokun_life/status/2068124530384711714"},
+  {x:-1.0,y:1.0,e:1.0,c:0.75,s:"高校野球の名称問題を懸念し移行に否定的",u:"https://x.com/lumIFSHUWs6GO2n/status/2063976964898332701"},
+  {x:1.0,y:0.0,e:1.0,c:0.80,s:"移行支持、条件不可能と諦め反対派を批判",u:"https://x.com/774nyannyan/status/2063489857993969715"},
+  {x:2.0,y:0.0,e:0.0,c:0.80,s:"地域移行支持、持続可能性の観点から肯定",u:"https://x.com/774nyannyan/status/2068230558992458134"},
+  {x:1.0,y:0.0,e:0.0,c:0.85,s:"地域移行支持も積極的推進ではなく必然的選択と認識",u:"https://x.com/774nyannyan/status/2068180634170990750"},
+  {x:1.5,y:0.0,e:0.5,c:0.80,s:"地域移行推進派が反対派のせいだと主張",u:"https://x.com/774nyannyan/status/2067883582647849464"},
+  {x:1.5,y:0.5,e:0.5,c:0.85,s:"地域移行の矛盾に困惑。支持だが熱度は中程度",u:"https://x.com/774nyannyan/status/2067880712943059272"},
+  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"地域移行反対論者を相手にせず",u:"https://x.com/774nyannyan/status/2063907885764182333"},
+  {x:2.0,y:0.0,e:1.5,c:0.85,s:"地域移行推進を支持し反対派を過激派と批判",u:"https://x.com/JlMqc1bALnVe9gS/status/2063598518305218910"},
+  {x:-0.5,y:0.0,e:0.0,c:0.85,s:"移行进まない理由は保護者负担と住民参画不足と分析",u:"https://x.com/774nyannyan/status/2063204420297617773"},
+  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"地域移行に反対立場だが、面倒くさがりつつも資料作成中",u:"https://x.com/Pansy_school/status/2063014247500816645"},
+  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"地域移行に強く反対、教員の質低下を懸念",u:"https://x.com/yamako_10/status/2061588627088634365"},
+  {x:1.0,y:0.0,e:0.0,c:0.75,s:"移行反対は親の送迎面倒さが原因と主張",u:"https://x.com/774nyannyan/status/2060903547257131344"},
+  {x:1.0,y:0.0,e:-1.0,c:0.60,s:"地域移行支持も住民反対で実現困難との皮肉",u:"https://x.com/774nyannyan/status/2060894243808530650"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"地域移行の住民反対で頓挫すると予測",u:"https://x.com/774nyannyan/status/2060890475503157752"},
+  {x:1.0,y:1.0,e:0.5,c:0.80,s:"地域移行支持だが現状維持派の矛盾を指摘",u:"https://x.com/774nyannyan/status/2058872234408833533"},
+  {x:1.0,y:1.0,e:1.0,c:0.85,s:"地域移行支持を表明、政策論",u:"https://x.com/bansho_teruhito/status/2069413298358059063"},
+  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"地域移行進まず 管理職・教員の意識改革を批判",u:"https://x.com/AUzzkqIjZ37594/status/2067938043332604078"},
+  {x:0.0,y:0.0,e:0.0,c:0.70,s:"地域移行に伴う内申評価の公平化を提案",u:"https://x.com/maeshima_nishi/status/2066861890064760889"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"地域移行の可行性に疑問呈し教員の善意頼み批判",u:"https://x.com/iwanissimo/status/2066786203442217008"},
+  {x:0.5,y:0.0,e:0.0,c:0.70,s:"地域移行の課題と解決策を冷静に分析する投稿",u:"https://x.com/taiikujin966039/status/2065544492430643515"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.70,s:"地域移行の可行性に疑問、教員善意依存の構造批判",u:"https://x.com/yamoto8/status/2065429718128816346"},
+  {x:-1.0,y:0.0,e:0.0,c:0.60,s:"地域移行で問題噴出を予測・やや懸念示す",u:"https://x.com/munougensouka/status/2064392535120937430"},
+  {x:0.5,y:1.0,e:0.0,c:0.65,s:"地域移行の格差解消プロジェクト紹介。移行自体は支持方向",u:"https://x.com/canpan2009/status/2064286063192117415"},
+  {x:0.0,y:0.0,e:1.0,c:0.70,s:"地域移行のビジネスモデル実施上の苦労を吐露",u:"https://x.com/Pansy_school/status/2063391483013583240"},
+  {x:-1.5,y:1.5,e:0.5,c:0.80,s:"移行に疑問、家庭負担増と体験格差を懸念",u:"https://x.com/danchosabasabu/status/2062309010200772695"},
+  {x:2.0,y:1.0,e:1.5,c:0.85,s:"地域移行支持・民意を根拠に既得権益側を批判",u:"https://x.com/m727243023/status/2060651797388394551"},
+  {x:-1.5,y:-1.5,e:1.0,c:0.75,s:"現行制度の強制労働的な実態への不満と移行への消極的立場",u:"https://x.com/774nyannyan/status/2060324516652568821"},
+  {x:1.0,y:0.0,e:-0.5,c:0.75,s:"文科省の腰の据わらない姿勢に苦笑しつつ地域移行推進派",u:"https://x.com/Sukimakagukmny/status/2060164886467150160"},
+  {x:-1.5,y:0.0,e:1.5,c:0.85,s:"委託条件の非現実性を批判し政策の本気度を疑問視",u:"https://x.com/ikuji_takuto/status/2070078294410850366"},
+  {x:0.0,y:1.5,e:1.0,c:0.60,s:"スポ少非協力親を批判、地域移行を背景に教育責任を促す",u:"https://x.com/AsahiPodcast/status/2069498240240849347"},
+  {x:1.0,y:-1.0,e:1.0,c:0.60,s:"部活外部委託と教員待遇改善を主張",u:"https://x.com/godof31icecream/status/2069288512311251029"},
+  {x:1.0,y:-1.0,e:1.0,c:0.85,s:"外部委託既定路線を容認、違法労働問題を根拠に",u:"https://x.com/shirassh/status/2069006288777052163"},
+  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"休日禁止・外部委託への疑問と実務的懸念",u:"https://x.com/gigigigigijutu/status/2068437174924812622"},
+  {x:1.0,y:1.0,e:0.5,c:0.80,s:"移行は不可避だが格差拡大を危惧",u:"https://x.com/football__cone/status/2068341617443189050"},
+  {x:1.0,y:0.0,e:1.0,c:0.70,s:"部活外部委託を肯定、支持意見",u:"https://x.com/LIU83414453/status/2067750890862493830"},
+  {x:0.0,y:-2.0,e:-1.0,c:0.70,s:"部活外部委託を削減の象徴に挙げ教員負担の理解不足を皮肉る",u:"https://x.com/yukiuniriri/status/2067037904401236236"},
+  {x:1.0,y:-1.0,e:0.0,c:0.75,s:"スポンサーをつけた外部委託で負担軽減を提案",u:"https://x.com/kudou24307267/status/2067017810401001829"},
+  {x:0.0,y:0.0,e:0.0,c:0.70,s:"地域移行に触れたが賛否なく淡々と記述",u:"https://x.com/akaishitaizo/status/2066060375049879553"},
+  {x:1.0,y:-1.0,e:1.0,c:0.85,s:"教師問題背景に外部委託肯定の意見",u:"https://x.com/sky_walker_1173/status/2065224434433298449"},
+  {x:0.0,y:-1.0,e:-1.0,c:0.75,s:"教員負担問題を冷笑視し現状認識を揶揄",u:"https://x.com/t_maru_summer/status/2065010419568406669"},
+  {x:0.0,y:0.0,e:0.0,c:0.50,s:"地域移行の是非より町の評価に困惑",u:"https://x.com/DwpN0ecG6R72240/status/2064660470913733098"},
+  {x:1.0,y:1.0,e:0.5,c:0.75,s:"水泳授業存続と外部委託を支持する個人的意見",u:"https://x.com/HissatuShigotoP/status/2064556920636358772"},
+  {x:0.0,y:0.0,e:0.0,c:0.50,s:"外部委託の理由を問い科学部との比較をしている",u:"https://x.com/punch551/status/2064470890977608037"},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"部活外注を批判し教育価値を重視する否定的見解",u:"https://x.com/2812572ng/status/2063911271570047166"},
+  {x:1.0,y:1.0,e:0.0,c:0.60,s:"OBOG活用と外部委託を肯定、地域移行支持",u:"https://x.com/addreality/status/2063634162880549031"},
+  {x:-1.0,y:1.0,e:-1.0,c:0.70,s:"移行後の部活で指導者が不在の中、子供たちがサークル状態で活動している現状を報告",u:"https://x.com/lHAKPI9sj52UVOW/status/2062678108780818526"},
+  {x:1.0,y:-1.5,e:1.5,c:0.90,s:"部活外部委託により教師の負担軽減を求める批判的意見",u:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
+  {x:-1.0,y:0.0,e:0.0,c:0.60,s:"配偶者の部活疲れを嘆き外部委託に疑問",u:"https://x.com/wamipiha_ROOM/status/2062441022815404445"},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"移行反対で代替案提示、子どもを最優先に",u:"https://x.com/joO7g4uWTlVCSMA/status/2061724320259608806"},
+  {x:2.0,y:-2.0,e:1.0,c:0.70,s:"教師負担軽減のため部活の外部委託を強く望む",u:"https://x.com/yuka_greentea30/status/2061436132769124660"},
+  {x:1.0,y:0.0,e:0.0,c:0.75,s:"部活は学校の仕事ではなく地域クラブでと主張",u:"https://x.com/sugiyama2023/status/2061056903124545999"},
+  {x:-0.5,y:-0.5,e:0.0,c:0.75,s:"部活への公的支援に懐疑的だが外部委託は支持",u:"https://x.com/Rx0073LT/status/2060361575635255788"},
+  {x:0.0,y:-1.0,e:0.0,c:0.65,s:"教育改革の虚幻性を指摘する意見",u:"https://x.com/mathmathsan/status/1888223251400438207"},
+  {x:0.0,y:-1.0,e:-1.0,c:0.70,s:"教員自身の負担削減行動を促す冷淡な意見",u:"https://x.com/sugiyama2023/status/2069927749997953237"},
+  {x:0.0,y:0.0,e:0.0,c:0.60,s:"入試優先の教育問題を指摘、地域移行には触れず",u:"https://x.com/Yama_to_Sima/status/2069699164318154834"},
+  {x:0.0,y:0.0,e:0.0,c:0.60,s:"市議批判と地域移行の困難性指摘",u:"https://x.com/db6qp9/status/2069228519016780190"},
+  {x:0.5,y:1.5,e:1.0,c:0.75,s:"先生負担より生徒保護を優先、指導員導入を望む",u:"https://x.com/1007_nagi/status/2068954974714052941"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.85,s:"移行進まぬ理由は地域のメリット不足と財源の欠如",u:"https://x.com/774nyannyan/status/2068566479247950305"},
+  {x:-1.0,y:0.0,e:0.0,c:0.85,s:"地域移行の難しさを住民メリット不足で分析",u:"https://x.com/774nyannyan/status/2068564242505269619"},
+  {x:0.0,y:-1.5,e:0.5,c:0.60,s:"顧問拒否で教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2068442038786547725"},
+  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"教員負担増への懸念と現場軽視への批判",u:"https://x.com/Kazukittyo_gun/status/2068325020313764315"},
+  {x:0.5,y:-1.0,e:-1.0,c:0.80,s:"教員負担削減観点から地域移行を容認する消極的支持",u:"https://x.com/774nyannyan/status/2068293099353416159"},
+  {x:-2.0,y:2.0,e:2.0,c:0.90,s:"経費削減优先に生徒安全軽視の政策に強く反発",u:"https://x.com/nom1153/status/2068292289173311686"},
+  {x:-1.0,y:-1.0,e:0.0,c:0.75,s:"学校負担軽減の観点から部活の学校依存に疑問",u:"https://x.com/zabarava/status/2068291631573549209"},
+  {x:0.0,y:-1.0,e:2.0,c:0.85,s:"分業で解决すべきで税金の議論は的外れ",u:"https://x.com/quomoritureruis/status/2068245939375219020"},
+  {x:-1.0,y:2.0,e:1.0,c:0.85,s:"部活動の教育的価値を強調し、縮小に懸念",u:"https://x.com/lIjdqs9tKf2434/status/2068244369690308798"},
+  {x:0.0,y:-1.0,e:1.0,c:0.65,s:"顧問拒否の実践法を共有し教員負担軽減を訴える",u:"https://x.com/yoshiki20260530/status/2068146586954412271"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"地域移行方針を批判し、受け皿整備の困難さを指摘",u:"https://x.com/774nyannyan/status/2068125288605852033"},
+  {x:0.0,y:1.0,e:0.5,c:0.85,s:"部活指導に思いのない者へ批判、特に地域移行での負担押しつけを問題視",u:"https://x.com/774nyannyan/status/2067944905457156215"},
+  {x:-0.5,y:1.0,e:-1.0,c:0.75,s:"移行に反対はしないが負担転嫁を皮肉る",u:"https://x.com/774nyannyan/status/2067944484231651534"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"負担を転嫁するだけでは解決しないと批判的",u:"https://x.com/774nyannyan/status/2067609586316800281"},
+  {x:-1.5,y:0.5,e:0.5,c:0.75,s:"地域移行支持で、保護者を批判",u:"https://x.com/774nyannyan/status/2067609048686669921"},
+  {x:0.0,y:1.0,e:0.5,c:0.75,s:"部活的教育意義認めつつ教員無料労働の矛盾を指摘",u:"https://x.com/Pansy_school/status/2067581200940843298"},
+  {x:2.0,y:-1.0,e:1.0,c:0.90,s:"部活解体と地域移行支持、教員業務削減を重視",u:"https://x.com/cold_2_dloc/status/2067556163802337627"},
+  {x:1.0,y:-2.0,e:1.0,c:0.80,s:"データで顧問拒否し教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2067198495979978851"},
+  {x:-0.5,y:-2.0,e:1.5,c:0.70,s:"顧問拒否の経験を共有し教員負担軽減を最優先",u:"https://x.com/yoshiki20260530/status/2067189419535409499"},
+  {x:-1.0,y:-2.0,e:1.0,c:0.80,s:"教員負担軽減優先で顧問拒否決意・同調圧力を批判",u:"https://x.com/yoshiki20260530/status/2066798324938919963"},
+  {x:0.0,y:-1.0,e:0.0,c:0.60,s:"教員不足の原因を列举し双方の立场を绍介",u:"https://x.com/monmon0816/status/2066477650051567764"},
+  {x:-1.0,y:0.0,e:0.0,c:0.75,s:"地域移行懐疑論、部活縮小を提案",u:"https://x.com/774nyannyan/status/2065997295855046946"},
+  {x:0.0,y:-1.5,e:1.5,c:0.75,s:"教員負担の危険性を指摘し待遇改善を求める意見",u:"https://x.com/kobuoichan/status/2065958821567385989"},
+  {x:1.0,y:-1.5,e:1.5,c:0.70,s:"顧問拒否の経験を語り教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2065906962597113927"},
+  {x:-1.0,y:0.0,e:-0.5,c:0.85,s:"地域移行の改革自体は肯定しつつも、困窮世帯への負担増を懸念",u:"https://x.com/Fujisawa_Suzuki/status/2065673921421287662"},
+  {x:0.0,y:-2.0,e:1.0,c:0.90,s:"音楽教師が本業防衛のため顧問を拒否",u:"https://x.com/yoshiki20260530/status/2065653370019561677"},
+  {x:0.0,y:-1.0,e:1.0,c:0.85,s:"教員が部活顧問拒否を宣言、自分の生活守る姿勢",u:"https://x.com/yoshiki20260530/status/2065409303255924929"},
+  {x:-1.0,y:-2.0,e:0.5,c:0.75,s:"教員負担増を懸念し現状維持を支持",u:"https://x.com/G0TTZIQEWm56962/status/2064928199222702145"},
+  {x:-1.0,y:-1.5,e:1.0,c:0.80,s:"教員負担増を懸念し地域移行に否定的な意見",u:"https://x.com/anderson0214/status/2064832907576021221"},
+  {x:-1.0,y:1.5,e:1.5,c:0.75,s:"学校に部活を要望する親や教員の滅私奉公を痛烈に批判",u:"https://x.com/hagakikatteren/status/2064823846402933129"},
+  {x:0.0,y:-1.0,e:-1.0,c:0.80,s:"ガイドライン根拠に 部活義務否定・教員負担軽減寄りの冷静な意見",u:"https://x.com/n821nJF8iuB4JAU/status/2064500878632210546"},
+  {x:-1.0,y:-2.0,e:1.0,c:0.85,s:"教員負担軽減を優先し 部活顧問拒否を呼びかける投稿",u:"https://x.com/yoshiki20260530/status/2064461183793696895"},
+  {x:1.5,y:0.5,e:0.5,c:0.75,s:"部活廃止を肯定し全校への拡大望む",u:"https://x.com/mamehina012/status/2070658992205148385"},
+  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"部活廃止訴える、教員負担軽減最優先で感情強い",u:"https://x.com/Hfcn4oelqPHUQqM/status/2070655303063158975"},
+  {x:-1.0,y:1.5,e:0.0,c:0.85,s:"学校部活は誰もが参加できるで開かれた存在であるべきと主張",u:"https://x.com/yanderedaisuki4/status/2070624714977050868"},
+  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"文科省の部活廃止に批判、監視求める",u:"https://x.com/Nijiiro_Ongaku/status/2070609133913719174"},
+  {x:-2.0,y:0.0,e:1.0,c:0.60,s:"部活廃止を提唱、再発防止では不十分と主張",u:"https://x.com/VrJQQQDQJKmiLzY/status/2070519063667986861"},
+  {x:-1.0,y:1.0,e:0.5,c:0.65,s:"自身の経験に基づき廃部動きを皮肉る",u:"https://x.com/mizuki_suguru/status/2070407597090586780"},
+  {x:1.0,y:0.0,e:1.0,c:0.75,s:"部活廃止を支持する激励メッセージ",u:"https://x.com/kyusaikatsudou/status/2070159831621931490"},
+  {x:-1.5,y:0.0,e:1.0,c:0.70,s:"部活廃止論者を人格・論理的に批判し嫌悪",u:"https://x.com/LwbR1psFJd55470/status/2070082170568520116"},
+  {x:-1.0,y:2.0,e:1.0,c:0.80,s:"部活廃止に反対し教育機会均等と子ども優先を主張",u:"https://x.com/kotoridesudesu/status/2070076881827950673"},
+  {x:-2.0,y:-1.0,e:1.0,c:0.75,s:"部活廃止を顧問自らの手で進めるべきと主張",u:"https://x.com/edu_impossible/status/2069916720547115204"},
+  {x:-2.0,y:0.0,e:1.0,c:0.80,s:"部活の廃止を求める簡潔な意見",u:"https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261"},
+  {x:-1.0,y:0.0,e:1.0,c:0.50,s:"廃止論派の主張に恐怖・拒否感",u:"https://x.com/GreatHjm/status/2069705751334179316"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.50,s:"部活廃止容認、議論倦厭示す投稿",u:"https://x.com/TEeDbIHUir13163/status/2069624470210572408"},
+  {x:1.5,y:-1.5,e:1.5,c:0.85,s:"教員の違法行為を批判し部活廃止を主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069555558802477361"},
+  {x:2.0,y:-1.0,e:1.0,c:0.95,s:"訴訟で部活廃止を加速させるべきと強く主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069539721546698982"},
+  {x:-1.0,y:1.0,e:0.0,c:0.80,s:"地域移行に懸念、学校部活の競技力育成機能を評価",u:"https://x.com/best_yajima/status/2069440318144200986"},
+  {x:1.0,y:0.0,e:-1.0,c:0.70,s:"地域移行の受け皿整備の遅れを皮肉混じりに批判",u:"https://x.com/DioxetaneMaker/status/2069386736292319386"},
+  {x:-2.0,y:1.0,e:2.0,c:0.75,s:"部活全面廃止を怒り強く主張",u:"https://x.com/hisa10swan/status/2069350819527618875"},
+  {x:-2.0,y:2.0,e:1.0,c:0.75,s:"部活廃止に強く反対、競技力維持を重視",u:"https://x.com/j_zw62/status/2069267266693447707"},
+  {x:-1.5,y:1.0,e:1.5,c:0.85,s:"部活廃止を支持、顧問の質 低さを批判",u:"https://x.com/pochi1182/status/2069232307479937533"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"部活廃止論に反対し教育的価値を強調",u:"https://x.com/yuritako/status/2069192029251547263"},
+  {x:-2.0,y:0.0,e:1.0,c:0.70,s:"部活の廃止を断言的に主張する強い意見",u:"https://x.com/hisa10swan/status/2069172279624577418"},
+  {x:-1.0,y:1.0,e:0.0,c:0.70,s:"部活人脈の有用性を語り廃止動きに反対",u:"https://x.com/nekonekocyan/status/2068933417702731793"},
+  {x:-1.0,y:1.0,e:1.0,c:0.50,s:"部活廃止への皮肉と社会劣化揶揄",u:"https://x.com/ienadia/status/2068932768843915393"},
+  {x:2.0,y:1.0,e:1.0,c:0.85,s:"地域移行を支持、閉鎖的な部活改善を主張",u:"https://x.com/SvErfdCKdt52541/status/2068859859077124604"},
+  {x:1.5,y:0.5,e:1.5,c:0.80,s:"地域移行肯定、顧問不要論に共感し批判的",u:"https://x.com/sugiyama2023/status/2068848471608844627"},
+  {x:-2.0,y:0.0,e:1.0,c:0.90,s:"部活廃止・勉強優先を明確に主張",u:"https://x.com/hiroa11011/status/2068702457820246445"},
+  {x:-2.0,y:1.0,e:0.0,c:0.80,s:"部活廃止を主張し勉強の優先度を強調する投稿",u:"https://x.com/weTdqo0isa11532/status/2068700099845509484"}
+];
+const SM_TOUR = [
+  {title:"全体像：中立帯に集中",desc:"148件中71件(48%)がX=0またはY=0の中立帯。地域移行は賛否の二極化というより、条件次第という意見が多い。",filter:"all"},
+  {title:"第2象限：移行反対・教員負担軽減重視（27件）",desc:"「費用増が保護者にしわ寄せ」「受け皿がない地方は切り捨てか」など、移行の現実的課題を指摘する声。",filter:"q2",highlight:[-1.5,1.5],quote:"経費削減优先に生徒安全軽視の政策に強く反発",quote_url:"https://x.com/nom1153/status/2068292289173311686"},
+  {title:"第1象限：移行推進・教員負担軽減重視（21件）",desc:"「教員の過労死ラインを超える部活顧問は限界」「少子化で学校単位の部活は維持不能」と構造的な課題を指摘。",filter:"q1",highlight:[1.0,1.0],quote:"地域移行を支持し持続可能な運営を求める",quote_url:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
+  {title:"高感情投稿（e≥1.5）",desc:"16件が強い感情を帯びた投稿。移行反対派・推進派双方から、子どもの権利や教員の人権をめぐる怒りが噴出。",filter:"q4",highlight:[1.0,-1.5],quote:"部活外部委託により教師の負担軽減を求める批判的意見",quote_url:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
+  {title:"冷静な投稿（e≤0）",desc:"66件(45%)が冷静・分析的な投稿。制度設計の具体論、費用試算、他国事例の紹介など。感情的な論争とは別に、政策的な議論も活発。",filter:"calm"}
+];
+</script>
 <script>
 (function(){
-  var data=[{"label": "教員の働き方改革と持続可能な部活動", "count": 95, "color": "#4a90d9", "cats": "教員負担の軽減, 少子化・維持困難, 部活廃止・縮小論"}, {"label": "その他", "count": 64, "color": "#cbd5e1", "cats": "その他・分類保留, 情報共有・ニュース言及, 条件付き・制度設計"}, {"label": "費用増と学校文化喪失への懸念", "count": 21, "color": "#e07040", "cats": "費用・受け皿の懸念, 教育的価値の喪失"}];
-  var total=data.reduce(function(s,d){return s+d.count},0);
-  var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
-  var svg=document.getElementById("semicircle-chart");
-  var startAngle=Math.PI;
-  data.forEach(function(d,idx){
-    var sweep=(d.count/total)*Math.PI-gap;
-    var endAngle=startAngle+sweep;
-    var x1o=cx+outerR*Math.cos(startAngle),y1o=cy+outerR*Math.sin(startAngle);
-    var x2o=cx+outerR*Math.cos(endAngle),y2o=cy+outerR*Math.sin(endAngle);
-    var x1i=cx+innerR*Math.cos(endAngle),y1i=cy+innerR*Math.sin(endAngle);
-    var x2i=cx+innerR*Math.cos(startAngle),y2i=cy+innerR*Math.sin(startAngle);
-    var la=sweep>Math.PI?1:0;
-    var path="M "+x1o+" "+y1o+" A "+outerR+" "+outerR+" 0 "+la+" 1 "+x2o+" "+y2o+" L "+x1i+" "+y1i+" A "+innerR+" "+innerR+" 0 "+la+" 0 "+x2i+" "+y2i+" Z";
-    var el=document.createElementNS("http://www.w3.org/2000/svg","path");
-    el.setAttribute("d",path);el.setAttribute("fill",d.color);
-    el.style.transition="opacity .15s";el.style.cursor="pointer";
-    el.onmouseenter=function(){el.style.opacity="0.75"};
-    el.onmouseleave=function(){el.style.opacity="1"};
-    var t=document.createElementNS("http://www.w3.org/2000/svg","title");
-    t.textContent=d.label+": "+d.count+"件 ("+(d.count/total*100).toFixed(1)+"%)"+"\n"+d.cats;
-    el.appendChild(t);svg.appendChild(el);
-    var mid=startAngle+sweep/2,lr=(outerR+innerR)/2;
-    if(d.count>=5){
-      var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
-      tx.setAttribute("x",cx+lr*Math.cos(mid));
-      tx.setAttribute("y",cy+lr*Math.sin(mid)-8);
-      tx.setAttribute("text-anchor","middle");tx.setAttribute("dominant-baseline","central");
-      tx.setAttribute("font-size","26");tx.setAttribute("font-weight","800");
-      tx.setAttribute("fill","#fff");tx.setAttribute("pointer-events","none");
-      tx.textContent=d.count;svg.appendChild(tx);
-    }
-    if(sweep>0.25){
-      var tx2=document.createElementNS("http://www.w3.org/2000/svg","text");
-      var short=d.label.length>12?d.label.substring(0,12)+"…":d.label;
-      tx2.setAttribute("x",cx+lr*Math.cos(mid));
-      tx2.setAttribute("y",cy+lr*Math.sin(mid)+14);
-      tx2.setAttribute("text-anchor","middle");tx2.setAttribute("dominant-baseline","central");
-      tx2.setAttribute("font-size","11");tx2.setAttribute("font-weight","600");
-      tx2.setAttribute("fill","rgba(255,255,255,.85)");tx2.setAttribute("pointer-events","none");
-      tx2.textContent=short;svg.appendChild(tx2);
-    }
-    startAngle=endAngle+gap;
-  });
-  // Center line (majority marker)
-  var lineX=cx;
-  var el=document.createElementNS("http://www.w3.org/2000/svg","line");
-  el.setAttribute("x1",lineX);el.setAttribute("y1",cy-outerR-5);
-  el.setAttribute("x2",lineX);el.setAttribute("y2",cy-innerR+5);
-  el.setAttribute("stroke","var(--ink,#172033)");el.setAttribute("stroke-width","2");
-  el.setAttribute("stroke-dasharray","4,3");el.setAttribute("opacity","0.4");
-  svg.appendChild(el);
+  const RAW = SM_RAW, TOUR = SM_TOUR;
+  const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
+  const IMG_ALPHA_END = 0.30;
+  let imgAlpha = IMG_ALPHA_END;
+  let showHeat = true, showDots = true, heatRadius = 48;
+  let activeFilter = 'all';
+  let spotlightTarget = null;
+  let animating = false, animFrame = 0;
 
-  var leg=document.getElementById("semicircle-legend");
-  data.forEach(function(d){
-    var item=document.createElement("div");
-    item.style.cssText="display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:6px 0;";
-    item.innerHTML='<span style="width:14px;height:14px;border-radius:4px;background:'+d.color+';flex-shrink:0;margin-top:2px"></span><div><strong style="font-size:14px">'+d.label+'</strong> <span style="color:var(--accent);font-weight:800;font-size:16px;margin-left:4px">'+d.count+'</span><span style="color:var(--muted);font-size:11px;margin-left:2px">件</span><div style="color:var(--muted);font-size:11px;margin-top:2px">'+d.cats+'</div></div>';
-    leg.appendChild(item);
+  const canvasMain = document.getElementById('smCanvasMain');
+  const ctx = canvasMain.getContext('2d');
+  const canvasHeat = document.getElementById('smCanvasHeat');
+  const hCtx = canvasHeat.getContext('2d');
+
+  function toCanvas(x, y) {
+    return [PAD + (x + 2) / 4 * INNER, PAD + (2 - y) / 4 * INNER];
+  }
+
+  function emoRGB(e) {
+    const t = (e + 2) / 4;
+    if (t < 0.5) {
+      const s = t * 2;
+      return [Math.round(74 + (187-74)*s), Math.round(144 + (187-144)*s), Math.round(217 + (187-217)*s)];
+    } else {
+      const s = (t - 0.5) * 2;
+      return [Math.round(187 + (224-187)*s), Math.round(187 + (187-187)*s), Math.round(187 + (187-187)*s)];
+    }
+  }
+
+  function seededRand(seed) {
+    let s = seed ^ 0x12345678;
+    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
+    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
+    s = (s >>> 16) ^ s;
+    return (s >>> 0) / 0xffffffff;
+  }
+
+  const jCache = RAW.map((_, i) => [(seededRand(i*2) - 0.5) * 14, (seededRand(i*2+1) - 0.5) * 14]);
+
+  function visible(p) {
+    if (activeFilter === 'all') return true;
+    const x = p.x, y = p.y, e = p.e;
+    if (activeFilter === 'q1') return x > 0 && y > 0;
+    if (activeFilter === 'q2') return x < 0 && y > 0;
+    if (activeFilter === 'q3') return x < 0 && y < 0;
+    if (activeFilter === 'q4') return e >= 1.5;
+    if (activeFilter === 'calm') return e <= 0;
+    return true;
+  }
+
+  function drawHeatmap() {
+    if (!showHeat) { hCtx.clearRect(0, 0, W, H); return; }
+    const res = 3;
+    const cols = Math.ceil(W / res), rows = Math.ceil(H / res);
+    const grid = new Float32Array(cols * rows);
+    const sigma = heatRadius / 2.5;
+    const sig2 = sigma * sigma * 2;
+    const r2 = heatRadius * heatRadius;
+
+    const vis = RAW.filter(p => visible(p));
+    vis.forEach(p => {
+      const [cx, cy] = toCanvas(p.x, p.y);
+      const gx0 = Math.max(0, Math.floor((cx - heatRadius) / res));
+      const gy0 = Math.max(0, Math.floor((cy - heatRadius) / res));
+      const gx1 = Math.min(cols - 1, Math.ceil((cx + heatRadius) / res));
+      const gy1 = Math.min(rows - 1, Math.ceil((cy + heatRadius) / res));
+      for (let gy = gy0; gy <= gy1; gy++) {
+        for (let gx = gx0; gx <= gx1; gx++) {
+          const dx = gx * res - cx, dy = gy * res - cy;
+          const d2 = dx*dx + dy*dy;
+          if (d2 < r2) grid[gy * cols + gx] += Math.exp(-d2 / sig2);
+        }
+      }
+    });
+
+    const maxV = Math.max(...grid) || 1;
+    const imgData = hCtx.createImageData(cols * res, rows * res);
+    for (let gy = 0; gy < rows; gy++) {
+      for (let gx = 0; gx < cols; gx++) {
+        const v = grid[gy * cols + gx] / maxV;
+        if (v < 0.01) continue;
+        let r, g, b;
+        if (v < 0.5) {
+          const t = v * 2;
+          r = Math.round(41 + (255-41)*t); g = Math.round(128 + (255-128)*t); b = Math.round(185 + (150-185)*t);
+        } else {
+          const t = (v - 0.5) * 2;
+          r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
+        }
+        const alpha = Math.round(Math.pow(v, 0.5) * 170);
+        for (let dy = 0; dy < res; dy++) {
+          for (let dx = 0; dx < res; dx++) {
+            const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
+            const inPad = (gx*res+dx) >= PAD && (gx*res+dx) < PAD+INNER && (gy*res+dy) >= PAD && (gy*res+dy) < PAD+INNER;
+            if (!inPad) continue;
+            imgData.data[px] = r; imgData.data[px+1] = g; imgData.data[px+2] = b; imgData.data[px+3] = alpha;
+          }
+        }
+      }
+    }
+    hCtx.clearRect(0, 0, W, H);
+    hCtx.putImageData(imgData, 0, 0);
+  }
+
+  function drawBase() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
+    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+      const [cx] = toCanvas(v, 0);
+      ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
+      const [,cy] = toCanvas(0, v);
+      ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
+    });
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
+    const [midX] = toCanvas(0, 0); const [,midY] = toCanvas(0, 0);
+    ctx.beginPath(); ctx.moveTo(PAD, midY); ctx.lineTo(PAD+INNER, midY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(midX, PAD); ctx.lineTo(midX, PAD+INNER); ctx.stroke();
+
+    ctx.font = 'bold 13px -apple-system,sans-serif';
+    ctx.textAlign = 'center';
+    const quadLabels = [
+      ['移行推進×負担軽減', PAD + INNER*0.75, PAD + 26],
+      ['移行反対×負担軽減', PAD + INNER*0.25, PAD + 26],
+      ['移行反対×教育的価値', PAD + INNER*0.25, PAD + INNER - 10],
+      ['移行推進×教育的価値', PAD + INNER*0.75, PAD + INNER - 10],
+    ];
+    quadLabels.forEach(([text, lx, ly]) => {
+      const tw = ctx.measureText(text).width;
+      const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
+      ctx.fillStyle = 'rgba(0,0,0,0.62)';
+      ctx.beginPath();
+      ctx.moveTo(rx + r, ry); ctx.lineTo(rx + pw - r, ry);
+      ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
+      ctx.lineTo(rx + pw, ry + ph - r);
+      ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
+      ctx.lineTo(rx + r, ry + ph);
+      ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
+      ctx.lineTo(rx, ry + r);
+      ctx.arcTo(rx, ry, rx + r, ry, r);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.fillText(text, lx, ly);
+    });
+
+    ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
+    ctx.textAlign = 'right';
+    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+      const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
+    });
+    ctx.textAlign = 'center';
+    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+      const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
+    });
+
+    if (showDots) {
+      const count = animating ? animFrame : RAW.length;
+      for (let i = 0; i < count; i++) {
+        const p = RAW[i];
+        const show = visible(p);
+        const [cx, cy] = toCanvas(p.x, p.y);
+        const [rr, gg, bb] = emoRGB(p.e);
+        ctx.beginPath();
+        ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
+        ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
+        ctx.fill();
+        if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
+      }
+    }
+
+    if (spotlightTarget) {
+      const [sx, sy] = spotlightTarget;
+      ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI*2);
+      ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(41,128,185,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+  }
+
+  function redraw() { drawHeatmap(); drawBase(); }
+
+  function playIntro() {
+    animating = true; animFrame = 0;
+    const total = RAW.length, duration = 1800, start = performance.now();
+    function tick(now) {
+      const elapsed = now - start, progress = Math.min(1, elapsed / duration);
+      animFrame = Math.min(total, Math.round(progress * total));
+      redraw();
+      if (progress < 1) requestAnimationFrame(tick);
+      else { animating = false; redraw(); }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  let tourActive = false, currentStep = 0;
+
+  function showTourStep(idx) {
+    const step = TOUR[idx], total = TOUR.length;
+    document.getElementById('smTourStep').textContent = `Step ${idx+1} / ${total}`;
+    document.getElementById('smTourTitle').textContent = step.title;
+    document.getElementById('smTourDesc').textContent = step.desc;
+    document.getElementById('smTourProgressBar').style.width = ((idx+1)/total*100)+'%';
+
+    const embedEl = document.getElementById('smTourEmbed');
+    const loadingEl = document.getElementById('smTourEmbedLoading');
+    const fallbackEl = document.getElementById('smTourQuoteFallback');
+    embedEl.style.display = 'none'; loadingEl.style.display = 'none'; fallbackEl.style.display = 'none';
+    embedEl.innerHTML = '';
+
+    if (step.quote && step.quote_url) {
+      showFallback(step, fallbackEl);
+      const tweetId = step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
+      if (tweetId) {
+        const tryEmbed = () => {
+          window.twttr.widgets.createTweet(tweetId, embedEl, { theme:'dark', dnt:true, conversation:'none' })
+            .then(el => { if (el) { fallbackEl.style.display='none'; embedEl.style.display='block'; } });
+        };
+        if (window.twttr && window.twttr.widgets) { window.twttr.ready(tryEmbed); }
+        else {
+          let wt = 0;
+          const wpoll = setInterval(() => {
+            wt += 200;
+            if (window.twttr && window.twttr.widgets) { clearInterval(wpoll); window.twttr.ready(tryEmbed); }
+            else if (wt >= 5000) clearInterval(wpoll);
+          }, 200);
+        }
+      }
+    } else if (step.quote) { showFallback(step, fallbackEl); }
+
+    activeFilter = step.filter || 'all';
+    document.querySelectorAll('.sm-fbtn').forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector(`.sm-fbtn[data-q="${step.filter || 'all'}"]`);
+    if (btn) btn.classList.add('active');
+    spotlightTarget = step.highlight ? (() => { const [sx,sy]=toCanvas(step.highlight[0],step.highlight[1]); return [sx,sy]; })() : null;
+    redraw();
+  }
+
+  function showFallback(step, fallbackEl) {
+    document.getElementById('smTourQuoteText').textContent = '「' + step.quote + '」';
+    const linkEl = document.getElementById('smTourQuoteLink');
+    if (step.quote_url) { linkEl.style.display='inline'; fallbackEl.onclick=()=>window.open(step.quote_url,'_blank'); }
+    else { linkEl.style.display='none'; fallbackEl.onclick=null; }
+    fallbackEl.style.display = 'block';
+  }
+
+  function startTour() { tourActive=true; currentStep=0; document.getElementById('smTourPanel').classList.add('active'); showTourStep(0); }
+  function closeTour() {
+    tourActive=false; document.getElementById('smTourPanel').classList.remove('active');
+    spotlightTarget=null; activeFilter='all';
+    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('.sm-fbtn[data-q="all"]').classList.add('active');
+    redraw();
+  }
+
+  document.getElementById('smStartTour').addEventListener('click', startTour);
+  document.getElementById('smBtnClose').addEventListener('click', closeTour);
+  document.getElementById('smBtnNext').addEventListener('click', () => { if (currentStep < TOUR.length-1) { currentStep++; showTourStep(currentStep); } else closeTour(); });
+  document.getElementById('smBtnPrev').addEventListener('click', () => { if (currentStep > 0) { currentStep--; showTourStep(currentStep); } });
+  document.getElementById('smChkHeat').addEventListener('change', e => { showHeat=e.target.checked; redraw(); });
+  document.getElementById('smChkDots').addEventListener('change', e => { showDots=e.target.checked; redraw(); });
+  document.getElementById('smHeatIntensity').addEventListener('input', e => { heatRadius=+e.target.value; redraw(); });
+  document.querySelector('.sm-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.sm-fbtn'); if (!btn) return;
+    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); activeFilter=btn.dataset.q; spotlightTarget=null; redraw();
   });
+
+  const tooltip = document.getElementById('sm-tooltip');
+  canvasMain.addEventListener('mousemove', e => {
+    const rect = canvasMain.getBoundingClientRect();
+    const sx = W/rect.width, sy = H/rect.height;
+    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
+    let found=null, minD=20;
+    RAW.forEach((p,i) => {
+      if (!visible(p)) return;
+      const [cx,cy] = toCanvas(p.x,p.y);
+      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
+      if (d < minD) { minD=d; found={p,i}; }
+    });
+    if (found) {
+      const p = found.p;
+      const eLabel = p.e>=1.5?'😤 激怒':p.e>=0.5?'😠 感情的':p.e<=-1?'😒 皮肉・冷笑':'😐 冷静';
+      const tx = e.clientX+14+260>window.innerWidth ? e.clientX-270 : e.clientX+14;
+      tooltip.style.opacity='1'; tooltip.style.left=tx+'px'; tooltip.style.top=(e.clientY-10)+'px';
+      tooltip.innerHTML = `<b>${p.s}</b><br>移行: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u?'<br><small style="opacity:.5">クリックでXへ ↗</small>':''}`;
+    } else { tooltip.style.opacity='0'; }
+  });
+  canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
+  canvasMain.addEventListener('click', e => {
+    const rect = canvasMain.getBoundingClientRect();
+    const sx = W/rect.width, sy = H/rect.height;
+    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
+    let found=null, minD=20;
+    RAW.forEach((p,i) => {
+      if (!visible(p)||!p.u) return;
+      const [cx,cy] = toCanvas(p.x,p.y);
+      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
+      if (d < minD) { minD=d; found=p; }
+    });
+    if (found) window.open(found.u,'_blank');
+  });
+
+  playIntro();
+  setTimeout(() => { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }, 3000);
 })();
 </script>
-</section>
     <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">移行推進派</div><h3>教員の働き方改革と持続可能な部活動</h3><div class="axis-count">95<span>件</span></div><p>教員の長時間労働解消と少子化対応のため、地域との役割分担や部活の外部委託・縮小を進めるべきとする立場。</p><div class="axis-tags"><a href="#sample-教員負担の軽減" style="text-decoration:none;color:inherit;"><span>教員負担の軽減</span></a><a href="#sample-少子化-維持困難" style="text-decoration:none;color:inherit;"><span>少子化・維持困難</span></a><a href="#sample-部活廃止-縮小論" style="text-decoration:none;color:inherit;"><span>部活廃止・縮小論</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">慎重・反対派</div><h3>費用増と学校文化喪失への懸念</h3><div class="axis-count">21<span>件</span></div><p>地域移行による保護者の費用負担増、受け皿不足、部活動の教育的価値の喪失を懸念する立場。</p><div class="axis-tags"><a href="#sample-費用-受け皿の懸念" style="text-decoration:none;color:inherit;"><span>費用・受け皿の懸念</span></a><a href="#sample-教育的価値の喪失" style="text-decoration:none;color:inherit;"><span>教育的価値の喪失</span></a></div></article></div></section>
     <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
 <div class="bar-list">

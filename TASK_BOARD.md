@@ -446,11 +446,11 @@
 | テーマ | スタンスマップ | 漫画コンテンツ | 備考 |
 |--------|----------------|----------------|------|
 | ai-copyright | 未 | 完了 | 参考実装。漫画・投票画像カード実装済み |
-| elderly-license | ✅ 完了 (117件) | 未着手 | 義務化賛成79件/強制反対移動権21件。プロンプト作成対象 |
-| bike-blue-ticket | ✅ 完了 (116件) | 未着手 | 取締賛成55件/取締反対利用者優先25件 |
-| school-nickname-ban | 未 | 未着手 | スタンスマップ完成後に着手 |
-| bukatsu-chiiki | 未 | 未着手 | スタンスマップ完成後に着手 |
-| constitutional | 未 | 未着手 | スタンスマップ完成後に着手 |
+| elderly-license | ✅ 完了 (117件) | 完了 | `elderly-license-revocation` として漫画データ・プロンプト・画像・HTML投票カードまで反映済み |
+| bike-blue-ticket | ✅ 完了 (116件) | 完了 | 漫画データ・プロンプト・画像・HTML投票カードまで反映済み |
+| school-nickname-ban | ⚠️ 103件(70%エラー) | 未着手 | 再実行中。完成後に着手 |
+| bukatsu-chiiki | ✅ 完了 (148件) | プロンプト作成済み | `manga-prompts/bukatsu-chiiki-prompts.md` / `bukatsu-chiiki-vote-prompts.md` 作成済み。画像生成・HTML反映待ち |
+| constitutional | ✅ 完了 (366件) | 完了 | プロンプト・画像WebP変換・`docs/constitutional-amendment-reaction-map.html` への漫画セクション/投票画像カード反映済み |
 **参照ファイル**:
 - `templates/manga-content.schema.md` — データスキーマ定義
 - `templates/reaction-map-workflow.md` — ワークフロー（Step 3.5が漫画）
@@ -459,6 +459,19 @@
 - `configs/ai-copyright-reaction-map.json` — mangaフィールドの実データ例
 - `docs/ai-copyright-reaction-map.html` — HTML実装例
 - セッションプロンプト: `configs/prompts/claude-code/20260703_task24-manga-content.md`
+
+### 課題25: スタンスマップ統一 — 半円図→2Dマップ一括移行
+**担当**: Claude Code（別セッション可）
+**状態**: 未着手
+**概要**: 各テーマで個別に実装された2Dスタンスマップ（十字散布図）を統一テンプレートに揃え、独立stance-map.htmlを削除してreaction-map.html内に一本化する
+**背景**: テーマごとに異なるセッションが異なる方式で実装した結果、ページ重複(constitutional)・セクション消失(ai-copyright/elderly)・孤立ページ(bike/bukatsu)が発生
+**スコープ**:
+- Phase 2: ai-copyright/elderly の消失セクション復旧 + constitutional の重複ページ解消
+- Phase 3: bike/bukatsu の半円チャート→2Dマップ置換 + 独立stance-map.html削除
+- Phase 5: index.htmlのリンク整理（重複カード削除、フッターリンク統一）
+- henoko/takaichi/school は2D分類データ未完のためスキップ
+**セッションプロンプト**: `configs/prompts/claude-code/20260704_stance-map-unification.md`
+**依存**: 課題23（ai-copyright 2Dマップ）、課題24（漫画コンテンツ）
 
 ---
 
@@ -489,7 +502,8 @@
 | 課題21: あだ名禁止・高齢者免許返納データ修正 | Hermes | 2026-07-02 | 完了 | school・elderly両テーマ完了 |
 | 課題22: Buy Me a Coffee URL修正 | Claude Code | 2026-07-02 | 完了 | 全ページ+ビルドスクリプトのURLをissue.stance.labに統一 |
 | 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
-| 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket優先。スタンスマップ完成テーマから順次展開 |
+| 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket完了。次はbukatsu-chiiki・constitutional等のスタンスマップ完成テーマへ順次展開 |
+| 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 未着手 | 半円図→2Dマップ一括移行。重複ページ解消・消失セクション復旧・テンプレート統一 |
 
 ---
 

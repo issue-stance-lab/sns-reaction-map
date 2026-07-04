@@ -517,6 +517,44 @@
       border-top: 4px solid transparent !important;
       border-image: linear-gradient(90deg, var(--grad-1), var(--grad-2)) 1 !important;
     }
+    /* === 2D Stance Map (embedded) === */
+    #stance-map-section { position: relative; }
+    #stance-map-inner { transition: filter .6s ease; }
+    #sm-wrap { position:relative; width:100%; max-width:660px; margin:0 auto; }
+    #stance-map-section canvas { display:block; width:100%; border:1px solid #e0e0e0; border-radius:8px; }
+    #smCanvasMain { cursor:crosshair; position:relative; z-index:2; background:transparent; }
+    #smCanvasHeat { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px; pointer-events:none; z-index:1; background:#fafafa; }
+    .sm-ax { position:absolute; font-size:10px; font-weight:600; color:#444; background:rgba(255,255,255,.85); padding:2px 6px; border-radius:4px; pointer-events:none; z-index:3; line-height:1.4; }
+    #sm-tooltip { position:fixed; background:#111; color:#fff; font-size:12px; padding:8px 12px; border-radius:8px; pointer-events:none; z-index:9999; max-width:280px; opacity:0; transition:opacity .15s; line-height:1.5; }
+    #smTourPanel { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); color:#e0e0e0; border-radius:12px; padding:16px; margin-top:10px; display:none; }
+    #smTourPanel.active { display:block; }
+    #smTourStep { font-size:10px; color:#888; margin-bottom:4px; }
+    #smTourTitle { font-size:16px; font-weight:800; color:#fff; margin-bottom:8px; }
+    #smTourDesc { font-size:13px; line-height:1.6; color:#ccc; margin-bottom:12px; }
+    #smTourEmbedLoading { font-size:12px; color:#888; display:none; margin-bottom:8px; }
+    #smTourEmbed { margin-bottom:8px; display:none; }
+    #smTourQuoteFallback { background:#0d1117; border-left:3px solid #1d9bf0; border-radius:6px; padding:10px 12px; margin-bottom:8px; font-size:13px; line-height:1.5; display:none; cursor:pointer; }
+    #smTourQuoteLink { color:#1d9bf0; margin-left:8px; }
+    .sm-tour-nav { display:flex; align-items:center; gap:8px; margin-top:10px; }
+    .sm-tnav { background:none; border:1px solid #444; color:#ccc; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; }
+    .sm-tnav.primary { background:#1d9bf0; border-color:#1d9bf0; color:#fff; }
+    .sm-tnav:hover { opacity:.8; }
+    #smTourProgress { flex:1; height:4px; background:#333; border-radius:2px; }
+    #smTourProgressBar { height:4px; background:#1d9bf0; border-radius:2px; transition:width .3s; }
+    .sm-controls { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+    .sm-view-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; font-size:13px; }
+    .sm-filters { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .sm-fbtn { font-size:11px; padding:4px 10px; border:1px solid #ccc; border-radius:20px; background:#fff; cursor:pointer; color:#555; }
+    .sm-fbtn.active { background:var(--accent,#2563eb); color:#fff; border-color:var(--accent,#2563eb); }
+    .sm-stat-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:10px; }
+    .sm-sbox { background:#f8f9fa; border-radius:8px; padding:10px 12px; }
+    .sm-slabel { font-size:11px; color:#666; margin-bottom:2px; }
+    .sm-sval { font-size:22px; font-weight:800; line-height:1.2; }
+    .sm-sdesc { font-size:11px; color:#888; margin-top:2px; }
+    .sm-legend-emo { display:flex; align-items:center; gap:6px; font-size:12px; }
+    .sm-emo-bar { width:60px; height:8px; border-radius:4px; background:linear-gradient(to right,#3498db,#e74c3c); }
+    #smStartTour { font-size:12px; padding:6px 14px; border:1px solid var(--accent,#2563eb); border-radius:6px; background:none; color:var(--accent,#2563eb); cursor:pointer; font-weight:600; }
+    #smStartTour:hover { background:var(--accent,#2563eb); color:#fff; }
     @media (max-width: 720px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stat { padding: 20px 16px; }
@@ -662,21 +700,21 @@
   var stored={};
   var myVote=localStorage.getItem(KEY+"_my");
 
-  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
+  // Blur the stance map until voted (deferred to ensure DOM is ready)
   function applyBlur(){
-    var chartPanel=document.getElementById("semicircle-chart");
-    if(chartPanel){
-      var wrap=chartPanel.closest(".panel");
-      if(wrap && myVote===null){
-        wrap.id="chart-panel";
-        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
-        wrap.style.position="relative";
-        var overlay=document.createElement("div");
-        overlay.id="chart-overlay";
-        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
-        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
-        wrap.appendChild(overlay);
+    var smSection=document.getElementById("stance-map-section");
+    if(smSection && myVote===null){
+      smSection.id="stance-map-section";
+      var inner=document.getElementById("stance-map-inner");
+      if(inner){
+        inner.style.filter="blur(8px)";inner.style.pointerEvents="none";inner.style.userSelect="none";
       }
+      smSection.style.position="relative";
+      var overlay=document.createElement("div");
+      overlay.id="chart-overlay";
+      overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
+      overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
+      smSection.appendChild(overlay);
     }
   }
   
@@ -730,13 +768,13 @@
   };
 
   function revealChart(){
-    var wrap=document.getElementById("chart-panel");
-    if(wrap){
-      wrap.style.transition="filter .6s ease";
-      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
-      var ov=document.getElementById("chart-overlay");
-      if(ov)ov.remove();
+    var inner=document.getElementById("stance-map-inner");
+    if(inner){
+      inner.style.transition="filter .6s ease";
+      inner.style.filter="none";inner.style.pointerEvents="auto";inner.style.userSelect="auto";
     }
+    var ov=document.getElementById("chart-overlay");
+    if(ov)ov.remove();
   }
 
   async function castVote(idx){
@@ -829,90 +867,497 @@
   }
 })();
 </script>
-    <section class="panel">
-<div class="panel-title"><h2>反応の勢力図</h2><span>対立軸ごとの比率</span></div>
-<div style="display:flex;justify-content:space-between;align-items:flex-end;max-width:660px;margin:0 auto 8px;padding:0 10px;">
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#4a90d912;border:2px solid #4a90d9;"><div style="font-size:12px;font-weight:700;color:#4a90d9">危険運転対策として取締りを支持</div><div style="font-size:32px;font-weight:800;color:#4a90d9;line-height:1.2">34</div></div>
-  <div style="text-align:center;color:var(--muted);font-size:12px;">
-    <div style="font-size:11px;">過半数</div>
-    <div style="font-weight:800;font-size:16px;color:var(--ink);">89</div>
-    <div style="font-size:18px;">▼</div>
-  </div>
-  <div style="text-align:center;padding:8px 16px;border-radius:10px;background:#0f749012;border:2px solid #0f7490;"><div style="font-size:12px;font-weight:700;color:#0f7490">専用道路の整備が先決であると主張</div><div style="font-size:32px;font-weight:800;color:#0f7490;line-height:1.2">31</div></div>
+    <section class="panel" id="stance-map-section">
+<div id="stance-map-inner">
+<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>116件 | 点の色=感情強度（青:冷静→赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
+<div id="sm-wrap">
+  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
+  <canvas id="smCanvasMain" width="600" height="600"></canvas>
+  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">安全・秩序を最優先 ▲</div>
+  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ ライダーの利便性・自由を重視</div>
+  <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 取締りに反対・懐疑的</div>
+  <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">取締り強化を支持 ▶</div>
 </div>
-<div style="position:relative;max-width:660px;margin:0 auto;">
-  <svg viewBox="0 0 660 350" id="semicircle-chart" style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;"></svg>
-  <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);text-align:center;">
-    <div style="font-size:42px;font-weight:800;color:var(--ink);line-height:1;">177</div>
-    <div style="font-size:14px;color:var(--muted);">サンプル</div>
+<div id="smTourPanel">
+  <div id="smTourStep"></div>
+  <div id="smTourTitle"></div>
+  <div id="smTourDesc"></div>
+  <div id="smTourEmbedLoading">投稿を読み込み中…</div>
+  <div id="smTourEmbed"></div>
+  <div id="smTourQuoteFallback"><span id="smTourQuoteText"></span><small id="smTourQuoteLink">↗ Xで見る</small></div>
+  <div class="sm-tour-nav">
+    <button class="sm-tnav" id="smBtnPrev">← 前へ</button>
+    <div id="smTourProgress"><div id="smTourProgressBar"></div></div>
+    <button class="sm-tnav primary" id="smBtnNext">次へ →</button>
+    <button class="sm-tnav" id="smBtnClose" style="border-color:#666;color:#aaa">✕</button>
   </div>
 </div>
-<div id="semicircle-legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;margin-top:16px;"></div>
+<div class="sm-controls">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div class="sm-legend-emo">
+      <span style="color:#555">感情強度:</span>
+      <span>冷静</span>
+      <div class="sm-emo-bar"></div>
+      <span>激怒</span>
+    </div>
+    <button id="smStartTour">▶ ガイドツアーで読む</button>
+  </div>
+  <div class="sm-view-row">
+    <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
+    <label><input type="checkbox" id="smChkDots" checked> ドット</label>
+    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="36" style="width:80px;vertical-align:middle"></label>
+  </div>
+  <div class="sm-filters">
+    <span style="font-size:10px;color:#888">絞り込み:</span>
+    <button class="sm-fbtn active" data-q="all">全件 (116)</button>
+    <button class="sm-fbtn" data-q="q1">取締り賛成×安全優先 (55)</button>
+    <button class="sm-fbtn" data-q="q3">取締り反対×ライダー重視 (25)</button>
+    <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (32)</button>
+    <button class="sm-fbtn" data-q="calm">冷静 e≤0 (35)</button>
+  </div>
+</div>
+<div class="sm-stat-cards">
+  <div class="sm-sbox"><div class="sm-slabel">取締り賛成 × 安全優先 (右上)</div><div class="sm-sval" style="color:#2980b9">55件</div><div class="sm-sdesc">「事故防止のため取締りは当然」規制派</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">取締り反対 × ライダー重視 (左下)</div><div class="sm-sval" style="color:#c0392b">25件</div><div class="sm-sdesc">「インフラなしの規制は不公平」反対派</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">中立含む（X=0またはY=0）</div><div class="sm-sval" style="color:#7f8c8d">22件</div><div class="sm-sdesc">条件付き賛成・日常報告など</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">32件</div><div class="sm-sdesc">強い怒り・感情的な訴え（両陣営）</div></div>
+</div>
+<div id="sm-tooltip"></div>
+</div><!-- /stance-map-inner -->
+</section>
+<script>
+const SM_RAW = [
+  {x:0.0,y:0.0,e:0.5,c:0.70,s:"青切符対象の是非めぐるSNS論争を中立紹介",u:"https://x.com/kuruma_newsjp/status/2064555848068722869"},
+  {x:1.0,y:0.5,e:0.0,c:0.70,s:"同時施行に賛成、金額設定は妥当と分析",u:"https://x.com/rainohitorigoto/status/2061284870995984443"},
+  {x:1.0,y:1.0,e:1.0,c:0.75,s:"青切符賛否併記し支持寄りの問いかけ",u:"https://x.com/Oneness_ringo/status/1997763402245255673"},
+  {x:1.0,y:1.0,e:1.0,c:0.85,s:"自転車利用者に歩道の乗車を改善させよ",u:"https://x.com/umakurage/status/2068167003215647051"},
+  {x:-2.0,y:-1.0,e:1.0,c:0.90,s:"青切符制度導入に強く反対、地方の実情を考慮すべきと主張",u:"https://x.com/zuppa_t/status/2067738312056639828"},
+  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"青切符制度導入に強く反対する署名への協力呼びかけ",u:"https://x.com/KaMama777307/status/2062717203263431053"},
+  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"青切符制度導入に强烈反対、车共存环境下の安全移动を主张",u:"https://x.com/j52flx/status/2061443794344747198"},
+  {x:1.5,y:1.5,e:1.5,c:0.80,s:"青切符なのに信号無視等の無法状態への怒り",u:"https://x.com/shocker108/status/2061387437340045705"},
+  {x:-2.0,y:-1.5,e:1.0,c:0.85,s:"青切符制度導入に強く反対する署名への赞同呼びかけ",u:"https://x.com/ibarakinoumi/status/2060612879012008160"},
+  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"青い切符制度導入に強く反対するオンライン署名の拡散投稿",u:"https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921"},
+  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"自転車青切符に強く反対し、自由制限を懸念",u:"https://x.com/kress813/status/2032672767527760350"},
+  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符に強く反対、監視社会への怒り",u:"https://x.com/kress813/status/2032229649317814760"},
+  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"青切符制度の導入に強く反対",u:"https://x.com/smd5963/status/2031237042987049316"},
+  {x:1.0,y:1.5,e:0.5,c:0.75,s:"自転車信号無視の危険性を指摘し青切符制度を懸念",u:"https://x.com/k_kisa_0729/status/2069356999574487158"},
+  {x:-1.5,y:-1.0,e:1.5,c:0.85,s:"青切符拡大に批判的自営業者",u:"https://x.com/kusdiyoko/status/2069017433956856152"},
+  {x:1.0,y:1.5,e:1.5,c:0.80,s:"私有地侵犯の爺への批判と対抗措置の投稿",u:"https://x.com/youkaiteikokusp/status/2068332868775116901"},
+  {x:1.0,y:1.0,e:-1.0,c:0.75,s:"ルール改正後の守法状況を皮肉交じりに批判",u:"https://x.com/kinfantasy55/status/2068275609588085075"},
+  {x:-1.5,y:-1.5,e:2.0,c:0.85,s:"自転車規制拡大に反対し他者批判の怒り投稿",u:"https://x.com/GameHAGE/status/2066073180465512800"},
+  {x:1.5,y:1.0,e:0.0,c:0.80,s:"自転車停车違反への青切符適用と反則金征收を求める意見",u:"https://x.com/mikosansun/status/2062921789827883285"},
+  {x:0.0,y:0.0,e:0.0,c:0.80,s:"ルール守った自己肯定と日常遭遇の報告",u:"https://x.com/FORNIK6/status/2062090917918777655"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"田舎と都会でルール統一はおかしいという意見",u:"https://x.com/gaokun___nnn2/status/2069754502547427529"},
+  {x:1.0,y:1.5,e:1.0,c:0.85,s:"自転車青切符の公平性・一貫性を問いかける批判投稿",u:"https://x.com/momota186cm_psa/status/2068676954656846060"},
+  {x:-1.5,y:1.5,e:1.5,c:0.85,s:"警察の二枚舌を批判し軽微 Bicycle Enforce偏重を疑問視",u:"https://x.com/knuckletn/status/2068259723267518964"},
+  {x:-1.0,y:2.0,e:1.5,c:0.85,s:"青切符の効果に懐疑的、儿童の车道通行に强烈反对",u:"https://x.com/isaiah8_1/status/2067988251760345275"},
+  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"ルール制定への疑問 自転車を擁護",u:"https://x.com/spnv2h89/status/2067953648047722913"},
+  {x:1.5,y:1.0,e:1.0,c:0.75,s:"電動スクーターの規制甘いのはおかしい",u:"https://x.com/gamblertetuya/status/2067200208732406100"},
+  {x:-1.5,y:1.0,e:1.5,c:0.80,s:"自治会の無法さと青切符制度への不満",u:"https://x.com/asagooods/status/2065953235475767499"},
+  {x:1.0,y:1.0,e:1.0,c:0.80,s:"新区分創設と規制緩和に疑問表明",u:"https://x.com/badgerkingtony/status/2065790718543847699"},
+  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"日本の交通制度・標識の矛盾を批判",u:"https://x.com/teianjapan/status/2064856553036148982"},
+  {x:1.0,y:1.5,e:1.0,c:0.85,s:"歩行者への青切符導入を支持し安全優先",u:"https://x.com/norihei1/status/2063825275960578333"},
+  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"事故減を根拠に青切符導入に強く反対",u:"https://x.com/tarutora17/status/2063058066007118110"},
+  {x:-0.5,y:0.0,e:-1.0,c:0.75,s:"青切符不便を皮肉る日常あるある投稿",u:"https://x.com/hanmingpenguin/status/2062033956162384206"},
+  {x:0.5,y:0.0,e:-1.0,c:0.85,s:"インフラ未整備での切符是不公平、煽り運転は厳罰化すべき",u:"https://x.com/0922Sisi/status/2060307582515077434"},
+  {x:1.0,y:1.0,e:0.0,c:0.70,s:"青切符に迷いつつも規制強化と安全優先支持",u:"https://x.com/jupitter3/status/2062205575593943523"},
+  {x:1.0,y:1.0,e:0.5,c:0.80,s:"無謀な並走cyclingを見て 青切符に感心 安全意識あり",u:"https://x.com/oboro_bishop/status/2070700403398951213"},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"自転車の一時不停止に怒り、厳しく取り締まるべきと主張",u:"https://x.com/bjayway/status/2070305605852836233"},
+  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"インフラ整備不足を批判し青切符制度に強く反対",u:"https://x.com/15jacnamagiga/status/2070261164618158443"},
+  {x:-1.0,y:-1.5,e:-1.5,c:0.65,s:"規制強化に懐疑、自家用车より步行者の安全軽視",u:"https://x.com/yujirohanma1313/status/2070140086289920170"},
+  {x:-1.0,y:-1.0,e:1.5,c:0.85,s:"場当たり的導入への批判的自撮り",u:"https://x.com/golden9398/status/2070003381025034696"},
+  {x:-0.5,y:0.5,e:-0.5,c:0.70,s:"青切符対象を絞り込むべきとの慎重な意見",u:"https://x.com/MoroQ_tan/status/2069998331728998807"},
+  {x:1.0,y:2.0,e:0.0,c:0.80,s:"自転車側に譲歩しつつ歩行者优先の規制強化を提案",u:"https://x.com/TqOT2vaQIyeZv0z/status/2069922851491344512"},
+  {x:1.0,y:2.0,e:2.0,c:0.95,s:"死亡事故を政治批判し規制強化求める",u:"https://x.com/stargamewalk101/status/2069849509274996774"},
+  {x:-2.0,y:2.0,e:1.5,c:0.85,s:"青切符制度に強く反対、制定側の批判も含む",u:"https://x.com/Shuns_private/status/2069803637371814378"},
+  {x:0.5,y:1.0,e:0.5,c:0.70,s:"青切符自体は支持も実施方法・道路整備不足を批判",u:"https://x.com/suzuking408/status/2069735857695891855"},
+  {x:-1.0,y:1.0,e:1.5,c:0.85,s:"青切符制度は点数稼ぎであり、道路整備など前提条件が欠如しているとの批判",u:"https://x.com/shirayuki_write/status/2069718795288297801"},
+  {x:-2.0,y:-1.5,e:2.0,c:0.80,s:"青切符制度に强烈不快·自転車利用优先",u:"https://x.com/wb_rin_p/status/2069698871832555613"},
+  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"規制先行でインフラ未整備は国の不作為",u:"https://x.com/many14219901/status/2069653099040673849"},
+  {x:-1.0,y:-1.0,e:1.0,c:0.70,s:"インフラ整備不足を指摘し新ルールを批判",u:"https://x.com/toratoramatus/status/2069640286129758338"},
+  {x:0.5,y:0.5,e:0.0,c:0.65,s:"青切符施策を肯定的に想像し、市民協働で安全構築を呼びかける穏当な意見",u:"https://x.com/reiziro/status/2068958423123980602"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"罰則強化と自転車青切符を支持し、歩行者安全最優先",u:"https://x.com/juddhy158284/status/2068567127423144348"},
+  {x:-0.5,y:0.0,e:0.0,c:0.60,s:"規制に疑問呈しインフラ整備を提案",u:"https://x.com/mhjj100924429/status/2068366069874483224"},
+  {x:1.5,y:1.5,e:1.0,c:0.80,s:"駅周辺の自転車危険行為を批判し強化要求",u:"https://x.com/kazu491223/status/2068252460469416060"},
+  {x:0.5,y:1.0,e:-1.0,c:0.60,s:"自転車道路の改善提言、青切符には消極的",u:"https://x.com/oshiigai/status/2068178039046127689"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"青切符効果を実感、傘差し自転車減を肯定的に評価",u:"https://x.com/hiroe4WD/status/2068089032639455519"},
+  {x:-1.0,y:0.0,e:-0.5,c:0.85,s:"113種は多すぎ。簡略化と整備後に実施を主張",u:"https://x.com/Clifrennie/status/2068026232860537188"},
+  {x:1.0,y:0.5,e:0.5,c:0.80,s:"並列走行への不満と青切符による規制強化支持",u:"https://x.com/capelliubereats/status/2066801642872418406"},
+  {x:-0.5,y:0.5,e:-0.5,c:0.70,s:"インフラ整備不足を指摘し青切符に慎重な姿勢",u:"https://x.com/bAgM8HRAo7aVtbp/status/2066690069206012139"},
+  {x:-1.0,y:1.0,e:0.0,c:0.70,s:"罰則では不十分、インフラ整備が必要",u:"https://x.com/koki_kajimoto/status/2067761200730095782"},
+  {x:-2.0,y:-1.5,e:2.0,c:0.90,s:"青切符制度に強く反対する自転車乗りの感情的意見",u:"https://x.com/48Kamaru/status/2067559221928091698"},
+  {x:-1.0,y:1.0,e:0.0,c:0.75,s:"インフラ整備なき青切符を批判し権利発想を主張",u:"https://x.com/fullsunjp/status/2065650976074469713"},
+  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"インフラ整備を主張する歩行者寄りの個人的見解",u:"https://x.com/12red_and_blue/status/2065042729974059469"},
+  {x:-1.0,y:1.0,e:1.0,c:0.85,s:"インフラ未整備の青切符制度を批判",u:"https://x.com/YP3xqnYKspOSM59/status/2064802887340069077"},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"自転車側に立ち、歩走帯の整備不足を指摘しつつ、警察の取締りに不満",u:"https://x.com/jianzijun381019/status/2063394602749726847"},
+  {x:1.0,y:1.5,e:1.5,c:0.85,s:"青切符導入支持も効果に疑問・自転車側に不満",u:"https://x.com/Kei_1134/status/2062149829845979435"},
+  {x:0.0,y:1.0,e:0.0,c:0.60,s:"青切符前にインフラ分割をすべきとの主張",u:"https://x.com/_hand_and_hand_/status/2061484624690475293"},
+  {x:0.5,y:0.0,e:1.0,c:0.60,s:"青い切符交付数への反応と日本批判",u:"https://x.com/OdzrtcySsIPXdoT/status/2061370674229436631"},
+  {x:0.5,y:1.5,e:0.5,c:0.80,s:"インフラ整備優先主張、自転側に理解あり",u:"https://x.com/Mid_observatory/status/2050519664510562807"},
+  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"インフラ整備なしの青切符制度に強く反対",u:"https://x.com/Coco2Poppin/status/2043699643520106773"},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"インフラ未整備のまま青切符導入に疑問，安全整備を求める",u:"https://x.com/Mid_observatory/status/2030591044098932852"},
+  {x:-1.0,y:0.0,e:1.0,c:0.85,s:"インフラ未整備のまま青切符制度を推行することへの疑問",u:"https://x.com/Mid_observatory/status/2021909225249947652"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"青切符形骸化に批判的、自利用者寄り",u:"https://x.com/bicicletta_/status/2066803620725792820"},
+  {x:0.5,y:1.0,e:1.0,c:0.80,s:"左折レーン直進の危険性を指摘、車のルール無視を批判",u:"https://x.com/bike_angler/status/2064044940385210547"},
+  {x:-0.5,y:0.0,e:1.5,c:0.70,s:"区職員的自転通勤を軽蔑的に批判",u:"https://x.com/scott_dragon29/status/2060974122742755749"},
+  {x:1.0,y:2.0,e:1.5,c:0.85,s:"路駐問題の解消と自転車安全確保を要望",u:"https://x.com/Mid_observatory/status/2021148538013671884"},
+  {x:1.5,y:1.0,e:1.0,c:0.80,s:"無知な自転車ユーザーに怒り・規制強化支持",u:"https://x.com/KeN2827/status/2070390576382357558"},
+  {x:2.0,y:2.0,e:0.0,c:0.80,s:"自転車に免許・講習義務付けるべき",u:"https://x.com/ZPlaiFah/status/2070308461683130627"},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"自転車への免許・培训導入を主張",u:"https://x.com/r70OylZbSZeiIIz/status/2070149487566418240"},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車免許導入を提唱し安全優先立场から現行ルールに疑問",u:"https://x.com/yamazakibusu/status/2070074656128917921"},
+  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"交通ルール解説記事、軽い个人观点含む",u:"https://x.com/ms06km/status/2069705866790789150"},
+  {x:2.0,y:2.0,e:1.5,c:0.75,s:"漫ろ見自転車への厳罰化を求める強い意見",u:"https://x.com/sora09_14/status/2069564683204677743"},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"歩行者保護のため自転車規制強化を求める強い主張",u:"https://x.com/obakekuntoujou/status/2069206248411795701"},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"LUUPユーザーに青切符適用を要求、危険運転や無免許問題を指摘",u:"https://x.com/gucciyuzo03/status/2069017985143246923"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"青切符に疑問、免許制を提案",u:"https://x.com/aftonp1988/status/2069001010878837074"},
+  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"自転車規制強化に反対・メディア報道を批判",u:"https://x.com/healhearts123/status/2068991161252122951"},
+  {x:-2.0,y:-2.0,e:0.5,c:0.85,s:"青切符制度廃止を求めるラジオ投稿",u:"https://x.com/hikaruscarlet/status/2068989604510978450"},
+  {x:0.0,y:1.5,e:1.0,c:0.80,s:"規制の不公平さを皮肉で指摘する批判的意見",u:"https://x.com/uraaka_1110_/status/2068731047148413155"},
+  {x:2.0,y:1.5,e:1.0,c:0.80,s:"自転車に免許制度導入を支持、歩行者安全優先",u:"https://x.com/tyocoramu/status/2067909250589044776"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"青切符肯定・自転車免許制度導入を主張",u:"https://x.com/_muhammedsdk7/status/2067630320459919789"},
+  {x:2.0,y:-1.5,e:1.5,c:0.85,s:"自転車側の視点で歩行者への切符制度を要求",u:"https://x.com/vIOOmQ8b1AlkU31/status/2067414600275132440"},
+  {x:0.0,y:0.0,e:0.0,c:0.70,s:"青切符制度に疑問呈すも評価保留",u:"https://x.com/akimi_o/status/2066859994369360070"},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"日常投稿中に青切符制度の実効性への疑問と皮肉",u:"https://x.com/46QakkoKwui5u1n/status/2066682764494323938"},
+  {x:0.5,y:0.0,e:0.5,c:0.80,s:"教育なしで取缔りを始めたことへの不满と、培训机构導入の提案",u:"https://x.com/thepassenger200/status/2066304199453773844"},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車安全利用の教育・褒賞的施策強化を求める要望",u:"https://x.com/megu5182/status/2064913709580144689"},
+  {x:1.5,y:2.0,e:0.0,c:0.75,s:"大人の自転車Helmet着用促進求める政策提言で安全優先",u:"https://x.com/megu5182/status/2064913577736278160"},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"原付と自動車の通行帯分離を求める安全優先の意見",u:"https://x.com/Eureka_2GG/status/2064886006168633754"},
+  {x:-0.5,y:-0.5,e:-1.0,c:0.60,s:"青切符よりLUUPの免許制を重要視する軽い意見",u:"https://x.com/tabun_nebusoku7/status/2064684211219624207"},
+  {x:1.0,y:1.0,e:1.0,c:0.80,s:"公職選挙法適用に疑問、未成年でも社会的責任を主張",u:"https://x.com/THS4_Osanpo/status/2064505197205017083"},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"加害者への強い怒りと厳格な法執行を求める主張",u:"https://x.com/THS4_Osanpo/status/2064478742656028745"},
+  {x:2.0,y:2.0,e:1.5,c:0.90,s:"青切符の実効性に疑問を持ち、自転車免許制導入を主張",u:"https://x.com/stopstopstoping/status/2064249780168183913"},
+  {x:2.0,y:2.0,e:1.0,c:0.95,s:"自転車に免許制が必要と強く主張。規制強化で安全確保を訴求",u:"https://x.com/moconya/status/2063924527634268388"},
+  {x:-1.0,y:0.0,e:0.0,c:0.80,s:"青切符に懐疑、専用道路や免許導入を提案",u:"https://x.com/fukumen_V/status/2063454860377485795"},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"自転車規制強化を支持、歩行者安全優先、怒り",u:"https://x.com/ABA_8S/status/2062951392902517086"},
+  {x:1.5,y:1.0,e:1.5,c:0.88,s:"歩きスマホ的危险性を指摘し取缔り強化を求める個人的意見",u:"https://x.com/1029yurie/status/2070153036568371223"},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"交通安全の徹底と取缔り強化を強く支持",u:"https://x.com/akiraAKIRA7878/status/2070132435820687506"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"地下道で軽バンの危険走行目睹、巡回による取缔り強化求める",u:"https://x.com/H31UNvOb6jZwbvI/status/2069437978737619289"},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"チャリ事故の不快感から歩行者安全確保へ",u:"https://x.com/leemanoid/status/2069354674734731759"},
+  {x:2.0,y:0.0,e:1.0,c:0.85,s:"県警が飲酒運転撲滅と取缔り強化を呼びかける広報投稿",u:"https://x.com/fukkei_Kkikaku/status/2069225078437589367"},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"踏切危険性を指摘し、規制強化を要望",u:"https://x.com/kazu491223/status/2069062750035472509"},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.75,s:"自転車取り締まり強化に懐疑的な意見",u:"https://x.com/takanori_w2/status/2068874487597318171"},
+  {x:1.0,y:1.5,e:1.0,c:0.75,s:"自転車取り締まり強化に肯定も現実的な施行に懐疑",u:"https://x.com/degutityuui/status/2064269440171278639"},
+  {x:2.0,y:2.0,e:1.0,c:0.75,s:"自転車違反の取缔り强化を求める怨言",u:"https://x.com/supra3k/status/2063139828842332559"},
+  {x:-1.0,y:0.0,e:-0.5,c:0.50,s:"取締り強化の繰り返しと不公平感の愚痴",u:"https://x.com/hanihani3939/status/2061944934295625973"},
+  {x:0.0,y:0.0,e:-1.0,c:0.60,s:"自転車取り締まり強化を皮肉交じりに軽く扱う冗談投稿",u:"https://x.com/clairvoyantRPT/status/2061233769504514377"},
+  {x:2.0,y:2.0,e:0.0,c:0.87,s:"自転車関連取締り強化を支持。更なる適用拡大を求める",u:"https://x.com/char2112000/status/2060943066341818753"},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"Luupに危険行為され規制強化を求める投稿",u:"https://x.com/keipierremulot/status/2044619052879102064"},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"違法自転車への厳格な取り締まりと法整備を支持",u:"https://x.com/ramen_mine/status/2038394465552146774"},
+];
+const SM_TOUR = [
+  {title:"全体像：右上に意見が集中",desc:"116件中55件(47%)が取締り賛成×安全優先。取締り強化を望む声が最大勢力です。",filter:"all"},
+  {title:"第1象限：取締り強化支持派（55件）",desc:"「事故防止のため取締りは当然」「自転車にも免許制を」など規制を求める意見が集中。",filter:"q1",highlight:[1.5,1.5],quote:"自転車に免許制が必要と強く主張。規制強化で安全確保を訴求",quote_url:"https://x.com/moconya/status/2063924527634268388"},
+  {title:"第3象限：取締り反対・ライダーの自由を重視（25件）",desc:"インフラ未整備のまま規制を強化することへの反対や、ライダーの自由・利便性を守るべきとする意見。",filter:"q3",highlight:[-1.5,-1.5],quote:"青い切符制度導入に強く反対するオンライン署名の拡散投稿",quote_url:"https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921"},
+  {title:"高感情投稿（e≥1.5）",desc:"32件。取締り賛成・反対の両陣営に強い怒りや感情的な訴えが見られます。",filter:"q4",highlight:[2.0,2.0],quote:"インフラ整備なしの青切符制度に強く反対",quote_url:"https://x.com/Coco2Poppin/status/2043699643520106773"},
+  {title:"冷静な投稿（e≤0）",desc:"35件。皮肉や冷笑を含みつつも、感情を抑えた分析的・中立的な投稿群。",filter:"calm"}
+];
+</script>
 <script>
 (function(){
-  var data=[{"label": "危険運転対策として取締りを支持", "count": 34, "color": "#4a90d9", "cats": "取締り強化賛成・マナーや危険運転の改善を期待"}, {"label": "車道走行の強要による事故増加を懸念", "count": 14, "color": "#e07040", "cats": "車道走行への不安・原則車道は事故を増やすと反対"}, {"label": "ルール周知のために免許制の導入を要求", "count": 41, "color": "#4a90d9", "cats": "制度が不十分・青切符に留まらず自転車も免許制にすべき"}, {"label": "基準の曖昧さや警察への不信感から反対", "count": 12, "color": "#e07040", "cats": "ルールが曖昧・現場の混乱や取り締まりへの不審で反対"}, {"label": "未確認・過激化した反応", "count": 45, "color": "#7a4cc2", "cats": "その他・分類保留"}, {"label": "専用道路の整備が先決であると主張", "count": 31, "color": "#0f7490", "cats": "インフラ未整備への不満・専用レーンの設置が先決"}];
-  var total=data.reduce(function(s,d){return s+d.count},0);
-  var cx=330,cy=310,outerR=290,innerR=160,gap=0.008;
-  var svg=document.getElementById("semicircle-chart");
-  var startAngle=Math.PI;
-  data.forEach(function(d,idx){
-    var sweep=(d.count/total)*Math.PI-gap;
-    var endAngle=startAngle+sweep;
-    var x1o=cx+outerR*Math.cos(startAngle),y1o=cy+outerR*Math.sin(startAngle);
-    var x2o=cx+outerR*Math.cos(endAngle),y2o=cy+outerR*Math.sin(endAngle);
-    var x1i=cx+innerR*Math.cos(endAngle),y1i=cy+innerR*Math.sin(endAngle);
-    var x2i=cx+innerR*Math.cos(startAngle),y2i=cy+innerR*Math.sin(startAngle);
-    var la=sweep>Math.PI?1:0;
-    var path="M "+x1o+" "+y1o+" A "+outerR+" "+outerR+" 0 "+la+" 1 "+x2o+" "+y2o+" L "+x1i+" "+y1i+" A "+innerR+" "+innerR+" 0 "+la+" 0 "+x2i+" "+y2i+" Z";
-    var el=document.createElementNS("http://www.w3.org/2000/svg","path");
-    el.setAttribute("d",path);el.setAttribute("fill",d.color);
-    el.style.transition="opacity .15s";el.style.cursor="pointer";
-    el.onmouseenter=function(){el.style.opacity="0.75"};
-    el.onmouseleave=function(){el.style.opacity="1"};
-    var t=document.createElementNS("http://www.w3.org/2000/svg","title");
-    t.textContent=d.label+": "+d.count+"件 ("+(d.count/total*100).toFixed(1)+"%)"+"\n"+d.cats;
-    el.appendChild(t);svg.appendChild(el);
-    var mid=startAngle+sweep/2,lr=(outerR+innerR)/2;
-    if(d.count>=5){
-      var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
-      tx.setAttribute("x",cx+lr*Math.cos(mid));
-      tx.setAttribute("y",cy+lr*Math.sin(mid)-8);
-      tx.setAttribute("text-anchor","middle");tx.setAttribute("dominant-baseline","central");
-      tx.setAttribute("font-size","26");tx.setAttribute("font-weight","800");
-      tx.setAttribute("fill","#fff");tx.setAttribute("pointer-events","none");
-      tx.textContent=d.count;svg.appendChild(tx);
-    }
-    if(sweep>0.25){
-      var tx2=document.createElementNS("http://www.w3.org/2000/svg","text");
-      var short=d.label.length>12?d.label.substring(0,12)+"…":d.label;
-      tx2.setAttribute("x",cx+lr*Math.cos(mid));
-      tx2.setAttribute("y",cy+lr*Math.sin(mid)+14);
-      tx2.setAttribute("text-anchor","middle");tx2.setAttribute("dominant-baseline","central");
-      tx2.setAttribute("font-size","11");tx2.setAttribute("font-weight","600");
-      tx2.setAttribute("fill","rgba(255,255,255,.85)");tx2.setAttribute("pointer-events","none");
-      tx2.textContent=short;svg.appendChild(tx2);
-    }
-    startAngle=endAngle+gap;
-  });
-  // Center line (majority marker)
-  var lineX=cx;
-  var el=document.createElementNS("http://www.w3.org/2000/svg","line");
-  el.setAttribute("x1",lineX);el.setAttribute("y1",cy-outerR-5);
-  el.setAttribute("x2",lineX);el.setAttribute("y2",cy-innerR+5);
-  el.setAttribute("stroke","var(--ink,#172033)");el.setAttribute("stroke-width","2");
-  el.setAttribute("stroke-dasharray","4,3");el.setAttribute("opacity","0.4");
-  svg.appendChild(el);
+  const RAW = SM_RAW, TOUR = SM_TOUR;
+  const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
+  const IMG_ALPHA_END = 0.30;
+  let imgAlpha = IMG_ALPHA_END;
+  let showHeat = true, showDots = true, heatRadius = 36;
+  let activeFilter = 'all';
+  let spotlightTarget = null;
+  let animating = false, animFrame = 0;
 
-  var leg=document.getElementById("semicircle-legend");
-  data.forEach(function(d){
-    var item=document.createElement("div");
-    item.style.cssText="display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:6px 0;";
-    item.innerHTML='<span style="width:14px;height:14px;border-radius:4px;background:'+d.color+';flex-shrink:0;margin-top:2px"></span><div><strong style="font-size:14px">'+d.label+'</strong> <span style="color:var(--accent);font-weight:800;font-size:16px;margin-left:4px">'+d.count+'</span><span style="color:var(--muted);font-size:11px;margin-left:2px">件</span><div style="color:var(--muted);font-size:11px;margin-top:2px">'+d.cats+'</div></div>';
-    leg.appendChild(item);
+  const canvasMain = document.getElementById('smCanvasMain');
+  const ctx = canvasMain.getContext('2d');
+  const canvasHeat = document.getElementById('smCanvasHeat');
+  const hCtx = canvasHeat.getContext('2d');
+
+  function toCanvas(x, y) {
+    return [PAD + (x + 2) / 4 * INNER, PAD + (2 - y) / 4 * INNER];
+  }
+
+  function emoRGB(e) {
+    const t = (e + 2) / 4;
+    if (t < 0.5) {
+      const s = t * 2;
+      return [Math.round(74 + (187-74)*s), Math.round(144 + (187-144)*s), Math.round(217 + (187-217)*s)];
+    } else {
+      const s = (t - 0.5) * 2;
+      return [Math.round(187 + (224-187)*s), Math.round(187 + (92-187)*s), Math.round(187 + (92-187)*s)];
+    }
+  }
+
+  function seededRand(seed) {
+    let s = seed ^ 0x12345678;
+    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
+    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
+    s = (s >>> 16) ^ s;
+    return (s >>> 0) / 0xffffffff;
+  }
+
+  const jCache = RAW.map((_, i) => [(seededRand(i*2) - 0.5) * 14, (seededRand(i*2+1) - 0.5) * 14]);
+
+  function visible(p) {
+    if (activeFilter === 'all') return true;
+    const x = p.x, y = p.y, e = p.e;
+    if (activeFilter === 'q1') return x > 0 && y > 0;
+    if (activeFilter === 'q2') return x < 0 && y > 0;
+    if (activeFilter === 'q3') return x < 0 && y < 0;
+    if (activeFilter === 'q4') return e >= 1.5;
+    if (activeFilter === 'calm') return e <= 0;
+    return true;
+  }
+
+  function drawHeatmap() {
+    if (!showHeat) { hCtx.clearRect(0, 0, W, H); return; }
+    const res = 3;
+    const cols = Math.ceil(W / res), rows = Math.ceil(H / res);
+    const grid = new Float32Array(cols * rows);
+    const sigma = heatRadius / 2.5;
+    const sig2 = sigma * sigma * 2;
+    const r2 = heatRadius * heatRadius;
+
+    RAW.forEach(p => {
+      if (!visible(p)) return;
+      const [cx, cy] = toCanvas(p.x, p.y);
+      const gx0 = Math.max(0, Math.floor((cx - heatRadius) / res));
+      const gy0 = Math.max(0, Math.floor((cy - heatRadius) / res));
+      const gx1 = Math.min(cols - 1, Math.ceil((cx + heatRadius) / res));
+      const gy1 = Math.min(rows - 1, Math.ceil((cy + heatRadius) / res));
+      for (let gy = gy0; gy <= gy1; gy++) {
+        for (let gx = gx0; gx <= gx1; gx++) {
+          const dx = gx * res - cx, dy = gy * res - cy;
+          const d2 = dx*dx + dy*dy;
+          if (d2 < r2) grid[gy * cols + gx] += Math.exp(-d2 / sig2);
+        }
+      }
+    });
+
+    const maxV = Math.max(...grid) || 1;
+    const imgData = hCtx.createImageData(cols * res, rows * res);
+    for (let gy = 0; gy < rows; gy++) {
+      for (let gx = 0; gx < cols; gx++) {
+        const v = grid[gy * cols + gx] / maxV;
+        if (v < 0.01) continue;
+        let r, g, b;
+        if (v < 0.5) {
+          const t = v * 2;
+          r = Math.round(41 + (255-41)*t); g = Math.round(128 + (255-128)*t); b = Math.round(185 + (150-185)*t);
+        } else {
+          const t = (v - 0.5) * 2;
+          r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
+        }
+        const alpha = Math.round(Math.pow(v, 0.5) * 170);
+        for (let dy = 0; dy < res; dy++) {
+          for (let dx = 0; dx < res; dx++) {
+            const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
+            const inPad = (gx*res+dx) >= PAD && (gx*res+dx) < PAD+INNER && (gy*res+dy) >= PAD && (gy*res+dy) < PAD+INNER;
+            if (!inPad) continue;
+            imgData.data[px] = r; imgData.data[px+1] = g; imgData.data[px+2] = b; imgData.data[px+3] = alpha;
+          }
+        }
+      }
+    }
+    hCtx.clearRect(0, 0, W, H);
+    hCtx.putImageData(imgData, 0, 0);
+  }
+
+  function drawBase() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
+    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+      const [cx] = toCanvas(v, 0);
+      ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
+      const [,cy] = toCanvas(0, v);
+      ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
+    });
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
+    const [midX] = toCanvas(0, 0); const [,midY] = toCanvas(0, 0);
+    ctx.beginPath(); ctx.moveTo(PAD, midY); ctx.lineTo(PAD+INNER, midY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(midX, PAD); ctx.lineTo(midX, PAD+INNER); ctx.stroke();
+
+    ctx.font = 'bold 13px -apple-system,sans-serif';
+    ctx.textAlign = 'center';
+    const quadLabels = [
+      ['取締り賛成×安全優先', PAD + INNER*0.75, PAD + 26],
+      ['取締り反対×安全優先', PAD + INNER*0.25, PAD + 26],
+      ['取締り反対×ライダー重視', PAD + INNER*0.25, PAD + INNER - 10],
+      ['取締り賛成×ライダー重視', PAD + INNER*0.75, PAD + INNER - 10],
+    ];
+    quadLabels.forEach(([text, lx, ly]) => {
+      const tw = ctx.measureText(text).width;
+      const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
+      ctx.fillStyle = 'rgba(0,0,0,0.62)';
+      ctx.beginPath();
+      ctx.moveTo(rx + r, ry); ctx.lineTo(rx + pw - r, ry);
+      ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
+      ctx.lineTo(rx + pw, ry + ph - r);
+      ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
+      ctx.lineTo(rx + r, ry + ph);
+      ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
+      ctx.lineTo(rx, ry + r);
+      ctx.arcTo(rx, ry, rx + r, ry, r);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.fillText(text, lx, ly);
+    });
+
+    ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
+    ctx.textAlign = 'right';
+    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+      const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
+    });
+    ctx.textAlign = 'center';
+    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
+      const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
+    });
+
+    if (showDots) {
+      const count = animating ? animFrame : RAW.length;
+      for (let i = 0; i < count; i++) {
+        const p = RAW[i];
+        const show = visible(p);
+        const [cx, cy] = toCanvas(p.x, p.y);
+        const [rr, gg, bb] = emoRGB(p.e);
+        ctx.beginPath();
+        ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
+        ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
+        ctx.fill();
+        if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
+      }
+    }
+
+    if (spotlightTarget) {
+      const [sx, sy] = spotlightTarget;
+      ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI*2);
+      ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(41,128,185,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+  }
+
+  function redraw() { drawHeatmap(); drawBase(); }
+
+  function playIntro() {
+    animating = true; animFrame = 0;
+    const total = RAW.length, duration = 1800, start = performance.now();
+    function tick(now) {
+      const elapsed = now - start, progress = Math.min(1, elapsed / duration);
+      animFrame = Math.min(total, Math.round(progress * total));
+      redraw();
+      if (progress < 1) requestAnimationFrame(tick);
+      else { animating = false; redraw(); }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  let tourActive = false, currentStep = 0;
+
+  function showTourStep(idx) {
+    const step = TOUR[idx], total = TOUR.length;
+    document.getElementById('smTourStep').textContent = `Step ${idx+1} / ${total}`;
+    document.getElementById('smTourTitle').textContent = step.title;
+    document.getElementById('smTourDesc').textContent = step.desc;
+    document.getElementById('smTourProgressBar').style.width = ((idx+1)/total*100)+'%';
+
+    const embedEl = document.getElementById('smTourEmbed');
+    const loadingEl = document.getElementById('smTourEmbedLoading');
+    const fallbackEl = document.getElementById('smTourQuoteFallback');
+    embedEl.style.display = 'none'; loadingEl.style.display = 'none'; fallbackEl.style.display = 'none';
+    embedEl.innerHTML = '';
+
+    if (step.quote && step.quote_url) {
+      showFallback(step, fallbackEl);
+      const tweetId = step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
+      if (tweetId) {
+        const tryEmbed = () => {
+          window.twttr.widgets.createTweet(tweetId, embedEl, { theme:'dark', dnt:true, conversation:'none' })
+            .then(el => { if (el) { fallbackEl.style.display='none'; embedEl.style.display='block'; } });
+        };
+        if (window.twttr && window.twttr.widgets) { window.twttr.ready(tryEmbed); }
+        else {
+          let wt = 0;
+          const wpoll = setInterval(() => {
+            wt += 200;
+            if (window.twttr && window.twttr.widgets) { clearInterval(wpoll); window.twttr.ready(tryEmbed); }
+            else if (wt >= 5000) clearInterval(wpoll);
+          }, 200);
+        }
+      }
+    } else if (step.quote) { showFallback(step, fallbackEl); }
+
+    activeFilter = step.filter || 'all';
+    document.querySelectorAll('.sm-fbtn').forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector(`.sm-fbtn[data-q="${step.filter || 'all'}"]`);
+    if (btn) btn.classList.add('active');
+    spotlightTarget = step.highlight ? (() => { const [sx,sy]=toCanvas(step.highlight[0],step.highlight[1]); return [sx,sy]; })() : null;
+    redraw();
+  }
+
+  function showFallback(step, fallbackEl) {
+    document.getElementById('smTourQuoteText').textContent = '「' + step.quote + '」';
+    const linkEl = document.getElementById('smTourQuoteLink');
+    if (step.quote_url) { linkEl.style.display='inline'; fallbackEl.onclick=()=>window.open(step.quote_url,'_blank'); }
+    else { linkEl.style.display='none'; fallbackEl.onclick=null; }
+    fallbackEl.style.display = 'block';
+  }
+
+  function startTour() { tourActive=true; currentStep=0; document.getElementById('smTourPanel').classList.add('active'); showTourStep(0); }
+  function closeTour() {
+    tourActive=false; document.getElementById('smTourPanel').classList.remove('active');
+    spotlightTarget=null; activeFilter='all';
+    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('.sm-fbtn[data-q="all"]').classList.add('active');
+    redraw();
+  }
+
+  document.getElementById('smStartTour').addEventListener('click', startTour);
+  document.getElementById('smBtnClose').addEventListener('click', closeTour);
+  document.getElementById('smBtnNext').addEventListener('click', () => { if (currentStep < TOUR.length-1) { currentStep++; showTourStep(currentStep); } else closeTour(); });
+  document.getElementById('smBtnPrev').addEventListener('click', () => { if (currentStep > 0) { currentStep--; showTourStep(currentStep); } });
+  document.getElementById('smChkHeat').addEventListener('change', e => { showHeat=e.target.checked; redraw(); });
+  document.getElementById('smChkDots').addEventListener('change', e => { showDots=e.target.checked; redraw(); });
+  document.getElementById('smHeatIntensity').addEventListener('input', e => { heatRadius=+e.target.value; redraw(); });
+  document.querySelector('.sm-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.sm-fbtn'); if (!btn) return;
+    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); activeFilter=btn.dataset.q; spotlightTarget=null; redraw();
   });
+
+  const tooltip = document.getElementById('sm-tooltip');
+  canvasMain.addEventListener('mousemove', e => {
+    const rect = canvasMain.getBoundingClientRect();
+    const sx = W/rect.width, sy = H/rect.height;
+    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
+    let found=null, minD=20;
+    RAW.forEach((p,i) => {
+      if (!visible(p)) return;
+      const [cx,cy] = toCanvas(p.x,p.y);
+      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
+      if (d < minD) { minD=d; found={p,i}; }
+    });
+    if (found) {
+      const p = found.p;
+      const eLabel = p.e>=1.5?'😤 激怒':p.e>=0.5?'😠 感情的':p.e<=-1?'😒 皮肉・冷笑':'😐 冷静';
+      const tx = e.clientX+14+260>window.innerWidth ? e.clientX-270 : e.clientX+14;
+      tooltip.style.opacity='1'; tooltip.style.left=tx+'px'; tooltip.style.top=(e.clientY-10)+'px';
+      tooltip.innerHTML = `<b>${p.s}</b><br>取締り: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u?'<br><small style="opacity:.5">クリックでXへ ↗</small>':''}`;
+    } else { tooltip.style.opacity='0'; }
+  });
+  canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
+  canvasMain.addEventListener('click', e => {
+    const rect = canvasMain.getBoundingClientRect();
+    const sx = W/rect.width, sy = H/rect.height;
+    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
+    let found=null, minD=20;
+    RAW.forEach((p,i) => {
+      if (!visible(p)||!p.u) return;
+      const [cx,cy] = toCanvas(p.x,p.y);
+      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
+      if (d < minD) { minD=d; found=p; }
+    });
+    if (found) window.open(found.u,'_blank');
+  });
+
+  playIntro();
+  setTimeout(() => { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }, 3000);
 })();
 </script>
-</section>
     <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">取締り強化</div><h3>危険運転対策として取締りを支持</h3><div class="axis-count">34<span>件</span></div><p>危険な走行やマナー違反を取り締まり、歩行者や周囲の安全を確保するために必要であるとする立場。</p><div class="axis-tags"><a href="#sample-取締り強化賛成-マナーや危険運転の改善を期待" style="text-decoration:none;color:inherit;"><span>取締り強化賛成・マナーや危険運転の改善を期待</span></a></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">インフラ優先</div><h3>専用道路の整備が先決であると主張</h3><div class="axis-count">31<span>件</span></div><p>安全に走れるインフラ（自転車レーンなど）が十分にない中で、取り締まりだけを先行させることに納得がいかない立場。</p><div class="axis-tags"><a href="#sample-インフラ未整備への不満-専用レーンの設置が先決" style="text-decoration:none;color:inherit;"><span>インフラ未整備への不満・専用レーンの設置が先決</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">車道走行の不安</div><h3>車道走行の強要による事故増加を懸念</h3><div class="axis-count">14<span>件</span></div><p>車道の狭さや車の至近走行の危険から車道原則に恐怖を感じ、結果として歩道通行も狭められることに反対する立場。</p><div class="axis-tags"><a href="#sample-車道走行への不安-原則車道は事故を増やすと反対" style="text-decoration:none;color:inherit;"><span>車道走行への不安・原則車道は事故を増やすと反対</span></a></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">免許制要求</div><h3>ルール周知のために免許制の導入を要求</h3><div class="axis-count">41<span>件</span></div><p>標識を理解しない運転手が多いため、反則金のみならず原付のような免許制度や事前講習を導入すべきとする立場。</p><div class="axis-tags"><a href="#sample-制度が不十分-青切符に留まらず自転車も免許制にすべき" style="text-decoration:none;color:inherit;"><span>制度が不十分・青切符に留まらず自転車も免許制にすべき</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">ルールの曖昧さ</div><h3>基準の曖昧さや警察への不信感から反対</h3><div class="axis-count">12<span>件</span></div><p>違反の成立基準が現場で分かりにくいことや、警察の点数・反則金集め目的ではないかという不信感による反対。</p><div class="axis-tags"><a href="#sample-ルールが曖昧-現場の混乱や取り締まりへの不審で反対" style="text-decoration:none;color:inherit;"><span>ルールが曖昧・現場の混乱や取り締まりへの不審で反対</span></a></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">45<span>件</span></div><p>罵倒、単なる怒り、事実誤認など、そのままでは記事化に注意が必要な反応。</p><div class="axis-tags"><a href="#sample-その他-分類保留" style="text-decoration:none;color:inherit;"><span>その他・分類保留</span></a></div></article></div></section>
     <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
 <div class="bar-list">

@@ -1086,7 +1086,7 @@
   <div class="sm-view-row">
     <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
     <label><input type="checkbox" id="smChkDots" checked> ドット</label>
-    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="40" style="width:80px;vertical-align:middle"></label>
+    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="30" style="width:80px;vertical-align:middle"></label>
   </div>
   <div class="sm-filters">
     <span style="font-size:10px;color:#888">絞り込み:</span>
@@ -1513,7 +1513,7 @@ const SM_TOUR = [
   const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
   const IMG_ALPHA_END = 0.30;
   let imgAlpha = IMG_ALPHA_END;
-  let showHeat = true, showDots = true, heatRadius = 40;
+  let showHeat = true, showDots = true, heatRadius = 30;
   let activeFilter = 'all';
   let spotlightTarget = null;
   let animating = false, animFrame = 0;
@@ -1598,7 +1598,7 @@ const SM_TOUR = [
           const t = (v - 0.5) * 2;
           r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
         }
-        const alpha = Math.round(v * 230);
+        const alpha = Math.round(Math.pow(v, 0.5) * 170);
         for (let dy = 0; dy < res; dy++) {
           for (let dx = 0; dx < res; dx++) {
             const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
