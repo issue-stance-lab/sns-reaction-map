@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>部活動の地域移行の是非 SNS反応まっぷ</title>
+<!-- SEO_META_START -->
   <meta name="description" content="部活動の地域移行について、SNSの賛否を可視化。あなたはどっち？">
   <link rel="canonical" href="https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html">
   <meta property="og:site_name" content="SNS反応まっぷ">
@@ -16,6 +17,7 @@
   <meta property="og:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/bukatsu-chiiki.png">
   <meta name="twitter:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/bukatsu-chiiki.png">
   <meta name="twitter:card" content="summary_large_image">
+<!-- SEO_META_END -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
@@ -567,6 +569,33 @@
     .sm-emo-bar { width:60px; height:8px; border-radius:4px; background:linear-gradient(to right,#3498db,#e74c3c); }
     #smStartTour { font-size:12px; padding:6px 14px; border:1px solid var(--accent,#2563eb); border-radius:6px; background:none; color:var(--accent,#2563eb); cursor:pointer; font-weight:600; }
     #smStartTour:hover { background:var(--accent,#2563eb); color:#fff; }
+    .question-line { color:#fff; font-size:clamp(18px,2.5vw,24px); font-weight:900; margin:10px 0 0; max-width:900px; }
+    .thirty-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:22px; max-width:960px; }
+    .thirty-summary ul { display:contents; margin:0; padding:0; }
+    .thirty-summary li { list-style:none; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:12px 14px; color:#fff; font-weight:800; line-height:1.55; backdrop-filter:blur(4px); }
+    .manga-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .manga-page-card { min-height:180px; border-radius:8px; padding:18px; background:linear-gradient(180deg,#fff,#ecfeff); border:1px solid var(--line); box-shadow:var(--shadow); }
+    .manga-page-card h3 { font-size:17px; margin-bottom:8px; }
+    .manga-page-card p { margin:0; font-size:13px; color:var(--muted); line-height:1.75; }
+    .vote-card-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:8px; }
+    .vote-image-card { position:relative; min-height:132px; border-radius:8px; overflow:hidden; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+    .vote-image-card::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.58)); }
+    .vote-card-label { position:absolute; left:10px; right:10px; bottom:10px; display:block; color:#fff; font-weight:900; font-size:13px; line-height:1.35; text-shadow:0 1px 8px rgba(0,0,0,.5); }
+    .vote-comparison { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0 16px; }
+    .vote-compare-card { border:1px solid var(--line); border-radius:8px; padding:12px 14px; background:#fff; }
+    .vote-compare-card strong { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+    .vote-compare-card span { display:block; font-size:14px; color:var(--ink); font-weight:800; line-height:1.55; }
+    .quadrant-nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+    .quadrant-nav a { display:inline-flex; align-items:center; min-height:34px; padding:6px 12px; border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--ink); text-decoration:none; font-weight:800; }
+    .related-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .related-card { display:grid; grid-template-rows:auto 1fr; gap:10px; text-decoration:none; color:var(--ink); border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#fff; box-shadow:var(--shadow); }
+    .related-card img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+    .related-card strong, .related-card span { display:block; padding:0 14px; }
+    .related-card strong { font-size:15px; font-weight:900; }
+    .related-card span { padding-bottom:14px; color:var(--muted); line-height:1.6; }
+    .details-panel details { border:1px solid var(--line); border-radius:8px; background:#fff; margin-bottom:12px; overflow:hidden; }
+    .details-panel summary { cursor:pointer; padding:14px 16px; font-weight:900; color:var(--ink); }
+    .details-panel details > :not(summary) { margin:0 auto 16px; }
     @media (max-width: 720px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stat { padding: 20px 16px; }
@@ -578,9 +607,12 @@
       .bar-row { padding: 12px 14px; }
       .panel-title { flex-direction: column; align-items: flex-start; gap: 8px; }
       .panel-title h2 { font-size: 26px; }
+      .panel-title span { white-space: normal; max-width: 100%; }
       .hero-inner { padding: 36px 16px 32px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
+      .thirty-summary, .vote-card-grid, .vote-comparison, .manga-grid, .related-grid { grid-template-columns:1fr; }
+      .vote-image-card { min-height:110px; }
     }
   </style>
 <!-- GA_TAG_START -->
@@ -602,7 +634,13 @@
       <nav class="top-nav"><a href="index.html">トップ</a></nav>
       <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">教育・部活動改革</span>
       <h1>部活動の地域移行の是非 SNS反応まっぷ</h1>
+      <p class="question-line">教員の限界を地域で支える改革か、家庭負担と地域格差を広げる移行か？</p>
       <p class="lead">中学校の部活動を地域団体・民間クラブに移行する政策について、SNS上の賛否を可視化したビューです。世論調査ではありません。</p>
+      <div class="thirty-summary" aria-label="30秒サマリー"><ul>
+        <li>最多は「教員負担の軽減」57件で、学校だけで部活を支え続ける限界を訴える声が目立つ。</li>
+        <li>反対・慎重側は費用、送迎、受け皿不足、学校部活の教育的価値喪失への懸念に集まる。</li>
+        <li>接点は「子どもの活動機会を残すこと」で、制度設計と公的支援の具体性が争点になっている。</li>
+      </ul></div>
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
@@ -615,18 +653,29 @@
       <div class="stat"><span>最多カテゴリ</span><strong>教員負担の軽減 57</strong></div>
       <div class="stat"><span>最多スタンス</span><strong>賛成 95</strong></div>
     </section>
+    <section class="panel" id="manga-section">
+<div class="panel-title"><h2>漫画で読む対立</h2><span>ショートコミック</span></div>
+<p class="manga-intro" style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">休日の部活指導に追われる若手教員と、費用や送迎に不安を抱える保護者。どちらも子どもの活動機会を守りたいからこそ、地域移行の進め方をめぐって向き合います。</p>
+<div class="manga-grid">
+  <article class="manga-page-card"><h3>Page 1 / 3 土曜の体育館</h3><p>休日指導と授業準備に追われる教員が、地域との役割分担に希望を見いだす場面。</p></article>
+  <article class="manga-page-card"><h3>Page 2 / 3 誰が支えるの？</h3><p>説明会で保護者が月謝、送迎、受け皿不足への不安を訴え、教員の限界と家庭負担がぶつかる場面。</p></article>
+  <article class="manga-page-card"><h3>Page 3 / 3 部活は誰のもの</h3><p>教員と保護者が互いの切実さに気づき、子どもの居場所を誰がどう支えるのかを問いとして残す場面。</p></article>
+</div>
+<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。現時点でこのテーマの漫画画像ファイルは配置されていないため、既存設定の場面構成を要約して掲載しています。</p>
+</section>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
 <div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
 <p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
-<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
+<div id="vote-buttons" class="vote-card-grid"></div>
 <p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
     <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
     <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
   </div>
+  <div id="vote-comparison" class="vote-comparison" aria-label="あなたの選択とSNS分布の比較"></div>
   <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
   <div id="vote-bars" style="margin-bottom:16px;"></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
@@ -645,7 +694,12 @@
 <script>
 (function(){
   var TOPIC="部活動の地域移行の是非_SNS反応まっぷ";
-  var axes=[{"kicker": "移行推進派", "label": "地域移行に賛成", "origLabel": "教員の働き方改革と持続可能な部活動", "tone": "positive", "color": "#4a90d9"}, {"kicker": "慎重・反対派", "label": "地域移行に反対", "origLabel": "費用増と学校文化喪失への懸念", "tone": "negative", "color": "#e07040"}];
+  var axes=[
+    {"kicker":"賛成","label":"地域移行に賛成","origLabel":"教員の働き方改革と持続可能な部活動","tone":"positive","color":"#1769d1"},
+    {"kicker":"反対","label":"地域移行に反対","origLabel":"費用増と学校文化喪失への懸念","tone":"negative","color":"#b54708"},
+    {"kicker":"条件付き","label":"条件付きで賛成","origLabel":"支援と制度設計があれば移行を容認","tone":"neutral","color":"#667085"},
+    {"kicker":"保留","label":"まだ判断できない","origLabel":"地域・家庭・学校条件で判断が分かれる","tone":"derived","color":"#0f7490"}
+  ];
   var TITLE="部活動の地域移行の是非 SNS反応まっぷ";
   var KEY="sns_vote_"+TOPIC;
 
@@ -711,13 +765,16 @@
     setTimeout(function(){ applyBlur(); fetchVotes(); },0);
   }
 
+  var voteImages=["images/bukatsu-hero.webp","images/bukatsu-hero.webp","images/bukatsu-hero.webp","images/bukatsu-hero.webp"];
+  var shortLabels=["賛成","反対","条件付き","判断保留"];
   var btnWrap=document.getElementById("vote-buttons");
   axes.forEach(function(a,i){
     var btn=document.createElement("button");
-    btn.style.cssText="flex:1;min-width:140px;padding:14px 12px;border-radius:12px;border:2px solid "+a.color+";background:"+a.color+"10;cursor:pointer;transition:all .15s;text-align:center;";
-    btn.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;">'+a.label+'</div>';
-    btn.onmouseenter=function(){btn.style.background=a.color+"22";btn.style.transform="translateY(-2px)"};
-    btn.onmouseleave=function(){btn.style.background=a.color+"10";btn.style.transform="none"};
+    btn.className="vote-image-card";
+    btn.style.cssText="border:2px solid "+a.color+";background:url('"+voteImages[i]+"') center/cover no-repeat;";
+    btn.innerHTML='<span class="vote-card-label">'+shortLabels[i]+'<br><small style="font-weight:700;">'+a.label+'</small></span>';
+    btn.onmouseenter=function(){btn.style.transform="translateY(-3px)";btn.style.boxShadow="0 6px 20px "+a.color+"44"};
+    btn.onmouseleave=function(){btn.style.transform="none";btn.style.boxShadow="none"};
     btn.onclick=function(){castVote(i)};
     btnWrap.appendChild(btn);
   });
@@ -755,7 +812,7 @@
         console.error("Error casting vote to Supabase:", err);
         var msg=err.message||"";
         var details=err.details||"";
-        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
+        if(err.code==="23505" || msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
           alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
           success=true;
         }else{
@@ -791,6 +848,15 @@
     posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
     posLabel.style.color=myAxis.color;
     posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
+
+    var comparisonEl=document.getElementById("vote-comparison");
+    if(comparisonEl){
+      var snsTopIdx=0;
+      axes.forEach(function(_,i){ if((stored[i]||0)>(stored[snsTopIdx]||0)) snsTopIdx=i; });
+      comparisonEl.innerHTML='<div class="vote-compare-card"><strong>あなたの選択</strong><span>'+myAxis.label+'</span></div>'
+        +'<div class="vote-compare-card"><strong>SNS分布で多い選択</strong><span>'+axes[snsTopIdx].label+'（'+(stored[snsTopIdx]||0)+'票）</span></div>';
+    }
+    if(window.setStanceMapVoteMarker) window.setStanceMapVoteMarker(myIdx);
 
     var barsEl=document.getElementById("vote-bars");
     barsEl.innerHTML="";
@@ -838,6 +904,7 @@
   <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 地域移行に反対・懐疑的</div>
   <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">地域移行を推進 ▶</div>
 </div>
+<div id="your-marker-note" style="display:none;margin:10px auto 0;max-width:660px;font-size:12px;font-weight:800;color:var(--accent);">投票した選択肢を、マップ上に「あなたはこのあたり」として表示しています。</div>
 <div id="smTourPanel">
   <div id="smTourStep"></div>
   <div id="smTourTitle"></div>
@@ -1054,6 +1121,13 @@ const SM_TOUR = [
   let activeFilter = 'all';
   let spotlightTarget = null;
   let animating = false, animFrame = 0;
+  let myVoteMarker = null;
+  const voteMarkers = [
+    {x:1.45,y:1.35,label:'あなたはこのあたり',color:'#1769d1'},
+    {x:-1.45,y:-1.25,label:'あなたはこのあたり',color:'#b54708'},
+    {x:0.75,y:0.45,label:'あなたはこのあたり',color:'#667085'},
+    {x:0.0,y:0.0,label:'あなたはこのあたり',color:'#0f7490'}
+  ];
 
   const canvasMain = document.getElementById('smCanvasMain');
   const ctx = canvasMain.getContext('2d');
@@ -1223,7 +1297,36 @@ const SM_TOUR = [
     }
   }
 
-  function redraw() { drawHeatmap(); drawBase(); }
+  function drawVoteMarker() {
+    if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
+    const marker = voteMarkers[myVoteMarker];
+    const [x, y] = toCanvas(marker.x, marker.y);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, 16, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.fill();
+    ctx.strokeStyle = marker.color;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = marker.color;
+    ctx.fill();
+    ctx.font = '700 12px -apple-system,sans-serif';
+    ctx.fillStyle = marker.color;
+    ctx.fillText(marker.label, Math.min(x + 16, W - 150), Math.max(y - 14, 24));
+    ctx.restore();
+  }
+
+  window.setStanceMapVoteMarker = function(idx) {
+    myVoteMarker = idx;
+    const note = document.getElementById('your-marker-note');
+    if (note) note.style.display = 'block';
+    redraw();
+  };
+
+  function redraw() { drawHeatmap(); drawBase(); drawVoteMarker(); }
 
   function playIntro() {
     animating = true; animFrame = 0;
@@ -1347,170 +1450,20 @@ const SM_TOUR = [
   });
 
   playIntro();
+  const savedVote = localStorage.getItem("sns_vote_部活動の地域移行の是非_SNS反応まっぷ_my");
+  if (savedVote !== null) window.setStanceMapVoteMarker(parseInt(savedVote, 10));
   setTimeout(() => { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }, 3000);
 })();
 </script>
-    <section class="panel conflict-panel"><div class="panel-title"><h2>対立軸</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">移行推進派</div><h3>教員の働き方改革と持続可能な部活動</h3><div class="axis-count">95<span>件</span></div><p>教員の長時間労働解消と少子化対応のため、地域との役割分担や部活の外部委託・縮小を進めるべきとする立場。</p><div class="axis-tags"><a href="#sample-教員負担の軽減" style="text-decoration:none;color:inherit;"><span>教員負担の軽減</span></a><a href="#sample-少子化-維持困難" style="text-decoration:none;color:inherit;"><span>少子化・維持困難</span></a><a href="#sample-部活廃止-縮小論" style="text-decoration:none;color:inherit;"><span>部活廃止・縮小論</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">慎重・反対派</div><h3>費用増と学校文化喪失への懸念</h3><div class="axis-count">21<span>件</span></div><p>地域移行による保護者の費用負担増、受け皿不足、部活動の教育的価値の喪失を懸念する立場。</p><div class="axis-tags"><a href="#sample-費用-受け皿の懸念" style="text-decoration:none;color:inherit;"><span>費用・受け皿の懸念</span></a><a href="#sample-教育的価値の喪失" style="text-decoration:none;color:inherit;"><span>教育的価値の喪失</span></a></div></article></div></section>
-    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
-<div class="bar-list">
-<div class="bar-row" data-category="教員負担の軽減"><div class="bar-meta"><span>教員負担の軽減</span><strong>57</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
-<div class="bar-row" data-category="少子化・維持困難"><div class="bar-meta"><span>少子化・維持困難</span><strong>9</strong></div><div class="bar-track"><div class="bar-fill" style="width:16%"></div></div></div>
-<div class="bar-row" data-category="費用・受け皿の懸念"><div class="bar-meta"><span>費用・受け皿の懸念</span><strong>13</strong></div><div class="bar-track"><div class="bar-fill" style="width:23%"></div></div></div>
-<div class="bar-row" data-category="教育的価値の喪失"><div class="bar-meta"><span>教育的価値の喪失</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div></div>
-<div class="bar-row" data-category="条件付き・制度設計"><div class="bar-meta"><span>条件付き・制度設計</span><strong>16</strong></div><div class="bar-track"><div class="bar-fill" style="width:28%"></div></div></div>
-<div class="bar-row" data-category="部活廃止・縮小論"><div class="bar-meta"><span>部活廃止・縮小論</span><strong>29</strong></div><div class="bar-track"><div class="bar-fill" style="width:51%"></div></div></div>
-<div class="bar-row" data-category="情報共有・ニュース言及"><div class="bar-meta"><span>情報共有・ニュース言及</span><strong>26</strong></div><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div></div>
-<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>22</strong></div><div class="bar-track"><div class="bar-fill" style="width:39%"></div></div></div>
-</div></section>
-    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
-<div class="table-wrap"><table class="heat-table">
-<thead><tr><th>分類</th><th>部活 外部委託</th><th>部活 廃止</th><th>部活動 地域移行</th><th>部活動 地域移行 反対</th><th>部活動 地域移行 問題</th><th>部活動 地域移行 賛成</th><th>部活動 教員 負担</th><th>合計</th></tr></thead>
-<tbody>
-<tr data-category="教員負担の軽減"><th><span class="row-dot"></span>教員負担の軽減</th>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="教員負担の軽減 / 部活 外部委託: 9件"><span>9</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活 廃止: 5件"><span>5</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行: 3件"><span>3</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行 反対: 3件"><span>3</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行 問題: 4件"><span>4</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="教員負担の軽減 / 部活動 教員 負担: 32件"><span>32</span></td>
-<td class="total">57</td></tr>
-<tr data-category="少子化・維持困難"><th><span class="row-dot"></span>少子化・維持困難</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活 外部委託: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 部活 廃止: 2件"><span>2</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 部活動 地域移行: 5件"><span>5</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 部活動 地域移行 反対: 2件"><span>2</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活動 地域移行 問題: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活動 教員 負担: 0件"><span>0</span></td>
-<td class="total">9</td></tr>
-<tr data-category="費用・受け皿の懸念"><th><span class="row-dot"></span>費用・受け皿の懸念</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活 外部委託: 4件"><span>4</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活 廃止: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行: 4件"><span>4</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行 反対: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行 問題: 2件"><span>2</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活動 教員 負担: 2件"><span>2</span></td>
-<td class="total">13</td></tr>
-<tr data-category="教育的価値の喪失"><th><span class="row-dot"></span>教育的価値の喪失</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活 外部委託: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活 廃止: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活動 地域移行: 3件"><span>3</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 部活動 地域移行 反対: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 部活動 地域移行 問題: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活動 教員 負担: 2件"><span>2</span></td>
-<td class="total">8</td></tr>
-<tr data-category="条件付き・制度設計"><th><span class="row-dot"></span>条件付き・制度設計</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活 外部委託: 3件"><span>3</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活 廃止: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 地域移行: 5件"><span>5</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 部活動 地域移行 反対: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 地域移行 問題: 3件"><span>3</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 教員 負担: 3件"><span>3</span></td>
-<td class="total">16</td></tr>
-<tr data-category="部活廃止・縮小論"><th><span class="row-dot"></span>部活廃止・縮小論</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="部活廃止・縮小論 / 部活 外部委託: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="部活廃止・縮小論 / 部活 廃止: 26件"><span>26</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行 反対: 1件"><span>1</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行 問題: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 部活動 教員 負担: 0件"><span>0</span></td>
-<td class="total">29</td></tr>
-<tr data-category="情報共有・ニュース言及"><th><span class="row-dot"></span>情報共有・ニュース言及</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活 外部委託: 4件"><span>4</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活 廃止: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#4da3ff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行: 14件"><span>14</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行 反対: 1件"><span>1</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行 問題: 5件"><span>5</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 部活動 教員 負担: 0件"><span>0</span></td>
-<td class="total">26</td></tr>
-<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 部活 外部委託: 8件"><span>8</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 部活 廃止: 2件"><span>2</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 部活動 地域移行: 4件"><span>4</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 部活動 地域移行 反対: 7件"><span>7</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 部活動 地域移行 問題: 1件"><span>1</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 部活動 教員 負担: 0件"><span>0</span></td>
-<td class="total">22</td></tr>
-</tbody></table></div></section>
-    <div class="legend">
-      <span>少</span>
-      <span class="chip" style="background:#f5f6f8"></span>
-      <span class="chip" style="background:#dceeff"></span>
-      <span class="chip" style="background:#9fd0ff"></span>
-      <span class="chip" style="background:#4da3ff"></span>
-      <span class="chip" style="background:#1769d1"></span>
-      <span class="chip" style="background:#0a3d91"></span>
-      <span>多</span>
-    </div>
-    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
-<div class="table-wrap"><table class="heat-table">
-<thead><tr><th>分類</th><th>賛成</th><th>反対</th><th>条件付き</th><th>情報共有</th><th>判断不能</th><th>合計</th></tr></thead>
-<tbody>
-<tr data-category="教員負担の軽減"><th><span class="row-dot"></span>教員負担の軽減</th>
-<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="教員負担の軽減 / 賛成: 57件"><span>57</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 反対: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 判断不能: 0件"><span>0</span></td>
-<td class="total">57</td></tr>
-<tr data-category="少子化・維持困難"><th><span class="row-dot"></span>少子化・維持困難</th>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 賛成: 9件"><span>9</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 反対: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 判断不能: 0件"><span>0</span></td>
-<td class="total">9</td></tr>
-<tr data-category="費用・受け皿の懸念"><th><span class="row-dot"></span>費用・受け皿の懸念</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="費用・受け皿の懸念 / 反対: 13件"><span>13</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 判断不能: 0件"><span>0</span></td>
-<td class="total">13</td></tr>
-<tr data-category="教育的価値の喪失"><th><span class="row-dot"></span>教育的価値の喪失</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 反対: 8件"><span>8</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 判断不能: 0件"><span>0</span></td>
-<td class="total">8</td></tr>
-<tr data-category="条件付き・制度設計"><th><span class="row-dot"></span>条件付き・制度設計</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 反対: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="条件付き・制度設計 / 条件付き: 16件"><span>16</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 判断不能: 0件"><span>0</span></td>
-<td class="total">16</td></tr>
-<tr data-category="部活廃止・縮小論"><th><span class="row-dot"></span>部活廃止・縮小論</th>
-<td class="heat-cell" style="background:#4da3ff;color:#172033" title="部活廃止・縮小論 / 賛成: 29件"><span>29</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 反対: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 判断不能: 0件"><span>0</span></td>
-<td class="total">29</td></tr>
-<tr data-category="情報共有・ニュース言及"><th><span class="row-dot"></span>情報共有・ニュース言及</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 反対: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#4da3ff;color:#172033" title="情報共有・ニュース言及 / 情報共有: 26件"><span>26</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 判断不能: 0件"><span>0</span></td>
-<td class="total">26</td></tr>
-<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 賛成: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 反対: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 条件付き: 0件"><span>0</span></td>
-<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 情報共有: 0件"><span>0</span></td>
-<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 判断不能: 22件"><span>22</span></td>
-<td class="total">22</td></tr>
-</tbody></table></div></section>
-    <section class="panel"><div class="panel-title"><h2>代表サンプル</h2></div>
+    <section class="panel"><div class="panel-title"><h2>象限別の代表的な声</h2><span>象限・立場別に読む</span></div>
+<nav class="quadrant-nav" aria-label="象限別ナビ">
+  <a href="#sample-教員負担の軽減">移行推進・教員負担軽減</a>
+  <a href="#sample-費用-受け皿の懸念">費用・受け皿の懸念</a>
+  <a href="#sample-教育的価値の喪失">教育的価値・部活文化</a>
+  <a href="#sample-条件付き-制度設計">条件付き・制度設計</a>
+  <a href="#sample-部活廃止-縮小論">廃止・縮小論</a>
+  <a href="#sample-その他-分類保留">保留・注意領域</a>
+</nav>
 <div class="sample-grid">
 <article class="sample-card" id="sample-教員負担の軽減"><h3>教員負担の軽減</h3><div>
 <div class="sample"><div class="meta">賛成 / 信頼度 0.90</div><p>部活動地域移行を批判し、待遇改善を求めている。</p>
@@ -1625,11 +1578,187 @@ const SM_TOUR = [
 </div>
 </div></article>
 </div></section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>争点カード</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">移行推進派</div><h3>教員の働き方改革と持続可能な部活動</h3><div class="axis-count">95<span>件</span></div><p>教員の長時間労働解消と少子化対応のため、地域との役割分担や部活の外部委託・縮小を進めるべきとする立場。</p><div class="axis-tags"><a href="#sample-教員負担の軽減" style="text-decoration:none;color:inherit;"><span>教員負担の軽減</span></a><a href="#sample-少子化-維持困難" style="text-decoration:none;color:inherit;"><span>少子化・維持困難</span></a><a href="#sample-部活廃止-縮小論" style="text-decoration:none;color:inherit;"><span>部活廃止・縮小論</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">慎重・反対派</div><h3>費用増と学校文化喪失への懸念</h3><div class="axis-count">21<span>件</span></div><p>地域移行による保護者の費用負担増、受け皿不足、部活動の教育的価値の喪失を懸念する立場。</p><div class="axis-tags"><a href="#sample-費用-受け皿の懸念" style="text-decoration:none;color:inherit;"><span>費用・受け皿の懸念</span></a><a href="#sample-教育的価値の喪失" style="text-decoration:none;color:inherit;"><span>教育的価値の喪失</span></a></div></article></div></section>
+    <section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
+<div class="related-grid">
+  <a class="related-card" href="bike-blue-ticket-reaction-map.html"><img src="images/bike-blue-ticket-hero.webp" alt="自転車の青切符" loading="lazy"><strong>自転車の青切符</strong><span>安全のための取締りか、道路整備が先か。</span></a>
+  <a class="related-card" href="ai-copyright-reaction-map.html"><img src="images/ai-copyright-hero.webp" alt="生成AIと著作権" loading="lazy"><strong>生成AIと著作権</strong><span>クリエイター保護と技術革新の距離を考える。</span></a>
+  <a class="related-card" href="elderly-license-revocation-reaction-map.html"><img src="images/elderly-license-revocation-hero.webp" alt="高齢者免許返納" loading="lazy"><strong>高齢者免許返納</strong><span>安全、移動の自由、地方生活の現実を比べる。</span></a>
+</div></section>
+    <section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2><span>必要な人向けに折りたたみ</span></div>
+<details open><summary>分類別件数</summary>
+    <section class="panel"><div class="panel-title"><h2>分類別件数</h2><span>論点の量感</span></div>
+<div class="bar-list">
+<div class="bar-row" data-category="教員負担の軽減"><div class="bar-meta"><span>教員負担の軽減</span><strong>57</strong></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="bar-row" data-category="少子化・維持困難"><div class="bar-meta"><span>少子化・維持困難</span><strong>9</strong></div><div class="bar-track"><div class="bar-fill" style="width:16%"></div></div></div>
+<div class="bar-row" data-category="費用・受け皿の懸念"><div class="bar-meta"><span>費用・受け皿の懸念</span><strong>13</strong></div><div class="bar-track"><div class="bar-fill" style="width:23%"></div></div></div>
+<div class="bar-row" data-category="教育的価値の喪失"><div class="bar-meta"><span>教育的価値の喪失</span><strong>8</strong></div><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div></div>
+<div class="bar-row" data-category="条件付き・制度設計"><div class="bar-meta"><span>条件付き・制度設計</span><strong>16</strong></div><div class="bar-track"><div class="bar-fill" style="width:28%"></div></div></div>
+<div class="bar-row" data-category="部活廃止・縮小論"><div class="bar-meta"><span>部活廃止・縮小論</span><strong>29</strong></div><div class="bar-track"><div class="bar-fill" style="width:51%"></div></div></div>
+<div class="bar-row" data-category="情報共有・ニュース言及"><div class="bar-meta"><span>情報共有・ニュース言及</span><strong>26</strong></div><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div></div>
+<div class="bar-row" data-category="その他・分類保留"><div class="bar-meta"><span>その他・分類保留</span><strong>22</strong></div><div class="bar-track"><div class="bar-fill" style="width:39%"></div></div></div>
+</div></section>
+</details>
+<details><summary>カテゴリ × 検索クエリ</summary>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × 検索クエリ</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>部活 外部委託</th><th>部活 廃止</th><th>部活動 地域移行</th><th>部活動 地域移行 反対</th><th>部活動 地域移行 問題</th><th>部活動 地域移行 賛成</th><th>部活動 教員 負担</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="教員負担の軽減"><th><span class="row-dot"></span>教員負担の軽減</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="教員負担の軽減 / 部活 外部委託: 9件"><span>9</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活 廃止: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行 反対: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行 問題: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教員負担の軽減 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="教員負担の軽減 / 部活動 教員 負担: 32件"><span>32</span></td>
+<td class="total">57</td></tr>
+<tr data-category="少子化・維持困難"><th><span class="row-dot"></span>少子化・維持困難</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活 外部委託: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 部活 廃止: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 部活動 地域移行: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 部活動 地域移行 反対: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活動 地域移行 問題: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 部活動 教員 負担: 0件"><span>0</span></td>
+<td class="total">9</td></tr>
+<tr data-category="費用・受け皿の懸念"><th><span class="row-dot"></span>費用・受け皿の懸念</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活 外部委託: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活 廃止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行: 4件"><span>4</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行 反対: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行 問題: 2件"><span>2</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="費用・受け皿の懸念 / 部活動 教員 負担: 2件"><span>2</span></td>
+<td class="total">13</td></tr>
+<tr data-category="教育的価値の喪失"><th><span class="row-dot"></span>教育的価値の喪失</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活 外部委託: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活 廃止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活動 地域移行: 3件"><span>3</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 部活動 地域移行 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 部活動 地域移行 問題: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 部活動 教員 負担: 2件"><span>2</span></td>
+<td class="total">8</td></tr>
+<tr data-category="条件付き・制度設計"><th><span class="row-dot"></span>条件付き・制度設計</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活 外部委託: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活 廃止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 地域移行: 5件"><span>5</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 部活動 地域移行 反対: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 地域移行 問題: 3件"><span>3</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="条件付き・制度設計 / 部活動 教員 負担: 3件"><span>3</span></td>
+<td class="total">16</td></tr>
+<tr data-category="部活廃止・縮小論"><th><span class="row-dot"></span>部活廃止・縮小論</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="部活廃止・縮小論 / 部活 外部委託: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="部活廃止・縮小論 / 部活 廃止: 26件"><span>26</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行 反対: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行 問題: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 部活動 教員 負担: 0件"><span>0</span></td>
+<td class="total">29</td></tr>
+<tr data-category="情報共有・ニュース言及"><th><span class="row-dot"></span>情報共有・ニュース言及</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活 外部委託: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活 廃止: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行: 14件"><span>14</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行 反対: 1件"><span>1</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行 問題: 5件"><span>5</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="情報共有・ニュース言及 / 部活動 地域移行 賛成: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 部活動 教員 負担: 0件"><span>0</span></td>
+<td class="total">26</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 部活 外部委託: 8件"><span>8</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 部活 廃止: 2件"><span>2</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 部活動 地域移行: 4件"><span>4</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 部活動 地域移行 反対: 7件"><span>7</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="その他・分類保留 / 部活動 地域移行 問題: 1件"><span>1</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 部活動 地域移行 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 部活動 教員 負担: 0件"><span>0</span></td>
+<td class="total">22</td></tr>
+</tbody></table></div></section>
+    <div class="legend">
+      <span>少</span>
+      <span class="chip" style="background:#f5f6f8"></span>
+      <span class="chip" style="background:#dceeff"></span>
+      <span class="chip" style="background:#9fd0ff"></span>
+      <span class="chip" style="background:#4da3ff"></span>
+      <span class="chip" style="background:#1769d1"></span>
+      <span class="chip" style="background:#0a3d91"></span>
+      <span>多</span>
+    </div>
+</details>
+<details><summary>カテゴリ × スタンス</summary>
+    <section class="panel heat-panel"><div class="panel-title"><h2>カテゴリ × スタンス</h2><span>色が濃いほど件数が多い</span></div>
+<div class="table-wrap"><table class="heat-table">
+<thead><tr><th>分類</th><th>賛成</th><th>反対</th><th>条件付き</th><th>情報共有</th><th>判断不能</th><th>合計</th></tr></thead>
+<tbody>
+<tr data-category="教員負担の軽減"><th><span class="row-dot"></span>教員負担の軽減</th>
+<td class="heat-cell" style="background:#0a3d91;color:#ffffff" title="教員負担の軽減 / 賛成: 57件"><span>57</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教員負担の軽減 / 判断不能: 0件"><span>0</span></td>
+<td class="total">57</td></tr>
+<tr data-category="少子化・維持困難"><th><span class="row-dot"></span>少子化・維持困難</th>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="少子化・維持困難 / 賛成: 9件"><span>9</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="少子化・維持困難 / 判断不能: 0件"><span>0</span></td>
+<td class="total">9</td></tr>
+<tr data-category="費用・受け皿の懸念"><th><span class="row-dot"></span>費用・受け皿の懸念</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="費用・受け皿の懸念 / 反対: 13件"><span>13</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="費用・受け皿の懸念 / 判断不能: 0件"><span>0</span></td>
+<td class="total">13</td></tr>
+<tr data-category="教育的価値の喪失"><th><span class="row-dot"></span>教育的価値の喪失</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#dceeff;color:#172033" title="教育的価値の喪失 / 反対: 8件"><span>8</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="教育的価値の喪失 / 判断不能: 0件"><span>0</span></td>
+<td class="total">8</td></tr>
+<tr data-category="条件付き・制度設計"><th><span class="row-dot"></span>条件付き・制度設計</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="条件付き・制度設計 / 条件付き: 16件"><span>16</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="条件付き・制度設計 / 判断不能: 0件"><span>0</span></td>
+<td class="total">16</td></tr>
+<tr data-category="部活廃止・縮小論"><th><span class="row-dot"></span>部活廃止・縮小論</th>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="部活廃止・縮小論 / 賛成: 29件"><span>29</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="部活廃止・縮小論 / 判断不能: 0件"><span>0</span></td>
+<td class="total">29</td></tr>
+<tr data-category="情報共有・ニュース言及"><th><span class="row-dot"></span>情報共有・ニュース言及</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#4da3ff;color:#172033" title="情報共有・ニュース言及 / 情報共有: 26件"><span>26</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="情報共有・ニュース言及 / 判断不能: 0件"><span>0</span></td>
+<td class="total">26</td></tr>
+<tr data-category="その他・分類保留"><th><span class="row-dot"></span>その他・分類保留</th>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 賛成: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 反対: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 条件付き: 0件"><span>0</span></td>
+<td class="heat-cell zero" style="background:#f5f6f8;color:#172033" title="その他・分類保留 / 情報共有: 0件"><span>0</span></td>
+<td class="heat-cell" style="background:#9fd0ff;color:#172033" title="その他・分類保留 / 判断不能: 22件"><span>22</span></td>
+<td class="total">22</td></tr>
+</tbody></table></div></section>
+</details>
+<details><summary>注意</summary>
     <section class="note-panel"><h2>注意</h2><ul>
 <li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
 <li>投稿本文の転載は最小限にし、要約中心にしてください。</li>
 <li>代表投稿は公開前に人間が確認する前提です。</li>
 </ul></section>
+</details>
+</section>
   </main>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <footer style="background:linear-gradient(135deg, var(--grad-2), var(--grad-1));border-top:none;padding:48px 24px;text-align:center;color:#fff;font-size:12px;line-height:1.8;">
