@@ -548,7 +548,7 @@
 - Phase C: 旧3テーマ（takaichi / henoko / school）のアーカイブ化 — 各ページに「旧形式」バナーを追加し、ポータルの回遊カードから除外。2D分類完成後に課題28でv3化。**課題28の完成テーマから随時Phase C→v3化へ移行**
 - Phase D: ✅ 完了（2026-07-05）。ポータル刷新 — 「今週の注目テーマ」（高齢者免許返納）+ 「意見が最も割れているテーマ」ランキング追加。ブランチ `task/26-phased-portal` をマージ済み（f473d70）。ハブ検証: GA4/AdSense/OGPタグ維持確認、2セクション追加確認、コンソールエラーなし、375px横スクロールなし。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phased-portal.md`
 - Phase E: ✅ 完了（2026-07-05）。旧世代ページ6ファイル削除（theme-preview / takaichi-heatmap / constitutional-dashboard / constitutional-summary / henoko-summary / takaichi-summary）+ sitemap.xml を11 URL構成に更新。d581555 でコミット済み、f473d70 でマージ済み。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phasee-cleanup.md`
-- Phase F: パフォーマンス統合対応 — 課題14をここに吸収。画像のlazy loading徹底、PNG重複削除、漫画画像の遅延読み込み、モバイルLighthouse 60以上
+- Phase F: パフォーマンス統合対応 — 課題14をここに吸収。画像のlazy loading徹底、PNG重複削除（18枚）、外部スクリプトdefer化、モバイルLighthouse 60以上。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phasef-performance.md`（ブランチ `task/26-phasef-performance`）
 **成功指標**: 平均滞在時間、投票率（訪問→投票）、回遊率（1訪問あたり閲覧テーマ数）、モバイルLighthouse Performance 60以上
 **依存**: 課題25（完了済み・v3のベース）、課題24（漫画は現行資産をそのまま使用）
 **関連**: 課題14（Phase Fに吸収）、課題18（本課題がその発展版。課題18の要件を包含する）
