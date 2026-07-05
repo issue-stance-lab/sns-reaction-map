@@ -1,0 +1,119 @@
+# THEMES.yaml — テーマ台帳（単一の真実源）
+# 最終更新: 2026-07-05
+#
+# 工程の定義（全テーマ共通のステートマシン）
+#   collect:     Yahoo検索でデータ収集済み
+#   classify:    Ollama分類済み（1D）
+#   classify2d:  2D分類済み（エラー率10%以下）
+#   page_v3:     v3フォーマットのHTMLが公開されている
+#   manga_data:  漫画データ・プロンプト作成済み
+#   manga_img:   画像生成・HTML反映済み（画像生成は人間の手動作業）
+#   published:   ポータル掲載・sitemap登録済み
+#
+# 各工程の値: done / partial / todo / blocked / n-a
+# refresh_at: 次回データ補充の目安日
+
+themes:
+  ai-copyright:
+    title: 生成AIと著作権
+    html: docs/ai-copyright-reaction-map.html
+    collect: done        # 904件
+    classify: done       # 339件有効（1D分類）
+    classify2d: done     # 339件、エラー0%
+    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    manga_data: done     # configs/ai-copyright-reaction-map.json manga field
+    manga_img: done      # docs/images/ に漫画8枚+投票4枚
+    published: done      # sitemap・ポータル掲載済み
+    refresh_at: 2026-07-12
+    notes: v3試験実装テーマ。canvas IDは正典（smCanvasMain/smCanvasHeat）
+
+  bike-blue-ticket:
+    title: 自転車の青切符導入
+    html: docs/bike-blue-ticket-reaction-map.html
+    collect: done        # 177件
+    classify: done       # 116件有効
+    classify2d: done     # 116件、エラー0%
+    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    manga_data: done
+    manga_img: done      # docs/images/ に漫画8枚+投票4枚
+    published: done
+    refresh_at: 2026-07-12
+    notes: ""
+
+  bukatsu-chiiki:
+    title: 部活動の地域移行
+    html: docs/bukatsu-chiiki-reaction-map.html
+    collect: done        # 148件
+    classify: done
+    classify2d: done     # 148件、エラー0%
+    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    manga_data: done     # manga-prompts/bukatsu-chiiki-prompts.md 作成済み
+    manga_img: blocked   # プロンプト済み、画像未生成（人間の手動作業待ち）
+    published: done
+    refresh_at: 2026-07-12
+    notes: 漫画セクションはテキストカード代替中。投票ボタンはヒーロー画像流用。課題27で画像生成予定
+
+  constitutional-amendment:
+    title: 憲法改正論議
+    html: docs/constitutional-amendment-reaction-map.html
+    collect: done        # 422件
+    classify: done       # 366件有効
+    classify2d: done     # 366件、エラー0%
+    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    manga_data: done
+    manga_img: done      # docs/images/ に漫画8枚+投票4枚
+    published: done
+    refresh_at: 2026-07-12
+    notes: ""
+
+  elderly-license-revocation:
+    title: 高齢者免許返納
+    html: docs/elderly-license-revocation-reaction-map.html
+    collect: done        # 117件
+    classify: done
+    classify2d: done     # 117件、エラー0%
+    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    manga_data: done
+    manga_img: done      # docs/images/ に漫画8枚+投票5枚
+    published: done
+    refresh_at: 2026-07-12
+    notes: ""
+
+  school-nickname-ban:
+    title: 学校でのあだ名禁止
+    html: docs/school-nickname-ban-reaction-map.html
+    collect: done        # 344件（v2再分類済み）
+    classify: done       # 103件有効
+    classify2d: done     # 103件、エラー0%（confidence>=0.5: 93件）
+    page_v3: todo        # 旧形式、「旧形式」バナーあり。2Dデータ完成済みのためv3化可能
+    manga_data: todo
+    manga_img: todo
+    published: partial   # ポータル回遊カードから除外中（旧形式アーカイブ）
+    refresh_at: 2026-07-19
+    notes: 2D分類データ完成済み。v3化（課題28）に着手可能。ポータルのアーカイブ扱い解除はv3化後
+
+  henoko-student-accident:
+    title: 辺野古高校生死亡事故
+    html: docs/henoko-student-accident-reaction-map.html
+    collect: done        # 403件
+    classify: done       # henoko_structured_redesign_final.json
+    classify2d: todo     # 2D軸設計から必要
+    page_v3: todo        # 旧形式、「旧形式」バナーあり
+    manga_data: todo
+    manga_img: todo
+    published: partial   # ポータル回遊カードから除外中
+    refresh_at: 2026-07-19
+    notes: 構造化分類v2済み。2D軸定義→Ollama2D分類→v3化の順
+
+  takaichi:
+    title: 高市文春問題
+    html: docs/takaichi-reaction-map-standard.html
+    collect: done        # 324件
+    classify: done
+    classify2d: todo     # 2D軸設計から必要
+    page_v3: todo        # 旧形式、「旧形式」バナーあり
+    manga_data: todo
+    manga_img: todo
+    published: partial   # ポータル回遊カードから除外中
+    refresh_at: 2026-07-19
+    notes: 2D軸定義→Ollama2D分類→v3化の順
