@@ -520,7 +520,7 @@
 
 ### 課題26: サイト全体を「最高のページ」へ進化させる構成改革
 **担当**: 未定（Hermes / Claude Code 分担推奨。フェーズ単位で別セッション可）
-**状態**: Phase A〜E完了（2026-07-05）、Phase F未着手
+**状態**: Phase A〜F完了（2026-07-05）
 **概要**: 現サイトの強み（漫画×2Dスタンスマップ×投票の三点セット）を軸に、ページ構成・体験フロー・回遊設計を全面再構築し、「見て楽しい→参加したい→シェアしたい→また来たい」の循環を完成させる
 **現状分析（2026-07-04時点）**:
 - **強み**: 漫画導入→投票→2Dスタンスマップという独自フォーマットが5テーマで完成。他に類例のない体験
@@ -548,7 +548,7 @@
 - Phase C: 旧3テーマ（takaichi / henoko / school）のアーカイブ化 — 各ページに「旧形式」バナーを追加し、ポータルの回遊カードから除外。2D分類完成後に課題28でv3化。**課題28の完成テーマから随時Phase C→v3化へ移行**
 - Phase D: ✅ 完了（2026-07-05）。ポータル刷新 — 「今週の注目テーマ」（高齢者免許返納）+ 「意見が最も割れているテーマ」ランキング追加。ブランチ `task/26-phased-portal` をマージ済み（f473d70）。ハブ検証: GA4/AdSense/OGPタグ維持確認、2セクション追加確認、コンソールエラーなし、375px横スクロールなし。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phased-portal.md`
 - Phase E: ✅ 完了（2026-07-05）。旧世代ページ6ファイル削除（theme-preview / takaichi-heatmap / constitutional-dashboard / constitutional-summary / henoko-summary / takaichi-summary）+ sitemap.xml を11 URL構成に更新。d581555 でコミット済み、f473d70 でマージ済み。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phasee-cleanup.md`
-- Phase F: パフォーマンス統合対応 — 課題14をここに吸収。画像のlazy loading徹底、PNG重複削除（18枚）、外部スクリプトdefer化、モバイルLighthouse 60以上。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phasef-performance.md`（ブランチ `task/26-phasef-performance`）
+- Phase F: ✅ 完了（2026-07-05）。PNG重複14枚削除（約25MB削減）、v3形式4テーマのマンガモーダル `<img>` に `loading="lazy"` 追加。ブランチ `task/26-phasef-performance` をマージ済み（d8e8afd）。セッションプロンプト: `configs/prompts/hermes/20260705_task26-phasef-performance.md`
 **成功指標**: 平均滞在時間、投票率（訪問→投票）、回遊率（1訪問あたり閲覧テーマ数）、モバイルLighthouse Performance 60以上
 **依存**: 課題25（完了済み・v3のベース）、課題24（漫画は現行資産をそのまま使用）
 **関連**: 課題14（Phase Fに吸収）、課題18（本課題がその発展版。課題18の要件を包含する）
@@ -584,7 +584,7 @@
 | 課題23: ai-copyright 2次元スタンスマップ | Claude Code | 2026-07-02 | 進行中 | 50件試験分類済み。プロンプト改善→904件全量→十字散布図HTML実装 |
 | 課題24: 各テーマへの漫画コンテンツ追加 | Claude Code | 2026-07-03 | 進行中 | elderly-license・bike-blue-ticket完了。次はbukatsu-chiiki・constitutional等のスタンスマップ完成テーマへ順次展開 |
 | 課題25: スタンスマップ統一 | Claude Code | 2026-07-04 | 完了 | 9c7db33で5テーマ統合済み。2026-07-04に全ページブラウザ検証合格を確認 |
-| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | Phase A〜E完了。Phase F未着手 | Phase D: ポータル刷新完了（f473d70）。Phase E: 旧ページ削除+sitemap更新完了（d581555）。次はPhase F（パフォーマンス最適化） |
+| 課題26: サイト構成改革（v3フォーマット） | ワーカーAI / Claude Code | 2026-07-04 | **Phase A〜F 全完了** | Phase F: PNG14枚削除+lazy loading追加（d8e8afd）。課題26全フェーズ完了 |
 | 課題27: bukatsu-chiiki 漫画・投票画像生成 | 課題24担当AI | 2026-07-04 | 未着手 | manga-promptsは課題24で作成済み。画像生成（手動）→HTML差し替えのみ残 |
 | 課題28: 旧3テーマ 2D分類→v3化 | Claude Code / ワーカーAI | 2026-07-05 | 未着手 | school⚠️再実行待ち / henoko・taikaichi 2D設計から。完成テーマから随時着手 |
 
