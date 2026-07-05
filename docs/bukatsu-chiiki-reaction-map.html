@@ -574,9 +574,17 @@
     .thirty-summary ul { display:contents; margin:0; padding:0; }
     .thirty-summary li { list-style:none; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:12px 14px; color:#fff; font-weight:800; line-height:1.55; backdrop-filter:blur(4px); }
     .manga-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-    .manga-page-card { min-height:180px; border-radius:8px; padding:18px; background:linear-gradient(180deg,#fff,#ecfeff); border:1px solid var(--line); box-shadow:var(--shadow); }
-    .manga-page-card h3 { font-size:17px; margin-bottom:8px; }
-    .manga-page-card p { margin:0; font-size:13px; color:var(--muted); line-height:1.75; }
+    .manga-page-card { border:1px solid rgba(0,0,0,.08); border-radius:8px; overflow:hidden; background:#fff; box-shadow:0 10px 28px rgba(16,24,40,.08); cursor:zoom-in; transition:transform .2s ease,box-shadow .2s ease; text-align:left; padding:0; }
+    .manga-page-card:hover { transform:translateY(-4px); box-shadow:0 18px 42px rgba(16,24,40,.14); }
+    .manga-page-card img { display:block; width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--accent-soft); }
+    .manga-page-card span { display:block; padding:12px 14px; color:var(--ink); font-size:14px; font-weight:900; line-height:1.45; }
+    .manga-modal { position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(15,23,42,.86); }
+    .manga-modal.active { display:flex; }
+    .manga-modal img { max-width:min(92vw,920px); max-height:88vh; border-radius:8px; box-shadow:0 24px 80px rgba(0,0,0,.45); background:#fff; }
+    .manga-modal button { position:absolute; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff; border-radius:8px; min-width:44px; height:44px; cursor:pointer; font-size:24px; font-weight:900; backdrop-filter:blur(6px); }
+    .manga-modal .manga-close { top:18px; right:18px; }
+    .manga-modal .manga-prev { left:18px; top:50%; transform:translateY(-50%); }
+    .manga-modal .manga-next { right:18px; top:50%; transform:translateY(-50%); }
     .vote-card-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:8px; }
     .vote-image-card { position:relative; min-height:132px; border-radius:8px; overflow:hidden; cursor:pointer; transition:transform .15s, box-shadow .15s; }
     .vote-image-card::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.58)); }
@@ -657,11 +665,26 @@
 <div class="panel-title"><h2>漫画で読む対立</h2><span>ショートコミック</span></div>
 <p class="manga-intro" style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">休日の部活指導に追われる若手教員と、費用や送迎に不安を抱える保護者。どちらも子どもの活動機会を守りたいからこそ、地域移行の進め方をめぐって向き合います。</p>
 <div class="manga-grid">
-  <article class="manga-page-card"><h3>Page 1 / 3 土曜の体育館</h3><p>休日指導と授業準備に追われる教員が、地域との役割分担に希望を見いだす場面。</p></article>
-  <article class="manga-page-card"><h3>Page 2 / 3 誰が支えるの？</h3><p>説明会で保護者が月謝、送迎、受け皿不足への不安を訴え、教員の限界と家庭負担がぶつかる場面。</p></article>
-  <article class="manga-page-card"><h3>Page 3 / 3 部活は誰のもの</h3><p>教員と保護者が互いの切実さに気づき、子どもの居場所を誰がどう支えるのかを問いとして残す場面。</p></article>
+  <button class="manga-page-card" type="button" data-manga-index="0">
+    <img src="images/bukatsu-chiiki-manga-page-1.webp" alt="漫画1ページ目 土曜の体育館" loading="lazy">
+    <span>Page 1 / 3 土曜の体育館</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="1">
+    <img src="images/bukatsu-chiiki-manga-page-2.webp" alt="漫画2ページ目 誰が支えるの？" loading="lazy">
+    <span>Page 2 / 3 誰が支えるの？</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="2">
+    <img src="images/bukatsu-chiiki-manga-page-3.webp" alt="漫画3ページ目 部活は誰のもの" loading="lazy">
+    <span>Page 3 / 3 部活は誰のもの</span>
+  </button>
 </div>
-<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。現時点でこのテーマの漫画画像ファイルは配置されていないため、既存設定の場面構成を要約して掲載しています。</p>
+<div class="manga-modal" id="manga-modal" aria-hidden="true">
+  <button class="manga-close" type="button" aria-label="閉じる">×</button>
+  <button class="manga-prev" type="button" aria-label="前のページ">‹</button>
+  <img id="manga-modal-image" src="" alt="" loading="lazy">
+  <button class="manga-next" type="button" aria-label="次のページ">›</button>
+</div>
+<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。</p>
 </section>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
@@ -765,7 +788,7 @@
     setTimeout(function(){ applyBlur(); fetchVotes(); },0);
   }
 
-  var voteImages=["images/bukatsu-hero.webp","images/bukatsu-hero.webp","images/bukatsu-hero.webp","images/bukatsu-hero.webp"];
+  var voteImages=["images/bukatsu-chiiki-vote-1-support.webp","images/bukatsu-chiiki-vote-2-oppose.webp","images/bukatsu-chiiki-vote-3-conditional.webp","images/bukatsu-chiiki-vote-4-unsure.webp"];
   var shortLabels=["賛成","反対","条件付き","判断保留"];
   var btnWrap=document.getElementById("vote-buttons");
   axes.forEach(function(a,i){
@@ -891,6 +914,24 @@
     document.getElementById("vote-result").style.display="block";
     document.getElementById("vote-result").scrollIntoView({behavior:"smooth",block:"nearest"});
   }
+})();
+
+(function(){
+  var mangaImages=["images/bukatsu-chiiki-manga-page-1.webp","images/bukatsu-chiiki-manga-page-2.webp","images/bukatsu-chiiki-manga-page-3.webp"];
+  var modal=document.getElementById("manga-modal");
+  var modalImg=document.getElementById("manga-modal-image");
+  var cur=0;
+  function openModal(i){cur=i;modalImg.src=mangaImages[cur];modal.classList.add("active");modal.setAttribute("aria-hidden","false");}
+  function closeModal(){modal.classList.remove("active");modal.setAttribute("aria-hidden","true");}
+  function move(d){cur=(cur+d+mangaImages.length)%mangaImages.length;modalImg.src=mangaImages[cur];}
+  document.querySelectorAll("[data-manga-index]").forEach(function(btn){
+    btn.addEventListener("click",function(){openModal(parseInt(btn.dataset.mangaIndex));});
+  });
+  modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});
+  modal.querySelector(".manga-close").addEventListener("click",closeModal);
+  modal.querySelector(".manga-prev").addEventListener("click",function(e){e.stopPropagation();move(-1);});
+  modal.querySelector(".manga-next").addEventListener("click",function(e){e.stopPropagation();move(1);});
+  document.addEventListener("keydown",function(e){if(!modal.classList.contains("active"))return;if(e.key==="Escape")closeModal();if(e.key==="ArrowLeft")move(-1);if(e.key==="ArrowRight")move(1);});
 })();
 </script>
     <section class="panel" id="stance-map-section">
