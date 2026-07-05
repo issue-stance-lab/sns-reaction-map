@@ -28,6 +28,18 @@
 
 ---
 
+## グロース課題（GROWTH.yaml へ移管）
+
+以下の課題はグロースループで管理する。詳細は `GROWTH.yaml` / `GROWTH_LOOP.md` を参照。
+
+| 旧課題 | 対応する GROWTH.yaml 項目 |
+|--------|--------------------------|
+| 課題6: X初期フォロワー獲得・集客強化（@sns_hannou_ma 0→100） | recurring.x-posting |
+| 課題14: ページ表示速度最適化（Lighthouse計測・Twitter widgets.js遅延読み込み） | capabilities（未起票、必要時に追加） |
+| 課題20: テーマ別問題提起LP | capabilities（未起票、必要時に追加） |
+
+---
+
 ## テーマ個別課題（THEMES.yaml へ移管）
 
 以下の課題はテーマ工程として THEMES.yaml で管理する。

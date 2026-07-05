@@ -1,0 +1,110 @@
+# GROWTH.yaml — グロース台帳（単一の真実源）
+# 最終更新: 2026-07-05
+#
+# 目的: 来訪者・回遊・投票・SNSシェアを増やす施策の台帳。
+# 制作・品質維持は THEMES.yaml / LOOP.md の管轄（このファイルでは扱わない）。
+#
+# 構造:
+#   kpi:          週次スナップショット（人間がGA4/GSC/Supabaseから転記、またはハブが依頼）
+#   capabilities: 一度作れば全テーマに効くサイト機能。工程は build → verify → measure → done
+#   experiments:  仮説→実装→計測→判定のライフサイクルを持つ施策
+#                 status: idea / building / measuring / adopted / rejected / blocked
+#   recurring:    定期運用タスク（X投稿、GSC確認など）。last_run と cadence で管理
+#
+# ルール:
+#   - measuring 状態の experiment は同時に1つまで（効果の切り分けのため）
+#   - 判定期限（judge_at）を過ぎた実験は必ず adopted / rejected に倒す。塩漬け禁止
+#   - 保護タグ（GA4/AdSense/Supabase/OGP）は絶対に壊さない
+
+kpi:
+  # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
+  snapshots:
+    - date: 2026-07-06
+      weekly_users: null        # GA4: 週間ユーザー数
+      pageviews: null           # GA4: 週間PV
+      pages_per_session: null   # GA4: 回遊率の代理指標
+      votes_total: null         # Supabase: 累計投票数
+      votes_week: null          # Supabase: 週間投票数
+      gsc_impressions: null     # Search Console: 週間表示回数
+      gsc_clicks: null          # Search Console: 週間クリック数
+      x_followers: null         # @sns_hannou_ma フォロワー数
+      notes: 初回ベースライン取得（人間に依頼中）
+
+capabilities:
+  share-after-vote:
+    title: 投票完了後のXシェアボタン
+    hypothesis: 投票直後は熱量が最も高く、結果画面にシェア導線を置けばシェア数が増える
+    scope: 全テーマ共通。投票結果表示に「結果をXでシェア」ボタン（テーマ名+自分の立場+URL入りテキスト自動生成）
+    status: idea
+    priority: 1
+    metric: Xシェア経由の流入（GA4 utm_source=share_button）
+    notes: OGP画像が既に整備済みなのでカードは綺麗に出るはず
+
+  related-themes-block:
+    title: 投票完了後・ページ末尾の関連テーマ表示
+    hypothesis: 読了・投票完了時点が離脱点。そこに関連テーマカードを置けば回遊が増える
+    scope: 全テーマ共通。ページ末尾と投票完了画面に他テーマカード2-3枚
+    status: idea
+    priority: 2
+    metric: pages_per_session、内部リンククリック（GA4イベント）
+    notes: ポータルの回遊カード実装を流用できる可能性
+
+  portal-featured-slot:
+    title: トップページの注目テーマ枠
+    hypothesis: 新着・話題性の高いテーマを最上部に出すと初回訪問者の直帰が減る
+    scope: ポータルに「注目」枠1つ。GROWTH.yaml の featured フィールドで指定
+    status: measuring
+    priority: 3
+    metric: ポータルからテーマページへの遷移率
+    started_at: 2026-07-05
+    judge_at: 2026-07-19
+    notes: school-nickname-ban に切り替え済み（2026-07-05）
+
+  x-post-templates:
+    title: X投稿テンプレート自動生成
+    hypothesis: テーマごとの定型投稿（問題提起+スタンスマップ画像+URL）を用意すれば投稿頻度が上がる
+    scope: 新テーマ公開時・データ補充時にハブが投稿文案を生成し人間に渡す運用をループに組み込む
+    status: measuring
+    priority: 4
+    metric: x_followers、X経由流入（GA4）
+    started_at: 2026-07-05
+    judge_at: 2026-07-19
+    notes: school-nickname-ban の投稿文案を初回生成済み（下記参照）
+
+experiments:
+  # 例:
+  # exp-001:
+  #   title: OGPタイトル文言A/B（疑問形 vs 断定形）
+  #   hypothesis: 疑問形タイトルの方がXでのクリック率が高い
+  #   change: ai-copyright と bike-blue-ticket のOGPタイトルを疑問形に変更
+  #   status: idea
+  #   started_at: null
+  #   judge_at: null          # 開始から2週間後を目安に設定
+  #   metric: gsc_clicks / GA4のX流入
+  #   result: null            # 判定時に adopted / rejected の根拠を書く
+  {}
+
+recurring:
+  gsc-review:
+    title: Search Console 確認とタイトル改善候補の抽出
+    cadence: weekly
+    last_run: null
+    procedure: 表示回数が多くCTRが低いページを抽出し、タイトル/description改善を experiments に起票
+    needs_human: GSC画面のデータ取得（スクショまたはCSV）
+
+  kpi-snapshot:
+    title: KPI週次スナップショット更新
+    cadence: weekly
+    last_run: null
+    procedure: kpi.snapshots に1行追加。人間にGA4/GSC/Supabaseの数値を依頼
+    needs_human: 各管理画面の数値取得
+
+  x-posting:
+    title: X運用（新テーマ告知・引用RT・リプライ）
+    cadence: per-theme-publish + weekly
+    last_run: null
+    procedure: 新テーマ公開時は告知文案生成。週次で引用RT候補・リプライ先リストを提案
+    needs_human: 実際の投稿操作
+    notes: 旧TASK_BOARD課題6（フォロワー0→100）をここに移管
+
+featured: school-nickname-ban   # portal-featured-slot 実装後に有効化
