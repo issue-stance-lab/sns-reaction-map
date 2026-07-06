@@ -3,19 +3,21 @@
 テーマ: 辺野古高校生死亡事故 SNS反応まっぷ
 生成枚数: キャラシート2枚 + 本番ページ3枚 = 計5枚
 
+**注意:** 事故・転覆・海上の危険シーンは描かない。教育基本法違反認定をめぐる教育現場と行政の対立にフォーカスする。
+
 ---
 
 ## Step 1: キャラクターシート生成（Character Lock用）
 
 ### キャラシート① 中村 真由美（なかむら まゆみ）
 
-- 役割: 同志社国際高校の社会科教員・修学旅行引率担当（35歳）
+- 役割: 高校の社会科教員・平和学習担当（35歳）
 - 立場: 平和教育の意義を信じ、文科省の違反認定に疑問を持つ
-- 恐れ: 事故の責任と、教育の自由が萎縮すること
-- 望み: 生徒が自分の目で見て考える教育を守りたい
+- 恐れ: 教育の自由が萎縮し、現場が沈黙してしまうこと
+- 望み: 生徒が多角的な視点で社会問題を考える教育を守りたい
 
 ```
-Character design reference sheet, white background, multiple expressions (passionate, guilty, defiant, sorrowful, determined), full body and close-up face views. Japanese female high school teacher, age 35, shoulder-length black hair with side part, no glasses, navy blazer over white blouse, small peace dove pin on lapel, holding a lesson plan folder. Slender build, earnest and idealistic demeanor. Anime-inspired semi-realistic manga style, clean line art, muted school color palette.
+Character design reference sheet, white background, multiple expressions (passionate, worried, defiant, thoughtful, determined), full body and close-up face views. Japanese female high school teacher, age 35, shoulder-length black hair with side part, no glasses, navy blazer over white blouse, small peace dove pin on lapel, holding a lesson plan folder. Slender build, earnest and idealistic demeanor. Anime-inspired semi-realistic manga style, clean line art, muted school color palette.
 ```
 
 ### キャラシート② 吉田 健太郎（よしだ けんたろう）
@@ -37,69 +39,66 @@ Character design reference sheet, white background, multiple expressions (stern,
 
 ---
 
-### ページ1「沖縄の海で」
+### ページ1「教育基本法違反、初認定」
 
 **構成:** 上段1コマ大 + 下段2コマ
 
 | コマ | 内容 | セリフ |
 |------|------|--------|
-| 上段・大 | 沖縄の美しい海を背景に、修学旅行の高校生たちがカヌーやボートに乗り込む。真由美が浜辺から見送る | 真由美「自分の目で見て、自分の頭で考える。それが平和教育の原点。」 |
-| 下段・左 | 突然の転覆。海上で混乱する生徒たち。救助ヘリの音 | ナレーション「その日、海は穏やかだったはずだった——」 |
-| 下段・右 | 病院の廊下。真由美が壁にもたれ、顔を覆っている。奥の部屋にICUの表示 | 真由美「……私が、連れて行かなければ。」 |
+| 上段・大 | 文科省の記者会見場。吉田がマイクの前で発表する。記者のカメラフラッシュ | 吉田「本件の修学旅行プログラムは、教育基本法第14条2項に違反すると認定します。」 |
+| 下段・左 | 職員室でテレビニュースを見る真由美。画面に「教育基本法違反 初認定」の速報 | 真由美「……平和を学ぶことが、"違反"だなんて。」 |
+| 下段・右 | 真由美がスマートフォンで教職員仲間にメッセージを送る。画面に「これから私たちはどう教えればいい？」 | 真由美「現場が萎縮したら、一番困るのは生徒たちなのに。」 |
 
 ```
-A manga page with 3 panels layout (one large panel on top, two smaller panels on the bottom row). Anime-inspired semi-realistic manga style, clean line art, dramatic contrast between beauty and tragedy.
+A manga page with 3 panels layout (one large panel on top, two smaller panels on the bottom row). Anime-inspired semi-realistic manga style, clean line art, tense institutional atmosphere.
 
-[TOP LARGE PANEL] A beautiful Okinawan seascape with turquoise water and a coral reef visible below. High school students in life jackets are boarding small boats and canoes near a dock. A female teacher (shoulder-length black hair, navy blazer, peace dove pin) watches from the shore with a hopeful expression. Bright sunlight, tropical atmosphere. A speech bubble containing the Japanese text "自分の目で見て、自分の頭で考える。それが平和教育の原点。"
+[TOP LARGE PANEL] A government press conference room. A male official (neatly combed hair with graying temples, rectangular glasses, dark charcoal suit, navy tie) stands at a podium with a ministry seal, speaking into microphones. Camera flashes illuminate him. Reporter hands hold up recorders. Behind him a screen shows "教育基本法第14条2項". A speech bubble containing the Japanese text "本件の修学旅行プログラムは、教育基本法第14条2項に違反すると認定します。"
 
-[BOTTOM LEFT PANEL] Chaos on the water. A boat has capsized. Students splash in the water, some clinging to the overturned hull. A rescue helicopter appears in the sky. Dark clouds roll in. Dynamic action lines. A narration box containing the Japanese text "その日、海は穏やかだったはずだった——"
+[BOTTOM LEFT PANEL] A school staff room. A female teacher (shoulder-length black hair, navy blazer, peace dove pin) sits at her desk watching a small TV. The TV screen shows a "速報" (breaking news) chyron reading "教育基本法違反 初認定". Her expression is shock and disbelief. Other teachers in the background look concerned. A speech bubble containing the Japanese text "……平和を学ぶことが、"違反"だなんて。"
 
-[BOTTOM RIGHT PANEL] A hospital corridor at night. The same female teacher slumps against a white wall, covering her face with both hands. Behind her, a door with an ICU sign glows red. Harsh fluorescent lighting, cold blue tones. A speech bubble containing the Japanese text "……私が、連れて行かなければ。"
+[BOTTOM RIGHT PANEL] Close-up of the teacher's hands holding a smartphone. The messaging app shows a group chat with fellow teachers. She's typing "これから私たちはどう教えればいい？". Her expression is anxious but resolute. A speech bubble containing the Japanese text "現場が萎縮したら、一番困るのは生徒たちなのに。"
 ```
 
 ---
 
-### ページ2「教育基本法違反」
+### ページ2「政治的中立とは何か」
 
 **構成:** 上段2コマ + 下段1コマ大
 
 | コマ | 内容 | セリフ |
 |------|------|--------|
-| 上段・左 | 文科省の記者会見。吉田が記者団の前でマイクに向かう | 吉田「本件は、教育基本法第14条2項に違反すると認定します。」 |
-| 上段・右 | テレビニュースを見る真由美。画面には「教育基本法違反 初認定」の速報テロップ | 真由美「……平和を学ぶことが、"違反"？」 |
-| 下段・大 | 吉田と真由美が対峙するイメージカット。背景に国会議事堂と沖縄の海が分断されている | 吉田「政治的中立性なき教育は、教育ではない。」/ 真由美「現場を見ずに、机上で何がわかるんですか。」 |
+| 上段・左 | 国会の委員会室。議員が吉田に質問。傍聴席で真由美が見守る | 議員「この認定は、平和教育そのものを否定するものではないのですか？」 |
+| 上段・右 | 吉田が答弁する。手元の資料を見ながら慎重に言葉を選ぶ | 吉田「平和教育を否定しているのではありません。特定の政治活動への参加を教育課程に組み込んだことが問題です。」 |
+| 下段・大 | 真由美と吉田が議事堂の廊下で偶然すれ違う | 真由美「現場を見たことはありますか。生徒たちがどんな顔で学んでいたか。」/ 吉田「感情ではなく、法に基づいて判断するのが私の仕事です。」 |
 
 ```
-A manga page with 3 panels layout (two smaller panels on top row, one large panel on the bottom). Anime-inspired semi-realistic manga style, clean line art, tense political-institutional atmosphere.
+A manga page with 3 panels layout (two smaller panels on top row, one large panel on the bottom). Anime-inspired semi-realistic manga style, clean line art, formal legislative atmosphere.
 
-[TOP LEFT PANEL] A government press conference room. A male official (neatly combed hair with graying temples, rectangular glasses, dark charcoal suit, navy tie) stands at a podium with a ministry seal, speaking into microphones. Camera flashes illuminate him. Reporter hands hold up recorders. A speech bubble containing the Japanese text "本件は、教育基本法第14条2項に違反すると認定します。"
+[TOP LEFT PANEL] A Japanese Diet committee room. A legislator at a desk asks a question, gesturing toward the government official (neatly combed hair, graying temples, rectangular glasses, charcoal suit) who sits at the witness table. In the spectator gallery, the female teacher (shoulder-length black hair, navy blazer, peace dove pin) watches intently. A speech bubble from the legislator containing the Japanese text "この認定は、平和教育そのものを否定するものではないのですか？"
 
-[TOP RIGHT PANEL] The female teacher sits in her small apartment watching a TV news broadcast. The TV screen shows a "速報" (breaking news) chyron reading "教育基本法違反 初認定". Her face reflects shock and disbelief. The room is dim, lit only by the TV screen. A speech bubble containing the Japanese text "……平和を学ぶことが、"違反"？"
+[TOP RIGHT PANEL] Close-up of the government official answering carefully. He looks down at documents on the table, choosing his words precisely. His expression is firm but measured. A speech bubble containing the Japanese text "平和教育を否定しているのではありません。特定の政治活動への参加を教育課程に組み込んだことが問題です。"
 
-[BOTTOM LARGE PANEL] An artistic confrontation shot. The government official and the female teacher face each other in the center. Behind the official: the National Diet Building, stacks of law books, the text of Article 14. Behind the teacher: Okinawa's ocean, memorial flowers, photos of students smiling. A vertical line divides the two worlds. Two speech bubbles: one from the official containing the Japanese text "政治的中立性なき教育は、教育ではない。" and one from the teacher containing the Japanese text "現場を見ずに、机上で何がわかるんですか。"
+[BOTTOM LARGE PANEL] A corridor in the Diet building. The female teacher and the government official pass each other. She stops and turns to face him. He pauses. Between them, on the walls, hang framed photos of historical education scenes. Tension in the air but no hostility. Two speech bubbles: one from the teacher containing the Japanese text "現場を見たことはありますか。生徒たちがどんな顔で学んでいたか。" and one from the official containing the Japanese text "感情ではなく、法に基づいて判断するのが私の仕事です。"
 ```
 
 ---
 
-### ページ3「それぞれの正義」
+### ページ3「教室から届く声」
 
-**構成:** 上段1コマ + 中段2コマ + 下段1コマ大
+**構成:** 上段2コマ + 下段1コマ大
 
 | コマ | 内容 | セリフ |
 |------|------|--------|
-| 上段 | 抗議集会。教職員組合が「平和教育を守れ」と横断幕を掲げる | 群衆「教育の自由を守れ！」 |
-| 中段・左 | SNS画面。支持派「政治活動に加担した学校が悪い」のツイート | ナレーション「ネット上では文科省判断を支持する声が多数を占めた。」 |
-| 中段・右 | 亡くなった生徒の献花台。写真と花束。そっと手を合わせる制服の生徒 | ナレーション「しかし、亡くなった命への追悼は、どちらの立場からも共通していた。」 |
-| 下段・大 | 真由美と吉田が同じ夕日の海を別々の場所から見ている。二人とも複雑な表情 | 真由美「この問いに、正解はあるのだろうか。」/ 吉田「……それでも、線は引かなければならない。」 |
+| 上段・左 | SNS画面のモンタージュ。「学校が悪い」「平和教育を守れ」「どっちもどっち」と様々な意見 | ナレーション「ネット上では賛否が激しく割れた。」 |
+| 上段・右 | 教室で授業をする真由美。生徒が手を挙げて質問している | 生徒「先生、政治的中立って、何も言わないことですか？」 |
+| 下段・大 | 真由美が教壇で少し微笑み、吉田が執務室の窓から空を見上げる。二分割構図 | 真由美「考えることをやめない。それだけは、どんなルールにも奪えない。」/ 吉田「……教育を守る形は、ひとつではないのかもしれない。」 |
 
 ```
-A manga page with 4 panels layout (one panel on top, two panels in middle row, one large panel on bottom). Anime-inspired semi-realistic manga style, clean line art, emotional and reflective tone.
+A manga page with 3 panels layout (two panels on top row, one large panel on bottom). Anime-inspired semi-realistic manga style, clean line art, reflective and hopeful tone.
 
-[TOP PANEL] A protest rally outside a government building. Teachers' union members hold a large banner reading "平和教育を守れ" (Protect Peace Education). Some hold candles, others raise fists. Intense atmosphere. A speech bubble from the crowd containing the Japanese text "教育の自由を守れ！"
+[TOP LEFT PANEL] A collage of smartphone screens and social media posts. Various opinions are visible: "学校が政治活動に加担した", "平和教育を萎縮させるな", "教育基本法違反は当然", "生徒の声を聞いたのか". Likes, retweets, and angry/sad emoji reactions. A narration box containing the Japanese text "ネット上では賛否が激しく割れた。"
 
-[MIDDLE LEFT PANEL] A smartphone screen showing social media posts. The top post reads "政治活動に加担した学校が悪い。文科省の判断は当然" with many likes and retweets. Below it, more supporting posts. A narration box containing the Japanese text "ネット上では文科省判断を支持する声が多数を占めた。"
+[TOP RIGHT PANEL] A bright classroom. The female teacher (shoulder-length black hair, navy blazer, peace dove pin) stands at the front. A student raises their hand with a curious, sincere expression. The blackboard behind shows "社会問題を考える". Warm classroom lighting. A speech bubble from the student containing the Japanese text "先生、政治的中立って、何も言わないことですか？"
 
-[MIDDLE RIGHT PANEL] A memorial altar for the deceased student at the school gate. A framed photo surrounded by flowers, candles, and handwritten messages. A student in school uniform presses their hands together in prayer. Soft, warm light. A narration box containing the Japanese text "しかし、亡くなった命への追悼は、どちらの立場からも共通していた。"
-
-[BOTTOM LARGE PANEL] Split composition: on the left, the female teacher stands on an Okinawan beach at sunset, looking at the ocean. On the right, the government official stands at his office window at the same twilight hour, looking at the horizon. Both have complex, pensive expressions. The same orange sunset connects both scenes. Two speech bubbles: one from the teacher containing the Japanese text "この問いに、正解はあるのだろうか。" and one from the official containing the Japanese text "……それでも、線は引かなければならない。"
+[BOTTOM LARGE PANEL] Split composition: on the left, the female teacher at her classroom podium, giving a gentle but firm smile to her students. On the right, the government official at his office window, looking up at a sky with both clouds and sunlight breaking through. Both scenes share the same sky. Two speech bubbles: one from the teacher containing the Japanese text "考えることをやめない。それだけは、どんなルールにも奪えない。" and one from the official containing the Japanese text "……教育を守る形は、ひとつではないのかもしれない。"
 ```
