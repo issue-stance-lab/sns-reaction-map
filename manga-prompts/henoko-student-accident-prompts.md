@@ -5,6 +5,19 @@
 
 **注意:** 事故・転覆・海上の危険シーンは描かない。教育基本法違反認定をめぐる教育現場と行政の対立にフォーカスする。
 
+## 保存先
+
+生成後 WebP に変換、漫画≤100KB（リサイズ900px、q45目安）で以下に配置:
+
+```
+docs/images/
+├── henoko-student-accident-manga-charsheet-mayumi.webp
+├── henoko-student-accident-manga-charsheet-kentaro.webp
+├── henoko-student-accident-manga-page-1.webp
+├── henoko-student-accident-manga-page-2.webp
+└── henoko-student-accident-manga-page-3.webp
+```
+
 ---
 
 ## Step 1: キャラクターシート生成（Character Lock用）
