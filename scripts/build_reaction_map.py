@@ -322,6 +322,25 @@ def conflict_axes_html(rows: list[dict[str, Any]], config: dict[str, Any]) -> st
     )
 
 
+def background_html(config: dict[str, Any]) -> str:
+    bg = config.get("background") or {}
+    paragraphs = bg.get("paragraphs") or []
+    if not paragraphs:
+        return ""
+    title = bg.get("title") or "この争点の背景"
+    subtitle = bg.get("subtitle") or "なにが起きていて、なぜ意見が割れるのか"
+    body = "".join(
+        f'<p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">{html.escape(p)}</p>'
+        for p in paragraphs
+    )
+    return (
+        '<section class="panel background-panel">'
+        f'<div class="panel-title"><h2>{html.escape(title)}</h2><span>{html.escape(subtitle)}</span></div>'
+        f"{body}"
+        "</section>"
+    )
+
+
 TONE_TO_SEMICIRCLE_COLOR = {
     "negative": "#e07040",
     "positive": "#4a90d9",
@@ -579,7 +598,8 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     }}).join(" / ");
     
     var text="【"+TITLE+"】\\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\\nSNSの声の分布と自分の感覚、あなたも比べてみて。\\n\\n#SNS反応まっぷ";
-    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text);
+    var shareUrl=location.href.split("#")[0].split("?")[0]+"?utm_source=share_button&utm_medium=social&utm_campaign=vote_share";
+    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(shareUrl);
     var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
     shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
 
@@ -1326,6 +1346,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
     </section>
     {vote_ui_html(config)}
     {semicircle_html(categories, by_category, config)}
+    {background_html(config)}
     {conflict_axes_html(rows, config)}
     {category_counts_html(categories, by_category)}
     {table_html("カテゴリ × 検索クエリ", "分類", categories, queries, by_query)}

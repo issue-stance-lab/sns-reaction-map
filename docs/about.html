@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="google-site-verification" content="m7TnCK7r49LynKemf0lmuJkzY4MoTTHDFgL3fW2bPlc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>このサイトについて — SNS反応まっぷ</title>
+  <meta name="description" content="SNS反応まっぷの運営者情報。サイトの目的、データの収集・分類方法、編集方針について説明します。">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d7dce5;
+      --accent: #1769d1;
+      --accent-soft: #e7f1ff;
+      --shadow: 0 12px 30px rgba(16, 24, 40, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.7;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 28px min(5vw, 56px) 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 3.2vw, 36px);
+    }
+    .lead { color: var(--muted); margin: 0; }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px min(5vw, 56px) 48px;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 32px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent-soft);
+    }
+    h3 {
+      font-size: 16px;
+      margin: 22px 0 8px;
+      color: var(--accent);
+    }
+    p, ul, ol { margin: 0 0 14px; color: var(--muted); }
+    ul, ol { padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .back::before { content: "←"; }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 720px) {
+      header, main { padding-inline: 16px; }
+    }
+  </style>
+<!-- ADSENSE_TAG_START -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
+<!-- ADSENSE_TAG_END -->
+<!-- GA_TAG_START -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K10S4YCZFH');
+  </script>
+<!-- GA_TAG_END -->
+</head>
+<body>
+  <header>
+    <h1>このサイトについて</h1>
+    <p class="lead">SNS反応まっぷの目的・データの扱い方・編集方針について</p>
+  </header>
+  <main>
+    <a class="back" href="index.html">トップに戻る</a>
+
+    <h2>1. SNS反応まっぷとは</h2>
+    <p><strong>SNS反応まっぷ</strong>（Issue Stance Lab）は、社会で意見が割れているテーマについて、SNS上の反応を収集・分類し、「どんな立場の人が、何を理由に、どう考えているのか」をひと目で見渡せるように可視化する個人運営のプロジェクトです。</p>
+    <p>ニュースのコメント欄やSNSでは、声の大きい意見だけが目立ち、議論の全体像が見えにくくなりがちです。本サイトは、賛成・反対という単純な二分ではなく、論点ごとの立場の分布をスタンスマップや対立軸カードとして整理することで、「自分と違う立場の人が何を心配しているのか」を落ち着いて眺められる場所を目指しています。</p>
+
+    <h2>2. データの収集と分類の方法</h2>
+    <ol>
+      <li><strong>収集</strong>: Yahoo!リアルタイム検索を利用して、テーマごとに複数の検索クエリでX（旧Twitter）の公開投稿を収集します。</li>
+      <li><strong>分類</strong>: 収集した投稿を、ローカル環境で動作するAI（大規模言語モデル）を用いて論点カテゴリと立場（スタンス）に自動分類します。</li>
+      <li><strong>可視化</strong>: 分類結果を2次元のスタンスマップ、対立軸カード、代表的な声などの形で表示します。あわせて、争点を理解しやすくするための解説やオリジナル漫画を掲載しています。</li>
+    </ol>
+    <h3>データの限界について</h3>
+    <ul>
+      <li>表示している内容は<strong>世論調査ではありません</strong>。収集できたSNS投稿サンプル内の傾向であり、社会全体の意見分布を表すものではありません。</li>
+      <li>AIによる自動分類のため、分類結果には誤りや偏りが含まれる可能性があります。</li>
+      <li>各投稿の著作権は投稿者に帰属します。本サイトでは引用の範囲で要旨を紹介し、元投稿へのリンクを併記しています。</li>
+    </ul>
+
+    <h2>3. 編集方針</h2>
+    <ul>
+      <li><strong>中立性</strong>: 特定の政治的立場を支持・批判することを目的としません。対立するすべての立場の意見を、件数とともに提示します。</li>
+      <li><strong>透明性</strong>: データの収集元・件数・分類方法を各ページに明記します。</li>
+      <li><strong>安全性</strong>: 誹謗中傷や事実誤認を含む投稿は「注意領域」として区別し、そのまま拡散しない形で扱います。</li>
+    </ul>
+
+    <h2>4. 運営者</h2>
+    <p>本サイトは個人が運営しています。テーマの選定、データ収集・分類パイプラインの開発、ページ制作までを一貫して行っています。</p>
+    <ul>
+      <li>サイト名: SNS反応まっぷ（Issue Stance Lab）</li>
+      <li>応援ページ: <a href="https://www.buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a></li>
+    </ul>
+    <p>内容の誤りのご指摘、掲載に関するご要望（引用の削除依頼など）、その他のお問い合わせは、上記ページよりお寄せください。</p>
+
+    <p style="margin-top: 28px; font-size: 13px; color: var(--muted);">最終更新日: 2026年7月7日</p>
+
+    <footer class="footer">
+      <p>© 2026 SNS反応まっぷ — <a href="index.html">トップ</a> · <a href="privacy.html">プライバシーポリシー</a> · <a href="disclaimer.html">免責事項</a></p>
+    </footer>
+  </main>
+</body>
+</html>
