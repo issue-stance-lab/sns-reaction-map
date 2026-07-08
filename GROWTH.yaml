@@ -71,6 +71,34 @@ capabilities:
     judge_at: 2026-07-19
     notes: school-nickname-ban の投稿文案を初回生成済み（下記参照）
 
+  design-tokens-unify:
+    title: 全テーマの配色・フォント・余白のトークン統一
+    hypothesis: ページごとにトーンがバラつくと「作りかけ感」が出て再訪意欲を下げる。共通CSSトークン化で一貫した世界観にする
+    scope: 全テーマ+ポータル。色・フォント・余白を共通CSS変数に集約（TASK_BOARD課題18の残作業と連動）
+    status: built
+    priority: 5
+    metric: 直帰率、pages_per_session（間接指標。主目的はサイト魅力）
+    built_at: 2026-07-08
+    notes: サイト魅力枠。docs/site-tokens.css を新規作成し全12ページへ link 追加。--ink/--muted/--line/--panel/--shadow/--font/--radius を共通化。テーマ固有の --bg/--accent/--grad-* は各ページに残存。コンソールエラーなし・375px横スクロールなし・保護タグ全確認済み
+
+  vote-ux-mobile:
+    title: モバイル投票UXの摩擦低減
+    hypothesis: 投票ボタンまでのスクロール距離・タップ精度がモバイルでの投票率を下げている。導線短縮で votes_week が増える
+    scope: 全テーマ共通。投票セクションへの追従ボタンまたはファーストビュー内投票導線
+    status: idea
+    priority: 6
+    metric: votes_week / weekly_users（投票転換率）
+    notes: サイト魅力枠。375px実機確認必須
+
+  portal-first-view:
+    title: ポータルのファーストビュー改善
+    hypothesis: 初見3秒で「何のサイトか・何ができるか」が伝わっていない。ヒーロー文言+人気テーマ即表示で直帰が減る
+    scope: index.html のファーストビュー（キャッチコピー・注目枠の視認性）
+    status: idea
+    priority: 7
+    metric: ポータル直帰率、テーマページ遷移率
+    notes: サイト魅力枠。portal-featured-slot の判定結果（7/19）を見てから着手
+
 experiments:
   # 例:
   # exp-001:
