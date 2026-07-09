@@ -558,7 +558,7 @@
     .thirty-summary li { list-style:none; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:12px 14px; color:#fff; font-weight:800; line-height:1.55; backdrop-filter:blur(4px); }
     .thirty-summary ul { display:contents; margin:0; padding:0; }
     .question-line { color:#fff; font-size:clamp(18px,2.5vw,24px); font-weight:900; margin:10px 0 0; max-width:900px; }
-    .vote-card-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:8px; max-width:560px; }
+    .vote-card-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:8px; }
     .vote-image-card { position:relative; aspect-ratio:1; border-radius:16px; cursor:pointer; transition:all .2s; overflow:hidden; padding:0; }
     .vote-card-label { position:absolute; bottom:0; left:0; right:0; padding:12px 8px; background:linear-gradient(transparent,rgba(0,0,0,.7)); color:#fff; font-size:18px; font-weight:800; line-height:1.2; text-align:center; text-shadow:0 1px 4px rgba(0,0,0,.6); }
     .vote-comparison { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0 16px; }
@@ -605,6 +605,7 @@
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
       .thirty-summary, .vote-comparison, .manga-grid, .related-grid { grid-template-columns:1fr; }
+      .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 <!-- GA_TAG_START -->

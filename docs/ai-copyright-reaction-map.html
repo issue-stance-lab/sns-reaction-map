@@ -853,15 +853,16 @@
   }
 
   var voteImages=["images/ai-copyright-vote-1-regulate.webp","images/ai-copyright-vote-2-innovate.webp","images/ai-copyright-vote-3-coexist.webp","images/ai-copyright-vote-4-unsure.webp"];
+  var shortLabels=["規制強化","規制最小","条件共存","判断保留"];
   var btnWrap=document.getElementById("vote-buttons");
   btnWrap.className="vote-card-grid";
   axes.forEach(function(a,i){
     var btn=document.createElement("button");
     btn.className="vote-image-card";
     btn.type="button";
-    btn.style.backgroundImage="url('"+voteImages[i]+"')";
+    btn.style.cssText="border:2px solid "+a.color+";background:url('"+voteImages[i]+"') center/cover no-repeat;";
     btn.setAttribute("aria-label",a.label);
-    btn.innerHTML='<span class="vote-card-label">'+a.label+'</span>';
+    btn.innerHTML='<span class="vote-card-label">'+shortLabels[i]+'<br><small style="font-weight:700;">'+a.label+'</small></span>';
     btn.onclick=function(){castVote(i)};
     btnWrap.appendChild(btn);
   });
