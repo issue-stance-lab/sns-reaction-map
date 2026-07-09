@@ -195,3 +195,7 @@ activity_log:
     type: x_profile_review
     detail: x-profile recurring の初回レビュー実施。bio・固定ポストのたたき台を提案（人間の現状確認待ち）
     related_capability: null
+  - date: 2026-07-09
+    type: ops
+    detail: scripts/fetch_growth_kpi.py が依存する scripts/fetch_supabase_votes.py が main に未マージでKPI自動取得が壊れていたため復旧（task/growth-fix-kpi-script）。実行確認済み（weekly_users 10 / pageviews 295 / votes_total 9 / gsc_impressions 6）。週次更新日ではないため snapshots への追記は次回月曜
+    related_capability: null
