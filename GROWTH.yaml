@@ -99,14 +99,32 @@ capabilities:
     judge_at: 2026-07-23
     notes: サイト魅力枠。docs/site-tokens.css を新規作成し全12ページへ link 追加。--ink/--muted/--line/--panel/--shadow/--font/--radius を共通化。テーマ固有の --bg/--accent/--grad-* は各ページに残存。コンソールエラーなし・375px横スクロールなし・保護タグ全確認済み。PR #11 を2026-07-09にmainへマージし計測開始
 
+  vote-2d-canvas:
+    title: 2Dキャンバス投票UI（vote2d.js）
+    hypothesis: 4択ボタンより「2Dマップで自分の立場を置く」体験の方が投票ハードルが下がり、完了後のシェア率も上がる
+    scope: 全テーマ共通。#vote-buttons コンテナにキャンバスを注入し、クリック/タップでXY軸上のピンを配置→確定→結果表示→スタンスマップに「あなたの位置」を反映
+    status: built
+    priority: 6
+    metric: votes_week / weekly_users（投票転換率）、シェアボタンクリック率
+    built_at: 2026-07-10
+    judge_at: 2026-07-24
+    notes: |
+      vote2d.js を docs/ に配置し全8テーマページに組み込み完了。
+      ・キャンバスサイズ: デスクトップ 幅フル×270px / モバイル(<500px) ×210px
+      ・投票データは localStorage（sns_vote2d_v1_<topic>_my）に保存
+      ・再訪時: DOMContentLoaded で setStanceMapVoteMarker を呼びスタンスマップに「あなた」マーカーを復元
+      ・スタンスマップのマーカー位置は正確な (sx,sy) 座標で描画（旧: 象限中心の固定点）
+      ・Supabase 集計対応済み（supabaseUrl 空の場合は localStorage 集計にフォールバック）
+      ・実装ブランチ: task/growth-2d-vote-canvas
+
   vote-ux-mobile:
     title: モバイル投票UXの摩擦低減
     hypothesis: 投票ボタンまでのスクロール距離・タップ精度がモバイルでの投票率を下げている。導線短縮で votes_week が増える
     scope: 全テーマ共通。投票セクションへの追従ボタンまたはファーストビュー内投票導線
     status: idea
-    priority: 6
+    priority: 7
     metric: votes_week / weekly_users（投票転換率）
-    notes: サイト魅力枠。375px実機確認必須
+    notes: vote-2d-canvas の効果を見てから判断（2Dキャンバス自体が mobile UX を改善する可能性あり）。375px実機確認必須
 
   portal-first-view:
     title: ポータルのファーストビュー改善
@@ -163,11 +181,11 @@ recurring:
     phase_rule: initial_traction では毎ループ必ず実行する（judge_at 判定より先に確認）
     minimum_action:
       daily: URLなしリプライ 1-3件（同一アカウントへの連日リプライは避ける）
-      weekly: URL付き投稿または引用RT 3件まで、プロフィール・固定ポスト・投稿文言の見直し
+      weekly: URL付き投稿または引用RT 1-2件（フォロワー100未満フェーズ。スパム判定回避のため抑制）、プロフィール・固定ポスト・投稿文言の見直し
     last_run: 2026-07-09
     procedure: 毎日「Xのリプライ検索」で高閲覧数（目安1万views以上）の関連ポストを探しリプライ先を提案。週次で引用RT候補・投稿文案を補充
     needs_human: 実際の投稿操作（1日1-3件）
-    notes: 旧TASK_BOARD課題6（フォロワー0→100）をここに移管。2026-07-07に docs/x-posts.md へ週次投稿3本、URLなし返信5本、URL付き返信3本の候補を追加。同日に引用RT3本実施（憲法改正/@tamakiyuichiro・高齢者免許/@taketake1w・高市早苗/@shukan_bunshun）。今週のURL付き引用RT上限到達。2026-07-08にURLなしリプライ3本実施（辺野古/@Sankei_news・高齢者免許/@nikkei・高市/@AtsushiKomori）。2026-07-09は自転車青切符・部活動地域移行・憲法改正の3テーマでURLなし返信候補文案を docs/x-posts.md に追加（ハブは実投稿不可のため人間が対象ポストを選んで使用）
+    notes: 旧TASK_BOARD課題6（フォロワー0→100）をここに移管。2026-07-07に docs/x-posts.md へ週次投稿3本、URLなし返信5本、URL付き返信3本の候補を追加。同日に引用RT3本実施（憲法改正/@tamakiyuichiro・高齢者免許/@taketake1w・高市早苗/@shukan_bunshun）。今週のURL付き引用RT上限到達。2026-07-08にURLなしリプライ3本実施（辺野古/@Sankei_news・高齢者免許/@nikkei・高市/@AtsushiKomori）。2026-07-09はURLなしリプライ3本実施（辺野古遺族/@narumita・憲法改正/@hashimoto_lo・生成AI著作権/@Henry66239746）。来週引用RT仕込み: @nhk_news（辺野古）・@izmkenta（辺野古文科委）・@yamazoejimusyo（憲法改正）
 
 featured: school-nickname-ban   # portal-featured-slot 実装後に有効化
 

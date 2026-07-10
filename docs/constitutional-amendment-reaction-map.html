@@ -880,207 +880,22 @@
   });
 })();
 </script>
+<script src="vote2d.js"></script>
 <script>
 (function(){
-  var TOPIC="憲法改正論議_SNS反応まっぷ";
-  var axes=[{"kicker": "改憲推進", "label": "改正を進めるべきだと思う", "origLabel": "憲法を現実に合わせる", "tone": "positive", "color": "#4a90d9"}, {"kicker": "改憲慎重・反対", "label": "改正には慎重・反対", "origLabel": "平和主義と権力制限を守る", "tone": "negative", "color": "#e07040"}, {"kicker": "手続き重視", "label": "まず手続きの公正さが大事", "origLabel": "国民投票の公平性を問う", "tone": "derived", "color": "#0f7490"}, {"kicker": "ノイズ・注意領域", "label": "よくわからない・関心が薄い", "origLabel": "未確認・過激化した反応", "tone": "warning", "color": "#7a4cc2"}];
-  var voteImages=[
-    "images/constitutional-amendment-vote-1-amend.webp",
-    "images/constitutional-amendment-vote-2-protect.webp",
-    "images/constitutional-amendment-vote-3-process.webp",
-    "images/constitutional-amendment-vote-4-unsure.webp"
-  ];
-  var shortLabels=["改正推進","慎重・反対","手続き重視","判断保留"];
-  var TITLE="憲法改正論議 SNS反応まっぷ";
-  var KEY="sns_vote_"+TOPIC;
-
   var supabaseUrl="";
   var supabaseAnonKey="";
-  var supabaseClient=null;
-
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
-    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-    // Supabase mode: hide the redo button to prevent abuse and desync
-    var redoBtn=document.getElementById("vote-redo-btn");
-    if(redoBtn) redoBtn.style.display="none";
-  }
-
-  var stored={};
-  var myVote=localStorage.getItem(KEY+"_my");
-
-  // Blur the stance map until voted (deferred to ensure DOM is ready)
-  function applyBlur(){
-    var inner=document.getElementById("stance-map-inner");
-    var section=document.getElementById("stance-map-section");
-    if(inner && myVote===null){
-      inner.style.filter="blur(8px)";inner.style.pointerEvents="none";inner.style.userSelect="none";
-      if(section){
-        section.style.position="relative";
-        var overlay=document.createElement("div");
-        overlay.id="chart-overlay";
-        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
-        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
-        section.appendChild(overlay);
-      }
-    }
-  }
-  
-  async function fetchVotes(){
-    if(supabaseClient){
-      try{
-        var res=await supabaseClient
-          .from("votes")
-          .select("choice_idx")
-          .eq("topic_id", TOPIC);
-        if(res.error) throw res.error;
-        stored={};
-        (res.data||[]).forEach(function(row){
-          var idx=row.choice_idx;
-          stored[idx]=(stored[idx]||0)+1;
-        });
-      }catch(err){
-        console.error("Error fetching votes from Supabase:", err);
-        stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
-      }
-    }else{
-      stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
-    }
-    if(myVote!==null){
-      showResults(parseInt(myVote));
-    }
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
-  }else{
-    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
-  }
-
-  var btnWrap=document.getElementById("vote-buttons");
-  btnWrap.className="vote-card-grid";
-  axes.forEach(function(a,i){
-    var btn=document.createElement("button");
-    btn.className="vote-image-card";
-    btn.type="button";
-    btn.style.backgroundImage="url('"+voteImages[i]+"')";
-    btn.setAttribute("aria-label",a.label);
-    btn.innerHTML='<span class="vote-card-label">'+shortLabels[i]+'</span>';
-    btn.onclick=function(){castVote(i)};
-    btnWrap.appendChild(btn);
+  Vote2D.init({
+    containerId: 'vote-buttons',
+    resultId: 'vote-result',
+    topic: '憲法改正論議_SNS反応まっぷ',
+    title: '憲法改正論議 SNS反応まっぷ',
+    xAxis: { neg: '護憲・改憲に反対', pos: '改憲に賛成' },
+    yAxis: { neg: '平和主義・9条護持を最優先', pos: '安全保障強化・現実的防衛を優先' },
+    quadrants: [{"label": "護憲のまま安全保障を強化", "desc": "憲法を変えずとも、解釈や政策で現実の安全保障ニーズに対応できる。"}, {"label": "改憲で安全保障を強化", "desc": "自衛隊明記・緊急事態条項など、改憲により現実の防衛力を高めるべき。"}, {"label": "9条を守り平和を貫く", "desc": "戦争放棄を定めた9条は日本の誇り。護憲こそが平和を守る唯一の道。"}, {"label": "改憲しても平和は守れる", "desc": "憲法を改正しても平和主義の理念は維持でき、より現実的な平和が実現する。"}],
+    supabaseUrl: supabaseUrl,
+    supabaseAnonKey: supabaseAnonKey
   });
-
-  document.getElementById("vote-redo-btn").onclick=function(){
-    localStorage.removeItem(KEY+"_my");
-    location.reload();
-  };
-
-  function revealChart(){
-    var inner=document.getElementById("stance-map-inner");
-    if(inner){
-      inner.style.transition="filter .6s ease";
-      inner.style.filter="none";inner.style.pointerEvents="auto";inner.style.userSelect="auto";
-      var ov=document.getElementById("chart-overlay");
-      if(ov)ov.remove();
-    }
-  }
-
-  async function castVote(idx){
-    if(myVote!==null) return;
-    
-    var btns=btnWrap.querySelectorAll("button");
-    btns.forEach(function(b){b.disabled=true; b.style.opacity="0.5"});
-
-    if(supabaseClient){
-      var success=false;
-      try{
-        var res=await supabaseClient
-          .from("votes")
-          .insert([{ topic_id: TOPIC, choice_idx: idx }]);
-        if(res.error) throw res.error;
-        success=true;
-      }catch(err){
-        console.error("Error casting vote to Supabase:", err);
-        var msg=err.message||"";
-        var details=err.details||"";
-        if(err.code==="23505" || msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
-          alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
-          success=true;
-        }else{
-          alert("投票データの送信中にエラーが発生しました。");
-          // Local fallback in case of connection failure
-          stored[idx]=(stored[idx]||0)+1;
-          localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-        }
-      }
-      if(success){
-        await fetchVotes();
-      }
-    }else{
-      // Pure local fallback
-      stored[idx]=(stored[idx]||0)+1;
-      localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-    }
-
-    localStorage.setItem(KEY+"_my",""+idx);
-    myVote=""+idx;
-    revealChart();
-    showResults(idx);
-  }
-
-  function showResults(myIdx){
-    var total=0;
-    axes.forEach(function(_,i){total+=(stored[i]||0)});
-    if(total===0)total=1;
-
-    var myAxis=axes[myIdx];
-    var posLabel=document.getElementById("vote-position-label");
-    var posText=document.getElementById("vote-position-text");
-    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
-    posLabel.style.color=myAxis.color;
-    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
-
-    var comparisonEl=document.getElementById("vote-comparison");
-    if(comparisonEl){
-      var snsTopIdx=0;
-      axes.forEach(function(_,i){ if((stored[i]||0)>(stored[snsTopIdx]||0)) snsTopIdx=i; });
-      comparisonEl.innerHTML='<div class="vote-compare-card"><strong>あなたの選択</strong><span>'+myAxis.label+'</span></div>'
-        +'<div class="vote-compare-card"><strong>SNS分布で多い選択</strong><span>'+axes[snsTopIdx].label+'（'+(stored[snsTopIdx]||0)+'票）</span></div>';
-    }
-    if(window.setStanceMapVoteMarker) window.setStanceMapVoteMarker(myIdx);
-
-    var barsEl=document.getElementById("vote-bars");
-    barsEl.innerHTML="";
-    axes.forEach(function(a,i){
-      var c=stored[i]||0;
-      var pct=Math.round(c/total*100);
-      var isMine=i===myIdx;
-      var row=document.createElement("div");
-      row.style.cssText="margin-bottom:8px;";
-      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
-        +(isMine?'✓ ':'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
-        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
-      barsEl.appendChild(row);
-    });
-
-    // Improved X share text with dynamic percentages
-    var shareBtn=document.getElementById("share-x");
-    var pctList=axes.map(function(a,i){
-      var c=stored[i]||0;
-      var pct=Math.round(c/total*100);
-      return a.label+" "+pct+"%";
-    }).join(" / ");
-    
-    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
-    var shareUrl=location.href.split("#")[0].split("?")[0]+"?utm_source=share_button&utm_medium=social&utm_campaign=vote_share";
-    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(shareUrl);
-    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
-    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
-
-    document.getElementById("vote-result").style.display="block";
-  }
 })();
 </script>
     <section class="panel" id="stance-map-section">
@@ -1554,12 +1369,13 @@ const SM_TOUR = [
   let spotlightTarget = null;
   let animating = false, animFrame = 0;
   let myVoteMarker = null;
+let myVoteSX = null, myVoteSY = null;
   const voteMarkers = [
-    {x:1.45,y:1.45,label:'あなたはこのあたり',color:'#4a90d9'},
-    {x:-1.45,y:-1.35,label:'あなたはこのあたり',color:'#e07040'},
-    {x:0.0,y:0.65,label:'あなたはこのあたり',color:'#0f7490'},
-    {x:0.0,y:0.0,label:'あなたはこのあたり',color:'#7a4cc2'}
-  ];
+  { x: -1.45, y: 1.45, label: 'あなた: 護憲のまま安全保障を強化', color: '#dc2626' },
+  { x: 1.45, y: 1.45, label: 'あなた: 改憲で安全保障を強化', color: '#2563eb' },
+  { x: -1.45, y: -1.45, label: 'あなた: 9条を守り平和を貫く', color: '#059669' },
+  { x: 1.45, y: -1.45, label: 'あなた: 改憲しても平和は守れる', color: '#d97706' }
+];
 
   const canvasMain = document.getElementById('smCanvasMain');
   const ctx = canvasMain.getContext('2d');
@@ -1732,7 +1548,9 @@ const SM_TOUR = [
   function drawVoteMarker() {
     if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
     const marker = voteMarkers[myVoteMarker];
-    const [x, y] = toCanvas(marker.x, marker.y);
+    const px = (myVoteSX !== null) ? myVoteSX : marker.x;
+  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
+  const [x, y] = toCanvas(px, py);
     ctx.save();
     ctx.beginPath();
     ctx.arc(x, y, 16, 0, Math.PI * 2);
@@ -1751,8 +1569,10 @@ const SM_TOUR = [
     ctx.restore();
   }
 
-  window.setStanceMapVoteMarker = function(idx) {
+  window.setStanceMapVoteMarker = function(idx, sx, sy) {
     myVoteMarker = idx;
+  if (sx !== undefined) myVoteSX = sx;
+  if (sy !== undefined) myVoteSY = sy;
     const note = document.getElementById('your-marker-note');
     if (note) note.style.display = 'block';
     redraw();

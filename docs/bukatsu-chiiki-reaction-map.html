@@ -710,224 +710,22 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
+<script src="vote2d.js"></script>
 <script>
 (function(){
-  var TOPIC="部活動の地域移行の是非_SNS反応まっぷ";
-  var axes=[
-    {"kicker":"賛成","label":"地域移行に賛成","origLabel":"教員の働き方改革と持続可能な部活動","tone":"positive","color":"#1769d1"},
-    {"kicker":"反対","label":"地域移行に反対","origLabel":"費用増と学校文化喪失への懸念","tone":"negative","color":"#b54708"},
-    {"kicker":"条件付き","label":"条件付きで賛成","origLabel":"支援と制度設計があれば移行を容認","tone":"neutral","color":"#667085"},
-    {"kicker":"保留","label":"まだ判断できない","origLabel":"地域・家庭・学校条件で判断が分かれる","tone":"derived","color":"#0f7490"}
-  ];
-  var TITLE="部活動の地域移行の是非 SNS反応まっぷ";
-  var KEY="sns_vote_"+TOPIC;
-
   var supabaseUrl="";
   var supabaseAnonKey="";
-  var supabaseClient=null;
-
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
-    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-    // Supabase mode: hide the redo button to prevent abuse and desync
-    var redoBtn=document.getElementById("vote-redo-btn");
-    if(redoBtn) redoBtn.style.display="none";
-  }
-
-  var stored={};
-  var myVote=localStorage.getItem(KEY+"_my");
-
-  // Blur the stance map until voted (deferred to ensure DOM is ready)
-  function applyBlur(){
-    var smSection=document.getElementById("stance-map-section");
-    if(smSection && myVote===null){
-      var inner=document.getElementById("stance-map-inner");
-      if(inner){
-        inner.style.filter="blur(8px)";inner.style.pointerEvents="none";inner.style.userSelect="none";
-      }
-      smSection.style.position="relative";
-      var overlay=document.createElement("div");
-      overlay.id="chart-overlay";
-      overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
-      overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
-      smSection.appendChild(overlay);
-    }
-  }
-  
-  async function fetchVotes(){
-    if(supabaseClient){
-      try{
-        var res=await supabaseClient
-          .from("votes")
-          .select("choice_idx")
-          .eq("topic_id", TOPIC);
-        if(res.error) throw res.error;
-        stored={};
-        (res.data||[]).forEach(function(row){
-          var idx=row.choice_idx;
-          stored[idx]=(stored[idx]||0)+1;
-        });
-      }catch(err){
-        console.error("Error fetching votes from Supabase:", err);
-        stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
-      }
-    }else{
-      stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
-    }
-    if(myVote!==null){
-      showResults(parseInt(myVote));
-    }
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
-  }else{
-    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
-  }
-
-  var voteImages=["images/bukatsu-chiiki-vote-1-support.webp","images/bukatsu-chiiki-vote-2-oppose.webp","images/bukatsu-chiiki-vote-3-conditional.webp","images/bukatsu-chiiki-vote-4-unsure.webp"];
-  var shortLabels=["賛成","反対","条件付き","判断保留"];
-  var btnWrap=document.getElementById("vote-buttons");
-  axes.forEach(function(a,i){
-    var btn=document.createElement("button");
-    btn.className="vote-image-card";
-    btn.style.cssText="border:2px solid "+a.color+";background:url('"+voteImages[i]+"') center/cover no-repeat;";
-    btn.innerHTML='<span class="vote-card-label">'+shortLabels[i]+'<br><small style="font-weight:700;">'+a.label+'</small></span>';
-    btn.onmouseenter=function(){btn.style.transform="translateY(-3px)";btn.style.boxShadow="0 6px 20px "+a.color+"44"};
-    btn.onmouseleave=function(){btn.style.transform="none";btn.style.boxShadow="none"};
-    btn.onclick=function(){castVote(i)};
-    btnWrap.appendChild(btn);
+  Vote2D.init({
+    containerId: 'vote-buttons',
+    resultId: 'vote-result',
+    topic: '部活動地域移行_SNS反応まっぷ',
+    title: '部活動の地域移行 SNS反応まっぷ',
+    xAxis: { neg: '地域移行に反対', pos: '地域移行に賛成' },
+    yAxis: { neg: '教員の負担軽減を最優先', pos: '競技力・教育的価値を最優先' },
+    quadrants: [{"label": "競技力は現状維持で守る", "desc": "地域移行ではなく現行の部活形態を改善しながら競技力・教育価値を守るべき。"}, {"label": "地域移行で競技力も維持", "desc": "地域クラブへの移行でも競技水準・教育的価値は維持・向上できる。"}, {"label": "教員負担は現行改善で解決", "desc": "移行より現行の枠組みを改善し、教員の働き方を守るべき。"}, {"label": "地域移行で教員の働き方改善", "desc": "地域移行により教員の長時間労働が解消し、持続可能な体制になる。"}],
+    supabaseUrl: supabaseUrl,
+    supabaseAnonKey: supabaseAnonKey
   });
-
-  document.getElementById("vote-redo-btn").onclick=function(){
-    localStorage.removeItem(KEY+"_my");
-    location.reload();
-  };
-
-  function revealChart(){
-    var inner=document.getElementById("stance-map-inner");
-    if(inner){
-      inner.style.transition="filter .6s ease";
-      inner.style.filter="none";inner.style.pointerEvents="auto";inner.style.userSelect="auto";
-    }
-    var ov=document.getElementById("chart-overlay");
-    if(ov)ov.remove();
-  }
-
-  async function castVote(idx){
-    if(myVote!==null) return;
-    
-    var btns=btnWrap.querySelectorAll("button");
-    btns.forEach(function(b){b.disabled=true; b.style.opacity="0.5"});
-
-    if(supabaseClient){
-      var success=false;
-      try{
-        var res=await supabaseClient
-          .from("votes")
-          .insert([{ topic_id: TOPIC, choice_idx: idx }]);
-        if(res.error) throw res.error;
-        success=true;
-      }catch(err){
-        console.error("Error casting vote to Supabase:", err);
-        var msg=err.message||"";
-        var details=err.details||"";
-        if(err.code==="23505" || msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
-          alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
-          success=true;
-        }else{
-          alert("投票データの送信中にエラーが発生しました。");
-          // Local fallback in case of connection failure
-          stored[idx]=(stored[idx]||0)+1;
-          localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-        }
-      }
-      if(success){
-        await fetchVotes();
-      }
-    }else{
-      // Pure local fallback
-      stored[idx]=(stored[idx]||0)+1;
-      localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-    }
-
-    localStorage.setItem(KEY+"_my",""+idx);
-    myVote=""+idx;
-    revealChart();
-    showResults(idx);
-  }
-
-  function showResults(myIdx){
-    var total=0;
-    axes.forEach(function(_,i){total+=(stored[i]||0)});
-    if(total===0)total=1;
-
-    var myAxis=axes[myIdx];
-    var posLabel=document.getElementById("vote-position-label");
-    var posText=document.getElementById("vote-position-text");
-    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
-    posLabel.style.color=myAxis.color;
-    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
-
-    var comparisonEl=document.getElementById("vote-comparison");
-    if(comparisonEl){
-      var snsTopIdx=0;
-      axes.forEach(function(_,i){ if((stored[i]||0)>(stored[snsTopIdx]||0)) snsTopIdx=i; });
-      comparisonEl.innerHTML='<div class="vote-compare-card"><strong>あなたの選択</strong><span>'+myAxis.label+'</span></div>'
-        +'<div class="vote-compare-card"><strong>SNS分布で多い選択</strong><span>'+axes[snsTopIdx].label+'（'+(stored[snsTopIdx]||0)+'票）</span></div>';
-    }
-    if(window.setStanceMapVoteMarker) window.setStanceMapVoteMarker(myIdx);
-
-    var barsEl=document.getElementById("vote-bars");
-    barsEl.innerHTML="";
-    axes.forEach(function(a,i){
-      var c=stored[i]||0;
-      var pct=Math.round(c/total*100);
-      var isMine=i===myIdx;
-      var row=document.createElement("div");
-      row.style.cssText="margin-bottom:8px;";
-      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
-        +(isMine?'✓ ':'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
-        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
-      barsEl.appendChild(row);
-    });
-
-    // Improved X share text with dynamic percentages
-    var shareBtn=document.getElementById("share-x");
-    var pctList=axes.map(function(a,i){
-      var c=stored[i]||0;
-      var pct=Math.round(c/total*100);
-      return a.label+" "+pct+"%";
-    }).join(" / ");
-    
-    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
-    var shareUrl=location.href.split("#")[0].split("?")[0]+"?utm_source=share_button&utm_medium=social&utm_campaign=vote_share";
-    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(shareUrl);
-    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
-    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
-
-    document.getElementById("vote-result").style.display="block";
-  }
-})();
-
-(function(){
-  var mangaImages=["images/bukatsu-chiiki-manga-page-1.webp","images/bukatsu-chiiki-manga-page-2.webp","images/bukatsu-chiiki-manga-page-3.webp"];
-  var modal=document.getElementById("manga-modal");
-  var modalImg=document.getElementById("manga-modal-image");
-  var cur=0;
-  function openModal(i){cur=i;modalImg.src=mangaImages[cur];modal.classList.add("active");modal.setAttribute("aria-hidden","false");}
-  function closeModal(){modal.classList.remove("active");modal.setAttribute("aria-hidden","true");}
-  function move(d){cur=(cur+d+mangaImages.length)%mangaImages.length;modalImg.src=mangaImages[cur];}
-  document.querySelectorAll("[data-manga-index]").forEach(function(btn){
-    btn.addEventListener("click",function(){openModal(parseInt(btn.dataset.mangaIndex));});
-  });
-  modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});
-  modal.querySelector(".manga-close").addEventListener("click",closeModal);
-  modal.querySelector(".manga-prev").addEventListener("click",function(e){e.stopPropagation();move(-1);});
-  modal.querySelector(".manga-next").addEventListener("click",function(e){e.stopPropagation();move(1);});
-  document.addEventListener("keydown",function(e){if(!modal.classList.contains("active"))return;if(e.key==="Escape")closeModal();if(e.key==="ArrowLeft")move(-1);if(e.key==="ArrowRight")move(1);});
 })();
 </script>
     <section class="panel" id="stance-map-section">
@@ -1159,12 +957,13 @@ const SM_TOUR = [
   let spotlightTarget = null;
   let animating = false, animFrame = 0;
   let myVoteMarker = null;
+let myVoteSX = null, myVoteSY = null;
   const voteMarkers = [
-    {x:1.45,y:1.35,label:'あなたはこのあたり',color:'#1769d1'},
-    {x:-1.45,y:-1.25,label:'あなたはこのあたり',color:'#b54708'},
-    {x:0.75,y:0.45,label:'あなたはこのあたり',color:'#667085'},
-    {x:0.0,y:0.0,label:'あなたはこのあたり',color:'#0f7490'}
-  ];
+  { x: -1.45, y: 1.45, label: 'あなた: 競技力は現状維持で守る', color: '#dc2626' },
+  { x: 1.45, y: 1.45, label: 'あなた: 地域移行で競技力も維持', color: '#2563eb' },
+  { x: -1.45, y: -1.45, label: 'あなた: 教員負担は現行改善で解決', color: '#059669' },
+  { x: 1.45, y: -1.45, label: 'あなた: 地域移行で教員の働き方改善', color: '#d97706' }
+];
 
   const canvasMain = document.getElementById('smCanvasMain');
   const ctx = canvasMain.getContext('2d');
@@ -1337,7 +1136,9 @@ const SM_TOUR = [
   function drawVoteMarker() {
     if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
     const marker = voteMarkers[myVoteMarker];
-    const [x, y] = toCanvas(marker.x, marker.y);
+    const px = (myVoteSX !== null) ? myVoteSX : marker.x;
+  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
+  const [x, y] = toCanvas(px, py);
     ctx.save();
     ctx.beginPath();
     ctx.arc(x, y, 16, 0, Math.PI * 2);
@@ -1356,8 +1157,10 @@ const SM_TOUR = [
     ctx.restore();
   }
 
-  window.setStanceMapVoteMarker = function(idx) {
+  window.setStanceMapVoteMarker = function(idx, sx, sy) {
     myVoteMarker = idx;
+  if (sx !== undefined) myVoteSX = sx;
+  if (sy !== undefined) myVoteSY = sy;
     const note = document.getElementById('your-marker-note');
     if (note) note.style.display = 'block';
     redraw();
