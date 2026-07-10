@@ -700,202 +700,22 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
+<script src="vote2d.js"></script>
 <script>
 (function(){
-  var TOPIC="自転車の青切符（反則金）導入の是非_SN";
-  var axes=[{"kicker": "取締り強化", "label": "マナーの悪さや事故を防ぐために取締りは当然", "origLabel": "危険運転対策として取締りを支持", "tone": "positive", "color": "#4a90d9"}, {"kicker": "インフラ優先", "label": "安全な自転車レーンがないのに車道原則は危険だ", "origLabel": "専用道路の整備が先決であると主張", "tone": "derived", "color": "#0f7490"}, {"kicker": "免許制要求", "label": "青切符だけじゃ甘い、自転車も免許制にすべき", "origLabel": "ルール周知のために免許制の導入を要求", "tone": "positive", "color": "#4a90d9"}, {"kicker": "混乱懸念", "label": "ルール変更が複雑で、どう走ればいいか迷う", "origLabel": "ルールが曖昧・現場の混乱や取り締まりへの不審で反対", "tone": "warning", "color": "#7a4cc2"}];
-  var TITLE="自転車の青切符（反則金）導入の是非 SNS反応まっぷ";
-  var KEY="sns_vote_"+TOPIC;
-
   var supabaseUrl="";
   var supabaseAnonKey="";
-  var supabaseClient=null;
-
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){
-    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-    // Supabase mode: hide the redo button to prevent abuse and desync
-    var redoBtn=document.getElementById("vote-redo-btn");
-    if(redoBtn) redoBtn.style.display="none";
-  }
-
-  var stored={};
-  var myVote=localStorage.getItem(KEY+"_my");
-
-  // Blur the stance map until voted (deferred to ensure DOM is ready)
-  function applyBlur(){
-    var smSection=document.getElementById("stance-map-section");
-    if(smSection && myVote===null){
-      smSection.id="stance-map-section";
-      var inner=document.getElementById("stance-map-inner");
-      if(inner){
-        inner.style.filter="blur(8px)";inner.style.pointerEvents="none";inner.style.userSelect="none";
-      }
-      smSection.style.position="relative";
-      var overlay=document.createElement("div");
-      overlay.id="chart-overlay";
-      overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
-      overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
-      smSection.appendChild(overlay);
-    }
-  }
-  
-  async function fetchVotes(){
-    if(supabaseClient){
-      try{
-        var res=await supabaseClient
-          .from("votes")
-          .select("choice_idx")
-          .eq("topic_id", TOPIC);
-        if(res.error) throw res.error;
-        stored={};
-        (res.data||[]).forEach(function(row){
-          var idx=row.choice_idx;
-          stored[idx]=(stored[idx]||0)+1;
-        });
-      }catch(err){
-        console.error("Error fetching votes from Supabase:", err);
-        stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
-      }
-    }else{
-      stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{}");
-    }
-    if(myVote!==null){
-      showResults(parseInt(myVote));
-    }
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded", function(){ applyBlur(); fetchVotes(); });
-  }else{
-    setTimeout(function(){ applyBlur(); fetchVotes(); },0);
-  }
-
-  var voteImages=["images/bike-blue-ticket-vote-1-enforce.webp","images/bike-blue-ticket-vote-2-lane-first.webp","images/bike-blue-ticket-vote-3-license.webp","images/bike-blue-ticket-vote-4-confused.webp"];
-  var shortLabels=["取締り当然","レーンが先","免許制に","ルール迷子"];
-  var btnWrap=document.getElementById("vote-buttons");
-  axes.forEach(function(a,i){
-    var btn=document.createElement("button");
-    btn.className="vote-image-card";
-    btn.style.cssText="border:2px solid "+a.color+";background:url('"+voteImages[i]+"') center/cover no-repeat;";
-    btn.innerHTML='<span class="vote-card-label">'+shortLabels[i]+'</span>';
-    btn.onmouseenter=function(){btn.style.transform="translateY(-3px)";btn.style.boxShadow="0 6px 20px "+a.color+"44"};
-    btn.onmouseleave=function(){btn.style.transform="none";btn.style.boxShadow="none"};
-    btn.onclick=function(){castVote(i)};
-    btnWrap.appendChild(btn);
+  Vote2D.init({
+    containerId: 'vote-buttons',
+    resultId: 'vote-result',
+    topic: '自転車青切符_SNS反応まっぷ',
+    title: '自転車の青切符導入 SNS反応まっぷ',
+    xAxis: { neg: '取締り不要・過剰規制', pos: '取締り強化・即刻施行' },
+    yAxis: { neg: '自転車利用者の自由・負担軽減優先', pos: '歩行者・社会の安全を最優先' },
+    quadrants: [{"label": "インフラ整備で安全を守る", "desc": "取締りより先に安全な自転車レーン整備を。歩行者安全のために環境づくりが先決。"}, {"label": "安全のため取締り強化", "desc": "歩行者・社会を守るために青切符導入・取締り強化は当然の措置。"}, {"label": "利用者の自由と負担を守る", "desc": "車道原則や取締り強化は自転車利用者に不当な負担。利用者の自由を守るべき。"}, {"label": "ルール周知で利用者も守る", "desc": "取締りとルール周知により自転車利用者自身の安全も高まる。"}],
+    supabaseUrl: supabaseUrl,
+    supabaseAnonKey: supabaseAnonKey
   });
-
-  document.getElementById("vote-redo-btn").onclick=function(){
-    localStorage.removeItem(KEY+"_my");
-    location.reload();
-  };
-
-  function revealChart(){
-    var inner=document.getElementById("stance-map-inner");
-    if(inner){
-      inner.style.transition="filter .6s ease";
-      inner.style.filter="none";inner.style.pointerEvents="auto";inner.style.userSelect="auto";
-    }
-    var ov=document.getElementById("chart-overlay");
-    if(ov)ov.remove();
-  }
-
-  async function castVote(idx){
-    if(myVote!==null) return;
-    
-    var btns=btnWrap.querySelectorAll("button");
-    btns.forEach(function(b){b.disabled=true; b.style.opacity="0.5"});
-
-    if(supabaseClient){
-      var success=false;
-      try{
-        var res=await supabaseClient
-          .from("votes")
-          .insert([{ topic_id: TOPIC, choice_idx: idx }]);
-        if(res.error) throw res.error;
-        success=true;
-      }catch(err){
-        console.error("Error casting vote to Supabase:", err);
-        var msg=err.message||"";
-        var details=err.details||"";
-        if(err.code==="23505" || msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){
-          alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
-          success=true;
-        }else{
-          alert("投票データの送信中にエラーが発生しました。");
-          // Local fallback in case of connection failure
-          stored[idx]=(stored[idx]||0)+1;
-          localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-        }
-      }
-      if(success){
-        await fetchVotes();
-      }
-    }else{
-      // Pure local fallback
-      stored[idx]=(stored[idx]||0)+1;
-      localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-    }
-
-    localStorage.setItem(KEY+"_my",""+idx);
-    myVote=""+idx;
-    revealChart();
-    showResults(idx);
-  }
-
-  function showResults(myIdx){
-    var total=0;
-    axes.forEach(function(_,i){total+=(stored[i]||0)});
-    if(total===0)total=1;
-
-    var myAxis=axes[myIdx];
-    var posLabel=document.getElementById("vote-position-label");
-    var posText=document.getElementById("vote-position-text");
-    posLabel.textContent="あなたの選択: 「"+myAxis.label+"」";
-    posLabel.style.color=myAxis.color;
-    posText.textContent="下のSNS投稿の自動分類結果と見比べて、SNSの声とあなたの感覚がどれくらい近いか確認してみてください。";
-
-    var comparisonEl=document.getElementById("vote-comparison");
-    if(comparisonEl){
-      var snsTopIdx=0;
-      axes.forEach(function(_,i){ if((stored[i]||0)>(stored[snsTopIdx]||0)) snsTopIdx=i; });
-      comparisonEl.innerHTML='<div class="vote-compare-card"><strong>あなたの選択</strong><span>'+myAxis.label+'</span></div>'
-        +'<div class="vote-compare-card"><strong>SNS分布で多い選択</strong><span>'+axes[snsTopIdx].label+'（'+(stored[snsTopIdx]||0)+'票）</span></div>';
-    }
-    if(window.setStanceMapVoteMarker) window.setStanceMapVoteMarker(myIdx);
-
-    var barsEl=document.getElementById("vote-bars");
-    barsEl.innerHTML="";
-    axes.forEach(function(a,i){
-      var c=stored[i]||0;
-      var pct=Math.round(c/total*100);
-      var isMine=i===myIdx;
-      var row=document.createElement("div");
-      row.style.cssText="margin-bottom:8px;";
-      row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-        +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
-        +(isMine?'✓ ':'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
-        +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
-      barsEl.appendChild(row);
-    });
-
-    // Improved X share text with dynamic percentages
-    var shareBtn=document.getElementById("share-x");
-    var pctList=axes.map(function(a,i){
-      var c=stored[i]||0;
-      var pct=Math.round(c/total*100);
-      return a.label+" "+pct+"%";
-    }).join(" / ");
-    
-    var text="【"+TITLE+"】\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\nSNSの声の分布と自分の感覚、あなたも比べてみて。\n\n#SNS反応まっぷ";
-    var shareUrl=location.href.split("#")[0].split("?")[0]+"?utm_source=share_button&utm_medium=social&utm_campaign=vote_share";
-    shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(shareUrl);
-    var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
-    shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
-
-    document.getElementById("vote-result").style.display="block";
-  }
 })();
 </script>
     <section class="panel" id="stance-map-section">
@@ -1095,12 +915,13 @@ const SM_TOUR = [
   let spotlightTarget = null;
   let animating = false, animFrame = 0;
   let myVoteMarker = null;
+let myVoteSX = null, myVoteSY = null;
   const voteMarkers = [
-    {x:1.45,y:1.45,label:'あなたはこのあたり',color:'#1769d1'},
-    {x:-1.25,y:1.15,label:'あなたはこのあたり',color:'#0f7490'},
-    {x:1.75,y:1.65,label:'あなたはこのあたり',color:'#1769d1'},
-    {x:-0.85,y:-0.35,label:'あなたはこのあたり',color:'#7a4cc2'}
-  ];
+  { x: -1.45, y: 1.45, label: 'あなた: インフラ整備で安全を守る', color: '#dc2626' },
+  { x: 1.45, y: 1.45, label: 'あなた: 安全のため取締り強化', color: '#2563eb' },
+  { x: -1.45, y: -1.45, label: 'あなた: 利用者の自由と負担を守る', color: '#059669' },
+  { x: 1.45, y: -1.45, label: 'あなた: ルール周知で利用者も守る', color: '#d97706' }
+];
 
   const canvasMain = document.getElementById('smCanvasMain');
   const ctx = canvasMain.getContext('2d');
@@ -1273,7 +1094,9 @@ const SM_TOUR = [
   function drawVoteMarker() {
     if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
     const marker = voteMarkers[myVoteMarker];
-    const [x, y] = toCanvas(marker.x, marker.y);
+    const px = (myVoteSX !== null) ? myVoteSX : marker.x;
+  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
+  const [x, y] = toCanvas(px, py);
     ctx.save();
     ctx.beginPath();
     ctx.arc(x, y, 16, 0, Math.PI * 2);
@@ -1292,8 +1115,10 @@ const SM_TOUR = [
     ctx.restore();
   }
 
-  window.setStanceMapVoteMarker = function(idx) {
+  window.setStanceMapVoteMarker = function(idx, sx, sy) {
     myVoteMarker = idx;
+  if (sx !== undefined) myVoteSX = sx;
+  if (sy !== undefined) myVoteSY = sy;
     const note = document.getElementById('your-marker-note');
     if (note) note.style.display = 'block';
     redraw();

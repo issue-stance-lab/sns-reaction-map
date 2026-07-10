@@ -238,6 +238,16 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 備考: 全3本URLなし。今週URL付き引用RT上限（3本）は引き続き消化済み。来週分の引用RT候補: @nhk_ohayou（辺野古・文科省調査）、@nikkei（高齢者免許追跡）。
 
+## リプライ実績 2026-07-09
+
+| # | リプライ先 | テーマ | タイプ |
+|---|-----------|--------|--------|
+| 1 | @narumita（辺野古遺族メモ） | 辺野古高校生事故 | URLなし |
+| 2 | @hashimoto_lo（憲法論議序盤戦） | 憲法改正 | URLなし |
+| 3 | @Henry66239746（生成AI著作権） | 生成AI著作権 | URLなし |
+
+来週引用RT候補（仕込み済み）: @nhk_news（辺野古・極めて不適切）、@izmkenta（辺野古・文科委質問）、@yamazoejimusyo（憲法改正・優先課題でない）
+
 ---
 
 ## 運用メモ 2026-07-09
