@@ -857,7 +857,7 @@
   });
 })();
 </script>
-<script src="vote2d.js?v=8"></script>
+<script src="vote2d.js?v=9"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -874,6 +874,12 @@
       {text:'高齢ドライバーの免許返納を義務化すべき？',negLabel:'本人・家族判断で',posLabel:'法的に義務化'},
       {text:'どちらを優先したい？',subtext:'答えたら開票します',negLabel:'高齢者の移動の自由',posLabel:'交通安全・被害防止'}
     ],
+    commonGround: {
+      title: '意見の向こう側',
+      lead: '立場や方法は違っても、両者に共通する願いがあります。',
+      statement: '事故から命を守りながら、高齢者の暮らしと移動も支えられる社会',
+      question: '反対側の心配も、少し理解できましたか？'
+    },
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });
