@@ -301,6 +301,167 @@
     requestAnimationFrame(step);
   };
 
+  /* ---------- F: 投票後キャンバス表示（ウィザードモード用） ---------- */
+  Vote2D.prototype._revealVoteCanvas = function (voteData) {
+    var self = this;
+    var cfg  = this.cfg;
+    var wrap = d.getElementById(cfg.containerId || 'vote-buttons');
+    if (!wrap) return;
+
+    wrap.style.display = 'block';
+    var H = w.innerWidth < 500 ? 210 : 270;
+
+    wrap.innerHTML =
+      '<div style="text-align:center;font-size:11px;color:var(--muted,#6b7280);margin-bottom:3px;">↑ ' + cfg.yAxis.pos + '</div>' +
+      '<div style="display:flex;align-items:stretch;gap:4px;">' +
+        '<div style="font-size:9px;color:var(--muted,#6b7280);writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;display:flex;align-items:center;">← ' + cfg.xAxis.neg + '</div>' +
+        '<div style="flex:1;position:relative;">' +
+          '<canvas id="v2d-canvas" style="display:block;width:100%;border-radius:10px;border:1.5px solid var(--line,#e0e4ea);" height="' + H + '"></canvas>' +
+        '</div>' +
+        '<div style="font-size:9px;color:var(--muted,#6b7280);writing-mode:vertical-rl;white-space:nowrap;display:flex;align-items:center;">' + cfg.xAxis.pos + ' →</div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted,#6b7280);margin-top:3px;">' +
+        '<span>← ' + cfg.xAxis.neg + '</span><span>' + cfg.xAxis.pos + ' →</span>' +
+      '</div>' +
+      '<div style="text-align:center;font-size:11px;color:var(--muted,#6b7280);margin-top:1px;">↓ ' + cfg.yAxis.neg + '</div>';
+
+    var canvas = d.getElementById('v2d-canvas');
+    var dpr = w.devicePixelRatio || 1;
+    var W   = Math.max(canvas.getBoundingClientRect().width || 320, 200);
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    this.canvas     = canvas;
+    this.ctx        = ctx;
+    this.cW         = W;
+    this.cH         = H;
+    this.confirmBtn = null;
+
+    var cp = stanceToCanvas(voteData.sx, voteData.sy, W, H);
+    this.pin = { cx: cp.cx, cy: cp.cy, sx: voteData.sx, sy: voteData.sy, qi: voteData.qi };
+
+    this._animateVoteReveal(voteData);
+  };
+
+  /* ---------- F: ピン落下 + X分類点出現アニメーション ---------- */
+  Vote2D.prototype._animateVoteReveal = function (voteData) {
+    var self   = this;
+    var cfg    = this.cfg;
+    var ctx    = this.ctx;
+    var W      = this.cW, H = this.cH;
+    var quads  = cfg.quadrants;
+
+    var cp       = stanceToCanvas(voteData.sx, voteData.sy, W, H);
+    var targetCx = cp.cx, targetCy = cp.cy;
+
+    /* X分類データ点をランダム順にシャッフル */
+    var raw  = getRawData() || [];
+    var dots = raw.map(function (p) {
+      var c2 = stanceToCanvas(p.x, p.y, W, H);
+      return { cx: c2.cx, cy: c2.cy, qi: stanceToQuad(p.x, p.y) };
+    });
+    for (var si = dots.length - 1; si > 0; si--) {
+      var sj = Math.floor(Math.random() * (si + 1));
+      var st = dots[si]; dots[si] = dots[sj]; dots[sj] = st;
+    }
+
+    /* タイミング (ms) */
+    var T_DROP  = 550;   /* ピンが上から落ちる */
+    var T_LAND  = 850;   /* バウンスが収まる  */
+    var T_DOTS0 = 700;   /* X点出現開始      */
+    var T_DOTS1 = 2000;  /* X点出現完了      */
+
+    var startTime = null;
+
+    function drawBg() {
+      ctx.clearRect(0, 0, W, H);
+      [[0,0],[W/2,0],[0,H/2],[W/2,H/2]].forEach(function (pos, qi) {
+        ctx.fillStyle = QUAD_COLORS[qi];
+        ctx.fillRect(pos[0], pos[1], W/2, H/2);
+      });
+      ctx.strokeStyle = 'rgba(140,140,160,.28)';
+      ctx.lineWidth   = 1;
+      ctx.setLineDash([4,4]);
+      ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
+      ctx.setLineDash([]);
+      var corners = [[10,16,'left'],[W-10,16,'right'],[10,H-7,'left'],[W-10,H-7,'right']];
+      corners.forEach(function (c, qi) {
+        ctx.font      = 'bold 10px -apple-system,sans-serif';
+        ctx.textAlign = c[2];
+        ctx.fillStyle = QUAD_TEXTS[qi];
+        ctx.fillText(quads[qi] ? quads[qi].label : '', c[0], c[1]);
+      });
+    }
+
+    function drawDots(count) {
+      for (var di = 0; di < count && di < dots.length; di++) {
+        var dot = dots[di];
+        ctx.save();
+        ctx.globalAlpha = 0.55;
+        ctx.beginPath();
+        ctx.arc(dot.cx, dot.cy, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = QUAD_BORDERS[dot.qi].replace('.40', '.9');
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawPin(cy, scale) {
+      var px = targetCx, py = cy;
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.scale(scale, scale);
+      ctx.translate(-px, -py);
+      ctx.beginPath(); ctx.arc(px, py + 3, 10, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fill();
+      ctx.beginPath(); ctx.arc(px, py, 11, 0, Math.PI * 2);
+      ctx.fillStyle = '#2563eb'; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.font      = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.fillText('あ', px, py + 4);
+      ctx.restore();
+    }
+
+    function frame(ts) {
+      if (!startTime) startTime = ts;
+      var t = ts - startTime;
+
+      /* ピン Y 座標 & スケール */
+      var pinCy, pinScale;
+      if (t < T_DROP) {
+        var dp   = t / T_DROP;
+        pinCy    = -30 + (targetCy + 30) * (dp * dp);  /* ease-in(重力) */
+        pinScale = 0.5 + 0.5 * dp;
+      } else if (t < T_LAND) {
+        var bp   = (t - T_DROP) / (T_LAND - T_DROP);
+        pinCy    = targetCy;
+        pinScale = 1 + 0.28 * Math.sin(bp * Math.PI); /* バウンス */
+      } else {
+        pinCy    = targetCy;
+        pinScale = 1.0;
+      }
+
+      /* 表示するX点数 */
+      var dotCount = 0;
+      if (t > T_DOTS0) {
+        dotCount = Math.floor(dots.length * Math.min((t - T_DOTS0) / (T_DOTS1 - T_DOTS0), 1));
+      }
+
+      drawBg();
+      drawDots(dotCount);   /* X点はピンの下 */
+      drawPin(pinCy, pinScale);
+
+      if (t < T_DOTS1) requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+  };
+
   /* ---------- F: 紙吹雪 ---------- */
   Vote2D.prototype._confetti = function (anchorEl) {
     var rect = anchorEl ? anchorEl.getBoundingClientRect() : null;
@@ -353,8 +514,28 @@
       self.myVote = voteData;
       self._revealChart();
       if (w.setStanceMapVoteMarker) w.setStanceMapVoteMarker(pin.qi, pin.sx, pin.sy);
-      self._drawPinBounce();
-      self._showQuiz(voteData);
+
+      /* ウィザードモード: 4軸キャンバスを再構築してピン落下アニメを再生。キャンバスモードはそのままバウンス */
+      if (!self.canvas) {
+        self._revealVoteCanvas(voteData);
+      } else {
+        self._drawPinBounce();
+      }
+
+      /* ピン落下を見せた後でスタンスマップへスクロール、さらにクイズを表示して戻る */
+      var mapEl = d.getElementById('stance-map-section') || d.getElementById('stance-map-inner');
+      if (mapEl) {
+        setTimeout(function () {
+          mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 900);
+        setTimeout(function () {
+          self._showQuiz(voteData);
+          var voteEl = d.getElementById('vote-section');
+          if (voteEl) voteEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 2400);
+      } else {
+        self._showQuiz(voteData);
+      }
     };
 
     if (this.supa) {
@@ -406,7 +587,7 @@
     var raw = getRawData();
 
     if (!raw || raw.length < 4) {
-      this._showResults(vote);
+      this._showResults(vote, true);
       return;
     }
 
@@ -416,7 +597,7 @@
     }
     var snsTotal = raw.length;
     var maxCount = Math.max.apply(null, snsCounts);
-    if (maxCount === 0) { this._showResults(vote); return; }
+    if (maxCount === 0) { this._showResults(vote, true); return; }
     var correctQi = snsCounts.indexOf(maxCount);
 
     var res = d.getElementById(cfg.resultId || 'vote-result');
@@ -457,7 +638,13 @@
         '</div>' +
       '</div>';
 
-    res.parentNode.insertBefore(quizDiv, res);
+    var wrap = d.getElementById(cfg.containerId || 'vote-buttons');
+    if (wrap) {
+      wrap.innerHTML = '';
+      wrap.appendChild(quizDiv);
+    } else {
+      res.parentNode.insertBefore(quizDiv, res);
+    }
 
     if (w.gtag) w.gtag('event', 'vote2d_quiz_shown', { topic: cfg.topic });
 
@@ -534,13 +721,13 @@
       nextBtn.addEventListener('click', function () {
         var qBlock = d.getElementById('vote2d-quiz');
         if (qBlock) qBlock.remove();
-        self._showResults(vote);
+        self._showResults(vote, true);
       });
     }
   };
 
   /* ---------- 結果表示 ---------- */
-  Vote2D.prototype._showResults = function (vote) {
+  Vote2D.prototype._showResults = function (vote, doScroll) {
     var self   = this;
     var cfg    = this.cfg;
     var quads  = cfg.quadrants;
@@ -694,7 +881,10 @@
     }
 
     var res = d.getElementById(cfg.resultId || 'vote-result');
-    if (res) res.style.display = 'block';
+    if (res) {
+      res.style.display = 'block';
+      if (doScroll) setTimeout(function () { res.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+    }
 
     document.dispatchEvent(new CustomEvent('vote2d:revealed'));
   };
@@ -804,10 +994,14 @@
         '.v2d-robot.excited .v2d-rhead{animation:v2dbob .6s ease-in-out infinite alternate;}',
         '.v2d-robot.excited .v2d-mouth{width:20px;height:7px;border-radius:0 0 8px 8px;}',
         '@keyframes v2dbob{from{transform:translateY(0)}to{transform:translateY(-5px)}}',
-        '.v2d-dot{border:2.5px solid #fff;border-radius:50%;cursor:pointer;flex-shrink:0;',
-        'box-shadow:0 2px 8px rgba(0,0,0,.13);transition:transform .12s,box-shadow .12s;}',
-        '.v2d-dot:hover{transform:scale(1.13);box-shadow:0 4px 16px rgba(0,0,0,.2);}',
-        '.v2d-dot.selected{transform:scale(1.18);box-shadow:0 0 0 3px #2563eb;}'
+        '.v2d-card{border:1.5px solid #e0e4ea;border-radius:10px;padding:10px 6px;cursor:pointer;',
+        'text-align:center;background:#fff;transition:border-color .15s,background .15s;min-width:0;width:100%;}',
+        '.v2d-card:hover{background:#f5f7fa;}',
+        '.v2d-card:active{transform:scale(.97);}',
+        '.v2d-card.selected{border-color:#2563eb;background:#eff6ff;}',
+        '.v2d-cswatch{width:28px;height:28px;border-radius:50%;margin:0 auto 6px;border:2.5px solid #fff;}',
+        '.v2d-clabel{font-size:12px;font-weight:700;line-height:1.3;margin-bottom:3px;}',
+        '.v2d-csub{font-size:10px;color:#6b7280;line-height:1.3;min-height:2.6em;}'
       ].join('');
       d.head.appendChild(st);
     }
@@ -826,37 +1020,44 @@
         '<div class="v2d-rbody"></div>' +
       '</div>';
 
-    function dotBtn(val, size, negLabel, posLabel) {
-      var label = val < -0.3 ? negLabel : (val > 0.3 ? posLabel : 'どちらでもない');
-      var bg    = val < 0 ? '#fca5a5' : (val > 0 ? '#93c5fd' : '#e5e7eb');
-      return '<button class="v2d-dot" data-val="' + val + '" ' +
-        'style="width:' + size + 'px;height:' + size + 'px;background:' + bg + ';" ' +
-        'title="' + label + '"></button>';
+    var CARD_DEFS = [
+      { v: -1.0, label: '強く反対', swatch: '#dc2626', textCol: '#991b1b', bdCol: '#fecaca', useNeg: true  },
+      { v: -0.5, label: 'やや反対', swatch: '#fca5a5', textCol: '#b91c1c', bdCol: '#fed7d7', useNeg: false },
+      { v:  0.0, label: 'どちらでも', swatch: '#d1d5db', textCol: '#374151', bdCol: '#e5e7eb', useNeg: false },
+      { v:  0.5, label: 'やや賛成', swatch: '#93c5fd', textCol: '#1d4ed8', bdCol: '#bfdbfe', useNeg: false },
+      { v:  1.0, label: '強く賛成', swatch: '#2563eb', textCol: '#1e40af', bdCol: '#93c5fd', usePos: true  }
+    ];
+    function cardBtn(val, negLabel, posLabel) {
+      var c = CARD_DEFS.filter(function (x) { return x.v === val; })[0] || CARD_DEFS[2];
+      var sub = c.useNeg ? negLabel : (c.usePos ? posLabel : '');
+      return '<button class="v2d-card" data-val="' + val + '" type="button" ' +
+        'style="border-color:' + c.bdCol + ';">' +
+        '<div class="v2d-cswatch" style="background:' + c.swatch + ';border-color:' + c.swatch + ';"></div>' +
+        '<div class="v2d-clabel" style="color:' + c.textCol + ';">' + escHtml(c.label) + '</div>' +
+        '<div class="v2d-csub">' + escHtml(sub) + '</div>' +
+        '</button>';
     }
 
     function renderStep() {
       var q = qs[step];
       wrap.innerHTML =
         robotHtml +
-        '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:2px 8px 8px;">' +
-          '<div style="width:100%;max-width:280px;height:4px;background:#e5e7eb;border-radius:2px;">' +
+        '<div style="display:flex;flex-direction:column;gap:10px;padding:2px 8px 8px;">' +
+          '<div style="width:100%;height:4px;background:#e5e7eb;border-radius:2px;">' +
             '<div id="v2d-prog" style="height:4px;background:#2563eb;border-radius:2px;width:' +
               (step === 0 ? '50%' : '100%') + ';transition:width .4s;"></div>' +
           '</div>' +
-          '<div style="font-size:11px;color:#6b7280;">質問 ' + (step+1) + ' / 2</div>' +
-          '<div style="text-align:center;max-width:280px;">' +
+          '<div style="font-size:11px;color:#6b7280;text-align:center;">質問 ' + (step+1) + ' / 2</div>' +
+          '<div style="text-align:center;">' +
             '<div style="font-size:15px;font-weight:700;color:var(--ink,#1a1a2e);line-height:1.4;">' + q.text + '</div>' +
             (q.subtext ? '<div style="font-size:11px;color:#6b7280;margin-top:3px;">' + q.subtext + '</div>' : '') +
           '</div>' +
-          '<div style="display:flex;justify-content:space-between;width:100%;max-width:280px;font-size:11px;color:#6b7280;">' +
-            '<span>' + q.negLabel + '</span><span>' + q.posLabel + '</span>' +
-          '</div>' +
-          '<div id="v2d-dots" style="display:flex;align-items:center;justify-content:center;gap:10px;">' +
-            dotBtn(-1.0, 54, q.negLabel, q.posLabel) +
-            dotBtn(-0.5, 43, q.negLabel, q.posLabel) +
-            dotBtn( 0.0, 33, q.negLabel, q.posLabel) +
-            dotBtn( 0.5, 43, q.negLabel, q.posLabel) +
-            dotBtn( 1.0, 54, q.negLabel, q.posLabel) +
+          '<div id="v2d-dots" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;">' +
+            cardBtn(-1.0, q.negLabel, q.posLabel) +
+            cardBtn(-0.5, q.negLabel, q.posLabel) +
+            cardBtn( 0.0, q.negLabel, q.posLabel) +
+            cardBtn( 0.5, q.negLabel, q.posLabel) +
+            cardBtn( 1.0, q.negLabel, q.posLabel) +
           '</div>' +
         '</div>';
 
