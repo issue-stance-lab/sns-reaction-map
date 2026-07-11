@@ -880,7 +880,7 @@
   });
 })();
 </script>
-<script src="vote2d.js?v=8"></script>
+<script src="vote2d.js?v=9"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -897,6 +897,12 @@
       {text:'憲法を改正すべきだと思う？',negLabel:'護憲・反対',posLabel:'改憲・賛成'},
       {text:'どちらを重視する？',subtext:'答えたら開票します',negLabel:'平和主義・9条',posLabel:'安全保障強化'}
     ],
+    commonGround: {
+      title: '意見の向こう側',
+      lead: '立場や方法は違っても、両者に共通する願いがあります。',
+      statement: '平和と安全が守られ、将来世代が安心して暮らせる社会',
+      question: '反対側の心配も、少し理解できましたか？'
+    },
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });

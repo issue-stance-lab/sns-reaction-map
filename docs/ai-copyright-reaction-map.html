@@ -785,7 +785,7 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下の2Dスタンスマップに「あなたはこのあたり」マーカーを表示しました。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=8"></script>
+<script src="vote2d.js?v=9"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -802,6 +802,12 @@
       {text:'AIの学習に規制は必要だと思う？',subtext:'直感でOK、あとから微調整できます',negLabel:'不要・AIは自由に',posLabel:'必要・著作権を守る'},
       {text:'どちらをより大事にしたい？',subtext:'答えたら開票します',negLabel:'AI産業の発展',posLabel:'作り手の権利'}
     ],
+    commonGround: {
+      title: '意見の向こう側',
+      lead: '立場や方法は違っても、両者に共通する願いがあります。',
+      statement: '作り手の権利と新しい技術がともに尊重され、創作が続いていく環境',
+      question: '反対側の心配も、少し理解できましたか？'
+    },
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });

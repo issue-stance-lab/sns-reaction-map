@@ -700,7 +700,7 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=8"></script>
+<script src="vote2d.js?v=9"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -717,6 +717,12 @@
       {text:'自転車の取り締まり強化は必要だと思う？',negLabel:'過剰規制・不要',posLabel:'強化すべき'},
       {text:'どちらを優先したい？',subtext:'答えたら開票します',negLabel:'利用者の自由',posLabel:'歩行者の安全'}
     ],
+    commonGround: {
+      title: '意見の向こう側',
+      lead: '立場や方法は違っても、両者に共通する願いがあります。',
+      statement: '歩行者も自転車利用者も、安心して移動できる道路',
+      question: '反対側の心配も、少し理解できましたか？'
+    },
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });
