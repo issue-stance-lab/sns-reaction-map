@@ -262,9 +262,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | 引用元 | テーマ | 投稿文冒頭 |
 |---|--------|--------|-----------|
 | 1 | @yamazoejimusyo（May 3） | 憲法改正 | 「改正するかどうか」より「何を・なぜ変えるか」の議論が先では… |
-| 2 | @tamakiyuichiro（Feb 15） | 憲法改正 | 「改正するかどうか」より「何を・なぜ変えるか」で立場が大きく変わる… |
 
-備考: 2本ともURL付き。今週のURL付き引用RT上限（週1〜2本）に到達。
+備考: 1本URL付き。今週のURL付き引用RT上限（週1〜2本）に到達。
+※ @tamakiyuichiro への引用RTは先週（2026-07-07）実施済み。
 
 ---
 
