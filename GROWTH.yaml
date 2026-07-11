@@ -217,3 +217,7 @@ activity_log:
     type: ops
     detail: scripts/fetch_growth_kpi.py が依存する scripts/fetch_supabase_votes.py が main に未マージでKPI自動取得が壊れていたため復旧（task/growth-fix-kpi-script）。実行確認済み（weekly_users 10 / pageviews 295 / votes_total 9 / gsc_impressions 6）。週次更新日ではないため snapshots への追記は次回月曜
     related_capability: null
+  - date: 2026-07-11
+    type: site_improvement
+    detail: vote2d.js に SNS分類データ（RAW）の象限別集計を投票結果画面へ自動挿入する機能を追加（task/growth-sns-vote-boost）。「みんなの感覚」のユーザー投票が少数でも、X投稿300〜900件の分布を「Xの声の分布（SNS分類 N件）」として投票完了後に表示。全8テーマ適用。vote2d.js v=3 に更新
+    related_capability: vote-2d-canvas

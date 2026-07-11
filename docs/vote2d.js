@@ -390,6 +390,65 @@
       });
     }
 
+    /* SNS分類データがある場合: Xの声の分布を vote-bars の直後に挿入
+     * RAWはconstのためwindowプロパティにならずスコープ直参照が必要。
+     * 返訪者では_showResultsがDOMContentLoaded前に呼ばれるためRAWが未定義の場合は
+     * DOMContentLoaded後に再実行する。 */
+    (function insertSnsSection() {
+      /* jshint ignore:start */
+      var rawData = (typeof RAW !== 'undefined') ? RAW : null; // eslint-disable-line no-undef
+      /* jshint ignore:end */
+      if (!rawData) {
+        if (d.readyState === 'loading') {
+          d.addEventListener('DOMContentLoaded', insertSnsSection, { once: true });
+        }
+        return;
+      }
+      if (!bars || !rawData.length) return;
+
+      var snsTotal  = rawData.length;
+      var snsCounts = [0, 0, 0, 0];
+      for (var ri = 0; ri < rawData.length; ri++) {
+        snsCounts[stanceToQuad(rawData[ri].x, rawData[ri].y)]++;
+      }
+      var mySnsPct = Math.round(snsCounts[vote.qi] / snsTotal * 100);
+
+      var snsDist = d.getElementById('vote-sns-dist');
+      if (!snsDist) {
+        snsDist = d.createElement('div');
+        snsDist.id = 'vote-sns-dist';
+        bars.parentNode.insertBefore(snsDist, bars.nextSibling);
+      }
+
+      var snsHtml =
+        '<div style="font-size:13px;font-weight:700;color:var(--muted,#667085);' +
+          'margin:16px 0 8px;border-top:1px solid var(--line,#e0e4ea);padding-top:16px;">' +
+          'Xの声の分布（SNS分類 ' + snsTotal + '件）</div>' +
+        '<div style="font-size:12px;color:var(--muted,#667085);margin-bottom:10px;">' +
+          'あなたと同じ「' + q.label + '」は ' +
+          '<strong style="color:' + color + '">' + mySnsPct + '%（' + snsCounts[vote.qi] + '件）</strong>' +
+        '</div>';
+      quads.forEach(function (qq, i) {
+        var c    = snsCounts[i];
+        var pct  = Math.round(c / snsTotal * 100);
+        var col  = QUAD_BORDERS[i].replace('.40', '.85');
+        var mine = i === vote.qi;
+        snsHtml +=
+          '<div style="margin-bottom:7px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+              '<span style="font-size:11px;font-weight:' + (mine ? '800' : '500') + ';color:' +
+                (mine ? col : 'var(--muted,#667085)') + '">' + (mine ? '✓ ' : '') + qq.label + '</span>' +
+              '<span style="font-size:12px;font-weight:700;color:' + col + '">' + pct + '%（' + c + '件）</span>' +
+            '</div>' +
+            '<div style="height:6px;border-radius:3px;background:var(--line,#e0e4ea);overflow:hidden;">' +
+              '<div style="height:100%;width:' + pct + '%;background:' + col +
+                ';border-radius:3px;transition:width .6s ease;"></div>' +
+            '</div>' +
+          '</div>';
+      });
+      snsDist.innerHTML = snsHtml;
+    }());
+
     /* Xシェア */
     var shareBtn = d.getElementById('share-x');
     if (shareBtn) {
