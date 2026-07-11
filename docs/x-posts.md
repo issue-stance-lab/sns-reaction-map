@@ -248,6 +248,15 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 来週引用RT候補（仕込み済み）: @nhk_news（辺野古・極めて不適切）、@izmkenta（辺野古・文科委質問）、@yamazoejimusyo（憲法改正・優先課題でない）
 
+## リプライ実績 2026-07-11
+
+| # | リプライ先 | テーマ | タイプ |
+|---|-----------|--------|--------|
+| 1 | @responsejp（高齢運転者技能検査見直し・3.8K imp） | 高齢者免許返納 | URLなし |
+| 2 | @Sankei_news（青切符対象違反113種・65K imp） | 自転車青切符 | URLなし |
+
+備考: 全2本URLなし。今週のURL付き引用RT枠は未使用（週1〜2本）。
+
 ---
 
 ## 運用メモ 2026-07-09
