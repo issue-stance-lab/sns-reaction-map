@@ -471,6 +471,8 @@
     /* 結果エリア表示 */
     var res = d.getElementById(cfg.resultId || 'vote-result');
     if (res) res.style.display = 'block';
+
+    document.dispatchEvent(new CustomEvent('vote2d:revealed'));
   };
 
   /* ---------- 公開API ---------- */

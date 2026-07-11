@@ -1591,15 +1591,16 @@ let myVoteSX = null, myVoteSY = null;
     return "<a class=\"related-card\" href=\""+item[1]+"\" data-related-target=\""+item[0]+"\" data-related-placement=\""+placement+"\"><img src=\""+item[2]+"\" alt=\""+item[3]+"\" loading=\"lazy\"><div><strong>"+item[3]+"</strong><p>"+item[4]+"</p></div></a>";
   }
   function renderVoteRelated(){
-    var result=document.getElementById("vote-result");
-    if(!result||document.getElementById("vote-related-themes"))return;
+    if(document.getElementById("vote-related-themes"))return;
     var items=relatedThemes[currentTopic()]||[];
     if(!items.length)return;
     var block=document.createElement("div");
     block.id="vote-related-themes";
     block.style.cssText="margin:18px 0 16px;";
     block.innerHTML="<div style=\"font-size:14px;font-weight:900;margin-bottom:10px;\">次に投票するテーマ</div><div class=\"related-grid\">"+items.slice(0,3).map(function(item){return cardHtml(item,"vote_result");}).join("")+"</div>";
-    result.appendChild(block);
+    var anchor=document.getElementById("detail-data")||document.getElementById("related-topics");
+    if(anchor){anchor.parentNode.insertBefore(block,anchor.nextSibling);}
+    else{(document.querySelector("main")||document.body).appendChild(block);}
   }
   function bindTracking(){
     document.querySelectorAll("#related-topics .related-card").forEach(function(card){
@@ -1615,7 +1616,8 @@ let myVoteSX = null, myVoteSY = null;
       track(card.dataset.relatedTarget,card.dataset.relatedPlacement||"page_bottom");
     },true);
   }
-  document.addEventListener("DOMContentLoaded",function(){renderVoteRelated();bindTracking();});
+  document.addEventListener("DOMContentLoaded",function(){bindTracking();});
+  document.addEventListener("vote2d:revealed",function(){renderVoteRelated();});
 })();
 </script>
 </body>
