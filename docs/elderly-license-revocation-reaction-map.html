@@ -857,7 +857,7 @@
   });
 })();
 </script>
-<script src="vote2d.js?v=4"></script>
+<script src="vote2d.js?v=5"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -870,6 +870,10 @@
     xAxis: { neg: '強制不要・本人・家族の判断で', pos: '法的義務化・強制返納すべき' },
     yAxis: { neg: '高齢者の移動権・生活の自由を優先', pos: '交通安全・被害者保護を優先' },
     quadrants: [{"label": "安全大切だが本人判断で", "desc": "交通安全は重要だが、一律の義務化より本人・家族・医師の判断に任せるべき。"}, {"label": "事故防止のため義務化を", "desc": "相次ぐ高齢ドライバーの事故から命を守るため、年齢での法的義務化が必要。"}, {"label": "移動権・生活守るため自主返納", "desc": "高齢者の移動手段・生活を守るために、自主判断と代替交通の整備を優先。"}, {"label": "義務化でも代替手段を整備", "desc": "義務化と同時に公共交通・移動支援を整備すれば生活は守れる。"}],
+    questions: [
+      {text:'高齢ドライバーの免許返納を義務化すべき？',negLabel:'本人・家族判断で',posLabel:'法的に義務化'},
+      {text:'どちらを優先したい？',subtext:'答えたら開票します',negLabel:'高齢者の移動の自由',posLabel:'交通安全・被害防止'}
+    ],
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });

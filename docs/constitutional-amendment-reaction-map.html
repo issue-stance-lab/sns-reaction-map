@@ -880,7 +880,7 @@
   });
 })();
 </script>
-<script src="vote2d.js?v=4"></script>
+<script src="vote2d.js?v=5"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -893,6 +893,10 @@
     xAxis: { neg: '護憲・改憲に反対', pos: '改憲に賛成' },
     yAxis: { neg: '平和主義・9条護持を最優先', pos: '安全保障強化・現実的防衛を優先' },
     quadrants: [{"label": "護憲のまま安全保障を強化", "desc": "憲法を変えずとも、解釈や政策で現実の安全保障ニーズに対応できる。"}, {"label": "改憲で安全保障を強化", "desc": "自衛隊明記・緊急事態条項など、改憲により現実の防衛力を高めるべき。"}, {"label": "9条を守り平和を貫く", "desc": "戦争放棄を定めた9条は日本の誇り。護憲こそが平和を守る唯一の道。"}, {"label": "改憲しても平和は守れる", "desc": "憲法を改正しても平和主義の理念は維持でき、より現実的な平和が実現する。"}],
+    questions: [
+      {text:'憲法を改正すべきだと思う？',negLabel:'護憲・反対',posLabel:'改憲・賛成'},
+      {text:'どちらを重視する？',subtext:'答えたら開票します',negLabel:'平和主義・9条',posLabel:'安全保障強化'}
+    ],
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });

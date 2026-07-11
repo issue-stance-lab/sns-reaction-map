@@ -700,7 +700,7 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=4"></script>
+<script src="vote2d.js?v=5"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -713,6 +713,10 @@
     xAxis: { neg: '取締り不要・過剰規制', pos: '取締り強化・即刻施行' },
     yAxis: { neg: '自転車利用者の自由・負担軽減優先', pos: '歩行者・社会の安全を最優先' },
     quadrants: [{"label": "インフラ整備で安全を守る", "desc": "取締りより先に安全な自転車レーン整備を。歩行者安全のために環境づくりが先決。"}, {"label": "安全のため取締り強化", "desc": "歩行者・社会を守るために青切符導入・取締り強化は当然の措置。"}, {"label": "利用者の自由と負担を守る", "desc": "車道原則や取締り強化は自転車利用者に不当な負担。利用者の自由を守るべき。"}, {"label": "ルール周知で利用者も守る", "desc": "取締りとルール周知により自転車利用者自身の安全も高まる。"}],
+    questions: [
+      {text:'自転車の取り締まり強化は必要だと思う？',negLabel:'過剰規制・不要',posLabel:'強化すべき'},
+      {text:'どちらを優先したい？',subtext:'答えたら開票します',negLabel:'利用者の自由',posLabel:'歩行者の安全'}
+    ],
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });

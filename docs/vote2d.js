@@ -10,6 +10,7 @@
   var QUAD_BORDERS = ['rgba(220,38,38,.40)','rgba(37,99,235,.40)','rgba(5,150,105,.40)','rgba(217,119,6,.40)'];
   var QUAD_TEXTS   = ['#991b1b','#1e40af','#065f46','#92400e'];
   var CONFETTI_COLORS = ['#dc2626','#2563eb','#059669','#d97706','#7c3aed','#0891b2','#db2777'];
+  var QUAD_PINS = ['#dc2626','#2563eb','#059669','#d97706'];
 
   function stanceToQuad(sx, sy) {
     return (sx >= 0 ? 1 : 0) + (sy < 0 ? 2 : 0);
@@ -72,7 +73,11 @@
     };
 
     onReady(function () { self._applyBlur(); });
-    this._buildCanvas();
+    if (cfg.questions && cfg.questions.length >= 2) {
+      this._buildWizard();
+    } else {
+      this._buildCanvas();
+    }
 
     this._fetchVotes().then(function () {
       if (self.myVote !== null) {
@@ -284,6 +289,7 @@
 
   /* ---------- F: ピンバウンスアニメーション ---------- */
   Vote2D.prototype._drawPinBounce = function () {
+    if (!this.canvas) return;
     var self = this;
     var SCALES = [0, 0.45, 0.82, 1.22, 1.06, 0.94, 1.0];
     var i = 0;
@@ -335,7 +341,7 @@
   Vote2D.prototype._cast = function () {
     if (!this.pin || this.voted) return;
     this.voted = true;
-    this.confirmBtn.style.display = 'none';
+    if (this.confirmBtn) this.confirmBtn.style.display = 'none';
 
     var self = this;
     var pin  = this.pin;
@@ -771,6 +777,118 @@
       ts.src = 'https://platform.twitter.com/widgets.js';
       d.body.appendChild(ts);
     }
+  };
+
+  /* ---------- ウィザードUI ---------- */
+  Vote2D.prototype._buildWizard = function () {
+    var self = this;
+    var cfg  = this.cfg;
+    var wrap = d.getElementById(cfg.containerId || 'vote-buttons');
+    if (!wrap) return;
+    wrap.style.display = 'block';
+
+    if (!d.getElementById('v2d-wiz-style')) {
+      var st = d.createElement('style');
+      st.id = 'v2d-wiz-style';
+      st.textContent = [
+        '.v2d-robot{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;}',
+        '.v2d-rhead{width:40px;height:36px;background:#2563eb;border-radius:10px;position:relative;}',
+        '.v2d-ant{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:3px;height:8px;background:#94a3b8;}',
+        '.v2d-ant::after{content:"";position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:7px;background:#f59e0b;border-radius:50%;}',
+        '.v2d-visor{display:flex;gap:5px;justify-content:center;padding-top:10px;}',
+        '.v2d-eye{width:10px;height:7px;background:#fff;border-radius:2px;animation:v2dblink 3.5s ease-in-out infinite;}',
+        '.v2d-eye:nth-child(2){animation-delay:.15s;}',
+        '@keyframes v2dblink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.05)}}',
+        '.v2d-mouth{width:14px;height:4px;background:#93c5fd;border-radius:2px;margin:4px auto 0;}',
+        '.v2d-rbody{width:30px;height:18px;background:#1d4ed8;border-radius:4px;margin-top:2px;}',
+        '.v2d-robot.excited .v2d-rhead{animation:v2dbob .6s ease-in-out infinite alternate;}',
+        '.v2d-robot.excited .v2d-mouth{width:20px;height:7px;border-radius:0 0 8px 8px;}',
+        '@keyframes v2dbob{from{transform:translateY(0)}to{transform:translateY(-5px)}}',
+        '.v2d-dot{border:2.5px solid #fff;border-radius:50%;cursor:pointer;flex-shrink:0;',
+        'box-shadow:0 2px 8px rgba(0,0,0,.13);transition:transform .12s,box-shadow .12s;}',
+        '.v2d-dot:hover{transform:scale(1.13);box-shadow:0 4px 16px rgba(0,0,0,.2);}',
+        '.v2d-dot.selected{transform:scale(1.18);box-shadow:0 0 0 3px #2563eb;}'
+      ].join('');
+      d.head.appendChild(st);
+    }
+
+    var qs = cfg.questions;
+    var step = 0;
+    var answers = [null, null];
+
+    var robotHtml =
+      '<div class="v2d-robot" id="v2d-robot">' +
+        '<div class="v2d-rhead">' +
+          '<div class="v2d-ant"></div>' +
+          '<div class="v2d-visor"><div class="v2d-eye"></div><div class="v2d-eye"></div></div>' +
+          '<div class="v2d-mouth"></div>' +
+        '</div>' +
+        '<div class="v2d-rbody"></div>' +
+      '</div>';
+
+    function dotBtn(val, size, negLabel, posLabel) {
+      var label = val < -0.3 ? negLabel : (val > 0.3 ? posLabel : 'どちらでもない');
+      var bg    = val < 0 ? '#fca5a5' : (val > 0 ? '#93c5fd' : '#e5e7eb');
+      return '<button class="v2d-dot" data-val="' + val + '" ' +
+        'style="width:' + size + 'px;height:' + size + 'px;background:' + bg + ';" ' +
+        'title="' + label + '"></button>';
+    }
+
+    function renderStep() {
+      var q = qs[step];
+      wrap.innerHTML =
+        robotHtml +
+        '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:2px 8px 8px;">' +
+          '<div style="width:100%;max-width:280px;height:4px;background:#e5e7eb;border-radius:2px;">' +
+            '<div id="v2d-prog" style="height:4px;background:#2563eb;border-radius:2px;width:' +
+              (step === 0 ? '50%' : '100%') + ';transition:width .4s;"></div>' +
+          '</div>' +
+          '<div style="font-size:11px;color:#6b7280;">質問 ' + (step+1) + ' / 2</div>' +
+          '<div style="text-align:center;max-width:280px;">' +
+            '<div style="font-size:15px;font-weight:700;color:var(--ink,#1a1a2e);line-height:1.4;">' + q.text + '</div>' +
+            (q.subtext ? '<div style="font-size:11px;color:#6b7280;margin-top:3px;">' + q.subtext + '</div>' : '') +
+          '</div>' +
+          '<div style="display:flex;justify-content:space-between;width:100%;max-width:280px;font-size:11px;color:#6b7280;">' +
+            '<span>' + q.negLabel + '</span><span>' + q.posLabel + '</span>' +
+          '</div>' +
+          '<div id="v2d-dots" style="display:flex;align-items:center;justify-content:center;gap:10px;">' +
+            dotBtn(-1.0, 54, q.negLabel, q.posLabel) +
+            dotBtn(-0.5, 43, q.negLabel, q.posLabel) +
+            dotBtn( 0.0, 33, q.negLabel, q.posLabel) +
+            dotBtn( 0.5, 43, q.negLabel, q.posLabel) +
+            dotBtn( 1.0, 54, q.negLabel, q.posLabel) +
+          '</div>' +
+        '</div>';
+
+      if (step === 1) {
+        var rob = d.getElementById('v2d-robot');
+        if (rob) rob.classList.add('excited');
+      }
+
+      d.getElementById('v2d-dots').addEventListener('click', function (e) {
+        var btn = e.target;
+        while (btn && btn !== this && btn.tagName !== 'BUTTON') btn = btn.parentNode;
+        if (!btn || btn.tagName !== 'BUTTON' || !btn.hasAttribute('data-val')) return;
+        btn.classList.add('selected');
+        answers[step] = parseFloat(btn.getAttribute('data-val'));
+        if (step === 0) {
+          step = 1;
+          setTimeout(renderStep, 250);
+        } else {
+          setTimeout(finalize, 250);
+        }
+      });
+    }
+
+    function finalize() {
+      var sx = answers[0], sy = answers[1];
+      var qi = stanceToQuad(sx, sy);
+      self.pin = { cx: 0, cy: 0, sx: sx, sy: sy, qi: qi };
+      wrap.innerHTML = '<div style="text-align:center;padding:20px;font-size:13px;color:#6b7280;">投票中...</div>';
+      self._cast();
+    }
+
+    renderStep();
   };
 
   /* ---------- 公開API ---------- */

@@ -785,7 +785,7 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下の2Dスタンスマップに「あなたはこのあたり」マーカーを表示しました。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=4"></script>
+<script src="vote2d.js?v=5"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -798,6 +798,10 @@
     xAxis: { neg: '規制に反対（AIを自由に）', pos: '規制に賛成（著作権保護）' },
     yAxis: { neg: 'AI産業・社会全体の競争力を優先', pos: 'クリエイター個人の権利を守る' },
     quadrants: [{"label": "AIで個人表現を広げる", "desc": "規制より個人の創造の自由を優先。AIは表現を広げるツールとして活かすべき。"}, {"label": "クリエイターを守るため規制を", "desc": "著作権侵害からクリエイターの権利・生活を守るために法規制強化が必要。"}, {"label": "産業競争力のため規制不要", "desc": "日本のAI産業・技術競争力のために過度な規制は避け、自由な活用を推進すべき。"}, {"label": "産業秩序のためルール整備を", "desc": "対価支払い・ライセンス制度など、産業のルールとして共存の仕組みを作るべき。"}],
+    questions: [
+      {text:'AIの学習に規制は必要だと思う？',subtext:'直感でOK、あとから微調整できます',negLabel:'不要・AIは自由に',posLabel:'必要・著作権を守る'},
+      {text:'どちらをより大事にしたい？',subtext:'答えたら開票します',negLabel:'AI産業の発展',posLabel:'作り手の権利'}
+    ],
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });

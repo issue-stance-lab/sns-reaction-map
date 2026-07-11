@@ -710,7 +710,7 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=4"></script>
+<script src="vote2d.js?v=5"></script>
 <script>
 (function(){
   var supabaseUrl="";
@@ -723,6 +723,10 @@
     xAxis: { neg: '地域移行に反対', pos: '地域移行に賛成' },
     yAxis: { neg: '教員の負担軽減を最優先', pos: '競技力・教育的価値を最優先' },
     quadrants: [{"label": "競技力は現状維持で守る", "desc": "地域移行ではなく現行の部活形態を改善しながら競技力・教育価値を守るべき。"}, {"label": "地域移行で競技力も維持", "desc": "地域クラブへの移行でも競技水準・教育的価値は維持・向上できる。"}, {"label": "教員負担は現行改善で解決", "desc": "移行より現行の枠組みを改善し、教員の働き方を守るべき。"}, {"label": "地域移行で教員の働き方改善", "desc": "地域移行により教員の長時間労働が解消し、持続可能な体制になる。"}],
+    questions: [
+      {text:'部活の地域移行に賛成？',negLabel:'反対',posLabel:'賛成'},
+      {text:'どちらを大事にしたい？',subtext:'答えたら開票します',negLabel:'教員の働き方',posLabel:'競技力・教育価値'}
+    ],
     supabaseUrl: supabaseUrl,
     supabaseAnonKey: supabaseAnonKey
   });
