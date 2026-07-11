@@ -956,6 +956,7 @@
       '</div>';
 
     snsDist.parentNode.insertBefore(nfDiv, snsDist.nextSibling);
+    this._showCommonGround(nfDiv);
 
     /* Twitter widgets をレンダリング */
     if (w.twttr && w.twttr.widgets) {
@@ -966,6 +967,82 @@
       ts.async = true;
       ts.src = 'https://platform.twitter.com/widgets.js';
       d.body.appendChild(ts);
+    }
+  };
+
+  /* ---------- B: 意見の向こう側 ---------- */
+  Vote2D.prototype._showCommonGround = function (nearFarEl) {
+    var cfg = this.cfg;
+    var common = cfg.commonGround;
+
+    if (!common || !nearFarEl || d.getElementById('vote2d-common-ground')) return;
+
+    var responses = common.responses || [
+      { value: 'understood', label: '理解できた' },
+      { value: 'understood_unchanged', label: '意見は変わらないが分かった' },
+      { value: 'not_yet', label: 'まだ分からない' }
+    ];
+    var buttonsHtml = '';
+    for (var i = 0; i < responses.length; i++) {
+      buttonsHtml +=
+        '<button type="button" data-common-ground-response="' + escHtml(responses[i].value) + '" ' +
+          'style="border:1px solid var(--line,#e0e4ea);border-radius:8px;background:#fff;' +
+          'padding:10px 12px;color:var(--ink,#1a1a2e);font-size:12px;font-weight:700;' +
+          'line-height:1.45;cursor:pointer;text-align:center;">' +
+          escHtml(responses[i].label) +
+        '</button>';
+    }
+
+    var groundDiv = d.createElement('section');
+    groundDiv.id = 'vote2d-common-ground';
+    groundDiv.setAttribute('aria-labelledby', 'vote2d-common-ground-title');
+    groundDiv.style.cssText =
+      'margin-top:16px;border:1px solid rgba(15,118,110,.24);border-radius:12px;' +
+      'background:linear-gradient(135deg,#f0fdfa,#f8fafc);padding:20px;';
+    groundDiv.innerHTML =
+      '<div id="vote2d-common-ground-title" style="font-size:12px;font-weight:900;' +
+        'letter-spacing:.08em;color:var(--accent,#0f766e);margin-bottom:8px;">' +
+        escHtml(common.title || '意見の向こう側') +
+      '</div>' +
+      '<div style="font-size:13px;color:var(--muted,#667085);line-height:1.7;">' +
+        escHtml(common.lead || '立場や方法は違っても、両者に共通する願いがあります。') +
+      '</div>' +
+      '<div style="font-size:20px;font-weight:900;color:var(--ink,#1a1a2e);line-height:1.55;' +
+        'margin:10px 0 18px;">「' + escHtml(common.statement) + '」</div>' +
+      '<div style="border-top:1px solid rgba(15,118,110,.16);padding-top:16px;">' +
+        '<div style="font-size:13px;font-weight:800;color:var(--ink,#1a1a2e);margin-bottom:10px;">' +
+          escHtml(common.question || '反対側の心配も、少し理解できましたか？') +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;">' +
+          buttonsHtml +
+        '</div>' +
+        '<div id="vote2d-common-ground-thanks" role="status" ' +
+          'style="display:none;margin-top:12px;font-size:12px;font-weight:700;color:var(--accent,#0f766e);">' +
+          '反対側の声にも目を向けてくれて、ありがとうございます。' +
+        '</div>' +
+      '</div>';
+
+    nearFarEl.parentNode.insertBefore(groundDiv, nearFarEl.nextSibling);
+
+    var buttons = groundDiv.querySelectorAll('[data-common-ground-response]');
+    for (var b = 0; b < buttons.length; b++) {
+      buttons[b].addEventListener('click', function (e) {
+        var selected = e.currentTarget;
+        var value = selected.getAttribute('data-common-ground-response');
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].disabled = true;
+          buttons[j].style.cursor = 'default';
+          buttons[j].style.opacity = buttons[j] === selected ? '1' : '.5';
+        }
+        selected.style.borderColor = 'var(--accent,#0f766e)';
+        selected.style.background = 'var(--accent-soft,#ecfdf5)';
+        var thanks = d.getElementById('vote2d-common-ground-thanks');
+        if (thanks) thanks.style.display = 'block';
+        if (w.gtag) w.gtag('event', 'vote2d_common_ground_response', {
+          topic: cfg.topic,
+          response: value
+        });
+      });
     }
   };
 
