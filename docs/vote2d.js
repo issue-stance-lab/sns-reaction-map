@@ -1,6 +1,6 @@
 /*!
  * vote2d.js — 2D キャンバス投票コンポーネント
- * 使い方: Vote2D.init(config) を呼ぶだけ。詳細は下記 init() の cfg 参照。
+ * v4: 開票前クイズ(A) / 近い声・遠い声(B) / ピンバウンス+紙吹雪(F)
  */
 (function (w, d) {
   'use strict';
@@ -9,12 +9,8 @@
   var QUAD_COLORS  = ['rgba(220,38,38,.11)','rgba(37,99,235,.11)','rgba(5,150,105,.11)','rgba(217,119,6,.11)'];
   var QUAD_BORDERS = ['rgba(220,38,38,.40)','rgba(37,99,235,.40)','rgba(5,150,105,.40)','rgba(217,119,6,.40)'];
   var QUAD_TEXTS   = ['#991b1b','#1e40af','#065f46','#92400e'];
+  var CONFETTI_COLORS = ['#dc2626','#2563eb','#059669','#d97706','#7c3aed','#0891b2','#db2777'];
 
-  /* quadrant index: 0=TL 1=TR 2=BL 3=BR
-     stanceX<0 & stanceY>=0 → TL(0)
-     stanceX>=0 & stanceY>=0 → TR(1)
-     stanceX<0 & stanceY<0  → BL(2)
-     stanceX>=0 & stanceY<0 → BR(3)  */
   function stanceToQuad(sx, sy) {
     return (sx >= 0 ? 1 : 0) + (sy < 0 ? 2 : 0);
   }
@@ -24,17 +20,39 @@
   function stanceToCanvas(sx, sy, W, H) {
     return { cx: (sx + 2) / 4 * W, cy: (2 - sy) / 4 * H };
   }
+  function dist2(ax, ay, bx, by) {
+    var dx = ax - bx, dy = ay - by;
+    return dx * dx + dy * dy;
+  }
+  function escHtml(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  /* ページごとに変数名が RAW / SM_RAW / STANCE_POINTS と異なるため統一取得 */
+  function getRawData() {
+    /* jshint ignore:start */
+    var r = (typeof RAW !== 'undefined') ? RAW            // eslint-disable-line no-undef
+          : (typeof SM_RAW !== 'undefined') ? SM_RAW      // eslint-disable-line no-undef
+          : (typeof STANCE_POINTS !== 'undefined') ? STANCE_POINTS // eslint-disable-line no-undef
+          : null;
+    /* jshint ignore:end */
+    if (!r || !r.length) return null;
+    /* フィールド名を {x,y,summary,url} に正規化 (RAW/SM_RAW は s/u 短縮) */
+    return r.map(function (p) {
+      return { x: p.x, y: p.y, summary: p.summary || p.s || '', url: p.url || p.u || '' };
+    });
+  }
 
   /* ---------- コンストラクタ ---------- */
   function Vote2D(cfg) {
-    this.cfg     = cfg;
-    this.pin     = null;
-    this.voted   = false;
-    this.stored  = {};
-    this.myVote  = null;
-    this.supa    = null;
-    this.KEY     = 'sns_vote2d_v1_' + cfg.topic;
-    this.TOPIC2D = cfg.topic + '_2d_v1';
+    this.cfg        = cfg;
+    this.pin        = null;
+    this.voted      = false;
+    this.stored     = {};
+    this.myVote     = null;
+    this.supa       = null;
+    this.quizCorrect = null; // null=クイズ未表示, true/false=回答結果
+    this.KEY        = 'sns_vote2d_v1_' + cfg.topic;
+    this.TOPIC2D    = cfg.topic + '_2d_v1';
 
     if (cfg.supabaseUrl && cfg.supabaseAnonKey && typeof supabase !== 'undefined') {
       this.supa = supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
@@ -45,8 +63,6 @@
 
     var self = this;
 
-    /* #stance-map-* や setStanceMapVoteMarker はこのスクリプトより後の
-       HTML/<script> で定義されるため、DOM 構築完了後に実行する */
     var onReady = function (fn) {
       if (d.readyState === 'loading') {
         d.addEventListener('DOMContentLoaded', fn, { once: true });
@@ -149,8 +165,6 @@
 
     this._draw();
 
-    /* Resize to actual CSS dimensions after layout — fixes blurry canvas
-       when clientWidth is 0 at synchronous script execution time */
     var self2 = this;
     requestAnimationFrame(function () {
       var trueW = canvas.getBoundingClientRect().width;
@@ -197,8 +211,8 @@
     return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy };
   };
 
-  /* ---------- 描画 ---------- */
-  Vote2D.prototype._draw = function (hx, hy) {
+  /* ---------- 描画（pinScale: F ピンバウンス用） ---------- */
+  Vote2D.prototype._draw = function (hx, hy, pinScale) {
     var ctx = this.ctx, W = this.cW, H = this.cH;
     var cfg = this.cfg;
     ctx.clearRect(0, 0, W, H);
@@ -209,13 +223,11 @@
       hq = stanceToQuad(hs.sx, hs.sy);
     }
 
-    /* 象限塗り */
     [[0,0],[W/2,0],[0,H/2],[W/2,H/2]].forEach(function (pos, i) {
       ctx.fillStyle = (i === hq) ? QUAD_COLORS[i].replace('.11', '.22') : QUAD_COLORS[i];
       ctx.fillRect(pos[0], pos[1], W/2, H/2);
     });
 
-    /* グリッド線 */
     ctx.strokeStyle = 'rgba(140,140,160,.28)';
     ctx.lineWidth   = 1;
     ctx.setLineDash([4,4]);
@@ -223,7 +235,6 @@
     ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
     ctx.setLineDash([]);
 
-    /* 象限ラベル（四隅） */
     var quads   = cfg.quadrants;
     var corners = [[10,16,'left'],[W-10,16,'right'],[10,H-7,'left'],[W-10,H-7,'right']];
     corners.forEach(function (c, i) {
@@ -233,7 +244,6 @@
       ctx.fillText(quads[i] ? quads[i].label : '', c[0], c[1]);
     });
 
-    /* ヒント文字 */
     if (!this.pin && !this.myVote) {
       ctx.font      = '11px -apple-system,sans-serif';
       ctx.textAlign = 'center';
@@ -241,7 +251,6 @@
       ctx.fillText('タップして自分の立場を置く', W/2, H/2 + 14);
     }
 
-    /* ホバー十字線 */
     if (hx !== undefined && !this.pin) {
       ctx.strokeStyle = 'rgba(37,99,235,.25)';
       ctx.lineWidth   = 1;
@@ -251,9 +260,14 @@
       ctx.setLineDash([]);
     }
 
-    /* ピン */
     var pin = this.pin;
     if (pin) {
+      var scale = (pinScale !== undefined) ? pinScale : 1;
+      ctx.save();
+      ctx.translate(pin.cx, pin.cy);
+      ctx.scale(scale, scale);
+      ctx.translate(-pin.cx, -pin.cy);
+
       ctx.beginPath(); ctx.arc(pin.cx, pin.cy+3, 10, 0, Math.PI*2);
       ctx.fillStyle = 'rgba(0,0,0,.14)'; ctx.fill();
       ctx.beginPath(); ctx.arc(pin.cx, pin.cy, 11, 0, Math.PI*2);
@@ -263,6 +277,57 @@
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.fillText('あ', pin.cx, pin.cy + 4);
+
+      ctx.restore();
+    }
+  };
+
+  /* ---------- F: ピンバウンスアニメーション ---------- */
+  Vote2D.prototype._drawPinBounce = function () {
+    var self = this;
+    var SCALES = [0, 0.45, 0.82, 1.22, 1.06, 0.94, 1.0];
+    var i = 0;
+    function step() {
+      self._draw(undefined, undefined, SCALES[Math.min(i, SCALES.length - 1)]);
+      i++;
+      if (i < SCALES.length) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  };
+
+  /* ---------- F: 紙吹雪 ---------- */
+  Vote2D.prototype._confetti = function (anchorEl) {
+    var rect = anchorEl ? anchorEl.getBoundingClientRect() : null;
+    var cx   = rect ? (rect.left + rect.right) / 2 : w.innerWidth / 2;
+    var cy   = rect ? (rect.top + rect.bottom) / 2 + w.scrollY : w.innerHeight / 2 + w.scrollY;
+    for (var i = 0; i < 50; i++) {
+      (function (i) {
+        setTimeout(function () {
+          var el = d.createElement('div');
+          var color   = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+          var isRound = Math.random() > 0.4;
+          el.style.cssText =
+            'position:absolute;pointer-events:none;z-index:99999;' +
+            'width:8px;height:8px;border-radius:' + (isRound ? '50%' : '2px') + ';' +
+            'background:' + color + ';' +
+            'left:' + cx + 'px;top:' + cy + 'px;' +
+            'transform:translate(-50%,-50%);opacity:1;';
+          d.body.appendChild(el);
+
+          var dx   = (Math.random() - 0.5) * 380;
+          var dy   = -Math.random() * 300 - 80;
+          var rot  = Math.random() * 720 - 360;
+          var dur  = 750 + Math.random() * 450;
+
+          setTimeout(function () {
+            el.style.transition = 'transform ' + dur + 'ms cubic-bezier(.25,.46,.45,.94), opacity ' + dur + 'ms ease';
+            el.style.transform  = 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) rotate(' + rot + 'deg) scale(0)';
+            el.style.opacity    = '0';
+          }, 16);
+
+          setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, dur + 200);
+        }, i * 18);
+      })(i);
     }
   };
 
@@ -282,8 +347,8 @@
       self.myVote = voteData;
       self._revealChart();
       if (w.setStanceMapVoteMarker) w.setStanceMapVoteMarker(pin.qi, pin.sx, pin.sy);
-      self._draw();
-      self._showResults(voteData);
+      self._drawPinBounce();
+      self._showQuiz(voteData);
     };
 
     if (this.supa) {
@@ -327,6 +392,147 @@
     this.stored = JSON.parse(localStorage.getItem(this.KEY + '_counts') || '{}');
   };
 
+  /* ---------- A: クイズ表示 ---------- */
+  Vote2D.prototype._showQuiz = function (vote) {
+    var self = this;
+    var cfg  = this.cfg;
+
+    var raw = getRawData();
+
+    if (!raw || raw.length < 4) {
+      this._showResults(vote);
+      return;
+    }
+
+    var snsCounts = [0, 0, 0, 0];
+    for (var ri = 0; ri < raw.length; ri++) {
+      snsCounts[stanceToQuad(raw[ri].x, raw[ri].y)]++;
+    }
+    var snsTotal = raw.length;
+    var maxCount = Math.max.apply(null, snsCounts);
+    if (maxCount === 0) { this._showResults(vote); return; }
+    var correctQi = snsCounts.indexOf(maxCount);
+
+    var res = d.getElementById(cfg.resultId || 'vote-result');
+    if (!res) { this._showResults(vote); return; }
+
+    var quizDiv = d.createElement('div');
+    quizDiv.id = 'vote2d-quiz';
+
+    var quads  = cfg.quadrants;
+    var btnHtml = '';
+    for (var q = 0; q < 4; q++) {
+      var col = QUAD_BORDERS[q].replace('.40', '.85');
+      var bg  = QUAD_COLORS[q];
+      btnHtml +=
+        '<button type="button" data-qi="' + q + '" ' +
+          'style="border:1.5px solid ' + col + ';border-radius:8px;background:' + bg + ';' +
+          'padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;text-align:left;' +
+          'color:' + QUAD_TEXTS[q] + ';transition:transform .15s ease,box-shadow .15s ease;">' +
+          escHtml(quads[q] ? quads[q].label : 'Q' + q) +
+        '</button>';
+    }
+
+    quizDiv.innerHTML =
+      '<div style="background:var(--accent-soft,#f0faf5);border-radius:10px;padding:16px 18px;margin-bottom:16px;">' +
+        '<div style="font-size:14px;font-weight:800;color:var(--ink,#1a1a2e);margin-bottom:10px;">' +
+          '開票前に予想！　SNSで最多だった立場は？' +
+        '</div>' +
+        '<div id="v2d-quiz-btns" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;">' +
+          btnHtml +
+        '</div>' +
+        '<div id="v2d-quiz-result" style="display:none;margin-top:12px;"></div>' +
+        '<div id="v2d-quiz-continue" style="display:none;margin-top:12px;">' +
+          '<button type="button" id="v2d-quiz-next" ' +
+            'style="background:var(--accent,#2563eb);color:#fff;border:none;border-radius:8px;' +
+            'padding:8px 22px;font-size:13px;font-weight:700;cursor:pointer;">' +
+            '結果を見る →' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+
+    res.parentNode.insertBefore(quizDiv, res);
+
+    if (w.gtag) w.gtag('event', 'vote2d_quiz_shown', { topic: cfg.topic });
+
+    var btns = quizDiv.querySelectorAll('[data-qi]');
+    var answered = false;
+    function onQuizClick(e) {
+      if (answered) return;
+      answered = true;
+      var btn    = e.currentTarget;
+      var chosen = parseInt(btn.getAttribute('data-qi'), 10);
+      for (var b = 0; b < btns.length; b++) {
+        btns[b].disabled = true;
+        btns[b].style.opacity = '0.5';
+      }
+      btn.style.opacity   = '1';
+      btn.style.transform = 'scale(1.04)';
+      self._evaluateQuiz(chosen, correctQi, snsCounts, maxCount, snsTotal, vote, quizDiv);
+    }
+    for (var b = 0; b < btns.length; b++) {
+      btns[b].addEventListener('click', onQuizClick);
+    }
+  };
+
+  /* ---------- A: クイズ答え合わせ ---------- */
+  Vote2D.prototype._evaluateQuiz = function (chosen, correctQi, snsCounts, maxCount, snsTotal, vote, quizDiv) {
+    var self      = this;
+    var cfg       = this.cfg;
+    var quads     = cfg.quadrants;
+    var isCorrect = (chosen === correctQi);
+    this.quizCorrect = isCorrect;
+
+    var correctLabel = quads[correctQi] ? quads[correctQi].label : '';
+    var pct          = snsTotal > 0 ? Math.round(maxCount / snsTotal * 100) : 0;
+    var col          = QUAD_BORDERS[correctQi].replace('.40', '.85');
+    var bg           = QUAD_COLORS[correctQi];
+
+    var resultDiv = d.getElementById('v2d-quiz-result');
+    if (!resultDiv) return;
+
+    if (isCorrect) {
+      resultDiv.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;' +
+          'background:' + bg + ';border:1.5px solid ' + col + ';">' +
+          '<span style="font-size:22px;line-height:1;" aria-hidden="true">&#x1F389;</span>' +
+          '<div>' +
+            '<div style="font-size:14px;font-weight:800;color:' + col + ';">正解！</div>' +
+            '<div style="font-size:12px;color:' + QUAD_TEXTS[correctQi] + ';margin-top:2px;">' +
+              'SNS最多は「' + escHtml(correctLabel) + '」 ' + pct + '%（' + maxCount + '/' + snsTotal + '件）' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      this._confetti(quizDiv);
+    } else {
+      resultDiv.innerHTML =
+        '<div style="padding:10px 14px;border-radius:8px;background:var(--panel,#f5f7f5);' +
+          'border:1px solid var(--line,#e0e4ea);">' +
+          '<div style="font-size:13px;font-weight:700;color:var(--ink,#1a1a2e);">惜しかった！</div>' +
+          '<div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">' +
+            'SNS最多は「<strong style="color:' + col + '">' + escHtml(correctLabel) + '</strong>」 ' +
+            pct + '%（' + maxCount + '/' + snsTotal + '件）' +
+          '</div>' +
+        '</div>';
+    }
+
+    resultDiv.style.display = 'block';
+
+    var cont = d.getElementById('v2d-quiz-continue');
+    if (cont) cont.style.display = 'block';
+
+    if (w.gtag) w.gtag('event', 'vote2d_quiz_answered', { topic: cfg.topic, correct: isCorrect });
+
+    var nextBtn = d.getElementById('v2d-quiz-next');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        var qBlock = d.getElementById('vote2d-quiz');
+        if (qBlock) qBlock.remove();
+        self._showResults(vote);
+      });
+    }
+  };
+
   /* ---------- 結果表示 ---------- */
   Vote2D.prototype._showResults = function (vote) {
     var self   = this;
@@ -335,7 +541,6 @@
     var q      = quads[vote.qi] || quads[0];
     var color  = QUAD_BORDERS[vote.qi].replace('.40','.85');
 
-    /* キャンバスにピンを復元 */
     if (this.canvas && vote.sx !== undefined) {
       var cp = stanceToCanvas(vote.sx, vote.sy, this.cW, this.cH);
       this.pin = { cx: cp.cx, cy: cp.cy, sx: vote.sx, sy: vote.sy, qi: vote.qi };
@@ -346,17 +551,15 @@
     for (var k in this.stored) total += (this.stored[k]||0);
     if (total === 0) total = 1;
 
-    /* 位置ラベル */
     var lbl = d.getElementById('vote-position-label');
     if (lbl) { lbl.textContent = 'あなたの立場: 「' + q.label + '」'; lbl.style.color = color; }
     var txt = d.getElementById('vote-position-text');
     if (txt) txt.textContent = (q.desc || '') +
-      '\n\nXY軸上の座標 — ' + cfg.xAxis.neg + '/' + cfg.xAxis.pos + ' 軸: ' +
+      '\n\nXY軸上の座標—— ' + cfg.xAxis.neg + '/' + cfg.xAxis.pos + ' 軸: ' +
       (vote.sx >= 0 ? '+' : '') + vote.sx.toFixed(1) + ' ／ ' +
       cfg.yAxis.neg + '/' + cfg.yAxis.pos + ' 軸: ' +
       (vote.sy >= 0 ? '+' : '') + vote.sy.toFixed(1);
 
-    /* 比較カードと投票バー: 投票数が少ないためX分類をメイン表示に切り替え。非表示にする */
     var comp = d.getElementById('vote-comparison');
     if (comp) {
       var hdr = comp.previousElementSibling;
@@ -366,13 +569,10 @@
     var bars = d.getElementById('vote-bars');
     if (bars) bars.style.display = 'none';
 
-    /* X分類データをメイン表示: vote-comparison の直前に挿入
-     * RAWはconstのためwindowプロパティにならずスコープ直参照が必要。
-     * 返訪者では DOMContentLoaded 前に呼ばれるため遅延対応。 */
+    var quizCorrect = this.quizCorrect;
+
     (function insertSnsSection() {
-      /* jshint ignore:start */
-      var rawData = (typeof RAW !== 'undefined') ? RAW : null; // eslint-disable-line no-undef
-      /* jshint ignore:end */
+      var rawData = getRawData();
       if (!rawData) {
         if (d.readyState === 'loading') {
           d.addEventListener('DOMContentLoaded', insertSnsSection, { once: true });
@@ -423,7 +623,7 @@
             '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
               '<span style="font-size:12px;font-weight:' + (mine ? '700' : '400') + ';color:' +
                 (mine ? col : 'var(--muted,#667085)') + ';display:flex;align-items:center;gap:6px;">' +
-                qq.label +
+                escHtml(qq.label) +
                 (mine
                   ? ' <span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;' +
                     'background:' + col + ';color:#fff;white-space:nowrap;">あなた</span>'
@@ -433,8 +633,8 @@
                 (mine ? col : 'var(--muted,#667085)') + '">' + pct + '%（' + c + '件）</span>' +
             '</div>' +
             '<div style="height:6px;border-radius:3px;background:var(--line,#e0e4ea);overflow:hidden;">' +
-              '<div style="height:100%;width:' + pct + '%;background:' + col +
-                ';border-radius:3px;transition:width .6s ease;opacity:' + (mine ? '1' : '0.4') + ';"></div>' +
+              '<div id="sns-bar-' + i + '" style="height:100%;width:0%;background:' + col +
+                ';border-radius:3px;transition:width .7s ease ' + (i * 0.1) + 's;opacity:' + (mine ? '1' : '0.4') + ';"></div>' +
             '</div>' +
           '</div>';
       });
@@ -448,47 +648,132 @@
       }
 
       snsDist.innerHTML = snsHtml;
+
+      /* F: バーアニメーション（次フレームで幅を設定して transition を発火） */
+      requestAnimationFrame(function () {
+        for (var bi = 0; bi < 4; bi++) {
+          var barEl = d.getElementById('sns-bar-' + bi);
+          if (barEl) {
+            var bpct = Math.round(snsCounts[bi] / snsTotal * 100);
+            barEl.style.width = bpct + '%';
+          }
+        }
+      });
+
+      /* B: 近い声・遠い声（SNS dist の直後に挿入） */
+      self._showNearFar(vote, rawData, snsDist);
     }());
 
     /* Xシェア */
     var shareBtn = d.getElementById('share-x');
     if (shareBtn) {
       var posStr = (vote.sx >= 0 ? 'やや右' : 'やや左') + '・' + (vote.sy >= 0 ? '上寄り' : '下寄り');
-      var text = '【'+cfg.title+'】\n私の立場: 「'+q.label+'」（'+posStr+'）\n\nあなたはどこ？ SNSの声の分布と比べてみて。\n\n#SNS反応まっぷ';
+      var shareText;
+      if (quizCorrect === true) {
+        shareText = '[開票前の予想的中！]\n' +
+          cfg.title + 'でSNS世論を1発で当てました。\n私の立場: 「' + q.label + '」\n\nあなたも試してみて。\n\n#SNS反応まっぷ';
+      } else {
+        shareText = '[「' + cfg.title + '」]\n私の立場: 「' + q.label + '」（' + posStr + '）\n\nSNSの声の分布と比べてみて。\n\n#SNS反応まっぷ';
+      }
       var url  = location.href.split('#')[0].split('?')[0]+'?utm_source=share_button&utm_medium=social&utm_campaign=vote_share';
-      shareBtn.href = 'https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url);
+      shareBtn.href = 'https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(url);
       var short = q.label.length > 14 ? q.label.slice(0,14)+'…' : q.label;
-      shareBtn.textContent = '𝕏 でシェア「'+short+'」';
+      shareBtn.textContent = '𝕏 でシェア「'+short+'」' + (quizCorrect === true ? ' ★的中' : '');
     }
 
-    /* やり直しボタン */
     var redo = d.getElementById('vote-redo-btn');
     if (redo) {
       if (self.supa) { redo.style.display = 'none'; }
       else { redo.onclick = function () { localStorage.removeItem(self.KEY+'_my'); location.reload(); }; }
     }
 
-    /* 結果エリア表示 */
     var res = d.getElementById(cfg.resultId || 'vote-result');
     if (res) res.style.display = 'block';
 
     document.dispatchEvent(new CustomEvent('vote2d:revealed'));
   };
 
+  /* ---------- B: 近い声・遠い声 ---------- */
+  Vote2D.prototype._showNearFar = function (vote, rawData, snsDist) {
+    var cfg = this.cfg;
+
+    if (!rawData || rawData.length < 2 || !snsDist) return;
+
+    var minD = Infinity, maxD = -1;
+    var nearPt = null, farPt = null;
+
+    for (var i = 0; i < rawData.length; i++) {
+      var r = rawData[i];
+      if (!r.summary || !r.summary.trim()) continue;
+      var d2 = dist2(vote.sx, vote.sy, r.x, r.y);
+      if (d2 < minD || (d2 === minD && nearPt && r.summary.length > nearPt.summary.length)) {
+        minD = d2; nearPt = r;
+      }
+      if (d2 > maxD || (d2 === maxD && farPt && r.summary.length > farPt.summary.length)) {
+        maxD = d2; farPt = r;
+      }
+    }
+
+    if (!nearPt || !farPt) return;
+
+    var nearQi    = stanceToQuad(nearPt.x, nearPt.y);
+    var farQi     = stanceToQuad(farPt.x,  farPt.y);
+    var nearCol   = QUAD_BORDERS[nearQi].replace('.40', '.85');
+    var farCol    = QUAD_BORDERS[farQi].replace('.40', '.85');
+    var nearBg    = QUAD_COLORS[nearQi];
+    var farBg     = QUAD_COLORS[farQi];
+    var nearLabel = cfg.quadrants[nearQi] ? cfg.quadrants[nearQi].label : '';
+    var farLabel  = cfg.quadrants[farQi]  ? cfg.quadrants[farQi].label  : '';
+    var nearDist  = Math.round(Math.sqrt(minD) * 10) / 10;
+    var farDist   = Math.round(Math.sqrt(maxD) * 10) / 10;
+
+    function cardHtml(pt, col, bg, label, dist, isNear) {
+      var titleText = isNear
+        ? 'あなたに一番近い声'
+        : '一番遠くにある声';
+      var linkHtml = pt.url
+        ? ' <a href="' + escHtml(pt.url) + '" target="_blank" rel="noopener" ' +
+          'style="font-size:11px;color:' + col + ';text-decoration:underline;">→ Xで見る</a>'
+        : '';
+      return '<div style="border-radius:10px;background:' + escHtml(bg) + ';border:1.5px solid ' + escHtml(col) + ';padding:14px;">' +
+        '<div style="font-size:12px;font-weight:800;color:' + escHtml(col) + ';margin-bottom:6px;">' +
+          (isNear ? '●' : '□') + ' ' + titleText +
+        '</div>' +
+        '<div style="font-size:13px;color:var(--ink,#1a1a2e);line-height:1.55;margin-bottom:8px;">' +
+          '「' + escHtml(pt.summary) + '」' +
+        '</div>' +
+        '<div style="font-size:11px;color:' + escHtml(col) + ';">' +
+          escHtml(label) + ' / 距離 ' + dist + linkHtml +
+        '</div>' +
+      '</div>';
+    }
+
+    var nfDiv = d.createElement('div');
+    nfDiv.id = 'vote2d-nearfar';
+    nfDiv.style.cssText = 'margin-top:16px;';
+    nfDiv.innerHTML =
+      '<div style="font-size:14px;font-weight:800;color:var(--ink,#1a1a2e);margin-bottom:10px;">' +
+        'あなたの立場から見たリアルな声' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">' +
+        cardHtml(nearPt, nearCol, nearBg, nearLabel, nearDist, true) +
+        cardHtml(farPt,  farCol,  farBg,  farLabel,  farDist,  false) +
+      '</div>';
+
+    snsDist.parentNode.insertBefore(nfDiv, snsDist.nextSibling);
+  };
+
   /* ---------- 公開API ---------- */
   w.Vote2D = {
     /**
      * cfg: {
-     *   containerId: string,          // #vote-buttons
-     *   resultId: string,             // #vote-result
-     *   topic: string,                // Supabase topic_id ベース
-     *   title: string,                // シェア文用タイトル
-     *   xAxis: { neg: string, pos: string },  // 左←→右
-     *   yAxis: { neg: string, pos: string },  // 下←→上
-     *   quadrants: [                  // [TL, TR, BL, BR]
-     *     { label: string, desc: string },
-     *     ...
-     *   ],
+     *   containerId: string,
+     *   resultId: string,
+     *   topic: string,
+     *   title: string,
+     *   xAxis: { neg: string, pos: string },
+     *   yAxis: { neg: string, pos: string },
+     *   quadrants: [{ label: string, desc: string }, ...],
      *   supabaseUrl: string,
      *   supabaseAnonKey: string,
      * }
