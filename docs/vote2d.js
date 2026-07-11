@@ -43,23 +43,26 @@
     var saved = localStorage.getItem(this.KEY + '_my');
     this.myVote = saved ? JSON.parse(saved) : null;
 
-    this._applyBlur();
+    var self = this;
+
+    /* #stance-map-* や setStanceMapVoteMarker はこのスクリプトより後の
+       HTML/<script> で定義されるため、DOM 構築完了後に実行する */
+    var onReady = function (fn) {
+      if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', fn, { once: true });
+      } else {
+        fn();
+      }
+    };
+
+    onReady(function () { self._applyBlur(); });
     this._buildCanvas();
 
-    var self = this;
     this._fetchVotes().then(function () {
       if (self.myVote !== null) {
-        /* Defer marker call: stance map script runs after this microtask */
-        /* setStanceMapVoteMarker is defined in a later <script> block.
-           Wait for DOMContentLoaded so all inline scripts have executed. */
-        var callMarker = function () {
+        onReady(function () {
           if (w.setStanceMapVoteMarker) w.setStanceMapVoteMarker(self.myVote.qi, self.myVote.sx, self.myVote.sy);
-        };
-        if (d.readyState === 'loading') {
-          d.addEventListener('DOMContentLoaded', callMarker, { once: true });
-        } else {
-          callMarker();
-        }
+        });
         self._showResults(self.myVote);
       }
     });
