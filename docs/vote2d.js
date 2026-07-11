@@ -727,24 +727,23 @@
     var nearDist  = Math.round(Math.sqrt(minD) * 10) / 10;
     var farDist   = Math.round(Math.sqrt(maxD) * 10) / 10;
 
-    function cardHtml(pt, col, bg, label, dist, isNear) {
-      var titleText = isNear
-        ? 'あなたに一番近い声'
-        : '一番遠くにある声';
-      var linkHtml = pt.url
-        ? ' <a href="' + escHtml(pt.url) + '" target="_blank" rel="noopener" ' +
-          'style="font-size:11px;color:' + col + ';text-decoration:underline;">→ Xで見る</a>'
-        : '';
-      return '<div style="border-radius:10px;background:' + escHtml(bg) + ';border:1.5px solid ' + escHtml(col) + ';padding:14px;">' +
-        '<div style="font-size:12px;font-weight:800;color:' + escHtml(col) + ';margin-bottom:6px;">' +
-          (isNear ? '●' : '□') + ' ' + titleText +
+    function embedCard(pt, col, bg, label, dist, isNear) {
+      var titleText = isNear ? '● あなたに一番近い声' : '□ 一番遠くにある声';
+      var embed = pt.url
+        ? '<blockquote class="twitter-tweet" data-conversation="none" data-cards="hidden">' +
+            '<a href="' + escHtml(pt.url) + '"></a>' +
+          '</blockquote>'
+        : '<div style="font-size:13px;color:var(--ink,#1a1a2e);padding:12px;line-height:1.55;">' +
+            '「' + escHtml(pt.summary) + '」' +
+          '</div>';
+      return '<div style="border-radius:10px;background:' + escHtml(bg) + ';border:1.5px solid ' + escHtml(col) + ';padding:12px 14px 8px;">' +
+        '<div style="font-size:12px;font-weight:800;color:' + escHtml(col) + ';margin-bottom:2px;">' +
+          titleText +
         '</div>' +
-        '<div style="font-size:13px;color:var(--ink,#1a1a2e);line-height:1.55;margin-bottom:8px;">' +
-          '「' + escHtml(pt.summary) + '」' +
+        '<div style="font-size:11px;color:' + escHtml(col) + ';margin-bottom:8px;">' +
+          escHtml(label) + ' / 距離 ' + dist +
         '</div>' +
-        '<div style="font-size:11px;color:' + escHtml(col) + ';">' +
-          escHtml(label) + ' / 距離 ' + dist + linkHtml +
-        '</div>' +
+        embed +
       '</div>';
     }
 
@@ -755,12 +754,23 @@
       '<div style="font-size:14px;font-weight:800;color:var(--ink,#1a1a2e);margin-bottom:10px;">' +
         'あなたの立場から見たリアルな声' +
       '</div>' +
-      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">' +
-        cardHtml(nearPt, nearCol, nearBg, nearLabel, nearDist, true) +
-        cardHtml(farPt,  farCol,  farBg,  farLabel,  farDist,  false) +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">' +
+        embedCard(nearPt, nearCol, nearBg, nearLabel, nearDist, true) +
+        embedCard(farPt,  farCol,  farBg,  farLabel,  farDist,  false) +
       '</div>';
 
     snsDist.parentNode.insertBefore(nfDiv, snsDist.nextSibling);
+
+    /* Twitter widgets をレンダリング */
+    if (w.twttr && w.twttr.widgets) {
+      w.twttr.widgets.load(nfDiv);
+    } else {
+      /* widgets.js 未読み込みなら動的に追加 */
+      var ts = d.createElement('script');
+      ts.async = true;
+      ts.src = 'https://platform.twitter.com/widgets.js';
+      d.body.appendChild(ts);
+    }
   };
 
   /* ---------- 公開API ---------- */
