@@ -266,6 +266,16 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 備考: 1本URL付き。今週のURL付き引用RT上限（週1〜2本）に到達。
 ※ @tamakiyuichiro への引用RTは先週（2026-07-07）実施済み。
 
+## リプライ実績 2026-07-12
+
+| # | リプライ先 | テーマ | タイプ | views |
+|---|-----------|--------|--------|-------|
+| 1 | @nhk_bknews（自転車青切符・大阪信号無視最多） | 自転車青切符 | URLなし | 15.5K |
+| 2 | @Kanchan_es（部活地域移行・体育館ジム化） | 部活地域移行 | URLなし | 8.3K |
+| 3 | @hst_tvasahi（高齢ドライバー技能検査見直し） | 高齢者免許返納 | URLなし | 22.2K |
+
+備考: 全3本URLなし。今週URL付き引用RTは@yamazoejimusyoの1本のみ（枠残り1本は来週へ）。
+
 ---
 
 ## 運用メモ 2026-07-09
