@@ -714,48 +714,14 @@
   <button class="manga-next" type="button" aria-label="次のページ">›</button>
 </div>
 </section>
+<script src="manga-viewer.js"></script>
 <script>
-(function(){
-  var pages=[
-    {src:"images/ai-copyright-manga-page-1.webp", alt:"漫画1ページ目 私の10年が、一瞬で……"},
-    {src:"images/ai-copyright-manga-page-2.webp", alt:"漫画2ページ目 二つの正義"},
-    {src:"images/ai-copyright-manga-page-3.webp", alt:"漫画3ページ目 答えのない問い"}
-  ];
-  var modal=document.getElementById("manga-modal");
-  var modalImg=document.getElementById("manga-modal-image");
-  var index=0;
-  function openModal(i){
-    index=i;
-    modalImg.src=pages[index].src;
-    modalImg.alt=pages[index].alt;
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden","false");
-    document.body.style.overflow="hidden";
-  }
-  function closeModal(){
-    modal.classList.remove("active");
-    modal.setAttribute("aria-hidden","true");
-    document.body.style.overflow="";
-  }
-  function move(delta){
-    index=(index+delta+pages.length)%pages.length;
-    modalImg.src=pages[index].src;
-    modalImg.alt=pages[index].alt;
-  }
-  document.querySelectorAll(".manga-page-card").forEach(function(btn){
-    btn.addEventListener("click",function(){openModal(parseInt(btn.dataset.mangaIndex,10));});
-  });
-  modal.querySelector(".manga-close").addEventListener("click",closeModal);
-  modal.querySelector(".manga-prev").addEventListener("click",function(e){e.stopPropagation();move(-1);});
-  modal.querySelector(".manga-next").addEventListener("click",function(e){e.stopPropagation();move(1);});
-  modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});
-  document.addEventListener("keydown",function(e){
-    if(!modal.classList.contains("active"))return;
-    if(e.key==="Escape")closeModal();
-    if(e.key==="ArrowLeft")move(-1);
-    if(e.key==="ArrowRight")move(1);
-  });
-})();
+MangaViewer.init({
+  chars: [
+    {img:'images/ai-copyright-manga-charsheet-mio.webp', name:'藤原 澪', role:'フリーランスイラストレーター', quote:'10年かけた作風が、一瞬で真似される'},
+    {img:'images/ai-copyright-manga-charsheet-sota.webp', name:'桐谷 颯太', role:'AIスタートアップのエンジニア', quote:'規制だけでは技術も文化も止まる'}
+  ]
+});
 </script>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
@@ -800,7 +766,7 @@
     quadrants: [{"label": "AIで個人表現を広げる", "desc": "規制より個人の創造の自由を優先。AIは表現を広げるツールとして活かすべき。"}, {"label": "クリエイターを守るため規制を", "desc": "著作権侵害からクリエイターの権利・生活を守るために法規制強化が必要。"}, {"label": "産業競争力のため規制不要", "desc": "日本のAI産業・技術競争力のために過度な規制は避け、自由な活用を推進すべき。"}, {"label": "産業秩序のためルール整備を", "desc": "対価支払い・ライセンス制度など、産業のルールとして共存の仕組みを作るべき。"}],
     questions: [
       {text:'AIの学習に規制は必要だと思う？',subtext:'直感でOK、あとから微調整できます',negLabel:'不要・AIは自由に',posLabel:'必要・著作権を守る'},
-      {text:'どちらをより大事にしたい？',subtext:'答えたら開票します',negLabel:'AI産業の発展',posLabel:'作り手の権利'}
+      {text:'AIをめぐるトレードオフ、何を優先したい？',subtext:'答えたら開票します',negLabel:'AI技術の自由な発展',posLabel:'作り手の権利・対価'}
     ],
     commonGround: {
       title: '意見の向こう側',

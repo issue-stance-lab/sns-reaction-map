@@ -671,7 +671,15 @@
 </div>
 <p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです</p>
 </section>
-<script>(function(){var mangaImages=["images/bike-blue-ticket-manga-page-1.webp","images/bike-blue-ticket-manga-page-2.webp","images/bike-blue-ticket-manga-page-3.webp"];var modal=document.getElementById("manga-modal");var modalImg=document.getElementById("manga-modal-image");var cur=0;function openModal(i){cur=i;modalImg.src=mangaImages[cur];modal.classList.add("active");modal.setAttribute("aria-hidden","false");}function closeModal(){modal.classList.remove("active");modal.setAttribute("aria-hidden","true");}function move(d){cur=(cur+d+mangaImages.length)%mangaImages.length;modalImg.src=mangaImages[cur];}document.querySelectorAll("[data-manga-index]").forEach(function(btn){btn.addEventListener("click",function(){openModal(parseInt(btn.dataset.mangaIndex));});});modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});modal.querySelector(".manga-close").addEventListener("click",closeModal);modal.querySelector(".manga-prev").addEventListener("click",function(e){e.stopPropagation();move(-1);});modal.querySelector(".manga-next").addEventListener("click",function(e){e.stopPropagation();move(1);});document.addEventListener("keydown",function(e){if(!modal.classList.contains("active"))return;if(e.key==="Escape")closeModal();if(e.key==="ArrowLeft")move(-1);if(e.key==="ArrowRight")move(1);});})();</script>
+<script src="manga-viewer.js"></script>
+<script>
+MangaViewer.init({
+  chars: [
+    {img:'images/bike-blue-ticket-manga-charsheet-haruo.webp', name:'森田 春夫', role:'商店街の文具店主', quote:'歩道を飛ばす自転車に、ヒヤッとする毎日'},
+    {img:'images/bike-blue-ticket-manga-charsheet-natsuki.webp', name:'相原 夏希', role:'自転車通勤の会社員', quote:'レーンもないのに取り締まりだけ先行？'}
+  ]
+});
+</script>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">自転車の「青切符」による反則金。事故やマナー違反を防ぐための厳罰化か、それとも危険な車道へ走らせる無理なルールか？</p>
@@ -715,7 +723,7 @@
     quadrants: [{"label": "インフラ整備で安全を守る", "desc": "取締りより先に安全な自転車レーン整備を。歩行者安全のために環境づくりが先決。"}, {"label": "安全のため取締り強化", "desc": "歩行者・社会を守るために青切符導入・取締り強化は当然の措置。"}, {"label": "利用者の自由と負担を守る", "desc": "車道原則や取締り強化は自転車利用者に不当な負担。利用者の自由を守るべき。"}, {"label": "ルール周知で利用者も守る", "desc": "取締りとルール周知により自転車利用者自身の安全も高まる。"}],
     questions: [
       {text:'自転車の取り締まり強化は必要だと思う？',negLabel:'過剰規制・不要',posLabel:'強化すべき'},
-      {text:'どちらを優先したい？',subtext:'答えたら開票します',negLabel:'利用者の自由',posLabel:'歩行者の安全'}
+      {text:'自転車問題、どちらの立場に近い？',subtext:'答えたら開票します',negLabel:'利用者の自由・負担軽減を守りたい',posLabel:'歩行者・社会の安全を守りたい'}
     ],
     commonGround: {
       title: '意見の向こう側',

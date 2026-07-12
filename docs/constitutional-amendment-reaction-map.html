@@ -837,48 +837,14 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
+<script src="manga-viewer.js"></script>
 <script>
-(function(){
-  var pages=[
-    {src:"images/constitutional-amendment-manga-page-1.webp", alt:"漫画1ページ目 古い教室の約束"},
-    {src:"images/constitutional-amendment-manga-page-2.webp", alt:"漫画2ページ目 現実を見ているのか"},
-    {src:"images/constitutional-amendment-manga-page-3.webp", alt:"漫画3ページ目 投票箱の前で"}
-  ];
-  var modal=document.getElementById("manga-modal");
-  var modalImg=document.getElementById("manga-modal-image");
-  var index=0;
-  function openModal(i){
-    index=i;
-    modalImg.src=pages[index].src;
-    modalImg.alt=pages[index].alt;
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden","false");
-    document.body.style.overflow="hidden";
-  }
-  function closeModal(){
-    modal.classList.remove("active");
-    modal.setAttribute("aria-hidden","true");
-    document.body.style.overflow="";
-  }
-  function move(delta){
-    index=(index+delta+pages.length)%pages.length;
-    modalImg.src=pages[index].src;
-    modalImg.alt=pages[index].alt;
-  }
-  document.querySelectorAll(".manga-page-card").forEach(function(btn){
-    btn.addEventListener("click",function(){openModal(parseInt(btn.dataset.mangaIndex,10));});
-  });
-  modal.querySelector(".manga-close").addEventListener("click",closeModal);
-  modal.querySelector(".manga-prev").addEventListener("click",function(e){e.stopPropagation();move(-1);});
-  modal.querySelector(".manga-next").addEventListener("click",function(e){e.stopPropagation();move(1);});
-  modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});
-  document.addEventListener("keydown",function(e){
-    if(!modal.classList.contains("active"))return;
-    if(e.key==="Escape")closeModal();
-    if(e.key==="ArrowLeft")move(-1);
-    if(e.key==="ArrowRight")move(1);
-  });
-})();
+MangaViewer.init({
+  chars: [
+    {img:'images/constitutional-amendment-manga-charsheet-kazuko.webp', name:'佐伯 和子', role:'元教員・平和学習ボランティア', quote:'平和主義は変えてはいけない、絶対に'},
+    {img:'images/constitutional-amendment-manga-charsheet-yuma.webp', name:'高瀬 悠真', role:'安全保障に関心のある会社員', quote:'今の脅威に備えるために、現実を見てほしい'}
+  ]
+});
 </script>
 <script src="vote2d.js?v=9"></script>
 <script>
@@ -895,7 +861,7 @@
     quadrants: [{"label": "護憲のまま安全保障を強化", "desc": "憲法を変えずとも、解釈や政策で現実の安全保障ニーズに対応できる。"}, {"label": "改憲で安全保障を強化", "desc": "自衛隊明記・緊急事態条項など、改憲により現実の防衛力を高めるべき。"}, {"label": "9条を守り平和を貫く", "desc": "戦争放棄を定めた9条は日本の誇り。護憲こそが平和を守る唯一の道。"}, {"label": "改憲しても平和は守れる", "desc": "憲法を改正しても平和主義の理念は維持でき、より現実的な平和が実現する。"}],
     questions: [
       {text:'憲法を改正すべきだと思う？',negLabel:'護憲・反対',posLabel:'改憲・賛成'},
-      {text:'どちらを重視する？',subtext:'答えたら開票します',negLabel:'平和主義・9条',posLabel:'安全保障強化'}
+      {text:'日本の安全保障、どちらの考えに近い？',subtext:'答えたら開票します',negLabel:'9条・平和主義で対応できる',posLabel:'防衛力の強化が不可欠'}
     ],
     commonGround: {
       title: '意見の向こう側',

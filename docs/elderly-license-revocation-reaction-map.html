@@ -814,48 +814,14 @@
   <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
+<script src="manga-viewer.js"></script>
 <script>
-(function(){
-  var pages=[
-    {src:"images/elderly-license-revocation-manga-page-1.webp", alt:"漫画1ページ目 ニュースの赤いブレーキランプ"},
-    {src:"images/elderly-license-revocation-manga-page-2.webp", alt:"漫画2ページ目 車がないと、生きていけない"},
-    {src:"images/elderly-license-revocation-manga-page-3.webp", alt:"漫画3ページ目 同じ道の上で"}
-  ];
-  var modal=document.getElementById("manga-modal");
-  var modalImg=document.getElementById("manga-modal-image");
-  var index=0;
-  function openModal(i){
-    index=i;
-    modalImg.src=pages[index].src;
-    modalImg.alt=pages[index].alt;
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden","false");
-    document.body.style.overflow="hidden";
-  }
-  function closeModal(){
-    modal.classList.remove("active");
-    modal.setAttribute("aria-hidden","true");
-    document.body.style.overflow="";
-  }
-  function move(delta){
-    index=(index+delta+pages.length)%pages.length;
-    modalImg.src=pages[index].src;
-    modalImg.alt=pages[index].alt;
-  }
-  document.querySelectorAll(".manga-page-card").forEach(function(btn){
-    btn.addEventListener("click",function(){openModal(parseInt(btn.dataset.mangaIndex,10));});
-  });
-  modal.querySelector(".manga-close").addEventListener("click",closeModal);
-  modal.querySelector(".manga-prev").addEventListener("click",function(e){e.stopPropagation();move(-1);});
-  modal.querySelector(".manga-next").addEventListener("click",function(e){e.stopPropagation();move(1);});
-  modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});
-  document.addEventListener("keydown",function(e){
-    if(!modal.classList.contains("active"))return;
-    if(e.key==="Escape")closeModal();
-    if(e.key==="ArrowLeft")move(-1);
-    if(e.key==="ArrowRight")move(1);
-  });
-})();
+MangaViewer.init({
+  chars: [
+    {img:'images/elderly-license-revocation-manga-charsheet-1.webp', name:'森田 直子', role:'都市部の会社員・二児の母', quote:'高齢ドライバーの事故が怖い。子どもを守りたい'},
+    {img:'images/elderly-license-revocation-manga-charsheet-2.webp', name:'田畑 茂', role:'地方在住の元農家', quote:'車がなければ、通院も買い物もできない'}
+  ]
+});
 </script>
 <script src="vote2d.js?v=9"></script>
 <script>
@@ -872,7 +838,7 @@
     quadrants: [{"label": "安全大切だが本人判断で", "desc": "交通安全は重要だが、一律の義務化より本人・家族・医師の判断に任せるべき。"}, {"label": "事故防止のため義務化を", "desc": "相次ぐ高齢ドライバーの事故から命を守るため、年齢での法的義務化が必要。"}, {"label": "移動権・生活守るため自主返納", "desc": "高齢者の移動手段・生活を守るために、自主判断と代替交通の整備を優先。"}, {"label": "義務化でも代替手段を整備", "desc": "義務化と同時に公共交通・移動支援を整備すれば生活は守れる。"}],
     questions: [
       {text:'高齢ドライバーの免許返納を義務化すべき？',negLabel:'本人・家族判断で',posLabel:'法的に義務化'},
-      {text:'どちらを優先したい？',subtext:'答えたら開票します',negLabel:'高齢者の移動の自由',posLabel:'交通安全・被害防止'}
+      {text:'どちらの視点をより大切にしたい？',subtext:'答えたら開票します',negLabel:'免許を失う高齢者の生活・権利',posLabel:'道路を使う全員の安全'}
     ],
     commonGround: {
       title: '意見の向こう側',
