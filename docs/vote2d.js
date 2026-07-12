@@ -1104,14 +1104,23 @@
       { v:  0.5, label: 'やや賛成', swatch: '#93c5fd', textCol: '#1d4ed8', bdCol: '#bfdbfe', useNeg: false },
       { v:  1.0, label: '強く賛成', swatch: '#2563eb', textCol: '#1e40af', bdCol: '#93c5fd', usePos: true  }
     ];
-    function cardBtn(val, negLabel, posLabel) {
-      var c = CARD_DEFS.filter(function (x) { return x.v === val; })[0] || CARD_DEFS[2];
+    var CARD_DEFS_Q2 = [
+      { v: -1.0, label: 'こちらを重視', swatch: '#dc2626', textCol: '#991b1b', bdCol: '#fecaca', useNeg: true  },
+      { v: -0.5, label: 'ややこちら',   swatch: '#fca5a5', textCol: '#b91c1c', bdCol: '#fed7d7', useNeg: true  },
+      { v:  0.0, label: 'どちらでも',   swatch: '#d1d5db', textCol: '#374151', bdCol: '#e5e7eb'               },
+      { v:  0.5, label: 'ややこちら',   swatch: '#93c5fd', textCol: '#1d4ed8', bdCol: '#bfdbfe', usePos: true  },
+      { v:  1.0, label: 'こちらを重視', swatch: '#2563eb', textCol: '#1e40af', bdCol: '#93c5fd', usePos: true  }
+    ];
+    function cardBtn(val, negLabel, posLabel, defs) {
+      var activeDefs = defs || CARD_DEFS;
+      var c = activeDefs.filter(function (x) { return x.v === val; })[0] || activeDefs[2];
       var sub = c.useNeg ? negLabel : (c.usePos ? posLabel : '');
+      var subStyle = defs && sub ? ' style="color:' + c.textCol + ';font-weight:500;"' : '';
       return '<button class="v2d-card" data-val="' + val + '" type="button" ' +
         'style="border-color:' + c.bdCol + ';">' +
         '<div class="v2d-cswatch" style="background:' + c.swatch + ';border-color:' + c.swatch + ';"></div>' +
         '<div class="v2d-clabel" style="color:' + c.textCol + ';">' + escHtml(c.label) + '</div>' +
-        '<div class="v2d-csub">' + escHtml(sub) + '</div>' +
+        '<div class="v2d-csub"' + subStyle + '>' + escHtml(sub) + '</div>' +
         '</button>';
     }
 
@@ -1130,11 +1139,11 @@
             (q.subtext ? '<div style="font-size:11px;color:#6b7280;margin-top:3px;">' + q.subtext + '</div>' : '') +
           '</div>' +
           '<div id="v2d-dots" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;">' +
-            cardBtn(-1.0, q.negLabel, q.posLabel) +
-            cardBtn(-0.5, q.negLabel, q.posLabel) +
-            cardBtn( 0.0, q.negLabel, q.posLabel) +
-            cardBtn( 0.5, q.negLabel, q.posLabel) +
-            cardBtn( 1.0, q.negLabel, q.posLabel) +
+            cardBtn(-1.0, q.negLabel, q.posLabel, step === 1 ? CARD_DEFS_Q2 : undefined) +
+            cardBtn(-0.5, q.negLabel, q.posLabel, step === 1 ? CARD_DEFS_Q2 : undefined) +
+            cardBtn( 0.0, q.negLabel, q.posLabel, step === 1 ? CARD_DEFS_Q2 : undefined) +
+            cardBtn( 0.5, q.negLabel, q.posLabel, step === 1 ? CARD_DEFS_Q2 : undefined) +
+            cardBtn( 1.0, q.negLabel, q.posLabel, step === 1 ? CARD_DEFS_Q2 : undefined) +
           '</div>' +
         '</div>';
 
