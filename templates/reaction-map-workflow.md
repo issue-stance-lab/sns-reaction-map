@@ -16,6 +16,9 @@
 
 入力形式は `templates/reaction-map-input.schema.md` に合わせる。
 
+分類基盤はOpenCode Go APIの `minimax-m2.7`。テーマ固有の2D分類スクリプトで
+10件テストを行い、合格後に全量実行する。Ollamaはローカル予備として使用する。
+
 最低限必要な項目:
 
 - `query`

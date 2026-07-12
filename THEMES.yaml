@@ -1,9 +1,9 @@
 # THEMES.yaml — テーマ台帳（単一の真実源）
-# 最終更新: 2026-07-05
+# 最終更新: 2026-07-12
 #
 # 工程の定義（全テーマ共通のステートマシン）
 #   collect:     Yahoo検索でデータ収集済み
-#   classify:    Ollama分類済み（1D）
+#   classify:    AI分類済み（1D）
 #   classify2d:  2D分類済み（エラー率10%以下）
 #   page_v3:     v3フォーマットのHTMLが公開されている
 #   manga_data:  漫画データ・プロンプト作成済み
@@ -30,15 +30,15 @@ themes:
   bike-blue-ticket:
     title: 自転車の青切符導入
     html: docs/bike-blue-ticket-reaction-map.html
-    collect: done        # 177件
-    classify: done       # 116件有効
-    classify2d: done     # 116件、エラー0%
+    collect: done        # 268件
+    classify: done       # 181件有効（OpenCode Go / minimax-m2.7）
+    classify2d: done     # 181件、APIエラー0%
     page_v3: done        # smCanvasMain/smCanvasHeat実装済み
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
-    refresh_at: 2026-07-12
-    notes: ""
+    refresh_at: 2026-07-19
+    notes: "2026-07-12にYahooリアルタイム検索169件を追加収集。重複77件を除外し、新規92件中65件をOpenCode Go / minimax-m2.7で2D有効分類。"
 
   bukatsu-chiiki:
     title: 部活動の地域移行
