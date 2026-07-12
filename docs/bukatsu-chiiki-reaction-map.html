@@ -682,6 +682,15 @@
 </div>
 <p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。</p>
 </section>
+<script src="manga-viewer.js"></script>
+<script>
+MangaViewer.init({
+  chars: [
+    {img:'images/bukatsu-chiiki-manga-charsheet-ren.webp', name:'片桐 蓮', role:'中学校教員・部活顧問', quote:'子どもの場を守るために、移行を前向きに進めたい'},
+    {img:'images/bukatsu-chiiki-manga-charsheet-maki.webp', name:'野口 真紀', role:'中学生の保護者', quote:'費用や送迎が増えて、本当に続けられるか不安'}
+  ]
+});
+</script>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
@@ -721,11 +730,11 @@
     topic: '部活動地域移行_SNS反応まっぷ',
     title: '部活動の地域移行 SNS反応まっぷ',
     xAxis: { neg: '地域移行に反対', pos: '地域移行に賛成' },
-    yAxis: { neg: '教員の負担軽減を最優先', pos: '競技力・教育的価値を最優先' },
+    yAxis: { neg: '支える仕組みの持続可能性を重視', pos: '活動の質・教育的価値を重視' },
     quadrants: [{"label": "競技力は現状維持で守る", "desc": "地域移行ではなく現行の部活形態を改善しながら競技力・教育価値を守るべき。"}, {"label": "地域移行で競技力も維持", "desc": "地域クラブへの移行でも競技水準・教育的価値は維持・向上できる。"}, {"label": "教員負担は現行改善で解決", "desc": "移行より現行の枠組みを改善し、教員の働き方を守るべき。"}, {"label": "地域移行で教員の働き方改善", "desc": "地域移行により教員の長時間労働が解消し、持続可能な体制になる。"}],
     questions: [
       {text:'部活の地域移行に賛成？',negLabel:'反対',posLabel:'賛成'},
-      {text:'どちらを大事にしたい？',subtext:'答えたら開票します',negLabel:'教員の働き方',posLabel:'競技力・教育価値'}
+      {text:'部活動改革で、まず優先して解決したいのは？',subtext:'答えたら開票します',negLabel:'支える仕組みの持続可能性',posLabel:'活動の質・教育的価値'}
     ],
     commonGround: {
       title: '意見の向こう側',
@@ -744,8 +753,8 @@
 <div id="sm-wrap">
   <canvas id="smCanvasHeat" width="600" height="600"></canvas>
   <canvas id="smCanvasMain" width="600" height="600"></canvas>
-  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">教員の負担軽減を最優先 ▲</div>
-  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 教育的価値・部活文化を重視</div>
+  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">活動の質・教育的価値を重視 ▲</div>
+  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 支える仕組みの持続可能性を重視</div>
   <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 地域移行に反対・懐疑的</div>
   <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">地域移行を推進 ▶</div>
 </div>
@@ -782,15 +791,15 @@
   <div class="sm-filters">
     <span style="font-size:10px;color:#888">絞り込み:</span>
     <button class="sm-fbtn active" data-q="all">全件 (148)</button>
-    <button class="sm-fbtn" data-q="q2">移行反対×負担軽減 (27)</button>
-    <button class="sm-fbtn" data-q="q1">移行推進×負担軽減 (21)</button>
+    <button class="sm-fbtn" data-q="q2">移行反対×活動価値 (27)</button>
+    <button class="sm-fbtn" data-q="q1">移行推進×活動価値 (21)</button>
     <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (16)</button>
     <button class="sm-fbtn" data-q="calm">冷静 e≤0 (66)</button>
   </div>
 </div>
 <div class="sm-stat-cards">
-  <div class="sm-sbox"><div class="sm-slabel">移行反対 × 負担軽減重視 (左上)</div><div class="sm-sval" style="color:#c0392b">27件</div><div class="sm-sdesc">「費用増・受け皿不足で教員にも保護者にも負担増」</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">移行推進 × 負担軽減重視 (右上)</div><div class="sm-sval" style="color:#2980b9">21件</div><div class="sm-sdesc">「教員の働き方改革と持続可能な部活動」</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">移行反対 × 活動価値重視 (左上)</div><div class="sm-sval" style="color:#c0392b">27件</div><div class="sm-sdesc">「学校部活の教育的価値や子どもの機会を守りたい」</div></div>
+  <div class="sm-sbox"><div class="sm-slabel">移行推進 × 活動価値重視 (右上)</div><div class="sm-sval" style="color:#2980b9">21件</div><div class="sm-sdesc">「地域移行でも活動の質と教育的価値は維持できる」</div></div>
   <div class="sm-sbox"><div class="sm-slabel">中立含む（X=0またはY=0）</div><div class="sm-sval" style="color:#7f8c8d">71件</div><div class="sm-sdesc">条件付き賛否・個別事情への言及</div></div>
   <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">16件</div><div class="sm-sdesc">強い怒り・感情的な訴え（両陣営）</div></div>
 </div>
@@ -950,8 +959,8 @@ const SM_RAW = [
 ];
 const SM_TOUR = [
   {title:"全体像：中立帯に集中",desc:"148件中71件(48%)がX=0またはY=0の中立帯。地域移行は賛否の二極化というより、条件次第という意見が多い。",filter:"all"},
-  {title:"第2象限：移行反対・教員負担軽減重視（27件）",desc:"「費用増が保護者にしわ寄せ」「受け皿がない地方は切り捨てか」など、移行の現実的課題を指摘する声。",filter:"q2",highlight:[-1.5,1.5],quote:"経費削減优先に生徒安全軽視の政策に強く反発",quote_url:"https://x.com/nom1153/status/2068292289173311686"},
-  {title:"第1象限：移行推進・教員負担軽減重視（21件）",desc:"「教員の過労死ラインを超える部活顧問は限界」「少子化で学校単位の部活は維持不能」と構造的な課題を指摘。",filter:"q1",highlight:[1.0,1.0],quote:"地域移行を支持し持続可能な運営を求める",quote_url:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
+  {title:"第2象限：移行反対・活動価値重視（27件）",desc:"「学校部活の教育的価値」「子どもの機会や安全」を理由に、地域移行に慎重な声。",filter:"q2",highlight:[-1.5,1.5],quote:"経費削減优先に生徒安全軽視の政策に強く反発",quote_url:"https://x.com/nom1153/status/2068292289173311686"},
+  {title:"第1象限：移行推進・活動価値重視（21件）",desc:"「地域移行でも子どもの活動機会を維持できる」「専門的な指導と持続可能な運営を両立できる」と考える声。",filter:"q1",highlight:[1.0,1.0],quote:"地域移行を支持し持続可能な運営を求める",quote_url:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
   {title:"高感情投稿（e≥1.5）",desc:"16件が強い感情を帯びた投稿。移行反対派・推進派双方から、子どもの権利や教員の人権をめぐる怒りが噴出。",filter:"q4",highlight:[1.0,-1.5],quote:"部活外部委託により教師の負担軽減を求める批判的意見",quote_url:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
   {title:"冷静な投稿（e≤0）",desc:"66件(45%)が冷静・分析的な投稿。制度設計の具体論、費用試算、他国事例の紹介など。感情的な論争とは別に、政策的な議論も活発。",filter:"calm"}
 ];
@@ -1087,10 +1096,10 @@ let myVoteSX = null, myVoteSY = null;
     ctx.font = 'bold 13px -apple-system,sans-serif';
     ctx.textAlign = 'center';
     const quadLabels = [
-      ['移行推進×負担軽減', PAD + INNER*0.75, PAD + 26],
-      ['移行反対×負担軽減', PAD + INNER*0.25, PAD + 26],
-      ['移行反対×教育的価値', PAD + INNER*0.25, PAD + INNER - 10],
-      ['移行推進×教育的価値', PAD + INNER*0.75, PAD + INNER - 10],
+      ['移行推進×活動価値', PAD + INNER*0.75, PAD + 26],
+      ['移行反対×活動価値', PAD + INNER*0.25, PAD + 26],
+      ['移行反対×持続可能性', PAD + INNER*0.25, PAD + INNER - 10],
+      ['移行推進×持続可能性', PAD + INNER*0.75, PAD + INNER - 10],
     ];
     quadLabels.forEach(([text, lx, ly]) => {
       const tw = ctx.measureText(text).width;
