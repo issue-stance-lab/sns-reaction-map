@@ -17,15 +17,15 @@ themes:
   ai-copyright:
     title: 生成AIと著作権
     html: docs/ai-copyright-reaction-map.html
-    collect: done        # 904件
-    classify: done       # 339件有効（1D分類）
-    classify2d: done     # 339件、エラー0%
+    collect: done        # 931件
+    classify: done       # 708件有効（OpenCode Go / minimax-m2.7）
+    classify2d: done     # 708件、APIエラー0%
     page_v3: done        # smCanvasMain/smCanvasHeat実装済み
     manga_data: done     # configs/ai-copyright-reaction-map.json manga field
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done      # sitemap・ポータル掲載済み
-    refresh_at: 2026-07-12
-    notes: v3試験実装テーマ。canvas IDは正典（smCanvasMain/smCanvasHeat）
+    refresh_at: 2026-07-19
+    notes: "2026-07-12にYahooリアルタイム検索463件を追加収集。重複7件を除外し、新規456件中369件をOpenCode Go / minimax-m2.7で2D有効分類。"
 
   bike-blue-ticket:
     title: 自転車の青切符導入
@@ -43,77 +43,77 @@ themes:
   bukatsu-chiiki:
     title: 部活動の地域移行
     html: docs/bukatsu-chiiki-reaction-map.html
-    collect: done        # 148件
+    collect: done        # 306件
     classify: done
-    classify2d: done     # 148件、エラー0%
+    classify2d: done     # 245件、APIエラー0%
     page_v3: done        # smCanvasMain/smCanvasHeat実装済み
     manga_data: done     # manga-prompts/bukatsu-chiiki-prompts.md 作成済み
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done
-    refresh_at: 2026-07-12
-    notes: ""
+    refresh_at: 2026-07-19
+    notes: "2026-07-12にYahooリアルタイム検索178件を追加収集。重複51件を除外し、新規127件中98件をOpenCode Go / minimax-m2.7で2D有効分類。"
 
   constitutional-amendment:
     title: 憲法改正論議
     html: docs/constitutional-amendment-reaction-map.html
-    collect: done        # 422件
-    classify: done       # 366件有効
-    classify2d: done     # 366件、エラー0%
+    collect: done        # 382件
+    classify: done       # 552件有効（2D累計）
+    classify2d: done     # 552件、APIエラー0%
     page_v3: done        # smCanvasMain/smCanvasHeat実装済み
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
-    refresh_at: 2026-07-12
-    notes: ""
+    refresh_at: 2026-07-19
+    notes: "2026-07-12にYahooリアルタイム検索223件を追加収集。既存rawとの重複0件、新規223件中212件をOpenCode Go / minimax-m2.7で2D有効分類。raw台帳と2D累計の母集団差あり。"
 
   elderly-license-revocation:
     title: 高齢者免許返納
     html: docs/elderly-license-revocation-reaction-map.html
-    collect: done        # 117件
+    collect: done        # 285件
     classify: done
-    classify2d: done     # 117件、エラー0%
+    classify2d: done     # 211件、APIエラー0%
     page_v3: done        # smCanvasMain/smCanvasHeat実装済み
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票5枚
     published: done
-    refresh_at: 2026-07-12
-    notes: ""
+    refresh_at: 2026-07-19
+    notes: "2026-07-12にYahooリアルタイム検索156件を追加収集。重複51件を除外し、新規105件中97件をOpenCode Go / minimax-m2.7で2D有効分類。"
 
   school-nickname-ban:
     title: 学校でのあだ名禁止
     html: docs/school-nickname-ban-reaction-map.html
-    collect: done        # 344件（v2再分類済み）
-    classify: done       # 103件有効
-    classify2d: done     # 103件、エラー0%（confidence>=0.5: 93件）
+    collect: done        # 374件
+    classify: done       # 134件有効
+    classify2d: done     # 134件、APIエラー0%
     page_v3: done        # v3化完了（2026-07-05）。旧形式バナー削除済み
     manga_data: done     # manga-prompts/school-nickname-ban-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル回遊カード復帰・sitemap掲載済み
     refresh_at: 2026-07-19
-    notes: 全工程完了
+    notes: "2026-07-12にYahooリアルタイム検索200件を追加収集。重複20件を除外し、新規180件中37件をOpenCode Go / minimax-m2.7で2D有効分類。2D重複6件を除外して31件追加。"
 
   henoko-student-accident:
     title: 辺野古高校生死亡事故
     html: docs/henoko-student-accident-reaction-map.html
-    collect: done        # 403件
+    collect: done        # 178件
     classify: done       # henoko_structured_redesign_final.json
-    classify2d: done     # 295件（重複除去後381件中、エラー23%）OpenCode Go minimax-m2.7
+    classify2d: done     # 356件、APIエラー0% OpenCode Go minimax-m2.7
     page_v3: done        # v3化完了（2026-07-06）。旧形式バナー削除済み
     manga_data: done     # manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル掲載・sitemap登録済み
     refresh_at: 2026-07-19
-    notes: 全工程完了
+    notes: "2026-07-12にYahooリアルタイム検索133件を追加収集。重複4件を除外し、新規129件中114件をOpenCode Go / minimax-m2.7で2D有効分類。2D重複53件を除外して61件追加。"
 
   takaichi:
     title: 高市文春問題
     html: docs/takaichi-reaction-map-standard.html
-    collect: done        # 324件
+    collect: done        # 312件
     classify: done
-    classify2d: done     # 140件（重複除去後165件中、エラー15%）OpenCode Go minimax-m2.7
+    classify2d: done     # 276件、APIエラー0% OpenCode Go minimax-m2.7
     page_v3: done        # v3化完了（2026-07-07）
     manga_data: done     # manga-prompts/takaichi-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル掲載・sitemap登録済み
     refresh_at: 2026-07-19
-    notes: 全工程完了
+    notes: "2026-07-12にYahooリアルタイム検索174件を追加収集。重複27件を除外し、新規147件中136件をOpenCode Go / minimax-m2.7で2D有効分類。"
