@@ -276,6 +276,15 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 備考: 全3本URLなし。今週URL付き引用RTは@yamazoejimusyoの1本のみ（枠残り1本は来週へ）。
 
+## リプライ実績 2026-07-13
+
+| # | リプライ先 | テーマ | タイプ | views |
+|---|-----------|--------|--------|-------|
+| 1 | @mainichijpnews（高市地元・憲法守れデモ） | 憲法改正 | URLなし | 434K |
+| 2 | @Pansy_school（部活地域移行・改革じゃなくて放棄） | 部活地域移行 | URLなし | 36K |
+
+備考: 2本のみ実施。今週の引用RT枠（残り1本）は来週へ持ち越し。
+
 ---
 
 ## 運用メモ 2026-07-09
