@@ -1528,6 +1528,25 @@ const SM_TOUR = [
   const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
   const IMG_ALPHA_END = 0.30;
   let imgAlpha = IMG_ALPHA_END;
+  const QUAD_IMGS={
+    q1:'images/constitutional-amendment-vote-1-amend.webp',
+    q3:'images/constitutional-amendment-vote-2-protect.webp',
+    q2:'images/constitutional-amendment-vote-3-process.webp',
+    q4:'images/constitutional-amendment-vote-4-unsure.webp',
+  };
+  const loadedImgs={};let imgsReady=0;
+  Object.entries(QUAD_IMGS).forEach(([key,src])=>{const img=new Image();img.onload=()=>{loadedImgs[key]=img;imgsReady++;if(imgsReady===4)redraw();};img.src=src;});
+  function drawQuadImages(){
+    const mid=PAD+INNER/2;
+    [{key:'q1',x:mid,y:PAD,w:PAD+INNER-mid,h:mid-PAD},{key:'q3',x:PAD,y:PAD,w:mid-PAD,h:mid-PAD},{key:'q2',x:PAD,y:mid,w:mid-PAD,h:PAD+INNER-mid},{key:'q4',x:mid,y:mid,w:PAD+INNER-mid,h:PAD+INNER-mid}].forEach(({key,x,y,w,h})=>{
+      const img=loadedImgs[key];if(!img)return;
+      ctx.save();ctx.globalAlpha=imgAlpha;
+      const scale=Math.min(w,h)/Math.min(img.width,img.height);
+      const dw=img.width*scale,dh=img.height*scale;
+      ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+      ctx.restore();
+    });
+  }
   let showHeat = true, showDots = true, heatRadius = 30;
   let activeFilter = 'all';
   let spotlightTarget = null;
@@ -1638,6 +1657,7 @@ let myVoteSX = null, myVoteSY = null;
 
   function drawBase() {
     ctx.clearRect(0, 0, W, H);
+    drawQuadImages();
     ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
     [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
       const [cx] = toCanvas(v, 0);
