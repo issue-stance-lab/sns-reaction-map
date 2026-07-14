@@ -1,5 +1,5 @@
 # THEMES.yaml — テーマ台帳（単一の真実源）
-# 最終更新: 2026-07-12
+# 最終更新: 2026-07-14
 #
 # 工程の定義（全テーマ共通のステートマシン）
 #   collect:     Yahoo検索でデータ収集済み
@@ -117,3 +117,29 @@ themes:
     published: done      # ポータル掲載・sitemap登録済み
     refresh_at: 2026-07-19
     notes: "2026-07-12にYahooリアルタイム検索174件を追加収集。重複27件を除外し、新規147件中136件をOpenCode Go / minimax-m2.7で2D有効分類。"
+
+  fukushuto:
+    title: 副首都法案・副首都構想
+    html: docs/fukushuto-reaction-map.html
+    collect: done        # 292件（2026-07-14、9クエリ）
+    classify: todo
+    classify2d: todo
+    page_v3: todo
+    manga_data: todo
+    manga_img: todo
+    published: todo
+    refresh_at: 2026-07-21
+    notes: "2026-07-14のYahooリアルタイムトレンド上位「副首都」から派生。trend_judgeはGO（スコア8/10、意見率60%）。副首都法案の衆院通過直前タイミングで収集。"
+
+  kyuden-data-leak:
+    title: 九州電力送配電の顧客情報紛失問題
+    html: docs/kyuden-data-leak-reaction-map.html
+    collect: done        # 2026-07-14にYahooリアルタイム検索148件を取得
+    classify: todo
+    classify2d: todo
+    page_v3: todo
+    manga_data: todo
+    manga_img: todo
+    published: todo
+    refresh_at: 2026-07-21
+    notes: "2026-07-14のYahooリアルタイム検索トレンド上位「九州電力」から派生。情報紛失問題に絞った4クエリの判定でtrend_judgeはGO（意見率45%、対立性あり）。本収集は9クエリで148件取得済み。分類待ち。"
