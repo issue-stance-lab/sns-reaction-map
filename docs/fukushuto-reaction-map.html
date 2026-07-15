@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>副首都法案 SNS反応まっぷ — 6つの論点</title>
+<!-- SEO_META_START -->
+  <meta name="description" content="副首都法案・副首都構想をめぐるSNSの反応を6つの論点に整理して可視化。防災・候補地・費用・都構想・定義・優先順位、あなたはどう考える？">
+  <link rel="canonical" href="https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html">
+  <meta property="og:site_name" content="SNS反応まっぷ">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="副首都法案 — 6つの論点でみるSNS反応まっぷ">
+  <meta property="og:description" content="副首都、本当に必要？場所は大阪でいい？SNS投稿292件を6つの論点に整理しました。">
+  <meta property="og:url" content="https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html">
+  <meta property="og:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="副首都法案 — 6つの論点でみるSNS反応まっぷ">
+  <meta name="twitter:description" content="副首都、本当に必要？場所は大阪でいい？SNS投稿292件を6つの論点に整理しました。">
+  <meta name="twitter:image" content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/default.png">
+<!-- SEO_META_END -->
+  <meta name="google-adsense-account" content="ca-pub-2542211932832864">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site-tokens.css">
+  <style>
+    :root{--bg:#fafaff;--accent:#4f46e5;--accent-soft:#eef2ff;--grad-1:#4338ca;--grad-2:#312e81}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.65} a{color:inherit}
+    .hero{position:relative;background:linear-gradient(135deg,rgba(67,56,202,.96),rgba(49,46,129,.94));overflow:hidden}
+    .hero-inner{position:relative;padding:42px min(6vw,72px) 38px;color:#fff}
+    .top-nav{display:flex;gap:8px;margin-bottom:18px}.top-nav a{border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:5px 10px;background:rgba(255,255,255,.14);text-decoration:none;font-weight:800}
+    .badge{display:inline-block;background:rgba(255,255,255,.2);padding:6px 16px;border-radius:999px;font-size:13px;font-weight:800}
+    .hero h1{margin:10px 0 10px;font-size:clamp(28px,5vw,48px);line-height:1.2}
+    .question-line{font-size:clamp(17px,2.5vw,24px);font-weight:900;margin:0 0 10px}
+    .lead{max-width:820px;color:rgba(255,255,255,.88);margin:0}
+    .thirty-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px;max-width:1050px}
+    .thirty-summary li{list-style:none;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:14px;margin:0}
+    .thirty-summary ul{display:contents;padding:0;margin:0}
+    .wave-divider{display:block;width:100%;height:44px;margin-top:-1px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(135deg,var(--grad-1),var(--grad-2));color:#fff}
+    .stat{padding:24px;border-right:1px solid rgba(255,255,255,.15)}.stat span{display:block;color:rgba(255,255,255,.82);font-size:12px}.stat strong{font-size:20px}
+    .panel{padding:42px min(6vw,72px);background:var(--panel);border-top:1px solid var(--line)}
+    .panel:nth-of-type(even){background:#f6f6ff}
+    .panel-title{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:18px}
+    .panel-title h2{font-size:clamp(24px,3vw,34px);margin:0}
+    .panel-title span{color:var(--muted);font-size:13px;font-weight:800}
+    .vote-card-grid,.sample-grid,.axis-grid,.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .sample-card,.axis-card,.related-card{border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:var(--shadow);padding:16px}
+    .vote-image-card{position:relative;aspect-ratio:1;overflow:hidden;border:0;border-radius:8px;padding:0;cursor:pointer;background-position:center;background-size:cover;box-shadow:0 10px 28px rgba(16,24,40,.12);transition:transform .18s ease,box-shadow .18s ease}
+    .vote-image-card::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,27,75,.25),rgba(30,27,75,.72))}
+    .vote-card-label{display:block;font-weight:900}
+    .vote-image-card .vote-card-label{position:absolute;left:12px;right:12px;bottom:12px;color:#fff;font-size:16px;font-weight:900;line-height:1.3;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+    .vote-card-kicker,.axis-kicker{font-size:12px;color:var(--accent);font-weight:900}
+    .vote-comparison{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 16px}
+    .comparison-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff}
+    .bar-row{margin:10px 0}.bar-track{height:10px;border-radius:999px;background:#e7e7f7;overflow:hidden}.bar-fill{height:100%;background:var(--accent)}
+    .stance-map-section #stance-map-inner{position:relative;max-width:720px;margin:0 auto}
+    #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto}
+    #sm-wrap canvas{display:block;width:100%;border:1px solid #d7dce6;border-radius:8px}
+    #sm-wrap #smCanvasMain{cursor:crosshair;position:relative;z-index:2;background:transparent}
+    #sm-wrap #smCanvasHeat{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;pointer-events:none;z-index:1;background:#fdfdff}
+    .map-caption{max-width:760px;margin:12px auto 0;color:var(--muted);font-size:13px}
+    .sm-controls{max-width:660px;margin:14px auto 0;display:flex;flex-direction:column;gap:10px}
+    .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:#555;align-items:center}
+    .sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+    .sm-filters{display:flex;gap:6px;flex-wrap:wrap}
+    .sm-fbtn{border:1px solid #d7dce6;border-radius:999px;padding:6px 12px;background:#fff;cursor:pointer;font-size:12px;font-weight:800}
+    .sm-fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    #sm-tooltip{position:absolute;display:none;z-index:5;max-width:260px;background:#1e1b4b;color:#fff;font-size:12px;line-height:1.5;border-radius:8px;padding:10px 12px;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.3)}
+    .quadrant-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+    .quadrant-nav a{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#fff;text-decoration:none;font-weight:800;font-size:13px}
+    .sample-grid{grid-template-columns:repeat(2,1fr)}
+    .sample{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+    .meta{color:var(--muted);font-size:12px;font-weight:800}
+    .issue-block{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow);padding:22px;margin:0 0 22px}
+    .issue-head h3{margin:4px 0 8px;font-size:clamp(19px,2.4vw,26px)}
+    .issue-count{display:inline-block;margin-left:8px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 12px;font-size:14px;vertical-align:middle}
+    .issue-heat{display:inline-block;margin-left:6px;font-size:12px;color:var(--muted);font-weight:800}
+    .issue-desc{font-size:14px;line-height:1.8;margin:0 0 14px;color:var(--ink)}
+    .issue-sides{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px}
+    .side{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.7}
+    .side strong{display:block;font-size:12px;margin-bottom:4px}
+    .side.neg{background:#fef2f2;border-left:4px solid #dc2626}.side.neg strong{color:#991b1b}
+    .side.pos{background:#ecfdf5;border-left:4px solid #059669}.side.pos strong{color:#065f46}
+    .axis-grid{grid-template-columns:repeat(3,1fr)}
+    .axis-count{font-size:34px;font-weight:900}
+    .related-grid{grid-template-columns:repeat(3,1fr)}
+    .related-card{display:block;text-decoration:none;padding:0;overflow:hidden}
+    .related-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+    .related-card div{padding:14px}
+    .details-panel details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:10px 0;padding:12px}
+    .table-wrap{overflow-x:auto}table{border-collapse:collapse;min-width:420px;width:100%}th,td{border:1px solid var(--line);padding:8px;text-align:left}th{background:#eef0fb}
+    @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}}
+  </style>
+<!-- GA_TAG_START -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K10S4YCZFH');</script>
+<!-- GA_TAG_END -->
+<!-- ADSENSE_TAG_START -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
+<!-- ADSENSE_TAG_END -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">統治機構・地方</span><h1>副首都法案 SNS反応まっぷ</h1><p class="question-line">副首都、本当に必要？ 場所は大阪でいい？</p><p class="lead">SNS投稿292件のうち2D分類済み255件（うち意見229件）を、AIが6つの論点に整理。世論調査ではなく、反応サンプルの論点整理です。</p><div class="thirty-summary"><ul><li>最多論点は「定義・中身」51件。「生煮え」「副首都の定義が法案にない」という制度批判が中心。</li><li>「候補地」49件と「都構想・維新」49件が拮抗。福岡・新潟推しの冷静な議論と、「大阪ありき」への熱い不信が対照的。</li><li>賛成派は少数だが、防災・一極集中の是正を根拠に「一刻も早く」と法案を支持。防災論点は賛否が正面からぶつかる唯一の激戦区。</li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
+<main>
+<section class="stats"><div class="stat"><span>収集投稿</span><strong>292件</strong></div><div class="stat"><span>2D分類</span><strong>255件</strong></div><div class="stat"><span>意見投稿</span><strong>229件</strong></div><div class="stat"><span>最多論点</span><strong>定義・中身 51</strong></div></section>
+
+<section class="panel" id="vote-section"><div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><strong>データの集め方:</strong> 「副首都法案」「副首都 大阪」などのキーワードで、Yahooリアルタイム検索からSNS投稿292件を取得し、AIが自動分類しました。</div><div id="vote-buttons" class="vote-card-grid"></div><p style="font-size:11px;color:var(--muted);">※ 世論調査ではありません。投票はブラウザまたはSupabase設定時はサーバーに保存されます。</p><div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;color:var(--accent);"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><div id="vote-comparison" class="vote-comparison"></div><div style="font-weight:900;margin-bottom:10px;">みんなの感覚（投票集計）</div><div id="vote-bars"></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:12px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
+
+<section class="panel stance-map-section" id="stance-map-section">
+<div id="stance-map-inner">
+<div class="panel-title"><h2>論点アリーナ</h2><span>意見227件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>
+<div id="sm-wrap">
+  <canvas id="smCanvasHeat" width="640" height="640"></canvas>
+  <canvas id="smCanvasMain" width="640" height="640"></canvas>
+</div>
+<p class="map-caption">中心の「副首都法案」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=肯定的 / 赤=否定的 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
+<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはこのあたり」マーカーで表示しています。</p>
+<div class="sm-controls">
+  <div class="sm-legend">
+    <span><i style="background:#059669"></i>肯定的</span>
+    <span><i style="background:#dc2626"></i>否定的</span>
+    <span><i style="background:#64748b"></i>中立</span>
+    <span style="color:#888">中心＝冷静 / 外周＝感情的</span>
+  </div>
+  <div class="sm-filters" id="sm-filters"></div>
+</div>
+<div id="sm-tooltip"></div>
+</div>
+</section>
+
+<script>
+const SM_RAW = [
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:3,s:"法案のリスク想定範囲が不完全と指摘",u:"https://x.com/sannbukai1789/status/2077038186925293726"},
+{x:-1.0,y:0.0,e:-1.0,c:0.8,i:0,s:"第一条二条を引用し経済格差是正が主目的と批判、backup機能議論の欠如を問題視",u:"https://x.com/GbPieOhMFJtLl0I/status/2077037997321842714"},
+{x:-2.0,y:0.0,e:2.0,c:0.9,i:2,s:"維新の会利権目的のインチキ法案と強く批判",u:"https://x.com/blueueu9/status/2077037966975963596"},
+{x:-1.5,y:0.0,e:-1.0,c:0.8,i:6,s:"法案に反対、審議拒否を批判、野党的对案支持",u:"https://x.com/tm3169230723667/status/2077037864861458664"},
+{x:-1.0,y:-1.5,e:1.0,c:0.8,i:3,s:"防災計画が不十分なら大阪を副首都から排除すべきとの意見",u:"https://x.com/Uby05tpbht84197/status/2077037646568931425"},
+{x:-0.5,y:-2.0,e:1.0,c:0.7,i:1,s:"戦争リスクを根拠に大阪を副首都候補として強く否定し新潟・福岡・北海道を推奨",u:"https://x.com/SbylDgtTtSoUU2/status/2077035693965250831"},
+{x:-1.0,y:0.0,e:0.0,c:0.8,i:0,s:"首都未定義のまま副首都法案提出の矛盾を疑問視",u:"https://x.com/ysdkz/status/2077035649803370918"},
+{x:-1.0,y:0.0,e:1.5,c:0.75,i:4,s:"修正のやり方を痛烈批判。国民民主党への強い怒り",u:"https://x.com/mukochan_IWGP/status/2077035492844228844"},
+{x:-1.5,y:-2.0,e:0.5,c:0.9,i:1,s:"法案自体を疑問視し大阪候補に強く反対、九州以北を主張",u:"https://x.com/SbylDgtTtSoUU2/status/2077035490344341794"},
+{x:0.0,y:0.0,e:0.0,c:0.6,i:4,s:"副首都法案自体は中立、批判対象はチームみらいへの批判の妥当性",u:"https://x.com/tatamiyasan19/status/2077035325667328030"},
+{x:-1.5,y:0.0,e:-1.5,c:0.85,i:0,s:"首都法律なく副首都法案は矛盾、推進政党を批判",u:"https://x.com/Shu1411828/status/2077035000659325086"},
+{x:0.0,y:0.0,e:0.0,c:0.8,i:0,s:"副首都は1自治体ではなく経済圏で考えるべきではとの疑問",u:"https://x.com/Prince_Ootsu/status/2077034589986730218"},
+{x:-1.0,y:0.0,e:1.0,c:0.85,i:0,s:"法案の制度設計が未完成のまま強行されることに批判",u:"https://x.com/oirakuno/status/2077033877093388434"},
+{x:-0.5,y:0.0,e:0.0,c:0.75,i:0,s:"法案の中身の不透明さを疑問視し都構想抱き合わせを指摘",u:"https://x.com/tsuruiriy1/status/2077033609844990057"},
+{x:1.0,y:-2.0,e:0.0,c:0.85,i:1,s:"法案支持、候補地として大阪を完全否定",u:"https://x.com/SbylDgtTtSoUU2/status/2077033427090723149"},
+{x:-1.5,y:-2.0,e:1.0,c:0.85,i:1,s:"副首都法案に疑問、新首都建設を主張。大阪は南海トラフ重複で不適切と批判。",u:"https://x.com/SbylDgtTtSoUU2/status/2077032398336991459"},
+{x:-1.5,y:-1.0,e:-1.0,c:0.75,i:2,s:"副首都法案は都構想隠れ蓑との批判",u:"https://x.com/2Zerosen/status/2077032280938402105"},
+{x:-1.5,y:-2.0,e:1.5,c:0.9,i:1,s:"副首都法案を批判し、新城市建設による遷都と九州・北海道・日本海側を提案",u:"https://x.com/SbylDgtTtSoUU2/status/2077032189519356049"},
+{x:-2.0,y:0.0,e:-2.0,c:0.85,i:5,s:"法案に強く反対。予算不明・インフラ不足を批判",u:"https://x.com/ichi_star/status/2077030769130881419"},
+{x:1.5,y:0.0,e:0.0,c:0.85,i:4,s:"チームみらいの修正合意接受を肯定、法案推進を支持",u:"https://x.com/Sea_jellyfish24/status/2077030547348726121"},
+{x:-1.0,y:0.0,e:0.5,c:0.7,i:6,s:"玉木氏支持し答弁・成立に批判",u:"https://x.com/sho_nishikawa_/status/2077028957937926463"},
+{x:-1.5,y:-1.5,e:-1.5,c:0.8,i:2,s:"大阪都構想の延長と利権追求を批判",u:"https://x.com/zero_harassment/status/2077028925159666173"},
+{x:-2.0,y:-1.5,e:-2.0,c:0.95,i:2,s:"法案の質・税金無駄・大阪利益誘導に激怒",u:"https://x.com/Miryu43530524/status/2077028636113408050"},
+{x:-1.5,y:0.0,e:1.0,c:0.7,i:6,s:"維新の過去批判と会期延長への疑問",u:"https://x.com/KunKunihide/status/2077028426100416539"},
+{x:-1.0,y:-1.0,e:0.0,c:0.75,i:2,s:"大阪ありきの法案を批判し複数副首都を提案",u:"https://x.com/little_tw_s/status/2077028121094897679"},
+{x:-2.0,y:0.0,e:2.0,c:0.9,i:2,s:"法案を利権政治と結びつけ強く批判",u:"https://x.com/blueueu9/status/2077027972784218347"},
+{x:-1.0,y:-1.0,e:0.5,c:0.8,i:0,s:"法案の制度設計甘さを批判、大阪色を疑問視",u:"https://x.com/ByIM1X5Tcd92159/status/2077027783541477404"},
+{x:-1.0,y:0.0,e:-1.5,c:0.8,i:0,s:"法案の拙速性に疑問。生煮え状態への批判",u:"https://x.com/CvRPjA7K5E69434/status/2077027604562137531"},
+{x:1.0,y:0.0,e:1.0,c:0.85,i:3,s:"東京一極集中の危険性を指摘し副首都構想の早期実現を支持",u:"https://x.com/P5Yf7EUHUULiBL6/status/2077038112459681941"},
+{x:-1.0,y:0.0,e:-1.0,c:0.65,i:2,s:"制度設計の不透明さを懸念し、地域間競争で弱者が出ないか危惧",u:"https://x.com/Wgx3F/status/2077037324677087490"},
+{x:0.5,y:0.0,e:0.0,c:0.65,i:4,s:"構想に消極的理解、成功への期待を示す",u:"https://x.com/NO_NO_777_th/status/2077036249798635973"},
+{x:0.0,y:-2.0,e:0.0,c:0.8,i:1,s:"大阪は東京に近く共倒れリスクあり、札幌・福岡を推奨",u:"https://x.com/takai_1b/status/2077034605425967136"},
+{x:0.0,y:0.0,e:0.0,c:0.6,i:4,s:"副首都構想への疑問を吉村さんに質問",u:"https://x.com/DimNoraSup/status/2077034091594293609"},
+{x:-1.5,y:0.0,e:1.5,c:0.8,i:6,s:"即時成立に反対、议员批判で感情的",u:"https://x.com/nakopan0824/status/2077034019217428508"},
+{x:-1.5,y:0.0,e:1.5,c:0.85,i:2,s:"維新との取引法案と批判しゴリ押しに反発",u:"https://x.com/glooobe/status/2077032137623241044"},
+{x:-1.5,y:-2.0,e:1.5,c:0.85,i:2,s:"維新への批判 大阪府民へ疑問 副首都構想に反発",u:"https://x.com/zun_zuya/status/2077031482355531887"},
+{x:0.5,y:-1.0,e:0.0,c:0.7,i:1,s:"法案自体は容認も大阪選定には疑問",u:"https://x.com/maxmasayuki432m/status/2077031109402202181"},
+{x:1.0,y:1.0,e:-1.0,c:0.7,i:2,s:"大阪は副首都構想すべき、都構想より優位と提案",u:"https://x.com/makyio/status/2077031020470374545"},
+{x:-1.0,y:0.0,e:1.0,c:0.7,i:6,s:"法案延伸を批判、中身伴わないと指摘",u:"https://x.com/jH49oXqa0t41892/status/2077029534617211175"},
+{x:-1.0,y:0.0,e:0.0,c:0.7,i:6,s:"法案の優先順位や政治過程への疑問",u:"https://x.com/robinsonmanana/status/2077029327754203435"},
+{x:0.0,y:-1.5,e:0.0,c:0.8,i:1,s:"大阪候補に疑問、京都要請",u:"https://x.com/otaky_ulysses/status/2077028580232675510"},
+{x:-1.0,y:0.0,e:-1.0,c:0.7,i:2,s:"維新批判と副首都構想を言葉遊びと切る",u:"https://x.com/xDMcbOWz7yNyrne/status/2077027010585801056"},
+{x:-1.0,y:0.0,e:-1.0,c:0.7,i:2,s:"特定知事への支持工作への疑念",u:"https://x.com/gpo144/status/2077026700047900896"},
+{x:-1.0,y:0.0,e:1.0,c:0.5,i:0,s:"動画共有で法案批判の姿勢示唆",u:"https://x.com/Hof_Japan1st/status/2077026231846068439"},
+{x:-1.5,y:0.0,e:1.5,c:0.85,i:2,s:"法案のゴリ押し・党利党略を批判。構想自体は容認",u:"https://x.com/PomkenOhagi/status/2077025765305233803"},
+{x:-2.0,y:-1.5,e:2.0,c:0.9,i:2,s:"副首都法案を大阪市解体と批判し強く反対",u:"https://x.com/minsei_twi/status/2077024060480057421"},
+{x:-1.5,y:0.0,e:1.5,c:0.7,i:2,s:"副首都法案を利権批判。腐れきった政治への怒り",u:"https://x.com/Nobuyuk32891431/status/2077023809245413405"},
+{x:0.5,y:0.0,e:0.0,c:0.7,i:4,s:"副首都構想のデジタル化方向性を肯定、野党参加で強引さ回避も評価",u:"https://x.com/akkaMan160/status/2077022596584161346"},
+{x:-1.0,y:0.0,e:1.0,c:0.5,i:4,s:"動画共有だが法案批判の感想含む",u:"https://x.com/hiroto_politics/status/2077022561599377545"},
+{x:-1.5,y:0.0,e:1.0,c:0.85,i:2,s:"維新の副首都構想を昭和的発想と批判しデジタル代替を主張",u:"https://x.com/ourosaka2/status/2077022305109381436"},
+{x:-0.5,y:-1.0,e:1.0,c:0.7,i:2,s:"副首都構想自体は容認だが大阪選定に抵抗、維新への感情も混入",u:"https://x.com/iguNi4T3FnrbMjS/status/2077020764843475409"},
+{x:-0.5,y:-0.5,e:0.0,c:0.7,i:4,s:"石丸伸二案を古いと批判し再推介、副首都構想に懐疑的な立場",u:"https://x.com/kaguramay/status/2077019942776668653"},
+{x:0.0,y:0.0,e:0.0,c:0.4,i:2,s:"チームみらい賛成への評価を中立的に質問",u:"https://x.com/mamabanchan/status/2077019936451604485"},
+{x:-1.5,y:0.0,e:1.0,c:0.8,i:2,s:"維新の法案推進を批判し政治的失敗を指摘",u:"https://x.com/Qtarou18091344/status/2077019461476065489"},
+{x:-1.5,y:0.0,e:1.0,c:0.75,i:2,s:"維新の副首都構想は失敗すると断言する",u:"https://x.com/TottanJ/status/2077018054853357886"},
+{x:-1.5,y:0.0,e:2.0,c:0.8,i:1,s:"副首都構想に強く反対、福岡の地方議会を酷評",u:"https://x.com/neko28n28n288/status/2077017757745623312"},
+{x:1.0,y:1.5,e:1.0,c:0.6,i:4,s:"大阪副首都への批判者を批判し、同構想を擁護する投稿",u:"https://x.com/tetsukintoki/status/2077038005114839468"},
+{x:0.0,y:-1.0,e:0.0,c:0.7,i:1,s:"大阪より京都・広島・愛知を推奨",u:"https://x.com/swordfishkou/status/2077037811279311291"},
+{x:-0.5,y:-1.0,e:-1.0,c:0.7,i:1,s:"大阪以外を副首都にすべきとの意見",u:"https://x.com/Kx2mLw0cGNYnT3n/status/2077036193649484257"},
+{x:-1.0,y:-1.0,e:-0.5,c:0.75,i:1,s:"大阪副首都化に懐疑的意義を疑問視",u:"https://x.com/koremasa/status/2077034344171155478"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:0,s:"国会審議の不足を指摘し法案成立に慎重論",u:"https://x.com/AYASTKA/status/2077034074544435707"},
+{x:-2.0,y:-2.0,e:2.0,c:0.9,i:2,s:"維新・自民を批判し大阪副首都構想に強く反対",u:"https://x.com/oirakuno/status/2077033721438609532"},
+{x:-0.5,y:-1.0,e:-0.5,c:0.75,i:1,s:"過去の構想にロマンを覚え現行法案を相対的に批判",u:"https://x.com/okajan2018new/status/2077033702698397886"},
+{x:0.0,y:0.0,e:1.0,c:0.5,i:4,s:"大阪を副首都とすることへの驚",u:"https://x.com/S3w0o9lQIU46512/status/2077032760792043913"},
+{x:0.0,y:-1.0,e:1.0,c:0.7,i:1,s:"京都を提案。大阪より京都が災害に強いと主張",u:"https://x.com/tomotomo_0301/status/2077032451021615463"},
+{x:-1.5,y:0.0,e:1.5,c:0.85,i:6,s:"今のタイミングで副首都法案を通す政治家を批判",u:"https://x.com/AtsukoSumire/status/2077032324601200809"},
+{x:-1.0,y:-2.0,e:1.5,c:0.8,i:1,s:"大阪の副首都指定に反対、福岡を推奨し関西を批判",u:"https://x.com/azashi/status/2077032202811142410"},
+{x:0.0,y:-1.0,e:0.0,c:0.75,i:1,s:"副首都法案自体には中立、大阪 指定に疑問",u:"https://x.com/m_is_mihhi/status/2077031679462715700"},
+{x:1.0,y:-0.5,e:1.0,c:0.7,i:3,s:"副首都法案自体は肯定、場所は大阪以外でもいい",u:"https://x.com/eeeeekooooo/status/2077031658507952436"},
+{x:-1.0,y:-0.5,e:-1.0,c:0.75,i:0,s:"大阪前提の逆算要件を皮肉で批判",u:"https://x.com/majimenikangae/status/2077030984831410640"},
+{x:-1.0,y:-2.0,e:2.0,c:0.9,i:3,s:"大阪を副首都にすることへの強い反対と皮肉",u:"https://x.com/deathkilldan/status/2077030025921261851"},
+{x:-1.5,y:-1.5,e:-1.0,c:0.85,i:2,s:"副首都不要論と大阪への不信を皮肉混じりに批判",u:"https://x.com/Q9AmWTqLCP989/status/2077029993356644516"},
+{x:-1.0,y:-2.0,e:-1.0,c:0.95,i:1,s:"大阪選定に強く反対。南海リスクから法案自体も否定",u:"https://x.com/sanjinn/status/2077029794487898326"},
+{x:0.5,y:-1.5,e:0.5,c:0.85,i:1,s:"名古屋支持・大阪に反対の副首都構想への意見",u:"https://x.com/ufrXs6URwSIaODr/status/2077028584485753095"},
+{x:-1.0,y:-1.0,e:0.0,c:0.85,i:2,s:"定義不清・議論不足を批判し大阪ありきに疑問",u:"https://x.com/kirakira274/status/2077027241226392002"},
+{x:-1.5,y:0.0,e:1.5,c:0.7,i:2,s:"維新への不信から副首都法案を否定する批判的投稿",u:"https://x.com/kakopontan/status/2077027184817148334"},
+{x:-2.0,y:-2.0,e:2.0,c:0.95,i:2,s:"大阪副首都法案に強く反対、維新を激しく非難",u:"https://x.com/MgiUPv66Tc72376/status/2077027103158235464"},
+{x:-2.0,y:0.0,e:2.0,c:0.95,i:2,s:"住民投票否決法案の強行に強く反対",u:"https://x.com/ore46re/status/2077026593411838331"},
+{x:-1.0,y:0.0,e:-1.0,c:0.7,i:0,s:"大臣数制約を理由に維新の副首都推進に懐疑的",u:"https://x.com/redpanderEn/status/2077037732770234371"},
+{x:-2.0,y:-2.0,e:2.0,c:0.95,i:0,s:"維新の副首都法案を痛烈批判、制度設計の甘さを非難",u:"https://x.com/chyooppa/status/2077036927715541440"},
+{x:-0.5,y:-0.5,e:1.0,c:0.7,i:1,s:"南海トラフ警戒しつつ副首都の西日本は疑問",u:"https://x.com/ifmzp37608/status/2077036615642533930"},
+{x:-2.0,y:-2.0,e:2.0,c:0.9,i:3,s:"南海リスク指摘し副首都法案と大阪選定を痛烈批判",u:"https://x.com/kashimasama3000/status/2077034243683926114"},
+{x:-0.5,y:0.0,e:0.0,c:0.7,i:0,s:"法案内容に疑問呈し審議の慎重さを主張",u:"https://x.com/Asklily10498/status/2077032517799182348"},
+{x:-0.5,y:0.0,e:1.0,c:0.7,i:6,s:"法案成立プロセスは批判も法案自体への態度は不明",u:"https://x.com/sd98376816/status/2077025527886717132"},
+{x:-1.0,y:-0.5,e:1.0,c:0.75,i:6,s:"副首都前にインフラ整備を大阪維新に注文",u:"https://x.com/os_haruka/status/2077024754259956010"},
+{x:0.5,y:-1.5,e:1.5,c:0.75,i:2,s:"副首都創設には賛成だが大阪選定に強く反対し維新を批判",u:"https://x.com/MgiUPv66Tc72376/status/2077024373773668770"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:4,s:"法案反対を表明も理由軽く維新・みらい嫌悪から",u:"https://x.com/mousou0910/status/2077024236217245800"},
+{x:-1.0,y:0.0,e:-1.0,c:0.85,i:0,s:"デジタル時代に大げさな副首都は不要との懐疑的意見",u:"https://x.com/degu_2/status/2077010941364023652"},
+{x:0.0,y:-1.0,e:-1.0,c:0.75,i:1,s:"玉木氏の発言矛盾を皮肉る投稿",u:"https://x.com/kazuhiro529518/status/2077006687454822747"},
+{x:1.0,y:0.0,e:0.0,c:0.6,i:2,s:"法案成立を支持、他地域にも利点あると主張",u:"https://x.com/MadnessDarknes1/status/2077005355272560683"},
+{x:-2.0,y:0.0,e:2.0,c:0.85,i:1,s:"副首都法案に絶対反対。インフラ整備もままならない地を候補にする疑問",u:"https://x.com/HadakaApron/status/2077004353496592658"},
+{x:-1.0,y:0.0,e:-2.0,c:0.75,i:4,s:"法案への消極的許容と呆れ",u:"https://x.com/shibakenhoshu/status/2076998979628445710"},
+{x:-0.5,y:0.0,e:0.5,c:0.7,i:0,s:"道州制への第一歩化を警戒、条件付きで消極的容認",u:"https://x.com/ryu30659192/status/2076998803325165608"},
+{x:-1.5,y:0.0,e:1.0,c:0.9,i:0,s:"法案自体は必要だが中身を欠くとして反対",u:"https://x.com/star__bao/status/2076993559555961197"},
+{x:1.0,y:0.0,e:1.0,c:0.7,i:3,s:"法案自体には賛成、全国に副首都機能を分散すべきと主張",u:"https://x.com/Nintendo_jap/status/2076993309386678423"},
+{x:1.0,y:0.0,e:0.5,c:0.75,i:0,s:"法案は拙速でないとし採決支持、野党Proceduralな反対を批判",u:"https://x.com/shimasa50737643/status/2076989894396887411"},
+{x:1.0,y:0.0,e:1.0,c:0.8,i:0,s:"法案支持派が地方分散政策との整合性を指摘し反対論を疑問視",u:"https://x.com/SdbzeqhzpN38004/status/2076989341357007163"},
+{x:-1.0,y:0.0,e:1.0,c:0.7,i:4,s:"法案の進め方へ不満、議論に疲れた消極的姿勢",u:"https://x.com/lord0628/status/2076989191070863710"},
+{x:-1.0,y:0.0,e:0.0,c:0.8,i:2,s:"法案と構想を区別し内容への反対を示唆",u:"https://x.com/mrpl93876557/status/2076983734403035168"},
+{x:0.5,y:0.0,e:0.0,c:0.85,i:0,s:"副首都法案に賛成、プロセス重視で議論を求める",u:"https://x.com/Shomin07212169N/status/2076981912577696171"},
+{x:-2.0,y:0.0,e:1.0,c:0.95,i:2,s:"百田氏引用し副首都法案に明白に反対、利権・予算問題を批判",u:"https://x.com/newsreactionmat/status/2076978409805435039"},
+{x:-1.0,y:0.0,e:1.0,c:0.75,i:0,s:"制度設計の不透明さを疑問視し詳細説明を求める",u:"https://x.com/lMQ3ikNMMSCqRiJ/status/2076975999921819964"},
+{x:-1.0,y:0.0,e:1.0,c:0.8,i:2,s:"制度設計の不備を批判し維新への嫌がらせ案と断じる",u:"https://x.com/ISwoKa90qxzcnGd/status/2076975448584810672"},
+{x:-0.5,y:0.0,e:1.0,c:0.7,i:0,s:"事後ビジョンの弱さを批判、条件付きで容認示唆",u:"https://x.com/t6RaXYMOTeKCORe/status/2076974547119886587"},
+{x:-0.5,y:-2.0,e:1.5,c:0.95,i:3,s:"大阪を副首都にすることへ強く反対、岡山を提案",u:"https://x.com/yonaosh40828308/status/2076973980117025051"},
+{x:-1.5,y:-1.0,e:-1.0,c:0.85,i:0,s:"法案成立の政争色を批判、中身なく大阪決めるだけと断じる",u:"https://x.com/yuramu0702/status/2076973393002610974"},
+{x:-0.5,y:0.0,e:-1.0,c:0.6,i:2,s:"利権構造への疑問と仕事への渴望",u:"https://x.com/GodStone1192/status/2076972136837869788"},
+{x:1.0,y:1.0,e:0.5,c:0.7,i:2,s:"法案賛成派が読まずに批判する層を批判",u:"https://x.com/koji7041/status/2076971951906812181"},
+{x:1.0,y:0.0,e:0.0,c:0.7,i:4,s:"法案に肯定的。反対理由に疑問呈す",u:"https://x.com/YataosjWgI87074/status/2076971491133145095"},
+{x:1.0,y:0.0,e:-1.0,c:0.7,i:6,s:"副首都構想に賛成だが政局運営を皮肉",u:"https://x.com/ebisawayuki/status/2076969556342648836"},
+{x:-1.0,y:0.0,e:0.0,c:0.7,i:4,s:"現行法案への反対を表明するが、プロセスとの区別を強調",u:"https://x.com/d_dmilimili/status/2076968014684230088"},
+{x:-1.0,y:0.0,e:0.0,c:0.8,i:0,s:"地方発展に懐疑的で副首都法案に反対",u:"https://x.com/yuumama2_osaka/status/2076964936203505923"},
+{x:-1.5,y:0.0,e:1.0,c:0.8,i:4,s:"国民民主に副首都法案への反対求める",u:"https://x.com/muguet_sakur/status/2076963782988030130"},
+{x:0.0,y:0.0,e:0.0,c:0.6,i:4,s:"法案への态度より与党・国民主の政局手腕を比較",u:"https://x.com/YataosjWgI87074/status/2076963476212531368"},
+{x:-0.5,y:0.0,e:0.0,c:0.6,i:2,s:"法案の再挑戦を認めない態度に疑問",u:"https://x.com/Saitomin240608/status/2076963457136771102"},
+{x:1.0,y:1.5,e:1.0,c:0.8,i:2,s:"大阪ありきを正当化しつつ副首都法案に概ね賛成する投稿",u:"https://x.com/MstPorcoMrt/status/2076959917068709937"},
+{x:2.0,y:0.0,e:2.0,c:0.9,i:4,s:"副首都法案を支持し反対派をスパイ呼ばわり",u:"https://x.com/Jw3HthzzON1rHCs/status/2076955154004513020"},
+{x:1.0,y:0.0,e:0.0,c:0.7,i:3,s:"副首都誘致に肯定的だが候補地不明",u:"https://x.com/Sea_jellyfish24/status/2077030457020133782"},
+{x:0.5,y:0.0,e:0.0,c:0.7,i:3,s:"副首都は防災・防衛・機動力が重要と指摘",u:"https://x.com/jbuslove0629/status/2077028753113538992"},
+{x:0.0,y:-0.5,e:0.0,c:0.75,i:1,s:"大阪以外で岡山推し。法案自体は容認",u:"https://x.com/SBKWEric4413/status/2077028294852247723"},
+{x:-0.5,y:0.0,e:0.0,c:0.6,i:0,s:"法案に経済成長機能を求めるも位置は未言及",u:"https://x.com/key39182431/status/2077011436530962796"},
+{x:-1.5,y:0.0,e:-1.0,c:0.9,i:2,s:"副首都構想に反対。国民不支持・少数連立での強行に不満",u:"https://x.com/1031Midoriri/status/2077008384348520770"},
+{x:-1.5,y:-2.0,e:-2.0,c:0.85,i:2,s:"維新の大阪治理批判し副首都に強く反対",u:"https://x.com/basokaki30/status/2077006586032349238"},
+{x:-1.0,y:0.0,e:0.0,c:0.7,i:5,s:"制度設計・費用試算の不透明さを懸念する批判的投稿",u:"https://x.com/USAGIRADIO/status/2077006276714975639"},
+{x:-1.5,y:-1.0,e:1.5,c:0.85,i:2,s:"大阪市インフラ問題を批判根拠に副首都法案に反対",u:"https://x.com/pall336_2/status/2076999163804622929"},
+{x:0.0,y:0.0,e:-1.0,c:0.6,i:2,s:"法案より大臣ポストの繰り返しを皮肉",u:"https://x.com/kdku841510/status/2076995343338840145"},
+{x:-1.0,y:0.0,e:-1.0,c:0.75,i:2,s:"法案の競争的政治性に疑問唱える",u:"https://x.com/TXQTM9K5Y4HV/status/2076988448137986355"},
+{x:0.5,y:0.0,e:0.0,c:0.6,i:0,s:"デジタル都市化なら面白いと語る穏健肯定",u:"https://x.com/LinhDao9x/status/2076985393438998810"},
+{x:-1.0,y:0.0,e:0.0,c:0.8,i:0,s:"行政学者が法案の欠点を指摘し生煮えと批判",u:"https://x.com/amateur_bird/status/2076979969771897172"},
+{x:1.0,y:0.0,e:0.0,c:0.75,i:3,s:"東京一極集中改め国家機能維持体制に賛成",u:"https://x.com/komatsujunya88/status/2076972338965348542"},
+{x:0.0,y:0.0,e:0.0,c:0.7,i:4,s:"制度と人口の流れの変化は別問題と懐疑的",u:"https://x.com/posanmedia/status/2076957622289436936"},
+{x:-1.5,y:0.0,e:0.0,c:0.7,i:0,s:"生煮え法案に学者が批判、維新支持者主張を反論",u:"https://x.com/redpanderEn/status/2076953134770086278"},
+{x:0.5,y:1.0,e:0.0,c:0.55,i:1,s:"大阪への副首都設置に同意、防災機能も同一locationが当然と主張",u:"https://x.com/for_daily_memo/status/2076952038001508393"},
+{x:-1.0,y:0.0,e:-1.0,c:0.8,i:0,s:"防災に触れず法案は生煮え",u:"https://x.com/monocromtabasan/status/2076945289240580442"},
+{x:-1.0,y:0.0,e:1.0,c:0.8,i:3,s:"BCP矛盾指摘し副首都有効性に疑問",u:"https://x.com/Marine_BlueO/status/2076944031679148232"},
+{x:-1.0,y:-1.0,e:0.0,c:0.8,i:3,s:"副首都を中央防災会議で検討し直すべきとの主張",u:"https://x.com/izu_jun2/status/2076938718502686873"},
+{x:-1.5,y:0.0,e:-1.0,c:0.85,i:6,s:"副首都法案より防災・生活対策を優先すべきと批判",u:"https://x.com/capricen24/status/2076936889534386425"},
+{x:0.0,y:-1.5,e:0.0,c:0.85,i:1,s:"副首都構想自体は容認も大阪一箇所に否定的",u:"https://x.com/burakoji_think/status/2076933910307770495"},
+{x:0.0,y:-2.0,e:0.0,c:0.85,i:1,s:"新潟推しで大阪を批判し候補地変更主张",u:"https://x.com/burakoji_think/status/2076932992052916337"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:1,s:"乱立に疑問、最低限の防災施設整備が前提と指摘",u:"https://x.com/5lyrK/status/2076925293575762383"},
+{x:-0.5,y:-2.0,e:0.0,c:0.8,i:3,s:"南海トラフ防災地域排除で大阪反対",u:"https://x.com/oochanoo2022/status/2076925107398975717"},
+{x:-1.0,y:0.0,e:1.0,c:0.7,i:1,s:"福岡の副首都選定に冷笑的な批判",u:"https://x.com/THE21167247/status/2077036002020041126"},
+{x:-1.0,y:0.0,e:0.5,c:0.7,i:5,s:"税負担への疑問。住民の不了解を指摘",u:"https://x.com/sake2mirin1/status/2077035601669570873"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:0,s:"制度設計の根幹が未完成のまま法案成立することへの批判",u:"https://x.com/takuyasan_0307/status/2077029454141075596"},
+{x:0.0,y:0.0,e:-1.0,c:0.6,i:1,s:"服部知事批判で福岡副首都を皮肉る投稿",u:"https://x.com/whytobeee/status/2077016539803644129"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:5,s:"法案の詳細不明確なまま強行することへの警告",u:"https://x.com/kensuke_yaoi/status/2077010463393726762"},
+{x:0.5,y:-1.5,e:1.0,c:0.7,i:1,s:"兵庫を副首都候補に提案。復興費用負担への不満を表明",u:"https://x.com/tsubasaitami555/status/2077000312045609395"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:0,s:"法案の土台不透明さを問題視する慎重派意見",u:"https://x.com/takuyasan_0307/status/2076967175899005185"},
+{x:-1.0,y:0.0,e:-1.0,c:0.85,i:0,s:"制度設計の不備を指摘し法案に慎重",u:"https://x.com/takuyasan_0307/status/2076967004821393580"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:0,s:"法案成立前に制度設計の土台が不十分と指摘",u:"https://x.com/takuyasan_0307/status/2076961536221102350"},
+{x:-1.0,y:0.0,e:0.5,c:0.8,i:0,s:"制度設計が不透明で順序が逆との批判",u:"https://x.com/takuyasan_0307/status/2076951080882315349"},
+{x:-1.0,y:0.0,e:0.0,c:0.9,i:0,s:"制度根幹の未整備を指摘し、法案賛成を明確に否定",u:"https://x.com/takuyasan_0307/status/2076926917551546719"},
+{x:-2.0,y:-2.0,e:-2.0,c:0.9,i:2,s:"維新をペテン師と非難し副首都法案に強く反対",u:"https://x.com/kobuta00315/status/2076918114537939095"},
+{x:0.5,y:0.0,e:0.0,c:0.8,i:5,s:"大型プロジェクトの例を示し法案手続きを擁護",u:"https://x.com/MilenaCotte/status/2076868992652960072"},
+{x:-1.5,y:-0.5,e:1.0,c:0.85,i:0,s:"法案の制度設計・費用への疑問と国会批判",u:"https://x.com/nosmokerider/status/2076865891141345439"},
+{x:-1.5,y:0.0,e:1.5,c:0.8,i:5,s:"法案を批判。費用予後無視の暴挙と痛烈、皮肉混じり",u:"https://x.com/MakishimaKei/status/2076863370985377956"},
+{x:-1.5,y:0.0,e:-1.0,c:0.8,i:5,s:"法案の制度設計に欠陥ありと批判",u:"https://x.com/mokuXoX/status/2076861256364134516"},
+{x:-1.0,y:0.0,e:-1.0,c:0.7,i:5,s:"副首都構想への批判的疑問。クリーンセンター等国負担への疑念",u:"https://x.com/tann2009/status/2076858586622554291"},
+{x:-1.5,y:0.0,e:-1.0,c:0.85,i:5,s:"費用非開示・国会関与不可を批判",u:"https://x.com/konahiyo/status/2076830180023398426"},
+{x:-0.5,y:0.0,e:0.0,c:0.7,i:0,s:"定義後に場所決めるべきと主張",u:"https://x.com/k_and_s1234/status/2076829010416529839"},
+{x:-1.5,y:0.0,e:0.0,c:0.85,i:5,s:"法案不要論・費用対効果に疑問",u:"https://x.com/OV9O5Rj3ui8LYxI/status/2076825266727649289"},
+{x:-1.5,y:0.0,e:-1.0,c:0.8,i:0,s:"制度設計への疑問と維新批判",u:"https://x.com/kampachi352992/status/2076813058794823988"},
+{x:-1.5,y:0.0,e:1.0,c:0.7,i:2,s:"維新の策略と批判的都構想との関連指摘",u:"https://x.com/osakakyumin/status/2076809524955275722"},
+{x:-1.0,y:0.0,e:0.0,c:0.8,i:5,s:"法案の予算・財源・費用分担の不透明さを疑問視",u:"https://x.com/nohohohoho/status/2076806853242290644"},
+{x:-1.0,y:0.0,e:1.0,c:0.85,i:0,s:"法案成立後に詳細決定は白紙委任だと批判",u:"https://x.com/hou_on_kansha/status/2076784171813683524"},
+{x:1.0,y:0.0,e:-1.0,c:0.7,i:5,s:"費用不透明への批判を「大げさ」と一刀両断する皮肉投稿",u:"https://x.com/WakaTakeTokyo/status/2076716413029700051"},
+{x:-1.0,y:0.0,e:0.0,c:0.8,i:5,s:"費用不透明を指摘し、制度設計の不備を批判",u:"https://x.com/RYUwWda4Adp5iB0/status/2076705657580106208"},
+{x:-1.0,y:-0.5,e:-1.0,c:0.75,i:5,s:"維新の法案運営を批判・費用対効果を疑問視",u:"https://x.com/little_tw_s/status/2076689887378714800"},
+{x:-0.5,y:0.0,e:-1.0,c:0.7,i:5,s:"財源・制度設計に疑問も期待表明、慎重推進",u:"https://x.com/nohohohoho/status/2076677435236716764"},
+{x:0.0,y:0.0,e:0.0,c:0.75,i:5,s:"府民負担が条件の消極的容認・法へも大阪へも明示的賛否なし",u:"https://x.com/nekorisa41/status/2076661157654622313"},
+{x:0.0,y:-0.5,e:0.0,c:0.6,i:1,s:"福岡推しだが法案自体への賛否は中立",u:"https://x.com/sol_than_sd/status/2076660707446390874"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:0,s:"法案の制度設計不十分を批判",u:"https://x.com/takuyasan_0307/status/2076656183591776385"},
+{x:-1.0,y:0.0,e:0.5,c:0.8,i:5,s:"法案の具体性不足・費用算出の欠如を批判",u:"https://x.com/7F9Fu0AIgEYgJmu/status/2076649746744377547"},
+{x:-2.0,y:-2.0,e:2.0,c:1.0,i:5,s:"維新の副首都構想に強く反対。巨額費用と大阪のリスクを批判",u:"https://x.com/takiniwataru_ad/status/2076646951391809629"},
+{x:-1.0,y:0.0,e:0.0,c:0.85,i:0,s:"制度設計の不備を批判し法案通過に慎重な立場",u:"https://x.com/takuyasan_0307/status/2076633301545325028"},
+{x:-2.0,y:0.0,e:2.0,c:0.9,i:6,s:"法案即時廃案を主張、優先順位と制度設計を批判",u:"https://x.com/BucchoJ/status/2077020779129303274"},
+{x:-1.5,y:-2.0,e:1.5,c:0.85,i:2,s:"大阪ありきの法案推進に強く反対。大阪人も拒否",u:"https://x.com/akiowho/status/2077012155812163949"},
+{x:-1.0,y:0.0,e:-1.0,c:0.7,i:2,s:"維新発案の副首都法案に懐疑的・皮肉的な投稿",u:"https://x.com/lucky_chopstick/status/2077011138156655016"},
+{x:0.0,y:-1.5,e:0.0,c:0.8,i:1,s:"構想自体は肯定も場所は京都が最適で国民投票で決めるべき",u:"https://x.com/kounenkye/status/2077010652326191119"},
+{x:-1.5,y:0.0,e:1.0,c:0.75,i:0,s:"法案の不透明さとゴリ押しに強く反発",u:"https://x.com/cat_tomzou/status/2077007318521446432"},
+{x:-0.5,y:0.0,e:-0.5,c:0.75,i:0,s:"法案精度への疑問と大阪依存への批判",u:"https://x.com/NihonPandaJP/status/2077002078397059133"},
+{x:-1.0,y:0.0,e:-1.0,c:0.7,i:6,s:"副首都法案より社会保険料引下げ優先を皮肉",u:"https://x.com/datsuryoku01/status/2077000852473291136"},
+{x:-2.0,y:0.0,e:-1.0,c:0.85,i:0,s:"副首都法案に強く反対。機能しないと断じる",u:"https://x.com/Hungry_spider72/status/2076997842649096286"},
+{x:-1.0,y:0.0,e:1.5,c:0.75,i:2,s:"インフラ整備を怠る吉村氏への批判、副首都優先に疑問",u:"https://x.com/Iju3BOdaQGU9Sm5/status/2076995534913778027"},
+{x:-0.5,y:0.0,e:-1.0,c:0.7,i:2,s:"維新の法案対応への疑問を皮肉交じりに指摘",u:"https://x.com/TXQTM9K5Y4HV/status/2076991529215041593"},
+{x:-1.5,y:0.0,e:1.0,c:0.85,i:0,s:"副首都指定の必然性を疑問視し制度設計を批判",u:"https://x.com/YutaYasumoto/status/2076986628950897024"},
+{x:-1.5,y:-1.0,e:-2.0,c:0.85,i:0,s:"大阪インフラの脆弱性を皮肉り首都定義の不明確さを批判",u:"https://x.com/ta93bottom/status/2076984816751485409"},
+{x:-1.0,y:0.0,e:1.0,c:0.85,i:6,s:"副首都法案より物価高対策を優先すべきとの批判",u:"https://x.com/0915Arnold/status/2076984185450123494"},
+{x:-1.0,y:0.0,e:0.0,c:0.7,i:3,s:"法案の優先順位より既存の地震対策強化を指摘",u:"https://x.com/min1_now/status/2076984002125459911"},
+{x:-1.5,y:0.0,e:1.0,c:0.8,i:3,s:"法案より議論順序を批判し利権疑惑を指摘",u:"https://x.com/MiyukiO46680/status/2076976782440628330"},
+{x:-1.0,y:-2.0,e:2.0,c:0.9,i:1,s:"大阪のインフラ問題を理由に副首都反対",u:"https://x.com/gmmnyam0319/status/2076976454504681718"},
+{x:-1.5,y:0.0,e:1.5,c:0.85,i:6,s:"法案強行提出と物价対策後回しを批判",u:"https://x.com/kcs_biora/status/2076972440341844101"},
+{x:-2.0,y:-1.0,e:2.0,c:0.85,i:2,s:"副首都法案に強く反対。維新批判と減税要求",u:"https://x.com/blueueu9/status/2076969215228338243"},
+{x:1.5,y:0.0,e:1.5,c:0.7,i:3,s:"首都バックアップ法案を推進すべきとの意見",u:"https://x.com/nx2wvl/status/2076963339318813120"},
+{x:-2.0,y:-1.5,e:1.5,c:0.95,i:2,s:"副首都法案の廃案要求。大阪ありきを維新の自己都合と批判",u:"https://x.com/a7BvKaEsuS41828/status/2076962759624024223"},
+{x:-1.5,y:0.0,e:1.5,c:0.85,i:0,s:"根拠不清で賛成するチームみらいを批判",u:"https://x.com/SUBARUfujita201/status/2076958836448170131"},
+{x:-0.5,y:1.0,e:0.0,c:0.75,i:1,s:"副首都法案にはやや懐疑的だが候補地として日本海側支持",u:"https://x.com/2Frlrfi5bg46586/status/2076955017165328663"},
+{x:-1.0,y:0.0,e:0.0,c:0.6,i:2,s:"法案の強行感到不能・静岡の災害リスク強調",u:"https://x.com/gop_525/status/2076951730273800554"},
+{x:-0.5,y:0.0,e:-1.0,c:0.6,i:3,s:"静岡の災害リスクと制度への呆れを皮肉で表現",u:"https://x.com/gop_525/status/2076951356011933961"},
+{x:-1.0,y:-1.0,e:0.0,c:0.8,i:1,s:"大阪ありきの進め方に疑問、成本も懸念",u:"https://x.com/yoshi_horishita/status/2076943517226795467"},
+{x:-0.5,y:0.0,e:0.0,c:0.65,i:0,s:"法案の必要性・機能を疑問視する質問",u:"https://x.com/tsubakiharayuya/status/2076936321206263911"},
+{x:-1.0,y:0.0,e:-1.0,c:0.75,i:1,s:"各政党の副首都法案対応への皮肉と批判",u:"https://x.com/2kariHakozaki/status/2076935209749205360"},
+{x:0.0,y:-1.5,e:-1.0,c:0.6,i:1,s:"奈良を提案する軽い皮肉投稿",u:"https://x.com/pandabengoshi/status/2077029594667090010"},
+{x:-0.5,y:0.0,e:0.0,c:0.75,i:3,s:"南海トラフ対策なしに副首都造りは危険と指摘",u:"https://x.com/k_and_s1234/status/2077026824610353169"},
+{x:0.0,y:-1.5,e:0.0,c:0.8,i:3,s:"副首都構想には賛成だが大阪一極に疑問",u:"https://x.com/marukagiRINGO/status/2077024033649090977"},
+{x:0.0,y:-2.0,e:0.0,c:0.85,i:1,s:"南海トラフリスクで大阪・名古屋候補に反対",u:"https://x.com/NISINnoHIBOSI/status/2077023948106293682"},
+{x:-1.0,y:0.0,e:0.0,c:0.7,i:0,s:"法案選定基準の矛盾を指摘し疑問呈する内容",u:"https://x.com/axela_cbr600rr/status/2077021851138830501"},
+{x:0.5,y:0.0,e:0.0,c:0.7,i:1,s:"災害リスク低い地域での副首都選定を支持",u:"https://x.com/k_and_s1234/status/2077017809322958987"},
+{x:-2.0,y:-1.5,e:-2.0,c:0.85,i:3,s:"南海トラフ riskと税金批判で大阪副首都法案に激烈反対",u:"https://x.com/itoyan2011/status/2077016163188715676"},
+{x:-1.5,y:-2.0,e:1.0,c:0.95,i:3,s:"南海トラフ連動リスクを指摘し大阪副首都は無意味と批判",u:"https://x.com/ponpon4183/status/2077015822225285572"},
+{x:-1.0,y:-1.5,e:0.5,c:0.85,i:0,s:"制度設計の甘さと大阪の南海トラフリスクに疑問",u:"https://x.com/sada0212m/status/2077012689818472884"},
+{x:-1.5,y:-2.0,e:1.0,c:0.85,i:1,s:"大阪副首都法案を批判し、南海トラフ地震リスクを根拠に却下",u:"https://x.com/HMasami319/status/2077012252482490843"},
+{x:-1.0,y:-2.0,e:1.0,c:0.85,i:1,s:"大阪都構想ありきを批判し日本海側を提案",u:"https://x.com/arapanman/status/2077010738917560412"},
+{x:0.5,y:0.0,e:0.0,c:0.7,i:3,s:"地震予測を疑問視しつつ複数候補を支持",u:"https://x.com/kXIMRJidYp6qZhx/status/2077010362055250012"},
+{x:-0.5,y:-2.0,e:2.0,c:1.0,i:3,s:"南海トラフリスク挙げ大阪副首都に强烈反対",u:"https://x.com/ochi_shika/status/2077009710390370453"},
+{x:-0.5,y:-2.0,e:0.0,c:0.85,i:1,s:"大阪より日本海側等の候補地を主張",u:"https://x.com/ya_momo/status/2077009367346634827"},
+{x:-0.5,y:-0.5,e:-0.5,c:0.4,i:0,s:"制度設計の不透明さへの疑問と南海トラフ対策の懸念",u:"https://x.com/draft_cool/status/2077009223997903264"},
+{x:-1.0,y:-1.5,e:-1.0,c:0.7,i:1,s:"大阪副首都に疑問、他地域提案",u:"https://x.com/crair312voyance/status/2077009180519797145"},
+{x:0.0,y:-2.0,e:0.0,c:0.85,i:1,s:"副首都構想は肯定しつつ大阪を南海トラフリスクで否定、福岡を提案",u:"https://x.com/marinosuke_1984/status/2077008916173750560"},
+{x:-1.0,y:-2.0,e:0.0,c:0.85,i:1,s:"大阪を副首都にする矛盾を指摘する批判的意見",u:"https://x.com/QalacGMvHRwnw/status/2077008909936754744"},
+{x:0.0,y:-2.0,e:0.0,c:0.85,i:1,s:"法案支持前提で福岡・札幌推奨",u:"https://x.com/oku201508/status/2077007827030376756"},
+{x:0.0,y:-2.0,e:1.0,c:0.9,i:1,s:"法案自体は肯定も否定もせず 大阪選定に強く反対し中津川を代替案に提示",u:"https://x.com/atsuyashi/status/2077006037132136746"},
+{x:0.0,y:-1.5,e:0.0,c:0.85,i:1,s:"新潟支持。大阪・名古屋の南海トラフリスクを理由に不支持",u:"https://x.com/Roadside_weed/status/2077002768104263777"},
+{x:-0.5,y:-1.5,e:0.0,c:0.85,i:3,s:"大阪ありきに批判、福岡を代替候補に提案",u:"https://x.com/Yjrus0QgoyUgC2r/status/2077000419944091972"},
+{x:0.5,y:-1.0,e:0.0,c:0.8,i:1,s:"大阪は南海トラフ地震の影響を受けるため副首都に不適切と指摘",u:"https://x.com/to22sif59/status/2077000332400570513"},
+{x:-1.5,y:0.0,e:1.0,c:0.75,i:3,s:"南海トラフで副首都が先壊滅と警告",u:"https://x.com/kenken28516851/status/2076994124025368801"},
+{x:0.0,y:-1.5,e:0.0,c:0.8,i:1,s:"南海トラフ考慮で日本海側を提案",u:"https://x.com/mizomegane11/status/2076990853688770669"}
+];
+</script>
+<script src="vote2d.js?v=10"></script><script>(function(){var supabaseUrl='';var supabaseAnonKey='';Vote2D.init({containerId:'vote-buttons',resultId:'vote-result',topic:'fukushuto-v3',title:'副首都法案 SNS反応まっぷ',xAxis:{neg:'副首都構想に反対・慎重',pos:'副首都構想に賛成・推進'},yAxis:{neg:'大阪以外・場所を再考すべき',pos:'大阪を軸に進めてよい'},quadrants:[{"label":"中身を問う慎重派","desc":"場所の議論より先に、副首都の定義・費用など法案の中身を詰めるべきだと考える。"},{"label":"大阪副首都を推進","desc":"防災・多極成長の観点から、大阪を軸に早く進めるべきだと考える。"},{"label":"大阪ありきに反対","desc":"「大阪ありき」の進め方に不信があり、法案にも反対・慎重。"},{"label":"構想賛成・場所は再考","desc":"副首都は必要だが、南海トラフを考えると大阪以外も検討すべきだと考える。"}],questions:[{text:'副首都、必要だと思う？',negLabel:'反対・今じゃない',posLabel:'必要・進めるべき'},{text:'場所は大阪でいい？',subtext:'答えたら開票します',negLabel:'大阪以外・再考を',posLabel:'大阪でよい'}],commonGround:{title:'意見の向こう側',lead:'立場や場所の好みは違っても、両者に共通する願いがあります。',statement:'大きな災害が起きたときに、国の機能が止まらず暮らしが守られること',question:'反対側の心配も、少し理解できましたか？'},supabaseUrl:supabaseUrl,supabaseAnonKey:supabaseAnonKey});})();</script>
+
+<script>
+(function(){
+  'use strict';
+  const ISSUES = [
+    {k:'定義・中身', n:51},
+    {k:'候補地', n:49},
+    {k:'都構想・維新', n:49},
+    {k:'防災・災害', n:26},
+    {k:'その他', n:19},
+    {k:'費用・財源', n:18},
+    {k:'優先順位', n:15}
+  ];
+  const W=640, CX=320, CY=320, R_MIN=64, R_MAX=214, R_HOLE=56, R_LBL=242;
+  const PAD_DEG=2.5;
+  const canvasMain=document.getElementById('smCanvasMain');
+  const canvasHeat=document.getElementById('smCanvasHeat');
+  const ctx=canvasMain.getContext('2d');
+  const hctx=canvasHeat.getContext('2d');
+  const tooltip=document.getElementById('sm-tooltip');
+
+  const total=ISSUES.reduce((a,b)=>a+b.n,0);
+  const usable=360-PAD_DEG*2*ISSUES.length;
+  let acc=-90;
+  ISSUES.forEach(iss=>{
+    const span=usable*iss.n/total;
+    iss.a0=acc+PAD_DEG; iss.a1=iss.a0+span; iss.mid=(iss.a0+iss.a1)/2;
+    acc=iss.a1+PAD_DEG;
+  });
+
+  function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+  function colorOf(p){return p.x>=0.5?'#059669':(p.x<=-0.5?'#dc2626':'#64748b');}
+
+  const pts=[];
+  SM_RAW.forEach((p,idx)=>{
+    const iss=ISSUES[p.i]; if(!iss) return;
+    const a=iss.a0+rnd(idx)*(iss.a1-iss.a0);
+    let r=R_MIN+8+Math.abs(p.e)/2*(R_MAX-R_MIN-30)+(rnd(idx+500)-0.5)*26;
+    r=Math.max(R_MIN,Math.min(R_MAX-4,r));
+    const rad=a*Math.PI/180;
+    pts.push({px:CX+r*Math.cos(rad),py:CY+r*Math.sin(rad),c:colorOf(p),p:p});
+  });
+
+  function drawHeat(){
+    hctx.clearRect(0,0,W,W);
+    const maxN=Math.max(...ISSUES.map(i=>i.n));
+    ISSUES.forEach(iss=>{
+      hctx.beginPath();
+      hctx.moveTo(CX+R_MIN*Math.cos(iss.a0*Math.PI/180),CY+R_MIN*Math.sin(iss.a0*Math.PI/180));
+      hctx.arc(CX,CY,R_MAX,iss.a0*Math.PI/180,iss.a1*Math.PI/180);
+      hctx.arc(CX,CY,R_MIN,iss.a1*Math.PI/180,iss.a0*Math.PI/180,true);
+      hctx.closePath();
+      hctx.fillStyle='rgba(79,70,229,'+(0.03+iss.n/maxN*0.09).toFixed(3)+')';
+      hctx.fill();
+    });
+    hctx.setLineDash([3,5]);
+    hctx.strokeStyle='rgba(100,116,139,.3)';
+    hctx.lineWidth=1;
+    [110,160,R_MAX].forEach(r=>{hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke();});
+    hctx.setLineDash([]);
+    ISSUES.forEach(iss=>{
+      const rad0=iss.a0*Math.PI/180, rad1=iss.a1*Math.PI/180;
+      hctx.strokeStyle='rgba(100,116,139,.35)';
+      [rad0,rad1].forEach(rd=>{
+        hctx.beginPath();
+        hctx.moveTo(CX+R_MIN*Math.cos(rd),CY+R_MIN*Math.sin(rd));
+        hctx.lineTo(CX+R_MAX*Math.cos(rd),CY+R_MAX*Math.sin(rd));
+        hctx.stroke();
+      });
+    });
+  }
+
+  let filterIdx=-1;
+  let voteMarker=null;
+
+  function drawMain(){
+    ctx.clearRect(0,0,W,W);
+    pts.forEach(pt=>{
+      const dim=filterIdx>=0&&pt.p.i!==filterIdx;
+      ctx.globalAlpha=dim?0.08:0.82;
+      ctx.beginPath();ctx.arc(pt.px,pt.py,4,0,Math.PI*2);
+      ctx.fillStyle=pt.c;ctx.fill();
+    });
+    ctx.globalAlpha=1;
+    ctx.font='900 13px "Noto Sans JP",sans-serif';
+    ISSUES.forEach((iss,i)=>{
+      const rad=iss.mid*Math.PI/180;
+      const lx=CX+R_LBL*Math.cos(rad), ly=CY+R_LBL*Math.sin(rad);
+      const c=Math.cos(rad);
+      ctx.textAlign=c>0.35?'left':(c<-0.35?'right':'center');
+      ctx.textBaseline='middle';
+      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(100,116,139,.4)':'#334155';
+      ctx.fillText(iss.k+' '+iss.n,lx,ly);
+    });
+    ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle='#c7d2fe';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#312e81';ctx.textAlign='center';
+    ctx.font='900 15px "Noto Sans JP",sans-serif';
+    ctx.fillText('副首都',CX,CY-9);
+    ctx.fillText('法案',CX,CY+11);
+    ctx.font='400 10px "Noto Sans JP",sans-serif';
+    ctx.fillStyle='#94a3b8';ctx.textAlign='center';
+    ctx.fillText('冷静',CX,CY-R_MIN-8);
+    ctx.fillText('感情的',CX,CY-R_MAX-8);
+    if(voteMarker){
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10,0,Math.PI*2);
+      ctx.fillStyle='rgba(79,70,229,.25)';ctx.fill();
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,5.5,0,Math.PI*2);
+      ctx.fillStyle='#4f46e5';ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+      ctx.font='900 11px "Noto Sans JP",sans-serif';
+      ctx.fillStyle='#4f46e5';ctx.textAlign='center';
+      ctx.fillText('あなた',voteMarker.x,voteMarker.y-14);
+    }
+  }
+
+  window.setStanceMapVoteMarker=function(qi,sx,sy){
+    const map={0:0,1:3,2:2,3:1};
+    const iss=ISSUES[map[qi]!==undefined?map[qi]:0];
+    const rad=iss.mid*Math.PI/180, r=(R_MIN+R_MAX)/2-14;
+    voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad)};
+    const note=document.getElementById('your-marker-note');
+    if(note)note.style.display='block';
+    drawMain();
+  };
+
+  const filters=document.getElementById('sm-filters');
+  function addBtn(label,idx){
+    const b=document.createElement('button');
+    b.className='sm-fbtn'+(idx===-1?' active':'');
+    b.textContent=label;
+    b.onclick=function(){
+      filterIdx=idx;
+      filters.querySelectorAll('.sm-fbtn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      drawMain();
+    };
+    filters.appendChild(b);
+  }
+  addBtn('全件 ('+total+')',-1);
+  ISSUES.forEach((iss,i)=>{if(iss.k!=='その他')addBtn(iss.k+' ('+iss.n+')',i);});
+
+  function evtPos(ev){
+    const rect=canvasMain.getBoundingClientRect();
+    const scale=W/rect.width;
+    return {x:(ev.clientX-rect.left)*scale,y:(ev.clientY-rect.top)*scale};
+  }
+  function nearest(pos){
+    let best=null,bd=196;
+    pts.forEach(pt=>{
+      if(filterIdx>=0&&pt.p.i!==filterIdx)return;
+      const d=(pt.px-pos.x)**2+(pt.py-pos.y)**2;
+      if(d<bd){bd=d;best=pt;}
+    });
+    return best;
+  }
+  canvasMain.addEventListener('mousemove',function(ev){
+    const pt=nearest(evtPos(ev));
+    if(pt){
+      const rect=canvasMain.getBoundingClientRect();
+      tooltip.style.display='block';
+      tooltip.style.left=Math.min(ev.clientX-rect.left+14,rect.width-270)+'px';
+      tooltip.style.top=(ev.clientY-rect.top+14)+'px';
+      tooltip.innerHTML='<strong>'+ISSUES[pt.p.i].k+'</strong> 熱量'+pt.p.e.toFixed(1)+'<br>'+pt.p.s.replace(/</g,'&lt;')+'<br><span style="opacity:.7">クリックでXの投稿へ</span>';
+      canvasMain.style.cursor='pointer';
+    }else{
+      tooltip.style.display='none';
+      canvasMain.style.cursor='crosshair';
+    }
+  });
+  canvasMain.addEventListener('mouseleave',function(){tooltip.style.display='none';});
+  canvasMain.addEventListener('click',function(ev){
+    const pt=nearest(evtPos(ev));
+    if(pt&&pt.p.u)window.open(pt.p.u,'_blank','noopener');
+  });
+
+  drawHeat();
+  drawMain();
+})();
+</script>
+
+<section class="panel conflict-panel"><div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとに賛否の投稿を読む</span></div>
+<nav class="quadrant-nav"><a href="#issue-teigi">定義・中身 51</a><a href="#issue-kouhochi">候補地 49</a><a href="#issue-tokoso">都構想・維新 49</a><a href="#issue-bousai">防災・災害 26</a><a href="#issue-hiyou">費用・財源 18</a><a href="#issue-yusen">優先順位 15</a></nav>
+
+<article class="issue-block" id="issue-teigi">
+<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span><h3>定義・中身 — 「生煮え」のまま通していいのか<span class="issue-count">51件</span><span class="issue-heat">熱量 0.61（冷静寄り）</span></h3>
+<p class="issue-desc">最多の論点。行政学者が指摘した「生煮え」という言葉が拡散し、「副首都の定義が法案に書かれていない」「基本方針や政令の前に指定するのは、家の設計前に契約させるようなもの」という制度批判が中心です。感情的な罵倒より、手続き論・立法論からの冷静な批判が多いのが特徴です。</p>
+<div class="issue-sides"><div class="side neg"><strong>批判側（37件）</strong>定義・統治体制・費用が何も決まっていないのに、指定の枠組みだけ先に通すのは順序が逆。国会審議も答弁も中身がない。</div><div class="side pos"><strong>擁護・少数派（2件）</strong>地方分散は既定の国家方針と整合している。中身はこれから多くの意見を聞いて詰めればよい。</div></div>
+</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">批判側 / conf 0.95</div><p>行政学者の「生煮え」評を引いて制度設計の甘さを批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/chyooppa/status/2077036927715541440"></a></blockquote></div>
+<div class="sample-card"><div class="meta">中間・建設側 / conf 0.85</div><p>副首都自体に反対はない、中身の議論をトップダウンでなく進めてほしい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Shomin07212169N/status/2076981912577696171"></a></blockquote></div>
+</div>
+</article>
+
+<article class="issue-block" id="issue-kouhochi">
+<div class="issue-head"><span class="axis-kicker">論点2・いちばん冷静</span><h3>候補地 — 大阪？福岡？新潟？<span class="issue-count">49件</span><span class="issue-heat">熱量 0.55（最も冷静）</span></h3>
+<p class="issue-desc">「南海トラフで東京と共倒れになる大阪はない」という地理的リスク論から、福岡・新潟・北海道・リニア沿線など対案が飛び交う論点です。中立が31件と最も多く、法案への賛否とは独立した「どこがいい？」談義として盛り上がっています。怒りではなく地図を広げて語る、このテーマで最も建設的なゾーンです。</p>
+<div class="issue-sides"><div class="side neg"><strong>大阪に否定的（17件）</strong>南海トラフの被災想定域に副首都を置く意味がない。太平洋側に1カ所増やしても分散にならない。</div><div class="side pos"><strong>対案・場所談義（31件）</strong>新潟・福岡・北海道など日本海側や遠隔地を推す声。「首都を先に定義すべき」という原則論も。</div></div>
+</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">大阪に否定的 / conf 0.95</div><p>南海トラフで東京・大阪が同時被災するリスクを指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sanjinn/status/2077029794487898326"></a></blockquote></div>
+<div class="sample-card"><div class="meta">対案提示 / conf 0.9</div><p>構想自体は肯定しつつ、被災想定域を外した代替案を提示</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/atsuyashi/status/2077006037132136746"></a></blockquote></div>
+</div>
+</article>
+
+<article class="issue-block" id="issue-tokoso">
+<div class="issue-head"><span class="axis-kicker">論点3・最も熱い</span><h3>都構想・維新 — 「大阪ありき」への不信<span class="issue-count">49件</span><span class="issue-heat">熱量 1.16（最高）</span></h3>
+<p class="issue-desc">このテーマで最も感情温度が高い論点。「副首都法案は大阪都構想の隠れ蓑」「維新の利権のための法案」という不信が中心で、附則の「都」への名称変更手続きが疑念に拍車をかけています。一方で「大阪ありきで何が悪い。提唱し続けてきたのは維新だけ」という真っ向からの反論もあり、維新への評価がそのまま賛否を分けています。</p>
+<div class="issue-sides"><div class="side neg"><strong>批判側（38件）</strong>住民投票で二度否決された都構想を国政経由で実現しようとしている。税金を大阪に還流させる利益誘導だ。</div><div class="side pos"><strong>擁護側（4件）</strong>大阪から提唱してきた政党が大阪を軸に進めるのは当然。必要だと思うなら対案を出すべき。</div></div>
+</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">批判側 / conf 0.95</div><p>法案の質と税金の使い方を強く批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Miryu43530524/status/2077028636113408050"></a></blockquote></div>
+<div class="sample-card"><div class="meta">擁護側 / conf 0.8</div><p>「大阪ありきで何が悪い」と真っ向から反論</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MstPorcoMrt/status/2076959917068709937"></a></blockquote></div>
+</div>
+</article>
+
+<article class="issue-block" id="issue-bousai">
+<div class="issue-head"><span class="axis-kicker">論点4・唯一の激戦区</span><h3>防災・災害 — 同じ「防災」で正反対の結論<span class="issue-count">26件</span><span class="issue-heat">熱量 0.77</span></h3>
+<p class="issue-desc">賛成6・反対11・中立9と、賛否が正面からぶつかる唯一の論点です。興味深いのは、両陣営とも「防災」を根拠にしていること。賛成派は「首都直下地震に備えて一刻も早く機能分散を」、反対派は「南海トラフは首都直下と連動する。大阪では共倒れだ」と、同じ災害リスクから正反対の結論を導いています。</p>
+<div class="issue-sides"><div class="side neg"><strong>反対側（11件）</strong>南海トラフと首都直下は連動の恐れ。同時被災する場所にバックアップを置く意味がない。</div><div class="side pos"><strong>賛成側（6件）</strong>東京一極集中こそ最大のリスク。危機管理の観点から早く着手すべき。</div></div>
+</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">反対側 / conf 0.95</div><p>南海トラフと首都直下の連動リスクを指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ponpon4183/status/2077015822225285572"></a></blockquote></div>
+<div class="sample-card"><div class="meta">賛成側 / conf 0.85</div><p>一極集中の危険性から早期実現を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/P5Yf7EUHUULiBL6/status/2077038112459681941"></a></blockquote></div>
+</div>
+</article>
+
+<article class="issue-block" id="issue-hiyou">
+<div class="issue-head"><span class="axis-kicker">論点5</span><h3>費用・財源 — 「4兆円とも7.5兆円とも」<span class="issue-count">18件</span><span class="issue-heat">熱量 0.69</span></h3>
+<p class="issue-desc">「兆円単位の費用がかかるのに試算が示されていない」「副首都になれば住民税が上がるのでは」という財政批判の論点です。国会で費用を問われて「現時点では分からない」と答弁されたことが火に油を注ぎました。少数派からは「整備新幹線も五輪も、大型プロジェクトは基本方針を決めてから予算を積むのが普通」という手続き擁護もあります。</p>
+<div class="issue-sides"><div class="side neg"><strong>批判側（14件）</strong>物価高で国民が苦しむ中、総額も財源も不明の巨大事業を走らせるべきではない。</div><div class="side pos"><strong>擁護・少数派（4件）</strong>大型事業で最初から全費用が確定している方が珍しい。費用不明批判は大げさ。</div></div>
+</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">批判側 / conf 1.0</div><p>巨額費用と大阪の被災リスクをあわせて批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/takiniwataru_ad/status/2076646951391809629"></a></blockquote></div>
+<div class="sample-card"><div class="meta">手続き擁護 / conf 0.8</div><p>大型プロジェクトの一般的な進め方から法案手続きを擁護</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MilenaCotte/status/2076868992652960072"></a></blockquote></div>
+</div>
+</article>
+
+<article class="issue-block" id="issue-yusen">
+<div class="issue-head"><span class="axis-kicker">論点6・少数だが最も怒っている</span><h3>優先順位 — 「物価対策どこ行った」<span class="issue-count">15件</span><span class="issue-heat">熱量 1.07</span></h3>
+<p class="issue-desc">件数は最少ですが感情温度は2番目に高い論点。「消費税減税は先送りなのに副首都法案は会期延長までして通すのか」という、生活実感からの怒りが中心です。法案の中身ではなく「なぜ今これなのか」を問うており、修正合意に加わったチームみらいへの失望の声も含まれます。</p>
+<div class="issue-sides"><div class="side neg"><strong>批判側（13件）</strong>物価高対策より副首都を優先する国会に納得できない。会期延長は税金の無駄。</div><div class="side pos"><strong>擁護・少数派（1件）</strong>副首都構想自体は日本の未来のために重要。ただし他法案との抱き合わせには疑問。</div></div>
+</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">批判側 / conf 0.9</div><p>「今やる必要全くなし」と廃案を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/BucchoJ/status/2077020779129303274"></a></blockquote></div>
+<div class="sample-card"><div class="meta">条件付き賛成 / conf 0.7</div><p>構想は重要としつつ政局の抱き合わせを疑問視</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ebisawayuki/status/2076969556342648836"></a></blockquote></div>
+</div>
+</article>
+</section>
+
+<section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div>
+<p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">副首都法案は、首都・東京の機能が大規模災害などで損なわれた場合に備え、バックアップ機能を担う「副首都」を政令で指定できるようにする法案です。日本維新の会が長年掲げてきた構想で、2026年7月、与党とチームみらいの修正合意により衆院通過が目前となりました。国会の会期も、この法案の成立を狙って延長が調整されています。</p>
+<p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">推進する立場からは「首都直下地震や南海トラフへの備えとして機能分散は不可欠」「東京一極集中を是正し多極成長型の国家をつくる一歩」という主張があります。一方で、法案には副首都の定義や統治体制、費用の枠組みが具体的に書かれておらず、行政学者からも「生煮え」との指摘が出ています。また大阪を軸に検討が進むことから「住民投票で否決された大阪都構想の実現が本当の狙いではないか」という不信も根強くあります。</p>
+<p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">SNS上の反応は反対・慎重が多数ですが、その中身は「そもそも不要」「中身が決まっていない」「場所が大阪なのが問題」「今やることではない」と論点ごとに大きく異なります。どの論点を重視するかで、同じ「反対」でも風景がまったく違って見えるテーマです。</p></section>
+
+<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2><span>2軸分類のサマリー</span></div><div class="axis-grid">
+<article class="axis-card"><div class="axis-kicker">法案への態度</div><h3>反対・慎重が多数</h3><div class="axis-count">138</div><p>強く反対64件＋慎重74件。賛成側は19件（概ね賛成16・強く賛成3）にとどまり、中立・態度不明が98件。</p></article>
+<article class="axis-card"><div class="axis-kicker">大阪指定への態度</div><h3>大阪に否定的が7割超</h3><div class="axis-count">72</div><p>候補地に言及した78件のうち、大阪NG52件・他候補地推奨20件。大阪を支持する声は6件と少数。</p></article>
+<article class="axis-card"><div class="axis-kicker">感情温度</div><h3>怒りの中心は「維新への不信」</h3><div class="axis-count">1.16</div><p>論点別の平均熱量は都構想・維新が1.16で最高。優先順位1.07が続き、候補地0.55が最も冷静。</p></article>
+</div></section>
+
+<section class="panel" id="related-topics"><div class="panel-title"><h2>次に読むテーマ</h2><span>他のテーマ</span></div><div class="related-grid">
+<a class="related-card" href="constitutional-amendment-reaction-map.html"><img src="images/constitutional-hero.webp" alt="憲法改正論議" loading="lazy"><div><strong>憲法改正論議</strong><p>統治の仕組みを変えるか、守るか。</p></div></a>
+<a class="related-card" href="takaichi-reaction-map-standard.html"><img src="images/takaichi-hero.webp" alt="高市文春問題" loading="lazy"><div><strong>高市文春問題</strong><p>中傷動画疑惑、説明責任はあるのか。</p></div></a>
+<a class="related-card" href="ai-copyright-reaction-map.html"><img src="images/ai-copyright-hero.webp" alt="生成AIと著作権" loading="lazy"><div><strong>生成AIと著作権</strong><p>規制か技術革新か。</p></div></a>
+</div></section>
+
+<section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2><span>折りたたみ</span></div>
+<details open><summary>論点別件数（main_issue）</summary><div class="table-wrap"><table><tbody><tr><th>定義・中身</th><td>51</td></tr><tr><th>候補地</th><td>49</td></tr><tr><th>都構想・維新</th><td>49</td></tr><tr><th>防災・災害</th><td>26</td></tr><tr><th>その他</th><td>19</td></tr><tr><th>費用・財源</th><td>18</td></tr><tr><th>優先順位</th><td>15</td></tr><tr><th style="font-weight:900">合計（意見・論点分類済み）</th><td style="font-weight:900">227</td></tr></tbody></table></div></details>
+<details><summary>法案への態度（stance_law）</summary><div class="table-wrap"><table><tbody><tr><th>強く反対 (-2)</th><td>64</td></tr><tr><th>慎重 (-1)</th><td>74</td></tr><tr><th>中立 (0)</th><td>98</td></tr><tr><th>概ね賛成 (+1)</th><td>16</td></tr><tr><th>強く賛成 (+2)</th><td>3</td></tr></tbody></table></div></details>
+<details><summary>大阪指定への態度（stance_location）</summary><div class="table-wrap"><table><tbody><tr><th>大阪は不適 (-2)</th><td>52</td></tr><tr><th>他候補地を推奨 (-1)</th><td>20</td></tr><tr><th>言及なし (0)</th><td>177</td></tr><tr><th>大阪で概ねよい (+1)</th><td>4</td></tr><tr><th>大阪を強く支持 (+2)</th><td>2</td></tr></tbody></table></div></details>
+<details><summary>投票の選択とアリーナ上の位置</summary><div class="table-wrap"><table><thead><tr><th>あなたの回答</th><th>タイプ</th><th>マーカーが置かれるセクター</th></tr></thead><tbody><tr><td>反対 × 大阪でよい</td><td>中身を問う慎重派</td><td>定義・中身</td></tr><tr><td>賛成 × 大阪でよい</td><td>大阪副首都を推進</td><td>防災・災害</td></tr><tr><td>反対 × 大阪以外</td><td>大阪ありきに反対</td><td>都構想・維新</td></tr><tr><td>賛成 × 大阪以外</td><td>構想賛成・場所は再考</td><td>候補地</td></tr></tbody></table></div></details>
+<details><summary>収集クエリ</summary><ul><li>副首都法案 / 副首都構想 / 副首都 大阪 / 副首都 維新 / 副首都 反対 / 副首都 防災 / 副首都 費用 / 副首都 どこ / 副首都 南海トラフ</li><li>2026-07-14にYahooリアルタイム検索で292件を取得（重複除去後285件、2D分類成功255件）。</li></ul></details>
+<details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>収集時点が衆院通過直前のため、国会審議・修正合意への反応が多く出やすいバイアスがあります。</li><li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
+</section>
+</main>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>
