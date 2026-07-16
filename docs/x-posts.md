@@ -317,8 +317,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | リプライ先 | テーマ | タイプ | views |
 |---|-----------|--------|--------|-------|
 | 1 | @isashinichi（副首都法案・反対討論動画） | 副首都法案 | URLなし | 9.9K |
+| 2 | @turningpointjpn（高市内閣支持率49%・副首都法案影響か） | 副首都法案 | URLなし | 12.5K |
 
-備考: 1本URLなし。今週URL付き枠残り0〜1本。
+備考: 2本URLなし。今週URL付き枠残り0〜1本。
 
 ## 通常ポスト実績 2026-07-15
 
