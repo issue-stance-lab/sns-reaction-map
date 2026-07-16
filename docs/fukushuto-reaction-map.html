@@ -90,6 +90,25 @@
     .related-card div{padding:14px}
     .details-panel details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:10px 0;padding:12px}
     .table-wrap{overflow-x:auto}table{border-collapse:collapse;min-width:420px;width:100%}th,td{border:1px solid var(--line);padding:8px;text-align:left}th{background:#eef0fb}
+    .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin:0 0 14px}
+    .vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
+    .vote-issue-btn{position:relative;display:block;width:100%;border:2px solid var(--line);border-left:6px solid var(--accent);border-radius:10px;padding:14px 38px 14px 16px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 3px 10px rgba(49,46,129,.08);transition:transform .15s,box-shadow .15s,border-color .15s,background .15s}
+    .vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-2px);border-color:var(--accent);background:var(--accent-soft);box-shadow:0 8px 20px rgba(79,70,229,.22)}
+    .vote-issue-btn::after{content:'›';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:900;color:var(--accent)}
+    .vote-issue-btn .vi-title{display:block;font-size:14px;font-weight:900;color:var(--ink)}
+    .vote-issue-btn .vi-desc{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+    .vote-stance-btn{border:0;border-radius:10px;padding:16px 30px;cursor:pointer;font-size:16px;font-weight:900;font-family:inherit;color:#fff;box-shadow:0 4px 14px rgba(16,24,40,.22);transition:transform .15s,box-shadow .15s,filter .15s}
+    .vote-stance-btn:hover,.vote-stance-btn:focus-visible{transform:translateY(-2px);filter:brightness(1.1);box-shadow:0 8px 22px rgba(16,24,40,.3)}
+    #manga-vote-popup{position:fixed;z-index:1200;width:224px;background:#fff;border:1px solid #c7d2fe;border-radius:12px;box-shadow:0 20px 60px rgba(16,24,40,.28);overflow:hidden;display:none;pointer-events:auto;transition:opacity .15s}
+    #manga-vote-popup.visible{display:block}
+    #manga-popup-img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:#eef2ff}
+    #manga-popup-placeholder{width:100%;aspect-ratio:2/3;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,#eef2ff,#e0e7ff);gap:10px}
+    #manga-popup-placeholder .ph-icon{font-size:48px}
+    #manga-popup-placeholder .ph-label{font-size:13px;font-weight:900;color:var(--accent);text-align:center;padding:0 12px}
+    #manga-popup-placeholder .ph-sub{font-size:10px;color:#818cf8;margin-top:2px}
+    #manga-popup-cap{padding:10px 14px 12px;border-top:1px solid #eef2ff}
+    #manga-popup-cap strong{display:block;font-size:13px;color:var(--ink);margin-bottom:2px}
+    #manga-popup-cap span{font-size:11px;color:var(--muted);line-height:1.5}
     @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}}
   </style>
 <!-- GA_TAG_START -->
@@ -105,7 +124,11 @@
 <main>
 <section class="stats"><div class="stat"><span>収集投稿</span><strong>292件</strong></div><div class="stat"><span>2D分類</span><strong>255件</strong></div><div class="stat"><span>意見投稿</span><strong>229件</strong></div><div class="stat"><span>最多論点</span><strong>定義・中身 51</strong></div></section>
 
-<section class="panel" id="vote-section"><div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><strong>データの集め方:</strong> 「副首都法案」「副首都 大阪」などのキーワードで、Yahooリアルタイム検索からSNS投稿292件を取得し、AIが自動分類しました。</div><div id="vote-buttons" class="vote-card-grid"></div><p style="font-size:11px;color:var(--muted);">※ 世論調査ではありません。投票はブラウザまたはSupabase設定時はサーバーに保存されます。</p><div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;color:var(--accent);"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><div id="vote-comparison" class="vote-comparison"></div><div style="font-weight:900;margin-bottom:10px;">みんなの感覚（投票集計）</div><div id="vote-bars"></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:12px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
+<section class="panel" id="vote-section"><div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> 「副首都法案」「副首都 大阪」などのキーワードで、Yahooリアルタイム検索からSNS投稿292件を取得し、AIが自動分類しました。</div>
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;"></div></div>
+<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>副首都構想への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
+<p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
+<div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
 
 <section class="panel stance-map-section" id="stance-map-section">
 <div id="stance-map-inner">
@@ -360,7 +383,120 @@ const SM_RAW = [
 {x:0.0,y:-1.5,e:0.0,c:0.8,i:1,s:"南海トラフ考慮で日本海側を提案",u:"https://x.com/mizomegane11/status/2076990853688770669"}
 ];
 </script>
-<script src="vote2d.js?v=10"></script><script>(function(){var supabaseUrl='';var supabaseAnonKey='';Vote2D.init({containerId:'vote-buttons',resultId:'vote-result',topic:'fukushuto-v3',title:'副首都法案 SNS反応まっぷ',xAxis:{neg:'副首都構想に反対・慎重',pos:'副首都構想に賛成・推進'},yAxis:{neg:'大阪以外・場所を再考すべき',pos:'大阪を軸に進めてよい'},quadrants:[{"label":"中身を問う慎重派","desc":"場所の議論より先に、副首都の定義・費用など法案の中身を詰めるべきだと考える。"},{"label":"大阪副首都を推進","desc":"防災・多極成長の観点から、大阪を軸に早く進めるべきだと考える。"},{"label":"大阪ありきに反対","desc":"「大阪ありき」の進め方に不信があり、法案にも反対・慎重。"},{"label":"構想賛成・場所は再考","desc":"副首都は必要だが、南海トラフを考えると大阪以外も検討すべきだと考える。"}],questions:[{text:'副首都、必要だと思う？',negLabel:'反対・今じゃない',posLabel:'必要・進めるべき'},{text:'場所は大阪でいい？',subtext:'答えたら開票します',negLabel:'大阪以外・再考を',posLabel:'大阪でよい'}],commonGround:{title:'意見の向こう側',lead:'立場や場所の好みは違っても、両者に共通する願いがあります。',statement:'大きな災害が起きたときに、国の機能が止まらず暮らしが守られること',question:'反対側の心配も、少し理解できましたか？'},supabaseUrl:supabaseUrl,supabaseAnonKey:supabaseAnonKey});})();</script>
+<script>
+(function(){
+  // ---- ホバー漫画ポップアップ ----
+  var MANGA_SLUGS=['teigi','kouhochi','tokoso','bousai','hiyou','yusen','sonota'];
+  var MANGA_ICONS=['📋','🗾','🏛️','🌊','💴','⏰','💬'];
+
+  var popup=document.createElement('div');
+  popup.id='manga-vote-popup';
+  popup.innerHTML=
+    '<div id="manga-popup-placeholder"><div class="ph-icon"></div><div class="ph-label"></div><div class="ph-sub">画像準備中</div></div>'+
+    '<img id="manga-popup-img" alt="" style="display:none">'+
+    '<div id="manga-popup-cap"><strong></strong><span></span></div>';
+  document.body.appendChild(popup);
+
+  var ppImg=document.getElementById('manga-popup-img');
+  var ppPh=document.getElementById('manga-popup-placeholder');
+  var ppCap=document.getElementById('manga-popup-cap');
+  var ppHideTimer;
+
+  function showMangaPopup(btn,idx){
+    clearTimeout(ppHideTimer);
+    // 画像
+    var src='images/fukushuto-manga-'+MANGA_SLUGS[idx]+'.webp';
+    ppImg.onload=function(){ppImg.style.display='block';ppPh.style.display='none';};
+    ppImg.onerror=function(){ppImg.style.display='none';ppPh.style.display='flex';};
+    ppImg.src=src; ppImg.alt=VOTE_ISSUES[idx].k;
+    ppPh.querySelector('.ph-icon').textContent=MANGA_ICONS[idx];
+    ppPh.querySelector('.ph-label').textContent=VOTE_ISSUES[idx].k;
+    // キャプション
+    ppCap.querySelector('strong').textContent=VOTE_ISSUES[idx].k;
+    ppCap.querySelector('span').textContent=VOTE_ISSUES[idx].desc;
+    // 位置
+    var r=btn.getBoundingClientRect();
+    var pw=236, ph=window.innerHeight;
+    var left=r.right+12;
+    if(left+pw>window.innerWidth-8)left=r.left-pw-12;
+    var top=Math.max(8,Math.min(r.top,ph-380));
+    popup.style.left=Math.max(8,left)+'px';
+    popup.style.top=top+'px';
+    popup.classList.add('visible');
+  }
+  function hideMangaPopup(){
+    ppHideTimer=setTimeout(function(){popup.classList.remove('visible');},130);
+  }
+  popup.addEventListener('mouseenter',function(){clearTimeout(ppHideTimer);});
+  popup.addEventListener('mouseleave',hideMangaPopup);
+
+  var VOTE_ISSUES=[
+    {k:'定義・中身',  desc:'副首都の定義が法案に書かれていない。生煮えのまま通していいのか'},
+    {k:'候補地',      desc:'大阪は南海トラフ圏内では？福岡・新潟・北海道はどう？'},
+    {k:'都構想・維新',desc:'「大阪ありき」への不信。維新の政治的動機への疑念'},
+    {k:'防災・災害',  desc:'同じ防災を根拠に、賛成・反対が正反対の結論に'},
+    {k:'費用・財源',  desc:'兆円単位なのに費用試算も財源も示されていない'},
+    {k:'優先順位',    desc:'物価対策が先では？なぜ今これなのか'},
+    {k:'その他・わからない', desc:'特定の論点には当てはまらない、または判断がつかない'}
+  ];
+  // VOTE_ISSUES index → ISSUES array index (定義0 候補地1 都構想2 防災3 その他4 費用5 優先順位6)
+  var V2I=[0,1,2,3,5,6,4];
+  var STANCES=[
+    {k:'反対・慎重',    color:'#dc2626'},
+    {k:'どちらでもない',color:'#64748b'},
+    {k:'賛成・推進',    color:'#059669'}
+  ];
+  var selIssue=-1;
+  var step1=document.getElementById('vote-step1');
+  var step2=document.getElementById('vote-step2');
+  var result=document.getElementById('vote-result');
+  var issueBtns=document.getElementById('vote-issue-btns');
+  var stanceBtns=document.getElementById('vote-stance-btns');
+
+  VOTE_ISSUES.forEach(function(iss,i){
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='vote-issue-btn';
+    btn.innerHTML='<span class="vi-title">'+iss.k+'</span><span class="vi-desc">'+iss.desc+'</span>';
+    btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';popup.classList.remove('visible');};
+    btn.addEventListener('mouseenter',function(){showMangaPopup(btn,i);});
+    btn.addEventListener('mouseleave',hideMangaPopup);
+    issueBtns.appendChild(btn);
+  });
+
+  STANCES.forEach(function(st){
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='vote-stance-btn';
+    btn.style.background=st.color;
+    btn.textContent=st.k;
+    btn.onclick=function(){
+      var iss=VOTE_ISSUES[selIssue];
+      var arenaIdx=V2I[selIssue];
+      step2.style.display='none';
+      result.style.display='block';
+      document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
+      document.getElementById('vote-position-text').textContent=iss.desc;
+      if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
+      var shareText='副首都法案、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
+      document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html');
+      setTimeout(function(){
+        var el=document.getElementById('stance-map-section');
+        if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
+      },300);
+    };
+    stanceBtns.appendChild(btn);
+  });
+
+  document.getElementById('vote-redo-btn').onclick=function(){
+    selIssue=-1;
+    step1.style.display='block';
+    step2.style.display='none';
+    result.style.display='none';
+    if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
+  };
+})();
+</script>
 
 <script>
 (function(){
@@ -467,25 +603,102 @@ const SM_RAW = [
     ctx.fillText('冷静',CX,CY-R_MIN-8);
     ctx.fillText('感情的',CX,CY-R_MAX-8);
     if(voteMarker){
-      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10,0,Math.PI*2);
-      ctx.fillStyle='rgba(79,70,229,.25)';ctx.fill();
-      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,5.5,0,Math.PI*2);
-      ctx.fillStyle='#4f46e5';ctx.fill();
-      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
-      ctx.font='900 11px "Noto Sans JP",sans-serif';
-      ctx.fillStyle='#4f46e5';ctx.textAlign='center';
-      ctx.fillText('あなた',voteMarker.x,voteMarker.y-14);
+      const mc=voteMarker.color||'#4f46e5';
+      // 選んだセクターを強調
+      const vi=ISSUES[voteMarker.sector];
+      if(vi){
+        ctx.beginPath();
+        ctx.moveTo(CX+R_MIN*Math.cos(vi.a0*Math.PI/180),CY+R_MIN*Math.sin(vi.a0*Math.PI/180));
+        ctx.arc(CX,CY,R_MAX,vi.a0*Math.PI/180,vi.a1*Math.PI/180);
+        ctx.arc(CX,CY,R_MIN,vi.a1*Math.PI/180,vi.a0*Math.PI/180,true);
+        ctx.closePath();
+        ctx.strokeStyle=mc;ctx.lineWidth=3;ctx.stroke();
+        ctx.fillStyle=mc+'14';ctx.fill();
+      }
+      // パルスリング
+      const pulse=(Date.now()%1400)/1400;
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
+      ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();
+      ctx.globalAlpha=1;
+      // 本体ピン
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,11,0,Math.PI*2);
+      ctx.fillStyle='#fff';ctx.fill();
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);
+      ctx.fillStyle=mc;ctx.fill();
+      // バッジラベル
+      ctx.font='900 12px "Noto Sans JP",sans-serif';
+      const txt='あなたはココ';
+      const tw=ctx.measureText(txt).width;
+      const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));
+      const by=voteMarker.y-32;
+      ctx.beginPath();
+      if(ctx.roundRect)ctx.roundRect(bx-tw/2-8,by-11,tw+16,22,11);
+      else ctx.rect(bx-tw/2-8,by-11,tw+16,22);
+      ctx.fillStyle='#fff';ctx.fill();
+      ctx.strokeStyle=mc;ctx.lineWidth=2;ctx.stroke();
+      ctx.fillStyle=mc;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(txt,bx,by+1);
+      ctx.textBaseline='alphabetic';
+      // 吹き出しの脚
+      ctx.beginPath();
+      ctx.moveTo(voteMarker.x-4,by+11);ctx.lineTo(voteMarker.x,by+17);ctx.lineTo(voteMarker.x+4,by+11);
+      ctx.fillStyle=mc;ctx.fill();
     }
   }
 
-  window.setStanceMapVoteMarker=function(qi,sx,sy){
-    const map={0:0,1:3,2:2,3:1};
-    const iss=ISSUES[map[qi]!==undefined?map[qi]:0];
+  // 投票前ブラー
+  (function applyBlur(){
+    var inner=document.getElementById('stance-map-inner');
+    var section=document.getElementById('stance-map-section');
+    if(!inner||!section)return;
+    inner.style.filter='blur(8px)';
+    inner.style.pointerEvents='none';
+    inner.style.userSelect='none';
+    section.style.position='relative';
+    var ov=document.createElement('div');
+    ov.id='chart-overlay';
+    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
+    ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
+    section.appendChild(ov);
+  })();
+
+  function revealChart(){
+    var inner=document.getElementById('stance-map-inner');
+    if(inner){inner.style.transition='filter .6s ease';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
+    var ov=document.getElementById('chart-overlay');
+    if(ov)ov.remove();
+  }
+  function reBlurChart(){
+    var inner=document.getElementById('stance-map-inner');
+    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
+    var section=document.getElementById('stance-map-section');
+    if(section&&!document.getElementById('chart-overlay')){
+      var ov=document.createElement('div');
+      ov.id='chart-overlay';
+      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
+      ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
+      section.appendChild(ov);
+    }
+  }
+
+  let pulseRAF=null;
+  window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
+    revealChart();
+    const iss=ISSUES[issueIdx]||ISSUES[0];
     const rad=iss.mid*Math.PI/180, r=(R_MIN+R_MAX)/2-14;
-    voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad)};
+    voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#4f46e5',sector:issueIdx};
     const note=document.getElementById('your-marker-note');
     if(note)note.style.display='block';
+    if(pulseRAF)cancelAnimationFrame(pulseRAF);
+    (function loop(){drawMain();pulseRAF=requestAnimationFrame(loop);})();
+  };
+  window.clearStanceMapVoteMarker=function(){
+    if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
+    voteMarker=null;
+    const note=document.getElementById('your-marker-note');
+    if(note)note.style.display='none';
     drawMain();
+    reBlurChart();
   };
 
   const filters=document.getElementById('sm-filters');
@@ -634,7 +847,7 @@ const SM_RAW = [
 <details open><summary>論点別件数（main_issue）</summary><div class="table-wrap"><table><tbody><tr><th>定義・中身</th><td>51</td></tr><tr><th>候補地</th><td>49</td></tr><tr><th>都構想・維新</th><td>49</td></tr><tr><th>防災・災害</th><td>26</td></tr><tr><th>その他</th><td>19</td></tr><tr><th>費用・財源</th><td>18</td></tr><tr><th>優先順位</th><td>15</td></tr><tr><th style="font-weight:900">合計（意見・論点分類済み）</th><td style="font-weight:900">227</td></tr></tbody></table></div></details>
 <details><summary>法案への態度（stance_law）</summary><div class="table-wrap"><table><tbody><tr><th>強く反対 (-2)</th><td>64</td></tr><tr><th>慎重 (-1)</th><td>74</td></tr><tr><th>中立 (0)</th><td>98</td></tr><tr><th>概ね賛成 (+1)</th><td>16</td></tr><tr><th>強く賛成 (+2)</th><td>3</td></tr></tbody></table></div></details>
 <details><summary>大阪指定への態度（stance_location）</summary><div class="table-wrap"><table><tbody><tr><th>大阪は不適 (-2)</th><td>52</td></tr><tr><th>他候補地を推奨 (-1)</th><td>20</td></tr><tr><th>言及なし (0)</th><td>177</td></tr><tr><th>大阪で概ねよい (+1)</th><td>4</td></tr><tr><th>大阪を強く支持 (+2)</th><td>2</td></tr></tbody></table></div></details>
-<details><summary>投票の選択とアリーナ上の位置</summary><div class="table-wrap"><table><thead><tr><th>あなたの回答</th><th>タイプ</th><th>マーカーが置かれるセクター</th></tr></thead><tbody><tr><td>反対 × 大阪でよい</td><td>中身を問う慎重派</td><td>定義・中身</td></tr><tr><td>賛成 × 大阪でよい</td><td>大阪副首都を推進</td><td>防災・災害</td></tr><tr><td>反対 × 大阪以外</td><td>大阪ありきに反対</td><td>都構想・維新</td></tr><tr><td>賛成 × 大阪以外</td><td>構想賛成・場所は再考</td><td>候補地</td></tr></tbody></table></div></details>
+<details><summary>投票の選択とアリーナ上の位置</summary><div class="table-wrap"><table><thead><tr><th>選んだ論点</th><th>マーカーが置かれるセクター</th><th>マーカーの色</th></tr></thead><tbody><tr><td>定義・中身</td><td>定義・中身</td><td rowspan="7">賛成=緑 / どちらでもない=灰 / 反対=赤</td></tr><tr><td>候補地</td><td>候補地</td></tr><tr><td>都構想・維新</td><td>都構想・維新</td></tr><tr><td>防災・災害</td><td>防災・災害</td></tr><tr><td>費用・財源</td><td>費用・財源</td></tr><tr><td>優先順位</td><td>優先順位</td></tr><tr><td>その他・わからない</td><td>その他</td></tr></tbody></table></div></details>
 <details><summary>収集クエリ</summary><ul><li>副首都法案 / 副首都構想 / 副首都 大阪 / 副首都 維新 / 副首都 反対 / 副首都 防災 / 副首都 費用 / 副首都 どこ / 副首都 南海トラフ</li><li>2026-07-14にYahooリアルタイム検索で292件を取得（重複除去後285件、2D分類成功255件）。</li></ul></details>
 <details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>収集時点が衆院通過直前のため、国会審議・修正合意への反応が多く出やすいバイアスがあります。</li><li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
 </section>
