@@ -90,6 +90,12 @@
     .related-card div{padding:14px}
     .details-panel details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:10px 0;padding:12px}
     .table-wrap{overflow-x:auto}table{border-collapse:collapse;min-width:420px;width:100%}th,td{border:1px solid var(--line);padding:8px;text-align:left}th{background:#eef0fb}
+    .manga-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+    .manga-page-card{border:1px solid rgba(0,0,0,.08);border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 6px 20px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease;text-align:left;padding:0;font-family:inherit}
+    .manga-page-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(16,24,40,.14)}
+    .manga-page-card img{display:block;width:100%;aspect-ratio:2/3;object-fit:cover;background:var(--accent-soft)}
+    .manga-page-card span{display:block;padding:10px 12px;color:var(--ink);font-size:13px;font-weight:900;line-height:1.4}
+    @media(max-width:720px){.manga-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin:0 0 14px}
     .vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
     .vote-issue-btn{position:relative;display:block;width:100%;border:2px solid var(--line);border-left:6px solid var(--accent);border-radius:10px;padding:14px 38px 14px 16px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 3px 10px rgba(49,46,129,.08);transition:transform .15s,box-shadow .15s,border-color .15s,background .15s}
@@ -123,6 +129,52 @@
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">統治機構・地方</span><h1>副首都法案 SNS反応まっぷ</h1><p class="question-line">副首都、本当に必要？ 場所は大阪でいい？</p><p class="lead">SNS投稿292件のうち2D分類済み255件（うち意見229件）を、AIが6つの論点に整理。世論調査ではなく、反応サンプルの論点整理です。</p><div class="thirty-summary"><ul><li>最多論点は「定義・中身」51件。「生煮え」「副首都の定義が法案にない」という制度批判が中心。</li><li>「候補地」49件と「都構想・維新」49件が拮抗。福岡・新潟推しの冷静な議論と、「大阪ありき」への熱い不信が対照的。</li><li>賛成派は少数だが、防災・一極集中の是正を根拠に「一刻も早く」と法案を支持。防災論点は賛否が正面からぶつかる唯一の激戦区。</li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
 <section class="stats"><div class="stat"><span>収集投稿</span><strong>292件</strong></div><div class="stat"><span>2D分類</span><strong>255件</strong></div><div class="stat"><span>意見投稿</span><strong>229件</strong></div><div class="stat"><span>最多論点</span><strong>定義・中身 51</strong></div></section>
+
+<section class="panel" id="manga-section">
+<div class="panel-title"><h2>漫画で読む6つの論点</h2><span>論点別ショートコミック</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">田村結衣（都市政策研究員）と大野信子（元市職員・市民活動家）が、副首都法案をめぐる6つの論点で議論します。タップで拡大。</p>
+<div class="manga-grid">
+  <button class="manga-page-card" type="button" data-manga-index="0">
+    <img src="images/fukushuto-manga-teigi.webp" alt="定義・中身" loading="lazy">
+    <span>📋 定義・中身</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="1">
+    <img src="images/fukushuto-manga-kouhochi.webp" alt="候補地" loading="lazy">
+    <span>🗾 候補地</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="2">
+    <img src="images/fukushuto-manga-tokoso.webp" alt="都構想・維新" loading="lazy">
+    <span>🏛️ 都構想・維新</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="3">
+    <img src="images/fukushuto-manga-bousai.webp" alt="防災・災害" loading="lazy">
+    <span>🌊 防災・災害</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="4">
+    <img src="images/fukushuto-manga-hiyou.webp" alt="費用・財源" loading="lazy">
+    <span>💴 費用・財源</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="5">
+    <img src="images/fukushuto-manga-yusen.webp" alt="優先順位" loading="lazy">
+    <span>⏰ 優先順位</span>
+  </button>
+  <button class="manga-page-card" type="button" data-manga-index="6">
+    <img src="images/fukushuto-manga-sonota.webp" alt="その他・わからない" loading="lazy">
+    <span>💬 その他</span>
+  </button>
+</div>
+<div class="manga-modal" id="manga-modal" aria-hidden="true"></div>
+<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。</p>
+</section>
+<script src="manga-viewer.js"></script>
+<script>
+MangaViewer.init({
+  chars:[
+    {img:'images/fukushuto-manga-charsheet-yui.webp',name:'田村 結衣',role:'都市政策シンクタンク研究員',quote:'一極集中のリスクを今すぐ解消すべき。理念はいいと思う'},
+    {img:'images/fukushuto-manga-charsheet-nobuko.webp',name:'大野 信子',role:'元市職員・市民活動家',quote:'中身が決まらないまま枠組みを作るのは順序が逆では？'}
+  ]
+});
+</script>
 
 <section class="panel" id="vote-section"><div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> 「副首都法案」「副首都 大阪」などのキーワードで、Yahooリアルタイム検索からSNS投稿292件を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;"></div></div>
