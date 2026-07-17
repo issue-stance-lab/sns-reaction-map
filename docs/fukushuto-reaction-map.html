@@ -114,10 +114,16 @@
     .vote-issue-btn .vi-copy{display:block;min-height:74px;padding:11px 34px 13px 13px;background:#fff}
     .vote-issue-btn .vi-title{display:block;font-size:14px;font-weight:900;color:var(--ink)}
     .vote-issue-btn .vi-desc{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
-    .vote-stance-btn{border:0;border-radius:10px;padding:16px 30px;cursor:pointer;font-size:16px;font-weight:900;font-family:inherit;color:#fff;box-shadow:0 4px 14px rgba(16,24,40,.22);transition:transform .15s,box-shadow .15s,filter .15s}
-    .vote-stance-btn:hover,.vote-stance-btn:focus-visible{transform:translateY(-2px);filter:brightness(1.1);box-shadow:0 8px 22px rgba(16,24,40,.3)}
+    #vote-stance-btns{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px!important;margin-top:10px}
+    .vote-stance-btn{position:relative;border:1px solid rgba(15,23,42,.08);border-top:6px solid var(--stance-color);border-radius:14px;padding:18px 16px 16px;background:linear-gradient(180deg,#fff,var(--stance-bg));cursor:pointer;font-family:inherit;color:var(--ink);box-shadow:0 8px 22px rgba(16,24,40,.1);text-align:left;transition:transform .15s,box-shadow .15s,border-color .15s}
+    .vote-stance-btn:hover,.vote-stance-btn:focus-visible{transform:translateY(-3px);border-color:var(--stance-color);box-shadow:0 14px 30px rgba(16,24,40,.18);outline:none}
+    .vote-stance-btn .vs-icon{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--stance-color);color:#fff;font-size:22px;font-weight:900;margin-bottom:10px;box-shadow:0 8px 18px var(--stance-shadow)}
+    .vote-stance-btn .vs-title{display:block;font-size:18px;font-weight:900;line-height:1.35;color:var(--stance-color)}
+    .vote-stance-btn .vs-desc{display:block;margin-top:6px;font-size:12px;line-height:1.65;color:var(--muted)}
+    .vote-stance-btn::after{content:'選ぶ';display:inline-flex;margin-top:12px;border-radius:999px;padding:5px 10px;background:var(--stance-color);color:#fff;font-size:11px;font-weight:900}
     .manga-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,42,.86)}
     .manga-modal.active{display:flex}
+    @media(max-width:860px){#vote-stance-btns{grid-template-columns:1fr}}
     @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}}
   </style>
 <!-- GA_TAG_START -->
@@ -472,9 +478,9 @@ const SM_RAW = [
   // VOTE_ISSUES index → ISSUES array index (定義0 候補地1 都構想2 防災3 その他4 費用5 優先順位6)
   var V2I=[0,1,2,3,5,6,4];
   var STANCES=[
-    {k:'反対・慎重',    color:'#dc2626'},
-    {k:'どちらでもない',color:'#64748b'},
-    {k:'賛成・推進',    color:'#059669'}
+    {k:'反対・慎重',    color:'#dc2626', bg:'#fef2f2', shadow:'rgba(220,38,38,.22)', icon:'!', desc:'中身・費用・進め方に疑問がある'},
+    {k:'どちらでもない',color:'#64748b', bg:'#f8fafc', shadow:'rgba(100,116,139,.22)', icon:'?', desc:'条件や情報を見てから判断したい'},
+    {k:'賛成・推進',    color:'#059669', bg:'#ecfdf5', shadow:'rgba(5,150,105,.22)', icon:'✓', desc:'防災・分散のために必要だと思う'}
   ];
   var selIssue=-1;
   var step1=document.getElementById('vote-step1');
@@ -496,8 +502,10 @@ const SM_RAW = [
     var btn=document.createElement('button');
     btn.type='button';
     btn.className='vote-stance-btn';
-    btn.style.background=st.color;
-    btn.textContent=st.k;
+    btn.style.setProperty('--stance-color',st.color);
+    btn.style.setProperty('--stance-bg',st.bg);
+    btn.style.setProperty('--stance-shadow',st.shadow);
+    btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
     btn.onclick=function(){
       var iss=VOTE_ISSUES[selIssue];
       var arenaIdx=V2I[selIssue];
