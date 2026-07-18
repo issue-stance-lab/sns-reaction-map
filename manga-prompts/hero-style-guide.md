@@ -29,6 +29,7 @@
 - 背景には柔らかいグラフ、カード、地図、SNS反応ドットなどの抽象要素
 - 角丸、柔らかい影、軽い奥行き
 - 写実よりもクリーンな編集イラスト・政策図解寄り
+- テーマによっては、抽象的な俯瞰構図、柔らかい水彩×デジタルアート、粒状テクスチャ、雑誌表紙風の余韻を使う
 - 文字を載せる前提で、左側または中央上部に余白を残す
 
 避けるもの:
@@ -134,6 +135,28 @@ cwebp -q 78 -resize 1400 0 input.png -o docs/images/<topic>-hero.webp
 - 中央に問い、天秤、分岐線
 - どちらかを勝たせない
 
+### D. 抽象俯瞰・雑誌表紙型
+
+用途:
+
+- 政治・制度・価値観など、実在人物や具体物を描きすぎると偏りや生々しさが出るテーマ
+- 皇室、憲法、国会、報道、SNS世論など、抽象モチーフで空気感を出したいテーマ
+- ページのヒーロー背景として、上に濃いグラデーションや白文字を重ねる場合
+
+構成:
+
+- 俯瞰視点で、机上・地図・議場・都市図・文書・会話スレッドなどが抽象的に広がる
+- 中心テーマを、線、矢印、分岐、空席、カード、天秤、ノード、グラフなどで示す
+- 人物の顔は描かない。必要なら手元、シルエット、空席、抽象アイコンで表現する
+- 文字は原則入れない。入れる場合も、後からHTMLやOGP側で載せる
+- ディテールは少なめにし、余白と柔らかい粒状テクスチャで編集イラスト感を出す
+
+例:
+
+- 国会・制度: 俯瞰の議場、空席、溶ける幾何学形、天秤
+- SNS議論: 都市地図に流れる吹き出し、会話スレッド、反応ノード
+- 皇室典範: 家系図ライン、空の系譜マーカー、養子矢印、法の天秤
+
 ## 6. 共通プロンプトブロック
 
 ```text
@@ -150,6 +173,26 @@ Avoid:
 No politicians, no party logos, no government emblems, no real SNS logos,
 no real person likeness, no dramatic disaster destruction, no dark photo-realistic scene,
 no dense text, no random letters, no watermark.
+```
+
+### 抽象俯瞰・雑誌表紙型プロンプトブロック
+
+政策・制度テーマで、今回のような柔らかい抽象ヒーローを作る場合は以下を使う。
+
+```text
+Illustration style:
+Soft watercolor-meets-digital art, muted pastel palette with one dominant accent color,
+gentle grain texture overlay, minimal detail, dreamy and editorial feel like a Japanese magazine cover.
+
+Composition:
+Abstract aerial view, with the theme represented through symbolic objects, lines, nodes, empty seats,
+documents, maps, speech bubbles, balanced scales, or geometric shapes.
+Leave clean negative space for HTML title and lead text overlay.
+
+Avoid:
+No text baked into the image, no people's faces, no real person likeness,
+no politicians, no party logos, no government emblems, no real SNS logos,
+no dark photo-realistic scene, no random letters, no watermark.
 ```
 
 ## 7. ヒーロー画像テンプレ
@@ -203,6 +246,30 @@ Add 3 small issue chips:
 Style:
 Same SNS反応まっぷ hero image style.
 Readable at social card size.
+```
+
+## 8.5 抽象俯瞰ヒーロー画像テンプレ
+
+他テーマで使った以下のような形式を標準化する。
+
+```text
+An abstract aerial view of <中心モチーフ>, with <象徴要素1>, <象徴要素2>, and <象徴要素3>. The scene should suggest <テーマで伝えたい論点や空気> without depicting real people or specific organizations.
+
+Leave gentle negative space on the <left side / upper center> for HTML title and lead text overlay. Place the main abstract motif on the <right / center-right / center>. Use <基本色> with subtle <アクセント色> accents. Illustration style: soft watercolor-meets-digital art, muted pastel palette with one dominant accent color, gentle grain texture overlay, minimal detail, dreamy and editorial feel like a Japanese magazine cover. No text, no people's faces, no <テーマ固有の避ける記号>, no logos, no watermark. 16:9 aspect ratio, 1792x1024px.
+```
+
+### テーマ別サンプル
+
+#### 国会・制度
+
+```text
+An abstract aerial view of a grand parliamentary chamber with rows of empty seats gradually fading and dissolving into geometric shapes, balanced scales of governance floating above, warm neutral tones with subtle deep red and gold accents. Illustration style: soft watercolor-meets-digital art, muted pastel palette with one dominant accent color, gentle grain texture overlay, minimal detail, dreamy and editorial feel like a Japanese magazine cover. No text, no people's faces. 16:9 aspect ratio, 1792x1024px.
+```
+
+#### SNS議論・会話
+
+```text
+An abstract bird's-eye view of intersecting speech bubbles and conversation threads flowing across a city map, soft glowing connections between nodes, warm neutral tones with subtle blue and orange accents. Illustration style: soft watercolor-meets-digital art, muted pastel palette with one dominant accent color, gentle grain texture overlay, minimal detail, dreamy and editorial feel like a Japanese magazine cover. No text, no people's faces. 16:9 aspect ratio, 1792x1024px.
 ```
 
 ## 9. テーマ別差し替え項目

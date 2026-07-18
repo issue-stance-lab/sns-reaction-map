@@ -143,3 +143,16 @@ themes:
     published: todo
     refresh_at: 2026-07-21
     notes: "2026-07-14のYahooリアルタイム検索トレンド上位「九州電力」から派生。情報紛失問題に絞った4クエリの判定でtrend_judgeはGO（意見率45%、対立性あり）。本収集は9クエリで148件取得済み。分類待ち。"
+
+  koshitsu-tenpakai:
+    title: 皇室典範改正（女性皇族の皇籍維持・旧宮家養子）
+    html: docs/koshitsu-tenpakai-reaction-map.html
+    collect: done        # 326件（2026-07-17、9クエリ）
+    classify: n-a        # 2D分類で直接カバー
+    classify2d: done     # 273件（エラー率2.1%）+ main_issue 268件（エラー率2.0%）
+    page_v3: done         # 比較型（温度バー＋2Dスキャッタ）2026-07-18
+    manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
+    manga_img: done       # 5枚WebP変換済み（charsheet×2 + page×3、全100KB以下）
+    published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
+    refresh_at: 2026-07-24
+    notes: "2026-07-17のYahooリアルタイム検索。皇室典範改正が同日参院で可決・成立した直後で投稿殺到中。trend_judgeはGO（スコア9/10、意見率60-70%）。9クエリで326件取得済み。2D分類完了（OpenCode Go minimax-m2.7）。stance_reform（反対140/中立103/賛成30）stance_succession（男系95/中立133/女系45）。main_issue分布: 男系vs女系75/養子制度54/立法手法54/女性天皇の区別24/愛子さま5/その他56。"
