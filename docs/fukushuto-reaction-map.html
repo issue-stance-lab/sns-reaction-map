@@ -54,18 +54,22 @@
     .vote-comparison{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 16px}
     .comparison-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff}
     .bar-row{margin:10px 0}.bar-track{height:10px;border-radius:999px;background:#e7e7f7;overflow:hidden}.bar-fill{height:100%;background:var(--accent)}
+    .stance-map-section{position:relative;background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat;border-top:0}
+    .stance-map-section .panel-title h2{color:#fff}.stance-map-section .panel-title span{color:rgba(255,255,255,.7)}
     .stance-map-section #stance-map-inner{position:relative;max-width:720px;margin:0 auto}
-    #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto}
-    #sm-wrap canvas{display:block;width:100%;border:1px solid #d7dce6;border-radius:8px}
+    #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
+    #sm-wrap canvas{display:block;width:100%;border:0;border-radius:8px}
     #sm-wrap #smCanvasMain{cursor:crosshair;position:relative;z-index:2;background:transparent}
-    #sm-wrap #smCanvasHeat{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;pointer-events:none;z-index:1;background:#fdfdff}
-    .map-caption{max-width:760px;margin:12px auto 0;color:var(--muted);font-size:13px}
+    #sm-wrap #smCanvasHeat{position:absolute;top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:8px;pointer-events:none;z-index:1;background:#fdfdff}
+    .map-caption{max-width:760px;margin:12px auto 0;color:rgba(255,255,255,.72);font-size:13px}
+    #your-marker-note{color:rgba(255,255,255,.7)!important}
     .sm-controls{max-width:660px;margin:14px auto 0;display:flex;flex-direction:column;gap:10px}
-    .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:#555;align-items:center}
+    .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:rgba(255,255,255,.8);align-items:center}
     .sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
     .sm-filters{display:flex;gap:6px;flex-wrap:wrap}
-    .sm-fbtn{border:1px solid #d7dce6;border-radius:999px;padding:6px 12px;background:#fff;cursor:pointer;font-size:12px;font-weight:800}
+    .sm-fbtn{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);cursor:pointer;font-size:12px;font-weight:800}
     .sm-fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .arena-divider{line-height:0;margin:0}.arena-divider img{width:100%;height:auto;display:block}
     #sm-tooltip{position:absolute;display:none;z-index:5;max-width:260px;background:#1e1b4b;color:#fff;font-size:12px;line-height:1.5;border-radius:8px;padding:10px 12px;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.3)}
     .quadrant-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
     .quadrant-nav a{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#fff;text-decoration:none;font-weight:800;font-size:13px}
@@ -124,7 +128,8 @@
     .manga-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,42,.86)}
     .manga-modal.active{display:flex}
     @media(max-width:860px){#vote-stance-btns{grid-template-columns:1fr}}
-    @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}}
+    .site-footer{background:#07172f;color:rgba(255,255,255,.72)}.footer-banner{line-height:0}.footer-banner img{width:100%;height:auto;display:block}.footer-inner{max-width:1192px;margin:0 auto;padding:32px 24px 0;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px}.footer-inner h3,.footer-inner h4{color:#fff;margin:0 0 8px}.footer-inner p,.footer-inner a{font-size:11px;color:rgba(255,255,255,.62);text-decoration:none}.footer-links{display:grid;gap:5px}.footer-bottom{max-width:1192px;margin:20px auto 0;padding:16px 24px 24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:9px}
+    @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px}}
   </style>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K10S4YCZFH');</script>
@@ -162,6 +167,7 @@
 <section class="panel" id="vote-section"><div class="panel-title"><h2>あなたが一番気になる「設計の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> 「副首都法案」「副首都 大阪」などのキーワードで、Yahooリアルタイム検索からSNS投稿292件を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>副首都構想への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
+<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
 <div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
 
@@ -232,6 +238,7 @@ MangaViewer.init({
 <div id="sm-tooltip"></div>
 </div>
 </section>
+<div class="arena-divider"><img src="images/arena-divider.webp" alt="" loading="lazy"></div>
 
 <script>
 const SM_RAW = [
@@ -466,6 +473,14 @@ const SM_RAW = [
 </script>
 <script>
 (function(){
+  var TOPIC='fukushuto-issue-stance-v1';
+  var STORAGE_KEY='sns_vote_'+TOPIC+'_my';
+  var supabaseUrl="";
+  var supabaseAnonKey="";
+  var supabaseClient=null;
+  if(supabaseUrl && supabaseAnonKey && typeof supabase!=='undefined'){
+    supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
+  }
   var VOTE_ISSUES=[
     {k:'定義・中身',  img:'images/fukushuto-vote-teigi.webp',    desc:'副首都の定義が法案に書かれていない。生煮えのまま通していいのか'},
     {k:'候補地',      img:'images/fukushuto-vote-kouhochi.webp', desc:'大阪は南海トラフ圏内では？福岡・新潟・北海道はどう？'},
@@ -498,7 +513,56 @@ const SM_RAW = [
     issueBtns.appendChild(btn);
   });
 
-  STANCES.forEach(function(st){
+  function showVote(issueIdx,stanceIdx,shouldScroll){
+    var iss=VOTE_ISSUES[issueIdx];
+    var st=STANCES[stanceIdx];
+    var arenaIdx=V2I[issueIdx];
+    selIssue=issueIdx;
+    step1.style.display='none';
+    step2.style.display='none';
+    result.style.display='block';
+    document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
+    document.getElementById('vote-position-text').textContent=iss.desc;
+    if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
+    var shareText='副首都法案、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
+    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html');
+    setTimeout(function(){
+      if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
+      var el=document.getElementById('stance-map-section');
+      if(shouldScroll!==false && el)el.scrollIntoView({behavior:'smooth',block:'center'});
+    },300);
+  }
+
+  async function saveVote(issueIdx,stanceIdx){
+    var vote={issueIdx:issueIdx,stanceIdx:stanceIdx};
+    if(supabaseClient){
+      var response;
+      try{
+        response=await supabaseClient.from('votes').insert([{
+          topic_id:TOPIC,
+          choice_idx:issueIdx*STANCES.length+stanceIdx
+        }]);
+      }catch(error){
+        console.error('Supabase vote request failed:',error);
+        alert('投票を保存できませんでした。通信状況を確認して再度お試しください。');
+        return false;
+      }
+      if(response.error){
+        var message=(response.error.message||'')+(response.error.details||'');
+        if(message.indexOf('already voted')!==-1 || response.error.code==='23505'){
+          alert('24時間以内に同じ回線からすでに投票されています。');
+        }else{
+          console.error('Supabase vote insert failed:',response.error);
+          alert('投票を保存できませんでした。通信状況を確認して再度お試しください。');
+        }
+        return false;
+      }
+    }
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(vote));
+    return true;
+  }
+
+  STANCES.forEach(function(st,stanceIdx){
     var btn=document.createElement('button');
     btn.type='button';
     btn.className='vote-stance-btn';
@@ -506,31 +570,34 @@ const SM_RAW = [
     btn.style.setProperty('--stance-bg',st.bg);
     btn.style.setProperty('--stance-shadow',st.shadow);
     btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
-    btn.onclick=function(){
-      var iss=VOTE_ISSUES[selIssue];
-      var arenaIdx=V2I[selIssue];
-      step2.style.display='none';
-      result.style.display='block';
-      document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
-      document.getElementById('vote-position-text').textContent=iss.desc;
-      if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
-      var shareText='副首都法案、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
-      document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html');
-      setTimeout(function(){
-        var el=document.getElementById('stance-map-section');
-        if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
-      },300);
+    btn.onclick=async function(){
+      var buttons=stanceBtns.querySelectorAll('button');
+      buttons.forEach(function(item){item.disabled=true;});
+      var saved=await saveVote(selIssue,stanceIdx);
+      buttons.forEach(function(item){item.disabled=false;});
+      if(saved)showVote(selIssue,stanceIdx);
     };
     stanceBtns.appendChild(btn);
   });
 
   document.getElementById('vote-redo-btn').onclick=function(){
+    localStorage.removeItem(STORAGE_KEY);
     selIssue=-1;
     step1.style.display='block';
     step2.style.display='none';
     result.style.display='none';
     if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
   };
+  if(supabaseClient)document.getElementById('vote-redo-btn').style.display='none';
+  try{
+    var previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(previous && Number.isInteger(previous.issueIdx) && previous.issueIdx>=0 && previous.issueIdx<VOTE_ISSUES.length &&
+       Number.isInteger(previous.stanceIdx) && previous.stanceIdx>=0 && previous.stanceIdx<STANCES.length){
+      showVote(previous.issueIdx,previous.stanceIdx,false);
+    }
+  }catch(error){
+    localStorage.removeItem(STORAGE_KEY);
+  }
 })();
 </script>
 
@@ -888,6 +955,8 @@ const SM_RAW = [
 <details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>収集時点が衆院通過直前のため、国会審議・修正合意への反応が多く出やすいバイアスがあります。</li><li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
 </section>
 </main>
+<footer class="site-footer"><div class="footer-banner"><img src="images/arena-footer.webp" alt="" loading="lazy"></div><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="constitutional-amendment-reaction-map.html">憲法改正論議</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html">このサイトについて</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="share-x-btn.js"></script>
 </body>
 </html>
