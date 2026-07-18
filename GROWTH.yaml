@@ -31,6 +31,17 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-07-14
+      weekly_users: 24          # GA4: 過去7日アクティブユーザー（↑100% vs 7/6）
+      pageviews: 387            # GA4: 過去7日（AI著作権80、あだ名57、トップ77、高市22、青切符16、憲法13、辺野古13、部活8、高齢者8）
+      pages_per_session: 5.529  # GA4
+      votes_total: 9            # Supabase
+      votes_week: null          # Supabase: 未取得
+      gsc_impressions: 21       # Search Console: 28日間（部活6、高齢者6、あだ名4、青切符3、AI著作権1、TOP1）
+      gsc_clicks: 1             # Search Console: 28日間（部活クリック1）
+      x_followers: null         # 手動確認が必要
+      notes: GSCインデックス開始。部活は9.8位・CTR16.7%、高齢者5.7位。シェアボタン経由流入は0、関連テーマクリック1回。Xシェアとナビ施策の効果はまだ出ていない
+
     - date: 2026-07-06
       weekly_users: 12          # GA4: 過去7日アクティブユーザー（↑71.4%）
       pageviews: 285            # GA4: 確認分合計（ホーム79、AI著作権81、高齢者33、憲法30、部活27、青切符16、あだ名19）
