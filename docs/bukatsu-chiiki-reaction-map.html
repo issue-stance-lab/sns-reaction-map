@@ -618,6 +618,52 @@
       .thirty-summary, .vote-card-grid, .vote-comparison, .manga-grid, .related-grid { grid-template-columns:1fr; }
       .vote-image-card { min-height:110px; }
     }
+  
+    /* === 論点アリーナ === */
+    .arena-section{position:relative;background:#0f0e2e;border-top:0;padding:42px min(6vw,72px)}
+    .arena-section .panel-title h2{color:#fff}.arena-section .panel-title span{color:rgba(255,255,255,.7)}
+    #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
+    #sm-wrap canvas{display:block;width:100%;border:0;border-radius:8px}
+    #smCanvasMain{cursor:crosshair;position:relative;z-index:2;background:transparent}
+    #smCanvasHeat{position:absolute;top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:8px;pointer-events:none;z-index:1;background:#fdfdff}
+    .map-caption{max-width:760px;margin:12px auto 0;color:rgba(255,255,255,.72);font-size:13px}
+    #your-marker-note{color:rgba(255,255,255,.7)!important}
+    .sm-controls{max-width:660px;margin:14px auto 0;display:flex;flex-direction:column;gap:10px}
+    .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:rgba(255,255,255,.8);align-items:center}
+    .sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+    .sm-filters{display:flex;gap:6px;flex-wrap:wrap}
+    .sm-fbtn{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);cursor:pointer;font-size:12px;font-weight:800}
+    .sm-fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    #sm-tooltip{position:absolute;display:none;z-index:5;max-width:260px;background:#1e1b4b;color:#fff;font-size:12px;line-height:1.5;border-radius:8px;padding:10px 12px;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.3)}
+    /* === 論点explainer === */
+    .explainer-section{background:#fff}
+    .explainer-lead{font-size:15px;line-height:1.9;color:var(--ink);margin:0 0 24px;max-width:880px}
+    .explainer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+    .explainer-card{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(16,24,40,.06);padding:18px;cursor:default}
+    .explainer-num{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;font-size:11px;font-weight:900;padding:2px 10px;margin-bottom:8px}
+    .explainer-card-title{font-size:15px;font-weight:900;margin:0 0 6px;line-height:1.4}
+    .explainer-card-desc{font-size:13px;color:var(--muted);line-height:1.7;margin:0 0 10px}
+    .explainer-sides{display:flex;flex-direction:column;gap:5px}
+    .explainer-side{font-size:12px;border-radius:6px;padding:5px 9px;font-weight:700}
+    .explainer-side.con{background:#fef2f2;color:#991b1b}
+    .explainer-side.pro{background:#ecfdf5;color:#065f46}
+    .explainer-note{font-size:12px;color:var(--muted);margin:12px 0 0}
+    /* === 2ステップ投票 === */
+    .vote-step-label{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;margin:0 0 14px}
+    .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:900;flex-shrink:0}
+    .vote-issue-btn{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff;cursor:pointer;font-size:13px;font-weight:800;text-align:left;display:flex;align-items:center;gap:8px;transition:border-color .15s,background .15s}
+    .vote-issue-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+    .vote-issue-icon{font-size:20px;flex-shrink:0}
+    .vote-stance-btn{border:2px solid;border-radius:12px;padding:14px 18px;background:#fff;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:160px;transition:transform .15s,box-shadow .15s;border-color:var(--stance-color,#ccc)}
+    .vote-stance-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--stance-shadow,rgba(0,0,0,.12))}
+    .vs-icon{font-size:22px;font-weight:900;color:var(--stance-color)}
+    .vs-title{font-size:14px;font-weight:900;color:var(--ink)}
+    .vs-desc{font-size:12px;color:var(--muted);line-height:1.5}
+    @media(max-width:767px){
+      .explainer-grid{grid-template-columns:1fr}
+      .vote-stance-btn{min-width:unset;width:100%}
+    }
+
   </style>
   <link rel="stylesheet" href="topic-modern.css?v=2">
   <script src="topic-modern.js?v=1" defer></script>
@@ -693,746 +739,706 @@ MangaViewer.init({
   ]
 });
 </script>
-    <section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+<section class="panel explainer-section" id="explainer-section">
+<div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
+<div class="explainer-grid">
+  <article class="explainer-card">
+    <span class="explainer-num">論点①</span>
+    <p class="explainer-card-title">費用・家庭負担 — 「月8000円、年間28万円」</p>
+    <p class="explainer-card-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">懸念：家計を直撃。格差が広がる</span>
+      <span class="explainer-side pro">擁護：市税補助・一律化で解決できる</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点②</span>
+    <p class="explainer-card-title">受け皿・指導者 — 「ボランティア頼みは限界」</p>
+    <p class="explainer-card-desc">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">懸念：報酬が安く人材が集まらない</span>
+      <span class="explainer-side pro">擁護：生活できる報酬を社会全体で保障を</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点③</span>
+    <p class="explainer-card-title">教員の働き方 — 「ブラック部活の解消」が最大動機</p>
+    <p class="explainer-card-desc">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side pro">賛成：強制をなくし教員の負担を減らせる</span>
+      <span class="explainer-side con">懸念：移行後も実態は変わらない可能性</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点④</span>
+    <p class="explainer-card-title">教育的意義・機会 — 「子どもの夢と居場所」</p>
+    <p class="explainer-card-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side pro">期待：門戸が広がり多様な子に機会を</span>
+      <span class="explainer-side con">懸念：費用・距離の壁で格差が生まれる</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点⑤</span>
+    <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」</p>
+    <p class="explainer-card-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">懸念：地方では移行自体が成立しない</span>
+      <span class="explainer-side pro">視点：地域の実情に合わせた柔軟設計を</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点⑥</span>
+    <p class="explainer-card-title">制度・移行プロセス — 「手探りのまま進んでいる」</p>
+    <p class="explainer-card-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">批判：制度設計が不透明なまま進んでいる</span>
+      <span class="explainer-side pro">擁護：段階的に改善していくのは当然</span>
+    </div>
+  </article>
+</div>
+<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+</section>
+
+<section class="panel" id="vote-section">
+<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
-<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
-<div id="vote-buttons" class="vote-card-grid"></div>
-<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
+<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
+<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
   </div>
-  <div id="vote-comparison" class="vote-comparison" aria-label="あなたの選択とSNS分布の比較"></div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
-  <div id="vote-bars" style="margin-bottom:16px;"></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-    <a id="share-x" href="#" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
-      𝕏 でシェア
-    </a>
-    <button id="vote-redo-btn"
-       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
-      投票をやり直す
-    </button>
-  </div>
-  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
+  <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a>
+  <button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button>
 </div>
 </section>
-<script src="vote2d.js?v=10"></script>
-<script>
-(function(){
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  Vote2D.init({
-    containerId: 'vote-buttons',
-    resultId: 'vote-result',
-    topic: '部活動地域移行_SNS反応まっぷ',
-    title: '部活動の地域移行 SNS反応まっぷ',
-    xAxis: { neg: '地域移行に反対', pos: '地域移行に賛成' },
-    yAxis: { neg: '支える仕組みの持続可能性を重視', pos: '活動の質・教育的価値を重視' },
-    quadrants: [{"label": "競技力は現状維持で守る", "desc": "地域移行ではなく現行の部活形態を改善しながら競技力・教育価値を守るべき。"}, {"label": "地域移行で競技力も維持", "desc": "地域クラブへの移行でも競技水準・教育的価値は維持・向上できる。"}, {"label": "教員負担は現行改善で解決", "desc": "移行より現行の枠組みを改善し、教員の働き方を守るべき。"}, {"label": "地域移行で教員の働き方改善", "desc": "地域移行により教員の長時間労働が解消し、持続可能な体制になる。"}],
-    questions: [
-      {text:'部活の地域移行に賛成？',negLabel:'反対',posLabel:'賛成'},
-      {text:'部活動改革で、まず優先して解決したいのは？',subtext:'答えたら開票します',negLabel:'支える仕組みの持続可能性',posLabel:'活動の質・教育的価値'}
-    ],
-    commonGround: {
-      title: '意見の向こう側',
-      lead: '立場や方法は違っても、両者に共通する願いがあります。',
-      statement: '子どもが活動を続けられ、支える大人にも無理が集中しない環境',
-      question: '反対側の心配も、少し理解できましたか？'
-    },
-    supabaseUrl: supabaseUrl,
-    supabaseAnonKey: supabaseAnonKey
-  });
-})();
-</script>
-    <section class="panel" id="stance-map-section">
-<div id="stance-map-inner">
-<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>245件 | 点の色=感情強度（青:冷静→赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
+
+<section class="arena-section" id="stance-map-section">
+<div id="stance-map-inner" style="max-width:720px;margin:0 auto">
+<div class="panel-title"><h2>論点アリーナ</h2><span>245件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
 <div id="sm-wrap">
-  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
-  <canvas id="smCanvasMain" width="600" height="600"></canvas>
-  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">活動の質・教育的価値を重視 ▲</div>
-  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 支える仕組みの持続可能性を重視</div>
-  <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 地域移行に反対・懐疑的</div>
-  <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">地域移行を推進 ▶</div>
+  <canvas id="smCanvasHeat" width="640" height="640"></canvas>
+  <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
-<div id="your-marker-note" style="display:none;margin:10px auto 0;max-width:660px;font-size:12px;font-weight:800;color:var(--accent);">投票した選択肢を、マップ上に「あなたはこのあたり」として表示しています。</div>
-<div id="smTourPanel">
-  <div id="smTourStep"></div>
-  <div id="smTourTitle"></div>
-  <div id="smTourDesc"></div>
-  <div id="smTourEmbedLoading">投稿を読み込み中…</div>
-  <div id="smTourEmbed"></div>
-  <div id="smTourQuoteFallback"><span id="smTourQuoteText"></span><small id="smTourQuoteLink">↗ Xで見る</small></div>
-  <div class="sm-tour-nav">
-    <button class="sm-tnav" id="smBtnPrev">← 前へ</button>
-    <div id="smTourProgress"><div id="smTourProgressBar"></div></div>
-    <button class="sm-tnav primary" id="smBtnNext">次へ →</button>
-    <button class="sm-tnav" id="smBtnClose" style="border-color:#666;color:#aaa">✕</button>
-  </div>
-</div>
+<p class="map-caption">中心の「部活動の地域移行」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=移行支持 / 赤=移行反対 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
+<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;"></p>
 <div class="sm-controls">
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <div class="sm-legend-emo">
-      <span style="color:#555">感情強度:</span>
-      <span>冷静</span>
-      <div class="sm-emo-bar"></div>
-      <span>激怒</span>
-    </div>
-    <button id="smStartTour">▶ ガイドツアーで読む</button>
+  <div class="sm-legend">
+    <span><i style="background:#059669"></i>移行支持</span>
+    <span><i style="background:#dc2626"></i>移行反対</span>
+    <span><i style="background:#64748b"></i>中立</span>
+    <span style="color:#888">中心＝冷静 / 外周＝感情的</span>
   </div>
-  <div class="sm-view-row">
-    <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
-    <label><input type="checkbox" id="smChkDots" checked> ドット</label>
-    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="48" style="width:80px;vertical-align:middle"></label>
-  </div>
-  <div class="sm-filters">
-    <span style="font-size:10px;color:#888">絞り込み:</span>
-    <button class="sm-fbtn active" data-q="all">全件 (245)</button>
-    <button class="sm-fbtn" data-q="q2">移行反対×活動価値 (32)</button>
-    <button class="sm-fbtn" data-q="q1">移行推進×活動価値 (38)</button>
-    <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (26)</button>
-    <button class="sm-fbtn" data-q="calm">冷静 e≤0 (116)</button>
-  </div>
-</div>
-<div class="sm-stat-cards">
-  <div class="sm-sbox"><div class="sm-slabel">移行反対 × 活動価値重視 (左上)</div><div class="sm-sval" style="color:#c0392b">26件</div><div class="sm-sdesc">「学校部活の教育的価値や子どもの機会を守りたい」</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">移行推進 × 活動価値重視 (右上)</div><div class="sm-sval" style="color:#2980b9">21件</div><div class="sm-sdesc">「地域移行でも活動の質と教育的価値は維持できる」</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">中立含む（X=0またはY=0）</div><div class="sm-sval" style="color:#7f8c8d">71件</div><div class="sm-sdesc">条件付き賛否・個別事情への言及</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">16件</div><div class="sm-sdesc">強い怒り・感情的な訴え（両陣営）</div></div>
+  <div class="sm-filters" id="sm-filters"></div>
 </div>
 <div id="sm-tooltip"></div>
-</div><!-- /stance-map-inner -->
+</div>
 </section>
+
+
 <script>
 const SM_RAW = [
-  {x:2.0,y:0.0,e:1.0,c:0.80,s:"地域移行の月会費統一と市税補助を提案し強く支持",u:"https://x.com/TheMirageof0/status/2070624074506863002"},
-  {x:-1.0,y:-1.5,e:-2.0,c:0.85,s:"月額8000円の家計負担を嘆き地域移行に不支持",u:"https://x.com/TheMirageof0/status/2070621781757726855"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.80,s:"報酬低くするから指導者不足になる",u:"https://x.com/774nyannyan/status/2070491362882150454"},
-  {x:-0.5,y:1.5,e:1.0,c:0.70,s:"熊本市の新方式を批判。教育価値を強調し市民の無関心を非難",u:"https://x.com/774nyannyan/status/2070491361137357035"},
-  {x:-1.0,y:1.0,e:0.0,c:0.60,s:"中体連高体連が地域移行で追い詰められ教育課程に位置づけてほしい",u:"https://x.com/wu76jgS82zThc8u/status/2070462759238811989"},
-  {x:1.0,y:1.0,e:0.0,c:0.85,s:"地域移行を支持し持続可能な運営を求める",u:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"保護者が部活地域移行を思考中",u:"https://x.com/papakoya25/status/2070424396137910617"},
-  {x:0.5,y:0.5,e:0.0,c:0.70,s:"市への質問形式で地域移行の検討姿勢を示す",u:"https://x.com/wakohappy2023/status/2070372233567240572"},
-  {x:-1.0,y:1.0,e:1.0,c:0.75,s:"指導者の低報酬・責任の乖離を批判",u:"https://x.com/SIND_/status/2070325146372739488"},
-  {x:-0.5,y:1.0,e:0.5,c:0.80,s:"地域移行流れ容認も部活縮小と保護者憤りに懸念",u:"https://x.com/Miyabi14_Miyabi/status/2070276591167639853"},
-  {x:1.0,y:1.0,e:-1.0,c:0.70,s:"移行後の継続仕組み優先を提案、自校に部活ない皮肉",u:"https://x.com/nijimasufire/status/2070118138885312676"},
-  {x:1.0,y:0.5,e:-1.0,c:0.70,s:"地域移行支持を示しつつ矛盾を皮肉",u:"https://x.com/774nyannyan/status/2070117159511130290"},
-  {x:1.5,y:-1.0,e:0.0,c:0.75,s:"地域移行支持、教員以外も負担分散すべき",u:"https://x.com/haiyuepanda/status/2070098123440140672"},
-  {x:1.0,y:1.0,e:0.0,c:0.85,s:"地域移行実現には指導者に生活を保障できるコストが必要",u:"https://x.com/todoporzoy2012/status/2070092023512932832"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"地域移行に懐疑的で現状維持派、冷静だが皮肉を含む",u:"https://x.com/crypticsa/status/2070077324008341725"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"地域移行の失敗批判と政策批判を含む分析投稿",u:"https://x.com/wu76jgS82zThc8u/status/2070075708609859823"},
-  {x:1.0,y:1.0,e:1.0,c:0.85,s:"少子化で破綻前に地域移行で存続支持",u:"https://x.com/774nyannyan/status/2070058879938084997"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"地域移行で不登校の子も参加しやすくなることを期待",u:"https://x.com/Mr_Peki_chan/status/2070029090003009670"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"クラブ化はチーム作成に留まり本質的理解が欠けると指摘",u:"https://x.com/chaw0501/status/2070020638383997407"},
-  {x:1.5,y:1.0,e:1.0,c:0.85,s:"地域移行を推進し具体的な改善案を主張",u:"https://x.com/tFwqQpA4kn3bwDn/status/2069879568618627305"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"団体数半減を嘆き地域移行の影響を指摘",u:"https://x.com/edamame_1219/status/2069742846606004286"},
-  {x:-1.5,y:2.0,e:1.5,c:0.85,s:"地域移行で夢を奪われる子への怒り",u:"https://x.com/No2lab150687/status/2069741426276233331"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"地域移行の持続困難を警告",u:"https://x.com/774nyannyan/status/2069730125340692943"},
-  {x:0.0,y:1.0,e:0.0,c:0.60,s:"地域移行後の決裁権の変化を冷静に分析",u:"https://x.com/Pansy_school/status/2069715403236954447"},
-  {x:1.0,y:0.0,e:0.0,c:0.60,s:"移行支持立場からやれなくなる論への疑問を呈する",u:"https://x.com/774nyannyan/status/2069694892037874163"},
-  {x:-1.0,y:1.0,e:1.0,c:0.85,s:"地域移行で野球の育成環境悪化を批判",u:"https://x.com/mamamam4949/status/2069589990011818183"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.80,s:"地域移行の課題追及と安全対策再不備を批判",u:"https://x.com/gi26ai/status/2069586455618523517"},
-  {x:-1.0,y:0.0,e:0.5,c:0.70,s:"地域移行の弊害を指摘、制度設計への疑問呈す",u:"https://x.com/suzuki_turitaro/status/2069580292386627898"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"移行の障壁である家族の移動困難と受入体制不足を指摘",u:"https://x.com/444sp/status/2069570277009490051"},
-  {x:0.0,y:0.0,e:-1.0,c:0.30,s:"マージャン登録への困惑・面白がる反応",u:"https://x.com/urya4432/status/2069543717686673480"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"地域移行は大多数賛成、教職員アンケートも支持",u:"https://x.com/tomokun_life/status/2068124530384711714"},
-  {x:-1.0,y:1.0,e:1.0,c:0.75,s:"高校野球の名称問題を懸念し移行に否定的",u:"https://x.com/lumIFSHUWs6GO2n/status/2063976964898332701"},
-  {x:1.0,y:0.0,e:1.0,c:0.80,s:"移行支持、条件不可能と諦め反対派を批判",u:"https://x.com/774nyannyan/status/2063489857993969715"},
-  {x:2.0,y:0.0,e:0.0,c:0.80,s:"地域移行支持、持続可能性の観点から肯定",u:"https://x.com/774nyannyan/status/2068230558992458134"},
-  {x:1.5,y:0.0,e:0.5,c:0.80,s:"地域移行推進派が反対派のせいだと主張",u:"https://x.com/774nyannyan/status/2067883582647849464"},
-  {x:1.5,y:0.5,e:0.5,c:0.85,s:"地域移行の矛盾に困惑。支持だが熱度は中程度",u:"https://x.com/774nyannyan/status/2067880712943059272"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"地域移行反対論者を相手にせず",u:"https://x.com/774nyannyan/status/2063907885764182333"},
-  {x:2.0,y:0.0,e:1.5,c:0.85,s:"地域移行推進を支持し反対派を過激派と批判",u:"https://x.com/JlMqc1bALnVe9gS/status/2063598518305218910"},
-  {x:-0.5,y:0.0,e:0.0,c:0.85,s:"移行进まない理由は保護者负担と住民参画不足と分析",u:"https://x.com/774nyannyan/status/2063204420297617773"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"地域移行に反対立場だが、面倒くさがりつつも資料作成中",u:"https://x.com/Pansy_school/status/2063014247500816645"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"地域移行に強く反対、教員の質低下を懸念",u:"https://x.com/yamako_10/status/2061588627088634365"},
-  {x:1.0,y:0.0,e:0.0,c:0.75,s:"移行反対は親の送迎面倒さが原因と主張",u:"https://x.com/774nyannyan/status/2060903547257131344"},
-  {x:1.0,y:0.0,e:-1.0,c:0.60,s:"地域移行支持も住民反対で実現困難との皮肉",u:"https://x.com/774nyannyan/status/2060894243808530650"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"地域移行の住民反対で頓挫すると予測",u:"https://x.com/774nyannyan/status/2060890475503157752"},
-  {x:1.0,y:1.0,e:0.5,c:0.80,s:"地域移行支持だが現状維持派の矛盾を指摘",u:"https://x.com/774nyannyan/status/2058872234408833533"},
-  {x:1.0,y:1.0,e:1.0,c:0.85,s:"地域移行支持を表明、🔥で熱量ある政策論",u:"https://x.com/bansho_teruhito/status/2069413298358059063"},
-  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"地域移行進まず 管理職・教員の意識改革を批判",u:"https://x.com/AUzzkqIjZ37594/status/2067938043332604078"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"地域移行に伴う内申評価の公平化を提案",u:"https://x.com/maeshima_nishi/status/2066861890064760889"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"地域移行の可行性に疑問呈し教員の善意頼み批判",u:"https://x.com/iwanissimo/status/2066786203442217008"},
-  {x:0.5,y:0.0,e:0.0,c:0.70,s:"地域移行の課題と解決策を冷静に分析する投稿",u:"https://x.com/taiikujin966039/status/2065544492430643515"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.70,s:"地域移行の可行性に疑問、教員善意依存の構造批判",u:"https://x.com/yamoto8/status/2065429718128816346"},
-  {x:-1.0,y:0.0,e:0.0,c:0.60,s:"地域移行で問題噴出を予測・やや懸念示す",u:"https://x.com/munougensouka/status/2064392535120937430"},
-  {x:0.5,y:1.0,e:0.0,c:0.65,s:"地域移行の格差解消プロジェクト紹介。移行自体は支持方向",u:"https://x.com/canpan2009/status/2064286063192117415"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"地域移行のビジネスモデル実施上の苦労を吐露",u:"https://x.com/Pansy_school/status/2063391483013583240"},
-  {x:-1.5,y:1.5,e:0.5,c:0.80,s:"移行に疑問、家庭負担増と体験格差を懸念",u:"https://x.com/danchosabasabu/status/2062309010200772695"},
-  {x:2.0,y:1.0,e:1.5,c:0.85,s:"地域移行支持・民意を根拠に既得権益側を批判",u:"https://x.com/m727243023/status/2060651797388394551"},
-  {x:-1.5,y:-1.5,e:1.0,c:0.75,s:"現行制度の強制労働的な実態への不満と移行への消極的立場",u:"https://x.com/774nyannyan/status/2060324516652568821"},
-  {x:1.0,y:0.0,e:-0.5,c:0.75,s:"文科省の腰の据わらない姿勢に苦笑しつつ地域移行推進派",u:"https://x.com/Sukimakagukmny/status/2060164886467150160"},
-  {x:-1.5,y:0.0,e:1.5,c:0.85,s:"委託条件の非現実性を批判し政策の本気度を疑問視",u:"https://x.com/ikuji_takuto/status/2070078294410850366"},
-  {x:0.0,y:1.5,e:1.0,c:0.60,s:"スポ少非協力親を批判、地域移行を背景に教育責任を促す",u:"https://x.com/AsahiPodcast/status/2069498240240849347"},
-  {x:1.0,y:-1.0,e:1.0,c:0.60,s:"部活外部委託と教員待遇改善を主張",u:"https://x.com/godof31icecream/status/2069288512311251029"},
-  {x:1.0,y:-1.0,e:1.0,c:0.85,s:"外部委託既定路線を容認、違法劳働問題を根拠に",u:"https://x.com/shirassh/status/2069006288777052163"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"休日禁止・外部委託への疑問と実務的懸念",u:"https://x.com/gigigigigijutu/status/2068437174924812622"},
-  {x:1.0,y:1.0,e:0.5,c:0.80,s:"移行は不可避だが格差拡大を危惧",u:"https://x.com/football__cone/status/2068341617443189050"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"部活外部委託を肯定、支持意見",u:"https://x.com/LIU83414453/status/2067750890862493830"},
-  {x:0.0,y:-2.0,e:-1.0,c:0.70,s:"部活外部委託を削減の象徴に挙げ教員負担の理解不足を皮肉る",u:"https://x.com/yukiuniriri/status/2067037904401236236"},
-  {x:1.0,y:-1.0,e:0.0,c:0.75,s:"スポンサーをつけた外部委託で負担軽減を提案",u:"https://x.com/kudou24307267/status/2067017810401001829"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"地域移行に触れたが賛否なく淡々と記述",u:"https://x.com/akaishitaizo/status/2066060375049879553"},
-  {x:1.0,y:-1.0,e:1.0,c:0.85,s:"教師問題背景に外部委託肯定の意見",u:"https://x.com/sky_walker_1173/status/2065224434433298449"},
-  {x:0.0,y:-1.0,e:-1.0,c:0.75,s:"教員負担問題を冷笑視し現状認識を揶揄",u:"https://x.com/t_maru_summer/status/2065010419568406669"},
-  {x:0.0,y:0.0,e:0.0,c:0.50,s:"地域移行の是非より町の評価に困惑",u:"https://x.com/DwpN0ecG6R72240/status/2064660470913733098"},
-  {x:1.0,y:1.0,e:0.5,c:0.75,s:"水泳授業存続と外部委託を支持する個人的意見",u:"https://x.com/HissatuShigotoP/status/2064556920636358772"},
-  {x:0.0,y:0.0,e:0.0,c:0.50,s:"外部委託の理由を問い科学部との比較をしている",u:"https://x.com/punch551/status/2064470890977608037"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"部活外注を批判し教育価値を重視する否定的見解",u:"https://x.com/2812572ng/status/2063911271570047166"},
-  {x:1.0,y:1.0,e:0.0,c:0.60,s:"OBOG活用と外部委託を肯定、地域移行支持",u:"https://x.com/addreality/status/2063634162880549031"},
-  {x:-1.0,y:1.0,e:-1.0,c:0.70,s:"移行後の部活で指導者が不在の中、子供たちがサークル状態で活動している現状を報告",u:"https://x.com/lHAKPI9sj52UVOW/status/2062678108780818526"},
-  {x:1.0,y:-1.5,e:1.5,c:0.90,s:"部活外部委託により教師の負担軽減を求める批判的意見",u:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
-  {x:-1.0,y:0.0,e:0.0,c:0.60,s:"配偶者の部活疲れを嘆き外部委託に疑問",u:"https://x.com/wamipiha_ROOM/status/2062441022815404445"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"移行反対で代替案提示把孩子放在第一位",u:"https://x.com/joO7g4uWTlVCSMA/status/2061724320259608806"},
-  {x:2.0,y:-2.0,e:1.0,c:0.70,s:"教師負担軽減のため部活の外部委託を強く望む",u:"https://x.com/yuka_greentea30/status/2061436132769124660"},
-  {x:1.0,y:0.0,e:0.0,c:0.75,s:"部活は学校の仕事ではなく地域クラブでと主張",u:"https://x.com/sugiyama2023/status/2061056903124545999"},
-  {x:-0.5,y:-0.5,e:0.0,c:0.75,s:"部活への公的支援に懐疑的だが外部委託は支持",u:"https://x.com/Rx0073LT/status/2060361575635255788"},
-  {x:0.0,y:-1.0,e:0.0,c:0.65,s:"教育改革の虚幻性を指摘する意見",u:"https://x.com/mathmathsan/status/1888223251400438207"},
-  {x:0.0,y:-1.0,e:-1.0,c:0.70,s:"教員自身の負担削減行動を促す冷淡な意見",u:"https://x.com/sugiyama2023/status/2069927749997953237"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"入試優先の教育問題を指摘、地域移行には触れず",u:"https://x.com/Yama_to_Sima/status/2069699164318154834"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"市議批判と地域移行の困難性指摘",u:"https://x.com/db6qp9/status/2069228519016780190"},
-  {x:0.5,y:1.5,e:1.0,c:0.75,s:"先生負担より生徒保護を優先、指導員導入を望む",u:"https://x.com/1007_nagi/status/2068954974714052941"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.85,s:"移行進まぬ理由は地域のメリット不足と財源の欠如",u:"https://x.com/774nyannyan/status/2068566479247950305"},
-  {x:-1.0,y:0.0,e:0.0,c:0.85,s:"地域移行の難しさを住民メリット不足で分析",u:"https://x.com/774nyannyan/status/2068564242505269619"},
-  {x:0.0,y:-1.5,e:0.5,c:0.60,s:"顧問拒否で教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2068442038786547725"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"教員負担増への懸念と現場軽視への批判",u:"https://x.com/Kazukittyo_gun/status/2068325020313764315"},
-  {x:0.5,y:-1.0,e:-1.0,c:0.80,s:"教員負担削減観点から地域移行を容認する消極的支持",u:"https://x.com/774nyannyan/status/2068293099353416159"},
-  {x:-2.0,y:2.0,e:2.0,c:0.90,s:"経費削減優先で生徒の安全を軽視する政策に強く反発",u:"https://x.com/nom1153/status/2068292289173311686"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.75,s:"学校負担軽減の観点から部活の学校依存に疑問",u:"https://x.com/zabarava/status/2068291631573549209"},
-  {x:0.0,y:-1.0,e:2.0,c:0.85,s:"分業で解决すべきで税金の議論は的外れ",u:"https://x.com/quomoritureruis/status/2068245939375219020"},
-  {x:-1.0,y:2.0,e:1.0,c:0.85,s:"部活動の教育的価値を強調し、縮小に懸念",u:"https://x.com/lIjdqs9tKf2434/status/2068244369690308798"},
-  {x:0.0,y:-1.0,e:1.0,c:0.65,s:"顧問拒否の実践法を共有し教員負担軽減を訴える",u:"https://x.com/yoshiki20260530/status/2068146586954412271"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"地域移行方針を批判し、受け皿整備の困難さを指摘",u:"https://x.com/774nyannyan/status/2068125288605852033"},
-  {x:0.0,y:1.0,e:0.5,c:0.85,s:"部活指導に思いのない者へ批判、特に地域移行での負担押しつけを問題視",u:"https://x.com/774nyannyan/status/2067944905457156215"},
-  {x:-0.5,y:1.0,e:-1.0,c:0.75,s:"移行に反対はしないが負担転嫁を皮肉る",u:"https://x.com/774nyannyan/status/2067944484231651534"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"負担を転嫁するだけでは解決しないと批判的",u:"https://x.com/774nyannyan/status/2067609586316800281"},
-  {x:-1.5,y:0.5,e:0.5,c:0.75,s:"地域移行支持で、保護者を批判",u:"https://x.com/774nyannyan/status/2067609048686669921"},
-  {x:0.0,y:1.0,e:0.5,c:0.75,s:"部活的教育意義認めつつ教員無料労働の矛盾を指摘",u:"https://x.com/Pansy_school/status/2067581200940843298"},
-  {x:2.0,y:-1.0,e:1.0,c:0.90,s:"部活解体と地域移行支持、教員業務削減を重視",u:"https://x.com/cold_2_dloc/status/2067556163802337627"},
-  {x:1.0,y:-2.0,e:1.0,c:0.80,s:"データで顧問拒否し教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2067198495979978851"},
-  {x:-0.5,y:-2.0,e:1.5,c:0.70,s:"顧問拒否の経験を共有し教員負担軽減を最優先",u:"https://x.com/yoshiki20260530/status/2067189419535409499"},
-  {x:-1.0,y:-2.0,e:1.0,c:0.80,s:"教員負担軽減優先で顧問拒否決意・同調圧力を批判",u:"https://x.com/yoshiki20260530/status/2066798324938919963"},
-  {x:0.0,y:-1.0,e:0.0,c:0.60,s:"教員不足の原因を列举し双方の立场を绍介",u:"https://x.com/monmon0816/status/2066477650051567764"},
-  {x:-1.0,y:0.0,e:0.0,c:0.75,s:"地域移行懐疑論、部活縮小を提案",u:"https://x.com/774nyannyan/status/2065997295855046946"},
-  {x:0.0,y:-1.5,e:1.5,c:0.75,s:"教員負担の危険性を指摘し待遇改善を求める意見",u:"https://x.com/kobuoichan/status/2065958821567385989"},
-  {x:1.0,y:-1.5,e:1.5,c:0.70,s:"顧問拒否の経験を語り教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2065906962597113927"},
-  {x:-1.0,y:0.0,e:-0.5,c:0.85,s:"地域移行の改革自体は肯定しつつも、困窮世帯への負担増を懸念",u:"https://x.com/Fujisawa_Suzuki/status/2065673921421287662"},
-  {x:0.0,y:-2.0,e:1.0,c:0.90,s:"音楽教師が本業防衛のため顧問を拒否",u:"https://x.com/yoshiki20260530/status/2065653370019561677"},
-  {x:0.0,y:-1.0,e:1.0,c:0.85,s:"教員が部活顧問拒否を宣言、自分の生活守る姿勢",u:"https://x.com/yoshiki20260530/status/2065409303255924929"},
-  {x:-1.0,y:-2.0,e:0.5,c:0.75,s:"教員負担増を懸念し現状維持を支持",u:"https://x.com/G0TTZIQEWm56962/status/2064928199222702145"},
-  {x:-1.0,y:-1.5,e:1.0,c:0.80,s:"教員負担増を懸念し地域移行に否定的な意見",u:"https://x.com/anderson0214/status/2064832907576021221"},
-  {x:-1.0,y:1.5,e:1.5,c:0.75,s:"学校に部活を要望する親や教員の滅私奉公を痛烈に批判",u:"https://x.com/hagakikatteren/status/2064823846402933129"},
-  {x:0.0,y:-1.0,e:-1.0,c:0.80,s:"ガイドライン根拠に 部活義務否定・教員負担軽減寄りの冷静な意見",u:"https://x.com/n821nJF8iuB4JAU/status/2064500878632210546"},
-  {x:-1.0,y:-2.0,e:1.0,c:0.85,s:"教員負担軽減を優先し 部活顧問拒否を呼びかける投稿",u:"https://x.com/yoshiki20260530/status/2064461183793696895"},
-  {x:1.5,y:0.5,e:0.5,c:0.75,s:"部活廃止を肯定し全校への拡大望む",u:"https://x.com/mamehina012/status/2070658992205148385"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"部活廃止訴える、教員負担軽減最優先で感情強い",u:"https://x.com/Hfcn4oelqPHUQqM/status/2070655303063158975"},
-  {x:-1.0,y:1.5,e:0.0,c:0.85,s:"学校部活は誰もが参加できるで開かれた存在であるべきと主張",u:"https://x.com/yanderedaisuki4/status/2070624714977050868"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"文科省の部活廃止に批判、監視求める",u:"https://x.com/Nijiiro_Ongaku/status/2070609133913719174"},
-  {x:-2.0,y:0.0,e:1.0,c:0.60,s:"部活廃止を提唱、再発防止では不十分と主張",u:"https://x.com/VrJQQQDQJKmiLzY/status/2070519063667986861"},
-  {x:-1.0,y:1.0,e:0.5,c:0.65,s:"自身の経験に基づき廃部動きを皮肉る",u:"https://x.com/mizuki_suguru/status/2070407597090586780"},
-  {x:1.0,y:0.0,e:1.0,c:0.75,s:"部活廃止を支持する激励メッセージ",u:"https://x.com/kyusaikatsudou/status/2070159831621931490"},
-  {x:-1.5,y:0.0,e:1.0,c:0.70,s:"部活廃止論者を人格・論理的に批判し嫌悪",u:"https://x.com/LwbR1psFJd55470/status/2070082170568520116"},
-  {x:-1.0,y:2.0,e:1.0,c:0.80,s:"部活廃止に反対し教育機会均等と子ども優先を主張",u:"https://x.com/kotoridesudesu/status/2070076881827950673"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.75,s:"部活廃止を顧問自らの手で進めるべきと主張",u:"https://x.com/edu_impossible/status/2069916720547115204"},
-  {x:-2.0,y:0.0,e:1.0,c:0.80,s:"部活の廃止を求める簡潔な意見",u:"https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261"},
-  {x:-1.0,y:0.0,e:1.0,c:0.50,s:"廃止論派の主張に恐怖・拒否感",u:"https://x.com/GreatHjm/status/2069705751334179316"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.50,s:"部活廃止容認、議論倦厭示す投稿",u:"https://x.com/TEeDbIHUir13163/status/2069624470210572408"},
-  {x:1.5,y:-1.5,e:1.5,c:0.85,s:"教員の違法行為を批判し部活廃止を主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069555558802477361"},
-  {x:2.0,y:-1.0,e:1.0,c:0.95,s:"訴訟で部活廃止を加速させるべきと強く主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069539721546698982"},
-  {x:-1.0,y:1.0,e:0.0,c:0.80,s:"地域移行に懸念、学校部活の競技力育成機能を評価",u:"https://x.com/best_yajima/status/2069440318144200986"},
-  {x:1.0,y:0.0,e:-1.0,c:0.70,s:"地域移行の受け皿整備の遅れを皮肉混じりに批判",u:"https://x.com/DioxetaneMaker/status/2069386736292319386"},
-  {x:-2.0,y:1.0,e:2.0,c:0.75,s:"部活全面廃止を怒り強く主張",u:"https://x.com/hisa10swan/status/2069350819527618875"},
-  {x:-2.0,y:2.0,e:1.0,c:0.75,s:"部活廃止に強く反対、競技力維持を重視",u:"https://x.com/j_zw62/status/2069267266693447707"},
-  {x:-1.5,y:1.0,e:1.5,c:0.85,s:"部活廃止を支持、顧問の質 低さを批判",u:"https://x.com/pochi1182/status/2069232307479937533"},
-  {x:2.0,y:2.0,e:1.0,c:0.85,s:"部活廃止論に反対し教育的価値を強調",u:"https://x.com/yuritako/status/2069192029251547263"},
-  {x:-2.0,y:0.0,e:1.0,c:0.70,s:"部活の廃止を断言的に主張する強い意見",u:"https://x.com/hisa10swan/status/2069172279624577418"},
-  {x:-1.0,y:1.0,e:0.0,c:0.70,s:"部活人脈の有用性を語り廃止動きに反対",u:"https://x.com/nekonekocyan/status/2068933417702731793"},
-  {x:-1.0,y:1.0,e:1.0,c:0.50,s:"部活廃止への皮肉と社会劣化歔謔",u:"https://x.com/ienadia/status/2068932768843915393"},
-  {x:2.0,y:1.0,e:1.0,c:0.85,s:"地域移行を支持、閉鎖的な部活改善を主張",u:"https://x.com/SvErfdCKdt52541/status/2068859859077124604"},
-  {x:1.5,y:0.5,e:1.5,c:0.80,s:"地域移行肯定、顧問不要論に共感し批判的",u:"https://x.com/sugiyama2023/status/2068848471608844627"},
-  {x:-2.0,y:0.0,e:1.0,c:0.90,s:"部活廃止・勉強優先を明確に主張",u:"https://x.com/hiroa11011/status/2068702457820246445"},
-  {x:-2.0,y:1.0,e:0.0,c:0.80,s:"部活廃止を主張し勉強の優先度を強調する投稿",u:"https://x.com/weTdqo0isa11532/status/2068700099845509484"},
-  {x:0.5,y:0.0,e:0.0,c:0.50,s:"地域移行が上手くいかず改善を期待する冷静な感想",u:"https://x.com/ashigoriP/status/2076242520015851607"},
-  {x:0.0,y:-0.5,e:0.0,c:0.80,s:"地域移行の制度課題（資格・日程）を冷静に指摘",u:"https://x.com/tomo124865/status/2076196920436166795"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"地域移行部活の援助活動報告。金銭よりマンパワーとの価値観。",u:"https://x.com/miokonboDaysAI/status/2076275556145058273"},
-  {x:0.0,y:-1.5,e:1.0,c:0.75,s:"給特法問題を根源と指摘し地域移行前に制度改革を主張",u:"https://x.com/satoyon4_/status/2076204305212989636"},
-  {x:1.0,y:0.0,e:0.0,c:0.85,s:"土地管理等コスト削減と地域移行の関連性を指摘し、条件付きで支持",u:"https://x.com/Irony2Nestle/status/2076118347310371167"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"地域移行進展のなさを疑問視する感想",u:"https://x.com/tokugsax2/status/2076160814382481610"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"移行成功を願い東金への期待示す",u:"https://x.com/l50Hrpo9Vhmqp2f/status/2075948014540308685"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"移行で指導者となり子どもの居場所守りたい",u:"https://x.com/miokonboDaysAI/status/2075943002162577760"},
-  {x:-1.0,y:0.0,e:1.5,c:0.85,s:"地域移行を批判。冷房など実需対応求めつつ大臣を痛烈非難",u:"https://x.com/CHAROdra/status/2075840460317397274"},
-  {x:2.0,y:1.0,e:1.0,c:1.00,s:"地域移行事業推進へ現場重視の決意",u:"https://x.com/Pansy_school/status/2075867944224272733"},
-  {x:1.0,y:2.0,e:2.0,c:0.85,s:"地域移行支持・子供教育優先・強い怒り",u:"https://x.com/HappaCommander/status/2075813418477494539"},
-  {x:0.0,y:0.0,e:-1.0,c:0.55,s:"地域移行の現状を認識し移行の流れを残念がる",u:"https://x.com/defense4220/status/2075796255129899023"},
-  {x:-1.0,y:1.0,e:0.5,c:0.85,s:"移行中の過渡期措置として教師の平日Superviseを求める",u:"https://x.com/siromi2022111/status/2075789986209919430"},
-  {x:1.0,y:1.0,e:0.5,c:0.85,s:"地域移行の真剣な実行を求め生涯スポーツの観点から支持",u:"https://x.com/housuka1/status/2075779065483853905"},
-  {x:1.0,y:2.0,e:0.0,c:0.80,s:"移行より展開を提唱、子の発達環境重視",u:"https://x.com/fcoachjp/status/2075754467593490668"},
-  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"地域移行の現状進め方へ不満・呆れ",u:"https://x.com/774nyannyan/status/2075736134399987882"},
-  {x:-1.5,y:0.0,e:1.0,c:0.80,s:"地域移行に懐疑的で縮小・廃止を主張",u:"https://x.com/774nyannyan/status/2075742246767624539"},
-  {x:0.0,y:1.0,e:0.0,c:0.60,s:"地域移行の課題を冷静に指摘、教育価値を暗に重視",u:"https://x.com/tamaru202312/status/2075724523790643610"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"施策の継続性への懸念示す批判的意見",u:"https://x.com/4ZYVNjQOkWBSoU8/status/2075717181103632386"},
-  {x:-1.0,y:-2.0,e:-1.5,c:0.70,s:"地域移行逆行批判・先生の業務過多への不満",u:"https://x.com/Sevda31651106/status/2075582024920756617"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"地域移行を支持しつつ質的転換を求める冷静な意見",u:"https://x.com/VDSc7uZWlDer7Wb/status/2075504460319883736"},
-  {x:1.0,y:-1.0,e:0.5,c:0.90,s:"教員過労問題を例に地域移行の必要性を支持",u:"https://x.com/daiyusaku/status/2075499348104991038"},
-  {x:-0.5,y:0.0,e:0.5,c:0.70,s:"地域移行無期限延期に怒り、政治混乱を皮肉",u:"https://x.com/Abaysal43/status/2075441531859742896"},
-  {x:-0.5,y:0.5,e:0.0,c:0.70,s:"地域移行の指導者質の問題を懸念",u:"https://x.com/chisakitakami/status/2075222628797923436"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.65,s:"制度変更の皮肉。費用的家庭負担増への懸念",u:"https://x.com/s_mama_46/status/2074860053614744049"},
-  {x:-1.0,y:1.0,e:0.0,c:0.60,s:"地域移行完了時の娘の過ごし方を憂慮",u:"https://x.com/kogaaoi/status/2074830329056272419"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"地域移行支持。孩子の体験・教育価値優先。",u:"https://x.com/Pansy_school/status/2074791853225091572"},
-  {x:1.0,y:0.5,e:-1.0,c:0.80,s:"地域移行支持も矛盾を皮肉る",u:"https://x.com/774nyannyan/status/2072690458292306109"},
-  {x:0.5,y:-1.0,e:0.5,c:0.70,s:"地域移行会議参加し先生負担の重さを認識",u:"https://x.com/SOUTAX2/status/2073945047264010712"},
-  {x:1.0,y:1.0,e:0.0,c:0.75,s:"地域移行を個人的に進んで受け入れている姿勢",u:"https://x.com/SIND_/status/2071935980316311734"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.80,s:"地域移行実現への不信と諦めを表明",u:"https://x.com/kyouiku_mondai/status/2057446869203390747"},
-  {x:0.0,y:-2.0,e:0.0,c:0.80,s:"教員の自腹問題を指摘し負担軽減を重視",u:"https://x.com/hiiragi2280/status/2071383152145428555"},
-  {x:1.0,y:0.5,e:0.0,c:0.70,s:"地域移行の公費支援と外部委託を提案",u:"https://x.com/ChyanNobu/status/2076250417663742366"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"部活休む後悔なし。夏休み制限肯定。親心配は呪縛と分析",u:"https://x.com/S_eiko_/status/2076119525679116653"},
-  {x:1.0,y:-1.0,e:0.0,c:0.75,s:"部活外部委託支持、教員負担軽減を重視",u:"https://x.com/voviroku/status/2075726282843996560"},
-  {x:-2.0,y:2.0,e:1.0,c:0.80,s:"部活外部委託に批判、競技力低下を懸念",u:"https://x.com/j_zw62/status/2074413179577454913"},
-  {x:0.0,y:0.0,e:-1.0,c:0.65,s:"地域移行の現状を経験者として淡々と報告",u:"https://x.com/nimoku551ura/status/2074136077645062400"},
-  {x:2.0,y:-2.0,e:1.5,c:1.00,s:"外部委託推進で教員負担軽減を最優先する感情的意見",u:"https://x.com/dam51730/status/2073954661355474996"},
-  {x:-1.0,y:1.0,e:0.5,c:0.70,s:"部活外部委託を残念がり_PRIVATE lessonsへ",u:"https://x.com/haruurarahare/status/2073911814791016477"},
-  {x:0.5,y:1.0,e:-1.0,c:0.65,s:"外部委託の難しさを熱血教師の例で指摘",u:"https://x.com/hakujiu_ki/status/2073438886190358618"},
-  {x:1.0,y:-2.0,e:1.0,c:0.80,s:"部活外部委託で先生負担軽減求める投稿",u:"https://x.com/shrekbonsai/status/2073243197334298807"},
-  {x:2.0,y:-1.0,e:0.0,c:0.75,s:"民間委託・単位制を提案し地域移行を支持、費用削減志向",u:"https://x.com/frozenworkerxyz/status/2073079595411407160"},
-  {x:-1.0,y:0.0,e:1.0,c:0.50,s:"保護者当番の負担を嘆き、先生不足→外部委託を推測",u:"https://x.com/eternalLoveFAM/status/2072829132887728292"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"部活外部委託を教育改革案として支持、効率化阻む利権を批判",u:"https://x.com/frozenworkerxyz/status/2071967276035915780"},
-  {x:-1.5,y:0.0,e:-0.5,c:0.60,s:"外部委託実現への懐疑示す 教师のバトン絡み",u:"https://x.com/kyouiku_mondai/status/2071721069980029333"},
-  {x:2.0,y:1.0,e:0.5,c:0.70,s:"部活の移送リスクを指摘し外部委託を提案",u:"https://x.com/KMqHb6wJoh6jNUB/status/2071560482578895003"},
-  {x:-1.0,y:0.0,e:0.5,c:0.70,s:"外部委託に疑問呈し批判的意見",u:"https://x.com/361_r19/status/2071424138594660712"},
-  {x:0.0,y:-1.0,e:1.0,c:0.80,s:"部活のボランティア労働への皮肉と外包提案",u:"https://x.com/cr5uPNIFIxI7mEl/status/2070995273678008350"},
-  {x:1.0,y:1.0,e:0.0,c:0.70,s:"エンジョイ勢も選択肢として必要との意見",u:"https://x.com/yuk0117/status/2071178606819340387"},
-  {x:1.0,y:0.0,e:0.0,c:0.85,s:"外部委託の現実解として地域クラブ独立を提案",u:"https://x.com/sugiyama2023/status/2070429609477472539"},
-  {x:-1.0,y:-2.0,e:-1.0,c:0.85,s:"教師負担軽減に懸念、地域移行の弊害指摘",u:"https://x.com/toichi10111/status/2076101995489051039"},
-  {x:-0.5,y:0.0,e:0.0,c:0.70,s:"移行の難しさを認識しつつ各立場への配慮示す",u:"https://x.com/sahxuenla/status/2075698328466256258"},
-  {x:0.5,y:1.5,e:-0.5,c:0.40,s:"部活縮小は教师負担軽減のため容認する姿勢",u:"https://x.com/satobon09/status/2074823734473674888"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.75,s:"地域移行の実効性を疑問視する批判的意見",u:"https://x.com/ChrFYM8Kui11326/status/2073637232242815404"},
-  {x:-1.0,y:-1.5,e:0.0,c:0.80,s:"教員負担増加に反対し、現場の 無理解も問題と指摘",u:"https://x.com/teacherhatena/status/2073219509687931184"},
-  {x:-1.0,y:-1.0,e:-0.5,c:0.60,s:"遠征通知で教員負担増を懸念",u:"https://x.com/kty281306/status/2074995461208072532"},
-  {x:0.5,y:-1.5,e:0.0,c:0.65,s:"地域移行加速と教員負担軽減を支持し現場主導を評価",u:"https://x.com/HIsound284443/status/2072425964597027225"},
-  {x:1.0,y:-1.0,e:0.0,c:0.85,s:"現行制度の教員負担は誤りで、早急に是正すべきと主張",u:"https://x.com/774nyannyan/status/2072289382208553291"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.60,s:"外部コーチの学校適性を懸念する冷静な分析",u:"https://x.com/361_r19/status/2071425059038822520"},
-  {x:0.0,y:-1.0,e:1.0,c:0.85,s:"移行コストの負担構造を批判的に分析",u:"https://x.com/774nyannyan/status/2071205424649642303"},
-  {x:0.0,y:0.0,e:1.0,c:0.80,s:"押しつけ合いの議論の不毛さを批判",u:"https://x.com/774nyannyan/status/2071054194933682454"},
-  {x:-1.0,y:-2.0,e:-1.0,c:0.85,s:"教員の過労を重視し地域移行に消極的な意見",u:"https://x.com/tea03031533410/status/2070847748644147509"},
-  {x:-1.0,y:-2.0,e:-1.0,c:0.80,s:"教員の部活負担を批判し改革を求める",u:"https://x.com/Yuan_TashiDelek/status/2071074743969833192"},
-  {x:0.0,y:-1.0,e:1.0,c:0.75,s:"教員の過重労働実態を批判し負担軽減を訴える",u:"https://x.com/js_kent2016/status/2070715184122147059"},
-  {x:0.0,y:-2.0,e:1.5,c:0.85,s:"教委施策への怒りと部活廃止を教师的負担軽減の手段として提案",u:"https://x.com/the_spiderkim02/status/2076264540996870574"},
-  {x:-0.5,y:0.5,e:0.5,c:0.80,s:"部活廃止と基礎学力の因果関係に疑問を呈する",u:"https://x.com/ymwhr924/status/2076252279146262925"},
-  {x:-0.5,y:-1.5,e:1.0,c:0.65,s:"教員の超過勤務是正には部活廃止等の抜本的措置が必要",u:"https://x.com/takohati3/status/2076303411650474204"},
-  {x:-2.0,y:1.0,e:1.0,c:0.70,s:"部活廃止に強く反対、教育的価値を重視",u:"https://x.com/blue_fires01/status/2076193871412043972"},
-  {x:-2.0,y:2.0,e:1.0,c:0.90,s:"部活存続を求める親の懸念と費用負担提案",u:"https://x.com/minidetamago/status/2076190777806639375"},
-  {x:2.0,y:1.0,e:1.0,c:0.80,s:"部活廃止前提に教育改革求める教育的意義問いかけ",u:"https://x.com/rErcLOd0Q6Mzrxj/status/2076196454587355299"},
-  {x:0.5,y:0.0,e:0.5,c:0.75,s:"部活廃止に共感も懸念あり",u:"https://x.com/Risarisakiu/status/2076175588474413236"},
-  {x:1.0,y:0.0,e:0.0,c:0.85,s:"地域移行の推進を支持する穏やか意見",u:"https://x.com/nabeshi2002jp/status/2076120662524244208"},
-  {x:2.0,y:0.0,e:0.0,c:0.85,s:"部活廃止と民営化を支持、副業許可で师资確保",u:"https://x.com/gedoubeam/status/2076109490253185329"},
-  {x:2.0,y:-1.0,e:0.5,c:0.70,s:"部活廃止と働き方改革進展を好意的に評価",u:"https://x.com/adhdsavetheplan/status/2076098536299798771"},
-  {x:1.0,y:0.0,e:-1.0,c:0.75,s:"部活廃止の趋势を容認・支持しつつ，冷淡に観察する姿勢",u:"https://x.com/otanyan_0923/status/2075967205616074803"},
-  {x:-0.5,y:0.0,e:-0.5,c:0.60,s:"先生の必须有化と改革を結びつけ変化への困惑示す",u:"https://x.com/qQCPNzKkk8CtUnt/status/2075944120410087821"},
-  {x:-1.5,y:-1.0,e:1.5,c:0.70,s:"部活廃止を求める怒りを含む投稿",u:"https://x.com/a4wd/status/2075930302023909691"},
-  {x:0.0,y:0.0,e:-0.5,c:0.30,s:"廃止地域の報告のみ、意見不明",u:"https://x.com/yurupsk/status/2075942395448025376"},
-  {x:-2.0,y:1.0,e:1.0,c:0.85,s:"部活廃止主張。孩子の幸福を優先し教師の犠牲も懸念",u:"https://x.com/hiroa11011/status/2075926152070443511"},
-  {x:1.0,y:1.0,e:0.0,c:0.85,s:"部活廃止より地域移行を支持、教育の質維持を重視",u:"https://x.com/haiyuepanda/status/2075825617267007541"},
-  {x:-2.0,y:0.0,e:1.5,c:0.80,s:"部活の廃止を一択と強く主張",u:"https://x.com/haoli3474/status/2075790544576582102"},
-  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"部活廃止機運への嘆きと風潮への不満",u:"https://x.com/Mezase1Ok/status/2075794716768281015"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.65,s:"部活廃止を断定的に主張する短文",u:"https://x.com/mitsunobu47/status/2075875504201351366"},
-  {x:1.5,y:-1.5,e:-0.5,c:0.80,s:"学校部活廃止論。教員負担軽減を最優先",u:"https://x.com/meronsparking/status/2075546907817197976"},
-  {x:-1.5,y:1.0,e:1.5,c:0.65,s:"部活廃止・学童化への嘆きと批判",u:"https://x.com/arakawakappa25/status/2075494831250686345"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"部活廃止を最強に主張。理由なく断言",u:"https://x.com/migrainejust/status/2075398159053037981"},
-  {x:-2.0,y:2.0,e:1.5,c:0.85,s:"子供の健康を守るため部活廃止を主張",u:"https://x.com/theworldbluee01/status/2075222203948556757"},
-  {x:1.0,y:0.0,e:0.0,c:0.50,s:"部活廃止を支持し安らぎ得たとの静か感想",u:"https://x.com/kyusaikatsudou/status/2075233261652262922"},
-  {x:-2.0,y:2.0,e:1.0,c:0.85,s:"学校部活の全面的廃止を主張、批判的",u:"https://x.com/theworldbluee01/status/2075184856657727657"},
-  {x:-1.0,y:1.0,e:-1.0,c:0.70,s:"部活廃止に反対し教育的価値を重視する軽口投稿",u:"https://x.com/gomadango0302/status/2075197973177459137"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"部活廃止を主張し教員負担軽減至上主義の感情的反発",u:"https://x.com/Hfcn4oelqPHUQqM/status/2075157733981257737"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"部活全廃で負担減し水泳だけは維持すべきとの主張",u:"https://x.com/BlackGoblin52/status/2075114586504917340"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"部活全廃・学習優先を主張する簡潔な意見",u:"https://x.com/pBO77RSRiXhq7R2/status/2075077832582234338"},
-  {x:1.0,y:0.0,e:1.0,c:0.75,s:"現行の先生頼み状態を批判し変革を求める",u:"https://x.com/sugiyama2023/status/2074982244461232324"},
-  {x:-0.5,y:-1.0,e:-1.0,c:0.75,s:"システム不在を指摘し継続要求を否定",u:"https://x.com/sugiyama2023/status/2074986129238135083"},
-  {x:1.0,y:1.0,e:1.0,c:0.70,s:"縮小・負担軽減ながら部活存続訴える",u:"https://x.com/SEITO_NO_MIKATA/status/2074810738829627783"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"部活廃止を危惧し現状維持派的立場",u:"https://x.com/Hfcn4oelqPHUQqM/status/2074795687309607129"},
-  {x:1.0,y:1.0,e:0.0,c:0.75,s:"教員待遇保障なければ部活廃止止むなしとの主張",u:"https://x.com/badedu3/status/2074862816310501576"},
-];
-const SM_TOUR = [
-  {title:"全体像：中立帯に集中",desc:"245件中110件(45%)がX=0またはY=0の中立帯。地域移行は賛否の二極化というより、条件次第という意見が多い。",filter:"all"},
-  {title:"第2象限：移行反対・活動価値重視（27件）",desc:"「学校部活の教育的価値」「子どもの機会や安全」を理由に、地域移行に慎重な声。",filter:"q2",highlight:[-1.5,1.5],quote:"経費削減优先に生徒安全軽視の政策に強く反発",quote_url:"https://x.com/nom1153/status/2068292289173311686"},
-  {title:"第1象限：移行推進・活動価値重視（21件）",desc:"「地域移行でも子どもの活動機会を維持できる」「専門的な指導と持続可能な運営を両立できる」と考える声。",filter:"q1",highlight:[1.0,1.0],quote:"地域移行を支持し持続可能な運営を求める",quote_url:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
-  {title:"高感情投稿（e≥1.5）",desc:"16件が強い感情を帯びた投稿。移行反対派・推進派双方から、子どもの権利や教員の人権をめぐる怒りが噴出。",filter:"q4",highlight:[1.0,-1.5],quote:"部活外部委託により教師の負担軽減を求める批判的意見",quote_url:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
-  {title:"冷静な投稿（e≤0）",desc:"66件(45%)が冷静・分析的な投稿。制度設計の具体論、費用試算、他国事例の紹介など。感情的な論争とは別に、政策的な議論も活発。",filter:"calm"}
+{x:2.0,e:1.0,c:0.8,i:0,s:"地域移行の月会費統一と市税補助を提案し強く支持",u:"https://x.com/TheMirageof0/status/2070624074506863002"},
+{x:-1.0,e:-2.0,c:0.85,i:0,s:"月額8000円の家計負担を嘆き地域移行に不支持",u:"https://x.com/TheMirageof0/status/2070621781757726855"},
+{x:-1.0,e:-1.0,c:0.8,i:1,s:"報酬低くするから指導者不足になる",u:"https://x.com/774nyannyan/status/2070491362882150454"},
+{x:-0.5,e:1.0,c:0.7,i:1,s:"熊本市の新方式を批判。教育価値を強調し市民の無関心を非難",u:"https://x.com/774nyannyan/status/2070491361137357035"},
+{x:-1.0,e:0.0,c:0.6,i:5,s:"中体連高体連が地域移行で追い詰められ教育課程に位置づけてほしい",u:"https://x.com/wu76jgS82zThc8u/status/2070462759238811989"},
+{x:1.0,e:0.0,c:0.85,i:1,s:"地域移行を支持し持続可能な運営を求める",u:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
+{x:0.0,e:0.0,c:0.6,i:6,s:"保護者が部活地域移行を思考中",u:"https://x.com/papakoya25/status/2070424396137910617"},
+{x:0.5,e:0.0,c:0.7,i:5,s:"市への質問形式で地域移行の検討姿勢を示す",u:"https://x.com/wakohappy2023/status/2070372233567240572"},
+{x:-1.0,e:1.0,c:0.75,i:1,s:"指導者の低報酬・責任の乖離を批判",u:"https://x.com/SIND_/status/2070325146372739488"},
+{x:-0.5,e:0.5,c:0.8,i:3,s:"地域移行流れ容認も部活縮小と保護者憤りに懸念",u:"https://x.com/Miyabi14_Miyabi/status/2070276591167639853"},
+{x:1.0,e:-1.0,c:0.7,i:4,s:"移行後の継続仕組み優先を提案、自校に部活ない皮肉",u:"https://x.com/nijimasufire/status/2070118138885312676"},
+{x:1.0,e:-1.0,c:0.7,i:6,s:"地域移行支持を示しつつ矛盾を皮肉",u:"https://x.com/774nyannyan/status/2070117159511130290"},
+{x:1.5,e:0.0,c:0.75,i:1,s:"地域移行支持、教員以外も負担分散すべき",u:"https://x.com/haiyuepanda/status/2070098123440140672"},
+{x:1.0,e:0.0,c:0.85,i:1,s:"地域移行実現には指導者に生活を保障できるコストが必要",u:"https://x.com/todoporzoy2012/status/2070092023512932832"},
+{x:-1.0,e:-1.0,c:0.75,i:1,s:"地域移行に懐疑的で現状維持派、冷静だが皮肉を含む",u:"https://x.com/crypticsa/status/2070077324008341725"},
+{x:-1.0,e:-1.0,c:0.7,i:5,s:"地域移行の失敗批判と政策批判を含む分析投稿",u:"https://x.com/wu76jgS82zThc8u/status/2070075708609859823"},
+{x:1.0,e:1.0,c:0.85,i:3,s:"少子化で破綻前に地域移行で存続支持",u:"https://x.com/774nyannyan/status/2070058879938084997"},
+{x:1.0,e:0.0,c:0.8,i:3,s:"地域移行で不登校の子も参加しやすくなることを期待",u:"https://x.com/Mr_Peki_chan/status/2070029090003009670"},
+{x:0.0,e:1.0,c:0.7,i:5,s:"クラブ化はチーム作成に留まり本質的理解が欠けると指摘",u:"https://x.com/chaw0501/status/2070020638383997407"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"地域移行を推進し具体的な改善案を主張",u:"https://x.com/tFwqQpA4kn3bwDn/status/2069879568618627305"},
+{x:-1.0,e:1.0,c:0.7,i:4,s:"団体数半減を嘆き地域移行の影響を指摘",u:"https://x.com/edamame_1219/status/2069742846606004286"},
+{x:-1.5,e:1.5,c:0.85,i:3,s:"地域移行で夢を奪われる子への怒り",u:"https://x.com/No2lab150687/status/2069741426276233331"},
+{x:-1.0,e:0.0,c:0.7,i:1,s:"地域移行の持続困難を警告",u:"https://x.com/774nyannyan/status/2069730125340692943"},
+{x:0.0,e:0.0,c:0.6,i:0,s:"地域移行後の決裁権の変化を冷静に分析",u:"https://x.com/Pansy_school/status/2069715403236954447"},
+{x:1.0,e:0.0,c:0.6,i:3,s:"移行支持立場からやれなくなる論への疑問を呈する",u:"https://x.com/774nyannyan/status/2069694892037874163"},
+{x:-1.0,e:1.0,c:0.85,i:4,s:"地域移行で野球の育成環境悪化を批判",u:"https://x.com/mamamam4949/status/2069589990011818183"},
+{x:-1.0,e:-1.0,c:0.8,i:5,s:"地域移行の課題追及と安全対策再不備を批判",u:"https://x.com/gi26ai/status/2069586455618523517"},
+{x:-1.0,e:0.5,c:0.7,i:5,s:"地域移行の弊害を指摘、制度設計への疑問呈す",u:"https://x.com/suzuki_turitaro/status/2069580292386627898"},
+{x:-1.0,e:0.0,c:0.7,i:1,s:"移行の障壁である家族の移動困難と受入体制不足を指摘",u:"https://x.com/444sp/status/2069570277009490051"},
+{x:0.0,e:-1.0,c:0.3,i:5,s:"マージャン登録への困惑・面白がる反応",u:"https://x.com/urya4432/status/2069543717686673480"},
+{x:1.0,e:0.0,c:0.7,i:1,s:"地域移行は大多数賛成、教職員アンケートも支持",u:"https://x.com/tomokun_life/status/2068124530384711714"},
+{x:-1.0,e:1.0,c:0.75,i:5,s:"高校野球の名称問題を懸念し移行に否定的",u:"https://x.com/lumIFSHUWs6GO2n/status/2063976964898332701"},
+{x:1.0,e:1.0,c:0.8,i:0,s:"移行支持、条件不可能と諦め反対派を批判",u:"https://x.com/774nyannyan/status/2063489857993969715"},
+{x:2.0,e:0.0,c:0.8,i:4,s:"地域移行支持、持続可能性の観点から肯定",u:"https://x.com/774nyannyan/status/2068230558992458134"},
+{x:1.5,e:0.5,c:0.8,i:5,s:"地域移行推進派が反対派のせいだと主張",u:"https://x.com/774nyannyan/status/2067883582647849464"},
+{x:1.5,e:0.5,c:0.85,i:5,s:"地域移行の矛盾に困惑。支持だが熱度は中程度",u:"https://x.com/774nyannyan/status/2067880712943059272"},
+{x:-1.0,e:1.0,c:0.7,i:5,s:"地域移行反対論者を相手にせず",u:"https://x.com/774nyannyan/status/2063907885764182333"},
+{x:2.0,e:1.5,c:0.85,i:6,s:"地域移行推進を支持し反対派を過激派と批判",u:"https://x.com/JlMqc1bALnVe9gS/status/2063598518305218910"},
+{x:-0.5,e:0.0,c:0.85,i:1,s:"移行进まない理由は保護者负担と住民参画不足と分析",u:"https://x.com/774nyannyan/status/2063204420297617773"},
+{x:-1.0,e:0.0,c:0.7,i:5,s:"地域移行に反対立場だが、面倒くさがりつつも資料作成中",u:"https://x.com/Pansy_school/status/2063014247500816645"},
+{x:-2.0,e:1.0,c:0.8,i:6,s:"地域移行に強く反対、教員の質低下を懸念",u:"https://x.com/yamako_10/status/2061588627088634365"},
+{x:1.0,e:0.0,c:0.75,i:0,s:"移行反対は親の送迎面倒さが原因と主張",u:"https://x.com/774nyannyan/status/2060903547257131344"},
+{x:1.0,e:-1.0,c:0.6,i:5,s:"地域移行支持も住民反対で実現困難との皮肉",u:"https://x.com/774nyannyan/status/2060894243808530650"},
+{x:-1.0,e:-1.0,c:0.75,i:4,s:"地域移行の住民反対で頓挫すると予測",u:"https://x.com/774nyannyan/status/2060890475503157752"},
+{x:1.0,e:0.5,c:0.8,i:6,s:"地域移行支持だが現状維持派の矛盾を指摘",u:"https://x.com/774nyannyan/status/2058872234408833533"},
+{x:1.0,e:1.0,c:0.85,i:6,s:"地域移行支持を表明、🔥で熱量ある政策論",u:"https://x.com/bansho_teruhito/status/2069413298358059063"},
+{x:-1.0,e:1.0,c:0.7,i:2,s:"地域移行進まず 管理職・教員の意識改革を批判",u:"https://x.com/AUzzkqIjZ37594/status/2067938043332604078"},
+{x:0.0,e:0.0,c:0.7,i:5,s:"地域移行に伴う内申評価の公平化を提案",u:"https://x.com/maeshima_nishi/status/2066861890064760889"},
+{x:-1.0,e:-1.0,c:0.7,i:2,s:"地域移行の可行性に疑問呈し教員の善意頼み批判",u:"https://x.com/iwanissimo/status/2066786203442217008"},
+{x:0.5,e:0.0,c:0.7,i:1,s:"地域移行の課題と解決策を冷静に分析する投稿",u:"https://x.com/taiikujin966039/status/2065544492430643515"},
+{x:-1.0,e:0.0,c:0.7,i:2,s:"地域移行の可行性に疑問、教員善意依存の構造批判",u:"https://x.com/yamoto8/status/2065429718128816346"},
+{x:-1.0,e:0.0,c:0.6,i:5,s:"地域移行で問題噴出を予測・やや懸念示す",u:"https://x.com/munougensouka/status/2064392535120937430"},
+{x:0.5,e:0.0,c:0.65,i:4,s:"地域移行の格差解消プロジェクト紹介。移行自体は支持方向",u:"https://x.com/canpan2009/status/2064286063192117415"},
+{x:0.0,e:1.0,c:0.7,i:5,s:"地域移行のビジネスモデル実施上の苦労を吐露",u:"https://x.com/Pansy_school/status/2063391483013583240"},
+{x:-1.5,e:0.5,c:0.8,i:0,s:"移行に疑問、家庭負担増と体験格差を懸念",u:"https://x.com/danchosabasabu/status/2062309010200772695"},
+{x:2.0,e:1.5,c:0.85,i:6,s:"地域移行支持・民意を根拠に既得権益側を批判",u:"https://x.com/m727243023/status/2060651797388394551"},
+{x:-1.5,e:1.0,c:0.75,i:2,s:"現行制度の強制労働的な実態への不満と移行への消極的立場",u:"https://x.com/774nyannyan/status/2060324516652568821"},
+{x:1.0,e:-0.5,c:0.75,i:5,s:"文科省の腰の据わらない姿勢に苦笑しつつ地域移行推進派",u:"https://x.com/Sukimakagukmny/status/2060164886467150160"},
+{x:-1.5,e:1.5,c:0.85,i:1,s:"委託条件の非現実性を批判し政策の本気度を疑問視",u:"https://x.com/ikuji_takuto/status/2070078294410850366"},
+{x:0.0,e:1.0,c:0.6,i:6,s:"スポ少非協力親を批判、地域移行を背景に教育責任を促す",u:"https://x.com/AsahiPodcast/status/2069498240240849347"},
+{x:1.0,e:1.0,c:0.6,i:1,s:"部活外部委託と教員待遇改善を主張",u:"https://x.com/godof31icecream/status/2069288512311251029"},
+{x:1.0,e:1.0,c:0.85,i:2,s:"外部委託既定路線を容認、違法劳働問題を根拠に",u:"https://x.com/shirassh/status/2069006288777052163"},
+{x:-1.0,e:1.0,c:0.7,i:1,s:"休日禁止・外部委託への疑問と実務的懸念",u:"https://x.com/gigigigigijutu/status/2068437174924812622"},
+{x:1.0,e:0.5,c:0.8,i:0,s:"移行は不可避だが格差拡大を危惧",u:"https://x.com/football__cone/status/2068341617443189050"},
+{x:1.0,e:1.0,c:0.7,i:6,s:"部活外部委託を肯定、支持意見",u:"https://x.com/LIU83414453/status/2067750890862493830"},
+{x:0.0,e:-1.0,c:0.7,i:2,s:"部活外部委託を削減の象徴に挙げ教員負担の理解不足を皮肉る",u:"https://x.com/yukiuniriri/status/2067037904401236236"},
+{x:1.0,e:0.0,c:0.75,i:0,s:"スポンサーをつけた外部委託で負担軽減を提案",u:"https://x.com/kudou24307267/status/2067017810401001829"},
+{x:0.0,e:0.0,c:0.7,i:6,s:"地域移行に触れたが賛否なく淡々と記述",u:"https://x.com/akaishitaizo/status/2066060375049879553"},
+{x:1.0,e:1.0,c:0.85,i:5,s:"教師問題背景に外部委託肯定の意見",u:"https://x.com/sky_walker_1173/status/2065224434433298449"},
+{x:0.0,e:-1.0,c:0.75,i:2,s:"教員負担問題を冷笑視し現状認識を揶揄",u:"https://x.com/t_maru_summer/status/2065010419568406669"},
+{x:0.0,e:0.0,c:0.5,i:5,s:"地域移行の是非より町の評価に困惑",u:"https://x.com/DwpN0ecG6R72240/status/2064660470913733098"},
+{x:1.0,e:0.5,c:0.75,i:3,s:"水泳授業存続と外部委託を支持する個人的意見",u:"https://x.com/HissatuShigotoP/status/2064556920636358772"},
+{x:0.0,e:0.0,c:0.5,i:5,s:"外部委託の理由を問い科学部との比較をしている",u:"https://x.com/punch551/status/2064470890977608037"},
+{x:-1.0,e:1.0,c:0.8,i:5,s:"部活外注を批判し教育価値を重視する否定的見解",u:"https://x.com/2812572ng/status/2063911271570047166"},
+{x:1.0,e:0.0,c:0.6,i:1,s:"OBOG活用と外部委託を肯定、地域移行支持",u:"https://x.com/addreality/status/2063634162880549031"},
+{x:-1.0,e:-1.0,c:0.7,i:1,s:"移行後の部活で指導者が不在の中、子供たちがサークル状態で活動している現状を報告",u:"https://x.com/lHAKPI9sj52UVOW/status/2062678108780818526"},
+{x:1.0,e:1.5,c:0.9,i:2,s:"部活外部委託により教師の負担軽減を求める批判的意見",u:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
+{x:-1.0,e:0.0,c:0.6,i:0,s:"配偶者の部活疲れを嘆き外部委託に疑問",u:"https://x.com/wamipiha_ROOM/status/2062441022815404445"},
+{x:-1.0,e:1.0,c:0.8,i:3,s:"移行反対で代替案提示把孩子放在第一位",u:"https://x.com/joO7g4uWTlVCSMA/status/2061724320259608806"},
+{x:2.0,e:1.0,c:0.7,i:6,s:"教師負担軽減のため部活の外部委託を強く望む",u:"https://x.com/yuka_greentea30/status/2061436132769124660"},
+{x:1.0,e:0.0,c:0.75,i:5,s:"部活は学校の仕事ではなく地域クラブでと主張",u:"https://x.com/sugiyama2023/status/2061056903124545999"},
+{x:-0.5,e:0.0,c:0.75,i:2,s:"部活への公的支援に懐疑的だが外部委託は支持",u:"https://x.com/Rx0073LT/status/2060361575635255788"},
+{x:0.0,e:0.0,c:0.65,i:5,s:"教育改革の虚幻性を指摘する意見",u:"https://x.com/mathmathsan/status/1888223251400438207"},
+{x:0.0,e:-1.0,c:0.7,i:2,s:"教員自身の負担削減行動を促す冷淡な意見",u:"https://x.com/sugiyama2023/status/2069927749997953237"},
+{x:0.0,e:0.0,c:0.6,i:2,s:"入試優先の教育問題を指摘、地域移行には触れず",u:"https://x.com/Yama_to_Sima/status/2069699164318154834"},
+{x:0.0,e:0.0,c:0.6,i:5,s:"市議批判と地域移行の困難性指摘",u:"https://x.com/db6qp9/status/2069228519016780190"},
+{x:0.5,e:1.0,c:0.75,i:1,s:"先生負担より生徒保護を優先、指導員導入を望む",u:"https://x.com/1007_nagi/status/2068954974714052941"},
+{x:-1.0,e:-1.0,c:0.85,i:1,s:"移行進まぬ理由は地域のメリット不足と財源の欠如",u:"https://x.com/774nyannyan/status/2068566479247950305"},
+{x:-1.0,e:0.0,c:0.85,i:1,s:"地域移行の難しさを住民メリット不足で分析",u:"https://x.com/774nyannyan/status/2068564242505269619"},
+{x:0.0,e:0.5,c:0.6,i:2,s:"顧問拒否で教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2068442038786547725"},
+{x:-1.0,e:1.0,c:0.8,i:2,s:"教員負担増への懸念と現場軽視への批判",u:"https://x.com/Kazukittyo_gun/status/2068325020313764315"},
+{x:0.5,e:-1.0,c:0.8,i:2,s:"教員負担削減観点から地域移行を容認する消極的支持",u:"https://x.com/774nyannyan/status/2068293099353416159"},
+{x:-2.0,e:2.0,c:0.9,i:2,s:"経費削減優先で生徒の安全を軽視する政策に強く反発",u:"https://x.com/nom1153/status/2068292289173311686"},
+{x:-1.0,e:0.0,c:0.75,i:5,s:"学校負担軽減の観点から部活の学校依存に疑問",u:"https://x.com/zabarava/status/2068291631573549209"},
+{x:0.0,e:2.0,c:0.85,i:2,s:"分業で解决すべきで税金の議論は的外れ",u:"https://x.com/quomoritureruis/status/2068245939375219020"},
+{x:-1.0,e:1.0,c:0.85,i:3,s:"部活動の教育的価値を強調し、縮小に懸念",u:"https://x.com/lIjdqs9tKf2434/status/2068244369690308798"},
+{x:0.0,e:1.0,c:0.65,i:2,s:"顧問拒否の実践法を共有し教員負担軽減を訴える",u:"https://x.com/yoshiki20260530/status/2068146586954412271"},
+{x:-1.0,e:-1.0,c:0.7,i:5,s:"地域移行方針を批判し、受け皿整備の困難さを指摘",u:"https://x.com/774nyannyan/status/2068125288605852033"},
+{x:0.0,e:0.5,c:0.85,i:1,s:"部活指導に思いのない者へ批判、特に地域移行での負担押しつけを問題視",u:"https://x.com/774nyannyan/status/2067944905457156215"},
+{x:-0.5,e:-1.0,c:0.75,i:1,s:"移行に反対はしないが負担転嫁を皮肉る",u:"https://x.com/774nyannyan/status/2067944484231651534"},
+{x:-1.0,e:-1.0,c:0.75,i:5,s:"負担を転嫁するだけでは解決しないと批判的",u:"https://x.com/774nyannyan/status/2067609586316800281"},
+{x:-1.5,e:0.5,c:0.75,i:5,s:"地域移行支持で、保護者を批判",u:"https://x.com/774nyannyan/status/2067609048686669921"},
+{x:0.0,e:0.5,c:0.75,i:2,s:"部活的教育意義認めつつ教員無料労働の矛盾を指摘",u:"https://x.com/Pansy_school/status/2067581200940843298"},
+{x:2.0,e:1.0,c:0.9,i:2,s:"部活解体と地域移行支持、教員業務削減を重視",u:"https://x.com/cold_2_dloc/status/2067556163802337627"},
+{x:1.0,e:1.0,c:0.8,i:2,s:"データで顧問拒否し教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2067198495979978851"},
+{x:-0.5,e:1.5,c:0.7,i:2,s:"顧問拒否の経験を共有し教員負担軽減を最優先",u:"https://x.com/yoshiki20260530/status/2067189419535409499"},
+{x:-1.0,e:1.0,c:0.8,i:2,s:"教員負担軽減優先で顧問拒否決意・同調圧力を批判",u:"https://x.com/yoshiki20260530/status/2066798324938919963"},
+{x:0.0,e:0.0,c:0.6,i:2,s:"教員不足の原因を列举し双方の立场を绍介",u:"https://x.com/monmon0816/status/2066477650051567764"},
+{x:-1.0,e:0.0,c:0.75,i:1,s:"地域移行懐疑論、部活縮小を提案",u:"https://x.com/774nyannyan/status/2065997295855046946"},
+{x:0.0,e:1.5,c:0.75,i:0,s:"教員負担の危険性を指摘し待遇改善を求める意見",u:"https://x.com/kobuoichan/status/2065958821567385989"},
+{x:1.0,e:1.5,c:0.7,i:2,s:"顧問拒否の経験を語り教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2065906962597113927"},
+{x:-1.0,e:-0.5,c:0.85,i:0,s:"地域移行の改革自体は肯定しつつも、困窮世帯への負担増を懸念",u:"https://x.com/Fujisawa_Suzuki/status/2065673921421287662"},
+{x:0.0,e:1.0,c:0.9,i:2,s:"音楽教師が本業防衛のため顧問を拒否",u:"https://x.com/yoshiki20260530/status/2065653370019561677"},
+{x:0.0,e:1.0,c:0.85,i:2,s:"教員が部活顧問拒否を宣言、自分の生活守る姿勢",u:"https://x.com/yoshiki20260530/status/2065409303255924929"},
+{x:-1.0,e:0.5,c:0.75,i:2,s:"教員負担増を懸念し現状維持を支持",u:"https://x.com/G0TTZIQEWm56962/status/2064928199222702145"},
+{x:-1.0,e:1.0,c:0.8,i:2,s:"教員負担増を懸念し地域移行に否定的な意見",u:"https://x.com/anderson0214/status/2064832907576021221"},
+{x:-1.0,e:1.5,c:0.75,i:6,s:"学校に部活を要望する親や教員の滅私奉公を痛烈に批判",u:"https://x.com/hagakikatteren/status/2064823846402933129"},
+{x:0.0,e:-1.0,c:0.8,i:6,s:"ガイドライン根拠に 部活義務否定・教員負担軽減寄りの冷静な意見",u:"https://x.com/n821nJF8iuB4JAU/status/2064500878632210546"},
+{x:-1.0,e:1.0,c:0.85,i:2,s:"教員負担軽減を優先し 部活顧問拒否を呼びかける投稿",u:"https://x.com/yoshiki20260530/status/2064461183793696895"},
+{x:1.5,e:0.5,c:0.75,i:6,s:"部活廃止を肯定し全校への拡大望む",u:"https://x.com/mamehina012/status/2070658992205148385"},
+{x:-2.0,e:2.0,c:0.9,i:2,s:"部活廃止訴える、教員負担軽減最優先で感情強い",u:"https://x.com/Hfcn4oelqPHUQqM/status/2070655303063158975"},
+{x:-1.0,e:0.0,c:0.85,i:3,s:"学校部活は誰もが参加できるで開かれた存在であるべきと主張",u:"https://x.com/yanderedaisuki4/status/2070624714977050868"},
+{x:-1.0,e:1.0,c:0.7,i:5,s:"文科省の部活廃止に批判、監視求める",u:"https://x.com/Nijiiro_Ongaku/status/2070609133913719174"},
+{x:-2.0,e:1.0,c:0.6,i:6,s:"部活廃止を提唱、再発防止では不十分と主張",u:"https://x.com/VrJQQQDQJKmiLzY/status/2070519063667986861"},
+{x:-1.0,e:0.5,c:0.65,i:6,s:"自身の経験に基づき廃部動きを皮肉る",u:"https://x.com/mizuki_suguru/status/2070407597090586780"},
+{x:1.0,e:1.0,c:0.75,i:6,s:"部活廃止を支持する激励メッセージ",u:"https://x.com/kyusaikatsudou/status/2070159831621931490"},
+{x:-1.5,e:1.0,c:0.7,i:6,s:"部活廃止論者を人格・論理的に批判し嫌悪",u:"https://x.com/LwbR1psFJd55470/status/2070082170568520116"},
+{x:-1.0,e:1.0,c:0.8,i:3,s:"部活廃止に反対し教育機会均等と子ども優先を主張",u:"https://x.com/kotoridesudesu/status/2070076881827950673"},
+{x:-2.0,e:1.0,c:0.75,i:6,s:"部活廃止を顧問自らの手で進めるべきと主張",u:"https://x.com/edu_impossible/status/2069916720547115204"},
+{x:-2.0,e:1.0,c:0.8,i:6,s:"部活の廃止を求める簡潔な意見",u:"https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261"},
+{x:-1.0,e:1.0,c:0.5,i:6,s:"廃止論派の主張に恐怖・拒否感",u:"https://x.com/GreatHjm/status/2069705751334179316"},
+{x:-1.0,e:-1.0,c:0.5,i:6,s:"部活廃止容認、議論倦厭示す投稿",u:"https://x.com/TEeDbIHUir13163/status/2069624470210572408"},
+{x:1.5,e:1.5,c:0.85,i:2,s:"教員の違法行為を批判し部活廃止を主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069555558802477361"},
+{x:2.0,e:1.0,c:0.95,i:5,s:"訴訟で部活廃止を加速させるべきと強く主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069539721546698982"},
+{x:-1.0,e:0.0,c:0.8,i:3,s:"地域移行に懸念、学校部活の競技力育成機能を評価",u:"https://x.com/best_yajima/status/2069440318144200986"},
+{x:1.0,e:-1.0,c:0.7,i:4,s:"地域移行の受け皿整備の遅れを皮肉混じりに批判",u:"https://x.com/DioxetaneMaker/status/2069386736292319386"},
+{x:-2.0,e:2.0,c:0.75,i:6,s:"部活全面廃止を怒り強く主張",u:"https://x.com/hisa10swan/status/2069350819527618875"},
+{x:-2.0,e:1.0,c:0.75,i:3,s:"部活廃止に強く反対、競技力維持を重視",u:"https://x.com/j_zw62/status/2069267266693447707"},
+{x:-1.5,e:1.5,c:0.85,i:3,s:"部活廃止を支持、顧問の質 低さを批判",u:"https://x.com/pochi1182/status/2069232307479937533"},
+{x:2.0,e:1.0,c:0.85,i:3,s:"部活廃止論に反対し教育的価値を強調",u:"https://x.com/yuritako/status/2069192029251547263"},
+{x:-2.0,e:1.0,c:0.7,i:6,s:"部活の廃止を断言的に主張する強い意見",u:"https://x.com/hisa10swan/status/2069172279624577418"},
+{x:-1.0,e:0.0,c:0.7,i:3,s:"部活人脈の有用性を語り廃止動きに反対",u:"https://x.com/nekonekocyan/status/2068933417702731793"},
+{x:-1.0,e:1.0,c:0.5,i:3,s:"部活廃止への皮肉と社会劣化歔謔",u:"https://x.com/ienadia/status/2068932768843915393"},
+{x:2.0,e:1.0,c:0.85,i:6,s:"地域移行を支持、閉鎖的な部活改善を主張",u:"https://x.com/SvErfdCKdt52541/status/2068859859077124604"},
+{x:1.5,e:1.5,c:0.8,i:5,s:"地域移行肯定、顧問不要論に共感し批判的",u:"https://x.com/sugiyama2023/status/2068848471608844627"},
+{x:-2.0,e:1.0,c:0.9,i:3,s:"部活廃止・勉強優先を明確に主張",u:"https://x.com/hiroa11011/status/2068702457820246445"},
+{x:-2.0,e:0.0,c:0.8,i:6,s:"部活廃止を主張し勉強の優先度を強調する投稿",u:"https://x.com/weTdqo0isa11532/status/2068700099845509484"},
+{x:0.5,e:0.0,c:0.5,i:1,s:"地域移行が上手くいかず改善を期待する冷静な感想",u:"https://x.com/ashigoriP/status/2076242520015851607"},
+{x:0.0,e:0.0,c:0.8,i:1,s:"地域移行の制度課題（資格・日程）を冷静に指摘",u:"https://x.com/tomo124865/status/2076196920436166795"},
+{x:0.0,e:0.0,c:0.6,i:1,s:"地域移行部活の援助活動報告。金銭よりマンパワーとの価値観。",u:"https://x.com/miokonboDaysAI/status/2076275556145058273"},
+{x:0.0,e:1.0,c:0.75,i:5,s:"給特法問題を根源と指摘し地域移行前に制度改革を主張",u:"https://x.com/satoyon4_/status/2076204305212989636"},
+{x:1.0,e:0.0,c:0.85,i:5,s:"土地管理等コスト削減と地域移行の関連性を指摘し、条件付きで支持",u:"https://x.com/Irony2Nestle/status/2076118347310371167"},
+{x:0.0,e:0.0,c:0.6,i:5,s:"地域移行進展のなさを疑問視する感想",u:"https://x.com/tokugsax2/status/2076160814382481610"},
+{x:1.0,e:0.0,c:0.7,i:6,s:"移行成功を願い東金への期待示す",u:"https://x.com/l50Hrpo9Vhmqp2f/status/2075948014540308685"},
+{x:-1.0,e:1.0,c:0.8,i:1,s:"移行で指導者となり子どもの居場所守りたい",u:"https://x.com/miokonboDaysAI/status/2075943002162577760"},
+{x:-1.0,e:1.5,c:0.85,i:5,s:"地域移行を批判。冷房など実需対応求めつつ大臣を痛烈非難",u:"https://x.com/CHAROdra/status/2075840460317397274"},
+{x:2.0,e:1.0,c:1.0,i:1,s:"地域移行事業推進へ現場重視の決意",u:"https://x.com/Pansy_school/status/2075867944224272733"},
+{x:1.0,e:2.0,c:0.85,i:5,s:"地域移行支持・子供教育優先・強い怒り",u:"https://x.com/HappaCommander/status/2075813418477494539"},
+{x:0.0,e:-1.0,c:0.55,i:6,s:"地域移行の現状を認識し移行の流れを残念がる",u:"https://x.com/defense4220/status/2075796255129899023"},
+{x:-1.0,e:0.5,c:0.85,i:1,s:"移行中の過渡期措置として教師の平日Superviseを求める",u:"https://x.com/siromi2022111/status/2075789986209919430"},
+{x:1.0,e:0.5,c:0.85,i:3,s:"地域移行の真剣な実行を求め生涯スポーツの観点から支持",u:"https://x.com/housuka1/status/2075779065483853905"},
+{x:1.0,e:0.0,c:0.8,i:5,s:"移行より展開を提唱、子の発達環境重視",u:"https://x.com/fcoachjp/status/2075754467593490668"},
+{x:-1.0,e:1.0,c:0.6,i:5,s:"地域移行の現状進め方へ不満・呆れ",u:"https://x.com/774nyannyan/status/2075736134399987882"},
+{x:-1.5,e:1.0,c:0.8,i:0,s:"地域移行に懐疑的で縮小・廃止を主張",u:"https://x.com/774nyannyan/status/2075742246767624539"},
+{x:0.0,e:0.0,c:0.6,i:3,s:"地域移行の課題を冷静に指摘、教育価値を暗に重視",u:"https://x.com/tamaru202312/status/2075724523790643610"},
+{x:-1.0,e:0.0,c:0.7,i:5,s:"施策の継続性への懸念示す批判的意見",u:"https://x.com/4ZYVNjQOkWBSoU8/status/2075717181103632386"},
+{x:-1.0,e:-1.5,c:0.7,i:2,s:"地域移行逆行批判・先生の業務過多への不満",u:"https://x.com/Sevda31651106/status/2075582024920756617"},
+{x:1.0,e:0.0,c:0.8,i:3,s:"地域移行を支持しつつ質的転換を求める冷静な意見",u:"https://x.com/VDSc7uZWlDer7Wb/status/2075504460319883736"},
+{x:1.0,e:0.5,c:0.9,i:2,s:"教員過労問題を例に地域移行の必要性を支持",u:"https://x.com/daiyusaku/status/2075499348104991038"},
+{x:-0.5,e:0.5,c:0.7,i:6,s:"地域移行無期限延期に怒り、政治混乱を皮肉",u:"https://x.com/Abaysal43/status/2075441531859742896"},
+{x:-0.5,e:0.0,c:0.7,i:1,s:"地域移行の指導者質の問題を懸念",u:"https://x.com/chisakitakami/status/2075222628797923436"},
+{x:-1.0,e:-1.0,c:0.65,i:0,s:"制度変更の皮肉。費用的家庭負担増への懸念",u:"https://x.com/s_mama_46/status/2074860053614744049"},
+{x:-1.0,e:0.0,c:0.6,i:6,s:"地域移行完了時の娘の過ごし方を憂慮",u:"https://x.com/kogaaoi/status/2074830329056272419"},
+{x:1.0,e:0.0,c:0.8,i:3,s:"地域移行支持。孩子の体験・教育価値優先。",u:"https://x.com/Pansy_school/status/2074791853225091572"},
+{x:1.0,e:-1.0,c:0.8,i:6,s:"地域移行支持も矛盾を皮肉る",u:"https://x.com/774nyannyan/status/2072690458292306109"},
+{x:0.5,e:0.5,c:0.7,i:2,s:"地域移行会議参加し先生負担の重さを認識",u:"https://x.com/SOUTAX2/status/2073945047264010712"},
+{x:1.0,e:0.0,c:0.75,i:5,s:"地域移行を個人的に進んで受け入れている姿勢",u:"https://x.com/SIND_/status/2071935980316311734"},
+{x:-1.0,e:-1.0,c:0.8,i:5,s:"地域移行実現への不信と諦めを表明",u:"https://x.com/kyouiku_mondai/status/2057446869203390747"},
+{x:0.0,e:0.0,c:0.8,i:2,s:"教員の自腹問題を指摘し負担軽減を重視",u:"https://x.com/hiiragi2280/status/2071383152145428555"},
+{x:1.0,e:0.0,c:0.7,i:0,s:"地域移行の公費支援と外部委託を提案",u:"https://x.com/ChyanNobu/status/2076250417663742366"},
+{x:0.0,e:0.0,c:0.7,i:3,s:"部活休む後悔なし。夏休み制限肯定。親心配は呪縛と分析",u:"https://x.com/S_eiko_/status/2076119525679116653"},
+{x:1.0,e:0.0,c:0.75,i:3,s:"部活外部委託支持、教員負担軽減を重視",u:"https://x.com/voviroku/status/2075726282843996560"},
+{x:-2.0,e:1.0,c:0.8,i:6,s:"部活外部委託に批判、競技力低下を懸念",u:"https://x.com/j_zw62/status/2074413179577454913"},
+{x:0.0,e:-1.0,c:0.65,i:1,s:"地域移行の現状を経験者として淡々と報告",u:"https://x.com/nimoku551ura/status/2074136077645062400"},
+{x:2.0,e:1.5,c:1.0,i:2,s:"外部委託推進で教員負担軽減を最優先する感情的意見",u:"https://x.com/dam51730/status/2073954661355474996"},
+{x:-1.0,e:0.5,c:0.7,i:6,s:"部活外部委託を残念がり_PRIVATE lessonsへ",u:"https://x.com/haruurarahare/status/2073911814791016477"},
+{x:0.5,e:-1.0,c:0.65,i:6,s:"外部委託の難しさを熱血教師の例で指摘",u:"https://x.com/hakujiu_ki/status/2073438886190358618"},
+{x:1.0,e:1.0,c:0.8,i:2,s:"部活外部委託で先生負担軽減求める投稿",u:"https://x.com/shrekbonsai/status/2073243197334298807"},
+{x:2.0,e:0.0,c:0.75,i:5,s:"民間委託・単位制を提案し地域移行を支持、費用削減志向",u:"https://x.com/frozenworkerxyz/status/2073079595411407160"},
+{x:-1.0,e:1.0,c:0.5,i:6,s:"保護者当番の負担を嘆き、先生不足→外部委託を推測",u:"https://x.com/eternalLoveFAM/status/2072829132887728292"},
+{x:1.0,e:1.0,c:0.7,i:6,s:"部活外部委託を教育改革案として支持、効率化阻む利権を批判",u:"https://x.com/frozenworkerxyz/status/2071967276035915780"},
+{x:-1.5,e:-0.5,c:0.6,i:2,s:"外部委託実現への懐疑示す 教师のバトン絡み",u:"https://x.com/kyouiku_mondai/status/2071721069980029333"},
+{x:2.0,e:0.5,c:0.7,i:6,s:"部活の移送リスクを指摘し外部委託を提案",u:"https://x.com/KMqHb6wJoh6jNUB/status/2071560482578895003"},
+{x:-1.0,e:0.5,c:0.7,i:6,s:"外部委託に疑問呈し批判的意見",u:"https://x.com/361_r19/status/2071424138594660712"},
+{x:0.0,e:1.0,c:0.8,i:1,s:"部活のボランティア労働への皮肉と外包提案",u:"https://x.com/cr5uPNIFIxI7mEl/status/2070995273678008350"},
+{x:1.0,e:0.0,c:0.7,i:3,s:"エンジョイ勢も選択肢として必要との意見",u:"https://x.com/yuk0117/status/2071178606819340387"},
+{x:1.0,e:0.0,c:0.85,i:6,s:"外部委託の現実解として地域クラブ独立を提案",u:"https://x.com/sugiyama2023/status/2070429609477472539"},
+{x:-1.0,e:-1.0,c:0.85,i:2,s:"教師負担軽減に懸念、地域移行の弊害指摘",u:"https://x.com/toichi10111/status/2076101995489051039"},
+{x:-0.5,e:0.0,c:0.7,i:5,s:"移行の難しさを認識しつつ各立場への配慮示す",u:"https://x.com/sahxuenla/status/2075698328466256258"},
+{x:0.5,e:-0.5,c:0.4,i:2,s:"部活縮小は教师負担軽減のため容認する姿勢",u:"https://x.com/satobon09/status/2074823734473674888"},
+{x:-1.0,e:-1.0,c:0.75,i:2,s:"地域移行の実効性を疑問視する批判的意見",u:"https://x.com/ChrFYM8Kui11326/status/2073637232242815404"},
+{x:-1.0,e:0.0,c:0.8,i:2,s:"教員負担増加に反対し、現場の 無理解も問題と指摘",u:"https://x.com/teacherhatena/status/2073219509687931184"},
+{x:-1.0,e:-0.5,c:0.6,i:2,s:"遠征通知で教員負担増を懸念",u:"https://x.com/kty281306/status/2074995461208072532"},
+{x:0.5,e:0.0,c:0.65,i:2,s:"地域移行加速と教員負担軽減を支持し現場主導を評価",u:"https://x.com/HIsound284443/status/2072425964597027225"},
+{x:1.0,e:0.0,c:0.85,i:2,s:"現行制度の教員負担は誤りで、早急に是正すべきと主張",u:"https://x.com/774nyannyan/status/2072289382208553291"},
+{x:-1.0,e:0.0,c:0.6,i:1,s:"外部コーチの学校適性を懸念する冷静な分析",u:"https://x.com/361_r19/status/2071425059038822520"},
+{x:0.0,e:1.0,c:0.85,i:0,s:"移行コストの負担構造を批判的に分析",u:"https://x.com/774nyannyan/status/2071205424649642303"},
+{x:0.0,e:1.0,c:0.8,i:5,s:"押しつけ合いの議論の不毛さを批判",u:"https://x.com/774nyannyan/status/2071054194933682454"},
+{x:-1.0,e:-1.0,c:0.85,i:2,s:"教員の過労を重視し地域移行に消極的な意見",u:"https://x.com/tea03031533410/status/2070847748644147509"},
+{x:-1.0,e:-1.0,c:0.8,i:2,s:"教員の部活負担を批判し改革を求める",u:"https://x.com/Yuan_TashiDelek/status/2071074743969833192"},
+{x:0.0,e:1.0,c:0.75,i:2,s:"教員の過重労働実態を批判し負担軽減を訴える",u:"https://x.com/js_kent2016/status/2070715184122147059"},
+{x:0.0,e:1.5,c:0.85,i:2,s:"教委施策への怒りと部活廃止を教师的負担軽減の手段として提案",u:"https://x.com/the_spiderkim02/status/2076264540996870574"},
+{x:-0.5,e:0.5,c:0.8,i:6,s:"部活廃止と基礎学力の因果関係に疑問を呈する",u:"https://x.com/ymwhr924/status/2076252279146262925"},
+{x:-0.5,e:1.0,c:0.65,i:2,s:"教員の超過勤務是正には部活廃止等の抜本的措置が必要",u:"https://x.com/takohati3/status/2076303411650474204"},
+{x:-2.0,e:1.0,c:0.7,i:6,s:"部活廃止に強く反対、教育的価値を重視",u:"https://x.com/blue_fires01/status/2076193871412043972"},
+{x:-2.0,e:1.0,c:0.9,i:6,s:"部活存続を求める親の懸念と費用負担提案",u:"https://x.com/minidetamago/status/2076190777806639375"},
+{x:2.0,e:1.0,c:0.8,i:3,s:"部活廃止前提に教育改革求める教育的意義問いかけ",u:"https://x.com/rErcLOd0Q6Mzrxj/status/2076196454587355299"},
+{x:0.5,e:0.5,c:0.75,i:3,s:"部活廃止に共感も懸念あり",u:"https://x.com/Risarisakiu/status/2076175588474413236"},
+{x:1.0,e:0.0,c:0.85,i:5,s:"地域移行の推進を支持する穏やか意見",u:"https://x.com/nabeshi2002jp/status/2076120662524244208"},
+{x:2.0,e:0.0,c:0.85,i:5,s:"部活廃止と民営化を支持、副業許可で师资確保",u:"https://x.com/gedoubeam/status/2076109490253185329"},
+{x:2.0,e:0.5,c:0.7,i:2,s:"部活廃止と働き方改革進展を好意的に評価",u:"https://x.com/adhdsavetheplan/status/2076098536299798771"},
+{x:1.0,e:-1.0,c:0.75,i:4,s:"部活廃止の趋势を容認・支持しつつ，冷淡に観察する姿勢",u:"https://x.com/otanyan_0923/status/2075967205616074803"},
+{x:-0.5,e:-0.5,c:0.6,i:2,s:"先生の必须有化と改革を結びつけ変化への困惑示す",u:"https://x.com/qQCPNzKkk8CtUnt/status/2075944120410087821"},
+{x:-1.5,e:1.5,c:0.7,i:6,s:"部活廃止を求める怒りを含む投稿",u:"https://x.com/a4wd/status/2075930302023909691"},
+{x:0.0,e:-0.5,c:0.3,i:2,s:"廃止地域の報告のみ、意見不明",u:"https://x.com/yurupsk/status/2075942395448025376"},
+{x:-2.0,e:1.0,c:0.85,i:2,s:"部活廃止主張。孩子の幸福を優先し教師の犠牲も懸念",u:"https://x.com/hiroa11011/status/2075926152070443511"},
+{x:1.0,e:0.0,c:0.85,i:5,s:"部活廃止より地域移行を支持、教育の質維持を重視",u:"https://x.com/haiyuepanda/status/2075825617267007541"},
+{x:-2.0,e:1.5,c:0.8,i:6,s:"部活の廃止を一択と強く主張",u:"https://x.com/haoli3474/status/2075790544576582102"},
+{x:-1.0,e:1.0,c:0.8,i:2,s:"部活廃止機運への嘆きと風潮への不満",u:"https://x.com/Mezase1Ok/status/2075794716768281015"},
+{x:-2.0,e:1.5,c:0.65,i:6,s:"部活廃止を断定的に主張する短文",u:"https://x.com/mitsunobu47/status/2075875504201351366"},
+{x:1.5,e:-0.5,c:0.8,i:2,s:"学校部活廃止論。教員負担軽減を最優先",u:"https://x.com/meronsparking/status/2075546907817197976"},
+{x:-1.5,e:1.5,c:0.65,i:6,s:"部活廃止・学童化への嘆きと批判",u:"https://x.com/arakawakappa25/status/2075494831250686345"},
+{x:-2.0,e:1.0,c:0.85,i:6,s:"部活廃止を最強に主張。理由なく断言",u:"https://x.com/migrainejust/status/2075398159053037981"},
+{x:-2.0,e:1.5,c:0.85,i:6,s:"子供の健康を守るため部活廃止を主張",u:"https://x.com/theworldbluee01/status/2075222203948556757"},
+{x:1.0,e:0.0,c:0.5,i:6,s:"部活廃止を支持し安らぎ得たとの静か感想",u:"https://x.com/kyusaikatsudou/status/2075233261652262922"},
+{x:-2.0,e:1.0,c:0.85,i:5,s:"学校部活の全面的廃止を主張、批判的",u:"https://x.com/theworldbluee01/status/2075184856657727657"},
+{x:-1.0,e:-1.0,c:0.7,i:3,s:"部活廃止に反対し教育的価値を重視する軽口投稿",u:"https://x.com/gomadango0302/status/2075197973177459137"},
+{x:-2.0,e:1.5,c:0.85,i:2,s:"部活廃止を主張し教員負担軽減至上主義の感情的反発",u:"https://x.com/Hfcn4oelqPHUQqM/status/2075157733981257737"},
+{x:-2.0,e:1.0,c:0.8,i:0,s:"部活全廃で負担減し水泳だけは維持すべきとの主張",u:"https://x.com/BlackGoblin52/status/2075114586504917340"},
+{x:-2.0,e:1.0,c:0.85,i:3,s:"部活全廃・学習優先を主張する簡潔な意見",u:"https://x.com/pBO77RSRiXhq7R2/status/2075077832582234338"},
+{x:1.0,e:1.0,c:0.75,i:6,s:"現行の先生頼み状態を批判し変革を求める",u:"https://x.com/sugiyama2023/status/2074982244461232324"},
+{x:-0.5,e:-1.0,c:0.75,i:5,s:"システム不在を指摘し継続要求を否定",u:"https://x.com/sugiyama2023/status/2074986129238135083"},
+{x:1.0,e:1.0,c:0.7,i:5,s:"縮小・負担軽減ながら部活存続訴える",u:"https://x.com/SEITO_NO_MIKATA/status/2074810738829627783"},
+{x:-1.0,e:1.0,c:0.8,i:1,s:"部活廃止を危惧し現状維持派的立場",u:"https://x.com/Hfcn4oelqPHUQqM/status/2074795687309607129"},
+{x:1.0,e:0.0,c:0.75,i:2,s:"教員待遇保障なければ部活廃止止むなしとの主張",u:"https://x.com/badedu3/status/2074862816310501576"}
 ];
 </script>
 <script>
 (function(){
-  const RAW = SM_RAW, TOUR = SM_TOUR;
-  const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
-  const IMG_ALPHA_END = 0.30;
-  let imgAlpha = IMG_ALPHA_END;
-  const QUAD_IMGS={
-    q1:'images/bukatsu-chiiki-vote-1-support.webp',
-    q3:'images/bukatsu-chiiki-vote-2-oppose.webp',
-    q2:'images/bukatsu-chiiki-vote-3-conditional.webp',
-    q4:'images/bukatsu-chiiki-vote-4-unsure.webp',
-  };
-  const loadedImgs={};let imgsReady=0;
-  Object.entries(QUAD_IMGS).forEach(([key,src])=>{const img=new Image();img.onload=()=>{loadedImgs[key]=img;imgsReady++;if(imgsReady===4)redraw();};img.src=src;});
-  function drawQuadImages(){
-    const mid=PAD+INNER/2;
-    [{key:'q1',x:mid,y:PAD,w:PAD+INNER-mid,h:mid-PAD},{key:'q3',x:PAD,y:PAD,w:mid-PAD,h:mid-PAD},{key:'q2',x:PAD,y:mid,w:mid-PAD,h:PAD+INNER-mid},{key:'q4',x:mid,y:mid,w:PAD+INNER-mid,h:PAD+INNER-mid}].forEach(({key,x,y,w,h})=>{
-      const img=loadedImgs[key];if(!img)return;
-      ctx.save();ctx.globalAlpha=imgAlpha;
-      const scale=Math.min(w,h)/Math.min(img.width,img.height);
-      const dw=img.width*scale,dh=img.height*scale;
-      ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
-      ctx.restore();
-    });
+  'use strict';
+  var TOPIC='bukatsu-chiiki-issue-stance-v1';
+  var STORAGE_KEY='sns_vote_'+TOPIC+'_my';
+  var supabaseUrl="";
+  var supabaseAnonKey="";
+  var supabaseClient=null;
+  if(supabaseUrl&&supabaseAnonKey&&typeof supabase!=='undefined'){
+    supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
   }
-  let showHeat = true, showDots = true, heatRadius = 48;
-  let activeFilter = 'all';
-  let spotlightTarget = null;
-  let animating = false, animFrame = 0;
-  let myVoteMarker = null;
-let myVoteSX = null, myVoteSY = null;
-  const voteMarkers = [
-  { x: -1.45, y: 1.45, label: 'あなた: 競技力は現状維持で守る', color: '#dc2626' },
-  { x: 1.45, y: 1.45, label: 'あなた: 地域移行で競技力も維持', color: '#2563eb' },
-  { x: -1.45, y: -1.45, label: 'あなた: 教員負担は現行改善で解決', color: '#059669' },
-  { x: 1.45, y: -1.45, label: 'あなた: 地域移行で教員の働き方改善', color: '#d97706' }
-];
+  var VOTE_ISSUES=[
+    {k:'費用・家庭負担',    icon:'💴', desc:'月会費・家計への経済的負担・格差'},
+    {k:'受け皿・指導者',    icon:'👤', desc:'指導者不足・報酬・人材確保'},
+    {k:'教員の働き方',      icon:'🏫', desc:'残業・強制参加・ブラック部活の解消'},
+    {k:'教育的意義・機会',  icon:'⭐', desc:'子どもの成長・不登校参加・文化継承'},
+    {k:'地域格差',          icon:'🗾', desc:'都市と地方の格差・自治体差'},
+    {k:'制度・移行プロセス',icon:'📋', desc:'国の方針・移行スピード・行政対応'},
+    {k:'その他・わからない',icon:'💬', desc:'上記以外・様子見'}
+  ];
+  // VOTE_ISSUES index → ISSUES array index (費0 受1 教員2 教育3 地域4 制度5 その他6)
+  var V2I=[0,1,2,3,4,5,6];
+  var STANCES=[
+    {k:'反対・慎重',    color:'#dc2626', bg:'#fef2f2', shadow:'rgba(220,38,38,.22)', icon:'!', desc:'このままの進め方には問題がある'},
+    {k:'どちらでもない',color:'#64748b', bg:'#f8fafc', shadow:'rgba(100,116,139,.22)', icon:'?', desc:'条件や内容を見てから判断したい'},
+    {k:'賛成・推進',    color:'#059669', bg:'#ecfdf5', shadow:'rgba(5,150,105,.22)', icon:'✓', desc:'教員の働き方改革や少子化対策として必要'}
+  ];
+  var selIssue=-1;
+  var step1=document.getElementById('vote-step1');
+  var step2=document.getElementById('vote-step2');
+  var result=document.getElementById('vote-result');
+  var issueBtns=document.getElementById('vote-issue-btns');
+  var stanceBtns=document.getElementById('vote-stance-btns');
 
-  const canvasMain = document.getElementById('smCanvasMain');
-  const ctx = canvasMain.getContext('2d');
-  const canvasHeat = document.getElementById('smCanvasHeat');
-  const hCtx = canvasHeat.getContext('2d');
+  VOTE_ISSUES.forEach(function(iss,i){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-issue-btn';
+    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
+    btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
+    issueBtns.appendChild(btn);
+  });
 
-  function toCanvas(x, y) {
-    return [PAD + (x + 2) / 4 * INNER, PAD + (2 - y) / 4 * INNER];
+  function showVote(issueIdx,stanceIdx,shouldScroll){
+    var iss=VOTE_ISSUES[issueIdx];
+    var st=STANCES[stanceIdx];
+    var arenaIdx=V2I[issueIdx];
+    selIssue=issueIdx;
+    step1.style.display='none';step2.style.display='none';result.style.display='block';
+    document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
+    document.getElementById('vote-position-text').textContent=iss.desc;
+    if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
+    var shareText='部活動の地域移行、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
+    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html');
+    setTimeout(function(){
+      if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
+      var el=document.getElementById('stance-map-section');
+      if(shouldScroll!==false&&el)el.scrollIntoView({behavior:'smooth',block:'center'});
+    },300);
   }
 
-  function emoRGB(e) {
-    const t = (e + 2) / 4;
-    if (t < 0.5) {
-      const s = t * 2;
-      return [Math.round(74 + (187-74)*s), Math.round(144 + (187-144)*s), Math.round(217 + (187-217)*s)];
-    } else {
-      const s = (t - 0.5) * 2;
-      return [Math.round(187 + (224-187)*s), Math.round(187 + (187-187)*s), Math.round(187 + (187-187)*s)];
+  async function saveVote(issueIdx,stanceIdx){
+    if(supabaseClient){
+      var response;
+      try{
+        response=await supabaseClient.from('votes').insert([{topic_id:TOPIC,choice_idx:issueIdx*STANCES.length+stanceIdx}]);
+      }catch(error){console.error('Supabase vote request failed:',error);alert('投票を保存できませんでした。');return false;}
+      if(response.error){
+        var message=(response.error.message||'')+(response.error.details||'');
+        if(message.indexOf('already voted')!==-1||response.error.code==='23505'){alert('24時間以内にすでに投票されています。');}
+        else{console.error('Supabase vote insert failed:',response.error);alert('投票を保存できませんでした。');}
+        return false;
+      }
     }
-  }
-
-  function seededRand(seed) {
-    let s = seed ^ 0x12345678;
-    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
-    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
-    s = (s >>> 16) ^ s;
-    return (s >>> 0) / 0xffffffff;
-  }
-
-  const jCache = RAW.map((_, i) => [(seededRand(i*2) - 0.5) * 14, (seededRand(i*2+1) - 0.5) * 14]);
-
-  function visible(p) {
-    if (activeFilter === 'all') return true;
-    const x = p.x, y = p.y, e = p.e;
-    if (activeFilter === 'q1') return x > 0 && y > 0;
-    if (activeFilter === 'q2') return x < 0 && y > 0;
-    if (activeFilter === 'q3') return x < 0 && y < 0;
-    if (activeFilter === 'q4') return e >= 1.5;
-    if (activeFilter === 'calm') return e <= 0;
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:issueIdx,stanceIdx:stanceIdx}));
     return true;
   }
 
-  function drawHeatmap() {
-    if (!showHeat) { hCtx.clearRect(0, 0, W, H); return; }
-    const res = 3;
-    const cols = Math.ceil(W / res), rows = Math.ceil(H / res);
-    const grid = new Float32Array(cols * rows);
-    const sigma = heatRadius / 2.5;
-    const sig2 = sigma * sigma * 2;
-    const r2 = heatRadius * heatRadius;
+  STANCES.forEach(function(st,stanceIdx){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-stance-btn';
+    btn.style.setProperty('--stance-color',st.color);
+    btn.style.setProperty('--stance-bg',st.bg);
+    btn.style.setProperty('--stance-shadow',st.shadow);
+    btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
+    btn.onclick=async function(){
+      var buttons=stanceBtns.querySelectorAll('button');
+      buttons.forEach(function(item){item.disabled=true;});
+      var saved=await saveVote(selIssue,stanceIdx);
+      buttons.forEach(function(item){item.disabled=false;});
+      if(saved)showVote(selIssue,stanceIdx);
+    };
+    stanceBtns.appendChild(btn);
+  });
 
-    const vis = RAW.filter(p => visible(p));
-    vis.forEach(p => {
-      const [cx, cy] = toCanvas(p.x, p.y);
-      const gx0 = Math.max(0, Math.floor((cx - heatRadius) / res));
-      const gy0 = Math.max(0, Math.floor((cy - heatRadius) / res));
-      const gx1 = Math.min(cols - 1, Math.ceil((cx + heatRadius) / res));
-      const gy1 = Math.min(rows - 1, Math.ceil((cy + heatRadius) / res));
-      for (let gy = gy0; gy <= gy1; gy++) {
-        for (let gx = gx0; gx <= gx1; gx++) {
-          const dx = gx * res - cx, dy = gy * res - cy;
-          const d2 = dx*dx + dy*dy;
-          if (d2 < r2) grid[gy * cols + gx] += Math.exp(-d2 / sig2);
-        }
-      }
-    });
-
-    const maxV = Math.max(...grid) || 1;
-    const imgData = hCtx.createImageData(cols * res, rows * res);
-    for (let gy = 0; gy < rows; gy++) {
-      for (let gx = 0; gx < cols; gx++) {
-        const v = grid[gy * cols + gx] / maxV;
-        if (v < 0.01) continue;
-        let r, g, b;
-        if (v < 0.5) {
-          const t = v * 2;
-          r = Math.round(41 + (255-41)*t); g = Math.round(128 + (255-128)*t); b = Math.round(185 + (150-185)*t);
-        } else {
-          const t = (v - 0.5) * 2;
-          r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
-        }
-        const alpha = Math.round(Math.pow(v, 0.5) * 170);
-        for (let dy = 0; dy < res; dy++) {
-          for (let dx = 0; dx < res; dx++) {
-            const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
-            const inPad = (gx*res+dx) >= PAD && (gx*res+dx) < PAD+INNER && (gy*res+dy) >= PAD && (gy*res+dy) < PAD+INNER;
-            if (!inPad) continue;
-            imgData.data[px] = r; imgData.data[px+1] = g; imgData.data[px+2] = b; imgData.data[px+3] = alpha;
-          }
-        }
-      }
-    }
-    hCtx.clearRect(0, 0, W, H);
-    hCtx.putImageData(imgData, 0, 0);
-  }
-
-  function drawBase() {
-    ctx.clearRect(0, 0, W, H);
-    drawQuadImages();
-    ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [cx] = toCanvas(v, 0);
-      ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
-      const [,cy] = toCanvas(0, v);
-      ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
-    });
-    ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
-    const [midX] = toCanvas(0, 0); const [,midY] = toCanvas(0, 0);
-    ctx.beginPath(); ctx.moveTo(PAD, midY); ctx.lineTo(PAD+INNER, midY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(midX, PAD); ctx.lineTo(midX, PAD+INNER); ctx.stroke();
-
-    ctx.font = 'bold 13px -apple-system,sans-serif';
-    ctx.textAlign = 'center';
-    const quadLabels = [
-      ['移行推進×活動価値', PAD + INNER*0.75, PAD + 26],
-      ['移行反対×活動価値', PAD + INNER*0.25, PAD + 26],
-      ['移行反対×持続可能性', PAD + INNER*0.25, PAD + INNER - 10],
-      ['移行推進×持続可能性', PAD + INNER*0.75, PAD + INNER - 10],
-    ];
-    quadLabels.forEach(([text, lx, ly]) => {
-      const tw = ctx.measureText(text).width;
-      const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
-      ctx.fillStyle = 'rgba(0,0,0,0.62)';
-      ctx.beginPath();
-      ctx.moveTo(rx + r, ry); ctx.lineTo(rx + pw - r, ry);
-      ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
-      ctx.lineTo(rx + pw, ry + ph - r);
-      ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
-      ctx.lineTo(rx + r, ry + ph);
-      ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
-      ctx.lineTo(rx, ry + r);
-      ctx.arcTo(rx, ry, rx + r, ry, r);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.fillText(text, lx, ly);
-    });
-
-    ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
-    ctx.textAlign = 'right';
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
-    });
-    ctx.textAlign = 'center';
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
-    });
-
-    if (showDots) {
-      const count = animating ? animFrame : RAW.length;
-      for (let i = 0; i < count; i++) {
-        const p = RAW[i];
-        const show = visible(p);
-        const [cx, cy] = toCanvas(p.x, p.y);
-        const [rr, gg, bb] = emoRGB(p.e);
-        ctx.beginPath();
-        ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
-        ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
-        ctx.fill();
-        if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
-      }
-    }
-
-    if (spotlightTarget) {
-      const [sx, sy] = spotlightTarget;
-      ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI*2);
-      ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 2.5; ctx.stroke();
-      ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2);
-      ctx.strokeStyle = 'rgba(41,128,185,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
-    }
-  }
-
-  function drawVoteMarker() {
-    if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
-    const marker = voteMarkers[myVoteMarker];
-    const px = (myVoteSX !== null) ? myVoteSX : marker.x;
-  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
-  const [x, y] = toCanvas(px, py);
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, 16, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,.92)';
-    ctx.fill();
-    ctx.strokeStyle = marker.color;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = marker.color;
-    ctx.fill();
-    ctx.font = '700 12px -apple-system,sans-serif';
-    ctx.fillStyle = marker.color;
-    ctx.fillText(marker.label, Math.min(x + 16, W - 150), Math.max(y - 14, 24));
-    ctx.restore();
-  }
-
-  window.setStanceMapVoteMarker = function(idx, sx, sy) {
-    myVoteMarker = idx;
-  if (sx !== undefined) myVoteSX = sx;
-  if (sy !== undefined) myVoteSY = sy;
-    const note = document.getElementById('your-marker-note');
-    if (note) note.style.display = 'block';
-    redraw();
+  document.getElementById('vote-redo-btn').onclick=function(){
+    localStorage.removeItem(STORAGE_KEY);
+    selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
+    if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
   };
-
-  function redraw() { drawHeatmap(); drawBase(); drawVoteMarker(); }
-
-  function playIntro() {
-    animating = true; animFrame = 0;
-    const total = RAW.length, duration = 1800, start = performance.now();
-    function tick(now) {
-      const elapsed = now - start, progress = Math.min(1, elapsed / duration);
-      animFrame = Math.min(total, Math.round(progress * total));
-      redraw();
-      if (progress < 1) requestAnimationFrame(tick);
-      else { animating = false; redraw(); }
+  if(supabaseClient)document.getElementById('vote-redo-btn').style.display='none';
+  try{
+    var previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(previous&&Number.isInteger(previous.issueIdx)&&previous.issueIdx>=0&&previous.issueIdx<VOTE_ISSUES.length&&
+       Number.isInteger(previous.stanceIdx)&&previous.stanceIdx>=0&&previous.stanceIdx<STANCES.length){
+      showVote(previous.issueIdx,previous.stanceIdx,false);
     }
-    requestAnimationFrame(tick);
-  }
-
-  let tourActive = false, currentStep = 0;
-
-  function showTourStep(idx) {
-    const step = TOUR[idx], total = TOUR.length;
-    document.getElementById('smTourStep').textContent = `Step ${idx+1} / ${total}`;
-    document.getElementById('smTourTitle').textContent = step.title;
-    document.getElementById('smTourDesc').textContent = step.desc;
-    document.getElementById('smTourProgressBar').style.width = ((idx+1)/total*100)+'%';
-
-    const embedEl = document.getElementById('smTourEmbed');
-    const loadingEl = document.getElementById('smTourEmbedLoading');
-    const fallbackEl = document.getElementById('smTourQuoteFallback');
-    embedEl.style.display = 'none'; loadingEl.style.display = 'none'; fallbackEl.style.display = 'none';
-    embedEl.innerHTML = '';
-
-    if (step.quote && step.quote_url) {
-      showFallback(step, fallbackEl);
-      const tweetId = step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
-      if (tweetId) {
-        const tryEmbed = () => {
-          window.twttr.widgets.createTweet(tweetId, embedEl, { theme:'dark', dnt:true, conversation:'none' })
-            .then(el => { if (el) { fallbackEl.style.display='none'; embedEl.style.display='block'; } });
-        };
-        if (window.twttr && window.twttr.widgets) { window.twttr.ready(tryEmbed); }
-        else {
-          let wt = 0;
-          const wpoll = setInterval(() => {
-            wt += 200;
-            if (window.twttr && window.twttr.widgets) { clearInterval(wpoll); window.twttr.ready(tryEmbed); }
-            else if (wt >= 5000) clearInterval(wpoll);
-          }, 200);
-        }
-      }
-    } else if (step.quote) { showFallback(step, fallbackEl); }
-
-    activeFilter = step.filter || 'all';
-    document.querySelectorAll('.sm-fbtn').forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`.sm-fbtn[data-q="${step.filter || 'all'}"]`);
-    if (btn) btn.classList.add('active');
-    spotlightTarget = step.highlight ? (() => { const [sx,sy]=toCanvas(step.highlight[0],step.highlight[1]); return [sx,sy]; })() : null;
-    redraw();
-  }
-
-  function showFallback(step, fallbackEl) {
-    document.getElementById('smTourQuoteText').textContent = '「' + step.quote + '」';
-    const linkEl = document.getElementById('smTourQuoteLink');
-    if (step.quote_url) { linkEl.style.display='inline'; fallbackEl.onclick=()=>window.open(step.quote_url,'_blank'); }
-    else { linkEl.style.display='none'; fallbackEl.onclick=null; }
-    fallbackEl.style.display = 'block';
-  }
-
-  function startTour() { tourActive=true; currentStep=0; document.getElementById('smTourPanel').classList.add('active'); showTourStep(0); }
-  function closeTour() {
-    tourActive=false; document.getElementById('smTourPanel').classList.remove('active');
-    spotlightTarget=null; activeFilter='all';
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    document.querySelector('.sm-fbtn[data-q="all"]').classList.add('active');
-    redraw();
-  }
-
-  document.getElementById('smStartTour').addEventListener('click', startTour);
-  document.getElementById('smBtnClose').addEventListener('click', closeTour);
-  document.getElementById('smBtnNext').addEventListener('click', () => { if (currentStep < TOUR.length-1) { currentStep++; showTourStep(currentStep); } else closeTour(); });
-  document.getElementById('smBtnPrev').addEventListener('click', () => { if (currentStep > 0) { currentStep--; showTourStep(currentStep); } });
-  document.getElementById('smChkHeat').addEventListener('change', e => { showHeat=e.target.checked; redraw(); });
-  document.getElementById('smChkDots').addEventListener('change', e => { showDots=e.target.checked; redraw(); });
-  document.getElementById('smHeatIntensity').addEventListener('input', e => { heatRadius=+e.target.value; redraw(); });
-  document.querySelector('.sm-filters').addEventListener('click', e => {
-    const btn = e.target.closest('.sm-fbtn'); if (!btn) return;
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active'); activeFilter=btn.dataset.q; spotlightTarget=null; redraw();
-  });
-
-  const tooltip = document.getElementById('sm-tooltip');
-  canvasMain.addEventListener('mousemove', e => {
-    const rect = canvasMain.getBoundingClientRect();
-    const sx = W/rect.width, sy = H/rect.height;
-    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
-    let found=null, minD=20;
-    RAW.forEach((p,i) => {
-      if (!visible(p)) return;
-      const [cx,cy] = toCanvas(p.x,p.y);
-      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
-      if (d < minD) { minD=d; found={p,i}; }
-    });
-    if (found) {
-      const p = found.p;
-      const eLabel = p.e>=1.5?'😤 激怒':p.e>=0.5?'😠 感情的':p.e<=-1?'😒 皮肉・冷笑':'😐 冷静';
-      const tx = e.clientX+14+260>window.innerWidth ? e.clientX-270 : e.clientX+14;
-      tooltip.style.opacity='1'; tooltip.style.left=tx+'px'; tooltip.style.top=(e.clientY-10)+'px';
-      tooltip.innerHTML = `<b>${p.s}</b><br>移行: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u?'<br><small style="opacity:.5">クリックでXへ ↗</small>':''}`;
-    } else { tooltip.style.opacity='0'; }
-  });
-  canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
-  canvasMain.addEventListener('click', e => {
-    const rect = canvasMain.getBoundingClientRect();
-    const sx = W/rect.width, sy = H/rect.height;
-    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
-    let found=null, minD=20;
-    RAW.forEach((p,i) => {
-      if (!visible(p)||!p.u) return;
-      const [cx,cy] = toCanvas(p.x,p.y);
-      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
-      if (d < minD) { minD=d; found=p; }
-    });
-    if (found) window.open(found.u,'_blank');
-  });
-
-  playIntro();
-  const savedVote = localStorage.getItem("sns_vote_部活動の地域移行の是非_SNS反応まっぷ_my");
-  if (savedVote !== null) window.setStanceMapVoteMarker(parseInt(savedVote, 10));
-  setTimeout(() => { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }, 3000);
+  }catch(error){localStorage.removeItem(STORAGE_KEY);}
 })();
 </script>
+<script>
+(function(){
+  'use strict';
+  const ISSUES=[
+    {k:'費用・家庭負担',    n:16},
+    {k:'受け皿・指導者',    n:34},
+    {k:'教員の働き方',      n:58},
+    {k:'教育的意義・機会',  n:28},
+    {k:'地域格差',          n:8},
+    {k:'制度・移行プロセス',n:51},
+    {k:'その他',            n:50}
+  ];
+  const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=242;
+  const PAD_DEG=2.5;
+  const canvasMain=document.getElementById('smCanvasMain');
+  const canvasHeat=document.getElementById('smCanvasHeat');
+  const ctx=canvasMain.getContext('2d');
+  const hctx=canvasHeat.getContext('2d');
+  const tooltip=document.getElementById('sm-tooltip');
+
+  const total=ISSUES.reduce((a,b)=>a+b.n,0);
+  const usable=360-PAD_DEG*2*ISSUES.length;
+  let acc=-90;
+  ISSUES.forEach(iss=>{
+    const span=usable*iss.n/total;
+    iss.a0=acc+PAD_DEG;iss.a1=iss.a0+span;iss.mid=(iss.a0+iss.a1)/2;
+    acc=iss.a1+PAD_DEG;
+  });
+
+  function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+  function colorOf(p){return p.x>=0.5?'#059669':(p.x<=-0.5?'#dc2626':'#64748b');}
+
+  const pts=[];
+  SM_RAW.forEach((p,idx)=>{
+    const iss=ISSUES[p.i];if(!iss)return;
+    const a=iss.a0+rnd(idx)*(iss.a1-iss.a0);
+    let r=R_MIN+8+Math.abs(p.e)/2*(R_MAX-R_MIN-30)+(rnd(idx+500)-0.5)*26;
+    r=Math.max(R_MIN,Math.min(R_MAX-4,r));
+    const rad=a*Math.PI/180;
+    pts.push({px:CX+r*Math.cos(rad),py:CY+r*Math.sin(rad),c:colorOf(p),p:p});
+  });
+
+  function drawHeat(){
+    hctx.clearRect(0,0,W,W);
+    const maxN=Math.max(...ISSUES.map(i=>i.n));
+    ISSUES.forEach(iss=>{
+      hctx.beginPath();
+      hctx.moveTo(CX+R_MIN*Math.cos(iss.a0*Math.PI/180),CY+R_MIN*Math.sin(iss.a0*Math.PI/180));
+      hctx.arc(CX,CY,R_MAX,iss.a0*Math.PI/180,iss.a1*Math.PI/180);
+      hctx.arc(CX,CY,R_MIN,iss.a1*Math.PI/180,iss.a0*Math.PI/180,true);
+      hctx.closePath();
+      hctx.fillStyle='rgba(8,145,178,'+(0.03+iss.n/maxN*0.09).toFixed(3)+')';
+      hctx.fill();
+    });
+    hctx.setLineDash([3,5]);hctx.strokeStyle='rgba(100,116,139,.3)';hctx.lineWidth=1;
+    [110,160,R_MAX].forEach(r=>{hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke();});
+    hctx.setLineDash([]);
+    ISSUES.forEach(iss=>{
+      hctx.strokeStyle='rgba(100,116,139,.35)';
+      [iss.a0*Math.PI/180,iss.a1*Math.PI/180].forEach(rd=>{
+        hctx.beginPath();
+        hctx.moveTo(CX+R_MIN*Math.cos(rd),CY+R_MIN*Math.sin(rd));
+        hctx.lineTo(CX+R_MAX*Math.cos(rd),CY+R_MAX*Math.sin(rd));
+        hctx.stroke();
+      });
+    });
+  }
+
+  let filterIdx=-1;let voteMarker=null;
+
+  function drawMain(){
+    ctx.clearRect(0,0,W,W);
+    pts.forEach(pt=>{
+      const dim=filterIdx>=0&&pt.p.i!==filterIdx;
+      ctx.globalAlpha=dim?0.08:0.82;
+      ctx.beginPath();ctx.arc(pt.px,pt.py,4,0,Math.PI*2);
+      ctx.fillStyle=pt.c;ctx.fill();
+    });
+    ctx.globalAlpha=1;
+    ctx.font='900 12px "Noto Sans JP",sans-serif';
+    ISSUES.forEach((iss,i)=>{
+      const rad=iss.mid*Math.PI/180;
+      const lx=CX+R_LBL*Math.cos(rad),ly=CY+R_LBL*Math.sin(rad);
+      const c=Math.cos(rad);
+      ctx.textAlign=c>0.35?'left':(c<-0.35?'right':'center');
+      ctx.textBaseline='middle';
+      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(100,116,139,.4)':'#334155';
+      ctx.fillText(iss.k+' '+iss.n,lx,ly);
+    });
+    ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle='#bae6fd';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#0e7490';ctx.textAlign='center';
+    ctx.font='900 13px "Noto Sans JP",sans-serif';
+    ctx.fillText('部活動',CX,CY-9);
+    ctx.fillText('地域移行',CX,CY+11);
+    ctx.font='400 10px "Noto Sans JP",sans-serif';
+    ctx.fillStyle='#94a3b8';ctx.textAlign='center';
+    ctx.fillText('冷静',CX,CY-R_MIN-8);
+    ctx.fillText('感情的',CX,CY-R_MAX-8);
+    if(voteMarker){
+      const mc=voteMarker.color||'#0891b2';
+      const vi=ISSUES[voteMarker.sector];
+      if(vi){
+        ctx.beginPath();
+        ctx.moveTo(CX+R_MIN*Math.cos(vi.a0*Math.PI/180),CY+R_MIN*Math.sin(vi.a0*Math.PI/180));
+        ctx.arc(CX,CY,R_MAX,vi.a0*Math.PI/180,vi.a1*Math.PI/180);
+        ctx.arc(CX,CY,R_MIN,vi.a1*Math.PI/180,vi.a0*Math.PI/180,true);
+        ctx.closePath();
+        ctx.strokeStyle=mc;ctx.lineWidth=3;ctx.stroke();
+        ctx.fillStyle=mc+'14';ctx.fill();
+      }
+      const pulse=(Date.now()%1400)/1400;
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
+      ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();
+      ctx.globalAlpha=1;
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,11,0,Math.PI*2);
+      ctx.fillStyle='#fff';ctx.fill();
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);
+      ctx.fillStyle=mc;ctx.fill();
+      ctx.font='900 12px "Noto Sans JP",sans-serif';
+      const txt='あなたはココ';
+      const tw=ctx.measureText(txt).width;
+      const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));
+      const by=voteMarker.y-32;
+      ctx.beginPath();
+      if(ctx.roundRect)ctx.roundRect(bx-tw/2-8,by-11,tw+16,22,11);
+      else ctx.rect(bx-tw/2-8,by-11,tw+16,22);
+      ctx.fillStyle='#fff';ctx.fill();
+      ctx.strokeStyle=mc;ctx.lineWidth=2;ctx.stroke();
+      ctx.fillStyle=mc;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(txt,bx,by+1);
+      ctx.textBaseline='alphabetic';
+      ctx.beginPath();
+      ctx.moveTo(voteMarker.x-4,by+11);ctx.lineTo(voteMarker.x,by+17);ctx.lineTo(voteMarker.x+4,by+11);
+      ctx.fillStyle=mc;ctx.fill();
+    }
+  }
+
+  // 投票前ブラー
+  (function applyBlur(){
+    var inner=document.getElementById('stance-map-inner');
+    var section=document.getElementById('stance-map-section');
+    if(!inner||!section)return;
+    inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';
+    section.style.position='relative';
+    var ov=document.createElement('div');ov.id='chart-overlay';
+    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.35);border-radius:8px;';
+    ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
+    section.appendChild(ov);
+  })();
+
+  function revealChart(){
+    var inner=document.getElementById('stance-map-inner');
+    if(inner){inner.style.transition='filter .6s ease';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
+    var ov=document.getElementById('chart-overlay');if(ov)ov.remove();
+  }
+  function reBlurChart(){
+    var inner=document.getElementById('stance-map-inner');
+    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
+    var section=document.getElementById('stance-map-section');
+    if(section&&!document.getElementById('chart-overlay')){
+      var ov=document.createElement('div');ov.id='chart-overlay';
+      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.35);border-radius:8px;';
+      ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
+      section.appendChild(ov);
+    }
+  }
+
+  let pulseRAF=null;
+  window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
+    revealChart();
+    const iss=ISSUES[issueIdx]||ISSUES[0];
+    const rad=iss.mid*Math.PI/180,r=(R_MIN+R_MAX)/2-14;
+    voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#0891b2',sector:issueIdx};
+    const note=document.getElementById('your-marker-note');if(note)note.style.display='block';
+    if(pulseRAF)cancelAnimationFrame(pulseRAF);
+    (function loop(){drawMain();pulseRAF=requestAnimationFrame(loop);})();
+  };
+  window.clearStanceMapVoteMarker=function(){
+    if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
+    voteMarker=null;
+    const note=document.getElementById('your-marker-note');if(note)note.style.display='none';
+    drawMain();reBlurChart();
+  };
+
+  const filters=document.getElementById('sm-filters');
+  function addBtn(label,idx){
+    const b=document.createElement('button');b.className='sm-fbtn'+(idx===-1?' active':'');
+    b.textContent=label;
+    b.onclick=function(){
+      filterIdx=idx;
+      filters.querySelectorAll('.sm-fbtn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');drawMain();
+    };
+    filters.appendChild(b);
+  }
+  addBtn('全件 ('+total+')',-1);
+  ISSUES.forEach((iss,i)=>{if(iss.k!=='その他')addBtn(iss.k+' ('+iss.n+')',i);});
+
+  function evtPos(ev){
+    const rect=canvasMain.getBoundingClientRect();
+    const scale=W/rect.width;
+    return{x:(ev.clientX-rect.left)*scale,y:(ev.clientY-rect.top)*scale};
+  }
+  function nearest(pos){
+    let best=null,bd=196;
+    pts.forEach(pt=>{
+      if(filterIdx>=0&&pt.p.i!==filterIdx)return;
+      const d=(pt.px-pos.x)**2+(pt.py-pos.y)**2;
+      if(d<bd){bd=d;best=pt;}
+    });
+    return best;
+  }
+  canvasMain.addEventListener('mousemove',function(ev){
+    const pt=nearest(evtPos(ev));
+    if(pt){
+      const rect=canvasMain.getBoundingClientRect();
+      tooltip.style.display='block';
+      tooltip.style.left=Math.min(ev.clientX-rect.left+14,rect.width-270)+'px';
+      tooltip.style.top=(ev.clientY-rect.top+14)+'px';
+      tooltip.innerHTML='<strong>'+ISSUES[pt.p.i].k+'</strong><br>'+pt.p.s;
+    }else{tooltip.style.display='none';}
+  });
+  canvasMain.addEventListener('mouseleave',function(){tooltip.style.display='none';});
+  canvasMain.addEventListener('click',function(ev){
+    const pt=nearest(evtPos(ev));
+    if(pt&&pt.p.u)window.open(pt.p.u,'_blank','noopener');
+  });
+  canvasMain.addEventListener('touchstart',function(ev){
+    if(ev.touches.length!==1)return;
+    const t=ev.touches[0];
+    const pt=nearest(evtPos(t));
+    if(pt&&pt.p.u){ev.preventDefault();window.open(pt.p.u,'_blank','noopener');}
+  },{passive:false});
+
+  drawHeat();drawMain();
+})();
+</script>
+
     <section class="panel"><div class="panel-title"><h2>象限別の代表的な声</h2><span>象限・立場別に読む</span></div>
 <nav class="quadrant-nav" aria-label="象限別ナビ">
   <a href="#sample-教員負担の軽減">移行推進・教員負担軽減</a>
@@ -1848,5 +1854,6 @@ let myVoteSX = null, myVoteSY = null;
   document.addEventListener("vote2d:revealed",function(){renderVoteRelated();});
 })();
 </script>
+<script src="share-x-btn.js"></script>
 </body>
 </html>
