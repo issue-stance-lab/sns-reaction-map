@@ -121,13 +121,10 @@
     @media(max-width:900px){.explainer-grid{gap:12px}.explainer-card{max-width:100%}}
     .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin:0 0 14px}
     .vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
-    .vote-issue-btn{position:relative;display:block;width:100%;border:1px solid rgba(79,70,229,.18);border-radius:12px;padding:0;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 8px 22px rgba(16,24,40,.1);overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s}
-    .vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 14px 30px rgba(79,70,229,.22);outline:none}
-    .vote-issue-btn::after{content:'›';position:absolute;right:12px;bottom:10px;font-size:24px;font-weight:900;color:var(--accent);line-height:1}
-    .vote-issue-btn img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:#eef2ff}
-    .vote-issue-btn .vi-copy{display:block;min-height:74px;padding:11px 34px 13px 13px;background:#fff}
-    .vote-issue-btn .vi-title{display:block;font-size:14px;font-weight:900;color:var(--ink)}
-    .vote-issue-btn .vi-desc{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+    .vote-issue-btn{display:flex;align-items:center;gap:10px;width:100%;border:1.5px solid rgba(79,70,229,.18);border-radius:10px;padding:13px 16px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 4px 14px rgba(16,24,40,.07);transition:transform .15s,box-shadow .15s,border-color .15s}
+    .vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 24px rgba(79,70,229,.14);outline:none}
+    .vote-issue-icon{font-size:22px;line-height:1;flex-shrink:0}
+    .vote-issue-title{font-size:13px;font-weight:900;color:var(--ink);line-height:1.35}
     #vote-stance-btns{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px!important;margin-top:10px}
     .vote-stance-btn{position:relative;border:1px solid rgba(15,23,42,.08);border-top:6px solid var(--stance-color);border-radius:14px;padding:18px 16px 16px;background:linear-gradient(180deg,#fff,var(--stance-bg));cursor:pointer;font-family:inherit;color:var(--ink);box-shadow:0 8px 22px rgba(16,24,40,.1);text-align:left;transition:transform .15s,box-shadow .15s,border-color .15s}
     .vote-stance-btn:hover,.vote-stance-btn:focus-visible{transform:translateY(-3px);border-color:var(--stance-color);box-shadow:0 14px 30px rgba(16,24,40,.18);outline:none}
@@ -251,43 +248,6 @@
   <img src="" alt="" id="explainer-modal-img">
 </div>
 
-<section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読むSNS上の代表意見</h2><span>論点別ショートコミック</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">図解で全体像をつかんだ後、田村結衣（都市政策研究員）と大野信子（元市職員・市民活動家）の会話で、SNS上に多い論点を具体的に読みます。タップで拡大。</p>
-<div class="manga-grid">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/fukushuto-manga-teigi.webp" alt="定義・中身" loading="lazy">
-    <span>📋 定義・中身</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/fukushuto-manga-kouhochi.webp" alt="候補地" loading="lazy">
-    <span>🗾 候補地</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/fukushuto-manga-tokoso.webp" alt="都構想・維新" loading="lazy">
-    <span>🏛️ 都構想・維新</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="3">
-    <img src="images/fukushuto-manga-bousai.webp" alt="防災・災害" loading="lazy">
-    <span>🌊 防災・災害</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="4">
-    <img src="images/fukushuto-manga-hiyou.webp" alt="費用・財源" loading="lazy">
-    <span>💴 費用・財源</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="5">
-    <img src="images/fukushuto-manga-yusen.webp" alt="優先順位" loading="lazy">
-    <span>⏰ 優先順位</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="6">
-    <img src="images/fukushuto-manga-sonota.webp" alt="その他・わからない" loading="lazy">
-    <span>💬 その他</span>
-  </button>
-</div>
-<div class="manga-modal" id="manga-modal" aria-hidden="true"></div>
-<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。</p>
-</section>
-<script src="manga-viewer.js"></script>
 <script>
 (function(){
   var modal=document.getElementById('explainer-modal');
@@ -305,17 +265,9 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
 })();
 </script>
-<script>
-MangaViewer.init({
-  chars:[
-    {img:'images/fukushuto-manga-charsheet-yui.webp',name:'田村 結衣',role:'都市政策シンクタンク研究員',quote:'一極集中のリスクを今すぐ解消すべき。理念はいいと思う'},
-    {img:'images/fukushuto-manga-charsheet-nobuko.webp',name:'大野 信子',role:'元市職員・市民活動家',quote:'中身が決まらないまま枠組みを作るのは順序が逆では？'}
-  ]
-});
-</script>
 
 <section class="panel" id="vote-section"><div class="panel-title"><h2>あなたが一番気になる「設計の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> 「副首都法案」「副首都 大阪」などのキーワードで、Yahooリアルタイム検索からSNS投稿292件を取得し、AIが自動分類しました。</div>
-<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;"></div></div>
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>副首都構想への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
@@ -586,13 +538,13 @@ const SM_RAW = [
     supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
   }
   var VOTE_ISSUES=[
-    {k:'定義・中身',  img:'images/fukushuto-vote-teigi.webp',    desc:'副首都の定義が法案に書かれていない。生煮えのまま通していいのか'},
-    {k:'候補地',      img:'images/fukushuto-vote-kouhochi.webp', desc:'大阪は南海トラフ圏内では？福岡・新潟・北海道はどう？'},
-    {k:'都構想・維新',img:'images/fukushuto-vote-tokoso.webp',   desc:'「大阪ありき」への不信。維新の政治的動機への疑念'},
-    {k:'防災・災害',  img:'images/fukushuto-vote-bousai.webp',   desc:'同じ防災を根拠に、賛成・反対が正反対の結論に'},
-    {k:'費用・財源',  img:'images/fukushuto-vote-hiyou.webp',    desc:'兆円単位なのに費用試算も財源も示されていない'},
-    {k:'優先順位',    img:'images/fukushuto-vote-yusen.webp',    desc:'物価対策が先では？なぜ今これなのか'},
-    {k:'その他・わからない', img:'images/fukushuto-vote-sonota.webp', desc:'特定の論点には当てはまらない、または判断がつかない'}
+    {k:'定義・中身',        icon:'📋'},
+    {k:'候補地',            icon:'🗾'},
+    {k:'都構想・維新',      icon:'🏛️'},
+    {k:'防災・災害',        icon:'🌊'},
+    {k:'費用・財源',        icon:'💴'},
+    {k:'優先順位',          icon:'⏰'},
+    {k:'その他・わからない',icon:'💬'}
   ];
   // VOTE_ISSUES index → ISSUES array index (定義0 候補地1 都構想2 防災3 その他4 費用5 優先順位6)
   var V2I=[0,1,2,3,5,6,4];
@@ -612,7 +564,7 @@ const SM_RAW = [
     var btn=document.createElement('button');
     btn.type='button';
     btn.className='vote-issue-btn';
-    btn.innerHTML='<img src="'+iss.img+'" alt="'+iss.k+'" loading="lazy"><span class="vi-copy"><span class="vi-title">'+iss.k+'</span><span class="vi-desc">'+iss.desc+'</span></span>';
+    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
     btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
     issueBtns.appendChild(btn);
   });
