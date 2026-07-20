@@ -75,7 +75,7 @@
     .temp-seg.neg{background:#dc2626}.temp-seg.neu{background:#94a3b8;color:#fff}.temp-seg.pos{background:#059669}
     .temp-bar-legend{display:flex;gap:12px;margin-top:6px;font-size:11px;color:var(--muted);font-weight:800}
     .temp-bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:3px;vertical-align:middle}
-    .stance-map-section{position:relative;background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat;border-top:0}
+    .panel.stance-map-section{position:relative;background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat!important;border-top:0}
     .stance-map-section .panel-title h2{color:#fff}.stance-map-section .panel-title span{color:rgba(255,255,255,.7)}
     .stance-map-section #stance-map-inner{position:relative;max-width:720px;margin:0 auto}
     #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
@@ -96,22 +96,28 @@
     .vote-stance-btn:hover,.vote-stance-btn:focus-visible{transform:translateY(-2px);filter:brightness(1.1);box-shadow:0 8px 22px rgba(16,24,40,.3)}
     .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin:0 0 14px}
     .vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
-    .vote-issue-btn{display:block;width:100%;border:1px solid rgba(124,45,18,.18);border-radius:12px;padding:14px 38px 14px 14px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 8px 22px rgba(16,24,40,.08);position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
-    .vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 14px 30px rgba(124,45,18,.16);outline:none}
-    .vote-issue-btn::after{content:'›';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:900;color:var(--accent)}
-    .vote-issue-btn{padding:0;overflow:hidden}
-    .vote-issue-btn img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--accent-soft)}
-    .vote-issue-btn .vi-copy{display:block;min-height:82px;padding:12px 38px 14px 14px;background:#fff}
-    .vote-issue-title{display:block;font-size:14px;font-weight:900;color:var(--ink);line-height:1.35}
-    .vote-issue-desc{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.55}
-    .explainer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
-    .explainer-card{border:1px solid rgba(124,45,18,.16);border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(16,24,40,.1)}
-    .explainer-card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--accent-soft)}
-    .explainer-card div{padding:14px 16px 16px}
-    .explainer-card h3{margin:0 0 6px;font-size:17px;line-height:1.35;color:var(--ink)}
-    .explainer-card p{margin:0;font-size:13px;line-height:1.75;color:var(--muted)}
+    .vote-issue-btn{display:flex;align-items:center;gap:10px;width:100%;border:1.5px solid rgba(124,45,18,.18);border-radius:10px;padding:13px 16px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 4px 14px rgba(16,24,40,.07);transition:transform .15s,box-shadow .15s,border-color .15s}
+    .vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 24px rgba(124,45,18,.14);outline:none}
+    .vote-issue-icon{font-size:22px;line-height:1;flex-shrink:0}
+    .vote-issue-title{font-size:13px;font-weight:900;color:var(--ink);line-height:1.35}
+    .explainer-grid{display:flex;flex-direction:column;gap:18px;margin-top:18px}
+    .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}
+    .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
+    .explainer-card img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;background:var(--accent-soft)}
+    .explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;border-bottom:1.5px solid #e4eaf3;pointer-events:none;user-select:none}
+    .explainer-num{flex-shrink:0;background:#071a3d;color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
+    .explainer-card-title{font-size:15px;font-weight:900;color:#071a3d;margin:0 0 4px;line-height:1.35;letter-spacing:-.02em}
+    .explainer-card-desc{font-size:12px;color:#637089;margin:0 0 7px;line-height:1.65}
+    .explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
+    .explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
+    .explainer-side.pro{background:#eff6ff;color:#075ef2;border:1px solid #bfdbfe}
+    .explainer-side.con{background:#fff2ee;color:#c0410f;border:1px solid #fdbcaa}
     .explainer-lead{font-size:14px;color:var(--ink);line-height:1.85;margin:0 0 12px;max-width:920px}
     .explainer-note{font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:16px 0 0;line-height:1.65}
+    .explainer-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.88)}
+    .explainer-modal.open{display:flex}
+    .explainer-modal img{max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain}
+    .explainer-modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:40px;height:40px;color:#fff;font-size:22px;cursor:pointer;line-height:40px;text-align:center}
     #vote-stance-btns{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px!important;max-width:900px}
     #vote-stance-btns .vote-stance-btn{border-top:6px solid var(--stance-color);background:linear-gradient(180deg,#fff,var(--stance-bg));color:var(--ink);text-align:left;box-shadow:0 8px 22px rgba(16,24,40,.1)}
     #vote-stance-btns .vote-stance-btn:hover,#vote-stance-btns .vote-stance-btn:focus-visible{border-color:var(--stance-color);filter:none;box-shadow:0 14px 30px rgba(16,24,40,.18);outline:none}
@@ -144,27 +150,121 @@
 <section class="stats"><div class="stat"><span>収集投稿</span><strong>326件</strong></div><div class="stat"><span>2D分類</span><strong>273件</strong></div><div class="stat"><span>論点分類</span><strong>268件</strong></div><div class="stat"><span>最多論点</span><strong>男系vs女系 75</strong></div></section>
 
 <section class="panel" id="explainer-section">
-<div class="panel-title"><h2>まず図解で理解：皇室典範改正の3つの入口</h2><span>投票前の論点整理</span></div>
-<p class="explainer-lead">皇室典範改正は、単純な賛否だけでは整理しにくいテーマです。まずは、女性皇族の皇籍維持、旧宮家男系男子の養子制度、男系維持か女系容認かという3つの入口から、どこに反応しているのかを分けて見ます。</p>
+<div class="panel-title"><h2>投票前に読む：6つの争点</h2><span>図解で全論点をチェック</span></div>
+<p class="explainer-lead">「改正への賛否」と「男系か女系か」——2つの軸が交差するため、保守派にも革新派にも賛成と反対が混在します。同じ「反対」でも右派は「女系への布石」、左派は「女性天皇が議論されない」と理由が正反対です。6つの争点を図解で把握してから投票に進んでください。画像はタップで拡大できます。</p>
 <div class="explainer-grid">
-  <article class="explainer-card">
-    <img src="images/koshitsu-infographic-kouseki.webp" alt="女性皇族の皇籍維持 結婚後も皇族に残るとは？" loading="lazy">
-    <div><h3>女性皇族の皇籍維持</h3><p>結婚後も皇族として活動する制度。皇族数の確保と、配偶者・子・継承権の扱いが論点です。</p></div>
+  <article class="explainer-card" data-img="images/koshitsu-infographic-wide-kouseki.webp" data-alt="女性皇族の皇籍維持">
+    <div class="explainer-card-label">
+      <span class="explainer-num">争点①</span>
+      <div>
+        <p class="explainer-card-title">女性皇族の皇籍維持</p>
+        <p class="explainer-card-desc">結婚後も皇族に留まることを認める。皇族数の減少に歯止めをかける核心措置。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">賛成：皇族数の確保・継承の安定化</span>
+          <span class="explainer-side con">反対：配偶者・子の身分整理が不十分</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/koshitsu-infographic-wide-kouseki.webp" alt="争点① 女性皇族の皇籍維持" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <img src="images/koshitsu-infographic-yoshi.webp" alt="旧宮家男系男子の養子制度 誰を皇族に迎えるのか？" loading="lazy">
-    <div><h3>旧宮家男系男子の養子制度</h3><p>旧宮家から男系男子を養子に迎える案。男系維持の現実策か、制度上の無理筋かが問われます。</p></div>
+  <article class="explainer-card" data-img="images/koshitsu-infographic-wide-yoshi.webp" data-alt="旧宮家男系男子の養子制度">
+    <div class="explainer-card-label">
+      <span class="explainer-num">争点②</span>
+      <div>
+        <p class="explainer-card-title">旧宮家男系男子の養子制度</p>
+        <p class="explainer-card-desc">1947年に離脱した旧宮家の男系男子を養子縁組で皇籍復帰させる。賛否が真っ二つ。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">賛成：男系維持の現実的な最終手段</span>
+          <span class="explainer-side con">反対：80年超の断絶・正当性に疑問</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/koshitsu-infographic-wide-yoshi.webp" alt="争点② 旧宮家男系男子の養子制度" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <img src="images/koshitsu-infographic-keisho.webp" alt="男系維持 vs 女系容認 何が対立しているのか？" loading="lazy">
-    <div><h3>男系維持 vs 女系容認</h3><p>皇位継承の原理をどう考えるか。伝統の継続と安定継承をどう両立するかが焦点です。</p></div>
+  <article class="explainer-card" data-img="images/koshitsu-infographic-wide-keisho.webp" data-alt="男系維持 vs 女系容認">
+    <div class="explainer-card-label">
+      <span class="explainer-num">争点③</span>
+      <div>
+        <p class="explainer-card-title">男系維持 vs 女系容認</p>
+        <p class="explainer-card-desc">「父系の血」だけを正統とするか、母系も認めるか。継承原則をめぐる最大の思想対立。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">男系派：2千年超の皇統・変えるべきでない</span>
+          <span class="explainer-side con">女系派：継承者不足・現実的対応が先決</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/koshitsu-infographic-wide-keisho.webp" alt="争点③ 男系維持 vs 女系容認" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/koshitsu-infographic-wide-josei-tenno.webp" data-alt="女性天皇・愛子天皇">
+    <div class="explainer-card-label">
+      <span class="explainer-num">争点④</span>
+      <div>
+        <p class="explainer-card-title">女性天皇・愛子天皇</p>
+        <p class="explainer-card-desc">女性が天皇に就くことの是非。愛子内親王を念頭に置いた議論が国民世論を二分。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">賛成：世論の7割超が支持・愛子即位を</span>
+          <span class="explainer-side con">反対：現行典範は男性限定・要法改正</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/koshitsu-infographic-wide-josei-tenno.webp" alt="争点④ 女性天皇・愛子天皇" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/koshitsu-infographic-wide-kenpo.webp" data-alt="憲法・制度上の妥当性">
+    <div class="explainer-card-label">
+      <span class="explainer-num">争点⑤</span>
+      <div>
+        <p class="explainer-card-title">憲法・制度上の妥当性</p>
+        <p class="explainer-card-desc">今回の改正が憲法の政教分離・平等原則などと整合するかを問う。合憲性への疑義。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">問題なし：既存法と整合・手続きも適正</span>
+          <span class="explainer-side con">疑義あり：政教分離・平等原則に抵触か</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/koshitsu-infographic-wide-kenpo.webp" alt="争点⑤ 憲法・制度上の妥当性" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/koshitsu-infographic-wide-shingi.webp" data-alt="国会審議・成立手続き">
+    <div class="explainer-card-label">
+      <span class="explainer-num">争点⑥</span>
+      <div>
+        <p class="explainer-card-title">国会審議・成立手続き</p>
+        <p class="explainer-card-desc">成立までの審議期間・与野党の合意形成プロセスへの疑問。手続きの正当性が焦点。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">適切：与野党合意を経た正当なプロセス</span>
+          <span class="explainer-side con">問題あり：審議不足・密室交渉と批判</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/koshitsu-infographic-wide-shingi.webp" alt="争点⑥ 国会審議・成立手続き" loading="lazy">
   </article>
 </div>
-<p class="explainer-note"><strong>読み方:</strong> 図解で全体像をつかんでから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+<p class="explainer-note"><strong>使い方:</strong> 6つの争点を図解で確認してから、次の投票で「自分が一番気になる争点」を選んでください。</p>
 </section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>
+(function(){
+  var modal=document.getElementById('explainer-modal');
+  var modalImg=document.getElementById('explainer-modal-img');
+  var closeBtn=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card').forEach(function(card){
+    card.addEventListener('click',function(){
+      modalImg.src=card.dataset.img;
+      modalImg.alt=card.dataset.alt;
+      modal.classList.add('open');
+    });
+  });
+  function closeModal(){modal.classList.remove('open');}
+  closeBtn.addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+})();
+</script>
 
 <section class="panel" id="vote-section"><div class="panel-title"><h2>あなたはどの論点を重く見る？</h2><span>SNSの声を見る前に</span></div><p>2026年7月17日、改正皇室典範が参議院で可決・成立しました。女性皇族の結婚後の皇籍維持と、旧宮家の男系男子を養子に迎える制度が柱です。まず気になる論点を選び、次に改正への総合評価を選んでください。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> 「皇室典範改正」「旧宮家 養子」などのキーワードで、Yahooリアルタイム検索からSNS投稿326件を取得し、AIが自動分類しました。</div>
-<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>一番気になる論点を選ぶ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;max-width:980px;"></div></div>
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>一番気になる論点を選ぶ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>改正への総合評価は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたらマップに表示します</span></p><div id="vote-stance-btns" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;"></div></div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
@@ -181,13 +281,13 @@
     supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
   }
   var VOTE_ISSUES=[
-    {k:'女性皇族の皇籍維持',desc:'結婚後も皇族として活動する仕組みを重く見る',img:'images/koshitsu-vote-kouseki.webp'},
-    {k:'旧宮家男系男子の養子制度',desc:'旧宮家から養子を迎える制度の妥当性を重く見る',img:'images/koshitsu-vote-yoshi.webp'},
-    {k:'男系維持 vs 女系容認',desc:'皇位継承原理そのものを重く見る',img:'images/koshitsu-vote-keisho.webp'},
-    {k:'女性天皇・愛子天皇',desc:'女性天皇や愛子さま即位の議論を重く見る',img:'images/koshitsu-vote-josei-tenno.webp'},
-    {k:'憲法・制度上の妥当性',desc:'法の下の平等、皇籍復帰、制度設計を重く見る',img:'images/koshitsu-vote-kenpo.webp'},
-    {k:'国会審議・成立手続き',desc:'議論の量、通し方、政治プロセスを重く見る',img:'images/koshitsu-vote-shingi.webp'},
-    {k:'その他・まだ整理できない',desc:'複数の論点が絡み、まだ絞れない',img:'images/koshitsu-vote-sonota.webp'}
+    {k:'女性皇族の皇籍維持',icon:'👸'},
+    {k:'旧宮家男系男子の養子制度',icon:'🏠'},
+    {k:'男系維持 vs 女系容認',icon:'⚖️'},
+    {k:'女性天皇・愛子天皇',icon:'🌸'},
+    {k:'憲法・制度上の妥当性',icon:'📜'},
+    {k:'国会審議・成立手続き',icon:'🏛️'},
+    {k:'その他・まだ整理できない',icon:'🤔'}
   ];
   var STANCES=[
     {k:'改正を支持',color:'#059669',bg:'#ecfdf5',desc:'皇族数確保のため妥当だと思う'},
@@ -206,7 +306,7 @@
     var btn=document.createElement('button');
     btn.type='button';
     btn.className='vote-issue-btn';
-    btn.innerHTML='<img src="'+iss.img+'" alt="'+iss.k+'" loading="lazy"><span class="vi-copy"><span class="vote-issue-title">'+iss.k+'</span><span class="vote-issue-desc">'+iss.desc+'</span></span>';
+    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
     btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
     issueBtns.appendChild(btn);
   });
@@ -296,35 +396,6 @@
 })();
 </script>
 
-<section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読む対立の構造</h2><span>3ページ・ショートコミック</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">宮本翔（内閣府職員・改正支持）と森山凛（憲法学院生・改正反対）。同じ「皇室を守りたい」から正反対の結論に至る二人の対話を描きます。タップで拡大。</p>
-<div class="manga-grid">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/koshitsu-manga-page-1.webp" alt="導入：可決の瞬間" loading="lazy">
-    <span>1. 可決の瞬間、二人の反応</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/koshitsu-manga-page-2.webp" alt="対立：養子制度か女系容認か" loading="lazy">
-    <span>2. 養子制度か、女系容認か</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/koshitsu-manga-page-3.webp" alt="余韻：皇室を想う気持ちは同じ" loading="lazy">
-    <span>3. 皇室を想う気持ちは、同じだった</span>
-  </button>
-</div>
-<div class="manga-modal" id="manga-modal" aria-hidden="true"></div>
-<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。</p>
-</section>
-<script src="manga-viewer.js"></script>
-<script>
-MangaViewer.init({
-  chars:[
-    {img:'images/koshitsu-manga-charsheet-sho.webp',name:'宮本 翔',role:'内閣府・皇室制度準備室職員',quote:'皇族がゼロになる前に、今できることを積み上げるべきだ'},
-    {img:'images/koshitsu-manga-charsheet-rin.webp',name:'森山 凛',role:'憲法学の大学院生',quote:'女性を除外した改正は、政治の選択であって必然ではない'}
-  ]
-});
-</script>
 
 <section class="panel stance-map-section" id="stance-map-section">
 <div id="stance-map-inner">
@@ -842,11 +913,11 @@ const SM_RAW = [
 })();
 </script>
 
-<section class="panel conflict-panel"><div class="panel-title"><h2>5つの論点とXの声</h2><span>論点ごとに温度バーと代表投稿</span></div>
-<nav class="quadrant-nav"><a href="#issue-danjo">男系vs女系 75</a><a href="#issue-yoshi">養子制度 54</a><a href="#issue-rippo">立法手法 54</a><a href="#issue-josei">女性天皇の区別 24</a><a href="#issue-aiko">愛子さま 5</a></nav>
+<section class="panel conflict-panel"><div class="panel-title"><h2>争点別のXの声</h2><span>代表的SNS投稿と温度バー</span></div>
+<nav class="quadrant-nav"><a href="#issue-danjo">争点③ 男系vs女系 75件</a><a href="#issue-yoshi">争点② 養子制度 54件</a><a href="#issue-rippo">争点⑥ 国会審議 54件</a><a href="#issue-josei">争点④ 女性天皇・愛子天皇 29件</a></nav>
 
 <article class="issue-block" id="issue-danjo">
-<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span><h3>男系vs女系 — 皇位継承の本質的対立<span class="issue-count">75件</span><span class="issue-heat">熱量 0.71</span></h3>
+<div class="issue-head"><span class="axis-kicker">争点③ · 最大勢力</span><h3>男系維持 vs 女系容認 — 皇位継承の本質的対立<span class="issue-count">75件</span><span class="issue-heat">熱量 0.71</span></h3>
 <div class="temp-bar-wrap"><div class="temp-bar-label"><span>改正への態度分布</span><span>反対39 / 中立18 / 賛成18</span></div><div class="temp-bar"><div class="temp-seg neg" style="width:52%">52%</div><div class="temp-seg neu" style="width:24%">24%</div><div class="temp-seg pos" style="width:24%">24%</div></div><div class="temp-bar-legend"><span><i style="background:#dc2626"></i>反対・慎重</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛成</span></div></div>
 <p class="issue-desc">最多の論点。「男系維持こそ皇統の根幹」と主張する保守派と、「女性天皇・女系天皇を排除するのは時代錯誤」と主張する改革派が真っ向から対立しています。興味深いのは、男系維持派の中にも改正に「賛成」する層がいること。旧宮家養子を通じて男系を強化できるとみるからです。反対に、女系容認派は今回の改正では不十分として反対に回る構造があります。</p>
 <div class="issue-sides"><div class="side neg"><strong>改正反対派（39件）</strong>「改正は男系を守るふりをしているが、女性皇族の皇籍維持は女系への布石だ」という右派の懸念と、「女系を排除した改正は不完全」という左派の不満が重なる。</div><div class="side pos"><strong>改正賛成派（18件）</strong>「旧宮家養子で男系は安泰」と評価する保守派と、「まずは第一歩として前進」と見る穏健派。</div></div>
@@ -858,7 +929,7 @@ const SM_RAW = [
 </article>
 
 <article class="issue-block" id="issue-yoshi">
-<div class="issue-head"><span class="axis-kicker">論点2・憲法論争の震源</span><h3>養子制度 — 旧宮家復帰は合憲か<span class="issue-count">54件</span><span class="issue-heat">熱量 0.56（最も冷静）</span></h3>
+<div class="issue-head"><span class="axis-kicker">争点② · 憲法論争の震源</span><h3>旧宮家男系男子の養子制度 — 旧宮家復帰は合憲か<span class="issue-count">54件</span><span class="issue-heat">熱量 0.56（最も冷静）</span></h3>
 <div class="temp-bar-wrap"><div class="temp-bar-label"><span>改正への態度分布</span><span>反対33 / 中立3 / 賛成18</span></div><div class="temp-bar"><div class="temp-seg neg" style="width:61%">61%</div><div class="temp-seg neu" style="width:6%"></div><div class="temp-seg pos" style="width:33%">33%</div></div><div class="temp-bar-legend"><span><i style="background:#dc2626"></i>反対・慎重</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛成</span></div></div>
 <p class="issue-desc">中立がほぼゼロという分極化した論点。旧宮家の男系男子を養子として迎える新制度をめぐり、「憲法14条（法の下の平等）違反では」「80年前に離脱した家系に正統性はあるのか」という批判と、「男系維持の現実的な唯一の方法」という擁護が拮抗しています。熱量は最も低く、感情ではなく法解釈で議論される傾向があります。</p>
 <div class="issue-sides"><div class="side neg"><strong>批判側（33件）</strong>養子案は男系維持のための無理筋。憲法14条違反、80年前の血統に正統性なし、愛子天皇の方が国民感情に合う。</div><div class="side pos"><strong>擁護側（18件）</strong>皇統維持の最後の手段。歴史的先例もあり、法的にも整理可能。</div></div>
@@ -870,7 +941,7 @@ const SM_RAW = [
 </article>
 
 <article class="issue-block" id="issue-rippo">
-<div class="issue-head"><span class="axis-kicker">論点3・最も熱い</span><h3>立法手法 — 拙速な成立プロセスへの怒り<span class="issue-count">54件</span><span class="issue-heat">熱量 1.17（最高）</span></h3>
+<div class="issue-head"><span class="axis-kicker">争点⑥ · 最も熱い</span><h3>国会審議・成立手続き — 拙速な成立プロセスへの怒り<span class="issue-count">54件</span><span class="issue-heat">熱量 1.17（最高）</span></h3>
 <div class="temp-bar-wrap"><div class="temp-bar-label"><span>改正への態度分布</span><span>反対42 / 中立4 / 賛成8</span></div><div class="temp-bar"><div class="temp-seg neg" style="width:78%">78%</div><div class="temp-seg neu" style="width:7%"></div><div class="temp-seg pos" style="width:15%">15%</div></div><div class="temp-bar-legend"><span><i style="background:#dc2626"></i>反対・慎重</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛成</span></div></div>
 <p class="issue-desc">このテーマで最も感情温度が高い論点。改正の中身ではなく「通し方」への怒りが噴出しています。「国民的議論なしに参議院で成立させた」「皇室の根幹に関わる法案を拙速に処理した」という批判が8割近くを占め、賛成側も「反対政党の姿勢こそ問題」と政局色の強い議論に。改正の内容以前に、民主的プロセスへの不信が読み取れます。</p>
 <div class="issue-sides"><div class="side neg"><strong>批判側（42件）</strong>国民的議論なし、強行採決、皇室の根幹をこの速度で変えるのは民主主義の否定。</div><div class="side pos"><strong>擁護側（8件）</strong>反対政党は代案を出さず審議拒否こそ問題。超党派で成立したことに意義がある。</div></div>
@@ -882,26 +953,14 @@ const SM_RAW = [
 </article>
 
 <article class="issue-block" id="issue-josei">
-<div class="issue-head"><span class="axis-kicker">論点4・用語の混乱</span><h3>女性天皇の区別 — 女性天皇と女系天皇は違う<span class="issue-count">24件</span><span class="issue-heat">熱量 0.71</span></h3>
-<div class="temp-bar-wrap"><div class="temp-bar-label"><span>改正への態度分布</span><span>反対6 / 中立16 / 賛成2</span></div><div class="temp-bar"><div class="temp-seg neg" style="width:25%">25%</div><div class="temp-seg neu" style="width:67%">67%</div><div class="temp-seg pos" style="width:8%"></div></div><div class="temp-bar-legend"><span><i style="background:#dc2626"></i>反対・慎重</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛成</span></div></div>
-<p class="issue-desc">「女性天皇」（男系の女性が即位）と「女系天皇」（母方の血統で即位）の区別をめぐる論点。中立が67%と高いのは、用語の解説や概念整理を行う投稿が多いためです。「推進派は意図的に混同している」という批判と、「そもそも区別する意味がない」という反論が対立しています。</p>
-<div class="issue-sides"><div class="side neg"><strong>男系維持派（6件）</strong>女性天皇を認めると次は女系天皇になる。推進派は意図的に混同している。</div><div class="side pos"><strong>女系容認派（2件）</strong>性別で皇位を制限すること自体が時代遅れ。区別にこだわるのは男性優位の発想。</div></div>
+<div class="issue-head"><span class="axis-kicker">争点④ · 29件</span><h3>女性天皇・愛子天皇 — 用語の混乱と即位論争<span class="issue-count">29件</span><span class="issue-heat">熱量 0.74</span></h3>
+<div class="temp-bar-wrap"><div class="temp-bar-label"><span>改正への態度分布（女性天皇の区別24件＋愛子さま5件）</span><span>反対9 / 中立16 / 賛成4</span></div><div class="temp-bar"><div class="temp-seg neg" style="width:31%">31%</div><div class="temp-seg neu" style="width:55%">55%</div><div class="temp-seg pos" style="width:14%">14%</div></div><div class="temp-bar-legend"><span><i style="background:#dc2626"></i>反対・慎重</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛成</span></div></div>
+<p class="issue-desc">「女性天皇」（男系の女性が即位）と「女系天皇」（母方の血統で即位）の区別をめぐる論点と、愛子内親王の即位可能性を直接論じる投稿を統合した争点。中立が半数超を占めるのは概念整理の投稿が多いためです。「推進派は女性天皇と女系天皇を意図的に混同している」という批判と、「そもそも区別に意味はない」という反論が対立。また少数ながら愛子天皇を個人として論じる声も国民感情を浮き彫りにします。</p>
+<div class="issue-sides"><div class="side neg"><strong>男系維持派（9件）</strong>女性天皇を認めると次は女系天皇になる。個人の人気で制度を変えるべきではない。</div><div class="side pos"><strong>女系容認・愛子即位支持派（4件）</strong>性別で皇位を制限すること自体が時代遅れ。国民の多数が愛子天皇を支持している。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">男系維持・区別重視 / conf 0.85</div><p>女性天皇と女系天皇の区別を強調し女系を否定</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/FNYClWP2fU9qnTf/status/2078057100362801634"></a></blockquote></div>
-<div class="sample-card"><div class="meta">女系容認 / conf 0.85</div><p>女系天皇支持を表明する意見</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ACDCSection/status/2078066380348531012"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-aiko">
-<div class="issue-head"><span class="axis-kicker">論点5・少数だが象徴的</span><h3>愛子さま — 個人名が議論の焦点に<span class="issue-count">5件</span><span class="issue-heat">熱量 0.90</span></h3>
-<div class="temp-bar-wrap"><div class="temp-bar-label"><span>改正への態度分布</span><span>反対3 / 中立0 / 賛成2</span></div><div class="temp-bar"><div class="temp-seg neg" style="width:60%">60%</div><div class="temp-seg pos" style="width:40%">40%</div></div><div class="temp-bar-legend"><span><i style="background:#dc2626"></i>反対・慎重</span><span><i style="background:#059669"></i>賛成</span></div></div>
-<p class="issue-desc">件数は最少ですが、愛子内親王の即位可能性を直接論じる象徴的な論点です。「愛子天皇を実現すべき」という声と「個人の人気で制度を変えるべきではない」という声が分かれています。</p>
-<div class="issue-sides"><div class="side neg"><strong>反対側（3件）</strong>愛子天皇論は皇統の原則を個人人気で曲げるもの。制度論で議論すべき。</div><div class="side pos"><strong>賛成側（2件）</strong>国民の多数が愛子天皇を支持している。今回の改正で議論しなかったのは問題。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">愛子天皇反対 / conf 0.85</div><p>改正皇室典範と愛子天皇論に強く反対</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NinjaH2SXSE1/status/2078067735939211286"></a></blockquote></div>
-<div class="sample-card"><div class="meta">女系容認 / conf 0.8</div><p>立憲の女系容認立場を説明し愛子天皇を示唆</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hurusato51/status/2078065561838432541"></a></blockquote></div>
+<div class="sample-card"><div class="meta">愛子天皇・女系容認 / conf 0.85</div><p>立憲の女系容認立場を説明し愛子天皇を示唆</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hurusato51/status/2078065561838432541"></a></blockquote></div>
 </div>
 </article>
 </section>
