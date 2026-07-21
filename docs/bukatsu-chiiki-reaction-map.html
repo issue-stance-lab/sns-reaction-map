@@ -638,16 +638,24 @@
     /* === 論点explainer === */
     .explainer-section{background:#fff}
     .explainer-lead{font-size:15px;line-height:1.9;color:var(--ink);margin:0 0 24px;max-width:880px}
-    .explainer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
-    .explainer-card{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(16,24,40,.06);padding:18px;cursor:default}
-    .explainer-num{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;font-size:11px;font-weight:900;padding:2px 10px;margin-bottom:8px}
-    .explainer-card-title{font-size:15px;font-weight:900;margin:0 0 6px;line-height:1.4}
-    .explainer-card-desc{font-size:13px;color:var(--muted);line-height:1.7;margin:0 0 10px}
-    .explainer-sides{display:flex;flex-direction:column;gap:5px}
-    .explainer-side{font-size:12px;border-radius:6px;padding:5px 9px;font-weight:700}
-    .explainer-side.con{background:#fef2f2;color:#991b1b}
-    .explainer-side.pro{background:#ecfdf5;color:#065f46}
+    .explainer-grid{display:flex;flex-direction:column;gap:18px;margin-bottom:16px}
+    .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}
+    .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
+    .explainer-card img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;background:var(--accent-soft)}
+    .explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;pointer-events:none;user-select:none}
+    .explainer-num{flex-shrink:0;background:var(--accent);color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
+    .explainer-card-body{flex:1;min-width:0}
+    .explainer-card-title{font-size:15px;font-weight:900;color:#1e1b4b;margin:0 0 4px;line-height:1.35}
+    .explainer-card-desc{font-size:12px;color:#637089;margin:0 0 8px;line-height:1.65}
+    .explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
+    .explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
+    .explainer-side.con{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .explainer-side.pro{background:#ecfdf5;color:#065f46;border:1px solid #bbf7d0}
     .explainer-note{font-size:12px;color:var(--muted);margin:12px 0 0}
+    .explainer-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.88)}
+    .explainer-modal.open{display:flex}
+    .explainer-modal img{max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain}
+    .explainer-modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:40px;height:40px;color:#fff;font-size:22px;cursor:pointer;line-height:40px;text-align:center}
     /* === 2ステップ投票 === */
     .vote-step-label{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;margin:0 0 14px}
     .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:900;flex-shrink:0}
@@ -660,7 +668,7 @@
     .vs-title{font-size:14px;font-weight:900;color:var(--ink)}
     .vs-desc{font-size:12px;color:var(--muted);line-height:1.5}
     @media(max-width:767px){
-      .explainer-grid{grid-template-columns:1fr}
+      .explainer-card-label{gap:8px;padding:12px 14px}
       .vote-stance-btn{min-width:unset;width:100%}
     }
 
@@ -743,63 +751,114 @@ MangaViewer.init({
 <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
 <div class="explainer-grid">
-  <article class="explainer-card">
-    <span class="explainer-num">論点①</span>
-    <p class="explainer-card-title">費用・家庭負担 — 「月8000円、年間28万円」</p>
-    <p class="explainer-card-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">懸念：家計を直撃。格差が広がる</span>
-      <span class="explainer-side pro">擁護：市税補助・一律化で解決できる</span>
+  <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-hiyou.webp" data-alt="費用・家庭負担">
+    <img src="images/bukatsu-chiiki-infographic-wide-hiyou.webp" alt="費用・家庭負担インフォグラフィック" loading="lazy">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点①</span>
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">費用・家庭負担 — 「月8000円、年間28万円」</p>
+        <p class="explainer-card-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：家計を直撃。格差が広がる</span>
+          <span class="explainer-side pro">擁護：市税補助・一律化で解決できる</span>
+        </div>
+      </div>
     </div>
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点②</span>
-    <p class="explainer-card-title">受け皿・指導者 — 「ボランティア頼みは限界」</p>
-    <p class="explainer-card-desc">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">懸念：報酬が安く人材が集まらない</span>
-      <span class="explainer-side pro">擁護：生活できる報酬を社会全体で保障を</span>
+  <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-ukesara.webp" data-alt="受け皿・指導者">
+    <img src="images/bukatsu-chiiki-infographic-wide-ukesara.webp" alt="受け皿・指導者インフォグラフィック" loading="lazy">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点②</span>
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">受け皿・指導者 — 「ボランティア頼みは限界」</p>
+        <p class="explainer-card-desc">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：報酬が安く人材が集まらない</span>
+          <span class="explainer-side pro">擁護：生活できる報酬を社会全体で保障を</span>
+        </div>
+      </div>
     </div>
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点③</span>
-    <p class="explainer-card-title">教員の働き方 — 「ブラック部活の解消」が最大動機</p>
-    <p class="explainer-card-desc">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side pro">賛成：強制をなくし教員の負担を減らせる</span>
-      <span class="explainer-side con">懸念：移行後も実態は変わらない可能性</span>
+  <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-kyoin.webp" data-alt="教員の働き方">
+    <img src="images/bukatsu-chiiki-infographic-wide-kyoin.webp" alt="教員の働き方インフォグラフィック" loading="lazy">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点③</span>
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">教員の働き方 — 「ブラック部活の解消」が最大動機</p>
+        <p class="explainer-card-desc">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">賛成：強制をなくし教員の負担を減らせる</span>
+          <span class="explainer-side con">懸念：移行後も実態は変わらない可能性</span>
+        </div>
+      </div>
     </div>
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点④</span>
-    <p class="explainer-card-title">教育的意義・機会 — 「子どもの夢と居場所」</p>
-    <p class="explainer-card-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side pro">期待：門戸が広がり多様な子に機会を</span>
-      <span class="explainer-side con">懸念：費用・距離の壁で格差が生まれる</span>
+  <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-kyoiku.webp" data-alt="教育的意義・機会">
+    <img src="images/bukatsu-chiiki-infographic-wide-kyoiku.webp" alt="教育的意義・機会インフォグラフィック" loading="lazy">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点④</span>
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">教育的意義・機会 — 「子どもの夢と居場所」</p>
+        <p class="explainer-card-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">期待：門戸が広がり多様な子に機会を</span>
+          <span class="explainer-side con">懸念：費用・距離の壁で格差が生まれる</span>
+        </div>
+      </div>
     </div>
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点⑤</span>
-    <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」</p>
-    <p class="explainer-card-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">懸念：地方では移行自体が成立しない</span>
-      <span class="explainer-side pro">視点：地域の実情に合わせた柔軟設計を</span>
+  <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-kousa.webp" data-alt="地域格差">
+    <img src="images/bukatsu-chiiki-infographic-wide-kousa.webp" alt="地域格差インフォグラフィック" loading="lazy">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑤</span>
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」</p>
+        <p class="explainer-card-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：地方では移行自体が成立しない</span>
+          <span class="explainer-side pro">視点：地域の実情に合わせた柔軟設計を</span>
+        </div>
+      </div>
     </div>
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点⑥</span>
-    <p class="explainer-card-title">制度・移行プロセス — 「手探りのまま進んでいる」</p>
-    <p class="explainer-card-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">批判：制度設計が不透明なまま進んでいる</span>
-      <span class="explainer-side pro">擁護：段階的に改善していくのは当然</span>
+  <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-seido.webp" data-alt="制度・移行プロセス">
+    <img src="images/bukatsu-chiiki-infographic-wide-seido.webp" alt="制度・移行プロセスインフォグラフィック" loading="lazy">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑥</span>
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">制度・移行プロセス — 「手探りのまま進んでいる」</p>
+        <p class="explainer-card-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">批判：制度設計が不透明なまま進んでいる</span>
+          <span class="explainer-side pro">擁護：段階的に改善していくのは当然</span>
+        </div>
+      </div>
     </div>
   </article>
 </div>
-<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。画像はタップで拡大できます。</p>
 </section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>
+(function(){
+  var modal=document.getElementById('explainer-modal');
+  var mImg=document.getElementById('explainer-modal-img');
+  var mClose=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
+    c.addEventListener('click',function(){
+      mImg.src=c.dataset.img;
+      mImg.alt=c.dataset.alt||'';
+      modal.classList.add('open');
+    });
+  });
+  mClose.addEventListener('click',function(){modal.classList.remove('open');});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
+})();
+</script>
 
 <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
