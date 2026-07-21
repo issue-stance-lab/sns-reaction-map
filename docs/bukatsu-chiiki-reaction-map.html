@@ -611,6 +611,13 @@
     .arena-section{position:relative;background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat;border-top:0;padding:42px min(6vw,72px)}
     .arena-section .panel-title h2{color:#fff}.arena-section .panel-title span{color:rgba(255,255,255,.7)!important;background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.2)!important}
     .arena-section .sm-controls{background:transparent!important;border:none!important;padding:0!important;border-radius:0!important}
+    .temp-bar-wrap{margin:0 0 14px}
+    .temp-bar-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+    .temp-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;background:#e7e7f7;position:relative}
+    .temp-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;min-width:2px;transition:width .4s ease}
+    .temp-seg.neg{background:#dc2626}.temp-seg.neu{background:#94a3b8}.temp-seg.pos{background:#059669}
+    .temp-bar-legend{display:flex;gap:12px;margin-top:6px;font-size:11px;color:var(--muted);font-weight:800}
+    .temp-bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:3px;vertical-align:middle}
     #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
     #sm-wrap canvas{display:block;width:100%;border:0;border-radius:8px}
     #smCanvasMain{cursor:crosshair;position:relative;z-index:2;background:transparent}
@@ -1459,6 +1466,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-kyoin">
 <div class="issue-head"><span class="axis-kicker">論点1・最多・最大動機</span>
 <h3>教員の働き方 — 「ブラック部活の解消」<span class="issue-count">58件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>働き方改革としての地域移行：論調</span><span>懐疑・反対26 / 中立15 / 支持17</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:45%">45%</div><div class="temp-seg neu" style="width:26%">26%</div><div class="temp-seg pos" style="width:29%">29%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>移行後も変わらないと懐疑</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>働き方改革として移行を支持</span></div>
+</div>
 <p class="issue-desc">最多論点。教員が土日に無償で指導する構造が長時間労働の温床になっているとして、地域移行を「働き方改革」として歓迎する声が目立ちます。ただし「義務がなくなっても続ける教員が多い」「実態は変わらない」という懐疑的な声もあります。</p>
 <div class="issue-sides"><div class="side pos"><strong>支持側</strong>教員の無償・強制労働の解消が最大の動機。長時間労働の温床をなくすべきだ。</div><div class="side neg"><strong>懐疑側</strong>義務がなくなっても自発的に続ける教員が多い。移行後も実態は変わらない可能性がある。</div></div>
 </div>
@@ -1473,6 +1485,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-seido">
 <div class="issue-head"><span class="axis-kicker">論点2</span>
 <h3>制度・移行プロセス — 「手探りのまま進んでいる」<span class="issue-count">51件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>移行プロセスへの評価</span><span>批判21 / 中立11 / 擁護19</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:41%">41%</div><div class="temp-seg neu" style="width:22%">22%</div><div class="temp-seg pos" style="width:37%">37%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>制度設計が不透明と批判</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>段階的な改善は当然と擁護</span></div>
+</div>
 <p class="issue-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も多く、プロセス設計の問題を問う声が集まっています。</p>
 <div class="issue-sides"><div class="side neg"><strong>批判側</strong>制度設計が不透明なまま進んでいる。自治体によって対応がバラバラで格差が広がる。</div><div class="side pos"><strong>擁護側</strong>段階的に改善していくのは当然。大きな制度変更は手探りから始まる。</div></div>
 </div>
@@ -1487,6 +1504,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-sonota">
 <div class="issue-head"><span class="axis-kicker">その他</span>
 <h3>その他 — 情報共有・複合的意見<span class="issue-count">50件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>投稿の論調（情報共有・複合意見）</span><span>批判27 / 中立5 / 賛同18</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:54%">54%</div><div class="temp-seg neu" style="width:10%">10%</div><div class="temp-seg pos" style="width:36%">36%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>批判・問題提起的な投稿</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛同・情報共有的な投稿</span></div>
+</div>
 <p class="issue-desc">特定の論点に絞り込めない複合的な意見や、ニュース・資料の情報共有が中心です。</p>
 <div class="issue-sides"><div class="side neg"><strong>複合的批判</strong>地域指導者の理解不足が地域移行の本質を妨げる。クラブ化の意味を問い直す必要がある。</div><div class="side pos"><strong>情報共有</strong>各地域の実証実験データや専門家の提言を共有し、議論の材料として提供。</div></div>
 </div>
@@ -1501,6 +1523,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-ukesara">
 <div class="issue-head"><span class="axis-kicker">論点3</span>
 <h3>受け皿・指導者 — 「ボランティア頼みは限界」<span class="issue-count">34件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>受け皿・指導者問題への立場</span><span>懸念19 / 中立5 / 支持10</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:56%">56%</div><div class="temp-seg neu" style="width:15%">15%</div><div class="temp-seg pos" style="width:29%">29%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>受け皿不足で移行に懸念</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>整備すれば解決できると支持</span></div>
+</div>
 <p class="issue-desc">地域クラブの指導者がいない・報酬が低い・責任は重い。人材確保ができなければ移行自体が空洞化するという懸念が中心です。</p>
 <div class="issue-sides"><div class="side neg"><strong>懸念側</strong>報酬が安く人材が集まらない。地方では受け皿となる団体自体が存在しない。</div><div class="side pos"><strong>提案側</strong>生活できる報酬を社会全体で保障する仕組みが必要。外部専門顧問の活用を。</div></div>
 </div>
@@ -1515,6 +1542,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-kyoiku">
 <div class="issue-head"><span class="axis-kicker">論点4</span>
 <h3>教育的意義・機会 — 「子どもの夢と居場所」<span class="issue-count">28件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>子どもの教育機会への影響評価</span><span>懸念14 / 中立2 / 期待12</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:50%">50%</div><div class="temp-seg neu" style="width:7%">7%</div><div class="temp-seg pos" style="width:43%">43%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>費用・格差で機会損失を懸念</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>移行で機会拡大に期待</span></div>
+</div>
 <p class="issue-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもあります。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用や距離で夢を奪われる子がいる」という懸念も根強い論点です。</p>
 <div class="issue-sides"><div class="side pos"><strong>期待側</strong>門戸が広がり不登校の子も参加しやすくなる。多様な子に活動機会が届く。</div><div class="side neg"><strong>懸念側</strong>費用・距離の壁で格差が生まれる。競技力が身につきやすい学校部活の価値が失われる。</div></div>
 </div>
@@ -1529,6 +1561,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-hiyou">
 <div class="issue-head"><span class="axis-kicker">論点5</span>
 <h3>費用・家庭負担 — 「月8000円、年間30万円近く」<span class="issue-count">16件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>家庭負担増への立場</span><span>反対7 / 中立3 / 支持6</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:44%">44%</div><div class="temp-seg neu" style="width:18%">18%</div><div class="temp-seg pos" style="width:38%">38%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>費用増に反対・移行に懸念</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>補助制度で解決できると支持</span></div>
+</div>
 <p class="issue-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。補助制度の有無で地域間格差が生まれることへの懸念が中心です。</p>
 <div class="issue-sides"><div class="side neg"><strong>懸念側</strong>家計を直撃する費用増。低所得家庭の子どもが部活を諦めざるを得なくなる。</div><div class="side pos"><strong>擁護側</strong>市税補助や一律化で解決できる。公費負担の設計次第で格差は縮められる。</div></div>
 </div>
@@ -1543,6 +1580,11 @@ const SM_RAW = [
 <article class="issue-block" id="issue-kousa">
 <div class="issue-head"><span class="axis-kicker">論点6・最小論点</span>
 <h3>地域格差 — 「都市はできるが地方は無理」<span class="issue-count">8件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>地域格差への立場</span><span>懸念3 / 中立0 / 支持5</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:38%">38%</div><div class="temp-seg neu" style="width:0%"></div><div class="temp-seg pos" style="width:62%">62%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>地方では移行が実現不可と指摘</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>少子化対応として移行を支持</span></div>
+</div>
 <p class="issue-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しないケースも。一律の移行政策が地域によっては実現不可能という指摘です。</p>
 <div class="issue-sides"><div class="side neg"><strong>懸念側</strong>地方では移行自体が成立しない。クラブも交通も選択肢がない地域に同じ政策は無理だ。</div><div class="side pos"><strong>視点</strong>地域の実情に合わせた柔軟な制度設計を。少子化対応として合同チームも選択肢に。</div></div>
 </div>
