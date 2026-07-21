@@ -569,18 +569,6 @@
     .thirty-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:22px; max-width:960px; }
     .thirty-summary ul { display:contents; margin:0; padding:0; }
     .thirty-summary li { list-style:none; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:12px 14px; color:#fff; font-weight:800; line-height:1.55; backdrop-filter:blur(4px); }
-    .manga-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-    .manga-page-card { border:1px solid rgba(0,0,0,.08); border-radius:8px; overflow:hidden; background:#fff; box-shadow:0 10px 28px rgba(16,24,40,.08); cursor:zoom-in; transition:transform .2s ease,box-shadow .2s ease; text-align:left; padding:0; }
-    .manga-page-card:hover { transform:translateY(-4px); box-shadow:0 18px 42px rgba(16,24,40,.14); }
-    .manga-page-card img { display:block; width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--accent-soft); }
-    .manga-page-card span { display:block; padding:12px 14px; color:var(--ink); font-size:14px; font-weight:900; line-height:1.45; }
-    .manga-modal { position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(15,23,42,.86); }
-    .manga-modal.active { display:flex; }
-    .manga-modal img { max-width:min(92vw,920px); max-height:88vh; border-radius:8px; box-shadow:0 24px 80px rgba(0,0,0,.45); background:#fff; }
-    .manga-modal button { position:absolute; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff; border-radius:8px; min-width:44px; height:44px; cursor:pointer; font-size:24px; font-weight:900; backdrop-filter:blur(6px); }
-    .manga-modal .manga-close { top:18px; right:18px; }
-    .manga-modal .manga-prev { left:18px; top:50%; transform:translateY(-50%); }
-    .manga-modal .manga-next { right:18px; top:50%; transform:translateY(-50%); }
     .vote-card-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:8px; }
     .vote-image-card { position:relative; min-height:132px; border-radius:8px; overflow:hidden; cursor:pointer; transition:transform .15s, box-shadow .15s; }
     .vote-image-card::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.58)); }
@@ -615,12 +603,12 @@
       .hero-inner { padding: 36px 16px 32px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
-      .thirty-summary, .vote-card-grid, .vote-comparison, .manga-grid, .related-grid { grid-template-columns:1fr; }
+      .thirty-summary, .vote-card-grid, .vote-comparison, .related-grid { grid-template-columns:1fr; }
       .vote-image-card { min-height:110px; }
     }
   
     /* === 論点アリーナ === */
-    .arena-section{position:relative;background:#0f0e2e;border-top:0;padding:42px min(6vw,72px)}
+    .arena-section{position:relative;background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat;border-top:0;padding:42px min(6vw,72px)}
     .arena-section .panel-title h2{color:#fff}.arena-section .panel-title span{color:rgba(255,255,255,.7)}
     #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
     #sm-wrap canvas{display:block;width:100%;border:0;border-radius:8px}
@@ -713,40 +701,6 @@
       <div class="stat"><span>論点分類</span><strong>222件</strong></div>
       <div class="stat"><span>最多論点</span><strong>教員の働き方 58</strong></div>
     </section>
-    <section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読む対立</h2><span>ショートコミック</span></div>
-<p class="manga-intro" style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">休日の部活指導に追われる若手教員と、費用や送迎に不安を抱える保護者。どちらも子どもの活動機会を守りたいからこそ、地域移行の進め方をめぐって向き合います。</p>
-<div class="manga-grid">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/bukatsu-chiiki-manga-page-1.webp" alt="漫画1ページ目 土曜の体育館" loading="lazy">
-    <span>Page 1 / 3 土曜の体育館</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/bukatsu-chiiki-manga-page-2.webp" alt="漫画2ページ目 誰が支えるの？" loading="lazy">
-    <span>Page 2 / 3 誰が支えるの？</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/bukatsu-chiiki-manga-page-3.webp" alt="漫画3ページ目 部活は誰のもの" loading="lazy">
-    <span>Page 3 / 3 部活は誰のもの</span>
-  </button>
-</div>
-<div class="manga-modal" id="manga-modal" aria-hidden="true">
-  <button class="manga-close" type="button" aria-label="閉じる">×</button>
-  <button class="manga-prev" type="button" aria-label="前のページ">‹</button>
-  <img id="manga-modal-image" src="" alt="" loading="lazy">
-  <button class="manga-next" type="button" aria-label="次のページ">›</button>
-</div>
-<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです。</p>
-</section>
-<script src="manga-viewer.js"></script>
-<script>
-MangaViewer.init({
-  chars: [
-    {img:'images/bukatsu-chiiki-manga-charsheet-ren.webp', name:'片桐 蓮', role:'中学校教員・部活顧問', quote:'子どもの場を守るために、移行を前向きに進めたい'},
-    {img:'images/bukatsu-chiiki-manga-charsheet-maki.webp', name:'野口 真紀', role:'中学生の保護者', quote:'費用や送迎が増えて、本当に続けられるか不安'}
-  ]
-});
-</script>
 <section class="panel explainer-section" id="explainer-section">
 <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
