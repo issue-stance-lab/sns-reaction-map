@@ -593,16 +593,22 @@
 
 /* ===== 論点Explainer ===== */
 .explainer-lead { font-size: 14px; line-height: 1.85; color: var(--ink); margin: 0 0 20px; }
-.explainer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin: 0 0 18px; }
-.explainer-card { border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.05); padding: 18px; transition: box-shadow .2s, transform .2s; }
-.explainer-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.1); transform: translateY(-2px); }
-.explainer-num { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 800; margin-bottom: 8px; }
-.explainer-card-title { font-size: 14px; font-weight: 900; color: var(--ink); margin: 0 0 8px; line-height: 1.4; }
-.explainer-card-desc { font-size: 13px; line-height: 1.75; color: var(--ink); margin: 0 0 12px; }
+.explainer-grid { display: flex; flex-direction: column; gap: 18px; margin: 0 0 18px; }
+.explainer-card { border-radius: 12px; overflow: hidden; background: #fff; border: 1.5px solid #e4eaf3; box-shadow: 0 8px 24px rgba(16,24,40,.08); cursor: zoom-in; transition: transform .2s ease, box-shadow .2s ease; }
+.explainer-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(16,24,40,.14); border-color: #c7d4ea; }
+.explainer-card img { display: block; width: 100%; aspect-ratio: 21/9; object-fit: cover; background: var(--accent-soft); }
+.explainer-card-label { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; background: #fff; border-bottom: 1.5px solid #e4eaf3; pointer-events: none; user-select: none; }
+.explainer-num { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 800; margin-bottom: 8px; flex-shrink: 0; }
+.explainer-card-title { font-size: 15px; font-weight: 900; color: #1e1b4b; margin: 0 0 4px; line-height: 1.35; letter-spacing: -.02em; }
+.explainer-card-desc { font-size: 12px; color: #637089; margin: 0 0 7px; line-height: 1.65; }
 .explainer-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .explainer-side { font-size: 11px; line-height: 1.5; padding: 6px 8px; border-radius: 8px; font-weight: 700; }
 .explainer-side.pro { background: #ecfdf5; color: #065f46; }
 .explainer-side.con { background: #fff1f2; color: #9f1239; }
+.explainer-modal { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(15,23,42,.88); }
+.explainer-modal.open { display: flex; }
+.explainer-modal img { max-width: 100%; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+.explainer-modal-close { position: absolute; top: 16px; right: 20px; background: rgba(255,255,255,.15); border: none; border-radius: 50%; width: 40px; height: 40px; color: #fff; font-size: 22px; cursor: pointer; line-height: 40px; text-align: center; }
 .explainer-note { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
 
 /* ===== 2ステップ投票 ===== */
@@ -750,63 +756,108 @@
 <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「生成AIと著作権」の議論は「賛成か反対か」だけではありません。学習データの合法性・クリエイターの権利・法制度・競争力・モラル・AI生成物の権利——6つの論点を整理してから投票に進んでください。</p>
 <div class="explainer-grid">
-  <article class="explainer-card">
-    <span class="explainer-num">論点① 最多 126件</span>
-    <p class="explainer-card-title">学習データ・無断利用 — 「AI学習は漫画村と同じか」</p>
-    <p class="explainer-card-desc">生成AIの開発に著作物を無断で学習させることは合法か。文化庁は原則として合法との見解だが、クリエイターから「許諾なしに使われた」との反発が根強い。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">懸念：無断利用は著作権侵害と同じ</span>
-      <span class="explainer-side pro">擁護：学習行為は情報の自由利用の範囲内</span>
+  <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-gakushu.webp" data-alt="学習データ・無断利用">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点① 最多 126件</span>
+      <div>
+        <p class="explainer-card-title">学習データ・無断利用 — 「AI学習は漫画村と同じか」</p>
+        <p class="explainer-card-desc">生成AIの開発に著作物を無断で学習させることは合法か。文化庁は原則として合法との見解だが、クリエイターから「許諾なしに使われた」との反発が根強い。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：無断利用は著作権侵害と同じ</span>
+          <span class="explainer-side pro">擁護：学習行為は情報の自由利用の範囲内</span>
+        </div>
+      </div>
     </div>
+    <img src="images/ai-copyright-infographic-wide-gakushu.webp" alt="論点① 学習データ・無断利用" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点② 79件</span>
-    <p class="explainer-card-title">法制度・規制整備 — 「ライセンス制度は必要か」</p>
-    <p class="explainer-card-desc">許諾要件・ライセンス制度・規制立法の整備を求める声と、現行法の枠内で対応できるという意見が対立。オプトアウト制度や対価還元の仕組みも議論になっている。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">規制派：許諾なし学習を禁止する法整備を</span>
-      <span class="explainer-side pro">自由派：現行法で十分・過剰規制は不要</span>
+  <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-hoseibi.webp" data-alt="法制度・規制整備">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点② 79件</span>
+      <div>
+        <p class="explainer-card-title">法制度・規制整備 — 「ライセンス制度は必要か」</p>
+        <p class="explainer-card-desc">許諾要件・ライセンス制度・規制立法の整備を求める声と、現行法の枠内で対応できるという意見が対立。オプトアウト制度や対価還元の仕組みも議論になっている。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">規制派：許諾なし学習を禁止する法整備を</span>
+          <span class="explainer-side pro">自由派：現行法で十分・過剰規制は不要</span>
+        </div>
+      </div>
     </div>
+    <img src="images/ai-copyright-infographic-wide-hoseibi.webp" alt="論点② 法制度・規制整備" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点③ 73件</span>
-    <p class="explainer-card-title">利用者モラル・倫理 — 「AI生成と隠して使うのが問題」</p>
-    <p class="explainer-card-desc">法律の問題とは別に、AI生成をクレジット表記なしで公開したり、既存作家の画風を意図的に模倣する行為を問題視する声がある。個人の使い方と倫理が問われる。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">問題視：AI生成を隠すことはモラル違反</span>
-      <span class="explainer-side pro">擁護：法的に問題がなければ個人の自由</span>
+  <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-moraru.webp" data-alt="利用者モラル・倫理">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点③ 73件</span>
+      <div>
+        <p class="explainer-card-title">利用者モラル・倫理 — 「AI生成と隠して使うのが問題」</p>
+        <p class="explainer-card-desc">法律の問題とは別に、AI生成をクレジット表記なしで公開したり、既存作家の画風を意図的に模倣する行為を問題視する声がある。個人の使い方と倫理が問われる。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">問題視：AI生成を隠すことはモラル違反</span>
+          <span class="explainer-side pro">擁護：法的に問題がなければ個人の自由</span>
+        </div>
+      </div>
     </div>
+    <img src="images/ai-copyright-infographic-wide-moraru.webp" alt="論点③ 利用者モラル・倫理" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点④ 46件</span>
-    <p class="explainer-card-title">クリエイター保護・権利 — 「絵師が廃業に追い込まれる」</p>
-    <p class="explainer-card-desc">AIが学習した画風を再現することでイラストレーターや漫画家の仕事が奪われる懸念がある。「作風は著作権で保護されない」という法的論理と、職業・表現の尊厳の問題が交錯する。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">懸念：クリエイターの生計・権利が脅かされる</span>
-      <span class="explainer-side pro">擁護：道具の変化と多様化で共存できる</span>
+  <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-creator.webp" data-alt="クリエイター保護・権利">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点④ 46件</span>
+      <div>
+        <p class="explainer-card-title">クリエイター保護・権利 — 「絵師が廃業に追い込まれる」</p>
+        <p class="explainer-card-desc">AIが学習した画風を再現することでイラストレーターや漫画家の仕事が奪われる懸念がある。「作風は著作権で保護されない」という法的論理と、職業・表現の尊厳の問題が交錯する。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：クリエイターの生計・権利が脅かされる</span>
+          <span class="explainer-side pro">擁護：道具の変化と多様化で共存できる</span>
+        </div>
+      </div>
     </div>
+    <img src="images/ai-copyright-infographic-wide-creator.webp" alt="論点④ クリエイター保護・権利" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点⑤ 40件</span>
-    <p class="explainer-card-title">技術競争・AI推進 — 「規制すれば日本が遅れる」</p>
-    <p class="explainer-card-desc">欧米や中国がAI開発を加速する中、厳しい規制を課せば日本の産業競争力が失われるという危機感。「AI学習の自由が日本の優位性」とも言われる。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side pro">推進：過剰規制はイノベーションを阻害する</span>
-      <span class="explainer-side con">慎重：技術競争力より文化保護を優先すべき</span>
+  <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-gijutsu.webp" data-alt="技術競争・AI推進">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑤ 40件</span>
+      <div>
+        <p class="explainer-card-title">技術競争・AI推進 — 「規制すれば日本が遅れる」</p>
+        <p class="explainer-card-desc">欧米や中国がAI開発を加速する中、厳しい規制を課せば日本の産業競争力が失われるという危機感。「AI学習の自由が日本の優位性」とも言われる。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">推進：過剰規制はイノベーションを阻害する</span>
+          <span class="explainer-side con">慎重：技術競争力より文化保護を優先すべき</span>
+        </div>
+      </div>
     </div>
+    <img src="images/ai-copyright-infographic-wide-gijutsu.webp" alt="論点⑤ 技術競争・AI推進" loading="lazy">
   </article>
-  <article class="explainer-card">
-    <span class="explainer-num">論点⑥ 31件</span>
-    <p class="explainer-card-title">AI生成物の権利・創作性 — 「プロンプトに著作権は生まれるか」</p>
-    <p class="explainer-card-desc">AI出力物に著作権が認められるべきか。文化庁は「人間の創作的寄与が必要」とするが基準は曖昧。二次創作との整合性、AI生成物の商業利用の是非も論争中。</p>
-    <div class="explainer-sides">
-      <span class="explainer-side con">懐疑：プロンプトだけでは創作性は認められない</span>
-      <span class="explainer-side pro">肯定：人間の意図・工夫がある以上権利を認めるべき</span>
+  <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-seiseibutsu.webp" data-alt="AI生成物の権利・創作性">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑥ 31件</span>
+      <div>
+        <p class="explainer-card-title">AI生成物の権利・創作性 — 「プロンプトに著作権は生まれるか」</p>
+        <p class="explainer-card-desc">AI出力物に著作権が認められるべきか。文化庁は「人間の創作的寄与が必要」とするが基準は曖昧。二次創作との整合性、AI生成物の商業利用の是非も論争中。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懐疑：プロンプトだけでは創作性は認められない</span>
+          <span class="explainer-side pro">肯定：人間の意図・工夫がある以上権利を認めるべき</span>
+        </div>
+      </div>
     </div>
+    <img src="images/ai-copyright-infographic-wide-seiseibutsu.webp" alt="論点⑥ AI生成物の権利・創作性" loading="lazy">
   </article>
 </div>
 <p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
 </section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>(function(){
+  var modal=document.getElementById('explainer-modal');
+  var mImg=document.getElementById('explainer-modal-img');
+  var mClose=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
+    c.addEventListener('click',function(){mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');});
+  });
+  mClose.addEventListener('click',function(){modal.classList.remove('open');});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
+})();</script>
 
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
