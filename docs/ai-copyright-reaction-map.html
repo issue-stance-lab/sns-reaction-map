@@ -582,6 +582,52 @@
     .vote-image-card[disabled] { cursor:default; filter:grayscale(.25); }
     .vote-image-card .vote-card-label { position:absolute; left:12px; right:12px; bottom:12px; color:#fff; font-size:18px; font-weight:900; line-height:1.3; text-shadow:0 2px 10px rgba(0,0,0,.55); }
 
+/* ===== 論点Explainer ===== */
+.explainer-lead { font-size: 14px; line-height: 1.85; color: var(--ink); margin: 0 0 20px; }
+.explainer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin: 0 0 18px; }
+.explainer-card { border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.05); padding: 18px; transition: box-shadow .2s, transform .2s; }
+.explainer-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.1); transform: translateY(-2px); }
+.explainer-num { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 800; margin-bottom: 8px; }
+.explainer-card-title { font-size: 14px; font-weight: 900; color: var(--ink); margin: 0 0 8px; line-height: 1.4; }
+.explainer-card-desc { font-size: 13px; line-height: 1.75; color: var(--ink); margin: 0 0 12px; }
+.explainer-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.explainer-side { font-size: 11px; line-height: 1.5; padding: 6px 8px; border-radius: 8px; font-weight: 700; }
+.explainer-side.pro { background: #ecfdf5; color: #065f46; }
+.explainer-side.con { background: #fff1f2; color: #9f1239; }
+.explainer-note { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+
+/* ===== 2ステップ投票 ===== */
+.vote-step-label { display: inline-flex; align-items: center; gap: 8px; font-weight: 900; font-size: 15px; margin: 0 0 12px; }
+.vote-step-label .step-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 13px; flex-shrink: 0; }
+.vote-issue-btn { display: flex; align-items: center; gap: 10px; width: 100%; border: 1.5px solid rgba(124,58,237,.18); border-radius: 10px; padding: 12px 14px; background: #fff; cursor: pointer; font-family: inherit; text-align: left; box-shadow: 0 4px 14px rgba(16,24,40,.06); transition: transform .15s, box-shadow .15s, border-color .15s; }
+.vote-issue-btn:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 8px 22px rgba(124,58,237,.14); }
+.vote-issue-icon { font-size: 20px; line-height: 1; flex-shrink: 0; }
+.vote-issue-title { font-size: 13px; font-weight: 900; color: var(--ink); line-height: 1.3; }
+#vote-stance-btns { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 10px; }
+@media (max-width:700px) { #vote-stance-btns { grid-template-columns: 1fr; } }
+.vote-stance-btn { position: relative; border: 1px solid rgba(15,23,42,.08); border-top: 5px solid var(--stance-color); border-radius: 12px; padding: 16px 14px 14px; background: linear-gradient(180deg,#fff,var(--stance-bg)); cursor: pointer; font-family: inherit; color: var(--ink); box-shadow: 0 6px 18px rgba(16,24,40,.09); text-align: left; transition: transform .15s, box-shadow .15s; }
+.vote-stance-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(16,24,40,.14); }
+.vote-stance-btn .vs-icon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--stance-color); color: #fff; font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+.vote-stance-btn .vs-title { display: block; font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--stance-color); }
+.vote-stance-btn .vs-desc { display: block; margin-top: 4px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+.vote-stance-btn::after { content: '選ぶ'; display: inline-flex; margin-top: 10px; border-radius: 999px; padding: 4px 10px; background: var(--stance-color); color: #fff; font-size: 11px; font-weight: 900; }
+
+/* ===== 極座標アリーナ ===== */
+.polar-arena-section { position: relative; background: #0f0e2e; padding: 42px min(6vw,72px); }
+.polar-arena-section .panel-title h2 { color: #fff; }
+.polar-arena-section .panel-title span { color: rgba(255,255,255,.65) !important; background: rgba(255,255,255,.08) !important; border-color: rgba(255,255,255,.15) !important; }
+.map-caption { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.65; margin: 0 0 16px; }
+#sm-wrap { position: relative; max-width: 640px; margin: 0 auto; }
+#sm-wrap canvas { display: block; width: 100%; border-radius: 10px; }
+#arenaMain { cursor: crosshair; }
+.sm-controls { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 14px; max-width: 640px; margin-left: auto; margin-right: auto; }
+.sm-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: rgba(255,255,255,.75); }
+.sm-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.sm-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.sm-fbtn { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; color: rgba(255,255,255,.75); font-size: 11px; font-weight: 700; padding: 4px 12px; cursor: pointer; font-family: inherit; transition: all .15s; }
+.sm-fbtn:hover, .sm-fbtn.active { background: rgba(255,255,255,.22); color: #fff; }
+#sm-tooltip { position: absolute; background: rgba(0,0,0,.85); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; display: none; max-width: 260px; line-height: 1.6; z-index: 10; }
+
 /* ===== 論点アリーナ ===== */
 #arena-section .arena-caption {
   font-size: 13px; color: var(--muted); margin: -8px 0 20px; line-height: 1.6;
@@ -792,60 +838,379 @@ MangaViewer.init({
   ]
 });
 </script>
+
+<!-- ===== 論点Explainer ===== -->
+<section class="panel" id="explainer-section">
+<div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<p class="explainer-lead">「生成AIと著作権」の議論は「賛成か反対か」だけではありません。学習データの合法性・クリエイターの権利・法制度・競争力・モラル・AI生成物の権利——6つの論点を整理してから投票に進んでください。</p>
+<div class="explainer-grid">
+  <article class="explainer-card">
+    <span class="explainer-num">論点① 最多 126件</span>
+    <p class="explainer-card-title">学習データ・無断利用 — 「AI学習は漫画村と同じか」</p>
+    <p class="explainer-card-desc">生成AIの開発に著作物を無断で学習させることは合法か。文化庁は原則として合法との見解だが、クリエイターから「許諾なしに使われた」との反発が根強い。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">懸念：無断利用は著作権侵害と同じ</span>
+      <span class="explainer-side pro">擁護：学習行為は情報の自由利用の範囲内</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点② 79件</span>
+    <p class="explainer-card-title">法制度・規制整備 — 「ライセンス制度は必要か」</p>
+    <p class="explainer-card-desc">許諾要件・ライセンス制度・規制立法の整備を求める声と、現行法の枠内で対応できるという意見が対立。オプトアウト制度や対価還元の仕組みも議論になっている。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">規制派：許諾なし学習を禁止する法整備を</span>
+      <span class="explainer-side pro">自由派：現行法で十分・過剰規制は不要</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点③ 73件</span>
+    <p class="explainer-card-title">利用者モラル・倫理 — 「AI生成と隠して使うのが問題」</p>
+    <p class="explainer-card-desc">法律の問題とは別に、AI生成をクレジット表記なしで公開したり、既存作家の画風を意図的に模倣する行為を問題視する声がある。個人の使い方と倫理が問われる。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">問題視：AI生成を隠すことはモラル違反</span>
+      <span class="explainer-side pro">擁護：法的に問題がなければ個人の自由</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点④ 46件</span>
+    <p class="explainer-card-title">クリエイター保護・権利 — 「絵師が廃業に追い込まれる」</p>
+    <p class="explainer-card-desc">AIが学習した画風を再現することでイラストレーターや漫画家の仕事が奪われる懸念がある。「作風は著作権で保護されない」という法的論理と、職業・表現の尊厳の問題が交錯する。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">懸念：クリエイターの生計・権利が脅かされる</span>
+      <span class="explainer-side pro">擁護：道具の変化と多様化で共存できる</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点⑤ 40件</span>
+    <p class="explainer-card-title">技術競争・AI推進 — 「規制すれば日本が遅れる」</p>
+    <p class="explainer-card-desc">欧米や中国がAI開発を加速する中、厳しい規制を課せば日本の産業競争力が失われるという危機感。「AI学習の自由が日本の優位性」とも言われる。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side pro">推進：過剰規制はイノベーションを阻害する</span>
+      <span class="explainer-side con">慎重：技術競争力より文化保護を優先すべき</span>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <span class="explainer-num">論点⑥ 31件</span>
+    <p class="explainer-card-title">AI生成物の権利・創作性 — 「プロンプトに著作権は生まれるか」</p>
+    <p class="explainer-card-desc">AI出力物に著作権が認められるべきか。文化庁は「人間の創作的寄与が必要」とするが基準は曖昧。二次創作との整合性、AI生成物の商業利用の是非も論争中。</p>
+    <div class="explainer-sides">
+      <span class="explainer-side con">懐疑：プロンプトだけでは創作性は認められない</span>
+      <span class="explainer-side pro">肯定：人間の意図・工夫がある以上権利を認めるべき</span>
+    </div>
+  </article>
+</div>
+<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+</section>
+
     <section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">生成AIの急速な普及により、著作物を無断で学習・模倣する仕組みへの賛否がSNSで激しく対立しています。クリエイターの生活基盤を脅かすツールなのか、表現の未来を拓く技術なのか。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> Yahooリアルタイム検索から「AI著作権侵害」「生成AI 反対」「生成AI 便利」「AI 規制」など両側のキーワードでSNS投稿904件を取得し、AIが自動分類しました。</div>
-<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
-<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
-<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
+<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文化庁が「AI学習は著作権侵害にならない」と見解を示す一方、イラストレーターや漫画家が反発。クリエイター保護と技術革新の狭間で、どの論点が最も重要だと思いますか？</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索から「AI著作権侵害」「生成AI 反対」「生成AI 便利」「AI 規制」など両側のキーワードでSNS投稿904件を取得し、AIが自動分類しました。</div>
+<div id="vote-step1">
+  <p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p>
+  <div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-width:900px;"></div>
+</div>
+<div id="vote-step2" style="display:none;margin-top:4px;">
+  <p class="vote-step-label"><span class="step-num">2</span>AI著作権問題への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p>
+  <div id="vote-stance-btns"></div>
+</div>
+<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
   </div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
-  <div class="vote-comparison" id="vote-comparison" aria-label="あなたの選択とSNS分布の比較"></div>
-  <div id="vote-bars" style="margin-bottom:16px;"></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-    <a id="share-x" href="#" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
-      𝕏 でシェア
-    </a>
-    <button id="vote-redo-btn"
-       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
-      投票をやり直す
-    </button>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">𝕏 でシェア</a>
+    <button id="vote-redo-btn" style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">投票をやり直す</button>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin:0;">下の2Dスタンスマップに「あなたはこのあたり」マーカーを表示しました。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=10"></script>
 <script>
 (function(){
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  Vote2D.init({
-    containerId: 'vote-buttons',
-    resultId: 'vote-result',
-    topic: '生成AIと著作権問題_SNS反応まっぷ',
-    title: '生成AIと著作権問題 SNS反応まっぷ',
-    xAxis: { neg: '規制に反対（AIを自由に）', pos: '規制に賛成（著作権保護）' },
-    yAxis: { neg: 'AI産業・社会全体の競争力を優先', pos: 'クリエイター個人の権利を守る' },
-    quadrants: [{"label": "AIで個人表現を広げる", "desc": "規制より個人の創造の自由を優先。AIは表現を広げるツールとして活かすべき。"}, {"label": "クリエイターを守るため規制を", "desc": "著作権侵害からクリエイターの権利・生活を守るために法規制強化が必要。"}, {"label": "産業競争力のため規制不要", "desc": "日本のAI産業・技術競争力のために過度な規制は避け、自由な活用を推進すべき。"}, {"label": "産業秩序のためルール整備を", "desc": "対価支払い・ライセンス制度など、産業のルールとして共存の仕組みを作るべき。"}],
-    questions: [
-      {text:'AIの学習に規制は必要だと思う？',subtext:'直感でOK、あとから微調整できます',negLabel:'不要・AIは自由に',posLabel:'必要・著作権を守る'},
-      {text:'AIをめぐるトレードオフ、何を優先したい？',subtext:'答えたら開票します',negLabel:'AI技術の自由な発展',posLabel:'作り手の権利・対価'}
-    ],
-    commonGround: {
-      title: '意見の向こう側',
-      lead: '立場や方法は違っても、両者に共通する願いがあります。',
-      statement: '作り手の権利と新しい技術がともに尊重され、創作が続いていく環境',
-      question: '反対側の心配も、少し理解できましたか？'
-    },
-    supabaseUrl: supabaseUrl,
-    supabaseAnonKey: supabaseAnonKey
+  'use strict';
+  var STORAGE_KEY='sns_vote_ai_copyright_2step';
+  var VOTE_ISSUES=[
+    {k:'学習データ・無断利用',   icon:'📚',desc:'AI学習への著作物利用の合法性・是非'},
+    {k:'法制度・規制整備',       icon:'⚖️', desc:'ライセンス制度・許諾要件・規制立法の是非'},
+    {k:'利用者モラル・倫理',     icon:'💬',desc:'クレジット表記・配慮・個人の使い方と倫理'},
+    {k:'クリエイター保護・権利', icon:'🎨',desc:'イラストレーター・表現者の生計・権利・尊厳'},
+    {k:'技術競争・AI推進',       icon:'🚀',desc:'過剰規制による競争力低下・技術進歩阻害'},
+    {k:'AI生成物の権利・創作性', icon:'✨',desc:'AI出力への著作権帰属・創作性の定義'},
+    {k:'その他・わからない',     icon:'🤔',desc:'上記以外・まだ判断がつかない'}
+  ];
+  var V2I=[0,2,4,1,3,5,6];
+  var STANCES=[
+    {k:'規制賛成・著作権保護',color:'#e04949',bg:'#fff1f2',shadow:'rgba(224,73,73,.22)',icon:'⚠',desc:'クリエイターの権利を守るため規制が必要'},
+    {k:'どちらでもない',      color:'#64748b',bg:'#f8fafc',shadow:'rgba(100,116,139,.22)',icon:'?',desc:'条件や内容を見てから判断したい'},
+    {k:'AI活用推進・規制反対',color:'#4b9cf4',bg:'#eff6ff',shadow:'rgba(75,156,244,.22)',icon:'✓',desc:'技術革新のため過剰規制は不要'}
+  ];
+  var selIssue=-1;
+  var step1=document.getElementById('vote-step1');
+  var step2=document.getElementById('vote-step2');
+  var result=document.getElementById('vote-result');
+  var issueBtns=document.getElementById('vote-issue-btns');
+  var stanceBtns=document.getElementById('vote-stance-btns');
+
+  VOTE_ISSUES.forEach(function(iss,i){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-issue-btn';
+    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
+    btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
+    issueBtns.appendChild(btn);
   });
+
+  function showVote(issueIdx,stanceIdx,shouldScroll){
+    var iss=VOTE_ISSUES[issueIdx];var st=STANCES[stanceIdx];
+    selIssue=issueIdx;
+    step1.style.display='none';step2.style.display='none';result.style.display='block';
+    document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
+    document.getElementById('vote-position-text').textContent=iss.desc;
+    if(window.setArenaVoteMarker)window.setArenaVoteMarker(V2I[issueIdx],st.color);
+    var shareText='生成AIと著作権問題、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
+    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/ai-copyright-reaction-map.html');
+    setTimeout(function(){
+      if(window.setArenaVoteMarker)window.setArenaVoteMarker(V2I[issueIdx],st.color);
+      var el=document.getElementById('issue-arena-section');
+      if(shouldScroll!==false&&el)el.scrollIntoView({behavior:'smooth',block:'center'});
+    },300);
+  }
+
+  STANCES.forEach(function(st,stanceIdx){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-stance-btn';
+    btn.style.setProperty('--stance-color',st.color);
+    btn.style.setProperty('--stance-bg',st.bg);
+    btn.style.setProperty('--stance-shadow',st.shadow);
+    btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
+    btn.onclick=function(){
+      showVote(selIssue,stanceIdx);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:selIssue,stanceIdx:stanceIdx}));
+    };
+    stanceBtns.appendChild(btn);
+  });
+
+  document.getElementById('vote-redo-btn').onclick=function(){
+    localStorage.removeItem(STORAGE_KEY);
+    selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
+    if(window.clearArenaVoteMarker)window.clearArenaVoteMarker();
+  };
+  try{
+    var prev=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(prev&&Number.isInteger(prev.issueIdx)&&prev.issueIdx>=0&&prev.issueIdx<VOTE_ISSUES.length&&
+       Number.isInteger(prev.stanceIdx)&&prev.stanceIdx>=0&&prev.stanceIdx<STANCES.length){
+      showVote(prev.issueIdx,prev.stanceIdx,false);
+    }
+  }catch(e){localStorage.removeItem(STORAGE_KEY);}
+})();
+</script>
+
+<!-- ===== 極座標 論点アリーナ ===== -->
+<section class="polar-arena-section" id="issue-arena-section">
+<div id="issue-arena-inner" style="max-width:720px;margin:0 auto">
+<div class="panel-title"><h2>論点アリーナ</h2><span>669件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
+<p class="map-caption">中心の「生成AIと著作権」を7つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は意見の強さ（外側ほど強い主張）、点の色はスタンス（赤=規制賛成 / 青=AI推進 / 灰=中立）。点をクリックするとXポストを開きます。</p>
+<div id="sm-wrap">
+  <canvas id="arenaHeat" width="640" height="640" style="display:block;width:100%;border-radius:10px;"></canvas>
+  <canvas id="arenaMain" width="640" height="640" style="position:absolute;top:0;left:0;width:100%;cursor:crosshair;"></canvas>
+</div>
+<p id="your-marker-note-arena" style="display:none;font-size:12px;color:rgba(255,255,255,.7);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
+<div class="sm-controls">
+  <div class="sm-legend">
+    <span><i style="background:#e04949"></i>規制賛成寄り</span>
+    <span><i style="background:#4b9cf4"></i>AI推進寄り</span>
+    <span><i style="background:#64748b"></i>中立</span>
+    <span style="color:rgba(255,255,255,.4)">中心＝冷静 / 外周＝意見が強い</span>
+  </div>
+  <div class="sm-filters" id="sm-filters"></div>
+</div>
+<div id="sm-tooltip" style="position:absolute"></div>
+</div>
+</section>
+<script src="ai-copyright-arena-data.js"></script>
+<script>
+(function(){
+  'use strict';
+  const ISSUES=[
+    {k:'学習データ・無断利用',   n:126},
+    {k:'クリエイター保護・権利', n:46},
+    {k:'法制度・規制整備',       n:79},
+    {k:'技術競争・AI推進',       n:40},
+    {k:'利用者モラル・倫理',     n:73},
+    {k:'AI生成物の権利・創作性', n:31},
+    {k:'その他',                 n:274}
+  ];
+  const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=244;
+  const PAD_DEG=2.5;
+  const canvasMain=document.getElementById('arenaMain');
+  const canvasHeat=document.getElementById('arenaHeat');
+  if(!canvasMain||!canvasHeat)return;
+  const ctx=canvasMain.getContext('2d');
+  const hctx=canvasHeat.getContext('2d');
+  const tooltip=document.getElementById('sm-tooltip');
+
+  const total=ISSUES.reduce((a,b)=>a+b.n,0);
+  const usable=360-PAD_DEG*2*ISSUES.length;
+  let acc=-90;
+  ISSUES.forEach(iss=>{
+    const span=usable*iss.n/total;
+    iss.a0=acc+PAD_DEG;iss.a1=iss.a0+span;iss.mid=(iss.a0+iss.a1)/2;
+    acc=iss.a1+PAD_DEG;
+  });
+
+  function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+  function colorOf(p){return p.x>=0.5?'#e04949':(p.x<=-0.5?'#4b9cf4':'#64748b');}
+
+  const pts=[];
+  SM_RAW.forEach((p,idx)=>{
+    const iss=ISSUES[p.i];if(!iss)return;
+    const a=iss.a0+rnd(idx)*(iss.a1-iss.a0);
+    let r=R_MIN+8+Math.abs(p.e)/3.5*(R_MAX-R_MIN-30)+(rnd(idx+500)-0.5)*20;
+    r=Math.max(R_MIN+2,Math.min(R_MAX-4,r));
+    const rad=a*Math.PI/180;
+    pts.push({px:CX+r*Math.cos(rad),py:CY+r*Math.sin(rad),c:colorOf(p),p:p});
+  });
+
+  function drawHeat(){
+    hctx.clearRect(0,0,W,W);
+    hctx.fillStyle='#0f0e2e';hctx.fillRect(0,0,W,W);
+    const maxN=Math.max(...ISSUES.map(i=>i.n));
+    ISSUES.forEach(iss=>{
+      hctx.beginPath();
+      hctx.moveTo(CX+R_MIN*Math.cos(iss.a0*Math.PI/180),CY+R_MIN*Math.sin(iss.a0*Math.PI/180));
+      hctx.arc(CX,CY,R_MAX,iss.a0*Math.PI/180,iss.a1*Math.PI/180);
+      hctx.arc(CX,CY,R_MIN,iss.a1*Math.PI/180,iss.a0*Math.PI/180,true);
+      hctx.closePath();
+      hctx.fillStyle='rgba(124,58,237,'+(0.04+iss.n/maxN*0.12).toFixed(3)+')';
+      hctx.fill();
+    });
+    hctx.setLineDash([3,5]);hctx.strokeStyle='rgba(100,116,139,.2)';hctx.lineWidth=1;
+    [110,160,R_MAX].forEach(r=>{hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke();});
+    hctx.setLineDash([]);
+    ISSUES.forEach(iss=>{
+      hctx.strokeStyle='rgba(100,116,139,.22)';
+      [iss.a0*Math.PI/180,iss.a1*Math.PI/180].forEach(rd=>{
+        hctx.beginPath();hctx.moveTo(CX+R_MIN*Math.cos(rd),CY+R_MIN*Math.sin(rd));hctx.lineTo(CX+R_MAX*Math.cos(rd),CY+R_MAX*Math.sin(rd));hctx.stroke();
+      });
+    });
+  }
+
+  let filterIdx=-1;let voteMarker=null;
+
+  function drawMain(){
+    ctx.clearRect(0,0,W,W);
+    pts.forEach(pt=>{
+      const dim=filterIdx>=0&&pt.p.i!==filterIdx;
+      ctx.globalAlpha=dim?0.06:0.8;
+      ctx.beginPath();ctx.arc(pt.px,pt.py,4,0,Math.PI*2);ctx.fillStyle=pt.c;ctx.fill();
+    });
+    ctx.globalAlpha=1;
+    ctx.font='bold 11px "Noto Sans JP",sans-serif';
+    ISSUES.forEach((iss,i)=>{
+      const rad=iss.mid*Math.PI/180;
+      const lx=CX+R_LBL*Math.cos(rad),ly=CY+R_LBL*Math.sin(rad);
+      const c=Math.cos(rad);
+      ctx.textAlign=c>0.35?'left':(c<-0.35?'right':'center');
+      ctx.textBaseline='middle';
+      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(100,116,139,.3)':'rgba(255,255,255,.88)';
+      ctx.fillText(iss.k+' '+iss.n,lx,ly);
+    });
+    ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);ctx.fillStyle='#0f0e2e';ctx.fill();
+    ctx.strokeStyle='rgba(124,58,237,.45)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.88)';ctx.textAlign='center';
+    ctx.font='bold 12px "Noto Sans JP",sans-serif';ctx.fillText('生成AI',CX,CY-8);ctx.fillText('著作権',CX,CY+10);
+    ctx.font='10px "Noto Sans JP",sans-serif';ctx.fillStyle='rgba(255,255,255,.3)';
+    ctx.fillText('冷静',CX,CY-R_MIN-8);ctx.fillText('強い意見',CX,CY-R_MAX-8);
+    if(voteMarker){
+      const mc=voteMarker.color||'#7c3aed';
+      const vi=ISSUES[voteMarker.sector];
+      if(vi){
+        ctx.beginPath();
+        ctx.moveTo(CX+R_MIN*Math.cos(vi.a0*Math.PI/180),CY+R_MIN*Math.sin(vi.a0*Math.PI/180));
+        ctx.arc(CX,CY,R_MAX,vi.a0*Math.PI/180,vi.a1*Math.PI/180);
+        ctx.arc(CX,CY,R_MIN,vi.a1*Math.PI/180,vi.a0*Math.PI/180,true);
+        ctx.closePath();ctx.strokeStyle=mc;ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=mc+'22';ctx.fill();
+      }
+      const pulse=(Date.now()%1400)/1400;
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
+      ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();ctx.globalAlpha=1;
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,11,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);ctx.fillStyle=mc;ctx.fill();
+      ctx.font='bold 12px "Noto Sans JP",sans-serif';
+      const txt='あなたはここ';const tw=ctx.measureText(txt).width;
+      const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));const by=voteMarker.y-32;
+      ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx-tw/2-8,by-11,tw+16,22,11);else ctx.rect(bx-tw/2-8,by-11,tw+16,22);
+      ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=mc;ctx.lineWidth=2;ctx.stroke();
+      ctx.fillStyle=mc;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(txt,bx,by+1);
+      ctx.textBaseline='alphabetic';
+      ctx.beginPath();ctx.moveTo(voteMarker.x-4,by+11);ctx.lineTo(voteMarker.x,by+17);ctx.lineTo(voteMarker.x+4,by+11);ctx.fillStyle=mc;ctx.fill();
+    }
+  }
+
+  (function applyBlur(){
+    var inner=document.getElementById('issue-arena-inner');
+    var section=document.getElementById('issue-arena-section');
+    if(!inner||!section)return;
+    inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';
+    section.style.position='relative';
+    var ov=document.createElement('div');ov.id='arena-overlay';
+    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;';
+    ov.innerHTML='<div style="text-align:center"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
+    section.appendChild(ov);
+  })();
+
+  function revealChart(){
+    var inner=document.getElementById('issue-arena-inner');
+    if(inner){inner.style.transition='filter .6s';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
+    var ov=document.getElementById('arena-overlay');if(ov)ov.remove();
+  }
+  function reBlurChart(){
+    var inner=document.getElementById('issue-arena-inner');
+    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
+    var section=document.getElementById('issue-arena-section');
+    if(section&&!document.getElementById('arena-overlay')){
+      var ov=document.createElement('div');ov.id='arena-overlay';
+      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;';
+      ov.innerHTML='<div style="text-align:center"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
+      section.appendChild(ov);
+    }
+  }
+
+  let pulseRAF=null;
+  window.setArenaVoteMarker=function(issueIdx,stanceColor){
+    revealChart();
+    const iss=ISSUES[issueIdx]||ISSUES[0];
+    const rad=iss.mid*Math.PI/180,r=(R_MIN+R_MAX)/2-14;
+    voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#7c3aed',sector:issueIdx};
+    const note=document.getElementById('your-marker-note-arena');if(note)note.style.display='block';
+    if(pulseRAF)cancelAnimationFrame(pulseRAF);
+    (function loop(){drawMain();pulseRAF=requestAnimationFrame(loop);})();
+  };
+  window.clearArenaVoteMarker=function(){
+    if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
+    voteMarker=null;
+    const note=document.getElementById('your-marker-note-arena');if(note)note.style.display='none';
+    drawMain();reBlurChart();
+  };
+
+  const filtersEl=document.getElementById('sm-filters');
+  function addBtn(label,idx){
+    const b=document.createElement('button');b.className='sm-fbtn'+(idx===-1?' active':'');
+    b.textContent=label;
+    b.onclick=function(){filterIdx=idx;filtersEl.querySelectorAll('.sm-fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');drawMain();};
+    filtersEl.appendChild(b);
+  }
+  addBtn('全件 ('+total+')',-1);
+  ISSUES.forEach((iss,i)=>{if(iss.k!=='その他')addBtn(iss.k+' ('+iss.n+')',i);});
+
+  function evtPos(ev){const rect=canvasMain.getBoundingClientRect();const scale=W/rect.width;return{x:(ev.clientX-rect.left)*scale,y:(ev.clientY-rect.top)*scale};}
+  function nearest(pos){let best=null,bd=196;pts.forEach(pt=>{if(filterIdx>=0&&pt.p.i!==filterIdx)return;const d=(pt.px-pos.x)**2+(pt.py-pos.y)**2;if(d<bd){bd=d;best=pt;}});return best;}
+  canvasMain.addEventListener('mousemove',function(ev){const pt=nearest(evtPos(ev));if(pt){tooltip.style.display='block';tooltip.style.left=(ev.offsetX+14)+'px';tooltip.style.top=(ev.offsetY+14)+'px';tooltip.innerHTML='<strong>'+ISSUES[pt.p.i].k+'</strong><br>'+pt.p.s;}else{tooltip.style.display='none';}});
+  canvasMain.addEventListener('mouseleave',function(){tooltip.style.display='none';});
+  canvasMain.addEventListener('click',function(ev){const pt=nearest(evtPos(ev));if(pt&&pt.p.u)window.open(pt.p.u,'_blank','noopener');});
+  canvasMain.addEventListener('touchstart',function(ev){if(ev.touches.length!==1)return;const t=ev.touches[0];const pt=nearest(evtPos(t));if(pt&&pt.p.u){ev.preventDefault();window.open(pt.p.u,'_blank','noopener');}},{passive:false});
+
+  drawHeat();drawMain();
 })();
 </script>
     <section class="panel" id="stance-map-section">
