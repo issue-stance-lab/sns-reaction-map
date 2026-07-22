@@ -1,5 +1,5 @@
 # GROWTH.yaml — グロース台帳（単一の真実源）
-# 最終更新: 2026-07-09
+# 最終更新: 2026-07-23
 #
 # 目的: 来訪者・回遊・投票・SNSシェアを増やす施策の台帳。
 # 制作・品質維持は THEMES.yaml / LOOP.md の管轄（このファイルでは扱わない）。
@@ -31,6 +31,17 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-07-23
+      weekly_users: 14          # GA4: 過去7日アクティブユーザー
+      pageviews: 181            # GA4: 過去7日
+      pages_per_session: 3.175  # GA4: 181 PV / 57 sessions
+      votes_total: 11           # Supabase（test / test_debug の2票を除外）
+      votes_week: null          # Supabase: 未取得
+      gsc_impressions: 45       # Search Console: 28日間
+      gsc_clicks: 2             # Search Console: 28日間
+      x_followers: null         # 手動確認が必要
+      notes: 7/14比でweekly_users 24→14、PV 387→181、pages/session 5.529→3.175。実投票9→11、GSC表示21→45、クリック1→2。related_theme_click 0件、share_button流入0件。母数が小さく施策別の採否判断は保留
+
     - date: 2026-07-14
       weekly_users: 24          # GA4: 過去7日アクティブユーザー（↑100% vs 7/6）
       pageviews: 387            # GA4: 過去7日（AI著作権80、あだ名57、トップ77、高市22、青切符16、憲法13、辺野古13、部活8、高齢者8）
@@ -62,7 +73,8 @@ capabilities:
     priority: 1
     metric: Xシェア経由の流入（GA4 utm_source=share_button）
     started_at: 2026-07-07
-    judge_at: 2026-07-21
+    judge_at: 2026-07-30
+    reflection: 2026-07-23時点で過去7日のshare_button流入は0件。実投票は9→11に増えたがシェア起点流入は確認できない。7/23に全10テーマの固定XシェアJSの404を解消したため、修正後データを1週間計測する（1回目延長）
     notes: 既存の投票後Xシェア導線を全公開テーマで utm_source=share_button / utm_medium=social / utm_campaign=vote_share 付きに統一。OGP画像が既に整備済みなのでカードは綺麗に出るはず
 
   related-themes-block:
@@ -73,7 +85,8 @@ capabilities:
     priority: 2
     metric: pages_per_session、内部リンククリック（GA4イベント）
     started_at: 2026-07-08
-    judge_at: 2026-07-22
+    judge_at: 2026-07-30
+    reflection: 2026-07-23時点でrelated_theme_clickは0件、pages/sessionは5.529→3.175。母数14ユーザーと少なく、導線の効果を判断できないため1週間延長する（1回目延長）。次回も0件なら導線・イベント発火を再点検する
     notes: ポータルの回遊カード実装を流用。2026-07-07に8テーマへ投票結果内関連テーマと related_theme_click GA4イベントを実装。share-after-voteとは別指標（回遊 vs X流入）のため並行計測開始（2026-07-08）
 
   portal-featured-slot:
@@ -84,8 +97,9 @@ capabilities:
     priority: 3
     metric: ポータルからテーマページへの遷移率
     started_at: 2026-07-05
-    judge_at: 2026-07-19
-    notes: school-nickname-ban に切り替え済み（2026-07-05）
+    judge_at: 2026-07-30
+    reflection: 2026-07-23時点でトップ系ページは合計56PVあるが、注目枠からテーマへの遷移イベントを個別取得できておらず効果判定不能。現行の副首都枠で1週間延長する（1回目延長）
+    notes: school-nickname-ban から fukushuto に切り替え済み
 
   x-post-templates:
     title: X投稿テンプレート自動生成
@@ -95,7 +109,8 @@ capabilities:
     priority: 4
     metric: x_followers、X経由流入（GA4）
     started_at: 2026-07-05
-    judge_at: 2026-07-19
+    judge_at: 2026-07-30
+    reflection: 2026-07-23時点でXフォロワー数は未取得。直近投稿対象の副首都は過去7日58PV、皇室典範は32PVで上位だがUTM帰属は確認できない。X活動を継続し、フォロワー数の手動確認と合わせて1週間延長する（1回目延長）
     notes: school-nickname-ban の投稿文案を初回生成済み（下記参照）
 
   design-tokens-unify:
@@ -107,7 +122,8 @@ capabilities:
     metric: 直帰率、pages_per_session（間接指標。主目的はサイト魅力）
     built_at: 2026-07-08
     started_at: 2026-07-09
-    judge_at: 2026-07-23
+    judge_at: 2026-07-30
+    reflection: 2026-07-23時点でpages/sessionは5.529→3.175だが、14ユーザーの小標本かつ複数施策が並行しておりデザイントークン単独の影響は判定不能。表示不具合は確認されていないため1週間延長する（1回目延長）
     notes: サイト魅力枠。docs/site-tokens.css を新規作成し全12ページへ link 追加。--ink/--muted/--line/--panel/--shadow/--font/--radius を共通化。テーマ固有の --bg/--accent/--grad-* は各ページに残存。コンソールエラーなし・375px横スクロールなし・保護タグ全確認済み。PR #11 を2026-07-09にmainへマージし計測開始
 
   vote-2d-canvas:
@@ -171,10 +187,10 @@ recurring:
   kpi-snapshot:
     title: KPI週次スナップショット更新
     cadence: weekly
-    last_run: 2026-07-07
+    last_run: 2026-07-23
     procedure: kpi.snapshots に1行追加。scripts/fetch_growth_kpi.py で自動取得（人間依頼は自動取得失敗時のみ）
     needs_human: 自動取得が失敗した場合のみ、各管理画面の数値取得
-    notes: 2026-07-08に scripts/fetch_growth_kpi.py（GA4/GSC/Supabase統合取得）を実装（docs/growth-kpi-automation.md）。2026-07-09に実行確認: weekly_users 10 / pages_per_session 7.195 / votes_total 9 / gsc_impressions 4。月曜ではないため snapshots への追記は次回月曜に実施。x_followers のみ引き続き手動
+    notes: 2026-07-23に自動取得・snapshot追記済み。weekly_users 14 / pageviews 181 / pages_per_session 3.175 / votes_total 11（テスト票除外）/ gsc_impressions 45 / gsc_clicks 2。x_followers のみ引き続き手動
 
   x-profile:
     title: Xプロフィール・固定ポスト改善
@@ -183,7 +199,11 @@ recurring:
     last_run: 2026-07-09
     procedure: プロフィール文・固定ポスト・ヘッダー画像を確認し「何のアカウントか3秒で分かるか」を評価。改善案を人間に提案する
     needs_human: プロフィール更新操作。ハブはブラウザでXにログインできないため現行プロフィール文言の確認自体も人間依頼
-    notes: 初期トラクション最優先。フォロワー獲得の第一関門。2026-07-09に初回レビュー実施（ハブはX画面を直接閲覧できないため、現状文言不明を前提に改善の型のみ提案）。人間への依頼: (1) 現在のプロフィール文・固定ポスト・ヘッダー画像のスクショ共有 (2) 下記たたき台の採用可否判断。提案bio案: 「SNS上の賛否・論点を1テーマ1ページで見える化。投票で自分の立場も参加できます。#SNS反応まっぷ」。固定ポスト案: サイト紹介+人気テーマ（あだ名禁止 or 高市早苗）へのリンクを固定し、初見フォロワーが1クリックで投票できる導線にする
+    notes: >-
+      初期トラクション最優先。フォロワー獲得の第一関門。2026-07-09に初回レビュー実施（ハブはX画面を直接閲覧できないため、現状文言不明を前提に改善の型のみ提案）。
+      人間への依頼: (1) 現在のプロフィール文・固定ポスト・ヘッダー画像のスクショ共有 (2) 下記たたき台の採用可否判断。
+      提案bio案: 「SNS上の賛否・論点を1テーマ1ページで見える化。投票で自分の立場も参加できます。#SNS反応まっぷ」。
+      固定ポスト案: サイト紹介+人気テーマ（あだ名禁止 or 高市早苗）へのリンクを固定し、初見フォロワーが1クリックで投票できる導線にする
 
   x-posting:
     title: X運用（新テーマ告知・引用RT・リプライ）
@@ -193,12 +213,17 @@ recurring:
     minimum_action:
       daily: URLなしリプライ 1-3件（同一アカウントへの連日リプライは避ける）
       weekly: URL付き投稿または引用RT 1-2件（フォロワー100未満フェーズ。スパム判定回避のため抑制）、プロフィール・固定ポスト・投稿文言の見直し
-    last_run: 2026-07-09
+    last_run: 2026-07-22
     procedure: 毎日「Xのリプライ検索」で高閲覧数（目安1万views以上）の関連ポストを探しリプライ先を提案。週次で引用RT候補・投稿文案を補充
     needs_human: 実際の投稿操作（1日1-3件）
-    notes: 旧TASK_BOARD課題6（フォロワー0→100）をここに移管。2026-07-07に docs/x-posts.md へ週次投稿3本、URLなし返信5本、URL付き返信3本の候補を追加。同日に引用RT3本実施（憲法改正/@tamakiyuichiro・高齢者免許/@taketake1w・高市早苗/@shukan_bunshun）。今週のURL付き引用RT上限到達。2026-07-08にURLなしリプライ3本実施（辺野古/@Sankei_news・高齢者免許/@nikkei・高市/@AtsushiKomori）。2026-07-09はURLなしリプライ3本実施（辺野古遺族/@narumita・憲法改正/@hashimoto_lo・生成AI著作権/@Henry66239746）。来週引用RT仕込み: @nhk_news（辺野古）・@izmkenta（辺野古文科委）・@yamazoejimusyo（憲法改正）
+    notes: >-
+      旧TASK_BOARD課題6（フォロワー0→100）をここに移管。2026-07-07に docs/x-posts.md へ週次投稿3本、URLなし返信5本、URL付き返信3本の候補を追加。
+      同日に引用RT3本実施（憲法改正/@tamakiyuichiro・高齢者免許/@taketake1w・高市早苗/@shukan_bunshun）。今週のURL付き引用RT上限到達。
+      2026-07-08にURLなしリプライ3本実施（辺野古/@Sankei_news・高齢者免許/@nikkei・高市/@AtsushiKomori）。
+      2026-07-09はURLなしリプライ3本実施（辺野古遺族/@narumita・憲法改正/@hashimoto_lo・生成AI著作権/@Henry66239746）。
+      来週引用RT仕込み: @nhk_news（辺野古）・@izmkenta（辺野古文科委）・@yamazoejimusyo（憲法改正）
 
-featured: school-nickname-ban   # portal-featured-slot 実装後に有効化
+featured: fukushuto   # 現在のポータル注目テーマ
 
 activity_log:
   # 計測中施策と並行して行った変更を記録する
@@ -232,3 +257,15 @@ activity_log:
     type: site_improvement
     detail: vote2d.js に SNS分類データ（RAW）の象限別集計を投票結果画面へ自動挿入する機能を追加（task/growth-sns-vote-boost）。「みんなの感覚」のユーザー投票が少数でも、X投稿300〜900件の分布を「Xの声の分布（SNS分類 N件）」として投票完了後に表示。全8テーマ適用。vote2d.js v=3 に更新
     related_capability: vote-2d-canvas
+  - date: 2026-07-22
+    type: x_activity
+    detail: 副首都の論点ポスト1本・リプライ2本、皇室典範リプライ1本を記録。直近7日PVは副首都58・皇室典範32で公開テーマ上位
+    related_capability: x-post-templates
+  - date: 2026-07-23
+    type: site_improvement
+    detail: 全10テーマの固定XシェアJSを公開し404を解消。3テーマのSupabase設定注入漏れも修正
+    related_capability: share-after-vote
+  - date: 2026-07-23
+    type: measurement
+    detail: KPI自動取得。weekly_users 14 / pageviews 181 / pages_per_session 3.175 / votes_total 11（テスト票除外）/ GSC表示45・クリック2。期限超過5施策を観察付きで7/30まで1回延長
+    related_capability: null

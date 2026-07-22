@@ -88,7 +88,7 @@ docs/supabase-votes-automation.md
 
 ## 注意点
 
-- `votes_week` はまだ未実装。現状は総投票数 `votes_total` のみ。
+- `votes_week` はまだ未実装。現状は総投票数 `votes_total` のみ（`test` で始まるテスト用topicは除外）。
 - `x_followers` はまだ自動取得していないため `null`。
 - GA4とGSCはOAuthトークンが必要。期限切れや権限不足の場合は各メモを参照。
 - Codex環境ではネットワーク接続とOAuthローカル待受のため、権限付き実行が必要になる場合がある。

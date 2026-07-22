@@ -36,7 +36,9 @@ def fetch_all(ga4_days: int, gsc_days: int) -> dict:
 
 def count_votes(votes: dict) -> int:
     total = 0
-    for choices in votes.values():
+    for topic, choices in votes.items():
+        if topic.lower().startswith("test"):
+            continue
         total += sum(int(value) for value in choices.values())
     return total
 
