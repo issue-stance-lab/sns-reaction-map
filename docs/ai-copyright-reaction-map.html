@@ -553,27 +553,28 @@
       .hero-inner { padding: 36px 16px 32px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
-      .manga-grid { grid-template-columns: 1fr; }
+      .issue-sides { grid-template-columns: 1fr; }
+      .issue-block .sample-grid { grid-template-columns: 1fr; }
       .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .thirty-summary, .vote-comparison, .related-grid { grid-template-columns:1fr; }
       .details-panel details, .details-panel .details-body, .details-panel .table-wrap { width:100%; max-width:100%; }
       .vote-image-card .vote-card-label { font-size: 15px; left: 10px; right: 10px; bottom: 10px; }
     }
-    /* ===== 漫画 ===== */
-    .manga-intro { max-width:760px; color:var(--muted); font-size:14px; line-height:1.8; margin-bottom:24px; }
-    .manga-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
-    .manga-page-card { border:1px solid rgba(0,0,0,.08); border-radius:8px; overflow:hidden; background:#fff; box-shadow:0 10px 28px rgba(16,24,40,.08); cursor:zoom-in; transition:transform .2s ease,box-shadow .2s ease; text-align:left; padding:0; }
-    .manga-page-card:hover { transform:translateY(-4px); box-shadow:0 18px 42px rgba(16,24,40,.14); }
-    .manga-page-card img { display:block; width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--accent-soft); }
-    .manga-page-card span { display:block; padding:12px 14px; color:var(--ink); font-size:14px; font-weight:900; line-height:1.45; }
-    .manga-disclaimer { max-width:760px; margin-top:18px; color:var(--muted); font-size:12px; line-height:1.7; }
-    .manga-modal { position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(15,23,42,.86); }
-    .manga-modal.active { display:flex; }
-    .manga-modal img { max-width:min(92vw,920px); max-height:88vh; border-radius:8px; box-shadow:0 24px 80px rgba(0,0,0,.45); background:#fff; }
-    .manga-modal button { position:absolute; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff; border-radius:8px; min-width:44px; height:44px; cursor:pointer; font-size:24px; font-weight:900; backdrop-filter:blur(6px); }
-    .manga-modal .manga-close { top:18px; right:18px; }
-    .manga-modal .manga-prev { left:18px; top:50%; transform:translateY(-50%); }
-    .manga-modal .manga-next { right:18px; top:50%; transform:translateY(-50%); }
+    /* ===== issue-block（論点×Xの声） ===== */
+    .issue-block { border:1px solid var(--line); border-radius:12px; background:#fff; box-shadow:var(--shadow); padding:22px; margin:0 0 22px; }
+    .issue-head h3 { margin:4px 0 8px; font-size:clamp(19px,2.4vw,26px); }
+    .issue-count { display:inline-block; margin-left:8px; background:var(--accent-soft); color:var(--accent); border-radius:999px; padding:2px 12px; font-size:14px; vertical-align:middle; }
+    .issue-heat { display:inline-block; margin-left:6px; font-size:12px; color:var(--muted); font-weight:800; }
+    .issue-desc { font-size:14px; line-height:1.8; margin:0 0 14px; color:var(--ink); }
+    .issue-sides { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0 0 16px; }
+    .side { border-radius:8px; padding:12px 14px; font-size:13px; line-height:1.7; }
+    .side strong { display:block; font-size:12px; margin-bottom:4px; }
+    .side.neg { background:#fef2f2; border-left:4px solid #dc2626; }
+    .side.neg strong { color:#991b1b; }
+    .side.pos { background:#ecfdf5; border-left:4px solid #059669; }
+    .side.pos strong { color:#065f46; }
+    .issue-block .sample-grid { grid-template-columns:repeat(2,1fr); }
+    .issue-block .sample-card { border:1px solid var(--line); border-radius:8px; padding:16px; background:#fff; box-shadow:var(--shadow); border-bottom:none; }
     /* ===== 投票カード ===== */
     .vote-card-grid { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px !important; margin-bottom:12px !important; }
     .vote-image-card { position:relative; min-width:0; aspect-ratio:1; border:0; border-radius:8px; overflow:hidden; cursor:pointer; background-position:center; background-size:cover; box-shadow:0 10px 28px rgba(16,24,40,.12); transition:transform .18s ease,box-shadow .18s ease,filter .18s ease; }
@@ -679,74 +680,6 @@
 .ar-sep { color: var(--muted); margin: 0 2px; }
 .ar-s { color: #4b9cf4; }
 
-/* ===== 2D スタンスマップ ===== */
-/* キャンバス */
-#wrap { position:relative; width:100%; margin:0 auto; }
-#stance-map-section canvas { display:block; width:100%; border:1px solid #e0e0e0; border-radius:8px; }
-#smCanvasMain { cursor:crosshair; position:relative; z-index:2; background:transparent; }
-#smCanvasHeat { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px; pointer-events:none; z-index:1; background:#fafafa; }
-.ax { position:absolute; font-size:10px; font-weight:600; color:#444; white-space:nowrap; pointer-events:none; z-index:3; }
-
-/* ツールチップ */
-#tooltip { position:fixed; background:#111; color:#fff; padding:8px 12px; border-radius:6px; font-size:11px; pointer-events:none; opacity:0; transition:opacity .12s; max-width:260px; line-height:1.7; z-index:100; }
-
-/* ガイドツアーパネル */
-#tourPanel {
-  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
-  color:#fff; border-radius:10px; padding:16px 18px; margin-top:12px;
-  display:none; position:relative;
-}
-#tourPanel.active { display:block; }
-#tourStep { font-size:10px; color:#aaa; margin-bottom:4px; }
-#tourTitle { font-size:14px; font-weight:700; margin-bottom:6px; color:#fff; }
-#tourDesc { font-size:12px; color:#ccc; line-height:1.7; margin-bottom:10px; }
-#tourEmbed {
-  margin-bottom:10px; display:none; border-radius:8px; overflow:hidden;
-  max-height:320px; overflow-y:auto;
-}
-#tourEmbed .twitter-tweet { margin:0 auto !important; }
-#tourEmbedLoading {
-  background:rgba(255,255,255,0.06); border-left:3px solid #e67e22;
-  padding:10px 12px; border-radius:4px; font-size:11px; color:#aaa;
-  display:none; margin-bottom:10px;
-}
-/* 埋め込み失敗時のフォールバック */
-#tourQuoteFallback {
-  background:rgba(255,255,255,0.08); border-left:3px solid #e67e22;
-  padding:8px 12px; border-radius:4px; font-size:11px; color:#eee;
-  line-height:1.6; margin-bottom:10px; display:none; cursor:pointer;
-}
-#tourQuoteFallback:hover { background:rgba(255,255,255,0.13); }
-#tourQuoteFallback small { display:block; margin-top:4px; color:#888; font-size:10px; }
-.tour-nav { display:flex; gap:8px; align-items:center; }
-.tnav { padding:6px 14px; border:1px solid rgba(255,255,255,0.2); border-radius:16px; cursor:pointer; font-size:11px; color:#fff; background:transparent; transition:background .15s; }
-.tnav:hover { background:rgba(255,255,255,0.1); }
-.tnav.primary { background:#e67e22; border-color:#e67e22; font-weight:600; }
-.tnav.primary:hover { background:#d35400; }
-#tourProgress { flex:1; height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
-#tourProgressBar { height:100%; background:#e67e22; border-radius:2px; transition:width .3s; }
-
-/* コントロール */
-.sm-controls { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
-.legend-emo { display:flex; align-items:center; gap:8px; font-size:10px; }
-.emo-bar { height:10px; width:160px; border-radius:3px; background:linear-gradient(to right,#4a90d9,#bbb,#e05c5c); flex-shrink:0; }
-.view-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.view-row label { font-size:10px; color:#555; display:flex; align-items:center; gap:4px; cursor:pointer; }
-.sm-filters { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-.fbtn { font-size:10px; padding:4px 10px; border:1px solid #ccc; border-radius:12px; cursor:pointer; background:#fff; transition:background .12s,color .12s; }
-.fbtn.active { background:#333; color:#fff; border-color:#333; }
-
-/* ツアー起動ボタン */
-#startTour { background:#e67e22; color:#fff; border:none; padding:6px 16px; border-radius:16px; font-size:11px; font-weight:600; cursor:pointer; margin-left:auto; }
-#startTour:hover { background:#d35400; }
-
-/* 統計カード */
-.sm-stat-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:10px; }
-.sm-sbox { background:#f5f5f5; border-radius:6px; padding:7px 10px; }
-.sm-slabel { font-size:9px; color:#888; }
-.sm-sval { font-size:18px; font-weight:700; }
-.sm-sdesc { font-size:9px; color:#aaa; }
-
   </style>
   <link rel="stylesheet" href="topic-modern.css?v=2">
   <script src="topic-modern.js?v=1" defer></script>
@@ -804,41 +737,6 @@
       <div class="stat"><span>最多カテゴリ</span><strong>著作権厳格保護・クリエイターの権利回復を最優先 168</strong></div>
       <div class="stat"><span>最多スタンス</span><strong>規制反対 164</strong></div>
     </section>
-    <section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読む、この対立</h2><span>ショートコミック</span></div>
-<p class="manga-intro">クリエイターとAIエンジニア——立場の違う二人がカフェで出会い、「創作の未来」をめぐって本音をぶつけ合います。</p>
-<div class="manga-grid" aria-label="生成AIと著作権問題の漫画">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/ai-copyright-manga-page-1.webp" alt="漫画1ページ目 私の10年が、一瞬で……" loading="lazy">
-    <span>1. 私の10年が、一瞬で……</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/ai-copyright-manga-page-2.webp" alt="漫画2ページ目 二つの正義" loading="lazy">
-    <span>2. 二つの正義</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/ai-copyright-manga-page-3.webp" alt="漫画3ページ目 答えのない問い" loading="lazy">
-    <span>3. 答えのない問い</span>
-  </button>
-</div>
-<p class="manga-disclaimer">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです</p>
-<div class="manga-modal" id="manga-modal" aria-hidden="true">
-  <button class="manga-close" type="button" aria-label="閉じる">×</button>
-  <button class="manga-prev" type="button" aria-label="前のページ">‹</button>
-  <img id="manga-modal-image" src="" alt="" loading="lazy">
-  <button class="manga-next" type="button" aria-label="次のページ">›</button>
-</div>
-</section>
-<script src="manga-viewer.js"></script>
-<script>
-MangaViewer.init({
-  chars: [
-    {img:'images/ai-copyright-manga-charsheet-mio.webp', name:'藤原 澪', role:'フリーランスイラストレーター', quote:'10年かけた作風が、一瞬で真似される'},
-    {img:'images/ai-copyright-manga-charsheet-sota.webp', name:'桐谷 颯太', role:'AIスタートアップのエンジニア', quote:'規制だけでは技術も文化も止まる'}
-  ]
-});
-</script>
-
 <!-- ===== 論点Explainer ===== -->
 <section class="panel" id="explainer-section">
 <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
@@ -1213,762 +1111,80 @@ MangaViewer.init({
   drawHeat();drawMain();
 })();
 </script>
-    <section class="panel" id="stance-map-section">
-<div id="stance-map-inner">
-<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>708件（広告・宣伝除外済）| 点の色＝感情強度（青:冷静 → 赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
-<div id="wrap" style="position:relative">
-  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
-  <canvas id="smCanvasMain" width="600" height="600"></canvas>
-  <div class="ax" style="top:3px;left:50%;transform:translateX(-50%)">クリエイター個人優先 ▲</div>
-  <div class="ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ AI産業・社会全体優先</div>
-  <div class="ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 規制反対</div>
-  <div class="ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">規制賛成 ▶</div>
+
+
+<section class="panel conflict-panel" id="issue-voices-section">
+<div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとに賛否の投稿を読む</span></div>
+<nav class="quadrant-nav"><a href="#issue-gakushu">学習データ 126</a><a href="#issue-hoseibi">法制度 79</a><a href="#issue-moraru">利用者モラル 73</a><a href="#issue-creator">クリエイター保護 46</a><a href="#issue-gijutsu">技術競争 40</a><a href="#issue-seiseibutsu">AI生成物 31</a></nav>
+
+<article class="issue-block" id="issue-gakushu">
+<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span><h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">126件</span><span class="issue-heat">規制賛成 93件（73%）</span></h3>
+<p class="issue-desc">最多の論点。「AI学習は漫画村と同じ無断利用だ」という批判が中心です。「対価もなく作品を取り込む仕組みは著作権侵害」という明確な立場から、「学習行為自体は合法であり表現の模倣は別問題」という反論まで、法的な解釈をめぐる議論が続いています。</p>
+<div class="issue-sides"><div class="side neg"><strong>規制賛成（93件）</strong>AIの学習行為そのものが著作権侵害であり、許諾なしの学習データ利用は禁止すべきだ。</div><div class="side pos"><strong>AI推進寄り（28件）</strong>著作権法30条の4により学習行為は合法。規制するなら学習ではなく生成・出力段階に限るべき。</div></div>
 </div>
-<div class="your-marker-note" id="your-marker-note" style="display:none;">あなたの投票位置をマップ上に表示しています。</div>
-
-<!-- ガイドツアーパネル -->
-<div id="tourPanel">
-  <div id="tourStep"></div>
-  <div id="tourTitle"></div>
-  <div id="tourDesc"></div>
-  <div id="tourEmbedLoading">投稿を読み込み中…</div>
-  <div id="tourEmbed"></div>
-  <div id="tourQuoteFallback"><span id="tourQuoteText"></span><small id="tourQuoteLink">↗ Xで見る</small></div>
-  <div class="tour-nav">
-    <button class="tnav" id="btnPrev">← 前へ</button>
-    <div id="tourProgress"><div id="tourProgressBar"></div></div>
-    <button class="tnav primary" id="btnNext">次へ →</button>
-    <button class="tnav" id="btnClose" style="border-color:#666;color:#aaa">✕</button>
-  </div>
-</div>
-
-<div class="sm-controls">
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <div class="legend-emo">
-      <span style="color:#555">感情強度:</span>
-      <span>冷静</span>
-      <div class="emo-bar"></div>
-      <span>激怒</span>
-    </div>
-    <button id="startTour">▶ ガイドツアーで読む</button>
-  </div>
-  <div class="view-row">
-    <label><input type="checkbox" id="chkHeat" checked> ヒートマップ</label>
-    <label><input type="checkbox" id="chkDots" checked> ドット</label>
-    <label style="color:#888">強度: <input type="range" id="heatIntensity" min="10" max="60" value="28" style="width:80px;vertical-align:middle"></label>
-  </div>
-  <div class="sm-filters">
-    <span style="font-size:10px;color:#888">絞り込み:</span>
-    <button class="fbtn active" data-q="all">全件 (708)</button>
-    <button class="fbtn" data-q="q1">規制賛成×個人優先 (297)</button>
-    <button class="fbtn" data-q="q2">規制反対×産業優先 (87)</button>
-    <button class="fbtn" data-q="q3">規制反対×個人優先 (38)</button>
-    <button class="fbtn" data-q="q4">高感情 e≥1.5 (98)</button>
-    <button class="fbtn" data-q="calm">冷静 e≤0 (342)</button>
-  </div>
-</div>
-
-<div class="sm-stat-cards">
-  <div class="sm-sbox"><div class="sm-slabel">規制賛成 × 個人優先 (右上)</div><div class="sm-sval" style="color:#c0392b">98件</div><div class="sm-sdesc">著作権保護・規制強化派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">規制反対 × 産業優先 (左下)</div><div class="sm-sval" style="color:#2980b9">47件</div><div class="sm-sdesc">AI推進・自由化派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">規制反対 × 個人優先 (左上)</div><div class="sm-sval" style="color:#27ae60">21件</div><div class="sm-sdesc">市場解決・オプトアウト派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">42件</div><div class="sm-sdesc">怒り・強い感情的反応</div></div>
-</div>
-
-<div id="tooltip"></div>
-</div><!-- /stance-map-inner -->
-</section>
-<script>
-const RAW = [{"x":1.0,"y":1.0,"e":0.0,"c":0.75,"s":"AI学習と漫画村の問題は同一の著作権侵害","u":"https://x.com/info_kvaluation/status/2069065388797960285"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AI著作権の実践的解法を紹介し是中立的","u":"https://x.com/AI_IT_kaz/status/2069064227827147011"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.6,"s":"AI規制に不便感じるが深い立場表明はない","u":"https://x.com/HimanchuJ/status/2069058903720280127"},{"x":1.0,"y":0.5,"e":0.0,"c":0.6,"s":"AI開発規制と著作権保護の法的枠組みを提案","u":"https://x.com/umedoblock/status/2069054473008492858"},{"x":1.0,"y":1.0,"e":1.0,"c":0.7,"s":"AI著作権侵害への不快感と規制要求","u":"https://x.com/koshian_2002/status/2069048301702480182"},{"x":2.0,"y":-1.5,"e":1.5,"c":0.85,"s":"AI廃止を環境・雇用・著作権観点から強く主張","u":"https://x.com/G32Jk/status/2069047015934464314"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AI軽微侵害容認論に反論、創作者権利重視","u":"https://x.com/ex_hmmt/status/2069040501723136153"},{"x":-1.0,"y":-0.5,"e":0.0,"c":0.85,"s":"AI利用の自由化主張、冷静な法理論展開","u":"https://x.com/hetoka710837/status/2069029252746694969"},{"x":-1.0,"y":0.0,"e":0.0,"c":0.8,"s":"情報自由化の原則を支持、立法での対応を提案","u":"https://x.com/hetoka710837/status/2069028815595249670"},{"x":0.0,"y":1.0,"e":1.0,"c":0.75,"s":"既存著作権法が適用されるべきと反論","u":"https://x.com/H050120_Lou/status/2069027622949150967"},{"x":-0.5,"y":0.0,"e":-0.5,"c":0.7,"s":"AI学習は合法的と法律論で主張","u":"https://x.com/ex_hmmt/status/2069027526236942570"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.7,"s":"規制は生成時に限定すべき","u":"https://x.com/ex_hmmt/status/2069025284180021543"},{"x":-1.5,"y":1.5,"e":1.0,"c":0.85,"s":"IP保持者の権利行使を肯定し規制を批判する怒りの投稿","u":"https://x.com/REN1127986/status/2069023776889774373"},{"x":1.5,"y":1.0,"e":0.0,"c":0.75,"s":"DRM的AI規制で著作権保護する提案","u":"https://x.com/takumaru_yo/status/2069023757705052612"},{"x":-1.5,"y":-1.0,"e":1.5,"c":0.75,"s":"AI規制の詭弁を批判し利用者視点で反論","u":"https://x.com/UHisayuki/status/2069018511356404047"},{"x":-1.0,"y":1.0,"e":0.5,"c":0.7,"s":"AI創作性を認めない方がよいという意見","u":"https://x.com/fast77775/status/2069015244144558583"},{"x":0.5,"y":1.0,"e":0.0,"c":0.65,"s":"AI学習利用は著作権違反という立場を冷静に支持","u":"https://x.com/n0o8BTzbdrUxMSi/status/2069011965599748245"},{"x":0.0,"y":-0.5,"e":-0.5,"c":0.6,"s":"著作権はAIには効きにくく、商業構造の問題だとする意見","u":"https://x.com/sweetsgarbage/status/2069002365592801461"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/TeshimaKairei/status/2069001892597043620"},{"x":0.0,"y":0.0,"e":0.0,"c":0.75,"s":"現行法ではAI侵害主張は成立しにくいと解説","u":"https://x.com/TeshimaKairei/status/2068999829771165795"},{"x":0.5,"y":1.0,"e":0.5,"c":0.7,"s":"著作権契約の不備を懸念しクリエイター権利保護を求める","u":"https://x.com/nek0n0tem0/status/2068998478592938008"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI学習の法的例外構造を批判的に指摘","u":"https://x.com/Motty122232/status/2068996271063580727"},{"x":1.0,"y":0.5,"e":0.0,"c":0.65,"s":"著作権とAIの法解釈に冷静に疑問呈す","u":"https://x.com/sweetsgarbage/status/2068993332328697917"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI模倣問題を示唆する冷静な問題提起","u":"https://x.com/AI_agent_code/status/2068991562030456973"},{"x":0.0,"y":1.0,"e":0.0,"c":0.75,"s":"DisneyとUniversalがMidjourney提訴","u":"https://x.com/ipconnect_jp/status/2068990437843693712"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.6,"s":"AI著作権の開示要求を疑問視する分析的な問い","u":"https://x.com/riot_stone/status/2068981434795303394"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI権利とクリエイター共存の課題提起","u":"https://x.com/AI_agent_code/status/2068958998922179002"},{"x":-1.5,"y":-1.0,"e":0.5,"c":0.75,"s":"AI著作権侵害否定、批判者を軽視","u":"https://x.com/rampokabuto/status/2068958568838234536"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"論点逸脱を指摘し著作権侵害問題を糾弾","u":"https://x.com/psalmark00_p2x/status/2068954942375923746"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/Keiji_Schwarzer/status/2069067215375405449"},{"x":1.5,"y":1.0,"e":1.5,"c":0.85,"s":"AI学習に強く反対・法的通報も厭わない感情的投稿","u":"https://x.com/NJK_09012/status/2069051704826642487"},{"x":1.5,"y":1.5,"e":1.0,"c":0.75,"s":"AI学習は著作権侵害と断言し規制を求める","u":"https://x.com/Gjsa05ffwr7968/status/2069049356444201349"},{"x":-1.5,"y":-1.5,"e":0.0,"c":0.8,"s":"AI学習は著作権侵害ではないと明確に主張","u":"https://x.com/sonson831155/status/2069027495350079812"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI著作権是否違反を中立的に質問","u":"https://x.com/kiryu21112445/status/2069015074401124404"},{"x":0.0,"y":0.0,"e":0.0,"c":0.85,"s":"著作権適用の論点について中立的に疑問呈示","u":"https://x.com/kazz_crimson4/status/2069014285137932619"},{"x":-1.0,"y":-1.5,"e":-0.5,"c":0.75,"s":"AI模倣は問題ないと論理的に反論","u":"https://x.com/kent446/status/2068975227409973406"},{"x":0.0,"y":0.5,"e":0.0,"c":0.55,"s":"AI利用の心得と著作権警告の共有投稿","u":"https://x.com/Sakura_kawaii64/status/2068974194331988037"},{"x":1.5,"y":1.5,"e":0.0,"c":0.75,"s":"著作権侵害だと指摘し止めるよう促す","u":"https://x.com/sigu0_3/status/2068969476104876417"},{"x":1.0,"y":1.5,"e":1.5,"c":0.85,"s":"AI改変に強く反対、作者保護を主張","u":"https://x.com/orenoryoteha_IH/status/2068969230968782938"},{"x":0.5,"y":1.0,"e":1.0,"c":0.65,"s":"自作画像がAI加工された件に憤る個人の怒り","u":"https://x.com/eroba/status/2068966443786584433"},{"x":1.0,"y":1.0,"e":1.0,"c":0.75,"s":"AI表現を認めつつデータ規制を強調","u":"https://x.com/numakame/status/2068965710483935612"},{"x":0.5,"y":1.0,"e":1.0,"c":0.8,"s":"AIと二次創作の矛盾に苦悩する個人の吐露","u":"https://x.com/shi_chan192/status/2068965030763302988"},{"x":1.0,"y":1.5,"e":1.5,"c":0.8,"s":"AI使用にモラルとリスクを喚起する批判的投稿","u":"https://x.com/mua0122/status/2068953204860346750"},{"x":1.5,"y":2.0,"e":1.0,"c":0.85,"s":"AI利用者を「情弱」と切り捨て、創作者保護を主張","u":"https://x.com/Bomzily/status/2068950693055168992"},{"x":-1.5,"y":-1.5,"e":-1.0,"c":0.8,"s":"AI学習は合法と主張、規制派をお気持ち呼ばわり","u":"https://x.com/Gjsa05ffwr7968/status/2068950404151607408"},{"x":1.0,"y":0.5,"e":1.5,"c":0.75,"s":"AI信者と創作者の双方を批判し規制強化を示唆","u":"https://x.com/d_mqt/status/2068949818467381289"},{"x":-1.5,"y":-1.0,"e":0.0,"c":0.8,"s":"AIは合法的、批判無効","u":"https://x.com/adularia_water/status/2068949455181946919"},{"x":0.5,"y":0.5,"e":0.5,"c":0.6,"s":"著作権侵害の優先検討を呼びかける冷静な主張","u":"https://x.com/bonsaiyan/status/2068931544128143535"},{"x":-1.0,"y":-1.0,"e":1.0,"c":0.8,"s":"AI規制派を批判しML学習は合法的と主張","u":"https://x.com/Lantern_pumpkin/status/2068918371815735641"},{"x":2.0,"y":1.5,"e":2.0,"c":0.85,"s":"AI使用に強く反対・怒り","u":"https://x.com/NOIROMANTIC/status/2068884245544862197"},{"x":-0.5,"y":-1.0,"e":0.0,"c":0.8,"s":"画風模倣は合法と解説、AI活用を支持する冷静な投稿","u":"https://x.com/gabugaburin/status/2068846840964071909"},{"x":-0.5,"y":1.0,"e":1.0,"c":0.7,"s":"AI批判者の二次創作問題を指摘し、創作者の権利擁護を主張","u":"https://x.com/Gjsa05ffwr7968/status/2068846650769211854"},{"x":2.0,"y":2.0,"e":1.0,"c":0.85,"s":"全創作を投稿禁止にすべきと強く主張","u":"https://x.com/Gjsa05ffwr7968/status/2068842994183413851"},{"x":0.0,"y":0.0,"e":0.0,"c":0.4,"s":"AI著作権問題のトレンドまとめ投稿","u":"https://x.com/banebav/status/2068816910314266713"},{"x":0.5,"y":0.5,"e":-1.0,"c":0.7,"s":"AI加工巡り皮肉　著作権には理解","u":"https://x.com/eroba/status/2068810270160593057"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI著作権に関する中立的なニュース共有","u":"https://x.com/momomo000o0/status/2068800362782593306"},{"x":0.5,"y":1.0,"e":-1.0,"c":0.6,"s":"AI著作相似の規制強化を示唆する冷静な分析","u":"https://x.com/youka_love/status/2068733453328326789"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.6,"s":"AI活用で安全性向上の可能性を冷静に推測","u":"https://x.com/youka_love/status/2068712514016395368"},{"x":1.0,"y":1.5,"e":0.5,"c":0.85,"s":"AIカバーは著作権侵害かと通報を検討","u":"https://x.com/tteuneseut42300/status/2068712397431513250"},{"x":-1.0,"y":0.0,"e":-0.5,"c":0.6,"s":"法改正の妥当性に疑問呈する批判的投稿","u":"https://x.com/shiroshiromagic/status/2068700484127556042"},{"x":-1.0,"y":-1.0,"e":1.0,"c":0.75,"s":"規制に反対するAIユーザーに政府決定の遵守を促す","u":"https://x.com/yaenomizu/status/2069052113041416426"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/Rafu0104/status/2069051127941955816"},{"x":1.5,"y":1.5,"e":1.5,"c":0.85,"s":"無断利用で構築のAIを手放したくない姿勢の醜さを批判","u":"https://x.com/gappoi_taisa/status/2069043570657591389"},{"x":1.0,"y":0.5,"e":0.5,"c":0.75,"s":"医療AIにも懸念を示し規制寄りの慎重な姿勢","u":"https://x.com/SKari01/status/2069037498630865212"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AI規制の拙速さに批判、個人情報保護を重視","u":"https://x.com/yitsuki615/status/2069034793472577540"},{"x":-1.0,"y":-0.5,"e":0.0,"c":0.75,"s":"AI活用による業務効率向上を支持、慎重な派にやや否定的","u":"https://x.com/kani_no_soko/status/2069032465424089313"},{"x":1.5,"y":2.0,"e":1.0,"c":0.85,"s":"公取のAI利用方針をアニメーター保護の観点から強く批判","u":"https://x.com/udon_don_nomi/status/2069030265536827463"},{"x":1.5,"y":1.0,"e":1.0,"c":0.85,"s":"生成AI規制支持、創作個人権利重視、感情的に批判","u":"https://x.com/hanashiwoshiou/status/2069009043482644909"},{"x":-0.5,"y":0.5,"e":0.5,"c":0.6,"s":"AI批判派的利用の否定と政治利用批判","u":"https://x.com/chitose_iroiro/status/2069003438097383542"},{"x":-0.5,"y":0.0,"e":-0.5,"c":0.7,"s":"現状容認・反対派的感情批判でやや自由化寄り","u":"https://x.com/KiKuRasKu/status/2068974942574834061"},{"x":0.0,"y":1.0,"e":0.0,"c":0.8,"s":"絵描き配慮でAI利用者と距離置く姿勢","u":"https://x.com/nmbblnm/status/2068947901116821790"},{"x":0.5,"y":0.0,"e":-0.5,"c":0.6,"s":"AI規制反対派の理解不足を皮肉る","u":"https://x.com/Cero_0727/status/2068927271013089563"},{"x":0.0,"y":0.0,"e":0.5,"c":0.7,"s":"AI利用巡り双方に共通認識あるはずと指摘","u":"https://x.com/phantom_white/status/2068896813353197798"},{"x":2.0,"y":1.5,"e":2.0,"c":0.7,"s":"AI 利用者を非難、規制強化を求める","u":"https://x.com/pt8mf/status/2068882072392057246"},{"x":-1.0,"y":-0.5,"e":-1.0,"c":0.75,"s":"AI推進を支持、反対派をネット偏在と皮肉","u":"https://x.com/kosokura8810/status/2068842216756478213"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.7,"s":"生成AIのリサーチ能力を 称賛する静かな驚き","u":"https://x.com/balanceanalyst/status/2068814522425741474"},{"x":-1.0,"y":1.0,"e":1.0,"c":0.75,"s":"AI利活用自体は容認し規制に反対、だが知財侵害は批判","u":"https://x.com/takanokomi/status/2068779082641502635"},{"x":1.0,"y":1.5,"e":1.5,"c":0.85,"s":"AI企業を批判し、作家の権利擁護を訴える感情的な投稿","u":"https://x.com/jfH4bwpeN710707/status/2068759014083805191"},{"x":-0.5,"y":0.0,"e":1.0,"c":0.75,"s":"批判的皮肉で両方を非難、規制は非表明","u":"https://x.com/C_LatiHeart/status/2068693413369913592"},{"x":2.0,"y":2.0,"e":2.0,"c":0.95,"s":"生成AI永久禁止・創作者権利最優先の怒り","u":"https://x.com/huluuto_usgmt/status/2068655294163652978"},{"x":-0.5,"y":0.0,"e":0.5,"c":0.7,"s":"AI反対派を疑問視する冷淡な皮肉","u":"https://x.com/_imai/status/2068639904129778163"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/SoundJourneyDS/status/2068630236477170063"},{"x":-0.5,"y":-1.0,"e":-1.0,"c":0.75,"s":"AI絵パクリ主張を皮肉で批判する投稿","u":"https://x.com/mossan_kareta/status/2067720210266849576"},{"x":1.5,"y":1.5,"e":1.5,"c":0.75,"s":"AI絵排斥・描き手擁護の怒り投稿","u":"https://x.com/nanahosi_tabako/status/2067591234408137092"},{"x":-0.5,"y":-1.5,"e":1.0,"c":0.6,"s":"AI批判を嫉妬呼ばわりする皮肉","u":"https://x.com/BlackSun_11/status/2067490253334872415"},{"x":-1.0,"y":-0.5,"e":0.0,"c":0.6,"s":"AI絵柄模倣は人間の芸術活動と同列に緩やかに擁護","u":"https://x.com/yoinokokeshi/status/2067344191374704951"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/sikata2881391/status/2067231468217323527"},{"x":1.5,"y":1.5,"e":1.5,"c":0.75,"s":"AI絵パクリに寛大と見なす層を痛烈に非難","u":"https://x.com/nob_sos/status/2067230980696609186"},{"x":1.5,"y":1.0,"e":1.0,"c":0.6,"s":"AI絵＝パクリと断じる強い否定的姿勢","u":"https://x.com/tanahiroseiji/status/2067194813003567214"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.65,"s":"AI絵を練習台利用。実在絵師の真似は批判されるがAIは問題ないとする個人的観察","u":"https://x.com/Kanameism/status/2065320691659104332"},{"x":2.0,"y":2.0,"e":2.0,"c":0.95,"s":"AI絵師は盗作パクリの野郎だ","u":"https://x.com/VvividC/status/2065117733017317765"},{"x":1.0,"y":1.5,"e":1.0,"c":0.7,"s":"AI絵は他者クローリングで成り立つパクリ","u":"https://x.com/imomiyo20260506/status/2063945552493187267"},{"x":-0.5,"y":0.0,"e":-0.5,"c":0.65,"s":"AIパクリ論の議論の甘さを批判","u":"https://x.com/7IxHZdLOIqPz7ry/status/2062876941137715678"},{"x":0.0,"y":1.5,"e":0.0,"c":0.6,"s":"AI絵はパクリ的だが感情の問題であり規制には触れず","u":"https://x.com/segawa_kuto/status/2062865702328095116"},{"x":0.5,"y":1.5,"e":0.5,"c":0.65,"s":"AI絵批判と個人創作の価値を語る","u":"https://x.com/shiroganekotatu/status/2062728547123486945"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.6,"s":"AI絵の再構築過程を示し技術的合法性を冷静に主張","u":"https://x.com/HalfLife_mae/status/2062377732156407890"},{"x":0.5,"y":0.5,"e":0.0,"c":0.55,"s":"AI絵のパクリ元に原作者の存在を疑問視","u":"https://x.com/kabunazuna/status/2062112846092419371"},{"x":1.0,"y":1.0,"e":0.5,"c":0.7,"s":"AI絵柄パクリを指摘し批判する投稿","u":"https://x.com/jsLFWaPyEKmRMVR/status/2062105511991054731"},{"x":-0.5,"y":-0.5,"e":-0.5,"c":0.65,"s":"AI絵参考は可。人はパクリ扱いされる矛盾を皮肉","u":"https://x.com/Gjsa05ffwr7968/status/2061954855045120114"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AI模写のグレーゾーンを疑問視する中立的投稿","u":"https://x.com/Papel_san/status/2061669073927512344"},{"x":0.5,"y":0.5,"e":-1.0,"c":0.6,"s":"規制肯定派による皮肉混じりの反論","u":"https://x.com/HOkurahoma/status/2061355089080754600"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"AI絵使用に倫理観の欠如を感じ、個人の権利擁護を訴える","u":"https://x.com/Sakana8C/status/2061138090186703235"},{"x":0.5,"y":1.0,"e":1.0,"c":0.85,"s":"AI絵・]~!b[jashin利用を自己都合と批判し消費者視点で忌避","u":"https://x.com/abyssal0307/status/2060953429141545109"},{"x":0.5,"y":0.5,"e":0.0,"c":0.65,"s":"AI使用時の盗作リスクを冷静に指摘","u":"https://x.com/Fuduki_Aoi_02/status/2060838118165717303"},{"x":1.5,"y":1.5,"e":1.0,"c":0.8,"s":"AI絵の盗用性を批判し作者保護を主張","u":"https://x.com/1vSGhuld9K50411/status/2059120953670730187"},{"x":-2.0,"y":-1.5,"e":1.5,"c":0.75,"s":"AI絵批判への反論で規制不要を主張","u":"https://x.com/Mezame0318/status/2058497187106206153"},{"x":-0.5,"y":-0.5,"e":1.0,"c":0.7,"s":"AI絵の正当使用を擁護、印象を言語化できず","u":"https://x.com/umiyuki_ai/status/2053502106292883497"},{"x":1.5,"y":1.5,"e":1.5,"c":0.8,"s":"AI規制とクリエイター権利擁護を主張する怒りの投稿","u":"https://x.com/vfAoRWWpkt86517/status/2069062760957460845"},{"x":2.0,"y":2.0,"e":2.0,"c":0.9,"s":"AIの無断利用に絶望、規制強化を求める怒り","u":"https://x.com/MM9963196287042/status/2069058998901555234"},{"x":0.5,"y":1.0,"e":1.0,"c":0.7,"s":"AIによるクリエイターPRへの不快感とクリエイター寄り姿勢","u":"https://x.com/wltaiktimas/status/2069058637063143588"},{"x":1.0,"y":1.5,"e":1.0,"c":0.85,"s":"会展でAIイラストが溢れ、クリエイター軽視だ","u":"https://x.com/MatchHina/status/2069057997230538861"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"小説家のAI利用を批判する個人的意見","u":"https://x.com/U7qWz/status/2069056454762668117"},{"x":-1.0,"y":0.5,"e":-1.0,"c":0.7,"s":"AI全否定派への呆れと疑問呈示","u":"https://x.com/HiroyukiSatou18/status/2069053635116634491"},{"x":1.0,"y":1.5,"e":1.5,"c":0.7,"s":"政府によるAI画像使用にクリエイター視点で怒り","u":"https://x.com/Ilori_Yumina/status/2069053391083561149"},{"x":2.0,"y":2.0,"e":2.0,"c":0.9,"s":"アニメーター、AI搾取に怒り","u":"https://x.com/yukidaruma000/status/2069048616317264239"},{"x":1.0,"y":1.0,"e":1.0,"c":0.75,"s":"AI生成の低品質とクリエイター軽視を嘲笑","u":"https://x.com/otakazedbDDG/status/2069044775194661363"},{"x":1.0,"y":1.5,"e":1.0,"c":0.85,"s":"クリエイター保護の矛盾を批判","u":"https://x.com/27watari/status/2069042993785446571"},{"x":0.0,"y":1.0,"e":-0.5,"c":0.6,"s":"AI出品でもクリエイターは不当扱いされないか疑問呈する","u":"https://x.com/baten5232/status/2069041450852262360"},{"x":0.0,"y":1.5,"e":1.0,"c":0.75,"s":"AI使用の二重標準に怒るクリエイター","u":"https://x.com/k8787808624578/status/2069039879405932831"},{"x":0.5,"y":1.0,"e":0.5,"c":0.7,"s":"規制の矛盾を指摘も諦め","u":"https://x.com/shzkgty_2/status/2069039229439766589"},{"x":1.5,"y":1.5,"e":1.5,"c":0.8,"s":"AI画像使用に激怒しクリエイター権利を擁護","u":"https://x.com/zzt231ss/status/2069038971297079565"},{"x":2.0,"y":2.0,"e":2.0,"c":0.85,"s":"生成AI規制とクリエイター権利擁護を激昂で非難","u":"https://x.com/flat0099/status/2069038130754457781"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"AI規制のrelevant性を問いかけ_CREATOR権利擁護の姿勢","u":"https://x.com/uragomori/status/2069037734124261532"},{"x":1.5,"y":1.5,"e":2.0,"c":0.85,"s":"AI・AI使用クリエイターへの強い嫌悪・軽蔑を表明","u":"https://x.com/vyiouoiyv/status/2069036837877035225"},{"x":1.0,"y":1.5,"e":1.5,"c":0.8,"s":"規制当局のAI利用はクリエイター軽視と批判","u":"https://x.com/jyugAmSiT923611/status/2069035375616729229"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI絵使用時のクリエイター名記入求める","u":"https://x.com/MTNS01660921/status/2069033742119952468"},{"x":0.5,"y":0.5,"e":0.0,"c":0.8,"s":"AI推進だが学習データにはクリーンさを要求","u":"https://x.com/roukifukureki/status/2069032281357037863"},{"x":-1.5,"y":-0.5,"e":0.0,"c":0.8,"s":"AIは消えないと認め市場適応を提言","u":"https://x.com/KiKuRasKu/status/2069032026272149860"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.5,"s":"AIユーザーの使用を容認する観察的投稿","u":"https://x.com/kijs24689gnm/status/2069031087494623593"},{"x":0.5,"y":1.5,"e":1.0,"c":0.8,"s":"生成AI使用の矛盾を皮肉るクリエイター権利擁護投稿","u":"https://x.com/severus_0109/status/2069030294594957426"},{"x":1.5,"y":1.5,"e":2.0,"c":0.75,"s":"生成AI海賊版利用を激怒批判","u":"https://x.com/yakimanzyu0/status/2069029884698280423"},{"x":1.0,"y":1.5,"e":1.5,"c":0.85,"s":"公取委の矛盾を皮肉る_CREATOR寄りで感情的","u":"https://x.com/ktjodjp/status/2069029207423013362"},{"x":0.5,"y":2.0,"e":1.5,"c":0.85,"s":"クリエイター支持を偽善と非難する怒りの投稿","u":"https://x.com/U11u_RA/status/2069016956532113443"},{"x":2.0,"y":2.0,"e":2.0,"c":0.95,"s":"AI完全禁止と創作者の権利保護を求める強い怒りの投稿","u":"https://x.com/azur_noir/status/2069016516977369574"},{"x":2.0,"y":2.0,"e":1.5,"c":0.8,"s":"生成AI海賊版利用に激怒する創作者保護論","u":"https://x.com/sobiura/status/2069014572569432374"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"AIはcreator依存で陶芸と異なる、規制強化を示唆","u":"https://x.com/NoblePerson009/status/2069012785846251941"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AI使用の矛盾を皮肉で批判","u":"https://x.com/VaMozk/status/2069010870945079633"},{"x":1.0,"y":1.5,"e":1.0,"c":0.85,"s":"AIが無断利用で公正競争しないと批判","u":"https://x.com/sasami2050/status/2069008518078935519"},{"x":1.5,"y":1.5,"e":1.5,"c":0.85,"s":"生成AIの規制とクリエイター保護を訴える","u":"https://x.com/aMj11jktCB80754/status/2069006959093903749"},{"x":0.5,"y":1.0,"e":1.0,"c":0.75,"s":"AIの盗用に懸念、クリエイター保護の立場","u":"https://x.com/nipponbare0v0/status/2069003711515668492"},{"x":1.5,"y":1.5,"e":2.0,"c":0.9,"s":"日本政府の生成AI政策に激怒する投稿","u":"https://x.com/miruyouman/status/2069003481202172267"},{"x":1.0,"y":1.5,"e":2.0,"c":0.95,"s":"AI利用の矛盾を激しく非難、クリエイター保護を主張","u":"https://x.com/artagongulgul/status/2068999230853960029"},{"x":0.5,"y":0.5,"e":0.0,"c":0.65,"s":"規制したいが実効性には無頓着","u":"https://x.com/angelic5moment/status/2069052354293637605"},{"x":0.5,"y":1.0,"e":0.0,"c":0.4,"s":"自作のAI学習禁止を条件的容認","u":"https://x.com/winterwintry/status/2069051094257529261"},{"x":1.5,"y":1.5,"e":0.0,"c":0.8,"s":"AI学習禁止でクリエイター保護を訴求するpromo投稿","u":"https://x.com/nekozoe_chan/status/2069045455749857464"},{"x":-1.0,"y":1.0,"e":1.0,"c":0.7,"s":"転載禁止は支持もAI規制には批判","u":"https://x.com/yzarc_ruoy/status/2069045421524312252"},{"x":1.0,"y":1.0,"e":0.0,"c":0.8,"s":"AI学習禁止を明記した創作宣伝文","u":"https://x.com/Lira_Compass/status/2069043200317383100"},{"x":1.5,"y":1.0,"e":-1.0,"c":0.8,"s":"AI学習・転載禁止を当然視し呆れ示す","u":"https://x.com/haya_haya0825/status/2069040136005001357"},{"x":1.0,"y":0.5,"e":0.0,"c":0.55,"s":"AI学習禁止掲げるSNS招待投稿、規制・個人保護の姿勢","u":"https://x.com/ponponsupe/status/2069036179887214890"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AI学習禁止を表明する個人クリエイター","u":"https://x.com/yotsuyu_zero/status/2069035823572701666"},{"x":1.0,"y":1.5,"e":0.0,"c":0.85,"s":"AI学習禁止でクリエイター保護主打の宣伝","u":"https://x.com/marukuru_20202/status/2069034356451233999"},{"x":1.5,"y":1.5,"e":0.5,"c":0.75,"s":"AI学習禁止の規制強化と創作者保護を訴える広告投稿","u":"https://x.com/Enemu_Eimy/status/2069033991705932076"},{"x":1.0,"y":1.0,"e":0.0,"c":0.85,"s":"AI学習禁止を揭げる創作支援SNSの宣伝","u":"https://x.com/ibaracity998/status/2069031872265674878"},{"x":1.0,"y":1.0,"e":0.0,"c":0.85,"s":"本人確認済みAI利用禁止告知・冷静","u":"https://x.com/yoshinonouenda/status/2069029582364434743"},{"x":0.5,"y":1.0,"e":-0.5,"c":0.55,"s":"AI著作への困惑を相談、規制に弱く賛成","u":"https://x.com/virovirowaifu/status/2069028310453989708"},{"x":1.5,"y":1.5,"e":0.5,"c":0.85,"s":"AI学習禁止の規制姿勢とクリエイター保護を強調","u":"https://x.com/yun_from2016/status/2069022140511490139"},{"x":2.0,"y":2.0,"e":0.0,"c":0.85,"s":"AI学習・転載の禁止を明示する静かな宣言","u":"https://x.com/0621__haruna/status/2069021631167742458"},{"x":1.0,"y":1.0,"e":0.0,"c":0.8,"s":"納品報告とAI学習禁止の注明","u":"https://x.com/vhrmyv/status/2069019655482822848"},{"x":1.0,"y":1.5,"e":0.0,"c":0.65,"s":"AI学習禁止の規制とクリエイター保護を訴える招待投稿","u":"https://x.com/gataaa62/status/2069014563857780877"},{"x":1.0,"y":1.0,"e":0.0,"c":0.7,"s":"日常投稿にAI学習禁止声明を添えた軽い内容","u":"https://x.com/miko_3917/status/2069010334233567576"},{"x":1.5,"y":1.5,"e":1.5,"c":0.6,"s":"クリエイター怒り・規制強化求める","u":"https://x.com/cutter_0303/status/2069007351081009323"},{"x":1.0,"y":1.5,"e":0.5,"c":0.75,"s":"AI学習禁止を打ち出す創作支援SNSの宣伝投稿","u":"https://x.com/m_isui0925/status/2069006408272707747"},{"x":2.0,"y":2.0,"e":1.0,"c":0.95,"s":"AI学習禁止を求めるクリエイターの発言","u":"https://x.com/hakuanagoz821/status/2069006303591297406"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.5,"s":"AI学習巡り無関心を表明","u":"https://x.com/Ozuya0812/status/2069002079847518697"},{"x":1.5,"y":1.0,"e":0.5,"c":0.75,"s":"AI学習禁止明記、クリエイター権利保護強調の定期宣伝","u":"https://x.com/ithemya_yoshi/status/2068999425431916924"},{"x":1.0,"y":1.0,"e":0.5,"c":0.8,"s":"クリエイターがAI学習利用の停止を求める穏当な投稿","u":"https://x.com/carracer1097/status/2068997488846008619"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI学習無断利用に困惑、個人権利擁護","u":"https://x.com/2501Muttyo/status/2068997473222496558"},{"x":0.5,"y":1.0,"e":0.5,"c":0.7,"s":"AI学習禁止を条件に作品は自由利用可","u":"https://x.com/usajou/status/2068997269031178689"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/Ryu_jo_iori/status/2068994557686243666"},{"x":0.5,"y":1.0,"e":0.0,"c":0.75,"s":"AI学習利用禁止を明言する穏当な投稿","u":"https://x.com/puka__puka__o/status/2068990480571048078"},{"x":1.5,"y":2.0,"e":2.0,"c":0.9,"s":"AI学習禁止宣言、著作権最優先の怒り","u":"https://x.com/purrely_socute/status/2068988462720815394"},{"x":1.5,"y":1.0,"e":0.5,"c":0.75,"s":"AI学習・転載はいかなる場合も禁止すべき","u":"https://x.com/purrely_socute/status/2068987994066043317"},{"x":2.0,"y":2.0,"e":0.0,"c":0.85,"s":"AI学習も著作権侵害と断じる冷静な主張","u":"https://x.com/zUo_oUw/status/2068984439066255795"},{"x":-1.5,"y":-1.0,"e":-0.5,"c":0.75,"s":"AI学習は犯罪にならないとの立場で自衛を呼びかけ","u":"https://x.com/SakazukiShine/status/2068981480135729165"},{"x":-1.0,"y":1.5,"e":0.0,"c":0.75,"s":"ウォーターマークでAI利用を阻止する助言","u":"https://x.com/Homurano_Yuma/status/2068978627178557567"},{"x":0.5,"y":1.0,"e":0.0,"c":0.6,"s":"AI学習禁止希望も控えめ提案","u":"https://x.com/Baek_dan_hyang/status/2068976699421958528"},{"x":0.5,"y":-1.0,"e":1.0,"c":0.7,"s":"共有OKだが無断転載は控えてほしい","u":"https://x.com/kurounmo831/status/2068975380028117379"},{"x":0.0,"y":0.0,"e":0.0,"c":0.3,"s":"AI規制の現状を淡々と陈述","u":"https://x.com/atiko628/status/2069059065276481892"},{"x":-1.0,"y":0.0,"e":-1.0,"c":0.75,"s":"規制より市場変化でAI論争は自然消滅すると予測","u":"https://x.com/made_by_KRT/status/2069047564259987669"},{"x":-1.0,"y":-1.0,"e":-0.5,"c":0.75,"s":"規制派を左派・反体制と断じ冷笑的に批判","u":"https://x.com/AB_raiga/status/2069045674377933137"},{"x":-1.0,"y":0.5,"e":1.5,"c":0.7,"s":"規制派なりすましを激しく非難","u":"https://x.com/sobiura/status/2069040173816705408"},{"x":-1.0,"y":0.0,"e":-0.5,"c":0.55,"s":"拙い規制への疑念と諦め混じりの警告","u":"https://x.com/iroha_shirakaba/status/2069038547693453492"},{"x":1.0,"y":0.5,"e":0.5,"c":0.75,"s":"部分規制賛成・消費者保護の立場","u":"https://x.com/aochins8/status/2069038109883601015"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.8,"s":"AI完全犯罪映画を皮肉, 規制より技術発展を支持","u":"https://x.com/namihorie88/status/2069036709870997976"},{"x":0.0,"y":0.0,"e":0.0,"c":0.75,"s":"AIが専門職と同等性能に到達","u":"https://x.com/AI_keita0312/status/2069030679975997497"},{"x":0.0,"y":-0.5,"e":0.0,"c":0.65,"s":"規制されぬ現状を諦めつつ自衛を呼びかけ","u":"https://x.com/mariko15kattun/status/2069028719356969375"},{"x":-0.5,"y":-0.5,"e":-1.0,"c":0.7,"s":"日本の技術競争力不足を皮肉る投稿","u":"https://x.com/BNJ65640048/status/2069016663606116792"},{"x":0.0,"y":0.0,"e":0.5,"c":0.65,"s":"両論を共に批判し同一視する懐疑的立場","u":"https://x.com/kurorinrin/status/2069012061636669701"},{"x":2.0,"y":2.0,"e":1.0,"c":0.8,"s":"規制と権利保護の議論先行を主張","u":"https://x.com/nankakureman/status/2069010338708856935"},{"x":-1.0,"y":0.0,"e":-0.5,"c":0.6,"s":"規制つぶしを求めるも，政治的妥協匂わせる","u":"https://x.com/fayforest/status/2069005029466664964"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"サムスンとノルウェーのAI規制動向の乖離を指摘","u":"https://x.com/fukurou_666/status/2069004420474621961"},{"x":0.0,"y":0.5,"e":-0.5,"c":0.6,"s":"文春の行為は批判も規制方向への懸念示す","u":"https://x.com/T666Blitz/status/2068994542091845925"},{"x":-0.5,"y":-0.5,"e":-1.0,"c":0.7,"s":"AI規制は自然の流れと受容、苦笑い気味","u":"https://x.com/animmaccha_rio/status/2068994320116703564"},{"x":-1.0,"y":0.5,"e":0.0,"c":0.8,"s":"AI規制は懐疑的だが開示義務は支持","u":"https://x.com/shichiy777/status/2068988336631660793"},{"x":-2.0,"y":1.5,"e":2.0,"c":0.95,"s":"規制撤廃求め怒り示す個人表現重視派","u":"https://x.com/Nahat127/status/2068984812854280197"},{"x":0.5,"y":0.0,"e":1.0,"c":0.6,"s":"AI合法前提に立つ規制派。否定派を批判","u":"https://x.com/uitosrn/status/2068982615160611229"},{"x":0.5,"y":0.0,"e":0.5,"c":0.7,"s":"規制派を自認しつつ政治批判の方法を問題視","u":"https://x.com/0bMa20830/status/2068972338046226674"},{"x":-1.5,"y":-1.0,"e":0.0,"c":0.75,"s":"AI規制不要論、社会の自由発展を優先","u":"https://x.com/lilyberyl_/status/2068951399887765576"},{"x":1.0,"y":0.0,"e":-0.5,"c":0.75,"s":"根本的規制を支持も、抜け道は必至と皮肉","u":"https://x.com/OEKAKI_DEKITANE/status/2068940443459739738"},{"x":1.5,"y":-0.5,"e":-0.5,"c":0.75,"s":"AI規制求めるも軽口で冷静","u":"https://x.com/2010_earth/status/2068936804133482825"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.6,"s":"教育には自制心必要で規制優先と主張","u":"https://x.com/gaming_rctno0/status/2068932583669506253"},{"x":-0.5,"y":-0.5,"e":-0.5,"c":0.6,"s":"規制寄りの立場を取るが、自陣営の議論に苦戦している","u":"https://x.com/pochi_nof/status/2068929568954782107"},{"x":1.0,"y":1.0,"e":0.0,"c":0.8,"s":"著作権保護目的での規制強化を支持","u":"https://x.com/Altextrack/status/2068921060830122356"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"AI出力物販売も規制すべきとの声","u":"https://x.com/AnimexJP/status/2068918504976449684"},{"x":-1.0,"y":0.0,"e":0.0,"c":0.7,"s":"指の本数は柔軟に考えて良い","u":"https://x.com/syokuenfushiyo/status/2069051870732267918"},{"x":0.5,"y":1.0,"e":0.5,"c":0.65,"s":"AI学習への公式著作利用を問題視","u":"https://x.com/wKy6i7hw7J3bk7Z/status/2069043231434981550"},{"x":-0.5,"y":-1.0,"e":2.0,"c":0.85,"s":"AI利用を擁護、激しい感情で批判","u":"https://x.com/SpinPenguin99/status/2069041608985870512"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.8,"s":"AI脅威認めるも適応促す冷めた論調","u":"https://x.com/kadotanimitsuru/status/2069033018615042199"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI音声の脅威を指摘する冷静な観察投稿","u":"https://x.com/besbeswitch/status/2069005033757388925"},{"x":-1.0,"y":0.5,"e":0.0,"c":0.8,"s":"技術変化は仕方ないが絵師の困窮は共感","u":"https://x.com/MangaNoriba/status/2068996393671516280"},{"x":-1.5,"y":-1.5,"e":-1.0,"c":0.85,"s":"AIは無規制で creadorより優れるとの主張","u":"https://x.com/sobuira/status/2068949968392757501"},{"x":0.5,"y":0.5,"e":1.0,"c":0.7,"s":"生成AIイラストへの嫌悪表明　感情的な批判","u":"https://x.com/piro_sen/status/2068907346949251077"},{"x":-1.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI学習は許可不要と主張","u":"https://x.com/wnaRCH1xBkKtfOn/status/2068890672258834840"},{"x":0.0,"y":0.5,"e":0.0,"c":0.55,"s":"AI権利議論で画像リプライが減ったという観察","u":"https://x.com/menmen_shi/status/2068883957341643021"},{"x":0.0,"y":1.5,"e":1.5,"c":0.85,"s":"AI以前の問題として無断修正行為を激しく非難","u":"https://x.com/qnwZZs6_T/status/2068882767459590332"},{"x":1.0,"y":1.0,"e":1.0,"c":0.7,"s":"AIイラスト不信感表明、問題は懸念","u":"https://x.com/A__MASHIRO/status/2068831407628226822"},{"x":1.0,"y":1.5,"e":1.0,"c":0.75,"s":"AI絵肯定派に反論、個人権利擁護","u":"https://x.com/makkan_0327/status/2068794276348359034"},{"x":0.5,"y":1.0,"e":0.0,"c":0.8,"s":"AI画像に好感を抱けず個人権利を傾斜","u":"https://x.com/nonpal/status/2068770351899873529"},{"x":-0.5,"y":0.5,"e":0.5,"c":0.7,"s":"AI利用の質を批判し、クリエイターとしての質を重視","u":"https://x.com/teeeeeekuma/status/2068690508013277378"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AI学習の違法性に懸念表明","u":"https://x.com/hacchipocchi888/status/2068665821057220707"},{"x":0.0,"y":0.0,"e":1.0,"c":0.7,"s":"AIアニメ化の実験共有で自由か規制かの論評はなし","u":"https://x.com/MALOMALO_Ae/status/2068659758656299254"},{"x":-1.0,"y":-1.0,"e":0.0,"c":0.8,"s":"AI活用に肯定的、産業利用を合理性で支持","u":"https://x.com/gabugaburin/status/2068659380980248593"},{"x":0.0,"y":0.0,"e":0.0,"c":0.65,"s":"AI活用の私的ワークフロー紹介。中立的。","u":"https://x.com/Emily146365811/status/2068657242417529218"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.5,"s":"AI利用の実践報告。無規制の暗黙肯定","u":"https://x.com/Emily146365811/status/2068657053317374068"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/anya46497/status/2068646428893933598"},{"x":-1.0,"y":-0.5,"e":0.5,"c":0.7,"s":"AI批判への冷静な反論で自由化寄り","u":"https://x.com/eiqxpXepDRWLWGK/status/2068601800123666904"},{"x":-0.5,"y":0.5,"e":-0.5,"c":0.7,"s":"AI便利だが解釈違いで自給自足が الأفضل","u":"https://x.com/sk_sakura4/status/2069400954705973351"},{"x":1.5,"y":1.5,"e":1.0,"c":0.75,"s":"生成AI使用を道義的に非難する怒り","u":"https://x.com/GOh_7FpooI/status/2069399602579886500"},{"x":-0.5,"y":0.0,"e":0.5,"c":0.6,"s":"AI活用の利便性を肯定的に共有する投稿","u":"https://x.com/kiyostyle8739/status/2069385803806191791"},{"x":-0.5,"y":0.0,"e":1.0,"c":0.7,"s":"政府AI方針の曖昧さに強い不満・批判","u":"https://x.com/2010_earth/status/2069376863424942095"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.7,"s":"AI活用は肯定的だが、導入時期に疑問を示している","u":"https://x.com/my_gokoku/status/2069369749004603524"},{"x":1.0,"y":1.5,"e":0.5,"c":0.75,"s":"AI企業によるアニメーター搾取を批判","u":"https://x.com/takatakabon82/status/2069358310898446580"},{"x":-1.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI普及は避けられずクリエイター抵抗は無駄との諦観","u":"https://x.com/toroumapasta/status/2069358027787141556"},{"x":0.5,"y":0.0,"e":0.0,"c":0.6,"s":"AI利用の自己責任を問いかける警鐘投稿","u":"https://x.com/artbreak_taichi/status/2069345038740672578"},{"x":-0.5,"y":0.5,"e":0.5,"c":0.75,"s":"AI否定せず棲み分け希望。見下しに辟易","u":"https://x.com/888lemonVC/status/2069320761576505841"},{"x":0.5,"y":0.5,"e":0.0,"c":0.75,"s":"AI利用時の個人リスク注意喚起","u":"https://x.com/yume_ai123/status/2069304310064923053"},{"x":-1.0,"y":-1.0,"e":0.0,"c":0.75,"s":"AI導入で業務効率化、中小企業のコスト削減を肯定的に紹介","u":"https://x.com/0zi369/status/2069299589841121625"},{"x":0.0,"y":0.5,"e":0.0,"c":0.7,"s":"AIは便利だが創作には熱意がない","u":"https://x.com/moru_2_wister/status/2069288418958536743"},{"x":0.0,"y":0.0,"e":0.0,"c":0.15,"s":"AI便利でフォトショ未使用の雑感","u":"https://x.com/7jvInfo/status/2069281624676880480"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI文章は便利だが調整を呼びかけ","u":"https://x.com/zeroichipro/status/2069279387628036165"},{"x":-0.5,"y":-1.0,"e":-1.0,"c":0.6,"s":"創作環境の変化を認めつつも社会的便利さを優先","u":"https://x.com/choco_monaca_/status/2069265657401901333"},{"x":0.0,"y":1.0,"e":1.0,"c":0.75,"s":"デザイナーの生存への懸念とAI模倣時代の到来を指摘","u":"https://x.com/shota7y/status/2069261255081447751"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"回転寿司比喩でAI量産の限界を指摘","u":"https://x.com/horino_ec/status/2069256195886731465"},{"x":0.0,"y":0.0,"e":0.5,"c":0.7,"s":"AI作曲ツールの軽い紹介・楽しい使用体験","u":"https://x.com/PC08649941/status/2069255855363838176"},{"x":0.0,"y":0.0,"e":0.0,"c":0.95,"s":"生成AIでプロフィール作成を試みる体験記","u":"https://x.com/Josef_Dietzgen/status/2069252996089954757"},{"x":1.0,"y":1.0,"e":0.0,"c":0.8,"s":"教育現場でAI利用時の安全・個人情報保護を促す情報共有","u":"https://x.com/DX2564078896964/status/2069242036398526837"},{"x":0.5,"y":0.5,"e":0.0,"c":0.6,"s":"AI利用に慎重派の穏当な願い","u":"https://x.com/nora_miles2/status/2069224274070835574"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"AI便利性を肯定する朝食投稿","u":"https://x.com/758758_AD/status/2069221842569887787"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"生成AIの行く末を問いかける投稿","u":"https://x.com/Vengineer/status/2069219598847865013"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.75,"s":"AI有用性を主張し不理解者に呆れる","u":"https://x.com/Tok_San76/status/2069215732551016663"},{"x":0.5,"y":0.0,"e":0.0,"c":0.7,"s":"AIは便利だが、学校では注意点の確認後に使うべきと主張","u":"https://x.com/DX2564078896964/status/2069194976718700887"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AI肯定認識の低さと浸透不足を分析","u":"https://x.com/bl_fox26/status/2069389043276951644"},{"x":-1.0,"y":0.5,"e":0.5,"c":0.75,"s":"AI活用で寝不足解消等の私的利益を称賛","u":"https://x.com/masukusoro/status/2069352163416117757"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.6,"s":"AI活用の効率性を肯定し個人利益も語る穏当な投稿","u":"https://x.com/airi_affi12/status/2069056324156146142"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.8,"s":"ソウル市のAI基盤が事業者にメリットをもたらすと紹介","u":"https://x.com/bl_fox26/status/2068932741622866352"},{"x":-0.5,"y":0.0,"e":-0.5,"c":0.65,"s":"AI活用の規制効果に懐疑的な観察投稿","u":"https://x.com/masataross/status/2068222695926611972"},{"x":-1.0,"y":-1.0,"e":0.5,"c":0.7,"s":"AI活用で経済復活策を語る能動的投稿","u":"https://x.com/s2000crow/status/2067988660910518679"},{"x":-0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI研究活用の効率性を肯定","u":"https://x.com/bl_fox26/status/2067887789891530941"},{"x":0.0,"y":0.5,"e":0.0,"c":0.8,"s":"AI導入定着化に現場視点の便益共有を推奨","u":"https://x.com/bl_fox26/status/2067835242778612021"},{"x":0.0,"y":0.0,"e":0.5,"c":0.6,"s":"モバイルAIの宣伝投稿、規制や受益者への言及なし","u":"https://x.com/ai_hakase_/status/2067533282053390356"},{"x":0.0,"y":-0.5,"e":0.0,"c":0.6,"s":"AI活用広がるDX、職員・全体にメリット","u":"https://x.com/matsu_f16_sub/status/2067365206540587384"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AI出力に懐疑的、権利問題と賛成派の態度を批判","u":"https://x.com/hiehie_tanuki/status/2069355226298245483"},{"x":-1.0,"y":-1.5,"e":0.5,"c":0.8,"s":"日本のAI活用加速と競争力強化を訴求","u":"https://x.com/hyogakioji/status/2069291894950051944"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"法整備前提でAI発展に条件付き賛成","u":"https://x.com/yoskei_sake/status/2069291473544347729"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.7,"s":"AIには触れずイラストレーターの矛盾を皮肉る","u":"https://x.com/KotobaAsobiCom/status/2069224992127307780"},{"x":0.0,"y":0.0,"e":-0.5,"c":0.7,"s":"AIは使いようで賛否は意味ないと指摘","u":"https://x.com/kurorinrin/status/2069213901171109917"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/az8997614728647/status/2069054281182019943"},{"x":-0.5,"y":0.0,"e":-0.5,"c":0.7,"s":"AI開発賛成だが品質不安を指摘","u":"https://x.com/NWaka_1415/status/2068952323515400410"},{"x":2.0,"y":1.5,"e":1.0,"c":0.85,"s":"規制派に全面賛成・AI使用全面的自重を求める","u":"https://x.com/Siberian_Tundra/status/2068894545019031863"},{"x":1.0,"y":0.5,"e":0.0,"c":0.85,"s":"規制主旨に賛成だが表現のまずさを指摘","u":"https://x.com/Usf1FoTboN24913/status/2068709469484470776"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AIコードツールの料金上昇に懐疑的","u":"https://x.com/ark496/status/2068657955327955349"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.6,"s":"AIは有用だが、教育課程への導入に限定","u":"https://x.com/lgwlXfAyUWCGSvV/status/2068471436285755697"},{"x":-0.5,"y":0.5,"e":0.5,"c":0.65,"s":"事務所の裏事情に呆れ・ファン保護意識","u":"https://x.com/2nd0ra/status/2068253714193031537"},{"x":-1.5,"y":-1.5,"e":1.0,"c":0.75,"s":"生成AI自由化支持、陰謀論的構成で感情的な主張","u":"https://x.com/Mori839924/status/2068040183291998567"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI側の対価支払いを批判、個人権利を擁護","u":"https://x.com/kurotuki2423/status/2068016294050566305"},{"x":-1.0,"y":-1.0,"e":0.5,"c":0.8,"s":"AI使用は責任前提に自由派、反対派の声には反論","u":"https://x.com/fuoco_yukitani/status/2068004295690293738"},{"x":2.0,"y":0.5,"e":1.0,"c":0.7,"s":"生成AI全面規制を主張、感情的な批判","u":"https://x.com/shigurezuki1008/status/2067850388817002949"},{"x":0.0,"y":0.0,"e":0.0,"c":0.85,"s":"AI活用法を冷静に語る中立的投稿","u":"https://x.com/misaki_hennyu/status/2067812184659513571"},{"x":-1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI利用には賛成も、創造者の矜持は譲らない","u":"https://x.com/aro_s_2/status/2067802381660918240"},{"x":0.5,"y":1.0,"e":0.0,"c":0.7,"s":"権利者の規制反対声明引用、冷静に両論提示","u":"https://x.com/appwink18/status/2067656415473496087"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.75,"s":"両陣営への批判的懐疑・自省的冷静な姿勢","u":"https://x.com/PatPatRin_Smoke/status/2067626679674261590"},{"x":-1.0,"y":-1.0,"e":-0.5,"c":0.75,"s":"規制矛盾を指摘する冷静だが皮肉な自由化支持","u":"https://x.com/Anpin_Chang/status/2067457229469683718"},{"x":1.5,"y":1.0,"e":1.5,"c":0.7,"s":"AI規制求めるも他者批判に終始","u":"https://x.com/0808yuhho/status/2067331056743915914"},{"x":1.0,"y":1.5,"e":1.0,"c":0.85,"s":"日本の漫画権利保護支持、AI規制に賛成","u":"https://x.com/0808yuhho/status/2067264511808249994"},{"x":0.0,"y":-1.0,"e":-1.0,"c":0.65,"s":"AI活用前提で教育改革と経済再生を支持","u":"https://x.com/sirouto/status/2067243951623721113"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.7,"s":"AI規制論者の屁理屈を皮肉る","u":"https://x.com/kef_in_kyoto/status/2067225036667461936"},{"x":0.5,"y":1.5,"e":0.5,"c":0.6,"s":"AI使用に消極的、でも規制強化は明示せず","u":"https://x.com/x_il_sab/status/2067118084545261719"},{"x":0.5,"y":0.0,"e":0.0,"c":0.7,"s":"中立寄りだが規制賛成派の話に共感","u":"https://x.com/hazako277803/status/2066879640569086046"},{"x":1.0,"y":1.5,"e":0.0,"c":0.75,"s":"AI学習規制強化と著作権者保護を支持","u":"https://x.com/ikapon1/status/2066611769439875314"},{"x":1.0,"y":0.0,"e":1.5,"c":0.75,"s":"AI追随者を全体主義呼ばわりし強い嫌悪を示す","u":"https://x.com/MinMin_999_min/status/2066530621053386880"},{"x":-1.0,"y":0.0,"e":-1.0,"c":0.6,"s":"AIイラストの「壊れ」も許容すべきと軽やかに主張","u":"https://x.com/0KmFGcBiw6x2tKy/status/2069398815006961855"},{"x":1.0,"y":0.5,"e":0.5,"c":0.6,"s":"AI画像に知情表示を求める穏当な意見","u":"https://x.com/sagyouneko09/status/2069398349539922252"},{"x":0.5,"y":0.0,"e":-0.5,"c":0.6,"s":"AIイラストの質への疑問と諦め","u":"https://x.com/C_Boost45/status/2069385543428002228"},{"x":0.0,"y":1.0,"e":0.0,"c":0.75,"s":"人間創作物への支持表明、規制は明言せず","u":"https://x.com/seankntome/status/2069381066620817650"},{"x":1.5,"y":1.0,"e":0.5,"c":0.75,"s":"AI創造は控えめに、補佐用途を推奨","u":"https://x.com/seankntome/status/2069380538218188855"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.6,"s":"AIの業務活用に肯定的で、仕事の効率を優先","u":"https://x.com/Banken0000/status/2069378801705082881"},{"x":0.0,"y":0.0,"e":1.0,"c":0.7,"s":"AI利用を肯定的に楽しみ感情を示す","u":"https://x.com/Shitow_sitoh/status/2069376360959889613"},{"x":0.5,"y":0.0,"e":-1.0,"c":0.55,"s":"条件付き容認を示唆、根本理解不足を暗に批判","u":"https://x.com/OEKAKI_DEKITANE/status/2069371490353791190"},{"x":0.0,"y":1.0,"e":0.5,"c":0.7,"s":"AI脅威を認めつつ個人の生き残り策を提唱","u":"https://x.com/ibara_Pursuit/status/2069336126880645364"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AIでアイコン作成した楽しい投稿","u":"https://x.com/Zakoasebito/status/2069300736610169149"},{"x":0.5,"y":1.0,"e":1.0,"c":0.7,"s":"AI利便性を認めつつ人間の芸術性を肯定","u":"https://x.com/okomegekilove/status/2069281202796912766"},{"x":0.0,"y":0.0,"e":0.5,"c":0.7,"s":"AI利用を肯定的に紹介、キャラらしい陽気な投稿","u":"https://x.com/MiharuMay3rd/status/2069276396116136350"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.85,"s":"AI利用を気軽に語る軽い投稿","u":"https://x.com/sausu2451/status/2069274956752703989"},{"x":0.0,"y":0.5,"e":0.0,"c":0.7,"s":"AIも手描きも好き、技量次第という中立意見","u":"https://x.com/AI_Illust_000/status/2069270699257290805"},{"x":0.5,"y":1.0,"e":0.5,"c":0.65,"s":"AI音楽は肯定する一方、AIイラストには批判的な個人感想","u":"https://x.com/manam0Azel/status/2069266595487371622"},{"x":0.0,"y":0.5,"e":-0.5,"c":0.6,"s":"AIより美的センスの涵養を重視","u":"https://x.com/natsu_iro54/status/2069255653248667800"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/mer_chinoch/status/2069248620805902397"},{"x":-0.5,"y":0.5,"e":-0.5,"c":0.6,"s":"AIサムネへの嫌悪示すも規制提起ではない","u":"https://x.com/nomad_893/status/2069246248054636948"},{"x":0.0,"y":0.0,"e":0.0,"c":0.55,"s":"AI 生成絵に自画自賛する自虐的・軽口の投稿","u":"https://x.com/nanoGIRL0520/status/2069244896977043771"},{"x":1.5,"y":1.5,"e":0.0,"c":0.85,"s":"AI学習の著作権侵害を懸念する声","u":"https://x.com/shionfutami0203/status/2069237110582952050"},{"x":0.5,"y":1.0,"e":0.5,"c":0.75,"s":"AI企業にクリエイター軽視の矛盾を批判","u":"https://x.com/sikyosyounin/status/2069225117599805465"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.8,"s":"AIと絵師の協働で品質アップ、双方win-win","u":"https://x.com/irisfionaAIBS/status/2069209390461378914"},{"x":1.0,"y":1.5,"e":0.0,"c":0.85,"s":"権利保護前提で規制容認、個人権利重視","u":"https://x.com/YUGAYUG01511120/status/2069369977229152612"},{"x":1.5,"y":1.0,"e":1.0,"c":0.85,"s":"X規制賛成・誤訳被害者に共感し政治家へ行動促す","u":"https://x.com/yuraiyurai07/status/2069231468820549690"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI大手CEOが規制求める異例の動きを報告","u":"https://x.com/yuichisatoeco/status/2069186631601410188"},{"x":1.0,"y":0.5,"e":1.0,"c":0.7,"s":"規制推進方針に疑問も具体的行動を要求","u":"https://x.com/mickey_kaze/status/2068939096572240108"},{"x":-0.5,"y":0.5,"e":1.0,"c":0.65,"s":"規制の真意を疑問視し個人利益を懸念","u":"https://x.com/nico_luvs_u/status/2068847171554955400"},{"x":-1.5,"y":-0.5,"e":1.5,"c":0.8,"s":"規制派を皮肉で批判し、自由化支持の立場","u":"https://x.com/MK950131/status/2068647834019303459"},{"x":1.5,"y":1.5,"e":2.0,"c":0.75,"s":"政府にAI規制を求める怒りと市民保護の主張","u":"https://x.com/gabei_tabetetai/status/2068578932484694330"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/NoblePerson009/status/2068565648519946725"},{"x":1.0,"y":0.5,"e":0.0,"c":0.7,"s":"個人利用の安全求める規制派","u":"https://x.com/uklzzz/status/2068555299452248250"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/jimo211k/status/2068524151288287359"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/MKBKCOM/status/2068446318012297656"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/MusicaRicercata/status/2068227779347533893"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"英検対策でAI規制トピック紹介","u":"https://x.com/YasuYasuEnglish/status/2068179965661831466"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/Keke965610Ke/status/2068143785343963447"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/ai_catchup_jp/status/2068106956255244454"},{"x":1.5,"y":1.5,"e":2.0,"c":0.85,"s":"規制推進派が反対派を非難する激烈な投稿","u":"https://x.com/w2XNRMLAwJCHGZC/status/2067820105573294481"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/chazy78e/status/2067810048617882055"},{"x":1.0,"y":0.5,"e":1.0,"c":0.75,"s":"AI業界の暴走に激怒し規制導入を支持","u":"https://x.com/382584025/status/2067736867739734452"},{"x":-0.5,"y":-0.5,"e":0.5,"c":0.7,"s":"規制対象を有害性に限定すべきと主張","u":"https://x.com/94zCTfAswUhq5AS/status/2067560308164681764"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/mask88014002/status/2067551728023777587"},{"x":1.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI・SNSの政治的影響に一定の規制が必要と主張","u":"https://x.com/astronomy428/status/2067293866735325229"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/kaneshou4545/status/2067232920750961051"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/kef_in_kyoto/status/2067228203522064894"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/N65006333/status/2067226110765719926"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/J_A_Prestwich/status/2067195663465726439"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/wwwwprivate/status/2067169711641756014"},{"x":0.0,"y":0.0,"e":0.0,"c":0.0,"s":"エラー","u":"https://x.com/meta__bow/status/2067152144315384225"},{"x":1.5,"y":1.5,"e":1.0,"c":0.75,"s":"AI開発での権利侵害拡大を懸念し規制強化支持","u":"https://x.com/Senoya708/status/2076283902319276162"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"生成AI画像乱用への強い不満と規制を求める声","u":"https://x.com/skr_0221/status/2076302537247109265"},{"x":-1.0,"y":1.0,"e":0.5,"c":0.85,"s":"自身の作品AI利用は正当と主張する個人ユーザー","u":"https://x.com/Ckawa_Niji/status/2076299801214505198"},{"x":-1.0,"y":-1.0,"e":1.5,"c":0.85,"s":"AIユーザーが著作権を主張することに怒り","u":"https://x.com/Mars_I_Phobos/status/2076279326933434672"},{"x":1.0,"y":1.5,"e":1.0,"c":0.85,"s":"文化庁のAI学習データ容認姿勢に懸念を示し、著作権保護の強化を求める投稿","u":"https://x.com/ryorekuiemu/status/2076274690205843526"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI利用で創作者の権利尊重を呼びかけ","u":"https://x.com/CafeRapin/status/2076265856959758665"},{"x":-1.0,"y":-0.5,"e":0.0,"c":0.7,"s":"AI批判の方法は悪手との意見で自由化寄り","u":"https://x.com/tell_meabout_u/status/2076254204654735520"},{"x":1.0,"y":0.5,"e":1.5,"c":0.85,"s":"AI批判者の自己矛盾を皮肉る規制寄りの投稿","u":"https://x.com/fxtj_gca/status/2076247449388392566"},{"x":2.0,"y":1.5,"e":2.0,"c":0.95,"s":"AI使用を人殺しと強く非難、規制求める","u":"https://x.com/AnimexJP/status/2076246575375163766"},{"x":-1.5,"y":-1.0,"e":1.0,"c":0.8,"s":"AI規制に反対し利用自由化と娯楽優先を主張","u":"https://x.com/jlm2dd/status/2076242482636165501"},{"x":1.0,"y":1.0,"e":-1.0,"c":0.75,"s":"AI著作権問題を皮肉で指摘","u":"https://x.com/temmado/status/2076240886057537729"},{"x":2.0,"y":2.0,"e":2.0,"c":0.9,"s":"生成AIのrights侵害を激しく批判、規制強化と個人権利保護を主張","u":"https://x.com/gabei_tabetetai/status/2076240628279853312"},{"x":-1.5,"y":-1.5,"e":1.0,"c":0.75,"s":"AI批判者の二重基準を指摘しAI擁護","u":"https://x.com/fxtj_gca/status/2076212450995908958"},{"x":-1.5,"y":-1.0,"e":1.5,"c":0.85,"s":"AI規制派を痛烈に批判する怒りの個人的意見","u":"https://x.com/ai_rapper_/status/2076231022434480562"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.75,"s":"著作権法30条の4を引用しAI利用は許容されると解説","u":"https://x.com/shiroshiromagic/status/2076193718298951873"},{"x":-1.0,"y":-0.5,"e":-0.5,"c":0.7,"s":"リテラシーある社会人には規制が不要との意見","u":"https://x.com/SuYgj/status/2076196365915623706"},{"x":1.0,"y":1.0,"e":-1.0,"c":0.75,"s":"AI企業による規約無視の学習を疑う批判","u":"https://x.com/Senoya708/status/2076190817568624944"},{"x":0.0,"y":0.0,"e":0.5,"c":0.7,"s":"AIより人間の悪意の方が恐ろしいとする個人的見解","u":"https://x.com/amatubakisakuya/status/2076189664415998347"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI不使用の明示を求め個人権利保護を懸念","u":"https://x.com/truly___all/status/2076175592400273917"},{"x":-2.0,"y":-2.0,"e":2.0,"c":1.0,"s":"AI自由化強く支持、規制派を敵視し激怒","u":"https://x.com/mike_taityou/status/2076174908019904997"},{"x":1.5,"y":1.0,"e":1.5,"c":0.9,"s":"AI規制強化で子供守れと主張","u":"https://x.com/AnimexJP/status/2076169538538987577"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AIの模倣・著作権侵害はNGという意見","u":"https://x.com/tempura_0721_kk/status/2076169100112666880"},{"x":1.0,"y":0.5,"e":1.0,"c":0.7,"s":"海外比で日本のAI楽観論を疑問視する意見","u":"https://x.com/tic_tune/status/2076168376779747336"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"生成AI作品は気持ち悪いという個人的感想","u":"https://x.com/_mikwskr_/status/2076166940855586967"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"文化庁見解の共有で意見色は薄いが解説的","u":"https://x.com/fddf_nb/status/2076159296140886381"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI著作権問題を指摘されても使用が続くことへの不満","u":"https://x.com/Al_Feld_2/status/2076150688875487432"},{"x":1.0,"y":1.5,"e":0.0,"c":0.7,"s":"権利侵害懸念を示しクリエイター相談AIを提案","u":"https://x.com/midxnt/status/2076141511683809694"},{"x":1.0,"y":1.0,"e":1.0,"c":0.85,"s":"日本のAI著作権規制の遅れを批判","u":"https://x.com/lQ0MrJT74X98862/status/2076136742231633927"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"生成AI管理問題を批判しクリエイター権利保護を主張","u":"https://x.com/Clere4096/status/2076129671939518863"},{"x":1.5,"y":1.0,"e":1.5,"c":0.7,"s":"AIの著作権ルールに嫌悪感を示す個人的意見","u":"https://x.com/sub_warts/status/2076123742561071356"},{"x":1.5,"y":1.5,"e":1.0,"c":0.8,"s":"AI利用時の二重基準を批判し全者の権利保護を支持","u":"https://x.com/kabayanke/status/2076120075455860860"},{"x":-1.5,"y":-1.5,"e":1.0,"c":0.85,"s":"AI規制に不満、二択迫る現状への愚痴","u":"https://x.com/kabayanke/status/2076120955974549970"},{"x":-1.0,"y":0.5,"e":1.0,"c":0.7,"s":"AI規制反対の個人的意見と悔しさ","u":"https://x.com/0808yuhho/status/2076294120667332708"},{"x":0.5,"y":0.5,"e":1.0,"c":0.7,"s":"AI規制に一定理解も政治への疑問示す批判的意見","u":"https://x.com/0808yuhho/status/2076292622268981515"},{"x":1.5,"y":1.0,"e":1.5,"c":0.85,"s":"AI規制派を支持し批判者に激怒する感情的な意見","u":"https://x.com/0808yuhho/status/2076290684940931443"},{"x":1.0,"y":0.0,"e":0.0,"c":0.6,"s":"生成AI規制等の法整備を要望する投稿","u":"https://x.com/pennoyume/status/2076270505217393093"},{"x":1.0,"y":0.0,"e":-1.0,"c":0.7,"s":"AI自体より利用者が問題で規制すべきとの意見","u":"https://x.com/sabuikaruro/status/2076243836452696078"},{"x":1.5,"y":0.5,"e":1.5,"c":0.7,"s":"AI規制を求めIP模倣への強い怒り","u":"https://x.com/0808yuhho/status/2076246235791712746"},{"x":1.0,"y":0.5,"e":0.0,"c":0.85,"s":"個人情報保護法によるAI学習規制強化を主張","u":"https://x.com/furukaska/status/2076233945914728878"},{"x":0.5,"y":-0.5,"e":1.0,"c":0.7,"s":"有権者がAI規制巡り政党に失望・批判","u":"https://x.com/Yoruobun/status/2076231524685590917"},{"x":0.0,"y":0.5,"e":-1.0,"c":0.6,"s":"AIユーザーに皮肉、規制への直接的な態度は不明","u":"https://x.com/2010_earth/status/2076228641281970198"},{"x":1.0,"y":0.5,"e":-1.0,"c":0.8,"s":"AI使用疑惑者と規制派は立場は同じと主張","u":"https://x.com/2010_earth/status/2076229711412572548"},{"x":-0.5,"y":1.0,"e":0.5,"c":0.85,"s":"規制自体よりデータセットの違法性に問題ありとする個人的見解","u":"https://x.com/SCP_P_/status/2076208097690108033"},{"x":2.0,"y":-1.5,"e":1.5,"c":0.85,"s":"生成AI根絶と規制強化を主張する強い不満投稿","u":"https://x.com/oOd1JJHXZF21700/status/2076199198207443353"},{"x":-1.0,"y":0.0,"e":1.0,"c":0.7,"s":"規制は既に遅く非現実的との批判的意見","u":"https://x.com/stonehunters/status/2076201060767821835"},{"x":1.0,"y":0.0,"e":1.0,"c":0.75,"s":"規制強化に期待しつつ、現実の厳しさを感情的に批判","u":"https://x.com/Amaiyouna/status/2076180441351229552"},{"x":1.0,"y":0.5,"e":1.0,"c":0.8,"s":"AI全体より悪意ある利用の規制を主張","u":"https://x.com/su79444587/status/2076182070821568545"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.6,"s":"X外の情報源見る事の重要性指摘、嫌悪の背景理解促す","u":"https://x.com/denosoft/status/2076181875283169400"},{"x":0.0,"y":0.0,"e":1.0,"c":0.7,"s":"AI規制論者の中のデマegosurfや他界隈蔑視を批判","u":"https://x.com/SoundJourneyDS/status/2076174845562482875"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI規制遅延を批判し政治家と人材産業を皮肉る投稿","u":"https://x.com/hyakuyobako_key/status/2076160024574111859"},{"x":-0.5,"y":1.5,"e":1.5,"c":0.8,"s":"AI推進政策を批判、犠牲は国民と主張","u":"https://x.com/jimo211k/status/2076174166110396613"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AI規制派と推進派双方の心理を冷静に分析","u":"https://x.com/XclaTYaT5450243/status/2076140042020610557"},{"x":-1.0,"y":0.0,"e":0.0,"c":0.7,"s":"厳格なAI不使用宣言は不要と提案","u":"https://x.com/SoundJourneyDS/status/2076149942339662020"},{"x":1.0,"y":0.5,"e":0.0,"c":0.8,"s":"配慮あるAIユーザーと対話し現実的な規制を提唱","u":"https://x.com/freischutz7/status/2076138515554087150"},{"x":0.0,"y":0.0,"e":1.0,"c":0.65,"s":"規制派を皮肉るが自身の立場は不明確","u":"https://x.com/20260616ygk/status/2076136235844960454"},{"x":1.5,"y":0.0,"e":1.0,"c":0.8,"s":"文科省批判とAI規制強化を求める個人的意見","u":"https://x.com/aulaitKACHOU/status/2076134883160994014"},{"x":-0.5,"y":-0.5,"e":1.0,"c":0.7,"s":"現在のAI規制は対象を誤っていると批判","u":"https://x.com/FlippedFox/status/2076129547293200571"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.75,"s":"AI規制に諦めた人の産業優先意見","u":"https://x.com/YutoMujou/status/2076118051557376338"},{"x":0.5,"y":0.0,"e":1.0,"c":0.6,"s":"規制派を自称しつつ同派への批判含む感情的な投稿","u":"https://x.com/aojiru0937/status/2076077762847355045"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"特定人物への皮肉・批判を含む投稿","u":"https://x.com/Gutiakazzgv/status/2076012127203274855"},{"x":-1.0,"y":0.5,"e":1.0,"c":0.75,"s":"AI相談の Children's 利用を肯定し規制強調の危険性を指摘","u":"https://x.com/AumDatabase/status/2076032884625002673"},{"x":1.0,"y":0.5,"e":0.0,"c":0.75,"s":"AI規制求める政治的主張だが他論点多","u":"https://x.com/mtgm333/status/2075996942111564060"},{"x":1.0,"y":0.0,"e":1.0,"c":0.8,"s":"AI規制の法整備が先だと主張","u":"https://x.com/YukihoTakizawa/status/2075961590005072330"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"AI裸作品と現行規制の現状紹介と芸術的考察","u":"https://x.com/Kanjosen_Tec/status/2075991930476105949"},{"x":-1.0,"y":0.5,"e":1.5,"c":0.8,"s":"AI規制への強い批判と政府不信を表明する個人的意見","u":"https://x.com/NemesisAKer/status/2075944263909826792"},{"x":2.0,"y":1.5,"e":1.0,"c":0.85,"s":"規制派を無視した国の責任を批判し規制強化を主張","u":"https://x.com/tomko_5/status/2075934401905787271"},{"x":0.5,"y":0.5,"e":0.0,"c":0.75,"s":"子供のAI多用には環境・Privacy観点から反対","u":"https://x.com/yknshi/status/2076251821056950361"},{"x":1.0,"y":0.5,"e":1.0,"c":0.8,"s":"AI含む各種規制強化要求和える改憲反対表明","u":"https://x.com/kVzCePMDq5qG/status/2075930455438979216"},{"x":2.0,"y":0.0,"e":2.0,"c":0.85,"s":"テック産業への激怒とAI規制の支持","u":"https://x.com/NemesisAKer/status/2075929629697941505"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.5,"s":"AI導入は自然に普及しているとの観察","u":"https://x.com/meichan_maru/status/2076245919692169633"},{"x":1.0,"y":0.5,"e":1.0,"c":0.8,"s":"改正案反対だがデマ拡散に困惑する個人見解","u":"https://x.com/shiawaserekishi/status/2076220606715179133"},{"x":0.5,"y":0.0,"e":0.5,"c":0.6,"s":"AI悪用に反対表明、 政治利用に困惑","u":"https://x.com/mashialbum/status/2076219300176875626"},{"x":0.0,"y":0.0,"e":0.0,"c":0.4,"s":"教育におけるAI活用の分析記事への誘導","u":"https://x.com/kozzy0919/status/2076218733794848849"},{"x":-1.0,"y":-0.5,"e":1.5,"c":0.7,"s":"国のAI推進に怒り・中止を求める投稿","u":"https://x.com/yu_haruka_0729/status/2076213974648160365"},{"x":0.5,"y":0.5,"e":-1.0,"c":0.6,"s":"馬エロ絵師のAI規制反対を皮肉る個人的見解","u":"https://x.com/toritoridori0/status/2076200498139680994"},{"x":1.0,"y":1.0,"e":0.0,"c":0.75,"s":"AI利用規制の矛盾を指摘する個人の見解","u":"https://x.com/dayth310/status/2076180706150297608"},{"x":0.0,"y":0.0,"e":1.0,"c":0.7,"s":"生成AIには環境リスクがある","u":"https://x.com/pehhus/status/2076211391523160469"},{"x":-1.0,"y":-1.0,"e":1.0,"c":0.8,"s":"AI・二次創作は問題ないと主張し相手批判","u":"https://x.com/x0fQKCmHs785342/status/2076175710520213935"},{"x":1.0,"y":1.0,"e":1.5,"c":0.75,"s":"AI規制を求めるはずの目覚めた系が使自己还用という現状への強烈な不满","u":"https://x.com/ichiichitoto/status/2076177230494155260"},{"x":0.5,"y":0.0,"e":0.5,"c":0.6,"s":"AI偽情報拡散への不安を表明する個人的所感","u":"https://x.com/TAKUSU31/status/2076149910249099523"},{"x":-1.0,"y":0.0,"e":1.0,"c":0.8,"s":"AI規制派を批判し、自由化支持を示す","u":"https://x.com/emeraldsword4/status/2076149789289578668"},{"x":1.0,"y":0.5,"e":1.0,"c":0.6,"s":"個人情報保護法改悪に反対し生成AI画像使用を批判","u":"https://x.com/hi_bibibi/status/2076145576392163557"},{"x":0.0,"y":0.0,"e":-0.5,"c":0.65,"s":"パブコの送り方の手法adviceで、規制賛否は不明","u":"https://x.com/nanaiirodori/status/2076146514842554487"},{"x":1.0,"y":1.0,"e":-1.0,"c":0.85,"s":"無断AI学習に反対し個人権利擁護の立場から批判的","u":"https://x.com/denosoft/status/2076158875691307307"},{"x":1.5,"y":1.5,"e":2.0,"c":0.85,"s":"AIユーザー不祥事を批判、絵師の被害を強調","u":"https://x.com/okeiouhan/status/2076125859061403657"},{"x":0.0,"y":-1.0,"e":1.0,"c":0.7,"s":"個人情報保護法改正案に反対する層の頭を疑う投稿","u":"https://x.com/shiawaserekishi/status/2076141976098062413"},{"x":-0.5,"y":0.0,"e":0.5,"c":0.7,"s":"規制強化より原因除去と対話を重視する意見","u":"https://x.com/H_cruiser1930/status/2076101466562171144"},{"x":2.0,"y":1.5,"e":1.5,"c":0.85,"s":"AI規制強化を強い調子で主張する批判的意見","u":"https://x.com/GuiI1eKiyuki/status/2076076897918967859"},{"x":1.0,"y":1.0,"e":1.5,"c":0.8,"s":"規制賛成派が声を上げないことに疑問","u":"https://x.com/moko_yummy/status/2076098616712905102"},{"x":1.5,"y":0.5,"e":1.0,"c":0.7,"s":"AIによる個人情報流出を懸念し改正案に批判的","u":"https://x.com/seoyukinari/status/2076022179242889353"},{"x":1.5,"y":2.0,"e":1.0,"c":0.85,"s":"声優のAI声複製に対し個人の権利保護を強調","u":"https://x.com/kazusakaks1/status/2076064036773601663"},{"x":1.5,"y":1.0,"e":1.0,"c":0.85,"s":"AI利用者に反対を呼びかける規制推進の個人的意見","u":"https://x.com/mimimibomboo/status/2076050824812482878"},{"x":1.5,"y":1.0,"e":1.0,"c":0.8,"s":"生成AIへの強い規制を促す怒りの意見","u":"https://x.com/dokusouen/status/2075964618682650752"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"X使用者が生成AI批判するのは矛盾とする個人的見解","u":"https://x.com/fuse_at_cyber/status/2075961748943982948"},{"x":1.5,"y":1.5,"e":1.5,"c":0.8,"s":"AI規制とcreator権利擁護を主張する感情的な批判投稿","u":"https://x.com/Massara4616/status/2075984518151110861"},{"x":-1.0,"y":-0.5,"e":1.5,"c":0.85,"s":"AI規制派をダブルスタンダードで批判する自由的立場","u":"https://x.com/fxtj_gca/status/2075939108640448968"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.6,"s":"AI活用の実践報告で規制・規制反対の主張はない","u":"https://x.com/seizo_ai_lab/status/2075926550730711408"},{"x":-1.0,"y":-0.5,"e":1.0,"c":0.7,"s":"AI規制は絵師だけでなく一般人も必要と指摘する分析","u":"https://x.com/miyamoyame/status/2075903591668441257"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"権利侵害批判とユーザー責任主張","u":"https://x.com/SSuteaka99143/status/2075892649530454028"},{"x":1.5,"y":1.5,"e":1.0,"c":0.8,"s":"AI企業批判と利用者に責任求める規制推進意見","u":"https://x.com/clapt23/status/2075891772090376525"},{"x":1.0,"y":1.0,"e":0.5,"c":0.85,"s":"AI導入批判は絵師だけでなく一般人も同じことを証明","u":"https://x.com/miyamoyame/status/2075901665853821105"},{"x":2.0,"y":1.5,"e":1.5,"c":0.85,"s":"生成AI反対・禁止を表明する強い感情的な政治主張","u":"https://x.com/PROBOS_JP/status/2075889830467383514"},{"x":-0.5,"y":-1.0,"e":-1.0,"c":0.7,"s":"生成AI反対派イラストレーターの矛盾を皮肉る投稿","u":"https://x.com/J_A_Prestwich/status/2075871559320023357"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"与党批判メイン、生成AI規制態度は不明","u":"https://x.com/negitori_momo/status/2075881811075535090"},{"x":1.0,"y":1.0,"e":1.0,"c":0.85,"s":"国民民主のAI活用Privacy法賛成を批判","u":"https://x.com/Ji1KxN15VC85UPF/status/2076278732789371125"},{"x":2.0,"y":2.0,"e":2.0,"c":0.85,"s":"個人情報法改正を非難、AI規制強化主張","u":"https://x.com/BrokenA1521/status/2076053891687522744"},{"x":0.0,"y":0.5,"e":0.5,"c":0.6,"s":"AI学習目的での情報取得問題を指摘する冷静な警告投稿","u":"https://x.com/negitori_momo/status/2075877444100534649"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI個人情報リスク警告→Legislatorの規制賛成転換に失望","u":"https://x.com/r18rensyu/status/2076274740004856031"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.5,"s":"政治的評価とAI政策への冷静な所感","u":"https://x.com/mutouha_dayo/status/2075814050773225730"},{"x":1.0,"y":1.5,"e":1.0,"c":0.7,"s":"个人情報保护法改正に反对し、无断利用に抗议","u":"https://x.com/0808yuhho/status/2075795813478060510"},{"x":1.0,"y":1.5,"e":0.0,"c":0.6,"s":"規制派立場から著作権保護と個人情報保護の関連を質問","u":"https://x.com/0808yuhho/status/2075789129858871740"},{"x":-1.5,"y":1.0,"e":2.0,"c":0.9,"s":"AI規制派を批判する感情的投稿","u":"https://x.com/0808yuhho/status/2075778763317723236"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.7,"s":"全政党のデータ取扱に変化不大的中","u":"https://x.com/gutibake/status/2075716517224939954"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AIユーザーは信用できると批判し規制強化を支持","u":"https://x.com/rito_92s5Yq/status/2075758359186423937"},{"x":1.0,"y":1.0,"e":1.0,"c":0.75,"s":"AI業界の言い訳を批判し規制を求める投稿","u":"https://x.com/rito_92s5Yq/status/2075635782371672167"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI開発とプライバシー保護の両立を認める穏健意見","u":"https://x.com/mutouha_dayo/status/2075611060942573755"},{"x":1.0,"y":-1.0,"e":1.0,"c":0.8,"s":"AI批判の冷静な呼びかけで規制支持","u":"https://x.com/s_g_nti/status/2075579860882427910"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.85,"s":"AI創作への諦めと冷笑 含みつつも態度は保留","u":"https://x.com/Rizvague12/status/2075556293876838739"},{"x":0.0,"y":0.0,"e":0.0,"c":0.8,"s":"規制や論争を超えてAI創作の自由を肯定する穏やかな意見","u":"https://x.com/tmichiaki/status/2075562695076815141"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"AIが偽情報を作成する危惧を予測する个人观点","u":"https://x.com/edge_of_a_cliff/status/2075573063937306691"},{"x":-1.5,"y":1.5,"e":2.0,"c":0.9,"s":"生成AI学習への个人情報提供に愤怒·批判","u":"https://x.com/nashigata1181/status/2075519539249594876"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.5,"s":"政治家の言行不一致を皮肉る投稿","u":"https://x.com/Semaru_85/status/2075535791099621868"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"SNSでの攻撃的言論を批判する投稿","u":"https://x.com/noelleno_/status/2075501342169411812"},{"x":0.0,"y":1.0,"e":1.0,"c":0.6,"s":"創作寄りの个人观点表明、AIデモへの複雑な感情","u":"https://x.com/yayoisan_jnl/status/2075483197299962311"},{"x":2.0,"y":2.0,"e":2.0,"c":0.95,"s":"AI規制強化とクリエイター権利保護を激しく要求","u":"https://x.com/sobiura/status/2075487463569850637"},{"x":1.5,"y":1.5,"e":0.5,"c":0.75,"s":"個人情洩漏に甘い政党への批判","u":"https://x.com/S0t4o1n6e/status/2075493365882421413"},{"x":1.0,"y":1.0,"e":1.0,"c":0.75,"s":"AIと個人情報流出に不快感・規制求める意見","u":"https://x.com/masora913/status/2075447693028253972"},{"x":0.0,"y":0.0,"e":0.0,"c":0.85,"s":"他者の姿勢を中立的に予測・観察する投稿","u":"https://x.com/kkk_sks0/status/2075438477089591373"},{"x":-1.0,"y":0.5,"e":1.5,"c":0.85,"s":"改悪法批判と全政党否定の感情的意見","u":"https://x.com/gutibake/status/2075414883198460050"},{"x":1.5,"y":1.5,"e":2.0,"c":0.95,"s":"無断学習批判でクリエイター擁護、感情的な自説展開","u":"https://x.com/gutibake/status/2075404817347035470"},{"x":-1.5,"y":1.0,"e":1.0,"c":0.6,"s":"松尾氏への批判的暗示を含む事実列挙","u":"https://x.com/XSft294hO480406/status/2075409894052929791"},{"x":0.0,"y":-0.5,"e":1.0,"c":0.75,"s":"国会議員のAI政策無理解と無責任さを批判","u":"https://x.com/koyan07211919/status/2075405775703511147"},{"x":1.0,"y":1.5,"e":1.0,"c":0.7,"s":"AI創作に反対する自身の立場と苦痛を吐露","u":"https://x.com/hibinon_al/status/2075398316939268516"},{"x":0.0,"y":0.0,"e":1.0,"c":0.7,"s":"反AIレッテルで既存AIも一括批判する行為を批判","u":"https://x.com/8a4pP9eZe037148/status/2075372095400448495"},{"x":-1.5,"y":-0.5,"e":-1.0,"c":0.85,"s":"AI規制に反対し、国会議員を皮肉る投稿","u":"https://x.com/kanchi0w0/status/2075319256271761466"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"生成AI規制派が容認派を批判する強い怒りの個人的意見","u":"https://x.com/_yokokokohama/status/2075258943799250946"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"両陣営を批判しデータセット問題の深掘りを促す","u":"https://x.com/m_norippo/status/2075280102280360114"},{"x":1.0,"y":1.5,"e":1.0,"c":0.7,"s":"法案賛成への不満とAI・創作者保護の主張","u":"https://x.com/ohajanp/status/2075223485543288956"},{"x":1.0,"y":-1.0,"e":1.0,"c":0.75,"s":"AI推進政党を批判、規制と福祉重視","u":"https://x.com/neity_filefish/status/2075241245832872362"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.6,"s":"政治家の倫理観を皮肉る投稿。政党不信を表明","u":"https://x.com/gutibake/status/2075208002207126006"},{"x":0.0,"y":0.0,"e":0.0,"c":0.3,"s":"生成AIの有用性を肯定する簡潔な感想","u":"https://x.com/clock_one/status/2076282746251731363"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"小説執筆支援ツールの機能を好意的に紹介","u":"https://x.com/HomuraTsumugi/status/2076291821777637622"},{"x":0.5,"y":0.0,"e":1.0,"c":0.6,"s":"生成AIの映像質感に不満を表明","u":"https://x.com/sio_shion/status/2076277029713109412"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"AI新機能の紹介と軽い注意点の提起","u":"https://x.com/UpZMa7pR8979964/status/2076282820885127453"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI利用への批判と自力創作を肯定する意見","u":"https://x.com/asahi_igarashiV/status/2076272703955435757"},{"x":0.0,"y":0.0,"e":0.5,"c":0.6,"s":"AI活用の便感を述べる軽い感想投稿","u":"https://x.com/freia_mardoll/status/2076272079503310952"},{"x":1.0,"y":1.0,"e":1.5,"c":0.75,"s":"AIユーザーに強く不満、依存を愚かと非難","u":"https://x.com/asahi_igarashiV/status/2076271347668513125"},{"x":1.0,"y":0.5,"e":0.5,"c":0.75,"s":"AI無知な利用者と催促いメディアを批判","u":"https://x.com/rolerole_role/status/2076263660486582285"},{"x":0.0,"y":0.5,"e":0.5,"c":0.7,"s":"AI生成物の薄さへの不満を個人の感想として表明","u":"https://x.com/461tiger/status/2076246378985218309"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI利用がバラエティや報道で増加","u":"https://x.com/Lantern_pumpkin/status/2076245755149570335"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.5,"s":"AI校正の不方便を皮肉交じりに語る使用者の感想","u":"https://x.com/mustard6/status/2076214637218124057"},{"x":1.5,"y":1.5,"e":1.5,"c":0.75,"s":"生成AI使用に強く反対しクリエイター権利を擁護","u":"https://x.com/461tiger/status/2076258587278717266"},{"x":0.5,"y":0.0,"e":0.5,"c":0.5,"s":"AI便利さに恐怖を感じる個人の感想","u":"https://x.com/KentaHayasnn4n/status/2076192535995974096"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"生成AI音楽の利用体験記。規制や権利問題には触れていない","u":"https://x.com/ra08bmatch/status/2076206317430321241"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"エージェント型AI使用経験の分享と实用tips共有","u":"https://x.com/electricdoc/status/2076185126359454091"},{"x":0.5,"y":0.0,"e":0.0,"c":0.6,"s":"AIの創作への影響を懸念しつつも冷静に捉える姿勢","u":"https://x.com/erithshaker/status/2076183485468086559"},{"x":0.0,"y":0.0,"e":0.0,"c":0.55,"s":"新聞コラムのRT。教育×AIの論点紹介で自身の見解は不明","u":"https://x.com/sibatamasami1/status/2076188697100480679"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.8,"s":"英語学習にAIが便利という感想","u":"https://x.com/Slogd923t4/status/2076177825963618782"},{"x":0.5,"y":0.0,"e":1.0,"c":0.6,"s":"AI便利さに恐怖や不安を感じる個人の感想","u":"https://x.com/KentaHayasnn4n/status/2076156973830242421"},{"x":1.0,"y":0.5,"e":0.0,"c":0.8,"s":"AI使用は無自覚に便利と言わず注意すべきと主張","u":"https://x.com/komeichigo15/status/2076147072844321196"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.5,"s":"AIツール体験記で便利と評価、規制には言及なし","u":"https://x.com/sino_p928/status/2076147339048472963"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.5,"s":"AI便利化に伴う技術的欠陥の指摘と工程管理重要性","u":"https://x.com/accell_mo_kun/status/2076147536109137965"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.5,"s":"AI便利さを皮肉混じりに陈述、態度は中立的","u":"https://x.com/saruinukiji/status/2076137566857056279"},{"x":0.0,"y":0.0,"e":0.5,"c":0.6,"s":"AIセキュリティの心得を述べた教育的な投稿","u":"https://x.com/SecurityZ9999/status/2076129999665639494"},{"x":0.5,"y":0.0,"e":0.0,"c":0.7,"s":"AI主体化における停止点設計の重要性を指摘","u":"https://x.com/_1104_h/status/2076126805489295604"},{"x":0.5,"y":0.0,"e":0.0,"c":0.7,"s":"AI便利だが人間管理・線引きすべき穏健主張","u":"https://x.com/Yotobari_Kamome/status/2076111220466409950"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.7,"s":"テック企業の新機能仕様への皮肉","u":"https://x.com/2010_earth/status/2076124068781436988"},{"x":0.0,"y":0.5,"e":0.0,"c":0.8,"s":"AI使用は自由だが使いこなす力が重要","u":"https://x.com/akisurfandsnow/status/2076103289234677972"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.7,"s":"生成AI業務利用の便利さを肯定的に感想","u":"https://x.com/pZthQtpwsGGfVeH/status/2076101300610351122"},{"x":0.0,"y":0.0,"e":0.0,"c":0.1,"s":"AI便利との感想のみ、規制には言及なし","u":"https://x.com/07j141/status/2076098959622508840"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI競争の日常進出関連新闻まとめ・中立","u":"https://x.com/kobatch_tk/status/2076099841617502275"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI導入のPoC疲れと変革の不足を指摘","u":"https://x.com/sbd_saito/status/2076094215826874748"},{"x":1.0,"y":1.5,"e":1.0,"c":0.7,"s":"AI絵の品質矛盾と著作権リスク指摘、クリエイター権利擁護","u":"https://x.com/toughb0y199x/status/2076288840919306342"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"AI著作権侵害に怒り、クリエイター権利擁護の個人的意見","u":"https://x.com/littanfx/status/2076289858239332744"},{"x":1.0,"y":1.0,"e":1.0,"c":0.7,"s":"AI絵利用は著作権侵害であり規制支持","u":"https://x.com/xx_hark_/status/2076279879851725027"},{"x":1.0,"y":1.5,"e":1.5,"c":0.9,"s":"AI利用への強い不満と原作保護の主張","u":"https://x.com/riru1029/status/2076276017770139885"},{"x":0.0,"y":1.0,"e":0.0,"c":0.8,"s":"AI創作物の著作権リスクについて分析的視点で指摘","u":"https://x.com/sZfLrvjJQUGOFXY/status/2076269421937750131"},{"x":1.0,"y":1.0,"e":0.0,"c":0.8,"s":"AI規制強化とクリエイター権利保護を支持する個人的見解","u":"https://x.com/Kitaguni8888/status/2076263686164082879"},{"x":1.0,"y":1.0,"e":0.0,"c":0.6,"s":"AI著作権侵害の書類送検事実を共有し規制支持","u":"https://x.com/jagd3328/status/2076266418614751417"},{"x":1.5,"y":1.0,"e":0.0,"c":0.7,"s":"AIは著作権侵害容易で割に合わない","u":"https://x.com/falzsutera5578/status/2076244010239393930"},{"x":0.0,"y":0.0,"e":0.0,"c":0.8,"s":"教育負担への懸念、中立的見解","u":"https://x.com/EL_ZELK/status/2076224568390463625"},{"x":-1.0,"y":-1.0,"e":1.0,"c":0.85,"s":"AI学習への著作権侵害主張を事実誤認と批判し、自由化・AI産業寄りの立場から感情的反論を展開","u":"https://x.com/easytechparadox/status/2076222541421814134"},{"x":0.5,"y":0.5,"e":0.5,"c":0.7,"s":"AI画像の国会議員による著作権侵害を疑問視","u":"https://x.com/DONBURI333/status/2076220826375073869"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.75,"s":"AI生成物の著作権否定を法解釈として説明","u":"https://x.com/namiyome/status/2076195038955246041"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI教育やネットリテラシー教育の必要性を理性的かつ支持する姿勢","u":"https://x.com/SatoSuguru/status/2076177056908669247"},{"x":0.0,"y":0.0,"e":-0.5,"c":0.65,"s":"AI教育は肯定、他者の過剰反応を指摘","u":"https://x.com/eijit/status/2076175040257896608"},{"x":-1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI利用擁護で規制批判、ユーザー権利を主張","u":"https://x.com/Vanitas_8282/status/2076117382972788836"},{"x":1.0,"y":0.5,"e":0.5,"c":0.8,"s":"AI学習への懸念と規制支持を表明","u":"https://x.com/___wadakamari/status/2076113298928607310"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"YouTubeの著作権対策への不满と改善要求","u":"https://x.com/fuwafuwasitemas/status/2076097904180404456"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.7,"s":"著作権法の法定解説。感情希薄で中立的立場","u":"https://x.com/ipconnect_jp/status/2076088694612865051"},{"x":0.5,"y":0.0,"e":-0.5,"c":0.65,"s":"教育課程への要望・AI教育追加希望も既存科目削除には反対","u":"https://x.com/Daisy_wmama/status/2076093829581791638"},{"x":1.0,"y":0.5,"e":0.0,"c":0.7,"s":"AI危険性の教育推進を支持、若年層保護優先","u":"https://x.com/SKari01/status/2076087639925821667"},{"x":0.5,"y":0.5,"e":0.5,"c":0.6,"s":"AIリテラシー教育は大事だが、それ以上は不要という意見","u":"https://x.com/bB4iCSAV0pOwn9e/status/2076062392291897595"},{"x":0.0,"y":0.0,"e":0.0,"c":0.3,"s":"ネモフィラ观赏推荐とAI学習禁止注记","u":"https://x.com/hako_photo_tw/status/2076303245061058799"},{"x":0.0,"y":-0.5,"e":-0.5,"c":0.6,"s":"教科構成への疑問、教学優先は中立","u":"https://x.com/mohno/status/2076076522277122264"},{"x":1.5,"y":1.0,"e":0.0,"c":0.85,"s":"AI学習拒否を明言するクリエイターの権利表明","u":"https://x.com/Cucumber__07/status/2076280945410474398"},{"x":-1.0,"y":1.0,"e":0.0,"c":0.65,"s":"創作投稿。AI学習利用の禁止を明示的に主張","u":"https://x.com/tadaneko_kairi/status/2076260411176091907"},{"x":1.0,"y":1.5,"e":1.5,"c":0.85,"s":"規制強化と創作者権利保護を批判的に支持","u":"https://x.com/99_ex_zero/status/2076255246347841992"},{"x":1.0,"y":1.0,"e":0.0,"c":0.85,"s":"AI学習禁止を明示、創作者権利保護の意思表示","u":"https://x.com/RTYU_stew/status/2076254235822608649"},{"x":1.0,"y":1.0,"e":1.0,"c":0.7,"s":"AI学習禁止は使用禁止に内包されないと主張","u":"https://x.com/Telfairiae/status/2076254058512531751"},{"x":1.5,"y":1.0,"e":1.0,"c":0.85,"s":"AI学習禁止を明示する二次創作共有","u":"https://x.com/BelleRose1224/status/2076252996795863524"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"AI学習禁止を明示、クリエイター権利保護の立場","u":"https://x.com/yuuthinnn172364/status/2076234569175712192"},{"x":-0.5,"y":-0.5,"e":-1.0,"c":0.5,"s":"自作品開放の皮肉宣言、冷笑的な表現","u":"https://x.com/Light241609/status/2076202434167497205"},{"x":1.0,"y":1.5,"e":0.0,"c":0.7,"s":"、AI学習拒否表明","u":"https://x.com/amqpmd/status/2076158056904454296"},{"x":1.0,"y":1.5,"e":-0.5,"c":0.7,"s":"AI学習利用禁止を宣言する詩的投稿","u":"https://x.com/oshin_taro/status/2076144360379617422"},{"x":0.0,"y":0.0,"e":0.0,"c":0.8,"s":"AI学習拒否と受肉化拒否を表明する個人の声明","u":"https://x.com/BiiiiiiiiHAN/status/2076140797561614641"},{"x":1.0,"y":1.5,"e":0.0,"c":0.75,"s":"AI無断利用は法的にも弱い立場と解説","u":"https://x.com/sZfLrvjJQUGOFXY/status/2076080220780876013"},{"x":0.5,"y":1.0,"e":0.0,"c":0.7,"s":"VTuber交流投稿 AI学習NG明記","u":"https://x.com/HanazakiMimoza/status/2076079087836143979"},{"x":1.0,"y":1.0,"e":-1.0,"c":0.75,"s":"自身のAI学習利用禁止と利用条件の声明","u":"https://x.com/oti_moti_/status/2076036182178435152"},{"x":1.0,"y":1.5,"e":1.5,"c":0.75,"s":"AI絵柄コピーされ個人の権利侵害に強く反発","u":"https://x.com/jsLFWaPyEKmRMVR/status/2076271882844966984"},{"x":-1.0,"y":-1.0,"e":-0.5,"c":0.7,"s":"AI絵には権利がないという意見","u":"https://x.com/shinikakeningen/status/2076256492479803799"},{"x":0.0,"y":-1.0,"e":2.0,"c":0.85,"s":"AI絵パクリ問題で批判者側を痛烈に非難する個人的意見","u":"https://x.com/12Dsurgent/status/2073935423160881403"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"手描きとAI絵の模倣の違いを批判的に指摘","u":"https://x.com/BlackSun_11/status/2073068110127804914"},{"x":0.0,"y":0.0,"e":1.0,"c":0.65,"s":"凍結への個人的怒り・規制への直接的立場は不明","u":"https://x.com/takaruG2000mg/status/2072940347706232988"},{"x":0.5,"y":1.0,"e":0.5,"c":0.65,"s":"AI画風模倣への困惑と不快感を示す投稿","u":"https://x.com/sickbeans/status/2071787945233698996"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"AI絵パクリ疑惑を冷笑的に批判する投稿","u":"https://x.com/vistron/status/2070072418178302440"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"SNS上の画風パクリへの批判はAI以前にも存在するとの冷静な観察投稿","u":"https://x.com/miyaneko_d/status/2069748696733085951"},{"x":1.0,"y":1.0,"e":0.0,"c":0.75,"s":"AI絵の無断学習問題を汉堡堡例で分析する投稿","u":"https://x.com/s_dlsk/status/2069938560887922851"},{"x":1.5,"y":0.0,"e":1.5,"c":0.85,"s":"AI絵やアセット利用への強い不快感と規制要求","u":"https://x.com/wal_uzranz/status/2069655404892782831"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.75,"s":"反AI派の過敏な主張を皮肉る","u":"https://x.com/PKAnzug/status/2069581707867808222"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"自分のSNSフィードの変化を不満げに報告","u":"https://x.com/0083DelazFleet/status/2068895889645826342"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI開発名目の規制緩和に反対、プライバシー保護優先","u":"https://x.com/show_ring_ouch/status/2076120643733700767"},{"x":1.0,"y":0.5,"e":0.0,"c":0.85,"s":"個人情報保護強化求め規制寄りの改善案提示","u":"https://x.com/8A1XM23JLG62603/status/2076102284019441709"},{"x":1.0,"y":-1.0,"e":1.0,"c":0.85,"s":"法案支持で規制肯定、産業競争力優先の主張","u":"https://x.com/NMXzWhpFTR31036/status/2075984790185296041"},{"x":-1.0,"y":-1.0,"e":0.0,"c":0.6,"s":"規制緩和によるAI開発推進を肯定的に捉える論調","u":"https://x.com/diet_safari/status/2075852844641534341"},{"x":-1.0,"y":0.0,"e":-1.0,"c":0.6,"s":"規制への軽い不満と自嘲を含む感想","u":"https://x.com/ryorekuiemu/status/2075959333612056889"},{"x":1.5,"y":0.0,"e":1.5,"c":0.75,"s":"AI兵器の規制強化を主張、感情的な批判を展開","u":"https://x.com/nama_mono_san/status/2075960365939376329"},{"x":-0.5,"y":1.0,"e":1.0,"c":0.7,"s":"AI利用者に苦言、攻撃への不快感","u":"https://x.com/GOh_7FpooI/status/2075814139231100945"},{"x":1.5,"y":1.5,"e":1.5,"c":0.85,"s":"規制緩和に強く反対し個人権利保護を主張する怒りの投稿","u":"https://x.com/Tweet_jaM5/status/2075842515224477825"},{"x":-1.0,"y":-1.0,"e":1.0,"c":0.75,"s":"規制派・推進派双方を批判しAI擁護の立場","u":"https://x.com/xqk0829277377/status/2075797237507219731"},{"x":1.0,"y":1.0,"e":0.5,"c":0.7,"s":"著作権・個人情報保護法に懸念を示し規制派を支持","u":"https://x.com/0808yuhho/status/2075797325310775631"},{"x":2.0,"y":2.0,"e":2.0,"c":0.9,"s":"規制緩和に強く反対、漏洩リスク批判","u":"https://x.com/mr_malaprop_jr/status/2075764720393760825"},{"x":2.0,"y":1.5,"e":1.0,"c":0.85,"s":"同意なき情報共有に強く反対","u":"https://x.com/dilettantism20/status/2075756683478040701"},{"x":0.5,"y":0.0,"e":0.0,"c":0.7,"s":"規制より還元型報酬モデルを提案する実用的意見","u":"https://x.com/uitosrn/status/2075784554397503745"},{"x":1.0,"y":0.5,"e":1.0,"c":0.7,"s":"改正個人情報保護法に懸念、規制緩和に不安","u":"https://x.com/anthriumu2/status/2075621095739449358"},{"x":1.0,"y":1.0,"e":1.0,"c":0.75,"s":"AI開発向け個人情報保護法改正に懸念示す投稿","u":"https://x.com/2kYOGrbMsx98531/status/2075679503163293886"},{"x":2.0,"y":1.5,"e":2.0,"c":0.95,"s":"個人情報保護法改正案に強く反対、規制強化を求める怒りの表明","u":"https://x.com/ks_tannmausu/status/2075552242862841864"},{"x":-1.0,"y":0.0,"e":-1.0,"c":0.7,"s":"個人情報保護法改正に反対し他者と距離を置く冷めた態度","u":"https://x.com/3124ux5/status/2075565399178154371"},{"x":0.0,"y":0.0,"e":0.0,"c":0.75,"s":"AI開発促進自体は否定せず、手順の明確化を主張","u":"https://x.com/Takataka22455/status/2075602236693266645"},{"x":2.0,"y":1.5,"e":2.0,"c":0.85,"s":"規制緩和に断固反対。患者隐私保護優先","u":"https://x.com/kishimakiko_j/status/2075518163790528823"},{"x":1.0,"y":0.5,"e":1.0,"c":0.85,"s":"AI規制強化とデータ主権保護を求める国会議員の政策批判","u":"https://x.com/nico_nico_news/status/2075501742029193650"},{"x":-1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AI表現規制に批判、個人の言葉の自由を重視","u":"https://x.com/boc_negadora/status/2075442360071430223"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.7,"s":"AI規制に反対表明、左派への嫌悪も併せた保守的投稿","u":"https://x.com/M2Boze/status/2075400523256418357"},{"x":-0.5,"y":0.5,"e":-0.5,"c":0.7,"s":"規制派ではない明言。群れず個人でAI利用に反対の立場","u":"https://x.com/1032gardenia/status/2075443349214073172"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"チームみらい支持者批判、AI規制推進","u":"https://x.com/r18rensyu/status/2075361517823029589"},{"x":1.5,"y":1.0,"e":1.0,"c":0.75,"s":"規制推進・個人権利重視の冷静な批判的意見","u":"https://x.com/mtgm333/status/2075352952852889935"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"二つのグループの違いを論理的説明する分析的な投稿","u":"https://x.com/3124ux5/status/2075341998861738134"},{"x":-1.0,"y":-0.5,"e":1.0,"c":0.7,"s":"AI規制派の矛盾をヴィーガン観点から批判","u":"https://x.com/aMj11jktCB80754/status/2075192491629006938"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.6,"s":"高市氏・左派批判目的の意見で政策論点は副次的","u":"https://x.com/CornHead0079/status/2075139700835451124"},{"x":-1.0,"y":0.0,"e":0.0,"c":0.8,"s":"AI規制に反対意見を表明","u":"https://x.com/TK_kokumin/status/2075139235179634705"},{"x":-1.0,"y":0.0,"e":0.5,"c":0.7,"s":"反AI規制への疑問・規制強化を指摘","u":"https://x.com/Gmixnt/status/2075149771095032200"},{"x":2.0,"y":0.0,"e":-1.0,"c":0.9,"s":"AI不要論と規制支持、NRA比較で皮肉","u":"https://x.com/superdustist/status/2075071818571104425"},{"x":-1.5,"y":-1.0,"e":0.0,"c":0.85,"s":"AI学習は規制不要で自由化・産業優先の立場","u":"https://x.com/kent446/status/2076282345972523390"},{"x":0.0,"y":1.0,"e":-0.5,"c":0.7,"s":"オタクの政治無関心がクリエイター支援の足を引っ張ると指摘","u":"https://x.com/128bp/status/2076269805393654121"},{"x":0.0,"y":0.0,"e":0.0,"c":0.3,"s":"AI描画の個人的楽しみ共有投稿","u":"https://x.com/simakamone/status/2076205630818517139"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.75,"s":"AI自由利用を肯定し業界規制を批判","u":"https://x.com/uNemrit/status/2076216692372590638"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI学習に迷う優しい感謝投稿","u":"https://x.com/_cocoa_sweet_/status/2076219075500589267"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.9,"s":"AIイラストのキャラ容姿変更を私的に語る軽い投稿","u":"https://x.com/aIarttechlab/status/2076188564300378248"},{"x":-1.0,"y":-0.5,"e":1.0,"c":0.85,"s":"現行法を守ればOK派が依頼者不在を嘆く","u":"https://x.com/honey_candyrain/status/2076167978144645298"},{"x":-1.0,"y":-0.5,"e":-1.0,"c":0.85,"s":"AI絵依頼者側から界隈の過度な規制に困惑する意見","u":"https://x.com/honey_candyrain/status/2076167802579308806"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.7,"s":"反AI過激派の脅迫行為を批判する冷笑的投稿","u":"https://x.com/nijifagerus/status/2076160262563152094"},{"x":0.0,"y":0.5,"e":2.0,"c":0.85,"s":"AI問題を軽視していた層への猛烈な怒りの批判","u":"https://x.com/ccchhhrrnnkk/status/2076128320245395903"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI規制の課題を冷静に分析している","u":"https://x.com/Altextrack/status/2076078347411759246"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"AI作家間の盗作問題を懸念する感想","u":"https://x.com/sugarclaus/status/2076020904371609964"},{"x":1.0,"y":1.0,"e":1.0,"c":0.7,"s":"AIへの技術委讓に倫理的な懸念を表明","u":"https://x.com/Author_COTD/status/2075930237561675963"},{"x":0.0,"y":0.5,"e":0.5,"c":0.5,"s":"AI反感のイラスト圏事情を解説する分析投稿","u":"https://x.com/XclaTYaT5450243/status/2075914597966684521"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.75,"s":"AI批判はルサンチマンに過ぎず規制不要との主張","u":"https://x.com/rvr75_raiden/status/2075918973666029644"},{"x":0.0,"y":0.5,"e":0.0,"c":0.7,"s":"創作の意味を問い個人寄りの見解を提示","u":"https://x.com/3ma_can_OmOchi/status/2075870751207592291"},{"x":0.0,"y":0.0,"e":0.5,"c":0.85,"s":"AIゲーム参加の感想・思い出投稿","u":"https://x.com/KaijuuteiSyachi/status/2075851293261009108"},{"x":0.5,"y":0.5,"e":0.0,"c":0.7,"s":"AI悪ではないが情報の価値とデータ流出に懸念","u":"https://x.com/akeboshi_licht/status/2075724535933161911"},{"x":0.5,"y":0.5,"e":2.0,"c":0.85,"s":"公共の場にエロAIイラストを流す行為への不快感と改善要求","u":"https://x.com/norakura1070/status/2075821118292910152"},{"x":2.0,"y":0.5,"e":0.0,"c":0.85,"s":"生成AI一律使用の自制を主張・矛盾を指摘","u":"https://x.com/himeca_cute/status/2075637946724802787"},{"x":1.0,"y":1.0,"e":0.0,"c":0.7,"s":"AI学習対策の技術的方策を考える思考共有","u":"https://x.com/NANAMI_AR/status/2075632489922732039"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"AIによる絵柄再現は問題と主張、規制強化とクリエイター保護を望む","u":"https://x.com/nanazow/status/2075595688801611800"},{"x":0.5,"y":0.5,"e":0.5,"c":0.6,"s":"AI規制の社会実装と個人の日常保護を求める意見","u":"https://x.com/Gbf1dl/status/2075566630609035537"},{"x":1.0,"y":1.5,"e":1.0,"c":0.85,"s":"AI画像改変の氾濫を問題視する怒り","u":"https://x.com/r1eM40215/status/2075542603731493173"},{"x":1.5,"y":1.0,"e":1.5,"c":0.85,"s":"AI強く否定し規制求める怒りの投稿","u":"https://x.com/riri3_moti1125/status/2075551169842418076"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"AIで価値下がるが生み出した変化受け入れる个人观点","u":"https://x.com/tanuki_tribal/status/2075509971383656633"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"手描き中心だがAIイラスト使用プロットも好きという個人的好み","u":"https://x.com/DOKAMERO_use/status/2075473959982948750"},{"x":0.0,"y":1.5,"e":1.5,"c":0.85,"s":"公式垢のAI悪用を批判し創作者権利を擁護","u":"https://x.com/shinratsu_twin/status/2075490650741723536"},{"x":0.5,"y":0.0,"e":0.0,"c":0.5,"s":"AI弊害への軽い懸念を表明","u":"https://x.com/nekomatajr/status/2075466582344806574"},{"x":1.0,"y":1.5,"e":1.0,"c":0.7,"s":"AIイラストの明示的なタグ付けを求める批判的意見","u":"https://x.com/SoundJourneyDS/status/2075437619652276527"},{"x":0.0,"y":0.0,"e":0.5,"c":0.4,"s":"AI添削の感謝投稿。規制・権利問題には言及なし","u":"https://x.com/sawayaka_owl/status/2076298085727379456"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"Grokでイラストを動かした体験記。無難な感想","u":"https://x.com/linkhimu/status/2076296105663619089"},{"x":0.0,"y":0.0,"e":1.0,"c":0.85,"s":"AIイラスト完成への喜びを表現する投稿","u":"https://x.com/ponytailCUTtear/status/2076287673111900316"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"AIイラストの質と効率性への個人的感想","u":"https://x.com/chikama_dev/status/2076284683210694978"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"AI活用肯定し思考促すコーナーを好意的に評価","u":"https://x.com/m0gumusya/status/2076279815146176619"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AIイラスト業界での水墨画×アニメの知見共有","u":"https://x.com/rednoah3/status/2076274667518857400"},{"x":1.0,"y":0.5,"e":0.0,"c":0.85,"s":"個人非商用は許容、法人は疑義を示す穏当な意見","u":"https://x.com/takezo1059/status/2076279582895030316"},{"x":0.0,"y":1.0,"e":0.0,"c":0.6,"s":"創作行為の自己表現的价值を歌う穏当な意見","u":"https://x.com/IMI0606/status/2076268106314604877"},{"x":0.0,"y":0.0,"e":1.0,"c":0.3,"s":"AIイラストへの好意的な感謝投稿","u":"https://x.com/taakekoke/status/2076267514770915440"},{"x":0.0,"y":0.0,"e":1.5,"c":0.3,"s":"AIおでんへの絡み・仲良くなりた願望表明","u":"https://x.com/8Qhoop8pFf90176/status/2076265304297288182"},{"x":0.0,"y":0.0,"e":-0.5,"c":0.7,"s":"AIvs手描き双方の理解を示し被拒 experienceを共有","u":"https://x.com/7JBXRS7ohj24965/status/2076261152926155199"},{"x":1.5,"y":1.5,"e":2.0,"c":0.85,"s":"AI嫌悪とcreater権利支持を表明","u":"https://x.com/sakurennbo/status/2076250450811306230"},{"x":0.0,"y":1.0,"e":1.0,"c":0.85,"s":"AIイラスト巡り批判受け疲労、送信控えてほしい","u":"https://x.com/zazizuzezo_x/status/2076252573464744336"},{"x":1.0,"y":1.0,"e":0.5,"c":0.75,"s":"AIイラスト禁止の自主ルールを軽い口調で提示","u":"https://x.com/hami_x0514/status/2076248522970861977"},{"x":0.0,"y":1.5,"e":0.5,"c":0.75,"s":"AI開示時に作家名も記載すべきと主張","u":"https://x.com/yukizu_ponkotsu/status/2076247586932130063"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.8,"s":"AI画像への個人的嫌悪感を軽口で表明","u":"https://x.com/kamy_m25/status/2076235585656897752"},{"x":1.0,"y":1.5,"e":0.0,"c":0.8,"s":"AI絵師の表記義務を求めcreator権利を支持","u":"https://x.com/tittyayu01/status/2076234367178076227"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AIで小説服装のイラスト化は便利という感想","u":"https://x.com/TRPG_iaiakuturu/status/2076211224363356472"},{"x":0.0,"y":0.0,"e":1.0,"c":0.5,"s":"クレジット案を前向きに支持","u":"https://x.com/ne_ge_ne_ge_tan/status/2076195994296054191"},{"x":0.5,"y":0.5,"e":0.0,"c":0.6,"s":"AI取り込み禁止でイラスト使用許可する声明","u":"https://x.com/ner_ill/status/2076199820138852779"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AIサムネは仕方ないという個人的状況共有","u":"https://x.com/solani_genshin/status/2076184007117848826"},{"x":0.0,"y":0.5,"e":0.0,"c":0.7,"s":"AI依頼時のコミュニケーション問題を私見で指摘","u":"https://x.com/pelicaNgumi6/status/2076194535689035910"},{"x":0.0,"y":0.5,"e":1.0,"c":0.7,"s":"AI創作した雪女イラストの分享と感想","u":"https://x.com/i_yumegorou/status/2076154715243749723"},{"x":1.5,"y":1.5,"e":1.5,"c":0.85,"s":"AI学習への矛盾した態度を批判","u":"https://x.com/miyamoyame/status/2076139637425492260"},{"x":0.0,"y":0.0,"e":1.0,"c":0.7,"s":"AIイラストを嫌いブロックする個人的感想","u":"https://x.com/_mikwskr_/status/2076166938859036811"},{"x":0.0,"y":0.0,"e":0.0,"c":0.5,"s":"AIイラストの実用的な活用法への感想のみ","u":"https://x.com/tanukida/status/2076126099525058967"},{"x":0.0,"y":0.0,"e":1.0,"c":0.95,"s":"AI利用への複雑な個人的感情を軽口で表明","u":"https://x.com/ykkieu/status/2076120349708816437"},{"x":0.0,"y":1.5,"e":1.0,"c":0.75,"s":"AI肯定派を呆れと皮肉で批判する個人的感想","u":"https://x.com/toyamaru39priv/status/2076113261544743342"},{"x":0.0,"y":0.0,"e":-0.5,"c":0.7,"s":"クリエイターはリサーチ不足だと成果が出ないと主張","u":"https://x.com/tarosukeyt/status/2076298459301478895"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"クリエイター成功にはリサーチ力が必要というアドバイス","u":"https://x.com/tarosukeyt/status/2076298393920663773"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"クリエイターにリサーチ力の大切さを訴える","u":"https://x.com/tarosukeyt/status/2076298213813113267"},{"x":-0.5,"y":-1.0,"e":1.0,"c":0.75,"s":"AI側に批判的だが規制強化ではなく双標批判","u":"https://x.com/Honmani_say/status/2076290899240481106"},{"x":-1.0,"y":-1.0,"e":-1.0,"c":0.7,"s":"AI規制不要、産業発展優先の冷静な意見","u":"https://x.com/eizo_kansatsu/status/2076283451947512171"},{"x":0.0,"y":0.0,"e":0.5,"c":0.7,"s":"AIキャラ着せ替えを楽しんでいる個人の感想・考察","u":"https://x.com/Sauer20/status/2076276042059350220"},{"x":1.0,"y":1.0,"e":-0.5,"c":0.6,"s":"AI作画反対派を支持し推進派を皮肉る個人的感想","u":"https://x.com/lenchroot/status/2076273589721210948"},{"x":2.0,"y":1.5,"e":1.0,"c":0.85,"s":"AI禁止・規制強化とクリエイター権利優先を主張","u":"https://x.com/Kitaguni8888/status/2076263652739690860"},{"x":0.5,"y":1.0,"e":1.0,"c":0.8,"s":"AI依存のクリエイターを皮肉る批判的意見","u":"https://x.com/Syoku0000/status/2076255604075897099"},{"x":0.0,"y":0.5,"e":0.0,"c":0.6,"s":"AI未来を冷静予測、クリエイター主体のクリーンAI到来を主張","u":"https://x.com/RequiemofHoly/status/2076253750759710866"},{"x":0.0,"y":0.0,"e":1.0,"c":0.8,"s":"大半のクリエイターは生成AI使用経験があり、使用を否定するのは嘘だと主張","u":"https://x.com/Lantern_pumpkin/status/2076243954937594273"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"AI創作を一段下に見る。クリエイター流出を危惧","u":"https://x.com/sa75i14u/status/2076248888307331433"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AI時代における人間同士のつながりの価値を訴える穏当な意見","u":"https://x.com/devol_ch/status/2076214626459811883"},{"x":1.0,"y":1.5,"e":0.0,"c":0.7,"s":"生成AI使用控えめな建議 クリエイター権利重視","u":"https://x.com/konosaki_siori/status/2076201851821937105"},{"x":0.0,"y":0.0,"e":0.0,"c":0.4,"s":"YouTube動画共有のみ具体的意見なし","u":"https://x.com/kikoubiayasuke/status/2076199941358367164"},{"x":1.5,"y":2.0,"e":2.0,"c":0.9,"s":"クリエイターとしてAI乱用に激怒、規制強化を支持","u":"https://x.com/Yumari_Vtuber/status/2076193416736874926"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"生成AI全面使用に否定的・個人的基準優先","u":"https://x.com/Yumari_Vtuber/status/2076192399693689332"},{"x":1.0,"y":1.5,"e":1.0,"c":0.8,"s":"AI使いへの批判とクリエイター権利擁護の意見","u":"https://x.com/hayaseyu/status/2076188606029574155"},{"x":1.0,"y":1.0,"e":1.0,"c":0.85,"s":"チームみらいの姿勢への批判とAI規制の訴え","u":"https://x.com/boyaki_san/status/2076189032967712806"},{"x":1.0,"y":2.0,"e":2.0,"c":0.85,"s":"AIの剽窃に激怒、創作者権利至上","u":"https://x.com/katsuota_taki/status/2076185025960382622"},{"x":0.5,"y":1.0,"e":1.0,"c":0.8,"s":"赤松議員のAI姿勢と立法姿勢を批判","u":"https://x.com/SoundJourneyDS/status/2076158047345664132"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"AIユーザーの偽装を批判","u":"https://x.com/reinamuko1224/status/2076135776493175243"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"クリエイター権利侵害が国民全体の権利侵害につながる恐れを警告","u":"https://x.com/966mium/status/2076130415430263075"},{"x":1.5,"y":1.5,"e":1.0,"c":0.85,"s":"AI規制とクリエイター権利保護を強く主張","u":"https://x.com/cord227_karaage/status/2076129655552410019"},{"x":-1.0,"y":-1.0,"e":2.0,"c":0.75,"s":"クリエイターへの怒りを含みながらAI規制論への懐疑を示す批判的意見","u":"https://x.com/MC3O2/status/2076123558921847262"},{"x":1.0,"y":1.0,"e":1.0,"c":0.8,"s":"クリエイター権利擁護・AI企業倫理観不足を批判","u":"https://x.com/kokosuringomoti/status/2076114673217536374"},{"x":1.0,"y":1.5,"e":1.5,"c":0.75,"s":"AI補助金への怒りと個人権利擁護の意見","u":"https://x.com/382584025/status/2076066849666769094"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AIと人間の関係性考察記事の告知","u":"https://x.com/simpeiidea/status/2076102853798826222"},{"x":0.0,"y":0.5,"e":-0.5,"c":0.7,"s":"AI現状分析でクリエイター保護に微かに傾く","u":"https://x.com/kadotanimitsuru/status/2076060675802370281"},{"x":1.0,"y":1.0,"e":1.0,"c":0.85,"s":"AIの著作権・個人情報利用に反発し規制を求める個人の意見","u":"https://x.com/yuria_net/status/2075963260730474913"},{"x":0.5,"y":1.0,"e":1.0,"c":0.8,"s":"ゲーム制作者の質は高いのでAI不要との主張","u":"https://x.com/snow_ghost95/status/2075949342637355311"},{"x":1.5,"y":1.0,"e":2.0,"c":0.75,"s":"AI規制強化とクリエイター権利保護を主張","u":"https://x.com/NemesisAKer/status/2075940336623612401"},{"x":-0.5,"y":1.0,"e":1.0,"c":0.85,"s":"反AIを批判しAIを使うクリエイターの権利を擁護","u":"https://x.com/SpicyChicken090/status/2075949186500169829"},{"x":1.0,"y":1.0,"e":0.5,"c":0.7,"s":"クリエイターがAIユーザーに選別で対応すべきと提案","u":"https://x.com/NemesisAKer/status/2075938227371045182"},{"x":2.0,"y":2.0,"e":2.0,"c":0.95,"s":"AI規制強化でクリエイターの権利守るべき","u":"https://x.com/NemesisAKer/status/2075925756988068200"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.7,"s":"AI活用・学習への肯定と教育的意義の提起","u":"https://x.com/nonoharupapa/status/2076304625809166443"},{"x":0.0,"y":0.0,"e":0.0,"c":0.85,"s":"AI市場予測のビジネス的可能性に関する冷静な分析","u":"https://x.com/tokusenjouhou20/status/2076089410001776751"},{"x":-1.0,"y":-1.0,"e":1.0,"c":0.8,"s":"AI活用を肯定し産業重視の冷静な意見","u":"https://x.com/take_wagatsuma/status/2075707337747394588"},{"x":-0.5,"y":-1.0,"e":0.5,"c":0.75,"s":"ID情報保護に肯定、規制に消極的な意見","u":"https://x.com/ehskculnu/status/2075511145163862162"},{"x":0.0,"y":0.0,"e":-1.0,"c":0.7,"s":"古い端末でもAIは同じ体験可との個人的所感","u":"https://x.com/nonpapa55/status/2075478410554712235"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AI活用時の人的作業の重要性を指摘する経験談","u":"https://x.com/dakkon_/status/2075472225868914756"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AIでCTO業務を自動化する企業側のメリットを中立的に説明","u":"https://x.com/bl_fox26/status/2075360441455542595"},{"x":0.0,"y":0.0,"e":0.0,"c":0.4,"s":"AI活用メリット肯定も規制・権利には言及なし","u":"https://x.com/bl_fox26/status/2075176583749603738"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"エッジAIの技術的優点と課題を中立的に説明する投稿","u":"https://x.com/Mar_3simai/status/2075059372351443093"},{"x":0.0,"y":0.0,"e":0.0,"c":0.7,"s":"AIメリットを客観的に列挙する情報投稿","u":"https://x.com/soukisya/status/2075042320052003090"},{"x":-0.5,"y":0.5,"e":0.0,"c":0.75,"s":"AIを自己分析に活用したい和个人利用の感想","u":"https://x.com/sponta1419/status/2075026489154949442"},{"x":1.0,"y":-0.5,"e":1.5,"c":0.85,"s":"海外依存法案を批判、数据流出风险を懸念","u":"https://x.com/mucamuca/status/2074976692725301335"},{"x":0.0,"y":0.0,"e":0.0,"c":0.6,"s":"AI活用の運用設計の重要性を述べる穏やかな投稿","u":"https://x.com/bl_fox26/status/2074972952844763247"},{"x":0.0,"y":0.0,"e":0.0,"c":0.85,"s":"AI導入による業務効率化の経営面での有用性を論じるビジネス寄稿","u":"https://x.com/bl_fox26/status/2074886783888982201"},{"x":-0.5,"y":-0.5,"e":0.0,"c":0.8,"s":"AI活用の費用対効果を肯定する経営判断の意見","u":"https://x.com/nakajiman/status/2074861403807305731"},{"x":-1.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI一般公開を好意的に捉え社会的活用メリットを強調","u":"https://x.com/bl_fox26/status/2074801706576343145"},{"x":-0.5,"y":-1.0,"e":-0.5,"c":0.7,"s":"ゲーム制作のAI活用に否定的反応","u":"https://x.com/ma_anago/status/2074824251023163856"},{"x":1.5,"y":1.0,"e":2.0,"c":0.85,"s":"AI活用の拡大と海外企業への個人情報提供に強く反対","u":"https://x.com/Massara4616/status/2074789214286471479"},{"x":0.0,"y":1.0,"e":-1.0,"c":0.7,"s":"AI活用の市民メリットを皮肉交じりに疑問視","u":"https://x.com/bitomasabune/status/2074698612257538325"},{"x":1.5,"y":1.5,"e":2.0,"c":0.95,"s":"法案に強く反対し個人保護を重視する怒りの表明","u":"https://x.com/myu_00S/status/2074687140936790174"},{"x":0.0,"y":-1.0,"e":1.0,"c":0.85,"s":"情シス視点でAIの外注管理省力化メリットを肯定的に評価","u":"https://x.com/yu_papa_dev/status/2074685303298892234"},{"x":0.0,"y":0.0,"e":1.0,"c":0.6,"s":"AI活用の消耗を報告し理解した上で活用すべきと主張","u":"https://x.com/nariyamasan10/status/2074665683338858842"},{"x":0.0,"y":-1.0,"e":0.0,"c":0.7,"s":"AI活用で開発効率向上を肯定的に捉える感想","u":"https://x.com/bl_fox26/status/2074650053512466798"},{"x":-0.5,"y":0.0,"e":0.0,"c":0.7,"s":"AI活用の業務メリットを肯定的に捉える感想","u":"https://x.com/ra0kley/status/2074625587365486706"}];
-const TOUR = [{"title": "全体像：右上に意見が集中", "desc": "708件中297件（42%）が「規制賛成かつクリエイター個人優先」。日本のSNSでは著作権保護を求める声が圧倒的多数を占めます。", "filter": "all", "highlight": null, "quote": null}, {"title": "第1象限：著作権保護・規制強化派（297件）", "desc": "「AI学習は盗作」「クリエイターを守れ」という感情的な訴えが多く、感情強度の高い赤い点が密集しています。", "filter": "q1", "highlight": [1.5, 1.5], "quote": "クリエイターから成果物を略奪して開発され対価を一銭も支払わない生成AIを利用しておきながら、よくも『取引適正化』などと言えますね", "quote_url": "https://x.com/yukidaruma000/status/2069048616317264239"}, {"title": "第2象限：AI推進・自由化派（87件）", "desc": "「AI学習は合法」「技術の発展を止めるな」という立場。冷静な法律論が多く、感情強度は低め（青系）です。", "filter": "q2", "highlight": [-1.0, -1.0], "quote": "上手くても下手でも無断転載は著作権侵害で、AI学習は著作権侵害ではない。日本の法では学習はモーマンタイ", "quote_url": "https://x.com/sonson831155/status/2069027495350079812"}, {"title": "注目：高感情ゾーン（42件）", "desc": "感情強度1.5以上の「激怒」投稿は98件。規制賛成側に偏り、「永遠に反対」「ゲロが出るほど気持ち悪い」など強い言葉が並びます。", "filter": "q4", "highlight": [2.0, 2.0], "quote": "アイドルの写真をAIに入れるのは著作権侵害なのでやめましょう。会場内撮影に厳しいのにこれを勝手にやることが矛盾だよマジでムカつく", "quote_url": "https://x.com/NOIROMANTIC/status/2068884245544862197"}, {"title": "第3象限：規制反対・個人優先派（38件）", "desc": "「AIは使ってよいが、著作者の権利も尊重すべき」という中間派。件数は少ないが、論理的な議論が多い象限です。", "filter": "q3", "highlight": [-1.0, 1.0], "quote": "私はAIを手段として利用するのは賛成ですが、生成AIごときに絵を描いた時の気持ちやこだわりなんかわかるわけがない", "quote_url": ""}, {"title": "冷静な意見：感情を抑えた論者たち（156件）", "desc": "感情強度0以下の冷静・皮肉系は342件（48%）。規制賛成であっても感情的でない投稿が多く、実態は二極化より複雑です。", "filter": "calm", "highlight": null, "quote": null}];
-
-const W=600, H=600, PAD=58, INNER=W-PAD*2;
-const canvasMain = document.getElementById('smCanvasMain');
-const canvasHeat = document.getElementById('smCanvasHeat');
-const ctx = canvasMain.getContext('2d');
-const hCtx = canvasHeat.getContext('2d');
-
-// 固定シードジッター
-function seededRand(seed) {
-  let s = seed;
-  return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
-}
-const jCache = RAW.map((_, i) => {
-  const r = seededRand(i * 2);
-  return [(r() - 0.5) * 12, (r() - 0.5) * 12];
-});
-
-function toCanvas(x, y) { return [PAD + (x + 2) / 4 * INNER, PAD + (-y + 2) / 4 * INNER]; }
-
-function emoRGB(e) {
-  const t = (e + 2) / 4;
-  if (t < 0.5) {
-    const u = t * 2;
-    return [Math.round(74 + u*(185-74)), Math.round(144 + u*(185-144)), Math.round(217 + u*(185-217))];
-  }
-  const u = (t - 0.5) * 2;
-  return [Math.round(185 + u*(224-185)), Math.round(185 + u*(75-185)), Math.round(185 + u*(75-185))];
-}
-
-let activeFilter = 'all';
-let showHeat = true, showDots = true, heatRadius = 28;
-let tourStep = -1;
-let spotlightTarget = null;
-let animFrame = 0, animTotal = RAW.length, animating = false;
-const IMG_ALPHA_START = 0.72, IMG_ALPHA_END = 0.13;
-let imgAlpha = IMG_ALPHA_END;
-
-function visible(p) {
-  if (activeFilter === 'all') return true;
-  if (activeFilter === 'q1') return p.x > 0 && p.y > 0;
-  if (activeFilter === 'q2') return p.x < 0 && p.y < 0;
-  if (activeFilter === 'q3') return p.x < 0 && p.y > 0;
-  if (activeFilter === 'q4') return p.e >= 1.5;
-  if (activeFilter === 'calm') return p.e <= 0;
-  return true;
-}
-
-// ===== ヒートマップ =====
-function drawHeatmap() {
-  hCtx.clearRect(0, 0, W, H);
-  if (!showHeat) return;
-  const vis = RAW.filter(p => visible(p));
-  if (!vis.length) return;
-  const res = 3, gw = Math.ceil(W/res), gh = Math.ceil(H/res);
-  const densAll = new Float32Array(gw * gh);
-  const densEmo = new Float32Array(gw * gh);
-  const sig = heatRadius / 2.5, sig2 = sig * sig * 2;
-  vis.forEach(p => {
-    const idx = RAW.indexOf(p);
-    const [cx, cy] = toCanvas(p.x, p.y);
-    const px = cx + jCache[idx][0], py = cy + jCache[idx][1];
-    const gxMin = Math.max(0, Math.floor((px - heatRadius)/res));
-    const gxMax = Math.min(gw-1, Math.ceil((px + heatRadius)/res));
-    const gyMin = Math.max(0, Math.floor((py - heatRadius)/res));
-    const gyMax = Math.min(gh-1, Math.ceil((py + heatRadius)/res));
-    for (let gy = gyMin; gy <= gyMax; gy++) {
-      for (let gx = gxMin; gx <= gxMax; gx++) {
-        const dx = gx*res - px, dy = gy*res - py, d2 = dx*dx + dy*dy;
-        if (d2 > heatRadius*heatRadius) continue;
-        const w = Math.exp(-d2/sig2) * p.c;
-        densAll[gy*gw+gx] += w;
-        densEmo[gy*gw+gx] += w * (p.e + 2) / 4;
-      }
-    }
-  });
-  let maxD = 0;
-  for (let i = 0; i < densAll.length; i++) if (densAll[i] > maxD) maxD = densAll[i];
-  if (!maxD) return;
-  const imgData = hCtx.createImageData(W, H);
-  for (let gy = 0; gy < gh; gy++) {
-    for (let gx = 0; gx < gw; gx++) {
-      const i = gy*gw+gx;
-      if (densAll[i] < 0.005) continue;
-      const t = Math.min(1, densAll[i] / maxD);
-      const et = densAll[i] > 0 ? densEmo[i] / densAll[i] : 0.5;
-      const rr = Math.round(60 + et*(220-60));
-      const gg = Math.round(120 - et*80);
-      const bb = Math.round(220 - et*180);
-      const alpha = Math.round(Math.pow(t, 0.5) * 170);
-      for (let dy = 0; dy < res && gy*res+dy < H; dy++) {
-        for (let dx = 0; dx < res && gx*res+dx < W; dx++) {
-          const pi = ((gy*res+dy)*W + (gx*res+dx)) * 4;
-          if (imgData.data[pi+3] < alpha) {
-            imgData.data[pi] = rr; imgData.data[pi+1] = gg;
-            imgData.data[pi+2] = bb; imgData.data[pi+3] = alpha;
-          }
-        }
-      }
-    }
-  }
-  hCtx.putImageData(imgData, 0, 0);
-  hCtx.save();
-  hCtx.globalCompositeOperation = 'destination-in';
-  hCtx.beginPath(); hCtx.rect(PAD, PAD, INNER, INNER); hCtx.fill();
-  hCtx.restore();
-}
-
-// ===== ベース描画（グリッド・軸・ドット） =====
-function drawBase() {
-  ctx.clearRect(0, 0, W, H);
-  const mid = PAD + INNER / 2;
-
-  // 象限背景画像
-  drawQuadImages();
-
-  // 象限背景
-  [[mid,PAD,PAD+INNER-mid,mid-PAD,'rgba(192,57,43,0.03)'],
-   [PAD,PAD,mid-PAD,mid-PAD,'rgba(39,174,96,0.03)'],
-   [mid,mid,PAD+INNER-mid,PAD+INNER-mid,'rgba(230,126,34,0.03)'],
-   [PAD,mid,mid-PAD,PAD+INNER-mid,'rgba(41,128,185,0.03)']
-  ].forEach(([x,y,w,h,c]) => { ctx.fillStyle = c; ctx.fillRect(x,y,w,h); });
-
-  // グリッド
-  ctx.strokeStyle = '#e0e0e0'; ctx.lineWidth = 0.7;
-  for (let v = -2; v <= 2; v += 0.5) {
-    const [cx] = toCanvas(v, 0); ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
-    const [, cy] = toCanvas(0, v); ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
-  }
-
-  // 主軸
-  ctx.strokeStyle = '#888'; ctx.lineWidth = 1.2;
-  ctx.beginPath(); ctx.moveTo(PAD, mid); ctx.lineTo(PAD+INNER, mid); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(mid, PAD); ctx.lineTo(mid, PAD+INNER); ctx.stroke();
-
-  // 象限ラベル（黒背景+白文字）
-  ctx.font = 'bold 12px -apple-system,sans-serif';
-  ctx.textAlign = 'center';
-  const quadLabels = [
-    ['規制賛成×個人優先', PAD + INNER*0.75, PAD + 26],
-    ['規制反対×個人優先', PAD + INNER*0.25, PAD + 26],
-    ['規制反対×産業優先', PAD + INNER*0.25, PAD + INNER - 10],
-    ['規制賛成×産業優先', PAD + INNER*0.75, PAD + INNER - 10],
-  ];
-  quadLabels.forEach(([text, lx, ly]) => {
-    const tw = ctx.measureText(text).width;
-    const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
-    ctx.fillStyle = 'rgba(0,0,0,0.62)';
-    ctx.beginPath();
-    ctx.moveTo(rx + r, ry); ctx.lineTo(rx + pw - r, ry);
-    ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
-    ctx.lineTo(rx + pw, ry + ph - r);
-    ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
-    ctx.lineTo(rx + r, ry + ph);
-    ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
-    ctx.lineTo(rx, ry + r);
-    ctx.arcTo(rx, ry, rx + r, ry, r);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.fillText(text, lx, ly);
-  });
-
-  // 目盛り
-  ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
-  ctx.textAlign = 'right';
-  [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-    const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
-  });
-  ctx.textAlign = 'center';
-  [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-    const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
-  });
-
-  // ドット
-  if (showDots) {
-    const count = animating ? animFrame : RAW.length;
-    for (let i = 0; i < count; i++) {
-      const p = RAW[i];
-      const show = visible(p);
-      const [cx, cy] = toCanvas(p.x, p.y);
-      const [rr, gg, bb] = emoRGB(p.e);
-      ctx.beginPath();
-      ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
-      ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
-      ctx.fill();
-      if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
-    }
-  }
-
-  // スポットライト（ツアー中）
-  if (spotlightTarget) {
-    const [sx, sy] = spotlightTarget;
-    ctx.beginPath();
-    ctx.arc(sx, sy, 18, 0, Math.PI*2);
-    ctx.strokeStyle = '#e67e22';
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-    // 外側の輪
-    ctx.beginPath();
-    ctx.arc(sx, sy, 24, 0, Math.PI*2);
-    ctx.strokeStyle = 'rgba(230,126,34,0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-  }
-}
-
-let myVoteMarker = null;
-let myVoteSX = null, myVoteSY = null;
-const VOTE_MARKERS = [
-  { x: -1.45, y: 1.45, label: 'あなた: AIで個人表現を広げる', color: '#dc2626' },
-  { x: 1.45, y: 1.45, label: 'あなた: クリエイターを守るため規制を', color: '#2563eb' },
-  { x: -1.45, y: -1.45, label: 'あなた: 産業競争力のため規制不要', color: '#059669' },
-  { x: 1.45, y: -1.45, label: 'あなた: 産業秩序のためルール整備を', color: '#d97706' }
-];
-function drawVoteMarker() {
-  if (myVoteMarker === null) return;
-  const marker = VOTE_MARKERS[myVoteMarker];
-  if (!marker) return;
-  const px = (myVoteSX !== null) ? myVoteSX : marker.x;
-  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
-  const [x, y] = toCanvas(px, py);
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x, y, 13, 0, Math.PI * 2);
-  ctx.fillStyle = '#fff';
-  ctx.fill();
-  ctx.lineWidth = 5;
-  ctx.strokeStyle = marker.color;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(x, y, 4, 0, Math.PI * 2);
-  ctx.fillStyle = marker.color;
-  ctx.fill();
-  ctx.font = '700 12px sans-serif';
-  ctx.fillStyle = marker.color;
-  ctx.fillText(marker.label, Math.min(x + 16, W - 150), Math.max(y - 14, 24));
-  ctx.restore();
-}
-window.setStanceMapVoteMarker = function(idx, sx, sy) {
-  myVoteMarker = idx;
-  if (sx !== undefined) myVoteSX = sx;
-  if (sy !== undefined) myVoteSY = sy;
-  const note = document.getElementById('your-marker-note');
-  if (note) note.style.display = 'block';
-  redraw();
-};
-function redraw() { drawHeatmap(); drawBase(); drawVoteMarker(); }
-
-// ===== 登場アニメーション =====
-function playIntro() {
-  animating = true;
-  animFrame = 0;
-  imgAlpha = IMG_ALPHA_START;
-  const total = RAW.length;
-  const duration = 1800;
-  const start = performance.now();
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(1, elapsed / duration);
-    animFrame = Math.min(total, Math.round(progress * total));
-    // 前半(0→0.5)は濃いまま、後半(0.5→1)でフェードアウト
-    imgAlpha = progress < 0.5
-      ? IMG_ALPHA_START
-      : IMG_ALPHA_START + (IMG_ALPHA_END - IMG_ALPHA_START) * ((progress - 0.5) / 0.5);
-    redraw();
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      animating = false;
-      imgAlpha = IMG_ALPHA_END;
-      redraw();
-    }
-  }
-  requestAnimationFrame(tick);
-}
-
-// ===== ガイドツアー =====
-let tourActive = false;
-let currentStep = 0;
-
-function showTourStep(idx) {
-  const step = TOUR[idx];
-  const total = TOUR.length;
-  document.getElementById('tourStep').textContent = `Step ${idx+1} / ${total}`;
-  document.getElementById('tourTitle').textContent = step.title;
-  document.getElementById('tourDesc').textContent = step.desc;
-  document.getElementById('tourProgressBar').style.width = ((idx+1)/total*100)+'%';
-
-  // X埋め込み
-  const embedEl = document.getElementById('tourEmbed');
-  const loadingEl = document.getElementById('tourEmbedLoading');
-  const fallbackEl = document.getElementById('tourQuoteFallback');
-  embedEl.style.display = 'none';
-  loadingEl.style.display = 'none';
-  fallbackEl.style.display = 'none';
-  embedEl.innerHTML = '';
-
-  if (step.quote) {
-    // 引用テキストを即座に表示（ツイート読み込みを待たない）
-    showFallback(step, fallbackEl);
-    // quote_url があればバックグラウンドで埋め込み試行（成功時のみ差し替え）
-    if (step.quote_url) {
-      const tweetId = step.quote_url.replace('x.com', 'twitter.com').split('/status/')[1];
-      if (window.twttr && window.twttr.widgets && tweetId) {
-        const p = window.twttr.widgets.createTweet(tweetId, embedEl, {theme:'dark',dnt:true,conversation:'none'});
-        if (p && p.then) p.then(el => {
-          if (el) { fallbackEl.style.display = 'none'; embedEl.style.display = 'block'; }
-        }).catch(() => {});
-      }
-    }
-  }
-
-  // フィルター切り替え
-  activeFilter = step.filter || 'all';
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector(`.fbtn[data-q="${step.filter || 'all'}"]`);
-  if (btn) btn.classList.add('active');
-
-  // スポットライト
-  if (step.highlight) {
-    const [sx, sy] = toCanvas(step.highlight[0], step.highlight[1]);
-    spotlightTarget = [sx, sy];
-  } else {
-    spotlightTarget = null;
-  }
-
-  redraw();
-}
-
-function showFallback(step, fallbackEl) {
-  document.getElementById('tourQuoteText').textContent = '「' + step.quote + '」';
-  const linkEl = document.getElementById('tourQuoteLink');
-  if (step.quote_url) {
-    linkEl.style.display = 'block';
-    fallbackEl.onclick = () => window.open(step.quote_url, '_blank');
-  } else {
-    linkEl.style.display = 'none';
-    fallbackEl.onclick = null;
-  }
-  fallbackEl.style.display = 'block';
-}
-
-function startTour() {
-  tourActive = true;
-  currentStep = 0;
-  document.getElementById('tourPanel').classList.add('active');
-  showTourStep(0);
-}
-
-function closeTour() {
-  tourActive = false;
-  document.getElementById('tourPanel').classList.remove('active');
-  spotlightTarget = null;
-  activeFilter = 'all';
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.fbtn[data-q="all"]').classList.add('active');
-  redraw();
-}
-
-document.getElementById('startTour').addEventListener('click', startTour);
-document.getElementById('btnClose').addEventListener('click', closeTour);
-document.getElementById('btnNext').addEventListener('click', () => {
-  if (currentStep < TOUR.length - 1) { currentStep++; showTourStep(currentStep); }
-  else { closeTour(); }
-});
-document.getElementById('btnPrev').addEventListener('click', () => {
-  if (currentStep > 0) { currentStep--; showTourStep(currentStep); }
-});
-
-// ===== コントロール =====
-document.getElementById('chkHeat').addEventListener('change', e => { showHeat = e.target.checked; redraw(); });
-document.getElementById('chkDots').addEventListener('change', e => { showDots = e.target.checked; redraw(); });
-document.getElementById('heatIntensity').addEventListener('input', e => { heatRadius = +e.target.value; redraw(); });
-document.querySelector('.sm-filters').addEventListener('click', e => {
-  const btn = e.target.closest('.fbtn');
-  if (!btn) return;
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  activeFilter = btn.dataset.q;
-  spotlightTarget = null;
-  redraw();
-});
-
-// ===== ツールチップ =====
-const tooltip = document.getElementById('tooltip');
-canvasMain.addEventListener('mousemove', e => {
-  const rect = canvasMain.getBoundingClientRect();
-  const sx = W / rect.width, sy = H / rect.height;
-  const mx = (e.clientX - rect.left) * sx, my = (e.clientY - rect.top) * sy;
-  let found = null, minD = 20;
-  RAW.forEach((p, i) => {
-    if (!visible(p)) return;
-    const [cx, cy] = toCanvas(p.x, p.y);
-    const d = Math.hypot(mx - (cx + jCache[i][0]), my - (cy + jCache[i][1]));
-    if (d < minD) { minD = d; found = { p, i }; }
-  });
-  if (found) {
-    const p = found.p;
-    const eLabel = p.e >= 1.5 ? '😤 激怒' : p.e >= 0.5 ? '😠 感情的' : p.e <= -1 ? '😒 皮肉・冷笑' : '😐 冷静';
-    const tx = e.clientX + 14 + 260 > window.innerWidth ? e.clientX - 270 : e.clientX + 14;
-    tooltip.style.opacity = '1';
-    tooltip.style.left = tx + 'px';
-    tooltip.style.top = (e.clientY - 10) + 'px';
-    tooltip.innerHTML = `<b>${p.s}</b><br>規制: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u ? '<br><small style="opacity:.5">クリックでXへ ↗</small>' : ''}`;
-  } else {
-    tooltip.style.opacity = '0';
-  }
-});
-canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
-canvasMain.addEventListener('click', e => {
-  const rect = canvasMain.getBoundingClientRect();
-  const sx = W / rect.width, sy = H / rect.height;
-  const mx = (e.clientX - rect.left) * sx, my = (e.clientY - rect.top) * sy;
-  let found = null, minD = 20;
-  RAW.forEach((p, i) => {
-    if (!visible(p) || !p.u) return;
-    const [cx, cy] = toCanvas(p.x, p.y);
-    const d = Math.hypot(mx - (cx + jCache[i][0]), my - (cy + jCache[i][1]));
-    if (d < minD) { minD = d; found = p; }
-  });
-  if (found) window.open(found.u, '_blank');
-});
-
-// 象限背景画像のプリロード
-const QUAD_IMGS = {
-  q1: 'images/ai-copyright-vote-1-regulate.webp',   // 右上: 規制賛成×個人優先
-  q3: 'images/ai-copyright-vote-3-coexist.webp',    // 左上: 規制反対×個人優先
-  q2: 'images/ai-copyright-vote-2-innovate.webp',   // 左下: 規制反対×産業優先
-  q4: 'images/ai-copyright-vote-4-unsure.webp',     // 右下: 規制賛成×産業優先
-};
-const loadedImgs = {};
-let imgsReady = 0;
-Object.entries(QUAD_IMGS).forEach(([key, src]) => {
-  const img = new Image();
-  img.onload = () => { loadedImgs[key] = img; imgsReady++; };
-  img.src = src;
-});
-
-function drawQuadImages() {
-  const mid = PAD + INNER / 2;
-  const quads = [
-    { key: 'q1', x: mid,  y: PAD,  w: PAD + INNER - mid, h: mid - PAD },  // 右上
-    { key: 'q3', x: PAD,  y: PAD,  w: mid - PAD,          h: mid - PAD },  // 左上
-    { key: 'q2', x: PAD,  y: mid,  w: mid - PAD,          h: PAD + INNER - mid }, // 左下
-    { key: 'q4', x: mid,  y: mid,  w: PAD + INNER - mid,  h: PAD + INNER - mid }, // 右下
-  ];
-  ctx.save();
-  quads.forEach(({ key, x, y, w, h }) => {
-    const img = loadedImgs[key];
-    if (!img) return;
-    ctx.globalAlpha = imgAlpha;
-    // 象限の中央寄りにアスペクト比を保って収める
-    const scale = Math.min(w, h) / Math.min(img.width, img.height);
-    const dw = img.width * scale;
-    const dh = img.height * scale;
-    const dx = x + (w - dw) / 2;
-    const dy = y + (h - dh) / 2;
-    ctx.drawImage(img, dx, dy, dw, dh);
-  });
-  ctx.globalAlpha = 1;
-  ctx.restore();
-}
-
-// 起動：ページ読み込み時にアニメーション
-playIntro();
-const savedVote = localStorage.getItem("sns_vote_生成AIと著作権問題_SNS反応まっぷ_my");
-if (savedVote !== null) window.setStanceMapVoteMarker(parseInt(savedVote, 10));
-</script>
-
-<!-- ===== 論点アリーナ ===== -->
-<section class="panel" id="arena-section">
-  <div class="panel-title">
-    <h2>論点別の反応分布</h2>
-    <span>669件の意見投稿を6つの論点に分類</span>
-  </div>
-  <p class="arena-caption">どの論点で議論が多いか、規制寄り・推進寄りのどちらが多いかを一覧で確認できます。バーの長さが投稿数を表します。</p>
-  <div class="arena-legend">
-    <span class="leg-item"><span class="leg-dot" style="background:#e04949"></span>規制賛成寄り（著作権保護）</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#d1d5db"></span>中立・判断困難</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#4b9cf4"></span>AI活用推進寄り</span>
-  </div>
-  <div class="arena-rows">
-    <!-- 学習データ・無断利用: 126件 規制93 中立5 推進28 -->
-    <div class="arena-row">
-      <div class="arena-label">
-        <span class="arena-issue">学習データ・無断利用</span>
-        <span class="arena-cnt">126件 ／ 最多論点</span>
-      </div>
-      <div class="arena-track">
-        <div class="arena-fill-wrap" style="width:100%">
-          <div class="af kisei" style="width:73.8%"></div>
-          <div class="af neutral" style="width:4.0%"></div>
-          <div class="af suishin" style="width:22.2%"></div>
-        </div>
-      </div>
-      <div class="arena-stat"><span class="ar-k">93</span><span class="ar-sep">/</span><span class="ar-s">28</span></div>
-    </div>
-    <!-- 法制度・規制整備: 79件 規制46 中立12 推進21 -->
-    <div class="arena-row">
-      <div class="arena-label">
-        <span class="arena-issue">法制度・規制整備</span>
-        <span class="arena-cnt">79件</span>
-      </div>
-      <div class="arena-track">
-        <div class="arena-fill-wrap" style="width:62.7%">
-          <div class="af kisei" style="width:58.2%"></div>
-          <div class="af neutral" style="width:15.2%"></div>
-          <div class="af suishin" style="width:26.6%"></div>
-        </div>
-      </div>
-      <div class="arena-stat"><span class="ar-k">46</span><span class="ar-sep">/</span><span class="ar-s">21</span></div>
-    </div>
-    <!-- 利用者モラル・倫理: 73件 規制47 中立8 推進18 -->
-    <div class="arena-row">
-      <div class="arena-label">
-        <span class="arena-issue">利用者モラル・倫理</span>
-        <span class="arena-cnt">73件</span>
-      </div>
-      <div class="arena-track">
-        <div class="arena-fill-wrap" style="width:57.9%">
-          <div class="af kisei" style="width:64.4%"></div>
-          <div class="af neutral" style="width:11.0%"></div>
-          <div class="af suishin" style="width:24.7%"></div>
-        </div>
-      </div>
-      <div class="arena-stat"><span class="ar-k">47</span><span class="ar-sep">/</span><span class="ar-s">18</span></div>
-    </div>
-    <!-- クリエイター保護・権利: 46件 規制33 中立4 推進9 -->
-    <div class="arena-row">
-      <div class="arena-label">
-        <span class="arena-issue">クリエイター保護・権利</span>
-        <span class="arena-cnt">46件</span>
-      </div>
-      <div class="arena-track">
-        <div class="arena-fill-wrap" style="width:36.5%">
-          <div class="af kisei" style="width:71.7%"></div>
-          <div class="af neutral" style="width:8.7%"></div>
-          <div class="af suishin" style="width:19.6%"></div>
-        </div>
-      </div>
-      <div class="arena-stat"><span class="ar-k">33</span><span class="ar-sep">/</span><span class="ar-s">9</span></div>
-    </div>
-    <!-- 技術競争・推進: 40件 規制6 中立7 推進27 -->
-    <div class="arena-row">
-      <div class="arena-label">
-        <span class="arena-issue">技術競争・AI推進</span>
-        <span class="arena-cnt">40件</span>
-      </div>
-      <div class="arena-track">
-        <div class="arena-fill-wrap" style="width:31.7%">
-          <div class="af kisei" style="width:15.0%"></div>
-          <div class="af neutral" style="width:17.5%"></div>
-          <div class="af suishin" style="width:67.5%"></div>
-        </div>
-      </div>
-      <div class="arena-stat"><span class="ar-k">6</span><span class="ar-sep">/</span><span class="ar-s">27</span></div>
-    </div>
-    <!-- AI生成物の権利・創作性: 31件 規制14 中立10 推進7 -->
-    <div class="arena-row">
-      <div class="arena-label">
-        <span class="arena-issue">AI生成物の権利・創作性</span>
-        <span class="arena-cnt">31件</span>
-      </div>
-      <div class="arena-track">
-        <div class="arena-fill-wrap" style="width:24.6%">
-          <div class="af kisei" style="width:45.2%"></div>
-          <div class="af neutral" style="width:32.3%"></div>
-          <div class="af suishin" style="width:22.6%"></div>
-        </div>
-      </div>
-      <div class="arena-stat"><span class="ar-k">14</span><span class="ar-sep">/</span><span class="ar-s">7</span></div>
-    </div>
-  </div>
-  <p style="font-size:11px;color:var(--muted);margin:16px 0 0;line-height:1.6;">
-    ※ 規制寄り／推進寄りの判定はAIによる自動分類（OpenCode Go / minimax-m2.7）。世論調査ではありません。<br>
-    ※「その他」論点274件を除く395件が対象。
-  </p>
-</section>
-
-    <section class="panel"><div class="panel-title"><h2>象限別の代表的な声</h2><span>タブで立場を切り替え</span></div>
-<nav class="quadrant-nav" aria-label="象限別ナビ">
-  <a href="#sample-著作権厳格保護-クリエイターの権利回復を最優先">規制賛成・権利保護</a>
-  <a href="#sample-AI技術推進-過度な規制は競争力を損なう">規制反対・技術推進</a>
-  <a href="#sample-条件付き容認-オプトアウトや対価支払いで共存">条件付き共存</a>
-  <a href="#sample-その他-分類保留">保留・注意領域</a>
-</nav>
 <div class="sample-grid">
-<article class="sample-card" id="sample-著作権厳格保護-クリエイターの権利回復を最優先"><h3>著作権厳格保護・クリエイターの権利回復を最優先</h3><div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 1.00</div><p>生成AIによる著作権侵害を批判し、対策を求めている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/koshian_2002/status/2069048301702480182"></a></blockquote>
-<div class="reason">理由: 著作権侵害に対する批判が明確に含まれている。</div>
+<div class="sample-card"><div class="meta">規制賛成 / conf 1.00</div><p>生成AIによる著作権侵害を批判し、対策を求めている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/koshian_2002/status/2069048301702480182"></a></blockquote></div>
+<div class="sample-card"><div class="meta">規制賛成 / conf 1.00</div><p>AIによる曲カバー動画が著作権侵害であると主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tteuneseut42300/status/2068712397431513250"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 1.00</div><p>AIによる改変は著作権侵害であり、作者に不快感を与える。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/orenoryoteha_IH/status/2068969230968782938"></a></blockquote>
-<div class="reason">理由: 明確な規制推進の立場あり</div>
+</article>
+
+<article class="issue-block" id="issue-hoseibi">
+<div class="issue-head"><span class="axis-kicker">論点2</span><h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">79件</span><span class="issue-heat">規制賛成 57件（72%）</span></h3>
+<p class="issue-desc">「許諾なし学習の禁止」「オプトアウト制度」「ライセンス料の徴収」など具体的な法整備を求める投稿が多い論点です。政府の対応の遅さへの批判と、「過剰な規制は産業を萎縮させる」という反論が対立しています。</p>
+<div class="issue-sides"><div class="side neg"><strong>規制賛成（57件）</strong>EUのAI法のようにライセンス制度・許諾要件を整備し、権利者への対価還元を義務化すべき。</div><div class="side pos"><strong>AI推進寄り（19件）</strong>規制は最小限にとどめ、利用者の自主的なクレジット表記などモラルで対応すべき。</div></div>
 </div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 1.00</div><p>AIによる曲カバー動画が著作権侵害であると主張している。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tteuneseut42300/status/2068712397431513250"></a></blockquote>
-<div class="reason">理由: 直接的に著作権侵害行為を指摘し、クリエイターの権利保護を求める。</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">条件付き賛成 / conf 0.90</div><p>権利問題が解決すればAI生成イラストは容認されるべき</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/YUGAYUG01511120/status/2069369977229152612"></a></blockquote></div>
+<div class="sample-card"><div class="meta">規制賛成 / conf 0.80</div><p>生成AIの学習データ利用やリバースエンジニアリングは著作権違反と主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/n0o8BTzbdrUxMSi/status/2069011965599748245"></a></blockquote></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-AI技術推進-過度な規制は競争力を損なう"><h3>AI技術推進・過度な規制は競争力を損なう</h3><div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 1.00</div><p>生成AIの廃止を主張し、著作権問題も含めて批判している。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/G32Jk/status/2069047015934464314"></a></blockquote>
-<div class="reason">理由: 生成AIの利点と問題点を全面的に否定しており、過度な規制に懸念を持っている。</div>
+</article>
+
+<article class="issue-block" id="issue-moraru">
+<div class="issue-head"><span class="axis-kicker">論点3</span><h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">73件</span><span class="issue-heat">規制賛成 42件（58%）</span></h3>
+<p class="issue-desc">「AI生成と隠してSNSに投稿する」「クレジット表記すらしない」という個人の使い方への批判が中心です。法整備よりも利用者モラルを問う声で、「ルールがないから何でもいいと思っている人が問題」という意見が目立ちます。</p>
+<div class="issue-sides"><div class="side neg"><strong>モラル問題派（42件）</strong>AI生成物をオリジナルとして公開したり、元の作者に配慮しない使い方が問題の本質だ。</div><div class="side pos"><strong>自衛・自己責任派（28件）</strong>利用者の行動は個人の判断。嫌なら公開しない、AIを使わないという自衛が基本。</div></div>
 </div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 1.00</div><p>AI学習は犯罪ではなく、自衛が重要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/SakazukiShine/status/2068981480135729165"></a></blockquote>
-<div class="reason">理由: AI学習を規制する必要性を否定している。</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">モラル批判 / conf 0.90</div><p>生成AI利用者の行動が社会的マナーに違反していると批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pt8mf/status/2068882072392057246"></a></blockquote></div>
+<div class="sample-card"><div class="meta">モラル重視 / conf 0.90</div><p>生成AIの使用時に適切なクレジット表記が重要と主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/animmaccha_rio/status/2068994320116703564"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 1.00</div><p>政府の即時アクセス遮断は強引で、業界全体の新展開が止まる可能性がある。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MKBKCOM/status/2068446318012297656"></a></blockquote>
-<div class="reason">理由: 投稿者が政府による規制を批判的視点から述べている。</div>
+</article>
+
+<article class="issue-block" id="issue-creator">
+<div class="issue-head"><span class="axis-kicker">論点4</span><h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">46件</span><span class="issue-heat">規制賛成 34件（74%）</span></h3>
+<p class="issue-desc">「イラストレーターが次々と廃業している」「10年かけた作風が一瞬で真似される」というクリエイターの生計への影響を訴える論点です。「AI自体は道具であり問題は使い方」という反論と、「仕事が奪われる現実を直視すべき」という訴えが対立しています。</p>
+<div class="issue-sides"><div class="side neg"><strong>クリエイター保護派（34件）</strong>生成AIの普及でイラスト・小説・音楽など創作の仕事が消滅しつつある。権利と生活を守る制度が必要。</div><div class="side pos"><strong>現実受容派（10件）</strong>技術革新で職業が変わるのは歴史的必然。AIを使いこなすスキルに転換すべき。</div></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-法規制強化-ライセンス制度や許諾要件の整備を求める"><h3>法規制強化・ライセンス制度や許諾要件の整備を求める</h3><div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 0.90</div><p>権利問題が解決すればAI生成イラストは容認されるべき。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/YUGAYUG01511120/status/2069369977229152612"></a></blockquote>
-<div class="reason">理由: 規制支持の明確な意見</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">規制賛成 / conf 1.00</div><p>生成AIが無断でデータを使用し、クリエイターが困っている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nipponbare0v0/status/2069003711515668492"></a></blockquote></div>
+<div class="sample-card"><div class="meta">規制賛成 / conf 1.00</div><p>AIイラストがクリエイターへの尊重不足であると批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sikyosyounin/status/2069225117599805465"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.80</div><p>生成AIの学習データ利用やリバースエンジニアリングは著作権違反と主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/n0o8BTzbdrUxMSi/status/2069011965599748245"></a></blockquote>
-<div class="reason">理由: 投稿者が生成AIによる学習データ利用やリバースエンジニアリングについて著作権違反であると指摘している。</div>
+</article>
+
+<article class="issue-block" id="issue-gijutsu">
+<div class="issue-head"><span class="axis-kicker">論点5・最も推進寄り</span><h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">40件</span><span class="issue-heat">AI推進 27件（67%）</span></h3>
+<p class="issue-desc">このテーマで唯一、AI推進派が多数を占める論点。「日本が規制を強化すれば中国・米国に遅れる」「過度な規制は技術革新と経済を損なう」という産業競争力の観点からの主張が中心です。「規制より自由な競争環境が長期的にクリエイターの利益にもなる」という主張もあります。</p>
+<div class="issue-sides"><div class="side pos"><strong>AI推進派（27件）</strong>日本だけが規制強化すれば国際競争から取り残される。学習規制より出力・利用段階での対策を。</div><div class="side neg"><strong>規制賛成（6件）</strong>競争力の議論は著作権侵害の正当化にならない。ルールの中で競争すべき。</div></div>
 </div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.80</div><p>内閣府の生成AIパブコメに反対し、慎重な取り扱いを求めている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yitsuki615/status/2069034793472577540"></a></blockquote>
-<div class="reason">理由: 個人情報提供の本人同意不要案に反対しているため</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">AI推進 / conf 1.00</div><p>AI学習は犯罪ではなく、自衛が重要と主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/SakazukiShine/status/2068981480135729165"></a></blockquote></div>
+<div class="sample-card"><div class="meta">規制批判 / conf 1.00</div><p>政府の即時アクセス遮断は強引で、業界全体の新展開が止まる可能性がある</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MKBKCOM/status/2068446318012297656"></a></blockquote></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-利用者モラル-クレジット表記や配慮の欠如を問題視"><h3>利用者モラル・クレジット表記や配慮の欠如を問題視</h3><div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 1.00</div><p>AIイラストがクリエイターへの尊重不足であると批判。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sikyosyounin/status/2069225117599805465"></a></blockquote>
-<div class="reason">理由: クリエイターへの敬意欠如</div>
+</article>
+
+<article class="issue-block" id="issue-seiseibutsu">
+<div class="issue-head"><span class="axis-kicker">論点6</span><h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">31件</span><span class="issue-heat">規制賛成 16件（52%）</span></h3>
+<p class="issue-desc">「プロンプト入力だけで著作権が生じるのはおかしい」「AIが作ったものに創作性を認めるべきか」という権利の定義をめぐる論点です。AI生成物を二次創作の延長と見るか、全く別のカテゴリとして扱うかで意見が分かれています。</p>
+<div class="issue-sides"><div class="side neg"><strong>著作権否定派（14件）</strong>人間の創意工夫なしに生成されたものに著作権は発生しない。AI出力の著作物性を認めるべきでない。</div><div class="side pos"><strong>認定賛成派（12件）</strong>プロンプトの工夫や編集作業には創作性がある。AIを道具として使った作品に著作権を認めるべき。</div></div>
 </div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.90</div><p>生成AI利用者の行動が社会的マナーに違反していると批判。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pt8mf/status/2068882072392057246"></a></blockquote>
-<div class="reason">理由: 投稿者がトランスジェンダーが女湯に入ろうとする比喩を使って、生成AI利用者の行動を非難している。</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">容認派 / conf 0.80</div><p>生成AIの利用を容認しつつ、反対派の理解不足を批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Cero_0727/status/2068927271013089563"></a></blockquote></div>
+<div class="sample-card"><div class="meta">利便性重視 / conf 0.90</div><p>生成AIの便利さを強調し、過度な批判に疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/toroumapasta/status/2069358027787141556"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">モラル重視 / 信頼度 0.90</div><p>生成AIの使用時に適切なクレジット表記が重要</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/animmaccha_rio/status/2068994320116703564"></a></blockquote>
-<div class="reason">理由: 投稿者が生成AIの使用時のモラルとクレジット表記について言及</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-条件付き容認-オプトアウトや対価支払いで共存"><h3>条件付き容認・オプトアウトや対価支払いで共存</h3><div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.90</div><p>生成AIは限定分野での活用には賛成だが、一般人への開放には反対。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shigurezuki1008/status/2067850388817002949"></a></blockquote>
-<div class="reason">理由: 反論を促す立場から規制が必要と主張。</div>
-</div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.80</div><p>生成AIの利用は企業版でオプトアウトしている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nek0n0tem0/status/2068998478592938008"></a></blockquote>
-<div class="reason">理由: 投稿者が企業版を使用しており、個人版での使用を避ける姿勢がある。</div>
-</div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.80</div><p>生成AIの利用を容認しつつ、反対派の理解不足を批判。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Cero_0727/status/2068927271013089563"></a></blockquote>
-<div class="reason">理由: 投稿者が生成AIの利用を容認しながら、反対派の理由が不明瞭であると指摘している。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-実用主義-利便性重視で問題に深入りしない"><h3>実用主義・利便性重視で問題に深入りしない</h3><div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.90</div><p>自分で撮った写真は著作権に問題がないと主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Emily146365811/status/2068657242417529218"></a></blockquote>
-<div class="reason">理由: 利便性重視の立場から規制を否定的</div>
-</div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.90</div><p>自分で撮った写真は著作権に問題がないと主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Emily146365811/status/2068657053317374068"></a></blockquote>
-<div class="reason">理由: 利便性重視の立場から規制を否定的</div>
-</div>
-<div class="sample"><div class="meta">規制反対 / 信頼度 0.90</div><p>生成AIの便利さを強調し、批判的ではない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/toroumapasta/status/2069358027787141556"></a></blockquote>
-<div class="reason">理由: 生成AIの利便性を肯定</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-その他-分類保留"><h3>その他・分類保留</h3><div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 1.00</div><p>生成AIが無断でデータを使用しているため、クリエイターは困っている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nipponbare0v0/status/2069003711515668492"></a></blockquote>
-<div class="reason">理由: 投稿者が生成AIによる無断学習を批判し、著作権保護を求めている。</div>
-</div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 1.00</div><p>AI編集と無断転用禁止を呼びかけている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yoshinonouenda/status/2069029582364434743"></a></blockquote>
-<div class="reason">理由: クリエイター保護を最優先する意見。</div>
-</div>
-<div class="sample"><div class="meta">規制賛成 / 信頼度 1.00</div><p>AI学習禁止と無断転載禁止を強調</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yun_from2016/status/2069022140511490139"></a></blockquote>
-<div class="reason">理由: クリエイターの権利保護を主張</div>
-</div>
-</div></article>
-</div></section>
+</article>
+
+</section>
     <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">画像や文章を自動生成する生成AIの普及に伴い、AIの学習データとして既存の作品が無断で使われることの是非が大きな争点になっています。日本の著作権法では、機械学習のための著作物利用は原則として認められていますが（30条の4）、イラストレーターや漫画家などのクリエイターからは「作風の模倣で仕事が奪われる」「対価もなく作品が使われるのは不当だ」という声が上がっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">一方で、AI開発を推進する立場からは「学習を規制すれば日本のAI産業が国際競争から取り残される」「作風やアイデアはもともと著作権では保護されない」という反論があります。文化庁は考え方の整理を公表していますが、既存の権利者の保護とAI技術の発展をどう両立させるかについて、明確な社会的合意はまだ形成されていません。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">この問題は、法規制のあり方だけでなく、AI生成物を公開・販売する利用者側のモラル、プラットフォームの対応、クリエイターへの対価還元の仕組みなど、多くの論点が絡み合っており、SNS上でも立場によって意見が大きく分かれています。</p></section>
-    <section class="panel conflict-panel"><div class="panel-title"><h2>争点カード</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="negative"><div class="axis-kicker">権利保護</div><h3>クリエイターの著作権を最優先に守る</h3><div class="axis-count">181<span>件</span></div><p>AI学習による無断利用は著作権侵害であり、クリエイターの権利回復と保護を最優先すべきとする立場。</p><div class="axis-tags"><a href="#sample-著作権厳格保護-クリエイターの権利回復を最優先" style="text-decoration:none;color:inherit;"><span>著作権厳格保護・クリエイターの権利回復を最優先</span></a><a href="#sample-法規制強化-ライセンス制度や許諾要件の整備を求める" style="text-decoration:none;color:inherit;"><span>法規制強化・ライセンス制度や許諾要件の整備を求める</span></a></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">技術推進</div><h3>AI技術の発展と表現の自由を守る</h3><div class="axis-count">122<span>件</span></div><p>過度な規制は日本の国際競争力を損ない、技術革新と表現の自由を制約するとする立場。</p><div class="axis-tags"><a href="#sample-AI技術推進-過度な規制は競争力を損なう" style="text-decoration:none;color:inherit;"><span>AI技術推進・過度な規制は競争力を損なう</span></a><a href="#sample-実用主義-利便性重視で問題に深入りしない" style="text-decoration:none;color:inherit;"><span>実用主義・利便性重視で問題に深入りしない</span></a></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">共存模索</div><h3>条件付きで共存の仕組みを作る</h3><div class="axis-count">36<span>件</span></div><p>オプトアウト、対価支払い、クレジット表記など、ルール整備で両立を目指す立場。</p><div class="axis-tags"><a href="#sample-条件付き容認-オプトアウトや対価支払いで共存" style="text-decoration:none;color:inherit;"><span>条件付き容認・オプトアウトや対価支払いで共存</span></a><a href="#sample-利用者モラル-クレジット表記や配慮の欠如を問題視" style="text-decoration:none;color:inherit;"><span>利用者モラル・クレジット表記や配慮の欠如を問題視</span></a></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">ノイズ・注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">136<span>件</span></div><p>断定、罵倒、文脈不足など、そのままでは記事化に注意が必要な反応。</p><div class="axis-tags"><a href="#sample-その他-分類保留" style="text-decoration:none;color:inherit;"><span>その他・分類保留</span></a></div></article></div></section>
     <section class="panel" id="related-topics">
 <div class="panel-title"><h2>次はこのテーマ</h2><span>他の争点も見比べる</span></div>
 <div class="related-grid">
@@ -2271,7 +1487,7 @@ if (savedVote !== null) window.setStanceMapVoteMarker(parseInt(savedVote, 10));
     },true);
   }
   document.addEventListener("DOMContentLoaded",function(){bindTracking();});
-  document.addEventListener("vote2d:revealed",function(){renderVoteRelated();});
+  document.addEventListener("DOMContentLoaded",function(){renderVoteRelated();});
 })();
 </script>
 <script src="share-x-btn.js"></script>
