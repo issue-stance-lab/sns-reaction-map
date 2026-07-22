@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="./owid.css">
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent-700); }
+  a:hover { color: var(--color-accent); }
+  .vote-btn:hover { border-color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 6%, transparent); }
+  .vote-btn.picked { background: var(--color-accent); color: var(--color-bg); border-color: var(--color-accent); }
+  details.issue > summary::-webkit-details-marker { display: none; }
+</style>
+</helmet>
+
+<div style="background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);min-height:100vh;">
+
+  <header class="nav" style="position:sticky;top:0;background:var(--color-bg);z-index:10;">
+    <span class="nav-brand">SNS反応まっぷ</span>
+    <a href="./Top.dc.html#topics">テーマ一覧</a>
+    <a href="./Top.dc.html#ranking">ランキング</a>
+    <a href="#">データについて</a>
+    <a href="#">使い方</a>
+    <a href="./Top.dc.html" class="btn btn-primary">テーマ一覧へ</a>
+  </header>
+
+  <div style="max-width:1000px;margin:0 auto;padding:var(--space-4) var(--space-6) 0;font-size:12px;" class="text-muted">
+    <a href="./Top.dc.html">トップ</a> › <a href="./Top.dc.html#topics">テーマ一覧</a> › 副首都法案・副首都構想
+  </div>
+
+  <section style="max-width:1000px;margin:0 auto;padding:var(--space-4) var(--space-6) var(--space-6);">
+    <div style="display:flex;gap:var(--space-2);margin-bottom:var(--space-3);">
+      <span class="tag tag-neutral">政治・統治機構</span>
+      <span class="tag tag-outline">投票受付中</span>
+    </div>
+    <h1 style="font-size:38px;max-width:760px;margin-bottom:var(--space-2);">副首都法案・副首都構想</h1>
+    <p style="font-size:17px;opacity:.8;max-width:640px;margin-bottom:var(--space-3);">副首都、本当に必要？場所は大阪でいい？衆院通過した副首都法案をめぐる6つの論点を整理。</p>
+    <div style="display:flex;gap:var(--space-4);font-size:12px;" class="text-muted">
+      <span>SNS分析対象 <strong style="color:var(--color-text);">255件</strong></span>
+      <span>論点アリーナ <strong style="color:var(--color-text);">6論点</strong></span>
+      <span>最終更新 <strong style="color:var(--color-text);">7/18</strong></span>
+    </div>
+  </section>
+
+  <hr class="hr" style="max-width:1000px;margin-left:auto;margin-right:auto;">
+
+  <section style="max-width:1000px;margin:0 auto;padding:var(--space-6);">
+    <h2 style="font-size:22px;margin-bottom:var(--space-1);">現在の意見の割合</h2>
+    <p class="text-muted" style="font-size:12px;margin-bottom:var(--space-4);">SNS投稿255件のAI分類結果</p>
+    <div style="display:flex;height:56px;width:100%;overflow:hidden;margin-bottom:var(--space-4);">
+      <div style="width:38%;background:var(--color-accent-600);"></div>
+      <div style="width:25%;background:var(--color-accent-2-600);"></div>
+      <div style="width:29%;background:var(--color-warn);"></div>
+      <div style="width:7%;background:var(--color-positive);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);">
+      <div style="border-left:1px solid var(--color-divider);padding:0 var(--space-3);"><span style="width:10px;height:10px;display:inline-block;background:var(--color-accent-600);margin-right:6px;"></span>賛成・推進<div style="font-family:var(--font-heading);font-weight:800;font-size:26px;">38%</div></div>
+      <div style="border-left:1px solid var(--color-divider);padding:0 var(--space-3);"><span style="width:10px;height:10px;display:inline-block;background:var(--color-accent-2-600);margin-right:6px;"></span>反対<div style="font-family:var(--font-heading);font-weight:800;font-size:26px;">25%</div></div>
+      <div style="border-left:1px solid var(--color-divider);padding:0 var(--space-3);"><span style="width:10px;height:10px;display:inline-block;background:var(--color-warn);margin-right:6px;"></span>慎重<div style="font-family:var(--font-heading);font-weight:800;font-size:26px;">29%</div></div>
+      <div style="border-left:1px solid var(--color-divider);border-right:1px solid var(--color-divider);padding:0 var(--space-3);"><span style="width:10px;height:10px;display:inline-block;background:var(--color-positive);margin-right:6px;"></span>どちらでもない<div style="font-family:var(--font-heading);font-weight:800;font-size:26px;">7%</div></div>
+    </div>
+  </section>
+
+  <hr class="hr" style="max-width:1000px;margin-left:auto;margin-right:auto;">
+
+  <section style="max-width:1000px;margin:0 auto;padding:var(--space-6);background:var(--color-surface);">
+    <sc-if value="{{ hasVoted }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <h2 style="font-size:22px;margin-bottom:var(--space-1);">投票ありがとうございました</h2>
+        <p class="text-muted" style="font-size:13px;margin-bottom:var(--space-4);">あなたの一票を反映した参考分布です（このセッション内のみ）</p>
+        <div style="display:flex;height:40px;width:100%;overflow:hidden;margin-bottom:var(--space-3);">
+          <div style="width:{{ liveW1 }}%;background:var(--color-accent-600);"></div>
+          <div style="width:{{ liveW2 }}%;background:var(--color-accent-2-600);"></div>
+          <div style="width:{{ liveW3 }}%;background:var(--color-warn);"></div>
+          <div style="width:{{ liveW4 }}%;background:var(--color-positive);"></div>
+        </div>
+        <p class="text-muted" style="font-size:12px;">あなたの回答: <strong style="color:var(--color-accent-700);">{{ votedLabel }}</strong></p>
+      </div>
+    </sc-if>
+    <sc-if value="{{ notVoted }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <h2 style="font-size:22px;margin-bottom:var(--space-1);">あなたはどっち？投票する</h2>
+        <p class="text-muted" style="font-size:13px;margin-bottom:var(--space-4);">この論点について、あなたの立場に近いものを選んでください</p>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--color-divider);">
+          <sc-for list="{{ voteOptions }}" as="v" hint-placeholder-count="4">
+            <button onClick="{{ v.onVote }}" class="btn vote-btn" style="justify-content:flex-start;background:var(--color-bg);padding:var(--space-4);font-size:16px;border:2px solid transparent;">{{ v.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+
+  <hr class="hr" style="max-width:1000px;margin-left:auto;margin-right:auto;">
+
+  <section style="max-width:1000px;margin:0 auto;padding:var(--space-6);">
+    <h2 style="font-size:22px;margin-bottom:var(--space-1);">論点アリーナ</h2>
+    <p class="text-muted" style="font-size:12px;margin-bottom:var(--space-4);">主要な6つの論点ごとの分類比率。タップして詳細を開く</p>
+    <div style="display:flex;flex-direction:column;gap:2px;background:var(--color-divider);">
+      <sc-for list="{{ issues }}" as="iss" hint-placeholder-count="6">
+        <details class="issue" style="background:var(--color-bg);padding:var(--space-4);">
+          <summary style="cursor:pointer;display:flex;align-items:center;gap:var(--space-3);list-style:none;">
+            <span class="text-muted" style="font-family:var(--font-heading);font-weight:800;font-size:13px;width:20px;">{{ iss.n }}</span>
+            <span style="flex:1;font-family:var(--font-heading);font-weight:600;font-size:15px;">{{ iss.title }}</span>
+            <div style="display:flex;height:16px;width:140px;overflow:hidden;flex:none;">
+              <div style="height:100%;background:var(--color-accent-600);width:{{ iss.w1 }}%;"></div>
+              <div style="height:100%;background:var(--color-accent-2-600);width:{{ iss.w2 }}%;"></div>
+              <div style="height:100%;background:var(--color-warn);width:{{ iss.w3 }}%;"></div>
+              <div style="height:100%;background:var(--color-positive);width:{{ iss.w4 }}%;"></div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><polyline points="6,9 12,15 18,9"></polyline></svg>
+          </summary>
+          <p class="text-muted" style="font-size:13px;margin:var(--space-3) 0 0;padding-left:32px;">{{ iss.body }}</p>
+        </details>
+      </sc-for>
+    </div>
+  </section>
+
+  <hr class="hr" style="max-width:1000px;margin-left:auto;margin-right:auto;">
+
+  <section style="max-width:1000px;margin:0 auto;padding:var(--space-6);">
+    <div style="border-left:2px solid var(--color-accent);padding-left:var(--space-3);">
+      <h6 class="text-muted" style="margin-bottom:var(--space-2);">データの見方</h6>
+      <p class="text-muted" style="font-size:13px;">表示している割合は収集したSNS投稿サンプル内の分類比率であり、世論調査の結果ではありません。AI分類は論点整理の補助として使用しています。</p>
+    </div>
+  </section>
+
+  <footer style="background:var(--color-surface);margin-top:var(--space-6);">
+    <div style="max-width:1000px;margin:0 auto;padding:var(--space-8) var(--space-6);display:grid;grid-template-columns:2fr 1fr 1fr;gap:var(--space-6);">
+      <div>
+        <div class="nav-brand" style="margin-bottom:var(--space-2);">SNS反応まっぷ</div>
+        <p class="text-muted" style="font-size:13px;max-width:340px;">SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p>
+      </div>
+      <div>
+        <h6 class="text-muted" style="margin-bottom:var(--space-3);">テーマ</h6>
+        <div style="display:flex;flex-direction:column;gap:var(--space-2);font-size:13px;">
+          <a href="./Top.dc.html#topics">テーマ一覧に戻る</a>
+        </div>
+      </div>
+      <div>
+        <h6 class="text-muted" style="margin-bottom:var(--space-3);">サイト情報</h6>
+        <div style="display:flex;flex-direction:column;gap:var(--space-2);font-size:13px;">
+          <a href="#">このサイトについて</a>
+          <a href="#">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+    <hr class="hr" style="max-width:1000px;margin:0 auto;">
+    <p class="text-muted" style="max-width:1000px;margin:0 auto;padding:var(--space-4) var(--space-6);font-size:12px;">© 2025–2026 SNS反応まっぷ 投票参加型 × AI自動分類</p>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { voted: null };
+
+  base = { w1: 38, w2: 25, w3: 29, w4: 7 };
+  labels = ['賛成・推進', '反対', '慎重', 'どちらでもない'];
+
+  issues = [
+    { n: 1, title: '副首都は本当に必要か', w1: 32, w2: 40, w3: 20, w4: 8, body: '首都機能のバックアップとして必要という声と、屋上屋を架す制度だとする懐疑論が並立している。' },
+    { n: 2, title: '設置場所は大阪でよいか', w1: 45, w2: 22, w3: 25, w4: 8, body: '経済圏として大阪を推す意見と、他地域を推す意見・一極集中の再現を懸念する声が交錯。' },
+    { n: 3, title: '財源・コスト負担', w1: 20, w2: 35, w3: 38, w4: 7, body: '国と地方の費用負担割合が不透明だとして、賛否以前に説明不足を指摘する声が多い。' },
+    { n: 4, title: '防災・危機管理上の意義', w1: 48, w2: 18, w3: 24, w4: 10, body: '首都直下地震などを念頭に機能分散を評価する声が優勢。' },
+    { n: 5, title: '地方分権・一極集中是正', w1: 40, w2: 24, w3: 28, w4: 8, body: '副首都構想が真の分権につながるか、看板倒れに終わるかで意見が分かれる。' },
+    { n: 6, title: '法案の進め方・国会審議', w1: 22, w2: 33, w3: 33, w4: 12, body: '審議の拙速さを問題視する声と、早期の法整備を評価する声が拮抗。' },
+  ];
+
+  renderVals() {
+    const voted = this.state.voted;
+    const b = this.base;
+    let live = b;
+    if (voted !== null) {
+      const total = 256;
+      live = { w1: b.w1, w2: b.w2, w3: b.w3, w4: b.w4 };
+      live[voted] = Math.round(((b[voted] / 100 * 255) + 1) / total * 100);
+      const keys = ['w1', 'w2', 'w3', 'w4'].filter(k => k !== voted);
+      const remainRatio = (100 - live[voted]) / (100 - b[voted]);
+      keys.forEach(k => { live[k] = Math.round(b[k] * remainRatio); });
+    }
+    return {
+      hasVoted: voted !== null,
+      notVoted: voted === null,
+      liveW1: live.w1, liveW2: live.w2, liveW3: live.w3, liveW4: live.w4,
+      votedLabel: voted ? this.labels[['w1', 'w2', 'w3', 'w4'].indexOf(voted)] : '',
+      voteOptions: ['w1', 'w2', 'w3', 'w4'].map((k, i) => ({ label: this.labels[i], onVote: () => this.setState({ voted: k }) })),
+      issues: this.issues,
+    };
+  }
+
+}
+
+</script>
+</body>
+</html>
