@@ -592,8 +592,10 @@
     .vote-image-card .vote-card-label { position:absolute; left:12px; right:12px; bottom:12px; color:#fff; font-size:18px; font-weight:900; line-height:1.3; text-shadow:0 2px 10px rgba(0,0,0,.55); }
 
 /* ===== 論点Explainer ===== */
-.explainer-lead { font-size: 14px; line-height: 1.85; color: var(--ink); margin: 0 0 20px; }
+.explainer-lead { font-size: 14px; line-height: 1.85; color: var(--ink); margin: 0 0 20px; max-width: 920px; }
 .explainer-grid { display: flex; flex-direction: column; gap: 18px; margin: 0 0 18px; }
+#explainer-section .explainer-lead { max-width: 920px !important; }
+#explainer-section .explainer-grid { max-width: 920px !important; margin-left: auto !important; margin-right: auto !important; }
 .explainer-card { border-radius: 12px; overflow: hidden; background: #fff; border: 1.5px solid #e4eaf3; box-shadow: 0 8px 24px rgba(16,24,40,.08); cursor: zoom-in; transition: transform .2s ease, box-shadow .2s ease; }
 .explainer-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(16,24,40,.14); border-color: #c7d4ea; }
 .explainer-card img { display: block; width: 100%; aspect-ratio: 21/9; object-fit: cover; background: var(--accent-soft); }
@@ -758,13 +760,13 @@
 <div class="explainer-grid">
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-gakushu.webp" data-alt="学習データ・無断利用">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点① 最多 126件</span>
+      <span class="explainer-num">論点①</span>
       <div>
         <p class="explainer-card-title">学習データ・無断利用 — 「AI学習は漫画村と同じか」</p>
-        <p class="explainer-card-desc">生成AIの開発に著作物を無断で学習させることは合法か。文化庁は原則として合法との見解だが、クリエイターから「許諾なしに使われた」との反発が根強い。</p>
+        <p class="explainer-card-desc">著作物を無断でAI学習に使うことは合法か。文化庁は合法とするが、クリエイターの反発が73%を占める最多論点（126件）。</p>
         <div class="explainer-sides">
-          <span class="explainer-side con">懸念：無断利用は著作権侵害と同じ</span>
-          <span class="explainer-side pro">擁護：学習行為は情報の自由利用の範囲内</span>
+          <span class="explainer-side con">批判：無断学習は著作権侵害と同じ</span>
+          <span class="explainer-side pro">擁護：30条の4で学習は原則合法</span>
         </div>
       </div>
     </div>
@@ -772,13 +774,13 @@
   </article>
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-hoseibi.webp" data-alt="法制度・規制整備">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点② 79件</span>
+      <span class="explainer-num">論点②</span>
       <div>
         <p class="explainer-card-title">法制度・規制整備 — 「ライセンス制度は必要か」</p>
-        <p class="explainer-card-desc">許諾要件・ライセンス制度・規制立法の整備を求める声と、現行法の枠内で対応できるという意見が対立。オプトアウト制度や対価還元の仕組みも議論になっている。</p>
+        <p class="explainer-card-desc">許諾要件やライセンス制度など具体的な法整備を求める声が58%。規制の範囲と設計が最大の焦点（79件）。</p>
         <div class="explainer-sides">
-          <span class="explainer-side con">規制派：許諾なし学習を禁止する法整備を</span>
-          <span class="explainer-side pro">自由派：現行法で十分・過剰規制は不要</span>
+          <span class="explainer-side con">規制：許諾義務・ライセンス化を</span>
+          <span class="explainer-side pro">自由：現行法で十分・過規制反対</span>
         </div>
       </div>
     </div>
@@ -786,13 +788,13 @@
   </article>
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-moraru.webp" data-alt="利用者モラル・倫理">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点③ 73件</span>
+      <span class="explainer-num">論点③</span>
       <div>
         <p class="explainer-card-title">利用者モラル・倫理 — 「AI生成と隠して使うのが問題」</p>
-        <p class="explainer-card-desc">法律の問題とは別に、AI生成をクレジット表記なしで公開したり、既存作家の画風を意図的に模倣する行為を問題視する声がある。個人の使い方と倫理が問われる。</p>
+        <p class="explainer-card-desc">AI生成を隠して投稿、クレジット表記なし——法律より先に使い手の倫理が問われる論点。問題視する声が64%（73件）。</p>
         <div class="explainer-sides">
-          <span class="explainer-side con">問題視：AI生成を隠すことはモラル違反</span>
-          <span class="explainer-side pro">擁護：法的に問題がなければ個人の自由</span>
+          <span class="explainer-side con">批判：AI隠し投稿はモラル違反</span>
+          <span class="explainer-side pro">擁護：法的問題なければ個人の自由</span>
         </div>
       </div>
     </div>
@@ -800,13 +802,13 @@
   </article>
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-creator.webp" data-alt="クリエイター保護・権利">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点④ 46件</span>
+      <span class="explainer-num">論点④</span>
       <div>
         <p class="explainer-card-title">クリエイター保護・権利 — 「絵師が廃業に追い込まれる」</p>
-        <p class="explainer-card-desc">AIが学習した画風を再現することでイラストレーターや漫画家の仕事が奪われる懸念がある。「作風は著作権で保護されない」という法的論理と、職業・表現の尊厳の問題が交錯する。</p>
+        <p class="explainer-card-desc">「10年の作風が一瞬で真似される」。廃業の危機を訴える声が72%を占める（46件）。</p>
         <div class="explainer-sides">
-          <span class="explainer-side con">懸念：クリエイターの生計・権利が脅かされる</span>
-          <span class="explainer-side pro">擁護：道具の変化と多様化で共存できる</span>
+          <span class="explainer-side con">懸念：廃業の危機・生計を脅かす</span>
+          <span class="explainer-side pro">擁護：道具として活用し共存できる</span>
         </div>
       </div>
     </div>
@@ -814,13 +816,13 @@
   </article>
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-gijutsu.webp" data-alt="技術競争・AI推進">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点⑤ 40件</span>
+      <span class="explainer-num">論点⑤</span>
       <div>
         <p class="explainer-card-title">技術競争・AI推進 — 「規制すれば日本が遅れる」</p>
-        <p class="explainer-card-desc">欧米や中国がAI開発を加速する中、厳しい規制を課せば日本の産業競争力が失われるという危機感。「AI学習の自由が日本の優位性」とも言われる。</p>
+        <p class="explainer-card-desc">AI推進派が68%と唯一の逆転論点。規制強化は国際競争に遅れるという主張が中心（40件）。</p>
         <div class="explainer-sides">
-          <span class="explainer-side pro">推進：過剰規制はイノベーションを阻害する</span>
-          <span class="explainer-side con">慎重：技術競争力より文化保護を優先すべき</span>
+          <span class="explainer-side pro">推進：規制で国際競争に遅れる</span>
+          <span class="explainer-side con">慎重：文化保護を競争力より優先</span>
         </div>
       </div>
     </div>
@@ -828,13 +830,13 @@
   </article>
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-seiseibutsu.webp" data-alt="AI生成物の権利・創作性">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点⑥ 31件</span>
+      <span class="explainer-num">論点⑥</span>
       <div>
         <p class="explainer-card-title">AI生成物の権利・創作性 — 「プロンプトに著作権は生まれるか」</p>
-        <p class="explainer-card-desc">AI出力物に著作権が認められるべきか。文化庁は「人間の創作的寄与が必要」とするが基準は曖昧。二次創作との整合性、AI生成物の商業利用の是非も論争中。</p>
+        <p class="explainer-card-desc">中立が32%と6論点最多。プロンプトに著作権が生じるかで社会的合意がない論点（31件）。</p>
         <div class="explainer-sides">
-          <span class="explainer-side con">懐疑：プロンプトだけでは創作性は認められない</span>
-          <span class="explainer-side pro">肯定：人間の意図・工夫がある以上権利を認めるべき</span>
+          <span class="explainer-side con">否定：人の創意なければ権利なし</span>
+          <span class="explainer-side pro">肯定：プロンプトにも創作性あり</span>
         </div>
       </div>
     </div>
@@ -1180,9 +1182,9 @@
 <div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span>
 <h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">126件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 93 / 中立 5 / AI推進 28</span></div>
+<div class="temp-bar-label"><span>学習データ問題における規制論調</span><span>規制賛成 93 / 中立 5 / AI推進 28</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:73.8%">74%</div><div class="temp-seg neu" style="width:4.0%"></div><div class="temp-seg pos" style="width:22.2%">22%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>無断学習は著作権侵害・規制が必要</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>学習行為は合法・AI推進を支持</span></div>
 </div>
 <p class="issue-desc">最多の論点。「AI学習は漫画村と同じ無断利用だ」という批判が中心です。「対価もなく作品を取り込む仕組みは著作権侵害」という明確な立場から、「学習行為自体は合法であり表現の模倣は別問題」という反論まで、法的な解釈をめぐる議論が続いています。</p>
 <div class="issue-sides"><div class="side neg"><strong>規制賛成（93件）</strong>AIの学習行為そのものが著作権侵害であり、許諾なしの学習データ利用は禁止すべきだ。</div><div class="side pos"><strong>AI推進寄り（28件）</strong>著作権法30条の4により学習行為は合法。規制するなら学習ではなく生成・出力段階に限るべき。</div></div>
@@ -1197,9 +1199,9 @@
 <div class="issue-head"><span class="axis-kicker">論点2</span>
 <h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">79件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 46 / 中立 12 / AI推進 21</span></div>
+<div class="temp-bar-label"><span>法整備・ライセンス制度への評価</span><span>規制賛成 46 / 中立 12 / AI推進 21</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:58.2%">58%</div><div class="temp-seg neu" style="width:15.2%"></div><div class="temp-seg pos" style="width:26.6%">27%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>許諾義務化・ライセンス整備を求める</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>現行法で十分・過剰規制は不要</span></div>
 </div>
 <p class="issue-desc">「許諾なし学習の禁止」「オプトアウト制度」「ライセンス料の徴収」など具体的な法整備を求める投稿が多い論点です。政府の対応の遅さへの批判と、「過剰な規制は産業を萎縮させる」という反論が対立しています。</p>
 <div class="issue-sides"><div class="side neg"><strong>規制賛成（46件）</strong>EUのAI法のようにライセンス制度・許諾要件を整備し、権利者への対価還元を義務化すべき。</div><div class="side pos"><strong>AI推進寄り（21件）</strong>規制は最小限にとどめ、利用者の自主的なクレジット表記などモラルで対応すべき。</div></div>
@@ -1214,9 +1216,9 @@
 <div class="issue-head"><span class="axis-kicker">論点3</span>
 <h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">73件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 47 / 中立 8 / AI推進 18</span></div>
+<div class="temp-bar-label"><span>利用者行動への道徳的評価</span><span>規制賛成 47 / 中立 8 / AI推進 18</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:64.4%">64%</div><div class="temp-seg neu" style="width:11.0%"></div><div class="temp-seg pos" style="width:24.7%">25%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>AI生成隠し・無断模倣はモラル違反</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>個人の自由・法的問題がなければOK</span></div>
 </div>
 <p class="issue-desc">「AI生成と隠してSNSに投稿する」「クレジット表記すらしない」という個人の使い方への批判が中心です。法整備よりも利用者モラルを問う声で、「ルールがないから何でもいいと思っている人が問題」という意見が目立ちます。</p>
 <div class="issue-sides"><div class="side neg"><strong>モラル問題派（47件）</strong>AI生成物をオリジナルとして公開したり、元の作者に配慮しない使い方が問題の本質だ。</div><div class="side pos"><strong>自衛・自己責任派（18件）</strong>利用者の行動は個人の判断。嫌なら公開しない、AIを使わないという自衛が基本。</div></div>
@@ -1231,9 +1233,9 @@
 <div class="issue-head"><span class="axis-kicker">論点4</span>
 <h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">46件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 33 / 中立 4 / AI推進 9</span></div>
+<div class="temp-bar-label"><span>クリエイターへの影響評価</span><span>規制賛成 33 / 中立 4 / AI推進 9</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:71.7%">72%</div><div class="temp-seg neu" style="width:8.7%"></div><div class="temp-seg pos" style="width:19.6%">20%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>廃業の危機・クリエイター保護が急務</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>技術適応・AIと共存できる</span></div>
 </div>
 <p class="issue-desc">「イラストレーターが次々と廃業している」「10年かけた作風が一瞬で真似される」というクリエイターの生計への影響を訴える論点です。「AI自体は道具であり問題は使い方」という反論と、「仕事が奪われる現実を直視すべき」という訴えが対立しています。</p>
 <div class="issue-sides"><div class="side neg"><strong>クリエイター保護派（33件）</strong>生成AIの普及でイラスト・小説・音楽など創作の仕事が消滅しつつある。権利と生活を守る制度が必要。</div><div class="side pos"><strong>現実受容派（9件）</strong>技術革新で職業が変わるのは歴史的必然。AIを使いこなすスキルに転換すべき。</div></div>
@@ -1248,9 +1250,9 @@
 <div class="issue-head"><span class="axis-kicker">論点5・唯一AI推進派多数</span>
 <h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">40件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 6 / 中立 7 / AI推進 27</span></div>
+<div class="temp-bar-label"><span>AI規制と国際競争への評価</span><span>規制賛成 6 / 中立 7 / AI推進 27</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:15.0%">15%</div><div class="temp-seg neu" style="width:17.5%"></div><div class="temp-seg pos" style="width:67.5%">68%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>文化保護優先・規制を支持（少数）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>規制より競争力優先・AI推進多数</span></div>
 </div>
 <p class="issue-desc">このテーマで唯一、AI推進派が多数を占める論点。「日本が規制を強化すれば中国・米国に遅れる」「過度な規制は技術革新と経済を損なう」という産業競争力の観点からの主張が中心です。</p>
 <div class="issue-sides"><div class="side pos"><strong>AI推進派（27件）</strong>日本だけが規制強化すれば国際競争から取り残される。学習規制より出力・利用段階での対策を。</div><div class="side neg"><strong>規制賛成（6件）</strong>競争力の議論は著作権侵害の正当化にならない。ルールの中で競争すべき。</div></div>
@@ -1265,9 +1267,9 @@
 <div class="issue-head"><span class="axis-kicker">論点6</span>
 <h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">31件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 14 / 中立 10 / AI推進 7</span></div>
+<div class="temp-bar-label"><span>AI生成物の著作権認定への論調</span><span>規制賛成 14 / 中立 10 / AI推進 7</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:45.2%">45%</div><div class="temp-seg neu" style="width:32.3%"></div><div class="temp-seg pos" style="width:22.6%">23%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>人の創意なければ著作権は生じない</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>プロンプトにも創作性・権利を認める</span></div>
 </div>
 <p class="issue-desc">「プロンプト入力だけで著作権が生じるのはおかしい」「AIが作ったものに創作性を認めるべきか」という権利の定義をめぐる論点です。AI生成物を二次創作の延長と見るか、全く別のカテゴリとして扱うかで意見が分かれています。</p>
 <div class="issue-sides"><div class="side neg"><strong>著作権否定派（14件）</strong>人間の創意工夫なしに生成されたものに著作権は発生しない。AI出力の著作物性を認めるべきでない。</div><div class="side pos"><strong>認定賛成派（7件）</strong>プロンプトの工夫や編集作業には創作性がある。AIを道具として使った作品に著作権を認めるべき。</div></div>
