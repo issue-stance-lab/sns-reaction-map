@@ -29,6 +29,8 @@ jobs:
             sed -i \
               -e "s|var supabaseUrl=\"\";|var supabaseUrl=\"${SUPABASE_URL}\";|g" \
               -e "s|var supabaseAnonKey=\"\";|var supabaseAnonKey=\"${SUPABASE_ANON_KEY}\";|g" \
+              -e "s|var supabaseUrl='';|var supabaseUrl='${SUPABASE_URL}';|g" \
+              -e "s|var supabaseAnonKey='';|var supabaseAnonKey='${SUPABASE_ANON_KEY}';|g" \
               "$f"
           done
 
