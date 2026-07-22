@@ -560,6 +560,14 @@
       .details-panel details, .details-panel .details-body, .details-panel .table-wrap { width:100%; max-width:100%; }
       .vote-image-card .vote-card-label { font-size: 15px; left: 10px; right: 10px; bottom: 10px; }
     }
+    /* ===== 論点内バー（temp-bar） ===== */
+    .temp-bar-wrap{margin:0 0 14px}
+    .temp-bar-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+    .temp-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;background:#e7e7f7;position:relative}
+    .temp-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;min-width:2px}
+    .temp-seg.neg{background:#dc2626}.temp-seg.neu{background:#94a3b8}.temp-seg.pos{background:#4b9cf4}
+    .temp-bar-legend{display:flex;gap:12px;margin-top:6px;font-size:11px;color:var(--muted);font-weight:800;flex-wrap:wrap}
+    .temp-bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:3px;vertical-align:middle}
     /* ===== issue-block（論点×Xの声） ===== */
     .issue-block { border:1px solid var(--line); border-radius:12px; background:#fff; box-shadow:var(--shadow); padding:22px; margin:0 0 22px; }
     .issue-head h3 { margin:4px 0 8px; font-size:clamp(19px,2.4vw,26px); }
@@ -1113,58 +1121,18 @@
 </script>
 
 
-<section class="panel" id="arena-section">
-  <div class="panel-title">
-    <h2>論点別の反応分布</h2>
-    <span>669件の意見投稿を6つの論点に分類</span>
-  </div>
-  <p class="arena-caption">どの論点で議論が多いか、規制寄り・推進寄りのどちらが多いかを一覧で確認できます。バーの長さが投稿数を表します。</p>
-  <div class="arena-legend">
-    <span class="leg-item"><span class="leg-dot" style="background:#e04949"></span>規制賛成寄り（著作権保護）</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#d1d5db"></span>中立・判断困難</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#4b9cf4"></span>AI活用推進寄り</span>
-  </div>
-  <div class="arena-rows">
-    <div class="arena-row">
-      <div class="arena-label"><span class="arena-issue">学習データ・無断利用</span><span class="arena-cnt">126件 ／ 最多論点</span></div>
-      <div class="arena-track"><div class="arena-fill-wrap" style="width:100%"><div class="af kisei" style="width:73.8%"></div><div class="af neutral" style="width:4.0%"></div><div class="af suishin" style="width:22.2%"></div></div></div>
-      <div class="arena-stat"><span class="ar-k">規制賛成 93</span><span class="ar-sep">/</span><span class="ar-s">推進 28</span></div>
-    </div>
-    <div class="arena-row">
-      <div class="arena-label"><span class="arena-issue">法制度・規制整備</span><span class="arena-cnt">79件</span></div>
-      <div class="arena-track"><div class="arena-fill-wrap" style="width:62.7%"><div class="af kisei" style="width:58.2%"></div><div class="af neutral" style="width:15.2%"></div><div class="af suishin" style="width:26.6%"></div></div></div>
-      <div class="arena-stat"><span class="ar-k">46</span><span class="ar-sep">/</span><span class="ar-s">21</span></div>
-    </div>
-    <div class="arena-row">
-      <div class="arena-label"><span class="arena-issue">利用者モラル・倫理</span><span class="arena-cnt">73件</span></div>
-      <div class="arena-track"><div class="arena-fill-wrap" style="width:57.9%"><div class="af kisei" style="width:64.4%"></div><div class="af neutral" style="width:11.0%"></div><div class="af suishin" style="width:24.7%"></div></div></div>
-      <div class="arena-stat"><span class="ar-k">47</span><span class="ar-sep">/</span><span class="ar-s">18</span></div>
-    </div>
-    <div class="arena-row">
-      <div class="arena-label"><span class="arena-issue">クリエイター保護・権利</span><span class="arena-cnt">46件</span></div>
-      <div class="arena-track"><div class="arena-fill-wrap" style="width:36.5%"><div class="af kisei" style="width:71.7%"></div><div class="af neutral" style="width:8.7%"></div><div class="af suishin" style="width:19.6%"></div></div></div>
-      <div class="arena-stat"><span class="ar-k">33</span><span class="ar-sep">/</span><span class="ar-s">9</span></div>
-    </div>
-    <div class="arena-row">
-      <div class="arena-label"><span class="arena-issue">技術競争・AI推進</span><span class="arena-cnt">40件</span></div>
-      <div class="arena-track"><div class="arena-fill-wrap" style="width:31.7%"><div class="af kisei" style="width:15.0%"></div><div class="af neutral" style="width:17.5%"></div><div class="af suishin" style="width:67.5%"></div></div></div>
-      <div class="arena-stat"><span class="ar-k">6</span><span class="ar-sep">/</span><span class="ar-s">27</span></div>
-    </div>
-    <div class="arena-row">
-      <div class="arena-label"><span class="arena-issue">AI生成物の権利・創作性</span><span class="arena-cnt">31件</span></div>
-      <div class="arena-track"><div class="arena-fill-wrap" style="width:24.6%"><div class="af kisei" style="width:45.2%"></div><div class="af neutral" style="width:32.3%"></div><div class="af suishin" style="width:22.6%"></div></div></div>
-      <div class="arena-stat"><span class="ar-k">14</span><span class="ar-sep">/</span><span class="ar-s">7</span></div>
-    </div>
-  </div>
-  <p style="font-size:11px;color:var(--muted);margin:16px 0 0;line-height:1.6;">※ 規制寄り／推進寄りの判定はAIによる自動分類。世論調査ではありません。　※「その他」論点274件を除く395件が対象。</p>
-</section>
-
 <section class="panel conflict-panel" id="issue-voices-section">
-<div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとに賛否の投稿を読む</span></div>
+<div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとの賛否分布と代表的な投稿</span></div>
 <nav class="quadrant-nav"><a href="#issue-gakushu">学習データ 126</a><a href="#issue-hoseibi">法制度 79</a><a href="#issue-moraru">利用者モラル 73</a><a href="#issue-creator">クリエイター保護 46</a><a href="#issue-gijutsu">技術競争 40</a><a href="#issue-seiseibutsu">AI生成物 31</a></nav>
 
 <article class="issue-block" id="issue-gakushu">
-<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span><h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">126件</span><span class="issue-heat">規制賛成 93件（73%）</span></h3>
+<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span>
+<h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">126件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 93 / 中立 5 / AI推進 28</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:73.8%">74%</div><div class="temp-seg neu" style="width:4.0%"></div><div class="temp-seg pos" style="width:22.2%">22%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+</div>
 <p class="issue-desc">最多の論点。「AI学習は漫画村と同じ無断利用だ」という批判が中心です。「対価もなく作品を取り込む仕組みは著作権侵害」という明確な立場から、「学習行為自体は合法であり表現の模倣は別問題」という反論まで、法的な解釈をめぐる議論が続いています。</p>
 <div class="issue-sides"><div class="side neg"><strong>規制賛成（93件）</strong>AIの学習行為そのものが著作権侵害であり、許諾なしの学習データ利用は禁止すべきだ。</div><div class="side pos"><strong>AI推進寄り（28件）</strong>著作権法30条の4により学習行為は合法。規制するなら学習ではなく生成・出力段階に限るべき。</div></div>
 </div>
@@ -1175,9 +1143,15 @@
 </article>
 
 <article class="issue-block" id="issue-hoseibi">
-<div class="issue-head"><span class="axis-kicker">論点2</span><h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">79件</span><span class="issue-heat">規制賛成 57件（72%）</span></h3>
+<div class="issue-head"><span class="axis-kicker">論点2</span>
+<h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">79件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 46 / 中立 12 / AI推進 21</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:58.2%">58%</div><div class="temp-seg neu" style="width:15.2%"></div><div class="temp-seg pos" style="width:26.6%">27%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+</div>
 <p class="issue-desc">「許諾なし学習の禁止」「オプトアウト制度」「ライセンス料の徴収」など具体的な法整備を求める投稿が多い論点です。政府の対応の遅さへの批判と、「過剰な規制は産業を萎縮させる」という反論が対立しています。</p>
-<div class="issue-sides"><div class="side neg"><strong>規制賛成（57件）</strong>EUのAI法のようにライセンス制度・許諾要件を整備し、権利者への対価還元を義務化すべき。</div><div class="side pos"><strong>AI推進寄り（19件）</strong>規制は最小限にとどめ、利用者の自主的なクレジット表記などモラルで対応すべき。</div></div>
+<div class="issue-sides"><div class="side neg"><strong>規制賛成（46件）</strong>EUのAI法のようにライセンス制度・許諾要件を整備し、権利者への対価還元を義務化すべき。</div><div class="side pos"><strong>AI推進寄り（21件）</strong>規制は最小限にとどめ、利用者の自主的なクレジット表記などモラルで対応すべき。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">条件付き賛成 / conf 0.90</div><p>権利問題が解決すればAI生成イラストは容認されるべき</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/YUGAYUG01511120/status/2069369977229152612"></a></blockquote></div>
@@ -1186,9 +1160,15 @@
 </article>
 
 <article class="issue-block" id="issue-moraru">
-<div class="issue-head"><span class="axis-kicker">論点3</span><h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">73件</span><span class="issue-heat">規制賛成 42件（58%）</span></h3>
+<div class="issue-head"><span class="axis-kicker">論点3</span>
+<h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">73件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 47 / 中立 8 / AI推進 18</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:64.4%">64%</div><div class="temp-seg neu" style="width:11.0%"></div><div class="temp-seg pos" style="width:24.7%">25%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+</div>
 <p class="issue-desc">「AI生成と隠してSNSに投稿する」「クレジット表記すらしない」という個人の使い方への批判が中心です。法整備よりも利用者モラルを問う声で、「ルールがないから何でもいいと思っている人が問題」という意見が目立ちます。</p>
-<div class="issue-sides"><div class="side neg"><strong>モラル問題派（42件）</strong>AI生成物をオリジナルとして公開したり、元の作者に配慮しない使い方が問題の本質だ。</div><div class="side pos"><strong>自衛・自己責任派（28件）</strong>利用者の行動は個人の判断。嫌なら公開しない、AIを使わないという自衛が基本。</div></div>
+<div class="issue-sides"><div class="side neg"><strong>モラル問題派（47件）</strong>AI生成物をオリジナルとして公開したり、元の作者に配慮しない使い方が問題の本質だ。</div><div class="side pos"><strong>自衛・自己責任派（18件）</strong>利用者の行動は個人の判断。嫌なら公開しない、AIを使わないという自衛が基本。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">モラル批判 / conf 0.90</div><p>生成AI利用者の行動が社会的マナーに違反していると批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pt8mf/status/2068882072392057246"></a></blockquote></div>
@@ -1197,9 +1177,15 @@
 </article>
 
 <article class="issue-block" id="issue-creator">
-<div class="issue-head"><span class="axis-kicker">論点4</span><h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">46件</span><span class="issue-heat">規制賛成 34件（74%）</span></h3>
+<div class="issue-head"><span class="axis-kicker">論点4</span>
+<h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">46件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 33 / 中立 4 / AI推進 9</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:71.7%">72%</div><div class="temp-seg neu" style="width:8.7%"></div><div class="temp-seg pos" style="width:19.6%">20%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+</div>
 <p class="issue-desc">「イラストレーターが次々と廃業している」「10年かけた作風が一瞬で真似される」というクリエイターの生計への影響を訴える論点です。「AI自体は道具であり問題は使い方」という反論と、「仕事が奪われる現実を直視すべき」という訴えが対立しています。</p>
-<div class="issue-sides"><div class="side neg"><strong>クリエイター保護派（34件）</strong>生成AIの普及でイラスト・小説・音楽など創作の仕事が消滅しつつある。権利と生活を守る制度が必要。</div><div class="side pos"><strong>現実受容派（10件）</strong>技術革新で職業が変わるのは歴史的必然。AIを使いこなすスキルに転換すべき。</div></div>
+<div class="issue-sides"><div class="side neg"><strong>クリエイター保護派（33件）</strong>生成AIの普及でイラスト・小説・音楽など創作の仕事が消滅しつつある。権利と生活を守る制度が必要。</div><div class="side pos"><strong>現実受容派（9件）</strong>技術革新で職業が変わるのは歴史的必然。AIを使いこなすスキルに転換すべき。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">規制賛成 / conf 1.00</div><p>生成AIが無断でデータを使用し、クリエイターが困っている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nipponbare0v0/status/2069003711515668492"></a></blockquote></div>
@@ -1208,8 +1194,14 @@
 </article>
 
 <article class="issue-block" id="issue-gijutsu">
-<div class="issue-head"><span class="axis-kicker">論点5・最も推進寄り</span><h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">40件</span><span class="issue-heat">AI推進 27件（67%）</span></h3>
-<p class="issue-desc">このテーマで唯一、AI推進派が多数を占める論点。「日本が規制を強化すれば中国・米国に遅れる」「過度な規制は技術革新と経済を損なう」という産業競争力の観点からの主張が中心です。「規制より自由な競争環境が長期的にクリエイターの利益にもなる」という主張もあります。</p>
+<div class="issue-head"><span class="axis-kicker">論点5・唯一AI推進派多数</span>
+<h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">40件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 6 / 中立 7 / AI推進 27</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:15.0%">15%</div><div class="temp-seg neu" style="width:17.5%"></div><div class="temp-seg pos" style="width:67.5%">68%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+</div>
+<p class="issue-desc">このテーマで唯一、AI推進派が多数を占める論点。「日本が規制を強化すれば中国・米国に遅れる」「過度な規制は技術革新と経済を損なう」という産業競争力の観点からの主張が中心です。</p>
 <div class="issue-sides"><div class="side pos"><strong>AI推進派（27件）</strong>日本だけが規制強化すれば国際競争から取り残される。学習規制より出力・利用段階での対策を。</div><div class="side neg"><strong>規制賛成（6件）</strong>競争力の議論は著作権侵害の正当化にならない。ルールの中で競争すべき。</div></div>
 </div>
 <div class="sample-grid">
@@ -1219,9 +1211,15 @@
 </article>
 
 <article class="issue-block" id="issue-seiseibutsu">
-<div class="issue-head"><span class="axis-kicker">論点6</span><h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">31件</span><span class="issue-heat">規制賛成 16件（52%）</span></h3>
+<div class="issue-head"><span class="axis-kicker">論点6</span>
+<h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">31件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>規制賛成 vs AI推進：分布</span><span>規制賛成 14 / 中立 10 / AI推進 7</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:45.2%">45%</div><div class="temp-seg neu" style="width:32.3%"></div><div class="temp-seg pos" style="width:22.6%">23%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>規制賛成（著作権保護）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>AI活用推進</span></div>
+</div>
 <p class="issue-desc">「プロンプト入力だけで著作権が生じるのはおかしい」「AIが作ったものに創作性を認めるべきか」という権利の定義をめぐる論点です。AI生成物を二次創作の延長と見るか、全く別のカテゴリとして扱うかで意見が分かれています。</p>
-<div class="issue-sides"><div class="side neg"><strong>著作権否定派（14件）</strong>人間の創意工夫なしに生成されたものに著作権は発生しない。AI出力の著作物性を認めるべきでない。</div><div class="side pos"><strong>認定賛成派（12件）</strong>プロンプトの工夫や編集作業には創作性がある。AIを道具として使った作品に著作権を認めるべき。</div></div>
+<div class="issue-sides"><div class="side neg"><strong>著作権否定派（14件）</strong>人間の創意工夫なしに生成されたものに著作権は発生しない。AI出力の著作物性を認めるべきでない。</div><div class="side pos"><strong>認定賛成派（7件）</strong>プロンプトの工夫や編集作業には創作性がある。AIを道具として使った作品に著作権を認めるべき。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">容認派 / conf 0.80</div><p>生成AIの利用を容認しつつ、反対派の理解不足を批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Cero_0727/status/2068927271013089563"></a></blockquote></div>
