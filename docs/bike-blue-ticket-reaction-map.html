@@ -607,6 +607,64 @@
       .thirty-summary, .vote-comparison, .manga-grid, .related-grid { grid-template-columns:1fr; }
       .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
+
+/* ===== 2ステップ投票（論点アリーナ） ===== */
+.vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:15px;margin:0 0 12px}
+.vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
+#vote-issue-btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-width:900px}
+.vote-issue-btn{display:flex;align-items:center;gap:10px;width:100%;border:1.5px solid rgba(13,148,136,.2);border-radius:10px;padding:12px 14px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 4px 14px rgba(16,24,40,.06);transition:transform .15s,box-shadow .15s,border-color .15s}
+.vote-issue-btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 22px rgba(13,148,136,.18)}
+.vote-issue-icon{font-size:20px;line-height:1;flex-shrink:0}
+.vote-issue-title{font-size:13px;font-weight:900;color:var(--ink);line-height:1.3}
+#vote-stance-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+@media(max-width:700px){#vote-stance-btns{grid-template-columns:1fr}}
+.vote-stance-btn{position:relative;border:1px solid rgba(15,23,42,.08);border-top:5px solid var(--stance-color);border-radius:12px;padding:16px 14px 14px;background:linear-gradient(180deg,#fff,var(--stance-bg));cursor:pointer;font-family:inherit;color:var(--ink);box-shadow:0 6px 18px rgba(16,24,40,.09);text-align:left;transition:transform .15s,box-shadow .15s}
+.vote-stance-btn:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(16,24,40,.14)}
+.vote-stance-btn .vs-icon{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--stance-color);color:#fff;font-size:18px;font-weight:900;margin-bottom:8px}
+.vote-stance-btn .vs-title{display:block;font-size:15px;font-weight:900;line-height:1.35;color:var(--stance-color)}
+.vote-stance-btn .vs-desc{display:block;margin-top:4px;font-size:12px;line-height:1.6;color:var(--muted)}
+.vote-stance-btn::after{content:'選ぶ';display:inline-flex;margin-top:10px;border-radius:999px;padding:4px 10px;background:var(--stance-color);color:#fff;font-size:11px;font-weight:900}
+/* ===== 極座標アリーナ ===== */
+.polar-arena-section{position:relative;background:#0f0e2e;padding:42px min(6vw,72px)}
+.polar-arena-section .panel-title h2{color:#fff}
+.polar-arena-section .panel-title span{color:rgba(255,255,255,.65)!important;background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.15)!important}
+.map-caption{font-size:13px;color:rgba(255,255,255,.65);line-height:1.65;margin:0 0 16px;max-width:720px}
+#sm-wrap{position:relative;max-width:640px;margin:0 auto}
+#sm-wrap canvas{display:block;width:100%;border-radius:10px}
+#arenaMain{cursor:crosshair;position:absolute;top:0;left:0;width:100%}
+#arenaHeat{display:block}
+.polar-arena-section .sm-controls{max-width:640px;margin:14px auto 0;display:flex;flex-direction:column;gap:10px;background:transparent;border:none;padding:0;border-radius:0}
+.polar-arena-section .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:rgba(255,255,255,.8);align-items:center}
+.polar-arena-section .sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+.polar-arena-section .sm-filters{display:flex;gap:6px;flex-wrap:wrap}
+.polar-arena-section .sm-fbtn{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);cursor:pointer;font-size:12px;font-weight:800}
+.polar-arena-section .sm-fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+#sm-tooltip{position:absolute;background:rgba(0,0,0,.85);color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;display:none;max-width:260px;line-height:1.6;z-index:10}
+/* ===== 論点×Xの声 ===== */
+.issue-block{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow);padding:22px;margin:0 0 22px}
+.issue-head{margin-bottom:14px}
+.issue-head h3{margin:4px 0 8px;font-size:clamp(17px,2.2vw,22px)}
+.issue-count{display:inline-block;margin-left:8px;font-size:12px;font-weight:800;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 10px}
+.issue-desc{font-size:14px;line-height:1.85;color:var(--ink);margin:10px 0 12px}
+.issue-sides{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+@media(max-width:600px){.issue-sides{grid-template-columns:1fr}}
+.side{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.7}
+.side.neg{background:#fff2f2;border-left:3px solid #e04949}
+.side.pos{background:#eff6ff;border-left:3px solid #4b9cf4}
+.issue-block .sample-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+@media(max-width:600px){.issue-block .sample-grid{grid-template-columns:1fr}}
+.issue-block .sample-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff;box-shadow:var(--shadow)}
+.issue-block .sample-card .meta{font-size:11px;color:var(--muted);font-weight:800;margin-bottom:6px}
+.temp-bar-wrap{margin:10px 0 8px}
+.temp-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px}
+.temp-bar{height:14px;border-radius:999px;overflow:hidden;display:flex;background:#f0f0f0}
+.temp-seg{height:100%;font-size:9px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;min-width:0}
+.temp-seg.neg{background:#e04949}
+.temp-seg.neu{background:#94a3b8}
+.temp-seg.pos{background:#4b9cf4}
+.temp-bar-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:10px;color:var(--muted)}
+.temp-bar-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:3px;vertical-align:middle}
+
   </style>
   <link rel="stylesheet" href="topic-modern.css?v=2">
   <script src="topic-modern.js?v=1" defer></script>
@@ -632,9 +690,9 @@
       <p class="question-line">危険運転を減らす青切符か、道路整備が追いつかないままの罰則強化か？</p>
       <p class="lead">Yahooリアルタイム検索で取得したSNS投稿を、取締り強化賛成、インフラ優先、車道走行への不安、免許制要求などの論点で整理したビューです。世論調査ではありません。</p>
       <div class="thirty-summary" aria-label="30秒サマリー"><ul>
-        <li>最多は「その他・分類保留」45件だが、明確な立場では免許制要求41件と取締り強化賛成34件が目立つ。</li>
-        <li>反対側はインフラ優先31件、車道走行への不安14件、混乱懸念12件に分かれる。</li>
-        <li>接点は「危険運転を減らしたい」点で、争点は罰則と道路環境の順番に集中している。</li>
+        <li>最多は免許制要求36件。「青切符だけでは不十分、免許か講習を義務化すべき」という立場で、取締り強化賛成27件と合わせると取締り方向の声が多数。</li>
+        <li>インフラ整備優先26件は反対側最大。「専用レーンもないのに取り締まるのは理不尽」が共通点。</li>
+        <li>賛否どちらも「危険を減らしたい」は共通。争点は罰則か整備か、順番の違いに集中している。</li>
       </ul></div>
     </div>
   </section>
@@ -643,10 +701,10 @@
   </svg>
   <main>
     <section class="stats">
-      <div class="stat"><span>総サンプル</span><strong>177</strong></div>
-      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>その他・分類保留 45</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>その他 43</strong></div>
+      <div class="stat"><span>収集投稿</span><strong>181件</strong></div>
+      <div class="stat"><span>AI分類済み</span><strong>181件</strong></div>
+      <div class="stat"><span>最多論点</span><strong>免許制要求 36</strong></div>
+      <div class="stat"><span>取締り賛成</span><strong>89件</strong></div>
     </section>
     <section class="panel" id="manga-section">
 <div class="panel-title"><h2>漫画で読む対立</h2><span>ショートコミック</span></div>
@@ -682,777 +740,543 @@ MangaViewer.init({
   ]
 });
 </script>
-    <section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">自転車の「青切符」による反則金。事故やマナー違反を防ぐための厳罰化か、それとも危険な車道へ走らせる無理なルールか？</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> Yahooリアルタイム検索で収集し、重複除去後の公開投稿をOpenCode Go API / minimax-m2.7で2D分類しました。最終更新: 2026-07-12。</div>
-<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
-<div id="vote-buttons" class="vote-card-grid"></div>
-<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
+        <section class="panel" id="vote-section">
+<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">2024年に道路交通法が改正され、自転車の違反に「青切符」（反則金）が導入されます。取り締まりを強化すべきか、まずインフラ整備が先か。あなたが最も気になる論点はどれですか？</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索で「自転車 青切符 賛成」「自転車 青切符 反対」「自転車 青切符 インフラ」などのキーワードでSNS投稿181件を収集し、AIが自動分類しました。最終更新: 2026-07-12。</div>
+<div id="vote-step1">
+  <p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p>
+  <div id="vote-issue-btns"></div>
+</div>
+<div id="vote-step2" style="display:none;margin-top:4px;">
+  <p class="vote-step-label"><span class="step-num">2</span>青切符導入への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p>
+  <div id="vote-stance-btns"></div>
+</div>
+<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
   </div>
-  <div id="vote-comparison" class="vote-comparison" aria-label="あなたの選択とSNS分布の比較"></div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
-  <div id="vote-bars" style="margin-bottom:16px;"></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-    <a id="share-x" href="#" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
-      𝕏 でシェア
-    </a>
-    <button id="vote-redo-btn"
-       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
-      投票をやり直す
-    </button>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">𝕏 でシェア</a>
+    <button id="vote-redo-btn" style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">投票をやり直す</button>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
-<script src="vote2d.js?v=10"></script>
 <script>
 (function(){
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  Vote2D.init({
-    containerId: 'vote-buttons',
-    resultId: 'vote-result',
-    topic: '自転車青切符_SNS反応まっぷ',
-    title: '自転車の青切符導入 SNS反応まっぷ',
-    xAxis: { neg: '取締り不要・過剰規制', pos: '取締り強化・即刻施行' },
-    yAxis: { neg: '自転車利用者の自由・負担軽減優先', pos: '歩行者・社会の安全を最優先' },
-    quadrants: [{"label": "インフラ整備で安全を守る", "desc": "取締りより先に安全な自転車レーン整備を。歩行者安全のために環境づくりが先決。"}, {"label": "安全のため取締り強化", "desc": "歩行者・社会を守るために青切符導入・取締り強化は当然の措置。"}, {"label": "利用者の自由と負担を守る", "desc": "車道原則や取締り強化は自転車利用者に不当な負担。利用者の自由を守るべき。"}, {"label": "ルール周知で利用者も守る", "desc": "取締りとルール周知により自転車利用者自身の安全も高まる。"}],
-    questions: [
-      {text:'自転車の取り締まり強化は必要だと思う？',negLabel:'過剰規制・不要',posLabel:'強化すべき'},
-      {text:'自転車問題、どちらの立場に近い？',subtext:'答えたら開票します',negLabel:'利用者の自由・負担軽減を守りたい',posLabel:'歩行者・社会の安全を守りたい'}
-    ],
-    commonGround: {
-      title: '意見の向こう側',
-      lead: '立場や方法は違っても、両者に共通する願いがあります。',
-      statement: '歩行者も自転車利用者も、安心して移動できる道路',
-      question: '反対側の心配も、少し理解できましたか？'
-    },
-    supabaseUrl: supabaseUrl,
-    supabaseAnonKey: supabaseAnonKey
+  'use strict';
+  var STORAGE_KEY='sns_vote_bike_blue_ticket_2step';
+  var VOTE_ISSUES=[
+    {k:'取締り強化',     icon:'🚔',desc:'危険運転・マナー違反を取り締まるべき（27件）'},
+    {k:'インフラ整備が先',icon:'🚲',desc:'専用レーンなど道路整備が先決（26件）'},
+    {k:'車道走行への不安',icon:'⚠️', desc:'車道走行の強制は事故を増やす（11件）'},
+    {k:'免許制が必要',   icon:'📋',desc:'青切符だけでは不十分、免許制を（36件）'},
+    {k:'ルールが曖昧',   icon:'❓',desc:'違反基準が不明確・取締り方に不信感（11件）'},
+    {k:'その他・わからない',icon:'💬',desc:'上記以外・まだ判断がつかない'},
+  ];
+  // VOTE_ISSUES index → ISSUES array index (order: 免許制3 取締り0 インフラ1 車道2 ルール4 その他5)
+  var V2I=[0,1,2,3,4,5];
+  var STANCES=[
+    {k:'賛成・取締り強化支持',color:'#e04949',bg:'#fff1f2',shadow:'rgba(224,73,73,.22)',icon:'✓',desc:'危険運転を取り締まり、安全を守るべき'},
+    {k:'どちらでもない',    color:'#64748b',bg:'#f8fafc',shadow:'rgba(100,116,139,.22)',icon:'?',desc:'条件や情報を見てから判断したい'},
+    {k:'反対・インフラ優先', color:'#4b9cf4',bg:'#eff6ff',shadow:'rgba(75,156,244,.22)',icon:'!',desc:'インフラ整備なしの取締りには納得できない'},
+  ];
+  var selIssue=-1;
+  var step1=document.getElementById('vote-step1');
+  var step2=document.getElementById('vote-step2');
+  var result=document.getElementById('vote-result');
+  var issueBtns=document.getElementById('vote-issue-btns');
+  var stanceBtns=document.getElementById('vote-stance-btns');
+
+  VOTE_ISSUES.forEach(function(iss,i){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-issue-btn';
+    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
+    btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
+    issueBtns.appendChild(btn);
   });
+
+  function showVote(issueIdx,stanceIdx,shouldScroll){
+    var iss=VOTE_ISSUES[issueIdx];var st=STANCES[stanceIdx];
+    selIssue=issueIdx;
+    step1.style.display='none';step2.style.display='none';result.style.display='block';
+    document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
+    document.getElementById('vote-position-text').textContent=iss.desc;
+    if(window.setArenaVoteMarker)window.setArenaVoteMarker(V2I[issueIdx],st.color);
+    var shareText='自転車の青切符導入、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
+    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/bike-blue-ticket-reaction-map.html');
+    setTimeout(function(){
+      if(window.setArenaVoteMarker)window.setArenaVoteMarker(V2I[issueIdx],st.color);
+      var el=document.getElementById('issue-arena-section');
+      if(shouldScroll!==false&&el)el.scrollIntoView({behavior:'smooth',block:'center'});
+    },300);
+  }
+
+  STANCES.forEach(function(st,stanceIdx){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-stance-btn';
+    btn.style.setProperty('--stance-color',st.color);
+    btn.style.setProperty('--stance-bg',st.bg);
+    btn.style.setProperty('--stance-shadow',st.shadow);
+    btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
+    btn.onclick=function(){
+      showVote(selIssue,stanceIdx);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:selIssue,stanceIdx:stanceIdx}));
+    };
+    stanceBtns.appendChild(btn);
+  });
+
+  document.getElementById('vote-redo-btn').onclick=function(){
+    localStorage.removeItem(STORAGE_KEY);
+    selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
+    if(window.clearArenaVoteMarker)window.clearArenaVoteMarker();
+  };
+  try{
+    var prev=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(prev&&Number.isInteger(prev.issueIdx)&&prev.issueIdx>=0&&prev.issueIdx<VOTE_ISSUES.length&&
+       Number.isInteger(prev.stanceIdx)&&prev.stanceIdx>=0&&prev.stanceIdx<STANCES.length){
+      showVote(prev.issueIdx,prev.stanceIdx,false);
+    }
+  }catch(e){localStorage.removeItem(STORAGE_KEY);}
 })();
 </script>
-    <section class="panel" id="stance-map-section">
-<div id="stance-map-inner">
-<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>181件 | 点の色=感情強度（青:冷静→赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
+    
+<!-- ===== 極座標 論点アリーナ ===== -->
+<section class="polar-arena-section" id="issue-arena-section">
+<div id="issue-arena-inner" style="max-width:720px;margin:0 auto">
+<div class="panel-title"><h2>論点アリーナ</h2><span>181件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
+<p class="map-caption">中心の「自転車の青切符」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は意見の強さ（外側ほど強い主張）、点の色はスタンス（赤=取締り賛成 / 青=反対・インフラ優先 / 灰=中立）。点をクリックするとXポストを開きます。</p>
 <div id="sm-wrap">
-  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
-  <canvas id="smCanvasMain" width="600" height="600"></canvas>
-  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">安全・秩序を最優先 ▲</div>
-  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ ライダーの利便性・自由を重視</div>
-  <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 取締りに反対・懐疑的</div>
-  <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">取締り強化を支持 ▶</div>
+  <canvas id="arenaHeat" width="640" height="640" style="display:block;width:100%;border-radius:10px;"></canvas>
+  <canvas id="arenaMain" width="640" height="640" style="position:absolute;top:0;left:0;width:100%;cursor:crosshair;"></canvas>
 </div>
-<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはこのあたり」マーカーで表示しています。</p>
-<div id="smTourPanel">
-  <div id="smTourStep"></div>
-  <div id="smTourTitle"></div>
-  <div id="smTourDesc"></div>
-  <div id="smTourEmbedLoading">投稿を読み込み中…</div>
-  <div id="smTourEmbed"></div>
-  <div id="smTourQuoteFallback"><span id="smTourQuoteText"></span><small id="smTourQuoteLink">↗ Xで見る</small></div>
-  <div class="sm-tour-nav">
-    <button class="sm-tnav" id="smBtnPrev">← 前へ</button>
-    <div id="smTourProgress"><div id="smTourProgressBar"></div></div>
-    <button class="sm-tnav primary" id="smBtnNext">次へ →</button>
-    <button class="sm-tnav" id="smBtnClose" style="border-color:#666;color:#aaa">✕</button>
-  </div>
-</div>
+<p id="your-marker-note-arena" style="display:none;font-size:12px;color:rgba(255,255,255,.7);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
 <div class="sm-controls">
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <div class="sm-legend-emo">
-      <span style="color:#555">感情強度:</span>
-      <span>冷静</span>
-      <div class="sm-emo-bar"></div>
-      <span>激怒</span>
-    </div>
-    <button id="smStartTour">▶ ガイドツアーで読む</button>
+  <div class="sm-legend">
+    <span><i style="background:#e04949"></i>取締り賛成寄り</span>
+    <span><i style="background:#4b9cf4"></i>反対・インフラ優先</span>
+    <span><i style="background:#64748b"></i>中立</span>
+    <span style="color:rgba(255,255,255,.4)">中心＝冷静 / 外周＝意見が強い</span>
   </div>
-  <div class="sm-view-row">
-    <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
-    <label><input type="checkbox" id="smChkDots" checked> ドット</label>
-    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="36" style="width:80px;vertical-align:middle"></label>
-  </div>
-  <div class="sm-filters">
-    <span style="font-size:10px;color:#888">絞り込み:</span>
-    <button class="sm-fbtn active" data-q="all">全件 (181)</button>
-    <button class="sm-fbtn" data-q="q1">取締り賛成×安全優先 (83)</button>
-    <button class="sm-fbtn" data-q="q3">取締り反対×ライダー重視 (40)</button>
-    <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (47)</button>
-    <button class="sm-fbtn" data-q="calm">冷静 e≤0 (61)</button>
-  </div>
+  <div class="sm-filters" id="sm-filters"></div>
 </div>
-<div class="sm-stat-cards">
-  <div class="sm-sbox"><div class="sm-slabel">取締り賛成 × 安全優先 (右上)</div><div class="sm-sval" style="color:#2980b9">83件</div><div class="sm-sdesc">「事故防止のため取締りは当然」規制派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">取締り反対 × ライダー重視 (左下)</div><div class="sm-sval" style="color:#c0392b">40件</div><div class="sm-sdesc">「インフラなしの規制は不公平」反対派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">中立含む（X=0またはY=0）</div><div class="sm-sval" style="color:#7f8c8d">42件</div><div class="sm-sdesc">条件付き賛成・日常報告など</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">47件</div><div class="sm-sdesc">強い怒り・感情的な訴え（両陣営）</div></div>
+<div id="sm-tooltip" style="position:absolute"></div>
 </div>
-<div id="sm-tooltip"></div>
-</div><!-- /stance-map-inner -->
 </section>
 <script>
 const SM_RAW = [
-  {x:0.0,y:0.0,e:0.5,c:0.70,s:"青切符対象の是非めぐるSNS論争を中立紹介",u:"https://x.com/kuruma_newsjp/status/2064555848068722869"},
-  {x:1.0,y:0.5,e:0.0,c:0.70,s:"同時施行に賛成、金額設定は妥当と分析",u:"https://x.com/rainohitorigoto/status/2061284870995984443"},
-  {x:1.0,y:1.0,e:1.0,c:0.75,s:"青切符賛否併記し支持寄りの問いかけ",u:"https://x.com/Oneness_ringo/status/1997763402245255673"},
-  {x:1.0,y:1.0,e:1.0,c:0.85,s:"自転車利用者に歩道の乗車を改善させよ",u:"https://x.com/umakurage/status/2068167003215647051"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.90,s:"青切符制度導入に強く反対、地方の実情を考慮すべきと主張",u:"https://x.com/zuppa_t/status/2067738312056639828"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"青切符制度導入に強く反対する署名への協力呼びかけ",u:"https://x.com/KaMama777307/status/2062717203263431053"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"青切符制度導入に強く反対し、自動車と共存できる安全な移動環境を求めている",u:"https://x.com/j52flx/status/2061443794344747198"},
-  {x:1.5,y:1.5,e:1.5,c:0.80,s:"青切符なのに信号無視等の無法状態への怒り",u:"https://x.com/shocker108/status/2061387437340045705"},
-  {x:-2.0,y:-1.5,e:1.0,c:0.85,s:"青切符制度導入に強く反対する署名への赞同呼びかけ",u:"https://x.com/ibarakinoumi/status/2060612879012008160"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"青い切符制度導入に強く反対するオンライン署名の拡散投稿",u:"https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"自転車青切符に強く反対し、自由制限を懸念",u:"https://x.com/kress813/status/2032672767527760350"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符に強く反対、監視社会への怒り",u:"https://x.com/kress813/status/2032229649317814760"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"青切符制度の導入に強く反対",u:"https://x.com/smd5963/status/2031237042987049316"},
-  {x:1.0,y:1.5,e:0.5,c:0.75,s:"自転車信号無視の危険性を指摘し青切符制度を懸念",u:"https://x.com/k_kisa_0729/status/2069356999574487158"},
-  {x:-1.5,y:-1.0,e:1.5,c:0.85,s:"青切符拡大に批判的自営業者",u:"https://x.com/kusdiyoko/status/2069017433956856152"},
-  {x:1.0,y:1.5,e:1.5,c:0.80,s:"私有地侵犯の爺への批判と対抗措置の投稿",u:"https://x.com/youkaiteikokusp/status/2068332868775116901"},
-  {x:1.0,y:1.0,e:-1.0,c:0.75,s:"ルール改正後の守法状況を皮肉交じりに批判",u:"https://x.com/kinfantasy55/status/2068275609588085075"},
-  {x:-1.5,y:-1.5,e:2.0,c:0.85,s:"自転車規制拡大に反対し他者批判の怒り投稿",u:"https://x.com/GameHAGE/status/2066073180465512800"},
-  {x:1.5,y:1.0,e:0.0,c:0.80,s:"自転車の駐停車違反にも青切符を適用し、反則金を徴収すべきだと求める意見",u:"https://x.com/mikosansun/status/2062921789827883285"},
-  {x:0.0,y:0.0,e:0.0,c:0.80,s:"ルール守った自己肯定と日常遭遇の報告",u:"https://x.com/FORNIK6/status/2062090917918777655"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"田舎と都会でルール統一はおかしいという意見",u:"https://x.com/gaokun___nnn2/status/2069754502547427529"},
-  {x:1.0,y:1.5,e:1.0,c:0.85,s:"自転車青切符の公平性・一貫性を問いかける批判投稿",u:"https://x.com/momota186cm_psa/status/2068676954656846060"},
-  {x:-1.5,y:1.5,e:1.5,c:0.85,s:"警察の二枚舌を批判し軽微 Bicycle Enforce偏重を疑問視",u:"https://x.com/knuckletn/status/2068259723267518964"},
-  {x:-1.0,y:2.0,e:1.5,c:0.85,s:"青切符の効果に懐疑的で、子どもに車道通行を求めることへ強く反対している",u:"https://x.com/isaiah8_1/status/2067988251760345275"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"ルール制定への疑問 自転車を擁護",u:"https://x.com/spnv2h89/status/2067953648047722913"},
-  {x:1.5,y:1.0,e:1.0,c:0.75,s:"電動スクーターの規制甘いのはおかしい",u:"https://x.com/gamblertetuya/status/2067200208732406100"},
-  {x:-1.5,y:1.0,e:1.5,c:0.80,s:"自治会の無法さと青切符制度への不満",u:"https://x.com/asagooods/status/2065953235475767499"},
-  {x:1.0,y:1.0,e:1.0,c:0.80,s:"新区分創設と規制緩和に疑問表明",u:"https://x.com/badgerkingtony/status/2065790718543847699"},
-  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"日本の交通制度・標識の矛盾を批判",u:"https://x.com/teianjapan/status/2064856553036148982"},
-  {x:1.0,y:1.5,e:1.0,c:0.85,s:"歩行者への青切符導入を支持し安全優先",u:"https://x.com/norihei1/status/2063825275960578333"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"事故減を根拠に青切符導入に強く反対",u:"https://x.com/tarutora17/status/2063058066007118110"},
-  {x:-0.5,y:0.0,e:-1.0,c:0.75,s:"青切符不便を皮肉る日常あるある投稿",u:"https://x.com/hanmingpenguin/status/2062033956162384206"},
-  {x:0.5,y:0.0,e:-1.0,c:0.85,s:"インフラ未整備での切符是不公平、煽り運転は厳罰化すべき",u:"https://x.com/0922Sisi/status/2060307582515077434"},
-  {x:1.0,y:1.0,e:0.0,c:0.70,s:"青切符に迷いつつも規制強化と安全優先支持",u:"https://x.com/jupitter3/status/2062205575593943523"},
-  {x:1.0,y:1.0,e:0.5,c:0.80,s:"無謀な並走cyclingを見て 青切符に感心 安全意識あり",u:"https://x.com/oboro_bishop/status/2070700403398951213"},
-  {x:2.0,y:2.0,e:1.5,c:0.85,s:"自転車の一時不停止に怒り、厳しく取り締まるべきと主張",u:"https://x.com/bjayway/status/2070305605852836233"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"インフラ整備不足を批判し青切符制度に強く反対",u:"https://x.com/15jacnamagiga/status/2070261164618158443"},
-  {x:-1.0,y:-1.5,e:-1.5,c:0.65,s:"規制強化に懐疑、自家用车より步行者の安全軽視",u:"https://x.com/yujirohanma1313/status/2070140086289920170"},
-  {x:-1.0,y:-1.0,e:1.5,c:0.85,s:"場当たり的導入への批判的自撮り",u:"https://x.com/golden9398/status/2070003381025034696"},
-  {x:-0.5,y:0.5,e:-0.5,c:0.70,s:"青切符対象を絞り込むべきとの慎重な意見",u:"https://x.com/MoroQ_tan/status/2069998331728998807"},
-  {x:1.0,y:2.0,e:0.0,c:0.80,s:"自転車側に一定の配慮を示しつつ、歩行者優先の規制強化を提案している",u:"https://x.com/TqOT2vaQIyeZv0z/status/2069922851491344512"},
-  {x:1.0,y:2.0,e:2.0,c:0.95,s:"死亡事故を政治批判し規制強化求める",u:"https://x.com/stargamewalk101/status/2069849509274996774"},
-  {x:-2.0,y:2.0,e:1.5,c:0.85,s:"青切符制度に強く反対、制定側の批判も含む",u:"https://x.com/Shuns_private/status/2069803637371814378"},
-  {x:0.5,y:1.0,e:0.5,c:0.70,s:"青切符自体は支持も実施方法・道路整備不足を批判",u:"https://x.com/suzuking408/status/2069735857695891855"},
-  {x:-1.0,y:1.0,e:1.5,c:0.85,s:"青切符制度は点数稼ぎであり、道路整備など前提条件が欠如しているとの批判",u:"https://x.com/shirayuki_write/status/2069718795288297801"},
-  {x:-2.0,y:-1.5,e:2.0,c:0.80,s:"青切符制度に強い不快感を示し、自転車利用者への配慮を優先すべきだとしている",u:"https://x.com/wb_rin_p/status/2069698871832555613"},
-  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"規制先行でインフラ未整備は国の不作為",u:"https://x.com/many14219901/status/2069653099040673849"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.70,s:"インフラ整備不足を指摘し新ルールを批判",u:"https://x.com/toratoramatus/status/2069640286129758338"},
-  {x:0.5,y:0.5,e:0.0,c:0.65,s:"青切符施策を肯定的に想像し、市民協働で安全構築を呼びかける穏当な意見",u:"https://x.com/reiziro/status/2068958423123980602"},
-  {x:2.0,y:2.0,e:1.0,c:0.85,s:"罰則強化と自転車青切符を支持し、歩行者安全最優先",u:"https://x.com/juddhy158284/status/2068567127423144348"},
-  {x:-0.5,y:0.0,e:0.0,c:0.60,s:"規制に疑問呈しインフラ整備を提案",u:"https://x.com/mhjj100924429/status/2068366069874483224"},
-  {x:1.5,y:1.5,e:1.0,c:0.80,s:"駅周辺の自転車危険行為を批判し強化要求",u:"https://x.com/kazu491223/status/2068252460469416060"},
-  {x:0.5,y:1.0,e:-1.0,c:0.60,s:"自転車道路の改善提言、青切符には消極的",u:"https://x.com/oshiigai/status/2068178039046127689"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"青切符効果を実感、傘差し自転車減を肯定的に評価",u:"https://x.com/hiroe4WD/status/2068089032639455519"},
-  {x:-1.0,y:0.0,e:-0.5,c:0.85,s:"113種は多すぎ。簡略化と整備後に実施を主張",u:"https://x.com/Clifrennie/status/2068026232860537188"},
-  {x:1.0,y:0.5,e:0.5,c:0.80,s:"並列走行への不満と青切符による規制強化支持",u:"https://x.com/capelliubereats/status/2066801642872418406"},
-  {x:-0.5,y:0.5,e:-0.5,c:0.70,s:"インフラ整備不足を指摘し青切符に慎重な姿勢",u:"https://x.com/bAgM8HRAo7aVtbp/status/2066690069206012139"},
-  {x:-1.0,y:1.0,e:0.0,c:0.70,s:"罰則では不十分、インフラ整備が必要",u:"https://x.com/koki_kajimoto/status/2067761200730095782"},
-  {x:-2.0,y:-1.5,e:2.0,c:0.90,s:"青切符制度に強く反対する自転車乗りの感情的意見",u:"https://x.com/48Kamaru/status/2067559221928091698"},
-  {x:-1.0,y:1.0,e:0.0,c:0.75,s:"インフラ整備なき青切符を批判し権利発想を主張",u:"https://x.com/fullsunjp/status/2065650976074469713"},
-  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"インフラ整備を主張する歩行者寄りの個人的見解",u:"https://x.com/12red_and_blue/status/2065042729974059469"},
-  {x:-1.0,y:1.0,e:1.0,c:0.85,s:"インフラ未整備の青切符制度を批判",u:"https://x.com/YP3xqnYKspOSM59/status/2064802887340069077"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"自転車側に立ち、歩走帯の整備不足を指摘しつつ、警察の取締りに不満",u:"https://x.com/jianzijun381019/status/2063394602749726847"},
-  {x:1.0,y:1.5,e:1.5,c:0.85,s:"青切符導入支持も効果に疑問・自転車側に不満",u:"https://x.com/Kei_1134/status/2062149829845979435"},
-  {x:0.0,y:1.0,e:0.0,c:0.60,s:"青切符前にインフラ分割をすべきとの主張",u:"https://x.com/_hand_and_hand_/status/2061484624690475293"},
-  {x:0.5,y:0.0,e:1.0,c:0.60,s:"青い切符交付数への反応と日本批判",u:"https://x.com/OdzrtcySsIPXdoT/status/2061370674229436631"},
-  {x:0.5,y:1.5,e:0.5,c:0.80,s:"インフラ整備優先主張、自転側に理解あり",u:"https://x.com/Mid_observatory/status/2050519664510562807"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"インフラ整備なしの青切符制度に強く反対",u:"https://x.com/Coco2Poppin/status/2043699643520106773"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"インフラ未整備のまま青切符導入に疑問，安全整備を求める",u:"https://x.com/Mid_observatory/status/2030591044098932852"},
-  {x:-1.0,y:0.0,e:1.0,c:0.85,s:"インフラ未整備のまま青切符制度を推行することへの疑問",u:"https://x.com/Mid_observatory/status/2021909225249947652"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"青切符形骸化に批判的、自利用者寄り",u:"https://x.com/bicicletta_/status/2066803620725792820"},
-  {x:0.5,y:1.0,e:1.0,c:0.80,s:"左折レーン直進の危険性を指摘、車のルール無視を批判",u:"https://x.com/bike_angler/status/2064044940385210547"},
-  {x:-0.5,y:0.0,e:1.5,c:0.70,s:"区職員的自転通勤を軽蔑的に批判",u:"https://x.com/scott_dragon29/status/2060974122742755749"},
-  {x:1.0,y:2.0,e:1.5,c:0.85,s:"路駐問題の解消と自転車安全確保を要望",u:"https://x.com/Mid_observatory/status/2021148538013671884"},
-  {x:1.5,y:1.0,e:1.0,c:0.80,s:"無知な自転車ユーザーに怒り・規制強化支持",u:"https://x.com/KeN2827/status/2070390576382357558"},
-  {x:2.0,y:2.0,e:0.0,c:0.80,s:"自転車に免許・講習義務付けるべき",u:"https://x.com/ZPlaiFah/status/2070308461683130627"},
-  {x:2.0,y:2.0,e:1.5,c:0.85,s:"自転車への免許制や講習制度の導入を主張している",u:"https://x.com/r70OylZbSZeiIIz/status/2070149487566418240"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車免許導入を提唱し安全優先立场から現行ルールに疑問",u:"https://x.com/yamazakibusu/status/2070074656128917921"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"交通ルール解説記事、軽い个人观点含む",u:"https://x.com/ms06km/status/2069705866790789150"},
-  {x:2.0,y:2.0,e:1.5,c:0.75,s:"漫ろ見自転車への厳罰化を求める強い意見",u:"https://x.com/sora09_14/status/2069564683204677743"},
-  {x:2.0,y:2.0,e:1.5,c:0.85,s:"歩行者保護のため自転車規制強化を求める強い主張",u:"https://x.com/obakekuntoujou/status/2069206248411795701"},
-  {x:2.0,y:2.0,e:1.0,c:0.80,s:"LUUPユーザーに青切符適用を要求、危険運転や無免許問題を指摘",u:"https://x.com/gucciyuzo03/status/2069017985143246923"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"青切符に疑問、免許制を提案",u:"https://x.com/aftonp1988/status/2069001010878837074"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"自転車規制強化に反対・メディア報道を批判",u:"https://x.com/healhearts123/status/2068991161252122951"},
-  {x:-2.0,y:-2.0,e:0.5,c:0.85,s:"青切符制度廃止を求めるラジオ投稿",u:"https://x.com/hikaruscarlet/status/2068989604510978450"},
-  {x:0.0,y:1.5,e:1.0,c:0.80,s:"規制の不公平さを皮肉で指摘する批判的意見",u:"https://x.com/uraaka_1110_/status/2068731047148413155"},
-  {x:2.0,y:1.5,e:1.0,c:0.80,s:"自転車に免許制度導入を支持、歩行者安全優先",u:"https://x.com/tyocoramu/status/2067909250589044776"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"青切符肯定・自転車免許制度導入を主張",u:"https://x.com/_muhammedsdk7/status/2067630320459919789"},
-  {x:2.0,y:-1.5,e:1.5,c:0.85,s:"自転車側の視点で歩行者への切符制度を要求",u:"https://x.com/vIOOmQ8b1AlkU31/status/2067414600275132440"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"青切符制度に疑問呈すも評価保留",u:"https://x.com/akimi_o/status/2066859994369360070"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"日常投稿中に青切符制度の実効性への疑問と皮肉",u:"https://x.com/46QakkoKwui5u1n/status/2066682764494323938"},
-  {x:0.5,y:0.0,e:0.5,c:0.80,s:"教育なしで取締りを始めたことへの不満と、講習制度導入の必要性を述べている",u:"https://x.com/thepassenger200/status/2066304199453773844"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車安全利用の教育・褒賞的施策強化を求める要望",u:"https://x.com/megu5182/status/2064913709580144689"},
-  {x:1.5,y:2.0,e:0.0,c:0.75,s:"大人の自転車Helmet着用促進求める政策提言で安全優先",u:"https://x.com/megu5182/status/2064913577736278160"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"原付と自動車の通行帯分離を求める安全優先の意見",u:"https://x.com/Eureka_2GG/status/2064886006168633754"},
-  {x:-0.5,y:-0.5,e:-1.0,c:0.60,s:"青切符よりLUUPの免許制を重要視する軽い意見",u:"https://x.com/tabun_nebusoku7/status/2064684211219624207"},
-  {x:1.0,y:1.0,e:1.0,c:0.80,s:"公職選挙法適用に疑問、未成年でも社会的責任を主張",u:"https://x.com/THS4_Osanpo/status/2064505197205017083"},
-  {x:2.0,y:2.0,e:2.0,c:0.95,s:"加害者への強い怒りと厳格な法執行を求める主張",u:"https://x.com/THS4_Osanpo/status/2064478742656028745"},
-  {x:2.0,y:2.0,e:1.5,c:0.90,s:"青切符の実効性に疑問を持ち、自転車免許制導入を主張",u:"https://x.com/stopstopstoping/status/2064249780168183913"},
-  {x:2.0,y:2.0,e:1.0,c:0.95,s:"自転車に免許制が必要と強く主張。規制強化で安全確保を訴求",u:"https://x.com/moconya/status/2063924527634268388"},
-  {x:-1.0,y:0.0,e:0.0,c:0.80,s:"青切符に懐疑、専用道路や免許導入を提案",u:"https://x.com/fukumen_V/status/2063454860377485795"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"自転車規制強化を支持、歩行者安全優先、怒り",u:"https://x.com/ABA_8S/status/2062951392902517086"},
-  {x:1.5,y:1.0,e:1.5,c:0.88,s:"歩きスマホに近い危険性を指摘し、自転車の取締り強化を求める個人的意見",u:"https://x.com/1029yurie/status/2070153036568371223"},
-  {x:2.0,y:2.0,e:1.0,c:0.80,s:"交通安全の徹底と自転車の取締り強化を強く支持している",u:"https://x.com/akiraAKIRA7878/status/2070132435820687506"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"地下道で軽バンの危険走行を目撃し、巡回による取締り強化を求めている",u:"https://x.com/H31UNvOb6jZwbvI/status/2069437978737619289"},
-  {x:1.5,y:1.5,e:1.5,c:0.85,s:"チャリ事故の不快感から歩行者安全確保へ",u:"https://x.com/leemanoid/status/2069354674734731759"},
-  {x:2.0,y:0.0,e:1.0,c:0.85,s:"県警が飲酒運転撲滅と取締り強化を呼びかける広報投稿",u:"https://x.com/fukkei_Kkikaku/status/2069225078437589367"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"踏切危険性を指摘し、規制強化を要望",u:"https://x.com/kazu491223/status/2069062750035472509"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.75,s:"自転車取り締まり強化に懐疑的な意見",u:"https://x.com/takanori_w2/status/2068874487597318171"},
-  {x:1.0,y:1.5,e:1.0,c:0.75,s:"自転車取り締まり強化に肯定も現実的な施行に懐疑",u:"https://x.com/degutityuui/status/2064269440171278639"},
-  {x:2.0,y:2.0,e:1.0,c:0.75,s:"自転車違反の取締り強化を求める強い不満の投稿",u:"https://x.com/supra3k/status/2063139828842332559"},
-  {x:-1.0,y:0.0,e:-0.5,c:0.50,s:"取締り強化の繰り返しと不公平感の愚痴",u:"https://x.com/hanihani3939/status/2061944934295625973"},
-  {x:0.0,y:0.0,e:-1.0,c:0.60,s:"自転車取り締まり強化を皮肉交じりに軽く扱う冗談投稿",u:"https://x.com/clairvoyantRPT/status/2061233769504514377"},
-  {x:2.0,y:2.0,e:0.0,c:0.87,s:"自転車関連取締り強化を支持。更なる適用拡大を求める",u:"https://x.com/char2112000/status/2060943066341818753"},
-  {x:1.5,y:1.5,e:1.5,c:0.85,s:"Luupに危険行為され規制強化を求める投稿",u:"https://x.com/keipierremulot/status/2044619052879102064"},
-  {x:2.0,y:2.0,e:1.0,c:0.85,s:"違法自転車への厳格な取り締まりと法整備を支持",u:"https://x.com/ramen_mine/status/2038394465552146774"},
-  {x:0.5,y:1.0,e:1.0,c:0.80,s:"傘差しには賛成できないが、警察の判断に疑問を投げかけている",u:"https://x.com/HellSeaJigokuum/status/2074152525343948882"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符制度導入に強く反対する署名への赞同呼びかけ",u:"https://x.com/sarusuberi2022/status/2073678665343455446"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符制度導入に強く反対するオンライン署名への赞同を呼びかけている",u:"https://x.com/buVWlKgMyETvugi/status/2072990764876042375"},
-  {x:1.0,y:1.0,e:1.5,c:0.80,s:"住宅街で迷惑行為をする自転車学生への批判。青切符制度を肯定的に捉え、安全確保を支持する姿勢。",u:"https://x.com/gk07bpkyoJ21761/status/2071933332884271593"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"青切符制度導入に強く反対する署名への協力を呼びかける投稿",u:"https://x.com/7znw79Af3557537/status/2071440652462698957"},
-  {x:-1.0,y:0.0,e:0.0,c:0.80,s:"青切符制度を過度な反応として批判し、法律は機能せず形骸化すると予測する懐疑的見解",u:"https://x.com/WatchoutTony/status/2071394546705973394"},
-  {x:2.0,y:2.0,e:1.0,c:0.85,s:"危険な自転車利用者に怒り、青切符制度を本来主旨通りに厳格施行すべきとの意見",u:"https://x.com/RicoRico6821447/status/2071174870743093451"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.90,s:"机上のルールより臨機応変な判断を重視し、青切符制度を批判する、自転車の自由と柔軟性を優先する意見。",u:"https://x.com/shinseiminkento/status/2041192037207478329"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"自転車に対する青切符制度の導入に強く反対する署名活動への協力を呼びかけている。",u:"https://x.com/smd5963/status/2036374372156580044"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"警察が本質的な問題より青切符に熱心なことを皮肉り、問題を矮小化udiscr",u:"https://x.com/sagaismylife/status/2072611676764131600"},
-  {x:1.5,y:1.5,e:1.0,c:0.85,s:"自転車イヤホンの解禁論に反発し、事故加害者の可能性すら危惧する強い批判",u:"https://x.com/Asadauzdk/status/2075837507099586895"},
-  {x:-0.5,y:0.0,e:-0.5,c:0.60,s:"青切符への批判を許容する姿勢を示しつつ、ルールへの不支持も示唆する冷静な反応",u:"https://x.com/kabochanch/status/2074876704838017428"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"歩行者優先で自転車への青切符適用強化を求める怒りの意見",u:"https://x.com/g901_901g4/status/2072120658000302364"},
-  {x:1.5,y:1.5,e:0.5,c:0.80,s:"自転車も車両の一部と位置づけ、而无免許者への自転車販売規制を青切符より先に実施すべきだと主張している。",u:"https://x.com/EPADPADHA2025/status/2071118307529458014"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"青切符制度の効果に疑問を呈し、経費削減優先の標識設置を皮肉交じりに指摘",u:"https://x.com/DaiReady/status/2075954492324093964"},
-  {x:1.5,y:1.0,e:0.5,c:0.75,s:"2026年の交通法改正を情報提供しつつ、「大丈夫という時代ではない」と厳しく捉える姿勢を示唆",u:"https://x.com/Shinmama_FIRE/status/2075416430758224042"},
-  {x:1.0,y:1.0,e:0.0,c:0.70,s:"青切符制度和30km/h制限の必要性を認識し、道路ルールを遵守する決意を示している",u:"https://x.com/izumo_kanbasira/status/2075332857967546724"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車除外規定がない道路は進入禁止という法解釈を示し、規則の順守と安全確保を支持する冷静な意見",u:"https://x.com/tyuuuytrewq/status/2075113608175108149"},
-  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"警官の指導に疑問を持ち、危険な車道走行を強制する現行運用に不満を感じている",u:"https://x.com/soramiruzo/status/2075043269420142614"},
-  {x:-1.0,y:-1.0,e:0.5,c:0.85,s:"青切符制度に懐疑的で、警察官の主観による違反判定の曖昧さを批判し、インフラ整備を優先すべきと主張している。",u:"https://x.com/aminkf_/status/2074865044425498902"},
-  {x:1.5,y:1.5,e:-1.0,c:0.80,s:"加古川市の自転車取り締まり不足を批判し、青切符制度導入を支持する皮肉な意見",u:"https://x.com/gelatoni_love__/status/2074427317359952236"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"青切符制度は騒ぐほどのことではないと冷静に考える一方、道路整備の重要性を指摘",u:"https://x.com/mikkamika2525/status/2074107136364450005"},
-  {x:2.0,y:2.0,e:0.0,c:0.90,s:"青切符制度と警察の取opi締まり強化が必要という意見。道路安全向上を重視する。",u:"https://x.com/JACKAL1550/status/2074008867130704022"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.70,s:"駐車違反摘発の民間委託のやり方を批判し、注意を呼びかけている",u:"https://x.com/catdaisk/status/2073989674100740436"},
-  {x:0.0,y:0.0,e:-1.0,c:0.40,s:"30キロ規制の施行時期に触れ、マスコミの取り上げ方が自転車青切符の時と異なるだろうと冷めた見方を示している。",u:"https://x.com/delalte/status/2073773262006579508"},
-  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"警官による自転車の車道走行指導に不満を示し、危険な道路でも強制するのは不当だと疑問を呈している",u:"https://x.com/soramiruzo/status/2073695061494448132"},
-  {x:2.0,y:1.5,e:2.0,c:0.90,s:"青切符は自転車より車の違反取り締まりに使うべきだという強い批判的意見",u:"https://x.com/takopan5g/status/2073561931047399736"},
-  {x:1.0,y:1.5,e:1.0,c:0.70,s:"青切符制度の正しい理解を深めるべきとの立場から、自転車の危険行為を指摘・批判している",u:"https://x.com/i_shinji/status/2073061409739681902"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.60,s:"法改正や青切符制度に懐疑的だが、諦めた様子も感じる",u:"https://x.com/isoe0815/status/2073033134334247300"},
-  {x:2.0,y:2.0,e:2.0,c:0.85,s:"一時停止無視の運転手責任を強調し、青切符批判や環境整備要求を痛烈に批判する投稿",u:"https://x.com/yujirohanma1313/status/2071818851143352369"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"自転車青切符制度の試行3か月の現状と課題を伝える政治家による活動報告で、導入への是非や方向性についての明らかな評価はない。",u:"https://x.com/AotaniSeido/status/2071564617256452483"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.80,s:"新たな自転車規制をダブルスタンダードと批判し、規制強化に懐疑的な立場",u:"https://x.com/fxxkevthg/status/2071397873791754388"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"狭い道路での青切符新ルール導入による渋滞を皮肉で批判。政策への支持や歩行者視点の表明はない",u:"https://x.com/KarasumaRyusei/status/2071102742198911276"},
-  {x:0.0,y:0.0,e:0.0,c:0.85,s:"自転車は軽車両であり左側通行義務を違反すると青切符対象になるとの法的知識・豆知識の投稿。",u:"https://x.com/hoieXpmvDmYHaUq/status/2071082726002753540"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"警官の厳格な自転車指導に反発し、危険道路でも車道走行を強いるやり方に不満を抱いている",u:"https://x.com/soramiruzo/status/2071060415048786401"},
-  {x:1.0,y:1.0,e:1.0,c:0.85,s:"青切符の走行を守らない人が多く、警官も見て見ぬふり이라며、規制するなら専用道路を整備すべきだと主張",u:"https://x.com/rainbow26278/status/2071039524466315464"},
-  {x:-1.0,y:-1.0,e:0.5,c:0.70,s:"青切符制度への懸念と自転車側の立場への理解を示しつつ、問題の困難さを訴える",u:"https://x.com/infodai3/status/2073880288078561496"},
-  {x:1.0,y:1.0,e:1.0,c:0.70,s:"青切符には賛成だが、道路整備など環境整備も合わせて必要だと訴える内容",u:"https://x.com/tomi13_tomi13/status/2071503310058836419"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"青切符制度に腹を立てつつ、步行者より自分（月刊利用）の利便性を優先すべきと主張する",u:"https://x.com/yujirohanma1313/status/2071025514513625591"},
-  {x:-0.5,y:-0.5,e:-0.5,c:0.75,s:"自転車規制強化を冷静に紹介し、個人の利便性からバイクを推奨する意見",u:"https://x.com/amunesgajyu1/status/2073841800192967137"},
-  {x:1.5,y:1.5,e:1.5,c:0.85,s:"青切符制度は支持しつつ、歩行者を危険に晒す cyclist への強い怒りと規制強化の支持を示す",u:"https://x.com/yujirohanma1313/status/2073670067078971743"},
-  {x:1.5,y:1.0,e:-1.0,c:0.85,s:"自転車に免許制度の創設と青切符の実効性を疑問視し、事故を避けたいとする投稿",u:"https://x.com/UsagiUsagi50/status/2073608845830861063"},
-  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"溝の口南口ケンタ前的警察官による自転車取り締まりを批判。青切符に疑問を持ち、拒否や出頭による対抗を呼びかけている。",u:"https://x.com/epsilon777_1999/status/2073222871384785299"},
-  {x:2.0,y:2.0,e:2.0,c:0.95,s:"イヤホン着用での自転車走行に強く反発し、極端に重い処分を求める怒りの投稿",u:"https://x.com/marumouke_sp/status/2071415578464842046"},
-  {x:1.0,y:1.0,e:0.5,c:0.70,s:"自転車への免許制導入と青切符制度施行を肯定的に捉え、支持する姿勢を示している。",u:"https://x.com/GAJ_cg/status/2070758747849588897"},
-  {x:2.0,y:2.0,e:2.0,c:0.85,s:"運転者のマナーの悪さを批判し、自転車の-License導入や青切符より前の対策が必要だと強く主張している。",u:"https://x.com/azuka_shiki/status/2046449390496497912"},
-  {x:2.0,y:2.0,e:2.0,c:0.95,s:"Toys感覚の自転車利用者が事故を起こすことを批判し、取締り強化を支持する怒りの投稿",u:"https://x.com/nyanpass2222/status/2074246204385611827"},
-  {x:2.0,y:2.0,e:2.0,c:0.85,s:"歩道を爆走する自転車への不满と、取り缔まり強化を求める怒りの表明",u:"https://x.com/ihx365/status/2072170594666471676"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.65,s:"黄線越えで反則切符を受けた体験から、自転車追い越し規制への疑問を示している",u:"https://x.com/jiro_3_/status/2074595565854454124"},
-  {x:1.0,y:0.5,e:1.5,c:0.65,s:"自転車交通違反への反則金制度導入を支持しつつ、司法や現状への強い怒りを感情的に表現した投稿",u:"https://x.com/punsun14/status/2074491401526796377"},
-  {x:1.0,y:1.0,e:1.5,c:0.75,s:"青切符制度の周知と共に、交通ルールを守れない自転車利用者を批判する投稿",u:"https://x.com/Kobebay31st/status/2074286923439579531"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"罰則強化は逆効果と批判し、厳格な取り締まりで前科者が増えると警告。自家用優先の立場。",u:"https://x.com/YHisaman/status/2074253148479504868"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"TBSニュースの自転車青切符関連記事を共有しており、情報紹介のみで意見や態度は示していない",u:"https://x.com/HoshiRyoji/status/2072578541812871258"},
-  {x:1.0,y:1.0,e:0.5,c:0.60,s:"自転車詐欺への注意喚起。青切符制度の存在を前提とし、利用者保護の立場から警告している。",u:"https://x.com/satsumasendai20/status/2071508682542916088"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"新ルールの効果を疑問視し、過剰な摘発を皮肉で批判している。特定の立場の支持は明確でない。",u:"https://x.com/Wowmori/status/2069665723467837812"},
-  {x:-2.0,y:0.0,e:2.0,c:0.85,s:"自転車追い抜き新ルールを酷評し、制定者の意図を悪質と断じる強い怒りを表明",u:"https://x.com/yasuda28582030/status/2069658399000891577"},
-  {x:2.0,y:2.0,e:1.5,c:0.85,s:"反則告知制度を賄賂制度呼ばわりし、自転車にも適用すべきでないと強く批判する个人观点",u:"https://x.com/wakwak_koba/status/2069034167191716307"},
-  {x:1.0,y:0.0,e:1.0,c:0.75,s:"自転車取り締まり強化に共感し、知らないと損だと警告する個人の体験記",u:"https://x.com/fumanzo48/status/2069024352742646164"},
-  {x:0.0,y:0.0,e:0.0,c:0.85,s:"自転車関連の道路交通法改正の内容と、事故時の過失割合について冷静に解説する投稿",u:"https://x.com/kusatsuyoitoko1/status/2068380780037071230"},
-  {x:1.5,y:1.5,e:1.0,c:0.85,s:"さいたま市の駐車違反放置を批判し、自転車の青切符導入を肯定的に捉える意見。",u:"https://x.com/minuma_biker/status/2068105954915434963"},
-  {x:-0.5,y:0.0,e:0.0,c:0.60,s:"自転車反則金制度開始を受け、\"ぼんやり\"と規制強化の現実の重さを考える、冷静だが微かに懐疑的な視点の投稿である。",u:"https://x.com/nwesgiron8989/status/2067452974499082612"},
-  {x:0.0,y:1.0,e:0.0,c:0.60,s:"死亡事故直前の補償金引き下げを批判的に報道、利用者保護より収益を優先する姿勢への疑問",u:"https://x.com/matrix____/status/2065717361945243806"},
-  {x:0.0,y:0.0,e:0.0,c:0.75,s:"Luupの補償改定と青切符制度開始を関連づけて指摘するニュース共有で、感情は控えめ",u:"https://x.com/Ortho_FL/status/2065716013510074509"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"青切符制度の交付件数と反則金額に触れ、税金を回収しているという批判的表現で問題提起している",u:"https://x.com/hikaruganji/status/2054765491596714175"},
-  {x:0.0,y:0.0,e:0.0,c:0.85,s:"警察庁の自転車青切符制度のニュースを共有。意見や感想は含まれていない。",u:"https://x.com/livedoornews/status/1915215672117952719"},
-];
-const SM_TOUR = [
-  {title:"全体像：投稿分布",desc:"181件中83件(46%)が取締り賛成×安全優先です。",filter:"all"},
-  {title:"第1象限：取締り強化支持派（83件）",desc:"「事故防止のため取締りは当然」「自転車にも免許制を」など規制を求める意見が集中。",filter:"q1",highlight:[1.5,1.5],quote:"自転車に免許制が必要と強く主張。規制強化で安全確保を訴求",quote_url:"https://x.com/moconya/status/2063924527634268388"},
-  {title:"第3象限：取締り反対・ライダーの自由を重視（40件）",desc:"インフラ未整備のまま規制を強化することへの反対や、ライダーの自由・利便性を守るべきとする意見。",filter:"q3",highlight:[-1.5,-1.5],quote:"青い切符制度導入に強く反対するオンライン署名の拡散投稿",quote_url:"https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921"},
-  {title:"高感情投稿（e≥1.5）",desc:"47件。取締り賛成・反対の両陣営に強い怒りや感情的な訴えが見られます。",filter:"q4",highlight:[2.0,2.0],quote:"インフラ整備なしの青切符制度に強く反対",quote_url:"https://x.com/Coco2Poppin/status/2043699643520106773"},
-  {title:"冷静な投稿（e≤0）",desc:"61件。皮肉や冷笑を含みつつも、感情を抑えた分析的・中立的な投稿群。",filter:"calm"}
+  {x:0.0,y:0.0,e:0.5,c:0.70,s:"青切符対象の是非めぐるSNS論争を中立紹介",u:"https://x.com/kuruma_newsjp/status/2064555848068722869",i:0},
+  {x:1.0,y:0.5,e:0.0,c:0.70,s:"同時施行に賛成、金額設定は妥当と分析",u:"https://x.com/rainohitorigoto/status/2061284870995984443",i:0},
+  {x:1.0,y:1.0,e:1.0,c:0.75,s:"青切符賛否併記し支持寄りの問いかけ",u:"https://x.com/Oneness_ringo/status/1997763402245255673",i:0},
+  {x:1.0,y:1.0,e:1.0,c:0.85,s:"自転車利用者に歩道の乗車を改善させよ",u:"https://x.com/umakurage/status/2068167003215647051",i:1},
+  {x:-2.0,y:-1.0,e:1.0,c:0.90,s:"青切符制度導入に強く反対、地方の実情を考慮すべきと主張",u:"https://x.com/zuppa_t/status/2067738312056639828",i:2},
+  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"青切符制度導入に強く反対する署名への協力呼びかけ",u:"https://x.com/KaMama777307/status/2062717203263431053",i:3},
+  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"青切符制度導入に強く反対し、自動車と共存できる安全な移動環境を求めている",u:"https://x.com/j52flx/status/2061443794344747198",i:4},
+  {x:1.5,y:1.5,e:1.5,c:0.80,s:"青切符なのに信号無視等の無法状態への怒り",u:"https://x.com/shocker108/status/2061387437340045705",i:5},
+  {x:-2.0,y:-1.5,e:1.0,c:0.85,s:"青切符制度導入に強く反対する署名への赞同呼びかけ",u:"https://x.com/ibarakinoumi/status/2060612879012008160",i:5},
+  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"青い切符制度導入に強く反対するオンライン署名の拡散投稿",u:"https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921",i:5},
+  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"自転車青切符に強く反対し、自由制限を懸念",u:"https://x.com/kress813/status/2032672767527760350",i:4},
+  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符に強く反対、監視社会への怒り",u:"https://x.com/kress813/status/2032229649317814760",i:4},
+  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"青切符制度の導入に強く反対",u:"https://x.com/smd5963/status/2031237042987049316",i:3},
+  {x:1.0,y:1.5,e:0.5,c:0.75,s:"自転車信号無視の危険性を指摘し青切符制度を懸念",u:"https://x.com/k_kisa_0729/status/2069356999574487158",i:0},
+  {x:-1.5,y:-1.0,e:1.5,c:0.85,s:"青切符拡大に批判的自営業者",u:"https://x.com/kusdiyoko/status/2069017433956856152",i:0},
+  {x:1.0,y:1.5,e:1.5,c:0.80,s:"私有地侵犯の爺への批判と対抗措置の投稿",u:"https://x.com/youkaiteikokusp/status/2068332868775116901",i:0},
+  {x:1.0,y:1.0,e:-1.0,c:0.75,s:"ルール改正後の守法状況を皮肉交じりに批判",u:"https://x.com/kinfantasy55/status/2068275609588085075",i:0},
+  {x:-1.5,y:-1.5,e:2.0,c:0.85,s:"自転車規制拡大に反対し他者批判の怒り投稿",u:"https://x.com/GameHAGE/status/2066073180465512800",i:0},
+  {x:1.5,y:1.0,e:0.0,c:0.80,s:"自転車の駐停車違反にも青切符を適用し、反則金を徴収すべきだと求める意見",u:"https://x.com/mikosansun/status/2062921789827883285",i:0},
+  {x:0.0,y:0.0,e:0.0,c:0.80,s:"ルール守った自己肯定と日常遭遇の報告",u:"https://x.com/FORNIK6/status/2062090917918777655",i:0},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"田舎と都会でルール統一はおかしいという意見",u:"https://x.com/gaokun___nnn2/status/2069754502547427529",i:4},
+  {x:1.0,y:1.5,e:1.0,c:0.85,s:"自転車青切符の公平性・一貫性を問いかける批判投稿",u:"https://x.com/momota186cm_psa/status/2068676954656846060",i:3},
+  {x:-1.5,y:1.5,e:1.5,c:0.85,s:"警察の二枚舌を批判し軽微 Bicycle Enforce偏重を疑問視",u:"https://x.com/knuckletn/status/2068259723267518964",i:4},
+  {x:-1.0,y:2.0,e:1.5,c:0.85,s:"青切符の効果に懐疑的で、子どもに車道通行を求めることへ強く反対している",u:"https://x.com/isaiah8_1/status/2067988251760345275",i:2},
+  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"ルール制定への疑問 自転車を擁護",u:"https://x.com/spnv2h89/status/2067953648047722913",i:4},
+  {x:1.5,y:1.0,e:1.0,c:0.75,s:"電動スクーターの規制甘いのはおかしい",u:"https://x.com/gamblertetuya/status/2067200208732406100",i:3},
+  {x:-1.5,y:1.0,e:1.5,c:0.80,s:"自治会の無法さと青切符制度への不満",u:"https://x.com/asagooods/status/2065953235475767499",i:3},
+  {x:1.0,y:1.0,e:1.0,c:0.80,s:"新区分創設と規制緩和に疑問表明",u:"https://x.com/badgerkingtony/status/2065790718543847699",i:3},
+  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"日本の交通制度・標識の矛盾を批判",u:"https://x.com/teianjapan/status/2064856553036148982",i:4},
+  {x:1.0,y:1.5,e:1.0,c:0.85,s:"歩行者への青切符導入を支持し安全優先",u:"https://x.com/norihei1/status/2063825275960578333",i:2},
+  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"事故減を根拠に青切符導入に強く反対",u:"https://x.com/tarutora17/status/2063058066007118110",i:5},
+  {x:-0.5,y:0.0,e:-1.0,c:0.75,s:"青切符不便を皮肉る日常あるある投稿",u:"https://x.com/hanmingpenguin/status/2062033956162384206",i:5},
+  {x:0.5,y:0.0,e:-1.0,c:0.85,s:"インフラ未整備での切符是不公平、煽り運転は厳罰化すべき",u:"https://x.com/0922Sisi/status/2060307582515077434",i:1},
+  {x:1.0,y:1.0,e:0.0,c:0.70,s:"青切符に迷いつつも規制強化と安全優先支持",u:"https://x.com/jupitter3/status/2062205575593943523",i:0},
+  {x:1.0,y:1.0,e:0.5,c:0.80,s:"無謀な並走cyclingを見て 青切符に感心 安全意識あり",u:"https://x.com/oboro_bishop/status/2070700403398951213",i:0},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"自転車の一時不停止に怒り、厳しく取り締まるべきと主張",u:"https://x.com/bjayway/status/2070305605852836233",i:0},
+  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"インフラ整備不足を批判し青切符制度に強く反対",u:"https://x.com/15jacnamagiga/status/2070261164618158443",i:1},
+  {x:-1.0,y:-1.5,e:-1.5,c:0.65,s:"規制強化に懐疑、自家用车より步行者の安全軽視",u:"https://x.com/yujirohanma1313/status/2070140086289920170",i:3},
+  {x:-1.0,y:-1.0,e:1.5,c:0.85,s:"場当たり的導入への批判的自撮り",u:"https://x.com/golden9398/status/2070003381025034696",i:1},
+  {x:-0.5,y:0.5,e:-0.5,c:0.70,s:"青切符対象を絞り込むべきとの慎重な意見",u:"https://x.com/MoroQ_tan/status/2069998331728998807",i:2},
+  {x:1.0,y:2.0,e:0.0,c:0.80,s:"自転車側に一定の配慮を示しつつ、歩行者優先の規制強化を提案している",u:"https://x.com/TqOT2vaQIyeZv0z/status/2069922851491344512",i:1},
+  {x:1.0,y:2.0,e:2.0,c:0.95,s:"死亡事故を政治批判し規制強化求める",u:"https://x.com/stargamewalk101/status/2069849509274996774",i:3},
+  {x:-2.0,y:2.0,e:1.5,c:0.85,s:"青切符制度に強く反対、制定側の批判も含む",u:"https://x.com/Shuns_private/status/2069803637371814378",i:2},
+  {x:0.5,y:1.0,e:0.5,c:0.70,s:"青切符自体は支持も実施方法・道路整備不足を批判",u:"https://x.com/suzuking408/status/2069735857695891855",i:1},
+  {x:-1.0,y:1.0,e:1.5,c:0.85,s:"青切符制度は点数稼ぎであり、道路整備など前提条件が欠如しているとの批判",u:"https://x.com/shirayuki_write/status/2069718795288297801",i:1},
+  {x:-2.0,y:-1.5,e:2.0,c:0.80,s:"青切符制度に強い不快感を示し、自転車利用者への配慮を優先すべきだとしている",u:"https://x.com/wb_rin_p/status/2069698871832555613",i:4},
+  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"規制先行でインフラ未整備は国の不作為",u:"https://x.com/many14219901/status/2069653099040673849",i:1},
+  {x:-1.0,y:-1.0,e:1.0,c:0.70,s:"インフラ整備不足を指摘し新ルールを批判",u:"https://x.com/toratoramatus/status/2069640286129758338",i:1},
+  {x:0.5,y:0.5,e:0.0,c:0.65,s:"青切符施策を肯定的に想像し、市民協働で安全構築を呼びかける穏当な意見",u:"https://x.com/reiziro/status/2068958423123980602",i:0},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"罰則強化と自転車青切符を支持し、歩行者安全最優先",u:"https://x.com/juddhy158284/status/2068567127423144348",i:4},
+  {x:-0.5,y:0.0,e:0.0,c:0.60,s:"規制に疑問呈しインフラ整備を提案",u:"https://x.com/mhjj100924429/status/2068366069874483224",i:3},
+  {x:1.5,y:1.5,e:1.0,c:0.80,s:"駅周辺の自転車危険行為を批判し強化要求",u:"https://x.com/kazu491223/status/2068252460469416060",i:0},
+  {x:0.5,y:1.0,e:-1.0,c:0.60,s:"自転車道路の改善提言、青切符には消極的",u:"https://x.com/oshiigai/status/2068178039046127689",i:1},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"青切符効果を実感、傘差し自転車減を肯定的に評価",u:"https://x.com/hiroe4WD/status/2068089032639455519",i:0},
+  {x:-1.0,y:0.0,e:-0.5,c:0.85,s:"113種は多すぎ。簡略化と整備後に実施を主張",u:"https://x.com/Clifrennie/status/2068026232860537188",i:1},
+  {x:1.0,y:0.5,e:0.5,c:0.80,s:"並列走行への不満と青切符による規制強化支持",u:"https://x.com/capelliubereats/status/2066801642872418406",i:0},
+  {x:-0.5,y:0.5,e:-0.5,c:0.70,s:"インフラ整備不足を指摘し青切符に慎重な姿勢",u:"https://x.com/bAgM8HRAo7aVtbp/status/2066690069206012139",i:1},
+  {x:-1.0,y:1.0,e:0.0,c:0.70,s:"罰則では不十分、インフラ整備が必要",u:"https://x.com/koki_kajimoto/status/2067761200730095782",i:1},
+  {x:-2.0,y:-1.5,e:2.0,c:0.90,s:"青切符制度に強く反対する自転車乗りの感情的意見",u:"https://x.com/48Kamaru/status/2067559221928091698",i:1},
+  {x:-1.0,y:1.0,e:0.0,c:0.75,s:"インフラ整備なき青切符を批判し権利発想を主張",u:"https://x.com/fullsunjp/status/2065650976074469713",i:1},
+  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"インフラ整備を主張する歩行者寄りの個人的見解",u:"https://x.com/12red_and_blue/status/2065042729974059469",i:1},
+  {x:-1.0,y:1.0,e:1.0,c:0.85,s:"インフラ未整備の青切符制度を批判",u:"https://x.com/YP3xqnYKspOSM59/status/2064802887340069077",i:1},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"自転車側に立ち、歩走帯の整備不足を指摘しつつ、警察の取締りに不満",u:"https://x.com/jianzijun381019/status/2063394602749726847",i:1},
+  {x:1.0,y:1.5,e:1.5,c:0.85,s:"青切符導入支持も効果に疑問・自転車側に不満",u:"https://x.com/Kei_1134/status/2062149829845979435",i:1},
+  {x:0.0,y:1.0,e:0.0,c:0.60,s:"青切符前にインフラ分割をすべきとの主張",u:"https://x.com/_hand_and_hand_/status/2061484624690475293",i:1},
+  {x:0.5,y:0.0,e:1.0,c:0.60,s:"青い切符交付数への反応と日本批判",u:"https://x.com/OdzrtcySsIPXdoT/status/2061370674229436631",i:1},
+  {x:0.5,y:1.5,e:0.5,c:0.80,s:"インフラ整備優先主張、自転側に理解あり",u:"https://x.com/Mid_observatory/status/2050519664510562807",i:1},
+  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"インフラ整備なしの青切符制度に強く反対",u:"https://x.com/Coco2Poppin/status/2043699643520106773",i:1},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"インフラ未整備のまま青切符導入に疑問，安全整備を求める",u:"https://x.com/Mid_observatory/status/2030591044098932852",i:1},
+  {x:-1.0,y:0.0,e:1.0,c:0.85,s:"インフラ未整備のまま青切符制度を推行することへの疑問",u:"https://x.com/Mid_observatory/status/2021909225249947652",i:1},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"青切符形骸化に批判的、自利用者寄り",u:"https://x.com/bicicletta_/status/2066803620725792820",i:2},
+  {x:0.5,y:1.0,e:1.0,c:0.80,s:"左折レーン直進の危険性を指摘、車のルール無視を批判",u:"https://x.com/bike_angler/status/2064044940385210547",i:3},
+  {x:-0.5,y:0.0,e:1.5,c:0.70,s:"区職員的自転通勤を軽蔑的に批判",u:"https://x.com/scott_dragon29/status/2060974122742755749",i:4},
+  {x:1.0,y:2.0,e:1.5,c:0.85,s:"路駐問題の解消と自転車安全確保を要望",u:"https://x.com/Mid_observatory/status/2021148538013671884",i:2},
+  {x:1.5,y:1.0,e:1.0,c:0.80,s:"無知な自転車ユーザーに怒り・規制強化支持",u:"https://x.com/KeN2827/status/2070390576382357558",i:3},
+  {x:2.0,y:2.0,e:0.0,c:0.80,s:"自転車に免許・講習義務付けるべき",u:"https://x.com/ZPlaiFah/status/2070308461683130627",i:3},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"自転車への免許制や講習制度の導入を主張している",u:"https://x.com/r70OylZbSZeiIIz/status/2070149487566418240",i:3},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車免許導入を提唱し安全優先立场から現行ルールに疑問",u:"https://x.com/yamazakibusu/status/2070074656128917921",i:3},
+  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"交通ルール解説記事、軽い个人观点含む",u:"https://x.com/ms06km/status/2069705866790789150",i:3},
+  {x:2.0,y:2.0,e:1.5,c:0.75,s:"漫ろ見自転車への厳罰化を求める強い意見",u:"https://x.com/sora09_14/status/2069564683204677743",i:3},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"歩行者保護のため自転車規制強化を求める強い主張",u:"https://x.com/obakekuntoujou/status/2069206248411795701",i:3},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"LUUPユーザーに青切符適用を要求、危険運転や無免許問題を指摘",u:"https://x.com/gucciyuzo03/status/2069017985143246923",i:2},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"青切符に疑問、免許制を提案",u:"https://x.com/aftonp1988/status/2069001010878837074",i:3},
+  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"自転車規制強化に反対・メディア報道を批判",u:"https://x.com/healhearts123/status/2068991161252122951",i:3},
+  {x:-2.0,y:-2.0,e:0.5,c:0.85,s:"青切符制度廃止を求めるラジオ投稿",u:"https://x.com/hikaruscarlet/status/2068989604510978450",i:3},
+  {x:0.0,y:1.5,e:1.0,c:0.80,s:"規制の不公平さを皮肉で指摘する批判的意見",u:"https://x.com/uraaka_1110_/status/2068731047148413155",i:3},
+  {x:2.0,y:1.5,e:1.0,c:0.80,s:"自転車に免許制度導入を支持、歩行者安全優先",u:"https://x.com/tyocoramu/status/2067909250589044776",i:3},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"青切符肯定・自転車免許制度導入を主張",u:"https://x.com/_muhammedsdk7/status/2067630320459919789",i:3},
+  {x:2.0,y:-1.5,e:1.5,c:0.85,s:"自転車側の視点で歩行者への切符制度を要求",u:"https://x.com/vIOOmQ8b1AlkU31/status/2067414600275132440",i:3},
+  {x:0.0,y:0.0,e:0.0,c:0.70,s:"青切符制度に疑問呈すも評価保留",u:"https://x.com/akimi_o/status/2066859994369360070",i:3},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"日常投稿中に青切符制度の実効性への疑問と皮肉",u:"https://x.com/46QakkoKwui5u1n/status/2066682764494323938",i:3},
+  {x:0.5,y:0.0,e:0.5,c:0.80,s:"教育なしで取締りを始めたことへの不満と、講習制度導入の必要性を述べている",u:"https://x.com/thepassenger200/status/2066304199453773844",i:3},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車安全利用の教育・褒賞的施策強化を求める要望",u:"https://x.com/megu5182/status/2064913709580144689",i:3},
+  {x:1.5,y:2.0,e:0.0,c:0.75,s:"大人の自転車Helmet着用促進求める政策提言で安全優先",u:"https://x.com/megu5182/status/2064913577736278160",i:3},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"原付と自動車の通行帯分離を求める安全優先の意見",u:"https://x.com/Eureka_2GG/status/2064886006168633754",i:3},
+  {x:-0.5,y:-0.5,e:-1.0,c:0.60,s:"青切符よりLUUPの免許制を重要視する軽い意見",u:"https://x.com/tabun_nebusoku7/status/2064684211219624207",i:3},
+  {x:1.0,y:1.0,e:1.0,c:0.80,s:"公職選挙法適用に疑問、未成年でも社会的責任を主張",u:"https://x.com/THS4_Osanpo/status/2064505197205017083",i:3},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"加害者への強い怒りと厳格な法執行を求める主張",u:"https://x.com/THS4_Osanpo/status/2064478742656028745",i:3},
+  {x:2.0,y:2.0,e:1.5,c:0.90,s:"青切符の実効性に疑問を持ち、自転車免許制導入を主張",u:"https://x.com/stopstopstoping/status/2064249780168183913",i:0},
+  {x:2.0,y:2.0,e:1.0,c:0.95,s:"自転車に免許制が必要と強く主張。規制強化で安全確保を訴求",u:"https://x.com/moconya/status/2063924527634268388",i:3},
+  {x:-1.0,y:0.0,e:0.0,c:0.80,s:"青切符に懐疑、専用道路や免許導入を提案",u:"https://x.com/fukumen_V/status/2063454860377485795",i:1},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"自転車規制強化を支持、歩行者安全優先、怒り",u:"https://x.com/ABA_8S/status/2062951392902517086",i:3},
+  {x:1.5,y:1.0,e:1.5,c:0.88,s:"歩きスマホに近い危険性を指摘し、自転車の取締り強化を求める個人的意見",u:"https://x.com/1029yurie/status/2070153036568371223",i:2},
+  {x:2.0,y:2.0,e:1.0,c:0.80,s:"交通安全の徹底と自転車の取締り強化を強く支持している",u:"https://x.com/akiraAKIRA7878/status/2070132435820687506",i:0},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"地下道で軽バンの危険走行を目撃し、巡回による取締り強化を求めている",u:"https://x.com/H31UNvOb6jZwbvI/status/2069437978737619289",i:0},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"チャリ事故の不快感から歩行者安全確保へ",u:"https://x.com/leemanoid/status/2069354674734731759",i:0},
+  {x:2.0,y:0.0,e:1.0,c:0.85,s:"県警が飲酒運転撲滅と取締り強化を呼びかける広報投稿",u:"https://x.com/fukkei_Kkikaku/status/2069225078437589367",i:2},
+  {x:2.0,y:2.0,e:1.0,c:0.90,s:"踏切危険性を指摘し、規制強化を要望",u:"https://x.com/kazu491223/status/2069062750035472509",i:2},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.75,s:"自転車取り締まり強化に懐疑的な意見",u:"https://x.com/takanori_w2/status/2068874487597318171",i:4},
+  {x:1.0,y:1.5,e:1.0,c:0.75,s:"自転車取り締まり強化に肯定も現実的な施行に懐疑",u:"https://x.com/degutityuui/status/2064269440171278639",i:3},
+  {x:2.0,y:2.0,e:1.0,c:0.75,s:"自転車違反の取締り強化を求める強い不満の投稿",u:"https://x.com/supra3k/status/2063139828842332559",i:0},
+  {x:-1.0,y:0.0,e:-0.5,c:0.50,s:"取締り強化の繰り返しと不公平感の愚痴",u:"https://x.com/hanihani3939/status/2061944934295625973",i:0},
+  {x:0.0,y:0.0,e:-1.0,c:0.60,s:"自転車取り締まり強化を皮肉交じりに軽く扱う冗談投稿",u:"https://x.com/clairvoyantRPT/status/2061233769504514377",i:0},
+  {x:2.0,y:2.0,e:0.0,c:0.87,s:"自転車関連取締り強化を支持。更なる適用拡大を求める",u:"https://x.com/char2112000/status/2060943066341818753",i:0},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"Luupに危険行為され規制強化を求める投稿",u:"https://x.com/keipierremulot/status/2044619052879102064",i:0},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"違法自転車への厳格な取り締まりと法整備を支持",u:"https://x.com/ramen_mine/status/2038394465552146774",i:0},
+  {x:0.5,y:1.0,e:1.0,c:0.80,s:"傘差しには賛成できないが、警察の判断に疑問を投げかけている",u:"https://x.com/HellSeaJigokuum/status/2074152525343948882",i:5},
+  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符制度導入に強く反対する署名への赞同呼びかけ",u:"https://x.com/sarusuberi2022/status/2073678665343455446",i:5},
+  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"青切符制度導入に強く反対するオンライン署名への赞同を呼びかけている",u:"https://x.com/buVWlKgMyETvugi/status/2072990764876042375",i:5},
+  {x:1.0,y:1.0,e:1.5,c:0.80,s:"住宅街で迷惑行為をする自転車学生への批判。青切符制度を肯定的に捉え、安全確保を支持する姿勢。",u:"https://x.com/gk07bpkyoJ21761/status/2071933332884271593",i:5},
+  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"青切符制度導入に強く反対する署名への協力を呼びかける投稿",u:"https://x.com/7znw79Af3557537/status/2071440652462698957",i:5},
+  {x:-1.0,y:0.0,e:0.0,c:0.80,s:"青切符制度を過度な反応として批判し、法律は機能せず形骸化すると予測する懐疑的見解",u:"https://x.com/WatchoutTony/status/2071394546705973394",i:5},
+  {x:2.0,y:2.0,e:1.0,c:0.85,s:"危険な自転車利用者に怒り、青切符制度を本来主旨通りに厳格施行すべきとの意見",u:"https://x.com/RicoRico6821447/status/2071174870743093451",i:5},
+  {x:-2.0,y:-2.0,e:-1.0,c:0.90,s:"机上のルールより臨機応変な判断を重視し、青切符制度を批判する、自転車の自由と柔軟性を優先する意見。",u:"https://x.com/shinseiminkento/status/2041192037207478329",i:5},
+  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"自転車に対する青切符制度の導入に強く反対する署名活動への協力を呼びかけている。",u:"https://x.com/smd5963/status/2036374372156580044",i:5},
+  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"警察が本質的な問題より青切符に熱心なことを皮肉り、問題を矮小化udiscr",u:"https://x.com/sagaismylife/status/2072611676764131600",i:5},
+  {x:1.5,y:1.5,e:1.0,c:0.85,s:"自転車イヤホンの解禁論に反発し、事故加害者の可能性すら危惧する強い批判",u:"https://x.com/Asadauzdk/status/2075837507099586895",i:5},
+  {x:-0.5,y:0.0,e:-0.5,c:0.60,s:"青切符への批判を許容する姿勢を示しつつ、ルールへの不支持も示唆する冷静な反応",u:"https://x.com/kabochanch/status/2074876704838017428",i:5},
+  {x:2.0,y:2.0,e:2.0,c:0.90,s:"歩行者優先で自転車への青切符適用強化を求める怒りの意見",u:"https://x.com/g901_901g4/status/2072120658000302364",i:5},
+  {x:1.5,y:1.5,e:0.5,c:0.80,s:"自転車も車両の一部と位置づけ、而无免許者への自転車販売規制を青切符より先に実施すべきだと主張している。",u:"https://x.com/EPADPADHA2025/status/2071118307529458014",i:5},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"青切符制度の効果に疑問を呈し、経費削減優先の標識設置を皮肉交じりに指摘",u:"https://x.com/DaiReady/status/2075954492324093964",i:5},
+  {x:1.5,y:1.0,e:0.5,c:0.75,s:"2026年の交通法改正を情報提供しつつ、「大丈夫という時代ではない」と厳しく捉える姿勢を示唆",u:"https://x.com/Shinmama_FIRE/status/2075416430758224042",i:5},
+  {x:1.0,y:1.0,e:0.0,c:0.70,s:"青切符制度和30km/h制限の必要性を認識し、道路ルールを遵守する決意を示している",u:"https://x.com/izumo_kanbasira/status/2075332857967546724",i:5},
+  {x:1.0,y:1.0,e:0.0,c:0.80,s:"自転車除外規定がない道路は進入禁止という法解釈を示し、規則の順守と安全確保を支持する冷静な意見",u:"https://x.com/tyuuuytrewq/status/2075113608175108149",i:5},
+  {x:-1.0,y:1.0,e:1.0,c:0.80,s:"警官の指導に疑問を持ち、危険な車道走行を強制する現行運用に不満を感じている",u:"https://x.com/soramiruzo/status/2075043269420142614",i:5},
+  {x:-1.0,y:-1.0,e:0.5,c:0.85,s:"青切符制度に懐疑的で、警察官の主観による違反判定の曖昧さを批判し、インフラ整備を優先すべきと主張している。",u:"https://x.com/aminkf_/status/2074865044425498902",i:5},
+  {x:1.5,y:1.5,e:-1.0,c:0.80,s:"加古川市の自転車取り締まり不足を批判し、青切符制度導入を支持する皮肉な意見",u:"https://x.com/gelatoni_love__/status/2074427317359952236",i:5},
+  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"青切符制度は騒ぐほどのことではないと冷静に考える一方、道路整備の重要性を指摘",u:"https://x.com/mikkamika2525/status/2074107136364450005",i:5},
+  {x:2.0,y:2.0,e:0.0,c:0.90,s:"青切符制度と警察の取opi締まり強化が必要という意見。道路安全向上を重視する。",u:"https://x.com/JACKAL1550/status/2074008867130704022",i:5},
+  {x:-1.0,y:-1.0,e:1.0,c:0.70,s:"駐車違反摘発の民間委託のやり方を批判し、注意を呼びかけている",u:"https://x.com/catdaisk/status/2073989674100740436",i:5},
+  {x:0.0,y:0.0,e:-1.0,c:0.40,s:"30キロ規制の施行時期に触れ、マスコミの取り上げ方が自転車青切符の時と異なるだろうと冷めた見方を示している。",u:"https://x.com/delalte/status/2073773262006579508",i:5},
+  {x:-1.0,y:1.0,e:1.0,c:0.70,s:"警官による自転車の車道走行指導に不満を示し、危険な道路でも強制するのは不当だと疑問を呈している",u:"https://x.com/soramiruzo/status/2073695061494448132",i:5},
+  {x:2.0,y:1.5,e:2.0,c:0.90,s:"青切符は自転車より車の違反取り締まりに使うべきだという強い批判的意見",u:"https://x.com/takopan5g/status/2073561931047399736",i:5},
+  {x:1.0,y:1.5,e:1.0,c:0.70,s:"青切符制度の正しい理解を深めるべきとの立場から、自転車の危険行為を指摘・批判している",u:"https://x.com/i_shinji/status/2073061409739681902",i:5},
+  {x:-1.0,y:0.0,e:-1.0,c:0.60,s:"法改正や青切符制度に懐疑的だが、諦めた様子も感じる",u:"https://x.com/isoe0815/status/2073033134334247300",i:5},
+  {x:2.0,y:2.0,e:2.0,c:0.85,s:"一時停止無視の運転手責任を強調し、青切符批判や環境整備要求を痛烈に批判する投稿",u:"https://x.com/yujirohanma1313/status/2071818851143352369",i:5},
+  {x:0.0,y:0.0,e:0.0,c:0.60,s:"自転車青切符制度の試行3か月の現状と課題を伝える政治家による活動報告で、導入への是非や方向性についての明らかな評価はない。",u:"https://x.com/AotaniSeido/status/2071564617256452483",i:5},
+  {x:-1.0,y:-1.0,e:-1.0,c:0.80,s:"新たな自転車規制をダブルスタンダードと批判し、規制強化に懐疑的な立場",u:"https://x.com/fxxkevthg/status/2071397873791754388",i:5},
+  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"狭い道路での青切符新ルール導入による渋滞を皮肉で批判。政策への支持や歩行者視点の表明はない",u:"https://x.com/KarasumaRyusei/status/2071102742198911276",i:5},
+  {x:0.0,y:0.0,e:0.0,c:0.85,s:"自転車は軽車両であり左側通行義務を違反すると青切符対象になるとの法的知識・豆知識の投稿。",u:"https://x.com/hoieXpmvDmYHaUq/status/2071082726002753540",i:5},
+  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"警官の厳格な自転車指導に反発し、危険道路でも車道走行を強いるやり方に不満を抱いている",u:"https://x.com/soramiruzo/status/2071060415048786401",i:5},
+  {x:1.0,y:1.0,e:1.0,c:0.85,s:"青切符の走行を守らない人が多く、警官も見て見ぬふり이라며、規制するなら専用道路を整備すべきだと主張",u:"https://x.com/rainbow26278/status/2071039524466315464",i:5},
+  {x:-1.0,y:-1.0,e:0.5,c:0.70,s:"青切符制度への懸念と自転車側の立場への理解を示しつつ、問題の困難さを訴える",u:"https://x.com/infodai3/status/2073880288078561496",i:5},
+  {x:1.0,y:1.0,e:1.0,c:0.70,s:"青切符には賛成だが、道路整備など環境整備も合わせて必要だと訴える内容",u:"https://x.com/tomi13_tomi13/status/2071503310058836419",i:5},
+  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"青切符制度に腹を立てつつ、步行者より自分（月刊利用）の利便性を優先すべきと主張する",u:"https://x.com/yujirohanma1313/status/2071025514513625591",i:5},
+  {x:-0.5,y:-0.5,e:-0.5,c:0.75,s:"自転車規制強化を冷静に紹介し、個人の利便性からバイクを推奨する意見",u:"https://x.com/amunesgajyu1/status/2073841800192967137",i:5},
+  {x:1.5,y:1.5,e:1.5,c:0.85,s:"青切符制度は支持しつつ、歩行者を危険に晒す cyclist への強い怒りと規制強化の支持を示す",u:"https://x.com/yujirohanma1313/status/2073670067078971743",i:5},
+  {x:1.5,y:1.0,e:-1.0,c:0.85,s:"自転車に免許制度の創設と青切符の実効性を疑問視し、事故を避けたいとする投稿",u:"https://x.com/UsagiUsagi50/status/2073608845830861063",i:5},
+  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"溝の口南口ケンタ前的警察官による自転車取り締まりを批判。青切符に疑問を持ち、拒否や出頭による対抗を呼びかけている。",u:"https://x.com/epsilon777_1999/status/2073222871384785299",i:5},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"イヤホン着用での自転車走行に強く反発し、極端に重い処分を求める怒りの投稿",u:"https://x.com/marumouke_sp/status/2071415578464842046",i:5},
+  {x:1.0,y:1.0,e:0.5,c:0.70,s:"自転車への免許制導入と青切符制度施行を肯定的に捉え、支持する姿勢を示している。",u:"https://x.com/GAJ_cg/status/2070758747849588897",i:5},
+  {x:2.0,y:2.0,e:2.0,c:0.85,s:"運転者のマナーの悪さを批判し、自転車の-License導入や青切符より前の対策が必要だと強く主張している。",u:"https://x.com/azuka_shiki/status/2046449390496497912",i:5},
+  {x:2.0,y:2.0,e:2.0,c:0.95,s:"Toys感覚の自転車利用者が事故を起こすことを批判し、取締り強化を支持する怒りの投稿",u:"https://x.com/nyanpass2222/status/2074246204385611827",i:5},
+  {x:2.0,y:2.0,e:2.0,c:0.85,s:"歩道を爆走する自転車への不满と、取り缔まり強化を求める怒りの表明",u:"https://x.com/ihx365/status/2072170594666471676",i:5},
+  {x:-1.0,y:-1.0,e:0.0,c:0.65,s:"黄線越えで反則切符を受けた体験から、自転車追い越し規制への疑問を示している",u:"https://x.com/jiro_3_/status/2074595565854454124",i:5},
+  {x:1.0,y:0.5,e:1.5,c:0.65,s:"自転車交通違反への反則金制度導入を支持しつつ、司法や現状への強い怒りを感情的に表現した投稿",u:"https://x.com/punsun14/status/2074491401526796377",i:5},
+  {x:1.0,y:1.0,e:1.5,c:0.75,s:"青切符制度の周知と共に、交通ルールを守れない自転車利用者を批判する投稿",u:"https://x.com/Kobebay31st/status/2074286923439579531",i:5},
+  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"罰則強化は逆効果と批判し、厳格な取り締まりで前科者が増えると警告。自家用優先の立場。",u:"https://x.com/YHisaman/status/2074253148479504868",i:5},
+  {x:0.0,y:0.0,e:0.0,c:0.70,s:"TBSニュースの自転車青切符関連記事を共有しており、情報紹介のみで意見や態度は示していない",u:"https://x.com/HoshiRyoji/status/2072578541812871258",i:5},
+  {x:1.0,y:1.0,e:0.5,c:0.60,s:"自転車詐欺への注意喚起。青切符制度の存在を前提とし、利用者保護の立場から警告している。",u:"https://x.com/satsumasendai20/status/2071508682542916088",i:5},
+  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"新ルールの効果を疑問視し、過剰な摘発を皮肉で批判している。特定の立場の支持は明確でない。",u:"https://x.com/Wowmori/status/2069665723467837812",i:5},
+  {x:-2.0,y:0.0,e:2.0,c:0.85,s:"自転車追い抜き新ルールを酷評し、制定者の意図を悪質と断じる強い怒りを表明",u:"https://x.com/yasuda28582030/status/2069658399000891577",i:5},
+  {x:2.0,y:2.0,e:1.5,c:0.85,s:"反則告知制度を賄賂制度呼ばわりし、自転車にも適用すべきでないと強く批判する个人观点",u:"https://x.com/wakwak_koba/status/2069034167191716307",i:5},
+  {x:1.0,y:0.0,e:1.0,c:0.75,s:"自転車取り締まり強化に共感し、知らないと損だと警告する個人の体験記",u:"https://x.com/fumanzo48/status/2069024352742646164",i:5},
+  {x:0.0,y:0.0,e:0.0,c:0.85,s:"自転車関連の道路交通法改正の内容と、事故時の過失割合について冷静に解説する投稿",u:"https://x.com/kusatsuyoitoko1/status/2068380780037071230",i:5},
+  {x:1.5,y:1.5,e:1.0,c:0.85,s:"さいたま市の駐車違反放置を批判し、自転車の青切符導入を肯定的に捉える意見。",u:"https://x.com/minuma_biker/status/2068105954915434963",i:5},
+  {x:-0.5,y:0.0,e:0.0,c:0.60,s:"自転車反則金制度開始を受け、\"ぼんやり\"と規制強化の現実の重さを考える、冷静だが微かに懐疑的な視点の投稿である。",u:"https://x.com/nwesgiron8989/status/2067452974499082612",i:5},
+  {x:0.0,y:1.0,e:0.0,c:0.60,s:"死亡事故直前の補償金引き下げを批判的に報道、利用者保護より収益を優先する姿勢への疑問",u:"https://x.com/matrix____/status/2065717361945243806",i:5},
+  {x:0.0,y:0.0,e:0.0,c:0.75,s:"Luupの補償改定と青切符制度開始を関連づけて指摘するニュース共有で、感情は控えめ",u:"https://x.com/Ortho_FL/status/2065716013510074509",i:5},
+  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"青切符制度の交付件数と反則金額に触れ、税金を回収しているという批判的表現で問題提起している",u:"https://x.com/hikaruganji/status/2054765491596714175",i:5},
+  {x:0.0,y:0.0,e:0.0,c:0.85,s:"警察庁の自転車青切符制度のニュースを共有。意見や感想は含まれていない。",u:"https://x.com/livedoornews/status/1915215672117952719",i:5},
 ];
 </script>
 <script>
 (function(){
-  const RAW = SM_RAW, TOUR = SM_TOUR;
-  const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
-  const IMG_ALPHA_END = 0.30;
-  let imgAlpha = IMG_ALPHA_END;
-  const QUAD_IMGS={
-    q1:'images/bike-blue-ticket-vote-1-enforce.webp',
-    q3:'images/bike-blue-ticket-vote-2-lane-first.webp',
-    q2:'images/bike-blue-ticket-vote-3-license.webp',
-    q4:'images/bike-blue-ticket-vote-4-confused.webp',
+  'use strict';
+  const ISSUES=[
+    {k:'取締り強化賛成',   n:27},
+    {k:'インフラ整備優先', n:26},
+    {k:'車道走行への不安', n:11},
+    {k:'免許制要求',       n:36},
+    {k:'ルール曖昧・不信', n:11},
+    {k:'その他',           n:70},
+  ];
+  const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=244;
+  const PAD_DEG=2.5;
+  const canvasMain=document.getElementById('arenaMain');
+  const canvasHeat=document.getElementById('arenaHeat');
+  if(!canvasMain||!canvasHeat)return;
+  const ctx=canvasMain.getContext('2d');
+  const hctx=canvasHeat.getContext('2d');
+  const tooltip=document.getElementById('sm-tooltip');
+
+  const total=ISSUES.reduce((a,b)=>a+b.n,0);
+  const usable=360-PAD_DEG*2*ISSUES.length;
+  let acc=-90;
+  ISSUES.forEach(iss=>{
+    const span=usable*iss.n/total;
+    iss.a0=acc+PAD_DEG;iss.a1=iss.a0+span;iss.mid=(iss.a0+iss.a1)/2;
+    acc=iss.a1+PAD_DEG;
+  });
+
+  function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+  function colorOf(p){return p.x>=0.5?'#e04949':(p.x<=-0.5?'#4b9cf4':'#64748b');}
+
+  const pts=[];
+  SM_RAW.forEach((p,idx)=>{
+    const iss=ISSUES[p.i];if(!iss)return;
+    const a=iss.a0+rnd(idx)*(iss.a1-iss.a0);
+    let r=R_MIN+8+Math.abs(p.e)/3.5*(R_MAX-R_MIN-30)+(rnd(idx+500)-0.5)*20;
+    r=Math.max(R_MIN+2,Math.min(R_MAX-4,r));
+    const rad=a*Math.PI/180;
+    pts.push({px:CX+r*Math.cos(rad),py:CY+r*Math.sin(rad),c:colorOf(p),p:p});
+  });
+
+  function drawHeat(){
+    hctx.clearRect(0,0,W,W);
+    hctx.fillStyle='#0f0e2e';hctx.fillRect(0,0,W,W);
+    const maxN=Math.max(...ISSUES.map(i=>i.n));
+    ISSUES.forEach(iss=>{
+      hctx.beginPath();
+      hctx.moveTo(CX+R_MIN*Math.cos(iss.a0*Math.PI/180),CY+R_MIN*Math.sin(iss.a0*Math.PI/180));
+      hctx.arc(CX,CY,R_MAX,iss.a0*Math.PI/180,iss.a1*Math.PI/180);
+      hctx.arc(CX,CY,R_MIN,iss.a1*Math.PI/180,iss.a0*Math.PI/180,true);
+      hctx.closePath();
+      hctx.fillStyle='rgba(13,148,136,'+(0.04+iss.n/maxN*0.14).toFixed(3)+')';
+      hctx.fill();
+    });
+    hctx.setLineDash([3,5]);hctx.strokeStyle='rgba(100,116,139,.2)';hctx.lineWidth=1;
+    [110,160,R_MAX].forEach(r=>{hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke();});
+    hctx.setLineDash([]);
+    ISSUES.forEach(iss=>{
+      hctx.strokeStyle='rgba(100,116,139,.22)';
+      [iss.a0*Math.PI/180,iss.a1*Math.PI/180].forEach(rd=>{
+        hctx.beginPath();hctx.moveTo(CX+R_MIN*Math.cos(rd),CY+R_MIN*Math.sin(rd));hctx.lineTo(CX+R_MAX*Math.cos(rd),CY+R_MAX*Math.sin(rd));hctx.stroke();
+      });
+    });
+    // Center label
+    hctx.fillStyle='rgba(255,255,255,.85)';hctx.font='900 13px sans-serif';hctx.textAlign='center';hctx.textBaseline='middle';
+    hctx.fillText('自転車',CX,CY-8);hctx.fillText('青切符',CX,CY+8);
+    // Sector labels
+    hctx.font='800 11px sans-serif';hctx.fillStyle='rgba(255,255,255,.75)';
+    ISSUES.forEach(iss=>{
+      const rad=iss.mid*Math.PI/180;
+      const lx=CX+R_LBL*Math.cos(rad);const ly=CY+R_LBL*Math.sin(rad);
+      hctx.fillText(iss.k,lx,ly);
+    });
+  }
+
+  let filterIdx=-1;let voteMarker=null;
+
+  function drawMain(){
+    ctx.clearRect(0,0,W,W);
+    // Draw inner ring
+    ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.06)';ctx.fill();
+    // Draw points
+    pts.forEach(pt=>{
+      if(filterIdx>=0&&pt.p.i!==filterIdx)return;
+      ctx.beginPath();ctx.arc(pt.px,pt.py,4.5,0,Math.PI*2);ctx.fillStyle=pt.c;ctx.fill();
+    });
+    // Vote marker
+    if(voteMarker){
+      const {sectorIdx,color}=voteMarker;
+      const iss=ISSUES[sectorIdx];if(iss){
+        const rad=iss.mid*Math.PI/180;
+        const r=(R_MIN+R_MAX)/2;
+        const mx=CX+r*Math.cos(rad);const my=CY+r*Math.sin(rad);
+        ctx.beginPath();ctx.arc(mx,my,12,0,Math.PI*2);ctx.fillStyle=color+'33';ctx.fill();
+        ctx.beginPath();ctx.arc(mx,my,12,0,Math.PI*2);ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
+        ctx.fillStyle='#fff';ctx.font='900 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText('あなた',mx,my);
+      }
+    }
+    ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  }
+
+  window.setArenaVoteMarker=function(sectorIdx,color){
+    voteMarker={sectorIdx,color};
+    drawMain();
+    var note=document.getElementById('your-marker-note-arena');
+    if(note)note.style.display='block';
   };
-  const loadedImgs={};let imgsReady=0;
-  Object.entries(QUAD_IMGS).forEach(([key,src])=>{const img=new Image();img.onload=()=>{loadedImgs[key]=img;imgsReady++;if(imgsReady===4)redraw();};img.src=src;});
-  function drawQuadImages(){
-    const mid=PAD+INNER/2;
-    [{key:'q1',x:mid,y:PAD,w:PAD+INNER-mid,h:mid-PAD},{key:'q3',x:PAD,y:PAD,w:mid-PAD,h:mid-PAD},{key:'q2',x:PAD,y:mid,w:mid-PAD,h:PAD+INNER-mid},{key:'q4',x:mid,y:mid,w:PAD+INNER-mid,h:PAD+INNER-mid}].forEach(({key,x,y,w,h})=>{
-      const img=loadedImgs[key];if(!img)return;
-      ctx.save();ctx.globalAlpha=imgAlpha;
-      const scale=Math.min(w,h)/Math.min(img.width,img.height);
-      const dw=img.width*scale,dh=img.height*scale;
-      ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
-      ctx.restore();
-    });
-  }
-  let showHeat = true, showDots = true, heatRadius = 36;
-  let activeFilter = 'all';
-  let spotlightTarget = null;
-  let animating = false, animFrame = 0;
-  let myVoteMarker = null;
-let myVoteSX = null, myVoteSY = null;
-  const voteMarkers = [
-  { x: -1.45, y: 1.45, label: 'あなた: インフラ整備で安全を守る', color: '#dc2626' },
-  { x: 1.45, y: 1.45, label: 'あなた: 安全のため取締り強化', color: '#2563eb' },
-  { x: -1.45, y: -1.45, label: 'あなた: 利用者の自由と負担を守る', color: '#059669' },
-  { x: 1.45, y: -1.45, label: 'あなた: ルール周知で利用者も守る', color: '#d97706' }
-];
-
-  const canvasMain = document.getElementById('smCanvasMain');
-  const ctx = canvasMain.getContext('2d');
-  const canvasHeat = document.getElementById('smCanvasHeat');
-  const hCtx = canvasHeat.getContext('2d');
-
-  function toCanvas(x, y) {
-    return [PAD + (x + 2) / 4 * INNER, PAD + (2 - y) / 4 * INNER];
-  }
-
-  function emoRGB(e) {
-    const t = (e + 2) / 4;
-    if (t < 0.5) {
-      const s = t * 2;
-      return [Math.round(74 + (187-74)*s), Math.round(144 + (187-144)*s), Math.round(217 + (187-217)*s)];
-    } else {
-      const s = (t - 0.5) * 2;
-      return [Math.round(187 + (224-187)*s), Math.round(187 + (92-187)*s), Math.round(187 + (92-187)*s)];
-    }
-  }
-
-  function seededRand(seed) {
-    let s = seed ^ 0x12345678;
-    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
-    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
-    s = (s >>> 16) ^ s;
-    return (s >>> 0) / 0xffffffff;
-  }
-
-  const jCache = RAW.map((_, i) => [(seededRand(i*2) - 0.5) * 14, (seededRand(i*2+1) - 0.5) * 14]);
-
-  function visible(p) {
-    if (activeFilter === 'all') return true;
-    const x = p.x, y = p.y, e = p.e;
-    if (activeFilter === 'q1') return x > 0 && y > 0;
-    if (activeFilter === 'q2') return x < 0 && y > 0;
-    if (activeFilter === 'q3') return x < 0 && y < 0;
-    if (activeFilter === 'q4') return e >= 1.5;
-    if (activeFilter === 'calm') return e <= 0;
-    return true;
-  }
-
-  function drawHeatmap() {
-    if (!showHeat) { hCtx.clearRect(0, 0, W, H); return; }
-    const res = 3;
-    const cols = Math.ceil(W / res), rows = Math.ceil(H / res);
-    const grid = new Float32Array(cols * rows);
-    const sigma = heatRadius / 2.5;
-    const sig2 = sigma * sigma * 2;
-    const r2 = heatRadius * heatRadius;
-
-    RAW.forEach(p => {
-      if (!visible(p)) return;
-      const [cx, cy] = toCanvas(p.x, p.y);
-      const gx0 = Math.max(0, Math.floor((cx - heatRadius) / res));
-      const gy0 = Math.max(0, Math.floor((cy - heatRadius) / res));
-      const gx1 = Math.min(cols - 1, Math.ceil((cx + heatRadius) / res));
-      const gy1 = Math.min(rows - 1, Math.ceil((cy + heatRadius) / res));
-      for (let gy = gy0; gy <= gy1; gy++) {
-        for (let gx = gx0; gx <= gx1; gx++) {
-          const dx = gx * res - cx, dy = gy * res - cy;
-          const d2 = dx*dx + dy*dy;
-          if (d2 < r2) grid[gy * cols + gx] += Math.exp(-d2 / sig2);
-        }
-      }
-    });
-
-    const maxV = Math.max(...grid) || 1;
-    const imgData = hCtx.createImageData(cols * res, rows * res);
-    for (let gy = 0; gy < rows; gy++) {
-      for (let gx = 0; gx < cols; gx++) {
-        const v = grid[gy * cols + gx] / maxV;
-        if (v < 0.01) continue;
-        let r, g, b;
-        if (v < 0.5) {
-          const t = v * 2;
-          r = Math.round(41 + (255-41)*t); g = Math.round(128 + (255-128)*t); b = Math.round(185 + (150-185)*t);
-        } else {
-          const t = (v - 0.5) * 2;
-          r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
-        }
-        const alpha = Math.round(Math.pow(v, 0.5) * 170);
-        for (let dy = 0; dy < res; dy++) {
-          for (let dx = 0; dx < res; dx++) {
-            const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
-            const inPad = (gx*res+dx) >= PAD && (gx*res+dx) < PAD+INNER && (gy*res+dy) >= PAD && (gy*res+dy) < PAD+INNER;
-            if (!inPad) continue;
-            imgData.data[px] = r; imgData.data[px+1] = g; imgData.data[px+2] = b; imgData.data[px+3] = alpha;
-          }
-        }
-      }
-    }
-    hCtx.clearRect(0, 0, W, H);
-    hCtx.putImageData(imgData, 0, 0);
-  }
-
-  function drawBase() {
-    ctx.clearRect(0, 0, W, H);
-    drawQuadImages();
-    ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [cx] = toCanvas(v, 0);
-      ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
-      const [,cy] = toCanvas(0, v);
-      ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
-    });
-    ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
-    const [midX] = toCanvas(0, 0); const [,midY] = toCanvas(0, 0);
-    ctx.beginPath(); ctx.moveTo(PAD, midY); ctx.lineTo(PAD+INNER, midY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(midX, PAD); ctx.lineTo(midX, PAD+INNER); ctx.stroke();
-
-    ctx.font = 'bold 13px -apple-system,sans-serif';
-    ctx.textAlign = 'center';
-    const quadLabels = [
-      ['取締り賛成×安全優先', PAD + INNER*0.75, PAD + 26],
-      ['取締り反対×安全優先', PAD + INNER*0.25, PAD + 26],
-      ['取締り反対×ライダー重視', PAD + INNER*0.25, PAD + INNER - 10],
-      ['取締り賛成×ライダー重視', PAD + INNER*0.75, PAD + INNER - 10],
-    ];
-    quadLabels.forEach(([text, lx, ly]) => {
-      const tw = ctx.measureText(text).width;
-      const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
-      ctx.fillStyle = 'rgba(0,0,0,0.62)';
-      ctx.beginPath();
-      ctx.moveTo(rx + r, ry); ctx.lineTo(rx + pw - r, ry);
-      ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
-      ctx.lineTo(rx + pw, ry + ph - r);
-      ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
-      ctx.lineTo(rx + r, ry + ph);
-      ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
-      ctx.lineTo(rx, ry + r);
-      ctx.arcTo(rx, ry, rx + r, ry, r);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.fillText(text, lx, ly);
-    });
-
-    ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
-    ctx.textAlign = 'right';
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
-    });
-    ctx.textAlign = 'center';
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
-    });
-
-    if (showDots) {
-      const count = animating ? animFrame : RAW.length;
-      for (let i = 0; i < count; i++) {
-        const p = RAW[i];
-        const show = visible(p);
-        const [cx, cy] = toCanvas(p.x, p.y);
-        const [rr, gg, bb] = emoRGB(p.e);
-        ctx.beginPath();
-        ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
-        ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
-        ctx.fill();
-        if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
-      }
-    }
-
-    if (spotlightTarget) {
-      const [sx, sy] = spotlightTarget;
-      ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI*2);
-      ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 2.5; ctx.stroke();
-      ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2);
-      ctx.strokeStyle = 'rgba(41,128,185,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
-    }
-  }
-
-  function drawVoteMarker() {
-    if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
-    const marker = voteMarkers[myVoteMarker];
-    const px = (myVoteSX !== null) ? myVoteSX : marker.x;
-  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
-  const [x, y] = toCanvas(px, py);
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, 16, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,.92)';
-    ctx.fill();
-    ctx.strokeStyle = marker.color;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = marker.color;
-    ctx.fill();
-    ctx.font = '700 12px -apple-system,sans-serif';
-    ctx.fillStyle = marker.color;
-    ctx.fillText(marker.label, Math.min(x + 16, W - 150), Math.max(y - 14, 24));
-    ctx.restore();
-  }
-
-  window.setStanceMapVoteMarker = function(idx, sx, sy) {
-    myVoteMarker = idx;
-  if (sx !== undefined) myVoteSX = sx;
-  if (sy !== undefined) myVoteSY = sy;
-    const note = document.getElementById('your-marker-note');
-    if (note) note.style.display = 'block';
-    redraw();
+  window.clearArenaVoteMarker=function(){
+    voteMarker=null;drawMain();
+    var note=document.getElementById('your-marker-note-arena');
+    if(note)note.style.display='none';
   };
 
-  function redraw() { drawHeatmap(); drawBase(); drawVoteMarker(); }
-
-  function playIntro() {
-    animating = true; animFrame = 0;
-    const total = RAW.length, duration = 1800, start = performance.now();
-    function tick(now) {
-      const elapsed = now - start, progress = Math.min(1, elapsed / duration);
-      animFrame = Math.min(total, Math.round(progress * total));
-      redraw();
-      if (progress < 1) requestAnimationFrame(tick);
-      else { animating = false; redraw(); }
-    }
-    requestAnimationFrame(tick);
+  // Filters
+  const filtersEl=document.getElementById('sm-filters');
+  function addBtn(label,idx){
+    const b=document.createElement('button');b.className='sm-fbtn'+(idx===-1?' active':'');b.textContent=label;
+    b.onclick=function(){filterIdx=idx;document.querySelectorAll('.sm-fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');drawMain();};
+    filtersEl.appendChild(b);
   }
+  addBtn('全件 ('+total+')',-1);
+  ISSUES.forEach((iss,i)=>{if(iss.k!=='その他')addBtn(iss.k+' ('+iss.n+')',i);});
 
-  let tourActive = false, currentStep = 0;
+  function evtPos(ev){const rect=canvasMain.getBoundingClientRect();const scale=W/rect.width;return{x:(ev.clientX-rect.left)*scale,y:(ev.clientY-rect.top)*scale};}
+  function nearest(pos){let best=null,bd=196;pts.forEach(pt=>{if(filterIdx>=0&&pt.p.i!==filterIdx)return;const d=(pt.px-pos.x)**2+(pt.py-pos.y)**2;if(d<bd){bd=d;best=pt;}});return best;}
+  canvasMain.addEventListener('mousemove',function(ev){const pt=nearest(evtPos(ev));if(pt){tooltip.style.display='block';tooltip.style.left=(ev.offsetX+14)+'px';tooltip.style.top=(ev.offsetY+14)+'px';tooltip.innerHTML='<strong>'+ISSUES[pt.p.i].k+'</strong><br>'+pt.p.s;}else{tooltip.style.display='none';}});
+  canvasMain.addEventListener('mouseleave',function(){tooltip.style.display='none';});
+  canvasMain.addEventListener('click',function(ev){const pt=nearest(evtPos(ev));if(pt&&pt.p.u)window.open(pt.p.u,'_blank','noopener');});
+  canvasMain.addEventListener('touchstart',function(ev){if(ev.touches.length!==1)return;const t=ev.touches[0];const pt=nearest(evtPos(t));if(pt&&pt.p.u){ev.preventDefault();window.open(pt.p.u,'_blank','noopener');}},{passive:false});
 
-  function showTourStep(idx) {
-    const step = TOUR[idx], total = TOUR.length;
-    document.getElementById('smTourStep').textContent = `Step ${idx+1} / ${total}`;
-    document.getElementById('smTourTitle').textContent = step.title;
-    document.getElementById('smTourDesc').textContent = step.desc;
-    document.getElementById('smTourProgressBar').style.width = ((idx+1)/total*100)+'%';
-
-    const embedEl = document.getElementById('smTourEmbed');
-    const loadingEl = document.getElementById('smTourEmbedLoading');
-    const fallbackEl = document.getElementById('smTourQuoteFallback');
-    embedEl.style.display = 'none'; loadingEl.style.display = 'none'; fallbackEl.style.display = 'none';
-    embedEl.innerHTML = '';
-
-    if (step.quote && step.quote_url) {
-      showFallback(step, fallbackEl);
-      const tweetId = step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
-      if (tweetId) {
-        const tryEmbed = () => {
-          window.twttr.widgets.createTweet(tweetId, embedEl, { theme:'dark', dnt:true, conversation:'none' })
-            .then(el => { if (el) { fallbackEl.style.display='none'; embedEl.style.display='block'; } });
-        };
-        if (window.twttr && window.twttr.widgets) { window.twttr.ready(tryEmbed); }
-        else {
-          let wt = 0;
-          const wpoll = setInterval(() => {
-            wt += 200;
-            if (window.twttr && window.twttr.widgets) { clearInterval(wpoll); window.twttr.ready(tryEmbed); }
-            else if (wt >= 5000) clearInterval(wpoll);
-          }, 200);
-        }
-      }
-    } else if (step.quote) { showFallback(step, fallbackEl); }
-
-    activeFilter = step.filter || 'all';
-    document.querySelectorAll('.sm-fbtn').forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`.sm-fbtn[data-q="${step.filter || 'all'}"]`);
-    if (btn) btn.classList.add('active');
-    spotlightTarget = step.highlight ? (() => { const [sx,sy]=toCanvas(step.highlight[0],step.highlight[1]); return [sx,sy]; })() : null;
-    redraw();
-  }
-
-  function showFallback(step, fallbackEl) {
-    document.getElementById('smTourQuoteText').textContent = '「' + step.quote + '」';
-    const linkEl = document.getElementById('smTourQuoteLink');
-    if (step.quote_url) { linkEl.style.display='inline'; fallbackEl.onclick=()=>window.open(step.quote_url,'_blank'); }
-    else { linkEl.style.display='none'; fallbackEl.onclick=null; }
-    fallbackEl.style.display = 'block';
-  }
-
-  function startTour() { tourActive=true; currentStep=0; document.getElementById('smTourPanel').classList.add('active'); showTourStep(0); }
-  function closeTour() {
-    tourActive=false; document.getElementById('smTourPanel').classList.remove('active');
-    spotlightTarget=null; activeFilter='all';
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    document.querySelector('.sm-fbtn[data-q="all"]').classList.add('active');
-    redraw();
-  }
-
-  document.getElementById('smStartTour').addEventListener('click', startTour);
-  document.getElementById('smBtnClose').addEventListener('click', closeTour);
-  document.getElementById('smBtnNext').addEventListener('click', () => { if (currentStep < TOUR.length-1) { currentStep++; showTourStep(currentStep); } else closeTour(); });
-  document.getElementById('smBtnPrev').addEventListener('click', () => { if (currentStep > 0) { currentStep--; showTourStep(currentStep); } });
-  document.getElementById('smChkHeat').addEventListener('change', e => { showHeat=e.target.checked; redraw(); });
-  document.getElementById('smChkDots').addEventListener('change', e => { showDots=e.target.checked; redraw(); });
-  document.getElementById('smHeatIntensity').addEventListener('input', e => { heatRadius=+e.target.value; redraw(); });
-  document.querySelector('.sm-filters').addEventListener('click', e => {
-    const btn = e.target.closest('.sm-fbtn'); if (!btn) return;
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active'); activeFilter=btn.dataset.q; spotlightTarget=null; redraw();
-  });
-
-  const tooltip = document.getElementById('sm-tooltip');
-  canvasMain.addEventListener('mousemove', e => {
-    const rect = canvasMain.getBoundingClientRect();
-    const sx = W/rect.width, sy = H/rect.height;
-    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
-    let found=null, minD=20;
-    RAW.forEach((p,i) => {
-      if (!visible(p)) return;
-      const [cx,cy] = toCanvas(p.x,p.y);
-      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
-      if (d < minD) { minD=d; found={p,i}; }
-    });
-    if (found) {
-      const p = found.p;
-      const eLabel = p.e>=1.5?'😤 激怒':p.e>=0.5?'😠 感情的':p.e<=-1?'😒 皮肉・冷笑':'😐 冷静';
-      const tx = e.clientX+14+260>window.innerWidth ? e.clientX-270 : e.clientX+14;
-      tooltip.style.opacity='1'; tooltip.style.left=tx+'px'; tooltip.style.top=(e.clientY-10)+'px';
-      tooltip.innerHTML = `<b>${p.s}</b><br>取締り: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u?'<br><small style="opacity:.5">クリックでXへ ↗</small>':''}`;
-    } else { tooltip.style.opacity='0'; }
-  });
-  canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
-  canvasMain.addEventListener('click', e => {
-    const rect = canvasMain.getBoundingClientRect();
-    const sx = W/rect.width, sy = H/rect.height;
-    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
-    let found=null, minD=20;
-    RAW.forEach((p,i) => {
-      if (!visible(p)||!p.u) return;
-      const [cx,cy] = toCanvas(p.x,p.y);
-      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
-      if (d < minD) { minD=d; found=p; }
-    });
-    if (found) window.open(found.u,'_blank');
-  });
-
-  playIntro();
-  const savedVote = localStorage.getItem("sns_vote_自転車の青切符（反則金）導入の是非_SN_my");
-  if (savedVote !== null) window.setStanceMapVoteMarker(parseInt(savedVote, 10));
-  setTimeout(() => { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }, 3000);
+  drawHeat();drawMain();
 })();
 </script>
-    <section class="panel"><div class="panel-title"><h2>象限別の代表的な声</h2><span>象限・立場別に読む</span></div>
-<nav class="quadrant-nav" aria-label="象限別ナビ">
-  <a href="#sample-取締り強化賛成-マナーや危険運転の改善を期待">取締り賛成・安全優先</a>
-  <a href="#sample-インフラ未整備への不満-専用レーンの設置が先決">インフラ優先</a>
-  <a href="#sample-車道走行への不安-原則車道は事故を増やすと反対">車道走行懸念</a>
-  <a href="#sample-制度が不十分-青切符に留まらず自転車も免許制にすべき">免許制要求</a>
-  <a href="#sample-ルールが曖昧-現場の混乱や取り締まりへの不審で反対">混乱懸念</a>
-  <a href="#sample-その他-分類保留">保留・注意領域</a>
-</nav>
+
+    <section class="panel conflict-panel" id="issue-voices-section">
+<div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとの賛否分布と代表的な投稿</span></div>
+<nav class="quadrant-nav"><a href="#issue-mensyo">免許制 36</a><a href="#issue-torishimari">取締り 27</a><a href="#issue-infra">インフラ 26</a><a href="#issue-sharido">車道 11</a><a href="#issue-ambiguity">ルール曖昧 11</a></nav>
+
+<article class="issue-block" id="issue-torishimari">
+<div class="issue-head"><span class="axis-kicker">論点1</span>
+<h3>取締り強化賛成・マナー違反を止めよ<span class="issue-count">27件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>取締り強化への姿勢</span><span>賛成 21 / 中立 3 / 反対 3</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:77.8%">78%</div><div class="temp-seg neu" style="width:11.1%"></div><div class="temp-seg pos" style="width:11.1%">11%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#e04949"></i>取締り強化を支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>慎重・反対</span></div>
+</div>
+<p class="issue-desc">信号無視・ながらスマホ・歩道の無謀走行など、自転車の危険行為を止めるために取り締まりは当然という立場。「歩行者が怖い思いをしている」という視点から、青切符による制裁強化を支持します。</p>
+<div class="issue-sides"><div class="side neg"><strong>取締り強化支持（21件）</strong>マナーの悪い自転車をこのまま放置するのはおかしい。事故が起きてからでは遅い。</div><div class="side pos"><strong>慎重派（3件）</strong>取り締まりには賛成でも、基準の曖昧さや警察の運用方法に疑問が残る。</div></div>
+</div>
 <div class="sample-grid">
-<article class="sample-card" id="sample-取締り強化賛成-マナーや危険運転の改善を期待"><h3>取締り強化賛成・マナーや危険運転の改善を期待</h3><div>
-<div class="sample"><div class="meta">賛成（取締り強化） / 信頼度 1.00</div><p>青切符は予防的で良い。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/neutrum_idea/status/2065075926472548556"></a></blockquote>
-<div class="reason">理由: 「むしろ 賛成」と明確に表明している。</div>
+<div class="sample-card"><div class="meta">取締り支持 / 感情やや高め</div><p>無法状態の自転車に怒り、青切符でも甘いとして厳格な対応を要求</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shocker108/status/2061387437340045705"></a></blockquote></div>
+<div class="sample-card"><div class="meta">取締り支持 / 安全優先</div><p>自転車の一時不停止に怒り、厳格な取り締まりを強く求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bjayway/status/2070305605852836233"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">賛成（取締り強化） / 信頼度 1.00</div><p>青切符は予防的で良い。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/fitenao/status/2065006550432059463"></a></blockquote>
-<div class="reason">理由: 「むしろ 賛成」と明確に表明している。</div>
+</article>
+
+<article class="issue-block" id="issue-infra">
+<div class="issue-head"><span class="axis-kicker">論点2</span>
+<h3>インフラ整備が先・専用レーンなしに取締りは不公平<span class="issue-count">26件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>インフラ整備への立場</span><span>取締り賛成寄り 8 / 中立 1 / インフラ優先 17</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:30.8%">31%</div><div class="temp-seg neu" style="width:3.8%"></div><div class="temp-seg pos" style="width:65.4%">65%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#e04949"></i>取締り支持（条件付き含む）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>インフラ整備が先</span></div>
 </div>
-<div class="sample"><div class="meta">賛成（取締り強化） / 信頼度 1.00</div><p>青切符は予防的で良い。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kuruma_newsjp/status/2064555848068722869"></a></blockquote>
-<div class="reason">理由: 「むしろ 賛成」と明確に表明している。</div>
+<p class="issue-desc">「安全に走れる自転車専用レーンがないのに、車道を走れというのは無理だ」という立場。インフラ整備なしの罰則強化は自転車利用者への一方的な押しつけで、本末転倒という批判です。</p>
+<div class="issue-sides"><div class="side pos"><strong>インフラ優先派（17件）</strong>自転車レーンが整備されてから取り締まるべき。先にルールありきでは混乱するだけ。</div><div class="side neg"><strong>条件付き賛成（8件）</strong>インフラ整備と取り締まり強化は並行して進めるべきで、どちらかに絞るのは現実的でない。</div></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-インフラ未整備への不満-専用レーンの設置が先決"><h3>インフラ未整備への不満・専用レーンの設置が先決</h3><div>
-<div class="sample"><div class="meta">その他 / 信頼度 1.00</div><p>自転車専用道路がないため、歩道に自転車が集まると危険。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/umakurage/status/2068167003215647051"></a></blockquote>
-<div class="reason">理由: 自転車専用レーンの欠如を批判。</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">インフラ優先 / 感情高め</div><p>インフラ整備不足を批判し、青切符制度に強く反対する声</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/15jacnamagiga/status/2070261164618158443"></a></blockquote></div>
+<div class="sample-card"><div class="meta">条件付き支持 / 冷静</div><p>インフラ整備優先を主張しつつ青切符制度を条件付きで支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/suzuking408/status/2069735857695891855"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">インフラ優先 / 信頼度 1.00</div><p>自転車専用道路や免許制よりも、まずは道路整備が必要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/fukumen_V/status/2063454860377485795"></a></blockquote>
-<div class="reason">理由: 投稿者が専用レーンの設置を先にすべきと主張している。</div>
+</article>
+
+<article class="issue-block" id="issue-sharido">
+<div class="issue-head"><span class="axis-kicker">論点3</span>
+<h3>車道走行への不安・「車道を走れ」は危険<span class="issue-count">11件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>車道走行ルールへの評価</span><span>賛成寄り 6 / 中立 0 / 不安派 5</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:54.5%">55%</div><div class="temp-seg neu" style="width:0%"></div><div class="temp-seg pos" style="width:45.5%">45%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#e04949"></i>ルール強化支持（歩行者目線）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>車道走行が怖い（自転車目線）</span></div>
 </div>
-<div class="sample"><div class="meta">インフラ優先 / 信頼度 0.90</div><p>自転車道路の整備と擦り合わせが不足している。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/suzuking408/status/2069735857695891855"></a></blockquote>
-<div class="reason">理由: 投稿者は道路整備や擦り合わせの欠如を批判し、青切符導入の前に専用レーンが必要であると主張しています。</div>
+<p class="issue-desc">青切符と合わせて「自転車は原則車道」というルールが強調されることへの不安。「子どもを車道に出せるか」「路駐があって走れない」といった現実的な危険を訴える声があります。一方で、歩道を飛ばす自転車が危険だという歩行者目線も存在します。</p>
+<div class="issue-sides"><div class="side pos"><strong>車道走行が怖い（5件）</strong>車道はトラックや路駐車があって危険。子どもや高齢者には無理なルールだ。</div><div class="side neg"><strong>歩道走行こそ問題（6件）</strong>歩道を猛スピードで走る自転車のほうが危ない。歩行者保護のためルール徹底を。</div></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-車道走行への不安-原則車道は事故を増やすと反対"><h3>車道走行への不安・原則車道は事故を増やすと反対</h3><div>
-<div class="sample"><div class="meta">車道走行懸念 / 信頼度 1.00</div><p>歩きスマホの取り締まりを自転車罰金よりも強化したいと主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/1029yurie/status/2070153036568371223"></a></blockquote>
-<div class="reason">理由: 明確に取締り強化を支持する意見あり。</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">車道不安 / 感情高め</div><p>青切符への疑念と子どもへの車道走行要求に強く反対</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/isaiah8_1/status/2067988251760345275"></a></blockquote></div>
+<div class="sample-card"><div class="meta">歩行者安全重視 / 感情高め</div><p>路駐問題の解消と自転車の安全確保を要望する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Mid_observatory/status/2021148538013671884"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">車道走行懸念 / 信頼度 1.00</div><p>踏切内での自転車通行に対する取締り強化を望む。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kazu491223/status/2069062750035472509"></a></blockquote>
-<div class="reason">理由: 投稿者が取締り強化を希望している。</div>
+</article>
+
+<article class="issue-block" id="issue-mensyo">
+<div class="issue-head"><span class="axis-kicker">論点4・最大勢力</span>
+<h3>免許制が必要・青切符だけでは不十分<span class="issue-count">36件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>免許制度要求への立場</span><span>取締り支持寄り 23 / 中立 3 / 慎重 10</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:63.9%">64%</div><div class="temp-seg neu" style="width:8.3%"></div><div class="temp-seg pos" style="width:27.8%">28%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#e04949"></i>免許制・講習義務化を支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>慎重・反対</span></div>
 </div>
-<div class="sample"><div class="meta">車道走行懸念 / 信頼度 0.90</div><p>自転車の歩道走行禁止について支持し、車道での安全性に懸念を持っている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/isaiah8_1/status/2067988251760345275"></a></blockquote>
-<div class="reason">理由: 「頭おかしいだろ」から車道走行に対する危険性を指摘している。</div>
+<p class="issue-desc">最多の論点。「青切符だけでは甘い」「自転車にも免許制度か事前講習を義務付けるべきだ」という主張です。標識を理解していない自転車利用者が多いため、罰則より先に教育が必要という考え方です。</p>
+<div class="issue-sides"><div class="side neg"><strong>免許・講習義務化派（23件）</strong>自転車にもルールを学ぶ機会が必要。原付のように免許制か事前講習で知識を担保すべき。</div><div class="side pos"><strong>慎重派（10件）</strong>免許制は自転車利用の障壁になる。費用や手続き負担が増えて利便性が下がる。</div></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-制度が不十分-青切符に留まらず自転車も免許制にすべき"><h3>制度が不十分・青切符に留まらず自転車も免許制にすべき</h3><div>
-<div class="sample"><div class="meta">免許制要求 / 信頼度 1.00</div><p>自転車にも免許が必要で、青切符だけでは改善されない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/r70OylZbSZeiIIz/status/2070149487566418240"></a></blockquote>
-<div class="reason">理由: 投稿者が自転車の免許制導入を推奨している。</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">免許制支持 / 感情高め</div><p>自転車への免許制や講習制度の導入を強く主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/r70OylZbSZeiIIz/status/2070149487566418240"></a></blockquote></div>
+<div class="sample-card"><div class="meta">免許制支持 / 安全優先</div><p>自転車に免許制導入を提唱し安全優先の立場から現行ルールに疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yamazakibusu/status/2070074656128917921"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">免許制要求 / 信頼度 1.00</div><p>青切符だけでなく、自転車にも免許制が必要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/aftonp1988/status/2069001010878837074"></a></blockquote>
-<div class="reason">理由: 投稿者が青切符に加え、自転車にも免許制を求める意見を述べている。</div>
+</article>
+
+<article class="issue-block" id="issue-ambiguity">
+<div class="issue-head"><span class="axis-kicker">論点5</span>
+<h3>ルールが曖昧・警察への不信感<span class="issue-count">11件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>ルール整備への評価</span><span>取締り支持 1 / 中立 0 / 慎重・反対 10</span></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:9.1%">9%</div><div class="temp-seg neu" style="width:0%"></div><div class="temp-seg pos" style="width:90.9%">91%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#e04949"></i>ルール整備後の取締り支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>現行のルールへの疑念</span></div>
 </div>
-<div class="sample"><div class="meta">免許制要求 / 信頼度 1.00</div><p>青切符は不十分で、自転車にも免許制が必要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/healhearts123/status/2068991161252122951"></a></blockquote>
-<div class="reason">理由: 投稿者が青切符だけでなく、自転車にも免許制を求める意見を述べている。</div>
+<p class="issue-desc">「何が違反になるのか現場でわからない」「警察が恣意的に取り締まるのではないか」という不信感が中心。「113種類もの違反基準は覚えられない」「点数稼ぎ目的ではないか」という批判です。反対派の多数がこの立場を取ります。</p>
+<div class="issue-sides"><div class="side pos"><strong>ルール不信派（10件）</strong>違反の基準が複雑すぎる。警察の裁量が広く、正直者がバカを見る取り締まりになりかねない。</div><div class="side neg"><strong>整備後なら支持（1件）</strong>ルールが明確になり、周知が十分なら取り締まりは賛成。今の状態では時期尚早。</div></div>
 </div>
-</div></article>
-<article class="sample-card" id="sample-ルールが曖昧-現場の混乱や取り締まりへの不審で反対"><h3>ルールが曖昧・現場の混乱や取り締まりへの不審で反対</h3><div>
-<div class="sample"><div class="meta">混乱懸念 / 信頼度 1.00</div><p>自転車は危険で、青切符制度が理解できず不安。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/j52flx/status/2061443794344747198"></a></blockquote>
-<div class="reason">理由: 青切符制度の理解不能と混乱を理由に反対</div>
+<div class="sample-grid">
+<div class="sample-card"><div class="meta">ルール不信 / 感情高め</div><p>青切符に強く反対、監視社会的な取り締まりへの怒り</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032229649317814760"></a></blockquote></div>
+<div class="sample-card"><div class="meta">基準複雑さへの批判</div><p>113種は多すぎ、簡略化と周知整備の後に実施すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Clifrennie/status/2068026232860537188"></a></blockquote></div>
 </div>
-<div class="sample"><div class="meta">混乱懸念 / 信頼度 0.80</div><p>自転車青切符制度に反対する。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032672767527760350"></a></blockquote>
-<div class="reason">理由: 行動制限と似ている点から、規則性に対する不信感が感じられる。</div>
-</div>
-<div class="sample"><div class="meta">混乱懸念 / 信頼度 0.80</div><p>自転車青切符制度に反対する。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032229649317814760"></a></blockquote>
-<div class="reason">理由: デジタル監視社会との類似性から、規則性に対する不信感が感じられる。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-その他-分類保留"><h3>その他・分類保留</h3><div>
-<div class="sample"><div class="meta">その他 / 信頼度 1.00</div><p>青切符制度の導入に反対している。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ibarakinoumi/status/2060612879012008160"></a></blockquote>
-<div class="reason">理由: 明確に反対の立場を示している。</div>
-</div>
-<div class="sample"><div class="meta">その他 / 信頼度 1.00</div><p>青切符制度の導入に反対している。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921"></a></blockquote>
-<div class="reason">理由: 明確に反対の立場を示している。</div>
-</div>
-<div class="sample"><div class="meta">混乱懸念 / 信頼度 0.80</div><p>自転車の不適切な行動が問題視されている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shocker108/status/2061387437340045705"></a></blockquote>
-<div class="reason">理由: 無法地帯と表現しているため、規制が必要との立場。</div>
-</div>
-</div></article>
-</div></section>
+</article>
+
+</section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2><span>2軸分類のサマリー</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">取締り強化賛成</div><h3>危険運転を取り締まり、安全を守れ</h3><div class="axis-count">27<span>件</span></div><p>マナー違反や危険走行を取り締まることで、歩行者・社会を守るために青切符は必要だとする立場。</p></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">インフラ整備優先</div><h3>専用レーンがなければ取り締まれない</h3><div class="axis-count">26<span>件</span></div><p>自転車レーンなどのインフラが整備されていない状況で、取り締まりだけを先行させることへの批判。</p></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">車道走行への不安</div><h3>車道を走れという指示は危険</h3><div class="axis-count">11<span>件</span></div><p>車道走行を強制されることへの恐怖と、歩道を飛ばす自転車への批判が交錯する論点。</p></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">免許制要求</div><h3>罰則より先に教育・免許制度を</h3><div class="axis-count">36<span>件</span></div><p>知識のない状態での取り締まりより、免許制・事前講習でルールを学ばせるべきとする立場。</p></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">ルールの曖昧さ</div><h3>違反基準が不明確・警察への不信</h3><div class="axis-count">11<span>件</span></div><p>何が違反か分かりにくく、警察の恣意的運用を懸念する立場。取り締まりの公正性に疑問。</p></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">その他・分類保留</div><h3>分類が難しい反応</h3><div class="axis-count">70<span>件</span></div><p>複数の論点が混在する投稿や、日常報告・日記的な内容など。</p></article></div></section>
     <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">2024年に成立した改正道路交通法により、自転車の交通違反にも「青切符」（交通反則通告制度）が導入されることになりました。16歳以上を対象に、信号無視や一時不停止、ながらスマホなどの違反に対して反則金が科されます。これまで自転車の違反は刑事罰の対象となる「赤切符」しかなく、実際にはほとんど検挙されてこなかったため、取り締まりの実効性を高める狙いがあります。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは、歩道での危険走行や事故の増加を踏まえ「歩行者の安全を守るために必要」「ルールを守らない自転車が多すぎる」という声が上がっています。一方で反対・慎重な立場からは、「自転車レーンなどのインフラ整備が先ではないか」「車道走行を強いられると、かえって事故が増える」「違反の基準が曖昧で現場が混乱する」といった懸念が示されています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">また、そもそも自転車にはルールを学ぶ機会が免許制度のように用意されていないため、「取り締まりの前に講習や免許制が必要だ」という意見も一定数あり、単純な賛否では割り切れない構図になっています。</p></section>
     <section class="panel conflict-panel"><div class="panel-title"><h2>争点カード</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">取締り強化</div><h3>危険運転対策として取締りを支持</h3><div class="axis-count">34<span>件</span></div><p>危険な走行やマナー違反を取り締まり、歩行者や周囲の安全を確保するために必要であるとする立場。</p><div class="axis-tags"><a href="#sample-取締り強化賛成-マナーや危険運転の改善を期待" style="text-decoration:none;color:inherit;"><span>取締り強化賛成・マナーや危険運転の改善を期待</span></a></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">インフラ優先</div><h3>専用道路の整備が先決であると主張</h3><div class="axis-count">31<span>件</span></div><p>安全に走れるインフラ（自転車レーンなど）が十分にない中で、取り締まりだけを先行させることに納得がいかない立場。</p><div class="axis-tags"><a href="#sample-インフラ未整備への不満-専用レーンの設置が先決" style="text-decoration:none;color:inherit;"><span>インフラ未整備への不満・専用レーンの設置が先決</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">車道走行の不安</div><h3>車道走行の強要による事故増加を懸念</h3><div class="axis-count">14<span>件</span></div><p>車道の狭さや車の至近走行の危険から車道原則に恐怖を感じ、結果として歩道通行も狭められることに反対する立場。</p><div class="axis-tags"><a href="#sample-車道走行への不安-原則車道は事故を増やすと反対" style="text-decoration:none;color:inherit;"><span>車道走行への不安・原則車道は事故を増やすと反対</span></a></div></article><article class="axis-card" data-tone="positive"><div class="axis-kicker">免許制要求</div><h3>ルール周知のために免許制の導入を要求</h3><div class="axis-count">41<span>件</span></div><p>標識を理解しない運転手が多いため、反則金のみならず原付のような免許制度や事前講習を導入すべきとする立場。</p><div class="axis-tags"><a href="#sample-制度が不十分-青切符に留まらず自転車も免許制にすべき" style="text-decoration:none;color:inherit;"><span>制度が不十分・青切符に留まらず自転車も免許制にすべき</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">ルールの曖昧さ</div><h3>基準の曖昧さや警察への不信感から反対</h3><div class="axis-count">12<span>件</span></div><p>違反の成立基準が現場で分かりにくいことや、警察の点数・反則金集め目的ではないかという不信感による反対。</p><div class="axis-tags"><a href="#sample-ルールが曖昧-現場の混乱や取り締まりへの不審で反対" style="text-decoration:none;color:inherit;"><span>ルールが曖昧・現場の混乱や取り締まりへの不審で反対</span></a></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">45<span>件</span></div><p>罵倒、単なる怒り、事実誤認など、そのままでは記事化に注意が必要な反応。</p><div class="axis-tags"><a href="#sample-その他-分類保留" style="text-decoration:none;color:inherit;"><span>その他・分類保留</span></a></div></article></div></section>
     <section class="panel" id="related-topics">
