@@ -665,6 +665,28 @@
 .temp-bar-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:10px;color:var(--muted)}
 .temp-bar-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:3px;vertical-align:middle}
 
+
+/* ===== 論点Explainerカード ===== */
+.explainer-lead{font-size:14px;line-height:1.85;color:var(--ink);margin:0 0 20px;max-width:920px}
+#explainer-section .explainer-lead{max-width:920px!important}
+#explainer-section .explainer-grid{max-width:920px!important;margin-left:auto!important;margin-right:auto!important}
+.explainer-grid{display:flex;flex-direction:column;gap:18px;margin:0 0 18px}
+.explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}
+.explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
+.explainer-card img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;background:var(--accent-soft)}
+.explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;border-bottom:1.5px solid #e4eaf3;pointer-events:none;user-select:none}
+.explainer-num{flex-shrink:0;background:#1e1b4b;color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
+.explainer-card-title{font-size:15px;font-weight:900;color:#1e1b4b;margin:0 0 4px;line-height:1.35;letter-spacing:-.02em}
+.explainer-card-desc{font-size:12px;color:#637089;margin:0 0 7px;line-height:1.65}
+.explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
+.explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
+.explainer-side.pro{background:#eff6ff;color:#075ef2;border:1px solid #bfdbfe}
+.explainer-side.con{background:#fff2ee;color:#c0410f;border:1px solid #fdbcaa}
+.explainer-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.88)}
+.explainer-modal.open{display:flex}
+.explainer-modal img{max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain}
+.explainer-modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:40px;height:40px;color:#fff;font-size:22px;cursor:pointer;line-height:40px;text-align:center}
+.explainer-note{font-size:12px;color:var(--muted);margin:4px 0 0}
   </style>
   <link rel="stylesheet" href="topic-modern.css?v=2">
   <script src="topic-modern.js?v=1" defer></script>
@@ -740,7 +762,100 @@ MangaViewer.init({
   ]
 });
 </script>
-        <section class="panel" id="vote-section">
+    <!-- ===== 論点Explainer ===== -->
+<section class="panel" id="explainer-section">
+<div class="panel-title"><h2>投票前に読む：5つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<p class="explainer-lead">「自転車の青切符」の議論は「賛成か反対か」だけではありません。取り締まりの是非・インフラ整備の順番・車道走行の危険性・免許制の必要性・ルールの曖昧さ——5つの論点を整理してから投票に進んでください。</p>
+<div class="explainer-grid">
+  <article class="explainer-card" data-img="images/bike-blue-ticket-infographic-wide-torishimari.webp" data-alt="取締り強化賛成">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点①</span>
+      <div>
+        <p class="explainer-card-title">取締り強化賛成 — 「危険な自転車に青切符は当然か」</p>
+        <p class="explainer-card-desc">信号無視・ながらスマホ・歩道の無謀走行への抑止力として青切符を歓迎。SNS上の37件全員が取締り強化を支持する唯一の論点。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">支持：歩行者の安全のため抑止力が必要</span>
+          <span class="explainer-side pro">焦点：どの違反行為を対象にするか</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/bike-blue-ticket-infographic-wide-torishimari.webp" alt="論点① 取締り強化賛成" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/bike-blue-ticket-infographic-wide-infra.webp" data-alt="インフラ整備優先">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点②</span>
+      <div>
+        <p class="explainer-card-title">インフラ整備優先 — 「自転車レーンがないのに取り締まれるか」</p>
+        <p class="explainer-card-desc">33件中30件（91%）が反対。専用レーンなしの罰則先行は理不尽という立場。「整備が先、取締りは後」という順番論が中心。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">反対：レーン整備なしの取締りは理不尽</span>
+          <span class="explainer-side con">条件付き：整備と並行なら取締りに賛成</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/bike-blue-ticket-infographic-wide-infra.webp" alt="論点② インフラ整備優先" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/bike-blue-ticket-infographic-wide-sharido.webp" data-alt="車道走行への不安">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点③</span>
+      <div>
+        <p class="explainer-card-title">車道走行への不安 — 「「車道を走れ」というルールは安全か」</p>
+        <p class="explainer-card-desc">14件中12件（86%）が不安を訴える。路駐・トラック・子ども・高齢者の問題。歩道を飛ばす自転車への歩行者の怒りとも交差する。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">不安：路駐や大型車で車道は危険</span>
+          <span class="explainer-side con">歩行者：歩道の自転車のほうが問題</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/bike-blue-ticket-infographic-wide-sharido.webp" alt="論点③ 車道走行への不安" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/bike-blue-ticket-infographic-wide-menkyo.webp" data-alt="免許制要求">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点④</span>
+      <div>
+        <p class="explainer-card-title">免許制要求 — 「罰則の前に、ルールを教えるべきでは？」</p>
+        <p class="explainer-card-desc">16件。取締り支持12%・中立44%・反対44%と最も拮抗。「知らずに違反させる前に免許・講習を義務化すべき」という提案型の論点。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">提案：事前講習・免許制を義務化すべき</span>
+          <span class="explainer-side pro">反対：免許制は自転車利用の障壁になる</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/bike-blue-ticket-infographic-wide-menkyo.webp" alt="論点④ 免許制要求" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/bike-blue-ticket-infographic-wide-ambiguity.webp" data-alt="ルール曖昧・不信">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑤</span>
+      <div>
+        <p class="explainer-card-title">ルール曖昧・不信 — 「113種類の違反基準——誰が全部わかるか」</p>
+        <p class="explainer-card-desc">19件中13件（68%）が反対・不信。「何が違反かわからない」「警察の恣意的運用が怖い」。基準の整理と周知なしでの取締りに強く反対。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">不信：基準が複雑で警察の裁量が広すぎる</span>
+          <span class="explainer-side con">条件：周知・整理後なら取締りに賛成</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/bike-blue-ticket-infographic-wide-ambiguity.webp" alt="論点⑤ ルール曖昧・不信" loading="lazy">
+  </article>
+</div>
+<p class="explainer-note"><strong>使い方:</strong> 5つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+</section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>(function(){
+  var modal=document.getElementById('explainer-modal');
+  var mImg=document.getElementById('explainer-modal-img');
+  var mClose=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
+    c.addEventListener('click',function(){mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');});
+  });
+  mClose.addEventListener('click',function(){modal.classList.remove('open');});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
+})();</script>
+    <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">2024年に道路交通法が改正され、自転車の違反に「青切符」（反則金）が導入されます。取り締まりを強化すべきか、まずインフラ整備が先か。あなたが最も気になる論点はどれですか？</p>
 <div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索で「自転車 青切符 賛成」「自転車 青切符 反対」「自転車 青切符 インフラ」などのキーワードでSNS投稿181件を収集し、AIが自動分類しました。最終更新: 2026-07-12。</div>
