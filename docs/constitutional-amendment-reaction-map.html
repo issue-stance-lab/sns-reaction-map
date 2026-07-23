@@ -745,8 +745,42 @@
     .sm-emo-bar { width:60px; height:8px; border-radius:4px; background:linear-gradient(to right,#3498db,#e74c3c); }
     #smStartTour { font-size:12px; padding:6px 14px; border:1px solid var(--accent,#2563eb); border-radius:6px; background:none; color:var(--accent,#2563eb); cursor:pointer; font-weight:600; }
     #smStartTour:hover { background:var(--accent,#2563eb); color:#fff; }
+
+    .data-method{font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px}
+    .vote-step-label{display:flex;align-items:center;gap:8px;font-weight:900;margin:18px 0 14px}.vote-step-label small{font-weight:400;color:var(--muted)}
+    .step-num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px}
+    #vote-issue-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.vote-issue-btn{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff;text-align:left;cursor:pointer;font-family:inherit}.vote-issue-btn>span:first-child{font-size:22px}.vote-issue-btn strong,.vote-issue-btn small{display:block}.vote-issue-btn small{color:var(--muted);margin-top:4px}
+    #vote-stance-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vote-stance-btn{border:1px solid var(--line);border-top:5px solid var(--stance-color);border-radius:10px;padding:14px;background:#fff;text-align:left;cursor:pointer;font-family:inherit}.vote-stance-btn b,.vote-stance-btn strong,.vote-stance-btn small{display:block}.vote-stance-btn b{color:var(--stance-color);font-size:22px}.vote-stance-btn small{color:var(--muted);margin-top:5px}
+    #vote-result{border-left:5px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:8px}#vote-result p{margin:5px 0}#vote-redo{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 10px;cursor:pointer}
+    .stance-map-section{background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat!important}.stance-map-section .panel-title h2{color:#fff}.stance-map-section .panel-title span,.map-caption{color:rgba(255,255,255,.72)}
+    #stance-map-inner{max-width:800px;margin:auto}#sm-wrap{position:relative;max-width:760px;margin:16px auto;background:#fff;border-radius:14px;padding:6px;box-shadow:0 18px 50px rgba(0,0,0,.35)}#smCanvasMain{display:block;width:100%;border-radius:10px}#sm-tooltip{position:absolute;display:none;z-index:5;max-width:260px;background:#172554;color:#fff;padding:10px 12px;border-radius:8px;font-size:12px;pointer-events:none}
+    .sm-controls{max-width:760px;margin:auto}.sm-legend,.sm-filters{display:flex;gap:8px;flex-wrap:wrap;color:#fff;font-size:12px}.sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}.sm-filters{margin-top:10px}.sm-fbtn{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer}.sm-fbtn.active{background:var(--accent)}
+    .arena-divider{line-height:0}.arena-divider img{display:block;width:100%}.issue-block{border:1px solid var(--line);border-radius:12px;background:#fff;padding:22px;margin-bottom:22px;box-shadow:var(--shadow)}.issue-head h3{font-size:24px;margin:5px 0}.issue-count{font-size:13px;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px;margin-left:8px}.issue-balance{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:14px}.sample-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sample-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff}.sample-card .meta{font-size:12px;color:var(--accent);font-weight:900}
+    @media(max-width:760px){#vote-issue-btns,#vote-stance-btns,.sample-grid{grid-template-columns:1fr}}
+
+
+    #explainer-section .explainer-lead{font-size:14px;color:var(--ink);line-height:1.85;margin:0 0 18px;max-width:1000px}
+    #explainer-section .explainer-grid{display:flex;flex-direction:column;gap:18px}
+    #explainer-section .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}
+    #explainer-section .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
+    #explainer-section .explainer-card img{display:block;width:100%;aspect-ratio:1916/821;object-fit:cover;background:var(--accent-soft)}
+    #explainer-section .explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;border-bottom:1.5px solid #e4eaf3}
+    #explainer-section .explainer-num{flex-shrink:0;background:#0a3d91;color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
+    #explainer-section .explainer-card-title{font-size:16px;font-weight:900;color:#0a245e;margin:0 0 4px;line-height:1.35}
+    #explainer-section .explainer-card-desc{font-size:12px;color:#637089;margin:0 0 7px;line-height:1.65}
+    #explainer-section .explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
+    #explainer-section .explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
+    #explainer-section .explainer-side.pro{background:#eff6ff;color:#075ef2;border:1px solid #bfdbfe}
+    #explainer-section .explainer-side.con{background:#fff2ee;color:#c0410f;border:1px solid #fdbcaa}
+    #explainer-section .explainer-note{font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:16px 0 0;line-height:1.65}
+    .explainer-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.9)}
+    .explainer-modal.open{display:flex}
+    .explainer-modal img{max-width:96vw;max-height:92vh;border-radius:8px;object-fit:contain;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+    .explainer-modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:50%;width:42px;height:42px;color:#fff;font-size:24px;cursor:pointer}
+    @media(max-width:760px){#explainer-section .explainer-grid{gap:12px}#explainer-section .explainer-card-label{padding:12px;gap:8px}#explainer-section .explainer-card-title{font-size:14px}#explainer-section .explainer-card img{aspect-ratio:1916/821}}
+
   </style>
-  <link rel="stylesheet" href="topic-modern.css?v=2">
+  <link rel="stylesheet" href="topic-modern.css?v=3">
   <script src="topic-modern.js?v=1" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
@@ -768,12 +802,8 @@
       <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">政策・国会</span>
       <h1>憲法改正論議 SNS反応まっぷ</h1>
       <p class="question-line">現実の安全保障に合わせて改正するのか、平和主義と権力制限を守るのか？</p>
-      <p class="lead">Yahooリアルタイム検索で取得したX反応サンプルを、9条・自衛隊明記、緊急事態条項、国民投票法、改憲賛否などの論点で整理した編集用ビューです。世論調査ではありません。</p>
-      <div class="thirty-summary" aria-label="30秒サマリー"><ul>
-        <li>最多カテゴリは「改憲反対・護憲」113件で、緊急事態条項や9条改正への警戒が強い。</li>
-        <li>推進側は自衛隊明記、防衛、緊急時対応を理由に「現実に合わせる」必要を訴えている。</li>
-        <li>接点は手続きの公正さで、国民投票法・広告規制を先に整えるべきという声も多い。</li>
-      </ul></div>
+      <p class="lead">Yahooリアルタイム検索で取得したX反応422件を、Hermesが6つの論点と4つのスタンスに再分類しました。世論調査ではなく、取得サンプルの論点比較です。</p>
+      <div class="thirty-summary" aria-label="30秒サマリー"><ul><li>最多論点は「改憲全般」116件。次いで「9条・自衛隊」103件、「国民投票・広告」96件。</li><li>慎重・反対が218件で最多。改正推進91件、中立91件、手続き重視22件と、論点ごとに構図が変わります。</li><li>9条・自衛隊では推進56件が慎重・反対33件を上回る一方、緊急事態条項では慎重・反対30件が推進2件を大きく上回りました。</li></ul></div>
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
@@ -781,10 +811,10 @@
   </svg>
   <main>
     <section class="stats">
-      <div class="stat"><span>総サンプル</span><strong>422</strong></div>
-      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>改憲反対・護憲 113</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>改憲反対 107</strong></div>
+      <div class="stat"><span>分類投稿</span><strong>422件</strong></div>
+      <div class="stat"><span>論点セクター</span><strong>6論点</strong></div>
+      <div class="stat"><span>最多論点</span><strong>改憲全般 116件</strong></div>
+      <div class="stat"><span>最多スタンス</span><strong>慎重・反対 218件</strong></div>
     </section>
     <section class="panel" id="manga-section">
 <div class="panel-title"><h2>漫画で読む、この論点</h2><span>3ページで対立をつかむ</span></div>
@@ -811,34 +841,59 @@
   <button class="manga-next" type="button" aria-label="次のページ">›</button>
 </div>
 </section>
-    <section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">自衛隊明記や緊急事態条項の追加など、憲法改正の発議に向けた議論が国会で活発化しています。改正すべきか、現行憲法を守るべきか、あるいは手続きの公正さが先か — SNS上でも意見が分かれています。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> 「憲法改正」「9条」「緊急事態条項」「国民投票法」などのキーワードで、Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
-<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
-<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
-<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
-<div id="vote-result" style="display:none;margin-top:20px;">
-  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
-  </div>
-  <div id="vote-comparison" class="vote-comparison" aria-label="あなたの選択とSNS分布の比較"></div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
-  <div id="vote-bars" style="margin-bottom:16px;"></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-    <a id="share-x" href="#" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
-      𝕏 でシェア
-    </a>
-    <button id="vote-redo-btn"
-       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
-      投票をやり直す
-    </button>
-  </div>
-  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
-</div>
+    <section class="panel" id="explainer-section">
+<div class="panel-title"><h2>投票前に読む：6つの争点</h2><span>図解で全論点をチェック</span></div>
+<p class="explainer-lead">憲法改正は、改正全般への賛否だけでは整理できません。9条、緊急事態条項、国民投票の公平性、発議手続き、情報環境ではそれぞれ対立の理由が異なります。6つの図解を確認してから、自分が重く見る論点を選んでください。画像はタップで拡大できます。</p>
+<div class="explainer-grid"><article class="explainer-card" data-img="images/constitutional-infographic-wide-general.webp" data-alt="改憲全般"><div class="explainer-card-label"><span class="explainer-num">争点1</span><div><p class="explainer-card-title">改憲全般</p><p class="explainer-card-desc">憲法を社会の変化に合わせるのか、権力を縛る原則として慎重に守るのか。</p><div class="explainer-sides"><span class="explainer-side pro">改正推進：現実に合うルールへ</span><span class="explainer-side con">慎重・反対：拙速な変更を防ぐ</span></div></div></div><img src="images/constitutional-infographic-wide-general.webp" alt="争点1 改憲全般" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-article9.webp" data-alt="9条・自衛隊"><div class="explainer-card-label"><span class="explainer-num">争点2</span><div><p class="explainer-card-title">9条・自衛隊</p><p class="explainer-card-desc">自衛隊の存在と任務を明記する意義と、9条の平和主義への影響を考える。</p><div class="explainer-sides"><span class="explainer-side pro">改正推進：法的位置づけを明確に</span><span class="explainer-side con">慎重・反対：平和主義の歯止めを維持</span></div></div></div><img src="images/constitutional-infographic-wide-article9.webp" alt="争点2 9条・自衛隊" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-emergency.webp" data-alt="緊急事態条項"><div class="explainer-card-label"><span class="explainer-num">争点3</span><div><p class="explainer-card-title">緊急事態条項</p><p class="explainer-card-desc">重大な危機への即応力と、政府への権限集中を防ぐ仕組みをどう設計するか。</p><div class="explainer-sides"><span class="explainer-side pro">整備賛成：危機対応を迅速に</span><span class="explainer-side con">慎重・反対：権限濫用を警戒</span></div></div></div><img src="images/constitutional-infographic-wide-emergency.webp" alt="争点3 緊急事態条項" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-referendum.webp" data-alt="国民投票・広告"><div class="explainer-card-label"><span class="explainer-num">争点4</span><div><p class="explainer-card-title">国民投票・広告</p><p class="explainer-card-desc">自由な意見表明を守りながら、資金力や広告量の差をどう整えるか。</p><div class="explainer-sides"><span class="explainer-side pro">自由を重視：多様な意見を届ける</span><span class="explainer-side con">公平性を重視：判断環境を整える</span></div></div></div><img src="images/constitutional-infographic-wide-referendum.webp" alt="争点4 国民投票・広告" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-process.webp" data-alt="政党・発議手続き"><div class="explainer-card-label"><span class="explainer-num">争点5</span><div><p class="explainer-card-title">政党・発議手続き</p><p class="explainer-card-desc">具体案を国民に問う機会と、国会での十分な審議・合意形成をどう両立するか。</p><div class="explainer-sides"><span class="explainer-side pro">発議推進：国民投票で判断を</span><span class="explainer-side con">慎重論：幅広い合意を先に</span></div></div></div><img src="images/constitutional-infographic-wide-process.webp" alt="争点5 政党・発議手続き" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-information.webp" data-alt="情報・議論の質"><div class="explainer-card-label"><span class="explainer-num">争点6</span><div><p class="explainer-card-title">情報・議論の質</p><p class="explainer-card-desc">条文・根拠・発言主体・引用関係を確認し、文脈不足の情報をどう扱うか。</p><div class="explainer-sides"><span class="explainer-side pro">確認する：一次資料と文脈を見る</span><span class="explainer-side con">保留する：不明な情報は断定しない</span></div></div></div><img src="images/constitutional-infographic-wide-information.webp" alt="争点6 情報・議論の質" loading="lazy"></article></div>
+<p class="explainer-note"><strong>使い方:</strong> 6つの争点を図解で確認してから、次の投票で「一番気になる論点」を選んでください。</p>
 </section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" type="button" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>
+(function(){
+  var modal=document.getElementById('explainer-modal');
+  var modalImg=document.getElementById('explainer-modal-img');
+  var closeBtn=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('#explainer-section .explainer-card').forEach(function(card){
+    card.addEventListener('click',function(){
+      modalImg.src=card.dataset.img;
+      modalImg.alt=card.dataset.alt;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+    });
+  });
+  function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');}
+  closeBtn.addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+})();
+</script>
+<section class="panel" id="vote-section">
+<div class="panel-title"><h2>あなたはどの論点を重く見る？</h2><span>SNSの声を見る前に</span></div>
+<p>憲法改正は、9条や緊急事態条項だけでなく、国民投票の公平性や議論の進め方まで含むテーマです。まず一番気になる論点を選び、次に改正への総合的な考えを選んでください。</p>
+<div class="data-method"><strong>データの集め方:</strong> 「憲法改正」「9条」「緊急事態条項」「国民投票法」などのキーワードで、Yahooリアルタイム検索からSNS投稿422件を取得し、AIが自動分類しました。</div>
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>一番気になる論点を選ぶ <small>（全2問）</small></p><div id="vote-issue-btns"></div></div>
+<div id="vote-step2" hidden><p class="vote-step-label"><span class="step-num">2</span>憲法改正への考えは？ <small>答えたらアリーナに表示します</small></p><div id="vote-stance-btns"></div></div>
+<div id="vote-result" hidden></div>
+</section>
+<script>
+(function(){
+  const issues=[{"k": "改憲全般", "d": "憲法を時代に合わせるべきか、現行憲法の原則を守るべきか。", "icon": "📜"}, {"k": "9条・自衛隊", "d": "自衛隊を憲法に明記する意義と、9条の平和主義への影響。", "icon": "🕊️"}, {"k": "緊急事態条項", "d": "災害などへの迅速な対応と、政府への権限集中リスク。", "icon": "🚨"}, {"k": "国民投票・広告", "d": "CM・ネット広告・資金力の差を含む国民投票の公平性。", "icon": "🗳️"}, {"k": "政党・発議手続き", "d": "政党の姿勢、国会での合意形成、発議までの進め方。", "icon": "🏛️"}, {"k": "情報・議論の質", "d": "事実確認、過激な断定、論点を理解できる情報環境。", "icon": "🔎"}];
+  const stances=[
+    {k:'改正を進める',d:'必要な項目を具体化し、改正を前へ進めたい',c:'#2563eb',icon:'→'},
+    {k:'慎重・反対',d:'平和主義や権力制限を守り、改正には慎重でありたい',c:'#dc2626',icon:'×'},
+    {k:'手続きを優先',d:'中身の前に、公平な国民投票と合意形成を整えたい',c:'#059669',icon:'◎'},
+    {k:'まだ決められない',d:'論点ごとの情報を見てから考えたい',c:'#64748b',icon:'?'}
+  ];
+  let selected=-1;
+  const issueBox=document.getElementById('vote-issue-btns');
+  issues.forEach((v,i)=>{const b=document.createElement('button');b.className='vote-issue-btn';b.innerHTML='<span>'+v.icon+'</span><span><strong>'+v.k+'</strong><small>'+v.d+'</small></span>';b.onclick=()=>{selected=i;document.getElementById('vote-step1').hidden=true;document.getElementById('vote-step2').hidden=false;};issueBox.appendChild(b);});
+  const stanceBox=document.getElementById('vote-stance-btns');
+  stances.forEach(v=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=()=>{document.getElementById('vote-step2').hidden=true;const r=document.getElementById('vote-result');r.hidden=false;const shareText='【憲法改正SNS反応まっぷ】\n「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」と考えています。\n#SNS反応まっぷ';const shareUrl='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(location.href);r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」</p><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;"><a href="'+shareUrl+'" target="_blank" rel="noopener" style="display:inline-flex;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">𝕏 でシェア</a><button type="button" id="vote-redo" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div>';window.setConstitutionalVoteMarker?.(selected,v.c);document.getElementById('vote-redo').onclick=()=>{r.hidden=true;document.getElementById('vote-step1').hidden=false;};};stanceBox.appendChild(b);});
+})();
+</script>
 <script src="manga-viewer.js"></script>
 <script>
 MangaViewer.init({
@@ -848,1215 +903,140 @@ MangaViewer.init({
   ]
 });
 </script>
-<script src="vote2d.js?v=10"></script>
-<script>
-(function(){
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  Vote2D.init({
-    containerId: 'vote-buttons',
-    resultId: 'vote-result',
-    topic: '憲法改正論議_SNS反応まっぷ',
-    title: '憲法改正論議 SNS反応まっぷ',
-    xAxis: { neg: '護憲・改憲に反対', pos: '改憲に賛成' },
-    yAxis: { neg: '平和主義・9条護持を最優先', pos: '安全保障強化・現実的防衛を優先' },
-    quadrants: [{"label": "護憲のまま安全保障を強化", "desc": "憲法を変えずとも、解釈や政策で現実の安全保障ニーズに対応できる。"}, {"label": "改憲で安全保障を強化", "desc": "自衛隊明記・緊急事態条項など、改憲により現実の防衛力を高めるべき。"}, {"label": "9条を守り平和を貫く", "desc": "戦争放棄を定めた9条は日本の誇り。護憲こそが平和を守る唯一の道。"}, {"label": "改憲しても平和は守れる", "desc": "憲法を改正しても平和主義の理念は維持でき、より現実的な平和が実現する。"}],
-    questions: [
-      {text:'憲法を改正すべきだと思う？',negLabel:'護憲・反対',posLabel:'改憲・賛成'},
-      {text:'日本の安全保障、どちらの考えに近い？',subtext:'答えたら開票します',negLabel:'9条・平和主義で対応できる',posLabel:'防衛力の強化が不可欠'}
-    ],
-    commonGround: {
-      title: '意見の向こう側',
-      lead: '立場や方法は違っても、両者に共通する願いがあります。',
-      statement: '平和と安全が守られ、将来世代が安心して暮らせる社会',
-      question: '反対側の心配も、少し理解できましたか？'
-    },
-    supabaseUrl: supabaseUrl,
-    supabaseAnonKey: supabaseAnonKey
-  });
-})();
-</script>
-    <section class="panel" id="stance-map-section">
+<section class="panel stance-map-section" id="stance-map-section">
 <div id="stance-map-inner">
-<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>552件 | 点の色=感情強度（青:冷静→赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
+<div class="panel-title"><h2>論点アリーナ</h2><span>意見422件 | セクター=論点 / 中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span></div>
 <div id="sm-wrap">
-  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
-  <canvas id="smCanvasMain" width="600" height="600"></canvas>
-  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">安全保障強化・現実的防衛を優先 ▲</div>
-  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 平和主義・9条護持を最優先</div>
-  <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 護憲・改憲に反対</div>
-  <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">改憲賛成・時代に合わせる ▶</div>
+  <canvas id="smCanvasHeat" width="640" height="640"></canvas>
+  <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
-<div id="your-marker-note" style="display:none;margin:10px auto 0;max-width:660px;font-size:12px;font-weight:800;color:var(--accent);">投票した選択肢を、マップ上に「あなたはこのあたり」として表示しています。</div>
-<div id="smTourPanel">
-  <div id="smTourStep"></div>
-  <div id="smTourTitle"></div>
-  <div id="smTourDesc"></div>
-  <div id="smTourEmbedLoading">投稿を読み込み中…</div>
-  <div id="smTourEmbed"></div>
-  <div id="smTourQuoteFallback"><span id="smTourQuoteText"></span><small id="smTourQuoteLink">↗ Xで見る</small></div>
-  <div class="sm-tour-nav">
-    <button class="sm-tnav" id="smBtnPrev">← 前へ</button>
-    <div id="smTourProgress"><div id="smTourProgressBar"></div></div>
-    <button class="sm-tnav primary" id="smBtnNext">次へ →</button>
-    <button class="sm-tnav" id="smBtnClose" style="border-color:#666;color:#aaa">✕</button>
-  </div>
-</div>
-<div class="sm-controls">
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <div class="sm-legend-emo">
-      <span style="color:#555">感情強度:</span>
-      <span>冷静</span>
-      <div class="sm-emo-bar"></div>
-      <span>激怒</span>
-    </div>
-    <button id="smStartTour">▶ ガイドツアーで読む</button>
-  </div>
-  <div class="sm-view-row">
-    <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
-    <label><input type="checkbox" id="smChkDots" checked> ドット</label>
-    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="30" style="width:80px;vertical-align:middle"></label>
-  </div>
-  <div class="sm-filters">
-    <span style="font-size:10px;color:#888">絞り込み:</span>
-    <button class="sm-fbtn active" data-q="all">全件 (552)</button>
-    <button class="sm-fbtn" data-q="q3">改憲反対×平和主義優先 (3)</button>
-    <button class="sm-fbtn" data-q="q1">改憲賛成×安保優先 (83)</button>
-    <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (168)</button>
-    <button class="sm-fbtn" data-q="calm">冷静 e≤0 (165)</button>
-  </div>
-</div>
-<div class="sm-stat-cards">
-  <div class="sm-sbox"><div class="sm-slabel">改憲反対 × 平和主義優先 (左下)</div><div class="sm-sval" style="color:#c0392b">168件</div><div class="sm-sdesc">「9条を守って平和を維持」護憲派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">改憲賛成 × 安保優先 (右上)</div><div class="sm-sval" style="color:#2980b9">67件</div><div class="sm-sdesc">「防衛力強化のため改憲が必要」改憲派</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">中立含む（X=0またはY=0）</div><div class="sm-sval" style="color:#7f8c8d">161件</div><div class="sm-sdesc">手続き論・国民投票法議論など</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">113件</div><div class="sm-sdesc">強い怒り・感情的な訴え（両陣営）</div></div>
-</div>
+<p class="map-caption">中心の「憲法改正」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は主張の強さ（外側ほど強い反応）、点の色は立場（青=改正推進 / 赤=慎重・反対 / 緑=手続き重視 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
+<div class="sm-controls"><div class="sm-legend"><span><i style="background:#2563eb"></i>改正推進</span><span><i style="background:#dc2626"></i>慎重・反対</span><span><i style="background:#059669"></i>手続き重視</span><span><i style="background:#64748b"></i>中立・情報</span></div><div class="sm-filters" id="sm-filters"></div></div>
 <div id="sm-tooltip"></div>
-</div><!-- /stance-map-inner -->
+</div>
 </section>
+<div class="arena-divider"><img src="images/arena-divider.webp" alt="" loading="lazy"></div>
 <script>
-const SM_RAW = [
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"護憲・平和主義の立場から改憲に強く反対し感情的に批判",u:"https://x.com/RzOFAwSxIeU07az/status/2068214583685513307"},
-  {x:-2.0,y:0.0,e:2.0,c:0.90,s:"改憲手続きへの強い怒りと護憲的批判",u:"https://x.com/7Gg2LbS2225/status/2068205623427408241"},
-  {x:-1.5,y:-1.0,e:2.0,c:0.85,s:"有田芳生氏への強い憤慨と護憲的な主張",u:"https://x.com/shuichi_isayama/status/2068205426999751046"},
-  {x:-1.0,y:0.0,e:0.0,c:0.80,s:"国民投票法改正に反対、投票率低くても改正成立の可能性を懸念",u:"https://x.com/tamacha1965/status/2068199813552980461"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.85,s:"護憲立場だが言論対抗を主張する冷静な意見",u:"https://x.com/ema_credo/status/2068173526709018800"},
-  {x:-1.0,y:0.0,e:1.0,c:0.75,s:"改憲反対表明も国民支持の実態に諦めと焦り",u:"https://x.com/ayuremufo369/status/2068150263819764032"},
-  {x:0.0,y:0.0,e:1.0,c:0.75,s:"改憲と護憲の二項対立を批判し、戦争反対≠改憲反対と主張",u:"https://x.com/mayaring/status/2068144903893430435"},
-  {x:0.5,y:0.0,e:0.0,c:0.60,s:"国民投票法改正の賛成理由に理解示す",u:"https://x.com/DontafraidRakka/status/2068140935612129373"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"護憲派が改憲策動を非難",u:"https://x.com/CoFt72/status/2068126114296496150"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"国民投票法改正に強く反対、平和憲法護持を叫ぶ護憲派投稿",u:"https://x.com/norahitsuji/status/2068119973722304845"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"護憲・平和主義の立場から改憲阻止を主張する強い反対意見",u:"https://x.com/Niant0922/status/2068080117826584606"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲賛成の矛盾を指摘し改憲に慎重な姿勢",u:"https://x.com/sai1292090/status/2068079820760903684"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"国民投票法採決で反対した院内の立場から改憲手続きに進むことへの不満・批判",u:"https://x.com/Junyuri7/status/2068012000060563775"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"法改正による改憲手続きへの懸念と反対意見",u:"https://x.com/yukinashi00/status/2068003355394515253"},
-  {x:2.0,y:0.0,e:1.5,c:0.85,s:"改憲支持の論理展開と反対派批判",u:"https://x.com/jijy513573/status/2067997596426367232"},
-  {x:1.0,y:1.0,e:1.0,c:0.85,s:"改悪反対・改正賛成。自民党明記で正当防衛可能に",u:"https://x.com/ke1ties/status/2067988934114869267"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"改憲に強く反対。国民投票法と緊急事態条項を批判",u:"https://x.com/buron2011/status/2067981968235810962"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.85,s:"改憲・国民投票法改正に強く反対の立場",u:"https://x.com/buron2011/status/2067980523079925923"},
-  {x:-1.0,y:-2.0,e:1.0,c:0.70,s:"護憲的平和主義者の政治的分類への苛立ち",u:"https://x.com/crossing_9/status/2067974311579926926"},
-  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"改憲支持への転換に不満で支援中止を表明",u:"https://x.com/NU1o1wku9oVUnsP/status/2067956917339902025"},
-  {x:2.0,y:1.0,e:-1.0,c:0.90,s:"改憲賛成で反対派を皮肉る投稿",u:"https://x.com/seigo84880901/status/2067948948179059010"},
-  {x:-1.0,y:0.0,e:1.5,c:0.65,s:"改憲手続き法賛成と反対デモ参加の矛盾を批判",u:"https://x.com/La_Rumba_Buena/status/2067947167487303855"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"改憲反対デモを擁護しメディアを非難",u:"https://x.com/yammy_tak/status/2067944065111560659"},
-  {x:0.5,y:0.0,e:0.5,c:0.60,s:"国民投票法の高支持を根拠に改憲手続きへの批判を軽視する姿勢",u:"https://x.com/tora_SQ/status/2067943301710520370"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.90,s:"改憲に強く反対、棄権阻止を呼びかける護憲投稿",u:"https://x.com/in_00_/status/2067942074750755090"},
-  {x:2.0,y:1.0,e:1.0,c:0.85,s:"改憲支持。時代適応と国際調和を理由に反対派を批判",u:"https://x.com/HARDLUC69070400/status/2067923273179136492"},
-  {x:-2.0,y:0.0,e:2.0,c:0.95,s:"国民投票法改正への強い護憲反対、感情的な危機感を表明",u:"https://x.com/U6aH9JyiuN1384/status/2067917490555142171"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"護憲・平和主義の立場から改憲に反対表明",u:"https://x.com/rrrrn_mimo/status/2067909198638424191"},
-  {x:1.0,y:0.0,e:1.5,c:0.60,s:"国会審議軽視を批判し改宪支持の立场",u:"https://x.com/Coulerpapier/status/2067897422978888117"},
-  {x:0.5,y:0.0,e:0.0,c:0.60,s:"改憲手続きの民主的解決を提唱。手続き論ながら改憲発議を肯定的に提案",u:"https://x.com/gofffwin/status/2067893607974293988"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"改憲国民投票の参加義務を主張",u:"https://x.com/miyukinishio_10/status/2067887260373233753"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"護憲派という用語の改善を提案",u:"https://x.com/gjtpwmda15937/status/2067885143206121665"},
-  {x:1.0,y:0.0,e:0.0,c:0.75,s:"改憲賛成だが具体案に反対",u:"https://x.com/frnXuWz00WuFE8R/status/2067876294105383303"},
-  {x:2.0,y:2.0,e:2.0,c:0.95,s:"改憲・自衛隊明記を熱烈支持、護憲派を激烈批判",u:"https://x.com/AbeKentaSoul/status/2068182999129043218"},
-  {x:-1.0,y:-1.5,e:-0.5,c:0.85,s:"改憲より平和外交・自給率向上など非軍事策を主張",u:"https://x.com/8_bee_/status/2068182185207910763"},
-  {x:2.0,y:2.0,e:1.5,c:0.95,s:"改憲強硬支持。護憲派への強い憤り",u:"https://x.com/ShinzoGuardian4/status/2068156079637241934"},
-  {x:-1.5,y:-1.5,e:1.5,c:0.75,s:"護憲的立場で改憲による自衛隊明記・廃止を主張",u:"https://x.com/monmon_wiz/status/2068147516701569094"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"改憲状況を描写し両論併記、筆者態度は不明",u:"https://x.com/famifami_don/status/2068145163659280427"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"改憲・国防強化を熱烈支持、感情的な投稿",u:"https://x.com/ShinzoGuardian4/status/2068114821191516170"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"憲法改正・9条的自隊明記を支持し国防強化を最優先",u:"https://x.com/mocchiAbeFan758/status/2068064226518663385"},
-  {x:2.0,y:2.0,e:2.0,c:0.95,s:"改憲・国防強化を熱烈支持し反対派を激烈批判",u:"https://x.com/ShinzoGuardian4/status/2068060682679910746"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"護憲・改悪反対。9条護持・現行憲法維持を最優先",u:"https://x.com/itsupansalary2/status/2068044998147453062"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"自民改憲案への疑問や困惑",u:"https://x.com/chinchixws5/status/2067982516276150769"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"改悪阻止呼びかけ、護憲・平和主義で強い怒り",u:"https://x.com/itsupansalary2/status/2067971234563047741"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"改宪の具体論点を列举し兴趣を示すも态度は未表明",u:"https://x.com/Rohan_DPFP/status/2067935946713272417"},
-  {x:2.0,y:2.0,e:1.0,c:0.85,s:"改憲早期実現と自衛隊明記を求める投稿",u:"https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939"},
-  {x:2.0,y:2.0,e:0.5,c:0.85,s:"改憲必须的と断じ個別的自衛権堅持を主張",u:"https://x.com/mal1476488/status/2067911074532429956"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.80,s:"改憲手続きへの批判的自民党の改憲手法を皮肉る",u:"https://x.com/xyukijix/status/2067898613356015823"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.95,s:"改憲に強く反対。人権侵害の段階的進行を警告",u:"https://x.com/QSeSlEN6j1YAKO/status/2067886026350330007"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"改憲批判的自民党・高市氏への警戒と護憲立場",u:"https://x.com/haruyokoi1023/status/2067873373439558116"},
-  {x:1.5,y:0.5,e:0.5,c:0.75,s:"改憲支持だが9条より24条の削除を重視",u:"https://x.com/kamioka_u1/status/2067862126451159164"},
-  {x:2.0,y:2.0,e:1.0,c:0.95,s:"台湾独立・改憲・自衛隊明記を熱烈支持・宣言",u:"https://x.com/TaYasouKei/status/2067850410900312417"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"改憲支持・抑止力強化が緊急課題と主張",u:"https://x.com/wind_0196/status/2067831949541216551"},
-  {x:-0.5,y:-1.0,e:1.0,c:0.70,s:"改憲より対岸の支援を優先すべきとの主張",u:"https://x.com/SDzpp8XtPmUsyN2/status/2067814737736524268"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"改憲支持、自民党案を及的腰と批判し参政党案を支持",u:"https://x.com/doriftbottle/status/2067774539774509546"},
-  {x:2.0,y:2.0,e:2.0,c:0.92,s:"改憲・国防軍明記を支持、敵意強い",u:"https://x.com/koji19610103/status/2067772348594598095"},
-  {x:-1.0,y:1.0,e:-0.5,c:0.85,s:"改憲に懐疑的。将来不安と政治的問題を指摘",u:"https://x.com/yotuusb888/status/2067750011451109489"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.85,s:"経済危機時に改憲は誤りと指摘し護憲的立場",u:"https://x.com/EudMe64/status/2067747932670161342"},
-  {x:2.0,y:2.0,e:2.0,c:0.85,s:"自衛官へのヘイトに反論し9条に触れずとも改正すべきと強く主張",u:"https://x.com/monozukuriman/status/2067746184924705132"},
-  {x:-2.0,y:0.0,e:1.0,c:0.90,s:"改憲に強く反対。独裁国家への方向を懸念",u:"https://x.com/ryosmitisirube/status/2067742561981395056"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"護憲・民主主義重視で改憲に強く反対",u:"https://x.com/masatami_kasagi/status/2067655097782538530"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"護憲の立場で改憲と徴兵制を批判",u:"https://x.com/tomimouse1/status/2067651960657080803"},
-  {x:-0.5,y:-0.5,e:1.0,c:0.70,s:"緊急事態条項と解散権制限の改憲案を批判的に分析",u:"https://x.com/iidak12/status/2068178506820079740"},
-  {x:-1.0,y:-2.0,e:-1.0,c:0.85,s:"護憲・平和主義立場から改憲と緊急事態条項に懸念",u:"https://x.com/ippozutu15/status/2068000182063829115"},
-  {x:-1.5,y:-1.0,e:1.5,c:0.85,s:"護憲の観点から改憲を批判する感情的な投稿",u:"https://x.com/fallen_teru/status/2067939915032297899"},
-  {x:0.0,y:0.0,e:0.0,c:0.75,s:"法案検証と国民議論の喚起、態度は不明",u:"https://x.com/EbiShumai257/status/2067920046702350517"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"憲法改正・国民投票法改正に強く反対、感情的な批判",u:"https://x.com/buron2011/status/2067763266311618753"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"国民投票法改悪反対、護憲、緊急事態条項新設阻止",u:"https://x.com/buron2011/status/2067762423277457741"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.75,s:"改憲世論調査を紹介しマスコミや政治を皮肉る",u:"https://x.com/CmfYnqbck380794/status/2067622226879504821"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"政党の言行不一致を批判する投稿",u:"https://x.com/machanlove15/status/2067614907722539174"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"改正案中 基本人权删除・紧急条款追加に強く反对",u:"https://x.com/Dabrith/status/2067585548626415824"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"緊急事態条項賛成の感想。改憲進展への焦り",u:"https://x.com/l1yphTWMsa45573/status/2067583144287687118"},
-  {x:-2.0,y:0.0,e:2.0,c:0.95,s:"国民投票法改悪に強く反対、憲法改正絶対阻止の立場",u:"https://x.com/buron2011/status/2067573140138693005"},
-  {x:-2.0,y:0.0,e:2.0,c:0.95,s:"国民投票法改悪と改憲に絶対反対、怒り",u:"https://x.com/buron2011/status/2067572951227232288"},
-  {x:-0.5,y:0.0,e:0.5,c:0.60,s:"改変派を不一致や政治利用の点から批判",u:"https://x.com/j6h9G7IZy0wvtLg/status/2067372340670038523"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"改憲派YouTuber二人を批判的に分析",u:"https://x.com/j6h9G7IZy0wvtLg/status/2067370888178352519"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.65,s:"改憲派への批判的紹介。護憲寄りだが明言せず",u:"https://x.com/j6h9G7IZy0wvtLg/status/2067368755324490223"},
-  {x:-2.0,y:0.0,e:2.0,c:0.95,s:"国民投票法改正に絶対反対、票操作で改憲阻止を主張",u:"https://x.com/buron2011/status/2067357075274117603"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"国民投票法改悪と憲法改悪に強く反対",u:"https://x.com/buron2011/status/2067241045554082294"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"国民投票法改正と緊急事態条項に絶対反対",u:"https://x.com/buron2011/status/2067237647928730001"},
-  {x:-2.0,y:0.0,e:1.5,c:0.90,s:"国民投票法改正と緊急事態条項に強く反対",u:"https://x.com/buron2011/status/2067237480752185754"},
-  {x:-2.0,y:-1.5,e:2.0,c:0.75,s:"国民投票法改悪と改憲に絶対反対の護憲派",u:"https://x.com/buron2011/status/2067236897504874965"},
-  {x:-2.0,y:0.0,e:2.0,c:0.85,s:"国民投票法改正に絶対反対の護憲的意見",u:"https://x.com/buron2011/status/2067234920628642282"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"国民投票法改正に強く反対し護憲立場",u:"https://x.com/buron2011/status/2067234439126778332"},
-  {x:-2.0,y:-1.5,e:2.0,c:0.95,s:"国民投票法改正と緊急事態条項に強く反対",u:"https://x.com/buron2011/status/2067233737419702356"},
-  {x:2.0,y:2.0,e:0.0,c:1.00,s:"9条改正・国防軍創設を支持",u:"https://x.com/y7m3389SorxeAi9/status/2068212493378560282"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"護憲・平和主義の立場から改憲に強く反対",u:"https://x.com/tom10644324280/status/2068204274467872792"},
-  {x:2.0,y:0.0,e:1.5,c:0.85,s:"改憲加速を支持。維新との連携に怒り",u:"https://x.com/lautrea/status/2068158992862576976"},
-  {x:2.0,y:2.0,e:1.0,c:0.95,s:"9条改憲と安保強化を主張",u:"https://x.com/GvVvfpjq2G97202/status/2068127797571449309"},
-  {x:2.0,y:1.0,e:1.0,c:0.95,s:"改憲強く支持、9条の時代にそぐわないとし批判",u:"https://x.com/rightrighton4/status/2067994758203756843"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"改憲に強く反対。自衛官保護を理由に9条改憲の危険性を警告",u:"https://x.com/FSNg7hpPtvnUjIF/status/2067981081681531266"},
-  {x:1.0,y:1.0,e:1.0,c:0.90,s:"9条改憲支持だが、自衛隊改革を先行すべきと主張",u:"https://x.com/TJopqC5RgviqSK5/status/2067969099871986156"},
-  {x:1.0,y:1.0,e:1.0,c:0.80,s:"9条と自卫隊の矛盾指摘し改正主張",u:"https://x.com/Nullypog/status/2067947902367134004"},
-  {x:1.5,y:1.5,e:0.0,c:0.85,s:"9条改正支持。自衛隊明記で安全保障強化が必要と主張",u:"https://x.com/niko3143/status/2067920109520453789"},
-  {x:1.0,y:1.0,e:0.0,c:0.85,s:"改憲支持、自隊の条文追加を主張",u:"https://x.com/dZFoZ835aWMMURR/status/2067914478537375828"},
-  {x:1.0,y:1.0,e:1.0,c:0.80,s:"護憲の非現実性を指摘し9条改正か自衛队廃止かの二択主張",u:"https://x.com/Nullypog/status/2067895002936868915"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"改憲・防衛強化を熱烈応援する投稿",u:"https://x.com/yknh08/status/2067877284556759302"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.70,s:"改憲草案の論理矛盾を指摘し護憲寄りに立つ冷静な分析",u:"https://x.com/ryudairou/status/2067822523992158268"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.65,s:"護憲先生の思想を冷笑、投稿者の改憲姿勢は不明",u:"https://x.com/paris0326/status/2067815785100427757"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"改憲強く支持、9条削除と防衛力強化主張",u:"https://x.com/Tenhai_exp/status/2067761996892893325"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"改憲強く支持、第2項削除主張",u:"https://x.com/Kawa6raFriedman/status/2067757539203391852"},
-  {x:1.5,y:1.5,e:0.5,c:0.85,s:"維新の改憲案を支持し抑止力強化を主張",u:"https://x.com/grok/status/2067742905721118801"},
-  {x:2.0,y:0.0,e:1.0,c:0.80,s:"自民に改憲求める、維新評価",u:"https://x.com/mogamiujisato/status/2067732837231628690"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"護憲・平和主義の立場から日本会議の改憲動きを批判",u:"https://x.com/FSNg7hpPtvnUjIF/status/2067624468340728067"},
-  {x:2.0,y:2.0,e:1.0,c:0.95,s:"9条改正と自卫国軍化を強く支持、感情的な批判を含む",u:"https://x.com/motoyama1982/status/2067575858685190288"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"9条改憲案を学術的に比較説明する中立的な投稿",u:"https://x.com/abe_keishi/status/2067572022868328558"},
-  {x:2.0,y:2.0,e:1.0,c:0.95,s:"改憲強く支持、9条2項削除と国防軍明記に賛成",u:"https://x.com/subririn_b/status/2067563630259028414"},
-  {x:-1.5,y:-1.5,e:0.0,c:0.85,s:"自衛力巡る分析で護憲主張",u:"https://x.com/kouzie01/status/2067512844866978127"},
-  {x:-1.0,y:0.0,e:0.5,c:0.75,s:"明記改憲不要と主張、違憲論解消目的の改憲に反対",u:"https://x.com/BucchoJ/status/2067497889933541868"},
-  {x:-1.0,y:-1.0,e:0.5,c:0.75,s:"改憲で徴兵制導入の懸念示す護憲的な意見",u:"https://x.com/TVbancyo/status/2067487614270427457"},
-  {x:1.0,y:1.5,e:0.0,c:0.85,s:"改憲支持で国防強化を重視国会質疑",u:"https://x.com/K5omyKUOte87912/status/2067466904877564329"},
-  {x:2.0,y:1.0,e:1.0,c:0.80,s:"解釈頼り運用の危険指摘し改憲支持",u:"https://x.com/tokumusocho/status/2067445721801146677"},
-  {x:1.0,y:0.5,e:0.0,c:0.80,s:"改憲支持・軍隊化容認の冷静な分析",u:"https://x.com/jijicoltdceo/status/2067442429939294255"},
-  {x:-1.5,y:-1.0,e:-1.0,c:0.65,s:"9条改正不要と代替案を示す護憲的意見",u:"https://x.com/akubikinako/status/2067441818783080941"},
-  {x:-1.0,y:-1.0,e:0.5,c:0.50,s:"改憲論議に懐疑的。全国民で安全を考えるべきと主張",u:"https://x.com/G6rWL31oqWdlICj/status/2067410440918057413"},
-  {x:2.0,y:1.5,e:1.0,c:0.80,s:"現行憲法に強い不満を示し、新憲法制定を主張",u:"https://x.com/yokohamaikka/status/2067285000735850873"},
-  {x:2.0,y:2.0,e:1.0,c:0.90,s:"9条改正と国軍化で防衛力強化を支持",u:"https://x.com/syohchikubuy/status/2067278406446907841"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"改憲と軍隊化を推進し危機感を煽る投稿",u:"https://x.com/MaTsu0_00/status/2067260313490313443"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"9条改正を支持、学説矛盾と解釈不一致を指摘",u:"https://x.com/ayahana_ciel_bl/status/2067221684684505448"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲手続きの公正性に懸念。印象操作を危惧",u:"https://x.com/bloodyMommy8412/status/2067775015152714162"},
-  {x:0.0,y:0.0,e:-1.0,c:0.50,s:"国民投票法や改憲議論の不足を指摘、手続き論のみ",u:"https://x.com/hisashi_karaage/status/2067587713180839980"},
-  {x:-1.0,y:0.0,e:1.0,c:0.75,s:"国民投票法改正案の広告規制・開票緩和に反対",u:"https://x.com/koiketakao/status/2067559788716986636"},
-  {x:-1.5,y:-1.5,e:0.0,c:0.95,s:"自民改憲案への反対表明、護憲的立場",u:"https://x.com/worldpeace828/status/2067529123527069857"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"国民投票法改正を批判し改憲に強く反対",u:"https://x.com/takuya_angel/status/2067475132617289988"},
-  {x:-1.0,y:0.0,e:1.0,c:0.85,s:"改正手続法への強い批判的意見。丁寧な議論を阻む仕様を非難",u:"https://x.com/mmmmmamama/status/2067465800894853326"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"国民投票法改正の手順に疑問呈す",u:"https://x.com/8_bee_/status/2067404127437754801"},
-  {x:0.0,y:0.0,e:0.0,c:0.80,s:"国民投票法改正の手続的問題点を指摘する法案論",u:"https://x.com/1984OrWeIIian/status/2067262077765578759"},
-  {x:-2.0,y:0.0,e:1.5,c:0.85,s:"国民投票法改正を批判し改憲Proceduralな問題に懸念",u:"https://x.com/take_mikazuchi/status/2067234719390150957"},
-  {x:-1.5,y:0.0,e:1.5,c:0.85,s:"国民投票法改正に強く反対、媒体の沈黙を批判",u:"https://x.com/niyari_honpo/status/2067211226401366473"},
-  {x:-2.0,y:0.0,e:1.0,c:0.95,s:"国民投票法の欠陥を指摘し改憲阻止を主張",u:"https://x.com/POLIMELOch/status/2067120194523377822"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"国民投票法改正後の憲法改正手続きへの不安",u:"https://x.com/yacosuke/status/2066878384551219337"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"国民投票法改正への批判的投稿",u:"https://x.com/niyari_honpo/status/2066770445291164077"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"国民投票法の問題点を指摘し改憲阻止を呼びかけ",u:"https://x.com/POLIMELOch/status/2066457786675003859"},
-  {x:-2.0,y:0.0,e:2.0,c:0.90,s:"改憲法案に強く反対し高市氏を批判する護憲派",u:"https://x.com/yuuta24mikiko/status/2066373740993433832"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲进程への批判的投稿、高市政権を非難",u:"https://x.com/shiraike2/status/2066035636755452237"},
-  {x:0.0,y:0.0,e:0.5,c:0.70,s:"国民投票法改正法案に反対。手続き・広告規制の欠陥を指摘",u:"https://x.com/yama_me_do_ob/status/2065322629435912293"},
-  {x:-0.5,y:0.0,e:-0.5,c:0.50,s:"有缺陷的国民投票法修正に批判的、慎重姿勢",u:"https://x.com/asuno_jiyuu/status/2065263881786888270"},
-  {x:0.0,y:0.0,e:0.0,c:0.75,s:"国民投票法の手続き問題を指摘し改憲手続きに慎重な姿勢",u:"https://x.com/hira_sail2/status/2065197085352407238"},
-  {x:-1.0,y:0.0,e:0.0,c:0.75,s:"国民投票法の手続的欠陥を指摘し改憲に懸念",u:"https://x.com/ponpocosora/status/2065171396201000974"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.85,s:"国民投票法改悪に強く反対、護憲立場",u:"https://x.com/etude_op25no1/status/2065066455339856062"},
-  {x:2.0,y:0.0,e:1.0,c:0.80,s:"改憲肯定的だが安保よりLGBT政策焦点",u:"https://x.com/amenonubok60793/status/2070726362739192309"},
-  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"共和制移行改憲を疑問視する批判的投稿",u:"https://x.com/AKsTCAcr0n83453/status/2070709728821514628"},
-  {x:0.5,y:0.0,e:0.0,c:0.60,s:"改憲支持だが実現困難と分析",u:"https://x.com/axela_cbr600rr/status/2070707373967319058"},
-  {x:1.5,y:0.5,e:1.0,c:0.75,s:"改憲実現のため他勢力を利用すべきとの主張",u:"https://x.com/Wq5if92WDa1qe0J/status/2070693142106673262"},
-  {x:0.0,y:0.0,e:0.5,c:0.60,s:"改憲法案への賛成に疑問・政治的整合性を問う投稿",u:"https://x.com/NU1o1wku9oVUnsP/status/2070668825067180325"},
-  {x:-1.0,y:0.0,e:1.5,c:0.70,s:"国民民主党の改憲・戦争支持を批判し騙されぬよう警告する投稿",u:"https://x.com/daisuke8174/status/2070651057987006490"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲への強い反対と平和主義的立場からの恐怖",u:"https://x.com/nippon_D_fujin/status/2070644433977291119"},
-  {x:0.5,y:-0.5,e:0.0,c:0.80,s:"慎重派改憲容認、戦争の可能性に懸念",u:"https://x.com/koto34/status/2070643130391732506"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"支援する改憲派に疑問呈し失望を示す護憲寄りの批判",u:"https://x.com/NU1o1wku9oVUnsP/status/2070624614947098821"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"護憲立場から改賛派を痛烈に批判する怒りの投稿",u:"https://x.com/Macopapa4/status/2070620944570474930"},
-  {x:1.5,y:1.0,e:1.0,c:0.65,s:"改憲賛成を護憲派にやじるという能動的表明",u:"https://x.com/arashiN06172/status/2070558958180610055"},
-  {x:-1.5,y:0.0,e:1.5,c:0.85,s:"国民投票の不正な運用に懸念を示し改憲に反対する立場",u:"https://x.com/androidappshq/status/2070536443047383308"},
-  {x:1.0,y:0.0,e:1.5,c:0.70,s:"参政党への強い怒りと共に改憲賛成を表明",u:"https://x.com/v77c6tfv/status/2070535528857108658"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"NHKの改憲誘導工作への批判",u:"https://x.com/AKsTCAcr0n83453/status/2070533610659287221"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"壊憲政党・悪法と強く非難する護憲派の見解",u:"https://x.com/etude_op25no1/status/2070513430289895696"},
-  {x:-1.0,y:-0.5,e:1.0,c:0.60,s:"改憲含む与党施策に反対し、追随せずに異論唱えるべきと主張",u:"https://x.com/pYrALh1Erb63935/status/2070510972599665139"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"改憲・核保有支持、安全保障最優先の危機感投稿",u:"https://x.com/TCj7lEPYTDM0FbG/status/2070503745813950518"},
-  {x:-1.0,y:-1.5,e:1.0,c:0.70,s:"改憲批判、平和主義の立場から感情的な危惧",u:"https://x.com/TCj7lEPYTDM0FbG/status/2070502651457052978"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"参政党不支持と護憲・平和主義的立場",u:"https://x.com/TCj7lEPYTDM0FbG/status/2070496593347010966"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"改憲手続法阻止を求める護憲的な陳情投稿",u:"https://x.com/cleanhouselily/status/2070475231593185579"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"憲法改正手続法に強く反対し廃案を求める感情的な暴露",u:"https://x.com/cleanhouselily/status/2070471014765793630"},
-  {x:0.0,y:0.0,e:0.5,c:0.75,s:"国民投票法の最低投票率を要望する手続き論",u:"https://x.com/tutida_kenji/status/2070468271929966597"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.60,s:"改憲批判の皮肉的投稿で護憲的姿勢",u:"https://x.com/40cells/status/2070458622426186047"},
-  {x:0.0,y:0.0,e:1.0,c:0.60,s:"改憲法案への賛成批判だが態度は不明確",u:"https://x.com/nine111nine/status/2070455579295035545"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"護憲・平和主義支持、軍拡と改憲に強く反対",u:"https://x.com/cleanhouselily/status/2070450314986328340"},
-  {x:-1.5,y:0.0,e:1.5,c:0.75,s:"改憲賛成派を批判し混沌を望む人と断じる",u:"https://x.com/NM09QSBN/status/2070439590884974897"},
-  {x:-1.0,y:0.0,e:0.5,c:0.60,s:"国民投票法改正と緊急事態条項の関連性に懸念",u:"https://x.com/koronawoowarase/status/2070438518799880652"},
-  {x:-1.0,y:-1.5,e:1.5,c:0.75,s:"改憲に批判的、共産党への冷笑と護憲寄りの立場",u:"https://x.com/kenmetal1217/status/2070424782324326742"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"国民投票法改正への批判的意見で言行不一致を指摘",u:"https://x.com/nekogadaisuke/status/2070424694277210500"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"国民投票法の公平性問題を提起。改憲賛否は不明",u:"https://x.com/KominLabo/status/2070420746040676572"},
-  {x:1.0,y:0.0,e:0.0,c:0.65,s:"改憲支持の立場で手続き情報を紹介",u:"https://x.com/SgfkSystem/status/2070410802637799509"},
-  {x:-1.0,y:0.0,e:1.0,c:0.75,s:"自民党の改憲公約を批判し野党に反対を求める護憲寄りの投稿",u:"https://x.com/EOqMvByyGNQErix/status/2070405031095079335"},
-  {x:-1.0,y:-1.5,e:1.5,c:0.80,s:"護憲・平和主義の立場から野党を批判",u:"https://x.com/AFYPTTVWsYcaYi2/status/2070350379649556871"},
-  {x:0.0,y:0.0,e:0.0,c:0.80,s:"改憲手続きの困難さを冷静に指摘する分析",u:"https://x.com/Cronous_zero/status/2070319265836867966"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"改憲支持。政治プロセス重視、冷静な立場",u:"https://x.com/mafuchanHonaka/status/2070292224248848824"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"憲法裁判所設置の改憲案を提示し左派に批判",u:"https://x.com/C_N_Lundi/status/2070780531688742945"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"護憲派を矛盾ある売国奴と激しく非難、改憲支持",u:"https://x.com/black_pearl0728/status/2070750009981829511"},
-  {x:-2.0,y:0.0,e:-0.5,c:0.90,s:"教授説明基に改憲に反対、明示的護憲立場",u:"https://x.com/rrevv2021/status/2070749210761380217"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"自民党改憲に強く反対。内容・方法共に批判し、自由保障を懸念",u:"https://x.com/to_m3v/status/2070748909023248488"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"改憲国民投票に反対表明、社会保障削減への不安から",u:"https://x.com/nemurineko42/status/2070748067830321165"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"改憲反対派を非難する改憲支持の意見",u:"https://x.com/251Kenichi/status/2070735159595553013"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"改憲反対を表明し護憲派、共産党支持を問う",u:"https://x.com/hidetaka5231/status/2070733901274996952"},
-  {x:-1.0,y:-1.0,e:2.0,c:0.75,s:"政治不信と改憲反対を強い怒りで批判",u:"https://x.com/azuazu25049499/status/2070728400298553558"},
-  {x:0.5,y:0.0,e:0.5,c:0.60,s:"改憲反対派の論点を疑問視",u:"https://x.com/shugimon/status/2070728271218770059"},
-  {x:-2.0,y:0.0,e:1.0,c:0.95,s:"改憲に強く反対表明。攻撃的感情あるが安保論はなし",u:"https://x.com/MIYUKI311255/status/2070726480418759106"},
-  {x:-2.0,y:-1.0,e:-1.0,c:0.70,s:"改憲反対を明言し異論への耳を閉じる態度",u:"https://x.com/hietaro/status/2070724375763198107"},
-  {x:-2.0,y:-1.5,e:1.5,c:0.85,s:"改憲反対を表明。被虐待児等の比喩で感情的に批判",u:"https://x.com/Ra5g6cdyhJZXMW1/status/2070724190119080399"},
-  {x:-2.0,y:-1.5,e:2.0,c:0.90,s:"改憲絶対反対、短期総選挙への不満",u:"https://x.com/J6fNp3GaHB79326/status/2070723570867806399"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.85,s:"日米同盟の再検討後に改憲を判断すべきと主張",u:"https://x.com/omnicom61/status/2070716578682011749"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"平成24年改憲草案の国旗条項に批判的",u:"https://x.com/yuki81463410/status/2070704699297411503"},
-  {x:0.0,y:0.0,e:-1.0,c:0.60,s:"改憲反対派の行動への批判で改憲賛否は不明",u:"https://x.com/Patoriot_Miyu/status/2070685489796125164"},
-  {x:1.0,y:2.0,e:1.0,c:0.80,s:"改憲反対を思考停止と批判し、防衛強化を重視する投稿",u:"https://x.com/suZX6e4JcPNxUJh/status/2070684400220799285"},
-  {x:-1.5,y:0.0,e:1.0,c:0.35,s:"護憲の意向を表明する仮定形の発言",u:"https://x.com/xjzsifHgkk5AlBd/status/2070677612247261290"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.85,s:"改憲反対集会への支持とマスコミ・高市氏への強い怒り",u:"https://x.com/yuukosemp/status/2070674815846101398"},
-  {x:-1.0,y:0.0,e:0.5,c:0.80,s:"改憲不要論を展開し護憲寄りの立場",u:"https://x.com/iD535JiziquRBrH/status/2070659147608293872"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲派を批判、護憲を示唆",u:"https://x.com/shimichan2012/status/2070651791340089560"},
-  {x:-2.0,y:0.0,e:2.0,c:0.90,s:"統一教会との結託を根拠に改憲に強く反対",u:"https://x.com/TuO8ZvhI1H24087/status/2070650402878734366"},
-  {x:-2.0,y:-1.0,e:-1.0,c:0.85,s:"憲法改正に強く反対。ナチス・ファシズムへの懸念を強調",u:"https://x.com/fallen_teru/status/2070637049779220776"},
-  {x:-1.0,y:0.0,e:1.5,c:0.70,s:"改憲中止を求める護憲寄りの意見",u:"https://x.com/lKrE08KGhI8VxXM/status/2070635719803228264"},
-  {x:1.5,y:1.5,e:1.5,c:0.85,s:"山本太郎支持で改憲容認、反対者は排除すべきとの強硬意見",u:"https://x.com/yuachan2022/status/2070609264658567436"},
-  {x:0.0,y:0.0,e:0.0,c:0.40,s:"れいわ新選組内の改憲めぐる方向性違いを報告",u:"https://x.com/yuachan2022/status/2070607687310852606"},
-  {x:0.5,y:0.0,e:-1.0,c:0.40,s:"改憲反対派を皮肉る冷笑的な投稿",u:"https://x.com/xyzw6gt/status/2070602189496840556"},
-  {x:1.5,y:1.5,e:1.5,c:0.85,s:"改憲支持立場から野党姿勢を批判",u:"https://x.com/Akathukimi/status/2070592113776246984"},
-  {x:-2.0,y:-1.5,e:1.5,c:0.80,s:"護憲立場で改憲阻止を呼びかけ強い批判",u:"https://x.com/pxAw5ZAJ0URhZxO/status/2070548653702517127"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"戦前生まれの保守層、改憲支持を表明",u:"https://x.com/sakurakonippon1/status/2070543654117409227"},
-  {x:-2.0,y:-1.5,e:1.5,c:0.95,s:"護憲で改憲阻止を呼びかける感情的な批判投稿",u:"https://x.com/CFlemingHomes/status/2070535017843802182"},
-  {x:1.0,y:1.0,e:0.5,c:0.70,s:"改憲で集団的自衛権を縛る提案。改憲支持・安全保障志向",u:"https://x.com/kemomimi_invest/status/2070491836465181134"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲慎重派。政府·烈士会優先を批判",u:"https://x.com/ZvJlFR5kPA3748/status/2070491255000510474"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"改憲反対を明記し山添議員を称賛",u:"https://x.com/Sravichan/status/2070785535489233063"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.85,s:"改憲阻止主張、高市氏を痛烈皮肉",u:"https://x.com/tana23555/status/2070783466019643836"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"9条改憲に強く反対する護憲派市民運動家の意見",u:"https://x.com/AE30glLVaVknvcm/status/2070783223995707753"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.85,s:"9条改憲に反対する護憲派・平和主義の活動家",u:"https://x.com/AE30glLVaVknvcm/status/2070782144318960035"},
-  {x:-1.5,y:-1.0,e:1.0,c:0.75,s:"改憲・戦争法案への批判的意見、護憲寄り",u:"https://x.com/iidak12/status/2070756787746488488"},
-  {x:1.0,y:0.0,e:0.0,c:0.75,s:"消極的改憲支持。技術進歩で憲法も時代変化すべき",u:"https://x.com/mamemiso2930/status/2070756721463881871"},
-  {x:-2.0,y:-2.0,e:0.0,c:0.95,s:"改憲反対を掲げる集会の告知投稿",u:"https://x.com/38etCafe_/status/2070755533347504550"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"護憲・平和主義の意思表示と抗議行動への参加を呼びかけ",u:"https://x.com/fujisanhakoneya/status/2070755231177318436"},
-  {x:-2.0,y:-2.0,e:0.0,c:0.90,s:"改憲に強く反対。武力頼りではなく平和主義を主張",u:"https://x.com/iikawa_h/status/2070752101924487528"},
-  {x:-1.0,y:-0.5,e:0.0,c:0.65,s:"改憲反対請願を支持し陳情した報告。冷静な報告口調",u:"https://x.com/whochitosa/status/2070750254199418938"},
-  {x:0.0,y:0.0,e:-1.0,c:0.40,s:"護憲派に流された自身の不明を自嘲的に語る",u:"https://x.com/minto_03101/status/2070748775891751065"},
-  {x:1.0,y:0.0,e:0.5,c:0.75,s:"38年前から改憲手続き実施を求めている",u:"https://x.com/s08533051/status/2070748199724417185"},
-  {x:1.0,y:2.0,e:1.0,c:0.85,s:"改憲・防衛増額を侵略への備えと正当化",u:"https://x.com/6Li6ItuHzs48450/status/2070747608600269225"},
-  {x:1.0,y:0.0,e:0.5,c:0.65,s:"改憲支持だが戦争賛成とは別の問題と指摘",u:"https://x.com/aosasa/status/2070746797371519396"},
-  {x:1.0,y:2.0,e:0.0,c:0.80,s:"戦争反対だが改憲・防衛強化に賛成",u:"https://x.com/yastsuchiya/status/2070743296767619425"},
-  {x:1.0,y:1.0,e:0.5,c:0.80,s:"改憲・防衛費増額を支持し護憲派を批判",u:"https://x.com/eeY8DRDxFVvdnXz/status/2070740809784426837"},
-  {x:-1.5,y:-1.0,e:0.0,c:0.80,s:"改憲反対署名に署名した自身の体験記",u:"https://x.com/riddle_whr/status/2070737917618827405"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"9条護持・改憲反対を表明",u:"https://x.com/Y9mamoru2026/status/2070734293769544147"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"現行平和憲法を支持し改憲反対の護憲派",u:"https://x.com/chinchixws5/status/2070730722638483705"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.85,s:"護憲の個人的立場から第九条改憲賛成政党を眼中外と表明",u:"https://x.com/letsgenmai/status/2070728016255439253"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.70,s:"改憲反対デモ紹介し正確情報重視",u:"https://x.com/maegamigaare/status/2070727931102699795"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"護憲・改憲阻止集会への参加呼びかけ",u:"https://x.com/YHEGep5l4lTPLmQ/status/2070726545262641398"},
-  {x:-1.0,y:-1.5,e:0.5,c:0.70,s:"改憲反対・平和主義を支持する投稿",u:"https://x.com/akiko311419/status/2070726284720980434"},
-  {x:1.0,y:0.0,e:-1.0,c:0.70,s:"改憲容認も現行憲法に疑問、米批判で皮肉",u:"https://x.com/iYHQZp9vtUGitbu/status/2070726085617365053"},
-  {x:1.0,y:0.5,e:-1.0,c:0.60,s:"改憲反対派を皮肉る改憲肯定寄りの投稿",u:"https://x.com/iYHQZp9vtUGitbu/status/2070725312665866284"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"軍拡改憲に強く反対、平和主義を主張",u:"https://x.com/iITdIIcutIVGKg1/status/2070723603650511099"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"改憲反対を軽いノリで肯定、皮肉っぽい",u:"https://x.com/yoco_noko/status/2070723499631780320"},
-  {x:0.0,y:0.0,e:1.0,c:0.60,s:"護憲派改憲派双方を批判し憲法知識の底上げを主張",u:"https://x.com/kikumaco/status/2070723414214812092"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"改憲反対派を批判的に指摘",u:"https://x.com/Gv4ibidx7Ong0ot/status/2070723141807300743"},
-  {x:1.0,y:0.0,e:0.0,c:0.85,s:"改憲支持だが自民案に条件付きで草案変更を求める",u:"https://x.com/9NsgFR5PzFCr3k9/status/2070722808947282361"},
-  {x:-2.0,y:0.0,e:0.0,c:0.75,s:"改憲STOP組織のルール告知であり護憲姿勢だが、組織宣言の色合い",u:"https://x.com/nowarmusan/status/2070717177070780876"},
-  {x:1.0,y:0.0,e:-1.0,c:0.80,s:"改憲賛成だったが減票を報告する自嘲的な投稿",u:"https://x.com/no1dreamworld/status/2070716859662696511"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.95,s:"改憲・戦争に強く反対、護憲・平和主義を鮮明に表明",u:"https://x.com/luck_level3/status/2070716837571211270"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"9条改憲に明確に反対、上官責任の欠如を憂く",u:"https://x.com/Uminekotop/status/2070713642774126722"},
-  {x:2.0,y:2.0,e:1.0,c:0.75,s:"改憲支持で護憲派を批判、安全保障優先の立場",u:"https://x.com/lCgGElaoQJprQx9/status/2070713561295495416"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"改憲に強く反対し国民投票での反対を主張",u:"https://x.com/kichi_kei/status/2070713008322720027"},
-  {x:-2.0,y:-2.0,e:0.0,c:0.90,s:"改憲STOPと国旗損壊罪反対の集会告知",u:"https://x.com/nowarmusan/status/2070709911785480400"},
-  {x:2.0,y:2.0,e:1.0,c:0.80,s:"9条改正の早期発議・承認を求める強い改憲支持投稿",u:"https://x.com/okahaji_92/status/2070758696645501059"},
-  {x:2.0,y:2.0,e:0.0,c:0.85,s:"9条廃止と国軍化、防衛力強化を主張する改憲賛成意見",u:"https://x.com/dracob70/status/2070758325793509740"},
-  {x:2.0,y:2.0,e:1.0,c:0.92,s:"9条改憲と国防優先を主張する愛国者の投稿",u:"https://x.com/renin_aikoku/status/2070741552188768428"},
-  {x:-0.5,y:0.0,e:1.5,c:0.75,s:"統一教会系改憲を批判し天皇削除改憲を主張",u:"https://x.com/shi20240821/status/2070738180429725956"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"自民改憲草案の9条改変を批判し戦争への懸念",u:"https://x.com/BvknJpw/status/2070737151680282851"},
-  {x:1.0,y:0.0,e:-1.0,c:0.70,s:"改憲⇒戦争論を極論と笑い、護憲派的懸念を一笑",u:"https://x.com/offtensivenobil/status/2070725679268946143"},
-  {x:2.0,y:2.0,e:0.0,c:0.90,s:"改憲支持・安保優先の冷静な投稿",u:"https://x.com/daifuku316inv/status/2070717792949764334"},
-  {x:1.5,y:0.0,e:1.0,c:0.85,s:"改憲支持。天皇の在り方から宪法改正が必要と主張",u:"https://x.com/katsuragisatoru/status/2070716875315798065"},
-  {x:-2.0,y:-1.5,e:-1.5,c:0.80,s:"改憲で徵兵制可能化の批判と個人情報管理への懸念",u:"https://x.com/yh496/status/2070714112863273307"},
-  {x:2.0,y:2.0,e:2.0,c:0.95,s:"9条改憲・核武装・自衛力強化を支持する改憲推進の投稿",u:"https://x.com/98n5hejNSKJkpQq/status/2070708512238502278"},
-  {x:2.0,y:2.0,e:1.0,c:0.85,s:"9条改正と国防総省設置を主張する改憲推進派",u:"https://x.com/on40938/status/2070708058431627648"},
-  {x:1.0,y:1.0,e:0.5,c:0.85,s:"改憲支持、自衛権明確化を主張",u:"https://x.com/yuma581/status/2070700109688693009"},
-  {x:-1.5,y:-1.5,e:-1.0,c:0.75,s:"自民改憲案を批判する護憲寄りの分析",u:"https://x.com/maxjp033/status/2070697300943585418"},
-  {x:1.0,y:0.0,e:-1.0,c:0.70,s:"愛子天皇阻止目的の改憲策を提案",u:"https://x.com/etude_op25no1/status/2070692680410308990"},
-  {x:-1.5,y:-1.0,e:1.0,c:0.80,s:"護憲派視点で改憲推進を批判",u:"https://x.com/x0M3h0P75O15644/status/2070691537663717438"},
-  {x:2.0,y:2.0,e:2.0,c:0.85,s:"改憲必須と安全保障優先を激烈に主張",u:"https://x.com/wjapandp/status/2070681640389820539"},
-  {x:-0.5,y:0.0,e:1.5,c:0.80,s:"共産党改憲主張と反対の矛盾を批判",u:"https://x.com/sakura_samuraix/status/2070673397428990241"},
-  {x:0.5,y:-0.5,e:0.0,c:0.60,s:"9条より1条の改正を優先すべきとの意見",u:"https://x.com/JAN_kbox/status/2070667057293934595"},
-  {x:2.0,y:2.0,e:1.5,c:0.95,s:"9条改正と国防強化を強く支持、感情的な批判",u:"https://x.com/8aCk9BZbsxuyJIa/status/2070660183446176084"},
-  {x:0.5,y:0.0,e:1.0,c:0.80,s:"改憲手続き合法と指摘し護憲派を批判",u:"https://x.com/kamikaze_49_730/status/2070652409580564944"},
-  {x:1.0,y:1.0,e:0.0,c:0.80,s:"9条より現実の防衛必要性を強調し改憲支持",u:"https://x.com/altair_david/status/2070647249651270118"},
-  {x:2.0,y:2.0,e:0.0,c:0.70,s:"改憲・安保強化推進を支持する立場",u:"https://x.com/jyo_fukyo/status/2070646994146926772"},
-  {x:-1.0,y:-2.0,e:1.0,c:0.80,s:"9条改憲に懸念、戦争の教訓から改憲慎重論",u:"https://x.com/koto34/status/2070633183700464002"},
-  {x:-1.5,y:-1.0,e:1.5,c:0.85,s:"改憲論を馬鹿にし護憲的立場示唆",u:"https://x.com/jackyie/status/2070627977826795878"},
-  {x:-1.0,y:-1.0,e:-1.5,c:0.80,s:"改憲を冷笑的に批判し、軍事力強化に懐疑的な投稿",u:"https://x.com/soranoki2023/status/2070617743049805904"},
-  {x:1.0,y:2.0,e:2.0,c:0.95,s:"改憲自体より核武装・抑止力を優先。感情的。",u:"https://x.com/fortunacaeca/status/2070579904538927421"},
-  {x:0.0,y:0.0,e:0.5,c:0.80,s:"地方自治体の武力保有は現行憲法では不可能との法的解釈の解説",u:"https://x.com/gao78654/status/2070565696988393816"},
-  {x:0.0,y:0.0,e:0.0,c:0.85,s:"政策不支持リスト形式、9条改正は不支持",u:"https://x.com/nu_X7U/status/2070563199280431124"},
-  {x:1.0,y:2.0,e:0.0,c:0.90,s:"9条改正で自衛権確保を、安保強化優先で支持",u:"https://x.com/aoiwinds/status/2070531371098124562"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"皇室典範改正を9条より優先すべきとの意見",u:"https://x.com/JAN_kbox/status/2070511784239431916"},
-  {x:1.0,y:0.5,e:-1.0,c:0.85,s:"9条制約を根拠に改憲を示唆、地方自治体の武力保持問題を論じる",u:"https://x.com/gao78654/status/2070509963789889955"},
-  {x:0.0,y:0.0,e:1.5,c:0.50,s:"9条改正より他の法改正優先との消極的改憲意見",u:"https://x.com/mi5kojp/status/2070504512578855191"},
-  {x:0.0,y:0.0,e:0.5,c:0.50,s:"9条改正後の外交力強化の重要性を警告",u:"https://x.com/DJT41453988/status/2070504342491447495"},
-  {x:2.0,y:1.0,e:-1.0,c:0.85,s:"石破の9条2項改正にのみ共感、他は皮肉",u:"https://x.com/goki90210/status/2070498691941830713"},
-  {x:0.5,y:0.0,e:0.0,c:0.60,s:"改憲枠内での緊急事態条項の議論を提案",u:"https://x.com/64CIVIC_law_med/status/2070784985833857080"},
-  {x:-0.5,y:0.0,e:-0.5,c:0.70,s:"改憲派の任期延長手法を疑問視する批判的投稿",u:"https://x.com/sisitouski/status/2070782090392785292"},
-  {x:1.5,y:0.0,e:2.0,c:0.80,s:"自主憲法制定望むも現行条文に断固反対",u:"https://x.com/waga8864kana/status/2070780670868398166"},
-  {x:-1.0,y:0.0,e:1.5,c:0.65,s:"緊急事態条項の悪用・権力濫用への警戒",u:"https://x.com/ikesanhoshuda/status/2070780515737907467"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.60,s:"緊急事態条項の制約に疑問・批判",u:"https://x.com/leFoGcy/status/2070757685209989370"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.85,s:"緊急事態条項は不要且つ有害との強い反対意見",u:"https://x.com/8FmN6Fc1RnvyCbj/status/2070757114751197398"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.70,s:"石破・高市氏を極右視し改憲に批判的、護憲寄りの慎重な立場",u:"https://x.com/U312461524276/status/2070753609403469958"},
-  {x:-1.0,y:-0.5,e:0.5,c:0.65,s:"改憲案の緊急事態条項を危険と指摘し警戒示す解説",u:"https://x.com/marotto78651/status/2070753228996939780"},
-  {x:1.0,y:0.5,e:0.0,c:0.30,s:"未完の改憲支持投稿。確信度低",u:"https://x.com/toyhyabrclpmkx/status/2070753091151167608"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.50,s:"緊急事態条項の悪用を皮肉る投稿",u:"https://x.com/inoue1126/status/2070753060511732022"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"移民治安問題を理由に緊急事態条項創設を急ぐ改憲推進の激情投稿",u:"https://x.com/7XyfnsbEMN38886/status/2070747648529998007"},
-  {x:-1.5,y:-1.5,e:1.5,c:0.85,s:"改憲批判と戦争危機感を煽る護憲寄りの投稿",u:"https://x.com/HScTq1wWnO99CK3/status/2070745408008282508"},
-  {x:-2.0,y:-1.0,e:-2.0,c:0.85,s:"緊急事態条項への強い反対表明・護憲立场",u:"https://x.com/oZfte97IfR30708/status/2070743250961592422"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.75,s:"改憲警戒派・陰謀論的主張で感情的な警告",u:"https://x.com/7XyfnsbEMN38886/status/2070740649410998552"},
-  {x:-2.0,y:-1.5,e:2.0,c:0.90,s:"緊急事態条項改憲に強く反対、感情的",u:"https://x.com/Haru_Try/status/2070738709025366345"},
-  {x:0.0,y:0.0,e:0.0,c:0.70,s:"法制度評価の基準を述べる分析的投稿",u:"https://x.com/BANGs_1019/status/2070733002280513898"},
-  {x:-1.0,y:0.0,e:1.0,c:0.75,s:"緊急事態条項の改正 政府のやり 方批判",u:"https://x.com/maniayokoha/status/2070732222785802704"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.85,s:"緊急条項導入を独裁化として強く非難",u:"https://x.com/62haruchan/status/2070726130987094508"},
-  {x:-1.0,y:0.0,e:1.0,c:0.80,s:"緊急事態条項・武器輸出の決定を批判的自民推薦を皮肉",u:"https://x.com/HeadinCloudNine/status/2070725187902062598"},
-  {x:1.0,y:0.0,e:1.0,c:0.50,s:"司法改革と改憲を混同したやや感情的な改善主張",u:"https://x.com/fromjapan_world/status/2070718714010632407"},
-  {x:-2.0,y:-1.5,e:1.5,c:0.75,s:"陰謀論含む護憲立場、緊急事態条項に強く反対",u:"https://x.com/ZP9YKVQxD9Gy6Cv/status/2070717199564890267"},
-  {x:-1.0,y:0.0,e:1.5,c:0.85,s:"緊急事態条項の悪用を批判、認為主的改憲に否定的",u:"https://x.com/maytofive/status/2070716289858068775"},
-  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"護憲系ブックレットを読み要約ビラ配布予定#LDP批判",u:"https://x.com/5hinda1nu/status/2070716108852830445"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"護憲立場から緊急事態条項の改悪に強い反対",u:"https://x.com/Wendy54795851/status/2070713286119854552"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"緊急事態条項をヒトラー手法と結びつけ高市氏を痛烈批判する護憲派投稿",u:"https://x.com/Wendy54795851/status/2070712333559849096"},
-  {x:-2.0,y:0.0,e:2.0,c:0.85,s:"改憲含む悪法成立に強く反発",u:"https://x.com/maytofive/status/2070710842170237345"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲・軍拡に強く反対。災害対策優先を主張",u:"https://x.com/niyari_honpo/status/2070705561289809943"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"緊急事態条項の改正に批判的。どさくさで改憲され得る懸念",u:"https://x.com/teruko1206/status/2070704958480294022"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"改憲阻止を呼びかける強い感情的な護憲投稿",u:"https://x.com/chibichibi_0801/status/2070758792661492047"},
-  {x:0.0,y:0.0,e:-1.0,c:0.50,s:"改憲は手続き論で判断すべきと述べる",u:"https://x.com/Niceguy27753/status/2070707152625553549"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲国民投票を危険と批判し国民性に疑問",u:"https://x.com/mitsunishi70553/status/2070694040371441962"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"改憲阻止・国民投票法廃案求める護憲的投稿",u:"https://x.com/sirousagi_mcs/status/2070690254152237530"},
-  {x:0.0,y:0.0,e:2.0,c:0.60,s:"改憲の国民投票手続きを政党が忘れることに怒り",u:"https://x.com/domitori_yazohu/status/2070684387977682989"},
-  {x:0.0,y:0.0,e:0.0,c:0.60,s:"国民投票による改憲手続きの重要性を指摘",u:"https://x.com/Toshizoo_wanko/status/2070672037685968922"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.85,s:"復興支援優先で改憲急ぐなとの護憲寄り立場",u:"https://x.com/purple1059/status/2070648140219441385"},
-  {x:-1.0,y:0.0,e:1.0,c:0.85,s:"改憲手続きの不公平性を批判する護憲寄りの意見",u:"https://x.com/ef827f223si79ji/status/2070606839222309119"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲阻止を強く訴える護憲派の声",u:"https://x.com/pDyvhzFJAIAJe90/status/2070601132339335175"},
-  {x:1.0,y:0.0,e:0.0,c:0.75,s:"改憲を起草→国民投票で問うべきと明文化を支持",u:"https://x.com/haraguro_aku/status/2070518197443572090"},
-  {x:0.5,y:0.0,e:0.0,c:0.70,s:"改憲の程序的議論、解釈改憲より正式改憲を支持",u:"https://x.com/aru_vvvfpwn/status/2070511854145974396"},
-  {x:-1.5,y:0.0,e:1.0,c:0.85,s:"改憲手続法への強い反対表明と国政通過への警戒",u:"https://x.com/gift_icecream31/status/2070510278446571944"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.95,s:"護憲の立場から国民投票法改悪と国旗損壊罪の阻止を訴える",u:"https://x.com/mayu69520154/status/2070497570116583590"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.90,s:"改憲阻止を表明。国民投票への言及も",u:"https://x.com/rxzpk9O2GUpXHWv/status/2070497232768696412"},
-  {x:0.0,y:0.0,e:-1.0,c:0.30,s:"改憲手続きの事実を示し他者を揶揄、賛否不明",u:"https://x.com/PGERA_RX/status/2070479436601016786"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.85,s:"軍需利権と改憲を結びつける護憲的批判",u:"https://x.com/Uminekotop/status/2070463732967428413"},
-  {x:-1.0,y:0.0,e:0.5,c:0.70,s:"改憲国民投票の制度欠陥を指摘し警惕を呼びかける護憲的投稿",u:"https://x.com/Uminekotop/status/2070461242641408207"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲反対のデモ告知。憲法の破壊を警告し強い危機感",u:"https://x.com/okazakiMas20382/status/2070458816341438735"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.80,s:"9条改憲に明確に反対、、国民投票ルールも重視",u:"https://x.com/Y9mamoru2026/status/2070442067793527222"},
-  {x:1.5,y:0.0,e:1.5,c:0.70,s:"国民投票での改憲を支持、政党の阻止を批判",u:"https://x.com/QaMxm/status/2070422852793442307"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"護憲派，改憲の「正体」広めたい，広告規制を",u:"https://x.com/mura_mika34861/status/2070411902505619700"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.90,s:"護憲派として改憲に反対し広告規制を提案",u:"https://x.com/mura_mika34861/status/2070409570904600603"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲による徴兵制・戦争への強い反対と危機感",u:"https://x.com/kissingman_jp/status/2070396096292237565"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"改憲阻止呼びかけ、護憲・平和主義立場",u:"https://x.com/starsky19628/status/2070387856531656848"},
-  {x:0.0,y:0.0,e:-0.5,c:0.70,s:"国民投票の投票率下限不要を擁護する手続き論",u:"https://x.com/09Ma77NyZdOVJRw/status/2070383130775880009"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲阻止は可能と指摘し反対派少数派論に反論",u:"https://x.com/09Ma77NyZdOVJRw/status/2070374174015869295"},
-  {x:-1.0,y:-1.0,e:0.0,c:0.85,s:"改憲を含む最近の立法姿勢を批判し生活に关注すべきと主張",u:"https://x.com/hajikamimochiya/status/2070356931156570372"},
-  {x:-2.0,y:0.0,e:1.5,c:0.85,s:"改憲に強く反対し、国民投票を通じた改憲推進に警戒感を示す",u:"https://x.com/Little_sky6/status/2070353860095295872"},
-  {x:1.0,y:0.0,e:0.0,c:0.60,s:"改憲自体は支持し女性天皇を問うべきと提案",u:"https://x.com/dogenka1010/status/2070330343132192953"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.50,s:"護憲派が国民投票で阻止可能と冷静に指摘",u:"https://x.com/china_mong1/status/2070328520333791742"},
-  {x:-1.5,y:-1.0,e:1.0,c:0.75,s:"改憲手続きへの批判的意見。民意反映の懸念を指摘",u:"https://x.com/mememaaaaa/status/2070286777123012614"},
-  {x:-1.5,y:0.0,e:-1.0,c:0.85,s:"改憲手続きの公正性に疑問呈す護憲寄りの批判的意見",u:"https://x.com/tasukubestlife/status/2070280664583487821"},
-  {x:-0.5,y:0.0,e:0.0,c:0.70,s:"改憲発議→国民投票で否決が望ましいと主張",u:"https://x.com/TOR89526034747/status/2070265289233858746"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"改憲に強く反対。自民党案の危険性を警告",u:"https://x.com/JudicialBlue/status/2076284016949711323"},
-  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"改憲手続き法案の採決阻止を呼びかける投稿",u:"https://x.com/sisitouski/status/2076286865129480297"},
-  {x:0.0,y:-1.0,e:-1.0,c:0.75,s:"改憲案の徴兵制導入に懐疑的、冷笑的に支持者を皮肉る",u:"https://x.com/wetshichimi/status/2076279409548673463"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"護憲的立場で改憲手続き法案に抗議、統一教会問題を批判",u:"https://x.com/fallen_teru/status/2076279315453694278"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"最低投票率設定求める程序論、改憲是非は中立",u:"https://x.com/Candide4828181/status/2076276804680302646"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"朝日新聞の護憲的立場を批判し改憲支持を示唆",u:"https://x.com/yabusameri/status/2076275939265425467"},
-  {x:1.0,y:1.0,e:0.0,c:0.70,s:"憲法改正支持、自衛隊記載は文言次第",u:"https://x.com/ruuchanganchan/status/2076262000099995697"},
-  {x:-0.5,y:0.0,e:1.0,c:0.70,s:"改憲反対論者の論理矛盾を皮肉る批判的投稿",u:"https://x.com/yabusameri/status/2076275905253736954"},
-  {x:-1.0,y:-1.0,e:1.5,c:0.75,s:"参政党の改憲的矛盾を批判し護憲寄りの失望を示す",u:"https://x.com/iminnhantai/status/2076258658208612615"},
-  {x:2.0,y:2.0,e:0.0,c:0.95,s:"9条制約を批判し、改憲と国防強化を明示的に支持",u:"https://x.com/RrTodos/status/2076234836273193118"},
-  {x:1.0,y:0.0,e:0.0,c:0.80,s:"憲法改正に賛成する明確な表明",u:"https://x.com/Hxd2gQt/status/2076236346679787711"},
-  {x:0.0,y:0.0,e:2.0,c:0.85,s:"経済政策を批判、増税方針を非難",u:"https://x.com/FTW73625565/status/2076219258229645595"},
-  {x:0.0,y:0.0,e:-1.0,c:0.50,s:"矛盾行動を皮肉る投稿。改憲賛否は不明",u:"https://x.com/tanbo_kaelu/status/2076232732771078395"},
-  {x:-1.5,y:-1.5,e:-1.0,c:0.80,s:"改憲による徴兵制導入に反対し現行平和憲法護持を主張",u:"https://x.com/IqTlgtSdfi0HaYF/status/2076195530305405067"},
-  {x:-1.5,y:0.0,e:1.5,c:0.75,s:"改憲に慎重な立場から護憲派勢力の矛盾を批判",u:"https://x.com/fH3JeXpNsZ42958/status/2076174422323724757"},
-  {x:1.0,y:2.0,e:1.0,c:0.85,s:"改憲支持、自衛隊明記主張、防衛優先の意見",u:"https://x.com/fei_shi46434/status/2076191847874220367"},
-  {x:-1.0,y:-1.0,e:2.0,c:0.80,s:"護憲派、改憲賛成政党を激しく非難",u:"https://x.com/fallen_teru/status/2076170501932888277"},
-  {x:-1.5,y:1.0,e:0.0,c:0.85,s:"改憲反対・防衛力強化賛成の立場から質問",u:"https://x.com/23_JuliusCaesar/status/2076165505388548607"},
-  {x:1.0,y:0.0,e:1.5,c:0.80,s:"改憲賛成・審議求めるも対抗勢力に強い憤り",u:"https://x.com/FTW73625565/status/2076174324361576913"},
-  {x:1.0,y:0.0,e:-1.0,c:0.60,s:"改憲の流れを当然視、溜息混じりに肯定",u:"https://x.com/aquot4/status/2076141435217396020"},
-  {x:-1.5,y:-1.0,e:1.0,c:0.75,s:"皇室典範改悪⇒改憲への警戒と反対表明",u:"https://x.com/tankyudou/status/2076127505438916732"},
-  {x:1.0,y:0.0,e:0.0,c:0.80,s:"第1条廃止に賛成。天皇制維持しつつ皇室典範改正で女性・女系天皇認めるべきと主張",u:"https://x.com/cmdjai/status/2076128754808836096"},
-  {x:2.0,y:2.0,e:2.0,c:0.90,s:"改憲支持・国防優先の、感謝示す熱い投稿",u:"https://x.com/ja25pa25n25/status/2076121785301680553"},
-  {x:1.0,y:0.0,e:1.0,c:0.80,s:"参院廃止に改憲解釈変更促す批判的投稿",u:"https://x.com/kokamot007/status/2076118087045394484"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.75,s:"改憲支持者を矛盾だと皮肉る護憲寄りの批判的投稿",u:"https://x.com/Take22571888/status/2076123926128972151"},
-  {x:0.5,y:0.0,e:1.0,c:0.60,s:"改憲賛成を暗に主張する修辞的問いかけ",u:"https://x.com/wildtur56113881/status/2076095869531963886"},
-  {x:0.5,y:0.0,e:0.0,c:0.50,s:"退院報告に改憲・護憲等立場を簡記、政治的主張は断片的",u:"https://x.com/ruuchanganchan/status/2076112656700940447"},
-  {x:1.0,y:0.0,e:-1.0,c:0.75,s:"改憲を支持するが皮肉を交えた投稿",u:"https://x.com/bwzxxUcIiV43985/status/2076088293037584585"},
-  {x:1.0,y:0.0,e:0.5,c:0.85,s:"改憲支持。9条以外的改正で民意を示すべきと提案",u:"https://x.com/bwzxxUcIiV43985/status/2076084142920646995"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"国民目線の改憲案を示すべきとの主張",u:"https://x.com/JudicialBlue/status/2076081754201608638"},
-  {x:-1.5,y:0.0,e:1.5,c:0.75,s:"改憲派的論理を皮肉で批判し護憲的立場",u:"https://x.com/iminnhantai/status/2076064315430588777"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.50,s:"改憲批判勢力が逆に改憲を後押しすると指摘する皮肉な分析",u:"https://x.com/hietaro/status/2076061491489648701"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.75,s:"立民改憲賛成への批判的指摘",u:"https://x.com/Inbeansppo1/status/2076093699055075511"},
-  {x:1.5,y:1.0,e:-1.0,c:0.70,s:"皇位継承に改憲必要なしと護憲派に挑発",u:"https://x.com/hvyfus/status/2076025571709161697"},
-  {x:-1.5,y:0.0,e:1.5,c:0.75,s:"改憲に否定的、自民・中道に怒り",u:"https://x.com/nana_minyan/status/2076010591244984367"},
-  {x:0.0,y:0.0,e:-1.0,c:0.50,s:"天皇制改廃を条件に改憲派と護憲派が逆転するとの軽口",u:"https://x.com/JAN_kbox/status/2075992464385781786"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"改憲に批判的自民に不満、条件賛成",u:"https://x.com/UbjH8R4gIp26313/status/2075997632183566783"},
-  {x:0.5,y:0.0,e:0.0,c:0.30,s:"改憲支持を暗に示唆する短い問いかけ",u:"https://x.com/SPIRITS71068670/status/2075949563324878893"},
-  {x:-2.0,y:0.0,e:1.0,c:0.70,s:"改憲に強く反対。自民の裏工作を非難",u:"https://x.com/7OuqAXeL9r58674/status/2075930173975961780"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.75,s:"手続き法案への強い反対表明。改憲自体への消極的姿勢",u:"https://x.com/BSdbuJurv849Pkw/status/2076295163471974843"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"改憲草案の有無をめぐる論点をずらす手法への批判",u:"https://x.com/Reiry85rai/status/2076293186792858061"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"護憲立場から改憲に強く反対、民生問題を最優先すべきと主張",u:"https://x.com/krsk_info/status/2076289619965206878"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.80,s:"護憲立場で改憲派に平和主義的批判",u:"https://x.com/sumitoshiraishi/status/2076284951696425408"},
-  {x:-2.0,y:0.0,e:2.0,c:0.95,s:"憲法改正に断固反対の意思表示",u:"https://x.com/mum609sakura/status/2076279394457497865"},
-  {x:-0.5,y:0.0,e:0.0,c:0.60,s:"皇室典範改正と改憲の一貫性を問う冷静な問いかけ",u:"https://x.com/8wmdENspEoHnTIT/status/2076284207610126423"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"改憲反対を明言し感嘆符多用で感情的",u:"https://x.com/yuminae2015/status/2076276856152846484"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"改憲反対、平和維持を重視する護憲派の見解",u:"https://x.com/pudding202607/status/2076276848921907676"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.95,s:"護憲立場で改憲に強く反対、感情的に抗議・行動を呼びかけ",u:"https://x.com/sabuaka12434/status/2076265717733961972"},
-  {x:-1.0,y:-1.0,e:0.5,c:0.75,s:"憲法改正に反対表明、武器輸出や安保策に不信感",u:"https://x.com/ch0m0n/status/2076256012265558320"},
-  {x:1.0,y:0.0,e:1.5,c:0.65,s:"改憲支持的で感情的な批判投稿",u:"https://x.com/inu_no_musashi/status/2076263302238548145"},
-  {x:-2.0,y:-2.0,e:0.0,c:0.60,s:"護憲・平和主義の立場から改憲に反対",u:"https://x.com/peace310sgact/status/2076241024985530775"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"護憲立場から改憲に強く反対し感情的な表現",u:"https://x.com/tomashu_1/status/2076231518440263965"},
-  {x:1.0,y:0.0,e:1.0,c:0.60,s:"改憲反対派を皮肉る、天皇不要論との矛盾を突く投稿",u:"https://x.com/A0kJnZSnv5nW0BP/status/2076228154029703291"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.90,s:"改憲絶対反対の強い怒りの表明",u:"https://x.com/lVl2UeSA8O49362/status/2076224968766144909"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.70,s:"改憲反対。米国による改憲押し付けと読売への批判",u:"https://x.com/xOQ379NXwMKFFXe/status/2076222123295822020"},
-  {x:-2.0,y:0.0,e:2.0,c:0.90,s:"国民投票法改正案の廃案を強く求める護憲的意見",u:"https://x.com/T1thwznIoTtfcs6/status/2076211224438870218"},
-  {x:1.0,y:0.0,e:-1.0,c:0.60,s:"改憲反対派を皮肉る改憲支持の意見",u:"https://x.com/ht96795384/status/2076204477405974765"},
-  {x:1.0,y:0.0,e:2.0,c:0.90,s:"故人への批判含み改憲反対派を痛烈非難",u:"https://x.com/rg30KoTW3O64449/status/2076202589071491420"},
-  {x:0.0,y:0.0,e:-1.0,c:0.50,s:"改憲と戦争の関連に疑問呈す",u:"https://x.com/s2M2ZNZmV863857/status/2076190560369647904"},
-  {x:1.0,y:1.0,e:1.0,c:0.70,s:"改憲推進派が高市氏支持と護憲的矛盾を皮肉",u:"https://x.com/alEk9t2PnM16QYH/status/2076201760327360778"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"改憲論争を皮肉る。護憲・改憲双方への批判",u:"https://x.com/1UNU3KpyECrRKAI/status/2076184638482251857"},
-  {x:-1.5,y:-1.5,e:-1.0,c:0.70,s:"改憲反対表明も左翼の戦略に不満、経済格差解決を優先すべきと主張",u:"https://x.com/takabayashihid/status/2076188113135866165"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"改憲反対・戦争反対を訴える、抗議行動への呼びかけ",u:"https://x.com/vdy7p/status/2076154728871022868"},
-  {x:0.5,y:0.0,e:1.0,c:0.60,s:"改憲への懸念を過大反応と批判",u:"https://x.com/innocence1839/status/2076179763488845847"},
-  {x:0.0,y:0.0,e:1.0,c:0.70,s:"共产党的矛盾を皮肉る投稿・改憲への明瞭な態度は示さず",u:"https://x.com/petgyoukai/status/2076154314687734133"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"改憲反対署名の拡散・支持表明",u:"https://x.com/petitsourir/status/2076148479982985533"},
-  {x:1.0,y:0.0,e:1.0,c:0.80,s:"改憲反対派を二重標準だと批判し改憲支持を示唆",u:"https://x.com/TsumitaniTanaka/status/2076148211857936734"},
-  {x:-2.0,y:0.0,e:0.0,c:0.70,s:"改憲反対を明示する署名呼びかけ",u:"https://x.com/KiyosiTutida/status/2076138684811030604"},
-  {x:1.0,y:0.0,e:1.0,c:0.70,s:"護憲派の二重基準を批判し改憲論への支持を示唆",u:"https://x.com/TsumitaniTanaka/status/2076144135350972876"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"改憲に強く反対、平和主義・非戦の立場を主張",u:"https://x.com/hQZOdpRjD30XQZh/status/2076306215928517110"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"改憲に明確に反対しメール送信行動を示唆",u:"https://x.com/wind_taiyaki/status/2076305667791691946"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"改憲阻止を求める護憲派の怒りと行動喚起",u:"https://x.com/dFHvFIJr0067749/status/2076305952970850812"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"護憲派が平和主義を主張し改憲の危険性を強く警戒",u:"https://x.com/yatainokohi/status/2076305878677066096"},
-  {x:-2.0,y:0.0,e:1.0,c:0.60,s:"経済問題優先で改憲に反対する感情的投稿",u:"https://x.com/donyaneko/status/2076305473624842578"},
-  {x:-2.0,y:0.0,e:2.0,c:0.85,s:"改憲反対を明示し強い怒りを表明",u:"https://x.com/vGT2rbhNiG61203/status/2076304235193647482"},
-  {x:-2.0,y:-2.0,e:2.0,c:1.00,s:"改憲・戦争に絶対反対の護憲・平和主義立場を感情的表明",u:"https://x.com/s31MJfb2oxfv2Q9/status/2076301215928066483"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.95,s:"改憲・戦争法案に強く反対の意思表示",u:"https://x.com/Literal_yarn/status/2076300543421735032"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"改憲・戦争共に反対の護憲平和主義的立場",u:"https://x.com/4Usq8D68OKzUDhx/status/2076297602887532655"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.80,s:"憲法改正手続き法に強く反対し廃案を求める護憲・平和主義の投稿",u:"https://x.com/_yuraprc/status/2076296949108740343"},
-  {x:-2.0,y:-1.0,e:1.5,c:0.95,s:"改憲Procedural法に抗議し改憲阻止を主張",u:"https://x.com/_yuraprc/status/2076299236925472936"},
-  {x:-1.5,y:-1.5,e:2.0,c:0.75,s:"改憲賛成政党を批判し強い怒りを示す護憲寄りの投稿",u:"https://x.com/goodbymorao/status/2076296243719106689"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"護憲派・改憲に強く反対・平和主義を最優先",u:"https://x.com/yuzupon2268/status/2076295520067465282"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"改憲手続き法案への強い反対、平和主義的立場",u:"https://x.com/tomakiko1/status/2076294922572083379"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"護憲の母親が戦争・改憲に反対を表明",u:"https://x.com/dongri_56koro/status/2076292739382321558"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"新害人が9条改憲反対を明示、組織加入を元気に呼びかけ",u:"https://x.com/sinfujinhyogo/status/2076292752523006157"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"改憲反対を掲げる若者の抗議運動への呼びかけ",u:"https://x.com/aiko33151709/status/2076293956535820706"},
-  {x:1.0,y:0.0,e:-1.0,c:0.60,s:"改憲派的自民党和維新を批判",u:"https://x.com/k_and_s1234/status/2076292626106695888"},
-  {x:-2.0,y:-1.0,e:-1.0,c:0.90,s:"改憲反対を訴える護憲派的情感強い投稿",u:"https://x.com/inakaneko_psw/status/2076290614757589477"},
-  {x:-2.0,y:0.0,e:1.5,c:0.85,s:"改憲手続き法案への抗議と改憲反対を表明",u:"https://x.com/_yuraprc/status/2076290461837467667"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"国民投票法改正に抗議し改憲反対の立場",u:"https://x.com/murashi_94/status/2076288516921983157"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲絶対反対、戦争反対を表明する護憲・平和主義の投稿",u:"https://x.com/QwmosY/status/2076285298057814243"},
-  {x:2.0,y:0.0,e:2.0,c:0.90,s:"改憲反対派を批判し改憲支持を主張",u:"https://x.com/minsk_5713/status/2076288099001536522"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"憲法審査会の開催中止と改憲への強い反対を表明",u:"https://x.com/jibundetaboo/status/2076282196768481600"},
-  {x:-2.0,y:0.0,e:0.0,c:0.90,s:"改憲に反対。憲法審査会開催を拒否",u:"https://x.com/jibundetaboo/status/2076282371524194487"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"憲法改正に強く反対。支持者を激励。",u:"https://x.com/jibundetaboo/status/2076282482350256569"},
-  {x:-1.5,y:-1.0,e:1.5,c:0.85,s:"国民投票法改正案の廃案を求め、改憲プロセスを批判する護憲的立場",u:"https://x.com/Takuro_R25/status/2076282020133757089"},
-  {x:1.5,y:0.0,e:1.0,c:0.75,s:"改憲肯定・野党や護憲派を誤誘導と批判",u:"https://x.com/euscaphys/status/2076279953767981552"},
-  {x:1.0,y:0.0,e:1.0,c:0.60,s:"改憲賛成派への誹謗中傷を批判し分断より団結を訴える投稿",u:"https://x.com/huyukiatuya/status/2076279433892372537"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.80,s:"護憲派デモへの参加を報告し、改憲反対の意思を表明",u:"https://x.com/asaki73yume/status/2076279313402577133"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"改憲手続き批判と改憲反対の表明",u:"https://x.com/DesuOtukare/status/2076277529066012943"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"護憲・9条守れの強い反対表明",u:"https://x.com/KoshimaSmile428/status/2076276119301656592"},
-  {x:-2.0,y:-2.0,e:2.0,c:1.00,s:"改憲・戦争に反対する感情的な表明",u:"https://x.com/lpGnMGBc1K5051/status/2076275972136198551"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"改憲に反対し、抗議行動への参加を呼びかけ",u:"https://x.com/a_20_b__th_c/status/2076281060464447614"},
-  {x:0.0,y:0.0,e:-1.0,c:0.70,s:"改憲派へのレッテル貼り批判",u:"https://x.com/hattatu_gaizi/status/2076275830326718638"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.90,s:"9条改憲派を痛烈に皮肉る護憲的投稿",u:"https://x.com/LindenMesicku/status/2076304953803673930"},
-  {x:0.0,y:0.0,e:2.0,c:0.60,s:"特定政党への激怒と批判が主。中道・立憲への強い反発",u:"https://x.com/zenith400/status/2076275864204091840"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"武器輸出・改憲・戦争に強く反対、政权批判と行動呼びかけ",u:"https://x.com/kare9sa/status/2076302821025268110"},
-  {x:1.0,y:1.0,e:-1.0,c:0.70,s:"保守派は改憲主張すべきと批判的に指摘",u:"https://x.com/akashach/status/2076300773739364515"},
-  {x:0.5,y:0.0,e:-1.0,c:0.60,s:"9条と1条で改憲論への理屈を使い分ける矛盾を指摘",u:"https://x.com/osogami/status/2076302887706329531"},
-  {x:0.0,y:0.0,e:-1.0,c:0.50,s:"日本会議と旧統一の相似を皮肉交じりに指摘",u:"https://x.com/nukolove44/status/2076299803206811915"},
-  {x:-1.0,y:0.0,e:2.0,c:0.60,s:"9条改正論への批判的投稿。「怖すぎる」と強い警戒感を表明",u:"https://x.com/buglesounds/status/2076290754578903367"},
-  {x:-1.5,y:-1.0,e:1.0,c:0.85,s:"9条改憲に反対、怖さと批判",u:"https://x.com/R08V5t966fH9Dl8/status/2076294629809655964"},
-  {x:-1.0,y:-0.5,e:-0.5,c:0.70,s:"9条改憲に疑問呈し現行9条を肯定する姿勢",u:"https://x.com/AncoroPelagique/status/2076290799864844630"},
-  {x:-1.0,y:-1.5,e:1.0,c:0.80,s:"9条改正に反対し護憲立場を❗で強調",u:"https://x.com/manhattanlove3/status/2076290715592835401"},
-  {x:-2.0,y:-2.0,e:-1.0,c:0.75,s:"9条改正に反対、呆れと嫌悪感",u:"https://x.com/mokkomococo/status/2076281694353768725"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"9条改正に強く反対し護憲・平和主義を表明",u:"https://x.com/huyuru222/status/2076288443211186267"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"9条改憲に強く反対。平和主義を最優先し感情的に批判",u:"https://x.com/kare9sa/status/2076280326087954861"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"9条改憲に強く反対し平和主義的立場から感情的批判",u:"https://x.com/77e3/status/2076279928728035478"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.85,s:"9条・皇室典範の改正に強く反対の立場",u:"https://x.com/kare9sa/status/2076279088919253425"},
-  {x:1.0,y:1.0,e:1.0,c:0.70,s:"改憲支持で安全保障優先、共産党を批判",u:"https://x.com/60codIvx2ThNwiK/status/2076276551843471550"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"9条死守・改憲反対を熱烈に訴える護憲投稿",u:"https://x.com/OHIw7hH9q684022/status/2076275702257865187"},
-  {x:-1.0,y:0.0,e:1.0,c:0.75,s:"皇室典範改正を極右支配の重大分岐点と批判",u:"https://x.com/TakashiJibu/status/2076272994356437254"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"9条改憲を批判し護憲的立場、平和主義を志向",u:"https://x.com/o_fujita/status/2076266301765681602"},
-  {x:2.0,y:1.5,e:1.0,c:0.85,s:"9条改正を詩的に支持、日本会議会長の改憲主張をRT",u:"https://x.com/hayakawa2600/status/2076272985657458875"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"改憲勢力を戦争屋呼ばわりし9条改正に強く反対",u:"https://x.com/kiztukiichi95/status/2076264909801979914"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"皇室典範改正の不支持と批判的立場",u:"https://x.com/watanabeatushi/status/2076260147484360724"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"9条護持呼びかけ、改憲に強く反対",u:"https://x.com/watokota/status/2076257161341231600"},
-  {x:-2.0,y:-1.5,e:1.5,c:0.92,s:"日本会議の改憲論に反論し9条改悪に強く反対",u:"https://x.com/98rFsnF7Gx13744/status/2076264369722360291"},
-  {x:-1.5,y:-1.5,e:-1.0,c:0.85,s:"改憲警戒の皮肉、米本土攻撃を示唆",u:"https://x.com/odayakaobaa/status/2076247771867426965"},
-  {x:2.0,y:2.0,e:1.5,c:0.85,s:"9条改憲実現を支持、護憲派を痛烈に批判",u:"https://x.com/waitoyt/status/2076251873800343949"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.75,s:"9条改憲への疑問と不安を表明する護憲寄りの批判的投稿",u:"https://x.com/akaryy33558/status/2076252162859184420"},
-  {x:2.0,y:2.0,e:0.0,c:0.90,s:"9条改正と国軍化で安全保障強化を主張",u:"https://x.com/toshihisa0513/status/2076244104917463406"},
-  {x:1.0,y:0.0,e:1.0,c:0.75,s:"一条改正で天皇制廃止を主張",u:"https://x.com/G9meaUCXuUMupGI/status/2076243026620637434"},
-  {x:1.5,y:2.0,e:1.0,c:0.85,s:"9条2項改正支持、自民党案には国民主権への懸念",u:"https://x.com/RrTodos/status/2076242472171381073"},
-  {x:1.5,y:1.0,e:1.5,c:0.85,s:"改憲支持だが護憲派を批判する感情的な投稿",u:"https://x.com/oJKKB0xhd785987/status/2076238833625203113"},
-  {x:-1.0,y:-1.0,e:0.5,c:0.60,s:"高市改憲案を批判し護憲色を強く示す",u:"https://x.com/xOQ379NXwMKFFXe/status/2076237864334237935"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.60,s:"改憲案批判の共有、否定的感情",u:"https://x.com/xOQ379NXwMKFFXe/status/2076237827495579949"},
-  {x:-1.0,y:-1.0,e:-1.0,c:0.60,s:"高市改憲案批判、護憲的で平和主義的な投稿",u:"https://x.com/xOQ379NXwMKFFXe/status/2076237792842338401"},
-  {x:1.0,y:0.0,e:0.5,c:0.80,s:"皇室典範第一条の改正を要望、女性天皇を支持",u:"https://x.com/Sshige13589670/status/2076239472031842532"},
-  {x:-2.0,y:-1.5,e:1.0,c:0.65,s:"高市氏改憲案を批判的に共有し護憲的な立場を示す投稿",u:"https://x.com/xOQ379NXwMKFFXe/status/2076237760453910989"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.70,s:"改憲案を批判的に共有 基本人权懸念",u:"https://x.com/xOQ379NXwMKFFXe/status/2076237724894564684"},
-  {x:1.0,y:1.0,e:1.0,c:0.75,s:"改憲支持。9条改正で中国抑止力を強化すべきと主張",u:"https://x.com/GRyQ8KeHjhrZRQG/status/2076232536553144732"},
-  {x:-1.5,y:-1.0,e:1.5,c:0.80,s:"護憲的立場で改憲法案に抗議、感情的批判",u:"https://x.com/KoshimaSmile428/status/2076302122753425676"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"国民投票法改正批判と緊急事態条項創設への懸念",u:"https://x.com/DirtyMind_2020/status/2076300093532315728"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.65,s:"緊急事態条項導入への懸念と批判的意見",u:"https://x.com/2222news2222/status/2076299524923179111"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.95,s:"緊急事態条項創設に強く反対し激しく非難",u:"https://x.com/bearsvalley/status/2076292773695922680"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"緊急事態条項に強く反対、民主的懸念を指摘",u:"https://x.com/atatan1963/status/2076295670856872359"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"NHK批判と改憲に反対する姿勢",u:"https://x.com/iminnhantai/status/2076292237621887135"},
-  {x:-1.0,y:0.0,e:1.0,c:0.60,s:"改悪反対の護憲姿勢、政治不信を強調",u:"https://x.com/iminnhantai/status/2076290060287365534"},
-  {x:-1.0,y:-1.0,e:1.5,c:0.75,s:"緊急事態条項改悪に批判的、平和主義的立場",u:"https://x.com/kenjinzerogo/status/2076291620136439941"},
-  {x:-2.0,y:-2.0,e:-2.0,c:0.90,s:"護憲派。緊急事態条項への強い批判と怒り",u:"https://x.com/sirorinntyatya/status/2076289987944079448"},
-  {x:-1.5,y:-1.5,e:-1.0,c:0.50,s:"改悪と批判、両建て比喩で護憲立場",u:"https://x.com/iminnhantai/status/2076289518244954336"},
-  {x:-2.0,y:-1.5,e:1.0,c:0.90,s:"改憲（緊急事態条項）に強く反対し日弁連動画を共有",u:"https://x.com/ninjin_daisuki/status/2076283972007628855"},
-  {x:-2.0,y:0.0,e:-1.0,c:0.70,s:"メディア不信と改憲批判、護憲傾向",u:"https://x.com/iminnhantai/status/2076287156960854069"},
-  {x:-2.0,y:0.0,e:1.5,c:0.85,s:"緊急事態条項改憲に強く反対、印象操作・謀略と批判",u:"https://x.com/Lumo_Azure/status/2076284110339977427"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.90,s:"緊急事態条項等国難勃発時規定の改正に強く反対し現行憲法擁護を主張",u:"https://x.com/felia133/status/2076282251722289313"},
-  {x:-1.5,y:-1.5,e:1.5,c:0.75,s:"緊急事態条項改悪に強く反対し危機感",u:"https://x.com/ren_rsc18/status/2076282068779282830"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"緊急事態条項導入に強く反対。人権侵害・独裁化のリスクを警告",u:"https://x.com/Lumo_Azure/status/2076281963120640254"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.90,s:"改憲に強く反対し護憲姿勢、感情的な批判",u:"https://x.com/KoshimaSmile428/status/2076273424176214058"},
-  {x:-1.0,y:-1.0,e:2.0,c:0.70,s:"緊急事態条項明記に強く反対し感情的",u:"https://x.com/pukukichi39/status/2076271555555057860"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.90,s:"緊急事態条項改憲に強く反対し発議阻止を求める",u:"https://x.com/SakieTamama8gou/status/2076267780450738371"},
-  {x:-2.0,y:-1.0,e:2.0,c:0.85,s:"緊急事態条項を悪政の道具と批判し強く反対",u:"https://x.com/felia133/status/2076267852223709630"},
-  {x:-1.0,y:0.0,e:2.0,c:0.85,s:"緊急事態条項や改憲手続きに抗議、陰謀論的批判",u:"https://x.com/fallen_teru/status/2076262778965533139"},
-  {x:-2.0,y:-1.0,e:1.0,c:0.85,s:"護憲派が緊急事態条項と改憲に強く反対表明",u:"https://x.com/felia133/status/2076261799670985210"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"緊急事態条項（改憲）に強く反対、平和主義的立場",u:"https://x.com/cogwakyanLv99w/status/2076261650739659105"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"護憲·平和主義で国家権力拡大に強く反対",u:"https://x.com/gemi_0611/status/2076254367481839830"},
-  {x:-0.5,y:0.5,e:-0.5,c:0.60,s:"マスク着用拒否が緊急事態条項導入の口実にと言い訳",u:"https://x.com/kuma___2205/status/2076259773570486764"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"自民党と統一教会の関連を批判的に指摘し改憲へ批判的",u:"https://x.com/nv_quw/status/2076258885040787747"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.50,s:"緊急事態条項追加への懸念を示唆",u:"https://x.com/cbIWt0j3I39399/status/2076253236902990216"},
-  {x:-1.0,y:0.0,e:1.0,c:0.65,s:"緊急条項を警戒する情報が中心",u:"https://x.com/Oneness_ringo/status/2076250899811561834"},
-  {x:-1.0,y:0.0,e:0.5,c:0.50,s:"緊急事態条項を「選挙止め装置」と否定的に表現し警戒を促す",u:"https://x.com/Oneness_ringo/status/2076250923392004602"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.50,s:"改憲への批判的疑念、具体的立場は不明",u:"https://x.com/miuraarisa093/status/2076242827907047704"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"緊急事態条項改憲に恐怖感じる護憲的意見",u:"https://x.com/Ooumi0x107Dai/status/2076247816574525616"},
-  {x:-1.5,y:-1.0,e:1.0,c:0.75,s:"緊急事態条項に反対、護憲的立場",u:"https://x.com/AAcZbwkvu892060/status/2076242463245975985"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"緊急事態条項改憲を皮肉で批判",u:"https://x.com/senka_chiri/status/2076240200230191611"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"改憲・緊急事態条項を危険と警告し警戒促す",u:"https://x.com/q0kuvoHBCX2BSMp/status/2076241228228907299"},
-  {x:1.0,y:-1.0,e:1.0,c:0.85,s:"加憲支持・言論規制を戦争社会への回帰として警戒",u:"https://x.com/q0kuvoHBCX2BSMp/status/2076234075749466230"},
-  {x:1.0,y:1.0,e:2.0,c:0.80,s:"緊急事態条項の改正を支持。左派批判の感情的な投稿",u:"https://x.com/riruriru_buncho/status/2076229918078468161"},
-  {x:1.0,y:0.0,e:1.0,c:0.75,s:"改憲推進の意志を皮肉混じりに表明",u:"https://x.com/vwzxzML3UTDuKSg/status/2076228987127579061"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"政府の改憲手法を批判し懐疑的な立場",u:"https://x.com/pedia72556158/status/2076305873547526590"},
-  {x:-1.0,y:0.0,e:1.0,c:0.70,s:"改憲に反対、だが9条等の護憲論ではなく無関心・不正への懸念",u:"https://x.com/ogt621/status/2076297654917849516"},
-  {x:-2.0,y:0.0,e:1.0,c:0.85,s:"国民投票による改憲に強く反対。政府が国民を欺くと主張",u:"https://x.com/ZLaiwo58977/status/2076281563558617359"},
-  {x:0.5,y:0.0,e:0.0,c:0.40,s:"国民投票で改憲決定すれば良いという手続き論的肯定",u:"https://x.com/sonnoujyoui10/status/2076294554337284201"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"改憲手続きの広告規制を求め戦争準備に反対",u:"https://x.com/AmRiTkCIkchCmN4/status/2076265207496859752"},
-  {x:-2.0,y:-1.0,e:-1.0,c:0.80,s:"護憲・改憲阻止の立場。否決後の政局も見据え",u:"https://x.com/K9FCR/status/2076249435869442196"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.85,s:"護憲を支持し改憲発議阻止を主張",u:"https://x.com/yamatokai_720/status/2076247008076304836"},
-  {x:0.0,y:0.0,e:-1.0,c:0.60,s:"改憲手続きへの皮肉混じりのコメント",u:"https://x.com/K9FCR/status/2076242263525691768"},
-  {x:-1.5,y:-1.5,e:1.0,c:0.80,s:"改憲阻止呼びかけ。国民投票での成立を危惧",u:"https://x.com/yamatokai_720/status/2076244431699911150"},
-  {x:-1.5,y:-1.5,e:1.0,c:0.85,s:"改憲実現への批判と落胆。護憲的立場。",u:"https://x.com/q0kuvoHBCX2BSMp/status/2076155078294356382"},
-  {x:0.0,y:0.0,e:1.0,c:0.40,s:"改憲手続きの政治的予想と首相人选批判",u:"https://x.com/daredemoyo_1/status/2076136677018616279"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.85,s:"改憲に強く反対し軍拡・軍事国家化を懸念",u:"https://x.com/hiiro33/status/2076130537174143140"},
-  {x:0.0,y:0.0,e:1.0,c:0.50,s:"改憲国民投票の重大性を指摘、賛否は不明",u:"https://x.com/LoooooL1246/status/2076124859248349346"},
-  {x:-1.0,y:0.0,e:0.0,c:0.70,s:"護憲立場を示しつつ将来的改憲の可能性も言及",u:"https://x.com/ohara1095/status/2076106316922446203"},
-  {x:1.0,y:0.0,e:0.0,c:0.70,s:"天皇継承問題は憲法2条との抵触を示唆し改憲・国民投票が必要と主張",u:"https://x.com/magoi_overhead/status/2076099302829768986"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"護憲・平和主義を主張し改憲と国民投票に強く反対",u:"https://x.com/Rc29fxMPGR36347/status/2076054142225899808"},
-  {x:1.5,y:0.0,e:1.5,c:0.85,s:"改憲支持・護憲派批判の感情的な意見投稿",u:"https://x.com/sakura_samuraix/status/2076040028770443766"},
-  {x:-2.0,y:0.0,e:2.0,c:0.85,s:"改憲反対。強引な手法と国民投票の公平性を強く非難",u:"https://x.com/41mICq8GeJ26170/status/2076018082355830811"},
-  {x:-1.0,y:0.0,e:1.0,c:0.85,s:"改憲手続きへの批判的懐疑。監視条文の合憲化に冷笑的",u:"https://x.com/hotjive/status/2075986840956670080"},
-  {x:0.0,y:0.0,e:1.0,c:0.60,s:"国民投票不正の懸念を示すが改憲賛否は不明",u:"https://x.com/maudayo007/status/2075950589075452355"},
-  {x:1.0,y:1.0,e:-1.0,c:0.70,s:"改憲肯定、中国脅威前提に安全保障を重視",u:"https://x.com/Koikemasaaki1/status/2075946989469245626"},
-  {x:0.0,y:0.0,e:0.0,c:0.85,s:"改憲議論の国民への説明不足を指摘。改憲賛否は不明",u:"https://x.com/noriokunda/status/2075944727598571757"},
-  {x:-2.0,y:-2.0,e:1.5,c:0.95,s:"護憲・現行宪法人権を守るべきと強く主張",u:"https://x.com/dFHvFIJr0067749/status/2075936096068997482"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.70,s:"国民投票慎重派的、皮肉で改憲基盤を批判",u:"https://x.com/gotainmino/status/2075938268915662993"},
-  {x:-2.0,y:-2.0,e:1.0,c:0.95,s:"護憲・改準阻止の立場、国民投票で反対票を呼びかけ",u:"https://x.com/H1nem0sun0tar1/status/2075932629002854846"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"護憲・平和主義を最重視し改憲に強く反対",u:"https://x.com/t2PrW6hArJWQR5S/status/2075930315403731404"},
-  {x:-1.5,y:-0.5,e:1.0,c:0.75,s:"改憲・戦争反対を之一に上げる幅広い政治批判",u:"https://x.com/hyro1206/status/2075935078883230100"},
-  {x:-2.0,y:-2.0,e:2.0,c:0.95,s:"改憲に強く反対し平和主義を最優先する感情的抗議投稿",u:"https://x.com/AmRiTkCIkchCmN4/status/2075918106053210579"},
-  {x:-2.0,y:0.0,e:1.0,c:0.95,s:"改憲手続き法案に強く反対し開催阻止を求める護憲的立場",u:"https://x.com/sumiremommy/status/2075930154971562059"},
-  {x:-1.0,y:-1.0,e:1.0,c:0.80,s:"改憲実現への懸念と投票警告",u:"https://x.com/aginogimon/status/2075859242767335914"},
-  {x:-1.0,y:0.0,e:-1.0,c:0.60,s:"テレビ局の改憲関与を批判",u:"https://x.com/oishiikatsu3/status/2075864108801704169"},
-  {x:0.0,y:0.0,e:1.0,c:0.60,s:"改憲手続きの困難さを冷静に指摘し、デモ批判も含む",u:"https://x.com/Ikepeedarkblack/status/2075824708801769678"},
-  {x:-1.5,y:0.0,e:-1.0,c:0.70,s:"改憲国民投票の策略性を批判",u:"https://x.com/oZfte97IfR30708/status/2075820657733247057"},
-];
-const SM_TOUR = [
-  {
-    title: "全体マップ: 護憲派が圧倒的多数、改憲賛成×安保派が対峙",
-    desc: "552件のSNS投稿を分析。左下（改憲反対×平和主義優先）に223件が集中し、右上（改憲賛成×安保優先）の83件と対峙する二極構造。中立含む240件は国民投票法の手続き論など改憲の本質より方法を議論する投稿が多い。",
-    filter: "all"
-  },
-  {
-    title: "左下: 「9条を守って平和を」護憲派（135件）",
-    desc: "改憲に反対し、平和主義・9条護持を最優先する層。「現政権下での改憲は絶対阻止」「軍拡を推進する改憲は危険」という強い危機感と感情的な訴えが多い。国民投票法改正案への反発も強く混在。",
-    filter: "q3",
-    highlight: [-2.0, -2.0],
-    quote: "憲法改正に向けて着々と進めてますよね。そしてそのアシストをする中道。そもそも改憲自体に中道は賛成、もう自民の補完勢力と言わざるを得ませんね💢 九条改憲も緊急事態条項も国家主義化と戦前回帰に繋がり、戦争の準備と言えます。先生の弟子として最後まで共に反対を訴え続けていきましょう！",
-    quote_url: "https://x.com/RzOFAwSxIeU07az/status/2068214583685513307"
-  },
-  {
-    title: "右上: 「防衛力強化のため改憲を」改憲派（67件）",
-    desc: "憲法改正を支持し、安全保障強化・現実的防衛を優先する層。「現行憲法は時代遅れ」「自衛隊の存在を明記すべき」「抑止力なき平和は幻想」という現実主義的な主張。護憲派への激しい批判を含む投稿も多い。",
-    filter: "q1",
-    highlight: [2.0, 2.0],
-    quote: "なのに反日リベラルどもは憲法改正で自衛隊明記すら邪魔して患者の不安も国の不安も放置工作か C-2輸送機が山形空港で高校生に機内見学させてるニュースまで胸熱くなるのに奴らは日本第一の誇りを奪おうとする 許せん！遺志を継いで守り抜くぞ！！",
-    quote_url: "https://x.com/AbeKentaSoul/status/2068182999129043218"
-  },
-  {
-    title: "高感情投稿（感情強度 e≥1.5）",
-    desc: "113件が強い感情を帯びた投稿。護憲派・改憲派の双方から強い怒りが噴出。「狂ってる」「絶対に阻止しなければ」「護憲派は現実を見ろ」など、この問題への感情的な関与の深さを示している。",
-    filter: "q4"
-  },
-  {
-    title: "冷静な投稿（e≤0）",
-    desc: "165件が冷静・論理的な投稿。国民投票法の手続き分析、改憲の各条文の検討、緊急事態条項の具体的リスク評価など。感情的な論争とは対照的に、法的・制度的な観点から問題を整理する声も一定数存在する。",
-    filter: "calm"
-  }
-];
 (function(){
-  const RAW = SM_RAW, TOUR = SM_TOUR;
-  const W = 600, H = 600, PAD = 60, INNER = W - PAD * 2;
-  const IMG_ALPHA_END = 0.30;
-  let imgAlpha = IMG_ALPHA_END;
-  const QUAD_IMGS={
-    q1:'images/constitutional-amendment-vote-1-amend.webp',
-    q3:'images/constitutional-amendment-vote-2-protect.webp',
-    q2:'images/constitutional-amendment-vote-3-process.webp',
-    q4:'images/constitutional-amendment-vote-4-unsure.webp',
-  };
-  const loadedImgs={};let imgsReady=0;
-  Object.entries(QUAD_IMGS).forEach(([key,src])=>{const img=new Image();img.onload=()=>{loadedImgs[key]=img;imgsReady++;if(imgsReady===4)redraw();};img.src=src;});
-  function drawQuadImages(){
-    const mid=PAD+INNER/2;
-    [{key:'q1',x:mid,y:PAD,w:PAD+INNER-mid,h:mid-PAD},{key:'q3',x:PAD,y:PAD,w:mid-PAD,h:mid-PAD},{key:'q2',x:PAD,y:mid,w:mid-PAD,h:PAD+INNER-mid},{key:'q4',x:mid,y:mid,w:PAD+INNER-mid,h:PAD+INNER-mid}].forEach(({key,x,y,w,h})=>{
-      const img=loadedImgs[key];if(!img)return;
-      ctx.save();ctx.globalAlpha=imgAlpha;
-      const scale=Math.min(w,h)/Math.min(img.width,img.height);
-      const dw=img.width*scale,dh=img.height*scale;
-      ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
-      ctx.restore();
-    });
-  }
-  let showHeat = true, showDots = true, heatRadius = 30;
-  let activeFilter = 'all';
-  let spotlightTarget = null;
-  let animating = false, animFrame = 0;
-  let myVoteMarker = null;
-let myVoteSX = null, myVoteSY = null;
-  const voteMarkers = [
-  { x: -1.45, y: 1.45, label: 'あなた: 護憲のまま安全保障を強化', color: '#dc2626' },
-  { x: 1.45, y: 1.45, label: 'あなた: 改憲で安全保障を強化', color: '#2563eb' },
-  { x: -1.45, y: -1.45, label: 'あなた: 9条を守り平和を貫く', color: '#059669' },
-  { x: 1.45, y: -1.45, label: 'あなた: 改憲しても平和は守れる', color: '#d97706' }
-];
+  'use strict';
+const ISSUES=[{"k": "改憲全般", "n": 116}, {"k": "9条・自衛隊", "n": 103}, {"k": "緊急事態条項", "n": 55}, {"k": "国民投票・広告", "n": 96}, {"k": "政党・発議手続き", "n": 24}, {"k": "情報・議論の質", "n": 28}];
+const P=[{"i":0,"t":0.94,"s":"中道や自民党の改憲推進を批判し、九条改憲や緊急事態条項を国家主義化・戦前回帰と捉えて改憲全般に反対する立場を表明している","u":"https://x.com/RzOFAwSxIeU07az/status/2068214583685513307","k":"con"},{"i":3,"t":0.94,"s":"国民投票の要件緩和を批判し、極端な例を挙げて憲法改正手続きの問題を指摘している","u":"https://x.com/7Gg2LbS2225/status/2068205623427408241","k":"con"},{"i":4,"t":0.94,"s":"中道の有田芳生議員が与党有利の改憲推進に賛成しながら改憲反対集会に登壇したことへの不信感を表明している","u":"https://x.com/shuichi_isayama/status/2068205426999751046","k":"con"},{"i":3,"t":0.66,"s":"国民投票法改正案に反対し、有効投票過半数で成立する仕組みが有権者少数の賛成で改憲を承認しかねないと指摘している","u":"https://x.com/tamacha1965/status/2068199813552980461","k":"con"},{"i":5,"t":0.34,"s":"憲法改正の賛否とは別に、数値で嘘をつく行為は信用できず議論の妨げになると主張している","u":"https://x.com/higher88672/status/2068191466690941164","k":"neutral"},{"i":5,"t":0.66,"s":"現政権下の改憲に反対しつつ、賛成意見を封殺すべきでないと言論の自由と対話の重要性を訴えている","u":"https://x.com/ema_credo/status/2068173526709018800","k":"con"},{"i":0,"t":0.66,"s":"改憲反対集会に参加しつつ、国民が改憲賛成政党を支持している現状を憂い、改憲阻止の困難さを述べている","u":"https://x.com/ayuremufo369/status/2068150263819764032","k":"con"},{"i":5,"t":0.66,"s":"「戦争反対＝改憲反対」という単純化を批判し、改憲賛成でも戦争反対の人がいることを指摘して議論の多様性を求めている","u":"https://x.com/mayaring/status/2068144903893430435","k":"neutral"},{"i":3,"t":0.34,"s":"国民投票法改正が憲法改正の地ならしであるとの見方に触れ、附帯決議を付けて賛成する選択肢に理解を示している","u":"https://x.com/DontafraidRakka/status/2068140935612129373","k":"process"},{"i":4,"t":0.94,"s":"複数政党が国民投票法改正案に賛成した衆議院憲法審査会の対応を批判し、改憲ハードル低下への懸念を示している","u":"https://x.com/CoFt72/status/2068126114296496150","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正案と改憲手続法に反対し、国民の過半数賛成を要件とする制度への回帰を求めている","u":"https://x.com/norahitsuji/status/2068119973722304845","k":"con"},{"i":0,"t":0.66,"s":"軍拡政権下での改憲阻止を訴え、「賛成か反対か」より誰がどう変えるかが重要だと主張している","u":"https://x.com/Niant0922/status/2068080117826584606","k":"con"},{"i":4,"t":0.66,"s":"公明党・中道が定数削減に反対しながら憲法改正に賛成する矛盾を指摘している。","u":"https://x.com/sai1292090/status/2068079820760903684","k":"con"},{"i":5,"t":0.34,"s":"国民投票法改正案の衆院本会議採決結果を記録している。賛成460名、反対5名。","u":"https://x.com/nqjbmi/status/2068055677482979735","k":"neutral"},{"i":3,"t":0.94,"s":"国民投票法改正案への自身の反対票と、ほぼ99%が賛成した状況を報告している。","u":"https://x.com/Junyuri7/status/2068012000060563775","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正案は改憲発議への布石であり、欠陥が放置されたまま改憲が加速すると懸念している。","u":"https://x.com/yukinashi00/status/2068003355394515253","k":"con"},{"i":3,"t":0.94,"s":"自民党の選挙勝利は国民の改憲賛成の意思と解釈し、国民投票法改正を支持している。","u":"https://x.com/jijy513573/status/2067997596426367232","k":"pro"},{"i":1,"t":0.66,"s":"自衛隊の憲法明記を求める改憲に賛成し、正当防衛の法的根拠を整備すべきと主張している。","u":"https://x.com/ke1ties/status/2067988934114869267","k":"pro"},{"i":3,"t":0.94,"s":"国民投票法改正案に断固反対し、選挙と同様の不正を懸念。緊急事態条項新設も否定している。","u":"https://x.com/buron2011/status/2067981968235810962","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正案と緊急事態条項新設に反対し、投票の公正性を疑問視している。","u":"https://x.com/buron2011/status/2067980523079925923","k":"con"},{"i":0,"t":0.34,"s":"自身は改憲に絶対反対ではないと述べ、相手の改憲賛成の理由を問うている。","u":"https://x.com/LovePeaceMJfan/status/2067977300591931467","k":"neutral"},{"i":0,"t":0.66,"s":"戦争反対の立場から共産党の改憲反対を支持し、他者へのレッテル貼りを批判している。","u":"https://x.com/crossing_9/status/2067974311579926926","k":"con"},{"i":5,"t":0.34,"s":"国民投票法改正案の採決結果と各党の賛否を報じている。","u":"https://x.com/GhettoOrgan/status/2067964907820364085","k":"neutral"},{"i":4,"t":0.66,"s":"公明党・中道の憲法改正賛成に反発し、党への支援を無期限中止すると表明している。","u":"https://x.com/NU1o1wku9oVUnsP/status/2067956917339902025","k":"con"},{"i":3,"t":0.34,"s":"憲法改正国民投票の賛成基準が有権者全体か投票者の過半数か、憲法に明記されていない点を指摘し、制度設計上の問題を述べている。","u":"https://x.com/mA4nilah/status/2067955404177572273","k":"process"},{"i":0,"t":0.94,"s":"改憲賛成派を「戦争しないで抑止したい人」と定義し、改憲反対派を「戦争をしたい反平和主義」だと主張して挑発している。","u":"https://x.com/seigo84880901/status/2067948948179059010","k":"pro"},{"i":4,"t":0.94,"s":"有田芳生が憲法改正手続き法に賛成しながら改憲反対デモに参加することを、態度の矛盾として批判している。","u":"https://x.com/La_Rumba_Buena/status/2067947167487303855","k":"pro"},{"i":5,"t":0.66,"s":"憲法改正反対デモが開催されているにもかかわらず、与野党多数の賛成で可決された背景からマスコミが報道しないことを皮肉っている。","u":"https://x.com/yammy_tak/status/2067944065111560659","k":"neutral"},{"i":0,"t":0.66,"s":"国民投票法改正への議員の賛成率が99%に達した事実を挙げ、憲法改正自体も「別に問題ない」と論じている。","u":"https://x.com/tora_SQ/status/2067943301710520370","k":"pro"},{"i":0,"t":0.94,"s":"改憲国民投票で改憲に反対票を入れるよう強く呼びかけており、棄権は賛成と同義だと主張している。","u":"https://x.com/in_00_/status/2067942074750755090","k":"con"},{"i":3,"t":0.94,"s":"憲法改正の国民投票において賛成・反対に関わらず棄権することを批判し、主権者としての投票参加を強く求めている。","u":"https://x.com/Takumi_0331/status/2067927362688414045","k":"process"},{"i":0,"t":0.94,"s":"憲法改正に賛成する理由として時代適応と国際貢献を挙げ、反対派の「戦争がしたい」という主張を「稚拙」「アホ」と批判している。","u":"https://x.com/HARDLUC69070400/status/2067923273179136492","k":"pro"},{"i":3,"t":0.94,"s":"国民投票法改正案への賛成議員が99%に達したことを「大政翼賛会」と批判し、改憲そのものを「改悪」と評価している。","u":"https://x.com/U6aH9JyiuN1384/status/2067917490555142171","k":"con"},{"i":0,"t":0.66,"s":"改憲反対集会に対する改憲推進派の反対行動を「戦争賛成」と結びつけ、その立場の矛盾に困惑しながら改憲反対側に同情的であることを示している。","u":"https://x.com/mistyminds/status/2067916967013650858","k":"con"},{"i":0,"t":0.66,"s":"現政権による憲法改正に反対する旨を、戦争反対・平和賛成との連帯表明とともに簡潔に示している。","u":"https://x.com/rrrrn_mimo/status/2067909198638424191","k":"con"},{"i":4,"t":0.94,"s":"憲法改正を含む法案の審議において、反対意見を聞かずに全員賛成で可決する国会の姿勢を、三権分立の観点から激しく批判している。","u":"https://x.com/Coulerpapier/status/2067897422978888117","k":"con"},{"i":0,"t":0.66,"s":"少数意見でも多数反対なら国民投票で決めるべきと主張。","u":"https://x.com/gofffwin/status/2067893607974293988","k":"pro"},{"i":3,"t":0.66,"s":"憲法改正の国民投票は通常選挙と異なるため、賛否に関わらず投票参加を求める。","u":"https://x.com/miyukinishio_10/status/2067887260373233753","k":"process"},{"i":0,"t":0.34,"s":"「護憲派」の呼称を批判し、憲法には改正条項があるので改正も憲法に含まれると論じる。","u":"https://x.com/gjtpwmda15937/status/2067885143206121665","k":"pro"},{"i":0,"t":0.66,"s":"憲法改正には賛成だが、自民党・参政党の現行草案には不要な変更が多いとして反対。","u":"https://x.com/frnXuWz00WuFE8R/status/2067876294105383303","k":"con"},{"i":1,"t":0.94,"s":"自衛隊明記を邪魔する勢力を「反日リベラル」と攻撃し、安倍氏の遺志継承と国防強化を訴える。","u":"https://x.com/AbeKentaSoul/status/2068182999129043218","k":"pro"},{"i":1,"t":0.66,"s":"9条への自衛隊明記による防衛体制強化より、平和外交・エネルギー・食料政策など実質的施策を優先すべきと主張。","u":"https://x.com/8_bee_/status/2068182185207910763","k":"con"},{"i":1,"t":0.94,"s":"refere法改正反対デモを左翼の必死さと見なし、自衛隊明記と憲法改正で日本を守るべきと主張。","u":"https://x.com/ShinzoGuardian4/status/2068156079637241934","k":"pro"},{"i":1,"t":0.66,"s":"自衛隊反対と憲法改正反対を両立させるのは情けないと皮肉り、改憲して自衛隊を廃止するくらいの一貫性があればと揶揄。","u":"https://x.com/monmon_wiz/status/2068147516701569094","k":"pro"},{"i":1,"t":0.34,"s":"自衛隊明記の目的を「正当性の法的明確化」として説明し、賛否両論の存在に言及。","u":"https://x.com/famifami_don/status/2068145163659280427","k":"neutral"},{"i":1,"t":0.94,"s":"中道勢力の自衛隊明記不要論を「ほざき」と蔑視し、安倍氏の国防路線復活と改憲を強く求める。","u":"https://x.com/ShinzoGuardian4/status/2068114821191516170","k":"pro"},{"i":1,"t":0.94,"s":"自民党憲法審査会での自衛隊明記議論を評価し、安倍氏ならもっと速やかに実現していたと高市政権への加速を求める。","u":"https://x.com/mocchiAbeFan758/status/2068064226518663385","k":"pro"},{"i":1,"t":0.94,"s":"中道勢力を「ほざく」と罵り、違憲論解消に留まらず国防明確化を目指す安倍氏路線の憲法改正を主張。","u":"https://x.com/ShinzoGuardian4/status/2068060682679910746","k":"pro"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2068044998147453062","k":"con"},{"i":1,"t":0.66,"s":"自民党の憲法改正草案に「自衛隊」ではなく「国防軍」と書かれていることへの疑念","u":"https://x.com/chinchixws5/status/2067982516276150769","k":"con"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067978942758424730","k":"con"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067971234563047741","k":"con"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067969211843101160","k":"con"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067945918352211992","k":"con"},{"i":0,"t":0.34,"s":"国民投票法改正案の衆院通過を受け、今後の憲法改正論点を展望","u":"https://x.com/Rohan_DPFP/status/2067935946713272417","k":"neutral"},{"i":1,"t":0.66,"s":"早期の憲法改正と自衛隊明記を求める","u":"https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939","k":"pro"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067913406477435347","k":"con"},{"i":1,"t":0.34,"s":"自衛隊明記の意義を論じ、憲法改正を主張","u":"https://x.com/mal1476488/status/2067911074532429956","k":"pro"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067908520167809343","k":"con"},{"i":0,"t":0.94,"s":"改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明","u":"https://x.com/itsupansalary2/status/2067906744156869070","k":"con"},{"i":1,"t":0.66,"s":"自衛隊明記を後出しで実現しようとする政府側の戦略を警戒する","u":"https://x.com/xyukijix/status/2067898613356015823","k":"con"},{"i":0,"t":0.94,"s":"改憲は自衛隊明記から始まり、人権侵害や緊急事態条項への拡大につながると警鐘を鳴らす","u":"https://x.com/QSeSlEN6j1YAKO/status/2067886026350330007","k":"con"},{"i":1,"t":0.94,"s":"自衛隊明記を軍事拡大・国軍復活への序章と捉え、高市政権の路線を批判する","u":"https://x.com/haruyokoi1023/status/2067873373439558116","k":"con"},{"i":0,"t":0.66,"s":"自衛隊明記には異論がない一方、24条の家族条項改悪に強く反対する","u":"https://x.com/kamioka_u1/status/2067862126451159164","k":"con"},{"i":0,"t":0.94,"s":"改憲を改悪と見なし、自衛隊明記と緊急事態条項のいずれも断固反対する","u":"https://x.com/itsupansalary2/status/2067854950395453680","k":"con"},{"i":0,"t":0.94,"s":"改憲を改悪と見なし、自衛隊明記と緊急事態条項のいずれも断固反対する","u":"https://x.com/itsupansalary2/status/2067852524250599624","k":"con"},{"i":1,"t":0.66,"s":"台湾独立支持とともに、憲法改正および自衛隊条文明記を改めて宣言する","u":"https://x.com/TaYasouKei/status/2067850410900312417","k":"pro"},{"i":1,"t":0.66,"s":"野党の9条解釈を批判し、抑止力強化のため自衛隊明記を喫緊の課題と主張する","u":"https://x.com/wind_0196/status/2067831949541216551","k":"pro"},{"i":1,"t":0.34,"s":"自衛隊明記よりも、ウクライナ支援の障害となる現行法の精査を優先すべきだと主張する","u":"https://x.com/SDzpp8XtPmUsyN2/status/2067814737736524268","k":"neutral"},{"i":1,"t":0.94,"s":"自民党の及び腰な自衛隊明記案を批判し、参政党の抜本的な憲法改正を支持する","u":"https://x.com/doriftbottle/status/2067774539774509546","k":"pro"},{"i":1,"t":0.94,"s":"日教組を攻撃し、一日も早い憲法改正と国防軍明記を強く求める","u":"https://x.com/koji19610103/status/2067772348594598095","k":"pro"},{"i":1,"t":0.94,"s":"千景・日教組を攻撃し、自衛隊を擁護して憲法改正と国防軍明記を強く求める","u":"https://x.com/koji19610103/status/2067765275324522502","k":"pro"},{"i":1,"t":0.66,"s":"憲法9条による自衛隊明記の改正に対し、少子化や与党の独裁化傾向などを挙げて改憲の意義を疑問視している。","u":"https://x.com/yotuusb888/status/2067750011451109489","k":"con"},{"i":0,"t":0.66,"s":"経済・物価対策を優先すべきだとし、憲法前文・人権削減や自衛隊明記などの改憲は時期尚早だと主張している。","u":"https://x.com/EudMe64/status/2067747932670161342","k":"con"},{"i":1,"t":0.66,"s":"自衛官へのヘイトスピーチを問題視し、自衛隊違憲論を否定するため憲法改正と自衛隊明記を早急に行うべきと主張している。","u":"https://x.com/monozukuriman/status/2067746184924705132","k":"pro"},{"i":1,"t":0.94,"s":"自衛隊明記だけの安易な改正ではなく、改憲がスパイ防止法や国家情報局とセットで独裁国家への道になると警鐘を鳴らしている。","u":"https://x.com/ryosmitisirube/status/2067742561981395056","k":"con"},{"i":0,"t":0.94,"s":"高市総理と自民党の改憲の狙いは自衛隊明記だけでなく国民主権の骨抜きと権力者依存の国家づくりであり、国民投票法案の早期成立も改憲急ぐ意図だと批判している。","u":"https://x.com/masatami_kasagi/status/2067655097782538530","k":"con"},{"i":0,"t":0.94,"s":"高市総理と自民党の改憲の狙いは自衛隊明記だけでなく国民主権の骨抜きと権力者依存の国家づくりであり、国民投票法案の早期成立も改憲急ぐ意図だと批判している。","u":"https://x.com/masatami_kasagi/status/2067654972020551806","k":"con"},{"i":1,"t":0.66,"s":"自衛隊明記を含む憲法改正を徴兵制への伏線と捉え、軍隊化と徴兵制誕生への懸念を表明している。また国民投票の過半数ルールを人権侵害と問題視している。","u":"https://x.com/tomimouse1/status/2067651960657080803","k":"con"},{"i":2,"t":0.66,"s":"國重徹氏の議員任期特例検討を批判し、それが4年ギリギリまで選挙が行われない緊急事態条項の頻発につながる最悪のシナリオだと主張している。","u":"https://x.com/iidak12/status/2068178506820079740","k":"con"},{"i":2,"t":0.66,"s":"戦争反対の立場から、改憲に伴う緊急事態条項の盛り込みに賛成できないと相手に問いかけている。","u":"https://x.com/ippozutu15/status/2068000182063829115","k":"con"},{"i":4,"t":0.66,"s":"旧統一教会と関係する4党の国民投票法案共同提出や中道・無所属議員の賛成を報じ、護憲を捨てたと批判。参政党の緊急事態条項反対は本気でないと指摘し、れいわ・共産党のみ反対と評価している。","u":"https://x.com/fallen_teru/status/2067939915032297899","k":"con"},{"i":5,"t":0.34,"s":"メディアに対し、次々に成立されようとしている法案が日本にとって本当に必要かを検証してほしいと求め、国民が内容を知らずに賛否を決めるべきでないと議論の質向上を訴えている。","u":"https://x.com/EbiShumai257/status/2067920046702350517","k":"neutral"},{"i":3,"t":0.94,"s":"国民投票法改正に反対し、最低投票率なしで賛成者が多ければ改憲成立となる仕組みを批判。衆院選での八百長を連想させ、国民投票での憲法改悪と緊急事態条項新設を絶対阻止すべきと訴えている。","u":"https://x.com/buron2011/status/2067763266311618753","k":"con"},{"i":3,"t":0.94,"s":"憲法改正のための国民投票法改正に反対。最低投票率なしで賛成多数で成立する仕組みや、選挙における公正性への疑念を指摘し、緊急事態条項新設も危険と主張している。","u":"https://x.com/buron2011/status/2067762423277457741","k":"con"},{"i":2,"t":0.66,"s":"若者を中心に緊急事態条項改憲に66%賛成というアンケート結果を引用し、皮肉を込めて自衛隊人手不足との整合性のなさを指摘している。","u":"https://x.com/CmfYnqbck380794/status/2067622226879504821","k":"con"},{"i":4,"t":0.66,"s":"参政党が緊急事態条項には反対としつつ憲法改正・国民投票改正に賛成したことに、支持者として整合性を求め批判している。","u":"https://x.com/machanlove15/status/2067614907722539174","k":"con"},{"i":3,"t":0.94,"s":"憲法改正のための国民投票法改正に反対。最低投票率なしで賛成多数で成立する仕組みや、選挙における公正性への疑念を指摘し、緊急事態条項新設も危険と主張している。","u":"https://x.com/buron2011/status/2067614441823498695","k":"con"},{"i":3,"t":0.94,"s":"国民投票は個別に可否を選べず一括表決になる点を指摘。基本的人権削除や国会機能維持条項が含まれる場合、賛成できないと主張している。","u":"https://x.com/Dabrith/status/2067585548626415824","k":"con"},{"i":2,"t":0.66,"s":"緊急事態条項の賛否が長年せめぎ合いになっていることに無関心だった自身を振り返り、事態の進展への危機感を表明している。","u":"https://x.com/l1yphTWMsa45573/status/2067583144287687118","k":"con"},{"i":3,"t":0.94,"s":"憲法改正のための国民投票法改正に反対。最低投票率なしで賛成多数で成立する仕組みや、選挙における公正性への疑念を指摘し、緊急事態条項新設も危険と主張している。","u":"https://x.com/buron2011/status/2067573140138693005","k":"con"},{"i":3,"t":0.94,"s":"憲法改正のための国民投票法改正に反対。最低投票率なしで賛成多数で成立する仕組みや、選挙における公正性への疑念を指摘し、緊急事態条項新設も危険と主張している。","u":"https://x.com/buron2011/status/2067572951227232288","k":"con"},{"i":2,"t":0.34,"s":"YouTuberおみそんと高橋洋一氏が比例定数削減や緊急事態条項賛成派であることを紹介し、左翼一掃などの発言や態度転換に批判的な距離を置いている。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067372340670038523","k":"neutral"},{"i":2,"t":0.34,"s":"YouTuberおみそんと高橋洋一氏が比例定数削減や緊急事態条項賛成派であることを紹介し、左翼一掃などの発言や態度転換に批判的な距離を置いている。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067372262085611859","k":"neutral"},{"i":2,"t":0.34,"s":"YouTuberおみそんと高橋洋一氏が比例定数削減や緊急事態条項賛成派であることを紹介し、左翼一掃などの発言や態度転換に批判的な距離を置いている。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067372111946260528","k":"neutral"},{"i":2,"t":0.34,"s":"YouTuberおみそんと高橋洋一氏が比例定数削減や緊急事態条項賛成派であることを紹介し、左翼一掃などの発言や態度転換に批判的な距離を置いている。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067371796597514689","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067371738003062907","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067371675533107700","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067370888178352519","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067370579741831395","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067370514340089857","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067370453866528813","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067370246353400245","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067369829821206960","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067369448408039698","k":"neutral"},{"i":2,"t":0.66,"s":"特定YouTuberが緊急事態条項について過去反対から現在賛成に転向したことを指摘・報告している。","u":"https://x.com/j6h9G7IZy0wvtLg/status/2067368755324490223","k":"neutral"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。最低投票率なしで賛成多数なら憲法改正が成立する仕組みを批判し、八百長の危険を指摘。緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067357075274117603","k":"con"},{"i":3,"t":0.94,"s":"憲法改正国民投票法改正に反対。最低投票率がないため賛成多数で憲法改正が成立する危険性を指摘し、衆議院選挙の八百長が国民投票に波及する可能性を懸念。緊急事態条項新設も反対。","u":"https://x.com/buron2011/status/2067241045554082294","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067237647928730001","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067237480752185754","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067237264372228297","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067236897504874965","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067234920628642282","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設の危険性を指摘。","u":"https://x.com/buron2011/status/2067234439126778332","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正に断固反対。少数投票でも賛成多数で憲法改正が成立する仕組みと選挙の不正を懸念し、緊急事態条項新設にも反対。","u":"https://x.com/buron2011/status/2067233737419702356","k":"con"},{"i":1,"t":0.94,"s":"自衛隊明記による憲法9条改正に反対。自衛隊の権威向上と戦前の軍部のような特別な発言力を懸念。","u":"https://x.com/buriki2025/status/2068213021131067816","k":"con"},{"i":1,"t":0.66,"s":"憲法9条改正、軍事法廷設置、自衛隊の日本国防軍への名称変更に賛成。","u":"https://x.com/y7m3389SorxeAi9/status/2068212493378560282","k":"pro"},{"i":1,"t":0.94,"s":"憲法9条を死守すべきと主張。自衛隊の指揮権が米国にある現状を指摘し、9条改正を米国の圧力と批判。","u":"https://x.com/tom10644324280/status/2068204274467872792","k":"con"},{"i":1,"t":0.94,"s":"中道改革連合が憲法9条維持を掲げながら、緊急事態条項や自衛隊位置づけの議論加速に寄与していると批判。","u":"https://x.com/lautrea/status/2068158992862576976","k":"con"},{"i":1,"t":0.94,"s":"憲法9条改正と自衛隊強化、日米安保強化を推進。周辺国やテロの脅威に備えるべきと主張。","u":"https://x.com/GvVvfpjq2G97202/status/2068127797571449309","k":"pro"},{"i":1,"t":0.66,"s":"憲法は時代に合わせて変えるべきであり、9条に自衛隊を明記する改正を支持するが、9条だけでは日本は守れないと主張。","u":"https://x.com/rightrighton4/status/2067994758203756843","k":"pro"},{"i":1,"t":0.94,"s":"憲法9条改正や国民投票法改正に反対し、改正により自衛隊が米国の捨て駒や戦死に晒されると懸念。","u":"https://x.com/FSNg7hpPtvnUjIF/status/2067981081681531266","k":"con"},{"i":1,"t":0.66,"s":"憲法9条改正には賛成だが、その前に自衛隊の徹底的な粛軍や旧軍決別など条件を先に満たすべきと主張。","u":"https://x.com/TJopqC5RgviqSK5/status/2067969099871986156","k":"pro"},{"i":1,"t":0.66,"s":"自衛隊明記だけでは憲法の矛盾が解消されず、自衛隊廃止か9条2項の改正・廃止の二択が必要と論じる。","u":"https://x.com/Nullypog/status/2067947902367134004","k":"pro"},{"i":1,"t":0.34,"s":"自衛隊の存在を認めるなら憲法9条改正が論理的結論であると指摘するが、自身の賛否は明示しない。","u":"https://x.com/niko3143/status/2067920109520453789","k":"neutral"},{"i":1,"t":0.66,"s":"自民党が9条改正で自衛隊を軍隊化しようとしていると批判し、違憲論解消ではなく地位明確化が必要と主張。","u":"https://x.com/dZFoZ835aWMMURR/status/2067914478537375828","k":"con"},{"i":1,"t":0.66,"s":"問題解決には自衛隊廃止か9条2項改正しかないと論じ、護憲派の立場の整合性を問う。","u":"https://x.com/Nullypog/status/2067895002936868915","k":"process"},{"i":1,"t":0.94,"s":"憲法9条改正と自衛隊強化を強く求め、原子力潜水艦・空母導入や隊員給料アップも主張。","u":"https://x.com/yknh08/status/2067877284556759302","k":"pro"},{"i":1,"t":0.66,"s":"憲法9条への自衛隊明記が徴兵につながるという川上浩一氏の論理は飛躍だと反論。","u":"https://x.com/ryudairou/status/2067822523992158268","k":"pro"},{"i":1,"t":0.66,"s":"中学時代の教師の護憲的・反自衛隊的な主張を回想し、改憲絶対反対の姿勢に違和感を示す。","u":"https://x.com/paris0326/status/2067815785100427757","k":"pro"},{"i":1,"t":0.94,"s":"憲法9条2項を削除し、自衛隊の防衛力をフル発揮できる時代が来たと主張。","u":"https://x.com/Tenhai_exp/status/2067761996892893325","k":"pro"},{"i":1,"t":0.66,"s":"憲法9条の改正は必要だが、自民党案の自衛隊明記は公明党の負の遺産であり根本解決にならず、第2項削除が望ましいと主張。","u":"https://x.com/Kawa6raFriedman/status/2067757539203391852","k":"pro"},{"i":1,"t":0.66,"s":"維新の憲法9条改正案について、2項削除と国防軍明記の内容を解説し、集団的自衛権の行使を認める抑止力強化であると説明する。","u":"https://x.com/grok/status/2067742905721118801","k":"pro"},{"i":1,"t":0.94,"s":"憲法9条の踏み込んだ改正で自衛隊が職業軍人化し、緊急事態条項とセットで人権が危うくなると警戒し、改憲に反対する。","u":"https://x.com/sk3856ks/status/2067736851008671816","k":"con"},{"i":1,"t":0.66,"s":"自衛隊明記のみでは不十分で、9条2項の堂々たる削除を自民党に求め、維新の改正案を評価する。","u":"https://x.com/mogamiujisato/status/2067732837231628690","k":"pro"},{"i":1,"t":0.94,"s":"日本会議を「軍国主義カルト」と呼び、同団体関連議員による9条改正推進を問題視し、改憲を強く警戒する。","u":"https://x.com/FSNg7hpPtvnUjIF/status/2067624468340728067","k":"con"},{"i":1,"t":0.94,"s":"名大祭への自衛隊出展中止を異常とし、9条改正と自衛隊の国軍化を強く求める。","u":"https://x.com/motoyama1982/status/2067575858685190288","k":"pro"},{"i":1,"t":0.34,"s":"憲法審査会で自衛隊明記案と2項削除案を、作用法と組織法の観点から比較説明したことを報告する。","u":"https://x.com/abe_keishi/status/2067572022868328558","k":"neutral"},{"i":1,"t":0.94,"s":"憲法9条2項削除と国防軍明記（自衛隊）、および憲法24条1項改正に賛成する意向を示す。","u":"https://x.com/subririn_b/status/2067563630259028414","k":"pro"},{"i":0,"t":0.34,"s":"自民党が2018年に提示した憲法改正4項目の条文イメージを解説し、現在の審査会議論の中心として紹介する。","u":"https://x.com/shadow_work_miu/status/2067551310686335409","k":"neutral"},{"i":1,"t":0.34,"s":"憲法9条の「戦力不保持」と「自衛力」の定義を問い、改憲論者が主張するのは純粋な自衛力か、それとも攻撃的戦力かを区別する必要性を指摘する。","u":"https://x.com/kouzie01/status/2067512844866978127","k":"neutral"},{"i":1,"t":0.66,"s":"自衛隊明記改憲を「違憲論解消のみを目的とするもの」として批判し、不要と主張","u":"https://x.com/BucchoJ/status/2067497889933541868","k":"con"},{"i":1,"t":0.94,"s":"高市早苗の9条私案が国防軍化につながり、徴兵制導入の恐れがあると警告","u":"https://x.com/TVbancyo/status/2067487614270427457","k":"con"},{"i":1,"t":0.66,"s":"自衛隊派遣と憲法改正の関連に懸念を示す","u":"https://x.com/y2hM0kZqXJr9HNe/status/2067473084391829828","k":"con"},{"i":1,"t":0.66,"s":"自衛隊明記だけでなく真の国防強化のための改正を主張","u":"https://x.com/K5omyKUOte87912/status/2067466904877564329","k":"pro"},{"i":1,"t":0.94,"s":"解釈頼りの運用は危険とし、憲法9条の直ちな改正を主張","u":"https://x.com/tokumusocho/status/2067445721801146677","k":"pro"},{"i":1,"t":0.94,"s":"自衛隊の軍隊化・9条改正を国防強化の前提として支持","u":"https://x.com/jijicoltdceo/status/2067442429939294255","k":"pro"},{"i":1,"t":0.66,"s":"憲法9条改正を不要とし、他法改正で対応可能と主張","u":"https://x.com/akubikinako/status/2067441818783080941","k":"con"},{"i":1,"t":0.66,"s":"法学者の9条解釈を引用し、国民全体の安全に言及","u":"https://x.com/G6rWL31oqWdlICj/status/2067410440918057413","k":"con"},{"i":0,"t":0.94,"s":"現行憲法の多面的問題を指摘し、新憲法制定を主張","u":"https://x.com/yokohamaikka/status/2067285000735850873","k":"pro"},{"i":1,"t":0.66,"s":"自衛隊の国軍化のため憲法9条改正を主張","u":"https://x.com/syohchikubuy/status/2067278406446907841","k":"pro"},{"i":1,"t":0.94,"s":"9条改正反対派を皮肉を込めて批判し、改正の必要性を主張","u":"https://x.com/MaTsu0_00/status/2067260313490313443","k":"pro"},{"i":1,"t":0.66,"s":"憲法9条解釈の学説対立を問題視し、改正の必要性を主張","u":"https://x.com/ayahana_ciel_bl/status/2067221684684505448","k":"pro"},{"i":3,"t":0.34,"s":"国民投票法の広告規制に穴があるというYouTube動画を共有し、規制の問題点に注目している。","u":"https://x.com/KominLabo/status/2068167430212620381","k":"neutral"},{"i":3,"t":0.66,"s":"有料CMによる印象操作で国民の意思が歪められた状態で憲法改正されることを恐れ、広告規制の強化を望んでいる。","u":"https://x.com/bloodyMommy8412/status/2067775015152714162","k":"con"},{"i":3,"t":0.34,"s":"通販生活のテレビCM問題と立憲議員の動きを評価し、有料広告規制の取り組みを称賛している。","u":"https://x.com/mura_mika34861/status/2067627721979826402","k":"process"},{"i":5,"t":0.34,"s":"国民投票法の広告規制だけでなく、憲法改正の中身について国民レベルの議論が不足していると指摘している。","u":"https://x.com/hisashi_karaage/status/2067587713180839980","k":"neutral"},{"i":3,"t":0.66,"s":"広告規制を放置し開票要件を緩和する国民投票法改正案に対し、ハッシュタグ付きで明確に反対を表明している。","u":"https://x.com/koiketakao/status/2067559788716986636","k":"con"},{"i":3,"t":0.66,"s":"CM規制・ネット広告規制が未整備で公平性に懸念があり、国民投票法改正案は容認できないと主張している。","u":"https://x.com/worldpeace828/status/2067529123527069857","k":"con"},{"i":3,"t":0.94,"s":"広告規制が不十分な国民投票法改正案の衆議院通過を「改憲へ王手」「終わり」と過激に表現し、強く反対している。","u":"https://x.com/takuya_angel/status/2067475132617289988","k":"con"},{"i":3,"t":0.66,"s":"憲法改正手続法（国民投票法）が最低投票数規定も広告規制もなく、国民に熟慮させない仕様であると批判している。","u":"https://x.com/mmmmmamama/status/2067465800894853326","k":"con"},{"i":3,"t":0.34,"s":"改憲草案が未定のまま国民投票法の改正が先に進むことに疑問を呈し、CM・ネット広告規制や最低投票率規定の欠如を指摘している。","u":"https://x.com/8_bee_/status/2067404127437754801","k":"con"},{"i":3,"t":0.34,"s":"国民投票法改正の重大な問題点（最低投票率、広告規制、運動資金上限の欠如）を報道機関に報じるよう求めている。","u":"https://x.com/1984OrWeIIian/status/2067264463393399275","k":"neutral"},{"i":3,"t":0.34,"s":"公平性を欠く国民投票法改正の問題点を報道機関に報じるよう求めている。","u":"https://x.com/1984OrWeIIian/status/2067263478382153766","k":"neutral"},{"i":3,"t":0.34,"s":"国民投票法改正の重大な問題点を有権者に報じるよう報道機関に求めている。","u":"https://x.com/1984OrWeIIian/status/2067262540841971802","k":"neutral"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067262432154935675","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067262077765578759","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067261139541770328","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067261076807512314","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067260999393304595","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067260526707757443","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067260422512837062","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067256308538216461","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067255963669905894","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067255835689210023","k":"process"},{"i":3,"t":0.66,"s":"憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている","u":"https://x.com/1984OrWeIIian/status/2067255747306799181","k":"process"},{"i":3,"t":0.94,"s":"国民投票法改正案を「憲法改正手続法」と呼ぶべきだと主張し、最低投票率や広告規制の不在を「ザル法」として強く批判している","u":"https://x.com/take_mikazuchi/status/2067234719390150957","k":"con"},{"i":3,"t":0.94,"s":"国民投票法に広告規制や最低投票率の歯止めがなく、メディアも報じないため、このまま改憲手続きを進めるべきではないと主張している。","u":"https://x.com/niyari_honpo/status/2067211226401366473","k":"con"},{"i":3,"t":0.66,"s":"今回の国民投票法改正自体は改憲への近道ではなく、改憲発議前にネット広告規制や最低投票率などの課題解決を求めるものだと解釈し、改憲発議前の手続き整備を重視している。","u":"https://x.com/proveyourlife/status/2067164921000022362","k":"process"},{"i":3,"t":0.94,"s":"国民投票法に最低投票率と広告規制がなく、与党の巨大な発信力により世論操作が可能であると指摘し、改憲を阻止すべきと訴えている。","u":"https://x.com/POLIMELOch/status/2067120194523377822","k":"con"},{"i":3,"t":0.66,"s":"今回の国民投票法改正内容自体には大きな問題を感じていないが、広告規制や最低投票率がないまま憲法改正になだれ込むことを懸念し、改正法案に反対している。","u":"https://x.com/yacosuke/status/2066878384551219337","k":"con"},{"i":3,"t":0.94,"s":"メディアに対し、国民投票法が広告規制や最低投票率などの歯止めがない「ザル法」であることをきちんと報道するよう求め、改正法案に反対している。","u":"https://x.com/niyari_honpo/status/2066770445291164077","k":"con"},{"i":3,"t":0.94,"s":"国民投票法に最低投票率と広告規制がなく、与党の圧倒的な発信力で世論が作られると指摘し、改憲を阻止すべきと主張している。","u":"https://x.com/POLIMELOch/status/2066457786675003859","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正案の審議入りを報告し、高市政権が改憲時のネット広告規制を拒否することへの恐怖感と、高市氏への責任追及を示している。","u":"https://x.com/yuuta24mikiko/status/2066373740993433832","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正案の審議入りと、ネガキャン動画疑惑のある高市政権が改憲時のネット広告規制を拒否することへの恐怖を述べている。","u":"https://x.com/shiraike2/status/2066035636755452237","k":"con"},{"i":3,"t":0.34,"s":"投票運動期間中の広告規制不在という国民投票法の欠陥を解説した書籍を紹介し、読者に読むよう促している。","u":"https://x.com/yama_me_do_ob/status/2065322629435912293","k":"neutral"},{"i":3,"t":0.66,"s":"階氏の発言を引用し、AI活用による国民投票結果への影響力を指摘。広告規制を含む欠陥放置の法改正には賛成できないと表明している。","u":"https://x.com/asuno_jiyuu/status/2065263881786888270","k":"con"},{"i":3,"t":0.34,"s":"国民投票法改正案の審議入りを受け、広告規制不在・最低投票率規程不在・立会人規程緩和など、国政選挙に遠く及ばない手続き上の問題点を列挙している。","u":"https://x.com/hira_sail2/status/2065197085352407238","k":"process"},{"i":3,"t":0.94,"s":"最低投票率と広告規制の不在を国民投票法の最大欠陥と位置づけ、改憲派4党が資金・組織票で有利な状況が変わらないことを指摘。憲法・国民投票法のリスクを報じるメディアの減少を嘆いている。","u":"https://x.com/ponpocosora/status/2065171396201000974","k":"con"},{"i":3,"t":0.66,"s":"自民党新藤氏の国民投票法におけるネット広告規制の法制措置要請を報じ、自民党トップの疑惑説明を国民投票の前提として求める修辞的疑問を呈している。","u":"https://x.com/a7BvKaEsuS41828/status/2065086777472569641","k":"neutral"},{"i":3,"t":0.94,"s":"国民投票法改正案が広告規制を意図的に除外し、改憲を有利に進める「詐欺法案」であると政府説明に反論して批判している。","u":"https://x.com/etude_op25no1/status/2065066455339856062","k":"con"},{"i":3,"t":0.34,"s":"国民投票法の衆院審議入りと、自民党の投票環境整備説明、中道改革連合の広告規制結論求めについて、報道的に要約している。","u":"https://x.com/92p12USuRLsVHyJ/status/2065020785547514082","k":"neutral"},{"i":5,"t":0.66,"s":"特定人物がLGBT法存置と憲法改正を結びつけて推進しているという、陰謀論的な指摘を投稿している。","u":"https://x.com/amenonubok60793/status/2070726362739192309","k":"neutral"},{"i":0,"t":0.66,"s":"改憲賛成の相手に対し、共和制移行も含めた改憲を支持するかと問いかけ、改憲の極端な帰結を突いている。","u":"https://x.com/AKsTCAcr0n83453/status/2070709728821514628","k":"con"},{"i":4,"t":0.66,"s":"参院での改憲賛成票確保の重要性を論じ、国民民主や公明、参政党の賛成を望み、改憲実現に向けた政党力学を分析している。","u":"https://x.com/axela_cbr600rr/status/2070707373967319058","k":"pro"},{"i":4,"t":0.94,"s":"高市総理の憲法改正実現のため、衆議院の2/3議席維持を最優先し、不本意な政治勢力も受け入れるべきと主張している。","u":"https://x.com/Wq5if92WDa1qe0J/status/2070693142106673262","k":"pro"},{"i":4,"t":0.66,"s":"公明党や中道改革連合が国会質疑での反対姿勢から一転して憲法改正法案に賛成したことに、疑問と失望を表明している。","u":"https://x.com/NU1o1wku9oVUnsP/status/2070668825067180325","k":"con"},{"i":0,"t":0.94,"s":"国民民主党の憲法改正・安保政策への賛成姿勢を「戦争賛成」と結びつけて批判し、玉木代表と政党を攻撃している。","u":"https://x.com/daisuke8174/status/2070651057987006490","k":"con"},{"i":4,"t":0.34,"s":"連立政権における自民党と維新の党の政策整合性を論じ、憲法改正を巡る両党の立場の不一致は連立を成立させないと分析している。","u":"https://x.com/ugogufi/status/2070646565916787133","k":"neutral"},{"i":0,"t":0.94,"s":"憲法改正が公務員による拷問や体罰を可能にすると主張し、改憲そのものを「イカれた改憲」と強く批判している。","u":"https://x.com/nippon_D_fujin/status/2070644433977291119","k":"con"},{"i":0,"t":0.66,"s":"憲法改正の潜在的なリスクを訴え、賛成派にその帰結を想像することを求め、慎重な姿勢を呼びかけている。","u":"https://x.com/koto34/status/2070643130391732506","k":"con"},{"i":0,"t":0.66,"s":"公明党等への支持を表明しつつ、同党の憲法改正賛成に疑問を呈め、国民への説明責任を求めている。","u":"https://x.com/NU1o1wku9oVUnsP/status/2070624614947098821","k":"con"},{"i":0,"t":0.94,"s":"憲法改正賛成者を「おバカさん」と呼び、自民党憲法草案の理解がないと酷評している。","u":"https://x.com/Macopapa4/status/2070620944570474930","k":"con"},{"i":5,"t":0.34,"s":"護憲派に対して「憲法改正賛成」とやじる（呼びかける・揶揄する）何らかの状況を示唆しているが、文脈が極めて不明瞭。","u":"https://x.com/arashiN06172/status/2070558958180610055","k":"neutral"},{"i":3,"t":0.66,"s":"国民投票への不参加が反対票と同値にカウントされる認識の問題を指摘し、それが改憲可決に繋がるなら改憲も反対すると表明。","u":"https://x.com/androidappshq/status/2070536443047383308","k":"con"},{"i":0,"t":0.94,"s":"参政党・神谷氏を「クズ野郎」と罵倒し、その認識の低さから憲法改正賛成に至ると批判している。","u":"https://x.com/v77c6tfv/status/2070535528857108658","k":"con"},{"i":5,"t":0.66,"s":"NHKが威迫的に憲法改正への賛成回答を誘導しているとの主張を展開している。","u":"https://x.com/AKsTCAcr0n83453/status/2070533610659287221","k":"con"},{"i":0,"t":0.66,"s":"参議院で自民補完政党が悪法を通す構造を批判し、憲法改正を含む懸念を表明している。","u":"https://x.com/etude_op25no1/status/2070513430289895696","k":"con"},{"i":0,"t":0.66,"s":"国旗損壊罪、国家情報局、天皇制改編、憲法改正のいずれにも賛成しないと表明し、与党への異議を唱えている。","u":"https://x.com/pYrALh1Erb63935/status/2070510972599665139","k":"con"},{"i":0,"t":0.94,"s":"憲法改正・移民・核武装への賛成を理由に、参政党を「絶対に支持出来ない」と表明。子供の未来への戦争巻き込みを懸念。","u":"https://x.com/TCj7lEPYTDM0FbG/status/2070503745813950518","k":"con"},{"i":0,"t":0.94,"s":"参政党支持者が「騙されている」とし、同党の憲法改正賛成を理由に、子供の未来が戦争に巻き込まれると警告している。","u":"https://x.com/TCj7lEPYTDM0FbG/status/2070502651457052978","k":"con"},{"i":0,"t":0.94,"s":"参政党の憲法改正賛成・移民賛成・核武装方針を列挙し、子供の未来を戦争に巻き込むとして支持しないと表明。","u":"https://x.com/TCj7lEPYTDM0FbG/status/2070496593347010966","k":"con"},{"i":3,"t":0.34,"s":"憲法改正賛成・反対のアンケートを、議員定数削減の賛否と同じ無意味なレベルと酷評している。","u":"https://x.com/kokumin_ouenn/status/2070483402370019597","k":"neutral"},{"i":0,"t":0.94,"s":"山内かなこ議員に対し、憲法審査会と憲法改正手続法の阻止、および最終採決での賛成拒否を強く求める。野党共闘と子供の未来の保護を訴える。","u":"https://x.com/cleanhouselily/status/2070475231593185579","k":"con"},{"i":0,"t":0.94,"s":"田島まいこ議員に対し、憲法審査会と憲法改正手続法の阻止を要請。与党の国民投票宣伝による誘導を警戒し、野党連携を訴える。","u":"https://x.com/cleanhouselily/status/2070471014765793630","k":"con"},{"i":3,"t":0.66,"s":"憲法改正国民投票の最低投票率設定を求めるChange.org署名を紹介。現行法では少数の賛成で憲法が変更される危険性を指摘する。","u":"https://x.com/tutida_kenji/status/2070468271929966597","k":"con"},{"i":5,"t":0.34,"s":"改憲に関する相手の論理の支離滅裂を指摘し、矛盾を突く返信。","u":"https://x.com/40cells/status/2070458622426186047","k":"neutral"},{"i":4,"t":0.34,"s":"議員が地元貢献を重視し国会での憲法案審議を軽視する傾向を批判。議員の本来の役割は国政にあると主張する。","u":"https://x.com/nine111nine/status/2070455579295035545","k":"neutral"},{"i":1,"t":0.94,"s":"立憲民主党が軍拡関連法案に賛成したことに抗議。憲法改正反対と軍拡反対の立場を貫くべきだと訴える。","u":"https://x.com/cleanhouselily/status/2070450314986328340","k":"con"},{"i":0,"t":0.94,"s":"改憲賛成派を社会的混乱や暴力革命を望む集団として批判し、嘲りの口吻で改憲に強く反対する。","u":"https://x.com/NM09QSBN/status/2070439590884974897","k":"con"},{"i":2,"t":0.66,"s":"参政党が憲法改正の国民投票改正に賛成した事実を確認し、緊急事態条項との関連性や「プロレス」の可能性に懸念を示す。","u":"https://x.com/koronawoowarase/status/2070438518799880652","k":"neutral"},{"i":4,"t":0.66,"s":"共産党の改憲に関する過去の主張を「支離滅裂」と批判し、一貫性の欠如を指摘する。","u":"https://x.com/kenmetal1217/status/2070424782324326742","k":"neutral"},{"i":3,"t":0.94,"s":"憲法改正国民投票法改正案への賛成を「言行不一致」と批判し、共産党やれいわの徹底反対を見習うべきだと主張する。","u":"https://x.com/nekogadaisuke/status/2070424694277210500","k":"con"},{"i":3,"t":0.34,"s":"憲法改正国民投票における資金力による宣伝格差の問題を動画で紹介し、公平性を問う。","u":"https://x.com/KominLabo/status/2070421276615938255","k":"neutral"},{"i":3,"t":0.34,"s":"憲法改正国民投票における資金力による宣伝格差の問題を動画で紹介し、公平性を問う。","u":"https://x.com/KominLabo/status/2070420746040676572","k":"neutral"},{"i":0,"t":0.34,"s":"憲法改正の必要性を主張し、国会発議と国民投票の手続きを解説している。","u":"https://x.com/SgfkSystem/status/2070410802637799509","k":"pro"},{"i":0,"t":0.66,"s":"自民党の憲法改正案に対し、参政党に対して民意を優先した反対を求めている。","u":"https://x.com/EOqMvByyGNQErix/status/2070405031095079335","k":"con"},{"i":0,"t":0.94,"s":"改憲反対を唱えながら軍拡法案に賛成した野党を「二枚舌」と批判し、改憲戦争への反対を示している。","u":"https://x.com/AFYPTTVWsYcaYi2/status/2070350379649556871","k":"con"},{"i":0,"t":0.34,"s":"憲法改正の法律上の要件を指摘し、実現が極めて困難であると論じている。","u":"https://x.com/Cronous_zero/status/2070319265836867966","k":"neutral"},{"i":0,"t":0.66,"s":"憲法改正には衆参両院3分の2の賛成が必要と述べ、主導権を握る重要性を強調している。","u":"https://x.com/mafuchanHonaka/status/2070292224248848824","k":"pro"},{"i":0,"t":0.34,"s":"憲法96条の改正手続きを説明し、「永久に」の文言があっても改正は可能であると主張している。","u":"https://x.com/FJkXzp4aKi9538/status/2070262566807609774","k":"pro"},{"i":0,"t":0.34,"s":"憲法裁判所設置のための憲法改正案を論じ、日本共産党の過去の反対立場に言及している。","u":"https://x.com/C_N_Lundi/status/2070780531688742945","k":"neutral"},{"i":1,"t":0.94,"s":"憲法改正反対や9条堅持を主張する左翼を「売国奴」と批判し、安保体制への矛盾を指摘している。","u":"https://x.com/black_pearl0728/status/2070750009981829511","k":"pro"},{"i":2,"t":0.66,"s":"学者の説明を引用し、緊急事態条項の追加は「必要なし」と結論付け、憲法改正に反対を呼びかけている。","u":"https://x.com/rrevv2021/status/2070749210761380217","k":"con"},{"i":0,"t":0.66,"s":"自民党の憲法改正案に反対し、内容と手法が国民に向かっていないと批判。憲法は権力者を縛るものだと主張している。","u":"https://x.com/to_m3v/status/2070748909023248488","k":"con"},{"i":3,"t":0.66,"s":"憲法改正後の社会保障の改悪を懸念し、憲法改正の国民投票に反対している。","u":"https://x.com/nemurineko42/status/2070748067830321165","k":"con"},{"i":5,"t":0.66,"s":"「憲法改正反対」のプロフィールを持つ相手に対し、具体的な反対対象と阻止方法の欠如を批判している。","u":"https://x.com/251Kenichi/status/2070735159595553013","k":"neutral"},{"i":4,"t":0.34,"s":"改憲反対論に賛同する共産党への支持を相手に求める反論","u":"https://x.com/hidetaka5231/status/2070733901274996952","k":"neutral"},{"i":0,"t":0.94,"s":"政治家への批判とともに憲法改正を含む複数政策への反対を表明","u":"https://x.com/azuazu25049499/status/2070728400298553558","k":"con"},{"i":5,"t":0.34,"s":"「憲法改正反対」の呼びかけが憲法改正そのものへの反対なのか現在の案への反対なのかを問う","u":"https://x.com/shugimon/status/2070728271218770059","k":"neutral"},{"i":4,"t":0.66,"s":"改憲反対を掲げる公式アカウントの政党支持なき姿勢を批判","u":"https://x.com/MIYUKI311255/status/2070726480418759106","k":"neutral"},{"i":0,"t":0.66,"s":"改憲反対の認識は前提の相違によるものとし対話不要とする","u":"https://x.com/hietaro/status/2070724375763198107","k":"pro"},{"i":0,"t":0.94,"s":"自民党の憲法改正案が被虐待児の親介護を招き生活破壊につながる恐れがあるとして反対","u":"https://x.com/Ra5g6cdyhJZXMW1/status/2070724190119080399","k":"con"},{"i":0,"t":0.94,"s":"高市首相の短期間での成果を問い、憲法改正に絶対反対を表明","u":"https://x.com/J6fNp3GaHB79326/status/2070723570867806399","k":"con"},{"i":0,"t":0.66,"s":"日米同盟見直しを先とし、それ抜きの憲法改正に反対。また天皇制と大統領制も言及","u":"https://x.com/omnicom61/status/2070716578682011749","k":"con"},{"i":0,"t":0.94,"s":"国旗損害罪に反対し、平成24年憲法改正草案の国旗尊重義務が強制掲揚につながると懸念","u":"https://x.com/yuki81463410/status/2070704699297411503","k":"con"},{"i":5,"t":0.66,"s":"渋谷での改憲反対アピールをバズ狙いのパフォーマンスと評価し効果を疑問視","u":"https://x.com/Patoriot_Miyu/status/2070685489796125164","k":"neutral"},{"i":0,"t":0.66,"s":"憲法改正反対は思考停止だとし、国防の最適化のための改憲を主張","u":"https://x.com/suZX6e4JcPNxUJh/status/2070684400220799285","k":"pro"},{"i":5,"t":0.34,"s":"日本愛国と憲法改正反対を結びつける表現について仮説的に問う","u":"https://x.com/xjzsifHgkk5AlBd/status/2070677612247261290","k":"neutral"},{"i":0,"t":0.66,"s":"マスコミが憲法改正反対の抗議活動を報道すべきだと主張","u":"https://x.com/yuukosemp/status/2070674815846101398","k":"con"},{"i":0,"t":0.66,"s":"共産党に対し、法律変更で済む事項なら改憲不要と論駁","u":"https://x.com/iD535JiziquRBrH/status/2070659147608293872","k":"con"},{"i":0,"t":0.66,"s":"特定政党が憲法違反の法律案を推進しつつ改憲を目指していることに批判","u":"https://x.com/shimichan2012/status/2070651791340089560","k":"con"},{"i":0,"t":0.94,"s":"自民党の改憲は統一教会の悲願であり、カルト宗教が憲法に口出しすべきでないと主張","u":"https://x.com/TuO8ZvhI1H24087/status/2070650402878734366","k":"con"},{"i":0,"t":0.66,"s":"改憲反対派でありつつ、両サイドの集会参加やディベート的思考を提言","u":"https://x.com/fallen_teru/status/2070637049779220776","k":"con"},{"i":0,"t":0.94,"s":"多くの国民が反対しているから改憲はやめるべきだと民主主義原理に訴え","u":"https://x.com/lKrE08KGhI8VxXM/status/2070635719803228264","k":"con"},{"i":3,"t":0.66,"s":"改憲は憲法順守であり、国民投票で意思表明すべきと改憲反対派に呼びかけ","u":"https://x.com/ambi_japan/status/2070624124096135381","k":"pro"},{"i":4,"t":0.34,"s":"社民・共産・れいわの3党が改憲反対であるとの情報共有","u":"https://x.com/TCj7lEPYTDM0FbG/status/2070612783855759529","k":"neutral"},{"i":1,"t":0.94,"s":"山本太郎の9条改正支持を肯定し、改憲反対派をれいわから排斥すべきと主張","u":"https://x.com/yuachan2022/status/2070609264658567436","k":"pro"},{"i":4,"t":0.34,"s":"山本太郎と大石あきこの改憲姿勢の違いを指摘し、れいわの方向転換に言及","u":"https://x.com/yuachan2022/status/2070607687310852606","k":"neutral"},{"i":5,"t":0.34,"s":"改憲反対投稿にお金が支払われるという皮肉を呈している","u":"https://x.com/xyzw6gt/status/2070602189496840556","k":"neutral"},{"i":5,"t":0.66,"s":"改憲反対の姿勢を認めつつ、反対派の活動が共産主義国家樹立を目的とした与党妨害であると批判","u":"https://x.com/Akathukimi/status/2070592113776246984","k":"neutral"},{"i":0,"t":0.94,"s":"憲法改正反対派を「低学歴低所得高齢奇人」と嘲弄し、納税者としての優位性を主張する投稿。","u":"https://x.com/taro_chigasaki/status/2070571903648219239","k":"pro"},{"i":0,"t":0.94,"s":"日米地位協定下での改憲無意味論を展開し、改憲反対派政党のみを支持対象として挙げる投稿。","u":"https://x.com/pxAw5ZAJ0URhZxO/status/2070548653702517127","k":"con"},{"i":0,"t":0.34,"s":"戦前生まれの保守的な人物が憲法改正を必要と主張していることを指摘する投稿。","u":"https://x.com/sakurakonippon1/status/2070543654117409227","k":"neutral"},{"i":0,"t":0.94,"s":"現政権の憲法改正を戦争への道と批判し、国民投票で反対票を投じるよう呼びかける投稿。","u":"https://x.com/CFlemingHomes/status/2070535017843802182","k":"con"},{"i":0,"t":0.66,"s":"憲法改正反対派と反自民を「九州女性侮辱」と非難する投稿。","u":"https://x.com/aa112224444/status/2070496614033297527","k":"pro"},{"i":1,"t":0.66,"s":"集団的自衛権反対派に対し、それを縛る憲法改正を提案する皮肉混じりの投稿。","u":"https://x.com/kemomimi_invest/status/2070491836465181134","k":"pro"},{"i":0,"t":0.66,"s":"沖縄の世論調査で示された憲法改正反対の民意が政府に無視されていると批判する投稿。","u":"https://x.com/ZvJlFR5kPA3748/status/2070491255000510474","k":"con"},{"i":0,"t":0.66,"s":"改憲反対の共産党議員を評価し、同じく反対のれいわに分断しないよう求める投稿。","u":"https://x.com/Sravichan/status/2070785535489233063","k":"con"},{"i":0,"t":0.66,"s":"街頭での改憲反対の声とれいわ新選組の一貫性を称賛する投稿。","u":"https://x.com/50ansdanslevent/status/2070783911538372964","k":"con"},{"i":0,"t":0.66,"s":"自衛隊支持なら改憲に反対すべきだと主張し、改憲推進の高市政権支持への皮肉を込める投稿。","u":"https://x.com/tana23555/status/2070783466019643836","k":"con"},{"i":1,"t":0.66,"s":"9条改憲反対運動の活動家の意見を「問題のすり替え」と批判する投稿。","u":"https://x.com/AE30glLVaVknvcm/status/2070783223995707753","k":"pro"},{"i":1,"t":0.66,"s":"9条改憲反対運動の活動家の意見を「問題のすり替え」と批判する投稿。","u":"https://x.com/AE30glLVaVknvcm/status/2070782144318960035","k":"pro"},{"i":0,"t":0.66,"s":"中道を装った政治家が改憲や戦争法案に無責任に賛成していく現状を批判し、国旗損壊罪より危機的だと指摘","u":"https://x.com/iidak12/status/2070756787746488488","k":"con"},{"i":0,"t":0.34,"s":"技術進歩により憲法も変化が必要としつつ、日本は侵略戦争をしないと述べ、改憲に消極的賛成を表明","u":"https://x.com/mamemiso2930/status/2070756721463881871","k":"pro"},{"i":0,"t":0.66,"s":"反戦・改憲反対・反差別を掲げたデモへの参加呼びかけ","u":"https://x.com/38etCafe_/status/2070755533347504550","k":"con"},{"i":0,"t":0.94,"s":"「戦争反対・改憲反対」を訴える箱根でのスタンディング活動告知","u":"https://x.com/fujisanhakoneya/status/2070755231177318436","k":"con"},{"i":0,"t":0.94,"s":"講演参加者が「改憲反対」「平和憲法を変えるな」と明確に表明","u":"https://x.com/iikawa_h/status/2070752101924487528","k":"con"},{"i":0,"t":0.66,"s":"愛知県議会での改憲反対請願の口頭陳情を実施した活動報告","u":"https://x.com/whochitosa/status/2070750254199418938","k":"con"},{"i":5,"t":0.34,"s":"SNSで戦争反対が護憲派と固定観念化されていることに流されていたと自覚し、改憲について無知であったことを告白","u":"https://x.com/minto_03101/status/2070748775891751065","k":"neutral"},{"i":4,"t":0.66,"s":"改憲・創憲の手続き実施を長年求めているが、未だ議論すら行われていないと不満を表明","u":"https://x.com/s08533051/status/2070748199724417185","k":"pro"},{"i":0,"t":0.66,"s":"改憲派は戦争をしたいのではなく侵略に備えたいと主張し、改憲派の立場を擁護","u":"https://x.com/6Li6ItuHzs48450/status/2070747608600269225","k":"pro"},{"i":0,"t":0.66,"s":"改憲の必要性を肯定し、改憲反対派による「戦争賛成」という印象操作を批判している。","u":"https://x.com/aosasa/status/2070746797371519396","k":"pro"},{"i":4,"t":0.94,"s":"チームみらいが個人情報保護法改悪と国民投票法（改憲手続き法）に賛成したことを批判している。","u":"https://x.com/niyari_honpo/status/2070744327970762780","k":"con"},{"i":1,"t":0.66,"s":"戦争反対を前提に、自衛隊明記の改憲と防衛費増額に賛成している。","u":"https://x.com/yastsuchiya/status/2070743296767619425","k":"pro"},{"i":1,"t":0.66,"s":"改憲・防衛費増額の意図を「国を守るため」と正当化し、印象操作を批判している。","u":"https://x.com/eeY8DRDxFVvdnXz/status/2070740809784426837","k":"pro"},{"i":0,"t":0.34,"s":"改憲反対の署名活動に参加した経験を共有している。","u":"https://x.com/riddle_whr/status/2070737917618827405","k":"con"},{"i":0,"t":0.94,"s":"高市総理（改憲推進派）を支持し、改憲反対・平和主義を掲げる勢力を陰謀論的に批判している。","u":"https://x.com/Nagisa_kiri_znd/status/2070735662412869865","k":"pro"},{"i":1,"t":0.66,"s":"9条に関する書籍を改憲反対の「武器」として紹介している。","u":"https://x.com/Y9mamoru2026/status/2070734293769544147","k":"con"},{"i":0,"t":0.66,"s":"改憲は平和憲法の損壊に等しいと主張し、改憲に反対している。","u":"https://x.com/chinchixws5/status/2070730722638483705","k":"con"},{"i":1,"t":0.66,"s":"9条改憲を政党評価の基準とし、9条改憲賛成政党を排除対象としている。","u":"https://x.com/letsgenmai/status/2070728016255439253","k":"con"},{"i":0,"t":0.34,"s":"改憲反対デモの情報と自民党改憲案の参考資料を共有している。","u":"https://x.com/maegamigaare/status/2070727931102699795","k":"con"},{"i":0,"t":0.34,"s":"「憲法守れ」シンポジウムの告知を共有し、「改憲NO!」と表明している。","u":"https://x.com/YHEGep5l4lTPLmQ/status/2070726545262641398","k":"con"},{"i":0,"t":0.34,"s":"奥田ふみよ氏らが改憲反対をストレートに訴えていることを評価している。","u":"https://x.com/akiko311419/status/2070726284720980434","k":"con"},{"i":5,"t":0.34,"s":"改憲内容の詳細は不明瞭だが、国民投票で判断でき、改憲反対派が米国嫌いでありながら米国関与の憲法を擁護するのは矛盾していると指摘している。","u":"https://x.com/iYHQZp9vtUGitbu/status/2070726085617365053","k":"neutral"},{"i":5,"t":0.34,"s":"改憲反対派がアメリカ嫌いであるという短い揶揄を発信している。","u":"https://x.com/iYHQZp9vtUGitbu/status/2070725312665866284","k":"neutral"},{"i":0,"t":0.94,"s":"軍拡増税と改憲に反対し、国民と自衛隊員の命を守るよう訴えている。","u":"https://x.com/iITdIIcutIVGKg1/status/2070723603650511099","k":"con"},{"i":0,"t":0.34,"s":"他の行為が許容されるなら、改憲反対の主張も同様に許容されると意見表現の公平性を訴えている。","u":"https://x.com/yoco_noko/status/2070723499631780320","k":"con"},{"i":5,"t":0.66,"s":"護憲派も改憲派も憲法を十分に読んでいないと指摘し、議論に先立って条文の理解を呼びかけている。","u":"https://x.com/kikumaco/status/2070723414214812092","k":"neutral"},{"i":4,"t":0.34,"s":"記者が改憲反対派の分断を意図して質問したのではないかと推測している。","u":"https://x.com/Gv4ibidx7Ong0ot/status/2070723141807300743","k":"neutral"},{"i":0,"t":0.34,"s":"改憲には賛成するが、自民党案の一部条文には同意できないため草案の修正を求めている。","u":"https://x.com/9NsgFR5PzFCr3k9/status/2070722808947282361","k":"pro"},{"i":0,"t":0.66,"s":"国旗損壊罪反対と改憲阻止を共通の目的とする非暴力の取り組みを告知している。","u":"https://x.com/nowarmusan/status/2070717177070780876","k":"con"},{"i":4,"t":0.34,"s":"参政党が改憲に賛成していたことを理由に、同党への投票を中止したと述べている。","u":"https://x.com/no1dreamworld/status/2070716859662696511","k":"con"},{"i":0,"t":0.66,"s":"戦争反対と改憲反対の立場を改めて表明し、国粋主義を批判している。","u":"https://x.com/luck_level3/status/2070716837571211270","k":"con"},{"i":1,"t":0.34,"s":"伊勢崎氏が9条改憲に反対し、上官責任不在のまま自衛隊員のみが責任を問われることを憂慮していると伝えている。","u":"https://x.com/Uminekotop/status/2070713642774126722","k":"neutral"},{"i":1,"t":0.66,"s":"9条を理由に改憲を反対する立場は侵略に抵抗しないことに等しいと批判し、自衛の必要性を主張している。","u":"https://x.com/lCgGElaoQJprQx9/status/2070713561295495416","k":"pro"},{"i":0,"t":0.66,"s":"憲法改正と国民投票法改正法案への反対を表明","u":"https://x.com/kichi_kei/status/2070713008322720027","k":"con"},{"i":0,"t":0.66,"s":"三鷹駅での改憲ストップ抗議スタンディングのイベント告知","u":"https://x.com/nowarmusan/status/2070709911785480400","k":"con"},{"i":1,"t":0.66,"s":"9条改正の審議を拒否してほしいとの投稿","u":"https://x.com/okahaji_92/status/2070758696645501059","k":"con"},{"i":1,"t":0.94,"s":"9条廃止・専守防衛廃止など憲法改正を必須と主張","u":"https://x.com/dracob70/status/2070758325793509740","k":"pro"},{"i":1,"t":0.66,"s":"反戦象徴を批判し、国の防衛のために9条改正を求める","u":"https://x.com/renin_aikoku/status/2070741552188768428","k":"pro"},{"i":1,"t":0.66,"s":"現行の9条改正案を戦争追従と批判し、天皇制変更を別の改正案として提示","u":"https://x.com/shi20240821/status/2070738180429725956","k":"con"},{"i":1,"t":0.66,"s":"自民党草案の9条関連項目を紹介し、若者への影響を懸念","u":"https://x.com/BvknJpw/status/2070737151680282851","k":"con"},{"i":5,"t":0.34,"s":"NHK番組を紹介し、憲法改正と9条・自衛隊に関する歴史的議論に言及","u":"https://x.com/makoto_sky8/status/2070736470105899183","k":"neutral"},{"i":1,"t":0.34,"s":"左派の9条改正反対論を「極論」と評して批判","u":"https://x.com/offtensivenobil/status/2070725679268946143","k":"pro"},{"i":1,"t":0.34,"s":"高市首相の9条改正推進と自衛隊の軍隊化方針を報じる","u":"https://x.com/daifuku316inv/status/2070717792949764334","k":"neutral"},{"i":0,"t":0.94,"s":"議院内閣制にとどまらず大統領制など憲法改正の必要性を主張","u":"https://x.com/katsuragisatoru/status/2070716875315798065","k":"pro"},{"i":1,"t":0.94,"s":"憲法改正が緊急事態条項や徴兵制、監視社会につながると懸念","u":"https://x.com/yh496/status/2070714112863273307","k":"con"},{"i":1,"t":0.94,"s":"9条改正による軍隊創設と核武装を主張し、在日米軍の撤退も求めている。","u":"https://x.com/98n5hejNSKJkpQq/status/2070708512238502278","k":"pro"},{"i":1,"t":0.94,"s":"憲法9条改正と国防総省設置を主張し、近隣諸国の侵略戦争に備えると述べている。","u":"https://x.com/on40938/status/2070708058431627648","k":"pro"},{"i":0,"t":0.34,"s":"皇室典範を改正する場合、9条より1条を優先すべきだと主張している。","u":"https://x.com/JAN_kbox/status/2070703915411394739","k":"neutral"},{"i":1,"t":0.66,"s":"9条第1項は維持し、第2項の曖昧さを払拭する改正が外交のバックボーンとして必要だと主張。","u":"https://x.com/yuma581/status/2070700109688693009","k":"pro"},{"i":1,"t":0.66,"s":"立憲民主党の9条改正反対が本気ではなくガス抜きの可能性が高いと分析している。","u":"https://x.com/maxjp033/status/2070697300943585418","k":"neutral"},{"i":0,"t":0.66,"s":"皇室典範改正の実際の目的は女系女性天皇阻止であり、1条の男系男子維持と9条養子禁止解除で愛子天皇の可能性をなくすと指摘。","u":"https://x.com/etude_op25no1/status/2070692680410308990","k":"neutral"},{"i":1,"t":0.66,"s":"高市氏が自衛隊派遣に前向きなため9条改正を急いでいる事実を指摘し、神谷代表の認識が甘いと批判。","u":"https://x.com/x0M3h0P75O15644/status/2070691537663717438","k":"neutral"},{"i":1,"t":0.94,"s":"憲法の本来の定義を主張し、9条改正必須と集団的自衛権承認を訴えている。","u":"https://x.com/wjapandp/status/2070681640389820539","k":"pro"},{"i":5,"t":0.34,"s":"憲法改正など国を分断しやすい話題を列挙し、事実と多角的な視点での議論の重要性を訴えている。","u":"https://x.com/grok/status/2070677858666652090","k":"neutral"},{"i":1,"t":0.66,"s":"日本共産党が9条と自衛隊の矛盾で改憲主張しながら改憲に抗戦し、政権取得で合憲と主張するダブスタだと批判。","u":"https://x.com/sakura_samuraix/status/2070673397428990241","k":"neutral"},{"i":0,"t":0.34,"s":"皇室典範を改正する場合、9条より1条が先だと意見を述べている。","u":"https://x.com/JAN_kbox/status/2070667057293934595","k":"neutral"},{"i":1,"t":0.94,"s":"憲法9条が日本人を弱体化させてきたと主張し、9条改正と国防強化を訴えている。","u":"https://x.com/8aCk9BZbsxuyJIa/status/2070660183446176084","k":"pro"},{"i":0,"t":0.66,"s":"憲法改正規定に基づく改正は立派な護憲であり、左翼の二者択一論を批判している。","u":"https://x.com/kamikaze_49_730/status/2070652409580564944","k":"pro"},{"i":1,"t":0.66,"s":"自衛隊法は現実に即しているが9条がそうでないため、改正議論が生じると説明している。","u":"https://x.com/altair_david/status/2070647249651270118","k":"pro"},{"i":1,"t":0.34,"s":"高市早苗首相が自衛隊の軍隊化と9条改正を推進しているという政策報道を転載している。","u":"https://x.com/jyo_fukyo/status/2070646994146926772","k":"neutral"},{"i":1,"t":0.94,"s":"9条1項削除は日本を戦争する国にし、元に戻せなくなると訴えている。","u":"https://x.com/koto34/status/2070633183700464002","k":"con"},{"i":1,"t":0.66,"s":"ネトウヨの「外国が9条を守らないから改正すべき」という論理を馬鹿にしている。","u":"https://x.com/jackyie/status/2070627977826795878","k":"con"},{"i":1,"t":0.66,"s":"イスラエルに機密が掌握された状況では9条改正後も独自軍事力は不可能だと主張している。","u":"https://x.com/soranoki2023/status/2070617743049805904","k":"con"},{"i":1,"t":0.94,"s":"ウルトラ右翼なら9条改正くらい成すべきだと、現状の右翼集団に改憲能力がないと嘆いている。","u":"https://x.com/seganobal285/status/2070605997069250901","k":"pro"},{"i":1,"t":0.94,"s":"憲法改正より核武装を優先し、9条の平和主義で世界をまとめると主張している。","u":"https://x.com/fortunacaeca/status/2070579904538927421","k":"neutral"},{"i":1,"t":0.34,"s":"地方自治体が独自の武力を持つことは憲法前文と9条に反すると法的に説明している。","u":"https://x.com/gao78654/status/2070565696988393816","k":"neutral"},{"i":0,"t":0.34,"s":"複数政策課題の賛否リストを示し、9条改正は条件付き、国防軍明記と緊急事態条項には反対の姿勢を示している。","u":"https://x.com/nu_X7U/status/2070563199280431124","k":"con"},{"i":1,"t":0.66,"s":"現行9条2項は自衛権放棄に誤読でき、ウクライナのような虐殺を防ぐため改正すべきと主張している。","u":"https://x.com/aoiwinds/status/2070531371098124562","k":"pro"},{"i":0,"t":0.34,"s":"皇室典範（1条）を9条より優先して改正すべきだと主張している。","u":"https://x.com/JAN_kbox/status/2070511784239431916","k":"pro"},{"i":1,"t":0.66,"s":"憲法が武力保持を認めていないため、地方自治体が武力を持つには憲法改正が必要と主張。","u":"https://x.com/gao78654/status/2070509963789889955","k":"pro"},{"i":1,"t":0.34,"s":"9条改正より住居損壊や木の伐採権利などの実用的な法改正を優先すべきだと主張。","u":"https://x.com/mi5kojp/status/2070504512578855191","k":"con"},{"i":1,"t":0.66,"s":"高市政権の9条改正に踏み切ったことに対し、外交力不足なら太平洋戦争再来の危険性を指摘。","u":"https://x.com/DJT41453988/status/2070504342491447495","k":"con"},{"i":1,"t":0.66,"s":"石破氏の憲法改正論、特に9条2項を改正しないと意味がないという点だけは賛同すると表明。","u":"https://x.com/goki90210/status/2070498691941830713","k":"pro"},{"i":2,"t":0.34,"s":"憲法改正限界説の範疇で緊急事態条項の内容を考える提案をしている。","u":"https://x.com/64CIVIC_law_med/status/2070784985833857080","k":"neutral"},{"i":2,"t":0.66,"s":"緊急事態条項の有権者周知と正しい説明がなされるか疑問視し、任期延長に固執する改憲派を批判。","u":"https://x.com/sisitouski/status/2070782090392785292","k":"process"},{"i":2,"t":0.94,"s":"現憲法下での緊急事態条項とスパイ防止法に断固反対し、善良な国民が虐げられると危惧。","u":"https://x.com/waga8864kana/status/2070780670868398166","k":"con"},{"i":2,"t":0.94,"s":"エボラなど感染症も緊急事態条項の発令に濫用される危険性があると主張。","u":"https://x.com/ikesanhoshuda/status/2070780515737907467","k":"con"},{"i":2,"t":0.66,"s":"日本はすでにロックダウンや情報統制が可能で緊急事態条項は不要ではないかと主張。","u":"https://x.com/dtv6xnmr/status/2070758983527534692","k":"con"},{"i":2,"t":0.66,"s":"緊急事態なのに食事に時間を取られることに不満を示し、条項で日本人に制約が課されるのではと危惧。","u":"https://x.com/leFoGcy/status/2070757685209989370","k":"con"},{"i":2,"t":0.94,"s":"緊急事態条項は不要であり百害だらけと激しく批判。","u":"https://x.com/8FmN6Fc1RnvyCbj/status/2070757114751197398","k":"con"},{"i":2,"t":0.34,"s":"枝野幸男氏の動画で「緊急事態条項は必要か」がテーマの一つとして紹介されている。","u":"https://x.com/takano_koutouku/status/2070755083965575454","k":"neutral"},{"i":5,"t":0.34,"s":"「緊急事態条項ですね」とのみ言及し、賛否や論旨が全く示されていない。","u":"https://x.com/manmadonbe/status/2070754256618234248","k":"neutral"},{"i":0,"t":0.66,"s":"石破氏が緊急事態条項と国防軍創設に賛成であることを挙げ、石破氏を「極右」と評価している。改憲項目を人物の過激性の根拠として使っている。","u":"https://x.com/U312461524276/status/2070753609403469958","k":"con"},{"i":2,"t":0.66,"s":"自民党草案における緊急事態条項を解説し、「海外にもあるから」という論拠は危険で他国と決定的に異なると批判している。","u":"https://x.com/marotto78651/status/2070753228996939780","k":"con"},{"i":2,"t":0.34,"s":"「緊急事態条項を成立させて次の選」と途中で切れており、文脈・意図ともに不明瞭。","u":"https://x.com/toyhyabrclpmkx/status/2070753091151167608","k":"neutral"},{"i":2,"t":0.66,"s":"緊急事態条項成立後、政権は次の選挙を行わないつもりだと主張し、選挙停止への懸念を示している。","u":"https://x.com/inoue1126/status/2070753060511732022","k":"con"},{"i":2,"t":0.94,"s":"移民による治安悪化を国家危機と位置づけ、緊急事態条項の創設を「急務」と強く主張している。野党や国民の反対を無視して可決されるべきとの趣旨。","u":"https://x.com/7XyfnsbEMN38886/status/2070747648529998007","k":"pro"},{"i":5,"t":0.34,"s":"『憲法に緊急事態条項は必要か』という本を読み、ビラ作成に移る予定だと活動を報告している。","u":"https://x.com/5hinda1nu/status/2070746268020965538","k":"neutral"},{"i":2,"t":0.94,"s":"中国との戦争を前提に、緊急事態条項創設と憲法改正を進めることで若者が徴兵されると警鐘を鳴らしている。","u":"https://x.com/HScTq1wWnO99CK3/status/2070745408008282508","k":"con"},{"i":2,"t":0.66,"s":"政治家が決めれば国民は実行せざるを得ない視点を批判し、緊急事態条項は「国民主権を破壊しようとするもの」と断定している。","u":"https://x.com/oZfte97IfR30708/status/2070743250961592422","k":"con"},{"i":2,"t":0.94,"s":"国民が憲法を無関心にしていると緊急事態条項が創設されるだろうと警告しており、グローバリストによる憲法改正支配を警戒している。","u":"https://x.com/7XyfnsbEMN38886/status/2070740649410998552","k":"con"},{"i":2,"t":0.94,"s":"緊急事態条項が創設されればすぐに戦闘状態にされ選挙ができなくなり「日本人は終わり」と危機感を煽り、改憲反対を訴えている。","u":"https://x.com/Haru_Try/status/2070738709025366345","k":"con"},{"i":2,"t":0.66,"s":"国旗損壊罪や緊急事態条項などの法制度を評価する際、他国の採用例数ではなく国民の自由・平等の侵害有無、権力抑制、メリットデメリットが重要だと主張している。","u":"https://x.com/BANGs_1019/status/2070733002280513898","k":"con"},{"i":2,"t":0.66,"s":"緊急事態条項導入に向けた発言への懸念を示している。","u":"https://x.com/maniayokoha/status/2070732222785802704","k":"con"},{"i":2,"t":0.34,"s":"緊急事態条項に関する教育漫画の書籍を紹介している。","u":"https://x.com/takeshita_58061/status/2070731709121999207","k":"neutral"},{"i":2,"t":0.94,"s":"玉木氏が緊急事態条項を名目変更で導入しようとし、将来的な言論弾圧を懸念している。","u":"https://x.com/62haruchan/status/2070726130987094508","k":"con"},{"i":2,"t":0.66,"s":"大和田氏の「決めなければならないこと」という発言を、対話なしの強行決定と結び付けて批判している。","u":"https://x.com/HeadinCloudNine/status/2070725187902062598","k":"con"},{"i":2,"t":0.94,"s":"陰謀論的な文脈で緊急事態条項を政府の強力な統制手段として描いている。","u":"https://x.com/ZInvester/status/2070720293421928547","k":"con"},{"i":2,"t":0.34,"s":"緊急事態条項を国会機能維持条項と位置づけ、憲法改正手続法との関係を示唆している。","u":"https://x.com/cogwakyanLv99w/status/2070719775727378826","k":"neutral"},{"i":2,"t":0.66,"s":"物価高対策を放置して緊急事態条項などの憲法改正議論が優先されていることに疑問を呈している。","u":"https://x.com/rikabell/status/2070719229939392738","k":"con"},{"i":2,"t":0.34,"s":"玉木氏が緊急事態条項の合意形成の難しさを指摘し、自制を促したことについて時事記事を共有している。","u":"https://x.com/03rume/status/2070719141384970323","k":"neutral"},{"i":2,"t":0.66,"s":"司法状態が緊急事態に相当する可能性を示唆し、憲法上の対応（修正）を求めている。","u":"https://x.com/fromjapan_world/status/2070718714010632407","k":"pro"},{"i":2,"t":0.94,"s":"陰謀論的な文脈で、緊急事態条項の導入を国民主権剥奪の手段として警戒している。","u":"https://x.com/ZP9YKVQxD9Gy6Cv/status/2070717199564890267","k":"con"},{"i":2,"t":0.94,"s":"緊急事態条項を皇室典範改悪の強行と選挙停止のための手段として批判している。","u":"https://x.com/maytofive/status/2070716289858068775","k":"con"},{"i":2,"t":0.34,"s":"岩波ブックレット『憲法に緊急事態条項は必要か』を読み、要約してビラにする予定であると報告している。","u":"https://x.com/5hinda1nu/status/2070716108852830445","k":"neutral"},{"i":2,"t":0.94,"s":"緊急事態条項をヒトラーの独裁確立手法に例え、賛成派への批判を展開している。","u":"https://x.com/Wendy54795851/status/2070713286119854552","k":"con"},{"i":2,"t":0.94,"s":"緊急事態条項をヒトラーの独裁手法に例え、高市政権の改憲企図に警鐘を鳴らしている。","u":"https://x.com/Wendy54795851/status/2070712333559849096","k":"con"},{"i":2,"t":0.94,"s":"自民党が議席を背景に緊急事態条項などの法案を強行できると警戒している。","u":"https://x.com/maytofive/status/2070710842170237345","k":"con"},{"i":2,"t":0.94,"s":"地震を政治的目的の陰謀と結びつけ、緊急事態条項推進を主張する陰謀論を展開している。","u":"https://x.com/G18683628/status/2070710638540992884","k":"con"},{"i":2,"t":0.94,"s":"政権が災害対策をおろそかにし、緊急事態条項の改憲に傾注していると批判している。","u":"https://x.com/niyari_honpo/status/2070705561289809943","k":"con"},{"i":2,"t":0.66,"s":"災害時に緊急事態条項が濫用される可能性を警戒している。","u":"https://x.com/teruko1206/status/2070704958480294022","k":"con"},{"i":3,"t":0.94,"s":"参議院の憲法審査会開催と国民投票法改正への反対を訴え、改憲阻止を呼びかけている。","u":"https://x.com/chibichibi_0801/status/2070758792661492047","k":"con"},{"i":3,"t":0.34,"s":"改憲反対論に対し、国民投票の手続きで反対を示せばよいと反論している。","u":"https://x.com/Niceguy27753/status/2070707152625553549","k":"pro"},{"i":3,"t":0.94,"s":"国民が情報操作に弱いため、改憲国民投票は危険と主張している。","u":"https://x.com/mitsunishi70553/status/2070694040371441962","k":"con"},{"i":3,"t":0.94,"s":"高市政権が急ぐ改憲と国民投票法改正の阻止を強く訴えている。","u":"https://x.com/sirousagi_mcs/status/2070690254152237530","k":"con"},{"i":3,"t":0.66,"s":"改憲には国民投票が必要であることへの言及と、これを無視する論議への不満を表明している。","u":"https://x.com/domitori_yazohu/status/2070684387977682989","k":"process"},{"i":3,"t":0.34,"s":"憲法改正の国民投票手続きを重視し、反対意見も正当な形で示すべきと主張している。","u":"https://x.com/Toshizoo_wanko/status/2070672037685968922","k":"process"},{"i":0,"t":0.66,"s":"災害復興を優先し、改憲や皇室制度の見直しは今は急がないとの主張。","u":"https://x.com/purple1059/status/2070648140219441385","k":"con"},{"i":5,"t":0.34,"s":"民放の報道姿勢と改憲国民投票の広告費の関係を指摘し、NHKの動向に疑問を呈する。","u":"https://x.com/pitaponista_2/status/2070621178054787168","k":"neutral"},{"i":3,"t":0.34,"s":"大阪の都市政策と改憲国民投票の制度設計に親和性があるとの分析。","u":"https://x.com/An7OmnKkudye32o/status/2070620298026893741","k":"neutral"},{"i":3,"t":0.94,"s":"改憲準備の透明性欠如と国民投票の公平性を批判。","u":"https://x.com/ef827f223si79ji/status/2070606839222309119","k":"con"},{"i":4,"t":0.94,"s":"改憲発議を阻止すべきと強く主張。","u":"https://x.com/pDyvhzFJAIAJe90/status/2070601132339335175","k":"con"},{"i":5,"t":0.34,"s":"文脈が不十分で論点が判定できない。","u":"https://x.com/syoya10yanetu/status/2070560323866882532","k":"neutral"},{"i":0,"t":0.66,"s":"解釈改憲より明文化改憲を支持し、国民投票で民意を問うべきと主張。","u":"https://x.com/haraguro_aku/status/2070518197443572090","k":"pro"},{"i":0,"t":0.66,"s":"社会変化に対応するため、憲法に定められた手続きで改憲し国民投票で賛否を示すべきと主張。","u":"https://x.com/aru_vvvfpwn/status/2070511854145974396","k":"pro"},{"i":3,"t":0.94,"s":"国民投票法改正などが注目を逸らした形で進んでいることに危機感を示し、改憲手続法に反対。","u":"https://x.com/gift_icecream31/status/2070510278446571944","k":"con"},{"i":3,"t":0.66,"s":"国会で進む複数の法案変更、特に国民投票法案の改憲有利化を懸念。","u":"https://x.com/HelloNeuWorld/status/2070505809281232999","k":"con"},{"i":3,"t":0.94,"s":"国民投票法改正と改憲阻止を訴え、護憲のため手続き阻止を求める。","u":"https://x.com/mayu69520154/status/2070497570116583590","k":"con"},{"i":0,"t":0.94,"s":"改憲阻止を訴える。","u":"https://x.com/rxzpk9O2GUpXHWv/status/2070497232768696412","k":"con"},{"i":3,"t":0.34,"s":"改憲には国民投票が必要という手続き上の事実を指摘している。","u":"https://x.com/PGERA_RX/status/2070479436601016786","k":"neutral"},{"i":3,"t":0.66,"s":"軍需産業の企業献金が改憲国民投票にも影響を与える可能性に警鐘を鳴らしている。","u":"https://x.com/Uminekotop/status/2070463732967428413","k":"con"},{"i":3,"t":0.94,"s":"改憲国民投票法にCM・SNS規制や最低投票率下限がない制度欠陥を指摘し、少数投票で採決される危険性を警告している。","u":"https://x.com/Uminekotop/status/2070461242641408207","k":"con"},{"i":3,"t":0.94,"s":"改憲派による国民投票法改正など憲法破壊の準備が進行中として、反対デモへの参加を呼びかけている。","u":"https://x.com/okazakiMas20382/status/2070458816341438735","k":"con"},{"i":1,"t":0.66,"s":"9条改憲に反対しつつ、国民投票のルールの重要性を訴えている。","u":"https://x.com/Y9mamoru2026/status/2070442067793527222","k":"con"},{"i":0,"t":0.94,"s":"政府の諸政策の中で改憲・国民投票を含む多くの施策に対し、混乱と怒りを表明し阻止を求めている。","u":"https://x.com/monomono147/status/2070437424245997750","k":"con"},{"i":4,"t":0.66,"s":"改憲・国民投票の機会をこれまで阻んできた政党が今更憲法を持ち出すことへの矛盾を批判している。","u":"https://x.com/QaMxm/status/2070422852793442307","k":"pro"},{"i":3,"t":0.66,"s":"護憲派の広告案を提案し、国民投票における有料広告規制を求めている。","u":"https://x.com/mura_mika34861/status/2070411902505619700","k":"con"},{"i":3,"t":0.66,"s":"市民連合の活動を支持し、護憲派広告案と国民投票の有料広告規制を訴えている。","u":"https://x.com/mura_mika34861/status/2070409570904600603","k":"con"},{"i":0,"t":0.94,"s":"特定政治家が国民投票と改憲・徴兵制を推進しようとしていると警戒し、戦争への懸念を表明している。","u":"https://x.com/kissingman_jp/status/2070396096292237565","k":"con"},{"i":3,"t":0.94,"s":"改憲阻止と国民投票法改正への反対を訴え、立憲民主党議員への抗議行動を呼びかけている。","u":"https://x.com/starsky19628/status/2070387856531656848","k":"con"},{"i":3,"t":0.34,"s":"憲法96条や衆参選にも投票率下限がないことを指摘し、改憲国民投票の投票率下限未設定は問題ないと主張している。","u":"https://x.com/09Ma77NyZdOVJRw/status/2070383130775880009","k":"neutral"},{"i":0,"t":0.66,"s":"改憲反対派に対し、国民投票で反対票を投じれば改憲を阻止できると主張し、護憲派が少数派で負けることを懸念しているのではないかと問うている。","u":"https://x.com/09Ma77NyZdOVJRw/status/2070374174015869295","k":"pro"},{"i":0,"t":0.94,"s":"物価高や災害対策に集中すべきとし、沖縄基地問題への対応を優先すべきだと主張。既存法の改正や改憲への動きを『悲願』『正気じゃない』として強く批判している。","u":"https://x.com/hajikamimochiya/status/2070356931156570372","k":"con"},{"i":3,"t":0.94,"s":"国民投票において改憲賛成広告と合わせて、改憲反対派を中傷する動画が出回ると懸念。資金力による情報操作で『名ばかり国民投票』となり国が壊れると警告。","u":"https://x.com/Little_sky6/status/2070353860095295872","k":"con"},{"i":0,"t":0.34,"s":"国民投票の機会を憲法改憲ではなく女性天皇の導入に使うべきだと主張。改憲より他の憲政課題を優先すべきとの立場。","u":"https://x.com/dogenka1010/status/2070330343132192953","k":"con"},{"i":0,"t":0.66,"s":"『国民投票は改憲派有利なまま発議される』という他者の発言に対し、護憲派が国民投票で数で阻止すればよいと反論している。","u":"https://x.com/china_mong1/status/2070328520333791742","k":"pro"},{"i":3,"t":0.94,"s":"国民投票法改正（改憲準備法）の可決を批判。最低投票率なし、ネット広告規制なしの制度下では投票率低下と広告操作で国民投票の結果が左右されると警告。","u":"https://x.com/mememaaaaa/status/2070286777123012614","k":"con"},{"i":3,"t":0.94,"s":"CMや広告の多さで資金力のある政党（自民党・改憲派）が有利になり、民意が反映されにくいと批判。改憲派の狙いは国民投票法の自派有利な制度設計だと主張。","u":"https://x.com/tasukubestlife/status/2070280664583487821","k":"con"},{"i":1,"t":0.66,"s":"改憲の発議を住民投票で否決すべきだと主張。自衛隊創設時に国民投票があれば集団的自衛権を閣議決定で認めることはなかったはずだと、9条関連の歴史的経緯を批判的に論じている。","u":"https://x.com/TOR89526034747/status/2070265289233858746","k":"con"}];
+const colors={pro:'#2563eb',con:'#dc2626',process:'#059669',neutral:'#64748b'};
+const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=244,PAD_DEG=2.5;
+const canvas=document.getElementById('smCanvasMain');
+const heat=document.getElementById('smCanvasHeat');
+const ctx=canvas.getContext('2d');
+const hctx=heat.getContext('2d');
+const tip=document.getElementById('sm-tooltip');
+let filter=-1,marker=null;
 
-  const canvasMain = document.getElementById('smCanvasMain');
-  const ctx = canvasMain.getContext('2d');
-  const canvasHeat = document.getElementById('smCanvasHeat');
-  const hCtx = canvasHeat.getContext('2d');
+const total=ISSUES.reduce((a,v)=>a+v.n,0);
+const usable=360-PAD_DEG*2*ISSUES.length;
+let acc=-90;
+ISSUES.forEach(v=>{
+  const span=usable*v.n/Math.max(total,1);
+  v.a0=acc+PAD_DEG;v.a1=v.a0+span;v.mid=(v.a0+v.a1)/2;
+  acc=v.a1+PAD_DEG;
+});
 
-  function toCanvas(x, y) {
-    return [PAD + (x + 2) / 4 * INNER, PAD + (2 - y) / 4 * INNER];
-  }
+function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+const pts=[];
+P.forEach((p,j)=>{
+  const v=ISSUES[p.i];if(!v)return;
+  const angle=v.a0+rnd(j)*(v.a1-v.a0);
+  const strength=Math.max(0,Math.min(1,p.t+(rnd(j+500)-.5)*.26));
+  let radius=R_MIN+10+strength*(R_MAX-R_MIN-28);
+  radius=Math.max(R_MIN+4,Math.min(R_MAX-4,radius));
+  const rad=angle*Math.PI/180;
+  pts.push({x:CX+Math.cos(rad)*radius,y:CY+Math.sin(rad)*radius,p});
+});
 
-  function emoRGB(e) {
-    const t = (e + 2) / 4;
-    if (t < 0.5) {
-      const s = t * 2;
-      return [Math.round(74 + (187-74)*s), Math.round(144 + (187-144)*s), Math.round(217 + (187-217)*s)];
-    } else {
-      const s = (t - 0.5) * 2;
-      return [Math.round(187 + (224-187)*s), Math.round(187 + (92-187)*s), Math.round(187 + (92-187)*s)];
-    }
-  }
-
-  function seededRand(seed) {
-    let s = seed ^ 0x12345678;
-    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
-    s = ((s >>> 16) ^ s) * 0x45d9f3b | 0;
-    s = (s >>> 16) ^ s;
-    return (s >>> 0) / 0xffffffff;
-  }
-
-  const jCache = RAW.map((_, i) => [(seededRand(i*2) - 0.5) * 14, (seededRand(i*2+1) - 0.5) * 14]);
-
-  function visible(p) {
-    if (activeFilter === 'all') return true;
-    const x = p.x, y = p.y, e = p.e;
-    if (activeFilter === 'q1') return x > 0 && y > 0;
-    if (activeFilter === 'q2') return x < 0 && y > 0;
-    if (activeFilter === 'q3') return x < 0 && y < 0;
-    if (activeFilter === 'q4') return e >= 1.5;
-    if (activeFilter === 'calm') return e <= 0;
-    return true;
-  }
-
-  function drawHeatmap() {
-    if (!showHeat) { hCtx.clearRect(0, 0, W, H); return; }
-    const res = 3;
-    const cols = Math.ceil(W / res), rows = Math.ceil(H / res);
-    const grid = new Float32Array(cols * rows);
-    const sigma = heatRadius / 2.5;
-    const sig2 = sigma * sigma * 2;
-    const r2 = heatRadius * heatRadius;
-
-    RAW.forEach(p => {
-      if (!visible(p)) return;
-      const [cx, cy] = toCanvas(p.x, p.y);
-      const gx0 = Math.max(0, Math.floor((cx - heatRadius) / res));
-      const gy0 = Math.max(0, Math.floor((cy - heatRadius) / res));
-      const gx1 = Math.min(cols - 1, Math.ceil((cx + heatRadius) / res));
-      const gy1 = Math.min(rows - 1, Math.ceil((cy + heatRadius) / res));
-      for (let gy = gy0; gy <= gy1; gy++) {
-        for (let gx = gx0; gx <= gx1; gx++) {
-          const dx = gx * res - cx, dy = gy * res - cy;
-          const d2 = dx*dx + dy*dy;
-          if (d2 < r2) grid[gy * cols + gx] += Math.exp(-d2 / sig2);
-        }
-      }
-    });
-
-    const maxV = Math.max(...grid) || 1;
-    const imgData = hCtx.createImageData(cols * res, rows * res);
-    for (let gy = 0; gy < rows; gy++) {
-      for (let gx = 0; gx < cols; gx++) {
-        const v = grid[gy * cols + gx] / maxV;
-        if (v < 0.01) continue;
-        let r, g, b;
-        if (v < 0.5) {
-          const t = v * 2;
-          r = Math.round(41 + (255-41)*t); g = Math.round(128 + (255-128)*t); b = Math.round(185 + (150-185)*t);
-        } else {
-          const t = (v - 0.5) * 2;
-          r = 255; g = Math.round(255 * (1-t)); b = Math.round(150 * (1-t));
-        }
-        const alpha = Math.round(Math.pow(v, 0.5) * 170);
-        for (let dy = 0; dy < res; dy++) {
-          for (let dx = 0; dx < res; dx++) {
-            const px = (gy * res + dy) * cols * res * 4 + (gx * res + dx) * 4;
-            const inPad = (gx*res+dx) >= PAD && (gx*res+dx) < PAD+INNER && (gy*res+dy) >= PAD && (gy*res+dy) < PAD+INNER;
-            if (!inPad) continue;
-            imgData.data[px] = r; imgData.data[px+1] = g; imgData.data[px+2] = b; imgData.data[px+3] = alpha;
-          }
-        }
-      }
-    }
-    hCtx.clearRect(0, 0, W, H);
-    hCtx.putImageData(imgData, 0, 0);
-  }
-
-  function drawBase() {
-    ctx.clearRect(0, 0, W, H);
-    drawQuadImages();
-    ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 1;
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [cx] = toCanvas(v, 0);
-      ctx.beginPath(); ctx.moveTo(cx, PAD); ctx.lineTo(cx, PAD+INNER); ctx.stroke();
-      const [,cy] = toCanvas(0, v);
-      ctx.beginPath(); ctx.moveTo(PAD, cy); ctx.lineTo(PAD+INNER, cy); ctx.stroke();
-    });
-    ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
-    const [midX] = toCanvas(0, 0); const [,midY] = toCanvas(0, 0);
-    ctx.beginPath(); ctx.moveTo(PAD, midY); ctx.lineTo(PAD+INNER, midY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(midX, PAD); ctx.lineTo(midX, PAD+INNER); ctx.stroke();
-
-    ctx.font = 'bold 13px -apple-system,sans-serif';
-    ctx.textAlign = 'center';
-    const quadLabels = [
-      ['改憲賛成×安保優先', PAD + INNER*0.75, PAD + 26],
-      ['改憲反対×安保優先', PAD + INNER*0.25, PAD + 26],
-      ['改憲反対×平和主義優先', PAD + INNER*0.25, PAD + INNER - 10],
-      ['改憲賛成×平和主義優先', PAD + INNER*0.75, PAD + INNER - 10],
-    ];
-    quadLabels.forEach(([text, lx, ly]) => {
-      const tw = ctx.measureText(text).width;
-      const ph = 18, pw = tw + 16, rx = lx - pw/2, ry = ly - ph + 4, r = 4;
-      ctx.fillStyle = 'rgba(0,0,0,0.62)';
-      ctx.beginPath();
-      ctx.moveTo(rx + r, ry); ctx.lineTo(rx + pw - r, ry);
-      ctx.arcTo(rx + pw, ry, rx + pw, ry + r, r);
-      ctx.lineTo(rx + pw, ry + ph - r);
-      ctx.arcTo(rx + pw, ry + ph, rx + pw - r, ry + ph, r);
-      ctx.lineTo(rx + r, ry + ph);
-      ctx.arcTo(rx, ry + ph, rx, ry + ph - r, r);
-      ctx.lineTo(rx, ry + r);
-      ctx.arcTo(rx, ry, rx + r, ry, r);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.fillText(text, lx, ly);
-    });
-
-    ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = '#bbb';
-    ctx.textAlign = 'right';
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [,cy] = toCanvas(0, v); ctx.fillText((v>0?'+':'')+v, PAD-4, cy+3);
-    });
-    ctx.textAlign = 'center';
-    [-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v => {
-      const [cx] = toCanvas(v, 0); ctx.fillText((v>0?'+':'')+v, cx, PAD+INNER+12);
-    });
-
-    if (showDots) {
-      const count = animating ? animFrame : RAW.length;
-      for (let i = 0; i < count; i++) {
-        const p = RAW[i];
-        const show = visible(p);
-        const [cx, cy] = toCanvas(p.x, p.y);
-        const [rr, gg, bb] = emoRGB(p.e);
-        ctx.beginPath();
-        ctx.arc(cx + jCache[i][0], cy + jCache[i][1], 2.5 + p.c * 2, 0, Math.PI*2);
-        ctx.fillStyle = show ? `rgba(${rr},${gg},${bb},0.8)` : 'rgba(200,200,200,0.08)';
-        ctx.fill();
-        if (show) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 0.5; ctx.stroke(); }
-      }
-    }
-
-    if (spotlightTarget) {
-      const [sx, sy] = spotlightTarget;
-      ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI*2);
-      ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 2.5; ctx.stroke();
-      ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2);
-      ctx.strokeStyle = 'rgba(41,128,185,0.4)'; ctx.lineWidth = 1.5; ctx.stroke();
-    }
-  }
-
-  function drawVoteMarker() {
-    if (myVoteMarker === null || !voteMarkers[myVoteMarker]) return;
-    const marker = voteMarkers[myVoteMarker];
-    const px = (myVoteSX !== null) ? myVoteSX : marker.x;
-  const py = (myVoteSY !== null) ? myVoteSY : marker.y;
-  const [x, y] = toCanvas(px, py);
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, 16, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,.92)';
-    ctx.fill();
-    ctx.strokeStyle = marker.color;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = marker.color;
-    ctx.fill();
-    ctx.font = '700 12px -apple-system,sans-serif';
-    ctx.fillStyle = marker.color;
-    ctx.fillText(marker.label, Math.min(x + 16, W - 150), Math.max(y - 14, 24));
-    ctx.restore();
-  }
-
-  window.setStanceMapVoteMarker = function(idx, sx, sy) {
-    myVoteMarker = idx;
-  if (sx !== undefined) myVoteSX = sx;
-  if (sy !== undefined) myVoteSY = sy;
-    const note = document.getElementById('your-marker-note');
-    if (note) note.style.display = 'block';
-    redraw();
-  };
-
-  function redraw() { drawHeatmap(); drawBase(); drawVoteMarker(); }
-
-  function playIntro() {
-    animating = true; animFrame = 0;
-    const total = RAW.length, duration = 1800, start = performance.now();
-    function tick(now) {
-      const elapsed = now - start, progress = Math.min(1, elapsed / duration);
-      animFrame = Math.min(total, Math.round(progress * total));
-      redraw();
-      if (progress < 1) requestAnimationFrame(tick);
-      else { animating = false; redraw(); }
-    }
-    requestAnimationFrame(tick);
-  }
-
-  let tourActive = false, currentStep = 0;
-
-  function showTourStep(idx) {
-    const step = TOUR[idx], total = TOUR.length;
-    document.getElementById('smTourStep').textContent = `Step ${idx+1} / ${total}`;
-    document.getElementById('smTourTitle').textContent = step.title;
-    document.getElementById('smTourDesc').textContent = step.desc;
-    document.getElementById('smTourProgressBar').style.width = ((idx+1)/total*100)+'%';
-
-    const embedEl = document.getElementById('smTourEmbed');
-    const loadingEl = document.getElementById('smTourEmbedLoading');
-    const fallbackEl = document.getElementById('smTourQuoteFallback');
-    embedEl.style.display = 'none'; loadingEl.style.display = 'none'; fallbackEl.style.display = 'none';
-    embedEl.innerHTML = '';
-
-    if (step.quote && step.quote_url) {
-      showFallback(step, fallbackEl);
-      const tweetId = step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
-      if (tweetId) {
-        const tryEmbed = () => {
-          window.twttr.widgets.createTweet(tweetId, embedEl, { theme:'dark', dnt:true, conversation:'none' })
-            .then(el => { if (el) { fallbackEl.style.display='none'; embedEl.style.display='block'; } });
-        };
-        if (window.twttr && window.twttr.widgets) { window.twttr.ready(tryEmbed); }
-        else {
-          let wt = 0;
-          const wpoll = setInterval(() => {
-            wt += 200;
-            if (window.twttr && window.twttr.widgets) { clearInterval(wpoll); window.twttr.ready(tryEmbed); }
-            else if (wt >= 5000) clearInterval(wpoll);
-          }, 200);
-        }
-      }
-    } else if (step.quote) { showFallback(step, fallbackEl); }
-
-    activeFilter = step.filter || 'all';
-    document.querySelectorAll('.sm-fbtn').forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`.sm-fbtn[data-q="${step.filter || 'all'}"]`);
-    if (btn) btn.classList.add('active');
-    spotlightTarget = step.highlight ? (() => { const [sx,sy]=toCanvas(step.highlight[0],step.highlight[1]); return [sx,sy]; })() : null;
-    redraw();
-  }
-
-  function showFallback(step, fallbackEl) {
-    document.getElementById('smTourQuoteText').textContent = '「' + step.quote + '」';
-    const linkEl = document.getElementById('smTourQuoteLink');
-    if (step.quote_url) { linkEl.style.display='inline'; fallbackEl.onclick=()=>window.open(step.quote_url,'_blank'); }
-    else { linkEl.style.display='none'; fallbackEl.onclick=null; }
-    fallbackEl.style.display = 'block';
-  }
-
-  function startTour() { tourActive=true; currentStep=0; document.getElementById('smTourPanel').classList.add('active'); showTourStep(0); }
-  function closeTour() {
-    tourActive=false; document.getElementById('smTourPanel').classList.remove('active');
-    spotlightTarget=null; activeFilter='all';
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    document.querySelector('.sm-fbtn[data-q="all"]').classList.add('active');
-    redraw();
-  }
-
-  document.getElementById('smStartTour').addEventListener('click', startTour);
-  document.getElementById('smBtnClose').addEventListener('click', closeTour);
-  document.getElementById('smBtnNext').addEventListener('click', () => { if (currentStep < TOUR.length-1) { currentStep++; showTourStep(currentStep); } else closeTour(); });
-  document.getElementById('smBtnPrev').addEventListener('click', () => { if (currentStep > 0) { currentStep--; showTourStep(currentStep); } });
-  document.getElementById('smChkHeat').addEventListener('change', e => { showHeat=e.target.checked; redraw(); });
-  document.getElementById('smChkDots').addEventListener('change', e => { showDots=e.target.checked; redraw(); });
-  document.getElementById('smHeatIntensity').addEventListener('input', e => { heatRadius=+e.target.value; redraw(); });
-  document.querySelector('.sm-filters').addEventListener('click', e => {
-    const btn = e.target.closest('.sm-fbtn'); if (!btn) return;
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active'); activeFilter=btn.dataset.q; spotlightTarget=null; redraw();
+function drawHeat(){
+  hctx.clearRect(0,0,W,W);
+  hctx.fillStyle='#fdfdff';hctx.fillRect(0,0,W,W);
+  const maxN=Math.max(...ISSUES.map(v=>v.n));
+  ISSUES.forEach(v=>{
+    const a0=v.a0*Math.PI/180,a1=v.a1*Math.PI/180;
+    hctx.beginPath();
+    hctx.moveTo(CX+R_MIN*Math.cos(a0),CY+R_MIN*Math.sin(a0));
+    hctx.arc(CX,CY,R_MAX,a0,a1);
+    hctx.arc(CX,CY,R_MIN,a1,a0,true);
+    hctx.closePath();
+    hctx.fillStyle='rgba(37,99,235,'+(0.035+v.n/maxN*.09).toFixed(3)+')';
+    hctx.fill();
+    hctx.strokeStyle='rgba(100,116,139,.28)';hctx.lineWidth=1;hctx.stroke();
   });
+  hctx.setLineDash([3,5]);hctx.strokeStyle='rgba(100,116,139,.28)';
+  [110,160,R_MAX].forEach(r=>{hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke();});
+  hctx.setLineDash([]);
+}
 
-  const tooltip = document.getElementById('sm-tooltip');
-  canvasMain.addEventListener('mousemove', e => {
-    const rect = canvasMain.getBoundingClientRect();
-    const sx = W/rect.width, sy = H/rect.height;
-    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
-    let found=null, minD=20;
-    RAW.forEach((p,i) => {
-      if (!visible(p)) return;
-      const [cx,cy] = toCanvas(p.x,p.y);
-      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
-      if (d < minD) { minD=d; found={p,i}; }
-    });
-    if (found) {
-      const p = found.p;
-      const eLabel = p.e>=1.5?'😤 激怒':p.e>=0.5?'😠 感情的':p.e<=-1?'😒 皮肉・冷笑':'😐 冷静';
-      const tx = e.clientX+14+260>window.innerWidth ? e.clientX-270 : e.clientX+14;
-      tooltip.style.opacity='1'; tooltip.style.left=tx+'px'; tooltip.style.top=(e.clientY-10)+'px';
-      tooltip.innerHTML = `<b>${p.s}</b><br>改憲: ${p.x>0?'+':''}${p.x} ／ 優先: ${p.y>0?'+':''}${p.y}<br>${eLabel} (${p.e}) ／ 確信度 ${Math.round(p.c*100)}%${p.u?'<br><small style="opacity:.5">クリックでXへ ↗</small>':''}`;
-    } else { tooltip.style.opacity='0'; }
+function draw(){
+  ctx.clearRect(0,0,W,W);
+  pts.forEach(pt=>{
+    const dim=filter>=0&&pt.p.i!==filter;
+    ctx.globalAlpha=dim?.08:.82;
+    ctx.beginPath();ctx.arc(pt.x,pt.y,4,0,Math.PI*2);
+    ctx.fillStyle=colors[pt.p.k];ctx.fill();
   });
-  canvasMain.addEventListener('mouseleave', () => { tooltip.style.opacity='0'; });
-  canvasMain.addEventListener('click', e => {
-    const rect = canvasMain.getBoundingClientRect();
-    const sx = W/rect.width, sy = H/rect.height;
-    const mx = (e.clientX-rect.left)*sx, my = (e.clientY-rect.top)*sy;
-    let found=null, minD=20;
-    RAW.forEach((p,i) => {
-      if (!visible(p)||!p.u) return;
-      const [cx,cy] = toCanvas(p.x,p.y);
-      const d = Math.hypot(mx-(cx+jCache[i][0]), my-(cy+jCache[i][1]));
-      if (d < minD) { minD=d; found=p; }
-    });
-    if (found) window.open(found.u,'_blank');
+  ctx.globalAlpha=1;
+  ctx.font='900 12px "Noto Sans JP",sans-serif';
+  ISSUES.forEach((v,i)=>{
+    const rad=v.mid*Math.PI/180,lx=CX+R_LBL*Math.cos(rad),ly=CY+R_LBL*Math.sin(rad),c=Math.cos(rad);
+    ctx.textAlign=c>.35?'left':(c<-.35?'right':'center');
+    ctx.textBaseline='middle';
+    ctx.fillStyle=(filter>=0&&i!==filter)?'rgba(100,116,139,.4)':'#334155';
+    ctx.fillText(v.k+' '+v.n,lx,ly);
   });
-
-  playIntro();
-  const savedVote = localStorage.getItem("sns_vote_憲法改正論議_SNS反応まっぷ_my");
-  if (savedVote !== null) window.setStanceMapVoteMarker(parseInt(savedVote, 10));
-  setTimeout(() => { animating = false; imgAlpha = IMG_ALPHA_END; redraw(); }, 3000);
+  ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);
+  ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#bfdbfe';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle='#172554';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  ctx.font='900 15px "Noto Sans JP",sans-serif';
+  ctx.fillText('憲法',CX,CY-9);ctx.fillText('改正',CX,CY+12);
+  ctx.font='400 10px "Noto Sans JP",sans-serif';ctx.fillStyle='#64748b';
+  ctx.fillText('冷静',CX,CY-R_MIN-8);ctx.fillText('主張が強い',CX,CY-R_MAX-8);
+  if(marker){
+    const v=ISSUES[marker.i];
+    if(v){
+      const ang=v.mid*Math.PI/180,x=CX+Math.cos(ang)*150,y=CY+Math.sin(ang)*150;
+      ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fillStyle=marker.c;ctx.fill();
+      ctx.strokeStyle=marker.c;ctx.lineWidth=2;ctx.stroke();
+      ctx.fillStyle=marker.c;ctx.font='900 12px "Noto Sans JP",sans-serif';ctx.textAlign='center';
+      ctx.fillText('あなたはココ',x,y-18);
+    }
+  }
+}
+function near(ev){
+  const r=canvas.getBoundingClientRect(),x=(ev.clientX-r.left)*W/r.width,y=(ev.clientY-r.top)*W/r.height;
+  let best=null,bd=225;
+  pts.forEach(q=>{if(filter>=0&&q.p.i!==filter)return;const d=(q.x-x)**2+(q.y-y)**2;if(d<bd){best=q;bd=d;}});
+  return best;
+}
+canvas.onmousemove=ev=>{
+  const q=near(ev);
+  if(!q){tip.style.display='none';canvas.style.cursor='crosshair';return;}
+  const rect=canvas.getBoundingClientRect();
+  tip.style.display='block';
+  tip.style.left=Math.min(ev.clientX-rect.left+14,rect.width-270)+'px';
+  tip.style.top=(ev.clientY-rect.top+14)+'px';
+  tip.innerHTML='<strong>'+ISSUES[q.p.i].k+'</strong><br>'+q.p.s.replace(/</g,'&lt;')+'<br><small>クリックでXの投稿へ</small>';
+  canvas.style.cursor=q.p.u?'pointer':'default';
+};
+canvas.onmouseleave=()=>{tip.style.display='none';};
+canvas.onclick=ev=>{const q=near(ev);if(q?.p.u)window.open(q.p.u,'_blank','noopener');};
+const filters=document.getElementById('sm-filters');
+['すべて',...ISSUES.map(v=>v.k)].forEach((k,i)=>{
+  const b=document.createElement('button');b.className='sm-fbtn'+(i===0?' active':'');b.textContent=k;
+  b.onclick=()=>{filter=i-1;filters.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');draw();};
+  filters.appendChild(b);
+});
+window.setConstitutionalVoteMarker=(i,c)=>{marker={i,c};draw();document.getElementById('stance-map-section').scrollIntoView({behavior:'smooth'});};
+drawHeat();draw();
 })();
 </script>
-    <section class="panel"><div class="panel-title"><h2>象限別の代表的な声</h2><span>象限・立場別に読む</span></div>
-<nav class="quadrant-nav" aria-label="象限別ナビ">
-  <a href="#sample-改憲賛成-推進">改憲推進</a>
-  <a href="#sample-改憲反対-護憲">護憲・改憲反対</a>
-  <a href="#sample-9条-自衛隊明記に賛成">9条・自衛隊明記賛成</a>
-  <a href="#sample-緊急事態条項に反対">緊急事態条項反対</a>
-  <a href="#sample-国民投票法-広告規制を重視">手続き重視</a>
-  <a href="#sample-未確認-過激表現">注意領域</a>
-</nav>
-<div class="sample-grid">
-<article class="sample-card" id="sample-改憲賛成-推進"><h3>改憲賛成・推進</h3><div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>9条改正は技術の進歩に伴う現実変化に対応する必要があると主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamemiso2930/status/2070756721463881871"></a></blockquote>
-<div class="reason">理由: 明確に改憲賛成の立場を示している。</div>
-</div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>法理論の欠如を批判し、個人情報保護法改悪に賛成。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/s08533051/status/2070748199724417185"></a></blockquote>
-<div class="reason">理由: 明確に改憲支持の立場を示している。</div>
-</div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>自衛隊明記と防衛費増額に賛成。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/6Li6ItuHzs48450/status/2070747608600269225"></a></blockquote>
-<div class="reason">理由: 明確に改憲支持の立場を示している。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-改憲反対-護憲"><h3>改憲反対・護憲</h3><div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>憲法改正反対の立場を表明した。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/xyzw6gt/status/2070602189496840556"></a></blockquote>
-<div class="reason">理由: 直接的に憲法改正に反対している。</div>
-</div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>社会民主党議員が9条改正に反対する立場を表明。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/AE30glLVaVknvcm/status/2070782144318960035"></a></blockquote>
-<div class="reason">理由: 明確に改憲反対の立場を示している。</div>
-</div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 1.00</div><p>若者憲法集会で改憲反対のデモを呼びかけ。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/38etCafe_/status/2070755533347504550"></a></blockquote>
-<div class="reason">理由: 明確に改憲反対の立場を示している。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-9条-自衛隊明記に賛成"><h3>9条・自衛隊明記に賛成</h3><div>
-<div class="sample"><div class="meta">支持 / 信頼度 1.00</div><p>自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/K5omyKUOte87912/status/2067466904877564329"></a></blockquote>
-<div class="reason">理由: 自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
-</div>
-<div class="sample"><div class="meta">支持 / 信頼度 1.00</div><p>投稿者が現行憲法の解釈が危険であると指摘し、9条改正を支持。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tokumusocho/status/2067445721801146677"></a></blockquote>
-<div class="reason">理由: 投稿者が9条改正を支持していることが明確。</div>
-</div>
-<div class="sample"><div class="meta">支持 / 信頼度 1.00</div><p>自衛隊明記や国防上の必要性から憲法改正を支持する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/akubikinako/status/2067441818783080941"></a></blockquote>
-<div class="reason">理由: 自衛隊明記・国防・抑止力への肯定的言及があるため。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-9条-自衛隊明記に反対"><h3>9条・自衛隊明記に反対</h3><div>
-<div class="sample"><div class="meta">反対 / 信頼度 1.00</div><p>投稿者が自衛隊の明記は不要であり、9条改正には反対。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/jijicoltdceo/status/2067442429939294255"></a></blockquote>
-<div class="reason">理由: 投稿者が自衛隊明記を反対していることが明確。</div>
-</div>
-<div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>投稿者は日本の自衛隊が米国の奴隷部隊であると批判し、憲法9条の維持を主張している。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tom10644324280/status/2068204274467872792"></a></blockquote>
-<div class="reason">理由: 投稿者が9条の改正に反対表明したため。</div>
-</div>
-<div class="sample"><div class="meta">反対 / 信頼度 0.80</div><p>投稿者は9条改正と自衛隊の明記を反対し、戦前回帰を避けるために9条改正は必要ない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MaTsu0_00/status/2067260313490313443"></a></blockquote>
-<div class="reason">理由: 投稿者が9条改正と自衛隊明記に反対する立場であることが明確。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-緊急事態条項に賛成"><h3>緊急事態条項に賛成</h3><div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 0.90</div><p>緊急事態条項を成立させることで選挙は不要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/toyhyabrclpmkx/status/2070753091151167608"></a></blockquote>
-<div class="reason">理由: 肯定的な表現が見られ、賛成。</div>
-</div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 0.90</div><p>緊急事態条項を成立させることで選挙は不要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/inoue1126/status/2070753060511732022"></a></blockquote>
-<div class="reason">理由: 肯定的な表現が見られ、賛成。</div>
-</div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 0.80</div><p>枝野幸男さんも支持する緊急事態条項は必要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/takano_koutouku/status/2070755083965575454"></a></blockquote>
-<div class="reason">理由: 枝野幸男さんの支持が明記されており、賛成。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-緊急事態条項に反対"><h3>緊急事態条項に反対</h3><div>
-<div class="sample"><div class="meta">反対 / 信頼度 1.00</div><p>緊急事態条項を権限集中や人権制限のリスクとして警戒する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Dabrith/status/2067585548626415824"></a></blockquote>
-<div class="reason">理由: 緊急事態条項への反対・危険視が主眼のため。</div>
-</div>
-<div class="sample"><div class="meta">反対 / 信頼度 1.00</div><p>緊急事態条項を権限集中や人権制限のリスクとして警戒する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/l1yphTWMsa45573/status/2067583144287687118"></a></blockquote>
-<div class="reason">理由: 緊急事態条項への反対・危険視が主眼のため。</div>
-</div>
-<div class="sample"><div class="meta">項目別反対 / 信頼度 0.90</div><p>緊急事態条項は百害あっても一利なし。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/8FmN6Fc1RnvyCbj/status/2070757114751197398"></a></blockquote>
-<div class="reason">理由: 否定的な表現が強調されており、改憲反対。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-国民投票法-広告規制を重視"><h3>国民投票法・広告規制を重視</h3><div>
-<div class="sample"><div class="meta">問題視 / 信頼度 1.00</div><p>国民投票法や広告規制など、改憲手続きの公平性を問題視する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tamacha1965/status/2068199813552980461"></a></blockquote>
-<div class="reason">理由: 国民投票法・広告規制・有効投票など手続きへの言及が中心のため。</div>
-</div>
-<div class="sample"><div class="meta">問題視 / 信頼度 1.00</div><p>国民投票法や広告規制など、改憲手続きの公平性を問題視する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/buron2011/status/2067573140138693005"></a></blockquote>
-<div class="reason">理由: 国民投票法・広告規制・有効投票など手続きへの言及が中心のため。</div>
-</div>
-<div class="sample"><div class="meta">問題視 / 信頼度 1.00</div><p>国民投票法や広告規制など、改憲手続きの公平性を問題視する反応。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/buron2011/status/2067572951227232288"></a></blockquote>
-<div class="reason">理由: 国民投票法・広告規制・有効投票など手続きへの言及が中心のため。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-政党-議員批判"><h3>政党・議員批判</h3><div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 1.00</div><p>第九条改正は政党の姿勢を示す指標と主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/letsgenmai/status/2070728016255439253"></a></blockquote>
-<div class="reason">理由: 明確に改憲支持の立場を示している。</div>
-</div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 0.90</div><p>公明党や中道改革連合の改憲案への賛成を疑問視する。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NU1o1wku9oVUnsP/status/2070668825067180325"></a></blockquote>
-<div class="reason">理由: 推進派が改憲案に賛成しているため、批判派と判断。</div>
-</div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 0.90</div><p>国民民主党を攻撃し、改憲案に反対する。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/daisuke8174/status/2070651057987006490"></a></blockquote>
-<div class="reason">理由: 推進派が改憲案に賛成しているため、批判派と判断。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-事実確認-情報共有"><h3>事実確認・情報共有</h3><div>
-<div class="sample"><div class="meta">中立 / 信頼度 0.80</div><p>議員の役割について説明。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nine111nine/status/2070455579295035545"></a></blockquote>
-<div class="reason">理由: 最後に 賛成 しているが、内容は中立的。</div>
-</div>
-<div class="sample"><div class="meta">中立 / 信頼度 0.80</div><p>改憲の手続きについて説明。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/koronawoowarase/status/2070438518799880652"></a></blockquote>
-<div class="reason">理由: 最後に 賛成 しているが、内容は中立的。</div>
-</div>
-<div class="sample"><div class="meta">中立 / 信頼度 0.80</div><p>改憲の手続きについて説明。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/SgfkSystem/status/2070410802637799509"></a></blockquote>
-<div class="reason">理由: 最後に 賛成 しているが、内容は中立的。</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-未確認-過激表現"><h3>未確認・過激表現</h3><div>
-<div class="sample"><div class="meta">未確認 / 信頼度 0.70</div><p>改憲の矛盾を指摘するが、具体的な立場は明確でない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/40cells/status/2070458622426186047"></a></blockquote>
-<div class="reason">理由: 最後に 改憲賛成 しているが、内容が支離滅裂。</div>
-</div>
-<div class="sample"><div class="meta">未確認 / 信頼度 0.70</div><p>改憲の公平性について疑問を呈するが、具体的な立場は明確でない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NM09QSBN/status/2070439590884974897"></a></blockquote>
-<div class="reason">理由: 最後に 反対 しているが、内容が過激。</div>
-</div>
-<div class="sample"><div class="meta">未確認 / 信頼度 0.50</div><p>改憲反対を許すなら、サッカーのルールも許される。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yoco_noko/status/2070723499631780320"></a></blockquote>
-<div class="reason">理由: 攻撃的表現</div>
-</div>
-</div></article>
-<article class="sample-card" id="sample-その他-分類保留"><h3>その他・分類保留</h3><div>
-<div class="sample"><div class="meta">改憲支持 / 信頼度 0.90</div><p>共和制移行の可能性について問う。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/AKsTCAcr0n83453/status/2070709728821514628"></a></blockquote>
-<div class="reason">理由: 推進派が共和制移行を含む改憲案に賛成している。</div>
-</div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 0.90</div><p>拷問や虐殺が可能になる改憲案に反対する。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nippon_D_fujin/status/2070644433977291119"></a></blockquote>
-<div class="reason">理由: 推進派が改憲案に賛成しているため、反対派と判断。</div>
-</div>
-<div class="sample"><div class="meta">改憲反対 / 信頼度 0.90</div><p>自民党の改憲案に反対する。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Macopapa4/status/2070620944570474930"></a></blockquote>
-<div class="reason">理由: 推進派が改憲案に賛成しているため、反対派と判断。</div>
-</div>
-</div></article>
-</div></section>
-    <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">日本国憲法は1947年の施行以来、一度も改正されたことがありません。近年の改憲論議では、9条への自衛隊明記、大規模災害時などに政府の権限を強化する緊急事態条項の創設、教育無償化、参議院の合区解消などが主な項目として挙げられています。改正には衆参両院で3分の2以上の賛成による発議と、国民投票での過半数の賛成が必要です。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「自衛隊の憲法上の位置づけを明確にすべき」「現行憲法は時代に合わなくなっている」という主張があり、反対する立場からは「9条改正は戦争への道を開く」「緊急事態条項は権力の濫用につながる」「改憲よりも優先すべき課題がある」といった主張があります。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">また、賛否そのものだけでなく、国民投票時のCM規制やネット広告のあり方など、手続き面の公平性をめぐる議論も続いており、世代や支持政党によって意見の分布が大きく異なるテーマです。</p></section>
+<section class="panel conflict-panel"><div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとに立場を読み比べる</span></div><article class="issue-block" id="issue-0"><div class="issue-head"><span class="axis-kicker">論点 1</span><h3>改憲全般<span class="issue-count">116件</span></h3></div><p class="issue-desc">憲法を時代に合わせるべきか、現行憲法の原則を守るべきか。</p><div class="issue-balance">慎重・反対 82 / 改正推進 25 / 中立・情報 9</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 1.0</div><p>改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/itsupansalary2/status/2068044998147453062"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.9</div><p>少数意見でも多数反対なら国民投票で決めるべきと主張。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/gofffwin/status/2067893607974293988"></a></blockquote></div></div></article><article class="issue-block" id="issue-1"><div class="issue-head"><span class="axis-kicker">論点 2</span><h3>9条・自衛隊<span class="issue-count">103件</span></h3></div><p class="issue-desc">自衛隊を憲法に明記する意義と、9条の平和主義への影響。</p><div class="issue-balance">慎重・反対 33 / 改正推進 56 / 手続き重視 1 / 中立・情報 13</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>憲法9条改正や国民投票法改正に反対し、改正により自衛隊が米国の捨て駒や戦死に晒されると懸念。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/FSNg7hpPtvnUjIF/status/2067981081681531266"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.95</div><p>早期の憲法改正と自衛隊明記を求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939"></a></blockquote></div></div></article><article class="issue-block" id="issue-2"><div class="issue-head"><span class="axis-kicker">論点 3</span><h3>緊急事態条項<span class="issue-count">55件</span></h3></div><p class="issue-desc">災害などへの迅速な対応と、政府への権限集中リスク。</p><div class="issue-balance">慎重・反対 30 / 改正推進 2 / 手続き重視 1 / 中立・情報 22</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>緊急事態条項は不要であり百害だらけと激しく批判。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/8FmN6Fc1RnvyCbj/status/2070757114751197398"></a></blockquote></div><div class="sample-card"><div class="meta">手続き重視 / conf 0.8</div><p>緊急事態条項の有権者周知と正しい説明がなされるか疑問視し、任期延長に固執する改憲派を批判。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sisitouski/status/2070782090392785292"></a></blockquote></div></div></article><article class="issue-block" id="issue-3"><div class="issue-head"><span class="axis-kicker">論点 4</span><h3>国民投票・広告<span class="issue-count">96件</span></h3></div><p class="issue-desc">CM・ネット広告・資金力の差を含む国民投票の公平性。</p><div class="issue-balance">慎重・反対 60 / 改正推進 3 / 手続き重視 20 / 中立・情報 13</div><div class="sample-grid"><div class="sample-card"><div class="meta">手続き重視 / conf 0.9</div><p>憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/1984OrWeIIian/status/2067262432154935675"></a></blockquote></div><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>国民投票法改正に反対し、最低投票率なしで賛成者が多ければ改憲成立となる仕組みを批判。衆院選での八百長を連想させ、国民投票での憲法改悪と緊急事態条項新設を絶対阻止すべきと訴えている。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/buron2011/status/2067763266311618753"></a></blockquote></div></div></article><article class="issue-block" id="issue-4"><div class="issue-head"><span class="axis-kicker">論点 5</span><h3>政党・発議手続き<span class="issue-count">24件</span></h3></div><p class="issue-desc">政党の姿勢、国会での合意形成、発議までの進め方。</p><div class="issue-balance">慎重・反対 11 / 改正推進 5 / 中立・情報 8</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.9</div><p>改憲発議を阻止すべきと強く主張。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pDyvhzFJAIAJe90/status/2070601132339335175"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.9</div><p>参院での改憲賛成票確保の重要性を論じ、国民民主や公明、参政党の賛成を望み、改憲実現に向けた政党力学を分析している。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/axela_cbr600rr/status/2070707373967319058"></a></blockquote></div></div></article><article class="issue-block" id="issue-5"><div class="issue-head"><span class="axis-kicker">論点 6</span><h3>情報・議論の質<span class="issue-count">28件</span></h3></div><p class="issue-desc">事実確認、過激な断定、論点を理解できる情報環境。</p><div class="issue-balance">慎重・反対 2 / 中立・情報 26</div><div class="sample-grid"><div class="sample-card"><div class="meta">中立・情報 / conf 0.9</div><p>憲法改正の賛否とは別に、数値で嘘をつく行為は信用できず議論の妨げになると主張している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/higher88672/status/2068191466690941164"></a></blockquote></div><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.8</div><p>現政権下の改憲に反対しつつ、賛成意見を封殺すべきでないと言論の自由と対話の重要性を訴えている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ema_credo/status/2068173526709018800"></a></blockquote></div></div></article></section>
+<section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">日本国憲法は1947年の施行以来、一度も改正されたことがありません。近年の改憲論議では、9条への自衛隊明記、大規模災害時などに政府の権限を強化する緊急事態条項の創設、教育無償化、参議院の合区解消などが主な項目として挙げられています。改正には衆参両院で3分の2以上の賛成による発議と、国民投票での過半数の賛成が必要です。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「自衛隊の憲法上の位置づけを明確にすべき」「現行憲法は時代に合わなくなっている」という主張があり、反対する立場からは「9条改正は戦争への道を開く」「緊急事態条項は権力の濫用につながる」「改憲よりも優先すべき課題がある」といった主張があります。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">また、賛否そのものだけでなく、国民投票時のCM規制やネット広告のあり方など、手続き面の公平性をめぐる議論も続いており、世代や支持政党によって意見の分布が大きく異なるテーマです。</p></section>
     <section class="panel conflict-panel"><div class="panel-title"><h2>争点カード</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">改憲推進</div><h3>憲法を現実に合わせる</h3><div class="axis-count">101<span>件</span></div><p>自衛隊明記、防衛、緊急事態対応などを理由に、憲法改正を進めるべきと見る立場。</p><div class="axis-tags"><a href="#sample-改憲賛成-推進" style="text-decoration:none;color:inherit;"><span>改憲賛成・推進</span></a><a href="#sample-9条-自衛隊明記に賛成" style="text-decoration:none;color:inherit;"><span>9条・自衛隊明記に賛成</span></a><a href="#sample-緊急事態条項に賛成" style="text-decoration:none;color:inherit;"><span>緊急事態条項に賛成</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">改憲慎重・反対</div><h3>平和主義と権力制限を守る</h3><div class="axis-count">168<span>件</span></div><p>9条改正や緊急事態条項は平和主義の後退や権限集中につながると見る立場。</p><div class="axis-tags"><a href="#sample-改憲反対-護憲" style="text-decoration:none;color:inherit;"><span>改憲反対・護憲</span></a><a href="#sample-9条-自衛隊明記に反対" style="text-decoration:none;color:inherit;"><span>9条・自衛隊明記に反対</span></a><a href="#sample-緊急事態条項に反対" style="text-decoration:none;color:inherit;"><span>緊急事態条項に反対</span></a></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">手続き重視</div><h3>国民投票の公平性を問う</h3><div class="axis-count">76<span>件</span></div><p>改憲の中身以前に、広告規制、資金、SNS、国民投票法の整備を重視する立場。</p><div class="axis-tags"><a href="#sample-国民投票法-広告規制を重視" style="text-decoration:none;color:inherit;"><span>国民投票法・広告規制を重視</span></a><a href="#sample-手続き-発議可能性への関心" style="text-decoration:none;color:inherit;"><span>手続き・発議可能性への関心</span></a></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">ノイズ・注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">63<span>件</span></div><p>政党批判、強い断定、文脈不足など、記事化前に確認が必要な反応。</p><div class="axis-tags"><a href="#sample-政党-議員批判" style="text-decoration:none;color:inherit;"><span>政党・議員批判</span></a><a href="#sample-未確認-過激表現" style="text-decoration:none;color:inherit;"><span>未確認・過激表現</span></a><a href="#sample-その他-分類保留" style="text-decoration:none;color:inherit;"><span>その他・分類保留</span></a></div></article></div></section>
     <section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
 <div class="related-grid">
