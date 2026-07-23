@@ -539,89 +539,6 @@
       border-top: 4px solid transparent !important;
       border-image: linear-gradient(90deg, var(--grad-1), var(--grad-2)) 1 !important;
     }
-    .manga-intro {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 24px;
-    }
-    .manga-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-    .manga-page-card {
-      border: 1px solid rgba(0,0,0,.08);
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fff;
-      box-shadow: 0 10px 28px rgba(16,24,40,.08);
-      cursor: zoom-in;
-      transition: transform .2s ease, box-shadow .2s ease;
-      text-align: left;
-      padding: 0;
-    }
-    .manga-page-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 42px rgba(16,24,40,.14);
-    }
-    .manga-page-card img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      background: var(--accent-soft);
-    }
-    .manga-page-card span {
-      display: block;
-      padding: 12px 14px;
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 900;
-      line-height: 1.45;
-    }
-    .manga-disclaimer {
-      max-width: 760px;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-    .manga-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: rgba(15, 23, 42, .86);
-    }
-    .manga-modal.active { display: flex; }
-    .manga-modal img {
-      max-width: min(92vw, 920px);
-      max-height: 88vh;
-      border-radius: 8px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.45);
-      background: #fff;
-    }
-    .manga-modal button {
-      position: absolute;
-      border: 1px solid rgba(255,255,255,.28);
-      background: rgba(255,255,255,.12);
-      color: #fff;
-      border-radius: 8px;
-      min-width: 44px;
-      height: 44px;
-      cursor: pointer;
-      font-size: 24px;
-      font-weight: 900;
-      backdrop-filter: blur(6px);
-    }
-    .manga-modal .manga-close { top: 18px; right: 18px; }
-    .manga-modal .manga-prev { left: 18px; top: 50%; transform: translateY(-50%); }
-    .manga-modal .manga-next { right: 18px; top: 50%; transform: translateY(-50%); }
     .vote-card-grid {
       display: grid !important;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -701,7 +618,6 @@
       .hero-inner { padding: 36px 16px 32px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
-      .manga-grid { grid-template-columns: 1fr; }
       .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .vote-image-card .vote-card-label { font-size: 15px; left: 10px; right: 10px; bottom: 10px; }
       .thirty-summary, .vote-comparison, .related-grid { grid-template-columns:1fr; }
@@ -780,7 +696,7 @@
     @media(max-width:760px){#explainer-section .explainer-grid{gap:12px}#explainer-section .explainer-card-label{padding:12px;gap:8px}#explainer-section .explainer-card-title{font-size:14px}#explainer-section .explainer-card img{aspect-ratio:1916/821}}
 
   </style>
-  <link rel="stylesheet" href="topic-modern.css?v=3">
+  <link rel="stylesheet" href="topic-modern.css?v=4">
   <script src="topic-modern.js?v=1" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
@@ -816,32 +732,7 @@
       <div class="stat"><span>最多論点</span><strong>改憲全般 116件</strong></div>
       <div class="stat"><span>最多スタンス</span><strong>慎重・反対 218件</strong></div>
     </section>
-    <section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読む、この論点</h2><span>3ページで対立をつかむ</span></div>
-<p class="manga-intro">元教員の平和学習ボランティアと、安全保障に不安を感じる会社員が、公民館の前で憲法改正をめぐって向き合う物語です。平和主義を守りたい切実さと、現実の脅威に備えたい焦りのどちらも描き、最後は国民投票の前に何を確かめるべきかを問いかけます。</p>
-<div class="manga-grid" aria-label="憲法改正論議の漫画">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/constitutional-amendment-manga-page-1.webp" alt="漫画1ページ目 古い教室の約束" loading="lazy">
-    <span>1. 古い教室の約束</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/constitutional-amendment-manga-page-2.webp" alt="漫画2ページ目 現実を見ているのか" loading="lazy">
-    <span>2. 現実を見ているのか</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/constitutional-amendment-manga-page-3.webp" alt="漫画3ページ目 投票箱の前で" loading="lazy">
-    <span>3. 投票箱の前で</span>
-  </button>
-</div>
-<p class="manga-disclaimer">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです</p>
-<div class="manga-modal" id="manga-modal" aria-hidden="true">
-  <button class="manga-close" type="button" aria-label="閉じる">×</button>
-  <button class="manga-prev" type="button" aria-label="前のページ">‹</button>
-  <img id="manga-modal-image" src="" alt="" loading="lazy">
-  <button class="manga-next" type="button" aria-label="次のページ">›</button>
-</div>
-</section>
-    <section class="panel" id="explainer-section">
+<section class="panel" id="explainer-section">
 <div class="panel-title"><h2>投票前に読む：6つの争点</h2><span>図解で全論点をチェック</span></div>
 <p class="explainer-lead">憲法改正は、改正全般への賛否だけでは整理できません。9条、緊急事態条項、国民投票の公平性、発議手続き、情報環境ではそれぞれ対立の理由が異なります。6つの図解を確認してから、自分が重く見る論点を選んでください。画像はタップで拡大できます。</p>
 <div class="explainer-grid"><article class="explainer-card" data-img="images/constitutional-infographic-wide-general.webp" data-alt="改憲全般"><div class="explainer-card-label"><span class="explainer-num">争点1</span><div><p class="explainer-card-title">改憲全般</p><p class="explainer-card-desc">憲法を社会の変化に合わせるのか、権力を縛る原則として慎重に守るのか。</p><div class="explainer-sides"><span class="explainer-side pro">改正推進：現実に合うルールへ</span><span class="explainer-side con">慎重・反対：拙速な変更を防ぐ</span></div></div></div><img src="images/constitutional-infographic-wide-general.webp" alt="争点1 改憲全般" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-article9.webp" data-alt="9条・自衛隊"><div class="explainer-card-label"><span class="explainer-num">争点2</span><div><p class="explainer-card-title">9条・自衛隊</p><p class="explainer-card-desc">自衛隊の存在と任務を明記する意義と、9条の平和主義への影響を考える。</p><div class="explainer-sides"><span class="explainer-side pro">改正推進：法的位置づけを明確に</span><span class="explainer-side con">慎重・反対：平和主義の歯止めを維持</span></div></div></div><img src="images/constitutional-infographic-wide-article9.webp" alt="争点2 9条・自衛隊" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-emergency.webp" data-alt="緊急事態条項"><div class="explainer-card-label"><span class="explainer-num">争点3</span><div><p class="explainer-card-title">緊急事態条項</p><p class="explainer-card-desc">重大な危機への即応力と、政府への権限集中を防ぐ仕組みをどう設計するか。</p><div class="explainer-sides"><span class="explainer-side pro">整備賛成：危機対応を迅速に</span><span class="explainer-side con">慎重・反対：権限濫用を警戒</span></div></div></div><img src="images/constitutional-infographic-wide-emergency.webp" alt="争点3 緊急事態条項" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-referendum.webp" data-alt="国民投票・広告"><div class="explainer-card-label"><span class="explainer-num">争点4</span><div><p class="explainer-card-title">国民投票・広告</p><p class="explainer-card-desc">自由な意見表明を守りながら、資金力や広告量の差をどう整えるか。</p><div class="explainer-sides"><span class="explainer-side pro">自由を重視：多様な意見を届ける</span><span class="explainer-side con">公平性を重視：判断環境を整える</span></div></div></div><img src="images/constitutional-infographic-wide-referendum.webp" alt="争点4 国民投票・広告" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-process.webp" data-alt="政党・発議手続き"><div class="explainer-card-label"><span class="explainer-num">争点5</span><div><p class="explainer-card-title">政党・発議手続き</p><p class="explainer-card-desc">具体案を国民に問う機会と、国会での十分な審議・合意形成をどう両立するか。</p><div class="explainer-sides"><span class="explainer-side pro">発議推進：国民投票で判断を</span><span class="explainer-side con">慎重論：幅広い合意を先に</span></div></div></div><img src="images/constitutional-infographic-wide-process.webp" alt="争点5 政党・発議手続き" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-information.webp" data-alt="情報・議論の質"><div class="explainer-card-label"><span class="explainer-num">争点6</span><div><p class="explainer-card-title">情報・議論の質</p><p class="explainer-card-desc">条文・根拠・発言主体・引用関係を確認し、文脈不足の情報をどう扱うか。</p><div class="explainer-sides"><span class="explainer-side pro">確認する：一次資料と文脈を見る</span><span class="explainer-side con">保留する：不明な情報は断定しない</span></div></div></div><img src="images/constitutional-infographic-wide-information.webp" alt="争点6 情報・議論の質" loading="lazy"></article></div>
@@ -891,17 +782,8 @@
   const issueBox=document.getElementById('vote-issue-btns');
   issues.forEach((v,i)=>{const b=document.createElement('button');b.className='vote-issue-btn';b.innerHTML='<span>'+v.icon+'</span><span><strong>'+v.k+'</strong><small>'+v.d+'</small></span>';b.onclick=()=>{selected=i;document.getElementById('vote-step1').hidden=true;document.getElementById('vote-step2').hidden=false;};issueBox.appendChild(b);});
   const stanceBox=document.getElementById('vote-stance-btns');
-  stances.forEach(v=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=()=>{document.getElementById('vote-step2').hidden=true;const r=document.getElementById('vote-result');r.hidden=false;const shareText='【憲法改正SNS反応まっぷ】\n「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」と考えています。\n#SNS反応まっぷ';const shareUrl='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(location.href);r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」</p><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;"><a href="'+shareUrl+'" target="_blank" rel="noopener" style="display:inline-flex;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">𝕏 でシェア</a><button type="button" id="vote-redo" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div>';window.setConstitutionalVoteMarker?.(selected,v.c);document.getElementById('vote-redo').onclick=()=>{r.hidden=true;document.getElementById('vote-step1').hidden=false;};};stanceBox.appendChild(b);});
+  stances.forEach(v=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=()=>{document.getElementById('vote-step2').hidden=true;const r=document.getElementById('vote-result');r.hidden=false;r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」</p><button type="button" id="vote-redo">選び直す</button>';window.setConstitutionalVoteMarker?.(selected,v.c);document.getElementById('vote-redo').onclick=()=>{r.hidden=true;document.getElementById('vote-step1').hidden=false;};};stanceBox.appendChild(b);});
 })();
-</script>
-<script src="manga-viewer.js"></script>
-<script>
-MangaViewer.init({
-  chars: [
-    {img:'images/constitutional-amendment-manga-charsheet-kazuko.webp', name:'佐伯 和子', role:'元教員・平和学習ボランティア', quote:'平和主義は変えてはいけない、絶対に'},
-    {img:'images/constitutional-amendment-manga-charsheet-yuma.webp', name:'高瀬 悠真', role:'安全保障に関心のある会社員', quote:'今の脅威に備えるために、現実を見てほしい'}
-  ]
-});
 </script>
 <section class="panel stance-map-section" id="stance-map-section">
 <div id="stance-map-inner">
@@ -1035,7 +917,7 @@ window.setConstitutionalVoteMarker=(i,c)=>{marker={i,c};draw();document.getEleme
 drawHeat();draw();
 })();
 </script>
-<section class="panel conflict-panel"><div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとに立場を読み比べる</span></div><article class="issue-block" id="issue-0"><div class="issue-head"><span class="axis-kicker">論点 1</span><h3>改憲全般<span class="issue-count">116件</span></h3></div><p class="issue-desc">憲法を時代に合わせるべきか、現行憲法の原則を守るべきか。</p><div class="issue-balance">慎重・反対 82 / 改正推進 25 / 中立・情報 9</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 1.0</div><p>改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/itsupansalary2/status/2068044998147453062"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.9</div><p>少数意見でも多数反対なら国民投票で決めるべきと主張。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/gofffwin/status/2067893607974293988"></a></blockquote></div></div></article><article class="issue-block" id="issue-1"><div class="issue-head"><span class="axis-kicker">論点 2</span><h3>9条・自衛隊<span class="issue-count">103件</span></h3></div><p class="issue-desc">自衛隊を憲法に明記する意義と、9条の平和主義への影響。</p><div class="issue-balance">慎重・反対 33 / 改正推進 56 / 手続き重視 1 / 中立・情報 13</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>憲法9条改正や国民投票法改正に反対し、改正により自衛隊が米国の捨て駒や戦死に晒されると懸念。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/FSNg7hpPtvnUjIF/status/2067981081681531266"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.95</div><p>早期の憲法改正と自衛隊明記を求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939"></a></blockquote></div></div></article><article class="issue-block" id="issue-2"><div class="issue-head"><span class="axis-kicker">論点 3</span><h3>緊急事態条項<span class="issue-count">55件</span></h3></div><p class="issue-desc">災害などへの迅速な対応と、政府への権限集中リスク。</p><div class="issue-balance">慎重・反対 30 / 改正推進 2 / 手続き重視 1 / 中立・情報 22</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>緊急事態条項は不要であり百害だらけと激しく批判。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/8FmN6Fc1RnvyCbj/status/2070757114751197398"></a></blockquote></div><div class="sample-card"><div class="meta">手続き重視 / conf 0.8</div><p>緊急事態条項の有権者周知と正しい説明がなされるか疑問視し、任期延長に固執する改憲派を批判。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sisitouski/status/2070782090392785292"></a></blockquote></div></div></article><article class="issue-block" id="issue-3"><div class="issue-head"><span class="axis-kicker">論点 4</span><h3>国民投票・広告<span class="issue-count">96件</span></h3></div><p class="issue-desc">CM・ネット広告・資金力の差を含む国民投票の公平性。</p><div class="issue-balance">慎重・反対 60 / 改正推進 3 / 手続き重視 20 / 中立・情報 13</div><div class="sample-grid"><div class="sample-card"><div class="meta">手続き重視 / conf 0.9</div><p>憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/1984OrWeIIian/status/2067262432154935675"></a></blockquote></div><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>国民投票法改正に反対し、最低投票率なしで賛成者が多ければ改憲成立となる仕組みを批判。衆院選での八百長を連想させ、国民投票での憲法改悪と緊急事態条項新設を絶対阻止すべきと訴えている。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/buron2011/status/2067763266311618753"></a></blockquote></div></div></article><article class="issue-block" id="issue-4"><div class="issue-head"><span class="axis-kicker">論点 5</span><h3>政党・発議手続き<span class="issue-count">24件</span></h3></div><p class="issue-desc">政党の姿勢、国会での合意形成、発議までの進め方。</p><div class="issue-balance">慎重・反対 11 / 改正推進 5 / 中立・情報 8</div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.9</div><p>改憲発議を阻止すべきと強く主張。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pDyvhzFJAIAJe90/status/2070601132339335175"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.9</div><p>参院での改憲賛成票確保の重要性を論じ、国民民主や公明、参政党の賛成を望み、改憲実現に向けた政党力学を分析している。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/axela_cbr600rr/status/2070707373967319058"></a></blockquote></div></div></article><article class="issue-block" id="issue-5"><div class="issue-head"><span class="axis-kicker">論点 6</span><h3>情報・議論の質<span class="issue-count">28件</span></h3></div><p class="issue-desc">事実確認、過激な断定、論点を理解できる情報環境。</p><div class="issue-balance">慎重・反対 2 / 中立・情報 26</div><div class="sample-grid"><div class="sample-card"><div class="meta">中立・情報 / conf 0.9</div><p>憲法改正の賛否とは別に、数値で嘘をつく行為は信用できず議論の妨げになると主張している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/higher88672/status/2068191466690941164"></a></blockquote></div><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.8</div><p>現政権下の改憲に反対しつつ、賛成意見を封殺すべきでないと言論の自由と対話の重要性を訴えている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ema_credo/status/2068173526709018800"></a></blockquote></div></div></article></section>
+<section class="panel conflict-panel"><div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとに立場を読み比べる</span></div><article class="issue-block" id="issue-0"><div class="issue-head"><span class="axis-kicker">論点 1</span><h3>改憲全般<span class="issue-count">116件</span></h3></div><p class="issue-desc">憲法を時代に合わせるべきか、現行憲法の原則を守るべきか。</p><div class="temp-bar-wrap"><div class="temp-bar-label"><span>X投稿のスタンス構成</span><span>改憲に慎重 82 / 情報・検討 9 / 改憲を支持 25</span></div><div class="temp-bar"><div class="temp-seg con" style="width:70.69%">71%</div><div class="temp-seg neutral" style="width:7.76%">8%</div><div class="temp-seg pro" style="width:21.55%">22%</div></div><div class="temp-bar-legend"><span><i class="con"></i>現行憲法の原則を守り、改憲を急ぐことに慎重（82件）</span><span><i class="neutral"></i>賛否を定めず、改憲論議の情報や論点を共有（9件）</span><span><i class="pro"></i>社会や安全保障環境の変化に合わせた改正を支持（25件）</span></div></div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 1.0</div><p>改憲を「改悪」と呼び、緊急事態条項や自衛隊明記への反対を表明</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/itsupansalary2/status/2068044998147453062"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.9</div><p>少数意見でも多数反対なら国民投票で決めるべきと主張。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/gofffwin/status/2067893607974293988"></a></blockquote></div></div></article><article class="issue-block" id="issue-1"><div class="issue-head"><span class="axis-kicker">論点 2</span><h3>9条・自衛隊<span class="issue-count">103件</span></h3></div><p class="issue-desc">自衛隊を憲法に明記する意義と、9条の平和主義への影響。</p><div class="temp-bar-wrap"><div class="temp-bar-label"><span>X投稿のスタンス構成</span><span>9条改正に反対 33 / 位置づけを検討 13 / 議論を優先 1 / 自衛隊明記を支持 56</span></div><div class="temp-bar"><div class="temp-seg con" style="width:32.04%">32%</div><div class="temp-seg neutral" style="width:12.62%">13%</div><div class="temp-seg process" style="width:0.97%"></div><div class="temp-seg pro" style="width:54.37%">54%</div></div><div class="temp-bar-legend"><span><i class="con"></i>9条改正・自衛隊明記による平和主義の後退を警戒（33件）</span><span><i class="neutral"></i>自衛隊の法的位置づけや改正論点を説明・検討（13件）</span><span><i class="process"></i>自衛隊明記の前に国民的議論と手続きを重視（1件）</span><span><i class="pro"></i>自衛隊の憲法明記と国防上の位置づけ明確化を支持（56件）</span></div></div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>憲法9条改正や国民投票法改正に反対し、改正により自衛隊が米国の捨て駒や戦死に晒されると懸念。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/FSNg7hpPtvnUjIF/status/2067981081681531266"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.95</div><p>早期の憲法改正と自衛隊明記を求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Tg9EQOXChjHjRJ9/status/2067917983327141939"></a></blockquote></div></div></article><article class="issue-block" id="issue-2"><div class="issue-head"><span class="axis-kicker">論点 3</span><h3>緊急事態条項<span class="issue-count">55件</span></h3></div><p class="issue-desc">災害などへの迅速な対応と、政府への権限集中リスク。</p><div class="temp-bar-wrap"><div class="temp-bar-label"><span>X投稿のスタンス構成</span><span>権限集中を警戒 30 / 条項内容を検討 22 / 制度設計を優先 1 / 条項新設を支持 2</span></div><div class="temp-bar"><div class="temp-seg con" style="width:54.55%">55%</div><div class="temp-seg neutral" style="width:40.00%">40%</div><div class="temp-seg process" style="width:1.82%"></div><div class="temp-seg pro" style="width:3.64%"></div></div><div class="temp-bar-legend"><span><i class="con"></i>政府への権限集中、選挙停止、条項の濫用を警戒（30件）</span><span><i class="neutral"></i>緊急事態条項の内容や必要性を説明・検討（22件）</span><span><i class="process"></i>国民への周知、適用条件、権力抑制の設計を優先（1件）</span><span><i class="pro"></i>災害や有事への迅速な対応のため条項新設を支持（2件）</span></div></div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>緊急事態条項は不要であり百害だらけと激しく批判。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/8FmN6Fc1RnvyCbj/status/2070757114751197398"></a></blockquote></div><div class="sample-card"><div class="meta">手続き重視 / conf 0.8</div><p>緊急事態条項の有権者周知と正しい説明がなされるか疑問視し、任期延長に固執する改憲派を批判。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sisitouski/status/2070782090392785292"></a></blockquote></div></div></article><article class="issue-block" id="issue-3"><div class="issue-head"><span class="axis-kicker">論点 4</span><h3>国民投票・広告<span class="issue-count">96件</span></h3></div><p class="issue-desc">CM・ネット広告・資金力の差を含む国民投票の公平性。</p><div class="temp-bar-wrap"><div class="temp-bar-label"><span>X投稿のスタンス構成</span><span>投票の公平性を懸念 60 / 手続き情報を共有 13 / 広告規制を重視 20 / 国民投票を支持 3</span></div><div class="temp-bar"><div class="temp-seg con" style="width:62.50%">62%</div><div class="temp-seg neutral" style="width:13.54%">14%</div><div class="temp-seg process" style="width:20.83%">21%</div><div class="temp-seg pro" style="width:3.12%"></div></div><div class="temp-bar-legend"><span><i class="con"></i>広告量や資金力、最低投票率の不備から現行制度を批判（60件）</span><span><i class="neutral"></i>国民投票の仕組み、採決結果、制度上の論点を共有（13件）</span><span><i class="process"></i>CM・ネット広告規制と公平な判断環境の整備を重視（20件）</span><span><i class="pro"></i>現行手続きに沿って国民投票で判断することを支持（3件）</span></div></div><div class="sample-grid"><div class="sample-card"><div class="meta">手続き重視 / conf 0.9</div><p>憲法改正手続法の審議において、最低投票率・広告規制・運動資金上限の欠如といった手続き上の問題点が報道されていないことを指摘し、有権者への情報提供を求めている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/1984OrWeIIian/status/2067262432154935675"></a></blockquote></div><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.95</div><p>国民投票法改正に反対し、最低投票率なしで賛成者が多ければ改憲成立となる仕組みを批判。衆院選での八百長を連想させ、国民投票での憲法改悪と緊急事態条項新設を絶対阻止すべきと訴えている。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/buron2011/status/2067763266311618753"></a></blockquote></div></div></article><article class="issue-block" id="issue-4"><div class="issue-head"><span class="axis-kicker">論点 5</span><h3>政党・発議手続き<span class="issue-count">24件</span></h3></div><p class="issue-desc">政党の姿勢、国会での合意形成、発議までの進め方。</p><div class="temp-bar-wrap"><div class="temp-bar-label"><span>X投稿のスタンス構成</span><span>拙速な発議に反対 11 / 政党動向を共有 8 / 発議を支持 5</span></div><div class="temp-bar"><div class="temp-seg con" style="width:45.83%">46%</div><div class="temp-seg neutral" style="width:33.33%">33%</div><div class="temp-seg pro" style="width:20.83%">21%</div></div><div class="temp-bar-legend"><span><i class="con"></i>政党の姿勢や国会審議を批判し、拙速な発議に反対（11件）</span><span><i class="neutral"></i>各党の賛否、議席状況、国会審議の動向を共有（8件）</span><span><i class="pro"></i>改憲案を発議し、国民投票へ進めることを支持（5件）</span></div></div><div class="sample-grid"><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.9</div><p>改憲発議を阻止すべきと強く主張。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pDyvhzFJAIAJe90/status/2070601132339335175"></a></blockquote></div><div class="sample-card"><div class="meta">改憲・推進寄り / conf 0.9</div><p>参院での改憲賛成票確保の重要性を論じ、国民民主や公明、参政党の賛成を望み、改憲実現に向けた政党力学を分析している。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/axela_cbr600rr/status/2070707373967319058"></a></blockquote></div></div></article><article class="issue-block" id="issue-5"><div class="issue-head"><span class="axis-kicker">論点 6</span><h3>情報・議論の質<span class="issue-count">28件</span></h3></div><p class="issue-desc">事実確認、過激な断定、論点を理解できる情報環境。</p><div class="temp-bar-wrap"><div class="temp-bar-label"><span>X投稿のスタンス構成</span><span>情報環境を警戒 2 / 事実確認・論点整理 26</span></div><div class="temp-bar"><div class="temp-seg con" style="width:7.14%">7%</div><div class="temp-seg neutral" style="width:92.86%">93%</div></div><div class="temp-bar-legend"><span><i class="con"></i>一方的な主張や現政権下の議論環境に懸念（2件）</span><span><i class="neutral"></i>数値、発言、一次資料を確認し、論点を整理（26件）</span></div></div><div class="sample-grid"><div class="sample-card"><div class="meta">中立・情報 / conf 0.9</div><p>憲法改正の賛否とは別に、数値で嘘をつく行為は信用できず議論の妨げになると主張している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/higher88672/status/2068191466690941164"></a></blockquote></div><div class="sample-card"><div class="meta">護憲・慎重寄り / conf 0.8</div><p>現政権下の改憲に反対しつつ、賛成意見を封殺すべきでないと言論の自由と対話の重要性を訴えている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ema_credo/status/2068173526709018800"></a></blockquote></div></div></article></section>
 <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">日本国憲法は1947年の施行以来、一度も改正されたことがありません。近年の改憲論議では、9条への自衛隊明記、大規模災害時などに政府の権限を強化する緊急事態条項の創設、教育無償化、参議院の合区解消などが主な項目として挙げられています。改正には衆参両院で3分の2以上の賛成による発議と、国民投票での過半数の賛成が必要です。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「自衛隊の憲法上の位置づけを明確にすべき」「現行憲法は時代に合わなくなっている」という主張があり、反対する立場からは「9条改正は戦争への道を開く」「緊急事態条項は権力の濫用につながる」「改憲よりも優先すべき課題がある」といった主張があります。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">また、賛否そのものだけでなく、国民投票時のCM規制やネット広告のあり方など、手続き面の公平性をめぐる議論も続いており、世代や支持政党によって意見の分布が大きく異なるテーマです。</p></section>
     <section class="panel conflict-panel"><div class="panel-title"><h2>争点カード</h2><span>何を評価し、何を問題視しているか</span></div><div class="axis-grid"><article class="axis-card" data-tone="positive"><div class="axis-kicker">改憲推進</div><h3>憲法を現実に合わせる</h3><div class="axis-count">101<span>件</span></div><p>自衛隊明記、防衛、緊急事態対応などを理由に、憲法改正を進めるべきと見る立場。</p><div class="axis-tags"><a href="#sample-改憲賛成-推進" style="text-decoration:none;color:inherit;"><span>改憲賛成・推進</span></a><a href="#sample-9条-自衛隊明記に賛成" style="text-decoration:none;color:inherit;"><span>9条・自衛隊明記に賛成</span></a><a href="#sample-緊急事態条項に賛成" style="text-decoration:none;color:inherit;"><span>緊急事態条項に賛成</span></a></div></article><article class="axis-card" data-tone="negative"><div class="axis-kicker">改憲慎重・反対</div><h3>平和主義と権力制限を守る</h3><div class="axis-count">168<span>件</span></div><p>9条改正や緊急事態条項は平和主義の後退や権限集中につながると見る立場。</p><div class="axis-tags"><a href="#sample-改憲反対-護憲" style="text-decoration:none;color:inherit;"><span>改憲反対・護憲</span></a><a href="#sample-9条-自衛隊明記に反対" style="text-decoration:none;color:inherit;"><span>9条・自衛隊明記に反対</span></a><a href="#sample-緊急事態条項に反対" style="text-decoration:none;color:inherit;"><span>緊急事態条項に反対</span></a></div></article><article class="axis-card" data-tone="derived"><div class="axis-kicker">手続き重視</div><h3>国民投票の公平性を問う</h3><div class="axis-count">76<span>件</span></div><p>改憲の中身以前に、広告規制、資金、SNS、国民投票法の整備を重視する立場。</p><div class="axis-tags"><a href="#sample-国民投票法-広告規制を重視" style="text-decoration:none;color:inherit;"><span>国民投票法・広告規制を重視</span></a><a href="#sample-手続き-発議可能性への関心" style="text-decoration:none;color:inherit;"><span>手続き・発議可能性への関心</span></a></div></article><article class="axis-card" data-tone="warning"><div class="axis-kicker">ノイズ・注意領域</div><h3>未確認・過激化した反応</h3><div class="axis-count">63<span>件</span></div><p>政党批判、強い断定、文脈不足など、記事化前に確認が必要な反応。</p><div class="axis-tags"><a href="#sample-政党-議員批判" style="text-decoration:none;color:inherit;"><span>政党・議員批判</span></a><a href="#sample-未確認-過激表現" style="text-decoration:none;color:inherit;"><span>未確認・過激表現</span></a><a href="#sample-その他-分類保留" style="text-decoration:none;color:inherit;"><span>その他・分類保留</span></a></div></article></div></section>
     <section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
