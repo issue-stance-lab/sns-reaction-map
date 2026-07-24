@@ -64,15 +64,29 @@
     #smStartTour:hover { background:var(--accent,#2563eb); color:#fff; }
 
     /* ===== 2026-07-24 論点アリーナ版 ===== */
-    .explainer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-    .explainer-card{border:1px solid var(--line);border-top:5px solid var(--issue-color);border-radius:12px;background:#fff;padding:18px;box-shadow:var(--shadow)}
-    .explainer-card .explainer-icon{font-size:28px;margin-bottom:8px}.explainer-card h3{margin:4px 0 8px;font-size:18px}.explainer-card p{font-size:13px;color:var(--muted);line-height:1.7}.explainer-card a{font-size:12px;font-weight:900;color:var(--issue-color)}
+    #explainer-section .explainer-lead{max-width:920px;margin:0 0 20px;font-size:14px;line-height:1.85;color:var(--ink)}
+    #explainer-section .explainer-grid{display:flex;flex-direction:column;gap:18px;max-width:920px;margin:0 auto 18px}
+    #explainer-section .explainer-card{padding:0;border:1.5px solid #e4eaf3;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+    #explainer-section .explainer-card:hover,#explainer-section .explainer-card:focus-visible{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#9fb4d4;outline:none}
+    #explainer-section .explainer-card img{display:block;width:100%;height:auto;aspect-ratio:21/9;object-fit:cover;background:var(--accent-soft)}
+    #explainer-section .explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;border-bottom:1.5px solid #e4eaf3;pointer-events:none;user-select:none}
+    #explainer-section .explainer-num{flex-shrink:0;background:#134e4a;color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
+    #explainer-section .explainer-card-title{font-size:15px;font-weight:900;color:#173b3a;margin:0 0 4px;line-height:1.45;letter-spacing:-.02em}
+    #explainer-section .explainer-card-desc{font-size:12px;color:#637089;margin:0 0 7px;line-height:1.65}
+    #explainer-section .explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
+    #explainer-section .explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
+    #explainer-section .explainer-side.pro{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
+    #explainer-section .explainer-side.con{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+    .explainer-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.88)}
+    .explainer-modal.open{display:flex}.explainer-modal img{max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain}.explainer-modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:40px;height:40px;color:#fff;font-size:22px;cursor:pointer;line-height:40px;text-align:center}
+    .explainer-note{font-size:12px;color:var(--muted);margin:4px 0 0}
     .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:15px;margin:0 0 12px}.vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px}
     #vote-issue-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vote-issue-btn{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(15,118,110,.18);border-radius:10px;padding:12px;background:#fff;cursor:pointer;text-align:left;font-family:inherit;box-shadow:0 4px 14px rgba(16,24,40,.06)}.vote-issue-btn:hover{border-color:var(--accent);transform:translateY(-2px)}.vote-issue-icon{font-size:20px}.vote-issue-title{font-size:13px;font-weight:900}
     #vote-stance-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.vote-stance-btn{border:1px solid var(--line);border-top:5px solid var(--stance-color);border-radius:12px;padding:16px 14px;background:#fff;cursor:pointer;text-align:left;font-family:inherit;box-shadow:0 6px 18px rgba(16,24,40,.09)}.vote-stance-btn:hover{transform:translateY(-3px)}.vote-stance-btn strong{display:block;color:var(--stance-color);font-size:15px}.vote-stance-btn span{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.6}
     .polar-arena-section{position:relative;background:#0f172a url('images/arena-bg.webp') center/cover no-repeat;padding:42px min(6vw,72px);color:#fff}.polar-arena-section .panel-title h2{color:#fff}.polar-arena-section .panel-title span{color:rgba(255,255,255,.78)!important;background:rgba(15,23,42,.56)!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:999px;padding:6px 10px}.arena-caption{max-width:820px;margin:0 auto 16px;color:rgba(255,255,255,.78);font-size:13px;line-height:1.8}.arena-wrap{position:relative;max-width:760px;margin:0 auto}.arena-wrap canvas{display:block;width:100%;height:auto}.arena-legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.78);margin-top:12px}.arena-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}.arena-tooltip{position:fixed;z-index:10000;max-width:280px;padding:10px 12px;border-radius:8px;background:#fff;color:#182230;font-size:12px;line-height:1.55;box-shadow:0 16px 40px rgba(0,0,0,.3);pointer-events:none;opacity:0}.arena-tooltip strong{display:block;margin-bottom:3px}
     .issue-block{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow);padding:22px;margin:0 0 22px}.issue-head h3{margin:4px 0 8px;font-size:clamp(19px,2.4vw,26px)}.issue-count{display:inline-block;margin-left:8px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 12px;font-size:14px;vertical-align:middle}.issue-desc{font-size:14px;line-height:1.8}.issue-sides{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.side{border-radius:10px;padding:13px;font-size:13px;line-height:1.7}.side strong{display:block;margin-bottom:4px}.side.support{background:#ecfdf5;border-left:4px solid #059669}.side.oppose{background:#fef2f2;border-left:4px solid #dc2626}.issue-x-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.issue-x-sample{min-width:0;border-top:1px solid var(--line);padding-top:12px}.issue-x-sample>p{font-size:13px;color:var(--muted)}
-    @media(max-width:760px){.explainer-grid,#vote-issue-btns,#vote-stance-btns,.issue-sides,.issue-x-grid{grid-template-columns:1fr}.polar-arena-section{padding-left:12px;padding-right:12px}.arena-caption{padding:0 8px}}
+    .temp-bar-wrap{margin:14px 0 16px}.temp-bar-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px;display:flex;justify-content:space-between;gap:12px}.temp-bar-label span:last-child{text-align:right}.temp-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;background:#e7e7f7;position:relative}.temp-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;min-width:2px}.temp-seg.oppose{background:#dc2626}.temp-seg.conditional{background:#d97706}.temp-seg.neutral{background:#94a3b8}.temp-seg.support{background:#059669}.temp-bar-legend{display:flex;gap:8px 14px;margin-top:7px;font-size:11px;color:var(--muted);font-weight:800;flex-wrap:wrap}.temp-bar-legend span{line-height:1.55}.temp-bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
+    @media(max-width:760px){#explainer-section .explainer-card-label{padding:12px;gap:8px}#explainer-section .explainer-card-title{font-size:14px}#explainer-section .explainer-num{white-space:nowrap}#vote-issue-btns,#vote-stance-btns,.issue-sides,.issue-x-grid{grid-template-columns:1fr}.temp-bar-label{display:block}.temp-bar-label span{display:block;text-align:left!important}.temp-bar-label span+span{margin-top:3px}.polar-arena-section{padding-left:12px;padding-right:12px}.arena-caption{padding:0 8px}}
 
   </style>
   <link rel="stylesheet" href="topic-modern.css?v=2">
@@ -94,53 +108,121 @@
 
 
 
+
+
+
+
 <section class="panel" id="explainer-section">
   <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>全体像をつかんでから選ぶ</span></div>
-  <p style="font-size:14px;color:var(--muted);margin:0 0 18px;">「賛成か反対か」だけでは見えない、呼称文化・現場体験・実効性・本人意思・心理的安全などの違いを整理しました。</p>
+  <p class="explainer-lead">「賛成か反対か」だけでは見えない、呼称文化・現場体験・実効性・本人意思・心理的安全などの違いを、Hermesが分類した投稿数とともに整理しました。</p>
   <div class="explainer-grid">
-  <article class="explainer-card" style="--issue-color:#0f766e">
-    <div class="explainer-icon">🛡️</div>
-    <div class="axis-kicker">論点1 · 17件</div>
-    <h3>いじめ・心理的安全</h3>
-    <p>嫌なあだ名やからかいを予防し、傷つく子を出さないために学校が介入すべきか。</p>
-    <a href="#issue-safety">この論点の声を見る</a>
+  <article class="explainer-card" data-img="images/school-nickname-ban-infographic-wide-safety.webp" data-alt="あだ名禁止の論点1、いじめ・心理的安全を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点1の図解を拡大表示">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点1</span>
+      <div>
+        <p class="explainer-card-title">🛡️ いじめ・心理的安全 — 「呼び方のルールで、傷つく子を守れるか」</p>
+        <p class="explainer-card-desc">最多17件。禁止支持6件、中立・体験10件、反対1件。被害予防と、対話・教育をどう組み合わせるかが焦点です。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">支持：傷つく呼び方を予防</span>
+          <span class="explainer-side con">慎重：対話・教育も必要</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/school-nickname-ban-infographic-wide-safety.webp" alt="あだ名禁止の論点1、いじめ・心理的安全を解説するインフォグラフィック" loading="lazy" width="1915" height="821">
   </article>
-  <article class="explainer-card" style="--issue-color:#2563eb">
-    <div class="explainer-icon">🎯</div>
-    <div class="axis-kicker">論点2 · 16件</div>
-    <h3>一律禁止の実効性</h3>
-    <p>呼び方を一律に禁止することで、いじめの原因や関係性まで変えられるのか。</p>
-    <a href="#issue-effect">この論点の声を見る</a>
+  <article class="explainer-card" data-img="images/school-nickname-ban-infographic-wide-effectiveness.webp" data-alt="あだ名禁止の論点2、一律禁止の実効性を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点2の図解を拡大表示">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点2</span>
+      <div>
+        <p class="explainer-card-title">🎯 一律禁止の実効性 — 「禁止すれば、いじめは減るのか」</p>
+        <p class="explainer-card-desc">16件のうち一律禁止への反対が13件。入口を減らす予防効果と、問題が別の形で残る懸念を比べます。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">予防：からかいの入口を減らす</span>
+          <span class="explainer-side con">批判：いじめの本質は残る</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/school-nickname-ban-infographic-wide-effectiveness.webp" alt="あだ名禁止の論点2、一律禁止の実効性を解説するインフォグラフィック" loading="lazy" width="1915" height="821">
   </article>
-  <article class="explainer-card" style="--issue-color:#64748b">
-    <div class="explainer-icon">🤝</div>
-    <div class="axis-kicker">論点3 · 13件</div>
-    <h3>親しさ・呼称文化</h3>
-    <p>あだ名を親しさや個性の表現と見るか、傷つける可能性のある呼び方と見るか。</p>
-    <a href="#issue-culture">この論点の声を見る</a>
+  <article class="explainer-card" data-img="images/school-nickname-ban-infographic-wide-culture.webp" data-alt="あだ名禁止の論点3、親しさと呼称文化を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点3の図解を拡大表示">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点3</span>
+      <div>
+        <p class="explainer-card-title">🤝 親しさ・呼称文化 — 「あだ名は親しさか、それとも負担か」</p>
+        <p class="explainer-card-desc">13件のうち一律禁止への反対が10件。愛称が生む親しさと、受け手が感じる痛みの両方を扱います。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">文化：親しさ・個性を尊重</span>
+          <span class="explainer-side con">受け手：嫌なら止める</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/school-nickname-ban-infographic-wide-culture.webp" alt="あだ名禁止の論点3、親しさと呼称文化を解説するインフォグラフィック" loading="lazy" width="1915" height="821">
   </article>
-  <article class="explainer-card" style="--issue-color:#dc2626">
-    <div class="explainer-icon">🏫</div>
-    <div class="axis-kicker">論点4 · 8件</div>
-    <h3>学校運用・現場体験</h3>
-    <p>学校ごとの運用差や、自分・子どもが実際に経験した呼ばれ方から考える論点。</p>
-    <a href="#issue-experience">この論点の声を見る</a>
+  <article class="explainer-card" data-img="images/school-nickname-ban-infographic-wide-field.webp" data-alt="あだ名禁止の論点4、学校運用と現場体験を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点4の図解を拡大表示">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点4</span>
+      <div>
+        <p class="explainer-card-title">🏫 学校運用・現場体験 — 「現場では、ルールがどう受け止められるか」</p>
+        <p class="explainer-card-desc">8件のうち6件が中立的な体験共有。学校・世代による差と、運用目的を説明できるかを見ます。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">実態：学校・世代で違う</span>
+          <span class="explainer-side con">運用：目的の説明が必要</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/school-nickname-ban-infographic-wide-field.webp" alt="あだ名禁止の論点4、学校運用と現場体験を解説するインフォグラフィック" loading="lazy" width="1915" height="821">
   </article>
-  <article class="explainer-card" style="--issue-color:#d97706">
-    <div class="explainer-icon">⚖️</div>
-    <div class="axis-kicker">論点5 · 5件</div>
-    <h3>さん付け・ジェンダー配慮</h3>
-    <p>「くん・ちゃん」の性差をなくし、名字＋さんへ統一する指導をどう見るか。</p>
-    <a href="#issue-gender">この論点の声を見る</a>
+  <article class="explainer-card" data-img="images/school-nickname-ban-infographic-wide-gender.webp" data-alt="あだ名禁止の論点5、さん付けとジェンダー配慮を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点5の図解を拡大表示">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点5</span>
+      <div>
+        <p class="explainer-card-title">⚖️ さん付け・ジェンダー配慮 — 「「名字＋さん」統一は、対等さにつながるか」</p>
+        <p class="explainer-card-desc">5件のうち一律禁止への反対が4件。性別で呼称を分けない配慮と、形式だけの統一への疑問を整理します。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">配慮：性別で呼称を分けない</span>
+          <span class="explainer-side con">懸念：形式だけでは変わらない</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/school-nickname-ban-infographic-wide-gender.webp" alt="あだ名禁止の論点5、さん付けとジェンダー配慮を解説するインフォグラフィック" loading="lazy" width="1915" height="821">
   </article>
-  <article class="explainer-card" style="--issue-color:#7c3aed">
-    <div class="explainer-icon">🗣️</div>
-    <div class="axis-kicker">論点6 · 4件</div>
-    <h3>本人意思と柔軟運用</h3>
-    <p>禁止か自由かではなく、呼ばれる本人の意思をルールの中心に置けるか。</p>
-    <a href="#issue-choice">この論点の声を見る</a>
+  <article class="explainer-card" data-img="images/school-nickname-ban-infographic-wide-choice.webp" data-alt="あだ名禁止の論点6、本人意思と柔軟運用を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点6の図解を拡大表示">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点6</span>
+      <div>
+        <p class="explainer-card-title">🗣️ 本人意思と柔軟運用 — 「呼ばれる本人の意思を、中心に置けるか」</p>
+        <p class="explainer-card-desc">4件すべてが条件付き・個別対応。望む愛称は認めつつ、嫌と言いにくい子をどう守るかが焦点です。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">本人同意：望む愛称は認める</span>
+          <span class="explainer-side con">支援：嫌と言いにくい子を守る</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/school-nickname-ban-infographic-wide-choice.webp" alt="あだ名禁止の論点6、本人意思と柔軟運用を解説するインフォグラフィック" loading="lazy" width="1915" height="821">
   </article></div>
+  <p class="explainer-note">各画像をクリックすると拡大表示します。件数は関連する意見投稿63件を主論点ごとに集計したものです。</p>
 </section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true" aria-label="論点インフォグラフィック拡大表示">
+  <button class="explainer-modal-close" id="explainer-modal-close" type="button" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>
+(function(){
+  var modal=document.getElementById('explainer-modal');
+  var modalImage=document.getElementById('explainer-modal-img');
+  var closeButton=document.getElementById('explainer-modal-close');
+  var lastTrigger=null;
+  function openModal(card){lastTrigger=card;modalImage.src=card.dataset.img;modalImage.alt=card.dataset.alt;modal.classList.add('open');document.body.style.overflow='hidden';closeButton.focus();}
+  function closeModal(){modal.classList.remove('open');modalImage.src='';document.body.style.overflow='';if(lastTrigger)lastTrigger.focus();}
+  document.querySelectorAll('#explainer-section .explainer-card').forEach(function(card){
+    card.addEventListener('click',function(){openModal(card);});
+    card.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal(card);}});
+  });
+  closeButton.addEventListener('click',closeModal);
+  modal.addEventListener('click',function(event){if(event.target===modal)closeModal();});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&modal.classList.contains('open'))closeModal();});
+})();
+</script>
 
 <section class="panel" id="vote-section">
   <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
@@ -202,16 +284,23 @@
       <h3>🛡️ いじめ・心理的安全<span class="issue-count">17件</span></h3>
     </div>
     <p class="issue-desc">嫌なあだ名やからかいを予防し、傷つく子を出さないために学校が介入すべきか。</p>
+    <div class="temp-bar-wrap">
+      <div class="temp-bar-label"><span>傷つく呼び方への学校介入をどう見るか</span><span>個別対応を重視 1 / 被害・実態を共有 10 / 予防ルールを重視 6</span></div>
+      <div class="temp-bar" role="img" aria-label="傷つく呼び方への学校介入をどう見るか。個別対応を重視 1 / 被害・実態を共有 10 / 予防ルールを重視 6"><div class="temp-seg oppose" style="width:5.88%" aria-label="一律規制より対話・個別対応を重視 1件"></div><div class="temp-seg neutral" style="width:58.82%" aria-label="傷ついた経験や学校現場の実態を共有 10件">59%</div><div class="temp-seg support" style="width:35.29%" aria-label="予防ルールで心理的安全を優先 6件">35%</div></div>
+      <div class="temp-bar-legend"><span><i style="background:#dc2626"></i>一律規制より対話・個別対応を重視（1件）</span><span><i style="background:#94a3b8"></i>傷ついた経験や学校現場の実態を共有（10件）</span><span><i style="background:#059669"></i>予防ルールで心理的安全を優先（6件）</span></div>
+    </div>
     <div class="issue-sides">
-      <div class="side support"><strong>ルールを支持する視点</strong>悪意の有無にかかわらず傷つく呼び方を予防し、安心を優先する。</div>
-      <div class="side oppose"><strong>一律禁止に慎重な視点</strong>禁止だけでなく、相手の気持ちを聞く教育や個別対応も必要。</div>
+      <div class="side support"><strong>予防ルールで安全を優先</strong>悪意の有無にかかわらず傷つく呼び方を予防し、安心を優先する。</div>
+      <div class="side oppose"><strong>対話・個別対応も組み合わせる</strong>禁止だけでなく、相手の気持ちを聞く教育や個別対応も必要。</div>
     </div>
     <div class="issue-x-grid">
       <div class="issue-x-sample">
+        <div class="meta">予防ルールを重視 / conf 0.90</div>
         <p>あだ名はいじめ温床なのでさん付け統一でフラットにすべき</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ibrahim_kh21712/status/2064315852036456507"></a></blockquote>
       </div>
       <div class="issue-x-sample">
+        <div class="meta">被害・実態を共有 / conf 0.95</div>
         <p>担任がつけたあだ名がいじめの原因になったため教師を批判</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/waiwaiwaiyyy1/status/2068529955403940061"></a></blockquote>
       </div></div>
@@ -222,16 +311,23 @@
       <h3>🎯 一律禁止の実効性<span class="issue-count">16件</span></h3>
     </div>
     <p class="issue-desc">呼び方を一律に禁止することで、いじめの原因や関係性まで変えられるのか。</p>
+    <div class="temp-bar-wrap">
+      <div class="temp-bar-label"><span>呼び方の禁止はいじめ予防に効くか</span><span>本質は変わらない 13 / 運用次第で効果 2 / 運用実態を共有 1</span></div>
+      <div class="temp-bar" role="img" aria-label="呼び方の禁止はいじめ予防に効くか。本質は変わらない 13 / 運用次第で効果 2 / 運用実態を共有 1"><div class="temp-seg oppose" style="width:81.25%" aria-label="禁止だけではいじめの本質は変わらない 13件">81%</div><div class="temp-seg conditional" style="width:12.50%" aria-label="対象や運用を絞れば予防効果がある 2件">13%</div><div class="temp-seg neutral" style="width:6.25%" aria-label="学校での禁止ルールや運用実態を共有 1件"></div></div>
+      <div class="temp-bar-legend"><span><i style="background:#dc2626"></i>禁止だけではいじめの本質は変わらない（13件）</span><span><i style="background:#d97706"></i>対象や運用を絞れば予防効果がある（2件）</span><span><i style="background:#94a3b8"></i>学校での禁止ルールや運用実態を共有（1件）</span></div>
+    </div>
     <div class="issue-sides">
-      <div class="side support"><strong>ルールを支持する視点</strong>からかいの入口を減らす予防策として、一定の効果が期待できる。</div>
-      <div class="side oppose"><strong>一律禁止に慎重な視点</strong>呼称だけを変えても、いじめの本質や別の攻撃手段は残る。</div>
+      <div class="side support"><strong>からかいの入口を減らす</strong>からかいの入口を減らす予防策として、一定の効果が期待できる。</div>
+      <div class="side oppose"><strong>本質的な関係改善を優先</strong>呼称だけを変えても、いじめの本質や別の攻撃手段は残る。</div>
     </div>
     <div class="issue-x-grid">
       <div class="issue-x-sample">
+        <div class="meta">運用次第で効果 / conf 0.90</div>
         <p>禁止ではなく理由を伝えて考えさせるのが教育だと主張</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bonobonomama/status/2067968884297375754"></a></blockquote>
       </div>
       <div class="issue-x-sample">
+        <div class="meta">本質は変わらない / conf 0.95</div>
         <p>隣クラスのあだ名禁止を見て自分のクラスでなくてよかったと実感</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yud8948/status/2068247949096943911"></a></blockquote>
       </div></div>
@@ -242,16 +338,23 @@
       <h3>🤝 親しさ・呼称文化<span class="issue-count">13件</span></h3>
     </div>
     <p class="issue-desc">あだ名を親しさや個性の表現と見るか、傷つける可能性のある呼び方と見るか。</p>
+    <div class="temp-bar-wrap">
+      <div class="temp-bar-label"><span>あだ名を親しさと負担のどちらから見るか</span><span>親しさを守る 10 / 望む愛称だけ 1 / 呼称文化を共有 1 / 傷つく呼称を止める 1</span></div>
+      <div class="temp-bar" role="img" aria-label="あだ名を親しさと負担のどちらから見るか。親しさを守る 10 / 望む愛称だけ 1 / 呼称文化を共有 1 / 傷つく呼称を止める 1"><div class="temp-seg oppose" style="width:76.92%" aria-label="愛称や親しさを一律ルールで奪わない 10件">77%</div><div class="temp-seg conditional" style="width:7.69%" aria-label="本人が望む愛称だけ柔軟に認める 1件"></div><div class="temp-seg neutral" style="width:7.69%" aria-label="学校や世代による呼称文化の違いを共有 1件"></div><div class="temp-seg support" style="width:7.69%" aria-label="傷つく可能性のある呼び方を学校が止める 1件"></div></div>
+      <div class="temp-bar-legend"><span><i style="background:#dc2626"></i>愛称や親しさを一律ルールで奪わない（10件）</span><span><i style="background:#d97706"></i>本人が望む愛称だけ柔軟に認める（1件）</span><span><i style="background:#94a3b8"></i>学校や世代による呼称文化の違いを共有（1件）</span><span><i style="background:#059669"></i>傷つく可能性のある呼び方を学校が止める（1件）</span></div>
+    </div>
     <div class="issue-sides">
-      <div class="side support"><strong>ルールを支持する視点</strong>本人が安心できる呼び方を優先し、学校が一定の線を引くべき。</div>
-      <div class="side oppose"><strong>一律禁止に慎重な視点</strong>親しい愛称まで一律に禁じると、自然な関係づくりを損なう。</div>
+      <div class="side support"><strong>受け手の安心を優先</strong>本人が安心できる呼び方を優先し、学校が一定の線を引くべき。</div>
+      <div class="side oppose"><strong>親しさと個性を尊重</strong>親しい愛称まで一律に禁じると、自然な関係づくりを損なう。</div>
     </div>
     <div class="issue-x-grid">
       <div class="issue-x-sample">
+        <div class="meta">傷つく呼称を止める / conf 0.80</div>
         <p>親しみを込めたあだ名と貶めるあだ名を区別しあだ名禁止を支持</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pumousuallife/status/2067967272703180860"></a></blockquote>
       </div>
       <div class="issue-x-sample">
+        <div class="meta">親しさを守る / conf 0.95</div>
         <p>子どもはあだ名の善悪を区別でき親しみある呼称を否定すべきでない</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kinakina35/status/2068167994224824357"></a></blockquote>
       </div></div>
@@ -262,16 +365,23 @@
       <h3>🏫 学校運用・現場体験<span class="issue-count">8件</span></h3>
     </div>
     <p class="issue-desc">学校ごとの運用差や、自分・子どもが実際に経験した呼ばれ方から考える論点。</p>
+    <div class="temp-bar-wrap">
+      <div class="temp-bar-label"><span>学校の呼称ルールを現場体験からどう評価するか</span><span>統一運用は窮屈 1 / 現場体験を共有 6 / 安心につながった 1</span></div>
+      <div class="temp-bar" role="img" aria-label="学校の呼称ルールを現場体験からどう評価するか。統一運用は窮屈 1 / 現場体験を共有 6 / 安心につながった 1"><div class="temp-seg oppose" style="width:12.50%" aria-label="さん付けなどの統一運用に窮屈さを感じる 1件">13%</div><div class="temp-seg neutral" style="width:75.00%" aria-label="学校・家庭・世代ごとの体験や実態を共有 6件">75%</div><div class="temp-seg support" style="width:12.50%" aria-label="共通ルールで安心して過ごせた経験を共有 1件">13%</div></div>
+      <div class="temp-bar-legend"><span><i style="background:#dc2626"></i>さん付けなどの統一運用に窮屈さを感じる（1件）</span><span><i style="background:#94a3b8"></i>学校・家庭・世代ごとの体験や実態を共有（6件）</span><span><i style="background:#059669"></i>共通ルールで安心して過ごせた経験を共有（1件）</span></div>
+    </div>
     <div class="issue-sides">
-      <div class="side support"><strong>ルールを支持する視点</strong>嫌なあだ名がなくなり、安心して過ごせたという経験がある。</div>
-      <div class="side oppose"><strong>一律禁止に慎重な視点</strong>さん付けの強制に距離や窮屈さを感じたという経験がある。</div>
+      <div class="side support"><strong>安心につながった体験</strong>嫌なあだ名がなくなり、安心して過ごせたという経験がある。</div>
+      <div class="side oppose"><strong>窮屈さを感じた体験</strong>さん付けの強制に距離や窮屈さを感じたという経験がある。</div>
     </div>
     <div class="issue-x-grid">
       <div class="issue-x-sample">
+        <div class="meta">現場体験を共有 / conf 0.90</div>
         <p>自宅では呼び捨ても学校ではさん付けを徹底している実態</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tategami_lab/status/2075873203034136829"></a></blockquote>
       </div>
       <div class="issue-x-sample">
+        <div class="meta">安心につながった / conf 0.80</div>
         <p>学校はあだ名禁止と同様に物の貸し借りも規則化すべき</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/launchonmattttt/status/2075236003112276054"></a></blockquote>
       </div></div>
@@ -282,16 +392,23 @@
       <h3>⚖️ さん付け・ジェンダー配慮<span class="issue-count">5件</span></h3>
     </div>
     <p class="issue-desc">「くん・ちゃん」の性差をなくし、名字＋さんへ統一する指導をどう見るか。</p>
+    <div class="temp-bar-wrap">
+      <div class="temp-bar-label"><span>「名字＋さん」統一は対等さにつながるか</span><span>形式的な統一に疑問 4 / 呼称実態を共有 1</span></div>
+      <div class="temp-bar" role="img" aria-label="「名字＋さん」統一は対等さにつながるか。形式的な統一に疑問 4 / 呼称実態を共有 1"><div class="temp-seg oppose" style="width:80.00%" aria-label="さん付けの形式的な統一では対等さは生まれない 4件">80%</div><div class="temp-seg neutral" style="width:20.00%" aria-label="学校での「くん・ちゃん・さん」の実態を共有 1件">20%</div></div>
+      <div class="temp-bar-legend"><span><i style="background:#dc2626"></i>さん付けの形式的な統一では対等さは生まれない（4件）</span><span><i style="background:#94a3b8"></i>学校での「くん・ちゃん・さん」の実態を共有（1件）</span></div>
+    </div>
     <div class="issue-sides">
-      <div class="side support"><strong>ルールを支持する視点</strong>性別や上下関係で呼び方を分けず、対等な敬称へ統一する。</div>
-      <div class="side oppose"><strong>一律禁止に慎重な視点</strong>さん付けの強制は形式的で、親しさや本人の希望を置き去りにする。</div>
+      <div class="side support"><strong>性別で呼称を分けない</strong>性別や上下関係で呼び方を分けず、対等な敬称へ統一する。</div>
+      <div class="side oppose"><strong>形式より本人希望を重視</strong>さん付けの強制は形式的で、親しさや本人の希望を置き去りにする。</div>
     </div>
     <div class="issue-x-grid">
       <div class="issue-x-sample">
+        <div class="meta">形式的な統一に疑問 / conf 0.90</div>
         <p>学校でのさん付け統一を面白がりつつあだ名の方が個性が出ると支持</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/brightestbug/status/2068046556918353969"></a></blockquote>
       </div>
       <div class="issue-x-sample">
+        <div class="meta">形式的な統一に疑問 / conf 0.90</div>
         <p>あだ名禁止は良いが全生徒へのさん付けは断固反対</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/seiro10/status/2064292094152413689"></a></blockquote>
       </div></div>
@@ -302,16 +419,23 @@
       <h3>🗣️ 本人意思と柔軟運用<span class="issue-count">4件</span></h3>
     </div>
     <p class="issue-desc">禁止か自由かではなく、呼ばれる本人の意思をルールの中心に置けるか。</p>
+    <div class="temp-bar-wrap">
+      <div class="temp-bar-label"><span>呼び方のルールを誰の意思で決めるか</span><span>本人意思で柔軟に 4</span></div>
+      <div class="temp-bar" role="img" aria-label="呼び方のルールを誰の意思で決めるか。本人意思で柔軟に 4"><div class="temp-seg conditional" style="width:100.00%" aria-label="望む愛称は認め、嫌な呼び方だけを止める 4件">100%</div></div>
+      <div class="temp-bar-legend"><span><i style="background:#d97706"></i>望む愛称は認め、嫌な呼び方だけを止める（4件）</span></div>
+    </div>
     <div class="issue-sides">
-      <div class="side support"><strong>ルールを支持する視点</strong>嫌だと言いにくい子を守るには、共通ルールを出発点にすべき。</div>
-      <div class="side oppose"><strong>一律禁止に慎重な視点</strong>本人が望む愛称は認め、嫌な呼び方だけを止めればよい。</div>
+      <div class="side support"><strong>共通ルールから守る</strong>嫌だと言いにくい子を守るには、共通ルールを出発点にすべき。</div>
+      <div class="side oppose"><strong>本人意思で柔軟に</strong>本人が望む愛称は認め、嫌な呼び方だけを止めればよい。</div>
     </div>
     <div class="issue-x-grid">
       <div class="issue-x-sample">
+        <div class="meta">本人意思で柔軟に / conf 0.90</div>
         <p>悪意あるあだ名は防ぐべきだが学校が一律禁止するのは過剰</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/I16Ufbnz/status/2067962406874366314"></a></blockquote>
       </div>
       <div class="issue-x-sample">
+        <div class="meta">本人意思で柔軟に / conf 0.90</div>
         <p>悪意あるあだ名は個人の問題で全体禁止は不要</p>
         <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/RM_OFFRoadMania/status/2064148087292236034"></a></blockquote>
       </div></div>
