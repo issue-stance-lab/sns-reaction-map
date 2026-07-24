@@ -789,31 +789,27 @@
 </div>
 </section>
     <section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">高齢運転手による死亡事故が報じられるたび、年齢による「運転免許の強制返納（義務化）」を求める声が上がる一方、地方での生活や公共交通機関の未整備から一律規制への強い反対も存在します。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 16px;line-height:1.65;"><span style="font-weight:700;">データの集め方:</span> Yahooリアルタイム検索から「免許返納 義務化」「高齢者 免許返納」など両側のキーワードでSNS投稿を取得し、AIが自動分類しました。</div>
-<p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
-<div id="vote-buttons" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;"></div>
-<p style="font-size:11px;color:var(--muted);margin:0;">※ 世論調査ではありません。投票は集計されサーバーに保存されます。</p>
+<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">高齢運転手による死亡事故が報じられるたび、免許返納の義務化を求める声が上がる一方、地方での生活維持や移動手段確保を重視する反対意見も根強くあります。あなたが最も気になる論点はどれですか？</p>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索で「免許返納 義務化」「高齢者 免許返納」などのキーワードでSNS投稿211件を収集し、AIが自動分類しました。</div>
+<div id="vote-step1">
+  <p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p>
+  <div id="vote-issue-btns"></div>
+</div>
+<div id="vote-step2" style="display:none;margin-top:4px;">
+  <p class="vote-step-label"><span class="step-num">2</span>免許返納義務化への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p>
+  <div id="vote-stance-btns"></div>
+</div>
+<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
   </div>
-  <div id="vote-comparison" class="vote-comparison" aria-label="あなたの選択とSNS分布の比較"></div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
-  <div id="vote-bars" style="margin-bottom:16px;"></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-    <a id="share-x" href="#" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">
-      𝕏 でシェア
-    </a>
-    <button id="vote-redo-btn"
-       style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">
-      投票をやり直す
-    </button>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">𝕏 でシェア</a>
+    <button id="vote-redo-btn" style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">投票をやり直す</button>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin:0;">下にスクロールすると、SNS投稿の自動分類結果（勢力図）を確認できます。<br>あなたの感覚と、SNSの声の分布を見比べてみてください。</p>
 </div>
 </section>
 <script src="manga-viewer.js"></script>
@@ -825,32 +821,81 @@ MangaViewer.init({
   ]
 });
 </script>
-<script src="vote2d.js?v=10"></script>
 <script>
 (function(){
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  Vote2D.init({
-    containerId: 'vote-buttons',
-    resultId: 'vote-result',
-    topic: '高齢者免許返納_SNS反応まっぷ',
-    title: '高齢者免許返納 SNS反応まっぷ',
-    xAxis: { neg: '強制不要・本人・家族の判断で', pos: '法的義務化・強制返納すべき' },
-    yAxis: { neg: '高齢者の移動権・生活の自由を優先', pos: '交通安全・被害者保護を優先' },
-    quadrants: [{"label": "安全大切だが本人判断で", "desc": "交通安全は重要だが、一律の義務化より本人・家族・医師の判断に任せるべき。"}, {"label": "事故防止のため義務化を", "desc": "相次ぐ高齢ドライバーの事故から命を守るため、年齢での法的義務化が必要。"}, {"label": "移動権・生活守るため自主返納", "desc": "高齢者の移動手段・生活を守るために、自主判断と代替交通の整備を優先。"}, {"label": "義務化でも代替手段を整備", "desc": "義務化と同時に公共交通・移動支援を整備すれば生活は守れる。"}],
-    questions: [
-      {text:'高齢ドライバーの免許返納を義務化すべき？',negLabel:'本人・家族判断で',posLabel:'法的に義務化'},
-      {text:'どちらの視点をより大切にしたい？',subtext:'答えたら開票します',negLabel:'免許を失う高齢者の生活・権利',posLabel:'道路を使う全員の安全'}
-    ],
-    commonGround: {
-      title: '意見の向こう側',
-      lead: '立場や方法は違っても、両者に共通する願いがあります。',
-      statement: '事故から命を守りながら、高齢者の暮らしと移動も支えられる社会',
-      question: '反対側の心配も、少し理解できましたか？'
-    },
-    supabaseUrl: supabaseUrl,
-    supabaseAnonKey: supabaseAnonKey
+  'use strict';
+  var STORAGE_KEY='sns_vote_elderly_license_revocation_2step';
+  var VOTE_ISSUES=[
+    {k:'義務化・事故防止',   icon:'🚗',desc:'年齢・事故件数から法的な義務化が必要（139件）'},
+    {k:'地方の足・移動権',   icon:'🚌',desc:'車なしでは生活できない地方の実情を重視（24件）'},
+    {k:'適性検査強化',       icon:'📋',desc:'年齢一律より個人の運転能力で判断すべき（20件）'},
+    {k:'代替交通の整備が先', icon:'🏙️',desc:'公共交通・移動手段の整備が先決（9件）'},
+    {k:'自主返納・支援充実', icon:'🎁',desc:'インセンティブで自発的な返納を促す（7件）'},
+    {k:'その他・わからない', icon:'💬',desc:'上記以外・まだ判断がつかない'},
+  ];
+  var V2I=[0,1,2,3,4,5];
+  var STANCES=[
+    {k:'賛成・義務化支持',    color:'#e04949',bg:'#fff1f2',shadow:'rgba(224,73,73,.22)',  icon:'✓',desc:'交通安全を守るため法的な規制が必要'},
+    {k:'どちらでもない',      color:'#64748b',bg:'#f8fafc',shadow:'rgba(100,116,139,.22)',icon:'?',desc:'条件や状況によって判断が変わる'},
+    {k:'反対・生活・移動重視',color:'#4b9cf4',bg:'#eff6ff',shadow:'rgba(75,156,244,.22)', icon:'!',desc:'高齢者の生活と移動手段を守ることが大切'},
+  ];
+  var selIssue=-1;
+  var step1=document.getElementById('vote-step1');
+  var step2=document.getElementById('vote-step2');
+  var result=document.getElementById('vote-result');
+  var issueBtns=document.getElementById('vote-issue-btns');
+  var stanceBtns=document.getElementById('vote-stance-btns');
+
+  VOTE_ISSUES.forEach(function(iss,i){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-issue-btn';
+    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
+    btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
+    issueBtns.appendChild(btn);
   });
+
+  function showVote(issueIdx,stanceIdx,shouldScroll){
+    var iss=VOTE_ISSUES[issueIdx];var st=STANCES[stanceIdx];
+    selIssue=issueIdx;
+    step1.style.display='none';step2.style.display='none';result.style.display='block';
+    document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
+    document.getElementById('vote-position-text').textContent=iss.desc;
+    if(window.setArenaVoteMarker)window.setArenaVoteMarker(V2I[issueIdx],st.color);
+    var shareText='高齢者の免許返納問題、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
+    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-reaction-map.html');
+    setTimeout(function(){
+      if(window.setArenaVoteMarker)window.setArenaVoteMarker(V2I[issueIdx],st.color);
+      var el=document.getElementById('issue-arena-section');
+      if(shouldScroll!==false&&el)el.scrollIntoView({behavior:'smooth',block:'center'});
+    },300);
+  }
+
+  STANCES.forEach(function(st,stanceIdx){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='vote-stance-btn';
+    btn.style.setProperty('--stance-color',st.color);
+    btn.style.setProperty('--stance-bg',st.bg);
+    btn.style.setProperty('--stance-shadow',st.shadow);
+    btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
+    btn.onclick=function(){
+      showVote(selIssue,stanceIdx);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:selIssue,stanceIdx:stanceIdx}));
+    };
+    stanceBtns.appendChild(btn);
+  });
+
+  document.getElementById('vote-redo-btn').onclick=function(){
+    localStorage.removeItem(STORAGE_KEY);
+    selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
+    if(window.clearArenaVoteMarker)window.clearArenaVoteMarker();
+  };
+  try{
+    var prev=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(prev&&Number.isInteger(prev.issueIdx)&&prev.issueIdx>=0&&prev.issueIdx<VOTE_ISSUES.length&&
+       Number.isInteger(prev.stanceIdx)&&prev.stanceIdx>=0&&prev.stanceIdx<STANCES.length){
+      showVote(prev.issueIdx,prev.stanceIdx,false);
+    }
+  }catch(e){localStorage.removeItem(STORAGE_KEY);}
 })();
 </script>
     <section class="panel" id="stance-map-section">
@@ -1402,6 +1447,21 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 @media(max-width:600px){.issue-block .sample-grid{grid-template-columns:1fr}}
 .issue-block .sample-card-x{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff;box-shadow:var(--shadow)}
 .issue-block .sample-card-x .meta{font-size:11px;color:var(--muted);font-weight:800;margin-bottom:6px}
+.vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:15px;margin:0 0 12px}
+.vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
+#vote-issue-btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-width:900px}
+.vote-issue-btn{display:flex;align-items:center;gap:10px;width:100%;border:1.5px solid rgba(13,148,136,.2);border-radius:10px;padding:12px 14px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 4px 14px rgba(16,24,40,.06);transition:transform .15s,box-shadow .15s,border-color .15s}
+.vote-issue-btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 22px rgba(13,148,136,.18)}
+.vote-issue-icon{font-size:20px;line-height:1;flex-shrink:0}
+.vote-issue-title{font-size:13px;font-weight:900;color:var(--ink);line-height:1.3}
+#vote-stance-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+@media(max-width:700px){#vote-stance-btns{grid-template-columns:1fr}}
+.vote-stance-btn{position:relative;border:1px solid rgba(15,23,42,.08);border-top:5px solid var(--stance-color);border-radius:12px;padding:16px 14px 14px;background:linear-gradient(180deg,#fff,var(--stance-bg));cursor:pointer;font-family:inherit;color:var(--ink);box-shadow:0 6px 18px rgba(16,24,40,.09);text-align:left;transition:transform .15s,box-shadow .15s}
+.vote-stance-btn:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(16,24,40,.14)}
+.vote-stance-btn .vs-icon{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--stance-color);color:#fff;font-size:18px;font-weight:900;margin-bottom:8px}
+.vote-stance-btn .vs-title{display:block;font-size:15px;font-weight:900;line-height:1.35;color:var(--stance-color)}
+.vote-stance-btn .vs-desc{display:block;margin-top:4px;font-size:12px;line-height:1.6;color:var(--muted)}
+.vote-stance-btn::after{content:'選ぶ';display:inline-flex;margin-top:10px;border-radius:999px;padding:4px 10px;background:var(--stance-color);color:#fff;font-size:11px;font-weight:900}
 </style>
 <section class="polar-arena-section" id="issue-arena-section">
 <div id="issue-arena-inner" style="max-width:720px;margin:0 auto">
