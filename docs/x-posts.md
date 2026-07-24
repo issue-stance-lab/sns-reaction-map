@@ -324,8 +324,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | リプライ先 | テーマ | タイプ | views |
 |---|-----------|--------|--------|-------|
 | 1 | @kokkai_sokuho（国民投票法改正案成立・速報） | 憲法改正・手続き論 | URLなし・referendum画像付き | 69K |
+| 2 | @nhk_news（副首都構想関連法・参院本会議で可決成立） | 副首都法案・成立 | URLなし・teigi画像付き | 36K |
 
-備考: 1本URLなし・画像付き。
+備考: 2本URLなし・各画像付き。
 
 ## リプライ実績 2026-07-23
 
