@@ -647,7 +647,7 @@
 <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「高齢者の免許返納」の議論は「義務化すべきか否か」だけではありません。地方の移動手段・適性検査の精度・代替交通のインフラ・自主返納へのインセンティブ——6つの論点を整理してから投票に進んでください。</p>
 <div class="explainer-grid">
-  <article class="explainer-card">
+  <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-gizuka.webp" data-alt="義務化・事故防止">
     <div class="explainer-card-label">
       <span class="explainer-num">論点①</span>
       <div>
@@ -659,8 +659,9 @@
         </div>
       </div>
     </div>
+    <img src="images/elderly-license-revocation-infographic-wide-gizuka.webp" alt="論点① 義務化・事故防止" loading="lazy">
   </article>
-  <article class="explainer-card">
+  <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-chiho.webp" data-alt="地方の足・移動権">
     <div class="explainer-card-label">
       <span class="explainer-num">論点②</span>
       <div>
@@ -672,8 +673,9 @@
         </div>
       </div>
     </div>
+    <img src="images/elderly-license-revocation-infographic-wide-chiho.webp" alt="論点② 地方の足・移動権" loading="lazy">
   </article>
-  <article class="explainer-card">
+  <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-tekisei.webp" data-alt="適性検査強化">
     <div class="explainer-card-label">
       <span class="explainer-num">論点③</span>
       <div>
@@ -685,8 +687,9 @@
         </div>
       </div>
     </div>
+    <img src="images/elderly-license-revocation-infographic-wide-tekisei.webp" alt="論点③ 適性検査強化" loading="lazy">
   </article>
-  <article class="explainer-card">
+  <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-infra.webp" data-alt="代替交通整備">
     <div class="explainer-card-label">
       <span class="explainer-num">論点④</span>
       <div>
@@ -698,8 +701,9 @@
         </div>
       </div>
     </div>
+    <img src="images/elderly-license-revocation-infographic-wide-infra.webp" alt="論点④ 代替交通整備" loading="lazy">
   </article>
-  <article class="explainer-card">
+  <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-jishu.webp" data-alt="自主返納支援">
     <div class="explainer-card-label">
       <span class="explainer-num">論点⑤</span>
       <div>
@@ -711,8 +715,9 @@
         </div>
       </div>
     </div>
+    <img src="images/elderly-license-revocation-infographic-wide-jishu.webp" alt="論点⑤ 自主返納支援" loading="lazy">
   </article>
-  <article class="explainer-card">
+  <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-sonota.webp" data-alt="その他・複合">
     <div class="explainer-card-label">
       <span class="explainer-num">論点⑥</span>
       <div>
@@ -724,10 +729,27 @@
         </div>
       </div>
     </div>
+    <img src="images/elderly-license-revocation-infographic-wide-sonota.webp" alt="論点⑥ その他・複合" loading="lazy">
   </article>
 </div>
 <p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
 </section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>(function(){
+  var modal=document.getElementById('explainer-modal');
+  var mImg=document.getElementById('explainer-modal-img');
+  var mClose=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
+    c.style.cursor='zoom-in';
+    c.addEventListener('click',function(){mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');});
+  });
+  mClose.addEventListener('click',function(){modal.classList.remove('open');});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
+})();</script>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">高齢運転手による死亡事故が報じられるたび、免許返納の義務化を求める声が上がる一方、地方での生活維持や移動手段確保を重視する反対意見も根強くあります。あなたが最も気になる論点はどれですか？</p>
