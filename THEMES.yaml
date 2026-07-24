@@ -78,7 +78,7 @@ themes:
     main_issue: done     # 211件（original_category→ヒューリスティック）。6論点: 義務化・事故防止139/地方の足・移動権24/適性検査強化20/代替交通整備9/自主返納支援7/その他12
     page_v3: done        # 論点アリーナ（極座標6セクター）実装済み 2026-07-24
     manga_data: done
-    manga_img: done      # docs/images/ に漫画8枚+投票5枚
+    manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
     published: done
     refresh_at: 2026-07-19
     notes: "2026-07-12にYahooリアルタイム検索156件を追加収集。重複51件を除外し、新規105件中97件をOpenCode Go / minimax-m2.7で2D有効分類。2026-07-24に論点アリーナ（極座標6セクター）と論点別サマリー5枚を追加。main_issueはoriginal_category（114件）とスタンスヒューリスティック（97件）で算出。義務化・事故防止139件最多（66%）。"
@@ -89,12 +89,12 @@ themes:
     collect: done        # 374件
     classify: done       # 134件有効
     classify2d: done     # 134件、APIエラー0%
-    page_v3: done        # v3化完了（2026-07-05）。旧形式バナー削除済み
+    page_v3: done        # 論点アリーナ（極座標6セクター・2ステップ投票）へ更新 2026-07-24
     manga_data: done     # manga-prompts/school-nickname-ban-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル回遊カード復帰・sitemap掲載済み
     refresh_at: 2026-07-19
-    notes: "2026-07-12にYahooリアルタイム検索200件を追加収集。重複20件を除外し、新規180件中37件をOpenCode Go / minimax-m2.7で2D有効分類。2D重複6件を除外して31件追加。"
+    notes: "2026-07-12にYahooリアルタイム検索200件を追加収集。重複20件を除外し、新規180件中37件をOpenCode Go / minimax-m2.7で2D有効分類。2D重複6件を除外して31件追加。2026-07-24にテーマ関連72件を6論点へ整理し、投票前の論点説明、2ステップ投票、極座標の論点アリーナ、論点別X投稿カードへ更新。"
 
   henoko-student-accident:
     title: 辺野古高校生死亡事故
