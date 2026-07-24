@@ -515,142 +515,25 @@
       border-top: 4px solid transparent !important;
       border-image: linear-gradient(90deg, var(--grad-1), var(--grad-2)) 1 !important;
     }
-    .manga-intro {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 24px;
-    }
-    .manga-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-    .manga-page-card {
-      border: 1px solid rgba(0,0,0,.08);
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fff;
-      box-shadow: 0 10px 28px rgba(16,24,40,.08);
-      cursor: zoom-in;
-      transition: transform .2s ease, box-shadow .2s ease;
-      text-align: left;
-      padding: 0;
-    }
-    .manga-page-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 42px rgba(16,24,40,.14);
-    }
-    .manga-page-card img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      background: var(--accent-soft);
-    }
-    .manga-page-card span {
-      display: block;
-      padding: 12px 14px;
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 900;
-      line-height: 1.45;
-    }
-    .manga-disclaimer {
-      max-width: 760px;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-    .manga-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: rgba(15, 23, 42, .86);
-    }
-    .manga-modal.active { display: flex; }
-    .manga-modal img {
-      max-width: min(92vw, 920px);
-      max-height: 88vh;
-      border-radius: 8px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.45);
-      background: #fff;
-    }
-    .manga-modal button {
-      position: absolute;
-      border: 1px solid rgba(255,255,255,.28);
-      background: rgba(255,255,255,.12);
-      color: #fff;
-      border-radius: 8px;
-      min-width: 44px;
-      height: 44px;
-      cursor: pointer;
-      font-size: 24px;
-      font-weight: 900;
-      backdrop-filter: blur(6px);
-    }
-    .manga-modal .manga-close { top: 18px; right: 18px; }
-    .manga-modal .manga-prev { left: 18px; top: 50%; transform: translateY(-50%); }
-    .manga-modal .manga-next { right: 18px; top: 50%; transform: translateY(-50%); }
-    .vote-card-grid {
-      display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px !important;
-      margin-bottom: 12px !important;
-    }
-    .vote-image-card {
-      position: relative;
-      min-width: 0;
-      aspect-ratio: 1;
-      border: 0;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      background-position: center;
-      background-size: cover;
-      box-shadow: 0 10px 28px rgba(16,24,40,.12);
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-    }
-    .vote-image-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.58));
-    }
-    .vote-image-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 42px rgba(16,24,40,.2);
-    }
-    .vote-image-card[disabled] {
-      cursor: default;
-      filter: grayscale(.25);
-    }
-    .vote-image-card .vote-card-label {
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 900;
-      line-height: 1.3;
-      text-shadow: 0 2px 10px rgba(0,0,0,.55);
-      letter-spacing: 0;
-    }
+    .explainer-lead{font-size:14px;line-height:1.85;color:var(--ink);margin:0 0 20px;max-width:920px}
+    #explainer-section .explainer-lead{max-width:920px!important}
+    #explainer-section .explainer-grid{max-width:920px!important;margin-left:auto!important;margin-right:auto!important}
+    .explainer-grid{display:flex;flex-direction:column;gap:18px;margin:0 0 18px}
+    .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);transition:transform .2s ease,box-shadow .2s ease}
+    .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
+    .explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;user-select:none}
+    .explainer-num{flex-shrink:0;background:#1e1b4b;color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
+    .explainer-card-title{font-size:15px;font-weight:900;color:#1e1b4b;margin:0 0 4px;line-height:1.35;letter-spacing:-.02em}
+    .explainer-card-desc{font-size:12px;color:#637089;margin:0 0 7px;line-height:1.65}
+    .explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
+    .explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
+    .explainer-side.pro{background:#eff6ff;color:#075ef2;border:1px solid #bfdbfe}
+    .explainer-side.con{background:#fff2ee;color:#c0410f;border:1px solid #fdbcaa}
+    .explainer-note{font-size:12px;color:var(--muted);margin:4px 0 0}
     .question-line { color:#fff; font-size:clamp(18px,2.5vw,24px); font-weight:900; margin:10px 0 0; max-width:900px; }
     .thirty-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:22px; max-width:960px; }
     .thirty-summary ul { display:contents; margin:0; padding:0; }
     .thirty-summary li { list-style:none; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:12px 14px; color:#fff; font-weight:800; line-height:1.55; backdrop-filter:blur(4px); }
-    .vote-comparison { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0 16px; }
-    .vote-compare-card { border:1px solid var(--line); border-radius:8px; padding:12px 14px; background:#fff; }
-    .vote-compare-card strong { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
-    .vote-compare-card span { display:block; font-size:14px; color:var(--ink); font-weight:800; line-height:1.55; }
     .quadrant-nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
     .quadrant-nav a { display:inline-flex; align-items:center; min-height:34px; padding:6px 12px; border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--ink); text-decoration:none; font-weight:800; }
     .related-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
@@ -677,10 +560,7 @@
       .hero-inner { padding: 36px 16px 32px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
-      .manga-grid { grid-template-columns: 1fr; }
-      .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .vote-image-card .vote-card-label { font-size: 15px; left: 10px; right: 10px; bottom: 10px; }
-      .thirty-summary, .vote-comparison, .related-grid { grid-template-columns:1fr; }
+      .thirty-summary, .related-grid { grid-template-columns:1fr; }
     }
     /* ===== 2D スタンスマップ ===== */
     #stance-map-section { position: relative; }
@@ -763,30 +643,90 @@
       <div class="stat"><span>最多カテゴリ</span><strong>免許返納義務化に賛成（高齢運転手の事故防止を最優先） 72</strong></div>
       <div class="stat"><span>最多スタンス</span><strong>義務化賛成 72</strong></div>
     </section>
-    <section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読む、この論点</h2><span>3ページで対立をつかむ</span></div>
-<p class="manga-intro">高齢ドライバーの事故報道を見て不安を強める都市部の会社員と、車がなければ通院も買い物も難しい地方在住の高齢者が、同じ病院の待合室で出会う物語です。交通安全を求める切実さと、移動手段を奪われる恐怖のどちらも現実であることを描きます。</p>
-<div class="manga-grid" aria-label="高齢者免許返納義務化の漫画">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/elderly-license-revocation-manga-page-1.webp" alt="漫画1ページ目 ニュースの赤いブレーキランプ" loading="lazy">
-    <span>1. ニュースの赤いブレーキランプ</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/elderly-license-revocation-manga-page-2.webp" alt="漫画2ページ目 車がないと、生きていけない" loading="lazy">
-    <span>2. 車がないと、生きていけない</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/elderly-license-revocation-manga-page-3.webp" alt="漫画3ページ目 同じ道の上で" loading="lazy">
-    <span>3. 同じ道の上で</span>
-  </button>
+    <section class="panel" id="explainer-section">
+<div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<p class="explainer-lead">「高齢者の免許返納」の議論は「義務化すべきか否か」だけではありません。地方の移動手段・適性検査の精度・代替交通のインフラ・自主返納へのインセンティブ——6つの論点を整理してから投票に進んでください。</p>
+<div class="explainer-grid">
+  <article class="explainer-card">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点①</span>
+      <div>
+        <p class="explainer-card-title">義務化・事故防止 — 「年齢で強制返納、命を守れるか」</p>
+        <p class="explainer-card-desc">高齢ドライバーの死亡事故報道を受け、75〜85歳などで一律義務化を求める声。全6論点中最多の139件で、感情強度が高い投稿が集中。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">義務化: 年齢で一律に法的義務化すべき</span>
+          <span class="explainer-side pro">懸念: 個人差を無視した一律規制は問題</span>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点②</span>
+      <div>
+        <p class="explainer-card-title">地方の足・移動権 — 「田舎で免許返納は死活問題」</p>
+        <p class="explainer-card-desc">地方では車なしに通院も買い物もできない。「東京の感覚で語るな」という切実な声が多く、義務化への強い反対（90%超）が特徴（24件）。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">反対: 地方の移動手段・生活を守れ</span>
+          <span class="explainer-side con">条件: 公共交通を整えてから返納を求めよ</span>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点③</span>
+      <div>
+        <p class="explainer-card-title">適性検査強化 — 「年齢より個人の能力で判断すべき」</p>
+        <p class="explainer-card-desc">認知機能検査・実車試験の厳格化を求め、一律年齢制限の代替案を提唱。サポートカー限定免許など技術的対応を好む立場も含む（20件）。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">代替案: 認知機能検査を厳格化すれば義務化不要</span>
+          <span class="explainer-side con">懸念: 検査通過でも事故リスクは残る</span>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点④</span>
+      <div>
+        <p class="explainer-card-title">代替交通整備 — 「インフラ整備が義務化の前提」</p>
+        <p class="explainer-card-desc">デマンド交通・コミュニティバス・ライドシェアの整備が先決という立場。返納させるなら移動手段の代替を保障せよという順番論（9件）。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">整備優先: インフラなしの義務化は理不尽</span>
+          <span class="explainer-side con">並行: 整備と義務化を同時に進めるべき</span>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑤</span>
+      <div>
+        <p class="explainer-card-title">自主返納支援 — 「特典と支援で自発的な返納を促す」</p>
+        <p class="explainer-card-desc">バス・タクシー割引や買い物支援など、返納のメリットを実感できる制度設計を求める声。強制より誘導を好む立場（7件）。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">支持: 特典強化で自然に返納者が増える</span>
+          <span class="explainer-side pro">補足: 現行の自主返納制度を知らない人が多い</span>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="explainer-card">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑥</span>
+      <div>
+        <p class="explainer-card-title">その他・複合 — 「政治批判・感情表出・分類外」</p>
+        <p class="explainer-card-desc">政治家への年齢制限要求・感情的な怒りの発露・複数論点の混在など、上記5カテゴリに収まらない反応。SNSらしい生の声（12件）。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">例: 政治家にも年齢制限を</span>
+          <span class="explainer-side con">例: 若者の事故も多い・高齢者だけ問題視は不公平</span>
+        </div>
+      </div>
+    </div>
+  </article>
 </div>
-<p class="manga-disclaimer">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです</p>
-<div class="manga-modal" id="manga-modal" aria-hidden="true">
-  <button class="manga-close" type="button" aria-label="閉じる">×</button>
-  <button class="manga-prev" type="button" aria-label="前のページ">‹</button>
-  <img id="manga-modal-image" src="" alt="" loading="lazy">
-  <button class="manga-next" type="button" aria-label="次のページ">›</button>
-</div>
+<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
 </section>
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
@@ -812,15 +752,6 @@
   </div>
 </div>
 </section>
-<script src="manga-viewer.js"></script>
-<script>
-MangaViewer.init({
-  chars: [
-    {img:'images/elderly-license-revocation-manga-charsheet-1.webp', name:'森田 直子', role:'都市部の会社員・二児の母', quote:'高齢ドライバーの事故が怖い。子どもを守りたい'},
-    {img:'images/elderly-license-revocation-manga-charsheet-2.webp', name:'田畑 茂', role:'地方在住の元農家', quote:'車がなければ、通院も買い物もできない'}
-  ]
-});
-</script>
 <script>
 (function(){
   'use strict';
@@ -1714,6 +1645,25 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="sample-grid">
 <div class="sample-card-x"><div class="meta">自主返納推進</div><p>自主返納制度とインセンティブ強化を支持する意見</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/News2057533/status/2070970271620853841"></a></blockquote></div>
 <div class="sample-card-x"><div class="meta">返納特典の紹介</div><p>バス運賃半額になる返納特典を紹介する情報共有投稿</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/balancepower46/status/2068972385005703261"></a></blockquote></div>
+</div>
+</article>
+
+<article class="issue-block" id="issue-sonota">
+<div class="issue-head"><span class="axis-kicker">論点6</span>
+<h3>その他・複合的な反応<span class="issue-count">12件</span></h3>
+<div class="temp-bar-wrap">
+<div class="temp-bar-label"><span>反応の傾向</span><span>分類外・混在 12</span></div>
+<div class="temp-bar"><div class="temp-seg neu" style="width:100%">100%</div></div>
+<div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>複合・分類外</span></div>
+</div>
+<p class="issue-desc">「政治家にも年齢制限を」「若者の事故も多いのに高齢者だけ問題視するのはおかしい」など、免許返納そのものへの賛否より別の論点を持ち出す投稿や、感情的な怒りの発露が中心。SNSならではの生の反応が集まるカテゴリです。</p>
+<div class="issue-sides">
+<div class="side neu"><strong>政治批判・類似論点（複数件）</strong>高齢政治家への年齢制限や、交通事故全体への不満を高齢ドライバー問題と絡めた投稿。</div>
+<div class="side neu"><strong>感情表出・分類困難（複数件）</strong>特定の政策立場は読み取れないが、事故報道への怒りや不満を端的に表した投稿。</div>
+</div>
+<div class="sample-grid">
+<div class="sample-card-x"><div class="meta">政治批判 / 類似論点</div><p>政治家にも年齢制限が必要だと述べるが、免許返納政策への明確な賛否はない</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/oekkdisk/status/2066363291761578319"></a></blockquote></div>
+<div class="sample-card-x"><div class="meta">感情表出 / 分類外</div><p>速度超過や運転マナーへの不満を述べるが、高齢者の免許返納義務化への政策意見ではない</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/newdoggy86/status/2064800151349432493"></a></blockquote></div>
 </div>
 </article>
 
