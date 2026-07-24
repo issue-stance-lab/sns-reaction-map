@@ -75,12 +75,13 @@ themes:
     collect: done        # 285件
     classify: done
     classify2d: done     # 211件、APIエラー0%
-    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    main_issue: done     # 211件（original_category→ヒューリスティック）。6論点: 義務化・事故防止139/地方の足・移動権24/適性検査強化20/代替交通整備9/自主返納支援7/その他12
+    page_v3: done        # 論点アリーナ（極座標6セクター）実装済み 2026-07-24
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票5枚
     published: done
     refresh_at: 2026-07-19
-    notes: "2026-07-12にYahooリアルタイム検索156件を追加収集。重複51件を除外し、新規105件中97件をOpenCode Go / minimax-m2.7で2D有効分類。"
+    notes: "2026-07-12にYahooリアルタイム検索156件を追加収集。重複51件を除外し、新規105件中97件をOpenCode Go / minimax-m2.7で2D有効分類。2026-07-24に論点アリーナ（極座標6セクター）と論点別サマリー5枚を追加。main_issueはoriginal_category（114件）とスタンスヒューリスティック（97件）で算出。義務化・事故防止139件最多（66%）。"
 
   school-nickname-ban:
     title: 学校でのあだ名禁止
