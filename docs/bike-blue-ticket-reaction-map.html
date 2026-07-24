@@ -577,18 +577,6 @@
     .details-panel details:not([open]) > .details-body { display:none; }
     .details-panel .legend { margin-left:auto; margin-right:auto; }
     .details-panel .table-wrap { display:block; width:100%; max-width:100%; min-width:0; overflow-x:auto; contain:inline-size; }
-    .manga-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .manga-page-card{border:1px solid rgba(0,0,0,.08);border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease;text-align:left;padding:0}
-    .manga-page-card:hover{transform:translateY(-4px);box-shadow:0 18px 42px rgba(16,24,40,.14)}
-    .manga-page-card img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--accent-soft)}
-    .manga-page-card span{display:block;padding:12px 14px;color:var(--ink);font-size:14px;font-weight:900;line-height:1.45}
-    .manga-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,42,.86)}
-    .manga-modal.active{display:flex}
-    .manga-modal img{max-width:min(92vw,920px);max-height:88vh;border-radius:8px;box-shadow:0 24px 80px rgba(0,0,0,.45);background:#fff}
-    .manga-modal button{position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#fff;border-radius:8px;min-width:44px;height:44px;cursor:pointer;font-size:24px;font-weight:900;backdrop-filter:blur(6px)}
-    .manga-modal .manga-close{top:18px;right:18px}
-    .manga-modal .manga-prev{left:18px;top:50%;transform:translateY(-50%)}
-    .manga-modal .manga-next{right:18px;top:50%;transform:translateY(-50%)}
     @media (max-width: 720px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stat { padding: 20px 16px; }
@@ -604,7 +592,7 @@
       .hero-inner { padding: 36px 16px 32px; }
       th:first-child { min-width: 180px; }
       table { min-width: 760px; }
-      .thirty-summary, .vote-comparison, .manga-grid, .related-grid { grid-template-columns:1fr; }
+      .thirty-summary, .vote-comparison, .related-grid { grid-template-columns:1fr; }
       .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
@@ -728,40 +716,6 @@
       <div class="stat"><span>最多論点</span><strong>その他 62 / 取締り 37</strong></div>
       <div class="stat"><span>取締り賛成</span><strong>89件</strong></div>
     </section>
-    <section class="panel" id="manga-section">
-<div class="panel-title"><h2>漫画で読む対立</h2><span>ショートコミック</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 16px;">商店街の店主と自転車通勤の会社員——同じ道を使う二人が、青切符をめぐってそれぞれの怖さと願いをぶつけ合います。</p>
-<div class="manga-grid">
-  <button class="manga-page-card" type="button" data-manga-index="0">
-    <img src="images/bike-blue-ticket-manga-page-1.webp" alt="漫画1ページ目 青切符の朝" loading="lazy">
-    <span>青切符の朝</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="1">
-    <img src="images/bike-blue-ticket-manga-page-2.webp" alt="漫画2ページ目 走る場所はどこにある？" loading="lazy">
-    <span>走る場所はどこにある？</span>
-  </button>
-  <button class="manga-page-card" type="button" data-manga-index="2">
-    <img src="images/bike-blue-ticket-manga-page-3.webp" alt="漫画3ページ目 同じ道の上で" loading="lazy">
-    <span>同じ道の上で</span>
-  </button>
-</div>
-<div class="manga-modal" id="manga-modal" aria-hidden="true">
-  <button class="manga-close" type="button" aria-label="閉じる">×</button>
-  <button class="manga-prev" type="button" aria-label="前のページ">‹</button>
-  <img id="manga-modal-image" src="" alt="" loading="lazy">
-  <button class="manga-next" type="button" aria-label="次のページ">›</button>
-</div>
-<p style="font-size:11px;color:var(--muted);margin:16px 0 0;">※ この漫画はSNS上の代表的な意見をもとに構成したフィクションです</p>
-</section>
-<script src="manga-viewer.js"></script>
-<script>
-MangaViewer.init({
-  chars: [
-    {img:'images/bike-blue-ticket-manga-charsheet-haruo.webp', name:'森田 春夫', role:'商店街の文具店主', quote:'歩道を飛ばす自転車に、ヒヤッとする毎日'},
-    {img:'images/bike-blue-ticket-manga-charsheet-natsuki.webp', name:'相原 夏希', role:'自転車通勤の会社員', quote:'レーンもないのに取り締まりだけ先行？'}
-  ]
-});
-</script>
     <!-- ===== 論点Explainer ===== -->
 <section class="panel" id="explainer-section">
 <div class="panel-title"><h2>投票前に読む：5つの論点</h2><span>それぞれの問いを把握してから</span></div>
