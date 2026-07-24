@@ -519,6 +519,7 @@
     #explainer-section .explainer-lead{max-width:920px!important}
     #explainer-section .explainer-grid{max-width:920px!important;margin-left:auto!important;margin-right:auto!important}
     .explainer-grid{display:flex;flex-direction:column;gap:18px;margin:0 0 18px}
+    .explainer-card img{width:100%;height:auto;display:block}
     .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);transition:transform .2s ease,box-shadow .2s ease}
     .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
     .explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;user-select:none}
@@ -851,69 +852,6 @@
   }catch(e){localStorage.removeItem(STORAGE_KEY);}
 })();
 </script>
-    <section class="panel" id="stance-map-section">
-<div id="stance-map-inner">
-<div class="panel-title"><h2>SNS意見スタンスマップ</h2><span>211件（広告・宣伝除外済）| 点の色＝感情強度（青:冷静 → 赤:激怒）| ホバーで詳細 / クリックでXへ</span></div>
-<div id="sm-wrap">
-  <canvas id="smCanvasHeat" width="600" height="600"></canvas>
-  <canvas id="smCanvasMain" width="600" height="600"></canvas>
-  <div class="sm-ax" style="top:3px;left:50%;transform:translateX(-50%)">事故防止優先 ▲</div>
-  <div class="sm-ax" style="bottom:3px;left:50%;transform:translateX(-50%)">▼ 生活・移動手段優先</div>
-  <div class="sm-ax" style="top:50%;left:2px;transform:translateY(-50%);writing-mode:vertical-rl">◀ 義務化反対</div>
-  <div class="sm-ax" style="top:50%;right:2px;transform:translateY(-50%);writing-mode:vertical-rl">義務化賛成 ▶</div>
-</div>
-<div id="your-marker-note" style="display:none;margin:10px auto 0;max-width:660px;font-size:12px;font-weight:800;color:var(--accent);">投票した選択肢を、マップ上に「あなたはこのあたり」として表示しています。</div>
-
-<div id="smTourPanel">
-  <div id="smTourStep"></div>
-  <div id="smTourTitle"></div>
-  <div id="smTourDesc"></div>
-  <div id="smTourEmbedLoading">投稿を読み込み中…</div>
-  <div id="smTourEmbed"></div>
-  <div id="smTourQuoteFallback"><span id="smTourQuoteText"></span><small id="smTourQuoteLink">↗ Xで見る</small></div>
-  <div class="sm-tour-nav">
-    <button class="sm-tnav" id="smBtnPrev">← 前へ</button>
-    <div id="smTourProgress"><div id="smTourProgressBar"></div></div>
-    <button class="sm-tnav primary" id="smBtnNext">次へ →</button>
-    <button class="sm-tnav" id="smBtnClose" style="border-color:#666;color:#aaa">✕</button>
-  </div>
-</div>
-
-<div class="sm-controls">
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <div class="sm-legend-emo">
-      <span style="color:#555">感情強度:</span>
-      <span>冷静</span>
-      <div class="sm-emo-bar"></div>
-      <span>激怒</span>
-    </div>
-    <button id="smStartTour">▶ ガイドツアーで読む</button>
-  </div>
-  <div class="sm-view-row">
-    <label><input type="checkbox" id="smChkHeat" checked> ヒートマップ</label>
-    <label><input type="checkbox" id="smChkDots" checked> ドット</label>
-    <label style="color:#888">強度: <input type="range" id="smHeatIntensity" min="10" max="60" value="28" style="width:80px;vertical-align:middle"></label>
-  </div>
-  <div class="sm-filters">
-    <span style="font-size:10px;color:#888">絞り込み:</span>
-    <button class="sm-fbtn active" data-q="all">全件 (211)</button>
-    <button class="sm-fbtn" data-q="q1">義務化賛成×事故防止優先 (143)</button>
-    <button class="sm-fbtn" data-q="q2">義務化反対×生活優先 (23)</button>
-    <button class="sm-fbtn" data-q="q4">高感情 e≥1.5 (74)</button>
-    <button class="sm-fbtn" data-q="calm">冷静 e≤0 (53)</button>
-  </div>
-</div>
-
-<div class="sm-stat-cards">
-  <div class="sm-sbox"><div class="sm-slabel">義務化賛成 × 事故防止優先 (右上)</div><div class="sm-sval" style="color:#c0392b">74件</div><div class="sm-sdesc">高齢者事故から命を守るため強制返納を支持</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">義務化反対 × 生活優先 (左下)</div><div class="sm-sval" style="color:#2980b9">21件</div><div class="sm-sdesc">地方では車なしに生活できない・移動権を守れ</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">高感情 (e ≥ 1.5)</div><div class="sm-sval" style="color:#e67e22">40件</div><div class="sm-sdesc">危険運転への怒り・強い感情的反応</div></div>
-  <div class="sm-sbox"><div class="sm-slabel">冷静な意見 (e ≤ 0)</div><div class="sm-sval" style="color:#27ae60">29件</div><div class="sm-sdesc">制度設計や技術的解決策を論理的に提案</div></div>
-</div>
-
-<div id="sm-tooltip"></div>
-</div><!-- /stance-map-inner -->
-</section>
 <script>
 const SM_RAW = [
   {x:1.0,y:1.0,e:0.5,c:0.85,s:"重大事故後の免許返納義務化支持",u:"https://x.com/PsyDuckisking/status/2069316466042904934",i:0},
@@ -1128,240 +1066,6 @@ const SM_RAW = [
   {x:1.5,y:1.0,e:2.0,c:0.85,s:"高齢者返納と類似の認知機能検査・議員辞職義務化を求める強い怒りの投稿",u:"https://x.com/Cherryqpq9z/status/2071662229020442812",i:0},
   {x:-1.0,y:0.5,e:1.0,c:0.7,s:"改正案批判も高齢者規制自体は支持する慎重意見",u:"https://x.com/h_mst_o/status/2070993011492671853",i:2}
 ];
-const SM_TOUR = [{"title":"全体像：義務化賛成派が多数","desc":"211件中143件（68%）が「義務化賛成かつ事故防止優先」。高齢ドライバーの事故を防ぐため法律で強制すべき、という声が大半を占めます。","filter":"all","highlight":null,"quote":null,"quote_url":null},{"title":"義務化賛成×事故防止優先（143件）","desc":"「高齢者が事故を起こす前に強制的に返納させるべき」という感情的な訴えが多い象限。怒りの赤い点が密集しています。","filter":"q1","highlight":[2.0,2.0],"quote":"75歳とかで強制的に返納にする義務化法案を作ってほしい。未来ある命が奪われるのは耐えられない","quote_url":"https://x.com/junchi1029/status/2061343452156293543"},{"title":"義務化反対×生活優先（23件）","desc":"「地方では車がなければ病院にも行けない」「移動手段を奪うな」という、地方在住者の切実な声。件数は少ないが訴えは切実です。","filter":"q2","highlight":[-2.0,-2.0],"quote":"田舎は車がないと生きていけない。東京の人間が義務化と気軽に言わないでほしい","quote_url":"https://x.com/new_yamanjy_thd/status/2063208587544158384"},{"title":"高感情ゾーン（40件）","desc":"感情強度1.5以上の「激怒」投稿は74件。危険運転を目撃した怒りや身内が被害にあった経験から、強い言葉で返納を求める声が目立ちます。","filter":"q4","highlight":[2.0,2.0],"quote":null,"quote_url":null},{"title":"冷静な意見（29件）","desc":"感情強度0以下の冷静な投稿は53件。地方の実情を考慮した制度設計や、技術的解決策を論理的に提案する声が含まれます。","filter":"calm","highlight":null,"quote":null,"quote_url":null}];
-(function(){
-const RAW=SM_RAW, TOUR=SM_TOUR;
-const W=600,H=600,PAD=60,INNER=W-PAD*2;
-const canvasMain=document.getElementById('smCanvasMain');
-const canvasHeat=document.getElementById('smCanvasHeat');
-const ctx=canvasMain.getContext('2d');
-const hCtx=canvasHeat.getContext('2d');
-let activeFilter='all',showHeat=true,showDots=true,heatIntensity=28;
-let spotlightTarget=null,tourIdx=0,animating=false,animFrame=0;
-let myVoteMarker=null;
-let myVoteSX = null, myVoteSY = null;
-const voteMarkers=[
-  {x:-1.45,y:1.45,label:'あなた: 安全大切だが本人判断で',color:'#dc2626'},
-  {x:1.45,y:1.45,label:'あなた: 事故防止のため義務化を',color:'#2563eb'},
-  {x:-1.45,y:-1.45,label:'あなた: 移動権・生活守るため自主返納',color:'#059669'},
-  {x:1.45,y:-1.45,label:'あなた: 義務化でも代替手段を整備',color:'#d97706'}
-];
-const IMG_ALPHA_START=0.72,IMG_ALPHA_END=0.13;
-let imgAlpha=IMG_ALPHA_END;
-const QUAD_IMGS={
-  q1:'images/elderly-license-revocation-vote-1-mandatory.webp',
-  q3:'images/elderly-license-revocation-vote-3-testing.webp',
-  q2:'images/elderly-license-revocation-vote-2-mobility.webp',
-  q4:'images/elderly-license-revocation-vote-4-unsure.webp',
-};
-const loadedImgs={};let imgsReady=0;
-Object.entries(QUAD_IMGS).forEach(([key,src])=>{const img=new Image();img.onload=()=>{loadedImgs[key]=img;imgsReady++;};img.src=src;});
-function drawQuadImages(){
-  const mid=PAD+INNER/2;
-  [{key:'q1',x:mid,y:PAD,w:PAD+INNER-mid,h:mid-PAD},{key:'q3',x:PAD,y:PAD,w:mid-PAD,h:mid-PAD},{key:'q2',x:PAD,y:mid,w:mid-PAD,h:PAD+INNER-mid},{key:'q4',x:mid,y:mid,w:PAD+INNER-mid,h:PAD+INNER-mid}].forEach(({key,x,y,w,h})=>{
-    const img=loadedImgs[key];if(!img)return;
-    ctx.save();ctx.globalAlpha=imgAlpha;
-    const scale=Math.min(w,h)/Math.min(img.width,img.height);
-    const dw=img.width*scale,dh=img.height*scale;
-    ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
-    ctx.restore();
-  });
-}
-const seed=(i,j)=>{let s=i*997+j*31;s=s^(s>>13);return(s*1664525+1013904223)&0xffffffff;};
-const jCache=RAW.map((_,i)=>[((seed(i,0)&0xff)/255-0.5)*5,((seed(i,1)&0xff)/255-0.5)*5]);
-function toCanvas(x,y){return[PAD+(x+2)/4*INNER,PAD+(2-y)/4*INNER];}
-function emoRGB(e){
-  const t=Math.max(0,Math.min(1,(e+2)/4));
-  if(t<0.5){const u=t*2;return[Math.round(74+(187-74)*u),Math.round(144+(187-144)*u),Math.round(217+(187-217)*u)];}
-  else{const u=(t-0.5)*2;return[Math.round(187+(224-187)*u),Math.round(187+(92-187)*u),Math.round(187+(92-187)*u)];}
-}
-function visible(p){
-  if(activeFilter==='all')return true;
-  if(activeFilter==='q1')return p.x>0&&p.y>0;
-  if(activeFilter==='q2')return p.x<0&&p.y<0;
-  if(activeFilter==='q3')return p.x<0&&p.y>0;
-  if(activeFilter==='q4')return p.e>=1.5;
-  if(activeFilter==='calm')return p.e<=0;
-  return true;
-}
-function drawHeatmap(){
-  if(!showHeat){hCtx.clearRect(0,0,W,H);return;}
-  const res=8,gw=Math.ceil(W/res),gh=Math.ceil(H/res);
-  const grid=new Float32Array(gw*gh);
-  const sig=heatIntensity,sig2=sig*sig*2;
-  RAW.forEach(p=>{
-    if(!visible(p))return;
-    const[cx,cy]=toCanvas(p.x,p.y);
-    const gx0=Math.max(0,Math.floor((cx-sig*3)/res)),gx1=Math.min(gw-1,Math.ceil((cx+sig*3)/res));
-    const gy0=Math.max(0,Math.floor((cy-sig*3)/res)),gy1=Math.min(gh-1,Math.ceil((cy+sig*3)/res));
-    for(let gy=gy0;gy<=gy1;gy++)for(let gx=gx0;gx<=gx1;gx++){
-      const dx=gx*res-cx,dy=gy*res-cy;
-      grid[gy*gw+gx]+=p.c*Math.exp(-(dx*dx+dy*dy)/sig2);
-    }
-  });
-  let mx=0;for(let i=0;i<grid.length;i++)if(grid[i]>mx)mx=grid[i];
-  const imgData=hCtx.createImageData(W,H);
-  for(let gy=0;gy<gh;gy++)for(let gx=0;gx<gw;gx++){
-    const v=mx>0?grid[gy*gw+gx]/mx:0;
-    if(v<0.01)continue;
-    const alpha=Math.pow(v,0.6)*180;
-    const t=Math.pow(v,0.4);
-    const r=Math.round(220+(255-220)*t),g=Math.round(220*(1-t)),b=Math.round(220*(1-t));
-    for(let dy=0;dy<res;dy++)for(let dx=0;dx<res;dx++){
-      const px=gy*res+dy,py=gx*res+dx;
-      if(px>=H||py>=W)continue;
-      const inPad=(gx*res+dx)>=PAD&&(gx*res+dx)<PAD+INNER&&(gy*res+dy)>=PAD&&(gy*res+dy)<PAD+INNER;
-      if(!inPad)continue;
-      const off=(px*W+py)*4;
-      imgData.data[off]=r;imgData.data[off+1]=g;imgData.data[off+2]=b;imgData.data[off+3]=alpha;
-    }
-  }
-  hCtx.putImageData(imgData,0,0);
-  hCtx.save();hCtx.globalCompositeOperation='destination-in';
-  hCtx.beginPath();hCtx.rect(PAD,PAD,INNER,INNER);hCtx.fill();
-  hCtx.restore();
-}
-function drawBase(){
-  ctx.clearRect(0,0,W,H);
-  const mid=PAD+INNER/2;
-  [[mid,PAD,PAD+INNER-mid,mid-PAD,'rgba(192,57,43,0.03)'],[PAD,PAD,mid-PAD,mid-PAD,'rgba(39,174,96,0.03)'],[mid,mid,PAD+INNER-mid,PAD+INNER-mid,'rgba(230,126,34,0.03)'],[PAD,mid,mid-PAD,PAD+INNER-mid,'rgba(41,128,185,0.03)']].forEach(([x,y,w,h,c])=>{ctx.fillStyle=c;ctx.fillRect(x,y,w,h);});
-  drawQuadImages();
-  ctx.strokeStyle='#e0e0e0';ctx.lineWidth=0.7;
-  for(let v=-2;v<=2;v+=0.5){const[cx]=toCanvas(v,0);ctx.beginPath();ctx.moveTo(cx,PAD);ctx.lineTo(cx,PAD+INNER);ctx.stroke();const[,cy]=toCanvas(0,v);ctx.beginPath();ctx.moveTo(PAD,cy);ctx.lineTo(PAD+INNER,cy);ctx.stroke();}
-  ctx.strokeStyle='#999';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(PAD,mid);ctx.lineTo(PAD+INNER,mid);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(mid,PAD);ctx.lineTo(mid,PAD+INNER);ctx.stroke();
-  ctx.font='bold 12px -apple-system,sans-serif';ctx.textAlign='center';
-  [['義務化賛成×事故防止優先',PAD+INNER*0.75,PAD+26],['義務化反対×事故防止優先',PAD+INNER*0.25,PAD+26],['義務化反対×生活優先',PAD+INNER*0.25,PAD+INNER-10],['義務化賛成×生活優先',PAD+INNER*0.75,PAD+INNER-10]].forEach(([text,lx,ly])=>{
-    const tw=ctx.measureText(text).width;
-    const ph=18,pw=tw+16,rx=lx-pw/2,ry=ly-ph+4,r=4;
-    ctx.fillStyle='rgba(0,0,0,0.62)';
-    ctx.beginPath();ctx.moveTo(rx+r,ry);ctx.lineTo(rx+pw-r,ry);ctx.arcTo(rx+pw,ry,rx+pw,ry+r,r);ctx.lineTo(rx+pw,ry+ph-r);ctx.arcTo(rx+pw,ry+ph,rx+pw-r,ry+ph,r);ctx.lineTo(rx+r,ry+ph);ctx.arcTo(rx,ry+ph,rx,ry+ph-r,r);ctx.lineTo(rx,ry+r);ctx.arcTo(rx,ry,rx+r,ry,r);ctx.closePath();ctx.fill();
-    ctx.fillStyle='#fff';ctx.fillText(text,lx,ly);
-  });
-  ctx.font='9px -apple-system,sans-serif';ctx.fillStyle='#bbb';
-  ctx.textAlign='right';[-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v=>{const[,cy]=toCanvas(0,v);ctx.fillText((v>0?'+':'')+v,PAD-4,cy+3);});
-  ctx.textAlign='center';[-2,-1.5,-1,-0.5,0.5,1,1.5,2].forEach(v=>{const[cx]=toCanvas(v,0);ctx.fillText((v>0?'+':'')+v,cx,PAD+INNER+12);});
-  if(showDots){
-    const count=animating?animFrame:RAW.length;
-    for(let i=0;i<count;i++){
-      const p=RAW[i];const show=visible(p);
-      const[cx,cy]=toCanvas(p.x,p.y);
-      const[rr,gg,bb]=emoRGB(p.e);
-      ctx.beginPath();ctx.arc(cx+jCache[i][0],cy+jCache[i][1],2.5+p.c*2,0,Math.PI*2);
-      ctx.fillStyle=show?`rgba(${rr},${gg},${bb},0.8)`:'rgba(200,200,200,0.08)';ctx.fill();
-      if(show){ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=0.5;ctx.stroke();}
-    }
-  }
-  if(spotlightTarget){
-    const[sx,sy]=spotlightTarget;
-    ctx.beginPath();ctx.arc(sx,sy,18,0,Math.PI*2);ctx.strokeStyle='#2980b9';ctx.lineWidth=2.5;ctx.stroke();
-    ctx.beginPath();ctx.arc(sx,sy,24,0,Math.PI*2);ctx.strokeStyle='rgba(41,128,185,0.4)';ctx.lineWidth=1.5;ctx.stroke();
-  }
-}
-function drawVoteMarker(){
-  if(myVoteMarker===null||!voteMarkers[myVoteMarker])return;
-  const marker=voteMarkers[myVoteMarker];
-  const px=(myVoteSX!==null)?myVoteSX:marker.x;
-  const py=(myVoteSY!==null)?myVoteSY:marker.y;
-  const[x,y]=toCanvas(px,py);
-  ctx.save();
-  ctx.beginPath();ctx.arc(x,y,16,0,Math.PI*2);
-  ctx.fillStyle='rgba(255,255,255,.92)';ctx.fill();
-  ctx.strokeStyle=marker.color;ctx.lineWidth=3;ctx.stroke();
-  ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
-  ctx.fillStyle=marker.color;ctx.fill();
-  ctx.font='700 12px -apple-system,sans-serif';
-  ctx.fillStyle=marker.color;
-  ctx.fillText(marker.label,Math.min(x+16,W-150),Math.max(y-14,24));
-  ctx.restore();
-}
-window.setStanceMapVoteMarker=function(idx,sx,sy){
-  myVoteMarker=idx;if(sx!==undefined)myVoteSX=sx;if(sy!==undefined)myVoteSY=sy;
-  const note=document.getElementById('your-marker-note');
-  if(note)note.style.display='block';
-  redraw();
-};
-function redraw(){drawHeatmap();drawBase();drawVoteMarker();}
-function playIntro(){
-  animating=true;animFrame=0;imgAlpha=IMG_ALPHA_START;
-  const total=RAW.length,duration=1800,start=performance.now();
-  function tick(now){
-    const progress=Math.min(1,(now-start)/duration);
-    animFrame=Math.min(total,Math.round(progress*total));
-    imgAlpha=progress<0.5?IMG_ALPHA_START:IMG_ALPHA_START+(IMG_ALPHA_END-IMG_ALPHA_START)*((progress-0.5)/0.5);
-    redraw();
-    if(progress<1){requestAnimationFrame(tick);}else{animating=false;imgAlpha=IMG_ALPHA_END;redraw();}
-  }
-  requestAnimationFrame(tick);
-}
-playIntro();
-const savedVote=localStorage.getItem("sns_vote_高齢者の運転免許返納義務化の是非_SNS_my");
-if(savedVote!==null)window.setStanceMapVoteMarker(parseInt(savedVote,10));
-const tooltip=document.getElementById('sm-tooltip');
-canvasMain.addEventListener('mousemove',function(e){
-  const r=canvasMain.getBoundingClientRect();
-  const sx=600/r.width,sy=600/r.height;
-  const mx=(e.clientX-r.left)*sx,my=(e.clientY-r.top)*sy;
-  let best=null,bd=9999;
-  RAW.forEach((p,i)=>{if(!visible(p))return;const[cx,cy]=toCanvas(p.x,p.y);const dx=mx-(cx+jCache[i][0]),dy=my-(cy+jCache[i][1]);const d=Math.sqrt(dx*dx+dy*dy);if(d<bd&&d<18){bd=d;best=p;}});
-  if(best){tooltip.style.opacity='1';tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY-30)+'px';tooltip.innerHTML=`<b>${best.s}</b><br><span style="opacity:.7">x=${best.x} y=${best.y} e=${best.e}</span>`;}else{tooltip.style.opacity='0';}
-});
-canvasMain.addEventListener('mouseleave',()=>tooltip.style.opacity='0');
-canvasMain.addEventListener('click',function(e){
-  const r=canvasMain.getBoundingClientRect();
-  const sx=600/r.width,sy=600/r.height;
-  const mx=(e.clientX-r.left)*sx,my=(e.clientY-r.top)*sy;
-  let best=null,bd=9999;
-  RAW.forEach((p,i)=>{if(!visible(p))return;const[cx,cy]=toCanvas(p.x,p.y);const dx=mx-(cx+jCache[i][0]),dy=my-(cy+jCache[i][1]);const d=Math.sqrt(dx*dx+dy*dy);if(d<bd&&d<18){bd=d;best=p;}});
-  if(best&&best.u)window.open(best.u,'_blank');
-});
-document.querySelectorAll('.sm-fbtn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');activeFilter=btn.dataset.q;redraw();
-  });
-});
-document.getElementById('smChkHeat').addEventListener('change',function(){showHeat=this.checked;redraw();});
-document.getElementById('smChkDots').addEventListener('change',function(){showDots=this.checked;redraw();});
-document.getElementById('smHeatIntensity').addEventListener('input',function(){heatIntensity=+this.value;redraw();});
-function smShowFallback(step,qf){
-  document.getElementById('smTourQuoteText').textContent=`"${step.quote}"`;
-  const ql=document.getElementById('smTourQuoteLink');
-  if(step.quote_url){ql.style.display='';ql.href=step.quote_url;qf.onclick=()=>window.open(step.quote_url,'_blank');}else{ql.style.display='none';qf.onclick=null;}
-  qf.style.display='block';
-}
-function showTourStep(i){
-  const step=TOUR[i];
-  document.getElementById('smTourStep').textContent=`${i+1} / ${TOUR.length}`;
-  document.getElementById('smTourTitle').textContent=step.title;
-  document.getElementById('smTourDesc').textContent=step.desc;
-  document.getElementById('smTourProgressBar').style.width=((i+1)/TOUR.length*100)+'%';
-  const embedEl=document.getElementById('smTourEmbed');
-  const loadingEl=document.getElementById('smTourEmbedLoading');
-  const qf=document.getElementById('smTourQuoteFallback');
-  embedEl.style.display='none'; loadingEl.style.display='none'; qf.style.display='none';
-  embedEl.innerHTML='';
-  if(step.quote){
-    smShowFallback(step,qf);
-    if(step.quote_url){
-      const tweetId=step.quote_url.replace('x.com','twitter.com').split('/status/')[1];
-      if(window.twttr&&window.twttr.widgets&&tweetId){
-        const p=window.twttr.widgets.createTweet(tweetId,embedEl,{theme:'dark',dnt:true,conversation:'none'});
-        if(p&&p.then)p.then(el=>{if(el){qf.style.display='none';embedEl.style.display='block';}}).catch(()=>{});
-      }
-    }
-  }
-  document.getElementById('smBtnPrev').disabled=(i===0);
-  if(step.filter){document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));const fb=document.querySelector(`.sm-fbtn[data-q="${step.filter}"]`);if(fb)fb.classList.add('active');activeFilter=step.filter;}
-  spotlightTarget=step.highlight?toCanvas(step.highlight[0],step.highlight[1]):null;
-  redraw();
-}
-document.getElementById('smStartTour').addEventListener('click',()=>{document.getElementById('smTourPanel').classList.add('active');tourIdx=0;showTourStep(0);});
-document.getElementById('smBtnNext').addEventListener('click',()=>{if(tourIdx<TOUR.length-1){tourIdx++;showTourStep(tourIdx);}else{document.getElementById('smBtnClose').click();}});
-document.getElementById('smBtnPrev').addEventListener('click',()=>{if(tourIdx>0){tourIdx--;showTourStep(tourIdx);}});
-document.getElementById('smBtnClose').addEventListener('click',()=>{document.getElementById('smTourPanel').classList.remove('active');spotlightTarget=null;activeFilter='all';document.querySelectorAll('.sm-fbtn').forEach(b=>b.classList.remove('active'));document.querySelector('.sm-fbtn[data-q="all"]').classList.add('active');redraw();});
-})();
 </script>
 
 <!-- ===== 極座標 論点アリーナ ===== -->
@@ -1579,9 +1283,9 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span>
 <h3>義務化・年齢で強制返納すべき<span class="issue-count">139件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>義務化への立場</span><span>義務化支持 129 / 中立 9</span></div>
+<div class="temp-bar-label"><span>年齢による返納義務化</span><span>義務化支持 129件 / 中立 9件</span></div>
 <div class="temp-bar"><div class="temp-seg pos" style="width:93%">93%</div><div class="temp-seg neu" style="width:7%">7%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#e04949"></i>義務化支持</span><span><i style="background:#94a3b8"></i>中立</span></div>
+<div class="temp-bar-legend"><span><i style="background:#e04949"></i>義務化・年齢制限を支持</span><span><i style="background:#94a3b8"></i>条件付き・慎重</span></div>
 </div>
 <p class="issue-desc">最多の論点。「年齢（75〜85歳）で一律に法的義務化すべき」という声が大勢を占めます。高齢ドライバーの事故報道を受けた怒りや恐怖が原動力で、「未来ある命を守るために」という切実な訴えが多い。感情強度が高い投稿が集中するセクターです。</p>
 <div class="issue-sides">
@@ -1598,9 +1302,9 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="issue-head"><span class="axis-kicker">論点2</span>
 <h3>地方の生活・移動権を守れ<span class="issue-count">24件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>移動権への立場</span><span>義務化反対 21 / 中立 2</span></div>
+<div class="temp-bar-label"><span>地方の移動手段・生活権</span><span>義務化反対 21件 / 条件付き 2件</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:90%">90%</div><div class="temp-seg neu" style="width:10%">10%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#4b9cf4"></i>義務化反対</span><span><i style="background:#94a3b8"></i>中立</span></div>
+<div class="temp-bar-legend"><span><i style="background:#4b9cf4"></i>地方移動権を優先（義務化反対）</span><span><i style="background:#94a3b8"></i>状況・条件次第</span></div>
 </div>
 <p class="issue-desc">「田舎では車がなければ病院にも買い物にも行けない」「東京の感覚で義務化を語るな」という、地方在住者の切実な声。件数は少ないが訴えの強度は高く、移動の自由と生活手段を守る観点から一律義務化に強く反対します。</p>
 <div class="issue-sides">
@@ -1617,9 +1321,9 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="issue-head"><span class="axis-kicker">論点3</span>
 <h3>年齢より適性検査・個別評価で<span class="issue-count">20件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>義務化への立場</span><span>反対寄り 12 / 中立 8</span></div>
+<div class="temp-bar-label"><span>年齢一律か個人の適性評価か</span><span>検査強化派 12件 / 技術的対応 8件</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:60%">60%</div><div class="temp-seg neu" style="width:40%">40%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#4b9cf4"></i>適性検査優先（義務化反対寄り）</span><span><i style="background:#94a3b8"></i>中立</span></div>
+<div class="temp-bar-legend"><span><i style="background:#4b9cf4"></i>適性検査・個人評価を優先</span><span><i style="background:#94a3b8"></i>技術的対応（EV・自動ブレーキ）</span></div>
 </div>
 <p class="issue-desc">「年齢で一律に区切るのではなく、認知機能・実車試験をもっと厳格化すべき」という、年齢制限への代替案を求める立場。サポートカー限定免許や技術的な制限（EV・自動運転限定）を提案する声も含まれます。</p>
 <div class="issue-sides">
@@ -1636,9 +1340,9 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="issue-head"><span class="axis-kicker">論点4</span>
 <h3>代替交通・インフラ整備が先<span class="issue-count">9件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>インフラ整備への態度</span><span>整備優先 7 / 中立 1</span></div>
+<div class="temp-bar-label"><span>代替交通の整備を義務化より先に</span><span>整備先決派 7件 / 並行推進 1件</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:80%">80%</div><div class="temp-seg neu" style="width:20%">20%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#4b9cf4"></i>インフラ整備優先</span><span><i style="background:#94a3b8"></i>中立</span></div>
+<div class="temp-bar-legend"><span><i style="background:#4b9cf4"></i>インフラ整備を先決に</span><span><i style="background:#94a3b8"></i>義務化と並行推進</span></div>
 </div>
 <p class="issue-desc">「返納させるなら、まず代わりの交通手段を整えるべきだ」という立場。デマンド交通・コミュニティバスの充実、ライドシェアの拡大など、移動手段の代替整備が義務化の前提条件だという考え方です。</p>
 <div class="issue-sides">
@@ -1655,9 +1359,9 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="issue-head"><span class="axis-kicker">論点5</span>
 <h3>自主返納を促す特典・支援の充実<span class="issue-count">7件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>自主返納への姿勢</span><span>支援強化支持 5 / 中立 1</span></div>
+<div class="temp-bar-label"><span>特典・支援による自主返納の促進</span><span>特典強化支持 5件 / 情報提供 1件</span></div>
 <div class="temp-bar"><div class="temp-seg neu" style="width:25%">25%</div><div class="temp-seg pos" style="width:75%">75%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#e04949"></i>特典強化支持</span></div>
+<div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>情報提供・中立</span><span><i style="background:#e04949"></i>インセンティブ強化を支持</span></div>
 </div>
 <p class="issue-desc">「強制するのではなく、特典や支援で自主的な返納を促すべき」という立場。バスや電車の割引、タクシーチケット、買い物支援など、返納のメリットを実感できる制度設計を求める声です。地方でも選びやすい仕組みへの期待が込められています。</p>
 <div class="issue-sides">
@@ -1674,9 +1378,9 @@ document.getElementById('smBtnClose').addEventListener('click',()=>{document.get
 <div class="issue-head"><span class="axis-kicker">論点6</span>
 <h3>その他・複合的な反応<span class="issue-count">12件</span></h3>
 <div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>反応の傾向</span><span>分類外・混在 12</span></div>
+<div class="temp-bar-label"><span>論点を横断する複合的な反応</span><span>分類外・混在 12件</span></div>
 <div class="temp-bar"><div class="temp-seg neu" style="width:100%">100%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>複合・分類外</span></div>
+<div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>政治批判・感情表出・分類外</span></div>
 </div>
 <p class="issue-desc">「政治家にも年齢制限を」「若者の事故も多いのに高齢者だけ問題視するのはおかしい」など、免許返納そのものへの賛否より別の論点を持ち出す投稿や、感情的な怒りの発露が中心。SNSならではの生の反応が集まるカテゴリです。</p>
 <div class="issue-sides">
