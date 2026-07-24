@@ -606,7 +606,7 @@
       .thirty-summary, .vote-card-grid, .vote-comparison, .related-grid { grid-template-columns:1fr; }
       .vote-image-card { min-height:110px; }
     }
-  
+
     /* === 論点アリーナ === */
     .arena-section{position:relative;background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat;border-top:0;padding:42px min(6vw,72px)}
     .arena-section .panel-title h2{color:#fff}.arena-section .panel-title span{color:rgba(255,255,255,.7)!important;background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.2)!important}
@@ -668,7 +668,52 @@
       .vote-stance-btn{min-width:unset;width:100%}
     }
 
-  </style>
+
+/* TIDE_CARD_START */
+.update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
+.update-dashboard>.stats{max-width:1180px;margin:0 auto 14px;gap:10px;background:transparent}
+.update-dashboard>.stats::before{display:none}
+.update-dashboard>.stats .stat{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);box-shadow:0 8px 24px rgba(18,35,64,.06)}
+.update-dashboard>.stats .stat span{font-size:12px;color:var(--muted)}
+.update-dashboard>.stats .stat strong{font-size:21px;color:var(--ink)}
+.tide-card{max-width:1180px;margin:0 auto;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}
+.tide-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}
+.tide-title-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tide-kicker{display:inline-flex;padding:5px 10px;border-radius:999px;background:#eaf1ff;color:#315bd8;font-size:13px;font-weight:900}
+.tide-head h2{margin:0;font-size:28px;letter-spacing:-.02em}
+.tide-period{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:#f3f6fb;color:#26364f;font-size:16px;font-weight:900;white-space:nowrap}
+.tide-period b{color:#315bd8;font-size:18px}
+.tide-lead{margin-bottom:8px;font-size:22px;font-weight:900;line-height:1.55}
+.tide-delta{color:#b45309;font-size:31px;white-space:nowrap}
+.tide-explain{margin:0 0 18px;color:var(--muted);font-size:15px;line-height:1.75}
+.tide-movements{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.tide-movement{padding:14px 16px;border:1px solid #e1e7f0;border-radius:14px;background:#f9fbfe}
+.tide-movement-label{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:14px;font-weight:900}
+.tide-dot{width:10px;height:10px;border-radius:50%}.tide-dot.pro{background:#059669}.tide-dot.conditional{background:#d97706}.tide-dot.con{background:#dc2626}
+.tide-values{font-size:17px;font-weight:900}.tide-values small{color:var(--muted);font-size:13px;font-weight:800}
+.tide-change{display:block;margin-top:3px;font-size:15px;font-weight:900}.tide-change.up{color:#047857}.tide-change.down{color:#b45309}.tide-change.con{color:#b91c1c}
+.tide-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(310px,.75fr);gap:22px;align-items:stretch}
+.tide-bars{display:grid;gap:14px;padding:18px;border-radius:16px;background:#f3f6fb}
+.tide-row{display:grid;grid-template-columns:148px 1fr 74px;gap:12px;align-items:center;font-size:14px;font-weight:900}
+.tide-row-label small{display:block;color:var(--muted);font-size:12px}
+.tide-track{display:flex;height:18px;border-radius:999px;overflow:hidden;background:#dfe5ee}.tide-seg{height:100%}.tide-seg.pro{background:#34d399}.tide-seg.conditional{background:#fbbf24}.tide-seg.con{background:#fb7185}.tide-seg.neutral{background:#94a3b8}
+.tide-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:2px;color:#4b5c74;font-size:12px;font-weight:800}.tide-legend span{display:inline-flex;align-items:center;gap:5px}.tide-legend i{width:8px;height:8px;border-radius:50%}
+.tide-side{display:grid;gap:10px}.tide-fact{padding:14px 16px;border-radius:14px;background:#13223d;color:#dbe6f5;font-size:13px;line-height:1.55}.tide-fact strong{display:block;margin-top:3px;color:#fff;font-size:16px;line-height:1.55}
+.tide-note{margin:16px 0 0;padding-top:14px;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.7}
+.hermes-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.hermes-summary-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:16px}.hermes-summary-card .axis-count{font-size:28px}
+.hermes-issue-list{display:grid;gap:14px}.hermes-issue-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:18px}.hermes-issue-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.hermes-issue-head h3{margin:0;font-size:18px}.hermes-issue-count{font-weight:900;color:var(--accent);white-space:nowrap}
+.hermes-stance-bar{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#eef2f6;margin:12px 0 8px}.hermes-stance-bar span.pro{background:#059669}.hermes-stance-bar span.conditional{background:#d97706}.hermes-stance-bar span.con{background:#dc2626}.hermes-stance-bar span.neutral{background:#94a3b8}
+.hermes-legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:11px}.hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.hermes-sample{border-left:4px solid var(--line);padding:8px 10px;background:var(--accent-soft);font-size:12px;line-height:1.55}.hermes-sample a{font-weight:800;color:var(--accent);text-decoration:none}
+@media(max-width:720px){
+  .update-dashboard{padding:10px 10px 24px}.update-dashboard>.stats{grid-template-columns:repeat(2,1fr);gap:8px}.update-dashboard>.stats .stat{padding:12px}.update-dashboard>.stats .stat strong{font-size:18px}
+  .tide-card{padding:20px 16px;border-radius:16px}.tide-head{display:block;margin-bottom:18px}.tide-title-wrap{margin-bottom:12px}.tide-head h2{font-size:25px}.tide-kicker{font-size:12px}.tide-period{justify-content:center;width:100%;font-size:14px;white-space:normal}.tide-period b{font-size:16px}
+  .tide-lead{font-size:19px}.tide-delta{display:block;margin-top:2px;font-size:27px;white-space:normal}.tide-explain{font-size:14px}.tide-movements,.tide-grid,.hermes-summary-grid,.hermes-samples{grid-template-columns:1fr}
+  .tide-movements{gap:8px}.tide-movement{padding:12px 14px}.tide-row{grid-template-columns:92px 1fr 50px;gap:8px;font-size:12px}.tide-row-label small{font-size:10px}.tide-track{height:16px}.tide-bars{padding:14px}.tide-fact strong{font-size:15px}.tide-note{font-size:12px}
+  .hermes-issue-head{display:block}.hermes-issue-count{display:block;margin-top:4px}
+}
+/* TIDE_CARD_END */
+
+</style>
   <link rel="stylesheet" href="topic-modern.css?v=2">
   <script src="topic-modern.js?v=1" defer></script>
 <!-- GA_TAG_START -->
@@ -692,23 +737,39 @@
       <h1>部活動の地域移行の是非 SNS反応まっぷ</h1>
       <p class="question-line">教員の限界を地域で支える改革か、家庭負担と地域格差を広げる移行か？</p>
       <p class="lead">中学校の部活動を地域団体・民間クラブに移行する政策について、SNS上の賛否を可視化したビューです。世論調査ではありません。</p>
-      <div class="thirty-summary" aria-label="30秒サマリー"><ul>
-        <li>最多は「教員負担の軽減」57件で、学校だけで部活を支え続ける限界を訴える声が目立つ。</li>
-        <li>反対・慎重側は費用、送迎、受け皿不足、学校部活の教育的価値喪失への懸念に集まる。</li>
-        <li>接点は「子どもの活動機会を残すこと」で、制度設計と公的支援の具体性が争点になっている。</li>
-      </ul></div>
+<div class="thirty-summary" aria-label="30秒サマリー"><ul><li>Hermesで累計467件を分類し、関連464件のうち意見投稿は389件。</li><li>最多論点は「教員の働き方」114件。最多スタンスは「支持」176件。</li><li>今回更新では「費用・家庭負担」が前回追加分より+6.9ポイント増加。</li></ul></div>
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats">
-      <div class="stat"><span>収集投稿</span><strong>306件</strong></div>
-      <div class="stat"><span>2D分類</span><strong>245件</strong></div>
-      <div class="stat"><span>論点分類</span><strong>222件</strong></div>
-      <div class="stat"><span>最多論点</span><strong>教員の働き方 58</strong></div>
-    </section>
+    <section class="update-dashboard" aria-label="更新データと世論の潮目"><section class="stats"><div class="stat"><span>今回追加した投稿</span><strong>161件</strong></div><div class="stat"><span>比較した意見投稿</span><strong>107件 → 132件</strong></div><div class="stat"><span>最も動いた立場</span><strong>条件・改善要求 −5.6ポイント</strong></div><div class="stat"><span>最も伸びた論点</span><strong>費用・家庭負担 ＋6.9ポイント</strong></div></section>
+<!-- TIDE_CARD_START -->
+<section class="tide-card" aria-label="世論の潮目 前回更新と今回更新の比較">
+  <div class="tide-head">
+    <div class="tide-title-wrap"><span class="tide-kicker">今回の更新でどう動いた？</span><h2>世論の潮目</h2></div>
+    <div class="tide-period"><span>前回 2026年7月12日</span><b>→</b><span>今回 2026年7月23日</span></div>
+  </div>
+  <div class="tide-lead">「地域移行には条件・改善が必要という意見」の割合が <span class="tide-delta">5.6ポイント減少</span></div>
+  <p class="tide-explain">投稿全体の件数ではなく、各更新日に追加された「意見投稿」の中で、その立場が占める割合を比較しています。</p>
+  <div class="tide-movements"><div class="tide-movement"><div class="tide-movement-label"><i class="tide-dot pro"></i>支持</div><div class="tide-values">42.1% <small>→</small> 45.5%</div><span class="tide-change up">+3.4ポイント</span></div><div class="tide-movement"><div class="tide-movement-label"><i class="tide-dot conditional"></i>条件付き</div><div class="tide-values">21.5% <small>→</small> 15.9%</div><span class="tide-change down">-5.6ポイント</span></div><div class="tide-movement"><div class="tide-movement-label"><i class="tide-dot con"></i>慎重・反対</div><div class="tide-values">30.8% <small>→</small> 31.8%</div><span class="tide-change con">+1.0ポイント</span></div></div>
+  <div class="tide-grid">
+    <div class="tide-bars" aria-label="スタンス構成の比較">
+      <div class="tide-row"><span class="tide-row-label">前回追加分<small>2026年7月12日</small></span><div class="tide-track"><span class="tide-seg pro" style="width:42.06%"></span><span class="tide-seg conditional" style="width:21.50%"></span><span class="tide-seg con" style="width:30.84%"></span><span class="tide-seg neutral" style="width:5.61%"></span></div><strong>107件</strong></div>
+      <div class="tide-row"><span class="tide-row-label">今回追加分<small>2026年7月23日</small></span><div class="tide-track"><span class="tide-seg pro" style="width:45.45%"></span><span class="tide-seg conditional" style="width:15.91%"></span><span class="tide-seg con" style="width:31.82%"></span><span class="tide-seg neutral" style="width:6.82%"></span></div><strong>132件</strong></div>
+      <div class="tide-legend">
+        <span><i style="background:#34d399"></i>移行支持</span><span><i style="background:#fbbf24"></i>条件・改善要求</span><span><i style="background:#fb7185"></i>慎重・反対</span><span><i style="background:#94a3b8"></i>中立・情報</span>
+      </div>
+    </div>
+    <div class="tide-side">
+      <div class="tide-fact"><span>今回、最も比率が伸びた論点</span><strong>「費用・家庭負担」を主な論点とする意見が +6.9ポイント</strong></div>
+      <div class="tide-fact"><span>表現の強さの変化</span><strong>感情表現が「強い」投稿の割合が +5.6ポイント</strong></div>
+    </div>
+  </div>
+  <p class="tide-note">比較対象：前回追加分 107件／今回追加分 132件。同じ検索語セットで取得した投稿をHermesで再分類しています。SNS投稿サンプルの構成変化であり、世論調査ではありません。</p>
+</section>
+<!-- TIDE_CARD_END --></section>
 <section class="panel explainer-section" id="explainer-section">
 <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
@@ -825,7 +886,7 @@
 <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
+<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、Hermesが論点・スタンス・強度を分類しました。最終更新: 2026-07-23。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
@@ -841,17 +902,18 @@
 
 <section class="arena-section" id="stance-map-section">
 <div id="stance-map-inner" style="max-width:720px;margin:0 auto">
-<div class="panel-title"><h2>論点アリーナ</h2><span>245件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
+<div class="panel-title"><h2>論点アリーナ</h2><span>意見389件 | セクター=論点 / 中心に近いほど冷静 / 色=立場</span></div>
 <div id="sm-wrap">
   <canvas id="smCanvasHeat" width="640" height="640"></canvas>
   <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
-<p class="map-caption">中心の「部活動の地域移行」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=移行支持 / 赤=移行反対 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
+<p class="map-caption">中心の「部活動の地域移行」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=移行支持 / 黄=条件付き・改善要求 / 赤=慎重・反対 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
 <p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはこのあたり」マーカーで表示しています。</p>
 <div class="sm-controls">
   <div class="sm-legend">
     <span><i style="background:#059669"></i>移行支持</span>
-    <span><i style="background:#dc2626"></i>移行反対</span>
+    <span><i style="background:#d97706"></i>条件付き</span>
+    <span><i style="background:#dc2626"></i>慎重・反対</span>
     <span><i style="background:#64748b"></i>中立</span>
     <span style="color:#888">中心＝冷静 / 外周＝感情的</span>
   </div>
@@ -864,251 +926,395 @@
 
 <script>
 const SM_RAW = [
-{x:2.0,e:1.0,c:0.8,i:0,s:"地域移行の月会費統一と市税補助を提案し強く支持",u:"https://x.com/TheMirageof0/status/2070624074506863002"},
-{x:-1.0,e:-2.0,c:0.85,i:0,s:"月額8000円の家計負担を嘆き地域移行に不支持",u:"https://x.com/TheMirageof0/status/2070621781757726855"},
-{x:-1.0,e:-1.0,c:0.8,i:1,s:"報酬低くするから指導者不足になる",u:"https://x.com/774nyannyan/status/2070491362882150454"},
-{x:-0.5,e:1.0,c:0.7,i:1,s:"熊本市の新方式を批判。教育価値を強調し市民の無関心を非難",u:"https://x.com/774nyannyan/status/2070491361137357035"},
-{x:-1.0,e:0.0,c:0.6,i:5,s:"中体連高体連が地域移行で追い詰められ教育課程に位置づけてほしい",u:"https://x.com/wu76jgS82zThc8u/status/2070462759238811989"},
-{x:1.0,e:0.0,c:0.85,i:1,s:"地域移行を支持し持続可能な運営を求める",u:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
-{x:0.0,e:0.0,c:0.6,i:6,s:"保護者が部活地域移行を思考中",u:"https://x.com/papakoya25/status/2070424396137910617"},
-{x:0.5,e:0.0,c:0.7,i:5,s:"市への質問形式で地域移行の検討姿勢を示す",u:"https://x.com/wakohappy2023/status/2070372233567240572"},
-{x:-1.0,e:1.0,c:0.75,i:1,s:"指導者の低報酬・責任の乖離を批判",u:"https://x.com/SIND_/status/2070325146372739488"},
-{x:-0.5,e:0.5,c:0.8,i:3,s:"地域移行流れ容認も部活縮小と保護者憤りに懸念",u:"https://x.com/Miyabi14_Miyabi/status/2070276591167639853"},
-{x:1.0,e:-1.0,c:0.7,i:4,s:"移行後の継続仕組み優先を提案、自校に部活ない皮肉",u:"https://x.com/nijimasufire/status/2070118138885312676"},
-{x:1.0,e:-1.0,c:0.7,i:6,s:"地域移行支持を示しつつ矛盾を皮肉",u:"https://x.com/774nyannyan/status/2070117159511130290"},
-{x:1.5,e:0.0,c:0.75,i:1,s:"地域移行支持、教員以外も負担分散すべき",u:"https://x.com/haiyuepanda/status/2070098123440140672"},
-{x:1.0,e:0.0,c:0.85,i:1,s:"地域移行実現には指導者に生活を保障できるコストが必要",u:"https://x.com/todoporzoy2012/status/2070092023512932832"},
-{x:-1.0,e:-1.0,c:0.75,i:1,s:"地域移行に懐疑的で現状維持派、冷静だが皮肉を含む",u:"https://x.com/crypticsa/status/2070077324008341725"},
-{x:-1.0,e:-1.0,c:0.7,i:5,s:"地域移行の失敗批判と政策批判を含む分析投稿",u:"https://x.com/wu76jgS82zThc8u/status/2070075708609859823"},
-{x:1.0,e:1.0,c:0.85,i:3,s:"少子化で破綻前に地域移行で存続支持",u:"https://x.com/774nyannyan/status/2070058879938084997"},
-{x:1.0,e:0.0,c:0.8,i:3,s:"地域移行で不登校の子も参加しやすくなることを期待",u:"https://x.com/Mr_Peki_chan/status/2070029090003009670"},
-{x:0.0,e:1.0,c:0.7,i:5,s:"クラブ化はチーム作成に留まり本質的理解が欠けると指摘",u:"https://x.com/chaw0501/status/2070020638383997407"},
-{x:1.5,e:1.0,c:0.85,i:5,s:"地域移行を推進し具体的な改善案を主張",u:"https://x.com/tFwqQpA4kn3bwDn/status/2069879568618627305"},
-{x:-1.0,e:1.0,c:0.7,i:4,s:"団体数半減を嘆き地域移行の影響を指摘",u:"https://x.com/edamame_1219/status/2069742846606004286"},
-{x:-1.5,e:1.5,c:0.85,i:3,s:"地域移行で夢を奪われる子への怒り",u:"https://x.com/No2lab150687/status/2069741426276233331"},
-{x:-1.0,e:0.0,c:0.7,i:1,s:"地域移行の持続困難を警告",u:"https://x.com/774nyannyan/status/2069730125340692943"},
-{x:0.0,e:0.0,c:0.6,i:0,s:"地域移行後の決裁権の変化を冷静に分析",u:"https://x.com/Pansy_school/status/2069715403236954447"},
-{x:1.0,e:0.0,c:0.6,i:3,s:"移行支持立場からやれなくなる論への疑問を呈する",u:"https://x.com/774nyannyan/status/2069694892037874163"},
-{x:-1.0,e:1.0,c:0.85,i:4,s:"地域移行で野球の育成環境悪化を批判",u:"https://x.com/mamamam4949/status/2069589990011818183"},
-{x:-1.0,e:-1.0,c:0.8,i:5,s:"地域移行の課題追及と安全対策再不備を批判",u:"https://x.com/gi26ai/status/2069586455618523517"},
-{x:-1.0,e:0.5,c:0.7,i:5,s:"地域移行の弊害を指摘、制度設計への疑問呈す",u:"https://x.com/suzuki_turitaro/status/2069580292386627898"},
-{x:-1.0,e:0.0,c:0.7,i:1,s:"移行の障壁である家族の移動困難と受入体制不足を指摘",u:"https://x.com/444sp/status/2069570277009490051"},
-{x:0.0,e:-1.0,c:0.3,i:5,s:"マージャン登録への困惑・面白がる反応",u:"https://x.com/urya4432/status/2069543717686673480"},
-{x:1.0,e:0.0,c:0.7,i:1,s:"地域移行は大多数賛成、教職員アンケートも支持",u:"https://x.com/tomokun_life/status/2068124530384711714"},
-{x:-1.0,e:1.0,c:0.75,i:5,s:"高校野球の名称問題を懸念し移行に否定的",u:"https://x.com/lumIFSHUWs6GO2n/status/2063976964898332701"},
-{x:1.0,e:1.0,c:0.8,i:0,s:"移行支持、条件不可能と諦め反対派を批判",u:"https://x.com/774nyannyan/status/2063489857993969715"},
-{x:2.0,e:0.0,c:0.8,i:4,s:"地域移行支持、持続可能性の観点から肯定",u:"https://x.com/774nyannyan/status/2068230558992458134"},
-{x:1.5,e:0.5,c:0.8,i:5,s:"地域移行推進派が反対派のせいだと主張",u:"https://x.com/774nyannyan/status/2067883582647849464"},
-{x:1.5,e:0.5,c:0.85,i:5,s:"地域移行の矛盾に困惑。支持だが熱度は中程度",u:"https://x.com/774nyannyan/status/2067880712943059272"},
-{x:-1.0,e:1.0,c:0.7,i:5,s:"地域移行反対論者を相手にせず",u:"https://x.com/774nyannyan/status/2063907885764182333"},
-{x:2.0,e:1.5,c:0.85,i:6,s:"地域移行推進を支持し反対派を過激派と批判",u:"https://x.com/JlMqc1bALnVe9gS/status/2063598518305218910"},
-{x:-0.5,e:0.0,c:0.85,i:1,s:"移行进まない理由は保護者负担と住民参画不足と分析",u:"https://x.com/774nyannyan/status/2063204420297617773"},
-{x:-1.0,e:0.0,c:0.7,i:5,s:"地域移行に反対立場だが、面倒くさがりつつも資料作成中",u:"https://x.com/Pansy_school/status/2063014247500816645"},
-{x:-2.0,e:1.0,c:0.8,i:6,s:"地域移行に強く反対、教員の質低下を懸念",u:"https://x.com/yamako_10/status/2061588627088634365"},
-{x:1.0,e:0.0,c:0.75,i:0,s:"移行反対は親の送迎面倒さが原因と主張",u:"https://x.com/774nyannyan/status/2060903547257131344"},
-{x:1.0,e:-1.0,c:0.6,i:5,s:"地域移行支持も住民反対で実現困難との皮肉",u:"https://x.com/774nyannyan/status/2060894243808530650"},
-{x:-1.0,e:-1.0,c:0.75,i:4,s:"地域移行の住民反対で頓挫すると予測",u:"https://x.com/774nyannyan/status/2060890475503157752"},
-{x:1.0,e:0.5,c:0.8,i:6,s:"地域移行支持だが現状維持派の矛盾を指摘",u:"https://x.com/774nyannyan/status/2058872234408833533"},
-{x:1.0,e:1.0,c:0.85,i:6,s:"地域移行支持を表明、🔥で熱量ある政策論",u:"https://x.com/bansho_teruhito/status/2069413298358059063"},
-{x:-1.0,e:1.0,c:0.7,i:2,s:"地域移行進まず 管理職・教員の意識改革を批判",u:"https://x.com/AUzzkqIjZ37594/status/2067938043332604078"},
-{x:0.0,e:0.0,c:0.7,i:5,s:"地域移行に伴う内申評価の公平化を提案",u:"https://x.com/maeshima_nishi/status/2066861890064760889"},
-{x:-1.0,e:-1.0,c:0.7,i:2,s:"地域移行の可行性に疑問呈し教員の善意頼み批判",u:"https://x.com/iwanissimo/status/2066786203442217008"},
-{x:0.5,e:0.0,c:0.7,i:1,s:"地域移行の課題と解決策を冷静に分析する投稿",u:"https://x.com/taiikujin966039/status/2065544492430643515"},
-{x:-1.0,e:0.0,c:0.7,i:2,s:"地域移行の可行性に疑問、教員善意依存の構造批判",u:"https://x.com/yamoto8/status/2065429718128816346"},
-{x:-1.0,e:0.0,c:0.6,i:5,s:"地域移行で問題噴出を予測・やや懸念示す",u:"https://x.com/munougensouka/status/2064392535120937430"},
-{x:0.5,e:0.0,c:0.65,i:4,s:"地域移行の格差解消プロジェクト紹介。移行自体は支持方向",u:"https://x.com/canpan2009/status/2064286063192117415"},
-{x:0.0,e:1.0,c:0.7,i:5,s:"地域移行のビジネスモデル実施上の苦労を吐露",u:"https://x.com/Pansy_school/status/2063391483013583240"},
-{x:-1.5,e:0.5,c:0.8,i:0,s:"移行に疑問、家庭負担増と体験格差を懸念",u:"https://x.com/danchosabasabu/status/2062309010200772695"},
-{x:2.0,e:1.5,c:0.85,i:6,s:"地域移行支持・民意を根拠に既得権益側を批判",u:"https://x.com/m727243023/status/2060651797388394551"},
-{x:-1.5,e:1.0,c:0.75,i:2,s:"現行制度の強制労働的な実態への不満と移行への消極的立場",u:"https://x.com/774nyannyan/status/2060324516652568821"},
-{x:1.0,e:-0.5,c:0.75,i:5,s:"文科省の腰の据わらない姿勢に苦笑しつつ地域移行推進派",u:"https://x.com/Sukimakagukmny/status/2060164886467150160"},
-{x:-1.5,e:1.5,c:0.85,i:1,s:"委託条件の非現実性を批判し政策の本気度を疑問視",u:"https://x.com/ikuji_takuto/status/2070078294410850366"},
-{x:0.0,e:1.0,c:0.6,i:6,s:"スポ少非協力親を批判、地域移行を背景に教育責任を促す",u:"https://x.com/AsahiPodcast/status/2069498240240849347"},
-{x:1.0,e:1.0,c:0.6,i:1,s:"部活外部委託と教員待遇改善を主張",u:"https://x.com/godof31icecream/status/2069288512311251029"},
-{x:1.0,e:1.0,c:0.85,i:2,s:"外部委託既定路線を容認、違法劳働問題を根拠に",u:"https://x.com/shirassh/status/2069006288777052163"},
-{x:-1.0,e:1.0,c:0.7,i:1,s:"休日禁止・外部委託への疑問と実務的懸念",u:"https://x.com/gigigigigijutu/status/2068437174924812622"},
-{x:1.0,e:0.5,c:0.8,i:0,s:"移行は不可避だが格差拡大を危惧",u:"https://x.com/football__cone/status/2068341617443189050"},
-{x:1.0,e:1.0,c:0.7,i:6,s:"部活外部委託を肯定、支持意見",u:"https://x.com/LIU83414453/status/2067750890862493830"},
-{x:0.0,e:-1.0,c:0.7,i:2,s:"部活外部委託を削減の象徴に挙げ教員負担の理解不足を皮肉る",u:"https://x.com/yukiuniriri/status/2067037904401236236"},
-{x:1.0,e:0.0,c:0.75,i:0,s:"スポンサーをつけた外部委託で負担軽減を提案",u:"https://x.com/kudou24307267/status/2067017810401001829"},
-{x:0.0,e:0.0,c:0.7,i:6,s:"地域移行に触れたが賛否なく淡々と記述",u:"https://x.com/akaishitaizo/status/2066060375049879553"},
-{x:1.0,e:1.0,c:0.85,i:5,s:"教師問題背景に外部委託肯定の意見",u:"https://x.com/sky_walker_1173/status/2065224434433298449"},
-{x:0.0,e:-1.0,c:0.75,i:2,s:"教員負担問題を冷笑視し現状認識を揶揄",u:"https://x.com/t_maru_summer/status/2065010419568406669"},
-{x:0.0,e:0.0,c:0.5,i:5,s:"地域移行の是非より町の評価に困惑",u:"https://x.com/DwpN0ecG6R72240/status/2064660470913733098"},
-{x:1.0,e:0.5,c:0.75,i:3,s:"水泳授業存続と外部委託を支持する個人的意見",u:"https://x.com/HissatuShigotoP/status/2064556920636358772"},
-{x:0.0,e:0.0,c:0.5,i:5,s:"外部委託の理由を問い科学部との比較をしている",u:"https://x.com/punch551/status/2064470890977608037"},
-{x:-1.0,e:1.0,c:0.8,i:5,s:"部活外注を批判し教育価値を重視する否定的見解",u:"https://x.com/2812572ng/status/2063911271570047166"},
-{x:1.0,e:0.0,c:0.6,i:1,s:"OBOG活用と外部委託を肯定、地域移行支持",u:"https://x.com/addreality/status/2063634162880549031"},
-{x:-1.0,e:-1.0,c:0.7,i:1,s:"移行後の部活で指導者が不在の中、子供たちがサークル状態で活動している現状を報告",u:"https://x.com/lHAKPI9sj52UVOW/status/2062678108780818526"},
-{x:1.0,e:1.5,c:0.9,i:2,s:"部活外部委託により教師の負担軽減を求める批判的意見",u:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
-{x:-1.0,e:0.0,c:0.6,i:0,s:"配偶者の部活疲れを嘆き外部委託に疑問",u:"https://x.com/wamipiha_ROOM/status/2062441022815404445"},
-{x:-1.0,e:1.0,c:0.8,i:3,s:"移行反対で代替案提示把孩子放在第一位",u:"https://x.com/joO7g4uWTlVCSMA/status/2061724320259608806"},
-{x:2.0,e:1.0,c:0.7,i:6,s:"教師負担軽減のため部活の外部委託を強く望む",u:"https://x.com/yuka_greentea30/status/2061436132769124660"},
-{x:1.0,e:0.0,c:0.75,i:5,s:"部活は学校の仕事ではなく地域クラブでと主張",u:"https://x.com/sugiyama2023/status/2061056903124545999"},
-{x:-0.5,e:0.0,c:0.75,i:2,s:"部活への公的支援に懐疑的だが外部委託は支持",u:"https://x.com/Rx0073LT/status/2060361575635255788"},
-{x:0.0,e:0.0,c:0.65,i:5,s:"教育改革の虚幻性を指摘する意見",u:"https://x.com/mathmathsan/status/1888223251400438207"},
-{x:0.0,e:-1.0,c:0.7,i:2,s:"教員自身の負担削減行動を促す冷淡な意見",u:"https://x.com/sugiyama2023/status/2069927749997953237"},
-{x:0.0,e:0.0,c:0.6,i:2,s:"入試優先の教育問題を指摘、地域移行には触れず",u:"https://x.com/Yama_to_Sima/status/2069699164318154834"},
-{x:0.0,e:0.0,c:0.6,i:5,s:"市議批判と地域移行の困難性指摘",u:"https://x.com/db6qp9/status/2069228519016780190"},
-{x:0.5,e:1.0,c:0.75,i:1,s:"先生負担より生徒保護を優先、指導員導入を望む",u:"https://x.com/1007_nagi/status/2068954974714052941"},
-{x:-1.0,e:-1.0,c:0.85,i:1,s:"移行進まぬ理由は地域のメリット不足と財源の欠如",u:"https://x.com/774nyannyan/status/2068566479247950305"},
-{x:-1.0,e:0.0,c:0.85,i:1,s:"地域移行の難しさを住民メリット不足で分析",u:"https://x.com/774nyannyan/status/2068564242505269619"},
-{x:0.0,e:0.5,c:0.6,i:2,s:"顧問拒否で教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2068442038786547725"},
-{x:-1.0,e:1.0,c:0.8,i:2,s:"教員負担増への懸念と現場軽視への批判",u:"https://x.com/Kazukittyo_gun/status/2068325020313764315"},
-{x:0.5,e:-1.0,c:0.8,i:2,s:"教員負担削減観点から地域移行を容認する消極的支持",u:"https://x.com/774nyannyan/status/2068293099353416159"},
-{x:-2.0,e:2.0,c:0.9,i:2,s:"経費削減優先で生徒の安全を軽視する政策に強く反発",u:"https://x.com/nom1153/status/2068292289173311686"},
-{x:-1.0,e:0.0,c:0.75,i:5,s:"学校負担軽減の観点から部活の学校依存に疑問",u:"https://x.com/zabarava/status/2068291631573549209"},
-{x:0.0,e:2.0,c:0.85,i:2,s:"分業で解决すべきで税金の議論は的外れ",u:"https://x.com/quomoritureruis/status/2068245939375219020"},
-{x:-1.0,e:1.0,c:0.85,i:3,s:"部活動の教育的価値を強調し、縮小に懸念",u:"https://x.com/lIjdqs9tKf2434/status/2068244369690308798"},
-{x:0.0,e:1.0,c:0.65,i:2,s:"顧問拒否の実践法を共有し教員負担軽減を訴える",u:"https://x.com/yoshiki20260530/status/2068146586954412271"},
-{x:-1.0,e:-1.0,c:0.7,i:5,s:"地域移行方針を批判し、受け皿整備の困難さを指摘",u:"https://x.com/774nyannyan/status/2068125288605852033"},
-{x:0.0,e:0.5,c:0.85,i:1,s:"部活指導に思いのない者へ批判、特に地域移行での負担押しつけを問題視",u:"https://x.com/774nyannyan/status/2067944905457156215"},
-{x:-0.5,e:-1.0,c:0.75,i:1,s:"移行に反対はしないが負担転嫁を皮肉る",u:"https://x.com/774nyannyan/status/2067944484231651534"},
-{x:-1.0,e:-1.0,c:0.75,i:5,s:"負担を転嫁するだけでは解決しないと批判的",u:"https://x.com/774nyannyan/status/2067609586316800281"},
-{x:-1.5,e:0.5,c:0.75,i:5,s:"地域移行支持で、保護者を批判",u:"https://x.com/774nyannyan/status/2067609048686669921"},
-{x:0.0,e:0.5,c:0.75,i:2,s:"部活的教育意義認めつつ教員無料労働の矛盾を指摘",u:"https://x.com/Pansy_school/status/2067581200940843298"},
-{x:2.0,e:1.0,c:0.9,i:2,s:"部活解体と地域移行支持、教員業務削減を重視",u:"https://x.com/cold_2_dloc/status/2067556163802337627"},
-{x:1.0,e:1.0,c:0.8,i:2,s:"データで顧問拒否し教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2067198495979978851"},
-{x:-0.5,e:1.5,c:0.7,i:2,s:"顧問拒否の経験を共有し教員負担軽減を最優先",u:"https://x.com/yoshiki20260530/status/2067189419535409499"},
-{x:-1.0,e:1.0,c:0.8,i:2,s:"教員負担軽減優先で顧問拒否決意・同調圧力を批判",u:"https://x.com/yoshiki20260530/status/2066798324938919963"},
-{x:0.0,e:0.0,c:0.6,i:2,s:"教員不足の原因を列举し双方の立场を绍介",u:"https://x.com/monmon0816/status/2066477650051567764"},
-{x:-1.0,e:0.0,c:0.75,i:1,s:"地域移行懐疑論、部活縮小を提案",u:"https://x.com/774nyannyan/status/2065997295855046946"},
-{x:0.0,e:1.5,c:0.75,i:0,s:"教員負担の危険性を指摘し待遇改善を求める意見",u:"https://x.com/kobuoichan/status/2065958821567385989"},
-{x:1.0,e:1.5,c:0.7,i:2,s:"顧問拒否の経験を語り教員負担軽減を重視",u:"https://x.com/yoshiki20260530/status/2065906962597113927"},
-{x:-1.0,e:-0.5,c:0.85,i:0,s:"地域移行の改革自体は肯定しつつも、困窮世帯への負担増を懸念",u:"https://x.com/Fujisawa_Suzuki/status/2065673921421287662"},
-{x:0.0,e:1.0,c:0.9,i:2,s:"音楽教師が本業防衛のため顧問を拒否",u:"https://x.com/yoshiki20260530/status/2065653370019561677"},
-{x:0.0,e:1.0,c:0.85,i:2,s:"教員が部活顧問拒否を宣言、自分の生活守る姿勢",u:"https://x.com/yoshiki20260530/status/2065409303255924929"},
-{x:-1.0,e:0.5,c:0.75,i:2,s:"教員負担増を懸念し現状維持を支持",u:"https://x.com/G0TTZIQEWm56962/status/2064928199222702145"},
-{x:-1.0,e:1.0,c:0.8,i:2,s:"教員負担増を懸念し地域移行に否定的な意見",u:"https://x.com/anderson0214/status/2064832907576021221"},
-{x:-1.0,e:1.5,c:0.75,i:6,s:"学校に部活を要望する親や教員の滅私奉公を痛烈に批判",u:"https://x.com/hagakikatteren/status/2064823846402933129"},
-{x:0.0,e:-1.0,c:0.8,i:6,s:"ガイドライン根拠に 部活義務否定・教員負担軽減寄りの冷静な意見",u:"https://x.com/n821nJF8iuB4JAU/status/2064500878632210546"},
-{x:-1.0,e:1.0,c:0.85,i:2,s:"教員負担軽減を優先し 部活顧問拒否を呼びかける投稿",u:"https://x.com/yoshiki20260530/status/2064461183793696895"},
-{x:1.5,e:0.5,c:0.75,i:6,s:"部活廃止を肯定し全校への拡大望む",u:"https://x.com/mamehina012/status/2070658992205148385"},
-{x:-2.0,e:2.0,c:0.9,i:2,s:"部活廃止訴える、教員負担軽減最優先で感情強い",u:"https://x.com/Hfcn4oelqPHUQqM/status/2070655303063158975"},
-{x:-1.0,e:0.0,c:0.85,i:3,s:"学校部活は誰もが参加できるで開かれた存在であるべきと主張",u:"https://x.com/yanderedaisuki4/status/2070624714977050868"},
-{x:-1.0,e:1.0,c:0.7,i:5,s:"文科省の部活廃止に批判、監視求める",u:"https://x.com/Nijiiro_Ongaku/status/2070609133913719174"},
-{x:-2.0,e:1.0,c:0.6,i:6,s:"部活廃止を提唱、再発防止では不十分と主張",u:"https://x.com/VrJQQQDQJKmiLzY/status/2070519063667986861"},
-{x:-1.0,e:0.5,c:0.65,i:6,s:"自身の経験に基づき廃部動きを皮肉る",u:"https://x.com/mizuki_suguru/status/2070407597090586780"},
-{x:1.0,e:1.0,c:0.75,i:6,s:"部活廃止を支持する激励メッセージ",u:"https://x.com/kyusaikatsudou/status/2070159831621931490"},
-{x:-1.5,e:1.0,c:0.7,i:6,s:"部活廃止論者を人格・論理的に批判し嫌悪",u:"https://x.com/LwbR1psFJd55470/status/2070082170568520116"},
-{x:-1.0,e:1.0,c:0.8,i:3,s:"部活廃止に反対し教育機会均等と子ども優先を主張",u:"https://x.com/kotoridesudesu/status/2070076881827950673"},
-{x:-2.0,e:1.0,c:0.75,i:6,s:"部活廃止を顧問自らの手で進めるべきと主張",u:"https://x.com/edu_impossible/status/2069916720547115204"},
-{x:-2.0,e:1.0,c:0.8,i:6,s:"部活の廃止を求める簡潔な意見",u:"https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261"},
-{x:-1.0,e:1.0,c:0.5,i:6,s:"廃止論派の主張に恐怖・拒否感",u:"https://x.com/GreatHjm/status/2069705751334179316"},
-{x:-1.0,e:-1.0,c:0.5,i:6,s:"部活廃止容認、議論倦厭示す投稿",u:"https://x.com/TEeDbIHUir13163/status/2069624470210572408"},
-{x:1.5,e:1.5,c:0.85,i:2,s:"教員の違法行為を批判し部活廃止を主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069555558802477361"},
-{x:2.0,e:1.0,c:0.95,i:5,s:"訴訟で部活廃止を加速させるべきと強く主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069539721546698982"},
-{x:-1.0,e:0.0,c:0.8,i:3,s:"地域移行に懸念、学校部活の競技力育成機能を評価",u:"https://x.com/best_yajima/status/2069440318144200986"},
-{x:1.0,e:-1.0,c:0.7,i:4,s:"地域移行の受け皿整備の遅れを皮肉混じりに批判",u:"https://x.com/DioxetaneMaker/status/2069386736292319386"},
-{x:-2.0,e:2.0,c:0.75,i:6,s:"部活全面廃止を怒り強く主張",u:"https://x.com/hisa10swan/status/2069350819527618875"},
-{x:-2.0,e:1.0,c:0.75,i:3,s:"部活廃止に強く反対、競技力維持を重視",u:"https://x.com/j_zw62/status/2069267266693447707"},
-{x:-1.5,e:1.5,c:0.85,i:3,s:"部活廃止を支持、顧問の質 低さを批判",u:"https://x.com/pochi1182/status/2069232307479937533"},
-{x:2.0,e:1.0,c:0.85,i:3,s:"部活廃止論に反対し教育的価値を強調",u:"https://x.com/yuritako/status/2069192029251547263"},
-{x:-2.0,e:1.0,c:0.7,i:6,s:"部活の廃止を断言的に主張する強い意見",u:"https://x.com/hisa10swan/status/2069172279624577418"},
-{x:-1.0,e:0.0,c:0.7,i:3,s:"部活人脈の有用性を語り廃止動きに反対",u:"https://x.com/nekonekocyan/status/2068933417702731793"},
-{x:-1.0,e:1.0,c:0.5,i:3,s:"部活廃止への皮肉と社会劣化歔謔",u:"https://x.com/ienadia/status/2068932768843915393"},
-{x:2.0,e:1.0,c:0.85,i:6,s:"地域移行を支持、閉鎖的な部活改善を主張",u:"https://x.com/SvErfdCKdt52541/status/2068859859077124604"},
-{x:1.5,e:1.5,c:0.8,i:5,s:"地域移行肯定、顧問不要論に共感し批判的",u:"https://x.com/sugiyama2023/status/2068848471608844627"},
-{x:-2.0,e:1.0,c:0.9,i:3,s:"部活廃止・勉強優先を明確に主張",u:"https://x.com/hiroa11011/status/2068702457820246445"},
-{x:-2.0,e:0.0,c:0.8,i:6,s:"部活廃止を主張し勉強の優先度を強調する投稿",u:"https://x.com/weTdqo0isa11532/status/2068700099845509484"},
-{x:0.5,e:0.0,c:0.5,i:1,s:"地域移行が上手くいかず改善を期待する冷静な感想",u:"https://x.com/ashigoriP/status/2076242520015851607"},
-{x:0.0,e:0.0,c:0.8,i:1,s:"地域移行の制度課題（資格・日程）を冷静に指摘",u:"https://x.com/tomo124865/status/2076196920436166795"},
-{x:0.0,e:0.0,c:0.6,i:1,s:"地域移行部活の援助活動報告。金銭よりマンパワーとの価値観。",u:"https://x.com/miokonboDaysAI/status/2076275556145058273"},
-{x:0.0,e:1.0,c:0.75,i:5,s:"給特法問題を根源と指摘し地域移行前に制度改革を主張",u:"https://x.com/satoyon4_/status/2076204305212989636"},
-{x:1.0,e:0.0,c:0.85,i:5,s:"土地管理等コスト削減と地域移行の関連性を指摘し、条件付きで支持",u:"https://x.com/Irony2Nestle/status/2076118347310371167"},
-{x:0.0,e:0.0,c:0.6,i:5,s:"地域移行進展のなさを疑問視する感想",u:"https://x.com/tokugsax2/status/2076160814382481610"},
-{x:1.0,e:0.0,c:0.7,i:6,s:"移行成功を願い東金への期待示す",u:"https://x.com/l50Hrpo9Vhmqp2f/status/2075948014540308685"},
-{x:-1.0,e:1.0,c:0.8,i:1,s:"移行で指導者となり子どもの居場所守りたい",u:"https://x.com/miokonboDaysAI/status/2075943002162577760"},
-{x:-1.0,e:1.5,c:0.85,i:5,s:"地域移行を批判。冷房など実需対応求めつつ大臣を痛烈非難",u:"https://x.com/CHAROdra/status/2075840460317397274"},
-{x:2.0,e:1.0,c:1.0,i:1,s:"地域移行事業推進へ現場重視の決意",u:"https://x.com/Pansy_school/status/2075867944224272733"},
-{x:1.0,e:2.0,c:0.85,i:5,s:"地域移行支持・子供教育優先・強い怒り",u:"https://x.com/HappaCommander/status/2075813418477494539"},
-{x:0.0,e:-1.0,c:0.55,i:6,s:"地域移行の現状を認識し移行の流れを残念がる",u:"https://x.com/defense4220/status/2075796255129899023"},
-{x:-1.0,e:0.5,c:0.85,i:1,s:"移行中の過渡期措置として教師の平日Superviseを求める",u:"https://x.com/siromi2022111/status/2075789986209919430"},
-{x:1.0,e:0.5,c:0.85,i:3,s:"地域移行の真剣な実行を求め生涯スポーツの観点から支持",u:"https://x.com/housuka1/status/2075779065483853905"},
-{x:1.0,e:0.0,c:0.8,i:5,s:"移行より展開を提唱、子の発達環境重視",u:"https://x.com/fcoachjp/status/2075754467593490668"},
-{x:-1.0,e:1.0,c:0.6,i:5,s:"地域移行の現状進め方へ不満・呆れ",u:"https://x.com/774nyannyan/status/2075736134399987882"},
-{x:-1.5,e:1.0,c:0.8,i:0,s:"地域移行に懐疑的で縮小・廃止を主張",u:"https://x.com/774nyannyan/status/2075742246767624539"},
-{x:0.0,e:0.0,c:0.6,i:3,s:"地域移行の課題を冷静に指摘、教育価値を暗に重視",u:"https://x.com/tamaru202312/status/2075724523790643610"},
-{x:-1.0,e:0.0,c:0.7,i:5,s:"施策の継続性への懸念示す批判的意見",u:"https://x.com/4ZYVNjQOkWBSoU8/status/2075717181103632386"},
-{x:-1.0,e:-1.5,c:0.7,i:2,s:"地域移行逆行批判・先生の業務過多への不満",u:"https://x.com/Sevda31651106/status/2075582024920756617"},
-{x:1.0,e:0.0,c:0.8,i:3,s:"地域移行を支持しつつ質的転換を求める冷静な意見",u:"https://x.com/VDSc7uZWlDer7Wb/status/2075504460319883736"},
-{x:1.0,e:0.5,c:0.9,i:2,s:"教員過労問題を例に地域移行の必要性を支持",u:"https://x.com/daiyusaku/status/2075499348104991038"},
-{x:-0.5,e:0.5,c:0.7,i:6,s:"地域移行無期限延期に怒り、政治混乱を皮肉",u:"https://x.com/Abaysal43/status/2075441531859742896"},
-{x:-0.5,e:0.0,c:0.7,i:1,s:"地域移行の指導者質の問題を懸念",u:"https://x.com/chisakitakami/status/2075222628797923436"},
-{x:-1.0,e:-1.0,c:0.65,i:0,s:"制度変更の皮肉。費用的家庭負担増への懸念",u:"https://x.com/s_mama_46/status/2074860053614744049"},
-{x:-1.0,e:0.0,c:0.6,i:6,s:"地域移行完了時の娘の過ごし方を憂慮",u:"https://x.com/kogaaoi/status/2074830329056272419"},
-{x:1.0,e:0.0,c:0.8,i:3,s:"地域移行支持。孩子の体験・教育価値優先。",u:"https://x.com/Pansy_school/status/2074791853225091572"},
-{x:1.0,e:-1.0,c:0.8,i:6,s:"地域移行支持も矛盾を皮肉る",u:"https://x.com/774nyannyan/status/2072690458292306109"},
-{x:0.5,e:0.5,c:0.7,i:2,s:"地域移行会議参加し先生負担の重さを認識",u:"https://x.com/SOUTAX2/status/2073945047264010712"},
-{x:1.0,e:0.0,c:0.75,i:5,s:"地域移行を個人的に進んで受け入れている姿勢",u:"https://x.com/SIND_/status/2071935980316311734"},
-{x:-1.0,e:-1.0,c:0.8,i:5,s:"地域移行実現への不信と諦めを表明",u:"https://x.com/kyouiku_mondai/status/2057446869203390747"},
-{x:0.0,e:0.0,c:0.8,i:2,s:"教員の自腹問題を指摘し負担軽減を重視",u:"https://x.com/hiiragi2280/status/2071383152145428555"},
-{x:1.0,e:0.0,c:0.7,i:0,s:"地域移行の公費支援と外部委託を提案",u:"https://x.com/ChyanNobu/status/2076250417663742366"},
-{x:0.0,e:0.0,c:0.7,i:3,s:"部活休む後悔なし。夏休み制限肯定。親心配は呪縛と分析",u:"https://x.com/S_eiko_/status/2076119525679116653"},
-{x:1.0,e:0.0,c:0.75,i:3,s:"部活外部委託支持、教員負担軽減を重視",u:"https://x.com/voviroku/status/2075726282843996560"},
-{x:-2.0,e:1.0,c:0.8,i:6,s:"部活外部委託に批判、競技力低下を懸念",u:"https://x.com/j_zw62/status/2074413179577454913"},
-{x:0.0,e:-1.0,c:0.65,i:1,s:"地域移行の現状を経験者として淡々と報告",u:"https://x.com/nimoku551ura/status/2074136077645062400"},
-{x:2.0,e:1.5,c:1.0,i:2,s:"外部委託推進で教員負担軽減を最優先する感情的意見",u:"https://x.com/dam51730/status/2073954661355474996"},
-{x:-1.0,e:0.5,c:0.7,i:6,s:"部活外部委託を残念がり_PRIVATE lessonsへ",u:"https://x.com/haruurarahare/status/2073911814791016477"},
-{x:0.5,e:-1.0,c:0.65,i:6,s:"外部委託の難しさを熱血教師の例で指摘",u:"https://x.com/hakujiu_ki/status/2073438886190358618"},
-{x:1.0,e:1.0,c:0.8,i:2,s:"部活外部委託で先生負担軽減求める投稿",u:"https://x.com/shrekbonsai/status/2073243197334298807"},
-{x:2.0,e:0.0,c:0.75,i:5,s:"民間委託・単位制を提案し地域移行を支持、費用削減志向",u:"https://x.com/frozenworkerxyz/status/2073079595411407160"},
-{x:-1.0,e:1.0,c:0.5,i:6,s:"保護者当番の負担を嘆き、先生不足→外部委託を推測",u:"https://x.com/eternalLoveFAM/status/2072829132887728292"},
-{x:1.0,e:1.0,c:0.7,i:6,s:"部活外部委託を教育改革案として支持、効率化阻む利権を批判",u:"https://x.com/frozenworkerxyz/status/2071967276035915780"},
-{x:-1.5,e:-0.5,c:0.6,i:2,s:"外部委託実現への懐疑示す 教师のバトン絡み",u:"https://x.com/kyouiku_mondai/status/2071721069980029333"},
-{x:2.0,e:0.5,c:0.7,i:6,s:"部活の移送リスクを指摘し外部委託を提案",u:"https://x.com/KMqHb6wJoh6jNUB/status/2071560482578895003"},
-{x:-1.0,e:0.5,c:0.7,i:6,s:"外部委託に疑問呈し批判的意見",u:"https://x.com/361_r19/status/2071424138594660712"},
-{x:0.0,e:1.0,c:0.8,i:1,s:"部活のボランティア労働への皮肉と外包提案",u:"https://x.com/cr5uPNIFIxI7mEl/status/2070995273678008350"},
-{x:1.0,e:0.0,c:0.7,i:3,s:"エンジョイ勢も選択肢として必要との意見",u:"https://x.com/yuk0117/status/2071178606819340387"},
-{x:1.0,e:0.0,c:0.85,i:6,s:"外部委託の現実解として地域クラブ独立を提案",u:"https://x.com/sugiyama2023/status/2070429609477472539"},
-{x:-1.0,e:-1.0,c:0.85,i:2,s:"教師負担軽減に懸念、地域移行の弊害指摘",u:"https://x.com/toichi10111/status/2076101995489051039"},
-{x:-0.5,e:0.0,c:0.7,i:5,s:"移行の難しさを認識しつつ各立場への配慮示す",u:"https://x.com/sahxuenla/status/2075698328466256258"},
-{x:0.5,e:-0.5,c:0.4,i:2,s:"部活縮小は教师負担軽減のため容認する姿勢",u:"https://x.com/satobon09/status/2074823734473674888"},
-{x:-1.0,e:-1.0,c:0.75,i:2,s:"地域移行の実効性を疑問視する批判的意見",u:"https://x.com/ChrFYM8Kui11326/status/2073637232242815404"},
-{x:-1.0,e:0.0,c:0.8,i:2,s:"教員負担増加に反対し、現場の 無理解も問題と指摘",u:"https://x.com/teacherhatena/status/2073219509687931184"},
-{x:-1.0,e:-0.5,c:0.6,i:2,s:"遠征通知で教員負担増を懸念",u:"https://x.com/kty281306/status/2074995461208072532"},
-{x:0.5,e:0.0,c:0.65,i:2,s:"地域移行加速と教員負担軽減を支持し現場主導を評価",u:"https://x.com/HIsound284443/status/2072425964597027225"},
-{x:1.0,e:0.0,c:0.85,i:2,s:"現行制度の教員負担は誤りで、早急に是正すべきと主張",u:"https://x.com/774nyannyan/status/2072289382208553291"},
-{x:-1.0,e:0.0,c:0.6,i:1,s:"外部コーチの学校適性を懸念する冷静な分析",u:"https://x.com/361_r19/status/2071425059038822520"},
-{x:0.0,e:1.0,c:0.85,i:0,s:"移行コストの負担構造を批判的に分析",u:"https://x.com/774nyannyan/status/2071205424649642303"},
-{x:0.0,e:1.0,c:0.8,i:5,s:"押しつけ合いの議論の不毛さを批判",u:"https://x.com/774nyannyan/status/2071054194933682454"},
-{x:-1.0,e:-1.0,c:0.85,i:2,s:"教員の過労を重視し地域移行に消極的な意見",u:"https://x.com/tea03031533410/status/2070847748644147509"},
-{x:-1.0,e:-1.0,c:0.8,i:2,s:"教員の部活負担を批判し改革を求める",u:"https://x.com/Yuan_TashiDelek/status/2071074743969833192"},
-{x:0.0,e:1.0,c:0.75,i:2,s:"教員の過重労働実態を批判し負担軽減を訴える",u:"https://x.com/js_kent2016/status/2070715184122147059"},
-{x:0.0,e:1.5,c:0.85,i:2,s:"教委施策への怒りと部活廃止を教师的負担軽減の手段として提案",u:"https://x.com/the_spiderkim02/status/2076264540996870574"},
-{x:-0.5,e:0.5,c:0.8,i:6,s:"部活廃止と基礎学力の因果関係に疑問を呈する",u:"https://x.com/ymwhr924/status/2076252279146262925"},
-{x:-0.5,e:1.0,c:0.65,i:2,s:"教員の超過勤務是正には部活廃止等の抜本的措置が必要",u:"https://x.com/takohati3/status/2076303411650474204"},
-{x:-2.0,e:1.0,c:0.7,i:6,s:"部活廃止に強く反対、教育的価値を重視",u:"https://x.com/blue_fires01/status/2076193871412043972"},
-{x:-2.0,e:1.0,c:0.9,i:6,s:"部活存続を求める親の懸念と費用負担提案",u:"https://x.com/minidetamago/status/2076190777806639375"},
-{x:2.0,e:1.0,c:0.8,i:3,s:"部活廃止前提に教育改革求める教育的意義問いかけ",u:"https://x.com/rErcLOd0Q6Mzrxj/status/2076196454587355299"},
-{x:0.5,e:0.5,c:0.75,i:3,s:"部活廃止に共感も懸念あり",u:"https://x.com/Risarisakiu/status/2076175588474413236"},
-{x:1.0,e:0.0,c:0.85,i:5,s:"地域移行の推進を支持する穏やか意見",u:"https://x.com/nabeshi2002jp/status/2076120662524244208"},
-{x:2.0,e:0.0,c:0.85,i:5,s:"部活廃止と民営化を支持、副業許可で师资確保",u:"https://x.com/gedoubeam/status/2076109490253185329"},
-{x:2.0,e:0.5,c:0.7,i:2,s:"部活廃止と働き方改革進展を好意的に評価",u:"https://x.com/adhdsavetheplan/status/2076098536299798771"},
-{x:1.0,e:-1.0,c:0.75,i:4,s:"部活廃止の趋势を容認・支持しつつ，冷淡に観察する姿勢",u:"https://x.com/otanyan_0923/status/2075967205616074803"},
-{x:-0.5,e:-0.5,c:0.6,i:2,s:"先生の必须有化と改革を結びつけ変化への困惑示す",u:"https://x.com/qQCPNzKkk8CtUnt/status/2075944120410087821"},
-{x:-1.5,e:1.5,c:0.7,i:6,s:"部活廃止を求める怒りを含む投稿",u:"https://x.com/a4wd/status/2075930302023909691"},
-{x:0.0,e:-0.5,c:0.3,i:2,s:"廃止地域の報告のみ、意見不明",u:"https://x.com/yurupsk/status/2075942395448025376"},
-{x:-2.0,e:1.0,c:0.85,i:2,s:"部活廃止主張。孩子の幸福を優先し教師の犠牲も懸念",u:"https://x.com/hiroa11011/status/2075926152070443511"},
-{x:1.0,e:0.0,c:0.85,i:5,s:"部活廃止より地域移行を支持、教育の質維持を重視",u:"https://x.com/haiyuepanda/status/2075825617267007541"},
-{x:-2.0,e:1.5,c:0.8,i:6,s:"部活の廃止を一択と強く主張",u:"https://x.com/haoli3474/status/2075790544576582102"},
-{x:-1.0,e:1.0,c:0.8,i:2,s:"部活廃止機運への嘆きと風潮への不満",u:"https://x.com/Mezase1Ok/status/2075794716768281015"},
-{x:-2.0,e:1.5,c:0.65,i:6,s:"部活廃止を断定的に主張する短文",u:"https://x.com/mitsunobu47/status/2075875504201351366"},
-{x:1.5,e:-0.5,c:0.8,i:2,s:"学校部活廃止論。教員負担軽減を最優先",u:"https://x.com/meronsparking/status/2075546907817197976"},
-{x:-1.5,e:1.5,c:0.65,i:6,s:"部活廃止・学童化への嘆きと批判",u:"https://x.com/arakawakappa25/status/2075494831250686345"},
-{x:-2.0,e:1.0,c:0.85,i:6,s:"部活廃止を最強に主張。理由なく断言",u:"https://x.com/migrainejust/status/2075398159053037981"},
-{x:-2.0,e:1.5,c:0.85,i:6,s:"子供の健康を守るため部活廃止を主張",u:"https://x.com/theworldbluee01/status/2075222203948556757"},
-{x:1.0,e:0.0,c:0.5,i:6,s:"部活廃止を支持し安らぎ得たとの静か感想",u:"https://x.com/kyusaikatsudou/status/2075233261652262922"},
-{x:-2.0,e:1.0,c:0.85,i:5,s:"学校部活の全面的廃止を主張、批判的",u:"https://x.com/theworldbluee01/status/2075184856657727657"},
-{x:-1.0,e:-1.0,c:0.7,i:3,s:"部活廃止に反対し教育的価値を重視する軽口投稿",u:"https://x.com/gomadango0302/status/2075197973177459137"},
-{x:-2.0,e:1.5,c:0.85,i:2,s:"部活廃止を主張し教員負担軽減至上主義の感情的反発",u:"https://x.com/Hfcn4oelqPHUQqM/status/2075157733981257737"},
-{x:-2.0,e:1.0,c:0.8,i:0,s:"部活全廃で負担減し水泳だけは維持すべきとの主張",u:"https://x.com/BlackGoblin52/status/2075114586504917340"},
-{x:-2.0,e:1.0,c:0.85,i:3,s:"部活全廃・学習優先を主張する簡潔な意見",u:"https://x.com/pBO77RSRiXhq7R2/status/2075077832582234338"},
-{x:1.0,e:1.0,c:0.75,i:6,s:"現行の先生頼み状態を批判し変革を求める",u:"https://x.com/sugiyama2023/status/2074982244461232324"},
-{x:-0.5,e:-1.0,c:0.75,i:5,s:"システム不在を指摘し継続要求を否定",u:"https://x.com/sugiyama2023/status/2074986129238135083"},
-{x:1.0,e:1.0,c:0.7,i:5,s:"縮小・負担軽減ながら部活存続訴える",u:"https://x.com/SEITO_NO_MIKATA/status/2074810738829627783"},
-{x:-1.0,e:1.0,c:0.8,i:1,s:"部活廃止を危惧し現状維持派的立場",u:"https://x.com/Hfcn4oelqPHUQqM/status/2074795687309607129"},
-{x:1.0,e:0.0,c:0.75,i:2,s:"教員待遇保障なければ部活廃止止むなしとの主張",u:"https://x.com/badedu3/status/2074862816310501576"}
+{x:1.5,e:1.0,c:0.90,i:0,s:"市税で月会費を補助し地域移行を支持",u:"https://x.com/TheMirageof0/status/2070624074506863002"},
+{x:-1.5,e:2.0,c:0.95,i:0,s:"月額8000円が家計を圧迫し反対的",u:"https://x.com/TheMirageof0/status/2070621781757726855"},
+{x:0.5,e:1.0,c:0.90,i:1,s:"安い謝礼では指導者不足は当然だと懸念",u:"https://x.com/774nyannyan/status/2070491362882150454"},
+{x:0.5,e:1.0,c:0.90,i:1,s:"学校部活指導者の待遇が不釣り合いだと批判",u:"https://x.com/774nyannyan/status/2070491361137357035"},
+{x:0.0,e:1.0,c:0.80,i:5,s:"部活の歴史と教員の理解不足を指摘",u:"https://x.com/wu76jgS82zThc8u/status/2070462759238811989"},
+{x:0.5,e:1.0,c:0.90,i:1,s:"ボランティアでは持続困難、運営観点を",u:"https://x.com/zHSIopRR3w36294/status/2070432128123248718"},
+{x:-1.5,e:0.5,c:0.85,i:3,s:"地域移行後の子どもの居場所について懸念",u:"https://x.com/papakoya25/status/2070424396137910617"},
+{x:0.5,e:0.5,c:0.85,i:5,s:"市の努力評価しつつ移行課題を質問",u:"https://x.com/wakohappy2023/status/2070372233567240572"},
+{x:0.5,e:2.0,c:0.95,i:1,s:"指導者報酬が最低賃金並みで強く不満",u:"https://x.com/SIND_/status/2070325146372739488"},
+{x:1.5,e:1.0,c:0.80,i:3,s:"クラブチーム増加で部活の活躍場が減ると予測",u:"https://x.com/Miyabi14_Miyabi/status/2070276591167639853"},
+{x:0.5,e:0.5,c:0.90,i:1,s:"勝つより続けられる仕組み作りを提案",u:"https://x.com/nijimasufire/status/2070118138885312676"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"地域移行反対派は本質を理解していないと指摘",u:"https://x.com/774nyannyan/status/2070117159511130290"},
+{x:1.5,e:0.5,c:0.85,i:1,s:"地域移行推進を支持、担い手を広く確保すべき",u:"https://x.com/haiyuepanda/status/2070098123440140672"},
+{x:0.5,e:1.0,c:0.85,i:0,s:"指導者収入保障は理想だが費用が課題",u:"https://x.com/todoporzoy2012/status/2070092023512932832"},
+{x:1.5,e:1.0,c:0.90,i:1,s:"地域移行を請け負う民間企業を立ち上げる",u:"https://x.com/Pansy_school/status/2070084593605317014"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"移行の本質は低モチベーション層の対応と指摘",u:"https://x.com/crypticsa/status/2070077324008341725"},
+{x:1.5,e:1.0,c:0.90,i:3,s:"少子化で学校部活破綻前に移行を支持",u:"https://x.com/774nyannyan/status/2070058879938084997"},
+{x:1.5,e:0.5,c:0.90,i:3,s:"合同部活で不登校児の参加機会増加を期待",u:"https://x.com/Mr_Peki_chan/status/2070029090003009670"},
+{x:0.5,e:1.0,c:0.90,i:5,s:"チーム移転ではなく本質的クラブ化を",u:"https://x.com/chaw0501/status/2070020638383997407"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"コベカツに向け企業・団体の参入を呼びかけ",u:"https://x.com/kazuyamatsui_ac/status/2069913704582492244"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"和歌山市に移行推進室とコーディネーター設置を提案",u:"https://x.com/tFwqQpA4kn3bwDn/status/2069879568618627305"},
+{x:-1.5,e:1.0,c:0.80,i:3,s:"部活地域移行で合唱大会参加団体が半減したと懸念",u:"https://x.com/edamame_1219/status/2069742846606004286"},
+{x:-1.5,e:2.0,c:0.90,i:0,s:"地域移行や送迎問題で子どもの夢が奪われると懸念",u:"https://x.com/No2lab150687/status/2069741426276233331"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"地域移行後の指導者確保の悪循環を予測",u:"https://x.com/774nyannyan/status/2069730125340692943"},
+{x:-1.5,e:1.0,c:0.80,i:3,s:"地域移行で決裁権が子どもから親へ移り塾化すると懸念",u:"https://x.com/Pansy_school/status/2069715403236954447"},
+{x:1.5,e:0.5,c:0.85,i:3,s:"反対派の「やれなくなる」主張に疑問を呈す",u:"https://x.com/774nyannyan/status/2069694892037874163"},
+{x:-1.5,e:2.0,c:0.85,i:4,s:"地域移行で野球の育成環境が悪化し都市部に偏在すると懸念",u:"https://x.com/mamamam4949/status/2069589990011818183"},
+{x:-1.5,e:1.0,c:0.80,i:5,s:"地域移行の弊害と責任主体を疑問視",u:"https://x.com/suzuki_turitaro/status/2069580292386627898"},
+{x:-1.5,e:1.0,c:0.90,i:1,s:"地域移行で家族全員のクラブ移籍が困難で受け入れ先も少ない",u:"https://x.com/444sp/status/2069570277009490051"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活切り離しは教職員の大多数が賛成と主張",u:"https://x.com/tomokun_life/status/2068124530384711714"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"部活地域移行と高校野球の制度矛盾を懸念",u:"https://x.com/lumIFSHUWs6GO2n/status/2063976964898332701"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"反対派の条件は不可能なので無視して移行すべきと主張",u:"https://x.com/774nyannyan/status/2063489857993969715"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"部活維持は不可避で地域移行が必然と主張",u:"https://x.com/774nyannyan/status/2068230558992458134"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"地域移行反対派が問題だと主張",u:"https://x.com/774nyannyan/status/2067883582647849464"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"部活存続を望む人が移行に反対する矛盾を指摘",u:"https://x.com/774nyannyan/status/2067880712943059272"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"反対派の要求は予算内で不可能なので無視して移行すべき",u:"https://x.com/774nyannyan/status/2063907885764182333"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"反対派が改革にブレーキをかけていると批判",u:"https://x.com/JlMqc1bALnVe9gS/status/2063598518305218910"},
+{x:0.0,e:1.0,c:0.85,i:1,s:"保護者の反対と地域指導者不足が移行阻害要因",u:"https://x.com/774nyannyan/status/2063204420297617773"},
+{x:-1.5,e:1.0,c:0.90,i:5,s:"計画未確定のまま進める地域移行に反対",u:"https://x.com/Pansy_school/status/2063014247500816645"},
+{x:-1.5,e:1.0,c:0.95,i:2,s:"教員志望の動機減少を懸念し地域移行に反対",u:"https://x.com/yamako_10/status/2061588627088634365"},
+{x:0.0,e:0.5,c:0.80,i:0,s:"送迎負担を嫌う家庭が多く反対の声が強い",u:"https://x.com/774nyannyan/status/2060903547257131344"},
+{x:1.5,e:1.0,c:0.75,i:1,s:"地域住民の反対で部活移行が進まないと残念がる",u:"https://x.com/774nyannyan/status/2060894243808530650"},
+{x:-1.5,e:2.0,c:0.85,i:4,s:"通学時間増加への反対で頓挫する未来を懸念",u:"https://x.com/774nyannyan/status/2060890475503157752"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"部活存続には地域移行が必須と主張し矛盾を指摘",u:"https://x.com/774nyannyan/status/2058872234408833533"},
+{x:-1.5,e:2.0,c:0.80,i:2,s:"地域移行より管理職と教員の意識こそが問題だと主張",u:"https://x.com/AUzzkqIjZ37594/status/2067938043332604078"},
+{x:0.5,e:1.0,c:0.90,i:5,s:"地域移行に伴う内申書評価の適正化を提言したい",u:"https://x.com/maeshima_nishi/status/2066861890064760889"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"奈良市の問題化は行政と市民の合意形成不足が原因",u:"https://x.com/miyaike_akira/status/2066301932831154597"},
+{x:0.5,e:1.0,c:0.90,i:1,s:"長崎実験で保護者負担軽減も運転手不足等新課題浮上",u:"https://x.com/taiikujin966039/status/2065544492430643515"},
+{x:-1.5,e:1.0,c:0.70,i:6,s:"部活地域移行が進めば新たな問題が噴出すると懸念",u:"https://x.com/munougensouka/status/2064392535120937430"},
+{x:0.0,e:1.0,c:0.80,i:5,s:"部活地域移行の事業化に向けた設立形態を考察中",u:"https://x.com/Pansy_school/status/2063391483013583240"},
+{x:-1.5,e:2.0,c:0.90,i:0,s:"地域移行で家庭負担増大し体験格差が拡大すると懸念",u:"https://x.com/danchosabasabu/status/2062309010200772695"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"地域移行は国の方針であり抵抗する既得権益者を批判",u:"https://x.com/m727243023/status/2060651797388394551"},
+{x:1.5,e:2.0,c:0.85,i:2,s:"地域移行まで教員が祝日も休めない過酷な現状を訴える",u:"https://x.com/774nyannyan/status/2060324516652568821"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"文科省の方針転換で現場混乱、粛々と移行すべきと主張",u:"https://x.com/Sukimakagukmny/status/2060164886467150160"},
+{x:-1.5,e:2.0,c:0.90,i:1,s:"外部委託指導者の時給1500円は安すぎ集まらないと批判",u:"https://x.com/ikuji_takuto/status/2070078294410850366"},
+{x:-1.5,e:1.0,c:0.75,i:1,s:"部活外部委託を子育て外部委託に喩え疑問視",u:"https://x.com/AsahiPodcast/status/2069498240240849347"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活を外部委託し教員に副業か増給を主張",u:"https://x.com/godof31icecream/status/2069288512311251029"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"部活外部委託は既定路線、違法労働強要は許されない",u:"https://x.com/shirassh/status/2069006288777052163"},
+{x:0.5,e:1.0,c:0.65,i:1,s:"休日禁止・平日委託の実例紹介、委託先不足を懸念",u:"https://x.com/gigigigigijutu/status/2068437174924812622"},
+{x:-1.5,e:2.0,c:0.85,i:0,s:"部活消滅で文化資本格差が拡大すると懸念",u:"https://x.com/football__cone/status/2068341617443189050"},
+{x:1.5,e:0.5,c:0.75,i:3,s:"中学部活廃止・外部委託で下の子が忙しくならないと期待",u:"https://x.com/sanappy_44maru/status/2067762484195607016"},
+{x:1.5,e:0.5,c:0.90,i:5,s:"部活の外部委託は良いアイデアと支持",u:"https://x.com/LIU83414453/status/2067750890862493830"},
+{x:1.5,e:1.0,c:0.80,i:2,s:"部活外部委託に続きプール中止・日帰り修学旅行を要望",u:"https://x.com/yukiuniriri/status/2067037904401236236"},
+{x:0.5,e:1.0,c:0.75,i:0,s:"スポンサー付き部活で送迎外部委託を提案",u:"https://x.com/kudou24307267/status/2067017810401001829"},
+{x:1.5,e:0.5,c:0.80,i:1,s:"引退後地域でゆるく指導したいと地域移行に前向き",u:"https://x.com/akaishitaizo/status/2066060375049879553"},
+{x:1.5,e:1.0,c:0.80,i:2,s:"公私混同する教師が多いため部活外部委託を支持",u:"https://x.com/sky_walker_1173/status/2065224434433298449"},
+{x:1.5,e:1.0,c:0.75,i:2,s:"教員働き方改革で部活顧問外部委託は始まっていると説明",u:"https://x.com/t_maru_summer/status/2065010419568406669"},
+{x:0.0,e:0.5,c:0.60,i:5,s:"大磯町の部活外部委託が最先端かどうか疑問視",u:"https://x.com/DwpN0ecG6R72240/status/2064660470913733098"},
+{x:1.5,e:0.5,c:0.75,i:3,s:"水泳授業は続け、部活みたいに外部委託すべきと主張",u:"https://x.com/HissatuShigotoP/status/2064556920636358772"},
+{x:-1.5,e:1.0,c:0.80,i:5,s:"授業すら外部委託を渋るなら部活外注は夢のまた夢と批判",u:"https://x.com/2812572ng/status/2063911271570047166"},
+{x:1.5,e:0.5,c:0.70,i:1,s:"OB・OG協力なくスポーツ団体は成り立たず部活は外部委託",u:"https://x.com/addreality/status/2063634162880549031"},
+{x:-1.5,e:2.0,c:0.85,i:1,s:"部活外部委託で指導者・安全面が未確立、子供だけで活動",u:"https://x.com/lHAKPI9sj52UVOW/status/2062678108780818526"},
+{x:-1.5,e:2.0,c:0.70,i:2,s:"部活外部委託を原因とする長期休養教員を見殺しに批判",u:"https://x.com/dEqvhKmVgTxhlY2/status/2062544124428066947"},
+{x:-1.5,e:1.0,c:0.85,i:0,s:"部活外部委託で夏休み費用が増加し家計負担に不満",u:"https://x.com/hk_tong_chikuwa/status/2062456394247459293"},
+{x:0.0,e:0.5,c:0.50,i:0,s:"公立中学の部活が外部委託化する話題に言及",u:"https://x.com/wamipiha_ROOM/status/2062441022815404445"},
+{x:0.5,e:2.0,c:0.90,i:0,s:"部活地域移行に反対し、教員手当・専門顧問招致・月謝自治体負担を要望",u:"https://x.com/joO7g4uWTlVCSMA/status/2061724320259608806"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"部活の外部委託を早期実施してほしいと要望",u:"https://x.com/yuka_greentea30/status/2061436132769124660"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"学校業務でない部活は地域クラブで実施すべきと主張",u:"https://x.com/sugiyama2023/status/2061056903124545999"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活の公的支援に疑問ありつつ外部委託で教員負担を減らすべきと主張",u:"https://x.com/Rx0073LT/status/2060361575635255788"},
+{x:-1.5,e:1.0,c:0.80,i:2,s:"部活外部委託後の教員業務はよりシビアになると指摘",u:"https://x.com/mathmathsan/status/1888223251400438207"},
+{x:-1.5,e:1.0,c:0.85,i:2,s:"部活負担は教員自身で削減すべきと主張し外部委託に否定的",u:"https://x.com/sugiyama2023/status/2069927749997953237"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"部活地域移行で議員は行政任せにせず提言をすべきと要望",u:"https://x.com/db6qp9/status/2069228519016780190"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活は教員の負担であり指導員活用を支持",u:"https://x.com/1007_nagi/status/2068954974714052941"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"地域移行が進まないのは受け継ぐメリットや財源に乏しいからと分析",u:"https://x.com/774nyannyan/status/2068566479247950305"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"地域移行には部活の規模縮小が必要だと提言",u:"https://x.com/774nyannyan/status/2068564242505269619"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"教員はデータで顧問を拒否し負担から解放されるべきと提言",u:"https://x.com/yoshiki20260530/status/2068442038786547725"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"部活指導員ありながら教員顧問は不要で負担増と主張",u:"https://x.com/Kazukittyo_gun/status/2068325020313764315"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活は教員負担であり学校義務ではないため削減しやすいと主張",u:"https://x.com/774nyannyan/status/2068293099353416159"},
+{x:-1.5,e:2.0,c:0.85,i:2,s:"遠征バス経費優先で教員負担と安全を軽視していると批判",u:"https://x.com/nom1153/status/2068292289173311686"},
+{x:-1.5,e:1.0,c:0.85,i:2,s:"部活遠征のため教員が運転手となる必要はないと疑問視",u:"https://x.com/zabarava/status/2068291631573549209"},
+{x:-1.5,e:2.0,c:0.90,i:2,s:"中学教員が部活で月80時間超残業の負担を訴える",u:"https://x.com/keizikeizikeizi/status/2068281221545947490"},
+{x:-1.5,e:2.0,c:0.85,i:2,s:"部活ではなく専門教員育成と分業で負担感を解消すべきと主張",u:"https://x.com/quomoritureruis/status/2068245939375219020"},
+{x:-1.5,e:0.5,c:0.85,i:3,s:"部活減少を憂い礼儀や協力力など教育価値を強調",u:"https://x.com/lIjdqs9tKf2434/status/2068244369690308798"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"教員が安全配慮義務データで顧問拒否し負担から解放された体験を共有",u:"https://x.com/yoshiki20260530/status/2068146586954412271"},
+{x:1.5,e:1.0,c:0.85,i:1,s:"受け皿待ちのスタンスでは部活地域移行が進まないと指摘",u:"https://x.com/774nyannyan/status/2068125288605852033"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"教員が家庭損失データで顧問拒否し負担から解放された体験を共有",u:"https://x.com/yoshiki20260530/status/2068079655861764135"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"部活指導は子どものためと思う人だけで実施すべきと主張",u:"https://x.com/774nyannyan/status/2067944905457156215"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"部活指導は子どものためと思う人だけが担うべきと主張",u:"https://x.com/774nyannyan/status/2067944484231651534"},
+{x:-1.5,e:1.0,c:0.90,i:2,s:"部活の地域移行は負担の転嫁に過ぎず解決にならない",u:"https://x.com/774nyannyan/status/2067609586316800281"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"学校部活にこだわる理由がない、地域クラブで十分",u:"https://x.com/774nyannyan/status/2067609048686669921"},
+{x:0.5,e:1.0,c:0.85,i:3,s:"部活機会は必要だが教員の無償負担は異常",u:"https://x.com/Pansy_school/status/2067581200940843298"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"部活は教員業務増のフリーライド制度、地域クラブへ移行を",u:"https://x.com/cold_2_dloc/status/2067556163802337627"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"生徒自主性を奪う強制顧問をデータで拒否、負担軽減を支持",u:"https://x.com/yoshiki20260530/status/2067198495979978851"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"安全配慮義務を理由に顧問を断り、教員負担軽減を支持",u:"https://x.com/yoshiki20260530/status/2067189419535409499"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"授業準備優先を理由に顧問を断り、教員負担軽減を支持",u:"https://x.com/yoshiki20260530/status/2066798324938919963"},
+{x:0.0,e:1.0,c:0.80,i:2,s:"教員不足の要因を多角的に列挙、双方の視点を提示",u:"https://x.com/monmon0816/status/2066477650051567764"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"地域住民が部活負担を引き継ぐ理由がない、規模縮小を主張",u:"https://x.com/774nyannyan/status/2065997295855046946"},
+{x:-1.5,e:1.0,c:0.85,i:2,s:"教員のリスク負担を無視していると懸念を表明",u:"https://x.com/kobuoichan/status/2065958821567385989"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"本業優先をデータで示し顧問を断り、負担軽減を支持",u:"https://x.com/yoshiki20260530/status/2065906962597113927"},
+{x:0.5,e:1.0,c:0.85,i:0,s:"費用負担が弱い家庭に偏る懸念、教員改革は必要",u:"https://x.com/Fujisawa_Suzuki/status/2065673921421287662"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"音楽授業への悪影響をデータ化し顧問を拒否",u:"https://x.com/yoshiki20260530/status/2065653370019561677"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"音楽授業への影響を可視化し顧問を拒否",u:"https://x.com/yoshiki20260530/status/2065409303255924929"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"教員の業務負担が過重、これ以上増やすべきでない",u:"https://x.com/G0TTZIQEWm56962/status/2064928199222702145"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"教員なり手不足に部活負担が拍車、異常事態だと主張",u:"https://x.com/anderson0214/status/2064832907576021221"},
+{x:1.5,e:2.0,c:0.95,i:3,s:"部活を学校から駆逐すべき、子育て責任放棄する親を批判",u:"https://x.com/hagakikatteren/status/2064823846402933129"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活義務はなく顧問は自由、やりたくなければやらなくてよい",u:"https://x.com/n821nJF8iuB4JAU/status/2064500878632210546"},
+{x:1.5,e:2.0,c:0.95,i:2,s:"家庭事情と授業優先をデータで示し顧問を拒否",u:"https://x.com/yoshiki20260530/status/2064461183793696895"},
+{x:1.5,e:1.0,c:0.90,i:3,s:"中学の部活廃止を評価、全体でそうあってほしいと支持",u:"https://x.com/mamehina012/status/2070658992205148385"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"部活トラブルは面倒なので部活廃止を訴えたい",u:"https://x.com/Hfcn4oelqPHUQqM/status/2070655303063158975"},
+{x:-1.5,e:1.0,c:0.90,i:3,s:"学校部活の低ハードル性を重視、廃止に反対",u:"https://x.com/yanderedaisuki4/status/2070624714977050868"},
+{x:-1.5,e:2.0,c:0.90,i:5,s:"文科省が勝手に部活を廃止していると憤慨、監視を訴え",u:"https://x.com/Nijiiro_Ongaku/status/2070609133913719174"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"学区制廃止で公立部活維持困難、強豪校に集中し機会減少と懸念",u:"https://x.com/jinchande/status/2070541471338705062"},
+{x:1.5,e:2.0,c:0.90,i:6,s:"部活廃止は善であると主張",u:"https://x.com/kyusaikatsudou/status/2070522219424575788"},
+{x:-1.5,e:1.0,c:0.60,i:6,s:"再発防止ではなく部活廃止が選ばれたと指摘",u:"https://x.com/VrJQQQDQJKmiLzY/status/2070519063667986861"},
+{x:1.5,e:1.0,c:0.85,i:6,s:"部活廃止のためには自ら行動すべきと主張",u:"https://x.com/kyusaikatsudou/status/2070159831621931490"},
+{x:-1.5,e:1.0,c:0.75,i:2,s:"少子化と長時間勤務で廃止も、10年後には生徒増加か",u:"https://x.com/mcLKvaVydIHSkaI/status/2070099638045266403"},
+{x:-1.5,e:2.0,c:0.85,i:6,s:"部活廃止論者は人格的・論理的に破綻していると批判",u:"https://x.com/LwbR1psFJd55470/status/2070082170568520116"},
+{x:-1.5,e:1.0,c:0.90,i:3,s:"働き方改革で部活廃止ではなく教育機会均等を求める",u:"https://x.com/kotoridesudesu/status/2070076881827950673"},
+{x:1.5,e:2.0,c:0.90,i:6,s:"顧問が自ら部活を終わらせるべき、他人任せにするなと主張",u:"https://x.com/edu_impossible/status/2069916720547115204"},
+{x:1.5,e:1.0,c:0.95,i:6,s:"部活は廃止で良いと支持",u:"https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261"},
+{x:1.5,e:1.0,c:0.80,i:6,s:"重い部活を持つ身で廃止派になったと自認",u:"https://x.com/Baidalka/status/2069728815409172505"},
+{x:-1.5,e:1.0,c:0.75,i:6,s:"部活廃止論派は周囲を巻き込もうとしていると懸念",u:"https://x.com/GreatHjm/status/2069705751334179316"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"勤務時間に収まらない部活は廃止すべきと法的に主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069555558802477361"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"部活訴訟で責任所在を明確化し、廃止改革を進めるべきと主張",u:"https://x.com/FNR4aFS4sTLVNkp/status/2069539721546698982"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"地域移行が進むが部活のメリット大、競技力向上に貢献",u:"https://x.com/best_yajima/status/2069440318144200986"},
+{x:-1.5,e:1.0,c:0.75,i:3,s:"修学旅行と部活の廃止を惜しむ",u:"https://x.com/hiroa11011/status/2069406812978479531"},
+{x:0.5,e:2.0,c:0.85,i:2,s:"部活廃止より担任制廃止や時間外業務禁止が根本と主張",u:"https://x.com/Sakuragi_iriS/status/2069397944827252756"},
+{x:1.5,e:1.0,c:0.85,i:1,s:"受け皿不要で廃止可能、地方は恒久化懸念",u:"https://x.com/DioxetaneMaker/status/2069386736292319386"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"創部拒否の経験から部活全面廃止を強く支持",u:"https://x.com/hisa10swan/status/2069350819527618875"},
+{x:-1.5,e:1.0,c:0.90,i:3,s:"部活廃止が日本スポーツを弱体化させると懸念",u:"https://x.com/j_zw62/status/2069267266693447707"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"顧問レベルに疑問を持ち部活廃止を支持",u:"https://x.com/pochi1182/status/2069232307479937533"},
+{x:-1.5,e:1.0,c:0.90,i:3,s:"育成の場として部活は絶対に必要と主張",u:"https://x.com/yuritako/status/2069192029251547263"},
+{x:1.5,e:2.0,c:0.70,i:6,s:"一部の部活に問題あり廃止を主張",u:"https://x.com/hisa10swan/status/2069172279624577418"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"全員入部の強制と選択肢の少なさを問題視",u:"https://x.com/hisa10swan/status/2069172058316329443"},
+{x:-1.5,e:1.0,c:0.90,i:3,s:"人脈形成の場として部活廃止に反対",u:"https://x.com/nekonekocyan/status/2068933417702731793"},
+{x:-1.5,e:1.0,c:0.80,i:5,s:"部活廃止がスポーツ推薦制度に与える影響に懸念",u:"https://x.com/ienadia/status/2068932768843915393"},
+{x:1.5,e:1.0,c:0.95,i:3,s:"閉鎖的な部活を廃し地域クラブへ移行すべき",u:"https://x.com/SvErfdCKdt52541/status/2068859859077124604"},
+{x:-1.5,e:1.0,c:0.85,i:5,s:"顧問不在では継続困難と指摘し廃止表現に疑問",u:"https://x.com/sugiyama2023/status/2068848471608844627"},
+{x:1.5,e:0.5,c:0.90,i:3,s:"学業を優先し部活は廃止すべきと支持",u:"https://x.com/hiroa11011/status/2068702457820246445"},
+{x:1.5,e:1.0,c:0.90,i:3,s:"中学以降の学業負担から部活廃止を支持",u:"https://x.com/weTdqo0isa11532/status/2068700099845509484"},
+{x:1.5,e:0.5,c:0.85,i:1,s:"地域移行後の部活を金銭的・人的に支援",u:"https://x.com/miokonboDaysAI/status/2076275556145058273"},
+{x:0.5,e:0.5,c:0.80,i:5,s:"地域移行の課題にテコ入れが必要と期待",u:"https://x.com/ashigoriP/status/2076242520015851607"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"給特法廃止が部活地域移行の前提だと主張",u:"https://x.com/satoyon4_/status/2076204305212989636"},
+{x:0.5,e:0.5,c:0.80,i:1,s:"地域移行後の指導者資格と日程の課題に懸念",u:"https://x.com/tomo124865/status/2076196920436166795"},
+{x:-1.5,e:0.5,c:0.85,i:5,s:"地域移行が遅々として進まないことに懸念",u:"https://x.com/tokugsax2/status/2076160814382481610"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"学校施設の自治体管理で地域移行を促進すべき",u:"https://x.com/Irony2Nestle/status/2076118347310371167"},
+{x:0.5,e:0.5,c:0.85,i:5,s:"地域移行説明会に参加し成功を期待",u:"https://x.com/l50Hrpo9Vhmqp2f/status/2075948014540308685"},
+{x:0.5,e:1.0,c:0.90,i:1,s:"地域移行で指導者不足になり自身も駆り出されている",u:"https://x.com/miokonboDaysAI/status/2075943002162577760"},
+{x:1.5,e:0.5,c:0.90,i:1,s:"地域移行を進めるため地域クラブの現場を確認へ",u:"https://x.com/Pansy_school/status/2075867944224272733"},
+{x:-1.5,e:2.0,c:0.85,i:5,s:"地域移行で現場が混乱し、大臣の的外れ発言を批判",u:"https://x.com/CHAROdra/status/2075840460317397274"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"部活移行で生計を立てていた人々の行末を皮肉に見守る",u:"https://x.com/HappaCommander/status/2075813418477494539"},
+{x:0.5,e:1.0,c:0.90,i:1,s:"外部講師導入で顧問が不在化、暫定顧問を要望",u:"https://x.com/siromi2022111/status/2075789986209919430"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"地域移行を本気で推進すれば生涯スポーツにつながる",u:"https://x.com/housuka1/status/2075779065483853905"},
+{x:1.5,e:0.5,c:0.85,i:3,s:"地域展開で選択肢を増やし子どもの成長環境を重視",u:"https://x.com/fcoachjp/status/2075754467593490668"},
+{x:-1.5,e:2.0,c:0.80,i:0,s:"保護者負担増なら現状維持も不可で廃止を主張",u:"https://x.com/774nyannyan/status/2075742246767624539"},
+{x:-1.5,e:1.0,c:0.75,i:5,s:"地域移行すら実現できていない現状を指摘",u:"https://x.com/774nyannyan/status/2075736134399987882"},
+{x:0.5,e:1.0,c:0.80,i:3,s:"スポーツ推進と部活移行の調整、生徒減少が難題",u:"https://x.com/tamaru202312/status/2075724523790643610"},
+{x:-1.5,e:0.5,c:0.75,i:5,s:"地域移行の進捗が聞こえず難航していると推測",u:"https://x.com/takanezawa_info/status/2075720089014522099"},
+{x:-1.5,e:1.0,c:0.80,i:5,s:"大臣交代で施策方向が変われば持続不可能と懸念",u:"https://x.com/4ZYVNjQOkWBSoU8/status/2075717181103632386"},
+{x:0.5,e:2.0,c:0.85,i:2,s:"部活移行を推す一方で別の学校負担を増やすなと批判",u:"https://x.com/Sevda31651106/status/2075582024920756617"},
+{x:1.5,e:0.5,c:0.85,i:3,s:"学校部活の丸移しではなく放課後を再設計すべき",u:"https://x.com/VDSc7uZWlDer7Wb/status/2075504460319883736"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"過重労働の報道を見て部活地域移行の必要性を再認識",u:"https://x.com/daiyusaku/status/2075499348104991038"},
+{x:-1.5,e:2.0,c:0.80,i:5,s:"歴代文科大臣の部活政策を酷評、移行無期限化に怒り",u:"https://x.com/Abaysal43/status/2075441531859742896"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"地域移行進展で指導者の質担保が新たな課題に",u:"https://x.com/chisakitakami/status/2075222628797923436"},
+{x:1.5,e:1.0,c:0.75,i:1,s:"地域移行事業の打ち合わせで試行錯誤し奮闘中",u:"https://x.com/Pansy_school/status/2075149207736885430"},
+{x:-1.5,e:1.0,c:0.80,i:0,s:"教員負担軽減で家庭の送迎や扶養問題が生じると皮肉",u:"https://x.com/s_mama_46/status/2074860053614744049"},
+{x:-1.5,e:0.5,c:0.85,i:3,s:"地域移行後、子どもの夏休みの過ごし方に不安",u:"https://x.com/kogaaoi/status/2074830329056272419"},
+{x:0.5,e:1.0,c:0.90,i:5,s:"地域移行で運動機会・競技・学習の3柱を重視すべき",u:"https://x.com/Pansy_school/status/2074791853225091572"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"部活維持には地域移行が必要なのに反対する人の矛盾を指摘",u:"https://x.com/774nyannyan/status/2072690458292306109"},
+{x:1.5,e:0.5,c:0.85,i:2,s:"教員の過重負担を知り、乾燥機寄付で負担軽減を提案",u:"https://x.com/SOUTAX2/status/2073945047264010712"},
+{x:1.5,e:0.5,c:0.90,i:5,s:"地域移行過渡期の中体連出場問題に個人的に歓迎の意",u:"https://x.com/SIND_/status/2071935980316311734"},
+{x:-1.5,e:2.0,c:0.85,i:2,s:"部活遠征の教員自腹負担が移行完了まで続く矛盾を指摘",u:"https://x.com/hiiragi2280/status/2071383152145428555"},
+{x:-1.5,e:2.0,c:0.90,i:5,s:"部活問題の先送りと2031年地域移行への強い不信感",u:"https://x.com/kyouiku_mondai/status/2057446869203390747"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"公立部活費用の公費バックアップと外部委託化を提案",u:"https://x.com/ChyanNobu/status/2076250417663742366"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"外部委託増加で活動環境は改善、休みの心配は親の呪縛と主張",u:"https://x.com/S_eiko_/status/2076119525679116653"},
+{x:1.5,e:0.5,c:0.85,i:1,s:"外部委託の部活に友人が仮入部し、和やかな雰囲気を喜ぶ",u:"https://x.com/booknoodle8989/status/2075728917319868470"},
+{x:1.5,e:1.0,c:0.85,i:1,s:"指導の困難を認識し、部活は本来外部委託すべき分野と主張",u:"https://x.com/voviroku/status/2075726282843996560"},
+{x:-1.5,e:2.0,c:0.75,i:6,s:"部活外部委託は日本の強さを損なうと皮肉を込めて批判",u:"https://x.com/j_zw62/status/2074413179577454913"},
+{x:0.0,e:0.5,c:0.80,i:1,s:"地域コーチによる外部委託の実態を報告、部費は高くないと説明",u:"https://x.com/nimoku551ura/status/2074136077645062400"},
+{x:-1.5,e:2.0,c:0.80,i:2,s:"外部委託で教員負担軽減を装い、現場崩壊への危惧を皮肉で示す",u:"https://x.com/dam51730/status/2073954661355474996"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"部活が外部委託化で消滅し、仕方なく習い事を続ける体験",u:"https://x.com/haruurarahare/status/2073911814791016477"},
+{x:-1.5,e:2.0,c:0.85,i:1,s:"部活関連事故で外部委託運転者の免許不提示と幹部の責任を追及",u:"https://x.com/ksl_live/status/2073728471944335404"},
+{x:0.5,e:1.0,c:0.85,i:1,s:"高校の熱血教師と清貧思想が外部委託推進の障壁と指摘",u:"https://x.com/hakujiu_ki/status/2073438886190358618"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"教員の顧問負担を問題視し、外部委託と適切な税金活用を強く要求",u:"https://x.com/shrekbonsai/status/2073243197334298807"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"学校を単位制に改め、部活や実習も積極的に外部委託すべきと提案",u:"https://x.com/frozenworkerxyz/status/2073088554088174062"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"民間外部委託を活用したレベル別・単位制の学校改革を提案",u:"https://x.com/frozenworkerxyz/status/2073079595411407160"},
+{x:1.5,e:0.5,c:0.80,i:1,s:"保護者当番に驚き、神戸市の部活外部委託化を好感を持って言及",u:"https://x.com/eternalLoveFAM/status/2072829132887728292"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"外部委託コーチの連絡不到位で不登校克服した娘が再び不調に",u:"https://x.com/mayumicat7855/status/2072476415606566940"},
+{x:1.5,e:0.5,c:0.85,i:1,s:"外部委託化で部活の選択肢が広がっていると評価",u:"https://x.com/pomp_miki/status/2072444444897673469"},
+{x:1.5,e:2.0,c:0.85,i:2,s:"部活の外部委託含む教育の合理化を主張",u:"https://x.com/frozenworkerxyz/status/2071967276035915780"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"外部委託は無理との見解、事故後安全策に言及",u:"https://x.com/kyouiku_mondai/status/2071721069980029333"},
+{x:1.5,e:1.0,c:0.85,i:1,s:"送迎を専門会社に外部委託し安全確保を提案",u:"https://x.com/KMqHb6wJoh6jNUB/status/2071560482578895003"},
+{x:-1.5,e:1.0,c:0.75,i:5,s:"横浜高校の件から部活外部委託に疑問",u:"https://x.com/361_r19/status/2071424138594660712"},
+{x:0.5,e:1.0,c:0.85,i:3,s:"エンジョイ勢用部活も必要、複数校合同で実現を提案",u:"https://x.com/yuk0117/status/2071178606819340387"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活はボランティア労働、外部委託を望む",u:"https://x.com/cr5uPNIFIxI7mEl/status/2070995273678008350"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"部活外部委託は顧問業務を含むため地域クラブ独立を提案",u:"https://x.com/sugiyama2023/status/2070429609477472539"},
+{x:-1.5,e:1.0,c:0.85,i:2,s:"部活地域展開で管理負担も教員に押し付けられることを懸念",u:"https://x.com/toichi10111/status/2076101995489051039"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"移行期の現場で教員生徒家庭の負担や戸惑いを実感",u:"https://x.com/sahxuenla/status/2075698328466256258"},
+{x:-1.5,e:1.0,c:0.85,i:2,s:"遠征制限通知で教員負担が増えると懸念",u:"https://x.com/kty281306/status/2074995461208072532"},
+{x:-1.5,e:0.5,c:0.75,i:3,s:"教員負担軽減のため部活が縮小されると懸念",u:"https://x.com/satobon09/status/2074823734473674888"},
+{x:-1.5,e:2.0,c:0.90,i:2,s:"地域移行を謳いながら教員負担が増える現状に反発",u:"https://x.com/ChrFYM8Kui11326/status/2073637232242815404"},
+{x:0.5,e:1.0,c:0.80,i:2,s:"内田教授に部活負担の実態調査を求める",u:"https://x.com/giT7tJkKCXZmdnp/status/2073387057330926047"},
+{x:-1.5,e:1.0,c:0.90,i:2,s:"朝7時開校は負担増と反対、部活の時間外前提も問題視",u:"https://x.com/teacherhatena/status/2073219509687931184"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"部活地域移行加速で教員負担を減らし教育活動に専念を支持",u:"https://x.com/HIsound284443/status/2072425964597027225"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"教員タダ働きで維持される部活制度を是正し責任引継ぎを議論",u:"https://x.com/774nyannyan/status/2072289382208553291"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"外部コーチは教育者ではないため学校での適切性に疑問",u:"https://x.com/361_r19/status/2071425059038822520"},
+{x:0.5,e:2.0,c:0.85,i:0,s:"地域クラブ化のコスト負担を保護者か公費かで議論",u:"https://x.com/774nyannyan/status/2071205424649642303"},
+{x:-1.5,e:2.0,c:0.90,i:2,s:"音楽教師の洗濯負担など過剰な部活業務の実態報道を求める",u:"https://x.com/Yuan_TashiDelek/status/2071074743969833192"},
+{x:1.5,e:1.0,c:0.80,i:2,s:"負担押しつけ合いは不毛で廃止論に走る原因",u:"https://x.com/774nyannyan/status/2071054194933682454"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"部活残すなら顧問負担軽減を軽視するな",u:"https://x.com/tea03031533410/status/2070847748644147509"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活手当数百円なのに過重拘束はおかしい",u:"https://x.com/js_kent2016/status/2070715184122147059"},
+{x:0.0,e:0.5,c:0.75,i:2,s:"火災原因の洗濯も生徒負担を背負う熱心な先生",u:"https://x.com/KA_z_YA/status/2070684701178855724"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"部活廃止や行事縮小で超過勤務を減らすべき",u:"https://x.com/takohati3/status/2076303411650474204"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"子どもの負担が限界で部活廃止が必要",u:"https://x.com/the_spiderkim02/status/2076264540996870574"},
+{x:-1.5,e:0.5,c:0.80,i:3,s:"部活廃止で学力が上がるとは思えない",u:"https://x.com/ymwhr924/status/2076252279146262925"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"部活廃止を前提に教育のあり方を再考すべき",u:"https://x.com/rErcLOd0Q6Mzrxj/status/2076196454587355299"},
+{x:-1.5,e:2.0,c:0.95,i:3,s:"部活廃止に断固反対",u:"https://x.com/blue_fires01/status/2076193871412043972"},
+{x:0.5,e:0.5,c:0.80,i:3,s:"部活の忙しさで勉強に支障、廃止も一考",u:"https://x.com/Risarisakiu/status/2076175588474413236"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"地域移行と部活廃止の広がりを支持",u:"https://x.com/nabeshi2002jp/status/2076120662524244208"},
+{x:0.5,e:1.0,c:0.85,i:5,s:"廃止後は教師の副業許可で指導者を確保",u:"https://x.com/gedoubeam/status/2076109490253185329"},
+{x:1.5,e:0.5,c:0.80,i:2,s:"部活廃止で教師に余裕が生まれ良いこと",u:"https://x.com/adhdsavetheplan/status/2076098536299798771"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"学力向上には部活廃止など文科省レベルの改革が必要",u:"https://x.com/kozykozychan/status/2075958449205350820"},
+{x:-1.5,e:0.5,c:0.75,i:2,s:"部活指導のルール厳格化が廃止につながっている",u:"https://x.com/qQCPNzKkk8CtUnt/status/2075944120410087821"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"学力向上には部活廃止で勉強時間を確保すべき",u:"https://x.com/a4wd/status/2075930302023909691"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"犠牲の上の部活は子どもも不幸にし廃止して各家庭の判断に",u:"https://x.com/hiroa11011/status/2075926152070443511"},
+{x:1.5,e:2.0,c:0.95,i:3,s:"部活は廃止一択で異論不要",u:"https://x.com/mitsunobu47/status/2075875504201351366"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"全国一斉廃止でないと学校が成り立たず適切な地域移行が必要",u:"https://x.com/haiyuepanda/status/2075825617267007541"},
+{x:-1.5,e:1.0,c:0.80,i:2,s:"廃止機運で嫌なことから逃げる大人が増えると懸念",u:"https://x.com/Mezase1Ok/status/2075794716768281015"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"野放図な部活は廃止が唯一の選択",u:"https://x.com/haoli3474/status/2075790544576582102"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"教員の休みがなくなるため学校部活は廃止すべき",u:"https://x.com/meronsparking/status/2075546907817197976"},
+{x:-1.5,e:1.0,c:0.80,i:3,s:"部活廃止で中学生の居場所がなくなり将来に不安",u:"https://x.com/arakawakappa25/status/2075494831250686345"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"学校部活は廃止が最善",u:"https://x.com/migrainejust/status/2075398159053037981"},
+{x:1.5,e:0.5,c:0.85,i:3,s:"部活廃止で安らぎを得た",u:"https://x.com/kyusaikatsudou/status/2075233261652262922"},
+{x:1.5,e:2.0,c:0.85,i:3,s:"子どもの健康を害する部活は廃止すべき",u:"https://x.com/theworldbluee01/status/2075222203948556757"},
+{x:-1.5,e:1.0,c:0.80,i:3,s:"スポーツの意義を認め部活廃止に反対",u:"https://x.com/gomadango0302/status/2075197973177459137"},
+{x:1.5,e:2.0,c:0.85,i:3,s:"学校部活は問題が起こるため廃止すべき",u:"https://x.com/theworldbluee01/status/2075184856657727657"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"顧問強制で持続不可能な部活は廃止すべき",u:"https://x.com/Hfcn4oelqPHUQqM/status/2075157733981257737"},
+{x:1.5,e:2.0,c:0.60,i:6,s:"外国人不起訴問題を受け体育や部活も廃止に",u:"https://x.com/smail0501m/status/2075131088608092524"},
+{x:0.0,e:0.5,c:0.65,i:6,s:"プール廃止と部活なしで遊び場に困る",u:"https://x.com/yurumaru22222/status/2075124602490265852"},
+{x:0.5,e:1.0,c:0.85,i:0,s:"部活は廃止し水泳だけ残すべき",u:"https://x.com/BlackGoblin52/status/2075114586504917340"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"学習優先のため部活は廃止すべき",u:"https://x.com/pBO77RSRiXhq7R2/status/2075077832582234338"},
+{x:0.0,e:0.5,c:0.85,i:5,s:"部活は継続システムではなく年度ごとのもの",u:"https://x.com/sugiyama2023/status/2074986129238135083"},
+{x:0.0,e:0.5,c:0.85,i:5,s:"部活は年度ごとで廃止ではなく初めからない",u:"https://x.com/sugiyama2023/status/2074982244461232324"},
+{x:1.5,e:0.5,c:0.85,i:3,s:"部活廃止の教えを信じ安らぎを得る",u:"https://x.com/kyusaikatsudou/status/2074870874163859813"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"教員の負担軽減なければ部活は廃止",u:"https://x.com/badedu3/status/2074862816310501576"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"顧問負担軽減で部活の存続を望む",u:"https://x.com/SEITO_NO_MIKATA/status/2074810738829627783"},
+{x:0.0,e:1.0,c:0.80,i:2,s:"顧問不足で部活が廃止される現実を指摘",u:"https://x.com/Hfcn4oelqPHUQqM/status/2074795687309607129"},
+{x:0.5,e:0.5,c:0.80,i:0,s:"地域移行で子どもの体験格差が生じる懸念",u:"https://x.com/maru1127apple/status/2080275848847142989"},
+{x:-1.5,e:1.0,c:0.85,i:0,s:"地域移行はスポーツと塾の不公平な税金使い",u:"https://x.com/774nyannyan/status/2080231794352533926"},
+{x:0.0,e:0.5,c:0.70,i:6,s:"塾講師の繁忙で地域移行のコンサルも止まる",u:"https://x.com/Pansy_school/status/2080218359824572752"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"保護者の反対で地域移行が進まず教員不足加速",u:"https://x.com/774nyannyan/status/2080214333145911676"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"教員の労働搾取を止めるため現状部活制度は障壁",u:"https://x.com/774nyannyan/status/2080207538499252357"},
+{x:-1.5,e:2.0,c:0.85,i:2,s:"教員負担を地域に押し付けるな、やりたい人だけでやれ",u:"https://x.com/774nyannyan/status/2080205273596317936"},
+{x:1.5,e:1.0,c:0.80,i:3,s:"部活をクラブチーム化し、甲子園の在り方も見直すべき",u:"https://x.com/matsutoshi1055/status/2080144018869211421"},
+{x:0.5,e:0.5,c:0.80,i:5,s:"地域移行より公的資金での民間委託が良い",u:"https://x.com/charlatan58/status/2080094295277871594"},
+{x:-1.5,e:1.0,c:0.85,i:0,s:"地域移行後はお金が前提の習い事になると警鐘",u:"https://x.com/tHMhtXMqyz94629/status/2080064448849694954"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"地域移行でリタイア者に責任押し付ける構造に懸念",u:"https://x.com/N_Hyperion/status/2080047973002871237"},
+{x:-1.5,e:2.0,c:0.85,i:0,s:"地域移行で徒歩通学と費用負担、安全性に懸念",u:"https://x.com/N_Hyperion/status/2080045303970103630"},
+{x:0.0,e:0.5,c:0.75,i:3,s:"地域移行で子どもが本当に求めるものを考えたい",u:"https://x.com/Tetsuya2627/status/2080042053917139365"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"部活は地域移行すべきで、教員を不当に駆り出すな",u:"https://x.com/NEBOSUK00204920/status/2079995445158515038"},
+{x:1.5,e:0.5,c:0.80,i:3,s:"部活地域移行後も講座需要が継続し安堵",u:"https://x.com/mingeikan4158/status/2079939493554196588"},
+{x:0.0,e:0.5,c:0.80,i:3,s:"地域移行は制度改革であり子どもの居場所の変化でもある",u:"https://x.com/kanon_niko1414/status/2079917418185396671"},
+{x:1.5,e:1.0,c:0.75,i:5,s:"中学の地域移行が高校にも及ぶべきと考える",u:"https://x.com/dYVfAifGLcrmfaQ/status/2079904817565270528"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"部活の価値と現状維持は別、持続可能な仕組みとして移行を支持",u:"https://x.com/dYVfAifGLcrmfaQ/status/2079904163979534393"},
+{x:0.5,e:0.5,c:0.80,i:0,s:"地域移行は予算内で行うか、民営クラブへ移行すれば良い",u:"https://x.com/774nyannyan/status/2079894119045050629"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"生徒主体の地域移行は主体性涵養と持続可能性に有益",u:"https://x.com/haiyuepanda/status/2079890697419936225"},
+{x:-1.5,e:1.0,c:0.75,i:3,s:"学校に部活を置く意義と地域移行の議論に距離を置く",u:"https://x.com/yu4302133447239/status/2079880470389772506"},
+{x:1.5,e:1.0,c:0.80,i:3,s:"部活が救うことと学校存続の必要性は別の議論だと指摘",u:"https://x.com/yu4302133447239/status/2079879288632021063"},
+{x:1.5,e:1.0,c:0.80,i:2,s:"教員に信頼がないなら地域移行して指導者に任せるべき",u:"https://x.com/tea03031533410/status/2079874530991083916"},
+{x:0.5,e:2.0,c:0.85,i:5,s:"教育委員会に予算を求め、地域移行事業の方向転換を図る",u:"https://x.com/Pansy_school/status/2079848422127915017"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"地域移行しないと部活制度は維持不能だと主張",u:"https://x.com/774nyannyan/status/2079841878996901927"},
+{x:1.5,e:1.0,c:0.80,i:0,s:"部活維持のコスト負担責任を主張し移行を支持",u:"https://x.com/774nyannyan/status/2079816461623922755"},
+{x:1.5,e:2.0,c:0.85,i:0,s:"地域移行後のコーチ費用は関係者が負担すべきと主張",u:"https://x.com/774nyannyan/status/2079809060204089686"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"指導員確保困難で中学校部活が地域移行前に消滅する懸念",u:"https://x.com/chi4444444444/status/2079783575684329639"},
+{x:0.5,e:1.0,c:0.80,i:5,s:"「誰が負担するのか」議論なき政策は決着しない",u:"https://x.com/Sukimakagukmny/status/2079741921027842386"},
+{x:1.5,e:0.5,c:0.75,i:1,s:"地域クラブ顧問として学校訪問、校長がリラックスしている様子",u:"https://x.com/rinkoropyon/status/2079716792759669086"},
+{x:1.5,e:2.0,c:0.80,i:3,s:"地域移行後も主体性は維持できるはずと反論",u:"https://x.com/JlMqc1bALnVe9gS/status/2079601397990085077"},
+{x:-1.5,e:2.0,c:0.85,i:3,s:"地域移行ではなく部活そのものの廃止を主張",u:"https://x.com/ryunosuke11845/status/2079583780348584442"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"B市の地域移行積極推進事例を紹介し支持を示唆",u:"https://x.com/m727243023/status/2079567826877284353"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"部活賛成派が地域移行に反対する矛盾を指摘",u:"https://x.com/774nyannyan/status/2079541255978311899"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"地域移行せず教員不足と少子化で部活制度は存続不能",u:"https://x.com/774nyannyan/status/2079541237263310933"},
+{x:1.5,e:0.5,c:0.90,i:2,s:"地域移行後も勤務時間外ボランティアで教員指導は可能",u:"https://x.com/774nyannyan/status/2079530463639871777"},
+{x:0.5,e:1.0,c:0.90,i:5,s:"外部委託の要件定義不足とシステム設計の問題を指摘し提言",u:"https://x.com/sakak9498/status/2079508976509813129"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"公立中学の部活は早期地域移行すべきと主張",u:"https://x.com/4ZYVNjQOkWBSoU8/status/2078690823928258939"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"地域移行は教員と生徒双方にメリットありと主張",u:"https://x.com/774nyannyan/status/2079495545912189140"},
+{x:1.5,e:1.0,c:0.85,i:0,s:"地域移行後の運営費議論が本質だが反対で議論が停滞",u:"https://x.com/774nyannyan/status/2079096156806955230"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"反対を無視して学校部活を即終了し残す派に責任を転嫁すべきと主張",u:"https://x.com/774nyannyan/status/2079033482169483702"},
+{x:1.5,e:1.0,c:0.85,i:3,s:"地域移行で加入率が下がってもやる気のある層で質向上と主張",u:"https://x.com/774nyannyan/status/2079096155322138995"},
+{x:0.0,e:0.5,c:0.70,i:6,s:"演劇作品が地域移行の持続可能性を面白く捉えていると評価",u:"https://x.com/miyahach/status/2078826272151781700"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"問題は制度設計であり地域移行先で活動は可能と主張",u:"https://x.com/JlMqc1bALnVe9gS/status/2078688627354443963"},
+{x:1.5,e:2.0,c:0.85,i:2,s:"教員の過重負担による部活継続の限界を指摘",u:"https://x.com/kyouiku_mondai/status/2077705516055421347"},
+{x:-1.5,e:2.0,c:0.90,i:1,s:"地域クラブの安全管理と責任能力に懸念",u:"https://x.com/munougensouka/status/2077670929673650214"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"教員の低賃金と長時間労働を批判し部活の外部委託を強く求める",u:"https://x.com/i_am_happy77/status/2079929022566613104"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"初任教員の外部委託窓口負担と顧問業務を憂慮し制度改革を望む",u:"https://x.com/w5Sp08Swy366266/status/2079835433165623651"},
+{x:-1.5,e:0.5,c:0.75,i:2,s:"部活の時間圧迫に苦慮し外部委託実施に慎重な姿勢を示す",u:"https://x.com/enteacher_hassy/status/2079695302400114870"},
+{x:0.5,e:1.0,c:0.85,i:1,s:"田舎の外部委託指導者の質に不安があり資格要件の設定を求める",u:"https://x.com/chirong_03/status/2079117795217092828"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"娘の教員就職までに部活外部委託化を願い教員の休養を重視する",u:"https://x.com/green_and_aqua/status/2078673491545764004"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"少子化下での学校持続可能性と教員働き方改革を論じ外部委託を評価",u:"https://x.com/kVaIEeKxJZuxcqV/status/2078414326055280833"},
+{x:1.5,e:2.0,c:0.85,i:2,s:"教員の過酷な勤務を憂慮し部活は外部委託か廃止を支持する",u:"https://x.com/shinja666/status/2078281640158388545"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"学校部活が労基法違反との見方を示し外部委託の正当性を論じる",u:"https://x.com/wu76jgS82zThc8u/status/2078157524097020097"},
+{x:-1.5,e:2.0,c:0.90,i:3,s:"学校の部活関与を全廃とし地域移行や委託も不十分だと主張する",u:"https://x.com/gsvw67/status/2078117966626140292"},
+{x:0.5,e:1.0,c:0.85,i:0,s:"部活外部委託費用の財政負担体制に問題があり国庫賄いを求める",u:"https://x.com/LARDYAGU/status/2077367984411246848"},
+{x:-1.5,e:0.5,c:0.75,i:1,s:"外部委託下で娘の部活を引き取る際の保護者側の不便を体験談で語る",u:"https://x.com/battamusic/status/2076949420453818567"},
+{x:1.5,e:1.0,c:0.90,i:5,s:"水泳授業からの外部委託を起点に部活を段階的に切り離す方法を支持",u:"https://x.com/tosa_zumi/status/2076925799366824135"},
+{x:1.5,e:0.5,c:0.85,i:3,s:"部活の教育的価値は外部委託や学校外活動でも維持できると評価",u:"https://x.com/LikeKyopan/status/2076152213114859800"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"友人教員の過酷な部活遠征待遇を憂慮し適正な働き環境を求める",u:"https://x.com/dnakada_0218/status/2080183349210152993"},
+{x:0.5,e:2.0,c:0.85,i:5,s:"部活制度の破綻を指摘し教員負担増大を憂慮して根本見直しを求める",u:"https://x.com/takitate_G/status/2080087341230915975"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"保護者対応と部活負担が教員精神疾患退職増の要因と分析し改善求める",u:"https://x.com/spiez_kabu104/status/2079927844931797338"},
+{x:-1.5,e:2.0,c:0.90,i:1,s:"地域への責任転嫁を批判し部活動の完全廃止を主張する",u:"https://x.com/hagakikatteren/status/2079858831459516865"},
+{x:1.5,e:0.5,c:0.85,i:2,s:"オンライン将棋部の新しい部活形態を評価し教員負担軽減を支持する",u:"https://x.com/80EmyKp8XoppKP/status/2079471836879077738"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"熱中症リスクと指導者不足を理由に部活の地域移行を支持する",u:"https://x.com/gyeong_kei1/status/2079400350206099852"},
+{x:-1.5,e:1.0,c:0.85,i:5,s:"外部指導者では顧問負担が減らない可能性も",u:"https://x.com/4ZYVNjQOkWBSoU8/status/2079383000463331775"},
+{x:-1.5,e:1.0,c:0.80,i:2,s:"教員家族から部活地域移行など現場の厳しい声を聞いた",u:"https://x.com/komachan1028nao/status/2078046600010891676"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"部活指導負担は民間ルールで計算すべき構造問題",u:"https://x.com/9LBJHCwmVdntMI2/status/2077880768773415394"},
+{x:0.5,e:1.0,c:0.80,i:3,s:"部活廃止より先に通知表廃止を主張",u:"https://x.com/yamako_10/status/2077819412174999938"},
+{x:0.0,e:1.0,c:0.80,i:5,s:"部活負担軽減政策の背景に文科省と内閣府の争いを指摘",u:"https://x.com/wu76jgS82zThc8u/status/2077669420487602493"},
+{x:-1.5,e:2.0,c:0.90,i:1,s:"地域移行で負担は教員から地域クラブ指導者に移っただけと指摘",u:"https://x.com/motz33/status/2077195097754706215"},
+{x:-1.5,e:2.0,c:0.90,i:2,s:"部活は教員負担を増やし生徒の学習エネルギーを奪うので廃止すべき",u:"https://x.com/Capitainememo2/status/2076347157695881335"},
+{x:0.5,e:2.0,c:0.90,i:2,s:"部活の美談だけを繰り返し教員負担を無視する議論を批判",u:"https://x.com/dYVfAifGLcrmfaQ/status/2075966930901667922"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"部活システムは非効率で教員リソースも圧迫するので外部化すべき",u:"https://x.com/dururururu_utd/status/2080267091677192557"},
+{x:0.0,e:0.5,c:0.60,i:6,s:"尼崎市の学校や交通・塾に関する地域課題を列挙",u:"https://x.com/ksskssksskss3/status/2080263939670323305"},
+{x:-1.5,e:2.0,c:0.85,i:3,s:"部活や学校行事はもう廃止でいいと感情的に主張",u:"https://x.com/6644ezakin/status/2080219025943171506"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"母校の部活は応援するが学校教育から部活廃止も考える",u:"https://x.com/RyoMa_0923/status/2080195282873315330"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"地元中学の部活廃止に驚き中学は部活する場ではないかと疑問",u:"https://x.com/antl_koharu2/status/2079963404119486753"},
+{x:0.0,e:1.0,c:0.85,i:0,s:"部活廃止減税論と増税無償化論は矛盾していると指摘",u:"https://x.com/WADIA168/status/2079943552491307339"},
+{x:1.5,e:2.0,c:0.85,i:2,s:"文科省の施策を批判し部活廃止を強く要求",u:"https://x.com/aldila9612/status/2079935400815239663"},
+{x:-1.5,e:2.0,c:0.85,i:0,s:"部活無償化を支持し廃止論を後進国思想として批判",u:"https://x.com/WADIA168/status/2079934957347369224"},
+{x:-1.5,e:2.0,c:0.80,i:3,s:"部活廃止など学校問題の迅速な解決を主張",u:"https://x.com/eduXaka/status/2079915536394391728"},
+{x:-1.5,e:1.0,c:0.85,i:2,s:"教職の働き方改善には部活廃止など無駄な業務削除が必要",u:"https://x.com/weTdqo0isa11532/status/2079906936024392034"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"教育界が子供のための部活や通知表をすぐやめてしまうと批判",u:"https://x.com/We4ir/status/2079836237112967593"},
+{x:0.0,e:0.5,c:0.85,i:5,s:"部活廃止できないのは制度上廃止対象がないためと解説",u:"https://x.com/sugiyama2023/status/2079807971635364107"},
+{x:0.5,e:2.0,c:0.85,i:0,s:"報酬で報いる制度になるまで部活は廃止し報酬化後に再開を主張",u:"https://x.com/Kl3JkihXGhUCe97/status/2079784768359821746"},
+{x:0.0,e:1.0,c:0.70,i:6,s:"お米de部活応援プロジェクトを含む記者会見に疑問と批判を呈す",u:"https://x.com/MikuLarenGt_r/status/2079779599551242680"},
+{x:-1.5,e:2.0,c:0.85,i:3,s:"廃止派は代案なく格差肯定と批判",u:"https://x.com/3mtyG08me214740/status/2079773971088826679"},
+{x:-1.5,e:1.0,c:0.90,i:3,s:"案なし廃止は子の居場所失うと懸念",u:"https://x.com/eduwithdai/status/2079704626841182589"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"教員負担軽減のため全面廃止を主張",u:"https://x.com/eutomica/status/2079698788982444514"},
+{x:0.5,e:2.0,c:0.80,i:2,s:"廃止でなく時間外勤務強要をやめよと要求",u:"https://x.com/sugiyama2023/status/2079690723419701476"},
+{x:1.5,e:0.5,c:0.85,i:2,s:"廃止すれば学校側の負担が減ると発言",u:"https://x.com/takumi_lifegoal/status/2079681117523972243"},
+{x:1.5,e:0.5,c:0.80,i:5,s:"部活は永久不変でなく変化は必然と指摘",u:"https://x.com/kyusaikatsudou/status/2079581916110659877"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"意欲ある教員不在なら部活は廃止だと主張",u:"https://x.com/7MzkfNobE7Yz3YE/status/2079519325082521847"},
+{x:0.5,e:1.0,c:0.80,i:2,s:"顧問不足で残れる部活は5つ以下と試算",u:"https://x.com/Hfcn4oelqPHUQqM/status/2079515104618664267"},
+{x:1.5,e:2.0,c:0.90,i:5,s:"地域移行より廃止支持、代替は自然発生と主張",u:"https://x.com/ikuji_takuto/status/2079514723482005708"},
+{x:0.5,e:0.5,c:0.85,i:5,s:"部活廃止ではなく建設的な改善案を求める",u:"https://x.com/hiro_stitch_/status/2079499155333132324"},
+{x:0.5,e:1.0,c:0.85,i:2,s:"顧問の負担重く休日練習廃止を体験談",u:"https://x.com/mitaserganm8619/status/2079451564318826891"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"部活廃止に進む現場を妨げないでと要望",u:"https://x.com/mitsunobu47/status/2079424581270696335"},
+{x:-1.5,e:1.0,c:0.75,i:3,s:"通知表廃止で二極化、部活の役割に言及",u:"https://x.com/re_mika_s/status/2079339458156200143"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"スポ少への移行体験と部活廃止への違和感",u:"https://x.com/cumunococco/status/2079217350382071922"},
+{x:1.5,e:2.0,c:0.90,i:3,s:"部活内のいじめ強制を理由に廃止を支持",u:"https://x.com/mikanmikan101/status/2079216646548509068"},
+{x:-1.5,e:0.5,c:0.70,i:6,s:"部活より先に廃止すべき課題が多いと指摘",u:"https://x.com/minami57903879/status/2079190864434450707"},
+{x:1.5,e:2.0,c:0.90,i:2,s:"顧問負担の不平等訴え部活廃止を求める",u:"https://x.com/Hfcn4oelqPHUQqM/status/2079187017070768345"},
+{x:-1.5,e:1.0,c:0.85,i:3,s:"厳しい部活を肯定し廃止傾向に懸念を示す",u:"https://x.com/59_oy1/status/2079165222510800911"},
+{x:1.5,e:2.0,c:0.80,i:6,s:"部活関連の人事に不満、廃止を強く求める",u:"https://x.com/mitsunobu47/status/2079142767335538837"},
+{x:0.5,e:1.0,c:0.85,i:1,s:"休日廃止で地域クラブ継続困難、代替模索",u:"https://x.com/JBA_Shibata/status/2079045602751746235"},
+{x:-1.5,e:2.0,c:0.90,i:3,s:"部活廃止に対する強い反発感情を示す",u:"https://x.com/eRqzbIfhNT30673/status/2079020425066283407"},
+{x:0.5,e:1.0,c:0.85,i:0,s:"費用がかかっても子どもの部活環境を残してほしい",u:"https://x.com/reigan4hatu/status/2079412889665110184"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"目的の混同と受け皿クラブの地域差を指摘",u:"https://x.com/sns_hannou_ma/status/2077020998801756661"},
+{x:1.5,e:1.0,c:0.80,i:0,s:"地域移行による保護者負担は当然と指摘",u:"https://x.com/high_school_JTE/status/2056304535476560110"},
+{x:1.5,e:1.0,c:0.85,i:2,s:"地域移行反対の指導者に教員疲弊への無関心を指摘",u:"https://x.com/YieArKUNG_FU/status/2080168143826391435"},
+{x:1.5,e:1.0,c:0.85,i:5,s:"教員人気時代に地域移行をしておくべきだったと主張",u:"https://x.com/hokutooh1/status/2079672544198848635"},
+{x:0.5,e:1.0,c:0.85,i:1,s:"部活継続なら公的資金で指導者と場所を確保すべき",u:"https://x.com/NanasiKh/status/2079537524352192745"},
+{x:1.5,e:0.5,c:0.85,i:1,s:"地域クラブとの指導者連携による地域移行を提案",u:"https://x.com/gattyann/status/2079371166234665221"},
+{x:-1.5,e:0.5,c:0.75,i:5,s:"部活存続も地域移行も簡単ではないと慎重に見る",u:"https://x.com/junyazawa_coach/status/2078628985853087892"},
+{x:-1.5,e:1.0,c:0.80,i:1,s:"ボランティア指導者不足を皮肉って懸念を示す",u:"https://x.com/VrJQQQDQJKmiLzY/status/2078204338384904274"},
+{x:-1.5,e:1.0,c:0.85,i:1,s:"地域移行後の指導者と組織の閉鎖性を懸念",u:"https://x.com/kosameneame/status/2076316822761296099"},
+{x:-1.5,e:1.0,c:0.90,i:1,s:"地域移行後の指導者の法的責任負担を懸念",u:"https://x.com/0goMONEPvQNfXWM/status/2073746978027241755"},
+{x:1.5,e:0.5,c:0.90,i:2,s:"地域移行で部活関与時間が減り自身の時間が増えると喜ぶ",u:"https://x.com/ebachan_club/status/2073301988050391455"},
+{x:1.5,e:1.0,c:0.80,i:1,s:"現行部活の指導者質担保の疑問と地域移行の有用性を示す",u:"https://x.com/todoporzoy2012/status/2072945511188025781"},
+{x:1.5,e:1.0,c:0.90,i:1,s:"地域移行で新たな部活種目ができた利点を強調",u:"https://x.com/tea03031533410/status/2072630566714061296"},
+{x:-1.5,e:1.0,c:0.85,i:5,s:"地域移行前に部活の定義と責任所在を明確化すべきと主張",u:"https://x.com/tahoex123/status/2070531756089119078"},
+{x:-1.5,e:2.0,c:0.90,i:1,s:"低賃金で指導者が見つからず地域移行は失敗すると断言",u:"https://x.com/kirishima_teach/status/2070447477484859720"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"地域移行で教員と生徒双方が利益を得ると評価",u:"https://x.com/774nyannyan/status/2079494022004117632"},
+{x:-1.5,e:1.0,c:0.80,i:5,s:"部活地域移行など教育改革の現場負担と制度ギャップを指摘",u:"https://x.com/Monchhichilorin/status/2079012968063488098"},
+{x:-1.5,e:2.0,c:0.90,i:5,s:"現状のままでは地域移行が破綻すると強く懸念",u:"https://x.com/Goshiki2023/status/2078663825013031272"},
+{x:1.5,e:1.0,c:0.75,i:5,s:"中体連や保護者の利権が地域移行を阻害していると分析",u:"https://x.com/dYVfAifGLcrmfaQ/status/2078654285672571281"},
+{x:-1.5,e:1.0,c:0.80,i:5,s:"地域移行の波に乗れない任意団体の苦労",u:"https://x.com/reichannel_go/status/2078441876475265411"},
+{x:1.5,e:1.0,c:0.75,i:1,s:"地域移行が進まないのは反対が一定数いるため",u:"https://x.com/774nyannyan/status/2072287973497057369"},
+{x:1.5,e:2.0,c:0.85,i:5,s:"無償での現状維持期待が移行の障害",u:"https://x.com/774nyannyan/status/2071574113483923590"},
+{x:-1.5,e:1.0,c:0.80,i:3,s:"転換期で中2生が置き去りにされる懸念",u:"https://x.com/Miyabi14_Miyabi/status/2071511785967112362"},
+{x:1.5,e:1.0,c:0.90,i:2,s:"地域移行運営者として学校負担の大きさを実感",u:"https://x.com/motz33/status/2055840810692985003"},
 ];
 </script>
 <script>
@@ -1224,13 +1430,13 @@ const SM_RAW = [
 (function(){
   'use strict';
   const ISSUES=[
-    {k:'費用・家庭負担',    n:16},
-    {k:'受け皿・指導者',    n:34},
-    {k:'教員の働き方',      n:58},
-    {k:'教育的意義・機会',  n:28},
-    {k:'地域格差',          n:8},
-    {k:'制度・移行プロセス',n:51},
-    {k:'その他',            n:50}
+    {k:"費用・家庭負担",n:30},
+    {k:"受け皿・指導者",n:61},
+    {k:"教員の働き方",n:114},
+    {k:"教育的意義・機会",n:82},
+    {k:"地域格差",n:2},
+    {k:"制度・移行プロセス",n:81},
+    {k:"その他",n:19}
   ];
   const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=242;
   const PAD_DEG=2.5;
@@ -1250,7 +1456,7 @@ const SM_RAW = [
   });
 
   function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
-  function colorOf(p){return p.x>=0.5?'#059669':(p.x<=-0.5?'#dc2626':'#64748b');}
+  function colorOf(p){return p.x>=1?'#059669':(p.x>0?'#d97706':(p.x<=-0.5?'#dc2626':'#64748b'));}
 
   const pts=[];
   SM_RAW.forEach((p,idx)=>{
@@ -1460,166 +1666,30 @@ const SM_RAW = [
 })();
 </script>
 
-    <section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2><span>論点ごとに賛否の投稿を読む</span></div>
-<nav class="quadrant-nav"><a href="#issue-kyoin">教員の働き方 58件</a><a href="#issue-seido">制度・移行プロセス 51件</a><a href="#issue-sonota">その他 50件</a><a href="#issue-ukesara">受け皿・指導者 34件</a><a href="#issue-kyoiku">教育的意義・機会 28件</a><a href="#issue-hiyou">費用・家庭負担 16件</a><a href="#issue-kousa">地域格差 8件</a></nav>
-
-<article class="issue-block" id="issue-kyoin">
-<div class="issue-head"><span class="axis-kicker">論点1・最多・最大動機</span>
-<h3>教員の働き方 — 「ブラック部活の解消」<span class="issue-count">58件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>働き方改革としての地域移行：論調</span><span>懐疑・反対26 / 中立15 / 支持17</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:45%">45%</div><div class="temp-seg neu" style="width:26%">26%</div><div class="temp-seg pos" style="width:29%">29%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>移行後も変わらないと懐疑</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>働き方改革として移行を支持</span></div>
-</div>
-<p class="issue-desc">最多論点。教員が土日に無償で指導する構造が長時間労働の温床になっているとして、地域移行を「働き方改革」として歓迎する声が目立ちます。ただし「義務がなくなっても続ける教員が多い」「実態は変わらない」という懐疑的な声もあります。</p>
-<div class="issue-sides"><div class="side pos"><strong>支持側</strong>教員の無償・強制労働の解消が最大の動機。長時間労働の温床をなくすべきだ。</div><div class="side neg"><strong>懐疑側</strong>義務がなくなっても自発的に続ける教員が多い。移行後も実態は変わらない可能性がある。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">支持 / conf 0.9</div><p>教員の過重労働や無償の部活指導の問題を指摘し、地域移行・外部委託の必要性を主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yoshiki20260530/status/2068079655861764135"></a></blockquote></div>
-<div class="sample-card"><div class="meta">批判 / conf 0.9</div><p>部活動を地域クラブに移管することで教員の業務量が増えると批判。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/cold_2_dloc/status/2067556163802337627"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-seido">
-<div class="issue-head"><span class="axis-kicker">論点2</span>
-<h3>制度・移行プロセス — 「手探りのまま進んでいる」<span class="issue-count">51件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>移行プロセスへの評価</span><span>批判21 / 中立11 / 擁護19</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:41%">41%</div><div class="temp-seg neu" style="width:22%">22%</div><div class="temp-seg pos" style="width:37%">37%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>制度設計が不透明と批判</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>段階的な改善は当然と擁護</span></div>
-</div>
-<p class="issue-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も多く、プロセス設計の問題を問う声が集まっています。</p>
-<div class="issue-sides"><div class="side neg"><strong>批判側</strong>制度設計が不透明なまま進んでいる。自治体によって対応がバラバラで格差が広がる。</div><div class="side pos"><strong>擁護側</strong>段階的に改善していくのは当然。大きな制度変更は手探りから始まる。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">提案 / conf 0.8</div><p>「勝つチームづくり」より「続けられる仕組みづくり」が先だと提案。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nijimasufire/status/2070118138885312676"></a></blockquote></div>
-<div class="sample-card"><div class="meta">批判 / conf 0.8</div><p>地域移行した部活動が真のクラブ化に達していない問題を指摘。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/chaw0501/status/2070020638383997407"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-sonota">
-<div class="issue-head"><span class="axis-kicker">その他</span>
-<h3>その他 — 情報共有・複合的意見<span class="issue-count">50件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>投稿の論調（情報共有・複合意見）</span><span>批判27 / 中立5 / 賛同18</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:54%">54%</div><div class="temp-seg neu" style="width:10%">10%</div><div class="temp-seg pos" style="width:36%">36%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>批判・問題提起的な投稿</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>賛同・情報共有的な投稿</span></div>
-</div>
-<p class="issue-desc">特定の論点に絞り込めない複合的な意見や、ニュース・資料の情報共有が中心です。</p>
-<div class="issue-sides"><div class="side neg"><strong>複合的批判</strong>地域指導者の理解不足が地域移行の本質を妨げる。クラブ化の意味を問い直す必要がある。</div><div class="side pos"><strong>情報共有</strong>各地域の実証実験データや専門家の提言を共有し、議論の材料として提供。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">批判 / conf 0.85</div><p>地域指導者の理解不足が部活動地域移行の本質を妨げると指摘。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/crypticsa/status/2070077324008341725"></a></blockquote></div>
-<div class="sample-card"><div class="meta">情報共有 / conf 0.9</div><p>関春海先生の意見を引用し、地域移行の方向性と小学生大会開催提言について述べる。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/wu76jgS82zThc8u/status/2070075708609859823"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-ukesara">
-<div class="issue-head"><span class="axis-kicker">論点3</span>
-<h3>受け皿・指導者 — 「ボランティア頼みは限界」<span class="issue-count">34件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>受け皿・指導者問題への立場</span><span>懸念19 / 中立5 / 支持10</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:56%">56%</div><div class="temp-seg neu" style="width:15%">15%</div><div class="temp-seg pos" style="width:29%">29%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>受け皿不足で移行に懸念</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>整備すれば解決できると支持</span></div>
-</div>
-<p class="issue-desc">地域クラブの指導者がいない・報酬が低い・責任は重い。人材確保ができなければ移行自体が空洞化するという懸念が中心です。</p>
-<div class="issue-sides"><div class="side neg"><strong>懸念側</strong>報酬が安く人材が集まらない。地方では受け皿となる団体自体が存在しない。</div><div class="side pos"><strong>提案側</strong>生活できる報酬を社会全体で保障する仕組みが必要。外部専門顧問の活用を。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">懸念 / conf 0.85</div><p>長崎での実証実験から、指導者育成と移動支援の必要性を指摘。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/taiikujin966039/status/2065544492430643515"></a></blockquote></div>
-<div class="sample-card"><div class="meta">提案 / conf 0.85</div><p>教師への手当や外部専門顧問の招致を提案。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/joO7g4uWTlVCSMA/status/2061724320259608806"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-kyoiku">
-<div class="issue-head"><span class="axis-kicker">論点4</span>
-<h3>教育的意義・機会 — 「子どもの夢と居場所」<span class="issue-count">28件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>子どもの教育機会への影響評価</span><span>懸念14 / 中立2 / 期待12</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:50%">50%</div><div class="temp-seg neu" style="width:7%">7%</div><div class="temp-seg pos" style="width:43%">43%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>費用・格差で機会損失を懸念</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>移行で機会拡大に期待</span></div>
-</div>
-<p class="issue-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもあります。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用や距離で夢を奪われる子がいる」という懸念も根強い論点です。</p>
-<div class="issue-sides"><div class="side pos"><strong>期待側</strong>門戸が広がり不登校の子も参加しやすくなる。多様な子に活動機会が届く。</div><div class="side neg"><strong>懸念側</strong>費用・距離の壁で格差が生まれる。競技力が身につきやすい学校部活の価値が失われる。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">期待 / conf 0.8</div><p>地域移行で不登校の子も参加機会を得られる可能性に期待。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Mr_Peki_chan/status/2070029090003009670"></a></blockquote></div>
-<div class="sample-card"><div class="meta">懸念 / conf 0.9</div><p>部活は日本独自の活動で競技力が身につきやすい、と教育的価値を強調。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/best_yajima/status/2069440318144200986"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-hiyou">
-<div class="issue-head"><span class="axis-kicker">論点5</span>
-<h3>費用・家庭負担 — 「月8000円、年間30万円近く」<span class="issue-count">16件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>家庭負担増への立場</span><span>反対7 / 中立3 / 支持6</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:44%">44%</div><div class="temp-seg neu" style="width:18%">18%</div><div class="temp-seg pos" style="width:38%">38%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>費用増に反対・移行に懸念</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>補助制度で解決できると支持</span></div>
-</div>
-<p class="issue-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。補助制度の有無で地域間格差が生まれることへの懸念が中心です。</p>
-<div class="issue-sides"><div class="side neg"><strong>懸念側</strong>家計を直撃する費用増。低所得家庭の子どもが部活を諦めざるを得なくなる。</div><div class="side pos"><strong>擁護側</strong>市税補助や一律化で解決できる。公費負担の設計次第で格差は縮められる。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">懸念 / conf 0.9</div><p>保護者が月額8000円の地域移行に反対。家計への影響を指摘。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TheMirageof0/status/2070621781757726855"></a></blockquote></div>
-<div class="sample-card"><div class="meta">支持 / conf 0.85</div><p>少子化で学校単位の部活維持が困難になっている現実を踏まえ、地域移行を支持。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/774nyannyan/status/2070058879938084997"></a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-kousa">
-<div class="issue-head"><span class="axis-kicker">論点6・最小論点</span>
-<h3>地域格差 — 「都市はできるが地方は無理」<span class="issue-count">8件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>地域格差への立場</span><span>懸念3 / 中立0 / 支持5</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:38%">38%</div><div class="temp-seg neu" style="width:0%"></div><div class="temp-seg pos" style="width:62%">62%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>地方では移行が実現不可と指摘</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#059669"></i>少子化対応として移行を支持</span></div>
-</div>
-<p class="issue-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しないケースも。一律の移行政策が地域によっては実現不可能という指摘です。</p>
-<div class="issue-sides"><div class="side neg"><strong>懸念側</strong>地方では移行自体が成立しない。クラブも交通も選択肢がない地域に同じ政策は無理だ。</div><div class="side pos"><strong>視点</strong>地域の実情に合わせた柔軟な制度設計を。少子化対応として合同チームも選択肢に。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">支持（少子化対応）/ conf 0.85</div><p>少子化で学校単位の部活維持が困難になっている現実を踏まえ、地域移行を支持。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mcLKvaVydIHSkaI/status/2070099638045266403"></a></blockquote></div>
-</div>
-</article>
-</section>
-    <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">少子化と教員の長時間労働を背景に、中学校の部活動を学校から地域のスポーツクラブや民間団体へ移す「地域移行」が国の方針として進められています。まず休日の部活動から段階的に移行を進める計画で、教員の負担軽減と、少子化で単独では部活動を維持できない学校の受け皿づくりが狙いです。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「教員の働き方改革に不可欠」「専門的な指導を受けられる機会が増える」という声があります。一方で、「地域に受け皿となるクラブや指導者がいない」「会費負担が増え、家庭の経済力で子どもの機会に格差が生まれる」「学校の部活動が持っていた教育的な意義が失われる」といった懸念も根強く、特に都市部と地方の環境差が大きな論点になっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">移行の担い手や費用負担のあり方は自治体ごとに手探りの状態が続いており、現場の教員・保護者・地域それぞれの立場から異なる意見がSNS上でも交わされています。</p></section>
-    <section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2><span>2軸分類のサマリー</span></div>
-<div class="axis-grid">
-<article class="axis-card"><div class="axis-kicker">地域移行への態度</div><h3>賛成・推進が多数</h3><div class="axis-count">95</div><p>移行支持95件。反対・慎重は21件にとどまる。教員の働き方改革を動機とした支持が最大勢力。条件付きは制度設計の改善を求める声（16件）。</p></article>
-<article class="axis-card"><div class="axis-kicker">最大論点</div><h3>教員の働き方が最多</h3><div class="axis-count">58</div><p>7論点中最多の教員の働き方（58件）が議論を牽引。制度・移行プロセス（51件）が拮抗。費用・家庭負担（16件）と地域格差（8件）は件数は少ないが感情温度が高い。</p></article>
-<article class="axis-card"><div class="axis-kicker">対立構造</div><h3>「移行の手段」をめぐる争い</h3><div class="axis-count">245</div><p>「地域移行すべき」では賛否が共鳴するが、費用負担の設計・指導者の確保・移行スピードで正反対の意見が激突。賛成でも反対でも「誰がどう支えるか」が論点の核心。</p></article>
-</div></section>
-    <section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2><span>Hermesによる論点・スタンス分類</span></div><div class="hermes-issue-list"><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>費用・家庭負担</h3><span class="hermes-issue-count">30件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:16.67%"></span><span class="conditional" style="width:36.67%"></span><span class="con" style="width:36.67%"></span><span class="neutral" style="width:10.00%"></span></div><div class="hermes-legend"><span>支持 5</span> <span>条件付き 11</span> <span>慎重・反対 11</span> <span>中立 3</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 月額8000円が家計を圧迫し反対的 <a href="https://x.com/TheMirageof0/status/2070621781757726855" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 市税で月会費を補助し地域移行を支持 <a href="https://x.com/TheMirageof0/status/2070624074506863002" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>受け皿・指導者</h3><span class="hermes-issue-count">61件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:32.79%"></span><span class="conditional" style="width:22.95%"></span><span class="con" style="width:40.98%"></span><span class="neutral" style="width:3.28%"></span></div><div class="hermes-legend"><span>支持 20</span> <span>条件付き 14</span> <span>慎重・反対 25</span> <span>中立 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>条件付き</strong> 指導者報酬が最低賃金並みで強く不満 <a href="https://x.com/SIND_/status/2070325146372739488" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>条件付き</strong> 安い謝礼では指導者不足は当然だと懸念 <a href="https://x.com/774nyannyan/status/2070491362882150454" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教員の働き方</h3><span class="hermes-issue-count">114件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:61.40%"></span><span class="conditional" style="width:13.16%"></span><span class="con" style="width:22.81%"></span><span class="neutral" style="width:2.63%"></span></div><div class="hermes-legend"><span>支持 70</span> <span>条件付き 15</span> <span>慎重・反対 26</span> <span>中立 3</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 教員志望の動機減少を懸念し地域移行に反対 <a href="https://x.com/yamako_10/status/2061588627088634365" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 生徒自主性を奪う強制顧問をデータで拒否、負担軽減を支持 <a href="https://x.com/yoshiki20260530/status/2067198495979978851" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教育的意義・機会</h3><span class="hermes-issue-count">82件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:48.78%"></span><span class="conditional" style="width:6.10%"></span><span class="con" style="width:42.68%"></span><span class="neutral" style="width:2.44%"></span></div><div class="hermes-legend"><span>支持 40</span> <span>条件付き 5</span> <span>慎重・反対 35</span> <span>中立 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活を学校から駆逐すべき、子育て責任放棄する親を批判 <a href="https://x.com/hagakikatteren/status/2064823846402933129" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 閉鎖的な部活を廃し地域クラブへ移行すべき <a href="https://x.com/SvErfdCKdt52541/status/2068859859077124604" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>地域格差</h3><span class="hermes-issue-count">2件</span></div><div class="hermes-stance-bar"><span class="con" style="width:100.00%"></span></div><div class="hermes-legend"><span>慎重・反対 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 地域移行で野球の育成環境が悪化し都市部に偏在すると懸念 <a href="https://x.com/mamamam4949/status/2069589990011818183" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>慎重・反対</strong> 通学時間増加への反対で頓挫する未来を懸念 <a href="https://x.com/774nyannyan/status/2060890475503157752" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>制度・移行プロセス</h3><span class="hermes-issue-count">81件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:40.74%"></span><span class="conditional" style="width:25.93%"></span><span class="con" style="width:24.69%"></span><span class="neutral" style="width:8.64%"></span></div><div class="hermes-legend"><span>支持 33</span> <span>条件付き 21</span> <span>慎重・反対 20</span> <span>中立 7</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>条件付き</strong> チーム移転ではなく本質的クラブ化を <a href="https://x.com/chaw0501/status/2070020638383997407" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> コベカツに向け企業・団体の参入を呼びかけ <a href="https://x.com/kazuyamatsui_ac/status/2069913704582492244" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>その他</h3><span class="hermes-issue-count">19件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:42.11%"></span><span class="con" style="width:31.58%"></span><span class="neutral" style="width:26.32%"></span></div><div class="hermes-legend"><span>支持 8</span> <span>慎重・反対 6</span> <span>中立 5</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活は廃止で良いと支持 <a href="https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 部活廃止は善であると主張 <a href="https://x.com/kyusaikatsudou/status/2070522219424575788" target="_blank" rel="noopener">投稿を見る</a></div></div></article></div></section><section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">少子化と教員の長時間労働を背景に、中学校の部活動を学校から地域のスポーツクラブや民間団体へ移す「地域移行」が国の方針として進められています。まず休日の部活動から段階的に移行を進める計画で、教員の負担軽減と、少子化で単独では部活動を維持できない学校の受け皿づくりが狙いです。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「教員の働き方改革に不可欠」「専門的な指導を受けられる機会が増える」という声があります。一方で、「地域に受け皿となるクラブや指導者がいない」「会費負担が増え、家庭の経済力で子どもの機会に格差が生まれる」「学校の部活動が持っていた教育的な意義が失われる」といった懸念も根強く、特に都市部と地方の環境差が大きな論点になっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">移行の担い手や費用負担のあり方は自治体ごとに手探りの状態が続いており、現場の教員・保護者・地域それぞれの立場から異なる意見がSNS上でも交わされています。</p></section>
+    <section class="panel conflict-panel"><div class="panel-title"><h2>Hermes分類サマリー</h2><span>意見投稿のみ</span></div>
+<div class="hermes-summary-grid">
+<article class="hermes-summary-card"><div class="axis-kicker">最多スタンス</div><h3>支持</h3><div class="axis-count">176</div><p>支持・条件付き・慎重反対を分けて集計しています。</p></article>
+<article class="hermes-summary-card"><div class="axis-kicker">最多論点</div><h3>教員の働き方</h3><div class="axis-count">114</div><p>投稿の主眼となる論点を1つに分類しています。</p></article>
+<article class="hermes-summary-card"><div class="axis-kicker">感情強度 high</div><h3>強い訴え・批判</h3><div class="axis-count">104</div><p>表現の強さであり、意見の正しさを示す値ではありません。</p></article>
+</div></section><section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
 <div class="related-grid">
   <a class="related-card" href="bike-blue-ticket-reaction-map.html"><img src="images/bike-blue-ticket-hero.webp" alt="自転車の青切符" loading="lazy"><strong>自転車の青切符</strong><span>安全のための取締りか、道路整備が先か。</span></a>
   <a class="related-card" href="ai-copyright-reaction-map.html"><img src="images/ai-copyright-hero.webp" alt="生成AIと著作権" loading="lazy"><strong>生成AIと著作権</strong><span>クリエイター保護と技術革新の距離を考える。</span></a>
   <a class="related-card" href="elderly-license-revocation-reaction-map.html"><img src="images/elderly-license-revocation-hero.webp" alt="高齢者免許返納" loading="lazy"><strong>高齢者免許返納</strong><span>安全、移動の自由、地方生活の現実を比べる。</span></a>
 </div></section>
     <section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2><span>必要な人向けに折りたたみ</span></div>
-<details><summary>注意</summary>
-    <section class="note-panel"><h2>注意</h2><ul>
-<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
-<li>投稿本文の転載は最小限にし、要約中心にしてください。</li>
-<li>代表投稿は公開前に人間が確認する前提です。</li>
-</ul></section>
-</details>
+<details><summary>収集・分類件数</summary><div class="table-wrap"><table><tbody>
+<tr><th>累計収集投稿</th><td>467</td></tr><tr><th>テーマ関連投稿</th><td>464</td></tr><tr><th>意見投稿</th><td>389</td></tr>
+</tbody></table></div></details>
+<details><summary>論点別件数</summary><div class="table-wrap"><table><tbody><tr><th>費用・家庭負担</th><td>30</td></tr><tr><th>受け皿・指導者</th><td>61</td></tr><tr><th>教員の働き方</th><td>114</td></tr><tr><th>教育的意義・機会</th><td>82</td></tr><tr><th>地域格差</th><td>2</td></tr><tr><th>制度・移行プロセス</th><td>81</td></tr><tr><th>その他</th><td>19</td></tr></tbody></table></div></details>
+<details><summary>スタンス別件数</summary><div class="table-wrap"><table><tbody><tr><th>移行支持</th><td>176</td></tr><tr><th>条件付き・改善要求</th><td>66</td></tr><tr><th>慎重・反対</th><td>125</td></tr><tr><th>中立・情報</th><td>22</td></tr></tbody></table></div></details>
+<details><summary>注意</summary><ul><li>Yahooリアルタイム検索で取得したSNS投稿サンプルであり、世論調査ではありません。</li><li>Hermesが論点・スタンス・強度を自動分類しました。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
 </section>
   </main>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <footer style="background:linear-gradient(135deg, var(--grad-2), var(--grad-1));border-top:none;padding:48px 24px;text-align:center;color:#fff;font-size:12px;line-height:1.8;">
-    <div>Powered by Yahooリアルタイム検索 + AI分類</div>
+    <div>Powered by Yahooリアルタイム検索 + Hermes分類</div>
     <a href="index.html" style="color:rgba(255,255,255,.85);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
     <div style="margin-top:8px;color:rgba(255,255,255,.6);">
       <a href="about.html" style="color:rgba(255,255,255,.7);margin-right:16px;">このサイトについて</a>

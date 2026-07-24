@@ -45,16 +45,16 @@ themes:
   bukatsu-chiiki:
     title: 部活動の地域移行
     html: docs/bukatsu-chiiki-reaction-map.html
-    collect: done        # 306件
-    classify: done
-    classify2d: done     # 245件、APIエラー0%
-    main_issue: done     # 222/225件（1.3%エラー）OpenCode Go / minimax-m2.7。7論点分類
-    page_v3: done        # 論点アリーナ（極座標7セクター・2ステップ投票）実装済み 2026-07-21
+    collect: done        # 累計467件（2026-07-23更新、今回新規161件）
+    classify: done       # Hermesで467件分類。関連464件、意見389件
+    classify2d: done     # 旧2D 245件は履歴保持。公開表示はHermes論点分類へ移行
+    main_issue: done     # Hermesで7論点・4スタンス・3段階強度を分類
+    page_v3: done        # 論点アリーナ＋タイトル直下「世論の潮目」実装 2026-07-23
     manga_data: done     # manga-prompts/bukatsu-chiiki-prompts.md 作成済み
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done
-    refresh_at: 2026-07-19
-    notes: "2026-07-12にYahooリアルタイム検索178件を追加収集。重複51件を除外し、新規127件中98件をOpenCode Go / minimax-m2.7で2D有効分類。2026-07-21に論点アリーナ形式へアップグレード（7論点極座標マップ）。"
+    refresh_at: 2026-07-30
+    notes: "2026-07-12に新規127件を収集。2026-07-23に同一10検索語で223件を取得し、既存との重複62件を除いた新規161件を追加、累計467件。全件をHermes方式（main_issue / stance / intensity / is_relevant / is_opinion）で再分類。関連464件、意見389件。前回追加分107意見と今回追加分132意見を比較し、条件付き・改善要求が5.6pt減少、移行支持が3.4pt増加、慎重・反対が1.0pt増加。費用・家庭負担が6.9pt増、感情highが5.6pt増。タイトル直下に世論の潮目を追加。"
 
   constitutional-amendment:
     title: 憲法改正論議
