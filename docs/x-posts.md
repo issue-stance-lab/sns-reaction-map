@@ -325,8 +325,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @y___hasegawa（副首都候補は大阪・名古屋論外・福岡・札幌推し） | 副首都法案・候補地 | URLなし・kouhochi画像付き | 34K |
 | 2 | @asahicom（皇室典範改正・国民の理解得られていない6割・世論調査） | 皇室典範・プロセス論 | URLなし・shingi画像付き | 13K |
+| 3 | @SEITO_NO_MIKATA（部活はセーフティネット・安易に壊すと社会コスト） | 部活地域移行・費用 | URLなし・hiyou画像付き | 26K |
 
-備考: 2本URLなし・各画像付き。
+備考: 3本URLなし・各画像付き。
 
 ## 論点ポスト実績 2026-07-24
 
