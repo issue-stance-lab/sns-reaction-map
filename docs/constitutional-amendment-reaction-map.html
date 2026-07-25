@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site-tokens.css">
+  <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root {
       color-scheme: light;
@@ -696,8 +696,8 @@
     @media(max-width:760px){#explainer-section .explainer-grid{gap:12px}#explainer-section .explainer-card-label{padding:12px;gap:8px}#explainer-section .explainer-card-title{font-size:14px}#explainer-section .explainer-card img{aspect-ratio:1916/821}}
 
   </style>
-  <link rel="stylesheet" href="topic-modern.css?v=4">
-  <script src="topic-modern.js?v=1" defer></script>
+  <link rel="stylesheet" href="topic-modern.css?v=22">
+  <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
   <script>
@@ -711,29 +711,49 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 </head>
-<body style="--topic-hero-image:url('images/constitutional-hero.webp')">
+<body class="summary-on-light" style="--topic-hero-image:url('images/constitutional-hero.webp')">
   <section class="hero">
     <div class="hero-inner">
       <nav class="top-nav"><a href="index.html">トップ</a></nav>
       <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">政策・国会</span>
       <h1>憲法改正論議 SNS反応まっぷ</h1>
       <p class="question-line">現実の安全保障に合わせて改正するのか、平和主義と権力制限を守るのか？</p>
-      <p class="lead">Yahooリアルタイム検索で取得したX反応422件を、Hermesが6つの論点と4つのスタンスに再分類しました。世論調査ではなく、取得サンプルの論点比較です。</p>
-      <div class="thirty-summary" aria-label="30秒サマリー"><ul><li>最多論点は「改憲全般」116件。次いで「9条・自衛隊」103件、「国民投票・広告」96件。</li><li>慎重・反対が218件で最多。改正推進91件、中立91件、手続き重視22件と、論点ごとに構図が変わります。</li><li>9条・自衛隊では推進56件が慎重・反対33件を上回る一方、緊急事態条項では慎重・反対30件が推進2件を大きく上回りました。</li></ul></div>
+      <p class="lead">収集したSNS投稿のうち、分析対象となった意見422件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
+      <div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>116</b>件</span><strong>そもそも、憲法を変えるべきなのか</strong><span class="conclusion-detail">個別の条文より先に、改憲そのものの必要性と進め方に議論が集中しています。</span></li></ul></div>
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats">
-      <div class="stat"><span>分類投稿</span><strong>422件</strong></div>
-      <div class="stat"><span>論点セクター</span><strong>6論点</strong></div>
-      <div class="stat"><span>最多論点</span><strong>改憲全般 116件</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>慎重・反対 218件</strong></div>
+    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+      <article class="stat insight-stat">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+        <strong class="insight-value">422<small>件</small></strong>
+        <p class="insight-note">改憲全般から9条、緊急事態、投票手続きまで</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="debate">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚖️</span><span class="insight-label">最も多い立場</span></div>
+        <strong class="insight-value">慎重・反対 52%</strong>
+        <p class="insight-note">218件。ただし論点ごとに優勢な立場が変わる</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:52%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="topic">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+        <strong class="insight-value">改憲全般 116<small>件</small></strong>
+        <p class="insight-note">憲法を変える必要そのものが最大の入口</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:27%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="insight">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">↕</span><span class="insight-label">論点による逆転</span></div>
+        <span class="insight-chip">一括の賛否では読めない</span>
+        <strong class="insight-value">9条は推進優勢</strong>
+        <p class="insight-note">一方、緊急事態条項は慎重30件・推進2件</p>
+      </article>
     </section>
 <section class="panel" id="explainer-section">
-<div class="panel-title"><h2>投票前に読む：6つの争点</h2><span>図解で全論点をチェック</span></div>
+<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>図解で全論点をチェック</span></div>
 <p class="explainer-lead">憲法改正は、改正全般への賛否だけでは整理できません。9条、緊急事態条項、国民投票の公平性、発議手続き、情報環境ではそれぞれ対立の理由が異なります。6つの図解を確認してから、自分が重く見る論点を選んでください。画像はタップで拡大できます。</p>
 <div class="explainer-grid"><article class="explainer-card" data-img="images/constitutional-infographic-wide-general.webp" data-alt="改憲全般"><div class="explainer-card-label"><span class="explainer-num">争点1</span><div><p class="explainer-card-title">改憲全般</p><p class="explainer-card-desc">憲法を社会の変化に合わせるのか、権力を縛る原則として慎重に守るのか。</p><div class="explainer-sides"><span class="explainer-side pro">改正推進：現実に合うルールへ</span><span class="explainer-side con">慎重・反対：拙速な変更を防ぐ</span></div></div></div><img src="images/constitutional-infographic-wide-general.webp" alt="争点1 改憲全般" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-article9.webp" data-alt="9条・自衛隊"><div class="explainer-card-label"><span class="explainer-num">争点2</span><div><p class="explainer-card-title">9条・自衛隊</p><p class="explainer-card-desc">自衛隊の存在と任務を明記する意義と、9条の平和主義への影響を考える。</p><div class="explainer-sides"><span class="explainer-side pro">改正推進：法的位置づけを明確に</span><span class="explainer-side con">慎重・反対：平和主義の歯止めを維持</span></div></div></div><img src="images/constitutional-infographic-wide-article9.webp" alt="争点2 9条・自衛隊" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-emergency.webp" data-alt="緊急事態条項"><div class="explainer-card-label"><span class="explainer-num">争点3</span><div><p class="explainer-card-title">緊急事態条項</p><p class="explainer-card-desc">重大な危機への即応力と、政府への権限集中を防ぐ仕組みをどう設計するか。</p><div class="explainer-sides"><span class="explainer-side pro">整備賛成：危機対応を迅速に</span><span class="explainer-side con">慎重・反対：権限濫用を警戒</span></div></div></div><img src="images/constitutional-infographic-wide-emergency.webp" alt="争点3 緊急事態条項" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-referendum.webp" data-alt="国民投票・広告"><div class="explainer-card-label"><span class="explainer-num">争点4</span><div><p class="explainer-card-title">国民投票・広告</p><p class="explainer-card-desc">自由な意見表明を守りながら、資金力や広告量の差をどう整えるか。</p><div class="explainer-sides"><span class="explainer-side pro">自由を重視：多様な意見を届ける</span><span class="explainer-side con">公平性を重視：判断環境を整える</span></div></div></div><img src="images/constitutional-infographic-wide-referendum.webp" alt="争点4 国民投票・広告" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-process.webp" data-alt="政党・発議手続き"><div class="explainer-card-label"><span class="explainer-num">争点5</span><div><p class="explainer-card-title">政党・発議手続き</p><p class="explainer-card-desc">具体案を国民に問う機会と、国会での十分な審議・合意形成をどう両立するか。</p><div class="explainer-sides"><span class="explainer-side pro">発議推進：国民投票で判断を</span><span class="explainer-side con">慎重論：幅広い合意を先に</span></div></div></div><img src="images/constitutional-infographic-wide-process.webp" alt="争点5 政党・発議手続き" loading="lazy"></article><article class="explainer-card" data-img="images/constitutional-infographic-wide-information.webp" data-alt="情報・議論の質"><div class="explainer-card-label"><span class="explainer-num">争点6</span><div><p class="explainer-card-title">情報・議論の質</p><p class="explainer-card-desc">条文・根拠・発言主体・引用関係を確認し、文脈不足の情報をどう扱うか。</p><div class="explainer-sides"><span class="explainer-side pro">確認する：一次資料と文脈を見る</span><span class="explainer-side con">保留する：不明な情報は断定しない</span></div></div></div><img src="images/constitutional-infographic-wide-information.webp" alt="争点6 情報・議論の質" loading="lazy"></article></div>
 <p class="explainer-note"><strong>使い方:</strong> 6つの争点を図解で確認してから、次の投票で「一番気になる論点」を選んでください。</p>
@@ -766,7 +786,7 @@
 <p>憲法改正は、9条や緊急事態条項だけでなく、国民投票の公平性や議論の進め方まで含むテーマです。まず一番気になる論点を選び、次に改正への総合的な考えを選んでください。</p>
 <div class="data-method"><strong>データの集め方:</strong> 「憲法改正」「9条」「緊急事態条項」「国民投票法」などのキーワードで、Yahooリアルタイム検索からSNS投稿422件を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>一番気になる論点を選ぶ <small>（全2問）</small></p><div id="vote-issue-btns"></div></div>
-<div id="vote-step2" hidden><p class="vote-step-label"><span class="step-num">2</span>憲法改正への考えは？ <small>答えたらアリーナに表示します</small></p><div id="vote-stance-btns"></div></div>
+<div id="vote-step2" hidden><p class="vote-step-label"><span class="step-num">2</span>憲法改正への考えは？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns"></div></div>
 <div id="vote-result" hidden></div>
 </section>
 <script>
@@ -782,7 +802,7 @@
   const issueBox=document.getElementById('vote-issue-btns');
   issues.forEach((v,i)=>{const b=document.createElement('button');b.className='vote-issue-btn';b.innerHTML='<span>'+v.icon+'</span><span><strong>'+v.k+'</strong><small>'+v.d+'</small></span>';b.onclick=()=>{selected=i;document.getElementById('vote-step1').hidden=true;document.getElementById('vote-step2').hidden=false;};issueBox.appendChild(b);});
   const stanceBox=document.getElementById('vote-stance-btns');
-  stances.forEach(v=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=()=>{document.getElementById('vote-step2').hidden=true;const r=document.getElementById('vote-result');r.hidden=false;r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」</p><button type="button" id="vote-redo">選び直す</button>';window.setConstitutionalVoteMarker?.(selected,v.c);document.getElementById('vote-redo').onclick=()=>{r.hidden=true;document.getElementById('vote-step1').hidden=false;};};stanceBox.appendChild(b);});
+  stances.forEach(v=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=()=>{document.getElementById('vote-step2').hidden=true;const r=document.getElementById('vote-result');r.hidden=false;r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」</p><button type="button" id="vote-redo">選び直す</button>';window.setConstitutionalVoteMarker?.(selected,v.c);document.getElementById('vote-redo').onclick=()=>{r.hidden=true;document.getElementById('vote-step1').hidden=false;window.clearConstitutionalVoteMarker?.();};};stanceBox.appendChild(b);});
 })();
 </script>
 <section class="panel stance-map-section" id="stance-map-section">
@@ -793,6 +813,7 @@
   <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
 <p class="map-caption">中心の「憲法改正」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は主張の強さ（外側ほど強い反応）、点の色は立場（青=改正推進 / 赤=慎重・反対 / 緑=手続き重視 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
+<p id="your-marker-note" style="display:none;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
 <div class="sm-controls"><div class="sm-legend"><span><i style="background:#2563eb"></i>改正推進</span><span><i style="background:#dc2626"></i>慎重・反対</span><span><i style="background:#059669"></i>手続き重視</span><span><i style="background:#64748b"></i>中立・情報</span></div><div class="sm-filters" id="sm-filters"></div></div>
 <div id="sm-tooltip"></div>
 </div>
@@ -835,7 +856,7 @@ P.forEach((p,j)=>{
 
 function drawHeat(){
   hctx.clearRect(0,0,W,W);
-  hctx.fillStyle='#fdfdff';hctx.fillRect(0,0,W,W);
+  hctx.fillStyle='#0f0e2e';hctx.fillRect(0,0,W,W);
   const maxN=Math.max(...ISSUES.map(v=>v.n));
   ISSUES.forEach(v=>{
     const a0=v.a0*Math.PI/180,a1=v.a1*Math.PI/180;
@@ -867,12 +888,12 @@ function draw(){
     const rad=v.mid*Math.PI/180,lx=CX+R_LBL*Math.cos(rad),ly=CY+R_LBL*Math.sin(rad),c=Math.cos(rad);
     ctx.textAlign=c>.35?'left':(c<-.35?'right':'center');
     ctx.textBaseline='middle';
-    ctx.fillStyle=(filter>=0&&i!==filter)?'rgba(100,116,139,.4)':'#334155';
+    ctx.fillStyle=(filter>=0&&i!==filter)?'rgba(255,255,255,.25)':'rgba(255,255,255,.88)';
     ctx.fillText(v.k+' '+v.n,lx,ly);
   });
   ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);
-  ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#bfdbfe';ctx.lineWidth=1.5;ctx.stroke();
-  ctx.fillStyle='#172554';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#0f0e2e';ctx.fill();ctx.strokeStyle='rgba(124,58,237,.45)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.88)';ctx.textAlign='center';ctx.textBaseline='alphabetic';
   ctx.font='900 15px "Noto Sans JP",sans-serif';
   ctx.fillText('憲法',CX,CY-9);ctx.fillText('改正',CX,CY+12);
   ctx.font='400 10px "Noto Sans JP",sans-serif';ctx.fillStyle='#64748b';
@@ -881,11 +902,12 @@ function draw(){
     const v=ISSUES[marker.i];
     if(v){
       const ang=v.mid*Math.PI/180,x=CX+Math.cos(ang)*150,y=CY+Math.sin(ang)*150;
-      ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
-      ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fillStyle=marker.c;ctx.fill();
-      ctx.strokeStyle=marker.c;ctx.lineWidth=2;ctx.stroke();
-      ctx.fillStyle=marker.c;ctx.font='900 12px "Noto Sans JP",sans-serif';ctx.textAlign='center';
-      ctx.fillText('あなたはココ',x,y-18);
+      if(window.drawArenaSectorHighlight){
+        window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:v.a0,endAngle:v.a1,color:marker.c,degrees:true});
+      }
+      if(window.drawArenaUserMarker){
+        window.drawArenaUserMarker(ctx,{x:x,y:y,color:marker.c,canvasSize:W});
+      }
     }
   }
 }
@@ -913,7 +935,8 @@ const filters=document.getElementById('sm-filters');
   b.onclick=()=>{filter=i-1;filters.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');draw();};
   filters.appendChild(b);
 });
-window.setConstitutionalVoteMarker=(i,c)=>{marker={i,c};draw();document.getElementById('stance-map-section').scrollIntoView({behavior:'smooth'});};
+window.setConstitutionalVoteMarker=(i,c)=>{marker={i,c};draw();const note=document.getElementById('your-marker-note');if(note)note.style.display='block';document.getElementById('stance-map-section').scrollIntoView({behavior:'smooth'});};
+window.clearConstitutionalVoteMarker=()=>{marker=null;draw();const note=document.getElementById('your-marker-note');if(note)note.style.display='none';};
 drawHeat();draw();
 })();
 </script>

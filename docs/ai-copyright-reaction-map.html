@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site-tokens.css">
+  <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root {
       color-scheme: light;
@@ -30,7 +30,6 @@
       --section-bg1: #f5f3ff;
     }
     * { box-sizing: border-box; }
-    html, body { overflow-x: hidden; }
     body {
       margin: 0;
       background: var(--bg);
@@ -697,8 +696,8 @@
 .ar-s { color: #4b9cf4; }
 
   </style>
-  <link rel="stylesheet" href="topic-modern.css?v=2">
-  <script src="topic-modern.js?v=1" defer></script>
+  <link rel="stylesheet" href="topic-modern.css?v=22">
+  <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
   <script>
@@ -712,7 +711,7 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 </head>
-<body style="--topic-hero-image:url('images/ai-copyright-hero.webp')">
+<body class="summary-on-light" style="--topic-hero-image:url('images/ai-copyright-hero.webp')">
   <header class="modern-site-header">
     <div class="modern-header-inner">
       <a class="modern-logo" href="index.html" aria-label="SNS反応まっぷ トップ">
@@ -735,11 +734,9 @@
       <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">テック・著作権</span>
       <h1>生成AIと著作権問題</h1>
       <p class="question-line">創作の権利を守るため、生成AIにはどこまでルールが必要か？</p>
-      <p class="lead">Yahooリアルタイム検索で取得したSNS投稿を、クリエイター権利保護、AI技術推進、法規制、利用者モラルなどの論点で整理したビューです。世論調査ではありません。</p>
-      <div class="thirty-summary" aria-label="30秒サマリー"><ul>
-        <li>権利保護・規制強化を求める声が、著作権侵害や無断学習への不安として大きく出ています。</li>
-        <li>一方で、AI学習の合法性や技術革新を重視し、過度な規制に反対する声も一定数あります。</li>
-        <li>対価支払い、オプトアウト、表示義務など、全面禁止ではなく条件付き共存を探る意見が接点です。</li>
+      <p class="lead">収集したSNS投稿のうち、分析対象となった意見475件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
+      <div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>
+        <li class="conclusion-focus"><span class="conclusion-count"><b>126</b>件</span><strong>学習データの無断利用を、どこまで認めるのか</strong><span class="conclusion-detail">許諾なしの学習は権利侵害か、合法な技術利用かに議論が集中しています。</span></li>
       </ul></div>
     </div>
   </section>
@@ -747,15 +744,35 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats">
-      <div class="stat"><span>総サンプル</span><strong>475</strong></div>
-      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>著作権厳格保護・クリエイターの権利回復を最優先 168</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>規制反対 164</strong></div>
+    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+      <article class="stat insight-stat">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+        <strong class="insight-value">475<small>件</small></strong>
+        <p class="insight-note">権利保護、規制、競争力、モラルの声を整理</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="debate">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚖️</span><span class="insight-label">最も多い立場</span></div>
+        <strong class="insight-value">規制反対 35%</strong>
+        <p class="insight-note">164件。AIの自由利用や技術革新を重視</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:35%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="topic">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+        <strong class="insight-value">無断学習 126<small>件</small></strong>
+        <p class="insight-note">学習データを許諾なしで使えるかが最大争点</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:27%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="insight">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">↔</span><span class="insight-label">判断を分ける核心</span></div>
+        <span class="insight-chip">対立の中心</span>
+        <strong class="insight-value">権利保護 × 技術革新</strong>
+        <p class="insight-note">全面禁止ではなく、対価やオプトアウトが接点</p>
+      </article>
     </section>
 <!-- ===== 論点Explainer ===== -->
 <section class="panel" id="explainer-section">
-<div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「生成AIと著作権」の議論は「賛成か反対か」だけではありません。学習データの合法性・クリエイターの権利・法制度・競争力・モラル・AI生成物の権利——6つの論点を整理してから投票に進んでください。</p>
 <div class="explainer-grid">
   <article class="explainer-card" data-img="images/ai-copyright-infographic-wide-gakushu.webp" data-alt="学習データ・無断利用">
@@ -870,7 +887,7 @@
   <div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-width:900px;"></div>
 </div>
 <div id="vote-step2" style="display:none;margin-top:4px;">
-  <p class="vote-step-label"><span class="step-num">2</span>AI著作権問題への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p>
+  <p class="vote-step-label"><span class="step-num">2</span>AI著作権問題への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p>
   <div id="vote-stance-btns"></div>
 </div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
@@ -1083,13 +1100,7 @@
     if(voteMarker){
       const mc=voteMarker.color||'#7c3aed';
       const vi=ISSUES[voteMarker.sector];
-      if(vi){
-        ctx.beginPath();
-        ctx.moveTo(CX+R_MIN*Math.cos(vi.a0*Math.PI/180),CY+R_MIN*Math.sin(vi.a0*Math.PI/180));
-        ctx.arc(CX,CY,R_MAX,vi.a0*Math.PI/180,vi.a1*Math.PI/180);
-        ctx.arc(CX,CY,R_MIN,vi.a1*Math.PI/180,vi.a0*Math.PI/180,true);
-        ctx.closePath();ctx.strokeStyle=mc;ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=mc+'22';ctx.fill();
-      }
+      if(vi&&window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:vi.a0,endAngle:vi.a1,color:mc,degrees:true});
       const pulse=(Date.now()%1400)/1400;
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
       ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();ctx.globalAlpha=1;

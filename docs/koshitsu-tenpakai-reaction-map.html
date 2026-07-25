@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site-tokens.css">
+  <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root{--bg:#faf8f6;--accent:#7c2d12;--accent-soft:#fef2f2;--grad-1:#7c2d12;--grad-2:#431407}
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.65} a{color:inherit}
@@ -136,6 +136,8 @@
     .site-footer{background:#07172f;color:rgba(255,255,255,.72)}.footer-banner{line-height:0}.footer-banner img{width:100%;height:auto;display:block}.footer-inner{max-width:1192px;margin:0 auto;padding:32px 24px 0;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px}.footer-inner h3,.footer-inner h4{color:#fff;margin:0 0 8px}.footer-inner p,.footer-inner a{font-size:11px;color:rgba(255,255,255,.62);text-decoration:none}.footer-links{display:grid;gap:5px}.footer-bottom{max-width:1192px;margin:20px auto 0;padding:16px 24px 24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:9px}
     @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.sample-grid,.axis-grid,.related-grid,.issue-sides,.manga-grid{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}#vote-stance-btns{grid-template-columns:1fr!important}body{overflow-x:hidden}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px}}
   </style>
+  <link rel="stylesheet" href="topic-modern.css?v=22">
+  <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K10S4YCZFH');</script>
 <!-- GA_TAG_END -->
@@ -144,13 +146,38 @@
 <!-- ADSENSE_TAG_END -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">皇室・憲法</span><h1>皇室典範改正 SNS反応まっぷ</h1><p class="question-line">男系維持か、女系容認か。養子制度は妥当か。</p><p class="lead">SNS投稿326件のうち2D分類済み273件（うち論点分類268件）を、AIが5つの論点に整理。世論調査ではなく、反応サンプルの論点比較です。</p><div class="thirty-summary"><ul><li>最多論点は「男系vs女系」75件。男系維持派と女系容認派が正面からぶつかる中核的対立軸。</li><li>「養子制度」54件と「立法手法」54件が拮抗。養子を巡る憲法論争と、成立プロセスへの怒りが二大テーマ。</li><li>反対・慎重が圧倒的多数（140件）。賛成は30件にとどまるが、男系維持を理由に賛成する層と女系容認を理由に反対する層が交差する構造。</li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
+<body class="summary-on-light" style="--topic-hero-image:url('images/koshitsu-hero.webp')">
+<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">皇室・憲法</span><h1>皇室典範改正 SNS反応まっぷ</h1><p class="question-line">男系維持か、女系容認か。養子制度は妥当か。</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見268件をAIが5つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>75</b>件</span><strong>皇位継承は「男系」か、「女系」か</strong><span class="conclusion-detail">男系維持派と女系容認派が正面からぶつかる、改正論議の中心です。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
-<section class="stats"><div class="stat"><span>収集投稿</span><strong>326件</strong></div><div class="stat"><span>2D分類</span><strong>273件</strong></div><div class="stat"><span>論点分類</span><strong>268件</strong></div><div class="stat"><span>最多論点</span><strong>男系vs女系 75</strong></div></section>
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+  <article class="stat insight-stat">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+    <strong class="insight-value">268<small>件</small></strong>
+    <p class="insight-note">改正評価と皇位継承観を別々の軸で整理</p>
+    <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+  </article>
+  <article class="stat insight-stat" data-tone="debate">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚖️</span><span class="insight-label">改正への態度</span></div>
+    <span class="insight-chip">110件差</span>
+    <div class="insight-versus"><span>反対・慎重<b>140</b></span><em>VS</em><span>賛成<b>30</b></span></div>
+    <div class="insight-split" aria-hidden="true"><i style="width:82%"></i><i style="width:18%"></i></div>
+  </article>
+  <article class="stat insight-stat" data-tone="insight">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">👑</span><span class="insight-label">皇位継承観</span></div>
+    <div class="insight-versus"><span>男系維持<b>95</b></span><em>VS</em><span>女系容認<b>45</b></span></div>
+    <div class="insight-split" data-palette="gold-purple" aria-hidden="true"><i style="width:68%"></i><i style="width:32%"></i></div>
+    <p class="insight-note">改正賛否とは別の軸で立場が交差</p>
+  </article>
+  <article class="stat insight-stat" data-tone="topic">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+    <strong class="insight-value">男系 vs 女系 75<small>件</small></strong>
+    <p class="insight-note">皇位継承の原則をどこまで変えるかが中心</p>
+    <div class="insight-meter" aria-hidden="true"><i style="width:28%"></i></div>
+  </article>
+</section>
 
 <section class="panel" id="explainer-section">
-<div class="panel-title"><h2>投票前に読む：6つの争点</h2><span>図解で全論点をチェック</span></div>
+<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>図解で全論点をチェック</span></div>
 <p class="explainer-lead">「改正への賛否」と「男系か女系か」——2つの軸が交差するため、保守派にも革新派にも賛成と反対が混在します。同じ「反対」でも右派は「女系への布石」、左派は「女性天皇が議論されない」と理由が正反対です。6つの争点を図解で把握してから投票に進んでください。画像はタップで拡大できます。</p>
 <div class="explainer-grid">
   <article class="explainer-card" data-img="images/koshitsu-infographic-wide-kouseki.webp" data-alt="女性皇族の皇籍維持">
@@ -265,7 +292,7 @@
 
 <section class="panel" id="vote-section"><div class="panel-title"><h2>あなたはどの論点を重く見る？</h2><span>SNSの声を見る前に</span></div><p>2026年7月17日、改正皇室典範が参議院で可決・成立しました。女性皇族の結婚後の皇籍維持と、旧宮家の男系男子を養子に迎える制度が柱です。まず気になる論点を選び、次に改正への総合評価を選んでください。</p><div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> 「皇室典範改正」「旧宮家 養子」などのキーワードで、Yahooリアルタイム検索からSNS投稿326件を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>一番気になる論点を選ぶ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;max-width:900px;"></div></div>
-<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>改正への総合評価は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたらマップに表示します</span></p><div id="vote-stance-btns" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;"></div></div>
+<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>改正への総合評価は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;"></div></div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
 <div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
@@ -404,8 +431,8 @@
   <canvas id="smCanvasHeat" width="640" height="640"></canvas>
   <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
-<p class="map-caption">中心の「皇室典範改正」を、論点ごとのセクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど強い反応）、点の色は改正への評価（緑=支持 / 赤=反対・慎重 / 灰=中立）。投票後は、選んだ論点セクターに「あなたはココ」を表示します。</p>
-<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはこのあたり」マーカーで表示しています。</p>
+<p class="map-caption">中心の「皇室典範改正」を、論点ごとのセクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど強い反応）、点の色は改正への評価（緑=支持 / 赤=反対・慎重 / 灰=中立）。投票後は、選んだ論点セクターに「あなたはここ」を表示します。</p>
+<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
 <div class="sm-controls">
   <div class="sm-legend">
     <span><i style="background:#059669"></i>支持</span>
@@ -749,7 +776,7 @@ const SM_RAW = [
 
   function drawHeat(){
     hctx.clearRect(0,0,W,W);
-    hctx.fillStyle='#fdfdff';hctx.fillRect(0,0,W,W);
+    hctx.fillStyle='#0f0e2e';hctx.fillRect(0,0,W,W);
     const maxN=Math.max(...ISSUES.map(i=>i.n));
     ISSUES.forEach(iss=>{
       const a0=iss.a0*Math.PI/180,a1=iss.a1*Math.PI/180;
@@ -789,13 +816,13 @@ const SM_RAW = [
       const c=Math.cos(rad);
       ctx.textAlign=c>0.35?'left':(c<-0.35?'right':'center');
       ctx.textBaseline='middle';
-      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(100,116,139,.4)':'#334155';
+      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(255,255,255,.25)':'rgba(255,255,255,.88)';
       ctx.fillText(iss.k+' '+iss.n,lx,ly);
     });
     ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);
-    ctx.fillStyle='#fff';ctx.fill();
-    ctx.strokeStyle='rgba(124,45,18,.28)';ctx.lineWidth=1.5;ctx.stroke();
-    ctx.fillStyle='#431407';ctx.textAlign='center';
+    ctx.fillStyle='#0f0e2e';ctx.fill();
+    ctx.strokeStyle='rgba(124,45,18,.55)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.88)';ctx.textAlign='center';
     ctx.font='900 15px "Noto Sans JP",sans-serif';
     ctx.fillText('皇室典範',CX,CY-9);
     ctx.fillText('改正',CX,CY+12);
@@ -806,15 +833,7 @@ const SM_RAW = [
     if(voteMarker){
       const mc=voteMarker.color||'#7c2d12';
       const vi=ISSUES[voteMarker.sector];
-      if(vi){
-        ctx.beginPath();
-        ctx.moveTo(CX+R_MIN*Math.cos(vi.a0*Math.PI/180),CY+R_MIN*Math.sin(vi.a0*Math.PI/180));
-        ctx.arc(CX,CY,R_MAX,vi.a0*Math.PI/180,vi.a1*Math.PI/180);
-        ctx.arc(CX,CY,R_MIN,vi.a1*Math.PI/180,vi.a0*Math.PI/180,true);
-        ctx.closePath();
-        ctx.strokeStyle=mc;ctx.lineWidth=3;ctx.stroke();
-        ctx.fillStyle=mc+'14';ctx.fill();
-      }
+      if(vi&&window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:vi.a0,endAngle:vi.a1,color:mc,degrees:true});
       const pulse=(Date.now()%1400)/1400;
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
       ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();
@@ -824,7 +843,7 @@ const SM_RAW = [
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);
       ctx.fillStyle=mc;ctx.fill();
       ctx.font='900 12px "Noto Sans JP",sans-serif';
-      const txt='あなたはココ';
+      const txt='あなたはここ';
       const tw=ctx.measureText(txt).width;
       const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));
       const by=voteMarker.y-32;

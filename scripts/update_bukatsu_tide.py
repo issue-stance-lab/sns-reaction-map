@@ -478,7 +478,8 @@ def main() -> int:
         page = replace_once(page, r"</style>", TIDE_CSS + "\n</style>", "tide CSS")
     stance_counts = Counter(classification(row).get("stance") for row in all_opinions)
     summary = (
-        '<div class="thirty-summary" aria-label="30秒サマリー"><ul>'
+        '<div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと">'
+        '<header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul>'
         f"<li>Hermesで累計{len(all_rows)}件を分類し、関連{relevant_count}件のうち意見投稿は{len(all_opinions)}件。</li>"
         f"<li>最多論点は「{html.escape(str(top_issue))}」{top_count}件。最多スタンスは「{html.escape(STANCE_SHORT.get(str(stance_counts.most_common(1)[0][0]), str(stance_counts.most_common(1)[0][0])))}」{stance_counts.most_common(1)[0][1]}件。</li>"
         f"<li>今回更新では「{html.escape(str(tide['rising_issue']))}」が前回追加分より{signed(float(tide['rising_issue_delta']))}ポイント増加。</li>"

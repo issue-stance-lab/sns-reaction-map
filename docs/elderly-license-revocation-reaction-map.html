@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site-tokens.css">
+  <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root {
       color-scheme: light;
@@ -604,8 +604,8 @@
     .sm-sval { font-size:18px; font-weight:700; }
     .sm-sdesc { font-size:9px; color:#aaa; }
   </style>
-  <link rel="stylesheet" href="topic-modern.css?v=2">
-  <script src="topic-modern.js?v=1" defer></script>
+  <link rel="stylesheet" href="topic-modern.css?v=22">
+  <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
   <script>
@@ -619,18 +619,16 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 </head>
-<body style="--topic-hero-image:url('images/elderly-license-revocation-hero.webp')">
+<body class="summary-on-light" style="--topic-hero-image:url('images/elderly-license-revocation-hero.webp')">
   <section class="hero">
     <div class="hero-inner">
       <nav class="top-nav"><a href="index.html">トップ</a></nav>
       <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">交通ルール・日常論争</span>
       <h1>高齢者の運転免許返納義務化の是非 SNS反応まっぷ</h1>
       <p class="question-line">事故を防ぐための年齢線引きか、暮らしの足を奪わない制度設計か？</p>
-      <p class="lead">Yahooリアルタイム検索で取得したSNS投稿を、事故防止優先（義務化賛成）、地方の足確保（義務化反対）、適性検査強化、インフラ整備などの論点で整理したビューです。世論調査ではありません。</p>
-      <div class="thirty-summary" aria-label="30秒サマリー"><ul>
-        <li>最多は義務化賛成系で、高齢ドライバー事故を防ぐため年齢による線引きを求める声が目立つ。</li>
-        <li>反対側は地方の通院・買い物など、車が生活インフラになっている現実を訴えている。</li>
-        <li>接点は「危険運転を減らすこと」で、適性検査強化や代替交通整備を条件にする声もある。</li>
+      <p class="lead">収集したSNS投稿のうち、分析対象となった意見211件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
+      <div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>
+        <li class="conclusion-focus"><span class="conclusion-count"><b>68</b>件</span><strong>事故を防ぐため、年齢で線を引くべきか</strong><span class="conclusion-detail">高齢ドライバーの事故を減らすため、返納を義務にすべきだという声が最も集まりました。</span></li>
       </ul></div>
     </div>
   </section>
@@ -638,14 +636,34 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats">
-      <div class="stat"><span>総サンプル</span><strong>183</strong></div>
-      <div class="stat"><span>ソース</span><strong>Yahooリアルタイム検索</strong></div>
-      <div class="stat"><span>最多カテゴリ</span><strong>免許返納義務化に賛成（高齢運転手の事故防止を最優先） 72</strong></div>
-      <div class="stat"><span>最多スタンス</span><strong>義務化賛成 72</strong></div>
+    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+      <article class="stat insight-stat">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+        <strong class="insight-value">211<small>件</small></strong>
+        <p class="insight-note">義務化、地方の足、検査、代替交通を6論点で整理</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="debate">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🚘</span><span class="insight-label">最も多い立場</span></div>
+        <strong class="insight-value">義務化・安全 66%</strong>
+        <p class="insight-note">139件。事故防止と被害者保護を最優先</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:66%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="option">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">第三の選択</span></div>
+        <strong class="insight-value">適性検査強化 20<small>件</small></strong>
+        <p class="insight-note">年齢一律ではなく、認知・実車試験で個別判断</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:9%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="insight">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">↔</span><span class="insight-label">判断を分ける核心</span></div>
+        <span class="insight-chip">安全と生活の両立</span>
+        <strong class="insight-value">事故防止 × 移動権</strong>
+        <p class="insight-note">地方の生活の足をどう補うかが判断の分かれ目</p>
+      </article>
     </section>
     <section class="panel" id="explainer-section">
-<div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「高齢者の免許返納」の議論は「義務化すべきか否か」だけではありません。地方の移動手段・適性検査の精度・代替交通のインフラ・自主返納へのインセンティブ——6つの論点を整理してから投票に進んでください。</p>
 <div class="explainer-grid">
   <article class="explainer-card" data-img="images/elderly-license-revocation-infographic-wide-gizuka.webp" data-alt="義務化・事故防止">
@@ -760,7 +778,7 @@
   <div id="vote-issue-btns"></div>
 </div>
 <div id="vote-step2" style="display:none;margin-top:4px;">
-  <p class="vote-step-label"><span class="step-num">2</span>免許返納義務化への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p>
+  <p class="vote-step-label"><span class="step-num">2</span>免許返納義務化への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p>
   <div id="vote-stance-btns"></div>
 </div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
@@ -1230,10 +1248,12 @@ const SM_RAW = [
         const rad=iss.mid*Math.PI/180;
         const r=(R_MIN+R_MAX)/2;
         const mx=CX+r*Math.cos(rad);const my=CY+r*Math.sin(rad);
-        ctx.beginPath();ctx.arc(mx,my,12,0,Math.PI*2);ctx.fillStyle=color+'33';ctx.fill();
-        ctx.beginPath();ctx.arc(mx,my,12,0,Math.PI*2);ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
-        ctx.fillStyle='#fff';ctx.font='900 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-        ctx.fillText('あなた',mx,my);
+        if(window.drawArenaSectorHighlight){
+          window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:iss.a0,endAngle:iss.a1,color:color,degrees:true});
+        }
+        if(window.drawArenaUserMarker){
+          window.drawArenaUserMarker(ctx,{x:mx,y:my,color:color,canvasSize:W});
+        }
       }
     }
     ctx.textAlign='left';ctx.textBaseline='alphabetic';

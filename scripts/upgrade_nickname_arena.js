@@ -359,7 +359,7 @@ const replacementCss = `
 
 const mainContent = `
 <section class="panel" id="explainer-section">
-  <div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>全体像をつかんでから選ぶ</span></div>
+  <div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>全体像をつかんでから選ぶ</span></div>
   <p class="explainer-lead">「賛成か反対か」だけでは見えない、呼称文化・現場体験・実効性・本人意思・心理的安全などの違いを、Hermesが分類した投稿数とともに整理しました。</p>
   <div class="explainer-grid">${explainerCards}</div>
   <p class="explainer-note">各画像をクリックすると拡大表示します。件数は関連する意見投稿63件を主論点ごとに集計したものです。</p>
@@ -391,7 +391,7 @@ const mainContent = `
   <p>まず重く見る論点を選び、次に「あだ名禁止・さん付け指導」への考えを選んでください。</p>
   <div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿374件を取得し、Hermesが関連性・意見性・論点・立場・熱量を再分類。関連する意見投稿63件を6論点へ整理しました。世論調査ではありません。</div>
   <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>最も気になる論点を選ぶ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns"></div></div>
-  <div id="vote-step2" style="display:none;"><p class="vote-step-label"><span class="step-num">2</span>一律の「あだ名禁止」への考えは？</p><div id="vote-stance-btns"></div></div>
+  <div id="vote-step2" style="display:none;"><p class="vote-step-label"><span class="step-num">2</span>一律の「あだ名禁止」への考えは？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns"></div></div>
   <div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;"><div id="vote-position-label" style="font-weight:900;color:var(--accent);"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);margin-top:5px;"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:12px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">選び直す</button></div>
 </section>
 <script>
@@ -468,7 +468,7 @@ if (html.includes('/* ===== 2026-07-24 論点アリーナ版 ===== */')) {
 }
 html = html.replace(
   /<section class="hero">[\s\S]*?<\/section><svg class="wave-divider"/,
-  `<section class="hero"><img class="hero-photo" src="images/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・日常論争</span><h1>学校でのあだ名禁止 SNS反応まっぷ</h1><p class="question-line">傷つく呼び方を防ぐルールか、関係性を縛る一律規制か。</p><p class="lead">Yahooリアルタイム検索で取得したSNS投稿374件をHermesが再分類し、関連する意見投稿63件を6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary"><ul><li>最多論点は「いじめ・心理的安全」17件。被害予防を重く見る声と、禁止だけでは足りないという声があります。</li><li>「一律禁止の実効性」16件と「親しさ・呼称文化」13件では、一律禁止への反対が中心です。</li><li>全63件では一律禁止に反対29件、禁止支持8件、条件付き7件、中立・体験19件でした。</li></ul></div></div></section><svg class="wave-divider"`,
+  `<section class="hero"><img class="hero-photo" src="images/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・日常論争</span><h1>学校でのあだ名禁止 SNS反応まっぷ</h1><p class="question-line">傷つく呼び方を防ぐルールか、関係性を縛る一律規制か。</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見63件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと"><header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul><li>最多論点は「いじめ・心理的安全」17件。被害予防を重く見る声と、禁止だけでは足りないという声があります。</li><li>「一律禁止の実効性」16件と「親しさ・呼称文化」13件では、一律禁止への反対が中心です。</li><li>全63件では一律禁止に反対29件、禁止支持8件、条件付き7件、中立・体験19件でした。</li></ul></div></div></section><svg class="wave-divider"`,
 );
 html = html.replace(
   /<section class="stats">[\s\S]*?<\/section>/,

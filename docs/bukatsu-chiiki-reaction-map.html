@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site-tokens.css">
+  <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root {
       color-scheme: light;
@@ -737,8 +737,8 @@
 /* TIDE_CARD_END */
 
 </style>
-  <link rel="stylesheet" href="topic-modern.css?v=2">
-  <script src="topic-modern.js?v=1" defer></script>
+  <link rel="stylesheet" href="topic-modern.css?v=22">
+  <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
   <script>
@@ -752,21 +752,47 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 </head>
-<body style="--topic-hero-image:url('images/bukatsu-hero.webp')">
+<body class="summary-on-light" style="--topic-hero-image:url('images/bukatsu-hero.webp')">
   <section class="hero">
     <div class="hero-inner">
       <nav class="top-nav"><a href="index.html">トップ</a></nav>
       <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:6px 18px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);">教育・部活動改革</span>
       <h1>部活動の地域移行の是非 SNS反応まっぷ</h1>
       <p class="question-line">教員の限界を地域で支える改革か、家庭負担と地域格差を広げる移行か？</p>
-      <p class="lead">中学校の部活動を地域団体・民間クラブに移行する政策について、SNS上の賛否を可視化したビューです。世論調査ではありません。</p>
-<div class="thirty-summary" aria-label="30秒サマリー"><ul><li>Hermesで累計467件を分類し、関連464件のうち意見投稿は389件。</li><li>最多論点は「教員の働き方」114件。最多スタンスは「支持」176件。</li><li>今回更新では「費用・家庭負担」が前回追加分より+6.9ポイント増加。</li></ul></div>
+      <p class="lead">収集したSNS投稿のうち、分析対象となった意見389件をAIが7つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
+<div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>114</b>件</span><strong>先生の働き方を、誰がどう支えるのか</strong><span class="conclusion-detail">地域移行への賛否を越えて、教員の負担を本当に減らせるかに声が集まりました。</span></li></ul></div>
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
+    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+      <article class="stat insight-stat">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+        <strong class="insight-value">389<small>件</small></strong>
+        <p class="insight-note">関連464件から、意見が読み取れる投稿を集計</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="debate">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">📣</span><span class="insight-label">最も多い立場</span></div>
+        <strong class="insight-value">移行支持 45%</strong>
+        <p class="insight-note">176件。教員負担の軽減を重く見る声が中心</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:45%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="topic">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+        <strong class="insight-value">教員の働き方 114<small>件</small></strong>
+        <p class="insight-note">長時間労働と顧問負担が議論の中心</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:29%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="option">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">条件付き・第三案</span></div>
+        <strong class="insight-value">改善条件あり 17%</strong>
+        <p class="insight-note">66件。費用、指導者、受け皿を整えれば支持</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:17%"></i></div>
+      </article>
+    </section>
     <section class="update-dashboard" aria-label="更新データと世論の潮目"><!-- TIDE_CARD_START -->
 <section class="tide-card" id="bukatsu-tide-widget" aria-label="世論の潮目 前回更新と今回更新の比較">
   <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
@@ -898,7 +924,7 @@
 
 <!-- TIDE_CARD_END --></section>
 <section class="panel explainer-section" id="explainer-section">
-<div class="panel-title"><h2>投票前に読む：6つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
 <div class="explainer-grid">
   <article class="explainer-card" data-img="images/bukatsu-chiiki-infographic-wide-hiyou.webp" data-alt="費用・家庭負担">
@@ -1015,7 +1041,7 @@
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
 <div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、Hermesが論点・スタンス・強度を分類しました。最終更新: 2026-07-23。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
-<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <span style="font-size:12px;font-weight:400;color:var(--muted)">答えたら開票します</span></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
+<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
 <p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
@@ -1035,7 +1061,7 @@
   <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
 <p class="map-caption">中心の「部活動の地域移行」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=移行支持 / 黄=条件付き・改善要求 / 赤=慎重・反対 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
-<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはこのあたり」マーカーで表示しています。</p>
+<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
 <div class="sm-controls">
   <div class="sm-legend">
     <span><i style="background:#059669"></i>移行支持</span>
@@ -1639,13 +1665,13 @@ const SM_RAW = [
       const c=Math.cos(rad);
       ctx.textAlign=c>0.35?'left':(c<-0.35?'right':'center');
       ctx.textBaseline='middle';
-      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(100,116,139,.4)':'#334155';
+      ctx.fillStyle=(filterIdx>=0&&i!==filterIdx)?'rgba(255,255,255,.25)':'rgba(255,255,255,.88)';
       ctx.fillText(iss.k+' '+iss.n,lx,ly);
     });
     ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);
-    ctx.fillStyle='#fff';ctx.fill();
-    ctx.strokeStyle='#bae6fd';ctx.lineWidth=1.5;ctx.stroke();
-    ctx.fillStyle='#0e7490';ctx.textAlign='center';
+    ctx.fillStyle='#0f0e2e';ctx.fill();
+    ctx.strokeStyle='rgba(8,145,178,.5)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.88)';ctx.textAlign='center';
     ctx.font='900 13px "Noto Sans JP",sans-serif';
     ctx.fillText('部活動',CX,CY-9);
     ctx.fillText('地域移行',CX,CY+11);
@@ -1656,15 +1682,7 @@ const SM_RAW = [
     if(voteMarker){
       const mc=voteMarker.color||'#0891b2';
       const vi=ISSUES[voteMarker.sector];
-      if(vi){
-        ctx.beginPath();
-        ctx.moveTo(CX+R_MIN*Math.cos(vi.a0*Math.PI/180),CY+R_MIN*Math.sin(vi.a0*Math.PI/180));
-        ctx.arc(CX,CY,R_MAX,vi.a0*Math.PI/180,vi.a1*Math.PI/180);
-        ctx.arc(CX,CY,R_MIN,vi.a1*Math.PI/180,vi.a0*Math.PI/180,true);
-        ctx.closePath();
-        ctx.strokeStyle=mc;ctx.lineWidth=3;ctx.stroke();
-        ctx.fillStyle=mc+'14';ctx.fill();
-      }
+      if(vi&&window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:vi.a0,endAngle:vi.a1,color:mc,degrees:true});
       const pulse=(Date.now()%1400)/1400;
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
       ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();
@@ -1674,7 +1692,7 @@ const SM_RAW = [
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);
       ctx.fillStyle=mc;ctx.fill();
       ctx.font='900 12px "Noto Sans JP",sans-serif';
-      const txt='あなたはココ';
+      const txt='あなたはここ';
       const tw=ctx.measureText(txt).width;
       const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));
       const by=voteMarker.y-32;

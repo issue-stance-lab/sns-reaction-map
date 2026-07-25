@@ -230,7 +230,7 @@ def build_explainer() -> str:
             '</article>'
         )
     return """<section class="panel" id="explainer-section">
-<div class="panel-title"><h2>投票前に読む：6つの争点</h2><span>図解で全論点をチェック</span></div>
+<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>図解で全論点をチェック</span></div>
 <p class="explainer-lead">憲法改正は、改正全般への賛否だけでは整理できません。9条、緊急事態条項、国民投票の公平性、発議手続き、情報環境ではそれぞれ対立の理由が異なります。6つの図解を確認してから、自分が重く見る論点を選んでください。画像はタップで拡大できます。</p>
 <div class="explainer-grid">""" + "".join(rendered) + """</div>
 <p class="explainer-note"><strong>使い方:</strong> 6つの争点を図解で確認してから、次の投票で「一番気になる論点」を選んでください。</p>
@@ -272,7 +272,7 @@ def build_vote() -> str:
 <p>憲法改正は、9条や緊急事態条項だけでなく、国民投票の公平性や議論の進め方まで含むテーマです。まず一番気になる論点を選び、次に改正への総合的な考えを選んでください。</p>
 <div class="data-method"><strong>データの集め方:</strong> 「憲法改正」「9条」「緊急事態条項」「国民投票法」などのキーワードで、Yahooリアルタイム検索からSNS投稿422件を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>一番気になる論点を選ぶ <small>（全2問）</small></p><div id="vote-issue-btns"></div></div>
-<div id="vote-step2" hidden><p class="vote-step-label"><span class="step-num">2</span>憲法改正への考えは？ <small>答えたらアリーナに表示します</small></p><div id="vote-stance-btns"></div></div>
+<div id="vote-step2" hidden><p class="vote-step-label"><span class="step-num">2</span>憲法改正への考えは？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns"></div></div>
 <div id="vote-result" hidden></div>
 </section>
 <script>
@@ -502,7 +502,7 @@ def replace_between(source: str, start: str, end: str, replacement: str) -> str:
 def main() -> None:
     rows = json.loads(DATA.read_text())
     source = PAGE.read_text()
-    source = re.sub(r'topic-modern\.css\?v=\d+', 'topic-modern.css?v=4', source)
+    source = re.sub(r'topic-modern\.css\?v=\d+', 'topic-modern.css?v=11', source)
     source = re.sub(
         r'\s*<section class="panel" id="manga-section">.*?</section>\s*'
         r'(?=<section class="panel" id="explainer-section">)',
@@ -614,13 +614,14 @@ def main() -> None:
     )
     source = re.sub(
         r'<p class="lead">Yahooリアルタイム検索で取得したX反応サンプルを、.*?</p>',
-        '<p class="lead">Yahooリアルタイム検索で取得したX反応422件を、Hermesが6つの論点と4つのスタンスに再分類しました。世論調査ではなく、取得サンプルの論点比較です。</p>',
+        '<p class="lead">収集したSNS投稿のうち、分析対象となった意見422件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>',
         source,
         count=1,
     )
     source = re.sub(
-        r'<div class="thirty-summary" aria-label="30秒サマリー"><ul>.*?</ul></div>',
-        '<div class="thirty-summary" aria-label="30秒サマリー"><ul>'
+        r'<div class="thirty-summary"[^>]*>.*?</ul></div>',
+        '<div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと">'
+        '<header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul>'
         '<li>最多論点は「改憲全般」116件。次いで「9条・自衛隊」103件、「国民投票・広告」96件。</li>'
         '<li>慎重・反対が218件で最多。改正推進91件、中立91件、手続き重視22件と、論点ごとに構図が変わります。</li>'
         '<li>9条・自衛隊では推進56件が慎重・反対33件を上回る一方、緊急事態条項では慎重・反対30件が推進2件を大きく上回りました。</li>'

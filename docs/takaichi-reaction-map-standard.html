@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site-tokens.css">
+  <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root{--bg:#fffbfb;--ink:#1a0a0a;--line:#e8d5d5;--accent:#dc2626;--accent-soft:#fef2f2;--grad-1:#dc2626;--grad-2:#991b1b;--panel:#fff;--muted:#6b7280;--shadow:0 4px 14px rgba(220,38,38,.08)}
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.65} a{color:inherit}
@@ -147,8 +147,8 @@
     .temp-bar-legend{display:flex;gap:8px 14px;margin-top:7px;font-size:11px;color:var(--muted);font-weight:800;flex-wrap:wrap}
     .temp-bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
   </style>
-  <link rel="stylesheet" href="topic-modern.css?v=2">
-  <script src="topic-modern.js?v=1" defer></script>
+  <link rel="stylesheet" href="topic-modern.css?v=22">
+  <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K10S4YCZFH');</script>
 <!-- GA_TAG_END -->
@@ -156,33 +156,51 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 </head>
-<body style="--topic-hero-image:url('images/takaichi-hero.webp')">
+<body class="summary-on-light" style="--topic-hero-image:url('images/takaichi-hero.webp')">
 <section class="hero">
   <div class="hero-inner">
     <nav class="top-nav"><a href="index.html">トップ</a></nav>
     <span class="badge">政治・ネット選挙</span>
     <h1>高市文春問題 SNS反応まっぷ</h1>
     <p class="question-line">中傷動画疑惑・文春報道・サナエトークン——あなたが気になる論点はどれ？</p>
-    <p class="lead">Yahooリアルタイム検索からSNS投稿324件を収集し、AIが論点・立場・熱量を分類した223件を5つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
-    <div class="thirty-summary"><ul>
-      <li>最多論点は「中傷動画・説明責任」97件。動画関与の有無と説明責任を問う声が正面から向き合います。</li>
-      <li>「文春報道の真偽」59件では、捏造を主張して高市氏を擁護する声と、報道を信頼して批判する声が対立。</li>
-      <li>批判・追及103件・擁護・懐疑102件と激しく拮抗。「サナエトークン疑惑」31件など周辺論点への拡散も目立ちます。</li>
+    <p class="lead">収集したSNS投稿のうち、分析対象となった意見223件をAIが5つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
+    <div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>
+      <li class="conclusion-focus"><span class="conclusion-count"><b>97</b>件</span><strong>中傷動画について、誰が説明責任を負うのか</strong><span class="conclusion-detail">動画への関与の有無と、事実関係を説明すべきかに議論が集中しています。</span></li>
     </ul></div>
   </div>
 </section>
 <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 
 <main>
-<section class="stats">
-  <div class="stat"><span>収集投稿</span><strong>324件</strong></div>
-  <div class="stat"><span>意見あり</span><strong>223件</strong></div>
-  <div class="stat"><span>論点数</span><strong>5論点</strong></div>
-  <div class="stat"><span>最多論点</span><strong>説明責任 97</strong></div>
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+  <article class="stat insight-stat">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+    <strong class="insight-value">223<small>件</small></strong>
+    <p class="insight-note">説明責任、報道の真偽、派生論点を5分類</p>
+    <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+  </article>
+  <article class="stat insight-stat" data-tone="debate">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚔️</span><span class="insight-label">意見の割れ方</span></div>
+    <span class="insight-chip">わずか1件差・ほぼ互角</span>
+    <div class="insight-versus"><span>批判・追及<b>103</b></span><em>VS</em><span>擁護・懐疑<b>102</b></span></div>
+    <div class="insight-split" aria-hidden="true"><i style="width:50.2%"></i><i style="width:49.8%"></i></div>
+  </article>
+  <article class="stat insight-stat" data-tone="topic">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+    <strong class="insight-value">説明責任 97<small>件</small></strong>
+    <p class="insight-note">動画への関与と説明責任の範囲が最大争点</p>
+    <div class="insight-meter" aria-hidden="true"><i style="width:43%"></i></div>
+  </article>
+  <article class="stat insight-stat" data-tone="insight">
+    <div class="insight-head"><span class="insight-icon" aria-hidden="true">↕</span><span class="insight-label">唯一の逆転論点</span></div>
+    <span class="insight-chip">文春報道の真偽</span>
+    <div class="insight-versus"><span>擁護・懐疑<b>55</b></span><em>VS</em><span>批判・追及<b>2</b></span></div>
+    <div class="insight-split" data-palette="green-orange" aria-hidden="true"><i style="width:96%"></i><i style="width:4%"></i></div>
+  </article>
 </section>
 
 <section class="panel" id="explainer-section">
-  <div class="panel-title"><h2>投票前に読む：5つの論点</h2><span>全体像をつかんでから選ぶ</span></div>
+  <div class="panel-title"><h2>このテーマを読み解く、5つの論点</h2><span>全体像をつかんでから選ぶ</span></div>
   <p class="explainer-lead">「賛成か反対か」の二元論では見えない、動画の事実・報道の信頼性・暗号資産・人脈・他の政治家との比較という5つの切り口を整理しました。画像をクリックすると拡大できます。</p>
   <div class="explainer-grid">
     <article class="explainer-card" data-img="images/takaichi-infographic-wide-setsumei.webp" data-alt="中傷動画・説明責任">
@@ -268,7 +286,7 @@
     <div id="vote-issue-btns"></div>
   </div>
   <div id="vote-step2" style="display:none;">
-    <p class="vote-step-label"><span class="step-num">2</span>この問題、全体的にどう見る？</p>
+    <p class="vote-step-label"><span class="step-num">2</span>この問題、全体的にどう見る？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p>
     <div id="vote-stance-btns"></div>
   </div>
   <div id="vote-result" style="display:none;margin-top:20px;">
@@ -313,12 +331,13 @@
       document.getElementById('vote-position-text').textContent=selectedIssue.description;
       var text='高市文春問題で気になる論点は「'+selectedIssue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';
       document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);
+      window.setTakaichiArenaMarker?.(selectedIssue.key,stance.color);
       localStorage.setItem('takaichi-arena-vote',JSON.stringify({issue:selectedIssue.key,stance:stance.key,at:Date.now()}));
       setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);
     };
     stanceBox.appendChild(btn);
   });
-  document.getElementById('vote-redo-btn').onclick=function(){selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';};
+  document.getElementById('vote-redo-btn').onclick=function(){selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';window.clearTakaichiArenaMarker?.();};
 })();
 </script>
 
@@ -340,6 +359,7 @@
     </div>
     <div class="sm-filters" id="sm-filters-arena"></div>
   </div>
+  <p id="your-marker-note-arena" class="arena-user-note" style="display:none;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
 </div>
 </section>
 <script src="takaichi-arena-data.js"></script>
@@ -366,7 +386,7 @@
     var radius=R0+32+(R1-R0-48)*p.intensity+(rand(p.seed+91)-.5)*26;
     return Object.assign({},p,{x:C+Math.cos(angle)*radius,y:C+Math.sin(angle)*radius});
   }).filter(Boolean);
-  var activeFilter=null;
+  var activeFilter=null,voteMarker=null;
   function draw(){
     ctx.clearRect(0,0,W,W);ctx.save();ctx.translate(C,C);
     issues.forEach(function(issue,i){
@@ -392,7 +412,14 @@
       ctx.beginPath();ctx.arc(d.x,d.y,5,0,TAU);ctx.fillStyle=colors[d.stance];ctx.fill();
       ctx.strokeStyle='rgba(255,255,255,.72)';ctx.lineWidth=1.2;ctx.stroke();
     });
+    if(voteMarker&&window.drawArenaUserMarker){
+      var markerAngle=angles[voteMarker.issue];
+      if(window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:C,cy:C,innerRadius:R0,outerRadius:R1,startAngle:markerAngle.a0,endAngle:markerAngle.a1,color:voteMarker.color});
+      window.drawArenaUserMarker(ctx,{x:C+Math.cos(markerAngle.mid)*203,y:C+Math.sin(markerAngle.mid)*203,color:voteMarker.color,canvasSize:W});
+    }
   }
+  window.setTakaichiArenaMarker=function(issue,color){voteMarker={issue:issue,color:color};draw();var note=document.getElementById('your-marker-note-arena');if(note)note.style.display='block';};
+  window.clearTakaichiArenaMarker=function(){voteMarker=null;draw();var note=document.getElementById('your-marker-note-arena');if(note)note.style.display='none';};
   var filterWrap=document.getElementById('sm-filters-arena');
   if(filterWrap){
     function setFilter(key,btn){
