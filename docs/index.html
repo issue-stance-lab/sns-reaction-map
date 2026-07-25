@@ -31,8 +31,9 @@
     @media(min-width:721px){.hero-inner{min-height:560px}}
     @media(min-width:1051px){.hero-copy{padding-bottom:80px}}
     .reveal{opacity:1;transform:none}
-    .update-bar{display:flex;align-items:center;gap:13px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 18px;margin:10px 0 0;box-shadow:var(--shadow-sm)}.update-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(54,184,163,.18);flex:0 0 auto;animation:upulse 2.4s ease-in-out infinite}@keyframes upulse{0%,100%{box-shadow:0 0 0 4px rgba(54,184,163,.18)}50%{box-shadow:0 0 0 8px rgba(54,184,163,.04)}}.update-body{flex:1;font-size:11px;color:var(--muted);min-width:150px}.update-body strong{color:var(--navy)}.update-next-badge{display:inline-flex;gap:5px;padding:5px 13px;border-radius:999px;background:#eef5ff;color:var(--blue);font-size:10px;font-weight:800;white-space:nowrap}.topic-fresh{color:#36b8a3;font-weight:800;font-size:8px;margin-left:4px}
+    .update-bar{display:flex;align-items:center;gap:13px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 18px;margin:10px 0 0;box-shadow:var(--shadow-sm)}.update-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(54,184,163,.18);flex:0 0 auto;animation:upulse 2.4s ease-in-out infinite}@keyframes upulse{0%,100%{box-shadow:0 0 0 4px rgba(54,184,163,.18)}50%{box-shadow:0 0 0 8px rgba(54,184,163,.04)}}.update-body{flex:1;font-size:11px;color:var(--muted);min-width:150px}.update-body strong{color:var(--navy)}.update-next-badge{display:inline-flex;gap:5px;padding:5px 13px;border-radius:999px;background:#eef5ff;color:var(--blue);font-size:10px;font-weight:800;white-space:nowrap}.topic-fresh{color:#36b8a3;font-weight:800;font-size:8px;margin-left:4px}.topic-new.hot,.live-pill.hot{background:var(--orange);box-shadow:0 4px 10px rgba(255,84,38,.25)}
   </style>
+  <link rel="stylesheet" href="home-story.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"SNS反応まっぷ","url":"https://issue-stance-lab.github.io/sns-reaction-map/","description":"SNSで意見が割れる話題を投票参加型で整理。あなたはどっち？"}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
@@ -55,6 +56,81 @@
     </div>
   </section>
   <div class="shell"><div class="hero-stats reveal"><div class="hero-stat"><small>分析済み投稿</small><strong id="hero-total-samples">3,191</strong><em>7/20更新</em></div><div class="hero-stat"><small>公開中のテーマ</small><strong>10</strong><em>10テーマで投票受付中</em></div><div class="hero-stat"><small>次回データ更新</small><strong id="hero-next-update">7/27</strong><em id="hero-days-left">あと7日</em></div></div></div>
+  <div class="home-story">
+    <header class="story-intro reveal">
+      <span class="story-kicker">HOW IT WORKS</span>
+      <h2>たくさんの声から、<br>見えてくるものがある。</h2>
+      <p>SNSにあふれるさまざまな意見を集め、AIと人の目で論点ごとに整理。賛成と反対だけでは見えない、考え方の広がりを可視化します。</p>
+    </header>
+
+    <section class="story-scene story-scene--voices" data-scroll-scene>
+      <div class="story-inner">
+        <figure class="story-art" data-parallax-speed="18">
+          <img src="images/2.webp" alt="暮らしのさまざまな場所からSNSの声が集まるイラスト" loading="lazy">
+        </figure>
+        <div class="story-copy">
+          <span class="story-number">01</span>
+          <span class="story-kicker">COLLECT VOICES</span>
+          <h2>社会のあちこちにある<br>声を集める。</h2>
+          <p>ニュースやSNSで交わされている公開投稿をテーマごとに収集します。特定の立場だけに偏らないよう、さまざまな言葉や視点から声を探します。</p>
+        </div>
+      </div>
+      <div class="story-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="story-scene story-scene--ai" data-scroll-scene>
+      <div class="story-inner">
+        <figure class="story-art" data-parallax-speed="-16">
+          <img src="images/3.webp" alt="AIが多数のSNS投稿を論点ごとに整理するイラスト" loading="lazy">
+        </figure>
+        <div class="story-copy">
+          <span class="story-number">02</span>
+          <span class="story-kicker">ORGANIZE WITH AI</span>
+          <h2>AIと人の目で、<br>論点をほどく。</h2>
+          <p>集めた投稿をAIが分類し、人が内容を確認します。単純なポジティブ・ネガティブではなく、「何について、どう考えているか」を丁寧に整理します。</p>
+        </div>
+      </div>
+      <div class="story-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="story-scene story-scene--stances" data-scroll-scene>
+      <div class="story-inner">
+        <figure class="story-art" data-parallax-speed="15">
+          <img src="images/1.webp" alt="多様なSNSの意見を4つの立場に整理したイラスト" loading="lazy">
+        </figure>
+        <div class="story-copy">
+          <span class="story-number">03</span>
+          <span class="story-kicker">MAP THE STANCES</span>
+          <h2>賛否の間にある、<br>考え方まで見える。</h2>
+          <p>意見を4つの立場に分けて表示します。数字だけでなく、代表的な主張や背景にある論点も一緒に読むことができます。</p>
+          <div class="story-chips" aria-label="4つの意見分類">
+            <span>賛成・推進</span><span>反対・慎重</span><span>条件付き</span><span>中立・保留</span>
+          </div>
+        </div>
+      </div>
+      <div class="story-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="story-scene story-scene--vote" data-scroll-scene>
+      <div class="story-inner">
+        <figure class="story-art" data-parallax-speed="-14">
+          <img src="images/4.webp" alt="多様な人が自分の考えに近い立場へ投票するイラスト" loading="lazy">
+        </figure>
+        <div class="story-copy">
+          <span class="story-number">04</span>
+          <span class="story-kicker">JOIN THE MAP</span>
+          <h2>あなたの考えも、<br>地図のひとつに。</h2>
+          <p>テーマを読んだら、あなたの考えに近い選択肢へ投票できます。誰かを言い負かすためではなく、考え方の広がりを一緒に見つけるための投票です。</p>
+          <a class="story-cta" href="#topics"><span>テーマを選んで投票する</span><span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="story-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <div class="story-divider" data-divider>
+      <img src="images/7.png" alt="" aria-hidden="true">
+    </div>
+  </div>
   <main class="shell">
     <div class="update-bar reveal"><span class="update-pulse"></span><span class="update-body">最終更新: <strong>2026年7月20日</strong>（皇室典範改正テーマのリプライを追加・分類しました）</span><span class="update-next-badge">次回更新: 7月27日（<span id="update-bar-days">あと7日</span>）</span></div>
     <section class="section reveal"><div class="section-head"><h2 class="section-title"><span class="section-icon">🔥</span>今週の注目テーマ</h2><a class="section-link" href="#topics">もっと見る ›</a></div><a class="feature-card" href="fukushuto-reaction-map.html"><div class="feature-image"><img src="images/fukushuto-hero.webp" alt="副首都法案" loading="eager"><span class="live-pill">投票受付中</span></div><div class="feature-body"><span class="category">政治・統治機構</span><h3>副首都法案・副首都構想</h3><p>副首都、本当に必要？場所は大阪でいい？衆院通過した副首都法案をめぐる6つの論点を整理。</p><div class="stance-chips"><span class="stance-chip con">反対・慎重</span><span class="stance-chip hold">どちらでもない</span><span class="stance-chip pro">賛成・推進</span></div></div><div class="feature-data"><h4>現在の意見の割合</h4><div class="stacked"><span style="width:25%;background:var(--blue)">25%</span><span style="width:29%;background:var(--orange)">29%</span><span style="width:38%;background:var(--green)">38%</span><span style="width:7%;background:var(--purple)">7%</span></div><div class="data-row"><span>SNS分析対象</span><strong>255件</strong></div><div class="data-row"><span>論点アリーナ</span><strong>6論点</strong></div><div class="feature-button">詳細を見る ›</div></div></a></section>
@@ -64,6 +140,14 @@
       <a class="rank-card" href="ai-copyright-reaction-map.html"><div class="rank-head"><span class="rank-num">3</span><div><h3>生成AIと著作権問題</h3><span class="rank-cat">テクノロジー</span></div></div><div class="rank-dist"><span style="color:var(--blue)">38%</span><span style="color:var(--orange)">26%</span><span style="color:var(--green)">8%</span><span style="color:var(--purple)">28%</span></div><div class="rank-track"><i style="width:38%;background:var(--blue)"></i><i style="width:26%;background:var(--orange)"></i><i style="width:8%;background:var(--green)"></i><i style="width:28%;background:var(--purple)"></i></div><div class="split-score"><span>割れ度</span><span class="meter"><i style="width:76%"></i></span><strong>76</strong><span>/100</span></div></a>
       <a class="rank-card" href="elderly-license-revocation-reaction-map.html"><div class="rank-head"><span class="rank-num">4</span><div><h3>高齢者の運転免許返納義務化</h3><span class="rank-cat">交通・福祉</span></div></div><div class="rank-dist"><span style="color:var(--blue)">37%</span><span style="color:var(--orange)">10%</span><span style="color:var(--green)">18%</span><span style="color:var(--purple)">35%</span></div><div class="rank-track"><i style="width:37%;background:var(--blue)"></i><i style="width:10%;background:var(--orange)"></i><i style="width:18%;background:var(--green)"></i><i style="width:35%;background:var(--purple)"></i></div><div class="split-score"><span>割れ度</span><span class="meter"><i style="width:72%"></i></span><strong>72</strong><span>/100</span></div></a>
     </div></section>
+    <section class="topics-landscape reveal" data-scroll-scene>
+      <img src="images/5.webp" alt="" loading="lazy" data-landscape-image>
+      <div class="topics-landscape-copy">
+        <span class="story-kicker">EXPLORE THE ISSUES</span>
+        <h2>気になる社会のテーマを<br>のぞいてみよう。</h2>
+        <p>暮らし、教育、テクノロジー、政治。いま意見が分かれているテーマから、気になるものを選べます。</p>
+      </div>
+    </section>
     <section class="section reveal" id="topics"><div class="section-head"><h2 class="section-title"><span class="section-icon">🌐</span>話題のテーマ</h2><div class="topics-toolbar"><button class="filter active" type="button" data-filter="all">すべて</button><button class="filter" type="button" data-filter="politics">政治・法律</button><button class="filter" type="button" data-filter="life">生活・教育</button></div></div><div class="topic-grid">
       <a class="topic-card" data-category="politics" href="koshitsu-tenpakai-reaction-map.html"><div class="topic-thumb"><img src="images/koshitsu-hero.webp" alt="皇室典範改正" loading="lazy"><span class="topic-new">NEW</span></div><div class="topic-info"><span class="category">政治・皇室</span><div class="topic-title-row"><h3>皇室典範改正</h3><span class="mini-map"></span></div><div class="topic-percent"><span style="color:var(--blue)">51%</span><span style="color:var(--orange)">38%</span><span style="color:var(--green)">11%</span></div><div class="topic-bar"><i style="width:51%;background:var(--blue)"></i><i style="width:38%;background:var(--orange)"></i><i style="width:11%;background:var(--green)"></i></div><div class="topic-meta">投稿 268件  |  論点比較（5論点）</div></div></a>
       <a class="topic-card" data-category="life" href="bukatsu-chiiki-reaction-map.html"><div class="topic-thumb"><img src="images/bukatsu-hero.webp" alt="部活動の地域移行" loading="lazy"><span class="topic-new">NEW</span></div><div class="topic-info"><span class="category">教育・子ども</span><div class="topic-title-row"><h3>部活動の地域移行の是非</h3><span class="mini-map"></span></div><div class="topic-percent"><span style="color:var(--blue)">62%</span><span style="color:var(--orange)">14%</span><span style="color:var(--green)">10%</span><span style="color:var(--purple)">14%</span></div><div class="topic-bar"><i style="width:62%;background:var(--blue)"></i><i style="width:14%;background:var(--orange)"></i><i style="width:10%;background:var(--green)"></i><i style="width:14%;background:var(--purple)"></i></div><div class="topic-meta">投稿 180件  |  2Dスタンスマップ<span class="topic-fresh"> +98件 7/12</span></div></div></a>
@@ -78,7 +162,7 @@
     </div></section>
     <aside class="notes reveal"><strong>データの見方</strong>表示している割合は収集したSNS投稿サンプル内の分類比率であり、世論調査の結果ではありません。AI分類は論点整理の補助として使用しています。</aside>
   </main>
-  <footer class="site-footer"><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a><a href="constitutional-amendment-reaction-map.html">憲法改正</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html">このサイトについて</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
+  <footer class="site-footer"><img class="footer-landscape" src="images/6.webp" alt="" loading="lazy"><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a><a href="constitutional-amendment-reaction-map.html">憲法改正</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html">このサイトについて</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
   <script>
   (function(){
     var canvas=document.getElementById('hero-map'),ctx=canvas.getContext('2d'),points=[];
@@ -87,7 +171,88 @@
     drawMap();window.addEventListener('resize',drawMap,{passive:true});
     if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.05});document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)})}else{document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('visible')})}
     document.querySelectorAll('.filter').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.filter').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');var f=btn.dataset.filter;document.querySelectorAll('.topic-card').forEach(function(card){card.style.display=f==='all'||card.dataset.category===f?'grid':'none'})})});
+    if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      var scrollTicking=false;
+      function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
+      function updateStoryMotion(){
+        var viewportHeight=window.innerHeight;
+        var hero=document.querySelector('.hero');
+        if(hero){
+          var heroRect=hero.getBoundingClientRect();
+          var heroProgress=clamp(-heroRect.top/Math.max(heroRect.height*.8,1),0,1);
+          hero.style.setProperty('--hero-copy-y',(heroProgress*-74)+'px');
+          hero.style.setProperty('--hero-art-y',(heroProgress*-34)+'px');
+          hero.style.setProperty('--hero-art-scale',(1+heroProgress*.1).toFixed(3));
+          hero.style.setProperty('--hero-side-y',(heroProgress*-95)+'px');
+          hero.style.setProperty('--hero-scroll-opacity',(1-heroProgress*.72).toFixed(3));
+        }
+        document.querySelectorAll('[data-scroll-scene]').forEach(function(scene,index){
+          var rect=scene.getBoundingClientRect();
+          var progress=clamp((viewportHeight-rect.top)/(viewportHeight+rect.height),0,1);
+          var enter=clamp(progress*2.25,0,1);
+          var exit=clamp((progress-.58)*2.38,0,1);
+          var direction=index%2===0?-1:1;
+          var artX=direction*((1-enter)*210+exit*82);
+          var artY=(1-enter)*116-exit*104;
+          var artScale=.78+enter*.22+exit*.075;
+          var artRotate=direction*((1-enter)*-8.5+exit*4.5);
+          var copyX=index===0
+            ? -((1-enter)*190+exit*42)
+            : direction*-1*((1-enter)*145+exit*48);
+          var copyY=(1-enter)*72-exit*58;
+          var opacity=clamp(enter*1.45-exit*.32,0,1);
+          scene.style.setProperty('--art-x',artX.toFixed(1)+'px');
+          scene.style.setProperty('--art-y',artY.toFixed(1)+'px');
+          scene.style.setProperty('--art-scale',artScale.toFixed(3));
+          scene.style.setProperty('--art-rotate',artRotate.toFixed(2)+'deg');
+          scene.style.setProperty('--art-opacity',opacity.toFixed(3));
+          scene.style.setProperty('--copy-x',copyX.toFixed(1)+'px');
+          scene.style.setProperty('--copy-y',copyY.toFixed(1)+'px');
+          scene.style.setProperty('--copy-opacity',clamp(enter*1.7-exit*.42,0,1).toFixed(3));
+          scene.style.setProperty('--orb-x',((progress-.5)*direction*168).toFixed(1)+'px');
+          scene.style.setProperty('--orb-y',((progress-.5)*-112).toFixed(1)+'px');
+          scene.style.setProperty('--orb2-x',((progress-.5)*direction*-94).toFixed(1)+'px');
+          scene.style.setProperty('--orb2-y',((progress-.5)*48).toFixed(1)+'px');
+          scene.style.setProperty('--orb-scale',(.8+progress*.4).toFixed(3));
+          scene.style.setProperty('--orb-rotate',((progress-.5)*direction*24).toFixed(2)+'deg');
+          scene.style.setProperty('--image-inner-scale',(2-progress*.08+exit*.06).toFixed(3));
+          var landscape=scene.querySelector('[data-landscape-image]');
+          if(landscape){
+            scene.style.setProperty('--landscape-y',((progress-.5)*-42).toFixed(1)+'px');
+            scene.style.setProperty('--landscape-scale',(1.12-progress*.07).toFixed(3));
+          }
+          if(rect.top<viewportHeight*.84&&rect.bottom>viewportHeight*.16)scene.classList.add('is-visible');
+        });
+        var dividerWrap=document.querySelector('[data-divider]');
+        if(dividerWrap){
+          var divider=dividerWrap.querySelector('img');
+          var dividerRect=dividerWrap.getBoundingClientRect();
+          var dividerProgress=clamp((viewportHeight-dividerRect.top)/(viewportHeight+dividerRect.height),0,1);
+          divider.style.setProperty('--divider-x',((dividerProgress-.5)*-76)+'px');
+          divider.style.setProperty('--divider-y',((dividerProgress-.5)*-16)+'px');
+          divider.style.setProperty('--divider-scale',(1.08-dividerProgress*.04).toFixed(3));
+        }
+        scrollTicking=false;
+      }
+      window.addEventListener('scroll',function(){if(!scrollTicking){requestAnimationFrame(updateStoryMotion);scrollTicking=true}},{passive:true});
+      updateStoryMotion();
+    }
     (function(){var next=new Date('2026-07-27T00:00:00+09:00'),now=new Date(),days=Math.ceil((next-now)/864e5),txt=days>0?'あと'+days+'日':days===0?'本日更新予定':'更新済み';['hero-days-left','update-bar-days'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=txt;});})();
+    (function(){
+      var B={"fukushuto-reaction-map.html":{"pub":"2026-07-15","xpost":"2026-07-25"},"koshitsu-tenpakai-reaction-map.html":{"pub":"2026-07-18","xpost":"2026-07-25"},"bukatsu-chiiki-reaction-map.html":{"pub":"2026-06-27","upd":"2026-07-23","delta":"161"},"ai-copyright-reaction-map.html":{"pub":"2026-06-24","upd":"2026-07-12","delta":"369","xpost":"2026-07-24"},"constitutional-amendment-reaction-map.html":{"pub":"2026-06-24","upd":"2026-07-12","delta":"212","xpost":"2026-07-24"},"bike-blue-ticket-reaction-map.html":{"pub":"2026-06-28","upd":"2026-07-12","delta":"65"},"elderly-license-revocation-reaction-map.html":{"pub":"2026-06-28","upd":"2026-07-12","delta":"97","xpost":"2026-07-25"},"school-nickname-ban-reaction-map.html":{"pub":"2026-06-24","upd":"2026-07-12","delta":"31"},"takaichi-reaction-map-standard.html":{"pub":"2026-06-24","upd":"2026-07-12","delta":"136"},"henoko-student-accident-reaction-map.html":{"pub":"2026-06-24","upd":"2026-07-12","delta":"61"}};
+      var t=new Date();t.setHours(0,0,0,0);
+      function ago(s){if(!s)return 9999;var d=new Date(s);d.setHours(0,0,0,0);return Math.floor((t-d)/864e5);}
+      document.querySelectorAll('.feature-card,.topic-card').forEach(function(card){
+        var data=B[card.getAttribute('href')];if(!data)return;
+        var isFeat=card.classList.contains('feature-card');
+        var xd=ago(data.xpost),pd=ago(data.pub),ud=ago(data.upd);
+        var txt=null,hot=false;
+        if(xd<=2){txt='🔥 注目';hot=true;}else if(pd<=14){txt='NEW';}
+        var old=card.querySelector(isFeat?'.live-pill':'.topic-new');if(old)old.remove();
+        if(txt){var el=document.createElement('span');el.className=isFeat?'live-pill':'topic-new';if(hot)el.classList.add('hot');el.textContent=txt;var c=card.querySelector(isFeat?'.feature-image':'.topic-thumb');if(c)c.appendChild(el);}
+        if(!isFeat){var meta=card.querySelector('.topic-meta');if(meta){var f=meta.querySelector('.topic-fresh');if(f)f.remove();if(ud<=7&&data.delta){var fn=document.createElement('span');fn.className='topic-fresh';fn.textContent=' +'+data.delta+'件 更新';meta.appendChild(fn);}}}
+      });
+    })();
   })();
   </script>
 </body>
