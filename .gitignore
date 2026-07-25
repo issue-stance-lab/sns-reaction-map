@@ -10,6 +10,18 @@ __pycache__/
 # Node
 node_modules/
 
+# Generated infographic source images
+# Optimized WebP files are tracked; keep the large PNG originals local.
+docs/images/*-infographic-wide-*.png
+
+# Local social-reaction source and classification data
+# Keep post text, URLs, and user identifiers out of the public repository.
+social-samples/bukatsu-chiiki_hermes_classified_20260723.*
+social-samples/bukatsu-chiiki_samples_*_20260723.*
+social-samples/constitutional_amendment_hermes_arena_classified*.*
+social-samples/henoko/henoko_hermes_arena_*.*
+social-samples/school-nickname-ban_hermes_arena_classified.*
+
 # Design system
 design-system/node_modules/
 design-system/dist/
@@ -20,4 +32,3 @@ ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
 .design-sync/node_modules
-
