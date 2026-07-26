@@ -318,8 +318,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @47news_official（女性天皇容認に賛成81%・世論調査速報） | 皇室典範・女性天皇 | URLなし・josei-tenno画像付き | 397K |
 | 2 | @ihiro16（名古屋市長・副首都FAQ・南海トラフ同時被災しない・複数選定予定） | 副首都法案・候補地 | URLなし・kouhochi画像付き | 312K |
+| 3 | @kobeshinbun（阪神自転車絡み人身事故増加・青切符認識薄く） | 自転車青切符・実効性 | URLなし・torishimari画像付き | 16K |
 
-備考: 2本URLなし・各画像付き。
+備考: 3本URLなし・各画像付き。
 
 ## URL付き告知ポスト実績 2026-07-26
 
