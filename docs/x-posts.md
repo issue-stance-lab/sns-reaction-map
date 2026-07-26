@@ -320,6 +320,12 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 備考: 1本URLなし・画像付き。
 
+## URL付き告知ポスト実績 2026-07-26
+
+| # | テーマ | タイプ | URL |
+|---|--------|--------|-----|
+| 1 | 生成AI著作権（475件分析・6論点） | URL付き通常ポスト | https://x.com/sns_hannou_ma/status/2081234241497833523 |
+
 ## 論点ポスト実績 2026-07-25
 
 テーマ: 高齢者免許・都市部と地方の差
