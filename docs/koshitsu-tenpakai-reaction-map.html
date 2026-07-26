@@ -135,11 +135,56 @@
     @media(max-width:900px){#vote-stance-btns{grid-template-columns:repeat(2,minmax(0,1fr))!important}.explainer-grid{grid-template-columns:1fr}.explainer-card{max-width:520px;margin:0 auto}}
     .site-footer{background:#07172f;color:rgba(255,255,255,.72)}.footer-banner{line-height:0}.footer-banner img{width:100%;height:auto;display:block}.footer-inner{max-width:1192px;margin:0 auto;padding:32px 24px 0;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px}.footer-inner h3,.footer-inner h4{color:#fff;margin:0 0 8px}.footer-inner p,.footer-inner a{font-size:11px;color:rgba(255,255,255,.62);text-decoration:none}.footer-links{display:grid;gap:5px}.footer-bottom{max-width:1192px;margin:20px auto 0;padding:16px 24px 24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:9px}
     @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.sample-grid,.axis-grid,.related-grid,.issue-sides,.manga-grid{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}#vote-stance-btns{grid-template-columns:1fr!important}body{overflow-x:hidden}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px}}
-  </style>
+  
+/* TIDE_CARD_START */
+.update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
+.tide-card{max-width:1180px;margin:0 auto;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}
+.tide-widget-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.tide-widget-tabs{display:flex;gap:6px;padding:4px;border-radius:12px;background:#eef3f9}
+.tide-widget-btn{min-height:38px;padding:8px 14px;border:0;border-radius:9px;background:transparent;color:#53647c;font:inherit;font-size:13px;font-weight:900;cursor:pointer}
+.tide-widget-btn[aria-pressed="true"]{background:#13223d;color:#fff;box-shadow:0 4px 12px rgba(18,35,64,.15)}
+.tide-replay{display:inline-flex;align-items:center;gap:6px;border:1px solid #d9e2ef;background:#fff;color:#20314d}
+.tide-replay:hover{background:#f3f6fb}.tide-replay-icon{font-size:11px}
+.tide-widget-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.tide-widget-period{display:inline-flex;padding:6px 11px;border-radius:999px;background:#eaf1ff;color:#315bd8;font-size:13px;font-weight:900}
+.tide-widget-summary strong{font-size:18px;font-weight:900}
+.tide-slope-wrap{margin-top:12px}.tide-slope-svg{display:block;width:100%;height:auto;overflow:visible}
+.tide-slope-axis{stroke:#d7e0eb;stroke-width:2}.tide-slope-date{fill:#34445e;font-size:16px;font-weight:900}
+.tide-slope-label{fill:#0b1d3a;font-size:15px;font-weight:900}.tide-slope-value{fill:#66758b;font-size:13px;font-weight:800}
+.tide-slope-line{fill:none;stroke-width:5;stroke-linecap:round}.tide-slope-point{stroke:#fff;stroke-width:3}
+.tide-slope-line.series-0{stroke:#10b981}.tide-slope-line.series-1{stroke:#f59e0b}.tide-slope-line.series-2{stroke:#ef476f}.tide-slope-line.series-3{stroke:#64748b}
+.tide-slope-point.series-0{fill:#10b981}.tide-slope-point.series-1{fill:#f59e0b}.tide-slope-point.series-2{fill:#ef476f}.tide-slope-point.series-3{fill:#64748b}
+.tide-mobile-rows{display:none}.tide-widget-note{margin:4px 0 0;padding-top:14px;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.7}
+.tide-mobile-row{padding:14px 0;border-bottom:1px solid #e4e9f1}.tide-mobile-row:last-child{border-bottom:0}.tide-mobile-head{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:900}
+.tide-mobile-values{margin-top:5px;color:#465873;font-size:13px;font-weight:800}.tide-mobile-bars{display:grid;gap:5px;margin-top:9px}.tide-mobile-bar{height:8px;border-radius:999px;background:#e5eaf1;overflow:hidden}.tide-mobile-bar span{display:block;height:100%;border-radius:inherit}.tide-mobile-bar.previous span{background:#a8b4c5}.tide-mobile-bar.current span{background:#315bd8}
+@media(max-width:720px){
+  .update-dashboard{padding:10px 10px 24px}
+  .tide-card{padding:20px 16px;border-radius:16px}
+}
+@media(max-width:430px){
+  .tide-widget-controls{align-items:stretch}.tide-widget-tabs{width:100%}.tide-widget-tabs .tide-widget-btn{flex:1}.tide-replay{justify-content:center;width:100%}
+  .tide-widget-summary{align-items:flex-start;flex-direction:column}.tide-widget-summary strong{font-size:17px}
+  .tide-slope-wrap{display:none}.tide-mobile-rows{display:block;margin-top:12px}
+}
+/* TIDE_CARD_END */
+</style>
   <link rel="stylesheet" href="topic-modern.css?v=22">
   <script src="topic-modern.js?v=8" defer></script>
 <!-- GA_TAG_START -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K10S4YCZFH');</script>
+  <script>
+    (function(){
+      var allowedHosts = ["issue-stance-lab.github.io"];
+      if (allowedHosts.indexOf(window.location.hostname) === -1) return;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH';
+      document.head.appendChild(script);
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-K10S4YCZFH');
+    })();
+  </script>
 <!-- GA_TAG_END -->
 <!-- ADSENSE_TAG_START -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
@@ -175,6 +220,129 @@
     <div class="insight-meter" aria-hidden="true"><i style="width:28%"></i></div>
   </article>
 </section>
+
+<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
+<section class="tide-card" id="koshitsu-tenpakai-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
+  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
+    <div class="tide-widget-tabs">
+      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
+      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
+    </div>
+    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
+  </div>
+  <div class="tide-widget-summary" aria-live="polite">
+    <span class="tide-widget-period">7月17日 → 7月26日</span>
+    <strong data-tide-headline>「改正賛成（女系容認）」が9.2ポイント増加</strong>
+  </div>
+  <div class="tide-slope-wrap">
+    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="koshitsu-tenpakai-tide-widget-slope-title koshitsu-tenpakai-tide-widget-slope-desc">
+      <title id="koshitsu-tenpakai-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
+      <desc id="koshitsu-tenpakai-tide-widget-slope-desc">前回収集分273件と今回収集分347件の構成比を比較します。</desc>
+      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 7月17日</text>
+      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 7月26日</text>
+      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
+      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
+      <g data-tide-series></g>
+    </svg>
+  </div>
+  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
+  <p class="tide-widget-note">比較対象：7月17日収集分の2Dスタンス統計（改正成立直後326件）と7月26日収集分のHermes分類（347件）。前回は2D分類データを再構成した参考値です。同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
+</section>
+<script>
+(() => {
+  const root = document.getElementById("koshitsu-tenpakai-tide-widget");
+  if (!root) return;
+  const datasets = {"stance": {"max": 60, "headline": "「改正賛成（女系容認）」が9.2ポイント増加", "rows": [{"label": "改正反対（男系維持）", "previous": 51.3, "current": 47.6}, {"label": "改正賛成（女系容認）", "previous": 11.0, "current": 20.2}, {"label": "中立・情報", "previous": 37.7, "current": 32.3}]}, "issue": {"max": 40, "headline": "「立法手続き・民主主義」が6.8ポイント減少", "rows": [{"label": "男系vs女系", "previous": 35.4, "current": 36.0}, {"label": "旧宮家養子縁組", "previous": 25.5, "current": 25.6}, {"label": "立法手続き・民主主義", "previous": 25.5, "current": 18.7}, {"label": "女性天皇・女系天皇", "previous": 11.3, "current": 13.8}, {"label": "愛子さま・皇族の地位", "previous": 2.4, "current": 5.9}]}};
+  const svgGroup = root.querySelector("[data-tide-series]");
+  const mobileRows = root.querySelector("[data-tide-mobile]");
+  const headline = root.querySelector("[data-tide-headline]");
+  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
+  const replayButton = root.querySelector("[data-tide-replay]");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let mode = "stance";
+  let animationFrame = 0;
+  let hasAutoPlayed = false;
+
+  const yFor = (value, max) => 310 - (value / max) * 235;
+  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
+  const svgElement = (name, attrs, text) => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
+    if (text !== undefined) el.textContent = text;
+    return el;
+  };
+
+  function draw(progress = 1) {
+    const data = datasets[mode];
+    svgGroup.replaceChildren();
+    mobileRows.replaceChildren();
+    data.rows.forEach((row, index) => {
+      const y1 = yFor(row.previous, data.max);
+      const y2Target = yFor(row.current, data.max);
+      const y2 = y1 + (y2Target - y1) * progress;
+      const shown = row.previous + (row.current - row.previous) * progress;
+      const shownDelta = shown - row.previous;
+      const seriesClass = `series-${index}`;
+      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2+17, class:"tide-slope-value"}, signed(shownDelta)));
+      const mobile = document.createElement("article");
+      mobile.className = "tide-mobile-row";
+      mobile.innerHTML =
+        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
+        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
+        `<div class="tide-mobile-bars" aria-hidden="true">` +
+          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
+          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
+        `</div>`;
+      mobileRows.appendChild(mobile);
+    });
+  }
+
+  function animate() {
+    cancelAnimationFrame(animationFrame);
+    if (reducedMotion) { draw(1); return; }
+    const startedAt = performance.now();
+    const duration = 900;
+    const step = now => {
+      const raw = Math.min(1, (now - startedAt) / duration);
+      draw(1 - Math.pow(1 - raw, 3));
+      if (raw < 1) animationFrame = requestAnimationFrame(step);
+    };
+    animationFrame = requestAnimationFrame(step);
+  }
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    modeButtons.forEach(button => {
+      const selected = button.dataset.tideMode === mode;
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    headline.textContent = datasets[mode].headline;
+    animate();
+  }
+
+  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
+  replayButton.addEventListener("click", animate);
+  draw(1);
+
+  if ("IntersectionObserver" in window && !reducedMotion) {
+    const observer = new IntersectionObserver(entries => {
+      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
+        hasAutoPlayed = true;
+        animate();
+        observer.disconnect();
+      }
+    }, {threshold: 0.35});
+    observer.observe(root);
+  }
+})();
+</script>
+<!-- TIDE_CARD_END --></section>
 
 <section class="panel" id="explainer-section">
 <div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>図解で全論点をチェック</span></div>

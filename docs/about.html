@@ -79,12 +79,19 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 <!-- GA_TAG_START -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-K10S4YCZFH');
+    (function(){
+      var allowedHosts = ["issue-stance-lab.github.io"];
+      if (allowedHosts.indexOf(window.location.hostname) === -1) return;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-K10S4YCZFH';
+      document.head.appendChild(script);
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-K10S4YCZFH');
+    })();
   </script>
 <!-- GA_TAG_END -->
 </head>
