@@ -142,11 +142,33 @@ https://issue-stance-lab.github.io/sns-reaction-map/テーマ名.html
 
 ## 作業完了後
 
-投稿案をユーザーに提示したら、実施後に x-posts.md に追記する。
-その日の実績をコミットする:
+投稿案をユーザーに提示したら、実施後に以下を順番に行う。
+
+### 1. x-posts.md に追記する
+
+### 2. THEMES.yaml の x_posted_at を更新する
+
+その日にリプライ・論点ポストで触れたテーマの `x_posted_at` を今日の日付に更新する。
+テーマ名とキー名の対応例：
+
+| テーマ | THEMES.yaml のキー |
+|--------|-------------------|
+| 副首都法案 | fukushuto |
+| 皇室典範改正 | koshitsu |
+| 憲法改正 | constitutional |
+| 生成AI・著作権 | ai-copyright |
+| 高齢者免許 | elderly-license |
+| 部活地域移行 | bukatsu |
+| 自転車青切符 | bike-blue-ticket |
+| あだ名禁止 | school-nickname |
+
+更新方法: 該当テーマの `x_posted_at: YYYY-MM-DD` を今日の日付に書き換える。
+（🔥注目バッジが2日間表示される）
+
+### 3. コミットする
 
 ```
-git add docs/x-posts.md
+git add docs/x-posts.md THEMES.yaml
 git commit -m "x-post: YYYY-MM-DD リプライN本記録"
 ```
 
