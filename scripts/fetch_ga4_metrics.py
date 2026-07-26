@@ -24,6 +24,7 @@ from pathlib import Path
 
 SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
 TOKEN_PATH = Path("secrets/ga4-oauth-token.json")
+DEFAULT_HOST_NAME = "issue-stance-lab.github.io"
 
 
 def load_dotenv(path: Path) -> None:
@@ -155,7 +156,28 @@ def call_run_report(access_token: str, property_id: str, payload: dict) -> dict:
         return json.loads(res.read().decode("utf-8"))
 
 
-def run_report(access_token: str, property_id: str, days: int) -> dict:
+def public_host_filter(host_name: str) -> dict:
+    return {
+        "filter": {
+            "fieldName": "hostName",
+            "stringFilter": {"matchType": "EXACT", "value": host_name},
+        }
+    }
+
+
+def and_filter(*expressions: dict) -> dict:
+    active = [expression for expression in expressions if expression]
+    if len(active) == 1:
+        return active[0]
+    return {"andGroup": {"expressions": active}}
+
+
+def run_report(
+    access_token: str,
+    property_id: str,
+    days: int,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
     payload = {
         "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
         "metrics": [
@@ -164,47 +186,72 @@ def run_report(access_token: str, property_id: str, days: int) -> dict:
             {"name": "sessions"},
             {"name": "eventCount"},
         ],
+        "dimensionFilter": public_host_filter(host_name),
     }
     return call_run_report(access_token, property_id, payload)
 
 
-def run_page_path_report(access_token: str, property_id: str, days: int, limit: int) -> dict:
+def run_page_path_report(
+    access_token: str,
+    property_id: str,
+    days: int,
+    limit: int,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
     payload = {
         "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
         "dimensions": [{"name": "pagePath"}],
         "metrics": [{"name": "screenPageViews"}, {"name": "activeUsers"}],
+        "dimensionFilter": public_host_filter(host_name),
         "orderBys": [{"metric": {"metricName": "screenPageViews"}, "desc": True}],
         "limit": limit,
     }
     return call_run_report(access_token, property_id, payload)
 
 
-def run_event_report(access_token: str, property_id: str, days: int, event_name: str) -> dict:
+def run_event_report(
+    access_token: str,
+    property_id: str,
+    days: int,
+    event_name: str,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
     payload = {
         "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
         "dimensions": [{"name": "eventName"}],
         "metrics": [{"name": "eventCount"}],
-        "dimensionFilter": {
-            "filter": {
-                "fieldName": "eventName",
-                "stringFilter": {"matchType": "EXACT", "value": event_name},
-            }
-        },
+        "dimensionFilter": and_filter(
+            public_host_filter(host_name),
+            {
+                "filter": {
+                    "fieldName": "eventName",
+                    "stringFilter": {"matchType": "EXACT", "value": event_name},
+                }
+            },
+        ),
     }
     return call_run_report(access_token, property_id, payload)
 
 
-def run_share_source_report(access_token: str, property_id: str, days: int) -> dict:
+def run_share_source_report(
+    access_token: str,
+    property_id: str,
+    days: int,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
     payload = {
         "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
         "dimensions": [{"name": "sessionSource"}, {"name": "sessionMedium"}],
         "metrics": [{"name": "sessions"}, {"name": "activeUsers"}, {"name": "screenPageViews"}],
-        "dimensionFilter": {
-            "filter": {
-                "fieldName": "sessionSource",
-                "stringFilter": {"matchType": "EXACT", "value": "share_button"},
-            }
-        },
+        "dimensionFilter": and_filter(
+            public_host_filter(host_name),
+            {
+                "filter": {
+                    "fieldName": "sessionSource",
+                    "stringFilter": {"matchType": "EXACT", "value": "share_button"},
+                }
+            },
+        ),
         "limit": 25,
     }
     return call_run_report(access_token, property_id, payload)
@@ -233,13 +280,21 @@ def report_rows(report: dict) -> list[dict]:
     return rows
 
 
-def detail_bundle(access_token: str, property_id: str, days: int, limit: int) -> dict:
-    summary = summarize(run_report(access_token, property_id, days))
-    page_paths = report_rows(run_page_path_report(access_token, property_id, days, limit))
-    related_theme_click = summarize(run_event_report(access_token, property_id, days, "related_theme_click"))
+def detail_bundle(
+    access_token: str,
+    property_id: str,
+    days: int,
+    limit: int,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
+    summary = summarize(run_report(access_token, property_id, days, host_name))
+    page_paths = report_rows(run_page_path_report(access_token, property_id, days, limit, host_name))
+    related_theme_click = summarize(
+        run_event_report(access_token, property_id, days, "related_theme_click", host_name)
+    )
     if "eventCount" not in related_theme_click:
         related_theme_click["eventCount"] = "0"
-    share_button = report_rows(run_share_source_report(access_token, property_id, days))
+    share_button = report_rows(run_share_source_report(access_token, property_id, days, host_name))
     return {
         "summary": summary,
         "page_paths": page_paths,
@@ -289,6 +344,7 @@ def main() -> int:
     parser.add_argument("--days", type=int, default=7)
     parser.add_argument("--details", action="store_true", help="Fetch pagePath, related_theme_click, and share_button reports")
     parser.add_argument("--limit", type=int, default=20, help="Row limit for detail reports")
+    parser.add_argument("--host-name", default="", help="Public hostname to include in GA4 reports")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
@@ -296,17 +352,20 @@ def main() -> int:
     property_id = os.environ.get("GA4_PROPERTY_ID", "")
     if not property_id:
         raise SystemExit("GA4_PROPERTY_ID is required.")
+    configured_site = os.environ.get("GSC_SITE_URL", "")
+    site_host = urllib.parse.urlparse(configured_site).hostname if configured_site else ""
+    host_name = args.host_name or os.environ.get("GA4_HOST_NAME", "") or site_host or DEFAULT_HOST_NAME
 
     client = read_client_secret()
     token = get_token(client)
     if args.details:
-        details = detail_bundle(token["access_token"], property_id, args.days, args.limit)
+        details = detail_bundle(token["access_token"], property_id, args.days, args.limit, host_name)
         if args.json:
             print(json.dumps(details, ensure_ascii=False, indent=2))
         else:
             print_details(details)
         return 0
-    report = run_report(token["access_token"], property_id, args.days)
+    report = run_report(token["access_token"], property_id, args.days, host_name)
     summary = summarize(report)
     if args.json:
         print(json.dumps(summary, ensure_ascii=False, indent=2))

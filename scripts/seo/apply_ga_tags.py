@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import re
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MARKER_START = "<!-- GA_TAG_START -->"
 MARKER_END = "<!-- GA_TAG_END -->"
+DEFAULT_ALLOWED_HOSTS = ("issue-stance-lab.github.io",)
 
 
 def resolve(path: str) -> Path:
@@ -26,17 +28,32 @@ def validate_measurement_id(measurement_id: str) -> str:
     return cleaned
 
 
-def ga_block(measurement_id: str) -> str:
+def validate_host(host: str) -> str:
+    cleaned = host.strip().lower()
+    if not cleaned or not re.fullmatch(r"[a-z0-9.-]+", cleaned):
+        raise ValueError(f"Invalid GA host: {host!r}")
+    return cleaned
+
+
+def ga_block(measurement_id: str, allowed_hosts: tuple[str, ...] = DEFAULT_ALLOWED_HOSTS) -> str:
     escaped_id = html.escape(measurement_id, quote=True)
+    encoded_hosts = json.dumps(list(allowed_hosts), ensure_ascii=True)
     return "\n".join(
         [
             MARKER_START,
-            f'  <script async src="https://www.googletagmanager.com/gtag/js?id={escaped_id}"></script>',
             "  <script>",
-            "    window.dataLayer = window.dataLayer || [];",
-            "    function gtag(){dataLayer.push(arguments);}",
-            "    gtag('js', new Date());",
-            f"    gtag('config', '{escaped_id}');",
+            "    (function(){",
+            f"      var allowedHosts = {encoded_hosts};",
+            "      if (allowedHosts.indexOf(window.location.hostname) === -1) return;",
+            "      window.dataLayer = window.dataLayer || [];",
+            "      window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};",
+            "      var script = document.createElement('script');",
+            "      script.async = true;",
+            f"      script.src = 'https://www.googletagmanager.com/gtag/js?id={escaped_id}';",
+            "      document.head.appendChild(script);",
+            "      window.gtag('js', new Date());",
+            f"      window.gtag('config', '{escaped_id}');",
+            "    })();",
             "  </script>",
             MARKER_END,
         ]
@@ -61,12 +78,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Apply Google Analytics tags to docs/*.html")
     parser.add_argument("--measurement-id", required=True, help="Google Analytics measurement ID, e.g. G-XXXXXXXXXX")
     parser.add_argument("--docs-dir", default="docs")
+    parser.add_argument(
+        "--allowed-host",
+        action="append",
+        default=[],
+        help="Production hostname allowed to send GA4 events. Repeat for multiple hosts.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     measurement_id = validate_measurement_id(args.measurement_id)
+    allowed_hosts = tuple(validate_host(host) for host in args.allowed_host) or DEFAULT_ALLOWED_HOSTS
     docs_dir = resolve(args.docs_dir)
-    block = ga_block(measurement_id)
+    block = ga_block(measurement_id, allowed_hosts)
 
     changed: list[Path] = []
     for path in sorted(docs_dir.glob("*.html")):

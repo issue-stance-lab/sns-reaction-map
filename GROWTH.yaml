@@ -1,5 +1,5 @@
 # GROWTH.yaml — グロース台帳（単一の真実源）
-# 最終更新: 2026-07-23
+# 最終更新: 2026-07-26
 #
 # 目的: 来訪者・回遊・投票・SNSシェアを増やす施策の台帳。
 # 制作・品質維持は THEMES.yaml / LOOP.md の管轄（このファイルでは扱わない）。
@@ -31,38 +31,49 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-07-26
+      weekly_users: 10          # GA4: 過去7日アクティブユーザー（公開ホスト限定）
+      pageviews: 163            # GA4: 過去7日（公開ホスト限定）
+      pages_per_session: 3.396  # GA4: 163 PV / 48 sessions
+      votes_total: 12           # Supabase（test / test_debug の2票を除外）
+      votes_week: null          # Supabase: 未取得
+      gsc_impressions: 45       # Search Console: 28日間
+      gsc_clicks: 2             # Search Console: 28日間
+      x_followers: null         # 手動確認が必要
+      notes: 公開ホスト issue-stance-lab.github.io 限定で再集計。未フィルタ値14ユーザー・620PV・69セッションのうち、localhost/127.0.0.1が457PVを占めていたため訂正。7/23比でweekly_users 10→10、PV 112→163、pages/session 2.800→3.396、実投票11→12。GSCは表示45・クリック2・CTR4.44%・平均掲載順位11.51。公開PV内訳はt.co 105・Direct 42・Google Organic 1
+
     - date: 2026-07-23
-      weekly_users: 14          # GA4: 過去7日アクティブユーザー
-      pageviews: 181            # GA4: 過去7日
-      pages_per_session: 3.175  # GA4: 181 PV / 57 sessions
+      weekly_users: 10          # GA4: 過去7日アクティブユーザー（公開ホスト限定で再集計）
+      pageviews: 112            # GA4: 過去7日（公開ホスト限定で再集計）
+      pages_per_session: 2.800  # GA4: 112 PV / 40 sessions
       votes_total: 11           # Supabase（test / test_debug の2票を除外）
       votes_week: null          # Supabase: 未取得
       gsc_impressions: 45       # Search Console: 28日間
       gsc_clicks: 2             # Search Console: 28日間
       x_followers: null         # 手動確認が必要
-      notes: 7/14比でweekly_users 24→14、PV 387→181、pages/session 5.529→3.175。実投票9→11、GSC表示21→45、クリック1→2。related_theme_click 0件、share_button流入0件。母数が小さく施策別の採否判断は保留
+      notes: 2026-07-26に公開ホスト限定で訂正（旧値14ユーザー・181PV・3.175 pages/session）。7/14比でweekly_users 13→10、PV 136→112、pages/session 4.250→2.800。実投票9→11、GSC表示21→45、クリック1→2。related_theme_click 0件、share_button流入0件
 
     - date: 2026-07-14
-      weekly_users: 24          # GA4: 過去7日アクティブユーザー（↑100% vs 7/6）
-      pageviews: 387            # GA4: 過去7日（AI著作権80、あだ名57、トップ77、高市22、青切符16、憲法13、辺野古13、部活8、高齢者8）
-      pages_per_session: 5.529  # GA4
+      weekly_users: 13          # GA4: 過去7日アクティブユーザー（公開ホスト限定で再集計）
+      pageviews: 136            # GA4: 過去7日（公開ホスト限定で再集計）
+      pages_per_session: 4.250  # GA4: 136 PV / 32 sessions
       votes_total: 9            # Supabase
       votes_week: null          # Supabase: 未取得
       gsc_impressions: 21       # Search Console: 28日間（部活6、高齢者6、あだ名4、青切符3、AI著作権1、TOP1）
       gsc_clicks: 1             # Search Console: 28日間（部活クリック1）
       x_followers: null         # 手動確認が必要
-      notes: GSCインデックス開始。部活は9.8位・CTR16.7%、高齢者5.7位。シェアボタン経由流入は0、関連テーマクリック1回。Xシェアとナビ施策の効果はまだ出ていない
+      notes: 2026-07-26に公開ホスト限定で訂正（旧値24ユーザー・387PV・5.529 pages/session）。GSCインデックス開始。部活は9.8位・CTR16.7%、高齢者5.7位。シェアボタン経由流入は0、関連テーマクリック1回
 
     - date: 2026-07-06
-      weekly_users: 12          # GA4: 過去7日アクティブユーザー（↑71.4%）
-      pageviews: 285            # GA4: 確認分合計（ホーム79、AI著作権81、高齢者33、憲法30、部活27、青切符16、あだ名19）
-      pages_per_session: null   # GA4: 未確認
+      weekly_users: 5           # GA4: 過去7日アクティブユーザー（公開ホスト限定で再集計）
+      pageviews: 76             # GA4: 過去7日（公開ホスト限定で再集計）
+      pages_per_session: 3.619  # GA4: 76 PV / 21 sessions
       votes_total: null         # Supabase: 未取得
       votes_week: null          # Supabase: 未取得
       gsc_impressions: 0        # Search Console: 28日間 0（インデックス未登録）
       gsc_clicks: 0             # Search Console: 28日間 0
       x_followers: 1            # @sns_hannou_ma（今日リプライ後に1人フォロー）
-      notes: 初回ベースライン。チャネルはDirect 4・Organic Social 1・AI Assistant。あだ名ページは19PVで↑850%
+      notes: 2026-07-26に公開ホスト限定で訂正（旧値12ユーザー・285PV、pages/session未取得）。初回ベースライン。チャネルはDirect 4・Organic Social 1・AI Assistant
 
 capabilities:
   share-after-vote:
@@ -86,7 +97,7 @@ capabilities:
     metric: pages_per_session、内部リンククリック（GA4イベント）
     started_at: 2026-07-08
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点でrelated_theme_clickは0件、pages/sessionは5.529→3.175。母数14ユーザーと少なく、導線の効果を判断できないため1週間延長する（1回目延長）。次回も0件なら導線・イベント発火を再点検する
+    reflection: 2026-07-23時点でrelated_theme_clickは0件、公開ホスト限定のpages/sessionは4.250→2.800。母数10ユーザーと少なく、導線の効果を判断できないため1週間延長する（1回目延長）。次回も0件なら導線・イベント発火を再点検する
     notes: ポータルの回遊カード実装を流用。2026-07-07に8テーマへ投票結果内関連テーマと related_theme_click GA4イベントを実装。share-after-voteとは別指標（回遊 vs X流入）のため並行計測開始（2026-07-08）
 
   portal-featured-slot:
@@ -123,7 +134,7 @@ capabilities:
     built_at: 2026-07-08
     started_at: 2026-07-09
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点でpages/sessionは5.529→3.175だが、14ユーザーの小標本かつ複数施策が並行しておりデザイントークン単独の影響は判定不能。表示不具合は確認されていないため1週間延長する（1回目延長）
+    reflection: 2026-07-23時点で公開ホスト限定のpages/sessionは4.250→2.800だが、10ユーザーの小標本かつ複数施策が並行しておりデザイントークン単独の影響は判定不能。表示不具合は確認されていないため1週間延長する（1回目延長）
     notes: サイト魅力枠。docs/site-tokens.css を新規作成し全12ページへ link 追加。--ink/--muted/--line/--panel/--shadow/--font/--radius を共通化。テーマ固有の --bg/--accent/--grad-* は各ページに残存。コンソールエラーなし・375px横スクロールなし・保護タグ全確認済み。PR #11 を2026-07-09にmainへマージし計測開始
 
   vote-2d-canvas:
@@ -179,18 +190,18 @@ recurring:
   gsc-review:
     title: Search Console 確認とタイトル改善候補の抽出
     cadence: weekly
-    last_run: 2026-07-07
+    last_run: 2026-07-26
     procedure: 表示回数が多くCTRが低いページを抽出し、タイトル/description改善を experiments に起票
-    needs_human: GSC画面のデータ取得（スクショまたはCSV）
-    notes: 2026-07-07に docs/gsc-review-2026-07-07.md へ取得項目と起票判断を整理。2026-07-08に scripts/fetch_gsc_metrics.py で自動取得化（docs/gsc-automation.md）。次回はこのスクリプトを使う
+    needs_human: 自動取得が失敗した場合のみ、GSC管理画面の確認
+    notes: 2026-07-26にOAuth再認証・自動取得確認。28日間で表示45・クリック2・CTR4.44%・平均掲載順位11.51。クリックは部活1（9表示・11.1%）と高齢者免許1（11表示・9.1%）。AI著作権は10表示・平均6.7位だがクリック0のためタイトル改善候補
 
   kpi-snapshot:
     title: KPI週次スナップショット更新
     cadence: weekly
-    last_run: 2026-07-23
+    last_run: 2026-07-26
     procedure: kpi.snapshots に1行追加。scripts/fetch_growth_kpi.py で自動取得（人間依頼は自動取得失敗時のみ）
     needs_human: 自動取得が失敗した場合のみ、各管理画面の数値取得
-    notes: 2026-07-23に自動取得・snapshot追記済み。weekly_users 14 / pageviews 181 / pages_per_session 3.175 / votes_total 11（テスト票除外）/ gsc_impressions 45 / gsc_clicks 2。x_followers のみ引き続き手動
+    notes: 2026-07-26に公開ホスト限定へ修正し、過去4回のGA4値も再集計。最新はweekly_users 10 / pageviews 163 / pages_per_session 3.396 / votes_total 12（テスト票除外）/ gsc_impressions 45 / gsc_clicks 2。x_followers のみ引き続き手動
 
   x-profile:
     title: Xプロフィール・固定ポスト改善
@@ -213,7 +224,7 @@ recurring:
     minimum_action:
       daily: URLなしリプライ 1-3件（同一アカウントへの連日リプライは避ける）
       weekly: URL付き投稿または引用RT 1-2件（フォロワー100未満フェーズ。スパム判定回避のため抑制）、プロフィール・固定ポスト・投稿文言の見直し
-    last_run: 2026-07-24
+    last_run: 2026-07-26
     procedure: 毎日「Xのリプライ検索」で高閲覧数（目安1万views以上）の関連ポストを探しリプライ先を提案。週次で引用RT候補・投稿文案を補充
     needs_human: 実際の投稿操作（1日1-3件）
     notes: >-
@@ -221,7 +232,7 @@ recurring:
       同日に引用RT3本実施（憲法改正/@tamakiyuichiro・高齢者免許/@taketake1w・高市早苗/@shukan_bunshun）。今週のURL付き引用RT上限到達。
       2026-07-08にURLなしリプライ3本実施（辺野古/@Sankei_news・高齢者免許/@nikkei・高市/@AtsushiKomori）。
       2026-07-09はURLなしリプライ3本実施（辺野古遺族/@narumita・憲法改正/@hashimoto_lo・生成AI著作権/@Henry66239746）。
-      来週引用RT仕込み: @nhk_news（辺野古）・@izmkenta（辺野古文科委）・@yamazoejimusyo（憲法改正）
+      2026-07-26に生成AI著作権ページのSEOタイトル改善後、計測用UTM付き告知を投稿（https://x.com/sns_hannou_ma/status/2081234241497833523）。
 
 featured: fukushuto   # 現在のポータル注目テーマ
 
@@ -267,7 +278,7 @@ activity_log:
     related_capability: share-after-vote
   - date: 2026-07-23
     type: measurement
-    detail: KPI自動取得。weekly_users 14 / pageviews 181 / pages_per_session 3.175 / votes_total 11（テスト票除外）/ GSC表示45・クリック2。期限超過5施策を観察付きで7/30まで1回延長
+    detail: KPI自動取得。2026-07-26の公開ホスト限定再集計でweekly_users 10 / pageviews 112 / pages_per_session 2.800へ訂正。votes_total 11（テスト票除外）/ GSC表示45・クリック2。期限超過5施策を観察付きで7/30まで1回延長
     related_capability: null
   - date: 2026-07-24
     type: x_post
@@ -277,3 +288,11 @@ activity_log:
     type: site_improvement
     detail: 高齢者免許ページ論点別インフォグラフィック wide 版6枚追加・全幅表示修正。部活・地域ページ Hermes 再分類467件・世論の潮目セクション追加
     related_capability: null
+  - date: 2026-07-26
+    type: measurement
+    detail: GA4・Search ConsoleのOAuth再認証と統合取得を復旧。GA4の620PV中457PVがローカル確認アクセスと特定し、送信側を本番ホスト限定・取得側をhostNameフィルタ付きに修正。過去4回を再集計し、最新値をweekly_users 10 / sessions 48 / pageviews 163 / pages_per_session 3.396へ訂正。votes_total 12 / GSC表示45・クリック2
+    related_capability: null
+  - date: 2026-07-26
+    type: x_post
+    detail: 生成AI著作権ページの検索タイトル・description・OGPを改善してPR #16で公開し、Search Consoleへ再クロール申請。utm_campaign=ai_copyright_seo_20260726 付きでX告知を投稿（https://x.com/sns_hannou_ma/status/2081234241497833523）。24時間後にX表示・反応・リンククリック、7日後にGA4新規ユーザー・PV・投票を確認する
+    related_capability: x-post-templates

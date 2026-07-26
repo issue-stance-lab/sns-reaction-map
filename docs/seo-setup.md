@@ -64,10 +64,13 @@ GA4の測定IDが発行できたら、次のコマンドで全HTMLへタグを�
 ```bash
 python3 scripts/seo/apply_ga_tags.py \
   --measurement-id "G-XXXXXXXXXX" \
+  --allowed-host "YOUR_PRODUCTION_HOST" \
   --dry-run
 ```
 
 表示された対象に問題がなければ `--dry-run` を外します。
+指定した公開ホスト以外ではGA4スクリプトを読み込まないため、
+`localhost` と `127.0.0.1` の確認アクセスは本番計測へ混入しません。
 
 ## 5. 現時点の注意
 

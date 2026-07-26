@@ -9,6 +9,10 @@
 
 GA4取得はOAuth方式で自動化済み。
 
+2026-07-26以降、すべてのレポートは公開ホスト
+`issue-stance-lab.github.io` のみに絞って取得する。`localhost` と
+`127.0.0.1` の開発アクセスはKPIへ含めない。
+
 追加済みスクリプト:
 
 ```bash
@@ -39,6 +43,18 @@ python3 scripts/fetch_ga4_metrics.py --days 7 --details
 python3 scripts/fetch_ga4_metrics.py --days 7 --details --json
 ```
 
+別の公開ホストへ移行した場合:
+
+```bash
+python3 scripts/fetch_ga4_metrics.py \
+  --days 7 \
+  --host-name "YOUR_PRODUCTION_HOST"
+```
+
+通常運用では `.env` の `GA4_HOST_NAME`、次に `GSC_SITE_URL` のホスト名を
+自動使用する。どちらも未設定の場合は
+`issue-stance-lab.github.io` を使用する。
+
 ## 取得できる指標
 
 現在のスクリプトは、指定期間の以下を取得する。
@@ -58,13 +74,13 @@ related_theme_click の eventCount
 utm_source=share_button 相当の sessionSource=share_button 流入
 ```
 
-2026-07-08に過去7日で取得確認済み:
+2026-07-26に公開ホスト限定で取得確認済み:
 
 ```text
-activeUsers: 13
-screenPageViews: 296
-sessions: 46
-eventCount: 605
+activeUsers: 10
+screenPageViews: 163
+sessions: 48
+eventCount: 403
 related_theme_click: 0
 share_button sessions: 0
 ```
@@ -76,12 +92,14 @@ share_button sessions: 0
 ```bash
 GA4_PROPERTY_ID="数字のGA4プロパティID"
 GOOGLE_OAUTH_CLIENT_SECRET="/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/secrets/ga4-oauth-client.json"
+GA4_HOST_NAME="issue-stance-lab.github.io"
 ```
 
 注意:
 
 - `GA4_PROPERTY_ID` は `G-K10S4YCZFH` ではない。
 - `GA4_PROPERTY_ID` はGA4管理画面にある数字だけのプロパティID。
+- `GA4_HOST_NAME` はGA4へ記録された公開サイトのホスト名。プロトコルやパスは付けない。
 - OAuthクライアントJSONの中身をチャットに貼らない。
 - `secrets/` はGit管理しない。
 
