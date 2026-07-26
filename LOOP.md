@@ -69,6 +69,66 @@ THEMES.yaml と実ファイルを突き合わせ、ズレがあれば台帳を�
 - キャラシートは比率指定不要（HTMLには表示しない）
 - 保存時の WebP 変換・リサイズ基準（漫画≤100KB、900px）は変わらない
 
+## データ補充（refresh）完了後の更新チェックリスト
+
+refresh_at を過ぎたテーマにデータを追加した後、以下を順番に確認する。
+
+### 1. データ分類
+
+- [ ] Yahoo リアルタイム検索で収集（fetch_yahoo_realtime_node.mjs / fetch_topic_refresh.py）
+- [ ] 重複チェック（既存 tweet_id と照合、件数を記録）
+- [ ] Hermes 分類実行（classify_{theme}_arena_hermes.py）
+- [ ] 新規分類データを既存 `{theme}_hermes_arena_classified.json` にマージ
+
+### 2. THEMES.yaml
+
+- [ ] `updated_at` → 今日の日付
+- [ ] `collect_delta` → 今回追加件数（重複除外後）
+- [ ] `refresh_at` → 次回目安日（通常1週間後）
+
+### 3. テーマページ（潮目ウィジェットがある場合）
+
+- [ ] `tide-widget-period` テキスト（例: 6月27日 → 7月26日）
+- [ ] SVG `tide-slope-date` テキスト（前回/今回の日付）
+- [ ] `aria-desc` 内の件数
+- [ ] `datasets` JS変数（`max`・`headline`・`rows` の `previous`/`current` 値）
+- [ ] `tide-widget-note` 注釈テキスト（収集件数・日付・背景説明）
+
+### 4. テーマページ（insight-stats カード 4枚）
+
+- [ ] 「分析対象の意見」件数（`insight-value`）
+- [ ] 「最も多い立場」% + 件数注（`insight-note`）+ `insight-meter` 幅
+- [ ] 「最も話された論点」件数（`insight-value`）
+- [ ] 「論点による逆転」注釈（件数が変わる場合）
+- [ ] ヒーローセクション「議論の中心」バッジ件数（`conclusion-count`）
+- [ ] lead文の件数
+- [ ] `data-method` テキスト（データの集め方）
+
+### 5. index.html（ポータル）
+
+- [ ] `rank-card` スタンス比率バー（`rank-dist` + `rank-track` の4項目）
+- [ ] 割れ度スコア（`split-score` の meter 幅 + 数値）
+- [ ] スコアが変動した場合: `rank-num` 順位番号 + カードの DOM 順序を更新
+- [ ] `topic-card` スタンス比率バー（`topic-percent` + `topic-bar` の各項目）
+- [ ] `topic-card` 件数（`topic-meta` 内の「投稿 XX件」）
+- [ ] `topic-card` 更新バッジ（`.topic-fresh` テキストと日付）
+- [ ] badge data `B` 変数（`upd` → 今日の日付、`delta` → 今回追加件数）
+- [ ] `hero-total-samples` → 全テーマ topic-card 件数の合計に更新
+- [ ] `hero-total-samples` の横の更新日テキスト（例: `7/26更新`）
+
+### 6. sitemap.xml
+
+- [ ] 該当テーマの `lastmod` → 今日の日付
+
+---
+
+**注意事項:**
+- `hero-total-samples` は全 topic-card の「投稿 XX件」の合計値。新テーマ公開直後に更新漏れが起きやすいので都度合算して確認する。
+- 割れ度スコアを変更するとランキング順位も変わる。DOM 順序（first-child が金色）も連動して並び替えること。
+- 論点アリーナ（P=[...] データ）は今回の分類結果を反映していないが、潮目ウィジェットで最新比較を表示しているため、現状はそのままでよい。
+
+---
+
 ## 人間（オーナー）の役割
 
 - プロンプトの受け渡し（ワーカーAIへの入力）
