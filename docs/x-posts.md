@@ -317,8 +317,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | リプライ先 | テーマ | タイプ | views |
 |---|-----------|--------|--------|-------|
 | 1 | @YahooNewsTopics（声の権利を検討会明記・AIに歯止め） | 生成AI著作権・声の権利 | URLなし・hoseibi画像付き | 56K |
+| 2 | @Sankei_news（辺野古転覆・遺族が引率教員ら刑事告訴・海保が家宅捜索） | 辺野古高校生事故・安全管理 | URLなし・画像なし | 8.7K |
 
-備考: 1本URLなし・画像付き。
+備考: 2本URLなし。
 
 ## 論点ポスト実績 2026-07-26
 
