@@ -317,8 +317,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | リプライ先 | テーマ | タイプ | views |
 |---|-----------|--------|--------|-------|
 | 1 | @anti_KO12（個人的な副首都に向いている都市ランキング） | 副首都法案・候補地 | URLなし・kouhochi画像付き | 1,368K |
+| 2 | @barikii（部活がなくなって中学校が荒れ始めている） | 部活地域移行・居場所機能 | URLなし・画像付き | 1,041K |
 
-備考: 1本URLなし。
+備考: 2本URLなし。
 
 ## 論点ポスト実績 2026-07-27
 
