@@ -100,7 +100,7 @@ python3 scripts/build_reaction_map.py \
 
 必須項目:
 
-- `site-tokens.css`、`topic-modern.css`、`topic-modern.js` を読み込む
+- `site-tokens.css?v=2`、`topic-modern.css?v=23`、`topic-modern.js?v=8` を読み込む
 - `<body class="summary-on-light">` に `--topic-hero-image` を設定
 - 題名下の分析方法を次の共通文にする
 
@@ -112,6 +112,18 @@ python3 scripts/build_reaction_map.py \
 - ヒーロー直下は `.stats.insight-stats` を使い、「分析対象の意見」とテーマ固有の重要な発見を表示
 - 論点解説の見出しは「このテーマを読み解く、{論点数}つの論点」
 - 収集件数、重複除去、使用モデルなどの工程詳細は「調査概要」へ置く
+
+公開前に `configs/theme-seo.json` へ、検索タイトル、description、根拠のある公開日・更新日、収集方法を登録し、共通の信頼性情報とArticle構造化データを適用する。
+
+```bash
+python3 scripts/seo/apply_theme_trust.py --check
+python3 scripts/seo/apply_theme_trust.py
+```
+
+- `datePublished` / `dateModified` は `THEMES.yaml` の `published_at` / `updated_at` など、リポジトリ内で確認できる日付だけを使う
+- 技術的な再生成だけで、分析内容の最終更新日を新しくしない
+- 編集・分析主体は個人名を推測せず、個人運営プロジェクトの編集名義 `SNS反応まっぷ編集部` と `about.html` を使用する
+- 既存の「データの集め方」は共通の信頼性情報欄へ統合し、重複表示しない
 
 注目指標は4枚を基本とするが、テーマに必要な場合は追加できる。候補と選定基準は `templates/topic-page-v3.md` の「1.3 ヒーロー直下の注目指標」を参照する。
 

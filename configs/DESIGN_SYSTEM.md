@@ -142,7 +142,7 @@ Google Fonts から `wght@400;500;600;700;800;900` をロード。
   - デスクトップ: 555px（inner 553px）
   - 720px以下: 834px（inner 832px）
 - テーマごとの文章量でヒーロー高を変えない。短い場合は画像側の余白として処理する
-- 必須参照: `site-tokens.css?v=2`、`topic-modern.css?v=20`、`topic-modern.js?v=8`
+- 必須参照: `site-tokens.css?v=2`、`topic-modern.css?v=23`、`topic-modern.js?v=8`
 
 ### 論点インフォグラフィック
 

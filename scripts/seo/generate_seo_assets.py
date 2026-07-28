@@ -31,34 +31,60 @@ def normalize_base_url(site_url: str) -> str:
     return cleaned.rstrip("/") + "/"
 
 
-def page_urls(config: dict[str, Any]) -> list[str]:
-    pages = ["index.html"]
+def page_entries(
+    config: dict[str, Any],
+    theme_seo: dict[str, Any],
+    output_dir: Path,
+) -> list[tuple[str, str | None]]:
+    entries: dict[str, str | None] = {}
+    for page in config.get("site_pages") or []:
+        value = str(page.get("url") or "").strip()
+        if value.endswith(".html"):
+            entries[value] = str(page.get("lastmod") or "").strip() or None
+
+    case_urls: set[str] = set()
     for case in config.get("cases") or []:
-        for key in ("reaction_map_url", "standard_map_url", "summary_url"):
-            value = str(case.get(key) or "").strip()
-            if value and value.endswith(".html"):
-                pages.append(value)
-        for group_key in ("article_urls", "research_urls"):
-            for item in case.get(group_key) or []:
-                value = str(item.get("url") or "").strip()
-                if value.endswith(".html") and not value.startswith("../"):
-                    pages.append(value)
-    return sorted(dict.fromkeys(pages))
+        value = str(case.get("reaction_map_url") or "").strip()
+        if value.endswith(".html"):
+            case_urls.add(value)
+
+    seo_dates = {
+        str(theme["url"]): str(theme["dateModified"])
+        for theme in theme_seo.get("themes") or []
+    }
+    if case_urls != set(seo_dates):
+        raise ValueError(
+            "reaction map mismatch between site-cases and theme-seo: "
+            f"site_cases_only={sorted(case_urls - set(seo_dates))}, "
+            f"theme_seo_only={sorted(set(seo_dates) - case_urls)}"
+        )
+    entries.update(seo_dates)
+
+    missing = sorted(page for page in entries if not (output_dir / page).is_file())
+    if missing:
+        raise FileNotFoundError(f"sitemap pages missing from output directory: {missing}")
+    return sorted(entries.items())
 
 
-def sitemap_xml(base_url: str, pages: list[str], lastmod: str) -> str:
+def sitemap_xml(
+    base_url: str,
+    pages: list[tuple[str, str | None]],
+    fallback_lastmod: str | None = None,
+) -> str:
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
-    for page in pages:
+    for page, page_lastmod in pages:
         loc = urljoin(base_url, page)
         priority = "1.0" if page == "index.html" else "0.8"
+        lines.extend(["  <url>", f"    <loc>{html.escape(loc)}</loc>"])
+        lastmod = page_lastmod or fallback_lastmod
+        if lastmod:
+            date.fromisoformat(lastmod)
+            lines.append(f"    <lastmod>{lastmod}</lastmod>")
         lines.extend(
             [
-                "  <url>",
-                f"    <loc>{html.escape(loc)}</loc>",
-                f"    <lastmod>{lastmod}</lastmod>",
                 "    <changefreq>weekly</changefreq>",
                 f"    <priority>{priority}</priority>",
                 "  </url>",
@@ -98,18 +124,26 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Generate SEO assets into docs/")
     parser.add_argument("--site-url", required=True, help="Published site URL, e.g. https://example.github.io/repo/")
     parser.add_argument("--config", default="configs/site-cases.json")
+    parser.add_argument("--theme-seo-config", default="configs/theme-seo.json")
     parser.add_argument("--output-dir", default="docs")
-    parser.add_argument("--lastmod", default=date.today().isoformat())
+    parser.add_argument(
+        "--lastmod",
+        help="Fallback lastmod for pages without a repository-backed date; omitted by default",
+    )
     parser.add_argument("--adsense-client", help="Google AdSense client ID (e.g. ca-pub-XXXXXXXXXXXXXXXX) to generate ads.txt")
     args = parser.parse_args()
 
     base_url = normalize_base_url(args.site_url)
     config = read_json(args.config)
-    pages = page_urls(config)
+    theme_seo = read_json(args.theme_seo_config)
     output_dir = resolve(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    pages = page_entries(config, theme_seo, output_dir)
 
-    (output_dir / "sitemap.xml").write_text(sitemap_xml(base_url, pages, args.lastmod), encoding="utf-8")
+    (output_dir / "sitemap.xml").write_text(
+        sitemap_xml(base_url, pages, args.lastmod),
+        encoding="utf-8",
+    )
     (output_dir / "robots.txt").write_text(robots_txt(base_url), encoding="utf-8")
 
     print(f"Generated {output_dir / 'sitemap.xml'} ({len(pages)} pages)")

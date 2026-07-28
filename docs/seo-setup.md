@@ -20,6 +20,15 @@ python3 scripts/seo/generate_seo_assets.py \
 
 生成対象は `configs/site-cases.json` のページ一覧です。新しい反応マップやまとめUIを追加したら、同じコマンドを再実行します。
 
+テーマページのタイトル、description、公開日・更新日、収集方法、Article構造化データは `configs/theme-seo.json` で管理します。HTMLを新規生成・更新した後は、次を実行します。
+
+```bash
+python3 scripts/seo/apply_theme_trust.py --check
+python3 scripts/seo/apply_theme_trust.py
+```
+
+`configs/site-cases.json` の公開テーマURLと `configs/theme-seo.json` のURLが一致しない場合は停止します。公開日・更新日は `THEMES.yaml` などリポジトリ内の根拠に合わせ、HTMLの再生成だけを理由に変更しません。
+
 ## 2. Google Search Console
 
 公開後に Google Search Console で以下を登録します。
@@ -75,3 +84,5 @@ python3 scripts/seo/apply_ga_tags.py \
 ## 5. 現時点の注意
 
 `sitemap.xml` のURLは絶対URLである必要があります。公開URLが未確定のまま仮URLで作ると、Google Search Console登録時に間違ったURLを送る事故につながるため、公開URL確定後に生成します。
+
+テーマの `lastmod` は `configs/theme-seo.json` の `dateModified`、固定ページは `configs/site-cases.json` の `site_pages[].lastmod` を使います。根拠日がないページには、明示的に `--lastmod` を渡さない限り `lastmod` を追加しません。
