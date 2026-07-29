@@ -318,8 +318,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @ashitawawatashi（島根県丸山知事・副首都法案の復興コスト批判） | 副首都法案・費用 | URLなし・hiyou画像付き | 93K |
 | 2 | @oosakahaoosaka（北海道・札幌市が副首都指定申請へ） | 副首都法案・候補地 | URLなし・kouhochi画像付き | 115K |
+| 3 | @hashimoto_lo（皇室典範・男系女性は認めるべき） | 皇室典範改正・女性天皇 | URLなし・josei-tenno画像付き | 123K |
 
-備考: 2本URLなし。
+備考: 3本URLなし。
 
 ## 論点ポスト実績 2026-07-28
 
