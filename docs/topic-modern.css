@@ -913,6 +913,89 @@ footer { margin-top: 0 !important; background: #07172f !important; }
   line-height: 1 !important;
 }
 
+/* Article provenance and methodology */
+.article-trust {
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--line, #e4eaf3);
+  border-radius: 16px;
+  background: var(--panel, #fff);
+  box-shadow: 0 5px 18px rgba(18, 53, 99, .07);
+  color: var(--ink, #071a3d);
+}
+.article-trust-heading {
+  margin-bottom: 18px;
+}
+.article-trust-heading h2 {
+  margin: 2px 0 0 !important;
+  font-size: 20px !important;
+  line-height: 1.35;
+}
+.article-trust-kicker {
+  margin: 0;
+  color: var(--blue, #075ef2);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.article-trust-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 18px;
+}
+.article-trust-meta > div {
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--soft, #f5f8fc);
+}
+.article-trust-meta dt {
+  margin: 0 0 3px;
+  color: var(--muted, #637089);
+  font-size: 11px;
+  font-weight: 800;
+}
+.article-trust-meta dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.article-trust a {
+  color: var(--blue, #075ef2);
+  text-underline-offset: 2px;
+}
+.article-trust-method {
+  display: grid;
+  grid-template-columns: minmax(120px, .32fr) minmax(0, 1.68fr);
+  gap: 8px 16px;
+}
+.article-trust-method h3 {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.article-trust-method p,
+.article-trust-caution,
+.article-trust-contact {
+  margin: 0;
+  color: var(--muted, #637089);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.article-trust-caution {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--purple, #9358e8);
+  border-radius: 0 9px 9px 0;
+  background: #f7f3ff;
+  color: var(--ink, #071a3d);
+}
+.article-trust-contact {
+  margin-top: 12px;
+}
+
 @media (max-width: 1050px) {
   .modern-nav { display: none; }
   .modern-header-button { margin-left: auto; }
@@ -951,4 +1034,99 @@ footer { margin-top: 0 !important; background: #07172f !important; }
   .panel-title h2 { font-size: 20px !important; }
   .axis-grid { grid-template-columns: 1fr !important; }
   #stance-map-inner { max-width: 100% !important; }
+  .article-trust { padding: 19px 16px; }
+  .article-trust-meta { grid-template-columns: 1fr; }
+  .article-trust-method { grid-template-columns: 1fr; gap: 3px; }
+  .article-trust-method p + h3 { margin-top: 10px; }
 }
+
+/* =========================================================
+   論点図解の拡大ビューア（全テーマ共通）
+   - 各ページのインラインCSSより後に読み込まれるので、ここが最終定義になる
+   - ai-copyright / elderly-license-revocation はインラインCSSを持たないため、
+     この定義がないとオーバーレイにならず本文中に巨大画像が差し込まれる
+   - 21:9の論点図解はモバイルで縮小すると文字が読めないため、
+     ピンチズーム（touch-action）と拡大→パン（is-zoom）に対応する
+   ========================================================= */
+.explainer-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999;
+  display: none;
+  padding: 12px;
+  background: rgba(15, 23, 42, .92);
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+.explainer-modal.open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 拡大中はスクロールコンテナへ切り替える。
+   flexの中央寄せのままだと、はみ出した左端・上端へスクロールで到達できない。 */
+.explainer-modal.open.is-zoom { display: block; }
+
+.explainer-modal img {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 24px);
+  border-radius: 8px;
+  object-fit: contain;
+  touch-action: inherit;
+}
+.explainer-modal.is-zoomable img { cursor: zoom-in; }
+.explainer-modal.is-zoom img {
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0;
+  cursor: zoom-out;
+}
+.explainer-modal.is-zoom img.is-grabbing { cursor: grabbing; }
+
+/* 拡大中は明るい図解が背面に来るため、半透明白のままだと閉じるボタンが埋もれる */
+.explainer-modal-close {
+  position: fixed !important;
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+  background: rgba(15, 23, 42, .82) !important;
+  border: 1px solid rgba(255, 255, 255, .35) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+}
+.explainer-modal-close:hover,
+.explainer-modal-close:focus-visible {
+  background: rgba(15, 23, 42, .95) !important;
+}
+.explainer-modal-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 2;
+  margin: 0;
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, .85);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: rgba(255, 255, 255, .92);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.explainer-modal-hint[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .explainer-modal-hint { transition: none; }
+}
+
+/* 4スタンス構成テーマ（消費税減税など）の「条件付き賛成」用セグメント。
+   論点アリーナの点の色と揃えるため橙を使う。 */
+.temp-seg.mid { background: #f59e0b; }
+.temp-bar-legend i.mid { background: #f59e0b; }
