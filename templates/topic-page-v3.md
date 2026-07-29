@@ -9,7 +9,7 @@
 
 ```html
 <link rel="stylesheet" href="site-tokens.css?v=2">
-<link rel="stylesheet" href="topic-modern.css?v=20">
+<link rel="stylesheet" href="topic-modern.css?v=23">
 <script src="topic-modern.js?v=8" defer></script>
 ```
 
@@ -221,6 +221,15 @@
   - 注意
 - 初期表示は「分類別件数」のみ `open` を許容する。他の表は閉じる。
 - 表の既存クラス（`.bar-list`, `.heat-table`, `.table-wrap`, `.legend`）は維持し、CSS互換性を保つ。
+
+## 9. 編集・分析情報とArticle構造化データ
+
+- 全公開テーマを `configs/theme-seo.json` に登録し、`scripts/seo/apply_theme_trust.py` で静的HTMLへ適用する。
+- 画面上に公開日、最終更新日、編集・分析主体、SNS投稿の収集方法、AIを使った工程、サンプル分類であり世論調査ではない旨、訂正窓口を表示する。
+- 既存の「データの集め方」欄は `.article-trust` に統合し、同じ説明を重複させない。
+- JSON-LDは `Article` とし、画面と同じ `headline`、`description`、`datePublished`、`dateModified`、Organization名を使用する。
+- `author` と `publisher` は `SNS反応まっぷ編集部`（Organization）とし、`about.html` へリンクする。
+- 公開日・更新日はリポジトリ内で根拠を確認できる値だけを使い、再生成やSEOタグ変更だけを理由に更新しない。
 
 ## 実装上の保持条件
 

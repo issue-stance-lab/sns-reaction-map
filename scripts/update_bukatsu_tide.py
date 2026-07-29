@@ -345,7 +345,7 @@ def tide_card(previous: list[dict[str, Any]], current: list[dict[str, Any]]) -> 
     </svg>
   </div>
   <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：前回追加分 {len(previous)}件／今回追加分 {len(current)}件。同じ検索語セットで取得した意見投稿をHermesで再分類しています。投稿サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
+  <p class="tide-widget-note">比較対象：前回追加分 {len(previous)}件／今回追加分 {len(current)}件。同じ検索語セットで取得した意見投稿をAIで再分類しています。投稿サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
 </section>
 {widget_script}
 <!-- TIDE_CARD_END -->"""
