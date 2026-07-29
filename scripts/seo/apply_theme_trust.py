@@ -26,7 +26,7 @@ PROTECTED_TOKENS = (
     "supabase",
     "topic-modern.js",
 )
-TOPIC_CSS_VERSION = "23"
+TOPIC_CSS_VERSION = "26"
 
 
 def load_json(path: Path) -> dict[str, Any]:

@@ -407,4 +407,231 @@
     });
   }
 
+  /* === 投票完了イベントの発火 =====================================
+     各テーマページの「次に投票するテーマ」回遊カードは
+     document の "vote2d:revealed" を待って描画されるが、
+     このイベントを発火する実装がどのページにも無く、
+     6ページで回遊カードが表示されないままになっていた。
+     投票結果（#vote-result）が可視になったら、ここで一度だけ発火する。
+  ================================================================ */
+  var voteResult = document.getElementById('vote-result');
+  if (voteResult) {
+    var voteRevealed = false;
+    var announceVoteReveal = function () {
+      if (voteRevealed) return;
+      var visible = voteResult.offsetParent !== null || getComputedStyle(voteResult).display !== 'none';
+      if (!visible) return;
+      voteRevealed = true;
+      document.dispatchEvent(new CustomEvent('vote2d:revealed'));
+    };
+    new MutationObserver(announceVoteReveal).observe(voteResult, {
+      attributes: true,
+      attributeFilter: ['style', 'class', 'hidden']
+    });
+    // 過去の投票が localStorage から復元されて最初から表示されている場合
+    document.addEventListener('DOMContentLoaded', announceVoteReveal);
+    announceVoteReveal();
+  }
+
+  /* === 論点図解の拡大ビューア =====================================
+     ほとんどのテーマページは開閉をインラインスクリプトで持っているので、
+     ここでは開いたあとの「拡大・パン」を足す。
+     モーダル自体を持たないページ（辺野古など）では要素と開閉も用意する。
+     21:9の論点図解はモバイルで画面幅に収めると文字が読めないため、
+     タップで原寸相当まで拡大し、スクロールでパンできるようにする。
+     ピンチズームはCSSの touch-action で端末側の機能に任せる。
+  ================================================================ */
+  var explainerCards = document.querySelectorAll('.explainer-card[data-img]');
+  var explainerModal = document.getElementById('explainer-modal');
+  var explainerImg = explainerModal && explainerModal.querySelector('#explainer-modal-img');
+  var modalWasCreated = false;
+
+  if (explainerCards.length && !explainerModal) {
+    explainerModal = document.createElement('div');
+    explainerModal.className = 'explainer-modal';
+    explainerModal.id = 'explainer-modal';
+    explainerModal.setAttribute('role', 'dialog');
+    explainerModal.setAttribute('aria-modal', 'true');
+    explainerModal.innerHTML =
+      '<button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>' +
+      '<img src="" alt="" id="explainer-modal-img">';
+    document.body.appendChild(explainerModal);
+    explainerImg = explainerModal.querySelector('#explainer-modal-img');
+    modalWasCreated = true;
+  }
+
+  if (explainerModal && explainerImg) {
+    // ページ側に開閉スクリプトが無い場合だけ、ここで開閉も担当する
+    if (modalWasCreated) {
+      var closeButton = explainerModal.querySelector('.explainer-modal-close');
+      var closeModal = function () { explainerModal.classList.remove('open'); };
+      Array.prototype.forEach.call(explainerCards, function (card) {
+        var open = function () {
+          explainerImg.src = card.getAttribute('data-img');
+          explainerImg.alt = card.getAttribute('data-alt') || '';
+          explainerModal.classList.add('open');
+        };
+        card.addEventListener('click', open);
+        card.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            open();
+          }
+        });
+      });
+      closeButton.addEventListener('click', closeModal);
+      explainerModal.addEventListener('click', function (event) {
+        if (event.target === explainerModal) closeModal();
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeModal();
+      });
+    }
+
+    var ZOOM_MAX_WIDTH = 2400;
+    var hint = explainerModal.querySelector('.explainer-modal-hint');
+    if (!hint) {
+      hint = document.createElement('p');
+      hint.className = 'explainer-modal-hint';
+      explainerModal.appendChild(hint);
+    }
+
+    function fitWidth() {
+      return Math.max(explainerModal.clientWidth - 24, 1);
+    }
+
+    // 画面に収めた状態より大きく表示できるときだけ拡大操作を出す
+    function canZoom() {
+      if (!explainerImg.naturalWidth) return false;
+      return Math.min(explainerImg.naturalWidth, ZOOM_MAX_WIDTH) > fitWidth() + 40;
+    }
+
+    function updateHint() {
+      if (!canZoom()) {
+        hint.hidden = true;
+        return;
+      }
+      hint.hidden = false;
+      hint.textContent = explainerModal.classList.contains('is-zoom')
+        ? 'ドラッグまたはスクロールで移動／もう一度タップで戻す'
+        : 'タップで拡大';
+    }
+
+    function applyZoomState() {
+      explainerModal.classList.toggle('is-zoomable', canZoom());
+      updateHint();
+    }
+
+    // ratioX/ratioY は画像内のどの位置を中心に持っていくか（0〜1）
+    function zoomIn(ratioX, ratioY) {
+      if (!canZoom()) return;
+      var width = Math.min(explainerImg.naturalWidth, ZOOM_MAX_WIDTH);
+      explainerModal.classList.add('is-zoom');
+      explainerImg.style.width = width + 'px';
+      explainerImg.style.maxWidth = 'none';
+      // レイアウト確定後にスクロール位置を合わせる
+      var rect = explainerImg.getBoundingClientRect();
+      explainerModal.scrollLeft = ratioX * rect.width - explainerModal.clientWidth / 2;
+      explainerModal.scrollTop = ratioY * rect.height - explainerModal.clientHeight / 2;
+      updateHint();
+    }
+
+    function zoomOut() {
+      explainerModal.classList.remove('is-zoom');
+      explainerImg.style.width = '';
+      explainerImg.style.maxWidth = '';
+      explainerModal.scrollLeft = 0;
+      explainerModal.scrollTop = 0;
+      updateHint();
+    }
+
+    explainerImg.addEventListener('click', function (event) {
+      event.stopPropagation();
+      if (explainerModal.classList.contains('is-zoom')) {
+        zoomOut();
+        return;
+      }
+      var rect = explainerImg.getBoundingClientRect();
+      zoomIn(
+        (event.clientX - rect.left) / rect.width,
+        (event.clientY - rect.top) / rect.height
+      );
+    });
+
+    // マウスでのドラッグパン（タッチは端末のスクロールに任せる）
+    var dragging = false;
+    var dragFrom = null;
+
+    explainerImg.addEventListener('pointerdown', function (event) {
+      if (event.pointerType === 'touch') return;
+      if (!explainerModal.classList.contains('is-zoom')) return;
+      dragging = true;
+      dragFrom = {
+        x: event.clientX,
+        y: event.clientY,
+        left: explainerModal.scrollLeft,
+        top: explainerModal.scrollTop,
+        moved: false
+      };
+      explainerImg.classList.add('is-grabbing');
+    });
+
+    window.addEventListener('pointermove', function (event) {
+      if (!dragging || !dragFrom) return;
+      var dx = event.clientX - dragFrom.x;
+      var dy = event.clientY - dragFrom.y;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragFrom.moved = true;
+      explainerModal.scrollLeft = dragFrom.left - dx;
+      explainerModal.scrollTop = dragFrom.top - dy;
+      event.preventDefault();
+    });
+
+    window.addEventListener('pointerup', function (event) {
+      if (!dragging) return;
+      dragging = false;
+      explainerImg.classList.remove('is-grabbing');
+      // ドラッグ後のクリックで縮小してしまわないように打ち消す
+      if (dragFrom && dragFrom.moved) {
+        explainerImg.addEventListener('click', function stop(e) {
+          e.stopImmediatePropagation();
+          explainerImg.removeEventListener('click', stop, true);
+        }, true);
+      }
+      dragFrom = null;
+    });
+
+    // トラックパッドのピンチ（ctrlKey付きwheel）でも拡大・縮小できるようにする
+    explainerModal.addEventListener('wheel', function (event) {
+      if (!event.ctrlKey) return;
+      event.preventDefault();
+      var rect = explainerImg.getBoundingClientRect();
+      if (event.deltaY < 0) {
+        if (!explainerModal.classList.contains('is-zoom')) {
+          zoomIn(
+            (event.clientX - rect.left) / rect.width,
+            (event.clientY - rect.top) / rect.height
+          );
+        }
+      } else if (explainerModal.classList.contains('is-zoom')) {
+        zoomOut();
+      }
+    }, { passive: false });
+
+    explainerImg.addEventListener('load', applyZoomState);
+    window.addEventListener('resize', function () {
+      if (explainerModal.classList.contains('open')) applyZoomState();
+    });
+
+    // 開閉は各ページ側で class を付け外しするので、それを見て状態を初期化する
+    new MutationObserver(function () {
+      if (explainerModal.classList.contains('open')) {
+        applyZoomState();
+      } else if (explainerModal.classList.contains('is-zoom')) {
+        zoomOut();
+      }
+    }).observe(explainerModal, { attributes: true, attributeFilter: ['class'] });
+
+    applyZoomState();
+  }
+
 })();

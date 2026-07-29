@@ -1039,3 +1039,94 @@ footer { margin-top: 0 !important; background: #07172f !important; }
   .article-trust-method { grid-template-columns: 1fr; gap: 3px; }
   .article-trust-method p + h3 { margin-top: 10px; }
 }
+
+/* =========================================================
+   論点図解の拡大ビューア（全テーマ共通）
+   - 各ページのインラインCSSより後に読み込まれるので、ここが最終定義になる
+   - ai-copyright / elderly-license-revocation はインラインCSSを持たないため、
+     この定義がないとオーバーレイにならず本文中に巨大画像が差し込まれる
+   - 21:9の論点図解はモバイルで縮小すると文字が読めないため、
+     ピンチズーム（touch-action）と拡大→パン（is-zoom）に対応する
+   ========================================================= */
+.explainer-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999;
+  display: none;
+  padding: 12px;
+  background: rgba(15, 23, 42, .92);
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+.explainer-modal.open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 拡大中はスクロールコンテナへ切り替える。
+   flexの中央寄せのままだと、はみ出した左端・上端へスクロールで到達できない。 */
+.explainer-modal.open.is-zoom { display: block; }
+
+.explainer-modal img {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 24px);
+  border-radius: 8px;
+  object-fit: contain;
+  touch-action: inherit;
+}
+.explainer-modal.is-zoomable img { cursor: zoom-in; }
+.explainer-modal.is-zoom img {
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0;
+  cursor: zoom-out;
+}
+.explainer-modal.is-zoom img.is-grabbing { cursor: grabbing; }
+
+/* 拡大中は明るい図解が背面に来るため、半透明白のままだと閉じるボタンが埋もれる */
+.explainer-modal-close {
+  position: fixed !important;
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+  background: rgba(15, 23, 42, .82) !important;
+  border: 1px solid rgba(255, 255, 255, .35) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+}
+.explainer-modal-close:hover,
+.explainer-modal-close:focus-visible {
+  background: rgba(15, 23, 42, .95) !important;
+}
+.explainer-modal-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 2;
+  margin: 0;
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, .85);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: rgba(255, 255, 255, .92);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.explainer-modal-hint[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .explainer-modal-hint { transition: none; }
+}
+
+/* 4スタンス構成テーマ（消費税減税など）の「条件付き賛成」用セグメント。
+   論点アリーナの点の色と揃えるため橙を使う。 */
+.temp-seg.mid { background: #f59e0b; }
+.temp-bar-legend i.mid { background: #f59e0b; }
