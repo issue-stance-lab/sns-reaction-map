@@ -317,8 +317,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | リプライ先 | テーマ | タイプ | views |
 |---|-----------|--------|--------|-------|
 | 1 | @ashitawawatashi（島根県丸山知事・副首都法案の復興コスト批判） | 副首都法案・費用 | URLなし・hiyou画像付き | 93K |
+| 2 | @oosakahaoosaka（北海道・札幌市が副首都指定申請へ） | 副首都法案・候補地 | URLなし・kouhochi画像付き | 115K |
 
-備考: 1本URLなし。
+備考: 2本URLなし。
 
 ## 論点ポスト実績 2026-07-28
 
