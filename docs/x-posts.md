@@ -312,6 +312,13 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @yu_kaizyu（高齢ドライバー技能検査・不合格でも何度でも受けられる） | 高齢者免許 | URLなし | 30.4K |
 
+## 論点ポスト実績 2026-07-29
+
+テーマ: 部活地域移行（部活が担っていた複合機能の分解）
+パターン: 問いかけ型（A）
+画像: bukatsu-chiiki-infographic-wide-kyoiku
+投稿文:「「部活がなくなって学校が荒れた」という声が出てきたけど、部活が担っていたのは"競技指導"なのか"居場所"なのか"生活指導"なのか。全部ひとつの仕組みに乗せていたこと自体が、そもそも無理があったのでは？ #部活動地域移行 #SNS反応まっぷ」
+
 ## リプライ実績 2026-07-29
 
 | # | リプライ先 | テーマ | タイプ | views |
@@ -503,7 +510,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/koshitsu-tenpakai-reaction-m
 
 返信文:「今回の改正では、女性天皇の是非は対象外でした。「男系女性天皇」を認めるには、皇位継承資格を男系男子に限る第1条を改める別の議論が必要です。今回の改正後も残された、大きな論点だと思います。」
 
-添付画像: `docs/images/x-reply-koshitsu-josei-tenno.png`
+添付画像: `docs/images/social/koshitsu-tenpakai/x-reply-koshitsu-josei-tenno.png`
 
 備考: 自サイトの「6つの論点」「争点④に当たる」といった分類説明やURLは本文に入れず、元投稿の主張に直接応答。
 
