@@ -318,8 +318,9 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @cynanyc（副首都は場所論ではなく数論） | 副首都法案・定義 | URLなし・teigi画像付き | 864K |
 | 2 | @Ryu_Atagawa（生成AI議論が二元論になる問題） | 生成AI著作権・モラル | URLなし・moraru画像付き | 12K |
+| 3 | @jijicom（高市首相「2年後に税率を元に戻す」速報） | 消費税減税・公約 | URLなし・kouyaku画像付き | 354K |
 
-備考: 2本URLなし。
+備考: 3本URLなし。
 
 ## 論点ポスト実績 2026-07-29
 
