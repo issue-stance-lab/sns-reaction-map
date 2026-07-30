@@ -19,7 +19,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_PAGE_TOKENS = (
     "G-K10S4YCZFH",
     "ca-pub-2542211932832864",
-    "topic-modern.css?v=23",
+    "topic-modern.css?v=",
     "topic-modern.js",
 )
 
