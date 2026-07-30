@@ -4,7 +4,7 @@
 
 対象:
 
-- `docs/images/<topic>-hero.webp`
+- `docs/images/topics/<topic>/<topic>-hero.webp`
 - テーマページのヒーロー背景
 - ポータルのテーマカード画像
 - 必要に応じたOGP画像のベース
@@ -76,13 +76,13 @@
 
 Web配置:
 
-- `docs/images/<topic>-hero.webp`
+- `docs/images/topics/<topic>/<topic>-hero.webp`
 - 横幅はページ側で `background-size: cover` またはカード画像として使用
 
 WebP変換:
 
 ```bash
-cwebp -q 78 -resize 1400 0 input.png -o docs/images/<topic>-hero.webp
+cwebp -q 78 -resize 1400 0 input.png -o docs/images/topics/<topic>/<topic>-hero.webp
 ```
 
 目標:

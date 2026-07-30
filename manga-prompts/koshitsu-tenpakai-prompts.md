@@ -8,7 +8,7 @@
 生成後 WebP に変換、各ファイル≤100KB（リサイズ900px幅、q45目安）で以下に配置:
 
 ```
-docs/images/
+docs/images/topics/koshitsu-tenpakai/
 ├── koshitsu-infographic-kouseki.webp
 ├── koshitsu-infographic-yoshi.webp
 ├── koshitsu-infographic-keisho.webp

@@ -66,7 +66,7 @@ Square illustration, 512x512px, white/light gradient background. A generic Japan
 生成後 WebP に変換、240x240px、20KB以下に圧縮して以下に配置:
 
 ```
-docs/images/
+docs/images/topics/school-nickname-ban/
 ├── school-nickname-ban-vote-1-support.webp
 ├── school-nickname-ban-vote-2-oppose.webp
 ├── school-nickname-ban-vote-3-flexible.webp

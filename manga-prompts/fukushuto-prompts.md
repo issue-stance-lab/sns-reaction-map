@@ -9,7 +9,7 @@
 生成後 WebP に変換、各ファイル≤100KB（リサイズ900px幅、q45目安）で以下に配置:
 
 ```
-docs/images/
+docs/images/topics/fukushuto/
 ├── fukushuto-manga-charsheet-yui.webp      ← キャラシートA
 ├── fukushuto-manga-charsheet-nobuko.webp   ← キャラシートB
 ├── fukushuto-manga-teigi.webp              ← 定義・中身

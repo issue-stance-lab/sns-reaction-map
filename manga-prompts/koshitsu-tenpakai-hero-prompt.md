@@ -5,13 +5,13 @@
 保存先:
 
 ```
-docs/images/koshitsu-hero.webp
+docs/images/topics/koshitsu-tenpakai/koshitsu-hero.webp
 ```
 
 生成後:
 
 ```bash
-cwebp -q 78 -resize 1400 0 input.png -o docs/images/koshitsu-hero.webp
+cwebp -q 78 -resize 1400 0 input.png -o docs/images/topics/koshitsu-tenpakai/koshitsu-hero.webp
 ```
 
 ---

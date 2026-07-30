@@ -66,7 +66,7 @@ Square illustration, 512x512px, white/light gradient background. A neutral Japan
 生成後 WebP に変換、240x240px、20KB以下に圧縮して以下に配置:
 
 ```
-docs/images/
+docs/images/topics/constitutional-amendment/
 ├── constitutional-amendment-vote-1-amend.webp
 ├── constitutional-amendment-vote-2-protect.webp
 ├── constitutional-amendment-vote-3-process.webp

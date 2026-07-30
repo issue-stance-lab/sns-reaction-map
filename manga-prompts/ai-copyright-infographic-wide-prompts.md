@@ -2,7 +2,7 @@
 
 共通スタイル: `manga-prompts/infographic-style-guide.md` を参照。
 
-基準テイスト: 副首都ページの `docs/images/fukushuto-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
+基準テイスト: 副首都ページの `docs/images/topics/fukushuto/fukushuto-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
 
 ## 生成サイズ
 
@@ -12,7 +12,7 @@
 ## 保存先・変換コマンド
 
 ```
-docs/images/
+docs/images/topics/ai-copyright/
 ├── ai-copyright-infographic-wide-gakushu.webp     （論点1: 学習データ・無断利用）
 ├── ai-copyright-infographic-wide-hoseibi.webp     （論点2: 法制度・規制整備）
 ├── ai-copyright-infographic-wide-moraru.webp      （論点3: 利用者モラル・倫理）
@@ -22,7 +22,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/ai-copyright-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/ai-copyright/ai-copyright-infographic-wide-XXX.webp
 ```
 
 ---

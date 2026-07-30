@@ -62,7 +62,7 @@ Square illustration, 512x512px, white/light gradient background. A single figure
 生成後 WebP に変換、20KB以下に圧縮して以下に配置:
 
 ```
-docs/images/
+docs/images/topics/ai-copyright/
 ├── ai-copyright-vote-1-regulate.webp
 ├── ai-copyright-vote-2-innovate.webp
 ├── ai-copyright-vote-3-coexist.webp

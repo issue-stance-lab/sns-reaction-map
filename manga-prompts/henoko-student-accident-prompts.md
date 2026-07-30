@@ -10,7 +10,7 @@
 生成後 WebP に変換、漫画≤100KB（リサイズ900px、q45目安）で以下に配置:
 
 ```
-docs/images/
+docs/images/topics/henoko-student-accident/
 ├── henoko-student-accident-manga-charsheet-mayumi.webp
 ├── henoko-student-accident-manga-charsheet-kentaro.webp
 ├── henoko-student-accident-manga-page-1.webp

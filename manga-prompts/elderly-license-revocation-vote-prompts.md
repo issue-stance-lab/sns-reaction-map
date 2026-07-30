@@ -62,7 +62,7 @@ Square illustration, 512x512px, white/light gradient background. A single neutra
 生成後 WebP に変換、20KB以下に圧縮して以下に配置:
 
 ```
-docs/images/
+docs/images/topics/elderly-license-revocation/
 ├── elderly-license-revocation-vote-1-mandatory.webp
 ├── elderly-license-revocation-vote-2-mobility.webp
 ├── elderly-license-revocation-vote-3-testing.webp

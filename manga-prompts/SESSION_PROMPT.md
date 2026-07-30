@@ -35,9 +35,9 @@ AI著作権テーマで実装済みの仕組みを、残り7テーマに展開�
 
 ### 3. 画像生成（手動 — Gptimage2）
 ユーザーがプロンプトをGptimage2に貼り付けて生成:
-- キャラシート2枚 → `docs/images/<topic>-manga-charsheet-*.webp`
-- 漫画ページ3枚 → `docs/images/<topic>-manga-page-{1,2,3}.webp`（100KB以下）
-- 投票画像4枚 → `docs/images/<topic>-vote-{1,2,3,4}-*.webp`（20KB以下、240x240）
+- キャラシート2枚 → `docs/images/topics/<topic>/<topic>-manga-charsheet-*.webp`
+- 漫画ページ3枚 → `docs/images/topics/<topic>/<topic>-manga-page-{1,2,3}.webp`（100KB以下）
+- 投票画像4枚 → `docs/images/topics/<topic>/<topic>-vote-{1,2,3,4}-*.webp`（20KB以下、240x240）
 
 ### 4. HTML更新（自動）
 `docs/<topic>-reaction-map.html` に以下を追加:

@@ -8,13 +8,13 @@
 保存先:
 
 ```
-docs/images/consumption-tax-cut-hero.webp
+docs/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp
 ```
 
 生成後:
 
 ```bash
-cwebp -q 78 -resize 1400 0 input.png -o docs/images/consumption-tax-cut-hero.webp
+cwebp -q 78 -resize 1400 0 input.png -o docs/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp
 ```
 
 ---
@@ -53,7 +53,7 @@ White, pale blue, and soft indigo base with warm amber as the dominant accent. I
 
 **2026-07-28 実施済み**。上段のプロンプト（レシート版）で生成した画像を採用した。
 
-1. WebP変換して `docs/images/consumption-tax-cut-hero.webp` に保存する
+1. WebP変換して `docs/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp` に保存する
    （1672×941 PNG 2.3MB → 1400px幅 WebP 65KB）
 2. `scripts/build_consumption_tax_page.py` の `HERO_IMAGE` を画像パスに変更する
 3. `python3 scripts/build_consumption_tax_page.py` を再実行する
@@ -62,7 +62,7 @@ White, pale blue, and soft indigo base with warm amber as the dominant accent. I
 `OGP_IMAGE` もこのヒーロー画像を指すようにした（他テーマと同じ扱い）。
 
 > **注意**: `docs/topic-modern.css` の `.hero::before` は `--topic-hero-image` が未指定だと
-> `images/ai-copyright-hero.webp` にフォールバックする。必ず body の inline style で指定すること。
+> `images/topics/ai-copyright/ai-copyright-hero.webp` にフォールバックする。必ず body の inline style で指定すること。
 
 ---
 

@@ -156,7 +156,7 @@ def apply_theme(source: str, theme: dict[str, Any], config: dict[str, Any]) -> s
     )
     updated = updated.replace(
         'src="ogp/fukushuto.png"',
-        'src="images/fukushuto-hero.webp"',
+        'src="images/topics/fukushuto/fukushuto-hero.webp"',
     )
     seo_start_index = updated.find(SEO_START)
     if seo_start_index < 0:

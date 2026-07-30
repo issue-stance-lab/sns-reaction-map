@@ -144,7 +144,7 @@ python3 scripts/seo/apply_theme_trust.py
 
 ### 出力先
 
-- 画像: `docs/images/<topic>-manga-panel-{1-4}.webp`
+- 画像: `docs/images/topics/<topic>/<topic>-manga-panel-{1-4}.webp`
 - データ: `configs/<topic>-reaction-map.json` の `manga` フィールド
 
 ### スキーマ

@@ -136,9 +136,9 @@ grep -n "G-K10S4YCZFH\|ca-pub-2542211932832864\|supabase\|og:image" \
 ```bash
 git add docs/bukatsu-chiiki-reaction-map.html \
         docs/henoko-student-accident-reaction-map.html \
-        docs/images/henoko-student-accident-manga-page-1.webp \
-        docs/images/henoko-student-accident-manga-page-2.webp \
-        docs/images/takaichi-manga-page-3.webp \
+        docs/images/topics/henoko-student-accident/henoko-student-accident-manga-page-1.webp \
+        docs/images/topics/henoko-student-accident/henoko-student-accident-manga-page-2.webp \
+        docs/images/topics/takaichi/takaichi-manga-page-3.webp \
         docs/takaichi-reaction-map-standard.html
 
 git commit -m "feat(vote): Q2投票設問を改善（部活・辺野古・高市）"

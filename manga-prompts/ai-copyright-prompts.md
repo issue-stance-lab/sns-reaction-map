@@ -106,7 +106,7 @@ A manga page with 3 panels layout (two smaller panels on top row, one wide cinem
 ## 画像仕様
 
 - 出力後 WebP 形式に変換、1枚100KB以下に圧縮
-- 保存先: `docs/images/ai-copyright-manga-page-{1,2,3}.webp`
+- 保存先: `docs/images/topics/ai-copyright/ai-copyright-manga-page-{1,2,3}.webp`
 - HTML埋め込み時: `loading="lazy"` 必須
 
 ## 注記

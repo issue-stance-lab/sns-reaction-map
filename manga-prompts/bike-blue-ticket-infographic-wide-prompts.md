@@ -2,7 +2,7 @@
 
 共通スタイル: `manga-prompts/infographic-style-guide.md` を参照。
 
-基準テイスト: 副首都ページの `docs/images/fukushuto-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
+基準テイスト: 副首都ページの `docs/images/topics/fukushuto/fukushuto-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
 
 ## 生成サイズ
 
@@ -12,7 +12,7 @@
 ## 保存先・変換コマンド
 
 ```
-docs/images/
+docs/images/topics/bike-blue-ticket/
 ├── bike-blue-ticket-infographic-wide-torishimari.webp  （論点1: 取締り強化賛成）
 ├── bike-blue-ticket-infographic-wide-infra.webp        （論点2: インフラ整備優先）
 ├── bike-blue-ticket-infographic-wide-sharido.webp      （論点3: 車道走行への不安）
@@ -21,7 +21,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/bike-blue-ticket-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-XXX.webp
 ```
 
 ---

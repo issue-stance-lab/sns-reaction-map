@@ -2,7 +2,7 @@
 
 共通スタイル: `manga-prompts/infographic-style-guide.md` を参照。
 
-基準テイスト: `docs/images/ai-copyright-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影、整理された左→中央→右の情報フローを使う。
+基準テイスト: `docs/images/topics/ai-copyright/ai-copyright-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影、整理された左→中央→右の情報フローを使う。
 
 データ基準: X投稿403件から重複を除いた363件をHermesで再分類し、記事利用可と判定した265件。画像内で件数を示す場合は、必ず「公開対象SNSサンプル265件中」と併記し、世論調査や支持率に見せない。
 
@@ -15,7 +15,7 @@ AIテーマのwide画像と同一サイズを指定すること。
 ## 保存先・変換コマンド
 
 ```text
-docs/images/
+docs/images/topics/henoko-student-accident/
 ├── henoko-student-accident-infographic-wide-churitsu.webp （論点1: 政治的中立性）
 ├── henoko-student-accident-infographic-wide-anzen.webp    （論点2: 安全管理・事故原因）
 ├── henoko-student-accident-infographic-wide-tsuito.webp   （論点3: 追悼・被害者の尊厳）
@@ -25,7 +25,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/henoko-student-accident-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-XXX.webp
 ```
 
 ## 全画像共通の安全指定

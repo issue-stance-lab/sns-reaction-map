@@ -10,7 +10,7 @@
 ## 保存先
 
 ```text
-docs/images/
+docs/images/topics/constitutional-amendment/
 ├── constitutional-infographic-wide-general.webp
 ├── constitutional-infographic-wide-article9.webp
 ├── constitutional-infographic-wide-emergency.webp

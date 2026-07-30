@@ -106,10 +106,10 @@ A manga page with 3 panels layout (two smaller panels on top row, one wide cinem
 ## 画像仕様
 
 - 出力後 WebP 形式に変換、1枚100KB以下に圧縮
-- 保存先: `docs/images/elderly-license-revocation-manga-page-{1,2,3}.webp`
+- 保存先: `docs/images/topics/elderly-license-revocation/elderly-license-revocation-manga-page-{1,2,3}.webp`
 - キャラシート保存先:
-  - `docs/images/elderly-license-revocation-manga-charsheet-1.webp`
-  - `docs/images/elderly-license-revocation-manga-charsheet-2.webp`
+  - `docs/images/topics/elderly-license-revocation/elderly-license-revocation-manga-charsheet-1.webp`
+  - `docs/images/topics/elderly-license-revocation/elderly-license-revocation-manga-charsheet-2.webp`
 - HTML埋め込み時: `loading="lazy"` 必須
 
 ## 注記

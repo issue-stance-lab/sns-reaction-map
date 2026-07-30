@@ -4,8 +4,8 @@
 
 副首都ページで作成した以下の画像群を基準テイストにします。
 
-- 冒頭理解画像: `docs/images/fukushuto-infographic-*.webp`
-- 投票ボタン画像: `docs/images/fukushuto-vote-*.webp`
+- 冒頭理解画像: `docs/images/topics/fukushuto/fukushuto-infographic-*.webp`
+- 投票ボタン画像: `docs/images/topics/fukushuto/fukushuto-vote-*.webp`
 
 ## 1. 共通コンセプト
 
@@ -263,8 +263,8 @@ Do not include long sentences. Do not add random labels.
 生成PNGをページ用に変換する場合の目安。
 
 ```bash
-cwebp -q 82 -resize 900 900 input.png -o docs/images/<topic>-infographic-<issue>.webp
-cwebp -q 82 -resize 768 768 input.png -o docs/images/<topic>-vote-<issue>.webp
+cwebp -q 82 -resize 900 900 input.png -o docs/images/topics/<topic>/<topic>-infographic-<issue>.webp
+cwebp -q 82 -resize 768 768 input.png -o docs/images/topics/<topic>/<topic>-vote-<issue>.webp
 ```
 
 目標:
@@ -276,18 +276,18 @@ cwebp -q 82 -resize 768 768 input.png -o docs/images/<topic>-vote-<issue>.webp
 ## 10. 命名ルール
 
 ```text
-docs/images/<topic>-infographic-<issue>.webp
-docs/images/<topic>-vote-<issue>.webp
-docs/images/<topic>-hero.webp
-docs/images/<topic>-ogp.webp
+docs/images/topics/<topic>/<topic>-infographic-<issue>.webp
+docs/images/topics/<topic>/<topic>-vote-<issue>.webp
+docs/images/topics/<topic>/<topic>-hero.webp
+docs/images/topics/<topic>/<topic>-ogp.webp
 ```
 
 例:
 
 ```text
-docs/images/fukushuto-infographic-teigi.webp
-docs/images/fukushuto-vote-kouhochi.webp
-docs/images/koshitsu-infographic-kouseki.webp
+docs/images/topics/fukushuto/fukushuto-infographic-teigi.webp
+docs/images/topics/fukushuto/fukushuto-vote-kouhochi.webp
+docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-kouseki.webp
 ```
 
 ## 11. テーマ別差し替え項目
