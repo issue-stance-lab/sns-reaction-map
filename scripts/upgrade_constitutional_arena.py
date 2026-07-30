@@ -215,7 +215,7 @@ def build_explainer() -> str:
     ]
     rendered = []
     for idx, (slug, title, desc, pro, con) in enumerate(cards, 1):
-        image = f"images/constitutional-infographic-wide-{slug}.webp"
+        image = f"images/topics/constitutional-amendment/constitutional-infographic-wide-{slug}.webp"
         rendered.append(
             f'<article class="explainer-card" data-img="{image}" data-alt="{esc(title)}">'
             '<div class="explainer-card-label">'
@@ -320,7 +320,7 @@ def build_arena(rows: list[dict]) -> str:
 <div id="sm-tooltip"></div>
 </div>
 </section>
-<div class="arena-divider"><img src="images/arena-divider.webp" alt="" loading="lazy"></div>
+<div class="arena-divider"><img src="images/shared/arena-divider.webp" alt="" loading="lazy"></div>
 <script>
 (function(){{
   'use strict';
@@ -574,7 +574,7 @@ def main() -> None:
     #vote-issue-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.vote-issue-btn{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff;text-align:left;cursor:pointer;font-family:inherit}.vote-issue-btn>span:first-child{font-size:22px}.vote-issue-btn strong,.vote-issue-btn small{display:block}.vote-issue-btn small{color:var(--muted);margin-top:4px}
     #vote-stance-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vote-stance-btn{border:1px solid var(--line);border-top:5px solid var(--stance-color);border-radius:10px;padding:14px;background:#fff;text-align:left;cursor:pointer;font-family:inherit}.vote-stance-btn b,.vote-stance-btn strong,.vote-stance-btn small{display:block}.vote-stance-btn b{color:var(--stance-color);font-size:22px}.vote-stance-btn small{color:var(--muted);margin-top:5px}
     #vote-result{border-left:5px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:8px}#vote-result p{margin:5px 0}#vote-redo{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 10px;cursor:pointer}
-    .stance-map-section{background:#0f0e2e url('images/arena-bg.webp') center/cover no-repeat!important}.stance-map-section .panel-title h2{color:#fff}.stance-map-section .panel-title span,.map-caption{color:rgba(255,255,255,.72)}
+    .stance-map-section{background:#0f0e2e url('images/shared/arena-bg.webp') center/cover no-repeat!important}.stance-map-section .panel-title h2{color:#fff}.stance-map-section .panel-title span,.map-caption{color:rgba(255,255,255,.72)}
     #stance-map-inner{max-width:800px;margin:auto}#sm-wrap{position:relative;max-width:660px;margin:16px auto;background:#fff;border-radius:14px;padding:6px;box-shadow:0 18px 50px rgba(0,0,0,.35)}#sm-wrap #smCanvasHeat{top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px)}#smCanvasMain{display:block;width:100%;border-radius:10px}#sm-tooltip{position:absolute;display:none;z-index:5;max-width:260px;background:#172554;color:#fff;padding:10px 12px;border-radius:8px;font-size:12px;pointer-events:none}
     .sm-controls{max-width:760px;margin:auto}.sm-legend,.sm-filters{display:flex;gap:8px;flex-wrap:wrap;color:#fff;font-size:12px}.sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}.sm-filters{margin-top:10px}.sm-fbtn{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer}.sm-fbtn.active{background:var(--accent)}
     .arena-divider{line-height:0}.arena-divider img{display:block;width:100%}.issue-block{border:1px solid var(--line);border-radius:12px;background:#fff;padding:22px;margin-bottom:22px;box-shadow:var(--shadow)}.issue-head h3{font-size:24px;margin:5px 0}.issue-count{font-size:13px;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px;margin-left:8px}.issue-balance{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:14px}.temp-bar-wrap{margin:0 0 18px}.temp-bar-label{display:flex;justify-content:space-between;gap:12px;margin-bottom:7px;color:var(--muted);font-size:12px;font-weight:800}.temp-bar{display:flex;height:28px;overflow:hidden;border-radius:7px;background:#e7e7f7}.temp-seg{display:flex;align-items:center;justify-content:center;min-width:2px;color:#fff;font-size:11px;font-weight:900}.temp-seg.con{background:#dc2626}.temp-seg.neutral{background:#94a3b8}.temp-seg.process{background:#059669}.temp-seg.pro{background:#2563eb}.temp-bar-legend{display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:7px;color:var(--muted);font-size:11px;font-weight:800}.temp-bar-legend i{display:inline-block;width:10px;height:10px;margin-right:4px;border-radius:2px;vertical-align:middle}.temp-bar-legend i.con{background:#dc2626}.temp-bar-legend i.neutral{background:#94a3b8}.temp-bar-legend i.process{background:#059669}.temp-bar-legend i.pro{background:#2563eb}.sample-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sample-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff}.sample-card .meta{font-size:12px;color:var(--accent);font-weight:900}

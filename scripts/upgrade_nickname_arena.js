@@ -18,7 +18,7 @@ const issueDefs = [
     title: 'いじめ・心理的安全',
     short: '心理的安全',
     icon: '🛡️',
-    image: 'images/school-nickname-ban-infographic-wide-safety.webp',
+    image: 'images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-safety.webp',
     imageAlt: 'あだ名禁止の論点1、いじめ・心理的安全を解説するインフォグラフィック',
     explainerTitle: '呼び方のルールで、傷つく子を守れるか',
     explainerDesc: '最多17件。禁止支持6件、中立・体験10件、反対1件。被害予防と、対話・教育をどう組み合わせるかが焦点です。',
@@ -44,7 +44,7 @@ const issueDefs = [
     title: '一律禁止の実効性',
     short: '実効性',
     icon: '🎯',
-    image: 'images/school-nickname-ban-infographic-wide-effectiveness.webp',
+    image: 'images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-effectiveness.webp',
     imageAlt: 'あだ名禁止の論点2、一律禁止の実効性を解説するインフォグラフィック',
     explainerTitle: '禁止すれば、いじめは減るのか',
     explainerDesc: '16件のうち一律禁止への反対が13件。入口を減らす予防効果と、問題が別の形で残る懸念を比べます。',
@@ -70,7 +70,7 @@ const issueDefs = [
     title: '親しさ・呼称文化',
     short: '呼称文化',
     icon: '🤝',
-    image: 'images/school-nickname-ban-infographic-wide-culture.webp',
+    image: 'images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-culture.webp',
     imageAlt: 'あだ名禁止の論点3、親しさと呼称文化を解説するインフォグラフィック',
     explainerTitle: 'あだ名は親しさか、それとも負担か',
     explainerDesc: '13件のうち一律禁止への反対が10件。愛称が生む親しさと、受け手が感じる痛みの両方を扱います。',
@@ -96,7 +96,7 @@ const issueDefs = [
     title: '学校運用・現場体験',
     short: '現場体験',
     icon: '🏫',
-    image: 'images/school-nickname-ban-infographic-wide-field.webp',
+    image: 'images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-field.webp',
     imageAlt: 'あだ名禁止の論点4、学校運用と現場体験を解説するインフォグラフィック',
     explainerTitle: '現場では、ルールがどう受け止められるか',
     explainerDesc: '8件のうち6件が中立的な体験共有。学校・世代による差と、運用目的を説明できるかを見ます。',
@@ -122,7 +122,7 @@ const issueDefs = [
     title: 'さん付け・ジェンダー配慮',
     short: 'さん付け',
     icon: '⚖️',
-    image: 'images/school-nickname-ban-infographic-wide-gender.webp',
+    image: 'images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-gender.webp',
     imageAlt: 'あだ名禁止の論点5、さん付けとジェンダー配慮を解説するインフォグラフィック',
     explainerTitle: '「名字＋さん」統一は、対等さにつながるか',
     explainerDesc: '5件のうち一律禁止への反対が4件。性別で呼称を分けない配慮と、形式だけの統一への疑問を整理します。',
@@ -148,7 +148,7 @@ const issueDefs = [
     title: '本人意思と柔軟運用',
     short: '本人意思',
     icon: '🗣️',
-    image: 'images/school-nickname-ban-infographic-wide-choice.webp',
+    image: 'images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-choice.webp',
     imageAlt: 'あだ名禁止の論点6、本人意思と柔軟運用を解説するインフォグラフィック',
     explainerTitle: '呼ばれる本人の意思を、中心に置けるか',
     explainerDesc: '4件すべてが条件付き・個別対応。望む愛称は認めつつ、嫌と言いにくい子をどう守るかが焦点です。',
@@ -351,7 +351,7 @@ const replacementCss = `
     .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:15px;margin:0 0 12px}.vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px}
     #vote-issue-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vote-issue-btn{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(15,118,110,.18);border-radius:10px;padding:12px;background:#fff;cursor:pointer;text-align:left;font-family:inherit;box-shadow:0 4px 14px rgba(16,24,40,.06)}.vote-issue-btn:hover{border-color:var(--accent);transform:translateY(-2px)}.vote-issue-icon{font-size:20px}.vote-issue-title{font-size:13px;font-weight:900}
     #vote-stance-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.vote-stance-btn{border:1px solid var(--line);border-top:5px solid var(--stance-color);border-radius:12px;padding:16px 14px;background:#fff;cursor:pointer;text-align:left;font-family:inherit;box-shadow:0 6px 18px rgba(16,24,40,.09)}.vote-stance-btn:hover{transform:translateY(-3px)}.vote-stance-btn strong{display:block;color:var(--stance-color);font-size:15px}.vote-stance-btn span{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.6}
-    .polar-arena-section{position:relative;background:#0f172a url('images/arena-bg.webp') center/cover no-repeat;padding:42px min(6vw,72px);color:#fff}.polar-arena-section .panel-title h2{color:#fff}.polar-arena-section .panel-title span{color:rgba(255,255,255,.78)!important;background:rgba(15,23,42,.56)!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:999px;padding:6px 10px}.arena-caption{max-width:820px;margin:0 auto 16px;color:rgba(255,255,255,.78);font-size:13px;line-height:1.8}.arena-wrap{position:relative;max-width:760px;margin:0 auto}.arena-wrap canvas{display:block;width:100%;height:auto}.arena-legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.78);margin-top:12px}.arena-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}.arena-tooltip{position:fixed;z-index:10000;max-width:280px;padding:10px 12px;border-radius:8px;background:#fff;color:#182230;font-size:12px;line-height:1.55;box-shadow:0 16px 40px rgba(0,0,0,.3);pointer-events:none;opacity:0}.arena-tooltip strong{display:block;margin-bottom:3px}
+    .polar-arena-section{position:relative;background:#0f172a url('images/shared/arena-bg.webp') center/cover no-repeat;padding:42px min(6vw,72px);color:#fff}.polar-arena-section .panel-title h2{color:#fff}.polar-arena-section .panel-title span{color:rgba(255,255,255,.78)!important;background:rgba(15,23,42,.56)!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:999px;padding:6px 10px}.arena-caption{max-width:820px;margin:0 auto 16px;color:rgba(255,255,255,.78);font-size:13px;line-height:1.8}.arena-wrap{position:relative;max-width:760px;margin:0 auto}.arena-wrap canvas{display:block;width:100%;height:auto}.arena-legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.78);margin-top:12px}.arena-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}.arena-tooltip{position:fixed;z-index:10000;max-width:280px;padding:10px 12px;border-radius:8px;background:#fff;color:#182230;font-size:12px;line-height:1.55;box-shadow:0 16px 40px rgba(0,0,0,.3);pointer-events:none;opacity:0}.arena-tooltip strong{display:block;margin-bottom:3px}
     .issue-block{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow);padding:22px;margin:0 0 22px}.issue-head h3{margin:4px 0 8px;font-size:clamp(19px,2.4vw,26px)}.issue-count{display:inline-block;margin-left:8px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 12px;font-size:14px;vertical-align:middle}.issue-desc{font-size:14px;line-height:1.8}.issue-sides{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.side{border-radius:10px;padding:13px;font-size:13px;line-height:1.7}.side strong{display:block;margin-bottom:4px}.side.support{background:#ecfdf5;border-left:4px solid #059669}.side.oppose{background:#fef2f2;border-left:4px solid #dc2626}.issue-x-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.issue-x-sample{min-width:0;border-top:1px solid var(--line);padding-top:12px}.issue-x-sample>p{font-size:13px;color:var(--muted)}
     .temp-bar-wrap{margin:14px 0 16px}.temp-bar-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px;display:flex;justify-content:space-between;gap:12px}.temp-bar-label span:last-child{text-align:right}.temp-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;background:#e7e7f7;position:relative}.temp-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;min-width:2px}.temp-seg.oppose{background:#dc2626}.temp-seg.conditional{background:#d97706}.temp-seg.neutral{background:#94a3b8}.temp-seg.support{background:#059669}.temp-bar-legend{display:flex;gap:8px 14px;margin-top:7px;font-size:11px;color:var(--muted);font-weight:800;flex-wrap:wrap}.temp-bar-legend span{line-height:1.55}.temp-bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
     @media(max-width:760px){#explainer-section .explainer-card-label{padding:12px;gap:8px}#explainer-section .explainer-card-title{font-size:14px}#explainer-section .explainer-num{white-space:nowrap}#vote-issue-btns,#vote-stance-btns,.issue-sides,.issue-x-grid{grid-template-columns:1fr}.temp-bar-label{display:block}.temp-bar-label span{display:block;text-align:left!important}.temp-bar-label span+span{margin-top:3px}.polar-arena-section{padding-left:12px;padding-right:12px}.arena-caption{padding:0 8px}}
@@ -468,7 +468,7 @@ if (html.includes('/* ===== 2026-07-24 論点アリーナ版 ===== */')) {
 }
 html = html.replace(
   /<section class="hero">[\s\S]*?<\/section><svg class="wave-divider"/,
-  `<section class="hero"><img class="hero-photo" src="images/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・日常論争</span><h1>学校でのあだ名禁止 SNS反応まっぷ</h1><p class="question-line">傷つく呼び方を防ぐルールか、関係性を縛る一律規制か。</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見63件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと"><header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul><li>最多論点は「いじめ・心理的安全」17件。被害予防を重く見る声と、禁止だけでは足りないという声があります。</li><li>「一律禁止の実効性」16件と「親しさ・呼称文化」13件では、一律禁止への反対が中心です。</li><li>全63件では一律禁止に反対29件、禁止支持8件、条件付き7件、中立・体験19件でした。</li></ul></div></div></section><svg class="wave-divider"`,
+  `<section class="hero"><img class="hero-photo" src="images/topics/school-nickname-ban/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・日常論争</span><h1>学校でのあだ名禁止 SNS反応まっぷ</h1><p class="question-line">傷つく呼び方を防ぐルールか、関係性を縛る一律規制か。</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見63件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと"><header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul><li>最多論点は「いじめ・心理的安全」17件。被害予防を重く見る声と、禁止だけでは足りないという声があります。</li><li>「一律禁止の実効性」16件と「親しさ・呼称文化」13件では、一律禁止への反対が中心です。</li><li>全63件では一律禁止に反対29件、禁止支持8件、条件付き7件、中立・体験19件でした。</li></ul></div></div></section><svg class="wave-divider"`,
 );
 html = html.replace(
   /<section class="stats">[\s\S]*?<\/section>/,

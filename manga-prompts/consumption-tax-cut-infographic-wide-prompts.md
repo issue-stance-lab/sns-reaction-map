@@ -2,7 +2,7 @@
 
 共通スタイル: `manga-prompts/infographic-style-guide.md` を参照。
 
-基準テイスト: 副首都ページの `docs/images/fukushuto-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
+基準テイスト: 副首都ページの `docs/images/topics/fukushuto/fukushuto-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
 
 **このテーマ固有の注意:** 最大論点が「公約と政治不信」で政党の動きが話題の中心だが、**画像内に実在の政党名・政治家名・省庁名は入れない**。「公約を掲げた各党」「与党」「野党」のような一般名詞に置き換える。特定政党の支持・批判に読める配色（政党カラー）も避ける。
 
@@ -14,7 +14,7 @@
 ## 保存先・変換コマンド
 
 ```
-docs/images/
+docs/images/topics/consumption-tax-cut/
 ├── consumption-tax-cut-infographic-wide-kouyaku.webp    （論点1: 公約と政治不信 267件）
 ├── consumption-tax-cut-infographic-wide-kouka.webp      （論点2: 減税の効果 114件）
 ├── consumption-tax-cut-infographic-wide-taishou.webp    （論点3: 減税の対象範囲 96件）
@@ -24,7 +24,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/consumption-tax-cut-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-XXX.webp
 ```
 
 分類の母数: Yahooリアルタイム検索667件 → 関連666件 → 意見612件（Hermes / kimi-k2.6、2026-07-28）。
@@ -271,10 +271,10 @@ No politicians, no party names, no party logos, no government emblems, no real S
 
 **2026-07-29 実施済み**（6枚とも生成・WebP変換・HTML反映・ローカル検証まで完了）。
 
-1. 各PNGをWebP変換して `docs/images/` に保存する
+1. 各PNGをWebP変換して `docs/images/topics/consumption-tax-cut/` に保存する
 
    ```bash
-   cwebp -q 82 input.png -o docs/images/consumption-tax-cut-infographic-wide-XXX.webp
+   cwebp -q 82 input.png -o docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-XXX.webp
    ```
 
 2. `scripts/build_consumption_tax_page.py` の explainer セクション生成部を、画像つきカード＋拡大モーダル版に切り替える

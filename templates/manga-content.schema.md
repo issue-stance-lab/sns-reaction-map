@@ -96,5 +96,5 @@ Step 1 → Step 2 の順に、コピペしやすい形式で記載。
 
 - 形式: WebP
 - サイズ: 1枚100KB以下
-- 保存先: `docs/images/<topic>-manga-page-{1,2,3}.webp`
+- 保存先: `docs/images/topics/<topic>/<topic>-manga-page-{1,2,3}.webp`
 - 遅延読み込み: `loading="lazy"` 必須

@@ -10,7 +10,7 @@
 生成後 WebP に変換、漫画≤100KB（リサイズ900px、q45目安）で以下に配置:
 
 ```
-docs/images/
+docs/images/topics/takaichi/
 ├── takaichi-manga-charsheet-reiko.webp
 ├── takaichi-manga-charsheet-shota.webp
 ├── takaichi-manga-page-1.webp

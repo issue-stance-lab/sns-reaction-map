@@ -2,14 +2,14 @@
 
 共通スタイル: `manga-prompts/infographic-style-guide.md` の **7. 個別論点画像テンプレ** を使用する。
 
-基準テイスト: 副首都ページの `docs/images/fukushuto-infographic-*.webp` と同じ、明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影、ドット・スパークル・グラフ風アクセントを使う。実在の皇族・政治家・政党ロゴ・政府エンブレムは描かない。
+基準テイスト: 副首都ページの `docs/images/topics/fukushuto/fukushuto-infographic-*.webp` と同じ、明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影、ドット・スパークル・グラフ風アクセントを使う。実在の皇族・政治家・政党ロゴ・政府エンブレムは描かない。
 
 ## 保存先
 
 生成後 WebP に変換、各ファイルは `900x900` 目安、100KB以下を目標にする。
 
 ```
-docs/images/
+docs/images/topics/koshitsu-tenpakai/
 ├── koshitsu-infographic-kouseki.webp
 ├── koshitsu-infographic-yoshi.webp
 └── koshitsu-infographic-keisho.webp

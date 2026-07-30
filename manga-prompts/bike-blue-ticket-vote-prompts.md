@@ -66,7 +66,7 @@ Square illustration, 512x512px, white/light gradient background. A single Japane
 生成後 WebP に変換、240x240px、20KB以下に圧縮して以下に配置:
 
 ```
-docs/images/
+docs/images/topics/bike-blue-ticket/
 ├── bike-blue-ticket-vote-1-enforce.webp
 ├── bike-blue-ticket-vote-2-lane-first.webp
 ├── bike-blue-ticket-vote-3-license.webp

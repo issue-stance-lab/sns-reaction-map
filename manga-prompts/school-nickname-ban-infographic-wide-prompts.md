@@ -3,7 +3,7 @@
 共通スタイル: `manga-prompts/infographic-style-guide.md` を参照。
 
 基準テイスト: 「生成AIと著作権」ページの
-`docs/images/ai-copyright-infographic-wide-*.webp` と同じ、明るい
+`docs/images/topics/ai-copyright/ai-copyright-infographic-wide-*.webp` と同じ、明るい
 civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の
 見出し、角丸カード、柔らかい影、ドット・スパークル・小さなグラフ風
 アクセントを使う。
@@ -37,7 +37,7 @@ Yahooリアルタイム検索で取得した374件をHermesで再分類。
 ## 保存先・変換コマンド
 
 ```text
-docs/images/
+docs/images/topics/school-nickname-ban/
 ├── school-nickname-ban-infographic-wide-safety.webp
 ├── school-nickname-ban-infographic-wide-effectiveness.webp
 ├── school-nickname-ban-infographic-wide-culture.webp
@@ -47,7 +47,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/school-nickname-ban-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-XXX.webp
 ```
 
 ---

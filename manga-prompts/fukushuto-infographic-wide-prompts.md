@@ -2,7 +2,7 @@
 
 共通スタイル: `manga-prompts/infographic-style-guide.md` を参照。
 
-基準テイスト: 皇室典範ページの `docs/images/koshitsu-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
+基準テイスト: 皇室典範ページの `docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-*.webp` と同じ明るい civic-tech インフォグラフィック。白〜淡い水色背景、濃紺・鮮やかな青の見出し、角丸カード、柔らかい影。実在の政治家・政党ロゴ・政府エンブレムは描かない。
 
 ## 生成サイズ
 
@@ -12,7 +12,7 @@
 ## 保存先・変換コマンド
 
 ```
-docs/images/
+docs/images/topics/fukushuto/
 ├── fukushuto-infographic-wide-teigi.webp
 ├── fukushuto-infographic-wide-kouhochi.webp
 ├── fukushuto-infographic-wide-tokoso.webp
@@ -22,7 +22,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/fukushuto-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/fukushuto/fukushuto-infographic-wide-XXX.webp
 ```
 
 ---

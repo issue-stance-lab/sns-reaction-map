@@ -24,7 +24,7 @@ PAGE_URL = "https://issue-stance-lab.github.io/sns-reaction-map/consumption-tax-
 
 # ヒーロー画像。topic-modern.css の .hero::before は --topic-hero-image 未指定だと
 # ai-copyright-hero.webp にフォールバックするため、必ず値を入れる。
-HERO_IMAGE = "url('images/consumption-tax-cut-hero.webp')"
+HERO_IMAGE = "url('images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp')"
 
 # SEO_META / ARTICLE_JSON_LD の中身。テーマを configs/theme-seo.json に登録したあとは
 # scripts/seo/apply_theme_trust.py が同じブロックを上書き管理するので、値を揃えておく。
@@ -33,7 +33,7 @@ DESCRIPTION = (
     "消費税減税について、対象範囲、財源と社会保障、価格への効果、給付付き税額控除との比較、"
     "事業者の実務負担、公約と政治不信の6論点とSNS上の賛否を整理します。"
 )
-OGP_IMAGE = "https://issue-stance-lab.github.io/sns-reaction-map/images/consumption-tax-cut-hero.webp"
+OGP_IMAGE = "https://issue-stance-lab.github.io/sns-reaction-map/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp"
 PUBLISHED_AT = "2026-07-28"
 ORGANIZATION = {
     "@type": "Organization",
@@ -258,12 +258,12 @@ RELATED_TOPIC_BY_PATH = {
 }
 RELATED_THEMES = {
     "consumption-tax-cut": [
-        ["fukushuto", "fukushuto-reaction-map.html", "images/fukushuto-hero.webp",
+        ["fukushuto", "fukushuto-reaction-map.html", "images/topics/fukushuto/fukushuto-hero.webp",
          "副首都法案", "「物価対策より優先か」の声も出た争点。"],
-        ["takaichi", "takaichi-reaction-map-standard.html", "images/takaichi-hero.webp",
+        ["takaichi", "takaichi-reaction-map-standard.html", "images/topics/takaichi/takaichi-hero.webp",
          "高市文春問題", "政権への評価と説明責任を見比べる。"],
         ["constitutional-amendment", "constitutional-amendment-reaction-map.html",
-         "images/constitutional-hero.webp", "憲法改正論議", "制度変更への賛否と慎重論を整理する。"],
+         "images/topics/constitutional-amendment/constitutional-hero.webp", "憲法改正論議", "制度変更への賛否と慎重論を整理する。"],
     ],
 }
 RELATED_FUNCS = """  function currentTopic(){return topicByPath[(location.pathname.split("/").pop()||"")]||"unknown";}
@@ -424,11 +424,11 @@ def build() -> None:
 
     # --- 2. hero 画像（未生成のためグラデーションのみ） -----------------
     html = html.replace(
-        "background:url('images/fukushuto-hero.webp') center/cover no-repeat;opacity:.18}",
-        "background:url('images/consumption-tax-cut-hero.webp') center/cover no-repeat;opacity:.18}",
+        "background:url('images/topics/fukushuto/fukushuto-hero.webp') center/cover no-repeat;opacity:.18}",
+        "background:url('images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp') center/cover no-repeat;opacity:.18}",
     )
     html = html.replace(
-        "<body class=\"summary-on-light\" style=\"--topic-hero-image:url('images/fukushuto-hero.webp')\">",
+        "<body class=\"summary-on-light\" style=\"--topic-hero-image:url('images/topics/fukushuto/fukushuto-hero.webp')\">",
         f'<body class="summary-on-light" style="--topic-hero-image:{HERO_IMAGE}">',
     )
 
@@ -503,7 +503,7 @@ def build() -> None:
     cards = []
     for n, name in enumerate(named, 1):
         meta = ISSUE_META[name]
-        img = f"images/consumption-tax-cut-infographic-wide-{meta['slug']}.webp"
+        img = f"images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-{meta['slug']}.webp"
         cards.append(
             f'  <article class="explainer-card" data-img="{img}" data-alt="{meta["short"]}">\n'
             f'    <div class="explainer-card-label">\n'
@@ -776,9 +776,9 @@ def build() -> None:
     related = (
         '<section class="panel" id="related-topics"><div class="panel-title"><h2>次に読むテーマ</h2>'
         '<span>他のテーマ</span></div><div class="related-grid">\n'
-        '<a class="related-card" href="fukushuto-reaction-map.html"><img src="images/fukushuto-hero.webp" alt="副首都法案" loading="lazy"><div><strong>副首都法案</strong><p>「物価対策どこ行った」の声も。</p></div></a>\n'
-        '<a class="related-card" href="takaichi-reaction-map-standard.html"><img src="images/takaichi-hero.webp" alt="高市文春問題" loading="lazy"><div><strong>高市文春問題</strong><p>中傷動画疑惑、説明責任はあるのか。</p></div></a>\n'
-        '<a class="related-card" href="constitutional-amendment-reaction-map.html"><img src="images/constitutional-hero.webp" alt="憲法改正論議" loading="lazy"><div><strong>憲法改正論議</strong><p>統治の仕組みを変えるか、守るか。</p></div></a>\n'
+        '<a class="related-card" href="fukushuto-reaction-map.html"><img src="images/topics/fukushuto/fukushuto-hero.webp" alt="副首都法案" loading="lazy"><div><strong>副首都法案</strong><p>「物価対策どこ行った」の声も。</p></div></a>\n'
+        '<a class="related-card" href="takaichi-reaction-map-standard.html"><img src="images/topics/takaichi/takaichi-hero.webp" alt="高市文春問題" loading="lazy"><div><strong>高市文春問題</strong><p>中傷動画疑惑、説明責任はあるのか。</p></div></a>\n'
+        '<a class="related-card" href="constitutional-amendment-reaction-map.html"><img src="images/topics/constitutional-amendment/constitutional-hero.webp" alt="憲法改正論議" loading="lazy"><div><strong>憲法改正論議</strong><p>統治の仕組みを変えるか、守るか。</p></div></a>\n'
         "</div></section>"
     )
     start = html.index('<section class="panel" id="related-topics">')

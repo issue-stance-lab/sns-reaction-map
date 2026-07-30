@@ -12,7 +12,7 @@
 ## 保存先・変換コマンド
 
 ```
-docs/images/
+docs/images/topics/bukatsu-chiiki/
 ├── bukatsu-chiiki-infographic-wide-hiyou.png/webp      （費用・家庭負担）
 ├── bukatsu-chiiki-infographic-wide-ukesara.png/webp    （受け皿・指導者）
 ├── bukatsu-chiiki-infographic-wide-kyoin.png/webp      （教員の働き方）
@@ -22,7 +22,7 @@ docs/images/
 ```
 
 ```bash
-cwebp -q 82 input.png -o docs/images/bukatsu-chiiki-infographic-wide-XXX.webp
+cwebp -q 82 input.png -o docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-XXX.webp
 ```
 
 ---

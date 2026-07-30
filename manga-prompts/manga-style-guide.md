@@ -198,18 +198,18 @@ Anime-inspired semi-realistic manga style, clean line art, realistic Japanese <s
 保存:
 
 ```text
-docs/images/<topic>-manga-charsheet-<name>.webp
-docs/images/<topic>-manga-page-1.webp
-docs/images/<topic>-manga-page-2.webp
-docs/images/<topic>-manga-page-3.webp
-docs/images/<topic>-manga-<issue>.webp
+docs/images/topics/<topic>/<topic>-manga-charsheet-<name>.webp
+docs/images/topics/<topic>/<topic>-manga-page-1.webp
+docs/images/topics/<topic>/<topic>-manga-page-2.webp
+docs/images/topics/<topic>/<topic>-manga-page-3.webp
+docs/images/topics/<topic>/<topic>-manga-<issue>.webp
 ```
 
 WebP変換:
 
 ```bash
-cwebp -q 45 -resize 900 0 input.png -o docs/images/<topic>-manga-page-1.webp
-cwebp -q 55 -resize 900 0 input.png -o docs/images/<topic>-manga-charsheet-<name>.webp
+cwebp -q 45 -resize 900 0 input.png -o docs/images/topics/<topic>/<topic>-manga-page-1.webp
+cwebp -q 55 -resize 900 0 input.png -o docs/images/topics/<topic>/<topic>-manga-charsheet-<name>.webp
 ```
 
 目標:

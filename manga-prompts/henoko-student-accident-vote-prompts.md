@@ -66,7 +66,7 @@ Square illustration, 512x512px, white/light gradient background. A generic Japan
 生成後 WebP に変換、240x240px、20KB以下に圧縮して以下に配置:
 
 ```
-docs/images/
+docs/images/topics/henoko-student-accident/
 ├── henoko-student-accident-vote-1-safety.webp
 ├── henoko-student-accident-vote-2-mext.webp
 ├── henoko-student-accident-vote-3-concern.webp
