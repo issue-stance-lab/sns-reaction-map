@@ -10,7 +10,7 @@
     "候補地・内容を見直してほしい",
     "まだ判断できない"
   ],
-  "vote_storage_note": "Supabaseのvotesテーブルに、topic_id = fukushuto-issue-stance-v1、choice_idx = issue_idx * 3 + stance_idxで保存する。",
+  "vote_storage_note": "共通VoteStoreからcast-vote Edge Functionへ送信し、topic_id = fukushuto-issue-stance-v1、choice_idx = issue_idx * 3 + stance_idxとして集計する。",
   "nav_links": [
     {
       "label": "トップ",

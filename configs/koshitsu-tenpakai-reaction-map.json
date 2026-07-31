@@ -20,7 +20,7 @@
     "改正に反対",
     "まだ判断できない"
   ],
-  "vote_storage_note": "Supabaseの既存votesテーブルを使う場合は、choice_idx = issue_idx * 4 + stance_idx の合成IDで保存する。",
+  "vote_storage_note": "共通VoteStoreからcast-vote Edge Functionへ送信し、choice_idx = issue_idx * 4 + stance_idx の合成IDとして集計する。",
   "vote_labels": [
     "改正は妥当（皇族数の確保に必要）",
     "改正に反対（拙速・女系排除は問題）",
