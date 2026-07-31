@@ -739,6 +739,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -1050,7 +1052,7 @@
   <p class="vote-step-label"><span class="step-num">2</span>青切符導入への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p>
   <div id="vote-stance-btns"></div>
 </div>
-<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。現在、回答はこのブラウザにのみ保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
     <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
@@ -1065,6 +1067,7 @@
 <script>
 (function(){
   'use strict';
+  var TOPIC='bike-blue-ticket-issue-stance-v1';
   var STORAGE_KEY='sns_vote_bike_blue_ticket_2step';
   var VOTE_ISSUES=[
     {k:'取締り強化',     icon:'🚔',desc:'危険運転・マナー違反を取り締まるべき（27件）'},
@@ -1119,15 +1122,20 @@
     btn.style.setProperty('--stance-bg',st.bg);
     btn.style.setProperty('--stance-shadow',st.shadow);
     btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
-    btn.onclick=function(){
-      showVote(selIssue,stanceIdx);
-      localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:selIssue,stanceIdx:stanceIdx}));
+    btn.onclick=async function(){
+      VoteStore.setBusy(stanceBtns,true);
+      try{
+        var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:selIssue*STANCES.length+stanceIdx,storageKey:STORAGE_KEY,localValue:{issueIdx:selIssue,stanceIdx:stanceIdx}});
+        if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');
+        showVote(selIssue,stanceIdx);
+      }catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error));}
+      finally{VoteStore.setBusy(stanceBtns,false);}
     };
     stanceBtns.appendChild(btn);
   });
 
   document.getElementById('vote-redo-btn').onclick=function(){
-    localStorage.removeItem(STORAGE_KEY);
+    VoteStore.clear(STORAGE_KEY);
     selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
     if(window.clearArenaVoteMarker)window.clearArenaVoteMarker();
   };
@@ -1138,6 +1146,7 @@
       showVote(prev.issueIdx,prev.stanceIdx,false);
     }
   }catch(e){localStorage.removeItem(STORAGE_KEY);}
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
 })();
 </script>
     

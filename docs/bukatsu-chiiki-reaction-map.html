@@ -768,6 +768,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -1098,7 +1100,7 @@
 <!-- ARTICLE_TRUST_END -->
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
-<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。現在、回答はこのブラウザにのみ保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
   <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
     <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
@@ -1531,12 +1533,6 @@ const SM_RAW = [
   'use strict';
   var TOPIC='bukatsu-chiiki-issue-stance-v1';
   var STORAGE_KEY='sns_vote_'+TOPIC+'_my';
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  var supabaseClient=null;
-  if(supabaseUrl&&supabaseAnonKey&&typeof supabase!=='undefined'){
-    supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
-  }
   var VOTE_ISSUES=[
     {k:'費用・家庭負担',    icon:'💴', desc:'月会費・家計への経済的負担・格差'},
     {k:'受け皿・指導者',    icon:'👤', desc:'指導者不足・報酬・人材確保'},
@@ -1587,20 +1583,11 @@ const SM_RAW = [
   }
 
   async function saveVote(issueIdx,stanceIdx){
-    if(supabaseClient){
-      var response;
-      try{
-        response=await supabaseClient.from('votes').insert([{topic_id:TOPIC,choice_idx:issueIdx*STANCES.length+stanceIdx}]);
-      }catch(error){console.error('Supabase vote request failed:',error);alert('投票を保存できませんでした。');return false;}
-      if(response.error){
-        var message=(response.error.message||'')+(response.error.details||'');
-        if(message.indexOf('already voted')!==-1||response.error.code==='23505'){alert('24時間以内にすでに投票されています。');}
-        else{console.error('Supabase vote insert failed:',response.error);alert('投票を保存できませんでした。');}
-        return false;
-      }
-    }
-    localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:issueIdx,stanceIdx:stanceIdx}));
-    return true;
+    try{
+      var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIdx*STANCES.length+stanceIdx,storageKey:STORAGE_KEY,localValue:{issueIdx:issueIdx,stanceIdx:stanceIdx}});
+      if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');
+      return true;
+    }catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error));return false;}
   }
 
   STANCES.forEach(function(st,stanceIdx){
@@ -1621,11 +1608,11 @@ const SM_RAW = [
   });
 
   document.getElementById('vote-redo-btn').onclick=function(){
-    localStorage.removeItem(STORAGE_KEY);
+    VoteStore.clear(STORAGE_KEY);
     selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
     if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
   };
-  if(supabaseClient)document.getElementById('vote-redo-btn').style.display='none';
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
   try{
     var previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
     if(previous&&Number.isInteger(previous.issueIdx)&&previous.issueIdx>=0&&previous.issueIdx<VOTE_ISSUES.length&&

@@ -91,6 +91,32 @@
     #sm-wrap #smCanvasMain{cursor:crosshair;position:relative;z-index:2;background:transparent}
     #sm-wrap #smCanvasHeat{position:absolute;top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:8px;pointer-events:none;z-index:1;background:#fdfdff}
     .map-caption{max-width:760px;margin:12px auto 0;color:rgba(255,255,255,.72);font-size:13px}
+    .map-participation{max-width:660px;margin:0 auto 18px;border:1px solid rgba(255,255,255,.24);border-radius:14px;background:rgba(255,255,255,.1);padding:18px;color:#fff;box-shadow:0 16px 40px rgba(0,0,0,.18)}
+    .map-participation-kicker{display:block;margin-bottom:7px;color:#a7f3d0;font-size:11px;font-weight:900;letter-spacing:.08em}
+    .map-question-progress{height:5px;margin:0 0 14px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+    .map-question-progress span{display:block;height:100%;width:14.285%;border-radius:inherit;background:#34d399;transition:width .25s ease}
+    .map-participation h3{margin:0;font-size:clamp(18px,2.5vw,24px);line-height:1.55;color:#fff}
+    .map-vote-buttons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+    .map-vote-buttons[hidden],.map-response-grid[hidden]{display:none}
+    .map-vote-btn{border:2px solid var(--choice-color);border-radius:10px;padding:12px 10px;background:rgba(255,255,255,.95);color:var(--choice-color);font-family:inherit;font-size:14px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
+    .map-vote-btn:hover,.map-vote-btn:focus-visible{transform:translateY(-2px);background:#fff;box-shadow:0 10px 22px rgba(0,0,0,.22);outline:none}
+    .map-vote-btn[aria-pressed="true"]{background:var(--choice-color);color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.28)}
+    .map-vote-btn:disabled{cursor:wait;opacity:.6;transform:none}
+    .map-vote-btn.skip{--choice-color:#94a3b8;border-style:dashed;background:rgba(255,255,255,.82)}
+    .map-vote-note{margin:9px 0 0;color:rgba(255,255,255,.65);font-size:11px}
+    .map-vote-feedback{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.2)}
+    .map-vote-feedback[hidden]{display:none}
+    .map-vote-answer{display:block;margin-bottom:10px;color:#fff;font-size:14px}
+    .map-response-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .map-response-card{border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.1)}
+    .map-response-card.opposite{background:rgba(255,255,255,.06)}
+    .map-response-label{display:block;margin-bottom:5px;color:rgba(255,255,255,.62);font-size:10px;font-weight:900;letter-spacing:.05em}
+    .map-response-card strong{display:block;color:#fff;font-size:13px;line-height:1.6}
+    .map-vote-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .map-vote-actions a,.map-vote-actions button{border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:7px 11px;background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-size:11px;font-weight:800;text-decoration:none;cursor:pointer}
+    .method-details{padding-top:22px;padding-bottom:22px}
+    .method-details>summary{cursor:pointer;font-size:15px;font-weight:900;color:var(--accent)}
+    .method-details-body{margin-top:18px}
     #your-marker-note{color:rgba(255,255,255,.7)!important}
     .sm-controls{max-width:660px;margin:14px auto 0;display:flex;flex-direction:column;gap:10px}
     .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:rgba(255,255,255,.8);align-items:center}
@@ -165,7 +191,7 @@
     .manga-modal.active{display:flex}
     @media(max-width:860px){#vote-stance-btns{grid-template-columns:1fr}}
     .site-footer{background:#07172f;color:rgba(255,255,255,.72)}.footer-banner{line-height:0}.footer-banner img{width:100%;height:auto;display:block}.footer-inner{max-width:1192px;margin:0 auto;padding:32px 24px 0;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px}.footer-inner h3,.footer-inner h4{color:#fff;margin:0 0 8px}.footer-inner p,.footer-inner a{font-size:11px;color:rgba(255,255,255,.62);text-decoration:none}.footer-links{display:grid;gap:5px}.footer-bottom{max-width:1192px;margin:20px auto 0;padding:16px 24px 24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:9px}
-    @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px}}
+    @media(max-width:720px){.hero-inner,.panel{padding-left:16px;padding-right:16px}.thirty-summary,.stats,.vote-card-grid,.vote-comparison,.sample-grid,.axis-grid,.related-grid,.issue-sides,.map-response-grid{grid-template-columns:1fr}.map-vote-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.15)}.panel-title{display:block}.sample-card{overflow:hidden}.twitter-tweet,.twitter-tweet-rendered{max-width:100%!important}.twitter-tweet iframe{max-width:100%!important}body{overflow-x:hidden}.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px}}
   
 /* TIDE_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
@@ -201,6 +227,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -220,7 +248,6 @@
 <!-- ADSENSE_TAG_START -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/fukushuto/fukushuto-hero.webp')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">統治機構・地方</span><h1>副首都法案とは？候補地・費用・防災をめぐる論点</h1><p class="question-line">副首都、本当に必要？ 場所は大阪でいい？</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見229件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>51</b>件</span><strong>「副首都」とは何かが、まだ見えない</strong><span class="conclusion-detail">「生煮え」「法案に定義がない」という制度設計への疑問が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
@@ -464,7 +491,7 @@
     <img src="images/topics/fukushuto/fukushuto-infographic-wide-yusen.webp" alt="論点⑥ 優先順位" loading="lazy">
   </article>
 </div>
-<p class="explainer-note"><strong>使い方:</strong> 6つの論点を図解で確認してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+<p class="explainer-note"><strong>使い方:</strong> 6つの論点を確認したら、次の1問に答えて自分の位置と異なる見方を比べてください。</p>
 </section>
 
 <div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
@@ -490,7 +517,7 @@
 })();
 </script>
 
-<section class="panel" id="vote-section"><div class="panel-title"><h2>あなたが一番気になる「設計の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><!-- ARTICLE_TRUST_START -->
+<details class="panel method-details"><summary>調査方法・このページの作り方</summary><div class="method-details-body"><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
     <p class="article-trust-kicker">編集・分析情報</p>
@@ -511,27 +538,51 @@
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
 <!-- ARTICLE_TRUST_END -->
-<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;max-width:900px;"></div></div>
-<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>副首都構想への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
-<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
-<p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
-<div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
+</div></details>
 
 <section class="panel stance-map-section" id="stance-map-section">
+<div class="map-participation" id="map-participation">
+  <span class="map-participation-kicker" id="map-question-kicker">質問 1 / 7　定義・中身</span>
+  <div class="map-question-progress" aria-hidden="true"><span id="map-question-progress"></span></div>
+  <h3 id="map-question-text"></h3>
+  <div class="map-vote-buttons" id="map-vote-buttons" aria-label="回答を選ぶ"></div>
+  <p class="map-vote-note">1問ずつ回答すると、対応するブロックにあなたのマーカーが増えます。</p>
+  <div class="map-vote-feedback" id="map-vote-feedback" aria-live="polite" hidden>
+    <strong class="map-vote-answer" id="map-vote-answer"></strong>
+    <div class="map-response-grid" id="map-response-grid">
+      <article class="map-response-card">
+        <span class="map-response-label">あなたに近いSNS投稿の要約</span>
+        <strong id="map-near-view"></strong>
+      </article>
+      <article class="map-response-card opposite">
+        <span class="map-response-label">異なる見方のSNS投稿の要約</span>
+        <strong id="map-opposite-view"></strong>
+      </article>
+    </div>
+    <div class="map-vote-actions">
+      <button id="map-next-btn" type="button">次の論点へ</button>
+      <a id="share-x" href="#" target="_blank" rel="noopener" hidden>Xでシェア</a>
+      <button id="vote-redo-btn" type="button">最初からやり直す</button>
+    </div>
+  </div>
+</div>
 <div id="stance-map-inner">
 <div class="panel-title"><h2>SNS反応マップ</h2><span>意見227件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>
 <div id="sm-wrap">
   <canvas id="smCanvasHeat" width="640" height="640"></canvas>
   <canvas id="smCanvasMain" width="640" height="640"></canvas>
 </div>
-<p class="map-caption">中心の「副首都法案」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=肯定的 / 赤=否定的 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
-<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
+<p class="map-caption">SNS投稿を、話題になった論点・立場・反応の強さで配置しています。扇形の大きさは、その論点に属する投稿数です。点をクリックすると元のXポストを開きます。</p>
+<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">回答した論点に、あなたのマーカーを表示しています。</p>
 <div class="sm-controls">
   <div class="sm-legend">
+    <span>扇形：話題になった論点</span>
+    <span>色：投稿の立場</span>
     <span><i style="background:#059669"></i>肯定的</span>
     <span><i style="background:#dc2626"></i>否定的</span>
     <span><i style="background:#64748b"></i>中立</span>
-    <span style="color:#888">中心＝冷静 / 外周＝感情的</span>
+    <span>中心：穏やかな反応</span>
+    <span>外側：強い反応</span>
   </div>
   <div class="sm-filters" id="sm-filters"></div>
 </div>
@@ -773,131 +824,182 @@ const SM_RAW = [
 </script>
 <script>
 (function(){
-  var TOPIC='fukushuto-issue-stance-v1';
-  var STORAGE_KEY='sns_vote_'+TOPIC+'_my';
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  var supabaseClient=null;
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=='undefined'){
-    supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
-  }
-  var VOTE_ISSUES=[
-    {k:'定義・中身',        icon:'📋'},
-    {k:'候補地',            icon:'🗾'},
-    {k:'都構想・維新',      icon:'🏛️'},
-    {k:'防災・災害',        icon:'🌊'},
-    {k:'費用・財源',        icon:'💴'},
-    {k:'優先順位',          icon:'⏰'},
-    {k:'その他・わからない',icon:'💬'}
+  var STORAGE_KEY='sns_vote_fukushuto-profile-v1';
+  var CHOICES=[
+    {k:'賛成',color:'#059669'},
+    {k:'判断できない',color:'#64748b'},
+    {k:'反対',color:'#dc2626'}
   ];
-  // VOTE_ISSUES index → ISSUES array index (定義0 候補地1 都構想2 防災3 その他4 費用5 優先順位6)
-  var V2I=[0,1,2,3,5,6,4];
-  var STANCES=[
-    {k:'反対・慎重',    color:'#dc2626', bg:'#fef2f2', shadow:'rgba(220,38,38,.22)', icon:'!', desc:'中身・費用・進め方に疑問がある'},
-    {k:'どちらでもない',color:'#64748b', bg:'#f8fafc', shadow:'rgba(100,116,139,.22)', icon:'?', desc:'条件や情報を見てから判断したい'},
-    {k:'賛成・推進',    color:'#059669', bg:'#ecfdf5', shadow:'rgba(5,150,105,.22)', icon:'✓', desc:'防災・分散のために必要だと思う'}
+  var QUESTIONS=[
+    {id:'definition',issueIdx:0,label:'定義・中身',text:'副首都の定義や権限が固まる前に、指定の枠組みを作ることに賛成ですか？',views:[
+      ['大型事業は、まず方針を決めてから制度の詳細を詰めればよい','定義・統治体制・費用が不明なまま進めるのは順序が逆'],
+      ['枠組みは必要でも、権限や費用を確認してから判断したい','まず方針を決めて制度設計を進めるべき'],
+      ['定義・統治体制・費用が不明なまま進めるのは順序が逆','大型事業は、まず方針を決めてから制度の詳細を詰めればよい']
+    ]},
+    {id:'location',issueIdx:1,label:'候補地',text:'大阪を主な候補地として、副首都の検討を進めることに賛成ですか？',views:[
+      ['交通・経済基盤のある大阪を軸に進めるのが現実的','南海トラフの被災想定域にバックアップを置くべきではない'],
+      ['大阪だけでなく、日本海側・福岡・北海道なども比較したい','大阪を軸に早く具体化するべき'],
+      ['南海トラフの被災想定域にバックアップを置くべきではない','交通・経済基盤のある大阪を軸に進めるのが現実的']
+    ]},
+    {id:'tokoso',issueIdx:2,label:'都構想・維新',text:'副首都制度を、大阪都構想とは切り離して進められると思いますか？',views:[
+      ['国の危機管理制度として、都構想とは別に評価できる','住民投票で否決された都構想を国政経由で進める疑いがある'],
+      ['制度上の関係と、推進主体の説明を確認してから判断したい','副首都と都構想は別の制度として考えるべき'],
+      ['住民投票で否決された都構想を国政経由で進める疑いがある','国の危機管理制度として、都構想とは別に評価できる']
+    ]},
+    {id:'disaster',issueIdx:3,label:'防災・災害',text:'災害時の首都機能を大阪に分散することに賛成ですか？',views:[
+      ['東京一極集中を減らし、災害時のバックアップ機能を早く整えるべき','南海トラフで同時被災する大阪では、バックアップ先にならない'],
+      ['機能分散は必要でも、防災効果と候補地を比較してから判断したい','制度の詳細を待たず、バックアップ機能の整備を進めるべき'],
+      ['南海トラフで同時被災する大阪では、バックアップ先にならない','東京一極集中を減らし、災害時のバックアップ機能を早く整えるべき']
+    ]},
+    {id:'cost',issueIdx:5,label:'費用・財源',text:'費用総額が確定する前に、副首都の制度づくりを進めることに賛成ですか？',views:[
+      ['大型事業は方針を先に決め、後から予算を積み上げるのが一般的','兆円単位の費用と財源が不明なまま進めるべきではない'],
+      ['必要性は理解できるが、費用と負担の目安を見て判断したい','費用の確定を待たず制度設計を進めるべき'],
+      ['兆円単位の費用と財源が不明なまま進めるべきではない','大型事業は方針を先に決め、後から予算を積み上げるのが一般的']
+    ]},
+    {id:'priority',issueIdx:6,label:'優先順位',text:'物価対策などより、副首都法案の成立を優先することに賛成ですか？',views:[
+      ['副首都は災害に備える長期の国家設計として早く進めるべき','物価高への対策を差し置いて優先することには納得できない'],
+      ['長期政策と生活対策を両立できるかを見て判断したい','災害対策として会期を延長してでも進めるべき'],
+      ['物価高への対策を差し置いて優先することには納得できない','副首都は災害に備える長期の国家設計として早く進めるべき']
+    ]},
+    {id:'other',issueIdx:4,label:'その他',text:'ここまでの6論点以外にも、重要な問題があると思いますか？',views:[
+      ['外交・戦争リスクや地域間格差など、別の観点も検討する必要がある','主要な対立点は、ここまでの6論点でおおむね整理できる'],
+      ['ほかの論点があるか、意見をさらに集めて確認したい','まず6つの主要論点から議論を進めればよい'],
+      ['主要な対立点は、ここまでの6論点でおおむね整理できる','外交・戦争リスクや地域間格差など、別の観点も検討する必要がある']
+    ]}
   ];
-  var selIssue=-1;
-  var step1=document.getElementById('vote-step1');
-  var step2=document.getElementById('vote-step2');
-  var result=document.getElementById('vote-result');
-  var issueBtns=document.getElementById('vote-issue-btns');
-  var stanceBtns=document.getElementById('vote-stance-btns');
+  var buttons=document.getElementById('map-vote-buttons');
+  var feedback=document.getElementById('map-vote-feedback');
+  var note=document.querySelector('.map-vote-note');
+  var nextButton=document.getElementById('map-next-btn');
+  var shareLink=document.getElementById('share-x');
+  var responseGrid=document.getElementById('map-response-grid');
+  var state={current:0,answers:Array(QUESTIONS.length).fill(null)};
 
-  VOTE_ISSUES.forEach(function(iss,i){
-    var btn=document.createElement('button');
-    btn.type='button';
-    btn.className='vote-issue-btn';
-    btn.innerHTML='<span class="vote-issue-icon">'+iss.icon+'</span><span class="vote-issue-title">'+iss.k+'</span>';
-    btn.onclick=function(){selIssue=i;step1.style.display='none';step2.style.display='block';};
-    issueBtns.appendChild(btn);
-  });
+  function persistState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
 
-  function showVote(issueIdx,stanceIdx,shouldScroll){
-    var iss=VOTE_ISSUES[issueIdx];
-    var st=STANCES[stanceIdx];
-    var arenaIdx=V2I[issueIdx];
-    selIssue=issueIdx;
-    step1.style.display='none';
-    step2.style.display='none';
-    result.style.display='block';
-    document.getElementById('vote-position-label').textContent='論点：'+iss.k+'　賛否：'+st.k;
-    document.getElementById('vote-position-text').textContent=iss.desc;
-    if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
-    var shareText='副首都法案、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
-    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html');
-    setTimeout(function(){
-      if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
-      var el=document.getElementById('stance-map-section');
-      if(shouldScroll!==false && el)el.scrollIntoView({behavior:'smooth',block:'center'});
-    },300);
+  function syncMap(showAll){
+    var profile=QUESTIONS.map(function(question,index){
+      var choiceIdx=state.answers[index];
+      return Number.isInteger(choiceIdx)&&choiceIdx>=0?{issueIdx:question.issueIdx,color:CHOICES[choiceIdx].color}:null;
+    }).filter(Boolean);
+    if(window.setStanceMapVoteProfile)window.setStanceMapVoteProfile(profile,showAll?-1:QUESTIONS[state.current].issueIdx);
+    else setTimeout(function(){syncMap(showAll);},100);
   }
 
-  async function saveVote(issueIdx,stanceIdx){
-    var vote={issueIdx:issueIdx,stanceIdx:stanceIdx};
-    if(supabaseClient){
-      var response;
-      try{
-        response=await supabaseClient.from('votes').insert([{
-          topic_id:TOPIC,
-          choice_idx:issueIdx*STANCES.length+stanceIdx
-        }]);
-      }catch(error){
-        console.error('Supabase vote request failed:',error);
-        alert('投票を保存できませんでした。通信状況を確認して再度お試しください。');
-        return false;
-      }
-      if(response.error){
-        var message=(response.error.message||'')+(response.error.details||'');
-        if(message.indexOf('already voted')!==-1 || response.error.code==='23505'){
-          alert('24時間以内に同じ回線からすでに投票されています。');
-        }else{
-          console.error('Supabase vote insert failed:',response.error);
-          alert('投票を保存できませんでした。通信状況を確認して再度お試しください。');
-        }
-        return false;
-      }
+  function showFeedback(choiceIdx){
+    var question=QUESTIONS[state.current];
+    var choice=CHOICES[choiceIdx];
+    buttons.querySelectorAll('button').forEach(function(button){
+      button.setAttribute('aria-pressed',String(Number(button.dataset.choiceIdx)===choiceIdx));
+    });
+    document.getElementById('map-vote-answer').textContent='あなたの回答：'+choice.k;
+    document.getElementById('map-near-view').textContent=question.views[choiceIdx][0];
+    document.getElementById('map-opposite-view').textContent=question.views[choiceIdx][1];
+    responseGrid.hidden=false;
+    feedback.hidden=false;
+    nextButton.hidden=false;
+    nextButton.textContent=state.current===QUESTIONS.length-1?'結果を見る':'次の論点へ';
+    shareLink.hidden=true;
+    syncMap(false);
+  }
+
+  function showQuestion(){
+    var question=QUESTIONS[state.current];
+    document.getElementById('map-question-kicker').textContent='質問 '+(state.current+1)+' / '+QUESTIONS.length+'　'+question.label;
+    document.getElementById('map-question-progress').style.width=((state.current+1)/QUESTIONS.length*100)+'%';
+    document.getElementById('map-question-text').textContent=question.text;
+    buttons.hidden=false;
+    buttons.querySelectorAll('button').forEach(function(button){button.setAttribute('aria-pressed','false');});
+    feedback.hidden=true;
+    var savedChoice=state.answers[state.current];
+    if(Number.isInteger(savedChoice)&&savedChoice>=0)showFeedback(savedChoice);
+    else syncMap(false);
+  }
+
+  function showComplete(){
+    var answered=state.answers.filter(function(answer){return Number.isInteger(answer)&&answer>=0;}).length;
+    document.getElementById('map-question-kicker').textContent='回答完了';
+    document.getElementById('map-question-progress').style.width='100%';
+    document.getElementById('map-question-text').textContent='あなたの反応マップができました';
+    buttons.hidden=true;
+    feedback.hidden=false;
+    responseGrid.hidden=true;
+    document.getElementById('map-vote-answer').textContent=QUESTIONS.length+'問中'+answered+'問に回答しました。色のついたマーカーが、論点ごとのあなたの立場です。';
+    nextButton.hidden=true;
+    shareLink.hidden=false;
+    shareLink.href='https://x.com/intent/tweet?text='+encodeURIComponent('副首都法案の7つの論点に回答して、自分の反応マップを作りました。')+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html');
+    syncMap(true);
+  }
+
+  async function saveAnswer(choiceIdx){
+    state.answers[state.current]=choiceIdx;
+    try{
+      var response=await VoteStore.cast({topicId:'fukushuto-statement-'+QUESTIONS[state.current].id+'-v1',choiceIdx:choiceIdx,storageKey:STORAGE_KEY,localValue:state});
+      if(response.duplicate)alert('24時間以内にすでに回答されています。前回の回答が集計されています。');
+      return true;
+    }catch(error){
+      state.answers[state.current]=null;
+      console.error('Vote request failed:',error);
+      alert(VoteStore.friendlyError(error));
+      return false;
     }
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(vote));
-    return true;
   }
 
-  STANCES.forEach(function(st,stanceIdx){
+  CHOICES.forEach(function(choice,choiceIdx){
     var btn=document.createElement('button');
     btn.type='button';
-    btn.className='vote-stance-btn';
-    btn.style.setProperty('--stance-color',st.color);
-    btn.style.setProperty('--stance-bg',st.bg);
-    btn.style.setProperty('--stance-shadow',st.shadow);
-    btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
+    btn.className='map-vote-btn';
+    btn.textContent=choice.k;
+    btn.dataset.choiceIdx=String(choiceIdx);
+    btn.style.setProperty('--choice-color',choice.color);
+    btn.setAttribute('aria-pressed','false');
     btn.onclick=async function(){
-      var buttons=stanceBtns.querySelectorAll('button');
-      buttons.forEach(function(item){item.disabled=true;});
-      var saved=await saveVote(selIssue,stanceIdx);
-      buttons.forEach(function(item){item.disabled=false;});
-      if(saved)showVote(selIssue,stanceIdx);
+      VoteStore.setBusy(buttons,true);
+      var saved=await saveAnswer(choiceIdx);
+      VoteStore.setBusy(buttons,false);
+      if(saved)showFeedback(choiceIdx);
     };
-    stanceBtns.appendChild(btn);
+    buttons.appendChild(btn);
   });
+
+  var skip=document.createElement('button');
+  skip.type='button';
+  skip.className='map-vote-btn skip';
+  skip.textContent='スキップ';
+  skip.onclick=function(){
+    state.answers[state.current]=-1;
+    persistState();
+    if(state.current<QUESTIONS.length-1){state.current++;persistState();showQuestion();}
+    else showComplete();
+  };
+  buttons.appendChild(skip);
+
+  nextButton.onclick=function(){
+    if(state.current<QUESTIONS.length-1){state.current++;persistState();showQuestion();}
+    else showComplete();
+  };
 
   document.getElementById('vote-redo-btn').onclick=function(){
-    localStorage.removeItem(STORAGE_KEY);
-    selIssue=-1;
-    step1.style.display='block';
-    step2.style.display='none';
-    result.style.display='none';
+    VoteStore.clear(STORAGE_KEY);
+    state={current:0,answers:Array(QUESTIONS.length).fill(null)};
     if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
+    showQuestion();
   };
-  if(supabaseClient)document.getElementById('vote-redo-btn').style.display='none';
+  note.textContent=VoteStore.isRemote()
+    ? '1問ずつ回答すると、対応するブロックにマーカーが増えます。24時間の重複回答を防止します。'
+    : '1問ずつ回答すると、対応するブロックにマーカーが増えます。回答はこのブラウザだけに保存されます。';
   try{
     var previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
-    if(previous && Number.isInteger(previous.issueIdx) && previous.issueIdx>=0 && previous.issueIdx<VOTE_ISSUES.length &&
-       Number.isInteger(previous.stanceIdx) && previous.stanceIdx>=0 && previous.stanceIdx<STANCES.length){
-      showVote(previous.issueIdx,previous.stanceIdx,false);
+    if(previous&&Array.isArray(previous.answers)&&previous.answers.length===QUESTIONS.length){
+      state.answers=previous.answers;
+      var firstUnanswered=state.answers.findIndex(function(answer){return answer===null;});
+      state.current=firstUnanswered===-1?QUESTIONS.length-1:firstUnanswered;
     }
   }catch(error){
     localStorage.removeItem(STORAGE_KEY);
   }
+  if(state.answers.every(function(answer){return answer!==null;}))showComplete();
+  else showQuestion();
 })();
 </script>
 
@@ -973,7 +1075,8 @@ const SM_RAW = [
   }
 
   let filterIdx=-1;
-  let voteMarker=null;
+  let voteMarkers=[];
+  let activeVoteSector=-1;
 
   function drawMain(){
     ctx.clearRect(0,0,W,W);
@@ -1005,101 +1108,79 @@ const SM_RAW = [
     ctx.fillStyle='#94a3b8';ctx.textAlign='center';
     ctx.fillText('冷静',CX,CY-R_MIN-8);
     ctx.fillText('感情的',CX,CY-R_MAX-8);
-    if(voteMarker){
+    voteMarkers.forEach(voteMarker=>{
       const mc=voteMarker.color||'#4f46e5';
-      // 選んだセクターを強調
+      const isActive=voteMarker.sector===activeVoteSector;
       const vi=ISSUES[voteMarker.sector];
-      if(vi&&window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:vi.a0,endAngle:vi.a1,color:mc,degrees:true});
-      // パルスリング
-      const pulse=(Date.now()%1400)/1400;
-      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
-      ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();
-      ctx.globalAlpha=1;
-      // 本体ピン
+      if(isActive&&vi&&window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:vi.a0,endAngle:vi.a1,color:mc,degrees:true});
+      if(isActive){
+        const pulse=(Date.now()%1400)/1400;
+        ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
+        ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();
+        ctx.globalAlpha=1;
+      }
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,11,0,Math.PI*2);
       ctx.fillStyle='#fff';ctx.fill();
       ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);
       ctx.fillStyle=mc;ctx.fill();
-      // バッジラベル
-      ctx.font='900 12px "Noto Sans JP",sans-serif';
-      const txt='あなたはここ';
-      const tw=ctx.measureText(txt).width;
-      const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));
-      const by=voteMarker.y-32;
-      ctx.beginPath();
-      if(ctx.roundRect)ctx.roundRect(bx-tw/2-8,by-11,tw+16,22,11);
-      else ctx.rect(bx-tw/2-8,by-11,tw+16,22);
-      ctx.fillStyle='#fff';ctx.fill();
-      ctx.strokeStyle=mc;ctx.lineWidth=2;ctx.stroke();
-      ctx.fillStyle=mc;ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.fillText(txt,bx,by+1);
-      ctx.textBaseline='alphabetic';
-      // 吹き出しの脚
-      ctx.beginPath();
-      ctx.moveTo(voteMarker.x-4,by+11);ctx.lineTo(voteMarker.x,by+17);ctx.lineTo(voteMarker.x+4,by+11);
-      ctx.fillStyle=mc;ctx.fill();
-    }
-  }
-
-  // 投票前ブラー
-  (function applyBlur(){
-    var inner=document.getElementById('stance-map-inner');
-    var section=document.getElementById('stance-map-section');
-    if(!inner||!section)return;
-    inner.style.filter='blur(8px)';
-    inner.style.pointerEvents='none';
-    inner.style.userSelect='none';
-    section.style.position='relative';
-    var ov=document.createElement('div');
-    ov.id='chart-overlay';
-    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-    ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-    section.appendChild(ov);
-  })();
-
-  function revealChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='filter .6s ease';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
-    var ov=document.getElementById('chart-overlay');
-    if(ov)ov.remove();
-  }
-  function reBlurChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
-    var section=document.getElementById('stance-map-section');
-    if(section&&!document.getElementById('chart-overlay')){
-      var ov=document.createElement('div');
-      ov.id='chart-overlay';
-      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-      ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-      section.appendChild(ov);
-    }
+      if(isActive){
+        ctx.font='900 12px "Noto Sans JP",sans-serif';
+        const txt='あなたはここ';
+        const tw=ctx.measureText(txt).width;
+        const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));
+        const by=voteMarker.y-32;
+        ctx.beginPath();
+        if(ctx.roundRect)ctx.roundRect(bx-tw/2-8,by-11,tw+16,22,11);
+        else ctx.rect(bx-tw/2-8,by-11,tw+16,22);
+        ctx.fillStyle='#fff';ctx.fill();
+        ctx.strokeStyle=mc;ctx.lineWidth=2;ctx.stroke();
+        ctx.fillStyle=mc;ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText(txt,bx,by+1);
+        ctx.textBaseline='alphabetic';
+      }
+    });
   }
 
   let pulseRAF=null;
-  window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
-    revealChart();
-    const iss=ISSUES[issueIdx]||ISSUES[0];
-    const rad=iss.mid*Math.PI/180, r=(R_MIN+R_MAX)/2-14;
-    voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#4f46e5',sector:issueIdx};
+  window.setStanceMapVoteProfile=function(profile,focusIssueIdx){
+    voteMarkers=profile.map(item=>{
+      const iss=ISSUES[item.issueIdx]||ISSUES[0];
+      const rad=iss.mid*Math.PI/180, r=(R_MIN+R_MAX)/2-14;
+      return {x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:item.color||'#4f46e5',sector:item.issueIdx};
+    });
+    activeVoteSector=Number.isInteger(focusIssueIdx)?focusIssueIdx:-1;
+    filterIdx=activeVoteSector;
+    const filterButtons=document.querySelectorAll('#sm-filters .sm-fbtn');
+    filterButtons.forEach(button=>button.classList.toggle('active',Number(button.dataset.issueIdx)===filterIdx));
     const note=document.getElementById('your-marker-note');
-    if(note)note.style.display='block';
+    if(note){note.style.display=voteMarkers.length?'block':'none';note.dataset.markerCount=String(voteMarkers.length);}
+    if(voteMarkers.length&&window.revealArenaAfterVote)window.revealArenaAfterVote();
     if(pulseRAF)cancelAnimationFrame(pulseRAF);
-    (function loop(){drawMain();pulseRAF=requestAnimationFrame(loop);})();
+    if(voteMarkers.length)(function loop(){drawMain();pulseRAF=requestAnimationFrame(loop);})();
+    else drawMain();
+  };
+  window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
+    const profile=voteMarkers.filter(marker=>marker.sector!==issueIdx).map(marker=>({issueIdx:marker.sector,color:marker.color}));
+    profile.push({issueIdx:issueIdx,color:stanceColor});
+    window.setStanceMapVoteProfile(profile,issueIdx);
   };
   window.clearStanceMapVoteMarker=function(){
     if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
-    voteMarker=null;
+    voteMarkers=[];
+    activeVoteSector=-1;
     const note=document.getElementById('your-marker-note');
-    if(note)note.style.display='none';
+    if(note){note.style.display='none';note.dataset.markerCount='0';}
+    filterIdx=-1;
+    const filterButtons=document.querySelectorAll('#sm-filters .sm-fbtn');
+    filterButtons.forEach(button=>button.classList.toggle('active',Number(button.dataset.issueIdx)===-1));
     drawMain();
-    reBlurChart();
   };
 
   const filters=document.getElementById('sm-filters');
   function addBtn(label,idx){
     const b=document.createElement('button');
     b.className='sm-fbtn'+(idx===-1?' active':'');
+    b.dataset.issueIdx=String(idx);
     b.textContent=label;
     b.onclick=function(){
       filterIdx=idx;
@@ -1242,7 +1323,7 @@ const SM_RAW = [
 <details open><summary>論点別件数（main_issue）</summary><div class="table-wrap"><table><tbody><tr><th>定義・中身</th><td>51</td></tr><tr><th>候補地</th><td>49</td></tr><tr><th>都構想・維新</th><td>49</td></tr><tr><th>防災・災害</th><td>26</td></tr><tr><th>その他</th><td>19</td></tr><tr><th>費用・財源</th><td>18</td></tr><tr><th>優先順位</th><td>15</td></tr><tr><th style="font-weight:900">合計（意見・論点分類済み）</th><td style="font-weight:900">227</td></tr></tbody></table></div></details>
 <details><summary>法案への態度（stance_law）</summary><div class="table-wrap"><table><tbody><tr><th>強く反対 (-2)</th><td>64</td></tr><tr><th>慎重 (-1)</th><td>74</td></tr><tr><th>中立 (0)</th><td>98</td></tr><tr><th>概ね賛成 (+1)</th><td>16</td></tr><tr><th>強く賛成 (+2)</th><td>3</td></tr></tbody></table></div></details>
 <details><summary>大阪指定への態度（stance_location）</summary><div class="table-wrap"><table><tbody><tr><th>大阪は不適 (-2)</th><td>52</td></tr><tr><th>他候補地を推奨 (-1)</th><td>20</td></tr><tr><th>言及なし (0)</th><td>177</td></tr><tr><th>大阪で概ねよい (+1)</th><td>4</td></tr><tr><th>大阪を強く支持 (+2)</th><td>2</td></tr></tbody></table></div></details>
-<details><summary>投票の選択とアリーナ上の位置</summary><div class="table-wrap"><table><thead><tr><th>選んだ論点</th><th>マーカーが置かれるセクター</th><th>マーカーの色</th></tr></thead><tbody><tr><td>定義・中身</td><td>定義・中身</td><td rowspan="7">賛成=緑 / どちらでもない=灰 / 反対=赤</td></tr><tr><td>候補地</td><td>候補地</td></tr><tr><td>都構想・維新</td><td>都構想・維新</td></tr><tr><td>防災・災害</td><td>防災・災害</td></tr><tr><td>費用・財源</td><td>費用・財源</td></tr><tr><td>優先順位</td><td>優先順位</td></tr><tr><td>その他・わからない</td><td>その他</td></tr></tbody></table></div></details>
+<details><summary>回答とマップ上の表示</summary><div class="table-wrap"><table><thead><tr><th>質問</th><th>表示するブロック</th></tr></thead><tbody><tr><td>定義や権限を固める前に枠組みを作るか</td><td>定義・中身</td></tr><tr><td>大阪を主な候補地として進めるか</td><td>候補地</td></tr><tr><td>大阪都構想と切り離せるか</td><td>都構想・維新</td></tr><tr><td>首都機能を大阪に分散するか</td><td>防災・災害</td></tr><tr><td>費用確定前に制度づくりを進めるか</td><td>費用・財源</td></tr><tr><td>副首都法案を優先するか</td><td>優先順位</td></tr><tr><td>6論点以外にも問題があるか</td><td>その他</td></tr></tbody></table></div><p>マーカーの色は、賛成＝緑、判断できない＝灰、反対＝赤です。スキップした論点にはマーカーを表示しません。</p></details>
 <details><summary>収集クエリ</summary><ul><li>副首都法案 / 副首都構想 / 副首都 大阪 / 副首都 維新 / 副首都 反対 / 副首都 防災 / 副首都 費用 / 副首都 どこ / 副首都 南海トラフ</li><li>2026-07-14にYahooリアルタイム検索で292件を取得（重複除去後285件、2D分類成功255件）。</li></ul></details>
 <details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>収集時点が衆院通過直前のため、国会審議・修正合意への反応が多く出やすいバイアスがあります。</li><li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
 </section>

@@ -152,6 +152,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -171,7 +173,6 @@
 <!-- ADSENSE_TAG_START -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/school-nickname-ban/school-nickname-hero.webp')">
 <section class="hero"><img class="hero-photo" src="images/topics/school-nickname-ban/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・日常論争</span><h1>学校のあだ名禁止は必要？賛成・反対の理由</h1><p class="question-line">傷つく呼び方を防ぐルールか、関係性を縛る一律規制か。</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見63件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>17</b>件</span><strong>子どもの心理的安全を、どう守るか</strong><span class="conclusion-detail">被害予防を重く見る声と、禁止だけでは守れないという声が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
@@ -477,6 +478,8 @@
 <script>
 (function(){
   var issues=[{"key":"safety","title":"いじめ・心理的安全","short":"心理的安全","icon":"🛡️","count":17,"description":"嫌なあだ名やからかいを予防し、傷つく子を出さないために学校が介入すべきか。"},{"key":"effect","title":"一律禁止の実効性","short":"実効性","icon":"🎯","count":16,"description":"呼び方を一律に禁止することで、いじめの原因や関係性まで変えられるのか。"},{"key":"culture","title":"親しさ・呼称文化","short":"呼称文化","icon":"🤝","count":13,"description":"あだ名を親しさや個性の表現と見るか、傷つける可能性のある呼び方と見るか。"},{"key":"experience","title":"学校運用・現場体験","short":"現場体験","icon":"🏫","count":8,"description":"学校ごとの運用差や、自分・子どもが実際に経験した呼ばれ方から考える論点。"},{"key":"gender","title":"さん付け・ジェンダー配慮","short":"さん付け","icon":"⚖️","count":5,"description":"「くん・ちゃん」の性差をなくし、名字＋さんへ統一する指導をどう見るか。"},{"key":"choice","title":"本人意思と柔軟運用","short":"本人意思","icon":"🗣️","count":4,"description":"禁止か自由かではなく、呼ばれる本人の意思をルールの中心に置けるか。"}];
+  var TOPIC='school-nickname-ban-issue-stance-v1';
+  var STORAGE_KEY='nickname-arena-vote';
   var stances=[
     {key:'support',title:'一律ルールを支持',desc:'傷つく呼び方を予防するため、学校が共通ルールを設ける',color:'#059669'},
     {key:'conditional',title:'本人意思で柔軟に',desc:'嫌な呼び方は止め、本人が望む愛称は認める',color:'#d97706'},
@@ -485,8 +488,11 @@
   var selectedIssue=null, step1=document.getElementById('vote-step1'), step2=document.getElementById('vote-step2'), result=document.getElementById('vote-result');
   var issueBox=document.getElementById('vote-issue-btns'), stanceBox=document.getElementById('vote-stance-btns');
   issues.forEach(function(issue){var btn=document.createElement('button');btn.type='button';btn.className='vote-issue-btn';btn.innerHTML='<span class="vote-issue-icon">'+issue.icon+'</span><span class="vote-issue-title">'+issue.title+' <small>('+issue.count+'件)</small></span>';btn.onclick=function(){selectedIssue=issue;step1.style.display='none';step2.style.display='block';};issueBox.appendChild(btn);});
-  stances.forEach(function(stance){var btn=document.createElement('button');btn.type='button';btn.className='vote-stance-btn';btn.style.setProperty('--stance-color',stance.color);btn.innerHTML='<strong>'+stance.title+'</strong><span>'+stance.desc+'</span>';btn.onclick=function(){step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+selectedIssue.title+' ／ '+stance.title;document.getElementById('vote-position-text').textContent=selectedIssue.description;var text='学校のあだ名禁止で気になる論点は「'+selectedIssue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);window.setNicknameArenaMarker?.(selectedIssue.key,stance.color);localStorage.setItem('nickname-arena-vote',JSON.stringify({issue:selectedIssue.key,stance:stance.key,at:Date.now()}));setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);};stanceBox.appendChild(btn);});
-  document.getElementById('vote-redo-btn').onclick=function(){selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';window.clearNicknameArenaMarker?.();};
+  function showVote(issue,stance,shouldScroll){selectedIssue=issue;step1.style.display='none';step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+issue.title+' ／ '+stance.title;document.getElementById('vote-position-text').textContent=issue.description;var text='学校のあだ名禁止で気になる論点は「'+issue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);window.setNicknameArenaMarker?.(issue.key,stance.color);if(shouldScroll!==false)setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);}
+  stances.forEach(function(stance,stanceIndex){var btn=document.createElement('button');btn.type='button';btn.className='vote-stance-btn';btn.style.setProperty('--stance-color',stance.color);btn.innerHTML='<strong>'+stance.title+'</strong><span>'+stance.desc+'</span>';btn.onclick=async function(){VoteStore.setBusy(stanceBox,true);try{var issueIndex=issues.indexOf(selectedIssue);var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIndex*stances.length+stanceIndex,storageKey:STORAGE_KEY,localValue:{issue:selectedIssue.key,stance:stance.key,at:Date.now()}});if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');showVote(selectedIssue,stance,true)}catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error))}finally{VoteStore.setBusy(stanceBox,false)}};stanceBox.appendChild(btn);});
+  document.getElementById('vote-redo-btn').onclick=function(){VoteStore.clear(STORAGE_KEY);selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';window.clearNicknameArenaMarker?.();};
+  var saved=VoteStore.getSaved(STORAGE_KEY);if(saved){var savedIssue=issues.find(function(issue){return issue.key===saved.issue});var savedStance=stances.find(function(stance){return stance.key===saved.stance});if(savedIssue&&savedStance)showVote(savedIssue,savedStance,false);}
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
 })();
 </script>
 
