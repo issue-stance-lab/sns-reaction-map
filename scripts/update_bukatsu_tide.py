@@ -500,15 +500,15 @@ def main() -> int:
         page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
     page = replace_once(
         page,
-        r'<div class="panel-title"><h2>論点アリーナ</h2><span>.*?</span></div>',
-        f'<div class="panel-title"><h2>論点アリーナ</h2><span>意見{len(all_opinions)}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場</span></div>',
+        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>.*?</span></div>',
+        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{len(all_opinions)}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場</span></div>',
         "arena heading",
     )
     page = replace_once(page, r"const SM_RAW = \[.*?\n\];", sm_raw(all_opinions), "SM_RAW", flags=re.DOTALL)
     issue_js = "const ISSUES=[\n" + ",\n".join(
         f"    {{k:{js(issue)},n:{issue_counts[issue]}}}" for issue in ISSUES
     ) + "\n  ];"
-    arena_pos = page.index("<h2>論点アリーナ</h2>")
+    arena_pos = page.index("<h2>SNS反応マップ</h2>")
     before, after = page[:arena_pos], page[arena_pos:]
     after = replace_once(after, r"const ISSUES=\[.*?\n  \];", issue_js, "arena issues", flags=re.DOTALL)
     page = before + after

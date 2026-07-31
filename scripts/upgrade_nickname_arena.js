@@ -331,7 +331,7 @@ const issuesJson = JSON.stringify(issueDefs.map((issue) => ({
 })));
 
 const replacementCss = `
-    /* ===== 2026-07-24 論点アリーナ版 ===== */
+    /* ===== 2026-07-24 SNS反応マップ版 ===== */
     #explainer-section .explainer-lead{max-width:920px;margin:0 0 20px;font-size:14px;line-height:1.85;color:var(--ink)}
     #explainer-section .explainer-grid{display:flex;flex-direction:column;gap:18px;max-width:920px;margin:0 auto 18px}
     #explainer-section .explainer-card{padding:0;border:1.5px solid #e4eaf3;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
@@ -411,7 +411,7 @@ const mainContent = `
 </script>
 
 <section class="polar-arena-section" id="issue-arena-section">
-  <div class="panel-title"><h2>論点アリーナ</h2><span>${arenaPosts.length}件 | セクター=論点 / 外側ほど熱量が高い / 色=立場</span></div>
+  <div class="panel-title"><h2>SNS反応マップ</h2><span>${arenaPosts.length}件 | セクター=論点 / 外側ほど熱量が高い / 色=立場</span></div>
   <p class="arena-caption">中心の「あだ名禁止」を6つの論点が囲みます。扇の幅は投稿数、中心からの距離はHermesが分類した表現の熱量、色は立場（緑=支持 / 赤=反対 / 黄=条件付き / 灰=中立）です。点をクリックすると元のX投稿を開きます。</p>
   <div class="arena-wrap"><canvas id="nickname-arena" width="760" height="760" aria-label="あだ名禁止をめぐる6論点の極座標マップ"></canvas></div>
   <div class="arena-legend"><span><i class="arena-dot" style="background:#10b981"></i>ルール支持</span><span><i class="arena-dot" style="background:#ef4444"></i>一律禁止に反対</span><span><i class="arena-dot" style="background:#f59e0b"></i>条件付き</span><span><i class="arena-dot" style="background:#94a3b8"></i>中立・情報共有</span></div>
@@ -458,9 +458,9 @@ html = html.replace(
   /<meta name="twitter:description" content="[^"]+">/,
   '<meta name="twitter:description" content="あだ名禁止は優しさか、行き過ぎた規制か。Hermesで再分類した6論点とSNSの声を可視化。">',
 );
-if (html.includes('/* ===== 2026-07-24 論点アリーナ版 ===== */')) {
+if (html.includes('/* ===== 2026-07-24 SNS反応マップ版 ===== */')) {
   html = html.replace(
-    /\n    \/\* ===== 2026-07-24 論点アリーナ版 ===== \*\/[\s\S]*?(?=\n  <\/style>)/,
+    /\n    \/\* ===== 2026-07-24 SNS反応マップ版 ===== \*\/[\s\S]*?(?=\n  <\/style>)/,
     replacementCss,
   );
 } else {

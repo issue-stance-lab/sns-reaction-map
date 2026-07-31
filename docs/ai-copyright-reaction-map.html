@@ -676,7 +676,7 @@
 .sm-fbtn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 #sm-tooltip { position: absolute; background: rgba(0,0,0,.85); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; display: none; max-width: 260px; line-height: 1.6; z-index: 10; }
 
-/* ===== 論点アリーナ ===== */
+/* ===== SNS反応マップ ===== */
 #arena-section .arena-caption {
   font-size: 13px; color: var(--muted); margin: -8px 0 20px; line-height: 1.6;
 }
@@ -1195,10 +1195,10 @@
 })();
 </script>
 
-<!-- ===== 極座標 論点アリーナ ===== -->
+<!-- ===== 極座標 SNS反応マップ ===== -->
 <section class="polar-arena-section" id="issue-arena-section">
 <div id="issue-arena-inner" style="max-width:720px;margin:0 auto">
-<div class="panel-title"><h2>論点アリーナ</h2><span>669件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
+<div class="panel-title"><h2>SNS反応マップ</h2><span>669件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
 <p class="map-caption">中心の「生成AIと著作権」を7つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は意見の強さ（外側ほど強い主張）、点の色はスタンス（赤=規制賛成 / 青=AI推進 / 灰=中立）。点をクリックするとXポストを開きます。</p>
 <div id="sm-wrap">
   <canvas id="arenaHeat" width="640" height="640" style="display:block;width:100%;border-radius:10px;"></canvas>

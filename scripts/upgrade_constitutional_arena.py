@@ -310,7 +310,7 @@ def build_arena(rows: list[dict]) -> str:
     issue_data = [{"k": name, "n": counts[i]} for i, (name, _) in enumerate(ISSUES)]
     return f"""<section class="panel stance-map-section" id="stance-map-section">
 <div id="stance-map-inner">
-<div class="panel-title"><h2>論点アリーナ</h2><span>意見422件 | セクター=論点 / 中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span></div>
+<div class="panel-title"><h2>SNS反応マップ</h2><span>意見422件 | セクター=論点 / 中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span></div>
 <div id="sm-wrap">
   <canvas id="smCanvasHeat" width="640" height="640"></canvas>
   <canvas id="smCanvasMain" width="640" height="640"></canvas>

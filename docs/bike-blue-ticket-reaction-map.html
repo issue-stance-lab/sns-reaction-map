@@ -625,7 +625,7 @@
       .vote-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-/* ===== 2ステップ投票（論点アリーナ） ===== */
+/* ===== 2ステップ投票（SNS反応マップ） ===== */
 .vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:15px;margin:0 0 12px}
 .vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
 #vote-issue-btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-width:900px}
@@ -1141,10 +1141,10 @@
 })();
 </script>
     
-<!-- ===== 極座標 論点アリーナ ===== -->
+<!-- ===== 極座標 SNS反応マップ ===== -->
 <section class="polar-arena-section" id="issue-arena-section">
 <div id="issue-arena-inner" style="max-width:720px;margin:0 auto">
-<div class="panel-title"><h2>論点アリーナ</h2><span>181件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
+<div class="panel-title"><h2>SNS反応マップ</h2><span>181件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
 <p class="map-caption">中心の「自転車の青切符」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は意見の強さ（外側ほど強い主張）、点の色はスタンス（赤=取締り賛成 / 青=反対・インフラ優先 / 灰=中立）。点をクリックするとXポストを開きます。</p>
 <div id="sm-wrap">
   <canvas id="arenaHeat" width="640" height="640" style="display:block;width:100%;border-radius:10px;"></canvas>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""部活動の地域移行 HTMLに論点アリーナを追加する変換スクリプト"""
+"""部活動の地域移行 HTMLにSNS反応マップを追加する変換スクリプト"""
 import json
 import re
 from pathlib import Path
@@ -38,7 +38,7 @@ def gen_sm_raw():
 
 # === 追加CSS ===
 EXTRA_CSS = """
-    /* === 論点アリーナ === */
+    /* === SNS反応マップ === */
     .arena-section{position:relative;background:#0f0e2e;border-top:0;padding:42px min(6vw,72px)}
     .arena-section .panel-title h2{color:#fff}.arena-section .panel-title span{color:rgba(255,255,255,.7)}
     #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
@@ -167,10 +167,10 @@ VOTE_SECTION = """<section class="panel" id="vote-section">
 </section>
 """
 
-# === 論点アリーナセクション ===
+# === SNS反応マップセクション ===
 ARENA_SECTION = """<section class="arena-section" id="stance-map-section">
 <div id="stance-map-inner" style="max-width:720px;margin:0 auto">
-<div class="panel-title"><h2>論点アリーナ</h2><span>245件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
+<div class="panel-title"><h2>SNS反応マップ</h2><span>245件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>
 <div id="sm-wrap">
   <canvas id="smCanvasHeat" width="640" height="640"></canvas>
   <canvas id="smCanvasMain" width="640" height="640"></canvas>
