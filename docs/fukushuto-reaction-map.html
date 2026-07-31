@@ -201,6 +201,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -220,7 +222,6 @@
 <!-- ADSENSE_TAG_START -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/fukushuto/fukushuto-hero.webp')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">統治機構・地方</span><h1>副首都法案とは？候補地・費用・防災をめぐる論点</h1><p class="question-line">副首都、本当に必要？ 場所は大阪でいい？</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見229件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>51</b>件</span><strong>「副首都」とは何かが、まだ見えない</strong><span class="conclusion-detail">「生煮え」「法案に定義がない」という制度設計への疑問が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
@@ -513,7 +514,7 @@
 <!-- ARTICLE_TRUST_END -->
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>副首都構想への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
-<p style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ 世論調査ではありません。投票は匿名で集計され、サーバーに保存されます。</p>
 <p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
 <div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
 
@@ -775,12 +776,6 @@ const SM_RAW = [
 (function(){
   var TOPIC='fukushuto-issue-stance-v1';
   var STORAGE_KEY='sns_vote_'+TOPIC+'_my';
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  var supabaseClient=null;
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=='undefined'){
-    supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
-  }
   var VOTE_ISSUES=[
     {k:'定義・中身',        icon:'📋'},
     {k:'候補地',            icon:'🗾'},
@@ -835,31 +830,15 @@ const SM_RAW = [
 
   async function saveVote(issueIdx,stanceIdx){
     var vote={issueIdx:issueIdx,stanceIdx:stanceIdx};
-    if(supabaseClient){
-      var response;
-      try{
-        response=await supabaseClient.from('votes').insert([{
-          topic_id:TOPIC,
-          choice_idx:issueIdx*STANCES.length+stanceIdx
-        }]);
-      }catch(error){
-        console.error('Supabase vote request failed:',error);
-        alert('投票を保存できませんでした。通信状況を確認して再度お試しください。');
-        return false;
-      }
-      if(response.error){
-        var message=(response.error.message||'')+(response.error.details||'');
-        if(message.indexOf('already voted')!==-1 || response.error.code==='23505'){
-          alert('24時間以内に同じ回線からすでに投票されています。');
-        }else{
-          console.error('Supabase vote insert failed:',response.error);
-          alert('投票を保存できませんでした。通信状況を確認して再度お試しください。');
-        }
-        return false;
-      }
+    try{
+      var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIdx*STANCES.length+stanceIdx,storageKey:STORAGE_KEY,localValue:vote});
+      if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');
+      return true;
+    }catch(error){
+      console.error('Vote request failed:',error);
+      alert(VoteStore.friendlyError(error));
+      return false;
     }
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(vote));
-    return true;
   }
 
   STANCES.forEach(function(st,stanceIdx){
@@ -871,24 +850,23 @@ const SM_RAW = [
     btn.style.setProperty('--stance-shadow',st.shadow);
     btn.innerHTML='<span class="vs-icon">'+st.icon+'</span><span class="vs-title">'+st.k+'</span><span class="vs-desc">'+st.desc+'</span>';
     btn.onclick=async function(){
-      var buttons=stanceBtns.querySelectorAll('button');
-      buttons.forEach(function(item){item.disabled=true;});
+      VoteStore.setBusy(stanceBtns,true);
       var saved=await saveVote(selIssue,stanceIdx);
-      buttons.forEach(function(item){item.disabled=false;});
+      VoteStore.setBusy(stanceBtns,false);
       if(saved)showVote(selIssue,stanceIdx);
     };
     stanceBtns.appendChild(btn);
   });
 
   document.getElementById('vote-redo-btn').onclick=function(){
-    localStorage.removeItem(STORAGE_KEY);
+    VoteStore.clear(STORAGE_KEY);
     selIssue=-1;
     step1.style.display='block';
     step2.style.display='none';
     result.style.display='none';
     if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
   };
-  if(supabaseClient)document.getElementById('vote-redo-btn').style.display='none';
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
   try{
     var previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
     if(previous && Number.isInteger(previous.issueIdx) && previous.issueIdx>=0 && previous.issueIdx<VOTE_ISSUES.length &&
