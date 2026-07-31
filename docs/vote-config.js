@@ -4,6 +4,6 @@
  * Secret key / Service Role key は絶対にここへ置かない。
  */
 window.SNS_VOTE_CONFIG = Object.freeze({
-  supabaseUrl: "\"https://qslrlprzoucrlptnhsmi.supabase.co\"",
-  publishableKey: "\"sb_publishable_FoQdRPaSTmNJZSAGwy4xJg_HcVOfOhr\""
+  supabaseUrl: "https://qslrlprzoucrlptnhsmi.supabase.co",
+  publishableKey: "sb_publishable_FoQdRPaSTmNJZSAGwy4xJg_HcVOfOhr"
 });
