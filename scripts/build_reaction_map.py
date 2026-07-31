@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import html
 import json
-import os
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -367,9 +366,6 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     vote_method = config.get("vote_method", "")
     vote_labels = config.get("vote_labels") or []
 
-    supabase_url_js = json.dumps(config.get("supabase_url") or "")
-    supabase_anon_key_js = json.dumps(config.get("supabase_anon_key") or "")
-
     intro_html = ""
     if vote_intro:
         intro_html = f'<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">{html.escape(vote_intro)}</p>'
@@ -428,13 +424,7 @@ def vote_ui_html(config: dict[str, Any]) -> str:
   var TITLE="{html.escape(title_for_share)}";
   var KEY="sns_vote_"+TOPIC;
 
-  var supabaseUrl={supabase_url_js};
-  var supabaseAnonKey={supabase_anon_key_js};
-  var supabaseClient=null;
-
-  if(supabaseUrl && supabaseAnonKey && typeof supabase!=="undefined"){{
-    supabaseClient=supabase.createClient(supabaseUrl, supabaseAnonKey);
-    // Supabase mode: hide the redo button to prevent abuse and desync
+  if(VoteStore.isRemote()){{
     var redoBtn=document.getElementById("vote-redo-btn");
     if(redoBtn) redoBtn.style.display="none";
   }}
@@ -461,23 +451,12 @@ def vote_ui_html(config: dict[str, Any]) -> str:
   }}
   
   async function fetchVotes(){{
-    if(supabaseClient){{
-      try{{
-        var res=await supabaseClient
-          .from("votes")
-          .select("choice_idx")
-          .eq("topic_id", TOPIC);
-        if(res.error) throw res.error;
-        stored={{}};
-        (res.data||[]).forEach(function(row){{
-          var idx=row.choice_idx;
-          stored[idx]=(stored[idx]||0)+1;
-        }});
-      }}catch(err){{
-        console.error("Error fetching votes from Supabase:", err);
-        stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{{}}");
-      }}
-    }}else{{
+    try{{
+      var result=await VoteStore.getCounts(TOPIC);
+      if(result.mode==="remote") stored=result.counts||{{}};
+      else stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{{}}");
+    }}catch(err){{
+      console.error("Error fetching vote counts:",err);
       stored=JSON.parse(localStorage.getItem(KEY+"_counts")||"{{}}");
     }}
     if(myVote!==null){{
@@ -503,7 +482,7 @@ def vote_ui_html(config: dict[str, Any]) -> str:
   }});
 
   document.getElementById("vote-redo-btn").onclick=function(){{
-    localStorage.removeItem(KEY+"_my");
+    VoteStore.clear(KEY+"_my");
     location.reload();
   }};
 
@@ -523,38 +502,18 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     var btns=btnWrap.querySelectorAll("button");
     btns.forEach(function(b){{b.disabled=true; b.style.opacity="0.5"}});
 
-    if(supabaseClient){{
-      var success=false;
-      try{{
-        var res=await supabaseClient
-          .from("votes")
-          .insert([{{ topic_id: TOPIC, choice_idx: idx }}]);
-        if(res.error) throw res.error;
-        success=true;
-      }}catch(err){{
-        console.error("Error casting vote to Supabase:", err);
-        var msg=err.message||"";
-        var details=err.details||"";
-        if(msg.indexOf("already voted")!==-1 || details.indexOf("already voted")!==-1){{
-          alert("24時間以内に同一IPアドレスからすでに投票されています。集計結果のみ表示します。");
-          success=true;
-        }}else{{
-          alert("投票データの送信中にエラーが発生しました。");
-          // Local fallback in case of connection failure
-          stored[idx]=(stored[idx]||0)+1;
-          localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
-        }}
-      }}
-      if(success){{
-        await fetchVotes();
-      }}
-    }}else{{
-      // Pure local fallback
-      stored[idx]=(stored[idx]||0)+1;
-      localStorage.setItem(KEY+"_counts",JSON.stringify(stored));
+    try{{
+      var response=await VoteStore.cast({{topicId:TOPIC,choiceIdx:idx,storageKey:KEY+"_my",localValue:idx}});
+      if(response.duplicate)alert("24時間以内にすでに投票されています。前回の投票が集計されています。");
+      if(response.mode==="remote")stored=response.counts||{{}};
+      else{{stored[idx]=(stored[idx]||0)+1;localStorage.setItem(KEY+"_counts",JSON.stringify(stored));}}
+    }}catch(err){{
+      console.error("Error casting vote:",err);
+      alert(VoteStore.friendlyError(err));
+      btns.forEach(function(b){{b.disabled=false;b.style.opacity="1"}});
+      return;
     }}
 
-    localStorage.setItem(KEY+"_my",""+idx);
     myVote=""+idx;
     revealChart();
     showResults(idx);
@@ -846,9 +805,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
         meta_tags.append('  <meta name="twitter:card" content="summary_large_image">')
         ogp_meta_html = "\n".join(meta_tags) + "\n"
 
-    supabase_script = ""
-    if config.get("supabase_url") and config.get("supabase_anon_key"):
-        supabase_script = '  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n'
+    vote_scripts = '  <script src="vote-config.js?v=1"></script>\n  <script src="vote-store.js?v=1"></script>\n'
 
     return f"""<!doctype html>
 <html lang="ja">
@@ -856,7 +813,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
-{ogp_meta_html}{supabase_script}  <link rel="preconnect" href="https://fonts.googleapis.com">
+{ogp_meta_html}{vote_scripts}  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
@@ -1393,8 +1350,6 @@ def main() -> int:
 
     rows = read_json(args.input)
     config = merge_config(args.config or None)
-    config["supabase_url"] = os.environ.get("SUPABASE_URL", "")
-    config["supabase_anon_key"] = os.environ.get("SUPABASE_ANON_KEY", "")
     output = resolve(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(build(rows, config), encoding="utf-8")

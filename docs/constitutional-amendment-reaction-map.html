@@ -758,6 +758,8 @@
   </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -1000,6 +1002,8 @@
 </section>
 <script>
 (function(){
+  const TOPIC='constitutional-amendment-issue-stance-v1';
+  const STORAGE_KEY='sns_vote_constitutional_amendment_2step';
   const issues=[{"k": "改憲全般", "d": "憲法を時代に合わせるべきか、現行憲法の原則を守るべきか。", "icon": "📜"}, {"k": "9条・自衛隊", "d": "自衛隊を憲法に明記する意義と、9条の平和主義への影響。", "icon": "🕊️"}, {"k": "緊急事態条項", "d": "災害などへの迅速な対応と、政府への権限集中リスク。", "icon": "🚨"}, {"k": "国民投票・広告", "d": "CM・ネット広告・資金力の差を含む国民投票の公平性。", "icon": "🗳️"}, {"k": "政党・発議手続き", "d": "政党の姿勢、国会での合意形成、発議までの進め方。", "icon": "🏛️"}, {"k": "情報・議論の質", "d": "事実確認、過激な断定、論点を理解できる情報環境。", "icon": "🔎"}];
   const stances=[
     {k:'改正を進める',d:'必要な項目を具体化し、改正を前へ進めたい',c:'#2563eb',icon:'→'},
@@ -1011,7 +1015,9 @@
   const issueBox=document.getElementById('vote-issue-btns');
   issues.forEach((v,i)=>{const b=document.createElement('button');b.className='vote-issue-btn';b.innerHTML='<span>'+v.icon+'</span><span><strong>'+v.k+'</strong><small>'+v.d+'</small></span>';b.onclick=()=>{selected=i;document.getElementById('vote-step1').hidden=true;document.getElementById('vote-step2').hidden=false;};issueBox.appendChild(b);});
   const stanceBox=document.getElementById('vote-stance-btns');
-  stances.forEach(v=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=()=>{document.getElementById('vote-step2').hidden=true;const r=document.getElementById('vote-result');r.hidden=false;r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[selected].k+'」を重視し、総合的には「'+v.k+'」</p><button type="button" id="vote-redo">選び直す</button>';window.setConstitutionalVoteMarker?.(selected,v.c);document.getElementById('vote-redo').onclick=()=>{r.hidden=true;document.getElementById('vote-step1').hidden=false;window.clearConstitutionalVoteMarker?.();};};stanceBox.appendChild(b);});
+  function showVote(issueIndex,stanceIndex){selected=issueIndex;document.getElementById('vote-step1').hidden=true;document.getElementById('vote-step2').hidden=true;const v=stances[stanceIndex];const r=document.getElementById('vote-result');r.hidden=false;r.innerHTML='<strong>あなたの選択</strong><p>「'+issues[issueIndex].k+'」を重視し、総合的には「'+v.k+'」</p><button type="button" id="vote-redo">選び直す</button>';window.setConstitutionalVoteMarker?.(issueIndex,v.c);const redo=document.getElementById('vote-redo');redo.onclick=()=>{VoteStore.clear(STORAGE_KEY);r.hidden=true;document.getElementById('vote-step1').hidden=false;window.clearConstitutionalVoteMarker?.();};if(VoteStore.isRemote())redo.style.display='none';}
+  stances.forEach((v,stanceIndex)=>{const b=document.createElement('button');b.className='vote-stance-btn';b.style.setProperty('--stance-color',v.c);b.innerHTML='<b>'+v.icon+'</b><strong>'+v.k+'</strong><small>'+v.d+'</small>';b.onclick=async()=>{VoteStore.setBusy(stanceBox,true);try{const response=await VoteStore.cast({topicId:TOPIC,choiceIdx:selected*stances.length+stanceIndex,storageKey:STORAGE_KEY,localValue:{issueIdx:selected,stanceIdx:stanceIndex}});if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');showVote(selected,stanceIndex)}catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error))}finally{VoteStore.setBusy(stanceBox,false)}};stanceBox.appendChild(b);});
+  const saved=VoteStore.getSaved(STORAGE_KEY);if(saved&&Number.isInteger(saved.issueIdx)&&saved.issueIdx>=0&&saved.issueIdx<issues.length&&Number.isInteger(saved.stanceIdx)&&saved.stanceIdx>=0&&saved.stanceIdx<stances.length)showVote(saved.issueIdx,saved.stanceIdx);
 })();
 </script>
 <section class="panel stance-map-section" id="stance-map-section">

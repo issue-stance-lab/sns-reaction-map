@@ -210,6 +210,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -517,6 +519,8 @@
 </section>
 <script>
 (function(){
+  var TOPIC='takaichi-issue-stance-v1';
+  var STORAGE_KEY='takaichi-arena-vote';
   var issues=[
     {key:'accountability',title:'中傷動画・説明責任',short:'説明責任',icon:'📹',count:97,description:'対立候補への中傷動画を高市陣営が依頼したのか。事実ならば本人にも説明責任があるか。'},
     {key:'bunshun',title:'文春報道の真偽',short:'文春報道',icon:'📰',count:59,description:'週刊文春の報道は正確か、それとも政治的意図を持った捏造・印象操作か。'},
@@ -538,23 +542,20 @@
     btn.onclick=function(){selectedIssue=issue;step1.style.display='none';step2.style.display='block';};
     issueBox.appendChild(btn);
   });
-  stances.forEach(function(stance){
+  function showVote(issue,stance,shouldScroll){selectedIssue=issue;step1.style.display='none';step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+issue.title+' ／ '+stance.title;document.getElementById('vote-position-text').textContent=issue.description;var text='高市文春問題で気になる論点は「'+issue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);window.setTakaichiArenaMarker?.(issue.key,stance.color);if(shouldScroll!==false)setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);}
+  stances.forEach(function(stance,stanceIndex){
     var btn=document.createElement('button');btn.type='button';btn.className='vote-stance-btn';
     btn.style.setProperty('--stance-color',stance.color);
     btn.innerHTML='<strong>'+stance.title+'</strong><span>'+stance.desc+'</span>';
-    btn.onclick=function(){
-      step2.style.display='none';result.style.display='block';
-      document.getElementById('vote-position-label').textContent='論点：'+selectedIssue.title+' ／ '+stance.title;
-      document.getElementById('vote-position-text').textContent=selectedIssue.description;
-      var text='高市文春問題で気になる論点は「'+selectedIssue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';
-      document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);
-      window.setTakaichiArenaMarker?.(selectedIssue.key,stance.color);
-      localStorage.setItem('takaichi-arena-vote',JSON.stringify({issue:selectedIssue.key,stance:stance.key,at:Date.now()}));
-      setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);
+    btn.onclick=async function(){
+      VoteStore.setBusy(stanceBox,true);
+      try{var issueIndex=issues.indexOf(selectedIssue);var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIndex*stances.length+stanceIndex,storageKey:STORAGE_KEY,localValue:{issue:selectedIssue.key,stance:stance.key,at:Date.now()}});if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');showVote(selectedIssue,stance,true)}catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error))}finally{VoteStore.setBusy(stanceBox,false)}
     };
     stanceBox.appendChild(btn);
   });
-  document.getElementById('vote-redo-btn').onclick=function(){selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';window.clearTakaichiArenaMarker?.();};
+  document.getElementById('vote-redo-btn').onclick=function(){VoteStore.clear(STORAGE_KEY);selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';window.clearTakaichiArenaMarker?.();};
+  var saved=VoteStore.getSaved(STORAGE_KEY);if(saved){var savedIssue=issues.find(function(issue){return issue.key===saved.issue});var savedStance=stances.find(function(stance){return stance.key===saved.stance});if(savedIssue&&savedStance)showVote(savedIssue,savedStance,false);}
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
 })();
 </script>
 

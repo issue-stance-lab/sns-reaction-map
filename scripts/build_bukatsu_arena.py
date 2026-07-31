@@ -197,12 +197,6 @@ VOTE_JS = """<script>
   'use strict';
   var TOPIC='bukatsu-chiiki-issue-stance-v1';
   var STORAGE_KEY='sns_vote_'+TOPIC+'_my';
-  var supabaseUrl="";
-  var supabaseAnonKey="";
-  var supabaseClient=null;
-  if(supabaseUrl&&supabaseAnonKey&&typeof supabase!=='undefined'){
-    supabaseClient=supabase.createClient(supabaseUrl,supabaseAnonKey);
-  }
   var VOTE_ISSUES=[
     {k:'費用・家庭負担',    icon:'💴', desc:'月会費・家計への経済的負担・格差'},
     {k:'受け皿・指導者',    icon:'👤', desc:'指導者不足・報酬・人材確保'},
@@ -253,20 +247,11 @@ VOTE_JS = """<script>
   }
 
   async function saveVote(issueIdx,stanceIdx){
-    if(supabaseClient){
-      var response;
-      try{
-        response=await supabaseClient.from('votes').insert([{topic_id:TOPIC,choice_idx:issueIdx*STANCES.length+stanceIdx}]);
-      }catch(error){console.error('Supabase vote request failed:',error);alert('投票を保存できませんでした。');return false;}
-      if(response.error){
-        var message=(response.error.message||'')+(response.error.details||'');
-        if(message.indexOf('already voted')!==-1||response.error.code==='23505'){alert('24時間以内にすでに投票されています。');}
-        else{console.error('Supabase vote insert failed:',response.error);alert('投票を保存できませんでした。');}
-        return false;
-      }
-    }
-    localStorage.setItem(STORAGE_KEY,JSON.stringify({issueIdx:issueIdx,stanceIdx:stanceIdx}));
-    return true;
+    try{
+      var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIdx*STANCES.length+stanceIdx,storageKey:STORAGE_KEY,localValue:{issueIdx:issueIdx,stanceIdx:stanceIdx}});
+      if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');
+      return true;
+    }catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error));return false;}
   }
 
   STANCES.forEach(function(st,stanceIdx){
@@ -287,11 +272,11 @@ VOTE_JS = """<script>
   });
 
   document.getElementById('vote-redo-btn').onclick=function(){
-    localStorage.removeItem(STORAGE_KEY);
+    VoteStore.clear(STORAGE_KEY);
     selIssue=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';
     if(window.clearStanceMapVoteMarker)window.clearStanceMapVoteMarker();
   };
-  if(supabaseClient)document.getElementById('vote-redo-btn').style.display='none';
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
   try{
     var previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
     if(previous&&Number.isInteger(previous.issueIdx)&&previous.issueIdx>=0&&previous.issueIdx<VOTE_ISSUES.length&&

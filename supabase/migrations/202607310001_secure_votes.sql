@@ -1,5 +1,6 @@
--- SNS反応まっぷ: Edge Function 経由の匿名投票ストア
--- このSQLは Supabase SQL Editor または migration として実行する。
+-- Canonical schema lives in data/supabase_schema.sql.
+-- Keep this migration byte-for-byte equivalent by running:
+--   cp data/supabase_schema.sql supabase/migrations/202607310001_secure_votes.sql
 
 CREATE TABLE IF NOT EXISTS public.votes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -9,7 +10,6 @@ CREATE TABLE IF NOT EXISTS public.votes (
   voter_hash TEXT
 );
 
--- 旧スキーマからの移行。既存票は保持し、IP由来の列は残さない。
 ALTER TABLE public.votes ADD COLUMN IF NOT EXISTS voter_hash TEXT;
 UPDATE public.votes
 SET voter_hash = md5(id::text) || md5('legacy:' || id::text)
@@ -18,14 +18,9 @@ ALTER TABLE public.votes ALTER COLUMN voter_hash SET NOT NULL;
 ALTER TABLE public.votes DROP COLUMN IF EXISTS ip_hash;
 ALTER TABLE public.votes DROP COLUMN IF EXISTS ip_addr;
 
-CREATE INDEX IF NOT EXISTS idx_votes_topic_created
-  ON public.votes(topic_id, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_votes_dedupe
-  ON public.votes(topic_id, voter_hash, created_at DESC);
-
+CREATE INDEX IF NOT EXISTS idx_votes_topic_created ON public.votes(topic_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_votes_dedupe ON public.votes(topic_id, voter_hash, created_at DESC);
 ALTER TABLE public.votes ENABLE ROW LEVEL SECURITY;
-
--- 名前が異なる過去の公開ポリシーも含め、votes上のポリシーを全て除去する。
 DO $$
 DECLARE
   existing_policy RECORD;
@@ -42,10 +37,8 @@ $$;
 DROP TRIGGER IF EXISTS trg_process_vote ON public.votes;
 DROP FUNCTION IF EXISTS public.process_vote();
 DROP FUNCTION IF EXISTS public.get_client_ip();
-
 REVOKE ALL ON TABLE public.votes FROM anon, authenticated;
 
--- 同一topic・同一voterの24時間重複を、同時リクエストでも原子的に防ぐ。
 CREATE OR REPLACE FUNCTION public.cast_anonymous_vote(
   requested_topic_id TEXT,
   requested_choice_idx INTEGER,
@@ -57,35 +50,23 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-  IF requested_topic_id IS NULL OR length(requested_topic_id) > 100 THEN
-    RAISE EXCEPTION 'invalid topic_id';
-  END IF;
-  IF requested_choice_idx < 0 OR requested_choice_idx >= 64 THEN
-    RAISE EXCEPTION 'invalid choice_idx';
-  END IF;
-  IF requested_voter_hash IS NULL OR length(requested_voter_hash) <> 64 THEN
-    RAISE EXCEPTION 'invalid voter_hash';
-  END IF;
-
+  IF requested_topic_id IS NULL OR length(requested_topic_id) > 100 THEN RAISE EXCEPTION 'invalid topic_id'; END IF;
+  IF requested_choice_idx < 0 OR requested_choice_idx >= 64 THEN RAISE EXCEPTION 'invalid choice_idx'; END IF;
+  IF requested_voter_hash IS NULL OR length(requested_voter_hash) <> 64 THEN RAISE EXCEPTION 'invalid voter_hash'; END IF;
   PERFORM pg_advisory_xact_lock(hashtext(requested_topic_id || ':' || requested_voter_hash));
-
   IF EXISTS (
-    SELECT 1
-    FROM public.votes
+    SELECT 1 FROM public.votes
     WHERE topic_id = requested_topic_id
       AND voter_hash = requested_voter_hash
       AND created_at > now() - interval '24 hours'
-  ) THEN
-    RETURN FALSE;
+  ) THEN RETURN FALSE;
   END IF;
-
   INSERT INTO public.votes(topic_id, choice_idx, voter_hash)
   VALUES (requested_topic_id, requested_choice_idx, requested_voter_hash);
   RETURN TRUE;
 END;
 $$;
 
--- 生の投票行ではなく、選択肢別の集計だけをEdge Functionへ返す。
 CREATE OR REPLACE FUNCTION public.get_vote_counts(requested_topic_id TEXT)
 RETURNS TABLE(choice_idx INTEGER, vote_count BIGINT)
 LANGUAGE sql

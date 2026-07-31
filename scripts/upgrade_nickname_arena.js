@@ -396,6 +396,8 @@ const mainContent = `
 </section>
 <script>
 (function(){
+  var TOPIC='school-nickname-ban-issue-stance-v1';
+  var STORAGE_KEY='nickname-arena-vote';
   var issues=${issuesJson};
   var stances=[
     {key:'support',title:'一律ルールを支持',desc:'傷つく呼び方を予防するため、学校が共通ルールを設ける',color:'#059669'},
@@ -405,8 +407,11 @@ const mainContent = `
   var selectedIssue=null, step1=document.getElementById('vote-step1'), step2=document.getElementById('vote-step2'), result=document.getElementById('vote-result');
   var issueBox=document.getElementById('vote-issue-btns'), stanceBox=document.getElementById('vote-stance-btns');
   issues.forEach(function(issue){var btn=document.createElement('button');btn.type='button';btn.className='vote-issue-btn';btn.innerHTML='<span class="vote-issue-icon">'+issue.icon+'</span><span class="vote-issue-title">'+issue.title+' <small>('+issue.count+'件)</small></span>';btn.onclick=function(){selectedIssue=issue;step1.style.display='none';step2.style.display='block';};issueBox.appendChild(btn);});
-  stances.forEach(function(stance){var btn=document.createElement('button');btn.type='button';btn.className='vote-stance-btn';btn.style.setProperty('--stance-color',stance.color);btn.innerHTML='<strong>'+stance.title+'</strong><span>'+stance.desc+'</span>';btn.onclick=function(){step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+selectedIssue.title+' ／ '+stance.title;document.getElementById('vote-position-text').textContent=selectedIssue.description;var text='学校のあだ名禁止で気になる論点は「'+selectedIssue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);localStorage.setItem('nickname-arena-vote',JSON.stringify({issue:selectedIssue.key,stance:stance.key,at:Date.now()}));setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);};stanceBox.appendChild(btn);});
-  document.getElementById('vote-redo-btn').onclick=function(){selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';};
+  function showVote(issue,stance,shouldScroll){selectedIssue=issue;step1.style.display='none';step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+issue.title+' ／ '+stance.title;document.getElementById('vote-position-text').textContent=issue.description;var text='学校のあだ名禁止で気になる論点は「'+issue.title+'」。私の考えは「'+stance.title+'」 #SNS反応まっぷ';document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(location.href.split('#')[0]);if(window.setNicknameArenaMarker)window.setNicknameArenaMarker(issue.key,stance.color);if(shouldScroll!==false)setTimeout(function(){document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth'});},450);}
+  stances.forEach(function(stance,stanceIndex){var btn=document.createElement('button');btn.type='button';btn.className='vote-stance-btn';btn.style.setProperty('--stance-color',stance.color);btn.innerHTML='<strong>'+stance.title+'</strong><span>'+stance.desc+'</span>';btn.onclick=async function(){VoteStore.setBusy(stanceBox,true);try{var issueIndex=issues.indexOf(selectedIssue);var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIndex*stances.length+stanceIndex,storageKey:STORAGE_KEY,localValue:{issue:selectedIssue.key,stance:stance.key,at:Date.now()}});if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');showVote(selectedIssue,stance,true)}catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error))}finally{VoteStore.setBusy(stanceBox,false)}};stanceBox.appendChild(btn);});
+  document.getElementById('vote-redo-btn').onclick=function(){VoteStore.clear(STORAGE_KEY);selectedIssue=null;result.style.display='none';step2.style.display='none';step1.style.display='block';if(window.clearNicknameArenaMarker)window.clearNicknameArenaMarker();};
+  var saved=VoteStore.getSaved(STORAGE_KEY);if(saved){var savedIssue=issues.find(function(issue){return issue.key===saved.issue});var savedStance=stances.find(function(stance){return stance.key===saved.stance});if(savedIssue&&savedStance)showVote(savedIssue,savedStance,false);}
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
 })();
 </script>
 

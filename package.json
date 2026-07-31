@@ -2,7 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch": "node scripts/fetch_yahoo_realtime_node.mjs"
+    "fetch": "node scripts/fetch_yahoo_realtime_node.mjs",
+    "test:vote": "node --test tests/vote-store.test.mjs"
   },
   "dependencies": {
     "playwright": "^1.52.0"

@@ -161,6 +161,8 @@
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=26">
   <script src="topic-modern.js?v=11" defer></script>
+  <script src="vote-config.js?v=1"></script>
+  <script src="vote-store.js?v=1"></script>
 <!-- GA_TAG_START -->
   <script>
     (function(){
@@ -180,7 +182,6 @@
 <!-- ADSENSE_TAG_START -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/henoko-student-accident/henoko-hero.webp')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・事故・基地問題</span><h1>辺野古高校生死亡事故をめぐる論点―安全管理・教育・報道</h1><p class="question-line">事故の検証と教育の評価、どの論点を重く見る？</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見265件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>75</b>件</span><strong>まず事故原因を検証し、再発を防げるか</strong><span class="conclusion-detail">教育への評価とは切り分け、事故検証と再発防止を求める声が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
@@ -373,11 +374,12 @@
 <!-- ARTICLE_TRUST_END -->
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>最も重く見る論点を選ぶ <small>（全2問）</small></p><div id="vote-issue-btns"></div></div>
 <div id="vote-step2" style="display:none"><p class="vote-step-label"><span class="step-num">2</span>文科省判断への評価は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns"></div></div>
-<p style="font-size:11px;color:var(--muted);">※ 世論調査ではありません。回答はこのブラウザに保存されます。</p>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);">※ 世論調査ではありません。現在、回答はこのブラウザにのみ保存されます。</p>
 <div id="vote-result" style="display:none;margin-top:20px"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:12px"><div id="vote-position-label" style="font-weight:900;color:var(--accent)"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted)"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800">投票をやり直す</button></div>
 </section>
 <script>
 (function(){
+  var TOPIC='henoko-student-accident-issue-stance-v1';
   var KEY='sns_vote_henoko_issue_arena_v1';
   var ISSUES=[
     {k:'政治的中立性',icon:'⚖️',desc:'教育内容と政治的中立性の境界'},
@@ -395,9 +397,10 @@
   var selected=-1,step1=document.getElementById('vote-step1'),step2=document.getElementById('vote-step2'),result=document.getElementById('vote-result');
   ISSUES.forEach(function(issue,index){var button=document.createElement('button');button.type='button';button.className='vote-issue-btn';button.innerHTML='<span class="vote-issue-icon">'+issue.icon+'</span><span class="vote-issue-title">'+issue.k+'</span>';button.onclick=function(){selected=index;step1.style.display='none';step2.style.display='block'};document.getElementById('vote-issue-btns').appendChild(button)});
   function showVote(issueIndex,stanceIndex,scroll){var issue=ISSUES[issueIndex],stance=STANCES[stanceIndex];selected=issueIndex;step1.style.display='none';step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+issue.k+'　評価：'+stance.k;document.getElementById('vote-position-text').textContent=issue.desc;document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent('辺野古高校生死亡事故で私が重く見る論点は「'+issue.k+'」。'+stance.k+'の立場です。')+'&url='+encodeURIComponent(location.href.split('#')[0]);if(window.setHenokoArenaMarker)window.setHenokoArenaMarker(issueIndex,stance.color);setTimeout(function(){if(window.setHenokoArenaMarker)window.setHenokoArenaMarker(issueIndex,stance.color);if(scroll!==false)document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth',block:'center'})},200)}
-  STANCES.forEach(function(stance,index){var button=document.createElement('button');button.type='button';button.className='vote-stance-btn';button.style.setProperty('--stance-color',stance.color);button.style.setProperty('--stance-bg',stance.bg);button.innerHTML='<span class="vote-stance-title">'+stance.k+'</span><span class="vote-stance-desc">'+stance.desc+'</span>';button.onclick=function(){localStorage.setItem(KEY,JSON.stringify({issue:selected,stance:index}));showVote(selected,index,true)};document.getElementById('vote-stance-btns').appendChild(button)});
-  document.getElementById('vote-redo-btn').onclick=function(){localStorage.removeItem(KEY);selected=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';if(window.clearHenokoArenaMarker)window.clearHenokoArenaMarker()};
+  STANCES.forEach(function(stance,index){var button=document.createElement('button');button.type='button';button.className='vote-stance-btn';button.style.setProperty('--stance-color',stance.color);button.style.setProperty('--stance-bg',stance.bg);button.innerHTML='<span class="vote-stance-title">'+stance.k+'</span><span class="vote-stance-desc">'+stance.desc+'</span>';button.onclick=async function(){var box=document.getElementById('vote-stance-btns');VoteStore.setBusy(box,true);try{var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:selected*STANCES.length+index,storageKey:KEY,localValue:{issue:selected,stance:index}});if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');showVote(selected,index,true)}catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error))}finally{VoteStore.setBusy(box,false)}};document.getElementById('vote-stance-btns').appendChild(button)});
+  document.getElementById('vote-redo-btn').onclick=function(){VoteStore.clear(KEY);selected=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';if(window.clearHenokoArenaMarker)window.clearHenokoArenaMarker()};
   try{var saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&Number.isInteger(saved.issue)&&Number.isInteger(saved.stance)&&saved.issue>=0&&saved.issue<ISSUES.length&&saved.stance>=0&&saved.stance<STANCES.length)showVote(saved.issue,saved.stance,false)}catch(error){localStorage.removeItem(KEY)}
+  if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
 })();
 </script>
 <section class="polar-arena-section" id="issue-arena-section">
