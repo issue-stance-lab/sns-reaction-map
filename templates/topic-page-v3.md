@@ -139,7 +139,8 @@
   - 操作列: 高さ40px
   - ボタン: 「𝕏 でシェア」「投票をやり直す」
   - `undefined` など未設定値を画面へ出さない
-- Supabase投票ロジックは維持する。重複投票は `err.code === "23505"` と既存メッセージ判定の両方で扱う。
+- `vote-config.js` と `vote-store.js` を読み込み、投票は共通 `VoteStore.cast()` から `cast-vote` Edge Functionへ送信する。ブラウザから `votes` テーブルを直接操作しない。
+- 24時間以内の再投票はEdge Functionの `duplicate: true` を使って案内し、サーバー集計へ追加・上書きしない。
 
 ## 4. SNS反応マップ
 
@@ -235,7 +236,7 @@
 
 - GA4タグ `G-K10S4YCZFH` を残す。
 - AdSenseコード `ca-pub-2542211932832864` を残す。
-- Supabase URL/APIキーと投票ロジックを削除しない。未設定ページでは空文字の変数を維持し、ローカルフォールバックを動かす。
+- `vote-config.js` / `vote-store.js` と `VoteStore` 経由の投票ロジックを削除しない。Service Role Keyや重複防止用秘密値をHTMLへ埋め込まない。
 - OGPメタタグとcanonicalリンクは `SEO_META_START` / `SEO_META_END` ブロックで管理する。
 - 漫画セクションと投票画像カードの既存資産は削除しない。
 - 共通表示は `site-tokens.css`、`topic-modern.css`、`topic-modern.js` を正典とし、テーマ固有部分だけをインラインCSSに置く。

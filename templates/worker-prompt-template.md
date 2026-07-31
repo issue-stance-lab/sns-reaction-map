@@ -28,7 +28,7 @@ HTML変更時は以下のタグが維持されていることを確認:
 
 - **GA4**: `G-K10S4YCZFH`（`<script>` タグ）
 - **AdSense**: `ca-pub-2542211932832864`（`<script>` タグ + `<meta>` タグ）
-- **Supabase**: `supabaseUrl` / `supabaseKey` 変数（投票機能）
+- **Supabase**: `vote-config.js` / `vote-store.js` と `VoteStore.cast()`（投票機能）
 - **OGP/SEO**: `<meta property="og:*">` / `<meta name="twitter:*">` / `<link rel="canonical">`
 - **Buy Me a Coffee**: `buymeacoffee.com/issue.stance.lab`
 
