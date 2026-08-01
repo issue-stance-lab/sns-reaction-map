@@ -36,6 +36,20 @@ FEATURED_QUESTION_LINKS = {
     "consumption-tax-cut": "consumption-tax-cut-reaction-map.html",
 }
 
+TOPIC_CARD_LINKS = {
+    "ai-copyright": "ai-copyright-reaction-map.html",
+    "bike-blue-ticket": "bike-blue-ticket-reaction-map.html",
+    "bukatsu-chiiki": "bukatsu-chiiki-reaction-map.html",
+    "constitutional-amendment": "constitutional-amendment-reaction-map.html",
+    "elderly-license-revocation": "elderly-license-revocation-reaction-map.html",
+    "school-nickname-ban": "school-nickname-ban-reaction-map.html",
+    "henoko-student-accident": "henoko-student-accident-reaction-map.html",
+    "takaichi": "takaichi-reaction-map-standard.html",
+    "fukushuto": "fukushuto-reaction-map.html",
+    "koshitsu-tenpakai": "koshitsu-tenpakai-reaction-map.html",
+    "consumption-tax-cut": "consumption-tax-cut-reaction-map.html",
+}
+
 
 def _content_markup(html: str) -> str:
     """CSS/JS内の表示でない数値を禁止表示検査から除外する。"""
@@ -114,6 +128,35 @@ def _hero_side_hidden_in_media(html: str) -> bool:
     )
 
 
+def _unmanaged_count_labels(html: str) -> list[str]:
+    """id付き要素で生成されていない「○件」表示を返す。"""
+    content = _content_markup(html)
+    managed = re.compile(
+        r'<(?P<tag>[a-z][\w:-]*)\b[^>]*\bid="[^"]+"[^>]*>'
+        r'\s*\d[\d,]*\s*</(?P=tag)>\s*件',
+        flags=re.IGNORECASE,
+    )
+    remaining = managed.sub(" ", content)
+    return re.findall(r"(?<![\d,])\d[\d,]*\s*件", _visible_text(remaining))
+
+
+def _card_count(
+    body: str,
+    *,
+    css_class: str,
+    id_prefix: str,
+) -> tuple[str, int] | None:
+    match = re.search(
+        rf'<[^>]*class="{re.escape(css_class)}"[^>]*>'
+        rf'\s*分類済み\s*<strong id="{re.escape(id_prefix)}-([^"]+)">'
+        r'([\d,]+)</strong>\s*件',
+        body,
+    )
+    if not match:
+        return None
+    return match.group(1), int(match.group(2).replace(",", ""))
+
+
 def verify_top_page(
     root: Path = ROOT,
     themes_path: Path = THEMES_YAML,
@@ -145,6 +188,99 @@ def verify_top_page(
         else:
             lines.append(f"NG  {label:<24} {matches}件マッチ（値不一致）")
             failures += 1
+
+    lines.extend(["", "=== 件数の網羅検査 ==="])
+    unmanaged_counts = _unmanaged_count_labels(html)
+    dynamic_delta_has_id = (
+        "fn.id=countEl.id.replace('topic-count-','topic-delta-')" in html
+    )
+    if unmanaged_counts or not dynamic_delta_has_id:
+        detail = unmanaged_counts or ["更新バッジの動的件数に id がない"]
+        lines.append(
+            "NG  ページ内の「○件」表示は全て id 付き: "
+            + ", ".join(detail)
+        )
+        failures += 1
+    else:
+        lines.append("OK  ページ内の「○件」表示は全て id 付き（手入力の件数が残っていない）")
+
+    topic_cards = re.findall(
+        r'<a\s+class="topic-card"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+        html,
+        flags=re.DOTALL,
+    )
+    topic_counts: dict[str, int] = {}
+    invalid_topic_cards: list[str] = []
+    href_to_topic = {href: theme for theme, href in TOPIC_CARD_LINKS.items()}
+    for href, body in topic_cards:
+        expected_theme = href_to_topic.get(href)
+        parsed = _card_count(body, css_class="topic-meta", id_prefix="topic-count")
+        if not expected_theme or not parsed or parsed[0] != expected_theme:
+            invalid_topic_cards.append(href)
+            continue
+        topic_counts[expected_theme] = parsed[1]
+    topic_values_match = (
+        len(topic_cards) == len(TOPIC_CARD_LINKS)
+        and not invalid_topic_cards
+        and topic_counts == stats["sample_counts"]
+    )
+    if topic_values_match:
+        lines.append(
+            f"OK  テーマカード{len(TOPIC_CARD_LINKS)}枚の件数が sample_file と一致する"
+        )
+    else:
+        mismatches = [
+            f"{theme}={topic_counts.get(theme, '未検出')}"
+            f"/正典{stats['sample_counts'].get(theme, 'なし')}"
+            for theme in TOPIC_CARD_LINKS
+            if topic_counts.get(theme) != stats["sample_counts"].get(theme)
+        ]
+        lines.append(
+            f"NG  テーマカード{len(TOPIC_CARD_LINKS)}枚の件数が sample_file と一致する: "
+            + ", ".join(mismatches + invalid_topic_cards)
+        )
+        failures += 1
+
+    question_cards = re.findall(
+        r'<a\s+class="question-card"\s+data-theme="([^"]+)"[^>]*>(.*?)</a>',
+        html,
+        flags=re.DOTALL,
+    )
+    question_counts: dict[str, int] = {}
+    for theme, body in question_cards:
+        parsed = _card_count(body, css_class="question-count", id_prefix="featured-count")
+        if parsed and parsed[0] == theme:
+            question_counts[theme] = parsed[1]
+    expected_question_counts = {
+        theme: stats["sample_counts"][theme] for theme in FEATURED_QUESTION_LINKS
+    }
+    if len(question_cards) == 4 and question_counts == expected_question_counts:
+        lines.append("OK  問いカード4枚の件数が sample_file と一致する")
+    else:
+        lines.append("NG  問いカード4枚の件数が sample_file と一致する")
+        failures += 1
+
+    hero_match = re.search(
+        r'<strong id="hero-total-samples">([\d,]+)</strong>', html
+    )
+    hero_total = int(hero_match.group(1).replace(",", "")) if hero_match else None
+    topic_total = sum(topic_counts.values())
+    if topic_values_match and hero_total == topic_total == stats["total_posts"]:
+        lines.append(f"OK  テーマカード合計 {topic_total:,} = ヒーロー表示 {hero_total:,}")
+    else:
+        lines.append(f"NG  テーマカード合計 {topic_total:,} = ヒーロー表示 {hero_total}")
+        failures += 1
+
+    count_cards = re.findall(
+        r'<(?:div|span)\s+class="(?:topic-meta|question-count)"[^>]*>(.*?)</(?:div|span)>',
+        html,
+        flags=re.DOTALL,
+    )
+    if len(count_cards) == 15 and all("分類済み" in body for body in count_cards):
+        lines.append("OK  件数の用語が「分類済み」で統一されている")
+    else:
+        lines.append("NG  件数の用語が「分類済み」で統一されている")
+        failures += 1
 
     lines.extend(["", "=== 正典ファイル検査 ==="])
     for name, synthetic_count in stats["synthetic_counts"].items():
@@ -214,6 +350,30 @@ def verify_top_page(
         lines.append("OK  問いカード 4/4 リンク有効（リンク先HTMLが実在する）")
     else:
         lines.append(f"NG  問いカード {valid_cards}/4 リンク有効")
+        failures += 1
+
+    growth_text = (root / "GROWTH.yaml").read_text(encoding="utf-8")
+    featured_theme_match = re.search(
+        r"^featured:\s*([\w-]+)", growth_text, flags=re.MULTILINE
+    )
+    feature_card_match = re.search(
+        r'<a\s+class="feature-card"\s+href="([^"]+)"', html
+    )
+    featured_theme = featured_theme_match.group(1) if featured_theme_match else None
+    featured_href = feature_card_match.group(1) if feature_card_match else None
+    expected_feature_href = (
+        Path(themes[featured_theme]["html"]).name
+        if featured_theme in themes and themes[featured_theme].get("html")
+        else None
+    )
+    if featured_href and featured_href == expected_feature_href:
+        lines.append(
+            f"OK  今週の注目テーマ {featured_theme} が GROWTH.yaml の featured と一致する"
+        )
+    else:
+        lines.append(
+            "NG  今週の注目テーマが GROWTH.yaml の featured と一致する"
+        )
         failures += 1
 
     if "#ranking" in html:

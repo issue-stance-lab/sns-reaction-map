@@ -28,6 +28,25 @@ class PortalStatsTest(unittest.TestCase):
 
         self.assertEqual(failures, 0)
 
+    def test_unmanaged_topic_count_is_rejected(self):
+        html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+        html = html.replace(
+            '<strong id="topic-count-ai-copyright">708</strong>',
+            "708",
+            1,
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            index_path = Path(directory) / "index.html"
+            index_path.write_text(html, encoding="utf-8")
+
+            lines, failures = verify_top_page(index_path=index_path)
+
+        self.assertGreater(failures, 0)
+        self.assertIn(
+            "NG  ページ内の「○件」表示は全て id 付き: 708件",
+            lines,
+        )
+
     def test_zero_record_sample_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -172,6 +172,8 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
     updated_long = f"{last_updated.year}年{last_updated.month}月{last_updated.day}日"
     next_long = f"{next_update.month}月{next_update.day}日"
     next_iso = next_update.isoformat()
+    days_until_update = (next_update - stats["today"]).days
+    next_days = f"あと{days_until_update}日" if days_until_update > 0 else "本日更新予定"
 
     specs = [
         ("分類済み投稿の用語", r"<small>分析済み投稿</small>|<small>分類済み投稿</small>", "<small>分類済み投稿</small>"),
@@ -181,6 +183,7 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("em更新日", r'(<strong id="hero-total-samples">[^<]*</strong><em>)[^<]*(</em>)', rf'\g<1>{updated_short}更新\2'),
         ("最終更新日", r'最終更新: <strong>[^<]+</strong>', f'最終更新: <strong>{updated_long}</strong>'),
         ("update-bar次回更新", r'(次回更新: )\d+月\d+日(（<span id="update-bar-days">)', rf'\g<1>{next_long}\2'),
+        ("update-bar残り日数", r'(<span id="update-bar-days">)[^<]*(</span>)', rf'\g<1>{next_days}\2'),
         ("JS次回更新", r"new Date\('\d{4}-\d{2}-\d{2}T00:00:00\+09:00'\)", f"new Date('{next_iso}T00:00:00+09:00')"),
     ]
     for theme in (
@@ -194,6 +197,14 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
                 f"注目の問い件数 {theme}",
                 rf'(<strong id="featured-count-{re.escape(theme)}">)[^<]*(</strong>)',
                 rf'\g<1>{stats["sample_counts"][theme]:,}\2',
+            )
+        )
+    for theme, count in stats["sample_counts"].items():
+        specs.append(
+            (
+                f"テーマカード件数 {theme}",
+                rf'(<strong id="topic-count-{re.escape(theme)}">)[^<]*(</strong>)',
+                rf'\g<1>{count:,}\2',
             )
         )
     return specs
