@@ -59,7 +59,7 @@ themes:
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 72
-    x_posted_at: 2026-07-31
+    x_posted_at: 2026-08-01
     notes: "2026-07-26にYahooリアルタイム検索72件を追加収集しHermes再分類。22件が意見投稿と判定。7/12収集31件との比較「世論の潮目」ウィジェットを追加（賛成54.5%↑、反対45.5%↓）。"
 
   bukatsu-chiiki:
@@ -100,7 +100,7 @@ themes:
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 224
-    x_posted_at: 2026-07-24
+    x_posted_at: 2026-08-01
     notes: "2026-07-12にYahooリアルタイム検索223件を追加収集。既存rawとの重複0件、新規223件中212件をOpenCode Go / minimax-m2.7で2D有効分類。raw台帳と2D累計の母集団差あり。2026-07-23に422件をHermes / kimi-k2.6で6論点・4スタンスへ再分類し、論点アリーナ（極座標6セクター・2ステップ投票）と論点別X投稿カードへ反映。"
 
   elderly-license-revocation:
@@ -182,7 +182,7 @@ themes:
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 178
-    x_posted_at: 2026-07-28
+    x_posted_at: 2026-08-01
     notes: "2026-07-26にYahooリアルタイム検索178件を追加収集しHermes再分類。141件が意見投稿と判定。7/12収集112件との比較「世論の潮目」ウィジェットを追加（批判・追及48.2%↑、擁護・懐疑44.7%↓）。"
 
   fukushuto:
@@ -222,7 +222,7 @@ themes:
     published_at: 2026-07-18
     updated_at: 2026-07-26
     collect_delta: 347
-    x_posted_at: 2026-07-31
+    x_posted_at: 2026-08-01
     notes: "2026-07-17のYahooリアルタイム検索。皇室典範改正が同日参院で可決・成立した直後で投稿殺到中。trend_judgeはGO（スコア9/10、意見率60-70%）。9クエリで326件取得済み。2D分類完了（OpenCode Go minimax-m2.7）。stance_reform（反対140/中立103/賛成30）stance_succession（男系95/中立133/女系45）。main_issue分布: 男系vs女系75/養子制度54/立法手法54/女性天皇の区別24/愛子さま5/その他56。2026-07-26に347件を追加収集しHermes1D分類（改正賛成11→20%に増加）、「世論の潮目」ウィジェットを追加（前回は2Dスタンス統計から合成）。"
 
   consumption-tax-cut:
@@ -243,5 +243,5 @@ themes:
     published_at: 2026-07-29
     updated_at: 2026-07-29
     collect_delta: 667
-    x_posted_at: 2026-07-31
+    x_posted_at: 2026-08-01
     notes: "2026-07-28に新規テーマとして収集。trend_judgeはGO（スコア9/10、意見率100%、投稿量2、対立性2、SEO需要2、広告安全性1）。食料品への限定的な消費税減税が高市政権で決着しつつあるタイミングで収集。20クエリで667件（batch1 324件 + batch2 382件、重複34件除外）。Hermes（kimi-k2.6）で7論点・4スタンス・3段階強度を分類。関連666件、意見612件と意見率91.8%は全テーマ中最高。スタンス内訳は減税推進299（48.9%）/条件付き賛成・政府案に不満109（17.8%）/減税反対・慎重163（26.6%）/中立41（6.7%）。副首都・皇室典範の3スタンスでは「減税は賛成だが政府案は中途半端」が表現できないため部活動と同じ4スタンス構成を採用し、アリーナの点の色をx座標ベースから立場インデックスベースへ変更。論点は公約と政治不信が43.6%と突出し、税制の中身より政治の姿勢を問う投稿が中心。ページはscripts/build_consumption_tax_page.py が副首都ページをテンプレートに生成（再実行可能）。topic-modern.cssの.hero::beforeは--topic-hero-image未指定だとai-copyright-hero.webpにフォールバックするため、必ずbodyのinline styleで指定すること。2026-07-29にヒーロー画像を生成・反映（manga-prompts/consumption-tax-cut-hero-prompt.md、買い物カゴ＋レシート折れ線＋値札の境界＋天秤の抽象俯瞰型、OGPも同画像）。同日、論点別インフォグラフィックwide6枚も生成・反映（manga-prompts/consumption-tax-cut-infographic-wide-prompts.md、1915×821px・156〜188KB）。explainerセクションを画像つきカード＋拡大モーダル版に切り替え済み。「その他」は6件と少なく図解を作っていない（自転車青切符と同じ扱い）。テンプレート元の副首都ページはSEOスクリプトで随時書き換わるため、build_consumption_tax_page.py に生成後の自己検証（タイトル・h1・canonical・保護タグ・SM_RAW件数・副首都由来の残留参照・図解6枚・賛否バー合計100%・trustブロック・回遊カード）を組み込んである。2026-07-29に公開: configs/site-cases.json と configs/theme-seo.json に登録（両者のURL集合が一致しないとapply_theme_trust.pyが落ちる）、sitemap登録、index.htmlにトピックカード追加（hero-total-samples 5,953／公開中のテーマ11）、副首都・憲法改正から相互リンク、投票後の回遊カードを追加。"
