@@ -45,6 +45,8 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
         end = positions[index + 1][0] if index + 1 < len(positions) else len(text)
         block = text[position:end]
         themes[name] = {
+            "title": _scalar(block, "title"),
+            "html": _scalar(block, "html"),
             "published": _scalar(block, "published") == "done",
             "page_v3": _scalar(block, "page_v3") == "done",
             "sample_file": _scalar(block, "sample_file"),

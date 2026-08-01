@@ -226,6 +226,16 @@
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/fukushuto/fukushuto-hero.webp')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">統治機構・地方</span><h1>副首都法案とは？候補地・費用・防災をめぐる論点</h1><p class="question-line">副首都、本当に必要？ 場所は大阪でいい？</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見229件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>51</b>件</span><strong>「副首都」とは何かが、まだ見えない</strong><span class="conclusion-detail">「生煮え」「法案に定義がない」という制度設計への疑問が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
+
+
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 255件<br>
+  （取得期間: 2026-07-14〜2026-07-26／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
 <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
   <article class="stat insight-stat">
     <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
@@ -491,7 +501,7 @@
 })();
 </script>
 
-<section class="panel" id="vote-section"><div class="panel-title"><h2>あなたが一番気になる「設計の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><!-- ARTICLE_TRUST_START -->
+<section class="panel" id="vote-section" data-vote-topic="fukushuto-issue-stance-v1"><div class="panel-title"><h2>あなたが一番気になる「設計の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、与党・日本維新の会・チームみらいの修正合意により、首都機能のバックアップ都市「副首都」を政令で指定できるようにする法案が衆院通過目前となりました。大阪を軸に検討が進む一方、「大阪ありき」批判や制度設計の不透明さへの疑問も広がっています。</p><!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
     <p class="article-trust-kicker">編集・分析情報</p>
@@ -1019,44 +1029,8 @@ const SM_RAW = [
     }
   }
 
-  // 投票前ブラー
-  (function applyBlur(){
-    var inner=document.getElementById('stance-map-inner');
-    var section=document.getElementById('stance-map-section');
-    if(!inner||!section)return;
-    inner.style.filter='blur(8px)';
-    inner.style.pointerEvents='none';
-    inner.style.userSelect='none';
-    section.style.position='relative';
-    var ov=document.createElement('div');
-    ov.id='chart-overlay';
-    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-    ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-    section.appendChild(ov);
-  })();
-
-  function revealChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='filter .6s ease';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
-    var ov=document.getElementById('chart-overlay');
-    if(ov)ov.remove();
-  }
-  function reBlurChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
-    var section=document.getElementById('stance-map-section');
-    if(section&&!document.getElementById('chart-overlay')){
-      var ov=document.createElement('div');
-      ov.id='chart-overlay';
-      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-      ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-      section.appendChild(ov);
-    }
-  }
-
   let pulseRAF=null;
   window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
-    revealChart();
     const iss=ISSUES[issueIdx]||ISSUES[0];
     const rad=iss.mid*Math.PI/180, r=(R_MIN+R_MAX)/2-14;
     voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#4f46e5',sector:issueIdx};
@@ -1071,7 +1045,6 @@ const SM_RAW = [
     const note=document.getElementById('your-marker-note');
     if(note)note.style.display='none';
     drawMain();
-    reBlurChart();
   };
 
   const filters=document.getElementById('sm-filters');

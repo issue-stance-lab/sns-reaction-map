@@ -795,7 +795,16 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 646件<br>
+  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
       <article class="stat insight-stat">
         <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
         <strong class="insight-value">646<small>件</small></strong>
@@ -972,7 +981,7 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
 })();
 </script>
-<section class="panel" id="vote-section">
+<section class="panel" id="vote-section" data-vote-topic="constitutional-amendment-issue-stance-v1">
 <div class="panel-title"><h2>あなたはどの論点を重く見る？</h2><span>SNSの声を見る前に</span></div>
 <p>憲法改正は、9条や緊急事態条項だけでなく、国民投票の公平性や議論の進め方まで含むテーマです。まず一番気になる論点を選び、次に改正への総合的な考えを選んでください。</p>
 <!-- ARTICLE_TRUST_START -->

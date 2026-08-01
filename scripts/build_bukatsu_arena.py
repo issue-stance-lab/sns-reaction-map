@@ -428,39 +428,8 @@ ARENA_JS = """<script>
     }
   }
 
-  // 投票前ブラー
-  (function applyBlur(){
-    var inner=document.getElementById('stance-map-inner');
-    var section=document.getElementById('stance-map-section');
-    if(!inner||!section)return;
-    inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';
-    section.style.position='relative';
-    var ov=document.createElement('div');ov.id='chart-overlay';
-    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.35);border-radius:8px;';
-    ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-    section.appendChild(ov);
-  })();
-
-  function revealChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='filter .6s ease';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
-    var ov=document.getElementById('chart-overlay');if(ov)ov.remove();
-  }
-  function reBlurChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
-    var section=document.getElementById('stance-map-section');
-    if(section&&!document.getElementById('chart-overlay')){
-      var ov=document.createElement('div');ov.id='chart-overlay';
-      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(0,0,0,.35);border-radius:8px;';
-      ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-      section.appendChild(ov);
-    }
-  }
-
   let pulseRAF=null;
   window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
-    revealChart();
     const iss=ISSUES[issueIdx]||ISSUES[0];
     const rad=iss.mid*Math.PI/180,r=(R_MIN+R_MAX)/2-14;
     voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#0891b2',sector:issueIdx};
@@ -472,7 +441,7 @@ ARENA_JS = """<script>
     if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
     voteMarker=null;
     const note=document.getElementById('your-marker-note');if(note)note.style.display='none';
-    drawMain();reBlurChart();
+    drawMain();
   };
 
   const filters=document.getElementById('sm-filters');

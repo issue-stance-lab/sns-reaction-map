@@ -817,7 +817,15 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 708件<br>
+  （取得期間: 2026-06-10〜2026-07-26／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
       <article class="stat insight-stat">
         <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
         <strong class="insight-value">475<small>件</small></strong>
@@ -1074,7 +1082,7 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
 })();</script>
 
-    <section class="panel" id="vote-section">
+    <section class="panel" id="vote-section" data-vote-topic="ai-copyright-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文化庁が「AI学習は著作権侵害にならない」と見解を示す一方、イラストレーターや漫画家が反発。クリエイター保護と技術革新の狭間で、どの論点が最も重要だと思いますか？</p>
 <!-- ARTICLE_TRUST_START -->
@@ -1340,38 +1348,8 @@
     }
   }
 
-  (function applyBlur(){
-    var inner=document.getElementById('issue-arena-inner');
-    var section=document.getElementById('issue-arena-section');
-    if(!inner||!section)return;
-    inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';
-    section.style.position='relative';
-    var ov=document.createElement('div');ov.id='arena-overlay';
-    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;';
-    ov.innerHTML='<div style="text-align:center"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-    section.appendChild(ov);
-  })();
-
-  function revealChart(){
-    var inner=document.getElementById('issue-arena-inner');
-    if(inner){inner.style.transition='filter .6s';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
-    var ov=document.getElementById('arena-overlay');if(ov)ov.remove();
-  }
-  function reBlurChart(){
-    var inner=document.getElementById('issue-arena-inner');
-    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
-    var section=document.getElementById('issue-arena-section');
-    if(section&&!document.getElementById('arena-overlay')){
-      var ov=document.createElement('div');ov.id='arena-overlay';
-      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;';
-      ov.innerHTML='<div style="text-align:center"><div style="font-size:16px;font-weight:800;color:#fff;">まず投票してから結果を見よう</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-      section.appendChild(ov);
-    }
-  }
-
   let pulseRAF=null;
   window.setArenaVoteMarker=function(issueIdx,stanceColor){
-    revealChart();
     const iss=ISSUES[issueIdx]||ISSUES[0];
     const rad=iss.mid*Math.PI/180,r=(R_MIN+R_MAX)/2-14;
     voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#7c3aed',sector:issueIdx};
@@ -1383,7 +1361,7 @@
     if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
     voteMarker=null;
     const note=document.getElementById('your-marker-note-arena');if(note)note.style.display='none';
-    drawMain();reBlurChart();
+    drawMain();
   };
 
   const filtersEl=document.getElementById('sm-filters');

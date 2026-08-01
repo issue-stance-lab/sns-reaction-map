@@ -778,7 +778,15 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 181件<br>
+  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
       <article class="stat insight-stat">
         <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
         <strong class="insight-value">181<small>件</small></strong>
@@ -1020,7 +1028,7 @@
   modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
 })();</script>
-    <section class="panel" id="vote-section">
+    <section class="panel" id="vote-section" data-vote-topic="bike-blue-ticket-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">2024年に道路交通法が改正され、自転車の違反に「青切符」（反則金）が導入されます。取り締まりを強化すべきか、まずインフラ整備が先か。あなたが最も気になる論点はどれですか？</p>
 <!-- ARTICLE_TRUST_START -->

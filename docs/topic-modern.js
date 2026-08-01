@@ -88,6 +88,7 @@
   function normalizeVoteResult() {
     var result = document.getElementById('vote-result');
     if (!result || !result.textContent.trim() || result.dataset.resultNormalizing === 'true') return;
+    if (getComputedStyle(result).display === 'none') return;
 
     var label = result.querySelector('#vote-position-label');
     var description = result.querySelector('#vote-position-text');
@@ -118,6 +119,36 @@
       if (description) card.appendChild(description);
     }
     card.classList.add('vote-result-card');
+
+    var participantSummary = result.querySelector('.participant-vote-summary');
+    if (!participantSummary) {
+      participantSummary = document.createElement('p');
+      participantSummary.className = 'participant-vote-summary';
+      result.insertBefore(participantSummary, card);
+    }
+    participantSummary.textContent = 'このサイトの参加者投票 n=集計中（訪問者の任意回答です）';
+
+    var voteSection = document.getElementById('vote-section');
+    var voteTopic = voteSection && voteSection.dataset.voteTopic;
+    if (voteTopic && window.VoteStore && result.dataset.participantCountLoading !== 'true' &&
+        result.dataset.participantCountLoaded !== 'true') {
+      result.dataset.participantCountLoading = 'true';
+      VoteStore.getCounts(voteTopic).then(function (response) {
+        var counts = response.counts || {};
+        var participantTotal = Object.keys(counts).reduce(function (sum, key) {
+          return sum + (Number(counts[key]) || 0);
+        }, 0);
+        if (response.mode === 'local' && participantTotal === 0) participantTotal = 1;
+        participantSummary.textContent = 'このサイトの参加者投票 n=' + participantTotal +
+          '（訪問者の任意回答です）';
+        result.dataset.participantCountLoaded = 'true';
+      }).catch(function (error) {
+        console.error('Participant vote count failed:', error);
+        participantSummary.textContent = 'このサイトの参加者投票 n=取得失敗（訪問者の任意回答です）';
+      }).finally(function () {
+        delete result.dataset.participantCountLoading;
+      });
+    }
 
     var share = result.querySelector('#share-x');
     var redo = result.querySelector('#vote-redo-btn, #vote-redo');
@@ -163,152 +194,6 @@
       subtree: true
     });
     normalizeVoteResult();
-  }
-
-  function getPrimaryArena() {
-    return document.getElementById('issue-arena-section') ||
-      document.getElementById('stance-map-section');
-  }
-
-  function getArenaContent(section) {
-    if (!section) return null;
-    var inner = section.querySelector('#issue-arena-inner, #stance-map-inner, .arena-gated-content');
-    if (inner) return inner;
-
-    inner = document.createElement('div');
-    inner.id = 'issue-arena-inner';
-    inner.className = 'arena-gated-content';
-    while (section.firstChild) inner.appendChild(section.firstChild);
-    section.appendChild(inner);
-    return inner;
-  }
-
-  function normalizeArenaLayout(section, inner) {
-    if (!section || !inner) return null;
-    var title = inner.querySelector(':scope > .panel-title');
-    var caption = inner.querySelector(':scope > .map-caption, :scope > .map-caption-a, :scope > .arena-caption');
-    var board = inner.querySelector(':scope > #sm-wrap, :scope > #sm-wrap-arena, :scope > #arena-wrap, :scope > .arena-wrap');
-    var note = inner.querySelector(':scope > #your-marker-note-arena, :scope > #your-marker-note, :scope > #arena-marker-note, :scope > .arena-user-note');
-    var controls = inner.querySelector(':scope > .sm-controls, :scope > .arena-controls, :scope > .arena-legend');
-    var tooltip = inner.querySelector(':scope > #sm-tooltip, :scope > #sm-tooltip-arena, :scope > .arena-tooltip');
-
-    [title, caption, board, note, controls, tooltip].forEach(function (element) {
-      if (element) inner.appendChild(element);
-    });
-    return board || inner.querySelector('canvas');
-  }
-
-  function positionArenaOverlay(overlay, section, board) {
-    if (!overlay || !section || !board) return;
-    var sectionRect = section.getBoundingClientRect();
-    var boardRect = board.getBoundingClientRect();
-    overlay.style.inset = 'auto';
-    overlay.style.top = (boardRect.top - sectionRect.top) + 'px';
-    overlay.style.left = (boardRect.left - sectionRect.left) + 'px';
-    overlay.style.width = boardRect.width + 'px';
-    overlay.style.height = boardRect.height + 'px';
-  }
-
-  function lockArenaUntilVote() {
-    var section = getPrimaryArena();
-    var inner = getArenaContent(section);
-    if (!section || !inner) return;
-    var board = normalizeArenaLayout(section, inner);
-
-    inner.style.filter = 'blur(8px)';
-    inner.style.pointerEvents = 'none';
-    inner.style.userSelect = 'none';
-    inner.setAttribute('aria-hidden', 'true');
-    section.classList.add('arena-is-locked');
-
-    section.querySelectorAll('#arena-overlay, #chart-overlay, #topic-arena-overlay').forEach(function (oldOverlay) {
-      oldOverlay.remove();
-    });
-    var overlay = document.createElement('div');
-    overlay.id = 'topic-arena-overlay';
-    overlay.className = 'topic-arena-overlay';
-    overlay.innerHTML =
-      '<div class="topic-arena-overlay-card">' +
-        '<strong>まず投票してからアリーナを見よう</strong>' +
-        '<span>上の投票で論点と考えを選んでください</span>' +
-      '</div>';
-    section.appendChild(overlay);
-    positionArenaOverlay(overlay, section, board);
-  }
-
-  function revealArenaAfterVote() {
-    var section = getPrimaryArena();
-    var inner = getArenaContent(section);
-    if (!section || !inner) return;
-
-    inner.style.transition = 'filter .45s ease';
-    inner.style.filter = 'none';
-    inner.style.pointerEvents = 'auto';
-    inner.style.userSelect = 'auto';
-    inner.removeAttribute('aria-hidden');
-    section.classList.remove('arena-is-locked');
-    section.querySelectorAll('#arena-overlay, #chart-overlay, #topic-arena-overlay').forEach(function (overlay) {
-      overlay.remove();
-    });
-  }
-
-  window.lockArenaUntilVote = lockArenaUntilVote;
-  window.revealArenaAfterVote = revealArenaAfterVote;
-
-  lockArenaUntilVote();
-  window.addEventListener('resize', function () {
-    var section = getPrimaryArena();
-    var inner = getArenaContent(section);
-    var overlay = section && section.querySelector('#topic-arena-overlay');
-    var board = normalizeArenaLayout(section, inner);
-    positionArenaOverlay(overlay, section, board);
-  });
-
-  [
-    'setArenaVoteMarker',
-    'setStanceMapVoteMarker',
-    'setConstitutionalVoteMarker',
-    'setHenokoArenaMarker',
-    'setNicknameArenaMarker',
-    'setTakaichiArenaMarker'
-  ].forEach(function (name) {
-    var original = window[name];
-    if (typeof original !== 'function' || original.__arenaGateWrapped) return;
-    var wrapped = function () {
-      var result = original.apply(this, arguments);
-      revealArenaAfterVote();
-      return result;
-    };
-    wrapped.__arenaGateWrapped = true;
-    window[name] = wrapped;
-  });
-
-  [
-    'clearArenaVoteMarker',
-    'clearStanceMapVoteMarker',
-    'clearConstitutionalVoteMarker',
-    'clearHenokoArenaMarker',
-    'clearNicknameArenaMarker',
-    'clearTakaichiArenaMarker'
-  ].forEach(function (name) {
-    var original = window[name];
-    if (typeof original !== 'function' || original.__arenaGateWrapped) return;
-    var wrapped = function () {
-      var result = original.apply(this, arguments);
-      lockArenaUntilVote();
-      return result;
-    };
-    wrapped.__arenaGateWrapped = true;
-    window[name] = wrapped;
-  });
-
-  var visibleMarkerNote = document.querySelector(
-    '#your-marker-note-arena:not([style*="display:none"]), ' +
-    '#your-marker-note:not([style*="display:none"]), ' +
-    '#arena-marker-note:not([style*="display:none"])'
-  );
-  if (visibleMarkerNote && getComputedStyle(visibleMarkerNote).display !== 'none') {
-    revealArenaAfterVote();
   }
 
   var header = document.querySelector('.modern-site-header');

@@ -421,8 +421,6 @@ def arguments_html(config: dict[str, Any]) -> str:
 
 def research_conditions_html(config: dict[str, Any], total: int) -> str:
     research = config.get("research_conditions") or {}
-    if not research:
-        return ""
     source = str(research.get("sample_source") or config.get("source_label") or "").replace("!", "")
     period = str(research.get("sample_period") or "")
     period_label = "記録なし" if period.lower() == "unknown" else period
@@ -473,11 +471,63 @@ def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[s
 
     if "<!-- RESEARCH_CONDITIONS_START -->" in source:
         source = re.sub(r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", conditions, source, flags=re.DOTALL)
-    elif conditions:
-        stats_match = re.search(r'(<section class="stats\b.*?</section>)', source, flags=re.DOTALL)
+        source = source.replace(conditions, "", 1)
+    if conditions:
+        stats_match = re.search(r'<section class="stats\b', source)
         if not stats_match:
             raise ValueError("調査条件の挿入先（stats）が見つかりません")
-        source = source[:stats_match.end()] + "\n" + conditions + source[stats_match.end():]
+        source = source[:stats_match.start()] + conditions + "\n" + source[stats_match.start():]
+        source = re.sub(
+            r"\n[ \t]+\n+(?=<!-- RESEARCH_CONDITIONS_START -->)",
+            "\n\n",
+            source,
+            count=1,
+        )
+    source = remove_legacy_vote_gates(source)
+    return add_vote_topic_metadata(source)
+
+
+def add_vote_topic_metadata(source: str) -> str:
+    """Expose each inline vote topic to the shared participant-count renderer."""
+    topic_match = re.search(r"\b(?:var|let|const)\s+TOPIC\s*=\s*['\"]([^'\"]+)['\"]", source)
+    if not topic_match:
+        return source
+    topic = html.escape(topic_match.group(1), quote=True)
+    section_match = re.search(r"<section\b([^>]*\bid=['\"]vote-section['\"][^>]*)>", source)
+    if not section_match:
+        return source
+    attributes = re.sub(r"\s+data-vote-topic=['\"][^'\"]*['\"]", "", section_match.group(1))
+    replacement = f'<section{attributes} data-vote-topic="{topic}">'
+    return source[:section_match.start()] + replacement + source[section_match.end():]
+
+
+def remove_legacy_vote_gates(source: str) -> str:
+    """Remove old inline map locks while preserving marker and vote behavior."""
+    source = re.sub(
+        r"\n\s*(?:// 投票前ブラー\s*\n)?\s*\(function applyBlur\(\)\{.*?\n\s*let pulseRAF=null;",
+        "\n\n  let pulseRAF=null;",
+        source,
+        count=1,
+        flags=re.DOTALL,
+    )
+    patterns = (
+        r"\n\s*// 投票前ブラー\s*\n\s*\(function applyBlur\(\)\{.*?\n\s*\}\)\(\);\s*\n",
+        r"\n\s*\(function applyBlur\(\)\{.*?\n\s*\}\)\(\);\s*\n",
+        r"\n\s*function revealChart\(\)\{.*?\n\s*\}\s*\n\s*function reBlurChart\(\)\{.*?\n\s*\}\s*\n",
+    )
+    for pattern in patterns:
+        source = re.sub(pattern, "\n", source, count=1, flags=re.DOTALL)
+    source = re.sub(r"\s*revealChart\(\);", "", source)
+    source = re.sub(r"\s*reBlurChart\(\);", "", source)
+    source = re.sub(r"\n\s*function blur\(\)\{.*?\}\s*\n", "\n", source, count=1)
+    source = re.sub(r"\s*reveal\(\);", "", source)
+    source = re.sub(r";?blur\(\);", ";", source)
+    source = re.sub(
+        r"(\n\s*\}\n\s*\})\n\s*\}\n(\s*let pulseRAF=null;)",
+        r"\1\n\2",
+        source,
+        count=1,
+    )
     return source
 
 
@@ -532,7 +582,7 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     axes_js = json.dumps(axes_with_labels, ensure_ascii=False)
 
     return f"""<section class="panel" id="vote-section">
-<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>SNSの声を見る前に</span></div>
+<div class="panel-title"><h2>この話題、あなたはどう感じる？</h2><span>記事を読んだあとでもOK</span></div>
 {intro_html}
 {method_html}
 <p style="font-size:13px;color:var(--ink);font-weight:700;margin:0 0 14px;">結果を見る前に — あなたの感覚に近いのは？</p>
@@ -543,7 +593,7 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;" id="vote-position-label"></div>
     <div style="font-size:12px;color:var(--muted);line-height:1.7;" id="vote-position-text"></div>
   </div>
-  <div style="font-size:14px;font-weight:700;margin-bottom:12px;">みんなの感覚（投票集計）</div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:#5b21b6;">サイト参加者の投票結果</div>
   <div id="vote-bars" style="margin-bottom:16px;"></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
     <a id="share-x" href="#" target="_blank" rel="noopener"
@@ -573,24 +623,6 @@ def vote_ui_html(config: dict[str, Any]) -> str:
   var stored={{}};
   var myVote=localStorage.getItem(KEY+"_my");
 
-  // Blur the semicircle chart until voted (deferred to ensure DOM is ready)
-  function applyBlur(){{
-    var chartPanel=document.getElementById("semicircle-chart");
-    if(chartPanel){{
-      var wrap=chartPanel.closest(".panel");
-      if(wrap && myVote===null){{
-        wrap.id="chart-panel";
-        wrap.style.filter="blur(8px)";wrap.style.pointerEvents="none";wrap.style.userSelect="none";
-        wrap.style.position="relative";
-        var overlay=document.createElement("div");
-        overlay.id="chart-overlay";
-        overlay.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;";
-        overlay.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">上の投票ボタンを押すと解除されます</div></div>';
-        wrap.appendChild(overlay);
-      }}
-    }}
-  }}
-  
   async function fetchVotes(){{
     try{{
       var result=await VoteStore.getCounts(TOPIC);
@@ -606,9 +638,9 @@ def vote_ui_html(config: dict[str, Any]) -> str:
   }}
 
   if(document.readyState==="loading"){{
-    document.addEventListener("DOMContentLoaded", function(){{ applyBlur(); fetchVotes(); }});
+    document.addEventListener("DOMContentLoaded", fetchVotes);
   }}else{{
-    setTimeout(function(){{ applyBlur(); fetchVotes(); }},0);
+    setTimeout(fetchVotes,0);
   }}
 
   var btnWrap=document.getElementById("vote-buttons");
@@ -626,16 +658,6 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     VoteStore.clear(KEY+"_my");
     location.reload();
   }};
-
-  function revealChart(){{
-    var wrap=document.getElementById("chart-panel");
-    if(wrap){{
-      wrap.style.transition="filter .6s ease";
-      wrap.style.filter="none";wrap.style.pointerEvents="auto";wrap.style.userSelect="auto";
-      var ov=document.getElementById("chart-overlay");
-      if(ov)ov.remove();
-    }}
-  }}
 
   async function castVote(idx){{
     if(myVote!==null) return;
@@ -656,7 +678,6 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     }}
 
     myVote=""+idx;
-    revealChart();
     showResults(idx);
   }}
 
@@ -683,9 +704,9 @@ def vote_ui_html(config: dict[str, Any]) -> str:
       row.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
         +'<span style="font-size:12px;font-weight:'+(isMine?'800':'600')+';color:'+(isMine?a.color:'var(--ink)')+';">'
         +(isMine?'✓ ':'')+a.label+'</span>'
-        +'<span style="font-size:14px;font-weight:800;color:'+a.color+'">'+pct+'% ('+c+'票)</span></div>'
+        +'<span style="font-size:14px;font-weight:800;color:#6d28d9">'+pct+'% ('+c+'票)</span></div>'
         +'<div style="height:8px;border-radius:4px;background:var(--line);overflow:hidden;">'
-        +'<div style="height:100%;width:'+pct+'%;background:'+a.color+';border-radius:4px;transition:width .4s ease;"></div></div>';
+        +'<div style="height:100%;width:'+pct+'%;background:#6d28d9;border-radius:4px;transition:width .4s ease;"></div></div>';
       barsEl.appendChild(row);
     }});
 
