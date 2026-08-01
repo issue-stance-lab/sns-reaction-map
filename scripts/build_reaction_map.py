@@ -464,14 +464,19 @@ def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[s
     if "<!-- ARGUMENTS_START -->" in source:
         source = re.sub(r"<!-- ARGUMENTS_START -->.*?<!-- ARGUMENTS_END -->", arguments, source, flags=re.DOTALL)
     elif arguments:
-        anchor = '    <section class="panel" id="vote-section">'
-        if anchor not in source:
+        vote_match = re.search(r'<section\b[^>]*\bid=["\']vote-section["\'][^>]*>', source)
+        if not vote_match:
             raise ValueError("arguments の挿入先（投票セクション）が見つかりません")
-        source = source.replace(anchor, arguments + "\n" + anchor, 1)
+        source = source[:vote_match.start()] + arguments + "\n" + source[vote_match.start():]
 
     if "<!-- RESEARCH_CONDITIONS_START -->" in source:
-        source = re.sub(r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", conditions, source, flags=re.DOTALL)
-        source = source.replace(conditions, "", 1)
+        source = re.sub(
+            r"\n?<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->\n?",
+            "\n",
+            source,
+            count=1,
+            flags=re.DOTALL,
+        )
     if conditions:
         stats_match = re.search(r'<section class="stats\b', source)
         if not stats_match:
@@ -479,6 +484,12 @@ def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[s
         source = source[:stats_match.start()] + conditions + "\n" + source[stats_match.start():]
         source = re.sub(
             r"\n[ \t]+\n+(?=<!-- RESEARCH_CONDITIONS_START -->)",
+            "\n\n",
+            source,
+            count=1,
+        )
+        source = re.sub(
+            r"\n{3,}(?=<!-- RESEARCH_CONDITIONS_START -->)",
             "\n\n",
             source,
             count=1,

@@ -119,6 +119,7 @@ def verify_theme_page(
         pos for pos in (
             page.find("象限別の代表的な声"),
             page.find("代表サンプル"),
+            page.find("7つの論点とXの声"),
         ) if pos >= 0
     ]
     representative_pos = min(representative_positions, default=-1)
@@ -182,9 +183,18 @@ def verify_theme_page(
 
     if arguments is not None:
         expected_count_text = f"公開投稿 {count}件"
-        map_count_text = f">{count}件 | セクター="
-        if expected_count_text in page and map_count_text in page:
-            lines.append(f"OK  件数表示が sample_file の実数と一致する（{count}件）")
+        opinion_count = sum(
+            1
+            for row in rows
+            if bool((row.get("classification") or row).get("is_opinion"))
+        )
+        map_count_texts = (
+            f">{count}件 | セクター=",
+            f">意見{opinion_count}件 | セクター=",
+        )
+        if expected_count_text in page and any(text in page for text in map_count_texts):
+            detail = f"全{count}件 / 意見{opinion_count}件" if opinion_count != count else f"{count}件"
+            lines.append(f"OK  件数表示が sample_file の実数と一致する（{detail}）")
         else:
             lines.append(f"NG  件数表示が sample_file の実数と一致する（期待: {count}件）")
             failures += 1
