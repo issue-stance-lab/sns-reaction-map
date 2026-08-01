@@ -500,7 +500,7 @@ def main() -> int:
         page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
     page = replace_once(
         page,
-        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>.*?</span></div>',
+        r'<div class="panel-title"><h2>(?:論点アリーナ|SNS反応マップ)</h2><span>.*?</span></div>',
         f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{len(all_opinions)}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場</span></div>',
         "arena heading",
     )
