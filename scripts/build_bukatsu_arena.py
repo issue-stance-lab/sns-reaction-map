@@ -4,9 +4,20 @@ import json
 import re
 from pathlib import Path
 
+try:
+    from .build_reaction_map import arguments_html, load_research_conditions, update_existing_html
+except ImportError:  # python3 scripts/build_bukatsu_arena.py
+    from build_reaction_map import (  # type: ignore[no-redef]
+        arguments_html,
+        load_research_conditions,
+        update_existing_html,
+    )
+
 ROOT = Path(__file__).parent.parent
 HTML_PATH = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
 JSON_PATH = ROOT / "social-samples" / "bukatsu-chiiki_2d_classified.json"
+CURRENT_JSON_PATH = ROOT / "social-samples" / "bukatsu-chiiki_hermes_classified_20260723.json"
+CONFIG_PATH = ROOT / "configs" / "bukatsu-chiiki-reaction-map.json"
 
 ISSUE_MAP = {
     "費用・家庭負担": 0,
@@ -500,23 +511,50 @@ ARENA_JS = """<script>
 """
 
 def transform(html: str) -> str:
+    # The published page now uses the 467-record Hermes dataset.  Keep the
+    # dedicated legacy entry point safe by routing modern pages through the
+    # same editorial-only updater as build_reaction_map.py --update-existing.
+    if "<!-- RESEARCH_CONDITIONS_START -->" in html:
+        config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+        config["research_conditions"] = load_research_conditions(CURRENT_JSON_PATH)
+        rows = json.loads(CURRENT_JSON_PATH.read_text(encoding="utf-8"))
+        return update_existing_html(html, rows, config)
+
     # 1. Add CSS before </style>
-    html = html.replace("</style>", EXTRA_CSS + "\n  </style>", 1)
+    if "/* === SNS反応マップ === */" not in html:
+        html = html.replace("</style>", EXTRA_CSS + "\n  </style>", 1)
 
-    # 2. Remove old vote + stance sections, insert new ones
-    # Find the manga section end + vote section start
-    vote_start = html.find('    <section class="panel" id="vote-section">')
+    # 2. Remove old explainer/vote/stance sections and insert current versions.
+    # Rebuilding an already converted page starts at the existing explainer so
+    # that the transform remains idempotent and arguments keep their position.
+    section_start = html.find('<section class="panel explainer-section" id="explainer-section">')
+    if section_start == -1:
+        section_start = html.find('<section class="panel" id="vote-section">')
+    if section_start == -1:
+        raise ValueError("explainer/vote section start marker not found")
     # Find the end of stance-map-section closing </section>
-    stance_end_marker = '</div><!-- /stance-map-inner -->\n</section>'
-    stance_end = html.find(stance_end_marker)
+    stance_start = html.find('<section class="arena-section" id="stance-map-section">')
+    stance_end = html.find("</section>", stance_start)
     if stance_end == -1:
-        raise ValueError("stance-map-inner end marker not found")
-    stance_end += len(stance_end_marker)
+        raise ValueError("stance-map section end marker not found")
+    stance_end += len("</section>")
 
-    before = html[:vote_start]
+    before = html[:section_start]
     after = html[stance_end:]
 
-    html = before + EXPLAINER_SECTION + "\n" + VOTE_SECTION + "\n" + ARENA_SECTION + after
+    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    arguments = arguments_html(config)
+    html = (
+        before
+        + EXPLAINER_SECTION
+        + "\n"
+        + arguments
+        + "\n"
+        + VOTE_SECTION
+        + "\n"
+        + ARENA_SECTION
+        + after
+    )
 
     # 3. Replace SM_RAW block + old rendering JS
     # Find <script>\nconst SM_RAW
