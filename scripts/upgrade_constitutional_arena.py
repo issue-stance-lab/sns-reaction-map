@@ -642,7 +642,19 @@ def main() -> None:
         source,
         count=1,
     )
+def _sync_issue_counts() -> None:
+    """論点カードの件数を貼り直す。ここを外すと再ビルドで件数が消える。"""
+    import subprocess
+    import sys
+
+    subprocess.run(
+        [sys.executable, str(Path(__file__).resolve().parent / "sync_issue_counts.py"), "constitutional-amendment"],
+        check=True,
+    )
+
+
     PAGE.write_text(source)
+    _sync_issue_counts()
 
 
 if __name__ == "__main__":

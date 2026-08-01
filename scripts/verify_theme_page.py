@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -12,8 +13,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from .issue_card_counts import IssueCountError, card_counts, span_id
     from .sync_portal_stats import ROOT, THEMES_YAML, load_sample_records, parse_themes_yaml
 except ImportError:  # python3 scripts/verify_theme_page.py
+    from issue_card_counts import IssueCountError, card_counts, span_id  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, load_sample_records, parse_themes_yaml  # type: ignore[no-redef]
 
 
@@ -115,11 +118,12 @@ def verify_theme_page(
             failures += 1
 
     arguments_pos = page.find('id="strongest-arguments"')
+    issue_voices = re.search(r"\d+つの論点とXの声", page)
     representative_positions = [
         pos for pos in (
             page.find("象限別の代表的な声"),
             page.find("代表サンプル"),
-            page.find("7つの論点とXの声"),
+            issue_voices.start() if issue_voices else -1,
         ) if pos >= 0
     ]
     representative_pos = min(representative_positions, default=-1)
@@ -188,9 +192,16 @@ def verify_theme_page(
             for row in rows
             if bool((row.get("classification") or row).get("is_opinion"))
         )
+        classified_count = sum(
+            1
+            for row in rows
+            if (row.get("classification") or row).get("main_issue")
+        )
         map_count_texts = (
             f">{count}件 | セクター=",
             f">意見{opinion_count}件 | セクター=",
+            # アリーナが論点分類済みのレコードだけを描いているテーマ
+            f">{classified_count}件 | セクター=",
         )
         if expected_count_text in page and any(text in page for text in map_count_texts):
             detail = f"全{count}件 / 意見{opinion_count}件" if opinion_count != count else f"{count}件"
@@ -207,6 +218,57 @@ def verify_theme_page(
         else:
             lines.append("NG  arguments は6つの論点の後、SNS反応マップの前にある")
             failures += 1
+
+    lines.append("=== 論点カード ===")
+    try:
+        cards = card_counts(theme, config, theme_data.get("sample_file"))
+    except IssueCountError as exc:
+        lines.append(f"NG  論点カードの件数を分類結果から計算できる: {exc}")
+        return lines, failures + 1
+
+    missing = [
+        card["slug"]
+        for card in cards
+        if f'id="{span_id(theme, str(card["slug"]))}"' not in page
+    ]
+    if not missing:
+        lines.append(f"OK  全カードに件数が併記されている（id付き、{len(cards)}枚）")
+    else:
+        lines.append(f"NG  全カードに件数が併記されている（id付き）: 欠落 {', '.join(missing)}")
+        failures += 1
+
+    mismatched = []
+    for card in cards:
+        marker = re.search(
+            rf'<span class="explainer-count" id="{re.escape(span_id(theme, str(card["slug"])))}">(\d+)件</span>',
+            page,
+        )
+        if not marker or int(marker.group(1)) != int(card["count"]):
+            shown = marker.group(1) + "件" if marker else "なし"
+            mismatched.append(f'{card["slug"]}（表示{shown} / 分類{card["count"]}件）')
+    if not mismatched:
+        detail = " / ".join(f'{card["slug"]}={card["count"]}' for card in cards)
+        lines.append(f"OK  論点カードの件数が分類結果と一致する（{detail}）")
+    else:
+        lines.append(f"NG  論点カードの件数が分類結果と一致する: {', '.join(mismatched)}")
+        failures += 1
+
+    # 生成した span 以外に同じ件数が書かれていると、次のデータ補充で片方だけ古くなる
+    stale = []
+    for block in re.finditer(r'<article class="explainer-card".*?</article>', page, re.DOTALL):
+        card_html = block.group(0)
+        for card in cards:
+            marker = f'id="{span_id(theme, str(card["slug"]))}"'
+            if marker not in card_html:
+                continue
+            stripped = re.sub(r'<span class="explainer-count"[^>]*>[^<]*</span>', "", card_html)
+            if re.search(rf'(?<!\d){card["count"]}件', stripped):
+                stale.append(f'{card["slug"]}（{card["count"]}件）')
+    if not stale:
+        lines.append("OK  ハードコードされた件数が残っていない")
+    else:
+        lines.append(f"NG  ハードコードされた件数が残っている: {', '.join(stale)}")
+        failures += 1
 
     return lines, failures
 

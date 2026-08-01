@@ -74,6 +74,75 @@
 **手順**: ①各テーマページが表示している件数がどの数字か（2D分類 / Hermes論点分類 / 収集総数）を特定 ②`sample_file` の数と一致するか確認 ③一致しない場合、どちらが「分類済み投稿」の定義に合うかを決めて統一 ④`verify_top_page.py` に「トップの件数と各テーマページの件数が矛盾しない」検査を追加
 **備考**: 2D分類と Hermes 論点分類で対象件数が違うのは妥当な可能性が高い。その場合はページ側の表記を「論点分類 ○件」等に変えて、何を数えた数字かを明示する
 
+**2026-08-02（S8）に判明した、①の調査結果**
+
+課題30の件数併記のために全11テーマの論点別件数の出所を洗ったところ、**7テーマは `sample_file` から再現できたが、4テーマは再現できるファイルがリポジトリに残っていなかった**。
+
+| テーマ | 論点別件数の出所 | `sample_file` から再現できるか |
+|---|---|---|
+| ai-copyright | sample_file（全件） | ✅ 126/79/73/46/40/31 |
+| bukatsu-chiiki / consumption-tax-cut / school-nickname-ban / takaichi | sample_file（`is_opinion` のみ） | ✅ |
+| fukushuto | sample_file（全件） | ✅ |
+| bike-blue-ticket | `social-samples/bike_arena_hermes_classified.json`（sample_file と同じ181件・main_issue付き） | ❌ sample_file に main_issue がない |
+| **constitutional-amendment** | ページ内 `const P`（422件） | ❌ sample_file は646件（旧422件の分類が残っている） |
+| **henoko-student-accident** | `docs/henoko-arena-data.js`（265件） | ❌ sample_file は363件 |
+| **koshitsu-tenpakai** | ページ内 `SM_RAW` + JS の `arenaIssueOf()`（268件） | ❌ sample_file は347件。しかも公開中の h3 件数は `koshitsu-tenpakai_hermes_prev_synthetic.json` 由来 |
+| **elderly-license-revocation** | ページ内 `SM_RAW`（211件） | ❌ sample_file に main_issue がない。`original_category` は114件しか埋まっておらず、残り97件は保存されていないキーワードヒューリスティックで割り当てられている |
+
+**暫定措置**: 上記4テーマ分を `scripts/extract_arena_issue_assignment.py` でページから1度だけ取り出し、`data/issue-counts/{theme}.json` に固定した。件数併記と検査はこのファイルを読む（ページのHTMLは読まないので、spanを手で書き換えれば検査が落ちる）。
+**残作業**: 4テーマの次回データ補充で Hermes 分類をやり直し、`configs/{theme}-reaction-map.json` の `issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
+
+### 課題30: 論点カードの解説と実データの乖離
+**状態**: 対応案②（件数の併記）を2026-08-02に全11テーマへ適用済み。①③は未着手
+**発見**: 2026-08-01、部活動ページの本番確認時
+
+**2026-08-02 対応済み（S8）**
+- `configs/{theme}-reaction-map.json` に `issue_counts`（source / basis / cards）を追加。カードと分類結果のラベル対応をここで宣言する
+- `scripts/issue_card_counts.py`（件数の計算）と `scripts/sync_issue_counts.py`（HTMLへの注入）を新設。`<span class="explainer-count" id="issue-count-{theme}-{slug}">N件</span>` を全11テーマ・65枚のカードに併記
+- `scripts/verify_theme_page.py` に「=== 論点カード ===」3検査を追加（id付きで併記されている / 件数が分類結果と一致する / ハードコードされた件数が残っていない）
+- 解説文の中に重複して書かれていた件数（ai-copyright・elderly・henoko・bike・school-nickname・takaichi の計34箇所）を削除。内訳の数字（「うち30件が反対」等）は残した
+- `build_bukatsu_arena.py` / `upgrade_constitutional_arena.py` / `build_consumption_tax_page.py` は生成後に `sync_issue_counts.py` を呼ぶようにした。`upgrade_nickname_arena.js` は手動実行が必要な旨をヘッダに明記
+
+**残り（①③、別途判断）**
+- 解説文の config への移行
+- 件数順の並べ替え、少数論点の「その他」への集約（部活動の地域格差2件は併記で可視化されたが、カードの大きさは他と同じまま）
+
+**概要**: 各テーマページの「このテーマを読み解く、N つの論点」の解説カードが**手書きの固定文言**で、分類結果の件数と連動していない。件数の大小に関わらず全論点が同じ大きさで並ぶため、実データ上ごく少数の論点が主要論点のように見える。
+
+**具体例（部活動の地域移行）**
+
+| 論点カード | 実件数（389件中） | 紙面 |
+|---|---|---|
+| 教員の働き方 | 114 (29%) | カード1枚 |
+| 教育的意義・機会 | 82 (21%) | カード1枚 |
+| 制度・移行プロセス | 81 (21%) | カード1枚 |
+| 受け皿・指導者 | 61 (16%) | カード1枚 |
+| 費用・家庭負担 | 30 (8%) | カード1枚 |
+| **地域格差** | **2 (0.5%)** | **カード1枚**（「都市はできるが地方は無理」と1論点として大きく扱われている） |
+
+同じページの「詳細データ」には `地域格差 2` と正しく出ているため、**同一ページ内で扱いの重みが矛盾している**。
+
+**根が深い点: 解説文がPythonスクリプト内にハードコードされている**
+
+config ではなくビルドスクリプトの中に直接埋め込まれている。
+
+```
+scripts/build_bukatsu_arena.py:141   <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」</p>
+scripts/build_consumption_tax_page.py
+scripts/upgrade_constitutional_arena.py
+scripts/upgrade_nickname_arena.js
+```
+
+**影響範囲**: 全11テーマ（論点カードは各テーマ3〜8枚、計70枚以上）
+
+**対応案**（横展開時に決める）
+1. 解説文を `configs/*.json` に移す（コードからコンテンツを分離）
+2. 各カードに**実件数を併記**する（「地域格差 **2件**」）
+3. 件数順に並べる、または一定件数未満は「その他の論点」にまとめる
+4. `verify_theme_page.py` に「論点カードの件数が sample_file の分類結果と一致する」検査を追加
+
+**優先度の判断**: 件数表示自体は全て正しいため緊急性は低い。ただし「実態と表示のズレ」はS1〜S6で潰してきた問題と同じ性質のもの。生成AIと著作権への `arguments` 横展開時に、同じ構造の設計判断が必要になるため、そのタイミングで一括対応する。
+
 ---
 
 ## 連絡メモ（AI間の申し送り）

@@ -589,8 +589,20 @@ def transform(html: str) -> str:
     return html
 
 
+def _sync_issue_counts() -> None:
+    """論点カードの件数を貼り直す。ここを外すと再ビルドで件数が消える。"""
+    import subprocess
+    import sys
+
+    subprocess.run(
+        [sys.executable, str(Path(__file__).resolve().parent / "sync_issue_counts.py"), "bukatsu-chiiki"],
+        check=True,
+    )
+
+
 if __name__ == "__main__":
     html = HTML_PATH.read_text()
     new_html = transform(html)
     HTML_PATH.write_text(new_html)
+    _sync_issue_counts()
     print(f"Done. Lines: {len(html.splitlines())} → {len(new_html.splitlines())}")

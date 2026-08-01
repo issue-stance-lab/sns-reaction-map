@@ -902,5 +902,17 @@ def verify(html: str, opinions: int) -> None:
         raise SystemExit("ビルド検証に失敗しました:\n  - " + "\n  - ".join(problems))
 
 
+def _sync_issue_counts() -> None:
+    """論点カードの件数を貼り直す。ここを外すと再ビルドで件数が消える。"""
+    import subprocess
+    import sys
+
+    subprocess.run(
+        [sys.executable, str(Path(__file__).resolve().parent / "sync_issue_counts.py"), "consumption-tax-cut"],
+        check=True,
+    )
+
+
 if __name__ == "__main__":
     build()
+    _sync_issue_counts()
