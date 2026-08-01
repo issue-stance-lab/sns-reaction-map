@@ -13,6 +13,7 @@ from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+THEMES_PATH = PROJECT_ROOT / "THEMES.yaml"
 
 DEFAULT_STANCE_ORDER = ["批判", "擁護", "賛成", "反対", "比較", "未確認", "保留", "その他"]
 
@@ -338,6 +339,146 @@ def background_html(config: dict[str, Any]) -> str:
         f"{body}"
         "</section>"
     )
+
+
+def arguments_html(config: dict[str, Any]) -> str:
+    """Render the reusable editorial argument schema when a theme defines it."""
+    arguments = config.get("arguments") or {}
+    if not arguments:
+        return ""
+
+    side_a = arguments.get("side_a") or {}
+    side_b = arguments.get("side_b") or {}
+    sources = arguments.get("sources") or []
+
+    def paragraphs(value: Any) -> str:
+        return "".join(
+            f"<p>{html.escape(part.strip())}</p>"
+            for part in re.split(r"\n\s*\n", str(value or ""))
+            if part.strip()
+        )
+
+    side_cards = []
+    for side, tone in ((side_a, "a"), (side_b, "b")):
+        side_cards.append(
+            f'<article class="argument-side argument-side-{tone}">'
+            f'<p class="argument-side-label">{html.escape(str(side.get("label") or ""))}</p>'
+            '<h3>最も強い論拠</h3>'
+            f'{paragraphs(side.get("strongest"))}'
+            '<div class="argument-basis"><strong>根拠</strong>'
+            f'{paragraphs(side.get("basis"))}</div>'
+            '</article>'
+        )
+
+    source_items = "".join(
+        '<li><a href="{url}" target="_blank" rel="noopener noreferrer">{label}</a></li>'.format(
+            url=html.escape(str(source.get("url") or ""), quote=True),
+            label=html.escape(str(source.get("label") or "")),
+        )
+        for source in sources
+        if str(source.get("label") or "").strip() and str(source.get("url") or "").strip()
+    )
+
+    return f'''<!-- ARGUMENTS_START -->
+<style>
+  .arguments-panel .argument-summary{{font-size:17px;line-height:1.9;font-weight:700;background:var(--accent-soft);border-left:5px solid var(--accent);border-radius:0 12px 12px 0;padding:18px 20px;margin:0 0 24px}}
+  .argument-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:22px}}
+  .argument-side{{background:#fff;border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:14px;padding:22px;box-shadow:var(--shadow)}}
+  .argument-side-b{{border-top-color:#4b9cf4}}
+  .argument-side-label{{display:inline-block;margin:0 0 10px!important;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:900}}
+  .argument-side-b .argument-side-label{{background:#eff6ff;color:#2563eb}}
+  .argument-side h3{{font-size:19px;margin:0 0 12px}}
+  .argument-side>p:not(.argument-side-label),.argument-basis p{{font-size:14px;line-height:1.9;margin:0 0 12px}}
+  .argument-basis{{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}}
+  .argument-basis>strong{{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}}
+  .argument-points{{display:grid;gap:12px;margin:0 0 22px}}
+  .argument-point{{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:rgba(255,255,255,.72)}}
+  .argument-point h3{{font-size:14px;margin:0 0 5px;color:var(--accent)}}
+  .argument-point p{{font-size:14px;line-height:1.8;margin:0}}
+  .argument-sources,.argument-criteria{{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}}
+  .argument-sources h3,.argument-criteria summary{{font-size:15px;font-weight:900;margin:0 0 8px}}
+  .argument-sources ul,.argument-criteria ul{{margin:0;padding-left:22px}}
+  .argument-sources li,.argument-criteria li{{font-size:13px;line-height:1.8;margin-bottom:4px}}
+  @media(max-width:720px){{.argument-grid{{grid-template-columns:1fr}}.arguments-panel .argument-summary{{font-size:15px;padding:15px}}}}
+</style>
+<section class="panel arguments-panel" id="strongest-arguments" aria-labelledby="arguments-title">
+  <div class="panel-title"><h2 id="arguments-title">30秒でわかる、両側の強い論拠</h2><span>代表投稿より先に論点を整理</span></div>
+  <p class="argument-summary">{html.escape(str(arguments.get("summary_30s") or ""))}</p>
+  <div class="argument-grid">{''.join(side_cards)}</div>
+  <div class="argument-points">
+    <article class="argument-point"><h3>共有している前提</h3><p>{html.escape(str(arguments.get("shared_premise") or ""))}</p></article>
+    <article class="argument-point"><h3>本当の対立点</h3><p>{html.escape(str(arguments.get("real_conflict") or ""))}</p></article>
+    <article class="argument-point"><h3>まだ確認できていない点</h3><p>{html.escape(str(arguments.get("unresolved") or ""))}</p></article>
+  </div>
+  <div class="argument-sources"><h3>一次情報・公的資料</h3><ul>{source_items}</ul></div>
+  <details class="argument-criteria"><summary>論拠の選定基準</summary><ul>
+    <li>具体的な根拠がある</li><li>人物攻撃ではない</li><li>検証可能である</li>
+    <li>相手の立場を単純化していない</li><li>高リスク・未確認情報でない</li>
+  </ul></details>
+</section>
+<!-- ARGUMENTS_END -->'''
+
+
+def research_conditions_html(config: dict[str, Any], total: int) -> str:
+    research = config.get("research_conditions") or {}
+    if not research:
+        return ""
+    source = str(research.get("sample_source") or config.get("source_label") or "").replace("!", "")
+    period = str(research.get("sample_period") or "")
+    period_label = "記録なし" if period.lower() == "unknown" else period
+    return f'''<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> {html.escape(source)}で取得した公開投稿 {total}件<br>
+  （取得期間: {html.escape(period_label)}／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->'''
+
+
+def load_research_conditions(sample_path: str) -> dict[str, str]:
+    """Resolve sample metadata from THEMES.yaml without adding a YAML dependency."""
+    if not THEMES_PATH.is_file():
+        return {}
+    text = THEMES_PATH.read_text(encoding="utf-8")
+    normalized = str(resolve(sample_path).resolve().relative_to(PROJECT_ROOT.resolve()))
+    theme_pattern = re.compile(r"^  ([\w-]+):\s*$", re.MULTILINE)
+    matches = list(theme_pattern.finditer(text))
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        block = text[match.start():end]
+        file_match = re.search(r"^    sample_file:\s*[\"']?([^\"'#\n]+)", block, re.MULTILINE)
+        if not file_match or file_match.group(1).strip() != normalized:
+            continue
+        values: dict[str, str] = {"theme": match.group(1)}
+        for field in ("sample_source", "sample_period"):
+            value_match = re.search(rf"^    {field}:\s*[\"']?([^\"'#\n]+)", block, re.MULTILINE)
+            if value_match:
+                values[field] = value_match.group(1).strip()
+        return values
+    return {}
+
+
+def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
+    """Update only editorial inserts in a hand-curated page, preserving its UI and protected tags."""
+    arguments = arguments_html(config)
+    conditions = research_conditions_html(config, len(rows))
+
+    if "<!-- ARGUMENTS_START -->" in source:
+        source = re.sub(r"<!-- ARGUMENTS_START -->.*?<!-- ARGUMENTS_END -->", arguments, source, flags=re.DOTALL)
+    elif arguments:
+        anchor = '    <section class="panel" id="vote-section">'
+        if anchor not in source:
+            raise ValueError("arguments の挿入先（投票セクション）が見つかりません")
+        source = source.replace(anchor, arguments + "\n" + anchor, 1)
+
+    if "<!-- RESEARCH_CONDITIONS_START -->" in source:
+        source = re.sub(r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", conditions, source, flags=re.DOTALL)
+    elif conditions:
+        stats_match = re.search(r'(<section class="stats\b.*?</section>)', source, flags=re.DOTALL)
+        if not stats_match:
+            raise ValueError("調査条件の挿入先（stats）が見つかりません")
+        source = source[:stats_match.end()] + "\n" + conditions + source[stats_match.end():]
+    return source
 
 
 TONE_TO_SEMICIRCLE_COLOR = {
@@ -1301,6 +1442,8 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
       <div class="stat"><span>最多カテゴリ</span><strong>{html.escape(top_category[0])} {top_category[1]}</strong></div>
       <div class="stat"><span>最多スタンス</span><strong>{html.escape(top_stance[0])} {top_stance[1]}</strong></div>
     </section>
+    {research_conditions_html(config, total)}
+    {arguments_html(config)}
     {vote_ui_html(config)}
     {semicircle_html(categories, by_category, config)}
     {background_html(config)}
@@ -1346,13 +1489,25 @@ def main() -> int:
     parser.add_argument("--input", required=True, help="Classified reaction JSON")
     parser.add_argument("--output", required=True, help="Output HTML path")
     parser.add_argument("--config", default="", help="Optional reaction map config JSON")
+    parser.add_argument(
+        "--update-existing",
+        action="store_true",
+        help="Preserve the existing page and update only arguments/research-condition sections",
+    )
     args = parser.parse_args()
 
     rows = read_json(args.input)
     config = merge_config(args.config or None)
+    config["research_conditions"] = load_research_conditions(args.input)
     output = resolve(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(build(rows, config), encoding="utf-8")
+    if args.update_existing:
+        if not output.is_file():
+            parser.error(f"--update-existing の出力先が存在しません: {output}")
+        rendered = update_existing_html(output.read_text(encoding="utf-8"), rows, config)
+    else:
+        rendered = build(rows, config)
+    output.write_text(rendered, encoding="utf-8")
     print(output)
     return 0
 

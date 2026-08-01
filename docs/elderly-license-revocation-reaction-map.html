@@ -732,6 +732,13 @@
         <p class="insight-note">地方の生活の足をどう補うかが判断の分かれ目</p>
       </article>
     </section>
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 211件<br>
+  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
     <section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
 <section class="tide-card" id="elderly-license-revocation-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
   <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
@@ -962,6 +969,44 @@
   modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
 })();</script>
+<!-- ARGUMENTS_START -->
+<style>
+  .arguments-panel .argument-summary{font-size:17px;line-height:1.9;font-weight:700;background:var(--accent-soft);border-left:5px solid var(--accent);border-radius:0 12px 12px 0;padding:18px 20px;margin:0 0 24px}
+  .argument-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:22px}
+  .argument-side{background:#fff;border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+  .argument-side-b{border-top-color:#4b9cf4}
+  .argument-side-label{display:inline-block;margin:0 0 10px!important;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:900}
+  .argument-side-b .argument-side-label{background:#eff6ff;color:#2563eb}
+  .argument-side h3{font-size:19px;margin:0 0 12px}
+  .argument-side>p:not(.argument-side-label),.argument-basis p{font-size:14px;line-height:1.9;margin:0 0 12px}
+  .argument-basis{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .argument-basis>strong{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+  .argument-points{display:grid;gap:12px;margin:0 0 22px}
+  .argument-point{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:rgba(255,255,255,.72)}
+  .argument-point h3{font-size:14px;margin:0 0 5px;color:var(--accent)}
+  .argument-point p{font-size:14px;line-height:1.8;margin:0}
+  .argument-sources,.argument-criteria{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}
+  .argument-sources h3,.argument-criteria summary{font-size:15px;font-weight:900;margin:0 0 8px}
+  .argument-sources ul,.argument-criteria ul{margin:0;padding-left:22px}
+  .argument-sources li,.argument-criteria li{font-size:13px;line-height:1.8;margin-bottom:4px}
+  @media(max-width:720px){.argument-grid{grid-template-columns:1fr}.arguments-panel .argument-summary{font-size:15px;padding:15px}}
+</style>
+<section class="panel arguments-panel" id="strongest-arguments" aria-labelledby="arguments-title">
+  <div class="panel-title"><h2 id="arguments-title">30秒でわかる、両側の強い論拠</h2><span>代表投稿より先に論点を整理</span></div>
+  <p class="argument-summary">一定年齢以上の免許返納を義務化すべきかが議論されています。賛成側の最も強い根拠は、75歳以上の運転者が免許保有者当たりで死亡事故を起こす割合の高さです。反対側の最も強い根拠は、年齢だけでは個々の運転能力を判定できず、代替交通の乏しい地域では返納が通院や買い物を難しくすることです。争点は、安全のために年齢で一律に線を引くか、能力の個別評価と移動支援を組み合わせるかにあります。</p>
+  <div class="argument-grid"><article class="argument-side argument-side-a"><p class="argument-side-label">義務化に賛成</p><h3>最も強い論拠</h3><p>運転による重大事故は、本人だけでなく歩行者や同乗者など第三者の生命を取り返しのつかない形で奪い得ます。本人が安全だと感じていても、加齢に伴う認知・身体機能の低下を自分で正確に把握できるとは限りません。そのため、個人の自己判断だけに委ねず、事故リスクが明確に高まる年齢層に共通の退出基準を設けることには、他者の生命を守る予防原則として合理性があります。</p><p>年齢基準には個人差を取りこぼす欠点があります。それでも、検査の対象や頻度に限界があり、事故が起きてからでは回復できない以上、一定年齢で普通自動車の運転資格を終了させる仕組みは、危険が現実化する前に広く介入できる点で最も確実だ、というのが賛成側の強い主張です。</p><div class="argument-basis"><strong>根拠</strong><p>警察庁の令和7年交通事故分析では、75歳以上の高齢運転者による死亡事故は免許保有者当たりで75歳未満の約2倍でした。また、75歳以上の自動車運転者による死亡事故では、人的要因のうち「操作不適」の割合が75歳未満の約3.1倍でした。これは特定の義務化年齢や効果量を直接証明する統計ではありませんが、年齢層としての重大事故リスクが高いことを示す公的根拠です。</p></div></article><article class="argument-side argument-side-b"><p class="argument-side-label">義務化に反対</p><h3>最も強い論拠</h3><p>年齢は運転能力の代理指標にすぎず、同じ年齢でも認知機能、視野、反応、運転歴には大きな個人差があります。安全に運転できる人まで一律に資格を失わせる一方、基準年齢未満の危険な運転者は残るため、年齢だけの義務化はリスクへの狙いが粗い制度です。重大事故を減らす目的には賛成でも、実車・認知機能・違反歴などを組み合わせた個別評価の方が、危険な人を直接見極める手段として筋が通ります。</p><p>さらに、車が通院、買い物、家族のケアに不可欠な地域で、代替交通を用意せず免許だけを取り上げれば、安全対策の負担が本人と家族に集中します。移動できないことが生活の継続を脅かす以上、全国一律の返納義務よりも、個別検査、サポートカー限定免許、地域交通の確保を組み合わせるべきだ、というのが反対側の強い主張です。</p><div class="argument-basis"><strong>根拠</strong><p>内閣府の令和5年度調査では、65歳以上の人が普段の外出に使う手段として「自分で運転する自動車」が46.6％でした。国は75歳以上で一定の違反歴がある人に運転技能検査を課し、不合格なら更新を認めない制度と、サポートカー限定免許という中間的な選択肢を設けています。また、国土交通省は高齢者の移動手段確保を政策課題として、地域の輸送資源を活用する制度・事業モデルを案内しています。これらは、安全確保と移動手段の代替を同時に扱う必要があることを示しています。</p></div></article></div>
+  <div class="argument-points">
+    <article class="argument-point"><h3>共有している前提</h3><p>高齢運転者による重大事故を減らし、道路を使う人の生命を守りたいという目的は双方で一致しています。また、運転に必要な能力を失った人が運転を続けるべきではないという点にも、大きな隔たりはありません。</p></article>
+    <article class="argument-point"><h3>本当の対立点</h3><p>対立しているのは目的ではなく、危険を見分ける基準と負担の配分です。年齢という一律の基準で事故を未然に防ぐことを優先するのか、個別の運転能力を基準にし、返納後の移動を保障してから制限するのかが本当の対立点です。</p></article>
+    <article class="argument-point"><h3>まだ確認できていない点</h3><p>警察庁は免許保有者10万人当たりの死亡事故件数を公表していますが、このページの調査では、同じ年について年齢層別の走行距離当たり死亡事故率を比較できる公的統計を確認できませんでした。また、全国一律の返納義務によって死亡事故が何件減るか、何歳を境界にすれば便益が不利益を上回るかを直接推計した公的資料も確認できていません。したがって、現時点の資料だけで最適な義務化年齢や政策効果を断定することはできません。</p></article>
+  </div>
+  <div class="argument-sources"><h3>一次情報・公的資料</h3><ul><li><a href="https://www.npa.go.jp/publications/statistics/koutsuu/jiko/R07bunseki.pdf" target="_blank" rel="noopener noreferrer">警察庁「令和7年における交通事故の発生状況について」</a></li><li><a href="https://www.npa.go.jp/hakusyo/r07/honbun/html/bb5532000.html" target="_blank" rel="noopener noreferrer">警察庁「令和7年警察白書 第5章 高齢運転者の交通事故防止対策の推進」</a></li><li><a href="https://www8.cao.go.jp/kourei/ishiki/r05/html/chapter3_1.html" target="_blank" rel="noopener noreferrer">内閣府「令和5年度 高齢者の住宅と生活環境に関する調査」</a></li><li><a href="https://www.mlit.go.jp/sogoseisaku/transport/sosei_transport_tk_000120.html" target="_blank" rel="noopener noreferrer">国土交通省「高齢者の移動手段を確保するためのパンフレット」</a></li></ul></div>
+  <details class="argument-criteria"><summary>論拠の選定基準</summary><ul>
+    <li>具体的な根拠がある</li><li>人物攻撃ではない</li><li>検証可能である</li>
+    <li>相手の立場を単純化していない</li><li>高リスク・未確認情報でない</li>
+  </ul></details>
+</section>
+<!-- ARGUMENTS_END -->
     <section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">高齢運転手による死亡事故が報じられるたび、免許返納の義務化を求める声が上がる一方、地方での生活維持や移動手段確保を重視する反対意見も根強くあります。あなたが最も気になる論点はどれですか？</p>
