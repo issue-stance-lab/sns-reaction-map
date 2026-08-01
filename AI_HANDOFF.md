@@ -72,7 +72,7 @@ Yahoo検索 → OpenCode Go分類 → HTML生成 → GitHub Pages → X投稿で
 | 分類（予備） | Ollama qwen2.5:7b（ローカル） | `scripts/classify_unified.py`, `scripts/classify_2d_*_ollama.py` |
 | 設定 | YAML/JSONトピック設定 | `configs/topics/*.yaml`（分類ルール）, `configs/*-reaction-map.json`（HTML設定） |
 | HTML生成 | Python | `scripts/build_reaction_map.py` |
-| ポータル | Python | `scripts/build_site_portal.py`（`configs/site-cases.json` を読んで `docs/index.html` を生成） |
+| 旧ポータルのプレビュー | Python | `scripts/build_site_portal.py`（`docs/index.html` は保護対象。明示した別の出力先にのみ生成） |
 | まとめUI | Python | `scripts/build_summary_ui.py` |
 | DB | SQLite | `data/reaction_map.sqlite3` |
 
@@ -389,10 +389,13 @@ python3 scripts/build_reaction_map.py \
   --output docs/{slug}-reaction-map.html
 ```
 
-### Step 7: ポータル再生成
+### Step 7: 旧ポータルのプレビュー（必要な場合のみ）
+
+現行トップページは手動管理のため、通常のデータ更新では再生成しない。
+旧ポータルを確認するときだけ、`docs/index.html` 以外の出力先を明示する。
 
 ```bash
-python3 scripts/build_site_portal.py
+python3 scripts/build_site_portal.py --output /tmp/sns-reaction-portal-preview.html
 ```
 
 ### Step 8: ローカル確認

@@ -75,9 +75,13 @@ python3 scripts/build_reaction_map.py \
   --output docs/{slug}-reaction-map.html
 ```
 
-#### Step 7: ポータル再生成
+#### Step 7: 旧ポータルのプレビュー（必要な場合のみ）
+
+現行トップページは再生成しない。旧ポータルを確認する場合も、
+`docs/index.html` 以外のプレビュー出力先を明示する。
+
 ```bash
-python3 scripts/build_site_portal.py
+python3 scripts/build_site_portal.py --output /tmp/sns-reaction-portal-preview.html
 ```
 
 ### 完了条件
