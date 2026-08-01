@@ -86,6 +86,34 @@ def _link_target_exists(index_path: Path, href: str) -> bool:
     return re.search(rf'\bid=["\']{re.escape(fragment)}["\']', target_html) is not None
 
 
+def _media_blocks(css: str) -> list[str]:
+    """CSSからネストを考慮して @media ブロックを取り出す。"""
+    blocks: list[str] = []
+    for match in re.finditer(r"@media\b", css, flags=re.IGNORECASE):
+        start = css.find("{", match.end())
+        if start < 0:
+            continue
+        depth = 1
+        pos = start + 1
+        while pos < len(css) and depth:
+            if css[pos] == "{":
+                depth += 1
+            elif css[pos] == "}":
+                depth -= 1
+            pos += 1
+        if depth == 0:
+            blocks.append(css[start + 1 : pos - 1])
+    return blocks
+
+
+def _hero_side_hidden_in_media(html: str) -> bool:
+    styles = "\n".join(re.findall(r"<style\b[^>]*>(.*?)</style>", html, re.DOTALL | re.IGNORECASE))
+    return any(
+        re.search(r"\.hero-side\s*\{[^}]*\bdisplay\s*:\s*none\b", block, re.IGNORECASE)
+        for block in _media_blocks(styles)
+    )
+
+
 def verify_top_page(
     root: Path = ROOT,
     themes_path: Path = THEMES_YAML,
@@ -206,6 +234,27 @@ def verify_top_page(
     else:
         detail = ", ".join(invalid_nav) if invalid_nav else "ナビ未検出"
         lines.append(f"NG  ナビの全リンク先が実在する: {detail}")
+        failures += 1
+
+    lines.extend(["", "=== レスポンシブ ==="])
+    if _hero_side_hidden_in_media(html):
+        lines.append("NG  .hero-side に display:none を適用するメディアクエリなし")
+        failures += 1
+    else:
+        lines.append("OK  .hero-side に display:none を適用するメディアクエリなし")
+
+    disclaimer = "世論調査ではありません"
+    disclaimer_pos = html.find(disclaimer)
+    stats_pos = html.find('class="hero-stats')
+    if disclaimer_pos >= 0:
+        lines.append(f"OK  「{disclaimer}」がページ内に存在する")
+    else:
+        lines.append(f"NG  「{disclaimer}」がページ内に存在する")
+        failures += 1
+    if disclaimer_pos >= 0 and stats_pos >= 0 and disclaimer_pos < stats_pos:
+        lines.append("OK  注意書きが hero-stats より前に出現する")
+    else:
+        lines.append("NG  注意書きが hero-stats より前に出現する")
         failures += 1
     return lines, failures
 

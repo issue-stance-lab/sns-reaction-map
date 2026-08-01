@@ -168,7 +168,6 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
     next_update: date = stats["next_update"]
     updated_short = f"{last_updated.month}/{last_updated.day}"
     updated_long = f"{last_updated.year}年{last_updated.month}月{last_updated.day}日"
-    next_short = f"{next_update.month}/{next_update.day}"
     next_long = f"{next_update.month}月{next_update.day}日"
     next_iso = next_update.isoformat()
 
@@ -179,7 +178,6 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("投票受付中", r'(<em>)\d+テーマで投票受付中(</em>)', rf'\g<1>{stats["voting_count"]}テーマで投票受付中\2'),
         ("em更新日", r'(<strong id="hero-total-samples">[^<]*</strong><em>)[^<]*(</em>)', rf'\g<1>{updated_short}更新\2'),
         ("最終更新日", r'最終更新: <strong>[^<]+</strong>', f'最終更新: <strong>{updated_long}</strong>'),
-        ("hero-next-update", r'(<strong id="hero-next-update">)[^<]*(</strong>)', rf'\g<1>{next_short}\2'),
         ("update-bar次回更新", r'(次回更新: )\d+月\d+日(（<span id="update-bar-days">)', rf'\g<1>{next_long}\2'),
         ("JS次回更新", r"new Date\('\d{4}-\d{2}-\d{2}T00:00:00\+09:00'\)", f"new Date('{next_iso}T00:00:00+09:00')"),
     ]
