@@ -23,6 +23,9 @@ themes:
   ai-copyright:
     title: 生成AIと著作権
     html: docs/ai-copyright-reaction-map.html
+    sample_file: social-samples/ai-copyright_2d_classified.json
+    sample_period: "2026-06-10〜2026-07-26"
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 931件
     classify: done       # 708件有効（OpenCode Go / minimax-m2.7）
     classify2d: done     # 708件、APIエラー0%
@@ -41,6 +44,9 @@ themes:
   bike-blue-ticket:
     title: 自転車の青切符導入
     html: docs/bike-blue-ticket-reaction-map.html
+    sample_file: social-samples/bike-blue-ticket_2d_classified.json
+    sample_period: unknown
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 268件
     classify: done       # 181件有効（OpenCode Go / minimax-m2.7）
     classify2d: done     # 181件、APIエラー0%
@@ -59,6 +65,9 @@ themes:
   bukatsu-chiiki:
     title: 部活動の地域移行
     html: docs/bukatsu-chiiki-reaction-map.html
+    sample_file: social-samples/bukatsu-chiiki_hermes_classified_20260723.json
+    sample_period: unknown
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 累計467件（2026-07-23更新、今回新規161件）
     classify: done       # Hermesで467件分類。関連464件、意見389件
     classify2d: done     # 旧2D 245件は履歴保持。公開表示はHermes論点分類へ移行
@@ -77,6 +86,9 @@ themes:
   constitutional-amendment:
     title: 憲法改正論議
     html: docs/constitutional-amendment-reaction-map.html
+    sample_file: social-samples/constitutional_amendment_hermes_arena_classified.json
+    sample_period: unknown
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 382件
     classify: done       # 552件有効（2D累計）
     classify2d: done     # 552件、APIエラー0%
@@ -94,6 +106,9 @@ themes:
   elderly-license-revocation:
     title: 高齢者免許返納
     html: docs/elderly-license-revocation-reaction-map.html
+    sample_file: social-samples/elderly-license_2d_classified.json
+    sample_period: unknown
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 285件
     classify: done
     classify2d: done     # 211件、APIエラー0%
@@ -112,6 +127,9 @@ themes:
   school-nickname-ban:
     title: 学校でのあだ名禁止
     html: docs/school-nickname-ban-reaction-map.html
+    sample_file: social-samples/school-nickname-ban_hermes_arena_classified.json
+    sample_period: unknown
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 374件
     classify: done       # 134件有効
     classify2d: done     # 134件、APIエラー0%
@@ -128,6 +146,9 @@ themes:
   henoko-student-accident:
     title: 辺野古高校生死亡事故
     html: docs/henoko-student-accident-reaction-map.html
+    sample_file: social-samples/henoko/henoko_hermes_arena_classified.json
+    sample_period: unknown
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 178件
     classify: done       # henoko_structured_redesign_final.json
     classify2d: done     # 356件、APIエラー0% OpenCode Go minimax-m2.7
@@ -146,6 +167,9 @@ themes:
   takaichi:
     title: 高市文春問題
     html: docs/takaichi-reaction-map-standard.html
+    sample_file: social-samples/takaichi_hermes_arena_classified.json
+    sample_period: "2026-06-14〜2026-07-26"
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 324件（累計）
     classify: done
     classify2d: done     # 276件、APIエラー0% OpenCode Go minimax-m2.7
@@ -164,6 +188,9 @@ themes:
   fukushuto:
     title: 副首都法案・副首都構想
     html: docs/fukushuto-reaction-map.html
+    sample_file: social-samples/fukushuto_2d_classified.json
+    sample_period: "2026-07-14〜2026-07-26"
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 292件（2026-07-14、9クエリ）
     classify: n-a        # 2D分類で直接カバー
     classify2d: done     # 255件（エラー率10.5%）+ main_issue 207件（エラー率1.0%）
@@ -181,6 +208,9 @@ themes:
   koshitsu-tenpakai:
     title: 皇室典範改正（女性皇族の皇籍維持・旧宮家養子）
     html: docs/koshitsu-tenpakai-reaction-map.html
+    sample_file: social-samples/koshitsu-tenpakai_hermes_cur_20260726.json
+    sample_period: "2026-07-17〜2026-07-26"
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 326件（2026-07-17、9クエリ）
     classify: n-a        # 2D分類で直接カバー
     classify2d: done     # 273件（エラー率2.1%）+ main_issue 268件（エラー率2.0%）
@@ -198,6 +228,9 @@ themes:
   consumption-tax-cut:
     title: 消費税減税
     html: docs/consumption-tax-cut-reaction-map.html
+    sample_file: social-samples/consumption-tax-cut_hermes_arena_classified.json
+    sample_period: "2026-07-28"
+    sample_source: "Yahooリアルタイム検索"
     collect: done        # 667件（2026-07-28、20クエリ・重複34件除外後）
     classify: done       # Hermes 667件。関連666件、意見612件（意見率91.8%）
     classify2d: n-a      # Hermes論点分類で直接カバー
