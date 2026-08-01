@@ -72,7 +72,6 @@
       }
     };
 
-    onReady(function () { self._applyBlur(); });
     if (cfg.questions && cfg.questions.length >= 2) {
       this._buildWizard();
     } else {
@@ -88,38 +87,6 @@
       }
     });
   }
-
-  /* ---------- ブラー ---------- */
-  Vote2D.prototype._applyBlur = function () {
-    if (this.myVote !== null) return;
-    var inner   = d.getElementById('stance-map-inner');
-    var section = d.getElementById('stance-map-section');
-    if (!inner || !section) return;
-    inner.style.filter       = 'blur(8px)';
-    inner.style.pointerEvents= 'none';
-    inner.style.userSelect   = 'none';
-    section.style.position   = 'relative';
-    var ov = d.createElement('div');
-    ov.id = 'chart-overlay';
-    ov.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;' +
-      'justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-    ov.innerHTML = '<div style="text-align:center;">' +
-      '<div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div>' +
-      '<div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">下の2D投票マップで立場を選んでください</div></div>';
-    section.appendChild(ov);
-  };
-
-  Vote2D.prototype._revealChart = function () {
-    var inner = d.getElementById('stance-map-inner');
-    if (inner) {
-      inner.style.transition   = 'filter .6s ease';
-      inner.style.filter       = 'none';
-      inner.style.pointerEvents= 'auto';
-      inner.style.userSelect   = 'auto';
-    }
-    var ov = d.getElementById('chart-overlay');
-    if (ov) ov.remove();
-  };
 
   /* ---------- キャンバスUI構築 ---------- */
   Vote2D.prototype._buildCanvas = function () {
@@ -512,7 +479,6 @@
       var voteData = { qi: pin.qi, sx: Math.round(pin.sx*100)/100, sy: Math.round(pin.sy*100)/100 };
       localStorage.setItem(self.KEY + '_my', JSON.stringify(voteData));
       self.myVote = voteData;
-      self._revealChart();
       if (w.setStanceMapVoteMarker) w.setStanceMapVoteMarker(pin.qi, pin.sx, pin.sy);
 
       /* ウィザードモード: 4軸キャンバスを再構築してピン落下アニメを再生。キャンバスモードはそのままバウンス */
@@ -836,7 +802,7 @@
         snsHtml +=
           '<div style="font-size:11px;color:var(--muted,#888);margin-top:12px;' +
             'padding:8px 12px;background:var(--panel,#f5f5f5);border-radius:6px;line-height:1.5;">' +
-            'あなたの投票が集計に追加されました。現在 <strong>' + voteTotal + '票</strong> が集まっています。' +
+            'このサイトの参加者投票 n=<strong>' + voteTotal + '</strong>（訪問者の任意回答です）' +
           '</div>';
       }
 

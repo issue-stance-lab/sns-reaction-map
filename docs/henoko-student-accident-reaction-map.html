@@ -186,6 +186,16 @@
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/henoko-student-accident/henoko-hero.webp')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・事故・基地問題</span><h1>辺野古高校生死亡事故をめぐる論点―安全管理・教育・報道</h1><p class="question-line">事故の検証と教育の評価、どの論点を重く見る？</p><p class="lead">収集したSNS投稿のうち、分析対象となった意見265件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>75</b>件</span><strong>まず事故原因を検証し、再発を防げるか</strong><span class="conclusion-detail">教育への評価とは切り分け、事故検証と再発防止を求める声が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
+
+
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 363件<br>
+  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
 <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
   <article class="stat insight-stat">
     <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
@@ -348,7 +358,7 @@
 </div>
 <p class="explainer-note"><strong>使い方：</strong> 次の投票で「最も重く見る論点」と「文科省判断への評価」を選ぶと、SNS反応マップにあなたの位置が表示されます。</p>
 </section>
-<section class="panel" id="vote-section">
+<section class="panel" id="vote-section" data-vote-topic="henoko-student-accident-issue-stance-v1">
 <div class="panel-title"><h2>あなたはどの論点を重く見る？</h2><span>SNSの声を見る前に</span></div>
 <p>事故の責任、教育の中立性、平和教育への影響は別々に考えられます。まず最も重く見る論点を選び、次に文科省判断への総合評価を選んでください。</p>
 <!-- ARTICLE_TRUST_START -->
@@ -449,9 +459,8 @@ const HENOKO_ARENA_RAW=[{"i":3,"e":0.94,"x":1,"s":"高校生死亡事故にも�
     if(marker){var issue=ISSUES[marker.issue],rad=issue.mid*Math.PI/180,r=142;marker.x=CX+r*Math.cos(rad);marker.y=CY+r*Math.sin(rad);if(window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:RMIN,outerRadius:RMAX,startAngle:issue.a0,endAngle:issue.a1,color:marker.color,degrees:true});if(window.drawArenaUserMarker)window.drawArenaUserMarker(ctx,{x:marker.x,y:marker.y,color:marker.color,canvasSize:W})}
   }
   var inner=document.getElementById('issue-arena-inner'),section=document.getElementById('issue-arena-section');
-  function blur(){inner.style.filter='blur(7px)';inner.style.pointerEvents='none';if(!document.getElementById('arena-overlay')){var overlay=document.createElement('div');overlay.id='arena-overlay';overlay.style.cssText='position:absolute;inset:0;display:grid;place-items:center;z-index:5;color:#fff;text-align:center;padding:20px';overlay.innerHTML='<div><strong>まず投票してからアリーナを見よう</strong><div style="font-size:12px;opacity:.72;margin-top:5px">上の投票で論点と評価を選んでください</div></div>';section.appendChild(overlay)}}
   function reveal(){inner.style.transition='filter .45s';inner.style.filter='none';inner.style.pointerEvents='auto';var overlay=document.getElementById('arena-overlay');if(overlay)overlay.remove()}
-  window.setHenokoArenaMarker=function(issue,colorValue){reveal();marker={issue:issue,color:colorValue||'#22d3ee'};document.getElementById('arena-marker-note').style.display='block';if(pulse)cancelAnimationFrame(pulse);(function loop(){draw();pulse=requestAnimationFrame(loop)})()};
+  window.setHenokoArenaMarker=function(issue,colorValue){marker={issue:issue,color:colorValue||'#22d3ee'};document.getElementById('arena-marker-note').style.display='block';if(pulse)cancelAnimationFrame(pulse);(function loop(){draw();pulse=requestAnimationFrame(loop)})()};
   window.clearHenokoArenaMarker=function(){if(pulse)cancelAnimationFrame(pulse);pulse=null;marker=null;document.getElementById('arena-marker-note').style.display='none';draw();blur()};
   function addFilter(label,index){var button=document.createElement('button');button.className='arena-filter'+(index===-1?' active':'');button.textContent=label;button.onclick=function(){filter=index;document.querySelectorAll('.arena-filter').forEach(function(item){item.classList.remove('active')});button.classList.add('active');draw()};document.getElementById('arena-filters').appendChild(button)}
   addFilter('全件 ('+total+')',-1);ISSUES.forEach(function(issue,index){addFilter(issue.k+' ('+issue.n+')',index)});
@@ -459,7 +468,7 @@ const HENOKO_ARENA_RAW=[{"i":3,"e":0.94,"x":1,"s":"高校生死亡事故にも�
   function nearest(pos){var best=null,distance=210;points.forEach(function(point){if(filter>=0&&point.p.i!==filter)return;var d=(point.px-pos.x)**2+(point.py-pos.y)**2;if(d<distance){distance=d;best=point}});return best}
   main.addEventListener('mousemove',function(event){var point=nearest(position(event));if(!point){tooltip.style.display='none';return}tooltip.style.display='block';tooltip.style.left=Math.min(event.offsetX+14,main.clientWidth-280)+'px';tooltip.style.top=event.offsetY+14+'px';tooltip.innerHTML='<strong>'+ISSUES[point.p.i].k+'</strong><br>'+String(point.p.s).replace(/</g,'&lt;')+'<br><span style="opacity:.65">クリックでXへ</span>'});
   main.addEventListener('mouseleave',function(){tooltip.style.display='none'});main.addEventListener('click',function(event){var point=nearest(position(event));if(point&&point.p.u)window.open(point.p.u,'_blank','noopener')});
-  drawHeat();draw();blur();
+  drawHeat();draw();
 })();
 </script>
 <section class="panel stance-map-section" id="stance-map-section" style="display:none"><div class="panel-title"><h2>2Dスタンスマップ</h2><span>356件 | 文科省判断への評価 × 議論の焦点 | ホバーで詳細 / クリックでXへ</span></div>

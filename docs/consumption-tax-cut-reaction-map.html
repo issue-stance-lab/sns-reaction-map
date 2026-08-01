@@ -227,6 +227,16 @@
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">税・財政</span><h1>消費税減税は何が論点？食料品限定と一律の賛否</h1><p class="question-line">食料品だけの減税で足りる？ 財源はどうする？</p><p class="lead">収集したSNS投稿667件のうち、分析対象となった意見612件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>267</b>件</span><strong>公約はどこへ行ったのか</strong><span class="conclusion-detail">選挙で減税を掲げた政党が採決でどう動いたか。税制の中身より政治の姿勢が問われました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
+
+
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 667件<br>
+  （取得期間: 2026-07-28／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
 <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
   <article class="stat insight-stat">
     <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
@@ -371,7 +381,7 @@
 })();
 </script>
 
-<section class="panel" id="vote-section"><div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、物価高対策として食料品に対象を絞った消費税減税の議論が大詰めを迎えました。「限定的で中途半端」という不満、「財源と社会保障はどうするのか」という懸念、「そもそも値下げに反映されるのか」という疑問が同時に噴き出しています。</p><!-- ARTICLE_TRUST_START -->
+<section class="panel" id="vote-section" data-vote-topic="consumption-tax-cut-issue-stance-v1"><div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2><span>SNSの声を見る前に</span></div><p>2026年7月、物価高対策として食料品に対象を絞った消費税減税の議論が大詰めを迎えました。「限定的で中途半端」という不満、「財源と社会保障はどうするのか」という懸念、「そもそも値下げに反映されるのか」という疑問が同時に噴き出しています。</p><!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
     <p class="article-trust-kicker">編集・分析情報</p>
@@ -1286,44 +1296,8 @@ const SM_RAW = [
     }
   }
 
-  // 投票前ブラー
-  (function applyBlur(){
-    var inner=document.getElementById('stance-map-inner');
-    var section=document.getElementById('stance-map-section');
-    if(!inner||!section)return;
-    inner.style.filter='blur(8px)';
-    inner.style.pointerEvents='none';
-    inner.style.userSelect='none';
-    section.style.position='relative';
-    var ov=document.createElement('div');
-    ov.id='chart-overlay';
-    ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-    ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-    section.appendChild(ov);
-  })();
-
-  function revealChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='filter .6s ease';inner.style.filter='none';inner.style.pointerEvents='auto';inner.style.userSelect='auto';}
-    var ov=document.getElementById('chart-overlay');
-    if(ov)ov.remove();
-  }
-  function reBlurChart(){
-    var inner=document.getElementById('stance-map-inner');
-    if(inner){inner.style.transition='';inner.style.filter='blur(8px)';inner.style.pointerEvents='none';inner.style.userSelect='none';}
-    var section=document.getElementById('stance-map-section');
-    if(section&&!document.getElementById('chart-overlay')){
-      var ov=document.createElement('div');
-      ov.id='chart-overlay';
-      ov.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(255,255,255,.3);border-radius:8px;';
-      ov.innerHTML='<div style="text-align:center;"><div style="font-size:16px;font-weight:800;color:var(--ink,#1a1a2e);">まず投票してから結果を見よう</div><div style="font-size:12px;color:var(--muted,#6b7280);margin-top:4px;">上の投票で論点と賛否を選んでください</div></div>';
-      section.appendChild(ov);
-    }
-  }
-
   let pulseRAF=null;
   window.setStanceMapVoteMarker=function(issueIdx,stanceColor){
-    revealChart();
     const iss=ISSUES[issueIdx]||ISSUES[0];
     const rad=iss.mid*Math.PI/180, r=(R_MIN+R_MAX)/2-14;
     voteMarker={x:CX+r*Math.cos(rad),y:CY+r*Math.sin(rad),color:stanceColor||'#4f46e5',sector:issueIdx};
@@ -1338,7 +1312,6 @@ const SM_RAW = [
     const note=document.getElementById('your-marker-note');
     if(note)note.style.display='none';
     drawMain();
-    reBlurChart();
   };
 
   const filters=document.getElementById('sm-filters');

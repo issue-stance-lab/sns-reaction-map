@@ -706,7 +706,15 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
-    <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+
+<!-- RESEARCH_CONDITIONS_START -->
+<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
+  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 211件<br>
+  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  <strong>社会全体の世論調査ではありません。</strong></p>
+</aside>
+<!-- RESEARCH_CONDITIONS_END -->
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
       <article class="stat insight-stat">
         <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
         <strong class="insight-value">211<small>件</small></strong>
@@ -732,13 +740,7 @@
         <p class="insight-note">地方の生活の足をどう補うかが判断の分かれ目</p>
       </article>
     </section>
-<!-- RESEARCH_CONDITIONS_START -->
-<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
-  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 211件<br>
-  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
-  <strong>社会全体の世論調査ではありません。</strong></p>
-</aside>
-<!-- RESEARCH_CONDITIONS_END -->
+
     <section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
 <section class="tide-card" id="elderly-license-revocation-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
   <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
@@ -1007,7 +1009,7 @@
   </ul></details>
 </section>
 <!-- ARGUMENTS_END -->
-    <section class="panel" id="vote-section">
+    <section class="panel" id="vote-section" data-vote-topic="elderly-license-revocation-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">高齢運転手による死亡事故が報じられるたび、免許返納の義務化を求める声が上がる一方、地方での生活維持や移動手段確保を重視する反対意見も根強くあります。あなたが最も気になる論点はどれですか？</p>
 <!-- ARTICLE_TRUST_START -->
