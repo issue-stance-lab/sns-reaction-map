@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One-command pipeline for SNS反応まっぷ.
 
-Orchestrates: fetch → classify → build HTML → rebuild portal.
+Orchestrates: fetch → classify → build topic HTML.
 
 Usage:
     # Full pipeline (queries from CLI)
@@ -210,14 +210,8 @@ def step_build(slug: str, *, dry_run: bool = False) -> int:
     return run_cmd(cmd, dry_run=dry_run, label=f"ビルド: {output_file.name}")
 
 
-def step_portal(*, dry_run: bool = False) -> int:
-    heading("Step 4: ポータル再生成")
-    cmd = [sys.executable, str(SCRIPTS_DIR / "build_site_portal.py")]
-    return run_cmd(cmd, dry_run=dry_run, label="ポータル: docs/index.html")
-
-
 def step_stats(slug: str) -> None:
-    heading("Step 5: 分類結果サマリー")
+    heading("Step 4: 分類結果サマリー")
     classified_file = SAMPLES_DIR / f"{slug}_classified.json"
     if not classified_file.exists():
         log(f"{classified_file.name} が見つかりません", level="warn")
@@ -573,7 +567,7 @@ def step_reclassify(slug: str, *, dry_run: bool = False, model: str = "qwen2.5:7
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="SNS反応まっぷ パイプライン — ワンコマンドでfetch→分類→HTML生成→ポータル更新",
+        description="SNS反応まっぷ パイプライン — ワンコマンドでfetch→分類→テーマHTML生成",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--topic", required=True, help="トピックslug (例: ai-copyright)")
@@ -585,7 +579,11 @@ def main() -> int:
     parser.add_argument("--skip-fetch", action="store_true", help="fetchステップをスキップ")
     parser.add_argument("--skip-classify", action="store_true", help="classifyステップをスキップ")
     parser.add_argument("--skip-build", action="store_true", help="HTML buildステップをスキップ")
-    parser.add_argument("--skip-portal", action="store_true", help="ポータル再生成をスキップ")
+    parser.add_argument(
+        "--skip-portal",
+        action="store_true",
+        help="非推奨の互換オプション（現在は常にno-op）",
+    )
     parser.add_argument("--dry-run", action="store_true", help="実行せずコマンドを表示")
 
     parser.add_argument("--scaffold", action="store_true", help="config雛形を自動生成")
@@ -599,6 +597,9 @@ def main() -> int:
 
     args = parser.parse_args()
     slug = args.topic
+
+    if args.skip_portal:
+        log("--skip-portal は非推奨です。トップページは常に更新対象外です。", level="warn")
 
     heading(f"SNS反応まっぷ パイプライン: {slug}")
 
@@ -671,11 +672,6 @@ def main() -> int:
 
     if not args.skip_build:
         rc = step_build(slug, dry_run=args.dry_run)
-        if rc != 0:
-            return rc
-
-    if not args.skip_portal:
-        rc = step_portal(dry_run=args.dry_run)
         if rc != 0:
             return rc
 

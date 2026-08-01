@@ -12,6 +12,7 @@ from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROTECTED_TOP_PAGE = (PROJECT_ROOT / "docs" / "index.html").resolve()
 
 
 def resolve(path: str) -> Path:
@@ -359,13 +360,23 @@ def build(config: dict[str, Any]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build multi-case portal HTML")
+    parser = argparse.ArgumentParser(description="Build a legacy portal preview HTML")
     parser.add_argument("--config", default="configs/site-cases.json")
-    parser.add_argument("--output", default="docs/index.html")
+    parser.add_argument(
+        "--output",
+        required=True,
+        help="プレビュー出力先（docs/index.html は指定不可）",
+    )
     args = parser.parse_args()
 
+    output = resolve(args.output).resolve()
+    if output == PROTECTED_TOP_PAGE:
+        parser.error(
+            "docs/index.html is the protected current top page; "
+            "the legacy portal generator cannot overwrite it"
+        )
+
     config = read_json(args.config)
-    output = resolve(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(build(config), encoding="utf-8")
     print(output)
