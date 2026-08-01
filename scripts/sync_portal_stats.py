@@ -172,7 +172,7 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
     next_long = f"{next_update.month}月{next_update.day}日"
     next_iso = next_update.isoformat()
 
-    return [
+    specs = [
         ("分類済み投稿の用語", r"<small>分析済み投稿</small>|<small>分類済み投稿</small>", "<small>分類済み投稿</small>"),
         ("hero-total-samples", r'(<strong id="hero-total-samples">)[^<]*(</strong>)', rf'\g<1>{stats["total_posts"]:,}\2'),
         ("公開中のテーマ", r'(<small>公開中のテーマ</small><strong>)\d+(</strong>)', rf'\g<1>{stats["theme_count"]}\2'),
@@ -183,6 +183,20 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("update-bar次回更新", r'(次回更新: )\d+月\d+日(（<span id="update-bar-days">)', rf'\g<1>{next_long}\2'),
         ("JS次回更新", r"new Date\('\d{4}-\d{2}-\d{2}T00:00:00\+09:00'\)", f"new Date('{next_iso}T00:00:00+09:00')"),
     ]
+    for theme in (
+        "ai-copyright",
+        "bike-blue-ticket",
+        "bukatsu-chiiki",
+        "consumption-tax-cut",
+    ):
+        specs.append(
+            (
+                f"注目の問い件数 {theme}",
+                rf'(<strong id="featured-count-{re.escape(theme)}">)[^<]*(</strong>)',
+                rf'\g<1>{stats["sample_counts"][theme]:,}\2',
+            )
+        )
+    return specs
 
 
 def update_html(html: str, stats: dict[str, Any]) -> str:
