@@ -119,3 +119,79 @@ Bottom conclusion band:
 
 Use the common “SNS反応まっぷ civic-tech infographic style”.
 ```
+
+---
+
+## 【生成済み 2026-08-02】争点⑤ 愛子さま・皇族の地位（wide 21:9）
+
+`docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko.webp`（1916×821px・140KB）
+PNGから `cwebp -q 80` で変換（同フォルダのwide図解は133〜141KB）。
+
+初版は中央下の注記カードに「サンプル17件」と件数を焼き込んでいたため、同日中に修正版へ差し替えた。
+現行版は画像内に数値を一切持たない。
+
+**ファイル名:** `koshitsu-infographic-wide-aiko.webp`
+
+```text
+Create a polished Japanese infographic.
+
+Theme:
+皇室典範改正 の個別論点「愛子さま・皇族の地位」
+
+Main title:
+「愛子さま・皇族の地位」
+「制度と国民感情のあいだ」
+
+Core message:
+皇族個人の地位や将来をめぐる議論。継承順位は制度が定めるものだが、国民感情との隔たりも指摘される。
+
+Composition:
+Center:
+天秤の図解。左の皿に「制度・法の定め」を表す巻物と条文アイコン、右の皿に「国民感情・世論」を表す人々のシルエット群。天秤はわずかに傾き、どちらにも振り切れていないことを示す。中央下に小さな注記カード「継承順位は制度が定める」。
+
+Around the center, place 4 rounded check cards:
+1. 「制度が定める」 「継承順位は法の問題」
+2. 「世論の支持」 「人気は制度を変えない」
+3. 「皇籍の維持」 「結婚後も皇族に残るか」
+4. 「次世代の扱い」 「子の身分は未確定」
+
+Bottom conclusion band:
+「制度の線引きと国民感情の距離をどう扱うか」
+
+IMPORTANT: Do not render any number, count, percentage, or sample size in the image.
+件数・サンプル数・割合は画像に一切入れないこと（ページ側が分類結果から自動表示するため）。
+
+Use the common “SNS反応まっぷ civic-tech infographic style”.
+Output image: wide, 21:9 aspect ratio (e.g. 1916×821px).
+```
+
+---
+
+### 納品後の手順
+
+1. PNGを `docs/images/topics/koshitsu-tenpakai/` に置く
+2. WebP変換: `cwebp -q 80 <入力>.png -o <出力>.webp`（q=80で136〜140KB、既存と揃う）
+3. PNGを削除（このフォルダはWebPのみ）
+4. `python3 scripts/build_koshitsu_arena.py --check` と
+   `python3 scripts/verify_theme_page.py koshitsu-tenpakai` が exit 0
+
+---
+
+## 図解を作るときの共通ルール
+
+**件数・パーセント・サンプル数を画像に焼き込まない。**
+数字は分類結果から `scripts/sync_issue_counts.py` が生成し、
+論点カードの `explainer-count` バッジとして表示される。
+画像に入れると、データ補充のたびに画像だけが取り残される。
+
+「最多の論点」「件数は少ない」といった**程度を表す言い回しも、できるだけ画像に入れない**。
+数値ほど壊れやすくはないが、データが動けば同じように嘘になる。
+
+---
+
+### 参考: 争点④の図解タイトルとのズレ（別件・未対応）
+
+争点④のカード名は `女性天皇と女系天皇の違い`（正典ラベル `女性天皇・女系天皇`）に変わったが、
+流用している `koshitsu-infographic-wide-josei-tenno.webp` の焼き込みタイトルは「女性天皇・愛子天皇」のまま。
+争点⑤で愛子さまを別カードに分けたので、余裕があれば争点④の図解も
+「女性天皇と女系天皇の違い」のタイトルで作り直すと、カードと図解の呼称が揃う。

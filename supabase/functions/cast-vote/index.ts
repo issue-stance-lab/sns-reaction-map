@@ -9,7 +9,10 @@ const TOPIC_CHOICES: Record<string, number> = {
   "elderly-license-revocation-issue-stance-v1": 18,
   "fukushuto-issue-stance-v1": 21,
   "henoko-student-accident-issue-stance-v1": 18,
+  // v1 は論点7つ×立場4。論点を正典の分類に揃えて6つにしたため v2 へ移行した。
+  // 集計は選択肢インデックス依存なので、v1 の票を v2 に引き継ぐことはできない。
   "koshitsu-tenpakai-issue-stance-v1": 28,
+  "koshitsu-tenpakai-issue-stance-v2": 24,
   "school-nickname-ban-issue-stance-v1": 18,
   "takaichi-issue-stance-v1": 15,
 };

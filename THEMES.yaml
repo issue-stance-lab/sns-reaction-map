@@ -216,14 +216,14 @@ themes:
     classify2d: done     # 273件（エラー率2.1%）+ main_issue 268件（エラー率2.0%）
     page_v3: done         # 比較型（温度バー＋2Dスキャッタ）2026-07-18
     manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
-    manga_img: done       # 5枚WebP変換済み（charsheet×2 + page×3、全100KB以下）
+    manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
     refresh_at: 2026-08-02
     published_at: 2026-07-18
     updated_at: 2026-07-26
     collect_delta: 347
     x_posted_at: 2026-08-01
-    notes: "2026-07-17のYahooリアルタイム検索。皇室典範改正が同日参院で可決・成立した直後で投稿殺到中。trend_judgeはGO（スコア9/10、意見率60-70%）。9クエリで326件取得済み。2D分類完了（OpenCode Go minimax-m2.7）。stance_reform（反対140/中立103/賛成30）stance_succession（男系95/中立133/女系45）。main_issue分布: 男系vs女系75/養子制度54/立法手法54/女性天皇の区別24/愛子さま5/その他56。2026-07-26に347件を追加収集しHermes1D分類（改正賛成11→20%に増加）、「世論の潮目」ウィジェットを追加（前回は2Dスタンス統計から合成）。"
+    notes: "2026-07-17のYahooリアルタイム検索。皇室典範改正が同日参院で可決・成立した直後で投稿殺到中。trend_judgeはGO（スコア9/10、意見率60-70%）。9クエリで326件取得済み。2D分類完了（OpenCode Go minimax-m2.7）。stance_reform（反対140/中立103/賛成30）stance_succession（男系95/中立133/女系45）。main_issue分布: 男系vs女系75/養子制度54/立法手法54/女性天皇の区別24/愛子さま5/その他56。2026-07-26に347件を追加収集しHermes1D分類（改正賛成11→20%に増加）、「世論の潮目」ウィジェットを追加（前回は2Dスタンス統計から合成）。2026-08-02にページの論点表示を正典 sample_file へ統一（S8-fix / 課題30）。それまでアリーナSM_RAW・論点カード・争点別のXの声・スタンス集計・詳細データは7/17収集分（268件）のままで、sample_file（7/26収集の347件）とURLが1件も重ならない状態だった。件数だけは「それらしい数字」だったため気づけなかった。論点カードの `女性皇族の皇籍維持` `憲法・制度上の妥当性` はAI分類ではなくページ内 arenaIssueOf() の正規表現が作った擬似ラベルで、正典に対応が無かったため廃止。scripts/build_koshitsu_arena.py が sample_file だけを読んでSM_RAW・ISSUES・VOTE_ISSUES・注目ポイント・争点別のXの声・スタンス集計・詳細データ・カード件数を再生成する（再実行可能・--checkあり）。論点は件数降順で 男系vs女系104/旧宮家養子縁組74/立法手続き・民主主義54/女性天皇・女系天皇40/愛子さま・皇族の地位17/その他58。カードは「その他」を除く5枚。arenaIssueOf() は p.i の直参照に置き換え、要約文からの推測をやめた。投票の選択肢が7→6に変わり choiceIdx の意味がずれるため topicId を v2 へ上げ、supabase/functions/cast-vote/index.ts に \"koshitsu-tenpakai-issue-stance-v2\": 24 を追加した（**Edge Function の再デプロイが必要。未デプロイだと投票が invalid_topic で失敗する**）。v1 の既存票は集計から外れる。旧2D分類由来の「皇位継承観（stance_succession）」は正典に対応データが無いため注目ポイント・スタンス集計・詳細データから削除した。「世論の潮目」ウィジェットの前回値のみ合成データ（_prev_synthetic）由来のままで、注釈で開示済み。同日、争点⑤「愛子さま・皇族の地位」のwide図解を生成・反映（1916×821px・140KB、cwebp -q 80）。初版は「サンプル17件」を画像に焼き込んでいたため同日中に数値なしの版へ差し替えた。図解に件数・％・サンプル数を入れないルールを manga-prompts/koshitsu-tenpakai-infographic-prompts.md に明記した（データ補充のたびに画像だけ古くなるため）。"
 
   consumption-tax-cut:
     title: 消費税減税
