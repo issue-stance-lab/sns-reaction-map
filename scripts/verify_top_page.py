@@ -310,6 +310,7 @@ def verify_top_page(
 
     overdue_collect = stats["overdue_collect"]
     missing_collect = stats["collect_at_missing"]
+    event_driven = stats["collect_event_driven"]
     if overdue_collect:
         detail = ", ".join(
             f"{theme}（{collect_at.isoformat()}）"
@@ -324,6 +325,8 @@ def verify_top_page(
         failures += 1
     else:
         lines.append("OK  collect_at 空欄 0件")
+    if event_driven:
+        lines.append(f"OK  イベント連動収集: {', '.join(event_driven)}")
 
     lines.extend(["", "=== 禁止表示 ==="])
     content_markup = _content_markup(html)

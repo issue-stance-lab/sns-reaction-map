@@ -96,6 +96,7 @@
 
 **暫定措置**: 上記4テーマ分を `scripts/extract_arena_issue_assignment.py` でページから1度だけ取り出し、`data/issue-counts/{theme}.json` に固定した。件数併記と検査はこのファイルを読む（ページのHTMLは読まないので、spanを手で書き換えれば検査が落ちる）。
 **残作業**: 4テーマの次回データ補充で Hermes 分類をやり直し、`configs/{theme}-reaction-map.json` の `issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
+**横展開の完了条件に追加（2026-08-02）**: bike の `social-samples/bike_arena_hermes_classified.json` 依存と、constitutional / elderly / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
 
 ### 課題30: 論点カードの解説と実データの乖離
 **状態**: 対応案②（件数の併記）を2026-08-02に全11テーマへ適用済み。①③は未着手
@@ -241,6 +242,7 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 5. 保存期間、暗号化、アクセス権、削除手順を運用文書へ記録する
 
 **2026-08-02 対応済み（完了条件3）**: `scripts/backup_private_data.py` を追加。`--dest` で必須の非公開 `sample_file` 5本、`social-samples/updates/`、標準化前のGit管理外raw・分類履歴をアーカイブする。必須ファイル欠落時は作成せず exit 1。同日再実行でも別run-idとなり、作成直後にSHA-256・件数の復元確認を自動実行する。実行確認は25ファイル・5,822,291バイト・復元確認 NG 0件。
+**2026-08-02 追加対応**: 共通ランナー `scripts/refresh_topic.py` は、更新回履歴を確定した直後と公開昇格後の2地点でバックアップを必須実行する。バックアップ失敗時は更新回を確定せず、昇格中なら公開側を復元する。`--backup-dest` は必須で、保存先未決定のまま本収集できない。
 **注意**: tar.gz自体は暗号化されないため、保存先はリポジトリ外の暗号化済み・アクセス制御済みストレージに限定する。
 **残り**: 完了条件1（保存先の決定）はオーナーの判断待ち。2（初回バックアップ）と4（別マシンでの復元テスト）は保存先が決まり次第。
 
@@ -260,6 +262,8 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 
 **やること**: ①henoko / koshitsu の候補input/output対応 ②school-nickname-ban の2点を直して adapter へ昇格 ③constitutional-amendment / consumption-tax-cut を再実行可能な形へ書き直す ④manual 4テーマのビルダーを新設する
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
+
+**2026-08-02 共通ランナー対応**: `scripts/refresh_topic.py --topic` に、全11テーマ共通の疎通確認・収集・重複排除・10件試験分類・全件分類・集合検査・更新回保存・バックアップを集約した。migration / manual / adapter_candidate も公開せずstaging止まりで予定どおり収集できる。ページ処理は `scripts/refresh_adapters/` に分離し、takaichi は候補ページ・arena data・潮目を2回生成して差分ゼロ、投票topicIdと15選択肢の互換性を検査する。
 
 **横展開のゲート**: 少なくとも保全先の決定、既存データの初回バックアップ、復元確認が終わるまで、他テーマの定期更新を開始しない。
 

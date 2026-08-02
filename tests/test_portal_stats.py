@@ -157,6 +157,21 @@ class PortalStatsTest(unittest.TestCase):
             self.assertEqual(stats["overdue_collect"], {})
             self.assertEqual(stats["collect_at_missing"], ["missing"])
 
+    def test_event_driven_theme_may_have_blank_collect_date(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "event.json").write_text(
+                json.dumps([{"tweet_id": "real", "source": "yahoo_realtime"}]),
+                encoding="utf-8",
+            )
+            theme = self._theme("event.json", None, collect_at=None)
+            theme["collect_mode"] = "event-driven"
+
+            stats = compute_stats({"event": theme}, root, today=date(2026, 8, 1))
+
+            self.assertEqual(stats["collect_at_missing"], [])
+            self.assertEqual(stats["collect_event_driven"], ["event"])
+
     @staticmethod
     def _theme(sample_file, refresh_at, *, collect_at="2026-08-02"):
         return {
@@ -169,6 +184,7 @@ class PortalStatsTest(unittest.TestCase):
             "sample_source": "Yahooリアルタイム検索",
             "updated_at": "2026-07-29",
             "collect_at": collect_at,
+            "collect_mode": "scheduled",
             "refresh_at": refresh_at,
         }
 

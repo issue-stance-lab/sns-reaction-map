@@ -1,0 +1,26 @@
+# 収集・分類ランナーの実行設定。ページ生成は adapter だけをテーマ別に差し替える。
+topics:
+  ai-copyright:
+    classifier: scripts/classify_aicopyright_arena_hermes.py
+  bike-blue-ticket:
+    classifier: scripts/classify_bike_arena_hermes.py
+  bukatsu-chiiki:
+    classifier: scripts/classify_bukatsu_arena_hermes.py
+    adapter: bukatsu
+  constitutional-amendment:
+    classifier: scripts/classify_constitutional_arena_hermes.py
+  elderly-license-revocation:
+    classifier: scripts/classify_elderly_arena_hermes.py
+  school-nickname-ban:
+    classifier: scripts/classify_nickname_arena_hermes.py
+  henoko-student-accident:
+    classifier: scripts/classify_henoko_arena_hermes.py
+  takaichi:
+    classifier: scripts/classify_takaichi_arena_hermes.py
+    adapter: takaichi
+  fukushuto:
+    classifier: scripts/classify_fukushuto_arena_hermes.py
+  koshitsu-tenpakai:
+    classifier: scripts/classify_koshitsu_arena_hermes.py
+  consumption-tax-cut:
+    classifier: scripts/classify_consumption_tax_arena_hermes.py

@@ -57,6 +57,7 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
             "refresh_config": _scalar(block, "refresh_config"),
             "page_update_mode": _scalar(block, "page_update_mode"),
             "collect_at": _scalar(block, "collect_at"),
+            "collect_mode": _scalar(block, "collect_mode") or "scheduled",
             "published_at": _scalar(block, "published_at"),
             "updated_at": _scalar(block, "updated_at"),
             "refresh_at": _scalar(block, "refresh_at"),
@@ -134,6 +135,7 @@ def compute_stats(
     refresh_at_missing: list[str] = []
     collect_dates: dict[str, date] = {}
     collect_at_missing: list[str] = []
+    collect_event_driven: list[str] = []
     synthetic_counts: dict[str, int] = {}
     today = date.today() if today is None else today
     for name, theme in published.items():
@@ -159,6 +161,8 @@ def compute_stats(
         collect_at = theme.get("collect_at")
         if collect_at:
             collect_dates[name] = _parse_iso_date(collect_at, theme=name, field="collect_at")
+        elif theme.get("collect_mode") == "event-driven":
+            collect_event_driven.append(name)
         else:
             collect_at_missing.append(name)
 
@@ -200,6 +204,7 @@ def compute_stats(
         "synthetic_counts": synthetic_counts,
         "refresh_at_missing": refresh_at_missing,
         "collect_at_missing": collect_at_missing,
+        "collect_event_driven": collect_event_driven,
         "overdue_collect": overdue_collect,
         "today": today,
     }

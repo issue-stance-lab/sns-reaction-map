@@ -17,6 +17,7 @@
 #   collect_delta:            今回の重複除外後・分類済み追加件数
 #   sample_period:            公開累積データの収集日の範囲（投稿日時ではない）
 #   collect_at:               次回の収集・staging作成予定日（内部運用用）
+#   collect_mode:             scheduled（既定）/ event-driven（新規0件が2回続き定期収集を停止）
 #   refresh_at:               次回の公開更新予定日。公開まで昇格できないテーマは空欄
 #   last_refresh_attempt_at:  収集を試みた日。新規0件や失敗でも記録する
 #   refresh_config:           収集条件（検索語）の正典ファイル
@@ -28,9 +29,11 @@
 #     migration … 一度きりの生成スクリプトしかない。再実行できないか副作用があるため自動化対象外
 #     manual    … 再実行可能な更新スクリプトが存在しない
 #
-# refresh_at の決め方
-#   既定は前回更新から14日。1回の更新で新規意見が50件以上なら次回だけ7日後。
+# collect_at / refresh_at の決め方
+#   既定は前回収集から14日。1回の更新で新規意見が50件以上なら次回だけ7日後。
 #   新規意見が20件未満の回が2回続いたら28日へ下げ、新規0件が2回続いたら定期更新を止めて空欄にする。
+#   collect_at は全テーマに設定し、refresh_at は公開まで昇格できるテーマだけに設定する。
+#   collect_at を空欄にできるのは collect_mode: event-driven を明記したテーマだけ。
 #   同じ日に複数テーマの期限が集まらないよう、日付は意図的に分散させる（2026-08-02 に10テーマが
 #   同時期限になった反省。1日あたり1テーマを上限にする）。
 #
@@ -45,6 +48,7 @@ themes:
     title: 生成AIと著作権
     html: docs/ai-copyright-reaction-map.html
     sample_file: social-samples/ai-copyright_2d_classified.json
+    refresh_config: configs/topics/ai-copyright-v2.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 931件
@@ -68,6 +72,7 @@ themes:
     title: 自転車の青切符導入
     html: docs/bike-blue-ticket-reaction-map.html
     sample_file: social-samples/bike-blue-ticket_2d_classified.json
+    refresh_config: configs/topics/bike-blue-ticket.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 268件
@@ -103,7 +108,7 @@ themes:
     manga_data: done     # manga-prompts/bukatsu-chiiki-prompts.md 作成済み
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done
-    page_update_mode: adapter   # refresh_bukatsu_pilot.py で候補生成・昇格まで実証済み
+    page_update_mode: adapter   # refresh_topic.py --topic bukatsu-chiiki のadapter。パイロットで昇格まで実証済み
     collect_at: 2026-08-09
     refresh_at: 2026-08-09
     last_refresh_attempt_at: 2026-08-02
@@ -117,6 +122,7 @@ themes:
     title: 憲法改正論議
     html: docs/constitutional-amendment-reaction-map.html
     sample_file: social-samples/constitutional_amendment_hermes_arena_classified.json
+    refresh_config: configs/topics/constitutional.yaml
     verification_file: data/verification/constitutional-amendment.json
     sample_period: "2026-06-20〜2026-07-25"
     sample_source: "Yahooリアルタイム検索"
@@ -140,6 +146,7 @@ themes:
     title: 高齢者免許返納
     html: docs/elderly-license-revocation-reaction-map.html
     sample_file: social-samples/elderly-license_2d_classified.json
+    refresh_config: configs/topics/elderly-license-revocation.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 285件
@@ -163,6 +170,7 @@ themes:
     title: 学校でのあだ名禁止
     html: docs/school-nickname-ban-reaction-map.html
     sample_file: social-samples/school-nickname-ban_hermes_arena_classified.json
+    refresh_config: configs/topics/school-nickname-ban-v2.yaml
     verification_file: data/verification/school-nickname-ban.json
     sample_period: "2026-06-22〜2026-07-12"
     sample_source: "Yahooリアルタイム検索"
@@ -185,6 +193,7 @@ themes:
     title: 辺野古高校生死亡事故
     html: docs/henoko-student-accident-reaction-map.html
     sample_file: social-samples/henoko/henoko_hermes_arena_classified.json
+    refresh_config: configs/topics/henoko-v2.yaml
     verification_file: data/verification/henoko-student-accident.json
     sample_period: "2026-06-14〜2026-06-27"
     sample_source: "Yahooリアルタイム検索"
@@ -209,6 +218,7 @@ themes:
     title: 高市文春問題
     html: docs/takaichi-reaction-map-standard.html
     sample_file: social-samples/takaichi_hermes_arena_classified.json
+    refresh_config: configs/topics/takaichi.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 324件（累計）
@@ -232,6 +242,7 @@ themes:
     title: 副首都法案・副首都構想
     html: docs/fukushuto-reaction-map.html
     sample_file: social-samples/fukushuto_2d_classified.json
+    refresh_config: configs/topics/fukushuto.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 292件（2026-07-14、9クエリ）
@@ -254,6 +265,7 @@ themes:
     title: 皇室典範改正（女性皇族の皇籍維持・旧宮家養子）
     html: docs/koshitsu-tenpakai-reaction-map.html
     sample_file: social-samples/koshitsu-tenpakai_hermes_cur_20260726.json
+    refresh_config: configs/topics/koshitsu-tenpakai.yaml
     sample_period: "2026-07-26"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 326件（2026-07-17、9クエリ）
@@ -276,6 +288,7 @@ themes:
     title: 消費税減税
     html: docs/consumption-tax-cut-reaction-map.html
     sample_file: social-samples/consumption-tax-cut_hermes_arena_classified.json
+    refresh_config: configs/topics/consumption-tax-cut.yaml
     verification_file: data/verification/consumption-tax-cut.json
     sample_period: "2026-07-28"
     sample_source: "Yahooリアルタイム検索"
