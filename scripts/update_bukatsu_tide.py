@@ -8,6 +8,7 @@ import html
 import json
 import re
 from collections import Counter
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -268,7 +269,12 @@ def replace_once(source: str, pattern: str, replacement: str, label: str, flags:
     return updated
 
 
-def tide_card(previous: list[dict[str, Any]], current: list[dict[str, Any]]) -> tuple[str, dict[str, Any]]:
+def japanese_date(value: str) -> str:
+    parsed = date.fromisoformat(value)
+    return f"{parsed.month}月{parsed.day}日"
+
+
+def tide_card(previous: list[dict[str, Any]], current: list[dict[str, Any]], previous_date: str, current_date: str) -> tuple[str, dict[str, Any]]:
     deltas = {stance: share(current, "stance", stance) - share(previous, "stance", stance) for stance in STANCES[:3]}
     focus = max(deltas, key=lambda stance: abs(deltas[stance]))
     issue_deltas = {
@@ -310,6 +316,8 @@ def tide_card(previous: list[dict[str, Any]], current: list[dict[str, Any]]) -> 
         "__TIDE_DATA__",
         json.dumps(widget_data, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c"),
     )
+    previous_label = japanese_date(previous_date)
+    current_label = japanese_date(current_date)
     card = f"""<!-- TIDE_CARD_START -->
 <section class="tide-card" id="bukatsu-tide-widget" aria-label="世論の潮目 前回更新と今回更新の比較">
   <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
@@ -320,15 +328,15 @@ def tide_card(previous: list[dict[str, Any]], current: list[dict[str, Any]]) -> 
     <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
   </div>
   <div class="tide-widget-summary" aria-live="polite">
-    <span class="tide-widget-period">7月12日 → 7月23日</span>
+    <span class="tide-widget-period">{previous_label} → {current_label}</span>
     <strong data-tide-headline>{widget_data["stance"]["headline"]}</strong>
   </div>
   <div class="tide-slope-wrap">
     <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="tide-slope-title tide-slope-desc">
       <title id="tide-slope-title">前回と今回の構成比を結ぶグラフ</title>
       <desc id="tide-slope-desc">前回追加分{len(previous)}件と今回追加分{len(current)}件の構成比を比較します。</desc>
-      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 7月12日</text>
-      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 7月23日</text>
+      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 {previous_label}</text>
+      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 {current_label}</text>
       <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
       <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
       <g data-tide-series></g>
@@ -443,6 +451,8 @@ def main() -> int:
     parser.add_argument("--classified", type=Path, required=True)
     parser.add_argument("--previous-batch", type=Path, required=True)
     parser.add_argument("--current-batch", type=Path, required=True)
+    parser.add_argument("--previous-date", required=True)
+    parser.add_argument("--current-date", required=True)
     parser.add_argument("--html", type=Path, required=True)
     parser.add_argument("--output-html", type=Path)
     args = parser.parse_args()
@@ -459,7 +469,7 @@ def main() -> int:
     issue_counts = Counter(classification(row).get("main_issue") for row in all_opinions)
     top_issue, top_count = issue_counts.most_common(1)[0]
     relevant_count = sum(bool(classification(row).get("is_relevant")) for row in all_rows)
-    card, tide = tide_card(previous, current)
+    card, tide = tide_card(previous, current, args.previous_date, args.current_date)
 
     page = args.html.read_text(encoding="utf-8")
     if "/* TIDE_CARD_START */" in page:
@@ -526,7 +536,13 @@ def main() -> int:
     )
     page = page.replace(
         "<strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。",
-        "<strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、Hermesが論点・スタンス・強度を分類しました。最終更新: 2026-07-23。",
+        f"<strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、Hermesが論点・スタンス・強度を分類しました。最終更新: {args.current_date}。",
+    )
+    page = re.sub(
+        r"(<strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、Hermesが論点・スタンス・強度を分類しました。最終更新: )\d{4}-\d{2}-\d{2}(。)",
+        rf"\g<1>{args.current_date}\g<2>",
+        page,
+        count=1,
     )
     page = page.replace(
         "function colorOf(p){return p.x>=0.5?'#059669':(p.x<=-0.5?'#dc2626':'#64748b');}",
