@@ -10,8 +10,11 @@
 
 ## 実行前ゲート
 
-本文付き正典と更新回履歴の正規保存先が決まり、別環境で復元確認できるまで本収集を開始しない。
-保存先はリポジトリ外の暗号化済み・アクセス制御済みストレージに限定する。生成するtar.gz自体は暗号化されない。
+本文付き正典と更新回履歴の正規保存先は、次の外付けディスク上のディレクトリとする。
+
+`/Volumes/HD-LE-B/issue-stance-private-backups`
+
+個人サイトとして運用するオーナー判断により暗号化は行わない。生成するtar.gz自体も暗号化されない。ディスクを共有・譲渡・廃棄するときは、保存済みアーカイブを先に削除する。別環境での復元確認が終わるまで本収集は開始しない。
 
 ## staging止まりの更新
 
@@ -21,7 +24,7 @@ migration、manual、adapter_candidateのテーマも同じコマンドで収集
 python3 scripts/refresh_topic.py \
   --topic consumption-tax-cut \
   --date 2026-08-04 \
-  --backup-dest /path/to/encrypted/private-storage
+  --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups
 ```
 
 処理内容:
@@ -46,7 +49,7 @@ python3 scripts/refresh_topic.py \
 python3 scripts/refresh_topic.py \
   --topic takaichi \
   --date 2026-08-06 \
-  --backup-dest /path/to/encrypted/private-storage \
+  --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups \
   --promote
 ```
 
