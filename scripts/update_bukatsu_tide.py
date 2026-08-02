@@ -11,24 +11,14 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+try:
+    from .bukatsu_taxonomy import ISSUES, STANCES, STANCE_BY_LABEL
+except ImportError:
+    from bukatsu_taxonomy import ISSUES, STANCES, STANCE_BY_LABEL  # type: ignore[no-redef]
+
 
 ROOT = Path(__file__).resolve().parent.parent
-ISSUES = [
-    "費用・家庭負担",
-    "受け皿・指導者",
-    "教員の働き方",
-    "教育的意義・機会",
-    "地域格差",
-    "制度・移行プロセス",
-    "その他",
-]
-STANCES = ["移行支持", "条件付き・改善要求", "慎重・反対", "中立・情報"]
-STANCE_SHORT = {
-    "移行支持": "支持",
-    "条件付き・改善要求": "条件付き",
-    "慎重・反対": "慎重・反対",
-    "中立・情報": "中立",
-}
+STANCE_SHORT = {label: item["short_label"] for label, item in STANCE_BY_LABEL.items()}
 STANCE_EXPLANATION = {
     "移行支持": "地域移行を支持する意見",
     "条件付き・改善要求": "地域移行には条件・改善が必要という意見",
@@ -47,7 +37,7 @@ STANCE_CLASS = {
     "慎重・反対": "con",
     "中立・情報": "neutral",
 }
-STANCE_X = {"移行支持": 1.5, "条件付き・改善要求": 0.5, "慎重・反対": -1.5, "中立・情報": 0.0}
+STANCE_X = {label: float(item["x"]) for label, item in STANCE_BY_LABEL.items()}
 INTENSITY_E = {"low": 0.5, "medium": 1.0, "high": 2.0}
 
 TIDE_CSS = """

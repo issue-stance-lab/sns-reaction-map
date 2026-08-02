@@ -6,28 +6,24 @@ from pathlib import Path
 
 try:
     from .build_reaction_map import arguments_html, load_research_conditions, update_existing_html
+    from .bukatsu_taxonomy import ISSUE_INDEX, ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES
+    from .sync_portal_stats import parse_themes_yaml
 except ImportError:  # python3 scripts/build_bukatsu_arena.py
     from build_reaction_map import (  # type: ignore[no-redef]
         arguments_html,
         load_research_conditions,
         update_existing_html,
     )
+    from bukatsu_taxonomy import ISSUE_INDEX, ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES  # type: ignore[no-redef]
+    from sync_portal_stats import parse_themes_yaml  # type: ignore[no-redef]
 
 ROOT = Path(__file__).parent.parent
 HTML_PATH = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
 JSON_PATH = ROOT / "social-samples" / "bukatsu-chiiki_2d_classified.json"
-CURRENT_JSON_PATH = ROOT / "social-samples" / "bukatsu-chiiki_hermes_classified_20260723.json"
+CURRENT_JSON_PATH = ROOT / str(parse_themes_yaml()["bukatsu-chiiki"]["sample_file"])
 CONFIG_PATH = ROOT / "configs" / "bukatsu-chiiki-reaction-map.json"
 
-ISSUE_MAP = {
-    "費用・家庭負担": 0,
-    "受け皿・指導者": 1,
-    "教員の働き方": 2,
-    "教育的意義・機会": 3,
-    "地域格差": 4,
-    "制度・移行プロセス": 5,
-    "その他": 6,
-}
+ISSUE_MAP = ISSUE_INDEX
 
 # === SM_RAW 生成 ===
 def gen_sm_raw():
@@ -37,7 +33,7 @@ def gen_sm_raw():
         if not p.get("is_opinion"):
             continue
         mi = p.get("main_issue", "その他")
-        i = ISSUE_MAP.get(mi, 6)
+        i = ISSUE_MAP.get(mi, ISSUE_MAP["その他"])
         x = round(p.get("stance_transfer", 0), 1)
         e = round(p.get("emotional_intensity", 0), 1)
         c = round(p.get("confidence", 0.7), 2)

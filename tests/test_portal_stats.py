@@ -93,7 +93,7 @@ class PortalStatsTest(unittest.TestCase):
             self.assertEqual(stats["next_update"], date(2026, 8, 2))
             self.assertEqual(stats["refresh_at_missing"], ["blank"])
 
-    def test_all_past_refresh_dates_are_rejected(self):
+    def test_all_past_refresh_dates_are_reported_as_overdue(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "past.json").write_text(
@@ -102,12 +102,16 @@ class PortalStatsTest(unittest.TestCase):
             )
             theme = self._theme("past.json", "2026-07-31")
 
-            with self.assertRaisesRegex(PortalStatsError, "今日.*以降"):
-                compute_stats({"past": theme}, root, today=date(2026, 8, 1))
+            stats = compute_stats({"past": theme}, root, today=date(2026, 8, 1))
+
+            self.assertIsNone(stats["next_update"])
+            self.assertEqual(stats["overdue_count"], 1)
 
     @staticmethod
     def _theme(sample_file, refresh_at):
         return {
+            "title": "Test theme",
+            "html": "docs/test.html",
             "published": True,
             "page_v3": True,
             "sample_file": sample_file,

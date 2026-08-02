@@ -171,7 +171,7 @@ def verify_top_page(
         f"分類済み投稿   {stats['total_posts']:,}   ← sample_file の実レコード合計（{stats['theme_count']}テーマ）",
         f"公開テーマ数      {stats['theme_count']}   ← THEMES.yaml published:done",
         f"最終更新    {stats['last_updated'].isoformat()}  ← THEMES.yaml updated_at 最大",
-        f"次回更新    {stats['next_update'].isoformat()}  ← THEMES.yaml refresh_at の今日以降の最小",
+        f"次回更新    {stats['next_update'].isoformat() if stats['next_update'] else '未定'}  ← THEMES.yaml refresh_at の今日以降の最小",
         "",
         "=== 置換の空振り検査 ===",
     ]
@@ -291,17 +291,15 @@ def verify_top_page(
             lines.append(f"OK  {name:<28} synthetic 0件")
 
     lines.extend(["", "=== 日付検査 ==="])
-    if stats["next_update"] >= stats["today"]:
+    if stats["overdue_count"]:
+        lines.append(f"OK  期限超過 {stats['overdue_count']}テーマを「更新予定を確認中」と表示")
+    elif stats["next_update"] and stats["next_update"] >= stats["today"]:
         lines.append(
             f"OK  次回更新 {stats['next_update'].isoformat()} "
             f"≥ 今日 {stats['today'].isoformat()}"
         )
     else:
-        lines.append(
-            f"NG  次回更新 {stats['next_update'].isoformat()} "
-            f"< 今日 {stats['today'].isoformat()}"
-        )
-        failures += 1
+        lines.append("OK  次回更新日は未定")
     missing = stats["refresh_at_missing"]
     if missing:
         lines.append(f"OK  refresh_at 空欄は候補から除外: {', '.join(missing)}")
