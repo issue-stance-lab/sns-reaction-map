@@ -22,9 +22,11 @@ import yaml
 try:
     from .bukatsu_taxonomy import ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES
     from .sync_portal_stats import parse_themes_yaml
+    from .verification_data import write_verification_file
 except ImportError:
     from bukatsu_taxonomy import ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES  # type: ignore[no-redef]
     from sync_portal_stats import parse_themes_yaml  # type: ignore[no-redef]
+    from verification_data import write_verification_file  # type: ignore[no-redef]
 
 ROOT = Path(__file__).resolve().parents[1]
 SLUG = "bukatsu-chiiki"
@@ -185,19 +187,32 @@ def update_seo_date(path: Path, current_date: str) -> None:
 def promote(stage: Path, current_date: str, report: dict[str, Any]) -> None:
     themes = parse_themes_yaml()
     canonical = ROOT / themes[SLUG]["sample_file"]
+    verification = ROOT / themes[SLUG]["verification_file"]
     history = ROOT / "social-samples" / "updates" / SLUG / current_date
-    targets = [canonical, PAGE, THEMES, SEO_CONFIG, ROOT / "docs" / "index.html", ROOT / "docs" / "sitemap.xml", ROOT / "docs" / "robots.txt"]
+    public_history = ROOT / "data" / "verification" / "updates" / SLUG / current_date
+    public_raw = public_history / "raw.json"
+    public_classified = public_history / "classified.json"
+    private_raw = history / "raw.json"
+    private_classified = history / "classified.json"
+    targets = [canonical, verification, private_raw, private_classified, public_raw, public_classified, PAGE, THEMES, SEO_CONFIG, ROOT / "docs" / "index.html", ROOT / "docs" / "sitemap.xml", ROOT / "docs" / "robots.txt"]
+    existing_targets = {target for target in targets if target.exists()}
     backup = stage / "backup"
     backup.mkdir(exist_ok=True)
     for target in targets:
         if target.exists():
-            shutil.copy2(target, backup / target.name)
+            saved = backup / target.relative_to(ROOT)
+            saved.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(target, saved)
     try:
         shutil.copy2(stage / "cumulative-candidate.json", canonical)
+        shutil.copy2(stage / "verification-candidate.json", verification)
+        public_history.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(stage / "raw-verification.json", public_raw)
+        shutil.copy2(stage / "classified-wave-verification.json", public_classified)
         shutil.copy2(stage / "page-candidate.html", PAGE)
         history.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(stage / "raw.json", history / "raw.json")
-        shutil.copy2(stage / "classified-wave.json", history / "classified.json")
+        shutil.copy2(stage / "raw.json", private_raw)
+        shutil.copy2(stage / "classified-wave.json", private_classified)
         opinions = int(report["opinions"])
         interval = 7 if opinions >= 50 else 14
         next_date = (date.fromisoformat(current_date) + timedelta(days=interval)).isoformat()
@@ -213,11 +228,12 @@ def promote(stage: Path, current_date: str, report: dict[str, Any]) -> None:
         run([sys.executable, "-m", "unittest", "tests.test_bukatsu_taxonomy", "tests.test_portal_stats"], label="unit tests")
     except Exception:
         for target in targets:
-            saved = backup / target.name
+            saved = backup / target.relative_to(ROOT)
             if saved.exists():
+                target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(saved, target)
-        if history.exists():
-            shutil.rmtree(history)
+            elif target not in existing_targets and target.is_file():
+                target.unlink()
         raise
 
 
@@ -284,6 +300,13 @@ def main() -> int:
     validate_classified(classified)
     candidate = current + classified
     write_json(stage / "cumulative-candidate.json", candidate)
+    write_verification_file(
+        stage / "cumulative-candidate.json", stage / "verification-candidate.json"
+    )
+    write_verification_file(stage / "raw.json", stage / "raw-verification.json")
+    write_verification_file(
+        stage / "classified-wave.json", stage / "classified-wave-verification.json"
+    )
     previous = [row for row in current if str(row.get("fetched_at") or "")[:10] == PREVIOUS_DATE]
     if len(previous) != 161:
         raise ValueError(f"expected 161 previous records, found {len(previous)}")

@@ -1,6 +1,7 @@
 import unittest
 
 from scripts.refresh_bukatsu_pilot import identity, unique, validate_candidate
+from scripts.verification_data import make_verification_records
 
 
 def row(tweet_id, *, issue="費用・家庭負担"):
@@ -19,6 +20,12 @@ def row(tweet_id, *, issue="費用・家庭負担"):
 
 
 class RefreshBukatsuPilotTest(unittest.TestCase):
+    def test_verification_history_preserves_wave_without_post_data(self):
+        safe = make_verification_records([row("123")])
+        self.assertEqual(len(safe), 1)
+        self.assertNotIn("123", str(safe))
+        self.assertNotIn("https://", str(safe))
+
     def test_identity_prefers_tweet_id(self):
         self.assertEqual(identity({"tweet_id": "123", "url": "https://invalid"}), "tweet:123")
 

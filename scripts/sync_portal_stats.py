@@ -50,6 +50,7 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
             "published": _scalar(block, "published") == "done",
             "page_v3": _scalar(block, "page_v3") == "done",
             "sample_file": _scalar(block, "sample_file"),
+            "verification_file": _scalar(block, "verification_file"),
             "sample_period": _scalar(block, "sample_period"),
             "sample_source": _scalar(block, "sample_source"),
             "refresh_config": _scalar(block, "refresh_config"),
@@ -134,7 +135,9 @@ def compute_stats(
         for field in ("sample_period", "sample_source"):
             if not theme.get(field):
                 raise PortalStatsError(f"{name}: {field} がありません")
-        records = load_sample_records(root, name, theme.get("sample_file"))
+        records = load_sample_records(
+            root, name, theme.get("verification_file") or theme.get("sample_file")
+        )
         counts[name] = len(records)
         synthetic_counts[name] = synthetic_record_count(records)
         if synthetic_counts[name] and not allow_synthetic:

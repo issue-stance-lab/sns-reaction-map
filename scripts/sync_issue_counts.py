@@ -82,7 +82,9 @@ def sync_theme(theme: str, *, check: bool = False) -> tuple[str, bool]:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     html_path = ROOT / str(theme_data.get("html") or f"docs/{theme}-reaction-map.html")
 
-    cards = card_counts(theme, config, theme_data.get("sample_file"))
+    cards = card_counts(
+        theme, config, theme_data.get("verification_file") or theme_data.get("sample_file")
+    )
     before = html_path.read_text(encoding="utf-8")
     after = apply_counts(before, theme, cards)
     changed = after != before
