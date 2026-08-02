@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// 論点カードを作り直すので、実行後に必ず
+//   python3 scripts/sync_issue_counts.py school-nickname-ban
+// を走らせること（件数の併記が消える）。verify_theme_page.py が検知する。
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

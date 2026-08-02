@@ -120,6 +120,13 @@ refresh_at を過ぎたテーマにデータを追加した後、以下を順番
 
 - [ ] 該当テーマの `lastmod` → 今日の日付
 
+### 7. 論点カードの件数
+
+- [ ] `python3 scripts/sync_issue_counts.py {theme}` を実行（件数は分類結果から生成する。HTMLに直接書かない）
+- [ ] 論点のラベルが変わった場合は `configs/{theme}-reaction-map.json` の `issue_counts.cards` を先に直す
+- [ ] `python3 scripts/verify_theme_page.py {theme}` が exit 0
+- [ ] `data/issue-counts/` を source にしているテーマ（constitutional-amendment / elderly-license-revocation / henoko-student-accident / koshitsu-tenpakai）は、再分類したら `issue_counts.source` を `sample_file` へ戻す（TASK_BOARD 課題29）
+
 ---
 
 **注意事項:**
