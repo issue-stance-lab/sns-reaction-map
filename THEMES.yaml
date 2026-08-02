@@ -21,6 +21,10 @@
 #   refresh_config:           収集条件（検索語）の正典ファイル
 #   sample_file:              ページ生成用の累積正典。本文を含むため Git 管理外のテーマがある
 #   verification_file:        本文を除いた検証用サマリ（data/verification/）。クリーンクローンとCIはこれを読む
+#   page_update_mode:         ページ更新の自動化可否（2026-08-02 の実測で判定）
+#     adapter   … 同じ入力で2回実行しても差分が出ない。データ更新の自動公開対象
+#     migration … 一度きりの生成スクリプトしかない。再実行できないか副作用があるため自動化対象外
+#     manual    … 再実行可能な更新スクリプトが存在しない
 #
 # refresh_at の決め方
 #   既定は前回更新から14日。1回の更新で新規意見が50件以上なら次回だけ7日後。
@@ -49,6 +53,7 @@ themes:
     manga_data: done     # configs/ai-copyright-reaction-map.json manga field
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done      # sitemap・ポータル掲載済み
+    page_update_mode: manual    # 再実行可能な更新スクリプトなし
     refresh_at: 2026-08-05
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -70,6 +75,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
+    page_update_mode: manual    # 再実行可能な更新スクリプトなし
     refresh_at: 2026-08-15
     published_at: 2026-06-28
     updated_at: 2026-07-26
@@ -93,6 +99,7 @@ themes:
     manga_data: done     # manga-prompts/bukatsu-chiiki-prompts.md 作成済み
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done
+    page_update_mode: adapter   # build_bukatsu_arena.py（2回実行で差分ゼロ確認 2026-08-02）
     refresh_at: 2026-08-09
     last_refresh_attempt_at: 2026-08-02
     published_at: 2026-06-27
@@ -115,6 +122,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
+    page_update_mode: migration # upgrade_constitutional_arena.py は生成済みページに再実行できない（ValueError）
     refresh_at: 2026-08-08
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -136,6 +144,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
     published: done
+    page_update_mode: manual    # 再実行可能な更新スクリプトなし
     refresh_at: 2026-08-13
     published_at: 2026-06-28
     updated_at: 2026-07-26
@@ -157,6 +166,7 @@ themes:
     manga_data: done     # manga-prompts/school-nickname-ban-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル回遊カード復帰・sitemap掲載済み
+    page_update_mode: migration # upgrade_nickname_arena.js は実行のたびに空行が1行増え、SEO meta を巻き戻す
     refresh_at: 2026-08-16
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -178,6 +188,7 @@ themes:
     manga_data: done     # manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚+論点別wide6枚（WebP変換済み）
     published: done      # ポータル掲載・sitemap登録済み
+    page_update_mode: adapter   # build_henoko_arena.mjs（2回実行で差分ゼロ確認 2026-08-02）
     refresh_at: 2026-08-18
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -199,6 +210,7 @@ themes:
     manga_data: done     # manga-prompts/takaichi-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: partial   # 漫画3枚+キャラシート2枚+投票4枚 WebP変換済み。論点別wide5枚プロンプト作成済み（manga-prompts/takaichi-infographic-wide-prompts.md）・未生成
     published: done      # ポータル掲載・sitemap登録済み
+    page_update_mode: adapter   # upgrade_takaichi_arena.js（2回実行で差分ゼロ確認 2026-08-02）
     refresh_at: 2026-08-06
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -219,6 +231,7 @@ themes:
     manga_data: done     # manga-prompts/fukushuto-prompts.md 作成済み（論点別7枚+キャラシート2枚）
     manga_img: done      # docs/images/ に漫画7枚+キャラシート2枚+hero WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-16）
+    page_update_mode: manual    # 再実行可能な更新スクリプトなし
     refresh_at: 2026-08-11
     published_at: 2026-07-15
     updated_at: 2026-07-26
@@ -239,6 +252,7 @@ themes:
     manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
     manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
+    page_update_mode: adapter   # build_koshitsu_arena.py（2回実行で差分ゼロ確認 2026-08-02）
     refresh_at: 2026-08-12
     published_at: 2026-07-18
     updated_at: 2026-07-26
@@ -261,6 +275,7 @@ themes:
     manga_data: todo
     manga_img: partial   # ヒーロー1枚+論点別wide6枚 done（2026-07-29、WebP変換・HTML反映済み）。漫画・投票画像は未生成
     published: done      # ポータル掲載・sitemap登録・回遊カード・SEO登録済み（2026-07-29）
+    page_update_mode: migration # build_consumption_tax_page.py は生成済みページに再実行できない（ValueError）
     refresh_at: 2026-08-04
     published_at: 2026-07-29
     updated_at: 2026-07-29
