@@ -16,6 +16,18 @@ from scripts.verify_top_page import verify_top_page
 
 
 class PortalStatsTest(unittest.TestCase):
+    def test_blank_yaml_scalar_does_not_consume_next_field(self):
+        with tempfile.TemporaryDirectory() as directory:
+            registry = Path(directory) / "THEMES.yaml"
+            registry.write_text(
+                "themes:\n  blank:\n    title: Blank\n    refresh_at:\n"
+                "    published_at: 2026-06-24\n",
+                encoding="utf-8",
+            )
+            theme = parse_themes_yaml(registry)["blank"]
+            self.assertIsNone(theme["refresh_at"])
+            self.assertEqual(theme["published_at"], "2026-06-24")
+
     def test_all_published_themes_have_nonzero_canonical_samples(self):
         stats = compute_stats(parse_themes_yaml(), ROOT)
 

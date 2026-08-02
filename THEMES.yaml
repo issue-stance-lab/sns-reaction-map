@@ -16,13 +16,15 @@
 #   updated_at:               検証済みデータを公開した日。全検査に合格した時だけ進める
 #   collect_delta:            今回の重複除外後・分類済み追加件数
 #   sample_period:            公開累積データの収集日の範囲（投稿日時ではない）
-#   refresh_at:               次回の収集予定日。出来事連動テーマは空欄
+#   collect_at:               次回の収集・staging作成予定日（内部運用用）
+#   refresh_at:               次回の公開更新予定日。公開まで昇格できないテーマは空欄
 #   last_refresh_attempt_at:  収集を試みた日。新規0件や失敗でも記録する
 #   refresh_config:           収集条件（検索語）の正典ファイル
 #   sample_file:              ページ生成用の累積正典。本文を含むため Git 管理外のテーマがある
 #   verification_file:        本文を除いた検証用サマリ（data/verification/）。クリーンクローンとCIはこれを読む
 #   page_update_mode:         ページ更新の自動化可否（2026-08-02 の実測で判定）
-#     adapter   … 同じ入力で2回実行しても差分が出ない。データ更新の自動公開対象
+#     adapter   … stagingの候補入出力に対応し、変更候補の2回目実行で差分が出ない
+#     adapter_candidate … 現行入力では冪等だが、stagingの候補入出力には未対応
 #     migration … 一度きりの生成スクリプトしかない。再実行できないか副作用があるため自動化対象外
 #     manual    … 再実行可能な更新スクリプトが存在しない
 #
@@ -43,7 +45,7 @@ themes:
     title: 生成AIと著作権
     html: docs/ai-copyright-reaction-map.html
     sample_file: social-samples/ai-copyright_2d_classified.json
-    sample_period: "2026-06-10〜2026-07-26"
+    sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 931件
     classify: done       # 708件有効（OpenCode Go / minimax-m2.7）
@@ -54,7 +56,8 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done      # sitemap・ポータル掲載済み
     page_update_mode: manual    # 再実行可能な更新スクリプトなし
-    refresh_at: 2026-08-05
+    collect_at: 2026-08-05
+    refresh_at:
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 452
@@ -76,7 +79,8 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
     page_update_mode: manual    # 再実行可能な更新スクリプトなし
-    refresh_at: 2026-08-15
+    collect_at: 2026-08-15
+    refresh_at:
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 72
@@ -99,7 +103,8 @@ themes:
     manga_data: done     # manga-prompts/bukatsu-chiiki-prompts.md 作成済み
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done
-    page_update_mode: adapter   # build_bukatsu_arena.py（2回実行で差分ゼロ確認 2026-08-02）
+    page_update_mode: adapter   # refresh_bukatsu_pilot.py で候補生成・昇格まで実証済み
+    collect_at: 2026-08-09
     refresh_at: 2026-08-09
     last_refresh_attempt_at: 2026-08-02
     published_at: 2026-06-27
@@ -123,7 +128,8 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
     page_update_mode: migration # upgrade_constitutional_arena.py は生成済みページに再実行できない（ValueError）
-    refresh_at: 2026-08-08
+    collect_at: 2026-08-08
+    refresh_at:
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 224
@@ -145,7 +151,8 @@ themes:
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
     published: done
     page_update_mode: manual    # 再実行可能な更新スクリプトなし
-    refresh_at: 2026-08-13
+    collect_at: 2026-08-13
+    refresh_at:
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 61
@@ -167,7 +174,8 @@ themes:
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル回遊カード復帰・sitemap掲載済み
     page_update_mode: migration # upgrade_nickname_arena.js は実行のたびに空行が1行増え、SEO meta を巻き戻す
-    refresh_at: 2026-08-16
+    collect_at: 2026-08-16
+    refresh_at:
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 45
@@ -188,8 +196,9 @@ themes:
     manga_data: done     # manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚+論点別wide6枚（WebP変換済み）
     published: done      # ポータル掲載・sitemap登録済み
-    page_update_mode: adapter   # build_henoko_arena.mjs（2回実行で差分ゼロ確認 2026-08-02）
-    refresh_at: 2026-08-18
+    page_update_mode: adapter_candidate # 現行入力は冪等だが候補input/output未対応
+    collect_at: 2026-08-18
+    refresh_at:
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 44
@@ -200,7 +209,7 @@ themes:
     title: 高市文春問題
     html: docs/takaichi-reaction-map-standard.html
     sample_file: social-samples/takaichi_hermes_arena_classified.json
-    sample_period: "2026-06-14〜2026-07-26"
+    sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 324件（累計）
     classify: done
@@ -210,7 +219,8 @@ themes:
     manga_data: done     # manga-prompts/takaichi-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: partial   # 漫画3枚+キャラシート2枚+投票4枚 WebP変換済み。論点別wide5枚プロンプト作成済み（manga-prompts/takaichi-infographic-wide-prompts.md）・未生成
     published: done      # ポータル掲載・sitemap登録済み
-    page_update_mode: adapter   # upgrade_takaichi_arena.js（2回実行で差分ゼロ確認 2026-08-02）
+    page_update_mode: adapter   # 候補input/output対応、変更候補の2回目差分ゼロ確認
+    collect_at: 2026-08-06
     refresh_at: 2026-08-06
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -222,7 +232,7 @@ themes:
     title: 副首都法案・副首都構想
     html: docs/fukushuto-reaction-map.html
     sample_file: social-samples/fukushuto_2d_classified.json
-    sample_period: "2026-07-14〜2026-07-26"
+    sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 292件（2026-07-14、9クエリ）
     classify: n-a        # 2D分類で直接カバー
@@ -232,7 +242,8 @@ themes:
     manga_img: done      # docs/images/ に漫画7枚+キャラシート2枚+hero WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-16）
     page_update_mode: manual    # 再実行可能な更新スクリプトなし
-    refresh_at: 2026-08-11
+    collect_at: 2026-08-11
+    refresh_at:
     published_at: 2026-07-15
     updated_at: 2026-07-26
     collect_delta: 308
@@ -243,7 +254,7 @@ themes:
     title: 皇室典範改正（女性皇族の皇籍維持・旧宮家養子）
     html: docs/koshitsu-tenpakai-reaction-map.html
     sample_file: social-samples/koshitsu-tenpakai_hermes_cur_20260726.json
-    sample_period: "2026-07-17〜2026-07-26"
+    sample_period: "2026-07-26"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 326件（2026-07-17、9クエリ）
     classify: n-a        # 2D分類で直接カバー
@@ -252,8 +263,9 @@ themes:
     manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
     manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
-    page_update_mode: adapter   # build_koshitsu_arena.py（2回実行で差分ゼロ確認 2026-08-02）
-    refresh_at: 2026-08-12
+    page_update_mode: adapter_candidate # 現行入力は冪等だが候補input/output未対応
+    collect_at: 2026-08-12
+    refresh_at:
     published_at: 2026-07-18
     updated_at: 2026-07-26
     collect_delta: 347
@@ -276,7 +288,8 @@ themes:
     manga_img: partial   # ヒーロー1枚+論点別wide6枚 done（2026-07-29、WebP変換・HTML反映済み）。漫画・投票画像は未生成
     published: done      # ポータル掲載・sitemap登録・回遊カード・SEO登録済み（2026-07-29）
     page_update_mode: migration # build_consumption_tax_page.py は生成済みページに再実行できない（ValueError）
-    refresh_at: 2026-08-04
+    collect_at: 2026-08-04
+    refresh_at:
     published_at: 2026-07-29
     updated_at: 2026-07-29
     collect_delta: 667

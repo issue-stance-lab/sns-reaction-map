@@ -21,13 +21,14 @@ class PortalStatsError(RuntimeError):
 
 def _scalar(block: str, key: str) -> str | None:
     match = re.search(
-        rf"^    {re.escape(key)}:\s*([^#\n]*?)(?:\s+#.*)?$",
+        rf"^    {re.escape(key)}:[ \t]*([^#\n]*?)(?:[ \t]+#.*)?$",
         block,
         re.MULTILINE,
     )
     if not match:
         return None
-    return match.group(1).strip().strip('"').strip("'")
+    value = match.group(1).strip().strip('"').strip("'")
+    return value or None
 
 
 def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
@@ -54,6 +55,8 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
             "sample_period": _scalar(block, "sample_period"),
             "sample_source": _scalar(block, "sample_source"),
             "refresh_config": _scalar(block, "refresh_config"),
+            "page_update_mode": _scalar(block, "page_update_mode"),
+            "collect_at": _scalar(block, "collect_at"),
             "published_at": _scalar(block, "published_at"),
             "updated_at": _scalar(block, "updated_at"),
             "refresh_at": _scalar(block, "refresh_at"),

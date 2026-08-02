@@ -57,8 +57,9 @@
 **対象（6件）**: bike-blue-ticket / bukatsu-chiiki / constitutional-amendment / elderly-license-revocation / school-nickname-ban / henoko-student-accident
 **手順**: 各テーマの `sample_file` のレコード内タイムスタンプ、または収集時の作業ログ・git log・`social-samples/*.md` から期間を特定する。**特定できない場合は推測で埋めず `unknown` のまま残し、ページ側で「取得期間: 記録なし」と正直に表示する**
 **2026-08-02 対応済み（3件）**: `sample_file` の `fetched_at` が全件そろっている constitutional-amendment（2026-06-20〜2026-07-25）/ school-nickname-ban（2026-06-22〜2026-07-12）/ henoko-student-accident（2026-06-14〜2026-06-27）を確定し、ページの「取得期間: 記録なし」も書き換えた。bukatsu-chiiki はパイロットで確定済み。
-**残り2件**: bike-blue-ticket（181件中116件に `fetched_at` なし）/ elderly-license-revocation（211件中114件なし）。部分欠損のため推測で埋めず `unknown` のまま残す。次回のデータ更新で全件再分類したときに確定する。
-**別件（課題29の一例）**: ai-copyright は `sample_period: "2026-06-10〜2026-07-26"` と書いてあるが、`sample_file` の `fetched_at` は最新が 2026-07-12（339件は欠損）。7/26に収集した452件は `sample_file` に入っておらず別ファイルにある。台帳の値が公開データと一致していないので、次回更新（8/5予定）で累積を正典へ統合するときに直す。
+**全11テーマ再検査**: 同じ基準を既に期間が入っていたテーマにも適用した。takaichi（276件中140件欠損）/ fukushuto（255件全件欠損）も `unknown` へ戻し、koshitsu-tenpakai は正典347件が全て7/26収集なので `2026-07-26` に修正した。現在の `unknown` は ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi / fukushuto の5件。
+**機械検査**: `data/verification/sample-periods.json` に総数・日付あり・欠損・最小日・最大日だけを保存し、`scripts/verify_sample_periods.py` で全11テーマを検査する。個別投稿の取得日は公開しない。
+**別件（課題29の一例）**: ai-copyright は `sample_period: "2026-06-10〜2026-07-26"` と書いてあったが、`sample_file` の `fetched_at` は最新が 2026-07-12（339件は欠損）。7/26に収集した452件は `sample_file` に入っておらず別ファイルにあるため、根拠のない期間を公開し続けず `unknown`／「記録なし」へ戻した。次回更新で累積を正典へ統合した時点で確定する。
 
 **注意**: `sample_source` は全11テーマ「Yahooリアルタイム検索」で埋まっている。検索語（クエリ）は未記録なので、A-4 で表示するなら `sample_queries` フィールドの追加も併せて検討する
 
@@ -237,8 +238,10 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 2. 5テーマの本文付き累積正典と `social-samples/updates/` をバックアップする
 3. 更新の昇格完了後に自動または1コマンドでバックアップし、失敗を検知できるようにする
 4. 別マシンへの復元テストを行い、正典からページ候補を再生成できることを確認する
+5. 保存期間、暗号化、アクセス権、削除手順を運用文書へ記録する
 
-**2026-08-02 対応済み（完了条件3）**: `scripts/backup_private_data.py` を追加。`--dest` でGit管理外の `sample_file` 5本と `social-samples/updates/` をアーカイブし、`--verify` でSHA-256と件数を照合する（失敗時 exit 1）。実行確認は7ファイル・3,349,937バイト・復元確認 NG 0件。
+**2026-08-02 対応済み（完了条件3）**: `scripts/backup_private_data.py` を追加。`--dest` で必須の非公開 `sample_file` 5本、`social-samples/updates/`、標準化前のGit管理外raw・分類履歴をアーカイブする。必須ファイル欠落時は作成せず exit 1。同日再実行でも別run-idとなり、作成直後にSHA-256・件数の復元確認を自動実行する。実行確認は25ファイル・5,822,291バイト・復元確認 NG 0件。
+**注意**: tar.gz自体は暗号化されないため、保存先はリポジトリ外の暗号化済み・アクセス制御済みストレージに限定する。
 **残り**: 完了条件1（保存先の決定）はオーナーの判断待ち。2（初回バックアップ）と4（別マシンでの復元テスト）は保存先が決まり次第。
 
 ### 課題34: ページ更新スクリプトが再実行できないテーマの整備
@@ -249,14 +252,14 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 
 | 区分 | テーマ | 状態 |
 |---|---|---|
-| adapter（4） | bukatsu-chiiki / henoko-student-accident / takaichi / koshitsu-tenpakai | 2回実行で差分ゼロ。自動公開の対象にできる |
+| adapter（2） | bukatsu-chiiki / takaichi | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
+| adapter_candidate（2） | henoko-student-accident / koshitsu-tenpakai | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
 | migration（3） | constitutional-amendment / consumption-tax-cut | 生成済みページへ再実行すると `ValueError: substring not found` で落ちる（一度きりの移行用スクリプト） |
 | | school-nickname-ban | 実行のたびに空行が1行増える。さらに `upgrade_nickname_arena.js` 内の古い meta description で `configs/theme-seo.json` 由来のSEO文言を巻き戻す |
 | manual（4） | ai-copyright / bike-blue-ticket / elderly-license-revocation / fukushuto | 再実行可能な更新スクリプトが存在しない（`inject_tide_widget.py` と検査スクリプトのみ） |
 
-**やること**: ①school-nickname-ban の2点を直して adapter へ昇格（最も軽い）②constitutional-amendment / consumption-tax-cut を再実行可能な形へ書き直す ③manual 4テーマのビルダーを新設する
+**やること**: ①henoko / koshitsu の候補input/output対応 ②school-nickname-ban の2点を直して adapter へ昇格 ③constitutional-amendment / consumption-tax-cut を再実行可能な形へ書き直す ④manual 4テーマのビルダーを新設する
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
-5. 保存期間、暗号化、アクセス権、削除手順を運用文書へ記録する
 
 **横展開のゲート**: 少なくとも保全先の決定、既存データの初回バックアップ、復元確認が終わるまで、他テーマの定期更新を開始しない。
 
