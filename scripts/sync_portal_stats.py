@@ -132,6 +132,8 @@ def compute_stats(
     updated_dates: list[date] = []
     refresh_dates: list[date] = []
     refresh_at_missing: list[str] = []
+    collect_dates: dict[str, date] = {}
+    collect_at_missing: list[str] = []
     synthetic_counts: dict[str, int] = {}
     today = date.today() if today is None else today
     for name, theme in published.items():
@@ -154,9 +156,19 @@ def compute_stats(
             refresh_dates.append(_parse_iso_date(refresh_at, theme=name, field="refresh_at"))
         else:
             refresh_at_missing.append(name)
+        collect_at = theme.get("collect_at")
+        if collect_at:
+            collect_dates[name] = _parse_iso_date(collect_at, theme=name, field="collect_at")
+        else:
+            collect_at_missing.append(name)
 
     upcoming_refresh_dates = [refresh_at for refresh_at in refresh_dates if refresh_at >= today]
     overdue_refresh_dates = [refresh_at for refresh_at in refresh_dates if refresh_at < today]
+    overdue_collect = {
+        name: collect_at
+        for name, collect_at in collect_dates.items()
+        if collect_at < today
+    }
 
     return {
         "total_posts": sum(counts.values()),
@@ -187,6 +199,8 @@ def compute_stats(
         "sample_counts": counts,
         "synthetic_counts": synthetic_counts,
         "refresh_at_missing": refresh_at_missing,
+        "collect_at_missing": collect_at_missing,
+        "overdue_collect": overdue_collect,
         "today": today,
     }
 

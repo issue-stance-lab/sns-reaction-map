@@ -161,10 +161,12 @@ def verify_top_page(
     root: Path = ROOT,
     themes_path: Path = THEMES_YAML,
     index_path: Path = INDEX_HTML,
+    *,
+    today: date | None = None,
 ) -> tuple[list[str], int]:
     """検証結果の行とNG件数を返す。tests/ からも呼び出せる。"""
     themes = parse_themes_yaml(themes_path)
-    stats = compute_stats(themes, root, allow_synthetic=True)
+    stats = compute_stats(themes, root, today=today, allow_synthetic=True)
     html = index_path.read_text(encoding="utf-8")
     lines = [
         "=== 数値の出所 ===",
@@ -305,6 +307,23 @@ def verify_top_page(
         lines.append(f"OK  refresh_at 空欄は候補から除外: {', '.join(missing)}")
     else:
         lines.append("OK  refresh_at 空欄 0件")
+
+    overdue_collect = stats["overdue_collect"]
+    missing_collect = stats["collect_at_missing"]
+    if overdue_collect:
+        detail = ", ".join(
+            f"{theme}（{collect_at.isoformat()}）"
+            for theme, collect_at in overdue_collect.items()
+        )
+        lines.append(f"NG  collect_at 期限超過: {detail}")
+        failures += 1
+    else:
+        lines.append("OK  collect_at 期限超過 0件")
+    if missing_collect:
+        lines.append(f"NG  collect_at 空欄: {', '.join(missing_collect)}")
+        failures += 1
+    else:
+        lines.append("OK  collect_at 空欄 0件")
 
     lines.extend(["", "=== 禁止表示 ==="])
     content_markup = _content_markup(html)

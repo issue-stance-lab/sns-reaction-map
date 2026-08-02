@@ -40,6 +40,16 @@ class PortalStatsTest(unittest.TestCase):
 
         self.assertEqual(failures, 0)
 
+    def test_top_page_verification_fails_after_collect_deadline(self):
+        lines, failures = verify_top_page(today=date(2026, 8, 6))
+
+        self.assertGreater(failures, 0)
+        self.assertIn(
+            "NG  collect_at 期限超過: ai-copyright（2026-08-05）, "
+            "consumption-tax-cut（2026-08-04）",
+            lines,
+        )
+
     def test_unmanaged_topic_count_is_rejected(self):
         html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
         html = html.replace(
@@ -119,8 +129,36 @@ class PortalStatsTest(unittest.TestCase):
             self.assertIsNone(stats["next_update"])
             self.assertEqual(stats["overdue_count"], 1)
 
+    def test_past_collect_dates_are_reported_even_without_refresh_at(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "past.json").write_text(
+                json.dumps([{"tweet_id": "real", "source": "yahoo_realtime"}]),
+                encoding="utf-8",
+            )
+            theme = self._theme("past.json", None, collect_at="2026-07-31")
+
+            stats = compute_stats({"past": theme}, root, today=date(2026, 8, 1))
+
+            self.assertEqual(stats["overdue_collect"], {"past": date(2026, 7, 31)})
+            self.assertEqual(stats["collect_at_missing"], [])
+
+    def test_missing_collect_date_is_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "missing.json").write_text(
+                json.dumps([{"tweet_id": "real", "source": "yahoo_realtime"}]),
+                encoding="utf-8",
+            )
+            theme = self._theme("missing.json", None, collect_at=None)
+
+            stats = compute_stats({"missing": theme}, root, today=date(2026, 8, 1))
+
+            self.assertEqual(stats["overdue_collect"], {})
+            self.assertEqual(stats["collect_at_missing"], ["missing"])
+
     @staticmethod
-    def _theme(sample_file, refresh_at):
+    def _theme(sample_file, refresh_at, *, collect_at="2026-08-02"):
         return {
             "title": "Test theme",
             "html": "docs/test.html",
@@ -130,6 +168,7 @@ class PortalStatsTest(unittest.TestCase):
             "sample_period": "unknown",
             "sample_source": "Yahooリアルタイム検索",
             "updated_at": "2026-07-29",
+            "collect_at": collect_at,
             "refresh_at": refresh_at,
         }
 
