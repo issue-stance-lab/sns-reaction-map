@@ -1,5 +1,5 @@
 # THEMES.yaml — テーマ台帳（単一の真実源）
-# 最終更新: 2026-07-28
+# 最終更新: 2026-08-02
 #
 # 工程の定義（全テーマ共通のステートマシン）
 #   collect:     Yahoo検索でデータ収集済み
@@ -11,9 +11,24 @@
 #   published:   ポータル掲載・sitemap登録済み
 #
 # 各工程の値: done / partial / todo / blocked / n-a
-# refresh_at:    次回データ補充の目安日
 #
-# バッジ自動制御フィールド（index.html JS が参照）
+# データ更新フィールド（2026-08-02 の部活動パイロットで意味を固定）
+#   updated_at:               検証済みデータを公開した日。全検査に合格した時だけ進める
+#   collect_delta:            今回の重複除外後・分類済み追加件数
+#   sample_period:            公開累積データの収集日の範囲（投稿日時ではない）
+#   refresh_at:               次回の収集予定日。出来事連動テーマは空欄
+#   last_refresh_attempt_at:  収集を試みた日。新規0件や失敗でも記録する
+#   refresh_config:           収集条件（検索語）の正典ファイル
+#   sample_file:              ページ生成用の累積正典。本文を含むため Git 管理外のテーマがある
+#   verification_file:        本文を除いた検証用サマリ（data/verification/）。クリーンクローンとCIはこれを読む
+#
+# refresh_at の決め方
+#   既定は前回更新から14日。1回の更新で新規意見が50件以上なら次回だけ7日後。
+#   新規意見が20件未満の回が2回続いたら28日へ下げ、新規0件が2回続いたら定期更新を止めて空欄にする。
+#   同じ日に複数テーマの期限が集まらないよう、日付は意図的に分散させる（2026-08-02 に10テーマが
+#   同時期限になった反省。1日あたり1テーマを上限にする）。
+#
+# バッジ自動制御フィールド（index.html JS が参照。値は sync_portal_stats.py が生成する）
 #   published_at:  初回ポータル公開日  → NEW バッジ（14日間）
 #   updated_at:    最終データ追加日    → +XX件 更新バッジ（7日間）
 #   collect_delta: 直近追加件数        → +XX件 の数字
@@ -34,7 +49,7 @@ themes:
     manga_data: done     # configs/ai-copyright-reaction-map.json manga field
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done      # sitemap・ポータル掲載済み
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-05
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 452
@@ -55,7 +70,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-15
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 72
@@ -91,7 +106,7 @@ themes:
     html: docs/constitutional-amendment-reaction-map.html
     sample_file: social-samples/constitutional_amendment_hermes_arena_classified.json
     verification_file: data/verification/constitutional-amendment.json
-    sample_period: unknown
+    sample_period: "2026-06-20〜2026-07-25"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 382件
     classify: done       # 552件有効（2D累計）
@@ -100,7 +115,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-08
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 224
@@ -121,7 +136,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
     published: done
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-13
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 61
@@ -133,7 +148,7 @@ themes:
     html: docs/school-nickname-ban-reaction-map.html
     sample_file: social-samples/school-nickname-ban_hermes_arena_classified.json
     verification_file: data/verification/school-nickname-ban.json
-    sample_period: unknown
+    sample_period: "2026-06-22〜2026-07-12"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 374件
     classify: done       # 134件有効
@@ -142,7 +157,7 @@ themes:
     manga_data: done     # manga-prompts/school-nickname-ban-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル回遊カード復帰・sitemap掲載済み
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-16
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 45
@@ -153,7 +168,7 @@ themes:
     html: docs/henoko-student-accident-reaction-map.html
     sample_file: social-samples/henoko/henoko_hermes_arena_classified.json
     verification_file: data/verification/henoko-student-accident.json
-    sample_period: unknown
+    sample_period: "2026-06-14〜2026-06-27"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 178件
     classify: done       # henoko_structured_redesign_final.json
@@ -163,7 +178,7 @@ themes:
     manga_data: done     # manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚+論点別wide6枚（WebP変換済み）
     published: done      # ポータル掲載・sitemap登録済み
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-18
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 44
@@ -184,7 +199,7 @@ themes:
     manga_data: done     # manga-prompts/takaichi-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: partial   # 漫画3枚+キャラシート2枚+投票4枚 WebP変換済み。論点別wide5枚プロンプト作成済み（manga-prompts/takaichi-infographic-wide-prompts.md）・未生成
     published: done      # ポータル掲載・sitemap登録済み
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-06
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 178
@@ -204,7 +219,7 @@ themes:
     manga_data: done     # manga-prompts/fukushuto-prompts.md 作成済み（論点別7枚+キャラシート2枚）
     manga_img: done      # docs/images/ に漫画7枚+キャラシート2枚+hero WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-16）
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-11
     published_at: 2026-07-15
     updated_at: 2026-07-26
     collect_delta: 308
@@ -224,7 +239,7 @@ themes:
     manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
     manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
-    refresh_at: 2026-08-02
+    refresh_at: 2026-08-12
     published_at: 2026-07-18
     updated_at: 2026-07-26
     collect_delta: 347
