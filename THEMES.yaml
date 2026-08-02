@@ -34,8 +34,10 @@
 #   新規意見が20件未満の回が2回続いたら28日へ下げ、新規0件が2回続いたら定期更新を止めて空欄にする。
 #   collect_at は全テーマに設定し、refresh_at は公開まで昇格できるテーマだけに設定する。
 #   collect_at を空欄にできるのは collect_mode: event-driven を明記したテーマだけ。
-#   同じ日に複数テーマの期限が集まらないよう、日付は意図的に分散させる（2026-08-02 に10テーマが
-#   同時期限になった反省。1日あたり1テーマを上限にする）。
+#   同じ日に予定が集まらないよう、日付は意図的に分散させる（2026-08-02 に10テーマが同時期限に
+#   なった反省）。公開まで行うテーマ（page_update_mode: adapter）は1日1テーマを上限にする。
+#   収集だけのテーマは判断がほぼ発生しないため、同じ日にまとめてよい。
+#   オーナーが作業できない日が分かっている場合は、期限を過ぎさせず事前に前後へ動かす。
 #
 # バッジ自動制御フィールド（index.html JS が参照。値は sync_portal_stats.py が生成する）
 #   published_at:  初回ポータル公開日  → NEW バッジ（14日間）
@@ -60,7 +62,7 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done      # sitemap・ポータル掲載済み
     page_update_mode: manual    # 再実行可能な更新スクリプトなし
-    collect_at: 2026-08-05
+    collect_at: 2026-08-03
     refresh_at:
     published_at: 2026-06-24
     updated_at: 2026-07-26
@@ -230,8 +232,8 @@ themes:
     manga_img: partial   # 漫画3枚+キャラシート2枚+投票4枚 WebP変換済み。論点別wide5枚プロンプト作成済み（manga-prompts/takaichi-infographic-wide-prompts.md）・未生成
     published: done      # ポータル掲載・sitemap登録済み
     page_update_mode: adapter   # 候補input/output対応、変更候補の2回目差分ゼロ確認
-    collect_at: 2026-08-06
-    refresh_at: 2026-08-06
+    collect_at: 2026-08-07
+    refresh_at: 2026-08-07
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 178
@@ -301,7 +303,7 @@ themes:
     manga_img: partial   # ヒーロー1枚+論点別wide6枚 done（2026-07-29、WebP変換・HTML反映済み）。漫画・投票画像は未生成
     published: done      # ポータル掲載・sitemap登録・回遊カード・SEO登録済み（2026-07-29）
     page_update_mode: migration # build_consumption_tax_page.py は生成済みページに再実行できない（ValueError）
-    collect_at: 2026-08-04
+    collect_at: 2026-08-03
     refresh_at:
     published_at: 2026-07-29
     updated_at: 2026-07-29

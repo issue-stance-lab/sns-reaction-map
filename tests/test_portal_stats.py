@@ -1,7 +1,7 @@
 import json
 import tempfile
 import unittest
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from scripts.sync_portal_stats import (
@@ -41,14 +41,21 @@ class PortalStatsTest(unittest.TestCase):
         self.assertEqual(failures, 0)
 
     def test_top_page_verification_fails_after_collect_deadline(self):
-        lines, failures = verify_top_page(today=date(2026, 8, 6))
+        # 予定日は運用で動くため、期待値は台帳から作る（日付をベタ書きすると
+        # collect_at を動かすたびにこのテストが落ちる）。
+        scheduled = {
+            name: fields["collect_at"]
+            for name, fields in parse_themes_yaml().items()
+            if fields.get("collect_at")
+        }
+        self.assertTrue(scheduled, "collect_at を持つテーマが1つもない")
+        latest = max(date.fromisoformat(value) for value in scheduled.values())
+
+        lines, failures = verify_top_page(today=latest + timedelta(days=1))
 
         self.assertGreater(failures, 0)
-        self.assertIn(
-            "NG  collect_at 期限超過: ai-copyright（2026-08-05）, "
-            "consumption-tax-cut（2026-08-04）",
-            lines,
-        )
+        detail = ", ".join(f"{name}（{value}）" for name, value in scheduled.items())
+        self.assertIn(f"NG  collect_at 期限超過: {detail}", lines)
 
     def test_unmanaged_topic_count_is_rejected(self):
         html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
