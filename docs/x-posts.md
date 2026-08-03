@@ -318,6 +318,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @livedoornews（岡山県知事「副首都に該当する可能性は極めて低い」） | 副首都・候補地選定基準 | URLなし・kouhochi画像付き | 1,256K |
 | 2 | @mainichi（小渕優子氏、消費減税方針に反対「ツケは次世代に」） | 消費税減税・財源と社会保障 | URLなし・zaigen画像付き | 356K |
+| 3 | @tsuda（辺野古沖転覆事故を沖縄二紙・朝日新聞は継続報道） | 辺野古高校生死亡事故・報道評価 | URLなし・houdou画像付き | 62K |
 
 返信先: https://x.com/livedoornews/status/2084081820925337957
 
@@ -327,7 +328,11 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 投稿文:「「次世代へのツケ」は減税反対側の重要な論拠。ただ、何もしない場合に家計と消費が受ける負担も比較しないと、減税だけを切り取った評価になる。必要なのは減税額、不足財源、実施期限、元に戻す条件を同じ表で示すこと。「いくらを、誰が、いつ負担するか」が見えないままでは判断できない。」
 
-備考: 2本URLなし。`fukushuto-infographic-wide-kouhochi.webp`、`consumption-tax-cut-infographic-wide-zaigen.webp` 添付。
+返信先: https://x.com/tsuda/status/2084158601292284288
+
+投稿文:「「スルーしているか」は記事本数だけでなく、掲載面・見出し・事故原因や責任主体への踏み込みまで分けて見る必要がある。98本という数字は「報道ゼロ」説への反証になる一方、報道の質への批判までは反証しない。件数、扱いの大きさ、追及した論点を同じ基準で比べれば、議論は整理できそうです。」
+
+備考: 3本URLなし。`fukushuto-infographic-wide-kouhochi.webp`、`consumption-tax-cut-infographic-wide-zaigen.webp`、`henoko-student-accident-infographic-wide-houdou.webp` 添付。
 
 ## 論点ポスト実績 2026-08-02
 
