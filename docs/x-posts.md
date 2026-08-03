@@ -317,12 +317,17 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | # | リプライ先 | テーマ | タイプ | views |
 |---|-----------|--------|--------|-------|
 | 1 | @livedoornews（岡山県知事「副首都に該当する可能性は極めて低い」） | 副首都・候補地選定基準 | URLなし・kouhochi画像付き | 1,256K |
+| 2 | @mainichi（小渕優子氏、消費減税方針に反対「ツケは次世代に」） | 消費税減税・財源と社会保障 | URLなし・zaigen画像付き | 356K |
 
 返信先: https://x.com/livedoornews/status/2084081820925337957
 
 投稿文:「岡山の可能性が低い理由が「官邸機能のバックアップは難しい」なら、副首都の中心要件は人口や経済規模より、首都機能をすぐ代替できる能力になる。一方、東京との同時被災を避ける地理条件も重要。代替能力と分散効果、どちらを優先するかで候補地が変わる。選定基準の公開が先では。」
 
-備考: 1本URLなし。`fukushuto-infographic-wide-kouhochi.webp` 添付。
+返信先: https://x.com/mainichi/status/2084205903969202415
+
+投稿文:「「次世代へのツケ」は減税反対側の重要な論拠。ただ、何もしない場合に家計と消費が受ける負担も比較しないと、減税だけを切り取った評価になる。必要なのは減税額、不足財源、実施期限、元に戻す条件を同じ表で示すこと。「いくらを、誰が、いつ負担するか」が見えないままでは判断できない。」
+
+備考: 2本URLなし。`fukushuto-infographic-wide-kouhochi.webp`、`consumption-tax-cut-infographic-wide-zaigen.webp` 添付。
 
 ## 論点ポスト実績 2026-08-02
 
