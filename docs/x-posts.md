@@ -312,6 +312,20 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|
 | 1 | @yu_kaizyu（高齢ドライバー技能検査・不合格でも何度でも受けられる） | 高齢者免許 | URLなし | 30.4K |
 
+## 論点ポスト実績 2026-08-05
+
+テーマ: 生成AIと著作権（対立点は合法性ではなく対価と開示の担保手段）
+パターン: 構図整理型（B）
+画像: ai-copyright-infographic-wide-hoseibi
+文字数: 272/280（X重み換算。日本語・記号=2、半角英数と改行=1）
+投稿文:「生成AIと著作権、「学習は合法か」で争っているようで、実はそこは対立していない。
+規制側も「作風は著作権では守れない」と認め、推進側も「合法だからで納得は得られない」と認めている。ずれているのは対価と開示を法で義務づけるのか、契約と技術に委ねるのか。
+#生成AI #SNS反応まっぷ」
+
+出典: `configs/ai-copyright-reaction-map.json` の `arguments`（side_a.strongest / side_b.strongest / shared_premise / real_conflict）。数値・割合は不使用。
+
+備考: 8/2〜8/4 はログに記録なし。今週（8/3〜）のURL付き枠は未消化で残り2本。
+
 ## 論点ポスト実績 2026-08-01
 
 テーマ: 憲法改正（項目ごとに賛否が変わる構造）
