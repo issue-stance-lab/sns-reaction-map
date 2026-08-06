@@ -71,8 +71,22 @@ def classification(record: dict[str, Any]) -> dict[str, Any]:
     return nested if isinstance(nested, dict) else record
 
 
-def load_canon() -> tuple[list[dict[str, Any]], str]:
-    """THEMES.yaml の sample_file を唯一の出所として読む。"""
+def load_canon(source: Path | None = None) -> tuple[list[dict[str, Any]], str]:
+    """THEMES.yaml の sample_file を唯一の出所として読む。
+
+    staging から呼ぶときだけ source に累積候補を渡す（公開前の候補ページ生成用）。
+    """
+    if source is not None:
+        sample_file = str(source)
+        records = json.loads(Path(source).read_text(encoding="utf-8"))
+        if not isinstance(records, list) or not records:
+            raise IssueCountError(f"{THEME}: 分類結果がJSON配列ではありません: {sample_file}")
+        rows = [r for r in records if isinstance(r, dict) and classification(r).get("main_issue")]
+        if len(rows) != len(records):
+            raise IssueCountError(
+                f"{THEME}: main_issue を持たないレコードがあります（{len(records) - len(rows)}件）"
+            )
+        return rows, sample_file
     themes = parse_themes_yaml(THEMES_YAML)
     if THEME not in themes:
         raise IssueCountError(f"THEMES.yaml にテーマがありません: {THEME}")
@@ -355,8 +369,14 @@ def replace_once(page: str, pattern: str, replacement: str, what: str, *, flags=
     return new_page
 
 
-def build(*, check: bool = False) -> tuple[list[str], bool]:
-    rows, sample_file = load_canon()
+def build(
+    *,
+    check: bool = False,
+    source: Path | None = None,
+    template: Path | None = None,
+    output: Path | None = None,
+) -> tuple[list[str], bool]:
+    rows, sample_file = load_canon(source)
     config_path = ROOT / "configs" / f"{THEME}-reaction-map.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
     arena = config.get("arena")
@@ -388,7 +408,7 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
     total = len(rows)
     top_issue = order[0]
 
-    html_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    html_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
     before = html_path.read_text(encoding="utf-8")
     page = before
 
@@ -478,8 +498,11 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         )
 
     changed = page != before
-    if changed and not check:
-        html_path.write_text(page, encoding="utf-8")
+    # output 指定時は差分がなくても書き出す（adapter が候補同士を突き合わせるため）
+    if not check and (changed or output is not None):
+        target = Path(output) if output else html_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(page, encoding="utf-8")
 
     detail = " / ".join(f"{labels.get(n, n)}={counts[n]}" for n in order)
     lines = [
@@ -493,9 +516,17 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="皇室典範改正ページの論点表示を正典から生成する")
     parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
+    parser.add_argument("--input", type=Path, help="正典の代わりに読む累積候補（staging用）")
+    parser.add_argument("--html-template", type=Path, help="読み込むHTML（既定は公開ページ）")
+    parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     args = parser.parse_args()
     try:
-        lines, changed = build(check=args.check)
+        lines, changed = build(
+            check=args.check,
+            source=args.input,
+            template=args.html_template,
+            output=args.output_html,
+        )
     except (IssueCountError, OSError, KeyError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1

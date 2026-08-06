@@ -279,9 +279,9 @@ themes:
     manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
     manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
-    page_update_mode: adapter_candidate # 現行入力は冪等だが候補input/output未対応
+    page_update_mode: adapter   # refresh_topic.py の koshitsu adapter。2026-08-06 に staging対応・冪等性・投票互換を確認
     collect_at: 2026-08-12
-    refresh_at:
+    refresh_at: 2026-08-12
     published_at: 2026-07-18
     updated_at: 2026-07-26
     collect_delta: 347
