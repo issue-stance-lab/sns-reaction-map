@@ -44,8 +44,14 @@ class TakaichiAdapterTests(unittest.TestCase):
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
             first = (digest(page_path), digest(data_path))
             page = page_path.read_text(encoding="utf-8")
-            self.assertIn("公開投稿 277件", page)
-            self.assertIn("issue-count-takaichi-chusho\">98件", page)
+            # 期待値は候補データから作る（件数をベタ書きすると更新のたびに落ちる）
+            chusho = sum(
+                1 for row in candidate
+                if row.get("classification", {}).get("main_issue") == "中傷動画・説明責任"
+                and row.get("classification", {}).get("is_opinion")
+            )
+            self.assertIn(f"公開投稿 {len(candidate)}件", page)
+            self.assertIn(f'issue-count-takaichi-chusho">{chusho}件', page)
 
             command[command.index("--html-template") + 1] = str(page_path)
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
