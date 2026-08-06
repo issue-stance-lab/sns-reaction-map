@@ -141,6 +141,34 @@ def classifier_schema(classifier: Path) -> tuple[set[str], set[str]]:
     return set(issues), set(stances)
 
 
+def taxonomy_continuity(current: list[dict[str, Any]], classifier: Path) -> dict[str, Any]:
+    """累積正典の既存ラベルが、分類器の宣言する taxonomy に収まっているかを見る。
+
+    許可ラベル検査（validate_classified）は「新規分が分類器の宣言どおりか」しか見ない。
+    分類器の taxonomy を作り直したのに正典を再分類していないテーマでは、累積した瞬間に
+    同義ラベルが二重に並ぶ（2026-08-03 の ai-copyright で判明: 正典は「学習データ・無断利用」、
+    分類器は「学習データ無断利用」）。公開すると論点カードの件数が分裂するため、
+    収集前に止める。
+    """
+    issues, stances = classifier_schema(classifier)
+    current_issues = {
+        value.get("main_issue")
+        for value in (classification(row) or row for row in current)
+        if isinstance(value, dict) and value.get("main_issue")
+    }
+    current_stances = {
+        value.get("stance")
+        for value in (classification(row) or row for row in current)
+        if isinstance(value, dict) and value.get("stance")
+    }
+    return {
+        "compatible": bool(current_issues) and current_issues <= issues and current_stances <= stances,
+        "canonical_without_main_issue": not current_issues,
+        "unknown_issues": sorted(current_issues - issues),
+        "unknown_stances": sorted(current_stances - stances),
+    }
+
+
 def validate_classified(rows: list[dict[str, Any]], classifier: Path) -> dict[str, int]:
     issues, stances = classifier_schema(classifier)
     malformed: list[str] = []
@@ -456,6 +484,11 @@ def main() -> int:
     parser.add_argument("--skip-smoke", action="store_true")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--promote", action="store_true")
+    parser.add_argument(
+        "--allow-taxonomy-mismatch",
+        action="store_true",
+        help="正典と分類器の taxonomy が違っても更新回の保管だけ行う（公開は不可）",
+    )
     args = parser.parse_args()
     date.fromisoformat(args.date)
 
@@ -493,6 +526,29 @@ def main() -> int:
     timings: dict[str, float] = json.loads(timings_path.read_text(encoding="utf-8")) if args.resume and timings_path.exists() else {}
     current = read_rows(canonical)
     queries = load_queries(refresh_config)
+
+    taxonomy = taxonomy_continuity(current, classifier)
+    if not taxonomy["compatible"]:
+        if taxonomy["canonical_without_main_issue"]:
+            reason = f"{canonical.name} に main_issue がない（論点別に累積できない）"
+        else:
+            parts = []
+            if taxonomy["unknown_issues"]:
+                parts.append(f"論点 {taxonomy['unknown_issues']}")
+            if taxonomy["unknown_stances"]:
+                parts.append(f"立場 {taxonomy['unknown_stances']}")
+            reason = f"正典にある {' / '.join(parts)} を分類器が生成しない"
+        message = (
+            f"{args.topic}: 正典と分類器の taxonomy が一致しません。{reason}。"
+            f" このまま累積すると同義ラベルが分裂します。正典を単一 taxonomy へ再分類してから実行するか、"
+            f" 更新回の保管だけが目的なら --allow-taxonomy-mismatch を付けてください（--promote は使えません）。"
+        )
+        if not args.allow_taxonomy_mismatch:
+            raise ValueError(message)
+        if args.promote:
+            raise ValueError(f"{args.topic}: taxonomy不一致のまま公開はできません（--promote と --allow-taxonomy-mismatch は併用不可）")
+        print(f"WARN {message}")
+
     record_refresh_attempt(ROOT, args.topic, args.date)
 
     if not args.resume and not args.skip_smoke:
@@ -528,6 +584,7 @@ def main() -> int:
             "relevant": 0,
             "opinions": 0,
             "queries": queries,
+            "taxonomy": taxonomy,
             "timings": timings,
         }
     else:
@@ -559,6 +616,7 @@ def main() -> int:
             "date": args.date,
             "run_id": args.run_id,
             "queries": queries,
+            "taxonomy": taxonomy,
             "timings": timings,
         })
 
