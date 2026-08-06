@@ -141,6 +141,18 @@ def classifier_schema(classifier: Path) -> tuple[set[str], set[str]]:
     return set(issues), set(stances)
 
 
+def load_adapter(name: str):
+    """テーマ別adapterを読み込む。
+
+    `python3 scripts/refresh_topic.py` で起動すると sys.path[0] は scripts/ になり、
+    `scripts.refresh_adapters.X` を解決できない（2026-08-07 の takaichi 公開でここに当たった）。
+    リポジトリのルートを明示的に通してから読み込む。
+    """
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    return importlib.import_module(f"scripts.refresh_adapters.{name}")
+
+
 def taxonomy_continuity(current: list[dict[str, Any]], classifier: Path) -> dict[str, Any]:
     """累積正典の既存ラベルが、分類器の宣言する taxonomy に収まっているかを見る。
 
@@ -634,7 +646,7 @@ def main() -> int:
         adapter_name = pipeline.get("adapter")
         if not adapter_name or theme.get("page_update_mode") != "adapter":
             raise ValueError(f"{args.topic}: 更新回は保存済みですが、page adapterがないため公開できません")
-        adapter = importlib.import_module(f"scripts.refresh_adapters.{adapter_name}")
+        adapter = load_adapter(adapter_name)
         adapter_targets = adapter.build(ROOT, stage, args.date)
         promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest)
         report["status"] = "promoted"

@@ -1,10 +1,14 @@
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from scripts.refresh_adapters import takaichi
+ROOT = Path(__file__).resolve().parents[1]
+
 from scripts.refresh_topic import (
     ROOT,
     _replace_theme_fields,
@@ -195,3 +199,21 @@ class RefreshTopicTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AdapterImportTest(unittest.TestCase):
+    """`python3 scripts/refresh_topic.py` の起動形（sys.path[0] が scripts/）でも
+    テーマ別adapterを読み込めること。2026-08-07 の takaichi 公開はここで落ちた。"""
+
+    def test_adapter_loads_when_only_scripts_dir_is_on_path(self):
+        for name in ("takaichi", "bukatsu", "koshitsu"):
+            with self.subTest(adapter=name):
+                result = subprocess.run(
+                    [
+                        sys.executable, "-c",
+                        "import sys; sys.path.insert(0, 'scripts');"
+                        f" from refresh_topic import load_adapter; load_adapter({name!r})",
+                    ],
+                    cwd=ROOT, capture_output=True, text=True,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
