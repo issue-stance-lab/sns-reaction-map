@@ -101,14 +101,17 @@ THEMES = [
         "slug": "fukushuto",
         "html": "docs/fukushuto-reaction-map.html",
         "widget_id": "fukushuto-tide-widget",
-        "prev_file": "fukushuto_hermes_prev_20260714.json",
-        "cur_file": "fukushuto_hermes_cur_20260726.json",
+        # 2026-08-08: 旧5論点で分類した更新回ファイルから、公開ページと同じ7論点で
+        # 分類し直した _v2 へ切り替えた。更新回ファイル自体は記録なので改変しない。
+        "prev_file": "fukushuto_hermes_prev_20260714_v2.json",
+        "cur_file": "fukushuto_hermes_cur_20260726_v2.json",
         "prev_label": "7月14日",
         "cur_label": "7月26日",
         "use_relevance_filter": True,
         "stance_labels": ["法案反対", "法案賛成・推進"],
-        "issue_labels": ["副首都法案の是非", "大阪・関西中心の問題", "首都機能分散の必要性", "財政・実現可能性"],
-        "note": "比較対象：7月14日収集分のうち意見投稿／7月26日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで再分類しています。",
+        # 論点は scripts/fukushuto_taxonomy.py の定義（公開ページと同じ7論点から「その他」を除く）
+        "issue_labels": ["定義・中身", "候補地", "都構想・維新", "防災・災害", "費用・財源", "優先順位"],
+        "note": "比較対象：7月14日収集分292件のうち意見投稿／7月26日収集分308件のうち意見投稿。同じ検索語セットで取得した投稿を、公開ページと同じ論点でAIが再分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。",
     },
     {
         "slug": "koshitsu-tenpakai",
