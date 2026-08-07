@@ -19,11 +19,21 @@ tar xzf "$(ls -t /Volumes/HD-LE-B/issue-stance-private-backups/private-data-*.ta
   -C . --exclude=manifest.json
 python3 -c "import yaml,os; th=yaml.safe_load(open('THEMES.yaml'))['themes']; \
   print('欠落:', [v['sample_file'] for v in th.values() if not os.path.exists(v['sample_file'])])"
+
+# 収集ツールを動かせるようにする（node_modules も gitignore 対象で複製されない）
+cp -R ../issue-stance-aggregator/node_modules .
 ```
 
-**復元を忘れると、テストと検査が「ファイルがない」で落ちる。** 5テーマの正典
+**この2つはどちらも「gitignore されているから worktree に入らない」もので、
+入っていないことが `git status` に出ない。** 忘れても静かに進み、後の工程で落ちる。
+
+**正典を復元しないと、テストと検査が「ファイルがない」で落ちる。** 5テーマの正典
 （bukatsu / constitutional / school-nickname / henoko / consumption-tax / ai-copyright）は
 本文を含むため Git 管理外で、新しい worktree には入らない。
+
+**`node_modules` を複製しないと、収集が最初の疎通確認で止まる。**
+`Cannot find package 'playwright'` と出る。2026-08-08 の憲法改正の収集で実際に発生した。
+収集を伴わない作業では不要なので、収集するときだけでよい。
 
 - **`social-samples/` 配下の未追跡ファイルを消さない。** 非公開の正典は gitignore 対象なので、
   古いブランチからは「どこからも参照されていない不要ファイル」に見える。判断する前に
