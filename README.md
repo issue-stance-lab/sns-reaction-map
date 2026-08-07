@@ -1,88 +1,98 @@
-# Issue Stance Aggregator 企画
+# SNS反応まっぷ
 
-作成日: 2026-06-13
+社会の問いについて、SNSの公開投稿サンプルを賛成・反対それぞれの「理由」まで分解して見せる静的サイト。
 
-## 目的
+**公開URL**: https://issue-stance-lab.github.io/sns-reaction-map/
 
-社会的な論争について、賛否の感情だけでなく「何が主張され、何が根拠で、どこが未確認か」を一覧できるWebサービスを作る。
+「どちらが正しいか」をAIに決めさせない。意見・論点・立場の分布を並べて出し、読んだ人が自分で選べる状態にすることを目的にしている。
 
-初期題材は、政治家のSNS・動画発言をめぐる論争。例として高市早苗氏の「奈良公園の鹿を外国人が蹴る動画」発言、国民民主党・玉木雄一郎代表に関するSNS/動画起点の政治的論争を扱う。
+---
 
-## 課題仮説
+## 現状
 
-- SNSや動画の短い切り抜きは拡散力が高い一方、前後文脈や根拠の強弱が失われやすい。
-- 政治家やインフルエンサーの発言は、支持者側・批判側の反応が分断され、第三者が全体像を把握しにくい。
-- 「事実」「推測」「意見」「未確認情報」が同じ画面で混ざるため、議論の質が下がりやすい。
-- 既存のニュース記事は記事単位で完結しており、論点ごとの賛否・根拠・未確認点を横断比較しにくい。
+| 項目 | 値 |
+|---|---|
+| 公開テーマ数 | 11 |
+| 累積サンプル数 | 5,723件 |
+| 形態 | 静的HTML（GitHub Pages、`docs/` を公開） |
+| データ源 | Yahooリアルタイム検索の公開投稿 |
+| 分類エンジン | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7） |
+| 投票基盤 | Supabase Edge Function（`supabase/functions/cast-vote/`） |
+| 計測 | GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864` |
 
-## 提供価値
+テーマごとの工程状態・データ更新履歴は **[THEMES.yaml](THEMES.yaml) が単一の真実源**。README には書かない。
 
-- 1つの争点に対して、要旨、論点、肯定的意見、批判的意見、確認済み事実、未確認事項を同じ画面で比較できる。
-- 各意見に根拠URL、発言者、媒体、日付、信頼度を付与する。
-- 断定できない情報は「未確認」「根拠弱」「一次情報待ち」と明示する。
-- ユーザーが感情的に賛否を選ぶ前に、論点の構造を把握できる。
+## 1テーマのページ構成
 
-## MVP機能
+1. **ヒーロー** — 問いと、いま議論の中心にある論点
+2. **論点アリーナ** — 何が争われているかを論点単位で分解
+3. **2Dスタンスマップ** — 投稿を2軸に配置した散布図＋ヒートマップ
+4. **投票** — 読んだ人自身の立場を記録し、全体分布と比べる
+5. **漫画・図解** — 論点を絵で説明する
+6. **背景解説** — 争点そのものの経緯
 
-1. 争点ページ
-   - タイトル
-   - 要旨
-   - 時系列
-   - 主要論点
-   - 肯定的意見
-   - 批判的意見
-   - 未確認・追加調査ポイント
-   - 参照元一覧
+## リポジトリ構成
 
-2. 根拠カード
-   - 出典名
-   - URL
-   - 公開日
-   - 種別: 一次情報、報道、専門家コメント、SNS、動画、ファクトチェック
-   - 信頼度: high / medium / low / unknown
-   - 要約
+```
+docs/                公開される静的サイト（GitHub Pages のルート）
+social-samples/      収集した投稿の累積正典。本文を含むため一部は Git 管理外
+data/verification/   本文を除いた検証用サマリ。クリーンクローンとCIはこれを読む
+scripts/             収集・分類・生成・検証。scripts/refresh_adapters/ はテーマ別のページ更新
+configs/             テーマ別の設定、収集条件、ワーカーAIへの発注書
+manga-prompts/       漫画・図解の生成プロンプト
+templates/           新規テーマ・ページの雛形
+tests/               unittest
+archive/             運用から外れた文書・スクリプト（下記）
+```
 
-3. 意見カード
-   - 立場: 肯定 / 批判 / 中立 / 保留
-   - 主張
-   - 根拠
-   - 反論可能性
-   - 関連する論点
+## 運用ドキュメント
 
-4. 比較ビュー
-   - 同じテーマに対して、複数の政治家・政党・媒体の扱いを横並び表示する。
+セッションを始めるAIは [CLAUDE.md](CLAUDE.md) の指示に従うこと。
 
-## 将来機能
+| 文書 | 役割 |
+|---|---|
+| [LOOP.md](LOOP.md) | 制作ループ。監査→選定→発注→検証→統合の手順 |
+| [GROWTH_LOOP.md](GROWTH_LOOP.md) | グロースループ。集客・回遊・投票・シェア |
+| [DATA_REFRESH.md](DATA_REFRESH.md) | データ更新の正典。`refresh_topic.py` の使い方と公開ゲート |
+| [THEMES.yaml](THEMES.yaml) | テーマ台帳（単一の真実源） |
+| [GROWTH.yaml](GROWTH.yaml) | グロース指標の実測値 |
+| [TASK_BOARD.md](TASK_BOARD.md) | テーマ横断の課題 |
+| [X_POSTING_GUIDE.md](X_POSTING_GUIDE.md) | X（Twitter）投稿の型とルール |
+| [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加エージェント向けの全体像 |
+| [AGENTS.md](AGENTS.md) | Codex 向けの GitHub 認証まわりの注意 |
 
-- X、YouTube、ニュース記事、国会会議録、政党公式発表の自動収集
-- LLMによる要約と論点抽出
-- 人間レビューによる信頼度補正
-- 誤情報・未確認情報の警告表示
-- 「この主張への反論」生成
-- ユーザーが自分の立場を登録し、反対側の根拠も確認できる表示
+## よく使うコマンド
 
-## 注意点
+データ更新（収集→分類→検証→バックアップ→公開まで1コマンド）:
 
-- 政治的中立性を装って恣意的な編集をすると信頼を失うため、編集基準を明文化する。
-- 誹謗中傷、個人攻撃、国籍・人種・性別など属性への差別的表現を増幅しない。
-- SNS投稿は削除・改変される可能性があるため、取得日時と確認状態を保存する。
-- 「報道されている」と「事実である」は区別する。
+```bash
+python3 scripts/refresh_topic.py --topic <theme> --date <YYYY-MM-DD> --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups --promote
+```
 
-## 推奨技術構成
+ページ検証:
 
-- Frontend: Next.js / React
-- Backend: Node.js or Python FastAPI
-- DB: PostgreSQL
-- Search: Meilisearch or OpenSearch
-- Queue: BullMQ or Cloud Tasks
-- LLM: 要約・分類補助。ただし最終表示には根拠URLと人間レビュー状態を持たせる。
+```bash
+python3 scripts/verify_theme_page.py <theme>
+```
 
-## 新規テーマ制作の正典
+トップページ検証:
 
-新しいSNS反応まっぷを追加するときは、次の順に参照する。
+```bash
+python3 scripts/verify_top_page.py
+```
 
-1. `templates/reaction-map-workflow.md`: 収集・分類・HTML生成・公開前確認の手順
-2. `templates/topic-page-v3.md`: テーマページの構造、共通文言、注目指標の選定ルール
-3. `configs/DESIGN_SYSTEM.md`: ヒーロー高、配色、グリッド、共通コンポーネントの表示仕様
+テスト:
 
-題名周辺の表示や文言を変更した場合は、既存HTMLだけでなく上記の正典と再生成用スクリプトも同時に更新する。
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+## archive/ について
+
+運用から外れたものはここに移してある。消していないのは、当時の判断の根拠が残っているため。
+
+- `archive/planning-2026-06/` — 2026-06 の企画段階の文書。**編集者がURLを登録しSubstackで配信する**という、いまとは別のサービス構想。現在の運用とは無関係
+- `archive/pipeline-ollama/` — ローカル Ollama で分類していた時代の手順書
+- `archive/prompts/` — 実行済みのワーカーAI発注書（2026-06〜07）。結果は THEMES.yaml と TASK_BOARD.md に記録済み
+- `archive/TASK_BOARD_ARCHIVE.md` — 完了した課題
+- `scripts/archive/ollama-era/` — Ollama 時代の分類スクリプト
