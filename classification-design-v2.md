@@ -92,7 +92,7 @@ v2では、テーマを型に分けて分類スキーマを変える。
 
 運用:
 
-- 既存の `scripts/classify_henoko_structured_ollama_batch.py` を基準にする。
+- 既存の `scripts/archive/ollama-era/classify_henoko_structured_ollama_batch.py`（アーカイブ済み） を基準にする。
 - 旧 `henoko.yaml` の単純分類は、互換用または軽量分類用に限定する。
 
 ### C. 生活・教育・マナー型

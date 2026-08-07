@@ -493,17 +493,19 @@ X投稿テンプレートで告知。
 
 ```
 issue-stance-aggregator/
+├── README.md              ← サービスの現状と運用文書の索引
 ├── AI_HANDOFF.md          ← この文書
-├── configs/               ← トピックごとのJSON設定
-├── data/                  ← SQLite DB
+├── THEMES.yaml            ← テーマ台帳（単一の真実源）
+├── archive/               ← 運用から外れた文書・発注書・スクリプト
+├── configs/               ← トピックごとのJSON設定、ワーカーAIへの発注書
+├── data/                  ← SQLite DB、検証用サマリ（data/verification/）
 ├── docs/                  ← 公開HTML（GitHub Pages）
 │   ├── index.html         ← ポータルページ
 │   ├── *-reaction-map.html
 │   └── *-summary.html
 ├── research/              ← Hermes調査結果
 ├── scripts/               ← Python収集・分類・生成スクリプト
-├── social-samples/        ← 分類済みJSONデータ
-└── social-classification-ollama.md
+└── social-samples/        ← 分類済みJSONデータ
 ```
 
 ---
