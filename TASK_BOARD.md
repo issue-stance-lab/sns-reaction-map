@@ -103,7 +103,7 @@
 - 凍結ファイル `data/issue-counts/elderly-license-revocation.json` を削除。bike が依存していた `social-samples/bike_arena_hermes_classified.json` への参照も解消（ファイル自体はGit管理外に残置）
 - 再分類前の2D分類のみの正典を `social-samples/{theme}_2d_classified_v1_2d_only.json` として保存
 - 再分類でラベルが動いたため、`THEMES.yaml` の `main_issue` 行の内訳も実数へ更新した（elderly 139→95 等）
-- `tests/test_taxonomy_continuity.py` の taxonomy不一致テーマは `{ai-copyright, fukushuto}` の2件へ減少
+- 同日に main 側で ai-copyright（7論点・1,606件）と fukushuto も単一ソース化されたため、マージ後は `tests/test_taxonomy_continuity.py` の taxonomy不一致テーマが **0件** になった
 
 **2026-08-07 に判明した未解決点（elderly / bike）**: 論点カードの件数は正典へ揃ったが、**同じページのアリーナ散布データ `SM_RAW` のセクター `i` は旧分類のまま**で、同一ページ内に2つの内訳が並んでいる。
 
