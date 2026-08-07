@@ -10,6 +10,10 @@
 
 ## 実行前ゲート
 
+**作業場所**: 収集・更新は専用の git worktree で行う（`git worktree add ../isa-wt-{テーマ} -b task/{テーマ}`）。
+共有ツリーを他セッションと同時に使うと、`--promote` の「未コミット差分なし」の前提が崩れる。
+
+
 本文付き正典と更新回履歴の正規保存先は、次の外付けディスク上のディレクトリとする。
 
 `/Volumes/HD-LE-B/issue-stance-private-backups`
