@@ -58,10 +58,13 @@ class PortalStatsTest(unittest.TestCase):
         self.assertIn(f"NG  collect_at 期限超過: {detail}", lines)
 
     def test_unmanaged_topic_count_is_rejected(self):
+        # 件数は更新のたびに変わるので、台帳から現在値を引く
+        stats = compute_stats(parse_themes_yaml(), ROOT)
+        count = stats["sample_counts"]["ai-copyright"]
         html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
         html = html.replace(
-            '<strong id="topic-count-ai-copyright">708</strong>',
-            "708",
+            f'<strong id="topic-count-ai-copyright">{count:,}</strong>',
+            f"{count:,}",
             1,
         )
         with tempfile.TemporaryDirectory() as directory:
@@ -72,7 +75,7 @@ class PortalStatsTest(unittest.TestCase):
 
         self.assertGreater(failures, 0)
         self.assertIn(
-            "NG  ページ内の「○件」表示は全て id 付き: 708件",
+            f"NG  ページ内の「○件」表示は全て id 付き: {count:,}件",
             lines,
         )
 
