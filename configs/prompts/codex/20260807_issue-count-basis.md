@@ -1,38 +1,65 @@
-## タスク: 論点カード件数の集計基準（basis）の定義と統一
+## タスク: 論点カードの件数基準を「意見投稿のみ」に統一する
 
 ### 出典
-- `issue_card_counts.py` の `basis` フィールド (`all` vs `opinion`)
-- テーマ設定 `configs/{theme}-reaction-map.json`
+2026-08-07 の高齢者免許返納の再分類レビュー / TASK_BOARD.md 課題30
 
----
+### 目的
+論点カードの件数を「全件」で数えているテーマと「意見投稿のみ」で数えているテーマが
+混在している。全件で数えると、ニュース共有などの非意見投稿が受け皿の「その他」に集まり、
+「その他」が主要論点のような大きさで並ぶ。
 
-### 背景・目的
-`configs/{theme}-reaction-map.json` の `issue_counts.basis` は、論点カードに表示する件数を集計する際の対象レコード範囲を定義する。
-- `"all"`: 正典ファイル内の `main_issue` を持つすべてのレコード（ニュース共有や中立等を含む）
-- `"opinion"`: 正典ファイル内で `is_opinion == true` かつ `main_issue` を持つレコードのみ
+### 背景（調査済み・再調査不要）
+高齢者免許返納を再分類した結果、`basis: all` のままだと「その他」が64件（全体の30%）で
+2番目に大きい論点になった。中身は58件がニュース共有などの非意見投稿。
+意見投稿だけで数えると6件で最小になる。
 
-全テーマにおいて集計基準 `basis` と正典スキーマ、ページ上の解説・注意書きとの矛盾が生じないよう、明確な決定ルールを整理・統一し、検証を自動化する。
+```
+全件基準:   義務化95 / その他64 / 適性19 / 地方14 / 代替10 / 自主9
+意見のみ:   義務化95 / 適性15 / 地方14 / 代替10 / 自主6 / その他6
+```
 
----
+現在の基準（`configs/{theme}-reaction-map.json` の `issue_counts.basis`）:
+
+| basis | テーマ | 正典の is_opinion |
+|---|---|---|
+| opinion（4） | 部活動 / 消費税減税 / 学校のあだ名 / 高市 | あり |
+| all（5・切替可能） | 生成AIと著作権 / 自転車青切符 / 高齢者免許返納 / 副首都 / 皇室典範 | あり |
+| all（2・切替不可） | 憲法改正 / 辺野古 | **なし**（正典に is_opinion が入っていない） |
 
 ### やること
+1. 「論点カードの件数は意見投稿のみを数える」を方針として `configs/DESIGN_SYSTEM.md` か
+   `LOOP.md` に明記する（論点は意見の分布を示すものであり、ニュース共有は論点ではないため）
+2. 切替可能な5テーマについて、変更前後の論点別件数の対照表を作って報告する
+   （**数字が変わることの承認を得てから3へ進む**）
+3. `issue_counts.basis` を `opinion` に変更し、`python3 scripts/sync_issue_counts.py {theme}` を実行する
+4. ページ内の「分析対象の意見◯件」「議論の中心」など、件数に連動する表示を確認して合わせる
+5. 憲法改正・辺野古は `is_opinion` がないため対象外。`basis: all` のままにし、
+   configs にその理由をコメントで残す（別発注で再分類したときに切り替える）
+6. `scripts/issue_card_counts.py` の docstring に「既定は opinion」と書き、
+   `basis` 未指定時の既定値を `opinion` へ変更するかを判断して報告する
 
-1. **各テーマの `configs/{theme}-reaction-map.json` における `basis` の点検**
-   - 各テーマの正典データにおける `is_opinion` の有無・割合の確認
-   - カード表示件数とページ本文の件数表示（「全○件 / 意見○件」）の整合確認
+### やらないこと
+- アリーナの点データの再生成（別発注 `20260807_elderly-bike-arena.md`）
+- 「その他」カードそのものの削除や並べ替え（課題30の①③、別途判断）
+- 正典データの再分類
 
-2. **`issue_card_counts.py` および `sync_issue_counts.py` の検証・改修**
-   - `basis` の指定通りに正確に集計されることをユニットテストで保証
-   - 不整合があるテーマの設定調整
-
-3. **`verify_theme_page.py` の検証強化**
-   - カード件数と `basis` の集計結果が常に100%合致することを保証
-
----
+### 制約（必ず守る）
+- 保護タグを壊さない: GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864` / Supabase / OGP
+- ブランチ: `task/issue-count-basis`。main 直接コミット禁止。**専用の git worktree で作業する**
+- 件数は必ず `sync_issue_counts.py` 経由で注入する。HTMLに直接書かない
+- 手順2の対照表を報告して承認を得るまで、公開ページを変更しない
+- トップの合計（`hero-total-samples`）は正典のレコード数なので変わらない。変わったら誤り
 
 ### 完了条件
-- [ ] 全テーマの `configs/{theme}-reaction-map.json` で `issue_counts.basis` が明確に定義されている
-- [ ] `python3 scripts/sync_issue_counts.py` で全テーマが正しく同期される
-- [ ] `python3 scripts/verify_theme_page.py` が全テーマで exit 0
+- [ ] 切替対象5テーマの `basis` が `opinion` になっている
+- [ ] `python3 scripts/verify_theme_page.py`（全テーマ）が NG 0件
 - [ ] `python3 scripts/verify_top_page.py` が exit 0
-- [ ] `tests/test_verification_data.py` または関連テストがパスする
+- [ ] 憲法改正・辺野古に理由コメントが入っている
+- [ ] 方針が手順書に書かれている
+
+### 完了報告に必ず含めること
+1. `git diff --stat`
+2. 5テーマ分の変更前後の論点別件数の対照表
+3. `verify_theme_page.py` / `verify_top_page.py` の出力をそのまま貼る
+4. `basis` の既定値を変えたかどうかと、その判断
+5. 判断に迷った点

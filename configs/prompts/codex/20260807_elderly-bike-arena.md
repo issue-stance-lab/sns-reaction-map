@@ -1,48 +1,73 @@
-## タスク: 高齢者免許返納・自転車青切符のアリーナデータ（SM_RAW）再生成プログラムの構築
+## タスク: 高齢者免許返納と自転車青切符のアリーナを正典から生成する
 
 ### 出典
-- `TASK_BOARD.md` 課題34
-- `THEMES.yaml` elderly-license-revocation, bike-blue-ticket
+TASK_BOARD.md 課題34 / 2026-08-07 の高齢者免許返納の再分類レビュー
 
----
+### 目的
+論点カードの件数は正典から出るようになったが、アリーナ（散布図）の点データは
+古い割り当てのまま。同じページの中で、図の点の数とカードの数字が食い違っている。
 
-### 背景・目的
-高齢者免許返納および自転車青切符のテーマにおいて、ページの論点カードや統計は正典 `sample_file` に統一されたが、ページ内のアリーナ点データ（`SM_RAW`）は旧分類や別ファイルに由来しており、`main_issue`（セクター `i`）が正典と整合していない。
+### 背景（調査済み・再調査不要）
+高齢者免許返納の現状（自転車青切符も同じ構造になる見込み）:
 
-`build_koshitsu_arena.py` や `build_bukatsu_arena.py` と同様に、正典 `sample_file` のみを読み込み、`main_issue`・座標・感情強度・要約・URL から `SM_RAW` や各種集計データを完全再現・再生成する再実行可能なスクリプトを構築し、HTMLへ再注入する。
+| 論点 | アリーナの点 | 論点カードの件数 |
+|---|---|---|
+| 義務化・事故防止 | 139 | 95 |
+| 地方の足・移動権 | 24 | 14 |
+| 適性検査強化 | 20 | 19 |
+| 代替交通整備 | 9 | 10 |
+| 自主返納支援 | 7 | 9 |
+| その他 | 12 | 64 |
 
----
+- アリーナの点は `docs/elderly-license-revocation-reaction-map.html` の `SM_RAW`（211点）に直書き
+- 生成スクリプトが存在しないため、データを更新しても点が古いまま残る
+- 手本は `scripts/build_koshitsu_arena.py`（正典だけを読み、SM_RAW・セクター・件数・
+  insight・詳細データを丸ごと作り直す。`--check` で差分検査、staging 用の
+  `--input` / `--html-template` / `--output-html` に対応）
 
-### やること
+### やること（1テーマずつ。まず高齢者免許返納）
+1. `scripts/build_{theme}_arena.py` を新設する。`build_koshitsu_arena.py` を手本に、
+   正典（`THEMES.yaml` の `sample_file`）だけを読んで次を生成する
+   - SM_RAW（アリーナの点）
+   - アリーナのセクター（論点の並びは `scripts/{theme}_taxonomy.py` から読む）
+   - 論点カードの件数、insight、公開件数、詳細データの表
+2. アリーナの座標の意味を `scripts/{theme}_taxonomy.py` に定義する
+   （`scripts/ai_copyright_taxonomy.py` の `STANCE_X` / `INTENSITY_E` が手本。
+   現行の点の x の符号と色の対応を壊さないこと）
+3. `--check` / `--input` / `--html-template` / `--output-html` を実装する
+4. `scripts/refresh_adapters/{theme}.py` を追加し、候補ページを2回生成して差分ゼロを確認、
+   投票定義と保護タグの個数が変わらないことを検査してから公開対象を返す
+5. `configs/refresh-pipeline.yaml` に `adapter` を登録し、`THEMES.yaml` の
+   `page_update_mode` を `adapter` へ、`refresh_at` を設定する
+6. `tests/test_{theme}_adapter.py` を追加する（`tests/test_koshitsu_adapter.py` が手本）
 
-1. **`scripts/build_elderly_arena.py` の作成**
-   - `social-samples/elderly-license_2d_classified.json` (正典) から `SM_RAW` を再生成
-   - `main_issue` を `elderly_license_taxonomy.ISSUE_INDEX` を用いてセクター index `i` に変換
-   - `docs/elderly-license-revocation-reaction-map.html` 内の `const SM_RAW = [...]` を更新
-   - `--check` フラグ（差分検査モード）の実装
+### やらないこと
+- 投票の選択肢の変更（現行の topicId と選択肢数を維持する）
+- 解説文の書き直し
+- データの追加収集
+- 2テーマを同時に進めること
 
-2. **`scripts/build_bike_arena.py` の作成（または共通スクリプト）**
-   - 自転車青切符の正典 (`social-samples/bike-blue-ticket_2d_classified.json`) から `SM_RAW` を再生成
-   - `bike_blue_ticket_taxonomy` (または該当論点定義) に従い `i` を割り当て
-   - `docs/bike-blue-ticket-reaction-map.html` 内の `const SM_RAW = [...]` を更新
-
-3. **`verify_theme_page.py` の検証強化**
-   - `SM_RAW` の件数および `i` インデックスが正典 `sample_file` の `main_issue` と完全一致することをアサーション
-
----
-
-### 制約
-- 保護タグを壊さない (`G-K10S4YCZFH`, `ca-pub-2542211932832864`, Supabase, OGP)
-- ブランチ: `task/elderly-bike-arena`
-- `SM_RAW` の件数・セクター `i` を正典から厳格に再現すること
-
----
+### 制約（必ず守る）
+- 保護タグを壊さない: GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864` / Supabase / OGP
+- ブランチ: `task/{theme}-arena`。main 直接コミット禁止。**専用の git worktree で作業する**
+- 論点・立場・座標は taxonomy モジュールからのみ読む。ラベルを直書きしない
+- 数値をハードコードしない。すべて正典から導出する
+- 同じ入力で2回実行して差分が出ないことを確認するまで `page_update_mode` を上げない
 
 ### 完了条件
-- [ ] `scripts/build_elderly_arena.py` が作成され、再実行可能である
-- [ ] `scripts/build_bike_arena.py` が作成され、再実行可能である
-- [ ] `docs/elderly-license-revocation-reaction-map.html` の `SM_RAW` が更新されている
-- [ ] `docs/bike-blue-ticket-reaction-map.html` の `SM_RAW` が更新されている
-- [ ] `python3 scripts/verify_theme_page.py elderly-license-revocation` が exit 0
-- [ ] `python3 scripts/verify_theme_page.py bike-blue-ticket` が exit 0
+- [ ] `python3 scripts/build_{theme}_arena.py --check` が exit 0
+- [ ] 同じ入力で2回実行して差分ゼロ
+- [ ] アリーナの点の数と論点カードの件数が一致する
+- [ ] 投票の topicId と選択肢数が変わっていない
+- [ ] `python3 scripts/verify_theme_page.py {theme}` が exit 0
 - [ ] `python3 scripts/verify_top_page.py` が exit 0
+- [ ] `tests/test_{theme}_adapter.py` が通る
+- [ ] `THEMES.yaml` の `page_update_mode` が `adapter` になっている
+
+### 完了報告に必ず含めること
+1. `git diff --stat`
+2. 変更前後のアリーナの点数・論点別内訳の対照表
+3. 2回実行して差分ゼロだったことの実行ログ
+4. 投票の topicId と選択肢数（変更がないこと）
+5. `verify_theme_page.py` / `verify_top_page.py` の出力をそのまま貼る
+6. 判断に迷った点

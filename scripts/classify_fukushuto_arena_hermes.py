@@ -13,20 +13,40 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parent.parent
-ISSUES = {
-    "副首都法案の是非",
-    "大阪・関西中心の問題",
-    "首都機能分散の必要性",
-    "財政・実現可能性",
-    "その他",
-}
-STANCES = {"法案反対", "法案賛成・推進", "中立・情報"}
-INTENSITIES = {"low", "medium", "high"}
-RISKS = {"low", "medium", "high"}
+try:
+    from .fukushuto_taxonomy import (
+        INTENSITIES,
+        ISSUE_DEFS,
+        ISSUE_ORDER,
+        ISSUES,
+        NEUTRAL_STANCE,
+        OTHER,
+        RISKS,
+        STANCE_DEFS,
+        STANCE_ORDER,
+        STANCES,
+    )
+except ImportError:  # python3 scripts/classify_fukushuto_arena_hermes.py
+    from fukushuto_taxonomy import (  # type: ignore[no-redef]
+        INTENSITIES,
+        ISSUE_DEFS,
+        ISSUE_ORDER,
+        ISSUES,
+        NEUTRAL_STANCE,
+        OTHER,
+        RISKS,
+        STANCE_DEFS,
+        STANCE_ORDER,
+        STANCES,
+    )
 
 
 def prompt_for(batch: list[dict[str, Any]]) -> str:
     payload = [{"id": i, "text": str(row.get("text") or "")[:1200]} for i, row in enumerate(batch)]
+    issue_menu = "\n".join(
+        f"{index}. {name} ─ {description}" for index, (name, description) in enumerate(ISSUE_DEFS, start=1)
+    )
+    stance_menu = "\n".join(f"- {name} ─ {description}" for name, description in STANCE_DEFS)
     return f"""あなたは「副首都法案」に関するX投稿の分類者です。
 次の投稿を、投稿者自身の主張に基づいて1投稿1分類してください。
 
@@ -39,29 +59,24 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
 - 引用・批判対象の意見を投稿者本人の意見と混同しない。
 - is_relevantは副首都法案・副首都構想・首都機能移転・大阪への首都機能に関係すればtrue。
 - is_opinionは投稿者自身の評価・提案・懸念・体験が読み取れる場合だけtrue。
-- ニュース共有・告知だけならis_relevant=true、is_opinion=false、stanceは「中立・情報」。
-- 無関係ならis_relevant=false、is_opinion=false、main_issueは「その他」、stanceは「中立・情報」。
+- ニュース共有・告知だけならis_relevant=true、is_opinion=false、stanceは「{NEUTRAL_STANCE}」。
+- 無関係ならis_relevant=false、is_opinion=false、main_issueは「{OTHER}」、stanceは「{NEUTRAL_STANCE}」。
 - raw本文をsummaryへ転載せず、攻撃的表現を中和して50字以内で要約する。
 - 複数論点がある場合は、投稿の主眼をmain_issueにする。
+- 法案への賛否そのものはstanceで表す。main_issueには「何を根拠に論じているか」を選ぶ。
 
-main_issue（完全一致5択）:
-1. 副首都法案の是非 ─ 法案そのものの賛否・必要性・問題点・維新への評価
-2. 大阪・関西中心の問題 ─ 大阪・関西優遇への懸念、地域間の不公平感
-3. 首都機能分散の必要性 ─ 首都直下地震・災害対策・分散化の是非
-4. 財政・実現可能性 ─ 費用対効果、予算規模、実現への具体性
-5. その他 ─ 上記に当てはまらない、論点不明、無関係
+main_issue（完全一致{len(ISSUE_DEFS)}択）:
+{issue_menu}
 
-stance（完全一致3択）:
-- 法案反対 ─ 副首都法案・副首都構想に否定的・批判的
-- 法案賛成・推進 ─ 副首都法案・副首都構想を支持・推進
-- 中立・情報 ─ ニュース・情報共有、または立場が不明
+stance（完全一致{len(STANCE_DEFS)}択）:
+{stance_menu}
 
 intensity: low / medium / high
 risk: low / medium / high
 confidence: 0から1
 
 JSON配列だけを返してください。各要素は必ず次のキーを持ち、idは入力と一致させてください:
-{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"副首都法案の是非","stance":"法案反対","intensity":"high","summary":"副首都法案は大阪優遇で反対","reason":"...","confidence":0.85,"article_usable":true,"risk":"low"}}
+{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"都構想・維新","stance":"法案反対","intensity":"high","summary":"副首都法案は大阪優遇で反対","reason":"...","confidence":0.85,"article_usable":true,"risk":"low"}}
 
 入力:
 {json.dumps(payload, ensure_ascii=False)}
@@ -93,11 +108,11 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
         row["article_usable"] = bool(row.get("article_usable"))
         if not row["is_relevant"]:
             row["is_opinion"] = False
-            row["main_issue"] = "その他"
-            row["stance"] = "中立・情報"
+            row["main_issue"] = OTHER
+            row["stance"] = NEUTRAL_STANCE
             row["article_usable"] = False
         elif not row["is_opinion"]:
-            row["stance"] = "中立・情報"
+            row["stance"] = NEUTRAL_STANCE
         row["confidence"] = max(0.0, min(1.0, float(row.get("confidence", 0))))
         row.pop("id", None)
     return rows
@@ -140,11 +155,11 @@ def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
         "",
         "## 論点別件数（意見投稿）",
         "",
-        *[f"- {key}: {issue_counts.get(key, 0)}" for key in sorted(ISSUES)],
+        *[f"- {key}: {issue_counts.get(key, 0)}" for key in ISSUE_ORDER],
         "",
         "## スタンス別件数（意見投稿）",
         "",
-        *[f"- {key}: {stance_counts.get(key, 0)}" for key in sorted(STANCES)],
+        *[f"- {key}: {stance_counts.get(key, 0)}" for key in STANCE_ORDER],
         "",
         "## 要レビュー例（confidence低い順）",
         "",

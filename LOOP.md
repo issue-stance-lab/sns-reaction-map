@@ -4,6 +4,33 @@
 
 ---
 
+## ⓪ 作業場所を確保する（着手前に必ず）
+
+**1エージェント＝1 worktree。** 複数のセッションが同じ作業ツリーを共有すると、
+片方の `git checkout` がもう片方のファイルをディスクから消す。2026-08-07 に実際に発生し、
+実行中だった分類処理の参照先ファイルが消えた（処理はメモリ上の版で継続したため助かった）。
+
+```sh
+git worktree add ../isa-wt-{作業名} -b task/{作業名}
+cd ../isa-wt-{作業名}
+
+# 非公開の正典データを復元する（gitignore対象なので worktree には複製されない）
+tar xzf "$(ls -t /Volumes/HD-LE-B/issue-stance-private-backups/private-data-*.tar.gz | head -1)" \
+  -C . --exclude=manifest.json
+python3 -c "import yaml,os; th=yaml.safe_load(open('THEMES.yaml'))['themes']; \
+  print('欠落:', [v['sample_file'] for v in th.values() if not os.path.exists(v['sample_file'])])"
+```
+
+**復元を忘れると、テストと検査が「ファイルがない」で落ちる。** 5テーマの正典
+（bukatsu / constitutional / school-nickname / henoko / consumption-tax / ai-copyright）は
+本文を含むため Git 管理外で、新しい worktree には入らない。
+
+- 作業が終わったら `git worktree remove` で片付ける
+- 共有ツリーで作業する場合は、着手前に `git status` を確認する。
+  他セッションの未コミット変更があれば、先にコミットしてもらってから始める
+- `git checkout -- <ディレクトリ>` を使わない。**自分が変更したファイルだけ**をパス指定で戻す
+  （ディレクトリごと戻すと他セッションの未コミット変更を消す）
+
 ## ① 監査
 
 THEMES.yaml と実ファイルを突き合わせ、ズレがあれば台帳を直す。

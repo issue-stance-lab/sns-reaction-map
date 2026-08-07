@@ -13,21 +13,23 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parent.parent
-ISSUES = {
-    "学習データ無断利用",
-    "クリエイター保護",
-    "法制度整備",
-    "技術競争・AI推進",
-    "利用者モラル・AI生成物",
-    "その他",
-}
-STANCES = {"規制・制限強化支持", "推進・活用支持", "中立・情報"}
-INTENSITIES = {"low", "medium", "high"}
-RISKS = {"low", "medium", "high"}
+try:
+    from .ai_copyright_taxonomy import INTENSITIES, ISSUE_DEFS, ISSUES, RISKS, STANCES
+except ImportError:  # python3 scripts/classify_aicopyright_arena_hermes.py
+    from ai_copyright_taxonomy import (  # type: ignore[no-redef]
+        INTENSITIES,
+        ISSUE_DEFS,
+        ISSUES,
+        RISKS,
+        STANCES,
+    )
 
 
 def prompt_for(batch: list[dict[str, Any]]) -> str:
     payload = [{"id": i, "text": str(row.get("text") or "")[:1200]} for i, row in enumerate(batch)]
+    issue_menu = "\n".join(
+        f"{index}. {name} ─ {description}" for index, (name, description) in enumerate(ISSUE_DEFS, start=1)
+    )
     return f"""あなたは「生成AI 著作権」に関するX投稿の分類者です。
 次の投稿を、投稿者自身の主張に基づいて1投稿1分類してください。
 
@@ -45,13 +47,8 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
 - raw本文をsummaryへ転載せず、攻撃的表現を中和して50字以内で要約する。
 - 複数論点がある場合は、投稿の主眼をmain_issueにする。
 
-main_issue（完全一致6択）:
-1. 学習データ無断利用 ─ 著作物を無断でAIに学習させること自体への賛否・問題意識
-2. クリエイター保護 ─ イラストレーター・作家・音楽家などクリエイターの権利・生計保護
-3. 法制度整備 ─ 著作権法改正・ガイドライン・規制立法・国際条約
-4. 技術競争・AI推進 ─ 日本の技術力・産業競争力・規制による開発停滞への懸念
-5. 利用者モラル・AI生成物 ─ AI生成物の二次利用・販売・表示義務・倫理的使用
-6. その他 ─ 上記に当てはまらない、論点不明、無関係
+main_issue（完全一致{len(ISSUE_DEFS)}択）:
+{issue_menu}
 
 stance（完全一致3択）:
 - 規制・制限強化支持 ─ 学習データの規制・クリエイター保護のための制限を支持
@@ -63,7 +60,7 @@ risk: low / medium / high
 confidence: 0から1
 
 JSON配列だけを返してください。各要素は必ず次のキーを持ち、idは入力と一致させてください:
-{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"学習データ無断利用","stance":"規制・制限強化支持","intensity":"high","summary":"無断学習は著作権侵害と強く批判","reason":"...","confidence":0.85,"article_usable":true,"risk":"low"}}
+{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"学習データ・無断利用","stance":"規制・制限強化支持","intensity":"high","summary":"無断学習は著作権侵害と強く批判","reason":"...","confidence":0.85,"article_usable":true,"risk":"low"}}
 
 入力:
 {json.dumps(payload, ensure_ascii=False)}

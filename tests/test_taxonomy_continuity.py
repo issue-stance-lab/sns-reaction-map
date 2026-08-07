@@ -75,7 +75,7 @@ class TaxonomyContinuityTest(unittest.TestCase):
 
         self.assertEqual(
             incompatible,
-            {"ai-copyright", "fukushuto"},
+            set(),
             "taxonomy不一致テーマが変わった。解消したなら期待値を減らし、増えたなら原因を調べること",
         )
 
