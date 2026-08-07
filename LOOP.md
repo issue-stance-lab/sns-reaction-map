@@ -13,7 +13,17 @@
 ```sh
 git worktree add ../isa-wt-{作業名} -b task/{作業名}
 cd ../isa-wt-{作業名}
+
+# 非公開の正典データを復元する（gitignore対象なので worktree には複製されない）
+tar xzf "$(ls -t /Volumes/HD-LE-B/issue-stance-private-backups/private-data-*.tar.gz | head -1)" \
+  -C . --exclude=manifest.json
+python3 -c "import yaml,os; th=yaml.safe_load(open('THEMES.yaml'))['themes']; \
+  print('欠落:', [v['sample_file'] for v in th.values() if not os.path.exists(v['sample_file'])])"
 ```
+
+**復元を忘れると、テストと検査が「ファイルがない」で落ちる。** 5テーマの正典
+（bukatsu / constitutional / school-nickname / henoko / consumption-tax / ai-copyright）は
+本文を含むため Git 管理外で、新しい worktree には入らない。
 
 - 作業が終わったら `git worktree remove` で片付ける
 - 共有ツリーで作業する場合は、着手前に `git status` を確認する。
