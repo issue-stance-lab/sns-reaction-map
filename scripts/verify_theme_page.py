@@ -21,6 +21,7 @@ try:
         span_id,
     )
     from .sync_portal_stats import ROOT, THEMES_YAML, load_sample_records, parse_themes_yaml
+    from .verification_data import record_id_hash
 except ImportError:  # python3 scripts/verify_theme_page.py
     from issue_card_counts import (  # type: ignore[no-redef]
         IssueCountError,
@@ -30,6 +31,7 @@ except ImportError:  # python3 scripts/verify_theme_page.py
         span_id,
     )
     from sync_portal_stats import ROOT, THEMES_YAML, load_sample_records, parse_themes_yaml  # type: ignore[no-redef]
+    from verification_data import record_id_hash  # type: ignore[no-redef]
 
 
 REQUIRED_ARGUMENT_FIELDS = (
@@ -72,15 +74,14 @@ def _arguments_complete(arguments: Any) -> bool:
     )
 
 
-def _record_urls(records: list[dict[str, Any]]) -> set[str]:
-    urls = set()
+def _record_hashes(records: list[dict[str, Any]]) -> set[str]:
+    hashes = set()
     for record in records:
-        nested = record.get("classification")
-        source = nested if isinstance(nested, dict) else record
-        url = record.get("url") or source.get("url")
-        if url:
-            urls.add(str(url))
-    return urls
+        try:
+            hashes.add(record_id_hash(record))
+        except ValueError:
+            continue
+    return hashes
 
 
 def verify_issue_count_source(
@@ -91,7 +92,7 @@ def verify_issue_count_source(
     件数の一致だけでは不十分。koshitsu-tenpakai では issue-counts(268件) と
     sample_file(347件) にURLの重なりが1件も無いまま「268件」が表示されていた。
     件数はどちらも「それらしい数字」だったので誰も気づけなかった。
-    だから **URL単位で部分集合であること** を見る。
+    だから **匿名化した投稿ID単位で部分集合であること** を見る。
     """
     lines: list[str] = []
     failures = 0
@@ -111,24 +112,24 @@ def verify_issue_count_source(
         lines.append("OK  合成データを件数の出所にしていない")
 
     canon_records = load_records(sample_file)
-    canon_urls = _record_urls(canon_records)
+    canon_hashes = _record_hashes(canon_records)
     if source == sample_file:
         lines.append(f"OK  件数の出所が sample_file そのもの（{len(canon_records)}件）")
     else:
         source_records = load_records(source)
-        source_urls = _record_urls(source_records)
-        if not source_urls or not canon_urls:
-            lines.append(f"NG  URLを持つレコードが無く部分集合を判定できない: {source}")
+        source_hashes = _record_hashes(source_records)
+        if not source_hashes or not canon_hashes:
+            lines.append(f"NG  投稿IDを持つレコードが無く部分集合を判定できない: {source}")
             failures += 1
-        elif source_urls <= canon_urls:
+        elif source_hashes <= canon_hashes:
             lines.append(
-                f"OK  issue-counts のURLが sample_file の部分集合"
-                f"（{len(source_urls)}/{len(canon_urls)}件）"
+                f"OK  issue-counts の投稿IDが検証データの部分集合"
+                f"（{len(source_hashes)}/{len(canon_hashes)}件）"
             )
         else:
-            stray = sorted(source_urls - canon_urls)
+            stray = sorted(source_hashes - canon_hashes)
             lines.append(
-                f"NG  issue-counts のURLが sample_file の部分集合: "
+                f"NG  issue-counts の投稿IDが検証データの部分集合: "
                 f"はみ出し{len(stray)}件 例 {stray[0]}"
             )
             failures += 1
@@ -206,7 +207,8 @@ def verify_theme_page(
 
     config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.is_file() else {}
     page = html_path.read_text(encoding="utf-8")
-    rows = load_sample_records(root, theme, theme_data.get("sample_file"))
+    verification_file = theme_data.get("verification_file") or theme_data.get("sample_file")
+    rows = load_sample_records(root, theme, verification_file)
     count = len(rows)
     arguments = config.get("arguments")
     lines = [f"=== {theme} ==="]
@@ -337,14 +339,14 @@ def verify_theme_page(
 
     lines.append("=== 論点カードのデータ整合 ===")
     source_lines, source_failures = verify_issue_count_source(
-        theme, config, theme_data.get("sample_file")
+        theme, config, verification_file
     )
     lines.extend(source_lines)
     failures += source_failures
 
     lines.append("=== 論点カード ===")
     try:
-        cards = card_counts(theme, config, theme_data.get("sample_file"))
+        cards = card_counts(theme, config, verification_file)
     except IssueCountError as exc:
         lines.append(f"NG  論点カードの件数を分類結果から計算できる: {exc}")
         return lines, failures + 1

@@ -21,13 +21,14 @@ class PortalStatsError(RuntimeError):
 
 def _scalar(block: str, key: str) -> str | None:
     match = re.search(
-        rf"^    {re.escape(key)}:\s*([^#\n]*?)(?:\s+#.*)?$",
+        rf"^    {re.escape(key)}:[ \t]*([^#\n]*?)(?:[ \t]+#.*)?$",
         block,
         re.MULTILINE,
     )
     if not match:
         return None
-    return match.group(1).strip().strip('"').strip("'")
+    value = match.group(1).strip().strip('"').strip("'")
+    return value or None
 
 
 def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
@@ -50,10 +51,18 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
             "published": _scalar(block, "published") == "done",
             "page_v3": _scalar(block, "page_v3") == "done",
             "sample_file": _scalar(block, "sample_file"),
+            "verification_file": _scalar(block, "verification_file"),
             "sample_period": _scalar(block, "sample_period"),
             "sample_source": _scalar(block, "sample_source"),
+            "refresh_config": _scalar(block, "refresh_config"),
+            "page_update_mode": _scalar(block, "page_update_mode"),
+            "collect_at": _scalar(block, "collect_at"),
+            "collect_mode": _scalar(block, "collect_mode") or "scheduled",
+            "published_at": _scalar(block, "published_at"),
             "updated_at": _scalar(block, "updated_at"),
             "refresh_at": _scalar(block, "refresh_at"),
+            "collect_delta": _scalar(block, "collect_delta"),
+            "x_posted_at": _scalar(block, "x_posted_at"),
         }
 
     if not themes:
@@ -124,13 +133,18 @@ def compute_stats(
     updated_dates: list[date] = []
     refresh_dates: list[date] = []
     refresh_at_missing: list[str] = []
+    collect_dates: dict[str, date] = {}
+    collect_at_missing: list[str] = []
+    collect_event_driven: list[str] = []
     synthetic_counts: dict[str, int] = {}
     today = date.today() if today is None else today
     for name, theme in published.items():
         for field in ("sample_period", "sample_source"):
             if not theme.get(field):
                 raise PortalStatsError(f"{name}: {field} がありません")
-        records = load_sample_records(root, name, theme.get("sample_file"))
+        records = load_sample_records(
+            root, name, theme.get("verification_file") or theme.get("sample_file")
+        )
         counts[name] = len(records)
         synthetic_counts[name] = synthetic_record_count(records)
         if synthetic_counts[name] and not allow_synthetic:
@@ -144,36 +158,77 @@ def compute_stats(
             refresh_dates.append(_parse_iso_date(refresh_at, theme=name, field="refresh_at"))
         else:
             refresh_at_missing.append(name)
+        collect_at = theme.get("collect_at")
+        if collect_at:
+            collect_dates[name] = _parse_iso_date(collect_at, theme=name, field="collect_at")
+        elif theme.get("collect_mode") == "event-driven":
+            collect_event_driven.append(name)
+        else:
+            collect_at_missing.append(name)
 
     upcoming_refresh_dates = [refresh_at for refresh_at in refresh_dates if refresh_at >= today]
-    if not upcoming_refresh_dates:
-        raise PortalStatsError(
-            f"今日（{today.isoformat()}）以降の refresh_at がありません"
-            "（空欄と過去日は候補外）"
-        )
+    overdue_refresh_dates = [refresh_at for refresh_at in refresh_dates if refresh_at < today]
+    overdue_collect = {
+        name: collect_at
+        for name, collect_at in collect_dates.items()
+        if collect_at < today
+    }
 
     return {
         "total_posts": sum(counts.values()),
         "theme_count": len(published),
         "voting_count": sum(1 for theme in published.values() if theme["page_v3"]),
         "last_updated": max(updated_dates),
-        "next_update": min(upcoming_refresh_dates),
+        "next_update": min(upcoming_refresh_dates) if upcoming_refresh_dates else None,
+        "overdue_count": len(overdue_refresh_dates),
+        "badge_data": {
+            str(theme.get("html") or name).removeprefix("docs/"): {
+                key: value
+                for key, value in (
+                    ("pub", theme.get("published_at")),
+                    ("upd", theme.get("updated_at")),
+                    ("delta", theme.get("collect_delta")),
+                    ("xpost", theme.get("x_posted_at")),
+                )
+                if value
+            }
+            for name, theme in published.items()
+        },
+        "latest_themes": [
+            (name, theme.get("title"), theme.get("collect_delta"))
+            for name, theme in published.items()
+            if _parse_iso_date(theme.get("updated_at"), theme=str(theme.get("title")), field="updated_at")
+            == max(updated_dates)
+        ],
         "sample_counts": counts,
         "synthetic_counts": synthetic_counts,
         "refresh_at_missing": refresh_at_missing,
+        "collect_at_missing": collect_at_missing,
+        "collect_event_driven": collect_event_driven,
+        "overdue_collect": overdue_collect,
         "today": today,
     }
 
 
 def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
     last_updated: date = stats["last_updated"]
-    next_update: date = stats["next_update"]
+    next_update: date | None = stats["next_update"]
     updated_short = f"{last_updated.month}/{last_updated.day}"
     updated_long = f"{last_updated.year}年{last_updated.month}月{last_updated.day}日"
-    next_long = f"{next_update.month}月{next_update.day}日"
-    next_iso = next_update.isoformat()
-    days_until_update = (next_update - stats["today"]).days
-    next_days = f"あと{days_until_update}日" if days_until_update > 0 else "本日更新予定"
+    latest_summary = "・".join(
+        f'{title}に<span id="latest-update-delta-{name}">{int(delta):,}</span>件追加' if delta else str(title)
+        for name, title, delta in stats["latest_themes"]
+    )
+    if stats["overdue_count"]:
+        next_badge = f'<span class="update-next-badge">更新予定を確認中（{stats["overdue_count"]}テーマ）</span>'
+    elif next_update:
+        days_until_update = (next_update - stats["today"]).days
+        next_days = f"あと{days_until_update}日" if days_until_update > 0 else "本日更新予定"
+        next_badge = f'<span class="update-next-badge">次回更新: {next_update.month}月{next_update.day}日（<span id="update-bar-days">{next_days}</span>）</span>'
+    else:
+        next_badge = '<span class="update-next-badge">更新予定を確認中</span>'
+    next_iso = next_update.isoformat() if next_update else stats["today"].isoformat()
+    badge_json = json.dumps(stats["badge_data"], ensure_ascii=False, separators=(",", ":"))
 
     specs = [
         ("分類済み投稿の用語", r"<small>分析済み投稿</small>|<small>分類済み投稿</small>", "<small>分類済み投稿</small>"),
@@ -181,10 +236,11 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("公開中のテーマ", r'(<small>公開中のテーマ</small><strong>)\d+(</strong>)', rf'\g<1>{stats["theme_count"]}\2'),
         ("投票受付中", r'(<em>)\d+テーマで投票受付中(</em>)', rf'\g<1>{stats["voting_count"]}テーマで投票受付中\2'),
         ("em更新日", r'(<strong id="hero-total-samples">[^<]*</strong><em>)[^<]*(</em>)', rf'\g<1>{updated_short}更新\2'),
-        ("最終更新日", r'最終更新: <strong>[^<]+</strong>', f'最終更新: <strong>{updated_long}</strong>'),
-        ("update-bar次回更新", r'(次回更新: )\d+月\d+日(（<span id="update-bar-days">)', rf'\g<1>{next_long}\2'),
-        ("update-bar残り日数", r'(<span id="update-bar-days">)[^<]*(</span>)', rf'\g<1>{next_days}\2'),
+        ("更新バー本文", r'最終更新: <strong>[^<]+</strong>（.*?）', f'最終更新: <strong>{updated_long}</strong>（{latest_summary}）'),
+        ("update-bar次回更新", r'<span class="update-next-badge">.*?</span>(?:）</span>)?', next_badge),
         ("JS次回更新", r"new Date\('\d{4}-\d{2}-\d{2}T00:00:00\+09:00'\)", f"new Date('{next_iso}T00:00:00+09:00')"),
+        ("JS期限超過表示", r"txt=days>0\?'あと'\+days\+'日':days===0\?'本日更新予定':'[^']+'", "txt=days>0?'あと'+days+'日':days===0?'本日更新予定':'予定を確認中'"),
+        ("バッジデータ", r"var B=\{.*?\};", f"var B={badge_json};"),
     ]
     for theme in (
         "ai-copyright",
@@ -235,7 +291,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  公開テーマ:   {stats['theme_count']}テーマ")
     print(f"  投票受付中:   {stats['voting_count']}テーマ")
     print(f"  最終更新:       {stats['last_updated'].isoformat()}")
-    print(f"  次回更新:       {stats['next_update'].isoformat()}")
+    next_label = stats["next_update"].isoformat() if stats["next_update"] else "未定"
+    print(f"  次回更新:       {next_label}")
+    print(f"  期限超過:       {stats['overdue_count']}テーマ")
 
     if html_original == html_new:
         print("  → 変更なし（すでに同期済み）")

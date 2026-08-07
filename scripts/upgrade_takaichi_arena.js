@@ -7,9 +7,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const dataPath = path.join(root, 'social-samples', 'takaichi_hermes_arena_classified.json');
-const arenaPath = path.join(root, 'docs', 'takaichi-arena-data.js');
-const htmlPath = path.join(root, 'docs', 'takaichi-reaction-map-standard.html');
+const args = process.argv.slice(2);
+function option(name, fallback) {
+  const index = args.indexOf(name);
+  if (index < 0) return fallback;
+  if (!args[index + 1]) throw new Error(`${name} requires a path`);
+  return path.resolve(root, args[index + 1]);
+}
+const dataPath = option('--input', path.join(root, 'social-samples', 'takaichi_hermes_arena_classified.json'));
+const htmlTemplatePath = option('--html-template', path.join(root, 'docs', 'takaichi-reaction-map-standard.html'));
+const arenaPath = option('--output-data', path.join(root, 'docs', 'takaichi-arena-data.js'));
+const htmlPath = option('--output-html', path.join(root, 'docs', 'takaichi-reaction-map-standard.html'));
 
 const allPosts = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
@@ -64,11 +72,12 @@ console.log('Counts by stance:', stanceCounts);
 
 // Write arena-data.js
 const arenaData = `window.TAKAICHI_ARENA_DATA = ${JSON.stringify(arenaPosts)};\n`;
+fs.mkdirSync(path.dirname(arenaPath), { recursive: true });
 fs.writeFileSync(arenaPath, arenaData, 'utf8');
 console.log(`Written: ${arenaPath}`);
 
 // Patch issue counts in the HTML
-let html = fs.readFileSync(htmlPath, 'utf8');
+let html = fs.readFileSync(htmlTemplatePath, 'utf8');
 for (const def of issueDefs) {
   const n = counts[def.key] ?? 0;
   html = html.replace(
@@ -82,5 +91,23 @@ html = html.replace(
   /(<span>)\d+(件 \| セクター=論点)/,
   `$1${total}$2`,
 );
+html = html.replace(
+  /(Yahooリアルタイム検索で取得した公開投稿 )\d+(件)/,
+  `$1${allPosts.length}$2`,
+);
+const cardSlugs = {
+  accountability: 'chusho',
+  bunshun: 'bunshun',
+  token: 'token',
+  matsui: 'matsui',
+  comparison: 'hikaku',
+};
+for (const def of issueDefs) {
+  html = html.replace(
+    new RegExp(`(<span class="explainer-count" id="issue-count-takaichi-${cardSlugs[def.key]}">)\\d+件(</span>)`),
+    `$1${counts[def.key] ?? 0}件$2`,
+  );
+}
+fs.mkdirSync(path.dirname(htmlPath), { recursive: true });
 fs.writeFileSync(htmlPath, html, 'utf8');
 console.log(`Patched counts in: ${htmlPath}`);

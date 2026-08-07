@@ -11,24 +11,24 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+try:
+    from .bukatsu_taxonomy import ISSUE_DEFS, ISSUES, STANCES
+except ImportError:
+    from bukatsu_taxonomy import ISSUE_DEFS, ISSUES, STANCES  # type: ignore[no-redef]
+
 
 ROOT = Path(__file__).resolve().parent.parent
-ISSUES = {
-    "費用・家庭負担",
-    "受け皿・指導者",
-    "教員の働き方",
-    "教育的意義・機会",
-    "地域格差",
-    "制度・移行プロセス",
-    "その他",
-}
-STANCES = {"移行支持", "条件付き・改善要求", "慎重・反対", "中立・情報"}
 INTENSITIES = {"low", "medium", "high"}
 RISKS = {"low", "medium", "high"}
 
 
 def prompt_for(batch: list[dict[str, Any]]) -> str:
     payload = [{"id": i, "text": str(row.get("text") or "")[:1200]} for i, row in enumerate(batch)]
+    issue_options = "\n".join(
+        f"{index}. {item['label']} ─ {item['description']}"
+        for index, item in enumerate(ISSUE_DEFS, 1)
+    )
+    stance_options = "\n".join(f"- {stance}" for stance in STANCES)
     return f"""あなたは「部活動の地域移行」に関するX投稿の分類者です。
 次の投稿を、投稿者自身の主張に基づいて1投稿1分類してください。
 
@@ -47,19 +47,10 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
 - 複数論点がある場合は、投稿の主眼をmain_issueにする。
 
 main_issue（完全一致7択）:
-1. 費用・家庭負担 ─ 月謝、参加費、送迎費、家計負担、所得による機会格差
-2. 受け皿・指導者 ─ 地域クラブ不足、指導者確保、報酬、責任、安全管理
-3. 教員の働き方 ─ 長時間労働、休日指導、強制顧問、働き方改革
-4. 教育的意義・機会 ─ 子どもの成長、競技機会、学校文化、居場所、部活廃止
-5. 地域格差 ─ 都市と地方、少子化、交通手段、自治体間格差
-6. 制度・移行プロセス ─ 国・自治体の方針、移行時期、責任主体、制度設計
-7. その他 ─ 上記に当てはまらない、論点不明、無関係
+{issue_options}
 
 stance（完全一致4択）:
-- 移行支持
-- 条件付き・改善要求
-- 慎重・反対
-- 中立・情報
+{stance_options}
 
 intensity: low / medium / high
 risk: low / medium / high
@@ -145,11 +136,11 @@ def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
         "",
         "## 論点別件数（意見投稿）",
         "",
-        *[f"- {key}: {issue_counts[key]}" for key in sorted(ISSUES)],
+        *[f"- {key}: {issue_counts[key]}" for key in ISSUES],
         "",
         "## スタンス別件数（意見投稿）",
         "",
-        *[f"- {key}: {stance_counts[key]}" for key in sorted(STANCES)],
+        *[f"- {key}: {stance_counts[key]}" for key in STANCES],
         "",
         "## 要レビュー例",
         "",

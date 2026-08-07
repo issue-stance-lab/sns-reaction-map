@@ -161,17 +161,19 @@ def verify_top_page(
     root: Path = ROOT,
     themes_path: Path = THEMES_YAML,
     index_path: Path = INDEX_HTML,
+    *,
+    today: date | None = None,
 ) -> tuple[list[str], int]:
     """検証結果の行とNG件数を返す。tests/ からも呼び出せる。"""
     themes = parse_themes_yaml(themes_path)
-    stats = compute_stats(themes, root, allow_synthetic=True)
+    stats = compute_stats(themes, root, today=today, allow_synthetic=True)
     html = index_path.read_text(encoding="utf-8")
     lines = [
         "=== 数値の出所 ===",
         f"分類済み投稿   {stats['total_posts']:,}   ← sample_file の実レコード合計（{stats['theme_count']}テーマ）",
         f"公開テーマ数      {stats['theme_count']}   ← THEMES.yaml published:done",
         f"最終更新    {stats['last_updated'].isoformat()}  ← THEMES.yaml updated_at 最大",
-        f"次回更新    {stats['next_update'].isoformat()}  ← THEMES.yaml refresh_at の今日以降の最小",
+        f"次回更新    {stats['next_update'].isoformat() if stats['next_update'] else '未定'}  ← THEMES.yaml refresh_at の今日以降の最小",
         "",
         "=== 置換の空振り検査 ===",
     ]
@@ -291,22 +293,40 @@ def verify_top_page(
             lines.append(f"OK  {name:<28} synthetic 0件")
 
     lines.extend(["", "=== 日付検査 ==="])
-    if stats["next_update"] >= stats["today"]:
+    if stats["overdue_count"]:
+        lines.append(f"OK  期限超過 {stats['overdue_count']}テーマを「更新予定を確認中」と表示")
+    elif stats["next_update"] and stats["next_update"] >= stats["today"]:
         lines.append(
             f"OK  次回更新 {stats['next_update'].isoformat()} "
             f"≥ 今日 {stats['today'].isoformat()}"
         )
     else:
-        lines.append(
-            f"NG  次回更新 {stats['next_update'].isoformat()} "
-            f"< 今日 {stats['today'].isoformat()}"
-        )
-        failures += 1
+        lines.append("OK  次回更新日は未定")
     missing = stats["refresh_at_missing"]
     if missing:
         lines.append(f"OK  refresh_at 空欄は候補から除外: {', '.join(missing)}")
     else:
         lines.append("OK  refresh_at 空欄 0件")
+
+    overdue_collect = stats["overdue_collect"]
+    missing_collect = stats["collect_at_missing"]
+    event_driven = stats["collect_event_driven"]
+    if overdue_collect:
+        detail = ", ".join(
+            f"{theme}（{collect_at.isoformat()}）"
+            for theme, collect_at in overdue_collect.items()
+        )
+        lines.append(f"NG  collect_at 期限超過: {detail}")
+        failures += 1
+    else:
+        lines.append("OK  collect_at 期限超過 0件")
+    if missing_collect:
+        lines.append(f"NG  collect_at 空欄: {', '.join(missing_collect)}")
+        failures += 1
+    else:
+        lines.append("OK  collect_at 空欄 0件")
+    if event_driven:
+        lines.append(f"OK  イベント連動収集: {', '.join(event_driven)}")
 
     lines.extend(["", "=== 禁止表示 ==="])
     content_markup = _content_markup(html)
