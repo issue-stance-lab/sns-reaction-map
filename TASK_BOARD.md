@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-07-05（課題6・14・20を GROWTH.yaml へ移管）
+最終更新: 2026-08-08（課題38を追加）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -283,6 +283,73 @@ X固定ポストの本文（「世論調査ではありません」）と画像�
 **2026-08-02 共通ランナー対応**: `scripts/refresh_topic.py --topic` に、全11テーマ共通の疎通確認・収集・重複排除・10件試験分類・全件分類・集合検査・更新回保存・バックアップを集約した。migration / manual / adapter_candidate も公開せずstaging止まりで予定どおり収集できる。ページ処理は `scripts/refresh_adapters/` に分離し、takaichi は候補ページ・arena data・潮目を2回生成して差分ゼロ、投票topicIdと15選択肢の互換性を検査する。
 
 **横展開のゲート**: 少なくとも保全先の決定、既存データの初回バックアップ、復元確認が終わるまで、他テーマの定期更新を開始しない。
+
+### 課題35: デザインシステム同期の実験が宙に浮いている
+**状態**: 判断保留（2026-08-07 の棚卸しで記録。削除も継続も決めていない）
+**発見**: 2026-08-07、運用棚卸し
+
+**概要**: `design-system/`（26ファイル、最終更新 2026-06-21）と、その claude.ai/design 同期まわり一式が残っているが、**`docs/` からの参照は0件**。公開サイトは一切使っていない。
+
+| 対象 | 状態 |
+|---|---|
+| `design-system/` | Git管理下26ファイル。参照元は `.gitignore` と `.design-sync/` のみ |
+| `.design-sync/` | 212KB。`config.json` に `projectId: 7a02f1be-4fed-4822-a2f2-4ac155424358` |
+| `.ds-sync/` | **45MB**。gitignore済み。同期ツールの実行環境（node_modules含む） |
+| `ds-bundle/` | 2.9MB。gitignore済み。生成物 |
+
+**判断が要る点**: claude.ai/design 側にプロジェクトが登録済みのため、消すと同期先との対応が切れる。デザイン刷新（課題18）で使うつもりがあるなら残す、ないなら `archive/` へ移してディスク約48MBを回収する。
+
+**注意**: `.ds-sync/` と `ds-bundle/` はディスク上だけの問題（gitignore済み）。急がないなら先にこの2つだけ消してもよい。
+
+---
+
+### 課題36: 放置された作業ツリー3本
+**状態**: 未着手（2026-08-07 の棚卸しで記録。稼働中セッションの有無を確認してから削除）
+**発見**: 2026-08-07、運用棚卸し
+
+**概要**: `LOOP.md` ⓪ は「作業が終わったら `git worktree remove` で片付ける」と定めているが、3本残っている。**3本ともブランチは main にマージ済み。**
+
+| ツリー | ブランチ | 未コミット |
+|---|---|---|
+| `.claude/worktrees/agent-ae24789032b473197` | task/henoko-page-v3 | あり。`docs/henoko-student-accident-reaction-map.html` を公開版1,051行 → 142行のスタブに壊す中断状態（投票セクション・シェア・やり直しボタンが全消え）。**採用してはいけない** |
+| `.claude/worktrees/competent-gates-92d0d7` | detached HEAD | なし |
+| `.worktrees/fukushuto-tide` | task/fukushuto-tide | 未追跡4件。**2026-08-07 に共有ツリーの `social-samples/` へ退避済み**（`fukushuto_hermes_prev_20260714_v2.json/.md`、`fukushuto_test_10.json`、`fukushuto_test_10_classified.json`） |
+
+**やること**: 稼働中のセッションが使っていないことを確認してから `git worktree remove`。fukushuto は `configs/prompts/codex/20260807_fukushuto-tide-widget.md` の作業が進行中の可能性があるため、担当セッションに確認してから消す。
+
+**なぜ放置が危険か**: 2026-08-07 に共有ツリーで事故が2件起きている（分類処理の参照ファイル消失、統合直後の正典1,606件が削除されかけ）。残ったツリーは同じ事故の温床になる。
+
+---
+
+### 課題37: validate_theme_seo.py が1件落ちている
+**状態**: 未着手（2026-08-07 の棚卸しで検出。棚卸し前から存在する既存の不整合）
+**発見**: 2026-08-07
+
+```
+FAILED: 1 validation error(s)
+- ai-copyright-reaction-map.html: dateModified does not match THEMES.yaml updated_at
+```
+
+**概要**: `docs/ai-copyright-reaction-map.html` の JSON-LD `dateModified` と `THEMES.yaml` の `updated_at` がずれている。データ更新時にページ側のSEO日付を戻し忘れたと思われる。
+
+**やること**: どちらが正しいか（最後に実際に公開更新した日）を確認して片方へ揃える。ai-copyright は `page_update_mode: adapter` なので、adapter 側で `dateModified` を更新していない可能性も調べる。
+
+---
+
+### 課題38: トップページのカウントダウンが毎日ズレる
+**状態**: 未着手（2026-08-08 に発生を確認。当日分は手動で直した）
+**発見**: 2026-08-08、日付が変わった直後の検査で検出
+
+**概要**: `docs/index.html` の更新バーに「次回更新: 8月9日（あと2日）」のように**残り日数が固定文字列で焼き込まれている**。日付が変わるたびに1日ずつズレ、`scripts/sync_portal_stats.py` を実行するまで公開サイトに誤った日数が出続ける。
+
+`scripts/verify_top_page.py` と `tests/test_portal_stats.py` は毎日この不一致で落ちるため、**「検査が落ちているのが平常」になって本当の異常を見逃す**危険がある。実際 2026-08-08 は、別作業の検証中にこれが混ざって原因切り分けが必要になった。
+
+**取りうる対応（どれか1つ）**:
+1. 残り日数の計算をページ内のJSに寄せ、HTMLには日付だけ焼き込む（表示は毎回正しくなる。既に `update-bar-days` という id はあるので差し替えやすい）
+2. 「あと◯日」の表示自体をやめ、日付だけ出す（いちばん単純）
+3. 毎日 `sync_portal_stats.py` を実行する運用にする（人手が増えるので非推奨）
+
+**推奨**: 1。既存の id をそのまま使えて、検査も安定する。
 
 ---
 

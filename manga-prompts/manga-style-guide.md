@@ -7,7 +7,7 @@
 - `templates/manga-content.schema.md`
 - `manga-prompts/ai-copyright-prompts.md`
 - `manga-prompts/fukushuto-prompts.md`
-- `configs/prompts/claude-code/20260703_task24-manga-content.md`
+- `archive/prompts/claude-code/20260703_task24-manga-content.md`
 
 ## 1. 共通コンセプト
 
