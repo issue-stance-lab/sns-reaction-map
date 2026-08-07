@@ -105,6 +105,16 @@
 - 再分類でラベルが動いたため、`THEMES.yaml` の `main_issue` 行の内訳も実数へ更新した（elderly 139→95 等）
 - `tests/test_taxonomy_continuity.py` の taxonomy不一致テーマは `{ai-copyright, fukushuto}` の2件へ減少
 
+**2026-08-07 に判明した未解決点（elderly / bike）**: 論点カードの件数は正典へ揃ったが、**同じページのアリーナ散布データ `SM_RAW` のセクター `i` は旧分類のまま**で、同一ページ内に2つの内訳が並んでいる。
+
+| テーマ | SM_RAW の件数・内訳 | 正典（`classification.main_issue`） |
+|---|---|---|
+| elderly-license-revocation | 211件 / 139・24・20・9・7・12 | 211件 / 95・14・19・10・9・64 |
+| bike-blue-ticket | **268件** / 54・56・16・28・20・94 | 181件 / 38・29・14・14・18・68 |
+
+bike は件数自体も食い違う（SM_RAW は収集総数268件、分類済みは181件）。`verify_theme_page.py` は SM_RAW を検査していないため exit 0 のまま通る。
+**発注書**: `configs/prompts/codex/20260807_elderly-bike-arena.md`（`build_elderly_arena.py` / `build_bike_arena.py` の新設と SM_RAW 再注入、検査追加。ブランチ `task/elderly-bike-arena`）
+
 **残作業**: constitutional-amendment と henoko-student-accident の2テーマ。次回データ補充で Hermes 分類をやり直し、`issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
 **横展開の完了条件に追加（2026-08-02）**: constitutional / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
 
