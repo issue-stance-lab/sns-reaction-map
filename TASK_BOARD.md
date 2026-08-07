@@ -88,15 +88,25 @@
 | ai-copyright | sample_file（全件） | ✅ 126/79/73/46/40/31 |
 | bukatsu-chiiki / consumption-tax-cut / school-nickname-ban / takaichi | sample_file（`is_opinion` のみ） | ✅ |
 | fukushuto | sample_file（全件） | ✅ |
-| bike-blue-ticket | `social-samples/bike_arena_hermes_classified.json`（sample_file と同じ181件・main_issue付き） | ❌ sample_file に main_issue がない |
+| bike-blue-ticket | sample_file（`classification.main_issue`） | ✅ 2026-08-07に解消（下記） |
 | **constitutional-amendment** | ページ内 `const P`（422件） | ❌ sample_file は646件（旧422件の分類が残っている） |
 | **henoko-student-accident** | `docs/henoko-arena-data.js`（265件） | ❌ sample_file は363件 |
 | **koshitsu-tenpakai** | ページ内 `SM_RAW` + JS の `arenaIssueOf()`（268件） | ❌ sample_file は347件。しかも公開中の h3 件数は `koshitsu-tenpakai_hermes_prev_synthetic.json` 由来 |
-| **elderly-license-revocation** | ページ内 `SM_RAW`（211件） | ❌ sample_file に main_issue がない。`original_category` は114件しか埋まっておらず、残り97件は保存されていないキーワードヒューリスティックで割り当てられている |
+| **elderly-license-revocation** | sample_file（`classification.main_issue`） | ✅ 2026-08-07に解消（下記） |
 
 **暫定措置**: 上記4テーマ分を `scripts/extract_arena_issue_assignment.py` でページから1度だけ取り出し、`data/issue-counts/{theme}.json` に固定した。件数併記と検査はこのファイルを読む（ページのHTMLは読まないので、spanを手で書き換えれば検査が落ちる）。
-**残作業**: 4テーマの次回データ補充で Hermes 分類をやり直し、`configs/{theme}-reaction-map.json` の `issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
-**横展開の完了条件に追加（2026-08-02）**: bike の `social-samples/bike_arena_hermes_classified.json` 依存と、constitutional / elderly / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
+
+**2026-08-07 対応済み（2テーマ）**: elderly-license-revocation（211件）と bike-blue-ticket（181件）を Hermes で再分類し、結果を正典 `sample_file` の各レコードへ `classification`（main_issue / stance / intensity / summary / reason / confidence / article_usable / risk）として格納した。あわせて次を実施。
+
+- 論点定義を `scripts/elderly_license_taxonomy.py` / `scripts/bike_blue_ticket_taxonomy.py` に切り出し、分類スクリプトと共有（`tests/test_*_taxonomy.py` で固定）
+- `configs/{theme}-reaction-map.json` の `issue_counts.source` を削除し、sample_file へ戻した
+- 凍結ファイル `data/issue-counts/elderly-license-revocation.json` を削除。bike が依存していた `social-samples/bike_arena_hermes_classified.json` への参照も解消（ファイル自体はGit管理外に残置）
+- 再分類前の2D分類のみの正典を `social-samples/{theme}_2d_classified_v1_2d_only.json` として保存
+- 再分類でラベルが動いたため、`THEMES.yaml` の `main_issue` 行の内訳も実数へ更新した（elderly 139→95 等）
+- `tests/test_taxonomy_continuity.py` の taxonomy不一致テーマは `{ai-copyright, fukushuto}` の2件へ減少
+
+**残作業**: constitutional-amendment と henoko-student-accident の2テーマ。次回データ補充で Hermes 分類をやり直し、`issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
+**横展開の完了条件に追加（2026-08-02）**: constitutional / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
 
 ### 課題30: 論点カードの解説と実データの乖離
 **状態**: 対応案②（件数の併記）を2026-08-02に全11テーマへ適用済み。①③は未着手
