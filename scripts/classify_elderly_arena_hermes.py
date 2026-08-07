@@ -8,31 +8,20 @@ import json
 import re
 import subprocess
 from collections import Counter
+import sys
 from pathlib import Path
-from typing import Any
-
 
 ROOT = Path(__file__).resolve().parent.parent
-ISSUES = {
-    "義務化・事故防止",
-    "地方の足・移動権",
-    "適性検査強化",
-    "代替交通整備",
-    "自主返納支援",
-    "その他",
-}
-STANCES = {"義務化賛成", "条件付き賛成", "義務化反対", "中立・情報"}
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.elderly_license_taxonomy import (
+    ISSUE_INDEX,
+    ISSUE_SET as ISSUES,
+    STANCE_SET as STANCES,
+)
 INTENSITIES = {"low", "medium", "high"}
 RISKS = {"low", "medium", "high"}
-
-ISSUE_INDEX = {
-    "義務化・事故防止": 0,
-    "地方の足・移動権": 1,
-    "適性検査強化": 2,
-    "代替交通整備": 3,
-    "自主返納支援": 4,
-    "その他": 5,
-}
 
 
 def prompt_for(batch: list[dict[str, Any]]) -> str:
