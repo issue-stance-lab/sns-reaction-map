@@ -100,6 +100,24 @@ class FukushutoTaxonomyTest(unittest.TestCase):
         self.assertTrue(labels)
         self.assertEqual(labels - taxonomy.ISSUES, set())
 
+    def test_tide_widget_issues_match_the_definition(self):
+        """潮目ウィジェットの論点モードが taxonomy と同じラベルを使っている。
+
+        2026-07-26〜08-08 は、同じページでアリーナ・カード・投票が7論点、
+        潮目のグラフだけ旧5論点という二重表示になっていた。
+        """
+        datasets = re.search(r"const datasets = (\{.*?\});", self.html, re.DOTALL)
+        self.assertIsNotNone(datasets, "潮目ウィジェットの datasets が見つからない")
+        rows = json.loads(datasets.group(1))["issue"]["rows"]
+        labels = [row["label"] for row in rows]
+        self.assertEqual(labels, [name for name in taxonomy.ISSUE_ORDER if name != taxonomy.OTHER])
+
+    def test_page_has_no_issue_label_outside_the_definition(self):
+        """ページ内に taxonomy 外の論点ラベルが1つも残っていない。"""
+        for label in taxonomy.RETIRED_ISSUE_LABELS:
+            self.assertNotIn(label, self.html, f"廃止した論点「{label}」がページに残っている")
+        self.assertEqual(set(taxonomy.RETIRED_ISSUE_LABELS) & taxonomy.ISSUES, set())
+
     def test_arena_coordinates_stay_inside_the_published_range(self):
         for stance in taxonomy.STANCE_ORDER:
             for intensity in sorted(taxonomy.INTENSITIES):
