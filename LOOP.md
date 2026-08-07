@@ -25,7 +25,14 @@ python3 -c "import yaml,os; th=yaml.safe_load(open('THEMES.yaml'))['themes']; \
 （bukatsu / constitutional / school-nickname / henoko / consumption-tax / ai-copyright）は
 本文を含むため Git 管理外で、新しい worktree には入らない。
 
-- 作業が終わったら `git worktree remove` で片付ける
+- **`social-samples/` 配下の未追跡ファイルを消さない。** 非公開の正典は gitignore 対象なので、
+  古いブランチからは「どこからも参照されていない不要ファイル」に見える。判断する前に
+  `origin/main` を取り込むこと（2026-08-07、統合したばかりの正典1,606件が削除されかけた）
+- **バックアップは作業したブランチの上で取る。** `backup_private_data.py` は
+  いまいるブランチの `THEMES.yaml` と `.gitignore` を見て対象を決めるため、
+  古いブランチで実行すると新しい正典が対象から漏れる
+- 作業が終わったら `git worktree remove` で片付ける。その前に、そのツリーにしかない
+  非公開ファイルを共有ツリーへ複製し、バックアップを取り直す
 - 共有ツリーで作業する場合は、着手前に `git status` を確認する。
   他セッションの未コミット変更があれば、先にコミットしてもらってから始める
 - `git checkout -- <ディレクトリ>` を使わない。**自分が変更したファイルだけ**をパス指定で戻す
