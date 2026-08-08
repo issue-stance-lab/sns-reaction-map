@@ -72,3 +72,18 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     candidate = read_rows(stage / "cumulative-candidate.json")
     validate_candidate(current, raw, new, classified, candidate, first.read_text(encoding="utf-8"))
     return {PAGE.relative_to(root): first}
+
+
+def finalize(root: Path, current_date: str) -> None:
+    """昇格後に調査条件（取得元・期間・件数）を貼り直す。
+
+    この文言はTHEMES.yamlのsample_periodと累積正典の件数から作られる。どちらも
+    昇格の途中で書き換わるので、build()が組み立てる候補ページには新しい値を
+    入れられない。パイロット（refresh_bukatsu_pilot.py）は台帳更新の直後に同じ
+    スクリプトを呼んでおり、adapter経由でもその一手を再現する。
+    """
+    subprocess.run(
+        [sys.executable, str(root / "scripts" / "build_bukatsu_arena.py")],
+        cwd=root,
+        check=True,
+    )
