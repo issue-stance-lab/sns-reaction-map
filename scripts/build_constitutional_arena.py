@@ -321,11 +321,17 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         "注目ポイント",
         flags=re.S,
     )
+    # 「SNS投稿の収集方法」の本文はここでは作らない。
+    # configs/theme-seo.json の collection を apply_theme_trust.py が {total} / {opinions} を
+    # 解決して書き込む。昇格処理はビルダーの後に apply_theme_trust.py を呼ぶため、両方が
+    # 別々の文言で同じ段落を書くと、次にビルダーを流したとき差分ありのまま止まる
+    # （2026-08-08 に高齢者免許でも同じ事故が起きた）。書き手を1つに保ち、既存の段落を残す。
+    existing_method = re.search(r"<h3>SNS投稿の収集方法</h3>\s*<p>.*?</p>", page, re.S)
+    if not existing_method:
+        raise SystemExit("ERROR: 収集方法の段落が見つかりません")
     trust_method = (
         '<div class="article-trust-method">\n'
-        '    <h3>SNS投稿の収集方法</h3>\n'
-        f'    <p>Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した'
-        f'{total}件を、マップ・論点・賛否の分析対象としています。</p>\n'
+        f'    {existing_method.group(0)}\n'
         '    <h3>AIを使用した工程</h3>\n'
         '    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、'
         '要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも'
