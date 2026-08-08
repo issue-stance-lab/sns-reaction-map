@@ -446,7 +446,12 @@ def promote(
     candidate = read_rows(stage / "cumulative-candidate.json")
     write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
 
-    targets = [canonical, root / "THEMES.yaml", root / "configs" / "theme-seo.json"]
+    targets = [
+        canonical,
+        root / "THEMES.yaml",
+        root / "configs" / "theme-seo.json",
+        root / "data" / "verification" / "sample-periods.json",
+    ]
     if verification:
         targets.append(verification)
     targets.extend(root / relative for relative in adapter_targets)
@@ -497,6 +502,9 @@ def promote(
         run([sys.executable, str(root / "scripts" / "seo" / "apply_theme_trust.py")], label="apply SEO", root=root)
         run([sys.executable, str(root / "scripts" / "sync_portal_stats.py")], label="sync portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "generate_seo_assets.py"), "--site-url", SITE_URL], label="generate sitemap", root=root)
+        # 収集日の検証メタデータはGit管理側にあり、正典が増えると台帳のsample_periodと
+        # ズレる。--generate は貼り直したうえで検証まで行うので、ここが不一致のゲートになる。
+        run([sys.executable, str(root / "scripts" / "verify_sample_periods.py"), "--generate"], label="sync sample periods", root=root)
         run([sys.executable, str(root / "scripts" / "verify_theme_page.py")], label="verify themes", root=root)
         run([sys.executable, str(root / "scripts" / "verify_top_page.py")], label="verify portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "validate_theme_seo.py")], label="verify SEO", root=root)
