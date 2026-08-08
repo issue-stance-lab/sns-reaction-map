@@ -436,6 +436,7 @@ def promote(
     report: dict[str, Any],
     adapter_targets: dict[Path, Path],
     backup_destination: Path,
+    adapter: Any = None,
 ) -> None:
     themes = parse_themes_yaml(root / "THEMES.yaml")
     theme = themes[topic]
@@ -445,7 +446,12 @@ def promote(
     candidate = read_rows(stage / "cumulative-candidate.json")
     write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
 
-    targets = [canonical, root / "THEMES.yaml", root / "configs" / "theme-seo.json"]
+    targets = [
+        canonical,
+        root / "THEMES.yaml",
+        root / "configs" / "theme-seo.json",
+        root / "data" / "verification" / "sample-periods.json",
+    ]
     if verification:
         targets.append(verification)
     targets.extend(root / relative for relative in adapter_targets)
@@ -487,10 +493,18 @@ def promote(
             encoding="utf-8",
         )
         update_seo_date(root / "configs" / "theme-seo.json", topic, current_date)
+        # 調査条件（取得元・期間・件数）はTHEMES.yamlの新しい値を読む。候補ページを組み立てる
+        # build()の時点では台帳がまだ旧期間なので、昇格してからadapterに貼り直させる。
+        finalize = getattr(adapter, "finalize", None)
+        if finalize is not None:
+            finalize(root, current_date)
         run([sys.executable, str(root / "scripts" / "sync_issue_counts.py"), topic], label="sync issue counts", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "apply_theme_trust.py")], label="apply SEO", root=root)
         run([sys.executable, str(root / "scripts" / "sync_portal_stats.py")], label="sync portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "generate_seo_assets.py"), "--site-url", SITE_URL], label="generate sitemap", root=root)
+        # 収集日の検証メタデータはGit管理側にあり、正典が増えると台帳のsample_periodと
+        # ズレる。--generate は貼り直したうえで検証まで行うので、ここが不一致のゲートになる。
+        run([sys.executable, str(root / "scripts" / "verify_sample_periods.py"), "--generate"], label="sync sample periods", root=root)
         run([sys.executable, str(root / "scripts" / "verify_theme_page.py")], label="verify themes", root=root)
         run([sys.executable, str(root / "scripts" / "verify_top_page.py")], label="verify portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "validate_theme_seo.py")], label="verify SEO", root=root)
@@ -668,7 +682,7 @@ def main() -> int:
             raise ValueError(f"{args.topic}: 更新回は保存済みですが、page adapterがないため公開できません")
         adapter = load_adapter(adapter_name)
         adapter_targets = adapter.build(ROOT, stage, args.date)
-        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest)
+        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest, adapter)
         report["status"] = "promoted"
         write_json(stage / "report.json", report)
     print(json.dumps(report, ensure_ascii=False, indent=2))
