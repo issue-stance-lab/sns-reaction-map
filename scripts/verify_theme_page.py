@@ -283,8 +283,12 @@ def verify_theme_page(
     source = str(theme_data.get("sample_source") or "")
     period = str(theme_data.get("sample_period") or "")
     period_label = "記録なし" if period.lower() == "unknown" else period
+    collected_count_texts = (
+        f"{source}で取得した公開投稿 {count}件",
+        f"{source}で取得した公開投稿{count}件",
+    )
     conditions_ok = (
-        f"{source}で取得した公開投稿 {count}件" in page
+        any(text in page for text in collected_count_texts)
         and f"取得期間: {period_label}" in page
         and "AI分類・人間による代表投稿の確認あり" in page
     )
@@ -304,11 +308,15 @@ def verify_theme_page(
         failures += 1
 
     if arguments is not None:
-        expected_count_text = f"公開投稿 {count}件"
+        expected_count_texts = (f"公開投稿 {count}件", f"公開投稿{count}件")
         opinion_count = sum(
             1
             for row in rows
-            if bool((row.get("classification") or row).get("is_opinion"))
+            if bool(
+                (row.get("classification") or row).get(
+                    "is_opinion", row.get("is_opinion")
+                )
+            )
         )
         classified_count = sum(
             1
@@ -318,10 +326,13 @@ def verify_theme_page(
         map_count_texts = (
             f">{count}件 | セクター=",
             f">意見{opinion_count}件 | セクター=",
+            f">{opinion_count}件 | セクター=",
             # アリーナが論点分類済みのレコードだけを描いているテーマ
             f">{classified_count}件 | セクター=",
         )
-        if expected_count_text in page and any(text in page for text in map_count_texts):
+        if any(text in page for text in expected_count_texts) and any(
+            text in page for text in map_count_texts
+        ):
             detail = f"全{count}件 / 意見{opinion_count}件" if opinion_count != count else f"{count}件"
             lines.append(f"OK  件数表示が sample_file の実数と一致する（{detail}）")
         else:

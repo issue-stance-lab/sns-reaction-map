@@ -58,7 +58,10 @@ def count_by_issue(records: list[dict[str, Any]], basis: str) -> dict[str, int]:
     counts: dict[str, int] = {}
     for record in records:
         classification = _classification(record)
-        if basis == "opinion" and not bool(classification.get("is_opinion")):
+        # 旧2D分類には is_opinion がトップレベルにあるテーマもある。
+        # ネスト側を優先し、欠落時だけ旧形式へフォールバックする。
+        is_opinion = classification.get("is_opinion", record.get("is_opinion"))
+        if basis == "opinion" and not bool(is_opinion):
             continue
         issue = classification.get("main_issue")
         if not issue:
