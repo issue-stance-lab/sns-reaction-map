@@ -69,10 +69,15 @@
 ### 1. 作業ツリーを用意する
 
 ```bash
-cd /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator && git worktree add ../isa-wt-elderly -b task/elderly-opinion-only
+cd /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator && git fetch origin && git worktree add ../isa-wt-elderly -b task/elderly-opinion-only origin/main
 ```
 
 成功の形: `Preparing worktree` と `Switched to a new branch` が出る。
+
+> **末尾の `origin/main` を省かないこと。** 省くと共有ツリーの現在のブランチから
+> 枝分かれする。共有ツリーは他セッションの作業中で、main より遅れていたり
+> 無関係なコミットが載っていたりする（2026-08-08 の皇室典範では、30コミット遅れ・
+> 7コミット先行の状態だった）。そのままPRを出すと他人の変更を巻き込む。
 
 ### 2. 非公開の正典データを復元する
 

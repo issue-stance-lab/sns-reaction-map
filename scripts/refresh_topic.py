@@ -232,6 +232,9 @@ def validate_sets(
         "new": len(new_ids),
         "relevant": sum(bool(classification(row).get("is_relevant")) for row in classified),
         "opinions": sum(bool(classification(row).get("is_opinion")) for row in classified),
+        "opinion_flag_available": any(
+            classification(row).get("is_opinion") is not None for row in classified
+        ),
         "candidate": len(candidate),
     }
 
@@ -333,14 +336,31 @@ def previous_reports(root: Path, topic: str, before: str) -> list[dict[str, Any]
     return reports
 
 
+def new_opinion_count(report: dict[str, Any]) -> int:
+    """周期判定に使う「今回の新規意見」件数。
+
+    分類器が is_opinion を出力するテーマでは opinions がその件数になる。
+    出力しないテーマ（憲法改正など）では opinions が常に0になり、何件集めても
+    既定14日→28日へ流れてしまうため、新規件数そのものを代わりに使う。
+
+    opinion_flag_available を持たない過去のレポートは、opinions が1件以上あれば
+    出力ありとみなす（既存4テーマの履歴はこれで正しく判定できる）。
+    """
+    opinions = int(report.get("opinions", 0) or 0)
+    available = report.get("opinion_flag_available")
+    if available is None:
+        available = opinions > 0
+    return opinions if available else int(report.get("new", 0) or 0)
+
+
 def next_collection_date(root: Path, topic: str, current_date: str, report: dict[str, Any]) -> str | None:
     previous = previous_reports(root, topic, current_date)
     latest = previous[-1] if previous else None
     new = int(report.get("new", 0))
-    opinions = int(report.get("opinions", 0))
+    opinions = new_opinion_count(report)
     if new == 0 and latest and int(latest.get("new", -1)) == 0:
         return None
-    if opinions < 20 and latest and int(latest.get("opinions", 20)) < 20:
+    if opinions < 20 and latest and new_opinion_count(latest) < 20:
         days = 28
     elif opinions >= 50:
         days = 7
@@ -416,6 +436,7 @@ def promote(
     report: dict[str, Any],
     adapter_targets: dict[Path, Path],
     backup_destination: Path,
+    adapter: Any = None,
 ) -> None:
     themes = parse_themes_yaml(root / "THEMES.yaml")
     theme = themes[topic]
@@ -425,7 +446,12 @@ def promote(
     candidate = read_rows(stage / "cumulative-candidate.json")
     write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
 
-    targets = [canonical, root / "THEMES.yaml", root / "configs" / "theme-seo.json"]
+    targets = [
+        canonical,
+        root / "THEMES.yaml",
+        root / "configs" / "theme-seo.json",
+        root / "data" / "verification" / "sample-periods.json",
+    ]
     if verification:
         targets.append(verification)
     targets.extend(root / relative for relative in adapter_targets)
@@ -467,10 +493,18 @@ def promote(
             encoding="utf-8",
         )
         update_seo_date(root / "configs" / "theme-seo.json", topic, current_date)
+        # 調査条件（取得元・期間・件数）はTHEMES.yamlの新しい値を読む。候補ページを組み立てる
+        # build()の時点では台帳がまだ旧期間なので、昇格してからadapterに貼り直させる。
+        finalize = getattr(adapter, "finalize", None)
+        if finalize is not None:
+            finalize(root, current_date)
         run([sys.executable, str(root / "scripts" / "sync_issue_counts.py"), topic], label="sync issue counts", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "apply_theme_trust.py")], label="apply SEO", root=root)
         run([sys.executable, str(root / "scripts" / "sync_portal_stats.py")], label="sync portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "generate_seo_assets.py"), "--site-url", SITE_URL], label="generate sitemap", root=root)
+        # 収集日の検証メタデータはGit管理側にあり、正典が増えると台帳のsample_periodと
+        # ズレる。--generate は貼り直したうえで検証まで行うので、ここが不一致のゲートになる。
+        run([sys.executable, str(root / "scripts" / "verify_sample_periods.py"), "--generate"], label="sync sample periods", root=root)
         run([sys.executable, str(root / "scripts" / "verify_theme_page.py")], label="verify themes", root=root)
         run([sys.executable, str(root / "scripts" / "verify_top_page.py")], label="verify portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "validate_theme_seo.py")], label="verify SEO", root=root)
@@ -648,7 +682,7 @@ def main() -> int:
             raise ValueError(f"{args.topic}: 更新回は保存済みですが、page adapterがないため公開できません")
         adapter = load_adapter(adapter_name)
         adapter_targets = adapter.build(ROOT, stage, args.date)
-        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest)
+        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest, adapter)
         report["status"] = "promoted"
         write_json(stage / "report.json", report)
     print(json.dumps(report, ensure_ascii=False, indent=2))

@@ -229,12 +229,12 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
     page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">{lead}</p>', "リード文", flags=re.S)
     research = f'<strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{len(rows)}件を分析対象としています。<br>'
     page = replace_once(page, r'<strong style="color:var\(--ink\);">このマップの元データ:</strong>.*?<br>', research, "調査条件", flags=re.S)
-    page = replace_once(
-        page,
-        r"ページの論点分析は(?:公開投稿\d+件のうち、意見と判定した)?\d+件を対象にしています。",
-        f"ページの論点分析は公開投稿{collected}件のうち、意見と判定した{len(rows)}件を対象にしています。",
-        "記事の検証方法",
-    )
+    # 「記事の検証方法」の収集方法の文はここでは書かない。
+    # configs/theme-seo.json の collection を apply_theme_trust.py が {total} / {opinions} を
+    # 解決して書き込む。昇格処理はビルダーの後に apply_theme_trust.py を呼ぶため、両方が
+    # 別々の文言で同じ場所を書くと、次にビルダーを流したとき差し替え対象を見失って止まる
+    # （2026-08-08 に「1箇所だけ一致する必要があります（0箇所）」で実際に発生）。
+    # 1つの文の書き手は1つに保つ。
     page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>', f'<span class="conclusion-count"><b>{counts[ISSUE_ORDER[0]]}</b>件</span>', "議論の中心")
     page = replace_once(page, r'<section class="stats insight-stats".*?</section>', build_stats(rows, collected), "注目ポイント", flags=re.S)
     page = replace_once(page, r'<section class="panel" id="issue-blocks-section">.*?</section>', build_issue_blocks(rows), "論点別サマリー", flags=re.S)
