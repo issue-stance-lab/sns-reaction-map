@@ -232,6 +232,9 @@ def validate_sets(
         "new": len(new_ids),
         "relevant": sum(bool(classification(row).get("is_relevant")) for row in classified),
         "opinions": sum(bool(classification(row).get("is_opinion")) for row in classified),
+        "opinion_flag_available": any(
+            classification(row).get("is_opinion") is not None for row in classified
+        ),
         "candidate": len(candidate),
     }
 
@@ -333,14 +336,31 @@ def previous_reports(root: Path, topic: str, before: str) -> list[dict[str, Any]
     return reports
 
 
+def new_opinion_count(report: dict[str, Any]) -> int:
+    """周期判定に使う「今回の新規意見」件数。
+
+    分類器が is_opinion を出力するテーマでは opinions がその件数になる。
+    出力しないテーマ（憲法改正など）では opinions が常に0になり、何件集めても
+    既定14日→28日へ流れてしまうため、新規件数そのものを代わりに使う。
+
+    opinion_flag_available を持たない過去のレポートは、opinions が1件以上あれば
+    出力ありとみなす（既存4テーマの履歴はこれで正しく判定できる）。
+    """
+    opinions = int(report.get("opinions", 0) or 0)
+    available = report.get("opinion_flag_available")
+    if available is None:
+        available = opinions > 0
+    return opinions if available else int(report.get("new", 0) or 0)
+
+
 def next_collection_date(root: Path, topic: str, current_date: str, report: dict[str, Any]) -> str | None:
     previous = previous_reports(root, topic, current_date)
     latest = previous[-1] if previous else None
     new = int(report.get("new", 0))
-    opinions = int(report.get("opinions", 0))
+    opinions = new_opinion_count(report)
     if new == 0 and latest and int(latest.get("new", -1)) == 0:
         return None
-    if opinions < 20 and latest and int(latest.get("opinions", 20)) < 20:
+    if opinions < 20 and latest and new_opinion_count(latest) < 20:
         days = 28
     elif opinions >= 50:
         days = 7
