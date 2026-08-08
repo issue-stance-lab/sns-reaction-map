@@ -115,7 +115,9 @@
 bike は件数自体も食い違う（SM_RAW は収集総数268件、分類済みは181件）。`verify_theme_page.py` は SM_RAW を検査していないため exit 0 のまま通る。
 **発注書**: `configs/prompts/codex/20260807_elderly-bike-arena.md`（`build_elderly_arena.py` / `build_bike_arena.py` の新設と SM_RAW 再注入、検査追加。ブランチ `task/elderly-bike-arena`）
 
-**残作業**: constitutional-amendment と henoko-student-accident の2テーマ。次回データ補充で Hermes 分類をやり直し、`issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
+**2026-08-08 対応済み**: constitutional-amendment は646件を同一条件で再分類し、意見577件に統一した。`scripts/build_constitutional_arena.py` を新設して SM_RAW・論点別の声・スタンス・詳細表を同じ意見集合から再生成し、`issue_counts.source` と凍結ファイルを削除した。
+
+**残作業**: henoko-student-accident の1テーマ。正典から再現できる状態へ揃え、最後の `data/issue-counts/henoko-student-accident.json` を削除した時点で課題29を完了にする。
 **横展開の完了条件に追加（2026-08-02）**: constitutional / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
 
 ### 課題30: 論点カードの解説と実データの乖離
