@@ -9,6 +9,10 @@
 両者はURLが1件も重ならないため、カードの件数と正典の件数が無関係になっていた。
 このスクリプトは **sample_file だけ** を読み、ページの論点まわりを丸ごと作り直す。
 
+数えるのは **意見と判定された投稿だけ**（2026-08-08）。それ以前はマップの点だけが全件で、
+論点カード・賛否は意見のみという混在状態だった。収集総数は調査条件と「意見と情報共有」
+カードにだけ出し、そこでは必ず意見件数と並べて書く。
+
 生成する箇所:
 
 - SM_RAW（アリーナの点）
@@ -71,39 +75,52 @@ def classification(record: dict[str, Any]) -> dict[str, Any]:
     return nested if isinstance(nested, dict) else record
 
 
-def load_canon(source: Path | None = None) -> tuple[list[dict[str, Any]], str]:
+def select_opinions(records: Any, sample_file: str) -> list[dict[str, Any]]:
+    """意見と判定されたレコードだけを返す。
+
+    ニュースのURL共有など意見でない投稿を落とすのは、ページ内の分母を1種類に保つため。
+    判定が入っていないレコードは**除外せずエラーで止める**。静かに落とすと、あとで
+    件数が合わない原因を追えなくなる。
+    """
+    if not isinstance(records, list) or not records:
+        raise IssueCountError(f"{THEME}: 分類結果がJSON配列ではありません: {sample_file}")
+    with_issue = [r for r in records if isinstance(r, dict) and classification(r).get("main_issue")]
+    if len(with_issue) != len(records):
+        raise IssueCountError(
+            f"{THEME}: main_issue を持たないレコードがあります（{len(records) - len(with_issue)}件）"
+        )
+    unjudged = [r for r in records if "is_opinion" not in classification(r)]
+    if unjudged:
+        raise IssueCountError(
+            f"{THEME}: is_opinion を持たないレコードがあります（{len(unjudged)}件）: {sample_file}"
+        )
+    rows = [r for r in records if classification(r)["is_opinion"] is True]
+    if not rows:
+        raise IssueCountError(f"{THEME}: 意見と判定されたレコードが0件です: {sample_file}")
+    return rows
+
+
+def load_canon(source: Path | None = None) -> tuple[list[dict[str, Any]], str, int]:
     """THEMES.yaml の sample_file を唯一の出所として読む。
 
     staging から呼ぶときだけ source に累積候補を渡す（公開前の候補ページ生成用）。
+    返すのは意見と判定されたレコードだけ。3つめは絞り込む前の収集総数。
     """
     if source is not None:
         sample_file = str(source)
         records = json.loads(Path(source).read_text(encoding="utf-8"))
-        if not isinstance(records, list) or not records:
-            raise IssueCountError(f"{THEME}: 分類結果がJSON配列ではありません: {sample_file}")
-        rows = [r for r in records if isinstance(r, dict) and classification(r).get("main_issue")]
-        if len(rows) != len(records):
-            raise IssueCountError(
-                f"{THEME}: main_issue を持たないレコードがあります（{len(records) - len(rows)}件）"
-            )
-        return rows, sample_file
-    themes = parse_themes_yaml(THEMES_YAML)
-    if THEME not in themes:
-        raise IssueCountError(f"THEMES.yaml にテーマがありません: {THEME}")
-    sample_file = str(themes[THEME].get("sample_file") or "")
-    if not sample_file:
-        raise IssueCountError(f"{THEME}: sample_file が未設定です")
-    if "synthetic" in sample_file:
-        raise IssueCountError(f"{THEME}: 合成データを正典にはできません: {sample_file}")
-    records = json.loads((ROOT / sample_file).read_text(encoding="utf-8"))
-    if not isinstance(records, list) or not records:
-        raise IssueCountError(f"{THEME}: 分類結果がJSON配列ではありません: {sample_file}")
-    rows = [r for r in records if isinstance(r, dict) and classification(r).get("main_issue")]
-    if len(rows) != len(records):
-        raise IssueCountError(
-            f"{THEME}: main_issue を持たないレコードがあります（{len(records) - len(rows)}件）"
-        )
-    return rows, sample_file
+    else:
+        themes = parse_themes_yaml(THEMES_YAML)
+        if THEME not in themes:
+            raise IssueCountError(f"THEMES.yaml にテーマがありません: {THEME}")
+        sample_file = str(themes[THEME].get("sample_file") or "")
+        if not sample_file:
+            raise IssueCountError(f"{THEME}: sample_file が未設定です")
+        if "synthetic" in sample_file:
+            raise IssueCountError(f"{THEME}: 合成データを正典にはできません: {sample_file}")
+        records = json.loads((ROOT / sample_file).read_text(encoding="utf-8"))
+    rows = select_opinions(records, sample_file)
+    return rows, sample_file, len(records)
 
 
 def issue_order(rows: list[dict[str, Any]]) -> list[str]:
@@ -244,25 +261,28 @@ def build_issue_section(rows: list[dict[str, Any]], blocks: list[dict[str, Any]]
 
 
 def build_insight_stats(
-    rows: list[dict[str, Any]], order: list[str], labels: dict[str, str]
+    rows: list[dict[str, Any]], order: list[str], labels: dict[str, str], collected: int
 ) -> str:
-    """ヒーロー直下の注目ポイント4枚。旧2D分類の「皇位継承観」は正典に無いので作らない。"""
+    """ヒーロー直下の注目ポイント4枚。旧2D分類の「皇位継承観」は正典に無いので作らない。
+
+    rows は意見のみなので、収集総数（collected）は必ず意見件数と並べて出す。
+    """
     total = len(rows)
     counts = Counter(classification(r)["main_issue"] for r in rows)
     stances = Counter(classification(r)["stance"] for r in rows)
-    opinions = sum(1 for r in rows if classification(r).get("is_opinion"))
     top = order[0]
     neg, pos = stances[NEG], stances[POS]
     neg_pct = round(neg / (neg + pos) * 100) if neg + pos else 0
-    op_pct = round(opinions / total * 100)
+    op_pct = round(total / collected * 100)
 
     return "\n".join(
         [
             '  <article class="stat insight-stat">',
             '    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span>'
-            '<span class="insight-label">分析対象の投稿</span></div>',
+            '<span class="insight-label">分析対象の意見</span></div>',
             f'    <strong class="insight-value">{total}<small>件</small></strong>',
-            f"    <p class=\"insight-note\">AIが論点・立場・表現強度を分類（うち意見は{opinions}件）</p>",
+            f"    <p class=\"insight-note\">収集した{collected}件のうち意見と判定した投稿。"
+            f"AIが論点・立場・表現強度を分類</p>",
             '    <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>',
             "  </article>",
             '  <article class="stat insight-stat" data-tone="debate">',
@@ -277,8 +297,8 @@ def build_insight_stats(
             '  <article class="stat insight-stat" data-tone="insight">',
             '    <div class="insight-head"><span class="insight-icon" aria-hidden="true">💬</span>'
             '<span class="insight-label">意見と情報共有</span></div>',
-            f'    <div class="insight-versus"><span>意見<b>{opinions}</b></span><em>VS</em>'
-            f"<span>情報共有<b>{total - opinions}</b></span></div>",
+            f'    <div class="insight-versus"><span>意見<b>{total}</b></span><em>VS</em>'
+            f"<span>情報共有<b>{collected - total}</b></span></div>",
             f'    <div class="insight-split" data-palette="gold-purple" aria-hidden="true">'
             f'<i style="width:{op_pct}%"></i><i style="width:{100 - op_pct}%"></i></div>',
             f"    <p class=\"insight-note\">賛否を述べた投稿が{op_pct}%。残りはニュース共有など</p>",
@@ -376,7 +396,7 @@ def build(
     template: Path | None = None,
     output: Path | None = None,
 ) -> tuple[list[str], bool]:
-    rows, sample_file = load_canon(source)
+    rows, sample_file, collected = load_canon(source)
     config_path = ROOT / "configs" / f"{THEME}-reaction-map.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
     arena = config.get("arena")
@@ -435,14 +455,47 @@ def build(
     page = replace_once(
         page,
         r"<span>(?:意見)?\d+件 \| セクター=",
-        f"<span>{total}件 | セクター=",
+        f"<span>意見{total}件 | セクター=",
         "アリーナ見出しの件数",
     )
     page = replace_once(
         page,
-        r"分析対象となった[^<]*?\d+件をAIが\d+つの論点に整理しました。",
-        f"分析対象となった公開投稿{total}件をAIが{len(blocks)}つの論点に整理しました。",
+        r"収集した[^<]*?つの論点に整理しました。",
+        f"収集した公開投稿{collected}件のうち、意見と判定した{total}件を"
+        f"AIが{len(blocks)}つの論点に整理しました。",
         "ヒーローの lead",
+    )
+    # 調査条件・収集方法・収集クエリは、収集総数と意見件数を必ずセットで書く
+    # （どちらか一方だけが出ていると、読者はマップの分母を取り違える）
+    page = replace_once(
+        page,
+        r"で取得した公開投稿 \d+件<br>\n(?:  （うち[^\n]*\n)?",
+        f"で取得した公開投稿 {collected}件<br>\n"
+        f"  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n",
+        "調査条件の件数",
+    )
+    page = replace_once(
+        page,
+        r"関連性と[^<]*?件を表示しています。",
+        f"関連性と意見性、論点を判定し、収集した{collected}件のうち"
+        f"意見と判定した{total}件を表示しています。",
+        "収集方法の件数",
+    )
+    page = replace_once(
+        page,
+        r"にYahooリアルタイム検索で\d+件を取得（重複除去後）。[^<]*?しています。",
+        f"にYahooリアルタイム検索で{collected}件を取得（重複除去後）。"
+        f"全件をAIが論点・立場・表現強度で分類し、うち意見と判定した{total}件を集計対象にしています。",
+        "収集クエリの件数",
+    )
+    page = replace_once(
+        page,
+        r"ページ上の件数はすべて[^<]*",
+        f"ページ上の件数はすべてこの意見{total}件から生成しています"
+        "（scripts/build_koshitsu_arena.py）。"
+        f"「世論の潮目」ウィジェットだけは例外で、2026-07-17収集分と収集{collected}件全体の"
+        "構成比を比較しています。",
+        "件数の出所の説明",
     )
     page = replace_once(
         page,
@@ -454,7 +507,7 @@ def build(
         page,
         r"<!-- INSIGHT_STATS_START -->.*?<!-- INSIGHT_STATS_END -->",
         "<!-- INSIGHT_STATS_START -->\n"
-        + build_insight_stats(rows, order, labels)
+        + build_insight_stats(rows, order, labels, collected)
         + "\n<!-- INSIGHT_STATS_END -->",
         "注目ポイント",
         flags=re.S,
@@ -506,7 +559,7 @@ def build(
 
     detail = " / ".join(f"{labels.get(n, n)}={counts[n]}" for n in order)
     lines = [
-        f"出所: {sample_file}（{total}件）",
+        f"出所: {sample_file}（収集{collected}件 → 意見{total}件）",
         f"論点: {detail}",
         f"投票選択肢: {len(order)}  論点カード: {len(config['issue_counts']['cards'])}枚",
     ]
