@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// マップの母数は代表例の安全性ではなく、投稿者自身の意見性で統一する。
+
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -39,7 +41,7 @@ function stance(row) {
 
 const rows = JSON.parse(await readFile(sourcePath, "utf8"));
 const arenaRows = rows
-  .filter((row) => row.classification?.article_usable === true)
+  .filter((row) => row.classification?.is_opinion === true)
   .map((row) => ({
     i: issueIndex[row.classification.main_issue],
     e: intensity(row),
