@@ -58,6 +58,21 @@ def sample_file_for(theme_id: str) -> Path:
     return PROJECT_ROOT / file_match.group(1).strip()
 
 
+def is_opinion(row: dict) -> bool:
+    """意見と判定されたか。
+
+    テーマによって置き場所が違う。`classification` の下にある形と、レコード直下にある形の
+    両方がある。さらに自転車の青切符のように、**`classification` はあるがその中に
+    `is_opinion` が無く、直下にだけある**テーマもある。
+    `classification` があれば必ずそちらを見る書き方だと、この形で常に0件になる
+    （2026-08-08 に「意見と判定した0件」を公開しかけた）。キーの有無で判断する。
+    """
+    nested = row.get("classification")
+    if isinstance(nested, dict) and "is_opinion" in nested:
+        return bool(nested["is_opinion"])
+    return bool(row.get("is_opinion"))
+
+
 def resolve_counts(text: str, theme_id: str) -> str:
     """収集方法の文中の {total} / {opinions} を分類結果の実数へ置き換える。
 
@@ -70,9 +85,7 @@ def resolve_counts(text: str, theme_id: str) -> str:
     rows = json.loads(sample_file_for(theme_id).read_text(encoding="utf-8"))
     counts = {
         "total": len(rows),
-        "opinions": sum(
-            1 for row in rows if ((row.get("classification") or row) or {}).get("is_opinion")
-        ),
+        "opinions": sum(1 for row in rows if is_opinion(row)),
     }
     for key, value in counts.items():
         text = text.replace("{" + key + "}", f"{value:,}")
