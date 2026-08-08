@@ -45,6 +45,40 @@ def japanese_date(value: str) -> str:
     return f"{parsed.year}年{parsed.month}月{parsed.day}日"
 
 
+def sample_file_for(theme_id: str) -> Path:
+    """THEMES.yaml から sample_file を引く（YAML依存を足さないため正規表現で読む）。"""
+    text = (PROJECT_ROOT / "THEMES.yaml").read_text(encoding="utf-8")
+    pattern = rf"^  {re.escape(theme_id)}:\s*$(.*?)(?=^  [\w-]+:\s*$|\Z)"
+    match = re.search(pattern, text, flags=re.MULTILINE | re.DOTALL)
+    if not match:
+        raise ValueError(f"THEMES.yamlにテーマがありません: {theme_id}")
+    file_match = re.search(r"^    sample_file:\s*[\"']?([^\"'#\n]+)", match.group(1), re.MULTILINE)
+    if not file_match:
+        raise ValueError(f"{theme_id}: sample_file がありません")
+    return PROJECT_ROOT / file_match.group(1).strip()
+
+
+def resolve_counts(text: str, theme_id: str) -> str:
+    """収集方法の文中の {total} / {opinions} を分類結果の実数へ置き換える。
+
+    以前はここが件数のべた書きで、更新しても誰も直さないまま公開ページに古い数字が
+    残っていた（部活動は累計467件・意見389件のまま実際は732件・599件だった）。
+    昇格処理がこのスクリプトを呼ぶので、差し込みにしておけば毎回ずれない。
+    """
+    if "{total}" not in text and "{opinions}" not in text:
+        return text
+    rows = json.loads(sample_file_for(theme_id).read_text(encoding="utf-8"))
+    counts = {
+        "total": len(rows),
+        "opinions": sum(
+            1 for row in rows if ((row.get("classification") or row) or {}).get("is_opinion")
+        ),
+    }
+    for key, value in counts.items():
+        text = text.replace("{" + key + "}", f"{value:,}")
+    return text
+
+
 def seo_block(theme: dict[str, Any], base_url: str) -> str:
     canonical = urljoin(base_url, theme["url"])
     image_url = urljoin(base_url, theme["image"])
@@ -98,7 +132,7 @@ def jsonld_block(theme: dict[str, Any], config: dict[str, Any]) -> str:
 def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
     published = theme["datePublished"]
     modified = theme["dateModified"]
-    collection = html.escape(theme["collection"])
+    collection = html.escape(resolve_counts(theme["collection"], theme["id"]))
     organization_name = html.escape(organization["name"])
     return f"""\
 {TRUST_START}
