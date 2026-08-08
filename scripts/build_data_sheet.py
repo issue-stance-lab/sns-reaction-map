@@ -120,7 +120,52 @@ def render(rows: list[dict]) -> str:
         else:
             out.append("- （賛否のラベルなし）")
         out.append("")
-    return "\n".join(out).rstrip() + "\n"
+    return "\n".join(out) + "\n"
+
+
+def in_linked_worktree() -> bool:
+    """作業ツリー（git worktree）で動いているか。
+
+    作業ツリーでは `.git` がファイル（本体へのポインタ）になる。共有ツリーはディレクトリ。
+    """
+    return (ROOT / ".git").is_file()
+
+
+def report_gaps(rows: list[dict]) -> None:
+    """意見・論点・賛否・マップの点がずれているテーマを並べる。
+
+    表を目で追わなくてもずれが分かるようにする。2026-08-08 に、作業ツリーで生成した
+    台帳の「部活動 意見599 / マップ519」を見て別テーマの破損と読み違えた（実際は
+    正典が最新・ページが古いだけだった）。
+    """
+    gaps = []
+    for row in rows:
+        if not row["judged"]:
+            gaps.append(f'{row["title"]}: 意見が未判定（論点{sum(row["issues"].values())}件を全件で数えている）')
+            continue
+        base = row["opinions"]
+        parts = {
+            "論点の合計": sum(row["issues"].values()),
+            "賛否の合計": sum(row["stances"].values()) or None,
+            "マップの点": row["points"] if isinstance(row["points"], int) else None,
+        }
+        off = [f"{name}{value}" for name, value in parts.items() if value is not None and value != base]
+        if off:
+            gaps.append(f'{row["title"]}: 意見{base} に対し ' + " / ".join(off))
+
+    if not gaps:
+        print("ずれなし  全テーマで 意見＝論点＝賛否＝マップの点")
+        return
+    print(f"ずれあり  {len(gaps)}件")
+    for line in gaps:
+        print(f"  - {line}")
+    if in_linked_worktree():
+        print(
+            "\n注意: 作業ツリーで実行している。正典データはバックアップから復元した最新、\n"
+            "      公開ページはこのブランチの中身（＝mainより古い可能性）なので、\n"
+            "      上のずれは本当の不整合ではなくブランチの古さが原因のことがある。\n"
+            "      担当テーマ以外のずれは、main で数え直してから判断すること。"
+        )
 
 
 def main() -> int:
@@ -128,7 +173,8 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="書き換えずに差分の有無だけ見る")
     args = parser.parse_args()
 
-    text = render(theme_rows())
+    rows = theme_rows()
+    text = render(rows)
     if args.check:
         current = SHEET.read_text(encoding="utf-8") if SHEET.is_file() else ""
         if current == text:
@@ -138,6 +184,7 @@ def main() -> int:
         return 1
     SHEET.write_text(text, encoding="utf-8")
     print(f"書き出しました: {SHEET.relative_to(ROOT)}")
+    report_gaps(rows)
     return 0
 
 

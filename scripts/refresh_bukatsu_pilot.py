@@ -30,7 +30,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 SLUG = "bukatsu-chiiki"
-PREVIOUS_DATE = "2026-07-23"
+PREVIOUS_DATE = "2026-08-02"
 PAGE = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
 THEMES = ROOT / "THEMES.yaml"
 SEO_CONFIG = ROOT / "configs" / "theme-seo.json"
@@ -308,8 +308,8 @@ def main() -> int:
         stage / "classified-wave.json", stage / "classified-wave-verification.json"
     )
     previous = [row for row in current if str(row.get("fetched_at") or "")[:10] == PREVIOUS_DATE]
-    if len(previous) != 161:
-        raise ValueError(f"expected 161 previous records, found {len(previous)}")
+    if len(previous) != 159:
+        raise ValueError(f"expected 159 previous records, found {len(previous)}")
     write_json(stage / "previous-wave.json", previous)
     run([
         sys.executable, str(ROOT / "scripts" / "update_bukatsu_tide.py"),
