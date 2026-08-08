@@ -103,7 +103,7 @@ themes:
     sample_file: social-samples/bukatsu-chiiki_hermes_classified.json
     verification_file: data/verification/bukatsu-chiiki.json
     refresh_config: configs/topics/bukatsu-chiiki-v2.yaml
-    sample_period: "2026-06-27〜2026-08-02"
+    sample_period: "2026-06-27〜2026-08-08"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 累計626件（2026-08-02更新、今回新規159件）
     classify: done       # Hermesで626件分類。関連623件、意見519件
@@ -114,12 +114,13 @@ themes:
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done
     page_update_mode: adapter   # refresh_topic.py --topic bukatsu-chiiki のadapter。パイロットで昇格まで実証済み
-    collect_at: 2026-08-09
-    refresh_at: 2026-08-09
-    last_refresh_attempt_at: 2026-08-02
+    collect_at: 2026-08-15
+    refresh_at: 2026-08-15
+    collect_mode: scheduled
+    last_refresh_attempt_at: 2026-08-08
     published_at: 2026-06-27
-    updated_at: 2026-08-02
-    collect_delta: 159
+    updated_at: 2026-08-08
+    collect_delta: 106
     x_posted_at: 2026-08-08
     notes: "2026-07-12に新規127件を収集。2026-07-23に同一10検索語で223件を取得し、既存との重複62件を除いた新規161件を追加、累計467件。全件をHermes方式（main_issue / stance / intensity / is_relevant / is_opinion）で再分類。関連464件、意見389件。2026-08-02に同じ10検索語で222件を取得し、重複63件を除いた新規159件をHermes分類（関連159件、意見130件）。累計626件、関連623件、意見519件。7/23追加分と8/2追加分を同一条件で比較し、移行支持が6.1pt増加、教員の働き方が8.9pt増加、感情highが8.0pt減少。"
 
@@ -138,9 +139,11 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
-    page_update_mode: migration # upgrade_constitutional_arena.py は生成済みページに再実行できない（ValueError）
-    collect_at: 2026-08-08
+    page_update_mode: adapter_candidate # build_constitutional_arena.py で再生成可能。候補input/outputは未対応
+    collect_at: 2026-08-15 # 新規227件・意見199件（50件以上）のため今回だけ7日後
     refresh_at:
+    collect_mode: scheduled
+    last_refresh_attempt_at: 2026-08-08
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 224
@@ -162,7 +165,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
     published: done
-    page_update_mode: manual    # 再実行可能な更新スクリプトなし
+    page_update_mode: adapter_candidate # build_elderly_arena.py は冪等。候補input/output未対応
     collect_at: 2026-08-13
     refresh_at:
     published_at: 2026-06-28

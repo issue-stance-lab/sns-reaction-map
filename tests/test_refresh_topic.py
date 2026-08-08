@@ -86,6 +86,50 @@ class RefreshTopicTests(unittest.TestCase):
                 next_collection_date(root, "topic", "2026-08-10", {"new": 0, "opinions": 0})
             )
 
+    def test_cadence_uses_new_count_when_classifier_has_no_opinion_flag(self):
+        """憲法改正のように is_opinion を出さないテーマでも件数ルールが効くこと。"""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.assertEqual(
+                next_collection_date(
+                    root,
+                    "topic",
+                    "2026-08-08",
+                    {"new": 220, "opinions": 0, "opinion_flag_available": False},
+                ),
+                "2026-08-15",
+            )
+
+    def test_cadence_keeps_opinion_count_when_classifier_has_flag(self):
+        """is_opinion を出すテーマで「意見0件」を新規件数で上書きしないこと。"""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.assertEqual(
+                next_collection_date(
+                    root,
+                    "topic",
+                    "2026-08-08",
+                    {"new": 100, "opinions": 0, "opinion_flag_available": True},
+                ),
+                "2026-08-22",
+            )
+
+    def test_cadence_reads_legacy_report_without_opinion_flag(self):
+        """opinion_flag_available を持たない過去回を「意見20件未満」と誤読しないこと。"""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            previous = root / "data/verification/updates/topic/2026-08-08/report.json"
+            write_json(previous, {"new": 220, "opinions": 0})
+            self.assertEqual(
+                next_collection_date(
+                    root,
+                    "topic",
+                    "2026-08-15",
+                    {"new": 30, "opinions": 0, "opinion_flag_available": False},
+                ),
+                "2026-08-29",
+            )
+
     def test_collection_registry_update_does_not_advance_updated_at(self):
         text = (
             "themes:\n  topic:\n    collect_at: 2026-08-04\n    refresh_at:\n"

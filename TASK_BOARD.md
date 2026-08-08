@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-07（運用棚卸しで課題35〜37を追加）
+最終更新: 2026-08-08（課題38を追加）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -64,7 +64,7 @@
 **注意**: `sample_source` は全11テーマ「Yahooリアルタイム検索」で埋まっている。検索語（クエリ）は未記録なので、A-4 で表示するなら `sample_queries` フィールドの追加も併せて検討する
 
 ### 課題29: ページ内件数表示と sample_file の突き合わせ
-**状態**: 未着手（`WORK_PLAN_2026-08.md` A-4 で回収）
+**状態**: **完了（2026-08-08）**。全11テーマの論点件数を正典 `sample_file` から再現できる状態にし、`data/issue-counts/` を削除した
 **概要**: S1 で「分類済み投稿数」をトップに出す根拠を `sample_file` の実レコード数に統一したが、THEMES.yaml のコメント記載や各テーマページ内の件数表示と食い違うテーマがある。トップとテーマページで違う数字が出ると、S1 で解消した矛盾が別の場所で再発する
 **乖離の例**:
 
@@ -115,9 +115,11 @@
 bike は件数自体も食い違う（SM_RAW は収集総数268件、分類済みは181件）。`verify_theme_page.py` は SM_RAW を検査していないため exit 0 のまま通る。
 **発注書**: `configs/prompts/codex/20260807_elderly-bike-arena.md`（`build_elderly_arena.py` / `build_bike_arena.py` の新設と SM_RAW 再注入、検査追加。ブランチ `task/elderly-bike-arena`）
 
-**2026-08-08 辺野古対応済み**: henoko-student-accident は363件を意見性付きで再分類し、意見のみをマップと論点件数の母数に統一。`issue_counts.source` と凍結件数ファイルへの依存を解消した。
+**2026-08-08 対応済み（憲法改正）**: constitutional-amendment は646件を同一条件で再分類し、意見577件に統一した。`scripts/build_constitutional_arena.py` を新設して SM_RAW・論点別の声・スタンス・詳細表を同じ意見集合から再生成し、`issue_counts.source` と凍結ファイルを削除した。
 
-**残作業**: constitutional-amendment の1テーマ。同テーマの依存解消後、`data/issue-counts/` ディレクトリ全体の不要化を確認する。
+**2026-08-08 対応済み（辺野古）**: henoko-student-accident は363件を意見性付きで再分類し、意見のみをマップと論点件数の母数に統一。`issue_counts.source` と凍結件数ファイルへの依存を解消した。
+
+**残作業なし。** 最後の `data/issue-counts/henoko-student-accident.json` を削除し、`data/issue-counts/` ディレクトリごと不要になった。**課題29は完了。**
 **横展開の完了条件に追加（2026-08-02）**: constitutional / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
 
 ### 課題30: 論点カードの解説と実データの乖離
@@ -379,6 +381,20 @@ FAILED: 1 validation error(s)
 **やること**: 次のいずれか。①`--slug` 引数を足して対象テーマだけ書き換えられるようにする ②`adapter` 方式のテーマを `THEMES` から外し、adapter 側に一本化する ③実行前に「`THEMES` の更新回がページの現状より古くないか」を検査して止める。②が筋が良いが、adapter 側が潮目を生成できるか未確認。
 
 **暫定の回避策**: 実行後に必ず `git status --porcelain` を見て、対象外の `docs/*.html` が出ていたら `git restore` する。この手順は `.claude/skills/taxonomy-migration/SKILL.md` の「落とし穴」に記載済み。
+### 課題39: トップページのカウントダウンが毎日ズレる
+**状態**: 未着手（2026-08-08 に発生を確認。当日分は手動で直した）
+**発見**: 2026-08-08、日付が変わった直後の検査で検出
+
+**概要**: `docs/index.html` の更新バーに「次回更新: 8月9日（あと2日）」のように**残り日数が固定文字列で焼き込まれている**。日付が変わるたびに1日ずつズレ、`scripts/sync_portal_stats.py` を実行するまで公開サイトに誤った日数が出続ける。
+
+`scripts/verify_top_page.py` と `tests/test_portal_stats.py` は毎日この不一致で落ちるため、**「検査が落ちているのが平常」になって本当の異常を見逃す**危険がある。実際 2026-08-08 は、別作業の検証中にこれが混ざって原因切り分けが必要になった。
+
+**取りうる対応（どれか1つ）**:
+1. 残り日数の計算をページ内のJSに寄せ、HTMLには日付だけ焼き込む（表示は毎回正しくなる。既に `update-bar-days` という id はあるので差し替えやすい）
+2. 「あと◯日」の表示自体をやめ、日付だけ出す（いちばん単純）
+3. 毎日 `sync_portal_stats.py` を実行する運用にする（人手が増えるので非推奨）
+
+**推奨**: 1。既存の id をそのまま使えて、検査も安定する。
 
 ---
 

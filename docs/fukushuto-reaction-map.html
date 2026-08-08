@@ -277,12 +277,12 @@
   </div>
   <div class="tide-widget-summary" aria-live="polite">
     <span class="tide-widget-period">7月14日 → 7月26日</span>
-    <strong data-tide-headline>「法案反対」が7.3ポイント減少</strong>
+    <strong data-tide-headline>「法案賛成・推進」が4.4ポイント増加</strong>
   </div>
   <div class="tide-slope-wrap">
     <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="fukushuto-tide-widget-slope-title fukushuto-tide-widget-slope-desc">
       <title id="fukushuto-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="fukushuto-tide-widget-slope-desc">前回収集分238件と今回収集分237件の構成比を比較します。</desc>
+      <desc id="fukushuto-tide-widget-slope-desc">前回収集分234件と今回収集分228件の構成比を比較します。</desc>
       <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 7月14日</text>
       <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 7月26日</text>
       <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
@@ -291,13 +291,13 @@
     </svg>
   </div>
   <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：7月14日収集分のうち意見投稿／7月26日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで再分類しています。</p>
+  <p class="tide-widget-note">比較対象：7月14日収集分292件のうち意見投稿／7月26日収集分308件のうち意見投稿。同じ検索語セットで取得した投稿を、公開ページと同じ論点でAIが再分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
 </section>
 <script>
 (() => {
   const root = document.getElementById("fukushuto-tide-widget");
   if (!root) return;
-  const datasets = {"stance": {"max": 90, "headline": "「法案反対」が7.3ポイント減少", "rows": [{"label": "法案反対", "previous": 84.9, "current": 77.6}, {"label": "法案賛成・推進", "previous": 15.1, "current": 22.4}]}, "issue": {"max": 60, "headline": "「首都機能分散の必要性」が12.1ポイント増加", "rows": [{"label": "副首都法案の是非", "previous": 58.3, "current": 52.6}, {"label": "大阪・関西中心の問題", "previous": 19.7, "current": 13.2}, {"label": "首都機能分散の必要性", "previous": 11.4, "current": 23.5}, {"label": "財政・実現可能性", "previous": 10.6, "current": 10.7}]}};
+  const datasets = {"stance": {"max": 90, "headline": "「法案賛成・推進」が4.4ポイント増加", "rows": [{"label": "法案反対", "previous": 83.3, "current": 78.9}, {"label": "法案賛成・推進", "previous": 16.7, "current": 21.1}]}, "issue": {"max": 40, "headline": "「定義・中身」が15.1ポイント減少", "rows": [{"label": "定義・中身", "previous": 34.1, "current": 19.0}, {"label": "候補地", "previous": 24.9, "current": 26.0}, {"label": "都構想・維新", "previous": 18.9, "current": 26.4}, {"label": "防災・災害", "previous": 9.6, "current": 15.1}, {"label": "費用・財源", "previous": 4.8, "current": 6.2}, {"label": "優先順位", "previous": 7.6, "current": 7.4}]}};
   const svgGroup = root.querySelector("[data-tide-series]");
   const mobileRows = root.querySelector("[data-tide-mobile]");
   const headline = root.querySelector("[data-tide-headline]");
@@ -517,7 +517,7 @@
   </dl>
   <div class="article-trust-method">
     <h3>SNS投稿の収集方法</h3>
-    <p>Yahoo!リアルタイム検索で「副首都法案」「副首都 大阪」など複数の検索語を使い、公開されているX投稿を収集しました。ページの論点分析は、収集サンプルのうち分析対象とした意見229件を表示しています。</p>
+    <p>Yahoo!リアルタイム検索で「副首都法案」「副首都 大阪」など複数の検索語を使い、公開されているX投稿を収集しました。ページの論点分析は、収集した255件のうち意見と判定した229件を表示しています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
   </div>

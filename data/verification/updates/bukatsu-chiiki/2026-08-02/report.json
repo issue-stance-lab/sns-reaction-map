@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 222,
+  "duplicates": 63,
+  "new": 159,
+  "relevant": 159,
+  "opinions": 130,
+  "opinion_flag_available": true,
+  "candidate": 626,
+  "classification_errors": 0,
+  "status": "backfilled",
+  "topic": "bukatsu-chiiki",
+  "date": "2026-08-02",
+  "next_collect_at": "2026-08-09",
+  "note": "この更新回は report.json が保存されないまま完了していた。周期判定が「前回の記録なし」として動き、2回連続の判定が効かない状態だったため、同じディレクトリの raw.json / classified.json から数値を復元した（THEMES.yaml の notes に残る 222件取得・重複63件・新規159件・関連159件・意見130件と一致する）。timings と run_id は復元できないため持たない。"
+}

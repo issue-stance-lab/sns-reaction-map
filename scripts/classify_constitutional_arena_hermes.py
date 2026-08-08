@@ -20,6 +20,7 @@ ISSUES = {
     "国民投票・広告",
     "政党・発議手続き",
     "情報・議論の質",
+    "その他",
 }
 STANCES = {"改正推進", "慎重・反対", "手続き重視", "中立"}
 INTENSITIES = {"low", "medium", "high"}
@@ -42,17 +43,22 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
 - 引用先・批判対象・他人の発言への態度を、投稿者自身の改憲賛否と混同しない。
 - 「Aに反対する人を批判」はAへの反対ではない。二重否定と皮肉を読む。
 - 複数論点がある場合は、投稿の主眼をmain_issueにする。
-- 情報共有だけ、文脈不足、論点判定不能は「情報・議論の質」「中立」。
+- is_relevantは憲法改正、9条、緊急事態条項、国民投票、改憲発議、政党の改憲姿勢に関係すればtrue。
+- is_opinionは投稿者自身の評価・主張・懸念・提案が読み取れる場合だけtrue。
+- ニュース共有・見出しの転載・告知だけならis_relevant=true、is_opinion=false、stanceは「中立」。
+- 無関係ならis_relevant=false、is_opinion=false、main_issueは「その他」、stanceは「中立」。
+- 「情報・議論の質」は議論のされ方そのものを論じている意見だけに使う。単なる情報共有をここに入れない。
 - article_usableは記事の代表例として安全に使えるか。事実の正しさを保証する値ではない。
 - raw本文をsummaryへ転載せず、短く中立的に要約する。
 
-main_issue（完全一致6択）:
+main_issue（完全一致7択）:
 1. 改憲全般
 2. 9条・自衛隊
 3. 緊急事態条項
 4. 国民投票・広告
 5. 政党・発議手続き
 6. 情報・議論の質
+7. その他
 
 stance（完全一致4択）:
 - 改正推進
@@ -65,7 +71,7 @@ risk: low / medium / high
 confidence: 0から1
 
 JSON配列だけを返してください。各要素は必ず次のキーを持ち、idは入力と一致させてください:
-{{"id":0,"main_issue":"改憲全般","stance":"中立","intensity":"low","summary":"...","reason":"...","confidence":0.8,"article_usable":true,"risk":"low"}}
+{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"改憲全般","stance":"改正推進","intensity":"medium","summary":"...","reason":"...","confidence":0.8,"article_usable":true,"risk":"low"}}
 
 入力:
 {json.dumps(payload, ensure_ascii=False)}
@@ -92,8 +98,17 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
             raise ValueError(f"invalid intensity: {row.get('intensity')}")
         if row.get("risk") not in RISKS:
             raise ValueError(f"invalid risk: {row.get('risk')}")
-        row["confidence"] = max(0.0, min(1.0, float(row.get("confidence", 0))))
+        row["is_relevant"] = bool(row.get("is_relevant"))
+        row["is_opinion"] = bool(row.get("is_opinion"))
         row["article_usable"] = bool(row.get("article_usable"))
+        if not row["is_relevant"]:
+            row["is_opinion"] = False
+            row["main_issue"] = "その他"
+            row["stance"] = "中立"
+            row["article_usable"] = False
+        elif not row["is_opinion"]:
+            row["stance"] = "中立"
+        row["confidence"] = max(0.0, min(1.0, float(row.get("confidence", 0))))
         row.pop("id", None)
     return rows
 
@@ -121,8 +136,10 @@ def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
-    issue_counts = Counter(row["classification"]["main_issue"] for row in rows)
-    stance_counts = Counter(row["classification"]["stance"] for row in rows)
+    relevant = [row for row in rows if row["classification"]["is_relevant"]]
+    opinions = [row for row in relevant if row["classification"]["is_opinion"]]
+    issue_counts = Counter(row["classification"]["main_issue"] for row in opinions)
+    stance_counts = Counter(row["classification"]["stance"] for row in opinions)
     low_conf = [row for row in rows if float(row["classification"]["confidence"]) < 0.65]
     high_risk = [row for row in rows if row["classification"]["risk"] == "high"]
     unusable = [row for row in rows if not row["classification"]["article_usable"]]
@@ -130,13 +147,15 @@ def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
         "# 憲法改正論議 Hermes 論点アリーナ分類",
         "",
         f"- 分類件数: {len(rows)}",
+        f"- 関連投稿: {len(relevant)}",
+        f"- 意見投稿: {len(opinions)}",
         "- 注意: 取得したSNS投稿サンプルの分類であり、世論比率ではありません。",
         "",
-        "## 論点別件数",
+        "## 論点別件数（意見投稿）",
         "",
         *[f"- {key}: {issue_counts[key]}" for key in sorted(ISSUES)],
         "",
-        "## スタンス別件数",
+        "## スタンス別件数（意見投稿）",
         "",
         *[f"- {key}: {stance_counts[key]}" for key in sorted(STANCES)],
         "",
