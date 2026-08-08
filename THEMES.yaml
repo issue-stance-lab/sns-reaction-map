@@ -139,8 +139,10 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
     page_update_mode: migration # upgrade_constitutional_arena.py は生成済みページに再実行できない（ValueError）
-    collect_at: 2026-08-08
+    collect_at: 2026-08-15 # 新規220件（50件以上）のため今回だけ7日後。refresh_topic.py は is_opinion 非対応テーマで opinions=0 となり14日を返す
     refresh_at:
+    collect_mode: scheduled
+    last_refresh_attempt_at: 2026-08-08
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 224
