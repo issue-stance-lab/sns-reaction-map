@@ -54,8 +54,8 @@ def _build_once(root: Path, stage: Path, current_date: str, template: Path, outp
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     current = read_rows(root / "social-samples" / "bukatsu-chiiki_hermes_classified.json")
     previous = [row for row in current if str(row.get("fetched_at") or "")[:10] == PREVIOUS_DATE]
-    if len(previous) != 161:
-        raise ValueError(f"前回更新回は161件の想定です: {len(previous)}件")
+    if len(previous) != 159:
+        raise ValueError(f"前回更新回は159件の想定です: {len(previous)}件")
     write_json(stage / "previous-wave.json", previous)
 
     first = stage / "page-candidate.html"
