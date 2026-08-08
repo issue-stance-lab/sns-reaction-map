@@ -17,6 +17,7 @@ BUILDERS: tuple[tuple[str, list[str]], ...] = (
     ("koshitsu-tenpakai", [sys.executable, "scripts/build_koshitsu_arena.py"]),
     ("elderly-license-revocation", [sys.executable, "scripts/build_elderly_arena.py"]),
     ("constitutional-amendment", [sys.executable, "scripts/build_constitutional_arena.py"]),
+    ("fukushuto", [sys.executable, "scripts/build_fukushuto_arena.py"]),
     ("henoko-student-accident", ["node", "scripts/build_henoko_arena.mjs"]),
     ("consumption-tax-cut", [sys.executable, "scripts/build_consumption_tax_arena.py"]),
     ("takaichi", ["node", "scripts/upgrade_takaichi_arena.js"]),
