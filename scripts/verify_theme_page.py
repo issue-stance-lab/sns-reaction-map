@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -44,6 +46,7 @@ REQUIRED_ARGUMENT_FIELDS = (
     "sources",
 )
 REQUIRED_SIDE_FIELDS = ("label", "strongest", "basis")
+MANAGED_COUNT_CLASSES = {"explainer-count", "issue-count", "hermes-issue-count"}
 
 
 def _filled(value: Any) -> bool:
@@ -82,6 +85,152 @@ def _record_hashes(records: list[dict[str, Any]]) -> set[str]:
         except ValueError:
             continue
     return hashes
+
+
+def _field(record: dict[str, Any], name: str) -> Any:
+    nested = record.get("classification")
+    if isinstance(nested, dict) and name in nested:
+        return nested[name]
+    return record.get(name)
+
+
+def _arena_points(root: Path, page: str, theme: str) -> int | None:
+    """公開マップの点数を数える。外部JS化されたテーマも同じ定義を使う。"""
+    sources = [page]
+    external = root / "docs" / f"{theme}-arena-data.js"
+    if external.is_file():
+        sources.append(external.read_text(encoding="utf-8"))
+    pattern = re.compile(
+        r"(?:SM_RAW|const P|[A-Z_]*ARENA_(?:RAW|DATA))\s*=\s*\[(.*?)\];",
+        re.DOTALL,
+    )
+    for source in sources:
+        match = pattern.search(source)
+        if match:
+            return match.group(1).count("{")
+    return None
+
+
+def _metric_line(
+    theme: str,
+    metric: str,
+    base: int,
+    actual: int | None,
+    exceptions: dict[str, Any],
+) -> tuple[str, int]:
+    labels = {"issues": "論点", "map": "マップ", "stances": "賛否"}
+    label = labels[metric]
+    exception = exceptions.get(metric)
+    if actual == base:
+        if exception is not None:
+            return f"NG  {theme}: {label}の例外宣言が不要に残っている", 1
+        return f"OK  {label}の合計が母数と一致する（{base}件）", 0
+    if actual is None:
+        difference = base
+        actual_label = "計測不能"
+    else:
+        difference = base - actual
+        actual_label = f"{actual}件"
+    if not isinstance(exception, dict):
+        return f"NG  {theme}: {label}の合計が母数と一致しない（母数{base}件 / {label}{actual_label}）", 1
+    reason = str(exception.get("reason") or "").strip()
+    declared = exception.get("difference")
+    if reason and isinstance(declared, int) and declared == difference:
+        return (
+            f"OK  {label}の差分が設定に明記されている"
+            f"（母数{base}件 / {label}{actual_label} / 差{difference}件: {reason}）",
+            0,
+        )
+    return (
+        f"NG  {theme}: {label}の差分宣言が実際と一致しない"
+        f"（実際{difference}件 / 宣言{declared!r} / reason={'あり' if reason else 'なし'}）",
+        1,
+    )
+
+
+def verify_denominators(
+    theme: str,
+    config: dict[str, Any],
+    rows: list[dict[str, Any]],
+    page: str,
+    root: Path,
+) -> tuple[list[str], int]:
+    block = config.get("issue_counts")
+    if not isinstance(block, dict):
+        return [f"NG  {theme}: configs に issue_counts がありません"], 1
+    basis = str(block.get("basis") or "all")
+    if basis not in ("all", "opinion"):
+        return [f"NG  {theme}: issue_counts.basis が all / opinion ではありません: {basis}"], 1
+    selected = rows if basis == "all" else [row for row in rows if _field(row, "is_opinion") is True]
+    base = len(selected)
+    issue_total = sum(1 for row in selected if _filled(_field(row, "main_issue")))
+    stance_total = sum(1 for row in selected if _filled(_field(row, "stance")))
+    map_total = _arena_points(root, page, theme)
+    exceptions = block.get("denominator_exceptions") or {}
+    if not isinstance(exceptions, dict):
+        return [f"NG  {theme}: denominator_exceptions はオブジェクトである必要があります"], 1
+    lines = [f"OK  母数は issue_counts.basis={basis}（{base}件）"]
+    failures = 0
+    for metric, actual in (("issues", issue_total), ("map", map_total), ("stances", stance_total)):
+        line, failed = _metric_line(theme, metric, base, actual, exceptions)
+        lines.append(line)
+        failures += failed
+    return lines, failures
+
+
+def verify_page_count_spans(theme: str, page: str) -> tuple[list[str], int]:
+    """ページ全体で、管理対象外の span に書かれた件数を拒否する。"""
+    stale: list[str] = []
+    for match in re.finditer(r"<span(?P<attrs>[^>]*)>\s*(?P<count>\d+)件\s*</span>", page):
+        attrs = match.group("attrs")
+        class_match = re.search(r'class=["\']([^"\']*)["\']', attrs)
+        classes = set(class_match.group(1).split()) if class_match else set()
+        if not classes.intersection(MANAGED_COUNT_CLASSES):
+            line = page.count("\n", 0, match.start()) + 1
+            stale.append(f"L{line}: {match.group(0)}")
+    if stale:
+        return [f"NG  {theme}: ページ全体に管理対象外の件数が残っている: " + ", ".join(stale)], 1
+    return ["OK  ページ全体に管理対象外の件数が残っていない"], 0
+
+
+def verify_largest_badge(
+    theme: str, config: dict[str, Any], cards: list[dict[str, Any]], page: str
+) -> tuple[list[str], int]:
+    card_specs = (config.get("issue_counts") or {}).get("cards") or []
+    counts = {str(card["slug"]): int(card["count"]) for card in cards}
+    maximum = max(counts.values(), default=0)
+    emphasized = re.compile(r"(?:最大勢力|(?:論点|争点)\s*[1１](?!\d))")
+    checked: list[str] = []
+    failures = 0
+    for match in re.finditer(r'<span class="axis-kicker">(.*?)</span>\s*<h3>(.*?)</h3>', page, re.DOTALL):
+        badge = html_lib.unescape(re.sub(r"<[^>]+>", "", match.group(1))).strip()
+        if not emphasized.search(badge):
+            continue
+        heading = html_lib.unescape(re.sub(r"<[^>]+>", "", match.group(2))).strip()
+        candidates = []
+        for spec in card_specs:
+            labels = [str(value) for value in spec.get("main_issue") or []]
+            title_label = re.split(r"\s+[—–]—?\s+", str(spec.get("title") or ""), maxsplit=1)[0]
+            if title_label:
+                labels.append(title_label)
+            if any(label in heading or (len(label) >= 3 and label[:3] in heading) for label in labels):
+                candidates.append(str(spec.get("slug") or ""))
+        if len(candidates) != 1 or candidates[0] not in counts:
+            checked.append(f"NG  {theme}: 強調表示の論点を特定できない（{badge}: {heading}）")
+            failures += 1
+            continue
+        slug = candidates[0]
+        if counts[slug] != maximum:
+            checked.append(
+                f"NG  {theme}: {badge} が最大論点ではない"
+                f"（{slug}={counts[slug]}件 / 最大={maximum}件）"
+            )
+            failures += 1
+        else:
+            checked.append(f"OK  {badge} が最大論点に付いている（{slug}={maximum}件）")
+    if not checked:
+        checked.append("OK  最大勢力・論点1の強調表示はない")
+    return checked, failures
 
 
 def verify_issue_count_source(
@@ -355,6 +504,13 @@ def verify_theme_page(
     lines.extend(source_lines)
     failures += source_failures
 
+    lines.append("=== 母数の統一 ===")
+    denominator_lines, denominator_failures = verify_denominators(
+        theme, config, rows, page, root
+    )
+    lines.extend(denominator_lines)
+    failures += denominator_failures
+
     lines.append("=== 論点カード ===")
     try:
         cards = card_counts(theme, config, verification_file)
@@ -389,22 +545,15 @@ def verify_theme_page(
         lines.append(f"NG  論点カードの件数が分類結果と一致する: {', '.join(mismatched)}")
         failures += 1
 
-    # 生成した span 以外に同じ件数が書かれていると、次のデータ補充で片方だけ古くなる
-    stale = []
-    for block in re.finditer(r'<article class="explainer-card".*?</article>', page, re.DOTALL):
-        card_html = block.group(0)
-        for card in cards:
-            marker = f'id="{span_id(theme, str(card["slug"]))}"'
-            if marker not in card_html:
-                continue
-            stripped = re.sub(r'<span class="explainer-count"[^>]*>[^<]*</span>', "", card_html)
-            if re.search(rf'(?<!\d){card["count"]}件', stripped):
-                stale.append(f'{card["slug"]}（{card["count"]}件）')
-    if not stale:
-        lines.append("OK  ハードコードされた件数が残っていない")
-    else:
-        lines.append(f"NG  ハードコードされた件数が残っている: {', '.join(stale)}")
-        failures += 1
+    lines.append("=== ページ全体の件数表示 ===")
+    count_lines, count_failures = verify_page_count_spans(theme, page)
+    lines.extend(count_lines)
+    failures += count_failures
+
+    lines.append("=== 最大勢力バッジ ===")
+    badge_lines, badge_failures = verify_largest_badge(theme, config, cards, page)
+    lines.extend(badge_lines)
+    failures += badge_failures
 
     return lines, failures
 
@@ -431,6 +580,17 @@ def main() -> int:
                 theme_lines, theme_failures = verify_theme_page(theme)
                 lines.extend(theme_lines)
                 failures += theme_failures
+            rebuild = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "verify_builder_rebuildability.py")],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+            )
+            lines.append(rebuild.stdout.strip())
+            if rebuild.stderr.strip():
+                lines.append(rebuild.stderr.strip())
+            if rebuild.returncode:
+                failures += 1
             lines.append(f"=== 全テーマ結果: {len(parse_themes_yaml(THEMES_YAML))}件 / NG {failures}件 ===")
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}")

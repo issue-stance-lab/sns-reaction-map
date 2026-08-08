@@ -54,7 +54,21 @@
     "その他・分類保留": "other"
   },
   "issue_counts": {
-    "basis": "all",
+    "basis": "opinion",
+    "denominator_exceptions": {
+      "issues": {
+        "difference": 2,
+        "reason": "意見と判定した2件は main_issue が未分類のため"
+      },
+      "map": {
+        "difference": 2,
+        "reason": "main_issue が未分類の意見2件は論点マップに配置できないため"
+      },
+      "stances": {
+        "difference": 229,
+        "reason": "正典に共通の stance 分類が無く、賛否区分は未集計のため"
+      }
+    },
     "cards": [
       {
         "slug": "teigi",
