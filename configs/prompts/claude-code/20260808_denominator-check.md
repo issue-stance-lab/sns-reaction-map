@@ -70,21 +70,24 @@ cd ../isa-wt-check && tar xzf "$(ls -t /Volumes/HD-LE-B/issue-stance-private-bac
 python3 scripts/build_data_sheet.py && cat DATA_SHEET.md
 ```
 
-成功の形: **全11テーマ**で「意見 / 論点の合計 / 賛否の合計 / マップの点」が同じ数。
+**2026-08-08 時点で、4テーマの作業はすべて完了して main に入っている。**
+残るずれは次の2件だけで、いずれも1〜2件の端数。
 
-ずれているテーマが1つでもあれば、**そのテーマの作業が未完了**なので着手しない。
-どのテーマがどうずれているかを報告して止まる。
+```text
+ずれあり  2件
+  - 高市文春問題: 意見360 に対し マップの点359
+  - 副首都法案・副首都構想: 意見229 に対し 論点の合計227 / マップの点227
+```
 
-| テーマ | 担当した指示文 |
+**この2件は手順6で原因を調べる。** ここで無理に埋めようとしない。
+上の2件以外のずれが出ていたら、**何かが後退している**ので報告して止まる。
+
+| 完了したテーマ | 担当した指示文 |
 |---|---|
-| 辺野古 | `20260808_henoko-opinion-only.md` |
-| 皇室典範 | `20260808_arena-opinion-only.md` |
-| 高齢者免許・自転車 | `20260808_elderly-opinion-only.md` |
-| 憲法改正 | `20260808_constitutional-amendment-opinion.md` → `20260808_constitutional-arena.md` |
-
-> 副首都（意見229 / 論点227）と高市（意見360 / マップ359）に1〜2件の差がある場合、
-> 原因は `main_issue` が空のレコードである可能性が高い。**今回はこの差を無理に
-> 埋めようとせず、原因だけ調べて報告する。**
+| 辺野古 | `20260808_henoko-opinion-only.md`（PR #47） |
+| 皇室典範 | `20260808_arena-opinion-only.md`（PR #42） |
+| 高齢者免許・自転車 | `20260808_elderly-opinion-only.md`（PR #45） |
+| 憲法改正 | `20260808_constitutional-amendment-opinion.md`（PR #39）→ `20260808_constitutional-arena.md`（PR #46） |
 
 ### 4. `verify_theme_page.py` に検査を足す
 
@@ -118,6 +121,68 @@ for block in re.finditer(r'<article class="explainer-card".*?</article>', page, 
 検査する。自転車の青切符では、16件の論点4（免許制）に「最大勢力」が付いていた
 （実際の最大は38件の取締り強化賛成）。
 
+#### 4-4. 昇格の順序どおりに流したあと、ビルダーをもう一度流せることを検査する
+
+**この作業で3回続けて出た事故を止めるための検査。最も重要。**
+
+昇格処理（`refresh_topic.py --promote`）は、次の順でスクリプトを呼ぶ。
+
+```text
+テーマ別ビルダー → sync_issue_counts.py → apply_theme_trust.py → sync_portal_stats.py
+```
+
+ところが、テーマ別ビルダーと `apply_theme_trust.py` が**同じ1文を別の文言で書く**
+ことがある。後から走る `apply_theme_trust.py` が上書きするため、**次にビルダーを
+流すと差し替え対象を見失って止まる。**
+
+```text
+ERROR: 記事の検証方法: 1箇所だけ一致する必要があります（0箇所）   ← 高齢者免許
+NG    ページが正典から生成した内容と一致しません                    ← 憲法改正
+```
+
+**1回の昇格でページが再生成不能になる。** せっかく `manual` / `migration` から
+脱したテーマが、更新1回で元に戻ってしまう。皇室典範・高齢者免許・憲法改正の
+3テーマで実際に起きた（いずれも公開前に手作業で発見した）。
+
+検査の内容は次のとおり。ビルダーを持つ全テーマに対して行う。
+
+1. テーマ別ビルダーを実行する
+2. `sync_issue_counts.py` → `apply_theme_trust.py` を実行する
+3. **もう一度ビルダーの `--check` を実行し、差分なし（exit 0）であること**
+4. あわせて `apply_theme_trust.py` の2回目が `changed=0` であること
+
+3で差分が出たら、**そのテーマは1回の昇格で再生成不能になる。**
+原因はほぼ「1つの文に書き手が2人いる」ことなので、ビルダー側の書き込みを外し、
+`configs/theme-seo.json` と `apply_theme_trust.py` に一本化する
+（`build_elderly_arena.py` と `build_constitutional_arena.py` が対処済みの実例）。
+
+対象のビルダー:
+
+| テーマ | ビルダー |
+|---|---|
+| 生成AIと著作権 | `scripts/build_ai_copyright_arena.py` |
+| 部活動 | `scripts/build_bukatsu_arena.py` |
+| 皇室典範 | `scripts/build_koshitsu_arena.py` |
+| 高齢者免許 | `scripts/build_elderly_arena.py` |
+| 憲法改正 | `scripts/build_constitutional_arena.py` |
+| 辺野古 | `scripts/build_henoko_arena.mjs` |
+| 消費税減税 | `scripts/build_consumption_tax_arena.py` |
+| 高市 | `scripts/refresh_adapters/takaichi.py` 経由 |
+
+**まだ検査していないテーマ（生成AI・部活動・消費税・高市）で新たに見つかる
+可能性が高い。** 見つけたら同じ方針で直し、完了報告に列挙すること。
+
+**2026-08-08 に先行して確認した結果**（この検査を書くにあたって試した）:
+
+| ビルダー | 結果 |
+|---|---|
+| `build_ai_copyright_arena.py` | 差分なし。問題なし |
+| `build_bukatsu_arena.py` | 差分なし。問題なし |
+| `build_consumption_tax_arena.py` | **`--check` が無い**（`unrecognized arguments: --check`） |
+
+**`--check` を持たないビルダーには追加する。** 無いと「何度実行しても同じ結果になるか」を
+確かめられず、この検査の対象から外れてしまう。追加したビルダーは完了報告に列挙すること。
+
 ### 5. データ台帳が古くなったら落ちるようにする
 
 `tests/` に、`DATA_SHEET.md` が正典と一致していることを確認するテストを追加する。
@@ -149,6 +214,7 @@ python3 -m unittest discover -s tests -q && python3 scripts/verify_theme_page.py
 | いずれかのページの見出しに `<span>999件</span>` を手で足す | 4-2 の検査がNG |
 | いずれかのページのマップの点を1つ削る | 4-1 の検査がNG |
 | 「最大勢力」の表示を件数の少ない論点へ移す | 4-3 の検査がNG |
+| いずれかのビルダーが書く文を1つ、`theme-seo.json` 側と違う文言に変える | 4-4 の検査がNG |
 
 戻し方は、変更したファイルを**パス指定で**戻す。
 
@@ -162,8 +228,13 @@ git checkout -- docs/{壊したファイル}
 ### 8. 記録を残す
 
 - `TASK_BOARD.md` に、数え方を「意見のみ」に統一したことと、検査を固定したことを記録する
-- 課題29（ページ内件数表示と sample_file の突き合わせ）が完了していれば完了に更新する
-- `DATA_REFRESH.md` に「数えるのは意見のみ」という1行のルールを追記する
+- `DATA_REFRESH.md` に次の2行のルールを追記する
+  - **数えるのは意見だけ。** 収集件数と意見件数の両方をページに出す
+  - **1つの文の書き手は1つ。** ビルダーと `apply_theme_trust.py` が同じ場所を書かない
+- 4-4 で新たに見つかった「書き手が2人」のテーマがあれば、直した内容を記録する
+
+> 課題29（ページ内件数表示と sample_file の突き合わせ）は 2026-08-08 に完了済み。
+> `data/issue-counts/` はディレクトリごと削除された。ここでは触らない。
 
 ### 9. コミットする
 
@@ -173,6 +244,8 @@ git checkout -- docs/{壊したファイル}
 - `tests/`（追加したテスト）
 - `TASK_BOARD.md`
 - `DATA_REFRESH.md`
+- 4-4 で直したビルダー（`scripts/build_*.py` / `.mjs`）と `configs/theme-seo.json`
+- 直した結果で再生成された `docs/*.html` と `DATA_SHEET.md`
 
 push して main へPRを出す。
 
@@ -199,8 +272,10 @@ git worktree remove ../isa-wt-check
 
 ## 完了報告に含めること
 
-1. 手順3で全11テーマがそろっていたか（ずれていたテーマがあればその内容）
+1. 手順3で、ずれが想定の2件（高市・副首都）だけだったか
 2. 追加した検査の一覧
-3. **手順7で、3つの壊し方それぞれに対して検査が何と言ったか（実際の出力）**
-4. 副首都・高市の1〜2件の差の原因（調べた結果）
-5. オーナーへの依頼事項があれば1つだけ
+3. **手順7の4つの壊し方それぞれに対して、検査が何と言ったか（実際の出力）**
+4. **4-4 で「書き手が2人」だったテーマの一覧と、直した内容**
+5. `--check` が無くて追加したビルダーがあれば、その一覧
+6. 高市（1件差）・副首都（2件差）の原因（調べた結果）
+7. オーナーへの依頼事項があれば1つだけ
