@@ -88,15 +88,35 @@
 | ai-copyright | sample_file（全件） | ✅ 126/79/73/46/40/31 |
 | bukatsu-chiiki / consumption-tax-cut / school-nickname-ban / takaichi | sample_file（`is_opinion` のみ） | ✅ |
 | fukushuto | sample_file（全件） | ✅ |
-| bike-blue-ticket | `social-samples/bike_arena_hermes_classified.json`（sample_file と同じ181件・main_issue付き） | ❌ sample_file に main_issue がない |
+| bike-blue-ticket | sample_file（`classification.main_issue`） | ✅ 2026-08-07に解消（下記） |
 | **constitutional-amendment** | ページ内 `const P`（422件） | ❌ sample_file は646件（旧422件の分類が残っている） |
 | **henoko-student-accident** | `docs/henoko-arena-data.js`（265件） | ❌ sample_file は363件 |
 | **koshitsu-tenpakai** | ページ内 `SM_RAW` + JS の `arenaIssueOf()`（268件） | ❌ sample_file は347件。しかも公開中の h3 件数は `koshitsu-tenpakai_hermes_prev_synthetic.json` 由来 |
-| **elderly-license-revocation** | ページ内 `SM_RAW`（211件） | ❌ sample_file に main_issue がない。`original_category` は114件しか埋まっておらず、残り97件は保存されていないキーワードヒューリスティックで割り当てられている |
+| **elderly-license-revocation** | sample_file（`classification.main_issue`） | ✅ 2026-08-07に解消（下記） |
 
 **暫定措置**: 上記4テーマ分を `scripts/extract_arena_issue_assignment.py` でページから1度だけ取り出し、`data/issue-counts/{theme}.json` に固定した。件数併記と検査はこのファイルを読む（ページのHTMLは読まないので、spanを手で書き換えれば検査が落ちる）。
-**残作業**: 4テーマの次回データ補充で Hermes 分類をやり直し、`configs/{theme}-reaction-map.json` の `issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
-**横展開の完了条件に追加（2026-08-02）**: bike の `social-samples/bike_arena_hermes_classified.json` 依存と、constitutional / elderly / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
+
+**2026-08-07 対応済み（2テーマ）**: elderly-license-revocation（211件）と bike-blue-ticket（181件）を Hermes で再分類し、結果を正典 `sample_file` の各レコードへ `classification`（main_issue / stance / intensity / summary / reason / confidence / article_usable / risk）として格納した。あわせて次を実施。
+
+- 論点定義を `scripts/elderly_license_taxonomy.py` / `scripts/bike_blue_ticket_taxonomy.py` に切り出し、分類スクリプトと共有（`tests/test_*_taxonomy.py` で固定）
+- `configs/{theme}-reaction-map.json` の `issue_counts.source` を削除し、sample_file へ戻した
+- 凍結ファイル `data/issue-counts/elderly-license-revocation.json` を削除。bike が依存していた `social-samples/bike_arena_hermes_classified.json` への参照も解消（ファイル自体はGit管理外に残置）
+- 再分類前の2D分類のみの正典を `social-samples/{theme}_2d_classified_v1_2d_only.json` として保存
+- 再分類でラベルが動いたため、`THEMES.yaml` の `main_issue` 行の内訳も実数へ更新した（elderly 139→95 等）
+- 同日に main 側で ai-copyright（7論点・1,606件）と fukushuto も単一ソース化されたため、マージ後は `tests/test_taxonomy_continuity.py` の taxonomy不一致テーマが **0件** になった
+
+**2026-08-07 に判明した未解決点（elderly / bike）**: 論点カードの件数は正典へ揃ったが、**同じページのアリーナ散布データ `SM_RAW` のセクター `i` は旧分類のまま**で、同一ページ内に2つの内訳が並んでいる。
+
+| テーマ | SM_RAW の件数・内訳 | 正典（`classification.main_issue`） |
+|---|---|---|
+| elderly-license-revocation | 211件 / 139・24・20・9・7・12 | 211件 / 95・14・19・10・9・64 |
+| bike-blue-ticket | **268件** / 54・56・16・28・20・94 | 181件 / 38・29・14・14・18・68 |
+
+bike は件数自体も食い違う（SM_RAW は収集総数268件、分類済みは181件）。`verify_theme_page.py` は SM_RAW を検査していないため exit 0 のまま通る。
+**発注書**: `configs/prompts/codex/20260807_elderly-bike-arena.md`（`build_elderly_arena.py` / `build_bike_arena.py` の新設と SM_RAW 再注入、検査追加。ブランチ `task/elderly-bike-arena`）
+
+**残作業**: constitutional-amendment と henoko-student-accident の2テーマ。次回データ補充で Hermes 分類をやり直し、`issue_counts.source` を `sample_file` に戻して `data/issue-counts/` を削除する。それまでページ内の h3 件数と sample_file の件数はズレたままになる
+**横展開の完了条件に追加（2026-08-02）**: constitutional / henoko の `data/issue-counts/` 依存は、それぞれのadapter・ビルダー整備と同時に解消する。累積正典またはGit管理する仮名化検証データから論点件数を再現できることをadapter昇格条件とし、暫定ファイルだけを残さない。
 
 ### 課題30: 論点カードの解説と実データの乖離
 **状態**: 対応案②（件数の併記）を2026-08-02に全11テーマへ適用済み。①③は未着手
@@ -304,20 +324,25 @@ X固定ポストの本文（「世論調査ではありません」）と画像�
 ---
 
 ### 課題36: 放置された作業ツリー3本
-**状態**: 未着手（2026-08-07 の棚卸しで記録。稼働中セッションの有無を確認してから削除）
+**状態**: 完了（2026-08-08。3本とも削除済み。中間成果物4件は担当ブランチへ保全）
 **発見**: 2026-08-07、運用棚卸し
 
-**概要**: `LOOP.md` ⓪ は「作業が終わったら `git worktree remove` で片付ける」と定めているが、3本残っている。**3本ともブランチは main にマージ済み。**
+**概要**: `LOOP.md` ⓪ は「作業が終わったら `git worktree remove` で片付ける」と定めているが、3本残っていた。**3本ともブランチは main にマージ済み。**
 
-| ツリー | ブランチ | 未コミット |
-|---|---|---|
-| `.claude/worktrees/agent-ae24789032b473197` | task/henoko-page-v3 | あり。`docs/henoko-student-accident-reaction-map.html` を公開版1,051行 → 142行のスタブに壊す中断状態（投票セクション・シェア・やり直しボタンが全消え）。**採用してはいけない** |
-| `.claude/worktrees/competent-gates-92d0d7` | detached HEAD | なし |
-| `.worktrees/fukushuto-tide` | task/fukushuto-tide | 未追跡4件。**2026-08-07 に共有ツリーの `social-samples/` へ退避済み**（`fukushuto_hermes_prev_20260714_v2.json/.md`、`fukushuto_test_10.json`、`fukushuto_test_10_classified.json`） |
+| ツリー | ブランチ | 未コミット | 処置（2026-08-08） |
+|---|---|---|---|
+| `.claude/worktrees/agent-ae24789032b473197` | task/henoko-page-v3 | あり。`docs/henoko-student-accident-reaction-map.html` を公開版1,051行 → 142行のスタブに壊す中断状態（投票セクション・シェア・やり直しボタンが全消え）。**採用してはいけない** | 未コミット分を破棄して削除。origin/main の現行版が正 |
+| `.claude/worktrees/competent-gates-92d0d7` | detached HEAD | なし | 削除。コミット 5b69733 は `claude/competent-gates-92d0d7`（ローカル・origin 両方）に残存 |
+| `.worktrees/fukushuto-tide` | task/fukushuto-tide | 未追跡4件。2026-08-07 に共有ツリーの `social-samples/` へ退避済み（`fukushuto_hermes_prev_20260714_v2.json/.md`、`fukushuto_test_10.json`、`fukushuto_test_10_classified.json`） | 削除。4件は `task/fukushuto-tide` にコミットして push（3b3efef）。詳細は下記 |
 
-**やること**: 稼働中のセッションが使っていないことを確認してから `git worktree remove`。fukushuto は `configs/prompts/codex/20260807_fukushuto-tide-widget.md` の作業が進行中の可能性があるため、担当セッションに確認してから消す。
+**4件の正体（2026-08-08 に中身を確認）**: `configs/prompts/codex/20260807_fukushuto-tide-widget.md` の**手順1・手順2の成果物**であり、破棄してはいけないものだった。
 
-**なぜ放置が危険か**: 2026-08-07 に共有ツリーで事故が2件起きている（分類処理の参照ファイル消失、統合直後の正典1,606件が削除されかけ）。残ったツリーは同じ事故の温床になる。
+- `fukushuto_test_10.json` / `_classified.json` — 手順2の試験分類10件。入力は旧5論点で全件「副首都法案の是非」、出力は新7論点に分散
+- `fukushuto_hermes_prev_20260714_v2.json` / `.md` — 手順1の7/14分292件の再分類。旧版に対し stance が変わったのは29件
+
+**残作業は 2026-08-08 に完了**（`task/fukushuto-tide` の `433d89c`）。7/26分308件を再分類し、対照表でオーナー承認を得たうえで潮目ウィジェットを7論点へ移行した。同一画面での二重表示は解消済み。作業手順は `.claude/skills/taxonomy-migration/` にスキルとして残した。
+
+**なぜ放置が危険だったか**: 2026-08-07 に共有ツリーで事故が2件起きている（分類処理の参照ファイル消失、統合直後の正典1,606件が削除されかけ）。残ったツリーは同じ事故の温床になる。**今回も、未追跡ファイルを中身を見ずに「不要」と判断しかけた。中間成果物は必ず中身を確認してから処置すること。**
 
 ---
 
@@ -336,7 +361,23 @@ FAILED: 1 validation error(s)
 
 ---
 
-### 課題38: トップページのカウントダウンが毎日ズレる
+### 課題38: inject_tide_widget.py が公開中のページを古いデータへ巻き戻す
+**状態**: 未着手（2026-08-08 に副首都の作業中に発見。実害は出ていない＝実行直後に戻した）
+**発見**: 2026-08-08
+
+**概要**: `scripts/inject_tide_widget.py` は引数を取らず、実行すると `THEMES` の全8テーマの HTML を書き換える。ところが `adapter` 方式のテーマは `refresh_topic.py` 経由で更新されており、スクリプト内の `THEMES` に書かれた更新回のほうが**古い**。そのため実行すると、公開中のページが過去のデータへ戻る。
+
+| テーマ | 公開中 | 実行後（巻き戻り先） |
+|---|---|---|
+| ai-copyright | 7月26日 → 8月3日 | 7月12日 → 7月26日 |
+| takaichi | 7月26日 → 8月7日 | 7月12日 → 7月26日 |
+
+**なぜ危険か**: 1テーマの潮目を直すだけのつもりで実行すると、無関係な2テーマが黙って後退する。`git status` を見て戻さない限り、そのままコミットされて公開される。検査は通ってしまう（日付の新しさを見る検査がない）。
+
+**やること**: 次のいずれか。①`--slug` 引数を足して対象テーマだけ書き換えられるようにする ②`adapter` 方式のテーマを `THEMES` から外し、adapter 側に一本化する ③実行前に「`THEMES` の更新回がページの現状より古くないか」を検査して止める。②が筋が良いが、adapter 側が潮目を生成できるか未確認。
+
+**暫定の回避策**: 実行後に必ず `git status --porcelain` を見て、対象外の `docs/*.html` が出ていたら `git restore` する。この手順は `.claude/skills/taxonomy-migration/SKILL.md` の「落とし穴」に記載済み。
+### 課題39: トップページのカウントダウンが毎日ズレる
 **状態**: 未着手（2026-08-08 に発生を確認。当日分は手動で直した）
 **発見**: 2026-08-08、日付が変わった直後の検査で検出
 

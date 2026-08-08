@@ -8,20 +8,18 @@ import json
 import re
 import subprocess
 from collections import Counter
+import sys
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parent.parent
-ISSUES = {
-    "取締り強化賛成",
-    "インフラ整備優先",
-    "車道走行への不安",
-    "免許制要求",
-    "ルール曖昧・不信",
-    "その他",
-}
-STANCES = {"賛成（取締り強化支持）", "どちらでもない", "反対（インフラ・制度優先）"}
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.bike_blue_ticket_taxonomy import (
+    ISSUE_SET as ISSUES,
+    STANCE_SET as STANCES,
+)
 INTENSITIES = {"low", "medium", "high"}
 RISKS = {"low", "medium", "high"}
 
