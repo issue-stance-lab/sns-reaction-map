@@ -9,7 +9,7 @@ from pathlib import Path
 
 from scripts.refresh_bukatsu_pilot import (
     PAGE,
-    PREVIOUS_DATE,
+    previous_wave,
     read_rows,
     sync_candidate_issue_counts,
     validate_candidate,
@@ -21,7 +21,14 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _build_once(root: Path, stage: Path, current_date: str, template: Path, output: Path) -> None:
+def _build_once(
+    root: Path,
+    stage: Path,
+    previous_date: str,
+    current_date: str,
+    template: Path,
+    output: Path,
+) -> None:
     subprocess.run(
         [
             sys.executable,
@@ -33,7 +40,7 @@ def _build_once(root: Path, stage: Path, current_date: str, template: Path, outp
             "--current-batch",
             str(stage / "classified-wave.json"),
             "--previous-date",
-            PREVIOUS_DATE,
+            previous_date,
             "--current-date",
             current_date,
             "--html",
@@ -53,16 +60,14 @@ def _build_once(root: Path, stage: Path, current_date: str, template: Path, outp
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     current = read_rows(root / "social-samples" / "bukatsu-chiiki_hermes_classified.json")
-    previous = [row for row in current if str(row.get("fetched_at") or "")[:10] == PREVIOUS_DATE]
-    if len(previous) != 159:
-        raise ValueError(f"前回更新回は159件の想定です: {len(previous)}件")
+    previous_date, previous = previous_wave(current, current_date)
     write_json(stage / "previous-wave.json", previous)
 
     first = stage / "page-candidate.html"
     second = stage / "idempotence" / "page-candidate.html"
     second.parent.mkdir(parents=True, exist_ok=True)
-    _build_once(root, stage, current_date, PAGE, first)
-    _build_once(root, stage, current_date, first, second)
+    _build_once(root, stage, previous_date, current_date, PAGE, first)
+    _build_once(root, stage, previous_date, current_date, first, second)
     if _digest(first) != _digest(second):
         raise ValueError("部活動adapterは同じ候補の2回目実行で差分が出ました")
 

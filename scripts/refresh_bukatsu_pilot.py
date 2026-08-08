@@ -30,7 +30,6 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 SLUG = "bukatsu-chiiki"
-PREVIOUS_DATE = "2026-08-02"
 PAGE = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
 THEMES = ROOT / "THEMES.yaml"
 SEO_CONFIG = ROOT / "configs" / "theme-seo.json"
@@ -43,6 +42,35 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
     if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
         raise ValueError(f"JSON array of objects required: {path}")
     return rows
+
+
+def collection_date(row: dict[str, Any]) -> str:
+    return str(row.get("fetched_at") or "")[:10]
+
+
+def previous_collection_date(rows: list[dict[str, Any]], current_date: str) -> str:
+    """潮目の比較対象になる前回の収集日を、正典から決める。
+
+    今回より前でいちばん新しい収集日が前回にあたる。以前はここが日付のべた書きで、
+    更新のたびに手で書き換える必要があった。書き換え忘れても件数チェックは前々回の
+    件数で通ってしまい、1回分ずれた比較がそのまま公開される事故になっていた。
+    """
+    dates = {collection_date(row) for row in rows}
+    candidates = sorted(
+        date for date in dates if re.fullmatch(r"\d{4}-\d{2}-\d{2}", date) and date < current_date
+    )
+    if not candidates:
+        raise ValueError(f"{current_date} より前の収集日が正典にありません")
+    return candidates[-1]
+
+
+def previous_wave(rows: list[dict[str, Any]], current_date: str) -> tuple[str, list[dict[str, Any]]]:
+    """前回の収集日と、その日に収集した行を返す。"""
+    previous_date = previous_collection_date(rows, current_date)
+    wave = [row for row in rows if collection_date(row) == previous_date]
+    if not wave:
+        raise ValueError(f"前回更新回（{previous_date}）の行が正典にありません")
+    return previous_date, wave
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -307,16 +335,14 @@ def main() -> int:
     write_verification_file(
         stage / "classified-wave.json", stage / "classified-wave-verification.json"
     )
-    previous = [row for row in current if str(row.get("fetched_at") or "")[:10] == PREVIOUS_DATE]
-    if len(previous) != 159:
-        raise ValueError(f"expected 159 previous records, found {len(previous)}")
+    previous_date, previous = previous_wave(current, args.date)
     write_json(stage / "previous-wave.json", previous)
     run([
         sys.executable, str(ROOT / "scripts" / "update_bukatsu_tide.py"),
         "--classified", str(stage / "cumulative-candidate.json"),
         "--previous-batch", str(stage / "previous-wave.json"),
         "--current-batch", str(stage / "classified-wave.json"),
-        "--previous-date", PREVIOUS_DATE, "--current-date", args.date,
+        "--previous-date", previous_date, "--current-date", args.date,
         "--html", str(PAGE), "--output-html", str(stage / "page-candidate.html"),
     ], label="build page candidate")
     page = sync_candidate_issue_counts((stage / "page-candidate.html").read_text(encoding="utf-8"), candidate)
