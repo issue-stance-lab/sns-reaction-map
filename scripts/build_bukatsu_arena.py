@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """部活動の地域移行 HTMLにSNS反応マップを追加する変換スクリプト"""
+import argparse
 import json
 import re
 from pathlib import Path
@@ -8,6 +9,8 @@ try:
     from .build_reaction_map import arguments_html, load_research_conditions, update_existing_html
     from .bukatsu_taxonomy import ISSUE_INDEX, ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES
     from .sync_portal_stats import parse_themes_yaml
+    from .issue_card_counts import card_counts
+    from .sync_issue_counts import apply_counts
 except ImportError:  # python3 scripts/build_bukatsu_arena.py
     from build_reaction_map import (  # type: ignore[no-redef]
         arguments_html,
@@ -16,6 +19,8 @@ except ImportError:  # python3 scripts/build_bukatsu_arena.py
     )
     from bukatsu_taxonomy import ISSUE_INDEX, ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES  # type: ignore[no-redef]
     from sync_portal_stats import parse_themes_yaml  # type: ignore[no-redef]
+    from issue_card_counts import card_counts  # type: ignore[no-redef]
+    from sync_issue_counts import apply_counts  # type: ignore[no-redef]
 
 ROOT = Path(__file__).parent.parent
 HTML_PATH = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
@@ -584,21 +589,22 @@ def transform(html: str) -> str:
 
     return html
 
-
-def _sync_issue_counts() -> None:
-    """論点カードの件数を貼り直す。ここを外すと再ビルドで件数が消える。"""
-    import subprocess
-    import sys
-
-    subprocess.run(
-        [sys.executable, str(Path(__file__).resolve().parent / "sync_issue_counts.py"), "bukatsu-chiiki"],
-        check=True,
-    )
-
-
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
+    args = parser.parse_args()
     html = HTML_PATH.read_text()
     new_html = transform(html)
-    HTML_PATH.write_text(new_html)
-    _sync_issue_counts()
-    print(f"Done. Lines: {len(html.splitlines())} → {len(new_html.splitlines())}")
+    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    sample_file = parse_themes_yaml()["bukatsu-chiiki"]["sample_file"]
+    new_html = apply_counts(
+        new_html,
+        "bukatsu-chiiki",
+        card_counts("bukatsu-chiiki", config, sample_file),
+    )
+    changed = new_html != html
+    if changed and not args.check:
+        HTML_PATH.write_text(new_html)
+    print(("UPDATE" if changed else "OK") + f". Lines: {len(html.splitlines())} → {len(new_html.splitlines())}")
+    if args.check and changed:
+        raise SystemExit(1)

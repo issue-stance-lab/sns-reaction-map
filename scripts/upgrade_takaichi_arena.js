@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
+const check = args.includes('--check');
 function option(name, fallback) {
   const index = args.indexOf(name);
   if (index < 0) return fallback;
@@ -72,9 +73,7 @@ console.log('Counts by stance:', stanceCounts);
 
 // Write arena-data.js
 const arenaData = `window.TAKAICHI_ARENA_DATA = ${JSON.stringify(arenaPosts)};\n`;
-fs.mkdirSync(path.dirname(arenaPath), { recursive: true });
-fs.writeFileSync(arenaPath, arenaData, 'utf8');
-console.log(`Written: ${arenaPath}`);
+const currentArena = fs.existsSync(arenaPath) ? fs.readFileSync(arenaPath, 'utf8') : '';
 
 // Patch issue counts in the HTML
 let html = fs.readFileSync(htmlTemplatePath, 'utf8');
@@ -108,6 +107,14 @@ for (const def of issueDefs) {
     `$1${counts[def.key] ?? 0}件$2`,
   );
 }
-fs.mkdirSync(path.dirname(htmlPath), { recursive: true });
-fs.writeFileSync(htmlPath, html, 'utf8');
-console.log(`Patched counts in: ${htmlPath}`);
+const currentHtml = fs.existsSync(htmlPath) ? fs.readFileSync(htmlPath, 'utf8') : '';
+const changed = currentArena !== arenaData || currentHtml !== html;
+if (!check) {
+  fs.mkdirSync(path.dirname(arenaPath), { recursive: true });
+  fs.writeFileSync(arenaPath, arenaData, 'utf8');
+  fs.mkdirSync(path.dirname(htmlPath), { recursive: true });
+  fs.writeFileSync(htmlPath, html, 'utf8');
+}
+console.log(`${check ? (changed ? 'would update' : 'unchanged') : 'written'}: ${arenaPath}`);
+console.log(`${check ? (changed ? 'would update' : 'unchanged') : 'patched'}: ${htmlPath}`);
+if (check && changed) process.exitCode = 1;

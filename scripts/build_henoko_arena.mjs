@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const check = process.argv.includes("--check");
 const sourcePath = path.join(
   root,
   "social-samples/henoko/henoko_hermes_arena_classified.json",
@@ -57,7 +58,7 @@ const output =
   JSON.stringify(arenaRows) +
   ";\n";
 
-await writeFile(outputPath, output);
+const currentOutput = await readFile(outputPath, "utf8").catch(() => "");
 const page = await readFile(pagePath, "utf8");
 const inlineData =
   "/* HENOKO_ARENA_DATA_START */\nconst HENOKO_ARENA_RAW=" +
@@ -72,5 +73,10 @@ const updatedPage = page.replace(
   dataMarkerPattern,
   inlineData,
 );
-await writeFile(pagePath, updatedPage);
-console.log(`wrote ${arenaRows.length} arena points to ${outputPath}`);
+const changed = currentOutput !== output || updatedPage !== page;
+if (!check) {
+  await writeFile(outputPath, output);
+  await writeFile(pagePath, updatedPage);
+}
+console.log(`${check ? (changed ? "would update" : "unchanged") : "wrote"} ${arenaRows.length} arena points to ${outputPath}`);
+if (check && changed) process.exitCode = 1;

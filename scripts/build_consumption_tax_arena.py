@@ -58,6 +58,7 @@ def main() -> int:
         default=ROOT / "social-samples" / "consumption-tax-cut_hermes_arena_classified.json",
     )
     parser.add_argument("--output", type=Path, default=ROOT / "social-samples" / "consumption-tax-cut_arena_data.json")
+    parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
     args = parser.parse_args()
 
     all_rows = json.loads(args.input.read_text(encoding="utf-8"))
@@ -136,7 +137,11 @@ def main() -> int:
         "sm_raw_js": "const SM_RAW = [\n" + ",\n".join(sm_lines) + "\n];",
         "samples": samples,
     }
-    args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    rendered = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    before = args.output.read_text(encoding="utf-8") if args.output.is_file() else ""
+    changed = rendered != before
+    if changed and not args.check:
+        args.output.write_text(rendered, encoding="utf-8")
 
     print(f"分類 {len(all_rows)}件 / 関連 {len(relevant)}件 / 意見 {len(opinions)}件")
     print("\n論点別（意見）:")
@@ -147,8 +152,8 @@ def main() -> int:
     for stance in STANCE_ORDER:
         n = stance_counts.get(stance, 0)
         print(f"  {stance:20s} {n:4d} ({n / len(opinions) * 100:4.1f}%)")
-    print(f"\nwrote {args.output}")
-    return 0
+    print(f"\n{'would update' if args.check and changed else 'wrote' if changed else 'unchanged'} {args.output}")
+    return 1 if args.check and changed else 0
 
 
 if __name__ == "__main__":
