@@ -238,11 +238,20 @@ python3 -m unittest discover -s tests -q && python3 scripts/verify_top_page.py &
 通ったらコミットして push、main へPRを出す。コミット対象:
 
 - `scripts/classify_constitutional_arena_hermes.py`（分類器）
-- `data/verification/constitutional-amendment.json`（仮名化サマリ）
+- **`data/verification/updates/constitutional-amendment/<日付>/`（今回の更新回サマリ）**
+- `data/verification/constitutional-amendment.json`（仮名化した累積サマリ）
 - `DATA_SHEET.md`
 - `THEMES.yaml`
 
 `social-samples/` 配下は非公開なのでコミット対象に入らない（gitignore済み）。
+
+**`data/verification/updates/` を忘れないこと。** gitignore されていないGit管理対象で、
+収集の履歴を本文なしで残す唯一の場所。**作業ツリーを消すと失われる。**
+作業ツリーを片付ける前に次を実行して、何も出ないことを確認する。
+
+```bash
+git status --short data/verification/
+```
 
 ### 10. 片付ける
 

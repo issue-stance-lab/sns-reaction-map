@@ -64,6 +64,31 @@ python3 scripts/refresh_topic.py \
 
 更新回保存後にadapterを使って候補ページを2回生成し、冪等性、投票互換性、保護タグを検査する。全検査合格時だけ累積正典・ページ・台帳・SEO・トップ・sitemapを一括昇格する。昇格後にもう一度バックアップし、失敗時は公開側を昇格前へ戻す。
 
+## コミット対象
+
+収集した回は、次を必ずコミットする。**`data/verification/updates/` を忘れやすい。**
+
+| パス | 内容 | staging止まり | `--promote` |
+|---|---|---|---|
+| `data/verification/updates/<topic>/<date>/` | 仮名化した更新回サマリ（raw / classified / report） | ✅ | ✅ |
+| `data/verification/<topic>.json` | 仮名化した累積サマリ | — | ✅ |
+| `THEMES.yaml` | 期限・件数・取得期間 | ✅ | ✅ |
+| `DATA_SHEET.md` | データ台帳（`scripts/build_data_sheet.py` で再生成） | ✅ | ✅ |
+| `configs/theme-seo.json` / `docs/` 配下 | ページ・SEO・sitemap | — | ✅ |
+| `social-samples/` 配下 | 本文付きの正典・更新回 | ❌ gitignore | ❌ gitignore |
+
+`data/verification/updates/` は gitignore されていない**Git管理対象**で、収集の履歴を
+本文なしで残す唯一の場所。**作業ツリーを消すと失われる。**
+2026-08-08 の憲法改正で、発注書のコミット対象リストから漏れて未追跡のまま残った。
+
+確認コマンド（作業ツリーを消す前に実行する）:
+
+```sh
+git status --short data/verification/
+```
+
+成功の形: 何も出ない。`??` で更新回のディレクトリが出たらコミットしていない。
+
 ## 周期
 
 - 既定14日
