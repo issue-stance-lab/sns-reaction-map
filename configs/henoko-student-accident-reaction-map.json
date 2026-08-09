@@ -264,5 +264,62 @@
       "arena"
     ],
     "conclusion": "anzen"
+  },
+  "number_provenance": {
+    "sources": [
+      {
+        "path": "social-samples/henoko_hermes_prev_20260712.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」前回収集回の分類結果（scripts/inject_tide_widget.py の prev_file）"
+      },
+      {
+        "path": "social-samples/henoko_hermes_cur_20260726.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      },
+      {
+        "path": "social-samples/henoko_student_accident_2d_classified.json",
+        "reason": "旧2Dスタンスマップ（文科省判断への評価 × 議論の焦点）の出所。散布図の点と象限集計はこの356件から作られている"
+      }
+    ],
+    "regions": {
+      "cross_tab": [
+        "temp-bar-wrap",
+        "issue-sides",
+        "heat-table",
+        "explainer-card-desc",
+        "sm-stat-cards"
+      ],
+      "wave": [
+        "tide-card"
+      ],
+      "combined": [
+        "tide-card",
+        "insight-chip",
+        "axis-card"
+      ]
+    },
+    "allow": [
+      {
+        "value": 211,
+        "reason": "旧2D正典で stance_mext>0 かつ stance_focus>0（文科省支持×政治的観点）= 211件"
+      },
+      {
+        "value": 49,
+        "reason": "旧2D正典で stance_mext<0 かつ stance_focus>0（文科省批判×政治的観点）= 49件"
+      },
+      {
+        "value": 78,
+        "reason": "旧2D正典で stance_focus<0（安全・追悼重視／下方向）= 78件"
+      },
+      {
+        "value": 142,
+        "reason": "旧2D正典で emotional_intensity>=1.5（高感情）= 142件"
+      }
+    ]
   }
 }
