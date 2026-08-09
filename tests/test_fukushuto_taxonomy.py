@@ -91,14 +91,42 @@ class FukushutoTaxonomyTest(unittest.TestCase):
         referenced = [name for card in cards for name in card["main_issue"]]
         self.assertEqual(sorted(referenced), sorted(set(taxonomy.ISSUE_ORDER) - {taxonomy.OTHER}))
 
-    def test_canonical_labels_stay_inside_the_definition(self):
+    def _canonical_rows(self):
         theme = re.search(r"\n  fukushuto:\n(.*?)\n  \w", read("THEMES.yaml"), re.DOTALL)
         self.assertIsNotNone(theme)
         sample_file = re.search(r"sample_file: (\S+)", theme.group(1)).group(1)
-        rows = json.loads(read(*sample_file.split("/")))
-        labels = {row.get("main_issue") for row in rows if row.get("main_issue")}
-        self.assertTrue(labels)
+        return json.loads(read(*sample_file.split("/")))
+
+    def test_canonical_labels_stay_inside_the_definition(self):
+        """正典の論点ラベルが論点体系の中に収まっている。
+
+        2026-08-08 に正典を2D分類（main_issue がレコード直下）から Hermes 方式
+        （classification の下）へ入れ替えた。直下だけを見る書き方だと、入れ替えた瞬間に
+        ラベル0件になり「何も検査していないのに緑」になるため、両方の置き場所を見る。
+        """
+        labels = set()
+        for row in self._canonical_rows():
+            nested = row.get("classification")
+            source = nested if isinstance(nested, dict) else row
+            if source.get("main_issue"):
+                labels.add(source["main_issue"])
+        self.assertTrue(labels, "正典から main_issue を1件も読めていない")
         self.assertEqual(labels - taxonomy.ISSUES, set())
+
+    def test_canonical_stances_stay_inside_the_definition(self):
+        """賛否も論点体系の中に収まっている。
+
+        2D正典には stance が無く、ページの賛否は未集計だった（母数の例外宣言つき）。
+        Hermes 方式へ移した 2026-08-08 以降は3値が入るので、取り違えをここで止める。
+        """
+        stances = set()
+        for row in self._canonical_rows():
+            nested = row.get("classification")
+            source = nested if isinstance(nested, dict) else row
+            if source.get("stance"):
+                stances.add(source["stance"])
+        self.assertTrue(stances, "正典から stance を1件も読めていない")
+        self.assertEqual(stances - taxonomy.STANCES, set())
 
     def test_tide_widget_issues_match_the_definition(self):
         """潮目ウィジェットの論点モードが taxonomy と同じラベルを使っている。
