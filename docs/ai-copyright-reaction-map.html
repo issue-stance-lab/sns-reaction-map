@@ -805,10 +805,14 @@
     #issue-arena-section .theme-atlas-pilot>p{margin:0 0 12px;color:#596983;font-size:12px;line-height:1.7}
     #issue-arena-section .theme-atlas-row{display:grid;grid-template-columns:170px 1fr;align-items:center;min-height:38px}
     #issue-arena-section .theme-atlas-label{padding-right:10px;color:#172541;font-size:11px;font-weight:900;line-height:1.3}
-    #issue-arena-section .theme-atlas-track{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:5px;min-height:38px;padding:4px 7px;border-top:1px solid #dce4ef;border-bottom:1px solid #dce4ef;background:#fff}
-    #issue-arena-section .theme-atlas-issue{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;min-height:23px;padding:3px 7px;border:1px solid currentColor;border-radius:3px;font-size:10px;font-weight:900;white-space:nowrap}
-    #issue-arena-section .theme-atlas-issue.protect{color:#d94c2c;background:#fff7f3}#issue-arena-section .theme-atlas-issue.protect:before{content:"← "}#issue-arena-section .theme-atlas-issue.neutral{color:#66758c;background:#f8fafc}#issue-arena-section .theme-atlas-issue.neutral:before{content:"・ "}#issue-arena-section .theme-atlas-issue.promote{color:#075ef2;background:#f2f6ff}#issue-arena-section .theme-atlas-issue.promote:before{content:"→ "}
-    @media(max-width:520px){#issue-arena-section .theme-atlas-pilot{padding:15px 12px}#issue-arena-section .theme-atlas-row{grid-template-columns:1fr}#issue-arena-section .theme-atlas-label{padding:7px 0 3px}#issue-arena-section .theme-atlas-issue{font-size:11px;padding:3px 5px}}
+    #issue-arena-section .theme-atlas-label small{display:block;margin-top:2px;color:#7c8899;font-size:10px;font-weight:800}
+    #issue-arena-section .theme-atlas-track{position:relative;display:flex;align-items:center;justify-content:flex-end;min-height:38px;padding:4px 9px;border-top:1px solid #dce4ef;border-bottom:1px solid #dce4ef;background:#fff;overflow:hidden}
+    #issue-arena-section .theme-atlas-bar{position:absolute;top:0;left:0;height:100%;background:#e6edf8;border-right:2px solid #7f9fd0}
+    #issue-arena-section .theme-atlas-count{position:relative;z-index:1;color:#071a3d;font-size:13px;font-weight:900;font-variant-numeric:tabular-nums}
+    #issue-arena-section .theme-atlas-count small{margin-left:2px;color:#5d6c83;font-size:10px;font-weight:800}
+    #issue-arena-section .theme-atlas-row.is-other{margin-top:10px;padding-top:9px;border-top:1px dashed #ccd7e6}
+    #issue-arena-section .theme-atlas-row.is-other .theme-atlas-bar{background:#f0f2f6;border-right-color:#b3bccb}
+    @media(max-width:520px){#issue-arena-section .theme-atlas-pilot{padding:15px 12px}#issue-arena-section .theme-atlas-row{grid-template-columns:1fr}#issue-arena-section .theme-atlas-label{padding:7px 0 3px}}
   </style>
   <script src="topic-modern.js?v=11" defer></script>
   <script src="vote-config.js?v=1"></script>
@@ -1303,18 +1307,20 @@
 </script>
 
 <!-- ===== 問いの背骨 SNS反応マップ ===== -->
-<section class="polar-arena-section" id="issue-arena-section">
+<section class="polar-arena-section" id="issue-arena-section" data-arena-total="1347">
 <div id="issue-arena-inner">
 <div class="theme-atlas-pilot" aria-labelledby="theme-atlas-pilot-title">
   <h2 id="theme-atlas-pilot-title">生成AIと著作権 — 論点アトラス</h2>
-  <p>このテーマの論点を一覧します。チップの位置そのものに意味は持たせず、矢印と色で立場の傾向を示します。</p>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">学習データ・無断利用</span><span class="theme-atlas-track"><span class="theme-atlas-issue protect">無断学習</span><span class="theme-atlas-issue neutral">法的解釈</span><span class="theme-atlas-issue promote">学習は合法</span></span></div>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">クリエイター保護・権利</span><span class="theme-atlas-track"><span class="theme-atlas-issue protect">対価還元</span><span class="theme-atlas-issue neutral">作風の扱い</span><span class="theme-atlas-issue promote">創作支援</span></span></div>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">法制度・規制整備</span><span class="theme-atlas-track"><span class="theme-atlas-issue protect">許諾要件</span><span class="theme-atlas-issue neutral">文化庁整理</span><span class="theme-atlas-issue promote">競争力</span></span></div>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">技術競争・AI推進</span><span class="theme-atlas-track"><span class="theme-atlas-issue protect">規制懸念</span><span class="theme-atlas-issue neutral">安全対策</span><span class="theme-atlas-issue promote">技術革新</span></span></div>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">利用者モラル・倫理</span><span class="theme-atlas-track"><span class="theme-atlas-issue protect">クレジット</span><span class="theme-atlas-issue neutral">利用条件</span><span class="theme-atlas-issue promote">利便性</span></span></div>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">AI生成物の権利・創作性</span><span class="theme-atlas-track"><span class="theme-atlas-issue protect">権利帰属</span><span class="theme-atlas-issue neutral">創作性</span><span class="theme-atlas-issue promote">新しい表現</span></span></div>
-  <div class="theme-atlas-row"><span class="theme-atlas-label">その他</span><span class="theme-atlas-track"><span class="theme-atlas-issue neutral">分類保留</span></span></div>
+  <p>このテーマの論点と、それぞれに分類された意見の件数です。件数と並び順は下の図と同じ分類結果から生成しています。</p>
+  <!-- THEME_ATLAS_START -->
+<div class="theme-atlas-row"><span class="theme-atlas-label">学習データ・無断利用</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:100%"></span><strong class="theme-atlas-count">340<small>件</small></strong></span></div>
+<div class="theme-atlas-row"><span class="theme-atlas-label">クリエイター保護・権利</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:56%"></span><strong class="theme-atlas-count">190<small>件</small></strong></span></div>
+<div class="theme-atlas-row"><span class="theme-atlas-label">法制度・規制整備</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:79%"></span><strong class="theme-atlas-count">270<small>件</small></strong></span></div>
+<div class="theme-atlas-row"><span class="theme-atlas-label">技術競争・AI推進</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:16%"></span><strong class="theme-atlas-count">54<small>件</small></strong></span></div>
+<div class="theme-atlas-row"><span class="theme-atlas-label">利用者モラル・倫理</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:90%"></span><strong class="theme-atlas-count">307<small>件</small></strong></span></div>
+<div class="theme-atlas-row"><span class="theme-atlas-label">AI生成物の権利・創作性</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:24%"></span><strong class="theme-atlas-count">82<small>件</small></strong></span></div>
+<div class="theme-atlas-row is-other"><span class="theme-atlas-label">その他<small>分類保留</small></span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:31%"></span><strong class="theme-atlas-count">104<small>件</small></strong></span></div>
+  <!-- THEME_ATLAS_END -->
 </div>
 <div class="panel-title"><h2>問いから分かれる、1,347件の意見</h2><span>公開投稿を論点・立場・主張の強さで配置</span></div>
 <p class="map-caption">中央の線は、まだ答えの出ていない問いです。そこから左へ伸びるほど権利保護・規制を求める主張が強く、右へ伸びるほどAI活用・推進を支持する主張が強くなります。点を選ぶと元のXポストを開きます。</p>

@@ -54,7 +54,7 @@ class AiCopyrightAdapterTests(unittest.TestCase):
             first = (digest(page_path), digest(data_path))
             page = page_path.read_text(encoding="utf-8")
             self.assertIn(f"公開投稿 {len(candidate)}件", page)
-            self.assertIn(f">意見{opinions}件 | セクター=", page)
+            self.assertIn(f'data-arena-total="{opinions}"', page)
 
             command[command.index("--html-template") + 1] = str(page_path)
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)

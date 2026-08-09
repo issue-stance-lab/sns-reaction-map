@@ -41,6 +41,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ai_copyright_taxonomy import (  # noqa: E402
+    ARENA_LABELS,
     ISSUE_ORDER,
     OTHER,
     SHORT_ISSUE_LABELS,
@@ -230,6 +231,33 @@ def build_issue_bars(counts: Counter, total: int) -> str:
     return "\n".join(parts)
 
 
+def atlas_row(label: str, value: int, top: int, *, other: bool = False) -> str:
+    width = max(2, round(value / top * 100)) if value else 0
+    label_html = html.escape(label)
+    if other:
+        label_html += "<small>分類保留</small>"
+    return (
+        '<div class="theme-atlas-row{extra}"><span class="theme-atlas-label">{label}</span>'
+        '<span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:{width}%"></span>'
+        '<strong class="theme-atlas-count">{value}<small>件</small></strong></span></div>'
+    ).format(extra=" is-other" if other else "", label=label_html, width=width, value=value)
+
+
+def build_theme_atlas(counts: Counter) -> str:
+    """テーマ内の「論点アトラス」の行を分類結果から作る。
+
+    行ラベルと件数を手書きすると、論点体系を変えたときに追随しない。潮目ウィジェットが
+    旧5論点のまま1ヶ月気づかれなかったのと同じ壊れ方なので、ここでは書かずに生成する。
+    並びは ISSUE_ORDER と同じにして、下のアリーナのセクター順と揃える。
+    「その他」は論点ではなく分類保留なので、本体の論点と分けて最後に置く。
+    """
+    main = [name for name in ISSUE_ORDER if name != OTHER]
+    top = max((counts.get(name, 0) for name in main), default=0) or 1
+    rows = [atlas_row(ARENA_LABELS.get(name, name), counts.get(name, 0), top) for name in main]
+    rows.append(atlas_row(ARENA_LABELS.get(OTHER, OTHER), counts.get(OTHER, 0), top, other=True))
+    return "\n".join(rows)
+
+
 def build_stance_bars(counts: Counter) -> str:
     top = counts.most_common(1)[0][1] if counts else 1
     parts = []
@@ -293,9 +321,22 @@ def build(
     )
     page = replace_once(
         page,
-        r">(?:意見)?[\d,]+件 \| セクター=",
-        f">意見{opinion_total}件 | セクター=",
+        r'data-arena-total="[\d,]*"',
+        f'data-arena-total="{opinion_total}"',
+        "アリーナの母数",
+    )
+    # 再設計で入った見出しと代替テキストの件数。生成側を持たないと次の更新で古くなる
+    page = replace_once(
+        page,
+        r"問いから分かれる、[\d,]+件の意見",
+        f"問いから分かれる、{opinion_total:,}件の意見",
         "アリーナの見出し件数",
+    )
+    page = replace_once(
+        page,
+        r"の\d+つの論点と分類保留に[\d,]+件の意見を配置した図",
+        f"の{len(ISSUE_ORDER) - 1}つの論点と分類保留に{opinion_total:,}件の意見を配置した図",
+        "アリーナ図の代替テキスト",
     )
     page = set_insight(
         page,
@@ -318,6 +359,11 @@ def build(
         "学習データを許諾なしで使えるかが最大争点",
         issue_pct,
     )
+
+    marker = re.search(r"(<!-- THEME_ATLAS_START -->)(.*?)(<!-- THEME_ATLAS_END -->)", page, re.S)
+    if not marker:
+        raise BuildError("論点アトラスの位置（THEME_ATLAS_START / END）を特定できません")
+    page = page[: marker.start(2)] + "\n" + build_theme_atlas(issue_counts) + "\n  " + page[marker.end(2) :]
 
     marker = re.search(
         r'(<summary>分類別件数</summary>\s*<div class="details-body">\s*<div class="bar-list">)(.*?)(</div>\s*</div>\s*</details>)',

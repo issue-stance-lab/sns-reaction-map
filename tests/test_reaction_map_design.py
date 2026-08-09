@@ -27,13 +27,14 @@ class ReactionMapDesignPilotTests(unittest.TestCase):
             'id="arena-question-spine-pilot"',
             'class="arena-spine-layout"',
             'class="arena-spine-key"',
-            "問いから分かれる、1,347件の意見",
             "未解決の問い",
             "sideOf(p)",
             "const spread=side===0?",
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, self.source)
+        # 件数はビルダが生成するので、値ではなく形だけを検査する（データ更新で落とさない）
+        self.assertRegex(self.source, r"問いから分かれる、[\d,]+件の意見")
         self.assertNotIn('media="not all"', self.source)
         self.assertEqual(self.source.count("7つの論点"), 0)
         self.assertIn("6つの論点とXの声", self.source)
