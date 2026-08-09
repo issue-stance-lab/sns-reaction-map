@@ -194,5 +194,40 @@
         ]
       }
     ]
+  },
+  "number_provenance": {
+    "sources": [
+      {
+        "path": "social-samples/constitutional_amendment_classified_refreshed.json",
+        "selectors": [
+          "heat-table",
+          "details-body"
+        ],
+        "reason": "詳細データ（分類別件数・カテゴリ × 検索クエリ・カテゴリ × スタンス）の出所である旧1D分類"
+      }
+    ],
+    "regions": {
+      "cross_tab": [
+        "temp-bar-wrap",
+        "issue-sides",
+        "heat-table",
+        "explainer-card-desc",
+        "sm-stat-cards"
+      ],
+      "wave": [
+        "tide-card"
+      ],
+      "combined": [
+        "tide-card",
+        "insight-chip",
+        "axis-card"
+      ]
+    },
+    "allow": [
+      {
+        "value": 0,
+        "reason": "アリーナのセクター件数は SM_RAW から実行時に数える。ISSUES の n は置き字（例: scripts/build_elderly_arena.py の build_issues）"
+      }
+    ]
   }
 }

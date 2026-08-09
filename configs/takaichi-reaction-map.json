@@ -236,8 +236,45 @@
     ],
     "sync": [
       "headings",
-      "conclusion"
+      "conclusion",
+      "lead",
+      "note"
     ],
     "conclusion": "chusho"
+  },
+  "number_provenance": {
+    "sources": [
+      {
+        "path": "social-samples/takaichi_hermes_cur_20260726.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」前回収集回の分類結果（scripts/inject_tide_widget.py の prev_file）"
+      },
+      {
+        "path": "social-samples/updates/takaichi/2026-08-07/classified.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      }
+    ],
+    "regions": {
+      "cross_tab": [
+        "temp-bar-wrap",
+        "issue-sides",
+        "heat-table",
+        "explainer-card-desc",
+        "sm-stat-cards"
+      ],
+      "wave": [
+        "tide-card"
+      ],
+      "combined": [
+        "tide-card",
+        "insight-chip",
+        "axis-card"
+      ]
+    }
   }
 }
