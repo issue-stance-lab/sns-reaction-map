@@ -48,30 +48,7 @@ body { background: var(--bg) !important; color: var(--navy) !important; }
   text-decoration: none;
   white-space: nowrap;
 }
-.modern-logo-mark { position: relative; width: 36px; height: 36px; }
-.modern-logo-mark i {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px #fff;
-}
-.modern-logo-mark i:nth-child(1) { left: 13px; top: 1px; background: var(--blue); }
-.modern-logo-mark i:nth-child(2) { right: 1px; top: 8px; background: #2987ff; }
-.modern-logo-mark i:nth-child(3) { right: 3px; bottom: 4px; background: var(--orange); }
-.modern-logo-mark i:nth-child(4) { left: 13px; bottom: 0; background: var(--green); }
-.modern-logo-mark i:nth-child(5) { left: 0; bottom: 6px; background: var(--purple); }
-.modern-logo-mark i:nth-child(6) { left: 2px; top: 7px; background: var(--orange); }
-.modern-logo-mark::before,
-.modern-logo-mark::after {
-  content: '';
-  position: absolute;
-  inset: 7px;
-  border: 2px solid #bfd1ee;
-  border-radius: 50%;
-  transform: rotate(35deg);
-}
-.modern-logo-mark::after { transform: rotate(-35deg); }
+.modern-logo-mark { width: 36px; height: 36px; display: block; flex: 0 0 auto; }
 .modern-logo-text { font-size: 19px; font-weight: 900; letter-spacing: -.04em; }
 .modern-nav { margin-left: auto; display: flex; align-items: center; gap: 25px; }
 .modern-nav a {
