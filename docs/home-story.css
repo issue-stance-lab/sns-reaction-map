@@ -1,10 +1,10 @@
 .home-story {
-  --story-ink: #173c58;
-  --story-blue: #3975b9;
-  --story-orange: #df7843;
-  --story-green: #61a889;
-  --story-purple: #8a6bb1;
-  --story-paper: #fffdf8;
+  --story-ink: #071a3d;
+  --story-blue: #075ef2;
+  --story-orange: #ff5426;
+  --story-green: #36b8a3;
+  --story-purple: #9358e8;
+  --story-paper: #f8f6f3;
   overflow: clip;
   background: var(--story-paper);
   color: var(--story-ink);
@@ -111,7 +111,7 @@
   --art-scale: 1;
   --art-rotate: 0deg;
   --art-opacity: 1;
-  --image-inner-scale: 2;
+  --image-inner-scale: 1;
   --copy-x: 0px;
   --copy-y: 0px;
   --copy-opacity: 1;
@@ -278,8 +278,9 @@
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 42% 48% 44% 50% / 45% 43% 52% 48%;
-  mix-blend-mode: multiply;
+  border: 1px solid rgba(7, 26, 61, .08);
+  border-radius: 28px;
+  mix-blend-mode: normal;
   transform-origin: center;
   will-change: transform;
   animation: story-image-float 5.8s ease-in-out infinite;
@@ -519,7 +520,7 @@
 .site-footer {
   position: relative;
   overflow: hidden;
-  background: #174f49 !important;
+  background: #071a3d !important;
   padding-top: 260px !important;
 }
 
@@ -537,6 +538,22 @@
 .footer-bottom {
   position: relative;
   z-index: 1;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.footer-brand img {
+  width: 38px;
+  height: 38px;
+}
+
+.footer-brand h3 {
+  margin: 0;
 }
 
 @media (max-width: 760px) {
