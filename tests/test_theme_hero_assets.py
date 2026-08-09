@@ -10,6 +10,8 @@ PAGE = ROOT / "docs" / "ai-copyright-reaction-map.html"
 HERO = ROOT / "docs" / "images" / "topics" / "ai-copyright" / "ai-copyright-hero.webp"
 BIKE_PAGE = ROOT / "docs" / "bike-blue-ticket-reaction-map.html"
 BIKE_HERO = ROOT / "docs" / "images" / "topics" / "bike-blue-ticket" / "bike-blue-ticket-hero.webp"
+BUKATSU_PAGE = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
+BUKATSU_HERO = ROOT / "docs" / "images" / "topics" / "bukatsu-chiiki" / "bukatsu-hero.webp"
 
 
 class ThemeHeroAssetTests(unittest.TestCase):
@@ -52,6 +54,23 @@ class ThemeHeroAssetTests(unittest.TestCase):
 
         with Image.open(BIKE_HERO) as image:
             self.assertEqual(image.size, (1536, 1024))
+            self.assertEqual(image.format, "WEBP")
+
+    def test_bukatsu_page_uses_the_canonical_hero_and_keeps_protected_features(self):
+        html = BUKATSU_PAGE.read_text(encoding="utf-8")
+
+        self.assertGreaterEqual(html.count("bukatsu-hero.webp"), 2)
+        self.assertNotIn("bukatsu-hero-v2.webp", html)
+        self.assertIn('content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/bukatsu-chiiki.png"', html)
+        self.assertIn("G-K10S4YCZFH", html)
+        self.assertIn("ca-pub-2542211932832864", html)
+
+    def test_bukatsu_hero_has_web_sized_dimensions(self):
+        self.assertTrue(BUKATSU_HERO.exists())
+        self.assertLess(BUKATSU_HERO.stat().st_size, 200_000)
+
+        with Image.open(BUKATSU_HERO) as image:
+            self.assertEqual(image.size, (1672, 941))
             self.assertEqual(image.format, "WEBP")
 
 
