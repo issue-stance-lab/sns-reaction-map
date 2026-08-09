@@ -204,6 +204,30 @@ def build_details(rows: list[dict[str, Any]]) -> str:
     )
 
 
+def sync_vote_counts(page: str, counts: Counter[str]) -> str:
+    """投票の選択肢の説明文にある「（N件）」を論点別件数に合わせる。
+
+    選択肢そのもの（k）は触らない。選択肢の数が変わると choiceIdx の意味がずれ、
+    Edge Function の再デプロイと既存票の破棄が要る。ここで変えるのは説明文の中の件数だけ。
+    """
+    pattern = re.compile(
+        r"(\{k:'(?P<key>[^']+)',\s*icon:'[^']*',desc:'[^']*?)（\d[\d,]*件）(')"
+    )
+    # 投票の選択肢のキーは論点名と1文字違うものがある（代替交通の整備が先 ⇔ 代替交通整備）
+    aliases = {"代替交通の整備が先": "代替交通整備", "自主返納・支援充実": "自主返納支援"}
+
+    def replace(match: re.Match[str]) -> str:
+        key = aliases.get(match.group("key"), match.group("key"))
+        if key not in counts:
+            raise IssueCountError(f"投票の選択肢が論点にありません: {match.group('key')}")
+        return f"{match.group(1)}（{counts[key]}件）{match.group(3)}"
+
+    result, replaced = pattern.subn(replace, page)
+    if replaced < 1:
+        raise IssueCountError("投票の選択肢の説明文に件数が見つかりません")
+    return result
+
+
 def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags: int = 0) -> str:
     result, count = re.subn(pattern, lambda _: replacement, page, count=1, flags=flags)
     if count != 1:
@@ -236,6 +260,7 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
     # （2026-08-08 に「1箇所だけ一致する必要があります（0箇所）」で実際に発生）。
     # 1つの文の書き手は1つに保つ。
     page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>', f'<span class="conclusion-count"><b>{counts[ISSUE_ORDER[0]]}</b>件</span>', "議論の中心")
+    page = sync_vote_counts(page, counts)
     page = replace_once(page, r'<section class="stats insight-stats".*?</section>', build_stats(rows, collected), "注目ポイント", flags=re.S)
     page = replace_once(page, r'<section class="panel" id="issue-blocks-section">.*?</section>', build_issue_blocks(rows), "論点別サマリー", flags=re.S)
     page = replace_once(page, r'<section class="panel conflict-panel">.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)

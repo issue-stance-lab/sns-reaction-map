@@ -351,5 +351,51 @@
       "arena"
     ],
     "conclusion": "gakushu"
+  },
+  "number_provenance": {
+    "sources": [
+      {
+        "path": "social-samples/ai-copyright_classified.json",
+        "selectors": [
+          "heat-table",
+          "details-body"
+        ],
+        "reason": "詳細データ（分類別件数・カテゴリ × 検索クエリ・カテゴリ × スタンス）の出所である旧1D分類"
+      },
+      {
+        "path": "social-samples/ai-copyright_hermes_prev_20260712.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」前回収集回の分類結果（scripts/inject_tide_widget.py の prev_file）"
+      },
+      {
+        "path": "social-samples/ai-copyright_hermes_cur_20260726.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      }
+    ],
+    "regions": {
+      "cross_tab": [
+        "temp-bar-wrap",
+        "issue-sides",
+        "heat-table",
+        "explainer-card-desc",
+        "sm-stat-cards"
+      ],
+      "combined": [
+        "tide-card",
+        "insight-chip",
+        "axis-card"
+      ]
+    },
+    "allow": [
+      {
+        "value": 24938,
+        "reason": "文化庁「AIと著作権に関する考え方について」素案への意見募集の提出件数（一次情報）"
+      }
+    ]
   }
 }

@@ -24,6 +24,16 @@
 `configs/{テーマ}-reaction-map.json` の `issue_counts.sync` に `headings` / `nav` / `conclusion` /
 `arena` を書くと、その4か所も同じ数字で揃う。ビルダがその場所を書くテーマ（副首都・消費税・皇室・
 憲法改正・高齢者）は `sync` に入れない。ずれは `python3 -m unittest tests.test_issue_count_sync` で落ちる。
+`lead`（リード文「分析対象となった意見N件をAIがK つの論点に整理しました」）と
+`note`（「※ SNS投稿N件をAIが分類した結果です」）も同じ仕組みで書ける。
+
+**ページに出る数字は、すべて正典から導けるか、理由付きで登録されていること。**
+場所を列挙するのをやめ、`python3 scripts/verify_number_provenance.py` が
+ページ（と同ディレクトリのJS）から `N件` と アリーナのセクター `n:N` を総当たりで拾い、
+正典から導けない数字が1つでもあれば落とす。新しい表示場所が増えても、同期し忘れれば必ず落ちる。
+引用・一次情報は `configs/{テーマ}-reaction-map.json` の
+`number_provenance.exclude_selectors` で領域ごと外し、それ以外の例外は
+`number_provenance.allow` に**値と理由をセットで**書く。理由なしでは登録できない。
 
 
 本文付き正典と更新回履歴の正規保存先は、次の外付けディスク上のディレクトリとする。

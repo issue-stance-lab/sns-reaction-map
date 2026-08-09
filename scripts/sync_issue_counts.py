@@ -16,6 +16,8 @@
     nav        … <nav class="quadrant-nav"><a href="#{anchor}">ラベル N</a>
     conclusion … 「議論の中心」の <span class="conclusion-count"><b>N</b>件</span>
     arena      … アリーナのセクター配列 const ISSUES=[{k:'ラベル', n:N}]
+    lead       … リード文「分析対象となった意見N件をAIがK つの論点に整理しました」
+    note       … 「※ SNS投稿N件をAIが分類した結果です」（Nは正典の全件数）
 
 `conclusion` は最大件数の論点を指す見出しなので、`conclusion` に指定したカードが
 最大でなくなったら書き換えず失敗する（見出しの文章を人が直す必要があるため）。
@@ -39,12 +41,20 @@ import sys
 from pathlib import Path
 
 try:
-    from .issue_card_counts import IssueCountError, card_counts, other_count, span_html, span_id
+    from .issue_card_counts import (
+        IssueCountError,
+        card_counts,
+        load_records,
+        other_count,
+        span_html,
+        span_id,
+    )
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
 except ImportError:  # python3 scripts/sync_issue_counts.py
     from issue_card_counts import (  # type: ignore[no-redef]
         IssueCountError,
         card_counts,
+        load_records,
         other_count,
         span_html,
         span_id,
@@ -52,7 +62,7 @@ except ImportError:  # python3 scripts/sync_issue_counts.py
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
 
 
-SYNC_TARGETS = ("headings", "nav", "conclusion", "arena")
+SYNC_TARGETS = ("headings", "nav", "conclusion", "arena", "lead", "note")
 
 
 STYLE_MARKER = "/* issue-count: scripts/sync_issue_counts.py */"
@@ -194,6 +204,48 @@ def apply_arena(page: str, theme: str, cards: list[dict[str, object]], other: in
     return pattern.sub(replace, page)
 
 
+LEAD_RE = re.compile(r"(分析対象となった意見)([\d,]+)(件をAIが)(\d+)(つの論点に整理しました)")
+NOTE_RE = re.compile(r"(SNS投稿)([\d,]+)(件をAIが分類した結果です)")
+
+
+def apply_lead(page: str, theme: str, cards: list[dict[str, object]], other: int) -> str:
+    """リード文「分析対象となった意見N件をAIがK つの論点に整理しました」を合わせる。
+
+    N はカードの件数の合計。「その他」を1論点として数えているページ（K がカード枚数+1）
+    では「その他」も足す。K が合わないときは書き換えずに失敗する。論点の数が変わったのなら、
+    カードの並びと投票の選択肢を先に直す必要があるため。
+    """
+    match = LEAD_RE.search(page)
+    if match is None:
+        raise IssueCountError(f"{theme}: リード文が見つかりません（issue_counts.sync の lead）")
+    listed = int(match.group(4))
+    if listed == len(cards):
+        total = sum(int(card["count"]) for card in cards)
+    elif listed == len(cards) + 1:
+        total = sum(int(card["count"]) for card in cards) + other
+    else:
+        raise IssueCountError(
+            f"{theme}: リード文の論点数が {listed} で、カード{len(cards)}枚と合いません。"
+            "論点体系が変わっています（taxonomy-migration の手順へ）"
+        )
+    page, replaced = LEAD_RE.subn(
+        lambda m: f"{m.group(1)}{total:,}{m.group(3)}{m.group(4)}{m.group(5)}", page, count=1
+    )
+    if replaced != 1:
+        raise IssueCountError(f"{theme}: リード文が1つだけ必要です（{replaced}個）")
+    return page
+
+
+def apply_note(page: str, theme: str, total: int) -> str:
+    """「※ SNS投稿N件をAIが分類した結果です」を、正典の全件数に合わせる。"""
+    page, replaced = NOTE_RE.subn(
+        lambda m: f"{m.group(1)}{total:,}{m.group(3)}", page
+    )
+    if replaced < 1:
+        raise IssueCountError(f"{theme}: 「SNS投稿N件をAIが分類した結果です」が見つかりません")
+    return page
+
+
 def sync_theme(theme: str, *, check: bool = False) -> tuple[str, bool]:
     themes = parse_themes_yaml(THEMES_YAML)
     if theme not in themes:
@@ -228,6 +280,11 @@ def sync_theme(theme: str, *, check: bool = False) -> tuple[str, bool]:
         after = apply_conclusion(after, theme, cards, str(block.get("conclusion") or ""))
     if "arena" in sync:
         after = apply_arena(after, theme, cards, other_count(theme, config, sample_file))
+    if "lead" in sync:
+        after = apply_lead(after, theme, cards, other_count(theme, config, sample_file))
+    if "note" in sync:
+        block_source = str(block.get("source") or sample_file or "")
+        after = apply_note(after, theme, len(load_records(block_source)))
 
     changed = after != before
     if changed and not check:

@@ -326,5 +326,96 @@
         ]
       }
     ]
+  },
+  "number_provenance": {
+    "sources": [
+      {
+        "path": "social-samples/elderly-license-revocation_classified.json",
+        "selectors": [
+          "heat-table",
+          "details-body"
+        ],
+        "reason": "詳細データ（分類別件数・カテゴリ × 検索クエリ・カテゴリ × スタンス）の出所である旧1D分類"
+      },
+      {
+        "path": "social-samples/elderly-license-revocation_hermes_prev_20260712.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」前回収集回の分類結果（scripts/inject_tide_widget.py の prev_file）"
+      },
+      {
+        "path": "social-samples/elderly-license-revocation_hermes_cur_20260726.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      }
+    ],
+    "regions": {
+      "cross_tab": [
+        "temp-bar-wrap",
+        "issue-sides",
+        "heat-table",
+        "explainer-card-desc",
+        "sm-stat-cards"
+      ],
+      "combined": [
+        "tide-card",
+        "insight-chip",
+        "axis-card"
+      ]
+    },
+    "exclude_selectors": [
+      "note-panel"
+    ],
+    "allow": [
+      {
+        "value": 0,
+        "reason": "アリーナのセクター件数は SM_RAW から実行時に数える。ISSUES の n は置き字（例: scripts/build_elderly_arena.py の build_issues）"
+      },
+      {
+        "value": 28,
+        "reason": "旧2Dカテゴリ × 検索クエリ／スタンスの詳細データ表。2026-07-01 に「その他・分類保留」を再分類したあとの表で、当時の中間状態が残っており elderly-license-revocation_classified.json から再現できない96セル中6セルのうちの1つ。表そのものを現行論点へ作り直すまでの暫定（TASK_BOARD 課題）",
+        "selectors": [
+          "heat-table"
+        ]
+      },
+      {
+        "value": 13,
+        "reason": "旧2Dカテゴリ × 検索クエリ／スタンスの詳細データ表。2026-07-01 に「その他・分類保留」を再分類したあとの表で、当時の中間状態が残っており elderly-license-revocation_classified.json から再現できない96セル中6セルのうちの1つ。表そのものを現行論点へ作り直すまでの暫定（TASK_BOARD 課題）",
+        "selectors": [
+          "heat-table"
+        ]
+      },
+      {
+        "value": 6,
+        "reason": "旧2Dカテゴリ × 検索クエリ／スタンスの詳細データ表。2026-07-01 に「その他・分類保留」を再分類したあとの表で、当時の中間状態が残っており elderly-license-revocation_classified.json から再現できない96セル中6セルのうちの1つ。表そのものを現行論点へ作り直すまでの暫定（TASK_BOARD 課題）",
+        "selectors": [
+          "heat-table"
+        ]
+      },
+      {
+        "value": 68,
+        "reason": "旧2Dカテゴリ × 検索クエリ／スタンスの詳細データ表。2026-07-01 に「その他・分類保留」を再分類したあとの表で、当時の中間状態が残っており elderly-license-revocation_classified.json から再現できない96セル中6セルのうちの1つ。表そのものを現行論点へ作り直すまでの暫定（TASK_BOARD 課題）",
+        "selectors": [
+          "heat-table"
+        ]
+      },
+      {
+        "value": 19,
+        "reason": "旧2Dカテゴリ × 検索クエリ／スタンスの詳細データ表。2026-07-01 に「その他・分類保留」を再分類したあとの表で、当時の中間状態が残っており elderly-license-revocation_classified.json から再現できない96セル中6セルのうちの1つ。表そのものを現行論点へ作り直すまでの暫定（TASK_BOARD 課題）",
+        "selectors": [
+          "heat-table"
+        ]
+      },
+      {
+        "value": 60,
+        "reason": "旧2Dカテゴリ × 検索クエリ／スタンスの詳細データ表。2026-07-01 に「その他・分類保留」を再分類したあとの表で、当時の中間状態が残っており elderly-license-revocation_classified.json から再現できない96セル中6セルのうちの1つ。表そのものを現行論点へ作り直すまでの暫定（TASK_BOARD 課題）",
+        "selectors": [
+          "heat-table"
+        ]
+      }
+    ]
   }
 }
