@@ -27,6 +27,10 @@ class ImagePolicyTests(unittest.TestCase):
         for value in required:
             with self.subTest(value=value):
                 self.assertIn(value, source)
+        self.assertIn('<link rel="stylesheet" href="site-tokens.css">', source)
+        self.assertIn('<link rel="icon" href="favicon.ico">', source)
+        self.assertIn('<p class="lead">', source)
+        self.assertNotIn("linear-gradient", source)
 
     def test_every_public_html_links_to_policy(self):
         missing = []
