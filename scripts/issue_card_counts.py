@@ -108,9 +108,31 @@ def card_counts(theme: str, config: dict[str, Any], sample_file: str | None) -> 
                 "slug": slug,
                 "title": title,
                 "count": sum(counts[str(issue)] for issue in issues),
+                # 論点セクションと論点ナビが使うアンカー。ページ側のidがslugと違う
+                # テーマがあるので、違う場合だけ configs に anchor を書く。
+                "anchor": str(card.get("anchor") or f"issue-{slug}"),
+                # アリーナのセクター配列 ISSUES のキー。表示名が分類ラベルと
+                # 違うテーマ（例: データ「技術競争・推進」／表示「技術競争・AI推進」）がある。
+                "arena_label": str(card.get("arena_label") or "").strip(),
             }
         )
     return resolved
+
+
+def other_count(theme: str, config: dict[str, Any], sample_file: str | None) -> int:
+    """カードに載らない意見（「その他」）の件数を返す。"""
+    block = config.get("issue_counts")
+    if not isinstance(block, dict):
+        raise IssueCountError(f"{theme}: configs に issue_counts がありません")
+    source = str(block.get("source") or sample_file or "")
+    counts = count_by_issue(load_records(source), str(block.get("basis") or "all"))
+    carded = {
+        str(issue)
+        for card in block.get("cards", [])
+        if isinstance(card, dict)
+        for issue in (card.get("main_issue") or [])
+    }
+    return sum(value for name, value in counts.items() if name not in carded)
 
 
 def span_id(theme: str, slug: str) -> str:

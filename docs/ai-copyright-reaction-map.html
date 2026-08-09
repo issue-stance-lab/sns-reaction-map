@@ -812,7 +812,7 @@
       <p class="question-line">創作の権利を守るため、生成AIにはどこまでルールが必要か？</p>
       <p class="lead">収集したSNS投稿のうち、分析対象となった意見1347件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
       <div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>
-        <li class="conclusion-focus"><span class="conclusion-count"><b>126</b>件</span><strong>学習データの無断利用を、どこまで認めるのか</strong><span class="conclusion-detail">許諾なしの学習は権利侵害か、合法な技術利用かに議論が集中しています。</span></li>
+        <li class="conclusion-focus"><span class="conclusion-count"><b>340</b>件</span><strong>学習データの無断利用を、どこまで認めるのか</strong><span class="conclusion-detail">許諾なしの学習は権利侵害か、合法な技術利用かに議論が集中しています。</span></li>
       </ul></div>
     </div>
   </section>
@@ -1280,13 +1280,13 @@
 (function(){
   'use strict';
   const ISSUES=[
-    {k:'学習データ・無断利用',   n:126},
-    {k:'クリエイター保護・権利', n:46},
-    {k:'法制度・規制整備',       n:79},
-    {k:'技術競争・AI推進',       n:40},
-    {k:'利用者モラル・倫理',     n:73},
-    {k:'AI生成物の権利・創作性', n:31},
-    {k:'その他',                 n:274}
+    {k:'学習データ・無断利用',   n:340},
+    {k:'クリエイター保護・権利', n:190},
+    {k:'法制度・規制整備',       n:270},
+    {k:'技術競争・AI推進',       n:54},
+    {k:'利用者モラル・倫理',     n:307},
+    {k:'AI生成物の権利・創作性', n:82},
+    {k:'その他',                 n:104}
   ];
   const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=244;
   const PAD_DEG=2.5;
@@ -1429,11 +1429,11 @@
 
 <section class="panel conflict-panel" id="issue-voices-section">
 <div class="panel-title"><h2>6つの論点とXの声</h2><span>論点ごとの賛否分布と代表的な投稿</span></div>
-<nav class="quadrant-nav"><a href="#issue-gakushu">学習データ 126</a><a href="#issue-hoseibi">法制度 79</a><a href="#issue-moraru">利用者モラル 73</a><a href="#issue-creator">クリエイター保護 46</a><a href="#issue-gijutsu">技術競争 40</a><a href="#issue-seiseibutsu">AI生成物 31</a></nav>
+<nav class="quadrant-nav"><a href="#issue-gakushu">学習データ 340</a><a href="#issue-hoseibi">法制度 270</a><a href="#issue-moraru">利用者モラル 307</a><a href="#issue-creator">クリエイター保護 190</a><a href="#issue-gijutsu">技術競争 54</a><a href="#issue-seiseibutsu">AI生成物 82</a></nav>
 
 <article class="issue-block" id="issue-gakushu">
 <div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span>
-<h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">126件</span></h3>
+<h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">340件</span></h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>学習データ問題における規制論調</span><span>規制賛成 93 / 中立 5 / AI推進 28</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:73.8%">74%</div><div class="temp-seg neu" style="width:4.0%"></div><div class="temp-seg pos" style="width:22.2%">22%</div></div>
@@ -1450,7 +1450,7 @@
 
 <article class="issue-block" id="issue-hoseibi">
 <div class="issue-head"><span class="axis-kicker">論点2</span>
-<h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">79件</span></h3>
+<h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">270件</span></h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>法整備・ライセンス制度への評価</span><span>規制賛成 46 / 中立 12 / AI推進 21</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:58.2%">58%</div><div class="temp-seg neu" style="width:15.2%"></div><div class="temp-seg pos" style="width:26.6%">27%</div></div>
@@ -1467,7 +1467,7 @@
 
 <article class="issue-block" id="issue-moraru">
 <div class="issue-head"><span class="axis-kicker">論点3</span>
-<h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">73件</span></h3>
+<h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">307件</span></h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>利用者行動への道徳的評価</span><span>規制賛成 47 / 中立 8 / AI推進 18</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:64.4%">64%</div><div class="temp-seg neu" style="width:11.0%"></div><div class="temp-seg pos" style="width:24.7%">25%</div></div>
@@ -1484,7 +1484,7 @@
 
 <article class="issue-block" id="issue-creator">
 <div class="issue-head"><span class="axis-kicker">論点4</span>
-<h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">46件</span></h3>
+<h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">190件</span></h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>クリエイターへの影響評価</span><span>規制賛成 33 / 中立 4 / AI推進 9</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:71.7%">72%</div><div class="temp-seg neu" style="width:8.7%"></div><div class="temp-seg pos" style="width:19.6%">20%</div></div>
@@ -1501,7 +1501,7 @@
 
 <article class="issue-block" id="issue-gijutsu">
 <div class="issue-head"><span class="axis-kicker">論点5・唯一AI推進派多数</span>
-<h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">40件</span></h3>
+<h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">54件</span></h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>AI規制と国際競争への評価</span><span>規制賛成 6 / 中立 7 / AI推進 27</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:15.0%">15%</div><div class="temp-seg neu" style="width:17.5%"></div><div class="temp-seg pos" style="width:67.5%">68%</div></div>
@@ -1518,7 +1518,7 @@
 
 <article class="issue-block" id="issue-seiseibutsu">
 <div class="issue-head"><span class="axis-kicker">論点6</span>
-<h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">31件</span></h3>
+<h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">82件</span></h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>AI生成物の著作権認定への論調</span><span>規制賛成 14 / 中立 10 / AI推進 7</span></div>
 <div class="temp-bar"><div class="temp-seg neg" style="width:45.2%">45%</div><div class="temp-seg neu" style="width:32.3%"></div><div class="temp-seg pos" style="width:22.6%">23%</div></div>
