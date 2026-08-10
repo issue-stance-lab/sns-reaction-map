@@ -89,13 +89,106 @@ class XPostTests(unittest.TestCase):
     def test_reply_tables_expand_to_one_row_each(self):
         replies = [p for p in self.posts if p["kind"] == "リプライ"]
         self.assertGreater(len(replies), 20, "リプライ表が1件も展開できていない")
-        self.assertTrue(any(p["views"] for p in replies), "views を1件も読めていない")
+        self.assertTrue(any(p["parent_views"] for p in replies), "元投稿views を1件も読めていない")
 
     def test_views_suffix_is_expanded(self):
         self.assertEqual(collect._parse_views("923K"), 923_000)
         self.assertEqual(collect._parse_views("1.2M"), 1_200_000)
         self.assertEqual(collect._parse_views("10"), 10)
         self.assertIsNone(collect._parse_views("—"))
+
+    def test_views_accept_comma_man_bold_and_trailing_note(self):
+        """実際に docs/x-posts.md に現れる表記をすべて読めること。
+
+        いずれか1つでも読めないと、その投稿は「表示回数なし」として静かに
+        集計から落ちる。2026-08-06〜08-10 が5日ぶん消えていたのがこれ。
+        """
+        self.assertEqual(collect._parse_views("4,916（8/8 18:50時点）"), 4_916)
+        self.assertEqual(collect._parse_views("2.5万（8/8 18:35時点）"), 25_000)
+        self.assertEqual(collect._parse_views("1,368K"), 1_368_000)
+        self.assertEqual(collect._parse_views("**101**"), 101)
+        self.assertEqual(collect._parse_views("10**"), 10)
+
+    def test_provisional_and_missing_views_are_distinguished(self):
+        """投稿直後の暫定値を実測と混ぜない。8/8は 4→51、2→37 と10倍以上動いた。"""
+        self.assertEqual(collect._views_status("4（投稿7分後）"), "provisional")
+        self.assertEqual(collect._views_status("2（投稿直後）"), "provisional")
+        self.assertEqual(collect._views_status("未計測（投稿直後）"), "missing")
+        self.assertEqual(collect._views_status("未取得"), "missing")
+        self.assertEqual(collect._views_status(""), "missing")
+        self.assertEqual(collect._views_status("**101**"), "measured")
+        # 注記が旧状態に言及していても、本計測なら実測として扱う
+        self.assertEqual(collect._views_status("**74**（8/10計測。旧記録は「未取得」）"), "measured")
+        self.assertEqual(collect._views_status("**51**（8/10計測。旧記録の「4」は投稿7分後の暫定値）"), "measured")
+
+    def test_parent_and_own_views_are_separate_fields(self):
+        """元投稿の表示回数と自分の到達を1つの数値に混ぜない。
+
+        混ぜていたために「30日で7.6M」が自分のリーチとして GROWTH.yaml に
+        記録され、PV 90 と比較して「変換できていない」という誤った所見になった。
+        """
+        row = next(p for p in self.posts if p["target"].startswith("@bunshun_online"))
+        self.assertEqual(row["parent_views"], 11_070)
+        self.assertEqual(row["own_views"], 642)
+        self.assertEqual(row["own_views_status"], "measured")
+
+    def test_new_two_column_tables_are_not_dropped(self):
+        """『元投稿views ｜ 自リプライ表示』形式の表が空扱いにならないこと。"""
+        rows = collect._table_rows(
+            [
+                "| # | リプライ先 | テーマ | タイプ | 元投稿views | 自リプライ表示 | 元投稿の返信数 |",
+                "|---|---|---|---|---|---|---|",
+                "| 1 | @a（x） | t | URLなし | 11,070 | **642** | 4 |",
+                "| 2 | @b（y） | t | URLなし | 3,623 | 未計測（投稿直後） | 3 |",
+            ],
+            "テスト",
+        )
+        self.assertEqual(len(rows), 2, "2列形式の表が1行ずつに展開されていない")
+        self.assertEqual(rows[0]["自リプライ表示"], "**642**")
+
+    def test_unknown_view_column_raises_instead_of_dropping(self):
+        """表示回数の列名を変えたら、黙って捨てずに落ちること。
+
+        これが無かったため、2026-08-06 の見出し変更に誰も気づかないまま
+        既存テストが通り続け、実測値が5日ぶんダッシュボードから消えていた。
+        """
+        with self.assertRaises(ValueError) as ctx:
+            collect._table_rows(
+                [
+                    "| # | リプライ先 | テーマ | インプレッション数 |",
+                    "|---|---|---|---|",
+                    "| 1 | @a（x） | t | 100 |",
+                ],
+                "リプライ実績 2026-09-01",
+            )
+        self.assertIn("インプレッション数", str(ctx.exception))
+        self.assertIn("リプライ実績 2026-09-01", str(ctx.exception))
+
+    def test_non_post_tables_are_ignored_without_raising(self):
+        """実績節に混ざるGA4の参照元表などは投稿表として扱わない。"""
+        rows = collect._table_rows(
+            [
+                "| 参照元 / メディア | セッション | エンゲージメント率 |",
+                "|---|---|---|",
+                "| t.co / referral | 3 | 33.3% |",
+            ],
+            "通常ポスト実績 2026-08-01",
+        )
+        self.assertEqual(rows, [])
+
+    def test_measured_own_views_are_recorded_for_every_recent_day(self):
+        """8/6〜8/10 の実測値がすべて拾えていること（欠けたら0本になる日が出る）。"""
+        measured = {
+            p["date"].isoformat()
+            for p in self.posts
+            if p["own_views_status"] == "measured" and p["own_views"] is not None
+        }
+        for day in ("2026-08-06", "2026-08-07", "2026-08-08", "2026-08-09", "2026-08-10"):
+            self.assertIn(day, measured, f"{day} の自リプライ表示が1件も読めていない")
+
+    def test_has_url_is_derived_from_type_column(self):
+        self.assertFalse(collect._has_url("URLなし・tokoso画像付き", "リプライ"))
+        self.assertTrue(collect._has_url("型C（反対側の最も強い論拠）", "流入投稿（URL付き）"))
 
     def test_posts_are_newest_first(self):
         dates = [p["date"] for p in self.posts]
