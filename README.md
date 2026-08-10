@@ -61,6 +61,23 @@ archive/             運用から外れた文書・スクリプト（下記）
 | [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加エージェント向けの全体像 |
 | [AGENTS.md](AGENTS.md) | Codex 向けの GitHub 認証まわりの注意 |
 
+## 運用状況をまとめて見る（ローカル専用の管理画面）
+
+いま何が期限切れか、流入がどう動いているか、X に何を投稿したか、何を変更したかを1画面にまとめる。
+
+```bash
+python3 scripts/build_admin_dashboard.py --open
+```
+
+`admin/dashboard.html` を作ってブラウザで開く。**公開されない**（`docs/` の外、`.gitignore` 対象、
+`noindex`）。中身はリポジトリ内のファイルの写しなので、開いた時点の実測ではない。
+GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` を足す（最大3分、
+認証が切れていればその旨が画面に出る）。
+
+読む材料: `THEMES.yaml`（予定日・工程）/ `GROWTH.yaml`（週次KPI・施策）/ `docs/x-posts.md`（X投稿実績）/
+`TASK_BOARD.md`（課題）/ `data/verification/updates/`（データ更新の検査結果）/ `git log`（変更履歴）。
+**画面が古い・空欄になるのは、これらの元ファイルが更新されていないということ。**
+
 ## よく使うコマンド
 
 データ更新（収集→分類→検証→バックアップ→公開まで1コマンド）:
