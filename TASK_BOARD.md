@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-10（課題45を追加。X運用の記録が公開ディレクトリから配信されていた）
+最終更新: 2026-08-10（課題46を追加。運用メモ9件が公開サイトから配信されている）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -582,6 +582,46 @@ FAILED: 1 validation error(s)
 15論点で行が重なる、Canvas上の投稿点にキーボードで到達できない、
 トップのアトラス34語が手書き
 
+### 課題46: 運用メモ9件が公開サイトから配信されている
+**状態**: 未着手（2026-08-10 記録）
+**きっかけ**: 課題45で `x-posts.md` をサイト配信から外した際、`docs/` 直下に
+運用メモの `.md` が残っていることに気づいた。**9件すべて HTTP 200 で配信中**
+（`https://issue-stance-lab.github.io/sns-reaction-map/<ファイル名>` で誰でも読める）。
+
+| ファイル | 行数 | 内容 |
+|---|---|---|
+| `ga4-automation.md` | 334 | GA4の自動取得手順（OAuth設定を含む） |
+| `gsc-automation.md` | 258 | Search Console の自動取得手順 |
+| `voting_design_guideline.md` | 135 | 投票設問・選択肢の設計方針 |
+| `growth-kpi-automation.md` | 107 | KPI取得の自動化メモ |
+| `seo-setup.md` | 88 | SEO・X共有のセットアップ |
+| `adsense-setup.md` | 84 | AdSense導入手順 |
+| `supabase-votes-automation.md` | 84 | 投票数の自動取得メモ |
+| `kpi-snapshot-request-2026-07-07.md` | 60 | KPI取得依頼（未対応のまま） |
+| `substack-takaichi-reaction-table.md` | 43 | Substack貼り付け用の分類表 |
+
+**調査済み（作業前に読むこと）**:
+- **鍵・トークンは無い。** `client_secret` / `refresh_token` / APIキーはいずれも不在。
+  `adsense-setup.md` の `ca-pub-1234567890123456` はプレースホルダで実IDではない。
+  `ga4-automation.md` の `G-K10S4YCZFH` はページに埋まる公開値
+- **課題45と同じく「漏洩」ではなく「見え方」の課題。** 運用の手順が読める状態
+- **サイト内からリンクされていない**（`docs/*.html` に参照なし）。URL直打ちでのみ到達する
+- 相互参照は `docs/` 内で閉じている（`ga4-automation` を2件、`gsc-automation` と
+  `growth-kpi-automation` を各1件が参照）。**リポジトリ外からの参照は無い**
+- `docs/images/README.md` はサブディレクトリなので別途判断（画像素材の説明）
+
+**取るべき方法**: 課題45と同じ `git rm --cached` ＋ `.gitignore`。
+ただし**それだけではサイト配信は止まらない**。デプロイは `docs/` を丸ごと
+アップロードするため、**追跡を外してもローカルにファイルが残っていれば配信され続ける**
+（課題45の `x-posts.md` はリポジトリ直下へ「移動」したので止まった）。
+
+→ **この課題では「`docs/` の外へ移す」方が確実。** 移動先の候補は `docs-internal/` など。
+   相互参照が `docs/` 内で閉じているので、まとめて移せばリンクは壊れない。
+
+**判断が要る点**: `substack-takaichi-reaction-table.md` は外部貼り付け用に作ったもので、
+公開前提だった可能性がある。移す前にオーナーに確認すること。
+
+---
 ### 課題45: X運用の手の内を公開リポジトリから外す
 **状態**: 未着手（第1段階のみ完了。2026-08-10、PR #80）
 **きっかけ**: オーナーから「Xの情報があまり見られたくない」。調査の結果、
