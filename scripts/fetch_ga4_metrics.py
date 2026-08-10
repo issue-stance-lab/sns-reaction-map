@@ -241,7 +241,13 @@ def run_share_source_report(
 ) -> dict:
     payload = {
         "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
-        "dimensions": [{"name": "sessionSource"}, {"name": "sessionMedium"}],
+        # sessionCampaignName が無いと fab_share（右下の固定ボタン）と
+        # vote_share（投票完了後）を区別できず、どちらの導線が効いたか分からない
+        "dimensions": [
+            {"name": "sessionSource"},
+            {"name": "sessionMedium"},
+            {"name": "sessionCampaignName"},
+        ],
         "metrics": [{"name": "sessions"}, {"name": "activeUsers"}, {"name": "screenPageViews"}],
         "dimensionFilter": and_filter(
             public_host_filter(host_name),
@@ -289,16 +295,19 @@ def detail_bundle(
 ) -> dict:
     summary = summarize(run_report(access_token, property_id, days, host_name))
     page_paths = report_rows(run_page_path_report(access_token, property_id, days, limit, host_name))
-    related_theme_click = summarize(
-        run_event_report(access_token, property_id, days, "related_theme_click", host_name)
-    )
-    if "eventCount" not in related_theme_click:
-        related_theme_click["eventCount"] = "0"
+    # クリックイベントも取る。UTM（流入）だけでは「押されていない」と
+    # 「押されたが戻ってこなかった」を区別できない（Xの投稿画面は別サイトのため）
+    events = {}
+    for name in ("related_theme_click", "fab_share_click", "vote_share_click"):
+        counts = summarize(run_event_report(access_token, property_id, days, name, host_name))
+        if "eventCount" not in counts:
+            counts["eventCount"] = "0"
+        events[name] = counts
     share_button = report_rows(run_share_source_report(access_token, property_id, days, host_name))
     return {
         "summary": summary,
         "page_paths": page_paths,
-        "events": {"related_theme_click": related_theme_click},
+        "events": events,
         "share_button": share_button,
     }
 
@@ -323,17 +332,18 @@ def print_details(details: dict) -> None:
     print("## Events")
     print("| eventName | eventCount |")
     print("|---|---:|")
-    event_count = details["events"]["related_theme_click"].get("eventCount", "0")
-    print(f"| related_theme_click | {event_count} |")
+    for name, counts in details["events"].items():
+        print(f"| {name} | {counts.get('eventCount', '0')} |")
     print()
     print("## Share button traffic")
-    print("| sessionSource | sessionMedium | sessions | activeUsers | screenPageViews |")
-    print("|---|---|---:|---:|---:|")
+    print("| sessionSource | sessionMedium | campaign | sessions | activeUsers | screenPageViews |")
+    print("|---|---|---|---:|---:|---:|")
     if not details["share_button"]:
-        print("| share_button |  | 0 | 0 | 0 |")
+        print("| share_button |  |  | 0 | 0 | 0 |")
     for row in details["share_button"]:
         print(
             f"| {row.get('sessionSource', '')} | {row.get('sessionMedium', '')} | "
+            f"{row.get('sessionCampaignName', '')} | "
             f"{row.get('sessions', '0')} | {row.get('activeUsers', '0')} | "
             f"{row.get('screenPageViews', '0')} |"
         )
@@ -342,7 +352,11 @@ def print_details(details: dict) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--days", type=int, default=7)
-    parser.add_argument("--details", action="store_true", help="Fetch pagePath, related_theme_click, and share_button reports")
+    parser.add_argument(
+        "--details",
+        action="store_true",
+        help="Fetch pagePath, click events (related_theme_click / fab_share_click / vote_share_click), and share_button traffic by campaign",
+    )
     parser.add_argument("--limit", type=int, default=20, help="Row limit for detail reports")
     parser.add_argument("--host-name", default="", help="Public hostname to include in GA4 reports")
     parser.add_argument("--json", action="store_true")

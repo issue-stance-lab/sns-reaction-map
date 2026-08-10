@@ -27,6 +27,43 @@
     }
   };
 
+  // ---- 関連テーマのクリック計測（未実装ページの受け皿）--------------------
+  // 8ページはページ内のインラインJSが計測しているが、fukushuto / koshitsu-tenpakai /
+  // takaichi の3ページには計測が無く、関連テーマ枠は出ているのにクリックが
+  // 記録されていなかった（2026-08-10 判明）。注目テーマ fukushuto を含むため、
+  // GROWTH.yaml の related-themes-block を判定できない一因になっていた。
+  function topicSlugFrom(fileName) {
+    return (fileName || '').replace(/-reaction-map(-standard)?\.html$|\.html$/, '');
+  }
+
+  function bindRelatedThemeFallback() {
+    var cards = document.querySelectorAll('a.related-card');
+    if (!cards.length) return;
+    // 既存のインライン計測があるページでは二重に送らない。
+    // そちらは data-related-target を後付けしてから委譲リスナで拾う実装。
+    if (document.querySelector('a.related-card[data-related-target]')) return;
+    var source = topicSlugFrom(location.pathname.split('/').pop()) || 'unknown';
+    Array.prototype.forEach.call(cards, function (card) {
+      card.addEventListener('click', function () {
+        if (typeof window.gtag !== 'function') return;
+        window.gtag('event', 'related_theme_click', {
+          source_topic: source,
+          target_topic: topicSlugFrom((card.getAttribute('href') || '').split('/').pop()),
+          placement: 'page_bottom'
+        });
+      });
+    });
+  }
+
+  // インライン側の DOMContentLoaded 処理より後に判定するため1テンポ遅らせる
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(bindRelatedThemeFallback, 0);
+    });
+  } else {
+    setTimeout(bindRelatedThemeFallback, 0);
+  }
+
   window.drawArenaUserMarker = function (ctx, options) {
     if (!ctx || !options) return;
     var x = options.x;
