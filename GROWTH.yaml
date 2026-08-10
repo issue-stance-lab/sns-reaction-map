@@ -31,6 +31,16 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-08-10
+      weekly_users: 9           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
+      pageviews: 90             # GA4: 過去7日（公開ホスト限定）
+      pages_per_session: 3.750  # GA4: 90 PV / 24 sessions
+      votes_total: 15           # Supabase（cast-vote Edge Function 経由。テストトピックは元から含まれない）
+      votes_week: null          # Supabase: 未取得
+      gsc_impressions: 27       # Search Console: 28日間
+      gsc_clicks: 1             # Search Console: 28日間
+      x_followers: null         # 手動確認が必要
+      notes: 15日ぶりの記録（7/26以降、GA4・GSCのOAuthトークン失効と投票取得の故障で取れていなかった。2026-08-10に3つとも復旧）。7/26比でweekly_users 10→9、PV 163→90、pages/session 3.396→3.750、実投票12→15、GSC表示45→27・クリック2→1・平均掲載順位11.51→12.07。**PVと検索表示がほぼ半減している。** 7/28〜8/8にXリプライを集中的に打った期間を含むにもかかわらず下がっており、リプライの表示回数（30日で7.6M）が流入に変換できていない。PV内訳はindex.html 36・about 7・トップ6で、テーマページは最多でも消費税減税6。related_theme_click 0件、share_button流入0件（judge_at 2026-07-30 を過ぎても両方0のまま）
     - date: 2026-07-26
       weekly_users: 10          # GA4: 過去7日アクティブユーザー（公開ホスト限定）
       pageviews: 163            # GA4: 過去7日（公開ホスト限定）
@@ -198,10 +208,10 @@ recurring:
   kpi-snapshot:
     title: KPI週次スナップショット更新
     cadence: weekly
-    last_run: 2026-07-26
+    last_run: 2026-08-10
     procedure: kpi.snapshots に1行追加。scripts/fetch_growth_kpi.py で自動取得（人間依頼は自動取得失敗時のみ）
-    needs_human: 自動取得が失敗した場合のみ、各管理画面の数値取得
-    notes: 2026-07-26に公開ホスト限定へ修正し、過去4回のGA4値も再集計。最新はweekly_users 10 / pageviews 163 / pages_per_session 3.396 / votes_total 12（テスト票除外）/ gsc_impressions 45 / gsc_clicks 2。x_followers のみ引き続き手動
+    needs_human: 自動取得が失敗した場合のみ、各管理画面の数値取得。OAuth再認証は必ず人間の操作が要る
+    notes: 2026-08-10に3つの取得元をすべて復旧させて再開。最新はweekly_users 9 / pageviews 90 / pages_per_session 3.750 / votes_total 15 / gsc_impressions 27 / gsc_clicks 1。x_followers のみ引き続き手動。**7/26から15日間、記録が取れていなかった。** 原因は(1)GA4・GSCのOAuthトークン失効（アプリの公開範囲が「テスト中」のため、Googleの仕様で7日ごとに強制失効する。恒久対策は同意画面を「本番」へ切り替えること。未実施）(2)投票取得の故障（2026-07-31のsecurity migrationで経路が消えていた。2026-08-10に修正済み）。取得元が生きているかは `python3 scripts/build_admin_dashboard.py` の「9. 数字の取得元の状態」で確認できる
 
   x-profile:
     title: Xプロフィール・固定ポスト改善
