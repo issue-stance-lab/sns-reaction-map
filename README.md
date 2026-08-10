@@ -74,7 +74,7 @@ python3 scripts/build_admin_dashboard.py --open
 GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` を足す（最大3分、
 認証が切れていればその旨が画面に出る）。
 
-読む材料: `THEMES.yaml`（予定日・工程）/ `GROWTH.yaml`（週次KPI・施策）/ `docs/x-posts.md`（X投稿実績）/
+読む材料: `THEMES.yaml`（予定日・工程）/ `GROWTH.yaml`（週次KPI・施策）/ `x-posts.md`（X投稿実績）/
 `TASK_BOARD.md`（課題）/ `data/verification/updates/`（データ更新の検査結果）/ `git log`（変更履歴）。
 **画面が古い・空欄になるのは、これらの元ファイルが更新されていないということ。**
 

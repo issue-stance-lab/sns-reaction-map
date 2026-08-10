@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""docs/x-posts.md の未計測投稿を列挙し、安全に表示回数を書き戻す。
+"""x-posts.md の未計測投稿を列挙し、安全に表示回数を書き戻す。
 
 表示回数そのものはログイン済み Chrome で取得する。このスクリプトは認証情報を
 扱わず、対象の特定・投稿時刻の算出・既存値の保護・表記統一だけを担当する。
@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PATH = ROOT / "docs" / "x-posts.md"
+DEFAULT_PATH = ROOT / "x-posts.md"
 JST = dt.timezone(dt.timedelta(hours=9))
 X_EPOCH_MS = 1_288_834_974_657
 

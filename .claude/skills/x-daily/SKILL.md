@@ -37,7 +37,7 @@ description: >-
 
 ## 開始時に読むファイル
 
-1. `docs/x-posts.md` — 過去の投稿・流入投稿実績（同じアカウントへの連日リプライを避けるため）
+1. `x-posts.md` — 過去の投稿・流入投稿実績（同じアカウントへの連日リプライを避けるため）
 2. `GROWTH.yaml` の `phase.current` と `recurring.x-posting` — 今週のURL付き枠の残数確認
 3. `X_POSTING_GUIDE.md` — URL付き流入投稿の書き方・禁止表現・UTMルール
 
@@ -432,7 +432,7 @@ python3 scripts/verify_top_page.py
 ### 5. コミットする
 
 ```
-git add docs/x-posts.md THEMES.yaml docs/index.html
+git add x-posts.md THEMES.yaml docs/index.html
 git commit -m "x-post: YYYY-MM-DD リプライN本記録"
 ```
 
