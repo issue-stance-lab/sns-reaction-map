@@ -461,36 +461,63 @@ def section_x(data: dict) -> str:
         return '<section id="x"><h2>4. X（旧Twitter）投稿</h2><p class="muted">docs/x-posts.md に実績の記録がありません。</p></section>'
 
     recent = [p for p in posts if (today - p["date"]).days <= 30]
-    views_by_day: dict[dt.date, int] = {}
-    for post in posts:
-        if post["views"]:
-            views_by_day[post["date"]] = views_by_day.get(post["date"], 0) + post["views"]
-    ordered_days = sorted(views_by_day)[-30:]
 
-    total_views_30 = sum(p["views"] or 0 for p in recent)
-    with_url = sum(1 for p in recent if "URL付き" in p["type"] or "URL付き" in p["kind"])
+    def is_measured(post: dict) -> bool:
+        return post["own_views_status"] == "measured" and post["own_views"] is not None
+
+    # グラフ・主指標は「自分の投稿が読まれた回数」のうち本計測できたものだけ。
+    # 暫定値（投稿直後の値）は入れない。8/8は4→51、2→37と10倍以上動いた
+    own_by_day: dict[dt.date, int] = {}
+    for post in posts:
+        if is_measured(post):
+            own_by_day[post["date"]] = own_by_day.get(post["date"], 0) + post["own_views"]
+    ordered_days = sorted(own_by_day)[-30:]
+
+    measured = [p for p in recent if is_measured(p)]
+    total_own_30 = sum(p["own_views"] for p in measured)
+    total_parent_30 = sum(p["parent_views"] or 0 for p in recent)
+    with_url = sum(1 for p in recent if p["has_url"])
 
     stats = (
         '<div class="stats">'
         + card("直近30日の投稿数", str(len(recent)))
-        + card("直近30日の表示回数", fmt_views(total_views_30))
+        + card(
+            "自分の投稿が読まれた回数",
+            fmt_views(total_own_30),
+            f"実測できた {len(measured)} 本の合計（30日の総量ではない）",
+            tone="ok" if measured else "warn",
+        )
+        + card(
+            "返信先の投稿の規模（参考）",
+            fmt_views(total_parent_30),
+            "自分への到達ではない。相手の投稿が読まれた数",
+            tone="muted",
+        )
         + card("うちURL付き", str(with_url), "リンクを踏ませる枠は週1〜2本が上限")
         + card("最後の投稿", f'{(today - posts[0]["date"]).days}日前', fmt_full_date(posts[0]["date"]), tone="warn" if (today - posts[0]["date"]).days > 3 else "ok")
         + "</div>"
     )
 
-    chart = bar_chart([(f"{d.month}/{d.day}", float(views_by_day[d])) for d in ordered_days], color="var(--c5)")
+    chart = bar_chart([(f"{d.month}/{d.day}", float(own_by_day[d])) for d in ordered_days], color="var(--c5)")
 
+    status_label = {"measured": "実測", "provisional": "暫定", "missing": "未計測"}
     rows = []
     for post in posts[:80]:
         text = post["text"] or post["target"]
+        status = post["own_views_status"]
+        reach = ""
+        if is_measured(post) and post["parent_views"]:
+            reach = f'{post["own_views"] / post["parent_views"] * 100:.2f}%'
         rows.append(
             [
                 fmt_full_date(post["date"]),
                 esc(post["kind"]),
                 esc(post["theme"]),
                 esc(post["type"]),
-                f'<span class="{"strong" if (post["views"] or 0) >= 100000 else ""}">{fmt_views(post["views"])}</span>',
+                f'<span class="{"strong" if (post["own_views"] or 0) >= 300 else ""}">{fmt_views(post["own_views"])}</span>',
+                f'<span class="pill {"ok" if status == "measured" else "warn" if status == "provisional" else "muted"}">{status_label[status]}</span>',
+                fmt_views(post["parent_views"]),
+                reach or "—",
                 f'<span class="clamp" title="{esc(text)}">{esc(text[:90])}</span>',
             ]
         )
@@ -504,13 +531,13 @@ def section_x(data: dict) -> str:
     return f"""<section id="x"><h2>4. X（旧Twitter）投稿</h2>
 <p class="lead">記録元は <code>docs/x-posts.md</code>。X の管理画面から自動では取れないので、投稿したら手で書き足す運用。ここに出ていない投稿は記録漏れ。</p>
 {stats}
-<h3>日ごとの表示回数（直近30日）</h3>
+<h3>日ごとに自分の投稿が読まれた回数（本計測ぶんのみ・直近30日）</h3>
 {chart}
-<p class="muted small">リプライは相手の投稿の閲覧者に出るため数万〜数十万、自分から出す通常ポストはフォロワーにしか届かないため数十止まり、という差がそのまま出ます。</p>
+<p class="muted small"><strong>「返信先の投稿の規模」は自分への到達ではありません。</strong>相手の投稿が何人に読まれたかで、そこから自分のリプライに届くのは実測で0.007%〜5.8%（約800倍の開き）。この2つを足し合わせたり、サイトのPVと比べたりはできません。表示回数はXの管理画面から自動で取れないので、投稿の1〜2日後に手で書き足す運用です。投稿直後の値は「暫定」として集計から外しています。</p>
 <h3>テーマごとの最終投稿</h3>
 {table(["テーマ", "最終投稿日", "経過"], theme_rows)}
 <h3>投稿の記録（新しい順・最大80件）</h3>
-{table(["日付", "種別", "テーマ", "型・タイプ", "表示回数", "内容 / リプライ先"], rows, cls="posts")}
+{table(["日付", "種別", "テーマ", "型・タイプ", "自分の表示回数", "計測", "返信先の規模", "到達率", "内容 / リプライ先"], rows, cls="posts")}
 </section>"""
 
 

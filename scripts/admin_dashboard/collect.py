@@ -196,23 +196,70 @@ def _collect_recurring(growth: dict) -> list[dict]:
 # -------------------------------------------------------------------- X 投稿
 
 _POST_HEADING = re.compile(r"^##\s+(.+?実績)\s*(\d{4}-\d{2}-\d{2})(?:（(.*?)）)?\s*$")
-_VIEWS = re.compile(r"([\d.]+)\s*([KMk])?\s*$")
+
+# 実績表の見出しは以下の2形式だけを認める。
+#   旧形式（〜2026-08-03）: views 列。中身は「返信先（元投稿）の表示回数」で、自分の到達ではない
+#   現行形式（2026-08-06〜）: 元投稿views と 自リプライ表示 に分かれている
+# 2026-08-06 に見出しを変えたとき、未知の見出しを黙って捨てる実装だったため
+# 8/6〜8/10 の実測値が5日ぶんダッシュボードから消えていた。見出しを増やすときは
+# ここと tests/test_admin_dashboard.py の両方を必ず更新すること。
+_COL_LEGACY_PARENT = "views"
+_COL_PARENT = "元投稿views"
+_COL_OWN = "自リプライ表示"
+_KNOWN_VIEW_COLS = {_COL_LEGACY_PARENT, _COL_PARENT, _COL_OWN}
+# 投稿を特定する列。これが無い表は投稿一覧ではない（GA4の参照元表など）
+_IDENTITY_COLS = ("リプライ先", "引用元", "投稿")
+# 投稿表で使ってよい列名。ここに無い列があれば落とす（列名の変更を検知するため）
+_KNOWN_POST_COLS = {
+    "#", "リプライ先", "引用元", "投稿", "テーマ", "タイプ", "投稿文冒頭",
+    _COL_LEGACY_PARENT, _COL_PARENT, _COL_OWN,
+    "元投稿の返信数", "元投稿からの経過",
+}
+
+# 先頭の数値だけを読む。後続の注記（「（8/8 18:35時点）」など）は無視する。
+_VIEWS_RE = re.compile(r"^\*{0,2}\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*(万|[KkMm])?")
+_MISSING_MARKS = ("未取得", "未計測", "未表示", "要確認", "該当なし")
+# 「投稿直後」「投稿7分後」は確定値ではない。8/8の暫定値4は2日後に51、2は37になった。
+_PROVISIONAL_RE = re.compile(r"投稿(直後|\s*\d+\s*[分時])")
 
 
 def _parse_views(text: str) -> int | None:
-    match = _VIEWS.match(text.strip())
+    """表示回数の文字列を整数にする。太字・カンマ・万・K/M・後続の注記に対応する。"""
+    stripped = (text or "").strip()
+    match = _VIEWS_RE.match(stripped)
     if not match:
         return None
     try:
-        number = float(match.group(1))
+        number = float(match.group(1).replace(",", ""))
     except ValueError:
         return None
     suffix = (match.group(2) or "").upper()
-    if suffix == "K":
+    if suffix == "万":
+        number *= 10_000
+    elif suffix == "K":
         number *= 1_000
     elif suffix == "M":
         number *= 1_000_000
     return int(number)
+
+
+def _views_status(text: str) -> str:
+    """measured / provisional / missing を返す。provisional は集計に入れない。
+
+    判定は先頭に数値があるかどうかで行う。注記に「未取得」「投稿7分後」といった
+    旧状態への言及が入ることがあり（例: `**74**（8/10計測。旧記録は「未取得」）`）、
+    語の有無だけで見ると本計測値を取りこぼす。
+    """
+    stripped = (text or "").strip()
+    if not _VIEWS_RE.match(stripped):
+        return "missing"
+    # 「8/10計測」「昼計測」など本計測を示す語があれば、注記が旧暫定値に
+    # 言及していても確定値として扱う
+    if "計測" in stripped:
+        return "measured"
+    if _PROVISIONAL_RE.search(stripped):
+        return "provisional"
+    return "measured"
 
 
 def collect_x_posts() -> list[dict]:
@@ -246,31 +293,45 @@ def collect_x_posts() -> list[dict]:
     for kind, date, suffix, body in sections:
         if not date:
             continue
-        rows = _table_rows(body)
+        label = f"{kind} {date}"
+        rows = _table_rows(body, label)
         if rows:
             for row in rows:
+                own_raw = row.get(_COL_OWN, "")
+                # 旧形式の views 列は元投稿（返信先）の表示回数。自分の到達ではない
+                parent_raw = row.get(_COL_PARENT) or row.get(_COL_LEGACY_PARENT, "")
+                post_type = row.get("タイプ", "")
                 posts.append(
                     {
                         "date": date,
                         "kind": kind.replace("実績", ""),
                         "theme": row.get("テーマ", ""),
-                        "target": row.get("リプライ先", ""),
-                        "type": row.get("タイプ", ""),
-                        "views": _parse_views(row.get("views", "")),
+                        "target": row.get("リプライ先") or row.get("投稿", ""),
+                        "type": post_type,
+                        "parent_views": _parse_views(parent_raw),
+                        "own_views": _parse_views(own_raw),
+                        "own_views_status": _views_status(own_raw),
+                        "has_url": _has_url(post_type, kind),
                         "text": "",
                         "note": suffix,
                     }
                 )
         else:
             fields = _field_lines(body)
+            own_raw = _views_text_in_body(body)
+            post_type = fields.get("パターン", "")
             posts.append(
                 {
                     "date": date,
                     "kind": kind.replace("実績", ""),
                     "theme": fields.get("テーマ", ""),
                     "target": "",
-                    "type": fields.get("パターン", ""),
-                    "views": _views_in_body(body),
+                    "type": post_type,
+                    # 箇条書き形式（論点ポスト・通常ポスト）の表示回数は自分の投稿のもの
+                    "parent_views": None,
+                    "own_views": _parse_views(own_raw),
+                    "own_views_status": _views_status(own_raw),
+                    "has_url": _has_url(post_type, kind),
                     "text": _post_text(body),
                     "note": suffix,
                 }
@@ -280,7 +341,15 @@ def collect_x_posts() -> list[dict]:
     return posts
 
 
-def _table_rows(body: list[str]) -> list[dict]:
+def _has_url(post_type: str, kind: str) -> bool:
+    """URLを含む投稿か。タイプ列の語彙から判定する（列は増やさない）。"""
+    blob = f"{post_type} {kind}"
+    if "URLなし" in blob:
+        return False
+    return "URL付き" in blob or "URLあり" in blob
+
+
+def _table_rows(body: list[str], label: str = "") -> list[dict]:
     header: list[str] | None = None
     rows: list[dict] = []
     for line in body:
@@ -294,8 +363,23 @@ def _table_rows(body: list[str]) -> list[dict]:
             header = cells
             continue
         rows.append(dict(zip(header, cells)))
-    if header and "views" not in header:
+    if header is None:
         return []
+    # 実績節にはGA4の参照元表など投稿一覧でない表も混ざる。投稿を特定する列が
+    # ないものは投稿表とみなさない（従来どおり箇条書き形式として扱う）
+    if not any(col in header for col in _IDENTITY_COLS):
+        return []
+    # 列名が変わったら黙って捨てずに落とす。2026-08-06 の見出し変更を拾えず、
+    # 8/6〜8/10の実測値が5日ぶん消えたまま既存テスト13件が通り続けた。
+    unknown = [c for c in header if c not in _KNOWN_POST_COLS]
+    if unknown:
+        raise ValueError(
+            f"docs/x-posts.md の「{label}」に未対応の列があります: {unknown}\n"
+            f"投稿表で使える列は {sorted(_KNOWN_POST_COLS)} です。\n"
+            f"表示回数の列は {sorted(_KNOWN_VIEW_COLS)} のいずれかにしてください。\n"
+            f"列を増やすときは scripts/admin_dashboard/collect.py と "
+            f"tests/test_admin_dashboard.py の両方を更新してください。"
+        )
     return rows
 
 
@@ -308,12 +392,13 @@ def _field_lines(body: list[str]) -> dict:
     return fields
 
 
-def _views_in_body(body: list[str]) -> int | None:
+def _views_text_in_body(body: list[str]) -> str:
+    """箇条書き形式の「views: 10」「表示回数: **6**（…）」から値の文字列を取り出す。"""
     for line in body:
-        match = re.search(r"views\s*[:：]\s*\*{0,2}\s*([\d.]+\s*[KMk]?)", line)
+        match = re.search(r"(?:views|表示回数)\s*[:：]\s*(.+)$", line.strip())
         if match:
-            return _parse_views(match.group(1))
-    return None
+            return match.group(1).strip()
+    return ""
 
 
 def _post_text(body: list[str]) -> str:
