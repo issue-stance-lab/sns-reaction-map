@@ -186,6 +186,13 @@ class XPostTests(unittest.TestCase):
         for day in ("2026-08-06", "2026-08-07", "2026-08-08", "2026-08-09", "2026-08-10"):
             self.assertIn(day, measured, f"{day} の自リプライ表示が1件も読めていない")
 
+    def test_conversation_follow_is_collected_as_own_post(self):
+        follow = next(p for p in self.posts if p["kind"] == "会話フォロー")
+        self.assertEqual(follow["date"], dt.date(2026, 8, 9))
+        self.assertIn("FPXLej8w7O61326", follow["target"])
+        self.assertEqual(follow["own_views_status"], "measured")
+        self.assertEqual(follow["own_views"], 8)
+
     def test_has_url_is_derived_from_type_column(self):
         self.assertFalse(collect._has_url("URLなし・tokoso画像付き", "リプライ"))
         self.assertTrue(collect._has_url("型C（反対側の最も強い論拠）", "流入投稿（URL付き）"))

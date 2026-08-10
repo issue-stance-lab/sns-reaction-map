@@ -196,6 +196,7 @@ def _collect_recurring(growth: dict) -> list[dict]:
 # -------------------------------------------------------------------- X 投稿
 
 _POST_HEADING = re.compile(r"^##\s+(.+?実績)\s*(\d{4}-\d{2}-\d{2})(?:（(.*?)）)?\s*$")
+_CONVERSATION_HEADING = re.compile(r"^###\s+会話フォロー\s+(\d{4}-\d{2}-\d{2})\s*$")
 
 # 実績表の見出しは以下の2形式だけを認める。
 #   旧形式（〜2026-08-03）: views 列。中身は「返信先（元投稿）の表示回数」で、自分の到達ではない
@@ -337,8 +338,46 @@ def collect_x_posts() -> list[dict]:
                 }
             )
 
+    # 会話フォローはリプライ実績節の中にある独立投稿。表の外に記録されるため、
+    # 表だけを展開する上の処理では管理画面から欠落する。
+    for date, body in _conversation_sections(lines):
+        fields = _field_lines(body)
+        own_raw = _views_text_in_body(body)
+        posts.append(
+            {
+                "date": date,
+                "kind": "会話フォロー",
+                "theme": fields.get("テーマ", ""),
+                "target": fields.get("返信先", ""),
+                "type": "URLなし",
+                "parent_views": None,
+                "own_views": _parse_views(own_raw),
+                "own_views_status": _views_status(own_raw),
+                "has_url": False,
+                "text": _post_text(body),
+                "note": "",
+            }
+        )
+
     posts.sort(key=lambda p: p["date"], reverse=True)
     return posts
+
+
+def _conversation_sections(lines: list[str]) -> list[tuple[dt.date, list[str]]]:
+    """`### 会話フォロー YYYY-MM-DD` を独立投稿として切り出す。"""
+    sections: list[tuple[dt.date, list[str]]] = []
+    for index, line in enumerate(lines):
+        match = _CONVERSATION_HEADING.match(line)
+        if not match:
+            continue
+        end = next(
+            (i for i in range(index + 1, len(lines)) if lines[i].startswith("## ") or lines[i].startswith("### ")),
+            len(lines),
+        )
+        date = _as_date(match.group(1))
+        if date:
+            sections.append((date, lines[index + 1:end]))
+    return sections
 
 
 def _has_url(post_type: str, kind: str) -> bool:
