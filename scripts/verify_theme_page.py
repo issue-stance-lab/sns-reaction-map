@@ -478,6 +478,8 @@ def verify_theme_page(
             f">{opinion_count}件 | セクター=",
             # アリーナが論点分類済みのレコードだけを描いているテーマ
             f">{classified_count}件 | セクター=",
+            # 表示文言に依存しない目印（再設計後のページ。旧キャプションを持たない）
+            f'data-arena-total="{opinion_count}"',
         )
         if any(text in page for text in expected_count_texts) and any(
             text in page for text in map_count_texts
@@ -490,6 +492,9 @@ def verify_theme_page(
 
     explainer_pos = page.find('id="explainer-section"')
     map_pos = page.find("<h2>SNS反応マップ</h2>")
+    if map_pos < 0:
+        # 見出し文言に依存しない目印（再設計後のページ）
+        map_pos = page.find('id="issue-arena-section"')
     if arguments is not None:
         if explainer_pos >= 0 and arguments_pos > explainer_pos and map_pos > arguments_pos:
             lines.append("OK  arguments は6つの論点の後、SNS反応マップの前にある")

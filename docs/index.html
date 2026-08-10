@@ -54,6 +54,21 @@
     })();
   </script>
 <!-- GA_TAG_END -->
+  <style id="topic-atlas-overview">
+    .topic-atlas{margin-top:34px;padding:24px 26px;background:#f4f7fb;border:1px solid #d7e1ee;border-radius:4px}
+    .topic-atlas h2{margin:0 0 6px;color:#071a3d;font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:clamp(21px,3vw,30px);letter-spacing:-.03em}
+    .topic-atlas>p{margin:0 0 10px;color:#596983;font-size:12px;line-height:1.75}
+    .topic-atlas-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 14px;color:#596983;font-size:10px;font-weight:800}.topic-atlas-legend span{display:inline-flex;align-items:center;gap:5px}.topic-atlas-legend i{width:9px;height:9px;border-radius:50%}.topic-atlas-legend .protect i{background:#d94c2c}.topic-atlas-legend .neutral i{background:#66758c}.topic-atlas-legend .promote i{background:#075ef2}
+    .topic-atlas-rows{display:grid;gap:5px}
+    .topic-atlas-row{display:grid;grid-template-columns:180px 1fr;align-items:center;min-height:42px;color:#172541;text-decoration:none}
+    .topic-atlas-row:hover .topic-atlas-topic{text-decoration:underline;text-decoration-color:#075ef2;text-underline-offset:3px}
+    .topic-atlas-topic{padding-right:12px;font-size:11px;font-weight:900;line-height:1.35}
+    .topic-atlas-track{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:42px;padding:5px 8px;border-top:1px solid #dce4ef;border-bottom:1px solid #dce4ef;background:#fff}
+    .topic-atlas-issue{display:inline-flex;align-items:center;justify-content:center;min-width:58px;min-height:25px;padding:3px 7px;border:1px solid currentColor;border-radius:3px;background:#fff;font-size:10px;font-weight:900;white-space:nowrap}
+    .topic-atlas-issue.protect{color:#d94c2c;background:#fff7f3}.topic-atlas-issue.protect:before{content:"← ";}.topic-atlas-issue.promote{color:#075ef2;background:#f2f6ff}.topic-atlas-issue.promote:before{content:"→ ";}.topic-atlas-issue.neutral{color:#66758c;background:#f8fafc}.topic-atlas-issue.neutral:before{content:"・ ";}
+    .topic-atlas-more{display:block;margin-top:12px;color:#075ef2;font-size:11px;font-weight:900;text-align:right;text-decoration:none}
+    @media(max-width:720px){.topic-atlas{margin-top:27px;padding:18px 14px}.topic-atlas-row{grid-template-columns:1fr}.topic-atlas-topic{padding:8px 0 4px}.topic-atlas-track{min-height:40px}.topic-atlas-issue{font-size:9px;min-width:50px;padding:3px 5px}}
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -163,6 +178,25 @@
         <h2>気になる社会のテーマを<br>のぞいてみよう。</h2>
         <p>暮らし、教育、テクノロジー、政治。いま意見が分かれているテーマから、気になるものを選べます。</p>
       </div>
+    </section>
+    <section class="topic-atlas reveal" aria-labelledby="topic-atlas-title">
+      <h2 id="topic-atlas-title">11テーマの論点アトラス</h2>
+      <p>テーマごとの論点を一覧できます。色は各テーマ内での立場を表し、論点の位置そのものは意味を持たせていません。</p>
+      <div class="topic-atlas-legend" aria-label="論点の立場"><span class="protect"><i></i>保護・規制寄り</span><span class="neutral"><i></i>中立・確認</span><span class="promote"><i></i>活用・推進寄り</span></div>
+      <div class="topic-atlas-rows">
+        <a class="topic-atlas-row" href="ai-copyright-reaction-map.html"><span class="topic-atlas-topic">生成AIと著作権</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">学習データ</span><span class="topic-atlas-issue neutral">法制度</span><span class="topic-atlas-issue promote">技術競争</span><span class="topic-atlas-issue protect">創作者保護</span></span></a>
+        <a class="topic-atlas-row" href="bike-blue-ticket-reaction-map.html"><span class="topic-atlas-topic">自転車の青切符導入</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">取締り</span><span class="topic-atlas-issue neutral">インフラ</span><span class="topic-atlas-issue promote">ルール</span></span></a>
+        <a class="topic-atlas-row" href="bukatsu-chiiki-reaction-map.html"><span class="topic-atlas-topic">部活動の地域移行</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">教員負担</span><span class="topic-atlas-issue neutral">受け皿</span><span class="topic-atlas-issue promote">地域格差</span></span></a>
+        <a class="topic-atlas-row" href="constitutional-amendment-reaction-map.html"><span class="topic-atlas-topic">憲法改正論議</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">緊急事態</span><span class="topic-atlas-issue neutral">国民投票</span><span class="topic-atlas-issue promote">改正</span></span></a>
+        <a class="topic-atlas-row" href="elderly-license-revocation-reaction-map.html"><span class="topic-atlas-topic">高齢者免許返納</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">義務化</span><span class="topic-atlas-issue neutral">地方交通</span><span class="topic-atlas-issue promote">代替手段</span></span></a>
+        <a class="topic-atlas-row" href="school-nickname-ban-reaction-map.html"><span class="topic-atlas-topic">学校のあだ名禁止</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">いじめ</span><span class="topic-atlas-issue neutral">親しさ</span><span class="topic-atlas-issue promote">運用</span></span></a>
+        <a class="topic-atlas-row" href="henoko-student-accident-reaction-map.html"><span class="topic-atlas-topic">辺野古高校生事故</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">安全</span><span class="topic-atlas-issue neutral">追悼</span><span class="topic-atlas-issue promote">政治利用</span></span></a>
+        <a class="topic-atlas-row" href="takaichi-reaction-map-standard.html"><span class="topic-atlas-topic">高市文春問題</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">中傷</span><span class="topic-atlas-issue neutral">報道</span><span class="topic-atlas-issue promote">比較</span></span></a>
+        <a class="topic-atlas-row" href="fukushuto-reaction-map.html"><span class="topic-atlas-topic">副首都法案</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">財源</span><span class="topic-atlas-issue neutral">分権</span><span class="topic-atlas-issue promote">災害</span></span></a>
+        <a class="topic-atlas-row" href="koshitsu-tenpakai-reaction-map.html"><span class="topic-atlas-topic">皇室典範改正</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">女性皇族</span><span class="topic-atlas-issue neutral">養子</span><span class="topic-atlas-issue promote">継承</span></span></a>
+        <a class="topic-atlas-row" href="consumption-tax-cut-reaction-map.html"><span class="topic-atlas-topic">消費税減税</span><span class="topic-atlas-track"><span class="topic-atlas-issue protect">物価</span><span class="topic-atlas-issue neutral">財源</span><span class="topic-atlas-issue promote">給付</span></span></a>
+      </div>
+      <a class="topic-atlas-more" href="#topics">テーマカードでも詳しく見る →</a>
     </section>
     <section class="section reveal" id="topics"><div class="section-head"><h2 class="section-title"><span class="section-icon">🌐</span>話題のテーマ</h2><div class="topics-toolbar"><button class="filter active" type="button" data-filter="all">すべて</button><button class="filter" type="button" data-filter="politics">政治・法律</button><button class="filter" type="button" data-filter="life">生活・教育</button></div></div><div class="topic-grid">
       <a class="topic-card" data-category="politics" href="consumption-tax-cut-reaction-map.html"><div class="topic-thumb"><img src="images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp" alt="消費税減税" loading="lazy"><span class="topic-new">NEW</span></div><div class="topic-info"><span class="category">税・財政</span><div class="topic-title-row"><h3>消費税減税</h3><span class="mini-map"></span></div><div class="topic-meta">分類済み <strong id="topic-count-consumption-tax-cut">667</strong>件  |  論点比較（6論点）</div></div></a><a class="topic-card" data-category="politics" href="koshitsu-tenpakai-reaction-map.html"><div class="topic-thumb"><img src="images/topics/koshitsu-tenpakai/koshitsu-hero.webp" alt="皇室典範改正" loading="lazy"><span class="topic-new">NEW</span></div><div class="topic-info"><span class="category">政治・皇室</span><div class="topic-title-row"><h3>皇室典範改正</h3><span class="mini-map"></span></div><div class="topic-meta">分類済み <strong id="topic-count-koshitsu-tenpakai">347</strong>件  |  論点比較（5論点）</div></div></a>
