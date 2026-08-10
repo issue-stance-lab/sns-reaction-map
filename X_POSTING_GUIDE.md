@@ -2,7 +2,7 @@
 
 作成: 2026-08-01
 目的: **サイトへの流入**（URL付き投稿でページを読んでもらう）
-関連: `configs/prompts/claude-code/x-daily-session.md`（日次のリプライ運用）/ `docs/x-posts.md`（実績ログ）/ `GROWTH.yaml`
+関連: `.claude/skills/x-daily/SKILL.md`（日次のリプライ運用。2026-08-10 に configs/prompts から移動）/ `docs/x-posts.md`（実績ログ）/ `GROWTH.yaml`
 
 ---
 
@@ -12,14 +12,15 @@ X運用には目的の違う2種類がある。**この文書は後者だけを�
 
 | | 目的 | 手段 | 参照先 |
 |---|---|---|---|
-| **リプライ運用** | 認知・フォロワー | URLなしリプライ 毎日2〜3本 | `configs/prompts/claude-code/x-daily-session.md` |
+| **リプライ運用** | 認知・フォロワー | URLなしリプライ 毎日2〜3本 | `.claude/skills/x-daily/SKILL.md` |
 | **流入投稿** | サイトを読んでもらう | **URL付き投稿 週1〜2本** | **この文書** |
 
 URL付き投稿は**週1〜2本しか撃てない貴重な枠**なので、その1本の質を上げるのがこの文書の役割。
 
 **2026-08-10 更新:** 旧記述「リプライ運用は既に機能しているので触らない（既存・変更不要）」は取り消した。
 素材選定の基準を実測にもとづき全面改訂している（旧「閲覧数1万以上が理想」→「元投稿の返信数が少ない・
-元投稿が新しい」）。リプライ運用の現行ルールは `x-daily-session.md` が唯一の正典。
+元投稿が新しい」）。リプライ運用の現行ルールは Skill `.claude/skills/x-daily/SKILL.md` が唯一の正典
+（2026-08-10 に `configs/prompts/claude-code/x-daily-session.md` から移動。旧パスはポインタのみ）。
 なお `docs/x-growth-strategy.md`（2026-06-27）はリプライへのURL付与を認める矛盾した記述と
 旧ドメインを含んでいたため `archive/x-growth-strategy_20260627.md` へ移した。
 
@@ -223,7 +224,7 @@ GSC実測（28日間）で、表示回数はこの4テーマに集中してい�
 
 ## 6. 投稿枠と頻度
 
-`x-daily-session.md` の枠を維持する。
+`.claude/skills/x-daily/SKILL.md` の枠を維持する。
 
 | 種別 | 頻度 | URL |
 |---|---|---|
