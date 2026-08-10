@@ -834,8 +834,14 @@
       } else {
         shareText = '[「' + cfg.title + '」]\n私の立場: 「' + q.label + '」（' + posStr + '）\n\nSNSの声の分布と比べてみて。\n\n#SNS反応まっぷ';
       }
-      var url  = location.href.split('#')[0].split('?')[0]+'?utm_source=share_button&utm_medium=social&utm_campaign=vote_share';
+      // 共有URLの正典は topic-modern.js の window.buildShareUrl。
+      // このファイルは2026-08-10時点でどの公開ページからも読み込まれていない（全11ページを確認）。
+      // 残っている理由が分かるまで消さないが、UTMを変えるときはここも揃えること。
+      var url = window.buildShareUrl
+        ? window.buildShareUrl(location.href, 'vote_share')
+        : location.href.split('#')[0].split('?')[0]+'?utm_source=share_button&utm_medium=social&utm_campaign=vote_share';
       shareBtn.href = 'https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(url);
+      if (w.trackShareClick) shareBtn.addEventListener('click', function(){ w.trackShareClick('vote_share'); });
       var short = q.label.length > 14 ? q.label.slice(0,14)+'…' : q.label;
       shareBtn.textContent = '𝕏 でシェア「'+short+'」' + (quizCorrect === true ? ' ★的中' : '');
     }

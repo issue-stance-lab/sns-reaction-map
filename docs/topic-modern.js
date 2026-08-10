@@ -1,4 +1,32 @@
 (function () {
+  // ---- 共有URLの正典 ------------------------------------------------------
+  // シェア導線（FAB / 投票後 / ビルダー生成分）は必ずここを通す。
+  // UTMが無いとGA4では t.co / referral にまとまり、どの導線からの流入か区別できない。
+  // GROWTH.yaml で share_button 経由の流入がゼロのままなのは施策の失敗ではなく、
+  // どのボタンも一度もUTMを付けていなかったため（2026-08-10 判明）。
+  window.SHARE_UTM_SOURCE = 'share_button';
+
+  window.buildShareUrl = function (baseUrl, campaign) {
+    try {
+      var url = new URL(baseUrl || location.href, location.href);
+      url.hash = '';
+      url.searchParams.set('utm_source', window.SHARE_UTM_SOURCE);
+      url.searchParams.set('utm_medium', 'social');
+      url.searchParams.set('utm_campaign', campaign);
+      return url.toString();
+    } catch (e) {
+      return baseUrl || location.href;
+    }
+  };
+
+  // クリック自体もGA4へ送る。UTMだけでは「押されていない」と
+  // 「押されたが流入しなかった」を区別できない（Xの投稿画面は別サイトのため）。
+  window.trackShareClick = function (campaign) {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', campaign + '_click', { utm_campaign: campaign });
+    }
+  };
+
   window.drawArenaUserMarker = function (ctx, options) {
     if (!ctx || !options) return;
     var x = options.x;
@@ -171,8 +199,14 @@
     }
     share.textContent = '𝕏 でシェア';
     var shareText = label.textContent.trim() + ' #SNS反応まっぷ';
+    // 以前は location.href をそのまま渡していたためUTMが付かず、
+    // 投票後シェア経由の流入をGA4で識別できなかった
     share.href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText) +
-      '&url=' + encodeURIComponent(location.href.split('#')[0]);
+      '&url=' + encodeURIComponent(window.buildShareUrl(location.href, 'vote_share'));
+    if (share.dataset.shareTracked !== '1') {
+      share.addEventListener('click', function () { window.trackShareClick('vote_share'); });
+      share.dataset.shareTracked = '1';
+    }
 
     if (redo) {
       if (redo.parentElement !== actions) actions.appendChild(redo);
