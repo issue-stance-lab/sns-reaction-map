@@ -730,8 +730,16 @@ def vote_ui_html(config: dict[str, Any]) -> str:
     }}).join(" / ");
     
     var text="【"+TITLE+"】\\nこの話題、私は「"+myAxis.label+"」に投票しました（"+pctList+"）。\\nSNSの声の分布と自分の感覚、あなたも比べてみて。\\n\\n#SNS反応まっぷ";
-    var shareUrl=location.href.split("#")[0].split("?")[0]+"?utm_source=share_button&utm_medium=social&utm_campaign=vote_share";
+    // 共有URLの正典は docs/topic-modern.js の window.buildShareUrl。
+    // このビルダーが生成するページは topic-modern.js を読み込まないため同等処理を持つ。
+    // UTMの値を変えるときは topic-modern.js / share-x-btn.js と必ず揃えること。
+    var shareUrl=window.buildShareUrl
+      ? window.buildShareUrl(location.href, "vote_share")
+      : location.href.split("#")[0].split("?")[0]+"?utm_source=share_button&utm_medium=social&utm_campaign=vote_share";
     shareBtn.href="https://x.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(shareUrl);
+    shareBtn.addEventListener("click",function(){{
+      if(window.trackShareClick) window.trackShareClick("vote_share");
+    }});
     var shortLabel=myAxis.label.length>15?myAxis.label.substring(0,15)+"…":myAxis.label;
     shareBtn.textContent="𝕏 でシェア「"+shortLabel+"」";
 

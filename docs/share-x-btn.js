@@ -11,8 +11,19 @@
   ].join('');
   document.head.appendChild(style);
 
+  // 共有URLの正典は topic-modern.js の window.buildShareUrl。
+  // 全10ページで topic-modern.js を先に読み込むため通常はそちらが使われる。
+  // 以下は読み込み失敗時の保険で、付けるUTMは同じ。
+  var buildShareUrl=window.buildShareUrl||function(base,campaign){
+    var clean=(base||location.href).split('#')[0];
+    return clean+(clean.indexOf('?')===-1?'?':'&')+
+      'utm_source=share_button&utm_medium=social&utm_campaign='+campaign;
+  };
+
   var text=ogTitle+'\n#SNS反応まっぷ';
-  var href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(ogUrl);
+  // 以前は og:url をそのまま渡していたためUTMが付かず、FAB経由の流入を識別できなかった
+  var href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+
+    '&url='+encodeURIComponent(buildShareUrl(ogUrl,'fab_share'));
 
   var btn=document.createElement('a');
   btn.className='share-x-fab';
@@ -20,6 +31,10 @@
   btn.target='_blank';
   btn.rel='noopener';
   btn.setAttribute('aria-label','Xでポスト');
+  // 「押されていない」と「押されたが流入しなかった」を区別するため、クリックも送る
+  btn.addEventListener('click',function(){
+    if(window.trackShareClick) window.trackShareClick('fab_share');
+  });
   btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Xでポスト</span>';
   document.body.appendChild(btn);
 })();
