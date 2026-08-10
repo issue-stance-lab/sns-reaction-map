@@ -164,6 +164,18 @@ def table(headers: Iterable[str], rows: Iterable[Iterable[str]], *, cls: str = "
     return f'<div class="scroll"><table class="{cls}"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
+# GROWTH.yaml の status を、オーナー向けの日本語と危険度に置き換える
+EXPERIMENT_STATUS = {
+    "measuring": ("計測中", "warn"),
+    "closed_undecided": ("判定不能で終了", "muted"),
+    "adopted": ("採用", "ok"),
+    "rejected": ("不採用", "danger"),
+    "blocked": ("止まっている", "danger"),
+    "built": ("実装済み・計測待ち", "soon"),
+    "building": ("作成中", "soon"),
+    "idea": ("案のみ", "muted"),
+}
+
 STAGE_MARK = {
     "done": ("●", "ok"),
     "partial": ("◐", "warn"),
@@ -377,12 +389,25 @@ def section_traffic(data: dict) -> str:
     freshness = f'<p class="{"warn-banner" if age > 10 else "muted small"}">この数字は {fmt_full_date(latest["date"])}（{age}日前）に記録したものです。'
     freshness += "画面を開いた時点の実測ではありません。</p>" if not live else "最新の実測は下の「取り直した実測値」を見てください。</p>"
 
-    experiments = table(
-        ["区分", "施策", "状態", "見る指標", "判定予定日"],
-        [
-            [esc(e["bucket"]), esc(e["title"]), f'<span class="pill {"warn" if e["status"] == "measuring" else "muted"}">{esc(e["status"])}</span>', esc(e["metric"]), fmt_full_date(e["judge_at"])]
-            for e in kpi["experiments"]
-        ],
+    experiment_rows = []
+    for experiment in kpi["experiments"]:
+        label, tone = EXPERIMENT_STATUS.get(experiment["status"], (experiment["status"], "muted"))
+        experiment_rows.append(
+            [
+                esc(experiment["bucket"]),
+                esc(experiment["title"]),
+                f'<span class="pill {tone}">{esc(label)}</span>',
+                esc(experiment["metric"]),
+                fmt_full_date(experiment["judge_at"]),
+            ]
+        )
+    experiments = table(["区分", "施策", "状態", "見る指標", "判定予定日"], experiment_rows)
+    measuring = sum(1 for e in kpi["experiments"] if e["status"] == "measuring")
+    experiments_lead = (
+        f'<p class="lead">計測中は {measuring} 件。'
+        + ("計測中が0件のときは、数字で効果を追っている施策が無いという意味です。" if measuring == 0 else "")
+        + "「判定不能で終了」は、効果が無かったのではなく<strong>読み手の数が足りなくて判定できなかった</strong>もので、"
+        + "機能はサイトに残っています。</p>"
     )
 
     return f"""<section id="traffic"><h2>3. 流入（どれだけ読まれているか）</h2>
@@ -395,7 +420,8 @@ def section_traffic(data: dict) -> str:
 <div class="goals">{"".join(goal_rows)}</div>
 <h3>週次の記録</h3>
 {table(["日付", "訪問者", "ページ閲覧", "1人あたり", "投票累計", "検索表示", "検索クリック"], history_rows)}
-<h3>いま試していること</h3>
+<h3>施策の状態</h3>
+{experiments_lead}
 {experiments}
 </section>"""
 
