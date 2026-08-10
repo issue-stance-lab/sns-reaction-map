@@ -1,3 +1,19 @@
+> **【廃止・2026-08-10】この文書は運用から外れている。現在の手順として参照しないこと。**
+>
+> 作成は2026-06-27。以下の理由で `archive/` へ移した。
+>
+> 1. **サイトのURLが旧ドメイン**（`kart100sd-two.github.io`）のまま。現行は `issue-stance-lab.github.io`
+> 2. **リプライのURLルールが現行と矛盾する。** 本文は「URLなしで2件、URLありで1件まで返信する」
+>    としているが、現行運用はリプライ全件URLなし（`configs/prompts/claude-code/x-daily-session.md` の禁止事項）。
+>    2つのルールが同時に存在したまま気づかれずにいた
+> 3. アカウント選定基準（フォロワー1万〜10万の中規模）も、2026-08-10 の実測で選定軸が
+>    「元投稿の返信数の少なさ」と「元投稿の新しさ」に変わったため現行と合わない
+>
+> 現行の正典:
+> - リプライ運用: `configs/prompts/claude-code/x-daily-session.md`
+> - URL付き流入投稿: `X_POSTING_GUIDE.md`
+> - 実績と分析: `docs/x-posts.md`
+
 # X初期フォロワー獲得の集客戦略
 
 対象アカウント: [@sns_hannou_ma](https://x.com/sns_hannou_ma)  
