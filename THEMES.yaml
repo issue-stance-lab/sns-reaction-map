@@ -89,8 +89,10 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
     page_update_mode: manual    # 再実行可能な更新スクリプトなし
-    collect_at: 2026-08-11 # 8/15に3テーマ集中したため前倒し（前回7/26から16日）
+    collect_at: 2026-08-17 # 2026-08-10収集の新規153件（50件以上）のため今回だけ7日後
     refresh_at:
+    collect_mode: scheduled
+    last_refresh_attempt_at: 2026-08-10
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 72
@@ -288,8 +290,10 @@ themes:
     manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
     published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
     page_update_mode: adapter   # refresh_topic.py の koshitsu adapter。2026-08-06 に staging対応・冪等性・投票互換を確認
-    collect_at: 2026-08-12
+    collect_at: 2026-08-17
     refresh_at: 2026-08-12
+    collect_mode: scheduled
+    last_refresh_attempt_at: 2026-08-10
     published_at: 2026-07-18
     updated_at: 2026-07-26
     collect_delta: 347
