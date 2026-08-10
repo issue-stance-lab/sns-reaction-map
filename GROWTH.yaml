@@ -10,13 +10,22 @@
 #   capabilities: 一度作れば全テーマに効くサイト機能。工程は idea → building → built（検証済み・マージ待ち）→ measure → done
 #                 計測中の凍結は「同じ指標を動かす変更のマージ」のみ。実装は built まで先行してよい（GROWTH_LOOP.md build-ahead）
 #   experiments:  仮説→実装→計測→判定のライフサイクルを持つ施策
-#                 status: idea / building / measuring / adopted / rejected / blocked
+#                 status: idea / building / measuring / adopted / rejected / closed_undecided / blocked
 #   recurring:    定期運用タスク。priority: critical のものは毎ループ必ず確認する
 #   activity_log: 計測中施策と並行して行った変更の時系列ログ（初期トラクションフェーズ用）
+#
+# closed_undecided（2026-08-10 に追加）
+#   「効果が無かった」ではなく「母数が足りず判定できないまま計測を終了した」状態。
+#   実装はサイトに残す。rejected（仮説が否定された）と混同しないこと。
+#   混同すると、後で流入が増えたときに「一度否定された施策」として再検討されなくなる。
+#   閉じるときは closed_at と、再開の判断材料（reopen_when）を必ず書く。
 #
 # ルール:
 #   - measuring 状態の experiment は同時に1つまで（効果の切り分けのため）
 #   - judge_at の扱いはフェーズ依存。initial_traction では振り返り日（reflection記録で延長可）、growth では判定期限（adopted/rejected 必須）
+#   - **延長は1回まで。** 2回目の判定日が来ても母数が足りない場合は closed_undecided で閉じる。
+#     2026-08-10 に5件が「1回目延長」のまま11日放置され、同時計測1件の上限も破っていた。
+#     延長を繰り返すと台帳が「何を計っているか分からない状態」になり、判定そのものが起きなくなる
 #   - 保護タグ（GA4/AdSense/Supabase/OGP）は絶対に壊さない
 
 phase:
@@ -90,61 +99,71 @@ capabilities:
     title: 投票完了後のXシェアボタン
     hypothesis: 投票直後は熱量が最も高く、結果画面にシェア導線を置けばシェア数が増える
     scope: 全テーマ共通。投票結果表示に「結果をXでシェア」ボタン（テーマ名+自分の立場+URL入りテキスト自動生成）
-    status: measuring
+    status: closed_undecided
     priority: 1
     metric: Xシェア経由の流入（GA4 utm_source=share_button）
     started_at: 2026-07-07
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点で過去7日のshare_button流入は0件。実投票は9→11に増えたがシェア起点流入は確認できない。7/23に全10テーマの固定XシェアJSの404を解消したため、修正後データを1週間計測する（1回目延長）
+    closed_at: 2026-08-10
+    reopen_when: weekly_users が50を超えたら再計測する（現在9）
+    reflection: 2026-07-23時点で過去7日のshare_button流入は0件。実投票は9→11に増えたがシェア起点流入は確認できない。7/23に全10テーマの固定XシェアJSの404を解消したため、修正後データを1週間計測する（1回目延長）。2026-08-10、修正から18日経っても share_button 流入は0件のまま。ただし同期間の全流入が90PV・9ユーザーしかなく、**シェアボタンの出来ではなく母数不足**。効果を否定できないので rejected ではなく closed_undecided で閉じる。ボタンはサイトに残す（残置コストは無く、外すと再計測できなくなる）
     notes: 既存の投票後Xシェア導線を全公開テーマで utm_source=share_button / utm_medium=social / utm_campaign=vote_share 付きに統一。OGP画像が既に整備済みなのでカードは綺麗に出るはず
 
   related-themes-block:
     title: 投票完了後・ページ末尾の関連テーマ表示
     hypothesis: 読了・投票完了時点が離脱点。そこに関連テーマカードを置けば回遊が増える
     scope: 全テーマ共通。ページ末尾と投票完了画面に他テーマカード2-3枚
-    status: measuring
+    status: closed_undecided
     priority: 2
     metric: pages_per_session、内部リンククリック（GA4イベント）
     started_at: 2026-07-08
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点でrelated_theme_clickは0件、公開ホスト限定のpages/sessionは4.250→2.800。母数10ユーザーと少なく、導線の効果を判断できないため1週間延長する（1回目延長）。次回も0件なら導線・イベント発火を再点検する
+    closed_at: 2026-08-10
+    reopen_when: weekly_users が50を超えたら再計測する（現在9）
+    reflection: 2026-07-23時点でrelated_theme_clickは0件、公開ホスト限定のpages/sessionは4.250→2.800。母数10ユーザーと少なく、導線の効果を判断できないため1週間延長する（1回目延長）。次回も0件なら導線・イベント発火を再点検する。2026-08-10、related_theme_click は依然0件。**ただしイベントが発火していないのか、押されていないだけなのかを切り分けていない**（前回「再点検する」と書いたまま未実施）。pages/session は 2.800→3.750 に戻ったが9ユーザーの小標本で複数施策が並行しており帰属不能。closed_undecided で閉じる。再開時は、まず手動クリックで related_theme_click が GA4 に届くかを確認すること
     notes: ポータルの回遊カード実装を流用。2026-07-07に8テーマへ投票結果内関連テーマと related_theme_click GA4イベントを実装。share-after-voteとは別指標（回遊 vs X流入）のため並行計測開始（2026-07-08）
 
   portal-featured-slot:
     title: トップページの注目テーマ枠
     hypothesis: 新着・話題性の高いテーマを最上部に出すと初回訪問者の直帰が減る
     scope: ポータルに「注目」枠1つ。GROWTH.yaml の featured フィールドで指定
-    status: measuring
+    status: closed_undecided
     priority: 3
     metric: ポータルからテーマページへの遷移率
     started_at: 2026-07-05
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点でトップ系ページは合計56PVあるが、注目枠からテーマへの遷移イベントを個別取得できておらず効果判定不能。現行の副首都枠で1週間延長する（1回目延長）
+    closed_at: 2026-08-10
+    reopen_when: 注目枠のクリックを個別のGA4イベントとして取れるようにしてから再計測する。それが無い限り何度延長しても判定できない
+    reflection: 2026-07-23時点でトップ系ページは合計56PVあるが、注目枠からテーマへの遷移イベントを個別取得できておらず効果判定不能。現行の副首都枠で1週間延長する（1回目延長）。2026-08-10、**計測手段が無いまま延長していたので、延長しても判定できるはずがなかった**。トップ系は index.html 36PV＋トップ6PVで計42PV、テーマページ最多は消費税減税6PV。注目枠は fukushuto のままだが fukushuto のPVは4で、枠の効果があるとは言えない（ただし母数不足で否定もできない）。closed_undecided で閉じる。枠自体は残す
     notes: school-nickname-ban から fukushuto に切り替え済み
 
   x-post-templates:
     title: X投稿テンプレート自動生成
     hypothesis: テーマごとの定型投稿（問題提起+スタンスマップ画像+URL）を用意すれば投稿頻度が上がる
     scope: 新テーマ公開時・データ補充時にハブが投稿文案を生成し人間に渡す運用をループに組み込む
-    status: measuring
+    status: closed_undecided
     priority: 4
     metric: x_followers、X経由流入（GA4）
     started_at: 2026-07-05
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点でXフォロワー数は未取得。直近投稿対象の副首都は過去7日58PV、皇室典範は32PVで上位だがUTM帰属は確認できない。X活動を継続し、フォロワー数の手動確認と合わせて1週間延長する（1回目延長）
+    closed_at: 2026-08-10
+    reopen_when: Xのリーチが流入に変換されない原因が分かってから。テンプレートの型を比べるのは、リンクが踏まれる場所を確保したあとの話
+    reflection: 2026-07-23時点でXフォロワー数は未取得。直近投稿対象の副首都は過去7日58PV、皇室典範は32PVで上位だがUTM帰属は確認できない。X活動を継続し、フォロワー数の手動確認と合わせて1週間延長する（1回目延長）。2026-08-10、**この施策は前提から崩れている。** 8/1の実測でURL付き通常ポストのviewsは10、同時期のリプライは9.4K〜871K（約1,000倍差、docs/x-posts.md参照）。直近30日ではリプライ87本で表示7.6Mに対し、サイトのページ閲覧は90・URL付き投稿は2本のみ。投稿文の型を比べる以前に、リーチのある枠にURLが乗っていない。closed_undecided で閉じ、この問題は別途「Xのリーチが流入にならない件」として調査する
     notes: school-nickname-ban の投稿文案を初回生成済み（下記参照）
 
   design-tokens-unify:
     title: 全テーマの配色・フォント・余白のトークン統一
     hypothesis: ページごとにトーンがバラつくと「作りかけ感」が出て再訪意欲を下げる。共通CSSトークン化で一貫した世界観にする
     scope: 全テーマ+ポータル。色・フォント・余白を共通CSS変数に集約（TASK_BOARD課題18の残作業と連動）
-    status: measuring
+    status: closed_undecided
     priority: 5
     metric: 直帰率、pages_per_session（間接指標。主目的はサイト魅力）
     built_at: 2026-07-08
     started_at: 2026-07-09
     judge_at: 2026-07-30
-    reflection: 2026-07-23時点で公開ホスト限定のpages/sessionは4.250→2.800だが、10ユーザーの小標本かつ複数施策が並行しておりデザイントークン単独の影響は判定不能。表示不具合は確認されていないため1週間延長する（1回目延長）
+    closed_at: 2026-08-10
+    reopen_when: 再計測しない。デザインの一貫性は数字で判定する対象ではなく、TASK_BOARD 課題18・課題44（共通デザインの再設計）として進める
+    reflection: 2026-07-23時点で公開ホスト限定のpages/sessionは4.250→2.800だが、10ユーザーの小標本かつ複数施策が並行しておりデザイントークン単独の影響は判定不能。表示不具合は確認されていないため1週間延長する（1回目延長）。2026-08-10、**そもそも間接指標しか無く、この規模では永久に判定できない**（pages/session は 2.800→3.750 に戻ったが、同期間に複数の変更が入っている）。実装（docs/site-tokens.css）は全ページに入って不具合も出ていないので、計測だけ終了する。以後は数字ではなく設計課題として TASK_BOARD 側で扱う
     notes: サイト魅力枠。docs/site-tokens.css を新規作成し全12ページへ link 追加。--ink/--muted/--line/--panel/--shadow/--font/--radius を共通化。テーマ固有の --bg/--accent/--grad-* は各ページに残存。コンソールエラーなし・375px横スクロールなし・保護タグ全確認済み。PR #11 を2026-07-09にmainへマージし計測開始
 
   vote-2d-canvas:
