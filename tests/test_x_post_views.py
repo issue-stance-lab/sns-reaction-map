@@ -1,5 +1,8 @@
 """X投稿の表示回数計測補助ツールの検査。"""
 
+from unittest import mock
+import json
+import io
 import datetime as dt
 import sys
 import unittest
@@ -94,3 +97,64 @@ class XPostViewsTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class EngagementRecordingTest(unittest.TestCase):
+    """いいね・リポストを列を増やさず注記に残せること。"""
+
+    def test_view_arg_accepts_optional_likes_and_reposts(self):
+        parsed = x_post_views._parse_views(["111=642,6,2", "222=59"])
+        self.assertEqual(parsed["111"], x_post_views.Metric(642, 6, 2))
+        self.assertEqual(parsed["222"], x_post_views.Metric(59, None, None))
+
+    def test_view_arg_rejects_too_many_values(self):
+        with self.assertRaises(ValueError):
+            x_post_views._parse_views(["111=1,2,3,4"])
+
+    def test_measurement_text_appends_engagement(self):
+        posted = dt.datetime(2026, 8, 10, 19, 57, tzinfo=x_post_views.JST)
+        measured = dt.datetime(2026, 8, 11, 12, 0, tzinfo=x_post_views.JST)
+        text = x_post_views._measurement_text(642, measured, posted, 6, 2)
+        self.assertIn("**642**", text)
+        self.assertIn("いいね6", text)
+        self.assertIn("リポスト2", text)
+
+    def test_measurement_text_omits_engagement_when_absent(self):
+        posted = dt.datetime(2026, 8, 10, 19, 57, tzinfo=x_post_views.JST)
+        measured = dt.datetime(2026, 8, 11, 12, 0, tzinfo=x_post_views.JST)
+        text = x_post_views._measurement_text(642, measured, posted)
+        self.assertNotIn("いいね", text)
+        self.assertNotIn("リポスト", text)
+
+    def test_negative_engagement_is_rejected(self):
+        with self.assertRaises(ValueError):
+            x_post_views._parse_views(["111=642,-1"])
+
+
+class ReplyListingTest(unittest.TestCase):
+    """自投稿に付いた返信の検出。ネットワークには出ない。"""
+
+    def test_all_status_ids_are_unique_and_newest_first(self):
+        text = (
+            "1 = https://x.com/sns_hannou_ma/status/100\n"
+            "2 = https://x.com/sns_hannou_ma/status/300\n"
+            "再掲 https://x.com/sns_hannou_ma/status/100\n"
+            "3 = https://x.com/sns_hannou_ma/status/200\n"
+        )
+        self.assertEqual(x_post_views._all_status_ids(text), ["300", "200", "100"])
+
+    def test_fetch_returns_none_on_unexpected_payload(self):
+        with mock.patch.object(x_post_views.urllib.request, "urlopen") as opener:
+            opener.return_value.__enter__.return_value = io.BytesIO(b'{"error":"x"}')
+            self.assertIsNone(x_post_views.fetch_public_counts("123"))
+
+    def test_fetch_maps_public_fields(self):
+        payload = json.dumps(
+            {"id_str": "123", "conversation_count": 2, "favorite_count": 5, "text": "本文"}
+        ).encode()
+        with mock.patch.object(x_post_views.urllib.request, "urlopen") as opener:
+            opener.return_value.__enter__.return_value = io.BytesIO(payload)
+            got = x_post_views.fetch_public_counts("123")
+        self.assertEqual(got["replies"], 2)
+        self.assertEqual(got["likes"], 5)
+        self.assertEqual(got["url"], "https://x.com/sns_hannou_ma/status/123")

@@ -10,6 +10,9 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import time
+import urllib.error
+import urllib.request
 import re
 import sys
 from dataclasses import asdict, dataclass
@@ -195,15 +198,37 @@ def _parse_measured_at(value: str | None) -> dt.datetime:
     return parsed.astimezone(JST)
 
 
-def _measurement_text(views: int, measured_at: dt.datetime, posted_at: dt.datetime) -> str:
+def _measurement_text(
+    views: int,
+    measured_at: dt.datetime,
+    posted_at: dt.datetime,
+    likes: int | None = None,
+    reposts: int | None = None,
+) -> str:
+    """計測値の表記を作る。
+
+    いいね・リポストは列を増やさず注記に入れる。実績表は既存行がすべて8列で、
+    列を足すと行ごとの列数がずれる。数値は表示回数と同じ aria-label から
+    一緒に読めるので取得の手間は増えない。
+    """
     hours = round((measured_at - posted_at).total_seconds() / 3600)
     if hours < 0:
         raise ValueError("計測日時が投稿日時より前です")
-    return f"**{views:,}**（{measured_at:%Y-%m-%d %H:%M}計測・投稿から約{hours}時間後）"
+    extra = ""
+    if likes is not None:
+        extra += f"・いいね{likes:,}"
+    if reposts is not None:
+        extra += f"・リポスト{reposts:,}"
+    return f"**{views:,}**（{measured_at:%Y-%m-%d %H:%M}計測・投稿から約{hours}時間後{extra}）"
 
 
 def apply_measurements(text: str, measurements: dict[str, int], measured_at: dt.datetime) -> str:
     """全入力を検証してから未計測箇所だけを書き換える。"""
+    # 後方互換: 表示回数だけの int で渡された場合も受ける
+    measurements = {
+        status_id: value if isinstance(value, Metric) else Metric(value)
+        for status_id, value in measurements.items()
+    }
     pending = {item.status_id: item for item in find_pending(text, measured_at)}
     unknown = sorted(set(measurements) - set(pending))
     if unknown:
@@ -211,16 +236,21 @@ def apply_measurements(text: str, measurements: dict[str, int], measured_at: dt.
             "未計測の投稿として確認できないため書き込みません（計測済みの値は上書き禁止）: "
             + ", ".join(unknown)
         )
-    for status_id, views in measurements.items():
-        if views < 0:
+    for status_id, metric in measurements.items():
+        if metric.views < 0:
             raise ValueError(f"表示回数は0以上で指定してください: {status_id}")
+        for label, value in (("いいね", metric.likes), ("リポスト", metric.reposts)):
+            if value is not None and value < 0:
+                raise ValueError(f"{label}は0以上で指定してください: {status_id}")
 
     lines = text.splitlines()
     # 行挿入で後続の行番号がずれないよう、文書の下から更新する。
     ordered = sorted(measurements.items(), key=lambda pair: pending[pair[0]].line_index, reverse=True)
-    for status_id, views in ordered:
+    for status_id, metric in ordered:
         item = pending[status_id]
-        value = _measurement_text(views, measured_at, item.posted_at)
+        value = _measurement_text(
+            metric.views, measured_at, item.posted_at, metric.likes, metric.reposts
+        )
         if item.kind == "リプライ":
             cells = _split_table(lines[item.line_index])
             sections = _sections(lines)
@@ -239,19 +269,74 @@ def apply_measurements(text: str, measurements: dict[str, int], measured_at: dt.
     return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
 
 
-def _parse_views(values: list[str]) -> dict[str, int]:
-    measurements: dict[str, int] = {}
+@dataclass(frozen=True)
+class Metric:
+    views: int
+    likes: int | None = None
+    reposts: int | None = None
+
+
+def _parse_views(values: list[str]) -> dict[str, Metric]:
+    """`ID=表示回数` または `ID=表示回数,いいね,リポスト` を読む。
+
+    いいね・リポストは省略可。表示回数と同じ aria-label から読めるので、
+    計測するときは一緒に入れておくと後から時間帯や型の分析に使える。
+    """
+    measurements: dict[str, Metric] = {}
     for value in values:
         try:
-            status_id, count = value.split("=", 1)
+            status_id, counts = value.split("=", 1)
             if status_id in measurements:
                 raise ValueError(f"同じ投稿IDが重複しています: {status_id}")
-            measurements[status_id] = int(count.replace(",", ""))
+            parts = [p.strip() for p in counts.split(",") if p.strip() != ""]
+            if not 1 <= len(parts) <= 3:
+                raise ValueError("値の個数が不正です")
+            nums = [int(p) for p in parts]
+            if any(n < 0 for n in nums):
+                raise ValueError("0以上で指定してください")
         except ValueError as exc:
             if "重複" in str(exc):
                 raise
-            raise ValueError(f"--view は 投稿ID=表示回数 で指定してください: {value}") from exc
+            raise ValueError(
+                f"--view は 投稿ID=表示回数 または 投稿ID=表示回数,いいね,リポスト で指定してください: {value}"
+            ) from exc
+        measurements[status_id] = Metric(*nums)
     return measurements
+
+
+def _all_status_ids(text: str) -> list[str]:
+    """記録済みの自投稿IDを重複なく新しい順に返す。"""
+    seen: dict[str, None] = {}
+    for match in _STATUS_RE.finditer(text):
+        seen.setdefault(match.group(1), None)
+    return sorted(seen, key=int, reverse=True)
+
+
+def fetch_public_counts(status_id: str, timeout: float = 10.0) -> dict | None:
+    """公開APIで返信数といいね数を取る。ログイン不要。
+
+    表示回数はこのAPIに存在しない（2026-08-10 検証）。取れるのは
+    conversation_count / favorite_count / created_at / photos まで。
+    """
+    url = (
+        "https://cdn.syndication.twimg.com/tweet-result"
+        f"?id={status_id}&token=a"
+    )
+    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            data = json.load(response)
+    except (urllib.error.URLError, json.JSONDecodeError, TimeoutError):
+        return None
+    if not isinstance(data, dict) or "id_str" not in data:
+        return None
+    return {
+        "status_id": status_id,
+        "url": f"https://x.com/sns_hannou_ma/status/{status_id}",
+        "replies": data.get("conversation_count", 0),
+        "likes": data.get("favorite_count", 0),
+        "text": (data.get("text") or "").replace("\n", " ")[:60],
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -265,8 +350,21 @@ def main(argv: list[str] | None = None) -> int:
     list_parser.add_argument("--json", action="store_true", help="JSONで出力する")
 
     apply_parser = subparsers.add_parser("apply", help="取得済みの表示回数を書き戻す")
-    apply_parser.add_argument("--view", action="append", required=True, metavar="ID=COUNT")
+    apply_parser.add_argument(
+        "--view",
+        action="append",
+        required=True,
+        metavar="ID=VIEWS[,LIKES,REPOSTS]",
+        help="表示回数。いいね・リポストも同じ aria-label から読めるので一緒に入れる",
+    )
     apply_parser.add_argument("--measured-at", help="計測日時（ISO 8601、未指定は現在時刻）")
+
+    replies_parser = subparsers.add_parser(
+        "replies", help="自投稿に付いた返信を一覧する（ログイン不要）"
+    )
+    replies_parser.add_argument("--limit", type=int, default=30, help="確認する投稿数（新しい順）")
+    replies_parser.add_argument("--json", action="store_true", help="JSONで出力する")
+    replies_parser.add_argument("--all", action="store_true", help="返信0件も表示する")
 
     args = parser.parse_args(argv)
     text = args.file.read_text(encoding="utf-8")
@@ -283,6 +381,29 @@ def main(argv: list[str] | None = None) -> int:
         else:
             for item in items:
                 print(f"{item.timing:7} {item.age_hours:5.1f}時間 {item.kind:7} {item.url} {item.target}")
+        return 0
+
+    if args.command == "replies":
+        rows = []
+        for status_id in _all_status_ids(text)[: args.limit]:
+            info = fetch_public_counts(status_id)
+            if info is None:
+                continue
+            rows.append(info)
+            time.sleep(0.3)  # 公開エンドポイントを叩きすぎない
+        if not args.all:
+            rows = [r for r in rows if r["replies"]]
+        if args.json:
+            print(json.dumps(rows, ensure_ascii=False, indent=2))
+        elif not rows:
+            print("返信が付いた自投稿はありません。")
+        else:
+            print("返信が付いた自投稿（返すかどうかは毎回判断すること）:")
+            for r in rows:
+                print(f"  返信{r['replies']:3} いいね{r['likes']:3}  {r['url']}  {r['text']}")
+            print()
+            print("返信する場合は「### 会話フォロー YYYY-MM-DD」節に記録する。")
+            print("相手の人物評価には乗らず、検証可能な論点に戻すこと（2026-08-09 の実例を参照）。")
         return 0
 
     measured_at = _parse_measured_at(args.measured_at)

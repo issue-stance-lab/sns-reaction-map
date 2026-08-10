@@ -244,6 +244,22 @@ def _parse_views(text: str) -> int | None:
     return int(number)
 
 
+# 注記に入れた「いいね6・リポスト2」を構造化して取り出す。列を増やさずに
+# 後から時間帯・型ごとの分析ができるようにするため（2026-08-10）。
+_LIKES_RE = re.compile(r"いいね\s*([\d,]+)")
+_REPOSTS_RE = re.compile(r"リポスト\s*([\d,]+)")
+
+
+def _engagement_in(text: str, pattern: re.Pattern) -> int | None:
+    match = pattern.search(text or "")
+    if not match:
+        return None
+    try:
+        return int(match.group(1).replace(",", ""))
+    except ValueError:
+        return None
+
+
 def _views_status(text: str) -> str:
     """measured / provisional / missing を返す。provisional は集計に入れない。
 
@@ -312,6 +328,8 @@ def collect_x_posts() -> list[dict]:
                         "parent_views": _parse_views(parent_raw),
                         "own_views": _parse_views(own_raw),
                         "own_views_status": _views_status(own_raw),
+                        "own_likes": _engagement_in(own_raw, _LIKES_RE),
+                        "own_reposts": _engagement_in(own_raw, _REPOSTS_RE),
                         "has_url": _has_url(post_type, kind),
                         "text": "",
                         "note": suffix,
@@ -332,6 +350,8 @@ def collect_x_posts() -> list[dict]:
                     "parent_views": None,
                     "own_views": _parse_views(own_raw),
                     "own_views_status": _views_status(own_raw),
+                    "own_likes": _engagement_in(own_raw, _LIKES_RE),
+                    "own_reposts": _engagement_in(own_raw, _REPOSTS_RE),
                     "has_url": _has_url(post_type, kind),
                     "text": _post_text(body),
                     "note": suffix,
