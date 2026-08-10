@@ -222,9 +222,10 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
     if stats["overdue_count"]:
         next_badge = f'<span class="update-next-badge">更新予定を確認中（{stats["overdue_count"]}テーマ）</span>'
     elif next_update:
-        days_until_update = (next_update - stats["today"]).days
-        next_days = f"あと{days_until_update}日" if days_until_update > 0 else "本日更新予定"
-        next_badge = f'<span class="update-next-badge">次回更新: {next_update.month}月{next_update.day}日（<span id="update-bar-days">{next_days}</span>）</span>'
+        # 残り日数はHTMLに焼き込まない。日付をまたぐたびに古くなり、
+        # このスクリプトを毎日実行しない限り検査が毎日落ちる（課題39）。
+        # 空の span をJSが開いた時点で埋めるので、表示は常に正しい。
+        next_badge = f'<span class="update-next-badge">次回更新: {next_update.month}月{next_update.day}日<span id="update-bar-days"></span></span>'
     else:
         next_badge = '<span class="update-next-badge">更新予定を確認中</span>'
     next_iso = next_update.isoformat() if next_update else stats["today"].isoformat()
@@ -237,9 +238,13 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("投票受付中", r'(<em>)\d+テーマで投票受付中(</em>)', rf'\g<1>{stats["voting_count"]}テーマで投票受付中\2'),
         ("em更新日", r'(<strong id="hero-total-samples">[^<]*</strong><em>)[^<]*(</em>)', rf'\g<1>{updated_short}更新\2'),
         ("更新バー本文", r'最終更新: <strong>[^<]+</strong>（.*?）', f'最終更新: <strong>{updated_long}</strong>（{latest_summary}）'),
-        ("update-bar次回更新", r'<span class="update-next-badge">.*?</span>(?:）</span>)?', next_badge),
+        (
+            "update-bar次回更新",
+            r'<span class="update-next-badge">(?:[^<]+|<span id="update-bar-days">[^<]*</span>)*</span>',
+            next_badge,
+        ),
         ("JS次回更新", r"new Date\('\d{4}-\d{2}-\d{2}T00:00:00\+09:00'\)", f"new Date('{next_iso}T00:00:00+09:00')"),
-        ("JS期限超過表示", r"txt=days>0\?'あと'\+days\+'日':days===0\?'本日更新予定':'[^']+'", "txt=days>0?'あと'+days+'日':days===0?'本日更新予定':'予定を確認中'"),
+        ("JS期限超過表示", r"txt=days>0\?'（あと'\+days\+'日）':days===0\?'（本日更新予定）':'[^']+'", "txt=days>0?'（あと'+days+'日）':days===0?'（本日更新予定）':'（予定を確認中）'"),
         ("バッジデータ", r"var B=\{.*?\};", f"var B={badge_json};"),
     ]
     for theme in (
