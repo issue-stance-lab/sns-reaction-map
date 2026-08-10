@@ -3,7 +3,7 @@
 守りたいのは3点。
   1. 実際のリポジトリの中身で最後まで組み上がること（落ちない）
   2. 出力が公開物に混ざらないこと（docs/ の外・robots で拒否・Git 管理外）
-  3. docs/x-posts.md の実績記録を取りこぼさないこと
+  3. x-posts.md の実績記録を取りこぼさないこと
 """
 
 import datetime as dt
@@ -78,7 +78,7 @@ class XPostTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.posts = collect.collect_x_posts()
-        cls.source = (ROOT / "docs" / "x-posts.md").read_text(encoding="utf-8")
+        cls.source = (ROOT / "x-posts.md").read_text(encoding="utf-8")
 
     def test_every_result_section_is_captured(self):
         """『◯◯実績 YYYY-MM-DD』の見出しが1つでも欠けたら気づけるようにする。"""
@@ -98,7 +98,7 @@ class XPostTests(unittest.TestCase):
         self.assertIsNone(collect._parse_views("—"))
 
     def test_views_accept_comma_man_bold_and_trailing_note(self):
-        """実際に docs/x-posts.md に現れる表記をすべて読めること。
+        """実際に x-posts.md に現れる表記をすべて読めること。
 
         いずれか1つでも読めないと、その投稿は「表示回数なし」として静かに
         集計から落ちる。2026-08-06〜08-10 が5日ぶん消えていたのがこれ。

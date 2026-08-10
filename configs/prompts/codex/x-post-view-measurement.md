@@ -1,7 +1,7 @@
 # X投稿の表示回数を計測する
 
 @sns_hannou_ma がすでに投稿したリプライ・論点ポスト・会話フォローのうち、
-投稿から24時間以上たった未計測分だけを計測し、`docs/x-posts.md` に記録する。
+投稿から24時間以上たった未計測分だけを計測し、`x-posts.md` に記録する。
 
 ## スコープ
 
@@ -36,7 +36,7 @@ python3 scripts/verify_theme_page.py
 python3 scripts/build_admin_dashboard.py
 ```
 
-8. 全て成功し、`docs/x-posts.md` と管理画面の収集結果に値が出た場合だけコミットする
+8. 全て成功し、`x-posts.md` と管理画面の収集結果に値が出た場合だけコミットする
 
 ## 失敗時
 

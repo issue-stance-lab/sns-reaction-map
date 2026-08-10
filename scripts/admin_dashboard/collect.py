@@ -280,13 +280,13 @@ def _views_status(text: str) -> str:
 
 
 def collect_x_posts() -> list[dict]:
-    """docs/x-posts.md の「◯◯実績 YYYY-MM-DD」節を、1投稿1行に展開する。
+    """x-posts.md の「◯◯実績 YYYY-MM-DD」節を、1投稿1行に展開する。
 
     節には2つの形がある。
       - 表形式（リプライ実績）: 1行 = 1リプライ。views 列あり
       - 箇条書き形式（論点ポスト・通常ポスト）: 節全体で1投稿
     """
-    text = _read_text("docs/x-posts.md")
+    text = _read_text("x-posts.md")
     if not text:
         return []
 
@@ -433,7 +433,7 @@ def _table_rows(body: list[str], label: str = "") -> list[dict]:
     unknown = [c for c in header if c not in _KNOWN_POST_COLS]
     if unknown:
         raise ValueError(
-            f"docs/x-posts.md の「{label}」に未対応の列があります: {unknown}\n"
+            f"x-posts.md の「{label}」に未対応の列があります: {unknown}\n"
             f"投稿表で使える列は {sorted(_KNOWN_POST_COLS)} です。\n"
             f"表示回数の列は {sorted(_KNOWN_VIEW_COLS)} のいずれかにしてください。\n"
             f"列を増やすときは scripts/admin_dashboard/collect.py と "
