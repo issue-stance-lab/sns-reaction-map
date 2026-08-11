@@ -20,6 +20,7 @@
 - VOTE_ISSUES（投票の論点選択肢）
 - アリーナの見出し件数・フィルタボタン
 - ヒーローの lead / 議論の中心 / insight カードの件数
+- 調査条件（件数・取得期間）と詳細データの「収集クエリ」
 - 「争点別のXの声」セクション全体（件数・熱量・温度バー・代表投稿）
 
 論点の並びは件数の降順、「その他」は必ず末尾。件数はここでしか作らない。
@@ -39,12 +40,16 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
+    from .verify_sample_periods import expected_period, summarize
 except ImportError:  # python3 scripts/build_koshitsu_arena.py
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
+    from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
 
 THEME = "koshitsu-tenpakai"
 OTHER = "その他"
@@ -120,7 +125,26 @@ def load_canon(source: Path | None = None) -> tuple[list[dict[str, Any]], str, i
             raise IssueCountError(f"{THEME}: 合成データを正典にはできません: {sample_file}")
         records = json.loads((ROOT / sample_file).read_text(encoding="utf-8"))
     rows = select_opinions(records, sample_file)
-    return rows, sample_file, len(records)
+    return rows, sample_file, len(records), sample_period(records)
+
+
+def sample_period(records: list[dict[str, Any]]) -> str:
+    """調査条件に出す収集日の範囲。
+
+    THEMES.yaml の `sample_period` と同じ計算を使う。verify_theme_page.py は
+    台帳の値とページの表記を突き合わせるので、別々に数えると必ずいつかズレる。
+    収集回が増えるたびに変わる値なので、ページ側に固定で書かない。
+    """
+    period = expected_period(summarize(records))
+    return "記録なし" if period == "unknown" else period
+
+
+def load_queries() -> list[str]:
+    """収集に実際に使った検索語。refresh_topic.py が読むのと同じファイルから出す。"""
+    themes = parse_themes_yaml(THEMES_YAML)
+    path = ROOT / str(themes[THEME].get("refresh_config") or "")
+    value = yaml.safe_load(path.read_text(encoding="utf-8"))
+    return [str(query) for query in (value.get("fetch_queries") or [])]
 
 
 def issue_order(rows: list[dict[str, Any]]) -> list[str]:
@@ -396,7 +420,7 @@ def build(
     template: Path | None = None,
     output: Path | None = None,
 ) -> tuple[list[str], bool]:
-    rows, sample_file, collected = load_canon(source)
+    rows, sample_file, collected, period = load_canon(source)
     config_path = ROOT / "configs" / f"{THEME}-reaction-map.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
     arena = config.get("arena")
@@ -476,26 +500,35 @@ def build(
     )
     page = replace_once(
         page,
+        r"（取得期間: [^／]*／",
+        f"（取得期間: {period}／",
+        "調査条件の取得期間",
+    )
+    page = replace_once(
+        page,
         r"関連性と[^<]*?件を表示しています。",
         f"関連性と意見性、論点を判定し、収集した{collected}件のうち"
         f"意見と判定した{total}件を表示しています。",
         "収集方法の件数",
     )
+    # 検索語・取得期間・件数は収集回が増えるたびに変わる。ページに固定で書くと、
+    # 追加収集のあとも初回の値が残る（2026-08-10 まで、7/17収集時の検索語9本と
+    # 「2026-07-17収集分と比較」が公開ページに残っていた）。
     page = replace_once(
         page,
-        r"にYahooリアルタイム検索で\d+件を取得（重複除去後）。[^<]*?しています。",
-        f"にYahooリアルタイム検索で{collected}件を取得（重複除去後）。"
-        f"全件をAIが論点・立場・表現強度で分類し、うち意見と判定した{total}件を集計対象にしています。",
-        "収集クエリの件数",
-    )
-    page = replace_once(
-        page,
-        r"ページ上の件数はすべて[^<]*",
-        f"ページ上の件数はすべてこの意見{total}件から生成しています"
+        r"<details><summary>収集クエリ</summary>.*?</details>",
+        "<details><summary>収集クエリ</summary><ul>"
+        f'<li>{html.escape(" / ".join(load_queries()))}</li>'
+        f"<li>{html.escape(period)}にYahooリアルタイム検索で累計{collected}件を取得"
+        f"（重複除去後）。全件をAIが論点・立場・表現強度で分類し、"
+        f"うち意見と判定した{total}件を集計対象にしています。</li>"
+        f"<li>ページ上の件数はすべてこの意見{total}件から生成しています"
         "（scripts/build_koshitsu_arena.py）。"
-        f"「世論の潮目」ウィジェットだけは例外で、2026-07-17収集分と収集{collected}件全体の"
-        "構成比を比較しています。",
-        "件数の出所の説明",
+        "「世論の潮目」ウィジェットだけは例外で、前回の収集分と今回の収集分どうしの"
+        "構成比を比較しています（対象日はウィジェット内に表示）。</li>"
+        "</ul></details>",
+        "収集クエリ",
+        flags=re.S,
     )
     page = replace_once(
         page,

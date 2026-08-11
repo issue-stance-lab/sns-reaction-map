@@ -16,6 +16,20 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def opinions(records: list[dict], main_issue: str | None = None) -> int:
+    """意見と判定されたレコード数。件数は正典から数える。
+
+    収集回を足すたびに正典の件数は変わる。期待値をテストに焼き込むと、
+    データ更新のたびにテストが落ちて更新そのものが止まる。
+    """
+    return sum(
+        1
+        for row in records
+        if row.get("classification", {}).get("is_opinion") is True
+        and (main_issue is None or row.get("classification", {}).get("main_issue") == main_issue)
+    )
+
+
 class KoshitsuAdapterTests(unittest.TestCase):
     def test_changed_candidate_updates_once_then_is_idempotent(self):
         source = json.loads(CANON.read_text(encoding="utf-8"))
@@ -43,9 +57,10 @@ class KoshitsuAdapterTests(unittest.TestCase):
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
             first = digest(page_path)
             page = page_path.read_text(encoding="utf-8")
-            # 意見1件を足したぶんだけ最大論点の件数が増える（93 → 94）。
+            # 意見1件を足したぶんだけ最大論点の件数が増える。
             # 数えるのは意見のみなので、意見と判定された投稿を足さないと動かない
-            self.assertIn('issue-count-koshitsu-tenpakai-dankei">94件', page)
+            expected = opinions(source, "男系vs女系") + 1
+            self.assertIn(f'issue-count-koshitsu-tenpakai-dankei">{expected}件', page)
 
             command[command.index("--html-template") + 1] = str(page_path)
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
@@ -79,7 +94,7 @@ class KoshitsuAdapterTests(unittest.TestCase):
 
         result = self._build_with(source + [added])
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("収集348件 → 意見283件", result.stdout)
+        self.assertIn(f"収集{len(source) + 1}件 → 意見{opinions(source)}件", result.stdout)
 
     def test_missing_is_opinion_stops_with_an_error(self):
         """判定が無いレコードは静かに落とさず止める（件数の食い違いを追えなくなる）。"""
