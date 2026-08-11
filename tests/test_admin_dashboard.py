@@ -16,27 +16,34 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from admin_dashboard import collect, render  # noqa: E402
+from admin_dashboard import actions, collect, render  # noqa: E402
 
 
 TODAY = dt.date(2026, 8, 10)
 
 
+def build_data(today: dt.date = TODAY) -> dict:
+    data = {
+        "today": today,
+        "built_at": dt.datetime(2026, 8, 10, 9, 0),
+        "themes": collect.collect_themes(today),
+        "kpi": collect.collect_kpi(),
+        "x_posts": collect.collect_x_posts(),
+        "commits": collect.collect_commits(20),
+        "data_updates": collect.collect_data_updates(),
+        "tasks": collect.collect_tasks(),
+        "health": collect.collect_source_health(today),
+        "live": None,
+        "sample_files": collect.collect_sample_files(),
+    }
+    data["next"] = actions.next_action(data)
+    return data
+
+
 class BuildTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = {
-            "today": TODAY,
-            "built_at": dt.datetime(2026, 8, 10, 9, 0),
-            "themes": collect.collect_themes(TODAY),
-            "kpi": collect.collect_kpi(),
-            "x_posts": collect.collect_x_posts(),
-            "commits": collect.collect_commits(20),
-            "data_updates": collect.collect_data_updates(),
-            "tasks": collect.collect_tasks(),
-            "health": collect.collect_source_health(TODAY),
-            "live": None,
-        }
+        cls.data = build_data()
         cls.html = render.render(cls.data)
 
     def test_all_sections_render(self):
@@ -200,6 +207,333 @@ class XPostTests(unittest.TestCase):
     def test_posts_are_newest_first(self):
         dates = [p["date"] for p in self.posts]
         self.assertEqual(dates, sorted(dates, reverse=True))
+
+
+class NextActionTests(unittest.TestCase):
+    """「次の一手」とコマンド組み立て。3つの不変条件を固定する。
+
+    どれも実際に事故った、あるいは事故りうる箇所なので、
+    ここが落ちたら実装ではなくテストの前提を疑うこと。
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.themes = collect.collect_themes(TODAY)
+        cls.by_key = {theme["key"]: theme for theme in cls.themes}
+
+    def _adapter_theme(self) -> dict:
+        for theme in self.themes:
+            if theme["update_mode"] == "adapter":
+                return theme
+        self.skipTest("adapter のテーマが THEMES.yaml に無い")
+
+    def test_date_is_the_run_day_not_the_scheduled_day(self):
+        """--date は実行日。予定日を渡すと次回更新日がずれて更新が静かに止まる。"""
+        theme = self._adapter_theme()
+        run_day = TODAY + dt.timedelta(days=3)
+        block = actions.command_block(theme, run_day, promote=False)
+        self.assertIn("--date 2026-08-13", block["script"])
+        if theme["collect_at"] and theme["collect_at"] != run_day:
+            self.assertNotIn(f"--date {theme['collect_at']:%Y-%m-%d}", block["script"])
+
+    def test_commands_start_by_making_a_worktree(self):
+        """共有ツリーでの実行を促さない（LOOP.md ⓪）。"""
+        theme = self._adapter_theme()
+        block = actions.command_block(theme, TODAY, promote=False)
+        self.assertTrue(
+            block["script"].startswith("git worktree add "),
+            f"1行目が worktree の作成になっていない: {block['script'].splitlines()[0]}",
+        )
+
+    def test_promote_is_offered_only_for_adapter_themes(self):
+        for theme in self.themes:
+            block = actions.command_block(theme, TODAY, promote=True)
+            if theme["update_mode"] == "adapter":
+                self.assertIsNotNone(block, f"{theme['key']} は公開まで進められるはず")
+                self.assertIn("--promote", block["script"])
+            else:
+                self.assertIsNone(block, f"{theme['key']} に --promote を出してはいけない")
+
+    def test_collect_only_command_has_no_promote(self):
+        theme = self._adapter_theme()
+        self.assertNotIn("--promote", actions.command_block(theme, TODAY, promote=False)["script"])
+
+    def test_backup_destination_matches_the_canonical_location(self):
+        theme = self._adapter_theme()
+        self.assertIn(f"--backup-dest {collect.backup_root()}", actions.command_block(theme, TODAY, promote=False)["script"])
+
+    def test_next_action_returns_at_most_one(self):
+        """予定が何件あっても、示すのは1件だけ。"""
+        data = build_data()
+        action = data["next"]
+        if action is None:
+            self.skipTest("この日に予定が無い")
+        self.assertIsInstance(action["title"], str)
+        self.assertLessEqual(len(action["blocks"]), 2, "収集だけ / 公開まで の2つを超えている")
+
+    def test_overdue_theme_is_chosen_first(self):
+        """期限超過があれば、今日明日の予定より先に出す。"""
+        future = max(t["collect_at"] for t in self.themes if t["collect_at"]) + dt.timedelta(days=1)
+        data = build_data(future)
+        action = data["next"]
+        self.assertIsNotNone(action, "全テーマ超過なのに次の一手が出ていない")
+        self.assertEqual(action["kind"], "refresh")
+        self.assertIn("過ぎています", action["why"])
+
+    def test_same_day_collect_and_refresh_are_one_item(self):
+        """収集と公開更新が同じ日なら1件にまとめる（--promote は収集も行うため）。"""
+        items = actions.due_items(self.themes, TODAY, within=60)
+        seen = set()
+        for item in items:
+            key = (item["theme"]["key"], item["date"])
+            self.assertNotIn(key, seen, f"{item['theme']['key']} の {item['date']} が2行に割れている")
+            seen.add(key)
+
+    def test_pending_measurements_skip_today_and_old_posts(self):
+        """当日は測る時期ではなく、8日以上前は追いかけない。"""
+        posts = [
+            {"date": TODAY, "own_views_status": "missing"},
+            {"date": TODAY - dt.timedelta(days=2), "own_views_status": "provisional"},
+            {"date": TODAY - dt.timedelta(days=2), "own_views_status": "measured"},
+            {"date": TODAY - dt.timedelta(days=30), "own_views_status": "missing"},
+        ]
+        pending = actions.pending_measurements(posts, TODAY)
+        self.assertEqual(len(pending), 1)
+        self.assertEqual(pending[0]["own_views_status"], "provisional")
+
+    def test_readiness_flags_the_shared_worktree(self):
+        """共有ツリーで作ったときは「作業用コピー: 未作成」になること。"""
+        main = actions.main_worktree()
+        if main is None:
+            self.skipTest("git の情報が読めない")
+        checks = actions.readiness(None, root=main)
+        worktree_check = next(c for c in checks if c["name"].startswith("作業用コピー"))
+        self.assertIs(worktree_check["ok"], False)
+
+
+class PostBreakdownTests(unittest.TestCase):
+    """X投稿の型別まとめ。少ない実測を根拠に見せないことを固定する。"""
+
+    def _post(self, **kwargs):
+        base = {
+            "date": TODAY,
+            "kind": "リプライ",
+            "own_views": 100,
+            "own_views_status": "measured",
+            "parent_views": 10_000,
+            "has_url": False,
+        }
+        base.update(kwargs)
+        return base
+
+    def test_group_with_few_measurements_is_marked_reference_only(self):
+        axes = actions.post_breakdown([self._post(), self._post()], TODAY)
+        for axis in axes:
+            for row in axis["rows"]:
+                self.assertTrue(row["reference_only"], f'{row["group"]} が参考値になっていない')
+
+    def test_three_measurements_are_enough_to_be_a_real_number(self):
+        axes = actions.post_breakdown([self._post() for _ in range(3)], TODAY)
+        reply = next(r for r in axes[2]["rows"] if r["group"] == "リプライ")
+        self.assertFalse(reply["reference_only"])
+        self.assertEqual(reply["measured"], 3)
+
+    def test_provisional_views_are_excluded_from_the_numbers(self):
+        posts = [self._post(), self._post(own_views_status="provisional", own_views=9999)]
+        axes = actions.post_breakdown(posts, TODAY)
+        reply = next(r for r in axes[2]["rows"] if r["group"] == "リプライ")
+        self.assertEqual(reply["posts"], 2)
+        self.assertEqual(reply["measured"], 1, "暫定値が集計に入っている")
+        self.assertEqual(reply["views_max"], 100)
+
+    def test_reach_and_views_are_both_reported(self):
+        """到達率だけ見て「良い」と判断できないよう、必ず両方を返す。"""
+        axes = actions.post_breakdown([self._post(own_views=5, parent_views=100) for _ in range(3)], TODAY)
+        row = axes[0]["rows"][0]
+        self.assertEqual(row["reach_median"], 5.0)
+        self.assertEqual(row["views_median"], 5)
+
+    def test_parent_bands_are_bucketed_by_size(self):
+        self.assertEqual(actions.parent_band(None), "記録なし")
+        self.assertEqual(actions.parent_band(999), "〜1千")
+        self.assertEqual(actions.parent_band(1_000), "1千〜1万")
+        self.assertEqual(actions.parent_band(50_000), "1万〜10万")
+        self.assertEqual(actions.parent_band(2_000_000), "10万〜")
+
+    def test_old_posts_are_out_of_scope(self):
+        old = self._post(date=TODAY - dt.timedelta(days=90))
+        axes = actions.post_breakdown([old], TODAY, days=60)
+        self.assertEqual(sum(len(axis["rows"]) for axis in axes), 0)
+
+
+class AnomalyTests(unittest.TestCase):
+    """気になる変化。多く出しすぎると読まれなくなるので、鳴る条件を固定する。"""
+
+    def _data(self, **overrides):
+        data = {
+            "today": TODAY,
+            "themes": [],
+            "x_posts": [],
+            "data_updates": [],
+            "live_cache": {},
+        }
+        data.update(overrides)
+        return data
+
+    def _update(self, **kwargs):
+        base = {
+            "theme": "takaichi",
+            "date": TODAY,
+            "raw": 100,
+            "duplicates": 0,
+            "new": 100,
+            "opinions": 80,
+            "errors": 0,
+            "status": "validated",
+            "checks_ok": True,
+            "next_collect_at": None,
+            "minutes": 20,
+        }
+        base.update(kwargs)
+        return base
+
+    def test_opinions_halving_is_reported(self):
+        found = actions.anomalies(
+            self._data(
+                data_updates=[
+                    self._update(opinions=30),
+                    self._update(date=TODAY - dt.timedelta(days=7), opinions=100),
+                ]
+            )
+        )
+        self.assertTrue(any("半分以下" in item["title"] for item in found))
+
+    def test_small_drop_is_not_reported(self):
+        found = actions.anomalies(
+            self._data(
+                data_updates=[
+                    self._update(opinions=80),
+                    self._update(date=TODAY - dt.timedelta(days=7), opinions=100),
+                ]
+            )
+        )
+        self.assertFalse(any("半分以下" in item["title"] for item in found))
+
+    def test_two_empty_runs_in_a_row_are_reported(self):
+        found = actions.anomalies(
+            self._data(
+                data_updates=[
+                    self._update(new=0),
+                    self._update(date=TODAY - dt.timedelta(days=7), new=0),
+                ]
+            )
+        )
+        self.assertTrue(any("新規0件が2回" in item["title"] for item in found))
+
+    def test_one_empty_run_is_not_reported(self):
+        found = actions.anomalies(
+            self._data(
+                data_updates=[
+                    self._update(new=0),
+                    self._update(date=TODAY - dt.timedelta(days=7), new=50),
+                ]
+            )
+        )
+        self.assertFalse(any("新規0件" in item["title"] for item in found))
+
+    def test_repeated_fetch_failures_are_reported(self):
+        found = actions.anomalies(
+            self._data(live_cache={"ga4": {"consecutive_failures": 3, "last_error": "認証が失効"}})
+        )
+        self.assertTrue(any("3 回続けて失敗" in item["title"] for item in found))
+
+    def test_single_fetch_failure_is_not_reported(self):
+        found = actions.anomalies(
+            self._data(live_cache={"ga4": {"consecutive_failures": 1, "last_error": "一時的な失敗"}})
+        )
+        self.assertFalse(any("失敗" in item["title"] for item in found))
+
+    def test_page_newer_than_ledger_is_not_an_anomaly(self):
+        """共有パーツの変更で全ページが一斉に変わるのは通常の運用。ここで鳴らさない。"""
+        theme = next(t for t in collect.collect_themes(TODAY) if t["html"] and t["updated_at"])
+        found = actions.anomalies(self._data(themes=[dict(theme, updated_at=dt.date(2026, 1, 1))]))
+        self.assertFalse(
+            any("ずれています" in item["title"] or "変わっていません" in item["title"] for item in found),
+            "ページのほうが新しいだけで警告が出ている",
+        )
+
+    def test_ledger_ahead_of_the_page_is_an_anomaly(self):
+        """台帳だけ進んでページが変わっていないのは、公開し忘れの疑い。"""
+        theme = next(t for t in collect.collect_themes(TODAY) if t["html"] and t["updated_at"])
+        found = actions.anomalies(self._data(themes=[dict(theme, updated_at=dt.date(2027, 1, 1))]))
+        self.assertTrue(any("変わっていません" in item["title"] for item in found))
+
+
+class TaskFieldTests(unittest.TestCase):
+    """TASK_BOARD.md の任意欄。未記入でも従来どおり動くこと。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tasks = collect.collect_tasks()
+
+    def test_every_task_has_all_fields_even_when_blank(self):
+        for task in self.tasks:
+            for field in collect.TASK_FIELDS.values():
+                self.assertIn(field, task, f'課題{task["id"]} に {field} が無い')
+
+    def test_status_is_still_read(self):
+        self.assertTrue(all(task["status"] for task in self.tasks), "状態欄が読めていない課題がある")
+
+    def test_optional_fields_are_read_when_present(self):
+        filled = [task for task in self.tasks if task["next_step"]]
+        self.assertTrue(filled, "任意欄を書いた課題が1件も読めていない")
+        waiting = [task for task in self.tasks if task["waiting_on"]]
+        self.assertTrue(waiting, "判断待ち欄が読めていない")
+
+
+class LiveCacheTests(unittest.TestCase):
+    """実測値キャッシュ。失敗が前回の正常値を消さないことを固定する。"""
+
+    NOW = dt.datetime(2026, 8, 10, 9, 0)
+    LATER = dt.datetime(2026, 8, 12, 9, 0)
+
+    def test_success_records_both_timestamps(self):
+        entry = collect.merge_live_result(None, {"activeUsers": 120}, "", self.NOW)
+        self.assertEqual(entry["value"], {"activeUsers": 120})
+        self.assertEqual(entry["last_success_at"], "2026-08-10T09:00:00")
+        self.assertEqual(entry["last_attempt_at"], "2026-08-10T09:00:00")
+        self.assertEqual(entry["consecutive_failures"], 0)
+
+    def test_failure_keeps_the_previous_good_value(self):
+        good = collect.merge_live_result(None, {"activeUsers": 120}, "", self.NOW)
+        failed = collect.merge_live_result(good, None, "認証が失効しています", self.LATER)
+        self.assertEqual(failed["value"], {"activeUsers": 120}, "失敗で前回の数字が消えた")
+        self.assertEqual(failed["last_success_at"], "2026-08-10T09:00:00", "成功日時が上書きされた")
+        self.assertEqual(failed["last_attempt_at"], "2026-08-12T09:00:00")
+        self.assertEqual(failed["last_error"], "認証が失効しています")
+
+    def test_consecutive_failures_accumulate_and_reset(self):
+        entry = collect.merge_live_result(None, None, "1回目", self.NOW)
+        entry = collect.merge_live_result(entry, None, "2回目", self.LATER)
+        self.assertEqual(entry["consecutive_failures"], 2)
+        entry = collect.merge_live_result(entry, {"ok": 1}, "", self.LATER)
+        self.assertEqual(entry["consecutive_failures"], 0)
+        self.assertEqual(entry["last_error"], "")
+
+    def test_cache_lives_outside_git(self):
+        relative = collect.LIVE_CACHE.relative_to(ROOT)
+        result = subprocess.run(
+            ["git", "check-ignore", "-q", str(relative)], cwd=ROOT, capture_output=True
+        )
+        self.assertEqual(result.returncode, 0, f"{relative} が .gitignore に入っていない")
+
+    def test_broken_cache_file_is_treated_as_empty(self):
+        original = collect.LIVE_CACHE
+        try:
+            collect.LIVE_CACHE = ROOT / "tests" / "__nonexistent_cache__.json"
+            self.assertEqual(collect.read_live_cache(), {})
+        finally:
+            collect.LIVE_CACHE = original
 
 
 class OutputLocationTests(unittest.TestCase):
