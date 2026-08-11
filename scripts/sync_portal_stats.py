@@ -237,7 +237,10 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("公開中のテーマ", r'(<small>公開中のテーマ</small><strong>)\d+(</strong>)', rf'\g<1>{stats["theme_count"]}\2'),
         ("投票受付中", r'(<em>)\d+テーマで投票受付中(</em>)', rf'\g<1>{stats["voting_count"]}テーマで投票受付中\2'),
         ("em更新日", r'(<strong id="hero-total-samples">[^<]*</strong><em>)[^<]*(</em>)', rf'\g<1>{updated_short}更新\2'),
-        ("更新バー本文", r'最終更新: <strong>[^<]+</strong>（.*?）', f'最終更新: <strong>{updated_long}</strong>（{latest_summary}）'),
+        # 終端の「）」は update-body の閉じタグ直前にあるものだけを見る。テーマ名そのものに
+        # 括弧が入る（皇室典範改正（女性皇族の皇籍維持・旧宮家養子））と、単純な `（.*?）` は
+        # 題名の途中で切れ、2回目の実行で違う文字列になって空振り検査が落ちる。
+        ("更新バー本文", r'最終更新: <strong>[^<]+</strong>（.*?）(?=</span>)', f'最終更新: <strong>{updated_long}</strong>（{latest_summary}）'),
         (
             "update-bar次回更新",
             r'<span class="update-next-badge">(?:[^<]+|<span id="update-bar-days">[^<]*</span>)*</span>',
