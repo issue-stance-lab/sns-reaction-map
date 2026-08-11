@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from admin_dashboard import collect, render  # noqa: E402
+from admin_dashboard import actions, collect, render  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "admin" / "dashboard.html"
@@ -37,7 +37,13 @@ def build(*, fetch: bool, today: dt.date) -> str:
         "tasks": collect.collect_tasks(),
         "health": collect.collect_source_health(today),
         "live": collect.fetch_live_metrics() if fetch else None,
+        "sample_files": collect.collect_sample_files(),
+        "live_cache": collect.read_live_cache(),
     }
+    # 次の一手は集めた材料すべてを見て決めるので、dict が揃ってから足す
+    data["next"] = actions.next_action(data)
+    data["post_breakdown"] = actions.post_breakdown(data["x_posts"], today)
+    data["anomalies"] = actions.anomalies(data)
     return render.render(data)
 
 

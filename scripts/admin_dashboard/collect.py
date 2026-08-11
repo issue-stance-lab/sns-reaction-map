@@ -16,6 +16,15 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 
+# 非公開の正典と更新回履歴の保管先（DATA_REFRESH.md の正規保存先）
+BACKUP_ROOT = Path("/Volumes/HD-LE-B/issue-stance-private-backups")
+
+
+def backup_root() -> Path:
+    """バックアップ先。actions.py の実行準備チェックと共有する。"""
+    return BACKUP_ROOT
+
+
 # THEMES.yaml の工程キーと、オーナー向けの日本語名
 STAGES = [
     ("collect", "収集"),
@@ -105,6 +114,15 @@ def collect_themes(today: dt.date) -> list[dict]:
 
     themes.sort(key=lambda t: (t["collect_in"] is None, t["collect_in"] if t["collect_in"] is not None else 0))
     return themes
+
+
+def collect_sample_files() -> list[str]:
+    """各テーマの正典ファイルのパス。gitignore 対象なので作業コピーには入らない。
+
+    LOOP.md ⓪ の「欠落チェック」と同じものを、管理画面から見えるようにする。
+    """
+    raw = _read_yaml("THEMES.yaml").get("themes") or {}
+    return [value["sample_file"] for value in raw.values() if value.get("sample_file")]
 
 
 def _read_json_file(relative: str):
@@ -576,8 +594,22 @@ def collect_data_updates() -> list[dict]:
 _TASK_HEADING = re.compile(r"^###\s+課題(\d+)\s*[:：]\s*(.+?)\s*$")
 
 
+# 課題1件から読み取る欄。状態以外は任意で、書いていなければ空になる。
+# 「未着手が何件」より「自分の判断待ちが何件」のほうが行動につながるので、
+# 判断待ちと次にすることを別欄として持てるようにしている。
+TASK_FIELDS = {
+    "状態": "status",
+    "優先度": "priority",
+    "次にすること": "next_step",
+    "判断待ち": "waiting_on",
+    "関連テーマ": "related",
+}
+
+_TASK_FIELD = re.compile(r"^\*\*(" + "|".join(TASK_FIELDS) + r")\*\*\s*[:：]\s*(.+)$")
+
+
 def collect_tasks() -> list[dict]:
-    """TASK_BOARD.md のアクティブ課題を、番号・題名・状態の3点に落とす。"""
+    """TASK_BOARD.md のアクティブ課題を読む。任意欄は未記入でも落ちない。"""
     text = _read_text("TASK_BOARD.md")
     if not text:
         return []
@@ -587,13 +619,16 @@ def collect_tasks() -> list[dict]:
     for line in text.splitlines():
         heading = _TASK_HEADING.match(line)
         if heading:
-            current = {"id": int(heading.group(1)), "title": heading.group(2), "status": ""}
+            current = {"id": int(heading.group(1)), "title": heading.group(2)}
+            current.update({key: "" for key in TASK_FIELDS.values()})
             tasks.append(current)
             continue
-        if current is not None and not current["status"]:
-            match = re.match(r"^\*\*状態\*\*\s*[:：]\s*(.+)$", line.strip())
-            if match:
-                current["status"] = match.group(1)
+        if current is None:
+            continue
+        match = _TASK_FIELD.match(line.strip())
+        # 同じ欄が複数回出てきたら最初のものを採る（状態欄に経緯が続く書き方があるため）
+        if match and not current[TASK_FIELDS[match.group(1)]]:
+            current[TASK_FIELDS[match.group(1)]] = match.group(2).strip()
     return tasks
 
 
@@ -607,32 +642,61 @@ def collect_source_health(today: dt.date) -> list[dict]:
     「認証ファイルがあるか」「最後にいつ取れたか」までを見る。
     """
     checks: list[dict] = []
+    cache = read_live_cache()
 
-    for label, token in (("GA4（アクセス解析）", "ga4-oauth-token.json"), ("Search Console（検索）", "gsc-oauth-token.json")):
+    # 判定は「最後に実際に取れたのはいつか」で行う。認証ファイルの更新日では、
+    # ファイルが残ったまま失効しているケース（Google は数日で失効しうる）を見逃す。
+    for key, label in LIVE_SOURCES:
+        entry = cache.get(key) or {}
+        success = _as_date(entry.get("last_success_at"))
+        attempt = _as_date(entry.get("last_attempt_at"))
+        failures = int(entry.get("consecutive_failures") or 0)
+
+        if success is None and attempt is None:
+            checks.append(
+                {
+                    "name": label,
+                    "ok": None,
+                    "detail": "まだ一度も取得を試していない（--fetch を付けて実行すると分かります）",
+                }
+            )
+            continue
+
+        if success is None:
+            checks.append({"name": label, "ok": False, "detail": f"一度も成功していない。最後の失敗: {entry.get('last_error') or '理由不明'}"})
+            continue
+
+        age = (today - success).days
+        detail = f"最後に取れたのは {age} 日前（{success}）"
+        if failures:
+            detail += f"。そのあと {failures} 回続けて失敗しています: {entry.get('last_error') or '理由不明'}"
+        checks.append({"name": label, "ok": age <= 7 and failures < 2, "detail": detail})
+
+    for label, token in (("GA4の認証ファイル", "ga4-oauth-token.json"), ("Search Consoleの認証ファイル", "gsc-oauth-token.json")):
         path = ROOT / "secrets" / token
         expired_siblings = sorted((ROOT / "secrets").glob(token.replace(".json", ".expired-*.json"))) if (ROOT / "secrets").exists() else []
         if not path.exists():
-            checks.append({"name": label, "ok": False, "detail": f"認証ファイル secrets/{token} がない"})
+            checks.append({"name": label, "ok": False, "detail": f"secrets/{token} がない"})
             continue
         age = (today - dt.date.fromtimestamp(path.stat().st_mtime)).days
         checks.append(
             {
                 "name": label,
                 "ok": None,
-                "detail": f"認証ファイルは {age} 日前に更新。過去に {len(expired_siblings)} 回失効している（実際に取れるかは「最新の数字を取り直す」で確認）",
+                "detail": f"{age} 日前に更新。過去に {len(expired_siblings)} 回失効している",
             }
         )
 
     env = ROOT / ".env"
     checks.append(
         {
-            "name": "Supabase（投票）",
+            "name": "Supabaseの接続情報",
             "ok": env.exists(),
-            "detail": ".env に接続情報あり" if env.exists() else ".env がない",
+            "detail": ".env にあり" if env.exists() else ".env がない",
         }
     )
 
-    backups = Path("/Volumes/HD-LE-B/issue-stance-private-backups")
+    backups = backup_root()
     if backups.exists():
         files = sorted(backups.glob("private-data-*.tar.gz"), key=lambda p: p.stat().st_mtime, reverse=True)
         if files:
@@ -649,10 +713,63 @@ def collect_source_health(today: dt.date) -> list[dict]:
 # ------------------------------------------------------------ 実測値の取り直し
 
 
+LIVE_SOURCES = (
+    ("ga4", "GA4（アクセス解析）"),
+    ("gsc", "Search Console（検索）"),
+    ("votes", "Supabase（投票）"),
+)
+
+# 取得できた数字の置き場。admin/ ごと .gitignore 済みなので Git には乗らない
+LIVE_CACHE = ROOT / "admin" / "cache" / "live-metrics.json"
+
+
+def read_live_cache() -> dict:
+    """前回までの取得結果。壊れていたら空として扱い、次の成功で上書きする。"""
+    if not LIVE_CACHE.exists():
+        return {}
+    try:
+        cached = json.loads(LIVE_CACHE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    return cached if isinstance(cached, dict) else {}
+
+
+def write_live_cache(cache: dict) -> None:
+    """書き途中で落ちても前回のキャッシュを壊さないよう、別名で書いてから置き換える。"""
+    LIVE_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    temporary = LIVE_CACHE.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+    temporary.replace(LIVE_CACHE)
+
+
+def merge_live_result(entry: dict | None, value, error: str, now: dt.datetime) -> dict:
+    """1つの取得元について、前回のキャッシュに今回の結果を重ねる。
+
+    失敗しても前回の value と last_success_at は残す。ここが上書きされると
+    「今日は取れなかった」と「そもそも一度も取れていない」の区別がつかなくなる。
+    """
+    merged = dict(entry or {})
+    merged["last_attempt_at"] = now.isoformat(timespec="seconds")
+    if value is None:
+        merged["last_error"] = error or "結果を読み取れなかった"
+        merged["consecutive_failures"] = int(merged.get("consecutive_failures") or 0) + 1
+    else:
+        merged["value"] = value
+        merged["last_success_at"] = now.isoformat(timespec="seconds")
+        merged["last_error"] = ""
+        merged["consecutive_failures"] = 0
+    return merged
+
+
 def fetch_live_metrics(days: int = 7) -> dict:
     """GA4 / Search Console / Supabase を実際に叩く（--fetch のときだけ）。
 
     どれか1つ落ちても残りは表示する。落ちた理由はそのまま画面に出す。
+
+    **失敗したときに、前回取れた数字を消さない。** Google の認証は数日で失効しうるので、
+    「今日は失敗したが、2日前の成功値は残っている」と言えることが重要になる。
+    そのため成功時だけ value と last_success_at を書き換え、
+    失敗時は last_attempt_at と last_error だけを更新する。
     """
     import sys
 
@@ -669,16 +786,22 @@ def fetch_live_metrics(days: int = 7) -> dict:
             return None, (proc.stdout or "").strip()[:300]
 
     python = sys.executable
-    ga4, ga4_error = run([python, "scripts/fetch_ga4_metrics.py", "--days", str(days), "--json"])
-    gsc, gsc_error = run([python, "scripts/fetch_gsc_metrics.py", "--days", "28", "--json"])
-    votes, votes_error = run([python, "scripts/fetch_supabase_votes.py", "--json"])
-
-    return {
-        "fetched_at": dt.datetime.now(),
-        "ga4": ga4,
-        "ga4_error": ga4_error,
-        "gsc": gsc,
-        "gsc_error": gsc_error,
-        "votes": votes,
-        "votes_error": votes_error,
+    commands = {
+        "ga4": [python, "scripts/fetch_ga4_metrics.py", "--days", str(days), "--json"],
+        "gsc": [python, "scripts/fetch_gsc_metrics.py", "--days", "28", "--json"],
+        "votes": [python, "scripts/fetch_supabase_votes.py", "--json"],
     }
+
+    now = dt.datetime.now()
+    cache = read_live_cache()
+    live: dict = {"fetched_at": now}
+
+    for key, _ in LIVE_SOURCES:
+        value, error = run(commands[key])
+        cache[key] = merge_live_result(cache.get(key), value, error, now)
+        live[key] = value
+        live[f"{key}_error"] = "" if value is not None else (error or "結果を読み取れなかった")
+
+    write_live_cache(cache)
+    live["cache"] = cache
+    return live

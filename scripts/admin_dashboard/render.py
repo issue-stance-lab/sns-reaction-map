@@ -7,11 +7,16 @@ from __future__ import annotations
 
 import datetime as dt
 import html
+from pathlib import Path
 from typing import Iterable
 
-from .collect import STAGES
+from . import actions
+from .collect import ROOT, STAGES
 
 WEEKDAY_JA = "月火水木金土日"
+
+# 公開先。README.md の「公開URL」と揃えること
+PUBLIC_BASE = "https://issue-stance-lab.github.io/sns-reaction-map/"
 
 
 def esc(value) -> str:
@@ -155,13 +160,33 @@ def card(label: str, value: str, sub: str = "", tone: str = "") -> str:
     return f'<div class="stat{tone_class}"><div class="stat-label">{esc(label)}</div><div class="stat-value">{value}</div>{sub_html}</div>'
 
 
-def table(headers: Iterable[str], rows: Iterable[Iterable[str]], *, cls: str = "") -> str:
+def table(headers: Iterable[str], rows: Iterable[Iterable[str]], *, cls: str = "", tools: str = "") -> str:
+    """表。tools を渡すと、絞り込み欄と列見出しの並べ替えが付く。
+
+    スマホでは横長の表をカードに組み替えるため、各セルに列名を data-label で持たせる。
+    """
     headers = list(headers)
-    head = "".join(f"<th>{esc(h)}</th>" for h in headers)
-    body = "".join("<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in rows)
+    head = "".join(f'<th scope="col">{esc(h)}</th>' for h in headers)
+    body = "".join(
+        "<tr>"
+        + "".join(f'<td data-label="{esc(headers[i]) if i < len(headers) else ""}">{cell}</td>' for i, cell in enumerate(row))
+        + "</tr>"
+        for row in rows
+    )
     if not body:
         body = f'<tr><td colspan="{len(headers)}" class="muted">データがありません</td></tr>'
-    return f'<div class="scroll"><table class="{cls}"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
+
+    classes = " ".join(part for part in (cls, "sortable" if tools else "") if part)
+    grid = f'<div class="scroll"><table class="{classes}"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
+    if not tools:
+        return grid
+    return (
+        f'<div class="tablebox">'
+        f'<div class="tabletools"><input type="search" class="filter" placeholder="{esc(tools)}" '
+        f'aria-label="{esc(tools)}"><span class="filter-count"></span>'
+        f'<span class="muted small">列見出しをクリックすると並べ替えできます</span></div>'
+        f"{grid}</div>"
+    )
 
 
 # GROWTH.yaml の status を、オーナー向けの日本語と危険度に置き換える
@@ -187,6 +212,26 @@ STAGE_MARK = {
 STAGE_TEXT = {"done": "済み", "partial": "途中", "todo": "未着手", "blocked": "止まっている", "n-a": "対象外", None: "記載なし"}
 
 
+def theme_name(theme: dict, *, with_key: bool = False) -> str:
+    """テーマ名を、公開ページと手元のページへのリンクにする。
+
+    更新したあと現物を見に行く導線がなく、画面と実物を往復できなかったため。
+    手元のページは file:// で開く（ブラウザで直接見られる）。
+    """
+    title = f'<strong>{esc(theme["title"])}</strong>'
+    page = theme.get("html")
+    if not page:
+        return title
+    public = PUBLIC_BASE + Path(page).name
+    local = f"file://{ROOT / page}"
+    links = (
+        f'<span class="links"><a href="{esc(public)}" target="_blank" rel="noopener">公開ページ</a>'
+        f'<a href="{esc(local)}">手元</a></span>'
+    )
+    key = f'<div class="muted small">{esc(theme["key"])}</div>' if with_key else ""
+    return f"{title}{links}{key}"
+
+
 def stage_dots(stages: dict) -> str:
     out = []
     for key, label in STAGES:
@@ -197,6 +242,133 @@ def stage_dots(stages: dict) -> str:
 
 
 # ------------------------------------------------------------------ 各セクション
+
+
+def _signal(check: dict) -> str:
+    tone = "ok" if check["ok"] else ("danger" if check["ok"] is False else "warn")
+    mark = "✓" if check["ok"] else ("✕" if check["ok"] is False else "?")
+    return (
+        f'<li class="signal {tone}"><span class="signal-mark">{mark}</span>'
+        f'<span class="signal-name">{esc(check["name"])}</span>'
+        f'<span class="signal-detail">{esc(check["detail"])}</span></li>'
+    )
+
+
+def _command_block(block: dict, *, ready: bool, index: int) -> str:
+    steps = "".join(
+        f'<div class="step"><div class="step-note">{esc(step["note"])}</div>'
+        f'<code class="step-cmd">{esc(step["command"])}</code></div>'
+        for step in block["steps"]
+    )
+    blocked = "" if ready else '<div class="cmd-blocked">上の準備が済むまで実行しないでください。最初の数行がその準備です。</div>'
+    impact_tone = "warn" if block["impact"].endswith("更新します") else "muted"
+    recommended = '<span class="pill ok">今日はこちら</span>' if block.get("recommended") else ""
+    return f"""<div class="cmdbox{'' if ready else ' not-ready'}{' recommended' if block.get('recommended') else ''}">
+<div class="cmd-head"><strong>{esc(block["label"])}</strong>{recommended}
+<span class="pill {impact_tone}">{esc(block["impact"])}</span>
+<button type="button" class="copy" data-copy="cmd{index}">まとめてコピー</button></div>
+{blocked}
+<div class="steps" id="cmd{index}">{steps}</div>
+<div class="cmd-foot"><strong>成功の見え方</strong>: {esc(block["success"])}<br>
+<strong>終わったら</strong>: <code>{esc(block["verify"])}</code> — {esc(block["verify_note"])}</div>
+</div>"""
+
+
+def _anomalies(found: list[dict]) -> str:
+    """いつもと違うところ。良い変化（伸びた投稿）も同じ場所に出す。"""
+    if not found:
+        return ""
+    items = "".join(
+        f'<li class="{esc(item["tone"])}"><strong>{esc(item["title"])}</strong>'
+        f'<span>{esc(item["detail"])}</span></li>'
+        for item in found
+    )
+    return (
+        f'<h3>気になる変化 {len(found)} 件</h3>'
+        '<p class="muted small">履歴を見に行かなくても気づけるよう、いつもと違うところだけを拾っています。'
+        "期限切れはここには出しません（上の「次の一手」と重なるため）。</p>"
+        f'<ul class="alerts">{items}</ul>'
+    )
+
+
+def section_next(data: dict) -> str:
+    action = data.get("next")
+    if not action:
+        return (
+            '<section id="next"><h2>1. 今日の次の一手</h2>'
+            '<p class="ok-banner">いま急いでやることはありません。'
+            '予定は「3. 更新スケジュール」で確認できます。</p>'
+            f'{_anomalies(data.get("anomalies") or [])}</section>'
+        )
+
+    checks = action["readiness"]
+    ready = bool(checks) and all(check["ok"] for check in checks)
+    signals = f'<ul class="signals">{"".join(_signal(c) for c in checks)}</ul>' if checks else ""
+    ready_head = ""
+    if checks:
+        ready_head = "<h3>実行できる状態か</h3>" + (
+            '<p class="muted small">すべて通っています。下の手順を実行できます。</p>'
+            if ready
+            else '<p class="muted small">通っていない項目があります。下の手順の最初の数行が、その準備そのものです。</p>'
+        )
+
+    blocks = "".join(_command_block(block, ready=ready, index=i) for i, block in enumerate(action["blocks"]))
+
+    minutes = f'<span class="meta">目安 約{action["minutes"]}分</span>' if action["minutes"] else ""
+    last = action.get("last")
+    last_html = ""
+    if last:
+        last_html = (
+            f'<p class="muted small">前回このテーマを更新したのは {fmt_full_date(last["date"])}。'
+            f'取得 {fmt_num(last["raw"])}件 / 新規 {fmt_num(last["new"])}件 / 意見 {fmt_num(last["opinions"])}件、'
+            f'結果は「{esc(last["status"])}」でした。</p>'
+        )
+
+    pending = action.get("pending")
+    pending_html = ""
+    if pending:
+        rows = [
+            [fmt_full_date(p["date"]), esc(p["kind"]), esc(p["target"] or p["theme"]), esc(p["type"])]
+            for p in pending
+        ]
+        pending_html = (
+            '<p class="lead">Xの管理画面で表示回数を見て、<code>x-posts.md</code> の該当行に書き足してください。'
+            "投稿直後の値は当てにならないので、1〜2日後のいまが測りどきです。</p>"
+            + table(["投稿日", "種別", "リプライ先 / テーマ", "型"], rows)
+        )
+
+    rest = action.get("rest") or []
+    rest_html = ""
+    if rest:
+        rest_rows = []
+        for item in rest:
+            text, tone = days_label(item["days"])
+            rest_rows.append(
+                [
+                    esc(item["theme"]["title"]),
+                    esc(item["kind"]),
+                    fmt_date(item["date"]),
+                    f'<span class="pill {tone}">{esc(text)}</span>',
+                ]
+            )
+        rest_html = (
+            f'<details class="rest"><summary>このあと7日以内に控えている予定 {len(rest)} 件</summary>'
+            + table(["テーマ", "種類", "予定日", "残り"], rest_rows)
+            + "</details>"
+        )
+
+    return f"""<section id="next"><h2>1. 今日の次の一手</h2>
+<div class="next-head {esc(action["tone"])}">
+<div class="next-title">{esc(action["title"])}</div>
+<div class="next-why">{esc(action["why"])}{minutes}</div>
+</div>
+{last_html}
+{ready_head}{signals}
+{blocks}
+{pending_html}
+{rest_html}
+{_anomalies(data.get("anomalies") or [])}
+</section>"""
 
 
 def section_alerts(data: dict) -> str:
@@ -247,7 +419,7 @@ def section_alerts(data: dict) -> str:
 
     counts = {"danger": sum(1 for a in alerts if a[0] == "danger"), "warn": sum(1 for a in alerts if a[0] == "warn")}
     summary = f'<p class="muted small">対応が要るもの {counts["danger"]} 件 / 近づいているもの {counts["warn"]} 件</p>'
-    return f'<section id="alerts"><h2>1. いま対応が要ること</h2>{summary}{body}</section>'
+    return f'<section id="alerts"><h2>2. いま対応が要ること</h2>{summary}{body}</section>'
 
 
 def section_schedule(data: dict) -> str:
@@ -261,7 +433,7 @@ def section_schedule(data: dict) -> str:
         mode_tone = "ok" if theme["update_mode"] == "adapter" else "warn"
         rows.append(
             [
-                f'<strong>{esc(theme["title"])}</strong><div class="muted small">{esc(theme["key"])}</div>',
+                theme_name(theme, with_key=True),
                 f'{fmt_date(theme["collect_at"])}<div class="pill {collect_tone}">{esc(collect_text)}</div>',
                 f'{fmt_date(theme["refresh_at"])}<div class="pill {refresh_tone}">{esc(refresh_text)}</div>',
                 f'<span class="pill {mode_tone}" title="{esc(theme["update_mode_note"])}">{esc(theme["update_mode_label"])}</span>',
@@ -281,7 +453,7 @@ def section_schedule(data: dict) -> str:
         + "</div>"
     )
 
-    return f"""<section id="schedule"><h2>2. 更新スケジュール</h2>
+    return f"""<section id="schedule"><h2>3. 更新スケジュール</h2>
 <p class="lead">「収集」は投稿データを集めるだけの作業、「公開更新」は集めたデータをページに反映して公開するところまで。予定日は <code>THEMES.yaml</code> が正。</p>
 {stats}
 <h3>これから4週間</h3>
@@ -324,7 +496,7 @@ def section_traffic(data: dict) -> str:
     live = data.get("live")
 
     if not snapshots:
-        return '<section id="traffic"><h2>3. 流入</h2><p class="muted">GROWTH.yaml に記録がありません。</p></section>'
+        return '<section id="traffic"><h2>4. 流入</h2><p class="muted">GROWTH.yaml に記録がありません。</p></section>'
 
     latest = snapshots[-1]
     prev = snapshots[-2] if len(snapshots) > 1 else None
@@ -410,7 +582,7 @@ def section_traffic(data: dict) -> str:
         + "機能はサイトに残っています。</p>"
     )
 
-    return f"""<section id="traffic"><h2>3. 流入（どれだけ読まれているか）</h2>
+    return f"""<section id="traffic"><h2>4. 流入（どれだけ読まれているか）</h2>
 {freshness}
 {stats}
 {live_html}
@@ -452,13 +624,63 @@ def _live_block(live: dict) -> str:
     return f'<h3>取り直した実測値（{stamp} 時点）</h3>{stats_html}{error_html}'
 
 
+def _pct(value) -> str:
+    return "—" if value is None else f"{value:.2f}%"
+
+
+def _range(low, high, formatter) -> str:
+    if low is None or high is None:
+        return "—"
+    if low == high:
+        return formatter(low)
+    return f"{formatter(low)} 〜 {formatter(high)}"
+
+
+def _post_breakdown(axes: list[dict]) -> str:
+    """型ごとの実績。中央値だけを見て選ばないよう、件数と幅を必ず並べる。"""
+    if not axes:
+        return ""
+
+    blocks = []
+    for axis in axes:
+        rows = []
+        for row in axis["rows"]:
+            note = '<span class="pill muted">参考値</span>' if row["reference_only"] else ""
+            rows.append(
+                [
+                    f'{esc(row["group"])} {note}',
+                    str(row["posts"]),
+                    str(row["measured"]),
+                    fmt_views(int(row["views_median"])) if row["views_median"] is not None else "—",
+                    _range(row["views_min"], row["views_max"], lambda v: fmt_views(int(v))),
+                    _pct(row["reach_median"]),
+                    _range(row["reach_min"], row["reach_max"], _pct),
+                ]
+            )
+        blocks.append(
+            f'<h4>{esc(axis["axis"])}</h4>'
+            + table(
+                ["区分", "投稿数", "実測できた数", "表示回数の中央値", "表示回数の幅", "到達率の中央値", "到達率の幅"],
+                rows,
+                cls="breakdown",
+            )
+        )
+
+    return f"""<h3>型ごとの実績（直近60日）</h3>
+<p class="lead">どのリプライ先を選ぶかで到達が大きく変わるため、投稿を3つの軸で束ねたもの。
+<strong>「到達率」と「表示回数」は必ず一緒に見てください。</strong>到達率5.8%でも表示回数が5回なら、
+読まれた人数はほとんどいません。実測が{esc(str(actions.MIN_SAMPLES))}件に満たない区分は「参考値」と表示しています
+（1〜2件の結果はたまたまで動くため、判断の根拠にはできません）。暫定値は集計から外しています。</p>
+<div class="breakdowns">{"".join(blocks)}</div>"""
+
+
 def section_x(data: dict) -> str:
     posts = data["x_posts"]
     themes = data["themes"]
     today = data["today"]
 
     if not posts:
-        return '<section id="x"><h2>4. X（旧Twitter）投稿</h2><p class="muted">x-posts.md に実績の記録がありません。</p></section>'
+        return '<section id="x"><h2>5. X（旧Twitter）投稿</h2><p class="muted">x-posts.md に実績の記録がありません。</p></section>'
 
     recent = [p for p in posts if (today - p["date"]).days <= 30]
 
@@ -528,16 +750,19 @@ def section_x(data: dict) -> str:
         tone = "muted" if age is None else ("danger" if age > 21 else "warn" if age > 10 else "ok")
         theme_rows.append([esc(theme["title"]), fmt_full_date(theme["x_posted_at"]), f'<span class="pill {tone}">{"記録なし" if age is None else f"{age}日前"}</span>'])
 
-    return f"""<section id="x"><h2>4. X（旧Twitter）投稿</h2>
+    breakdown_html = _post_breakdown(data.get("post_breakdown") or [])
+
+    return f"""<section id="x"><h2>5. X（旧Twitter）投稿</h2>
 <p class="lead">記録元は <code>x-posts.md</code>。X の管理画面から自動では取れないので、投稿したら手で書き足す運用。ここに出ていない投稿は記録漏れ。</p>
 {stats}
 <h3>日ごとに自分の投稿が読まれた回数（本計測ぶんのみ・直近30日）</h3>
 {chart}
 <p class="muted small"><strong>「返信先の投稿の規模」は自分への到達ではありません。</strong>相手の投稿が何人に読まれたかで、そこから自分のリプライに届くのは実測で0.007%〜5.8%（約800倍の開き）。この2つを足し合わせたり、サイトのPVと比べたりはできません。表示回数はXの管理画面から自動で取れないので、投稿の1〜2日後に手で書き足す運用です。投稿直後の値は「暫定」として集計から外しています。</p>
+{breakdown_html}
 <h3>テーマごとの最終投稿</h3>
 {table(["テーマ", "最終投稿日", "経過"], theme_rows)}
 <h3>投稿の記録（新しい順・最大80件）</h3>
-{table(["日付", "種別", "テーマ", "型・タイプ", "自分の表示回数", "計測", "返信先の規模", "到達率", "内容 / リプライ先"], rows, cls="posts")}
+{table(["日付", "種別", "テーマ", "型・タイプ", "自分の表示回数", "計測", "返信先の規模", "到達率", "内容 / リプライ先"], rows, cls="posts", tools="テーマ・リプライ先・本文で絞り込む")}
 </section>"""
 
 
@@ -549,7 +774,7 @@ def section_themes(data: dict) -> str:
         period = f'{theme["sample_min"]} 〜 {theme["sample_max"]}' if theme["sample_min"] else "—"
         rows.append(
             [
-                f'<strong>{esc(theme["title"])}</strong>',
+                theme_name(theme),
                 stage_dots(theme["stages"]),
                 fmt_num(theme["records"]),
                 esc(period),
@@ -557,7 +782,7 @@ def section_themes(data: dict) -> str:
                 f'<span class="pill {"ok" if theme["update_mode"] == "adapter" else "warn"}">{esc(theme["update_mode_label"])}</span>',
             ]
         )
-    return f"""<section id="themes"><h2>5. テーマの状態</h2>
+    return f"""<section id="themes"><h2>6. テーマの状態</h2>
 <p class="lead">丸印は左から {esc("・".join(label for _, label in STAGES))} の8工程。<span class="dot ok">●</span>済み <span class="dot warn">◐</span>途中 <span class="dot muted">○</span>未着手 <span class="dot danger">×</span>止まっている <span class="dot muted">–</span>対象外 <span class="dot muted">·</span>台帳に記載なし（丸印にカーソルを載せると工程名が出ます）</p>
 {table(["テーマ", "工程", "件数", "収集した期間", "公開日", "更新のしかた"], rows)}
 </section>"""
@@ -583,7 +808,7 @@ def section_data_updates(data: dict) -> str:
             ]
         )
     note = '<p class="lead">1回の収集で何件取れて、何件が重複で落ちて、何件が新しく残ったか。<code>data/verification/updates/</code> にある検査結果そのままです。ここに出るのは検査つきで回した回だけで、それ以前の手作業の回は記録が残っていません。</p>'
-    return f'<section id="data"><h2>6. データ更新の履歴</h2>{note}{table(["日付", "テーマ", "取得", "重複", "新規", "意見", "分類エラー", "検査", "所要"], rows, cls="updates")}</section>'
+    return f'<section id="data"><h2>7. データ更新の履歴</h2>{note}{table(["日付", "テーマ", "取得", "重複", "新規", "意見", "分類エラー", "検査", "所要"], rows, cls="updates")}</section>'
 
 
 def section_history(data: dict) -> str:
@@ -605,7 +830,7 @@ def section_history(data: dict) -> str:
         items = "".join(entries)
         blocks.append(f'<div class="day"><div class="day-date">{fmt_full_date(date)}<span class="muted small">{len(by_date[date])}件</span></div><ul class="commits">{items}</ul></div>')
 
-    return f"""<section id="history"><h2>7. 変更履歴</h2>
+    return f"""<section id="history"><h2>8. 変更履歴</h2>
 <p class="lead">直近 {len(commits)} 件の変更（合流だけの記録は除外）。「機能追加」は新しくできるようになったこと、「不具合修正」は壊れていたものを直したことです。</p>
 <div class="timeline">{"".join(blocks)}</div>
 </section>"""
@@ -623,26 +848,48 @@ def _task_phase(status: str) -> tuple[str, str]:
     return "未着手", "danger"
 
 
+PRIORITY_TONE = {"高": "danger", "中": "warn", "低": "muted"}
+
+
 def section_tasks(data: dict) -> str:
     tasks = data["tasks"]
     rows = []
     counts = {"未着手": 0, "進行中": 0, "完了": 0, "保留": 0}
+    waiting = 0
     for task in tasks:
         phase, tone = _task_phase(task["status"])
         counts[phase] = counts.get(phase, 0) + 1
+        owner_decision = task["waiting_on"] and "なし" not in task["waiting_on"]
+        if owner_decision and phase != "完了":
+            waiting += 1
+        priority = task["priority"]
         rows.append(
             [
                 f'課題{task["id"]}',
-                f'<strong>{esc(task["title"])}</strong>',
-                f'<span class="pill {tone}">{phase}</span>',
+                f'<strong>{esc(task["title"])}</strong>'
+                + (f'<div class="muted small">関連: {esc(task["related"])}</div>' if task["related"] else ""),
+                f'<span class="pill {PRIORITY_TONE.get(priority, "muted")}">{esc(priority or "—")}</span>',
+                f'<span class="pill {tone}">{phase}</span>'
+                + (f'<div class="pill danger">判断待ち: {esc(task["waiting_on"])}</div>' if owner_decision else ""),
+                esc(task["next_step"]) or '<span class="muted">未記入</span>',
                 esc(task["status"][:200]),
             ]
         )
+
     summary = " / ".join(f"{key} {value}件" for key, value in counts.items() if value)
-    return f"""<section id="tasks"><h2>8. 抱えている課題</h2>
-<p class="lead"><code>TASK_BOARD.md</code> に載っている {len(tasks)} 件（{esc(summary)}）。「完了」と書かれたまま残っているものは、
+    headline = (
+        f'<div class="stats">{card("あなたの判断待ち", str(waiting), "止まっている理由が判断なら、ここが動かないと先へ進みません", tone="danger" if waiting else "ok")}'
+        + card("課題の総数", str(len(tasks)), esc(summary))
+        + "</div>"
+    )
+    filled = sum(1 for task in tasks if task["next_step"])
+    return f"""<section id="tasks"><h2>9. 抱えている課題</h2>
+<p class="lead"><code>TASK_BOARD.md</code> に載っている {len(tasks)} 件。「完了」と書かれたまま残っているものは、
 まだ <code>archive/TASK_BOARD_ARCHIVE.md</code> へ移していないだけです。区分は状態欄の書き出しから機械的に判定しています。</p>
-{table(["番号", "課題", "区分", "状態"], rows)}
+{headline}
+<p class="muted small">「優先度」「次にすること」「判断待ち」は <code>TASK_BOARD.md</code> の任意の欄です
+（<code>**優先度**: 高</code> のように書くと、ここに出ます）。いま {filled} / {len(tasks)} 件に記入があります。</p>
+{table(["番号", "課題", "優先度", "区分", "次にすること", "状態"], rows, cls="tasks", tools="課題名・状態で絞り込む")}
 </section>"""
 
 
@@ -652,7 +899,7 @@ def section_health(data: dict) -> str:
         tone = "ok" if check["ok"] else ("danger" if check["ok"] is False else "warn")
         mark = "使える" if check["ok"] else ("使えない" if check["ok"] is False else "未確認")
         rows.append([esc(check["name"]), f'<span class="pill {tone}">{mark}</span>', esc(check["detail"])])
-    return f"""<section id="health"><h2>9. 数字の取得元の状態</h2>
+    return f"""<section id="health"><h2>10. 数字の取得元の状態</h2>
 <p class="lead">流入や投票の数字を自動で取ってくる仕組みが生きているかどうか。ここが赤いと、上の数字が古いまま更新されません。</p>
 {table(["取得元", "状態", "詳細"], rows)}
 </section>"""
@@ -697,6 +944,51 @@ code{background:color-mix(in srgb,var(--fg) 8%,transparent);padding:1px 5px;bord
 .stat-value{font-size:24px;font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums}
 .stat-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 .stat.danger .stat-value{color:var(--danger)}.stat.warn .stat-value{color:var(--warn)}.stat.ok .stat-value{color:var(--ok)}
+.next-head{border-radius:10px;padding:14px 16px;margin:12px 0;border:1px solid var(--line);background:var(--panel)}
+.next-head.danger{border-left:5px solid var(--danger)}
+.next-head.warn{border-left:5px solid var(--warn)}
+.next-title{font-size:20px;font-weight:700;line-height:1.4}
+.next-why{color:var(--muted);font-size:13px;margin-top:2px}
+.next-why .meta{margin-left:10px;padding:1px 8px;border-radius:999px;font-size:11.5px;
+background:color-mix(in srgb,var(--muted) 15%,transparent)}
+.signals{list-style:none;margin:8px 0 16px;padding:0;display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:6px}
+.signal{display:flex;gap:8px;align-items:baseline;background:var(--panel);border:1px solid var(--line);
+border-radius:8px;padding:7px 11px;font-size:12.5px}
+.signal-mark{flex:none;font-weight:700}
+.signal.ok .signal-mark{color:var(--ok)}
+.signal.danger .signal-mark{color:var(--danger)}
+.signal.warn .signal-mark{color:var(--warn)}
+.signal-name{flex:none;font-weight:600}
+.signal-detail{color:var(--muted);font-size:11.5px}
+.cmdbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0}
+.cmdbox.not-ready{opacity:.72}
+.cmdbox.recommended{border-color:color-mix(in srgb,var(--ok) 50%,var(--line))}
+.cmd-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.cmd-blocked{font-size:12px;color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent);
+border-radius:6px;padding:6px 10px;margin-bottom:8px}
+.copy{margin-left:auto;font:inherit;font-size:12px;padding:3px 12px;border-radius:999px;cursor:pointer;
+border:1px solid var(--line);background:color-mix(in srgb,var(--fg) 5%,transparent);color:var(--fg)}
+.copy:hover{background:color-mix(in srgb,var(--fg) 10%,transparent)}
+.copy.done{border-color:var(--ok);color:var(--ok)}
+.copy-area{width:100%;min-height:96px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+line-height:1.6;padding:8px 10px;margin-bottom:8px;border-radius:6px;border:2px solid var(--soon);
+background:var(--bg);color:var(--fg);white-space:pre}
+.step{margin-bottom:7px}
+.step-note{font-size:11.5px;color:var(--muted);margin-bottom:2px}
+.step-cmd{display:block;white-space:pre-wrap;word-break:break-all;font-size:12px;line-height:1.6;
+padding:6px 10px;border-radius:6px;background:color-mix(in srgb,var(--fg) 7%,transparent)}
+.cmd-foot{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.8}
+.links{display:inline-flex;gap:8px;margin-left:8px;font-size:11px;font-weight:400}
+.links a{color:var(--soon);text-decoration:none;border-bottom:1px dotted currentColor}
+.links a:hover{border-bottom-style:solid}
+.breakdowns h4{margin-top:14px}
+table.breakdown{min-width:640px}
+table.breakdown td{white-space:nowrap}
+.rest{margin-top:14px}
+.rest summary{cursor:pointer;font-size:13px;color:var(--muted);padding:6px 0}
+.stale{position:sticky;top:0;z-index:9;background:var(--danger);color:#fff;padding:10px 16px;font-size:13.5px;line-height:1.6}
+.stale code{background:rgba(255,255,255,.22);color:#fff}
 .alerts{list-style:none;margin:12px 0;padding:0;display:flex;flex-direction:column;gap:8px}
 .alerts li{border-left:4px solid var(--line);background:var(--panel);border-radius:0 8px 8px 0;padding:10px 14px}
 .alerts li.danger{border-left-color:var(--danger)}
@@ -761,16 +1053,175 @@ background:color-mix(in srgb,var(--muted) 16%,transparent);color:var(--muted)}
 .clamp{display:inline-block;max-width:38ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 .legend{margin-right:10px;font-size:12px;color:var(--muted)}
 footer{border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12.5px}
+.tablebox{margin:12px 0}
+.tabletools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.filter{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;min-width:240px;
+border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.filter-count{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+th.sortcol{cursor:pointer;user-select:none}
+th.sortcol:hover{color:var(--fg)}
+th.sortcol::after{content:"";opacity:.35;margin-left:4px}
+th.sortcol[data-dir="asc"]::after{content:"▲";opacity:1}
+th.sortcol[data-dir="desc"]::after{content:"▼";opacity:1}
 @media(max-width:640px){
 .wrap{padding:0 12px 64px}
 .calendar{grid-template-columns:repeat(7,1fr);gap:2px}
 .cal-day{min-height:48px;padding:3px}
 .cal-item{font-size:9px}
 h1{font-size:21px}
+.filter{min-width:0;flex:1}
+.signals{grid-template-columns:1fr}
+.step-cmd{font-size:11px}
+/* 横長の表は読めないので、1行を1枚のカードに組み替える */
+.tablebox .scroll{border:none;background:none;overflow-x:visible}
+.tablebox table,.tablebox thead,.tablebox tbody,.tablebox tr,.tablebox td{display:block;min-width:0}
+.tablebox thead{display:none}
+.tablebox tr{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+padding:8px 12px;margin-bottom:8px}
+.tablebox td{border:none;padding:3px 0;white-space:normal;display:flex;gap:10px;font-size:12.5px}
+.tablebox td::before{content:attr(data-label);flex:none;width:8.5em;color:var(--muted);font-size:11.5px}
+.tablebox .clamp{max-width:none;white-space:normal}
 }
 """
 
+# 外部CDNは使わない方針なので、必要な動きだけを素のJSで書く。
+# ここでやるのは2つだけ。日数の再計算はしない（Python側と二重管理になるため）。
+SCRIPT = r"""
+(function () {
+  // 1) 作った日と、いま開いた日がずれていたら赤帯を出す。
+  //    この画面は静止画なので、古いHTMLを開くと「あと2日」が実は「1日超過」になる。
+  var built = document.body.dataset.built;
+  var now = new Date();
+  var pad = function (n) { return String(n).padStart(2, "0"); };
+  var iso = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  if (built && built !== iso) {
+    var days = Math.round((Date.parse(iso) - Date.parse(built)) / 86400000);
+    var bar = document.createElement("div");
+    bar.className = "stale";
+    bar.innerHTML =
+      "<strong>この画面は" + Math.abs(days) + "日" + (days > 0 ? "前" : "先") + "（" + built +
+      "）に作ったものです。</strong>「あと◯日」「今日やること」はすべてその時点の計算で、" +
+      "いまの状況とは違います。作り直す: <code>python3 scripts/build_admin_dashboard.py --open</code>";
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
+
+  // 2) コマンドのコピー。file:// では navigator.clipboard が塞がれる環境があるので、
+  //    失敗したら選択状態にして、手でコピーできるところまで持っていく。
+  var buttons = document.querySelectorAll(".copy");
+  Array.prototype.forEach.call(buttons, function (button) {
+    button.addEventListener("click", function () {
+      var box = document.getElementById(button.getAttribute("data-copy"));
+      if (!box) { return; }
+      var lines = Array.prototype.map.call(box.querySelectorAll(".step-cmd"), function (el) {
+        return el.textContent;
+      });
+      var reset = function () {
+        button.textContent = "まとめてコピー";
+        button.classList.remove("done");
+      };
+      var done = function () {
+        button.textContent = "コピーしました";
+        button.classList.add("done");
+        setTimeout(reset, 2000);
+      };
+      var text = lines.join("\n");
+      // 最後の手段。コマンドだけを入れた入力欄を作って選択させる。
+      // 注釈まで選ぶと、貼り付けたときに日本語が混ざって動かない。
+      var selectOnly = function () {
+        var area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "readonly");
+        area.className = "copy-area";
+        box.parentNode.insertBefore(area, box);
+        area.focus();
+        area.select();
+        var copied = false;
+        try { copied = document.execCommand("copy"); } catch (error) { copied = false; }
+        if (copied) {
+          area.remove();
+          done();
+          return;
+        }
+        button.textContent = "この枠を ⌘C でコピーしてください";
+        area.addEventListener("blur", function () { area.remove(); reset(); });
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, selectOnly);
+      } else {
+        selectOnly();
+      }
+    });
+  });
+
+  // 3) 表の絞り込み。入力に含まれる語をすべて含む行だけ残す（空白区切りのAND）。
+  Array.prototype.forEach.call(document.querySelectorAll(".tablebox"), function (box) {
+    var input = box.querySelector(".filter");
+    var counter = box.querySelector(".filter-count");
+    var rows = box.querySelectorAll("tbody tr");
+    if (!input) { return; }
+    input.addEventListener("input", function () {
+      var words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      var shown = 0;
+      Array.prototype.forEach.call(rows, function (row) {
+        var text = row.textContent.toLowerCase();
+        var hit = words.every(function (word) { return text.indexOf(word) !== -1; });
+        row.style.display = hit ? "" : "none";
+        if (hit) { shown += 1; }
+      });
+      counter.textContent = words.length ? shown + " / " + rows.length + " 件" : "";
+    });
+  });
+
+  // 4) 列見出しをクリックして並べ替え。
+  //    "1.2K" や "0.30%" のまま文字として並べると桁が壊れるので、数値に直してから比べる。
+  var sortValue = function (text) {
+    var value = text.trim();
+    if (!value || value === "—") { return { empty: true }; }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) { return { num: Date.parse(value) }; }
+    var match = value.match(/^\*{0,2}(-?[\d,]+(?:\.\d+)?)\s*(万|K|M|%)?/i);
+    if (match) {
+      var num = parseFloat(match[1].replace(/,/g, ""));
+      var unit = (match[2] || "").toUpperCase();
+      if (unit === "万") { num *= 10000; }
+      else if (unit === "K") { num *= 1000; }
+      else if (unit === "M") { num *= 1000000; }
+      return { num: num };
+    }
+    return { str: value };
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll("table.sortable"), function (table) {
+    var headers = table.querySelectorAll("thead th");
+    Array.prototype.forEach.call(headers, function (header, column) {
+      header.classList.add("sortcol");
+      header.addEventListener("click", function () {
+        var descending = header.getAttribute("data-dir") !== "desc";
+        Array.prototype.forEach.call(headers, function (other) {
+          other.removeAttribute("data-dir");
+        });
+        header.setAttribute("data-dir", descending ? "desc" : "asc");
+        var body = table.querySelector("tbody");
+        var rows = Array.prototype.slice.call(body.querySelectorAll("tr"));
+        rows.sort(function (left, right) {
+          var a = sortValue((left.children[column] || {}).textContent || "");
+          var b = sortValue((right.children[column] || {}).textContent || "");
+          if (a.empty && b.empty) { return 0; }
+          if (a.empty) { return 1; }   // 値の無い行は常に下
+          if (b.empty) { return -1; }
+          var result;
+          if (a.num !== undefined && b.num !== undefined) { result = a.num - b.num; }
+          else { result = String(a.str || a.num).localeCompare(String(b.str || b.num), "ja"); }
+          return descending ? -result : result;
+        });
+        rows.forEach(function (row) { body.appendChild(row); });
+      });
+    });
+  });
+})();
+"""
+
 NAV = [
+    ("next", "次の一手"),
     ("alerts", "対応が要ること"),
     ("schedule", "スケジュール"),
     ("traffic", "流入"),
@@ -786,8 +1237,11 @@ NAV = [
 def render(data: dict) -> str:
     nav = "".join(f'<li><a href="#{key}">{esc(label)}</a></li>' for key, label in NAV)
     built = data["built_at"].strftime("%Y-%m-%d %H:%M")
+    # 古いHTMLを開いたときに赤帯を出すため、作成日をブラウザ側から読める形で置く
+    built_date = data["today"].isoformat()
     sections = "".join(
         [
+            section_next(data),
             section_alerts(data),
             section_schedule(data),
             section_traffic(data),
@@ -805,7 +1259,7 @@ def render(data: dict) -> str:
 <meta name="robots" content="noindex,nofollow">
 <title>SNS反応まっぷ 管理画面</title>
 <style>{CSS}</style></head>
-<body><div class="wrap">
+<body data-built="{built_date}"><div class="wrap">
 <header class="top">
 <h1>SNS反応まっぷ 管理画面</h1>
 <div class="built">{built} 時点のリポジトリの中身から作成</div>
@@ -818,5 +1272,5 @@ GitHub にも上がりません（<code>admin/</code> は Git の管理対象外
 生成元: THEMES.yaml / GROWTH.yaml / x-posts.md / TASK_BOARD.md / data/verification/ / git log<br>
 作り直すコマンド: <code>python3 scripts/build_admin_dashboard.py --open</code>（実測値も取り直す場合は <code>--fetch</code> を足す）
 </footer>
-</div></body></html>
+</div><script>{SCRIPT}</script></body></html>
 """
