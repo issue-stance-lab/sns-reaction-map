@@ -141,7 +141,7 @@ politicstokyo@gmail.com
 ```
 
 **「テスト中」に戻すと、リフレッシュトークンが7日ごとに強制失効する。**
-経緯と対処は `docs/ga4-automation.md` の「『テスト中』に戻してはいけない」を参照。
+経緯と対処は `docs-internal/ga4-automation.md` の「『テスト中』に戻してはいけない」を参照。
 GA4と同じOAuthクライアントを共有しているので、片方を戻すと両方が同時に壊れる。
 
 ## OAuthスコープ
