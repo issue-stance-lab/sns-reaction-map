@@ -23,8 +23,10 @@ import yaml
 
 try:
     from .issue_card_counts import IssueCountError, span_html
+    from .x_embed import embed_html
 except ImportError:
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
+    from x_embed import embed_html  # type: ignore[no-redef]
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -150,12 +152,11 @@ def sample_cards(rows: list[dict[str, Any]], issue: str) -> str:
 
     return "".join(
         '<div class="sample-card"><div class="meta">{stance} / conf {confidence:.2g}</div>'
-        '<p>{summary}</p><blockquote class="twitter-tweet" data-conversation="none" '
-        'data-dnt="true"><a href="{url}"></a></blockquote></div>'.format(
+        "<p>{summary}</p>{embed}</div>".format(
             stance=html.escape(str(classification(row)["stance"])),
             confidence=float(classification(row).get("confidence") or 0),
             summary=html.escape(str(classification(row).get("summary") or "")),
-            url=html.escape(str(row["url"]), quote=True),
+            embed=embed_html(row["url"]),
         )
         for row in picked
     )

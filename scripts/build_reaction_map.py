@@ -11,6 +11,11 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+try:
+    from .x_embed import embed_html
+except ImportError:  # python3 scripts/build_reaction_map.py
+    from x_embed import embed_html  # type: ignore[no-redef]
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 THEMES_PATH = PROJECT_ROOT / "THEMES.yaml"
@@ -216,10 +221,7 @@ def representative_html(rows: list[dict[str, Any]], categories: list[str], confi
             )
             url = str(row.get("url", "")).strip()
             if url and _is_x_url(url):
-                out.append(
-                    f'<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
-                    f'<a href="{html.escape(url)}"></a></blockquote>'
-                )
+                out.append(embed_html(url))
             elif show_raw_text:
                 out.append(f"<blockquote>{html.escape(text)}</blockquote>")
                 if url:

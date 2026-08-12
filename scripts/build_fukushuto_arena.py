@@ -61,6 +61,7 @@ try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
+    from .x_embed import embed_html
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -78,6 +79,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
+    from x_embed import embed_html  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 NEG = "法案反対"
@@ -235,11 +237,10 @@ def build_issue_section(rows: list[dict[str, Any]], blocks: list[dict[str, Any]]
 
         samples = "\n".join(
             '<div class="sample-card"><div class="meta">{meta}</div><p>{note}</p>'
-            '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
-            '<a href="{url}"></a></blockquote></div>'.format(
+            "{embed}</div>".format(
                 meta=html.escape(str(sample["meta"])),
                 note=html.escape(str(sample["note"])),
-                url=html.escape(str(sample["url"])),
+                embed=embed_html(sample["url"]),
             )
             for sample in block.get("samples") or []
         )

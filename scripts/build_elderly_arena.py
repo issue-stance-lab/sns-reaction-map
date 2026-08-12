@@ -22,9 +22,11 @@ from typing import Any
 try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
+    from .x_embed import embed_html
 except ImportError:
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
+    from x_embed import embed_html  # type: ignore[no-redef]
 
 THEME = "elderly-license-revocation"
 ISSUE_ORDER = (
@@ -157,11 +159,11 @@ def build_issue_blocks(rows: list[dict[str, Any]]) -> str:
             if stances[stance]
         )
         sample_html = "\n".join(
-            '<div class="sample-card-x"><div class="meta">{stance} / {intensity}</div><p>{summary}</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="{url}"></a></blockquote></div>'.format(
+            '<div class="sample-card-x"><div class="meta">{stance} / {intensity}</div><p>{summary}</p>{embed}</div>'.format(
                 stance=html.escape(str(classification(row)["stance"])),
                 intensity=html.escape(str(classification(row)["intensity"])),
                 summary=html.escape(str(classification(row).get("summary") or "")),
-                url=html.escape(str(row["url"])),
+                embed=embed_html(row["url"]),
             )
             for row in samples
         )
