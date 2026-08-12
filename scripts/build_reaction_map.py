@@ -28,16 +28,16 @@ TOPIC_THEME_COLORS: dict[str, dict[str, str]] = {
 
 DEFAULT_CONFIG = {
     "title": "SNS反応まっぷ",
-    "subtitle": "投稿サンプルを、論点カテゴリ・検索クエリ・立場で可視化した編集用ビューです。",
+    "subtitle": "投稿サンプルを、論点カテゴリ・検索クエリ・立場で整理しています。",
     "source_label": "SNS/Yahooリアルタイム検索",
     "category_order": [],
     "stance_order": DEFAULT_STANCE_ORDER,
     "sample_limit_per_category": 3,
     "show_raw_text": True,
+    # notes は読者に向けた注意だけを置く。制作者への指示を書くと公開ページに出る
+    # （2026-08-12、8テーマ・14文が公開されていた。scripts/seo/strip_production_notes.py 参照）
     "notes": [
         "これは世論調査ではなく、取得した投稿サンプルの反応整理です。",
-        "投稿本文の転載は最小限にし、公開記事では要約中心にしてください。",
-        "代表投稿は公開前に人間が確認する前提です。",
     ],
     "conflict_axes": [],
     "category_tones": {},

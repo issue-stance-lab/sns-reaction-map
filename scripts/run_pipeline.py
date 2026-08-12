@@ -406,10 +406,9 @@ def scaffold_reaction_map_json(slug: str, title: str, topic_config: dict[str, An
         "stance_order": stances,
         "sample_limit_per_category": 3,
         "show_raw_text": True,
+        # notes は読者に向けた注意だけを置く。制作者への指示は公開ページに出る
         "notes": [
             "これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。",
-            "投稿本文の転載は最小限にし、要約中心にしてください。",
-            "代表投稿は公開前に人間が確認する前提です。",
         ],
         "conflict_axes": [],
         "category_tones": {},

@@ -412,9 +412,7 @@ def build_details(rows: list[dict[str, Any]], collected: int, queries: list[str]
             "<details><summary>注意</summary><ul>"
             "<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>"
             "<li>初回の収集時点が衆院通過直前のため、国会審議・修正合意への反応が"
-            "多く出やすいバイアスがあります。</li>"
-            "<li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li>"
-            "<li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>",
+            "多く出やすいバイアスがあります。</li></ul></details>",
             "</section>",
         ]
     )
