@@ -73,6 +73,18 @@ def is_opinion(row: dict) -> bool:
     return bool(row.get("is_opinion"))
 
 
+# 論点カードに出さない受け皿ラベル。ここに落ちた投稿は {issue_opinions} から外す。
+CATCH_ALL_ISSUES = {"その他", "その他・分類保留", "その他・わからない"}
+
+
+def main_issue(row: dict) -> str:
+    """主論点のラベル。is_opinion と同じく置き場所がテーマで違うのでキーの有無で判断する。"""
+    nested = row.get("classification")
+    if isinstance(nested, dict) and "main_issue" in nested:
+        return str(nested.get("main_issue") or "")
+    return str(row.get("main_issue") or "")
+
+
 def resolve_counts(text: str, theme_id: str) -> str:
     """収集方法の文中の {total} / {opinions} を分類結果の実数へ置き換える。
 
@@ -80,12 +92,21 @@ def resolve_counts(text: str, theme_id: str) -> str:
     残っていた（部活動は累計467件・意見389件のまま実際は732件・599件だった）。
     昇格処理がこのスクリプトを呼ぶので、差し込みにしておけば毎回ずれない。
     """
-    if "{total}" not in text and "{opinions}" not in text:
+    placeholders = ("{total}", "{opinions}", "{issue_opinions}")
+    if not any(name in text for name in placeholders):
         return text
     rows = json.loads(sample_file_for(theme_id).read_text(encoding="utf-8"))
     counts = {
         "total": len(rows),
         "opinions": sum(1 for row in rows if is_opinion(row)),
+        # 論点カードに載る件数。受け皿の「その他」を含めるかはテーマで違い、
+        # 高市ページは除いた359件で図と指標を作っているのに、この欄だけ360件と
+        # 書いていた（2026-08-12）。件数をべた書きせずに済ませるための差し込み。
+        "issue_opinions": sum(
+            1
+            for row in rows
+            if is_opinion(row) and main_issue(row) not in CATCH_ALL_ISSUES
+        ),
     }
     for key, value in counts.items():
         text = text.replace("{" + key + "}", f"{value:,}")
