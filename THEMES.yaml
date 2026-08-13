@@ -159,10 +159,10 @@ themes:
     refresh_config: configs/topics/elderly-license-revocation.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
-    collect: done        # 285件
+    collect: done        # 272件（累計）
     classify: done
     classify2d: done     # 211件、APIエラー0%
-    main_issue: done     # 211件（Hermes再分類 2026-08-07、正典 sample_file の classification.main_issue）。6論点: 義務化・事故防止95/その他64/適性検査強化19/地方の足・移動権14/代替交通整備10/自主返納支援9
+    main_issue: done     # 272件（Hermes再分類 2026-08-07 + 2026-07-26収集分61件を 2026-08-14 に統合）。6論点: 義務化・事故防止126/その他81/適性検査強化25/地方の足・移動権18/自主返納支援12/代替交通整備10。意見188件
     page_v3: done        # 論点アリーナ（極座標6セクター）実装済み 2026-07-24
     manga_data: done
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
@@ -176,7 +176,7 @@ themes:
     updated_at: 2026-07-26
     collect_delta: 61
     x_posted_at: 2026-08-02
-    notes: "2026-07-26にYahooリアルタイム検索61件を追加収集しHermes再分類。42件が意見投稿と判定。7/12収集61件との比較「世論の潮目」ウィジェットを追加（義務化賛成72.5%↑、条件付き賛成が19.5pt減少）。"
+    notes: "2026-08-14に課題40の未統合分（2026-07-26収集の61件）を正典へ統合し、211→272件（意見188件）。ページは build_elderly_arena.py で再生成した。同日にYahooリアルタイム検索172件を収集し新規110件・意見59件を得たが、page_update_mode が adapter_candidate のため更新回の保存止まりで未公開。7/12収集61件との比較「世論の潮目」ウィジェットは 2026-07-26 時点のまま（義務化賛成72.5%↑、条件付き賛成が19.5pt減少）。"
 
   school-nickname-ban:
     title: 学校でのあだ名禁止
