@@ -24,6 +24,7 @@ try:
     )
     from .sync_portal_stats import ROOT, THEMES_YAML, load_sample_records, parse_themes_yaml
     from .verification_data import record_id_hash
+    from .x_embed import period_label as _period_label
 except ImportError:  # python3 scripts/verify_theme_page.py
     from issue_card_counts import (  # type: ignore[no-redef]
         IssueCountError,
@@ -34,6 +35,7 @@ except ImportError:  # python3 scripts/verify_theme_page.py
     )
     from sync_portal_stats import ROOT, THEMES_YAML, load_sample_records, parse_themes_yaml  # type: ignore[no-redef]
     from verification_data import record_id_hash  # type: ignore[no-redef]
+    from x_embed import period_label as _period_label  # type: ignore[no-redef]
 
 
 REQUIRED_ARGUMENT_FIELDS = (
@@ -75,6 +77,20 @@ def _arguments_complete(arguments: Any) -> bool:
         and _filled(source.get("url"))
         for source in sources
     )
+
+
+def _expected_review_note(root: Path, theme: str) -> str | None:
+    """台帳から、そのテーマに表示してよい確認文言を返す。記録が無ければ None。"""
+    ledger_path = root / "data/review-ledger.json"
+    if not ledger_path.exists():
+        return None
+    themes = json.loads(ledger_path.read_text(encoding="utf-8")).get("themes") or {}
+    entry = themes.get(theme)
+    if not entry:
+        return None
+    if entry.get("status") == "reviewed":
+        return f"AI分類。代表投稿{int(entry['samples'])}件の要旨を編集部が確認"
+    return "AI分類。代表投稿は編集部が選定"
 
 
 def _record_hashes(records: list[dict[str, Any]]) -> set[str]:
@@ -431,7 +447,7 @@ def verify_theme_page(
 
     source = str(theme_data.get("sample_source") or "")
     period = str(theme_data.get("sample_period") or "")
-    period_label = "記録なし" if period.lower() == "unknown" else period
+    period_label = _period_label(period)
     collected_count_texts = (
         f"{source}で取得した公開投稿 {count}件",
         f"{source}で取得した公開投稿{count}件",
@@ -439,12 +455,24 @@ def verify_theme_page(
     conditions_ok = (
         any(text in page for text in collected_count_texts)
         and f"取得期間: {period_label}" in page
-        and "AI分類・人間による代表投稿の確認あり" in page
     )
     if conditions_ok:
         lines.append(f"OK  調査条件（取得元・期間・件数）が表示されている（{period_label}）")
     else:
         lines.append("NG  調査条件（取得元・期間・件数）が表示されている")
+        failures += 1
+
+    # 代表投稿の確認表示は data/review-ledger.json の記録と一致していなければならない。
+    # かつて全11テーマが同じ「AI分類・人間による代表投稿の確認あり」を表示していたが、
+    # 何を何件確認したのかの記録が無く、検証できない主張になっていた（2026-08-12）。
+    expected_note = _expected_review_note(root, theme)
+    if expected_note is None:
+        lines.append("NG  代表投稿の確認表示: data/review-ledger.json に記録がない")
+        failures += 1
+    elif f"／{expected_note}）" in page:
+        lines.append(f"OK  代表投稿の確認表示が台帳と一致する（{expected_note}）")
+    else:
+        lines.append(f"NG  代表投稿の確認表示が台帳と一致する: 「{expected_note}」であるべき")
         failures += 1
 
     gate_text = page + "\n" + topic_script + "\n" + vote_script

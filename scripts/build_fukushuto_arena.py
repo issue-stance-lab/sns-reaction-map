@@ -61,7 +61,7 @@ try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
-    from .x_embed import embed_html
+    from .x_embed import embed_html, period_label
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -79,7 +79,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
-    from x_embed import embed_html  # type: ignore[no-redef]
+    from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 NEG = "法案反対"
@@ -433,7 +433,7 @@ def sample_period(records: list[dict[str, Any]]) -> str:
     台帳の値とページの表記を突き合わせるので、別々に数えると必ずいつかズレる。
     """
     period = expected_period(summarize(records))
-    return "記録なし" if period == "unknown" else period
+    return period_label(period)
 
 
 def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags: int = 0) -> str:
@@ -516,7 +516,7 @@ def build(
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
         f"  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n"
-        f"  （取得期間: {sample_period(records)}／AI分類・人間による代表投稿の確認あり）<br>\n"
+        f"  （取得期間: {sample_period(records)}／AI分類。代表投稿は編集部が選定）<br>\n"
         "  <strong>社会全体の世論調査ではありません。</strong></p>",
         "調査条件",
         flags=re.S,

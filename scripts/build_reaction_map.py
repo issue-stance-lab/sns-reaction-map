@@ -12,9 +12,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .x_embed import embed_html
+    from .x_embed import embed_html, period_label as period_label_for
 except ImportError:  # python3 scripts/build_reaction_map.py
-    from x_embed import embed_html  # type: ignore[no-redef]
+    from x_embed import embed_html, period_label as period_label_for  # type: ignore[no-redef]
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -425,11 +425,11 @@ def research_conditions_html(config: dict[str, Any], total: int) -> str:
     research = config.get("research_conditions") or {}
     source = str(research.get("sample_source") or config.get("source_label") or "").replace("!", "")
     period = str(research.get("sample_period") or "")
-    period_label = "記録なし" if period.lower() == "unknown" else period
+    period_text = period_label_for(period)
     return f'''<!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> {html.escape(source)}で取得した公開投稿 {total}件<br>
-  （取得期間: {html.escape(period_label)}／AI分類・人間による代表投稿の確認あり）<br>
+  （取得期間: {html.escape(period_text)}／AI分類。代表投稿は編集部が選定）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->'''

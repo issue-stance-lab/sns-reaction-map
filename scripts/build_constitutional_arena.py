@@ -304,7 +304,7 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         '<p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">'
         f'このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 {collected}件のうち、'
         f'意見と判定した{total}件を分析対象としています。<br>\n'
-        '  （取得期間: 2026-06-20〜2026-07-25／AI分類・人間による代表投稿の確認あり）<br>\n'
+        '  （取得期間: 2026-06-20〜2026-07-25／AI分類。代表投稿は編集部が選定）<br>\n'
         '  <strong>社会全体の世論調査ではありません。</strong></p>\n'
         '</aside>\n<!-- RESEARCH_CONDITIONS_END -->'
     )

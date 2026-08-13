@@ -43,9 +43,9 @@ from typing import Any
 import yaml
 
 try:
-    from .x_embed import embed_html
+    from .x_embed import embed_html, period_label
 except ImportError:  # python3 scripts/build_koshitsu_arena.py
-    from x_embed import embed_html  # type: ignore[no-redef]
+    from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 try:
     from .issue_card_counts import IssueCountError, span_html
@@ -141,7 +141,7 @@ def sample_period(records: list[dict[str, Any]]) -> str:
     収集回が増えるたびに変わる値なので、ページ側に固定で書かない。
     """
     period = expected_period(summarize(records))
-    return "記録なし" if period == "unknown" else period
+    return period_label(period)
 
 
 def load_queries() -> list[str]:

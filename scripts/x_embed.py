@@ -51,3 +51,21 @@ def fallback_link(url: str) -> str:
 def embed_html(url: str, *, attrs: str = BLOCKQUOTE_ATTRS) -> str:
     """出典リンク入りの blockquote を返す。"""
     return f"<blockquote {attrs}>{fallback_link(url)}</blockquote>"
+
+
+# ── 調査条件の表示ラベル ────────────────────────────────────────────────
+# THEMES.yaml の sample_period が unknown のとき、ページには長く「記録なし」と
+# 出していた。信頼性の表示（代表投稿の確認）のすぐ隣に並ぶため、いちばん印象が悪い。
+#
+# 4テーマ（ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi）が
+# 該当する。いずれも sample_period を記録する運用より前に公開したテーマで、
+# 収集期間の始まりは復元できない（TASK_BOARD 課題28）。更新記録から最終収集日は
+# 分かるが、範囲の始まりは残っていない。推測で埋めず、理由を書く。
+
+UNKNOWN_PERIOD_LABEL = "未記録 — 収集期間の記録を始める前に公開したテーマ"
+
+
+def period_label(period: str) -> str:
+    """sample_period の表示ラベル。unknown は理由つきの文言に置き換える。"""
+    value = str(period or "").strip()
+    return UNKNOWN_PERIOD_LABEL if value.lower() == "unknown" else value
