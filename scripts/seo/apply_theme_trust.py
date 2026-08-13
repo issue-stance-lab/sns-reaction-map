@@ -26,7 +26,7 @@ PROTECTED_TOKENS = (
     "supabase",
     "topic-modern.js",
 )
-TOPIC_CSS_VERSION = "26"
+TOPIC_CSS_VERSION = "27"  # 2026-08-13 .article-trust-observations を追加
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -163,11 +163,37 @@ def jsonld_block(theme: dict[str, Any], config: dict[str, Any]) -> str:
     return f'{JSONLD_START}\n  <script type="application/ld+json">\n{encoded}\n  </script>\n{JSONLD_END}'
 
 
+def observations_html(theme: dict[str, Any]) -> str:
+    """「収集・分類で分かったこと」。
+
+    セオリコの診断で Experience（体験・経験）が NG になった。記事が収集結果の整理だけで、
+    運営側が実際に手を動かして分かったことが1行も書かれていなかったため。
+
+    ここに書くのは**実際の作業ログにある事実だけ**。材料は
+    data/verification/updates/<theme>/<date>/report.json（機械検証済みの件数）、
+    THEMES.yaml の notes（作業中に起きたこと）、configs/topics/<theme>.yaml（検索語）。
+    作り話を書かない。材料が無いテーマには節ごと出さない。
+    """
+    items = theme.get("observations") or []
+    if not items:
+        return ""
+    rows = "\n".join(
+        f"      <li>{html.escape(resolve_counts(str(item), theme['id']))}</li>" for item in items
+    )
+    return (
+        "    <h3>収集・分類で分かったこと</h3>\n"
+        '    <ul class="article-trust-observations">\n'
+        f"{rows}\n"
+        "    </ul>\n"
+    )
+
+
 def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
     published = theme["datePublished"]
     modified = theme["dateModified"]
     collection = html.escape(resolve_counts(theme["collection"], theme["id"]))
     organization_name = html.escape(organization["name"])
+    observations = observations_html(theme)
     return f"""\
 {TRUST_START}
 <aside class="article-trust" aria-labelledby="article-trust-title">
@@ -185,7 +211,7 @@ def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
     <p>{collection}</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
-  </div>
+{observations}  </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
@@ -268,12 +294,42 @@ def apply_theme(source: str, theme: dict[str, Any], config: dict[str, Any]) -> s
     return updated
 
 
+# 「収集・分類で分かったこと」だけを差し替えるための目印。
+OBSERVATIONS_PATTERN = re.compile(
+    r"    <h3>収集・分類で分かったこと</h3>\n"
+    r'    <ul class="article-trust-observations">\n.*?    </ul>\n',
+    re.DOTALL,
+)
+
+
+def apply_observations_only(source: str, theme: dict[str, Any]) -> str:
+    """分析メモだけを入れ替える。件数表示には触れない。
+
+    ブロック全体を作り直すには正典（本文を含むため一部が Git 管理外）が要る。
+    正典が手元に無い環境でも分析メモを更新できるように、この経路を残す。
+    """
+    block = observations_html(theme)
+    if OBSERVATIONS_PATTERN.search(source):
+        return OBSERVATIONS_PATTERN.sub(lambda _: block, source, count=1)
+    if not block:
+        return source
+    anchor = "  </div>\n  <p class=\"article-trust-caution\">"
+    if anchor not in source:
+        raise ValueError(f'{theme["id"]}: 分析メモの差し込み位置が見つかりません')
+    return source.replace(anchor, block + anchor, 1)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default="configs/theme-seo.json")
     parser.add_argument("--site-cases", default="configs/site-cases.json")
     parser.add_argument("--docs-dir", default="docs")
     parser.add_argument("--check", action="store_true", help="validate and report without writing")
+    parser.add_argument(
+        "--observations-only",
+        action="store_true",
+        help="「収集・分類で分かったこと」だけを更新する（正典が無い環境用）",
+    )
     args = parser.parse_args()
 
     config = load_json(PROJECT_ROOT / args.config)
@@ -287,7 +343,10 @@ def main() -> int:
         if not path.is_file():
             raise FileNotFoundError(path)
         source = path.read_text(encoding="utf-8")
-        updated = apply_theme(source, theme, config)
+        if args.observations_only:
+            updated = apply_observations_only(source, theme)
+        else:
+            updated = apply_theme(source, theme, config)
         if updated != source:
             changed += 1
             if not args.check:
