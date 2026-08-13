@@ -57,9 +57,40 @@ Codex にも見せ、3者の指摘を実ファイルで検証して統合した�
 - **404ページを新設**（`scripts/build_404_page.py`）。GitHub Pages の汎用404が出ていた
 - takaichi の「意見360件を表示しています」が1件ずれ（表示は359件）。`{issue_opinions}` 差し込みで修正
 
+**2026-08-13 対応済み（フェーズB・C前半）**:
+- **お問い合わせ導線が index.html と全11テーマに1件も無かった**（セオリコ「必須ページ 不明」の実体）。
+  全18ファイルのフッターを6リンクで統一（運営者情報／調査・編集方法／お問い合わせ・訂正依頼／
+  プライバシーポリシー／免責事項／画像制作方針）。`scripts/seo/unify_site_chrome.py --check` で検査可能
+- **about.html を 1,368字 → 2,980字**。テーマ選定基準・検索語の作り方・重複除外・意見判定基準・
+  分類方法・代表投稿の選定基準・AI分類の誤りの確認方法・訂正時の対応・**広告と編集の関係**を追加。
+  `#operator` `#method` を新設。運営者が1人であること、「編集部」が1人の編集名義であることを明記。
+  「ローカル環境で動作するAI」の誤記も修正（現行は Hermes / OpenCode Go）
+- **全11テーマに「収集・分類で分かったこと」を追加**（セオリコ Experience NG への本丸）。
+  report.json・THEMES.yaml の notes・検索語設定から、実際の作業ログにある事実だけを書いた。
+  本文 +3,595文字。`configs/theme-seo.json` の `observations` で管理し、正典が無い環境でも
+  `apply_theme_trust.py --observations-only` で更新できる
+- **ルートリポジトリに robots.txt / sitemap.xml / 404.html を追加**。robots.txt はホストのルートに
+  置いたものしか読まれない仕様で、`/sns-reaction-map/robots.txt` は無視されていた。sitemap も
+  発見されていなかった（GSC 28日間で表示27回・クリック1件と整合）。
+  ブランチ `claude/google-adsense-improvement-iot78g` に出してある（main へ push すると即公開になるため）
+
+**検証コマンド**（すべて `OK` で終われば成功。`grep` で数えると修正後の正常な形も
+拾ってしまうため、必ず下のスクリプトを使うこと）:
+
+```sh
+python3 scripts/seo/strip_production_notes.py --check   # 制作指示が残っていないか
+python3 scripts/seo/add_embed_fallback.py --check       # 中身が空の埋め込みが無いか
+python3 scripts/seo/unify_site_chrome.py --check        # 全ページに統一リンクが揃っているか
+python3 scripts/seo/apply_review_note.py --check        # 確認表示が台帳と一致するか
+python3 scripts/build_404_page.py --check               # 404がテーマ一覧と同期しているか
+python3 scripts/build_review_ledger.py --check          # 台帳の再計算で内容が変わらないか
+python3 scripts/verify_theme_page.py <theme>            # 出典リンクの死活を含む総合検査
+python3 scripts/verify_top_page.py                      # docs/ の衛生・404の存在
+```
+
 **残作業**:
-①フェーズB以降（編集情報をページ冒頭へ / ヘッダー・フッターの共通化 / about.html の調査方法の具体化 /
-  編集部の分析メモ / 一次資料を7テーマへ / 背景解説の増補 / ルートページ / robots.txt・sitemap.xml）
+①フェーズC後半（一次資料が0件の7テーマへ官公庁リンクを追加 / 背景解説を1,200字へ増補 /
+  編集情報をページ冒頭へ）
 ②**出典リンクの死活確認**。`verify_theme_page.py` に検査は既にあるが、作業環境の通信制限で実行できない。
   オーナーのローカルで `python3 scripts/verify_theme_page.py <theme>` を回して確認すること
 ③独自ドメイン移行の判断（保留中。3者とも「今回は保留」で一致）
