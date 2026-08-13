@@ -29,7 +29,15 @@ THEMES_YAML = PROJECT_ROOT / "THEMES.yaml"
 OLD_NOTE = "AI分類・人間による代表投稿の確認あり"
 SELECTED_NOTE = "AI分類。代表投稿は編集部が選定"
 
-CONDITION_PATTERN = re.compile(r"（取得期間: (?P<period>[^／）]*)／(?P<note>[^）]*)）")
+# 確認表示は <span class="review-note"> で囲む。この件数は data/review-ledger.json 由来で
+# 正典（分類結果）からは導けないため、verify_number_provenance.py の
+# exclude_selectors で「ここだけ」除外できるようにするための目印。
+# 同じ段落にある「公開投稿 N件」は正典から導ける値なので、除外に巻き込んではいけない。
+REVIEW_NOTE_CLASS = "review-note"
+CONDITION_PATTERN = re.compile(
+    r"（取得期間: (?P<period>[^／）]*)／"
+    r'(?:<span class="review-note">)?(?P<note>[^<）]*)(?:</span>)?）'
+)
 
 
 def reviewed_note(samples: int) -> str:
@@ -87,16 +95,22 @@ def main() -> int:
             failures += 1
             continue
         actual = match.group("note")
-        if actual == expected:
+        # 文言だけでなく <span> で囲まれているかも見る。囲みは
+        # verify_number_provenance.py が「ここだけ」除外するための目印なので、
+        # 文言が合っていても囲みが無ければ書き換える必要がある。
+        desired = (
+            f"（取得期間: {match.group('period')}／"
+            f'<span class="{REVIEW_NOTE_CLASS}">{expected}</span>）'
+        )
+        if match.group(0) == desired:
             print(f"OK  {theme_id}: {expected}")
             continue
         if args.check:
-            print(f"NG  {theme_id}: 台帳と不一致\n      いま: {actual}\n      あるべき: {expected}")
+            reason = "台詞が台帳と不一致" if actual != expected else "review-note の囲みが無い"
+            print(f"NG  {theme_id}: {reason}\n      いま: {actual}\n      あるべき: {expected}")
             failures += 1
             continue
-        updated = CONDITION_PATTERN.sub(
-            lambda m: f"（取得期間: {m.group('period')}／{expected}）", content
-        )
+        updated = CONDITION_PATTERN.sub(lambda m: desired, content, count=1)
         changed += 1
         print(f"{'変更予定' if args.dry_run else '変更'}  {theme_id}\n      旧: {actual}\n      新: {expected}")
         if not args.dry_run:
