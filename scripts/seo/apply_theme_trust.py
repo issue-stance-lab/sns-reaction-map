@@ -26,7 +26,7 @@ PROTECTED_TOKENS = (
     "supabase",
     "topic-modern.js",
 )
-TOPIC_CSS_VERSION = "27"  # 2026-08-13 .article-trust-observations を追加
+TOPIC_CSS_VERSION = "28"  # 2026-08-13 .background-sources を追加
 
 
 def load_json(path: Path) -> dict[str, Any]:

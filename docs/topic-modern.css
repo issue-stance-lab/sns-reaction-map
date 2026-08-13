@@ -941,6 +941,35 @@ footer { margin-top: 0 !important; background: #07172f !important; }
   font-size: 12px;
   line-height: 1.75;
 }
+/* 「この争点の背景」末尾の一次情報リンク。SNSとAI以外の出典であることを示す */
+.background-sources {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, #e6ebf3);
+}
+.background-sources h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink, #071a3d);
+}
+.background-sources ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted, #637089);
+}
+.background-sources li {
+  margin-bottom: 5px;
+}
+.background-sources-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted, #637089);
+}
+
 /* 「収集・分類で分かったこと」。h3 と同じ2カラムグリッドの右列に入る */
 .article-trust-observations {
   margin: 0;
