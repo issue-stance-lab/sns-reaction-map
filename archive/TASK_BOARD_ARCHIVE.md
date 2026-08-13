@@ -50,6 +50,7 @@
 | 課題24: 漫画コンテンツ追加 | manga_data / manga_img |
 | 課題27: bukatsu-chiiki 画像生成 | manga_img（blocked） |
 | 課題28: 旧3テーマ v3化 | classify2d → page_v3 |
+| 課題46: 運用メモの公開停止 | Claude Code | 2026-08-13 | `docs/` 直下の運用メモ10件を `docs-internal/` へ移動。verify_top_page.py に再発防止の検査を追加 |
 
 ---
 
@@ -73,3 +74,51 @@
 | 2026-06-24 | Claude Code | Codex | レビュー全6項目対応完了 |
 | 2026-06-24 | Codex | Claude Code | 再レビュー。P3指摘 |
 | 2026-06-24 | Claude Code | Codex | P3対応完了（try/finally化） |
+
+
+---
+
+## 課題46 の詳細（2026-08-13 完了）
+### 課題46: 運用メモ9件が公開サイトから配信されている
+**状態**: 未着手（2026-08-10 記録）
+**きっかけ**: 課題45で `x-posts.md` をサイト配信から外した際、`docs/` 直下に
+運用メモの `.md` が残っていることに気づいた。**9件すべて HTTP 200 で配信中**
+（`https://issue-stance-lab.github.io/sns-reaction-map/<ファイル名>` で誰でも読める）。
+
+| ファイル | 行数 | 内容 |
+|---|---|---|
+| `ga4-automation.md` | 334 | GA4の自動取得手順（OAuth設定を含む） |
+| `gsc-automation.md` | 258 | Search Console の自動取得手順 |
+| `voting_design_guideline.md` | 135 | 投票設問・選択肢の設計方針 |
+| `growth-kpi-automation.md` | 107 | KPI取得の自動化メモ |
+| `seo-setup.md` | 88 | SEO・X共有のセットアップ |
+| `adsense-setup.md` | 84 | AdSense導入手順 |
+| `supabase-votes-automation.md` | 84 | 投票数の自動取得メモ |
+| `kpi-snapshot-request-2026-07-07.md` | 60 | KPI取得依頼（未対応のまま） |
+| `substack-takaichi-reaction-table.md` | 43 | Substack貼り付け用の分類表 |
+
+**調査済み（作業前に読むこと）**:
+- **鍵・トークンは無い。** `client_secret` / `refresh_token` / APIキーはいずれも不在。
+  `adsense-setup.md` の `ca-pub-1234567890123456` はプレースホルダで実IDではない。
+  `ga4-automation.md` の `G-K10S4YCZFH` はページに埋まる公開値
+- **課題45と同じく「漏洩」ではなく「見え方」の課題。** 運用の手順が読める状態
+- **サイト内からリンクされていない**（`docs/*.html` に参照なし）。URL直打ちでのみ到達する
+- 相互参照は `docs/` 内で閉じている（`ga4-automation` を2件、`gsc-automation` と
+  `growth-kpi-automation` を各1件が参照）。**リポジトリ外からの参照は無い**
+- `docs/images/README.md` はサブディレクトリなので別途判断（画像素材の説明）
+
+**取るべき方法**: 課題45と同じ `git rm --cached` ＋ `.gitignore`。
+ただし**それだけではサイト配信は止まらない**。デプロイは `docs/` を丸ごと
+アップロードするため、**追跡を外してもローカルにファイルが残っていれば配信され続ける**
+（課題45の `x-posts.md` はリポジトリ直下へ「移動」したので止まった）。
+
+→ **この課題では「`docs/` の外へ移す」方が確実。** 移動先の候補は `docs-internal/` など。
+   相互参照が `docs/` 内で閉じているので、まとめて移せばリンクは壊れない。
+
+**判断が要る点**: `substack-takaichi-reaction-table.md` は外部貼り付け用に作ったもので、
+公開前提だった可能性がある。移す前にオーナーに確認すること。
+
+**完了**: 2026-08-13。`git mv` で10件（9件＋`docs/images/README.md`）を `docs-internal/` へ移動。
+相互参照の書き換えは5行のみ。`substack-takaichi-reaction-table.md` も移動した（貼り付け元の作業ファイルで
+リンク0件、かつ記載183件が現行正典447件と食い違うため）。機密は無かったが、`ga4-automation.md` と
+`gsc-automation.md` にオーナーのローカルパスが含まれ、リポジトリが public のため git 履歴には残る。

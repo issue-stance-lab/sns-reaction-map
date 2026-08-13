@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import html
+import sys
 import json
 import re
 from collections import Counter
@@ -11,6 +12,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from x_embed import embed_html  # noqa: E402
 PAGE = ROOT / "docs/constitutional-amendment-reaction-map.html"
 DATA = ROOT / "social-samples/constitutional_amendment_hermes_arena_classified.json"
 
@@ -173,9 +177,9 @@ def sample_cards(rows: list[dict], idx: int) -> str:
             + esc(c.get("confidence") or "—")
             + "</div><p>"
             + esc(c.get("summary") or "投稿の要旨")
-            + '</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="'
-            + esc(row["url"])
-            + '"></a></blockquote></div>'
+            + "</p>"
+            + embed_html(row["url"])
+            + "</div>"
         )
     return "".join(cards)
 

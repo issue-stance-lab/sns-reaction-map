@@ -737,7 +737,7 @@
 }
 /* TIDE_CARD_END */
 </style>
-  <link rel="stylesheet" href="topic-modern.css?v=26">
+  <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
   <script src="vote-config.js?v=1"></script>
   <script src="vote-store.js?v=1"></script>
@@ -785,7 +785,7 @@
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 181件<br>
-  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  （取得期間: 未記録 — 収集期間の記録を始める前に公開したテーマ／AI分類。代表投稿10件の要旨を編集部が確認）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
@@ -1088,6 +1088,12 @@
     <p>Yahoo!リアルタイム検索で「自転車 青切符 賛成」「自転車 青切符 反対」「自転車 青切符 インフラ」など複数の検索語を使い、公開されているX投稿を収集しました。収集した181件のうち意見と判定した181件を論点分析の対象にしています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>10の検索語を賛否の対で作りました。「自転車 青切符 当然」と「自転車 青切符 おかしい」「やりすぎ」、取り締まりの語とインフラ側の語（「道路 OR インフラ」「車道 怖い」）を組み合わせています。片側だけだと取り締まり賛成の声しか集まりません。</li>
+      <li>2026年7月12日の収集分と7月26日の収集分を比べると、賛成が54.5%へ増え、反対が45.5%へ減りました。ただし比較に使った件数はそれぞれ31件と22件と少なく、数件の増減で動く範囲です。</li>
+      <li>取り締まりへの賛否とは別に、「車道が危ないから歩道を走っている」という道路整備側の指摘がまとまった数ありました。賛成・反対の2つに分けると消えてしまうため、独立した論点として立てています。</li>
+    </ul>
   </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
@@ -1560,8 +1566,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>取締り強化支持（37件・全員）</strong>マナーの悪い自転車をこのまま放置するのはおかしい。事故が起きてからでは遅い。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">取締り支持 / 感情やや高め</div><p>無法状態の自転車に怒り、青切符でも甘いとして厳格な対応を要求</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shocker108/status/2061387437340045705"></a></blockquote></div>
-<div class="sample-card"><div class="meta">取締り支持 / 安全優先</div><p>自転車の一時不停止に怒り、厳格な取り締まりを強く求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bjayway/status/2070305605852836233"></a></blockquote></div>
+<div class="sample-card"><div class="meta">取締り支持 / 感情やや高め</div><p>無法状態の自転車に怒り、青切符でも甘いとして厳格な対応を要求</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shocker108/status/2061387437340045705">@shocker108 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">取締り支持 / 安全優先</div><p>自転車の一時不停止に怒り、厳格な取り締まりを強く求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bjayway/status/2070305605852836233">@bjayway の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1577,8 +1583,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side pos"><strong>インフラ整備優先派（27件）</strong>自転車レーンが整備されてから取り締まるべき。先にルールありきでは混乱するだけ。</div><div class="side neg"><strong>中立（2件）</strong>インフラ整備と取り締まりを並行して進める現実的な視点。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">インフラ優先 / 感情高め</div><p>インフラ整備不足を批判し、青切符制度に強く反対する声</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/15jacnamagiga/status/2070261164618158443"></a></blockquote></div>
-<div class="sample-card"><div class="meta">条件付き支持 / 冷静</div><p>インフラ整備優先を主張しつつ青切符制度を条件付きで支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/suzuking408/status/2069735857695891855"></a></blockquote></div>
+<div class="sample-card"><div class="meta">インフラ優先 / 感情高め</div><p>インフラ整備不足を批判し、青切符制度に強く反対する声</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/15jacnamagiga/status/2070261164618158443">@15jacnamagiga の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">条件付き支持 / 冷静</div><p>インフラ整備優先を主張しつつ青切符制度を条件付きで支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/suzuking408/status/2069735857695891855">@suzuking408 の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1594,8 +1600,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side pos"><strong>車道走行が怖い（12件）</strong>車道はトラックや路駐車があって危険。子どもや高齢者には無理なルールだ。</div><div class="side neg"><strong>中立（2件）</strong>車道・歩道どちらにも問題があるという複合的な視点。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">車道不安 / 感情高め</div><p>青切符への疑念と子どもへの車道走行要求に強く反対</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/isaiah8_1/status/2067988251760345275"></a></blockquote></div>
-<div class="sample-card"><div class="meta">歩行者安全重視 / 感情高め</div><p>路駐問題の解消と自転車の安全確保を要望する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Mid_observatory/status/2021148538013671884"></a></blockquote></div>
+<div class="sample-card"><div class="meta">車道不安 / 感情高め</div><p>青切符への疑念と子どもへの車道走行要求に強く反対</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/isaiah8_1/status/2067988251760345275">@isaiah8_1 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">歩行者安全重視 / 感情高め</div><p>路駐問題の解消と自転車の安全確保を要望する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Mid_observatory/status/2021148538013671884">@Mid_observatory の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1611,8 +1617,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>免許・講習義務化派（2件）</strong>自転車にもルールを学ぶ機会が必要。原付のように免許制か事前講習で知識を担保すべき。</div><div class="side pos"><strong>慎重・反対派（7件）</strong>免許制は自転車利用の障壁になる。費用や手続き負担が増えて利便性が下がる。</div><div class="side neu" style="background:#f8fafc;border-left:3px solid #94a3b8"><strong>中立（7件）</strong>条件次第では免許制や講習義務化もあり得るという立場。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">免許制支持 / 感情高め</div><p>自転車への免許制や講習制度の導入を強く主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/r70OylZbSZeiIIz/status/2070149487566418240"></a></blockquote></div>
-<div class="sample-card"><div class="meta">免許制支持 / 安全優先</div><p>自転車に免許制導入を提唱し安全優先の立場から現行ルールに疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yamazakibusu/status/2070074656128917921"></a></blockquote></div>
+<div class="sample-card"><div class="meta">免許制支持 / 感情高め</div><p>自転車への免許制や講習制度の導入を強く主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/r70OylZbSZeiIIz/status/2070149487566418240">@r70OylZbSZeiIIz の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">免許制支持 / 安全優先</div><p>自転車に免許制導入を提唱し安全優先の立場から現行ルールに疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yamazakibusu/status/2070074656128917921">@yamazakibusu の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1628,8 +1634,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side pos"><strong>ルール不信派（13件）</strong>違反の基準が複雑すぎる。警察の裁量が広く、正直者がバカを見る取り締まりになりかねない。</div><div class="side neg"><strong>中立（6件）</strong>ルールの周知や整備状況を見ながら判断したい。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">ルール不信 / 感情高め</div><p>青切符に強く反対、監視社会的な取り締まりへの怒り</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032229649317814760"></a></blockquote></div>
-<div class="sample-card"><div class="meta">基準複雑さへの批判</div><p>113種は多すぎ、簡略化と周知整備の後に実施すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Clifrennie/status/2068026232860537188"></a></blockquote></div>
+<div class="sample-card"><div class="meta">ルール不信 / 感情高め</div><p>青切符に強く反対、監視社会的な取り締まりへの怒り</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032229649317814760">@kress813 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">基準複雑さへの批判</div><p>113種は多すぎ、簡略化と周知整備の後に実施すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Clifrennie/status/2068026232860537188">@Clifrennie の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1792,8 +1798,6 @@ const SM_RAW = [
 <ul>
 <li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
 <li>検索語には制度への疑問や取締りへの不安を含むキーワードが含まれるため、特定の反応に偏りが出る可能性があります。</li>
-<li>投稿本文の転載は最小限にし、要約中心にしてください。</li>
-<li>代表投稿は公開前に人間が確認する前提です。</li>
 </ul>
 </div></details>
 </section>
@@ -1803,10 +1807,12 @@ const SM_RAW = [
     <div>Powered by Yahooリアルタイム検索 + AI分類</div>
     <a href="index.html" style="color:rgba(255,255,255,.85);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
     <div style="margin-top:8px;color:rgba(255,255,255,.6);">
-      <a href="about.html" style="color:rgba(255,255,255,.7);margin-right:16px;">このサイトについて</a>
-      <a href="image-policy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">画像制作方針</a>
+      <a href="about.html#operator" style="color:rgba(255,255,255,.7);margin-right:16px;">運営者情報</a>
+      <a href="about.html#method" style="color:rgba(255,255,255,.7);margin-right:16px;">調査・編集方法</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener" style="color:rgba(255,255,255,.7);margin-right:16px;">お問い合わせ・訂正依頼</a>
       <a href="privacy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">プライバシーポリシー</a>
-      <a href="disclaimer.html" style="color:rgba(255,255,255,.7);">免責事項</a>
+      <a href="disclaimer.html" style="color:rgba(255,255,255,.7);margin-right:16px;">免責事項</a>
+      <a href="image-policy.html" style="color:rgba(255,255,255,.7);">画像制作方針</a>
     </div>
     <div style="margin-top:10px;">
       <a href="https://www.buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener"

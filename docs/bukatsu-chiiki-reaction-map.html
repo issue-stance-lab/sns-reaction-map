@@ -766,7 +766,7 @@
 /* TIDE_CARD_END */
 
 </style>
-  <link rel="stylesheet" href="topic-modern.css?v=26">
+  <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
   <script src="vote-config.js?v=1"></script>
   <script src="vote-store.js?v=1"></script>
@@ -812,7 +812,7 @@
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 732件<br>
-  （取得期間: 2026-06-27〜2026-08-08／AI分類・人間による代表投稿の確認あり）<br>
+  （取得期間: 2026-06-27〜2026-08-08／AI分類。代表投稿は編集部が選定）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
@@ -1142,6 +1142,12 @@
     <p>Yahoo!リアルタイム検索で地域移行、教員負担、費用、受け皿などに関する複数の検索語を使い、公開されているX投稿を収集しました。重複を除いた累計732件を分類し、意見と判定した599件を論点分析に使用しています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>同じ10の検索語で3回にわたって収集しています。回を重ねるごとに重複が増え、2026年8月8日の回では取得238件のうち132件（約55%）が既に取得済みの投稿でした。話題が一巡すると新しい声が出にくくなります。</li>
+      <li>7月23日の追加分と8月2日の追加分を同じ条件で比べると、移行支持が6.1ポイント増え、「教員の働き方」を論点とする投稿が8.9ポイント増えました。一方で感情の強い投稿は8.0ポイント減っています。</li>
+      <li>収集した投稿のうち意見と判定できた割合は約76〜82%でした。制度の説明や自治体の告知を共有する投稿が一定数あり、それらは分析から外しています。</li>
+    </ul>
   </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
@@ -2100,7 +2106,7 @@ const SM_RAW = [
 </tbody></table></div></details>
 <details><summary>論点別件数</summary><div class="table-wrap"><table><tbody><tr><th>費用・家庭負担</th><td>54</td></tr><tr><th>受け皿・指導者</th><td>86</td></tr><tr><th>教員の働き方</th><td>184</td></tr><tr><th>教育的意義・機会</th><td>117</td></tr><tr><th>地域格差</th><td>3</td></tr><tr><th>制度・移行プロセス</th><td>123</td></tr><tr><th>その他</th><td>32</td></tr></tbody></table></div></details>
 <details><summary>スタンス別件数</summary><div class="table-wrap"><table><tbody><tr><th>移行支持</th><td>278</td></tr><tr><th>条件付き・改善要求</th><td>105</td></tr><tr><th>慎重・反対</th><td>188</td></tr><tr><th>中立・情報</th><td>28</td></tr></tbody></table></div></details>
-<details><summary>注意</summary><ul><li>Yahooリアルタイム検索で取得したSNS投稿サンプルであり、世論調査ではありません。</li><li>Hermesが論点・スタンス・強度を自動分類しました。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
+<details><summary>注意</summary><ul><li>Yahooリアルタイム検索で取得したSNS投稿サンプルであり、世論調査ではありません。</li><li>Hermesが論点・スタンス・強度を自動分類しました。</li></ul></details>
 </section>
   </main>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -2108,10 +2114,12 @@ const SM_RAW = [
     <div>Powered by Yahooリアルタイム検索 + Hermes分類</div>
     <a href="index.html" style="color:rgba(255,255,255,.85);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
     <div style="margin-top:8px;color:rgba(255,255,255,.6);">
-      <a href="about.html" style="color:rgba(255,255,255,.7);margin-right:16px;">このサイトについて</a>
-      <a href="image-policy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">画像制作方針</a>
+      <a href="about.html#operator" style="color:rgba(255,255,255,.7);margin-right:16px;">運営者情報</a>
+      <a href="about.html#method" style="color:rgba(255,255,255,.7);margin-right:16px;">調査・編集方法</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener" style="color:rgba(255,255,255,.7);margin-right:16px;">お問い合わせ・訂正依頼</a>
       <a href="privacy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">プライバシーポリシー</a>
-      <a href="disclaimer.html" style="color:rgba(255,255,255,.7);">免責事項</a>
+      <a href="disclaimer.html" style="color:rgba(255,255,255,.7);margin-right:16px;">免責事項</a>
+      <a href="image-policy.html" style="color:rgba(255,255,255,.7);">画像制作方針</a>
     </div>
     <div style="margin-top:10px;">
       <a href="https://www.buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener"

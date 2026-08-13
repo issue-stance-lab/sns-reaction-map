@@ -23,8 +23,10 @@ import yaml
 
 try:
     from .issue_card_counts import IssueCountError, span_html
+    from .x_embed import embed_html
 except ImportError:
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
+    from x_embed import embed_html  # type: ignore[no-redef]
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -150,12 +152,11 @@ def sample_cards(rows: list[dict[str, Any]], issue: str) -> str:
 
     return "".join(
         '<div class="sample-card"><div class="meta">{stance} / conf {confidence:.2g}</div>'
-        '<p>{summary}</p><blockquote class="twitter-tweet" data-conversation="none" '
-        'data-dnt="true"><a href="{url}"></a></blockquote></div>'.format(
+        "<p>{summary}</p>{embed}</div>".format(
             stance=html.escape(str(classification(row)["stance"])),
             confidence=float(classification(row).get("confidence") or 0),
             summary=html.escape(str(classification(row).get("summary") or "")),
-            url=html.escape(str(row["url"]), quote=True),
+            embed=embed_html(row["url"]),
         )
         for row in picked
     )
@@ -303,7 +304,7 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         '<p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">'
         f'このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 {collected}件のうち、'
         f'意見と判定した{total}件を分析対象としています。<br>\n'
-        '  （取得期間: 2026-06-20〜2026-07-25／AI分類・人間による代表投稿の確認あり）<br>\n'
+        '  （取得期間: 2026-06-20〜2026-07-25／AI分類。代表投稿は編集部が選定）<br>\n'
         '  <strong>社会全体の世論調査ではありません。</strong></p>\n'
         '</aside>\n<!-- RESEARCH_CONDITIONS_END -->'
     )

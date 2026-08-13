@@ -24,6 +24,27 @@ const issueIndex = {
   "報道・行政対応": 5,
 };
 
+// 詳細データの表に出す見出し。正典のラベルとページの表示名が一部違うため、
+// 表示側に合わせた対応表を index 順で持つ（投票UIの ISSUES / STANCES と同じ文字列）。
+const issueLabels = [
+  "政治的中立性",
+  "安全管理・事故原因",
+  "追悼と被害者の尊厳",
+  "平和教育の萎縮",
+  "政治利用・基地問題",
+  "報道・行政の伝え方",
+];
+const stanceLabels = new Map([
+  [1, "文科省判断を評価"],
+  [0, "判断を保留・切り分ける"],
+  [-1, "文科省判断に疑問"],
+]);
+const intensityLabels = new Map([
+  [0.94, "high（強い）"],
+  [0.62, "medium（中）"],
+  [0.28, "low（弱い）"],
+]);
+
 function intensity(row) {
   const classification = row.classification || {};
   return {
@@ -58,6 +79,76 @@ const output =
   JSON.stringify(arenaRows) +
   ";\n";
 
+// 詳細データの表は、マップが読むのと同じ arenaRows から作る。
+// 別集計にすると同じページ内で数字が食い違う（課題29）。
+function countBy(keyOf) {
+  const counts = new Map();
+  for (const row of arenaRows) {
+    const key = keyOf(row);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+function totalRow(label, value, span = 1) {
+  const bold = ' style="font-weight:900"';
+  const cells = span === 1
+    ? `<td${bold}>${value}</td>`
+    : value.map((v) => `<td${bold}>${v}</td>`).join("");
+  return `<tr><th${bold}>${label}</th>${cells}</tr>`;
+}
+
+function detailTables() {
+  const total = arenaRows.length;
+  const byIssue = countBy((row) => row.i);
+  const byStance = countBy((row) => row.x);
+  const byIntensity = countBy((row) => row.e);
+  const byCross = countBy((row) => `${row.i}/${row.x}`);
+  const cross = (i, x) => byCross.get(`${i}/${x}`) || 0;
+
+  const issueRows = issueLabels
+    .map((label, i) => `<tr><th>${label}</th><td>${byIssue.get(i) || 0}</td></tr>`)
+    .join("") + totalRow("合計（意見投稿）", total);
+
+  const stanceRows = [...stanceLabels]
+    .map(([key, label]) => `<tr><th>${label}</th><td>${byStance.get(key) || 0}</td></tr>`)
+    .join("") + totalRow("合計（意見投稿）", total);
+
+  const crossRows =
+    "<thead><tr><th>論点</th><th>評価</th><th>保留</th><th>疑問</th><th>計</th></tr></thead><tbody>" +
+    issueLabels
+      .map((label, i) => {
+        const cells = [cross(i, 1), cross(i, 0), cross(i, -1)];
+        const sum = cells.reduce((a, b) => a + b, 0);
+        return `<tr><th>${label}</th>${cells.map((v) => `<td>${v}</td>`).join("")}<td>${sum}</td></tr>`;
+      })
+      .join("") +
+    totalRow(
+      "合計",
+      [byStance.get(1) || 0, byStance.get(0) || 0, byStance.get(-1) || 0, total],
+      4,
+    ) +
+    "</tbody>";
+
+  const intensityRows = [...intensityLabels]
+    .filter(([key]) => byIntensity.has(key))
+    .map(([key, label]) => `<tr><th>${label}</th><td>${byIntensity.get(key)}</td></tr>`)
+    .join("") + totalRow("合計（意見投稿）", total);
+
+  const wrap = (summary, inner, open = false) =>
+    `<details${open ? " open" : ""}><summary>${summary}</summary>` +
+    `<div class="table-wrap"><table>${inner}</table></div></details>`;
+
+  return (
+    "<!-- DETAIL_TABLES_START -->" +
+    wrap("論点別件数", `<tbody>${issueRows}</tbody>`, true) +
+    wrap("立場別件数", `<tbody>${stanceRows}</tbody>`) +
+    wrap("論点×立場のクロス集計", crossRows) +
+    wrap("感情の強さ（intensity）", `<tbody>${intensityRows}</tbody>`) +
+    "<!-- DETAIL_TABLES_END -->"
+  );
+}
+
 const currentOutput = await readFile(outputPath, "utf8").catch(() => "");
 const page = await readFile(pagePath, "utf8");
 const inlineData =
@@ -69,10 +160,14 @@ const dataMarkerPattern =
 if (!dataMarkerPattern.test(page)) {
   throw new Error("Henoko arena data markers were not found in the page");
 }
-const updatedPage = page.replace(
-  dataMarkerPattern,
-  inlineData,
-);
+const tableMarkerPattern =
+  /<!-- DETAIL_TABLES_START -->[\s\S]*?<!-- DETAIL_TABLES_END -->/;
+if (!tableMarkerPattern.test(page)) {
+  throw new Error("Henoko detail table markers were not found in the page");
+}
+const updatedPage = page
+  .replace(dataMarkerPattern, inlineData)
+  .replace(tableMarkerPattern, detailTables());
 const changed = currentOutput !== output || updatedPage !== page;
 if (!check) {
   await writeFile(outputPath, output);

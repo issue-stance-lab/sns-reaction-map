@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-10（課題46を追加。運用メモ9件が公開サイトから配信されている）
+最終更新: 2026-08-13（AdSense 2回目の不承認への対応。課題15を更新、課題46を完了、課題28を訂正）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -24,7 +24,7 @@
 **手順**: AI_HANDOFF.md §9 参照
 
 ### 課題15: AdSense審査対応 & 広告配置設計
-**状態**: 2026-08-01 に再審査をリクエスト（審査中）。前回は不承認（2026-07-07、理由: 有用性の低いコンテンツ）
+**状態**: 2026-08-12 に2回目の不承認（理由: 有用性の低いコンテンツ）。フェーズAの修正を2026-08-13 に実施、フェーズB以降が残り
 **概要**: 審査結果追跡、通過後の広告ユニット配置設計、プロジェクトアドレスへの管理権限移行
 **2026-07-07 対応済み**: 全8テーマページに「この争点の背景」解説セクション追加（configs/*.json の `background` フィールド＋build_reaction_map.py 対応済みのため再ビルドでも保持される）、docs/about.html（運営者情報）新設、全フッターにリンク追加、sitemap更新
 **2026-07-30 対応済み**: 問い合わせ窓口をGoogleフォームで開設（メールアドレス非公開・ログイン不要）、about.html の訂正窓口セクションと disclaimer.html の削除依頼導線をフォームにリンク。個別返信は原則行わない旨と、事実誤認の指摘・削除依頼には対応する旨を明記
@@ -32,7 +32,84 @@
 **2026-08-01 対応済み**: 別リポジトリ `issue-stance-lab/issue-stance-lab.github.io` の `index.html` を実体のあるトップページに差し替え（プロジェクトの目的、収集→分類→編集の3ステップ、公開中11テーマへのリンク、編集方針5項目、運営者情報と問い合わせフォーム、privacy/disclaimer/usage へのフッターリンク、数字の前にサンプルであり世論調査ではない旨の注意書き）。同リポジトリのルートに `ads.txt` を追加（`docs/ads.txt` と同一内容。従来は `/sns-reaction-map/ads.txt` にしか無く、ルートは404で管理画面のads.txtステータスが「不明」だった）。commit `aa4d05e`
 **注意**: ルートページには件数を載せていない。別リポジトリで二重管理すると課題29と同じ数字の食い違いが再発するため、件数と取得期間は各テーマページ側に一本化する方針
 **2026-08-01 申請済み**: 管理画面から再審査をリクエスト。お支払いプロフィールは登録済み（住所確認PINは累計$10、支払い方法登録は$100到達後のため現時点では操作不可）
-**残作業**: ①審査結果を待つ（数日〜2週間程度）。結果が出たら本欄に記録 ②通過した場合は広告ユニットの配置設計（本課題の後半スコープ）③再度不承認の場合は独自ドメイン移行を優先（github.ioサブドメインは審査上不利）④今後 `/sns-reaction-map/` 側だけを改善しても審査対象のルート（別リポジトリ `issue-stance-lab/issue-stance-lab.github.io`）には反映されない。テーマ追加時はルートの一覧にも追記すること
+**2026-08-12 不承認（2回目）**: 理由は同じ「有用性の低いコンテンツ」。
+セオリコの診断ツールにもかけ、Experience=NG / 必須ページ・Expertise・Trustworthiness=不明 が出た。
+Codex にも見せ、3者の指摘を実ファイルで検証して統合した。
+
+**2026-08-13 対応済み（フェーズA: 減点要素の除去）**:
+- **公開ページに制作指示が載っていた**（8テーマ・14文）。「代表投稿は公開前に人間が確認する前提です」
+  「投稿本文の転載は最小限にし…してください」など。**未完成の下書きに見えるうえ、同じページ上部の
+  「人間による代表投稿の確認あり」と矛盾していた**。`constitutional-amendment` は廃止済みの Ollama
+  への言及つき。設定10件・生成器4本・雛形1件から出どころも除去
+  （`scripts/seo/strip_production_notes.py --check` で再発を検出）
+- **`subtitle` の「編集用ビューです」**を設定3件＋雛形から除去。公開HTMLは差し替え済みだったが
+  設定が古く、再ビルドで復活する状態だった
+- **辺野古に旧2D分類の section が2つ丸ごと残っていた**。356件と278件が同一ページに同居。
+  どちらも `display:none` で読者には見えず、クローラーだけが63KBを読んでいた。削除して176KB→112KB。
+  詳細データ3表も旧仕様だったため正典から4表を再生成（`build_henoko_arena.mjs` に生成を追加）
+- **X投稿の埋め込み142件が空だった**。widgets.js が読めないと出典もリンクも残らない。
+  `scripts/x_embed.py` に形を集約し、生成器9本と修正スクリプトで共用
+- **運用メモ10件が HTTP 200 で配信されていた**（課題46。完了・アーカイブ済み）
+- **「AI分類・人間による代表投稿の確認あり」に記録が無かった**。ただし**確認自体は実際に行われていた**
+  — ページの要旨を正典と突き合わせると、断定的・党派的な表現を中立化する書き換えが入っている。
+  `data/review-ledger.json`（非公開）に証拠を記録し、記録のあるテーマだけ件数つきで表示するようにした
+  （bike-blue-ticket / takaichi / koshitsu-tenpakai の3テーマ。残る7テーマは正典が手元に無く判定不能）
+- **404ページを新設**（`scripts/build_404_page.py`）。GitHub Pages の汎用404が出ていた
+- takaichi の「意見360件を表示しています」が1件ずれ（表示は359件）。`{issue_opinions}` 差し込みで修正
+
+**2026-08-13 対応済み（フェーズB・C前半）**:
+- **お問い合わせ導線が index.html と全11テーマに1件も無かった**（セオリコ「必須ページ 不明」の実体）。
+  全18ファイルのフッターを6リンクで統一（運営者情報／調査・編集方法／お問い合わせ・訂正依頼／
+  プライバシーポリシー／免責事項／画像制作方針）。`scripts/seo/unify_site_chrome.py --check` で検査可能
+- **about.html を 1,368字 → 2,980字**。テーマ選定基準・検索語の作り方・重複除外・意見判定基準・
+  分類方法・代表投稿の選定基準・AI分類の誤りの確認方法・訂正時の対応・**広告と編集の関係**を追加。
+  `#operator` `#method` を新設。運営者が1人であること、「編集部」が1人の編集名義であることを明記。
+  「ローカル環境で動作するAI」の誤記も修正（現行は Hermes / OpenCode Go）
+- **全11テーマに「収集・分類で分かったこと」を追加**（セオリコ Experience NG への本丸）。
+  report.json・THEMES.yaml の notes・検索語設定から、実際の作業ログにある事実だけを書いた。
+  本文 +3,595文字。`configs/theme-seo.json` の `observations` で管理し、正典が無い環境でも
+  `apply_theme_trust.py --observations-only` で更新できる
+- **ルートリポジトリに robots.txt / sitemap.xml / 404.html を追加**。robots.txt はホストのルートに
+  置いたものしか読まれない仕様で、`/sns-reaction-map/robots.txt` は無視されていた。sitemap も
+  発見されていなかった（GSC 28日間で表示27回・クリック1件と整合）。
+  ブランチ `claude/google-adsense-improvement-iot78g` に出してある（main へ push すると即公開になるため）
+
+**検証コマンド**（すべて `OK` で終われば成功。`grep` で数えると修正後の正常な形も
+拾ってしまうため、必ず下のスクリプトを使うこと）:
+
+```sh
+python3 scripts/seo/strip_production_notes.py --check   # 制作指示が残っていないか
+python3 scripts/seo/add_embed_fallback.py --check       # 中身が空の埋め込みが無いか
+python3 scripts/seo/unify_site_chrome.py --check        # 全ページに統一リンクが揃っているか
+python3 scripts/seo/apply_review_note.py --check        # 確認表示が台帳と一致するか
+python3 scripts/build_404_page.py --check               # 404がテーマ一覧と同期しているか
+python3 scripts/build_review_ledger.py --check          # 台帳の再計算で内容が変わらないか
+python3 scripts/verify_theme_page.py <theme>            # 出典リンクの死活を含む総合検査
+python3 scripts/verify_top_page.py                      # docs/ の衛生・404の存在
+```
+
+**2026-08-13 対応済み（フェーズC後半）**:
+- **一次資料が0本だったテーマをゼロにした**。7テーマに官公庁・国会の出典を2〜4本ずつ追加
+  （参議院・衆議院の議案情報、首相官邸の記者会見録、文部科学省の見解、内閣官房・内閣府の資料、
+  総務省の制度資料、e-Gov 法令検索）。`configs/*.json` の `background.sources` で管理し、
+  `scripts/seo/apply_background_sources.py` が背景セクション末尾へ差し込む
+- school-nickname-ban には「**あだ名の禁止を定めた国の規定は無い**」、takaichi には
+  「事実関係の認定を行うページではない」という注記を添えた
+
+**残作業**:
+①**出典リンクの死活確認**（最優先）。作業環境の通信制限で官公庁ドメインへ到達できず、
+  今回追加した21本のリンクは WebSearch の結果までしか確認できていない。
+  マージ前に `python3 scripts/verify_theme_page.py <theme>` を通信制限のない環境で実行すること
+②背景解説の本文増補（現状は一次資料の追加のみ。時系列・未決着の問いの明記は未着手）
+③編集情報をページ冒頭へ移す（現状は可視テキストの23〜66%の位置）
+②**出典リンクの死活確認**。`verify_theme_page.py` に検査は既にあるが、作業環境の通信制限で実行できない。
+  オーナーのローカルで `python3 scripts/verify_theme_page.py <theme>` を回して確認すること
+③独自ドメイン移行の判断（保留中。3者とも「今回は保留」で一致）
+④再申請の判断。**反映して Google が再クロールするまで、管理画面の「問題を修正しました」に
+  チェックを入れないこと**
+⑤通過した場合は広告ユニットの配置設計（本課題の後半スコープ）
+⑥`/sns-reaction-map/` 側だけを改善しても審査対象のルート（別リポジトリ
+  `issue-stance-lab/issue-stance-lab.github.io`）には反映されない。テーマ追加時はルートの一覧にも追記すること
 
 ### 課題17: Googleアカウント・サービスのプロジェクトアドレス統一
 **状態**: 未着手
@@ -55,9 +132,19 @@
 **手順**: https://github.com/settings/tokens で現トークン削除 → 新規作成（repo・workflow・read:orgスコープ、90日期限）→ `gh auth logout` → `gh auth login` でトークン更新
 
 ### 課題28: sample_period の unknown を埋める
-**状態**: 未着手（`WORK_PLAN_2026-08.md` A-4 で回収）
-**概要**: S1 で THEMES.yaml に `sample_period`（収集期間）を追加したが、6テーマが `unknown` のまま。A-4「調査条件の表示」で各テーマの数字の近くに取得期間を出すため、それまでに埋める必要がある
-**対象（6件）**: bike-blue-ticket / bukatsu-chiiki / constitutional-amendment / elderly-license-revocation / school-nickname-ban / henoko-student-accident
+**状態**: 表示は対応済み（2026-08-13）。値の復元は未着手
+**概要**: S1 で THEMES.yaml に `sample_period`（収集期間）を追加したが、一部テーマが `unknown` のまま
+**2026-08-13 訂正**: 対象は**6テーマではなく4テーマ**。bukatsu-chiiki・constitutional-amendment・
+school-nickname-ban・henoko-student-accident はその後に埋まっており、記述が古かった
+**対象（実測4件）**: ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi
+**2026-08-13 対応済み**: 公開ページの表示を「取得期間: 記録なし」から
+「未記録 — 収集期間の記録を始める前に公開したテーマ」へ変更した。信頼性の表示（代表投稿の確認）の
+すぐ隣に「記録なし」と並ぶのが最も印象が悪かったため、理由を書く形にした。
+ラベルは `scripts/x_embed.py` の `period_label()` に集約（それまで4か所に散っていた）
+**残作業**: 値そのものの復元。**収集期間の始まりは復元できない**。正典に日付フィールドが無く、
+`data/verification/updates/` の記録も最新の収集回しか残っていない
+（ai-copyright 2026-08-03・08-09 / bike-blue-ticket 08-10（未昇格）/ takaichi 08-07 /
+elderly-license-revocation 記録なし）。推測で埋めないこと
 **手順**: 各テーマの `sample_file` のレコード内タイムスタンプ、または収集時の作業ログ・git log・`social-samples/*.md` から期間を特定する。**特定できない場合は推測で埋めず `unknown` のまま残し、ページ側で「取得期間: 記録なし」と正直に表示する**
 **2026-08-02 対応済み（3件）**: `sample_file` の `fetched_at` が全件そろっている constitutional-amendment（2026-06-20〜2026-07-25）/ school-nickname-ban（2026-06-22〜2026-07-12）/ henoko-student-accident（2026-06-14〜2026-06-27）を確定し、ページの「取得期間: 記録なし」も書き換えた。bukatsu-chiiki はパイロットで確定済み。
 **全11テーマ再検査**: 同じ基準を既に期間が入っていたテーマにも適用した。takaichi（276件中140件欠損）/ fukushuto（255件全件欠損）も `unknown` へ戻し、koshitsu-tenpakai は正典347件が全て7/26収集なので `2026-07-26` に修正した。現在の `unknown` は ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi / fukushuto の5件。
@@ -599,44 +686,6 @@ FAILED: 1 validation error(s)
 15論点で行が重なる、Canvas上の投稿点にキーボードで到達できない、
 トップのアトラス34語が手書き
 
-### 課題46: 運用メモ9件が公開サイトから配信されている
-**状態**: 未着手（2026-08-10 記録）
-**きっかけ**: 課題45で `x-posts.md` をサイト配信から外した際、`docs/` 直下に
-運用メモの `.md` が残っていることに気づいた。**9件すべて HTTP 200 で配信中**
-（`https://issue-stance-lab.github.io/sns-reaction-map/<ファイル名>` で誰でも読める）。
-
-| ファイル | 行数 | 内容 |
-|---|---|---|
-| `ga4-automation.md` | 334 | GA4の自動取得手順（OAuth設定を含む） |
-| `gsc-automation.md` | 258 | Search Console の自動取得手順 |
-| `voting_design_guideline.md` | 135 | 投票設問・選択肢の設計方針 |
-| `growth-kpi-automation.md` | 107 | KPI取得の自動化メモ |
-| `seo-setup.md` | 88 | SEO・X共有のセットアップ |
-| `adsense-setup.md` | 84 | AdSense導入手順 |
-| `supabase-votes-automation.md` | 84 | 投票数の自動取得メモ |
-| `kpi-snapshot-request-2026-07-07.md` | 60 | KPI取得依頼（未対応のまま） |
-| `substack-takaichi-reaction-table.md` | 43 | Substack貼り付け用の分類表 |
-
-**調査済み（作業前に読むこと）**:
-- **鍵・トークンは無い。** `client_secret` / `refresh_token` / APIキーはいずれも不在。
-  `adsense-setup.md` の `ca-pub-1234567890123456` はプレースホルダで実IDではない。
-  `ga4-automation.md` の `G-K10S4YCZFH` はページに埋まる公開値
-- **課題45と同じく「漏洩」ではなく「見え方」の課題。** 運用の手順が読める状態
-- **サイト内からリンクされていない**（`docs/*.html` に参照なし）。URL直打ちでのみ到達する
-- 相互参照は `docs/` 内で閉じている（`ga4-automation` を2件、`gsc-automation` と
-  `growth-kpi-automation` を各1件が参照）。**リポジトリ外からの参照は無い**
-- `docs/images/README.md` はサブディレクトリなので別途判断（画像素材の説明）
-
-**取るべき方法**: 課題45と同じ `git rm --cached` ＋ `.gitignore`。
-ただし**それだけではサイト配信は止まらない**。デプロイは `docs/` を丸ごと
-アップロードするため、**追跡を外してもローカルにファイルが残っていれば配信され続ける**
-（課題45の `x-posts.md` はリポジトリ直下へ「移動」したので止まった）。
-
-→ **この課題では「`docs/` の外へ移す」方が確実。** 移動先の候補は `docs-internal/` など。
-   相互参照が `docs/` 内で閉じているので、まとめて移せばリンクは壊れない。
-
-**判断が要る点**: `substack-takaichi-reaction-table.md` は外部貼り付け用に作ったもので、
-公開前提だった可能性がある。移す前にオーナーに確認すること。
 
 ---
 ### 課題45: X運用の手の内を公開リポジトリから外す

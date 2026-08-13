@@ -442,7 +442,7 @@ def details_panel(all_rows: list[dict[str, Any]], opinion_rows: list[dict[str, A
 </tbody></table></div></details>
 <details><summary>論点別件数</summary><div class="table-wrap"><table><tbody>{issue_table}</tbody></table></div></details>
 <details><summary>スタンス別件数</summary><div class="table-wrap"><table><tbody>{stance_table}</tbody></table></div></details>
-<details><summary>注意</summary><ul><li>Yahooリアルタイム検索で取得したSNS投稿サンプルであり、世論調査ではありません。</li><li>Hermesが論点・スタンス・強度を自動分類しました。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
+<details><summary>注意</summary><ul><li>Yahooリアルタイム検索で取得したSNS投稿サンプルであり、世論調査ではありません。</li><li>Hermesが論点・スタンス・強度を自動分類しました。</li></ul></details>
 </section>"""
 
 

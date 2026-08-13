@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import sys
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -12,6 +13,9 @@ from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+
+from x_embed import fallback_link  # noqa: E402
 
 
 def resolve(path: str) -> Path:
@@ -119,7 +123,7 @@ def sample_list(rows: list[dict[str, Any]], group: str, limit: int = 4) -> str:
         embed = (
             '<div class="tweet-embed">'
             '<blockquote class="twitter-tweet" data-dnt="true" data-theme="light">'
-            f'<a href="{esc(url)}"></a>'
+            f'{fallback_link(url)}'
             '</blockquote>'
             f'<div class="embed-fallback"><a href="{esc(url)}" target="_blank" rel="noopener noreferrer">元投稿を開く</a></div>'
             '</div>'

@@ -49,9 +49,9 @@ scripts/fetch_supabase_votes.py
 各スクリプトの詳細:
 
 ```text
-docs/ga4-automation.md
-docs/gsc-automation.md
-docs/supabase-votes-automation.md
+docs-internal/ga4-automation.md
+docs-internal/gsc-automation.md
+docs-internal/supabase-votes-automation.md
 ```
 
 ## 出力例

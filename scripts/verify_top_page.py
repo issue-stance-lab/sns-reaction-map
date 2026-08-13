@@ -436,6 +436,29 @@ def verify_top_page(
     else:
         lines.append("NG  注意書きが hero-stats より前に出現する")
         failures += 1
+
+    lines.extend(["", "=== 公開ディレクトリの衛生 ==="])
+    docs_dir = index_path.parent
+    stray_markdown = sorted(
+        path.relative_to(root).as_posix() for path in docs_dir.rglob("*.md")
+    )
+    if stray_markdown:
+        # 運用メモ9件が HTTP 200 で配信されていた（課題46、2026-08-12 に docs-internal/ へ移動）。
+        # 公開されるのは読者向けのページだけにする。運用メモは docs-internal/ へ置く。
+        lines.append(
+            "NG  docs/ に .md が無い（運用メモは docs-internal/ へ）: "
+            + ", ".join(stray_markdown)
+        )
+        failures += 1
+    else:
+        lines.append("OK  docs/ に .md が無い（運用メモは docs-internal/ へ）")
+
+    if (docs_dir / "404.html").exists():
+        lines.append("OK  docs/404.html がある")
+    else:
+        lines.append("NG  docs/404.html がある")
+        failures += 1
+
     return lines, failures
 
 

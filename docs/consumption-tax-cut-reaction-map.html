@@ -200,7 +200,7 @@
 }
 /* TIDE_CARD_END */
 </style>
-  <link rel="stylesheet" href="topic-modern.css?v=26">
+  <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
   <script src="vote-config.js?v=1"></script>
   <script src="vote-store.js?v=1"></script>
@@ -236,7 +236,7 @@
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 667件<br>
-  （取得期間: 2026-07-28／AI分類・人間による代表投稿の確認あり）<br>
+  （取得期間: 2026-07-28／AI分類。代表投稿は編集部が選定）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
@@ -400,6 +400,13 @@
     <p>Yahoo!リアルタイム検索で「消費税減税 賛成」「消費税減税 反対」「消費税 廃止 すべき」「消費税減税 財源 どうする」など賛否双方の検索語20件を使い、公開されているX投稿を収集しました。重複を除いた667件を分類し、意見と判定した612件を論点分析に使用しています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>20の検索語で収集しました。意見と判定できた割合は約91%で、公開中の11テーマで最も高い数字です。減税というテーマは、報道の共有よりも自分の意見を書く投稿が圧倒的に多くなります。</li>
+      <li>当初は「賛成・反対・中立」の3分類で始めましたが、「減税には賛成だが政府案は中途半端だ」という声を表現できませんでした。そこで「条件付き賛成・政府案に不満」を独立した立場として立て直しています（該当109件・約18%）。</li>
+      <li>最も多かった論点は税制の中身ではなく「公約と政治不信」で、全体の43.6%を占めました。税率や財源の議論より、公約を守るかどうかを問う投稿が中心です。</li>
+      <li>どの論点にも当てはまらない「その他」は6件にとどまりました。論点の立て方がこのテーマの投稿とよく合っていたと考えています。</li>
+    </ul>
   </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
@@ -1386,10 +1393,10 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side mid"><strong>実行したとは言えない（35件）</strong>公約どおりとは言えない中身で決着させ、やった形だけを作っている</div><div class="side pos"><strong>公約どおり実行すべき（167件）</strong>公約に掲げた減税を実行しない政党は信用できない。先送りの言い訳が続いている</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">公約どおり実行すべき / conf 0.95</div><p>減税推進を支持の条件とする</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/taFpUX4lmQREFwt/status/2082093296793624810"></a></blockquote></div>
-<div class="sample-card"><div class="meta">実行したとは言えない / conf 0.9</div><p>減税への取り組みが遅く財源の説明がないと不満</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Andrew_jpn/status/2081669115371192734"></a></blockquote></div>
-<div class="sample-card"><div class="meta">公約に縛られるべきでない / conf 0.9</div><p>減税不支持だが公約遂行求め政治不信表明</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/PleaseGnp/status/2082048819240607962"></a></blockquote></div>
-<div class="sample-card"><div class="meta">経緯の共有・立場不明 / conf 0.85</div><p>一律5%公約から給付優先への転換に困惑</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/j_kfp499265/status/2082051582280311164"></a></blockquote></div>
+<div class="sample-card"><div class="meta">公約どおり実行すべき / conf 0.95</div><p>減税推進を支持の条件とする</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/taFpUX4lmQREFwt/status/2082093296793624810">@taFpUX4lmQREFwt の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">実行したとは言えない / conf 0.9</div><p>減税への取り組みが遅く財源の説明がないと不満</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Andrew_jpn/status/2081669115371192734">@Andrew_jpn の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">公約に縛られるべきでない / conf 0.9</div><p>減税不支持だが公約遂行求め政治不信表明</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/PleaseGnp/status/2082048819240607962">@PleaseGnp の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">経緯の共有・立場不明 / conf 0.85</div><p>一律5%公約から給付優先への転換に困惑</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/j_kfp499265/status/2082051582280311164">@j_kfp499265 の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1404,10 +1411,10 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>効かない・副作用が大きい（61件）</strong>値下げに反映されず企業に吸収される。供給不足の中ではインフレを悪化させる</div><div class="side pos"><strong>物価高に効く（37件）</strong>物価高対策として最も早く広く効く。可処分所得が直接増える</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">物価高に効く / conf 0.95</div><p>物価高対策と消費税減税を最優先として求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/DXrUalvupnIEs2Z/status/2080983066286461049"></a></blockquote></div>
-<div class="sample-card"><div class="meta">効くが規模が足りない / conf 0.9</div><p>食料品減税は有効だが価格反映と財源の明示が必要</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/gno_tb34585/status/2081521547647635532"></a></blockquote></div>
-<div class="sample-card"><div class="meta">効かない・副作用が大きい / conf 0.95</div><p>消費税減税には反対。価格転嫁されず効果はないと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/takuyasan_0307/status/2078001157067407606"></a></blockquote></div>
-<div class="sample-card"><div class="meta">実施して検証すべき / conf 0.75</div><p>申請不要でその場に金が残る効果の出方に注目</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mattya/status/2082093019747213806"></a></blockquote></div>
+<div class="sample-card"><div class="meta">物価高に効く / conf 0.95</div><p>物価高対策と消費税減税を最優先として求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/DXrUalvupnIEs2Z/status/2080983066286461049">@DXrUalvupnIEs2Z の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">効くが規模が足りない / conf 0.9</div><p>食料品減税は有効だが価格反映と財源の明示が必要</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/gno_tb34585/status/2081521547647635532">@gno_tb34585 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">効かない・副作用が大きい / conf 0.95</div><p>消費税減税には反対。価格転嫁されず効果はないと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/takuyasan_0307/status/2078001157067407606">@takuyasan_0307 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">実施して検証すべき / conf 0.75</div><p>申請不要でその場に金が残る効果の出方に注目</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mattya/status/2082093019747213806">@mattya の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1422,9 +1429,9 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side mid"><strong>食料品限定では不十分（42件）</strong>減税自体は歓迎だが、対象と期限を絞った政府案では中途半端だ</div><div class="side pos"><strong>一律・廃止まで下げる（47件）</strong>食料品限定・期限付きでは生活実感に届かない。一律5%か廃止まで踏み込むべきだ</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">一律・廃止まで下げる / conf 0.95</div><p>消費税廃止を求め財源論より生活優先</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tncreator1/status/2082059015576797691"></a></blockquote></div>
-<div class="sample-card"><div class="meta">食料品限定では不十分 / conf 0.95</div><p>全品目の消費税減税を強く求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pinknolemon/status/2081576263182094677"></a></blockquote></div>
-<div class="sample-card"><div class="meta">これ以上広げるべきでない / conf 0.95</div><p>消費税引き下げに反対なので、食料品限定で済んで良い</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MIZUTAKI0520/status/2082004257814012086"></a></blockquote></div>
+<div class="sample-card"><div class="meta">一律・廃止まで下げる / conf 0.95</div><p>消費税廃止を求め財源論より生活優先</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tncreator1/status/2082059015576797691">@tncreator1 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">食料品限定では不十分 / conf 0.95</div><p>全品目の消費税減税を強く求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pinknolemon/status/2081576263182094677">@pinknolemon の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">これ以上広げるべきでない / conf 0.95</div><p>消費税引き下げに反対なので、食料品限定で済んで良い</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MIZUTAKI0520/status/2082004257814012086">@MIZUTAKI0520 の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1439,10 +1446,10 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>社会保障の財源が細る（30件）</strong>年金・医療の財源が細る。財源を示さない減税は無責任だ</div><div class="side pos"><strong>歳出の組み替えで賄える（28件）</strong>財源論は増税のための口実。歳出の組み替えと国債で対応できる</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">歳出の組み替えで賄える / conf 0.95</div><p>消費税廃止で経済成長し税収減は自然増収で補えると主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/HIIjujywBiCiHF2/status/2082088206779261109"></a></blockquote></div>
-<div class="sample-card"><div class="meta">財源の説明がほしい / conf 0.85</div><p>高市減税への期待を示しつつ財源の具体性に疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/f_ganba/status/2081944698898526285"></a></blockquote></div>
-<div class="sample-card"><div class="meta">社会保障の財源が細る / conf 0.95</div><p>減税には代替財源の明示がなければ詐欺と同じと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/19890430yoshi/status/2082082008201863587"></a></blockquote></div>
-<div class="sample-card"><div class="meta">立場を示さず論点を共有 / conf 0.65</div><p>軍拡が社会保障と減税を圧迫する警告</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/x21r5/status/2078518484657692728"></a></blockquote></div>
+<div class="sample-card"><div class="meta">歳出の組み替えで賄える / conf 0.95</div><p>消費税廃止で経済成長し税収減は自然増収で補えると主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/HIIjujywBiCiHF2/status/2082088206779261109">@HIIjujywBiCiHF2 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">財源の説明がほしい / conf 0.85</div><p>高市減税への期待を示しつつ財源の具体性に疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/f_ganba/status/2081944698898526285">@f_ganba の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">社会保障の財源が細る / conf 0.95</div><p>減税には代替財源の明示がなければ詐欺と同じと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/19890430yoshi/status/2082082008201863587">@19890430yoshi の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">立場を示さず論点を共有 / conf 0.65</div><p>軍拡が社会保障と減税を圧迫する警告</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/x21r5/status/2078518484657692728">@x21r5 の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1457,9 +1464,9 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>給付・税額控除を推す（21件）</strong>逆進性の是正が目的なら、給付付き税額控除の方が的を絞れる</div><div class="side mid"><strong>減税と給付の併用を（13件）</strong>減税と給付を組み合わせなければ、低所得層には届かない</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">減税を推す / conf 0.9</div><p>配るなら取るなの減税支持論を擁護</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MisaPipiriko/status/2082044578727911474"></a></blockquote></div>
-<div class="sample-card"><div class="meta">減税と給付の併用を / conf 0.9</div><p>2年1%では弱く給付の方が良いと政府案に異論</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kurimariM/status/2082018264188932397"></a></blockquote></div>
-<div class="sample-card"><div class="meta">給付・税額控除を推す / conf 0.9</div><p>消費税減税より社会保障費削減を優先したい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/4gVRQlUcsu81365/status/2082051171494285739"></a></blockquote></div>
+<div class="sample-card"><div class="meta">減税を推す / conf 0.9</div><p>配るなら取るなの減税支持論を擁護</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MisaPipiriko/status/2082044578727911474">@MisaPipiriko の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">減税と給付の併用を / conf 0.9</div><p>2年1%では弱く給付の方が良いと政府案に異論</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kurimariM/status/2082018264188932397">@kurimariM の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">給付・税額控除を推す / conf 0.9</div><p>消費税減税より社会保障費削減を優先したい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/4gVRQlUcsu81365/status/2082051171494285739">@4gVRQlUcsu81365 の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1474,10 +1481,10 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>現場の負担が大きすぎる（11件）</strong>レジ改修の負担が中小事業者に集中する。短期の税率変更は現場が回らない</div><div class="side pos"><strong>実務は見送る理由にならない（5件）</strong>システム改修は減税をやらない言い訳にされている</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">実務は見送る理由にならない / conf 0.9</div><p>レジ障害なら公費で買い替えを提案、即設定可能と主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/onion_sword_/status/2081930304739250415"></a></blockquote></div>
-<div class="sample-card"><div class="meta">準備期間があれば回る / conf 0.85</div><p>レジ理由で減税断念なら今後一切増税を許さず</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/koto_cat_/status/2081981547775995905"></a></blockquote></div>
-<div class="sample-card"><div class="meta">現場の負担が大きすぎる / conf 0.9</div><p>レジ改修や区分けの実務問題を指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Knives1842/status/2081968418136453385"></a></blockquote></div>
-<div class="sample-card"><div class="meta">対応状況を共有 / conf 0.8</div><p>減税の有無に関わらずレジ改修を早急に進めるべき</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/muuk2022myabi/status/2082092464849203425"></a></blockquote></div>
+<div class="sample-card"><div class="meta">実務は見送る理由にならない / conf 0.9</div><p>レジ障害なら公費で買い替えを提案、即設定可能と主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/onion_sword_/status/2081930304739250415">@onion_sword_ の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">準備期間があれば回る / conf 0.85</div><p>レジ理由で減税断念なら今後一切増税を許さず</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/koto_cat_/status/2081981547775995905">@koto_cat_ の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">現場の負担が大きすぎる / conf 0.9</div><p>レジ改修や区分けの実務問題を指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Knives1842/status/2081968418136453385">@Knives1842 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">対応状況を共有 / conf 0.8</div><p>減税の有無に関わらずレジ改修を早急に進めるべき</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/muuk2022myabi/status/2082092464849203425">@muuk2022myabi の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 </section>
@@ -1486,7 +1493,7 @@ const SM_RAW = [
 <p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">消費税は税率10%（食料品などは軽減税率8%）で、社会保障の主要財源とされてきました。物価高が続くなかで各党が減税を掲げ、2026年7月には食料品に対象を絞った減税をめぐる調整が大詰めを迎えています。対象範囲・税率・実施時期・恒久化の有無が、いずれも決着の焦点になっています。</p>
 <p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">推進する立場からは「物価高対策として最も早く広く効く」「可処分所得が直接増える」という主張があります。慎重な立場からは「社会保障の財源が細る」「値下げに反映されず事業者の利益になる」「供給が追いつかないなかで需要を刺激すればインフレが加速する」という反論が出ています。</p>
 <p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">SNS上では減税に前向きな声が多数ですが、その中身は一枚岩ではありません。「一律・恒久でなければ意味がない」という不満、「財源を示さない減税は無責任」という批判、「公約を掲げた政党が採決でどう動いたか」という政治不信が、論点ごとに別々の対立軸をつくっています。</p>
-</section>
+<!-- BACKGROUND_SOURCES_START --><div class="background-sources"><h3>一次情報</h3><ul><li><a href="https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html" target="_blank" rel="noopener noreferrer">首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）</a></li><li><a href="https://www.kantei.go.jp/jp/105/statement/2026/0805kaiken.html" target="_blank" rel="noopener noreferrer">首相官邸「『給付付き税額控除』の制度導入の基本方針の閣議決定についての会見」（令和8年8月5日）</a></li><li><a href="https://www.cas.go.jp/jp/seisaku/kokuminkaigi/contents/20260603/05_siryou5.pdf" target="_blank" rel="noopener noreferrer">内閣官房 社会保障国民会議「参考資料（食料品消費税率ゼロ関係）」（令和8年6月3日）</a></li><li><a href="https://www5.cao.go.jp/keizai-shimon/kaigi/cabinet/honebuto/2026/2026_basicpolicies_ja.pdf" target="_blank" rel="noopener noreferrer">内閣府「経済財政運営と改革の基本方針2026」（令和8年7月21日 閣議決定）</a></li></ul></div><!-- BACKGROUND_SOURCES_END --></section>
 
 <section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2><span>Hermes分類のサマリー</span></div><div class="axis-grid">
 <article class="axis-card"><div class="axis-kicker">減税への態度</div><h3>推進が最多</h3><div class="axis-count">299</div><p>意見612件の内訳は、減税推進299件・条件付き賛成109件・反対・慎重163件・中立41件。</p></article>
@@ -1509,7 +1516,7 @@ const SM_RAW = [
 <details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>収集時点が食料品限定の減税案の決着直前のため、政府案への評価に反応が偏りやすいバイアスがあります。</li><li>検索語に「賛成」「反対」など意見誘発語を含むため、意見投稿の比率が実際のSNS全体より高く出ます。</li></ul></details>
 </section>
 </main>
-<footer class="site-footer"><div class="footer-banner"><img src="images/shared/arena-footer.webp" alt="" loading="lazy"></div><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="constitutional-amendment-reaction-map.html">憲法改正論議</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html">このサイトについて</a><a href="image-policy.html">画像制作方針</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
+<footer class="site-footer"><div class="footer-banner"><img src="images/shared/arena-footer.webp" alt="" loading="lazy"></div><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="constitutional-amendment-reaction-map.html">憲法改正論議</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html#operator">運営者情報</a><a href="about.html#method">調査・編集方法</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a><a href="image-policy.html">画像制作方針</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
 <script id="related-theme-tracking">
 (function(){
   var topicByPath={

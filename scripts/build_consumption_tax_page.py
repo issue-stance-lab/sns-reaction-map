@@ -13,9 +13,13 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from x_embed import embed_html  # noqa: E402
 TEMPLATE = ROOT / "docs" / "fukushuto-reaction-map.html"
 OUTPUT = ROOT / "docs" / "consumption-tax-cut-reaction-map.html"
 DATA = ROOT / "social-samples" / "consumption-tax-cut_arena_data.json"
@@ -674,8 +678,7 @@ def build() -> None:
                 cards.append(
                     f'<div class="sample-card"><div class="meta">{meta["bar_stances"][stance]} / conf {sample["confidence"]}</div>'
                     f'<p>{esc(sample["summary"])}</p>'
-                    f'<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
-                    f'<a href="{sample["url"]}"></a></blockquote></div>'
+                    f'{embed_html(sample["url"])}</div>'
                 )
             if len(cards) >= 4:
                 break

@@ -43,6 +43,11 @@ from typing import Any
 import yaml
 
 try:
+    from .x_embed import embed_html, period_label
+except ImportError:  # python3 scripts/build_koshitsu_arena.py
+    from x_embed import embed_html, period_label  # type: ignore[no-redef]
+
+try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
@@ -136,7 +141,7 @@ def sample_period(records: list[dict[str, Any]]) -> str:
     収集回が増えるたびに変わる値なので、ページ側に固定で書かない。
     """
     period = expected_period(summarize(records))
-    return "記録なし" if period == "unknown" else period
+    return period_label(period)
 
 
 def load_queries() -> list[str]:
@@ -244,11 +249,10 @@ def build_issue_section(rows: list[dict[str, Any]], blocks: list[dict[str, Any]]
 
         samples = "\n".join(
             '<div class="sample-card"><div class="meta">{meta}</div><p>{note}</p>'
-            '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
-            '<a href="{url}"></a></blockquote></div>'.format(
+            "{embed}</div>".format(
                 meta=html.escape(str(s["meta"])),
                 note=html.escape(str(s["note"])),
-                url=html.escape(str(s["url"])),
+                embed=embed_html(s["url"]),
             )
             for s in block["samples"]
         )

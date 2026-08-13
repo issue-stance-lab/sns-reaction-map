@@ -199,7 +199,7 @@
 }
 /* TIDE_CARD_END */
 </style>
-  <link rel="stylesheet" href="topic-modern.css?v=26">
+  <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
   <script src="vote-config.js?v=1"></script>
   <script src="vote-store.js?v=1"></script>
@@ -236,7 +236,7 @@
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 897件<br>
   （うち意見と判定した765件を、マップ・論点・賛否の分析対象としています）<br>
-  （取得期間: 2026-07-14〜2026-08-08／AI分類・人間による代表投稿の確認あり）<br>
+  （取得期間: 2026-07-14〜2026-08-08／AI分類。代表投稿は編集部が選定）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
@@ -521,6 +521,12 @@
     <p>Yahoo!リアルタイム検索で「副首都法案」「副首都 大阪」など複数の検索語を使い、公開されているX投稿を収集しました。ページの論点分析は、収集した897件のうち意見と判定した765件を表示しています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>9つの検索語で収集しました。2026年8月8日の回では取得297件のうち重複が0件で、法案の審議が進むたびに新しい声が出続けていました。</li>
+      <li>3番目に大きい論点が「副首都とは何か（定義・中身）」の162件でした。賛成か反対かを述べる前に、そもそも何が決まるのか分からないという投稿がまとまった数あります。</li>
+      <li>2026年8月まで、このページは集めたデータの半分以下しか使えていませんでした。初期の分類結果が賛否のラベルを持っておらず、別の回で集めた分は比較ウィジェット専用で本編に入っていなかったためです。同年8月8日にすべて同じ形式へ統合し、累計897件・意見765件から作り直しました。</li>
+    </ul>
   </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
@@ -1653,8 +1659,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>法案反対（147件）</strong>住民投票で二度否決された都構想を国政経由で実現しようとしている。税金を大阪に還流させる利益誘導だ。</div><div class="side pos"><strong>法案賛成・推進（19件）</strong>大阪から提唱してきた政党が大阪を軸に進めるのは当然。必要だと思うなら対案を出すべき。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">批判側 / conf 0.95</div><p>法案の質と税金の使い方を強く批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Miryu43530524/status/2077028636113408050"></a></blockquote></div>
-<div class="sample-card"><div class="meta">擁護側 / conf 0.8</div><p>「大阪ありきで何が悪い」と真っ向から反論</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MstPorcoMrt/status/2076959917068709937"></a></blockquote></div>
+<div class="sample-card"><div class="meta">批判側 / conf 0.95</div><p>法案の質と税金の使い方を強く批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Miryu43530524/status/2077028636113408050">@Miryu43530524 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">擁護側 / conf 0.8</div><p>「大阪ありきで何が悪い」と真っ向から反論</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MstPorcoMrt/status/2076959917068709937">@MstPorcoMrt の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1664,8 +1670,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>法案反対（100件）</strong>南海トラフの被災想定域に副首都を置く意味がない。太平洋側に1カ所増やしても分散にならない。</div><div class="side pos"><strong>法案賛成・推進（40件）</strong>新潟・福岡・北海道など日本海側や遠隔地を推す声。「首都を先に定義すべき」という原則論も。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">大阪に否定的 / conf 0.95</div><p>南海トラフで東京・大阪が同時被災するリスクを指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sanjinn/status/2077029794487898326"></a></blockquote></div>
-<div class="sample-card"><div class="meta">対案提示 / conf 0.9</div><p>構想自体は肯定しつつ、被災想定域を外した代替案を提示</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/atsuyashi/status/2077006037132136746"></a></blockquote></div>
+<div class="sample-card"><div class="meta">大阪に否定的 / conf 0.95</div><p>南海トラフで東京・大阪が同時被災するリスクを指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sanjinn/status/2077029794487898326">@sanjinn の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">対案提示 / conf 0.9</div><p>構想自体は肯定しつつ、被災想定域を外した代替案を提示</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/atsuyashi/status/2077006037132136746">@atsuyashi の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1675,8 +1681,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>法案反対（104件）</strong>定義・統治体制・費用が何も決まっていないのに、指定の枠組みだけ先に通すのは順序が逆。国会審議も答弁も中身がない。</div><div class="side pos"><strong>法案賛成・推進（28件）</strong>地方分散は既定の国家方針と整合している。中身はこれから多くの意見を聞いて詰めればよい。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">批判側 / conf 0.95</div><p>行政学者の「生煮え」評を引いて制度設計の甘さを批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/chyooppa/status/2077036927715541440"></a></blockquote></div>
-<div class="sample-card"><div class="meta">中間・建設側 / conf 0.85</div><p>副首都自体に反対はない、中身の議論をトップダウンでなく進めてほしい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Shomin07212169N/status/2076981912577696171"></a></blockquote></div>
+<div class="sample-card"><div class="meta">批判側 / conf 0.95</div><p>行政学者の「生煮え」評を引いて制度設計の甘さを批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/chyooppa/status/2077036927715541440">@chyooppa の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">中間・建設側 / conf 0.85</div><p>副首都自体に反対はない、中身の議論をトップダウンでなく進めてほしい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Shomin07212169N/status/2076981912577696171">@Shomin07212169N の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1686,8 +1692,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>法案反対（63件）</strong>南海トラフと首都直下は連動の恐れ。同時被災する場所にバックアップを置く意味がない。</div><div class="side pos"><strong>法案賛成・推進（21件）</strong>東京一極集中こそ最大のリスク。危機管理の観点から早く着手すべき。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">反対側 / conf 0.95</div><p>南海トラフと首都直下の連動リスクを指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ponpon4183/status/2077015822225285572"></a></blockquote></div>
-<div class="sample-card"><div class="meta">賛成側 / conf 0.85</div><p>一極集中の危険性から早期実現を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/P5Yf7EUHUULiBL6/status/2077038112459681941"></a></blockquote></div>
+<div class="sample-card"><div class="meta">反対側 / conf 0.95</div><p>南海トラフと首都直下の連動リスクを指摘</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ponpon4183/status/2077015822225285572">@ponpon4183 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">賛成側 / conf 0.85</div><p>一極集中の危険性から早期実現を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/P5Yf7EUHUULiBL6/status/2077038112459681941">@P5Yf7EUHUULiBL6 の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1697,8 +1703,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>法案反対（58件）</strong>物価高対策より副首都を優先する国会に納得できない。会期延長は税金の無駄。</div><div class="side pos"><strong>法案賛成・推進（4件）</strong>副首都構想自体は日本の未来のために重要。ただし他法案との抱き合わせには疑問。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">批判側 / conf 0.9</div><p>「今やる必要全くなし」と廃案を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/BucchoJ/status/2077020779129303274"></a></blockquote></div>
-<div class="sample-card"><div class="meta">条件付き賛成 / conf 0.7</div><p>構想は重要としつつ政局の抱き合わせを疑問視</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ebisawayuki/status/2076969556342648836"></a></blockquote></div>
+<div class="sample-card"><div class="meta">批判側 / conf 0.9</div><p>「今やる必要全くなし」と廃案を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/BucchoJ/status/2077020779129303274">@BucchoJ の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">条件付き賛成 / conf 0.7</div><p>構想は重要としつつ政局の抱き合わせを疑問視</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ebisawayuki/status/2076969556342648836">@ebisawayuki の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 
@@ -1708,8 +1714,8 @@ const SM_RAW = [
 <div class="issue-sides"><div class="side neg"><strong>法案反対（34件）</strong>物価高で国民が苦しむ中、総額も財源も不明の巨大事業を走らせるべきではない。</div><div class="side pos"><strong>法案賛成・推進（4件）</strong>大型事業で最初から全費用が確定している方が珍しい。費用不明批判は大げさ。</div></div>
 </div>
 <div class="sample-grid">
-<div class="sample-card"><div class="meta">批判側 / conf 1.0</div><p>巨額費用と大阪の被災リスクをあわせて批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/takiniwataru_ad/status/2076646951391809629"></a></blockquote></div>
-<div class="sample-card"><div class="meta">手続き擁護 / conf 0.8</div><p>大型プロジェクトの一般的な進め方から法案手続きを擁護</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MilenaCotte/status/2076868992652960072"></a></blockquote></div>
+<div class="sample-card"><div class="meta">批判側 / conf 1.0</div><p>巨額費用と大阪の被災リスクをあわせて批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/takiniwataru_ad/status/2076646951391809629">@takiniwataru_ad の投稿をXで見る</a></blockquote></div>
+<div class="sample-card"><div class="meta">手続き擁護 / conf 0.8</div><p>大型プロジェクトの一般的な進め方から法案手続きを擁護</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/MilenaCotte/status/2076868992652960072">@MilenaCotte の投稿をXで見る</a></blockquote></div>
 </div>
 </article>
 </section>
@@ -1717,7 +1723,7 @@ const SM_RAW = [
 <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div>
 <p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">副首都法案は、首都・東京の機能が大規模災害などで損なわれた場合に備え、バックアップ機能を担う「副首都」を政令で指定できるようにする法案です。日本維新の会が長年掲げてきた構想で、2026年7月、与党とチームみらいの修正合意により衆院通過が目前となりました。国会の会期も、この法案の成立を狙って延長が調整されています。</p>
 <p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">推進する立場からは「首都直下地震や南海トラフへの備えとして機能分散は不可欠」「東京一極集中を是正し多極成長型の国家をつくる一歩」という主張があります。一方で、法案には副首都の定義や統治体制、費用の枠組みが具体的に書かれておらず、行政学者からも「生煮え」との指摘が出ています。また大阪を軸に検討が進むことから「住民投票で否決された大阪都構想の実現が本当の狙いではないか」という不信も根強くあります。</p>
-<p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">SNS上の反応は反対・慎重が多数ですが、その中身は「そもそも不要」「中身が決まっていない」「場所が大阪なのが問題」「今やることではない」と論点ごとに大きく異なります。どの論点を重視するかで、同じ「反対」でも風景がまったく違って見えるテーマです。</p></section>
+<p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">SNS上の反応は反対・慎重が多数ですが、その中身は「そもそも不要」「中身が決まっていない」「場所が大阪なのが問題」「今やることではない」と論点ごとに大きく異なります。どの論点を重視するかで、同じ「反対」でも風景がまったく違って見えるテーマです。</p><!-- BACKGROUND_SOURCES_START --><div class="background-sources"><h3>一次情報</h3><ul><li><a href="https://www.sangiin.go.jp/japanese/joho1/kousei/gian/221/meisai/m221090221027.htm" target="_blank" rel="noopener noreferrer">参議院「国家社会機能継続性確保施策及び副首都の整備に係る施策の推進に関する法律案」議案情報</a></li><li><a href="https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm" target="_blank" rel="noopener noreferrer">参議院 本会議投票結果（令和8年7月24日）</a></li><li><a href="https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/honbun/houan/g22105027.htm" target="_blank" rel="noopener noreferrer">衆議院「国家社会機能継続性確保施策及び副首都の整備に係る施策の推進に関する法律案」本文</a></li><li><a href="https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/honbun/youkou/g22105027.htm" target="_blank" rel="noopener noreferrer">衆議院 同法律案 要綱</a></li></ul></div><!-- BACKGROUND_SOURCES_END --></section>
 
 <section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2><span>意見のみ・正典から自動集計</span></div>
 <div class="axis-grid">
@@ -1738,10 +1744,10 @@ const SM_RAW = [
 <details><summary>感情の強さ（intensity）</summary><div class="table-wrap"><table><tbody><tr><th>high（強い）</th><td>264</td></tr><tr><th>medium（中）</th><td>364</td></tr><tr><th>low（弱い）</th><td>137</td></tr></tbody></table></div></details>
 <details><summary>投票の選択とアリーナ上の位置</summary><div class="table-wrap"><table><thead><tr><th>選んだ論点</th><th>マーカーが置かれるセクター</th><th>マーカーの色</th></tr></thead><tbody><tr><td>定義・中身</td><td>定義・中身</td><td rowspan="7">賛成=緑 / どちらでもない=灰 / 反対=赤</td></tr><tr><td>候補地</td><td>候補地</td></tr><tr><td>都構想・維新</td><td>都構想・維新</td></tr><tr><td>防災・災害</td><td>防災・災害</td></tr><tr><td>費用・財源</td><td>費用・財源</td></tr><tr><td>優先順位</td><td>優先順位</td></tr><tr><td>その他・わからない</td><td>その他</td></tr></tbody></table></div></details>
 <details><summary>収集クエリ</summary><ul><li>副首都法案 / 副首都構想 / 副首都 大阪 / 副首都 維新 / 副首都 反対 / 副首都 防災 / 副首都 費用 / 副首都 どこ / 副首都 南海トラフ</li><li>Yahooリアルタイム検索で累計897件を取得（重複除去後）。全件をAIが論点・立場・表現強度で分類し、うち意見と判定した765件をマップ・論点・賛否の集計対象にしています。</li></ul></details>
-<details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>初回の収集時点が衆院通過直前のため、国会審議・修正合意への反応が多く出やすいバイアスがあります。</li><li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li><li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>
+<details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>初回の収集時点が衆院通過直前のため、国会審議・修正合意への反応が多く出やすいバイアスがあります。</li></ul></details>
 </section>
 </main>
-<footer class="site-footer"><div class="footer-banner"><img src="images/shared/arena-footer.webp" alt="" loading="lazy"></div><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="constitutional-amendment-reaction-map.html">憲法改正論議</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html">このサイトについて</a><a href="image-policy.html">画像制作方針</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
+<footer class="site-footer"><div class="footer-banner"><img src="images/shared/arena-footer.webp" alt="" loading="lazy"></div><div class="footer-inner"><div><h3>SNS反応まっぷ</h3><p>SNSで意見が割れる話題を、投票参加型 × AI分類で可視化する独立メディアプロジェクトです。</p></div><div><h4>テーマ</h4><div class="footer-links"><a href="ai-copyright-reaction-map.html">生成AIと著作権</a><a href="constitutional-amendment-reaction-map.html">憲法改正論議</a><a href="bike-blue-ticket-reaction-map.html">自転車の青切符</a></div></div><div><h4>サイト情報</h4><div class="footer-links"><a href="about.html#operator">運営者情報</a><a href="about.html#method">調査・編集方法</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a><a href="privacy.html">プライバシーポリシー</a><a href="disclaimer.html">免責事項</a><a href="image-policy.html">画像制作方針</a></div></div></div><div class="footer-bottom"><span>&copy; 2025–2026 SNS反応まっぷ</span><span>投票参加型 × AI自動分類</span></div></footer>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="share-x-btn.js"></script>
 </body>

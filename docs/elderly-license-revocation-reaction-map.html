@@ -665,7 +665,7 @@
 }
 /* TIDE_CARD_END */
 </style>
-  <link rel="stylesheet" href="topic-modern.css?v=26">
+  <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
   <script src="vote-config.js?v=1"></script>
   <script src="vote-store.js?v=1"></script>
@@ -713,7 +713,7 @@
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿211件のうち、意見と判定した146件を分析対象としています。<br>
-  （取得期間: 記録なし／AI分類・人間による代表投稿の確認あり）<br>
+  （取得期間: 未記録 — 収集期間の記録を始める前に公開したテーマ／AI分類。代表投稿は編集部が選定）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
@@ -1015,6 +1015,12 @@
     <p>Yahoo!リアルタイム検索で「免許返納 義務化」「高齢者 免許返納」など複数の検索語を使い、公開されているX投稿を収集しました。収集した211件のうち意見と判定した146件を論点分析の対象にしています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>10の検索語には「高齢者 運転 やめろ」のような強い語と、「免許返納 地方 生活」のような生活側の語の両方を入れています。前者だけでは義務化賛成に、後者だけでは反対に偏ります。</li>
+      <li>2026年7月12日の収集分と7月26日の収集分を比べると、義務化賛成が72.5%へ増える一方、「条件付き賛成」が19.5ポイント減りました。重大事故の報道があると、条件付きの声が賛成側へ移る傾向が見えます。</li>
+      <li>「地方の足・移動権」を論点とする投稿は14件で、義務化そのものへの賛否（95件）に比べるとかなり少数でした。ただし返納後の生活をどうするかは、義務化を進めるうえで避けられない論点のため、件数が少なくても独立した論点として残しています。</li>
+    </ul>
   </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
@@ -1488,18 +1494,18 @@ const SM_RAW = [
 
 <section class="panel" id="issue-blocks-section">
 <div class="panel-title"><h2>論点別サマリー</h2><span>SM_RAWと同じ意見146件から自動生成</span></div>
-<article class="issue-block" id="issue-gimuka"><div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span><h3>義務化・事故防止</h3><p class="issue-desc">この論点に分類された意見は95件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side pos"><strong>義務化賛成 83件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>条件付き賛成 10件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 1件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 1件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">義務化賛成 / high</div><p>重大事故なら免許返納義務化を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/PsyDuckisking/status/2069316466042904934"></a></blockquote></div>
-<div class="sample-card-x"><div class="meta">義務化賛成 / medium</div><p>85歳以上の免許返納義務化を望む</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/senchanpe/status/2067548872151634344"></a></blockquote></div></div></article>
-<article class="issue-block" id="issue-chiho"><div class="issue-head"><span class="axis-kicker">論点2</span><h3>地方の足・移動権</h3><p class="issue-desc">この論点に分類された意見は14件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>条件付き賛成 2件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 11件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 1件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / low</div><p>39歳で自主返納しタクシー代の負担を語る</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/HonokaBoat/status/2063752310128583139"></a></blockquote></div>
-<div class="sample-card-x"><div class="meta">義務化反対 / high</div><p>地方居住者が免許返納後の生活困窮を訴える</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/new_yamanjy_thd/status/2070818858425020700"></a></blockquote></div></div></article>
-<article class="issue-block" id="issue-tekisei"><div class="issue-head"><span class="axis-kicker">論点3</span><h3>適性検査強化</h3><p class="issue-desc">この論点に分類された意見は15件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>条件付き賛成 14件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 1件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">義務化反対 / low</div><p>年齢一律の返納には反対、更新時の検査を厳格化すべきとの意見</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/dare_iwan/status/2060626741530616094"></a></blockquote></div>
-<div class="sample-card-x"><div class="meta">条件付き賛成 / low</div><p>実車試験見直しによる高齢ドライバー安全対策を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Blackhole260685/status/2070125427600044378"></a></blockquote></div></div></article>
-<article class="issue-block" id="issue-daitai"><div class="issue-head"><span class="axis-kicker">論点4</span><h3>代替交通整備</h3><p class="issue-desc">この論点に分類された意見は10件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>条件付き賛成 4件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 4件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 2件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / medium</div><p>返納者の継続的な代替交通手段の確保を提言</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ayashii5/status/2062921201912263134"></a></blockquote></div>
-<div class="sample-card-x"><div class="meta">義務化反対 / medium</div><p>高齢者対策に先立ち移動手段の整備を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hoho_desu/status/2070273120079138901"></a></blockquote></div></div></article>
-<article class="issue-block" id="issue-jishu"><div class="issue-head"><span class="axis-kicker">論点5</span><h3>自主返納支援</h3><p class="issue-desc">この論点に分類された意見は6件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side pos"><strong>義務化賛成 2件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 4件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / low</div><p>体調不良により運転免許を自主返納した体験</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NICORIRIS/status/2063812497354973568"></a></blockquote></div>
-<div class="sample-card-x"><div class="meta">中立・情報 / low</div><p>統合失調症などで免許を自主返納した経験</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/homes9991/status/2063407752043782200"></a></blockquote></div></div></article>
-<article class="issue-block" id="issue-sonota"><div class="issue-head"><span class="axis-kicker">論点6</span><h3>その他</h3><p class="issue-desc">この論点に分類された意見は6件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>中立・情報 6件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / medium</div><p>高齢者の免許返納を求めるなら、政治家にも年齢制限を設けるべきとの主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nucomass/status/2074146431301251572"></a></blockquote></div>
-<div class="sample-card-x"><div class="meta">中立・情報 / medium</div><p>高齢者の免許返納と同様に、国会議員にも年齢制限を設けるべきとの主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/uikun/status/2072340516482748692"></a></blockquote></div></div></article>
+<article class="issue-block" id="issue-gimuka"><div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span><h3>義務化・事故防止</h3><p class="issue-desc">この論点に分類された意見は95件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side pos"><strong>義務化賛成 83件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>条件付き賛成 10件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 1件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 1件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">義務化賛成 / high</div><p>重大事故なら免許返納義務化を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/PsyDuckisking/status/2069316466042904934">@PsyDuckisking の投稿をXで見る</a></blockquote></div>
+<div class="sample-card-x"><div class="meta">義務化賛成 / medium</div><p>85歳以上の免許返納義務化を望む</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/senchanpe/status/2067548872151634344">@senchanpe の投稿をXで見る</a></blockquote></div></div></article>
+<article class="issue-block" id="issue-chiho"><div class="issue-head"><span class="axis-kicker">論点2</span><h3>地方の足・移動権</h3><p class="issue-desc">この論点に分類された意見は14件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>条件付き賛成 2件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 11件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 1件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / low</div><p>39歳で自主返納しタクシー代の負担を語る</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/HonokaBoat/status/2063752310128583139">@HonokaBoat の投稿をXで見る</a></blockquote></div>
+<div class="sample-card-x"><div class="meta">義務化反対 / high</div><p>地方居住者が免許返納後の生活困窮を訴える</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/new_yamanjy_thd/status/2070818858425020700">@new_yamanjy_thd の投稿をXで見る</a></blockquote></div></div></article>
+<article class="issue-block" id="issue-tekisei"><div class="issue-head"><span class="axis-kicker">論点3</span><h3>適性検査強化</h3><p class="issue-desc">この論点に分類された意見は15件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>条件付き賛成 14件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 1件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">義務化反対 / low</div><p>年齢一律の返納には反対、更新時の検査を厳格化すべきとの意見</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/dare_iwan/status/2060626741530616094">@dare_iwan の投稿をXで見る</a></blockquote></div>
+<div class="sample-card-x"><div class="meta">条件付き賛成 / low</div><p>実車試験見直しによる高齢ドライバー安全対策を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Blackhole260685/status/2070125427600044378">@Blackhole260685 の投稿をXで見る</a></blockquote></div></div></article>
+<article class="issue-block" id="issue-daitai"><div class="issue-head"><span class="axis-kicker">論点4</span><h3>代替交通整備</h3><p class="issue-desc">この論点に分類された意見は10件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>条件付き賛成 4件</strong>正典の意見投稿から集計</div><div class="side neg"><strong>義務化反対 4件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 2件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / medium</div><p>返納者の継続的な代替交通手段の確保を提言</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ayashii5/status/2062921201912263134">@ayashii5 の投稿をXで見る</a></blockquote></div>
+<div class="sample-card-x"><div class="meta">義務化反対 / medium</div><p>高齢者対策に先立ち移動手段の整備を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hoho_desu/status/2070273120079138901">@hoho_desu の投稿をXで見る</a></blockquote></div></div></article>
+<article class="issue-block" id="issue-jishu"><div class="issue-head"><span class="axis-kicker">論点5</span><h3>自主返納支援</h3><p class="issue-desc">この論点に分類された意見は6件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side pos"><strong>義務化賛成 2件</strong>正典の意見投稿から集計</div><div class="side neu"><strong>中立・情報 4件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / low</div><p>体調不良により運転免許を自主返納した体験</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NICORIRIS/status/2063812497354973568">@NICORIRIS の投稿をXで見る</a></blockquote></div>
+<div class="sample-card-x"><div class="meta">中立・情報 / low</div><p>統合失調症などで免許を自主返納した経験</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/homes9991/status/2063407752043782200">@homes9991 の投稿をXで見る</a></blockquote></div></div></article>
+<article class="issue-block" id="issue-sonota"><div class="issue-head"><span class="axis-kicker">論点6</span><h3>その他</h3><p class="issue-desc">この論点に分類された意見は6件。スタンス別内訳は正典から自動集計しています。</p><div class="issue-sides"><div class="side neu"><strong>中立・情報 6件</strong>正典の意見投稿から集計</div></div></div><div class="sample-grid"><div class="sample-card-x"><div class="meta">中立・情報 / medium</div><p>高齢者の免許返納を求めるなら、政治家にも年齢制限を設けるべきとの主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nucomass/status/2074146431301251572">@nucomass の投稿をXで見る</a></blockquote></div>
+<div class="sample-card-x"><div class="meta">中立・情報 / medium</div><p>高齢者の免許返納と同様に、国会議員にも年齢制限を設けるべきとの主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/uikun/status/2072340516482748692">@uikun の投稿をXで見る</a></blockquote></div></div></article>
 </section>
 
 
@@ -1515,85 +1521,85 @@ const SM_RAW = [
 <div class="sample-grid">
 <article class="sample-card" id="sample-免許返納義務化に賛成-高齢運転手の事故防止を最優先"><h3>免許返納義務化に賛成（高齢運転手の事故防止を最優先）</h3><div>
 <div class="sample"><div class="meta">義務化賛成 / 信頼度 1.00</div><p>介護従事者が免許返納義務化を支持。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pGyPV4ZWUcdozJ1/status/2067239970751037498"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/pGyPV4ZWUcdozJ1/status/2067239970751037498">@pGyPV4ZWUcdozJ1 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 直接「免許返納義務化」を肯定する言及あり。</div>
 </div>
 <div class="sample"><div class="meta">義務化賛成 / 信頼度 1.00</div><p>高齢者による事故被害を防ぐため、免許返納の義務化を求めている。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ebifry_away/status/2067182907178000531"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ebifry_away/status/2067182907178000531">@ebifry_away の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 再分類に基づく判定</div>
 </div>
 <div class="sample"><div class="meta">義務化賛成 / 信頼度 1.00</div><p>年齢や運動機能に合わせて免許返納を義務化すべき。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nish_i1106/status/2066740456185340235"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nish_i1106/status/2066740456185340235">@nish_i1106 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 明確に免許返納義務化を推奨しており、高齢運転手の事故防止を最優先としている。</div>
 </div>
 </div></article>
 <article class="sample-card" id="sample-免許返納義務化に反対-地方の生活維持や移動手段確保を重視"><h3>免許返納義務化に反対（地方の生活維持や移動手段確保を重視）</h3><div>
 <div class="sample"><div class="meta">義務化反対 / 信頼度 1.00</div><p>地方での移動手段としての車の重要性と免許返納による生活不能を強調。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/new_yamanjy_thd/status/2068281057674399848"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/new_yamanjy_thd/status/2068281057674399848">@new_yamanjy_thd の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 地方での移動手段としての車の必要性強調</div>
 </div>
 <div class="sample"><div class="meta">義務化反対 / 信頼度 0.90</div><p>田舎で免許返納はできない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NRVYC5XYAkTDIHD/status/2060768487430373720"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NRVYC5XYAkTDIHD/status/2060768487430373720">@NRVYC5XYAkTDIHD の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 地方での移動手段確保を主張している。</div>
 </div>
 <div class="sample"><div class="meta">義務化反対 / 信頼度 0.90</div><p>地方での移動手段が不足しているため、免許返納は生活不能。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/new_yamanjy_thd/status/2070818858425020700"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/new_yamanjy_thd/status/2070818858425020700">@new_yamanjy_thd の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 地方での移動手段の欠如と免許返納の不可避性を指摘</div>
 </div>
 </div></article>
 <article class="sample-card" id="sample-適性検査や技術的制限の強化で対応-年齢一律の義務化は避けるべき"><h3>適性検査や技術的制限の強化で対応（年齢一律の義務化は避けるべき）</h3><div>
 <div class="sample"><div class="meta">適性検査強化 / 信頼度 1.00</div><p>高齢者はガソリン車運転禁止、EV自動運転に舵を切るべき。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/minto_kun0617/status/2064654467111559494"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/minto_kun0617/status/2064654467111559494">@minto_kun0617 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 免許返納義務化ではなく、技術的制限の強化を推奨しており、年齢一律の義務化は避けるべきとしている。</div>
 </div>
 <div class="sample"><div class="meta">適性検査強化 / 信頼度 1.00</div><p>一律の年齢制限ではなく、認知機能検査を厳格化すべき。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Cu_the_3rd/status/2061589539723137076"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Cu_the_3rd/status/2061589539723137076">@Cu_the_3rd の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 投稿者が年齢一律の免許返納義務化に反対し、代替案として適性検査や技術的制限の強化を推奨している。</div>
 </div>
 <div class="sample"><div class="meta">適性検査強化 / 信頼度 0.90</div><p>実車試験の見直しを急ぐ必要があると主張。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Salamison/status/2070116967902593367"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Salamison/status/2070116967902593367">@Salamison の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 事故率が高いため、実車試験を見直すべきと主張</div>
 </div>
 </div></article>
 <article class="sample-card" id="sample-代替移動手段や公共交通機関の整備を優先すべき"><h3>代替移動手段や公共交通機関の整備を優先すべき</h3><div>
 <div class="sample"><div class="meta">インフラ優先 / 信頼度 1.00</div><p>高齢者の免許自主返納促進に伴う公共交通機関の整備が必要。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ISHIHARA_Osamu/status/2070855015057756393"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ISHIHARA_Osamu/status/2070855015057756393">@ISHIHARA_Osamu の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 投稿者が公共交通機関の整備を推奨している。</div>
 </div>
 <div class="sample"><div class="meta">インフラ優先 / 信頼度 1.00</div><p>高齢ドライバーの運転技能検査見直しについて批判、移動施策整備を主張</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hoho_desu/status/2070273120079138901"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hoho_desu/status/2070273120079138901">@hoho_desu の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 代替移動手段や公共交通機関の必要性</div>
 </div>
 <div class="sample"><div class="meta">義務化反対 / 信頼度 0.90</div><p>地方で高齢者が免許返納できない理由は、生活に支障が生じるため。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/angelsnow04/status/2062736909122884008"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/angelsnow04/status/2062736909122884008">@angelsnow04 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 投稿者は代替移動手段の不足を指摘し、その整備が必要であると主張している。</div>
 </div>
 </div></article>
 <article class="sample-card" id="sample-自主返納のインセンティブ強化-特典や支援-を進めるべき"><h3>自主返納のインセンティブ強化（特典や支援）を進めるべき</h3><div>
 <div class="sample"><div class="meta">自主返納促進 / 信頼度 1.00</div><p>高齢ドライバーの判断に基づく免許自主返納を推奨。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/News2057533/status/2070970271620853841"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/News2057533/status/2070970271620853841">@News2057533 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 投稿者が自主返納制度とそのインセンティブ強化を主張している。</div>
 </div>
 <div class="sample"><div class="meta">自主返納促進 / 信頼度 1.00</div><p>80歳の誕生日に自動車運転免許を自主返納し、愛車を譲渡した</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TunedCarsJapan/status/2060934296001773884"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TunedCarsJapan/status/2060934296001773884">@TunedCarsJapan の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 自主返納と特典に関する一例</div>
 </div>
 <div class="sample"><div class="meta">自主返納促進 / 信頼度 0.90</div><p>宇和島バスでは、運転免許証を自主返納した後に運賃半額になる運転経歴証明書がもらえます。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/balancepower46/status/2068972385005703261"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/balancepower46/status/2068972385005703261">@balancepower46 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 特典や支援に関する情報提供。</div>
 </div>
 </div></article>
 <article class="sample-card" id="sample-その他-分類保留"><h3>その他・分類保留</h3><div>
 <div class="sample"><div class="meta">その他 / 信頼度 0.00</div><p>高齢ドライバー事故の増加に対し対策がないことに不満を表明するが、具体的政策は示されていない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/SonDakikaCadde/status/2069196027895349503"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/SonDakikaCadde/status/2069196027895349503">@SonDakikaCadde の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 再分類に基づく判定</div>
 </div>
 <div class="sample"><div class="meta">その他 / 信頼度 0.50</div><p>政治家にも年齢制限が必要だと述べるが、免許返納政策への明確な賛否はない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/oekkdisk/status/2066363291761578319"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/oekkdisk/status/2066363291761578319">@oekkdisk の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 再分類に基づく判定</div>
 </div>
 <div class="sample"><div class="meta">その他 / 信頼度 0.30</div><p>速度超過や運転マナーに関する不満を述べるが、高齢者の免許返納義務化に関する政策意見ではない。</p>
-<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/newdoggy86/status/2064800151349432493"></a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/newdoggy86/status/2064800151349432493">@newdoggy86 の投稿をXで見る</a></blockquote>
 <div class="reason">理由: 再分類に基づく判定</div>
 </div>
 </div></article>
@@ -1756,7 +1762,6 @@ const SM_RAW = [
 <details><summary>注意</summary>
     <section class="note-panel"><h2>注意</h2><ul>
 <li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>
-<li>代表投稿は公開前に人間が確認する前提です。</li>
 <li>2026-07-01: 「その他・分類保留」63件を再分類し、45件（24%）に縮小しました。自主返納支援や安全対策強化の投稿を既存カテゴリに振り分けています。</li>
 </ul></section>
 </details>
@@ -1767,10 +1772,12 @@ const SM_RAW = [
     <div>Powered by Yahooリアルタイム検索 + AI分類</div>
     <a href="index.html" style="color:rgba(255,255,255,.85);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
     <div style="margin-top:8px;color:rgba(255,255,255,.6);">
-      <a href="about.html" style="color:rgba(255,255,255,.7);margin-right:16px;">このサイトについて</a>
-      <a href="image-policy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">画像制作方針</a>
+      <a href="about.html#operator" style="color:rgba(255,255,255,.7);margin-right:16px;">運営者情報</a>
+      <a href="about.html#method" style="color:rgba(255,255,255,.7);margin-right:16px;">調査・編集方法</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener" style="color:rgba(255,255,255,.7);margin-right:16px;">お問い合わせ・訂正依頼</a>
       <a href="privacy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">プライバシーポリシー</a>
-      <a href="disclaimer.html" style="color:rgba(255,255,255,.7);">免責事項</a>
+      <a href="disclaimer.html" style="color:rgba(255,255,255,.7);margin-right:16px;">免責事項</a>
+      <a href="image-policy.html" style="color:rgba(255,255,255,.7);">画像制作方針</a>
     </div>
     <div style="margin-top:10px;">
       <a href="https://www.buymeacoffee.com/issue.stance.lab" target="_blank" rel="noopener"

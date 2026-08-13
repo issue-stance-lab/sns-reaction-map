@@ -2,7 +2,7 @@
 
 作成日: 2026-08-10
 
-`docs/growth-kpi-automation.md` から参照されているが実体が無かったので新設した。
+`docs-internal/growth-kpi-automation.md` から参照されているが実体が無かったので新設した。
 
 ## 実行
 

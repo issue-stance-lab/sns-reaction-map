@@ -61,6 +61,7 @@ try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
+    from .x_embed import embed_html, period_label
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -78,6 +79,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
+    from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 NEG = "法案反対"
@@ -235,11 +237,10 @@ def build_issue_section(rows: list[dict[str, Any]], blocks: list[dict[str, Any]]
 
         samples = "\n".join(
             '<div class="sample-card"><div class="meta">{meta}</div><p>{note}</p>'
-            '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
-            '<a href="{url}"></a></blockquote></div>'.format(
+            "{embed}</div>".format(
                 meta=html.escape(str(sample["meta"])),
                 note=html.escape(str(sample["note"])),
-                url=html.escape(str(sample["url"])),
+                embed=embed_html(sample["url"]),
             )
             for sample in block.get("samples") or []
         )
@@ -412,9 +413,7 @@ def build_details(rows: list[dict[str, Any]], collected: int, queries: list[str]
             "<details><summary>注意</summary><ul>"
             "<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>"
             "<li>初回の収集時点が衆院通過直前のため、国会審議・修正合意への反応が"
-            "多く出やすいバイアスがあります。</li>"
-            "<li>投稿本文の転載は最小限にし、公開記事では要約中心にしてください。</li>"
-            "<li>代表投稿は公開前に人間が確認する前提です。</li></ul></details>",
+            "多く出やすいバイアスがあります。</li></ul></details>",
             "</section>",
         ]
     )
@@ -434,7 +433,7 @@ def sample_period(records: list[dict[str, Any]]) -> str:
     台帳の値とページの表記を突き合わせるので、別々に数えると必ずいつかズレる。
     """
     period = expected_period(summarize(records))
-    return "記録なし" if period == "unknown" else period
+    return period_label(period)
 
 
 def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags: int = 0) -> str:
@@ -517,7 +516,7 @@ def build(
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
         f"  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n"
-        f"  （取得期間: {sample_period(records)}／AI分類・人間による代表投稿の確認あり）<br>\n"
+        f"  （取得期間: {sample_period(records)}／AI分類。代表投稿は編集部が選定）<br>\n"
         "  <strong>社会全体の世論調査ではありません。</strong></p>",
         "調査条件",
         flags=re.S,
