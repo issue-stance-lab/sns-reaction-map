@@ -317,20 +317,12 @@
     },
     "allow": [
       {
-        "value": 211,
-        "reason": "旧2D正典で stance_mext>0 かつ stance_focus>0（文科省支持×政治的観点）= 211件"
-      },
-      {
-        "value": 49,
-        "reason": "旧2D正典で stance_mext<0 かつ stance_focus>0（文科省批判×政治的観点）= 49件"
-      },
-      {
         "value": 78,
         "reason": "旧2D正典で stance_focus<0（安全・追悼重視／下方向）= 78件"
       },
       {
-        "value": 142,
-        "reason": "旧2D正典で emotional_intensity>=1.5（高感情）= 142件"
+        "value": 216,
+        "reason": "注目指標「論点を切り分け」。正典の立場のうち「文科省判断を支持」43件・「文科省判断に反発」19件のどちらでもない投稿の合計（278−43−19）。build_henoko_arena.mjs の stance() が複数の分類ラベルを1つにまとめるため、正典の1ラベルの件数としては現れない。2026-08-12まではここに旧2D分類の211件が残っていた"
       }
     ],
     "exclude_selectors": [
