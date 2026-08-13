@@ -130,7 +130,7 @@ def render(cases: list[dict]) -> str:
   <main>
     <div class="actions">
       <a class="btn" href="index.html">トップページへ</a>
-      <a class="btn secondary" href="about.html">運営者情報・調査方法</a>
+      <a class="btn secondary" href="about.html#method">運営者情報・調査方法</a>
     </div>
     <h2>公開中のテーマ</h2>
     <p>意見が分かれている社会のテーマを、賛成・反対それぞれの理由まで分けて整理しています。</p>
@@ -145,7 +145,7 @@ def render(cases: list[dict]) -> str:
     </p>
   </main>
   <footer class="footer">
-    <p>© 2026 SNS反応まっぷ — <a href="index.html">トップ</a> · <a href="about.html">運営者情報・調査方法</a> · <a href="image-policy.html">画像制作方針</a> · <a href="privacy.html">プライバシーポリシー</a> · <a href="disclaimer.html">免責事項</a> · <a href="{CONTACT_FORM_URL}" target="_blank" rel="noopener">お問い合わせ</a></p>
+    <p>© 2026 SNS反応まっぷ — <a href="index.html">トップ</a> · <a href="about.html#operator">運営者情報</a> · <a href="about.html#method">調査・編集方法</a> · <a href="{CONTACT_FORM_URL}" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a> · <a href="privacy.html">プライバシーポリシー</a> · <a href="disclaimer.html">免責事項</a> · <a href="image-policy.html">画像制作方針</a></p>
   </footer>
 </body>
 </html>
