@@ -516,7 +516,10 @@ def build(
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
         f"  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n"
-        f"  （取得期間: {sample_period(records)}／AI分類。代表投稿は編集部が選定）<br>\n"
+        # 確認表示は <span class="review-note"> で囲む（apply_review_note.py が中身を書き分け、
+        # verify_number_provenance.py がこの囲みだけを検査から外す）。落とすと再生成で検査が落ちる。
+        f'  （取得期間: {sample_period(records)}／'
+        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
         "  <strong>社会全体の世論調査ではありません。</strong></p>",
         "調査条件",
         flags=re.S,

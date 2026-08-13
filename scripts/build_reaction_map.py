@@ -429,7 +429,7 @@ def research_conditions_html(config: dict[str, Any], total: int) -> str:
     return f'''<!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> {html.escape(source)}で取得した公開投稿 {total}件<br>
-  （取得期間: {html.escape(period_text)}／AI分類。代表投稿は編集部が選定）<br>
+  （取得期間: {html.escape(period_text)}／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->'''
