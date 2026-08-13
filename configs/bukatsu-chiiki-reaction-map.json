@@ -9,24 +9,115 @@
   "arena_taxonomy": {
     "topic_id": "bukatsu-chiiki-issue-stance-v1",
     "issues": [
-      {"key": "hiyo", "label": "費用・家庭負担", "description": "月会費・家計への経済的負担・格差", "icon": "💴", "vote_enabled": true},
-      {"key": "ukezara", "label": "受け皿・指導者", "description": "指導者不足・報酬・人材確保", "icon": "👤", "vote_enabled": true},
-      {"key": "kyoin", "label": "教員の働き方", "description": "残業・強制参加・ブラック部活の解消", "icon": "🏫", "vote_enabled": true},
-      {"key": "kyoiku", "label": "教育的意義・機会", "description": "子どもの成長・不登校参加・文化継承", "icon": "⭐", "vote_enabled": true},
-      {"key": "kakusa", "label": "地域格差", "description": "都市と地方の格差・自治体差", "icon": "🗺️", "vote_enabled": true},
-      {"key": "seido", "label": "制度・移行プロセス", "description": "国の方針・移行スピード・行政対応", "icon": "📋", "vote_enabled": true},
-      {"key": "sonota", "label": "その他", "vote_label": "その他・わからない", "description": "上記以外・様子見", "icon": "💬", "vote_enabled": true}
+      {
+        "key": "hiyo",
+        "label": "費用・家庭負担",
+        "description": "月会費・家計への経済的負担・格差",
+        "icon": "💴",
+        "vote_enabled": true
+      },
+      {
+        "key": "ukezara",
+        "label": "受け皿・指導者",
+        "description": "指導者不足・報酬・人材確保",
+        "icon": "👤",
+        "vote_enabled": true
+      },
+      {
+        "key": "kyoin",
+        "label": "教員の働き方",
+        "description": "残業・強制参加・ブラック部活の解消",
+        "icon": "🏫",
+        "vote_enabled": true
+      },
+      {
+        "key": "kyoiku",
+        "label": "教育的意義・機会",
+        "description": "子どもの成長・不登校参加・文化継承",
+        "icon": "⭐",
+        "vote_enabled": true
+      },
+      {
+        "key": "kakusa",
+        "label": "地域格差",
+        "description": "都市と地方の格差・自治体差",
+        "icon": "🗺️",
+        "vote_enabled": true
+      },
+      {
+        "key": "seido",
+        "label": "制度・移行プロセス",
+        "description": "国の方針・移行スピード・行政対応",
+        "icon": "📋",
+        "vote_enabled": true
+      },
+      {
+        "key": "sonota",
+        "label": "その他",
+        "vote_label": "その他・わからない",
+        "description": "上記以外・様子見",
+        "icon": "💬",
+        "vote_enabled": true
+      }
     ],
     "stances": [
-      {"key": "support", "label": "移行支持", "short_label": "支持", "color": "#059669", "x": 1.5},
-      {"key": "conditional", "label": "条件付き・改善要求", "short_label": "条件付き", "color": "#d97706", "x": 0.5},
-      {"key": "oppose", "label": "慎重・反対", "short_label": "慎重・反対", "color": "#dc2626", "x": -1.5},
-      {"key": "neutral", "label": "中立・情報", "short_label": "中立", "color": "#64748b", "x": 0.0}
+      {
+        "key": "support",
+        "label": "移行支持",
+        "short_label": "支持",
+        "color": "#059669",
+        "x": 1.5
+      },
+      {
+        "key": "conditional",
+        "label": "条件付き・改善要求",
+        "short_label": "条件付き",
+        "color": "#d97706",
+        "x": 0.5
+      },
+      {
+        "key": "oppose",
+        "label": "慎重・反対",
+        "short_label": "慎重・反対",
+        "color": "#dc2626",
+        "x": -1.5
+      },
+      {
+        "key": "neutral",
+        "label": "中立・情報",
+        "short_label": "中立",
+        "color": "#64748b",
+        "x": 0.0
+      }
     ],
     "vote_stances": [
-      {"key": "oppose", "label": "反対・慎重", "description": "このままの進め方には問題がある", "color": "#dc2626", "background": "#fef2f2", "shadow": "rgba(220,38,38,.22)", "icon": "!"},
-      {"key": "neutral", "label": "どちらでもない", "description": "条件や内容を見てから判断したい", "color": "#64748b", "background": "#f8fafc", "shadow": "rgba(100,116,139,.22)", "icon": "?"},
-      {"key": "support", "label": "賛成・推進", "description": "教員の働き方改革や少子化対策として必要", "color": "#059669", "background": "#ecfdf5", "shadow": "rgba(5,150,105,.22)", "icon": "✓"}
+      {
+        "key": "oppose",
+        "label": "反対・慎重",
+        "description": "このままの進め方には問題がある",
+        "color": "#dc2626",
+        "background": "#fef2f2",
+        "shadow": "rgba(220,38,38,.22)",
+        "icon": "!"
+      },
+      {
+        "key": "neutral",
+        "label": "どちらでもない",
+        "description": "条件や内容を見てから判断したい",
+        "color": "#64748b",
+        "background": "#f8fafc",
+        "shadow": "rgba(100,116,139,.22)",
+        "icon": "?"
+      },
+      {
+        "key": "support",
+        "label": "賛成・推進",
+        "description": "教員の働き方改革や少子化対策として必要",
+        "color": "#059669",
+        "background": "#ecfdf5",
+        "shadow": "rgba(5,150,105,.22)",
+        "icon": "✓"
+      }
     ]
   },
   "vote_intro": "文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。",
@@ -353,6 +444,10 @@
         "insight-chip",
         "axis-card"
       ]
-    }
+    },
+    "exclude_selectors": [
+      "review-note",
+      "article-trust-observations"
+    ]
   }
 }
