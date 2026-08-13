@@ -335,13 +335,25 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
     existing_method = re.search(r"<h3>SNS投稿の収集方法</h3>\s*<p>.*?</p>", page, re.S)
     if not existing_method:
         raise SystemExit("ERROR: 収集方法の段落が見つかりません")
+    # 「収集・分類で分かったこと」も同じ理由で作らず、既存のものをそのまま残す。
+    # 書き手は configs/theme-seo.json の observations と apply_theme_trust.py。
+    # ここで落とすと、ビルダーを流すたびに分析メモが消えて差分ありのまま止まる。
+    existing_observations = re.search(
+        r'<h3>収集・分類で分かったこと</h3>\s*<ul class="article-trust-observations">.*?</ul>',
+        page,
+        re.S,
+    )
+    observations_block = (
+        f"\n    {existing_observations.group(0)}" if existing_observations else ""
+    )
     trust_method = (
         '<div class="article-trust-method">\n'
         f'    {existing_method.group(0)}\n'
         '    <h3>AIを使用した工程</h3>\n'
         '    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、'
         '要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも'
-        '使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>\n'
+        '使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>'
+        f'{observations_block}\n'
         '  </div>'
     )
     page = replace_once(

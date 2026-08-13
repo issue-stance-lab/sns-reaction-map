@@ -333,6 +333,15 @@ def trust_block(total: int, relevant: int, opinions: int) -> str:
 
     scripts/seo/apply_theme_trust.py が configs/theme-seo.json から生成するものと
     同じ構造・同じ文面にしてある。テーマを登録したあとは同スクリプトが上書き管理する。
+
+    **「収集・分類で分かったこと」（article-trust-observations）はここに含めていない。**
+    あれは configs/theme-seo.json の observations が出所で、apply_theme_trust.py が書く。
+    このスクリプトを単体で流すと分析メモが消えるので、流したあとは必ず
+
+        python3 scripts/seo/apply_theme_trust.py
+
+    を実行して戻すこと。再生成可能性の検査（scripts/verify_builder_rebuildability.py）は
+    consumption-tax-cut に build_consumption_tax_arena.py を使うため、ここは検査に出ない。
     """
     published = "2026年7月28日"
     return f"""<!-- ARTICLE_TRUST_START -->
