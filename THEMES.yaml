@@ -159,10 +159,10 @@ themes:
     refresh_config: configs/topics/elderly-license-revocation.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
-    collect: done        # 285件
+    collect: done        # 272件（累計）
     classify: done
     classify2d: done     # 211件、APIエラー0%
-    main_issue: done     # 211件（Hermes再分類 2026-08-07、正典 sample_file の classification.main_issue）。6論点: 義務化・事故防止95/その他64/適性検査強化19/地方の足・移動権14/代替交通整備10/自主返納支援9
+    main_issue: done     # 272件（Hermes再分類 2026-08-07 + 2026-07-26収集分61件を 2026-08-14 に統合）。6論点: 義務化・事故防止126/その他81/適性検査強化25/地方の足・移動権18/自主返納支援12/代替交通整備10。意見188件
     page_v3: done        # 論点アリーナ（極座標6セクター）実装済み 2026-07-24
     manga_data: done
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
@@ -176,7 +176,7 @@ themes:
     updated_at: 2026-07-26
     collect_delta: 61
     x_posted_at: 2026-08-02
-    notes: "2026-07-26にYahooリアルタイム検索61件を追加収集しHermes再分類。42件が意見投稿と判定。7/12収集61件との比較「世論の潮目」ウィジェットを追加（義務化賛成72.5%↑、条件付き賛成が19.5pt減少）。"
+    notes: "2026-08-14に課題40の未統合分（2026-07-26収集の61件）を正典へ統合し、211→272件（意見188件）。ページは build_elderly_arena.py で再生成した。同日にYahooリアルタイム検索172件を収集し新規110件・意見59件を得たが、page_update_mode が adapter_candidate のため更新回の保存止まりで未公開。7/12収集61件との比較「世論の潮目」ウィジェットは 2026-07-26 時点のまま（義務化賛成72.5%↑、条件付き賛成が19.5pt減少）。"
 
   school-nickname-ban:
     title: 学校でのあだ名禁止
@@ -233,24 +233,24 @@ themes:
     refresh_config: configs/topics/takaichi.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
-    collect: done        # 324件（累計）
+    collect: done        # 675件（累計）
     classify: done
     classify2d: done     # 276件、APIエラー0% OpenCode Go minimax-m2.7
-    main_issue: done     # 223件（Hermes）。5論点: 中傷動画・説明責任97/文春報道59/サナエトークン31/松井健氏19/比較・政治倫理17。批判・追及103/擁護・懐疑102（拮抗）
+    main_issue: done     # 550件（Hermes）。5論点: 中傷動画・説明責任284/文春報道の真偽100/サナエトークン疑惑99/松井健氏35/比較・政治倫理31（＋その他1）。批判・追及281/擁護・懐疑230
     page_v3: done        # 論点アリーナ（極座標5セクター・2ステップ投票）実装済み 2026-07-24
     manga_data: done     # manga-prompts/takaichi-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: partial   # 漫画3枚+キャラシート2枚+投票4枚 WebP変換済み。論点別wide5枚プロンプト作成済み（manga-prompts/takaichi-infographic-wide-prompts.md）・未生成
     published: done      # ポータル掲載・sitemap登録済み
     page_update_mode: adapter   # 候補input/output対応、変更候補の2回目差分ゼロ確認
-    collect_at: 2026-08-14
-    refresh_at: 2026-08-14
+    collect_at: 2026-08-21
+    refresh_at: 2026-08-21
     collect_mode: scheduled
-    last_refresh_attempt_at: 2026-08-07
+    last_refresh_attempt_at: 2026-08-14
     published_at: 2026-06-24
-    updated_at: 2026-08-07
-    collect_delta: 171
+    updated_at: 2026-08-14
+    collect_delta: 88
     x_posted_at: 2026-08-11
-    notes: "2026-07-26にYahooリアルタイム検索178件を追加収集しHermes再分類。141件が意見投稿と判定。7/12収集112件との比較「世論の潮目」ウィジェットを追加（批判・追及48.2%↑、擁護・懐疑44.7%↓）。"
+    notes: "2026-08-14にYahooリアルタイム検索172件を収集し88件が新規、69件が意見投稿と判定。あわせて課題40の未統合分（2026-07-26収集の140件）を正典へ統合し、累計447→675件。8/7収集分との比較「世論の潮目」は批判・追及55.1→66.7%、擁護・懐疑40.4→29.0%。注目ポイント4枚と論点内スタンス分布5本はビルダーが書かないため手で更新した。"
 
   fukushuto:
     title: 副首都法案・副首都構想
