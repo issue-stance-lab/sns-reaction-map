@@ -62,12 +62,13 @@ def classification(record: dict[str, Any]) -> dict[str, Any]:
     return nested
 
 
-def load_opinions() -> tuple[list[dict[str, Any]], str, int]:
+def load_opinions(input_path: Path | None = None) -> tuple[list[dict[str, Any]], str, int]:
     themes = parse_themes_yaml(THEMES_YAML)
     sample_file = str(themes[THEME].get("sample_file") or "")
     if not sample_file or "synthetic" in sample_file:
         raise IssueCountError(f"{THEME}: 正典 sample_file が不正です: {sample_file}")
-    records = json.loads((ROOT / sample_file).read_text(encoding="utf-8"))
+    source = input_path or ROOT / sample_file
+    records = json.loads(source.read_text(encoding="utf-8"))
     if not isinstance(records, list) or not records:
         raise IssueCountError(f"{THEME}: 正典が空、またはJSON配列ではありません")
 
@@ -92,7 +93,7 @@ def load_opinions() -> tuple[list[dict[str, Any]], str, int]:
         opinions.append(record)
     if not opinions:
         raise IssueCountError("意見と判定されたレコードがありません")
-    return opinions, sample_file, len(records)
+    return opinions, str(source), len(records)
 
 
 def build_sm_raw(rows: list[dict[str, Any]]) -> str:
@@ -237,12 +238,20 @@ def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags
     return result
 
 
-def build(*, check: bool = False) -> tuple[list[str], bool]:
-    rows, sample_file, collected = load_opinions()
+def build(
+    *,
+    check: bool = False,
+    input_path: Path | None = None,
+    html_template: Path | None = None,
+    output_html: Path | None = None,
+) -> tuple[list[str], bool]:
+    rows, sample_file, collected = load_opinions(input_path)
     counts = Counter(str(classification(row)["main_issue"]) for row in rows)
     config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
-    path = ROOT / "docs" / f"{THEME}-reaction-map.html"
-    before = path.read_text(encoding="utf-8")
+    public_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    template = html_template or public_path
+    destination = output_html or public_path
+    before = template.read_text(encoding="utf-8")
     page = before
 
     page = replace_once(page, r"const SM_RAW = \[.*?\n\];", build_sm_raw(rows), "SM_RAW", flags=re.S)
@@ -273,8 +282,9 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         page = replace_once(page, rf'<span class="explainer-count" id="issue-count-{THEME}-{card["slug"]}">\d+件</span>', span_html(THEME, str(card["slug"]), total), f'論点カード {card["slug"]}')
 
     changed = page != before
-    if changed and not check:
-        path.write_text(page, encoding="utf-8")
+    if not check:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(page, encoding="utf-8")
     detail = " / ".join(f"{issue}={counts[issue]}" for issue in ISSUE_ORDER)
     return [f"出所: {sample_file}（収集{collected}件 / 意見{len(rows)}件）", f"論点: {detail}", "スタンス: " + " / ".join(f"{s}={stance_counts(rows)[s]}" for s in STANCE_ORDER)], changed
 
@@ -282,9 +292,23 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--input", type=Path)
+    parser.add_argument("--html-template", type=Path)
+    parser.add_argument("--output-html", type=Path)
     args = parser.parse_args()
     try:
-        lines, changed = build(check=args.check)
+        if args.check and any((args.input, args.html_template, args.output_html)):
+            parser.error("--checkは公開ページと正典の一致確認専用です")
+        if any((args.input, args.html_template, args.output_html)) and not all(
+            (args.input, args.html_template, args.output_html)
+        ):
+            parser.error("候補生成では--input/--html-template/--output-htmlをすべて指定してください")
+        lines, changed = build(
+            check=args.check,
+            input_path=args.input,
+            html_template=args.html_template,
+            output_html=args.output_html,
+        )
         print("\n".join(lines))
         if args.check and changed:
             print("NG: HTMLに差分があります", file=sys.stderr)

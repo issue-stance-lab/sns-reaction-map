@@ -156,6 +156,7 @@ themes:
     title: 高齢者免許返納
     html: docs/elderly-license-revocation-reaction-map.html
     sample_file: social-samples/elderly-license_2d_classified.json
+    verification_file: data/verification/elderly-license-revocation.json
     refresh_config: configs/topics/elderly-license-revocation.yaml
     sample_period: unknown
     sample_source: "Yahooリアルタイム検索"
@@ -167,7 +168,7 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
     published: done
-    page_update_mode: adapter_candidate # build_elderly_arena.py は冪等。候補input/output未対応
+    page_update_mode: adapter   # refresh_topic.py の elderly adapter。候補input/output・潮目更新・投票互換検査に対応
     collect_at: 2026-08-21
     refresh_at:
     collect_mode: scheduled

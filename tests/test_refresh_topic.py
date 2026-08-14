@@ -17,6 +17,7 @@ from scripts.refresh_topic import (
     identity,
     load_pipeline_config,
     next_collection_date,
+    prepare_archived_resume,
     promote,
     record_collection_schedule,
     validate_sets,
@@ -47,6 +48,44 @@ def classified(tweet_id: str, issue: str = "中傷動画・説明責任") -> dic
 
 
 class RefreshTopicTests(unittest.TestCase):
+    def test_archived_resume_preserves_wave_and_filters_against_current_canonical(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            stage = root / ".staging/refresh/topic/run"
+            archived = root / "social-samples/updates/topic/2026-08-14"
+            current = [classified("1"), classified("2")]
+            saved_wave = [classified("2"), classified("3")]
+            for path, value in (
+                (stage / "raw.json", saved_wave),
+                (stage / "new-only.json", saved_wave),
+                (stage / "classified-wave.json", saved_wave),
+                (archived / "raw.json", saved_wave),
+                (archived / "classified.json", saved_wave),
+                (
+                    archived / "report.json",
+                    {"new": 2, "opinions": 2, "next_collect_at": "2026-08-21"},
+                ),
+            ):
+                write_json(path, value)
+
+            saved_report = prepare_archived_resume(
+                root, "topic", "2026-08-14", stage, current
+            )
+
+            self.assertEqual(saved_report["new"], 2)
+            self.assertEqual(
+                [row["tweet_id"] for row in json.loads((stage / "new-only.json").read_text())],
+                ["3"],
+            )
+            self.assertEqual(
+                [row["tweet_id"] for row in json.loads((stage / "classified-wave.json").read_text())],
+                ["3"],
+            )
+            self.assertEqual(
+                [row["tweet_id"] for row in json.loads((archived / "classified.json").read_text())],
+                ["2", "3"],
+            )
+
     def test_all_themes_have_pipeline_refresh_config_and_classifier_schema(self):
         themes = parse_themes_yaml()
         pipelines = load_pipeline_config()

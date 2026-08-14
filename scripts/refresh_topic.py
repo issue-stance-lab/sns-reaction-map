@@ -325,6 +325,55 @@ def archive_wave(
         _same_or_write(stage / source_name, public / target_name)
 
 
+def prepare_archived_resume(
+    root: Path,
+    topic: str,
+    current_date: str,
+    stage: Path,
+    current: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """保存済み更新回を改変せず、現在の正典へ足せる分だけをstageへ戻す。
+
+    収集後に別の更新回が正典へ統合されると、当時は新規だった投稿の一部が
+    公開時点では重複になる。収集履歴は当時の事実として残し、累積候補だけを
+    現在の正典に対して再重複判定する。
+    """
+    archived = root / "social-samples" / "updates" / topic / current_date
+    paths = {
+        "raw": archived / "raw.json",
+        "classified": archived / "classified.json",
+        "report": archived / "report.json",
+    }
+    if not all(path.is_file() for path in paths.values()):
+        return None
+
+    raw = read_rows(stage / "raw.json")
+    archived_raw = read_rows(paths["raw"])
+    if {identity(row) for row in raw} != {identity(row) for row in archived_raw}:
+        raise ValueError(f"{topic}: resume対象のrawが保存済み{current_date}更新回と一致しません")
+
+    archived_classified = read_rows(paths["classified"])
+    archived_ids = {identity(row) for row in archived_classified}
+    raw_ids = {identity(row) for row in archived_raw}
+    if not archived_ids <= raw_ids:
+        raise ValueError(f"{topic}: 保存済みclassifiedにraw由来でない投稿があります")
+
+    current_ids = {identity(row) for row in current}
+    if not raw_ids - archived_ids <= current_ids:
+        raise ValueError(f"{topic}: 保存時に除外された重複投稿を現在の正典で確認できません")
+    publishable = [row for row in archived_classified if identity(row) not in current_ids]
+    publishable_ids = {identity(row) for row in publishable}
+    if publishable_ids != archived_ids - current_ids:
+        raise ValueError(f"{topic}: 保存済み更新回から公開候補を再構成できません")
+
+    write_json(stage / "new-only.json", publishable)
+    write_json(stage / "classified-wave.json", publishable)
+    saved_report = json.loads(paths["report"].read_text(encoding="utf-8"))
+    if not isinstance(saved_report, dict):
+        raise ValueError(f"{topic}: 保存済みreportがJSONオブジェクトではありません")
+    return saved_report
+
+
 def previous_reports(root: Path, topic: str, before: str) -> list[dict[str, Any]]:
     reports: list[dict[str, Any]] = []
     base = root / "data" / "verification" / "updates" / topic
@@ -477,7 +526,11 @@ def promote(
             destination = root / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, destination)
-        next_date = next_collection_date(root, topic, current_date, report)
+        next_date = (
+            report["next_collect_at"]
+            if "next_collect_at" in report
+            else next_collection_date(root, topic, current_date, report)
+        )
         registry = root / "THEMES.yaml"
         registry.write_text(
             _replace_theme_fields(
@@ -506,6 +559,7 @@ def promote(
         # ズレる。--generate は貼り直したうえで検証まで行うので、ここが不一致のゲートになる。
         run([sys.executable, str(root / "scripts" / "verify_sample_periods.py"), "--generate"], label="sync sample periods", root=root)
         run([sys.executable, str(root / "scripts" / "verify_theme_page.py")], label="verify themes", root=root)
+        run([sys.executable, str(root / "scripts" / "verify_number_provenance.py")], label="verify number provenance", root=root)
         run([sys.executable, str(root / "scripts" / "verify_top_page.py")], label="verify portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "validate_theme_seo.py")], label="verify SEO", root=root)
         backup_private(root, backup_destination)
@@ -604,9 +658,15 @@ def main() -> int:
         timings["smoke_seconds"] = round(time.monotonic() - started, 2)
         write_json(timings_path, timings)
 
+    archived_report: dict[str, Any] | None = None
     if args.resume:
         raw = read_rows(stage / "raw.json")
         new = read_rows(stage / "new-only.json")
+        archived_report = prepare_archived_resume(
+            ROOT, args.topic, args.date, stage, current
+        )
+        if archived_report is not None:
+            new = read_rows(stage / "new-only.json")
     else:
         started = time.monotonic()
         fetch(ROOT, queries, stage / "raw.json", args.wait_ms)
@@ -668,8 +728,13 @@ def main() -> int:
 
     classified = read_rows(stage / "classified-wave.json")
     write_json(stage / "cumulative-candidate.json", current + classified)
-    report["next_collect_at"] = next_collection_date(ROOT, args.topic, args.date, report)
-    archive_wave(ROOT, args.topic, args.date, stage, report, args.backup_dest)
+    if archived_report is not None:
+        report["next_collect_at"] = archived_report.get("next_collect_at")
+        report["saved_wave_new"] = int(archived_report.get("new", 0) or 0)
+        report["saved_wave_opinions"] = int(archived_report.get("opinions", 0) or 0)
+    else:
+        report["next_collect_at"] = next_collection_date(ROOT, args.topic, args.date, report)
+        archive_wave(ROOT, args.topic, args.date, stage, report, args.backup_dest)
     record_collection_schedule(ROOT, args.topic, args.date, report["next_collect_at"])
     report["status"] = "archived"
     write_json(stage / "report.json", report)
