@@ -105,7 +105,7 @@ themes:
     sample_file: social-samples/bukatsu-chiiki_hermes_classified.json
     verification_file: data/verification/bukatsu-chiiki.json
     refresh_config: configs/topics/bukatsu-chiiki-v2.yaml
-    sample_period: "2026-06-27〜2026-08-08"
+    sample_period: "2026-06-27〜2026-08-14"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 累計626件（2026-08-02更新、今回新規159件）
     classify: done       # Hermesで626件分類。関連623件、意見519件
@@ -117,14 +117,14 @@ themes:
     published: done
     page_update_mode: adapter   # refresh_topic.py --topic bukatsu-chiiki のadapter。パイロットで昇格まで実証済み
     collect_at: 2026-08-21
-    refresh_at: 2026-08-15
+    refresh_at: 2026-08-21
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-14
     published_at: 2026-06-27
-    updated_at: 2026-08-08
-    collect_delta: 106
+    updated_at: 2026-08-14
+    collect_delta: 118
     x_posted_at: 2026-08-12
-    notes: "2026-07-12に新規127件を収集。2026-07-23に同一10検索語で223件を取得し、既存との重複62件を除いた新規161件を追加、累計467件。全件をHermes方式（main_issue / stance / intensity / is_relevant / is_opinion）で再分類。関連464件、意見389件。2026-08-02に同じ10検索語で222件を取得し、重複63件を除いた新規159件をHermes分類（関連159件、意見130件）。累計626件、関連623件、意見519件。7/23追加分と8/2追加分を同一条件で比較し、移行支持が6.1pt増加、教員の働き方が8.9pt増加、感情highが8.0pt減少。"
+    notes: "2026-07-12に新規127件を収集。2026-07-23に同一10検索語で223件を取得し、既存との重複62件を除いた新規161件を追加、累計467件。全件をHermes方式（main_issue / stance / intensity / is_relevant / is_opinion）で再分類。関連464件、意見389件。2026-08-02に同じ10検索語で222件を取得し、重複63件を除いた新規159件をHermes分類（関連159件、意見130件）。累計626件、関連623件、意見519件。7/23追加分と8/2追加分を同一条件で比較し、移行支持が6.1pt増加、教員の働き方が8.9pt増加、感情highが8.0pt減少。2026-08-14に同じ10検索語で250件を取得し、重複132件を除いた新規118件をHermes分類（関連117件、意見90件、分類エラー0件）。累計850件、関連841件、意見689件。論点は 教員の働き方212／制度・移行プロセス146／教育的意義・機会131／受け皿・指導者95／費用・家庭負担67／その他35／地域格差3、賛否は 移行支持315／慎重・反対217／条件付き・改善要求128／中立・情報29。潮目は8/8追加分80件と8/14追加分90件の比較で、条件付き・改善要求が4.3pt増、教員の働き方が4.9pt増、感情highが3.9pt減。注目ポイント4枚は生成側が無いため手で更新した（課題43の積み残し1）。分類は途中1バッチがHermesの非JSON応答で落ち、分類器の --resume で96件目から再開した。"
 
   constitutional-amendment:
     title: 憲法改正論議
