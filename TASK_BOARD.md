@@ -101,10 +101,29 @@ python3 scripts/verify_top_page.py                      # docs/ の衛生・404�
 確認は `python3 scripts/seo/check_source_links.py`。遠隔実行環境では組織のegressポリシーで
 *.go.jp への CONNECT が 403 になり全件「遮断」と出るため、この検査はローカルで行うこと。
 
+**2026-08-13 検証済み（オーナーのローカル環境）**: 非公開の正典が揃った環境で全検査を通した。
+- 出典リンク: **全40本 HTTP 200**（OK 40 / NG 0）
+- 数字の出所: **11テーマ / NG 0件**
+- 再生成可能性: **9テーマ / NG 0件**
+- テーマページ検査: **11テーマすべて NG 0件**
+- テスト: 残る失敗は `collect_at 期限超過: elderly-license-revocation（2026-08-13）` の1件のみ。
+  これは当該テーマのデータ収集予定日が来ているという運用リマインダーで、AdSense対応とは無関係
+
+作業中に見つかり修正した、今回の作業に起因する不具合は3件。
+①分析メモと確認表示の件数が数字の出所検査に引っかかった（review-note の囲みを作って
+  その2か所だけを exclude_selectors で除外。領域ごと除外はしていない）
+②生成器3本が review-note の囲みを落としていた
+③build_constitutional_arena.py が article-trust-method を作り直す際に分析メモを落としていた
+
+**2026-08-14 公開済み**: 2リポジトリとも main へマージ・push 済み。
+- ルート `issue-stance-lab.github.io`: `aa4d05e..5f8d95d`（robots.txt / sitemap.xml / 404.html を新設）
+- `sns-reaction-map`: `f6588a4..7646dc8`
+- Pages のデプロイはどちらも成功（ルート run 31751029338 / テーマ側 run 31786825581）
+
 **残作業**:
-①**2リポジトリのブランチをマージする**（どちらも `claude/google-adsense-improvement-iot78g`）。
-  ルート側 `issue-stance-lab.github.io` は main へ push すると即公開になるため、
-  sns-reaction-map 側と揃えてブランチに出してある
+①**Search Console で再クロールを依頼する**（オーナー操作。URL検査 → インデックス登録をリクエスト、
+  およびサイトマップに `sitemap.xml` を登録）。ルートに robots.txt が無かったため、
+  そこで宣言していた sitemap は今まで一度も発見されていない
 ②Buy Me a Coffee のURLが2種類ある。`issue.stance.lab` が7ページ、`sns_hannou_map` が
   ai-copyright の1ページ。どちらが正しいかオーナーの確認が要る
 ③背景解説の本文増補（現状は一次資料の追加のみ。時系列・未決着の問いの明記は未着手）
