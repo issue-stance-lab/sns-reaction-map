@@ -9,13 +9,28 @@
 このスクリプトはテーマの説明・件数・更新日を正典から読んで生成する。
 ルート側に数字を手書きしないので、テーマ側と食い違うことがない。
 
+2026-08-14 の初版は「文章ばかりで面白みがない」「ボタンを押すとまた同じような
+ページが出る」という指摘を受けた。実測すると、ルートはポータル（docs/index.html）と
+ヒーロー・件数・工程説明・テーマ一覧・注意書き・読み方まで重複しており、
+画像だけが無い劣化コピーになっていた。そのため第2版では
+
+  * ポータルと重複する説明（3ステップ・数字の読み方・編集方針の列挙）を削除し、
+    docs/about.html へ寄せる
+  * 各テーマにヒーロー画像と、テーマページ実物のスタンス内訳バーを載せる
+
+という方針に変えている。ルートは「読ませるページ」ではなく「選ばせる入口」。
+
 正典
   THEMES.yaml            … テーマID・表示名・更新日
   configs/theme-seo.json … 説明文・ページURL・最終更新日
   docs/index.html        … 分類済み件数（sync_portal_stats.py が算出した値）
+  docs/<テーマページ>.html … 1本目のスタンス内訳バー（ラベル・幅・凡例）
+  docs/images/topics/<id>/ … ヒーロー画像
 
 件数を docs/index.html から読むのは、算出元の social-samples/ が本文を含み
 Git 管理外のため。ポータルの表示値をそのまま引き写すことで二重集計を避ける。
+スタンス内訳もテーマページの表示をそのまま引き写す。ルート側で数え直さないので、
+テーマページと食い違うことがない。
 
 使い方
   python3 scripts/build_root_index.py --output ../issue-stance-lab.github.io/index.html
@@ -87,6 +102,128 @@ def load_counts() -> dict[str, int]:
     return {theme: int(value.replace(",", "")) for theme, value in found}
 
 
+# スタンス内訳バーの色。テーマページはそれぞれ独自の配色を持つが、ルートでは
+# 11枚のカードが並ぶため、立場の向きだけを揃えた共通パレットにする。
+# キーはテーマページの .temp-seg に付いているクラス名。
+SEG_COLORS: dict[str, str] = {
+    # 否定・反対・批判側
+    "neg": "#dc2626",
+    "con": "#dc2626",
+    "oppose": "#dc2626",
+    "accuse": "#dc2626",
+    # 中立・情報共有
+    "neu": "#94a3b8",
+    "neutral": "#94a3b8",
+    "mid": "#94a3b8",
+    # 肯定・賛成・擁護側
+    "pos": "#2563eb",
+    "pro": "#2563eb",
+    "support": "#2563eb",
+    "defend": "#2563eb",
+    # 手続き・留保
+    "process": "#f59e0b",
+    "cautious": "#f59e0b",
+}
+
+
+def find_card_image(page: Path, theme: str) -> str:
+    """カードに載せる画像を1枚選び、/sns-reaction-map/ からのパスを返す。
+
+    ヒーロー画像（*-hero.webp）は使わない。ポータル（docs/index.html）が
+    テーマカードに同じ絵を使っているので、ルートで再利用すると
+    「ボタンを押すとまた同じページ」に見えてしまう。
+
+    代わりにテーマページで最初に出てくる論点別インフォグラフィックを使う。
+    ページ内の出現順は論点順なので、これは論点1の図であり、
+    カードに並べるスタンス内訳バー（同じく論点1）と対になる。
+    """
+    text = page.read_text(encoding="utf-8")
+    found = re.findall(
+        r'src="(images/topics/[^"]*infographic-wide[^"]*\.webp)"', text
+    )
+    if not found:
+        raise BuildError(f"{page} に論点別インフォグラフィックがありません")
+    path = found[0]
+    if not (PORTAL_HTML.parent / path).is_file():
+        raise BuildError(f"{page} が参照する {path} が見つかりません")
+    if f"/topics/{theme}/" not in f"/{path}":
+        raise BuildError(f"{page} の画像 {path} が {theme} のものではありません")
+    return MAP_BASE + path
+
+
+def _slice_div(text: str, start: int) -> str:
+    """start 位置の <div> に対応する </div> までを切り出す。"""
+    depth = 0
+    for match in re.finditer(r"<div\b|</div>", text[start:]):
+        depth += 1 if match.group(0).startswith("<div") else -1
+        if depth == 0:
+            return text[start : start + match.end()]
+    raise BuildError("div の対応が取れませんでした")
+
+
+def _strip_tags(fragment: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", fragment)).strip()
+
+
+def extract_stance(page: Path) -> dict | None:
+    """テーマページの1本目のスタンス内訳バーを読む。
+
+    バーが無いテーマ（bukatsu-chiiki / elderly-license-revocation / fukushuto）は
+    None を返す。無いものを作らず、カードから省く。
+    """
+    text = page.read_text(encoding="utf-8")
+    # takaichi のように role/aria-label が付くテーマがあるので属性を許す。
+    head_match = re.search(r'<div class="temp-bar-label"[\s>]', text)
+    if head_match is None:
+        return None
+    head = head_match.start()
+
+    spans = re.findall(r"<span>(.*?)</span>", _slice_div(text, head), re.S)
+    if len(spans) < 2:
+        raise BuildError(f"{page} のスタンスバーの見出しを読めませんでした")
+    caption, summary = (_strip_tags(span) for span in spans[:2])
+
+    bar_match = re.compile(r'<div class="temp-bar"[\s>]').search(text, head)
+    if bar_match is None:
+        raise BuildError(f"{page} にスタンスバー本体がありません")
+    segments = [
+        {"cls": cls.split()[0], "width": width}
+        for cls, width in re.findall(
+            r'<div class="temp-seg ([^"]+)" style="width:\s*([\d.]+)%"',
+            _slice_div(text, bar_match.start()),
+        )
+    ]
+    if not segments:
+        raise BuildError(f"{page} のスタンスバーに区画がありません")
+
+    legend_match = re.compile(r'<div class="temp-bar-legend"[\s>]').search(
+        text, bar_match.start()
+    )
+    legend: list[str] = []
+    if legend_match is not None:
+        legend = [
+            _strip_tags(span)
+            for span in re.findall(
+                r"<span>(.*?)</span>", _slice_div(text, legend_match.start()), re.S
+            )
+        ]
+    if len(legend) != len(segments):
+        raise BuildError(
+            f"{page} のスタンスバーで区画数({len(segments)})と"
+            f"凡例数({len(legend)})が合いません"
+        )
+
+    for segment, label in zip(segments, legend):
+        if segment["cls"] not in SEG_COLORS:
+            raise BuildError(
+                f"{page} に未知のスタンス区画 .{segment['cls']} があります。"
+                "SEG_COLORS に色を足してください"
+            )
+        segment["color"] = SEG_COLORS[segment["cls"]]
+        segment["label"] = label
+    return {"caption": caption, "summary": summary, "segments": segments}
+
+
 def format_date(value: str) -> str:
     parsed = date.fromisoformat(value)
     return f"{parsed.year}年{parsed.month}月{parsed.day}日"
@@ -108,6 +245,7 @@ def collect_entries() -> list[dict]:
     entries = []
     for theme, category in THEME_ORDER:
         meta = seo[theme]
+        page = PORTAL_HTML.parent / meta["url"]
         entries.append(
             {
                 "id": theme,
@@ -117,9 +255,42 @@ def collect_entries() -> list[dict]:
                 "url": MAP_BASE + meta["url"],
                 "count": counts[theme],
                 "modified": meta["dateModified"],
+                "hero": find_card_image(page, theme),
+                "stance": extract_stance(page),
             }
         )
     return entries
+
+
+def stance_block(stance: dict | None) -> str:
+    """カード内のスタンス内訳バー。テーマページの表示をそのまま引き写す。"""
+    if stance is None:
+        return ""
+    segments = "".join(
+        '<i style="width:{width}%;background:{color}" title="{label}"></i>'.format(
+            width=segment["width"],
+            color=segment["color"],
+            label=html.escape(segment["label"], quote=True),
+        )
+        for segment in stance["segments"]
+    )
+    legend = "".join(
+        '<li><i style="background:{color}"></i>{label}</li>'.format(
+            color=segment["color"], label=html.escape(segment["label"])
+        )
+        for segment in stance["segments"]
+    )
+    return (
+        '<span class="stance-cap">論点1・{caption}</span>'
+        '<span class="stance-bar">{segments}</span>'
+        '<span class="stance-num">{summary}</span>'
+        '<ul class="stance-leg">{legend}</ul>'
+    ).format(
+        caption=html.escape(stance["caption"]),
+        segments=segments,
+        summary=html.escape(stance["summary"]),
+        legend=legend,
+    )
 
 
 def topic_cards(entries: list[dict]) -> str:
@@ -127,16 +298,22 @@ def topic_cards(entries: list[dict]) -> str:
     for entry in entries:
         rows.append(
             "      <li><a href=\"{url}\">"
+            "<img src=\"{hero}\" alt=\"\" loading=\"lazy\" decoding=\"async\""
+            " width=\"1915\" height=\"821\">"
+            "<span class=\"body\">"
             "<span class=\"cat\">{category}</span>"
             "<span class=\"ttl\">{title}</span>"
             "<span class=\"sum\">{description}</span>"
+            "{stance}"
             "<span class=\"meta\">分類済み <b>{count:,}</b>件"
             "<span class=\"sep\">/</span>最終更新 {modified}</span>"
-            "</a></li>".format(
+            "</span></a></li>".format(
                 url=html.escape(entry["url"]),
+                hero=html.escape(entry["hero"]),
                 category=html.escape(entry["category"]),
                 title=html.escape(entry["title"]),
                 description=html.escape(entry["description"]),
+                stance=stance_block(entry["stance"]),
                 count=entry["count"],
                 modified=html.escape(format_date(entry["modified"])),
             )
@@ -200,33 +377,35 @@ h3{{font-size:15px;margin:0 0 6px}}
 p{{margin:0 0 14px;font-size:14px}}
 .note{{background:#fff;border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:10px;padding:14px 18px;font-size:13px;color:#4a5872;box-shadow:var(--shadow-sm)}}
 .note strong{{display:block;color:var(--navy);margin-bottom:4px;font-size:13px}}
-.steps{{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0;padding:0;list-style:none}}
-.steps li{{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow-sm)}}
-.steps .num{{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#eef5ff;color:var(--blue);font-size:12px;font-weight:900;margin-bottom:10px}}
-.steps p{{font-size:12px;color:var(--muted);margin:0}}
-.topics{{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:0;padding:0;list-style:none}}
-.topics a{{display:block;height:100%;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;text-decoration:none;color:var(--navy);box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s}}
+.topics{{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:0;padding:0;list-style:none}}
+.topics a{{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--navy);box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s}}
 .topics a:hover{{transform:translateY(-2px);box-shadow:var(--shadow)}}
-.topics .cat{{display:inline-block;margin-bottom:6px;padding:3px 8px;border-radius:6px;background:#eef5ff;color:var(--blue);font-size:10px;font-weight:800}}
+.topics img{{display:block;width:100%;height:auto;aspect-ratio:1915/821;object-fit:cover;background:#eef2f9;border-bottom:1px solid var(--line)}}
+.topics .body{{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px}}
+.topics .cat{{display:inline-block;align-self:flex-start;margin-bottom:6px;padding:3px 8px;border-radius:6px;background:#eef5ff;color:var(--blue);font-size:10px;font-weight:800}}
 .topics .ttl{{display:block;font-size:15px;font-weight:800;line-height:1.5;letter-spacing:-.01em}}
-.topics .sum{{display:block;margin:6px 0 10px;font-size:12.5px;line-height:1.75;color:#4a5872}}
-.topics .meta{{display:block;font-size:11px;color:var(--muted);font-weight:600}}
+.topics .sum{{display:block;margin:6px 0 0;font-size:12.5px;line-height:1.75;color:#4a5872}}
+.topics .meta{{display:block;margin-top:auto;padding-top:12px;font-size:11px;color:var(--muted);font-weight:600}}
 .topics .meta b{{color:var(--navy);font-size:12px}}
 .topics .sep{{margin:0 6px;color:var(--line)}}
+.stance-cap{{display:block;margin:12px 0 5px;font-size:10.5px;font-weight:800;color:var(--muted);letter-spacing:.01em}}
+.stance-bar{{display:flex;height:9px;border-radius:5px;overflow:hidden;background:#eef2f9}}
+.stance-bar i{{display:block;min-width:1px}}
+.stance-num{{display:block;margin-top:6px;font-size:11px;font-weight:700;color:var(--navy)}}
+.stance-leg{{margin:5px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:2px 10px}}
+.stance-leg li{{font-size:10px;color:var(--muted);font-weight:600;line-height:1.6}}
+.stance-leg i{{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:4px;vertical-align:middle}}
 .recent{{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 22px;box-shadow:var(--shadow-sm)}}
 .recent ul{{margin:0;padding:0;list-style:none}}
 .recent li{{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}}
 .recent li:last-child{{border-bottom:none}}
 .recent .when{{font-size:11px;color:var(--muted);font-weight:700;min-width:104px}}
 .recent .what{{font-size:11px;color:var(--muted)}}
-.policy{{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}}
-.policy ul{{margin:0;padding-left:20px;font-size:14px}}
-.policy li{{margin-bottom:8px}}
 footer.site{{background:#07172f;color:rgba(255,255,255,.66);padding:30px 0 22px;font-size:12px}}
 footer.site a{{color:rgba(255,255,255,.8)}}
 footer.site .links{{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px}}
 footer.site .copy{{padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:11px}}
-@media(max-width:680px){{.steps,.topics{{grid-template-columns:1fr}}header.site .shell{{height:auto;padding-top:12px;padding-bottom:12px;flex-direction:column;align-items:flex-start}}header.site nav a{{margin:0 16px 0 0}}.recent .when{{min-width:0}}}}
+@media(max-width:680px){{.topics{{grid-template-columns:1fr}}header.site .shell{{height:auto;padding-top:12px;padding-bottom:12px;flex-direction:column;align-items:flex-start}}header.site nav a{{margin:0 16px 0 0}}.recent .when{{min-width:0}}}}
 </style>
 </head>
 <body>
@@ -264,38 +443,8 @@ footer.site .copy{{padding-top:14px;border-top:1px solid rgba(255,255,255,.12);f
   </section>
 
   <section>
-    <h2>何をしているか</h2>
-    <p>ニュースやSNSで意見が割れる争点は、「賛成が多い／反対が多い」という数字だけを見ても、その裏にある理由までは分かりません。同じ「反対」でも、制度の中身に反対している人と、決め方の乱暴さに反対している人では、話がまったく噛み合いません。Issue Stance Lab は、そこを分けて読めるようにすることを目的にしています。</p>
-    <p>そのため、各テーマでは投稿を「賛成／反対」だけで数えず、<b>何について語っているか（論点）</b>と<b>その論点に対する立場</b>の2つに分けて分類しています。たとえば消費税減税なら、財源をどうするかを論じている投稿と、生活の苦しさを訴えている投稿は、どちらも「賛成」でも読み方が変わります。論点ごとに賛否の内訳が見えると、賛成派・反対派の内部でも意見が割れている場所が分かります。</p>
-    <ol class="steps">
-      <li>
-        <span class="num">1</span>
-        <h3>収集</h3>
-        <p>テーマごとに賛否双方の立場から検索語を決め、Yahoo!リアルタイム検索から公開投稿を収集します。取得期間と件数は記録し、ページ上に表示します。</p>
-      </li>
-      <li>
-        <span class="num">2</span>
-        <h3>分類</h3>
-        <p>大規模言語モデルを使い、各投稿が意見を含むかを判定したうえで、どの論点について何を主張しているかを分類します。分類は論点整理の補助であり、事実認定ではありません。</p>
-      </li>
-      <li>
-        <span class="num">3</span>
-        <h3>編集と公開</h3>
-        <p>分類結果を人が確認し、賛成・反対それぞれの主要な論拠と争点の背景、一次資料へのリンクを整理してページにまとめます。読者は自分の立場を投票できます。</p>
-      </li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>数字の読み方</h2>
-    <p>各テーマに表示している「分類済み◯件」は、<b>収集した投稿のうち、意見を含むと判定され論点分類まで済んだ件数</b>です。収集した総数とは別の数字で、テーマページには両方を載せています。母数が何を指しているかを取り違えると読み方が変わるため、ページ内の数字には必ず母数の名前を付けています。</p>
-    <p>この数字は<b>そのテーマに関心があり、かつSNSに書き込んだ人の中での分布</b>です。世の中の意見の比率ではありません。関心が高い人ほど投稿しやすく、検索語の選び方によっても集まる投稿は変わります。何を検索語にしたかは各テーマページの調査条件に明記しているので、偏りの方向を読者が判断できるようにしています。</p>
-    <p>ページ内の投票は、この分類結果とは別に集計しています。読者の投票結果を投稿の分類件数に混ぜることはありません。</p>
-  </section>
-
-  <section>
     <h2>公開中のテーマ</h2>
-    <p>各テーマのページでは、争点の背景と経緯、賛成・反対それぞれの理由、論点ごとの分類件数、取得期間と検索条件、参照した一次資料を確認できます。以下の件数と最終更新日は各テーマページの表示と同じ値です。</p>
+    <p>バーは各テーマの<b>論点1</b>について、どの立場の投稿が何件あったかの内訳です。テーマページに出している数字をそのまま載せています。<a href="{map_base}about.html#numbers">数字の読み方</a>／<a href="{map_base}about.html#method">調査・編集方法</a></p>
     <ul class="topics">
 {topic_cards}
     </ul>
@@ -311,24 +460,8 @@ footer.site .copy{{padding-top:14px;border-top:1px solid rgba(255,255,255,.12);f
   </section>
 
   <section>
-    <h2>編集方針</h2>
-    <div class="policy">
-      <ul>
-        <li><b>賛否のどちらかを推奨しません。</b>特定の政党・団体・候補者を支持または批判する目的でテーマを選定・編集することはありません。</li>
-        <li><b>両側の理由を必ず載せます。</b>片方の立場の論拠だけを詳しく書き、もう片方を要約で済ませることはしません。</li>
-        <li><b>数字の出所を明示します。</b>ページに出す件数は収集した投稿データから機械的に算出したものだけを使い、根拠のない概数は掲載しません。算出できない数字はページに出しません。</li>
-        <li><b>投稿の扱いに配慮します。</b>個々の投稿は要約とリンク中心で扱い、一般個人が特定される形での転載は行いません。</li>
-        <li><b>分かっていないことは、分かっていないと書きます。</b>収集したデータだけでは判断できない点は、各テーマの「収集・分類で分かったこと」に明記します。</li>
-        <li><b>誤りは訂正します。</b>事実誤認のご指摘および掲載内容の削除依頼には、内容を確認のうえ対応します。</li>
-      </ul>
-    </div>
-  </section>
-
-  <section>
     <h2>運営者・お問い合わせ</h2>
-    <p>本サイトは個人が運営しています。テーマの選定、データ収集・分類の仕組みの開発、ページ制作までを一貫して行っています。ページ内で使っている「SNS反応まっぷ編集部」は個人運営プロジェクトの編集名義であり、法人名ではありません。</p>
-    <p>収集の方法、意見投稿と判定する基準、論点と立場の分類方法、代表投稿の選び方、AI分類の誤りをどう確認しているかは、<a href="{map_base}about.html#method">調査・編集方法</a>に手順として書いています。運営者情報は<a href="{map_base}about.html#operator">運営者情報</a>をご覧ください。</p>
-    <p>内容の誤りのご指摘、引用の削除依頼、その他のお問い合わせは<a href="{contact_url}" target="_blank" rel="noopener noreferrer">お問い合わせフォーム</a>よりお寄せください。個人運営のため個別の返信は原則として行っておりませんが、事実誤認のご指摘と削除依頼には対応します。</p>
+    <p>本サイトはエンジニアではない個人が1人で運営しています。テーマの選定、収集・分類の仕組みづくり、ページ制作まで同じ1人が行っており、「SNS反応まっぷ編集部」は法人名ではなく個人プロジェクトの編集名義です。収集や分類の手順は<a href="{map_base}about.html#method">調査・編集方法</a>、運営者情報は<a href="{map_base}about.html#operator">運営者情報</a>に書いています。誤りのご指摘・削除依頼は<a href="{contact_url}" target="_blank" rel="noopener noreferrer">お問い合わせフォーム</a>へお寄せください。</p>
   </section>
 
 </main>
