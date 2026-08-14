@@ -426,8 +426,16 @@ def _replace_theme_fields(text: str, topic: str, fields: dict[str, str | None]) 
     block = match.group(2)
     for key, value in fields.items():
         rendered = "" if value is None else value
-        field_pattern = rf"(^    {re.escape(key)}:[ \t]*)[^#\n]*(.*$)"
-        block, count = re.subn(field_pattern, rf"\g<1>{rendered}\2", block, count=1, flags=re.MULTILINE)
+        field_pattern = rf"(^    {re.escape(key)}:)[ \t]*[^#\n]*(.*$)"
+
+        def replace_field(field_match: re.Match[str]) -> str:
+            suffix = field_match.group(2)
+            comment = f" {suffix}" if suffix else ""
+            return f"{field_match.group(1)} {rendered}{comment}"
+
+        block, count = re.subn(
+            field_pattern, replace_field, block, count=1, flags=re.MULTILINE
+        )
         if count == 0:
             anchor = re.search(r"^    refresh_at:.*$", block, flags=re.MULTILINE)
             if not anchor:

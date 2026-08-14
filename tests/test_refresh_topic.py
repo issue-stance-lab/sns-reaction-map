@@ -184,6 +184,13 @@ class RefreshTopicTests(unittest.TestCase):
         self.assertIn("updated_at: 2026-07-26", changed)
         self.assertIn("collect_delta: 12", changed)
 
+    def test_blank_registry_field_keeps_yaml_space_when_filled(self):
+        text = "themes:\n  topic:\n    refresh_at:\n    collect_at: 2026-08-21\n"
+        changed = _replace_theme_fields(
+            text, "topic", {"refresh_at": "2026-08-21"}
+        )
+        self.assertIn("refresh_at: 2026-08-21", changed)
+
     def test_two_zero_waves_set_explicit_event_driven_mode(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
