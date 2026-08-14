@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-14（高市・高齢者免許の収集と課題40の統合。課題40を3/6完了、課題43を更新、課題47を新規）
+最終更新: 2026-08-14（高齢者免許返納をadapterへ昇格し、保存済み更新回から純新規92件を公開）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -395,23 +395,24 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 **保存期間**: 当面は全世代保持。ディスクの共有・譲渡・廃棄時はアーカイブを先に削除する。
 
 ### 課題34: ページ更新スクリプトが再実行できないテーマの整備
-**状態**: 未着手（課題33のゲート完了後、データ更新の横展開と同時に進める）
+**状態**: 進行中（11テーマ中5テーマがadapter。高齢者免許返納を2026-08-14に昇格）
 **発見**: 2026-08-02、adapter 昇格判定の実測時
 
 **概要**: データ更新を自動化するには「同じ入力で2回実行しても差分が出ない」ページ更新スクリプトが要る。全11テーマで実測し、`THEMES.yaml` の `page_update_mode` に記録した。
 
 | 区分 | テーマ | 状態 |
 |---|---|---|
-| adapter（2） | bukatsu-chiiki / takaichi | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
-| adapter_candidate（2） | henoko-student-accident / koshitsu-tenpakai | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
-| migration（3） | constitutional-amendment / consumption-tax-cut | 生成済みページへ再実行すると `ValueError: substring not found` で落ちる（一度きりの移行用スクリプト） |
-| | school-nickname-ban | 実行のたびに空行が1行増える。さらに `upgrade_nickname_arena.js` 内の古い meta description で `configs/theme-seo.json` 由来のSEO文言を巻き戻す |
-| manual（4） | ai-copyright / bike-blue-ticket / elderly-license-revocation / fukushuto | 再実行可能な更新スクリプトが存在しない（`inject_tide_widget.py` と検査スクリプトのみ） |
+| adapter（5） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
+| adapter_candidate（3） | constitutional-amendment / henoko-student-accident / fukushuto | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
+| migration（2） | consumption-tax-cut / school-nickname-ban | 一度きりの移行用スクリプト、または再実行で副作用が出る |
+| manual（1） | bike-blue-ticket | 再実行可能な更新スクリプトが存在しない |
 
 **やること**: ①henoko / koshitsu の候補input/output対応 ②school-nickname-ban の2点を直して adapter へ昇格 ③constitutional-amendment / consumption-tax-cut を再実行可能な形へ書き直す ④manual 4テーマのビルダーを新設する
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
 
 **2026-08-02 共通ランナー対応**: `scripts/refresh_topic.py --topic` に、全11テーマ共通の疎通確認・収集・重複排除・10件試験分類・全件分類・集合検査・更新回保存・バックアップを集約した。migration / manual / adapter_candidate も公開せずstaging止まりで予定どおり収集できる。ページ処理は `scripts/refresh_adapters/` に分離し、takaichi は候補ページ・arena data・潮目を2回生成して差分ゼロ、投票topicIdと15選択肢の互換性を検査する。
+
+**2026-08-14 高齢者免許返納**: `build_elderly_arena.py` を候補input/output対応にし、専用adapterでページ・潮目を2回生成して差分ゼロ、投票topicId・18選択肢・GA4/AdSense/OGPを保護する。保存済み110件の収集履歴は書き換えず、現在の正典と再照合して重複18件を除いた92件（意見45件）を公開。累積364件・意見233件になった。
 
 **横展開のゲート**: 少なくとも保全先の決定、既存データの初回バックアップ、復元確認が終わるまで、他テーマの定期更新を開始しない。
 
