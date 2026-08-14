@@ -64,6 +64,52 @@ class BuildTests(unittest.TestCase):
             self.assertIn(theme["title"], self.html)
 
 
+class AlertTests(unittest.TestCase):
+    @staticmethod
+    def _data(today: dt.date, last_run: dt.date | None, post_date: dt.date) -> dict:
+        return {
+            "today": today,
+            "themes": [],
+            "kpi": {
+                "snapshots": [],
+                "recurring": [
+                    {"key": "x-posting", "last_run": last_run},
+                ],
+            },
+            "x_posts": [{"date": post_date}],
+            "health": [],
+            "live": None,
+        }
+
+    def test_x_alert_uses_candidate_check_not_latest_post(self):
+        data = self._data(
+            today=dt.date(2026, 8, 14),
+            last_run=dt.date(2026, 8, 10),
+            post_date=dt.date(2026, 8, 14),
+        )
+        html = render.section_alerts(data)
+        self.assertIn("X の候補確認が 4 日前で止まっています", html)
+        self.assertNotIn("毎日1〜3件", html)
+
+    def test_fresh_candidate_check_allows_no_recent_posts(self):
+        data = self._data(
+            today=dt.date(2026, 8, 14),
+            last_run=dt.date(2026, 8, 14),
+            post_date=dt.date(2026, 8, 1),
+        )
+        html = render.section_alerts(data)
+        self.assertNotIn("X の候補確認", html)
+        self.assertNotIn("X の投稿記録", html)
+
+    def test_missing_candidate_check_date_is_reported(self):
+        data = self._data(
+            today=dt.date(2026, 8, 14),
+            last_run=None,
+            post_date=dt.date(2026, 8, 14),
+        )
+        html = render.section_alerts(data)
+        self.assertIn("X の候補確認日が記録されていません", html)
+
 class ThemeScheduleTests(unittest.TestCase):
     def test_days_until_deadline_is_signed(self):
         themes = collect.collect_themes(TODAY)

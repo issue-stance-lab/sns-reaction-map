@@ -391,11 +391,22 @@ def section_alerts(data: dict) -> str:
         if age > 10:
             alerts.append(("warn", f"流入の記録（週次KPI）が {age} 日前で止まっています", "GROWTH.yaml の kpi.snapshots に1行追加する運用。週1回が想定"))
 
-    posts = data["x_posts"]
-    if posts:
-        age = (today - posts[0]["date"]).days
-        if age > 3:
-            alerts.append(("warn", f"X の投稿記録が {age} 日前で止まっています", "毎日1〜3件のリプライが最低ラインの運用"))
+    x_posting = next(
+        (item for item in data["kpi"].get("recurring", []) if item["key"] == "x-posting"),
+        None,
+    )
+    if x_posting:
+        last_run = x_posting.get("last_run")
+        if last_run is None:
+            alerts.append(("warn", "X の候補確認日が記録されていません", "GROWTH.yaml の recurring.x-posting.last_run を更新してください"))
+        else:
+            age = (today - last_run).days
+            if age > 3:
+                alerts.append((
+                    "warn",
+                    f"X の候補確認が {age} 日前で止まっています",
+                    "投稿本数のノルマはありません。関連ポストを確認し、有効な候補がある場合のみ返信する運用です",
+                ))
 
     for check in data["health"]:
         if check["ok"] is False:
