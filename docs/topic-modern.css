@@ -880,6 +880,11 @@ footer { margin-top: 0 !important; background: #07172f !important; }
   box-shadow: 0 5px 18px rgba(18, 53, 99, .07);
   color: var(--ink, #071a3d);
 }
+/* 本文直下へ置く場合も、通常のパネルと同じ読みやすい幅にそろえる。 */
+main > .article-trust {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+}
 .article-trust-heading {
   margin-bottom: 18px;
 }
