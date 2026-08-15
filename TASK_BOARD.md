@@ -114,7 +114,10 @@ python3 scripts/verify_top_page.py                      # docs/ の衛生・404�
   チェックを入れないこと**
 ⑦通過した場合は広告ユニットの配置設計（本課題の後半スコープ）
 ⑧`/sns-reaction-map/` 側だけを改善しても審査対象のルート（別リポジトリ
-  `issue-stance-lab/issue-stance-lab.github.io`）には反映されない。テーマ追加時はルートの一覧にも追記すること
+ `issue-stance-lab/issue-stance-lab.github.io`）には反映されない。テーマ追加時はルートの一覧にも追記すること
+
+**2026-08-16 対応**: 生成AIと著作権ページは、編集・分析情報をヒーロー直後へ移し、
+一次資料に基づく「学習・出力・公開」の判断入口を追加した。残る10テーマの移設は未着手。
 
 ### 課題17: Googleアカウント・サービスのプロジェクトアドレス統一
 **状態**: 未着手
@@ -155,6 +158,10 @@ elderly-license-revocation 記録なし）。推測で埋めないこと
 **全11テーマ再検査**: 同じ基準を既に期間が入っていたテーマにも適用した。takaichi（276件中140件欠損）/ fukushuto（255件全件欠損）も `unknown` へ戻し、koshitsu-tenpakai は正典347件が全て7/26収集なので `2026-07-26` に修正した。現在の `unknown` は ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi / fukushuto の5件。
 **機械検査**: `data/verification/sample-periods.json` に総数・日付あり・欠損・最小日・最大日だけを保存し、`scripts/verify_sample_periods.py` で全11テーマを検査する。個別投稿の取得日は公開しない。
 **別件（課題29の一例）**: ai-copyright は `sample_period: "2026-06-10〜2026-07-26"` と書いてあったが、`sample_file` の `fetched_at` は最新が 2026-07-12（339件は欠損）。7/26に収集した452件は `sample_file` に入っておらず別ファイルにあるため、根拠のない期間を公開し続けず `unknown`／「記録なし」へ戻した。次回更新で累積を正典へ統合した時点で確定する。
+
+**2026-08-16 対応**: ai-copyright の収集期間はオーナー確認により `2026-06-27` と登録した。
+正典には取得日欠損が339件あるため、`sample_period_source: owner_confirmed` を明示し、
+自動算出値と混同しない形で検査する。
 
 **注意**: `sample_source` は全11テーマ「Yahooリアルタイム検索」で埋まっている。検索語（クエリ）は未記録なので、A-4 で表示するなら `sample_queries` フィールドの追加も併せて検討する
 

@@ -53,6 +53,7 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
             "sample_file": _scalar(block, "sample_file"),
             "verification_file": _scalar(block, "verification_file"),
             "sample_period": _scalar(block, "sample_period"),
+            "sample_period_source": _scalar(block, "sample_period_source"),
             "sample_source": _scalar(block, "sample_source"),
             "refresh_config": _scalar(block, "refresh_config"),
             "page_update_mode": _scalar(block, "page_update_mode"),

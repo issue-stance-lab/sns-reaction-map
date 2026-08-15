@@ -90,6 +90,25 @@ def apply_counts(page: str, theme: str, cards: list[dict[str, object]]) -> str:
         slug = str(card["slug"])
         title = str(card["title"])
         span = span_html(theme, slug, int(card["count"]))
+        display_label = str(card.get("display_label") or "")
+        if display_label:
+            pattern = re.compile(
+                r'(<p class="explainer-card-title">)'
+                + re.escape(title)
+                + r'(</p>\s*<p class="explainer-card-meta">)'
+                + re.escape(display_label)
+                + r'(?:<span class="explainer-count"[^>]*>[^<]*</span>)?'
+                + r'(</p>)'
+            )
+            page, replaced = pattern.subn(
+                lambda m: m.group(1) + title + m.group(2) + display_label + span + m.group(3),
+                page,
+            )
+            if replaced != 1:
+                raise IssueCountError(
+                    f"{theme}: 論点カードが1件だけ見つかる必要があります（{replaced}件）: {title}"
+                )
+            continue
         # 既存のタイトル（件数span付き/なしの両方）を拾って差し替える
         pattern = re.compile(
             r'(<p class="explainer-card-title">)'

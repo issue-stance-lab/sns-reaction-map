@@ -226,10 +226,17 @@ def verify_largest_badge(
         candidates = []
         for spec in card_specs:
             labels = [str(value) for value in spec.get("main_issue") or []]
+            display_label = str(spec.get("display_label") or "")
             title_label = re.split(r"\s+[—–]—?\s+", str(spec.get("title") or ""), maxsplit=1)[0]
-            if title_label:
+            if display_label:
+                labels.append(display_label)
+            elif title_label:
                 labels.append(title_label)
-            if any(label in heading or (len(label) >= 3 and label[:3] in heading) for label in labels):
+            if any(
+                label in heading
+                or (not display_label and len(label) >= 3 and label[:3] in heading)
+                for label in labels
+            ):
                 candidates.append(str(spec.get("slug") or ""))
         if len(candidates) != 1 or candidates[0] not in counts:
             checked.append(f"NG  {theme}: 強調表示の論点を特定できない（{badge}: {heading}）")

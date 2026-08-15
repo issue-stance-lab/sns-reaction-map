@@ -60,6 +60,13 @@ def verify(evidence: dict[str, dict[str, Any]]) -> int:
             continue
         expected = expected_period(item)
         actual = str(theme.get("sample_period") or "")
+        if theme.get("sample_period_source") == "owner_confirmed":
+            if DATE_RE.fullmatch(actual):
+                print(f"OK  {slug}: {actual}（オーナー確認済み／取得日欠損{item['missing_records']}/{item['records']}件）")
+                continue
+            print(f"NG  {slug}: オーナー確認済みの sample_period が日付形式ではない: {actual}")
+            failures += 1
+            continue
         if actual == expected:
             print(f"OK  {slug}: {actual}（欠損{item['missing_records']}/{item['records']}件）")
         else:

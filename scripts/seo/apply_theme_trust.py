@@ -159,6 +159,8 @@ def jsonld_block(theme: dict[str, Any], config: dict[str, Any]) -> str:
         "author": organization,
         "publisher": organization,
     }
+    if theme.get("temporalCoverage"):
+        payload["temporalCoverage"] = theme["temporalCoverage"]
     encoded = json.dumps(payload, ensure_ascii=False, indent=2).replace("</", "<\\/")
     return f'{JSONLD_START}\n  <script type="application/ld+json">\n{encoded}\n  </script>\n{JSONLD_END}'
 

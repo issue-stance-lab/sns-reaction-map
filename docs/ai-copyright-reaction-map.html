@@ -37,6 +37,7 @@
   },
   "datePublished": "2026-06-24",
   "dateModified": "2026-08-09",
+  "temporalCoverage": "2026-06-27",
   "author": {
     "@type": "Organization",
     "name": "SNS反応まっぷ編集部",
@@ -636,6 +637,7 @@
 .explainer-card-label { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; background: #fff; border-bottom: 1.5px solid #e4eaf3; pointer-events: none; user-select: none; }
 .explainer-num { flex-shrink: 0; background: #1e1b4b; color: #fff; font-size: 11px; font-weight: 900; letter-spacing: .05em; border-radius: 6px; padding: 4px 10px; margin-top: 3px; line-height: 1.3; }
 .explainer-card-title { font-size: 15px; font-weight: 900; color: #1e1b4b; margin: 0 0 4px; line-height: 1.35; letter-spacing: -.02em; }
+.explainer-card-meta { font-size: 11px; color: #637089; font-weight: 800; letter-spacing: .03em; margin: 0 0 6px; }
 .explainer-card-desc { font-size: 12px; color: #637089; margin: 0 0 7px; line-height: 1.65; }
 .explainer-sides { display: flex; gap: 6px; flex-wrap: wrap; }
 .explainer-side { font-size: 11px; font-weight: 800; border-radius: 5px; padding: 3px 9px; line-height: 1.4; }
@@ -646,6 +648,23 @@
 .explainer-modal img { max-width: 100%; max-height: 90vh; border-radius: 8px; object-fit: contain; }
 .explainer-modal-close { position: absolute; top: 16px; right: 20px; background: rgba(255,255,255,.15); border: none; border-radius: 50%; width: 40px; height: 40px; color: #fff; font-size: 22px; cursor: pointer; line-height: 40px; text-align: center; }
 .explainer-note { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+
+/* ===== 生成AIと著作権：判断の入口 ===== */
+.copyright-entry { max-width: 1000px; margin: 0 auto; padding: 30px min(6vw,72px) 36px; }
+.copyright-entry-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:14px; }
+.copyright-entry h2 { margin:0; color:var(--navy); font-size:26px; line-height:1.35; letter-spacing:-.035em; }
+.copyright-entry-kicker { margin:0 0 4px; color:var(--blue); font-size:11px; font-weight:900; letter-spacing:.08em; }
+.copyright-entry-lead { max-width:800px; margin:0 0 20px; color:var(--ink); font-size:15px; line-height:1.85; }
+.copyright-flow { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0; padding:0; list-style:none; }
+.copyright-flow li { position:relative; min-height:178px; padding:18px; background:#fff; border:1px solid #d9e2ef; border-top:4px solid var(--blue); border-radius:12px; box-shadow:0 8px 22px rgba(18,35,64,.07); }
+.copyright-flow li:nth-child(2) { border-top-color:#7c3aed; }
+.copyright-flow li:nth-child(3) { border-top-color:#0f766e; }
+.copyright-flow h3 { margin:0 0 8px; color:var(--navy); font-size:16px; }
+.copyright-flow p { margin:0; color:#465873; font-size:13px; line-height:1.75; }
+.copyright-flow .entry-caution { margin-top:10px; color:#68778d; font-size:11px; font-weight:800; line-height:1.55; }
+.copyright-entry-sources { margin:16px 0 0; color:#637089; font-size:12px; line-height:1.7; }
+.copyright-entry-sources a { color:var(--blue); font-weight:800; }
+@media(max-width:720px) { .copyright-entry { padding:26px 20px 30px; } .copyright-entry-head { display:block; } .copyright-entry h2 { font-size:22px; } .copyright-flow { grid-template-columns:1fr; } .copyright-flow li { min-height:0; } }
 
 /* ===== 2ステップ投票 ===== */
 .vote-step-label { display: inline-flex; align-items: center; gap: 8px; font-weight: 900; font-size: 15px; margin: 0 0 12px; }
@@ -877,10 +896,53 @@
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 2015件<br>
-  （取得期間: 未記録 — 収集期間の記録を始める前に公開したテーマ／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>
+  （取得期間: 2026-06-27／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
+<!-- ARTICLE_TRUST_START -->
+<aside class="article-trust" aria-labelledby="article-trust-title">
+  <div class="article-trust-heading">
+    <p class="article-trust-kicker">編集・分析情報</p>
+    <h2 id="article-trust-title">このページの作り方</h2>
+  </div>
+  <dl class="article-trust-meta">
+    <div><dt>公開日</dt><dd><time datetime="2026-06-24">2026年6月24日</time></dd></div>
+    <div><dt>最終更新日</dt><dd><time datetime="2026-08-09">2026年8月9日</time></dd></div>
+    <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
+  </dl>
+  <div class="article-trust-method">
+    <h3>SNS投稿の収集方法</h3>
+    <p>Yahoo!リアルタイム検索で「AI著作権侵害」「生成AI 反対」「生成AI 便利」「AI 規制」など賛否双方の検索語を使い、公開されているX投稿を収集しました。収集した2,015件のうち、意見と判定した1,347件を論点分析に表示しています。</p>
+    <h3>AIを使用した工程</h3>
+    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>検索語は13語を賛否の両側から作りました。「AI著作権侵害」「生成AI 反対」のような規制寄りの語だけでは規制支持側に偏るため、「生成AI 便利」「AI イラスト 良い OR 便利 OR 助かる」「AI 規制 やりすぎ OR 反対」を足しています。</li>
+      <li>収集した投稿のうち意見と判定できた割合は約64%で、公開中の11テーマで最も低い数字です。法改正や判決の報道をそのまま共有する投稿が多く、賛否を述べていないものが3分の1を超えます。</li>
+      <li>2026年7月に集め直したところ、規制支持が78%から60%へ、推進支持が22%から41%へ動きました。同じ検索語でも収集した時期によって構成比が大きく変わるため、ここに出している比率は「その時点で集まった投稿の中での比率」です。</li>
+      <li>AIの学習が合法かどうかという法律論と、対価を払うべきかという倫理の話が同じ投稿の中で混ざりやすく、論点の切り分けが最も難しいテーマでした。どちらとも判定できない投稿は無理に寄せず「その他」に残しています。</li>
+    </ul>
+  </div>
+  <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
+  <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
+</aside>
+<!-- ARTICLE_TRUST_END -->
+<section class="copyright-entry" id="copyright-entry" aria-labelledby="copyright-entry-title">
+  <div class="copyright-entry-head">
+    <div>
+      <p class="copyright-entry-kicker">判断の入口</p>
+      <h2 id="copyright-entry-title">学習・出力・公開――どの行為にルールを求めるか</h2>
+    </div>
+  </div>
+  <p class="copyright-entry-lead">「AI利用」とひとまとめにせず、まず問題にしている行為を確かめます。文化庁の整理は、学習段階と生成・利用段階を分けています。ここでは個別の侵害判断は行いません。</p>
+  <ol class="copyright-flow">
+    <li><h3>学習データの収集・学習</h3><p>著作物の表現を楽しませる目的がない情報解析には、30条の4が適用され得ます。一方、目的や収集方法など個別事情で見方が変わります。</p><p class="entry-caution">「学習なら常に合法」とは示しません。</p></li>
+    <li><h3>生成</h3><p>特定の作品に似た出力を生む場合、どの表現が共通しているか、どのように生成されたかを区別して考える必要があります。</p><p class="entry-caution">このページは個別生成物の法的評価をしません。</p></li>
+    <li><h3>公開・販売</h3><p>生成物を公開・販売する段階では、既存著作物との類似性と依拠性が認められるかが問題となり得ます。</p><p class="entry-caution">最終的な評価は個別事案と司法判断によります。</p></li>
+  </ol>
+  <p class="copyright-entry-sources">判断の根拠は、<a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化庁「AIと著作権に関する考え方について」</a>と、<a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf" target="_blank" rel="noopener noreferrer">内閣府「AI時代の知的財産権検討会 中間とりまとめ」</a>です。</p>
+</section>
 <section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
       <article class="stat insight-stat">
         <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
@@ -1032,14 +1094,14 @@
 <!-- TIDE_CARD_END --></section>
 
 <section class="panel" id="explainer-section">
-<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから</span></div>
-<p class="explainer-lead">「生成AIと著作権」の議論は「賛成か反対か」だけではありません。学習データの合法性・クリエイターの権利・法制度・競争力・モラル・AI生成物の権利——6つの論点を整理してから投票に進んでください。</p>
+<div class="panel-title"><h2>判断が分かれる、6つの問い</h2><span>気になる問いから確かめる</span></div>
+<p class="explainer-lead">「生成AIと著作権」の議論は、単純な賛成・反対では整理できません。学習、対価、表示、作風、開発、創作性について、いま気になる問いから読み進めてください。</p>
 <div class="explainer-grid">
   <article class="explainer-card" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-gakushu.webp" data-alt="学習データ・無断利用">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点①</span>
       <div>
-        <p class="explainer-card-title">学習データ・無断利用 — 「AI学習は漫画村と同じか」<span class="explainer-count" id="issue-count-ai-copyright-gakushu">340件</span></p>
+        <p class="explainer-card-title">AI学習のための利用と、作品を読む・見るための利用は、著作権上どう違うのか？</p>
+        <p class="explainer-card-meta">学習データ・無断利用<span class="explainer-count" id="issue-count-ai-copyright-gakushu">340件</span></p>
         <p class="explainer-card-desc">著作物を無断でAI学習に使うことは合法か。文化庁は合法とするが、クリエイターの反発が73%を占める最多論点。</p>
         <div class="explainer-sides">
           <span class="explainer-side con">批判：無断学習は著作権侵害と同じ</span>
@@ -1047,13 +1109,13 @@
         </div>
       </div>
     </div>
-    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-gakushu.webp" alt="論点① 学習データ・無断利用" loading="lazy">
+    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-gakushu.webp" alt="学習データ・無断利用" loading="lazy">
   </article>
   <article class="explainer-card" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-hoseibi.webp" data-alt="法制度・規制整備">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点②</span>
       <div>
-        <p class="explainer-card-title">法制度・規制整備 — 「ライセンス制度は必要か」<span class="explainer-count" id="issue-count-ai-copyright-hoseibi">270件</span></p>
+        <p class="explainer-card-title">学習データへの許諾や対価は、法律で決めるべきか？</p>
+        <p class="explainer-card-meta">法制度・規制整備<span class="explainer-count" id="issue-count-ai-copyright-hoseibi">270件</span></p>
         <p class="explainer-card-desc">許諾要件やライセンス制度など具体的な法整備を求める声が58%。規制の範囲と設計が最大の焦点。</p>
         <div class="explainer-sides">
           <span class="explainer-side con">規制：許諾義務・ライセンス化を</span>
@@ -1061,13 +1123,13 @@
         </div>
       </div>
     </div>
-    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-hoseibi.webp" alt="論点② 法制度・規制整備" loading="lazy">
+    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-hoseibi.webp" alt="法制度・規制整備" loading="lazy">
   </article>
   <article class="explainer-card" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-moraru.webp" data-alt="利用者モラル・倫理">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点③</span>
       <div>
-        <p class="explainer-card-title">利用者モラル・倫理 — 「AI生成と隠して使うのが問題」<span class="explainer-count" id="issue-count-ai-copyright-moraru">307件</span></p>
+        <p class="explainer-card-title">AI生成であることは、誰がどこまで示すべきか？</p>
+        <p class="explainer-card-meta">利用者モラル・倫理<span class="explainer-count" id="issue-count-ai-copyright-moraru">307件</span></p>
         <p class="explainer-card-desc">AI生成を隠して投稿、クレジット表記なし——法律より先に使い手の倫理が問われる論点。問題視する声が64%。</p>
         <div class="explainer-sides">
           <span class="explainer-side con">批判：AI隠し投稿はモラル違反</span>
@@ -1075,13 +1137,13 @@
         </div>
       </div>
     </div>
-    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-moraru.webp" alt="論点③ 利用者モラル・倫理" loading="lazy">
+    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-moraru.webp" alt="利用者モラル・倫理" loading="lazy">
   </article>
   <article class="explainer-card" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-creator.webp" data-alt="クリエイター保護・権利">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点④</span>
       <div>
-        <p class="explainer-card-title">クリエイター保護・権利 — 「絵師が廃業に追い込まれる」<span class="explainer-count" id="issue-count-ai-copyright-creator">190件</span></p>
+        <p class="explainer-card-title">作風が似た出力で仕事が失われるとき、何を守れるのか？</p>
+        <p class="explainer-card-meta">クリエイター保護・権利<span class="explainer-count" id="issue-count-ai-copyright-creator">190件</span></p>
         <p class="explainer-card-desc">「10年の作風が一瞬で真似される」。廃業の危機を訴える声が72%を占める。</p>
         <div class="explainer-sides">
           <span class="explainer-side con">懸念：廃業の危機・生計を脅かす</span>
@@ -1089,13 +1151,13 @@
         </div>
       </div>
     </div>
-    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-creator.webp" alt="論点④ クリエイター保護・権利" loading="lazy">
+    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-creator.webp" alt="クリエイター保護・権利" loading="lazy">
   </article>
   <article class="explainer-card" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-gijutsu.webp" data-alt="技術競争・AI推進">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点⑤</span>
       <div>
-        <p class="explainer-card-title">技術競争・AI推進 — 「規制すれば日本が遅れる」<span class="explainer-count" id="issue-count-ai-copyright-gijutsu">54件</span></p>
+        <p class="explainer-card-title">規制を強めると、日本のAI開発は実際に遅れるのか？</p>
+        <p class="explainer-card-meta">技術競争・AI推進<span class="explainer-count" id="issue-count-ai-copyright-gijutsu">54件</span></p>
         <p class="explainer-card-desc">AI推進派が68%と唯一の逆転論点。規制強化は国際競争に遅れるという主張が中心。</p>
         <div class="explainer-sides">
           <span class="explainer-side pro">推進：規制で国際競争に遅れる</span>
@@ -1103,13 +1165,13 @@
         </div>
       </div>
     </div>
-    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-gijutsu.webp" alt="論点⑤ 技術競争・AI推進" loading="lazy">
+    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-gijutsu.webp" alt="技術競争・AI推進" loading="lazy">
   </article>
   <article class="explainer-card" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-seiseibutsu.webp" data-alt="AI生成物の権利・創作性">
     <div class="explainer-card-label">
-      <span class="explainer-num">論点⑥</span>
       <div>
-        <p class="explainer-card-title">AI生成物の権利・創作性 — 「プロンプトに著作権は生まれるか」<span class="explainer-count" id="issue-count-ai-copyright-seiseibutsu">82件</span></p>
+        <p class="explainer-card-title">AIを使った創作物に、誰の著作権が生まれるのか？</p>
+        <p class="explainer-card-meta">AI生成物の権利・創作性<span class="explainer-count" id="issue-count-ai-copyright-seiseibutsu">82件</span></p>
         <p class="explainer-card-desc">中立が32%と6論点最多。プロンプトに著作権が生じるかで社会的合意がない論点。</p>
         <div class="explainer-sides">
           <span class="explainer-side con">否定：人の創意なければ権利なし</span>
@@ -1117,10 +1179,10 @@
         </div>
       </div>
     </div>
-    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-seiseibutsu.webp" alt="論点⑥ AI生成物の権利・創作性" loading="lazy">
+    <img src="images/topics/ai-copyright/ai-copyright-infographic-wide-seiseibutsu.webp" alt="AI生成物の権利・創作性" loading="lazy">
   </article>
 </div>
-<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+<p class="explainer-note"><strong>使い方:</strong> 気になる問いを読んでから、次の投票で最も重く見る論点を選んでください。</p>
 </section>
 <div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
   <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
@@ -1178,35 +1240,7 @@
 <!-- ARGUMENTS_END -->
 <section class="panel" id="vote-section" data-vote-topic="ai-copyright-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文化庁が「AI学習は著作権侵害にならない」と見解を示す一方、イラストレーターや漫画家が反発。クリエイター保護と技術革新の狭間で、どの論点が最も重要だと思いますか？</p>
-<!-- ARTICLE_TRUST_START -->
-<aside class="article-trust" aria-labelledby="article-trust-title">
-  <div class="article-trust-heading">
-    <p class="article-trust-kicker">編集・分析情報</p>
-    <h2 id="article-trust-title">このページの作り方</h2>
-  </div>
-  <dl class="article-trust-meta">
-    <div><dt>公開日</dt><dd><time datetime="2026-06-24">2026年6月24日</time></dd></div>
-    <div><dt>最終更新日</dt><dd><time datetime="2026-08-09">2026年8月9日</time></dd></div>
-    <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
-  </dl>
-  <div class="article-trust-method">
-    <h3>SNS投稿の収集方法</h3>
-    <p>Yahoo!リアルタイム検索で「AI著作権侵害」「生成AI 反対」「生成AI 便利」「AI 規制」など賛否双方の検索語を使い、公開されているX投稿を収集しました。収集した2,015件のうち、意見と判定した1,347件を論点分析に表示しています。</p>
-    <h3>AIを使用した工程</h3>
-    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
-    <h3>収集・分類で分かったこと</h3>
-    <ul class="article-trust-observations">
-      <li>検索語は13語を賛否の両側から作りました。「AI著作権侵害」「生成AI 反対」のような規制寄りの語だけでは規制支持側に偏るため、「生成AI 便利」「AI イラスト 良い OR 便利 OR 助かる」「AI 規制 やりすぎ OR 反対」を足しています。</li>
-      <li>収集した投稿のうち意見と判定できた割合は約64%で、公開中の11テーマで最も低い数字です。法改正や判決の報道をそのまま共有する投稿が多く、賛否を述べていないものが3分の1を超えます。</li>
-      <li>2026年7月に集め直したところ、規制支持が78%から60%へ、推進支持が22%から41%へ動きました。同じ検索語でも収集した時期によって構成比が大きく変わるため、ここに出している比率は「その時点で集まった投稿の中での比率」です。</li>
-      <li>AIの学習が合法かどうかという法律論と、対価を払うべきかという倫理の話が同じ投稿の中で混ざりやすく、論点の切り分けが最も難しいテーマでした。どちらとも判定できない投稿は無理に寄せず「その他」に残しています。</li>
-    </ul>
-  </div>
-  <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
-  <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
-</aside>
-<!-- ARTICLE_TRUST_END -->
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">ここまでの問いと資料を踏まえ、あなたが最も重く見る論点を選んでください。</p>
 <div id="vote-step1">
   <p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p>
   <div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-width:900px;"></div>
@@ -1811,6 +1845,18 @@
 </ul></div></details>
 </section>
 
+  <script>
+  (() => {
+    const entry = document.getElementById('copyright-entry');
+    const argumentsPanel = document.getElementById('strongest-arguments');
+    const arena = document.getElementById('issue-arena-section');
+    const stats = document.querySelector('section.stats.insight-stats');
+    const tide = document.querySelector('section.update-dashboard');
+    if (entry && argumentsPanel) entry.insertAdjacentElement('afterend', argumentsPanel);
+    if (arena && stats) arena.insertAdjacentElement('afterend', stats);
+    if (stats && tide) stats.insertAdjacentElement('afterend', tide);
+  })();
+  </script>
   </main>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <footer style="background:linear-gradient(135deg, var(--grad-2), var(--grad-1));border-top:none;padding:48px 24px;text-align:center;color:#fff;font-size:12px;line-height:1.8;">
