@@ -44,35 +44,42 @@ INTENSITY_E = {"low": 0.5, "medium": 1.0, "high": 2.0}
 # 編集確認済みの代表投稿。直近追加分（status が 208... の投稿）も含め、
 # 各論点で具体的な条件・経験・制度設計を説明しているものを優先する。
 # データ更新でURLが欠けた場合は、下の confidence 順の候補に安全に戻る。
-REPRESENTATIVE_POST_URLS = {
+REPRESENTATIVE_POSTS = {
     "費用・家庭負担": [
-        "https://x.com/TheMirageof0/status/2070621781757726855",
-        "https://x.com/774nyannyan/status/2086731858579263880",
+        ("https://x.com/TheMirageof0/status/2070621781757726855", "家計にのしかかる会費"),
+        ("https://x.com/774nyannyan/status/2086731858579263880", "公費が足りないと縮小・負担増"),
     ],
     "受け皿・指導者": [
-        "https://x.com/maru_moneyy/status/2084392638506274876",
-        "https://x.com/SIND_/status/2070325146372739488",
+        ("https://x.com/maru_moneyy/status/2084392638506274876", "受け皿の人手・送迎が足りない"),
+        ("https://x.com/SIND_/status/2070325146372739488", "指導を担う報酬の問題"),
     ],
     "教員の働き方": [
-        "https://x.com/AtelierClutch/status/2082217044611834122",
-        "https://x.com/Namenotblanko/status/2082969614196093400",
+        ("https://x.com/AtelierClutch/status/2082217044611834122", "授業に専念できる環境を求める"),
+        ("https://x.com/Namenotblanko/status/2082969614196093400", "善意に頼らない仕組みを求める"),
     ],
     "教育的意義・機会": [
-        "https://x.com/ikuji_takuto/status/2083492685223215132",
-        "https://x.com/SvErfdCKdt52541/status/2068859859077124604",
+        ("https://x.com/ikuji_takuto/status/2083492685223215132", "学校教育としての部活を残したい"),
+        ("https://x.com/SvErfdCKdt52541/status/2068859859077124604", "開かれた地域クラブへ移したい"),
     ],
     "地域格差": [
-        "https://x.com/Davestaragues/status/2085511206278939102",
-        "https://x.com/mamamam4949/status/2069589990011818183",
+        ("https://x.com/Davestaragues/status/2085511206278939102", "地方で施設が取れない"),
+        ("https://x.com/mamamam4949/status/2069589990011818183", "都市部への環境偏在を懸念"),
     ],
     "制度・移行プロセス": [
-        "https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355",
-        "https://x.com/Goshiki2023/status/2078663825013031272",
+        ("https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355", "公費と負担金の仕組みが必要"),
+        ("https://x.com/Goshiki2023/status/2078663825013031272", "費用・場所・責任の設計が未解決"),
     ],
     "その他": [
-        "https://x.com/m727243023/status/2085525452777795616",
-        "https://x.com/dZYWrWnJodpAzEg/status/2085370360980201885",
+        ("https://x.com/m727243023/status/2085525452777795616", "吹奏楽は移行しにくいという経験"),
+        ("https://x.com/dZYWrWnJodpAzEg/status/2085370360980201885", "部活の役割と推薦制度を問い直す"),
     ],
+}
+
+ISSUE_STANCE_LABEL = {
+    "移行支持": "地域で担う形を進めたい",
+    "条件付き・改善要求": "条件を整えて進めたい",
+    "慎重・反対": "今のままでは進めにくい",
+    "中立・情報": "経験・情報を共有",
 }
 
 TIDE_CSS = """
@@ -420,23 +427,27 @@ def issue_panel(rows: list[dict[str, Any]]) -> str:
             for stance in STANCES if total and counts[stance]
         )
         legend = " ".join(
-            f"<span>{html.escape(STANCE_SHORT[stance])} {counts[stance]}</span>"
+            f"<span>{html.escape(ISSUE_STANCE_LABEL[stance])} {counts[stance]}</span>"
             for stance in STANCES if counts[stance]
         )
         usable = [row for row in group if classification(row).get("article_usable") and row.get("url")]
         candidates_by_url = {str(row["url"]): row for row in usable}
         candidates = [
-            candidates_by_url[url]
-            for url in REPRESENTATIVE_POST_URLS.get(issue, [])
+            (candidates_by_url[url], label)
+            for url, label in REPRESENTATIVE_POSTS.get(issue, [])
             if url in candidates_by_url
         ]
         fallback = sorted(
-            [row for row in usable if row not in candidates],
+            [row for row in usable if row not in [candidate[0] for candidate in candidates]],
             key=lambda row: float(classification(row).get("confidence", 0)),
             reverse=True,
         )
-        candidates = (candidates + fallback)[:2]
-        samples = "".join(tweet_sample(row) for row in candidates)
+        fallback_samples = [
+            (row, ISSUE_STANCE_LABEL.get(str(classification(row).get("stance")), "投稿の視点"))
+            for row in fallback
+        ]
+        candidates = (candidates + fallback_samples)[:2]
+        samples = "".join(tweet_sample(row, label) for row, label in candidates)
         blocks.append(
             '<article class="hermes-issue-card">'
             f'<div class="hermes-issue-head"><h3>{html.escape(issue)}</h3><span class="hermes-issue-count">{total}件</span></div>'
@@ -451,16 +462,16 @@ def issue_panel(rows: list[dict[str, Any]]) -> str:
     )
 
 
-def tweet_sample(row: dict[str, Any]) -> str:
+def tweet_sample(row: dict[str, Any], detail_label: str) -> str:
     """Render the same X embed used for representative posts on other themes."""
     url = html.escape(str(row.get("url") or ""), quote=True)
     handle = re.search(r"x\.com/([^/]+)/status/", str(row.get("url") or ""))
     account = f"@{handle.group(1)}" if handle else "この投稿"
-    stance = html.escape(STANCE_SHORT.get(str(classification(row).get("stance")), "中立"))
+    detail_label = html.escape(detail_label)
     summary = html.escape(str(classification(row).get("summary") or ""))
     return (
         '<div class="hermes-sample">'
-        f'<span class="hermes-sample-meta">{stance}</span>'
+        f'<span class="hermes-sample-meta">{detail_label}</span>'
         f'<p class="hermes-sample-summary">{summary}</p>'
         '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
         f'<a href="{url}">{account} の投稿をXで見る</a></blockquote>'
