@@ -114,6 +114,11 @@ def card_counts(theme: str, config: dict[str, Any], sample_file: str | None) -> 
                 # アリーナのセクター配列 ISSUES のキー。表示名が分類ラベルと
                 # 違うテーマ（例: データ「技術競争・推進」／表示「技術競争・AI推進」）がある。
                 "arena_label": str(card.get("arena_label") or "").strip(),
+                # 件数spanをカードの meta 行（論点名の直後）に置くテーマの目印。
+                # ここで落とすと sync_issue_counts.apply_counts がタイトル行に
+                # 別のspanを足し、meta行の古い件数が残る（2026-08-16、生成AIで
+                # 「419件」と「340件」が同じカードに並んだ）。
+                "display_label": str(card.get("display_label") or "").strip(),
             }
         )
     return resolved
