@@ -697,7 +697,6 @@
       .vote-stance-btn{min-width:unset;width:100%}
     }
 
-
 /* TIDE_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
 .update-dashboard>.stats{max-width:1180px;margin:0 auto 14px;gap:10px;background:transparent}
@@ -765,6 +764,14 @@
 }
 /* TIDE_CARD_END */
 
+/* BUKATSU_ENTRY_START */
+.bukatsu-entry{padding:34px min(6vw,72px) 20px;background:linear-gradient(180deg,#f4f8ff 0%,var(--bg) 100%)}
+.bukatsu-entry-inner{max-width:1180px;margin:0 auto;border-top:5px solid #315bd8;background:#fff;box-shadow:0 14px 36px rgba(29,78,216,.10)}
+.bukatsu-entry-heading{padding:24px 28px 18px;border-bottom:1px solid #dbe5f3}.bukatsu-entry-kicker{margin:0 0 7px;color:#315bd8;font-size:12px;font-weight:900;letter-spacing:.08em}.bukatsu-entry h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;color:#13223d}.bukatsu-entry-lead{max-width:820px;margin:12px 0 0;font-size:16px;line-height:1.8;color:#34445e}.bukatsu-entry-lead strong{color:#13223d}
+.bukatsu-entry-table{width:100%;border-collapse:collapse;font-size:14px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:16px 20px;text-align:left;vertical-align:top;border-bottom:1px solid #e3eaf3;line-height:1.65}.bukatsu-entry-table th{width:18%;color:#13223d;background:#f7faff;font-size:13px}.bukatsu-entry-table td:nth-child(2){width:34%;font-weight:800;color:#26364f}.bukatsu-entry-table td:nth-child(3){color:#596a82}.bukatsu-entry-note{margin:0;padding:16px 28px 20px;color:#596a82;font-size:13px;line-height:1.75}.bukatsu-entry-note strong{color:#26364f}
+@media(max-width:720px){.bukatsu-entry{padding:20px 16px 10px}.bukatsu-entry-heading{padding:20px 18px 14px}.bukatsu-entry-lead{font-size:15px}.bukatsu-entry-table,.bukatsu-entry-table tbody,.bukatsu-entry-table tr,.bukatsu-entry-table th,.bukatsu-entry-table td{display:block;width:auto}.bukatsu-entry-table tr{border-bottom:1px solid #e3eaf3;padding:14px 18px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:0;border:0}.bukatsu-entry-table th{margin-bottom:4px;background:none}.bukatsu-entry-table td:nth-child(2){margin-bottom:6px}.bukatsu-entry-note{padding:14px 18px 18px}}
+/* BUKATSU_ENTRY_END */
+
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
@@ -801,7 +808,7 @@
       <h1>部活動の地域移行は必要？賛成・反対と制度の課題</h1>
       <p class="question-line">教員の限界を地域で支える改革か、家庭負担と地域格差を広げる移行か？</p>
       <p class="lead">収集したSNS投稿のうち、分析対象となった意見689件をAIが7つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
-<div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと"><header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul><li>Hermesで累計850件を分類し、関連841件のうち意見投稿は689件。</li><li>最多論点は「教員の働き方」212件。最多スタンスは「支持」315件。</li><li>今回更新では「教員の働き方」が前回追加分より+4.9ポイント増加。</li></ul></div>
+
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
@@ -816,162 +823,29 @@
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
-<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
-      <article class="stat insight-stat">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
-        <strong class="insight-value">689<small>件</small></strong>
-        <p class="insight-note">関連841件から、意見が読み取れる投稿を集計</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="debate">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">📣</span><span class="insight-label">最も多い立場</span></div>
-        <strong class="insight-value">移行支持 46%</strong>
-        <p class="insight-note">315件。教員負担の軽減を重く見る声が中心</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:46%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="topic">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
-        <strong class="insight-value">教員の働き方 212<small>件</small></strong>
-        <p class="insight-note">長時間労働と顧問負担が議論の中心</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:31%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="option">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">条件付き・第三案</span></div>
-        <strong class="insight-value">改善条件あり 19%</strong>
-        <p class="insight-note">128件。費用、指導者、受け皿を整えれば支持</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:19%"></i></div>
-      </article>
-    </section>
-    <section class="update-dashboard" aria-label="更新データと世論の潮目"><!-- TIDE_CARD_START -->
-<section class="tide-card" id="bukatsu-tide-widget" aria-label="世論の潮目 前回更新と今回更新の比較">
-  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
-    <div class="tide-widget-tabs">
-      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
-      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
-    </div>
-    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
+<!-- BUKATSU_ENTRY_START -->
+<section class="bukatsu-entry" aria-labelledby="bukatsu-entry-title">
+  <div class="bukatsu-entry-inner">
+    <header class="bukatsu-entry-heading">
+      <p class="bukatsu-entry-kicker">判断の前に確かめること</p>
+      <h2 id="bukatsu-entry-title">学校の外へ出した後、だれが続けるか</h2>
+      <p class="bukatsu-entry-lead">地域展開は、活動場所だけを学校の外へ変える話ではありません。<strong>学校が担ってきた運営・費用・人材・安全の責任を、地域の誰が引き受ける設計か</strong>を確認してから、意見の分布を読みます。</p>
+    </header>
+    <table class="bukatsu-entry-table">
+      <thead><tr><th scope="col">確認する機能</th><th scope="col">まず見る問い</th><th scope="col">国のガイドラインが示す担い手・条件</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">運営の責任</th><td>方針を決め、相談を受けるのは誰か</td><td>市区町村等が改革の責任主体として企画・調整を行い、運営団体・実施主体との役割を整理する。</td></tr>
+        <tr><th scope="row">費用</th><td>会費と公的負担を、誰がどの基準で決めるか</td><td>受益者負担と公的負担のバランスを、地域の実情に応じて検討する。</td></tr>
+        <tr><th scope="row">参加できる条件</th><td>指導者、活動場所、移動手段は確保されているか</td><td>市区町村等と運営団体等が、指導者・場所・移動手段を確保することが課題として示されている。</td></tr>
+        <tr><th scope="row">安全と事故</th><td>事故が起きた時、どの主体が対応・補償するか</td><td>運営主体や事故の原因により、賠償責任主体と保険の扱いが異なる。</td></tr>
+      </tbody>
+    </table>
+    <p class="bukatsu-entry-note"><strong>このページで未確認のこと：</strong>自治体ごとに上の条件がどこまで整っているかは、全国比較できる資料を確認できていません。ここでは「できている地域／できていない地域」を断定せず、次のSNS投稿で、どの条件が論点になっているかを見ます。</p>
   </div>
-  <div class="tide-widget-summary" aria-live="polite">
-    <span class="tide-widget-period">8月8日 → 8月14日</span>
-    <strong data-tide-headline>条件・改善要求の割合が4.3ポイント増加</strong>
-  </div>
-  <div class="tide-slope-wrap">
-    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="tide-slope-title tide-slope-desc">
-      <title id="tide-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="tide-slope-desc">前回追加分80件と今回追加分90件の構成比を比較します。</desc>
-      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月8日</text>
-      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 8月14日</text>
-      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
-      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
-      <g data-tide-series></g>
-    </svg>
-  </div>
-  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：前回追加分 80件／今回追加分 90件。同じ検索語セットで取得した意見投稿をAIで再分類しています。投稿サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
 </section>
+<!-- BUKATSU_ENTRY_END -->
+<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2><span>Hermesによる論点・スタンス分類</span></div><div class="hermes-issue-list"><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>費用・家庭負担</h3><span class="hermes-issue-count">67件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:17.91%"></span><span class="conditional" style="width:31.34%"></span><span class="con" style="width:46.27%"></span><span class="neutral" style="width:4.48%"></span></div><div class="hermes-legend"><span>支持 12</span> <span>条件付き 21</span> <span>慎重・反対 31</span> <span>中立 3</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 月額8000円が家計を圧迫し反対的 <a href="https://x.com/TheMirageof0/status/2070621781757726855" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 市税で月会費を補助し地域移行を支持 <a href="https://x.com/TheMirageof0/status/2070624074506863002" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>受け皿・指導者</h3><span class="hermes-issue-count">95件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:31.58%"></span><span class="conditional" style="width:24.21%"></span><span class="con" style="width:42.11%"></span><span class="neutral" style="width:2.11%"></span></div><div class="hermes-legend"><span>支持 30</span> <span>条件付き 23</span> <span>慎重・反対 40</span> <span>中立 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>条件付き</strong> 指導者報酬が最低賃金並みで強く不満 <a href="https://x.com/SIND_/status/2070325146372739488" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>条件付き</strong> 安い謝礼では指導者不足は当然だと懸念 <a href="https://x.com/774nyannyan/status/2070491362882150454" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教員の働き方</h3><span class="hermes-issue-count">212件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:60.38%"></span><span class="conditional" style="width:17.45%"></span><span class="con" style="width:20.28%"></span><span class="neutral" style="width:1.89%"></span></div><div class="hermes-legend"><span>支持 128</span> <span>条件付き 37</span> <span>慎重・反対 43</span> <span>中立 4</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 教員志望の動機減少を懸念し地域移行に反対 <a href="https://x.com/yamako_10/status/2061588627088634365" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 生徒自主性を奪う強制顧問をデータで拒否、負担軽減を支持 <a href="https://x.com/yoshiki20260530/status/2067198495979978851" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教育的意義・機会</h3><span class="hermes-issue-count">131件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:43.51%"></span><span class="conditional" style="width:6.87%"></span><span class="con" style="width:48.09%"></span><span class="neutral" style="width:1.53%"></span></div><div class="hermes-legend"><span>支持 57</span> <span>条件付き 9</span> <span>慎重・反対 63</span> <span>中立 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活を学校から駆逐すべき、子育て責任放棄する親を批判 <a href="https://x.com/hagakikatteren/status/2064823846402933129" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 閉鎖的な部活を廃し地域クラブへ移行すべき <a href="https://x.com/SvErfdCKdt52541/status/2068859859077124604" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>地域格差</h3><span class="hermes-issue-count">3件</span></div><div class="hermes-stance-bar"><span class="con" style="width:100.00%"></span></div><div class="hermes-legend"><span>慎重・反対 3</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 田舎町で移行後の施設予約が既存クラブに阻害された <a href="https://x.com/Davestaragues/status/2085511206278939102" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>慎重・反対</strong> 地域移行で野球の育成環境が悪化し都市部に偏在すると懸念 <a href="https://x.com/mamamam4949/status/2069589990011818183" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>制度・移行プロセス</h3><span class="hermes-issue-count">146件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:48.63%"></span><span class="conditional" style="width:25.34%"></span><span class="con" style="width:19.86%"></span><span class="neutral" style="width:6.16%"></span></div><div class="hermes-legend"><span>支持 71</span> <span>条件付き 37</span> <span>慎重・反対 29</span> <span>中立 9</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活動は廃止すべきと主張 <a href="https://x.com/kosatsusokuho/status/2085101033441710351" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 学校部活は持続不可能なので全面廃止すべき <a href="https://x.com/Baidalka/status/2084894292188008617" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>その他</h3><span class="hermes-issue-count">35件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:48.57%"></span><span class="conditional" style="width:2.86%"></span><span class="con" style="width:22.86%"></span><span class="neutral" style="width:25.71%"></span></div><div class="hermes-legend"><span>支持 17</span> <span>条件付き 1</span> <span>慎重・反対 8</span> <span>中立 9</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活は廃止で良いと支持 <a href="https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 部活廃止は善であると主張 <a href="https://x.com/kyusaikatsudou/status/2070522219424575788" target="_blank" rel="noopener">投稿を見る</a></div></div></article></div></section>
 
-<script>
-(() => {
-  const root = document.getElementById("bukatsu-tide-widget");
-  if (!root) return;
-  const datasets = {"stance":{"max":50,"headline":"条件・改善要求の割合が4.3ポイント増加","rows":[{"label":"移行支持","previous":43.8,"current":41.1},{"label":"条件・改善要求","previous":21.2,"current":25.6},{"label":"慎重・反対","previous":30.0,"current":32.2}]},"issue":{"max":30,"headline":"教員の働き方が4.9ポイント増加","rows":[{"label":"その他","previous":10.0,"current":3.3},{"label":"教員の働き方","previous":26.2,"current":31.1},{"label":"費用・家庭負担","previous":11.2,"current":14.4},{"label":"受け皿・指導者","previous":7.5,"current":10.0}]}};
-  const svgGroup = root.querySelector("[data-tide-series]");
-  const mobileRows = root.querySelector("[data-tide-mobile]");
-  const headline = root.querySelector("[data-tide-headline]");
-  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
-  const replayButton = root.querySelector("[data-tide-replay]");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mode = "stance";
-  let animationFrame = 0;
-  let hasAutoPlayed = false;
-
-  const yFor = (value, max) => 310 - (value / max) * 235;
-  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
-  const svgElement = (name, attrs, text) => {
-    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
-    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
-    if (text !== undefined) el.textContent = text;
-    return el;
-  };
-
-  function draw(progress = 1) {
-    const data = datasets[mode];
-    svgGroup.replaceChildren();
-    mobileRows.replaceChildren();
-
-    data.rows.forEach((row, index) => {
-      const y1 = yFor(row.previous, data.max);
-      const y2Target = yFor(row.current, data.max);
-      const y2 = y1 + (y2Target - y1) * progress;
-      const shown = row.previous + (row.current - row.previous) * progress;
-      const shownDelta = shown - row.previous;
-      const seriesClass = `series-${index}`;
-
-      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2+17, class:"tide-slope-value"}, signed(shownDelta)));
-
-      const mobile = document.createElement("article");
-      mobile.className = "tide-mobile-row";
-      mobile.innerHTML =
-        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
-        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
-        `<div class="tide-mobile-bars" aria-hidden="true">` +
-          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
-          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
-        `</div>`;
-      mobileRows.appendChild(mobile);
-    });
-  }
-
-  function animate() {
-    cancelAnimationFrame(animationFrame);
-    if (reducedMotion) {
-      draw(1);
-      return;
-    }
-    const startedAt = performance.now();
-    const duration = 900;
-    const step = now => {
-      const raw = Math.min(1, (now - startedAt) / duration);
-      draw(1 - Math.pow(1 - raw, 3));
-      if (raw < 1) animationFrame = requestAnimationFrame(step);
-    };
-    animationFrame = requestAnimationFrame(step);
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-    modeButtons.forEach(button => {
-      const selected = button.dataset.tideMode === mode;
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    headline.textContent = datasets[mode].headline;
-    animate();
-  }
-
-  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
-  replayButton.addEventListener("click", animate);
-  draw(1);
-
-  if ("IntersectionObserver" in window && !reducedMotion) {
-    const observer = new IntersectionObserver(entries => {
-      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
-        hasAutoPlayed = true;
-        animate();
-        observer.disconnect();
-      }
-    }, {threshold: 0.35});
-    observer.observe(root);
-  }
-})();
-</script>
-
-<!-- TIDE_CARD_END --></section>
 <section class="panel explainer-section" id="explainer-section">
 <div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから</span></div>
 <p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
@@ -1188,7 +1062,163 @@
 <div id="sm-tooltip"></div>
 </div>
 </section>
+<div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと"><header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul><li>Hermesで累計850件を分類し、関連841件のうち意見投稿は689件。</li><li>最多論点は「教員の働き方」212件。最多スタンスは「支持」315件。</li><li>今回更新では「教員の働き方」が前回追加分より+4.9ポイント増加。</li></ul></div>
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+      <article class="stat insight-stat">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+        <strong class="insight-value">689<small>件</small></strong>
+        <p class="insight-note">関連841件から、意見が読み取れる投稿を集計</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="debate">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">📣</span><span class="insight-label">最も多い立場</span></div>
+        <strong class="insight-value">移行支持 46%</strong>
+        <p class="insight-note">315件。教員負担の軽減を重く見る声が中心</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:46%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="topic">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+        <strong class="insight-value">教員の働き方 212<small>件</small></strong>
+        <p class="insight-note">長時間労働と顧問負担が議論の中心</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:31%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="option">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">条件付き・第三案</span></div>
+        <strong class="insight-value">改善条件あり 19%</strong>
+        <p class="insight-note">128件。費用、指導者、受け皿を整えれば支持</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:19%"></i></div>
+      </article>
+    </section>
+<section class="update-dashboard" aria-label="更新データと世論の潮目"><!-- TIDE_CARD_START -->
+<section class="tide-card" id="bukatsu-tide-widget" aria-label="世論の潮目 前回更新と今回更新の比較">
+  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
+    <div class="tide-widget-tabs">
+      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
+      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
+    </div>
+    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
+  </div>
+  <div class="tide-widget-summary" aria-live="polite">
+    <span class="tide-widget-period">8月8日 → 8月14日</span>
+    <strong data-tide-headline>条件・改善要求の割合が4.3ポイント増加</strong>
+  </div>
+  <div class="tide-slope-wrap">
+    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="tide-slope-title tide-slope-desc">
+      <title id="tide-slope-title">前回と今回の構成比を結ぶグラフ</title>
+      <desc id="tide-slope-desc">前回追加分80件と今回追加分90件の構成比を比較します。</desc>
+      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月8日</text>
+      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 8月14日</text>
+      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
+      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
+      <g data-tide-series></g>
+    </svg>
+  </div>
+  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
+  <p class="tide-widget-note">比較対象：前回追加分 80件／今回追加分 90件。同じ検索語セットで取得した意見投稿をAIで再分類しています。投稿サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
+</section>
 
+<script>
+(() => {
+  const root = document.getElementById("bukatsu-tide-widget");
+  if (!root) return;
+  const datasets = {"stance":{"max":50,"headline":"条件・改善要求の割合が4.3ポイント増加","rows":[{"label":"移行支持","previous":43.8,"current":41.1},{"label":"条件・改善要求","previous":21.2,"current":25.6},{"label":"慎重・反対","previous":30.0,"current":32.2}]},"issue":{"max":30,"headline":"教員の働き方が4.9ポイント増加","rows":[{"label":"その他","previous":10.0,"current":3.3},{"label":"教員の働き方","previous":26.2,"current":31.1},{"label":"費用・家庭負担","previous":11.2,"current":14.4},{"label":"受け皿・指導者","previous":7.5,"current":10.0}]}};
+  const svgGroup = root.querySelector("[data-tide-series]");
+  const mobileRows = root.querySelector("[data-tide-mobile]");
+  const headline = root.querySelector("[data-tide-headline]");
+  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
+  const replayButton = root.querySelector("[data-tide-replay]");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let mode = "stance";
+  let animationFrame = 0;
+  let hasAutoPlayed = false;
+
+  const yFor = (value, max) => 310 - (value / max) * 235;
+  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
+  const svgElement = (name, attrs, text) => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
+    if (text !== undefined) el.textContent = text;
+    return el;
+  };
+
+  function draw(progress = 1) {
+    const data = datasets[mode];
+    svgGroup.replaceChildren();
+    mobileRows.replaceChildren();
+
+    data.rows.forEach((row, index) => {
+      const y1 = yFor(row.previous, data.max);
+      const y2Target = yFor(row.current, data.max);
+      const y2 = y1 + (y2Target - y1) * progress;
+      const shown = row.previous + (row.current - row.previous) * progress;
+      const shownDelta = shown - row.previous;
+      const seriesClass = `series-${index}`;
+
+      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2+17, class:"tide-slope-value"}, signed(shownDelta)));
+
+      const mobile = document.createElement("article");
+      mobile.className = "tide-mobile-row";
+      mobile.innerHTML =
+        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
+        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
+        `<div class="tide-mobile-bars" aria-hidden="true">` +
+          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
+          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
+        `</div>`;
+      mobileRows.appendChild(mobile);
+    });
+  }
+
+  function animate() {
+    cancelAnimationFrame(animationFrame);
+    if (reducedMotion) {
+      draw(1);
+      return;
+    }
+    const startedAt = performance.now();
+    const duration = 900;
+    const step = now => {
+      const raw = Math.min(1, (now - startedAt) / duration);
+      draw(1 - Math.pow(1 - raw, 3));
+      if (raw < 1) animationFrame = requestAnimationFrame(step);
+    };
+    animationFrame = requestAnimationFrame(step);
+  }
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    modeButtons.forEach(button => {
+      const selected = button.dataset.tideMode === mode;
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    headline.textContent = datasets[mode].headline;
+    animate();
+  }
+
+  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
+  replayButton.addEventListener("click", animate);
+  draw(1);
+
+  if ("IntersectionObserver" in window && !reducedMotion) {
+    const observer = new IntersectionObserver(entries => {
+      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
+        hasAutoPlayed = true;
+        animate();
+        observer.disconnect();
+      }
+    }, {threshold: 0.35});
+    observer.observe(root);
+  }
+})();
+</script>
+
+<!-- TIDE_CARD_END --></section>
 
 <script>
 const SM_RAW = [
@@ -2178,7 +2208,7 @@ const SM_RAW = [
 })();
 </script>
 
-    <section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2><span>Hermesによる論点・スタンス分類</span></div><div class="hermes-issue-list"><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>費用・家庭負担</h3><span class="hermes-issue-count">67件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:17.91%"></span><span class="conditional" style="width:31.34%"></span><span class="con" style="width:46.27%"></span><span class="neutral" style="width:4.48%"></span></div><div class="hermes-legend"><span>支持 12</span> <span>条件付き 21</span> <span>慎重・反対 31</span> <span>中立 3</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 月額8000円が家計を圧迫し反対的 <a href="https://x.com/TheMirageof0/status/2070621781757726855" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 市税で月会費を補助し地域移行を支持 <a href="https://x.com/TheMirageof0/status/2070624074506863002" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>受け皿・指導者</h3><span class="hermes-issue-count">95件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:31.58%"></span><span class="conditional" style="width:24.21%"></span><span class="con" style="width:42.11%"></span><span class="neutral" style="width:2.11%"></span></div><div class="hermes-legend"><span>支持 30</span> <span>条件付き 23</span> <span>慎重・反対 40</span> <span>中立 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>条件付き</strong> 指導者報酬が最低賃金並みで強く不満 <a href="https://x.com/SIND_/status/2070325146372739488" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>条件付き</strong> 安い謝礼では指導者不足は当然だと懸念 <a href="https://x.com/774nyannyan/status/2070491362882150454" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教員の働き方</h3><span class="hermes-issue-count">212件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:60.38%"></span><span class="conditional" style="width:17.45%"></span><span class="con" style="width:20.28%"></span><span class="neutral" style="width:1.89%"></span></div><div class="hermes-legend"><span>支持 128</span> <span>条件付き 37</span> <span>慎重・反対 43</span> <span>中立 4</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 教員志望の動機減少を懸念し地域移行に反対 <a href="https://x.com/yamako_10/status/2061588627088634365" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 生徒自主性を奪う強制顧問をデータで拒否、負担軽減を支持 <a href="https://x.com/yoshiki20260530/status/2067198495979978851" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教育的意義・機会</h3><span class="hermes-issue-count">131件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:43.51%"></span><span class="conditional" style="width:6.87%"></span><span class="con" style="width:48.09%"></span><span class="neutral" style="width:1.53%"></span></div><div class="hermes-legend"><span>支持 57</span> <span>条件付き 9</span> <span>慎重・反対 63</span> <span>中立 2</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活を学校から駆逐すべき、子育て責任放棄する親を批判 <a href="https://x.com/hagakikatteren/status/2064823846402933129" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 閉鎖的な部活を廃し地域クラブへ移行すべき <a href="https://x.com/SvErfdCKdt52541/status/2068859859077124604" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>地域格差</h3><span class="hermes-issue-count">3件</span></div><div class="hermes-stance-bar"><span class="con" style="width:100.00%"></span></div><div class="hermes-legend"><span>慎重・反対 3</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>慎重・反対</strong> 田舎町で移行後の施設予約が既存クラブに阻害された <a href="https://x.com/Davestaragues/status/2085511206278939102" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>慎重・反対</strong> 地域移行で野球の育成環境が悪化し都市部に偏在すると懸念 <a href="https://x.com/mamamam4949/status/2069589990011818183" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>制度・移行プロセス</h3><span class="hermes-issue-count">146件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:48.63%"></span><span class="conditional" style="width:25.34%"></span><span class="con" style="width:19.86%"></span><span class="neutral" style="width:6.16%"></span></div><div class="hermes-legend"><span>支持 71</span> <span>条件付き 37</span> <span>慎重・反対 29</span> <span>中立 9</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活動は廃止すべきと主張 <a href="https://x.com/kosatsusokuho/status/2085101033441710351" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 学校部活は持続不可能なので全面廃止すべき <a href="https://x.com/Baidalka/status/2084894292188008617" target="_blank" rel="noopener">投稿を見る</a></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>その他</h3><span class="hermes-issue-count">35件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:48.57%"></span><span class="conditional" style="width:2.86%"></span><span class="con" style="width:22.86%"></span><span class="neutral" style="width:25.71%"></span></div><div class="hermes-legend"><span>支持 17</span> <span>条件付き 1</span> <span>慎重・反対 8</span> <span>中立 9</span></div><div class="hermes-samples"><div class="hermes-sample"><strong>支持</strong> 部活は廃止で良いと支持 <a href="https://x.com/VrJQQQDQJKmiLzY/status/2069782817077424261" target="_blank" rel="noopener">投稿を見る</a></div><div class="hermes-sample"><strong>支持</strong> 部活廃止は善であると主張 <a href="https://x.com/kyusaikatsudou/status/2070522219424575788" target="_blank" rel="noopener">投稿を見る</a></div></div></article></div></section><section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">少子化と教員の長時間労働を背景に、中学校の部活動を学校から地域のスポーツクラブや民間団体へ移す「地域移行」が国の方針として進められています。まず休日の部活動から段階的に移行を進める計画で、教員の負担軽減と、少子化で単独では部活動を維持できない学校の受け皿づくりが狙いです。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「教員の働き方改革に不可欠」「専門的な指導を受けられる機会が増える」という声があります。一方で、「地域に受け皿となるクラブや指導者がいない」「会費負担が増え、家庭の経済力で子どもの機会に格差が生まれる」「学校の部活動が持っていた教育的な意義が失われる」といった懸念も根強く、特に都市部と地方の環境差が大きな論点になっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">移行の担い手や費用負担のあり方は自治体ごとに手探りの状態が続いており、現場の教員・保護者・地域それぞれの立場から異なる意見がSNS上でも交わされています。</p></section>
+    <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">少子化と教員の長時間労働を背景に、中学校の部活動を学校から地域のスポーツクラブや民間団体へ移す「地域移行」が国の方針として進められています。まず休日の部活動から段階的に移行を進める計画で、教員の負担軽減と、少子化で単独では部活動を維持できない学校の受け皿づくりが狙いです。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「教員の働き方改革に不可欠」「専門的な指導を受けられる機会が増える」という声があります。一方で、「地域に受け皿となるクラブや指導者がいない」「会費負担が増え、家庭の経済力で子どもの機会に格差が生まれる」「学校の部活動が持っていた教育的な意義が失われる」といった懸念も根強く、特に都市部と地方の環境差が大きな論点になっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">移行の担い手や費用負担のあり方は自治体ごとに手探りの状態が続いており、現場の教員・保護者・地域それぞれの立場から異なる意見がSNS上でも交わされています。</p></section>
     <section class="panel conflict-panel"><div class="panel-title"><h2>Hermes分類サマリー</h2><span>意見投稿のみ</span></div>
 <div class="hermes-summary-grid">
 <article class="hermes-summary-card"><div class="axis-kicker">最多スタンス</div><h3>支持</h3><div class="axis-count">315</div><p>支持・条件付き・慎重反対を分けて集計しています。</p></article>

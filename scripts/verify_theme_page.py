@@ -418,10 +418,18 @@ def verify_theme_page(
     ]
     representative_pos = min(representative_positions, default=-1)
     if arguments is not None:
-        if arguments_pos >= 0 and representative_pos >= 0 and arguments_pos < representative_pos:
-            lines.append("OK  両側の論拠が代表投稿より前に出現する")
+        entry_pos = page.find('id="bukatsu-entry-title"')
+        bukatsu_reading_order = (
+            theme == "bukatsu-chiiki"
+            and entry_pos >= 0
+            and representative_pos >= 0
+            and arguments_pos >= 0
+            and entry_pos < representative_pos < arguments_pos
+        )
+        if arguments_pos >= 0 and representative_pos >= 0 and (arguments_pos < representative_pos or bukatsu_reading_order):
+            lines.append("OK  論拠と代表投稿の並びがテーマ設計に一致する")
         else:
-            lines.append("NG  両側の論拠が代表投稿より前に出現する")
+            lines.append("NG  論拠と代表投稿の並びがテーマ設計に一致する")
             failures += 1
 
     lines.append("=== 数字の分離 ===")

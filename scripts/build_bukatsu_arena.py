@@ -30,6 +30,122 @@ CONFIG_PATH = ROOT / "configs" / "bukatsu-chiiki-reaction-map.json"
 
 ISSUE_MAP = ISSUE_INDEX
 
+
+# === テーマ固有の判断入口 ===
+# 「地域へ移すか」の二択より前に、学校が担ってきた機能を誰が引き受ける
+# 設計なのかを確認できるようにする。自治体別の実施状況はこのページのデータ
+# では確認していないため、達成状況を推測して表示しない。
+ENTRY_CSS = """
+/* BUKATSU_ENTRY_START */
+.bukatsu-entry{padding:34px min(6vw,72px) 20px;background:linear-gradient(180deg,#f4f8ff 0%,var(--bg) 100%)}
+.bukatsu-entry-inner{max-width:1180px;margin:0 auto;border-top:5px solid #315bd8;background:#fff;box-shadow:0 14px 36px rgba(29,78,216,.10)}
+.bukatsu-entry-heading{padding:24px 28px 18px;border-bottom:1px solid #dbe5f3}.bukatsu-entry-kicker{margin:0 0 7px;color:#315bd8;font-size:12px;font-weight:900;letter-spacing:.08em}.bukatsu-entry h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;color:#13223d}.bukatsu-entry-lead{max-width:820px;margin:12px 0 0;font-size:16px;line-height:1.8;color:#34445e}.bukatsu-entry-lead strong{color:#13223d}
+.bukatsu-entry-table{width:100%;border-collapse:collapse;font-size:14px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:16px 20px;text-align:left;vertical-align:top;border-bottom:1px solid #e3eaf3;line-height:1.65}.bukatsu-entry-table th{width:18%;color:#13223d;background:#f7faff;font-size:13px}.bukatsu-entry-table td:nth-child(2){width:34%;font-weight:800;color:#26364f}.bukatsu-entry-table td:nth-child(3){color:#596a82}.bukatsu-entry-note{margin:0;padding:16px 28px 20px;color:#596a82;font-size:13px;line-height:1.75}.bukatsu-entry-note strong{color:#26364f}
+@media(max-width:720px){.bukatsu-entry{padding:20px 16px 10px}.bukatsu-entry-heading{padding:20px 18px 14px}.bukatsu-entry-lead{font-size:15px}.bukatsu-entry-table,.bukatsu-entry-table tbody,.bukatsu-entry-table tr,.bukatsu-entry-table th,.bukatsu-entry-table td{display:block;width:auto}.bukatsu-entry-table tr{border-bottom:1px solid #e3eaf3;padding:14px 18px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:0;border:0}.bukatsu-entry-table th{margin-bottom:4px;background:none}.bukatsu-entry-table td:nth-child(2){margin-bottom:6px}.bukatsu-entry-note{padding:14px 18px 18px}}
+/* BUKATSU_ENTRY_END */
+"""
+
+ENTRY_SECTION = """<!-- BUKATSU_ENTRY_START -->
+<section class="bukatsu-entry" aria-labelledby="bukatsu-entry-title">
+  <div class="bukatsu-entry-inner">
+    <header class="bukatsu-entry-heading">
+      <p class="bukatsu-entry-kicker">判断の前に確かめること</p>
+      <h2 id="bukatsu-entry-title">学校の外へ出した後、だれが続けるか</h2>
+      <p class="bukatsu-entry-lead">地域展開は、活動場所だけを学校の外へ変える話ではありません。<strong>学校が担ってきた運営・費用・人材・安全の責任を、地域の誰が引き受ける設計か</strong>を確認してから、意見の分布を読みます。</p>
+    </header>
+    <table class="bukatsu-entry-table">
+      <thead><tr><th scope="col">確認する機能</th><th scope="col">まず見る問い</th><th scope="col">国のガイドラインが示す担い手・条件</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">運営の責任</th><td>方針を決め、相談を受けるのは誰か</td><td>市区町村等が改革の責任主体として企画・調整を行い、運営団体・実施主体との役割を整理する。</td></tr>
+        <tr><th scope="row">費用</th><td>会費と公的負担を、誰がどの基準で決めるか</td><td>受益者負担と公的負担のバランスを、地域の実情に応じて検討する。</td></tr>
+        <tr><th scope="row">参加できる条件</th><td>指導者、活動場所、移動手段は確保されているか</td><td>市区町村等と運営団体等が、指導者・場所・移動手段を確保することが課題として示されている。</td></tr>
+        <tr><th scope="row">安全と事故</th><td>事故が起きた時、どの主体が対応・補償するか</td><td>運営主体や事故の原因により、賠償責任主体と保険の扱いが異なる。</td></tr>
+      </tbody>
+    </table>
+    <p class="bukatsu-entry-note"><strong>このページで未確認のこと：</strong>自治体ごとに上の条件がどこまで整っているかは、全国比較できる資料を確認できていません。ここでは「できている地域／できていない地域」を断定せず、次のSNS投稿で、どの条件が論点になっているかを見ます。</p>
+  </div>
+</section>
+<!-- BUKATSU_ENTRY_END -->"""
+
+
+def _section_end(html: str, start: int) -> int:
+    """Return the end offset of a section, allowing nested sections."""
+    depth = 0
+    for match in re.finditer(r"</?section\b[^>]*>", html[start:]):
+        token = match.group(0)
+        if token.startswith("</"):
+            depth -= 1
+            if depth == 0:
+                return start + match.end()
+        else:
+            depth += 1
+    raise ValueError("section closing tag not found")
+
+
+def apply_bukatsu_entry(html: str) -> str:
+    """Keep the theme-specific entry and the first reading sequence idempotent."""
+    if "/* BUKATSU_ENTRY_START */" in html:
+        html = re.sub(r"/\* BUKATSU_ENTRY_START \*/.*?/\* BUKATSU_ENTRY_END \*/", ENTRY_CSS.strip(), html, flags=re.DOTALL)
+    else:
+        html = html.replace("</style>", ENTRY_CSS + "\n</style>", 1)
+
+    html = re.sub(r"\n?<!-- BUKATSU_ENTRY_START -->.*?<!-- BUKATSU_ENTRY_END -->", "", html, flags=re.DOTALL)
+
+    # The common data-provenance block must remain before the first numerical
+    # display, even after the numerical cards themselves have been moved later.
+    conditions_match = re.search(
+        r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
+        html,
+        flags=re.DOTALL,
+    )
+    if not conditions_match:
+        raise ValueError("research conditions marker not found")
+    conditions = conditions_match.group(0)
+    html = html[:conditions_match.start()] + html[conditions_match.end():]
+    main_end = html.find("<main>") + len("<main>")
+    if main_end < len("<main>"):
+        raise ValueError("main element not found")
+    html = html[:main_end] + "\n\n" + conditions + html[main_end:]
+
+    # The sample-count cards and the update comparison are useful after readers
+    # have seen the material, not as the premise for their decision.
+    moved_blocks: list[str] = []
+    for marker in ('<section class="stats insight-stats"', '<section class="update-dashboard"'):
+        start = html.find(marker)
+        if start >= 0:
+            end = _section_end(html, start)
+            moved_blocks.append(html[start:end])
+            html = html[:start] + html[end:]
+
+    # Put the actual classified issue voices immediately after the entry. This
+    # replaces the generic six-card primer as the next reading step.
+    conflict_start = html.find('<section class="panel conflict-panel">')
+    conflict = ""
+    if conflict_start >= 0:
+        conflict_end = _section_end(html, conflict_start)
+        conflict = html[conflict_start:conflict_end]
+        html = html[:conflict_start] + html[conflict_end:]
+
+    conditions_end = html.find("<!-- RESEARCH_CONDITIONS_END -->")
+    conditions_end = html.find("\n", conditions_end)
+    html = html[:conditions_end] + "\n" + ENTRY_SECTION + ("\n" + conflict if conflict else "") + html[conditions_end:]
+
+    # Do not prime readers with the numerical conclusion in the hero. Retain it
+    # as a later summary, after the response map.
+    summary_match = re.search(r'<div class="thirty-summary".*?</div>', html, flags=re.DOTALL)
+    summary = summary_match.group(0) if summary_match else ""
+    if summary_match:
+        html = html[:summary_match.start()] + html[summary_match.end():]
+
+    arena_start = html.find('<section class="arena-section" id="stance-map-section">')
+    if arena_start < 0:
+        raise ValueError("stance map section not found")
+    arena_end = _section_end(html, arena_start)
+    after_arena = "\n" + summary + ("\n" + "\n".join(moved_blocks) if moved_blocks else "")
+    html = html[:arena_end] + after_arena + html[arena_end:]
+    html = re.sub(r"\n[ \t]+\n", "\n\n", html)
+    return re.sub(r"\n{3,}", "\n\n", html)
+
 # === SM_RAW 生成 ===
 def gen_sm_raw():
     data = json.loads(JSON_PATH.read_text())
@@ -519,7 +635,7 @@ def transform(html: str) -> str:
         config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
         config["research_conditions"] = load_research_conditions(CURRENT_JSON_PATH)
         rows = json.loads(CURRENT_JSON_PATH.read_text(encoding="utf-8"))
-        return update_existing_html(html, rows, config)
+        return apply_bukatsu_entry(update_existing_html(html, rows, config))
 
     # 1. Add CSS before </style>
     if "/* === SNS反応マップ === */" not in html:
@@ -587,7 +703,7 @@ def transform(html: str) -> str:
     # 4. Remove old vote2d.js script tag and its inline script
     html = html.replace('<script src="vote2d.js?v=10"></script>\n', '')
 
-    return html
+    return apply_bukatsu_entry(html)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
