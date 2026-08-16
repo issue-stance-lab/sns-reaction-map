@@ -91,10 +91,10 @@ themes:
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
     page_update_mode: manual    # 冒頭3セクションのみ scripts/build_bike_process_sections.py で再生成可
-    collect_at: 2026-08-17 # 2026-08-10収集の新規153件（50件以上）のため今回だけ7日後
+    collect_at: 2026-08-24 # 2026-08-10収集の新規153件（50件以上）のため今回だけ7日後
     refresh_at:
     collect_mode: scheduled
-    last_refresh_attempt_at: 2026-08-10
+    last_refresh_attempt_at: 2026-08-17
     published_at: 2026-06-28
     updated_at: 2026-07-26
     collect_delta: 72
@@ -197,8 +197,10 @@ themes:
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
     published: done      # ポータル回遊カード復帰・sitemap掲載済み
     page_update_mode: migration # upgrade_nickname_arena.js は実行のたびに空行が1行増え、SEO meta を巻き戻す
-    collect_at: 2026-08-17
+    collect_at: 2026-08-31
     refresh_at:
+    collect_mode: scheduled
+    last_refresh_attempt_at: 2026-08-17
     published_at: 2026-06-24
     updated_at: 2026-07-26
     collect_delta: 45
@@ -322,10 +324,10 @@ themes:
     manga_img: partial   # ヒーロー1枚+論点別wide6枚 done（2026-07-29、WebP変換・HTML反映済み）。漫画・投票画像は未生成
     published: done      # ポータル掲載・sitemap登録・回遊カード・SEO登録済み（2026-07-29）
     page_update_mode: migration # build_consumption_tax_page.py は生成済みページに再実行できない（ValueError）
-    collect_at: 2026-08-17
+    collect_at: 2026-08-24
     refresh_at:
     collect_mode: scheduled
-    last_refresh_attempt_at: 2026-08-10
+    last_refresh_attempt_at: 2026-08-17
     published_at: 2026-07-29
     updated_at: 2026-07-29
     collect_delta: 667
