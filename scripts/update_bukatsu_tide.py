@@ -411,7 +411,7 @@ def issue_panel(rows: list[dict[str, Any]]) -> str:
         )
     return (
         '<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>'
-        '<span>Hermesによる論点・スタンス分類</span></div>'
+        '<span>公開投稿を論点・立場・主張の強さで配置</span></div>'
         '<div class="hermes-issue-list">' + "".join(blocks) + "</div></section>"
     )
 
@@ -422,7 +422,7 @@ def summary_panel(rows: list[dict[str, Any]]) -> str:
     intensity_counts = Counter(classification(row).get("intensity") for row in rows)
     top_issue, top_count = issue_counts.most_common(1)[0]
     top_stance, stance_count = stance_counts.most_common(1)[0]
-    return f"""<section class="panel conflict-panel"><div class="panel-title"><h2>Hermes分類サマリー</h2><span>意見投稿のみ</span></div>
+    return f"""<section class="panel conflict-panel"><div class="panel-title"><h2>投稿の分類結果</h2><span>意見投稿のみ</span></div>
 <div class="hermes-summary-grid">
 <article class="hermes-summary-card"><div class="axis-kicker">最多スタンス</div><h3>{html.escape(STANCE_SHORT.get(str(top_stance), str(top_stance)))}</h3><div class="axis-count">{stance_count}</div><p>支持・条件付き・慎重反対を分けて集計しています。</p></article>
 <article class="hermes-summary-card"><div class="axis-kicker">最多論点</div><h3>{html.escape(str(top_issue))}</h3><div class="axis-count">{top_count}</div><p>投稿の主眼となる論点を1つに分類しています。</p></article>
@@ -526,7 +526,7 @@ def main() -> int:
     )
     page = replace_once(
         page,
-        r'<section class="panel conflict-panel"><div class="panel-title"><h2>(?:スタンス集計|Hermes分類サマリー)</h2>.*?(?=<section class="panel" id="related-topics">)',
+        r'<section class="panel conflict-panel"><div class="panel-title"><h2>(?:スタンス集計|Hermes分類サマリー|投稿の分類結果)</h2>.*?(?=<section class="panel" id="related-topics">)',
         summary_panel(all_opinions),
         "summary panel",
         flags=re.DOTALL,
@@ -561,7 +561,8 @@ def main() -> int:
         '    <span><i style="background:#dc2626"></i>慎重・反対</span>\n'
         '    <span><i style="background:#64748b"></i>中立</span>',
     )
-    page = page.replace("Powered by Yahooリアルタイム検索 + AI分類", "Powered by Yahooリアルタイム検索 + Hermes分類")
+    page = page.replace("Powered by Yahooリアルタイム検索 + AI分類", "公開投稿を収集・分類して整理")
+    page = page.replace("Powered by Yahooリアルタイム検索 + Hermes分類", "公開投稿を収集・分類して整理")
 
     output = args.output_html or args.html
     output.write_text(page, encoding="utf-8")

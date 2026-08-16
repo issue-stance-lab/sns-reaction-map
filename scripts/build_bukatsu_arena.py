@@ -40,7 +40,7 @@ ENTRY_CSS = """
 .bukatsu-entry{padding:34px min(6vw,72px) 20px;background:linear-gradient(180deg,#f4f8ff 0%,var(--bg) 100%)}
 .bukatsu-entry-inner{max-width:1180px;margin:0 auto;border-top:5px solid #315bd8;background:#fff;box-shadow:0 14px 36px rgba(29,78,216,.10)}
 .bukatsu-entry-heading{padding:24px 28px 18px;border-bottom:1px solid #dbe5f3}.bukatsu-entry-kicker{margin:0 0 7px;color:#315bd8;font-size:12px;font-weight:900;letter-spacing:.08em}.bukatsu-entry h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;color:#13223d}.bukatsu-entry-lead{max-width:820px;margin:12px 0 0;font-size:16px;line-height:1.8;color:#34445e}.bukatsu-entry-lead strong{color:#13223d}
-.bukatsu-entry-table{width:100%;border-collapse:collapse;font-size:14px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:16px 20px;text-align:left;vertical-align:top;border-bottom:1px solid #e3eaf3;line-height:1.65}.bukatsu-entry-table th{width:18%;color:#13223d;background:#f7faff;font-size:13px}.bukatsu-entry-table td:nth-child(2){width:34%;font-weight:800;color:#26364f}.bukatsu-entry-table td:nth-child(3){color:#596a82}.bukatsu-entry-note{margin:0;padding:16px 28px 20px;color:#596a82;font-size:13px;line-height:1.75}.bukatsu-entry-note strong{color:#26364f}
+.bukatsu-entry-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:16px 20px;text-align:left;vertical-align:top;border-bottom:1px solid #e3eaf3;line-height:1.65;overflow-wrap:anywhere;word-break:break-word}.bukatsu-entry-table th{width:18%;color:#13223d;background:#f7faff;font-size:13px}.bukatsu-entry-table td:nth-child(2){width:34%;font-weight:800;color:#26364f}.bukatsu-entry-table td:nth-child(3){color:#596a82}.bukatsu-entry-note{margin:0;padding:16px 28px 20px;color:#596a82;font-size:13px;line-height:1.75}.bukatsu-entry-note strong{color:#26364f}
 @media(max-width:720px){.bukatsu-entry{padding:20px 16px 10px}.bukatsu-entry-heading{padding:20px 18px 14px}.bukatsu-entry-lead{font-size:15px}.bukatsu-entry-table,.bukatsu-entry-table tbody,.bukatsu-entry-table tr,.bukatsu-entry-table th,.bukatsu-entry-table td{display:block;width:auto}.bukatsu-entry-table tr{border-bottom:1px solid #e3eaf3;padding:14px 18px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:0;border:0}.bukatsu-entry-table th{margin-bottom:4px;background:none}.bukatsu-entry-table td:nth-child(2){margin-bottom:6px}.bukatsu-entry-note{padding:14px 18px 18px}}
 /* BUKATSU_ENTRY_END */
 """
@@ -173,6 +173,29 @@ def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     arena_end = _section_end(html, arena_start)
     after_arena = "\n" + "\n".join(moved_blocks) if moved_blocks else ""
     html = html[:arena_end] + after_arena + html[arena_end:]
+
+    # Keep the hand-curated explainer free from generic pro/con framing and
+    # ordinal labels. These substitutions also update pages built before the
+    # current explainer template.
+    html = html.replace(
+        "このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから",
+        "このテーマを読み解く論点</h2><span>活動を続ける条件を確かめる",
+    )
+    html = html.replace(
+        "「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。",
+        "部活動を学校の外へ展開するとき、教員の負担だけでなく、費用、担い手、移動、安全を誰が引き受けるかが問われます。活動を続ける条件ごとに投稿を読みます。",
+    )
+    html = html.replace(
+        "<strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。画像はタップで拡大できます。",
+        "<strong>使い方:</strong> 気になる条件を確かめてから、次の投票で「自分が一番気になる論点」を選んでください。画像はタップで拡大できます。",
+    )
+    html = re.sub(r"\s*<span class=\"explainer-num\">論点[①-⑥]</span>", "", html)
+    html = html.replace(
+        "Hermesによる論点・スタンス分類",
+        "公開投稿を論点・立場・主張の強さで配置",
+    )
+    html = html.replace("<h2>Hermes分類サマリー</h2>", "<h2>投稿の分類結果</h2>")
+    html = html.replace("Powered by Yahooリアルタイム検索 + Hermes分類", "公開投稿を収集・分類して整理")
     html = re.sub(r"\n[ \t]+\n", "\n\n", html)
     return re.sub(r"\n{3,}", "\n\n", html)
 
@@ -244,11 +267,10 @@ EXTRA_CSS = """
 
 # === explainer セクション ===
 EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-section">
-<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>それぞれの問いを把握してから</span></div>
-<p class="explainer-lead">「部活動の地域移行」の議論は「賛成か反対か」だけではありません。費用・指導者・教員の働き方・子どもの機会・地域差・行政手続き——6つの論点を整理してから投票に進んでください。</p>
+<div class="panel-title"><h2>このテーマを読み解く論点</h2><span>活動を続ける条件を確かめる</span></div>
+<p class="explainer-lead">部活動を学校の外へ展開するとき、教員の負担だけでなく、費用、担い手、移動、安全を誰が引き受けるかが問われます。活動を続ける条件ごとに投稿を読みます。</p>
 <div class="explainer-grid">
   <article class="explainer-card">
-    <span class="explainer-num">論点①</span>
     <p class="explainer-card-title">費用・家庭負担 — 「月8000円、年間28万円」</p>
     <p class="explainer-card-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
     <div class="explainer-sides">
@@ -257,7 +279,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
     </div>
   </article>
   <article class="explainer-card">
-    <span class="explainer-num">論点②</span>
     <p class="explainer-card-title">受け皿・指導者 — 「ボランティア頼みは限界」</p>
     <p class="explainer-card-desc">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
     <div class="explainer-sides">
@@ -266,7 +287,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
     </div>
   </article>
   <article class="explainer-card">
-    <span class="explainer-num">論点③</span>
     <p class="explainer-card-title">教員の働き方 — 「ブラック部活の解消」が最大動機</p>
     <p class="explainer-card-desc">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
     <div class="explainer-sides">
@@ -275,7 +295,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
     </div>
   </article>
   <article class="explainer-card">
-    <span class="explainer-num">論点④</span>
     <p class="explainer-card-title">教育的意義・機会 — 「子どもの夢と居場所」</p>
     <p class="explainer-card-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
     <div class="explainer-sides">
@@ -284,7 +303,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
     </div>
   </article>
   <article class="explainer-card">
-    <span class="explainer-num">論点⑤</span>
     <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」</p>
     <p class="explainer-card-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
     <div class="explainer-sides">
@@ -293,7 +311,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
     </div>
   </article>
   <article class="explainer-card">
-    <span class="explainer-num">論点⑥</span>
     <p class="explainer-card-title">制度・移行プロセス — 「手探りのまま進んでいる」</p>
     <p class="explainer-card-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
     <div class="explainer-sides">
@@ -302,7 +319,7 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
     </div>
   </article>
 </div>
-<p class="explainer-note"><strong>使い方:</strong> 6つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+<p class="explainer-note"><strong>使い方:</strong> 気になる条件を確かめてから、次の投票で「自分が一番気になる論点」を選んでください。</p>
 </section>
 """
 
