@@ -372,6 +372,23 @@
           "tide-card"
         ],
         "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      },
+      {
+        "path": "data/verification/bike-blue-ticket-reread.json",
+        "selectors": [
+          "pc-funnel",
+          "pf-stage",
+          "pf-conclusion",
+          "#reread-basis"
+        ],
+        "reason": "冒頭3セクションの区分別件数。編集部が反対77件を1件ずつ割り当てた結果＋賛成38件（scripts/build_bike_process_sections.py が生成）"
+      },
+      {
+        "path": "data/verification/bike-blue-ticket-claims.json",
+        "selectors": [
+          "pv-count"
+        ],
+        "reason": "STEP2の「N件の投稿」。主張ごとに編集部が確定した該当投稿（data/bike-blue-ticket_claim_posts.json 由来）"
       }
     ],
     "regions": {
@@ -392,6 +409,10 @@
       {
         "value": 67470,
         "reason": "警察庁 令和7年中の自転車関連事故件数（一次情報）"
+      },
+      {
+        "value": 61,
+        "reason": "警察庁 令和7年中の自転車関連事故の前年比減少件数（一次情報）"
       }
     ],
     "exclude_selectors": [

@@ -35,6 +35,10 @@ BUCKET_META = [
 
 CHECKED_AT = "2026年8月16日"
 
+# 取得期間。正典に fetched_at が入っているのは65/181件だけなので実測からは復元できず、
+# THEMES.yaml の sample_period（オーナー確認済み）が唯一の出所。ここで直書きすると
+# 台帳とページがずれるため、必ず台帳から読む。
+
 # 一次資料に当たって確かめた結果。判定は fact / gap / miss の3種。
 # 件数は data/bike-blue-ticket_claim_posts.json の tweet_id から数える。
 # 本文の機械抽出をそのまま件数にすると3〜4割ぶん実際より多く出る（無関係な
@@ -165,11 +169,14 @@ def esc(text: str) -> str:
 def load() -> tuple[list[dict], dict, dict]:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
     theme = themes[THEME]
+    period = str(theme.get("sample_period") or "").strip()
+    if not period or period.lower() == "unknown":
+        raise SystemExit("THEMES.yaml の bike-blue-ticket に sample_period がありません")
     samples = json.loads((ROOT / theme["sample_file"]).read_text(encoding="utf-8"))
     config = yaml.safe_load((ROOT / theme["refresh_config"]).read_text(encoding="utf-8"))
     reread = json.loads((ROOT / "data" / f"{THEME}_opposition_reread.json").read_text(encoding="utf-8"))
     claim_posts = json.loads((ROOT / "data" / f"{THEME}_claim_posts.json").read_text(encoding="utf-8"))
-    return samples, config, reread, claim_posts
+    return samples, config, reread, claim_posts, period
 
 
 def build_counts(samples: list[dict], reread: dict) -> dict[str, int]:
@@ -189,13 +196,13 @@ def build_counts(samples: list[dict], reread: dict) -> dict[str, int]:
     return counts
 
 
-def build_collect(samples: list[dict], config: dict, counts: dict) -> str:
+def build_collect(samples: list[dict], config: dict, counts: dict, period: str) -> str:
     queries = "".join(f"<li>{esc(q)}</li>" for q in config["fetch_queries"])
     return f"""<section id="process-collect" aria-labelledby="process-collect-title">
   <div class="pc-inner">
     <p class="pc-step">STEP 1 — 集め方</p>
     <h2 id="process-collect-title">{counts['_total']}件を、この10本の検索語で集めました</h2>
-    <p class="pc-lead">Yahooリアルタイム検索の公開投稿を、下の検索語で取得しています。同じ語を入れれば、読者も同じ範囲を見に行けます。取得期間は記録を始める前に公開したテーマのため未記録です。</p>
+    <p class="pc-lead">Yahooリアルタイム検索の公開投稿を、下の検索語で取得しています。同じ語を入れれば、読者も同じ範囲を見に行けます。取得期間は{esc(period)}です。</p>
     <ul class="pc-queries">{queries}</ul>
     <div class="pc-funnel">
       <div class="pc-funnel-row"><span>集めて分類できた投稿</span><b>{counts['_total']}</b><span class="pc-unit">件</span></div>
@@ -276,7 +283,7 @@ def build_found(counts: dict) -> str:
       <div class="pf-track" aria-hidden="true">{''.join(segs)}</div>
       <p class="pf-caption" data-caption-before>いまの数え方：賛成{counts['support']}件（{counts['support'] / sided * 100:.0f}%）と、反対{counts['_oppose']}件（{counts['_oppose'] / sided * 100:.0f}%）。</p>
       <p class="pf-caption" data-caption-after>読み直したあと：反対{counts['_oppose']}件は6つに分かれ、うち{counts['strict']}件は「青切符では甘い、免許制にしろ」と、賛成側より外側の要求でした。取締りそのものをやめろと読めるのは{counts['abolish']}件（{abolish_pct:.0f}%）で、そのうち8件は同じ署名の定型文です。</p>
-      <button type="button" class="pf-replay" id="pf-replay"><span aria-hidden="true">▶</span>反対{counts['_oppose']}件を分解する</button>
+      <button type="button" class="pf-replay" id="pf-replay"><span aria-hidden="true">▶</span>賛成{counts['support']}＋反対{counts['_oppose']}を、6区分に組み替える</button>
       <ol class="pf-labels">
 {chr(10).join(labels)}
       </ol>
@@ -511,12 +518,36 @@ SCRIPT = """<script id="process-found-anim">
 </script>"""
 
 
+# 冒頭3セクションの件数は、AI分類ではなく編集部が1件ずつ割り当てた結果から出ている。
+# 数字の出所検査（scripts/verify_number_provenance.py）は「レコードの配列」しか正典に
+# できないため、割り当てを配列の形で書き出しておく。ページと同じ手順で作るので、
+# 読み直しを足し忘れればここも一緒にずれ、検査で落ちる。
+def write_provenance_records(samples: list[dict], reread: dict, claim_posts: dict) -> None:
+    support_ids = [
+        s["tweet_id"] for s in samples
+        if s["classification"]["stance"] == "賛成（取締り強化支持）"
+    ]
+    rows = [{"tweet_id": tid, "bucket": "support"} for tid in support_ids]
+    for key, ids in reread["buckets"].items():
+        rows += [{"tweet_id": tid, "bucket": key} for tid in ids]
+    claims = [
+        {"tweet_id": tid, "claim": key}
+        for key, ids in claim_posts["claims"].items()
+        for tid in ids
+    ]
+    out = ROOT / "data" / "verification"
+    for name, data in (("bike-blue-ticket-reread", rows), ("bike-blue-ticket-claims", claims)):
+        (out / f"{name}.json").write_text(
+            json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+
+
 def main() -> int:
-    samples, config, reread, claim_posts = load()
+    samples, config, reread, claim_posts, period = load()
     counts = build_counts(samples, reread)
     blocks = "\n\n".join([
         CSS,
-        build_collect(samples, config, counts),
+        build_collect(samples, config, counts, period),
         build_verify(samples, counts, claim_posts),
         build_found(counts),
         build_table(samples, reread, counts),
@@ -554,6 +585,7 @@ def main() -> int:
     if page.count('class="conclusion-count"') != 1:
         raise SystemExit("conclusion-count は1つだけ必要です")
 
+    write_provenance_records(samples, reread, claim_posts)
     page_path.write_text(page, encoding="utf-8")
     claim_total = sum(len(v) for v in claim_posts["claims"].values())
     print(f"OK  {page_path.name} を更新（母数{counts['_total']}件 / 立場{counts['_sided']}件 / 反対{counts['_oppose']}件 / 事実確認の該当投稿{claim_total}件）")

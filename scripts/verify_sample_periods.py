@@ -17,6 +17,9 @@ except ImportError:
 
 EVIDENCE = ROOT / "data" / "verification" / "sample-periods.json"
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# オーナー確認済みの取得期間は、1日だけのこともあれば範囲のこともある。
+# 範囲を書けないと unknown に戻すしかなく、ページに「未記録」が出続ける。
+OWNER_PERIOD_RE = re.compile(r"^\d{4}-\d{2}-\d{2}(〜\d{4}-\d{2}-\d{2})?$")
 
 
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -61,7 +64,7 @@ def verify(evidence: dict[str, dict[str, Any]]) -> int:
         expected = expected_period(item)
         actual = str(theme.get("sample_period") or "")
         if theme.get("sample_period_source") == "owner_confirmed":
-            if DATE_RE.fullmatch(actual):
+            if OWNER_PERIOD_RE.fullmatch(actual):
                 print(f"OK  {slug}: {actual}（オーナー確認済み／取得日欠損{item['missing_records']}/{item['records']}件）")
                 continue
             print(f"NG  {slug}: オーナー確認済みの sample_period が日付形式ではない: {actual}")
