@@ -300,6 +300,27 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 備考: 1本URLなし。
 
+## 流入投稿実績 2026-08-16（URL付き）
+
+テーマ: 生成AIと著作権
+パターン: 型A（問いを立てる）
+画像: なし（手動添付なし。URL付き投稿）
+X換算: 231文字
+
+投稿文:
+```
+生成AIと著作権、問われるのは「学習は合法か」だけではありません。
+学習・出力・公開のそれぞれで、誰にどんな確認や対価が必要か。SNSの意見を整理しました。
+あなたなら、どこに線を引きますか？
+
+https://issue-stance-lab.github.io/sns-reaction-map/ai-copyright-reaction-map.html?utm_source=x&utm_medium=social&utm_campaign=post_20260816
+#SNS反応まっぷ #生成AI
+```
+
+投稿URL: https://x.com/sns_hannou_ma/status/2088912690676994449（17:56投稿）
+
+備考: UTMは `utm_source=x` / `utm_medium=social` / `utm_campaign=post_20260816`。学習・出力・公開を分ける問いを入口にした流入投稿。投稿本文・URL・投稿時刻はXの個別ページで確認済み。表示回数は投稿直後のため、24〜48時間後に本計測する。
+
 ## リプライ実績 2026-08-16
 
 | # | リプライ先 | テーマ | タイプ | 元投稿views | 自リプライ表示 | 元投稿の返信数 | 元投稿からの経過 |
