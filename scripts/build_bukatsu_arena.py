@@ -11,6 +11,7 @@ try:
     from .sync_portal_stats import parse_themes_yaml
     from .issue_card_counts import card_counts
     from .sync_issue_counts import apply_counts
+    from .update_bukatsu_tide import issue_panel as hermes_issue_panel
 except ImportError:  # python3 scripts/build_bukatsu_arena.py
     from build_reaction_map import (  # type: ignore[no-redef]
         arguments_html,
@@ -21,6 +22,7 @@ except ImportError:  # python3 scripts/build_bukatsu_arena.py
     from sync_portal_stats import parse_themes_yaml  # type: ignore[no-redef]
     from issue_card_counts import card_counts  # type: ignore[no-redef]
     from sync_issue_counts import apply_counts  # type: ignore[no-redef]
+    from update_bukatsu_tide import issue_panel as hermes_issue_panel  # type: ignore[no-redef]
 
 ROOT = Path(__file__).parent.parent
 HTML_PATH = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
@@ -187,6 +189,15 @@ def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
         conflict_end = _section_end(html, conflict_start)
         conflict = html[conflict_start:conflict_end]
         html = html[:conflict_start] + html[conflict_end:]
+        # Representative posts are selected from the current full dataset,
+        # including the most recently added X posts, rather than preserving
+        # an older page snapshot.
+        opinion_rows = [
+            row for row in rows
+            if row.get("classification", {}).get("is_relevant")
+            and row.get("classification", {}).get("is_opinion")
+        ]
+        conflict = hermes_issue_panel(opinion_rows)
 
     conditions_end = html.find("<!-- RESEARCH_CONDITIONS_END -->")
     conditions_end = html.find("\n", conditions_end)

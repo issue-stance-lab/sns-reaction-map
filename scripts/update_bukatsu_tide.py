@@ -41,6 +41,40 @@ STANCE_CLASS = {
 STANCE_X = {label: float(item["x"]) for label, item in STANCE_BY_LABEL.items()}
 INTENSITY_E = {"low": 0.5, "medium": 1.0, "high": 2.0}
 
+# 編集確認済みの代表投稿。直近追加分（status が 208... の投稿）も含め、
+# 各論点で具体的な条件・経験・制度設計を説明しているものを優先する。
+# データ更新でURLが欠けた場合は、下の confidence 順の候補に安全に戻る。
+REPRESENTATIVE_POST_URLS = {
+    "費用・家庭負担": [
+        "https://x.com/TheMirageof0/status/2070621781757726855",
+        "https://x.com/774nyannyan/status/2086731858579263880",
+    ],
+    "受け皿・指導者": [
+        "https://x.com/maru_moneyy/status/2084392638506274876",
+        "https://x.com/SIND_/status/2070325146372739488",
+    ],
+    "教員の働き方": [
+        "https://x.com/AtelierClutch/status/2082217044611834122",
+        "https://x.com/Namenotblanko/status/2082969614196093400",
+    ],
+    "教育的意義・機会": [
+        "https://x.com/ikuji_takuto/status/2083492685223215132",
+        "https://x.com/SvErfdCKdt52541/status/2068859859077124604",
+    ],
+    "地域格差": [
+        "https://x.com/Davestaragues/status/2085511206278939102",
+        "https://x.com/mamamam4949/status/2069589990011818183",
+    ],
+    "制度・移行プロセス": [
+        "https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355",
+        "https://x.com/Goshiki2023/status/2078663825013031272",
+    ],
+    "その他": [
+        "https://x.com/m727243023/status/2085525452777795616",
+        "https://x.com/dZYWrWnJodpAzEg/status/2085370360980201885",
+    ],
+}
+
 TIDE_CSS = """
 /* TIDE_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
@@ -389,11 +423,19 @@ def issue_panel(rows: list[dict[str, Any]]) -> str:
             f"<span>{html.escape(STANCE_SHORT[stance])} {counts[stance]}</span>"
             for stance in STANCES if counts[stance]
         )
-        candidates = sorted(
-            [row for row in group if classification(row).get("article_usable") and row.get("url")],
+        usable = [row for row in group if classification(row).get("article_usable") and row.get("url")]
+        candidates_by_url = {str(row["url"]): row for row in usable}
+        candidates = [
+            candidates_by_url[url]
+            for url in REPRESENTATIVE_POST_URLS.get(issue, [])
+            if url in candidates_by_url
+        ]
+        fallback = sorted(
+            [row for row in usable if row not in candidates],
             key=lambda row: float(classification(row).get("confidence", 0)),
             reverse=True,
-        )[:2]
+        )
+        candidates = (candidates + fallback)[:2]
         samples = "".join(tweet_sample(row) for row in candidates)
         blocks.append(
             '<article class="hermes-issue-card">'
