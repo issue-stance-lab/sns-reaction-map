@@ -51,7 +51,7 @@ REPRESENTATIVE_POSTS = {
     ],
     "受け皿・指導者": [
         ("https://x.com/maru_moneyy/status/2084392638506274876", "受け皿の人手・送迎が足りない"),
-        ("https://x.com/SIND_/status/2070325146372739488", "指導を担う報酬の問題"),
+        ("https://x.com/kohei_okada_pt/status/2084608274377437341", "地域資源に合わせた再構築を求める"),
     ],
     "教員の働き方": [
         ("https://x.com/AtelierClutch/status/2082217044611834122", "授業に専念できる環境を求める"),
@@ -59,7 +59,7 @@ REPRESENTATIVE_POSTS = {
     ],
     "教育的意義・機会": [
         ("https://x.com/ikuji_takuto/status/2083492685223215132", "学校教育としての部活を残したい"),
-        ("https://x.com/SvErfdCKdt52541/status/2068859859077124604", "開かれた地域クラブへ移したい"),
+        ("https://x.com/39Md8/status/2082487864135393452", "生涯スポーツ・音楽につながる場にしたい"),
     ],
     "地域格差": [
         ("https://x.com/Davestaragues/status/2085511206278939102", "地方で施設が取れない"),
@@ -71,7 +71,7 @@ REPRESENTATIVE_POSTS = {
     ],
     "その他": [
         ("https://x.com/m727243023/status/2085525452777795616", "吹奏楽は移行しにくいという経験"),
-        ("https://x.com/dZYWrWnJodpAzEg/status/2085370360980201885", "部活の役割と推薦制度を問い直す"),
+        ("https://x.com/mamimami_koro/status/2087383840331608316", "マネージャーの役割にある性別規範を問う"),
     ],
 }
 
