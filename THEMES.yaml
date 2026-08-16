@@ -133,7 +133,7 @@ themes:
     sample_file: social-samples/constitutional_amendment_hermes_arena_classified.json
     refresh_config: configs/topics/constitutional.yaml
     verification_file: data/verification/constitutional-amendment.json
-    sample_period: "2026-06-20〜2026-07-25"
+    sample_period: "2026-06-20〜2026-08-16"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 382件
     classify: done       # 552件有効（2D累計）
@@ -142,14 +142,14 @@ themes:
     manga_data: done
     manga_img: done      # docs/images/ に漫画8枚+投票4枚
     published: done
-    page_update_mode: adapter_candidate # build_constitutional_arena.py で再生成可能。候補input/outputは未対応
+    page_update_mode: adapter # scripts/refresh_adapters/constitutional.py（潮目は更新回どうしの比較）
     collect_at: 2026-08-23 # 新規230件・意見198件（50件以上）のため今回だけ7日後
-    refresh_at:
+    refresh_at: 2026-08-23
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-16
     published_at: 2026-06-24
-    updated_at: 2026-07-26
-    collect_delta: 224
+    updated_at: 2026-08-16
+    collect_delta: 230
     x_posted_at: 2026-08-11
     notes: "2026-07-12にYahooリアルタイム検索223件を追加収集。既存rawとの重複0件、新規223件中212件をOpenCode Go / minimax-m2.7で2D有効分類。raw台帳と2D累計の母集団差あり。2026-07-23に422件をHermes / kimi-k2.6で6論点・4スタンスへ再分類し、論点アリーナ（極座標6セクター・2ステップ投票）と論点別X投稿カードへ反映。"
 
