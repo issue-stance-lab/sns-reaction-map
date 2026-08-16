@@ -94,7 +94,7 @@ TIDE_CSS = """
 .hermes-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.hermes-summary-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:16px}.hermes-summary-card .axis-count{font-size:28px}
 .hermes-issue-list{display:grid;gap:14px}.hermes-issue-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:18px}.hermes-issue-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.hermes-issue-head h3{margin:0;font-size:18px}.hermes-issue-count{font-weight:900;color:var(--accent);white-space:nowrap}
 .hermes-stance-bar{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#eef2f6;margin:12px 0 8px}.hermes-stance-bar span.pro{background:#059669}.hermes-stance-bar span.conditional{background:#d97706}.hermes-stance-bar span.con{background:#dc2626}.hermes-stance-bar span.neutral{background:#94a3b8}
-.hermes-legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:11px}.hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.hermes-sample{border-left:4px solid var(--line);padding:8px 10px;background:var(--accent-soft);font-size:12px;line-height:1.55}.hermes-sample a{font-weight:800;color:var(--accent);text-decoration:none}
+.hermes-legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:11px}.hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.hermes-sample{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--accent-soft);font-size:12px;line-height:1.55}.hermes-sample-meta{display:block;color:var(--accent);font-size:11px;font-weight:900}.hermes-sample-summary{margin:5px 0 8px;color:var(--ink);font-weight:700}.hermes-sample .twitter-tweet,.hermes-sample .twitter-tweet-rendered{max-width:100%!important;margin:0 auto!important}.hermes-sample .twitter-tweet iframe{max-width:100%!important}
 @media(max-width:720px){
   .update-dashboard{padding:10px 10px 24px}.update-dashboard>.stats{grid-template-columns:repeat(2,1fr);gap:8px}.update-dashboard>.stats .stat{padding:12px}.update-dashboard>.stats .stat strong{font-size:18px}
   .tide-card{padding:20px 16px;border-radius:16px}.tide-head{display:block;margin-bottom:18px}.tide-title-wrap{margin-bottom:12px}.tide-head h2{font-size:25px}.tide-kicker{font-size:12px}.tide-period{justify-content:center;width:100%;font-size:14px;white-space:normal}.tide-period b{font-size:16px}
@@ -394,14 +394,7 @@ def issue_panel(rows: list[dict[str, Any]]) -> str:
             key=lambda row: float(classification(row).get("confidence", 0)),
             reverse=True,
         )[:2]
-        samples = "".join(
-            '<div class="hermes-sample">'
-            f'<strong>{html.escape(STANCE_SHORT.get(str(classification(row).get("stance")), "中立"))}</strong> '
-            f'{html.escape(str(classification(row).get("summary") or ""))}'
-            f' <a href="{html.escape(str(row.get("url")))}" target="_blank" rel="noopener">投稿を見る</a>'
-            "</div>"
-            for row in candidates
-        )
+        samples = "".join(tweet_sample(row) for row in candidates)
         blocks.append(
             '<article class="hermes-issue-card">'
             f'<div class="hermes-issue-head"><h3>{html.escape(issue)}</h3><span class="hermes-issue-count">{total}件</span></div>'
@@ -413,6 +406,23 @@ def issue_panel(rows: list[dict[str, Any]]) -> str:
         '<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>'
         '<span>公開投稿を論点・立場・主張の強さで配置</span></div>'
         '<div class="hermes-issue-list">' + "".join(blocks) + "</div></section>"
+    )
+
+
+def tweet_sample(row: dict[str, Any]) -> str:
+    """Render the same X embed used for representative posts on other themes."""
+    url = html.escape(str(row.get("url") or ""), quote=True)
+    handle = re.search(r"x\.com/([^/]+)/status/", str(row.get("url") or ""))
+    account = f"@{handle.group(1)}" if handle else "この投稿"
+    stance = html.escape(STANCE_SHORT.get(str(classification(row).get("stance")), "中立"))
+    summary = html.escape(str(classification(row).get("summary") or ""))
+    return (
+        '<div class="hermes-sample">'
+        f'<span class="hermes-sample-meta">{stance}</span>'
+        f'<p class="hermes-sample-summary">{summary}</p>'
+        '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
+        f'<a href="{url}">{account} の投稿をXで見る</a></blockquote>'
+        "</div>"
     )
 
 

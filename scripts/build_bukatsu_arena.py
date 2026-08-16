@@ -40,7 +40,8 @@ ENTRY_CSS = """
 .bukatsu-entry{padding:34px min(6vw,72px) 20px;background:linear-gradient(180deg,#f4f8ff 0%,var(--bg) 100%)}
 .bukatsu-entry-inner{max-width:1180px;margin:0 auto;border-top:5px solid #315bd8;background:#fff;box-shadow:0 14px 36px rgba(29,78,216,.10)}
 .bukatsu-entry-heading{padding:24px 28px 18px;border-bottom:1px solid #dbe5f3}.bukatsu-entry-kicker{margin:0 0 7px;color:#315bd8;font-size:12px;font-weight:900;letter-spacing:.08em}.bukatsu-entry h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;color:#13223d}.bukatsu-entry-lead{max-width:820px;margin:12px 0 0;font-size:16px;line-height:1.8;color:#34445e}.bukatsu-entry-lead strong{color:#13223d}
-.bukatsu-entry-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:16px 20px;text-align:left;vertical-align:top;border-bottom:1px solid #e3eaf3;line-height:1.65;overflow-wrap:anywhere;word-break:break-word}.bukatsu-entry-table th{width:18%;color:#13223d;background:#f7faff;font-size:13px}.bukatsu-entry-table td:nth-child(2){width:34%;font-weight:800;color:#26364f}.bukatsu-entry-table td:nth-child(3){color:#596a82}.bukatsu-entry-note{margin:0;padding:16px 28px 20px;color:#596a82;font-size:13px;line-height:1.75}.bukatsu-entry-note strong{color:#26364f}
+.bukatsu-entry-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}.bukatsu-entry-table th,.bukatsu-entry-table td{min-width:0;padding:16px 20px;text-align:left;vertical-align:top;border-bottom:1px solid #e3eaf3;line-height:1.65;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word}.bukatsu-entry-table th{width:18%;color:#13223d;background:#f7faff;font-size:13px}.bukatsu-entry-table td:nth-child(2){width:34%;font-weight:800;color:#26364f}.bukatsu-entry-table td:nth-child(3){color:#596a82}.bukatsu-entry-note{margin:0;padding:16px 28px 20px;color:#596a82;font-size:13px;line-height:1.75}.bukatsu-entry-note strong{color:#26364f}
+.hermes-samples{gap:14px!important}.hermes-sample{min-width:0;overflow:hidden;border:1px solid var(--line)!important;border-left:1px solid var(--line)!important;border-radius:10px;padding:12px!important;background:var(--accent-soft);font-size:12px;line-height:1.55}.hermes-sample-meta{display:block;color:var(--accent);font-size:11px;font-weight:900}.hermes-sample-summary{margin:5px 0 8px;color:var(--ink);font-weight:700}.hermes-sample .twitter-tweet,.hermes-sample .twitter-tweet-rendered{max-width:100%!important;margin:0 auto!important}.hermes-sample .twitter-tweet iframe{max-width:100%!important}
 @media(max-width:720px){.bukatsu-entry{padding:20px 16px 10px}.bukatsu-entry-heading{padding:20px 18px 14px}.bukatsu-entry-lead{font-size:15px}.bukatsu-entry-table,.bukatsu-entry-table tbody,.bukatsu-entry-table tr,.bukatsu-entry-table th,.bukatsu-entry-table td{display:block;width:auto}.bukatsu-entry-table tr{border-bottom:1px solid #e3eaf3;padding:14px 18px}.bukatsu-entry-table th,.bukatsu-entry-table td{padding:0;border:0}.bukatsu-entry-table th{margin-bottom:4px;background:none}.bukatsu-entry-table td:nth-child(2){margin-bottom:6px}.bukatsu-entry-note{padding:14px 18px 18px}}
 /* BUKATSU_ENTRY_END */
 """
@@ -106,6 +107,30 @@ def hero_summary_html(rows: list[dict]) -> str:
         f'<li class="conclusion-focus"><span class="conclusion-count"><b>{top_count}</b>件</span>'
         f'<strong>{title}</strong><span class="conclusion-detail">{detail}</span></li></ul></div>'
     )
+
+
+def embed_hermes_samples(html: str) -> str:
+    """Upgrade existing issue samples to the site's standard X embed markup."""
+    pattern = re.compile(
+        r'<div class="hermes-sample"><strong>(?P<stance>.*?)</strong>\s*'
+        r'(?P<summary>.*?)\s*<a href="(?P<url>[^"]+)" target="_blank" rel="noopener">投稿を見る</a></div>',
+        flags=re.DOTALL,
+    )
+
+    def replace(match: re.Match) -> str:
+        url = match.group("url")
+        account = re.search(r"x\.com/([^/]+)/status/", url)
+        label = f"@{account.group(1)}" if account else "この投稿"
+        return (
+            '<div class="hermes-sample">'
+            f'<span class="hermes-sample-meta">{match.group("stance")}</span>'
+            f'<p class="hermes-sample-summary">{match.group("summary").strip()}</p>'
+            '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
+            f'<a href="{url}">{label} の投稿をXで見る</a></blockquote>'
+            "</div>"
+        )
+
+    return pattern.sub(replace, html)
 
 
 def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
@@ -196,6 +221,7 @@ def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     )
     html = html.replace("<h2>Hermes分類サマリー</h2>", "<h2>投稿の分類結果</h2>")
     html = html.replace("Powered by Yahooリアルタイム検索 + Hermes分類", "公開投稿を収集・分類して整理")
+    html = embed_hermes_samples(html)
     html = re.sub(r"\n[ \t]+\n", "\n\n", html)
     return re.sub(r"\n{3,}", "\n\n", html)
 
