@@ -82,7 +82,33 @@ def _section_end(html: str, start: int) -> int:
     raise ValueError("section closing tag not found")
 
 
-def apply_bukatsu_entry(html: str) -> str:
+def hero_summary_html(rows: list[dict]) -> str:
+    """Render the shared hero-level '議論の中心' block from current data."""
+    opinions = [
+        row for row in rows
+        if row.get("classification", {}).get("is_opinion")
+        and row.get("classification", {}).get("is_relevant")
+    ]
+    counts = {}
+    for row in opinions:
+        issue = row.get("classification", {}).get("main_issue")
+        if issue:
+            counts[issue] = counts.get(issue, 0) + 1
+    top_issue, top_count = max(counts.items(), key=lambda item: item[1])
+    if top_issue == "教員の働き方":
+        title = "教員の負担を減らしながら、活動を誰が支えるのか"
+        detail = "教員の働き方を論点とする投稿が最も多く、学校だけに担わせない必要性と、地域で費用・指導者・責任をどう確保するかが同時に問われています。"
+    else:
+        title = f"「{top_issue}」を、どう支えるのか"
+        detail = "この論点を中心に、地域展開の進め方と必要な条件が議論されています。"
+    return (
+        '<div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>'
+        f'<li class="conclusion-focus"><span class="conclusion-count"><b>{top_count}</b>件</span>'
+        f'<strong>{title}</strong><span class="conclusion-detail">{detail}</span></li></ul></div>'
+    )
+
+
+def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     """Keep the theme-specific entry and the first reading sequence idempotent."""
     if "/* BUKATSU_ENTRY_START */" in html:
         html = re.sub(r"/\* BUKATSU_ENTRY_START \*/.*?/\* BUKATSU_ENTRY_END \*/", ENTRY_CSS.strip(), html, flags=re.DOTALL)
@@ -90,6 +116,17 @@ def apply_bukatsu_entry(html: str) -> str:
         html = html.replace("</style>", ENTRY_CSS + "\n</style>", 1)
 
     html = re.sub(r"\n?<!-- BUKATSU_ENTRY_START -->.*?<!-- BUKATSU_ENTRY_END -->", "", html, flags=re.DOTALL)
+
+    # Other themes show one data-grounded "議論の中心" directly below the
+    # title. Keep that shared orientation element before this theme's unique
+    # responsibility map; it is not a pro/con conclusion.
+    summary = hero_summary_html(rows)
+    html = re.sub(r'<div class="thirty-summary".*?</div>', "", html, flags=re.DOTALL)
+    hero_start = html.find('<section class="hero">')
+    hero_end = _section_end(html, hero_start)
+    hero = html[hero_start:hero_end]
+    hero = re.sub(r'(<p class="lead">.*?</p>)', r'\1' + summary, hero, count=1, flags=re.DOTALL)
+    html = html[:hero_start] + hero + html[hero_end:]
 
     # The common data-provenance block must remain before the first numerical
     # display, even after the numerical cards themselves have been moved later.
@@ -130,18 +167,11 @@ def apply_bukatsu_entry(html: str) -> str:
     conditions_end = html.find("\n", conditions_end)
     html = html[:conditions_end] + "\n" + ENTRY_SECTION + ("\n" + conflict if conflict else "") + html[conditions_end:]
 
-    # Do not prime readers with the numerical conclusion in the hero. Retain it
-    # as a later summary, after the response map.
-    summary_match = re.search(r'<div class="thirty-summary".*?</div>', html, flags=re.DOTALL)
-    summary = summary_match.group(0) if summary_match else ""
-    if summary_match:
-        html = html[:summary_match.start()] + html[summary_match.end():]
-
     arena_start = html.find('<section class="arena-section" id="stance-map-section">')
     if arena_start < 0:
         raise ValueError("stance map section not found")
     arena_end = _section_end(html, arena_start)
-    after_arena = "\n" + summary + ("\n" + "\n".join(moved_blocks) if moved_blocks else "")
+    after_arena = "\n" + "\n".join(moved_blocks) if moved_blocks else ""
     html = html[:arena_end] + after_arena + html[arena_end:]
     html = re.sub(r"\n[ \t]+\n", "\n\n", html)
     return re.sub(r"\n{3,}", "\n\n", html)
@@ -635,7 +665,7 @@ def transform(html: str) -> str:
         config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
         config["research_conditions"] = load_research_conditions(CURRENT_JSON_PATH)
         rows = json.loads(CURRENT_JSON_PATH.read_text(encoding="utf-8"))
-        return apply_bukatsu_entry(update_existing_html(html, rows, config))
+        return apply_bukatsu_entry(update_existing_html(html, rows, config), rows)
 
     # 1. Add CSS before </style>
     if "/* === SNS反応マップ === */" not in html:
@@ -703,7 +733,7 @@ def transform(html: str) -> str:
     # 4. Remove old vote2d.js script tag and its inline script
     html = html.replace('<script src="vote2d.js?v=10"></script>\n', '')
 
-    return apply_bukatsu_entry(html)
+    return apply_bukatsu_entry(html, [])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

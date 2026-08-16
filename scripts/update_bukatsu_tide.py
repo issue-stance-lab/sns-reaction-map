@@ -477,13 +477,17 @@ def main() -> int:
     else:
         page = replace_once(page, r"</style>", TIDE_CSS + "\n</style>", "tide CSS")
     stance_counts = Counter(classification(row).get("stance") for row in all_opinions)
+    if top_issue == "教員の働き方":
+        focus_title = "教員の負担を減らしながら、活動を誰が支えるのか"
+        focus_detail = "教員の働き方を論点とする投稿が最も多く、学校だけに担わせない必要性と、地域で費用・指導者・責任をどう確保するかが同時に問われています。"
+    else:
+        focus_title = f"「{html.escape(str(top_issue))}」を、どう支えるのか"
+        focus_detail = "この論点を中心に、地域展開の進め方と必要な条件が議論されています。"
     summary = (
-        '<div class="thirty-summary" aria-label="まず結論：今回の分析で見えたこと">'
-        '<header class="thirty-summary-title"><h2>まず結論</h2><p>今回の分析で見えたこと</p></header><ul>'
-        f"<li>Hermesで累計{len(all_rows)}件を分類し、関連{relevant_count}件のうち意見投稿は{len(all_opinions)}件。</li>"
-        f"<li>最多論点は「{html.escape(str(top_issue))}」{top_count}件。最多スタンスは「{html.escape(STANCE_SHORT.get(str(stance_counts.most_common(1)[0][0]), str(stance_counts.most_common(1)[0][0])))}」{stance_counts.most_common(1)[0][1]}件。</li>"
-        f"<li>今回更新では「{html.escape(str(tide['rising_issue']))}」が前回追加分より{signed(float(tide['rising_issue_delta']))}ポイント増加。</li>"
-        "</ul></div>"
+        '<div class="thirty-summary" aria-label="議論の中心">'
+        '<header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>'
+        f'<li class="conclusion-focus"><span class="conclusion-count"><b>{top_count}</b>件</span>'
+        f'<strong>{focus_title}</strong><span class="conclusion-detail">{focus_detail}</span></li></ul></div>'
     )
     page = replace_once(page, r'<div class="thirty-summary".*?</div>', summary, "30 second summary", flags=re.DOTALL)
     dashboard = f'<section class="update-dashboard" aria-label="更新データと世論の潮目">{card}</section>'
