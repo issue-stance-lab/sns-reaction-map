@@ -540,16 +540,21 @@ def promote(
             else next_collection_date(root, topic, current_date, report)
         )
         registry = root / "THEMES.yaml"
+        # sample_period_source: owner_confirmed のテーマは、オーナーが確定させた期間を正とする。
+        # 上書きすると取得日を持たない古い行のせいで "unknown" になり、
+        # verify_sample_periods.py の owner_confirmed 検査（日付形式であること）で必ず落ちる。
+        fields = {
+            "updated_at": current_date,
+            "collect_delta": str(int(report["new"])),
+            "refresh_at": next_date,
+        }
+        if theme.get("sample_period_source") != "owner_confirmed":
+            fields["sample_period"] = sample_period(candidate)
         registry.write_text(
             _replace_theme_fields(
                 registry.read_text(encoding="utf-8"),
                 topic,
-                {
-                    "updated_at": current_date,
-                    "collect_delta": str(int(report["new"])),
-                    "sample_period": sample_period(candidate),
-                    "refresh_at": next_date,
-                },
+                fields,
             ),
             encoding="utf-8",
         )
