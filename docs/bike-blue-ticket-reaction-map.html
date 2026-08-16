@@ -772,9 +772,6 @@
       <h1>自転車の青切符で何が変わる？対象と賛否</h1>
       <p class="question-line">危険運転を減らす青切符か、道路整備が追いつかないままの罰則強化か？</p>
       <p class="lead">収集したSNS投稿のうち、分析対象となった意見181件をAIが5つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>
-      <div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>
-        <li class="conclusion-focus"><span class="conclusion-count"><b>38</b>件</span><strong>危険な自転車に青切符は当然ではないか</strong><span class="conclusion-detail">歩道の暴走や信号無視の実害を挙げ、取締りの強化を支持する声が最も集まりました。</span></li>
-      </ul></div>
     </div>
   </section>
   <svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)">
@@ -789,33 +786,513 @@
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
-<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
-      <article class="stat insight-stat">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
-        <strong class="insight-value">181<small>件</small></strong>
-        <p class="insight-note">取締り、道路、車道不安、免許制を6論点で比較</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+<!-- PROCESS_SECTIONS_START -->
+<style id="process-sections-css">
+#process-collect,#process-verify,#process-found,#process-table{padding:26px min(6vw,72px) 6px;background:var(--bg)}
+#process-table{padding-bottom:30px}
+.pc-inner{max-width:1000px;margin:0 auto}
+.pc-step{display:inline-block;margin:0 0 10px;padding:5px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:900;letter-spacing:.06em}
+#process-collect h2,#process-verify h2,#process-found h2{font-size:clamp(20px,3.5vw,27px);line-height:1.5;margin:0 0 10px;color:var(--ink)}
+.pc-lead{font-size:14px;line-height:1.95;color:var(--muted);margin:0 0 16px}
+.pc-note{margin:14px 0 0;font-size:12px;line-height:1.9;color:var(--muted)}
+.pc-note a,.pc-lead a{color:var(--accent)}
+.pc-queries{display:flex;flex-wrap:wrap;gap:7px;list-style:none;margin:0 0 16px;padding:0}
+.pc-queries li{font-size:12.5px;font-weight:700;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 13px}
+.pc-queries li::before{content:"検索";font-size:10px;font-weight:900;color:var(--muted);margin-right:6px}
+.pc-funnel{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.pc-funnel-row{display:flex;align-items:baseline;gap:10px;padding:12px 15px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.7;color:var(--ink)}
+.pc-funnel-row:first-child{border-top:0}
+.pc-funnel-row span:first-child{flex:1}
+.pc-funnel-row b{font-size:21px;font-weight:900;font-variant-numeric:tabular-nums}
+.pc-funnel-row .pc-unit{font-size:12px;color:var(--muted)}
+.pc-funnel-row[data-drop] {color:var(--muted)}
+.pc-funnel-row[data-drop] b{color:var(--muted)}
+.pc-funnel-row[data-keep]{background:var(--accent-soft)}
+.pc-funnel-row[data-keep] b{color:var(--accent)}
+.pv-grid{display:grid;gap:11px}
+.pv-card{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0 12px 12px 0;background:var(--panel);padding:15px 17px}
+.pv-card[data-verdict="fact"]{border-left-color:#15803d}
+.pv-card[data-verdict="gap"]{border-left-color:#b45309}
+.pv-card[data-verdict="miss"]{border-left-color:#64748b}
+.pv-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 9px}
+.pv-claim{margin:0;font-size:15px;font-weight:900;line-height:1.6;color:var(--ink)}
+.pv-claim::before{content:"投稿：「";color:var(--muted);font-weight:700;font-size:12px}
+.pv-claim::after{content:"」";color:var(--muted);font-weight:700;font-size:12px}
+.pv-count{font-size:11.5px;font-weight:800;color:var(--muted);white-space:nowrap}
+.pv-body p{margin:0 0 7px;font-size:13.5px;line-height:1.9;color:var(--ink)}
+.pv-body p:last-child{margin-bottom:0}
+.pv-source strong{font-weight:900}
+.pv-note{color:var(--muted)!important}
+.pv-verdict{display:inline-block;margin-right:8px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:900;color:#fff}
+.pv-card[data-verdict="fact"] .pv-verdict{background:#15803d}
+.pv-card[data-verdict="gap"] .pv-verdict{background:#b45309}
+.pv-card[data-verdict="miss"] .pv-verdict{background:#64748b}
+.pv-src{font-size:12px}
+.pv-src a{color:var(--muted)}
+.pf-stage{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:18px 18px 16px}
+.pf-track{display:flex;width:100%;height:34px;border-radius:8px;overflow:hidden;background:rgba(15,23,42,.06)}
+.pf-seg{width:var(--seg-w);background:var(--seg-c);transition:background-color .5s ease,transform .7s cubic-bezier(.22,.61,.36,1),opacity .4s ease;will-change:transform}
+.pf-stage[data-state="before"] .pf-seg[data-side="oppose"]{background:#3b6fb0}
+.pf-stage[data-state="before"] .pf-seg[data-side="support"]{background:#e0654e}
+.pf-stage[data-state="before"] .pf-seg[data-key="strict"],
+.pf-stage[data-state="before"] .pf-seg[data-key="support"]{transform:translateX(var(--seg-shift))}
+.pf-stage[data-state="after"] .pf-seg{background:var(--seg-c);transform:none}
+.pf-caption{margin:12px 0 0;font-size:13px;line-height:1.9;color:var(--ink)}
+.pf-stage[data-state="before"] [data-caption-after]{display:none}
+.pf-stage[data-state="after"] [data-caption-before]{display:none}
+.pf-replay{margin:12px 0 0;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:12.5px;font-weight:800;cursor:pointer}
+.pf-replay span{margin-right:6px;color:var(--accent)}
+.pf-replay:hover{border-color:var(--accent)}
+.pf-labels{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.pf-label{display:grid;grid-template-columns:12px auto 1fr;align-items:baseline;gap:9px;font-size:13px;line-height:1.75;opacity:0;transform:translateY(4px);transition:opacity .45s ease,transform .45s ease}
+.pf-stage[data-state="after"] .pf-label{opacity:1;transform:none}
+.pf-label b{font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--accent)}
+.pf-label strong{font-weight:800;color:var(--ink)}
+.pf-label span:last-child{grid-column:2/-1;color:var(--muted);font-size:12.5px}
+.pf-swatch{width:12px;height:12px;border-radius:3px;align-self:center}
+.pf-conclusion{margin:18px 0 0;font-size:15px;line-height:2;color:var(--ink)}
+.pf-conclusion strong{font-weight:900;background:linear-gradient(transparent 62%,var(--accent-soft) 62%)}
+.pt-details{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:0 16px}
+.pt-details>summary{cursor:pointer;padding:14px 0;font-size:14px;font-weight:800;color:var(--ink)}
+.pt-details[open]>summary{border-bottom:1px solid var(--line);margin-bottom:14px}
+.pt-details .pc-lead{margin-top:0}
+.pt-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 16px}
+.pt-wrap table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+.pt-wrap th,.pt-wrap td{white-space:normal;text-align:left;vertical-align:top;padding:9px 11px;border-right:0;border-bottom:1px solid var(--line);line-height:1.75}
+.pt-wrap thead th{font-size:11.5px;font-weight:900;color:var(--muted);background:rgba(15,23,42,.04)}
+.pt-wrap td.pt-ex{color:var(--ink);width:46%}
+.pt-wrap td.pt-ai,.pt-wrap td.pt-bd{color:var(--muted);width:22%;white-space:nowrap}
+.pt-wrap td.pt-link{width:10%}
+.pt-wrap td.pt-link a{color:var(--accent);font-weight:800;text-decoration:none}
+.pt-dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.pt-hidden{color:var(--muted);font-style:normal}
+@media (max-width:720px){
+  #process-collect,#process-verify,#process-found,#process-table{padding-left:14px;padding-right:14px}
+  .pf-track{height:28px}
+  .pf-label{grid-template-columns:12px auto;font-size:12.5px}
+  .pt-wrap table{min-width:520px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pf-seg,.pf-label{transition:none}
+}
+</style>
+
+<section id="process-collect" aria-labelledby="process-collect-title">
+  <div class="pc-inner">
+    <p class="pc-step">STEP 1 — 集め方</p>
+    <h2 id="process-collect-title">181件を、この10本の検索語で集めました</h2>
+    <p class="pc-lead">Yahooリアルタイム検索の公開投稿を、下の検索語で取得しています。同じ語を入れれば、読者も同じ範囲を見に行けます。取得期間は記録を始める前に公開したテーマのため未記録です。</p>
+    <ul class="pc-queries"><li>自転車 青切符 賛成</li><li>自転車 青切符 反対</li><li>自転車 青切符 当然</li><li>自転車 青切符 おかしい</li><li>自転車 青切符 やりすぎ</li><li>自転車 青切符 道路 OR インフラ</li><li>自転車 青切符 車道 怖い</li><li>自転車 青切符 免許</li><li>自転車 取締り 強化</li><li>自転車 交通違反 反則金</li></ul>
+    <div class="pc-funnel">
+      <div class="pc-funnel-row"><span>集めて分類できた投稿</span><b>181</b><span class="pc-unit">件</span></div>
+      <div class="pc-funnel-row" data-drop="1"><span>賛否が読み取れなかった（ニュース共有・日常の記録など）</span><b>−66</b><span class="pc-unit">件</span></div>
+      <div class="pc-funnel-row" data-keep="1"><span>このページで立場として数えた投稿</span><b>115</b><span class="pc-unit">件</span></div>
+    </div>
+    <p class="pc-note">内訳は賛成38件・反対77件。分類はAIが行い、そのあと編集部が反対77件の本文を全件読み直しています。読み直した割り当ては<a href="#process-table">全件表</a>で1件ずつ確認できます。</p>
+  </div>
+</section>
+
+<section id="process-verify" aria-labelledby="process-verify-title">
+  <div class="pc-inner">
+    <p class="pc-step">STEP 2 — 確かめ方</p>
+    <h2 id="process-verify-title">投稿が言っていることを、警察庁の資料と突き合わせました</h2>
+    <p class="pc-lead">投稿の中で事実として確かめられる主張を7つ選び、警察庁の公表資料に1つずつ当たっています。確認できなかったものも、確認できなかったまま残しています。確認日は2026年8月16日です。</p>
+    <div class="pv-grid">
+      <article class="pv-card" data-verdict="gap">
+        <div class="pv-head">
+          <p class="pv-claim">LUUPは免許不要で野放しなのに、自転車だけ青切符だ</p>
+          <span class="pv-count">10件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>16歳以上・免許不要・ヘルメットは努力義務、まではそのとおり。ただし警察庁は「特定小型原動機付自転車の運転者がした道路交通法の規定に違反する行為も、交通反則通告制度の対象とされました」と明記している。</p>
+          <p class="pv-note"><span class="pv-verdict">前提が食い違う</span>電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html" target="_blank" rel="noopener noreferrer">警察庁 特定小型原動機付自転車の交通ルール</a></p>
+        </div>
       </article>
-      <article class="stat insight-stat" data-tone="debate">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚔️</span><span class="insight-label">意見の割れ方</span></div>
-        <span class="insight-chip">39件差・道路整備が先が優勢</span>
-        <div class="insight-versus"><span>取締り強化<b>38</b></span><em>VS</em><span>道路整備が先<b>77</b></span></div>
-        <div class="insight-split" aria-hidden="true"><i style="width:33%"></i><i style="width:67%"></i></div>
+      <article class="pv-card" data-verdict="fact">
+        <div class="pv-head">
+          <p class="pv-claim">反則金は6,000円くらい取られる</p>
+          <span class="pv-count">8件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>警察庁が反則行為と金額の一覧を公表している。携帯電話使用等（保持）12,000円、遮断踏切立入り7,000円、信号無視6,000円（点滅信号を無視した場合は5,000円）。最も低い区分は3,000円。</p>
+          <p class="pv-note"><span class="pv-verdict">一致する</span>投稿で挙がる6,000円は、信号無視などの区分と一致する。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf" target="_blank" rel="noopener noreferrer">警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）</a></p>
+        </div>
       </article>
-      <article class="stat insight-stat" data-tone="topic">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
-        <strong class="insight-value">取締り強化 38<small>件</small></strong>
-        <p class="insight-note">危険運転やマナー違反を止めたいという声</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:21%"></i></div>
+      <article class="pv-card" data-verdict="fact">
+        <div class="pv-head">
+          <p class="pv-claim">対象は16歳以上だ</p>
+          <span class="pv-count">5件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>「16歳以上の運転者が対象となります」。16歳未満の違反は「これまで多くの場合、指導警告が行われており、その取扱いに変更はありません」。</p>
+          <p class="pv-note"><span class="pv-verdict">正しい</span>年齢の理解に食い違いは見当たらなかった。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html" target="_blank" rel="noopener noreferrer">警察庁 自転車の新しい制度</a></p>
+        </div>
       </article>
-      <article class="stat insight-stat" data-tone="option">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">第三の選択</span></div>
-        <strong class="insight-value">免許・講習 14<small>件</small></strong>
-        <p class="insight-note">罰則だけでなく、先にルールを学ぶ機会を求める</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:8%"></i></div>
+      <article class="pv-card" data-verdict="gap">
+        <div class="pv-head">
+          <p class="pv-claim">歩道を少し走っただけで即青切符・罰金</p>
+          <span class="pv-count">7件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>「単に歩道通行をしたといった場合は原則として指導警告の対象です」。悪質・危険な違反や、実際に交通の危険を生じさせた場合が検挙の対象とされている。</p>
+          <p class="pv-note"><span class="pv-verdict">食い違う</span>歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" target="_blank" rel="noopener noreferrer">警察庁 自転車ポータル よくある質問</a></p>
+        </div>
       </article>
-    </section>
+      <article class="pv-card" data-verdict="gap">
+        <div class="pv-head">
+          <p class="pv-claim">自転車の事故は減っている／いや増えている</p>
+          <span class="pv-count">2件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>令和7年中の自転車関連事故は67,470件で、前年より61件減少。減少幅は0.09%にあたる。</p>
+          <p class="pv-note"><span class="pv-verdict">どちらの言い方とも合わない</span>投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/info.html" target="_blank" rel="noopener noreferrer">警察庁 自転車は車のなかま</a></p>
+        </div>
+      </article>
+      <article class="pv-card" data-verdict="gap">
+        <div class="pv-head">
+          <p class="pv-claim">取締りなんて実際にはされていない</p>
+          <span class="pv-count">3件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>令和7年中、警察は自転車利用者に対して約110万件の指導警告票を交付し、約6万件の交通違反を検挙した。</p>
+          <p class="pv-note"><span class="pv-verdict">食い違う</span>警告を含めれば、件数としては相当数が行われている。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/info.html" target="_blank" rel="noopener noreferrer">警察庁 自転車は車のなかま</a></p>
+        </div>
+      </article>
+      <article class="pv-card" data-verdict="miss">
+        <div class="pv-head">
+          <p class="pv-claim">対象になる違反は113種類もある</p>
+          <span class="pv-count">2件の投稿</span>
+        </div>
+        <div class="pv-body">
+          <p class="pv-source"><strong>一次資料はどう書いているか。</strong>警察庁が公表している反則行為の一覧を数えると65項目だった。113という数字は、参照した警察庁の資料では確認できなかった。</p>
+          <p class="pv-note"><span class="pv-verdict">確認できず</span>113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。</p>
+          <p class="pv-src"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf" target="_blank" rel="noopener noreferrer">警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）</a></p>
+        </div>
+      </article>
+    </div>
+    <p class="pc-note">件数の数え方：本文をキーワードで拾っただけでは、無関係な金額（ポイ捨ての過料、ヘルメット購入補助）や報道の共有まで混ざり、実際より3〜4割多く出ます。そのため候補を1件ずつ読み、実際にその主張をしている投稿だけを残して数えています。賛成・反対どちらの投稿も含みます。</p>
+  </div>
+</section>
+
+<section id="process-found" aria-labelledby="process-found-title">
+  <div class="pc-inner">
+    <p class="pc-step">STEP 3 — 分かったこと</p>
+    <h2 id="process-found-title">「反対77件」は、ひとつの塊ではありませんでした</h2>
+    <p class="pc-lead">数えるだけなら、賛成38件に対して反対77件。反対が2倍です。ところが本文を読むと、その内訳は同じ方向を向いていません。</p>
+
+    <div class="pf-stage" id="pf-stage" data-state="before">
+      <div class="pf-track" aria-hidden="true"><span class="pf-seg" data-key="strict" data-side="oppose" style="--seg-w:7.826%;--seg-c:#b91c1c;--seg-shift:422.222%"></span><span class="pf-seg" data-key="support" data-side="support" style="--seg-w:33.043%;--seg-c:#e0654e;--seg-shift:-23.684%"></span><span class="pf-seg" data-key="scope" data-side="oppose" style="--seg-w:26.087%;--seg-c:#8b8fd8"></span><span class="pf-seg" data-key="place" data-side="oppose" style="--seg-w:8.696%;--seg-c:#4b9cf4"></span><span class="pf-seg" data-key="distrust" data-side="oppose" style="--seg-w:12.174%;--seg-c:#3b6fb0"></span><span class="pf-seg" data-key="abolish" data-side="oppose" style="--seg-w:12.174%;--seg-c:#1e3a6b"></span></div>
+      <p class="pf-caption" data-caption-before>いまの数え方：賛成38件（33%）と、反対77件（67%）。</p>
+      <p class="pf-caption" data-caption-after>読み直したあと：反対77件は6つに分かれ、うち9件は「青切符では甘い、免許制にしろ」と、賛成側より外側の要求でした。取締りそのものをやめろと読めるのは14件（12%）で、そのうち8件は同じ署名の定型文です。</p>
+      <button type="button" class="pf-replay" id="pf-replay"><span aria-hidden="true">▶</span>反対77件を分解する</button>
+      <ol class="pf-labels">
+        <li class="pf-label" data-key="strict"><span class="pf-swatch" style="background:#b91c1c"></span>
+          <b>9件</b><strong>青切符では足りない</strong><span>免許制・講習の義務化を求める。「反対」に分類されているが、要求の向きは逆。</span></li>
+        <li class="pf-label" data-key="support"><span class="pf-swatch" style="background:#e0654e"></span>
+          <b>38件</b><strong>今の青切符を支持する</strong><span>信号無視や歩道の暴走を実際に見た、という目撃の報告が根拠。</span></li>
+        <li class="pf-label" data-key="scope"><span class="pf-swatch" style="background:#8b8fd8"></span>
+          <b>30件</b><strong>対象と順番に異議</strong><span>青切符自体は否定せず、対象を絞れ・整備と周知が先だと順序を問う。</span></li>
+        <li class="pf-label" data-key="place"><span class="pf-swatch" style="background:#4b9cf4"></span>
+          <b>10件</b><strong>走る場所がない</strong><span>車道も歩道も選べないという、賛否以前の生活上の訴え。</span></li>
+        <li class="pf-label" data-key="distrust"><span class="pf-swatch" style="background:#3b6fb0"></span>
+          <b>14件</b><strong>警察の運用が信用できない</strong><span>制度の中身ではなく運用への異議。説明と現場の食い違い。</span></li>
+        <li class="pf-label" data-key="abolish"><span class="pf-swatch" style="background:#1e3a6b"></span>
+          <b>14件</b><strong>制度そのものに反対</strong><span>撤回・廃止すべきという立場。うち8件は同一の署名定型文。</span></li>
+      </ol>
+    </div>
+
+    <p class="pf-conclusion">立場が読み取れた115件のうち、危険な運転を取り締まること自体を否定していると読めるのは14件でした。多数派が問うているのは「やるかやらないか」ではなく、<strong>どこまでを対象にするか、どの順番で進めるか</strong>です。賛成の理由と反対の理由を左右に並べる形にしなかったのは、そこに線が引かれていなかったからです。</p>
+    <p class="pc-note">この内訳はSNS投稿サンプルの構成であり、社会全体の割合ではありません。同じ人が複数回投稿している可能性、署名の定型文が数を押し上げている可能性は、公開情報だけでは排除できていません。「整備が先だ」と書いた人が整備後に取締りを受け入れるかどうかも、投稿からは分かりません。</p>
+  </div>
+</section>
+
+<section id="process-table" aria-labelledby="process-table-title">
+  <div class="pc-inner">
+    <details class="pt-details">
+      <summary id="process-table-title">読み直した反対77件を、1件ずつ確認する</summary>
+      <p class="pc-lead">AIが付けた論点と、編集部が割り当てた区分を並べています。1件は1区分にのみ数えています。11件は、AIが表現に配慮が必要と判定したため本文の抜粋を載せず、投稿へのリンクだけにしています。</p>
+      <div class="pt-wrap">
+        <table>
+          <thead><tr><th>投稿（抜粋）</th><th>AIが付けた論点</th><th>編集部の区分</th><th>原文</th></tr></thead>
+          <tbody>
+            <tr><td class="pt-ex">自転車 を締め付けてまで税金取りたいか？テレビなどでは一方的に 自転車 が悪い報道をする。軽車両扱いなら 免許 制にしろ。 今まで何も言わなかったくせにいき…</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/healhearts123/status/2068991161252122951" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/tyocoramu/status/2067909250589044776" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">16以上から 自転車 取締で 青切符 切るの始まったけど やっぱり「どこも誰も教えてくれないじゃん！」って声あるんだから 高校、高専…etcで 半日～1日か…</td><td class="pt-ai">免許制要求</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/thepassenger200/status/2066304199453773844" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">やっぱり「 免許 不要」ってのが制度設計上の最大のミスなんだと思うンだニャ 自転車 が 青切符 制度導入になるまで何十年かかったかを考えれば 免許 制にしな…</td><td class="pt-ai">免許制要求</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/moconya/status/2063924527634268388" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車免許 制はよ！マナーも何も知らんヤツばかりが乗ってるから邪魔でしか無い！ 青切符 が意味ないという事を警察や国は理解すべし</td><td class="pt-ai">免許制要求</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/ABA_8S/status/2062951392902517086" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 の罰則 強化 されたけど タクシー乗ってると正直 自転車 の 一方通行逆走とか信号無視とか 見ない日はない。 警察もほとんど 取締り してない現状、…</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/degutityuui/status/2064269440171278639" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">そもそも、運転免許を取得していないものが、車両( 自転車 も車両等の一部ですよ)を手に入れられることが おかしい 。 青切符 制度を始める前に、運転免許を持…</td><td class="pt-ai">免許制要求</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/EPADPADHA2025/status/2071118307529458014" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">もう車だけじゃなくて 自転車 も 免許 制度実装してくれんかね? ルールも知らないのにイキってくるわ、車道ですら逆走して何こいつみたいな顔されるわで事故りた…</td><td class="pt-ai">免許制要求</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/UsagiUsagi50/status/2073608845830861063" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">#LUUP がどーのというより運転者がトチ狂ってるとしか。やっぱり要 免許 にすべきだろう。交通ルールを知らなさ過ぎる。 自転車 の 青切符 とかやる以前に…</td><td class="pt-ai">免許制要求</td><td class="pt-bd"><span class="pt-dot" style="background:#b91c1c"></span>青切符では足りない</td><td class="pt-link"><a href="https://x.com/azuka_shiki/status/2046449390496497912" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">もう、こういうのは都市部だけでいいんじゃないかねぇ？ 地方だと車も 自転車 も双方が危険になるよ。 このオンライン署名に賛同をお願いします！「 自転車 に対…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/zuppa_t/status/2067738312056639828" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  via @change_jp 私は車が…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/j52flx/status/2061443794344747198" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/kusdiyoko/status/2069017433956856152" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 の交通ルールについて。 2026年4月1日からは悪質な違反で 青切符 による反則金の対象。 田舎地方と都会でルールが同じってのも おかしい 。 誰が…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/gaokun___nnn2/status/2069754502547427529" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">守れないルール作るほうが おかしい 。どうやったら安全にルールを守れるのかを考えるのが有識者や議員と警察関係者の本来の仕事だろ。 &quot;黄色い線で 自転車 を抜…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/spnv2h89/status/2067953648047722913" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">そうなんです、派手な1軍女子だったもんで威圧感凄かったです😂 青切符 は例えばスマホしながらとか信号無視なんかは良いと思うんですがよっしーさんの言う通り 自…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/0922Sisi/status/2060307582515077434" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 専用 道路 どころか歩道すらも碌に整備されない現状を無視した 青切符 なんて小銭稼ぎを止めれば済むだけなのに馬鹿なの？</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/15jacnamagiga/status/2070261164618158443" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">ただ青線を 道路 に塗って看板立てただけの場当たり対応で環境が整ってないのにさらに 自転車青切符 導入。 今度はセンターラインとか言い出してアホすぎる。 片…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/golden9398/status/2070003381025034696" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">青切符 がダメな訳じゃねぇんだよなぁダメなのはろくに 道路 の整備も車側のルールとの擦り合わせせずに強行した事何だよ……しばらくと言うか 自転車道路 を敷い…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/suzuking408/status/2069735857695891855" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">例えば路肩駐車の取り締まりとか、 道路 の整備とかをしない癖に 自転車 と車を同じところで走らせようなんて土台無理な話だ。一丁前に 自転車 へ 青切符 なん…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/shirayuki_write/status/2069718795288297801" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 の反則金（ 青切符 ）制度の導入や傘さし運転の罰則強化。4月から新道交法は施行されたが街のインフラや 道路 の実態が伴わないまま規制だけが先行してい…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/many14219901/status/2069653099040673849" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">道路 の整備も出来てないのに 青切符 で 自転車 が歩道走行出来なくなるんだからこうなることわかってただろ 自転車 追い抜き「新ルール」が交通違反引き起こす…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/toratoramatus/status/2069640286129758338" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">皆さん、こんばんは。 ちらっと見ただけですが。 自転車 の 青切符 対象って、100以上！ ずっと 自転車 🚲乗ってないけど。 車の運転免許試験より難しいか…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/mhjj100924429/status/2068366069874483224" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">正直 自転車 に関してだけは本当にそう言われてもしょうがないと思う… 青切符 の前にそもそも 道路 なんとかしなきゃいけないよね…海外と違ってちゃんと 自転…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/bAgM8HRAo7aVtbp/status/2066690069206012139" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">「罰則」だけでは解決しない、都市 インフラ の構造的欠陥。 自転車 への 青切符 が導入されて早2カ月が経過し、歩道・車道走行をめぐる取り締まりの実態が問わ…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/koki_kajimoto/status/2067761200730095782" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">なぜ日本人は「 自転車 専用レーン」を選ばないのか？――支持率31か国中「最下位」 インフラ 不在のまま家計を削る「 青切符 」の現実 | Merkmal …</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/fullsunjp/status/2065650976074469713" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">分かるわ〜 歩行も困難だけと、オマケに 自転車 の 青切符 も始まって、訳のわからないことになってる… 全てにおいて、 インフラ の整備が必要じゃね⁉️</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/12red_and_blue/status/2065042729974059469" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">おこがましくも専門家ﾂﾞﾗしながら、歩道のある道路の割合は？と言う俺の問いにも答えられずにスルーしたお前。本来、主要幹線道路に、広い 自転車 道を確保した上…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/YP3xqnYKspOSM59/status/2064802887340069077" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">バカなのは追い越さないパトカー。逆にこの状況で 自転車 が歩道に入ると警察に歩道走行で 青切符 切られる可能性。 自転車 がゆっくり走ろうが関係ない。 イン…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/jianzijun381019/status/2063394602749726847" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">青切符 導入より先に、歩行者・ 自転車 ・自動車の３つをガードレールや縁石などで3分割する インフラ 整備をするべきだった</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/_hand_and_hand_/status/2061484624690475293" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">先日行いました、安全な 自転車 レーンなどの インフラ を求める国会前クリティカルマスを、朝日新聞が取り上げてくれました。青キップの前に安全な インフラ が…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/Mid_observatory/status/2050519664510562807" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/Coco2Poppin/status/2043699643520106773" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">港区にある東京で数少ない「まともな」 自転車 レーン。こんなふうにポール立てるだけでも、安心感はぜんぜん違います。4月の 青切符 導入まであと20日ほど。 …</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/Mid_observatory/status/2030591044098932852" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 が車道を走らなければ 青切符 を切られるようにするのは、欧米のように分離式の 自転車 レーンを整備してからだと思います。パリは2014年～2021年…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/Mid_observatory/status/2021909225249947652" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">これ最近多くない？ 自転車 の 青切符 とか始める前に 自転車 専用道路作ったり、 自転車 にも 免許 とか導入したらいいのに</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/fukumen_V/status/2063454860377485795" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">4月6日自動車 青切符反対 デモ警察庁前より。 自転車 はその時々で臨機応変に安全なところを走るべきで、その判断を机上で考えた細かなルールで邪魔をするので余…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/shinseiminkento/status/2041192037207478329" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">取締役さんの切り返し、さすがすぎます！😂 現場の警察官の「主観」で違反が決まるのは本当に曖昧すぎて困りますよね。 青切符 導入で 自転車 乗るのが怖くなりま…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/aminkf_/status/2074865044425498902" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">法改正とか難しそぉですね～ 道路 整備する前の 自転車青切符 もなんだかなあーです どうにもならないのでみんな歩道走ってますしw</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/isoe0815/status/2073033134334247300" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 の 青切符 始めだけで守ってる人少ないよ 警官だって見て見ぬふり 国は守らせるなら 自転車 専用 道路 整備してくれよ 路駐もしっかり取り締まってく…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/rainbow26278/status/2071039524466315464" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">「「 自転車 は 車道 を走るのが原則」と言われても、その 車道 が狭く、すぐ横を車が通る。」 「罰則と環境整備、その両輪がそろって初めて、 自転車 の安全…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#8b8fd8"></span>対象と順番に異議</td><td class="pt-link"><a href="https://x.com/tomi13_tomi13/status/2071503310058836419" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">違反が減ったんじゃなくて 自転車 に乗る人が減ったんだよ。子供に車道横を 自転車 で通らせるとか、頭 おかしい だろ。 ＃ 青切符 ＃ 自転車 自転車 「歩…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/isaiah8_1/status/2067988251760345275" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">日本人ですらグチャグチャなのに これで外国人も生活させて事故を起こすなと言う方が おかしい のでは？ また、 自転車 問題でも同じで、そもそも車メインの標識…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/teianjapan/status/2064856553036148982" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/stargamewalk101/status/2069849509274996774" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">中東情勢を考慮して自動車を使わず 自転車 でという気持ちになってるのに、 青切符 切るようにしたから乗るのが怖いと言って控えてる人が多い。霞ヶ関周辺の 道路…</td><td class="pt-ai">取締り強化賛成</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/wb_rin_p/status/2069698871832555613" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">今日、 自転車 レーンを見たら、路駐の車でいっぱいでした。もう1ヵ月半余りで、 自転車 は 車道 を走らなければ、 青切符 で6000円の反則金を取られます…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/Mid_observatory/status/2021148538013671884" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 はともかく原付は 免許 下にありますので…… 自転車青切符 の時とかに言われましたが、車と 自転車 とか特定原付とかは明確に通行帯分けてほしいところ…</td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/Eureka_2GG/status/2064886006168633754" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">「軽車両を除く」「 自転車 を除く」が無いのだから、進入しちゃダメだよな 都心にも数ヶ所あって、複数車線の一方通行路…ずっと前（ 青切符 制度のずっと前）に…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/tyuuuytrewq/status/2075113608175108149" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">「まぁそうなるな」としか言えないよね。 ただでさえ 道路 狭いのに実装したら渋滞するよ。 警察さん、 自転車青切符 と共に追い抜き新ルールを設けた結果 #2…</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/KarasumaRyusei/status/2071102742198911276" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">この問題。。。どうにもなりませんよねえ💦。元ツイの方曰く『 自転車 にも 青切符 』になる前は、こういう場合歩道が混んでなければ 自転車 は歩道を走ってくれ…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/infodai3/status/2073880288078561496" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">何が言いたいかというと 「 自転車 で歩道を走りたいけど 青切符 切られるのは嫌だし、かと言って 車道 を走るのも 怖い し、厄介な制度にしやがってムカつく…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#4b9cf4"></span>走る場所がない</td><td class="pt-link"><a href="https://x.com/yujirohanma1313/status/2071025514513625591" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">次々と免許不要の､､､ 一方で 自転車 には厳しく？ 交通ルールを知らない状態で乗るのがＯＫなら、 青切符 もやめなさいよ！ おかしい と思わないの？ 電動…</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/momota186cm_psa/status/2068676954656846060" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/knuckletn/status/2068259723267518964" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">ペダルを漕ぐ 自転車 にすら 青切符 を切るなら、レバー一つで時速20km出る電動バイク（LUUP）が、免許もなしにノーヘルで走っているのはどう考えてもダブ…</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/gamblertetuya/status/2067200208732406100" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">インフラ整備優先</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/48Kamaru/status/2067559221928091698" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自衛隊要請とか謎の押し付けムーブが来ても不思議ではない… もしくはオービス代稼ぐために一時停止違反とか 自転車取締り強化 するのかしら</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/takanori_w2/status/2068874487597318171" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">既に取りしまってないしまた来年辺りから TV「 自転車 の 取締り強化 します」 自「そんなの不公平だ！LOOPをなんとかしろ」 の繰り返し</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/hanihani3939/status/2061944934295625973" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/sagaismylife/status/2072611676764131600" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">一番上のコメントの人、大丈夫かな 自転車 の 青切符 のルール自体が おかしい って主張なんだけど ルールを決めたのが自分じゃ無い以上、そのルールに対する批…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/kabochanch/status/2074876704838017428" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/soramiruzo/status/2075043269420142614" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/soramiruzo/status/2073695061494448132" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">大日五差路交番の5,60代のオールバックの警官に、 自転車 は徐行でも歩道に進入禁止だと指導を受けました。危険ではないか？と質問したら「決まりだから仕方がな…</td><td class="pt-ai">車道走行への不安</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/soramiruzo/status/2071060415048786401" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">溝の口南口ケンタ前で警官3人が下らない 自転車 の取り締まりやってるので気を付けてください。しかも自動車 免許 出させて簡単に 青切符 切ってる模様。複数回…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/epsilon777_1999/status/2073222871384785299" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 追い抜き「新ルール」が 交通違反 引き起こす？ 7割超が黄色線はみ出し 白いセンターラインへの変更など警視庁が見直し検討 #FNNプライムオンライン…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/Wowmori/status/2069665723467837812" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">交通秩序悪化の原因にしかならないこんなルール、作った連中の想像力の完全なる欠落か、確信的悪意の 反則金 目当て、どちらかしかない◆&quot; 自転車 追い抜き「新ル…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#3b6fb0"></span>警察の運用が信用できない</td><td class="pt-link"><a href="https://x.com/yasuda28582030/status/2069658399000891577" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpから</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/KaMama777307/status/2062717203263431053" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！ 「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpより</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/ibarakinoumi/status/2060612879012008160" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpより</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/1vMQEYXYkunbQPM/status/2060569178411843921" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/kress813/status/2032672767527760350" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex"><span class="pt-hidden">本文の掲載は見送り（表現に配慮が必要と判定）</span></td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/kress813/status/2032229649317814760" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpから</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/smd5963/status/2031237042987049316" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">自転車 関連事故はめちゃくちゃ減ってるのに 青切符 導入とかどう考えても おかしい です</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/tarutora17/status/2063058066007118110" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">どうせ 自転車 も車も運転せず、公用車の後部座席に座ってる人たちが作ったルールでしょ？とまで思ってしまう 青切符 。いっそ辞めてもむしろみんな喜ぶよ。今の日…</td><td class="pt-ai">ルール曖昧・不信</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/Shuns_private/status/2069803637371814378" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">ね～ね～テクノポリスぅ 自転車 の車道通行 自転車 、 免許 の要らない乗り物の 青切符 制度を、 廃止しておくれよぉ・・・。 #フラワーラジオ</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/hikaruscarlet/status/2068989604510978450" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpより</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/sarusuberi2022/status/2073678665343455446" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpより</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/buVWlKgMyETvugi/status/2072990764876042375" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpより</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/7znw79Af3557537/status/2071440652462698957" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">このオンライン署名に賛同をお願いします！「 自転車 に対する 青切符 制度（罰金制度）の導入に強く 反対 します」  @change_jpより</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/smd5963/status/2036374372156580044" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+            <tr><td class="pt-ex">いやだから、 交通違反 の反則告知制度そのものが「訴追を免れるための賄賂制度」なんだって 道交法に違反しても、警察（最終的に交通安全協会）に 反則金 を払え…</td><td class="pt-ai">その他</td><td class="pt-bd"><span class="pt-dot" style="background:#1e3a6b"></span>制度そのものに反対</td><td class="pt-link"><a href="https://x.com/wakwak_koba/status/2069034167191716307" target="_blank" rel="noopener noreferrer">𝕏</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+<script id="process-found-anim">
+(() => {
+  const stage = document.getElementById('pf-stage');
+  if (!stage) return;
+  const replay = document.getElementById('pf-replay');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let played = false;
+  const play = () => {
+    stage.dataset.state = 'before';
+    if (reduced) { stage.dataset.state = 'after'; return; }
+    window.setTimeout(() => { stage.dataset.state = 'after'; }, 700);
+  };
+  replay.addEventListener('click', play);
+  if (!('IntersectionObserver' in window)) { stage.dataset.state = 'after'; return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || played) return;
+      played = true;
+      play();
+      io.disconnect();
+    });
+  }, { threshold: 0.35 });
+  io.observe(stage);
+})();
+</script>
+<!-- PROCESS_SECTIONS_END -->
     <!-- ===== 論点Explainer ===== -->
+
+<section class="panel" id="explainer-section">
+<div class="panel-title"><h2>このテーマを読み解く、5つの論点</h2><span>それぞれの問いを把握してから</span></div>
+<p class="explainer-lead">「自転車の青切符」の議論は「賛成か反対か」だけではありません。取り締まりの是非・インフラ整備の順番・車道走行の危険性・免許制の必要性・ルールの曖昧さ——5つの論点を整理してから投票に進んでください。</p>
+<div class="explainer-grid">
+  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" data-alt="取締り強化賛成">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点①</span>
+      <div>
+        <p class="explainer-card-title">取締り強化賛成 — 「危険な自転車に青切符は当然か」<span class="explainer-count" id="issue-count-bike-blue-ticket-torishimari">38件</span></p>
+        <p class="explainer-card-desc">信号無視・ながらスマホ・歩道の無謀走行への抑止力として青切符を歓迎。SNS上ではこの論点だけ、全員が取締り強化を支持。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">支持：歩行者の安全のため抑止力が必要</span>
+          <span class="explainer-side pro">焦点：どの違反行為を対象にするか</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" alt="論点① 取締り強化賛成" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" data-alt="インフラ整備優先">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点②</span>
+      <div>
+        <p class="explainer-card-title">インフラ整備優先 — 「自転車レーンがないのに取り締まれるか」<span class="explainer-count" id="issue-count-bike-blue-ticket-infra">29件</span></p>
+        <p class="explainer-card-desc">うち27件（93%）が反対。専用レーンなしの罰則先行は理不尽という立場。「整備が先、取締りは後」という順番論が中心。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">反対：レーン整備なしの取締りは理不尽</span>
+          <span class="explainer-side con">条件付き：整備と並行なら取締りに賛成</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" alt="論点② インフラ整備優先" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" data-alt="車道走行への不安">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点③</span>
+      <div>
+        <p class="explainer-card-title">車道走行への不安 — 「「車道を走れ」というルールは安全か」<span class="explainer-count" id="issue-count-bike-blue-ticket-shado">14件</span></p>
+        <p class="explainer-card-desc">うち12件（86%）が不安を訴える。路駐・トラック・子ども・高齢者の問題。歩道を飛ばす自転車への歩行者の怒りとも交差する。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">不安：路駐や大型車で車道は危険</span>
+          <span class="explainer-side con">歩行者：歩道の自転車のほうが問題</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" alt="論点③ 車道走行への不安" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" data-alt="免許制要求">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点④</span>
+      <div>
+        <p class="explainer-card-title">免許制要求 — 「罰則の前に、ルールを教えるべきでは？」<span class="explainer-count" id="issue-count-bike-blue-ticket-menkyo">14件</span></p>
+        <p class="explainer-card-desc">取締り支持12%・中立44%・反対44%と最も拮抗。「知らずに違反させる前に免許・講習を義務化すべき」という提案型の論点。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">提案：事前講習・免許制を義務化すべき</span>
+          <span class="explainer-side pro">反対：免許制は自転車利用の障壁になる</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" alt="論点④ 免許制要求" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" data-alt="ルール曖昧・不信">
+    <div class="explainer-card-label">
+      <span class="explainer-num">論点⑤</span>
+      <div>
+        <p class="explainer-card-title">ルール曖昧・不信 — 「113種類の違反基準——誰が全部わかるか」<span class="explainer-count" id="issue-count-bike-blue-ticket-rule">18件</span></p>
+        <p class="explainer-card-desc">うち12件（67%）が反対・不信。「何が違反かわからない」「警察の恣意的運用が怖い」。基準の整理と周知なしでの取締りに強く反対。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">不信：基準が複雑で警察の裁量が広すぎる</span>
+          <span class="explainer-side con">条件：周知・整理後なら取締りに賛成</span>
+        </div>
+      </div>
+    </div>
+    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" alt="論点⑤ ルール曖昧・不信" loading="lazy">
+  </article>
+</div>
+<p class="explainer-note"><strong>使い方:</strong> 5つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
+</section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>(function(){
+  var modal=document.getElementById('explainer-modal');
+  var mImg=document.getElementById('explainer-modal-img');
+  var mClose=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
+    c.addEventListener('click',function(){mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');});
+  });
+  mClose.addEventListener('click',function(){modal.classList.remove('open');});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
+})();</script>
+<!-- REREAD_BASIS_START -->
+<style id="reread-basis-css">
+#reread-basis{padding:8px min(6vw,72px) 30px;background:var(--bg)}
+#reread-basis .rb-inner{max-width:1000px;margin:0 auto}
+#reread-basis h2{font-size:clamp(19px,3.2vw,24px);line-height:1.5;margin:0 0 8px;color:var(--ink)}
+#reread-basis .rb-lead{font-size:13.5px;line-height:1.9;color:var(--muted);margin:0 0 16px}
+#reread-basis .rb-grid{display:grid;gap:11px}
+#reread-basis .rb-card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px}
+#reread-basis .rb-card h3{display:flex;align-items:baseline;gap:8px;margin:0 0 6px;font-size:15px;font-weight:900;color:var(--ink)}
+#reread-basis .rb-card h3 b{margin-left:auto;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
+#reread-basis .rb-dot{width:10px;height:10px;border-radius:3px;align-self:center}
+#reread-basis .rb-rule{margin:0 0 10px;font-size:13px;line-height:1.85;color:var(--ink)}
+#reread-basis .rb-rule::before{content:"物差し：";font-weight:900;color:var(--muted);font-size:12px}
+#reread-basis .rb-cases{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+#reread-basis .rb-cases li{border-left:3px solid var(--line);padding-left:11px}
+#reread-basis .rb-cases q{display:block;font-size:13px;line-height:1.8;color:var(--ink);font-weight:700;quotes:"「" "」"}
+#reread-basis .rb-cases span{display:block;margin-top:3px;font-size:12.5px;line-height:1.8;color:var(--muted)}
+#reread-basis .rb-note{margin:14px 0 0;font-size:12px;line-height:1.9;color:var(--muted)}
+#reread-basis .thirty-summary{display:block!important;margin:14px 0 0!important;max-width:none!important;grid-template-columns:none!important}
+#reread-basis .thirty-summary-title{display:none!important}
+#reread-basis .thirty-summary ul{display:block!important;margin:0!important;padding:0!important}
+#reread-basis .thirty-summary li{list-style:none;display:flex!important;align-items:baseline;gap:10px;flex-wrap:wrap;background:var(--accent-soft)!important;border:1px solid var(--line)!important;border-radius:10px;padding:12px 15px!important;color:var(--ink)!important;min-height:0!important}
+#reread-basis .thirty-summary li::before,#reread-basis .thirty-summary li::after{content:none!important;display:none!important}
+#reread-basis .thirty-summary .conclusion-count{color:var(--accent)!important;font-weight:900;font-size:13px!important;white-space:nowrap;background:none!important;padding:0!important;position:static!important;top:auto!important;right:auto!important;border:0!important}
+#reread-basis .thirty-summary .conclusion-count b{font-size:20px}
+#reread-basis .thirty-summary .conclusion-focus strong{font-size:14px!important;font-weight:800;color:var(--ink)!important}
+#reread-basis .thirty-summary .conclusion-detail{flex:1 1 100%;font-size:12.5px!important;line-height:1.8;color:var(--muted)!important;font-weight:500}
+@media (max-width:720px){#reread-basis{padding:4px 14px 24px}}
+</style>
+<section id="reread-basis" aria-labelledby="reread-basis-title">
+  <div class="rb-inner">
+    <h2 id="reread-basis-title">その1件を、どうやってその区分に入れたか</h2>
+    <p class="rb-lead">冒頭の内訳は編集部の読み直しによるものです。判断が妥当かどうかを読者が確かめられるよう、区分ごとの物差しと、実際に決め手になった文言を挙げます。</p>
+    <div class="rb-grid">
+      <article class="rb-card">
+        <h3><span class="rb-dot" style="background:#b91c1c"></span>青切符では足りない<b>9件</b></h3>
+        <p class="rb-rule">青切符を弱いと見て、免許制や講習の義務化など、より強い規制を求めているもの。</p>
+        <ul class="rb-cases"><li><q>「免許不要」ってのが制度設計上の最大のミス</q><span>制度の欠陥を「罰が軽い」ではなく「学ぶ機会がない」と見ている。撤回ではなく上乗せの要求。</span></li><li><q>青切符だけでは改善されないので、購入前に道路交通法の講習を義務付けるべき</q><span>青切符を否定せず、その手前に義務を足せと言っている。</span></li></ul>
+      </article>
+      <article class="rb-card">
+        <h3><span class="rb-dot" style="background:#8b8fd8"></span>対象と順番に異議<b>30件</b></h3>
+        <p class="rb-rule">青切符そのものは認めたうえで、対象の広さか、着手の順番に異議を唱えているもの。</p>
+        <ul class="rb-cases"><li><q>青切符がダメな訳じゃねぇんだよなぁ</q><span>制度の否定を本人が明示的に打ち消している。続けて「強行した事」が問題だと書く。</span></li><li><q>青切符は例えばスマホしながらとか信号無視なんかは良いと思うんですが</q><span>一部の違反は取締り対象として認めている。範囲の議論であって是非の議論ではない。</span></li><li><q>無灯火・逆走・ながらスマホくらいに絞って開始して</q><span>対象を絞れという要求そのもの。</span></li></ul>
+      </article>
+      <article class="rb-card">
+        <h3><span class="rb-dot" style="background:#4b9cf4"></span>走る場所がない<b>10件</b></h3>
+        <p class="rb-rule">制度への賛否ではなく、どこを走ればよいのか分からないという体験が中心のもの。</p>
+        <ul class="rb-cases"><li><q>子供前後に載せてる自転車も車道走らないと罰則なんでしょう？</q><span>評価ではなく、自分の身に起きることへの問い。</span></li><li><q>路駐だらけの車道を走るのは、本当に怖いです</q><span>反対の理由ではなく、走行環境の描写。</span></li></ul>
+      </article>
+      <article class="rb-card">
+        <h3><span class="rb-dot" style="background:#3b6fb0"></span>警察の運用が信用できない<b>14件</b></h3>
+        <p class="rb-rule">制度の中身ではなく、警察の運用や動機に疑いを向けているもの。</p>
+        <ul class="rb-cases"><li><q>複数回や重大な違反でない限り切符切らないとか言ってなかったっけ…？</q><span>説明と現場の食い違いを問題にしている。制度設計そのものへの反対ではない。</span></li><li><q>全部摘発したら反則金だけで国の借金1200兆円を返済できてしまうのでは</q><span>動機への疑い。金額の主張ではないため、事実確認の対象にも入れていない。</span></li></ul>
+      </article>
+      <article class="rb-card">
+        <h3><span class="rb-dot" style="background:#1e3a6b"></span>制度そのものに反対<b>14件</b></h3>
+        <p class="rb-rule">撤回・廃止を求めているもの。理由を書かずに反対だけを表明したものもここに入れる。</p>
+        <ul class="rb-cases"><li><q>いっそ辞めてもむしろみんな喜ぶよ</q><span>制度の存続そのものを否定している。</span></li><li><q>自転車に対する青切符制度（罰金制度）の導入に強く反対します</q><span>オンライン署名の定型文。理由が書かれていないため、内容では他の区分に振り分けられない。同じ文面が8件。</span></li></ul>
+      </article>
+    </div>
+    <div class="thirty-summary" aria-label="SNS投稿で最も多かった論点"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>
+      <li class="conclusion-focus"><span class="conclusion-count"><b>38</b>件</span><strong>AIによる5論点の分類では「取締り強化賛成」が最多</strong><span class="conclusion-detail">歩道の暴走や信号無視の実害を挙げ、取締りの強化を支持する声です。これはSNS投稿サンプルの内訳であり、賛否の結論ではありません。</span></li>
+    </ul></div>
+    <p class="rb-note">読み直したのは反対77件だけです。賛成38件はAIの分類のまま扱っており、同じ精度で見直してはいません。1件は1区分にのみ数えています。全77件の割り当ては<a href="#process-table">全件表</a>にあります。</p>
+  </div>
+</section>
+<!-- REREAD_BASIS_END -->
+
 <section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
 <section class="tide-card" id="bike-blue-ticket-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
   <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
@@ -938,99 +1415,6 @@
 })();
 </script>
 <!-- TIDE_CARD_END --></section>
-
-<section class="panel" id="explainer-section">
-<div class="panel-title"><h2>このテーマを読み解く、5つの論点</h2><span>それぞれの問いを把握してから</span></div>
-<p class="explainer-lead">「自転車の青切符」の議論は「賛成か反対か」だけではありません。取り締まりの是非・インフラ整備の順番・車道走行の危険性・免許制の必要性・ルールの曖昧さ——5つの論点を整理してから投票に進んでください。</p>
-<div class="explainer-grid">
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" data-alt="取締り強化賛成">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点①</span>
-      <div>
-        <p class="explainer-card-title">取締り強化賛成 — 「危険な自転車に青切符は当然か」<span class="explainer-count" id="issue-count-bike-blue-ticket-torishimari">38件</span></p>
-        <p class="explainer-card-desc">信号無視・ながらスマホ・歩道の無謀走行への抑止力として青切符を歓迎。SNS上ではこの論点だけ、全員が取締り強化を支持。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">支持：歩行者の安全のため抑止力が必要</span>
-          <span class="explainer-side pro">焦点：どの違反行為を対象にするか</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" alt="論点① 取締り強化賛成" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" data-alt="インフラ整備優先">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点②</span>
-      <div>
-        <p class="explainer-card-title">インフラ整備優先 — 「自転車レーンがないのに取り締まれるか」<span class="explainer-count" id="issue-count-bike-blue-ticket-infra">29件</span></p>
-        <p class="explainer-card-desc">うち27件（93%）が反対。専用レーンなしの罰則先行は理不尽という立場。「整備が先、取締りは後」という順番論が中心。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">反対：レーン整備なしの取締りは理不尽</span>
-          <span class="explainer-side con">条件付き：整備と並行なら取締りに賛成</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" alt="論点② インフラ整備優先" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" data-alt="車道走行への不安">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点③</span>
-      <div>
-        <p class="explainer-card-title">車道走行への不安 — 「「車道を走れ」というルールは安全か」<span class="explainer-count" id="issue-count-bike-blue-ticket-shado">14件</span></p>
-        <p class="explainer-card-desc">うち12件（86%）が不安を訴える。路駐・トラック・子ども・高齢者の問題。歩道を飛ばす自転車への歩行者の怒りとも交差する。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">不安：路駐や大型車で車道は危険</span>
-          <span class="explainer-side con">歩行者：歩道の自転車のほうが問題</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" alt="論点③ 車道走行への不安" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" data-alt="免許制要求">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点④</span>
-      <div>
-        <p class="explainer-card-title">免許制要求 — 「罰則の前に、ルールを教えるべきでは？」<span class="explainer-count" id="issue-count-bike-blue-ticket-menkyo">14件</span></p>
-        <p class="explainer-card-desc">取締り支持12%・中立44%・反対44%と最も拮抗。「知らずに違反させる前に免許・講習を義務化すべき」という提案型の論点。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">提案：事前講習・免許制を義務化すべき</span>
-          <span class="explainer-side pro">反対：免許制は自転車利用の障壁になる</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" alt="論点④ 免許制要求" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" data-alt="ルール曖昧・不信">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点⑤</span>
-      <div>
-        <p class="explainer-card-title">ルール曖昧・不信 — 「113種類の違反基準——誰が全部わかるか」<span class="explainer-count" id="issue-count-bike-blue-ticket-rule">18件</span></p>
-        <p class="explainer-card-desc">うち12件（67%）が反対・不信。「何が違反かわからない」「警察の恣意的運用が怖い」。基準の整理と周知なしでの取締りに強く反対。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">不信：基準が複雑で警察の裁量が広すぎる</span>
-          <span class="explainer-side con">条件：周知・整理後なら取締りに賛成</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" alt="論点⑤ ルール曖昧・不信" loading="lazy">
-  </article>
-</div>
-<p class="explainer-note"><strong>使い方:</strong> 5つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
-</section>
-<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
-  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
-  <img src="" alt="" id="explainer-modal-img">
-</div>
-<script>(function(){
-  var modal=document.getElementById('explainer-modal');
-  var mImg=document.getElementById('explainer-modal-img');
-  var mClose=document.getElementById('explainer-modal-close');
-  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
-    c.addEventListener('click',function(){mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');});
-  });
-  mClose.addEventListener('click',function(){modal.classList.remove('open');});
-  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
-})();</script>
     <!-- ARGUMENTS_START -->
 <style>
   .arguments-panel .argument-summary{font-size:17px;line-height:1.9;font-weight:700;background:var(--accent-soft);border-left:5px solid var(--accent);border-radius:0 12px 12px 0;padding:18px 20px;margin:0 0 24px}
@@ -1205,6 +1589,43 @@
 })();
 </script>
     
+<style id="insight-issue-breakdown-css">
+.insight-issue-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
+.insight-issue-list li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--ink)}
+.insight-issue-list .insight-issue-bar{grid-column:1/-1;height:5px;border-radius:999px;background:rgba(15,23,42,.08);overflow:hidden}
+.insight-issue-list .insight-issue-bar i{display:block;height:100%;border-radius:999px;background:var(--accent)}
+.insight-issue-list b{font-variant-numeric:tabular-nums}
+</style>
+<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
+      <article class="stat insight-stat">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
+        <strong class="insight-value">181<small>件</small></strong>
+        <p class="insight-note">うち賛否が読み取れた113件を5論点に分類（残る68件は「その他・分類保留」）</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="debate">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚔️</span><span class="insight-label">5論点の内訳</span></div>
+        <ul class="insight-issue-list">
+          <li><span>取締り強化賛成</span><b>38件</b><span class="insight-issue-bar"><i style="width:100%"></i></span></li>
+          <li><span>インフラ整備優先</span><b>29件</b><span class="insight-issue-bar"><i style="width:76%"></i></span></li>
+          <li><span>ルール曖昧・不信</span><b>18件</b><span class="insight-issue-bar"><i style="width:47%"></i></span></li>
+          <li><span>車道走行への不安</span><b>14件</b><span class="insight-issue-bar"><i style="width:37%"></i></span></li>
+          <li><span>免許制要求</span><b>14件</b><span class="insight-issue-bar"><i style="width:37%"></i></span></li>
+        </ul>
+      </article>
+      <article class="stat insight-stat" data-tone="topic">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
+        <strong class="insight-value">取締り強化 38<small>件</small></strong>
+        <p class="insight-note">危険運転やマナー違反を止めたいという声。5論点113件の34%</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:34%"></i></div>
+      </article>
+      <article class="stat insight-stat" data-tone="option">
+        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">第三の選択</span></div>
+        <strong class="insight-value">免許・講習 14<small>件</small></strong>
+        <p class="insight-note">罰則だけでなく、先にルールを学ぶ機会を求める</p>
+        <div class="insight-meter" aria-hidden="true"><i style="width:12%"></i></div>
+      </article>
+    </section>
 <!-- ===== 極座標 SNS反応マップ ===== -->
 <section class="polar-arena-section" id="issue-arena-section">
 <div id="issue-arena-inner" style="max-width:720px;margin:0 auto">
