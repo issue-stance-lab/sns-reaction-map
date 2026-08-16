@@ -126,6 +126,32 @@ THEMES = [
         "issue_labels": ["男系vs女系", "旧宮家養子縁組", "立法手続き・民主主義", "女性天皇・女系天皇", "愛子さま・皇族の地位"],
         "note": "比較対象：7月17日収集分の2Dスタンス統計（改正成立直後326件）と7月26日収集分のAI分類（347件）。前回は2D分類データを再構成した参考値です。同じ人の意見が移動したことや世論全体の変化を示すものではありません。",
     },
+    {
+        # 潮目ウィジェットの原型がこのページで、汎用JSとCSSは _load_generic_js /
+        # _load_tide_css がここから読み出している。adapter（refresh_adapters/
+        # constitutional.py）が更新回どうしの比較で作り直すので、prev_file / cur_file は
+        # 使わない（前回・今回は social-samples/updates/ の実データから決まる）。
+        "slug": "constitutional-amendment",
+        "html": "docs/constitutional-amendment-reaction-map.html",
+        "widget_id": "constitutional-tide-widget",
+        "prev_file": None,
+        "cur_file": None,
+        "prev_label": "",
+        "cur_label": "",
+        "use_relevance_filter": True,
+        # 立場・論点は scripts/build_constitutional_arena.py の定義と同じ順。
+        # 「その他」は投票にもカードにも出さないので潮目からも外す。
+        "stance_labels": ["慎重・反対", "中立", "手続き重視", "改正推進"],
+        "issue_labels": [
+            "改憲全般",
+            "9条・自衛隊",
+            "緊急事態条項",
+            "国民投票・広告",
+            "政党・発議手続き",
+            "情報・議論の質",
+        ],
+        "note": "",
+    },
 ]
 
 
@@ -315,6 +341,10 @@ def main() -> None:
 
     for theme in THEMES:
         print(f"\n=== {theme['slug']} ===")
+        if not theme.get("prev_file") or not theme.get("cur_file"):
+            # adapter が更新回どうしを比較して作り直すテーマ。固定ファイルを持たない。
+            print("  SKIP: adapter が更新回から生成する（固定の比較ファイルなし）")
+            continue
         prev_path = SS / theme["prev_file"]
         cur_path = SS / theme["cur_file"]
 

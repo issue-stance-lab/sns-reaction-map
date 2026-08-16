@@ -6,6 +6,14 @@
 
     python3 scripts/build_constitutional_arena.py
     python3 scripts/build_constitutional_arena.py --check
+
+adapter（refresh_topic.py --promote）から呼ぶときは、正典も公開ページも触らずに
+候補だけを組み立てる。読み書きの3点はまとめて指定する。
+
+    python3 scripts/build_constitutional_arena.py \\
+      --input <stage>/cumulative-candidate.json \\
+      --html-template docs/constitutional-amendment-reaction-map.html \\
+      --output-html <stage>/page-candidate.html
 """
 
 from __future__ import annotations
@@ -23,10 +31,12 @@ import yaml
 
 try:
     from .issue_card_counts import IssueCountError, span_html
-    from .x_embed import embed_html
+    from .verify_sample_periods import expected_period, summarize
+    from .x_embed import embed_html, period_label
 except ImportError:
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
-    from x_embed import embed_html  # type: ignore[no-redef]
+    from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
+    from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -68,12 +78,22 @@ def classification(record: dict[str, Any]) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-def load_canon() -> tuple[list[dict[str, Any]], int, str]:
+def sample_period(records: list[dict[str, Any]]) -> str:
+    """調査条件に出す収集日の範囲。
+
+    THEMES.yaml の `sample_period` と同じ計算を使う。verify_theme_page.py が台帳の値と
+    ページの表記を突き合わせるので、別々に数えるといつか必ずズレる。収集回が増える
+    たびに変わる値なので、ページ側にも固定で書かない。
+    """
+    return period_label(expected_period(summarize(records)))
+
+
+def load_canon(input_path: Path | None = None) -> tuple[list[dict[str, Any]], int, str]:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
     sample_file = str(themes[THEME]["sample_file"])
     if "synthetic" in sample_file:
         raise IssueCountError(f"合成データは正典にできません: {sample_file}")
-    records = json.loads((ROOT / sample_file).read_text(encoding="utf-8"))
+    records = json.loads((input_path or ROOT / sample_file).read_text(encoding="utf-8"))
     if not isinstance(records, list) or not records:
         raise IssueCountError(f"正典が空、またはJSON配列ではありません: {sample_file}")
 
@@ -94,7 +114,8 @@ def load_canon() -> tuple[list[dict[str, Any]], int, str]:
     if missing_stance:
         values = Counter(str(classification(r).get("stance")) for r in missing_stance)
         raise IssueCountError(f"未知または未設定の stance があります: {dict(values)}")
-    return rows, len(records), sample_file
+    source = str(input_path) if input_path else sample_file
+    return rows, len(records), source, sample_period(records)
 
 
 def js_string(value: object) -> str:
@@ -275,13 +296,21 @@ def replace_once(source: str, pattern: str, replacement: str, label: str, *, fla
     return updated
 
 
-def build(*, check: bool = False) -> tuple[list[str], bool]:
-    rows, collected, sample_file = load_canon()
+def build(
+    *,
+    check: bool = False,
+    input_path: Path | None = None,
+    html_template: Path | None = None,
+    output_html: Path | None = None,
+) -> tuple[list[str], bool]:
+    rows, collected, sample_file, period = load_canon(input_path)
     total = len(rows)
     issue_counts = Counter(str(classification(r)["main_issue"]) for r in rows)
     stance_counts = Counter(str(classification(r)["stance"]) for r in rows)
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
-    before = PAGE.read_text(encoding="utf-8")
+    template = html_template or PAGE
+    destination = output_html or PAGE
+    before = template.read_text(encoding="utf-8")
     page = before
 
     lead = (
@@ -308,7 +337,7 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         # data/review-ledger.json に合わせて中身を書き分け、
         # verify_number_provenance.py がこの囲みだけを検査から外す。
         # 囲みを落とすと再生成のたびに検査が落ちる。
-        '  （取得期間: 2026-06-20〜2026-07-25／'
+        f'  （取得期間: {period}／'
         '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
         '  <strong>社会全体の世論調査ではありません。</strong></p>\n'
         '</aside>\n<!-- RESEARCH_CONDITIONS_END -->'
@@ -422,10 +451,11 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
         raise IssueCountError("論点またはスタンスの合計が意見件数と一致しません")
 
     changed = page != before
-    if changed and not check:
-        PAGE.write_text(page, encoding="utf-8")
+    if not check and (changed or destination != template):
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(page, encoding="utf-8")
     lines = [
-        f"出所: {sample_file}（収集{collected}件 → 意見{total}件）",
+        f"出所: {sample_file}（収集{collected}件 → 意見{total}件 / 取得期間 {period}）",
         "論点: " + " / ".join(f"{name}={issue_counts[name]}" for name, _ in ISSUES),
         "賛否: " + " / ".join(f"{stance}={stance_counts[stance]}" for stance in STANCES),
         f"マップ: {total}点 / 論点カード: {len(cards)}枚 / スタンス: {len(STANCES)}種",
@@ -436,9 +466,22 @@ def build(*, check: bool = False) -> tuple[list[str], bool]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
+    parser.add_argument("--input", type=Path, help="正典の代わりに読む累積候補（adapter用）")
+    parser.add_argument("--html-template", type=Path, help="読み込むHTML（既定は公開ページ）")
+    parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     args = parser.parse_args()
+    candidate_args = (args.input, args.html_template, args.output_html)
+    if args.check and any(candidate_args):
+        parser.error("--checkは公開ページと正典の一致確認専用です")
+    if any(candidate_args) and not all(candidate_args):
+        parser.error("候補生成では--input/--html-template/--output-htmlをすべて指定してください")
     try:
-        lines, changed = build(check=args.check)
+        lines, changed = build(
+            check=args.check,
+            input_path=args.input,
+            html_template=args.html_template,
+            output_html=args.output_html,
+        )
     except (IssueCountError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
