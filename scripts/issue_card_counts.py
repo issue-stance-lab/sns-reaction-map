@@ -111,6 +111,9 @@ def card_counts(theme: str, config: dict[str, Any], sample_file: str | None) -> 
                 # 論点セクションと論点ナビが使うアンカー。ページ側のidがslugと違う
                 # テーマがあるので、違う場合だけ configs に anchor を書く。
                 "anchor": str(card.get("anchor") or f"issue-{slug}"),
+                # 件数spanを出す場所。カード見出しの下に分類ラベルの行がある
+                # テーマは、見出しではなくその行へ付ける（例: ai-copyright）。
+                "display_label": str(card.get("display_label") or "").strip(),
                 # アリーナのセクター配列 ISSUES のキー。表示名が分類ラベルと
                 # 違うテーマ（例: データ「技術競争・推進」／表示「技術競争・AI推進」）がある。
                 "arena_label": str(card.get("arena_label") or "").strip(),
