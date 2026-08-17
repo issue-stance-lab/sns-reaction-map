@@ -52,6 +52,33 @@ def generate() -> dict[str, dict[str, Any]]:
     return result
 
 
+def stale_owner_period(actual: str, theme: dict[str, Any]) -> str:
+    """オーナー確認済みの取得期間が、最後の公開更新より古いままでないかを見る。
+
+    `owner_confirmed` のテーマは `--promote` で `sample_period` が自動更新されない。
+    そのため台帳を直し忘れると、ページの取得期間が半月前のまま公開される
+    （2026-08-17 の自転車青切符で実際に起きた。STEP1も調査条件ブロックもこの値から
+    作るので、2か所が揃って古くなり、食い違いの検査では気づけない）。
+
+    範囲で書かれているときだけ、終わりの日が `updated_at`（その回の収集日）と
+    一致することを求める。開始日だけの表記は範囲を持たないので対象外。
+    戻り値は理由の文字列。問題なければ空文字。
+    """
+    if "〜" not in actual:
+        return ""
+    updated_at = str(theme.get("updated_at") or "")
+    if not DATE_RE.fullmatch(updated_at):
+        return ""
+    end = actual.split("〜", 1)[1]
+    if end == updated_at:
+        return ""
+    return (
+        f"取得期間の終わりが最終更新日と違う: 台帳={actual} / updated_at={updated_at}。"
+        "収集した回まで期間を伸ばして sample_period を直してください"
+        "（このテーマは sample_period_source: owner_confirmed のため自動では伸びません）"
+    )
+
+
 def verify(evidence: dict[str, dict[str, Any]]) -> int:
     failures = 0
     themes = parse_themes_yaml()
@@ -64,11 +91,16 @@ def verify(evidence: dict[str, dict[str, Any]]) -> int:
         expected = expected_period(item)
         actual = str(theme.get("sample_period") or "")
         if theme.get("sample_period_source") == "owner_confirmed":
-            if OWNER_PERIOD_RE.fullmatch(actual):
-                print(f"OK  {slug}: {actual}（オーナー確認済み／取得日欠損{item['missing_records']}/{item['records']}件）")
+            if not OWNER_PERIOD_RE.fullmatch(actual):
+                print(f"NG  {slug}: オーナー確認済みの sample_period が日付形式ではない: {actual}")
+                failures += 1
                 continue
-            print(f"NG  {slug}: オーナー確認済みの sample_period が日付形式ではない: {actual}")
-            failures += 1
+            stale = stale_owner_period(actual, theme)
+            if stale:
+                print(f"NG  {slug}: {stale}")
+                failures += 1
+                continue
+            print(f"OK  {slug}: {actual}（オーナー確認済み／取得日欠損{item['missing_records']}/{item['records']}件）")
             continue
         if actual == expected:
             print(f"OK  {slug}: {actual}（欠損{item['missing_records']}/{item['records']}件）")
