@@ -331,39 +331,59 @@ def prepare_archived_resume(
     current_date: str,
     stage: Path,
     current: list[dict[str, Any]],
+    include_waves: list[str] | None = None,
 ) -> dict[str, Any] | None:
     """保存済み更新回を改変せず、現在の正典へ足せる分だけをstageへ戻す。
 
     収集後に別の更新回が正典へ統合されると、当時は新規だった投稿の一部が
     公開時点では重複になる。収集履歴は当時の事実として残し、累積候補だけを
     現在の正典に対して再重複判定する。
+
+    include_waves を渡すと、まだ公開していない過去の更新回も同じ候補へ畳み込む。
+    公開できない期間に収集だけが進むと更新回が溜まり、1回ずつ公開しようとすると
+    途中の状態が「収集期限が過ぎている」で必ず落ちるため（自転車青切符でも
+    2回分をまとめて統合した）。保管された更新回そのものは書き換えない。
     """
-    archived = root / "social-samples" / "updates" / topic / current_date
-    paths = {
-        "raw": archived / "raw.json",
-        "classified": archived / "classified.json",
-        "report": archived / "report.json",
+    dates = sorted(set(include_waves or []) | {current_date})
+    archives = {
+        date: {
+            "raw": root / "social-samples" / "updates" / topic / date / "raw.json",
+            "classified": root / "social-samples" / "updates" / topic / date / "classified.json",
+            "report": root / "social-samples" / "updates" / topic / date / "report.json",
+        }
+        for date in dates
     }
-    if not all(path.is_file() for path in paths.values()):
+    if not all(path.is_file() for paths in archives.values() for path in paths.values()):
         return None
 
     raw = read_rows(stage / "raw.json")
-    archived_raw = read_rows(paths["raw"])
-    if {identity(row) for row in raw} != {identity(row) for row in archived_raw}:
-        raise ValueError(f"{topic}: resume対象のrawが保存済み{current_date}更新回と一致しません")
-
-    archived_classified = read_rows(paths["classified"])
-    archived_ids = {identity(row) for row in archived_classified}
-    raw_ids = {identity(row) for row in archived_raw}
-    if not archived_ids <= raw_ids:
-        raise ValueError(f"{topic}: 保存済みclassifiedにraw由来でない投稿があります")
+    archived_raw_ids = {
+        identity(row) for paths in archives.values() for row in read_rows(paths["raw"])
+    }
+    if {identity(row) for row in raw} != archived_raw_ids:
+        label = "・".join(dates)
+        raise ValueError(f"{topic}: resume対象のrawが保存済み{label}更新回と一致しません")
 
     current_ids = {identity(row) for row in current}
-    if not raw_ids - archived_ids <= current_ids:
-        raise ValueError(f"{topic}: 保存時に除外された重複投稿を現在の正典で確認できません")
-    publishable = [row for row in archived_classified if identity(row) not in current_ids]
-    publishable_ids = {identity(row) for row in publishable}
-    if publishable_ids != archived_ids - current_ids:
+    publishable: list[dict[str, Any]] = []
+    classified_union: set[str] = set()
+    seen = set(current_ids)
+    for date in dates:
+        paths = archives[date]
+        archived_classified = read_rows(paths["classified"])
+        archived_ids = {identity(row) for row in archived_classified}
+        raw_ids = {identity(row) for row in read_rows(paths["raw"])}
+        if not archived_ids <= raw_ids:
+            raise ValueError(f"{topic}: 保存済みclassified（{date}）にraw由来でない投稿があります")
+        if not raw_ids - archived_ids <= current_ids:
+            raise ValueError(f"{topic}: 保存時に除外された重複投稿を現在の正典で確認できません（{date}）")
+        # 同じ投稿が複数の更新回で新規と判定されている（どの回も同じ正典と比べたため）。
+        # 先に収集した回のものを残す。
+        added = [row for row in archived_classified if identity(row) not in seen]
+        seen |= {identity(row) for row in added}
+        classified_union |= archived_ids
+        publishable.extend(added)
+    if {identity(row) for row in publishable} != classified_union - current_ids:
         raise ValueError(f"{topic}: 保存済み更新回から公開候補を再構成できません")
 
     write_json(stage / "new-only.json", publishable)
@@ -596,6 +616,13 @@ def main() -> int:
     parser.add_argument("--wait-ms", default="5000")
     parser.add_argument("--skip-smoke", action="store_true")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--include-wave",
+        action="append",
+        default=[],
+        metavar="YYYY-MM-DD",
+        help="まだ公開していない過去の更新回も同じ候補へ畳み込む（--resume と併用。複数回指定可）",
+    )
     parser.add_argument("--promote", action="store_true")
     parser.add_argument(
         "--allow-taxonomy-mismatch",
@@ -611,6 +638,10 @@ def main() -> int:
         raise ValueError(f"未設定のテーマです: {args.topic}")
     theme = themes[args.topic]
     pipeline = pipelines[args.topic]
+    if args.include_wave and not args.resume:
+        raise ValueError("--include-wave は保存済み更新回を畳み込む指定なので --resume と併用してください")
+    if args.date in args.include_wave:
+        raise ValueError("--include-wave に --date と同じ日付は指定できません")
     promotion_preflight_error: ValueError | None = None
     if args.promote:
         try:
@@ -676,7 +707,7 @@ def main() -> int:
         raw = read_rows(stage / "raw.json")
         new = read_rows(stage / "new-only.json")
         archived_report = prepare_archived_resume(
-            ROOT, args.topic, args.date, stage, current
+            ROOT, args.topic, args.date, stage, current, args.include_wave
         )
         if archived_report is not None:
             new = read_rows(stage / "new-only.json")
