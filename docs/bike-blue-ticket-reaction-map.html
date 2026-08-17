@@ -668,6 +668,7 @@
 .side{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.7}
 .side.neg{background:#fff2f2;border-left:3px solid #e04949}
 .side.pos{background:#eff6ff;border-left:3px solid #4b9cf4}
+.side.neu{background:#f8fafc;border-left:3px solid #94a3b8}
 .issue-block .sample-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
 @media(max-width:600px){.issue-block .sample-grid{grid-template-columns:1fr}}
 .issue-block .sample-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff;box-shadow:var(--shadow)}
@@ -881,7 +882,7 @@
   <div class="pc-inner">
     <p class="pc-step">STEP 1 — 集め方</p>
     <h2 id="process-collect-title">355件を、この10本の検索語で集めました</h2>
-    <p class="pc-lead">Yahooリアルタイム検索の公開投稿を、下の検索語で取得しています。同じ語を入れれば、読者も同じ範囲を見に行けます。取得期間は2026-06-27〜2026-07-26です。</p>
+    <p class="pc-lead">Yahooリアルタイム検索の公開投稿を、下の検索語で取得しています。同じ語を入れれば、読者も同じ範囲を見に行けます。取得期間は2026-06-27〜2026-08-17です。</p>
     <ul class="pc-queries"><li>自転車 青切符 賛成</li><li>自転車 青切符 反対</li><li>自転車 青切符 当然</li><li>自転車 青切符 おかしい</li><li>自転車 青切符 やりすぎ</li><li>自転車 青切符 道路 OR インフラ</li><li>自転車 青切符 車道 怖い</li><li>自転車 青切符 免許</li><li>自転車 取締り 強化</li><li>自転車 交通違反 反則金</li></ul>
     <div class="pc-funnel">
       <div class="pc-funnel-row"><span>集めて分類できた投稿</span><b>355</b><span class="pc-unit">件</span></div>
@@ -1574,11 +1575,11 @@
   var TOPIC='bike-blue-ticket-issue-stance-v1';
   var STORAGE_KEY='sns_vote_bike_blue_ticket_2step';
   var VOTE_ISSUES=[
-    {k:'取締り強化',     icon:'🚔',desc:'危険運転・マナー違反を取り締まるべき（27件）'},
-    {k:'インフラ整備が先',icon:'🚲',desc:'専用レーンなど道路整備が先決（26件）'},
-    {k:'車道走行への不安',icon:'⚠️', desc:'車道走行の強制は事故を増やす（11件）'},
-    {k:'免許制が必要',   icon:'📋',desc:'青切符だけでは不十分、免許制を（36件）'},
-    {k:'ルールが曖昧',   icon:'❓',desc:'違反基準が不明確・取締り方に不信感（11件）'},
+    {k:'取締り強化',     icon:'🚔',desc:'危険運転・マナー違反を取り締まるべき（68件）'},
+    {k:'インフラ整備が先',icon:'🚲',desc:'専用レーンなど道路整備が先決（45件）'},
+    {k:'車道走行への不安',icon:'⚠️', desc:'車道走行の強制は事故を増やす（18件）'},
+    {k:'免許制が必要',   icon:'📋',desc:'青切符だけでは不十分、免許制を（21件）'},
+    {k:'ルールが曖昧',   icon:'❓',desc:'違反基準が不明確・取締り方に不信感（34件）'},
     {k:'その他・わからない',icon:'💬',desc:'上記以外・まだ判断がつかない'},
   ];
   // VOTE_ISSUES index → ISSUES array index (order: 免許制3 取締り0 インフラ1 車道2 ルール4 その他5)
@@ -2236,11 +2237,11 @@ const SM_RAW = [
 <h3>インフラ整備が先・専用レーンなしに取締りは不公平</h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>インフラ整備への立場</span><span>取締り寄り 0 / 中立 2 / インフラ優先 43</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:0%"></div><div class="temp-seg neu" style="width:4.4%">4%</div><div class="temp-seg pos" style="width:95.6%">96%</div></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:0.0%"></div><div class="temp-seg neu" style="width:4.4%"></div><div class="temp-seg pos" style="width:95.6%">96%</div></div>
 <div class="temp-bar-legend"><span><i style="background:#e04949"></i>取締り支持（条件付き含む）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>インフラ整備が先</span></div>
 </div>
 <p class="issue-desc">「安全に走れる自転車専用レーンがないのに、車道を走れというのは無理だ」という立場。インフラ整備なしの罰則強化は自転車利用者への一方的な押しつけで、本末転倒という批判です。</p>
-<div class="issue-sides"><div class="side pos"><strong>インフラ整備優先派（43件）</strong>自転車レーンが整備されてから取り締まるべき。先にルールありきでは混乱するだけ。</div><div class="side neg"><strong>中立（2件）</strong>インフラ整備と取り締まりを並行して進める現実的な視点。</div></div>
+<div class="issue-sides"><div class="side pos"><strong>インフラ整備優先派（43件）</strong>自転車レーンが整備されてから取り締まるべき。先にルールありきでは混乱するだけ。</div><div class="side neu"><strong>中立（2件）</strong>インフラ整備と取り締まりを並行して進める現実的な視点。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">インフラ優先 / 感情高め</div><p>インフラ整備不足を批判し、青切符制度に強く反対する声</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/15jacnamagiga/status/2070261164618158443">@15jacnamagiga の投稿をXで見る</a></blockquote></div>
@@ -2253,11 +2254,11 @@ const SM_RAW = [
 <h3>車道走行への不安・「車道を走れ」は危険</h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>車道走行ルールへの評価</span><span>歩道批判 0 / 中立 3 / 車道不安派 15</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:0%"></div><div class="temp-seg neu" style="width:14.3%">14%</div><div class="temp-seg pos" style="width:85.7%">86%</div></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:0.0%"></div><div class="temp-seg neu" style="width:16.7%">17%</div><div class="temp-seg pos" style="width:83.3%">83%</div></div>
 <div class="temp-bar-legend"><span><i style="background:#e04949"></i>ルール強化支持（歩行者目線）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>車道走行が怖い（自転車目線）</span></div>
 </div>
 <p class="issue-desc">青切符と合わせて「自転車は原則車道」というルールが強調されることへの不安。「子どもを車道に出せるか」「路駐があって走れない」といった現実的な危険を訴える声があります。一方で、歩道を飛ばす自転車が危険だという歩行者目線も存在します。</p>
-<div class="issue-sides"><div class="side pos"><strong>車道走行が怖い（15件）</strong>車道はトラックや路駐車があって危険。子どもや高齢者には無理なルールだ。</div><div class="side neg"><strong>中立（3件）</strong>車道・歩道どちらにも問題があるという複合的な視点。</div></div>
+<div class="issue-sides"><div class="side pos"><strong>車道走行が怖い（15件）</strong>車道はトラックや路駐車があって危険。子どもや高齢者には無理なルールだ。</div><div class="side neu"><strong>中立（3件）</strong>車道・歩道どちらにも問題があるという複合的な視点。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">車道不安 / 感情高め</div><p>青切符への疑念と子どもへの車道走行要求に強く反対</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/isaiah8_1/status/2067988251760345275">@isaiah8_1 の投稿をXで見る</a></blockquote></div>
@@ -2273,8 +2274,8 @@ const SM_RAW = [
 <div class="temp-bar"><div class="temp-seg neg" style="width:19.0%">19%</div><div class="temp-seg neu" style="width:33.3%">33%</div><div class="temp-seg pos" style="width:47.6%">48%</div></div>
 <div class="temp-bar-legend"><span><i style="background:#e04949"></i>免許制・講習義務化を支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>慎重・反対</span></div>
 </div>
-<p class="issue-desc">最多の論点。「青切符だけでは甘い」「自転車にも免許制度か事前講習を義務付けるべきだ」という主張です。標識を理解していない自転車利用者が多いため、罰則より先に教育が必要という考え方です。</p>
-<div class="issue-sides"><div class="side neg"><strong>免許・講習義務化派（4件）</strong>自転車にもルールを学ぶ機会が必要。原付のように免許制か事前講習で知識を担保すべき。</div><div class="side pos"><strong>慎重・反対派（10件）</strong>免許制は自転車利用の障壁になる。費用や手続き負担が増えて利便性が下がる。</div><div class="side neu" style="background:#f8fafc;border-left:3px solid #94a3b8"><strong>中立（7件）</strong>条件次第では免許制や講習義務化もあり得るという立場。</div></div>
+<p class="issue-desc">「青切符だけでは甘い」「自転車にも免許制度か事前講習を義務付けるべきだ」という主張です。標識を理解していない自転車利用者が多いため、罰則より先に教育が必要という考え方です。</p>
+<div class="issue-sides"><div class="side neg"><strong>免許・講習義務化派（4件）</strong>自転車にもルールを学ぶ機会が必要。原付のように免許制か事前講習で知識を担保すべき。</div><div class="side pos"><strong>慎重・反対派（10件）</strong>免許制は自転車利用の障壁になる。費用や手続き負担が増えて利便性が下がる。</div><div class="side neu"><strong>中立（7件）</strong>条件次第では免許制や講習義務化もあり得るという立場。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">免許制支持 / 感情高め</div><p>自転車への免許制や講習制度の導入を強く主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/r70OylZbSZeiIIz/status/2070149487566418240">@r70OylZbSZeiIIz の投稿をXで見る</a></blockquote></div>
@@ -2287,11 +2288,11 @@ const SM_RAW = [
 <h3>ルールが曖昧・警察への不信感</h3>
 <div class="temp-bar-wrap">
 <div class="temp-bar-label"><span>ルール整備への評価</span><span>取締り支持 0 / 中立 15 / 慎重・反対 19</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:0%"></div><div class="temp-seg neu" style="width:44.1%">44%</div><div class="temp-seg pos" style="width:55.9%">56%</div></div>
+<div class="temp-bar"><div class="temp-seg neg" style="width:0.0%"></div><div class="temp-seg neu" style="width:44.1%">44%</div><div class="temp-seg pos" style="width:55.9%">56%</div></div>
 <div class="temp-bar-legend"><span><i style="background:#e04949"></i>ルール整備後の取締り支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>現行のルールへの疑念</span></div>
 </div>
-<p class="issue-desc">「何が違反になるのか現場でわからない」「警察が恣意的に取り締まるのではないか」という不信感が中心。「113種類もの違反基準は覚えられない」「点数稼ぎ目的ではないか」という批判です。反対派の多数がこの立場を取ります。</p>
-<div class="issue-sides"><div class="side pos"><strong>ルール不信派（19件）</strong>違反の基準が複雑すぎる。警察の裁量が広く、正直者がバカを見る取り締まりになりかねない。</div><div class="side neg"><strong>中立（15件）</strong>ルールの周知や整備状況を見ながら判断したい。</div></div>
+<p class="issue-desc">「何が違反になるのか現場でわからない」「警察が恣意的に取り締まるのではないか」という不信感が中心。「113種類もの違反基準は覚えられない」「点数稼ぎ目的ではないか」という批判です。</p>
+<div class="issue-sides"><div class="side pos"><strong>ルール不信派（19件）</strong>違反の基準が複雑すぎる。警察の裁量が広く、正直者がバカを見る取り締まりになりかねない。</div><div class="side neu"><strong>中立（15件）</strong>ルールの周知や整備状況を見ながら判断したい。</div></div>
 </div>
 <div class="sample-grid">
 <div class="sample-card"><div class="meta">ルール不信 / 感情高め</div><p>青切符に強く反対、監視社会的な取り締まりへの怒り</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032229649317814760">@kress813 の投稿をXで見る</a></blockquote></div>

@@ -189,6 +189,11 @@ def main() -> int:
         for original, label in zip(batch, labels):
             row = dict(original)
             row["classification"] = label
+            # このテーマは収集した投稿を全件「意見」として数える（公開ページの母数と同じ扱い）。
+            # is_opinion を付けるのは分類器だけに寄せる。付いていないレコードが混じると、
+            # 論点カードの母数（issue_counts.basis: opinion）からその分が静かに消え、
+            # 1つのページに2つの母数が並ぶ（2026-08-17 の更新で実際に起きた）。
+            row["is_opinion"] = True
             completed.append(row)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(completed, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

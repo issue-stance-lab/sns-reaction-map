@@ -41,19 +41,23 @@ THEMES = [
         "note": "比較対象：7月12日収集分のうち意見投稿／7月26日収集分のうち意見投稿。サンプル数が少ないため傾向の参考程度にご覧ください。",
     },
     {
+        # adapter（scripts/refresh_adapters/bike.py）が更新回どうしの比較で作り直すので、
+        # prev_file / cur_file は持たない。固定ファイル名を書いておくと、このスクリプトを
+        # 単体で流したときに、あとから増えた更新回を無視して古いデータへ巻き戻る（課題38）。
         "slug": "bike-blue-ticket",
         "html": "docs/bike-blue-ticket-reaction-map.html",
         "widget_id": "bike-blue-ticket-tide-widget",
-        "prev_file": "bike-blue-ticket_hermes_cur_20260726.json",
-        "cur_file": "bike-blue-ticket_hermes_cur_20260817.json",
-        "prev_label": "7月26日",
-        "cur_label": "8月17日",
+        "prev_file": None,
+        "cur_file": None,
+        "prev_label": "",
+        "cur_label": "",
         "use_relevance_filter": False,
         "exclude_stances": {"どちらでもない", "中立・情報"},
         "exclude_issues": {"その他"},
         "stance_labels": ["賛成（取締り強化支持）", "反対（インフラ・制度優先）"],
         "issue_labels": ["取締り強化賛成", "インフラ整備優先", "ルール曖昧・不信", "車道走行への不安", "免許制要求"],
-        "note": "比較対象：7月26日収集分のうち賛否を含む意見投稿／8月17日収集分。同じ検索語セットで取得した投稿をAIで再分類しています。8月17日収集分には、同一文面のオンライン署名の貼り付けが多数含まれており、反対側の比率を押し上げています。",
+        # 注記は adapter が毎回組み立てる（署名定型文の件数を数えて書き足すため）。
+        "note": "",
     },
     {
         "slug": "henoko",

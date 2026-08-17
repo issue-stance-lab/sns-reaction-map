@@ -6,11 +6,18 @@
 データを追加したあとにこのスクリプトを流せば本文の数字がずれない。
 
     python3 scripts/build_bike_process_sections.py
+    python3 scripts/build_bike_process_sections.py \
+        --input <候補正典> --html-template <元HTML> --output-html <候補HTML> \
+        --verification-dest <候補の出所ファイル置き場>
 
 HTML 内の PROCESS_SECTIONS_START / END の間だけを差し替える。
+
+`--input` 以下は adapter（scripts/refresh_adapters/bike.py）が候補ページを作るための
+引数で、公開ページと data/verification/ には触らない。
 """
 from __future__ import annotations
 
+import argparse
 import html
 import json
 import re
@@ -170,17 +177,71 @@ def esc(text: str) -> str:
     return html.escape(text, quote=True)
 
 
-def load() -> tuple[list[dict], dict, dict]:
+def load(input_path: Path | None = None) -> tuple[list[dict], dict, dict]:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
     theme = themes[THEME]
     period = str(theme.get("sample_period") or "").strip()
     if not period or period.lower() == "unknown":
         raise SystemExit("THEMES.yaml の bike-blue-ticket に sample_period がありません")
-    samples = json.loads((ROOT / theme["sample_file"]).read_text(encoding="utf-8"))
+    samples = json.loads((input_path or ROOT / theme["sample_file"]).read_text(encoding="utf-8"))
     config = yaml.safe_load((ROOT / theme["refresh_config"]).read_text(encoding="utf-8"))
     reread = json.loads((ROOT / "data" / f"{THEME}_opposition_reread.json").read_text(encoding="utf-8"))
     claim_posts = json.loads((ROOT / "data" / f"{THEME}_claim_posts.json").read_text(encoding="utf-8"))
     return samples, config, reread, claim_posts, period
+
+
+class RereadGapError(SystemExit):
+    """再読マッピングが正典の「反対」を覆っていないときに投げる。
+
+    これは失敗させるための設計であって、直せるバグではない。ページの中心的な主張
+    （「反対はひとつの塊ではない」）は、編集部が反対投稿を1件ずつ読んで5区分へ
+    割り当てた結果に載っている。読み直さずに新しい件数だけ入れ替えると、古い割り当ての
+    まま新しい数字が表示される。読む工程は自動化できないので、ここで止める。
+    """
+
+
+def check_reread_coverage(samples: list[dict], reread: dict) -> None:
+    """正典の「反対」と再読マッピングを tweet_id で突き合わせる。
+
+    件数の一致だけでは、1件足して1件消したような入れ替わりを見逃す。
+    未再読の投稿は tweet_id を並べて出す。そのまま
+    data/bike-blue-ticket_opposition_reread.json の該当区分へ追記できる。
+    """
+    oppose_ids = {
+        s["tweet_id"] for s in samples
+        if s["classification"]["stance"] == "反対（インフラ・制度優先）"
+    }
+    assigned: dict[str, str] = {}
+    duplicated: list[str] = []
+    for bucket, ids in reread["buckets"].items():
+        for tid in ids:
+            if tid in assigned:
+                duplicated.append(f"{tid}({assigned[tid]}/{bucket})")
+            assigned[tid] = bucket
+
+    missing = sorted(oppose_ids - set(assigned))
+    extra = sorted(set(assigned) - oppose_ids)
+    if not (missing or extra or duplicated):
+        return
+
+    by_id = {s["tweet_id"]: s for s in samples}
+    lines = [
+        "再読マッピングが正典の「反対」と一致しません。"
+        "編集部が新しい反対投稿を読み、"
+        "data/bike-blue-ticket_opposition_reread.json の buckets へ追記してください。",
+        f"正典の反対 {len(oppose_ids)}件 / 割り当て済み {len(assigned)}件",
+    ]
+    if missing:
+        lines.append(f"未再読 {len(missing)}件:")
+        lines += [
+            f"  {tid}  {str(by_id[tid].get('text') or '')[:60].replace(chr(10), ' ')}"
+            for tid in missing
+        ]
+    if extra:
+        lines.append(f"正典に無いのに割り当てられている {len(extra)}件: {extra}")
+    if duplicated:
+        lines.append(f"2つの区分に入っている {len(duplicated)}件: {duplicated}")
+    raise RereadGapError("\n".join(lines))
 
 
 def build_counts(samples: list[dict], reread: dict) -> dict[str, int]:
@@ -189,8 +250,7 @@ def build_counts(samples: list[dict], reread: dict) -> dict[str, int]:
     oppose = stances.count("反対（インフラ・制度優先）")
     counts = {k: len(v) for k, v in reread["buckets"].items()}
     counts["support"] = support
-    if sum(len(v) for v in reread["buckets"].values()) != oppose:
-        raise SystemExit(f"再読マッピングの件数({sum(len(v) for v in reread['buckets'].values())})が反対件数({oppose})と一致しません")
+    check_reread_coverage(samples, reread)
     counts["_oppose"] = oppose
     counts["_total"] = len(samples)
     counts["_sided"] = support + oppose
@@ -533,7 +593,9 @@ SCRIPT = """<script id="process-found-anim">
 # 数字の出所検査（scripts/verify_number_provenance.py）は「レコードの配列」しか正典に
 # できないため、割り当てを配列の形で書き出しておく。ページと同じ手順で作るので、
 # 読み直しを足し忘れればここも一緒にずれ、検査で落ちる。
-def write_provenance_records(samples: list[dict], reread: dict, claim_posts: dict) -> None:
+def write_provenance_records(
+    samples: list[dict], reread: dict, claim_posts: dict, destination: Path | None = None
+) -> None:
     support_ids = [
         s["tweet_id"] for s in samples
         if s["classification"]["stance"] == "賛成（取締り強化支持）"
@@ -563,7 +625,8 @@ def write_provenance_records(samples: list[dict], reread: dict, claim_posts: dic
         for key, ids in claim_posts["claims"].items()
         for tid in ids
     ]
-    out = ROOT / "data" / "verification"
+    out = destination or ROOT / "data" / "verification"
+    out.mkdir(parents=True, exist_ok=True)
     for name, data in (("bike-blue-ticket-reread", rows), ("bike-blue-ticket-claims", claims)):
         (out / f"{name}.json").write_text(
             json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -571,7 +634,17 @@ def write_provenance_records(samples: list[dict], reread: dict, claim_posts: dic
 
 
 def main() -> int:
-    samples, config, reread, claim_posts, period = load()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", type=Path, help="候補の累積正典（省略時は THEMES.yaml の sample_file）")
+    parser.add_argument("--html-template", type=Path, help="差し替え元のHTML（省略時は公開ページ）")
+    parser.add_argument("--output-html", type=Path, help="書き出し先のHTML（省略時は公開ページ）")
+    parser.add_argument("--verification-dest", type=Path, help="出所ファイルの書き出し先（省略時は data/verification）")
+    args = parser.parse_args()
+    candidate_args = (args.input, args.html_template, args.output_html, args.verification_dest)
+    if any(candidate_args) and not all(candidate_args):
+        parser.error("候補生成では--input/--html-template/--output-html/--verification-destをすべて指定してください")
+
+    samples, config, reread, claim_posts, period = load(args.input)
     counts = build_counts(samples, reread)
     blocks = "\n\n".join([
         CSS,
@@ -581,8 +654,10 @@ def main() -> int:
         build_table(samples, reread, counts),
         SCRIPT,
     ])
-    page_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
-    page = page_path.read_text(encoding="utf-8")
+    public_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    template_path = args.html_template or public_path
+    page_path = args.output_html or public_path
+    page = template_path.read_text(encoding="utf-8")
     for a, b in ((START, END), (BASIS_START, BASIS_END)):
         if page.count(a) != 1 or page.count(b) != 1:
             raise SystemExit(f"{a} / {b} が1つずつ必要です")
@@ -613,7 +688,8 @@ def main() -> int:
     if page.count('class="conclusion-count"') != 1:
         raise SystemExit("conclusion-count は1つだけ必要です")
 
-    write_provenance_records(samples, reread, claim_posts)
+    write_provenance_records(samples, reread, claim_posts, args.verification_dest)
+    page_path.parent.mkdir(parents=True, exist_ok=True)
     page_path.write_text(page, encoding="utf-8")
     claim_total = sum(len(v) for v in claim_posts["claims"].values())
     print(f"OK  {page_path.name} を更新（母数{counts['_total']}件 / 立場{counts['_sided']}件 / 反対{counts['_oppose']}件 / 事実確認の該当投稿{claim_total}件）")
