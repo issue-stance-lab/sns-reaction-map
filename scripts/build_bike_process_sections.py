@@ -280,7 +280,7 @@ def build_collect(samples: list[dict], config: dict, counts: dict, period: str) 
       <div class="pc-funnel-row" data-drop="1"><span>賛否が読み取れなかった（ニュース共有・日常の記録など）</span><b>−{counts['_unsided']}</b><span class="pc-unit">件</span></div>
       <div class="pc-funnel-row" data-keep="1"><span>このページで立場として数えた投稿</span><b>{counts['_sided']}</b><span class="pc-unit">件</span></div>
     </div>
-    <p class="pc-note">内訳は賛成{counts['support']}件・反対{counts['_oppose']}件。分類はAIが行い、そのあと編集部が反対{counts['_oppose']}件の本文を全件読み直しています。読み直した割り当ては<a href="#process-table">全件表</a>で1件ずつ確認できます。</p>
+    <p class="pc-note">内訳は賛成{counts['support']}件・反対{counts['_oppose']}件。分類はAIが行い、そのあと編集部が反対{counts['_oppose']}件すべてに、本文を読んで区分を割り当てています（データを追加するたびに、増えた分を読み足しています）。割り当ては<a href="#process-table">全件表</a>で1件ずつ確認できます。</p>
   </div>
 </section>"""
 
