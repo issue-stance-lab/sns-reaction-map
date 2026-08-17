@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-17（自転車青切符を累計355件で公開更新。課題40の自転車分が解消、課題34の残る manual 1テーマに発注書を用意）
+最終更新: 2026-08-17（自転車青切符を adapter へ昇格。manual テーマが0になり、課題34の「ビルダーを新設する」が完了。課題38は自転車分だけ解消）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -432,19 +432,19 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 **保存期間**: 当面は全世代保持。ディスクの共有・譲渡・廃棄時はアーカイブを先に削除する。
 
 ### 課題34: ページ更新スクリプトが再実行できないテーマの整備
-**状態**: 進行中（11テーマ中5テーマがadapter。高齢者免許返納を2026-08-14に昇格）
+**状態**: 進行中（11テーマ中6テーマがadapter。自転車青切符を2026-08-17に昇格し、manual は0になった）
 **発見**: 2026-08-02、adapter 昇格判定の実測時
 
 **概要**: データ更新を自動化するには「同じ入力で2回実行しても差分が出ない」ページ更新スクリプトが要る。全11テーマで実測し、`THEMES.yaml` の `page_update_mode` に記録した。
 
 | 区分 | テーマ | 状態 |
 |---|---|---|
-| adapter（5） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
+| adapter（6） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
 | adapter_candidate（3） | constitutional-amendment / henoko-student-accident / fukushuto | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
 | migration（2） | consumption-tax-cut / school-nickname-ban | 一度きりの移行用スクリプト、または再実行で副作用が出る |
-| manual（1） | bike-blue-ticket | 冒頭3セクション・アリーナの点・論点件数は生成スクリプトあり。insight-stats と論点別クロス集計が手書きのまま。発注書 `configs/prompts/codex/20260817_bike-adapter.md` |
+| manual（0） | — | 2026-08-17 に自転車青切符が昇格して解消 |
 
-**やること**: ①henoko / koshitsu の候補input/output対応 ②school-nickname-ban の2点を直して adapter へ昇格 ③constitutional-amendment / consumption-tax-cut を再実行可能な形へ書き直す ④manual 4テーマのビルダーを新設する
+**やること**: ①henoko の候補input/output対応 ②school-nickname-ban の2点を直して adapter へ昇格 ③consumption-tax-cut を再実行可能な形へ書き直す（④の manual 4テーマは 2026-08-17 に完了）
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
 
 **2026-08-02 共通ランナー対応**: `scripts/refresh_topic.py --topic` に、全11テーマ共通の疎通確認・収集・重複排除・10件試験分類・全件分類・集合検査・更新回保存・バックアップを集約した。migration / manual / adapter_candidate も公開せずstaging止まりで予定どおり収集できる。ページ処理は `scripts/refresh_adapters/` に分離し、takaichi は候補ページ・arena data・潮目を2回生成して差分ゼロ、投票topicIdと15選択肢の互換性を検査する。
@@ -514,7 +514,7 @@ FAILED: 1 validation error(s)
 ---
 
 ### 課題38: inject_tide_widget.py が公開中のページを古いデータへ巻き戻す
-**状態**: 未着手（2026-08-08 に副首都の作業中に発見。実害は出ていない＝実行直後に戻した）
+**状態**: 進行中（自転車青切符だけ 2026-08-17 に解消。ai-copyright / takaichi は未対応で、実行すると巻き戻る）
 **発見**: 2026-08-08
 
 **概要**: `scripts/inject_tide_widget.py` は引数を取らず、実行すると `THEMES` の全8テーマの HTML を書き換える。ところが `adapter` 方式のテーマは `refresh_topic.py` 経由で更新されており、スクリプト内の `THEMES` に書かれた更新回のほうが**古い**。そのため実行すると、公開中のページが過去のデータへ戻る。
@@ -527,6 +527,8 @@ FAILED: 1 validation error(s)
 **なぜ危険か**: 1テーマの潮目を直すだけのつもりで実行すると、無関係な2テーマが黙って後退する。`git status` を見て戻さない限り、そのままコミットされて公開される。検査は通ってしまう（日付の新しさを見る検査がない）。
 
 **やること**: 次のいずれか。①`--slug` 引数を足して対象テーマだけ書き換えられるようにする ②`adapter` 方式のテーマを `THEMES` から外し、adapter 側に一本化する ③実行前に「`THEMES` の更新回がページの現状より古くないか」を検査して止める。②が筋が良いが、adapter 側が潮目を生成できるか未確認。
+
+**2026-08-17 自転車青切符**: ②を1テーマ分だけ実施。`THEMES` の `bike-blue-ticket` の `prev_file` / `cur_file` を `None` にして、単体実行では飛ばすようにした（`constitutional-amendment` と同じ形）。潮目は `scripts/refresh_adapters/bike.py` が更新回どうしを比較して作る。残るのは ai-copyright / takaichi / 部活動など、まだ固定ファイル名を持つテーマ。
 
 **暫定の回避策**: 実行後に必ず `git status --porcelain` を見て、対象外の `docs/*.html` が出ていたら `git restore` する。この手順は `.claude/skills/taxonomy-migration/SKILL.md` の「落とし穴」に記載済み。
 ### 課題39: ポータル（本体トップ）のカウントダウンが毎日ズレる

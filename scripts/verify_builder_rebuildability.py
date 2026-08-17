@@ -20,6 +20,7 @@ BUILDERS: tuple[tuple[str, list[str]], ...] = (
     ("fukushuto", [sys.executable, "scripts/build_fukushuto_arena.py"]),
     ("henoko-student-accident", ["node", "scripts/build_henoko_arena.mjs"]),
     ("consumption-tax-cut", [sys.executable, "scripts/build_consumption_tax_arena.py"]),
+    ("bike-blue-ticket", [sys.executable, "scripts/build_bike_arena.py"]),
     ("takaichi", ["node", "scripts/upgrade_takaichi_arena.js"]),
 )
 
