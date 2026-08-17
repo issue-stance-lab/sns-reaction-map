@@ -678,10 +678,20 @@ def main() -> int:
         ("pf-seg", "STEP3の帯"),
         ("process-found-anim", "STEP3のスクリプト"),
         ("rb-cases", "区分の根拠"),
+        (f"取得期間は{period}です", "STEP1の取得期間"),
     ]
     for needle, label in checks:
         if needle not in page:
             raise SystemExit(f"生成結果に {label} が見つかりません: {needle}")
+    # 取得期間はページ内の2か所（調査条件ブロックとSTEP1）に出る。台帳を更新する前に
+    # このスクリプトを流すと、STEP1だけ古い期間で残る（2026-08-17に発生し、公開された）。
+    # 台帳と違う期間がページのどこかに残っていたら、ここで落とす。
+    stale = {m for m in re.findall(r"取得期間[:：はが]?\s*(\d{4}-\d{2}-\d{2}〜\d{4}-\d{2}-\d{2})", page)} - {period}
+    if stale:
+        raise SystemExit(
+            f"台帳の取得期間は {period} ですが、ページに別の期間が残っています: {sorted(stale)}。"
+            "先に THEMES.yaml の sample_period を直し、調査条件ブロックも作り直すこと"
+        )
     seg_total = sum(float(m) for m in re.findall(r"--seg-w:([\d.]+)%", page))
     if abs(seg_total - 100) > 0.01:
         raise SystemExit(f"帯の合計が100%になりません: {seg_total}")
