@@ -599,7 +599,8 @@ def build(
     if '<section class="update-dashboard"' in html and marker in html:
         start = html.index('<section class="update-dashboard"')
         end = html.index(marker) + len(marker)
-        html = html[:start] + html[end:]
+        # 前後の空行ごと詰める。残すと貼り直しのたびに空行が2行ずつ増える
+        html = html[:start].rstrip() + "\n\n" + html[end:].lstrip()
 
     # --- 6. explainer（論点別インフォグラフィック＋拡大モーダル） --------
     circled = "①②③④⑤⑥⑦"
