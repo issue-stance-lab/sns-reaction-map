@@ -30,10 +30,14 @@ BUCKET_META = [
     ("scope", "対象と順番に異議", "青切符自体は否定せず、対象を絞れ・整備と周知が先だと順序を問う。", "#8b8fd8"),
     ("place", "走る場所がない", "車道も歩道も選べないという、賛否以前の生活上の訴え。", "#4b9cf4"),
     ("distrust", "警察の運用が信用できない", "制度の中身ではなく運用への異議。説明と現場の食い違い。", "#3b6fb0"),
-    ("abolish", "制度そのものに反対", "撤回・廃止すべきという立場。うち8件は同一の署名定型文。", "#1e3a6b"),
+    ("abolish", "制度そのものに反対", "撤回・廃止すべきという立場。うち{sig}件は同一の署名定型文。", "#1e3a6b"),
 ]
 
 CHECKED_AT = "2026年8月16日"
+
+# change.org の署名文。同じ文面の貼り付けが「制度そのものに反対」を押し上げるため、
+# 何件がこれなのかを本文に出す。件数は数え直すので直書きしない。
+SIGNATURE_PHRASE = "自転車に対する青切符制度（罰金制度）の導入に強く反対します"
 
 # 取得期間。正典に fetched_at が入っているのは65/181件だけなので実測からは復元できず、
 # THEMES.yaml の sample_period（オーナー確認済み）が唯一の出所。ここで直書きすると
@@ -156,7 +160,7 @@ BASIS = {
         "rule": "撤回・廃止を求めているもの。理由を書かずに反対だけを表明したものもここに入れる。",
         "cases": [
             ("いっそ辞めてもむしろみんな喜ぶよ", "制度の存続そのものを否定している。"),
-            ("自転車に対する青切符制度（罰金制度）の導入に強く反対します", "オンライン署名の定型文。理由が書かれていないため、内容では他の区分に振り分けられない。同じ文面が8件。"),
+            ("自転車に対する青切符制度（罰金制度）の導入に強く反対します", "オンライン署名の定型文。理由が書かれていないため、内容では他の区分に振り分けられない。同じ文面が{sig}件。"),
         ],
     },
 }
@@ -193,6 +197,13 @@ def build_counts(samples: list[dict], reread: dict) -> dict[str, int]:
     counts["_unsided"] = len(samples) - support - oppose
     issues = [s["classification"]["main_issue"] for s in samples if s["classification"]["main_issue"] != "その他"]
     counts["_top_issue"] = max(issues.count(i) for i in set(issues))
+    # 「制度そのものに反対」のうち、change.org の署名定型文をそのまま貼った投稿。
+    # 数を押し上げている要因なので、件数は毎回本文から数え直して本文に出す。
+    by_id = {s["tweet_id"]: s for s in samples}
+    counts["_sig"] = sum(
+        1 for tid in reread["buckets"]["abolish"]
+        if SIGNATURE_PHRASE in by_id[tid]["text"]
+    )
     return counts
 
 
@@ -270,7 +281,7 @@ def build_found(counts: dict) -> str:
         )
         labels.append(
             f"""        <li class="pf-label" data-key="{key}"><span class="pf-swatch" style="background:{color}"></span>
-          <b>{n}件</b><strong>{esc(title)}</strong><span>{esc(desc)}</span></li>"""
+          <b>{n}件</b><strong>{esc(title)}</strong><span>{esc(desc.replace("{sig}", str(counts["_sig"])))}</span></li>"""
         )
     abolish_pct = counts["abolish"] / sided * 100
     return f"""<section id="process-found" aria-labelledby="process-found-title">
@@ -282,7 +293,7 @@ def build_found(counts: dict) -> str:
     <div class="pf-stage" id="pf-stage" data-state="before">
       <div class="pf-track" aria-hidden="true">{''.join(segs)}</div>
       <p class="pf-caption" data-caption-before>いまの数え方：賛成{counts['support']}件（{counts['support'] / sided * 100:.0f}%）と、反対{counts['_oppose']}件（{counts['_oppose'] / sided * 100:.0f}%）。</p>
-      <p class="pf-caption" data-caption-after>読み直したあと：反対{counts['_oppose']}件は6つに分かれ、うち{counts['strict']}件は「青切符では甘い、免許制にしろ」と、賛成側より外側の要求でした。取締りそのものをやめろと読めるのは{counts['abolish']}件（{abolish_pct:.0f}%）で、そのうち8件は同じ署名の定型文です。</p>
+      <p class="pf-caption" data-caption-after>読み直したあと：反対{counts['_oppose']}件は6つに分かれ、うち{counts['strict']}件は「青切符では甘い、免許制にしろ」と、賛成側より外側の要求でした。取締りそのものをやめろと読めるのは{counts['abolish']}件（{abolish_pct:.0f}%）で、そのうち{counts['_sig']}件は同じ署名の定型文です。</p>
       <button type="button" class="pf-replay" id="pf-replay"><span aria-hidden="true">▶</span>賛成{counts['support']}＋反対{counts['_oppose']}を、6区分に組み替える</button>
       <ol class="pf-labels">
 {chr(10).join(labels)}
@@ -348,7 +359,7 @@ def build_basis(counts: dict) -> str:
             continue
         basis = BASIS[key]
         cases = "".join(
-            f'<li><q>{esc(q)}</q><span>{esc(why)}</span></li>' for q, why in basis["cases"]
+            f'<li><q>{esc(q)}</q><span>{esc(why.replace(chr(123) + "sig" + chr(125), str(counts["_sig"])))}</span></li>' for q, why in basis["cases"]
         )
         blocks.append(f"""      <article class="rb-card">
         <h3><span class="rb-dot" style="background:{colors[key]}"></span>{esc(titles[key])}<b>{counts[key]}件</b></h3>
@@ -527,9 +538,26 @@ def write_provenance_records(samples: list[dict], reread: dict, claim_posts: dic
         s["tweet_id"] for s in samples
         if s["classification"]["stance"] == "賛成（取締り強化支持）"
     ]
-    rows = [{"tweet_id": tid, "bucket": "support"} for tid in support_ids]
+    by_id = {s["tweet_id"]: s for s in samples}
+
+    def row(tid: str, bucket: str) -> dict:
+        s = by_id[tid]
+        c = s["classification"]
+        listed = bucket != "support"  # 全件表に載るのは反対の5区分だけ
+        shown = c["article_usable"] and c["risk"] == "low"
+        return {
+            "tweet_id": tid,
+            "bucket": bucket,
+            # 本文に出る「うちN件は署名の定型文」「N件は抜粋を載せず」を、この配列から数える。
+            # ページに出るのと同じ範囲でだけ "yes" / "hidden" にする。範囲を広げると、
+            # 数字の出所検査（1次元の集計）とページの数字が合わなくなる。
+            "signature": "yes" if bucket == "abolish" and SIGNATURE_PHRASE in s["text"] else "no",
+            "excerpt": ("shown" if shown else "hidden") if listed else "not_listed",
+        }
+
+    rows = [row(tid, "support") for tid in support_ids]
     for key, ids in reread["buckets"].items():
-        rows += [{"tweet_id": tid, "bucket": key} for tid in ids]
+        rows += [row(tid, key) for tid in ids]
     claims = [
         {"tweet_id": tid, "claim": key}
         for key, ids in claim_posts["claims"].items()
