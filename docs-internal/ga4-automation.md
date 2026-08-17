@@ -72,7 +72,13 @@ eventCount
 pagePath別 screenPageViews / activeUsers
 related_theme_click の eventCount
 utm_source=share_button 相当の sessionSource=share_button 流入
+utm_source=x のX投稿流入を utm_campaign（post_YYYYMMDD）別に集計（2026-08-17 追加）
 ```
+
+X投稿流入は `## X post traffic (utm_source=x)` の見出しで出る。`utm_campaign` は
+X_POSTING_GUIDE.md §4 のとおり投稿日なので、行がそのまま「どの投稿から何人来たか」になる。
+0行（`(no sessions)`）は「投稿からのクリックが記録されていない」という結果であって、
+取得失敗ではない。
 
 2026-07-26に公開ホスト限定で取得確認済み:
 

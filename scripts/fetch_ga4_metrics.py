@@ -263,6 +263,39 @@ def run_share_source_report(
     return call_run_report(access_token, property_id, payload)
 
 
+def run_x_campaign_report(
+    access_token: str,
+    property_id: str,
+    days: int,
+    limit: int,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
+    # X_POSTING_GUIDE.md §4 の utm_source=x / utm_campaign=post_YYYYMMDD を投稿単位で見る。
+    # share_button の集計とは別枠。混ぜると「サイト内シェア経由」と「X投稿経由」が
+    # 同じ行に潰れて、どの投稿が流入を生んだのか分からなくなる
+    payload = {
+        "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
+        "dimensions": [
+            {"name": "sessionCampaignName"},
+            {"name": "sessionSource"},
+            {"name": "sessionMedium"},
+        ],
+        "metrics": [{"name": "sessions"}, {"name": "activeUsers"}, {"name": "screenPageViews"}],
+        "dimensionFilter": and_filter(
+            public_host_filter(host_name),
+            {
+                "filter": {
+                    "fieldName": "sessionSource",
+                    "stringFilter": {"matchType": "EXACT", "value": "x"},
+                }
+            },
+        ),
+        "orderBys": [{"desc": True, "metric": {"metricName": "sessions"}}],
+        "limit": limit,
+    }
+    return call_run_report(access_token, property_id, payload)
+
+
 def summarize(report: dict) -> dict[str, str]:
     headers = [h["name"] for h in report.get("metricHeaders", [])]
     values = []
@@ -304,11 +337,15 @@ def detail_bundle(
             counts["eventCount"] = "0"
         events[name] = counts
     share_button = report_rows(run_share_source_report(access_token, property_id, days, host_name))
+    x_campaigns = report_rows(
+        run_x_campaign_report(access_token, property_id, days, limit, host_name)
+    )
     return {
         "summary": summary,
         "page_paths": page_paths,
         "events": events,
         "share_button": share_button,
+        "x_campaigns": x_campaigns,
     }
 
 
@@ -347,6 +384,18 @@ def print_details(details: dict) -> None:
             f"{row.get('sessions', '0')} | {row.get('activeUsers', '0')} | "
             f"{row.get('screenPageViews', '0')} |"
         )
+    print()
+    print("## X post traffic (utm_source=x)")
+    print("| campaign | sessionMedium | sessions | activeUsers | screenPageViews |")
+    print("|---|---|---:|---:|---:|")
+    if not details["x_campaigns"]:
+        print("| (no sessions) |  | 0 | 0 | 0 |")
+    for row in details["x_campaigns"]:
+        print(
+            f"| {row.get('sessionCampaignName', '')} | {row.get('sessionMedium', '')} | "
+            f"{row.get('sessions', '0')} | {row.get('activeUsers', '0')} | "
+            f"{row.get('screenPageViews', '0')} |"
+        )
 
 
 def main() -> int:
@@ -355,7 +404,7 @@ def main() -> int:
     parser.add_argument(
         "--details",
         action="store_true",
-        help="Fetch pagePath, click events (related_theme_click / fab_share_click / vote_share_click), and share_button traffic by campaign",
+        help="Fetch pagePath, click events (related_theme_click / fab_share_click / vote_share_click), share_button traffic, and X post traffic by campaign",
     )
     parser.add_argument("--limit", type=int, default=20, help="Row limit for detail reports")
     parser.add_argument("--host-name", default="", help="Public hostname to include in GA4 reports")
