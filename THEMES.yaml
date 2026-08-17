@@ -323,9 +323,9 @@ themes:
     manga_data: todo
     manga_img: partial   # ヒーロー1枚+論点別wide6枚 done（2026-07-29、WebP変換・HTML反映済み）。漫画・投票画像は未生成
     published: done      # ポータル掲載・sitemap登録・回遊カード・SEO登録済み（2026-07-29）
-    page_update_mode: migration # build_consumption_tax_page.py は生成済みページに再実行できない（ValueError）
+    page_update_mode: adapter   # scripts/refresh_adapters/consumption_tax.py。2026-08-17に昇格（生成器を自分自身のページから作り直せる形にした）
     collect_at: 2026-08-24
-    refresh_at:
+    refresh_at: 2026-08-24
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-17
     published_at: 2026-07-29

@@ -156,6 +156,30 @@ THEMES = [
         ],
         "note": "",
     },
+    {
+        # adapter（refresh_adapters/consumption_tax.py）が更新回どうしの比較で作り直すので、
+        # prev_file / cur_file は使わない（前回・今回は social-samples/updates/ の実データ）。
+        "slug": "consumption-tax-cut",
+        "html": "docs/consumption-tax-cut-reaction-map.html",
+        "widget_id": "consumption-tax-cut-tide-widget",
+        "prev_file": None,
+        "cur_file": None,
+        "prev_label": "",
+        "cur_label": "",
+        "use_relevance_filter": True,
+        # 立場・論点は scripts/build_consumption_tax_arena.py の定義と同じ順。
+        # 「その他」は論点カードにも投票にも出さないので潮目からも外す。
+        "stance_labels": ["減税推進", "条件付き賛成・政府案に不満", "減税反対・慎重", "中立・情報"],
+        "issue_labels": [
+            "減税の対象範囲",
+            "財源と社会保障",
+            "減税の効果",
+            "給付など他策との比較",
+            "事業者の実務負担",
+            "公約と政治不信",
+        ],
+        "note": "",
+    },
 ]
 
 
