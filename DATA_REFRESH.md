@@ -103,6 +103,12 @@ python3 scripts/refresh_topic.py \
 事実確認7主張の該当投稿（`data/bike-blue-ticket_claim_posts.json`）も人が確定したもので、
 こちらは件数が合わなくても止まらない。新しい収集回を公開するときは併せて見直すこと。
 
+**取得期間も人が直す。** `bike-blue-ticket` と `ai-copyright` は
+`sample_period_source: owner_confirmed` で、`--promote` では `sample_period` が伸びない。
+直し忘れると、ページの取得期間が前回の収集日のまま公開される（2026-08-17 に発生）。
+`verify_sample_periods.py` が「期間の終わり ≠ `updated_at`」で止めるので、
+公開前に `THEMES.yaml` の `sample_period` を今回の収集日まで伸ばしておくこと。
+
 ## コミット対象
 
 収集した回は、次を必ずコミットする。**`data/verification/updates/` を忘れやすい。**
