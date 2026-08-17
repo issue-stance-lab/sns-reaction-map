@@ -240,8 +240,10 @@ class XPostTests(unittest.TestCase):
             self.assertIn(day, measured, f"{day} の自リプライ表示が1件も読めていない")
 
     def test_conversation_follow_is_collected_as_own_post(self):
-        follow = next(p for p in self.posts if p["kind"] == "会話フォロー")
-        self.assertEqual(follow["date"], dt.date(2026, 8, 9))
+        follow = next(
+            p for p in self.posts
+            if p["kind"] == "会話フォロー" and p["date"] == dt.date(2026, 8, 9)
+        )
         self.assertIn("FPXLej8w7O61326", follow["target"])
         self.assertEqual(follow["own_views_status"], "measured")
         self.assertEqual(follow["own_views"], 8)
