@@ -359,6 +359,29 @@ def related_block() -> str:
     )
 
 
+def pinned_issue_order(html: str, order: list[str]) -> list[str]:
+    """公開済みページに入っている論点の並びを引き継ぐ。
+
+    データ側の並びは件数の多い順で、データが増えると入れ替わる。ところが投票は
+    「論点の番号×立場の番号」で保存されているため（saveVote の choiceIdx）、
+    並びが変わると過去の投票の意味まで変わってしまう。公開後は並びを固定する。
+
+    ページにまだ無い論点は、件数順のまま「その他」の直前へ足す。
+    """
+    published = re.search(r"var VOTE_ISSUES=\[(.*?)\];", html, re.DOTALL)
+    if not published:
+        return order
+    short_to_name = {ISSUE_META[name]["short"]: name for name in order if name in ISSUE_META}
+    pinned = [
+        short_to_name[key]
+        for key in re.findall(r"\bk:'([^']+)'", published.group(1))
+        if key in short_to_name
+    ]
+    rest = [name for name in order if name not in pinned and name != "その他"]
+    tail = ["その他"] if "その他" in order else []
+    return [name for name in pinned if name != "その他"] + rest + tail
+
+
 def existing_dates(html: str) -> tuple[str, str]:
     """テンプレートに入っている公開日・最終更新日を引き継ぐ。
 
@@ -464,7 +487,7 @@ def build(
     opinions = data["opinions"]
     relevant = data["relevant"]
     total = data["total_classified"]
-    order = data["issue_order"]
+    order = pinned_issue_order(html, data["issue_order"])
     counts = data["issue_counts"]
     stance_counts = data["stance_counts"]
     stance_share = data["stance_share"]
