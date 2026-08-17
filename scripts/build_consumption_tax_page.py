@@ -599,8 +599,10 @@ def build(
     if '<section class="update-dashboard"' in html and marker in html:
         start = html.index('<section class="update-dashboard"')
         end = html.index(marker) + len(marker)
-        # 前後の空行ごと詰める。残すと貼り直しのたびに空行が2行ずつ増える
-        html = html[:start].rstrip() + "\n\n" + html[end:].lstrip()
+        html = html[:start] + html[end:]
+    # 潮目を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
+    # 空行が増えていき、adapterの冪等性検査（2回目で差分なし）が通らない。
+    html = re.sub(r"\n\s*\n+(<section class=\"panel\" id=\"explainer-section\">)", r"\n\n\1", html)
 
     # --- 6. explainer（論点別インフォグラフィック＋拡大モーダル） --------
     circled = "①②③④⑤⑥⑦"
