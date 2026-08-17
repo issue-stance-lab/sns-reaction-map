@@ -121,6 +121,24 @@ def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> N
     )
 
 
+def finalize(root: Path, current_date: str) -> None:
+    """昇格後に調査条件（取得元・期間・件数）を貼り直す。
+
+    この文言は THEMES.yaml の sample_period と累積正典の件数から作られる。どちらも
+    昇格の途中で書き換わるので、build() が組み立てる候補ページには新しい値を入れられない。
+    """
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_consumption_tax_page.py"),
+            "--conditions-only",
+            "--output-html", str(root / PAGE),
+        ],
+        cwd=root,
+        check=True,
+    )
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"

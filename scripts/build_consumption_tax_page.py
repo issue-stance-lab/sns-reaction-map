@@ -359,6 +359,47 @@ def related_block() -> str:
     )
 
 
+def research_conditions(html: str) -> str:
+    """調査条件（取得元・期間・件数）を THEMES.yaml と累積正典から貼り直す。
+
+    件数は正典の行数、取得期間は台帳の sample_period。どちらも昇格の途中で
+    書き換わるため、候補ページを組み立てる時点では新しい値を入れられない。
+    adapter の finalize（＝昇格後）から呼ぶ。
+    """
+    import yaml
+
+    theme = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"][
+        "consumption-tax-cut"
+    ]
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from x_embed import period_label  # noqa: E402
+
+    count = len(json.loads(CANONICAL.read_text(encoding="utf-8")))
+    period = period_label(str(theme.get("sample_period") or ""))
+    source = str(theme.get("sample_source") or "Yahooリアルタイム検索")
+    block = (
+        "<!-- RESEARCH_CONDITIONS_START -->\n"
+        '<aside class="research-conditions" aria-label="SNSデータの調査条件" '
+        'style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);'
+        'font-size:13px;line-height:1.8;color:var(--muted);">\n'
+        '  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">'
+        f"このマップの元データ:</strong> {source}で取得した公開投稿 {count}件<br>\n"
+        # 確認表示は <span class="review-note"> で囲む。scripts/seo/apply_review_note.py が
+        # data/review-ledger.json に合わせて中身を書き分け、
+        # verify_number_provenance.py がこの囲みだけを検査から外す。
+        f'  （取得期間: {period}／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
+        "  <strong>社会全体の世論調査ではありません。</strong></p>\n"
+        "</aside>\n<!-- RESEARCH_CONDITIONS_END -->"
+    )
+    return re.sub(
+        r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
+        lambda _: block,
+        html,
+        count=1,
+        flags=re.S,
+    )
+
+
 def pinned_issue_order(html: str, order: list[str]) -> list[str]:
     """公開済みページに入っている論点の並びを引き継ぐ。
 
@@ -1074,11 +1115,22 @@ def main() -> int:
     parser.add_argument("--html-template", type=Path, default=TEMPLATE, help="作り直しの土台にするHTML")
     parser.add_argument("--output-html", type=Path, default=OUTPUT)
     parser.add_argument(
+        "--conditions-only",
+        action="store_true",
+        help="調査条件（取得元・期間・件数）だけを公開ページに貼り直す（昇格後に使う）",
+    )
+    parser.add_argument(
         "--skip-issue-counts",
         action="store_true",
         help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
     )
     args = parser.parse_args()
+
+    if args.conditions_only:
+        page = args.output_html
+        page.write_text(research_conditions(page.read_text(encoding="utf-8")), encoding="utf-8")
+        print(f"updated research conditions in {page}")
+        return 0
 
     build(classified=args.input, template=args.html_template, output=args.output_html)
     if not args.skip_issue_counts:
