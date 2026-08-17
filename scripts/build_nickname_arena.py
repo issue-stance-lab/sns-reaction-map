@@ -28,11 +28,13 @@ from typing import Any
 try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
-    from .x_embed import embed_html
+    from .verify_sample_periods import expected_period, summarize
+    from .x_embed import embed_html, period_label
 except ImportError:
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
-    from x_embed import embed_html  # type: ignore[no-redef]
+    from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
+    from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 THEME = "school-nickname-ban"
 ARENA_DATA = Path("docs/school-nickname-ban-arena-data.js")
@@ -268,7 +270,7 @@ def classification(record: dict[str, Any]) -> dict[str, Any]:
     return nested
 
 
-def load_opinions(input_path: Path | None = None) -> tuple[list[dict[str, Any]], str, int]:
+def load_opinions(input_path: Path | None = None) -> tuple[list[dict[str, Any]], str, list[dict[str, Any]]]:
     """正典から、カードに載る6論点の意見投稿だけを取り出す。
 
     `is_opinion` が欠落したレコードは黙って落とさず失敗させる。付いていないと
@@ -306,7 +308,7 @@ def load_opinions(input_path: Path | None = None) -> tuple[list[dict[str, Any]],
         opinions.append(record)
     if not opinions:
         raise IssueCountError("意見と判定されたレコードがありません")
-    return opinions, str(source), len(records)
+    return opinions, str(source), records
 
 
 def stance_of(record: dict[str, Any]) -> str:
@@ -344,6 +346,33 @@ def build_arena_data(rows: list[dict[str, Any]]) -> str:
         )
     body = json.dumps(points, ensure_ascii=False, separators=(",", ":"))
     return f"window.NICKNAME_ARENA_DATA={body};\n"
+
+
+def sample_period(records: list[dict[str, Any]]) -> str:
+    """調査条件に出す収集日の範囲。
+
+    THEMES.yaml の `sample_period` と同じ計算を使う。verify_theme_page.py は
+    台帳の値とページの表記を突き合わせるので、別々に数えると必ずいつかズレる。
+    昇格処理は adapter の後に台帳を書き換えるため、台帳から読むと1回分古くなる。
+    """
+    return period_label(expected_period(summarize(records)))
+
+
+def build_research_conditions(records: list[dict[str, Any]]) -> str:
+    """調査条件（取得元・件数・期間）。
+
+    確認表示は <span class="review-note"> で囲む（apply_review_note.py が中身を
+    書き分け、verify_number_provenance.py がこの囲みだけを検査から外す）。
+    落とすと再生成で検査が落ちる。
+    """
+    return (
+        '<p style="max-width:1000px;margin:0 auto;">'
+        '<strong style="color:var(--ink);">このマップの元データ:</strong> '
+        f"Yahooリアルタイム検索で取得した公開投稿 {len(records)}件<br>\n"
+        f"  （取得期間: {sample_period(records)}／"
+        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
+        "  <strong>社会全体の世論調査ではありません。</strong></p>"
+    )
 
 
 def build_lead(rows: list[dict[str, Any]]) -> str:
@@ -606,7 +635,8 @@ def build(
     html_template: Path | None = None,
     output_html: Path | None = None,
 ) -> tuple[list[str], bool]:
-    rows, sample_file, collected = load_opinions(input_path)
+    rows, sample_file, records = load_opinions(input_path)
+    collected = len(records)
     counts = issue_counts(rows)
     public_page = ROOT / "docs" / f"{THEME}-reaction-map.html"
     template = html_template or public_page
@@ -618,6 +648,13 @@ def build(
     before = template.read_text(encoding="utf-8")
     page = before
     page = replace_once(page, r'<p class="lead">.*?</p>', build_lead(rows), "リード文", flags=re.S)
+    page = replace_once(
+        page,
+        r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
+        build_research_conditions(records),
+        "調査条件",
+        flags=re.S,
+    )
     page = replace_once(
         page,
         r'<section class="stats insight-stats".*?</section>',
