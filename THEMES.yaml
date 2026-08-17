@@ -187,7 +187,7 @@ themes:
     sample_file: social-samples/school-nickname-ban_hermes_arena_classified.json
     refresh_config: configs/topics/school-nickname-ban-v2.yaml
     verification_file: data/verification/school-nickname-ban.json
-    sample_period: "2026-06-22〜2026-07-12"
+    sample_period: "2026-06-22〜2026-08-16"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 374件
     classify: done       # 134件有効
@@ -202,9 +202,9 @@ themes:
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-17
     published_at: 2026-06-24
-    updated_at: 2026-07-26
-    collect_delta: 45
-    notes: "2026-07-26にYahooリアルタイム検索45件を追加収集しHermes再分類。17件が意見投稿と判定。7/12収集15件との比較「世論の潮目」ウィジェットを追加（いじめ・心理的安全47.1%↑が最大変化）。サンプル数少なく傾向参考程度。"
+    updated_at: 2026-08-17
+    collect_delta: 46
+    notes: "2026-08-17にYahooリアルタイム検索46件を追加収集しHermes再分類。24件が意見投稿と判定。専用adapter（scripts/refresh_adapters/nickname.py）を整備し、一度きりの移行用 upgrade_nickname_arena.js を archive/scripts/ へ退けた。ページ・アリーナの点・潮目（7月26日→8月17日）を正典から作り直す。累積420件・意見87件。最多論点はいじめ・心理的安全29件。2026-07-26の45件追加時に「世論の潮目」ウィジェットを追加している。サンプル数少なく傾向参考程度。"
 
   henoko-student-accident:
     title: 辺野古高校生死亡事故
