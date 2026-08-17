@@ -147,6 +147,32 @@ git status --short data/verification/
 
 成功の形: 何も出ない。`??` で更新回のディレクトリが出たらコミットしていない。
 
+## 溜まった更新回をまとめて公開する
+
+公開できない期間に収集だけが進むと、未公開の更新回が溜まる。1回ずつ公開しようとすると
+**途中の状態が「collect_at 期限超過」で必ず落ちる**ため、最後の回に畳み込む。
+
+```sh
+python3 scripts/refresh_topic.py \
+  --topic consumption-tax-cut \
+  --date 2026-08-17 \
+  --include-wave 2026-08-03 --include-wave 2026-08-10 \
+  --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups \
+  --resume --promote
+```
+
+`--resume` は再収集しない。保管済みの更新回はそのまま残し、公開候補だけを現在の正典に対して
+重複判定し直す。`--date` に指定した回の次回予定日が `collect_at` になる。
+
+`--resume` を使うときは、保管済みの更新回から作業場を組み直しておく（`--include-wave` を
+使う場合は、指定した全回の raw を1つに結合したものを置く）。
+
+```sh
+mkdir -p .staging/refresh/<topic>/<run-id>
+# raw.json  … 対象の全回の raw.json を結合したもの
+# new-only.json … 空の [] でよい（保管済みclassifiedから組み直される）
+```
+
 ## 周期
 
 - 既定14日

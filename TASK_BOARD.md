@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-17（自転車青切符を adapter へ昇格。manual テーマが0になり、課題34の「ビルダーを新設する」が完了。課題38は自転車分だけ解消）
+最終更新: 2026-08-18（消費税減税を adapter へ昇格し、滞留していた3回分を公開。migration テーマが0になった。残る非adapterは henoko の1テーマ）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -432,19 +432,21 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 **保存期間**: 当面は全世代保持。ディスクの共有・譲渡・廃棄時はアーカイブを先に削除する。
 
 ### 課題34: ページ更新スクリプトが再実行できないテーマの整備
-**状態**: 進行中（11テーマ中7テーマがadapter。学校あだ名を2026-08-17に昇格し、migration は消費税減税の1テーマだけになった）
+**状態**: 進行中（11テーマ中10テーマがadapter。消費税減税を2026-08-18に昇格し、migration は0になった。残るは henoko の候補input/output対応だけ）
 **発見**: 2026-08-02、adapter 昇格判定の実測時
 
 **概要**: データ更新を自動化するには「同じ入力で2回実行しても差分が出ない」ページ更新スクリプトが要る。全11テーマで実測し、`THEMES.yaml` の `page_update_mode` に記録した。
 
 | 区分 | テーマ | 状態 |
 |---|---|---|
-| adapter（7） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket / school-nickname-ban | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
-| adapter_candidate（3） | constitutional-amendment / henoko-student-accident / fukushuto | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
-| migration（1） | consumption-tax-cut | 一度きりの移行用スクリプト、または再実行で副作用が出る |
+| adapter（10） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket / school-nickname-ban / constitutional-amendment / fukushuto / consumption-tax-cut | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
+| adapter_candidate（1） | henoko-student-accident | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
+| migration（0） | — | 2026-08-18 に消費税減税が昇格して解消 |
 | manual（0） | — | 2026-08-17 に自転車青切符が昇格して解消 |
 
-**やること**: ①henoko の候補input/output対応 ②consumption-tax-cut を再実行可能な形へ書き直す（③の school-nickname-ban と④の manual 4テーマは 2026-08-17 に完了）
+**やること**: henoko の候補input/output対応（残り1件。②の consumption-tax-cut は 2026-08-18、③の school-nickname-ban と④の manual 4テーマは 2026-08-17 に完了）
+
+**2026-08-18 消費税減税**: `build_consumption_tax_page.py` は副首都ページをテンプレートに読む一度きりの生成器だった。候補input/outputを足し、テンプレートの既定を自分自身の公開ページへ変更。2回目で差分が出ていたのは回遊カードのスクリプトの追記・`.side.mid` の追記・潮目前後の空行の3か所。**投票は「論点の番号×立場の番号」で保存されるため、件数順の並びが入れ替わると過去の投票の意味が変わる**（8/3分を足した時点で実際に入れ替わり、adapterの投票互換性検査が止めた）。公開後は並びを固定する。調査条件（取得元・期間・件数）は昇格後に `finalize` が貼り直す。滞留していた3回分は1回ずつ公開できない（途中の状態が collect_at 期限超過で必ず落ちる）ため、`refresh_topic.py` に `--include-wave` を足して保管済み更新回を1つの候補へ畳み込んだ。**同じ滞留は他テーマでも起きるので、次からはこのフラグを使う。**
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
 
 **2026-08-02 共通ランナー対応**: `scripts/refresh_topic.py --topic` に、全11テーマ共通の疎通確認・収集・重複排除・10件試験分類・全件分類・集合検査・更新回保存・バックアップを集約した。migration / manual / adapter_candidate も公開せずstaging止まりで予定どおり収集できる。ページ処理は `scripts/refresh_adapters/` に分離し、takaichi は候補ページ・arena data・潮目を2回生成して差分ゼロ、投票topicIdと15選択肢の互換性を検査する。
