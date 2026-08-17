@@ -1,28 +1,45 @@
 #!/usr/bin/env python3
-"""消費税減税テーマページを副首都ページのv3レイアウトから生成する。
+"""消費税減税テーマページを分類済みデータから生成する。
 
-docs/fukushuto-reaction-map.html をテンプレートとして読み、
-社会実装済みの構造（CSS・投票UI・論点アリーナ・フッター）を保ったまま、
-消費税減税のコンテンツとHermes分類データへ差し替える。
+既定では自分自身の公開ページ（docs/consumption-tax-cut-reaction-map.html）を
+テンプレートに読み、データ由来のセクションだけを作り直す。
 
-前提: scripts/build_consumption_tax_arena.py を先に実行して
-      social-samples/consumption-tax-cut_arena_data.json を作っておく。
+  python3 scripts/build_consumption_tax_page.py \\
+      --input <stage>/cumulative-candidate.json \\
+      --html-template docs/consumption-tax-cut-reaction-map.html \\
+      --output-html <stage>/page-candidate.html
+
+初版は副首都ページ（docs/fukushuto-reaction-map.html）をテンプレートに生成した。
+副首都由来の文字列を置き換える処理はそのまま残してあり、既に置き換わっている
+（＝自分自身をテンプレートにした）場合は何もしない。副首都ページはSEOスクリプトで
+随時書き換わるため、テンプレートとして読み続けると他テーマの変更が漏れ込む。
+
+--input を渡すと scripts/build_consumption_tax_arena.py を内部で実行して
+アリーナ用データを作り直す。渡さない場合は既存の
+social-samples/consumption-tax-cut_arena_data.json を読む。
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from x_embed import embed_html  # noqa: E402
-TEMPLATE = ROOT / "docs" / "fukushuto-reaction-map.html"
-OUTPUT = ROOT / "docs" / "consumption-tax-cut-reaction-map.html"
+PAGE = ROOT / "docs" / "consumption-tax-cut-reaction-map.html"
+# 既定のテンプレートは自分自身。副首都ページから作った初版だけ --html-template で指定した。
+TEMPLATE = PAGE
+OUTPUT = PAGE
 DATA = ROOT / "social-samples" / "consumption-tax-cut_arena_data.json"
+CANONICAL = ROOT / "social-samples" / "consumption-tax-cut_hermes_arena_classified.json"
+TOPIC_CONFIG = ROOT / "configs" / "topics" / "consumption-tax-cut.yaml"
 
 PAGE_URL = "https://issue-stance-lab.github.io/sns-reaction-map/consumption-tax-cut-reaction-map.html"
 
@@ -227,12 +244,26 @@ STANCE_ORDER = ["減税推進", "条件付き賛成・政府案に不満", "減�
 # 投票UIで見せるスタンス（中立を含めた4択）
 VOTE_STANCE_ORDER = STANCE_ORDER
 
-QUERIES = [
-    "消費税減税 賛成 / 消費税減税 反対 / 消費税 廃止 すべき / 消費税減税 財源 どうする",
-    "消費税減税 意味ない / 消費税減税 期待 / 消費税 減税 社会保障 削減 / 消費税減税 効果",
-    "食料品 消費税 ゼロ / 消費税減税 高市 / 給付付き税額控除 消費税 / 消費税 減税 恒久",
-    "消費税減税 レジ 改修 / 消費税 減税 物価高 生活 / 消費税 増税 財務省 / 消費税 一律 減税 5% / 消費税減税 法案 採決 / 消費税減税 インボイス 事業者 / 消費税減税 おかしい OR やるべき",
-]
+def query_lines() -> list[str]:
+    """収集クエリは configs/topics/consumption-tax-cut.yaml が正典。
+
+    ページに直書きすると検索語を足したときに古い一覧が残る（実際に他テーマで起きた）。
+    4語ずつ 1 行にまとめて、初版と同じ見た目にする。
+    """
+    import yaml  # 収集設定を読むためだけに使うので、ここで読み込む
+
+    queries = yaml.safe_load(TOPIC_CONFIG.read_text(encoding="utf-8"))["fetch_queries"]
+    return [" / ".join(queries[i : i + 4]) for i in range(0, len(queries), 4)]
+
+
+def collection_period(rows: list[dict]) -> str:
+    """収集日の範囲。scripts/refresh_topic.py の sample_period と同じ導き方。"""
+    values = sorted({str(row.get("fetched_at") or "")[:10] for row in rows})
+    if not values or any(not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in values):
+        raise SystemExit("fetched_at から収集日を読み取れません")
+    if values[0] == values[-1]:
+        return f"{values[0]}に"
+    return f"{values[0]}〜{values[-1]}に"
 
 
 def replace_between(html: str, start: str, end: str, new: str, *, keep_markers: bool = False) -> str:
@@ -328,7 +359,90 @@ def related_block() -> str:
     )
 
 
-def trust_block(total: int, relevant: int, opinions: int) -> str:
+def research_conditions(html: str) -> str:
+    """調査条件（取得元・期間・件数）を THEMES.yaml と累積正典から貼り直す。
+
+    件数は正典の行数、取得期間は台帳の sample_period。どちらも昇格の途中で
+    書き換わるため、候補ページを組み立てる時点では新しい値を入れられない。
+    adapter の finalize（＝昇格後）から呼ぶ。
+    """
+    import yaml
+
+    theme = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"][
+        "consumption-tax-cut"
+    ]
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from x_embed import period_label  # noqa: E402
+
+    count = len(json.loads(CANONICAL.read_text(encoding="utf-8")))
+    period = period_label(str(theme.get("sample_period") or ""))
+    source = str(theme.get("sample_source") or "Yahooリアルタイム検索")
+    block = (
+        "<!-- RESEARCH_CONDITIONS_START -->\n"
+        '<aside class="research-conditions" aria-label="SNSデータの調査条件" '
+        'style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);'
+        'font-size:13px;line-height:1.8;color:var(--muted);">\n'
+        '  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">'
+        f"このマップの元データ:</strong> {source}で取得した公開投稿 {count}件<br>\n"
+        # 確認表示は <span class="review-note"> で囲む。scripts/seo/apply_review_note.py が
+        # data/review-ledger.json に合わせて中身を書き分け、
+        # verify_number_provenance.py がこの囲みだけを検査から外す。
+        f'  （取得期間: {period}／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
+        "  <strong>社会全体の世論調査ではありません。</strong></p>\n"
+        "</aside>\n<!-- RESEARCH_CONDITIONS_END -->"
+    )
+    return re.sub(
+        r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
+        lambda _: block,
+        html,
+        count=1,
+        flags=re.S,
+    )
+
+
+def pinned_issue_order(html: str, order: list[str]) -> list[str]:
+    """公開済みページに入っている論点の並びを引き継ぐ。
+
+    データ側の並びは件数の多い順で、データが増えると入れ替わる。ところが投票は
+    「論点の番号×立場の番号」で保存されているため（saveVote の choiceIdx）、
+    並びが変わると過去の投票の意味まで変わってしまう。公開後は並びを固定する。
+
+    ページにまだ無い論点は、件数順のまま「その他」の直前へ足す。
+    """
+    published = re.search(r"var VOTE_ISSUES=\[(.*?)\];", html, re.DOTALL)
+    if not published:
+        return order
+    short_to_name = {ISSUE_META[name]["short"]: name for name in order if name in ISSUE_META}
+    pinned = [
+        short_to_name[key]
+        for key in re.findall(r"\bk:'([^']+)'", published.group(1))
+        if key in short_to_name
+    ]
+    rest = [name for name in order if name not in pinned and name != "その他"]
+    tail = ["その他"] if "その他" in order else []
+    return [name for name in pinned if name != "その他"] + rest + tail
+
+
+def existing_dates(html: str) -> tuple[str, str]:
+    """テンプレートに入っている公開日・最終更新日を引き継ぐ。
+
+    どちらも本来は scripts/seo/apply_theme_trust.py が configs/theme-seo.json から
+    管理する値で、このスクリプトが初版の日付で塗り直すと更新日が巻き戻る。
+    """
+    published = re.search(r'"datePublished": "(\d{4}-\d{2}-\d{2})"', html)
+    modified = re.search(r'"dateModified": "(\d{4}-\d{2}-\d{2})"', html)
+    return (
+        published.group(1) if published else PUBLISHED_AT,
+        modified.group(1) if modified else PUBLISHED_AT,
+    )
+
+
+def japanese_date(value: str) -> str:
+    year, month, day = value.split("-")
+    return f"{int(year)}年{int(month)}月{int(day)}日"
+
+
+def trust_block(total: int, relevant: int, opinions: int, published_at: str, modified_at: str) -> str:
     """他テーマと同じ「このページの作り方」ブロック。
 
     scripts/seo/apply_theme_trust.py が configs/theme-seo.json から生成するものと
@@ -343,7 +457,6 @@ def trust_block(total: int, relevant: int, opinions: int) -> str:
     を実行して戻すこと。再生成可能性の検査（scripts/verify_builder_rebuildability.py）は
     consumption-tax-cut に build_consumption_tax_arena.py を使うため、ここは検査に出ない。
     """
-    published = "2026年7月28日"
     return f"""<!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
@@ -351,8 +464,8 @@ def trust_block(total: int, relevant: int, opinions: int) -> str:
     <h2 id="article-trust-title">このページの作り方</h2>
   </div>
   <dl class="article-trust-meta">
-    <div><dt>公開日</dt><dd><time datetime="{PUBLISHED_AT}">{published}</time></dd></div>
-    <div><dt>最終更新日</dt><dd><time datetime="{PUBLISHED_AT}">{published}</time></dd></div>
+    <div><dt>公開日</dt><dd><time datetime="{published_at}">{japanese_date(published_at)}</time></dd></div>
+    <div><dt>最終更新日</dt><dd><time datetime="{modified_at}">{japanese_date(modified_at)}</time></dd></div>
     <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
   </dl>
   <div class="article-trust-method">
@@ -373,14 +486,49 @@ def esc(text: str) -> str:
     )
 
 
-def build() -> None:
-    data = json.loads(DATA.read_text(encoding="utf-8"))
-    html = TEMPLATE.read_text(encoding="utf-8")
+def arena_data(classified: Path | None) -> tuple[dict, list[dict]]:
+    """アリーナ用データと、元になった分類済み行を返す。
+
+    --input が来たときは既存の social-samples/*_arena_data.json を書き換えず、
+    一時ファイルへ作り直す（候補ページの生成が正典の隣を汚さないようにする）。
+    """
+    source = classified if classified is not None else CANONICAL
+    with tempfile.TemporaryDirectory(prefix="consumption-tax-arena-") as directory:
+        output = Path(directory) / "arena_data.json"
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts" / "build_consumption_tax_arena.py"),
+                "--input", str(source),
+                "--output", str(output),
+            ],
+            cwd=ROOT,
+            check=True,
+        )
+        return json.loads(output.read_text(encoding="utf-8")), json.loads(source.read_text(encoding="utf-8"))
+
+
+def build(
+    *,
+    classified: Path | None = None,
+    template: Path = TEMPLATE,
+    output: Path = OUTPUT,
+) -> None:
+    data, rows = arena_data(classified)
+    period = collection_period(rows)
+    html = template.read_text(encoding="utf-8")
+    published_at, modified_at = existing_dates(html)
+    # 一次情報の囲みは scripts/seo/apply_background_sources.py が書くもので、
+    # 公開更新の工程では流れない。背景セクションを作り直すときに持ち越す。
+    sources = re.search(
+        r"<!-- BACKGROUND_SOURCES_START -->.*?<!-- BACKGROUND_SOURCES_END -->", html, re.S
+    )
+    background_sources = sources.group(0) if sources else ""
 
     opinions = data["opinions"]
     relevant = data["relevant"]
     total = data["total_classified"]
-    order = data["issue_order"]
+    order = pinned_issue_order(html, data["issue_order"])
     counts = data["issue_counts"]
     stance_counts = data["stance_counts"]
     stance_share = data["stance_share"]
@@ -419,8 +567,8 @@ def build() -> None:
             "description": DESCRIPTION,
             "image": [OGP_IMAGE],
             "mainEntityOfPage": {"@type": "WebPage", "@id": PAGE_URL},
-            "datePublished": PUBLISHED_AT,
-            "dateModified": PUBLISHED_AT,
+            "datePublished": published_at,
+            "dateModified": modified_at,
             "author": ORGANIZATION,
             "publisher": ORGANIZATION,
         },
@@ -445,12 +593,13 @@ def build() -> None:
         f'<body class="summary-on-light" style="--topic-hero-image:{HERO_IMAGE}">',
     )
 
-    # 「条件付き賛成」用の配色を追加（アリーナの橙と揃える）
-    html = html.replace(
-        ".side.pos{background:#ecfdf5;border-left:4px solid #059669}.side.pos strong{color:#065f46}",
-        ".side.pos{background:#ecfdf5;border-left:4px solid #059669}.side.pos strong{color:#065f46}\n"
-        "    .side.mid{background:#fffbeb;border-left:4px solid #f59e0b}.side.mid strong{color:#92400e}",
-    )
+    # 「条件付き賛成」用の配色を追加（アリーナの橙と揃える）。既にあれば足さない
+    if ".side.mid{" not in html:
+        html = html.replace(
+            ".side.pos{background:#ecfdf5;border-left:4px solid #059669}.side.pos strong{color:#065f46}",
+            ".side.pos{background:#ecfdf5;border-left:4px solid #059669}.side.pos strong{color:#065f46}\n"
+            "    .side.mid{background:#fffbeb;border-left:4px solid #f59e0b}.side.mid strong{color:#92400e}",
+        )
 
     # --- 3. hero -------------------------------------------------------
     hero = (
@@ -506,10 +655,18 @@ def build() -> None:
         flags=re.S,
     )
 
-    # --- 5. 潮目ウィジェットは比較対象がないため削除 ---------------------
-    start = html.index('<section class="update-dashboard"')
-    end = html.index("<!-- TIDE_CARD_END --></section>") + len("<!-- TIDE_CARD_END --></section>")
-    html = html[:start] + html[end:]
+    # --- 5. 潮目ウィジェットを外す ---------------------------------------
+    # 中身は「前回の収集回 × 今回の収集回」で決まり、このスクリプトは回の区別を持たない。
+    # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに貼り直すので、
+    # ここでは残っていれば必ず外す。外さないと古い比較が居座る。
+    marker = "<!-- TIDE_CARD_END --></section>"
+    if '<section class="update-dashboard"' in html and marker in html:
+        start = html.index('<section class="update-dashboard"')
+        end = html.index(marker) + len(marker)
+        html = html[:start] + html[end:]
+    # 潮目を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
+    # 空行が増えていき、adapterの冪等性検査（2回目で差分なし）が通らない。
+    html = re.sub(r"\n\s*\n+(<section class=\"panel\" id=\"explainer-section\">)", r"\n\n\1", html)
 
     # --- 6. explainer（論点別インフォグラフィック＋拡大モーダル） --------
     circled = "①②③④⑤⑥⑦"
@@ -544,24 +701,31 @@ def build() -> None:
         "次の投票で「自分が一番気になる論点」を選んでください。</p>\n"
         "</section>"
     )
-    # モーダルと開閉スクリプトはテンプレート（副首都）のものをそのまま使う
+    # 投票セクションの開始タグは data-vote-topic 属性が後から足されている。
+    # 位置の目印にも、書き戻す開始タグにも、いま付いている属性ごと使う。
+    vote_open = re.search(r'<section class="panel" id="vote-section"[^>]*>', html)
+    if not vote_open:
+        raise SystemExit("投票セクションが見つかりません")
+
+    # モーダルと開閉スクリプトはテンプレートのものをそのまま使う
     modal_start = html.index('<div class="explainer-modal" id="explainer-modal"')
-    modal_end = html.index('<section class="panel" id="vote-section">')
+    modal_end = vote_open.start()
     modal = html[modal_start:modal_end]
 
     start = html.index('<section class="panel" id="explainer-section">')
     html = html[:start] + explainer + "\n\n" + modal + html[modal_end:]
+    vote_open_tag = vote_open.group(0)
 
     # --- 7. 投票セクション ---------------------------------------------
     vote_intro = (
-        '<section class="panel" id="vote-section"><div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2>'
+        f'{vote_open_tag}<div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2>'
         "<span>SNSの声を見る前に</span></div>"
         "<p>2026年7月、物価高対策として食料品に対象を絞った消費税減税の議論が大詰めを迎えました。"
         "「限定的で中途半端」という不満、「財源と社会保障はどうするのか」という懸念、"
         "「そもそも値下げに反映されるのか」という疑問が同時に噴き出しています。</p>"
-        + trust_block(total, relevant, opinions)
+        + trust_block(total, relevant, opinions, published_at, modified_at)
     )
-    start = html.index('<section class="panel" id="vote-section">')
+    start = html.index(vote_open_tag)
     end = html.index('<div id="vote-step1">')
     html = html[:start] + vote_intro + "\n" + html[end:]
     html = html.replace(
@@ -585,9 +749,23 @@ def build() -> None:
         '    <span><i style="background:#64748b"></i>中立</span>\n'
         '    <span style="color:#888">中心＝冷静 / 外周＝感情的</span>'
     )
+    # 凡例の先頭は初版（副首都）では「肯定的」、生成後は「減税推進」。どちらからでも作り直す。
+    legend_start = next(
+        (
+            token
+            for token in (
+                '<span><i style="background:#059669"></i>肯定的</span>',
+                '<span><i style="background:#059669"></i>減税推進</span>',
+            )
+            if token in html
+        ),
+        None,
+    )
+    if legend_start is None:
+        raise SystemExit("アリーナの凡例が見つかりません")
     html = replace_between(
         html,
-        '<span><i style="background:#059669"></i>肯定的</span>',
+        legend_start,
         '<span style="color:#888">中心＝冷静 / 外周＝感情的</span>',
         legend,
     )
@@ -754,7 +932,8 @@ def build() -> None:
         f"<p {p}>SNS上では減税に前向きな声が多数ですが、その中身は一枚岩ではありません。"
         "「一律・恒久でなければ意味がない」という不満、「財源を示さない減税は無責任」という批判、"
         "「公約を掲げた政党が採決でどう動いたか」という政治不信が、論点ごとに別々の対立軸をつくっています。</p>\n"
-        "</section>"
+        + background_sources
+        + "</section>"
     )
     start = html.index('<section class="panel background-panel">')
     end = html.index('<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>')
@@ -812,7 +991,7 @@ def build() -> None:
         + "</tr>"
         for i, name in enumerate(order)
     )
-    query_items = "".join(f"<li>{q}</li>" for q in QUERIES)
+    query_items = "".join(f"<li>{q}</li>" for q in query_lines())
     details = (
         '<section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2>'
         "<span>折りたたみ</span></div>\n"
@@ -826,7 +1005,7 @@ def build() -> None:
         f'<div class="table-wrap"><table><thead><tr><th>選んだ論点</th><th>マーカーが置かれるセクター</th><th>マーカーの色</th></tr></thead>'
         f"<tbody>{marker_rows}</tbody></table></div></details>\n"
         f"<details><summary>収集クエリ</summary><ul>{query_items}"
-        f"<li>2026-07-28にYahooリアルタイム検索で{total}件を取得（重複除外後）。"
+        f"<li>{period}Yahooリアルタイム検索で{total}件を取得（重複除外後）。"
         f"うちHermes（kimi-k2.6）が関連{relevant}件・意見{opinions}件と判定。</li></ul></details>\n"
         "<details><summary>注意</summary><ul>"
         "<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>"
@@ -839,14 +1018,20 @@ def build() -> None:
     html = html[:start] + details + "\n" + html[end:]
 
     # --- 16. 投票後の回遊カード -------------------------------------------
-    # 他テーマページと同じく </footer> の直後に置く
-    anchor = "</footer>"
-    idx = html.index(anchor) + len(anchor)
-    html = html[:idx] + "\n" + related_block() + html[idx:]
+    # 他テーマページと同じく </footer> の直後に置く。既にあれば差し替える
+    # （追記のままだと、自分自身をテンプレートに再生成したときに2枚出る）。
+    block = related_block()
+    if '<script id="related-theme-tracking">' in html:
+        start = html.index('<script id="related-theme-tracking">')
+        end = html.index("</script>", start) + len("</script>")
+        html = html[:start] + block + html[end:]
+    else:
+        idx = html.index("</footer>") + len("</footer>")
+        html = html[:idx] + "\n" + block + html[idx:]
 
     verify(html, opinions)
-    OUTPUT.write_text(html, encoding="utf-8")
-    print(f"wrote {OUTPUT} ({len(html.splitlines())} lines)")
+    output.write_text(html, encoding="utf-8")
+    print(f"wrote {output} ({len(html.splitlines())} lines)")
     print(f"意見{opinions}件 / 論点順: {order}")
 
 
@@ -881,7 +1066,8 @@ def verify(html: str, opinions: int) -> None:
 
     if html.count("{x:") - 2 != opinions:
         problems.append("SM_RAW の件数が意見件数と一致しない")
-    for token in ("G-K10S4YCZFH", "ca-pub-2542211932832864", "supabase", "topic-modern.js"):
+    # 投票の保存先は supabase 直叩きから vote-store.js 経由へ移っている
+    for token in ("G-K10S4YCZFH", "ca-pub-2542211932832864", "vote-store.js", "topic-modern.js"):
         if token not in html:
             problems.append(f"保護タグが失われている: {token}")
     if "--topic-hero-image:" not in html:
@@ -889,7 +1075,8 @@ def verify(html: str, opinions: int) -> None:
 
     # 参照している画像が実在するか（論点図解・ヒーロー）
     for src in sorted(set(re.findall(r'(?:src|data-img)="(images/[^"]+)"', html))):
-        if not (OUTPUT.parent / src).exists():
+        # 候補ページを stage に書くときも、画像の在り処は公開ディレクトリで見る
+        if not (PAGE.parent / src).exists():
             problems.append(f"参照画像が存在しない: {src}")
     cards = len(re.findall(r'<article class="explainer-card"', html))
     if cards != 6:
@@ -916,15 +1103,40 @@ def verify(html: str, opinions: int) -> None:
 
 def _sync_issue_counts() -> None:
     """論点カードの件数を貼り直す。ここを外すと再ビルドで件数が消える。"""
-    import subprocess
-    import sys
-
     subprocess.run(
-        [sys.executable, str(Path(__file__).resolve().parent / "sync_issue_counts.py"), "consumption-tax-cut"],
+        [sys.executable, str(ROOT / "scripts" / "sync_issue_counts.py"), "consumption-tax-cut"],
         check=True,
     )
 
 
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, default=None, help="分類済みJSON（既定: 累積正典）")
+    parser.add_argument("--html-template", type=Path, default=TEMPLATE, help="作り直しの土台にするHTML")
+    parser.add_argument("--output-html", type=Path, default=OUTPUT)
+    parser.add_argument(
+        "--conditions-only",
+        action="store_true",
+        help="調査条件（取得元・期間・件数）だけを公開ページに貼り直す（昇格後に使う）",
+    )
+    parser.add_argument(
+        "--skip-issue-counts",
+        action="store_true",
+        help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
+    )
+    args = parser.parse_args()
+
+    if args.conditions_only:
+        page = args.output_html
+        page.write_text(research_conditions(page.read_text(encoding="utf-8")), encoding="utf-8")
+        print(f"updated research conditions in {page}")
+        return 0
+
+    build(classified=args.input, template=args.html_template, output=args.output_html)
+    if not args.skip_issue_counts:
+        _sync_issue_counts()
+    return 0
+
+
 if __name__ == "__main__":
-    build()
-    _sync_issue_counts()
+    raise SystemExit(main())
