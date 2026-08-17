@@ -28,13 +28,16 @@ THEMES = [
         "note": "比較対象：7月12日収集分のうち意見投稿／7月26日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで再分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。",
     },
     {
+        # adapter（scripts/refresh_adapters/nickname.py）が更新回どうしの比較で作り直すので、
+        # prev_file / cur_file は持たない。固定ファイル名を書いておくと、このスクリプトを
+        # 単体で流したときに、あとから増えた更新回を無視して古いデータへ巻き戻る（課題38）。
         "slug": "school-nickname-ban",
         "html": "docs/school-nickname-ban-reaction-map.html",
         "widget_id": "school-nickname-ban-tide-widget",
-        "prev_file": "school-nickname-ban_hermes_prev_20260712.json",
-        "cur_file": "school-nickname-ban_hermes_cur_20260726.json",
-        "prev_label": "7月12日",
-        "cur_label": "7月26日",
+        "prev_file": None,
+        "cur_file": None,
+        "prev_label": "",
+        "cur_label": "",
         "use_relevance_filter": True,
         "stance_labels": ["一律禁止に反対", "禁止支持", "条件付き・個別対応"],
         "issue_labels": ["一律禁止の実効性", "いじめ・心理的安全", "学校運用・現場体験", "親しさ・呼称文化", "本人意思・柔軟運用"],

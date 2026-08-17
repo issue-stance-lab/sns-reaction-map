@@ -432,24 +432,32 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 **保存期間**: 当面は全世代保持。ディスクの共有・譲渡・廃棄時はアーカイブを先に削除する。
 
 ### 課題34: ページ更新スクリプトが再実行できないテーマの整備
-**状態**: 進行中（11テーマ中6テーマがadapter。自転車青切符を2026-08-17に昇格し、manual は0になった）
+**状態**: 進行中（11テーマ中7テーマがadapter。学校あだ名を2026-08-17に昇格し、migration は消費税減税の1テーマだけになった）
 **発見**: 2026-08-02、adapter 昇格判定の実測時
 
 **概要**: データ更新を自動化するには「同じ入力で2回実行しても差分が出ない」ページ更新スクリプトが要る。全11テーマで実測し、`THEMES.yaml` の `page_update_mode` に記録した。
 
 | 区分 | テーマ | 状態 |
 |---|---|---|
-| adapter（6） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
+| adapter（7） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket / school-nickname-ban | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
 | adapter_candidate（3） | constitutional-amendment / henoko-student-accident / fukushuto | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
-| migration（2） | consumption-tax-cut / school-nickname-ban | 一度きりの移行用スクリプト、または再実行で副作用が出る |
+| migration（1） | consumption-tax-cut | 一度きりの移行用スクリプト、または再実行で副作用が出る |
 | manual（0） | — | 2026-08-17 に自転車青切符が昇格して解消 |
 
-**やること**: ①henoko の候補input/output対応 ②school-nickname-ban の2点を直して adapter へ昇格 ③consumption-tax-cut を再実行可能な形へ書き直す（④の manual 4テーマは 2026-08-17 に完了）
+**やること**: ①henoko の候補input/output対応 ②consumption-tax-cut を再実行可能な形へ書き直す（③の school-nickname-ban と④の manual 4テーマは 2026-08-17 に完了）
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
 
 **2026-08-02 共通ランナー対応**: `scripts/refresh_topic.py --topic` に、全11テーマ共通の疎通確認・収集・重複排除・10件試験分類・全件分類・集合検査・更新回保存・バックアップを集約した。migration / manual / adapter_candidate も公開せずstaging止まりで予定どおり収集できる。ページ処理は `scripts/refresh_adapters/` に分離し、takaichi は候補ページ・arena data・潮目を2回生成して差分ゼロ、投票topicIdと15選択肢の互換性を検査する。
 
 **2026-08-14 高齢者免許返納**: `build_elderly_arena.py` を候補input/output対応にし、専用adapterでページ・潮目を2回生成して差分ゼロ、投票topicId・18選択肢・GA4/AdSense/OGPを保護する。保存済み110件の収集履歴は書き換えず、現在の正典と再照合して重複18件を除いた92件（意見45件）を公開。累積364件・意見233件になった。
+
+**2026-08-17 学校あだ名**: `scripts/build_nickname_arena.py` を新設し、一度きりの移行用
+`upgrade_nickname_arena.js`（実行のたびに空行が1行増え、SEO meta を374件時代へ巻き戻す）を
+`archive/scripts/` へ退けた。移行前の公開ページとアリーナの点を正典からバイト単位で
+再現できることを確認してから差し替えている。専用adapterがページとアリーナの点の2ファイルを
+2回生成して差分ゼロ、投票 topicId と18選択肢、GA4／AdSense／OGPを保護する。投票ボタンの
+件数は毎回変わるので指紋から外した。潮目も更新回から作る形へ移した（課題38の②）。
+8月17日収集の46件（意見24件）を公開し、累積420件・意見87件になった。
 
 **横展開のゲート**: 少なくとも保全先の決定、既存データの初回バックアップ、復元確認が終わるまで、他テーマの定期更新を開始しない。
 
