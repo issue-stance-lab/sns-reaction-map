@@ -63,19 +63,23 @@ THEMES = [
         "note": "",
     },
     {
+        # adapter（scripts/refresh_adapters/henoko.py）が更新回どうしの比較で作り直すので、
+        # prev_file / cur_file は持たない。固定ファイル名を書いておくと、このスクリプトを
+        # 単体で流したときに、あとから増えた更新回を無視して古いデータへ巻き戻る。
         "slug": "henoko",
         "html": "docs/henoko-student-accident-reaction-map.html",
         "widget_id": "henoko-tide-widget",
-        "prev_file": "henoko_hermes_prev_20260712.json",
-        "cur_file": "henoko_hermes_cur_20260726.json",
-        "prev_label": "7月12日",
-        "cur_label": "7月26日",
+        "prev_file": None,
+        "cur_file": None,
+        "prev_label": "",
+        "cur_label": "",
         "use_relevance_filter": False,
         "exclude_stances": {"論点を切り分ける"},
         "exclude_issues": {"その他"},
         "stance_labels": ["文科省判断を支持", "文科省判断に反発", "中立・情報共有"],
         "issue_labels": ["報道・行政対応", "政治的中立性", "安全管理・事故原因", "平和教育の萎縮", "追悼・被害者の尊厳"],
-        "note": "比較対象：7月12日収集分／7月26日収集分。辺野古高校生事故は6月発生のため7月末時点で投稿が少ない。少数サンプルの傾向としてご参照ください。",
+        # 注記は adapter が毎回組み立てる（比較する2回の収集日が変わるため）。
+        "note": "",
     },
     {
         "slug": "elderly-license-revocation",

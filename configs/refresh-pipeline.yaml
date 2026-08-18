@@ -22,7 +22,12 @@ topics:
     classifier: scripts/classify_henoko_arena_hermes.py
     # 本文が同一でも投稿者が違う行を落とさない。収集側が tweet_id/URL/本文ハッシュで
     # 重複を除いた後なので、ここで再度まとめると new と classified の件数が食い違う。
-    classifier_args: ["--keep-duplicates"]
+    # 分類モデルを回ごとに固定する。既定（~/.hermes/config.yaml）を追うと、
+    # 2026-08-18 の minimax-m2.7 切り替えのように、正典と性質の違うラベルが
+    # 混ざる（同じ39件で論点一致41%・賛否一致21%。kimi-k2.7-code は82%・97%）。
+    # 10件ずつ投げると応答が空で返るため、このモデルでは5件ずつに割る。
+    classifier_args: ["--keep-duplicates", "--model", "kimi-k2.7-code", "--batch-size", "5"]
+    adapter: henoko
   takaichi:
     classifier: scripts/classify_takaichi_arena_hermes.py
     adapter: takaichi

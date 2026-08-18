@@ -222,7 +222,7 @@ themes:
     manga_data: done     # manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚+論点別wide6枚（WebP変換済み）
     published: done      # ポータル掲載・sitemap登録済み
-    page_update_mode: adapter_candidate # 現行入力は冪等だが候補input/output未対応
+    page_update_mode: adapter   # scripts/refresh_adapters/henoko.py。2026-08-18に昇格（生成器を候補input/output対応のPythonへ作り直した）
     collect_at: 2026-09-01
     refresh_at:
     collect_mode: scheduled
