@@ -200,13 +200,13 @@ def build_section(counts: dict[str, int]) -> str:
 </style>
 <section id="elderly-verify" aria-labelledby="elderly-verify-title">
   <div class="ev-inner">
-    <p class="ev-step">STEP 2 — 確かめ方</p>
-    <h2 id="elderly-verify-title">投稿が事実として言っていることを、公表資料と突き合わせました</h2>
-    <p class="ev-lead">投稿の中から、公的な資料で真偽や幅を確かめられる主張を{len(FACT_CHECKS)}つ選び、警察庁・内閣府・国土交通省の公表資料と法令に1つずつ当たっています。結果は一致{tally['fact']}件、食い違い{tally['gap']}件、確認できず{tally['miss']}件でした。確認できなかったものも、確認できなかったまま残しています。確認日は{CHECKED_AT}です。</p>
+    <p class="ev-step">投稿の数字を当たる</p>
+    <h2 id="elderly-verify-title">「事故が増えている」「返納に法的根拠はない」は、統計と法令のどこに当たるか</h2>
+    <p class="ev-lead">数や年齢、制度の適用範囲を述べている投稿を{len(FACT_CHECKS)}件ぶん取り出し、警察庁・内閣府・国土交通省の公表資料と道路交通法の条文に当たりました。資料どおりだったのは{tally['fact']}件、ずれがあったのは{tally['gap']}件、材料が見つからず判断を保留したのが{tally['miss']}件です。保留した分も、そのまま下に並べています（{CHECKED_AT}時点）。</p>
     <div class="ev-grid">
 {body}
     </div>
-    <p class="ev-note-foot">件数の数え方：本文をキーワードで拾っただけでは、報道の見出しをそのまま共有した投稿や、「こうすべきだ」という提案だけの投稿まで混ざります。そのため候補を1件ずつ読み、実際にその主張を事実として述べている投稿だけを数えています。該当した投稿のIDは data/elderly-license-revocation_claim_posts.json に保存しており、以後の件数はそこから数えます。義務化に賛成・反対どちらの投稿も含みます。</p>
+    <p class="ev-note-foot">件数の数え方：キーワードで拾うだけだと、報道の見出しをそのまま貼った投稿や、「こうすべきだ」という提案だけの投稿まで混ざりました。そこで候補を編集部が1件ずつ開いて読み、その主張を自分の言葉で述べている投稿だけを数えています。義務化に賛成の投稿も反対の投稿も同じ扱いです。</p>
   </div>
 </section>
 {END}"""
@@ -250,7 +250,7 @@ def build(
     checks = [
         ('data-verdict="miss"', "確認できなかった主張のカード"),
         (CHECKED_AT, "確認日"),
-        ("STEP 2 — 確かめ方", "STEP2の見出し"),
+        ("投稿の数字を当たる", "確かめ方の見出し"),
     ] + [(f">{counts[c['key']]}件の投稿<", f"{c['key']} の件数") for c in FACT_CHECKS]
     for needle, label in checks:
         if needle not in page:
