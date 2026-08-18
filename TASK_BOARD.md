@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-18（消費税減税を adapter へ昇格し、滞留していた3回分を公開。migration テーマが0になった。残る非adapterは henoko の1テーマ）
+最終更新: 2026-08-18（辺野古を adapter へ昇格。11テーマすべてが収集から公開まで自動で回る状態になり、非adapterは0になった）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
