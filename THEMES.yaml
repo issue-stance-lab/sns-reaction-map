@@ -212,7 +212,7 @@ themes:
     sample_file: social-samples/henoko/henoko_hermes_arena_classified.json
     refresh_config: configs/topics/henoko.yaml   # v2 は分類定義のみで fetch_queries を持たない
     verification_file: data/verification/henoko-student-accident.json
-    sample_period: "2026-06-14〜2026-06-27"
+    sample_period: "2026-06-14〜2026-08-18"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 178件
     classify: done       # henoko_structured_redesign_final.json
@@ -222,16 +222,16 @@ themes:
     manga_data: done     # manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
     manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚+論点別wide6枚（WebP変換済み）
     published: done      # ポータル掲載・sitemap登録済み
-    page_update_mode: adapter_candidate # 現行入力は冪等だが候補input/output未対応
-    collect_at: 2026-09-01
-    refresh_at:
+    page_update_mode: adapter   # scripts/refresh_adapters/henoko.py。2026-08-18に昇格（生成器を候補input/output対応のPythonへ作り直した）
+    collect_at: 2026-08-25
+    refresh_at: 2026-08-25
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-18
     published_at: 2026-06-24
-    updated_at: 2026-07-26
-    collect_delta: 44
+    updated_at: 2026-08-18
+    collect_delta: 68
     x_posted_at: 2026-08-16
-    notes: "2026-07-26にYahooリアルタイム検索44件を追加収集しHermes再分類。6件が意見投稿と判定（6月発生の話題のため投稿減少中）。7/12収集41件との比較「世論の潮目」ウィジェットを追加。少数サンプルの傾向として参照。"
+    notes: "2026-07-26にYahooリアルタイム検索44件を追加収集しHermes再分類。6件が意見投稿と判定（6月発生の話題のため投稿減少中）。7/12収集41件との比較「世論の潮目」ウィジェットを追加。少数サンプルの傾向として参照。 2026-08-18に70件を追加収集し、重複2件を除く68件を分類（意見50件）。ページ生成器を build_henoko_arena.mjs から build_henoko_arena.py へ作り直し、件数を出しているすべての場所（リード文・調査条件・注目ポイント4枚・論点ブロックの内訳文と賛否件数・詳細データ表・アリーナの点）を正典から生成する形にして adapter へ昇格。潮目は固定ファイル名をやめ、更新回どうしの比較で作る（少数の回は注記が付く）。分類モデルは configs/refresh-pipeline.yaml で kimi-k2.7-code に固定した。既定の minimax-m2.7 は同じ39件で旧モデルとの一致が論点41%・賛否21%しかなく、正典の「切り分け」中心の分布が「中立」中心に置き換わるため採用していない（kimi-k2.7-code は82%・97%）。このモデルは10件ずつ投げると応答が空で返るため、5件ずつに分けて分類する。"
 
   takaichi:
     title: 高市文春問題

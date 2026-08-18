@@ -136,12 +136,16 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
     return rows
 
 
+MODEL: str | None = None
+
+
 def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
     prompt = prompt_for(batch)
+    command = ["hermes"] + (["-m", MODEL] if MODEL else []) + ["--oneshot"]
     last_error: Exception | None = None
     for _ in range(2):
         result = subprocess.run(
-            ["hermes", "--oneshot", prompt],
+            command + [prompt],
             cwd=ROOT,
             text=True,
             capture_output=True,
@@ -274,8 +278,13 @@ def main() -> int:
     parser.add_argument("--batch-size", type=int, default=10)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--keep-duplicates", action="store_true")
+    # 既定は ~/.hermes/config.yaml の model.default。回どうしを比べるときは、
+    # 比較相手と同じモデルを明示して分類し直す（DATA_REFRESH.md の注意）。
+    parser.add_argument("--model")
     parser.add_argument("--sample-evenly", action="store_true")
     args = parser.parse_args()
+    global MODEL
+    MODEL = args.model
 
     source = json.loads(args.input.read_text())
     if not args.keep_duplicates:
