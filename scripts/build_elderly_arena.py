@@ -22,10 +22,12 @@ from typing import Any
 try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
+    from .x_embed import period_label
     from .x_embed import embed_html
 except ImportError:
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
+    from x_embed import period_label  # type: ignore[no-redef]
     from x_embed import embed_html  # type: ignore[no-redef]
 
 THEME = "elderly-license-revocation"
@@ -60,6 +62,11 @@ def classification(record: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(nested, dict):
         raise IssueCountError("classification を持たないレコードがあります")
     return nested
+
+
+def sample_period() -> str:
+    """台帳に書かれた取得期間。ページの表示はここだけを出所にする。"""
+    return str(parse_themes_yaml(THEMES_YAML)[THEME].get("sample_period") or "unknown")
 
 
 def load_opinions(input_path: Path | None = None) -> tuple[list[dict[str, Any]], str, int]:
@@ -264,6 +271,14 @@ def build(
     page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">{lead}</p>', "リード文", flags=re.S)
     research = f'<strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{len(rows)}件を分析対象としています。<br>'
     page = replace_once(page, r'<strong style="color:var\(--ink\);">このマップの元データ:</strong>.*?<br>', research, "調査条件", flags=re.S)
+    # 取得期間も台帳（THEMES.yaml の sample_period）から書く。ページに直書きすると、
+    # 収集を重ねたときに前回の日付のまま公開される（2026-08-17 に自転車で発生）。
+    page = replace_once(
+        page,
+        r"（取得期間: [^／]*／",
+        f"（取得期間: {period_label(sample_period())}／",
+        "取得期間",
+    )
     # 「記事の検証方法」の収集方法の文はここでは書かない。
     # configs/theme-seo.json の collection を apply_theme_trust.py が {total} / {opinions} を
     # 解決して書き込む。昇格処理はビルダーの後に apply_theme_trust.py を呼ぶため、両方が
