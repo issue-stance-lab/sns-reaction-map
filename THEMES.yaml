@@ -160,7 +160,8 @@ themes:
     sample_file: social-samples/elderly-license_2d_classified.json
     verification_file: data/verification/elderly-license-revocation.json
     refresh_config: configs/topics/elderly-license-revocation.yaml
-    sample_period: unknown
+    sample_period: "2026-06-27〜2026-08-14"
+    sample_period_source: owner_confirmed   # 正典の fetched_at は250/364件のみ。開始日はオーナー確認、終了日は updated_at
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 364件（累計）
     classify: done
