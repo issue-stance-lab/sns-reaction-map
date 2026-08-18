@@ -132,6 +132,11 @@ python3 scripts/refresh_topic.py \
 `verify_sample_periods.py` が「期間の終わり ≠ `updated_at`」で止めるので、
 公開前に `THEMES.yaml` の `sample_period` を今回の収集日まで伸ばしておくこと。
 
+**言い回しの使い回しも検査する。** 新しいセクションを別テーマへ広げるとき、先行事例の
+見出しや書き出しがそのまま複製されやすい（2026-08-18 に自転車→高齢者で発生）。
+`python3 scripts/verify_page_originality.py` が、ページ間で同じ文・似すぎた見出しを見つけて
+止める。共通で当たり前の文は `configs/page-originality.json` に理由つきで登録すること。
+
 ## コミット対象
 
 収集した回は、次を必ずコミットする。**`data/verification/updates/` を忘れやすい。**
