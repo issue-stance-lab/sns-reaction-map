@@ -302,7 +302,12 @@ def insight_stats(opinions: list[dict[str, Any]], stats: dict[str, IssueStats]) 
     どちらも同数のときは ISSUE_DEFS の並び順で先に来るほうを採る。
     """
     total = len(opinions)
-    split_total = sum(1 for row in opinions if stance_value(row) == 0)
+    # 「切り分け」だけを数える。中立・情報共有を足した合計は、正典のどの
+    # 1ラベルの件数でもないため verify_number_provenance.py が説明できない
+    # （2026-08-18 の昇格で、足した値 263 が出所不明として落ちた）。
+    split_total = sum(
+        1 for row in opinions if str(classification(row).get("stance")) == SPLIT
+    )
     top_issue = min(ISSUE_DEFS, key=lambda issue: (-stats[issue["main_issue"]].total, ISSUE_INDEX[issue["main_issue"]]))
     divided = min(
         ISSUE_DEFS,
