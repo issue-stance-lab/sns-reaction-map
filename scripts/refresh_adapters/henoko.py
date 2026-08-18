@@ -73,11 +73,6 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
         raise ValueError(f"合成データを潮目の比較対象にはできません: {previous_path}")
     base["prev_label"] = _label(previous_date)
     base["cur_label"] = _label(current_date)
-    base["note"] = (
-        f"比較対象：{base['prev_label']}収集分／{base['cur_label']}収集分。"
-        "同じ検索語セットで取得した投稿をAIで分類しています。"
-        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
-    )
     previous = load_classified(
         previous_path,
         base["use_relevance_filter"],
@@ -89,6 +84,21 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
         base["use_relevance_filter"],
         base.get("exclude_stances"),
         base.get("exclude_issues"),
+    )
+    # 6月発生の話題で、回によっては比較対象が数十件しかない。少数であることは
+    # 数字と同じ場所に書く（注記を落とすと、6件の構成比が世論の変化に見える）。
+    smallest = min(len(previous), len(current))
+    caution = (
+        "どちらかの回が少数のため、少数サンプルの傾向としてご参照ください。"
+        if smallest < 30
+        else ""
+    )
+    base["note"] = (
+        f"比較対象：{base['prev_label']}収集分{len(previous)}件／"
+        f"{base['cur_label']}収集分{len(current)}件。"
+        "同じ検索語セットで取得した投稿をAIで分類しています。"
+        f"{caution}"
+        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
     )
     tide = generate_tide_section(base, previous, current)
     page.write_text(inject_into_html(page, tide, _load_tide_css()), encoding="utf-8")
