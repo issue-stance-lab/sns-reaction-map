@@ -58,6 +58,7 @@ archive/             運用から外れた文書・スクリプト（下記）
 | [GROWTH.yaml](GROWTH.yaml) | グロース指標の実測値 |
 | [TASK_BOARD.md](TASK_BOARD.md) | テーマ横断の課題 |
 | [X_POSTING_GUIDE.md](X_POSTING_GUIDE.md) | X（Twitter）投稿の型とルール |
+| [FACT_CHECK_GUIDE.md](FACT_CHECK_GUIDE.md) | 投稿の主張を一次資料と突き合わせる手順と発注文 |
 | [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加エージェント向けの全体像 |
 | [AGENTS.md](AGENTS.md) | Codex 向けの GitHub 認証まわりの注意 |
 
