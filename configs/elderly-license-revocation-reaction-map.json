@@ -349,6 +349,13 @@
           "tide-card"
         ],
         "reason": "「世論の潮目」今回側（2026-08-14収集分110件）の仮名化済み分類サマリ"
+      },
+      {
+        "path": "data/verification/elderly-license-revocation-claims.json",
+        "selectors": [
+          "ev-count"
+        ],
+        "reason": "STEP2の「N件の投稿」。主張ごとに編集部が確定した該当投稿（data/elderly-license-revocation_claim_posts.json 由来、scripts/build_elderly_process_sections.py が生成）"
       }
     ],
     "regions": {
@@ -423,6 +430,28 @@
         "selectors": [
           "heat-table"
         ]
+      },
+      {
+        "value": 397,
+        "selectors": [
+          "ev-source",
+          "ev-note"
+        ],
+        "reason": "警察庁 令和7年中の75歳以上の高齢運転者による死亡事故件数（一次情報）"
+      },
+      {
+        "value": 458,
+        "selectors": [
+          "ev-source"
+        ],
+        "reason": "警察庁 平成27年中の75歳以上の高齢運転者による死亡事故件数（一次情報）"
+      },
+      {
+        "value": 435067,
+        "selectors": [
+          "ev-source"
+        ],
+        "reason": "警察庁 運転免許統計 令和7年の申請による運転免許の取消件数（一次情報）"
       }
     ]
   }

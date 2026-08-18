@@ -996,6 +996,124 @@
   </ul></details>
 </section>
 <!-- ARGUMENTS_END -->
+<!-- VERIFY_SECTION_START -->
+<style id="elderly-verify-css">
+#elderly-verify{padding:26px min(6vw,72px) 30px;background:var(--bg)}
+#elderly-verify .ev-inner{max-width:1000px;margin:0 auto}
+#elderly-verify .ev-step{display:inline-block;margin:0 0 10px;padding:5px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:900;letter-spacing:.06em}
+#elderly-verify h2{font-size:clamp(20px,3.5vw,27px);line-height:1.5;margin:0 0 10px;color:var(--ink)}
+#elderly-verify .ev-lead{font-size:14px;line-height:1.95;color:var(--muted);margin:0 0 16px}
+#elderly-verify .ev-grid{display:grid;gap:11px}
+#elderly-verify .ev-card{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0 12px 12px 0;background:var(--panel,#fff);padding:15px 17px}
+#elderly-verify .ev-card[data-verdict="fact"]{border-left-color:#15803d}
+#elderly-verify .ev-card[data-verdict="gap"]{border-left-color:#b45309}
+#elderly-verify .ev-card[data-verdict="miss"]{border-left-color:#64748b}
+#elderly-verify .ev-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 9px}
+#elderly-verify .ev-claim{margin:0;font-size:15px;font-weight:900;line-height:1.6;color:var(--ink)}
+#elderly-verify .ev-claim::before{content:"投稿：「";color:var(--muted);font-weight:700;font-size:12px}
+#elderly-verify .ev-claim::after{content:"」";color:var(--muted);font-weight:700;font-size:12px}
+#elderly-verify .ev-count{font-size:11.5px;font-weight:800;color:var(--muted);white-space:nowrap}
+#elderly-verify .ev-body p{margin:0 0 7px;font-size:13.5px;line-height:1.9;color:var(--ink)}
+#elderly-verify .ev-body p:last-child{margin-bottom:0}
+#elderly-verify .ev-source strong{font-weight:900}
+#elderly-verify .ev-note{color:var(--muted)}
+#elderly-verify .ev-verdict{display:inline-block;margin-right:8px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:900;color:#fff}
+#elderly-verify .ev-card[data-verdict="fact"] .ev-verdict{background:#15803d}
+#elderly-verify .ev-card[data-verdict="gap"] .ev-verdict{background:#b45309}
+#elderly-verify .ev-card[data-verdict="miss"] .ev-verdict{background:#64748b}
+#elderly-verify .ev-src{font-size:12px}
+#elderly-verify .ev-src a{color:var(--muted)}
+#elderly-verify .ev-note-foot{margin:14px 0 0;font-size:12px;line-height:1.9;color:var(--muted)}
+@media (max-width:720px){#elderly-verify{padding:20px 14px 24px}}
+</style>
+<section id="elderly-verify" aria-labelledby="elderly-verify-title">
+  <div class="ev-inner">
+    <p class="ev-step">STEP 2 — 確かめ方</p>
+    <h2 id="elderly-verify-title">投稿が事実として言っていることを、公表資料と突き合わせました</h2>
+    <p class="ev-lead">投稿の中から、公的な資料で真偽や幅を確かめられる主張を7つ選び、警察庁・内閣府・国土交通省の公表資料と法令に1つずつ当たっています。結果は一致2件、食い違い4件、確認できず1件でした。確認できなかったものも、確認できなかったまま残しています。確認日は2026年8月18日です。</p>
+    <div class="ev-grid">
+      <article class="ev-card" data-verdict="gap">
+        <div class="ev-head">
+          <p class="ev-claim">高齢ドライバーの事故は増えている、多すぎる</p>
+          <span class="ev-count">8件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>警察庁は「75歳以上の高齢運転者による死亡事故は、前年比13件、3.2％減（免許保有者当たりでは75歳未満の約２倍）」と書いている。件数は令和7年で397件、平成27年の458件から減っており、免許保有者10万人当たりでも9.6件から4.8件へ下がっている。一方で同じ資料は「全死亡事故に占める75歳以上の高齢運転者による死亡事故の割合は増加傾向」とも書いている。</p>
+          <p class="ev-note"><span class="ev-verdict">食い違う</span>件数としては減っており、「増えている」は資料と合わない。ただし全死亡事故に占める割合は増えているため、目立つようになったという実感の側は資料と矛盾しない。なお「2025年の統計では397件」と数字を挙げた投稿があり、これは令和7年の公表値と一致していた。</p>
+          <p class="ev-src"><a href="https://www.npa.go.jp/publications/statistics/koutsuu/jiko/R07bunseki.pdf" target="_blank" rel="noopener noreferrer">警察庁 令和7年における交通事故の発生状況について（PDF）</a></p>
+        </div>
+      </article>
+      <article class="ev-card" data-verdict="gap">
+        <div class="ev-head">
+          <p class="ev-claim">高齢者の事故率が高いというのは印象操作で、実際は10代20代の方が高い</p>
+          <span class="ev-count">2件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>内閣府の交通安全白書（警察庁資料）によると、令和6年の免許保有者10万人当たり交通死亡事故件数は、16〜19歳が10.3件で最も多く、次いで80歳以上が7.2件。20〜29歳は3.0件で、70〜79歳の3.5件より低い。白書本文は「16～19歳及び80歳以上が他の年齢層に比べ多くなっており、令和６年中については、16～19歳が最も多く、次いで80歳以上が多くなっている」と記している。</p>
+          <p class="ev-note"><span class="ev-verdict">数字は合うが幅が違う</span>10代が最も高いという部分は資料どおり。ただし20代は低い側にあり、「10代20代の方が高い」とまでは言えない。逆側の「高齢者は通常の約2倍」という投稿は、75歳以上と75歳未満を比べた場合の値としては資料と一致する。</p>
+          <p class="ev-src"><a href="https://www8.cao.go.jp/koutu/taisaku/r07kou_haku/zenbun/genkyo/h1/h1b1s1_2.html" target="_blank" rel="noopener noreferrer">内閣府 令和7年版交通安全白書 第1-22図</a></p>
+        </div>
+      </article>
+      <article class="ev-card" data-verdict="gap">
+        <div class="ev-head">
+          <p class="ev-claim">高齢者の免許更新はほぼ無条件に通る。実技試験は2026年から始まる</p>
+          <span class="ev-count">3件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>警察庁の資料では、75歳以上は更新時に認知機能検査を受け、そのうち過去3年間に信号無視・速度超過など一定の違反歴がある者は運転技能検査の対象になる。更新期間満了までに合格しなければ「更新せず」となる。運転技能検査は令和4年（2022年）5月13日から実施されており、令和7年の対象者数は16万5,756人だった。</p>
+          <p class="ev-note"><span class="ev-verdict">時期と対象が食い違う</span>実技の検査はこれから始まるのではなく、2022年5月からすでに行われている。ただし対象は違反歴のある人に限られ、違反歴がなければ実車の合否判定はない（高齢者講習の実車指導のみ）。「無条件に通る」という言い方が、この線引きを指しているのであれば、資料と真っ向から食い違うわけではない。</p>
+          <p class="ev-src"><a href="https://www.npa.go.jp/news/release/2026/260625_kouhou.pdf" target="_blank" rel="noopener noreferrer">警察庁 運転技能検査合格者の追跡調査の結果等について（PDF）</a></p>
+        </div>
+      </article>
+      <article class="ev-card" data-verdict="fact">
+        <div class="ev-head">
+          <p class="ev-claim">運転技能検査はザルだ。期間内なら何度でも受け直せる</p>
+          <span class="ev-count">3件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>警察庁の資料には、更新の流れとして運転技能検査は「繰り返し受検可」と明記されている。令和7年は受検者15万6,513人に対し合格者14万5,935人で、「運転技能検査受検者に占める合格者の割合：93％」。さらに追跡調査で「運転技能検査に合格した者の…10万人当たりの事故件数等は、運転技能検査の対象ではない高齢運転者10万人当たりの事故件数等より多い」ことが確認されたとしている。</p>
+          <p class="ev-note"><span class="ev-verdict">資料と一致する</span>繰り返し受検できることも、合格率の高さも資料どおり。警察庁自身が「運転技能が低下して交通事故を起こしやすくなっている者が、運転技能検査に合格していることがうかがわれる」として、検査内容を見直す有識者検討会を開き、令和8年8月を目途に報告書をまとめるとしている。</p>
+          <p class="ev-src"><a href="https://www.npa.go.jp/news/release/2026/260625_kouhou.pdf" target="_blank" rel="noopener noreferrer">警察庁 運転技能検査合格者の追跡調査の結果等について（PDF）</a></p>
+        </div>
+      </article>
+      <article class="ev-card" data-verdict="fact">
+        <div class="ev-head">
+          <p class="ev-claim">返納すれば運転経歴証明書がもらえ、タクシーやバスの割引などの特典を受けられる</p>
+          <span class="ev-count">8件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>警察庁は、自主返納した人は運転経歴証明書の交付を受けられるとし、「地域の実情に応じて、自治体や事業者等による様々な支援が行われています」と書いている。運転経歴証明書は「運転免許証に代わる公的な本人確認書類として、永年、利用することができます」とも案内されている。</p>
+          <p class="ev-note"><span class="ev-verdict">制度としては存在する</span>証明書も特典も実在する。ただし支援の中身を決めているのは自治体や事業者で、全国一律の制度ではない。投稿に出てくるタクシー券・コミュニティバスの割引・預金金利の上乗せ・シニアカーの購入補助は、いずれもその地域だけの例として読む必要がある。</p>
+          <p class="ev-src"><a href="https://www.npa.go.jp/policies/application/license_renewal/jishuhennou.html" target="_blank" rel="noopener noreferrer">警察庁 運転免許証の自主返納について</a></p>
+        </div>
+      </article>
+      <article class="ev-card" data-verdict="gap">
+        <div class="ev-head">
+          <p class="ev-claim">運転免許証の自主返納に法的な根拠はない</p>
+          <span class="ev-count">1件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>道路交通法第百四条の四は「免許を受けた者は、その者の住所地を管轄する公安委員会に免許の取消しを申請することができる」と定めており、第百五条の二が運転経歴証明書の交付を定めている。警察庁の運転免許統計も「申請による運転免許の取消件数」を毎年集計しており、令和7年は435,067件、うち70歳以上が86.2％だった。</p>
+          <p class="ev-note"><span class="ev-verdict">前提が成立しない</span>返納は法律に手続が定められた「申請による取消し」で、件数も毎年公表されている。同じ投稿にある「70歳から返納者が増える」という部分は、申請取消の86.2％が70歳以上という統計と方向としては合っている。</p>
+          <p class="ev-src"><a href="https://laws.e-gov.go.jp/law/335AC0000000105" target="_blank" rel="noopener noreferrer">e-Gov法令検索 道路交通法（第百四条の四・第百五条の二）</a></p>
+        </div>
+      </article>
+      <article class="ev-card" data-verdict="miss">
+        <div class="ev-head">
+          <p class="ev-claim">返納したくても、地方はバスが1日2本で、タクシーも呼べず生活できない</p>
+          <span class="ev-count">7件の投稿</span>
+        </div>
+        <div class="ev-body">
+          <p class="ev-source"><strong>資料はどう書いているか。</strong>国土交通省の「乗合バス路線の廃止状況の推移」では、令和5年度に届出のあった廃止キロは8,617キロメートル。ここ10年ほど毎年7,000〜9,000キロ規模の廃止が続いている。一方で、「1日2本」「呼んでも来ない」といった個々の地域の運行本数や待ち時間を示す全国的な公的資料は、今回参照した範囲では見つけられなかった。</p>
+          <p class="ev-note"><span class="ev-verdict">確認できず</span>路線の廃止が全国で続いていること自体は資料で確かめられた。ただし投稿が語っている暮らしの水準そのものは、公表資料からは確認できていない。投稿が誤りだという意味ではなく、確かめる材料がこちらに無いということ。</p>
+          <p class="ev-src"><a href="https://www.mlit.go.jp/jidosha/content/001898907.pdf" target="_blank" rel="noopener noreferrer">国土交通省 乗合バス路線の廃止状況の推移（PDF）</a></p>
+        </div>
+      </article>
+    </div>
+    <p class="ev-note-foot">件数の数え方：本文をキーワードで拾っただけでは、報道の見出しをそのまま共有した投稿や、「こうすべきだ」という提案だけの投稿まで混ざります。そのため候補を1件ずつ読み、実際にその主張を事実として述べている投稿だけを数えています。該当した投稿のIDは data/elderly-license-revocation_claim_posts.json に保存しており、以後の件数はそこから数えます。義務化に賛成・反対どちらの投稿も含みます。</p>
+  </div>
+</section>
+<!-- VERIFY_SECTION_END -->
     <section class="panel" id="vote-section" data-vote-topic="elderly-license-revocation-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">高齢運転手による死亡事故が報じられるたび、免許返納の義務化を求める声が上がる一方、地方での生活維持や移動手段確保を重視する反対意見も根強くあります。あなたが最も気になる論点はどれですか？</p>
