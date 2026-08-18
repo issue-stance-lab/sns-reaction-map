@@ -20,6 +20,9 @@ topics:
     adapter: nickname
   henoko-student-accident:
     classifier: scripts/classify_henoko_arena_hermes.py
+    # 本文が同一でも投稿者が違う行を落とさない。収集側が tweet_id/URL/本文ハッシュで
+    # 重複を除いた後なので、ここで再度まとめると new と classified の件数が食い違う。
+    classifier_args: ["--keep-duplicates"]
   takaichi:
     classifier: scripts/classify_takaichi_arena_hermes.py
     adapter: takaichi
