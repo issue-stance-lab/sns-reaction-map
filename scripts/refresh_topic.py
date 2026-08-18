@@ -652,6 +652,7 @@ def main() -> int:
     canonical = ROOT / str(theme.get("sample_file") or "")
     refresh_config = ROOT / str(theme.get("refresh_config") or "")
     classifier = ROOT / pipeline["classifier"]
+    classifier_args = [str(value) for value in (pipeline.get("classifier_args") or [])]
     for label, path in (("sample_file", canonical), ("refresh_config", refresh_config), ("classifier", classifier)):
         if not path.is_file():
             raise FileNotFoundError(f"{args.topic}: {label}がありません: {path}")
@@ -745,13 +746,13 @@ def main() -> int:
             reusable = False
         if not reusable:
             run(
-                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-test.json"), "--markdown", str(stage / "classified-test.md"), "--limit", str(test_count)],
+                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-test.json"), "--markdown", str(stage / "classified-test.md"), "--limit", str(test_count), *classifier_args],
                 label="classify test",
             )
             validate_classified(read_rows(stage / "classified-test.json"), classifier)
             started = time.monotonic()
             run(
-                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-wave.json"), "--markdown", str(stage / "classified-wave.md")],
+                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-wave.json"), "--markdown", str(stage / "classified-wave.md"), *classifier_args],
                 label="classify full",
             )
             classified = read_rows(stage / "classified-wave.json")
