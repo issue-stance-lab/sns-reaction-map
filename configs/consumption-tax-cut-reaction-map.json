@@ -69,6 +69,16 @@
     "exclude_selectors": [
       "review-note",
       "article-trust-observations"
+    ],
+    "sources": [
+      {
+        "path": "data/verification/consumption-tax-cut-claims.json",
+        "selectors": [
+          "ca-n",
+          "ca-how"
+        ],
+        "reason": "「その言い分、原典に当たるとどうなるか」の該当件数。言い分ごとに編集部が候補を1件ずつ読んで確定した投稿（data/consumption-tax-cut_claim_posts.json 由来、scripts/build_consumption_tax_page.py が生成）"
+      }
     ]
   },
   "background": {
