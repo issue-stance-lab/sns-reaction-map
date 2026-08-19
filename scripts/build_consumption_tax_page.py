@@ -508,11 +508,248 @@ def arena_data(classified: Path | None) -> tuple[dict, list[dict]]:
         return json.loads(output.read_text(encoding="utf-8")), json.loads(source.read_text(encoding="utf-8"))
 
 
+# ---------------------------------------------------------------------------
+# 投稿の言い分と一次資料の突き合わせ（AdSense診断でExperienceだけがNGだったため、
+# 誰が・いつ・何を確かめたかをページに残す。FACT_CHECK_GUIDE.md が正典）
+# ---------------------------------------------------------------------------
+CLAIM_POSTS = ROOT / "data" / "consumption-tax-cut_claim_posts.json"
+CLAIM_START = "<!-- CLAIM_AUDIT_START -->"
+CLAIM_END = "<!-- CLAIM_AUDIT_END -->"
+# 差し込む位置。「この争点の背景」で制度と経緯を読んだ直後に置く。
+CLAIM_ANCHOR = '<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>'
+CHECKED_ON = "2026年8月19日"
+
+# 判定の呼び名。他テーマと同じ言い方にしないこと（verify_page_originality.py が見る）。
+VERDICT_LABEL = {
+    "fact": "原典どおり",
+    "gap": "原典とズレ",
+    "miss": "原典に届かず",
+}
+
+# 件数は data/consumption-tax-cut_claim_posts.json の tweet_id から毎回数え直す。
+# 直書きしないこと。キーワード一致の件数をそのまま出すと実際より多く出る。
+CLAIM_AUDIT = [
+    {
+        "key": "rate10",
+        "say": "2年たてば、食料品の消費税は10％に戻る",
+        "source": (
+            "首相官邸の会見録（令和8年7月30日）は、令和11年4月の「本格導入」に合わせて"
+            "「『飲食料品の消費税率』は元の税率（８％）に戻」すとしている。"
+            "飲食料品に今かかっているのは標準税率10％ではなく軽減税率8％"
+            "（国分6.24％・地方分1.76％）で、戻り先も8％になる。"
+        ),
+        "note": (
+            "戻る先は10％ではなく8％。1％との差は7ポイントで、"
+            "投稿が前提にしている9ポイントではない。"
+        ),
+        "verdict": "gap",
+        "links": [
+            ("https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html",
+             "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」"),
+            ("https://www.mof.go.jp/tax_policy/summary/consumption/122.pdf",
+             "財務省「消費税の使途（令和8年度予算）」（PDF）"),
+        ],
+    },
+    {
+        "key": "register",
+        "say": "ゼロではなく1％にしたのは、レジなどのシステム改修が理由だ",
+        "source": (
+            "同じ会見で、税率を1％とした理由について"
+            "「１％であれば０％とするよりも事業者のシステム改修の期間を短縮でき、"
+            "令和９年４月から実施可能である」と説明されている。"
+        ),
+        "note": (
+            "理由の説明は会見の発言と重なる。ただし投稿によく出てくる"
+            "「改修に1年かかる」という年数までは、この会見録からは確認できなかった。"
+        ),
+        "verdict": "fact",
+        "links": [
+            ("https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html",
+             "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」"),
+        ],
+    },
+    {
+        "key": "cost5cho",
+        "say": "食料品の消費税を下げると、年5兆円かかる",
+        "source": (
+            "片山さつき財務大臣は衆議院予算委員会（令和8年6月22日）で"
+            "「軽減税率の対象、飲食料品の消費税率を一％にした場合」について"
+            "「減収額が約四・三兆円になりますから、それを総人口約一・二億人で割りますと、"
+            "一人、一年当たりの減税額は……約三万六千円」と答弁している。"
+        ),
+        "note": (
+            "国会で政府が示した額は約4.3兆円。5兆円はそれより約7千億円大きい。"
+            "桁は合っているが、答弁の数字ではない。"
+        ),
+        "verdict": "gap",
+        "links": [
+            ("https://kokkai.ndl.go.jp/txt/122105261X01520260622/110",
+             "国会会議録検索システム 第219回国会 衆議院予算委員会（令和8年6月22日）片山財務大臣答弁"),
+        ],
+    },
+    {
+        "key": "welfare",
+        "say": "消費税は全額が社会保障に使われている／一般会計に入るのだから使われていない",
+        "source": (
+            "消費税法第1条第2項は、消費税の収入を「毎年度、制度として確立された年金、医療及び介護の"
+            "社会保障給付並びに少子化に対処するための施策に要する経費に充てるものとする」と定める。"
+            "財務省は「消費税収（国・地方）は、全て社会保障財源に充てることとされています。"
+            "しかしながら、社会保障４経費の合計額には足りていません」と書いており、"
+            "令和8年度予算では消費税収34.0兆円に対し社会保障4経費は48.9兆円。"
+        ),
+        "note": (
+            "「全額を社会保障へ」は、法律と予算の建て付けとしては資料どおり。"
+            "ただし4経費を消費税収でまかなえてはいない。"
+            "逆に「一般会計に入るのだから社会保障には使われていない」という言い方も、"
+            "条文と予算総則を見るかぎり成り立たない。どちらの言い分も、そのままでは資料と合わない。"
+        ),
+        "verdict": "gap",
+        "links": [
+            ("https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm",
+             "財務省「消費税の使途に関する資料」"),
+            ("https://www.mof.go.jp/tax_policy/summary/consumption/d05_1.pdf",
+             "財務省「消費税率の引上げと使途の明確化」（PDF、消費税法第1条第2項の条文）"),
+        ],
+    },
+    {
+        "key": "refund",
+        "say": "輸出企業には年11.7兆円（別の投稿では7兆円）の消費税が還付されている",
+        "source": (
+            "国税庁は「個人及び法人が提出した令和４（2022）年の消費税還付申告税額の合計額は"
+            "７兆円を超えています」と公表している。ただしこれは還付申告全体の額で、"
+            "輸出取引に係る分を区分した数字ではない。国税庁の公表資料にも政府統計の総合窓口にも、"
+            "輸出企業向けの還付額だけを切り出した統計は見当たらなかった。"
+        ),
+        "note": (
+            "輸出免税で仕入れにかかった税額が控除しきれず還付が生じる仕組み自体は、"
+            "国税庁が説明している。確かめられなかったのは金額のほう。"
+            "7兆円は還付申告全体の額に近いが、輸出分と限った公表値ではなく、"
+            "11.7兆円に至っては対応する公表値を見つけられなかった。"
+            "投稿が誤りだと判定したのではなく、公表資料では確認できなかった、という結果である。"
+        ),
+        "verdict": "miss",
+        "links": [
+            ("https://www.nta.go.jp/about/introduction/torikumi/report/2024/04_3.htm",
+             "国税庁「令和6年度版 国税庁レポート 適正・公平な課税・徴収」"),
+            ("https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6551.htm",
+             "国税庁 タックスアンサー No.6551 輸出取引の免税"),
+        ],
+    },
+    {
+        "key": "firstcut",
+        "say": "消費税は導入されてから、一度も下げられたことがない",
+        "source": (
+            "財務省の説明では、税率3％の消費税が平成元年4月に導入され、平成9年に5％、"
+            "平成26年に8％、令和元年10月に8％から10％へ引き上げられた。"
+            "引下げにあたる記載はない。"
+        ),
+        "note": (
+            "税率が下がった例は資料に見当たらない。"
+            "ただし年数の言い方は投稿ごとに割れていて、平成元年4月からだと37年になる。"
+            "「30年」「40年」はどちらも実際の期間とずれる。"
+        ),
+        "verdict": "fact",
+        "links": [
+            ("https://www.mof.go.jp/tax_information/qanda015.html",
+             "財務省「日本の税の歴史を教えてください。」"),
+        ],
+    },
+]
+
+CLAIM_CSS = """<style>
+.claim-audit .ca-lead{margin:0 0 18px;line-height:1.9}
+.claim-audit .ca-list{display:grid;gap:14px}
+.claim-audit .ca-item{border:1px solid var(--line,#dcdfe6);border-radius:12px;padding:16px 18px;background:var(--card,#fff)}
+.claim-audit .ca-item[data-verdict="gap"]{border-left:5px solid #d1603d}
+.claim-audit .ca-item[data-verdict="fact"]{border-left:5px solid #3f7d58}
+.claim-audit .ca-item[data-verdict="miss"]{border-left:5px solid #8a8fa3;border-style:dashed;border-left-style:solid}
+.claim-audit .ca-say{margin:0 0 10px;font-weight:700;font-size:1.02rem;line-height:1.7}
+.claim-audit .ca-n{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:rgba(120,130,150,.14);font-size:.78rem;font-weight:600;white-space:nowrap;vertical-align:middle}
+.claim-audit .ca-detail{margin:0;display:grid;grid-template-columns:8.4em 1fr;gap:6px 14px}
+.claim-audit .ca-detail dt{font-size:.8rem;font-weight:700;opacity:.72;white-space:normal}
+.claim-audit .ca-detail dd{margin:0;line-height:1.85;white-space:normal}
+.claim-audit .ca-mark{display:inline-block;margin-right:.5em;padding:1px 8px;border-radius:5px;background:rgba(120,130,150,.16);font-size:.82rem}
+.claim-audit .ca-item[data-verdict="gap"] .ca-mark{background:rgba(209,96,61,.16);color:#a34526}
+.claim-audit .ca-item[data-verdict="fact"] .ca-mark{background:rgba(63,125,88,.16);color:#2f6144}
+.claim-audit .ca-item[data-verdict="miss"] .ca-mark{background:rgba(138,143,163,.2)}
+.claim-audit .ca-src{margin:10px 0 0;font-size:.82rem;line-height:1.8}
+.claim-audit .ca-src a{word-break:break-word}
+.claim-audit .ca-how{margin:18px 0 0;padding:12px 14px;border-radius:10px;background:rgba(120,130,150,.09);font-size:.86rem;line-height:1.85}
+@media (max-width:640px){.claim-audit .ca-detail{grid-template-columns:1fr;gap:2px}
+.claim-audit .ca-detail dt{margin-top:8px}}
+</style>"""
+
+
+def claim_audit(rows: list[dict]) -> str:
+    """投稿の言い分と一次資料の突き合わせセクションを組み立てる。"""
+    data = json.loads(CLAIM_POSTS.read_text(encoding="utf-8"))
+    known = {row["tweet_id"] for row in rows}
+    items = []
+    total = 0
+    for entry in CLAIM_AUDIT:
+        ids = data["claims"][entry["key"]]
+        missing = [i for i in ids if i not in known]
+        if missing:
+            raise SystemExit(f"{entry['key']}: 正典に無い tweet_id があります: {missing}")
+        if len(set(ids)) != len(ids):
+            raise SystemExit(f"{entry['key']}: tweet_id が重複しています")
+        total += len(ids)
+        links = " ／ ".join(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
+            for url, label in entry["links"]
+        )
+        items.append(
+            f'  <article class="ca-item" data-verdict="{entry["verdict"]}">\n'
+            f'    <p class="ca-say">「{esc(entry["say"])}」'
+            f'<span class="ca-n">該当した投稿 {len(ids)}件</span></p>\n'
+            f'    <dl class="ca-detail">\n'
+            f"      <dt>原典はこう書いている</dt><dd>{esc(entry['source'])}</dd>\n"
+            f'      <dt>突き合わせた結果</dt><dd><b class="ca-mark">'
+            f"{esc(VERDICT_LABEL[entry['verdict']])}</b>{esc(entry['note'])}</dd>\n"
+            f"    </dl>\n"
+            f'    <p class="ca-src">{links}</p>\n'
+            f"  </article>"
+        )
+    body = "\n".join(items)
+    return f"""{CLAIM_START}
+<section class="panel claim-audit" id="claim-audit">
+{CLAIM_CSS}
+<div class="panel-title"><h2>その言い分、原典に当たるとどうなるか</h2><span>会見録・国会答弁・官庁統計で1件ずつ照合</span></div>
+<p class="ca-lead">税の話は、数字を出したほうが強く見えます。だからこそ、その数字がどこから来たのかを見ておきたい。ここでは投稿にくり返し出てくる言い分のうち、公の記録で当否を判定できるものを6つ取り出し、首相官邸の会見録、国会の議事録、財務省と国税庁の公表資料に当たりました。照合したのは{CHECKED_ON}です。裏の取れなかった1件も、取れないまま置いてあります。</p>
+<div class="ca-list">
+{body}
+</div>
+<p class="ca-how">数え方について。検索で拾った候補をそのまま足すと、同じ語を別の意味で使っている投稿まで数に入ります。ここでは候補を一つずつ開き、その言い分を実際にしている投稿だけを残しました（合わせて{total}件）。減税に賛成か反対かは問うていません。この節では投稿の本文は載せず、件数と照合の結果だけを出しています。</p>
+</section>
+{CLAIM_END}"""
+
+
+def write_claim_provenance(destination: Path | None = None) -> None:
+    """ページに出る「N件」の出所を、1行1投稿の配列として書き出す。
+
+    verify_number_provenance.py はレコードの配列しか出所にできないため、
+    編集部が割り当てた件数はここを通す。中身は claim_posts の写しなので、
+    候補ページを作るときに同じ内容を書いても差分は出ない。
+    """
+    data = json.loads(CLAIM_POSTS.read_text(encoding="utf-8"))
+    records = [
+        {"tweet_id": tid, "claim": key}
+        for key, ids in data["claims"].items()
+        for tid in ids
+    ]
+    out = destination or ROOT / "data" / "verification"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "consumption-tax-cut-claims.json").write_text(
+        json.dumps(records, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+
 def build(
     *,
     classified: Path | None = None,
     template: Path = TEMPLATE,
     output: Path = OUTPUT,
+    verification_dest: Path | None = None,
 ) -> None:
     data, rows = arena_data(classified)
     period = collection_period(rows)
@@ -1029,6 +1266,18 @@ def build(
         idx = html.index("</footer>") + len("</footer>")
         html = html[:idx] + "\n" + block + html[idx:]
 
+    # --- 17. 投稿の言い分と一次資料の突き合わせ ---------------------------
+    # マーカーの間だけを差し替える。初回はマーカーごと「スタンス集計」の手前へ入れる。
+    audit = claim_audit(rows)
+    if CLAIM_START in html and CLAIM_END in html:
+        start = html.index(CLAIM_START)
+        end = html.index(CLAIM_END) + len(CLAIM_END)
+        html = html[:start] + audit + html[end:]
+    else:
+        idx = html.index(CLAIM_ANCHOR)
+        html = html[:idx] + audit + "\n" + html[idx:]
+    write_claim_provenance(verification_dest)
+
     verify(html, opinions)
     output.write_text(html, encoding="utf-8")
     print(f"wrote {output} ({len(html.splitlines())} lines)")
@@ -1087,6 +1336,31 @@ def verify(html: str, opinions: int) -> None:
         problems.append("「このページの作り方」ブロックがない（他テーマと不揃いになる）")
     if 'id="related-theme-tracking"' not in html:
         problems.append("投票後の回遊カードのスクリプトがない")
+
+    # 一次資料との突き合わせセクション。マーカー・判定3種・確認日・件数の出所が揃っているか。
+    if html.count(CLAIM_START) != 1 or html.count(CLAIM_END) != 1:
+        problems.append("突き合わせセクションのマーカーが1組でない")
+    audits = len(re.findall(r'<article class="ca-item"', html))
+    if audits != len(CLAIM_AUDIT):
+        problems.append(f"突き合わせカードが{len(CLAIM_AUDIT)}枚でない: {audits}枚")
+    for verdict in ("fact", "gap", "miss"):
+        if f'data-verdict="{verdict}"' not in html:
+            problems.append(f"突き合わせの判定 {verdict} のカードがない")
+    if CHECKED_ON not in html:
+        problems.append("突き合わせの照合日がページにない")
+    claims_file = ROOT / "data" / "verification" / "consumption-tax-cut-claims.json"
+    if not claims_file.exists():
+        problems.append("件数の出所ファイル（consumption-tax-cut-claims.json）がない")
+    else:
+        records = json.loads(claims_file.read_text(encoding="utf-8"))
+        shown = [
+            int(n) for n in re.findall(r'<span class="ca-n">該当した投稿 (\d+)件</span>', html)
+        ]
+        expected = [
+            sum(1 for r in records if r["claim"] == entry["key"]) for entry in CLAIM_AUDIT
+        ]
+        if shown != expected:
+            problems.append(f"突き合わせの件数が出所ファイルと合わない: {shown} != {expected}")
     bars = len(re.findall(r'<div class="temp-bar-wrap">', html))
     if bars != 6:
         problems.append(f"論点別の立場構成バーが6本でない: {bars}本")
@@ -1115,9 +1389,20 @@ def main() -> int:
     parser.add_argument("--html-template", type=Path, default=TEMPLATE, help="作り直しの土台にするHTML")
     parser.add_argument("--output-html", type=Path, default=OUTPUT)
     parser.add_argument(
+        "--verification-dest",
+        type=Path,
+        default=None,
+        help="件数の出所ファイルの書き出し先（既定: data/verification）",
+    )
+    parser.add_argument(
         "--conditions-only",
         action="store_true",
         help="調査条件（取得元・期間・件数）だけを公開ページに貼り直す（昇格後に使う）",
+    )
+    parser.add_argument(
+        "--claim-audit-only",
+        action="store_true",
+        help="一次資料との突き合わせセクションだけを貼り直す（潮目ウィジェットを落とさない）",
     )
     parser.add_argument(
         "--skip-issue-counts",
@@ -1126,13 +1411,35 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    if args.claim_audit_only:
+        page = args.output_html
+        rows = json.loads((args.input or CANONICAL).read_text(encoding="utf-8"))
+        html = page.read_text(encoding="utf-8")
+        audit = claim_audit(rows)
+        if CLAIM_START in html and CLAIM_END in html:
+            start = html.index(CLAIM_START)
+            end = html.index(CLAIM_END) + len(CLAIM_END)
+            html = html[:start] + audit + html[end:]
+        else:
+            idx = html.index(CLAIM_ANCHOR)
+            html = html[:idx] + audit + "\n" + html[idx:]
+        write_claim_provenance(args.verification_dest)
+        page.write_text(html, encoding="utf-8")
+        print(f"updated claim audit in {page}")
+        return 0
+
     if args.conditions_only:
         page = args.output_html
         page.write_text(research_conditions(page.read_text(encoding="utf-8")), encoding="utf-8")
         print(f"updated research conditions in {page}")
         return 0
 
-    build(classified=args.input, template=args.html_template, output=args.output_html)
+    build(
+        classified=args.input,
+        template=args.html_template,
+        output=args.output_html,
+        verification_dest=args.verification_dest,
+    )
     if not args.skip_issue_counts:
         _sync_issue_counts()
     return 0
