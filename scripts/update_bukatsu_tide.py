@@ -582,7 +582,7 @@ def main() -> int:
 
     page = replace_once(
         page,
-        r'<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>.*?(?=<section class="panel explainer-section">)',
+        r'<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>.*?(?=<section class="panel explainer-section")',
         issue_panel(all_opinions),
         "issue panel",
         flags=re.DOTALL,
