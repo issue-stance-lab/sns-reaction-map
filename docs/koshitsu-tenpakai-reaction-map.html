@@ -1677,7 +1677,7 @@ const SM_RAW = [
   <div class="pc-inner">
     <p class="pc-step">資料を当たる</p>
     <h2 id="koshitsu-audit-title">投稿が引く条文・数字を、皇室典範の原文と官公庁の公表資料で確かめました</h2>
-    <p class="pc-lead">967件の投稿から、条文の引用・人数・日付など事実として確かめられる主張を選び、e-Gov法令検索と内閣官房の公表資料に当たりました。確認できなかったものも、そのまま残しています。確認日は2026年8月20日です。</p>
+    <p class="pc-lead">条文の引用・人数の根拠・施行日など、投稿が事実として示す主張を6件取り上げ、皇室典範の原文（e-Gov法令検索）・内閣官房の公表資料・有識者会議の報告書を一件ずつ調べました。根拠まで届かなかった項目は、何が確認できて何が届かなかったかを残しています。調査日は2026年8月20日です。</p>
     <div class="pv-grid">
     <article class="pv-card" data-verdict="fact">
       <div class="pv-head">
@@ -1718,9 +1718,31 @@ const SM_RAW = [
         <span class="pv-count">1件の投稿</span>
       </div>
       <div class="pv-body">
-        <p class="pv-source"><strong>一次資料には何と書いてあるか。</strong>内閣官房が公開しているヒアリング資料に参加者21名の氏名は記載されている。ただし「11人賛成・7人男系」という区分と集計の根拠となる資料は見当たらなかった。</p>
-        <p class="pv-note"><span class="pv-verdict">確認できず</span>21名がヒアリングに参加した事実は確認できたが、賛否の内訳の集計表は公開資料から見つかっていない。</p>
-        <p class="pv-src"><a href="https://www.cas.go.jp/jp/seisaku/taii_tokurei/dai8/siryou1.pdf" target="_blank" rel="noopener noreferrer">内閣官房 安定的な皇位継承の確保に関する懇談会 第8回資料1（PDF）</a></p>
+        <p class="pv-source"><strong>一次資料には何と書いてあるか。</strong>有識者会議の報告書本文（令和3年12月22日）には「ヒアリングの中では、皇位継承のルールについて悠仁親王殿下までは変えるべきでないとの意見がほとんどを占め、現時点において直ちに変更すべきとの意見は一つのみでありました」という記述がある。女性天皇・女系天皇への賛否を「11人・7人」と区分した集計表は本文中に見当たらなかった。意見の詳細整理は参考資料8（別文書）に収録されているが、そちらは今回確認できていない。</p>
+        <p class="pv-note"><span class="pv-verdict">確認できず</span>21名がヒアリングに参加した事実と報告書の一般的な記述は確認できた。しかし「11人賛成・7人男系」という具体的な内訳は、確認できた報告書本文の中には記載がなかった。</p>
+        <p class="pv-src"><a href="https://www.cas.go.jp/jp/seisaku/taii_tokurei/pdf/houkoku_honbun_20211222.pdf" target="_blank" rel="noopener noreferrer">内閣官房 有識者会議 報告書（令和3年12月22日、PDF）</a></p>
+      </div>
+    </article>
+    <article class="pv-card" data-verdict="fact">
+      <div class="pv-head">
+        <p class="pv-claim">皇位継承資格者（男系男子の皇族）は現在3名しかいない</p>
+        <span class="pv-count">3件の投稿</span>
+      </div>
+      <div class="pv-body">
+        <p class="pv-source"><strong>一次資料には何と書いてあるか。</strong>有識者会議報告書（令和3年12月22日）は「皇位継承資格者として、秋篠宮皇嗣殿下、悠仁親王殿下及び常陸宮正仁親王殿下の三方がおられます」と明記している。令和8年の改正皇室典範は皇位継承資格の範囲を変えていないため、この3名という人数は改正後も変わっていない。</p>
+        <p class="pv-note"><span class="pv-verdict">報告書に明記</span>3名という数は報告書が明記しており、投稿の主張と一致する。改正法は女性皇族の皇籍維持と旧宮家の養子を対象としており、継承資格者の増加は今回の改正に含まれていない。</p>
+        <p class="pv-src"><a href="https://www.cas.go.jp/jp/seisaku/taii_tokurei/pdf/houkoku_honbun_20211222.pdf" target="_blank" rel="noopener noreferrer">内閣官房 有識者会議 報告書（令和3年12月22日、PDF）</a></p>
+      </div>
+    </article>
+    <article class="pv-card" data-verdict="fact">
+      <div class="pv-head">
+        <p class="pv-claim">皇室典範では継承順位は皇長子（長男）から始まり、直系を優先する</p>
+        <span class="pv-count">4件の投稿</span>
+      </div>
+      <div class="pv-body">
+        <p class="pv-source"><strong>一次資料には何と書いてあるか。</strong>皇室典範第二条は「皇位は、左の順序により、皇族に、これを伝える。一 皇長子 二 皇長孫 三 その他の皇長子の子孫 四 皇次子及びその子孫…」と定め、同条第三項は「長系を先にし、同等内では、長を先にする」と明記している。</p>
+        <p class="pv-note"><span class="pv-verdict">条文と一致</span>「直系優先・長を先にする」という原則は条文に明記されており、投稿の理解と一致する。e-Gov法令検索のAPIで原文を取得して確認した。</p>
+        <p class="pv-src"><a href="https://laws.e-gov.go.jp/law/322AC0000000003" target="_blank" rel="noopener noreferrer">e-Gov法令検索 皇室典範</a></p>
       </div>
     </article>
     </div>
