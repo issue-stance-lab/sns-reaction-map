@@ -16,7 +16,7 @@
 | 累積サンプル数 | 5,723件 |
 | 形態 | 静的HTML（GitHub Pages、`docs/` を公開） |
 | データ源 | Yahooリアルタイム検索の公開投稿 |
-| 分類エンジン | Hermes（minimax-m2.7、2026-08-18にkimi-k2.6から切替）／ OpenCode Go（minimax-m2.7） |
+| 分類エンジン | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7） |
 | 投票基盤 | Supabase Edge Function（`supabase/functions/cast-vote/`） |
 | 計測 | GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864` |
 
