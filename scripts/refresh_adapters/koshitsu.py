@@ -109,6 +109,19 @@ def _run_builder(root: Path, candidate: Path, template: Path, page: Path) -> Non
     )
 
 
+def _run_process_sections(root: Path, page: Path) -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_koshitsu_process_sections.py"),
+            "--output-html",
+            str(page),
+        ],
+        cwd=root,
+        check=True,
+    )
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
@@ -119,8 +132,10 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
 
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page)
+    _run_process_sections(root, first_page)
     _apply_tide(root, first_page, stage / "classified-wave.json", current_date)
     _run_builder(root, candidate, first_page, second_page)
+    _run_process_sections(root, second_page)
     _apply_tide(root, second_page, stage / "classified-wave.json", current_date)
 
     if _digest(first_page) != _digest(second_page):
