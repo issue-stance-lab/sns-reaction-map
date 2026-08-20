@@ -107,6 +107,58 @@ for (const def of issueDefs) {
     `$1${counts[def.key] ?? 0}件$2`,
   );
 }
+// insight-stats の件数・割合を正典から自動更新
+const opinionPosts = allPosts.filter((p) => p.classification.is_relevant && p.classification.is_opinion);
+const opinionCount = opinionPosts.length;
+const accuseN = opinionPosts.filter((p) => p.classification.stance === '批判・追及').length;
+const defendN = opinionPosts.filter((p) => p.classification.stance === '擁護・懐疑').length;
+const debateTotalN = accuseN + defendN;
+const accusePct = debateTotalN ? ((accuseN / debateTotalN) * 100).toFixed(1) : '0.0';
+const defendPct = debateTotalN ? ((defendN / debateTotalN) * 100).toFixed(1) : '0.0';
+const diff = Math.abs(accuseN - defendN);
+const diffLabel = `${diff}件差・批判${diff < 30 ? 'がやや優勢' : 'が優勢'}`;
+const accountabilityN = opinionPosts.filter((p) => p.classification.main_issue === '中傷動画・説明責任').length;
+const accountabilityPct = opinionCount ? Math.round(accountabilityN * 100 / opinionCount) : 0;
+const bunshunPosts = opinionPosts.filter((p) => p.classification.main_issue === '文春報道の真偽');
+const bunshunDefendN = bunshunPosts.filter((p) => p.classification.stance === '擁護・懐疑').length;
+const bunshunAccuseN = bunshunPosts.filter((p) => p.classification.stance === '批判・追及').length;
+// カード1: 意見件数
+html = html.replace(
+  /(<strong class="insight-value">)\d+(<small>件<\/small><\/strong>\s*<p class="insight-note">説明責任)/,
+  `$1${opinionCount}$2`,
+);
+// カード2: 意見の割れ方
+html = html.replace(
+  /(<span class="insight-chip">)\d+件差・批判(?:がやや優勢|が優勢)(<\/span>)/,
+  `$1${diffLabel}$2`,
+);
+html = html.replace(
+  /(<span>批判・追及<b>)\d+(<\/b><\/span>)/,
+  `$1${accuseN}$2`,
+);
+html = html.replace(
+  /(<span>擁護・懐疑<b>)\d+(<\/b><\/span><em>VS<\/em>)/,
+  `$1${defendN}$2`,
+);
+html = html.replace(
+  /(<div class="insight-split"[^>]*><i style="width:)[\d.]+(%"><\/i><i style="width:)[\d.]+(%"><\/i><\/div>)/s,
+  `$1${accusePct}$2${defendPct}$3`,
+);
+// カード3: 最も話された論点（説明責任）
+html = html.replace(
+  /(<strong class="insight-value">説明責任 )\d+(<small>件<\/small><\/strong>)/,
+  `$1${accountabilityN}$2`,
+);
+html = html.replace(
+  /(data-tone="topic"[\s\S]*?<i style="width:)\d+(%"><\/i><\/div>)/,
+  `$1${accountabilityPct}$2`,
+);
+// カード4: 唯一の逆転論点（文春報道の真偽）
+html = html.replace(
+  /(<span>擁護・懐疑<b>)\d+(<\/b><\/span><em>VS<\/em><span>批判・追及<b>)\d+(<\/b><\/span>)/,
+  `$1${bunshunDefendN}$2${bunshunAccuseN}$3`,
+);
+
 const currentHtml = fs.existsSync(htmlPath) ? fs.readFileSync(htmlPath, 'utf8') : '';
 const changed = currentArena !== arenaData || currentHtml !== html;
 if (!check) {
