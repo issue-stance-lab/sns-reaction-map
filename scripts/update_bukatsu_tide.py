@@ -582,7 +582,7 @@ def main() -> int:
 
     page = replace_once(
         page,
-        r'<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>.*?(?=<section class="panel background-panel">)',
+        r'<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>.*?(?=<section class="panel explainer-section")',
         issue_panel(all_opinions),
         "issue panel",
         flags=re.DOTALL,
@@ -626,6 +626,55 @@ def main() -> int:
     )
     page = page.replace("Powered by Yahooリアルタイム検索 + AI分類", "公開投稿を収集・分類して整理")
     page = page.replace("Powered by Yahooリアルタイム検索 + Hermes分類", "公開投稿を収集・分類して整理")
+
+    # insight-stats の件数・パーセントを正典の現在値で更新する
+    opinion_total = len(all_opinions)
+    top_stance = max(stance_counts, key=stance_counts.get) if stance_counts else "移行支持"
+    top_stance_count = stance_counts.get(top_stance, 0)
+    top_stance_pct = round(top_stance_count * 100 / opinion_total) if opinion_total else 0
+    cond_count = stance_counts.get("条件付き・改善要求", 0)
+    cond_pct = round(cond_count * 100 / opinion_total) if opinion_total else 0
+    kyoin_count = issue_counts.get("教員の働き方", 0)
+    kyoin_pct = round(kyoin_count * 100 / opinion_total) if opinion_total else 0
+    # カード1: 意見件数・関連件数
+    page = re.sub(
+        r'(<strong class="insight-value">)\d+(<small>件</small></strong>\s*<p class="insight-note">関連)\d+(件から)',
+        rf'\g<1>{opinion_total}\g<2>{relevant_count}\g<3>',
+        page, count=1,
+    )
+    # カード2: 最も多い立場（移行支持 XX%）の値と件数とメーター
+    page = re.sub(
+        r'(<strong class="insight-value">移行支持 )\d+(%</strong>\s*<p class="insight-note">)\d+(件)',
+        rf'\g<1>{top_stance_pct}\g<2>{top_stance_count}\g<3>',
+        page, count=1,
+    )
+    page = re.sub(
+        r'(data-tone="debate"[^>]*>.*?<i style="width:)\d+(%">)',
+        rf'\g<1>{top_stance_pct}\g<2>',
+        page, count=1, flags=re.DOTALL,
+    )
+    # カード3: 教員の働き方の件数とメーター
+    page = re.sub(
+        r'(<strong class="insight-value">教員の働き方 )\d+(<small>件</small></strong>)',
+        rf'\g<1>{kyoin_count}\g<2>',
+        page, count=1,
+    )
+    page = re.sub(
+        r'(data-tone="topic"[^>]*>.*?<i style="width:)\d+(%">)',
+        rf'\g<1>{kyoin_pct}\g<2>',
+        page, count=1, flags=re.DOTALL,
+    )
+    # カード4: 条件付き・第三案の件数とメーター
+    page = re.sub(
+        r'(<strong class="insight-value">改善条件あり )\d+(%</strong>\s*<p class="insight-note">)\d+(件)',
+        rf'\g<1>{cond_pct}\g<2>{cond_count}\g<3>',
+        page, count=1,
+    )
+    page = re.sub(
+        r'(data-tone="option"[^>]*>.*?<i style="width:)\d+(%">)',
+        rf'\g<1>{cond_pct}\g<2>',
+        page, count=1, flags=re.DOTALL,
+    )
 
     output = args.output_html or args.html
     output.write_text(page, encoding="utf-8")
