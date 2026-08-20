@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from scripts.build_elderly_arena import classification
 from scripts.refresh_adapters import elderly
 from scripts.refresh_topic import identity
 
@@ -59,8 +60,13 @@ class ElderlyAdapterTests(unittest.TestCase):
 
             self.assertEqual(first.read_bytes(), second.read_bytes())
             page = first.read_text(encoding="utf-8")
-            self.assertIn("公開投稿364件", page)
-            self.assertIn("意見と判定した233件", page)
+            # 件数は候補データから数える。ここに数字を直書きすると、データを追加した回の
+            # 更新でこのテストだけが古い件数のまま落ちる（2026-08-20 の更新で実際に起きた）。
+            opinions = sum(
+                1 for row in candidate if classification(row).get("is_opinion") is True
+            )
+            self.assertIn(f"公開投稿{len(candidate)}件", page)
+            self.assertIn(f"意見と判定した{opinions}件", page)
 
     def test_adapter_updates_tide_and_preserves_vote_contract(self):
         candidate = self._candidate()
