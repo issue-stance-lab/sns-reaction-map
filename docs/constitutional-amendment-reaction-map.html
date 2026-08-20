@@ -2299,6 +2299,132 @@ drawHeat();draw();
 </ul></section>
 </details>
 </section>
+<!-- CLAIM_AUDIT_START -->
+<style id="claim-audit-css">
+#claim-audit{padding:26px min(6vw,72px) 30px;background:var(--bg)}
+#claim-audit .ca-inner{max-width:1000px;margin:0 auto}
+#claim-audit h2{font-size:clamp(20px,3.5vw,27px);line-height:1.5;margin:0 0 10px;color:var(--ink)}
+.ca-lead{font-size:14px;line-height:1.95;color:var(--muted);margin:0 0 16px}
+.ca-grid{display:grid;gap:11px}
+.ca-card{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0 12px 12px 0;background:var(--panel);padding:15px 17px}
+.ca-card[data-verdict="原典にある"]{border-left-color:#15803d}
+.ca-card[data-verdict="原典とずれる"]{border-left-color:#b45309}
+.ca-card[data-verdict="原典にたどり着けず"]{border-left-color:#64748b}
+.ca-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 9px}
+.ca-claim{margin:0;font-size:15px;font-weight:900;line-height:1.6;color:var(--ink)}
+.ca-claim::before{content:"投稿：「";color:var(--muted);font-weight:700;font-size:12px}
+.ca-claim::after{content:"」";color:var(--muted);font-weight:700;font-size:12px}
+.ca-count{font-size:11.5px;font-weight:800;color:var(--muted);white-space:nowrap}
+.ca-body p{margin:0 0 7px;font-size:13.5px;line-height:1.9;color:var(--ink)}
+.ca-body p:last-child{margin-bottom:0}
+.ca-source strong{font-weight:900}
+.ca-note{color:var(--muted)!important}
+.ca-verdict{display:inline-block;margin-right:8px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:900;color:#fff}
+.ca-src{font-size:12px}
+.ca-src a{color:var(--muted)}
+.ca-note-bottom{margin:14px 0 0;font-size:12px;line-height:1.9;color:var(--muted)}
+@media (max-width:720px){
+  #claim-audit{padding-left:14px;padding-right:14px}
+}
+</style>
+<section id="claim-audit" aria-labelledby="claim-audit-title">
+  <div class="ca-inner">
+    <h2 id="claim-audit-title">原典にある数字・原典にない数字</h2>
+    <p class="ca-lead">憲法改正に関する投稿の8つの主張を、条文・政党の公表資料などの一次資料に1つずつ当たって確かめました。「原典にたどり着けず」はそのまま残しています。確認日は2026年8月20日です。報道・解説サイトは参照していません。</p>
+    <div class="ca-grid">
+      <article class="ca-card" data-verdict="原典にある">
+        <div class="ca-head">
+          <p class="ca-claim">国民投票は有効投票の過半数で成立し、最低投票率の規定はない</p>
+          <span class="ca-count">5件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>国民投票法（日本国憲法の改正手続に関する法律）第98条第1項は「憲法改正案に対する賛成の投票の数が投票総数の二分の一を超えた場合は、当該憲法改正について日本国憲法第九十六条第1項の国民の承認があったものとする」と定める。法文中に最低投票率の規定はなく、附則第11条に「投票率が低い場合における措置について検討する」という努力義務が置かれているのみ。施行から18年が経つが、最低投票率を義務づける立法措置は講じられていない。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#15803d">原典にある</span>過半数で成立・最低投票率なしは、いずれも条文の直接の読みとして正確。附則の検討条項は法的効力を持たない。</p>
+          <p class="ca-src"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" target="_blank" rel="noopener noreferrer">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典にある">
+        <div class="ca-head">
+          <p class="ca-claim">国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ</p>
+          <span class="ca-count">5件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>国民投票法第105条第1項は「何人も、国民投票の期日前十四日に当たる日から国民投票の期日までの間、憲法改正に関する広告放送（テレビジョン放送及びラジオ放送に限る）をしてはならない」と定める。同条はその14日間に限定して放送CMを禁止しており、それより前の期間やインターネット広告については禁止規定が本則に置かれていない。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#15803d">原典にある</span>14日間という数字は第105条の条文どおり。14日より前は放送CM量の上限も設けられておらず、「それ以前は無制限」という読みも条文上は否定できない。</p>
+          <p class="ca-src"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" target="_blank" rel="noopener noreferrer">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典にある">
+        <div class="ca-head">
+          <p class="ca-claim">国会が発議してから国民投票まで最短60日、最長180日だ</p>
+          <span class="ca-count">1件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>国民投票法第2条は「国民投票は、少なくとも六十日、多くとも百八十日の範囲で国会が議決した期日にこれを行う」と定める。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#15803d">原典にある</span>60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。</p>
+          <p class="ca-src"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" target="_blank" rel="noopener noreferrer">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典にある">
+        <div class="ca-head">
+          <p class="ca-claim">衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない</p>
+          <span class="ca-count">5件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>日本国憲法第96条第1項は「この憲法の改正は、各議院の総議員の三分の二以上の賛成で、国会がこれを発議し、国民に提案してその承認を経なければならない」と定める。「各議院の」とあるため、衆議院・参議院の両院それぞれで3分の2以上が必要。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#15803d">原典にある</span>3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。</p>
+          <p class="ca-src"><a href="https://hourei.net/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">hourei.net 日本国憲法 第96条</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典とずれる">
+        <div class="ca-head">
+          <p class="ca-claim">自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる</p>
+          <span class="ca-count">3件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>自民党の条文イメージ（2018年3月）第73条の2第1項は「大規模な自然災害その他の法律の定める緊急事態において、特に必要があると認めるときは、閣議にかけて、法律に代わる政令を制定することができる」と定める。ただし、第64条の2では宣言には国会の承認が、政令には国会の事後承認がそれぞれ必要とされており、承認を得られなければ政令は効力を失う。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#b45309">原典とずれる</span>政令は閣議決定だけで制定できる段階が存在するため「国会を経ずに」という表現は一面では当たっているが、国会の事後承認がなければ効力が続かない仕組みは落ちている。「国会を完全に迂回して永続的に効力を持つ法律を作れる」という読みは条文と合わない。</p>
+          <p class="ca-src"><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" target="_blank" rel="noopener noreferrer">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典にある">
+        <div class="ca-head">
+          <p class="ca-claim">現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている</p>
+          <span class="ca-count">5件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>日本国憲法第9条第1項は「日本国民は、正義と秩序を基調とする国際平和を誠実に希求し、国権の発動たる戦争と、武力による威嚇又は武力の行使は、国際紛争を解決する手段としては、永久にこれを放棄する」、第2項は「前項の目的を達するため、陸海空軍その他の戦力は、これを保持しない。国の交戦権は、これを認めない」と定める。「自衛隊」の語は第9条のどの項にも存在しない。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#15803d">原典にある</span>「自衛隊の文字がない」「戦力不保持・交戦権否認が書かれている」はいずれも第9条の条文の直接引用に基づく。自衛隊の存在根拠を9条の枠外に求める政府解釈については第9条に条文はない。</p>
+          <p class="ca-src"><a href="https://hourei.net/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">hourei.net 日本国憲法 第9条</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典とずれる">
+        <div class="ca-head">
+          <p class="ca-claim">自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない</p>
+          <span class="ca-count">4件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>自民党の条文イメージ（2018年3月）第9条の2第1項は「前条の規定は、我が国の平和と独立を守り、国及び国民の安全を保つために必要な自衛の措置をとることを妨げず、そのための実力組織として、法律の定めるところにより、内閣の首長たる内閣総理大臣を最高の指揮監督者とする自衛隊を保持する」と定める。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#b45309">原典とずれる</span>「自衛隊」の文字を加えることに加え、「必要な自衛の措置をとることを妨げず」という留保条項と「内閣総理大臣を最高の指揮監督者とする」という指揮命令の明文化が盛り込まれている。現行9条には存在しないこれらの文言が追加されるため、「書き加えるだけ」という表現は変化の範囲を過小評価している。</p>
+          <p class="ca-src"><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" target="_blank" rel="noopener noreferrer">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></p>
+        </div>
+      </article>
+      <article class="ca-card" data-verdict="原典にたどり着けず">
+        <div class="ca-head">
+          <p class="ca-claim">2026年の国民投票法改正でインターネット広告規制が明文化された</p>
+          <span class="ca-count">5件の投稿</span>
+        </div>
+        <div class="ca-body">
+          <p class="ca-source"><strong>一次資料の記述。</strong>現行の国民投票法（令和4年改正時点）附則第12条は「インターネット等を用いた意見表明に係る規制の在り方については、（中略）検討を加え、必要な法制上の措置を講ずる」という努力義務の検討条項にとどまる。2026年6月に衆院憲法審査会を通過したとされる改正法案の条文テキストは、公開されているe-Govのデータベースに未収録であり、条文の確認ができなかった。</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:#64748b">原典にたどり着けず</span>現行法（令和4年版）の時点では、ネット広告規制は附則の「検討事項」であり禁止規定ではない。投稿が言及している2026年改正の条文は公式データベースに掲載がなく、「明文化された」かどうかを確認する原典にたどり着けなかった。</p>
+          <p class="ca-src"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" target="_blank" rel="noopener noreferrer">e-Gov 国民投票法（令和4年改正時点、2026年改正は未収録）</a></p>
+        </div>
+      </article>
+    </div>
+    <p class="ca-note-bottom">件数の数え方：本文をキーワードで検索すると、趣旨が異なる投稿や報道の引用まで拾って実際より3〜4割多く出ます。候補を1件ずつ読み、実際にその主張をしている投稿だけを残して数えています。賛成・反対どちらの投稿も含みます。</p>
+  </div>
+</section>
+<!-- CLAIM_AUDIT_END -->
   </main>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <footer style="background:linear-gradient(135deg, var(--grad-2), var(--grad-1));border-top:none;padding:48px 24px;text-align:center;color:#fff;font-size:12px;line-height:1.8;">
