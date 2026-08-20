@@ -107,8 +107,174 @@ for (const def of issueDefs) {
     `$1${counts[def.key] ?? 0}件$2`,
   );
 }
-// insight-stats の件数・割合を正典から自動更新
+// === 意見投稿（is_opinion=true）の集合 — insight-stats と論点バーで共用 ===
 const opinionPosts = allPosts.filter((p) => p.classification.is_relevant && p.classification.is_opinion);
+
+// === 論点内スタンスバーを正典から自動更新 ===
+// issue blockごとに temp-bar-wrap セクションを書き換える
+function patchIssueBlock(src, issueId, transforms) {
+  const start = src.indexOf(`id="${issueId}"`);
+  if (start < 0) return src;
+  const end = src.indexOf('</article>', start) + '</article>'.length;
+  let block = src.slice(start, end);
+  for (const [pat, rep] of transforms) block = block.replace(pat, rep);
+  return src.slice(0, start) + block + src.slice(end);
+}
+function fmtPct(n, total) { return total ? Math.round(n * 100 / total) : 0; }
+
+// accountability (中傷動画・説明責任): 4-category bar
+{
+  const posts = opinionPosts.filter(p => p.classification.main_issue === '中傷動画・説明責任');
+  const a = posts.filter(p => p.classification.stance === '批判・追及').length;
+  const d = posts.filter(p => p.classification.stance === '擁護・懐疑').length;
+  const c = posts.filter(p => p.classification.stance === '慎重・保留').length;
+  const n = posts.filter(p => p.classification.stance === '中立・情報').length;
+  const t = a + d + c + n;
+  const [ap, dp, cp, np] = [fmtPct(a,t), fmtPct(d,t), fmtPct(c,t), fmtPct(n,t)];
+  html = patchIssueBlock(html, 'issue-accountability', [
+    [/論点内スタンス分布（Hermes分類 \d+件）<\/span><span>批判 \d+ \/ 擁護 \d+ \/ 慎重 \d+ \/ 中立 \d+/,
+      `論点内スタンス分布（Hermes分類 ${t}件）</span><span>批判 ${a} / 擁護 ${d} / 慎重 ${c} / 中立 ${n}`],
+    [/aria-label="批判・追及\d+%、擁護・懐疑\d+%、慎重・保留\d+%、中立・情報\d+%"/,
+      `aria-label="批判・追及${ap}%、擁護・懐疑${dp}%、慎重・保留${cp}%、中立・情報${np}%"`],
+    [/(temp-seg accuse" style="width:)\d+(%"[^>]*>)\d+%/,
+      `$1${ap}$2${ap}%`],
+    [/(aria-label="批判・追及 )\d+(件">)/,
+      `$1${a}$2`],
+    [/(temp-seg defend" style="width:)\d+(%"[^>]*>)\d+%/,
+      `$1${dp}$2${dp}%`],
+    [/(aria-label="擁護・懐疑 )\d+(件">)/,
+      `$1${d}$2`],
+    [/(temp-seg cautious" style="width:)\d+(%"[^>]*>)(\d+%)?/,
+      `$1${cp}$2`],
+    [/(aria-label="慎重・保留 )\d+(件">)/,
+      `$1${c}$2`],
+    [/(temp-seg neutral" style="width:)\d+(%"[^>]*>)(\d+%)?/,
+      `$1${np}$2`],
+    [/(aria-label="中立・情報 )\d+(件">)/,
+      `$1${n}$2`],
+    [/(批判・追及（)\d+(件）<\/span>)/, `$1${a}$2`],
+    [/(擁護・懐疑（)\d+(件）<\/span>)/, `$1${d}$2`],
+    [/(慎重・保留（)\d+(件）<\/span>)/, `$1${c}$2`],
+    [/(中立（)\d+(件）<\/span>)/, `$1${n}$2`],
+  ]);
+}
+
+// bunshun (文春報道の真偽): 逆転論点、中立なし
+{
+  const posts = opinionPosts.filter(p => p.classification.main_issue === '文春報道の真偽');
+  const a = posts.filter(p => p.classification.stance === '批判・追及').length;
+  const d = posts.filter(p => p.classification.stance === '擁護・懐疑').length;
+  const c = posts.filter(p => p.classification.stance === '慎重・保留').length;
+  const t = a + d + c;
+  const [ap, dp, cp] = [fmtPct(a,t), fmtPct(d,t), fmtPct(c,t)];
+  html = patchIssueBlock(html, 'issue-bunshun', [
+    [/論点内スタンス分布（Hermes分類 \d+件）— 5論点唯一の逆転<\/span><span>擁護 \d+ \/ 慎重 \d+ \/ 批判 \d+/,
+      `論点内スタンス分布（Hermes分類 ${t}件）— 5論点唯一の逆転</span><span>擁護 ${d} / 慎重 ${c} / 批判 ${a}`],
+    [/aria-label="批判・追及\d+%、擁護・懐疑\d+%、慎重・保留\d+%"/,
+      `aria-label="批判・追及${ap}%、擁護・懐疑${dp}%、慎重・保留${cp}%"`],
+    [/(temp-seg accuse" style="width:)\d+(%"[^>]*>)(\d+%)?/,
+      `$1${ap}$2`],
+    [/(aria-label="批判・追及 )\d+(件">)/,
+      `$1${a}$2`],
+    [/(temp-seg defend" style="width:)\d+(%"[^>]*>)\d+%/,
+      `$1${dp}$2${dp}%`],
+    [/(aria-label="擁護・懐疑 )\d+(件">)/,
+      `$1${d}$2`],
+    [/(temp-seg cautious" style="width:)\d+(%"[^>]*>)(\d+%)?/,
+      `$1${cp}$2`],
+    [/(aria-label="慎重・保留 )\d+(件">)/,
+      `$1${c}$2`],
+    [/(擁護・懐疑（)\d+(件・)\d+(%）★唯一の逆転論点<\/span>)/,
+      `$1${d}$2${dp}$3`],
+    [/(慎重・保留（)\d+(件）<\/span>)/, `$1${c}$2`],
+    [/(批判・追及（)\d+(件）<\/span>)/, `$1${a}$2`],
+  ]);
+}
+
+// token (サナエトークン疑惑): 4-category bar
+{
+  const posts = opinionPosts.filter(p => p.classification.main_issue === 'サナエトークン疑惑');
+  const a = posts.filter(p => p.classification.stance === '批判・追及').length;
+  const d = posts.filter(p => p.classification.stance === '擁護・懐疑').length;
+  const c = posts.filter(p => p.classification.stance === '慎重・保留').length;
+  const n = posts.filter(p => p.classification.stance === '中立・情報').length;
+  const t = a + d + c + n;
+  const [ap, dp, cp, np] = [fmtPct(a,t), fmtPct(d,t), fmtPct(c,t), fmtPct(n,t)];
+  html = patchIssueBlock(html, 'issue-token', [
+    [/論点内スタンス分布（Hermes分類 \d+件）<\/span><span>批判 \d+ \/ 擁護 \d+ \/ 慎重 \d+ \/ 中立 \d+/,
+      `論点内スタンス分布（Hermes分類 ${t}件）</span><span>批判 ${a} / 擁護 ${d} / 慎重 ${c} / 中立 ${n}`],
+    [/aria-label="批判・追及\d+%、擁護・懐疑\d+%、慎重・保留\d+%、中立・情報\d+%"/,
+      `aria-label="批判・追及${ap}%、擁護・懐疑${dp}%、慎重・保留${cp}%、中立・情報${np}%"`],
+    [/(temp-seg accuse" style="width:)\d+(%"[^>]*>)\d+%/, `$1${ap}$2${ap}%`],
+    [/(aria-label="批判・追及 )\d+(件">)/, `$1${a}$2`],
+    [/(temp-seg defend" style="width:)\d+(%"[^>]*>)\d+%/, `$1${dp}$2${dp}%`],
+    [/(aria-label="擁護・懐疑 )\d+(件">)/, `$1${d}$2`],
+    [/(temp-seg cautious" style="width:)\d+(%"[^>]*>)(\d+%)?/, `$1${cp}$2`],
+    [/(aria-label="慎重・保留 )\d+(件">)/, `$1${c}$2`],
+    [/(temp-seg neutral" style="width:)\d+(%"[^>]*>)(\d+%)?/, `$1${np}$2`],
+    [/(aria-label="中立・情報 )\d+(件">)/, `$1${n}$2`],
+    [/(批判・追及（)\d+(件）<\/span>)/, `$1${a}$2`],
+    [/(擁護・懐疑（)\d+(件）<\/span>)/, `$1${d}$2`],
+    [/(慎重・保留（)\d+(件）<\/span>)/, `$1${c}$2`],
+    [/(中立（)\d+(件）<\/span>)/, `$1${n}$2`],
+  ]);
+}
+
+// matsui (松井健氏・工作の実態): 3-category bar (no neutral)
+{
+  const posts = opinionPosts.filter(p => p.classification.main_issue === '松井健氏・工作の実態');
+  const a = posts.filter(p => p.classification.stance === '批判・追及').length;
+  const d = posts.filter(p => p.classification.stance === '擁護・懐疑').length;
+  const c = posts.filter(p => p.classification.stance === '慎重・保留').length;
+  const t = a + d + c;
+  const [ap, dp, cp] = [fmtPct(a,t), fmtPct(d,t), fmtPct(c,t)];
+  html = patchIssueBlock(html, 'issue-matsui', [
+    [/論点内スタンス分布（Hermes分類 \d+件）<\/span><span>批判 \d+ \/ 擁護 \d+ \/ 慎重 \d+/,
+      `論点内スタンス分布（Hermes分類 ${t}件）</span><span>批判 ${a} / 擁護 ${d} / 慎重 ${c}`],
+    [/aria-label="批判・追及\d+%、擁護・懐疑\d+%、慎重・保留\d+%"/,
+      `aria-label="批判・追及${ap}%、擁護・懐疑${dp}%、慎重・保留${cp}%"`],
+    [/(temp-seg accuse" style="width:)\d+(%"[^>]*>)\d+%/, `$1${ap}$2${ap}%`],
+    [/(aria-label="批判・追及 )\d+(件">)/, `$1${a}$2`],
+    [/(temp-seg defend" style="width:)\d+(%"[^>]*>)\d+%/, `$1${dp}$2${dp}%`],
+    [/(aria-label="擁護・懐疑 )\d+(件">)/, `$1${d}$2`],
+    [/(temp-seg cautious" style="width:)\d+(%"[^>]*>)\d+%/, `$1${cp}$2${cp}%`],
+    [/(aria-label="慎重・保留 )\d+(件">)/, `$1${c}$2`],
+    [/(批判・追及（)\d+(件）<\/span>)/, `$1${a}$2`],
+    [/(擁護・懐疑（)\d+(件）<\/span>)/, `$1${d}$2`],
+    [/(慎重・保留（)\d+(件）<\/span>)/, `$1${c}$2`],
+  ]);
+}
+
+// comparison (比較・政治倫理): 4-category bar
+{
+  const posts = opinionPosts.filter(p => p.classification.main_issue === '比較・政治倫理');
+  const a = posts.filter(p => p.classification.stance === '批判・追及').length;
+  const d = posts.filter(p => p.classification.stance === '擁護・懐疑').length;
+  const c = posts.filter(p => p.classification.stance === '慎重・保留').length;
+  const n = posts.filter(p => p.classification.stance === '中立・情報').length;
+  const t = a + d + c + n;
+  const [ap, dp, cp, np] = [fmtPct(a,t), fmtPct(d,t), fmtPct(c,t), fmtPct(n,t)];
+  html = patchIssueBlock(html, 'issue-comparison', [
+    [/論点内スタンス分布（Hermes分類 \d+件）<\/span><span>批判 \d+ \/ 擁護 \d+ \/ 慎重 \d+ \/ 中立 \d+/,
+      `論点内スタンス分布（Hermes分類 ${t}件）</span><span>批判 ${a} / 擁護 ${d} / 慎重 ${c} / 中立 ${n}`],
+    [/aria-label="批判・追及\d+%、擁護・懐疑\d+%、慎重・保留\d+%、中立・情報\d+%"/,
+      `aria-label="批判・追及${ap}%、擁護・懐疑${dp}%、慎重・保留${cp}%、中立・情報${np}%"`],
+    [/(temp-seg accuse" style="width:)\d+(%"[^>]*>)\d+%/, `$1${ap}$2${ap}%`],
+    [/(aria-label="批判・追及 )\d+(件">)/, `$1${a}$2`],
+    [/(temp-seg defend" style="width:)\d+(%"[^>]*>)\d+%/, `$1${dp}$2${dp}%`],
+    [/(aria-label="擁護・懐疑 )\d+(件">)/, `$1${d}$2`],
+    [/(temp-seg cautious" style="width:)\d+(%"[^>]*>)\d+%/, `$1${cp}$2${cp}%`],
+    [/(aria-label="慎重・保留 )\d+(件">)/, `$1${c}$2`],
+    [/(temp-seg neutral" style="width:)\d+(%"[^>]*>)(\d+%)?/, `$1${np}$2`],
+    [/(aria-label="中立・情報 )\d+(件">)/, `$1${n}$2`],
+    [/(批判・追及（)\d+(件）<\/span>)/, `$1${a}$2`],
+    [/(擁護・懐疑（)\d+(件）<\/span>)/, `$1${d}$2`],
+    [/(慎重・保留（)\d+(件）<\/span>)/, `$1${c}$2`],
+    [/(中立（)\d+(件）<\/span>)/, `$1${n}$2`],
+  ]);
+}
+
+// === insight-stats の件数・割合を正典から自動更新 ===
 const opinionCount = opinionPosts.length;
 const accuseN = opinionPosts.filter((p) => p.classification.stance === '批判・追及').length;
 const defendN = opinionPosts.filter((p) => p.classification.stance === '擁護・懐疑').length;
