@@ -126,6 +126,22 @@ def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> N
         cwd=root,
         check=True,
     )
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_constitutional_process_sections.py"),
+            "--input",
+            str(candidate),
+            "--html-template",
+            str(output),
+            "--output-html",
+            str(output),
+            "--verification-dest",
+            str(output.parent / "verification"),
+        ],
+        cwd=root,
+        check=True,
+    )
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
