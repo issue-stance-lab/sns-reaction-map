@@ -595,6 +595,7 @@ def promote(
         run([sys.executable, str(root / "scripts" / "verify_number_provenance.py")], label="verify number provenance", root=root)
         run([sys.executable, str(root / "scripts" / "verify_top_page.py")], label="verify portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "validate_theme_seo.py")], label="verify SEO", root=root)
+        run([sys.executable, str(root / "scripts" / "build_data_sheet.py")], label="update DATA_SHEET", root=root)
         backup_private(root, backup_destination)
     except Exception:
         for path in targets:
