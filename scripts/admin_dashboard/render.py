@@ -35,6 +35,14 @@ def fmt_full_date(value: dt.date | None) -> str:
     return f"{value.year}-{value.month:02d}-{value.day:02d}"
 
 
+def fmt_week_window(end_date: dt.date) -> str:
+    """GA4「直近7日」のウィンドウを表示用文字列で返す。end_date が計測日（当日含む7日間）。"""
+    start = end_date - dt.timedelta(days=6)
+    if start.month == end_date.month:
+        return f"{start.month}/{start.day}〜{end_date.month}/{end_date.day}（7日間）"
+    return f"{start.month}/{start.day}〜{end_date.month}/{end_date.day}（7日間）"
+
+
 def fmt_num(value) -> str:
     if value is None:
         return "—"
@@ -521,7 +529,9 @@ def section_traffic(data: dict) -> str:
         return f"前回から {'+' if diff > 0 else ''}{fmt_num(diff)}"
 
     age = (data["today"] - latest["date"]).days
+    win = fmt_week_window(latest["date"])
     stats = (
+        f'<p class="muted small">計測ウィンドウ: {win}</p>'
         '<div class="stats">'
         + card("週の訪問者", fmt_num(latest["weekly_users"]), delta("weekly_users"))
         + card("週のページ閲覧", fmt_num(latest["pageviews"]), delta("pageviews"))
@@ -532,13 +542,20 @@ def section_traffic(data: dict) -> str:
         + "</div>"
     )
 
+    follower_points = [(s["date"], s["x_followers"]) for s in snapshots if s.get("x_followers") is not None]
+    follower_chart = (
+        f'<div class="panel"><h4>X フォロワー</h4>{line_chart(follower_points, color="var(--c5)")}</div>'
+        if follower_points
+        else '<div class="panel"><h4>X フォロワー</h4><p class="muted small" style="padding:16px 0">まだデータがありません。下のフォームで記録してください。</p></div>'
+    )
     charts = (
         '<div class="grid2">'
         f'<div class="panel"><h4>週の訪問者</h4>{line_chart([(s["date"], s["weekly_users"]) for s in snapshots], color="var(--c1)")}</div>'
         f'<div class="panel"><h4>週のページ閲覧</h4>{line_chart([(s["date"], s["pageviews"]) for s in snapshots], color="var(--c2)")}</div>'
         f'<div class="panel"><h4>投票（累計）</h4>{line_chart([(s["date"], s["votes_total"]) for s in snapshots], color="var(--c3)")}</div>'
         f'<div class="panel"><h4>検索での表示回数（28日）</h4>{line_chart([(s["date"], s["gsc_impressions"]) for s in snapshots], color="var(--c4)")}</div>'
-        "</div>"
+        + follower_chart
+        + "</div>"
     )
 
     goal = kpi["phase_goal"]
@@ -555,6 +572,7 @@ def section_traffic(data: dict) -> str:
     history_rows = [
         [
             fmt_full_date(s["date"]),
+            fmt_week_window(s["date"]),
             fmt_num(s["weekly_users"]),
             fmt_num(s["pageviews"]),
             fmt_num(s["pages_per_session"]),
@@ -567,7 +585,7 @@ def section_traffic(data: dict) -> str:
 
     live_html = ""
     if live:
-        live_html = _live_block(live)
+        live_html = _live_block(live, latest)
 
     freshness = f'<p class="{"warn-banner" if age > 10 else "muted small"}">この数字は {fmt_full_date(latest["date"])}（{age}日前）に記録したものです。'
     freshness += "画面を開いた時点の実測ではありません。</p>" if not live else "最新の実測は下の「取り直した実測値」を見てください。</p>"
@@ -602,27 +620,46 @@ def section_traffic(data: dict) -> str:
 <p class="muted small">現在: {esc(kpi["phase"])}</p>
 <div class="goals">{"".join(goal_rows)}</div>
 <h3>週次の記録</h3>
-{table(["日付", "訪問者", "ページ閲覧", "1人あたり", "投票累計", "検索表示", "検索クリック"], history_rows)}
+{table(["記録日", "計測ウィンドウ（7日間）", "訪問者", "ページ閲覧", "1人あたり", "投票累計", "検索表示", "検索クリック"], history_rows)}
 <h3>施策の状態</h3>
 {experiments_lead}
 {experiments}
 </section>"""
 
 
-def _live_block(live: dict) -> str:
+def _live_block(live: dict, prev_snapshot: dict | None = None) -> str:
     parts = []
+
+    def live_delta(live_val: int | None, prev_val) -> str:
+        if live_val is None or prev_val is None:
+            return ""
+        diff = live_val - int(prev_val)
+        if diff == 0:
+            return "前回比 横ばい"
+        return f"前回比 {'+' if diff > 0 else ''}{diff:,}"
+
     ga4 = live.get("ga4")
+    ga4_users = ga4_views = None
     if ga4:
-        parts.append(card("訪問者（直近7日・実測）", fmt_num(int(float(ga4.get("activeUsers", 0) or 0)))))
-        parts.append(card("ページ閲覧（直近7日・実測）", fmt_num(int(float(ga4.get("screenPageViews", 0) or 0)))))
+        ga4_users = int(float(ga4.get("activeUsers", 0) or 0))
+        ga4_views = int(float(ga4.get("screenPageViews", 0) or 0))
+        parts.append(card("訪問者（直近7日・実測）", fmt_num(ga4_users),
+                          live_delta(ga4_users, prev_snapshot.get("weekly_users") if prev_snapshot else None)))
+        parts.append(card("ページ閲覧（直近7日・実測）", fmt_num(ga4_views),
+                          live_delta(ga4_views, prev_snapshot.get("pageviews") if prev_snapshot else None)))
     gsc = live.get("gsc")
     if gsc and isinstance(gsc.get("summary"), dict):
-        parts.append(card("検索表示（28日・実測）", fmt_num(int(float(gsc["summary"].get("impressions", 0) or 0)))))
-        parts.append(card("検索クリック（28日・実測）", fmt_num(int(float(gsc["summary"].get("clicks", 0) or 0)))))
+        imp = int(float(gsc["summary"].get("impressions", 0) or 0))
+        clk = int(float(gsc["summary"].get("clicks", 0) or 0))
+        parts.append(card("検索表示（28日・実測）", fmt_num(imp),
+                          live_delta(imp, prev_snapshot.get("gsc_impressions") if prev_snapshot else None)))
+        parts.append(card("検索クリック（28日・実測）", fmt_num(clk),
+                          live_delta(clk, prev_snapshot.get("gsc_clicks") if prev_snapshot else None)))
     votes = live.get("votes")
     if isinstance(votes, dict):
         total = sum(sum(int(v) for v in choices.values()) for topic, choices in votes.items() if not topic.lower().startswith("test"))
-        parts.append(card("投票累計（実測）", fmt_num(total)))
+        parts.append(card("投票累計（実測）", fmt_num(total),
+                          live_delta(total, prev_snapshot.get("votes_total") if prev_snapshot else None)))
 
     errors = [
         f'<li class="danger"><strong>{esc(label)}</strong><span>{esc(live[key])}</span></li>'
@@ -632,7 +669,37 @@ def _live_block(live: dict) -> str:
     error_html = f'<ul class="alerts">{"".join(errors)}</ul>' if errors else ""
     stats_html = f'<div class="stats">{"".join(parts)}</div>' if parts else ""
     stamp = live["fetched_at"].strftime("%Y-%m-%d %H:%M")
-    return f'<h3>取り直した実測値（{stamp} 時点）</h3>{stats_html}{error_html}'
+    win = fmt_week_window(live["fetched_at"].date())
+    prev_date = fmt_full_date(prev_snapshot["date"]) if prev_snapshot else "—"
+
+    follower_form = f"""<h3>X フォロワー数を記録する</h3>
+<div class="cmdbox">
+  <div class="cmd-head">
+    <span>今日のフォロワー数</span>
+    <input type="number" id="x-followers-input" min="0" placeholder="例: 5"
+      style="font:inherit;font-size:14px;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:120px"
+      oninput="(function(){{
+        var n=document.getElementById('x-followers-input').value;
+        var d=new Date().toISOString().slice(0,10);
+        var cmd=n?'python3 scripts/record_x_followers.py --count '+n+' --date '+d:'数字を入力してください';
+        document.getElementById('x-followers-cmd').textContent=cmd;
+      }})()">
+    <button class="copy" onclick="(function(){{
+      var t=document.getElementById('x-followers-cmd').textContent;
+      if(t==='数字を入力してください')return;
+      navigator.clipboard.writeText(t).then(function(){{
+        var b=event.target;b.textContent='コピーしました';b.classList.add('done');
+        setTimeout(function(){{b.textContent='コピー';b.classList.remove('done')}},2000);
+      }});
+    }})()">コピー</button>
+  </div>
+  <div class="step-cmd" id="x-followers-cmd">数字を入力してください</div>
+  <div class="cmd-foot">実行すると GROWTH.yaml の最新スナップショットに記録されます。実行後は <code>python3 scripts/build_admin_dashboard.py</code> で画面を更新してください。</div>
+</div>"""
+
+    compare_note = f'<p class="muted small">前回の週次記録（{prev_date}）との比較。「前回比」はその時点からの変化です。</p>' if prev_snapshot else ""
+
+    return f'<h3>取り直した実測値（{stamp} 時点 / {win}）</h3>{compare_note}{stats_html}{error_html}{follower_form}'
 
 
 def _pct(value) -> str:
