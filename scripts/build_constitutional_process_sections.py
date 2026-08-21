@@ -29,7 +29,7 @@ THEME = "constitutional-amendment"
 START = "<!-- CLAIM_AUDIT_START -->"
 END = "<!-- CLAIM_AUDIT_END -->"
 
-CHECKED_AT = "2026年8月20日"
+CHECKED_AT = "2026年8月21日"
 
 # 一次資料に当たって確かめた結果。判定は 原典にある / 原典とずれる / 原典にたどり着けず の3種。
 # 件数は data/constitutional-amendment_claim_posts.json の tweet_id から数える。
@@ -277,7 +277,7 @@ def build_section(samples: list[dict], claim_posts: dict) -> str:
 <section id="claim-audit" aria-labelledby="claim-audit-title">
   <div class="ca-inner">
     <h2 id="claim-audit-title">原典にある数字・原典にない数字</h2>
-    <p class="ca-lead">憲法改正に関する投稿の{len(FACT_CHECKS)}つの主張を、条文・政党の公表資料などの一次資料に1つずつ当たって確かめました。「原典にたどり着けず」はそのまま残しています。確認日は{CHECKED_AT}です。報道・解説サイトは参照していません。</p>
+    <p class="ca-lead">憲法改正に関する投稿の{len(FACT_CHECKS)}の主張を、憲法と国民投票法の条文、国会の会議録、政党が公表した条文案に1つずつ当たって確かめました。「原典にたどり着けず」はそのまま残しています。確認日は{CHECKED_AT}です。報道・解説サイトは参照していません。</p>
     <div class="ca-grid">
 {body}
     </div>
