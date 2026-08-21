@@ -69,7 +69,6 @@ THEME_ORDER: list[tuple[str, str]] = [
     ("bukatsu-chiiki", "教育・子ども"),
     ("koshitsu-tenpakai", "政治・皇室"),
     ("constitutional-amendment", "政治・法律"),
-    ("takaichi", "政治・ネット選挙"),
     ("school-nickname-ban", "教育・子ども"),
     ("henoko-student-accident", "教育・基地問題"),
     ("elderly-license-revocation", "交通・福祉"),

@@ -769,7 +769,6 @@ MangaViewer.init({
     "elderly-license-revocation-reaction-map.html":"elderly-license-revocation",
     "school-nickname-ban-reaction-map.html":"school-nickname-ban",
     "henoko-student-accident-reaction-map.html":"henoko-student-accident",
-    "takaichi-reaction-map-standard.html":"takaichi",
     "consumption-tax-cut-reaction-map.html":"consumption-tax-cut"
   };
   var relatedThemes={
@@ -789,7 +788,6 @@ MangaViewer.init({
       ["elderly-license-revocation","elderly-license-revocation-reaction-map.html","images/topics/elderly-license-revocation/elderly-license-revocation-hero.webp","高齢者免許返納","地域差と安全対策の声を整理する。"]
     ],
     "constitutional-amendment":[
-      ["takaichi","takaichi-reaction-map-standard.html","images/topics/takaichi/takaichi-hero.webp","高市文春問題","政治報道への信頼と疑義を見る。"],
       ["henoko-student-accident","henoko-student-accident-reaction-map.html","images/topics/henoko-student-accident/henoko-hero.webp","辺野古高校生死亡事故","政治・教育・安全の論点を整理する。"],
       ["ai-copyright","ai-copyright-reaction-map.html","images/topics/ai-copyright/ai-copyright-hero.webp","生成AIと著作権","制度設計と権利保護の距離を見る。"]
     ],
@@ -805,14 +803,8 @@ MangaViewer.init({
     ],
     "henoko-student-accident":[
       ["constitutional-amendment","constitutional-amendment-reaction-map.html","images/topics/constitutional-amendment/constitutional-hero.webp","憲法改正論議","政治・教育・安全保障の接点を見る。"],
-      ["school-nickname-ban","school-nickname-ban-reaction-map.html","images/topics/school-nickname-ban/school-nickname-hero.webp","学校でのあだ名禁止","教育現場のルール運用を考える。"],
-      ["takaichi","takaichi-reaction-map-standard.html","images/topics/takaichi/takaichi-hero.webp","高市文春問題","政治報道への反応を見比べる。"]
+      ["school-nickname-ban","school-nickname-ban-reaction-map.html","images/topics/school-nickname-ban/school-nickname-hero.webp","学校でのあだ名禁止","教育現場のルール運用を考える。"]
     ],
-    "takaichi":[
-      ["constitutional-amendment","constitutional-amendment-reaction-map.html","images/topics/constitutional-amendment/constitutional-hero.webp","憲法改正論議","政治争点への賛否を整理する。"],
-      ["henoko-student-accident","henoko-student-accident-reaction-map.html","images/topics/henoko-student-accident/henoko-hero.webp","辺野古高校生死亡事故","報道・政治・教育の論点を見る。"],
-      ["ai-copyright","ai-copyright-reaction-map.html","images/topics/ai-copyright/ai-copyright-hero.webp","生成AIと著作権","ネット上の制度論点を比べる。"]
-    ]
   };
   function currentTopic(){return topicByPath[(location.pathname.split("/").pop()||"")]||"unknown";}
   function track(target,placement){

@@ -15,7 +15,7 @@ class ReactionMapDesignPilotTests(unittest.TestCase):
 
     def test_index_and_first_theme_have_scalable_atlas_overview(self):
         for source, markers in (
-            (self.index_source, ('id="topic-atlas-overview"', 'id="topic-atlas-title"', 'topic-atlas-rows', '11テーマの論点アトラス')),
+            (self.index_source, ('id="topic-atlas-overview"', 'id="topic-atlas-title"', 'topic-atlas-rows', '10テーマの論点アトラス')),
             (self.source, ('id="theme-atlas-pilot"', 'theme-atlas-row', '生成AIと著作権 — 論点アトラス')),
         ):
             for marker in markers:

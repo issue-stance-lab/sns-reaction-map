@@ -286,7 +286,6 @@ RELATED_TOPIC_BY_PATH = {
     "elderly-license-revocation-reaction-map.html": "elderly-license-revocation",
     "school-nickname-ban-reaction-map.html": "school-nickname-ban",
     "henoko-student-accident-reaction-map.html": "henoko-student-accident",
-    "takaichi-reaction-map-standard.html": "takaichi",
     "fukushuto-reaction-map.html": "fukushuto",
     "koshitsu-tenpakai-reaction-map.html": "koshitsu-tenpakai",
     "consumption-tax-cut-reaction-map.html": "consumption-tax-cut",
@@ -295,10 +294,10 @@ RELATED_THEMES = {
     "consumption-tax-cut": [
         ["fukushuto", "fukushuto-reaction-map.html", "images/topics/fukushuto/fukushuto-hero.webp",
          "副首都法案", "「物価対策より優先か」の声も出た争点。"],
-        ["takaichi", "takaichi-reaction-map-standard.html", "images/topics/takaichi/takaichi-hero.webp",
-         "高市文春問題", "政権への評価と説明責任を見比べる。"],
         ["constitutional-amendment", "constitutional-amendment-reaction-map.html",
          "images/topics/constitutional-amendment/constitutional-hero.webp", "憲法改正論議", "制度変更への賛否と慎重論を整理する。"],
+        ["koshitsu-tenpakai", "koshitsu-tenpakai-reaction-map.html",
+         "images/topics/koshitsu-tenpakai/koshitsu-hero.webp", "皇室典範改正", "政策転換への賛否と慎重論を見る。"],
     ],
 }
 RELATED_FUNCS = """  function currentTopic(){return topicByPath[(location.pathname.split("/").pop()||"")]||"unknown";}
@@ -1205,8 +1204,8 @@ def build(
         '<section class="panel" id="related-topics"><div class="panel-title"><h2>次に読むテーマ</h2>'
         '<span>他のテーマ</span></div><div class="related-grid">\n'
         '<a class="related-card" href="fukushuto-reaction-map.html"><img src="images/topics/fukushuto/fukushuto-hero.webp" alt="副首都法案" loading="lazy"><div><strong>副首都法案</strong><p>「物価対策どこ行った」の声も。</p></div></a>\n'
-        '<a class="related-card" href="takaichi-reaction-map-standard.html"><img src="images/topics/takaichi/takaichi-hero.webp" alt="高市文春問題" loading="lazy"><div><strong>高市文春問題</strong><p>中傷動画疑惑、説明責任はあるのか。</p></div></a>\n'
         '<a class="related-card" href="constitutional-amendment-reaction-map.html"><img src="images/topics/constitutional-amendment/constitutional-hero.webp" alt="憲法改正論議" loading="lazy"><div><strong>憲法改正論議</strong><p>統治の仕組みを変えるか、守るか。</p></div></a>\n'
+        '<a class="related-card" href="koshitsu-tenpakai-reaction-map.html"><img src="images/topics/koshitsu-tenpakai/koshitsu-hero.webp" alt="皇室典範改正" loading="lazy"><div><strong>皇室典範改正</strong><p>政策転換への賛否と慎重論を見る。</p></div></a>\n'
         "</div></section>"
     )
     start = html.index('<section class="panel" id="related-topics">')
