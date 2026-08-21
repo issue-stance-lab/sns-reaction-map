@@ -38,10 +38,9 @@
   手順書に「先行事例の見出しをコピーするな」と書いても守られず、2026-08-18 に自転車→高齢者で
   見出しが完全一致した。共通で当たり前の文は `configs/page-originality.json` に理由つきで登録する
 - 取得期間を bike / elderly にも記載（`sample_period_source: owner_confirmed`）
-**残り**: 一次資料との突き合わせが未実装のテーマが6つ（ai-copyright / bukatsu-chiiki / henoko-student-accident /
-fukushuto / school-nickname-ban / takaichi）。本文量が最も少ないのは takaichi 5,058字・school-nickname-ban 5,612字で、
-審査で「有用性の低いコンテンツ」と判断されるならこの2本が筆頭候補。takaichi は特定個人の疑惑が主題のため、
-厚くするか検索対象から外すかをオーナーが判断する
+**残り**: 一次資料との突き合わせが未実装のテーマが5つ（ai-copyright / bukatsu-chiiki / henoko-student-accident /
+fukushuto / school-nickname-ban）。takaichi は 2026-08-21 に noindex / sitemap除外 / サイト導線から除外し、
+検索・AdSense審査の対象外にした（データ・投票は保持。設定を戻せば復活可）。
 **2026-07-07 対応済み**: 全8テーマページに「この争点の背景」解説セクション追加（configs/*.json の `background` フィールド＋build_reaction_map.py 対応済みのため再ビルドでも保持される）、docs/about.html（運営者情報）新設、全フッターにリンク追加、sitemap更新
 **2026-07-30 対応済み**: 問い合わせ窓口をGoogleフォームで開設（メールアドレス非公開・ログイン不要）、about.html の訂正窓口セクションと disclaimer.html の削除依頼導線をフォームにリンク。個別返信は原則行わない旨と、事実誤認の指摘・削除依頼には対応する旨を明記
 **2026-08-01 判明した本質的な問題**: AdSenseに登録されているサイトは `issue-stance-lab.github.io`（**ルートのサブドメイン全体**）であり、`/sns-reaction-map/` ではない。7/7以降の対策（背景解説・about・問い合わせ窓口）はすべて `/sns-reaction-map/` 配下で、**審査員が最初に見るルートページは見出し1つ＋リンク1本の947バイトのスタブのままだった**。「有用性の低いコンテンツ」はこれを指していた可能性が高い。所有権確認は完了済み（管理画面で緑チェック）。
