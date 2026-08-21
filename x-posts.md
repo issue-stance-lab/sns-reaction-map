@@ -307,6 +307,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | 1 | @nikkan_gendai | 副首都法案・副首都構想 | URLなし・hiyou画像付き | 1,052 | 未計測（投稿直後） | 3 | 約1時間16分 |
 | 2 | @NovelPengin | 生成AIと著作権 | URLなし・creator画像付き | 1,671 | 未計測（投稿直後） | 2 | 約47分 |
 | 3 | @don_mai_don_mai | 消費税減税 | URLなし・taishou画像付き | 583 | 未計測（投稿直後） | 0 | 約5分 |
+| 4 | @hatakezo | 高市文春問題 | URLなし・setsumei画像付き | 1,318 | 未計測（投稿直後） | 0 | 約26分 |
 
 自リプライURL: 1 = https://x.com/sns_hannou_ma/status/2090571093849653500（07:46投稿）／ 2 = https://x.com/sns_hannou_ma/status/2090648279294042478（12:52投稿）
 
@@ -321,6 +322,16 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 X換算 3: 262文字
 
 備考 3: `consumption-tax-cut-infographic-wide-taishou.webp` 添付。元投稿の「給付付き税額控除を含めれば国民負担は変わらない」という説明に対し、給付対象・手続き・支給時期まで含めて確認する必要を補足。投稿本文と21:17の投稿時刻は確認済み。投稿直後のため、24〜48時間後に本計測する。
+
+自リプライURL 4: https://x.com/sns_hannou_ma/status/2090816042205692274（23:59投稿）
+
+返信先 4: https://x.com/hatakezo/status/2090798852395954320
+
+投稿文 4:「批判への反論をするかどうかだけでなく、事実関係をどこまで確認し、何が未確認なのかを示せるかが説明責任の中心だと思います。説明がないと、支持する人も批判する人も、何を根拠に判断すればいいか分からなくなります。」
+
+X換算 4: 206文字
+
+備考 4: `takaichi-infographic-wide-setsumei.webp` 添付。元投稿の説明・反論を求める問いに対し、反論の有無だけでなく、確認済みの事実と未確認の点を示すことが判断の前提になると補足。投稿本文・画像添付・23:59の投稿時刻は確認済み。投稿直後のため、24〜48時間後に本計測する。
 
 ## リプライ実績 2026-08-20
 
