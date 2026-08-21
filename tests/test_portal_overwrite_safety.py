@@ -27,7 +27,6 @@ CURRENT_THEME_PAGES = (
     "henoko-student-accident-reaction-map.html",
     "koshitsu-tenpakai-reaction-map.html",
     "school-nickname-ban-reaction-map.html",
-    "takaichi-reaction-map-standard.html",
 )
 
 
@@ -106,7 +105,7 @@ class PortalOverwriteSafetyTest(unittest.TestCase):
         self.assertIn("home-story.css", html)
         self.assertIn('id="hero-map"', html)
         self.assertIn("公開中のテーマ</", html)
-        self.assertIn("<strong>11</strong>", html)
+        self.assertIn("<strong>10</strong>", html)
         for page in CURRENT_THEME_PAGES:
             with self.subTest(page=page):
                 self.assertIn(f'href="{page}"', html)

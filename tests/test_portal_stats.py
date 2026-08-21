@@ -31,8 +31,8 @@ class PortalStatsTest(unittest.TestCase):
     def test_all_published_themes_have_nonzero_canonical_samples(self):
         stats = compute_stats(parse_themes_yaml(), ROOT)
 
-        self.assertEqual(stats["theme_count"], 11)
-        self.assertEqual(len(stats["sample_counts"]), 11)
+        self.assertEqual(stats["theme_count"], 10)
+        self.assertEqual(len(stats["sample_counts"]), 10)
         self.assertTrue(all(count > 0 for count in stats["sample_counts"].values()))
 
     def test_top_page_matches_canonical_stats(self):
@@ -46,7 +46,7 @@ class PortalStatsTest(unittest.TestCase):
         scheduled = {
             name: fields["collect_at"]
             for name, fields in parse_themes_yaml().items()
-            if fields.get("collect_at")
+            if fields.get("collect_at") and fields.get("published")
         }
         self.assertTrue(scheduled, "collect_at を持つテーマが1つもない")
         latest = max(date.fromisoformat(value) for value in scheduled.values())

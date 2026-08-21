@@ -44,7 +44,6 @@ TOPIC_CARD_LINKS = {
     "elderly-license-revocation": "elderly-license-revocation-reaction-map.html",
     "school-nickname-ban": "school-nickname-ban-reaction-map.html",
     "henoko-student-accident": "henoko-student-accident-reaction-map.html",
-    "takaichi": "takaichi-reaction-map-standard.html",
     "fukushuto": "fukushuto-reaction-map.html",
     "koshitsu-tenpakai": "koshitsu-tenpakai-reaction-map.html",
     "consumption-tax-cut": "consumption-tax-cut-reaction-map.html",
@@ -278,7 +277,7 @@ def verify_top_page(
         html,
         flags=re.DOTALL,
     )
-    if len(count_cards) == 15 and all("分類済み" in body for body in count_cards):
+    if len(count_cards) == 14 and all("分類済み" in body for body in count_cards):
         lines.append("OK  件数の用語が「分類済み」で統一されている")
     else:
         lines.append("NG  件数の用語が「分類済み」で統一されている")

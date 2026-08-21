@@ -267,129 +267,6 @@
   </article>
 </section>
 
-<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
-<section class="tide-card" id="consumption-tax-cut-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
-  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
-    <div class="tide-widget-tabs">
-      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
-      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
-    </div>
-    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
-  </div>
-  <div class="tide-widget-summary" aria-live="polite">
-    <span class="tide-widget-period">8月10日 → 8月17日</span>
-    <strong data-tide-headline>「減税反対・慎重」が4.7ポイント減少</strong>
-  </div>
-  <div class="tide-slope-wrap">
-    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="consumption-tax-cut-tide-widget-slope-title consumption-tax-cut-tide-widget-slope-desc">
-      <title id="consumption-tax-cut-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="consumption-tax-cut-tide-widget-slope-desc">前回収集分604件と今回収集分637件の構成比を比較します。</desc>
-      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月10日</text>
-      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 8月17日</text>
-      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
-      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
-      <g data-tide-series></g>
-    </svg>
-  </div>
-  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：8月10日収集分のうち意見投稿／8月17日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
-</section>
-<script>
-(() => {
-  const root = document.getElementById("consumption-tax-cut-tide-widget");
-  if (!root) return;
-  const datasets = {"stance": {"max": 50, "headline": "「減税反対・慎重」が4.7ポイント減少", "rows": [{"label": "減税推進", "previous": 44.7, "current": 46.9}, {"label": "条件付き賛成・政府案に不満", "previous": 19.7, "current": 18.1}, {"label": "減税反対・慎重", "previous": 28.1, "current": 23.4}, {"label": "中立・情報", "previous": 7.5, "current": 11.6}]}, "issue": {"max": 40, "headline": "「公約と政治不信」が3.7ポイント増加", "rows": [{"label": "減税の対象範囲", "previous": 25.7, "current": 23.6}, {"label": "財源と社会保障", "previous": 13.9, "current": 12.1}, {"label": "減税の効果", "previous": 18.3, "current": 18.6}, {"label": "給付など他策との比較", "previous": 6.7, "current": 5.6}, {"label": "事業者の実務負担", "previous": 3.2, "current": 4.2}, {"label": "公約と政治不信", "previous": 32.2, "current": 35.9}]}};
-  const svgGroup = root.querySelector("[data-tide-series]");
-  const mobileRows = root.querySelector("[data-tide-mobile]");
-  const headline = root.querySelector("[data-tide-headline]");
-  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
-  const replayButton = root.querySelector("[data-tide-replay]");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mode = "stance";
-  let animationFrame = 0;
-  let hasAutoPlayed = false;
-
-  const yFor = (value, max) => 310 - (value / max) * 235;
-  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
-  const svgElement = (name, attrs, text) => {
-    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
-    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
-    if (text !== undefined) el.textContent = text;
-    return el;
-  };
-
-  function draw(progress = 1) {
-    const data = datasets[mode];
-    svgGroup.replaceChildren();
-    mobileRows.replaceChildren();
-    data.rows.forEach((row, index) => {
-      const y1 = yFor(row.previous, data.max);
-      const y2Target = yFor(row.current, data.max);
-      const y2 = y1 + (y2Target - y1) * progress;
-      const shown = row.previous + (row.current - row.previous) * progress;
-      const shownDelta = shown - row.previous;
-      const seriesClass = `series-${index}`;
-      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2+17, class:"tide-slope-value"}, signed(shownDelta)));
-      const mobile = document.createElement("article");
-      mobile.className = "tide-mobile-row";
-      mobile.innerHTML =
-        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
-        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
-        `<div class="tide-mobile-bars" aria-hidden="true">` +
-          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
-          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
-        `</div>`;
-      mobileRows.appendChild(mobile);
-    });
-  }
-
-  function animate() {
-    cancelAnimationFrame(animationFrame);
-    if (reducedMotion) { draw(1); return; }
-    const startedAt = performance.now();
-    const duration = 900;
-    const step = now => {
-      const raw = Math.min(1, (now - startedAt) / duration);
-      draw(1 - Math.pow(1 - raw, 3));
-      if (raw < 1) animationFrame = requestAnimationFrame(step);
-    };
-    animationFrame = requestAnimationFrame(step);
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-    modeButtons.forEach(button => {
-      const selected = button.dataset.tideMode === mode;
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    headline.textContent = datasets[mode].headline;
-    animate();
-  }
-
-  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
-  replayButton.addEventListener("click", animate);
-  draw(1);
-
-  if ("IntersectionObserver" in window && !reducedMotion) {
-    const observer = new IntersectionObserver(entries => {
-      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
-        hasAutoPlayed = true;
-        animate();
-        observer.disconnect();
-      }
-    }, {threshold: 0.35});
-    observer.observe(root);
-  }
-})();
-</script>
-<!-- TIDE_CARD_END --></section>
-
 <section class="panel" id="explainer-section">
 <div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>図解で全論点をチェック</span></div>
 <p class="explainer-lead">消費税減税の議論は「賛成か反対か」だけではありません。対象は食料品だけでいいのか、財源はどうするのか、そもそも生活に効くのか——6つの論点を図解で把握してから投票に進んでください。画像はタップで拡大できます。</p>
@@ -518,16 +395,9 @@
   </dl>
   <div class="article-trust-method">
     <h3>SNS投稿の収集方法</h3>
-    <p>Yahoo!リアルタイム検索で「消費税減税 賛成」「消費税減税 反対」「消費税 廃止 すべき」「消費税減税 財源 どうする」など賛否双方の検索語20件を使い、公開されているX投稿を収集しました。重複を除いた2,614件を分類し、意見と判定した2,342件を論点分析に使用しています。</p>
+    <p>Yahoo!リアルタイム検索で「消費税減税 賛成」「消費税減税 反対」「消費税 廃止 すべき」「消費税減税 財源 どうする」など賛否双方の検索語20件を使い、公開されているX投稿を収集しました。重複を除いた2614件を分類し、意見と判定した2342件を論点分析に使用しています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
-    <h3>収集・分類で分かったこと</h3>
-    <ul class="article-trust-observations">
-      <li>20の検索語で収集しました。意見と判定できた割合は約91%で、公開中の11テーマで最も高い数字です。減税というテーマは、報道の共有よりも自分の意見を書く投稿が圧倒的に多くなります。</li>
-      <li>当初は「賛成・反対・中立」の3分類で始めましたが、「減税には賛成だが政府案は中途半端だ」という声を表現できませんでした。そこで「条件付き賛成・政府案に不満」を独立した立場として立て直しています（該当109件・約18%）。</li>
-      <li>最も多かった論点は税制の中身ではなく「公約と政治不信」で、全体の43.6%を占めました。税率や財源の議論より、公約を守るかどうかを問う投稿が中心です。</li>
-      <li>どの論点にも当てはまらない「その他」は6件にとどまりました。論点の立て方がこのテーマの投稿とよく合っていたと考えています。</li>
-    </ul>
   </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
@@ -3435,8 +3305,8 @@ const SM_RAW = [
 
 <section class="panel" id="related-topics"><div class="panel-title"><h2>次に読むテーマ</h2><span>他のテーマ</span></div><div class="related-grid">
 <a class="related-card" href="fukushuto-reaction-map.html"><img src="images/topics/fukushuto/fukushuto-hero.webp" alt="副首都法案" loading="lazy"><div><strong>副首都法案</strong><p>「物価対策どこ行った」の声も。</p></div></a>
-<a class="related-card" href="takaichi-reaction-map-standard.html"><img src="images/topics/takaichi/takaichi-hero.webp" alt="高市文春問題" loading="lazy"><div><strong>高市文春問題</strong><p>中傷動画疑惑、説明責任はあるのか。</p></div></a>
 <a class="related-card" href="constitutional-amendment-reaction-map.html"><img src="images/topics/constitutional-amendment/constitutional-hero.webp" alt="憲法改正論議" loading="lazy"><div><strong>憲法改正論議</strong><p>統治の仕組みを変えるか、守るか。</p></div></a>
+<a class="related-card" href="koshitsu-tenpakai-reaction-map.html"><img src="images/topics/koshitsu-tenpakai/koshitsu-hero.webp" alt="皇室典範改正" loading="lazy"><div><strong>皇室典範改正</strong><p>政策転換への賛否と慎重論を見る。</p></div></a>
 </div></section>
 
 <section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2><span>折りたたみ</span></div>
@@ -3459,7 +3329,6 @@ const SM_RAW = [
     "elderly-license-revocation-reaction-map.html":"elderly-license-revocation",
     "school-nickname-ban-reaction-map.html":"school-nickname-ban",
     "henoko-student-accident-reaction-map.html":"henoko-student-accident",
-    "takaichi-reaction-map-standard.html":"takaichi",
     "fukushuto-reaction-map.html":"fukushuto",
     "koshitsu-tenpakai-reaction-map.html":"koshitsu-tenpakai",
     "consumption-tax-cut-reaction-map.html":"consumption-tax-cut"
@@ -3467,8 +3336,8 @@ const SM_RAW = [
   var relatedThemes={
     "consumption-tax-cut":[
       ["fukushuto", "fukushuto-reaction-map.html", "images/topics/fukushuto/fukushuto-hero.webp", "副首都法案", "「物価対策より優先か」の声も出た争点。"],
-      ["takaichi", "takaichi-reaction-map-standard.html", "images/topics/takaichi/takaichi-hero.webp", "高市文春問題", "政権への評価と説明責任を見比べる。"],
-      ["constitutional-amendment", "constitutional-amendment-reaction-map.html", "images/topics/constitutional-amendment/constitutional-hero.webp", "憲法改正論議", "制度変更への賛否と慎重論を整理する。"]
+      ["constitutional-amendment", "constitutional-amendment-reaction-map.html", "images/topics/constitutional-amendment/constitutional-hero.webp", "憲法改正論議", "制度変更への賛否と慎重論を整理する。"],
+      ["koshitsu-tenpakai", "koshitsu-tenpakai-reaction-map.html", "images/topics/koshitsu-tenpakai/koshitsu-hero.webp", "皇室典範改正", "政策転換への賛否と慎重論を見る。"]
     ]
   };
   function currentTopic(){return topicByPath[(location.pathname.split("/").pop()||"")]||"unknown";}
