@@ -307,7 +307,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | 1 | @nikkan_gendai | 副首都法案・副首都構想 | URLなし・hiyou画像付き | 1,052 | 未計測（投稿直後） | 3 | 約1時間16分 |
 | 2 | @NovelPengin | 生成AIと著作権 | URLなし・creator画像付き | 1,671 | 未計測（投稿直後） | 2 | 約47分 |
 
-自リプライURL: https://x.com/sns_hannou_ma/status/2090571093849653500（07:46投稿）／https://x.com/sns_hannou_ma/status/2090648279294042478（12:52投稿）
+自リプライURL: 1 = https://x.com/sns_hannou_ma/status/2090571093849653500（07:46投稿）／ 2 = https://x.com/sns_hannou_ma/status/2090648279294042478（12:52投稿）
 
 備考: 副首都の地価高騰懸念には移転機能・国費使途・検証基準を、AI作品の受容には類似出力の停止・権利者への連絡や補償を論点として補足。いずれも投稿直後のため、24〜48時間後に本計測する。
 
@@ -321,7 +321,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 | 4 | @rikuto10sfc | 部活動の地域移行 | URLなし・hiyou画像付き | 80,068 | **76,981**（2026-08-21 20:40計測・投稿から約25時間後・いいね108・リポスト21） | 4 | 約3時間16分 |
 | 5 | @nikkyoweb | 部活動の地域移行 | URLなし・seido画像付き | 2,678 | **181**（2026-08-21 20:40計測・投稿から約22時間後・いいね1・リポスト1） | 0 | 約5時間53分 |
 
-自リプライURL: https://x.com/sns_hannou_ma/status/2090206649940365410（07:37投稿）
+自リプライURL: 1 = https://x.com/sns_hannou_ma/status/2090206649940365410（07:37投稿）／ 2 = https://x.com/sns_hannou_ma/status/2090311527945715721 ／ 3 = https://x.com/sns_hannou_ma/status/2090362132072431806 ／ 4 = https://x.com/sns_hannou_ma/status/2090386186229702851 ／ 5 = https://x.com/sns_hannou_ma/status/2090426335298752612
 
 返信先: https://x.com/nara_np/status/2090031032108204452
 
@@ -331,7 +331,7 @@ X換算: 92文字
 
 備考: `bukatsu-chiiki-infographic-wide-kyoin.webp` 添付。元投稿は奈良市の部活動地域移行で人材不足が課題という記事紹介。「量」の人材確保と「質」の指導・安全管理水準の確認体制を分けて問うた。投稿前の元投稿は返信0件・いいね18（API取得）、親投稿から約11時間37分後。投稿本文・画像添付・投稿時刻はXの個別ページで確認済み。自リプライ表示は2026-08-21 20:40に本計測済み（93件・いいね0・リポスト0）。
 
-自リプライURL 2〜5: https://x.com/sns_hannou_ma/status/2090311527945715721 ／ https://x.com/sns_hannou_ma/status/2090362132072431806 ／ https://x.com/sns_hannou_ma/status/2090386186229702851 ／ https://x.com/sns_hannou_ma/status/2090426335298752612
+（URL 2〜5 は上の自リプライURL行に統合済み）
 
 備考 2〜5: 旧宮家養子の制度設計、消費税と社会保険料の負担の見え方、地域移行後の費用・送迎格差、部活動改革の成果指標をそれぞれ補足。2026-08-21 20:40に本計測済み（220件・いいね5・リポスト0 / 177件・いいね0・リポスト0 / **76,981**件・いいね108・リポスト21 / 181件・いいね1・リポスト1）。
 
@@ -343,7 +343,7 @@ X換算: 92文字
 | 2 | @diet_safari | 消費税減税 | URLなし・jigyousha画像付き | 2,506 | **82**（2026-08-21 20:40計測・投稿から約48時間後・いいね1・リポスト1） | 1 | 約4時間 |
 | 3 | @tetsuya_00x | 消費税減税 | URLなし・kouka画像付き | 7,512 | **139**（2026-08-21 20:40計測・投稿から約45時間後・いいね0・リポスト0） | 10 | 約2時間40分 |
 
-自リプライURL: https://x.com/sns_hannou_ma/status/2089918776213201104 ／ https://x.com/sns_hannou_ma/status/2090045257274798248 ／ https://x.com/sns_hannou_ma/status/2090080964693356752
+自リプライURL: 1 = https://x.com/sns_hannou_ma/status/2089918776213201104 ／ 2 = https://x.com/sns_hannou_ma/status/2090045257274798248 ／ 3 = https://x.com/sns_hannou_ma/status/2090080964693356752
 
 備考: AI利用の基準、簡易課税・インボイスの扱い、減税の価格反映・事務負担・財源を補足。@naotokui への会話フォロー（https://x.com/sns_hannou_ma/status/2090084688409071868）も実施。2026-08-21 20:40に本計測済み（157件・いいね1・リポスト0 / 82件・いいね1・リポスト1 / 139件・いいね0・リポスト0）。
 
