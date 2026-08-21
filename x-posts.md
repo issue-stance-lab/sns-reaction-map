@@ -306,7 +306,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 |---|-----------|--------|--------|-------|-------|-------|-------|
 | 1 | @nikkan_gendai | 副首都法案・副首都構想 | URLなし・hiyou画像付き | 1,052 | 未計測（投稿直後） | 3 | 約1時間16分 |
 | 2 | @NovelPengin | 生成AIと著作権 | URLなし・creator画像付き | 1,671 | 未計測（投稿直後） | 2 | 約47分 |
-| 3 | @don_mai_don_mai | 消費税減税 | URLなし・画像なし | 583 | 未計測（投稿直後） | 0 | 約5分 |
+| 3 | @don_mai_don_mai | 消費税減税 | URLなし・taishou画像付き | 583 | 未計測（投稿直後） | 0 | 約5分 |
 
 自リプライURL: 1 = https://x.com/sns_hannou_ma/status/2090571093849653500（07:46投稿）／ 2 = https://x.com/sns_hannou_ma/status/2090648279294042478（12:52投稿）
 
@@ -320,7 +320,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-r
 
 X換算 3: 262文字
 
-備考 3: 元投稿の「給付付き税額控除を含めれば国民負担は変わらない」という説明に対し、給付対象・手続き・支給時期まで含めて確認する必要を補足。投稿本文と21:17の投稿時刻は確認済み。添付画像は確認できなかったため画像なしとして記録する。投稿直後のため、24〜48時間後に本計測する。
+備考 3: `consumption-tax-cut-infographic-wide-taishou.webp` 添付。元投稿の「給付付き税額控除を含めれば国民負担は変わらない」という説明に対し、給付対象・手続き・支給時期まで含めて確認する必要を補足。投稿本文と21:17の投稿時刻は確認済み。投稿直後のため、24〜48時間後に本計測する。
 
 ## リプライ実績 2026-08-20
 
