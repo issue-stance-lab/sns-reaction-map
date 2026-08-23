@@ -399,6 +399,41 @@ def section_alerts(data: dict) -> str:
         if age > 10:
             alerts.append(("warn", f"流入の記録（週次KPI）が {age} 日前で止まっています", "GROWTH.yaml の kpi.snapshots に1行追加する運用。週1回が想定"))
 
+    measurement = data.get("x_measurement") or {}
+    if measurement.get("error"):
+        alerts.append((
+            "warn",
+            "X の計測状況を集計できませんでした",
+            measurement["error"],
+        ))
+    else:
+        overdue = measurement.get("overdue") or []
+        if overdue:
+            oldest = overdue[0]
+            alerts.append((
+                "danger" if oldest["age_hours"] >= 48 else "warn",
+                f"X投稿の表示回数が {len(overdue)} 件未計測です（最長 {oldest['age_hours']:.0f} 時間経過）",
+                f"最も古いのは {oldest['target']} への{oldest['kind']}。"
+                "毎日20時の定期タスク x-daily-measure が動いていれば溜まりません。"
+                "溜まっているなら、そのタスクが止まっているか失敗しています",
+            ))
+
+        review_latest = measurement.get("review_latest")
+        if review_latest is None:
+            alerts.append((
+                "warn",
+                "X週次レビューがまだ1件も記録されていません",
+                "x-weekly-reviews.md に記入する運用。日曜20:30の定期タスク x-weekly-review が担当",
+            ))
+        else:
+            age = (today - review_latest).days
+            if age > 10:
+                alerts.append((
+                    "warn",
+                    f"X週次レビューが {age} 日前で止まっています",
+                    f"最後の記録は {fmt_full_date(review_latest)} まで。週1回が想定",
+                ))
+
     x_posting = next(
         (item for item in data["kpi"].get("recurring", []) if item["key"] == "x-posting"),
         None,

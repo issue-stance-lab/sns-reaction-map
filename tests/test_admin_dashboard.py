@@ -110,6 +110,84 @@ class AlertTests(unittest.TestCase):
         html = render.section_alerts(data)
         self.assertIn("X の候補確認日が記録されていません", html)
 
+class MeasurementStallTests(unittest.TestCase):
+    """定期タスクが黙って止まったことに気づけるか。
+
+    2026-07-09 に止まった daily-growth-loop は45日間オフのまま誰も気づかなかった。
+    後継の x-daily-measure / x-weekly-review で同じことが起きないよう、
+    **タスクの登録状態ではなく「結果が滞っているか」**で警告を出す。
+    タスクの生死を見ると「動いてはいるが毎回失敗している」を見逃す。
+    """
+
+    @staticmethod
+    def _data(today: dt.date, measurement: dict) -> dict:
+        return {
+            "today": today,
+            "themes": [],
+            "kpi": {"snapshots": [], "recurring": []},
+            "x_posts": [],
+            "health": [],
+            "live": None,
+            "x_measurement": measurement,
+        }
+
+    def test_overdue_measurements_are_reported(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 8, 23),
+            {
+                "error": None,
+                "review_latest": dt.date(2026, 8, 23),
+                "overdue": [
+                    {"url": "https://x.com/sns_hannou_ma/status/1", "target": "@example",
+                     "kind": "リプライ", "age_hours": 61.0, "timing": "overdue"},
+                    {"url": "https://x.com/sns_hannou_ma/status/2", "target": "@other",
+                     "kind": "リプライ", "age_hours": 30.0, "timing": "overdue"},
+                ],
+            },
+        ))
+        self.assertIn("X投稿の表示回数が 2 件未計測です", html)
+        self.assertIn("61 時間経過", html)
+        self.assertIn("x-daily-measure", html)
+
+    def test_no_overdue_means_no_measurement_alert(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 8, 23),
+            {"error": None, "review_latest": dt.date(2026, 8, 23), "overdue": []},
+        ))
+        self.assertNotIn("未計測です", html)
+
+    def test_weekly_review_never_written_is_reported(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 8, 23),
+            {"error": None, "review_latest": None, "overdue": []},
+        ))
+        self.assertIn("X週次レビューがまだ1件も記録されていません", html)
+
+    def test_stale_weekly_review_is_reported(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 8, 23),
+            {"error": None, "review_latest": dt.date(2026, 8, 1), "overdue": []},
+        ))
+        self.assertIn("X週次レビューが 22 日前で止まっています", html)
+
+    def test_collector_failure_does_not_hide_the_problem(self):
+        """集計に失敗したときに黙って「異常なし」に見せない。"""
+        html = render.section_alerts(self._data(
+            dt.date(2026, 8, 23),
+            {"error": "boom", "review_latest": None, "overdue": []},
+        ))
+        self.assertIn("X の計測状況を集計できませんでした", html)
+
+    def test_collector_reads_the_real_repository(self):
+        result = collect.collect_x_measurement(
+            dt.datetime(2026, 8, 23, 20, 0, tzinfo=dt.timezone(dt.timedelta(hours=9)))
+        )
+        self.assertIsNone(result["error"], result["error"])
+        self.assertIsInstance(result["overdue"], list)
+        for item in result["overdue"]:
+            self.assertNotEqual(item["timing"], "waiting")
+
+
 class ThemeScheduleTests(unittest.TestCase):
     def test_days_until_deadline_is_signed(self):
         themes = collect.collect_themes(TODAY)
