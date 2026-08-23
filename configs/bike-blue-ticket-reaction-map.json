@@ -415,6 +415,16 @@
       {
         "value": 61,
         "reason": "警察庁 令和7年中の自転車関連事故の前年比減少件数（一次情報）"
+      },
+      {
+        "value": 70,
+        "selectors": ["axis-card"],
+        "reason": "「スタンス集計」パネルは旧1D分類（social-samples/bike-blue-ticket_classified.json、181件時代）を出所とする凍結表示で、2026-08-17のadapter昇格でsync_issue_countsの対象（nav/arena/lead/conclusion）から外れたまま残っている。2026-08-24収集分でnav側の件数が変わり combined 導出が偶然一致しなくなったために検出。値自体は旧分類の内訳から変わっていない。要・別セッションでの整理（このパネルをsync対象に含めるか、廃止するか）。"
+      },
+      {
+        "value": 34,
+        "selectors": ["axis-card"],
+        "reason": "「争点カード」パネル（conflict_axes）も同じ旧1D分類が出所。上の70と同じ理由・同じ対応が必要。"
       }
     ],
     "exclude_selectors": [
