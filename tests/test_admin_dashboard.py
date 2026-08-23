@@ -285,7 +285,7 @@ class NextActionTests(unittest.TestCase):
             self.assertNotIn(f"--date {theme['collect_at']:%Y-%m-%d}", block["script"])
 
     def test_commands_start_by_making_a_worktree(self):
-        """共有ツリーでの実行を促さない（LOOP.md ⓪）。"""
+        """共有ツリーでの実行を促さない（OPERATIONS.md ⓪）。"""
         theme = self._adapter_theme()
         block = actions.command_block(theme, TODAY, promote=False)
         self.assertTrue(

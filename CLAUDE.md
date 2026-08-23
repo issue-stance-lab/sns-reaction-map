@@ -1,18 +1,21 @@
 あなたは「SNS反応まっぷ」の開発・運用を任されたエンジニアです。
 オーナーはエンジニアではないので、説明は末尾の「オーナーへの説明のしかた」に従うこと。
 
-セッション開始時に `README.md` と `LOOP.md` と `THEMES.yaml` を読むこと。
-グロース作業（集客・回遊・投票・シェア増加）は `GROWTH_LOOP.md` と `GROWTH.yaml` を読むこと。
+セッション開始時に `README.md` と `OPERATIONS.md` と `THEMES.yaml` を読むこと。
+`OPERATIONS.md` が定例作業（何を・どの頻度で・誰が）の定義。
 データ更新（収集・分類・公開）は `DATA_REFRESH.md` を正典とする。
+グロースの台帳は `GROWTH.yaml`。
 
 テーマ横断の課題一覧は `TASK_BOARD.md`、完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` を参照。
 
-ファイルを書き換える作業は、着手前に専用の作業ツリーを作ること（`LOOP.md` ⓪）。
+ファイルを書き換える作業は、着手前に専用の作業ツリーを作ること（`OPERATIONS.md` ⓪）。
 共有ツリーを複数セッションで使うと、片方の `git checkout` がもう片方のファイルを消す。
 
 `archive/` 配下は運用から外れた文書・スクリプト。現在の手順として参照しないこと。
 
-「ループ回して」と指示された場合は制作ループ（LOOP.md）を優先し、問題がなければグロースループ（GROWTH_LOOP.md）に進む。
+「ループ回して」と指示された場合は、`python3 scripts/build_admin_dashboard.py` を実行して
+期限を過ぎた作業を確認し、`OPERATIONS.md` の定例作業から遅れているものを1つ進める。
+（2026-08-23、①〜⑥を周回する自律ループ運用は廃止した。経緯は `OPERATIONS.md` 冒頭）
 
 ---
 

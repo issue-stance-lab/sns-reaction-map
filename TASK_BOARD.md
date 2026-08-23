@@ -9,7 +9,7 @@
 
 ## 運用ルール
 
-- ハブAI（Claude Code）は毎セッション LOOP.md に従って動く
+- ハブAI（Claude Code）は毎セッション OPERATIONS.md に従って動く
 - ワーカーAIは `configs/prompts/` のプロンプトに従って作業する
 - ブランチ運用: `task/{theme}-{工程}` 形式。main直接コミット禁止
 - 保護タグ: GA4(`G-K10S4YCZFH`) / AdSense(`ca-pub-2542211932832864`) / Supabase / OGP
@@ -19,7 +19,7 @@
 ## アクティブ課題（テーマ横断）
 
 ### 課題13: 新規トピック継続追加
-**状態**: 未着手（LOOP.md ②の優先順位5に該当）
+**状態**: 未着手（OPERATIONS.md「サイト改善の進め方」に該当）
 **概要**: 2日に1本ペースで新テーマ追加。賛否が出やすいテーマ。戦争関連除外
 **手順**: AI_HANDOFF.md §9 参照
 

@@ -28,7 +28,7 @@
 
 **作業場所**: 収集・更新は専用の git worktree で行う（`git worktree add ../isa-wt-{テーマ} -b task/{テーマ}`）。
 共有ツリーを他セッションと同時に使うと、`--promote` の「未コミット差分なし」の前提が崩れる。
-新しい worktree では、**先にバックアップから非公開の正典を復元し、`node_modules` を複製する**（`LOOP.md` ⓪ のコマンド）。正典を復元しないと収集は走っても検査で落ちる。`node_modules` が無いと収集自体が最初の疎通確認で `Cannot find package 'playwright'` で止まる（2026-08-08 の憲法改正で発生）。どちらも gitignore 対象のため、不足していても `git status` には出ない。
+新しい worktree では、**先にバックアップから非公開の正典を復元し、`node_modules` を複製する**（`OPERATIONS.md` ⓪ のコマンド）。正典を復元しないと収集は走っても検査で落ちる。`node_modules` が無いと収集自体が最初の疎通確認で `Cannot find package 'playwright'` で止まる（2026-08-08 の憲法改正で発生）。どちらも gitignore 対象のため、不足していても `git status` には出ない。
 
 **数えるのは意見だけ。** 収集件数と意見件数の両方をページに出す。
 
@@ -230,3 +230,75 @@ mkdir -p .staging/refresh/<topic>/<run-id>
 - henoko-student-accident: `data/issue-counts/henoko-student-accident.json` 依存
 
 累積正典またはGit管理する仮名化検証データから論点件数を再現できる状態をadapter昇格条件とする。
+
+---
+
+## 更新後の画面チェックリスト
+
+collect_at を迎えたテーマにデータを追加した後、以下を順番に確認する。
+手動更新テーマで使う（adapter テーマは生成スクリプトが埋めるので、生成後の差分確認だけでよい）。
+2026-08-23 に `LOOP.md` の廃止にともないこちらへ移設した。
+
+### 1. データ分類
+
+- [ ] Yahoo リアルタイム検索で収集（fetch_yahoo_realtime_node.mjs / fetch_topic_refresh.py）
+- [ ] 重複チェック（既存 tweet_id と照合、件数を記録）
+- [ ] Hermes 分類実行（classify_{theme}_arena_hermes.py）
+- [ ] 新規分類データを既存 `{theme}_hermes_arena_classified.json` にマージ
+
+### 2. THEMES.yaml
+
+- [ ] `updated_at` → 今日の日付
+- [ ] `collect_delta` → 今回追加件数（重複除外後）
+- [ ] `collect_at` → 次回の収集・staging作成予定日
+- [ ] `refresh_at` → 次回の公開更新予定日（公開まで昇格できるテーマのみ。既定14日、今回の新規意見が50件以上なら次回だけ7日）
+
+### 3. テーマページ（潮目ウィジェットがある場合）
+
+- [ ] `tide-widget-period` テキスト（例: 6月27日 → 7月26日）
+- [ ] SVG `tide-slope-date` テキスト（前回/今回の日付）
+- [ ] `aria-desc` 内の件数
+- [ ] `datasets` JS変数（`max`・`headline`・`rows` の `previous`/`current` 値）
+- [ ] `tide-widget-note` 注釈テキスト（収集件数・日付・背景説明）
+
+### 4. テーマページ（insight-stats カード 4枚）
+
+- [ ] 「分析対象の意見」件数（`insight-value`）
+- [ ] 「最も多い立場」% + 件数注（`insight-note`）+ `insight-meter` 幅
+- [ ] 「最も話された論点」件数（`insight-value`）
+- [ ] 「論点による逆転」注釈（件数が変わる場合）
+- [ ] ヒーローセクション「議論の中心」バッジ件数（`conclusion-count`）
+- [ ] lead文の件数
+- [ ] `data-method` テキスト（データの集め方）
+
+### 5. index.html（ポータル）
+
+- [ ] `rank-card` スタンス比率バー（`rank-dist` + `rank-track` の4項目）
+- [ ] 割れ度スコア（`split-score` の meter 幅 + 数値）
+- [ ] スコアが変動した場合: `rank-num` 順位番号 + カードの DOM 順序を更新
+- [ ] `topic-card` スタンス比率バー（`topic-percent` + `topic-bar` の各項目）
+- [ ] `topic-card` 件数（`topic-meta` 内の「投稿 XX件」）
+- [ ] `topic-card` 更新バッジ（`.topic-fresh` テキストと日付）
+- [ ] badge data `B` 変数（`upd` → 今日の日付、`delta` → 今回追加件数）
+- [ ] `hero-total-samples` → 全テーマ topic-card 件数の合計に更新
+- [ ] `hero-total-samples` の横の更新日テキスト（例: `7/26更新`）
+
+### 6. sitemap.xml
+
+- [ ] 該当テーマの `lastmod` → 今日の日付
+
+### 7. 論点カードの件数
+
+- [ ] `python3 scripts/sync_issue_counts.py {theme}` を実行（件数は分類結果から生成する。HTMLに直接書かない）
+- [ ] 論点のラベルが変わった場合は `configs/{theme}-reaction-map.json` の `issue_counts.cards` を先に直す
+- [ ] `python3 scripts/verify_theme_page.py {theme}` が exit 0
+- [ ] `data/issue-counts/` を source にしているテーマ（constitutional-amendment / elderly-license-revocation / henoko-student-accident / koshitsu-tenpakai）は、再分類したら `issue_counts.source` を `sample_file` へ戻す（TASK_BOARD 課題29）
+
+---
+
+**注意事項:**
+- `hero-total-samples` は全 topic-card の「投稿 XX件」の合計値。新テーマ公開直後に更新漏れが起きやすいので都度合算して確認する。
+- 割れ度スコアを変更するとランキング順位も変わる。DOM 順序（first-child が金色）も連動して並び替えること。
+- 論点アリーナ（P=[...] データ）は今回の分類結果を反映していないが、潮目ウィジェットで最新比較を表示しているため、現状はそのままでよい。
+
+---

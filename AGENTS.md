@@ -9,13 +9,13 @@
 このファイル（AGENTS.md）には、Codex 固有の注意だけを書く。
 
 - `CLAUDE.md` — 共通ルール（読むファイル・作業ツリー・オーナーへの説明のしかた）
-- `README.md` / `LOOP.md` / `THEMES.yaml` — プロジェクトの現状
+- `README.md` / `OPERATIONS.md` / `THEMES.yaml` — プロジェクトの現状と定例作業
 - `TASK_BOARD.md` — テーマ横断の課題一覧。ここが課題の正典（GitHub Issue は使わない）
 
 ## 作業ツリー（着手前に必ず）
 
 **1エージェント＝1 worktree。** Claude Code と Codex が同じ作業ツリーを共有すると、
-片方の `git checkout` がもう片方のファイルをディスクから消す。手順は `LOOP.md` ⓪ にある。
+片方の `git checkout` がもう片方のファイルをディスクから消す。手順は `OPERATIONS.md` ⓪ にある。
 
 ```sh
 git worktree add ../isa-wt-{作業名} -b task/{作業名}

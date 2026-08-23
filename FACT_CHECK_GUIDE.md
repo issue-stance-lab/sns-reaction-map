@@ -56,7 +56,7 @@ AdSense審査で、12項目中 Experience（体験・経験）だけがNGでし�
 ■ 着手前
 1. CLAUDE.md / README.md / THEMES.yaml を読む。オーナーは非エンジニアなので
    説明はCLAUDE.md末尾の「オーナーへの説明のしかた」に従うこと。
-2. LOOP.md ⓪ に従い専用の作業ツリーを作る。共有ツリーで作業しない。
+2. OPERATIONS.md ⓪ に従い専用の作業ツリーを作る。共有ツリーで作業しない。
      git worktree add ../isa-wt-{作業名} -b task/{作業名}
    作る前に共有ツリーの main が origin/main と同じか確認する。古いと分岐元が狂う。
 3. 正典データを作業ツリーに揃える（無いと検査が「ファイルがない」で落ちる）:

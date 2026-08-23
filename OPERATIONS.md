@@ -1,0 +1,171 @@
+# OPERATIONS.md — 定例作業の定義
+
+このプロジェクトで「期日が来たらやること」の一覧。着手前の作業場所の作り方もここにある。
+
+## この文書の位置づけ（2026-08-23 に運用を切り替えた）
+
+**それまでの「2つのループ」（`LOOP.md` の制作ループ、`GROWTH_LOOP.md` のグロースループ、
+および毎朝7時の自動タスク `daily-growth-loop`）は廃止した。**
+
+廃止の理由は、設計が悪かったからではなく、**周回そのものが続かなかった**ため。
+
+- 自動タスク `daily-growth-loop` は 2026-07-09 を最後に実行されず、45日間オフのままだった
+- `GROWTH.yaml` の `activity_log` は 2026-07-28 で止まった
+- `x-weekly-reviews.md` は週次レビューの実績が一度もない（テンプレートのみ）
+- `recurring.x-profile.last_run` は 2026-07-09 のまま
+- 一方、X日次運用とデータ更新は**ループの外で手動セッションとして毎日回っていた**
+
+つまり「見えている作業は続き、周回の中に埋め込まれた見えない作業だけが消えた」。
+`LOOP.md` 自身も 2026-08-07 の時点で「自律ループとしては成立しなかった」と書いていた。
+
+そこで、**周回をやめ、期日駆動に切り替える。**
+何が遅れているかは人が覚えるのではなく、管理ダッシュボードが検知する。
+
+---
+
+## ⓪ 着手前に必ず — 作業場所を確保する
+
+**1エージェント＝1 worktree（作業用のコピー）。** 複数のセッションが同じ作業ツリーを共有すると、
+片方の `git checkout` がもう片方のファイルをディスクから消す。2026-08-07 に実際に発生し、
+実行中だった分類処理の参照先ファイルが消えた（処理はメモリ上の版で継続したため助かった）。
+
+```sh
+git worktree add ../isa-wt-{作業名} -b task/{作業名}
+cd ../isa-wt-{作業名}
+
+# 非公開の正典データを復元する（gitignore対象なので worktree には複製されない）
+tar xzf "$(ls -t /Volumes/HD-LE-B/issue-stance-private-backups/private-data-*.tar.gz | head -1)" \
+  -C . --exclude=manifest.json
+python3 -c "import yaml,os; th=yaml.safe_load(open('THEMES.yaml'))['themes']; \
+  print('欠落:', [v['sample_file'] for v in th.values() if not os.path.exists(v['sample_file'])])"
+
+# 収集ツールを動かせるようにする（node_modules も gitignore 対象で複製されない）
+cp -R ../issue-stance-aggregator/node_modules .
+```
+
+**この2つはどちらも「gitignore されているから worktree に入らない」もので、
+入っていないことが `git status` に出ない。** 忘れても静かに進み、後の工程で落ちる。
+
+**正典を復元しないと、テストと検査が「ファイルがない」で落ちる。** 5テーマの正典
+（bukatsu / constitutional / school-nickname / henoko / consumption-tax / ai-copyright）は
+本文を含むため Git 管理外で、新しい worktree には入らない。
+
+**`node_modules` を複製しないと、収集が最初の疎通確認で止まる。**
+`Cannot find package 'playwright'` と出る。2026-08-08 の憲法改正の収集で実際に発生した。
+収集を伴わない作業では不要なので、収集するときだけでよい。
+
+- **`social-samples/` 配下の未追跡ファイルを消さない。** 非公開の正典は gitignore 対象なので、
+  古いブランチからは「どこからも参照されていない不要ファイル」に見える。判断する前に
+  `origin/main` を取り込むこと（2026-08-07、統合したばかりの正典1,606件が削除されかけた）
+- **バックアップは作業したブランチの上で取る。** `backup_private_data.py` は
+  いまいるブランチの `THEMES.yaml` と `.gitignore` を見て対象を決めるため、
+  古いブランチで実行すると新しい正典が対象から漏れる
+- 作業が終わったら `git worktree remove` で片付ける。その前に、そのツリーにしかない
+  非公開ファイルを共有ツリーへ複製し、バックアップを取り直す（`release` スキル）
+- 共有ツリーで作業する場合は、着手前に `git status` を確認する。
+  他セッションの未コミット変更があれば、先にコミットしてもらってから始める
+- `git checkout -- <ディレクトリ>` を使わない。**自分が変更したファイルだけ**をパス指定で戻す
+  （ディレクトリごと戻すと他セッションの未コミット変更を消す）
+
+---
+
+## 遅れの見つけ方（唯一の入口）
+
+セッションの最初にこれを実行する。何が期限を過ぎているかが一覧で出る。
+
+```sh
+python3 scripts/build_admin_dashboard.py
+```
+
+検知される遅れ:
+
+- テーマごとの収集予定日（`collect_at`）・公開更新予定日（`refresh_at`）の超過
+- 週次KPIの記録が止まっている日数
+- X の候補確認日（`recurring.x-posting.last_run`）が未記録
+- 数字の取得元（GA4 / Search Console / Supabase）が壊れていないか
+
+**この一覧に出ないものは、定例作業として成立していない。**
+新しく定例にしたい作業があるときは、下の表に足すだけでなく、
+ダッシュボードが遅れを検知できるようにすること（`scripts/admin_dashboard/render.py`）。
+
+---
+
+## 定例作業の一覧
+
+| 作業 | 頻度 | 期日の決まり方 | 正典 | 人間が必要なこと |
+|---|---|---|---|---|
+| **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` | なし（自動テーマ）／自転車青切符のみ読む工程あり |
+| **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` | 実際の投稿操作 |
+| **X週次レビュー** | 週1 | 前回から7日 | `.claude/skills/x-daily/SKILL.md` §週次レビュー | なし |
+| **KPIスナップショット** | 週1（月曜） | 前回から7日 | `scripts/fetch_growth_kpi.py` → `GROWTH.yaml` | OAuth再認証・フォロワー数の手動確認 |
+| **新テーマの追加** | 不定期 | オーナーの指示 | `.claude/skills/new-topic/SKILL.md` | 画像生成（GPTimage2） |
+| **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` | なし（マージはAIが実行する） |
+| **note 記事** | 月1本以上＋新テーマ公開時 | 前回から30日 | `.claude/skills/note-operation/SKILL.md` | note への投稿操作 |
+| **サイト改善を1つ進める** | 週1 | 前回から7日 | 下の「サイト改善の進め方」 | 最終承認 |
+| **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` | なし |
+
+---
+
+## サイト改善の進め方
+
+**これが1ヶ月間、誰の担当でもなくなっていた工程。** 週1回、以下を1つだけ進める。
+
+台帳は `GROWTH.yaml` の `capabilities`。工程は `idea → building → built → measuring → done`。
+
+1. `judge_at` を過ぎた `measuring` があれば、まずそれを片づける
+   - `phase.current: initial_traction` の間は判定を急がず、`reflection` に観察ログを書いて延長する
+   - **延長は1回まで。** 2回目も母数が足りなければ `closed_undecided` で閉じ、`reopen_when` を書く
+2. `built`（実装済み・マージ待ち）があれば main に入れて `measuring` に進める
+3. どちらも無ければ `priority` 順に `idea` を1つ着手する
+
+守ること:
+
+- 保護タグ（GA4 / AdSense / Supabase / OGP）を壊さない
+- 375px で横スクロールなし・コンソールエラーなし
+- 新しい導線には GA4 イベントか utm を必ず付ける。**計測できない施策は実装しない**
+- ブランチは `task/growth-{id}`。main への直接コミットはしない
+- 規模が大きいものは `configs/prompts/{YYYYMMDD}_growth-{id}.md` に発注プロンプトを書いて止める
+- やったことは `GROWTH.yaml` の `activity_log` に1行残す
+
+---
+
+## 台帳を更新するのは誰か
+
+**作業したセッションが、その場で更新する。** 別工程にまとめない。
+まとめる設計にしていたために、ループが止まったとき台帳だけが1ヶ月取り残された。
+
+| 台帳 | 更新するタイミング |
+|---|---|
+| `THEMES.yaml` | データ更新の直後（`DATA_REFRESH.md`） |
+| `x-posts.md` | X投稿の直後 |
+| `GROWTH.yaml` `recurring.*.last_run` | その定例作業をやった直後。**実際に運用が動いた日**を書く（ループが動いた日ではない） |
+| `GROWTH.yaml` `kpi.snapshots` | KPI取得の直後（週1） |
+| `GROWTH.yaml` `activity_log` | サイト改善を進めた直後 |
+| `TASK_BOARD.md` | 課題を見つけた時・片づけた時 |
+
+X日次スキルは `GROWTH.yaml` を読むだけで書かないため、
+`recurring.x-posting.last_run` の更新が誰の担当でもなくなっていた（2026-08-23 時点で実態と6日ずれていた）。
+**X運用をしたセッションが更新すること。**
+
+---
+
+## 人間（オーナー）の役割
+
+- X の実投稿・リプライ操作
+- note への投稿操作
+- 画像生成（GPTimage2）
+- AdSense / GA4 など管理画面での操作、OAuth の再認証
+- 施策を `adopted` / `rejected` に倒すときの最終承認
+
+数値取得は原則不要（`scripts/fetch_growth_kpi.py` が自動取得する）。
+フォロワー数だけは自動取得できないため `scripts/record_x_followers.py` を使う。
+
+---
+
+## 廃止したもの（復活させないこと）
+
+- **①〜⑥の周回**（制作ループ・グロースループ）。チェックリストとして必要な部分は
+  `DATA_REFRESH.md` と各スキルに移した
+- **毎朝7時の自動タスク `daily-growth-loop`**。45日間オフのまま気づかれなかった。
+  自動起動に頼らず、セッション開始時のダッシュボード確認で代替する
+- **「ループが判断し、人間は実行のみ」という分担**。実態と合っていなかった
