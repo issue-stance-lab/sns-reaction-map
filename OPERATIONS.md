@@ -90,13 +90,39 @@ python3 scripts/build_admin_dashboard.py
 
 ---
 
+## 自動実行している定期タスク
+
+| タスクID | 実行 | 何をするか |
+|---|---|---|
+| `x-daily-measure` | 毎日 20:05頃 | 24時間経過した未計測投稿の表示回数を読み、`x-posts.md` に記録する |
+| `x-weekly-review` | 日曜 20:32頃 | 直近7日のX運用を振り返り、`x-weekly-reviews.md` に記録する |
+
+どちらも**投稿はしない**（計測と記録だけ）。返信案は出すが送信はしない。
+
+**このアプリが開いていないと動かない。** 実行時刻にアプリが閉じていれば、次に開いたときに
+遅れて実行される。廃止した `daily-growth-loop` が45日間気づかれなかった原因もこれである。
+
+### 止まったことに気づくための仕掛け
+
+**タスクの登録状態を見て「生きているか」を確かめない。** 動いてはいるが毎回失敗している
+場合を見逃す。代わりに**結果が滞っているか**を管理ダッシュボードが警告する。
+
+- 未計測の投稿が溜まっている → 「X投稿の表示回数が N 件未計測です」
+- 週次レビューが10日以上更新されていない → 「X週次レビューが N 日前で止まっています」
+
+この2つは `tests/test_admin_dashboard.py` の `MeasurementStallTests` で守っている。
+警告の文言や条件を変えるときは、テストも同時に直すこと。
+
+---
+
 ## 定例作業の一覧
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 | 人間が必要なこと |
 |---|---|---|---|---|
 | **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` | なし（自動テーマ）／自転車青切符のみ読む工程あり |
 | **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` | 実際の投稿操作 |
-| **X週次レビュー** | 週1 | 前回から7日 | `.claude/skills/x-daily/SKILL.md` §週次レビュー | なし |
+| **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` | なし（ログイン済みChromeが開いていること） |
+| **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー | なし |
 | **KPIスナップショット** | 週1（月曜） | 前回から7日 | `scripts/fetch_growth_kpi.py` → `GROWTH.yaml` | OAuth再認証・フォロワー数の手動確認 |
 | **新テーマの追加** | 不定期 | オーナーの指示 | `.claude/skills/new-topic/SKILL.md` | 画像生成（GPTimage2） |
 | **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` | なし（マージはAIが実行する） |

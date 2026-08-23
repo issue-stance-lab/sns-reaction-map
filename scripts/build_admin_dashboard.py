@@ -36,6 +36,7 @@ def build(*, fetch: bool, today: dt.date) -> str:
         "data_updates": collect.collect_data_updates(),
         "tasks": collect.collect_tasks(),
         "health": collect.collect_source_health(today),
+        "x_measurement": collect.collect_x_measurement(dt.datetime.now(dt.timezone(dt.timedelta(hours=9)))),
         "live": collect.fetch_live_metrics() if fetch else None,
         "sample_files": collect.collect_sample_files(),
         "live_cache": collect.read_live_cache(),

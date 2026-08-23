@@ -511,6 +511,64 @@ COMMIT_TYPE_LABEL = {
 }
 
 
+# ------------------------------------------------- X計測・週次レビューの滞り
+
+_WEEKLY_REVIEW_HEADING = re.compile(
+    r"^###\s+(\d{4}-\d{2}-\d{2})〜(\d{4}-\d{2}-\d{2})\s*$"
+)
+
+
+def collect_x_measurement(now: dt.datetime) -> dict:
+    """24〜48時間後の計測と週次レビューが滞っていないかを見る。
+
+    定期タスク（x-daily-measure / x-weekly-review）が黙って止まっても
+    気づけるようにするための材料。**タスクの生死ではなく結果で判定する。**
+    タスクの登録状態を見に行くと「動いてはいるが毎回失敗している」を見逃す。
+
+    2026-07-09 に止まった daily-growth-loop は、45日間オフのまま誰も気づかなかった。
+    同じことを繰り返さないために、滞りは必ずこの画面に出す。
+    """
+    text = _read_text("x-posts.md")
+    overdue: list[dict] = []
+    if text:
+        try:
+            import sys
+
+            scripts_dir = str(ROOT / "scripts")
+            if scripts_dir not in sys.path:
+                sys.path.insert(0, scripts_dir)
+            import x_post_views
+
+            for item in x_post_views.find_pending(text, now):
+                if item.timing == "waiting":
+                    continue
+                overdue.append(
+                    {
+                        "url": item.url,
+                        "target": item.target,
+                        "kind": item.kind,
+                        "age_hours": round(item.age_hours, 1),
+                        "timing": item.timing,
+                    }
+                )
+        except Exception as exc:  # 計測の集計に失敗しても画面全体は出す
+            return {"error": str(exc), "overdue": [], "review_latest": None}
+
+    review_latest = None
+    for line in _read_text("x-weekly-reviews.md").splitlines():
+        matched = _WEEKLY_REVIEW_HEADING.match(line)
+        if matched:
+            end = _as_date(matched.group(2))
+            if end and (review_latest is None or end > review_latest):
+                review_latest = end
+
+    return {
+        "error": None,
+        "overdue": sorted(overdue, key=lambda item: -item["age_hours"]),
+        "review_latest": review_latest,
+    }
+
+
 def collect_commits(limit: int = 80) -> list[dict]:
     """git log を、日付と種別つきの一覧にする。マージコミットは除く。"""
     try:
