@@ -42,16 +42,10 @@ def main() -> None:
         print("エラー: 最新スナップショットに x_followers フィールドが見つかりません", file=sys.stderr)
         sys.exit(1)
 
-    # すでに数値が入っている場合は上書き確認
+    # すでに数値が入っている場合はログだけ出して上書き
     existing = re.search(r"x_followers:\s*(\d+)", block)
     if existing:
-        current = int(existing.group(1))
-        print(f"最新スナップショットには既に x_followers: {current} が記録されています。")
-        print(f"{args.count} に上書きしますか？ [y/N] ", end="", flush=True)
-        ans = input().strip().lower()
-        if ans != "y":
-            print("中止しました。")
-            sys.exit(0)
+        print(f"既存値 {existing.group(1)} を {args.count} に上書きします。")
 
     # 置換: null → 数値（コメントは保持）
     new_block = re.sub(

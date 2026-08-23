@@ -143,6 +143,24 @@ python3 scripts/refresh_topic.py \
 `python3 scripts/verify_page_originality.py` が、ページ間で同じ文・似すぎた見出しを見つけて
 止める。共通で当たり前の文は `configs/page-originality.json` に理由つきで登録すること。
 
+## note 記事の更新要否チェック（公開後）
+
+`--promote` による昇格が完了したら、論点に変化があるか確認し、必要なら note 記事とサイトを同時に更新する。
+
+**確認方法：**
+- 今回の主要論点の件数・割合を、前回公開時の `data/verification/<topic>.json` と比較する
+- 新しい論点が浮上したか、既存論点の比率が ±5pt 以上変化したか
+
+**変化なし → スキップ。** note は更新しない。
+
+**変化あり → 以下を同タイミングで行う：**
+1. note 記事の「前回からの変化」セクションを追記した更新案を Artifact（HTML）で出力する
+2. サイトの論点説明文（ビルダが生成している箇所）も同じ変化に合わせて更新する
+
+更新ルールの詳細は `note-operation` スキルを参照。
+
+---
+
 ## コミット対象
 
 収集した回は、次を必ずコミットする。**`data/verification/updates/` を忘れやすい。**

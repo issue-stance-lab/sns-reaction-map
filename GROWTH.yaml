@@ -43,6 +43,20 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-08-22
+      weekly_users: 11           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
+      pageviews: 170             # GA4: 過去7日（公開ホスト限定）
+      pages_per_session: 4.146   # GA4: 自動取得
+      votes_total: 16            # Supabase（cast-vote Edge Function 経由）
+      votes_week: null           # Supabase: 未取得
+      gsc_impressions: 3         # Search Console: 28日間
+      gsc_clicks: 0              # Search Console: 28日間
+      x_followers: 18  # 手動確認済み（8/10から変化なし）
+      notes: >-
+        8/10比でweekly_users 9→11、PV 90→170、pages/session 3.750→4.146、votes_total 15→16。
+        GSCは28日間の値でimpressions 27→3、clicks 1→0と急減しているが、これは28日窓が前回8/10から
+        約12日しか経過しておらず、過去期間がリセットされたわけではなく期間内のデータが少ない可能性がある。
+        x_followersは手動確認が必要。GA4・Supabase・GSCの自動取得はすべて正常。
     - date: 2026-08-10
       weekly_users: 9           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
       pageviews: 90             # GA4: 過去7日（公開ホスト限定）
@@ -51,7 +65,7 @@ kpi:
       votes_week: null          # Supabase: 未取得
       gsc_impressions: 27       # Search Console: 28日間
       gsc_clicks: 1             # Search Console: 28日間
-      x_followers: null         # 手動確認が必要
+      x_followers: 18  # 手動確認が必要
       notes: >-
         15日ぶりの記録（7/26以降、GA4・GSCのOAuthトークン失効と投票取得の故障で取れていなかった。2026-08-10に3つとも復旧）。
         7/26比でweekly_users 10→9、PV 163→90、pages/session 3.396→3.750、実投票12→15、
@@ -309,7 +323,7 @@ recurring:
   kpi-snapshot:
     title: KPI週次スナップショット更新
     cadence: weekly
-    last_run: 2026-08-10
+    last_run: 2026-08-22
     procedure: kpi.snapshots に1行追加。scripts/fetch_growth_kpi.py で自動取得（人間依頼は自動取得失敗時のみ）
     needs_human: 自動取得が失敗した場合のみ、各管理画面の数値取得。OAuth再認証は必ず人間の操作が要る
     notes: 2026-08-10に3つの取得元をすべて復旧させて再開。最新はweekly_users 9 / pageviews 90 / pages_per_session 3.750 / votes_total 15 / gsc_impressions 27 / gsc_clicks 1。x_followers のみ引き続き手動。**7/26から15日間、記録が取れていなかった。** 原因は(1)GA4・GSCのOAuthトークン失効（アプリの公開範囲が「テスト中」のため、Googleの仕様で7日ごとに強制失効する。恒久対策は同意画面を「本番」へ切り替えること。未実施）(2)投票取得の故障（2026-07-31のsecurity migrationで経路が消えていた。2026-08-10に修正済み）。取得元が生きているかは `python3 scripts/build_admin_dashboard.py` の「9. 数字の取得元の状態」で確認できる
@@ -326,6 +340,22 @@ recurring:
       人間への依頼: (1) 現在のプロフィール文・固定ポスト・ヘッダー画像のスクショ共有 (2) 下記たたき台の採用可否判断。
       提案bio案: 「SNS上の賛否・論点を1テーマ1ページで見える化。投票で自分の立場も参加できます。#SNS反応まっぷ」。
       固定ポスト案: サイト紹介+人気テーマ（あだ名禁止 or 高市早苗）へのリンクを固定し、初見フォロワーが1クリックで投票できる導線にする
+
+  note-posting:
+    title: note 記事の執筆・公開
+    cadence: monthly（最低1本）+ per-theme-publish（新テーマ公開時）
+    priority: critical
+    last_run: null          # 2026-08-20時点で消費税減税の記事1本のみ確認。URL・日付は未記録
+    procedure: >-
+      `.claude/skills/note-operation/SKILL.md` に従い、テーマ別分析記事を執筆する。
+      記事には UTM 付きテーマページへのリンクを必ず入れる。
+      投稿後は `note-posts.md` に記録し、7日後・28日後に GA4（sessionSource=note）を確認する。
+    needs_human: note への投稿操作（ハブは note にアクセスできない）
+    next_article: ai-copyright（最多PV・検索需要が高いため優先）
+    notes: >-
+      2026-08-20 に note 運用を正式立ち上げ。GA4 で consumption_tax_01 キャンペーンの流入が
+      1セッション確認されており、既存記事が1本あることが分かった（URL・日付は未記録のため
+      note-posts.md への追記が必要）。被リンク獲得の現状最速の手段として recurring に昇格。
 
   x-posting:
     title: X運用（新テーマ告知・引用RT・リプライ）
