@@ -119,7 +119,7 @@ def collect_themes(today: dt.date) -> list[dict]:
 def collect_sample_files() -> list[str]:
     """各テーマの正典ファイルのパス。gitignore 対象なので作業コピーには入らない。
 
-    LOOP.md ⓪ の「欠落チェック」と同じものを、管理画面から見えるようにする。
+    OPERATIONS.md ⓪ の「欠落チェック」と同じものを、管理画面から見えるようにする。
     """
     raw = _read_yaml("THEMES.yaml").get("themes") or {}
     return [value["sample_file"] for value in raw.values() if value.get("sample_file")]

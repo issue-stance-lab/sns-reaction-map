@@ -2,13 +2,14 @@
 # 最終更新: 2026-08-10
 #
 # 目的: 来訪者・回遊・投票・SNSシェアを増やす施策の台帳。
-# 制作・品質維持は THEMES.yaml / LOOP.md の管轄（このファイルでは扱わない）。
+# 制作・品質維持は THEMES.yaml / DATA_REFRESH.md の管轄（このファイルでは扱わない）。
+# 定例作業の定義は OPERATIONS.md。
 #
 # 構造:
 #   phase:        現在のグロースフェーズ（initial_traction / growth）と卒業条件
 #   kpi:          週次スナップショット（人間がGA4/GSC/Supabaseから転記、またはハブが依頼）
 #   capabilities: 一度作れば全テーマに効くサイト機能。工程は idea → building → built（検証済み・マージ待ち）→ measure → done
-#                 計測中の凍結は「同じ指標を動かす変更のマージ」のみ。実装は built まで先行してよい（GROWTH_LOOP.md build-ahead）
+#                 計測中の凍結は「同じ指標を動かす変更のマージ」のみ。実装は built まで先行してよい（OPERATIONS.md「サイト改善の進め方」）
 #   experiments:  仮説→実装→計測→判定のライフサイクルを持つ施策
 #                 status: idea / building / measuring / adopted / rejected / closed_undecided / blocked
 #   recurring:    定期運用タスク。priority: critical のものは毎ループ必ず確認する

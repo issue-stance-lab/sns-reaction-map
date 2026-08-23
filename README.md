@@ -51,8 +51,7 @@ archive/             運用から外れた文書・スクリプト（下記）
 
 | 文書 | 役割 |
 |---|---|
-| [LOOP.md](LOOP.md) | 制作ループ。監査→選定→発注→検証→統合の手順 |
-| [GROWTH_LOOP.md](GROWTH_LOOP.md) | グロースループ。集客・回遊・投票・シェア |
+| [OPERATIONS.md](OPERATIONS.md) | 定例作業の定義。作業場所の作り方・頻度・担当・遅れの見つけ方 |
 | [DATA_REFRESH.md](DATA_REFRESH.md) | データ更新の正典。`refresh_topic.py` の使い方と公開ゲート |
 | [THEMES.yaml](THEMES.yaml) | テーマ台帳（単一の真実源） |
 | [GROWTH.yaml](GROWTH.yaml) | グロース指標の実測値 |
