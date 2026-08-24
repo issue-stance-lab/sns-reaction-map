@@ -268,6 +268,13 @@
           "tide-card"
         ],
         "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      },
+      {
+        "path": "data/verification/fukushuto-claims.json",
+        "selectors": [
+          "fc-count"
+        ],
+        "reason": "「投稿の主張を、国会と選管の記録に当ててみた」の「N件の投稿」。主張ごとに編集部が確定した該当投稿（data/fukushuto_claim_posts.json 由来、scripts/build_fukushuto_process_sections.py が生成）"
       }
     ],
     "regions": {
