@@ -1,0 +1,343 @@
+<title>部活動の地域移行</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #07111E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  }
+
+  .card {
+    width: 1200px;
+    height: 630px;
+    background: linear-gradient(145deg, #0C1E35 0%, #0A1928 60%, #071522 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 44px 52px 36px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* subtle grid texture */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    border-radius: 16px;
+    pointer-events: none;
+  }
+
+  /* teal glow top-right */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(45,212,191,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── top row ── */
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(45,212,191,0.15);
+    border: 1px solid rgba(45,212,191,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #2DD4BF;
+    letter-spacing: .06em;
+  }
+
+  .brand {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: .08em;
+    padding-top: 4px;
+  }
+
+  /* ── title block ── */
+  .title-block {
+    margin-bottom: 26px;
+  }
+
+  .title {
+    font-size: 36px;
+    font-weight: 900;
+    color: #F0F4FF;
+    line-height: 1.3;
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .title em {
+    font-style: normal;
+    color: #2DD4BF;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: rgba(240,244,255,0.55);
+    font-weight: 400;
+    letter-spacing: .02em;
+  }
+  .subtitle strong {
+    color: rgba(240,244,255,0.85);
+    font-weight: 700;
+  }
+
+  /* ── stance bar ── */
+  .stance-section {
+    margin-bottom: 24px;
+  }
+
+  .stance-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .bar-track {
+    height: 32px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    gap: 2px;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.75);
+    transition: filter .15s;
+  }
+  .seg:first-child { border-radius: 6px 0 0 6px; }
+  .seg:last-child  { border-radius: 0 6px 6px 0; }
+  .seg.teal  { background: #2DD4BF; width: 44%; }
+  .seg.red   { background: #F87171; width: 32.2%; }
+  .seg.amber { background: #FBBF24; width: 19%; color: rgba(0,0,0,0.6); }
+  .seg.gray  { background: #64748B; width: 4.8%; color: transparent; }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: rgba(240,244,255,0.7);
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .dot.teal  { background: #2DD4BF; }
+  .dot.red   { background: #F87171; }
+  .dot.amber { background: #FBBF24; }
+  .dot.gray  { background: #64748B; }
+  .legend-item strong { color: #F0F4FF; font-weight: 700; }
+
+  /* ── issues row ── */
+  .issues-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    flex: 1;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+
+  .issue-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .issue-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 10px 0 0 10px;
+  }
+  .issue-card:nth-child(1)::before { background: #2DD4BF; }
+  .issue-card:nth-child(2)::before { background: #60A5FA; }
+  .issue-card:nth-child(3)::before { background: #A78BFA; }
+  .issue-card:nth-child(4)::before { background: #F472B6; }
+
+  .issue-num {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    font-weight: 500;
+    letter-spacing: .06em;
+  }
+
+  .issue-icon {
+    font-size: 22px;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .issue-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #F0F4FF;
+    line-height: 1.4;
+  }
+
+  .issue-count {
+    font-size: 28px;
+    font-weight: 900;
+    color: #2DD4BF;
+    letter-spacing: -.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .issue-card:nth-child(2) .issue-count { color: #60A5FA; }
+  .issue-card:nth-child(3) .issue-count { color: #A78BFA; }
+  .issue-card:nth-child(4) .issue-count { color: #F472B6; }
+
+  .issue-pct {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 400;
+  }
+
+  /* ── footer ── */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 14px;
+  }
+
+  .source {
+    font-size: 11px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: .04em;
+  }
+
+  .url-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(45,212,191,0.1);
+    border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: #2DD4BF;
+    font-weight: 500;
+    letter-spacing: .03em;
+  }
+  .url-badge svg { opacity: .7; }
+</style>
+
+<div class="card">
+  <div class="top-row">
+    <div class="badge">教育・部活動改革</div>
+    <div class="brand">SNS反応まっぷ</div>
+  </div>
+
+  <div class="title-block">
+    <div class="title">部活動の地域移行は<em>誰のため</em>？</div>
+    <div class="subtitle">SNS公開投稿 <strong>754件</strong> を分析してわかった、4つの論点</div>
+  </div>
+
+  <div class="stance-section">
+    <div class="stance-label">意見の内訳（754件中）</div>
+    <div class="bar-track">
+      <div class="seg teal">44%</div>
+      <div class="seg red">32%</div>
+      <div class="seg amber">19%</div>
+      <div class="seg gray">5%</div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="dot teal"></div><strong>移行支持</strong> 332件（44%）</div>
+      <div class="legend-item"><div class="dot red"></div><strong>慎重・反対</strong> 243件（32%）</div>
+      <div class="legend-item"><div class="dot amber"></div><strong>条件付き</strong> 143件（19%）</div>
+      <div class="legend-item"><div class="dot gray"></div><strong>中立・情報</strong> 36件（5%）</div>
+    </div>
+  </div>
+
+  <div class="issues-row">
+    <div class="issue-card">
+      <div class="issue-num">論点 01</div>
+      <div class="issue-icon">👩‍🏫</div>
+      <div class="issue-title">先生の負担<br>を地域で支える</div>
+      <div class="issue-count">227<span style="font-size:16px;font-weight:500;">件</span></div>
+      <div class="issue-pct">全体の 30.1%</div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-num">論点 02</div>
+      <div class="issue-icon">🏗️</div>
+      <div class="issue-title">移すなら先に<br>仕組みをつくって</div>
+      <div class="issue-count" style="font-size:18px;padding-top:8px;">制度設計<br>が先決</div>
+      <div class="issue-pct">2番目に多い論点</div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-num">論点 03</div>
+      <div class="issue-icon">🏠</div>
+      <div class="issue-title">子どもの居場所<br>はどこへ行く？</div>
+      <div class="issue-count" style="font-size:18px;padding-top:8px;">居場所<br>と価値観</div>
+      <div class="issue-pct">文化部・地域格差の声</div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-num">論点 04</div>
+      <div class="issue-icon">💴</div>
+      <div class="issue-title">行く先も<br>払うお金もない</div>
+      <div class="issue-count" style="font-size:18px;padding-top:8px;">費用・<br>送迎問題</div>
+      <div class="issue-pct">家庭格差に直結</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="source">データ：Yahooリアルタイム検索 公開投稿（2026/6/27〜8/19）｜AIによる自動分類｜世論調査ではありません</div>
+    <div class="url-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      issue-stance-lab.github.io
+    </div>
+  </div>
+</div>
