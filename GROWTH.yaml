@@ -267,19 +267,33 @@ capabilities:
     title: 2Dキャンバス投票UI（vote2d.js）
     hypothesis: 4択ボタンより「2Dマップで自分の立場を置く」体験の方が投票ハードルが下がり、完了後のシェア率も上がる
     scope: 全テーマ共通。#vote-buttons コンテナにキャンバスを注入し、クリック/タップでXY軸上のピンを配置→確定→結果表示→スタンスマップに「あなたの位置」を反映
-    status: built
+    status: measuring
     priority: 6
     metric: votes_week / weekly_users（投票転換率）、シェアボタンクリック率
     built_at: 2026-07-10
-    judge_at: 2026-07-24
+    started_at: 2026-08-24
+    judge_at: 2026-09-21
+    closed_at: null
+    reopen_when: null
+    reflection: |
+      2026-08-24、OPERATIONS.md「サイト改善の進め方」の週次点検で発見: status が built のまま
+      1ヶ月放置されていた（judge_at 2026-07-24 を超過）。「マージ待ち」ではなく既に main へ
+      統合済みで、docs/*-reaction-map.html 7本（bukatsu-chiiki / consumption-tax-cut /
+      school-nickname-ban / constitutional-amendment / henoko-student-accident /
+      elderly-license-revocation / bike-blue-ticket）で稼働していることを確認した。
+      ただし現在11テーマ中、takaichi / fukushuto / koshitsu-tenpakai / ai-copyright の4テーマには
+      未組み込みで、「全テーマ共通」の scope を満たしていない（課題50に記録）。
+      この4テーマ分の展開は判定の前提を変える別作業のため、今回はやらず、
+      既に載っている7テーマの実績から measuring を開始する。
     notes: |
-      vote2d.js を docs/ に配置し全8テーマページに組み込み完了。
+      vote2d.js を docs/ に配置。
       ・キャンバスサイズ: デスクトップ 幅フル×270px / モバイル(<500px) ×210px
       ・投票データは localStorage（sns_vote2d_v1_<topic>_my）に保存
       ・再訪時: DOMContentLoaded で setStanceMapVoteMarker を呼びスタンスマップに「あなた」マーカーを復元
       ・スタンスマップのマーカー位置は正確な (sx,sy) 座標で描画（旧: 象限中心の固定点）
       ・Supabase 集計対応済み（supabaseUrl 空の場合は localStorage 集計にフォールバック）
       ・実装ブランチ: task/growth-2d-vote-canvas
+      ・2026-08-24 時点で7/11テーマのみ組み込み済み（課題50）
 
   vote-ux-mobile:
     title: モバイル投票UXの摩擦低減
@@ -469,3 +483,7 @@ activity_log:
     target_pages: 10
     metrics: GSC impressions、GSC clicks、GSC CTR、GA4 Google Organic users
     related_capability: null
+  - date: 2026-08-24
+    type: site_improvement
+    detail: 週次のサイト改善点検で vote-2d-canvas が built のまま1ヶ月放置されているのを発見。実際は既にmain統合済み・7/11テーマで稼働中と確認し、measuring へ進めた（judge_at 2026-09-21）。未組み込みの4テーマは課題50に切り出した
+    related_capability: vote-2d-canvas

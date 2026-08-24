@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-18（辺野古を adapter へ昇格。11テーマすべてが収集から公開まで自動で回る状態になり、非adapterは0になった）
+最終更新: 2026-08-24（課題50を追加。vote-2d-canvas の built 放置を発見し measuring へ進めた）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -935,6 +935,32 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 **検討が必要なこと**: サーバーの常駐方法、セキュリティ（ローカル限定でも外部からの呼び出しを防ぐ）、
 起動する `claude` コマンドの形式  
 **優先度**: 低（先に flow が安定してから）
+
+---
+
+### 課題50: 2Dキャンバス投票UI（vote2d.js）が11テーマ中7テーマにしか入っていない
+
+**状態**: 未着手
+**優先度**: 中
+**発見**: 2026-08-24、OPERATIONS.md「サイト改善の進め方」の週次点検（`GROWTH.yaml` の `capabilities`
+を確認）で発覚。`vote-2d-canvas` は `status: built`（実装済み・マージ待ち扱い）のまま
+2026-07-24（`judge_at`）から1ヶ月放置されていた。
+
+**分かったこと**: 「マージ待ち」ではなく、コードは既に `main` に統合済みで一部テーマでは稼働していた。
+`docs/*-reaction-map.html` を確認したところ、`vote2d.js` を読み込んでいるのは以下の7テーマのみ:
+bukatsu-chiiki / consumption-tax-cut / school-nickname-ban / constitutional-amendment /
+henoko-student-accident / elderly-license-revocation / bike-blue-ticket
+
+**入っていない4テーマ**: takaichi / fukushuto / koshitsu-tenpakai / ai-copyright
+（このうち takaichi は課題15対応で検索除外中のため対象外でよいかは要判断）
+
+**次にすること**: 残り3〜4テーマへ `vote2d.js` の読み込みタグを追加する。既存7テーマと同じ差分の
+はずだが、保護タグ（GA4/AdSense/Supabase/OGP）を壊さないこと・375pxで横スクロールなしを
+テーマごとに確認すること。作業は `OPERATIONS.md` ⓪に従い専用worktreeで行う。
+
+**当面の扱い**: `GROWTH.yaml` の `vote-2d-canvas` は、この4テーマ分の展開を待たずに既存7テーマの
+実績で `measuring` を開始した（2026-08-24、judge_at 2026-09-21）。判定時は「7/11テーマのみ」が
+前提であることを踏まえること。
 
 ---
 
