@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <title>先生・保護者・自治体の三すくみ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page: #07111E;
+      --ink: #F0F4FF;
+      --ink-70: rgba(240,244,255,0.70);
+      --ink-45: rgba(240,244,255,0.45);
+      --teal: #2DD4BF;
+      --red: #F87171;
+      --amber: #FBBF24;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1200px; height: 720px; overflow: hidden; }
+    body {
+      background: var(--page);
+      color: var(--ink);
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+    .canvas {
+      position: relative;
+      width: 1200px;
+      height: 720px;
+      padding: 32px 52px 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      background: #07111E;
+    }
+    .canvas::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    h1 {
+      position: relative;
+      z-index: 4;
+      margin: 0;
+      color: var(--ink);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .edges {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      width: 1200px;
+      height: 720px;
+      pointer-events: none;
+    }
+    .edge-line {
+      fill: none;
+      stroke: rgba(255,255,255,0.18);
+      stroke-width: 2;
+      marker-start: url(#arrow);
+      marker-end: url(#arrow);
+    }
+    .question {
+      fill: var(--ink-45);
+      font-size: 22px;
+      font-weight: 700;
+      text-anchor: middle;
+    }
+    .card {
+      position: absolute;
+      z-index: 2;
+      width: 360px;
+      height: 250px;
+      padding: 16px 20px 18px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      border-radius: 12px 12px 0 0;
+    }
+    .teacher { top: 80px; left: 420px; }
+    .parent { top: 420px; left: 90px; }
+    .official { top: 420px; left: 750px; }
+    .teacher::before { background: var(--teal); }
+    .parent::before { background: var(--red); }
+    .official::before { background: var(--amber); }
+    .portrait {
+      display: block;
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 7px;
+      object-fit: cover;
+      border: 2px solid;
+      border-radius: 50%;
+    }
+    .teacher .portrait { border-color: var(--teal); }
+    .parent .portrait { border-color: var(--red); }
+    .official .portrait { border-color: var(--amber); }
+    .role {
+      margin: 0 0 5px;
+      color: var(--ink-70);
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .statement {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+    .teacher .statement { color: var(--teal); }
+    .parent .statement { color: var(--red); }
+    .official .statement { color: var(--amber); }
+    .detail {
+      margin: 6px 0 0;
+      color: var(--ink-70);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.45;
+    }
+    .center {
+      position: absolute;
+      z-index: 3;
+      top: 342px;
+      left: 485px;
+      width: 230px;
+      min-height: 72px;
+      padding: 10px 14px;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.35;
+      text-align: center;
+      border: 1px solid rgba(251,191,36,0.35);
+      border-radius: 12px;
+      background: rgba(251,191,36,0.10);
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas" aria-label="先生・保護者・自治体の三すくみ">
+    <h1>先生・保護者・自治体の三すくみ</h1>
+    <svg class="edges" viewBox="0 0 1200 720" aria-hidden="true">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto-start-reverse">
+          <path d="M 0 0 L 8 4 L 0 8 z" fill="rgba(255,255,255,0.42)"></path>
+        </marker>
+      </defs>
+      <path class="edge-line" d="M 420 310 L 450 420"></path>
+      <path class="edge-line" d="M 780 310 L 750 420"></path>
+      <path class="edge-line" d="M 450 686 L 750 686"></path>
+      <text class="question" x="462" y="366">?</text>
+      <text class="question" x="738" y="366">?</text>
+      <text class="question" x="600" y="675">?</text>
+    </svg>
+    <section class="card teacher" aria-label="先生">
+      <img class="portrait" src="../photos/teacher-portrait.png" alt="先生の肖像">
+      <p class="role">先生</p>
+      <p class="statement">渡したい</p>
+      <p class="detail">土日の指導と引率を、<br>これ以上は担えない</p>
+    </section>
+    <section class="card parent" aria-label="保護者">
+      <img class="portrait" src="../photos/parent-portrait.png" alt="保護者の肖像">
+      <p class="role">保護者</p>
+      <p class="statement">受け取れない</p>
+      <p class="detail">会費と送迎を、<br>家庭では引き受けきれない</p>
+    </section>
+    <section class="card official" aria-label="自治体">
+      <img class="portrait" src="../photos/municipality-portrait.png" alt="自治体職員の肖像">
+      <p class="role">自治体</p>
+      <p class="statement">用意しきれない</p>
+      <p class="detail">指導者も予算も、<br>まだ揃っていない</p>
+    </section>
+    <div class="center">引き取り手が<br>決まっていない</div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<title>部活動の地域移行</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --surface: #F2F1EE;
+    --border: #E0DDD8;
+    --text: #1C1B18;
+    --text-sub: #6B6760;
+    --text-meta: #9A9690;
+    --accent: #1B6B5A;
+    --accent-light: #EBF4F1;
+    --link: #1B6B5A;
+    --callout-bg: #EBF4F1;
+    --callout-border: #1B6B5A;
+    --tweet-bg: #F5F4F1;
+    --tweet-border: #DDD9D4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1A1918;
+      --surface: #242320;
+      --border: #333129;
+      --text: #EDE9E2;
+      --text-sub: #A09C94;
+      --text-meta: #6B6760;
+      --accent: #3DB896;
+      --accent-light: #1C2E2A;
+      --link: #3DB896;
+      --callout-bg: #1C2E2A;
+      --callout-border: #3DB896;
+      --tweet-bg: #242320;
+      --tweet-border: #333129;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1A1918;
+    --surface: #242320;
+    --border: #333129;
+    --text: #EDE9E2;
+    --text-sub: #A09C94;
+    --text-meta: #6B6760;
+    --accent: #3DB896;
+    --accent-light: #1C2E2A;
+    --link: #3DB896;
+    --callout-bg: #1C2E2A;
+    --callout-border: #3DB896;
+    --tweet-bg: #242320;
+    --tweet-border: #333129;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+    font-size: 17px;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── header banner ── */
+  .preview-banner {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-align: center;
+    padding: 8px 16px;
+  }
+
+  /* ── main layout ── */
+  .article {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── meta ── */
+  .meta {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    color: var(--text-meta);
+    letter-spacing: .06em;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .meta .tag {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+
+  /* ── title ── */
+  h1 {
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -.01em;
+    text-wrap: balance;
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── body text ── */
+  p { margin-bottom: 1.4em; max-width: 65ch; }
+
+  /* ── section headers ── */
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-wrap: balance;
+    margin: 2.4em 0 .8em;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+  }
+
+  /* ── callout (まず結論) ── */
+  .callout {
+    background: var(--callout-bg);
+    border-left: 3px solid var(--callout-border);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin: 1.2em 0 1.6em;
+    font-size: 15.5px;
+    color: var(--text);
+  }
+  .callout em { font-style: italic; color: var(--text-sub); }
+
+  /* ── table ── */
+  .table-wrap { overflow-x: auto; margin: 1.4em 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+  }
+  th {
+    background: var(--surface);
+    font-weight: 500;
+    text-align: left;
+    padding: 9px 12px;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+  }
+  td:nth-child(2), td:nth-child(3),
+  th:nth-child(2), th:nth-child(3) { text-align: right; }
+  tr:hover td { background: var(--surface); }
+
+  /* ── tweet embed style ── */
+  .tweet-card {
+    border: 1px solid var(--tweet-border);
+    border-radius: 10px;
+    background: var(--tweet-bg);
+    padding: 14px 16px;
+    margin: 1.2em 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    color: var(--text-sub);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tweet-card svg { flex-shrink: 0; opacity: .5; }
+  .tweet-card a { color: var(--link); text-decoration: none; word-break: break-all; }
+  .tweet-card a:hover { text-decoration: underline; }
+
+  /* ── links ── */
+  a { color: var(--link); }
+
+  /* ── CTA button ── */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #fff !important;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    margin: .8em 0;
+    transition: opacity .15s;
+  }
+  .cta:hover { opacity: .85; }
+
+  /* ── data note ── */
+  .data-note {
+    margin-top: 3em;
+    padding-top: 1.5em;
+    border-top: 1px solid var(--border);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    color: var(--text-meta);
+    line-height: 1.7;
+  }
+
+  /* ── external links list ── */
+  .ref-list {
+    list-style: none;
+    padding: 0;
+    margin: .8em 0 1.4em;
+  }
+  .ref-list li { margin-bottom: .4em; font-size: 15px; }
+  .ref-list a { color: var(--link); }
+
+  /* ── posting guide ── */
+  .posting-guide {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-top: 56px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+  }
+  .posting-guide h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .posting-guide ol { padding-left: 1.4em; }
+  .posting-guide li { margin-bottom: 10px; line-height: 1.6; color: var(--text-sub); }
+  .posting-guide li strong { color: var(--text); }
+  .posting-guide .note-tip {
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: var(--callout-bg);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.6;
+  }
+</style>
+
+<div class="preview-banner">note 投稿プレビュー — 確認後コピペして投稿してください</div>
+
+<article class="article">
+
+  <div class="meta">
+    <span class="tag">部活動改革</span>
+    <span class="tag">教育</span>
+    <span>SNS 754件分析</span>
+  </div>
+
+  <h1>部活動の地域移行は誰のため？ 754件の声を読んでわかったこと</h1>
+
+  <p>いま、学校の部活動が大きく変わろうとしています。</p>
+  <p>理由はシンプルです。生徒が減り、学校だけではチームや部を維持できない地域が増えていること。そして、土日まで指導や大会の引率を担う教員の負担が重くなっていることです。これまでの形を、そのまま続けることが難しくなっています。</p>
+  <p>そこで国は、学校部活動を地域のクラブや団体と一緒に支える「地域展開」を進めています。2026年度からの6年間を「改革実行期間」とし、中学校の休日の活動は、原則として地域で担う形を目指す方針です。ここでいう「地域移行」は、単に部活をなくすことではありません。子どもがスポーツや文化活動を続けられる場を、学校だけに頼らず地域全体でつくるための試みです。</p>
+  <p>ただ、学校の外へ活動場所を移せば解決するわけではありません。会費は誰が払うのか。送迎が難しい家庭はどうするのか。指導者は集まるのか。けがやトラブルが起きたとき、誰が責任を持つのか。子どもの居場所は守られるのか。新しい仕組みには、答えを出さなければならない課題もあります。</p>
+  <p>すでに具体的な変更を決めた自治体もあります。京都市は、原則2028年8月末で市立中学校の部活動を廃止し、同年9月から地域クラブ活動「京クラ」と、校内の放課後活動「放活」を始める計画です。掛川市も、2026年夏に中学校部活動を終え、約40クラブを受け皿とする「かけがわ地域クラブ」を始める予定です。いつ、どのように変わるかは地域ごとに異なります。</p>
+
+  <ul class="ref-list">
+    <li>→ <a href="https://www.city.kyoto.lg.jp/kyoiku/page/0000356517.html">京都市教育委員会：学校部活動地域展開実施計画</a></li>
+    <li>→ <a href="https://www.city.kakegawa.shizuoka.jp/gyosei/docs/136762.html">掛川市：部活動の地域展開</a></li>
+    <li>→ <a href="https://www.mext.go.jp/sports/b_menu/choukan/jsa_00067.html">スポーツ庁：部活動の地域展開等に係る「改革実行期間」の開始</a></li>
+  </ul>
+
+  <p>この記事では、SNSの公開投稿954件のうち、意見として分析できた754件を手がかりに、次のことを整理します。</p>
+  <ul style="padding-left:1.4em; margin-bottom:1.4em;">
+    <li>地域移行を支持する人、慎重な人は、それぞれ何を理由にしているのか</li>
+    <li>投稿で最も多く語られていた論点は何か</li>
+    <li>家庭や地域が、これから確認しておきたい課題は何か</li>
+  </ul>
+  <p>最初に大切な注意点があります。この数字は無作為抽出の世論調査ではありません。特定の検索語で見つかった公開投稿のサンプルです。したがって「日本人の何％が賛成」とは言えません。ここで分かるのは、SNSでどんな理由が語られていたかです。</p>
+
+  <h2>先に結論：一番多かったのは「先生の負担」</h2>
+  <div class="callout"><em>立場ごとの内訳から、賛否だけでは捉えられない議論の全体像をつかみます。</em></div>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>立場</th><th>件数</th><th>割合（意見754件中）</th></tr>
+      <tr><td>移行支持</td><td>332件</td><td>44.0%</td></tr>
+      <tr><td>慎重・反対</td><td>243件</td><td>32.2%</td></tr>
+      <tr><td>条件付き・改善要求</td><td>143件</td><td>19.0%</td></tr>
+      <tr><td>中立・情報</td><td>36件</td><td>4.8%</td></tr>
+    </table>
+  </div>
+
+  <p>移行を支持する投稿が最も多い一方、慎重・反対と「条件を整えてから進めてほしい」という投稿も、合わせて半数を超えます。</p>
+  <p>ただし、これを単純に「賛成対反対」とは読めません。投稿で最も多く語られていたのは、教員の働き方でした。次に、制度をどう設計して移すか。多くの人が問うているのは、移行そのものの是非だけでなく、<strong>誰が、いくらで、どのように子どもの活動を支えるのか</strong>です。</p>
+
+  <a class="cta" href="https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu_chiiki_20260823&utm_content=after-results">👉 立場ごとの内訳と実際のX投稿を、SNS反応まっぷで見る</a>
+
+  <h2>論点1　「先生が限界」——学校だけに任せ続けられない（227件・30.1%）</h2>
+  <div class="callout">まず結論：先生に土日まで部活を任せ続ける今の形は、もう続けにくい。だから、地域で支える仕組みが必要だという声が最も多くありました。</div>
+
+  <p>部活動では、放課後の指導だけでなく、休日の練習、大会の引率、保護者への連絡なども必要になります。授業や学級運営を担いながら、これらを続けるのは簡単ではありません。</p>
+  <p>「部活を残したい」という気持ちと、「先生に負担を押しつけたくない」という気持ちは、対立するとは限りません。むしろ投稿では、先生の善意や時間外の負担に頼らず、子どもが活動を続けられる形へ変えたいという意見が多く見られました。</p>
+
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/774nyannyan/status/2068230558992458134">x.com/774nyannyan/status/2068230558992458134</a>
+  </div>
+
+  <p>「先生に無理をさせないこと」と「限られた自治体の予算で続けられること」を両方満たさなければ、今までと同じ部活は成り立たない、という指摘です。</p>
+
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/774nyannyan/status/2063907885764182333">x.com/774nyannyan/status/2063907885764182333</a>
+  </div>
+
+  <p>ただし、「部活の負担だけを減らしても、学校全体の働き方は変わらないのではないか」という見方もあります。授業準備、保護者対応、学校運営など、ほかにも負担はあるからです。</p>
+
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/Sakuragi_iriS/status/2069397944827252756">x.com/Sakuragi_iriS/status/2069397944827252756</a>
+  </div>
+
+  <p>つまり、この論点は「先生が部活を続けるべきか」を決める話だけではありません。<strong>子どもの活動を続けながら、先生が本来の仕事にも向き合える仕組みを、誰がどうつくるのか</strong>が問われています。</p>
+
+  <h2>論点2　「移すなら、先に仕組みをつくって」</h2>
+  <div class="callout">まず結論：部活の看板を学校の外へ替えるだけでは不十分です。誰が運営し、安全と費用をどう支えるかを決めて初めて、子どもが安心して参加できます。</div>
+
+  <p>なぜ、この問題が出てくるのでしょうか。</p>
+  <p>学校の部活なら、学校が活動場所を用意し、先生が指導や見守りを担ってきました。地域クラブになると、その役割を一つずつ決め直す必要があります。活動場所はどこか。指導者は誰か。けがをしたときはどうするか。会費はいくらで、払うのが難しい家庭をどう支えるか。決めることが増えるからです。</p>
+  <p>国のガイドラインも、自治体を改革の責任を持つ主体と位置づけています。また、地域クラブとして認めるためには、参加費をできるだけ抑えること、適切な指導・安全・運営の体制を整えること、学校と連携することを求めています。</p>
+
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/Pansy_school/status/2063014247500816645">x.com/Pansy_school/status/2063014247500816645</a>
+  </div>
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/chaw0501/status/2070020638383997407">x.com/chaw0501/status/2070020638383997407</a>
+  </div>
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/kazuyamatsui_ac/status/2069913704582492244">x.com/kazuyamatsui_ac/status/2069913704582492244</a>
+  </div>
+
+  <p>ここで大切なのは、「地域移行に賛成か反対か」だけではありません。自分の地域の計画に、<strong>活動場所、指導者、安全、費用、学校とのつながり</strong>がきちんと書かれているかを確かめることです。</p>
+
+  <h2>論点3　「部活が持っていた価値は、どこへいく？」</h2>
+  <div class="callout">まず結論：この論点で問われているのは「誰が運営するか」ではありません。部活が変わった後も、子どもが仲間や居場所、挑戦する機会を持ち続けられるかです。</div>
+
+  <p>論点1は、先生の負担をどう減らすかという話でした。論点2は、安全や費用を誰が支えるかという仕組みの話でした。それに対して論点3は、もっと子どもの毎日に近い話です。放課後にどこへ行けるのか。好きなことを続けられるのか。クラス以外の仲間をつくれるのか。部活がなくなったあとにも、同じような体験が残るのかを考えています。</p>
+
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/papakoya25/status/2070424396137910617">x.com/papakoya25/status/2070424396137910617</a>
+  </div>
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/edamame_1219/status/2069742846606004286">x.com/edamame_1219/status/2069742846606004286</a>
+  </div>
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/Mr_Peki_chan/status/2070029090003009670">x.com/Mr_Peki_chan/status/2070029090003009670</a>
+  </div>
+
+  <p>つまり、ここで対立しているのは「学校の部活を守るか、地域クラブにするか」だけではありません。<strong>どんな形なら、一人ひとりの子どもが、自分に合う活動や居場所を持ち続けられるか。</strong>その答えを探す論点です。</p>
+
+  <h2>論点4　「行く先も、払うお金もない」</h2>
+  <div class="callout">まず結論：地域クラブに変わったことで、お金や移動の事情から参加できない子どもが出るなら、それは活動の機会を守る改革にはなりません。</div>
+
+  <p>これまで学校の部活は、学校の施設を使い、先生が支えることで、家庭が負担するお金を比較的抑えられてきました。地域クラブになると、活動場所の使用料、指導者への謝礼、保険、用具、移動などにお金がかかります。その分を誰が負担するのかが、重要な問題になります。</p>
+
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/TheMirageof0/status/2070621781757726855">x.com/TheMirageof0/status/2070621781757726855</a>
+  </div>
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.231H5.117z"/></svg>
+    <a href="https://x.com/No2lab150687/status/2069741426276233331">x.com/No2lab150687/status/2069741426276233331</a>
+  </div>
+  <div class="tweet-card">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <a href="https://x.com/774nyannyan/status/2070491362882150454">x.com/774nyannyan/status/2070491362882150454</a>
+  </div>
+
+  <p>だから確認したいのは、会費の金額だけではありません。<strong>費用を軽くする制度があるか、送迎をどうするか、指導者をどう確保するか。</strong>この三つがそろって初めて、希望する子どもが参加し続けられる仕組みになります。</p>
+
+  <a class="cta" href="https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu_chiiki_20260823&utm_content=after-issues">👉 費用・送迎・指導者の声を、SNS反応まっぷでもっと見る</a>
+
+  <h2>これから問われるのは、部活を誰の負担で、誰のために続けるのかです</h2>
+  <div class="callout">まず結論：先生だけに無理をさせず、お金や送迎の事情で子どもがあきらめることもない。そんな形にできるかどうかが、地域移行で一番大切です。</div>
+
+  <p>地域移行は、「部活をなくすか、残すか」だけの話ではありません。先生の負担を減らすこと。子どもの居場所を守ること。お金の理由で参加できない子を出さないこと。どれも同時に大切です。</p>
+  <p>だから、地域移行にすぐ賛成か反対かを決めなくても大丈夫です。まずは、自分の住む市や町が出している計画を読んでみてください。</p>
+  <p>見るポイントは、この五つです。</p>
+  <ul style="padding-left:1.4em; margin-bottom:1.4em;">
+    <li>参加にかかるお金を助ける仕組みはあるか</li>
+    <li>送迎が難しい子も参加できるか</li>
+    <li>やりたいスポーツや文化活動を選べるか</li>
+    <li>安全に教えてくれる大人がいるか</li>
+    <li>困ったとき、学校・地域クラブ・家庭の誰に相談すればよいか</li>
+  </ul>
+  <p>答えは、国が一つに決めるものではありません。地域の計画で、子どもの放課後がどう変わるかは大きく変わります。だからこそ、子ども自身の声も聞きながら、みんなで確かめていくことが大切です。</p>
+
+  <h2>データと実際の投稿を見る</h2>
+  <p>この記事で紹介した数字は、「SNS反応まっぷ｜部活動の地域移行」の公開投稿サンプルを、立場と論点で整理したものです。投稿の分布や実際の声は、次のページで確認できます。</p>
+
+  <a class="cta" href="https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu_chiiki_20260823&utm_content=final-cta">👉 SNS反応まっぷ｜部活動の地域移行</a>
+
+  <p>あなたが一番気になる論点も、ぜひ投票で教えてください。これは世論調査ではありませんが、地域移行を考えるための材料を増やす一票になります。</p>
+
+  <div class="data-note">
+    データについて：Yahooリアルタイム検索で取得した公開投稿954件（2026年6月27日〜8月19日）のうち、意見と判定した754件を集計。AIによる分類をもとに、代表投稿は編集部が選定しています。SNS投稿の集計であり、社会全体の意見分布を示す世論調査ではありません。
+  </div>
+
+  <!-- ── 投稿手順 ── -->
+  <div class="posting-guide">
+    <h3>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      note への投稿手順
+    </h3>
+    <ol>
+      <li><strong>note アカウントを作成</strong>（未開設の場合）→ <a href="https://note.com/signup">note.com/signup</a></li>
+      <li><strong>新規記事を作成</strong> → note の「投稿」ボタン → テキスト記事を選択</li>
+      <li><strong>本文をコピペ</strong> → この記事のテキストをそのまま貼り付ける。見出し（##）は note のエディタで見出し形式に変換してください</li>
+      <li><strong>X投稿を埋め込む</strong> → 各 x.com/… の URL を note エディタに単独で貼ると自動でポストが埋め込まれます</li>
+      <li><strong>スタンスマップ画像を挿入</strong> → <code>note-drafts/images/bukatsu-chiiki_map.png</code> を画像として追加（※スクショ別途撮影が必要）</li>
+      <li><strong>タグを設定</strong> → 「部活動」「地域移行」「教育」「SNS分析」</li>
+      <li><strong>投稿後に URL を <code>note-posts.md</code> に記録</strong></li>
+    </ol>
+    <div class="note-tip">
+      💡 X投稿の埋め込みは、URLを1行で単独に貼ると note が自動変換します。他のテキストと同じ行に入れないようにしてください。
+    </div>
+  </div>
+
+</article>
