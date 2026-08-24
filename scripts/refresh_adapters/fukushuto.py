@@ -15,6 +15,7 @@ from pathlib import Path
 
 TOPIC = "fukushuto"
 PAGE = Path("docs/fukushuto-reaction-map.html")
+CLAIM_RECORDS = Path("data/verification/fukushuto-claims.json")
 # 更新回がまだ1回も無かった頃の比較対象。潮目ウィジェットの「前回」に使う。
 LEGACY_PREVIOUS_WAVE = Path("social-samples/fukushuto_hermes_cur_20260726_v2.json")
 LEGACY_PREVIOUS_DATE = "2026-07-26"
@@ -117,6 +118,22 @@ def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> N
         cwd=root,
         check=True,
     )
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_fukushuto_process_sections.py"),
+            "--input",
+            str(candidate),
+            "--html-template",
+            str(output),
+            "--output-html",
+            str(output),
+            "--verification-dest",
+            str(output.parent),
+        ],
+        cwd=root,
+        check=True,
+    )
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
@@ -136,6 +153,10 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
 
     if _digest(first_page) != _digest(second_page):
         raise ValueError("副首都adapterは同じ候補の2回目実行で差分が出ました")
+    first_claims = stage / CLAIM_RECORDS.name
+    second_claims = stage / "idempotence" / CLAIM_RECORDS.name
+    if _digest(first_claims) != _digest(second_claims):
+        raise ValueError(f"副首都adapterは同じ候補の2回目実行で差分が出ました: {CLAIM_RECORDS.name}")
 
     current_html = current_page.read_text(encoding="utf-8")
     candidate_html = first_page.read_text(encoding="utf-8")
@@ -148,4 +169,4 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     if changed:
         raise ValueError("保護タグの個数が変わりました: " + ", ".join(changed))
 
-    return {PAGE: first_page}
+    return {PAGE: first_page, CLAIM_RECORDS: first_claims}
