@@ -361,20 +361,6 @@
         "reason": "詳細データ（分類別件数・カテゴリ × 検索クエリ・カテゴリ × スタンス）の出所である旧1D分類"
       },
       {
-        "path": "social-samples/bike-blue-ticket_hermes_cur_20260726.json",
-        "selectors": [
-          "tide-card"
-        ],
-        "reason": "「世論の潮目」前回収集回（2026-07-26）の分類結果（scripts/inject_tide_widget.py の prev_file）"
-      },
-      {
-        "path": "social-samples/bike-blue-ticket_hermes_cur_20260817.json",
-        "selectors": [
-          "tide-card"
-        ],
-        "reason": "「世論の潮目」今回収集回（2026-08-17）の分類結果（scripts/inject_tide_widget.py の cur_file）"
-      },
-      {
         "path": "data/verification/bike-blue-ticket-reread.json",
         "selectors": [
           "pc-funnel",
@@ -391,6 +377,20 @@
           "pv-count"
         ],
         "reason": "STEP2の「N件の投稿」。主張ごとに編集部が確定した該当投稿（data/bike-blue-ticket_claim_posts.json 由来）"
+      },
+      {
+        "path": "data/verification/updates/bike-blue-ticket/2026-08-17/classified.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」前回側（2026-08-17収集分）の分類結果"
+      },
+      {
+        "path": "data/verification/updates/bike-blue-ticket/2026-08-24/classified.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」今回側（2026-08-24収集分）の分類結果"
       }
     ],
     "regions": {
@@ -415,6 +415,20 @@
       {
         "value": 61,
         "reason": "警察庁 令和7年中の自転車関連事故の前年比減少件数（一次情報）"
+      },
+      {
+        "value": 70,
+        "selectors": [
+          "axis-card"
+        ],
+        "reason": "「スタンス集計」パネルは旧1D分類（social-samples/bike-blue-ticket_classified.json、181件時代）を出所とする凍結表示で、2026-08-17のadapter昇格でsync_issue_countsの対象（nav/arena/lead/conclusion）から外れたまま残っている。2026-08-24収集分でnav側の件数が変わり combined 導出が偶然一致しなくなったために検出。値自体は旧分類の内訳から変わっていない。要・別セッションでの整理（このパネルをsync対象に含めるか、廃止するか）。"
+      },
+      {
+        "value": 34,
+        "selectors": [
+          "axis-card"
+        ],
+        "reason": "「争点カード」パネル（conflict_axes）も同じ旧1D分類が出所。上の70と同じ理由・同じ対応が必要。"
       }
     ],
     "exclude_selectors": [
