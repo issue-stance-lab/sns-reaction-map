@@ -61,18 +61,22 @@ FACT_CHECKS = [
     {
         "key": "resolution_ban",
         "claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ",
-        "source": "参議院沖縄・北方問題及び地方に関する特別委員会は、2026年7月24日に副首都法案への"
-        "附帯決議を採択した。複数の報道が一致して伝える決議の文言は「重複しないよう最大限調整する」"
-        "というもので、禁止ではなく努力目標。同日実施そのものを禁じる法案（国民民主党・公明党提出）は"
-        "同じ本会議で否決されている。",
-        "verdict": "gap",
-        "verdict_label": "資料とズレる",
-        "note": "投稿の中でもこの読み方は割れており、「禁止されていた同日選が破られた」と読む側と、"
-        "「禁止にはなっていない」と正しく指摘する側の両方があった。決議の性質（努力目標・法的拘束力なし）"
-        "からは後者が資料に近い。附帯決議の議事録原文（PDF）は執筆時点で確認できておらず、この判定は"
-        "内容が一致する複数の報道の引用にもとづく。",
+        "source": "参議院沖縄・北方問題及び地方に関する特別委員会の議案経過には、2026年7月24日に"
+        "副首都法案への附帯決議を行ったと記載されている。同日、住民投票と地方選挙の同日実施を"
+        "禁じる法律案（参第18号）は参議院本会議で賛成117・反対127で否決された。",
+        "verdict": "miss",
+        "verdict_label": "裏付けなし",
+        "note": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、"
+        "決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で"
+        "確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。",
         "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm",
         "url_label": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）",
+        "extra_links": [
+            (
+                "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm",
+                "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）",
+            ),
+        ],
     },
     {
         "key": "cost_old_estimate",
@@ -125,13 +129,15 @@ def build_section(samples: list[dict], claim_posts: dict) -> str:
         if unknown:
             raise SystemExit(f"{check['key']}: 正典に無い tweet_id があります: {unknown}")
         rep_url = esc(known[ids[0]]["url"])
+        links = []
         if check["url"]:
-            src_line = (
-                f'<p class="fc-source"><strong>一次資料はどう書いているか。</strong>{esc(check["source"])} '
-                f'<a href="{check["url"]}" target="_blank" rel="noopener noreferrer">{esc(check["url_label"])}</a></p>'
-            )
-        else:
-            src_line = f'<p class="fc-source"><strong>一次資料はどう書いているか。</strong>{esc(check["source"])}</p>'
+            links.append((check["url"], check["url_label"]))
+        links.extend(check.get("extra_links") or [])
+        link_html = "".join(
+            f' <a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
+            for url, label in links
+        )
+        src_line = f'<p class="fc-source"><strong>一次資料はどう書いているか。</strong>{esc(check["source"])}{link_html}</p>'
         cards.append(f"""      <article class="fc-card" data-verdict="{check['verdict']}">
         <div class="fc-head">
           <p class="fc-claim">{esc(check['claim'])}</p>
@@ -180,7 +186,7 @@ def build_section(samples: list[dict], claim_posts: dict) -> str:
     <div class="fc-grid">
 {body}
     </div>
-    <p class="fc-note" style="margin-top:14px;font-size:12px;line-height:1.9;color:var(--muted)">件数の数え方：本文をキーワードで拾っただけでは、無関係な話題（他県の視察費用など）まで混ざる。そのため候補を1件ずつ読み、実際にその主張をしている投稿だけを残して数えている（data/fukushuto_claim_posts.json）。賛成・反対どちらの投稿も含む。</p>
+    <p class="fc-note" style="margin-top:14px;font-size:12px;line-height:1.9;color:var(--muted)">件数の数え方：本文をキーワードで拾っただけでは、無関係な話題（他県の視察費用など）まで混ざる。そのため候補を1件ずつ読み、実際にその主張をしている投稿だけを残して数えている。賛成・反対どちらの投稿も含む。</p>
   </div>
 </section>
 {END}"""
