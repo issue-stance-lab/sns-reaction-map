@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <title>先生の負担を語る227件の内訳</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --page:#07111E; --card-1:#0C1E35; --card-2:#0A1928; --card-3:#071522; --ink:#F0F4FF; --ink-70:rgba(240,244,255,.70); --ink-45:rgba(240,244,255,.45); --teal:#2DD4BF; --red:#F87171; --amber:#FBBF24; --gray:#64748B; }
+    * { box-sizing:border-box; }
+    html, body { width:1200px; height:380px; margin:0; overflow:hidden; }
+    body { background:var(--page); color:var(--ink); font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif; font-variant-numeric:tabular-nums; }
+    .canvas { position:relative; width:1200px; height:380px; padding:42px 52px 34px; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:radial-gradient(circle at 86% 5%,rgba(45,212,191,.12) 0%,transparent 28%),linear-gradient(145deg,var(--card-1) 0%,var(--card-2) 60%,var(--card-3) 100%); }
+    .canvas::before { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px); background-size:48px 48px; pointer-events:none; }
+    .content { position:relative; z-index:1; }
+    h1 { margin:0; color:var(--ink); font-size:28px; font-weight:700; line-height:1.4; }
+    .bar { display:flex; gap:2px; height:72px; margin-top:28px; overflow:hidden; border-radius:8px; background:rgba(7,17,30,.72); }
+    .segment { display:flex; align-items:center; justify-content:center; min-width:0; color:#07111E; font-size:24px; font-weight:700; line-height:1; }
+    .support { flex:136 1 0; background:var(--teal); }
+    .cautious { flex:44 1 0; background:var(--red); }
+    .conditional { flex:43 1 0; background:var(--amber); }
+    .neutral { flex:4 1 0; background:var(--gray); }
+    .legend { display:flex; align-items:center; gap:22px; margin-top:26px; color:var(--ink-70); font-size:19px; line-height:1.35; white-space:nowrap; }
+    .legend-item { display:flex; align-items:center; gap:9px; }
+    .dot { width:10px; height:10px; flex:0 0 auto; border-radius:3px; }
+    .dot.support { background:var(--teal); }.dot.cautious { background:var(--red); }.dot.conditional { background:var(--amber); }.dot.neutral { background:var(--gray); }
+    .count { color:var(--ink); font-weight:700; }
+    .credit { position:absolute; z-index:1; right:28px; bottom:20px; color:var(--ink-45); font-size:12px; letter-spacing:.08em; line-height:1; }
+  </style>
+</head>
+<body>
+  <main class="canvas" aria-label="先生の負担を語る227件の内訳">
+    <div class="content">
+      <h1>先生の負担を語る227件の内訳</h1>
+      <div class="bar" role="img" aria-label="移行支持136件、慎重・反対44件、条件付き・改善要求43件、中立・情報4件">
+        <div class="segment support">136件</div>
+        <div class="segment cautious">44件</div>
+        <div class="segment conditional">43件</div>
+        <div class="segment neutral" aria-label="中立・情報4件"></div>
+      </div>
+      <div class="legend" aria-label="凡例">
+        <div class="legend-item"><span class="dot support"></span><span>移行支持</span><span class="count">136件</span></div>
+        <div class="legend-item"><span class="dot cautious"></span><span>慎重・反対</span><span class="count">44件</span></div>
+        <div class="legend-item"><span class="dot conditional"></span><span>条件付き・改善要求</span><span class="count">43件</span></div>
+        <div class="legend-item"><span class="dot neutral"></span><span>中立・情報</span><span class="count">4件</span></div>
+      </div>
+    </div>
+    <div class="credit">SNS反応まっぷ</div>
+  </main>
+</body>
+</html>
