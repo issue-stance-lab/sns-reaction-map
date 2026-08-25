@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280, initial-scale=1">
+  <title>部活動の地域移行｜賛成しない声を読む</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page: #07111E;
+      --ink: #F0F4FF;
+      --ink-70: rgba(240,244,255,0.70);
+      --ink-45: rgba(240,244,255,0.45);
+      --teal: #2DD4BF;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 1280px; height: 670px; margin: 0; overflow: hidden; }
+    body {
+      background: var(--page);
+      color: var(--ink);
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+    .canvas {
+      position: relative;
+      width: 1280px;
+      height: 670px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      background: var(--page);
+    }
+    .photo, .gradient, .shade {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .photo { object-fit: cover; object-position: center center; }
+    .gradient {
+      background: linear-gradient(90deg, rgba(7,17,30,0.94) 0%, rgba(7,17,30,0.86) 42%, rgba(7,17,30,0.15) 72%, rgba(7,17,30,0) 100%);
+    }
+    .shade { background: rgba(7,17,30,0.25); }
+    .canvas::before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none;
+    }
+    .content {
+      position: absolute;
+      z-index: 2;
+      top: 170px;
+      left: 315px;
+      width: 650px;
+      text-align: left;
+    }
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--ink-70);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      line-height: 1.35;
+    }
+    .count {
+      display: flex;
+      align-items: baseline;
+      height: 202px;
+      color: var(--teal);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: .95;
+      white-space: nowrap;
+    }
+    .number { font-size: 190px; }
+    .unit {
+      margin-left: 8px;
+      color: var(--ink-70);
+      font-size: 90px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .subtitle {
+      margin: 18px 0 0;
+      color: rgba(240,244,255,0.62);
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: .01em;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .credit {
+      position: absolute;
+      z-index: 2;
+      right: 28px;
+      bottom: 20px;
+      color: var(--ink-45);
+      font-size: 12px;
+      letter-spacing: .08em;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas" aria-label="部活動の地域移行、賛成しない声を読む">
+    <img class="photo" src="../photos/teacher-staffroom-night.png" alt="夜の職員室で机から振り返る学校教員">
+    <div class="gradient" aria-hidden="true"></div>
+    <div class="shade" aria-hidden="true"></div>
+    <div class="content">
+      <p class="eyebrow">部活動の地域移行</p>
+      <div class="count" aria-label="87件"><span class="number">87</span><span class="unit">件</span></div>
+      <p class="subtitle">賛成しない声を、1件ずつ読んだ</p>
+    </div>
+    <div class="credit">SNS反応まっぷ</div>
+  </main>
+</body>
+</html>
