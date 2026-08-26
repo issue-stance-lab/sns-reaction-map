@@ -9,6 +9,7 @@
 このファイル（AGENTS.md）には、Codex 固有の注意だけを書く。
 
 - `CLAUDE.md` — 共通ルール（読むファイル・作業ツリー・オーナーへの説明のしかた）
+- `company/COMPANY.md` / `company/GOALS.yaml` — 会社理念、権限、数値目標
 - `README.md` / `OPERATIONS.md` / `THEMES.yaml` — プロジェクトの現状と定例作業
 - `TASK_BOARD.md` — テーマ横断の課題一覧。ここが課題の正典（GitHub Issue は使わない）
 

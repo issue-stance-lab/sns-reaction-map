@@ -7,6 +7,8 @@
 - 収集・分類は全テーマで `scripts/refresh_topic.py --topic ...` を使う。
 - ページ生成だけを `scripts/refresh_adapters/` のテーマ別adapterへ委譲する。
 - `--promote` を付けない限り、累積正典、公開HTML、`updated_at`、`refresh_at` は変更しない。
+- 収集・分類・検査・公開候補の作成までは AI が自律的に行う。
+- **`--promote` は、検査結果を CEO に提示し、承認を `company/APPROVALS.yaml` に記録した後だけ実行する。**
 - **分類モデルは `kimi-k2.6`（Hermes / OpenCode Go）。** `~/.hermes/config.yaml` の
   `model.default` が全テーマ・全セッションに効き、スクリプト側にモデル指定は無い。
   2026-08-18 に OpenCode Go 側の障害（503）で一時 `minimax-m2.7` へ切り替えたが、
@@ -90,6 +92,7 @@ python3 scripts/refresh_topic.py \
 ## 公開まで行う更新
 
 `page_update_mode: adapter` のテーマだけ `--promote` を付けられる。
+以下のコマンドは、公開候補の検査合格と CEO 承認を記録した後に実行する。
 
 ```sh
 python3 scripts/refresh_topic.py \
@@ -101,12 +104,13 @@ python3 scripts/refresh_topic.py \
 
 更新回保存後にadapterを使って候補ページを2回生成し、冪等性、投票互換性、保護タグを検査する。全検査合格時だけ累積正典・ページ・台帳・SEO・トップ・sitemapを一括昇格する。昇格後にもう一度バックアップし、失敗時は公開側を昇格前へ戻す。
 
-### 学校あだ名は全自動（人が読む工程なし）
+### 学校あだ名は公開承認以外を自動化（人が読む工程なし）
 
 `school-nickname-ban` の adapter は正典だけを読んで、件数を出している場所を毎回
 すべて作り直す（リード文・調査条件・注目ポイント4枚・論点カードの内訳文・投票の件数・
 論点ナビ・論点ブロック6つ・詳細データ表・アリーナの点）。代表投稿も
-`article_usable` かつ `risk: low` から自動で選ぶので、`--promote` を流すだけでよい。
+`article_usable` かつ `risk: low` から自動で選ぶ。内容の手動再読は不要だが、
+`--promote` 前の CEO 承認は他テーマと同じく必要。
 
 `docs/school-nickname-ban-arena-data.js` も公開対象に入っている。ページだけ差し替えると、
 数字は新しいのにアリーナの点だけ古い状態になる。

@@ -1,10 +1,11 @@
 # SNS反応まっぷ
 
-社会の問いについて、SNSの公開投稿サンプルを賛成・反対それぞれの「理由」まで分解して見せる静的サイト。
+社会の問いについて、SNSの公開投稿サンプルを立場ごとの「理由」まで分解して見せる静的サイト。
 
 **公開URL**: https://issue-stance-lab.github.io/sns-reaction-map/
 
-「どちらが正しいか」をAIに決めさせない。意見・論点・立場の分布を並べて出し、読んだ人が自分で選べる状態にすることを目的にしている。
+「どちらが正しいか」をAIに決めさせない。対立の向こう側にある
+「もう一つの正義」を可視化し、人々が互いを悪と決めつけずに向き合える状態を目指す。
 
 ---
 
@@ -34,6 +35,7 @@
 ## リポジトリ構成
 
 ```
+company/             会社理念、目標、承認、収支、AI部門の責任
 docs/                公開される静的サイト（GitHub Pages のルート）
 social-samples/      収集した投稿の累積正典。本文を含むため一部は Git 管理外
 data/verification/   本文を除いた検証用サマリ。クリーンクローンとCIはこれを読む
@@ -51,6 +53,10 @@ archive/             運用から外れた文書・スクリプト（下記）
 
 | 文書 | 役割 |
 |---|---|
+| [company/COMPANY.md](company/COMPANY.md) | 会社の理念、事業、組織、CEO承認範囲 |
+| [company/GOALS.yaml](company/GOALS.yaml) | 90日・1年・3年の数値目標 |
+| [company/APPROVALS.yaml](company/APPROVALS.yaml) | CEO承認の待ち・決定ログ |
+| [company/FINANCE.yaml](company/FINANCE.yaml) | 月次の収益、費用、利益 |
 | [OPERATIONS.md](OPERATIONS.md) | 定例作業の定義。作業場所の作り方・頻度・担当・遅れの見つけ方 |
 | [DATA_REFRESH.md](DATA_REFRESH.md) | データ更新の正典。`refresh_topic.py` の使い方と公開ゲート |
 | [THEMES.yaml](THEMES.yaml) | テーマ台帳（単一の真実源） |
@@ -58,7 +64,7 @@ archive/             運用から外れた文書・スクリプト（下記）
 | [TASK_BOARD.md](TASK_BOARD.md) | テーマ横断の課題 |
 | [X_POSTING_GUIDE.md](X_POSTING_GUIDE.md) | X（Twitter）投稿の型とルール |
 | [FACT_CHECK_GUIDE.md](FACT_CHECK_GUIDE.md) | 投稿の主張を一次資料と突き合わせる手順と発注文 |
-| [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加エージェント向けの全体像 |
+| [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加AI向けの会社運営エントリーポイント |
 | [AGENTS.md](AGENTS.md) | Codex 向けの GitHub 認証まわりの注意 |
 
 ## 運用状況をまとめて見る（ローカル専用の管理画面）
@@ -80,7 +86,8 @@ GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` �
 
 ## よく使うコマンド
 
-データ更新（収集→分類→検証→バックアップ→公開まで1コマンド）:
+データ更新（収集→分類→検証→バックアップ→承認済み公開まで1コマンド）。
+`--promote` は `DATA_REFRESH.md` の検査と CEO 承認後だけ使う:
 
 ```bash
 python3 scripts/refresh_topic.py --topic <theme> --date <YYYY-MM-DD> --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups --promote

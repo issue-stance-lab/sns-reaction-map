@@ -1,0 +1,30 @@
+version: 1
+updated_at: "2026-08-26"
+currency: JPY
+
+policy:
+  monthly_cost_limit_until_revenue: 3000
+  spending_requires_ceo_approval: true
+  editorial_independence_from_revenue: true
+
+revenue_sources:
+  primary: adsense
+  secondary:
+    - paid_note
+    - reader_support
+    - future_business_services
+
+# 月次の実測は次の形で追加する。
+# - month: "YYYY-MM"
+#   revenue:
+#     adsense: 0
+#     note: 0
+#     other: 0
+#   costs:
+#     ai: 0
+#     hosting: 0
+#     services: 0
+#     other: 0
+#   profit: 0
+#   notes: ""
+periods: []
