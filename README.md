@@ -55,6 +55,7 @@ archive/             運用から外れた文書・スクリプト（下記）
 |---|---|
 | [company/COMPANY.md](company/COMPANY.md) | 会社の理念、事業、組織、CEO承認範囲 |
 | [company/GOALS.yaml](company/GOALS.yaml) | 90日・1年・3年の数値目標 |
+| [company/ROADMAP.md](company/ROADMAP.md) | 会社化のフェーズ、成果物、完了条件 |
 | [company/APPROVALS.yaml](company/APPROVALS.yaml) | CEO承認の待ち・決定ログ |
 | [company/FINANCE.yaml](company/FINANCE.yaml) | 月次の収益、費用、利益 |
 | [OPERATIONS.md](OPERATIONS.md) | 定例作業の定義。作業場所の作り方・頻度・担当・遅れの見つけ方 |
