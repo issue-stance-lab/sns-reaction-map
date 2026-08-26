@@ -74,9 +74,10 @@ archive/             運用から外れた文書・実験・スクリプト
 | [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加AI向けの会社運営エントリーポイント |
 | [AGENTS.md](AGENTS.md) | Codex 向けの GitHub 認証まわりの注意 |
 
-## 運用状況をまとめて見る（ローカル専用の管理画面）
+## 会社と運用状況をまとめて見る（CEO経営管理画面）
 
-いま何が期限切れか、流入がどう動いているか、X に何を投稿したか、何を変更したかを1画面にまとめる。
+会社の目的、今日の4行報告、CEO承認待ち、進行中業務、90日・1年・3年目標、月次収支、
+組織を最初に表示する。その下で、期限切れ、流入、X の投稿、テーマ更新、変更履歴を確認できる。
 
 ```bash
 python3 scripts/build_admin_dashboard.py --open
@@ -87,7 +88,9 @@ python3 scripts/build_admin_dashboard.py --open
 GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` を足す（最大3分、
 認証が切れていればその旨が画面に出る）。
 
-読む材料: `THEMES.yaml`（予定日・工程）/ `GROWTH.yaml`（週次KPI・施策）/ `content/x/posts.md`（X投稿実績）/
+読む材料: `company/GOALS.yaml` / `company/HANDOFFS.yaml` / `company/APPROVALS.yaml` /
+`company/FINANCE.yaml` / `company/CORRECTIONS.yaml` / `THEMES.yaml`（予定日・工程）/
+`GROWTH.yaml`（週次KPI・施策）/ `content/x/posts.md`（X投稿実績）/
 `TASK_BOARD.md`（課題）/ `data/verification/updates/`（データ更新の検査結果）/ `git log`（変更履歴）。
 **画面が古い・空欄になるのは、これらの元ファイルが更新されていないということ。**
 

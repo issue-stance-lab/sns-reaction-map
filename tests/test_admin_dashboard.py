@@ -26,6 +26,7 @@ def build_data(today: dt.date = TODAY) -> dict:
     data = {
         "today": today,
         "built_at": dt.datetime(2026, 8, 10, 9, 0),
+        "company": collect.collect_company(today),
         "themes": collect.collect_themes(today),
         "kpi": collect.collect_kpi(),
         "x_posts": collect.collect_x_posts(),
@@ -37,6 +38,9 @@ def build_data(today: dt.date = TODAY) -> dict:
         "sample_files": collect.collect_sample_files(),
     }
     data["next"] = actions.next_action(data)
+    data["post_breakdown"] = actions.post_breakdown(data["x_posts"], today)
+    data["anomalies"] = actions.anomalies(data)
+    data["executive_brief"] = actions.executive_brief(data)
     return data
 
 
@@ -62,6 +66,42 @@ class BuildTests(unittest.TestCase):
     def test_every_theme_appears(self):
         for theme in self.data["themes"]:
             self.assertIn(theme["title"], self.html)
+
+    def test_ceo_home_uses_company_ledgers(self):
+        self.assertIn("会社の北極星", self.html)
+        self.assertIn(self.data["company"]["north_star"], self.html)
+        self.assertIn("今日の経営報告", self.html)
+        self.assertIn("月次収支", self.html)
+
+
+class CompanyLedgerTests(unittest.TestCase):
+    def test_company_ledgers_are_collected(self):
+        company = collect.collect_company(dt.date(2026, 8, 27))
+        self.assertIn("もう一つの正義", company["north_star"])
+        self.assertEqual(len(company["milestones"]), 3)
+        self.assertEqual(len(company["departments"]), 6)
+        self.assertTrue(company["handoffs"])
+
+    def test_pending_approval_is_visible(self):
+        company = collect.collect_company(dt.date(2026, 8, 27))
+        self.assertEqual(len(company["pending_approvals"]), 1)
+        self.assertIn("note", company["pending_approvals"][0]["summary"])
+        self.assertTrue(any(item["kind"] == "approval" for item in company["alerts"]))
+
+    def test_unknown_costs_are_not_treated_as_zero(self):
+        finance = collect.collect_company(dt.date(2026, 8, 27))["current_finance"]
+        self.assertEqual(finance["cost_total"], 0)
+        self.assertIsNone(finance["profit"])
+        self.assertIn("ai", finance["unknown_costs"])
+
+    def test_overdue_handoff_is_an_alert(self):
+        company = collect.collect_company(dt.date(2026, 8, 28))
+        self.assertTrue(any(item["kind"] == "deadline" for item in company["alerts"]))
+
+    def test_daily_report_has_exactly_four_lines(self):
+        report = actions.executive_brief(build_data(dt.date(2026, 8, 27)))
+        self.assertEqual([item["key"] for item in report], ["yesterday", "today", "problem", "approval"])
+        self.assertTrue(all(item["text"] for item in report))
 
 
 class AlertTests(unittest.TestCase):
