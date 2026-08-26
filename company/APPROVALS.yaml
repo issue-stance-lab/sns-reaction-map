@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-26"
+updated_at: "2026-08-27"
 
 rules:
   required_for:
@@ -49,3 +49,20 @@ items:
     requested_at: "2026-08-26"
     decided_at: "2026-08-26"
     decision_note: "CEOとの対話で理念、目標、AI中心運用、最終承認範囲を決定した。"
+  - id: approval-20260827-001
+    department: executive
+    action: important_policy_change
+    summary: "進行中業務の引き継ぎを含む会社化ロードマップを採用する"
+    reason: "収集・公開・X・note・AdSenseを止めず、抜けのない順番で会社運営へ移行するため"
+    risks:
+      - "引き継ぎ前にフォルダ整理を始めると、進行中成果や次の一手を失う可能性がある"
+      - "安全・法務・収益施策を同時に進めると、CEOの承認負荷が増える可能性がある"
+    recommendation: approve
+    evidence:
+      - company/ROADMAP.md
+      - TASK_BOARD.md
+      - company/DECISIONS.md
+    status: approved
+    requested_at: "2026-08-27"
+    decided_at: "2026-08-27"
+    decision_note: "CEOから見落としを確認してフェーズ内容を作成するよう指示を受け、フェーズ1.5を含む計画を採用した。"

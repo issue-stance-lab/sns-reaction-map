@@ -10,10 +10,11 @@
 1. `CLAUDE.md` — 全AI共通のルールとオーナーへの説明方法
 2. `company/COMPANY.md` — 会社の目的、行動原則、CEO承認の範囲
 3. `company/GOALS.yaml` — 3か月・1年・3年の数値目標
-4. `README.md` — サービスとリポジトリの現状
-5. `OPERATIONS.md` — 定例作業、作業用コピー、遅れの見つけ方
-6. `THEMES.yaml` — 公開テーマと更新工程の単一の真実源
-7. `TASK_BOARD.md` — テーマ横断の課題の正典
+4. `company/ROADMAP.md` — 現在の移行フェーズと完了条件
+5. `README.md` — サービスとリポジトリの現状
+6. `OPERATIONS.md` — 定例作業、作業用コピー、遅れの見つけ方
+7. `THEMES.yaml` — 公開テーマと更新工程の単一の真実源
+8. `TASK_BOARD.md` — テーマ横断の課題の正典
 
 その後、自分の作業に対応する `company/departments/` の部門文書を読む。
 
