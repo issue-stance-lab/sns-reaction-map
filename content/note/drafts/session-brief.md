@@ -13,7 +13,7 @@
 - 形式: テーマごとに個別記事（型A）を1本ずつ
 - 更新: 同じ記事を「新論点が出たとき」だけ更新
 - 下書き渡し: **Artifact（HTML）で出力**。オーナーが確認後コピペ投稿
-- 画像: Claude がブラウザでスクショ → `note-drafts/images/<theme>_map.png` に保存
+- 画像: Claude がブラウザでスクショ → `content/note/drafts/images/<theme>_map.png` に保存
 
 ---
 
@@ -45,11 +45,11 @@
 1. `Skill("note-operation")` を読む
 2. ブラウザでテーマページを開き、スタンスマップのスクリーンショットを撮る
    - URL: `https://issue-stance-lab.github.io/sns-reaction-map/ai-copyright-reaction-map.html`
-   - 保存先: `note-drafts/images/ai-copyright_map.png`
+   - 保存先: `content/note/drafts/images/ai-copyright_map.png`
 3. 記事本文を書く（SKILL.md 型A の構成に従う）
 4. **Artifact（HTML）で出力する**（オーナーが見やすい形で）
 5. 出力後、オーナーに「この内容で問題なければ note にコピペして投稿してください」と伝える
-6. 投稿完了の連絡を受けたら `note-posts.md` に記録する
+6. 投稿完了の連絡を受けたら `content/note/posts.md` に記録する
 
 ---
 
@@ -65,6 +65,6 @@
 
 ## 参照ファイル
 
-- `note-posts.md` — 投稿履歴・計測記録
+- `content/note/posts.md` — 投稿履歴・計測記録
 - `.claude/skills/note-operation/SKILL.md` — 執筆ルール正典
 - `THEMES.yaml` — テーマ一覧と件数

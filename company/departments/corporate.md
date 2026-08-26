@@ -8,6 +8,8 @@
 
 - `company/APPROVALS.yaml`
 - `company/FINANCE.yaml`
+- `company/HANDOFFS.yaml`
+- `company/CORRECTIONS.yaml`
 - `company/DECISIONS.md`
 - `TASK_BOARD.md`
 - `AGENTS.md`
@@ -16,7 +18,7 @@
 
 - CEO 承認待ちを整理する。
 - 問い合わせと訂正依頼の有無を確認する。
-- 重要な期限と各部門の記録漏れを確認する。
+- 重要な期限と各部門の記録漏れを `company/HANDOFFS.yaml` で確認する。
 
 ## 毎月
 
@@ -27,7 +29,7 @@
 
 ## 訂正対応
 
-1. 指摘内容と受付日を記録する。
+1. 指摘内容と受付日を `company/CORRECTIONS.yaml` に記録する。
 2. 編集部に一次資料との照合を依頼する。
 3. 品質監査AIが判定と訂正案を検査する。
 4. CEO 承認後に修正を公開する。

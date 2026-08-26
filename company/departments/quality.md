@@ -7,10 +7,11 @@
 ## 正典
 
 - 会社理念: `company/COMPANY.md`
+- 公開品質基準: `company/QUALITY_GATE.md`
 - ファクトチェック: `FACT_CHECK_GUIDE.md`
 - テーマ正典: `THEMES.yaml`
 - 自動検査: `tests/` / `scripts/verify_*.py`
-- 過去の検査: `reviews/`
+- 監査記録: `quality/reviews/`
 
 ## 公開前チェック
 

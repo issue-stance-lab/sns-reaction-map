@@ -1,0 +1,95 @@
+version: 1
+updated_at: "2026-08-27"
+
+# 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
+required_fields:
+  - id
+  - department
+  - status
+  - current_state
+  - next_action
+  - due_at
+  - canonical_sources
+  - ceo_approval
+  - completion_evidence
+
+items:
+  - id: theme-refresh-20260827
+    department: engineering-data
+    status: in_progress
+    current_state: "全11テーマの収集予定がTHEMES.yamlに登録済み。高市文春問題は本日が収集予定日。"
+    next_action: "高市文春問題を収集候補として作成し、品質監査とCEO承認後にだけ公開へ昇格する。"
+    due_at: "2026-08-27"
+    canonical_sources: ["THEMES.yaml", "DATA_REFRESH.md"]
+    ceo_approval: "公開昇格のみ必要"
+    completion_evidence: ["data/verification/updates/", "scripts/verify_theme_page.py"]
+
+  - id: theme-refresh-next-batch
+    department: engineering-data
+    status: scheduled
+    current_state: "8/30に生成AI・憲法・副首都、8/31にあだ名・皇室典範・消費税減税、9/3に部活動・高齢者、9/7に自転車・辺野古が予定済み。"
+    next_action: "期日に最も近いテーマを一つずつ収集し、結果をTHEMES.yamlへ記録する。"
+    due_at: "2026-08-30"
+    canonical_sources: ["THEMES.yaml", "DATA_REFRESH.md"]
+    ceo_approval: "公開昇格のみ必要"
+    completion_evidence: ["THEMES.yaml", "data/verification/updates/"]
+
+  - id: x-daily-operation
+    department: editorial
+    status: recurring
+    current_state: "候補確認・投稿・計測を継続中。直近の記録は2026-08-23で、週次レビューは未記入。"
+    next_action: "朝・昼・夕方・夜の各時間帯に候補を確認し、追加価値がある案だけCEO承認候補にする。次の週次レビューに実測を記録する。"
+    due_at: "2026-08-27"
+    canonical_sources: ["content/x/posts.md", "content/x/weekly-reviews.md", "GROWTH.yaml", ".claude/skills/x-daily/SKILL.md"]
+    ceo_approval: "各投稿で必要"
+    completion_evidence: ["content/x/posts.md", "content/x/weekly-reviews.md"]
+
+  - id: note-bukatsu-1-measurement
+    department: business
+    status: scheduled
+    current_state: "第1回は8/23公開、8/25に全面改稿済み。初回計測と改稿後計測が未実施。"
+    next_action: "GA4のnote流入を記録し、初回7日後・改稿後7日後の結果を投稿ログへ追記する。"
+    due_at: "2026-08-30"
+    canonical_sources: ["content/note/posts.md", "GROWTH.yaml"]
+    ceo_approval: "不要（計測記録のみ）"
+    completion_evidence: ["content/note/posts.md"]
+
+  - id: note-bukatsu-2-publication
+    department: editorial
+    status: awaiting_ceo_approval
+    current_state: "下書きと画像4点が準備済み。公開候補は8/29。"
+    next_action: "品質チェックを完了し、公開内容・リンク・リスクを添えてCEOへ投稿承認を依頼する。"
+    due_at: "2026-08-29"
+    canonical_sources: ["content/note/drafts/bukatsu-chiiki-note2-HANDOFF.md", "content/note/drafts/bukatsu-chiiki-note2-FINAL.md"]
+    ceo_approval: "必要"
+    completion_evidence: ["content/note/posts.md", "company/APPROVALS.yaml"]
+
+  - id: note-bukatsu-3-draft
+    department: editorial
+    status: ready_for_drafting
+    current_state: "費用・送迎・指導者報酬の一次資料調査と、172件の再読データを保全済み。"
+    next_action: "一次資料とSNS投稿の区別を保った第3回下書きを作り、公開候補として品質監査へ渡す。"
+    due_at: "2026-09-01"
+    canonical_sources: ["content/note/research/bukatsu-chiiki3-cost-research.md", "data/bukatsu-chiiki_cost-receiver-reread.json"]
+    ceo_approval: "投稿時に必要"
+    completion_evidence: ["content/note/drafts/", "quality/reviews/"]
+
+  - id: note-bukatsu-4-planning
+    department: editorial
+    status: planned
+    current_state: "第4回は主題のみ決定し、専用原稿は未作成。"
+    next_action: "第1〜3回で未解決の論点を確認し、読者に残る問いを一つに絞って企画書を作る。"
+    due_at: "2026-09-04"
+    canonical_sources: ["content/note/drafts/bukatsu-chiiki-note-HANDOFF.md", "content/note/drafts/bukatsu-chiiki-note2-HANDOFF.md"]
+    ceo_approval: "投稿時に必要"
+    completion_evidence: ["content/note/drafts/"]
+
+  - id: adsense-third-review
+    department: business
+    status: waiting_external_result
+    current_state: "3回目の審査結果待ち。2026-08-18の診断は合格ラインだった。"
+    next_action: "結果通知を記録し、不通過なら診断・改善候補・CEO承認・再申請の順に進める。"
+    due_at: null
+    canonical_sources: ["TASK_BOARD.md", "quality/reviews/adsense-check-2026-08-18.md"]
+    ceo_approval: "再申請時に必要"
+    completion_evidence: ["company/FINANCE.yaml", "TASK_BOARD.md"]

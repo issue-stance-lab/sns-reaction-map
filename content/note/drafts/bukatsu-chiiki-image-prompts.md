@@ -170,7 +170,7 @@ Aspect ratio: 1:1 for all three.
 以降の指示はすべてこの共通仕様に従ってください。
 
 ## 方式
-人物・情景の写真はすでに生成済みで note-drafts/photos/ に置いてあります。
+人物・情景の写真はすでに生成済みで content/note/drafts/photos/ に置いてあります。
 あなたの仕事は、その写真の上に HTML/CSS で数字・ラベル・グラフを重ね、
 PNGとして書き出すことです。写真そのものを加工したり、
 文字を画像として生成したりはしないでください。
@@ -181,10 +181,10 @@ PNGとして書き出すことです。写真そのものを加工したり、
 - レンダリングは Playwright（Chromium）で該当要素をスクリーンショットしてPNG化
 - フォントは Google Fonts の Noto Sans JP（weight 400/500/700/900）
 - 数字には font-variant-numeric: tabular-nums を必ず指定
-- 写真入力: note-drafts/photos/
-- HTML出力: note-drafts/figures/<名前>.html
-- PNG出力:  note-drafts/images/<名前>.png
-- note-drafts/figures/render.mjs にまとめ、全図を一括再生成できるようにする
+- 写真入力: content/note/drafts/photos/
+- HTML出力: content/note/drafts/figures/<名前>.html
+- PNG出力:  content/note/drafts/images/<名前>.png
+- content/note/drafts/figures/render.mjs にまとめ、全図を一括再生成できるようにする
 
 ## カラートークン（既存のSNS反応まっぷのテーマ。変更しないこと）
 --page:    #07111E
@@ -245,13 +245,13 @@ PNGとして書き出すことです。写真そのものを加工したり、
 見出し画像を1点つくってください。
 
 ## 出力
-- ファイル: note-drafts/images/bukatsu-chiiki_note-header.png
+- ファイル: content/note/drafts/images/bukatsu-chiiki_note-header.png
 - 論理サイズ 1280×670px を deviceScaleFactor: 1.5 で描画し、
   実ピクセル 1920×1006px のPNGとして書き出す
 - 比率は厳密に 1.91:1
 
 ## 素材
-- 写真: note-drafts/photos/teacher-gym.png（体育館の入口に立つ先生、カメラ目線、右寄り）
+- 写真: content/note/drafts/photos/teacher-gym.png（体育館の入口に立つ先生、カメラ目線、右寄り）
 - 写真は object-fit: cover で全面に敷き、顔が中央やや右（x≈62%）に来るよう位置調整する
 
 ## レイヤー構成
@@ -301,7 +301,7 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 本文用の図解を1点つくってください。写真は使いません。
 
 ## 出力
-- note-drafts/images/bukatsu-chiiki_fig1-stance.png
+- content/note/drafts/images/bukatsu-chiiki_fig1-stance.png
 - 論理サイズ 1200×380px、deviceScaleFactor: 2
 - 背景は共通仕様のカードスタイル
   （linear-gradient(145deg, #0C1E35 0%, #0A1928 60%, #071522 100%)、
@@ -334,7 +334,7 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 本文用の図解を1点つくってください。この記事で最も重要な図です。写真は使いません。
 
 ## 出力
-- note-drafts/images/bukatsu-chiiki_fig2-issue-support.png
+- content/note/drafts/images/bukatsu-chiiki_fig2-issue-support.png
 - 論理サイズ 1200×760px、deviceScaleFactor: 2
 - 背景は図1と同じカードスタイル
 
@@ -391,12 +391,12 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 本文用の概念図を1点つくってください。写真を2枚使います。
 
 ## 出力
-- note-drafts/images/bukatsu-chiiki_fig3-give-receive.png
+- content/note/drafts/images/bukatsu-chiiki_fig3-give-receive.png
 - 論理サイズ 1200×680px、deviceScaleFactor: 2
 
 ## 素材
-- 左パネル: note-drafts/photos/teacher-staffroom.png
-- 右パネル: note-drafts/photos/parent-car.png
+- 左パネル: content/note/drafts/photos/teacher-staffroom.png
+- 右パネル: content/note/drafts/photos/parent-car.png
 
 ## 伝えたいこと
 同じ「部活動の地域移行」について、負担を手放す側の話をしている人と
@@ -448,13 +448,13 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 本文用の概念図を1点つくってください。写真を3枚使います。
 
 ## 出力
-- note-drafts/images/bukatsu-chiiki_fig4-standoff.png
+- content/note/drafts/images/bukatsu-chiiki_fig4-standoff.png
 - 論理サイズ 1200×820px、deviceScaleFactor: 2
 
 ## 素材（すべて1:1）
-- note-drafts/photos/person-teacher.png
-- note-drafts/photos/person-parent.png
-- note-drafts/photos/person-official.png
+- content/note/drafts/photos/person-teacher.png
+- content/note/drafts/photos/person-parent.png
+- content/note/drafts/photos/person-official.png
 
 ## 伝えたいこと
 3者とも部活をなくしたいとは言っていないのに前へ進まない。
@@ -516,7 +516,7 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 5. 写真の上に置いたすべての文字について、コントラスト比を計算して一覧で報告
 6. 生成写真に文字（日本語・英語・数字）が紛れ込んでいないか、
    5枚すべてを拡大して確認する
-7. note-drafts/figures/render.mjs で5枚すべて再生成できる状態か確認
+7. content/note/drafts/figures/render.mjs で5枚すべて再生成できる状態か確認
 ```
 
 ---

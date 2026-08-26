@@ -3,7 +3,7 @@
 作成日: 2026-08-24
 この文書だけを読めば作業が完結するように書いてあります。会話履歴は不要です。
 
-シリーズ第1回の指示書は `note-drafts/bukatsu-chiiki-note-HANDOFF.md`。
+シリーズ第1回の指示書は `content/note/drafts/bukatsu-chiiki-note-HANDOFF.md`。
 本書はその第2回にあたる。第1回で確定した設定（タグ・UTM・初速手順）を引き継ぐ。
 
 ---
@@ -27,11 +27,11 @@
 | `CLAUDE.md` | オーナーへの説明のしかた（非エンジニア向け）。必ず従う |
 | `OPERATIONS.md` ⓪ | ファイルを書き換える作業は専用の作業ツリーを作ってから着手する |
 | `.claude/skills/note-operation/SKILL.md` | note運用の正典 |
-| `note-drafts/bukatsu-chiiki-note-HANDOFF.md` | 第1回の指示書。設定を引き継ぐ |
-| `note-drafts/bukatsu-chiiki2-image-prompts.md` | **本記事の画像4点の作成指示。Codexにそのまま貼る** |
-| `note-drafts/bukatsu-chiiki-image-prompts.md` | 第1回の画像プロンプト。共通仕様の元。片方を直したらもう片方も直す |
+| `content/note/drafts/bukatsu-chiiki-note-HANDOFF.md` | 第1回の指示書。設定を引き継ぐ |
+| `content/note/drafts/bukatsu-chiiki2-image-prompts.md` | **本記事の画像4点の作成指示。Codexにそのまま貼る** |
+| `content/note/drafts/bukatsu-chiiki-image-prompts.md` | 第1回の画像プロンプト。共通仕様の元。片方を直したらもう片方も直す |
 | `data/bukatsu-chiiki_teacher-reread.json` | **本記事の中核データ。87件の再読結果** |
-| `note-posts.md` | 投稿ログ。作業後に追記する |
+| `content/note/posts.md` | 投稿ログ。作業後に追記する |
 
 ---
 
@@ -394,7 +394,7 @@ https://x.com/dYVfAifGLcrmfaQ/status/2083719199449575575
 画像4点の作成指示は、**別ファイルにまとめてある。**
 
 ```
-note-drafts/bukatsu-chiiki2-image-prompts.md
+content/note/drafts/bukatsu-chiiki2-image-prompts.md
 ```
 
 Codex にそのまま貼れる形になっている。共通仕様 → 写真生成 → 見出し画像 → 図1 → 図2 → 図3 → 検収、の順に渡すこと。
@@ -481,7 +481,7 @@ note上に下書き作成済み。編集URL: https://editor.note.com/notes/n116e
 
 ## 10. 完了条件
 
-- [ ] 画像4点が `note-drafts/images/` に揃っている（見出し・図1・図2・図3）
+- [ ] 画像4点が `content/note/drafts/images/` に揃っている（見出し・図1・図2・図3）
 - [ ] 全図にパーセント表示がないことを目視で確認した
 - [ ] 見出し画像の中央670×670に「87件」と人物の顔が収まっている
 - [ ] note記事が公開され、マガジンに追加されている
@@ -493,9 +493,9 @@ note上に下書き作成済み。編集URL: https://editor.note.com/notes/n116e
 - [ ] 第1回の記事末に、第2回へのリンクを追記した
 - [ ] スマホプレビューで、見出し画像と図4点の文字が読める
 - [ ] 第1回の告知ポストへのリプライとして本告知を投稿した
-- [ ] `note-posts.md` に第2回のエントリを追加した
+- [ ] `content/note/posts.md` に第2回のエントリを追加した
 
-### note-posts.md に追加する内容
+### content/note/posts.md に追加する内容
 
 ```
 ### 部活動の地域移行（第2回・先生編）

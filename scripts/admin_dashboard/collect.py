@@ -298,13 +298,13 @@ def _views_status(text: str) -> str:
 
 
 def collect_x_posts() -> list[dict]:
-    """x-posts.md の「◯◯実績 YYYY-MM-DD」節を、1投稿1行に展開する。
+    """content/x/posts.md の「◯◯実績 YYYY-MM-DD」節を、1投稿1行に展開する。
 
     節には2つの形がある。
       - 表形式（リプライ実績）: 1行 = 1リプライ。views 列あり
       - 箇条書き形式（論点ポスト・通常ポスト）: 節全体で1投稿
     """
-    text = _read_text("x-posts.md")
+    text = _read_text("content/x/posts.md")
     if not text:
         return []
 
@@ -451,7 +451,7 @@ def _table_rows(body: list[str], label: str = "") -> list[dict]:
     unknown = [c for c in header if c not in _KNOWN_POST_COLS]
     if unknown:
         raise ValueError(
-            f"x-posts.md の「{label}」に未対応の列があります: {unknown}\n"
+            f"content/x/posts.md の「{label}」に未対応の列があります: {unknown}\n"
             f"投稿表で使える列は {sorted(_KNOWN_POST_COLS)} です。\n"
             f"表示回数の列は {sorted(_KNOWN_VIEW_COLS)} のいずれかにしてください。\n"
             f"列を増やすときは scripts/admin_dashboard/collect.py と "
@@ -528,7 +528,7 @@ def collect_x_measurement(now: dt.datetime) -> dict:
     2026-07-09 に止まった daily-growth-loop は、45日間オフのまま誰も気づかなかった。
     同じことを繰り返さないために、滞りは必ずこの画面に出す。
     """
-    text = _read_text("x-posts.md")
+    text = _read_text("content/x/posts.md")
     overdue: list[dict] = []
     if text:
         try:
@@ -555,7 +555,7 @@ def collect_x_measurement(now: dt.datetime) -> dict:
             return {"error": str(exc), "overdue": [], "review_latest": None}
 
     review_latest = None
-    for line in _read_text("x-weekly-reviews.md").splitlines():
+    for line in _read_text("content/x/weekly-reviews.md").splitlines():
         matched = _WEEKLY_REVIEW_HEADING.match(line)
         if matched:
             end = _as_date(matched.group(2))

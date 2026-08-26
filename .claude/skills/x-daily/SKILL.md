@@ -30,8 +30,8 @@ description: >-
 
 開始時に次を読む。
 
-1. `x-posts.md` の直近1週間 — 投稿数、語尾、テーマ、返信先、未計測行
-2. `x-weekly-reviews.md` の最新レビュー — 今週試す変数と継続事項
+1. `content/x/posts.md` の直近1週間 — 投稿数、語尾、テーマ、返信先、未計測行
+2. `content/x/weekly-reviews.md` の最新レビュー — 今週試す変数と継続事項
 3. `GROWTH.yaml` の `phase.current` と `recurring.x-posting` — 現在の目的とURL付き枠
 4. `X_POSTING_GUIDE.md` — 流入投稿、禁止表現、UTM、投稿前チェック
 5. `references/writing.md` — 具体化、冒頭、構成、文体、推敲の共通基準
@@ -192,7 +192,7 @@ URLにはUTMを付け、URL付き枠を消費する。
 
 ## 週次レビュー
 
-週1回、`x-weekly-reviews.md` に次を記録する。
+週1回、`content/x/weekly-reviews.md` に次を記録する。
 
 - 到達: 表示数と自アカウント通常値との差
 - 会話: 返信、引用、リポスト、返信内容

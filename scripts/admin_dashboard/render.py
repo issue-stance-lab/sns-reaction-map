@@ -340,7 +340,7 @@ def section_next(data: dict) -> str:
             for p in pending
         ]
         pending_html = (
-            '<p class="lead">Xの管理画面で表示回数を見て、<code>x-posts.md</code> の該当行に書き足してください。'
+            '<p class="lead">Xの管理画面で表示回数を見て、<code>content/x/posts.md</code> の該当行に書き足してください。'
             "投稿直後の値は当てにならないので、1〜2日後のいまが測りどきです。</p>"
             + table(["投稿日", "種別", "リプライ先 / テーマ", "型"], rows)
         )
@@ -423,7 +423,7 @@ def section_alerts(data: dict) -> str:
             alerts.append((
                 "warn",
                 "X週次レビューがまだ1件も記録されていません",
-                "x-weekly-reviews.md に記入する運用。日曜20:30の定期タスク x-weekly-review が担当",
+                "content/x/weekly-reviews.md に記入する運用。日曜20:30の定期タスク x-weekly-review が担当",
             ))
         else:
             age = (today - review_latest).days
@@ -793,7 +793,7 @@ def section_x(data: dict) -> str:
     today = data["today"]
 
     if not posts:
-        return '<section id="x"><h2>5. X（旧Twitter）投稿</h2><p class="muted">x-posts.md に実績の記録がありません。</p></section>'
+        return '<section id="x"><h2>5. X（旧Twitter）投稿</h2><p class="muted">content/x/posts.md に実績の記録がありません。</p></section>'
 
     recent = [p for p in posts if (today - p["date"]).days <= 30]
 
@@ -866,7 +866,7 @@ def section_x(data: dict) -> str:
     breakdown_html = _post_breakdown(data.get("post_breakdown") or [])
 
     return f"""<section id="x"><h2>5. X（旧Twitter）投稿</h2>
-<p class="lead">記録元は <code>x-posts.md</code>。X の管理画面から自動では取れないので、投稿したら手で書き足す運用。ここに出ていない投稿は記録漏れ。</p>
+<p class="lead">記録元は <code>content/x/posts.md</code>。X の管理画面から自動では取れないので、投稿したら手で書き足す運用。ここに出ていない投稿は記録漏れ。</p>
 {stats}
 <h3>日ごとに自分の投稿が読まれた回数（本計測ぶんのみ・直近30日）</h3>
 {chart}
@@ -1382,7 +1382,7 @@ GitHub にも上がりません（<code>admin/</code> は Git の管理対象外
 <nav class="toc"><ul>{nav}</ul></nav>
 {sections}
 <footer>
-生成元: THEMES.yaml / GROWTH.yaml / x-posts.md / TASK_BOARD.md / data/verification/ / git log<br>
+生成元: THEMES.yaml / GROWTH.yaml / content/x/posts.md / TASK_BOARD.md / data/verification/ / git log<br>
 作り直すコマンド: <code>python3 scripts/build_admin_dashboard.py --open</code>（実測値も取り直す場合は <code>--fetch</code> を足す）
 </footer>
 </div><script>{SCRIPT}</script></body></html>

@@ -9,7 +9,7 @@
 - 目標: `company/GOALS.yaml`
 - 収支: `company/FINANCE.yaml`
 - グロース実測: `GROWTH.yaml`
-- X・note実績: `x-posts.md` / `x-weekly-reviews.md` / `note-posts.md`
+- X・note実績: `content/x/posts.md` / `content/x/weekly-reviews.md` / `content/note/posts.md`
 - AdSense課題: `TASK_BOARD.md` 課題15
 
 ## 運用

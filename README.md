@@ -36,6 +36,8 @@
 
 ```
 company/             会社理念、目標、承認、収支、AI部門の責任
+content/             X・noteの下書き、調査、投稿実績（公開しない）
+quality/             公開候補と公開後の品質監査記録
 docs/                公開される静的サイト（GitHub Pages のルート）
 social-samples/      収集した投稿の累積正典。本文を含むため一部は Git 管理外
 data/verification/   本文を除いた検証用サマリ。クリーンクローンとCIはこれを読む
@@ -56,8 +58,12 @@ archive/             運用から外れた文書・スクリプト（下記）
 | [company/COMPANY.md](company/COMPANY.md) | 会社の理念、事業、組織、CEO承認範囲 |
 | [company/GOALS.yaml](company/GOALS.yaml) | 90日・1年・3年の数値目標 |
 | [company/ROADMAP.md](company/ROADMAP.md) | 会社化のフェーズ、成果物、完了条件 |
+| [company/HANDOFFS.yaml](company/HANDOFFS.yaml) | 進行中業務の担当、期日、承認、次の一手 |
+| [company/QUALITY_GATE.md](company/QUALITY_GATE.md) | Website / X / note 共通の公開品質基準 |
+| [company/FOLDER_MAP.md](company/FOLDER_MAP.md) | 成果物の正式な置き場所と保全方針 |
 | [company/APPROVALS.yaml](company/APPROVALS.yaml) | CEO承認の待ち・決定ログ |
 | [company/FINANCE.yaml](company/FINANCE.yaml) | 月次の収益、費用、利益 |
+| [company/CORRECTIONS.yaml](company/CORRECTIONS.yaml) | 訂正・一時非公開・引用削除依頼の記録 |
 | [OPERATIONS.md](OPERATIONS.md) | 定例作業の定義。作業場所の作り方・頻度・担当・遅れの見つけ方 |
 | [DATA_REFRESH.md](DATA_REFRESH.md) | データ更新の正典。`refresh_topic.py` の使い方と公開ゲート |
 | [THEMES.yaml](THEMES.yaml) | テーマ台帳（単一の真実源） |
@@ -81,7 +87,7 @@ python3 scripts/build_admin_dashboard.py --open
 GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` を足す（最大3分、
 認証が切れていればその旨が画面に出る）。
 
-読む材料: `THEMES.yaml`（予定日・工程）/ `GROWTH.yaml`（週次KPI・施策）/ `x-posts.md`（X投稿実績）/
+読む材料: `THEMES.yaml`（予定日・工程）/ `GROWTH.yaml`（週次KPI・施策）/ `content/x/posts.md`（X投稿実績）/
 `TASK_BOARD.md`（課題）/ `data/verification/updates/`（データ更新の検査結果）/ `git log`（変更履歴）。
 **画面が古い・空欄になるのは、これらの元ファイルが更新されていないということ。**
 

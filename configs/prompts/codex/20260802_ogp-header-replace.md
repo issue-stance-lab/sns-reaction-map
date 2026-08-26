@@ -179,4 +179,4 @@ Facebook は https://developers.facebook.com/tools/debug/ で同様に更新で�
 ### 4. 記録
 
 - `TASK_BOARD.md` 課題32 を完了に更新
-- `x-posts.md` にヘッダー差し替えを記録
+- `content/x/posts.md` にヘッダー差し替えを記録

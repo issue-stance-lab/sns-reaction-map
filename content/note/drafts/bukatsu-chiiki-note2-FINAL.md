@@ -6,7 +6,7 @@
 
 ## 貼ったあとにnoteの画面でやること
 
-1. 見出し画像に `note-drafts/images/bukatsu2_note-header.png` をアップロード
+1. 見出し画像に `content/note/drafts/images/bukatsu2_note-header.png` をアップロード
 2. `▼［画像を挿入］` の行を、指定のファイルに差し替える（行そのものは消す）
 3. 「## 」で始まる行を**大見出し**にする
 4. 「［編集部の読み］」と一次資料の引用（3か所）は**引用ブロック**にする
@@ -50,7 +50,7 @@ https://note.com/sns_hanno_ma/n/naf45019db1c0
 
 ## 先生の負担を語る227件は、こう分かれていた
 
-▼［画像を挿入］note-drafts/images/bukatsu2_fig1-227.png
+▼［画像を挿入］content/note/drafts/images/bukatsu2_fig1-227.png
 
 移行支持がいちばん多い。
 ここまでは、前回書いたとおりです。
@@ -92,7 +92,7 @@ https://x.com/miniminie083/status/2083346934220419500
 
 結果は、こうなりました。
 
-▼［画像を挿入］note-drafts/images/bukatsu2_fig2-reread.png
+▼［画像を挿入］content/note/drafts/images/bukatsu2_fig2-reread.png
 
 👉 論点別の内訳と実際のX投稿を、SNS反応まっぷで見る
 https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu2_20260829&utm_content=after_chart
@@ -199,7 +199,7 @@ https://x.com/dYVfAifGLcrmfaQ/status/2083719199449575575
 
 指導者を集められるかについても、ガイドラインは「地域の多様な人材等から、質・量ともに十分な指導者を確保することが不可欠」としています。87件が心配していたことは、国も未解決の課題として挙げています。
 
-▼［画像を挿入］note-drafts/images/bukatsu2_fig3-answer.png
+▼［画像を挿入］content/note/drafts/images/bukatsu2_fig3-answer.png
 
 👉 先生・保護者・自治体、それぞれの声を見る
 https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu2_20260829&utm_content=after_verify
