@@ -1,0 +1,72 @@
+version: 1
+updated_at: "2026-08-26"
+
+north_star:
+  statement: >-
+    対立の向こう側にある「もう一つの正義」を可視化し、
+    人々が互いを悪と決めつけずに向き合える、より温和な社会をつくる。
+
+constraints:
+  owner_hours_per_week_max: 10
+  monthly_operating_cost_yen_max_until_revenue: 3000
+  execution: ai_first
+  public_release_requires_ceo_approval: true
+  principle_over_growth: true
+
+milestones:
+  - id: first_90_days
+    due_at: "2026-11-23"
+    goals:
+      adsense_status: approved
+      adsense_revenue_yen_min: 1
+      monthly_pageviews: 3000
+      weekly_users: 100
+      x_followers: 100
+      note_new_posts: 30
+      votes_total: 100
+
+  - id: first_year
+    due_at: "2027-08-26"
+    goals:
+      adsense_monthly_revenue_yen: 50000
+      monthly_pageviews_provisional: 200000
+      x_followers: 1000
+    assumptions:
+      page_rpm_yen_provisional: 250
+      note: >-
+        月20万ページ表示は計画用の仮置き。AdSense通過後の実際のページRPMから
+        月5万円に必要なページ表示数を毎月再計算する。
+
+  - id: third_year
+    due_at: "2029-08-26"
+    goals:
+      monthly_revenue_yen: 1000000
+      company_form: consider_incorporation
+
+channels:
+  website:
+    role: 中心商品と長期資産
+  x:
+    role: 認知、フォロワー獲得、会話、Website流入
+    candidate_windows:
+      - "07:00-09:00"
+      - "11:30-13:30"
+      - "16:30-18:30"
+      - "20:30-22:30"
+    rule: 有力候補がなければ見送る
+  note:
+    role: テーマの理解とWebsiteへの導線
+    cadence_days: 3
+    planned_articles_per_theme: 4
+    free_period_days: 30
+    paid_price_yen: 500
+    paid_conversion_requires_ceo_approval: true
+
+measurement_sources:
+  themes: THEMES.yaml
+  growth: GROWTH.yaml
+  x_posts: x-posts.md
+  x_reviews: x-weekly-reviews.md
+  note_posts: note-posts.md
+  tasks: TASK_BOARD.md
+  dashboard_command: python3 scripts/build_admin_dashboard.py

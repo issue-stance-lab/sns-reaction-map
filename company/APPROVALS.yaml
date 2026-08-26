@@ -1,0 +1,51 @@
+version: 1
+updated_at: "2026-08-26"
+
+rules:
+  required_for:
+    - website_publication
+    - x_post
+    - note_post
+    - note_paid_conversion
+    - spending
+    - paid_contract
+    - important_policy_change
+    - data_deletion
+    - adsense_resubmission
+  statuses:
+    - pending
+    - approved
+    - rejected
+    - withdrawn
+
+# 承認案件は次の形で追加する。
+# - id: approval-YYYYMMDD-001
+#   department: editorial
+#   action: website_publication
+#   summary: "..."
+#   reason: "..."
+#   risks: ["..."]
+#   recommendation: approve
+#   evidence: ["path/to/report"]
+#   status: pending
+#   requested_at: "YYYY-MM-DD"
+#   decided_at: null
+#   decision_note: null
+items:
+  - id: approval-20260826-001
+    department: executive
+    action: important_policy_change
+    summary: "AI中心の会社運営方針とCEO承認範囲を定める"
+    reason: "理念を守りながら、CEO週10時間以内でWebsite・X・noteを運営するため"
+    risks:
+      - "承認待ちが増えると公開が遅れる"
+      - "旧文書に残る運用と一時的に食い違う可能性がある"
+    recommendation: approve
+    evidence:
+      - company/COMPANY.md
+      - company/GOALS.yaml
+      - company/DECISIONS.md
+    status: approved
+    requested_at: "2026-08-26"
+    decided_at: "2026-08-26"
+    decision_note: "CEOとの対話で理念、目標、AI中心運用、最終承認範囲を決定した。"

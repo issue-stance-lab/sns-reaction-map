@@ -119,14 +119,14 @@ python3 scripts/build_admin_dashboard.py
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 | 人間が必要なこと |
 |---|---|---|---|---|
-| **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` | なし（自動テーマ）／自転車青切符のみ読む工程あり |
-| **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` | 実際の投稿操作 |
+| **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` | 公開側への昇格は最終承認／自転車青切符は再読工程あり |
+| **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` | 最終承認と実際の投稿操作 |
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` | なし（ログイン済みChromeが開いていること） |
 | **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー | なし |
 | **KPIスナップショット** | 週1（月曜） | 前回から7日 | `scripts/fetch_growth_kpi.py` → `GROWTH.yaml` | OAuth再認証・フォロワー数の手動確認 |
 | **新テーマの追加** | 不定期 | オーナーの指示 | `.claude/skills/new-topic/SKILL.md` | 画像生成（GPTimage2） |
-| **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` | なし（マージはAIが実行する） |
-| **note 記事** | 月1本以上＋新テーマ公開時 | 前回から30日 | `.claude/skills/note-operation/SKILL.md` | note への投稿操作 |
+| **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` | 最終承認（マージ・pushは承認後にAIが実行） |
+| **note 記事** | 3日に1本を目安（候補なしは見送り可） | 前回から3日 | `.claude/skills/note-operation/SKILL.md` | 最終承認と note への投稿操作 |
 | **サイト改善を1つ進める** | 週1 | 前回から7日 | 下の「サイト改善の進め方」 | 最終承認 |
 | **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` | なし |
 
@@ -177,13 +177,17 @@ X日次スキルは `GROWTH.yaml` を読むだけで書かないため、
 
 ## 人間（オーナー）の役割
 
-- X の実投稿・リプライ操作
-- note への投稿操作
+- Website の公開・公開内容変更の最終承認
+- X の投稿・リプライの最終承認と操作
+- note の投稿・有料化の最終承認と操作
 - 画像生成（GPTimage2）
 - AdSense / GA4 など管理画面での操作、OAuth の再認証
+- 支出・有料契約・重要方針変更・データ削除の最終承認
 - 施策を `adopted` / `rejected` に倒すときの最終承認
 
-数値取得は原則不要（`scripts/fetch_growth_kpi.py` が自動取得する）。
+調査、候補作成、分析、検査、承認後のマージ・pushは原則 AI が行う。
+承認記録は `company/APPROVALS.yaml` に残す。数値取得は原則不要
+（`scripts/fetch_growth_kpi.py` が自動取得する）。
 フォロワー数だけは自動取得できないため `scripts/record_x_followers.py` を使う。
 
 ---
