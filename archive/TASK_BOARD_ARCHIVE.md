@@ -50,7 +50,7 @@
 | 課題24: 漫画コンテンツ追加 | manga_data / manga_img |
 | 課題27: bukatsu-chiiki 画像生成 | manga_img（blocked） |
 | 課題28: 旧3テーマ v3化 | classify2d → page_v3 |
-| 課題46: 運用メモの公開停止 | Claude Code | 2026-08-13 | `docs/` 直下の運用メモ10件を `docs-internal/` へ移動。verify_top_page.py に再発防止の検査を追加 |
+| 課題46: 運用メモの公開停止 | Claude Code | 2026-08-13 | `docs/` 直下の運用メモ10件を `content/website/internal/` へ移動。verify_top_page.py に再発防止の検査を追加 |
 
 ---
 
@@ -112,13 +112,13 @@
 アップロードするため、**追跡を外してもローカルにファイルが残っていれば配信され続ける**
 （課題45の `x-posts.md` はリポジトリ直下へ「移動」したので止まった）。
 
-→ **この課題では「`docs/` の外へ移す」方が確実。** 移動先の候補は `docs-internal/` など。
+→ **この課題では「`docs/` の外へ移す」方が確実。** 移動先の候補は `content/website/internal/` など。
    相互参照が `docs/` 内で閉じているので、まとめて移せばリンクは壊れない。
 
 **判断が要る点**: `substack-takaichi-reaction-table.md` は外部貼り付け用に作ったもので、
 公開前提だった可能性がある。移す前にオーナーに確認すること。
 
-**完了**: 2026-08-13。`git mv` で10件（9件＋`docs/images/README.md`）を `docs-internal/` へ移動。
+**完了**: 2026-08-13。`git mv` で10件（9件＋`docs/images/README.md`）を `content/website/internal/` へ移動。
 相互参照の書き換えは5行のみ。`substack-takaichi-reaction-table.md` も移動した（貼り付け元の作業ファイルで
 リンク0件、かつ記載183件が現行正典447件と食い違うため）。機密は無かったが、`ga4-automation.md` と
 `gsc-automation.md` にオーナーのローカルパスが含まれ、リポジトリが public のため git 履歴には残る。

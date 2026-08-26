@@ -225,7 +225,7 @@ python3 -m unittest discover -s tests
 
 ### ⑨ 画像
 
-漫画・図解プロンプトは `manga-prompts/{slug}-prompts.md` に書く。生成はオーナーがGPTimage2で行う。
+漫画・図解プロンプトは `creative/manga-prompts/{slug}-prompts.md` に書く。生成はオーナーがGPTimage2で行う。
 
 - **本番ページ生成プロンプトの末尾に必ず比率を書く**:
   `Output image: portrait, 3:4 aspect ratio (e.g. 900×1200px).`

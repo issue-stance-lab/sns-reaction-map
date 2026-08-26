@@ -2,8 +2,8 @@
 
 ### 出典
 
-`WORK_PLAN_2026-08.md` §3 A-4
-`WORK_PLAN_2026-08_SESSIONS.md` S4
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §3 A-4
+`archive/planning-2026-08/WORK_PLAN_2026-08_SESSIONS.md` S4
 
 ### 前提（S1〜S3・S5 完了済み）
 
@@ -46,7 +46,7 @@ docs/topic-modern.js:212 function lockArenaUntilVote()
 docs/topic-modern.js:258 lockArenaUntilVote();   ← 実行されている
 ```
 
-**これは計画の記載漏れです。** 議論の段階で「投票前にマップをぼかして閲覧不能にする設計は撤去する」と合意していたにもかかわらず、`WORK_PLAN_2026-08.md` に項目として書き落とされていました。このタスクで回収します。
+**これは計画の記載漏れです。** 議論の段階で「投票前にマップをぼかして閲覧不能にする設計は撤去する」と合意していたにもかかわらず、`archive/planning-2026-08/WORK_PLAN_2026-08.md` に項目として書き落とされていました。このタスクで回収します。
 
 撤去する理由：
 

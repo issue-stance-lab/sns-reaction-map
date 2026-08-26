@@ -3,7 +3,7 @@
 ### 出典
 
 `TASK_BOARD.md` 課題29（前倒しで実施）
-`WORK_PLAN_2026-08.md` §3 A-4 の残件
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §3 A-4 の残件
 
 ### 前提（S1〜S5 完了・本番反映済み）
 

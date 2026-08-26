@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ローカル専用の管理画面（1枚のHTML）を作る。
 
-公開しない。出力先の admin/ は .gitignore 済みで、GitHub Pages が配信する
+公開しない。出力先の company/dashboard/ は .gitignore 済みで、GitHub Pages が配信する
 docs/ の外にある。
 
   python3 scripts/build_admin_dashboard.py            # 作るだけ
@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from admin_dashboard import actions, collect, render  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = ROOT / "admin" / "dashboard.html"
+DEFAULT_OUTPUT = ROOT / "company" / "dashboard" / "dashboard.html"
 
 
 def build(*, fetch: bool, today: dt.date) -> str:
@@ -50,7 +50,7 @@ def build(*, fetch: bool, today: dt.date) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="ローカル専用の管理画面を作る")
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="出力先（既定: admin/dashboard.html）")
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="出力先（既定: company/dashboard/dashboard.html）")
     parser.add_argument("--open", action="store_true", help="作成後にブラウザで開く")
     parser.add_argument("--fetch", action="store_true", help="GA4 / Search Console / Supabase から実測値を取り直す（時間がかかる）")
     parser.add_argument("--today", help="今日の日付を上書きする（YYYY-MM-DD、動作確認用）")

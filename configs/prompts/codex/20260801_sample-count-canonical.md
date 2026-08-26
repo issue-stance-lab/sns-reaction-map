@@ -2,8 +2,8 @@
 
 ### 出典
 
-`WORK_PLAN_2026-08.md` §2「着手前に確定させること」＋ §3 A-5（自動検査の土台を前倒し）
-`WORK_PLAN_2026-08_SESSIONS.md` §4
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §2「着手前に確定させること」＋ §3 A-5（自動検査の土台を前倒し）
+`archive/planning-2026-08/WORK_PLAN_2026-08_SESSIONS.md` §4
 
 ### 背景（調査済みの事実。再調査不要）
 

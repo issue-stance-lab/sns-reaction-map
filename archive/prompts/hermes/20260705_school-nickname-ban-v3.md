@@ -7,7 +7,7 @@
 - リポジトリ: issue-stance-aggregator
 - プロジェクト概要: AI_HANDOFF.md を参照
 - テーマ台帳: THEMES.yaml を参照
-- v3仕様書: `templates/topic-page-v3.md`（必読）
+- v3仕様書: `creative/templates/topic-page-v3.md`（必読）
 - 本タスクの対象テーマ: school-nickname-ban（学校でのあだ名禁止の是非）
 - 対象ファイル: `docs/school-nickname-ban-reaction-map.html`
 
@@ -29,7 +29,7 @@ v3完了済みの参考実装: `docs/ai-copyright-reaction-map.html`（正典テ
 
 `docs/school-nickname-ban-reaction-map.html` を v3フォーマットに全面書き換える。
 
-### 必須要素（templates/topic-page-v3.md 準拠）
+### 必須要素（creative/templates/topic-page-v3.md 準拠）
 
 1. **ヒーローセクション** — テーマ画像 + 問い1行 + 30秒サマリー3点
 2. **漫画セクション** — 漫画画像が未生成のため、テキストカード形式で代替（bukatsu-chiiki実装を参照: `docs/bukatsu-chiiki-reaction-map.html`）

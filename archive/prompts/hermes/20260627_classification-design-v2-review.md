@@ -10,7 +10,7 @@ Yahooリアルタイム検索で取得したSNS反応をOllamaで分類してい
 
 ## レビュー対象
 
-- `classification-design-v2.md`
+- `quality/designs/classification-v2.md`
 - 既存トピック設定:
   - `configs/topics/school-nickname-ban.yaml`
   - `configs/topics/takaichi.yaml`

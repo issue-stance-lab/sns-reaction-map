@@ -50,7 +50,7 @@ themes:
   # ... 残り7テーマも同様に
 ```
 
-**初回タスク**: TASK_BOARD.md の課題7/9/21/23/24/25/26/27/28 の記述と実ファイル（docs/*.html、social-samples/、manga-prompts/、configs/topics/）を突き合わせ、8テーマ全部の正確な状態を調査して THEMES.yaml を作成すること。**記述を信じず、実ファイルを確認して判定する**（例: HTMLに smCanvasMain があるか、manga-prompts/ にファイルがあるか、2D分類JSONのエラー率はいくつか）。
+**初回タスク**: TASK_BOARD.md の課題7/9/21/23/24/25/26/27/28 の記述と実ファイル（docs/*.html、social-samples/、creative/manga-prompts/、configs/topics/）を突き合わせ、8テーマ全部の正確な状態を調査して THEMES.yaml を作成すること。**記述を信じず、実ファイルを確認して判定する**（例: HTMLに smCanvasMain があるか、creative/manga-prompts/ にファイルがあるか、2D分類JSONのエラー率はいくつか）。
 
 既知の状態（前セッションからの引き継ぎ、要実地検証）:
 - v3完了5テーマ: ai-copyright / bike-blue-ticket / bukatsu-chiiki / constitutional-amendment / elderly-license-revocation
@@ -90,7 +90,7 @@ themes:
 
 ### 4. ワーカープロンプトの共通テンプレート
 
-`templates/worker-prompt-template.md` を新規作成。既存の良いプロンプト
+`creative/templates/worker-prompt-template.md` を新規作成。既存の良いプロンプト
 （configs/prompts/hermes/20260705_task26-phased-portal.md 等）から共通部を抽出:
 - コンテキスト（役割・参照ファイル）
 - 保護タグ一覧（GA4: G-K10S4YCZFH / AdSense: ca-pub-2542211932832864 / SEO_META / Supabase）
@@ -101,7 +101,7 @@ themes:
 
 1. THEMES.yaml が実ファイル調査に基づいて作成されている（8テーマ全部）
 2. LOOP.md が作成されている
-3. templates/worker-prompt-template.md が作成されている
+3. creative/templates/worker-prompt-template.md が作成されている
 4. TASK_BOARD.md が縮小され、完了課題が archive/ へ移動されている
 5. CLAUDE.md の「セッション開始時に読むファイル」を Agent.md + LOOP.md + THEMES.yaml に更新
 6. 上記を main にコミット・プッシュ（ブランチ task/loop-engineering-setup 経由）

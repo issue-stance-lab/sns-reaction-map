@@ -777,8 +777,8 @@ LIVE_SOURCES = (
     ("votes", "Supabase（投票）"),
 )
 
-# 取得できた数字の置き場。admin/ ごと .gitignore 済みなので Git には乗らない
-LIVE_CACHE = ROOT / "admin" / "cache" / "live-metrics.json"
+# 取得できた数字の置き場。company/dashboard/ ごと .gitignore 済みなので Git には乗らない
+LIVE_CACHE = ROOT / "company" / "dashboard" / "cache" / "live-metrics.json"
 
 
 def read_live_cache() -> dict:

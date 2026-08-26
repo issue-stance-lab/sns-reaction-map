@@ -20,10 +20,10 @@
 
 | ファイル | 目的 |
 |---------|------|
-| `templates/manga-content.schema.md` | JSONスキーマ定義 |
-| `templates/reaction-map-workflow.md` | ワークフロー全体（Step 3.5が漫画） |
-| `manga-prompts/ai-copyright-prompts.md` | キャラシート+ページプロンプトの文体・構成 |
-| `manga-prompts/ai-copyright-vote-prompts.md` | 投票ボタン画像プロンプトの形式 |
+| `creative/templates/manga-content.schema.md` | JSONスキーマ定義 |
+| `creative/templates/reaction-map-workflow.md` | ワークフロー全体（Step 3.5が漫画） |
+| `creative/manga-prompts/ai-copyright-prompts.md` | キャラシート+ページプロンプトの文体・構成 |
+| `creative/manga-prompts/ai-copyright-vote-prompts.md` | 投票ボタン画像プロンプトの形式 |
 | `configs/ai-copyright-reaction-map.json` | `manga` フィールドの実データ構造 |
 | `docs/ai-copyright-reaction-map.html` | HTML実装（漫画セクション・投票カードのDOM構造） |
 
@@ -50,8 +50,8 @@
 
 以下の2ファイルを作成（`ai-copyright-prompts.md` の形式を踏襲）:
 
-- `manga-prompts/<topic>-prompts.md`: キャラシート2枚 + 本番ページ3枚（計5枚）の英語プロンプト
-- `manga-prompts/<topic>-vote-prompts.md`: 投票ボタン画像4枚の512×512英語プロンプト
+- `creative/manga-prompts/<topic>-prompts.md`: キャラシート2枚 + 本番ページ3枚（計5枚）の英語プロンプト
+- `creative/manga-prompts/<topic>-vote-prompts.md`: 投票ボタン画像4枚の512×512英語プロンプト
 
 **日本語フキダシについて:** GPTimage2は日本語テキスト描画が得意。ページプロンプトには `A speech bubble containing the Japanese text "台詞"` の形式で台詞を含める。
 
@@ -225,7 +225,7 @@ docs/images/
 
 - [ ] `AGENT.md` と `TASK_BOARD.md` を読んだ
 - [ ] `configs/ai-copyright-reaction-map.json` の `manga` フィールドの構造を確認した
-- [ ] `manga-prompts/ai-copyright-prompts.md` の英語プロンプトの文体を確認した
+- [ ] `creative/manga-prompts/ai-copyright-prompts.md` の英語プロンプトの文体を確認した
 - [ ] `docs/ai-copyright-reaction-map.html` の漫画セクションのDOM構造を確認した
 - [ ] elderly-license のキャラ設計方針を決めた（上記の推奨を参考に）
 - [ ] `configs/elderly-license-revocation-reaction-map.json` が存在するか確認した

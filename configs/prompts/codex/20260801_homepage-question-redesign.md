@@ -2,8 +2,8 @@
 
 ### 出典
 
-`WORK_PLAN_2026-08.md` §3 A-1
-`WORK_PLAN_2026-08_SESSIONS.md` S2
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §3 A-1
+`archive/planning-2026-08/WORK_PLAN_2026-08_SESSIONS.md` S2
 
 ### 前提（S1 完了済み）
 
