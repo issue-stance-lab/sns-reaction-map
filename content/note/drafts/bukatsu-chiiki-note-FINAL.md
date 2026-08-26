@@ -6,7 +6,7 @@
 
 ## 貼ったあとにnoteの画面でやること（5つだけ）
 
-1. 見出し画像に `note-drafts/images/bukatsu-chiiki_note-header.png` をアップロード
+1. 見出し画像に `content/note/drafts/images/bukatsu-chiiki_note-header.png` をアップロード
 2. `▼［画像を挿入］` の行を、指定のファイルに差し替える（行そのものは消す）
 3. 「## 」で始まる行を**大見出し**にする（8か所）
 4. 「［編集部の読み①］」「［編集部の読み②］」の段落を**引用ブロック**にする
@@ -56,7 +56,7 @@ SNSの公開投稿754件を立場と論点で分類したところ、その"多�
 
 SNSの公開投稿954件のうち、意見として読めた754件を分類しました。
 
-▼［画像を挿入］note-drafts/images/bukatsu-chiiki_fig1-stance.png
+▼［画像を挿入］content/note/drafts/images/bukatsu-chiiki_fig1-stance.png
 
 いちばん多いのは「移行支持」です。
 反対は3割ほど。
@@ -70,7 +70,7 @@ SNSの公開投稿954件のうち、意見として読めた754件を分類し�
 投稿が「何の話をしているか」で5つに分けました。
 そのうえで、それぞれの支持率を出しました。
 
-▼［画像を挿入］note-drafts/images/bukatsu-chiiki_fig2-issue-support.png
+▼［画像を挿入］content/note/drafts/images/bukatsu-chiiki_fig2-issue-support.png
 
 いちばん上といちばん下で、3.6倍の開きがあります。
 
@@ -93,7 +93,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.
 支持が高いほうは、負担を手放す側の話でした。
 支持が低いほうは、負担を受け取る側の話でした。
 
-▼［画像を挿入］note-drafts/images/bukatsu-chiiki_fig3-give-receive.png
+▼［画像を挿入］content/note/drafts/images/bukatsu-chiiki_fig3-give-receive.png
 
 たとえば、教員の働き方について書かれた投稿です。
 
@@ -143,7 +143,7 @@ SNSには当事者の声が濃く出ます。
 
 ## 部活動の地域移行、本当の対立は先生・保護者・自治体の三すくみ
 
-▼［画像を挿入］note-drafts/images/bukatsu-chiiki_fig4-standoff.png
+▼［画像を挿入］content/note/drafts/images/bukatsu-chiiki_fig4-standoff.png
 
 先生は、渡したい。
 保護者は、受け取れない。

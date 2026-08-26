@@ -1,6 +1,6 @@
 # AI引き継ぎ — SNS反応まっぷ
 
-最終更新: 2026-08-26
+最終更新: 2026-08-27
 
 この文書は、新しく参加する AI が、現在の会社理念、権限、正典、公開手順を取り違えないための入り口。
 具体的な作業手順はここに重複して書かず、必ず対応する正典を読む。
@@ -11,10 +11,13 @@
 2. `company/COMPANY.md` — 会社の目的、行動原則、CEO承認の範囲
 3. `company/GOALS.yaml` — 3か月・1年・3年の数値目標
 4. `company/ROADMAP.md` — 現在の移行フェーズと完了条件
-5. `README.md` — サービスとリポジトリの現状
-6. `OPERATIONS.md` — 定例作業、作業用コピー、遅れの見つけ方
-7. `THEMES.yaml` — 公開テーマと更新工程の単一の真実源
-8. `TASK_BOARD.md` — テーマ横断の課題の正典
+5. `company/HANDOFFS.yaml` — 進行中業務の担当、期日、承認、次の一手
+6. `company/QUALITY_GATE.md` — Website / X / note 共通の公開品質基準
+7. `company/FOLDER_MAP.md` — 成果物の正式な置き場所
+8. `README.md` — サービスとリポジトリの現状
+9. `OPERATIONS.md` — 定例作業、作業用コピー、遅れの見つけ方
+10. `THEMES.yaml` — 公開テーマと更新工程の単一の真実源
+11. `TASK_BOARD.md` — テーマ横断の課題の正典
 
 その後、自分の作業に対応する `company/departments/` の部門文書を読む。
 

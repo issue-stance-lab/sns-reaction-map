@@ -9,7 +9,9 @@ CEO の窓口を一本化し、会社の目標、期限、部門間の依存関�
 - `company/COMPANY.md`
 - `company/GOALS.yaml`
 - `company/ROADMAP.md`
+- `company/HANDOFFS.yaml`
 - `company/APPROVALS.yaml`
+- `company/FINANCE.yaml`
 - `OPERATIONS.md`
 - `TASK_BOARD.md`
 - `GROWTH.yaml`

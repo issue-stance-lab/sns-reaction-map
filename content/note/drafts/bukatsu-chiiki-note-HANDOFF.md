@@ -28,8 +28,8 @@
 | `CLAUDE.md` | オーナーへの説明のしかた（非エンジニア向け）。必ず従う |
 | `OPERATIONS.md` ⓪ | ファイルを書き換える作業は専用の作業ツリーを作ってから着手する |
 | `.claude/skills/note-operation/SKILL.md` | note運用の正典 |
-| `note-posts.md` | 投稿ログ。作業後にここへ追記する |
-| `note-drafts/bukatsu-chiiki-image-prompts.md` | 画像作成プロンプト v2（再生成が必要になったとき用） |
+| `content/note/posts.md` | 投稿ログ。作業後にここへ追記する |
+| `content/note/drafts/bukatsu-chiiki-image-prompts.md` | 画像作成プロンプト v2（再生成が必要になったとき用） |
 
 ---
 
@@ -39,15 +39,15 @@
 
 | 物 | 場所 | 状態 |
 |---|---|---|
-| 見出し画像 | `note-drafts/images/bukatsu-chiiki_note-header.png` | 1920×1006。**完成** |
-| 図1 立場の内訳 | `note-drafts/images/bukatsu-chiiki_fig1-stance.png` | **完成** |
-| 図2 論点別支持率 | `note-drafts/images/bukatsu-chiiki_fig2-issue-support.png` | **完成** |
-| 図3 渡す側／受け取る側 | `note-drafts/images/bukatsu-chiiki_fig3-give-receive.png` | **完成** |
-| 図4 三すくみ | `note-drafts/images/bukatsu-chiiki_fig4-standoff.png` | **完成** |
+| 見出し画像 | `content/note/drafts/images/bukatsu-chiiki_note-header.png` | 1920×1006。**完成** |
+| 図1 立場の内訳 | `content/note/drafts/images/bukatsu-chiiki_fig1-stance.png` | **完成** |
+| 図2 論点別支持率 | `content/note/drafts/images/bukatsu-chiiki_fig2-issue-support.png` | **完成** |
+| 図3 渡す側／受け取る側 | `content/note/drafts/images/bukatsu-chiiki_fig3-give-receive.png` | **完成** |
+| 図4 三すくみ | `content/note/drafts/images/bukatsu-chiiki_fig4-standoff.png` | **完成** |
 | 確認用（正方形／300px／コンタクトシート） | 同ディレクトリ | 完成 |
 | 完成原稿 | **本書の第6節** | 確定済み |
 
-**画像は 2026-08-24 に本体リポジトリ（main）へ取り込み済みです。** 場所は `note-drafts/images/`。
+**画像は 2026-08-24 に本体リポジトリ（main）へ取り込み済みです。** 場所は `content/note/drafts/images/`。
 第4節 STEP 1 は完了しているので、次の作業は STEP 2（マガジン作成）から。
 
 ### 品質確認の結果
@@ -75,9 +75,9 @@
 
 ### STEP 1: 画像を本体へ取り込む — **完了（2026-08-24）**
 
-main の `note-drafts/images/` に5点そろっている。作業ツリー `isa-wt-bukatsu-header` は撤去済み。
-第2〜4回で使う人物写真6点（`note-drafts/photos/`）と図のHTMLソース（`note-drafts/figures/`）も
-一緒に取り込んであるので、再レンダリングは `node note-drafts/figures/render.mjs` でできる。
+main の `content/note/drafts/images/` に5点そろっている。作業ツリー `isa-wt-bukatsu-header` は撤去済み。
+第2〜4回で使う人物写真6点（`content/note/drafts/photos/`）と図のHTMLソース（`content/note/drafts/figures/`）も
+一緒に取り込んであるので、再レンダリングは `node content/note/drafts/figures/render.mjs` でできる。
 
 ### STEP 2: マガジンを作る（記事更新より先） — **完了（2026-08-25）**
 
@@ -127,7 +127,7 @@ noteは編集内容を自動保存するが、**公開記事はまだ8/23の旧�
 
 ### STEP 5: 記録
 
-`note-posts.md` の「部活動の地域移行」エントリに追記する。
+`content/note/posts.md` の「部活動の地域移行」エントリに追記する。
 
 ```
 - リライト: 2026-08-25（全面改稿。タイトル・見出し画像・図5点を刷新）
@@ -151,7 +151,7 @@ noteは編集内容を自動保存するが、**公開記事はまだ8/23の旧�
 
 ### 見出し画像
 
-`note-drafts/images/bukatsu-chiiki_note-header.png`（1920×1006px）
+`content/note/drafts/images/bukatsu-chiiki_note-header.png`（1920×1006px）
 
 ### タグ（5個）
 
@@ -434,7 +434,7 @@ https://x.com/Pansy_school/status/2063014247500816645
 - [ ] X投稿3件が正しく埋め込み表示されている（URLが単独行になっているか）
 - [ ] スマホプレビューで、見出し画像と図5点の文字が読める
 - [ ] 8/23の既存X告知へのリプライとして、本告知を投稿した
-- [ ] `note-posts.md` にリライト日・X告知URL・計測予定日を追記した
+- [ ] `content/note/posts.md` にリライト日・X告知URL・計測予定日を追記した
 
 ---
 

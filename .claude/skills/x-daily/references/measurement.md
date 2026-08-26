@@ -2,13 +2,13 @@
 
 投稿実施後に読む。候補検索中には実行しない。
 
-## x-posts.mdへ記録する
+## content/x/posts.mdへ記録する
 
 リプライ実績表の列を次の8列から変更しない。
 
 `# ｜ リプライ先 ｜ テーマ ｜ タイプ ｜ 元投稿views ｜ 自リプライ表示 ｜ 元投稿の返信数 ｜ 元投稿からの経過`
 
-管理画面の集計が列名に依存している。新しい分析項目は行の備考か `x-weekly-reviews.md` に書く。
+管理画面の集計が列名に依存している。新しい分析項目は行の備考か `content/x/weekly-reviews.md` に書く。
 列を変える場合は `scripts/admin_dashboard/collect.py` と `tests/test_admin_dashboard.py` も同時に直す。
 
 投稿直後の `自リプライ表示` は `未計測（投稿直後）` とし、数値を入れない。備考へ次を記録する。

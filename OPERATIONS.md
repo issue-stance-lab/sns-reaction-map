@@ -11,7 +11,7 @@
 
 - 自動タスク `daily-growth-loop` は 2026-07-09 を最後に実行されず、45日間オフのままだった
 - `GROWTH.yaml` の `activity_log` は 2026-07-28 で止まった
-- `x-weekly-reviews.md` は週次レビューの実績が一度もない（テンプレートのみ）
+- `content/x/weekly-reviews.md` は週次レビューの実績が一度もない（テンプレートのみ）
 - `recurring.x-profile.last_run` は 2026-07-09 のまま
 - 一方、X日次運用とデータ更新は**ループの外で手動セッションとして毎日回っていた**
 
@@ -94,8 +94,8 @@ python3 scripts/build_admin_dashboard.py
 
 | タスクID | 実行 | 何をするか |
 |---|---|---|
-| `x-daily-measure` | 毎日 20:05頃 | 24時間経過した未計測投稿の表示回数を読み、`x-posts.md` に記録する |
-| `x-weekly-review` | 日曜 20:32頃 | 直近7日のX運用を振り返り、`x-weekly-reviews.md` に記録する |
+| `x-daily-measure` | 毎日 20:05頃 | 24時間経過した未計測投稿の表示回数を読み、`content/x/posts.md` に記録する |
+| `x-weekly-review` | 日曜 20:32頃 | 直近7日のX運用を振り返り、`content/x/weekly-reviews.md` に記録する |
 
 どちらも**投稿はしない**（計測と記録だけ）。返信案は出すが送信はしない。
 
@@ -163,7 +163,7 @@ python3 scripts/build_admin_dashboard.py
 | 台帳 | 更新するタイミング |
 |---|---|
 | `THEMES.yaml` | データ更新の直後（`DATA_REFRESH.md`） |
-| `x-posts.md` | X投稿の直後 |
+| `content/x/posts.md` | X投稿の直後 |
 | `GROWTH.yaml` `recurring.*.last_run` | その定例作業をやった直後。**実際に運用が動いた日**を書く（ループが動いた日ではない） |
 | `GROWTH.yaml` `kpi.snapshots` | KPI取得の直後（週1） |
 | `GROWTH.yaml` `activity_log` | サイト改善を進めた直後 |

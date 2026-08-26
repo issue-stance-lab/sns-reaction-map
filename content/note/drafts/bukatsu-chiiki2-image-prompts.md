@@ -1,10 +1,10 @@
 # note第2回「賛成しない87件を1件ずつ読んだ」｜画像作成プロンプト（Codex用）
 
 作成日: 2026-08-24
-対象記事: note第2回・先生編（作業指示書 `note-drafts/bukatsu-chiiki-note2-HANDOFF.md`）
+対象記事: note第2回・先生編（作業指示書 `content/note/drafts/bukatsu-chiiki-note2-HANDOFF.md`）
 作るもの: 見出し画像1点＋本文図解3点＝計4点
 
-第1回のプロンプト集は `note-drafts/bukatsu-chiiki-image-prompts.md`。
+第1回のプロンプト集は `content/note/drafts/bukatsu-chiiki-image-prompts.md`。
 本書の共通仕様はそこから引き写しているので、**片方を直したらもう片方も直すこと。**
 
 ---
@@ -41,10 +41,10 @@
 - レンダリングは Playwright（Chromium）で該当要素をスクリーンショットしてPNG化
 - フォントは Google Fonts の Noto Sans JP（weight 400/500/700/900）
 - 数字には font-variant-numeric: tabular-nums を必ず指定
-- 写真入力: note-drafts/photos/
-- HTML出力: note-drafts/figures/<名前>.html
-- PNG出力:  note-drafts/images/<名前>.png
-- note-drafts/figures/render2.mjs にまとめ、4点を一括再生成できるようにする
+- 写真入力: content/note/drafts/photos/
+- HTML出力: content/note/drafts/figures/<名前>.html
+- PNG出力:  content/note/drafts/images/<名前>.png
+- content/note/drafts/figures/render2.mjs にまとめ、4点を一括再生成できるようにする
   （第1回の render.mjs は上書きしないこと）
 
 ## カラートークン（既存のSNS反応まっぷのテーマ。変更しないこと）
@@ -165,13 +165,13 @@ Aspect ratio: 1.91:1 (wide). Output at the highest resolution available.
 見出し画像を1点つくってください。
 
 ## 出力
-- ファイル: note-drafts/images/bukatsu2_note-header.png
+- ファイル: content/note/drafts/images/bukatsu2_note-header.png
 - 論理サイズ 1280×670px を deviceScaleFactor: 1.5 で描画し、
   実ピクセル 1920×1006px のPNGとして書き出す
 - 比率は厳密に 1.91:1
 
 ## 素材
-- 写真: note-drafts/photos/teacher-staffroom-night.png
+- 写真: content/note/drafts/photos/teacher-staffroom-night.png
 - object-fit: cover で全面に敷き、顔が中央やや右（x≈62%）に来るよう位置調整する
 
 ## レイヤー構成
@@ -219,7 +219,7 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 本文用の図解を1点つくってください。写真は使いません。
 
 ## 出力
-- note-drafts/images/bukatsu2_fig1-227.png
+- content/note/drafts/images/bukatsu2_fig1-227.png
 - 論理サイズ 1200×380px、deviceScaleFactor: 2
 - 背景は共通仕様のカードスタイル
 
@@ -254,7 +254,7 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 本文用の図解を1点つくってください。この記事で最も重要な図です。写真は使いません。
 
 ## 出力
-- note-drafts/images/bukatsu2_fig2-reread.png
+- content/note/drafts/images/bukatsu2_fig2-reread.png
 - 論理サイズ 1200×820px、deviceScaleFactor: 2
 - 背景は図1と同じカードスタイル
 
@@ -329,7 +329,7 @@ A・Bを隣り合わせにして括弧でくくることが、この図の目的
 （noteは表の表示が弱いため、画像にします）
 
 ## 出力
-- note-drafts/images/bukatsu2_fig3-answer.png
+- content/note/drafts/images/bukatsu2_fig3-answer.png
 - 論理サイズ 1200×760px、deviceScaleFactor: 2
 - 背景は共通仕様のカードスタイル
 
@@ -393,7 +393,7 @@ SNSで心配されていたことが、国と自治体の資料でどうなっ�
 6. 幅375pxのモバイル表示を想定して縮小し、読めなくなる文字がないか確認
 7. 写真の上に置いた文字のコントラスト比を計算して一覧で報告
 8. 生成写真に文字（日本語・英語・数字）が紛れ込んでいないか拡大して確認
-9. note-drafts/figures/render2.mjs で4枚すべて再生成できる状態か確認
+9. content/note/drafts/figures/render2.mjs で4枚すべて再生成できる状態か確認
    （第1回の render.mjs を上書きしていないことも確認）
 ```
 

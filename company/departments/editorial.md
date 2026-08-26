@@ -10,8 +10,9 @@ Website、X、note を通じて、SNS の声、議論の流れ、現在の論点
 - テーマ台帳: `THEMES.yaml`
 - 公開ページ: `docs/`
 - 一次資料照合: `FACT_CHECK_GUIDE.md`
-- X: `.claude/skills/x-daily/SKILL.md` / `X_POSTING_GUIDE.md` / `x-posts.md`
-- note: `note-posts.md` / `note-drafts/`
+- 公開品質基準: `company/QUALITY_GATE.md`
+- X: `.claude/skills/x-daily/SKILL.md` / `X_POSTING_GUIDE.md` / `content/x/posts.md`
+- note: `content/note/posts.md` / `content/note/drafts/`
 
 ## Website運用
 
@@ -27,7 +28,7 @@ Website、X、note を通じて、SNS の声、議論の流れ、現在の論点
 - 各投稿の目的を「認知 / フォロワー / 会話 / Website流入」の1つに絞る。
 - 元投稿にない価値を追加できなければ見送る。
 - 実投稿は CEO が行う。
-- 投稿後は `x-posts.md` と `GROWTH.yaml` を現場で更新する。
+- 投稿後は `content/x/posts.md` と `GROWTH.yaml` を現場で更新する。
 
 ## note運用
 
@@ -36,6 +37,7 @@ Website、X、note を通じて、SNS の声、議論の流れ、現在の論点
 - 有料化後の価格は500円。CEO 承認なしで有料化しない。
 - Website の主要情報は無料で維持する。
 - UTM 付き Website リンクと、7日後・28日後の計測日を記録する。
+- 下書き、調査、実績は `company/FOLDER_MAP.md` の正式な場所に保存する。
 
 ## CEO承認が必要
 
