@@ -299,6 +299,146 @@ def _anomalies(found: list[dict]) -> str:
     )
 
 
+# --------------------------------------------------------------- CEO経営画面
+
+
+DEPARTMENT_LABELS = {
+    "executive": "経営統括",
+    "editorial": "編集部",
+    "business": "事業部",
+    "engineering-data": "開発・データ部",
+    "corporate": "経営管理",
+    "quality": "品質監査",
+}
+
+HANDOFF_STATUS = {
+    "in_progress": ("進行中", "soon"),
+    "scheduled": ("予定済み", "calm"),
+    "recurring": ("継続中", "ok"),
+    "awaiting_ceo_approval": ("CEO承認待ち", "warn"),
+    "ready_for_drafting": ("執筆可能", "soon"),
+    "planned": ("企画済み", "calm"),
+    "waiting_external_result": ("外部結果待ち", "calm"),
+}
+
+
+def _goal_value(goal: dict) -> str:
+    key, value = goal["key"], goal["value"]
+    if "revenue_yen" in key:
+        return f"{int(value):,}円"
+    if key == "adsense_status" and value == "approved":
+        return "承認"
+    if key == "company_form" and value == "consider_incorporation":
+        return "法人化を検討"
+    return fmt_num(value)
+
+
+def section_ceo(data: dict) -> str:
+    company = data.get("company") or {}
+    brief = data.get("executive_brief") or []
+    constraints = company.get("constraints") or {}
+    report = "".join(
+        f'<article class="brief-card {esc(item["tone"])}"><div class="brief-label">{esc(item["label"])}</div>'
+        f'<div class="brief-text">{esc(item["text"])}</div></article>'
+        for item in brief
+    )
+    owner_hours = constraints.get("owner_hours_per_week_max")
+    cost_limit = constraints.get("monthly_operating_cost_yen_max_until_revenue")
+    return f"""<section id="ceo" class="ceo-home">
+<div class="north-star">
+  <div class="north-star-mark" aria-hidden="true"><span></span><i></i><b></b></div>
+  <div><div class="eyebrow">会社の北極星</div><h2>{esc(company.get("north_star") or "目的が未記入です")}</h2></div>
+</div>
+<div class="operating-rule"><span>CEO <strong>週{fmt_num(owner_hours)}時間以内</strong></span>
+<span>収益化前の運営費 <strong>月{fmt_num(cost_limit)}円以内</strong></span>
+<span><strong>AI中心</strong> ・公開はCEO承認</span></div>
+<div class="section-kicker"><span>TODAY</span><h3>今日の経営報告</h3><p>下の4行だけ読めば、今日の判断を始められます。</p></div>
+<div class="brief-grid">{report}</div>
+</section>"""
+
+
+def section_company(data: dict) -> str:
+    company = data.get("company") or {}
+    today = data["today"]
+
+    pending = company.get("pending_approvals") or []
+    approval_cards = []
+    for item in pending:
+        risks = "".join(f"<li>{esc(risk)}</li>" for risk in item.get("risks") or [])
+        approval_cards.append(
+            f'<article class="approval-card"><div class="approval-top"><span class="pill warn">CEO判断</span>'
+            f'<span class="muted small">依頼 {fmt_full_date(item.get("requested_at"))}</span></div>'
+            f'<h4>{esc(item.get("summary"))}</h4><p>{esc(item.get("reason"))}</p>'
+            f'<div class="recommendation">推奨 <strong>{esc(item.get("recommendation") or "未記入")}</strong></div>'
+            f'{f"<ul>{risks}</ul>" if risks else ""}</article>'
+        )
+    approvals_html = "".join(approval_cards) or '<p class="empty-state">現在、CEOの承認待ちはありません。</p>'
+
+    work_rows = []
+    for item in (company.get("handoffs") or [])[:8]:
+        status_label, tone = HANDOFF_STATUS.get(item.get("status"), (item.get("status") or "不明", "calm"))
+        due_text, due_tone = days_label(item.get("due_in"))
+        work_rows.append(
+            f'<article class="work-item"><div class="work-meta"><span>{esc(DEPARTMENT_LABELS.get(item.get("department"), item.get("department")))}</span>'
+            f'<span class="pill {tone}">{esc(status_label)}</span><span class="pill {due_tone}">{esc(due_text)}</span></div>'
+            f'<h4>{esc(item.get("current_state"))}</h4><p><strong>次:</strong> {esc(item.get("next_action"))}</p>'
+            f'<div class="work-id">{esc(item.get("id"))} ・ 期日 {fmt_full_date(item.get("due_at"))}</div></article>'
+        )
+
+    milestone_cards = []
+    for milestone in company.get("milestones") or []:
+        due_text, due_tone = days_label(milestone.get("due_in"))
+        goals = "".join(
+            f'<li><span>{esc(goal["label"])}</span><strong>{esc(_goal_value(goal))}</strong></li>'
+            for goal in milestone.get("goals") or []
+        )
+        milestone_cards.append(
+            f'<article class="milestone"><div class="milestone-head"><div><div class="milestone-name">{esc(milestone["label"])}</div>'
+            f'<div class="muted small">期日 {fmt_full_date(milestone.get("due_at"))}</div></div>'
+            f'<span class="pill {due_tone}">{esc(due_text)}</span></div><ul>{goals}</ul></article>'
+        )
+
+    finance = company.get("current_finance")
+    if finance:
+        profit = "未確定" if finance["profit"] is None else f'{finance["profit"]:,}円'
+        unknown = finance["unknown_revenue"] + finance["unknown_costs"]
+        unknown_note = (
+            f'<div class="finance-note warn-banner">未確認の費目: {esc(", ".join(unknown))}。未確認を0円とは扱いません。</div>'
+            if unknown else ""
+        )
+        finance_html = f"""<div class="finance-panel">
+<div class="finance-month">{esc(finance['month'])}</div>
+<div class="finance-numbers">
+  <div><span>収益</span><strong>{finance['revenue_total']:,}円</strong></div>
+  <div><span>費用（確定分）</span><strong>{finance['cost_total']:,}円</strong></div>
+  <div><span>利益</span><strong>{esc(profit)}</strong></div>
+  <div><span>費用上限</span><strong>{finance['cost_limit']:,}円</strong></div>
+</div>{unknown_note}<p>{esc(finance['notes'])}</p></div>"""
+    else:
+        finance_html = '<p class="empty-state">月次収支の記録がありません。</p>'
+
+    alert_items = "".join(
+        f'<li class="{esc(item["tone"])}"><strong>{esc(item["title"])}</strong><span>{esc(item["detail"])}</span></li>'
+        for item in company.get("alerts") or []
+    )
+    ledger_alerts = f'<ul class="alerts ledger-alerts">{alert_items}</ul>' if alert_items else '<p class="ok-banner">会社台帳に記録漏れ・期限超過・費用超過はありません。</p>'
+
+    org_cards = "".join(
+        f'<article class="org-card"><div class="org-key">{index:02d}</div><h4>{esc(item["title"])}</h4><p>{esc(item["mission"])}</p></article>'
+        for index, item in enumerate(company.get("departments") or [], 1)
+    )
+
+    return f"""<section id="company" class="company-board">
+<div class="section-kicker"><span>DECIDE</span><h2>CEOの判断と会社の現在地</h2><p>{fmt_full_date(today)} 時点。各台帳から自動で集約しています。</p></div>
+<div class="company-split"><div><h3>承認待ち <span class="count">{len(pending)}</span></h3><div class="approval-list">{approvals_html}</div></div>
+<div><h3>台帳アラート <span class="count">{len(company.get("alerts") or [])}</span></h3>{ledger_alerts}</div></div>
+<h3 class="board-heading">進行中の業務</h3><div class="work-list">{"".join(work_rows)}</div>
+<h3 class="board-heading">目標までの距離</h3><div class="milestone-grid">{"".join(milestone_cards)}</div>
+<div class="company-split lower"><div><h3>月次収支</h3>{finance_html}</div>
+<div><h3>組織と責任</h3><div class="org-grid">{org_cards}</div></div></div>
+</section>"""
+
+
 def section_next(data: dict) -> str:
     action = data.get("next")
     if not action:
@@ -382,6 +522,10 @@ def section_next(data: dict) -> str:
 def section_alerts(data: dict) -> str:
     today = data["today"]
     alerts: list[tuple[str, str, str]] = []  # (深刻度, 見出し, 説明)
+
+    # 会社台帳の期限・承認・収支・訂正を、従来の運用警告と同じ場所で見る。
+    for item in (data.get("company") or {}).get("alerts") or []:
+        alerts.append((item.get("tone") or "warn", item.get("title") or "会社台帳の確認", item.get("detail") or ""))
 
     for theme in data["themes"]:
         for kind, field, action in (("収集", "collect_in", "データを集める日"), ("公開更新", "refresh_in", "ページを更新して公開する日")):
@@ -1022,19 +1166,23 @@ def section_health(data: dict) -> str:
 
 
 CSS = """
-:root{--bg:#f6f7f9;--fg:#16191d;--muted:#697080;--line:#dfe3e9;--panel:#fff;
---ok:#1a7f4b;--warn:#a86400;--danger:#b3261e;--soon:#1f6feb;
---c1:#1f6feb;--c2:#7b48d6;--c3:#1a7f4b;--c4:#c2740b;--c5:#0e7c86;}
-@media (prefers-color-scheme:dark){:root{--bg:#101317;--fg:#e6e9ee;--muted:#98a1b0;--line:#2a3038;--panel:#171b21;
---ok:#4ec98a;--warn:#e0a33c;--danger:#f2776b;--soon:#6ea8fe;
---c1:#6ea8fe;--c2:#b48ef5;--c3:#4ec98a;--c4:#e0a33c;--c5:#3fbfc9;}}
+:root{--bg:#edf2f6;--fg:#172235;--muted:#637184;--line:#d4dde5;--panel:#fbfcfe;
+--ink:#173c5a;--water:#2f7e83;--sun:#c98b24;--paper:#f7fafc;
+--ok:#24775b;--warn:#9b6712;--danger:#ad3d35;--soon:#276c9b;
+--c1:#276c9b;--c2:#6467a8;--c3:#24775b;--c4:#b37720;--c5:#2f7e83;}
+@media (prefers-color-scheme:dark){:root{--bg:#101820;--fg:#e7edf2;--muted:#9aaaba;--line:#2b3a47;--panel:#16222c;
+--ink:#9dc5df;--water:#64b7b7;--sun:#e0a94b;--paper:#15212a;
+--ok:#5bc798;--warn:#e4b45c;--danger:#f08479;--soon:#70afe0;
+--c1:#70afe0;--c2:#a5a8e7;--c3:#5bc798;--c4:#e4b45c;--c5:#64b7b7;}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);
-font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+font-family:"Hiragino Sans","Yu Gothic UI","Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;
 line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px 96px}
-header.top{padding:28px 0 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
-header.top h1{margin:0 0 4px;font-size:26px;letter-spacing:.01em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+header.top{padding:30px 0 14px;border-bottom:1px solid var(--line);margin-bottom:8px;position:relative}
+header.top::after{content:"";position:absolute;left:0;bottom:-1px;width:116px;height:3px;background:linear-gradient(90deg,var(--ink) 0 46%,var(--sun) 46% 54%,var(--water) 54%)}
+header.top h1{margin:0 0 4px;font:700 28px/1.25 "Avenir Next","Hiragino Sans",sans-serif;letter-spacing:.015em}
+.product-name{font:700 11px/1 "Avenir Next",sans-serif;letter-spacing:.2em;color:var(--water);text-transform:uppercase;margin-bottom:8px}
 .built{color:var(--muted);font-size:13px}
 .local-note{margin-top:12px;padding:10px 14px;border-radius:8px;background:color-mix(in srgb,var(--soon) 12%,transparent);
 border:1px solid color-mix(in srgb,var(--soon) 35%,transparent);font-size:13px}
@@ -1044,12 +1192,48 @@ nav.toc ul{display:flex;gap:4px;list-style:none;margin:0;padding:8px 0;overflow-
 nav.toc a{display:block;white-space:nowrap;padding:5px 11px;border-radius:999px;text-decoration:none;
 color:var(--muted);font-size:13px}
 nav.toc a:hover{background:var(--panel);color:var(--fg)}
+nav.toc a:focus-visible,.copy:focus-visible,.filter:focus-visible{outline:3px solid color-mix(in srgb,var(--soon) 38%,transparent);outline-offset:2px}
 section{margin:0 0 52px;scroll-margin-top:56px}
 h2{font-size:20px;margin:0 0 6px;padding-bottom:8px;border-bottom:2px solid var(--line)}
 h3{font-size:15px;margin:28px 0 10px;color:var(--fg)}
 h4{font-size:13px;margin:0 0 8px;color:var(--muted);font-weight:600}
 .lead{color:var(--muted);font-size:13.5px;margin:8px 0 16px}
 .muted{color:var(--muted)}.small{font-size:12.5px}.strong{font-weight:700}
+.eyebrow{font:700 11px/1.2 "Avenir Next",sans-serif;letter-spacing:.18em;color:var(--water);text-transform:uppercase;margin-bottom:9px}
+.north-star{display:grid;grid-template-columns:88px 1fr;gap:24px;align-items:center;margin:10px 0 0;padding:26px 28px;
+background:linear-gradient(120deg,color-mix(in srgb,var(--ink) 10%,var(--panel)),var(--panel) 62%,color-mix(in srgb,var(--water) 10%,var(--panel)));
+border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 42px color-mix(in srgb,var(--ink) 9%,transparent)}
+.north-star h2{max-width:850px;margin:0;padding:0;border:0;font-size:clamp(22px,3vw,35px);line-height:1.5;letter-spacing:.015em;color:var(--ink)}
+.north-star-mark{width:76px;height:76px;position:relative;border-radius:50%;border:1px solid color-mix(in srgb,var(--ink) 24%,transparent)}
+.north-star-mark::before,.north-star-mark::after{content:"";position:absolute;top:15px;width:32px;height:46px;border:2px solid var(--ink)}
+.north-star-mark::before{left:8px;border-right:0;border-radius:32px 0 0 32px;transform:rotate(18deg)}
+.north-star-mark::after{right:8px;border-left:0;border-radius:0 32px 32px 0;transform:rotate(-18deg)}
+.north-star-mark span{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--sun);left:33px;top:33px;z-index:2}
+.north-star-mark i,.north-star-mark b{position:absolute;width:22px;height:2px;background:var(--water);top:36px}.north-star-mark i{left:3px}.north-star-mark b{right:3px}
+.operating-rule{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 30px}
+.operating-rule span{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--panel) 78%,transparent);font-size:12px;color:var(--muted)}
+.operating-rule strong{color:var(--fg)}
+.section-kicker{display:grid;grid-template-columns:80px minmax(240px,1fr) auto;gap:14px;align-items:end;margin:26px 0 12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.section-kicker>span{font:700 10px/1 "Avenir Next",sans-serif;letter-spacing:.18em;color:var(--water)}
+.section-kicker h2,.section-kicker h3{font-size:19px;margin:0;padding:0;border:0}.section-kicker p{margin:0;color:var(--muted);font-size:12px;text-align:right}
+.brief-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.brief-card{min-height:140px;background:var(--panel);padding:16px 17px;border-top:4px solid transparent}
+.brief-card.focus{border-top-color:var(--water)}.brief-card.warn{border-top-color:var(--sun)}.brief-card.danger{border-top-color:var(--danger)}
+.brief-label{font:700 11px/1.2 "Avenir Next","Hiragino Sans",sans-serif;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.brief-text{font-weight:650;line-height:1.65}
+.company-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}.company-split.lower{margin-top:30px;align-items:start}
+.company-split h3,.board-heading{font-size:15px;margin:0 0 10px}.count{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:5px;border-radius:50%;background:var(--ink);color:var(--panel);font:700 11px/1 "Avenir Next",sans-serif}
+.approval-list,.work-list{display:grid;gap:9px}.approval-card,.work-item,.milestone,.finance-panel,.org-card{background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.approval-card{padding:15px;border-left:4px solid var(--sun)}.approval-top,.work-meta,.milestone-head{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap}
+.approval-card h4,.work-item h4{font-size:14px;color:var(--fg);margin:10px 0 4px}.approval-card p,.work-item p,.finance-panel p,.org-card p{font-size:12.5px;color:var(--muted);margin:3px 0;line-height:1.6}
+.approval-card ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:11.5px}.recommendation{font-size:12px;color:var(--muted);margin-top:8px}.recommendation strong{color:var(--water)}
+.ledger-alerts{margin-top:0}.empty-state{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);background:color-mix(in srgb,var(--panel) 70%,transparent)}
+.board-heading{margin-top:30px}.work-list{grid-template-columns:repeat(2,minmax(0,1fr))}.work-item{padding:14px 15px}.work-meta{justify-content:flex-start;color:var(--water);font-size:11.5px}.work-item h4{font-weight:650}.work-id{font:500 10px/1.4 "Avenir Next",sans-serif;color:var(--muted);margin-top:10px;letter-spacing:.02em}
+.milestone-grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:10px}.milestone{padding:14px}.milestone-name{font-weight:750;color:var(--ink)}.milestone ul{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--line)}
+.milestone li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 66%,transparent);font-size:12px}.milestone li span{color:var(--muted)}.milestone li strong{font-variant-numeric:tabular-nums;text-align:right}
+.finance-panel{padding:16px}.finance-month{font:750 13px/1.2 "Avenir Next",sans-serif;color:var(--water);letter-spacing:.08em}.finance-numbers{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin:12px 0;border:1px solid var(--line)}
+.finance-numbers div{background:var(--panel);padding:10px}.finance-numbers span{display:block;font-size:10.5px;color:var(--muted)}.finance-numbers strong{font:750 18px/1.4 "Avenir Next","Hiragino Sans",sans-serif}.finance-note{font-size:11.5px}
+.org-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.org-card{padding:12px;position:relative;overflow:hidden}.org-key{position:absolute;right:8px;top:5px;font:800 28px/1 "Avenir Next",sans-serif;color:color-mix(in srgb,var(--ink) 9%,transparent)}.org-card h4{position:relative;margin:0 0 4px;color:var(--ink)}
 code{background:color-mix(in srgb,var(--fg) 8%,transparent);padding:1px 5px;border-radius:4px;font-size:12.5px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:10px;margin:14px 0}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
@@ -1178,6 +1362,8 @@ th.sortcol[data-dir="asc"]::after{content:"▲";opacity:1}
 th.sortcol[data-dir="desc"]::after{content:"▼";opacity:1}
 @media(max-width:640px){
 .wrap{padding:0 12px 64px}
+.north-star{grid-template-columns:54px 1fr;gap:13px;padding:18px 15px}.north-star-mark{width:50px;height:50px}.north-star-mark::before,.north-star-mark::after{top:9px;width:22px;height:31px}.north-star-mark::before{left:4px}.north-star-mark::after{right:4px}.north-star-mark span{left:21px;top:21px}.north-star-mark i,.north-star-mark b{width:14px;top:24px}.north-star h2{font-size:19px;line-height:1.55}
+.section-kicker{grid-template-columns:62px 1fr}.section-kicker p{grid-column:1/-1;text-align:left}.brief-grid{grid-template-columns:1fr}.brief-card{min-height:0}.company-split,.company-split.lower,.work-list,.milestone-grid,.org-grid{grid-template-columns:1fr}.operating-rule{gap:5px}.finance-numbers{grid-template-columns:1fr 1fr}
 .calendar{grid-template-columns:repeat(7,1fr);gap:2px}
 .cal-day{min-height:48px;padding:3px}
 .cal-item{font-size:9px}
@@ -1195,6 +1381,7 @@ padding:8px 12px;margin-bottom:8px}
 .tablebox td::before{content:attr(data-label);flex:none;width:8.5em;color:var(--muted);font-size:11.5px}
 .tablebox .clamp{max-width:none;white-space:normal}
 }
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 """
 
 # 外部CDNは使わない方針なので、必要な動きだけを素のJSで書く。
@@ -1334,6 +1521,8 @@ SCRIPT = r"""
 """
 
 NAV = [
+    ("ceo", "CEOホーム"),
+    ("company", "承認・目標・収支"),
     ("next", "次の一手"),
     ("alerts", "対応が要ること"),
     ("schedule", "スケジュール"),
@@ -1354,6 +1543,8 @@ def render(data: dict) -> str:
     built_date = data["today"].isoformat()
     sections = "".join(
         [
+            section_ceo(data),
+            section_company(data),
             section_next(data),
             section_alerts(data),
             section_schedule(data),
@@ -1374,7 +1565,8 @@ def render(data: dict) -> str:
 <style>{CSS}</style></head>
 <body data-built="{built_date}"><div class="wrap">
 <header class="top">
-<h1>SNS反応まっぷ 管理画面</h1>
+<div class="product-name">SNS Reaction Map / Executive Office</div>
+<h1>CEO 経営管理画面</h1>
 <div class="built">{built} 時点のリポジトリの中身から作成</div>
 <div class="local-note"><strong>このファイルは公開されません。</strong>手元の Mac の中だけにあり、
 GitHub にも上がりません（<code>company/dashboard/</code> は Git の管理対象外）。数字を新しくするには作り直すコマンドを実行します。</div>

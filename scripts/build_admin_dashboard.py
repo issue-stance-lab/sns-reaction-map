@@ -29,6 +29,7 @@ def build(*, fetch: bool, today: dt.date) -> str:
     data = {
         "today": today,
         "built_at": dt.datetime.now(),
+        "company": collect.collect_company(today),
         "themes": collect.collect_themes(today),
         "kpi": collect.collect_kpi(),
         "x_posts": collect.collect_x_posts(),
@@ -45,6 +46,7 @@ def build(*, fetch: bool, today: dt.date) -> str:
     data["next"] = actions.next_action(data)
     data["post_breakdown"] = actions.post_breakdown(data["x_posts"], today)
     data["anomalies"] = actions.anomalies(data)
+    data["executive_brief"] = actions.executive_brief(data)
     return render.render(data)
 
 

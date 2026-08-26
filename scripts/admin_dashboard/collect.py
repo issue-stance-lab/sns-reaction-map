@@ -125,6 +125,225 @@ def collect_sample_files() -> list[str]:
     return [value["sample_file"] for value in raw.values() if value.get("sample_file")]
 
 
+# --------------------------------------------------------------- 会社運営台帳
+
+
+MILESTONE_LABELS = {
+    "first_90_days": "90日目標",
+    "first_year": "1年目標",
+    "third_year": "3年目標",
+}
+
+GOAL_LABELS = {
+    "adsense_status": "AdSense",
+    "adsense_revenue_yen_min": "AdSense収益",
+    "adsense_monthly_revenue_yen": "AdSense月収",
+    "monthly_revenue_yen": "月間収益",
+    "monthly_pageviews": "月間PV",
+    "monthly_pageviews_provisional": "月間PV（仮）",
+    "weekly_users": "週間利用者",
+    "x_followers": "Xフォロワー",
+    "note_new_posts": "note新規記事",
+    "votes_total": "累計投票",
+    "company_form": "会社形態",
+}
+
+DEPARTMENT_ORDER = (
+    "executive",
+    "editorial",
+    "business",
+    "engineering-data",
+    "corporate",
+    "quality",
+)
+
+
+def _mission_from_markdown(relative: str) -> tuple[str, str]:
+    """部門文書の見出しと「使命」の最初の段落を読む。"""
+    lines = _read_text(relative).splitlines()
+    title = next((line[2:].strip() for line in lines if line.startswith("# ")), Path(relative).stem)
+    mission = ""
+    for index, line in enumerate(lines):
+        if line.strip() != "## 使命":
+            continue
+        paragraph = []
+        for candidate in lines[index + 1:]:
+            if candidate.startswith("## "):
+                break
+            if candidate.strip():
+                paragraph.append(candidate.strip())
+            elif paragraph:
+                break
+        mission = " ".join(paragraph)
+        break
+    return title, mission
+
+
+def _finance_period(period: dict, limit: int) -> dict:
+    revenue = period.get("revenue") or {}
+    costs = period.get("costs") or {}
+    revenue_known = [value for value in revenue.values() if isinstance(value, (int, float))]
+    costs_known = [value for value in costs.values() if isinstance(value, (int, float))]
+    unknown_revenue = [key for key, value in revenue.items() if value is None]
+    unknown_costs = [key for key, value in costs.items() if value is None]
+    revenue_total = sum(revenue_known)
+    cost_total = sum(costs_known)
+    profit = period.get("profit")
+    if profit is None and not unknown_revenue and not unknown_costs:
+        profit = revenue_total - cost_total
+    return {
+        "month": str(period.get("month") or ""),
+        "revenue": revenue,
+        "costs": costs,
+        "revenue_total": revenue_total,
+        "cost_total": cost_total,
+        "profit": profit,
+        "unknown_revenue": unknown_revenue,
+        "unknown_costs": unknown_costs,
+        "cost_limit": limit,
+        "cost_over": not unknown_costs and cost_total > limit,
+        "notes": period.get("notes") or "",
+    }
+
+
+def collect_company(today: dt.date) -> dict:
+    """CEOが判断するための会社台帳を一度に読む。
+
+    各数値をHTMLに直書きせず、company/の正典をそのまま表示用に
+    整える。必須欄の欠落、期限超過、承認待ち、費用上限もここで検知する。
+    """
+    goals_raw = _read_yaml("company/GOALS.yaml")
+    handoffs_raw = _read_yaml("company/HANDOFFS.yaml")
+    approvals_raw = _read_yaml("company/APPROVALS.yaml")
+    finance_raw = _read_yaml("company/FINANCE.yaml")
+    corrections_raw = _read_yaml("company/CORRECTIONS.yaml")
+
+    milestones = []
+    for milestone in goals_raw.get("milestones") or []:
+        due_at = _as_date(milestone.get("due_at"))
+        milestone_goals = [
+            {
+                "key": key,
+                "label": GOAL_LABELS.get(key, key),
+                "value": value,
+            }
+            for key, value in (milestone.get("goals") or {}).items()
+        ]
+        milestones.append(
+            {
+                "id": milestone.get("id") or "",
+                "label": MILESTONE_LABELS.get(milestone.get("id"), milestone.get("id") or "目標"),
+                "due_at": due_at,
+                "due_in": (due_at - today).days if due_at else None,
+                "goals": milestone_goals,
+                "assumptions": milestone.get("assumptions") or {},
+            }
+        )
+
+    required = handoffs_raw.get("required_fields") or []
+    handoffs = []
+    ledger_alerts = []
+    terminal_statuses = {"completed", "cancelled", "withdrawn"}
+    for item in handoffs_raw.get("items") or []:
+        due_at = _as_date(item.get("due_at"))
+        missing = [field for field in required if field not in item]
+        normalized = dict(item)
+        normalized["due_at"] = due_at
+        normalized["due_in"] = (due_at - today).days if due_at else None
+        normalized["missing_fields"] = missing
+        handoffs.append(normalized)
+        if missing:
+            ledger_alerts.append(
+                {"tone": "danger", "kind": "ledger", "title": f"{item.get('id', '名前なし')} に必須欄がありません", "detail": " / ".join(missing)}
+            )
+        if due_at and due_at < today and item.get("status") not in terminal_statuses:
+            ledger_alerts.append(
+                {
+                    "tone": "danger",
+                    "kind": "deadline",
+                    "title": f"{item.get('id', '業務')} が {(today - due_at).days} 日超過",
+                    "detail": item.get("next_action") or "次の一手が未記入です",
+                }
+            )
+    handoffs.sort(key=lambda item: (item["due_at"] is None, item["due_at"] or dt.date.max, item.get("id") or ""))
+
+    approvals = []
+    for item in approvals_raw.get("items") or []:
+        normalized = dict(item)
+        normalized["requested_at"] = _as_date(item.get("requested_at"))
+        normalized["decided_at"] = _as_date(item.get("decided_at"))
+        approvals.append(normalized)
+        if item.get("status") == "pending":
+            ledger_alerts.append(
+                {
+                    "tone": "warn",
+                    "kind": "approval",
+                    "title": f"CEO承認待ち: {item.get('summary') or item.get('id')}",
+                    "detail": item.get("reason") or "判断理由が未記入です",
+                }
+            )
+    approvals.sort(key=lambda item: (item.get("status") != "pending", item.get("requested_at") or dt.date.min), reverse=False)
+
+    limit = int((finance_raw.get("policy") or {}).get("monthly_cost_limit_until_revenue") or 0)
+    periods = [_finance_period(period, limit) for period in finance_raw.get("periods") or []]
+    periods.sort(key=lambda period: period["month"], reverse=True)
+    current_finance = periods[0] if periods else None
+    if current_finance:
+        unknown = current_finance["unknown_revenue"] + current_finance["unknown_costs"]
+        if unknown:
+            ledger_alerts.append(
+                {
+                    "tone": "warn",
+                    "kind": "finance",
+                    "title": f"{current_finance['month']} の収支が未確定です",
+                    "detail": f"未確認: {', '.join(unknown)}。未確認を0円とは扱いません",
+                }
+            )
+        if current_finance["cost_over"]:
+            ledger_alerts.append(
+                {
+                    "tone": "danger",
+                    "kind": "finance",
+                    "title": f"月間費用が上限 {limit:,} 円を超えています",
+                    "detail": f"確定費用 {current_finance['cost_total']:,} 円",
+                }
+            )
+
+    corrections = []
+    for item in corrections_raw.get("items") or []:
+        normalized = dict(item)
+        normalized["received_at"] = _as_date(item.get("received_at"))
+        corrections.append(normalized)
+        if item.get("status") not in terminal_statuses | {"resolved", "closed"}:
+            ledger_alerts.append(
+                {
+                    "tone": "danger",
+                    "kind": "correction",
+                    "title": f"未解決の訂正案件: {item.get('summary') or item.get('id', '名前なし')}",
+                    "detail": item.get("next_action") or "対応内容を確認してください",
+                }
+            )
+
+    departments = []
+    for key in DEPARTMENT_ORDER:
+        title, mission = _mission_from_markdown(f"company/departments/{key}.md")
+        departments.append({"key": key, "title": title, "mission": mission})
+
+    return {
+        "north_star": (goals_raw.get("north_star") or {}).get("statement") or "",
+        "constraints": goals_raw.get("constraints") or {},
+        "milestones": milestones,
+        "handoffs": handoffs,
+        "approvals": approvals,
+        "pending_approvals": [item for item in approvals if item.get("status") == "pending"],
+        "finance": periods,
+        "current_finance": current_finance,
+        "corrections": corrections,
+        "departments": departments,
+        "alerts": ledger_alerts,
+    }
+
+
 def _read_json_file(relative: str):
     path = ROOT / relative
     if not path.exists():

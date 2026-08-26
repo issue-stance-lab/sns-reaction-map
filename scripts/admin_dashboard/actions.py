@@ -329,6 +329,73 @@ def post_breakdown(posts: list[dict], today: dt.date, *, days: int = 60) -> list
     return out
 
 
+# --------------------------------------------------------------- CEO日次報告
+
+
+def executive_brief(data: dict) -> list[dict]:
+    """「昨日 / 今日 / 問題 / 承認」を、1画面の4行にまとめる。
+
+    完了の根拠は git・データ更新・X投稿の実績から拾い、今日の作業と
+    承認は company/ の台帳から拾う。記録が無いときは推測で埋めない。
+    """
+    today = data["today"]
+    yesterday = today - dt.timedelta(days=1)
+    company = data.get("company") or {}
+
+    commits = [item for item in data.get("commits") or [] if item.get("date") == yesterday]
+    updates = [item for item in data.get("data_updates") or [] if item.get("date") == yesterday]
+    posts = [item for item in data.get("x_posts") or [] if item.get("date") == yesterday]
+    result_parts = []
+    if updates:
+        result_parts.append(f"データ更新 {len(updates)}テーマ")
+    if posts:
+        result_parts.append(f"X投稿 {len(posts)}件")
+    if commits:
+        result_parts.append(f"作業記録 {len(commits)}件（{commits[0]['message']}）")
+    yesterday_text = " / ".join(result_parts) if result_parts else "昨日の完了記録はまだありません"
+
+    active = [
+        item
+        for item in company.get("handoffs") or []
+        if item.get("status") not in {"completed", "cancelled", "withdrawn"}
+    ]
+    due_now = [item for item in active if item.get("due_in") is not None and item["due_in"] <= 0]
+    focus = (due_now or active)[0] if (due_now or active) else None
+    today_text = focus.get("next_action") if focus else "今日が期限の進行中業務はありません"
+
+    company_alerts = company.get("alerts") or []
+    health_failures = [item for item in data.get("health") or [] if item.get("ok") is False]
+    found_anomalies = data.get("anomalies") or []
+    overdue_measurements = ((data.get("x_measurement") or {}).get("overdue") or [])
+    problem_count = len(company_alerts) + len(health_failures) + len(found_anomalies)
+    if overdue_measurements:
+        problem_count += 1
+    if company_alerts:
+        problem_text = f"{problem_count}件。最優先: {company_alerts[0]['title']}"
+    elif health_failures:
+        problem_text = f"{problem_count}件。最優先: {health_failures[0]['name']} を確認"
+    elif found_anomalies:
+        problem_text = f"{problem_count}件。最優先: {found_anomalies[0]['title']}"
+    elif overdue_measurements:
+        problem_text = f"1件。X投稿の表示回数が {len(overdue_measurements)} 件未計測"
+    else:
+        problem_text = "台帳が検知した遅れ・問題はありません"
+
+    pending = company.get("pending_approvals") or []
+    if pending:
+        approval = pending[0]
+        approval_text = f"{approval.get('summary')}（推奨: {approval.get('recommendation') or '未記入'}）"
+    else:
+        approval_text = "CEOの承認待ちはありません"
+
+    return [
+        {"key": "yesterday", "label": "昨日の結果", "text": yesterday_text, "tone": "calm"},
+        {"key": "today", "label": "今日進めること", "text": today_text, "tone": "focus"},
+        {"key": "problem", "label": "遅れ・問題", "text": problem_text, "tone": "danger" if problem_count else "calm"},
+        {"key": "approval", "label": "承認事項", "text": approval_text, "tone": "warn" if pending else "calm"},
+    ]
+
+
 def typical_minutes(data_updates: list[dict], topic: str) -> int | None:
     """そのテーマの過去の所要時間の中央値。「どれくらいかかるか」の目安に使う。"""
     minutes = [u["minutes"] for u in data_updates if u["theme"] == topic and u["minutes"]]
