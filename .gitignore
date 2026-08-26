@@ -10,7 +10,13 @@ __pycache__/
 
 # ローカル専用の管理画面（scripts/build_admin_dashboard.py の出力）
 # 運用状況をまとめた画面で、公開もコミットもしない
-admin/
+company/dashboard/
+
+# note調査の再生成可能な字幕・ローカル作業環境
+content/note/raw-research/
+
+# 使われていないデザイン同期実験のローカル実行環境・生成物
+archive/local/design-sync-runtime/
 
 # Node
 node_modules/
@@ -34,16 +40,12 @@ social-samples/consumption-tax-cut_hermes_arena_classified.*
 social-samples/consumption-tax-cut_samples*.*
 social-samples/fukushuto_hermes_classified.*
 
-# Design system
-design-system/node_modules/
-design-system/dist/
-
-# Design sync tooling
-.ds-sync/
-ds-bundle/
-.design-sync/.cache/
-.design-sync/learnings/
-.design-sync/node_modules
+# Archived design system experiment
+archive/design-system-experiment/package/node_modules/
+archive/design-system-experiment/package/dist/
+archive/design-system-experiment/sync-config/.cache/
+archive/design-system-experiment/sync-config/learnings/
+archive/design-system-experiment/sync-config/node_modules
 
 # Local Claude settings
 .claude/settings.local.json

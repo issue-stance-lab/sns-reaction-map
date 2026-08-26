@@ -24,7 +24,7 @@
 
 ### 1. フォーマット定義書の作成
 
-`templates/topic-page-v3.md` を新規作成し、以下のセクション構成・順序を仕様として文書化する（Phase Bで他テーマへ展開する際の正典になる。CSSクラス名・セクションID・折りたたみ仕様まで具体的に書くこと）:
+`creative/templates/topic-page-v3.md` を新規作成し、以下のセクション構成・順序を仕様として文書化する（Phase Bで他テーマへ展開する際の正典になる。CSSクラス名・セクションID・折りたたみ仕様まで具体的に書くこと）:
 
 1. **ヒーロー** — 既存ヒーロー画像 + テーマの問い1行 + 「30秒サマリー」3点箇条書き（新規。SNS意見分布の要点を3行で）
 2. **漫画で読む対立** — 現行維持
@@ -41,7 +41,7 @@
 
 ## 制約・注意（重要）
 
-- **変更してよいファイル**: `docs/ai-copyright-reaction-map.html`、`templates/topic-page-v3.md`（新規）のみ。他テーマのHTML・ポータル(index.html)・スクリプトは変更しない
+- **変更してよいファイル**: `docs/ai-copyright-reaction-map.html`、`creative/templates/topic-page-v3.md`（新規）のみ。他テーマのHTML・ポータル(index.html)・スクリプトは変更しない
 - **絶対に維持するもの**（削除・破壊禁止。改修後にgrepで存在確認すること）:
   - GA4タグ: `G-K10S4YCZFH`
   - AdSenseコード: `ca-pub-2542211932832864`
@@ -62,7 +62,7 @@
 
 ## 完了条件・報告
 
-1. `templates/topic-page-v3.md` が作成され、8セクションの仕様が具体的に書かれている
+1. `creative/templates/topic-page-v3.md` が作成され、8セクションの仕様が具体的に書かれている
 2. `docs/ai-copyright-reaction-map.html` が v3 構成になり、ローカルでブラウザ表示確認済み（コンソールエラーなし、投票→比較表示→マップ上マーカーが動作）
 3. GA4 / AdSense / Supabase / OGP のタグ残存を grep で確認した結果を報告する
 4. 変更ファイル一覧と各セクションの実装サマリーを出力する

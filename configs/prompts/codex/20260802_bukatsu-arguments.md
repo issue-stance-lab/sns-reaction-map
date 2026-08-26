@@ -2,8 +2,8 @@
 
 ### 出典
 
-`WORK_PLAN_2026-08.md` §4 B-2 の横展開1本目
-`WORK_PLAN_2026-08_SESSIONS.md`
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §4 B-2 の横展開1本目
+`archive/planning-2026-08/WORK_PLAN_2026-08_SESSIONS.md`
 
 ### なぜこのテーマか
 

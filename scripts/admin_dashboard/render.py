@@ -1377,7 +1377,7 @@ def render(data: dict) -> str:
 <h1>SNS反応まっぷ 管理画面</h1>
 <div class="built">{built} 時点のリポジトリの中身から作成</div>
 <div class="local-note"><strong>このファイルは公開されません。</strong>手元の Mac の中だけにあり、
-GitHub にも上がりません（<code>admin/</code> は Git の管理対象外）。数字を新しくするには作り直すコマンドを実行します。</div>
+GitHub にも上がりません（<code>company/dashboard/</code> は Git の管理対象外）。数字を新しくするには作り直すコマンドを実行します。</div>
 </header>
 <nav class="toc"><ul>{nav}</ul></nav>
 {sections}

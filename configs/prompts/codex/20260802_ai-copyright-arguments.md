@@ -2,7 +2,7 @@
 
 ### 出典
 
-`WORK_PLAN_2026-08.md` §4 B-2 の横展開2本目
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §4 B-2 の横展開2本目
 `TASK_BOARD.md` 課題30（同一PRで対応）
 
 ### 前提（S5・S7 で型が確定済み）

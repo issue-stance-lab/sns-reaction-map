@@ -35,18 +35,18 @@
 ## リポジトリ構成
 
 ```
-company/             会社理念、目標、承認、収支、AI部門の責任
-content/             X・noteの下書き、調査、投稿実績（公開しない）
-quality/             公開候補と公開後の品質監査記録
+company/             会社理念、目標、承認、収支、AI部門、ローカル管理画面
+content/             Website・X・noteの非公開制作物、調査、投稿実績
+creative/            ブランド、デザイン、画像プロンプト、制作テンプレート
+quality/             公開候補・公開後の監査、設計レビュー
 docs/                公開される静的サイト（GitHub Pages のルート）
-social-samples/      収集した投稿の累積正典。本文を含むため一部は Git 管理外
-data/verification/   本文を除いた検証用サマリ。クリーンクローンとCIはこれを読む
-scripts/             収集・分類・生成・検証。scripts/refresh_adapters/ はテーマ別のページ更新
 configs/             テーマ別の設定、収集条件、ワーカーAIへの発注書
-manga-prompts/       漫画・図解の生成プロンプト
-templates/           新規テーマ・ページの雛形
+scripts/             収集・分類・生成・検証。scripts/refresh_adapters/ はテーマ別のページ更新
+data/verification/   本文を除いた検証用サマリ。クリーンクローンとCIはこれを読む
+social-samples/      収集した投稿の累積正典。本文を含むため一部は Git 管理外
+supabase/            投票基盤
 tests/               unittest
-archive/             運用から外れた文書・スクリプト（下記）
+archive/             運用から外れた文書・実験・スクリプト
 ```
 
 ## 運用ドキュメント
@@ -82,7 +82,7 @@ archive/             運用から外れた文書・スクリプト（下記）
 python3 scripts/build_admin_dashboard.py --open
 ```
 
-`admin/dashboard.html` を作ってブラウザで開く。**公開されない**（`docs/` の外、`.gitignore` 対象、
+`company/dashboard/dashboard.html` を作ってブラウザで開く。**公開されない**（`docs/` の外、`.gitignore` 対象、
 `noindex`）。中身はリポジトリ内のファイルの写しなので、開いた時点の実測ではない。
 GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` を足す（最大3分、
 認証が切れていればその旨が画面に出る）。

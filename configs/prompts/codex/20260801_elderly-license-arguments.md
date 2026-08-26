@@ -2,8 +2,8 @@
 
 ### 出典
 
-`WORK_PLAN_2026-08.md` §4 B-2
-`WORK_PLAN_2026-08_SESSIONS.md` S5
+`archive/planning-2026-08/WORK_PLAN_2026-08.md` §4 B-2
+`archive/planning-2026-08/WORK_PLAN_2026-08_SESSIONS.md` S5
 
 ### なぜこのテーマか（GSC実測にもとづく選定）
 

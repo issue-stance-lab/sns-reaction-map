@@ -672,11 +672,11 @@ class OutputLocationTests(unittest.TestCase):
 
     def test_output_directory_is_git_ignored(self):
         result = subprocess.run(
-            ["git", "check-ignore", "-q", "admin/dashboard.html"],
+            ["git", "check-ignore", "-q", "company/dashboard/dashboard.html"],
             cwd=ROOT,
             capture_output=True,
         )
-        self.assertEqual(result.returncode, 0, "admin/ が .gitignore に入っていない")
+        self.assertEqual(result.returncode, 0, "company/dashboard/ が .gitignore に入っていない")
 
 
 if __name__ == "__main__":

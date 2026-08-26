@@ -27,10 +27,31 @@ class CompanyOperationsTests(unittest.TestCase):
             "content/note/posts.md",
             "content/note/drafts",
             "content/note/research",
+            "content/website/internal",
+            "content/website/research",
+            "creative/brand-concepts",
+            "creative/design",
+            "creative/manga-prompts",
+            "creative/templates",
             "quality/reviews",
+            "quality/designs",
+            "archive/design-system-experiment",
         ]:
             self.assertTrue((ROOT / path).exists(), f"媒体の正式な場所がない: {path}")
-        for legacy in ["x-posts.md", "x-weekly-reviews.md", "note-posts.md", "note-drafts", "reviews"]:
+        for legacy in [
+            "x-posts.md",
+            "x-weekly-reviews.md",
+            "note-posts.md",
+            "note-drafts",
+            "reviews",
+            "brand-concepts",
+            "design",
+            "design-system",
+            "docs-internal",
+            "manga-prompts",
+            "research",
+            "templates",
+        ]:
             self.assertFalse((ROOT / legacy).exists(), f"旧配置が残っている: {legacy}")
 
     def test_all_reaction_map_ogp_descriptions_avoid_two_choice_copy(self):
@@ -44,4 +65,3 @@ class CompanyOperationsTests(unittest.TestCase):
         self.assertTrue((ROOT / "company/QUALITY_GATE.md").exists())
         corrections = yaml.safe_load((ROOT / "company/CORRECTIONS.yaml").read_text(encoding="utf-8"))
         self.assertIn("items", corrections)
-

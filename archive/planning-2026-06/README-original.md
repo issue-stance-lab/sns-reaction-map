@@ -81,8 +81,8 @@
 
 新しいSNS反応まっぷを追加するときは、次の順に参照する。
 
-1. `templates/reaction-map-workflow.md`: 収集・分類・HTML生成・公開前確認の手順
-2. `templates/topic-page-v3.md`: テーマページの構造、共通文言、注目指標の選定ルール
+1. `creative/templates/reaction-map-workflow.md`: 収集・分類・HTML生成・公開前確認の手順
+2. `creative/templates/topic-page-v3.md`: テーマページの構造、共通文言、注目指標の選定ルール
 3. `configs/DESIGN_SYSTEM.md`: ヒーロー高、配色、グリッド、共通コンポーネントの表示仕様
 
 題名周辺の表示や文言を変更した場合は、既存HTMLだけでなく上記の正典と再生成用スクリプトも同時に更新する。

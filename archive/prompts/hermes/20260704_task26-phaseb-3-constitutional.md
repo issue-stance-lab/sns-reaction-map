@@ -17,7 +17,7 @@
 
 課題26 Phase Aで、`docs/ai-copyright-reaction-map.html` を「トピックページ標準フォーマット v3」に試験改修し、mainにマージ済み。この形式を残り4テーマへ順に展開する Phase B のうち、**このタスクは constitutional-amendment 1テーマのみを担当する**。
 
-v3の正典仕様は `templates/topic-page-v3.md` に定義されている。**必ず全文を読んでから作業を始めること**。参考実装は `docs/ai-copyright-reaction-map.html`（コミット `37e09d5` 以降の版）。B-1/B-2で他テーマにも展開済みのはずなので、そちらも参考にしてよい。
+v3の正典仕様は `creative/templates/topic-page-v3.md` に定義されている。**必ず全文を読んでから作業を始めること**。参考実装は `docs/ai-copyright-reaction-map.html`（コミット `37e09d5` 以降の版）。B-1/B-2で他テーマにも展開済みのはずなので、そちらも参考にしてよい。
 
 ## 注意: このテーマ固有の既知の問題
 
@@ -26,7 +26,7 @@ v3の正典仕様は `templates/topic-page-v3.md` に定義されている。**�
 
 ## あなたのタスク
 
-`docs/constitutional-amendment-reaction-map.html` を `templates/topic-page-v3.md` の8セクション構成に改修する。
+`docs/constitutional-amendment-reaction-map.html` を `creative/templates/topic-page-v3.md` の8セクション構成に改修する。
 
 ### 実装すべき8セクション（順序厳守）
 
@@ -45,12 +45,12 @@ v3の正典仕様は `templates/topic-page-v3.md` に定義されている。**�
 
 手順:
 1. `configs/constitutional-amendment-reaction-map.json` を読み、投票セクションの質問・選択肢と、2DスタンスマップのX軸・Y軸の定義（何を+方向/-方向とするか）を把握する
-2. 各投票選択肢が、2軸の意味的にどのあたりに位置するかを自分で判断し、`templates/topic-page-v3.md` の「4. 2Dスタンスマップ」セクションにある ai-copyright の記法（座標目安付き）にならって、constitutional-amendment版の対応表を作成する
+2. 各投票選択肢が、2軸の意味的にどのあたりに位置するかを自分で判断し、`creative/templates/topic-page-v3.md` の「4. 2Dスタンスマップ」セクションにある ai-copyright の記法（座標目安付き）にならって、constitutional-amendment版の対応表を作成する
 3. 実装後、この対応表を完了報告に明記する（座標と判断理由を含む）
 
 ## 制約・注意（重要）
 
-- **変更してよいファイル**: `docs/constitutional-amendment-reaction-map.html` のみ。`constitutional-amendment-dashboard.html` / `constitutional-amendment-summary.html` を含む他テーマのHTML・ポータル(index.html)・スクリプト・`templates/topic-page-v3.md` は変更しない
+- **変更してよいファイル**: `docs/constitutional-amendment-reaction-map.html` のみ。`constitutional-amendment-dashboard.html` / `constitutional-amendment-summary.html` を含む他テーマのHTML・ポータル(index.html)・スクリプト・`creative/templates/topic-page-v3.md` は変更しない
 - **絶対に維持するもの**（削除・破壊禁止。改修後にgrepで存在確認すること）:
   - GA4タグ: `G-K10S4YCZFH`
   - AdSenseコード: `ca-pub-2542211932832864`

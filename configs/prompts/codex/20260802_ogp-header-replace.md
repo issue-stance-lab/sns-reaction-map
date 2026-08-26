@@ -3,7 +3,7 @@
 ### 出典
 
 `TASK_BOARD.md` 課題32
-`manga-prompts/site-ogp-header-prompts.md`（生成プロンプト）
+`creative/manga-prompts/site-ogp-header-prompts.md`（生成プロンプト）
 
 ---
 

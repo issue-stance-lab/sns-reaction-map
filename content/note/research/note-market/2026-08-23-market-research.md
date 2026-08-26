@@ -264,4 +264,4 @@
 
 ## 📁 生データ
 
-字幕ファイルは `note-research/subs/` ディレクトリに保存済み。
+字幕ファイルは `content/note/raw-research/subs/` ディレクトリに保存済み。

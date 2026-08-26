@@ -7,7 +7,7 @@
 - リポジトリ: issue-stance-aggregator
 - プロジェクト概要: AI_HANDOFF.md を参照
 - テーマ台帳: THEMES.yaml を参照
-- v3仕様書: `templates/topic-page-v3.md`（必読）
+- v3仕様書: `creative/templates/topic-page-v3.md`（必読）
 - 本タスクの対象テーマ: henoko-student-accident（辺野古高校生死亡事故）
 - 対象ファイル: `docs/henoko-student-accident-reaction-map.html`
 
@@ -76,7 +76,7 @@ stance_focus: 事故中心(53件) / 混合(15件) / 政治中心(227件)
 
 ## 制約・注意（重要）
 
-- **変更してよいファイル**: `docs/henoko-student-accident-reaction-map.html` のみ。他テーマのHTML・ポータル(index.html)・スクリプト・`templates/topic-page-v3.md` は変更しない
+- **変更してよいファイル**: `docs/henoko-student-accident-reaction-map.html` のみ。他テーマのHTML・ポータル(index.html)・スクリプト・`creative/templates/topic-page-v3.md` は変更しない
 - **絶対に維持するもの**（削除・破壊禁止。改修後にgrepで存在確認すること）:
   - GA4タグ: `G-K10S4YCZFH`
   - AdSenseコード: `ca-pub-2542211932832864`

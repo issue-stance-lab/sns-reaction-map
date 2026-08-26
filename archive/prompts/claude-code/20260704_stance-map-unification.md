@@ -376,6 +376,6 @@ python3 generate_raw.py social-samples/bike-blue-ticket_2d_classified.json stanc
 - 正典実装: `docs/constitutional-amendment-reaction-map.html` (行691〜728: CSS, 行1051〜1107: HTML, 行1109〜1815: JS)
 - CSSバグチェックリスト: メモリ `reference_stancemap_impl.md`
 - 2D分類データ: `social-samples/*_2d_classified.json`
-- ワークフロー: `templates/reaction-map-workflow.md`
-- 漫画データスキーマ: `templates/manga-content.schema.md`
+- ワークフロー: `creative/templates/reaction-map-workflow.md`
+- 漫画データスキーマ: `creative/templates/manga-content.schema.md`
 - TASK_BOARD: 課題23（ai-copyright 2Dマップ）、課題24（漫画コンテンツ）
