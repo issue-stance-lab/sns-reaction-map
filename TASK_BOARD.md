@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-18（辺野古を adapter へ昇格。11テーマすべてが収集から公開まで自動で回る状態になり、非adapterは0になった）
+最終更新: 2026-08-27（編集部にライター3名を採用。文体の正典 WRITING_VOICE.md とAI臭の検査を新設し、課題51・52を追加）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -1010,6 +1010,68 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 
 **ルートに維持する技術基盤**: `docs/` / `scripts/` / `data/` / `configs/` / `tests/` /
 `social-samples/` / `supabase/`。公開・収集・検査の実行経路そのものなので、大分類の下へは移さない。
+
+---
+
+
+### 課題51: サイト内記事セクションを新設する（検索流入用）
+
+**状態**: 未着手。`writer-seo` エージェントは作成済みだが、公開先が無いため下書きのみで待機中
+**発端**: 2026-08-27、編集部にライター3名（`.claude/agents/`）を採用した際、`writer-seo` の
+担当媒体「サイト内SEO記事」が**実在しない**ことが分かった。`docs/` にあるのは11本のテーマページと
+法務ページだけで、`sitemap.xml` にも記事は0本。
+
+**なぜやるか**: 90日目標に月3,000ページ表示がある（`company/GOALS.yaml`）。テーマページは
+1テーマ1本しか作れず、検索語の幅を取れない。「〇〇 賛否」「〇〇 どっちが正しい」で流入する
+読者向けの記事があれば、既存の投票ページへ送れる。
+
+**決めること**:
+1. URL設計（`docs/articles/{slug}.html` か、テーマ配下か）
+2. HTMLテンプレート（テーマページの `topic-modern.css` を流用するか、専用にするか）
+3. `index.html` からの導線と `sitemap.xml` への登録
+4. 記事から投票ページへの導線の形
+5. 記事の生成方法。**手書きHTMLを `docs/` へ直接置かない**
+   （`verify_builder_rebuildability.py` が落ちる。課題47と同じ事故）
+6. 記事に対する `verify_page_originality.py` / `verify_ai_tone.py` の掛け方
+
+**完了条件**: 記事1本が公開され、上記6つの検査・導線がすべて通ること。
+**関係する文書**: `WRITING_VOICE.md` / `.claude/agents/writer-seo.md` / `company/GOALS.yaml`
+
+---
+
+### 課題52: 既存11ページのAI臭をリライトで落とす
+
+**状態**: 未着手。検査（`scripts/verify_ai_tone.py`）と baseline は 2026-08-27 に設置済み
+**発端**: 公開11ページの本文1,007文を実測したところ、「いかがでしたか」の類の安っぽい定型は
+**0件**だった一方、**賛否を同じ構文で並べる鏡像**が見つかった。これが読者に「AIが書いた」と
+感じさせる最大の要因。
+
+> 推進側の最も強い根拠は、〜ことです。慎重側の最も強い根拠は、〜ことです。
+
+**baseline に登録した既存分**（`configs/ai-tone.json`。ここを0へ減らすのがこの課題）:
+
+| テーマ | 検出 | 件数 |
+|---|---|---|
+| ai-copyright | 側の最も強い根拠は | 2 |
+| bukatsu-chiiki | 側の最も強い根拠は / というのが◯◯側の強い主張 | 各2 |
+| elderly-license-revocation | 側の最も強い根拠は / というのが◯◯側の強い主張 | 各2 |
+| bike-blue-ticket | というのが◯◯側の強い主張 | 2 |
+| school-nickname-ban | ではなく（密度 6.7/100文、上限5.0） | 4 |
+
+**難しさ**: 本文は `scripts/refresh_adapters/*.py` と `configs/prompts/` の発注書から生成される。
+ページのHTMLを直接直すと次のデータ更新で戻る。**発注書と adapter 側を直す必要がある**。
+
+**手順の骨子**:
+1. 該当テーマの発注書に `WRITING_VOICE.md`「1. 対称にしない」を組み込む
+2. 賛否のどちらかを別の入り口（具体的な場面、数字、未解決点）から書き直す
+3. `python3 scripts/verify_ai_tone.py` で baseline を下回ることを確認し、`configs/ai-tone.json` の
+   baseline を実測値まで下げる（**下げ忘れると次の劣化を検知できない**）
+4. `verify_page_originality.py` と `verify_theme_page.py` を通す
+
+**注意**: X の投稿済み台帳（`content/x/posts.md`）に「〜ではないでしょうか」が4件ある。
+過去の投稿は取り消せないため検査対象外にしたが、同じ癖が続いていたことは記録に残す
+（`x-daily/references/writing.md`「テーマ全体の感想を求めない」に反する）。今後は
+`writer-x` と下書き段階の検査で止める。
 
 ---
 

@@ -1,0 +1,93 @@
+{
+  "_comment": "verify_ai_tone.py の設定。baseline は 2026-08-27 の公開11ページ実測値で、既存分の許容量。減らすのは自由、増やすと検査が落ちる。",
+  "banned": [
+    {
+      "pattern": "いかがでし",
+      "reason": "まとめブログの定型。2026-08-27 時点で公開物に0件。新規流入を止める"
+    },
+    {
+      "pattern": "注目が集ま",
+      "reason": "出所を示さずに話題性を主張する定型。行動原則8（怒りや恐怖でアクセスを集めない）"
+    },
+    {
+      "pattern": "話題を呼んで",
+      "reason": "同上。誰がどこで話題にしたかを書かせる"
+    },
+    {
+      "pattern": "と言えるでしょう",
+      "reason": "断定を避けたように見せる定型。事実か推測かを書き分けさせる（行動原則4）"
+    },
+    {
+      "pattern": "ではないでしょうか",
+      "reason": "同意を誘導する定型。読者に判断を委ねる書き方と両立しない"
+    },
+    {
+      "pattern": "言うまでもありません",
+      "reason": "根拠を省く定型"
+    },
+    {
+      "pattern": "まとめると[、,]以下",
+      "reason": "機械的な要約の定型"
+    },
+    {
+      "pattern": "結論から言うと",
+      "reason": "会社の書き方（結論を先に）は構成で実現する。宣言は不要"
+    }
+  ],
+  "mirror": [
+    {
+      "pattern": "側の最も強い根拠は",
+      "max_per_page": 1,
+      "reason": "賛否を同じ構文で並べる鏡像。AI臭の最大要因（2026-08-27 実測6件）"
+    },
+    {
+      "pattern": "というのが.{0,10}側の強い主張",
+      "max_per_page": 1,
+      "reason": "段落末の定型オチが賛否で対になる。同上（実測6件）"
+    },
+    {
+      "pattern": "側の言い分は",
+      "max_per_page": 1,
+      "reason": "同じ型の予備。先回りで止める"
+    }
+  ],
+  "density": [
+    {
+      "pattern": "ではなく[、,]",
+      "max_per_100_sentences": 5,
+      "reason": "「AではなくB」の連用。2026-08-27 実測で自転車6件/138文など"
+    },
+    {
+      "pattern": "一方[、で]",
+      "max_per_100_sentences": 5,
+      "reason": "段落を継ぐ定型接続。実測21件"
+    },
+    {
+      "pattern": "そのため[、,]",
+      "max_per_100_sentences": 4,
+      "reason": "同上"
+    }
+  ],
+  "baseline": {
+    "ai-copyright": {
+      "mirror:側の最も強い根拠は": 2
+    },
+    "bike-blue-ticket": {
+      "mirror:というのが.{0,10}側の強い主張": 2
+    },
+    "bukatsu-chiiki": {
+      "mirror:側の最も強い根拠は": 2,
+      "mirror:というのが.{0,10}側の強い主張": 2
+    },
+    "elderly-license-revocation": {
+      "mirror:側の最も強い根拠は": 2,
+      "mirror:というのが.{0,10}側の強い主張": 2
+    },
+    "school-nickname-ban": {
+      "density:ではなく[、,]": 4
+    }
+  },
+  "baseline_reason": "2026-08-27 に検査を新設した時点で既にあった分。TASK_BOARD「既存ページのAI臭リライト」で0へ減らす。school-nickname-ban の「ではなく」4件/60文は短いページで密度が上がったもので、最後の1文が同じ語を2回使っている。リライト対象。",
+  "_ledger_note": "content/x/posts.md と content/note/posts.md は投稿済みの台帳で、過去の投稿は取り消せないため ペルソナ流出だけを検査する。2026-08-27 時点で「〜ではないでしょうか」が4件あり（部活・副首都・辺野古ほか）、x-daily/references/writing.md の「テーマ全体の感想を求めない」に反する癖が続いていた。今後は下書き（content/*/drafts, content/x/research）の段階で禁止フレーズ検査が止める。",
+  "_persona_note": "ペルソナ用語は configs/persona.private.json（Git 管理外）から読む。リポジトリが公開のため、名前をここに書かない。ファイルが無いときはペルソナ流出の検査だけを飛ばし、他の検査は続ける（OPERATIONS.md ⓪ で復元する）。"
+}

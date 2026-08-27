@@ -11,6 +11,7 @@
 - ファクトチェック: `FACT_CHECK_GUIDE.md`
 - テーマ正典: `THEMES.yaml`
 - 自動検査: `tests/` / `scripts/verify_*.py`
+- 文体: `WRITING_VOICE.md`
 - 監査記録: `quality/reviews/`
 
 ## 公開前チェック
@@ -23,6 +24,8 @@
 - 見出し、要約、画像が対立をあおっていない。
 - 著作権、個人情報、事故・遺族への配慮を確認している。
 - 数字が正典から再現できる。
+- `python3 scripts/verify_ai_tone.py` が通る（AI臭・ペルソナ流出）。
+- 賛否が同じ構文・同じ語尾・同じ長さで並んでいない。
 - GA4 / AdSense / Supabase / OGP / 投票機能を壊していない。
 - 375px で横スクロールと重大な表示崩れがない。
 

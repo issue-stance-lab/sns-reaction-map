@@ -11,6 +11,8 @@ Website、X、note を通じて、SNS の声、議論の流れ、現在の論点
 - 公開ページ: `docs/`
 - 一次資料照合: `FACT_CHECK_GUIDE.md`
 - 公開品質基準: `company/QUALITY_GATE.md`
+- 文体（ペルソナ・AI臭）: `WRITING_VOICE.md`
+- ライター: `.claude/agents/writer-seo.md` / `writer-x.md` / `writer-note.md`
 - X: `.claude/skills/x-daily/SKILL.md` / `X_POSTING_GUIDE.md` / `content/x/posts.md`
 - note: `content/note/posts.md` / `content/note/drafts/`
 

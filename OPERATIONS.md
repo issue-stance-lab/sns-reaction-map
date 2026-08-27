@@ -43,6 +43,17 @@ python3 -c "import yaml,os; th=yaml.safe_load(open('THEMES.yaml'))['themes']; \
 cp -R ../issue-stance-aggregator/node_modules .
 ```
 
+文章を書く作業（Website本文・X・note）では、ライターのペルソナも復元する。
+
+```sh
+# バックアップに含まれている。上の tar 復元で一緒に戻る
+ls configs/persona.private.json || echo "無い → バックアップから戻す"
+python3 scripts/verify_ai_tone.py   # 「ペルソナ検査は飛ばしています」と出たら復元漏れ
+```
+
+**無くても検査は exit 0 で通る。** ペルソナ流出の検査だけが黙って外れるので、
+書き手の名前が公開ページに載っても止まらない。文章を書く前に上の1行を確認する。
+
 **この2つはどちらも「gitignore されているから worktree に入らない」もので、
 入っていないことが `git status` に出ない。** 忘れても静かに進み、後の工程で落ちる。
 

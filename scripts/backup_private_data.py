@@ -104,6 +104,14 @@ def collect_targets() -> tuple[list[Path], list[str]]:
     # 現行正典と標準 updates/ だけでなく、標準化前のraw・分類履歴も保全する。
     targets.extend(ignored_private_files())
 
+    # ライターのペルソナ。公開リポジトリに置けないため Git 管理外にしてある（課題45と同じ方式）。
+    # ここに入れておかないと、worktree を消した時点で世界から消える。
+    persona = ROOT / "configs" / "persona.private.json"
+    if persona.is_file():
+        targets.append(persona)
+    else:
+        errors.append(f"ライターのペルソナが存在しない（{persona.relative_to(ROOT)}）")
+
     return sorted(set(path for path in targets if path.is_file())), errors
 
 
