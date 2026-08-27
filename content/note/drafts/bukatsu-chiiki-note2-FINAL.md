@@ -96,7 +96,7 @@ https://x.com/miniminie083/status/2083346934220419500
 ・移行や廃止で失われるものへの不安 …… 8件
 ・部活そのものを廃止すべき …… 4件
 
-移行そのものへの反対は、いちばん下の4件です。87件を「反対の声」とまとめると、この構造が消えます。
+移行そのものに反対しているのは、いちばん下の4件だけです。いちばん多い30件と17件は、移行を止めろとは言っていません。直す順番が違う、移しただけでは足りない、という話です。87件をまとめて「反対の声」と数えると、この違いが消えます。
 
 👉 論点別の内訳と実際のX投稿を、SNS反応まっぷで見る
 https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu2_20260829&utm_content=after_chart
