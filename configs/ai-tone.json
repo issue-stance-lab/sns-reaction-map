@@ -32,6 +32,22 @@
     {
       "pattern": "結論から言うと",
       "reason": "会社の書き方（結論を先に）は構成で実現する。宣言は不要"
+    },
+    {
+      "pattern": "結論を先に書きます",
+      "reason": "執筆手順の実況。結論そのものを書けば足りる（WRITING_VOICE 4）"
+    },
+    {
+      "pattern": "を知るためです",
+      "reason": "目的の後置き。恩着せがましく読める（WRITING_VOICE 4）"
+    },
+    {
+      "pattern": "だけを見ます",
+      "reason": "次に何を見るかの宣言。見た結果を書く（WRITING_VOICE 4）"
+    },
+    {
+      "pattern": "全部見ます",
+      "reason": "同上。口調も浮く"
     }
   ],
   "mirror": [
@@ -89,5 +105,9 @@
   },
   "baseline_reason": "2026-08-27 に検査を新設した時点で既にあった分。TASK_BOARD「既存ページのAI臭リライト」で0へ減らす。school-nickname-ban の「ではなく」4件/60文は短いページで密度が上がったもので、最後の1文が同じ語を2回使っている。リライト対象。",
   "_ledger_note": "content/x/posts.md と content/note/posts.md は投稿済みの台帳で、過去の投稿は取り消せないため ペルソナ流出だけを検査する。2026-08-27 時点で「〜ではないでしょうか」が4件あり（部活・副首都・辺野古ほか）、x-daily/references/writing.md の「テーマ全体の感想を求めない」に反する癖が続いていた。今後は下書き（content/*/drafts, content/x/research）の段階で禁止フレーズ検査が止める。",
-  "_persona_note": "ペルソナ用語は configs/persona.private.json（Git 管理外）から読む。リポジトリが公開のため、名前をここに書かない。ファイルが無いときはペルソナ流出の検査だけを飛ばし、他の検査は続ける（OPERATIONS.md ⓪ で復元する）。"
+  "_persona_note": "ペルソナ用語は configs/persona.private.json（Git 管理外）から読む。リポジトリが公開のため、名前をここに書かない。ファイルが無いときはペルソナ流出の検査だけを飛ばし、他の検査は続ける（OPERATIONS.md ⓪ で復元する）。",
+  "note_counts": {
+    "max_per_draft": 8,
+    "_reason": "note本文の件数の並べすぎ。2026-08-28 のオーナー指摘（件数ばかりで読み進められない）を検査にした。内訳は図2と記事末の注記が担う。"
+  }
 }

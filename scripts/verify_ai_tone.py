@@ -140,6 +140,36 @@ def draft_texts() -> dict[str, str]:
     return out
 
 
+def check_note_counts(config: dict, drafts: dict[str, str]) -> list[str]:
+    """note下書きの本文に件数を並べすぎていないか。
+
+    2026-08-28、note第2回で「件数ばかり列挙してつまらない」とオーナー指摘。
+    件数は図と記事末の注記が担い、本文は人と仕組みで進める（note-operation「数字の扱い」）。
+    数えるのは貼り付け用の本文だけ。記事末の注記（データについて／制度についての記述）は除く。
+    """
+    limit = int((config.get("note_counts") or {}).get("max_per_draft", 8))
+    failures = []
+    for label, text in drafts.items():
+        # 対象は貼り付け用の本文だけ。指示書・画像プロンプト・引き継ぎメモは数えない
+        if "/note/" not in label or not label.endswith(("-FINAL.md", "-CANDIDATE.md")):
+            continue
+        if "\n---\n" not in text:
+            continue
+        body = text.split("\n---\n", 1)[1]
+        lines = [
+            line
+            for line in body.splitlines()
+            if not line.startswith(("データについて", "制度についての記述"))
+        ]
+        hits = re.findall(r"[0-9][0-9,]*件", "\n".join(lines))
+        if len(hits) > limit:
+            failures.append(
+                f"件数の並べすぎ: {label} の本文に「◯件」が{len(hits)}件（上限{limit}）。"
+                "内訳は図と記事末の注記に預ける（note-operation「数字の扱い」）"
+            )
+    return failures
+
+
 def check_persona(config: dict, pages: dict[str, list[str]], extras: dict[str, str]) -> list[str]:
     """ペルソナは社内専用。公開物に1文字でも出たら落とす。"""
     terms, _skipped = persona_terms()
@@ -234,6 +264,7 @@ def main() -> int:
     _terms, skipped = persona_terms()
     failures += check_persona(config, pages, {**ledgers, **drafts})
     failures += check_banned(config, pages, drafts)
+    failures += check_note_counts(config, drafts)
     mirror_fail, mirror_notes = check_mirror(config, pages, args.verbose)
     density_fail, density_notes = check_density(config, pages, args.verbose)
     failures += mirror_fail + density_fail
