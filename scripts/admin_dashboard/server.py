@@ -98,7 +98,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self._error(HTTPStatus.FORBIDDEN, "起動した管理画面のURLから開いてください")
             return
         if path == "/":
-            from scripts.build_admin_dashboard import build
+            try:
+                # `python3 -m scripts.admin_dashboard.server` で起動した場合。
+                from scripts.build_admin_dashboard import build
+            except ModuleNotFoundError:
+                # Finderの .command → `scripts/build_admin_dashboard.py --serve`
+                # で起動した場合。
+                from build_admin_dashboard import build
 
             html = build(fetch=False, today=dt.date.today(), interactive=True, token=self.server.token)
             self.server.last_heartbeat = time.monotonic()
