@@ -21,6 +21,7 @@ from typing import Any
 
 from . import collect
 from .jobs import JobManager, TERMINAL_STATES
+from .x_api_usage import summarize_jobs
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -208,6 +209,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 for item in themes
             ],
             "jobs": jobs[:50],
+            "x_api_usage": summarize_jobs(jobs),
             "dirty": _shared_dirty(),
             "server_time": dt.datetime.now().isoformat(timespec="seconds"),
         }

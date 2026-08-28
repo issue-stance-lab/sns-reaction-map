@@ -10,6 +10,7 @@ from pathlib import Path
 from scripts.admin_dashboard.codex_client import CodexAppServer, CodexProtocolError
 from scripts.admin_dashboard.jobs import JobManager, JobStore
 from scripts.admin_dashboard.server import DashboardHTTPServer
+from scripts.admin_dashboard.x_api_usage import parse_usage, summarize_jobs
 from scripts.build_admin_dashboard import build
 
 
@@ -82,6 +83,36 @@ class InteractiveRenderTests(unittest.TestCase):
         self.assertIn("theme.collect", html)
         self.assertIn("metrics.refresh", html)
         self.assertNotIn("shell.run", html)
+        self.assertIn('id="x-api-usage"', html)
+
+
+class XApiUsageTests(unittest.TestCase):
+    def test_usage_block_is_parsed_without_post_content(self):
+        messages = [{"role": "assistant", "text": "candidate text\nX_USAGE_JSON_BEGIN\n"
+                     '{"mode":"chrome","queries_count":4,"search_results_loaded":44,'
+                     '"unique_posts_read":40,"post_detail_reads":6,"unique_users_read":35,'
+                     '"owned_posts_read":1,"candidates_shortlisted":3,"counts_complete":true,'
+                     '"note":"all counted"}\nX_USAGE_JSON_END'}]
+        usage = parse_usage(messages, recorded_at="2026-08-29T10:00:00+09:00")
+        self.assertEqual(usage["unique_posts_read"], 40)
+        self.assertEqual(usage["estimated_cost_usd"]["posts_only"], 0.196)
+        self.assertEqual(usage["estimated_cost_usd"]["posts_and_users"], 0.546)
+        self.assertNotIn("candidate text", json.dumps(usage))
+
+    def test_missing_counts_are_not_invented(self):
+        usage = parse_usage([{"role": "assistant", "text": "X_USAGE_JSON_BEGIN "
+                             '{"mode":"chrome","unique_posts_read":null,"counts_complete":false}'
+                             " X_USAGE_JSON_END"}], recorded_at="2026-08-29T10:00:00+09:00")
+        self.assertIsNone(usage["estimated_cost_usd"])
+
+    def test_jobs_are_summarized_for_cost_planning(self):
+        usage = parse_usage([{"role": "assistant", "text": "X_USAGE_JSON_BEGIN "
+                             '{"mode":"chrome","unique_posts_read":20,"unique_users_read":15,'
+                             '"owned_posts_read":0,"counts_complete":true} X_USAGE_JSON_END'}],
+                            recorded_at="2026-08-29T10:00:00+00:00")
+        result = summarize_jobs([{"result": {"x_api_usage": usage}}], now=dt.datetime(2026, 8, 29, 12, tzinfo=dt.timezone.utc))
+        self.assertEqual(result["days_30"]["unique_posts_read"], 20)
+        self.assertEqual(result["days_30"]["posts_and_users_usd"], 0.25)
 
 
 class LoopbackSecurityTests(unittest.TestCase):
