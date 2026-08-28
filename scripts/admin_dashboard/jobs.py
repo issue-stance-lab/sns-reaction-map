@@ -20,6 +20,7 @@ import yaml
 
 from . import collect
 from .codex_client import CodexAppServer, CodexProtocolError
+from .x_api_usage import parse_usage
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -342,6 +343,12 @@ class JobManager:
                 "$x-daily 今日のSNS反応まっぷのX投稿候補を0〜3件準備してください。"
                 "正典のルールを全文確認し、対象者、追加価値、本文、画像、代替テキストを示します。"
                 "推奨案の本文は POST_TEXT_BEGIN と POST_TEXT_END の間に、代替テキストは ALT_TEXT_BEGIN と ALT_TEXT_END の間に書いてください。"
+                "検索開始時から件数を数え、回答末尾に次のJSONだけの記録ブロックを必ず付けてください。"
+                "X_USAGE_JSON_BEGIN {\"mode\":\"chrome\",\"queries_count\":0,\"search_results_loaded\":0,"
+                "\"unique_posts_read\":0,\"post_detail_reads\":0,\"unique_users_read\":0,\"owned_posts_read\":0,"
+                "\"candidates_shortlisted\":0,\"counts_complete\":true,\"note\":\"\"} X_USAGE_JSON_END。"
+                "同じ投稿は24時間内で1件として数えます。数えられなかった項目はnull、途中から計測した場合はcounts_completeをfalseにし、"
+                "noteには理由だけを書き、投稿本文・アカウント名・URLは入れないでください。"
                 "Xへの投稿・返信の送信は絶対に行わないでください。"
             )
         if action == "x.record_post":
@@ -385,7 +392,15 @@ class JobManager:
         if latest.get("status") != "cancelled":
             latest["status"] = "completed"
             self._append(latest, "completed", "Codex作業が完了しました")
-            latest["result"] = self._result_from_worktree(latest)
+            latest["result"] = self._result_from_worktree(latest) or latest.get("result") or {}
+            if latest["action"] == "x.prepare":
+                usage = parse_usage(latest.get("messages") or [], recorded_at=latest["updated_at"])
+                if usage:
+                    latest["result"]["x_api_usage"] = usage
+                    self._append(latest, "completed", "X検索件数とAPI換算費用を記録しました")
+                else:
+                    latest["result"]["x_api_usage_missing"] = True
+                    self._append(latest, "completed", "候補は作成しましたが、検索件数は記録できませんでした")
             self.store.save(latest)
             self._notify("管理画面の作業が完了しました", latest["action"])
 
