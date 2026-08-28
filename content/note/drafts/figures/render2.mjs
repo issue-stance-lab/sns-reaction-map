@@ -36,9 +36,14 @@ await tiny.goto(`file://${path.join(figures, 'bukatsu2_note-header.html')}`, { w
 await tiny.evaluate(() => document.fonts.ready);
 await tiny.addStyleTag({ content: 'html,body{width:300px!important;height:157px!important}.canvas{transform:scale(.234375);transform-origin:top left}' });
 await tiny.screenshot({ path: path.join(images, 'bukatsu2_note-header-300px.png') });
-await header.close(); await tiny.close();
+const small = await browser.newPage({ viewport: { width: 375, height: 196 }, deviceScaleFactor: 1 });
+await small.goto(`file://${path.join(figures, 'bukatsu2_note-header.html')}`, { waitUntil: 'networkidle' });
+await small.evaluate(() => document.fonts.ready);
+await small.addStyleTag({ content: 'html,body{width:375px!important;height:196px!important}.canvas{transform:scale(.29296875);transform-origin:top left}' });
+await small.screenshot({ path: path.join(images, 'bukatsu2_note-header-375px.png') });
+await header.close(); await tiny.close(); await small.close();
 await render('bukatsu2_fig1-227', 800, 420);
-await render('bukatsu2_fig2-reread', 800, 1000);
+await render('bukatsu2_fig2-reread', 800, 1230);
 await render('bukatsu2_fig3-answer', 800, 1100);
 await browser.close();
 console.log('Rendered note 2 header and figures at their specified logical sizes.');
