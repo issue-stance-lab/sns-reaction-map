@@ -1,11 +1,35 @@
-# note第2回「賛成しない87件を1件ずつ読んだ」｜画像作成プロンプト（Codex用）
+# note第2回「先生が休日に部活を見ている」｜画像作成プロンプト（Codex用）
 
-作成日: 2026-08-24
-対象記事: note第2回・先生編（作業指示書 `content/note/drafts/bukatsu-chiiki-note2-HANDOFF.md`）
-作るもの: 見出し画像1点＋本文図解3点＝計4点
-
+作成日: 2026-08-24 / 改訂: 2026-08-28（記事の全面改稿にあわせて見出し画像を作り直す）
+対象記事: `content/note/drafts/bukatsu-chiiki-note2-FINAL.md`（4稿目）
 第1回のプロンプト集は `content/note/drafts/bukatsu-chiiki-image-prompts.md`。
 本書の共通仕様はそこから引き写しているので、**片方を直したらもう片方も直すこと。**
+
+---
+
+## 今回やること（2026-08-28 改訂）
+
+記事のタイトルと構成が変わりました。**画像4点のうち、作り直すのは見出し画像だけです。**
+
+| 画像 | 今回 | 理由 |
+|---|---|---|
+| 写真 `teacher-saturday-gym.png` | **新規生成** | 記事の書き出しが「土曜の朝8時の体育館」に変わった。夜の職員室の写真は本文と合わない |
+| 見出し画像 `bukatsu2_note-header.png` | **作り直す** | 「87件」の文字が旧タイトル用。新タイトルに数字の87件は出てこない |
+| 図1 `bukatsu2_fig1-227.png` | **触らない** | 内訳の数字は変わっていない |
+| 図2 `bukatsu2_fig2-reread.png` | **触らない** | 6区分の件数と「合わせて47件」が入っており、本文から外した内訳をこの図が担う。**この図を消したり数字を減らしたりしないこと** |
+| 図3 `bukatsu2_fig3-answer.png` | **触らない** | 資料の答え合わせは変わっていない |
+
+作り直すのは **写真1枚と見出し画像1点** です。図の再生成は不要ですが、
+`render2.mjs` で4点を一括再生成できる状態は維持してください。
+
+### 見出し画像で変わったこと
+
+記事の主役が「87件を読んだ」から「休日に部活を見ているのは、いまも先生だ」に変わりました。
+**数字の主役は `1,700円` です。** 神栖市が休日の指導者に払う1時間あたりの報酬で、
+記事はこの金額と、それに付いた上限（単月100時間）から始まります。
+
+件数（87件・136件）を見出し画像に出さないでください。本文から件数を外した記事なので、
+表紙に件数が出ると、また「数字の記事」に見えます。
 
 ---
 
@@ -128,29 +152,32 @@ Composition must leave the specified area of the frame visually quiet
 (low detail, low contrast) so that graphics can be overlaid there later.
 ```
 
-### 生成｜見出し画像用の人物（第2回）
+### 生成｜見出し画像用の人物（第2回・2026-08-28 差し替え）
 
 第1回の見出し画像は「夕方の体育館の入口に立つ先生」でした。
-**第2回は同じ職業・別の場面**にして、シリーズの連続性と各回の違いを両立させます。
+第2回は**土曜の朝の体育館の中**。同じ場所の別の時間帯にして、
+シリーズの連続性と、記事の書き出し（土曜の朝8時）との一致を両立させます。
 
 ```
 [STYLE LOCK を貼る]
 
 Subject: A Japanese schoolteacher in their late 30s to 40s, wearing a plain
-navy track jacket, sitting at a desk in a school staff room late at night.
-The room is mostly dark; one desk lamp and the glow of a laptop light the face
-from the side. The teacher has turned away from the desk and is looking
-directly into the camera, with a calm, tired, composed expression — someone who
-has been there for hours and is not performing for the lens.
+navy track jacket, standing inside a school gymnasium on a Saturday morning.
+Cool morning daylight comes through high windows on the right and falls across
+the wooden floor. The teacher stands still, holding a clipboard at their side,
+looking toward the camera with a calm, neutral, slightly tired expression —
+someone who came in on their day off and is simply there to do the work.
 
 Placement: The person occupies the RIGHT side of the frame, with their face
 positioned roughly 60-65% across the frame from the left. The LEFT 45% of the
-frame must be visually quiet — dark, out-of-focus staff room interior,
+frame must be visually quiet — empty gymnasium floor and shadowed wall,
 low contrast, no distracting detail, no readable objects.
 
-Background: rows of empty desks, stacked papers and folders (no readable text),
-a wall clock too blurred to read, dark windows.
+Background: an empty gymnasium — folded mats stacked against the wall, a ball
+cart, basketball hoops raised, no scoreboard numbers legible. No other adults.
+Any children must be distant, small, out of focus, and seen only from behind.
 
+Output file name: teacher-saturday-gym.png
 Aspect ratio: 1.91:1 (wide). Output at the highest resolution available.
 ```
 
@@ -171,7 +198,7 @@ Aspect ratio: 1.91:1 (wide). Output at the highest resolution available.
 - 比率は厳密に 1.91:1
 
 ## 素材
-- 写真: content/note/drafts/photos/teacher-staffroom-night.png
+- 写真: content/note/drafts/photos/teacher-saturday-gym.png
 - object-fit: cover で全面に敷き、顔が中央やや右（x≈62%）に来るよう位置調整する
 
 ## レイヤー構成
@@ -182,22 +209,31 @@ Aspect ratio: 1.91:1 (wide). Output at the highest resolution available.
 
 ## 文字レイヤーの中身（これだけ。増やさない）
 
-  部活動の地域移行            26px / weight 500 / --ink-70 / letter-spacing .08em
+  部活動の地域移行 ②先生編        26px / weight 500 / --ink-70 / letter-spacing .08em
 
-  87件                       ← 主役
+  1,700円                        ← 主役
 
-  賛成しない声を、1件ずつ読んだ   20px / weight 400 / --ink-45
+  休日の部活を見る先生に、          20px / weight 400 / --ink-45
+  いま付いている値段                （2行に折り返してよい）
 
-「87件」の指定:
-- 「87」は 190px 前後、weight 900、--teal
-- 「件」は 90px 前後、weight 700、--ink-70。「87」のベースラインに揃える
-- 第1回の「44% → 17%」と同じ高さ・同じ左端に置く（並べたときに揃って見えるように）
+「1,700円」の指定:
+- 「1,700」は 170px 前後、weight 900、--teal、font-variant-numeric: tabular-nums
+- 「円」は 90px 前後、weight 700、--ink-70。「1,700」のベースラインに揃える
+- 桁区切りのカンマを必ず入れる（1700 と書かない）
+- 第1回の「44% → 17%」、旧第2回の「87件」と**同じ高さ・同じ左端**に置く
+  （シリーズで並べたときに文字の位置が揃って見えるように）
+
+## 数字の意味を誤解させないための注意
+1,700円は「神栖市が休日の地域クラブ指導者に払う1時間あたりの報酬」です。
+全国の相場でも、先生の給与でもありません。
+- 画像の中に「時給」「相場」「全国」などの語を足さないこと
+- 「1,700円」の直後に単位や補足（/時、〜など）を足さないこと。説明は本文が持ちます
 
 ## 配置の絶対条件（最重要）
 noteは一覧表示で左右を切り、右側サムネイルや音声記事では
 「中央の正方形」だけを切り出します。1280×670の中央正方形は x=305〜975 です。
 
-- 「87件」の全体が x=305〜975 の内側に完全に収まること
+- 「1,700円」の全体が x=305〜975 の内側に完全に収まること
 - 先生の顔も x=305〜975 の内側に収まること
 - 画像の端から100px以内には意味のある要素を置かない
   （右下の「SNS反応まっぷ」クレジット 12px --ink-45 のみ例外）
@@ -205,8 +241,8 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 
 ## 検収に追加
 - 1280×670の全体像と、中央670×670を切り出した正方形の両方をPNGで出し、
-  どちらでも「87件」と先生の顔が成立していることを確認して報告
-- 幅300pxに縮小した状態でも「87件」が判読できるか確認
+  どちらでも「1,700円」と先生の顔が成立していることを確認して報告
+- 幅300pxに縮小した状態でも「1,700円」が判読できるか確認（桁区切りが潰れないこと）
 - 第1回の bukatsu-chiiki_note-header.png と並べたコンタクトシートを作り、
   文字の高さ・位置・トーンが揃っているか確認して報告
 ```
@@ -214,6 +250,9 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 ---
 
 ## 3. 図1｜先生の負担を語る227件の内訳
+
+**2026-08-28: この図は作り直しません。**現行の `bukatsu2_fig1-227.png` をそのまま使います。
+以下は、再生成が必要になったときのための仕様です。
 
 ```
 本文用の図解を1点つくってください。写真は使いません。
@@ -249,6 +288,11 @@ noteは一覧表示で左右を切り、右側サムネイルや音声記事で�
 ---
 
 ## 4. 図2｜87件の再読（★記事の山・最重要）
+
+**2026-08-28: この図は作り直しません。むしろ、消さないでください。**
+記事本文から6区分の件数を外したため、**内訳を読者に見せる役目はこの図だけが持っています。**
+現行の `bukatsu2_fig2-reread.png` には6区分の件数と「合わせて47件」が入っており、要件を満たしています。
+以下は、再生成が必要になったときのための仕様です。
 
 ```
 本文用の図解を1点つくってください。この記事で最も重要な図です。写真は使いません。
@@ -322,7 +366,10 @@ A・Bを隣り合わせにして括弧でくくることが、この図の目的
 
 ---
 
-## 5. 図3｜答え合わせ（新規）
+## 5. 図3｜答え合わせ
+
+**2026-08-28: この図は作り直しません。**現行の `bukatsu2_fig3-answer.png` をそのまま使います。
+以下は、再生成が必要になったときのための仕様です。
 
 ```
 本文用の図を1点つくってください。表を図として組みます。
@@ -380,21 +427,28 @@ SNSで心配されていたことが、国と自治体の資料でどうなっ�
 
 ---
 
-## 6. 最後にまとめて確認してもらうこと
+## 6. 最後に確認してもらうこと（2026-08-28 改訂）
+
+作り直したのは写真1枚と見出し画像1点なので、確認もそこに絞ります。
 
 ```
-4点すべて完成したら、以下を確認して報告してください。
+できあがったら、以下を確認して報告してください。
 
-1. **全画像にパーセント表記が1つも入っていないこと**を、拡大して確認する
-2. 4枚を並べたコンタクトシートをつくり、トーン・フォント・余白が揃っているか確認する
-3. さらに第1回の5枚とも並べ、シリーズとして違和感がないか確認する
-4. 各PNGのファイルサイズを報告（10MB以内。超えるものは画質を落とさず圧縮）
-5. 見出し画像は1920×1006px、本文図解は横1200px（実ピクセル2400px）か確認
-6. 幅375pxのモバイル表示を想定して縮小し、読めなくなる文字がないか確認
-7. 写真の上に置いた文字のコントラスト比を計算して一覧で報告
-8. 生成写真に文字（日本語・英語・数字）が紛れ込んでいないか拡大して確認
-9. content/note/drafts/figures/render2.mjs で4枚すべて再生成できる状態か確認
-   （第1回の render.mjs を上書きしていないことも確認）
+1. 生成写真に文字（日本語・英語・数字）が紛れ込んでいないか拡大して確認する
+   （体育館は得点板・掲示物・ボールのロゴが入りやすい。特に注意）
+2. 手指の破綻、顔の左右非対称、実在しそうな校章が無いか確認する
+3. 見出し画像は 1920×1006px（論理1280×670 / deviceScaleFactor 1.5）か確認する
+4. 中央670×670を切り出した正方形でも「1,700円」と先生の顔が成立するか、
+   両方のPNGを出して報告する
+5. 幅300pxに縮小して「1,700円」が読めるか、桁区切りのカンマが潰れていないか確認する
+6. 写真の上に置いた文字のコントラスト比を計算して報告する
+   （24px以上は3:1以上、それ未満は4.5:1以上）
+7. 画像内にパーセント表記が無いこと、件数（87件・136件）が無いことを確認する
+8. 第1回の bukatsu-chiiki_note-header.png、および図1〜図3と並べたコンタクトシートを作り、
+   トーン・文字の高さ・左端の位置が揃っているか報告する
+9. 図1〜図3のPNGを書き換えていないことを確認する（更新日時で確認）
+10. render2.mjs で4点を一括再生成できる状態を維持できているか確認する
+    （第1回の render.mjs は上書きしないこと）
 ```
 
 ---
