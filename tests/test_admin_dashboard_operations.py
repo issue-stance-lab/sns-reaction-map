@@ -7,6 +7,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from scripts.admin_dashboard.codex_client import CodexAppServer, CodexProtocolError
 from scripts.admin_dashboard.jobs import JobManager, JobStore
 from scripts.admin_dashboard.server import DashboardHTTPServer
 from scripts.build_admin_dashboard import build
@@ -23,6 +24,29 @@ class FakeCodex:
 
     def close(self):
         pass
+
+
+class ApprovalCompatibilityTests(unittest.TestCase):
+    def test_old_cli_approval_name_is_retried(self):
+        client = object.__new__(CodexAppServer)
+        calls = []
+
+        def request(method, params):
+            calls.append((method, dict(params)))
+            if params["approvalPolicy"] == "unlessTrusted":
+                raise CodexProtocolError("Invalid request: unknown variant `unlessTrusted`")
+            return {"ok": True}
+
+        client.request = request
+        result = client._request_with_approval_compat("thread/start", {"approvalPolicy": "unlessTrusted"})
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual([item[1]["approvalPolicy"] for item in calls], ["unlessTrusted", "on-request"])
+
+    def test_unrelated_protocol_errors_are_not_retried(self):
+        client = object.__new__(CodexAppServer)
+        client.request = lambda method, params: (_ for _ in ()).throw(CodexProtocolError("different error"))
+        with self.assertRaisesRegex(CodexProtocolError, "different error"):
+            client._request_with_approval_compat("thread/start", {"approvalPolicy": "unlessTrusted"})
 
 
 class JobStoreTests(unittest.TestCase):
