@@ -6,9 +6,10 @@
 - `refresh_at` は公開まで昇格できるテーマだけに設定する。
 - 収集・分類は全テーマで `scripts/refresh_topic.py --topic ...` を使う。
 - ページ生成だけを `scripts/refresh_adapters/` のテーマ別adapterへ委譲する。
-- `--promote` を付けない限り、累積正典、公開HTML、`updated_at`、`refresh_at` は変更しない。
+- `--promote` または `--apply-promotion` を付けない限り、累積正典、公開HTML、`updated_at`、`refresh_at` は変更しない。
 - 収集・分類・検査・公開候補の作成までは AI が自律的に行う。
-- **`--promote` は、検査結果を CEO に提示し、承認を `company/APPROVALS.yaml` に記録した後だけ実行する。**
+- **`--apply-promotion` は、候補manifestの品質監査が `ready_for_ceo` になり、CEO承認を `company/APPROVALS.yaml` に記録した後だけ実行する。**
+- `--promote` は従来手順との互換用に残す。管理画面からは使わない。
 - **分類モデルは `kimi-k2.6`（Hermes / OpenCode Go）。** `~/.hermes/config.yaml` の
   `model.default` が全テーマ・全セッションに効き、スクリプト側にモデル指定は無い。
   2026-08-18 に OpenCode Go 側の障害（503）で一時 `minimax-m2.7` へ切り替えたが、
@@ -91,18 +92,29 @@ python3 scripts/refresh_topic.py \
 
 ## 公開まで行う更新
 
-`page_update_mode: adapter` のテーマだけ `--promote` を付けられる。
-以下のコマンドは、公開候補の検査合格と CEO 承認を記録した後に実行する。
+`page_update_mode: adapter` のテーマだけ公開候補を作れる。収集が完了した同じworktreeで、まず正典と公開ページを変えずに候補を固定する。
 
 ```sh
 python3 scripts/refresh_topic.py \
   --topic takaichi \
   --date 2026-08-06 \
+  --run-id <収集時のrun-id> \
   --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups \
-  --promote
+  --resume --prepare-promotion
 ```
 
-更新回保存後にadapterを使って候補ページを2回生成し、冪等性、投票互換性、保護タグを検査する。全検査合格時だけ累積正典・ページ・台帳・SEO・トップ・sitemapを一括昇格する。昇格後にもう一度バックアップし、失敗時は公開側を昇格前へ戻す。
+`promotion-manifest.json` に対象ファイル、SHA256、件数、調査期間、検査結果が保存される。別の読み取り専用Codexセッションで品質監査し、CEO承認後に同じmanifestを適用する。
+
+```sh
+python3 scripts/refresh_topic.py \
+  --topic takaichi \
+  --date 2026-08-06 \
+  --run-id <収集時のrun-id> \
+  --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups \
+  --resume --apply-promotion
+```
+
+適用時はmanifestと実物のハッシュが一致しなければ停止する。全検査合格時だけ累積正典・ページ・台帳・SEO・トップ・sitemapを一括昇格し、昇格後に再度バックアップする。
 
 ### 学校あだ名は公開承認以外を自動化（人が読む工程なし）
 

@@ -2,7 +2,7 @@
 """全テーマ共通の収集・分類ランナー。公開処理だけをテーマ別adapterへ委譲する。
 
 公開できないテーマも、収集回を履歴へ保存してバックアップするところまでは同じ経路を通る。
-`--promote` を付けない限り、累積正典・公開ページ・updated_at は変更しない。
+`--promote` / `--apply-promotion` を付けない限り、累積正典・公開ページ・updated_at は変更しない。
 """
 
 from __future__ import annotations
@@ -608,6 +608,89 @@ def promote(
         raise
 
 
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for block in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def prepare_promotion_manifest(
+    root: Path,
+    topic: str,
+    current_date: str,
+    run_id: str,
+    stage: Path,
+    report: dict[str, Any],
+    adapter_targets: dict[Path, Path],
+) -> dict[str, Any]:
+    """Bind an approval candidate to exact staged bytes without mutating public files."""
+    write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
+    files = [
+        {"role": "canonical", "target": str(parse_themes_yaml(root / "THEMES.yaml")[topic]["sample_file"]), "source": str((stage / "cumulative-candidate.json").relative_to(root))},
+        *[
+            {"role": "page", "target": str(target), "source": str(source.relative_to(root))}
+            for target, source in adapter_targets.items()
+        ],
+    ]
+    for item in files:
+        source = root / item["source"]
+        if not source.is_file():
+            raise FileNotFoundError(f"公開候補がありません: {source}")
+        item["sha256"] = _file_sha256(source)
+        item["bytes"] = source.stat().st_size
+    manifest = {
+        "version": 1,
+        "status": "prepared",
+        "topic": topic,
+        "date": current_date,
+        "run_id": run_id,
+        "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "report": {
+            "raw": report.get("raw"),
+            "new": report.get("new"),
+            "opinions": report.get("opinions"),
+            "next_collect_at": report.get("next_collect_at"),
+        },
+        "files": files,
+    }
+    canonical = json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    manifest["manifest_sha256"] = hashlib.sha256(canonical).hexdigest()
+    path = stage / "promotion-manifest.json"
+    manifest["manifest_path"] = str(path.relative_to(root))
+    write_json(path, manifest)
+    return manifest
+
+
+def load_promotion_manifest(root: Path, stage: Path, topic: str, current_date: str, run_id: str) -> tuple[dict[str, Any], dict[Path, Path]]:
+    path = stage / "promotion-manifest.json"
+    if not path.is_file():
+        raise FileNotFoundError("承認対象の promotion-manifest.json がありません。先に --prepare-promotion を実行してください")
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if (manifest.get("topic"), manifest.get("date"), manifest.get("run_id")) != (topic, current_date, run_id):
+        raise ValueError("manifest のテーマ・日付・run-id が今回の公開対象と一致しません")
+    unsigned = {key: value for key, value in manifest.items() if key not in {"manifest_sha256", "manifest_path"}}
+    canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    expected_manifest_hash = hashlib.sha256(canonical).hexdigest()
+    if manifest.get("manifest_sha256") != expected_manifest_hash:
+        raise ValueError("promotion-manifest.json が準備後に変更されています。公開候補を作り直してください")
+    targets: dict[Path, Path] = {}
+    for item in manifest.get("files") or []:
+        source = (root / str(item["source"])).resolve()
+        try:
+            source.relative_to(root.resolve())
+        except ValueError as exc:
+            raise ValueError("manifest の候補ファイルがリポジトリ外を指しています") from exc
+        if not source.is_file() or _file_sha256(source) != item.get("sha256"):
+            raise ValueError(f"承認後に公開候補が変わりました: {item.get('source')}")
+        if item.get("role") == "page":
+            targets[Path(str(item["target"]))] = source
+    if not targets:
+        raise ValueError("manifest に公開ページ候補がありません")
+    return manifest, targets
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--topic", required=True)
@@ -626,12 +709,27 @@ def main() -> int:
     )
     parser.add_argument("--promote", action="store_true")
     parser.add_argument(
+        "--prepare-promotion",
+        action="store_true",
+        help="公開候補とハッシュmanifestだけを作り、正典・公開ページは変更しない",
+    )
+    parser.add_argument(
+        "--apply-promotion",
+        action="store_true",
+        help="--prepare-promotionで固定した候補をハッシュ確認後に公開へ反映する",
+    )
+    parser.add_argument(
         "--allow-taxonomy-mismatch",
         action="store_true",
         help="正典と分類器の taxonomy が違っても更新回の保管だけ行う（公開は不可）",
     )
     args = parser.parse_args()
     date.fromisoformat(args.date)
+    selected_modes = sum(bool(value) for value in (args.promote, args.prepare_promotion, args.apply_promotion))
+    if selected_modes > 1:
+        raise ValueError("--promote / --prepare-promotion / --apply-promotion は同時に指定できません")
+    if (args.prepare_promotion or args.apply_promotion) and not args.resume:
+        raise ValueError("承認前後の公開処理は保存済み更新回を使うため --resume と併用してください")
 
     themes = parse_themes_yaml()
     pipelines = load_pipeline_config()
@@ -644,7 +742,7 @@ def main() -> int:
     if args.date in args.include_wave:
         raise ValueError("--include-wave に --date と同じ日付は指定できません")
     promotion_preflight_error: ValueError | None = None
-    if args.promote:
+    if args.promote or args.apply_promotion:
         try:
             ensure_promotion_targets_clean(ROOT, themes)
         except ValueError as exc:
@@ -691,8 +789,8 @@ def main() -> int:
         )
         if not args.allow_taxonomy_mismatch:
             raise ValueError(message)
-        if args.promote:
-            raise ValueError(f"{args.topic}: taxonomy不一致のまま公開はできません（--promote と --allow-taxonomy-mismatch は併用不可）")
+        if args.promote or args.prepare_promotion or args.apply_promotion:
+            raise ValueError(f"{args.topic}: taxonomy不一致のまま公開候補を作成・反映できません")
         print(f"WARN {message}")
 
     record_refresh_attempt(ROOT, args.topic, args.date)
@@ -781,17 +879,35 @@ def main() -> int:
     else:
         report["next_collect_at"] = next_collection_date(ROOT, args.topic, args.date, report)
         archive_wave(ROOT, args.topic, args.date, stage, report, args.backup_dest)
-    record_collection_schedule(ROOT, args.topic, args.date, report["next_collect_at"])
+        record_collection_schedule(ROOT, args.topic, args.date, report["next_collect_at"])
     report["status"] = "archived"
     write_json(stage / "report.json", report)
 
-    if args.promote:
-        if promotion_preflight_error:
-            raise promotion_preflight_error
+    if args.promote or args.prepare_promotion or args.apply_promotion:
         adapter_name = pipeline.get("adapter")
         if not adapter_name or theme.get("page_update_mode") != "adapter":
             raise ValueError(f"{args.topic}: 更新回は保存済みですが、page adapterがないため公開できません")
         adapter = load_adapter(adapter_name)
+
+    if args.prepare_promotion:
+        adapter_targets = adapter.build(ROOT, stage, args.date)
+        manifest = prepare_promotion_manifest(ROOT, args.topic, args.date, args.run_id, stage, report, adapter_targets)
+        report["status"] = "prepared"
+        report["promotion_manifest"] = manifest["manifest_path"]
+        report["promotion_manifest_sha256"] = manifest["manifest_sha256"]
+        write_json(stage / "report.json", report)
+    elif args.apply_promotion:
+        if promotion_preflight_error:
+            raise promotion_preflight_error
+        manifest, adapter_targets = load_promotion_manifest(ROOT, stage, args.topic, args.date, args.run_id)
+        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest, adapter)
+        report["status"] = "promoted"
+        report["promotion_manifest"] = manifest["manifest_path"]
+        report["promotion_manifest_sha256"] = manifest["manifest_sha256"]
+        write_json(stage / "report.json", report)
+    elif args.promote:
+        if promotion_preflight_error:
+            raise promotion_preflight_error
         adapter_targets = adapter.build(ROOT, stage, args.date)
         promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest, adapter)
         report["status"] = "promoted"
