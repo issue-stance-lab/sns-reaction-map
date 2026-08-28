@@ -127,26 +127,22 @@ class CodexAppServer:
         return self._server_requests.get(request_id)
 
     def start_thread(self, cwd: Path, *, writable: bool, service_name: str) -> str:
-        result = self.request(
-            "thread/start",
-            {
+        params = {
                 "model": self.model,
                 "cwd": str(cwd),
                 "approvalPolicy": "unlessTrusted",
                 # The installed desktop build currently expects the legacy kebab-case value here.
                 "sandbox": "workspace-write" if writable else "read-only",
                 "serviceName": service_name,
-            },
-        )
+            }
+        result = self._request_with_approval_compat("thread/start", params)
         return str(result["thread"]["id"])
 
     def resume_thread(self, thread_id: str, cwd: Path) -> None:
         self.request("thread/resume", {"threadId": thread_id, "cwd": str(cwd), "model": self.model})
 
     def start_turn(self, thread_id: str, cwd: Path, prompt: str, *, writable: bool) -> str:
-        result = self.request(
-            "turn/start",
-            {
+        params = {
                 "threadId": thread_id,
                 "input": [{"type": "text", "text": prompt}],
                 "cwd": str(cwd),
@@ -157,9 +153,26 @@ class CodexAppServer:
                     **({"writableRoots": [str(cwd)], "networkAccess": True} if writable else {}),
                 },
                 "summary": "concise",
-            },
-        )
+            }
+        result = self._request_with_approval_compat("turn/start", params)
         return str(result["turn"]["id"])
+
+    def _request_with_approval_compat(self, method: str, params: dict[str, Any]) -> dict[str, Any]:
+        """Use the current protocol name, then fall back for older local CLIs.
+
+        Codex CLI 0.141 accepts ``on-request`` while the current app-server
+        protocol documents ``unlessTrusted``. Retrying is safe because schema
+        validation fails before a thread or turn is created.
+        """
+        try:
+            return self.request(method, params)
+        except CodexProtocolError as exc:
+            message = str(exc)
+            if "unknown variant `unlessTrusted`" not in message:
+                raise
+            legacy = dict(params)
+            legacy["approvalPolicy"] = "on-request"
+            return self.request(method, legacy)
 
     def interrupt_turn(self, thread_id: str, turn_id: str) -> None:
         self.request("turn/interrupt", {"threadId": thread_id, "turnId": turn_id})
