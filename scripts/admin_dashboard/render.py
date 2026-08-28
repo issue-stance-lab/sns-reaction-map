@@ -357,6 +357,62 @@ def section_ceo(data: dict) -> str:
 </section>"""
 
 
+def section_operations(data: dict) -> str:
+    """Interactive control room. It is emitted only by the loopback server."""
+    if not data.get("interactive"):
+        return ""
+    themes = data["themes"]
+    theme_cards = []
+    for theme in themes:
+        mode_ok = theme["update_mode"] == "adapter"
+        due, due_tone = days_label(theme["collect_in"])
+        disabled_note = "" if mode_ok else f'<p class="ops-disabled">{esc(theme["update_mode_note"])}</p>'
+        theme_cards.append(
+            f'<article class="ops-theme" data-theme="{esc(theme["key"])}">'
+            f'<label class="ops-select"><input type="checkbox" value="{esc(theme["key"])}">'
+            f'<span><strong>{esc(theme["title"])}</strong><small>{esc(theme["key"])}</small></span></label>'
+            f'<div class="ops-theme-state"><span class="pill {due_tone}">収集 {esc(due)}</span>'
+            f'<span class="pill {"ok" if mode_ok else "warn"}">{esc(theme["update_mode_label"])}</span></div>'
+            f'<div class="ops-theme-actions"><button type="button" class="ops-btn" data-action="theme.collect" data-theme="{esc(theme["key"])}">収集・分類</button>'
+            f'<button type="button" class="ops-btn secondary" data-action="theme.prepare_release" data-theme="{esc(theme["key"])}" {"" if mode_ok else "disabled"}>公開候補を確認</button></div>'
+            f'{disabled_note}</article>'
+        )
+    return f"""<section id="operations" class="operations" data-token="{esc(data.get('dashboard_token') or '')}">
+<div class="ops-heading"><div><div class="eyebrow">OPERATIONS DESK</div><h2>今日の運用をここから進める</h2>
+<p>ボタンを押すと専用のCodexセッションが始まります。通常は問題が起きるまで自動で進みます。</p></div>
+<div class="ops-server"><span class="ops-live"></span><strong>このMacだけ</strong><small>Codex model <span id="ops-model">—</span></small></div></div>
+<div id="ops-dirty" class="ops-warning" hidden></div>
+<div class="ops-layout">
+  <div class="ops-left">
+    <div class="ops-toolbar"><strong>テーマ</strong><button type="button" class="ops-link" id="select-due">予定が近いものを選択</button>
+    <button type="button" class="ops-btn primary" id="collect-selected">選んだテーマを順番に収集</button></div>
+    <div class="ops-themes">{"".join(theme_cards)}</div>
+    <div class="ops-channel-grid">
+      <article class="ops-channel x"><span class="ops-channel-mark">X</span><h3>X運用</h3><p>候補作成から投稿画面の準備、24〜48時間後の計測まで。</p>
+      <div class="ops-channel-actions"><button class="ops-btn primary" data-action="x.prepare">今日のX候補</button><button class="ops-btn" id="open-x">この案で投稿準備</button><button class="ops-btn" data-action="x.measure">結果を計測</button></div>
+      <div class="ops-inline"><input id="x-post-url" type="url" placeholder="投稿後の https://x.com/.../status/..."><button class="ops-btn" id="record-x">投稿済みにする</button></div></article>
+      <article class="ops-channel metrics"><span class="ops-channel-mark">↗</span><h3>流入データ</h3><p>実測の取得は決められた処理、変化の説明はCodexが担当します。</p>
+      <div class="ops-inline"><input id="x-followers" type="number" min="0" inputmode="numeric" placeholder="Xフォロワー数（手入力）"></div>
+      <div class="ops-channel-actions"><button class="ops-btn primary" id="refresh-metrics">最新値を取得</button><button class="ops-btn" data-action="metrics.explain">Codexに解説させる</button></div></article>
+    </div>
+  </div>
+  <aside class="ops-console">
+    <div class="ops-console-head"><div><div class="eyebrow">CODEX SESSION</div><h3 id="job-title">作業を選んでください</h3></div><button class="ops-link" id="shutdown-dashboard">管理画面を終了</button></div>
+    <div id="job-empty" class="ops-empty">左のボタンから作業を始めると、工程とCodexの回答がここに表示されます。</div>
+    <div id="job-detail" hidden>
+      <div class="ops-session-meta"><span id="job-status" class="pill">—</span><span id="job-owner" class="pill">管理画面で操作</span><code id="job-thread">—</code></div>
+      <ol class="ops-rail" id="job-progress"></ol>
+      <div class="ops-approval" id="job-approval" hidden></div>
+      <div class="ops-chat" id="job-chat"></div>
+      <div class="ops-chat-form"><textarea id="job-message" rows="3" placeholder="この作業についてCodexへ追加で伝える"></textarea><button class="ops-btn primary" id="send-job-message">送る</button></div>
+      <div class="ops-console-actions"><button class="ops-btn" id="handoff-job">Codexアプリへ引き継ぐ</button><button class="ops-btn danger" id="cancel-job">中止</button></div>
+    </div>
+    <div class="ops-history"><div class="ops-history-head"><strong>最近の作業</strong><span id="job-count"></span></div><div id="job-list"></div></div>
+  </aside>
+</div>
+</section>"""
+
+
 def section_company(data: dict) -> str:
     company = data.get("company") or {}
     today = data["today"]
@@ -1360,6 +1416,7 @@ th.sortcol:hover{color:var(--fg)}
 th.sortcol::after{content:"";opacity:.35;margin-left:4px}
 th.sortcol[data-dir="asc"]::after{content:"▲";opacity:1}
 th.sortcol[data-dir="desc"]::after{content:"▼";opacity:1}
+.operations{margin-top:18px}.ops-heading{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:16px}.ops-heading h2{border:0;padding:0;font-size:25px;color:var(--ink)}.ops-heading p{margin:5px 0;color:var(--muted);font-size:13px}.ops-server{display:grid;grid-template-columns:auto auto;align-items:center;gap:1px 8px;flex:none;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:12px}.ops-server small{grid-column:2;color:var(--muted)}.ops-live{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 15%,transparent);grid-row:1/3}.ops-warning{padding:10px 13px;margin-bottom:12px;border-left:4px solid var(--danger);background:color-mix(in srgb,var(--danger) 10%,var(--panel));font-size:12.5px}.ops-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(340px,.72fr);gap:14px;align-items:start}.ops-left,.ops-console{min-width:0}.ops-toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:9px}.ops-toolbar .primary{margin-left:auto}.ops-link{border:0;background:none;color:var(--soon);font:inherit;font-size:12px;cursor:pointer;padding:4px}.ops-link:hover{text-decoration:underline}.ops-themes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:480px;overflow:auto;padding-right:3px}.ops-theme{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px}.ops-theme:has(input:checked){border-color:var(--water);box-shadow:0 0 0 1px var(--water) inset;background:color-mix(in srgb,var(--water) 6%,var(--panel))}.ops-select{display:flex;gap:8px;align-items:flex-start;cursor:pointer}.ops-select input{accent-color:var(--water);margin-top:4px}.ops-select span{min-width:0}.ops-select strong,.ops-select small{display:block}.ops-select strong{font-size:13px;line-height:1.45}.ops-select small{font:500 9.5px/1.4 "Avenir Next",sans-serif;color:var(--muted);overflow:hidden;text-overflow:ellipsis}.ops-theme-state{display:flex;gap:5px;margin:8px 0}.ops-theme-actions,.ops-channel-actions,.ops-console-actions{display:flex;gap:6px;flex-wrap:wrap}.ops-btn{appearance:none;border:1px solid var(--line);border-radius:7px;background:color-mix(in srgb,var(--fg) 4%,var(--panel));color:var(--fg);font:650 11.5px/1.25 "Hiragino Sans","Yu Gothic UI",sans-serif;padding:7px 9px;cursor:pointer}.ops-btn:hover:not(:disabled){border-color:var(--water);background:color-mix(in srgb,var(--water) 9%,var(--panel))}.ops-btn:focus-visible,.ops-link:focus-visible,.ops-select input:focus-visible,.ops-chat-form textarea:focus-visible,.ops-inline input:focus-visible{outline:3px solid color-mix(in srgb,var(--soon) 35%,transparent);outline-offset:2px}.ops-btn.primary{background:var(--ink);border-color:var(--ink);color:var(--panel)}.ops-btn.danger{color:var(--danger)}.ops-btn:disabled{opacity:.42;cursor:not-allowed}.ops-disabled{margin:7px 0 0;color:var(--warn);font-size:10.5px;line-height:1.45}.ops-channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.ops-channel{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:13px}.ops-channel h3{margin:0 0 3px;font-size:14px}.ops-channel p{margin:0 0 11px;color:var(--muted);font-size:11.5px;max-width:44ch}.ops-channel-mark{position:absolute;right:10px;top:5px;font:800 32px/1 "Avenir Next",sans-serif;color:color-mix(in srgb,var(--water) 14%,transparent)}.ops-inline{display:flex;gap:6px;margin-top:8px}.ops-inline input,.ops-chat-form textarea{min-width:0;width:100%;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--fg);font:inherit;font-size:11.5px;padding:7px 9px}.ops-console{position:sticky;top:58px;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:0 16px 38px color-mix(in srgb,var(--ink) 8%,transparent);max-height:calc(100vh - 76px);overflow:auto}.ops-console-head{display:flex;justify-content:space-between;gap:10px;padding:14px 15px 11px;border-bottom:1px solid var(--line)}.ops-console-head h3{margin:0;font-size:15px}.ops-empty{padding:34px 20px;color:var(--muted);font-size:12.5px;text-align:center}.ops-session-meta{display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}.ops-session-meta code{margin-left:auto;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px}.ops-rail{list-style:none;margin:0;padding:10px 14px 5px}.ops-rail li{position:relative;padding:0 0 13px 24px;font-size:11.5px}.ops-rail li::before{content:"";position:absolute;left:4px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--line);box-shadow:0 0 0 3px var(--panel),0 0 0 4px var(--line)}.ops-rail li::after{content:"";position:absolute;left:8px;top:16px;bottom:0;width:1px;background:var(--line)}.ops-rail li:last-child::after{display:none}.ops-rail li.active::before{background:var(--water);box-shadow:0 0 0 3px var(--panel),0 0 0 4px var(--water)}.ops-rail time{display:block;color:var(--muted);font-size:9.5px}.ops-approval{margin:6px 14px;padding:10px;border:1px solid color-mix(in srgb,var(--sun) 45%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--sun) 9%,var(--panel));font-size:11.5px}.ops-chat{border-top:1px solid var(--line);padding:12px 14px;max-height:260px;overflow:auto}.ops-message{padding:9px 10px;margin:0 0 7px;border-radius:9px;background:var(--bg);white-space:pre-wrap;font-size:11.5px;line-height:1.6}.ops-message.user{margin-left:24px;background:color-mix(in srgb,var(--soon) 11%,var(--panel))}.ops-live-summary{color:var(--muted);font-size:11px;padding:7px;border-left:2px solid var(--water)}.ops-chat-form{display:grid;grid-template-columns:1fr auto;gap:6px;padding:0 14px 10px}.ops-console-actions{padding:0 14px 12px}.ops-history{border-top:1px solid var(--line);padding:11px 14px}.ops-history-head{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:6px}.ops-job{display:grid;grid-template-columns:auto 1fr auto;gap:7px;align-items:center;width:100%;border:0;border-top:1px solid color-mix(in srgb,var(--line) 65%,transparent);background:none;color:var(--fg);text-align:left;padding:7px 0;cursor:pointer}.ops-job:hover strong{color:var(--water)}.ops-job strong{font-size:11.5px}.ops-job small{display:block;color:var(--muted);font-size:9.5px}.ops-job-state{width:7px;height:7px;border-radius:50%;background:var(--muted)}.ops-job-state.running,.ops-job-state.preflight,.ops-job-state.reviewing,.ops-job-state.applying,.ops-job-state.verifying{background:var(--water)}.ops-job-state.completed{background:var(--ok)}.ops-job-state.failed,.ops-job-state.cancelled{background:var(--danger)}.ops-job-state.needs_input,.ops-job-state.awaiting_approval{background:var(--sun)}
 @media(max-width:640px){
 .wrap{padding:0 12px 64px}
 .north-star{grid-template-columns:54px 1fr;gap:13px;padding:18px 15px}.north-star-mark{width:50px;height:50px}.north-star-mark::before,.north-star-mark::after{top:9px;width:22px;height:31px}.north-star-mark::before{left:4px}.north-star-mark::after{right:4px}.north-star-mark span{left:21px;top:21px}.north-star-mark i,.north-star-mark b{width:14px;top:24px}.north-star h2{font-size:19px;line-height:1.55}
@@ -1380,6 +1437,7 @@ padding:8px 12px;margin-bottom:8px}
 .tablebox td{border:none;padding:3px 0;white-space:normal;display:flex;gap:10px;font-size:12.5px}
 .tablebox td::before{content:attr(data-label);flex:none;width:8.5em;color:var(--muted);font-size:11.5px}
 .tablebox .clamp{max-width:none;white-space:normal}
+.ops-heading{display:block}.ops-server{margin-top:10px;width:max-content}.ops-layout{grid-template-columns:1fr}.ops-themes,.ops-channel-grid{grid-template-columns:1fr;max-height:none}.ops-console{position:static;max-height:none}.ops-toolbar .primary{margin-left:0}.operations{margin-bottom:36px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 """
@@ -1520,6 +1578,116 @@ SCRIPT = r"""
 })();
 """
 
+INTERACTIVE_SCRIPT = r"""
+(function () {
+  var root = document.getElementById("operations");
+  if (!root) { return; }
+  var token = root.getAttribute("data-token");
+  var state = { jobs: [], themes: [], dirty: [] };
+  var selectedJobId = null;
+  var batchRemaining = [];
+  var statusLabel = {
+    queued:"実行待ち",preflight:"準備確認",running:"実行中",reviewing:"品質監査中",
+    awaiting_approval:"CEO承認待ち",applying:"反映中",verifying:"最終検査中",
+    completed:"完了",needs_input:"対応待ち",failed:"失敗",cancelled:"中止"
+  };
+  var actionLabel = {
+    "theme.collect":"収集・分類","theme.prepare_release":"公開候補の確認","theme.release":"承認して公開",
+    "x.prepare":"今日のX候補","x.record_post":"X投稿の記録","x.measure":"X結果の計測",
+    "metrics.refresh":"流入データ取得","metrics.explain":"流入データの解説"
+  };
+  var warn = function (message) {
+    var box = document.getElementById("ops-dirty"); box.hidden = !message; box.textContent = message || "";
+  };
+  var api = function (path, options) {
+    options = options || {};
+    options.headers = Object.assign({"X-Dashboard-Token":token}, options.headers || {});
+    if (options.body) { options.headers["Content-Type"] = "application/json"; }
+    return fetch(path, options).then(function (response) {
+      return response.json().then(function (data) {
+        if (!response.ok) { throw new Error(data.error || "操作に失敗しました"); }
+        return data;
+      });
+    });
+  };
+  var post = function (path, payload) { return api(path, {method:"POST",body:JSON.stringify(payload || {})}); };
+  var escapeHtml = function (value) {
+    var div=document.createElement("div"); div.textContent=value == null ? "" : String(value); return div.innerHTML;
+  };
+  var latestJob = function (action, theme, statuses) {
+    return state.jobs.find(function (job) {
+      return job.action === action && (!theme || job.theme === theme) && (!statuses || statuses.indexOf(job.status) !== -1);
+    });
+  };
+  var startJob = function (action, payload) {
+    if (state.dirty.length && ["theme.collect","x.record_post","x.measure"].indexOf(action) !== -1) {
+      warn("未コミットの変更があるため、変更を伴う作業は開始できません: " + state.dirty.slice(0,3).join(" / "));
+      return Promise.reject(new Error("未コミット変更があります"));
+    }
+    if (action === "theme.prepare_release") {
+      var source = latestJob("theme.collect", payload.theme, ["completed"]);
+      if (!source) { warn("先に同じテーマの「収集・分類」を完了してください。"); return Promise.reject(new Error("収集結果がありません")); }
+      payload.source_job_id = source.id;
+    }
+    warn("");
+    return post("/api/v1/jobs", {action:action,payload:payload || {}}).then(function (job) {
+      selectedJobId = job.id; return refresh();
+    }).catch(function (error) { warn(error.message); throw error; });
+  };
+  var renderJobs = function () {
+    var list=document.getElementById("job-list");
+    document.getElementById("job-count").textContent=state.jobs.length+"件";
+    list.innerHTML=state.jobs.slice(0,16).map(function (job) {
+      return '<button class="ops-job" data-job="'+job.id+'"><span class="ops-job-state '+job.status+'"></span><span><strong>'+escapeHtml(actionLabel[job.action] || job.action)+'</strong><small>'+escapeHtml(job.theme || (job.created_at || "").slice(0,16))+'</small></span><span class="pill">'+escapeHtml(statusLabel[job.status] || job.status)+'</span></button>';
+    }).join("") || '<div class="muted small">まだ作業履歴がありません</div>';
+    Array.prototype.forEach.call(list.querySelectorAll("[data-job]"),function(button){button.onclick=function(){selectedJobId=button.getAttribute("data-job");renderDetail();};});
+  };
+  var renderDetail = function () {
+    var job=state.jobs.find(function(item){return item.id===selectedJobId;});
+    document.getElementById("job-empty").hidden=!!job; document.getElementById("job-detail").hidden=!job;
+    if(!job){return;}
+    document.getElementById("job-title").textContent=(actionLabel[job.action]||job.action)+(job.theme?" / "+job.theme:"");
+    var status=document.getElementById("job-status");status.textContent=statusLabel[job.status]||job.status;status.className="pill "+(["completed"].indexOf(job.status)>=0?"ok":["failed","cancelled"].indexOf(job.status)>=0?"danger":["needs_input","awaiting_approval"].indexOf(job.status)>=0?"warn":"soon");
+    document.getElementById("job-owner").textContent=job.control_owner==="codex_app"?"Codexアプリで操作":"管理画面で操作";
+    document.getElementById("job-thread").textContent=job.thread_id||"セッション準備中";
+    var progress=(job.progress||[]).slice(-8);document.getElementById("job-progress").innerHTML=progress.map(function(item,index){return '<li class="'+(index===progress.length-1?"active":"")+'"><span>'+escapeHtml(item.text)+'</span><time>'+escapeHtml((item.at||"").replace("T"," ").slice(0,16))+'</time></li>';}).join("");
+    var approval=document.getElementById("job-approval"); approval.hidden=true; approval.innerHTML="";
+    if(job.pending_request&&job.pending_request.kind==="runtime"){
+      approval.hidden=false;approval.innerHTML='<strong>Codexの操作許可</strong><p>'+escapeHtml(job.pending_request.reason||"")+'</p><div class="ops-channel-actions"><button class="ops-btn primary" data-decision="accept">今回だけ許可</button><button class="ops-btn" data-decision="acceptForSession">この作業中は許可</button><button class="ops-btn danger" data-decision="decline">許可しない</button></div>';
+    } else if(job.status==="awaiting_approval"&&job.action==="theme.prepare_release"){
+      var artifacts=((job.result||{}).artifacts||[]).map(function(item){return '<a class="ops-btn" target="_blank" rel="noopener" href="/api/v1/jobs/'+job.id+'/artifact?path='+encodeURIComponent(item.path)+'">'+escapeHtml(item.label)+' をプレビュー</a>';}).join("");
+      approval.hidden=false;approval.innerHTML='<strong>公開してよいか確認してください</strong><p>品質監査: '+escapeHtml((job.quality||{}).verdict||"—")+'。承認後はmainへの統合、検査、push、本番の現物確認、バックアップまで自動で進みます。</p><div class="ops-channel-actions">'+artifacts+'<button class="ops-btn primary" id="approve-release">承認して公開</button></div>';
+      approval.querySelector("#approve-release").onclick=function(){startJob("theme.release",{theme:job.theme,source_job_id:job.id});};
+    }
+    Array.prototype.forEach.call(approval.querySelectorAll("[data-decision]"),function(button){button.onclick=function(){post("/api/v1/jobs/"+job.id+"/decision",{decision:button.getAttribute("data-decision")}).then(refresh).catch(function(error){warn(error.message);});};});
+    var chat=document.getElementById("job-chat");chat.innerHTML=(job.messages||[]).map(function(message){return '<div class="ops-message '+escapeHtml(message.role||"assistant")+'">'+escapeHtml(message.text||"")+'</div>';}).join("")+(job.live_summary?'<div class="ops-live-summary">'+escapeHtml(job.live_summary)+'</div>':"");chat.scrollTop=chat.scrollHeight;
+    var handoff=document.getElementById("handoff-job");handoff.textContent=job.control_owner==="codex_app"?"管理画面へ戻す":"Codexアプリへ引き継ぐ";handoff.disabled=["running","preflight","reviewing","applying","verifying"].indexOf(job.status)>=0;
+    document.getElementById("send-job-message").disabled=job.control_owner!=="dashboard"||["running","preflight","reviewing","applying","verifying"].indexOf(job.status)>=0;
+  };
+  var maybeContinueBatch = function () {
+    if(!batchRemaining.length){return;}
+    var current=state.jobs.find(function(job){return job.id===selectedJobId;});
+    if(current&&current.action==="theme.collect"&&current.status==="completed"){
+      var next=batchRemaining.shift();startJob("theme.collect",{theme:next});
+    } else if(current&&["failed","needs_input","cancelled"].indexOf(current.status)>=0){
+      warn("連続収集を停止しました。現在のテーマを確認してから、残りを再度選択してください。");batchRemaining=[];
+    }
+  };
+  var refresh = function () {return api("/api/v1/state").then(function(data){state=data;document.getElementById("ops-model").textContent=data.model;if(!selectedJobId&&data.jobs.length){selectedJobId=data.jobs[0].id;}if(data.dirty.length){warn("未コミット変更を保護しています: "+data.dirty.slice(0,3).join(" / "));}renderJobs();renderDetail();maybeContinueBatch();});};
+  Array.prototype.forEach.call(root.querySelectorAll("[data-action]"),function(button){button.addEventListener("click",function(){var action=button.getAttribute("data-action");var payload={};if(button.getAttribute("data-theme")){payload.theme=button.getAttribute("data-theme");}startJob(action,payload);});});
+  document.getElementById("collect-selected").onclick=function(){var selected=Array.prototype.map.call(root.querySelectorAll(".ops-theme input:checked"),function(input){return input.value;});if(!selected.length){warn("収集するテーマを一つ以上選んでください。");return;}batchRemaining=selected.slice(1);startJob("theme.collect",{theme:selected[0]});};
+  document.getElementById("select-due").onclick=function(){var due=state.themes.filter(function(theme){if(!theme.collect_at){return false;}return Date.parse(theme.collect_at)<=Date.now()+7*86400000;}).map(function(theme){return theme.key;});Array.prototype.forEach.call(root.querySelectorAll(".ops-theme input"),function(input){input.checked=due.indexOf(input.value)>=0;});};
+  document.getElementById("record-x").onclick=function(){startJob("x.record_post",{url:document.getElementById("x-post-url").value});};
+  document.getElementById("refresh-metrics").onclick=function(){startJob("metrics.refresh",{x_followers:document.getElementById("x-followers").value});};
+  document.getElementById("open-x").onclick=function(){var jobs=state.jobs.filter(function(job){return job.action==="x.prepare"&&job.status==="completed";});var messages=jobs.length?(jobs[0].messages||[]):[];var text=messages.map(function(item){return item.text||"";}).join("\n");var match=text.match(/POST_TEXT_BEGIN\s*([\s\S]*?)\s*POST_TEXT_END/);if(!match){warn("先に「今日のX候補」を作り、推奨案を確認してください。");return;}window.open("https://x.com/intent/post?text="+encodeURIComponent(match[1].trim()),"_blank","noopener");};
+  document.getElementById("send-job-message").onclick=function(){var text=document.getElementById("job-message").value;if(!selectedJobId||!text.trim()){return;}post("/api/v1/jobs/"+selectedJobId+"/messages",{text:text}).then(function(){document.getElementById("job-message").value="";refresh();}).catch(function(error){warn(error.message);});};
+  document.getElementById("cancel-job").onclick=function(){if(selectedJobId){post("/api/v1/jobs/"+selectedJobId+"/cancel",{}).then(refresh).catch(function(error){warn(error.message);});}};
+  document.getElementById("handoff-job").onclick=function(){var job=state.jobs.find(function(item){return item.id===selectedJobId;});if(!job){return;}post("/api/v1/jobs/"+job.id+"/control",{owner:job.control_owner==="codex_app"?"dashboard":"codex_app"}).then(refresh).catch(function(error){warn(error.message);});};
+  document.getElementById("shutdown-dashboard").onclick=function(){post("/api/v1/shutdown",{}).then(function(){document.body.innerHTML='<main style="max-width:520px;margin:15vh auto;font-family:sans-serif"><h1>管理画面を終了しました</h1><p>このタブは閉じてかまいません。</p></main>';}).catch(function(error){warn(error.message);});};
+  refresh().catch(function(error){warn(error.message);});setInterval(refresh,2000);setInterval(function(){post("/api/v1/heartbeat",{});},30000);
+})();
+"""
+
 NAV = [
     ("ceo", "CEOホーム"),
     ("company", "承認・目標・収支"),
@@ -1537,13 +1705,15 @@ NAV = [
 
 
 def render(data: dict) -> str:
-    nav = "".join(f'<li><a href="#{key}">{esc(label)}</a></li>' for key, label in NAV)
+    navigation = ([('operations', '運用する')] if data.get("interactive") else []) + NAV
+    nav = "".join(f'<li><a href="#{key}">{esc(label)}</a></li>' for key, label in navigation)
     built = data["built_at"].strftime("%Y-%m-%d %H:%M")
     # 古いHTMLを開いたときに赤帯を出すため、作成日をブラウザ側から読める形で置く
     built_date = data["today"].isoformat()
     sections = "".join(
         [
             section_ceo(data),
+            section_operations(data),
             section_company(data),
             section_next(data),
             section_alerts(data),
@@ -1577,5 +1747,5 @@ GitHub にも上がりません（<code>company/dashboard/</code> は Git の管
 生成元: THEMES.yaml / GROWTH.yaml / content/x/posts.md / TASK_BOARD.md / data/verification/ / git log<br>
 作り直すコマンド: <code>python3 scripts/build_admin_dashboard.py --open</code>（実測値も取り直す場合は <code>--fetch</code> を足す）
 </footer>
-</div><script>{SCRIPT}</script></body></html>
+</div><script>{SCRIPT}{INTERACTIVE_SCRIPT if data.get('interactive') else ''}</script></body></html>
 """

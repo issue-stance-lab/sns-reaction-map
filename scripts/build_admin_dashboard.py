@@ -7,6 +7,7 @@ docs/ の外にある。
   python3 scripts/build_admin_dashboard.py            # 作るだけ
   python3 scripts/build_admin_dashboard.py --open     # 作ってブラウザで開く
   python3 scripts/build_admin_dashboard.py --fetch    # GA4/GSC/Supabase の実測値も取り直す
+  python3 scripts/build_admin_dashboard.py --serve    # ボタンで操作できるローカル版を開く
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "company" / "dashboard" / "dashboard.html"
 
 
-def build(*, fetch: bool, today: dt.date) -> str:
+def build(*, fetch: bool, today: dt.date, interactive: bool = False, token: str = "") -> str:
     data = {
         "today": today,
         "built_at": dt.datetime.now(),
@@ -41,6 +42,8 @@ def build(*, fetch: bool, today: dt.date) -> str:
         "live": collect.fetch_live_metrics() if fetch else None,
         "sample_files": collect.collect_sample_files(),
         "live_cache": collect.read_live_cache(),
+        "interactive": interactive,
+        "dashboard_token": token,
     }
     # 次の一手は集めた材料すべてを見て決めるので、dict が揃ってから足す
     data["next"] = actions.next_action(data)
@@ -56,7 +59,14 @@ def main() -> int:
     parser.add_argument("--open", action="store_true", help="作成後にブラウザで開く")
     parser.add_argument("--fetch", action="store_true", help="GA4 / Search Console / Supabase から実測値を取り直す（時間がかかる）")
     parser.add_argument("--today", help="今日の日付を上書きする（YYYY-MM-DD、動作確認用）")
+    parser.add_argument("--serve", action="store_true", help="Codex連携ボタンが使えるローカル版を開く")
+    parser.add_argument("--port", type=int, default=8765, help="ローカル版の待受ポート（既定: 8765）")
     args = parser.parse_args()
+
+    if args.serve:
+        from admin_dashboard.server import serve
+
+        return serve(port=args.port, open_browser=True)
 
     today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
     if args.fetch:

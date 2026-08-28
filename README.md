@@ -79,6 +79,14 @@ archive/             運用から外れた文書・実験・スクリプト
 
 会社の目的、今日の4行報告、CEO承認待ち、進行中業務、90日・1年・3年目標、月次収支、
 組織を最初に表示する。その下で、期限切れ、流入、X の投稿、テーマ更新、変更履歴を確認できる。
+通常はリポジトリ直下の **`管理画面を開く.command`** をダブルクリックする。
+テーマの収集・公開候補・承認後の公開、X準備と計測、流入取得をボタンから開始できる。
+Codexの作業は1回ごとに別セッションになり、Codexデスクトップアプリのタスク一覧からも同じ履歴を開ける。
+
+Xは投稿画面の準備までで、最後の「ポストする」はオーナーがX上で行う。
+公開も品質監査が通った候補に対する「承認して公開」が必要。
+
+読み取り用の静的な写しだけ作る場合は従来どおり次を使う。
 
 ```bash
 python3 scripts/build_admin_dashboard.py --open
@@ -97,8 +105,8 @@ GA4・Search Console・Supabase の実測値も取り直すときは `--fetch` �
 
 ## よく使うコマンド
 
-データ更新（収集→分類→検証→バックアップ→承認済み公開まで1コマンド）。
-`--promote` は `DATA_REFRESH.md` の検査と CEO 承認後だけ使う:
+データ更新の詳細は `DATA_REFRESH.md` を参照。管理画面は「候補作成」と「承認済み反映」を分離し、
+互換用の `--promote` は使わない。手動運用で従来形式を使う場合だけ、検査と CEO 承認後に実行する:
 
 ```bash
 python3 scripts/refresh_topic.py --topic <theme> --date <YYYY-MM-DD> --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups --promote
