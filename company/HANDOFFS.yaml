@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-27"
+updated_at: "2026-08-29"
 
 # 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
 required_fields:
@@ -86,10 +86,10 @@ items:
 
   - id: adsense-third-review
     department: business
-    status: waiting_external_result
-    current_state: "3回目の審査結果待ち。2026-08-18の診断は合格ラインだった。"
-    next_action: "結果通知を記録し、不通過なら診断・改善候補・CEO承認・再申請の順に進める。"
+    status: in_progress
+    current_state: "2026-08-29に3回目も『有用性の低いコンテンツ』で不承認。ads.txtは承認済み。ルートと本体の数字、ページ内母数、手動確認表示、サイトマップ更新日の不一致を確認し、再申請を保留した。"
+    next_action: "TASK_BOARD課題15-Aとして、表示・数字・2リポジトリ・サイトマップの整合性修正だけに着手する。15-A〜C完了前は再申請しない。"
     due_at: null
-    canonical_sources: ["TASK_BOARD.md", "quality/reviews/adsense-check-2026-08-18.md"]
+    canonical_sources: ["TASK_BOARD.md", "quality/reviews/adsense-check-2026-08-18.md", "quality/reviews/adsense-third-rejection-2026-08-29.md"]
     ceo_approval: "再申請時に必要"
-    completion_evidence: ["company/FINANCE.yaml", "TASK_BOARD.md"]
+    completion_evidence: ["quality/reviews/", "TASK_BOARD.md", "company/APPROVALS.yaml"]
