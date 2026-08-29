@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-29"
+updated_at: "2026-08-30"
 
 # 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
 required_fields:
@@ -14,6 +14,16 @@ required_fields:
   - completion_evidence
 
 items:
+  - id: website-reaction-planet-renewal
+    department: engineering-data
+    status: in_progress
+    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。"
+    next_action: "課題15-Aの数字・定義・2リポジトリ整合を完了させ、その正典だけを読む共通planet-data生成器の最小構成を部活地域移行で実装する。"
+    due_at: null
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml"]
+    ceo_approval: "重要方針と非公開実装は承認済み。一般公開、広告配置、AdSense再申請は別途必要"
+    completion_evidence: ["tests/", "quality/reviews/", "data/review-ledger.json", "company/APPROVALS.yaml"]
+
   - id: theme-refresh-20260827
     department: engineering-data
     status: in_progress

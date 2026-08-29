@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-27"
+updated_at: "2026-08-30"
 
 rules:
   required_for:
@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260830-001
+    department: executive
+    action: important_policy_change
+    summary: "Websiteを3D『議論の惑星』中心へリニューアルし、10テーマすべてを移行対象にする"
+    reason: "Websiteをnoteの転載先ではなく、議論の全体像を探索できる中心商品へ育て、AdSense再申請の前に独自価値と閲覧体験を改善するため"
+    risks:
+      - "3D表現が先行すると、データの意味や記事本文が伝わらず、見た目だけのサイトになる"
+      - "10テーマを個別実装すると保守不能になるため、共通生成器と検査を先に整える必要がある"
+      - "操作領域の近くに広告を置くと誤クリックを招くため、広告配置は審査通過後に別設計とする"
+    recommendation: approve
+    evidence:
+      - quality/designs/reaction-planet-renewal.md
+      - quality/reviews/2026-08-30-reaction-planet-plan.md
+      - TASK_BOARD.md
+    status: approved
+    requested_at: "2026-08-30"
+    decided_at: "2026-08-30"
+    decision_note: "CEOが本対話で、最重要項目としての記録、他AIによるレビュー、完成版に基づく実作業を指示した。対象は6テーマではなく公開対象10テーマすべてと明示した。"
   - id: approval-20260826-001
     department: executive
     action: important_policy_change
