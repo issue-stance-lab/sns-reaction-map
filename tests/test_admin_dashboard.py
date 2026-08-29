@@ -655,6 +655,8 @@ class TaskFieldTests(unittest.TestCase):
         self.assertTrue(filled, "任意欄を書いた課題が1件も読めていない")
         waiting = [task for task in self.tasks if task["waiting_on"]]
         self.assertTrue(waiting, "判断待ち欄が読めていない")
+        deadlines = [task for task in self.tasks if task["deadline"]]
+        self.assertTrue(deadlines, "期限欄が読めていない")
 
 
 class LiveCacheTests(unittest.TestCase):
