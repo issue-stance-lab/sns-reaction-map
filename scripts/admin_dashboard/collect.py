@@ -877,6 +877,7 @@ _TASK_HEADING = re.compile(r"^###\s+課題(\d+)\s*[:：]\s*(.+?)\s*$")
 TASK_FIELDS = {
     "状態": "status",
     "優先度": "priority",
+    "期限": "deadline",
     "次にすること": "next_step",
     "判断待ち": "waiting_on",
     "関連テーマ": "related",

@@ -1186,6 +1186,7 @@ def section_tasks(data: dict) -> str:
                 f'<span class="pill {PRIORITY_TONE.get(priority, "muted")}">{esc(priority or "—")}</span>',
                 f'<span class="pill {tone}">{phase}</span>'
                 + (f'<div class="pill danger">判断待ち: {esc(task["waiting_on"])}</div>' if owner_decision else ""),
+                esc(task["deadline"]) or '<span class="muted">—</span>',
                 esc(task["next_step"]) or '<span class="muted">未記入</span>',
                 esc(task["status"][:200]),
             ]
@@ -1202,9 +1203,9 @@ def section_tasks(data: dict) -> str:
 <p class="lead"><code>TASK_BOARD.md</code> に載っている {len(tasks)} 件。「完了」と書かれたまま残っているものは、
 まだ <code>archive/TASK_BOARD_ARCHIVE.md</code> へ移していないだけです。区分は状態欄の書き出しから機械的に判定しています。</p>
 {headline}
-<p class="muted small">「優先度」「次にすること」「判断待ち」は <code>TASK_BOARD.md</code> の任意の欄です
+<p class="muted small">「優先度」「期限」「次にすること」「判断待ち」は <code>TASK_BOARD.md</code> の任意の欄です
 （<code>**優先度**: 高</code> のように書くと、ここに出ます）。いま {filled} / {len(tasks)} 件に記入があります。</p>
-{table(["番号", "課題", "優先度", "区分", "次にすること", "状態"], rows, cls="tasks", tools="課題名・状態で絞り込む")}
+{table(["番号", "課題", "優先度", "区分", "期限", "次にすること", "状態"], rows, cls="tasks", tools="課題名・状態で絞り込む")}
 </section>"""
 
 
