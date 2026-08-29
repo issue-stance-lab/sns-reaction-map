@@ -10,7 +10,7 @@ from pathlib import Path
 from scripts.admin_dashboard.codex_client import CodexAppServer, CodexProtocolError
 from scripts.admin_dashboard.jobs import JobManager, JobStore
 from scripts.admin_dashboard.server import DashboardHTTPServer
-from scripts.admin_dashboard.x_api_usage import parse_usage, summarize_jobs
+from scripts.admin_dashboard.x_api_usage import append_usage, parse_usage, read_usage_ledger, summarize_jobs, summarize_usage
 from scripts.build_admin_dashboard import build
 
 
@@ -113,6 +113,28 @@ class XApiUsageTests(unittest.TestCase):
         result = summarize_jobs([{"result": {"x_api_usage": usage}}], now=dt.datetime(2026, 8, 29, 12, tzinfo=dt.timezone.utc))
         self.assertEqual(result["days_30"]["unique_posts_read"], 20)
         self.assertEqual(result["days_30"]["posts_and_users_usd"], 0.25)
+
+    def test_shared_ledger_is_idempotent_and_contains_no_post_text(self):
+        usage = parse_usage([{"role": "assistant", "text": "X_USAGE_JSON_BEGIN "
+                             '{"mode":"chrome","search_results_loaded":8,"unique_posts_read":6,'
+                             '"unique_users_read":5,"candidates_shortlisted":2,"counts_complete":true,'
+                             '"note":"https://x.com/example/status/1 @example を確認"} X_USAGE_JSON_END'}],
+                            recorded_at="2026-08-29T10:00:00+00:00")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "usage.json"
+            append_usage(usage, source_id="same-run", source="codex_app", path=path)
+            append_usage(usage, source_id="same-run", source="codex_app", path=path)
+            rows = read_usage_ledger(path)
+        self.assertEqual(len(rows), 1)
+        self.assertNotIn("x.com/example", rows[0]["note"])
+        self.assertNotIn("@example", rows[0]["note"])
+        self.assertEqual(summarize_usage(rows, now=dt.datetime(2026, 8, 29, 12, tzinfo=dt.timezone.utc))["days_7"]["runs"], 1)
+
+    def test_impossible_count_relationship_is_rejected(self):
+        usage = parse_usage([{"role": "assistant", "text": "X_USAGE_JSON_BEGIN "
+                             '{"mode":"chrome","search_results_loaded":3,"unique_posts_read":4,'
+                             '"counts_complete":true} X_USAGE_JSON_END'}], recorded_at="2026-08-29T10:00:00+09:00")
+        self.assertIsNone(usage)
 
 
 class LoopbackSecurityTests(unittest.TestCase):

@@ -20,7 +20,7 @@ import yaml
 
 from . import collect
 from .codex_client import CodexAppServer, CodexProtocolError
-from .x_api_usage import parse_usage
+from .x_api_usage import append_usage, parse_usage
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -397,6 +397,7 @@ class JobManager:
                 usage = parse_usage(latest.get("messages") or [], recorded_at=latest["updated_at"])
                 if usage:
                     latest["result"]["x_api_usage"] = usage
+                    append_usage(usage, source_id=latest["id"], source="dashboard")
                     self._append(latest, "completed", "X検索件数とAPI換算費用を記録しました")
                 else:
                     latest["result"]["x_api_usage_missing"] = True

@@ -5,6 +5,8 @@ from __future__ import annotations
 import datetime as dt
 import json
 import re
+import uuid
+from pathlib import Path
 from typing import Any, Iterable
 
 POST_READ_USD = 0.005
@@ -16,6 +18,8 @@ _COUNT_KEYS = (
     "queries_count", "search_results_loaded", "unique_posts_read", "post_detail_reads",
     "unique_users_read", "owned_posts_read", "candidates_shortlisted",
 )
+ROOT = Path(__file__).resolve().parents[2]
+LEDGER_PATH = ROOT / "company" / "dashboard" / "x-search-usage.json"
 
 
 def parse_usage(messages: Iterable[dict[str, Any]], *, recorded_at: str) -> dict[str, Any] | None:
@@ -28,6 +32,11 @@ def parse_usage(messages: Iterable[dict[str, Any]], *, recorded_at: str) -> dict
         raw = json.loads(matches[-1].group(1))
     except json.JSONDecodeError:
         return None
+    return build_usage(raw, recorded_at=recorded_at)
+
+
+def build_usage(raw: Any, *, recorded_at: str) -> dict[str, Any] | None:
+    """Normalize one count-only record and attach the price snapshot."""
     if not isinstance(raw, dict) or raw.get("mode") not in {"chrome", "x_api", "mixed"}:
         return None
     usage: dict[str, Any] = {
@@ -38,7 +47,17 @@ def parse_usage(messages: Iterable[dict[str, Any]], *, recorded_at: str) -> dict
     for key in _COUNT_KEYS:
         value = raw.get(key)
         usage[key] = value if isinstance(value, int) and not isinstance(value, bool) and value >= 0 else None
-    usage["note"] = str(raw.get("note") or "")[:240]
+    unique = usage.get("unique_posts_read")
+    for subset in ("post_detail_reads", "unique_users_read", "owned_posts_read", "candidates_shortlisted"):
+        if isinstance(unique, int) and isinstance(usage.get(subset), int) and usage[subset] > unique:
+            return None
+    loaded = usage.get("search_results_loaded")
+    if isinstance(loaded, int) and isinstance(unique, int) and unique > loaded:
+        return None
+    note = str(raw.get("note") or "")[:240]
+    note = re.sub(r"https?://\S+", "[URL除去]", note)
+    note = re.sub(r"(?<!\w)@[A-Za-z0-9_]+", "[アカウント除去]", note)
+    usage["note"] = note
     usage["pricing"] = {
         "post_read_usd": POST_READ_USD,
         "user_read_usd": USER_READ_USD,
@@ -48,6 +67,33 @@ def parse_usage(messages: Iterable[dict[str, Any]], *, recorded_at: str) -> dict
     }
     usage["estimated_cost_usd"] = estimate_cost(usage)
     return usage
+
+
+def read_usage_ledger(path: Path = LEDGER_PATH) -> list[dict[str, Any]]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    rows = payload.get("runs") if isinstance(payload, dict) else None
+    return rows if isinstance(rows, list) else []
+
+
+def append_usage(
+    usage: dict[str, Any], *, source_id: str | None = None, source: str = "desktop_skill", path: Path = LEDGER_PATH
+) -> dict[str, Any]:
+    """Atomically append a count-only run. Reusing source_id is idempotent."""
+    source_id = source_id or uuid.uuid4().hex
+    rows = read_usage_ledger(path)
+    existing = next((item for item in rows if item.get("source_id") == source_id), None)
+    if existing:
+        return existing
+    record = {"source_id": source_id, "source": source, **usage}
+    rows.append(record)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".tmp")
+    temporary.write_text(json.dumps({"version": 1, "runs": rows}, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary.replace(path)
+    return record
 
 
 def estimate_cost(usage: dict[str, Any]) -> dict[str, float] | None:
@@ -66,10 +112,17 @@ def estimate_cost(usage: dict[str, Any]) -> dict[str, float] | None:
 
 def summarize_jobs(jobs: Iterable[dict[str, Any]], *, now: dt.datetime | None = None) -> dict[str, Any]:
     """Summarize measured x.prepare jobs for 7- and 30-day dashboard cards."""
+    return summarize_usage(
+        [(job.get("result") or {}).get("x_api_usage") for job in jobs],
+        now=now,
+    )
+
+
+def summarize_usage(usages: Iterable[dict[str, Any] | None], *, now: dt.datetime | None = None) -> dict[str, Any]:
+    """Summarize count-only usage records from any desktop or dashboard session."""
     now = now or dt.datetime.now(dt.timezone.utc)
     rows = []
-    for job in jobs:
-        usage = (job.get("result") or {}).get("x_api_usage")
+    for usage in usages:
         if not usage:
             continue
         try:
