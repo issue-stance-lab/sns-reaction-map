@@ -311,12 +311,60 @@ def build(topic: str) -> dict:
     }
 
 
+def independence_gate(data: dict, cfg: dict) -> list[str]:
+    """公開してよいだけの独自性がそろっているかを機械で確かめる。
+
+    AdSense の診断で「自動生成コンテンツの疑い」が OK だった根拠は
+    「定型的な繰り返しがなく、論点ごとに異なる構造」だった。10テーマを1つの生成器で
+    作ると、この根拠がいちばん壊れやすい。だから生成器自身に、
+    「中身が薄いテーマは公開ページを出さない」検査を持たせる。
+
+    指示文に書いた禁止は別セッションで破られる。検査だけが残る。
+    """
+    ng = []
+    # 1. 一次資料との突き合わせ（FACT_CHECK_GUIDE.md の claim_posts）
+    claims = ROOT / "data" / f"{data['theme_id']}_claim_posts.json"
+    if not claims.exists():
+        ng.append(f"一次資料との突き合わせが無い（{claims.relative_to(ROOT)} が未作成）")
+
+    # 2. 人が本文を読み直した論点が、意見の半分以上を占めていること
+    reread_n = sum(i["count"] for i in data["issues"] if i["sub"]["status"] == "reread")
+    share = 100 * reread_n / data["totals"]["opinions"]
+    if share < 50:
+        ng.append(f"編集部が読み直した論点が意見の{share:.0f}%しかない（50%以上必要）")
+
+    # 3. 読み直し済みの論点でも、未読の残りが多すぎないこと
+    for i in data["issues"]:
+        s = i["sub"]
+        if s["status"] == "reread" and s["unread_count"] > 0.4 * i["count"]:
+            ng.append(f"「{i['label']}」の未読が{s['unread_count']}件（全{i['count']}件の4割超）")
+
+    # 4. テーマ固有の言葉が入っていること（共通テンプレだけのページを出さない）
+    if not cfg.get("question"):
+        ng.append("テーマ固有の『中心の問い』が設定されていない")
+    return ng
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--topic", required=True)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--prototype", action="store_true",
+                    help="独自性の検査に落ちても試作として出力する（公開には使えない）")
     a = ap.parse_args()
     data = build(a.topic)
+    cfg = yaml.safe_load((ROOT / "configs" / "planet" / f"{a.topic}.yaml").read_text())
+    ng = independence_gate(data, cfg)
+    if ng:
+        print("独自性の検査に不合格:")
+        for x in ng:
+            print("  - " + x)
+        if not a.prototype:
+            print("公開ページは出力しません。試作として作るなら --prototype を付けてください。")
+            raise SystemExit(1)
+        print("--prototype 指定のため、試作としてだけ出力します。")
+        data["prototype_only"] = True
+        data["gate_failures"] = ng
     out = Path(a.out) if a.out else ROOT / "quality/prototypes/data" / f"{a.topic}-planet.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, ensure_ascii=False, indent=1))

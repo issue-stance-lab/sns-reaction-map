@@ -537,6 +537,14 @@ document.getElementById("caution").innerHTML =
   + "収集期間 " + D.sample_period + "／収集" + D.totals.collected + "件・関連" + D.totals.relevant
   + "件・<b>意見" + D.totals.opinions + "件</b>（惑星の母数）／更新 " + D.updated_at
   + "　<code>" + D.snapshot_id + "</code>";
+if (D.prototype_only){
+  const b = document.createElement("div");
+  b.className = "caution";
+  b.style.borderLeftColor = "#e5534b";
+  b.innerHTML = "<b>このページは公開できません。</b>独自性の検査に落ちています。<br>・"
+    + D.gate_failures.join("<br>・");
+  document.querySelector(".caution").after(b);
+}
 document.getElementById("meta").innerHTML =
   "大陸＝論点、面積＝意見の数（最小" + D.min_area_pct + "%の床あり）、色＝いちばん多い立場（薄いほど意見が割れている）、"
   + "山の高さ＝" + D.elevation_formula.definition + "（小さい論点は k=" + D.elevation_formula.k
