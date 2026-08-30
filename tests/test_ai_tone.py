@@ -97,6 +97,45 @@ class DetectorTest(unittest.TestCase):
         )
         self.assertEqual(failures, [])
 
+    def test_ending_repeat_is_caught(self) -> None:
+        """2026-08-30、note第3回の下書きにオーナーから「〜しました。〜しました。と続く」と指摘。
+
+        鏡像構文（賛否の対称）は元から検出していたが、賛否に関係ない語尾の連続は
+        見ていなかった。実際に指摘された文そのままで、検出できることを確かめる。
+        """
+        drafts = {
+            "content/note/drafts/x-FINAL.md": (
+                "# t\n\nリード\n\n---\n\n"
+                "編集部はそう思い込んでいました。数字を並べて、思い込みのほうが違っていたと気づきました。\n\n"
+                "※記事末\n"
+            )
+        }
+        self.assertTrue(tone.check_ending_repeat(self.config, drafts))
+
+    def test_ending_varied_is_allowed(self) -> None:
+        """語尾を変えていれば落とさない。"""
+        drafts = {
+            "content/note/drafts/x-FINAL.md": (
+                "# t\n\nリード\n\n---\n\n"
+                "編集部はそう思い込んでいました。数字を並べると、間違っていたのは思い込みのほうだった。\n\n"
+                "※記事末\n"
+            )
+        }
+        self.assertEqual(tone.check_ending_repeat(self.config, drafts), [])
+
+    def test_ending_repeat_baseline_covers_published_notes(self) -> None:
+        """公開済みの第1回・第2回は語尾だけを理由に書き直さない（note-operation「記事の更新ルール」）。"""
+        drafts = tone.draft_texts()
+        for label in (
+            "content/note/drafts/bukatsu-chiiki-note-FINAL.md",
+            "content/note/drafts/bukatsu-chiiki-note2-FINAL.md",
+        ):
+            self.assertIn(label, drafts, f"{label} が見つからない（下書きの配置が変わった？）")
+        failures = tone.check_ending_repeat(self.config, drafts)
+        self.assertEqual(
+            failures, [], f"baseline を超えた語尾の連続がある: {failures}"
+        )
+
 
 class PrivatePersonaTest(unittest.TestCase):
     """ペルソナ名を公開リポジトリへ入れない（課題45と同じ方式）。"""

@@ -22,6 +22,8 @@
 2. **禁止フレーズ**: まとめブログの定型。現在0件なので1件でも落とす
 3. **鏡像構文**: 同じページ内で賛否を同じ型に流し込んでいないか
 4. **定型の密度**: 「AではなくB」「一方で」を100文あたり何回使ったか
+5. **語尾の連続**: note下書きで「〜しました。〜しました。」のように同じ語尾が
+   続けて並んでいないか（2026-08-30、オーナー指摘を受けて追加）
 
 対象は「編集で書いた本文」だけ。フッター・調査条件・免責など全ページ共通の枠は
 `configs/page-originality.json` の `shared_selectors` を使って除く。
@@ -170,6 +172,81 @@ def check_note_counts(config: dict, drafts: dict[str, str]) -> list[str]:
     return failures
 
 
+def _classify_ending(sentence: str, patterns: list[str]) -> str | None:
+    """文末が endings.patterns のどれと一致するか。最長一致を優先する。
+
+    「しました」は「ました」を含むため、短い方から先に判定すると
+    「しました。」が「ました」として分類され、同じ文が二重に数えられない。
+    """
+    for pattern in patterns:  # 呼び出し側で長い順に渡す
+        if sentence.endswith(pattern + "。"):
+            return pattern
+    return None
+
+
+def check_ending_repeat(config: dict, drafts: dict[str, str]) -> list[str]:
+    """同じ語尾の文が続けて並んでいないか。
+
+    2026-08-30、note第3回の下書きにオーナーから「〜しました。〜しました。と続く」と指摘。
+    `verify_ai_tone.py` は当時この種類の単調さを見ていなかった
+    （鏡像構文＝賛否を同じ型で並べる、は見ていたが、賛否に関係ない語尾の連続は対象外だった）。
+    `WRITING_VOICE.md`「対称にしない」の考え方を語尾の連続にも広げる。
+    数えるのは note_counts と同じ、貼り付け用の本文だけ（記事末の注記は除く）。
+
+    既に公開済みの第1回・第2回にも該当箇所があった。投稿済みの記事は「新論点が出たときだけ
+    更新する」（note-operation「記事の更新ルール」）ため、語尾だけを理由に書き直さない。
+    ai-tone.json の baseline にラベルごとの許容件数を書いて、その分だけ見逃す。
+    baseline を超えて増えたら（＝新しい下書きで同じ癖が増えたら）落とす。
+    """
+    endings = config.get("endings") or {}
+    patterns = sorted((endings.get("patterns") or []), key=len, reverse=True)
+    max_consecutive = int(endings.get("max_consecutive", 1))
+    if not patterns:
+        return []
+    baseline = config.get("baseline") or {}
+    failures = []
+    for label, text in drafts.items():
+        if "/note/" not in label or not label.endswith(("-FINAL.md", "-CANDIDATE.md")):
+            continue
+        if "\n---\n" not in text:
+            continue
+        body = text.split("\n---\n", 1)[1]
+        lines = [
+            line
+            for line in body.splitlines()
+            if line.strip()
+            and not line.startswith(("データについて", "制度についての記述", "#", "|", "http", "▼", "👉", ">"))
+        ]
+        counts: dict[str, int] = {}
+        run_pattern: str | None = None
+        run_len = 0
+        reported = False
+        for line in lines:
+            for sentence in re.split(r"(?<=。)", line):
+                sentence = sentence.strip()
+                if not sentence:
+                    continue
+                matched = _classify_ending(sentence, patterns)
+                if matched and matched == run_pattern:
+                    run_len += 1
+                else:
+                    run_pattern = matched
+                    run_len = 1 if matched else 0
+                    reported = False
+                if matched and run_len > max_consecutive and not reported:
+                    counts[matched] = counts.get(matched, 0) + 1
+                    reported = True
+        allowed = baseline.get(label, {})
+        for pattern, count in counts.items():
+            limit = int(allowed.get(f"endings:{pattern}", 0))
+            if count > limit:
+                failures.append(
+                    f"語尾の連続: {label} に「{pattern}。」で{max_consecutive + 1}文以上続く箇所が"
+                    f"{count}か所（上限{limit}）。WRITING_VOICE.md「対称にしない」に従い、語尾か構文を変える"
+                )
+    return failures
+
+
 def check_persona(config: dict, pages: dict[str, list[str]], extras: dict[str, str]) -> list[str]:
     """ペルソナは社内専用。公開物に1文字でも出たら落とす。"""
     terms, _skipped = persona_terms()
@@ -265,6 +342,7 @@ def main() -> int:
     failures += check_persona(config, pages, {**ledgers, **drafts})
     failures += check_banned(config, pages, drafts)
     failures += check_note_counts(config, drafts)
+    failures += check_ending_repeat(config, drafts)
     mirror_fail, mirror_notes = check_mirror(config, pages, args.verbose)
     density_fail, density_notes = check_density(config, pages, args.verbose)
     failures += mirror_fail + density_fail

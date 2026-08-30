@@ -101,13 +101,27 @@
     },
     "school-nickname-ban": {
       "density:ではなく[、,]": 4
+    },
+    "content/note/drafts/bukatsu-chiiki-note-FINAL.md": {
+      "endings:でした": 1,
+      "endings:ません": 1
+    },
+    "content/note/drafts/bukatsu-chiiki-note2-FINAL.md": {
+      "endings:ました": 1
     }
   },
-  "baseline_reason": "2026-08-27 に検査を新設した時点で既にあった分。TASK_BOARD「既存ページのAI臭リライト」で0へ減らす。school-nickname-ban の「ではなく」4件/60文は短いページで密度が上がったもので、最後の1文が同じ語を2回使っている。リライト対象。",
+  "baseline_reason": "2026-08-27 に検査を新設した時点で既にあった分。TASK_BOARD「既存ページのAI臭リライト」で0へ減らす。school-nickname-ban の「ではなく」4件/60文は短いページで密度が上がったもので、最後の1文が同じ語を2回使っている。リライト対象。2026-08-30 の endings 分は、公開済みの note第1回・第2回に既にあった語尾の連続。note-operation「記事の更新ルール」により、語尾だけを理由に公開済み記事を書き直さない。第3回以降の新規下書きでは baseline を足さず、検査どおり直す。",
   "_ledger_note": "content/x/posts.md と content/note/posts.md は投稿済みの台帳で、過去の投稿は取り消せないため ペルソナ流出だけを検査する。2026-08-27 時点で「〜ではないでしょうか」が4件あり（部活・副首都・辺野古ほか）、x-daily/references/writing.md の「テーマ全体の感想を求めない」に反する癖が続いていた。今後は下書き（content/*/drafts, content/x/research）の段階で禁止フレーズ検査が止める。",
   "_persona_note": "ペルソナ用語は configs/persona.private.json（Git 管理外）から読む。リポジトリが公開のため、名前をここに書かない。ファイルが無いときはペルソナ流出の検査だけを飛ばし、他の検査は続ける（OPERATIONS.md ⓪ で復元する）。",
   "note_counts": {
     "max_per_draft": 8,
     "_reason": "note本文の件数の並べすぎ。2026-08-28 のオーナー指摘（件数ばかりで読み進められない）を検査にした。内訳は図2と記事末の注記が担う。"
+  },
+  "endings": {
+    "patterns": [
+      "していました", "でしょうか", "しました", "ています", "ません", "ました", "でした", "のです"
+    ],
+    "max_consecutive": 1,
+    "_reason": "note本文の語尾の連続。2026-08-30、第3回下書きにオーナーから「〜しました。〜しました。と続く」と指摘。同じ語尾が2文続いた時点で落とす（WRITING_VOICE.md「対称にしない」を語尾にも広げる）。判定は最長一致（例:「しました。」は「ました」ではなく「しました」として数える）。"
   }
 }
