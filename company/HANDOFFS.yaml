@@ -76,11 +76,11 @@ items:
 
   - id: note-bukatsu-3-draft
     department: editorial
-    status: ready_for_drafting
-    current_state: "費用・送迎・指導者報酬の一次資料調査と、172件の再読データを保全済み。"
-    next_action: "一次資料とSNS投稿の区別を保った第3回下書きを作り、公開候補として品質監査へ渡す。"
+    status: drafted_awaiting_quality_review
+    current_state: "第3回本文下書きを content/note/drafts/bukatsu-chiiki-note3-FINAL.md に作成済み（作業ツリー task/note-bukatsu3）。verify_ai_tone.py通過済み（「◯件」3回、上限8）。引用したX投稿7件はdata/bukatsu-chiiki_cost-receiver-reread.jsonの実データと突合済み。画像3点・見出し画像は未制作。"
+    next_action: "品質監査AIにcontent/note/drafts/bukatsu-chiiki-note3-FINAL.mdを渡し、quality/reviews/へ判定を記録する。通過後に画像プロンプト作成とCEO承認へ進む。"
     due_at: "2026-09-01"
-    canonical_sources: ["content/note/research/bukatsu-chiiki3-cost-research.md", "data/bukatsu-chiiki_cost-receiver-reread.json"]
+    canonical_sources: ["content/note/research/bukatsu-chiiki3-cost-research.md", "data/bukatsu-chiiki_cost-receiver-reread.json", "content/note/drafts/bukatsu-chiiki-note3-FINAL.md"]
     ceo_approval: "投稿時に必要"
     completion_evidence: ["content/note/drafts/", "quality/reviews/"]
 
