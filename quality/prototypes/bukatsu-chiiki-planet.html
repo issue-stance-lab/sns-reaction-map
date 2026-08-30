@@ -1,0 +1,552 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>議論の惑星 試作 — 部活動の地域移行</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}
+.q{color:var(--muted);font-size:14px;margin:0 0 12px}
+.caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
+  border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}
+.proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
+.stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+@media(max-width:820px){.stage{grid-template-columns:1fr}}
+.canvas-box{position:relative;background:radial-gradient(circle at 50% 40%,#12181f,#0a0d12);
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
+canvas{display:block;width:100%;height:auto;cursor:grab}
+canvas.dragging{cursor:grabbing}
+.hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
+.zoombar{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:5px}
+.zoombar button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);
+  background:#161b22cc;color:var(--fg);font-size:15px;cursor:pointer;line-height:1}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.panel h2{font-size:16px;margin:0 0 2px}
+.panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
+.bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  font-weight:700;overflow:hidden;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+.islands{list-style:none;padding:0;margin:8px 0 0}
+.islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
+.islands li:first-child{border-top:none}
+.islands .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.islands .sw{width:12px;height:12px;border-radius:3px;flex:none}
+.islands .num{width:19px;height:19px;border-radius:99px;flex:none;background:#0d1117;
+  border:1px solid var(--line);font-size:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-weight:700}
+.islands li.unread{color:var(--muted)}
+.note{font-size:12px;color:var(--muted);background:#1c2128;border:1px dashed var(--line);
+  border-radius:6px;padding:9px 10px;margin-top:10px}
+.back{margin-top:12px;background:transparent;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.issue-list{list-style:none;padding:0;margin:18px 0 0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
+.issue-list button{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;color:var(--fg);cursor:pointer;font-family:inherit;font-size:13px}
+.issue-list button:hover,.issue-list button:focus-visible{border-color:var(--accent);outline:none}
+.issue-list .m{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:6px}
+h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
+  border-top:1px solid var(--line);padding-top:14px}
+.meta{font-size:11.5px;color:var(--muted)}
+.meta code{background:#1c2128;padding:1px 5px;border-radius:4px}
+</style>
+
+<div class="wrap">
+  <h1>議論の惑星<span class="proto-tag">試作・非公開</span></h1>
+  <p class="q" id="q"></p>
+  <p class="caution" id="caution"></p>
+
+  <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
+
+  <div class="stage">
+    <div class="canvas-box">
+      <canvas id="cv" width="640" height="640" tabindex="0"
+              aria-label="論点の惑星。下の一覧からも同じ内容を読めます"></canvas>
+      <div class="zoombar">
+        <button type="button" id="zin" aria-label="拡大">＋</button>
+        <button type="button" id="zout" aria-label="縮小">−</button>
+      </div>
+      <div class="hint">ドラッグで回転 / ホイールで拡大 / 大陸をクリックで着陸</div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <h3 class="sec">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
+  <ul class="issue-list" id="list"></ul>
+
+  <h3 class="sec">この試作の見かた</h3>
+  <p class="meta" id="meta"></p>
+</div>
+
+<script>window.PLANET_DATA={"schema": 1, "theme_id": "bukatsu-chiiki", "title": "部活動の地域移行", "question": "学校の部活動を地域へ移すべきか", "snapshot_id": "bukatsu-chiiki-20260827", "updated_at": "2026-08-27", "sample_period": "2026-06-27〜2026-08-26", "source_label": "Yahoo!リアルタイム検索", "totals": {"collected": 1216, "relevant": 1203, "opinions": 993}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.2185, "k": 50, "max_pct": 4.0}, "min_area_pct": 2.5, "stances": [{"key": "移行支持", "label": "移行支持", "color": "#2F8F83", "pattern": "plain", "count": 414}, {"key": "慎重・反対", "label": "慎重・反対", "color": "#7D5BA6", "pattern": "diagonal", "count": 329}, {"key": "条件付き・改善要求", "label": "条件付き・改善要求", "color": "#D9A520", "pattern": "dots", "count": 206}, {"key": "中立・情報", "label": "中立・情報", "color": "#8B9199", "pattern": "mesh", "count": 44}], "vote_issue_order": ["費用・家庭負担", "受け皿・指導者", "教員の働き方", "教育的意義・機会", "地域格差", "制度・移行プロセス", "その他"], "modes": [{"id": "all", "label": "すべての意見", "total": 993, "counts": {"bukatsu-chiiki-kyoin": 283, "bukatsu-chiiki-seido": 227, "bukatsu-chiiki-kyoiku": 189, "bukatsu-chiiki-ukezara": 143, "bukatsu-chiiki-hiyo": 97, "bukatsu-chiiki-sonota": 45, "bukatsu-chiiki-kakusa": 9}, "area_pct": {"bukatsu-chiiki-kyoin": 28.04, "bukatsu-chiiki-seido": 22.49, "bukatsu-chiiki-kyoiku": 18.73, "bukatsu-chiiki-ukezara": 14.17, "bukatsu-chiiki-hiyo": 9.61, "bukatsu-chiiki-sonota": 4.46, "bukatsu-chiiki-kakusa": 2.5}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 28.04, "bukatsu-chiiki-seido": 22.49, "bukatsu-chiiki-kyoiku": 18.73, "bukatsu-chiiki-ukezara": 14.17, "bukatsu-chiiki-hiyo": 9.61, "bukatsu-chiiki-sonota": 4.46, "bukatsu-chiiki-kakusa": 2.5}}, {"id": "移行支持", "label": "移行支持", "total": 414, "counts": {"bukatsu-chiiki-kyoin": 164, "bukatsu-chiiki-seido": 97, "bukatsu-chiiki-kyoiku": 76, "bukatsu-chiiki-ukezara": 39, "bukatsu-chiiki-hiyo": 18, "bukatsu-chiiki-sonota": 20, "bukatsu-chiiki-kakusa": 0}, "area_pct": {"bukatsu-chiiki-kyoin": 39.61, "bukatsu-chiiki-seido": 23.43, "bukatsu-chiiki-kyoiku": 18.36, "bukatsu-chiiki-ukezara": 9.42, "bukatsu-chiiki-hiyo": 4.35, "bukatsu-chiiki-sonota": 4.83, "bukatsu-chiiki-kakusa": 0.0}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 39.61, "bukatsu-chiiki-seido": 23.43, "bukatsu-chiiki-kyoiku": 18.36, "bukatsu-chiiki-ukezara": 9.42, "bukatsu-chiiki-hiyo": 4.35, "bukatsu-chiiki-sonota": 4.83, "bukatsu-chiiki-kakusa": 0.0}}, {"id": "慎重・反対", "label": "慎重・反対", "total": 329, "counts": {"bukatsu-chiiki-kyoin": 57, "bukatsu-chiiki-seido": 57, "bukatsu-chiiki-kyoiku": 93, "bukatsu-chiiki-ukezara": 57, "bukatsu-chiiki-hiyo": 46, "bukatsu-chiiki-sonota": 11, "bukatsu-chiiki-kakusa": 8}, "area_pct": {"bukatsu-chiiki-kyoin": 17.31, "bukatsu-chiiki-seido": 17.31, "bukatsu-chiiki-kyoiku": 28.25, "bukatsu-chiiki-ukezara": 17.31, "bukatsu-chiiki-hiyo": 13.97, "bukatsu-chiiki-sonota": 3.34, "bukatsu-chiiki-kakusa": 2.5}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 17.31, "bukatsu-chiiki-seido": 17.31, "bukatsu-chiiki-kyoiku": 28.25, "bukatsu-chiiki-ukezara": 17.31, "bukatsu-chiiki-hiyo": 13.97, "bukatsu-chiiki-sonota": 3.34, "bukatsu-chiiki-kakusa": 2.5}}, {"id": "条件付き・改善要求", "label": "条件付き・改善要求", "total": 206, "counts": {"bukatsu-chiiki-kyoin": 58, "bukatsu-chiiki-seido": 56, "bukatsu-chiiki-kyoiku": 16, "bukatsu-chiiki-ukezara": 44, "bukatsu-chiiki-hiyo": 30, "bukatsu-chiiki-sonota": 1, "bukatsu-chiiki-kakusa": 1}, "area_pct": {"bukatsu-chiiki-kyoin": 27.01, "bukatsu-chiiki-seido": 26.08, "bukatsu-chiiki-kyoiku": 7.45, "bukatsu-chiiki-ukezara": 20.49, "bukatsu-chiiki-hiyo": 13.97, "bukatsu-chiiki-sonota": 2.5, "bukatsu-chiiki-kakusa": 2.5}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 27.01, "bukatsu-chiiki-seido": 26.08, "bukatsu-chiiki-kyoiku": 7.45, "bukatsu-chiiki-ukezara": 20.49, "bukatsu-chiiki-hiyo": 13.97, "bukatsu-chiiki-sonota": 2.5, "bukatsu-chiiki-kakusa": 2.5}}, {"id": "中立・情報", "label": "中立・情報", "total": 44, "counts": {"bukatsu-chiiki-kyoin": 4, "bukatsu-chiiki-seido": 17, "bukatsu-chiiki-kyoiku": 4, "bukatsu-chiiki-ukezara": 3, "bukatsu-chiiki-hiyo": 3, "bukatsu-chiiki-sonota": 13, "bukatsu-chiiki-kakusa": 0}, "area_pct": {"bukatsu-chiiki-kyoin": 9.09, "bukatsu-chiiki-seido": 38.64, "bukatsu-chiiki-kyoiku": 9.09, "bukatsu-chiiki-ukezara": 6.82, "bukatsu-chiiki-hiyo": 6.82, "bukatsu-chiiki-sonota": 29.55, "bukatsu-chiiki-kakusa": 0.0}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 9.09, "bukatsu-chiiki-seido": 38.64, "bukatsu-chiiki-kyoiku": 9.09, "bukatsu-chiiki-ukezara": 6.82, "bukatsu-chiiki-hiyo": 6.82, "bukatsu-chiiki-sonota": 29.55, "bukatsu-chiiki-kakusa": 0.0}}], "weights_by_mode": {"all": [0.3420599567995663, 0.3431870590156049, 0.08510780309389382, 0.08046146915734033, -0.2055507609592528, -0.31613145340194376, -0.3291340737052023], "移行支持": [0.5449754301676963, 0.3470661186905472, -0.0660006757177684, -0.10934489749293805, -0.4332567605441352, -0.2834392151033999, 0.0], "慎重・反対": [-0.009632178888980117, 0.16930895861308728, 0.41357412170773933, 0.19955709571242813, -0.020894138764322445, -0.4119064430717917, -0.340007415308162], "条件付き・改善要求": [0.3713897498856396, 0.44230965805081807, -0.2179056634353815, 0.21142608391293932, -0.1451685673630138, -0.3622797903708493, -0.29977147068014953], "中立・情報": [-0.0001573615405145797, 0.45771063334673545, -0.27447230401046746, -0.09618610425957708, -0.3611825065233637, 0.2742876429871877, 0.0]}, "issues": [{"id": "bukatsu-chiiki-kyoin", "key": "教員の働き方", "label": "教員の働き方", "icon": "🏫", "count": 283, "share_pct": 28.5, "stances": {"移行支持": 164, "慎重・反対": 57, "条件付き・改善要求": 58, "中立・情報": 4}, "top_stance": "移行支持", "purity_pct": 58.0, "intensity": {"high": 79, "medium": 183, "low": 21}, "high_pct": 27.9, "high_adjusted_pct": 27.0, "elevation": 3.77, "center": [0.6614483761820575, -0.4857524404480346, -0.5714285714285714], "centroid": [0.7950480030935018, -0.49531448236613784, -0.35008889776084007], "sub": {"status": "reread", "coverage": "partial", "coverage_note": "移行支持以外だけを読み直し。賛成側は未再読", "source_file": "data/bukatsu-chiiki_teacher-reread.json", "reread_count": 87, "unread_count": 196, "items": [{"id": "B", "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）", "count": 30, "centroid": [0.7785990949570448, 0.07854545071671938, -0.6225865895630728], "area_pct_in_issue": 10.6}, {"id": "F", "label": "その他（実態の訴え・分類が難しいもの）", "count": 20, "centroid": [0.26097534652438825, -0.36613919778434145, -0.8932155150647094], "area_pct_in_issue": 7.1}, {"id": "A", "label": "移しても教員の負担は減らない・むしろ増える", "count": 17, "centroid": [0.48446849723178, 0.2742496855576638, -0.8307089653792736], "area_pct_in_issue": 6.0}, {"id": "C", "label": "やりたい先生だけが担えばよい（移行ではなく任意化）", "count": 8, "centroid": [0.6821959064938483, 0.5407960702085232, -0.4920857197786322], "area_pct_in_issue": 2.8}, {"id": "E", "label": "移行や廃止で失われるものへの不安", "count": 8, "centroid": [0.8323731114680647, 0.5279126557024961, -0.16871049538813648], "area_pct_in_issue": 2.8}, {"id": "D", "label": "移行ではなく部活そのものを廃止すべき", "count": 4, "centroid": [0.9226348911790444, 0.3815827635709808, 0.05603081406303091], "area_pct_in_issue": 1.4}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 196, "unread": true, "centroid": [0.7006329939361042, -0.7058128797069411, -0.10460203940615227], "area_pct_in_issue": 69.3}], "centers": [[0.7950480030935019, -0.4953144823661379, -0.3500888977608401], [0.1081418808070954, -0.616417600167196, -0.7799581244013162], [0.3996160178178872, -0.05300857947113077, -0.9151486921838587], [0.7879110262723015, 0.3025252471937508, -0.5363531387890711], [0.980632845029466, 0.18245965678041418, 0.07118775805564224], [0.8326580137565702, -0.3227935122381934, 0.44998331145042997], [0.4554145985385709, -0.8327683183046747, 0.3147927436678875]], "weights": [0.055729746273474344, 0.014767289992169055, -0.20832173486455136, -0.36732626700944426, -0.2552716348201198, 0.12090545313892925, 0.6395171472895447]}}, {"id": "bukatsu-chiiki-seido", "key": "制度・移行プロセス", "label": "制度・移行プロセス", "icon": "📋", "count": 227, "share_pct": 22.9, "stances": {"移行支持": 97, "慎重・反対": 57, "条件付き・改善要求": 56, "中立・情報": 17}, "top_stance": "移行支持", "purity_pct": 42.7, "intensity": {"high": 32, "medium": 156, "low": 39}, "high_pct": 14.1, "high_adjusted_pct": 15.5, "elevation": 2.16, "center": [-0.5120664921863806, -0.05562400586900254, -0.8571428571428573], "centroid": [-0.6469498248684531, -0.11253858059867008, -0.7541823333780197], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}}, {"id": "bukatsu-chiiki-kyoiku", "key": "教育的意義・機会", "label": "教育的意義・機会", "icon": "⭐", "count": 189, "share_pct": 19.0, "stances": {"移行支持": 76, "慎重・反対": 93, "条件付き・改善要求": 16, "中立・情報": 4}, "top_stance": "慎重・反対", "purity_pct": 49.2, "intensity": {"high": 42, "medium": 111, "low": 36}, "high_pct": 22.2, "high_adjusted_pct": 22.1, "elevation": 3.09, "center": [-0.7359464433452164, 0.3631146103954347, 0.5714285714285714], "centroid": [-0.6294249490237125, 0.2628804662304554, 0.7312442095640522], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}}, {"id": "bukatsu-chiiki-ukezara", "key": "受け皿・指導者", "label": "受け皿・指導者", "icon": "👤", "count": 143, "share_pct": 14.4, "stances": {"移行支持": 39, "慎重・反対": 57, "条件付き・改善要求": 44, "中立・情報": 3}, "top_stance": "慎重・反対", "purity_pct": 39.9, "intensity": {"high": 23, "medium": 95, "low": 25}, "high_pct": 16.1, "high_adjusted_pct": 17.6, "elevation": 2.45, "center": [-0.18638477793780364, 0.9400149262069466, -0.28571428571428575], "centroid": [0.07402419601078819, 0.9912781031869076, -0.10903274988334086], "sub": {"status": "reread", "coverage": "full", "coverage_note": "論点全件を読み直し", "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json", "reread_count": 100, "unread_count": 43, "items": [{"id": "R2", "label": "地域が引き受ける理由がない・引き受け手がいない", "count": 23, "centroid": [0.030979498828907666, 0.9939983253438074, -0.10491710950086398], "area_pct_in_issue": 16.1}, {"id": "R6", "label": "その他", "count": 22, "centroid": [0.4503142530935854, 0.7752476521048794, -0.44295389304829225], "area_pct_in_issue": 15.4}, {"id": "R1", "label": "報酬が安すぎて指導者が集まらない", "count": 20, "centroid": [-0.06509996212748961, 0.8305708185712464, -0.553095028244595], "area_pct_in_issue": 14.0}, {"id": "R3", "label": "責任・安全・指導者の質への不安", "count": 17, "centroid": [-0.5141775279123943, 0.8163404555495621, -0.2630774228683111], "area_pct_in_issue": 11.9}, {"id": "R4", "label": "受け皿はできている・うまくいっている", "count": 16, "centroid": [-0.42051019549530144, 0.8991568476933834, 0.1211946316080086], "area_pct_in_issue": 11.2}, {"id": "R5", "label": "送迎・移動の課題", "count": 2, "centroid": [-0.13864168256542375, 0.9036840986119931, 0.4051339701521682], "area_pct_in_issue": 1.4}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 43, "unread": true, "centroid": [0.37588012646858476, 0.8863916559756972, 0.27022946312832347], "area_pct_in_issue": 30.1}], "centers": [[0.07402419601078819, 0.9912781031869076, -0.10903274988334086], [0.3557087155989787, 0.8118986722744631, -0.46291668322268176], [-0.043203378414521446, 0.831723461850364, -0.5535065953547595], [-0.36043933983460463, 0.8833322128232635, -0.29967930206864624], [-0.3571140192776496, 0.9278624830839022, 0.10742806765802658], [-0.035731450947220994, 0.9317820708740459, 0.36125536094414007], [0.3617007361942036, 0.892139446642696, 0.2706654488120623]], "weights": [0.025901922454395397, 0.004056490009302972, 0.02012656067148939, -0.020439139072147616, -0.02315146044833995, -0.056150697711429706, 0.04965632409672916]}}, {"id": "bukatsu-chiiki-hiyo", "key": "費用・家庭負担", "label": "費用・家庭負担", "icon": "💴", "count": 97, "share_pct": 9.8, "stances": {"移行支持": 18, "慎重・反対": 46, "条件付き・改善要求": 30, "中立・情報": 3}, "top_stance": "慎重・反対", "purity_pct": 47.4, "intensity": {"high": 21, "medium": 67, "low": 9}, "high_pct": 21.6, "high_adjusted_pct": 21.7, "elevation": 3.03, "center": [0.18665160673225664, -0.48007009920765364, 0.8571428571428572], "centroid": [0.2079455705702079, -0.4465064762571371, 0.870281911992123], "sub": {"status": "reread", "coverage": "full", "coverage_note": "論点全件を読み直し", "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json", "reread_count": 72, "unread_count": 25, "items": [{"id": "P4", "label": "誰が、いくら払うのかを決めろ（財源設計）", "count": 21, "centroid": [0.27709345913360933, -0.403571941044258, 0.8719798755172855], "area_pct_in_issue": 21.6}, {"id": "P1", "label": "いまの部活が安いのは、誰かの無償労働で成り立っているから", "count": 15, "centroid": [-0.1073685084880985, -0.8137435081906752, 0.571221066017854], "area_pct_in_issue": 15.5}, {"id": "P3", "label": "お金が理由で参加できない子が出る（格差）", "count": 13, "centroid": [0.37312135664975715, -0.6738906219514664, 0.6376926241205165], "area_pct_in_issue": 13.4}, {"id": "P5", "label": "送迎・移動の負担", "count": 9, "centroid": [0.6405204568256838, -0.23376025494871105, 0.7314982485243084], "area_pct_in_issue": 9.3}, {"id": "P2", "label": "家庭が払えない・負担が増える", "count": 8, "centroid": [0.5151536272072957, 0.08846171135722182, 0.8525205369953959], "area_pct_in_issue": 8.3}, {"id": "P6", "label": "その他", "count": 6, "centroid": [0.30473817364999345, 0.1441695049041443, 0.9414615230460354], "area_pct_in_issue": 6.2}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 25, "unread": true, "centroid": [-0.10377489698441816, -0.3841250073186658, 0.9174305148120528], "area_pct_in_issue": 25.8}], "centers": [[0.2079455705702079, -0.4465064762571371, 0.870281911992123], [0.08945946956363533, -0.7421555104920174, 0.6642305334382981], [0.40153203203639265, -0.6658645136879798, 0.628805595283467], [0.5565632369019833, -0.4002000483624535, 0.7280640662880408], [0.4378114248363616, -0.14521287547305334, 0.8872622932817569], [0.13469913242045087, -0.09291353699591824, 0.9865207642863307], [-0.12452390179261279, -0.28268450151641483, 0.9510958261314997]], "weights": [0.0375888720035724, -0.01436862099006549, 0.026071758732797257, -0.0165037833251955, -0.0572893282229266, -0.03407629862447153, 0.058577400426289346]}}, {"id": "bukatsu-chiiki-sonota", "key": "その他", "label": "その他", "icon": "💬", "count": 45, "share_pct": 4.5, "stances": {"移行支持": 20, "慎重・反対": 11, "条件付き・改善要求": 1, "中立・情報": 13}, "top_stance": "移行支持", "purity_pct": 44.4, "intensity": {"high": 14, "medium": 18, "low": 13}, "high_pct": 31.1, "high_adjusted_pct": 26.2, "elevation": 3.66, "center": [0.9201208231806256, 0.2678526044080652, 0.28571428571428564], "centroid": [0.7511051045199271, 0.4127605316640476, 0.5152376786149497], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}}, {"id": "bukatsu-chiiki-kakusa", "key": "地域格差", "label": "地域格差", "icon": "🗾", "count": 9, "share_pct": 0.9, "stances": {"移行支持": 0, "慎重・反対": 8, "条件付き・改善要求": 1, "中立・情報": 0}, "top_stance": "慎重・反対", "purity_pct": 88.9, "intensity": {"high": 6, "medium": 2, "low": 1}, "high_pct": 66.7, "high_adjusted_pct": 28.7, "elevation": 4.0, "center": [-0.5191786663984923, -0.8546657313574021, 6.123233995736766e-17], "centroid": [-0.4626031802595213, -0.8505260557310361, 0.25020736627122536], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}}]};</script>
+<script>
+(function(){
+"use strict";
+const D = window.PLANET_DATA;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 状態 ---------- */
+const st = {
+  yaw: 0.6, pitch: -0.15, zoom: 1,
+  mode: "all", landed: null, islandMix: 0,
+  dragging: false, quality: 1, anim: null
+};
+const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
+const issues = D.issues;
+const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
+const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
+
+/* ---------- 色 ---------- */
+function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
+function mix(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
+const WHITE=[236,240,244];
+// 大陸の色 = 最多立場の色。純度が低いほど白っぽく（＝割れている論点）
+function continentRGB(it, modeId){
+  const key = (modeId === "all") ? it.top_stance : modeId;
+  const base = hex2rgb((stanceMap[key]||stanceMap[it.top_stance]).color);
+  if (modeId !== "all"){
+    // 立場を絞ると全部同じ色になるので、明るさを少しずつ変えて大陸の区切りを見せる
+    const r = idIndex[it.id] / Math.max(1, issues.length-1);
+    return mix(mix(WHITE, base, 0.95), WHITE, 0.05 + 0.42*r);
+  }
+  const purity = it.purity_pct/100;
+  const t = Math.min(1, Math.max(0, (purity-0.30)/0.45));   // 純度30%→100%を薄い→濃いへ
+  return mix(WHITE, base, 0.58 + 0.42*t);
+}
+const PATTERN = {plain:0, diagonal:1, dots:2, mesh:3};
+const DARK=[26,32,40];
+function islandRGB(it, modeId, j, m, unread){
+  if (unread) return [116,124,134];
+  const base = continentRGB(it, modeId);
+  const t = m > 1 ? j/(m-1) : 0;
+  return mix(mix(base, DARK, 0.42), WHITE, 0.92*t);   // 濃い→淡いの段階
+}
+function css(c){ return "rgb("+c.map(v=>Math.round(v)).join(",")+")"; }
+
+/* ---------- 幾何 ---------- */
+function rot(yaw, pitch){
+  const cy=Math.cos(yaw), sy=Math.sin(yaw), cp=Math.cos(pitch), sp=Math.sin(pitch);
+  // view = Ry(yaw) then Rx(pitch);  world = Rinv * view
+  return [
+    [cy, sy*sp, sy*cp],
+    [0,  cp,   -sp   ],
+    [-sy, cy*sp, cy*cp]
+  ];
+}
+
+/* ---------- 描画 ---------- */
+const cv = document.getElementById("cv");
+const ctx = cv.getContext("2d", {alpha:false});
+const off = document.createElement("canvas");
+const octx = off.getContext("2d", {alpha:false});
+let img = null;
+
+function activeIssues(){
+  const m = modeById[st.mode];
+  return issues.map((it,i)=>({it, i, on: m.counts[it.id] > 0}));
+}
+
+function render(){
+  const size = Math.round(cv.width * (st.dragging ? 0.55 : 1));
+  if (off.width !== size){ off.width = off.height = size; img = octx.createImageData(size,size); }
+  const data = img.data;
+  const R = rot(st.yaw, st.pitch);
+  const W = D.weights_by_mode[st.mode];
+  const acts = activeIssues();
+  const cols = issues.map(it => continentRGB(it, st.mode));
+  const pats = issues.map(it => PATTERN[(stanceMap[st.mode==="all"?it.top_stance:st.mode]||{}).pattern] || 0);
+  const landed = st.landed;
+  const sub = landed !== null ? issues[landed].sub : null;
+  const hasIsl = sub && sub.status === "reread" && st.islandMix > 0.01;
+  const islCols = hasIsl
+    ? sub.items.map((x,j)=>islandRGB(issues[landed], st.mode, j, sub.items.length, x.unread))
+    : null;
+
+  const half = size/2, radius = half*0.94*st.zoom;
+  const zq = st.zoom;   // 拡大率。境界線と等高線の幅をこれで割って一定に見せる
+  // 光の向き（左上から）
+  const lx=-0.45, ly=-0.5, lz=0.74;
+
+  for (let py=0; py<size; py++){
+    const y = (py - half)/radius;
+    for (let px=0; px<size; px++){
+      const o = (py*size+px)*4;
+      const x = (px - half)/radius;
+      const r2 = x*x + y*y;
+      if (r2 > 1){ data[o]=10;data[o+1]=13;data[o+2]=18;data[o+3]=255; continue; }
+      const z = Math.sqrt(1-r2);
+      // 視線座標 -> 世界座標
+      const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
+      const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
+      const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
+
+      let best=-9, second=-9, bi=0;
+      for (let k=0;k<acts.length;k++){
+        if (!acts[k].on) continue;
+        const c = issues[k].center;
+        const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
+        if (s > best){ second=best; best=s; bi=k; }
+        else if (s > second) second=s;
+      }
+      const margin = best - second;
+      const it = issues[bi];
+      let col = cols[bi];
+      let shade = 1;
+
+      // 着陸中は他の大陸の彩度を落とす
+      if (landed !== null && bi !== landed){
+        const g = 0.30*col[0]+0.59*col[1]+0.11*col[2];
+        col = mix(col, [g,g,g], 0.75*st.islandMix + 0.25);
+        shade *= 0.72;
+      }
+
+      // 島（下位論点）
+      if (hasIsl && bi === landed){
+        let sb=-9, ss=-9, sj=0;
+        for (let j=0;j<sub.centers.length;j++){
+          const c = sub.centers[j];
+          const s = wx*c[0]+wy*c[1]+wz*c[2] + sub.weights[j];
+          if (s>sb){ ss=sb; sb=s; sj=j; }
+          else if (s>ss) ss=s;
+        }
+        const item = sub.items[sj];
+        col = mix(col, islCols[sj], st.islandMix);
+        if (sb - ss < (0.003 + 0.004*st.islandMix)/zq) col = mix(col, [18,22,28], 0.8);  // 島の海岸線
+        if (item.unread && ((px+py) % 8 < 3)) col = mix(col, [64,70,80], 0.55*st.islandMix); // 未読は斜線
+      }
+
+      // 標高＝等高線の本数（強い表現の割合）
+      const rings = Math.round(it.elevation);
+      const step2 = 0.020/zq;
+      const band = margin / step2;
+      if (band < rings && (band % 1) < 0.20) shade *= 0.82;
+
+      // 大陸の境界
+      if (margin < 0.0045/zq) col = mix(col, [13,17,23], 0.8);
+
+      // 地表パターン（色に頼らないため）
+      const p = pats[bi];
+      if (p===1 && (px+py)%10 < 2) shade *= 0.955;
+      else if (p===2 && px%7===0 && py%7===0) shade *= 0.90;
+      else if (p===3 && (px%9===0 || py%9===0)) shade *= 0.96;
+
+      // 陰影＋周縁減光
+      const lam = Math.max(0, x*lx + (-y)*ly + z*lz);
+      shade *= 0.42 + 0.58*lam;
+      shade *= 0.75 + 0.25*z;
+
+      data[o]   = Math.min(255, col[0]*shade);
+      data[o+1] = Math.min(255, col[1]*shade);
+      data[o+2] = Math.min(255, col[2]*shade);
+      data[o+3] = 255;
+    }
+  }
+  octx.putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(off, 0, 0, cv.width, cv.height);
+  drawLabels(R, cv.width/2, cv.width/2*0.94*st.zoom);
+}
+
+// 大陸名を球の上に置く（正面を向いている大陸だけ）
+function drawLabels(R, half, radius){
+  const m = modeById[st.mode];
+  // 画面が小さいほどキャンバスが縮小表示されるので、文字を大きくして読めるようにする
+  const fs = Math.max(1, cv.width / Math.max(1, cv.clientWidth));
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  issues.forEach((it,k)=>{
+    const n = m.counts[it.id];
+    if (!n) return;
+    const v = it.centroid;
+    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
+    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
+    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
+    if (z < 0.28) return;
+    const X = half + a*radius, Y = half - b*radius;
+    const dim = (st.landed !== null && st.landed !== k);
+    const alpha = Math.min(1,(z-0.28)/0.25) * (dim ? 0.35 : 1);
+    const big = st.landed === k;
+    ctx.globalAlpha = alpha;
+    ctx.font = (big?"700 ":"600 ") + Math.round((big?21:17)*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
+    ctx.lineWidth = 4*fs; ctx.strokeStyle = "rgba(8,11,15,.85)";
+    ctx.strokeText(it.label, X, Y); ctx.fillStyle = "#f2f6fa"; ctx.fillText(it.label, X, Y);
+    ctx.font = "600 " + Math.round(13*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
+    ctx.lineWidth = 3.5*fs;
+    const sub = n + "件", dy = (big?20:17)*fs;
+    ctx.strokeText(sub, X, Y + dy); ctx.fillStyle = "#c7d1dc"; ctx.fillText(sub, X, Y + dy);
+    ctx.globalAlpha = 1;
+  });
+  // 島の番号（着陸後）
+  const L = st.landed;
+  if (L === null || st.islandMix < 0.55) return;
+  const sb = issues[L].sub;
+  if (sb.status !== "reread") return;
+  ctx.globalAlpha = Math.min(1,(st.islandMix-0.55)/0.35);
+  ctx.lineWidth = 2*fs;
+  sb.items.forEach((x,j)=>{
+    const v = x.centroid;
+    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
+    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
+    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
+    if (z < 0.3) return;
+    const X = half + a*radius, Y = half - b*radius;
+    ctx.beginPath(); ctx.arc(X, Y, 12*fs, 0, 6.284);
+    ctx.fillStyle = "rgba(10,13,18,.82)"; ctx.fill();
+    ctx.strokeStyle = css(islandRGB(issues[L], st.mode, j, sb.items.length, x.unread));
+    ctx.stroke();
+    ctx.font = "700 " + Math.round(13*fs) + "px -apple-system,sans-serif"; ctx.fillStyle = "#f2f6fa";
+    ctx.fillText(String(j+1), X, Y+0.5);
+  });
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- 当たり判定 ---------- */
+function pick(mx, my){
+  const half = cv.width/2, radius = half*0.94*st.zoom;
+  const x = (mx - half)/radius, y = (my - half)/radius;
+  if (x*x + y*y > 1) return null;
+  const z = Math.sqrt(1-x*x-y*y);
+  const R = rot(st.yaw, st.pitch);
+  const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
+  const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
+  const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
+  const W = D.weights_by_mode[st.mode], m = modeById[st.mode];
+  let best=-9, bi=null;
+  issues.forEach((it,k)=>{
+    if (m.counts[it.id] <= 0) return;
+    const c = it.center;
+    const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
+    if (s > best){ best=s; bi=k; }
+  });
+  return bi;
+}
+
+/* ---------- アニメーション（案A：球を回して降りる） ---------- */
+function anglesFor(v){ // その方向が正面に来る yaw/pitch
+  const c = Math.max(-1, Math.min(1, v[0]));
+  return { yaw: Math.asin(-c), pitch: Math.max(-0.96, Math.min(0.96, Math.atan2(v[1], v[2]))) };
+}
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+function animateTo(target, dur, done){
+  if (st.anim) cancelAnimationFrame(st.anim);
+  if (reduce){ Object.assign(st, target.end); st.islandMix = target.end.islandMix ?? st.islandMix; render(); done&&done(); return; }
+  const from = {yaw:st.yaw, pitch:st.pitch, zoom:st.zoom, islandMix:st.islandMix};
+  let dy = target.end.yaw - from.yaw;
+  while (dy > Math.PI) dy -= 2*Math.PI;
+  while (dy < -Math.PI) dy += 2*Math.PI;
+  const t0 = performance.now();
+  (function step(now){
+    const t = Math.min(1, (now-t0)/dur), e = ease(t);
+    st.yaw   = from.yaw + dy*e;
+    st.pitch = from.pitch + (target.end.pitch-from.pitch)*e;
+    // ズームは少し遅れて始める（0.25→1.0）
+    const ez = ease(Math.min(1, Math.max(0,(t-0.25)/0.75)));
+    st.zoom  = from.zoom + (target.end.zoom-from.zoom)*ez;
+    // 島は最後に浮き上がる（0.7→1.0）
+    const ei = Math.min(1, Math.max(0,(t-0.7)/0.3));
+    st.islandMix = from.islandMix + ((target.end.islandMix??from.islandMix)-from.islandMix)*ei;
+    render();
+    if (t < 1) st.anim = requestAnimationFrame(step); else { st.anim=null; done&&done(); }
+  })(t0);
+}
+
+function land(i, focus){
+  st.landed = i;
+  drawPanel();                                   // ← 本文はアニメを待たない（0ms）
+  location.hash = issues[i].id;
+  if (focus !== false){
+    const h = document.querySelector("#panel h2");
+    if (h){ h.tabIndex = -1; h.focus({preventScroll:true}); }
+  }
+  const a = anglesFor(issues[i].centroid);
+  animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:1.5, islandMix:1}}, 900);
+  syncList();
+}
+function orbit(){
+  const prev = st.landed;
+  st.landed = null; drawPanel(); syncList();
+  if (location.hash) history.replaceState(null,"",location.pathname);
+  animateTo({end:{yaw:st.yaw, pitch:st.pitch, zoom:1, islandMix:0}}, 600, ()=>{
+    const b = prev!==null && document.getElementById("btn-"+issues[prev].id);
+    if (b) b.focus({preventScroll:true});
+  });
+}
+
+/* ---------- パネル ---------- */
+function stanceBar(counts, total){
+  return '<div class="bar">' + D.stances.map(s=>{
+    const n = counts[s.key]||0; if(!n) return "";
+    const w = 100*n/total;
+    return '<span style="width:'+w+'%;background:'+s.color+'">'+(w>13?s.label+" "+n:(w>6?n:""))+'</span>';
+  }).join("") + '</div>';
+}
+function legend(){
+  return '<div class="legend">' + D.stances.map(s=>
+    '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
+}
+
+function drawPanel(){
+  const p = document.getElementById("panel");
+  const m = modeById[st.mode];
+  if (st.landed === null){
+    p.innerHTML = '<h2>'+D.title+'</h2>'
+      + '<p class="sub">'+m.label+'：'+m.total+'件'
+      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
+      + legend()
+      + '<p class="sub" style="margin:6px 0 0">大陸をクリックすると、その論点へ降ります。'
+      + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。</p>'
+      + (st.mode!=="all"
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで大陸を作り直しています。'
+          + '大きさはこの'+m.total+'件の中での割合です。'
+          + (issues.filter(it=>m.counts[it.id]===0).length
+             ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
+               +' が0件のため、大陸が消えています。'
+             : '')
+          + '</div>'
+        : '');
+    return;
+  }
+  const it = issues[st.landed];
+  const n = m.counts[it.id];
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
+    + '　山の高さ：強い表現'+it.high_adjusted_pct+'%</p>'
+    + legend() + stanceBar(it.stances, it.count)
+    + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
+  if (it.share_pct < D.min_area_pct){
+    h += '<div class="note">この大陸は実際の割合（'+it.share_pct+'%）より大きく描いています。'
+       + '小さすぎると押せないため、最小'+D.min_area_pct+'%まで拡大しました。実件数は'+it.count+'件です。</div>';
+  }
+  const s = it.sub;
+  if (s.status === "reread"){
+    h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
+      + '<ul class="islands">' + s.items.map((x,j)=>
+          '<li class="'+(x.unread?"unread":"")+'">'
+          + '<span class="num">'+(j+1)+'</span>'
+          + '<span class="sw" style="background:'+css(islandRGB(it, st.mode, j, s.items.length, x.unread))+'"></span>'
+          + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
+      + '<div class="note">'+s.coverage_note+'。読み直した'+s.reread_count+'件は '
+      + '<code>'+s.source_file.split("/").pop()+'</code> が出所です。'
+      + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
+      + '</div>';
+  } else {
+    h += '<div class="note">'+s.note+'。<br>'
+       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>';
+  }
+  h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
+  p.innerHTML = h;
+  document.getElementById("back").onclick = orbit;
+}
+
+/* ---------- 一覧・モード ---------- */
+function syncList(){
+  const m = modeById[st.mode];
+  issues.forEach((it,i)=>{
+    const b = document.getElementById("btn-"+it.id);
+    if (!b) return;
+    const n = m.counts[it.id];
+    b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
+    b.style.opacity = n ? 1 : .45;
+    b.querySelector(".m").textContent =
+      (n ? n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
+  });
+}
+function buildList(){
+  const ul = document.getElementById("list");
+  ul.innerHTML = issues.map(it =>
+    '<li><button type="button" id="btn-'+it.id+'" aria-pressed="false">'
+    + '<span class="dot" style="background:'+stanceMap[it.top_stance].color+'"></span>'
+    + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
+  issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
+}
+function buildModes(){
+  const el = document.getElementById("modes");
+  el.innerHTML = D.modes.map(m =>
+    '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
+    + m.label+' '+m.total+'</button>').join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
+    st.mode = b.dataset.m;
+    el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    if (st.landed!==null && modeById[st.mode].counts[issues[st.landed].id]===0) st.landed=null;
+    drawPanel(); syncList(); render();
+  });
+}
+
+/* ---------- 操作 ---------- */
+let px0=0, py0=0, moved=0;
+function pos(e){
+  const r = cv.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
+  return [(t.clientX-r.left)*cv.width/r.width, (t.clientY-r.top)*cv.height/r.height];
+}
+cv.addEventListener("pointerdown", e=>{
+  cv.setPointerCapture(e.pointerId); st.dragging=true; moved=0;
+  cv.classList.add("dragging"); [px0,py0]=pos(e);
+});
+cv.addEventListener("pointermove", e=>{
+  if (!st.dragging) return;
+  const [x,y]=pos(e), dx=x-px0, dy=y-py0;
+  moved += Math.abs(dx)+Math.abs(dy);
+  st.yaw += dx*0.006;
+  st.pitch = Math.max(-0.96, Math.min(0.96, st.pitch + dy*0.006));  // 上下55度で制限
+  px0=x; py0=y; render();
+});
+function endDrag(e){
+  if (!st.dragging) return;
+  st.dragging=false; cv.classList.remove("dragging");
+  if (moved < 6){ const i = pick(...pos(e)); if (i!==null) land(i); }
+  render();
+}
+cv.addEventListener("pointerup", endDrag);
+cv.addEventListener("pointercancel", ()=>{ st.dragging=false; cv.classList.remove("dragging"); render(); });
+cv.addEventListener("wheel", e=>{
+  e.preventDefault();
+  st.zoom = Math.max(1, Math.min(2.6, st.zoom * (e.deltaY>0?0.94:1.06))); render();
+}, {passive:false});
+document.getElementById("zin").onclick = ()=>{ st.zoom=Math.min(2.6,st.zoom*1.15); render(); };
+document.getElementById("zout").onclick= ()=>{ st.zoom=Math.max(1,st.zoom/1.15); render(); };
+addEventListener("keydown", e=>{
+  if (e.key === "Escape" && st.landed!==null){ orbit(); return; }
+  if (document.activeElement !== cv) return;
+  if (e.key==="ArrowLeft"){ st.yaw-=0.12; render(); e.preventDefault(); }
+  if (e.key==="ArrowRight"){ st.yaw+=0.12; render(); e.preventDefault(); }
+  if (e.key==="ArrowUp"){ st.pitch=Math.max(-0.96,st.pitch-0.1); render(); e.preventDefault(); }
+  if (e.key==="ArrowDown"){ st.pitch=Math.min(0.96,st.pitch+0.1); render(); e.preventDefault(); }
+});
+
+/* ---------- 初期化 ---------- */
+document.getElementById("q").textContent = D.question + "（" + D.title + "）";
+document.getElementById("caution").innerHTML =
+  D.source_label + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
+  + "収集期間 " + D.sample_period + "／収集" + D.totals.collected + "件・関連" + D.totals.relevant
+  + "件・<b>意見" + D.totals.opinions + "件</b>（惑星の母数）／更新 " + D.updated_at
+  + "　<code>" + D.snapshot_id + "</code>";
+document.getElementById("meta").innerHTML =
+  "大陸＝論点、面積＝意見の数（最小" + D.min_area_pct + "%の床あり）、色＝いちばん多い立場（薄いほど意見が割れている）、"
+  + "山の高さ＝" + D.elevation_formula.definition + "（小さい論点は k=" + D.elevation_formula.k
+  + " で抑制。全体平均 " + (D.elevation_formula.p0*100).toFixed(1) + "%）。"
+  + "大陸の位置は見やすさのための配置で、論点同士の近さを意味しません。<br>"
+  + "このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。"
+  + "データが増えたら同じコマンドを実行し直すだけで、面積・色・高さ・島が更新されます。";
+(function initView(){ const a = anglesFor(issues[0].centroid); st.yaw=a.yaw; st.pitch=a.pitch; })();
+buildModes(); buildList(); drawPanel(); syncList(); render();
+const h = location.hash.slice(1);
+if (h && idIndex[h] !== undefined) land(idIndex[h], false);
+})();
+</script>
