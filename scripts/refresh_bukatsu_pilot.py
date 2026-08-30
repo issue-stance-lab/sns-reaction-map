@@ -33,7 +33,7 @@ SLUG = "bukatsu-chiiki"
 PAGE = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
 THEMES = ROOT / "THEMES.yaml"
 SEO_CONFIG = ROOT / "configs" / "theme-seo.json"
-SITE_URL = "https://issue-stance-lab.github.io/sns-reaction-map/"
+SITE_URL = "https://sns-reaction-map.jp/"
 PROTECTED = ("G-K10S4YCZFH", "ca-pub-2542211932832864", "vote-store.js", TOPIC_ID)
 
 

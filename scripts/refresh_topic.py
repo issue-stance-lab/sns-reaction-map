@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parents[1]
 THEMES = ROOT / "THEMES.yaml"
 PIPELINES = ROOT / "configs" / "refresh-pipeline.yaml"
 SEO_CONFIG = ROOT / "configs" / "theme-seo.json"
-SITE_URL = "https://issue-stance-lab.github.io/sns-reaction-map/"
+SITE_URL = "https://sns-reaction-map.jp/"
 
 
 def read_rows(path: Path) -> list[dict[str, Any]]:

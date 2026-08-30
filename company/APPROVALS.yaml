@@ -32,6 +32,41 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260830-002
+    department: executive
+    action: important_policy_change
+    summary: "sns-reaction-map.jpを唯一の公開URLとし、公開専用リポジトリをissue-stance-lab.github.ioへ一本化する"
+    reason: "ルートとSNS反応まっぷの二重管理を解消し、開発・収集・会社資料を将来非公開にできる構成へ移すため"
+    risks:
+      - "カスタムドメインの付け替え中に一時的な表示停止が起きる可能性がある"
+      - "旧URLの検索評価が新URLへ移るまで流入が減る可能性がある"
+      - "SupabaseやActions secretsの移設漏れがあると投票が動かなくなる"
+    recommendation: approve
+    evidence:
+      - quality/designs/domain-migration-2026-08-30.md
+      - TASK_BOARD.md
+    status: approved
+    requested_at: "2026-08-30"
+    decided_at: "2026-08-30"
+    decision_note: "CEOが本対話で6項目の移行作業を明示し、実施を指示した。一般公開、カスタムドメインの付け替え、AdSense再申請は検証後の別承認とする。"
+  - id: approval-20260830-003
+    department: engineering-data
+    action: website_publication
+    summary: "公開専用リポジトリへ統合版を反映し、sns-reaction-map.jpの配信元を切り替える"
+    reason: "承認済みの独自ドメイン・公開リポジトリ一本化を一般公開へ反映するため"
+    risks:
+      - "切り替え時の一時停止"
+      - "HTTPS証明書の再発行待ち"
+      - "投票・画像・旧URL案内の回帰"
+    recommendation: approve_after_quality_gate
+    evidence:
+      - quality/designs/domain-migration-2026-08-30.md
+      - tests/test_domain_migration.py
+      - tests/test_sync_public_site.py
+    status: pending
+    requested_at: "2026-08-30"
+    decided_at: null
+    decision_note: null
   - id: approval-20260830-001
     department: executive
     action: important_policy_change

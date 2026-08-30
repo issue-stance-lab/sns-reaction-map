@@ -62,7 +62,7 @@ class ThemeHeroAssetTests(unittest.TestCase):
 
         self.assertGreaterEqual(html.count("ai-copyright-hero.webp"), 2)
         self.assertNotIn("ai-copyright-hero-v2.webp", html)
-        self.assertIn('content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/ai-copyright.png"', html)
+        self.assertIn('content="https://sns-reaction-map.jp/ogp/ai-copyright.png"', html)
         self.assertIn("G-K10S4YCZFH", html)
         self.assertIn("ca-pub-2542211932832864", html)
 
@@ -86,7 +86,7 @@ class ThemeHeroAssetTests(unittest.TestCase):
 
         self.assertGreaterEqual(html.count("bike-blue-ticket-hero.webp"), 2)
         self.assertNotIn("bike-blue-ticket-hero-v2.webp", html)
-        self.assertIn('content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/bike-blue-ticket.png"', html)
+        self.assertIn('content="https://sns-reaction-map.jp/ogp/bike-blue-ticket.png"', html)
         self.assertIn("G-K10S4YCZFH", html)
         self.assertIn("ca-pub-2542211932832864", html)
 
@@ -103,7 +103,7 @@ class ThemeHeroAssetTests(unittest.TestCase):
 
         self.assertGreaterEqual(html.count("bukatsu-hero.webp"), 2)
         self.assertNotIn("bukatsu-hero-v2.webp", html)
-        self.assertIn('content="https://issue-stance-lab.github.io/sns-reaction-map/ogp/bukatsu-chiiki.png"', html)
+        self.assertIn('content="https://sns-reaction-map.jp/ogp/bukatsu-chiiki.png"', html)
         self.assertIn("G-K10S4YCZFH", html)
         self.assertIn("ca-pub-2542211932832864", html)
 

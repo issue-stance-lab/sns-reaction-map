@@ -6,7 +6,7 @@
 
 ```bash
 supabase secrets set VOTE_HASH_SECRET="32文字以上のランダム値"
-supabase secrets set VOTE_ALLOWED_ORIGINS="https://issue-stance-lab.github.io"
+supabase secrets set VOTE_ALLOWED_ORIGINS="https://sns-reaction-map.jp,https://issue-stance-lab.github.io"
 supabase functions deploy cast-vote --no-verify-jwt
 ```
 

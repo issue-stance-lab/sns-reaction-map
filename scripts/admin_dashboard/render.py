@@ -16,7 +16,7 @@ from .collect import ROOT, STAGES
 WEEKDAY_JA = "月火水木金土日"
 
 # 公開先。README.md の「公開URL」と揃えること
-PUBLIC_BASE = "https://issue-stance-lab.github.io/sns-reaction-map/"
+PUBLIC_BASE = "https://sns-reaction-map.jp/"
 
 
 def esc(value) -> str:

@@ -43,7 +43,7 @@ class ImagePolicyTests(unittest.TestCase):
     def test_policy_is_in_sitemap(self):
         sitemap = (DOCS / "sitemap.xml").read_text(encoding="utf-8")
         self.assertIn(
-            "https://issue-stance-lab.github.io/sns-reaction-map/image-policy.html",
+            "https://sns-reaction-map.jp/image-policy.html",
             sitemap,
         )
 

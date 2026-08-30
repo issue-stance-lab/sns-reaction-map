@@ -1,6 +1,6 @@
 # SNS反応まっぷ デザインシステム
 
-現行サイト（https://issue-stance-lab.github.io/sns-reaction-map/）から抽出。
+現行サイト（https://sns-reaction-map.jp/）から抽出。
 新規テーマ作成、バナー画像、インフォグラフィック、マンガ、OGP画像のプロンプトに使用する。
 
 ---

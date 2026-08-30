@@ -41,7 +41,7 @@ DATA = ROOT / "social-samples" / "consumption-tax-cut_arena_data.json"
 CANONICAL = ROOT / "social-samples" / "consumption-tax-cut_hermes_arena_classified.json"
 TOPIC_CONFIG = ROOT / "configs" / "topics" / "consumption-tax-cut.yaml"
 
-PAGE_URL = "https://issue-stance-lab.github.io/sns-reaction-map/consumption-tax-cut-reaction-map.html"
+PAGE_URL = "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
 
 # ヒーロー画像。topic-modern.css の .hero::before は --topic-hero-image 未指定だと
 # ai-copyright-hero.webp にフォールバックするため、必ず値を入れる。
@@ -54,12 +54,12 @@ DESCRIPTION = (
     "消費税減税について、対象範囲、財源と社会保障、価格への効果、給付付き税額控除との比較、"
     "事業者の実務負担、公約と政治不信の6論点とSNS上の賛否を整理します。"
 )
-OGP_IMAGE = "https://issue-stance-lab.github.io/sns-reaction-map/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp"
+OGP_IMAGE = "https://sns-reaction-map.jp/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp"
 PUBLISHED_AT = "2026-07-28"
 ORGANIZATION = {
     "@type": "Organization",
     "name": "SNS反応まっぷ編集部",
-    "url": "https://issue-stance-lab.github.io/sns-reaction-map/about.html",
+    "url": "https://sns-reaction-map.jp/about.html",
 }
 
 # 論点キー → ページ上の表示情報
@@ -1070,7 +1070,7 @@ def build(
         "var shareText='消費税減税、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';",
     )
     html = html.replace(
-        "encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/fukushuto-reaction-map.html')",
+        "encodeURIComponent('https://sns-reaction-map.jp/fukushuto-reaction-map.html')",
         f"encodeURIComponent('{PAGE_URL}')",
     )
 

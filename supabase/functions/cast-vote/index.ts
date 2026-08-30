@@ -20,7 +20,7 @@ const TOPIC_CHOICES: Record<string, number> = {
 function corsHeaders(request: Request): HeadersInit {
   const origin = request.headers.get("origin") || "";
   const configured = (Deno.env.get("VOTE_ALLOWED_ORIGINS") ||
-    "https://issue-stance-lab.github.io,http://localhost:8000,http://127.0.0.1:8000")
+    "https://sns-reaction-map.jp,https://issue-stance-lab.github.io,http://localhost:8000,http://127.0.0.1:8000")
     .split(",")
     .map((value) => value.trim());
   return {
@@ -66,7 +66,7 @@ Deno.serve(async (request) => {
 
   const origin = request.headers.get("origin") || "";
   const allowedOrigins = (Deno.env.get("VOTE_ALLOWED_ORIGINS") ||
-    "https://issue-stance-lab.github.io,http://localhost:8000,http://127.0.0.1:8000")
+    "https://sns-reaction-map.jp,https://issue-stance-lab.github.io,http://localhost:8000,http://127.0.0.1:8000")
     .split(",")
     .map((value) => value.trim());
   if (origin && !allowedOrigins.includes(origin)) return json(request, { error: "origin_not_allowed" }, 403);

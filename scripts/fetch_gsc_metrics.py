@@ -27,7 +27,7 @@ from pathlib import Path
 
 SCOPES = ["https://www.googleapis.com/auth/webmasters.readonly"]
 TOKEN_PATH = Path("secrets/gsc-oauth-token.json")
-DEFAULT_SITE_URL = "https://issue-stance-lab.github.io/sns-reaction-map/"
+DEFAULT_SITE_URL = "https://sns-reaction-map.jp/"
 
 
 def load_dotenv(path: Path) -> None:
