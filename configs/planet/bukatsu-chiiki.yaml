@@ -1,0 +1,88 @@
+# 「議論の惑星」テーマ設定 — 部活動の地域移行
+# データが増えたら scripts/build_planet_data.py を再実行するだけでよい。
+# ここに件数を書かないこと（件数は必ず正典から数え直す）。
+
+theme_id: bukatsu-chiiki
+title: 部活動の地域移行
+question: 学校の部活動を地域へ移すべきか
+source_label: Yahoo!リアルタイム検索
+
+# 立場（表示順・色・地表パターン）。色だけに頼らないためパターンを併用する。
+stances:
+  - key: 移行支持
+    label: 移行支持
+    color: "#2F8F83"
+    pattern: plain
+  - key: 慎重・反対
+    label: 慎重・反対
+    color: "#7D5BA6"
+    pattern: diagonal
+  - key: 条件付き・改善要求
+    label: 条件付き・改善要求
+    color: "#D9A520"
+    pattern: dots
+  - key: 中立・情報
+    label: 中立・情報
+    color: "#8B9199"
+    pattern: mesh
+
+# 論点。id は公開ページのカウンタIDと一致させる（URLアンカー・投票互換のため変更禁止）。
+# 新しい論点が増えたらここへ追記する。id を後から変えないこと。
+issues:
+  - key: 教員の働き方
+    id: bukatsu-chiiki-kyoin
+    icon: "🏫"
+  - key: 制度・移行プロセス
+    id: bukatsu-chiiki-seido
+    icon: "📋"
+  - key: 教育的意義・機会
+    id: bukatsu-chiiki-kyoiku
+    icon: "⭐"
+  - key: 受け皿・指導者
+    id: bukatsu-chiiki-ukezara
+    icon: "👤"
+  - key: 費用・家庭負担
+    id: bukatsu-chiiki-hiyo
+    icon: "💴"
+  - key: その他
+    id: bukatsu-chiiki-sonota
+    icon: "💬"
+  - key: 地域格差
+    id: bukatsu-chiiki-kakusa
+    icon: "🗾"
+
+# 投票の保存順。表示順（件数順）とは別物。並べ替え禁止（過去の投票の意味が変わる）。
+vote_issue_order:
+  - 費用・家庭負担
+  - 受け皿・指導者
+  - 教員の働き方
+  - 教育的意義・機会
+  - 地域格差
+  - 制度・移行プロセス
+  - その他
+
+# 下位論点（島）。編集部が本文を1件ずつ読んだ再読データだけを使う。
+# 未再読の論点はここに書かない＝島に割れず「未再読」と表示される。
+sub_issues:
+  費用・家庭負担:
+    file: data/bukatsu-chiiki_cost-receiver-reread.json
+    path: [cost_side, buckets]
+    coverage: full
+    coverage_note: 論点全件を読み直し
+  受け皿・指導者:
+    file: data/bukatsu-chiiki_cost-receiver-reread.json
+    path: [receiver_side, buckets]
+    coverage: full
+    coverage_note: 論点全件を読み直し
+  教員の働き方:
+    file: data/bukatsu-chiiki_teacher-reread.json
+    path: [buckets]
+    coverage: partial
+    coverage_note: 移行支持以外だけを読み直し。賛成側は未再読
+
+geometry:
+  min_area_pct: 2.5        # 小さい論点でも押せるようにする床
+  elevation_k: 50          # 小標本の抑制係数
+  elevation_max: 4.0       # 半径に対する最大%
+  fit_points: 30000        # 面積合わせに使う球面上の標本点
+  fit_iters: 400
