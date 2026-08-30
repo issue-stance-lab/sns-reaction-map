@@ -95,6 +95,51 @@ class XPostViewsTests(unittest.TestCase):
             )
 
 
+NEW_FORMAT_ID_1 = "2093124499726299494"
+NEW_FORMAT_ID_2 = "2093204337073996089"
+NEW_FORMAT_ID_3 = "2093263576341655863"
+
+SAMPLE_NEW_FORMAT = f"""## リプライ実績 2026-08-24
+
+| # | リプライ先 | テーマ | タイプ | 元投稿views | 自リプライ表示 | 元投稿の返信数 | 元投稿からの経過 |
+|---|---|---|---|---|---|---|---|
+| 1 | @a（未計測） | A | URLなし | 100 | 未計測（投稿直後） | 0 | 約1時間 |
+| 2 | @b（未計測） | B | URLなし | 200 | 未計測（投稿直後） | 0 | 約2時間 |
+| 3 | @c（未計測） | C | URLなし | 300 | 未計測（投稿直後） | 0 | 約3時間 |
+
+自リプライURL: https://x.com/sns_hannou_ma/status/{NEW_FORMAT_ID_1}（08:52投稿）
+自リプライURL 2: https://x.com/sns_hannou_ma/status/{NEW_FORMAT_ID_2}（14:09投稿）
+自リプライURL 3: https://x.com/sns_hannou_ma/status/{NEW_FORMAT_ID_3}（18:05投稿）
+"""
+
+
+class NewUrlFormatTest(unittest.TestCase):
+    """2026-08-24以降の1行1件形式（自リプライURL: / 自リプライURL N:）の検出。"""
+
+    def setUp(self):
+        self.now = dt.datetime(2026, 8, 30, 21, 0, tzinfo=x_post_views.JST)
+
+    def test_detects_all_rows_in_new_format(self):
+        pending = x_post_views.find_pending(SAMPLE_NEW_FORMAT, self.now)
+        ids = {item.status_id for item in pending}
+        self.assertEqual(ids, {NEW_FORMAT_ID_1, NEW_FORMAT_ID_2, NEW_FORMAT_ID_3})
+
+    def test_row_numbers_match_table_rows(self):
+        pending = {item.status_id: item for item in x_post_views.find_pending(SAMPLE_NEW_FORMAT, self.now)}
+        self.assertEqual(pending[NEW_FORMAT_ID_1].row_number, "1")
+        self.assertEqual(pending[NEW_FORMAT_ID_2].row_number, "2")
+        self.assertEqual(pending[NEW_FORMAT_ID_3].row_number, "3")
+
+    def test_apply_measurements_writes_into_correct_row(self):
+        updated = x_post_views.apply_measurements(
+            SAMPLE_NEW_FORMAT,
+            {NEW_FORMAT_ID_2: 42},
+            self.now,
+        )
+        self.assertIn("@b（未計測） | B | URLなし | 200 | **42**", updated)
+        self.assertIn("@a（未計測） | A | URLなし | 100 | 未計測（投稿直後）", updated)
+
+
 if __name__ == "__main__":
     unittest.main()
 

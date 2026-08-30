@@ -28,6 +28,7 @@ _TOP_HEADING_RE = re.compile(r"^##\s+(.+?)\s+(\d{4}-\d{2}-\d{2})(?:（.*?）)?\s
 _FOLLOW_HEADING_RE = re.compile(r"^###\s+会話フォロー\s+(\d{4}-\d{2}-\d{2})\s*$")
 _STATUS_RE = re.compile(r"https://x\.com/sns_hannou_ma/status/(\d+)")
 _NUMBERED_URL_RE = re.compile(r"(\d+)\s*=\s*https://x\.com/sns_hannou_ma/status/(\d+)")
+_URL_LABEL_RE = re.compile(r"^自リプライURL(?:\s+(\d+))?:\s*(.*)$")
 _MEASURED_RE = re.compile(r"^\*{0,2}\s*[0-9][0-9,]*(?:\.[0-9]+)?\s*(?:万|[KkMm])?")
 
 
@@ -114,24 +115,35 @@ def find_pending(text: str, now: dt.datetime) -> list[PendingPost]:
                         continue
                     rows[cells[number_col]] = (i, cells[own_col], cells[1])
 
-                url_line = next((lines[i] for i in range(header_index + 1, end) if lines[i].startswith("自リプライURL:")), "")
-                for row_number, status_id in _NUMBERED_URL_RE.findall(url_line):
-                    row = rows.get(row_number)
-                    if not row or not _is_missing(row[1]):
-                        continue
-                    posted_at = post_datetime(status_id)
-                    age = (now.astimezone(JST) - posted_at).total_seconds() / 3600
-                    pending.append(PendingPost(
-                        status_id=status_id,
-                        url=f"https://x.com/sns_hannou_ma/status/{status_id}",
-                        kind="リプライ",
-                        posted_at=posted_at,
-                        age_hours=age,
-                        timing=_age_label(age),
-                        target=row[2],
-                        line_index=row[0],
-                        row_number=row_number,
-                    ))
+                url_lines = [
+                    (i, m) for i in range(header_index + 1, end)
+                    if (m := _URL_LABEL_RE.match(lines[i]))
+                ]
+                for _i, label_match in url_lines:
+                    label_num, rest = label_match.groups()
+                    numbered = _NUMBERED_URL_RE.findall(rest)
+                    if numbered:
+                        entries = numbered
+                    else:
+                        status_match = _STATUS_RE.search(rest)
+                        entries = [(label_num or "1", status_match.group(1))] if status_match else []
+                    for row_number, status_id in entries:
+                        row = rows.get(row_number)
+                        if not row or not _is_missing(row[1]):
+                            continue
+                        posted_at = post_datetime(status_id)
+                        age = (now.astimezone(JST) - posted_at).total_seconds() / 3600
+                        pending.append(PendingPost(
+                            status_id=status_id,
+                            url=f"https://x.com/sns_hannou_ma/status/{status_id}",
+                            kind="リプライ",
+                            posted_at=posted_at,
+                            age_hours=age,
+                            timing=_age_label(age),
+                            target=row[2],
+                            line_index=row[0],
+                            row_number=row_number,
+                        ))
 
         if kind == "論点ポスト実績":
             url_index = next((i for i in body_indexes if lines[i].startswith("投稿URL:")), None)
