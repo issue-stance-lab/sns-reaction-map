@@ -25,6 +25,7 @@
 **対象**: 公開対象10テーマすべて。最初の完成基準は `bukatsu-chiiki`（部活地域移行）。対象IDは設計書に固定する
 **正典**: `quality/designs/reaction-planet-renewal.md`
 **独立レビュー**: `quality/reviews/2026-08-30-reaction-planet-plan.md`
+**部活の実装構想**: `quality/designs/planet-bukatsu-chiiki.md`（2026-08-30 作成。面積・色・標高の具体値を現行正典993意見で確定）
 
 **目的**: テーマごとに雑多な情報を縦に並べるページから、読者が議論の全体像を回し、論点へ着陸し、
 理由と一次資料を読めるWebsiteへ変える。noteは論考、Xは入口、Websiteは探索できる中心商品に役割を分ける。
