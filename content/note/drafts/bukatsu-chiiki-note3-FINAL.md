@@ -23,7 +23,7 @@ SNS再分類は `data/bukatsu-chiiki_cost-receiver-reread.json`。使う数字�
 
 ## 貼ったあとにnoteの画面でやること
 
-1. 見出し画像に `content/note/drafts/images/bukatsu3_note-header.png` をアップロード（未制作。別工程）
+1. 見出し画像に `content/note/drafts/images/bukatsu3_note-header.png` をアップロード（2026-08-30 制作済み）
 2. `▼［画像を挿入］` の行を、指定のファイルに差し替える（行そのものは消す）
 3. 「## 」で始まる行を**大見出し**にする
 4. 一次資料の引用（文科省ガイドライン・神栖市Q&A・笹川スポーツ財団・キッズドア）は**引用ブロック**にする
