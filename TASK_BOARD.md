@@ -77,7 +77,7 @@
 **実施順**（段階をまたいで先に進まない。各段階の「成功の形」が出てから次へ）
 
 **段階0: すでに壊れている2つを復旧する（CEO操作1つ＋先行公開の判断）**
-0-1. 投票の復旧（**CEO操作・公開不要・即日**）。Supabaseダッシュボード → Edge Functions → cast-vote → Secrets の
+0-1. 投票の復旧。**2026-08-31 CEO実施・確認済み。** Supabaseダッシュボード → Edge Functions → cast-vote → Secrets の
     `VOTE_ALLOWED_ORIGINS` に新ドメインを追加する。値は新旧を並べる（移行期間中は両方許可する）:
     `https://sns-reaction-map.jp,https://issue-stance-lab.github.io,http://localhost:8000,http://127.0.0.1:8000`
     成功の形: 下のコマンドで `access-control-allow-origin: https://sns-reaction-map.jp` が返る。
@@ -85,7 +85,8 @@
     curl -sS -X OPTIONS -H "Origin: https://sns-reaction-map.jp" -H "Access-Control-Request-Method: POST" \
       -D - -o /dev/null https://qslrlprzoucrlptnhsmi.supabase.co/functions/v1/cast-vote | grep -i access-control-allow-origin
     ```
-    そのうえで新ドメインの公開ページで実際に1票入れ、やり直しボタンまで動くことを目視確認する
+    **2026-08-31 に実行して確認済み**（新旧どちらのOriginでも `access-control-allow-origin` が自分自身の値で返ることを確認）。
+    **残作業**: 新ドメインの公開ページで実際に1票入れ、やり直しボタンまで動くことをブラウザで目視確認する（未実施）
 0-2. GA4の復旧は**原則として段階3の一括公開に同梱する**（公開回数を増やさないため）。
     ただし段階3が2026-09-03 より後ろにずれる場合は、`apply_ga_tags.py` の許可ホスト1行だけを先行公開する承認案件を出す。
     判断者はCEO。計測が止まっている日数と、公開を1回増やす手間の比較で決める
