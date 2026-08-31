@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題57を新設。課題15-Aを統合し、課題54の前提となる公開データ基盤を手順化）
+最終更新: 2026-08-31（課題57 段階3完了。公開データ生成器を実装し10テーマ全件で非公開正典と完全照合）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -193,7 +193,7 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 
 ### 課題57: 公開データ基盤と公開承認物の一本化（旧15-A・課題54の前提）
 
-**状態**: 段階2 完了（2026-08-31）。段階3着手可能
+**状態**: 段階3 完了（2026-08-31）。段階4着手前に「問い」文言のCEO確認が必要
 **優先度**: **最優先の基盤作業**。課題54の3D実装より先に完了する
 **正典**: `quality/designs/public-data-foundation-rebuild.md`
 **対象**: 公開中の10テーマ。高市テーマは非公開保全し、公開合計・トップ・sitemapへ含めない
@@ -234,7 +234,17 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 新しい公開正典にせず、トップ・テーマ・sitemapを公開JSON／catalogへ接続する方針を確定した。
 記録: `quality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md`。公開物は変更していない。
 
-**次にすること**: 段階3で部活動テーマの公開JSONを生成し、非公開正典と完全照合する
+**次にすること**: 各テーマの読者向け「問い」文言（`scripts/public_registry_common.py` の
+`QUESTIONS`）をCEO確認へ出す。承認後、段階4（トップ・10テーマ・sitemapを公開JSONへ接続する）に進む
+
+**段階3の実装・完全照合（2026-08-31）**: `build_public_registry.py` / `verify_public_registry.py` を実装し、
+公開10テーマすべてでSchema検査・不変条件検査・非公開正典との完全照合（終了コード0/1/2）が通った。
+2回生成でバイト列差分0、既存unittest 327件中326件成功（唯一の失敗は本作業と無関係な
+ai-copyright/constitutional-amendment/fukushutoの収集期限超過）。10テーマ合計は収集12,792件・意見10,030件で、
+段階1調査で「廃棄対象」とされた旧固定テストの値と、固定値としてではなく計算結果として一致した。
+自転車青切符は`is_relevant`フィールドが存在せず`is_opinion`のみで判定する既存規則（`build_bike_arena.py`）を
+踏襲。読者向け「問い」は各テーマの公開済みvote_intro/subtitleを言い換えたが未レビュー。
+記録: `quality/reviews/2026-08-31-public-data-foundation-stage3-generator.md`。公開ページ・sitemap・一般公開は未変更。
 
 **段階2の仕様案（2026-08-31）**: `schemas/public-theme.schema.json` と
 `schemas/public-catalog.schema.json` を追加し、公開JSONに含める項目と禁止する内部情報を定義した。
