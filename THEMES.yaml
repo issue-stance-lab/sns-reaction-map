@@ -264,7 +264,7 @@ themes:
     html: docs/fukushuto-reaction-map.html
     sample_file: social-samples/fukushuto_hermes_classified.json
     refresh_config: configs/topics/fukushuto.yaml
-    sample_period: "2026-07-14〜2026-08-23"
+    sample_period: "2026-07-14〜2026-08-31"
     sample_source: "Yahooリアルタイム検索"
     collect: done        # 累計897件（2026-07-14 / 07-26 / 08-08、9クエリ）
     classify: done       # Hermesで897件分類。意見765件、分類エラー0件
@@ -275,12 +275,12 @@ themes:
     published: done      # ポータル掲載・sitemap登録済み（2026-07-16）
     page_update_mode: adapter # scripts/refresh_adapters/fukushuto.py（build_fukushuto_arena.py を候補生成に使う）
     collect_at: 2026-09-07
-    refresh_at: 2026-08-30
+    refresh_at: 2026-09-07
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-31
     published_at: 2026-07-15
-    updated_at: 2026-08-23
-    collect_delta: 274
+    updated_at: 2026-08-31
+    collect_delta: 292
     x_posted_at: 2026-08-29
     notes: "2026-07-14のYahooリアルタイムトレンド上位「副首都」から派生。trend_judgeはGO（スコア8/10、意見率60%）。副首都法案衆院通過直前タイミングで収集。2026-08-08に正典をHermes方式へ統合（課題40）。7/14の292件と7/26の308件（いずれも公開側7論点で再分類済みのv2）を重複排除して600件にし、同日の新規297件（重複0・意見224・分類エラー0）を加えて累計897件・意見765件。旧2D正典255件は賛否ラベルを持たず、7/26分は潮目ウィジェット専用で正典に入っていなかったため、公開ページは実データの半分以下しか使えていなかった。統合後の論点は都構想・維新180／候補地174／定義・中身162／防災・災害97／優先順位70／費用・財源41／その他41、賛否は法案反対522／賛成・推進125／中立・情報118。ページ生成は scripts/build_fukushuto_arena.py に一本化し、manual から脱した。潮目ウィジェットの数字（法案反対83.3→78.9%、賛成16.7→21.1%）は統合後の正典から fetched_at で切り出して完全に再現できる。2026-08-24、FACT_CHECK_GUIDE.md に沿って「投稿の主張を、国会と選管の記録に当ててみた」セクションを追加（課題: AdSense診断でExperience項目のみNGだったための対応）。自分の文章を先に書き終えてから bike-blue-ticket のスクリプト構造だけを参照。5主張（住民投票二度否決=fact／賛成123反対121=fact／附帯決議は同日選を禁止した=gap／整備費用4〜7.5兆円=gap／AI試算2兆円=miss）を大阪市・参議院・国土交通省の一次資料と突き合わせ、該当投稿14件（延べ、実質13件）を data/fukushuto_claim_posts.json に確定。miss（AI試算2兆円）は出典が投稿内に無く一次資料を特定できなかったためそのまま残した。judgement labelは他5テーマ（bike等）の「一致する／食い違う／確認できず」と被らないよう「資料どおり／資料とズレる／裏付けなし」を採用。生成器は scripts/build_fukushuto_process_sections.py を新設（build_fukushuto_arena.py とは別スクリプトのまま、refresh_adapters/fukushuto.py の _run_builder から続けて呼ぶ形に統合。共有はせず新設。理由: arena側は論点集計のregex差し替え主体、事実確認側はSTART/ENDマーカー1ブロックの静的差し替えで設計が異なるため）。HTML内マーカーは FACT_CHECK_START/END、挿入位置は「スタンス集計」と「次に読むテーマ」の間。data/verification/fukushuto-claims.json を configs/fukushuto-reaction-map.json の number_provenance.sources に selectors:[\"fc-count\"] で登録。verify_theme_page / verify_number_provenance / verify_page_originality / strip_production_notes / add_embed_fallback / unify_site_chrome / unittest（255件・着手前と同数）を全通過、生成器2回連続実行で差分ゼロを確認。附帯決議の議事録原文（PDF）は参議院keikaページで採択の事実までは一次確認できたが、逐語全文は複数報道の引用一致にとどまり未確認（ページにもその旨を明記）。2026-08-25、レビュー指摘（コミット0451a01対象）を受けて修正。resolution_ban（附帯決議の同日選禁止解釈）は報道を根拠にgap判定していたが、FACT_CHECK_GUIDE.mdの「報道・まとめ・解説サイトは不可」に反するため、報道由来の記述を全て削除しmissへ変更。一次資料で確認できたのは①参議院keikaページに附帯決議採択の記載があること、②同日実施を禁じる法律案（参第18号）が参議院本会議で賛成117・反対127で否決されたこと（参議院 記名投票結果 221-0724-v007.htmで新規確認）の2点のみ。決議本文の文言（禁止か努力目標か）は、採択した委員会（沖縄・北方問題及び地方に関する特別委員会）の会議録が2026年8月時点で未公開のため確認不能、国会会議録検索システムでも同日分は未搭載（オーナー確認済み）。**会議録が公開され次第、fact/gapへの再判定が必要。** 他4主張（住民投票二度否決・採決123対121・整備費用4〜7.5兆円・AI試算2兆円）は変更なし（一次資料で確認済みのため対象外）。あわせて本文中に data/fukushuto_claim_posts.json という内部パスが露出していた箇所を削除（読者が開けないファイルを案内していたため）。"
 
