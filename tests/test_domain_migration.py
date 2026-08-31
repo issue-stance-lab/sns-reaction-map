@@ -11,21 +11,22 @@ NEW_ORIGIN = "https://sns-reaction-map.jp"
 NEW_HOST = "sns-reaction-map.jp"
 OLD_HOST = "issue-stance-lab.github.io"
 OLD_SITE_BASE = "https://issue-stance-lab.github.io/sns-reaction-map/"
+SITEMAP_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+
+
+def _sitemap_urls() -> list[str]:
+    tree = ElementTree.parse(DOCS / "sitemap.xml")
+    return [node.text or "" for node in tree.findall("sm:url/sm:loc", SITEMAP_NS)]
 
 
 class DomainMigrationTests(unittest.TestCase):
     def test_sitemap_only_contains_new_domain(self):
-        tree = ElementTree.parse(DOCS / "sitemap.xml")
-        namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-        urls = [node.text for node in tree.findall("sm:url/sm:loc", namespace)]
+        urls = _sitemap_urls()
         self.assertGreater(len(urls), 0)
-        self.assertTrue(all(url and url.startswith(f"{NEW_ORIGIN}/") for url in urls))
+        self.assertTrue(all(url.startswith(f"{NEW_ORIGIN}/") for url in urls))
 
     def test_every_sitemap_page_has_new_canonical_and_og_url(self):
-        tree = ElementTree.parse(DOCS / "sitemap.xml")
-        namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-        for node in tree.findall("sm:url/sm:loc", namespace):
-            url = node.text or ""
+        for url in _sitemap_urls():
             relative = url.removeprefix(f"{NEW_ORIGIN}/")
             page = DOCS / relative
             html = page.read_text(encoding="utf-8")
@@ -66,10 +67,10 @@ class DomainMigrationTests(unittest.TestCase):
         self.assertIn("https://issue-stance-lab.github.io", source)
 
     def test_published_pages_gate_analytics_to_new_host(self):
-        pages = [p for p in DOCS.glob("*.html") if "allowedHosts" in p.read_text(encoding="utf-8")]
+        pages = {p: p.read_text(encoding="utf-8") for p in DOCS.glob("*.html")}
+        pages = {p: html for p, html in pages.items() if "allowedHosts" in html}
         self.assertGreater(len(pages), 0)
-        for page in pages:
-            html = page.read_text(encoding="utf-8")
+        for page, html in pages.items():
             with self.subTest(page=page.relative_to(ROOT)):
                 match = re.search(r"var allowedHosts = (\[[^\]]*\]);", html)
                 self.assertIsNotNone(match, "allowedHosts の配列が見つからない")
@@ -91,6 +92,16 @@ class DomainMigrationTests(unittest.TestCase):
         ads = DOCS / "ads.txt"
         self.assertTrue(ads.exists(), "docs/ads.txt が無い。AdSense収益化に必要")
         self.assertIn("pub-2542211932832864", ads.read_text(encoding="utf-8"))
+
+    def test_deploy_workflow_publishes_docs_directly(self):
+        workflow = ROOT / ".github" / "workflows" / "deploy.yml"
+        self.assertTrue(
+            workflow.exists(),
+            "deploy.yml が無い。GitHub Pagesへの唯一の公開経路が無くなり公開が止まる",
+        )
+        text = workflow.read_text(encoding="utf-8")
+        self.assertIn("actions/deploy-pages", text)
+        self.assertRegex(text, r"path:\s*docs/?\s*\n")
 
 
 if __name__ == "__main__":

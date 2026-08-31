@@ -17,12 +17,12 @@ items:
   - id: website-domain-migration
     department: engineering-data
     status: awaiting_ceo_approval
-    current_state: "新ドメイン用canonical・OGP・sitemap・robots、公開専用リポジトリへの同期、旧URL案内、投票CORSの候補版を作成中。実サイトは未切り替え。"
-    next_action: "全検査と公開候補の目視確認を完了し、CEO承認後に公開専用リポジトリへの反映、カスタムドメイン付け替え、HTTPS確認を順番に行う。"
+    current_state: "課題55（TASK_BOARD.md）。公開専用リポジトリへの同期構成は2026-08-31に破棄し、issue-stance-lab/sns-reaction-mapリポジトリのdocs/を1リポジトリで公開する構成に一本化。新ドメイン用canonical・OGP・sitemap・robots・deploy.yml・投票CORS・GA許可ホストの候補版は作成済み（task/domain-cutoverブランチ）。実サイトのコード反映は未実施。"
+    next_action: "段階2の全検査と公開候補の目視確認を完了し、CEO承認後にmainへマージ・pushして一般公開する。"
     due_at: null
-    canonical_sources: ["quality/designs/domain-migration-2026-08-30.md", "TASK_BOARD.md", "company/APPROVALS.yaml"]
-    ceo_approval: "一般公開とドメイン付け替えに必要。AdSense再申請は別承認"
-    completion_evidence: ["tests/test_domain_migration.py", "tests/test_sync_public_site.py", "quality/reviews/"]
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/domain-migration-2026-08-30.md", "company/APPROVALS.yaml"]
+    ceo_approval: "一般公開に必要。AdSense再申請は別承認"
+    completion_evidence: ["tests/test_domain_migration.py", "quality/reviews/"]
 
   - id: website-reaction-planet-renewal
     department: engineering-data

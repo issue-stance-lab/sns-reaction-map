@@ -2,7 +2,9 @@
 
 **2026-08-31 に破棄。** 切り替え順序・旧URLの扱い・安定後の公開データ基盤（公開専用リポジトリへの同期構成）は破棄した。
 実測の結果、公開元はプロジェクトリポジトリ `issue-stance-lab/sns-reaction-map` の GitHub Pages（`docs/`）に一本化し、
-`scripts/sync_public_site.py` は使わない。詳細は `TASK_BOARD.md` の課題55を参照。以下は経緯として残す。
+`scripts/sync_public_site.py` は使わない。詳細はTASK_BOARD.mdの課題55（本ファイルの後継）を参照。
+以下は経緯として残す。**下記の「公開前ゲート」「切り替え順序」に出てくる `scripts/sync_public_site.py` /
+`tests/test_sync_public_site.py` は削除済みで実行できない。手順として使わないこと**（現在の手順はTASK_BOARD.mdの課題55）。
 
 ## 決定
 

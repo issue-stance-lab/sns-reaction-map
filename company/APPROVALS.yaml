@@ -52,17 +52,17 @@ items:
   - id: approval-20260830-003
     department: engineering-data
     action: website_publication
-    summary: "公開専用リポジトリへ統合版を反映し、sns-reaction-map.jpの配信元を切り替える"
-    reason: "承認済みの独自ドメイン・公開リポジトリ一本化を一般公開へ反映するため"
+    summary: "課題55: sns-reaction-map.jpを正式URLとして一般公開する（issue-stance-lab/sns-reaction-mapリポジトリのdocs/を1リポジトリで公開。公開専用リポジトリへの同期案は2026-08-31に破棄）"
+    reason: "承認済みの独自ドメイン移行を一般公開へ反映するため"
     risks:
       - "切り替え時の一時停止"
       - "HTTPS証明書の再発行待ち"
       - "投票・画像・旧URL案内の回帰"
     recommendation: approve_after_quality_gate
     evidence:
-      - quality/designs/domain-migration-2026-08-30.md
+      - TASK_BOARD.md（課題55）
+      - quality/designs/domain-migration-2026-08-30.md（2026-08-31に破棄の経緯として参照）
       - tests/test_domain_migration.py
-      - tests/test_sync_public_site.py
     status: pending
     requested_at: "2026-08-30"
     decided_at: null
