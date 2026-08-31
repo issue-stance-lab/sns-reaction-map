@@ -40,12 +40,22 @@ items:
   - id: website-reaction-planet-renewal
     department: engineering-data
     status: in_progress
-    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。カスタムドメイン移行の残作業を課題55として先に完了させる。"
-    next_action: "課題55で正式URLと公開元を一本化し、続いて課題15-Aの数字・定義・公開テーマ・サイトマップ整合を完了させる。その正典だけを読む共通planet-data生成器の最小構成を部活地域移行で実装する。"
+    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。課題57の公開データ基盤を先に完了させる。"
+    next_action: "課題57で数字・用語・公開テーマ・サイトマップの公開データ契約を一本化する。完了後、そのJSONだけを構造化データ入力とする共通planet-data生成器の最小構成を部活地域移行で実装する。"
     due_at: null
-    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml"]
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/designs/public-data-foundation-rebuild.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml"]
     ceo_approval: "重要方針と非公開実装は承認済み。一般公開、広告配置、AdSense再申請は別途必要"
     completion_evidence: ["tests/", "quality/reviews/", "data/review-ledger.json", "company/APPROVALS.yaml"]
+
+  - id: public-data-foundation
+    department: engineering-data
+    status: planned
+    current_state: "課題57として実施手順を確定。旧15-Aを統合し、公開10テーマの収集数・意見数・論点・立場・強度・期間・更新日をGit管理JSONへ一本化する。課題55の4週間監視とは並行できる。"
+    next_action: "正典の段階0だけを実施する。最新mainの専用worktreeを作り、非公開正典を復元し、公開10テーマのsample_file欠落が0件であることを確認する。"
+    due_at: null
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/public-data-foundation-rebuild.md", "THEMES.yaml", "DATA_REFRESH.md"]
+    ceo_approval: "公開データ契約の重要方針を段階2で確認する。一般公開は15-Cで別途承認が必要"
+    completion_evidence: ["data/public/", "schemas/", "tests/", "quality/reviews/", "company/APPROVALS.yaml"]
 
   - id: theme-refresh-20260827
     department: engineering-data
@@ -121,7 +131,7 @@ items:
     department: business
     status: in_progress
     current_state: "2026-08-29に3回目も『有用性の低いコンテンツ』で不承認。ads.txtは承認済み。ルートと本体の数字、ページ内母数、手動確認表示、サイトマップ更新日の不一致を確認し、再申請を保留した。"
-    next_action: "TASK_BOARD課題55で正式URLと公開元を一本化した後、課題15-Aとして表示・数字・公開テーマ・サイトマップの整合性を修正する。課題55と15-A〜C完了前は再申請しない。"
+    next_action: "TASK_BOARD課題57で旧15-Aの表示・数字・公開テーマ・サイトマップ整合を完了する。課題57と15-B/C完了前は再申請しない。"
     due_at: null
     canonical_sources: ["TASK_BOARD.md", "quality/reviews/adsense-check-2026-08-18.md", "quality/reviews/adsense-third-rejection-2026-08-29.md"]
     ceo_approval: "再申請時に必要"
