@@ -165,6 +165,27 @@ class BikeRereadGateTests(unittest.TestCase):
 
 
 class BikeAdapterTests(unittest.TestCase):
+    def test_public_json_drives_page_level_counts(self):
+        from scripts.build_bike_arena import apply_public_counts
+
+        public_path = ROOT / "data/public/themes/bike-blue-ticket.json"
+        public = json.loads(public_path.read_text(encoding="utf-8"))
+        named = [issue for issue in public["issues"] if issue["kind"] == "named"]
+        other = next(issue for issue in public["issues"] if issue["kind"] == "other")
+        five = sum(int(issue["count"]) for issue in named)
+        page = apply_public_counts(PAGE.read_text(encoding="utf-8"), public_path)
+
+        self.assertIn(f'分析対象の意見{public["opinion_count"]}件をAIで整理', page)
+        self.assertIn(f'主要5論点{five}件に分類し、残る{other["count"]}件は「その他・分類保留」', page)
+        self.assertIn(f'<h2>SNS反応マップ</h2><span>{public["opinion_count"]}件 |', page)
+
+    def test_issue_cards_use_public_json(self):
+        config = json.loads(
+            (ROOT / "configs/bike-blue-ticket-reaction-map.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(config["issue_counts"]["basis"], "public_json")
+        self.assertNotIn("lead", config["issue_counts"]["sync"])
+
     def test_vote_definition_stays_v1_with_18_choices(self):
         sys.path.insert(0, str(ROOT))
         from scripts.refresh_adapters.bike import VOTE_CHOICES, VOTE_TOPIC, vote_fingerprint

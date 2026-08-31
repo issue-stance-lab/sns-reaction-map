@@ -49,6 +49,7 @@ except ImportError:
     from x_embed import embed_html  # type: ignore[no-redef]
 
 THEME = "bike-blue-ticket"
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 
 # ページ内 const ISSUES=[…] と同じ並び。ここがずれるとセクターと点が食い違う。
 ISSUE_ORDER = (
@@ -287,10 +288,10 @@ def cross_tab(rows: list[dict[str, Any]]) -> dict[str, Counter[str]]:
     return table
 
 
-def build_insight_stats(rows: list[dict[str, Any]], table: dict[str, Counter[str]]) -> str:
+def _build_insight_stats(total: int, table: dict[str, Counter[str]]) -> str:
     issue_totals = {issue: sum(table[issue].values()) for issue in MAIN_ISSUES}
     five = sum(issue_totals.values())
-    other = len(rows) - five
+    other = total - five
     if five <= 0:
         raise IssueCountError("5論点に分類された意見が0件です")
     ranked = sorted(MAIN_ISSUES, key=lambda issue: (-issue_totals[issue], MAIN_ISSUES.index(issue)))
@@ -306,7 +307,7 @@ def build_insight_stats(rows: list[dict[str, Any]], table: dict[str, Counter[str
     return f"""<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
       <article class="stat insight-stat">
         <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
-        <strong class="insight-value">{len(rows)}<small>件</small></strong>
+        <strong class="insight-value">{total}<small>件</small></strong>
         <p class="insight-note">うち5つの論点に分類できた{five}件（残る{other}件は「その他・分類保留」）</p>
         <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
       </article>
@@ -329,6 +330,10 @@ def build_insight_stats(rows: list[dict[str, Any]], table: dict[str, Counter[str
         <div class="insight-meter" aria-hidden="true"><i style="width:{menkyo / five * 100:.0f}%"></i></div>
       </article>
     </section>"""
+
+
+def build_insight_stats(rows: list[dict[str, Any]], table: dict[str, Counter[str]]) -> str:
+    return _build_insight_stats(len(rows), table)
 
 
 def build_issue_block(block: dict[str, Any], number: int, counts: Counter[str], is_largest: bool) -> str:
@@ -437,6 +442,92 @@ def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags
     return result
 
 
+def _public_table(data: dict[str, Any]) -> dict[str, Counter[str]]:
+    """公開JSONの論点×立場集計を、ページ生成器と同じ形にする。"""
+    if data.get("theme_id") != THEME:
+        raise IssueCountError(f"自転車青切符の公開JSONではありません: {data.get('theme_id')}")
+    by_label = {str(issue["label"]): issue for issue in data.get("issues", [])}
+    if set(by_label) != set(ISSUE_ORDER):
+        raise IssueCountError(
+            "自転車青切符の公開JSONの論点がページ定義と一致しません: "
+            + ", ".join(sorted(by_label))
+        )
+    table: dict[str, Counter[str]] = {issue: Counter() for issue in ISSUE_ORDER}
+    for issue in ISSUE_ORDER:
+        item = by_label[issue]
+        stance_counts = Counter(
+            {str(stance["label"]): int(stance["count"]) for stance in item.get("stances", [])}
+        )
+        if set(stance_counts) != set(STANCE_ORDER):
+            raise IssueCountError(f"公開JSONの立場定義が一致しません: {issue}")
+        if sum(stance_counts.values()) != int(item["count"]):
+            raise IssueCountError(f"公開JSONの論点数と立場数が一致しません: {issue}")
+        table[issue] = stance_counts
+    opinions = int(data["opinion_count"])
+    if sum(sum(counts.values()) for counts in table.values()) != opinions:
+        raise IssueCountError("公開JSONの意見数と論点別合計が一致しません")
+    return table
+
+
+def apply_public_counts(html: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """公開JSONを正典とし、ページの管理対象数字を貼り直す。
+
+    候補生成では先に公開JSONが固定される。その後にこの関数を実行し、
+    ヒーロー、注目ポイント、論点帯、投票説明、マップ見出しを同じ公開物に揃える。
+    賛否を明示できた投稿の編集部再読集計は別の検証データなので触らない。
+    """
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    table = _public_table(data)
+    collected = int(data["collected_count"])
+    opinions = int(data["opinion_count"])
+    totals = {issue: sum(table[issue].values()) for issue in MAIN_ISSUES}
+    five = sum(totals.values())
+    other = sum(table["その他"].values())
+    largest = max(totals.values())
+
+    html = replace_once(
+        html,
+        r'<p class="lead">収集したSNS投稿.*?</p>',
+        f'<p class="lead">収集したSNS投稿{collected}件のうち、分析対象の意見{opinions}件をAIで整理し、'
+        f'主要5論点{five}件に分類し、残る{other}件は「その他・分類保留」としました。'
+        '世論調査ではなく、SNS反応サンプルの論点比較です。</p>',
+        "ヒーローの収集数・意見数・論点数",
+        flags=re.S,
+    )
+    html = replace_once(
+        html,
+        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
+        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{opinions}件 | '
+        'セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>',
+        "アリーナ見出し",
+    )
+    html = replace_once(
+        html,
+        r'<section class="stats insight-stats".*?</section>',
+        _build_insight_stats(opinions, table),
+        "注目ポイント",
+        flags=re.S,
+    )
+    for number, block in enumerate(BLOCKS, start=1):
+        counts = table[str(block["issue"])]
+        html = replace_once(
+            html,
+            rf'<article class="issue-block" id="{block["anchor"]}">.*?\n</article>',
+            build_issue_block(block, number, counts, sum(counts.values()) == largest),
+            f'論点ブロック {block["anchor"]}',
+            flags=re.S,
+        )
+    html = sync_vote_counts(html, totals)
+    html = replace_once(
+        html,
+        r'<article class="argument-point"><h3>本当の対立点</h3>.*?</article>',
+        build_conflict_paragraph(table),
+        "本当の対立点",
+        flags=re.S,
+    )
+    return html
+
+
 def build(
     *,
     check: bool = False,
@@ -520,11 +611,25 @@ def build(
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument(
+        "--public-counts-only",
+        action="store_true",
+        help="公開JSONからページの管理対象数字だけを貼り直す",
+    )
     parser.add_argument("--input", type=Path)
     parser.add_argument("--html-template", type=Path)
     parser.add_argument("--output-html", type=Path)
     args = parser.parse_args()
     try:
+        if args.public_counts_only:
+            if args.check or args.input or args.html_template:
+                parser.error("--public-counts-onlyは--output-html以外と併用できません")
+            destination = args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
+            destination.write_text(
+                apply_public_counts(destination.read_text(encoding="utf-8")), encoding="utf-8"
+            )
+            print(f"updated public JSON counts in {destination}")
+            return 0
         if args.check and any((args.input, args.html_template, args.output_html)):
             parser.error("--checkは公開ページと正典の一致確認専用です")
         if any((args.input, args.html_template, args.output_html)) and not all(
