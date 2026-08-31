@@ -1,6 +1,6 @@
-> **URL検査（2026-08-30, curl）で開けなかったURLがこのメモに含まれています。そのまま使わないこと。**
-> - mlit.go.jp/bicycleuse/good-cycle-japan/environment/（404）
-> - mlit.go.jp/bicycleuse/good-cycle-japan/jitensha_katsuyo/（404）
+> **URL検査（2026-08-31, curl）で開けなかったURLがこのメモに含まれています。そのまま使わないこと。**
+> - https://www.mlit.go.jp/bicycleuse/good-cycle-japan/environment/ （404）
+> - https://www.mlit.go.jp/bicycleuse/good-cycle-japan/jitensha_katsuyo/ （404）
 
 確認できた一次資料に基づき、調査メモを作成します。
 
