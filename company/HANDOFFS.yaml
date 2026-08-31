@@ -40,22 +40,22 @@ items:
   - id: website-reaction-planet-renewal
     department: engineering-data
     status: in_progress
-    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。課題57の公開データ基盤を先に完了させる。"
-    next_action: "課題57で数字・用語・公開テーマ・サイトマップの公開データ契約を一本化する。完了後、そのJSONだけを構造化データ入力とする共通planet-data生成器の最小構成を部活地域移行で実装する。"
+    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。課題57の公開データ基盤が完了し（2026-08-31）、data/public/catalog.jsonとdata/public/themes/が正典として揃った。"
+    next_action: "課題57のcatalog・テーマJSON・configs/public-data-taxonomy.jsonだけを構造化データ入力とする共通planet-data生成器の最小構成を部活地域移行で実装する。HTMLや設計書の固定数字は読まない。"
     due_at: null
-    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/designs/public-data-foundation-rebuild.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml"]
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/designs/public-data-foundation-rebuild.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml", "data/public/catalog.json"]
     ceo_approval: "重要方針と非公開実装は承認済み。一般公開、広告配置、AdSense再申請は別途必要"
     completion_evidence: ["tests/", "quality/reviews/", "data/review-ledger.json", "company/APPROVALS.yaml"]
 
   - id: public-data-foundation
     department: engineering-data
-    status: in_progress
-    current_state: "課題57の段階2はCEO確認・Claude独立レビュー・指摘修正まで完了。公開テーマJSON・catalogのSchema、読者向け用語、不変条件、決定的生成規則を定義し、10テーマの論点・立場と固定IDの対応をconfigs/public-data-taxonomy.jsonへ追加した。レビュー最終判定はpass。公開ページは変更していない。"
-    next_action: "段階3として、まず部活動テーマの公開JSON生成器とpublic-only／against-privateの検査を実装し、非公開正典と完全照合する。"
+    status: complete
+    current_state: "課題57完了（2026-08-31）。公開10テーマすべてが data/public/themes/ と data/public/catalog.json を正典として数字・論点・期間・更新日・用語を再現する。段階4で全10テーマの issue_counts.basis を public_json へ接続し、段階5で refresh_topic.py の候補生成へ 公開JSON生成→finalize→ページ・トップ・sitemap を1本の順で組み込み、段階6で全テーマ検査・独立レビュー・全353件unittest・2回生成差分0を確認した。公開10テーマのページHTMLは接続前後でバイト一致（数字の出所だけが変わった）。一般公開・Search Console再確認・AdSense再申請は未実施のまま。"
+    next_action: "課題54（3D『議論の惑星』）へ引き継ぐ。課題54は公開JSONとcatalogだけを構造化データ入力とし、HTMLや設計書の固定数字を読まない。一般公開は15-Bと課題54の完了後、15-CでCEO承認を得てまとめて行う。"
     due_at: null
-    canonical_sources: ["TASK_BOARD.md", "quality/designs/public-data-foundation-rebuild.md", "THEMES.yaml", "DATA_REFRESH.md"]
-    ceo_approval: "公開データ契約の重要方針を段階2で確認する。一般公開は15-Cで別途承認が必要"
-    completion_evidence: ["data/public/", "schemas/", "tests/", "quality/reviews/", "company/APPROVALS.yaml"]
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/public-data-foundation-rebuild.md", "THEMES.yaml", "DATA_REFRESH.md", "data/public/catalog.json", "configs/public-data-taxonomy.json"]
+    ceo_approval: "公開データ契約の重要方針は段階2でCEO確認済み。一般公開は15-Cで別途承認が必要（今回は未実施）"
+    completion_evidence: ["data/public/", "schemas/", "tests/test_public_data_contract.py", "tests/test_public_registry_build.py", "quality/reviews/2026-08-31-public-data-foundation-stage6-audit.md", "quality/reviews/", "company/APPROVALS.yaml"]
 
   - id: theme-refresh-20260827
     department: engineering-data

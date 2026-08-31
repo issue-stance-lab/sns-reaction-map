@@ -121,6 +121,26 @@ def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> N
     )
 
 
+def finalize(root: Path, current_date: str) -> None:
+    """候補公開JSONから、ページの集計表示を貼り直す（課題57 段階4）。
+
+    `build()` は候補の投稿から直接数えるので、公開データJSONと食い違ってはいけない。
+    候補ツリーでは `build_public_registry.py` が同じ候補から公開JSONを作り直した
+    あとにここが走るため、ページの数字の出所が公開データ契約側へ一本化される。
+    """
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_nickname_arena.py"),
+            "--public-counts-only",
+            "--output-html",
+            str(root / PAGE),
+        ],
+        cwd=root,
+        check=True,
+    )
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
