@@ -377,15 +377,19 @@ def _verify_issue_count_source_public_json(
     verification_counts = count_by_issue(load_records(verification_file), "opinion")
     public_counts = count_by_issue_from_public_json(theme)
 
-    if verification_counts == public_counts:
+    # 仮名化検証データは「該当する意見が0件」の論点を行として保持しない。
+    # 公開JSONは全論点を固定IDで出すため0件も明示する。この表現差だけで、
+    # 同じ集計を不一致にしない。
+    labels = set(verification_counts) | set(public_counts)
+    if all(verification_counts.get(label, 0) == public_counts.get(label, 0) for label in labels):
         lines.append(
             f"OK  公開データJSONの論点別件数が仮名化検証データと一致する（{len(public_counts)}論点）"
         )
     else:
         mismatches = {
             label: (verification_counts.get(label), public_counts.get(label))
-            for label in set(verification_counts) | set(public_counts)
-            if verification_counts.get(label) != public_counts.get(label)
+            for label in labels
+            if verification_counts.get(label, 0) != public_counts.get(label, 0)
         }
         lines.append(
             "NG  公開データJSONの論点別件数が仮名化検証データと一致する: "

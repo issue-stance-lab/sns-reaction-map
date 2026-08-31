@@ -221,6 +221,16 @@ def _write_config(root: Path, stage: Path, previous_date: str, current_date: str
     return destination
 
 
+def finalize(root: Path, current_date: str) -> None:
+    """候補公開JSONから、ページ内の管理対象数字を貼り直す。"""
+    _run(
+        root,
+        "build_bike_arena.py",
+        "--public-counts-only",
+        "--output-html", str(root / PAGE),
+    )
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"

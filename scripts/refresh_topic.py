@@ -616,6 +616,97 @@ def _file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _copy_candidate_tree(root: Path, stage: Path) -> Path:
+    """候補を組み立てる隔離コピーを作る。
+
+    承認前に docs/ や data/public/ を書き換えないため、昇格後に走っていた
+    finalize / トップ / sitemap の生成をこのコピー内だけで実行する。`.staging`
+    自体をコピー対象から外すので、コピー先が root の配下でも再帰しない。
+    """
+    candidate_root = stage / "public-candidate"
+    if candidate_root.exists():
+        shutil.rmtree(candidate_root)
+    shutil.copytree(
+        root,
+        candidate_root,
+        ignore=shutil.ignore_patterns(".git", ".staging", "node_modules", "__pycache__"),
+    )
+    return candidate_root
+
+
+def prepare_public_candidate_bundle(
+    root: Path,
+    topic: str,
+    current_date: str,
+    stage: Path,
+    report: dict[str, Any],
+    adapter_targets: dict[Path, Path],
+    adapter: Any,
+) -> dict[Path, Path]:
+    """累積候補から、承認対象となる公開物一式を隔離して生成する。
+
+    ここで作ったバイト列だけをmanifestへ入れ、承認後は再生成しない。
+    """
+    candidate_root = _copy_candidate_tree(root, stage)
+    themes = parse_themes_yaml(root / "THEMES.yaml")
+    theme = themes[topic]
+    canonical = Path(str(theme["sample_file"]))
+    shutil.copy2(stage / "cumulative-candidate.json", candidate_root / canonical)
+    if theme.get("verification_file"):
+        write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
+        shutil.copy2(stage / "verification-candidate.json", candidate_root / str(theme["verification_file"]))
+    for target, source in adapter_targets.items():
+        destination = candidate_root / target
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+
+    next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
+    fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), "refresh_at": next_date}
+    if theme.get("sample_period_source") != "owner_confirmed":
+        fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
+    registry = candidate_root / "THEMES.yaml"
+    registry.write_text(_replace_theme_fields(registry.read_text(encoding="utf-8"), topic, fields), encoding="utf-8")
+    update_seo_date(candidate_root / "configs" / "theme-seo.json", topic, current_date)
+
+    # 公開JSONを先に作る。finalize とページ件数同期はこの候補JSONだけを読む。
+    for command in (
+        [sys.executable, "scripts/build_public_registry.py", "--all"],
+        [sys.executable, "scripts/verify_public_registry.py", "--public-only"],
+    ):
+        run(command, label="prepare public candidate", root=candidate_root)
+
+    # finalize を候補コピーに対して実行し、従来の「昇格後だけ変わる」ページをなくす。
+    finalize = getattr(adapter, "finalize", None)
+    if finalize is not None:
+        finalize(candidate_root, current_date)
+    commands = [
+        [sys.executable, "scripts/sync_issue_counts.py", topic],
+        [sys.executable, "scripts/seo/apply_theme_trust.py"],
+        [sys.executable, "scripts/sync_portal_stats.py"],
+        [sys.executable, "scripts/seo/generate_seo_assets.py", "--site-url", SITE_URL],
+        [sys.executable, "scripts/verify_sample_periods.py", "--generate"],
+        [sys.executable, "scripts/build_data_sheet.py"],
+    ]
+    for command in commands:
+        run(command, label="prepare public candidate", root=candidate_root)
+
+    # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
+    targets = [
+        canonical,
+        Path("THEMES.yaml"),
+        Path("configs/theme-seo.json"),
+        Path("data/verification/sample-periods.json"),
+        Path("DATA_SHEET.md"),
+        Path("data/public/catalog.json"),
+        Path("docs/index.html"), Path("docs/sitemap.xml"), Path("docs/robots.txt"),
+        *[Path("data/public/themes") / path.name for path in sorted((candidate_root / "data/public/themes").glob("*.json"))],
+        *adapter_targets.keys(),
+    ]
+    if theme.get("verification_file"):
+        targets.append(Path(str(theme["verification_file"])))
+    return {target: candidate_root / target for target in dict.fromkeys(targets)}
+
+
 def prepare_promotion_manifest(
     root: Path,
     topic: str,
@@ -627,13 +718,20 @@ def prepare_promotion_manifest(
 ) -> dict[str, Any]:
     """Bind an approval candidate to exact staged bytes without mutating public files."""
     write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
-    files = [
-        {"role": "canonical", "target": str(parse_themes_yaml(root / "THEMES.yaml")[topic]["sample_file"]), "source": str((stage / "cumulative-candidate.json").relative_to(root))},
-        *[
-            {"role": "page", "target": str(target), "source": str(source.relative_to(root))}
-            for target, source in adapter_targets.items()
-        ],
-    ]
+    files_by_target = {
+        str(parse_themes_yaml(root / "THEMES.yaml")[topic]["sample_file"]): {
+            "role": "canonical",
+            "target": str(parse_themes_yaml(root / "THEMES.yaml")[topic]["sample_file"]),
+            "source": str((stage / "cumulative-candidate.json").relative_to(root)),
+        }
+    }
+    for target, source in adapter_targets.items():
+        files_by_target[str(target)] = {
+            "role": "public_artifact",
+            "target": str(target),
+            "source": str(source.relative_to(root)),
+        }
+    files = list(files_by_target.values())
     for item in files:
         source = root / item["source"]
         if not source.is_file():
@@ -684,11 +782,46 @@ def load_promotion_manifest(root: Path, stage: Path, topic: str, current_date: s
             raise ValueError("manifest の候補ファイルがリポジトリ外を指しています") from exc
         if not source.is_file() or _file_sha256(source) != item.get("sha256"):
             raise ValueError(f"承認後に公開候補が変わりました: {item.get('source')}")
-        if item.get("role") == "page":
-            targets[Path(str(item["target"]))] = source
+        targets[Path(str(item["target"]))] = source
     if not targets:
-        raise ValueError("manifest に公開ページ候補がありません")
+        raise ValueError("manifest に公開候補がありません")
     return manifest, targets
+
+
+def apply_manifest_targets(root: Path, stage: Path, targets: dict[Path, Path], backup_destination: Path) -> None:
+    """manifestで固定した候補をそのまま適用し、途中失敗なら戻す。"""
+    rollback = stage / "promotion-backup"
+    existing = {target for target in targets if (root / target).exists()}
+    for target in targets:
+        destination = root / target
+        if destination.exists():
+            saved = rollback / target
+            saved.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(destination, saved)
+    try:
+        for target, source in targets.items():
+            destination = root / target
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+        for command, label in (
+            ([sys.executable, str(root / "scripts/verify_public_registry.py"), "--against-private"], "verify public registry"),
+            ([sys.executable, str(root / "scripts/verify_theme_page.py")], "verify themes"),
+            ([sys.executable, str(root / "scripts/verify_number_provenance.py")], "verify number provenance"),
+            ([sys.executable, str(root / "scripts/verify_top_page.py"), "--allow-overdue-collect"], "verify portal"),
+            ([sys.executable, str(root / "scripts/seo/validate_theme_seo.py")], "verify SEO"),
+        ):
+            run(command, label=label, root=root)
+        backup_private(root, backup_destination)
+    except Exception:
+        for target in targets:
+            destination = root / target
+            saved = rollback / target
+            if saved.exists():
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(saved, destination)
+            elif target not in existing and destination.is_file():
+                destination.unlink()
+        raise
 
 
 def main() -> int:
@@ -891,7 +1024,10 @@ def main() -> int:
 
     if args.prepare_promotion:
         adapter_targets = adapter.build(ROOT, stage, args.date)
-        manifest = prepare_promotion_manifest(ROOT, args.topic, args.date, args.run_id, stage, report, adapter_targets)
+        public_targets = prepare_public_candidate_bundle(
+            ROOT, args.topic, args.date, stage, report, adapter_targets, adapter
+        )
+        manifest = prepare_promotion_manifest(ROOT, args.topic, args.date, args.run_id, stage, report, public_targets)
         report["status"] = "prepared"
         report["promotion_manifest"] = manifest["manifest_path"]
         report["promotion_manifest_sha256"] = manifest["manifest_sha256"]
@@ -899,8 +1035,8 @@ def main() -> int:
     elif args.apply_promotion:
         if promotion_preflight_error:
             raise promotion_preflight_error
-        manifest, adapter_targets = load_promotion_manifest(ROOT, stage, args.topic, args.date, args.run_id)
-        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest, adapter)
+        manifest, public_targets = load_promotion_manifest(ROOT, stage, args.topic, args.date, args.run_id)
+        apply_manifest_targets(ROOT, stage, public_targets, args.backup_dest)
         report["status"] = "promoted"
         report["promotion_manifest"] = manifest["manifest_path"]
         report["promotion_manifest_sha256"] = manifest["manifest_sha256"]
@@ -909,7 +1045,10 @@ def main() -> int:
         if promotion_preflight_error:
             raise promotion_preflight_error
         adapter_targets = adapter.build(ROOT, stage, args.date)
-        promote(ROOT, args.topic, args.date, stage, report, adapter_targets, args.backup_dest, adapter)
+        public_targets = prepare_public_candidate_bundle(
+            ROOT, args.topic, args.date, stage, report, adapter_targets, adapter
+        )
+        apply_manifest_targets(ROOT, stage, public_targets, args.backup_dest)
         report["status"] = "promoted"
         write_json(stage / "report.json", report)
     print(json.dumps(report, ensure_ascii=False, indent=2))

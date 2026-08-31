@@ -82,6 +82,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 THEME = "fukushuto"
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 NEG = "法案反対"
 POS = "法案賛成・推進"
 NEU = NEUTRAL_STANCE
@@ -436,6 +437,55 @@ def sample_period(records: list[dict[str, Any]]) -> str:
     return period_label(period)
 
 
+def _public_rows(data: dict[str, Any]) -> tuple[int, list[dict[str, Any]]]:
+    """公開JSONの集計を検査し、既存の集計表示生成に渡せる最小行へ変換する。"""
+    if data.get("theme_id") != THEME:
+        raise IssueCountError(f"副首都の公開JSONではありません: {data.get('theme_id')}")
+    items = {str(item["label"]): item for item in data.get("issues", [])}
+    if set(items) != set(ISSUE_ORDER):
+        raise IssueCountError("公開JSONの論点がページ定義と一致しません: " + ", ".join(sorted(items)))
+    rows: list[dict[str, Any]] = []
+    for issue in ISSUE_ORDER:
+        item = items[issue]
+        count = int(item["count"])
+        stances = {str(value["label"]): int(value["count"]) for value in item.get("stances", [])}
+        intensities = {str(value["id"]): int(value["count"]) for value in item.get("intensities", [])}
+        if set(stances) != set(STANCE_ORDER) or sum(stances.values()) != count:
+            raise IssueCountError(f"公開JSONの立場集計が一致しません: {issue}")
+        if set(intensities) != INTENSITIES or sum(intensities.values()) != count:
+            raise IssueCountError(f"公開JSONの強度集計が一致しません: {issue}")
+        stance_values = [name for name in STANCE_ORDER for _ in range(stances[name])]
+        intensity_values = [name for name in ("high", "medium", "low") for _ in range(intensities[name])]
+        rows.extend(
+            {"classification": {"main_issue": issue, "stance": stance, "intensity": intensity}}
+            for stance, intensity in zip(stance_values, intensity_values, strict=True)
+        )
+    opinions = int(data["opinion_count"])
+    if len(rows) != opinions:
+        raise IssueCountError("公開JSONの意見数と集計値が一致しません")
+    return int(data["collected_count"]), rows
+
+
+def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """候補公開JSONを正典に、ページ上の管理対象集計を貼り直す。"""
+    collected, rows = _public_rows(json.loads(public_theme.read_text(encoding="utf-8")))
+    counts = Counter(str(classification(row)["main_issue"]) for row in rows)
+    total = len(rows)
+    top = ranked_issues(counts)[0]
+    config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
+    blocks = config["arena"]["issue_blocks"]
+    conclusion = {str(block["main_issue"]): block["conclusion"] for block in blocks}[top]
+    page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
+    page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
+    page = replace_once(page, r'<li class="conclusion-focus">.*?</li>', '<li class="conclusion-focus">' + f'<span class="conclusion-count"><b>{counts[top]}</b>件</span><strong>{html.escape(str(conclusion["headline"]))}</strong><span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span></li>', "議論の中心", flags=re.S)
+    page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + '  （取得期間: ' + re.search(r'（取得期間: ([^／]+)／', page).group(1) + '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
+    page = replace_once(page, r'<section class="stats insight-stats".*?\n</section>', build_insight_stats(rows, collected), "注目ポイント", flags=re.S)
+    page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し")
+    page = replace_once(page, r'<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
+    page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?\n</section>', build_details(rows, collected, load_queries()), "詳細データ", flags=re.S)
+    return page
+
+
 def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags: int = 0) -> str:
     result, count = re.subn(pattern, lambda _: replacement, page, count=1, flags=flags)
     if count != 1:
@@ -594,8 +644,16 @@ def main() -> int:
     parser.add_argument("--input", type=Path, help="正典の代わりに読む累積候補（staging用）")
     parser.add_argument("--html-template", type=Path, help="読み込むHTML（既定は公開ページ）")
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
+    parser.add_argument("--public-counts-only", action="store_true", help="公開JSONから集計表示だけを更新する")
     args = parser.parse_args()
     try:
+        if args.public_counts_only:
+            if args.check or args.input or args.html_template:
+                parser.error("--public-counts-only は --output-html だけを指定してください")
+            destination = args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
+            destination.write_text(apply_public_counts(destination.read_text(encoding="utf-8")), encoding="utf-8")
+            print(f"OK: 公開JSONから集計表示を更新しました: {destination}")
+            return 0
         lines, changed = build(
             check=args.check,
             source=args.input,

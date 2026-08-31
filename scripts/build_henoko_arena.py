@@ -45,6 +45,7 @@ except ImportError:  # python3 scripts/build_henoko_arena.py
 THEME = "henoko-student-accident"
 PAGE = Path("docs/henoko-student-accident-reaction-map.html")
 ARENA_DATA = Path("docs/henoko-arena-data.js")
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 
 # 正典の立場ラベル。ページ側は「評価／疑問／切り分け」の3方向で色分けする。
 SUPPORT = "文科省判断を支持"
@@ -182,6 +183,17 @@ class IssueStats:
         self.split = counts[SPLIT]
         self.neutral = counts[NEUTRAL]
 
+    @classmethod
+    def from_counts(cls, issue: dict[str, Any], counts: Counter[str]) -> "IssueStats":
+        stats = cls.__new__(cls)
+        stats.issue = issue
+        stats.total = sum(counts.values())
+        stats.support = counts[SUPPORT]
+        stats.oppose = counts[OPPOSE]
+        stats.split = counts[SPLIT]
+        stats.neutral = counts[NEUTRAL]
+        return stats
+
     @property
     def split_and_neutral(self) -> int:
         return self.split + self.neutral
@@ -220,6 +232,16 @@ def detail_tables(rows: list[dict[str, Any]]) -> str:
     by_intensity = Counter(row["e"] for row in rows)
     by_cross = Counter((row["i"], row["x"]) for row in rows)
 
+    return detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total)
+
+
+def detail_tables_from_counts(
+    by_issue: Counter[int],
+    by_stance: Counter[int],
+    by_intensity: Counter[float],
+    by_cross: Counter[tuple[int, int]],
+    total: int,
+) -> str:
     issue_rows = "".join(
         f'<tr><th>{html.escape(str(issue["table_label"]))}</th><td>{by_issue.get(index, 0)}</td></tr>'
         for index, issue in enumerate(ISSUE_DEFS)
@@ -301,13 +323,15 @@ def insight_stats(opinions: list[dict[str, Any]], stats: dict[str, IssueStats]) 
     賛否をはっきり示した投稿（評価＋疑問）の比率が最も高い論点とする。
     どちらも同数のときは ISSUE_DEFS の並び順で先に来るほうを採る。
     """
-    total = len(opinions)
-    # 「切り分け」だけを数える。中立・情報共有を足した合計は、正典のどの
-    # 1ラベルの件数でもないため verify_number_provenance.py が説明できない
-    # （2026-08-18 の昇格で、足した値 263 が出所不明として落ちた）。
-    split_total = sum(
-        1 for row in opinions if str(classification(row).get("stance")) == SPLIT
+    return insight_stats_from_counts(
+        len(opinions),
+        sum(1 for row in opinions if str(classification(row).get("stance")) == SPLIT),
+        stats,
     )
+
+
+def insight_stats_from_counts(total: int, split_total: int, stats: dict[str, IssueStats]) -> str:
+    """公開JSONの集計値から、注目ポイントを再生成する。"""
     top_issue = min(ISSUE_DEFS, key=lambda issue: (-stats[issue["main_issue"]].total, ISSUE_INDEX[issue["main_issue"]]))
     divided = min(
         ISSUE_DEFS,
@@ -361,6 +385,70 @@ def insight_stats(opinions: list[dict[str, Any]], stats: dict[str, IssueStats]) 
             "<!-- INSIGHT_STATS_END -->",
         ]
     )
+
+
+def _public_counts(
+    data: dict[str, Any],
+) -> tuple[int, int, dict[str, IssueStats], Counter[int], Counter[float], Counter[tuple[int, int]]]:
+    """公開JSONの論点・立場・強度集計を検査してページ用に読み込む。"""
+    if data.get("theme_id") != THEME:
+        raise IssueCountError(f"辺野古高校生事故の公開JSONではありません: {data.get('theme_id')}")
+    items = {str(item["label"]): item for item in data.get("issues", [])}
+    expected = set(ISSUE_INDEX) | {"その他"}
+    if set(items) != expected:
+        raise IssueCountError("公開JSONの論点がページ定義と一致しません: " + ", ".join(sorted(items)))
+    by_issue: Counter[int] = Counter()
+    by_stance: Counter[int] = Counter()
+    by_intensity: Counter[float] = Counter()
+    by_cross: Counter[tuple[int, int]] = Counter()
+    stats: dict[str, IssueStats] = {}
+    all_total = 0
+    for issue in ISSUE_DEFS:
+        name = str(issue["main_issue"])
+        item = items[name]
+        count = int(item["count"])
+        labels = {str(value["label"]): int(value["count"]) for value in item.get("stances", [])}
+        if set(labels) != {SUPPORT, OPPOSE, SPLIT, NEUTRAL} or sum(labels.values()) != count:
+            raise IssueCountError(f"公開JSONの立場集計が一致しません: {name}")
+        intensities = {str(value["id"]): int(value["count"]) for value in item.get("intensities", [])}
+        if set(intensities) != set(INTENSITY_SCALE) or sum(intensities.values()) != count:
+            raise IssueCountError(f"公開JSONの強度集計が一致しません: {name}")
+        index = ISSUE_INDEX[name]
+        by_issue[index] = count
+        by_stance[1] += labels[SUPPORT]
+        by_stance[0] += labels[SPLIT] + labels[NEUTRAL]
+        by_stance[-1] += labels[OPPOSE]
+        by_cross[(index, 1)] = labels[SUPPORT]
+        by_cross[(index, 0)] = labels[SPLIT] + labels[NEUTRAL]
+        by_cross[(index, -1)] = labels[OPPOSE]
+        for label, scale in INTENSITY_SCALE.items():
+            by_intensity[scale] += intensities[label]
+        stats[name] = IssueStats.from_counts(issue, Counter(labels))
+        all_total += count
+    other = items["その他"]
+    if int(other["count"]) != 0:
+        raise IssueCountError("ページに含めない「その他」が0件ではありません")
+    collected = int(data["collected_count"])
+    opinions = int(data["opinion_count"])
+    if all_total != opinions or sum(by_stance.values()) != opinions or sum(by_intensity.values()) != opinions:
+        raise IssueCountError("公開JSONの意見数と集計値が一致しません")
+    return collected, opinions, stats, by_stance, by_intensity, by_cross
+
+
+def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """候補公開JSONを正典に、ページ上の集計表示を貼り直す。"""
+    collected, total, stats, by_stance, by_intensity, by_cross = _public_counts(
+        json.loads(public_theme.read_text(encoding="utf-8"))
+    )
+    by_issue = Counter({ISSUE_INDEX[name]: values.total for name, values in stats.items()})
+    page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total), "詳細データ表")
+    page = replace_block(page, r"<!-- INSIGHT_STATS_START -->.*?<!-- INSIGHT_STATS_END -->", insight_stats_from_counts(total, sum(values.split for values in stats.values()), stats), "注目ポイント")
+    page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
+    page = replace_number(page, r"<span>(\d+)件 \| Hermes再分類", [total], "SNS反応マップの見出し")
+    page = replace_number(page, r"<span>(\d+)件 Hermes再分類</span>", [total], "論点別Xの声の見出し")
+    for pattern, values, label in issue_rewrites(stats):
+        page = replace_number(page, pattern, values, label)
+    return page
 
 
 # ---------------------------------------------------------------- 差し替え
@@ -519,7 +607,16 @@ def main() -> int:
     parser.add_argument("--output-html", type=Path, help="書き出し先HTML")
     parser.add_argument("--output-data", type=Path, help="書き出し先のアリーナJS")
     parser.add_argument("--check", action="store_true", help="書き換えずに差分の有無だけ返す")
+    parser.add_argument("--public-counts-only", action="store_true", help="公開JSONから集計表示だけを更新する")
     args = parser.parse_args()
+
+    if args.public_counts_only:
+        if args.check or args.input or args.html_template or args.output_data:
+            parser.error("--public-counts-only は --output-html だけを指定してください")
+        destination = args.output_html or ROOT / PAGE
+        destination.write_text(apply_public_counts(destination.read_text(encoding="utf-8")), encoding="utf-8")
+        print(f"updated public JSON aggregates in {destination}")
+        return 0
 
     template = args.html_template or ROOT / PAGE
     output_html = args.output_html or ROOT / PAGE

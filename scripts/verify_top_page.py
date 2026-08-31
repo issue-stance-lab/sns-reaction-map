@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import re
+import argparse
 from datetime import date
 from pathlib import Path
 
@@ -174,6 +175,7 @@ def verify_top_page(
     index_path: Path = INDEX_HTML,
     *,
     today: date | None = None,
+    fail_on_collect_deadline: bool = True,
 ) -> tuple[list[str], int]:
     """検証結果の行とNG件数を返す。tests/ からも呼び出せる。"""
     themes = parse_themes_yaml(themes_path)
@@ -375,8 +377,10 @@ def verify_top_page(
             f"{theme}（{collect_at.isoformat()}）"
             for theme, collect_at in overdue_collect.items()
         )
-        lines.append(f"NG  collect_at 期限超過: {detail}")
-        failures += 1
+        prefix = "NG" if fail_on_collect_deadline else "WARN"
+        lines.append(f"{prefix}  collect_at 期限超過: {detail}")
+        if fail_on_collect_deadline:
+            failures += 1
     else:
         lines.append("OK  collect_at 期限超過 0件")
     if missing_collect:
@@ -522,8 +526,15 @@ def verify_top_page(
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--allow-overdue-collect",
+        action="store_true",
+        help="収集予定日超過を運用警告として表示し、公開物の整合検査は続行する",
+    )
+    args = parser.parse_args()
     try:
-        lines, failures = verify_top_page()
+        lines, failures = verify_top_page(fail_on_collect_deadline=not args.allow_overdue_collect)
     except (OSError, PortalStatsError) as exc:
         print(f"ERROR: {exc}")
         return 1

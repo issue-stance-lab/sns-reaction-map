@@ -144,6 +144,20 @@ def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> N
     )
 
 
+def finalize(root: Path, current_date: str) -> None:
+    """候補公開JSONから、ページの管理対象集計を貼り直す。"""
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_constitutional_arena.py"),
+            "--public-counts-only",
+            "--output-html", str(root / PAGE),
+        ],
+        cwd=root,
+        check=True,
+    )
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"

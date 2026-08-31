@@ -43,6 +43,7 @@ ROOT = Path(__file__).resolve().parent.parent
 THEME = "constitutional-amendment"
 PAGE = ROOT / "docs" / "constitutional-amendment-reaction-map.html"
 CONFIG = ROOT / "configs" / "constitutional-amendment-reaction-map.json"
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 
 # 先頭6件は投票 choiceIdx と論点カードの順序なので固定する。「その他」は投票対象に
 # 加えないが、正典の main_issue を改変せずマップと詳細集計へ含める。
@@ -225,10 +226,9 @@ def build_issue_section(rows: list[dict[str, Any]]) -> str:
     )
 
 
-def build_insights(rows: list[dict[str, Any]], collected: int) -> str:
-    issues = Counter(str(classification(r)["main_issue"]) for r in rows)
-    stances = Counter(str(classification(r)["stance"]) for r in rows)
-    total = len(rows)
+def build_insights_from_counts(
+    issues: Counter[str], stances: Counter[str], total: int, collected: int
+) -> str:
     top_issue, top_issue_count = issues.most_common(1)[0]
     top_stance, top_stance_count = stances.most_common(1)[0]
     opinion_pct = round(total / collected * 100)
@@ -259,6 +259,12 @@ def build_insights(rows: list[dict[str, Any]], collected: int) -> str:
     </section>'''
 
 
+def build_insights(rows: list[dict[str, Any]], collected: int) -> str:
+    issues = Counter(str(classification(r)["main_issue"]) for r in rows)
+    stances = Counter(str(classification(r)["stance"]) for r in rows)
+    return build_insights_from_counts(issues, stances, len(rows), collected)
+
+
 def build_details(rows: list[dict[str, Any]]) -> str:
     issues = Counter(str(classification(r)["main_issue"]) for r in rows)
     stances = Counter(str(classification(r)["stance"]) for r in rows)
@@ -287,6 +293,101 @@ def build_details(rows: list[dict[str, Any]]) -> str:
         f'<details><summary>件数の出所</summary><p>ページ上の件数はすべて正典の意見{total}件から'
         ' scripts/build_constitutional_arena.py が生成しています。</p></details></section>'
     )
+
+
+def _public_counts(data: dict[str, Any]) -> tuple[int, int, Counter[str], Counter[str], Counter[str]]:
+    """公開JSONの論点・立場・強度集計をページ生成用に検査して読み込む。"""
+    if data.get("theme_id") != THEME:
+        raise IssueCountError(f"憲法改正の公開JSONではありません: {data.get('theme_id')}")
+    items = {str(item["label"]): item for item in data.get("issues", [])}
+    issue_order = [name for name, _desc in ISSUES]
+    if set(items) != set(issue_order):
+        raise IssueCountError("公開JSONの論点がページ定義と一致しません: " + ", ".join(sorted(items)))
+    issues: Counter[str] = Counter()
+    stances: Counter[str] = Counter()
+    intensities: Counter[str] = Counter()
+    for name in issue_order:
+        item = items[name]
+        count = int(item["count"])
+        issues[name] = count
+        by_stance = {str(value["label"]): int(value["count"]) for value in item.get("stances", [])}
+        if set(by_stance) != set(STANCES) or sum(by_stance.values()) != count:
+            raise IssueCountError(f"公開JSONの立場集計が一致しません: {name}")
+        stances.update(by_stance)
+        by_intensity = {str(value["id"]): int(value["count"]) for value in item.get("intensities", [])}
+        if set(by_intensity) != set(INTENSITY) or sum(by_intensity.values()) != count:
+            raise IssueCountError(f"公開JSONの強度集計が一致しません: {name}")
+        intensities.update(by_intensity)
+    collected = int(data["collected_count"])
+    opinions = int(data["opinion_count"])
+    if sum(issues.values()) != opinions or sum(stances.values()) != opinions or sum(intensities.values()) != opinions:
+        raise IssueCountError("公開JSONの意見数と集計値が一致しません")
+    return collected, opinions, issues, stances, intensities
+
+
+def build_details_from_counts(
+    issues: Counter[str], stances: Counter[str], intensities: Counter[str], total: int
+) -> str:
+    def table(counter: Counter[str], order: list[str]) -> str:
+        body = "".join(
+            f"<tr><th>{html.escape(label)}</th><td>{counter[label]}</td></tr>" for label in order
+        )
+        return (
+            f'<div class="table-wrap"><table><tbody>{body}'
+            f'<tr><th style="font-weight:900">合計</th><td style="font-weight:900">{total}</td>'
+            "</tr></tbody></table></div>"
+        )
+    return (
+        '<section class="panel details-panel" id="detail-data">'
+        '<div class="panel-title"><h2>詳細データ</h2><span>必要な人向けに折りたたみ</span></div>'
+        f'<details open><summary>論点別件数（main_issue）</summary>{table(issues, [name for name, _ in ISSUES])}</details>'
+        f'<details><summary>改正への態度（stance）</summary>{table(stances, list(STANCES))}</details>'
+        f'<details><summary>感情の強さ（intensity）</summary>{table(intensities, ["high", "medium", "low"])}</details>'
+        f'<details><summary>件数の出所</summary><p>ページ上の件数はすべて正典の意見{total}件から'
+        ' scripts/build_constitutional_arena.py が生成しています。</p></details></section>'
+    )
+
+
+def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """候補公開JSONを正典に、ページ上の集計表示を貼り直す。"""
+    collected, total, issues, stances, intensities = _public_counts(
+        json.loads(public_theme.read_text(encoding="utf-8"))
+    )
+    lead = (
+        f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'
+        f'意見と判定した{total}件を分析対象としています。AIが主要6論点とその他に整理しました。'
+        '世論調査ではなく、SNS反応サンプルの論点比較です。</p>'
+    )
+    page = replace_once(page, r'<p class="lead">.*?</p>', lead, "ヒーローの母数表記", flags=re.S)
+    page = replace_once(
+        page, r'<span class="conclusion-count"><b>\d+</b>件</span>',
+        f'<span class="conclusion-count"><b>{issues["改憲全般"]}</b>件</span>', "議論の中心",
+    )
+    page = replace_once(
+        page,
+        r'Yahooリアルタイム検索で取得した公開投稿 \d+件のうち、\s*意見と判定した\d+件を分析対象としています。',
+        f'Yahooリアルタイム検索で取得した公開投稿 {collected}件のうち、意見と判定した{total}件を分析対象としています。',
+        "調査条件の件数", flags=re.S,
+    )
+    page = replace_once(
+        page, r'<section class="stats insight-stats".*?</section>',
+        build_insights_from_counts(issues, stances, total, collected), "注目ポイント", flags=re.S,
+    )
+    page = replace_once(
+        page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>.*?</span></div>',
+        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=main_issue / '
+        '中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し",
+    )
+    page = replace_once(
+        page, r'<section class="panel details-panel" id="detail-data">.*?</section>',
+        build_details_from_counts(issues, stances, intensities, total), "詳細データ", flags=re.S,
+    )
+    page = replace_once(
+        page, r'主要6論点のほか「その他」\d+件も、マップと詳細集計には含めています。',
+        f'主要6論点のほか「その他」{issues["その他"]}件も、マップと詳細集計には含めています。',
+        "その他の件数", flags=re.S,
+    )
+    return page
 
 
 def replace_once(source: str, pattern: str, replacement: str, label: str, *, flags: int = 0) -> str:
@@ -466,11 +567,23 @@ def build(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
+    parser.add_argument("--public-counts-only", action="store_true", help="公開JSONからページの集計表示を貼り直す")
     parser.add_argument("--input", type=Path, help="正典の代わりに読む累積候補（adapter用）")
     parser.add_argument("--html-template", type=Path, help="読み込むHTML（既定は公開ページ）")
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     args = parser.parse_args()
     candidate_args = (args.input, args.html_template, args.output_html)
+    if args.public_counts_only:
+        if args.check or args.input or args.html_template:
+            parser.error("--public-counts-onlyは--output-html以外と併用できません")
+        target = args.output_html or PAGE
+        try:
+            target.write_text(apply_public_counts(target.read_text(encoding="utf-8")), encoding="utf-8")
+        except (IssueCountError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        print(f"updated public JSON counts in {target}")
+        return 0
     if args.check and any(candidate_args):
         parser.error("--checkは公開ページと正典の一致確認専用です")
     if any(candidate_args) and not all(candidate_args):

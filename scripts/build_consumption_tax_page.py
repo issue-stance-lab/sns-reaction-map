@@ -39,6 +39,7 @@ TEMPLATE = PAGE
 OUTPUT = PAGE
 DATA = ROOT / "social-samples" / "consumption-tax-cut_arena_data.json"
 CANONICAL = ROOT / "social-samples" / "consumption-tax-cut_hermes_arena_classified.json"
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / "consumption-tax-cut.json"
 TOPIC_CONFIG = ROOT / "configs" / "topics" / "consumption-tax-cut.yaml"
 
 PAGE_URL = "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
@@ -970,10 +971,14 @@ def build(
     )
 
     # --- 8. アリーナ見出し・凡例 ---------------------------------------
-    html = html.replace(
-        '<span>意見227件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span>',
+    html, map_heading_count = re.subn(
+        r'<span>意見[\d,]+件 \| セクター=論点 / 中心に近いほど冷静 / 色=(?:賛否|立場) \| ホバーで詳細・クリックでXへ</span>',
         f'<span>意見{opinions}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span>',
+        html,
+        count=1,
     )
+    if map_heading_count != 1:
+        raise ValueError(f"反応マップ見出しの置換が{map_heading_count}件です")
     html = html.replace(
         '中心の「副首都法案」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=肯定的 / 赤=否定的 / 灰=中立）。点をクリックすると元のXポストを開きます。',
         '中心の「消費税減税」を7つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色は立場（緑=減税推進 / 橙=条件付き賛成 / 赤=反対・慎重 / 灰=中立）。点をクリックすると元のXポストを開きます。',
@@ -1382,6 +1387,52 @@ def _sync_issue_counts() -> None:
     )
 
 
+def apply_public_counts(html: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """公開JSONを正典として、ページ上部の管理対象数字を貼り直す。
+
+    更新候補の生成時は、先に `build_public_registry.py` が候補JSONを作る。
+    ここでは投稿本文を読まず、承認対象になる公開JSONだけから収集数・意見数・
+    最大論点数を反映する。論点カードは直後の sync_issue_counts.py が同じJSONから同期する。
+    """
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    if data.get("theme_id") != "consumption-tax-cut":
+        raise ValueError(f"消費税減税の公開JSONではありません: {public_theme}")
+    collected = int(data["collected_count"])
+    opinions = int(data["opinion_count"])
+    named = [issue for issue in data["issues"] if issue["kind"] == "named"]
+    if not named:
+        raise ValueError("消費税減税の公開JSONに主要論点がありません")
+    top_issue = max(named, key=lambda issue: int(issue["count"]))
+
+    replacements = (
+        (
+            r'<p class="lead">収集したSNS投稿[\d,]+件のうち、分析対象となった意見[\d,]+件をAIが6つの論点に整理しました。',
+            f'<p class="lead">収集したSNS投稿{collected}件のうち、分析対象となった意見{opinions}件をAIが6つの論点に整理しました。',
+            "ヒーローの収集数・意見数",
+        ),
+        (
+            r'(<div class="thirty-summary".*?<span class="conclusion-count"><b>)[\d,]+(</b>件</span>)',
+            rf'\g<1>{int(top_issue["count"])}\2',
+            "議論の中心の件数",
+        ),
+        (
+            r'(<div class="panel-title"><h2>SNS反応マップ</h2><span>意見)[\d,]+(件 \|)',
+            rf'\g<1>{opinions}\2',
+            "反応マップの意見数",
+        ),
+        (
+            r'(重複を除いた)[\d,]+(件を分類し、意見と判定した)[\d,]+(件を論点分析に使用しています。)',
+            rf'\g<1>{collected:,}\g<2>{opinions:,}\g<3>',
+            "作り方欄の収集数・意見数",
+        ),
+    )
+    for pattern, replacement, label in replacements:
+        html, count = re.subn(pattern, replacement, html, count=1, flags=re.S)
+        if count != 1:
+            raise ValueError(f"公開JSON件数の置換が{count}件です: {label}")
+    return html
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=None, help="分類済みJSON（既定: 累積正典）")
@@ -1397,6 +1448,11 @@ def main() -> int:
         "--conditions-only",
         action="store_true",
         help="調査条件（取得元・期間・件数）だけを公開ページに貼り直す（昇格後に使う）",
+    )
+    parser.add_argument(
+        "--public-counts-only",
+        action="store_true",
+        help="公開JSONから収集数・意見数・最大論点数だけを貼り直す",
     )
     parser.add_argument(
         "--claim-audit-only",
@@ -1431,6 +1487,12 @@ def main() -> int:
         page = args.output_html
         page.write_text(research_conditions(page.read_text(encoding="utf-8")), encoding="utf-8")
         print(f"updated research conditions in {page}")
+        return 0
+
+    if args.public_counts_only:
+        page = args.output_html
+        page.write_text(apply_public_counts(page.read_text(encoding="utf-8")), encoding="utf-8")
+        print(f"updated public JSON counts in {page}")
         return 0
 
     build(

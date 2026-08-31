@@ -44,7 +44,7 @@ class AiCopyrightTaxonomyTest(unittest.TestCase):
         config = json.loads((ROOT / "configs" / "ai-copyright-reaction-map.json").read_text(encoding="utf-8"))
         labels = {label for card in config["issue_counts"]["cards"] for label in card["main_issue"]}
         self.assertTrue(labels <= set(tx.ISSUE_ORDER), f"taxonomy 外のカード: {sorted(labels - set(tx.ISSUE_ORDER))}")
-        self.assertEqual(config["issue_counts"]["basis"], "opinion")
+        self.assertEqual(config["issue_counts"]["basis"], "public_json")
 
     def test_page_has_no_labels_outside_taxonomy(self):
         """旧分類器の5論点が潮目ウィジェットなどに残っていないこと。"""

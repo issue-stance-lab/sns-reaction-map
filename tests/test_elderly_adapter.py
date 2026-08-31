@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.build_elderly_arena import classification
+from scripts.build_elderly_arena import apply_public_counts, classification
 from scripts.refresh_adapters import elderly
 from scripts.refresh_topic import identity
 
@@ -106,6 +106,13 @@ class ElderlyAdapterTests(unittest.TestCase):
             text=True,
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_public_counts_replace_page_aggregates(self):
+        public = ROOT / "data/public/themes/elderly-license-revocation.json"
+        page = apply_public_counts(PAGE.read_text(encoding="utf-8"), public)
+        data = json.loads(public.read_text(encoding="utf-8"))
+        self.assertIn(f'>{data["opinion_count"]}件 | セクター=論点', page)
+        self.assertIn(f'公開投稿{data["collected_count"]}件', page)
 
 
 if __name__ == "__main__":

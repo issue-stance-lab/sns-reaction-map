@@ -6,6 +6,8 @@
 どれも気づけなかった（件数の網羅検査はトップページにしか掛かっていない）。
 """
 
+import json
+import re
 import subprocess
 import sys
 import unittest
@@ -19,6 +21,82 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class IssueCountSyncTest(unittest.TestCase):
+    def test_koshitsu_map_heading_matches_public_json(self) -> None:
+        public = json.loads((ROOT / "data/public/themes/koshitsu-tenpakai.json").read_text(encoding="utf-8"))
+        page = (ROOT / "docs/koshitsu-tenpakai-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_fukushuto_map_heading_matches_public_json(self) -> None:
+        public = json.loads((ROOT / "data/public/themes/fukushuto.json").read_text(encoding="utf-8"))
+        page = (ROOT / "docs/fukushuto-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_henoko_map_heading_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/henoko-student-accident.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/henoko-student-accident-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_elderly_map_heading_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/elderly-license-revocation.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/elderly-license-revocation-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_constitutional_map_heading_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/constitutional-amendment.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/constitutional-amendment-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_ai_copyright_arena_total_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/ai-copyright.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/ai-copyright-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'data-arena-total="([\d,]+)"', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_bike_map_heading_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/bike-blue-ticket.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_consumption_map_heading_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/consumption-tax-cut.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/consumption-tax-cut-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_public_pages_do_not_claim_eleven_published_themes(self) -> None:
+        offenders = [
+            path.name
+            for path in (ROOT / "docs").glob("*.html")
+            if "公開中の11テーマ" in path.read_text(encoding="utf-8")
+        ]
+        self.assertEqual([], offenders)
+
     def test_published_pages_have_no_stale_issue_counts(self) -> None:
         result = subprocess.run(
             [sys.executable, "scripts/sync_issue_counts.py", "--check"],
