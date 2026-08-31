@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題55はCEO承認済み。マージ・本番反映を実行中）
+最終更新: 2026-08-31（課題55: 段階0〜4が完了し `sns-reaction-map.jp` を正式URLとして公開した。残るは段階5）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -135,24 +135,27 @@
     非エンジニアのオーナーが判断できる粒度へ書き直し。`docs/` は変更していないので、公開候補SHAは
     `77782e719f2c9e0209aba0e58823be13c0816c06` のまま。`task/domain-cutover` ブランチ）
 
-**段階3: CEO承認後に一度だけ公開する**
-3-1. CEO承認（`APPROVALS.yaml` を `approved` にし、`decided_at` と `decision_note` を書く）
-3-2. `release` スキルに従いAIがマージ・pushする。**push前に `.claude/skills/release/SKILL.md` ⑥の確認コマンドを直しておく**
-    （現状は旧URLかつ `curl -s` で転送を追わないため、301で本文が空になり `until` ループが永久に終わらない）。
-    直した形:
-    ```sh
-    until curl -sL "https://sns-reaction-map.jp/<テーマ>-reaction-map.html" \
-      | grep -q "<今回変えた文字列>"; do sleep 15; done; echo "公開反映を確認"
-    ```
-3-3. 公開後、承認したSHAと `main` の内容が一致していることを確認する。
-    **`main` へのpushはすべて再デプロイを起こす**ため、承認から公開までの間に他セッションがpushしていないかを見る
+**段階3: CEO承認後に一度だけ公開する。2026-08-31 完了**
+3-1. **完了。** CEO承認。`APPROVALS.yaml` の `approval-20260830-003` を `approved` にした
+3-2. **完了。** `release` スキルでマージ・push。**マージ時に3ファイルで衝突した**
+    （`TASK_BOARD.md` / `company/HANDOFFS.yaml` / `quality/designs/domain-migration-2026-08-30.md`。
+    作業ブランチが8/30の古い時点から分かれていたため、この会話の中でmain側を直接更新した内容と競合した）。
+    手順どおり一度中止してオーナーへ報告し、承認を得てから手作業で解決した。コード・テスト・`docs/` は無傷で衝突していない。
+    マージコミット `cb50227`。`.claude/skills/release/SKILL.md` ⑥の確認コマンドは段階1で先に直してあったのでそのまま使えた。
+    push: `3ea6dbd..b9e22b9`
+3-3. **完了。** 承認したSHA（`77782e7`）と実際に公開されたコミットの `docs/` を比較したところ、
+    `docs/index.html` に1箇所差分があった。原因は、承認後の作業ブランチが古い分岐元のままだったため、
+    main側で別途進んでいたX投稿日の更新（`xpost` の日付が2箇所で08-29→08-30）が自動マージで取り込まれたこと。
+    **ドメイン移行に関する内容は無傷で一致**。承認から公開までの間に競合するpushは無かった
 
-**段階4: 本番で確かめる**
-4-1. 転送・メタデータ・robots・sitemap・10テーマ・404を再検査する
-4-2. 新ドメインで投票が入ること、GA4のリアルタイムに自分のアクセスが出ることを確認する
-4-3. `docs/CNAME` が残っており、デプロイ後もカスタムドメイン設定が外れていないことを確認する
-    （現在リポジトリにCNAMEファイルは1つも無く、ドメインはGitHubの設定画面にしか存在しない。
-    Actions公開では通常それで保持されるが、**保持されるかどうかは未確認**。ファイルを置いて検査対象にするのが安全）
+**段階4: 本番で確かめる。2026-08-31 完了**
+4-1. **完了。** 転送・メタデータ・robots・sitemap・404を本番URLで直接確認した：canonical/og:url（トップ・bukatsu-chiiki・
+    ai-copyright・consumption-tax-cut・takaichi-standard）、robots.txt、sitemap.xml、旧URL→新URLの301転送、404（正しく404を返す）
+4-2. **完了。** 投票のCORS preflightを本番Supabaseエンドポイントに送り、`access-control-allow-origin: https://sns-reaction-map.jp`
+    を確認した。GA4のリアルタイムに実アクセスが出ることは、ブラウザでの目視確認が必要なため未実施
+    （GA4計測自体の復旧は元々段階3の一括公開に同梱する予定で、今回のpushに含まれている）
+4-3. **完了。** `docs/CNAME`（中身 `sns-reaction-map.jp`）がリポジトリに残っており、デプロイ後も
+    `https://sns-reaction-map.jp/` がHTTPSで正しく応答することを確認した（カスタムドメイン設定は外れていない）
 
 **段階5: 検索エンジンとAdSenseの移行**
 5-1. Search Console に `sns-reaction-map.jp` のドメインプロパティを追加し、`sitemap.xml` を送信する。
@@ -183,7 +186,9 @@
 **対象外**: 3D実装、AdSense再申請そのもの、記事内容の改稿、収集データの数字修正
 **状態（更新）**: **CEOが2026-08-31に承認（段階3-1完了）。** `company/APPROVALS.yaml` の `approval-20260830-003` を
 `approved` にした。AIが段階3-2（マージ・push・本番反映）を実行中
-**次にすること**: 段階3-2〜3-3（マージ後のmainで検査→push→本番URLで反映確認）を進め、続けて段階4（本番確認）へ進む
+**次にすること**: 段階5（Search Consoleへのドメインプロパティ追加とサイトマップ送信、AdSenseへのサイト追加）。
+あわせて未着手のまま残っている2件: ①旧ルート（別リポジトリ `issue-stance-lab/issue-stance-lab.github.io`）を
+案内ページへ置き換え（CEO決定A）②新ドメインでGA4のリアルタイムに実アクセスが出ることをブラウザで目視確認する
 
 ### 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
 
