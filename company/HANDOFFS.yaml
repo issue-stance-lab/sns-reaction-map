@@ -50,8 +50,8 @@ items:
   - id: public-data-foundation
     department: engineering-data
     status: in_progress
-    current_state: "課題57の段階1を2026-08-31に完了。専用worktree task/public-data-foundationで非公開正典を復元済み、published: doneの公開10テーマはsample_file欠落0件。数値表示1,306か所を抽出し、既存の出所検査で不明0件を確認した。data/verificationは検査専用とし、新しい公開正典にはしない。詳細はquality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md。"
-    next_action: "段階2の仕様案（schemas/public-theme.schema.json、schemas/public-catalog.schema.json、quality/reviews/2026-08-31-public-data-foundation-stage2-proposal.md）を独立レビューとCEO確認に出す。承認後にだけ、10テーマ設定へ安定IDを追加し、部活動で公開データ生成・完全照合を実装する。"
+    current_state: "課題57の段階2はCEO確認済み（approval-20260831-001）。公開テーマJSON・catalogのSchema、読者向け用語、不変条件を定義し、10テーマの論点・立場と固定IDの対応をconfigs/public-data-taxonomy.jsonへ追加した。公開ページは変更していない。独立レビューが残る。"
+    next_action: "段階2の独立レビューで、Schema、固定ID、公開禁止情報、不変条件、既存投票との非干渉を確認する。重大指摘が0件なら、段階3として部活動の公開JSON生成・完全照合を実装する。"
     due_at: null
     canonical_sources: ["TASK_BOARD.md", "quality/designs/public-data-foundation-rebuild.md", "THEMES.yaml", "DATA_REFRESH.md"]
     ceo_approval: "公開データ契約の重要方針を段階2で確認する。一般公開は15-Cで別途承認が必要"
