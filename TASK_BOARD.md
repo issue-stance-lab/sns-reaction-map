@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題57 段階4着手。トップページを公開データcatalogに接続。残る10テーマページが本体）
+最終更新: 2026-08-31（課題57 段階4。トップページと部活動の論点カードを公開データへ接続。次はあだ名禁止）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -193,7 +193,8 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 
 ### 課題57: 公開データ基盤と公開承認物の一本化（旧15-A・課題54の前提）
 
-**状態**: 段階4着手中（2026-08-31）。トップページ（収集数・意見数・主要論点数）は完了。残る10テーマページ個別分が最大の残作業
+**状態**: 段階4着手中（2026-08-31）。トップページ完了。テーマページは着手順
+部活動→あだ名禁止→消費税減税→残り7テーマの1本目（部活動、論点カード件数）まで完了
 **優先度**: **最優先の基盤作業**。課題54の3D実装より先に完了する
 **正典**: `quality/designs/public-data-foundation-rebuild.md`
 **対象**: 公開中の10テーマ。高市テーマは非公開保全し、公開合計・トップ・sitemapへ含めない
@@ -234,9 +235,20 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 新しい公開正典にせず、トップ・テーマ・sitemapを公開JSON／catalogへ接続する方針を確定した。
 記録: `quality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md`。公開物は変更していない。
 
-**次にすること**: 段階4の残り（10テーマページそれぞれの見出し・論点カード・説明文中の数字を
-公開JSON参照へ移す。自転車の旧201件・消費税の旧612件など既知の古い数字はこの作業の中で解消する）。
-テーマごとに別々の生成スクリプトがあり、1テーマずつ確認しながら進める
+**次にすること**: 段階4の2本目、school-nickname-ban（あだ名禁止）に進む。着手順の理由は
+`quality/reviews/2026-08-31-public-data-foundation-stage4-bukatsu.md` 6節を参照
+
+**段階4：部活動の論点カード接続（2026-08-31）**: `configs/bukatsu-chiiki-reaction-map.json` の
+`issue_counts.basis` を `public_json` に変更し、`scripts/issue_card_counts.py` に
+`count_by_issue_from_public_json()` を追加。論点カード6枚とリード文の件数が
+`data/public/themes/bukatsu-chiiki.json` から出るようになった（表示数字は接続前後でバイト一致、
+`sync_issue_counts.py --check` で確認）。`verify_theme_page.py` の2箇所
+（`verify_issue_count_source` / `verify_denominators`）を `basis: public_json` に対応させ、
+bukatsu-chiikiで全項目OK、他9テーマもNG 0件を確認。番号→固定IDの対応表（`public-data-taxonomy.json`
+の論点順とページ内の論点番号は**並びが違う**ことが判明）と、ビルダーのどの関数が要らなくなったかの
+棚卸しを `quality/reviews/2026-08-31-public-data-foundation-stage4-bukatsu.md` に記録。
+アリーナのセクター件数（`update_bukatsu_tide.py` が担当）と自転車・消費税の古い数字は未接続。
+既存unittest 327件中326件成功（唯一の失敗は本作業と無関係な既存の遅れ）。
 
 **段階4：トップページ接続（2026-08-31）**: `sync_portal_stats.py` を拡張し、`data/public/catalog.json`
 （課題57の公開データ）を正典として読むようにした。トップの「収集した投稿」（旧称「分類済み投稿」）に

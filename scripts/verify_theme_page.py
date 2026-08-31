@@ -19,6 +19,7 @@ try:
         IssueCountError,
         card_counts,
         count_by_issue,
+        count_by_issue_from_public_json,
         load_records,
         span_id,
     )
@@ -30,6 +31,7 @@ except ImportError:  # python3 scripts/verify_theme_page.py
         IssueCountError,
         card_counts,
         count_by_issue,
+        count_by_issue_from_public_json,
         load_records,
         span_id,
     )
@@ -175,8 +177,10 @@ def verify_denominators(
     if not isinstance(block, dict):
         return [f"NG  {theme}: configs に issue_counts がありません"], 1
     basis = str(block.get("basis") or "all")
-    if basis not in ("all", "opinion"):
-        return [f"NG  {theme}: issue_counts.basis が all / opinion ではありません: {basis}"], 1
+    if basis not in ("all", "opinion", "public_json"):
+        return [f"NG  {theme}: issue_counts.basis が all / opinion / public_json ではありません: {basis}"], 1
+    # public_json（課題57）も意見(is_opinion)基準。件数の出所が公開データJSONへ変わるだけで
+    # 母数の定義そのものは opinion と同じ。
     selected = rows if basis == "all" else [row for row in rows if _field(row, "is_opinion") is True]
     base = len(selected)
     issue_total = sum(1 for row in selected if _filled(_field(row, "main_issue")))
@@ -274,8 +278,11 @@ def verify_issue_count_source(
     if not sample_file:
         return [f"NG  {theme}: THEMES.yaml に sample_file がありません"], 1
 
-    source = str(block.get("source") or sample_file)
     basis = str(block.get("basis") or "all")
+    if basis == "public_json":
+        return _verify_issue_count_source_public_json(theme, block, sample_file)
+
+    source = str(block.get("source") or sample_file)
 
     if "synthetic" in source or "synthetic" in sample_file:
         lines.append(f"NG  合成データを件数の出所にしていない: {source} / {sample_file}")
@@ -342,6 +349,63 @@ def verify_issue_count_source(
     else:
         lines.append(
             f"NG  全カードの main_issue が sample_file に実在する: "
+            f"{', '.join(unknown)}（実在: {', '.join(sorted(canon_labels))}）"
+        )
+        failures += 1
+
+    return lines, failures
+
+
+def _verify_issue_count_source_public_json(
+    theme: str, block: dict[str, Any], verification_file: str
+) -> tuple[list[str], int]:
+    """課題57: 件数の出所が公開データJSONのテーマの整合を、非公開正典なしで検査する。
+
+    verification_file（仮名化検証データ）から数え直した論点別意見数と、公開データJSONの
+    件数を突き合わせる。この検査は非公開正典が無くても実行できる。非公開正典との完全な
+    バイト単位の照合は `scripts/verify_public_registry.py --against-private` が別に行う。
+    """
+    lines: list[str] = []
+    failures = 0
+    public_path = ROOT / "data" / "public" / "themes" / f"{theme}.json"
+    if not public_path.is_file():
+        return [
+            f"NG  {theme}: 公開データJSONがありません: {public_path}"
+            f"（scripts/build_public_registry.py --topic {theme} を先に実行する）"
+        ], 1
+
+    verification_counts = count_by_issue(load_records(verification_file), "opinion")
+    public_counts = count_by_issue_from_public_json(theme)
+
+    if verification_counts == public_counts:
+        lines.append(
+            f"OK  公開データJSONの論点別件数が仮名化検証データと一致する（{len(public_counts)}論点）"
+        )
+    else:
+        mismatches = {
+            label: (verification_counts.get(label), public_counts.get(label))
+            for label in set(verification_counts) | set(public_counts)
+            if verification_counts.get(label) != public_counts.get(label)
+        }
+        lines.append(
+            "NG  公開データJSONの論点別件数が仮名化検証データと一致する: "
+            + ", ".join(f"{label}=検証{v}/公開{p}" for label, (v, p) in mismatches.items())
+        )
+        failures += 1
+
+    canon_labels = set(public_counts)
+    unknown = [
+        str(issue)
+        for card in block.get("cards") or []
+        if isinstance(card, dict)
+        for issue in (card.get("main_issue") or [])
+        if str(issue) not in canon_labels
+    ]
+    if not unknown:
+        lines.append(f"OK  全カードの main_issue が公開データJSONに実在する（{len(canon_labels)}ラベル）")
+    else:
+        lines.append(
+            f"NG  全カードの main_issue が公開データJSONに実在する: "
             f"{', '.join(unknown)}（実在: {', '.join(sorted(canon_labels))}）"
         )
         failures += 1

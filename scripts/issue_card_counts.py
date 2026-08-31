@@ -5,11 +5,15 @@
 
     "issue_counts": {
       "source": "social-samples/foo.json",   # 省略時は THEMES.yaml の sample_file
-      "basis": "all" | "opinion",            # 省略時は all
+      "basis": "all" | "opinion" | "public_json",  # 省略時は all
       "cards": [
         {"slug": "gakushu", "title": "学習データ・無断利用 — ...", "main_issue": ["学習データ・無断利用"]}
       ]
     }
+
+`basis: "public_json"`（課題57）は `source` を無視し、`data/public/themes/{theme}.json`
+（`scripts/build_public_registry.py` の生成物）の論点別意見数をそのまま使う。
+正典（social-samples）は再計算しない。
 
 `title` は docs/*.html の `<p class="explainer-card-title">` と完全一致させる。
 `main_issue` は分類結果側のラベル（複数指定でカードへ合算できる）。
@@ -52,6 +56,22 @@ def load_records(source: str) -> list[dict[str, Any]]:
     return [record for record in records if isinstance(record, dict)]
 
 
+def count_by_issue_from_public_json(theme: str) -> dict[str, int]:
+    """課題57: 公開データJSON（data/public/themes/{theme}.json）の論点別意見数を読む。
+
+    正典（social-samples）を再計算しない。ここで数える意見はcatalog生成時の
+    is_relevant/is_opinionと同じ定義（scripts/public_registry_common.py）に固定される。
+    """
+    path = ROOT / "data" / "public" / "themes" / f"{theme}.json"
+    if not path.is_file():
+        raise IssueCountError(
+            f"{theme}: 公開データJSONがありません: {path}"
+            f"（scripts/build_public_registry.py --topic {theme} を先に実行する）"
+        )
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {str(issue["label"]): int(issue["count"]) for issue in data["issues"]}
+
+
 def count_by_issue(records: list[dict[str, Any]], basis: str) -> dict[str, int]:
     if basis not in ("all", "opinion"):
         raise IssueCountError(f"basis は all / opinion のいずれかです: {basis}")
@@ -80,11 +100,14 @@ def card_counts(theme: str, config: dict[str, Any], sample_file: str | None) -> 
     if not isinstance(cards, list) or not cards:
         raise IssueCountError(f"{theme}: issue_counts.cards が空です")
 
-    source = str(block.get("source") or sample_file or "")
-    if not source:
-        raise IssueCountError(f"{theme}: 件数の出所（source / sample_file）が決まりません")
-
-    counts = count_by_issue(load_records(source), str(block.get("basis") or "all"))
+    basis = str(block.get("basis") or "all")
+    if basis == "public_json":
+        counts = count_by_issue_from_public_json(theme)
+    else:
+        source = str(block.get("source") or sample_file or "")
+        if not source:
+            raise IssueCountError(f"{theme}: 件数の出所（source / sample_file）が決まりません")
+        counts = count_by_issue(load_records(source), basis)
 
     resolved = []
     for card in cards:
@@ -132,8 +155,12 @@ def other_count(theme: str, config: dict[str, Any], sample_file: str | None) -> 
     block = config.get("issue_counts")
     if not isinstance(block, dict):
         raise IssueCountError(f"{theme}: configs に issue_counts がありません")
-    source = str(block.get("source") or sample_file or "")
-    counts = count_by_issue(load_records(source), str(block.get("basis") or "all"))
+    basis = str(block.get("basis") or "all")
+    if basis == "public_json":
+        counts = count_by_issue_from_public_json(theme)
+    else:
+        source = str(block.get("source") or sample_file or "")
+        counts = count_by_issue(load_records(source), basis)
     carded = {
         str(issue)
         for card in block.get("cards", [])
