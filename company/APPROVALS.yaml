@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-30"
+updated_at: "2026-08-31"
 
 rules:
   required_for:
@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260831-001
+    department: engineering-data
+    action: important_policy_change
+    summary: "課題57の公開データ契約を採用し、サイトの数字を公開JSONとcatalogから再生成する"
+    reason: "トップ、テーマページ、サイトマップに同じ数字・用語・更新日を使わせ、更新時の食い違いを防ぐため"
+    risks:
+      - "生成器の実装中は公開候補の表示が変わる可能性があるが、一般公開は別承認まで行わない"
+      - "論点や立場の表示名を変えても意味が変わらないよう、固定IDの対応を追加して検査する必要がある"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md
+      - quality/reviews/2026-08-31-public-data-foundation-stage2-proposal.md
+      - schemas/public-theme.schema.json
+      - schemas/public-catalog.schema.json
+    status: approved
+    requested_at: "2026-08-31"
+    decided_at: "2026-08-31"
+    decision_note: "CEOが本対話で、分かりやすい説明を確認した上で『承認』と回答。公開ページの変更・一般公開・AdSense再申請は含まない。"
   - id: approval-20260830-002
     department: executive
     action: important_policy_change

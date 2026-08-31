@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sns-reaction-map.jp/schemas/public-theme.schema.json",
+  "title": "SNS反応まっぷ 公開テーマデータ",
+  "description": "投稿本文・投稿ID・個別ハッシュ・利用者情報・AI信頼度・内部理由を含めない、公開用の集計データ。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "theme_id", "title", "question", "page_path", "data_version", "source_sha256", "updated_on", "collection_period", "collected_count", "opinion_count", "issue_assigned_count", "issues"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "theme_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "title": {"type": "string", "minLength": 1},
+    "question": {"type": "string", "minLength": 1},
+    "page_path": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-reaction-map\\.html$"},
+    "data_version": {"type": "string", "minLength": 1, "description": "正規化した非公開正典のハッシュから決定的に作る版。生成時刻を含めない。"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$", "description": "正規化した非公開正典全体のSHA-256。公開テーマJSON自身のハッシュではない。"},
+    "updated_on": {"type": "string", "format": "date"},
+    "collection_period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "status"],
+      "properties": {
+        "start": {"type": ["string", "null"], "format": "date"},
+        "end": {"type": ["string", "null"], "format": "date"},
+        "status": {"enum": ["known", "start_only", "unknown"]}
+      }
+    },
+    "collected_count": {"type": "integer", "minimum": 0},
+    "opinion_count": {"type": "integer", "minimum": 0},
+    "issue_assigned_count": {"type": "integer", "minimum": 0},
+    "issues": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/issue"}
+    }
+  },
+  "$defs": {
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "kind", "count", "stances", "intensities"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["named", "other"]},
+        "count": {"type": "integer", "minimum": 0},
+        "stances": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/count_item"}
+        },
+        "intensities": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/intensity_count"},
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "count_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "count"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "intensity_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "count"],
+      "properties": {
+        "id": {"enum": ["low", "medium", "high"]},
+        "count": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

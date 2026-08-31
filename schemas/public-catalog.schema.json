@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sns-reaction-map.jp/schemas/public-catalog.schema.json",
+  "title": "SNS反応まっぷ 公開テーマカタログ",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_from", "themes", "totals"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "generated_from": {"type": "string", "description": "テーマJSONの内容ハッシュ。生成時刻は入れず、同じ入力では同じ出力にする。"},
+    "themes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["theme_id", "title", "page_path", "updated_on", "collected_count", "opinion_count", "named_issue_count", "data_sha256"],
+        "properties": {
+          "theme_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+          "title": {"type": "string", "minLength": 1},
+          "page_path": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-reaction-map\\.html$"},
+          "updated_on": {"type": "string", "format": "date"},
+          "collected_count": {"type": "integer", "minimum": 0},
+          "opinion_count": {"type": "integer", "minimum": 0},
+          "named_issue_count": {"type": "integer", "minimum": 0},
+          "data_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$", "description": "正規化して出力した公開テーマJSONファイル自身のSHA-256。非公開正典のsource_sha256とは対象が異なる。"}
+        }
+      }
+    },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["theme_count", "collected_count", "opinion_count", "latest_updated_on"],
+      "properties": {
+        "theme_count": {"type": "integer", "minimum": 0},
+        "collected_count": {"type": "integer", "minimum": 0},
+        "opinion_count": {"type": "integer", "minimum": 0},
+        "latest_updated_on": {"type": "string", "format": "date"}
+      }
+    }
+  }
+}
