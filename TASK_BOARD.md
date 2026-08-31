@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題55にレビュー指摘を反映し、実施順・完了条件を確定）
+最終更新: 2026-08-31（課題55の段階1完了。作業ツリー `task/domain-cutover` を作成し実装ブランチを現行構成へ直した）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -91,15 +91,24 @@
     ただし段階3が2026-09-03 より後ろにずれる場合は、`apply_ga_tags.py` の許可ホスト1行だけを先行公開する承認案件を出す。
     判断者はCEO。計測が止まっている日数と、公開を1回増やす手間の比較で決める
 
-**段階1: 作業ツリーを作り、実装ブランチを現行構成へ直す**
-1-1. `git worktree add ../isa-wt-domain-cutover -b task/domain-cutover task/domain-migration` で `929ebc9` から分岐する
-    （main から作り直さない。コード側の大半は既に実装済みのため）
-1-2. 破棄した設計に属する3点を戻す: `.github/workflows/deploy.yml` を復活、`scripts/sync_public_site.py` と
+**段階1: 作業ツリーを作り、実装ブランチを現行構成へ直す。2026-08-31 完了**
+1-1. **完了。** `git worktree add ../isa-wt-domain-cutover -b task/domain-cutover task/domain-migration` で `929ebc9` から分岐した
+    （main から作り直していない。コード側の大半は既に実装済みだったため）
+1-2. **完了。** 破棄した設計に属する3点を戻した: `.github/workflows/deploy.yml` を復活、`scripts/sync_public_site.py` と
     `tests/test_sync_public_site.py` を削除、`tests/test_domain_migration.py` から
     `test_source_repository_has_no_pages_deploy_workflow` を削除
-1-3. 修正範囲 6〜10 を実装する（段階0-1 で直した環境変数と同じ並びを `cast-vote/index.ts` の既定値にも入れる）
-1-4. `quality/designs/domain-migration-2026-08-30.md` の冒頭に「切り替え順序・旧URLの扱い・安定後の公開データ基盤は
-    2026-08-31 に破棄。公開元は sns-reaction-map リポジトリ」と追記する
+1-3. **完了。** 修正範囲 6〜10 を確認・実装した。**6・7・9・10 は `929ebc9` の時点で既に実装済みだった**
+    （`cast-vote/index.ts` の既定値、GA許可ホスト、`refresh_topic.py` 等のSITE_URL、テスト、`takaichi-...standard.html` のURLはすべて新ドメイン）。
+    **8（旧URLを埋め込む手順書）は未着手で今回直した**: `README.md`（公開先の説明を1リポジトリ構成へ書き換え、
+    `sync_public_site.py` への言及を削除）、`.claude/skills/release/SKILL.md`（段階3-2で指示された確認コマンドの修正を先取り）、
+    `.claude/skills/new-topic/SKILL.md` と `check_launch.py`（別リポジトリへの追記手順を削除。公開元一本化で不要になったため）、
+    `.claude/skills/note-operation/SKILL.md`、`X_POSTING_GUIDE.md`（UTM付きURL例）
+1-4. **完了。** `quality/designs/domain-migration-2026-08-30.md` の冒頭に破棄の経緯を追記した
+1-5. （計画外の追加対応）新しい作業ツリーに非公開の正典データ `social-samples/` が無く、フルテストが13件エラーになったため、
+    分岐元の `isa-wt-domain-migration` からrsyncで同期した。
+    同期後のフルテストは1件失敗のみで、これは `929ebc9` の時点から存在する無関係な既存差分
+    （`test_portal_stats.test_top_page_matches_canonical_stats`、トップページの集計値ずれ）と確認した。段階1の変更が原因ではない
+    コミット: `56cb9b8`（`task/domain-cutover` ブランチ、作業ツリー `../isa-wt-domain-cutover`）
 
 **段階2: 公開前の機械検査を足し、候補を固める**
 2-1. `tests/test_domain_migration.py` に次の検査を足す（**ルールは検査にしないと守られない**）:
@@ -168,7 +177,9 @@
   ただし旧ルートは別リポジトリなので、この作業は本リポジトリの作業ツリーではできない
 
 **対象外**: 3D実装、AdSense再申請そのもの、記事内容の改稿、収集データの数字修正
-**次にすること**: 段階0-1（Supabaseの `VOTE_ALLOWED_ORIGINS` に新ドメインを追加）だけを先に行う。公開もCEO承認も要らず、投票の停止が今日止まるため
+**次にすること**: 段階2（`../isa-wt-domain-cutover` で機械検査を追加し、通し、公開候補を固定する）に進む。
+段階0-1・段階1は完了済み。0-2（GA4先行公開の要否）と段階1の「CEOに決めてもらうこと」（旧ルートの扱い）は
+段階1完了時点でも未回答のまま残っている
 
 ### 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
 
