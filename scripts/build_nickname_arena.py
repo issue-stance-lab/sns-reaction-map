@@ -26,18 +26,23 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .issue_card_counts import IssueCountError, span_html
+    from .issue_card_counts import IssueCountError, count_by_issue_from_public_json, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
     from .x_embed import embed_html, period_label
 except ImportError:
-    from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
+    from issue_card_counts import (  # type: ignore[no-redef]
+        IssueCountError,
+        count_by_issue_from_public_json,
+        span_html,
+    )
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
     from x_embed import embed_html, period_label  # type: ignore[no-redef]
 
 THEME = "school-nickname-ban"
 ARENA_DATA = Path("docs/school-nickname-ban-arena-data.js")
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 
 # 立場（正典のラベル）→ ページ側の色分けキー。
 STANCE_KEY = {
@@ -358,7 +363,7 @@ def sample_period(records: list[dict[str, Any]]) -> str:
     return period_label(expected_period(summarize(records)))
 
 
-def build_research_conditions(records: list[dict[str, Any]]) -> str:
+def build_research_conditions(collected: int, period: str) -> str:
     """調査条件（取得元・件数・期間）。
 
     確認表示は <span class="review-note"> で囲む（apply_review_note.py が中身を
@@ -368,8 +373,8 @@ def build_research_conditions(records: list[dict[str, Any]]) -> str:
     return (
         '<p style="max-width:1000px;margin:0 auto;">'
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
-        f"Yahooリアルタイム検索で取得した公開投稿 {len(records)}件<br>\n"
-        f"  （取得期間: {sample_period(records)}／"
+        f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
+        f"  （取得期間: {period}／"
         '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
         "  <strong>社会全体の世論調査ではありません。</strong></p>"
     )
@@ -521,32 +526,71 @@ def representative_posts(issue: dict[str, Any], rows: list[dict[str, Any]]) -> l
     return selected
 
 
+def issue_nav(counts: Counter[str]) -> str:
+    """論点ナビ。件数だけが変わる。"""
+    return '<nav class="quadrant-nav">' + "".join(
+        f'<a href="#issue-{issue["key"]}">{issue["short"]} {counts[issue["main_issue"]]}</a>'
+        for issue in ISSUE_DEFS
+    ) + "</nav>"
+
+
+def issue_block_head(
+    issue: dict[str, Any],
+    index: int,
+    rows: list[dict[str, Any]],
+    counts: Counter[str],
+    largest: int,
+) -> str:
+    """論点ブロックのうち、集計と固定文だけでできる前半（代表投稿の直前まで）。
+
+    後半（`issue-x-grid` の中身）は個々の投稿から作るので、ここには入れない。
+    公開データJSON（課題57）には投稿本文もURLも入らないため、公開JSONから
+    貼り直せるのはここまでになる。
+    """
+    total = counts[issue["main_issue"]]
+    stances = stance_counts(rows, issue)
+    shown = [key for key in STANCE_ORDER if stances[key]]
+    labels = issue["stance_labels"]
+    segments = ""
+    for key in shown:
+        percentage = stances[key] / total * 100
+        visible = f"{percent(stances[key], total)}%" if percentage >= 10 else ""
+        segments += (
+            f'<div class="temp-seg {key}" style="width:{percentage:.2f}%"'
+            f' aria-label="{html.escape(labels[key][1])} {stances[key]}件">{visible}</div>'
+        )
+    summary = " / ".join(f"{labels[key][0]} {stances[key]}" for key in shown)
+    legend = "".join(
+        f'<span><i style="background:{STANCE_COLORS[key]}"></i>{labels[key][1]}（{stances[key]}件）</span>'
+        for key in shown
+    )
+    badge = " · 最大勢力" if total == largest else ""
+    return (
+        f'\n  <article class="issue-block" id="issue-{issue["key"]}">\n'
+        '    <div class="issue-head">\n'
+        f'      <span class="axis-kicker">論点{index}{badge}</span>\n'
+        f'      <h3>{issue["icon"]} {issue["title"]}<span class="issue-count">{total}件</span></h3>\n'
+        "    </div>\n"
+        f'    <p class="issue-desc">{issue["description"]}</p>\n'
+        '    <div class="temp-bar-wrap">\n'
+        f'      <div class="temp-bar-label"><span>{issue["bar_title"]}</span><span>{summary}</span></div>\n'
+        f'      <div class="temp-bar" role="img" aria-label="{html.escape(str(issue["bar_title"]))}。{html.escape(summary)}">{segments}</div>\n'
+        f'      <div class="temp-bar-legend">{legend}</div>\n'
+        "    </div>\n"
+        '    <div class="issue-sides">\n'
+        f'      <div class="side support"><strong>{issue["side_support_label"]}</strong>{issue["support"]}</div>\n'
+        f'      <div class="side oppose"><strong>{issue["side_oppose_label"]}</strong>{issue["oppose"]}</div>\n'
+        "    </div>\n"
+        '    <div class="issue-x-grid">'
+    )
+
+
 def build_issue_blocks(rows: list[dict[str, Any]]) -> str:
     counts = issue_counts(rows)
     largest = max(counts.values())
-    nav = "".join(
-        f'<a href="#issue-{issue["key"]}">{issue["short"]} {counts[issue["main_issue"]]}</a>'
-        for issue in ISSUE_DEFS
-    )
     blocks = []
     for index, issue in enumerate(ISSUE_DEFS, start=1):
-        total = counts[issue["main_issue"]]
-        stances = stance_counts(rows, issue)
-        shown = [key for key in STANCE_ORDER if stances[key]]
         labels = issue["stance_labels"]
-        segments = ""
-        for key in shown:
-            percentage = stances[key] / total * 100
-            visible = f"{percent(stances[key], total)}%" if percentage >= 10 else ""
-            segments += (
-                f'<div class="temp-seg {key}" style="width:{percentage:.2f}%"'
-                f' aria-label="{html.escape(labels[key][1])} {stances[key]}件">{visible}</div>'
-            )
-        summary = " / ".join(f"{labels[key][0]} {stances[key]}" for key in shown)
-        legend = "".join(
-            f'<span><i style="background:{STANCE_COLORS[key]}"></i>{labels[key][1]}（{stances[key]}件）</span>'
-            for key in shown
-        )
         samples = "".join(
             "\n      <div class=\"issue-x-sample\">\n"
             f'        <div class="meta">{html.escape(labels[stance_of(row)][0])} / conf {float(classification(row)["confidence"]):.2f}</div>\n'
@@ -555,30 +599,16 @@ def build_issue_blocks(rows: list[dict[str, Any]]) -> str:
             "      </div>"
             for row in representative_posts(issue, rows)
         )
-        badge = " · 最大勢力" if total == largest else ""
         blocks.append(
-            f'\n  <article class="issue-block" id="issue-{issue["key"]}">\n'
-            '    <div class="issue-head">\n'
-            f'      <span class="axis-kicker">論点{index}{badge}</span>\n'
-            f'      <h3>{issue["icon"]} {issue["title"]}<span class="issue-count">{total}件</span></h3>\n'
-            "    </div>\n"
-            f'    <p class="issue-desc">{issue["description"]}</p>\n'
-            '    <div class="temp-bar-wrap">\n'
-            f'      <div class="temp-bar-label"><span>{issue["bar_title"]}</span><span>{summary}</span></div>\n'
-            f'      <div class="temp-bar" role="img" aria-label="{html.escape(str(issue["bar_title"]))}。{html.escape(summary)}">{segments}</div>\n'
-            f'      <div class="temp-bar-legend">{legend}</div>\n'
-            "    </div>\n"
-            '    <div class="issue-sides">\n'
-            f'      <div class="side support"><strong>{issue["side_support_label"]}</strong>{issue["support"]}</div>\n'
-            f'      <div class="side oppose"><strong>{issue["side_oppose_label"]}</strong>{issue["oppose"]}</div>\n'
-            "    </div>\n"
-            f'    <div class="issue-x-grid">{samples}</div>\n'
+            issue_block_head(issue, index, rows, counts, largest)
+            + samples
+            + "</div>\n"
             "  </article>"
         )
     return (
         '<section class="panel conflict-panel" id="issue-voices-section">\n'
         f'  <div class="panel-title"><h2>{len(ISSUE_DEFS)}つの論点とXの声</h2><span>論点ごとの両側の見方と代表投稿</span></div>\n'
-        f'  <nav class="quadrant-nav">{nav}</nav>\n'
+        f'  {issue_nav(counts)}\n'
         + "".join(blocks)
         + "\n</section>"
     )
@@ -628,6 +658,135 @@ def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags
     return result
 
 
+def _public_period(data: dict[str, Any]) -> str:
+    """公開JSONの収集期間を、ページの調査条件と同じ表記へ戻す。
+
+    `collection_period` は `THEMES.yaml` の `sample_period` を分解したものなので、
+    `verify_sample_periods.expected_period()` と同じ文字列に組み直せる。
+    """
+    period = data["collection_period"]
+    if str(period.get("status")) != "known":
+        return period_label("unknown")
+    start, end = str(period["start"]), str(period["end"])
+    return period_label(start if start == end else f"{start}〜{end}")
+
+
+def _public_rows(data: dict[str, Any]) -> tuple[int, str, list[dict[str, Any]]]:
+    """公開JSONを検査し、集計表示の生成に渡せる最小行へ変換する。
+
+    公開JSONには投稿本文・URL・confidence が入らないので、ここで作れるのは
+    「論点・立場・表現強度だけを持つ行」。代表投稿とアリーナの点はこの行から
+    作れないため、`apply_public_counts()` はそこに触れない。
+    """
+    if data.get("theme_id") != THEME:
+        raise IssueCountError(f"あだ名禁止の公開JSONではありません: {data.get('theme_id')}")
+    rows: list[dict[str, Any]] = []
+    assigned = 0
+    for item in data.get("issues", []):
+        label = str(item["label"])
+        count = int(item["count"])
+        assigned += count
+        stances = {str(value["label"]): int(value["count"]) for value in item.get("stances", [])}
+        intensities = {str(value["id"]): int(value["count"]) for value in item.get("intensities", [])}
+        if set(stances) - set(STANCE_KEY):
+            raise IssueCountError(f"公開JSONに未知の立場があります: {label} / {sorted(set(stances) - set(STANCE_KEY))}")
+        if set(intensities) - set(INTENSITY_SCALE):
+            raise IssueCountError(f"公開JSONに未知の表現強度があります: {label}")
+        if sum(stances.values()) != count or sum(intensities.values()) != count:
+            raise IssueCountError(f"公開JSONの立場・強度の合計が論点件数と一致しません: {label}")
+        if label not in ISSUE_BY_MAIN:
+            # 「その他」はカードにも論点ブロックにも出さない。件数が付いたら気づけるようにする。
+            if count:
+                raise IssueCountError(f"ページに無い論点に件数が付きました: {label} {count}件")
+            continue
+        stance_values = [name for name in STANCE_KEY for _ in range(stances.get(name, 0))]
+        intensity_values = [name for name in INTENSITY_SCALE for _ in range(intensities.get(name, 0))]
+        rows.extend(
+            {"classification": {"main_issue": label, "stance": stance, "intensity": intensity}}
+            for stance, intensity in zip(stance_values, intensity_values, strict=True)
+        )
+    if assigned != int(data["opinion_count"]):
+        raise IssueCountError("公開JSONの意見数と論点別件数の合計が一致しません")
+    if not rows:
+        raise IssueCountError("公開JSONにカード対象の論点がありません")
+    return int(data["collected_count"]), _public_period(data), rows
+
+
+def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """候補公開JSONを正典に、ページ上の集計表示を貼り直す。
+
+    昇格が確定する前の候補ツリーで `build_public_registry.py` が作り直した
+    公開JSONを読む。ここを通すことで、ページの数字の出所が公開データ契約側に
+    一本化される（課題57 段階4）。代表投稿とアリーナの点は個々の投稿からしか
+    作れないので、`build()` の生成結果をそのまま残す。
+    """
+    collected, period, rows = _public_rows(json.loads(public_theme.read_text(encoding="utf-8")))
+    counts = issue_counts(rows)
+    if public_theme == PUBLIC_THEME:
+        # 公開JSONが非公開正典より古ければここで止める。止めないと、正しい形の
+        # 古い数字が黙って貼られる（あだ名禁止の接続を一度見送った理由そのもの）。
+        fresh = count_by_issue_from_public_json(THEME)
+        if {key: value for key, value in counts.items()} != {
+            key: value for key, value in fresh.items() if key in counts
+        }:
+            raise IssueCountError(f"公開JSONの論点別件数が食い違います: {dict(counts)} / {fresh}")
+    largest = max(counts.values())
+    page = replace_once(page, r'<p class="lead">.*?</p>', build_lead(rows), "リード文", flags=re.S)
+    page = replace_once(
+        page,
+        r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
+        build_research_conditions(collected, period),
+        "調査条件",
+        flags=re.S,
+    )
+    page = replace_once(
+        page,
+        r'<section class="stats insight-stats".*?</section>',
+        build_stats(rows, collected),
+        "注目ポイント",
+        flags=re.S,
+    )
+    page = replace_once(
+        page,
+        r'<div class="explainer-grid">.*?<p class="explainer-note">.*?</p>',
+        build_explainer_cards(rows),
+        "論点カード",
+        flags=re.S,
+    )
+    page = replace_once(
+        page,
+        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
+        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | '
+        "セクター=論点 / 外側ほど熱量が高い / 色=立場</span></div>",
+        "マップ見出し",
+    )
+    vote_issues = build_vote_issues(rows)
+    page = replace_once(page, r"var issues=\[[^\n]*?\];", vote_issues + ";", "投票の論点")
+    page = replace_once(
+        page,
+        r"var issues=\[[^\n]*?\],posts=window\.NICKNAME_ARENA_DATA",
+        vote_issues + ",posts=window.NICKNAME_ARENA_DATA",
+        "アリーナの論点",
+    )
+    page = replace_once(page, r'<nav class="quadrant-nav">.*?</nav>', issue_nav(counts), "論点ナビ", flags=re.S)
+    for index, issue in enumerate(ISSUE_DEFS, start=1):
+        page = replace_once(
+            page,
+            r'\n  <article class="issue-block" id="issue-' + re.escape(str(issue["key"])) + r'">.*?<div class="issue-x-grid">',
+            issue_block_head(issue, index, rows, counts, largest),
+            f"論点ブロック{index}の集計",
+            flags=re.S,
+        )
+    page = replace_once(
+        page,
+        r'<section class="panel details-panel" id="detail-data">.*?</section>',
+        build_details(rows, collected),
+        "詳細データ",
+        flags=re.S,
+    )
+    return page
+
+
 def build(
     *,
     check: bool = False,
@@ -651,7 +810,7 @@ def build(
     page = replace_once(
         page,
         r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
-        build_research_conditions(records),
+        build_research_conditions(collected, sample_period(records)),
         "調査条件",
         flags=re.S,
     )
@@ -730,8 +889,22 @@ def main() -> int:
     parser.add_argument("--input", type=Path)
     parser.add_argument("--html-template", type=Path)
     parser.add_argument("--output-html", type=Path)
+    parser.add_argument(
+        "--public-counts-only",
+        action="store_true",
+        help="候補公開JSON（data/public/themes/）から集計表示だけを貼り直す",
+    )
     args = parser.parse_args()
     try:
+        if args.public_counts_only:
+            if args.check or args.input or args.html_template:
+                parser.error("--public-counts-only は --output-html だけを指定してください")
+            destination = args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
+            destination.write_text(
+                apply_public_counts(destination.read_text(encoding="utf-8")), encoding="utf-8"
+            )
+            print(f"OK: 公開JSONから集計表示を更新しました: {destination}")
+            return 0
         if args.check and any((args.input, args.html_template, args.output_html)):
             parser.error("--checkは公開ページと正典の一致確認専用です")
         if any((args.input, args.html_template, args.output_html)) and not all(

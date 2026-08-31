@@ -1,3 +1,4 @@
+import importlib
 import json
 import unittest
 from pathlib import Path
@@ -15,6 +16,42 @@ class PublicDataContractTests(unittest.TestCase):
             (ROOT / "configs/public-data-taxonomy.json").read_text(encoding="utf-8")
         )["themes"]
         cls.themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
+
+    def _public_slugs(self) -> list[str]:
+        return sorted(slug for slug, item in self.themes.items() if item.get("published") == "done")
+
+    def test_every_public_theme_reads_its_counts_from_public_json(self) -> None:
+        """公開10テーマの件数の出所は公開データJSONに一本化する（課題57 段階4）。
+
+        1テーマでも `basis` を戻すと、そのページだけ非公開正典から直接数える状態に
+        なり、公開データ契約から再現できなくなる。
+        """
+        for slug in self._public_slugs():
+            config = json.loads(
+                (ROOT / "configs" / f"{slug}-reaction-map.json").read_text(encoding="utf-8")
+            )
+            with self.subTest(slug=slug):
+                self.assertEqual(config.get("issue_counts", {}).get("basis"), "public_json")
+
+    def test_every_public_theme_repastes_counts_after_the_public_json_is_rebuilt(self) -> None:
+        """公開テーマのadapterは `finalize` を持つ（課題57 段階4・段階5）。
+
+        候補ツリーでは 公開JSON生成 → `finalize` の順に走る。`finalize` が無いテーマは
+        候補生成の時点の数字で止まり、「2回生成して差分ゼロ」は通るのに数字だけ古い、
+        という自動検査をすり抜ける不具合になる（2026-08-31、あだ名禁止で実際に
+        接続を見送った理由）。
+        """
+        pipeline = yaml.safe_load((ROOT / "configs/refresh-pipeline.yaml").read_text(encoding="utf-8"))
+        topics = pipeline["topics"]
+        for slug in self._public_slugs():
+            name = topics.get(slug, {}).get("adapter")
+            with self.subTest(slug=slug):
+                self.assertIsNotNone(name, f"{slug}: refresh-pipeline.yaml に adapter がありません")
+                module = importlib.import_module(f"scripts.refresh_adapters.{name}")
+                self.assertTrue(
+                    callable(getattr(module, "finalize", None)),
+                    f"{slug}: {name} adapter に finalize がありません",
+                )
 
     def test_taxonomy_matches_exactly_the_public_theme_set(self) -> None:
         public = {slug for slug, item in self.themes.items() if item.get("published") == "done"}
