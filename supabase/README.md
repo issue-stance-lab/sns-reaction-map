@@ -16,7 +16,7 @@ CLIを使わない場合は、DashboardのSQL Editorで `data/supabase_schema.sq
 
 ```bash
 supabase secrets set VOTE_HASH_SECRET="ランダムな秘密値"
-supabase secrets set VOTE_ALLOWED_ORIGINS="https://issue-stance-lab.github.io"
+supabase secrets set VOTE_ALLOWED_ORIGINS="https://sns-reaction-map.jp,https://issue-stance-lab.github.io"
 ```
 
 ## 3. Edge Functionの公開

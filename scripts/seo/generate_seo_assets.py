@@ -98,14 +98,10 @@ def robots_txt(base_url: str) -> str:
     sitemap_url = urljoin(base_url, "sitemap.xml")
     return "\n".join(
         [
-            # この注意書きはここが書き手。docs/robots.txt へ手で足すと、次の公開昇格で
-            # このスクリプトが上書きして消える（2026-08-14 の高市の更新で実際に消えた）。
-            "# 注意: このファイルはクローラーに読まれていない。",
-            "# robots.txt はホストのルート（https://issue-stance-lab.github.io/robots.txt）に",
-            "# 置いたものだけが参照される仕様で、サブパスのものは無視される。",
-            "# 実際に効いているのは別リポジトリ issue-stance-lab/issue-stance-lab.github.io の robots.txt。",
-            "# ここに残しているのは、独自ドメインへ移行してこのディレクトリがサイトのルートになったときに",
-            "# 必要になるため。内容はルート側と揃えておくこと。",
+            # このファイルは独自ドメインのルートへ同期される。
+            # docs/robots.txt を手で直すと次の生成で戻るため、ここを正典とする。
+            "# SNS反応まっぷの公開用 robots.txt。",
+            "# 正典: scripts/seo/generate_seo_assets.py",
             "User-agent: *",
             "Allow: /",
             "",

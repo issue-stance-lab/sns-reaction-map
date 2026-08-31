@@ -24,7 +24,7 @@ from pathlib import Path
 
 SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
 TOKEN_PATH = Path("secrets/ga4-oauth-token.json")
-DEFAULT_HOST_NAME = "issue-stance-lab.github.io"
+DEFAULT_HOST_NAME = "sns-reaction-map.jp"
 
 
 def load_dotenv(path: Path) -> None:

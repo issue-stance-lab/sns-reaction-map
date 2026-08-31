@@ -48,7 +48,7 @@ MUTATING_ACTIONS = {
 }
 TERMINAL_STATES = {"completed", "failed", "cancelled"}
 X_STATUS_RE = re.compile(r"^https://(?:www\.)?x\.com/[A-Za-z0-9_]+/status/\d+(?:\?.*)?$")
-PUBLIC_BASE = "https://issue-stance-lab.github.io/sns-reaction-map/"
+PUBLIC_BASE = "https://sns-reaction-map.jp/"
 
 
 def _now() -> str:

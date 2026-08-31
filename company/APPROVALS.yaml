@@ -32,6 +32,54 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260830-002
+    department: executive
+    action: important_policy_change
+    summary: "sns-reaction-map.jpを唯一の公開URLとし、公開専用リポジトリをissue-stance-lab.github.ioへ一本化する"
+    reason: "ルートとSNS反応まっぷの二重管理を解消し、開発・収集・会社資料を将来非公開にできる構成へ移すため"
+    risks:
+      - "カスタムドメインの付け替え中に一時的な表示停止が起きる可能性がある"
+      - "旧URLの検索評価が新URLへ移るまで流入が減る可能性がある"
+      - "SupabaseやActions secretsの移設漏れがあると投票が動かなくなる"
+    recommendation: approve
+    evidence:
+      - quality/designs/domain-migration-2026-08-30.md
+      - TASK_BOARD.md
+    status: approved
+    requested_at: "2026-08-30"
+    decided_at: "2026-08-30"
+    decision_note: "CEOが本対話で6項目の移行作業を明示し、実施を指示した。一般公開、カスタムドメインの付け替え、AdSense再申請は検証後の別承認とする。"
+  - id: approval-20260830-003
+    department: engineering-data
+    action: website_publication
+    summary: >
+      【承認いただくと何が起きるか】
+      いま公開中のページは「案内文（canonical・OGP等、検索エンジンやSNSシェアが参照するURL情報）」が
+      まだ旧アドレス（issue-stance-lab.github.io/sns-reaction-map/）を指したまま。
+      承認後、AIがこの変更をmain（本番用の履歴）へ取り込み、pushする。これにより数分以内に
+      GitHub Actions（自動デプロイの仕組み）が動き、公開ページの案内文が正式ドメイン
+      sns-reaction-map.jp を指すよう書き換わる。カスタムドメイン・DNS・HTTPS・投票機能の復旧は
+      2026-08-31に別途完了済みで、今回の承認はその最後の「ページの中身をこの正式URLに合わせて出し直す」部分。
+      旧アドレスへのブックマークやリンクは、新アドレスへ自動転送されるので読者影響は無い。
+      GA4（アクセス解析）の復旧はこの承認には含めず、次回の一括公開まで待つ（CEO決定・2026-08-31）。
+      【対象コミット】task/domain-cutoverブランチ 77782e719f2c9e0209aba0e58823be13c0816c06 時点の docs/ の中身。
+      段階3でmainへマージする直前に、他セッションが割り込んでいないか再確認してから実行する
+    reason: "カスタムドメイン取得・DNS設定は完了済みで、残るのは公開ページ側の案内文（URL表記）を実際の正式ドメインへ合わせる作業だけのため"
+    risks:
+      - "切り替え時の一時停止（数分程度、GitHub Actionsのデプロイ待ち）"
+      - "投票・画像・旧URL案内が正しく動くかは、公開直後に本番URLで目視確認する（段階4で実施）"
+    recommendation: approve_after_quality_gate
+    evidence:
+      - TASK_BOARD.md（課題55）
+      - quality/designs/domain-migration-2026-08-30.md（2026-08-31に破棄の経緯として参照）
+      - tests/test_domain_migration.py（10件、独立レビューで追加した4件を含む）
+      - "python3 -m unittest discover -s tests: 310件中、既存の無関係な1件（test_top_page_matches_canonical_stats、データ更新待ち）を除き成功"
+      - "verify_top_page.py / verify_theme_page.py（全10テーマ）: 本移行が原因のNGなし。残るNGはすべて既知・無関係（期限超過3テーマ、次回更新日の表示ズレ、外部リンクチェックの一時的失敗）"
+      - "Claude独立レビュー（5観点・6候補まで×5=最大30候補→検証）: 8件が生存。ガバナンス文書の廃止済み設計への言及4件を修正、deploy.yml未検査を追加。残り2件は本移行と無関係な既存バグ・重複として対象外に記録"
+    status: approved
+    requested_at: "2026-08-30"
+    decided_at: "2026-08-31"
+    decision_note: "CEOが本対話で承認。あわせて旧ルートissue-stance-lab.github.ioの扱いは(A)（案内ページへ置き換え）に決定、GA4復旧は今回に含めず次回の一括公開まで待つと確認"
   - id: approval-20260830-001
     department: executive
     action: important_policy_change

@@ -12,7 +12,7 @@
 | `content/` | Website・X・noteの非公開制作物、調査、実績 |
 | `creative/` | ブランド、デザイン、画像プロンプト、制作テンプレート |
 | `quality/` | 品質監査、設計レビュー、訂正判断の証拠 |
-| `docs/` | GitHub Pagesで一般公開する静的サイト |
+| `docs/` | 公開専用リポジトリへ同期する静的サイトの正典 |
 | `configs/` / `scripts/` / `data/` / `tests/` | Websiteの設定、生成、検査、検証データ |
 | `social-samples/` | 投稿本文を含む非公開の累積正典 |
 | `supabase/` | 投票基盤 |
@@ -27,7 +27,7 @@
 |---|---|---|---|
 | 会社の方針・台帳 | `company/` | 管理する | 理念、承認、引き継ぎ、収支、訂正、部門責任 |
 | CEO管理画面 | `company/dashboard/` | 管理しない | ローカル生成物と実測キャッシュ |
-| Website公開物 | `docs/` | 管理する | GitHub Pagesの公開対象。運用メモを置かない |
+| Website公開物 | `docs/` | 管理する | 公開専用リポジトリの `public/` へ同期する正典。運用メモを置かない |
 | Website内部資料 | `content/website/internal/` | 管理する | 計測、SEO、投票などの非公開運用メモ |
 | Website調査 | `content/website/research/` | 管理する | テーマ調査と分類レポート |
 | Websiteの設定・生成・検査 | `configs/` / `scripts/` / `tests/` | 管理する | 参照を更新できる変更だけを行う |

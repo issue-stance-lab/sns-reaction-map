@@ -2,7 +2,7 @@
 
 社会の問いについて、SNSの公開投稿サンプルを立場ごとの「理由」まで分解して見せる静的サイト。
 
-**公開URL**: https://issue-stance-lab.github.io/sns-reaction-map/
+**公開URL**: https://sns-reaction-map.jp/
 
 「どちらが正しいか」をAIに決めさせない。対立の向こう側にある
 「もう一つの正義」を可視化し、人々が互いを悪と決めつけずに向き合える状態を目指す。
@@ -15,7 +15,7 @@
 |---|---|
 | 公開テーマ数 | 11 |
 | 累積サンプル数 | 5,723件 |
-| 形態 | 静的HTML（GitHub Pages、`docs/` を公開） |
+| 形態 | 静的HTML（`docs/` を公開専用リポジトリへ同期してGitHub Pagesで公開） |
 | データ源 | Yahooリアルタイム検索の公開投稿 |
 | 分類エンジン | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7） |
 | 投票基盤 | Supabase Edge Function（`supabase/functions/cast-vote/`） |
@@ -39,7 +39,7 @@ company/             会社理念、目標、承認、収支、AI部門、ロー
 content/             Website・X・noteの非公開制作物、調査、投稿実績
 creative/            ブランド、デザイン、画像プロンプト、制作テンプレート
 quality/             公開候補・公開後の監査、設計レビュー
-docs/                公開される静的サイト（GitHub Pages のルート）
+docs/                公開候補となる静的サイトの正典（公開専用リポジトリの public/ へ同期）
 configs/             テーマ別の設定、収集条件、ワーカーAIへの発注書
 scripts/             収集・分類・生成・検証。scripts/refresh_adapters/ はテーマ別のページ更新
 data/verification/   本文を除いた検証用サマリ。クリーンクローンとCIはこれを読む
@@ -123,6 +123,9 @@ python3 scripts/verify_theme_page.py <theme>
 ```bash
 python3 scripts/verify_top_page.py
 ```
+
+公開先は `issue-stance-lab/sns-reaction-map` の GitHub Pages（`.github/workflows/deploy.yml` による
+GitHub Actions公開）で、`docs/` がサイトのルートになる。`main` へのpushで自動的に再デプロイされる。
 
 テスト:
 

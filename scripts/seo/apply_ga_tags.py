@@ -13,7 +13,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MARKER_START = "<!-- GA_TAG_START -->"
 MARKER_END = "<!-- GA_TAG_END -->"
-DEFAULT_ALLOWED_HOSTS = ("issue-stance-lab.github.io",)
+DEFAULT_ALLOWED_HOSTS = ("sns-reaction-map.jp",)
 
 
 def resolve(path: str) -> Path:

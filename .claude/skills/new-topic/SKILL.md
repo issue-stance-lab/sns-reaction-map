@@ -192,7 +192,7 @@ python3 scripts/build_{slug}_page.py && git diff --stat docs/{slug}-reaction-map
 - [ ] 投票 → 完了画面に「シェア」と「投票をやり直す」が出る
 - [ ] ヒーロー画像が自テーマのものになっている
 
-### ⑧ 公開の登録（忘れやすい6か所）
+### ⑧ 公開の登録（忘れやすい5か所）
 
 ```sh
 python3 .claude/skills/new-topic/scripts/check_launch.py {slug}
@@ -208,8 +208,6 @@ python3 .claude/skills/new-topic/scripts/check_launch.py {slug}
 5. `supabase/functions/cast-vote/index.ts` の `TOPIC_CHOICES` に
    `{slug}-issue-stance-v1: 論点数×立場数` を追加 → **オーナーに `supabase functions deploy cast-vote --no-verify-jwt` を依頼**
    （これを忘れると投票が `invalid_topic` で全部弾かれる。ページ側は無言で失敗する）
-6. **別リポジトリ `issue-stance-lab/issue-stance-lab.github.io` のルート `index.html` の一覧に追記**
-   — AdSenseの審査対象は `/sns-reaction-map/` ではなくルート。ここに載せないと審査に反映されない（課題15）
 
 続けて既存の検査を通す。
 

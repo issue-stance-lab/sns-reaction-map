@@ -284,12 +284,6 @@ def check_registrations(slug: str, html_path: str) -> None:
     else:
         warn("taxonomy 定義", f"{tax.name} が無い（論点の唯一の定義を置く場所）")
 
-    warn(
-        "ルートリポジトリ",
-        "別リポジトリ issue-stance-lab/issue-stance-lab.github.io の index.html の一覧にも"
-        "追記したか。AdSense の審査対象はそちら（課題15）。ここからは確認できない",
-    )
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="新テーマの公開前ゲート")

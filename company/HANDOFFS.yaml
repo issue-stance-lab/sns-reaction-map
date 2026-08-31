@@ -17,11 +17,11 @@ items:
   - id: custom-domain-migration
     department: engineering-data
     status: in_progress
-    current_state: "正式URL https://sns-reaction-map.jp/ を sns-reaction-map リポジトリのGitHub Pagesへ設定済み。DNSチェック成功、HTTPS強制有効、旧プロジェクトURLからパスを保った301転送を確認した。2026-08-31のClaudeレビューで、新ドメインでは投票（Supabaseの許可オリジンに新ドメインが無い）とGA4（公開HTMLの許可ホストが旧ドメイン固定）が停止していることを実測で検出した。同日、CEOがSupabaseのVOTE_ALLOWED_ORIGINSに新ドメインを追加し、投票のCORS許可を復旧・確認済み（新旧両オリジンとも許可を確認）。ブラウザでの実投票の目視確認とGA4の復旧は未実施。公開HTMLのcanonical・OGP・JSON-LD・robots.txt・sitemap.xmlは旧URLのままで、検索エンジン移行は未完了。コード側の大半は未マージブランチ task/domain-migration（929ebc9）に実装済みだが、破棄した『公開専用リポジトリから公開する』設計に属する deploy.yml 削除と sync_public_site.py を含むため、そのままマージできない。"
-    next_action: "新ドメインの公開ページで実際に1票入れて投票復旧を目視確認する。その後TASK_BOARD課題55の段階1（作業ツリーを作りtask/domain-migrationを現行構成へ直す）から段階5までを順に進め、Claudeの独立レビューとCEO承認後にだけ公開する。"
+    current_state: "正式URL https://sns-reaction-map.jp/ を sns-reaction-map リポジトリのGitHub Pagesへ設定済み。DNSチェック成功、HTTPS強制有効、旧プロジェクトURLからパスを保った301転送を確認した。投票のCORS許可はCEOがSupabaseのVOTE_ALLOWED_ORIGINSに新ドメインを追加して復旧・確認済み。課題55の段階0〜2（作業ツリーでの実装・機械検査・独立レビュー・公開候補固定）が完了し、CEOが2026-08-31に公開を承認した（company/APPROVALS.yaml の approval-20260830-003）。旧ルートissue-stance-lab.github.ioの扱いは(A)（案内ページへ置き換え、別リポジトリでの作業）に、GA4の復旧タイミングは今回の公開に含めず次回一括公開まで待つことにCEOが決定。task/domain-cutoverブランチをmainへマージ・push中。"
+    next_action: "マージ後のmainで検査を通し、pushして本番反映を確認する（release スキル④〜⑥）。反映後、新ドメインの公開ページで実際に1票入れて投票復旧を目視確認する。旧ルートの案内ページ置き換え（別リポジトリでの作業）は別途着手する。"
     due_at: "2026-09-03"
-    canonical_sources: ["TASK_BOARD.md", "quality/designs/domain-migration-2026-08-30.md", "configs/site-cases.json", "configs/theme-seo.json", "scripts/seo/generate_seo_assets.py", "company/APPROVALS.yaml"]
-    ceo_approval: "DNS・HTTPS設定はCEO実施済み。旧ルートの扱い（課題55のA/B/C）の決定、公開HTML・SEO情報の一括更新と公開には別途必要"
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/domain-migration-2026-08-30.md", "company/APPROVALS.yaml", "configs/site-cases.json", "configs/theme-seo.json", "scripts/seo/generate_seo_assets.py"]
+    ceo_approval: "DNS・HTTPS設定・公開承認・旧ルートの扱い・GA4タイミングはCEO決定済み（2026-08-31）。AdSense再申請は別承認"
     completion_evidence: ["quality/reviews/", "tests/test_domain_migration.py", "docs/sitemap.xml", "docs/robots.txt", "docs/CNAME", "company/APPROVALS.yaml"]
 
   - id: website-reaction-planet-renewal

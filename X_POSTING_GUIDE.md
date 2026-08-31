@@ -259,7 +259,7 @@ SNSの議論を整理すると、著作権のほかに「対価」「表示」�
 例：
 
 ```
-https://issue-stance-lab.github.io/sns-reaction-map/elderly-license-revocation-reaction-map.html?utm_source=x&utm_medium=social&utm_campaign=post_20260802
+https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html?utm_source=x&utm_medium=social&utm_campaign=post_20260802
 ```
 
 - `utm_source=x` — 投稿由来（シェアボタン由来の `share_button` と区別する）

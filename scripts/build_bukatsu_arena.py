@@ -451,7 +451,7 @@ VOTE_JS = """<script>
     document.getElementById('vote-position-text').textContent=iss.desc;
     if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
     var shareText='部活動の地域移行、私が最も気になる論点は「'+iss.k+'」。'+st.k+'の立場です。';
-    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html');
+    document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent('https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html');
     setTimeout(function(){
       if(window.setStanceMapVoteMarker)window.setStanceMapVoteMarker(arenaIdx,st.color);
       var el=document.getElementById('stance-map-section');
