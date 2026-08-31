@@ -57,6 +57,7 @@ from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # noqa: E402
 THEME = "ai-copyright"
 PAGE = ROOT / "docs" / "ai-copyright-reaction-map.html"
 ARENA_DATA = ROOT / "docs" / "ai-copyright-arena-data.js"
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 
 
 class BuildError(RuntimeError):
@@ -276,6 +277,103 @@ def build_stance_bars(counts: Counter) -> str:
     return "\n".join(parts)
 
 
+def _counts_from_public_json(data: dict[str, Any]) -> tuple[int, int, Counter[str], Counter[str]]:
+    """公開JSONの集計を、既存のページ生成関数が受け取る形にする。"""
+    if data.get("theme_id") != THEME:
+        raise BuildError(f"生成AI著作権の公開JSONではありません: {data.get('theme_id')}")
+    items = {str(issue["label"]): issue for issue in data.get("issues", [])}
+    if set(items) != set(ISSUE_ORDER):
+        raise BuildError("公開JSONの論点がページ定義と一致しません: " + ", ".join(sorted(items)))
+
+    issue_counts: Counter[str] = Counter()
+    stance_counts: Counter[str] = Counter()
+    for issue in ISSUE_ORDER:
+        item = items[issue]
+        value = int(item["count"])
+        issue_counts[issue] = value
+        stances = {str(stance["label"]): int(stance["count"]) for stance in item.get("stances", [])}
+        if set(stances) != set(STANCE_ORDER):
+            raise BuildError(f"公開JSONの立場定義が一致しません: {issue}")
+        if sum(stances.values()) != value:
+            raise BuildError(f"公開JSONの論点数と立場数が一致しません: {issue}")
+        stance_counts.update(stances)
+
+    collected = int(data["collected_count"])
+    opinions = int(data["opinion_count"])
+    if sum(issue_counts.values()) != opinions or sum(stance_counts.values()) != opinions:
+        raise BuildError("公開JSONの意見数と論点別・立場別合計が一致しません")
+    return collected, opinions, issue_counts, stance_counts
+
+
+def apply_public_counts(html_text: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """候補公開JSONを正典に、ページ上の管理対象集計を貼り直す。"""
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    total, opinion_total, issue_counts, stance_counts = _counts_from_public_json(data)
+    ranked = [(name, issue_counts[name]) for name in ISSUE_ORDER if name != OTHER]
+    top_issue, top_issue_count = max(ranked, key=lambda item: item[1])
+    top_stance, top_stance_count = stance_counts.most_common(1)[0]
+    stance_pct = round(top_stance_count / opinion_total * 100)
+    issue_pct = round(top_issue_count / opinion_total * 100)
+    page = html_text
+
+    page = replace_once(
+        page,
+        r"で取得した公開投稿 [\d,]+件",
+        f"で取得した公開投稿 {total}件",
+        "調査条件の件数",
+    )
+    page = replace_once(
+        page,
+        r"分析対象となった意見[\d,]+件をAIが\d+つの論点に整理しました",
+        f"分析対象となった意見{opinion_total}件をAIが{len(ISSUE_ORDER) - 1}つの論点に整理しました",
+        "lead文の件数",
+    )
+    page = replace_once(page, r'data-arena-total="[\d,]*"', f'data-arena-total="{opinion_total}"', "アリーナの母数")
+    page = replace_once(
+        page,
+        r"問いから分かれる、[\d,]+件の意見",
+        f"問いから分かれる、{opinion_total:,}件の意見",
+        "アリーナの見出し件数",
+    )
+    page = replace_once(
+        page,
+        r"の\d+つの論点と分類保留に[\d,]+件の意見を配置した図",
+        f"の{len(ISSUE_ORDER) - 1}つの論点と分類保留に{opinion_total:,}件の意見を配置した図",
+        "アリーナ図の代替テキスト",
+    )
+    page = set_insight(
+        page, "分析対象の意見", f"{opinion_total:,}<small>件</small>",
+        "権利保護、規制、競争力、モラルの声を整理", 100,
+    )
+    page = set_insight(
+        page, "最も多い立場", f"{SHORT_STANCE_LABELS.get(top_stance, top_stance)} {stance_pct}%",
+        f"{top_stance_count:,}件。{STANCE_NOTES.get(top_stance, '')}", stance_pct,
+    )
+    page = set_insight(
+        page, "最も話された論点",
+        f"{SHORT_ISSUE_LABELS.get(top_issue, top_issue)} {top_issue_count:,}<small>件</small>",
+        "学習データを許諾なしで使えるかが最大争点", issue_pct,
+    )
+    marker = re.search(r"(<!-- THEME_ATLAS_START -->)(.*?)(<!-- THEME_ATLAS_END -->)", page, re.S)
+    if not marker:
+        raise BuildError("論点アトラスの位置（THEME_ATLAS_START / END）を特定できません")
+    page = page[: marker.start(2)] + "\n" + build_theme_atlas(issue_counts) + "\n  " + page[marker.end(2) :]
+    marker = re.search(
+        r'(<summary>分類別件数</summary>\s*<div class="details-body">\s*<div class="bar-list">)(.*?)(</div>\s*</div>\s*</details>)',
+        page, re.S,
+    )
+    if not marker:
+        raise BuildError("詳細データ『分類別件数』の位置を特定できません")
+    page = page[: marker.start(2)] + "\n" + build_issue_bars(issue_counts, opinion_total) + "\n" + page[marker.end(2) :]
+    marker = re.search(
+        r'(<summary>カテゴリ × スタンス</summary>\s*<div class="details-body">\s*<div class="bar-list">)(.*?)(</div>\s*</div>\s*</details>)',
+        page, re.S,
+    )
+    if marker:
+        page = page[: marker.start(2)] + "\n" + build_stance_bars(stance_counts) + "\n" + page[marker.end(2) :]
+    return page
+
+
 def build(
     *,
     check: bool = False,
@@ -415,12 +513,24 @@ def build(
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成AIと著作権ページを正典から生成する")
     parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
+    parser.add_argument("--public-counts-only", action="store_true", help="公開JSONからページ上の集計を貼り直す")
     parser.add_argument("--input", type=Path, help="正典の代わりに読む累積候補（staging用）")
     parser.add_argument("--html-template", type=Path, help="読み込むHTML（既定は公開ページ）")
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     parser.add_argument("--output-data", type=Path, help="アリーナデータの書き出し先")
     parser.add_argument("--skip-issue-counts", action="store_true", help="sync_issue_counts.py を呼ばない")
     args = parser.parse_args()
+    if args.public_counts_only:
+        if args.check or args.input or args.html_template or args.output_data or args.skip_issue_counts:
+            parser.error("--public-counts-onlyは--output-html以外と併用できません")
+        target = args.output_html or PAGE
+        try:
+            target.write_text(apply_public_counts(target.read_text(encoding="utf-8")), encoding="utf-8")
+        except (BuildError, OSError, KeyError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        print(f"updated public JSON counts in {target}")
+        return 0
     try:
         lines, changed = build(
             check=args.check,

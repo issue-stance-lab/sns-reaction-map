@@ -15,6 +15,21 @@ def digest(path: Path) -> str:
 
 
 class AiCopyrightAdapterTests(unittest.TestCase):
+    def test_public_json_drives_page_level_counts(self):
+        from scripts.build_ai_copyright_arena import apply_public_counts
+
+        public_path = ROOT / "data/public/themes/ai-copyright.json"
+        public = json.loads(public_path.read_text(encoding="utf-8"))
+        page = apply_public_counts(PAGE.read_text(encoding="utf-8"), public_path)
+        top_issue = max(
+            (issue for issue in public["issues"] if issue["kind"] == "named"),
+            key=lambda issue: int(issue["count"]),
+        )
+
+        self.assertIn(f'data-arena-total="{public["opinion_count"]}"', page)
+        self.assertIn(f'問いから分かれる、{public["opinion_count"]:,}件の意見', page)
+        self.assertIn(f'>{top_issue["count"]}<small>件</small>', page)
+
     def _canonical(self):
         import yaml
         themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]

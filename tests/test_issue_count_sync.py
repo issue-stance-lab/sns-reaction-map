@@ -21,6 +21,15 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class IssueCountSyncTest(unittest.TestCase):
+    def test_ai_copyright_arena_total_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/ai-copyright.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/ai-copyright-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'data-arena-total="([\d,]+)"', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
     def test_bike_map_heading_matches_public_json(self) -> None:
         public = json.loads(
             (ROOT / "data/public/themes/bike-blue-ticket.json").read_text(encoding="utf-8")
