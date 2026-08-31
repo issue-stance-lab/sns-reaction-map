@@ -193,7 +193,7 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 
 ### 課題57: 公開データ基盤と公開承認物の一本化（旧15-A・課題54の前提）
 
-**状態**: 段階1 完了（2026-08-31）。段階2の契約確定・独立レビュー・CEO確認待ち
+**状態**: 段階2 仕様案作成済み（2026-08-31）。独立レビュー・CEO確認待ち
 **優先度**: **最優先の基盤作業**。課題54の3D実装より先に完了する
 **正典**: `quality/designs/public-data-foundation-rebuild.md`
 **対象**: 公開中の10テーマ。高市テーマは非公開保全し、公開合計・トップ・sitemapへ含めない
@@ -235,6 +235,12 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 記録: `quality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md`。公開物は変更していない。
 
 **次にすること**: 段階2でJSON Schema、安定ID、不変条件、読者向け用語を確定し、独立レビューとCEO確認に出す
+
+**段階2の仕様案（2026-08-31）**: `schemas/public-theme.schema.json` と
+`schemas/public-catalog.schema.json` を追加し、公開JSONに含める項目と禁止する内部情報を定義した。
+読者向け用語は「収集した投稿／分析対象の意見／主要論点／その他」に統一する提案。不変条件7件と
+固定IDの方針を `quality/reviews/2026-08-31-public-data-foundation-stage2-proposal.md` に記録した。
+生成器の実装・既存テーマ設定へのID追加は、独立レビューとCEO確認の後に行う。
 
 ### 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
 
