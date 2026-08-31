@@ -1,5 +1,9 @@
 # sns-reaction-map.jp 移行設計
 
+**2026-08-31 に破棄。** 切り替え順序・旧URLの扱い・安定後の公開データ基盤（公開専用リポジトリへの同期構成）は破棄した。
+実測の結果、公開元はプロジェクトリポジトリ `issue-stance-lab/sns-reaction-map` の GitHub Pages（`docs/`）に一本化し、
+`scripts/sync_public_site.py` は使わない。詳細は `TASK_BOARD.md` の課題55を参照。以下は経緯として残す。
+
 ## 決定
 
 - 公開専用リポジトリは `issue-stance-lab/issue-stance-lab.github.io` の1つにする。

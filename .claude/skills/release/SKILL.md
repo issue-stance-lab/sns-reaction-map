@@ -95,7 +95,7 @@ GitHub Pages は反映に1〜数分かかる。**push した直後に見ると�
 待つときは `until` で条件が満たされるまで回す（短い `sleep` を並べない）。
 
 ```sh
-until curl -s "https://issue-stance-lab.github.io/sns-reaction-map/<テーマ>-reaction-map.html" \
+until curl -sL "https://sns-reaction-map.jp/<テーマ>-reaction-map.html" \
   | grep -q "<今回変えた文字列>"; do sleep 15; done; echo "公開反映を確認"
 ```
 

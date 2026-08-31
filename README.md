@@ -124,15 +124,8 @@ python3 scripts/verify_theme_page.py <theme>
 python3 scripts/verify_top_page.py
 ```
 
-公開専用リポジトリへの同期確認:
-
-```bash
-python3 scripts/sync_public_site.py --target ../issue-stance-lab.github.io/public --check
-```
-
-公開先は `issue-stance-lab/issue-stance-lab.github.io` の1リポジトリだけとし、
-この開発・運用リポジトリからGitHub Pagesへ直接デプロイしない。切り替えと公開は
-[独自ドメイン移行手順](quality/designs/domain-migration-2026-08-30.md) に従い、CEO承認後に行う。
+公開先は `issue-stance-lab/sns-reaction-map` の GitHub Pages（`.github/workflows/deploy.yml` による
+GitHub Actions公開）で、`docs/` がサイトのルートになる。`main` へのpushで自動的に再デプロイされる。
 
 テスト:
 

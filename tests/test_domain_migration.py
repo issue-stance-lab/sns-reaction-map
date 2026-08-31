@@ -55,9 +55,6 @@ class DomainMigrationTests(unittest.TestCase):
                 with self.subTest(path=path.relative_to(ROOT)):
                     self.assertNotIn(OLD_SITE_BASE, path.read_text(encoding="utf-8"))
 
-    def test_source_repository_has_no_pages_deploy_workflow(self):
-        self.assertFalse((ROOT / ".github" / "workflows" / "deploy.yml").exists())
-
     def test_vote_service_allows_new_and_legacy_origins_during_transition(self):
         source = (ROOT / "supabase" / "functions" / "cast-vote" / "index.ts").read_text(
             encoding="utf-8"

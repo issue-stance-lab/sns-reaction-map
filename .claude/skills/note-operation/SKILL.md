@@ -158,7 +158,7 @@ SNSの集計を扱う以上、記事に件数は必ず出る。**出し方を間
 note 記事からサイトへのリンクには必ず UTM を付ける。
 
 ```
-https://issue-stance-lab.github.io/sns-reaction-map/<theme>-reaction-map.html
+https://sns-reaction-map.jp/<theme>-reaction-map.html
   ?utm_source=note
   &utm_medium=referral
   &utm_campaign=note_<theme>_<yyyymmdd>
@@ -166,7 +166,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/<theme>-reaction-map.html
 
 例：
 ```
-https://issue-stance-lab.github.io/sns-reaction-map/ai-copyright-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_ai_copyright_20260820
+https://sns-reaction-map.jp/ai-copyright-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_ai_copyright_20260820
 ```
 
 - `utm_source=note` 固定
