@@ -18,7 +18,7 @@
 | テーマ | ファイル | 状態 |
 |---|---|---|
 | 生成AIと著作権 | ai-copyright-primary-sources.md | 再発注ずみ・URL全通 |
-| 自転車の青切符 | bike-blue-ticket-primary-sources.md | **404が2本**（冒頭に警告） |
+| 自転車の青切符 | bike-blue-ticket-primary-sources.md | 取り直しずみ・URL全通 |
 | 部活動の地域移行 | bukatsu-chiiki-primary-sources.md | 403が2本／本文が「推定」と自認したURLが2本（実在は確認） |
 | 憲法改正論議 | constitutional-amendment-primary-sources.md | 取り直しずみ・会議録は詳細URL・URL全通 |
 | 高齢者免許返納 | elderly-license-revocation-primary-sources.md | URL全通 |
@@ -38,3 +38,14 @@
    会議録3本が詳細URLになった。会議録を出典にするときはこの手順を発注文に必ず入れること
 3. **引用文の原文照合。** メモの「確かめられる事実」は Hermes の読み取りで、原文と1字ずつ照合していない。
    憲法改正ページで過去にやったように、会議録APIで発言番号まで突き合わせること
+
+
+## 2026-08-31（続き）自転車の404を解消
+
+国交省GOOD CYCLE JAPANの2URLが404だった原因は、Hermesが `/bicycleuse/` から始まる推測URLを
+書いていたこと（正しいパスは `/road/bicycleuse/`）。この作業は「機械的な照合」ではなく
+「正しいURLをもう一度探す」作業なので、opencode（`opencode-go/qwen3.7-max`、hermesとは別枠の
+クォータ）にURL特定だけを発注し、返ってきたURLを自分でcurlして200・本文一致を確認した。
+計画本体PDF（`assets/pdf/3rd_plan.pdf`）と目標1のページ（`plan/action1/`）も合わせて確認済み。
+警察庁・内閣官房の「確認できなかったこと」2件は、URLパターンを推測しても404止まりだったため
+未解決のまま残してある（空振りを消さない方針どおり）。

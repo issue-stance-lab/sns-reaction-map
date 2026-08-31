@@ -1,7 +1,3 @@
-> **URL検査（2026-08-31, curl）で開けなかったURLがこのメモに含まれています。そのまま使わないこと。**
-> - https://www.mlit.go.jp/bicycleuse/good-cycle-japan/environment/ （404）
-> - https://www.mlit.go.jp/bicycleuse/good-cycle-japan/jitensha_katsuyo/ （404）
-
 確認できた一次資料に基づき、調査メモを作成します。
 
 # 自転車の青切符導入（2026年施行の交通反則通告制度の自転車への拡大） — 一次資料メモ
@@ -26,12 +22,15 @@
 ## 2. 自転車インフラ
 
 ### 資料D
-- 発行機関 / 国土交通省 / 目標1 自転車利用環境｜GOOD CYCLE JAPAN / URL: https://www.mlit.go.jp/bicycleuse/good-cycle-japan/environment/ （推定、サイト内リンクからアクセス） / 該当箇所: 「施策一覧」
+- 発行機関 / 国土交通省 / 目標1 自転車利用環境｜GOOD CYCLE JAPAN / URL: https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/plan/action1/ / 該当箇所: 「施策一覧」
+  【2026-08-31訂正】旧URLは404だった（`/bicycleuse/`ではなく`/road/bicycleuse/`が正しいパス）。
+  opencode（qwen3.7-max）にURL特定を依頼し、curlで200・content確認済み。
 - 確かめられる事実: 第3次自転車活用推進計画（令和8年5月閣議決定）の目標1として、安全で快適な走行環境等の整備による良好な自転車利用環境の実現を掲げている。具体的施策として、(1)地方公共団体における計画策定・施策実施の促進、(2)自転車通行空間の計画的な整備の推進、(3)路外駐車場整備・停車抑制対策・違法駐車取締りの推進、(4)多様な自転車や地域の駐輪ニーズに応じた駐輪場の整備の推進、(5)計画策定等の高度化に向けた情報通信技術の活用の推進、(6)生活道路での通過交通の抑制や無電柱化と合わせた取組の実施、を挙げている。
 - 確認日: 2026-08-30
 
 ### 資料E
-- 発行機関 / 国土交通省 / 自転車活用推進計画について｜GOOD CYCLE JAPAN / URL: https://www.mlit.go.jp/bicycleuse/good-cycle-japan/jitensha_katsuyo/ / 該当箇所: 「政府の自転車活用推進計画」
+- 発行機関 / 国土交通省 / 自転車活用推進計画について｜GOOD CYCLE JAPAN / URL: https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/plan/ / 該当箇所: 「政府の自転車活用推進計画」
+  【2026-08-31訂正】旧URLは404だった。正しいURLへ差し替え、curlで200・本文が「令和８年５月に第３次自転車活用推進計画を閣議決定」の記述と一致することを確認。計画本体PDFは https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/assets/pdf/3rd_plan.pdf （200・application/pdf）。
 - 確かめられる事実: 政府は令和8年5月に第3次自転車活用推進計画を閣議決定。2030年度までに目指す姿を示したビジョン「安全・快適に自転車を活用できる環境の実現により、自転車交通の役割を拡大し、人と地域が調和した豊かに暮らせる持続可能な社会を目指す」を掲げ、5つの目標を設定。
 - 確認日: 2026-08-30
 
