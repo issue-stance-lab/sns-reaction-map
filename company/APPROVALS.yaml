@@ -76,10 +76,10 @@ items:
       - "python3 -m unittest discover -s tests: 310件中、既存の無関係な1件（test_top_page_matches_canonical_stats、データ更新待ち）を除き成功"
       - "verify_top_page.py / verify_theme_page.py（全10テーマ）: 本移行が原因のNGなし。残るNGはすべて既知・無関係（期限超過3テーマ、次回更新日の表示ズレ、外部リンクチェックの一時的失敗）"
       - "Claude独立レビュー（5観点・6候補まで×5=最大30候補→検証）: 8件が生存。ガバナンス文書の廃止済み設計への言及4件を修正、deploy.yml未検査を追加。残り2件は本移行と無関係な既存バグ・重複として対象外に記録"
-    status: pending
+    status: approved
     requested_at: "2026-08-30"
-    decided_at: null
-    decision_note: null
+    decided_at: "2026-08-31"
+    decision_note: "CEOが本対話で承認。あわせて旧ルートissue-stance-lab.github.ioの扱いは(A)（案内ページへ置き換え）に決定、GA4復旧は今回に含めず次回の一括公開まで待つと確認"
   - id: approval-20260830-001
     department: executive
     action: important_policy_change
