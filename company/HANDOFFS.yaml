@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-31"
+updated_at: "2026-09-01"
 
 # 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
 required_fields:
@@ -40,10 +40,10 @@ items:
   - id: website-reaction-planet-renewal
     department: engineering-data
     status: in_progress
-    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。課題57の公開データ基盤が完了し（2026-08-31）、data/public/catalog.jsonとdata/public/themes/が正典として揃った。"
-    next_action: "課題57のcatalog・テーマJSON・configs/public-data-taxonomy.jsonだけを構造化データ入力とする共通planet-data生成器の最小構成を部活地域移行で実装する。HTMLや設計書の固定数字は読まない。"
+    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。課題57の公開データ基盤が完了し（2026-08-31）、data/public/catalog.jsonとdata/public/themes/が正典として揃った。2026-09-01にオーナー承認のうえ照合レイヤー『海・地下水脈』を設計書へ追加し、課題15-B（手動編集・独自価値）を本課題の段階3〜5へ統合した。陸地=SNSの分類、海面より下=人が一次資料を読んで初めて分かること、と分ける。段階0（設計・工程表）まで完了。公開実装は未着手。"
+    next_action: "工程表の段階1。一次資料との突き合わせ判定を fact/gap/miss の3語へ統一する（憲法改正だけ日本語の判定語で、他5テーマと揃っていない）。公開ページのHTMLはバイト単位で変えない。工程表はTASK_BOARD.mdの課題54が正典。オーナーの出番は段階4の文言確認、段階9の共通仕様承認、段階11・12の公開/申請承認の3か所だけ。"
     due_at: null
-    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/designs/public-data-foundation-rebuild.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml", "data/public/catalog.json"]
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/designs/planet-adsense-gates.md", "quality/designs/planet-bukatsu-chiiki.md", "quality/designs/public-data-foundation-rebuild.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml", "data/public/catalog.json"]
     ceo_approval: "重要方針と非公開実装は承認済み。一般公開、広告配置、AdSense再申請は別途必要"
     completion_evidence: ["tests/", "quality/reviews/", "data/review-ledger.json", "company/APPROVALS.yaml"]
 
