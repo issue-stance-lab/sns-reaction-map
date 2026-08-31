@@ -56,11 +56,19 @@ def load_records(source: str) -> list[dict[str, Any]]:
     return [record for record in records if isinstance(record, dict)]
 
 
-def count_by_issue_from_public_json(theme: str) -> dict[str, int]:
+def count_by_issue_from_public_json(theme: str, *, check_freshness: bool = True) -> dict[str, int]:
     """課題57: 公開データJSON（data/public/themes/{theme}.json）の論点別意見数を読む。
 
     正典（social-samples）を再計算しない。ここで数える意見はcatalog生成時の
     is_relevant/is_opinionと同じ定義（scripts/public_registry_common.py）に固定される。
+
+    `check_freshness=True`（既定）では、`THEMES.yaml` の非公開正典 `sample_file` が
+    ローカルにあれば、公開データJSONの `source_sha256` が現在内容と一致するかを確認する。
+    **この確認を省くと、昇格直後に build_public_registry.py の再実行を忘れたとき、
+    古い件数を公開ページへ出し続けてしまう**（段階5でrefresh_topic.pyへ自動接続するまでの間、
+    手動再実行が必要）。呼び出し側が渡す sample_file/verification_file はテーマによって
+    仮名化データを指すことがあり信用できないため、THEMES.yaml を自分で読み直す。
+    非公開正典が手元に無い環境（監査のみ）では確認をスキップする。
     """
     path = ROOT / "data" / "public" / "themes" / f"{theme}.json"
     if not path.is_file():
@@ -69,6 +77,21 @@ def count_by_issue_from_public_json(theme: str) -> dict[str, int]:
             f"（scripts/build_public_registry.py --topic {theme} を先に実行する）"
         )
     data = json.loads(path.read_text(encoding="utf-8"))
+    if check_freshness:
+        try:
+            from .public_registry_common import load_themes_yaml, source_sha256
+        except ImportError:  # python3 scripts/*.py
+            from public_registry_common import load_themes_yaml, source_sha256  # type: ignore[no-redef]
+        canon_relpath = load_themes_yaml().get(theme, {}).get("sample_file")
+        canon_path = ROOT / canon_relpath if canon_relpath else None
+        if canon_path is not None and canon_path.is_file():
+            canon_records = json.loads(canon_path.read_text(encoding="utf-8"))
+            actual_hash = source_sha256(canon_records)
+            if data.get("source_sha256") != actual_hash:
+                raise IssueCountError(
+                    f"{theme}: 公開データJSONのsource_sha256が非公開正典の現在内容と"
+                    f"不一致です（scripts/build_public_registry.py --topic {theme} を再実行する）"
+                )
     return {str(issue["label"]): int(issue["count"]) for issue in data["issues"]}
 
 
