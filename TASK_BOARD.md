@@ -1622,8 +1622,20 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 3. 作業ツリーが古くなる前にmainの最新を取り込むか、早めに次の作業（ページ反映）に着手すること
    （`project_shared_tree_staleness` のとおり、放置すると分岐元がずれる）
 
-**次にすること**: FACT_CHECK_GUIDE.mdの発注文に沿って、まず1テーマ（例: ai-copyright、一次資料が
-最も厚い）でページへの実装を試し、`quality/research/` の情報がどの程度使えるか検証する。
+**テーマ別の厚み（2026-08-31時点、偏りがあるので着手順の参考に）**:
+- **厚い**（オーナー提示のURLを多数確認済み）: ai-copyright（21本）、bike-blue-ticket、bukatsu-chiiki、
+  constitutional-amendment、fukushuto、consumption-tax-cut、elderly-license-revocation
+- **薄い**（初回のhermes生成のみ、または着手直後）: henoko-student-accident（着手済み、教育基本法14条
+  違反の是正指導・追悼決議の不存在を確認したが「確認できなかったこと」がまだ4件残る）、
+  **koshitsu-tenpakai（着手直後。改正法＝令和8年法律第66号の法律番号は確定したが、施行日が
+  令和8年10月24日頃で、本メモ確認時点ではまだ全面施行されていない可能性が高いことが判明。
+  実質的な改正内容〔婚姻後の皇籍維持等〕はe-Gov APIが附則を「抜粋」でしか返さず未確認のまま。
+  「確認できなかったこと」6件中、法律番号の特定以外は未解消）**、school-nickname-ban（未着手）
+
+**次にすること**: koshitsu-tenpakaiは施行日（令和8年10月24日頃）以降にe-Govをブラウザで直接開くか
+官報で附則全文を確認するのが本筋。それ以外では、FACT_CHECK_GUIDE.mdの発注文に沿って、まず1テーマ
+（例: ai-copyright、一次資料が最も厚い）でページへの実装を試し、`quality/research/` の情報が
+どの程度使えるか検証する。
 
 ---
 
