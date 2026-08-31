@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 from scripts.refresh_topic import (
     ROOT,
     _replace_theme_fields,
+    apply_manifest_targets,
     archive_wave,
     classifier_schema,
     identity,
@@ -50,6 +51,31 @@ def classified(tweet_id: str, issue: str = "中傷動画・説明責任") -> dic
 
 
 class RefreshTopicTests(unittest.TestCase):
+    def test_manifest_application_uses_the_fixed_candidate_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            stage = root / ".staging/refresh/topic/run-1"
+            source = stage / "public-candidate/docs/index.html"
+            source.parent.mkdir(parents=True)
+            source.write_text("approved candidate", encoding="utf-8")
+            target = root / "docs/index.html"
+            target.parent.mkdir(parents=True)
+            target.write_text("old public page", encoding="utf-8")
+
+            with patch("scripts.refresh_topic.run") as mocked_run, patch(
+                "scripts.refresh_topic.backup_private"
+            ) as mocked_backup:
+                apply_manifest_targets(
+                    root,
+                    stage,
+                    {Path("docs/index.html"): source},
+                    Path("/outside-backup"),
+                )
+
+            self.assertEqual(target.read_text(encoding="utf-8"), "approved candidate")
+            self.assertEqual(mocked_run.call_count, 5)
+            mocked_backup.assert_called_once_with(root, Path("/outside-backup"))
+
     def test_promotion_manifest_binds_candidate_without_touching_target(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
