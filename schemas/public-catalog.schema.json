@@ -23,7 +23,7 @@
           "collected_count": {"type": "integer", "minimum": 0},
           "opinion_count": {"type": "integer", "minimum": 0},
           "named_issue_count": {"type": "integer", "minimum": 0},
-          "data_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+          "data_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$", "description": "正規化して出力した公開テーマJSONファイル自身のSHA-256。非公開正典のsource_sha256とは対象が異なる。"}
         }
       }
     },

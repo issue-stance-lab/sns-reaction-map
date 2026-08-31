@@ -12,8 +12,8 @@
     "title": {"type": "string", "minLength": 1},
     "question": {"type": "string", "minLength": 1},
     "page_path": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-reaction-map\\.html$"},
-    "data_version": {"type": "string", "minLength": 1},
-    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "data_version": {"type": "string", "minLength": 1, "description": "正規化した非公開正典のハッシュから決定的に作る版。生成時刻を含めない。"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$", "description": "正規化した非公開正典全体のSHA-256。公開テーマJSON自身のハッシュではない。"},
     "updated_on": {"type": "string", "format": "date"},
     "collection_period": {
       "type": "object",
@@ -22,7 +22,7 @@
       "properties": {
         "start": {"type": ["string", "null"], "format": "date"},
         "end": {"type": ["string", "null"], "format": "date"},
-        "status": {"enum": ["known", "unknown"]}
+        "status": {"enum": ["known", "start_only", "unknown"]}
       }
     },
     "collected_count": {"type": "integer", "minimum": 0},
