@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題57 段階4。トップページと部活動の論点カードを公開データへ接続。次はあだ名禁止）
+最終更新: 2026-08-31（課題57 段階4。あだ名禁止は候補生成タイミングの制約で接続見送りと判断。次は消費税減税）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -193,8 +193,8 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 
 ### 課題57: 公開データ基盤と公開承認物の一本化（旧15-A・課題54の前提）
 
-**状態**: 段階4着手中（2026-08-31）。トップページ完了。テーマページは着手順
-部活動→あだ名禁止→消費税減税→残り7テーマの1本目（部活動、論点カード件数）まで完了
+**状態**: 段階4着手中（2026-08-31）。トップページ完了。テーマページは2/10（部活動＝接続、
+あだ名禁止＝調査のうえ接続見送り）。次は消費税減税
 **優先度**: **最優先の基盤作業**。課題54の3D実装より先に完了する
 **正典**: `quality/designs/public-data-foundation-rebuild.md`
 **対象**: 公開中の10テーマ。高市テーマは非公開保全し、公開合計・トップ・sitemapへ含めない
@@ -235,8 +235,24 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 新しい公開正典にせず、トップ・テーマ・sitemapを公開JSON／catalogへ接続する方針を確定した。
 記録: `quality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md`。公開物は変更していない。
 
-**次にすること**: 段階4の2本目、school-nickname-ban（あだ名禁止）に進む。着手順の理由は
-`quality/reviews/2026-08-31-public-data-foundation-stage4-bukatsu.md` 6節を参照
+**次にすること**: 段階4の3本目、consumption-tax-cut（消費税減税）へ進む。着手前に、この
+テーマのビルダーが候補生成でどのrowsから件数を計算しているかを最初に確認する
+（下記「あだ名禁止」の発見のとおり、後工程が無いテーマは接続を見送る）
+
+**段階4：あだ名禁止は調査のうえ接続を見送り（2026-08-31）**: `build_nickname_arena.py` の
+論点別件数計算は、通常のデータ更新時に**まだ昇格していない候補ファイル**を直接読む
+（`refresh_adapters/nickname.py`の`build()`が`--input`に候補を渡す）。bukatsu-chiikiと違い
+「昇格確定後に正典から数え直す」専用の後工程（finalize）が無いため、ここを公開データJSONへ
+繋ぐと、次回のデータ更新（このテーマの`collect_at`はまさに本日）で候補ページが新しい投稿の
+件数を反映しなくなる。しかも「2回生成して差分ゼロ」の既存検査はこの不具合をすり抜ける
+（2回とも同じ古い数字で一致するため）。**段階5（`refresh_topic.py`の候補作成への自動接続）が
+終わるまで、このテーマの接続は見送る。** 番号→固定IDの対応表と判断の詳細は
+`quality/reviews/2026-08-31-public-data-foundation-stage4-school-nickname-ban.md`。
+この調査の副産物として、bukatsu-chiikiの接続に同種の鮮度リスク（昇格後にbuild_public_registry.py
+の再実行を忘れると古い件数を出し続ける）があることに気づき、`source_sha256`の鮮度確認を追加した
+（古ければ止まる。**bukatsu-chiikiの次回更新`refresh_at: 2026-09-03`の前に、昇格後は
+`build_public_registry.py --topic bukatsu-chiiki`を手動で再実行すること**）。
+段階5を残り8テーマの個別接続より前に着手候補として検討する価値がある。
 
 **段階4：部活動の論点カード接続（2026-08-31）**: `configs/bukatsu-chiiki-reaction-map.json` の
 `issue_counts.basis` を `public_json` に変更し、`scripts/issue_card_counts.py` に
