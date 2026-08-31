@@ -147,13 +147,25 @@ def _card_count(
 ) -> tuple[str, int] | None:
     match = re.search(
         rf'<[^>]*class="{re.escape(css_class)}"[^>]*>'
-        rf'\s*分類済み\s*<strong id="{re.escape(id_prefix)}-([^"]+)">'
+        rf'\s*収集\s*<strong id="{re.escape(id_prefix)}-([^"]+)">'
         r'([\d,]+)</strong>\s*件',
         body,
     )
     if not match:
         return None
     return match.group(1), int(match.group(2).replace(",", ""))
+
+
+def _topic_card_extra_counts(body: str, theme: str) -> tuple[int, int] | None:
+    """テーマカードの意見数・主要論点数を取り出す（課題57の公開データcatalogが正典）。"""
+    match = re.search(
+        rf'<strong id="topic-opinion-{re.escape(theme)}">([\d,]+)</strong>'
+        rf'件・主要<strong id="topic-issues-{re.escape(theme)}">(\d+)</strong>論点',
+        body,
+    )
+    if not match:
+        return None
+    return int(match.group(1).replace(",", "")), int(match.group(2))
 
 
 def verify_top_page(
@@ -169,7 +181,8 @@ def verify_top_page(
     html = index_path.read_text(encoding="utf-8")
     lines = [
         "=== 数値の出所 ===",
-        f"分類済み投稿   {stats['total_posts']:,}   ← sample_file の実レコード合計（{stats['theme_count']}テーマ）",
+        f"収集した投稿   {stats['total_posts']:,}   ← sample_file の実レコード合計（{stats['theme_count']}テーマ）",
+        f"分析対象の意見 {stats['total_opinions']:,}   ← 課題57 公開データcatalog（data/public/catalog.json）",
         f"公開テーマ数      {stats['theme_count']}   ← THEMES.yaml published:done",
         f"最終更新    {stats['last_updated'].isoformat()}  ← THEMES.yaml updated_at 最大",
         f"次回更新    {stats['next_update'].isoformat() if stats['next_update'] else '未定'}  ← THEMES.yaml refresh_at の今日以降の最小",
@@ -277,11 +290,58 @@ def verify_top_page(
         html,
         flags=re.DOTALL,
     )
-    if len(count_cards) == 14 and all("分類済み" in body for body in count_cards):
-        lines.append("OK  件数の用語が「分類済み」で統一されている")
+    if len(count_cards) == 14 and all("収集" in body for body in count_cards):
+        lines.append("OK  件数の用語が「収集」で統一されている")
     else:
-        lines.append("NG  件数の用語が「分類済み」で統一されている")
+        lines.append("NG  件数の用語が「収集」で統一されている")
         failures += 1
+
+    lines.extend(["", "=== 意見数・主要論点数（課題57 公開データcatalog） ==="])
+    if stats["opinion_counts"] is None:
+        lines.append("NG  公開データcatalogが読めない（scripts/build_public_registry.py --all を先に実行する）")
+        failures += 1
+    else:
+        card_extras: dict[str, tuple[int, int]] = {}
+        missing_extras: list[str] = []
+        for href, body in topic_cards:
+            theme = href_to_topic.get(href)
+            if not theme:
+                continue
+            extra = _topic_card_extra_counts(body, theme)
+            if extra is None:
+                missing_extras.append(theme)
+            else:
+                card_extras[theme] = extra
+        expected_extras = {
+            theme: (stats["opinion_counts"][theme], stats["issue_counts"][theme])
+            for theme in TOPIC_CARD_LINKS
+        }
+        if not missing_extras and card_extras == expected_extras:
+            lines.append("OK  テーマカードの意見数・主要論点数が公開データcatalogと一致する")
+        else:
+            mismatches = [
+                f"{theme}={card_extras.get(theme, '未検出')}/catalog{expected_extras.get(theme)}"
+                for theme in TOPIC_CARD_LINKS
+                if card_extras.get(theme) != expected_extras.get(theme)
+            ]
+            lines.append(
+                "NG  テーマカードの意見数・主要論点数が公開データcatalogと一致する: "
+                + ", ".join(mismatches)
+            )
+            failures += 1
+
+        hero_opinion_match = re.search(r'<strong id="hero-total-opinions">([\d,]+)</strong>', html)
+        hero_opinion_total = (
+            int(hero_opinion_match.group(1).replace(",", "")) if hero_opinion_match else None
+        )
+        if hero_opinion_total == stats["total_opinions"]:
+            lines.append(f"OK  ヒーローの意見数合計 {hero_opinion_total:,} が公開データcatalogと一致する")
+        else:
+            lines.append(
+                f"NG  ヒーローの意見数合計 {hero_opinion_total} が公開データcatalogと一致する"
+                f"（catalog合計 {stats['total_opinions']}）"
+            )
+            failures += 1
 
     lines.extend(["", "=== 正典ファイル検査 ==="])
     for name, synthetic_count in stats["synthetic_counts"].items():

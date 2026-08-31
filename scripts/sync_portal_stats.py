@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""THEMES.yaml の正典データから docs/index.html の統計を同期する。"""
+"""THEMES.yaml の正典データと公開データcatalogから docs/index.html の統計を同期する。"""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 THEMES_YAML = ROOT / "THEMES.yaml"
 INDEX_HTML = ROOT / "docs" / "index.html"
+PUBLIC_CATALOG = ROOT / "data" / "public" / "catalog.json"
 
 
 class PortalStatsError(RuntimeError):
@@ -106,6 +107,15 @@ def load_sample_records(root: Path, theme: str, relative_path: str | None) -> li
     return records
 
 
+def load_public_catalog(path: Path = PUBLIC_CATALOG) -> dict[str, dict[str, Any]]:
+    """課題57で作った公開データcatalogを読む（意見数・主要論点数の正典）。"""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        raise PortalStatsError(f"公開データcatalogを読めません: {path}: {exc}") from exc
+    return {theme["theme_id"]: theme for theme in data["themes"]}
+
+
 def synthetic_record_count(records: list[dict[str, Any]]) -> int:
     """tweet_id または source が synthetic のレコード数。"""
     return sum(
@@ -130,7 +140,12 @@ def compute_stats(
     if not published:
         raise PortalStatsError("published: done のテーマがありません")
 
+    catalog_path = root / "data" / "public" / "catalog.json"
+    catalog = load_public_catalog(catalog_path) if catalog_path.exists() else None
+
     counts: dict[str, int] = {}
+    opinion_counts: dict[str, int] = {}
+    issue_counts: dict[str, int] = {}
     updated_dates: list[date] = []
     refresh_dates: list[date] = []
     refresh_at_missing: list[str] = []
@@ -153,6 +168,22 @@ def compute_stats(
                 f"{name}: sample_file に synthetic な tweet_id/source が"
                 f" {synthetic_counts[name]}件あります"
             )
+        if catalog is not None:
+            # 課題57: 意見数・主要論点数は公開データcatalogだけが正典。ここでは再計算しない。
+            entry = catalog.get(name)
+            if entry is None:
+                raise PortalStatsError(
+                    f"{name}: 公開データcatalogにテーマがありません"
+                    "（scripts/build_public_registry.py --all を先に実行する）"
+                )
+            if entry["collected_count"] != counts[name]:
+                raise PortalStatsError(
+                    f"{name}: catalogのcollected_count({entry['collected_count']:,})が"
+                    f" sample_fileの実件数({counts[name]:,})と不一致です"
+                    "（scripts/build_public_registry.py --all を再実行して同期する）"
+                )
+            opinion_counts[name] = entry["opinion_count"]
+            issue_counts[name] = entry["named_issue_count"]
         updated_dates.append(_parse_iso_date(theme.get("updated_at"), theme=name, field="updated_at"))
         refresh_at = theme.get("refresh_at")
         if refresh_at:
@@ -202,6 +233,9 @@ def compute_stats(
             == max(updated_dates)
         ],
         "sample_counts": counts,
+        "opinion_counts": opinion_counts if catalog is not None else None,
+        "issue_counts": issue_counts if catalog is not None else None,
+        "total_opinions": sum(opinion_counts.values()) if catalog is not None else None,
         "synthetic_counts": synthetic_counts,
         "refresh_at_missing": refresh_at_missing,
         "collect_at_missing": collect_at_missing,
@@ -233,7 +267,11 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
     badge_json = json.dumps(stats["badge_data"], ensure_ascii=False, separators=(",", ":"))
 
     specs = [
-        ("分類済み投稿の用語", r"<small>分析済み投稿</small>|<small>分類済み投稿</small>", "<small>分類済み投稿</small>"),
+        (
+            "収集した投稿の用語",
+            r"<small>分析済み投稿</small>|<small>分類済み投稿</small>|<small>収集した投稿</small>",
+            "<small>収集した投稿</small>",
+        ),
         ("hero-total-samples", r'(<strong id="hero-total-samples">)[^<]*(</strong>)', rf'\g<1>{stats["total_posts"]:,}\2'),
         ("公開中のテーマ", r'(<small>公開中のテーマ</small><strong>)\d+(</strong>)', rf'\g<1>{stats["theme_count"]}\2'),
         ("投票受付中", r'(<em>)\d+テーマで投票受付中(</em>)', rf'\g<1>{stats["voting_count"]}テーマで投票受付中\2'),
@@ -251,6 +289,14 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
         ("JS期限超過表示", r"txt=days>0\?'（あと'\+days\+'日）':days===0\?'（本日更新予定）':'[^']+'", "txt=days>0?'（あと'+days+'日）':days===0?'（本日更新予定）':'（予定を確認中）'"),
         ("バッジデータ", r"var B=\{.*?\};", f"var B={badge_json};"),
     ]
+    if stats["total_opinions"] is not None:
+        specs.append(
+            (
+                "hero-total-opinions",
+                r'(<strong id="hero-total-opinions">)[^<]*(</strong>)',
+                rf'\g<1>{stats["total_opinions"]:,}\2',
+            )
+        )
     for theme in (
         "ai-copyright",
         "bike-blue-ticket",
@@ -270,6 +316,22 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
                 f"テーマカード件数 {theme}",
                 rf'(<strong id="topic-count-{re.escape(theme)}">)[^<]*(</strong>)',
                 rf'\g<1>{count:,}\2',
+            )
+        )
+    for theme, count in (stats["opinion_counts"] or {}).items():
+        specs.append(
+            (
+                f"テーマカード意見数 {theme}",
+                rf'(<strong id="topic-opinion-{re.escape(theme)}">)[^<]*(</strong>)',
+                rf'\g<1>{count:,}\2',
+            )
+        )
+    for theme, count in (stats["issue_counts"] or {}).items():
+        specs.append(
+            (
+                f"テーマカード主要論点数 {theme}",
+                rf'(<strong id="topic-issues-{re.escape(theme)}">)[^<]*(</strong>)',
+                rf'\g<1>{count}\2',
             )
         )
     return specs

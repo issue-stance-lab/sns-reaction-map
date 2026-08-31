@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題57を新設。課題15-Aを統合し、課題54の前提となる公開データ基盤を手順化）
+最終更新: 2026-08-31（課題57 段階4を一時中断し段階5を先行着手。オーナー承認済み）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -193,7 +193,10 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 
 ### 課題57: 公開データ基盤と公開承認物の一本化（旧15-A・課題54の前提）
 
-**状態**: 段階2 完了（2026-08-31）。段階3着手可能
+**状態**: 段階4を一時中断（2026-08-31）。トップページ完了。テーマページは2/10
+（部活動＝接続、あだ名禁止＝調査のうえ接続見送り）。10テーマ中2テーマで「候補生成中は
+公開JSONに繋げない」という同じ壁に当たったため、**オーナー承認により段階5を先行着手する**
+（消費税減税を含む残り8テーマの個別接続は段階5の後に再開）
 **優先度**: **最優先の基盤作業**。課題54の3D実装より先に完了する
 **正典**: `quality/designs/public-data-foundation-rebuild.md`
 **対象**: 公開中の10テーマ。高市テーマは非公開保全し、公開合計・トップ・sitemapへ含めない
@@ -234,7 +237,64 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 新しい公開正典にせず、トップ・テーマ・sitemapを公開JSON／catalogへ接続する方針を確定した。
 記録: `quality/reviews/2026-08-31-public-data-foundation-stage1-inventory.md`。公開物は変更していない。
 
-**次にすること**: 段階3で部活動テーマの公開JSONを生成し、非公開正典と完全照合する
+**次にすること**: 段階5（`refresh_topic.py`の候補作成へ`build_public_registry.py`を接続し、
+一部だけ古い状態で昇格できないようにする）へ着手する（2026-08-31、オーナー承認）。
+消費税減税を含む段階4の残り8テーマの個別接続は、段階5完了後に再開する。
+
+**段階4→段階5の順序変更の判断（2026-08-31）**: 部活動（1本目）で「昇格後に正典から
+数え直す後工程（finalize）があるテーマだけ、鮮度確認つきで公開JSONへ安全に繋げる」ことを
+確認したが、あだ名禁止（2本目）はその後工程を持たず、候補生成そのものが正典（候補ファイル）
+から直接件数を計算していたため接続を見送った（詳細は下記および
+`quality/reviews/2026-08-31-public-data-foundation-stage4-school-nickname-ban.md`）。
+10テーマ中2テーマで同じ制約に当たった時点で、残り8テーマも同様の壁に当たる可能性が高いと
+判断し、個別テーマの接続を1つずつ進めるより、`refresh_topic.py`の候補作成パイプラインへ
+`build_public_registry.py`を先に組み込む（段階5）方が手戻りが少ないとオーナーへ提案し、承認された。
+段階5が完了すれば、`finalize`の有無や候補データのタイミングをテーマごとに個別調査する必要が
+なくなり、残り8テーマの接続はその上に乗るだけになる見込み。
+
+**段階4：あだ名禁止は調査のうえ接続を見送り（2026-08-31）**: `build_nickname_arena.py` の
+論点別件数計算は、通常のデータ更新時に**まだ昇格していない候補ファイル**を直接読む
+（`refresh_adapters/nickname.py`の`build()`が`--input`に候補を渡す）。bukatsu-chiikiと違い
+「昇格確定後に正典から数え直す」専用の後工程（finalize）が無いため、ここを公開データJSONへ
+繋ぐと、次回のデータ更新（このテーマの`collect_at`はまさに本日）で候補ページが新しい投稿の
+件数を反映しなくなる。しかも「2回生成して差分ゼロ」の既存検査はこの不具合をすり抜ける
+（2回とも同じ古い数字で一致するため）。**段階5（`refresh_topic.py`の候補作成への自動接続）が
+終わるまで、このテーマの接続は見送る。** 番号→固定IDの対応表と判断の詳細は
+`quality/reviews/2026-08-31-public-data-foundation-stage4-school-nickname-ban.md`。
+この調査の副産物として、bukatsu-chiikiの接続に同種の鮮度リスク（昇格後にbuild_public_registry.py
+の再実行を忘れると古い件数を出し続ける）があることに気づき、`source_sha256`の鮮度確認を追加した
+（古ければ止まる。**bukatsu-chiikiの次回更新`refresh_at: 2026-09-03`の前に、昇格後は
+`build_public_registry.py --topic bukatsu-chiiki`を手動で再実行すること**）。
+段階5を残り8テーマの個別接続より前に着手候補として検討する価値がある。
+
+**段階4：部活動の論点カード接続（2026-08-31）**: `configs/bukatsu-chiiki-reaction-map.json` の
+`issue_counts.basis` を `public_json` に変更し、`scripts/issue_card_counts.py` に
+`count_by_issue_from_public_json()` を追加。論点カード6枚とリード文の件数が
+`data/public/themes/bukatsu-chiiki.json` から出るようになった（表示数字は接続前後でバイト一致、
+`sync_issue_counts.py --check` で確認）。`verify_theme_page.py` の2箇所
+（`verify_issue_count_source` / `verify_denominators`）を `basis: public_json` に対応させ、
+bukatsu-chiikiで全項目OK、他9テーマもNG 0件を確認。番号→固定IDの対応表（`public-data-taxonomy.json`
+の論点順とページ内の論点番号は**並びが違う**ことが判明）と、ビルダーのどの関数が要らなくなったかの
+棚卸しを `quality/reviews/2026-08-31-public-data-foundation-stage4-bukatsu.md` に記録。
+アリーナのセクター件数（`update_bukatsu_tide.py` が担当）と自転車・消費税の古い数字は未接続。
+既存unittest 327件中326件成功（唯一の失敗は本作業と無関係な既存の遅れ）。
+
+**段階4：トップページ接続（2026-08-31）**: `sync_portal_stats.py` を拡張し、`data/public/catalog.json`
+（課題57の公開データ）を正典として読むようにした。トップの「収集した投稿」（旧称「分類済み投稿」）に
+加えて「分析対象の意見」を新設し、10テーマのカードそれぞれに収集数・意見数・主要論点数を表示。
+`verify_top_page.py` にcatalogとの一致検査を追加し、古い数字に戻すと検査が落ちることを確認した
+（意見数・論点数を書き換えて検査がNGになることを実地テスト済み）。sample_fileの実件数とcatalogの
+集計が一致しない場合もエラーで止まるようにした（catalog再生成忘れの検知）。既存unittest 327件中
+326件成功（唯一の失敗は本作業と無関係な既存の遅れ、下記に既出）。
+
+**段階3の実装・完全照合（2026-08-31）**: `build_public_registry.py` / `verify_public_registry.py` を実装し、
+公開10テーマすべてでSchema検査・不変条件検査・非公開正典との完全照合（終了コード0/1/2）が通った。
+2回生成でバイト列差分0、既存unittest 327件中326件成功（唯一の失敗は本作業と無関係な
+ai-copyright/constitutional-amendment/fukushutoの収集期限超過）。10テーマ合計は収集12,792件・意見10,030件で、
+段階1調査で「廃棄対象」とされた旧固定テストの値と、固定値としてではなく計算結果として一致した。
+自転車青切符は`is_relevant`フィールドが存在せず`is_opinion`のみで判定する既存規則（`build_bike_arena.py`）を
+踏襲。読者向け「問い」は各テーマの公開済みvote_intro/subtitleを言い換えたが未レビュー。
+記録: `quality/reviews/2026-08-31-public-data-foundation-stage3-generator.md`。公開ページ・sitemap・一般公開は未変更。
 
 **段階2の仕様案（2026-08-31）**: `schemas/public-theme.schema.json` と
 `schemas/public-catalog.schema.json` を追加し、公開JSONに含める項目と禁止する内部情報を定義した。
@@ -774,19 +834,20 @@ S8-fix でページ本体（アリーナ・投票・カード・集計・詳細�
 **保存期間**: 当面は全世代保持。ディスクの共有・譲渡・廃棄時はアーカイブを先に削除する。
 
 ### 課題34: ページ更新スクリプトが再実行できないテーマの整備
-**状態**: 進行中（11テーマ中10テーマがadapter。消費税減税を2026-08-18に昇格し、migration は0になった。残るは henoko の候補input/output対応だけ）
+**状態**: **完了**（11テーマ全件がadapter。henokoの候補input/output対応も2026-08-18に完了し、
+`THEMES.yaml` の `page_update_mode` は全テーマ `adapter` で確認済み）
 **発見**: 2026-08-02、adapter 昇格判定の実測時
 
 **概要**: データ更新を自動化するには「同じ入力で2回実行しても差分が出ない」ページ更新スクリプトが要る。全11テーマで実測し、`THEMES.yaml` の `page_update_mode` に記録した。
 
 | 区分 | テーマ | 状態 |
 |---|---|---|
-| adapter（10） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket / school-nickname-ban / constitutional-amendment / fukushuto / consumption-tax-cut | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
-| adapter_candidate（1） | henoko-student-accident | 現行入力では冪等だが、staging候補のinput/output指定に未対応 |
+| adapter（11） | ai-copyright / bukatsu-chiiki / elderly-license-revocation / takaichi / koshitsu-tenpakai / bike-blue-ticket / school-nickname-ban / constitutional-amendment / fukushuto / consumption-tax-cut / henoko-student-accident | staging候補の入出力に対応。変更候補の2回目実行で差分ゼロ |
+| adapter_candidate（0） | — | 2026-08-18 にhenokoが昇格して解消 |
 | migration（0） | — | 2026-08-18 に消費税減税が昇格して解消 |
 | manual（0） | — | 2026-08-17 に自転車青切符が昇格して解消 |
 
-**やること**: henoko の候補input/output対応（残り1件。②の consumption-tax-cut は 2026-08-18、③の school-nickname-ban と④の manual 4テーマは 2026-08-17 に完了）
+**やること**: なし。全11テーマがadapterになったため課題34は完了。次にpage_update_modeを見るのは新テーマ追加時（`new-topic` スキル）だけでよい
 
 **2026-08-18 消費税減税**: `build_consumption_tax_page.py` は副首都ページをテンプレートに読む一度きりの生成器だった。候補input/outputを足し、テンプレートの既定を自分自身の公開ページへ変更。2回目で差分が出ていたのは回遊カードのスクリプトの追記・`.side.mid` の追記・潮目前後の空行の3か所。**投票は「論点の番号×立場の番号」で保存されるため、件数順の並びが入れ替わると過去の投票の意味が変わる**（8/3分を足した時点で実際に入れ替わり、adapterの投票互換性検査が止めた）。公開後は並びを固定する。調査条件（取得元・期間・件数）は昇格後に `finalize` が貼り直す。滞留していた3回分は1回ずつ公開できない（途中の状態が collect_at 期限超過で必ず落ちる）ため、`refresh_topic.py` に `--include-wave` を足して保管済み更新回を1つの候補へ畳み込んだ。**同じ滞留は他テーマでも起きるので、次からはこのフラグを使う。**
 **注意**: ビルダーを直したら必ず同じ入力で2回実行し、2回目に差分が出ないことを確認してから `page_update_mode` を上げる
