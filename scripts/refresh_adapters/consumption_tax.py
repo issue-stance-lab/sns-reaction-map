@@ -137,6 +137,16 @@ def finalize(root: Path, current_date: str) -> None:
         cwd=root,
         check=True,
     )
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_consumption_tax_page.py"),
+            "--public-counts-only",
+            "--output-html", str(root / PAGE),
+        ],
+        cwd=root,
+        check=True,
+    )
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:

@@ -6,6 +6,8 @@
 どれも気づけなかった（件数の網羅検査はトップページにしか掛かっていない）。
 """
 
+import json
+import re
 import subprocess
 import sys
 import unittest
@@ -19,6 +21,23 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class IssueCountSyncTest(unittest.TestCase):
+    def test_consumption_map_heading_matches_public_json(self) -> None:
+        public = json.loads(
+            (ROOT / "data/public/themes/consumption-tax-cut.json").read_text(encoding="utf-8")
+        )
+        page = (ROOT / "docs/consumption-tax-cut-reaction-map.html").read_text(encoding="utf-8")
+        match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
+        self.assertIsNotNone(match)
+        self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
+
+    def test_public_pages_do_not_claim_eleven_published_themes(self) -> None:
+        offenders = [
+            path.name
+            for path in (ROOT / "docs").glob("*.html")
+            if "公開中の11テーマ" in path.read_text(encoding="utf-8")
+        ]
+        self.assertEqual([], offenders)
+
     def test_published_pages_have_no_stale_issue_counts(self) -> None:
         result = subprocess.run(
             [sys.executable, "scripts/sync_issue_counts.py", "--check"],

@@ -668,13 +668,18 @@ def prepare_public_candidate_bundle(
     registry.write_text(_replace_theme_fields(registry.read_text(encoding="utf-8"), topic, fields), encoding="utf-8")
     update_seo_date(candidate_root / "configs" / "theme-seo.json", topic, current_date)
 
+    # 公開JSONを先に作る。finalize とページ件数同期はこの候補JSONだけを読む。
+    for command in (
+        [sys.executable, "scripts/build_public_registry.py", "--all"],
+        [sys.executable, "scripts/verify_public_registry.py", "--public-only"],
+    ):
+        run(command, label="prepare public candidate", root=candidate_root)
+
     # finalize を候補コピーに対して実行し、従来の「昇格後だけ変わる」ページをなくす。
     finalize = getattr(adapter, "finalize", None)
     if finalize is not None:
         finalize(candidate_root, current_date)
     commands = [
-        [sys.executable, "scripts/build_public_registry.py", "--all"],
-        [sys.executable, "scripts/verify_public_registry.py", "--public-only"],
         [sys.executable, "scripts/sync_issue_counts.py", topic],
         [sys.executable, "scripts/seo/apply_theme_trust.py"],
         [sys.executable, "scripts/sync_portal_stats.py"],
