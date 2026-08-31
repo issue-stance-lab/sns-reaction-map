@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-31（課題55の段階1完了。作業ツリー `task/domain-cutover` を作成し実装ブランチを現行構成へ直した）
+最終更新: 2026-08-31（課題55の段階0〜2完了。公開候補を固定し、CEO承認待ち）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -110,23 +110,28 @@
     （`test_portal_stats.test_top_page_matches_canonical_stats`、トップページの集計値ずれ）と確認した。段階1の変更が原因ではない
     コミット: `56cb9b8`（`task/domain-cutover` ブランチ、作業ツリー `../isa-wt-domain-cutover`）
 
-**段階2: 公開前の機械検査を足し、候補を固める**
-2-1. `tests/test_domain_migration.py` に次の検査を足す（**ルールは検査にしないと守られない**）:
+**段階2: 公開前の機械検査を足し、候補を固める。2026-08-31 完了**
+2-1. **完了。** `tests/test_domain_migration.py` に4件追加した（9→10件）:
     ①公開HTMLのGA許可ホストが新ドメインであること ②`docs/CNAME` が存在し中身が `sns-reaction-map.jp` であること
-    ③`scripts/` 配下に旧オリジンのURL定数が残っていないこと ④`docs/ads.txt` が存在すること
-2-2. 検査を通す。
-    ```sh
-    python3 -m unittest discover -s tests -q
-    python3 scripts/verify_top_page.py
-    python3 scripts/verify_theme_page.py
-    ```
-    成功の形: いずれも異常なしで終わる（`verify_theme_page.py` は unittest では回らないので別に実行する）
-2-3. 生成器を2回続けて実行し、差分が出ないことを確認する（`sitemap.xml` の日付が動かないこと）
-2-4. Claudeの独立レビューを受け、指摘修正後の公開候補を固定する。
-    **固定の意味は「コミットSHAを1つ決めること」**。公開されるHTMLはビルド時にSupabase認証情報が差し込まれるため、
-    配信バイト列とリポジトリの中身は必ず違う。承認対象は「そのSHAの `docs/` の中身」と定義する
-2-5. `company/APPROVALS.yaml` に `website_publication` の承認案件を `status: pending` で追加する。
-    summary にドメイン移行と対象SHAを書き、evidence に検査ログとレビュー結果を入れる
+    ③`scripts/` 配下に旧オリジンのURL定数が残っていないこと ④`docs/ads.txt` が存在すること。
+    `docs/CNAME` はこの段階で新設した（段階4-3が確認する対象。デプロイでカスタムドメインが外れないことの検査対象にする目的）
+2-2. **完了。** 検査を通した。フルテストは310件中、既存の無関係な1件のみ失敗（`test_top_page_matches_canonical_stats`、
+    データ更新待ちで `929ebc9` の時点から存在）。`verify_top_page.py` と全10テーマの `verify_theme_page.py` にもNGが出たが、
+    いずれも本移行と無関係と確認した：collect_at期限超過3テーマ・次回更新日の表示ズレ（today=2026-08-31になったことによる
+    既存の日付ドリフト、`929ebc9` でも再現）、外部リンクチェックの一時的失敗2件（対象URLは実際は200、再実行で消えた）
+2-3. **完了。** `generate_seo_assets.py` を2回連続実行し、`docs/` に差分が出ないことを確認した（既にコミット済みの内容と完全一致）
+2-4. **完了。** Claudeの独立レビュー（5観点のエージェントで最大30候補→検証、8件生存）を受けた。
+    **見つかった主な問題**: 廃止した「公開専用リポジトリへの同期」設計への言及が、コードでなく会社のガバナンス文書
+    （`company/APPROVALS.yaml` の承認待ち案件、`company/HANDOFFS.yaml` の引き継ぎ、設計書の「公開前ゲート」節）に
+    4箇所残っていた。削除済みファイル（`tests/test_sync_public_site.py`）を承認の証拠に挙げたままの箇所もあった。
+    いずれも修正済み。あわせて `deploy.yml`（唯一の公開経路）の存在を検査するテストが無かったので追加した。
+    残り2件は対象外として記録のみ（`scripts/admin_dashboard/jobs.py` の公開後確認が `docs/` 抜きでindex.htmlを読む
+    既存バグ＝mainにも存在し本移行が原因ではない。ドメイン定数が7スクリプトに重複している設計上の改善余地）
+2-5. **完了。** `company/APPROVALS.yaml` の `approval-20260830-003`（既存のpending案件。新規追加ではなく、
+    廃止済み設計を書いたままだったこれを訂正して使った）に、公開候補コミット
+    `77782e719f2c9e0209aba0e58823be13c0816c06`（`task/domain-cutover`、承認対象は「このSHAの `docs/` の中身」）と
+    検査・レビュー結果をevidenceとして記録した。CEO承認はまだ得ていない（`status: pending` のまま）
+    コミット: `bb30a35`（2-1）→ `77782e7`（2-4）→ `d7a0fe9`（2-5、`task/domain-cutover` ブランチ）
 
 **段階3: CEO承認後に一度だけ公開する**
 3-1. CEO承認（`APPROVALS.yaml` を `approved` にし、`decided_at` と `decision_note` を書く）
@@ -177,9 +182,11 @@
   ただし旧ルートは別リポジトリなので、この作業は本リポジトリの作業ツリーではできない
 
 **対象外**: 3D実装、AdSense再申請そのもの、記事内容の改稿、収集データの数字修正
-**次にすること**: 段階2（`../isa-wt-domain-cutover` で機械検査を追加し、通し、公開候補を固定する）に進む。
-段階0-1・段階1は完了済み。0-2（GA4先行公開の要否）と段階1の「CEOに決めてもらうこと」（旧ルートの扱い）は
-段階1完了時点でも未回答のまま残っている
+**次にすること**: **CEO承認を待つ（段階3-1）。** 段階0-1・段階1・段階2はすべて完了し、公開候補
+（`task/domain-cutover` ブランチ、コミット `d7a0fe9` 時点の `docs/` の中身）を固定した。`company/APPROVALS.yaml` の
+`approval-20260830-003` が承認待ち。承認が出ればAIが段階3（マージ・push・本番反映）を実行する。
+0-2（GA4先行公開の要否）と段階1の「CEOに決めてもらうこと」（旧ルートの扱い、A/B/Cの3択・私ならA）は
+承認と合わせて回答をもらえると助かる（無回答でも段階3-1の承認だけで公開作業は進められる）
 
 ### 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
 
