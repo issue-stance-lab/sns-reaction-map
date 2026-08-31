@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-30"
+updated_at: "2026-08-31"
 
 # 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
 required_fields:
@@ -14,11 +14,21 @@ required_fields:
   - completion_evidence
 
 items:
+  - id: custom-domain-migration
+    department: engineering-data
+    status: in_progress
+    current_state: "正式URL https://sns-reaction-map.jp/ を sns-reaction-map リポジトリのGitHub Pagesへ設定済み。DNSチェック成功、HTTPS強制有効、旧プロジェクトURLからパスを保った301転送を確認した。2026-08-31のClaudeレビューで、新ドメインでは投票（Supabaseの許可オリジンに新ドメインが無い）とGA4（公開HTMLの許可ホストが旧ドメイン固定）が停止していることを実測で検出した。同日、CEOがSupabaseのVOTE_ALLOWED_ORIGINSに新ドメインを追加し、投票のCORS許可を復旧・確認済み（新旧両オリジンとも許可を確認）。ブラウザでの実投票の目視確認とGA4の復旧は未実施。公開HTMLのcanonical・OGP・JSON-LD・robots.txt・sitemap.xmlは旧URLのままで、検索エンジン移行は未完了。コード側の大半は未マージブランチ task/domain-migration（929ebc9）に実装済みだが、破棄した『公開専用リポジトリから公開する』設計に属する deploy.yml 削除と sync_public_site.py を含むため、そのままマージできない。"
+    next_action: "新ドメインの公開ページで実際に1票入れて投票復旧を目視確認する。その後TASK_BOARD課題55の段階1（作業ツリーを作りtask/domain-migrationを現行構成へ直す）から段階5までを順に進め、Claudeの独立レビューとCEO承認後にだけ公開する。"
+    due_at: "2026-09-03"
+    canonical_sources: ["TASK_BOARD.md", "quality/designs/domain-migration-2026-08-30.md", "configs/site-cases.json", "configs/theme-seo.json", "scripts/seo/generate_seo_assets.py", "company/APPROVALS.yaml"]
+    ceo_approval: "DNS・HTTPS設定はCEO実施済み。旧ルートの扱い（課題55のA/B/C）の決定、公開HTML・SEO情報の一括更新と公開には別途必要"
+    completion_evidence: ["quality/reviews/", "tests/test_domain_migration.py", "docs/sitemap.xml", "docs/robots.txt", "docs/CNAME", "company/APPROVALS.yaml"]
+
   - id: website-reaction-planet-renewal
     department: engineering-data
     status: in_progress
-    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。"
-    next_action: "課題15-Aの数字・定義・2リポジトリ整合を完了させ、その正典だけを読む共通planet-data生成器の最小構成を部活地域移行で実装する。"
+    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。設計書と独立レビューを正典化したが、公開実装は未着手。カスタムドメイン移行の残作業を課題55として先に完了させる。"
+    next_action: "課題55で正式URLと公開元を一本化し、続いて課題15-Aの数字・定義・公開テーマ・サイトマップ整合を完了させる。その正典だけを読む共通planet-data生成器の最小構成を部活地域移行で実装する。"
     due_at: null
     canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml"]
     ceo_approval: "重要方針と非公開実装は承認済み。一般公開、広告配置、AdSense再申請は別途必要"
@@ -98,7 +108,7 @@ items:
     department: business
     status: in_progress
     current_state: "2026-08-29に3回目も『有用性の低いコンテンツ』で不承認。ads.txtは承認済み。ルートと本体の数字、ページ内母数、手動確認表示、サイトマップ更新日の不一致を確認し、再申請を保留した。"
-    next_action: "TASK_BOARD課題15-Aとして、表示・数字・2リポジトリ・サイトマップの整合性修正だけに着手する。15-A〜C完了前は再申請しない。"
+    next_action: "TASK_BOARD課題55で正式URLと公開元を一本化した後、課題15-Aとして表示・数字・公開テーマ・サイトマップの整合性を修正する。課題55と15-A〜C完了前は再申請しない。"
     due_at: null
     canonical_sources: ["TASK_BOARD.md", "quality/reviews/adsense-check-2026-08-18.md", "quality/reviews/adsense-third-rejection-2026-08-29.md"]
     ceo_approval: "再申請時に必要"

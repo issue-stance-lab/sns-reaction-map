@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題のみ）
 
-最終更新: 2026-08-30（3D「議論の惑星」中心リニューアルを最重要課題として追加）
+最終更新: 2026-08-31（課題55にレビュー指摘を反映し、実施順・完了条件を確定）
 
 > **テーマ個別の工程状態は `THEMES.yaml` を参照してください。**
 > 完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` に移動しました。
@@ -17,6 +17,158 @@
 ---
 
 ## アクティブ課題（テーマ横断）
+
+### 課題55: カスタムドメイン移行と公開元の一本化（課題54・15-Cの前提）
+
+**状態**: ドメイン取得・DNS・GitHub Pages・HTTPS設定は完了。**ただし新ドメインでは投票とGA4が停止している**（2026-08-31 のレビューで実測検出。段階0で先に直す）。公開HTML内のURL移行と検索エンジン移行は未完了
+**優先度**: **最優先の基盤作業**。課題54の公開実装および課題15-Cより先に完了する
+**正式URL**: `https://sns-reaction-map.jp/`
+
+**公開元（2026-08-31 確定）**: `issue-stance-lab/sns-reaction-map` の GitHub Pages（GitHub Actions公開・`.github/workflows/deploy.yml`）。
+`docs/` がサイトのルートになる。旧ルートリポジトリを同一内容の第二公開元にしない。
+
+**採用しなかった案**: `quality/designs/domain-migration-2026-08-30.md` は「公開専用リポジトリ `issue-stance-lab.github.io` から公開し、
+このリポジトリのPagesを止める」設計だった。2026-08-31 に実際に行われた設定はこれと違い、プロジェクトリポジトリ側に
+カスタムドメインを付けている。実測の結果**現行構成のほうが優れているため、現行構成を採用し、設計書の「切り替え順序」「旧URLの扱い」
+「安定後の公開データ基盤」は破棄する**。理由は、現行構成では旧URLがパスを保ったまま本物の301転送になること（実測: 
+`/sns-reaction-map/bukatsu-chiiki-reaction-map.html` → `https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html`、`sitemap.xml` も同様）。
+設計書案では GitHub Pages がページ単位の301を出せず、meta refresh による弱い代替になる。設計書の Search Console 節・AdSense 節は引き続き有効。
+
+**実装ブランチ（未マージ・要修正）**: `task/domain-migration`（929ebc9 "Prepare custom domain migration"）。
+公開HTML・configs・スクリプト・テストの書き換えは大半が実装済みで流用できる。ただし次の3点は破棄した設計に属するため**そのままマージしてはいけない**。
+- `.github/workflows/deploy.yml` の削除 → 現行構成ではこれが唯一の公開経路。削除すると公開が止まる
+- `scripts/sync_public_site.py` と `tests/test_sync_public_site.py` の新設 → 公開専用リポジトリへ同期する前提の道具。不要
+- `tests/test_domain_migration.py` の `test_source_repository_has_no_pages_deploy_workflow` → 上と同じ前提。削除して差し替える
+
+**Hermes/Codexレビュー反映**: 2リポジトリの存在だけでなく、数字・URL・生成物を複数箇所で手編集できることが再発の原因。正典の一元化、自動検査、承認済み生成物の固定をセットで行う
+
+**2026-08-31 に実画面・公開URLで確認済み**:
+- GitHub Pages のDNSチェック成功、HTTPS強制が有効
+- `sns-reaction-map.jp` と `www.sns-reaction-map.jp` は到達でき、wwwは正式URLへ転送される
+- 旧URL `https://issue-stance-lab.github.io/sns-reaction-map/` は新しい正式URLへ**パスを保ったまま301で**転送される
+- ただし公開HTMLの canonical / OGP / JSON-LD、`robots.txt`、`sitemap.xml` は旧URLのまま
+- 新ドメインではサイトをルート `/` で公開するため、`/sns-reaction-map/` が404になること自体は想定どおり
+- 旧ルート `https://issue-stance-lab.github.io/` は200のまま生きており、中のリンクは全て新ドメインへ301する
+
+**2026-08-31 のレビューで検出した「すでに本番で壊れているもの」**:
+- **投票が新ドメインで動かない。** Supabase Edge Function の許可オリジンに新ドメインが無い。
+  実測: `Origin: https://sns-reaction-map.jp` で preflight を送ると `access-control-allow-origin: https://issue-stance-lab.github.io` が返り、ブラウザが拒否する。
+  実際に効いているのは**デプロイ済みの環境変数 `VOTE_ALLOWED_ORIGINS`** で、`supabase/functions/cast-vote/index.ts` の既定値を直すだけでは復旧しない
+- **GA4が新ドメインで1件も計測していない。** 公開中のHTMLに `var allowedHosts = ["issue-stance-lab.github.io"];` のホスト判定が入っており、
+  新ドメインでは計測タグ自体が読み込まれない。書き手は `scripts/seo/apply_ga_tags.py`。
+  あわせて `scripts/fetch_ga4_metrics.py`（DEFAULT_HOST_NAME）と `scripts/fetch_gsc_metrics.py`（DEFAULT_SITE_URL）も旧ホスト固定で、数字が0のまま静かに続く
+
+**修正範囲**:
+1. 正式ドメインとベースパスを1つの設定へ集約し、生成器がそこだけを参照する
+2. canonical、`og:url`、JSON-LD、絶対画像URL、robots、sitemap、404、内部リンクを一括生成・検査する
+3. 公開対象10テーマ、トップ、共通ページについて、旧URL残存とリンク切れを機械検査する
+4. 旧URLから対応する新URLへの転送を確認し、旧ルートリポジトリは重複コンテンツを配信しない役割に整理する
+5. 公開後にSearch Consoleへ新ドメインのサイトマップを登録し、旧プロパティも移行確認のため当面残す
+6. **投票（Supabase許可オリジン）とGA4計測ホストを新ドメインで復旧する**
+7. **再生成で旧URLが復活する経路を塞ぐ。** `scripts/refresh_topic.py` と `scripts/refresh_bukatsu_pilot.py` の `SITE_URL`、
+   `scripts/admin_dashboard/{jobs,render}.py` の `PUBLIC_BASE`、`scripts/build_bukatsu_arena.py` と `scripts/build_consumption_tax_page.py` の共有URL
+8. **旧URLを埋め込む手順書を直す。** `README.md`（公開URL）、`.claude/skills/release/SKILL.md`（後述の永久ループ）、
+   `.claude/skills/new-topic/SKILL.md` と `.claude/skills/new-topic/scripts/check_launch.py`（旧ルートへの追記手順）、
+   `.claude/skills/note-operation/SKILL.md`（UTM URL）、`X_POSTING_GUIDE.md`
+9. **旧URLを正解として固定しているテストを更新する。** `tests/test_theme_hero_assets.py`、`tests/test_image_policy.py`、`tests/test_admin_dashboard.py`
+10. **公開対象外の11ページ目 `docs/takaichi-reaction-map-standard.html` の扱いを決める。**
+   新ドメインで200で開けるがサイトマップには載っていない。方針は「URLだけ新ドメインへ直し、`noindex` は付けない現状維持」
+
+**実施順**（段階をまたいで先に進まない。各段階の「成功の形」が出てから次へ）
+
+**段階0: すでに壊れている2つを復旧する（CEO操作1つ＋先行公開の判断）**
+0-1. 投票の復旧。**2026-08-31 CEO実施・確認済み。** Supabaseダッシュボード → Edge Functions → cast-vote → Secrets の
+    `VOTE_ALLOWED_ORIGINS` に新ドメインを追加する。値は新旧を並べる（移行期間中は両方許可する）:
+    `https://sns-reaction-map.jp,https://issue-stance-lab.github.io,http://localhost:8000,http://127.0.0.1:8000`
+    成功の形: 下のコマンドで `access-control-allow-origin: https://sns-reaction-map.jp` が返る。
+    ```sh
+    curl -sS -X OPTIONS -H "Origin: https://sns-reaction-map.jp" -H "Access-Control-Request-Method: POST" \
+      -D - -o /dev/null https://qslrlprzoucrlptnhsmi.supabase.co/functions/v1/cast-vote | grep -i access-control-allow-origin
+    ```
+    **2026-08-31 に実行して確認済み**（新旧どちらのOriginでも `access-control-allow-origin` が自分自身の値で返ることを確認）。
+    **残作業**: 新ドメインの公開ページで実際に1票入れ、やり直しボタンまで動くことをブラウザで目視確認する（未実施）
+0-2. GA4の復旧は**原則として段階3の一括公開に同梱する**（公開回数を増やさないため）。
+    ただし段階3が2026-09-03 より後ろにずれる場合は、`apply_ga_tags.py` の許可ホスト1行だけを先行公開する承認案件を出す。
+    判断者はCEO。計測が止まっている日数と、公開を1回増やす手間の比較で決める
+
+**段階1: 作業ツリーを作り、実装ブランチを現行構成へ直す**
+1-1. `git worktree add ../isa-wt-domain-cutover -b task/domain-cutover task/domain-migration` で `929ebc9` から分岐する
+    （main から作り直さない。コード側の大半は既に実装済みのため）
+1-2. 破棄した設計に属する3点を戻す: `.github/workflows/deploy.yml` を復活、`scripts/sync_public_site.py` と
+    `tests/test_sync_public_site.py` を削除、`tests/test_domain_migration.py` から
+    `test_source_repository_has_no_pages_deploy_workflow` を削除
+1-3. 修正範囲 6〜10 を実装する（段階0-1 で直した環境変数と同じ並びを `cast-vote/index.ts` の既定値にも入れる）
+1-4. `quality/designs/domain-migration-2026-08-30.md` の冒頭に「切り替え順序・旧URLの扱い・安定後の公開データ基盤は
+    2026-08-31 に破棄。公開元は sns-reaction-map リポジトリ」と追記する
+
+**段階2: 公開前の機械検査を足し、候補を固める**
+2-1. `tests/test_domain_migration.py` に次の検査を足す（**ルールは検査にしないと守られない**）:
+    ①公開HTMLのGA許可ホストが新ドメインであること ②`docs/CNAME` が存在し中身が `sns-reaction-map.jp` であること
+    ③`scripts/` 配下に旧オリジンのURL定数が残っていないこと ④`docs/ads.txt` が存在すること
+2-2. 検査を通す。
+    ```sh
+    python3 -m unittest discover -s tests -q
+    python3 scripts/verify_top_page.py
+    python3 scripts/verify_theme_page.py
+    ```
+    成功の形: いずれも異常なしで終わる（`verify_theme_page.py` は unittest では回らないので別に実行する）
+2-3. 生成器を2回続けて実行し、差分が出ないことを確認する（`sitemap.xml` の日付が動かないこと）
+2-4. Claudeの独立レビューを受け、指摘修正後の公開候補を固定する。
+    **固定の意味は「コミットSHAを1つ決めること」**。公開されるHTMLはビルド時にSupabase認証情報が差し込まれるため、
+    配信バイト列とリポジトリの中身は必ず違う。承認対象は「そのSHAの `docs/` の中身」と定義する
+2-5. `company/APPROVALS.yaml` に `website_publication` の承認案件を `status: pending` で追加する。
+    summary にドメイン移行と対象SHAを書き、evidence に検査ログとレビュー結果を入れる
+
+**段階3: CEO承認後に一度だけ公開する**
+3-1. CEO承認（`APPROVALS.yaml` を `approved` にし、`decided_at` と `decision_note` を書く）
+3-2. `release` スキルに従いAIがマージ・pushする。**push前に `.claude/skills/release/SKILL.md` ⑥の確認コマンドを直しておく**
+    （現状は旧URLかつ `curl -s` で転送を追わないため、301で本文が空になり `until` ループが永久に終わらない）。
+    直した形:
+    ```sh
+    until curl -sL "https://sns-reaction-map.jp/<テーマ>-reaction-map.html" \
+      | grep -q "<今回変えた文字列>"; do sleep 15; done; echo "公開反映を確認"
+    ```
+3-3. 公開後、承認したSHAと `main` の内容が一致していることを確認する。
+    **`main` へのpushはすべて再デプロイを起こす**ため、承認から公開までの間に他セッションがpushしていないかを見る
+
+**段階4: 本番で確かめる**
+4-1. 転送・メタデータ・robots・sitemap・10テーマ・404を再検査する
+4-2. 新ドメインで投票が入ること、GA4のリアルタイムに自分のアクセスが出ることを確認する
+4-3. `docs/CNAME` が残っており、デプロイ後もカスタムドメイン設定が外れていないことを確認する
+    （現在リポジトリにCNAMEファイルは1つも無く、ドメインはGitHubの設定画面にしか存在しない。
+    Actions公開では通常それで保持されるが、**保持されるかどうかは未確認**。ファイルを置いて検査対象にするのが安全）
+
+**段階5: 検索エンジンとAdSenseの移行**
+5-1. Search Console に `sns-reaction-map.jp` のドメインプロパティを追加し、`sitemap.xml` を送信する。
+    旧プロパティは移行確認のため当面残す。**「アドレス変更ツール」は使えない**（パス単位の移転は対象外のため）
+5-2. AdSenseに `sns-reaction-map.jp` をサイトとして追加し、所有権確認と `ads.txt` を確認する（再申請はしない）
+5-3. 4週間、週1回インデックス状況を見る。移行確認後に課題54と15-Cを進める
+
+**完了条件**:
+- 公開物の canonical / OGP / JSON-LD / robots / sitemap がすべて正式URLを示す
+- 公開対象10テーマ、トップ、about等の共通ページが新ドメインのルート配下で開く
+- 旧URLが対応する新URLへ転送され、新旧2か所で同じ本文を公開していない
+- 旧オリジン文字列は、転送設定・移行記録など明示的な許可箇所以外の公開物で0件（`docs/takaichi-reaction-map-standard.html` を含む）
+- 公開直前に承認されたコミットSHAの `docs/` と、実際に公開されたコミットSHAの `docs/` が同一である
+- Search Consoleで新ドメインのサイトマップが受理される
+- **新ドメインの公開ページで投票が成立する**（preflightが新ドメインを許可し、実際に1票入る）
+- **新ドメインでGA4が計測される**（公開HTMLの許可ホストが新ドメインで、リアルタイムに反映される）
+- **収集・更新スクリプトを再実行しても旧URLが復活しない**（`refresh_topic.py` 実行後の `sitemap.xml`・`robots.txt` が新ドメインのまま）
+- **旧URLを埋め込む手順書が残っていない**（README・release・new-topic・note-operation・X_POSTING_GUIDE）
+- **`docs/CNAME` がリポジトリにあり、デプロイ後もカスタムドメインが外れない**
+- 上記のうち機械で見られるものが `tests/test_domain_migration.py` で検査され、検査を消さない限り再発しない
+
+**CEOに決めてもらうこと（1件・段階1までに）**: 旧ルート `issue-stance-lab.github.io` をどうするか。
+現在は200で生きており、リンク先は全部新ドメインへ301する「中身のないリンク集」になっている。ここはAdSenseの審査対象でもある。
+- (A) 旧ルートのトップを `noindex` + 新ドメインへの案内1枚に置き換え、AdSenseの審査対象を新ドメインへ移す
+- (B) 旧ルートを今の内容のまま残し、AdSenseの審査対象も旧ルートのままにする
+- (C) 旧ルートのPagesを止める
+- **私なら (A)。** 理由は、(B)は「新旧2か所で同じ本文を公開しない」という本課題の完了条件と両立せず、
+  (C)は旧ルートに来た読者と既存の被リンクを捨てることになるため。(A)なら転送の受け皿を残したまま重複が消える。
+  ただし旧ルートは別リポジトリなので、この作業は本リポジトリの作業ツリーではできない
+
+**対象外**: 3D実装、AdSense再申請そのもの、記事内容の改稿、収集データの数字修正
+**次にすること**: 段階0-1（Supabaseの `VOTE_ALLOWED_ORIGINS` に新ドメインを追加）だけを先に行う。公開もCEO承認も要らず、投票の停止が今日止まるため
 
 ### 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
 
@@ -44,12 +196,13 @@
 3Dが動かない端末、JavaScript無効時、キーボード操作でも同じ主要内容へ到達できることを必須とする。
 
 **実装順**:
-1. 課題15-Aを完了し、意見数・論点数・更新日・用語の正典を一本化する
-2. 部活地域移行で、共通planet-data生成器、共通3D表示、HTMLフォールバックを作る
-3. 非公開の部活完成版を品質監査し、CEOが10テーマ共通仕様として承認する
-4. 同じ生成器で残り9テーマへ移行し、10テーマすべてを確認台帳へ記録する
-5. 10テーマ・トップ・ルート・サイトマップを総合監査し、CEO承認後に2リポジトリを同時公開する
-6. ルートと本体の再クロールを確認し、品質監査とCEO承認後にだけAdSenseへ再申請する
+1. 課題55を完了し、正式URLと公開元を一本化する
+2. 課題15-Aを完了し、意見数・論点数・更新日・用語の正典を一本化する
+3. 部活地域移行で、共通planet-data生成器、共通3D表示、HTMLフォールバックを作る
+4. 非公開の部活完成版を品質監査し、CEOが10テーマ共通仕様として承認する
+5. 同じ生成器で残り9テーマへ移行し、10テーマすべてを確認台帳へ記録する
+6. 10テーマ・トップ・サイトマップを総合監査し、CEO承認後に課題55で一本化した公開元へ公開する
+7. 新ドメインの再クロールを確認し、品質監査とCEO承認後にだけAdSenseへ再申請する
 
 **完了条件**:
 - 10テーマすべてが1つの共通生成経路から再生成でき、同じ入力では地形が勝手に変わらない
@@ -96,13 +249,13 @@
 
 | ID | 担当 | 状態 | 完了条件 |
 |---|---|---|---|
-| 15-A 表示・数字・2リポジトリ整合 | 開発・データ部AI | **次に着手** | ルート・本体・10テーマ・サイトマップの収集数／意見数／論点数／更新日が正典と一致し、説明文中の古い数字も検査で検出できる |
+| 15-A 表示・数字・公開元整合 | 開発・データ部AI | **課題55後** | 新ドメインのトップ・10テーマ・サイトマップの収集数／意見数／論点数／更新日が正典と一致し、説明文中の古い数字も検査で検出できる。旧ルートの数字を合わせるかは課題55のCEO決定に従う（(A)採用なら旧ルートに数字は残らない） |
 | 15-B 手動編集・独自価値 | 編集部AI → 品質監査AI | 15-A後 | 公開対象10テーマの代表投稿・要旨・編集結論を確認台帳へ記録し、AIの信頼度・内部理由を読者向け本文から除去する |
-| 15-C 公開・再クロール確認 | 開発・データ部AI → CEO | 15-A/B後 | CEO承認後に2リポジトリを同時公開し、Search Consoleでルート・本体トップ・10テーマが最新版として取得されたことを確認する |
-| 15-D AdSense再申請 | 事業部AI → CEO | **保留** | 15-A〜Cの証拠を品質監査が確認し、CEOが再申請を事前承認する |
+| 15-C 公開・再クロール確認 | 開発・データ部AI → CEO | 課題55・15-A/B後 | CEO承認後に一本化した公開元へ公開し、Search Consoleで新ドメインのトップ・10テーマが最新版として取得されたことを確認する |
+| 15-D AdSense再申請 | 事業部AI → CEO | **保留** | 課題55で審査対象サイトを確定し、AdSenseへ新ドメインを追加・所有権確認済みであること。そのうえで15-A〜Cの証拠を品質監査が確認し、CEOが再申請を事前承認する |
 
-**次にすること**: 15-Aだけに着手する。消費税・自転車・「分類済み」の定義を直し、
-ルート生成器とサイトマップ生成を通常の公開検査へ接続する。15-A完了前に新しいAdSense対策記事を増やさない
+**次にすること**: 課題55（特に段階3の公開まで）を先に完了した後、15-Aだけに着手する。消費税・自転車・「分類済み」の定義を直し、
+一本化した公開元の生成器とサイトマップ生成を通常の公開検査へ接続する。15-A完了前に新しいAdSense対策記事を増やさない
 
 **2026-08-21 対応済み（3回目の申請）**: 「投稿の主張を一次資料と突き合わせる」セクションを5テーマに実装し、
 セオリコ診断の Experience NG を解消した（2026-08-18 の再診断で全12項目OK・総合「合格ライン」）。
@@ -223,7 +376,7 @@ python3 scripts/verify_top_page.py                      # docs/ の衛生・404�
   ai-copyright の1ページ。どちらが正しいかオーナーの確認が要る
 ③背景解説の本文増補（現状は一次資料の追加のみ。時系列・未決着の問いの明記は未着手）
 ④編集情報をページ冒頭へ移す（現状は可視テキストの23〜66%の位置）
-⑤独自ドメイン移行の判断（保留中。3者とも「今回は保留」で一致）
+⑤独自ドメイン移行は2026-08-31に実施へ変更。DNS・HTTPS設定は完了し、公開HTMLと検索エンジンの残作業は課題55で管理する
 ⑥再申請の判断。**反映して Google が再クロールするまで、管理画面の「問題を修正しました」に
   チェックを入れないこと**
 ⑦通過した場合は広告ユニットの配置設計（本課題の後半スコープ）
