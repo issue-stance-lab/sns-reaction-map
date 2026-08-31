@@ -57,6 +57,7 @@ except ImportError:  # python3 scripts/build_koshitsu_arena.py
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
 
 THEME = "koshitsu-tenpakai"
+PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 OTHER = "その他"
 
 # stance → アリーナのx値（改正への賛否軸）
@@ -417,6 +418,71 @@ def replace_once(page: str, pattern: str, replacement: str, what: str, *, flags=
     return new_page
 
 
+def _public_rows(data: dict[str, Any]) -> tuple[int, list[dict[str, Any]]]:
+    """公開JSONを検査し、既存の集計表示生成に渡せる最小行へ変換する。"""
+    if data.get("theme_id") != THEME:
+        raise IssueCountError(f"皇室典範の公開JSONではありません: {data.get('theme_id')}")
+    rows: list[dict[str, Any]] = []
+    for item in data.get("issues", []):
+        issue = str(item["label"])
+        count = int(item["count"])
+        stances = {str(value["label"]): int(value["count"]) for value in item.get("stances", [])}
+        intensities = {str(value["id"]): int(value["count"]) for value in item.get("intensities", [])}
+        if set(stances) != set(STANCE_X) or sum(stances.values()) != count:
+            raise IssueCountError(f"公開JSONの立場集計が一致しません: {issue}")
+        if set(intensities) != set(INTENSITY_E) or sum(intensities.values()) != count:
+            raise IssueCountError(f"公開JSONの強度集計が一致しません: {issue}")
+        stance_values = [name for name in (NEG, NEU, POS) for _ in range(stances[name])]
+        intensity_values = [name for name in ("high", "medium", "low") for _ in range(intensities[name])]
+        rows.extend({"classification": {"main_issue": issue, "stance": stance, "intensity": intensity}} for stance, intensity in zip(stance_values, intensity_values, strict=True))
+    if len(rows) != int(data["opinion_count"]):
+        raise IssueCountError("公開JSONの意見数と集計値が一致しません")
+    return int(data["collected_count"]), rows
+
+
+def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """候補公開JSONを正典に、ページ上の管理対象集計を貼り直す。"""
+    collected, rows = _public_rows(json.loads(public_theme.read_text(encoding="utf-8")))
+    config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
+    arena = config["arena"]
+    labels = {str(k): str(v) for k, v in arena["labels"].items()}
+    icons = {str(k): str(v) for k, v in arena["icons"].items()}
+    blocks = arena["issue_blocks"]
+    order = issue_order(rows)
+    counts = Counter(classification(row)["main_issue"] for row in rows)
+    if [str(block["main_issue"]) for block in blocks] != order[:len(blocks)]:
+        raise IssueCountError("公開JSONの論点順とページ設定が一致しません")
+    total = len(rows)
+    page = replace_once(page, r"const ISSUES=\[.*?\n  \];", build_issues(order, labels), "ISSUES", flags=re.S)
+    page = replace_once(page, r"var VOTE_ISSUES=\[.*?\n  \];", build_vote_issues(order, labels, icons), "VOTE_ISSUES", flags=re.S)
+    page = replace_once(page, r"addBtn\('全件 \(\d+\)',-1\);", f"addBtn('全件 ({total})',-1);", "フィルタの全件ボタン")
+    page = replace_once(page, r"<span>(?:意見)?\d+件 \| セクター=", f"<span>意見{total}件 | セクター=", "アリーナ見出しの件数")
+    page = replace_once(page, r"収集した[^<]*?つの論点に整理しました。", f"収集した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。", "ヒーローの lead")
+    page = replace_once(page, r"で取得した公開投稿 \d+件<br>\n(?:  （うち[^\n]*\n)?", f"で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n", "調査条件の件数")
+    page = replace_once(page, r"関連性と[^<]*?件を表示しています。", f"関連性と意見性、論点を判定し、収集した{collected:,}件のうち意見と判定した{total:,}件を表示しています。", "収集方法の件数")
+    period = re.search(r"（取得期間: ([^／]+)／", page)
+    if not period:
+        raise IssueCountError("調査条件の取得期間が見つかりません")
+    page = replace_once(
+        page,
+        r"<details><summary>収集クエリ</summary>.*?</details>",
+        "<details><summary>収集クエリ</summary><ul>"
+        f'<li>{html.escape(" / ".join(load_queries()))}</li>'
+        f"<li>{html.escape(period.group(1))}にYahooリアルタイム検索で累計{collected}件を取得"
+        f"（重複除去後）。全件をAIが論点・立場・表現強度で分類し、うち意見と判定した{total}件を集計対象にしています。</li>"
+        f"<li>ページ上の件数はすべてこの意見{total}件から生成しています（scripts/build_koshitsu_arena.py）。"
+        "「世論の潮目」ウィジェットだけは例外で、前回の収集分と今回の収集分どうしの構成比を比較しています（対象日はウィジェット内に表示）。</li>"
+        "</ul></details>",
+        "収集クエリ",
+        flags=re.S,
+    )
+    page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>', f'<span class="conclusion-count"><b>{counts[order[0]]}</b>件</span>', "議論の中心の件数")
+    page = replace_once(page, r"<!-- INSIGHT_STATS_START -->.*?<!-- INSIGHT_STATS_END -->", "<!-- INSIGHT_STATS_START -->\n" + build_insight_stats(rows, order, labels, collected) + "\n<!-- INSIGHT_STATS_END -->", "注目ポイント", flags=re.S)
+    page = replace_once(page, r"<!-- STANCE_SUMMARY_START -->.*?<!-- STANCE_SUMMARY_END -->", "<!-- STANCE_SUMMARY_START -->\n" + build_stance_summary(rows, order, labels) + "\n<!-- STANCE_SUMMARY_END -->", "スタンス集計", flags=re.S)
+    page = replace_once(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", "<!-- DETAIL_TABLES_START -->\n" + build_detail_tables(rows, order, labels) + "\n<!-- DETAIL_TABLES_END -->", "詳細データの表", flags=re.S)
+    return page
+
+
 def build(
     *,
     check: bool = False,
@@ -609,8 +675,16 @@ def main() -> int:
     parser.add_argument("--input", type=Path, help="正典の代わりに読む累積候補（staging用）")
     parser.add_argument("--html-template", type=Path, help="読み込むHTML（既定は公開ページ）")
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
+    parser.add_argument("--public-counts-only", action="store_true")
     args = parser.parse_args()
     try:
+        if args.public_counts_only:
+            if args.check or args.input or args.html_template:
+                parser.error("--public-counts-only は --output-html だけを指定してください")
+            destination = args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
+            destination.write_text(apply_public_counts(destination.read_text(encoding="utf-8")), encoding="utf-8")
+            print(f"OK: 公開JSONから集計表示を更新しました: {destination}")
+            return 0
         lines, changed = build(
             check=args.check,
             source=args.input,
