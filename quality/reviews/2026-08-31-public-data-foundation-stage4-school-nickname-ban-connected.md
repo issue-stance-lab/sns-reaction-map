@@ -121,13 +121,17 @@ ERROR: school-nickname-ban: 公開データJSONのsource_sha256が非公開正�
 
 ## 6. 段階6へ引き継ぐ申し送り
 
-`verify_top_page.py` が現在 exit 1 で落ちる。理由は本作業と無関係で、
+`verify_top_page.py` を引数なしで実行すると exit 1 で落ちる。理由は本作業と無関係で、
 
 ```
 NG  collect_at 期限超過: ai-copyright（2026-08-30）, constitutional-amendment（2026-08-30）,
     fukushuto（2026-08-30）
 ```
 
-段階5では「収集予定日超過は `WARN`、公開物の整合不良とは分けて表示する」と決めたが、
-`verify_top_page.py` は同じ状態を `NG`（exit 1）として扱っている。段階6の成功条件
-「警告が失敗と明確に分離されている」に直接ぶつかるので、段階6でどちらかへ揃える。
+これは検査の不備ではなく、**運用警告と公開停止の分離が段階5で既に実装済み**であることの
+現れ。`--allow-overdue-collect` を付けると同じ状態が `WARN` になり exit 0 になる。
+`refresh_topic.py:810` の公開経路はこのフラグ付きで呼ぶ（＝収集の遅れでは公開を止めない）。
+引数なしの既定が `NG` なのは、管理ダッシュボード側で遅れを見つけるための挙動。
+
+段階6では公開経路と同じ `--allow-overdue-collect` 付きで記録し、3テーマの収集遅れは
+公開物の整合とは別の運用課題として `TASK_BOARD.md` のデータ更新側へ残す。

@@ -292,10 +292,11 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 記録: `quality/reviews/2026-08-31-public-data-foundation-stage4-koshitsu-tenpakai.md`。
 
 **次にすること**: 段階6の全テーマ総合監査と独立レビューを行う。
-着手時の申し送り: `verify_top_page.py` が `collect_at` 期限超過を `NG`（exit 1）として扱う一方、
-段階5では同じ状態を `WARN`（運用警告）と決めた。段階6の成功条件「警告が失敗と明確に分離されている」に
-直接ぶつかるので、どちらかへ揃える。2026-08-31時点では ai-copyright / constitutional-amendment /
-fukushuto の3テーマ（いずれも 2026-08-30 予定）が超過していて `verify_top_page.py` は落ちる。
+着手時の申し送り: 段階6の `verify_top_page.py` は、公開経路と同じ `--allow-overdue-collect` 付きで
+実行して記録する（運用警告と公開停止の分離は段階5で実装済み。引数なしの既定が `NG` なのは
+管理ダッシュボードで遅れを見つけるための挙動）。2026-08-31時点では ai-copyright /
+constitutional-amendment / fukushuto の3テーマ（いずれも 2026-08-30 予定）が収集予定日を超過していて
+`WARN` が出る。これは公開物の整合とは別の、データ更新側の遅れ。
 
 **段階4：あだ名禁止を接続し、段階4を完了（2026-08-31）**: 段階5により
 「候補ツリーの中で公開JSONを作り直してから `finalize` が走る」順序が保証されたため、
