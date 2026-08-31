@@ -17,12 +17,25 @@ items:
   - id: custom-domain-migration
     department: engineering-data
     status: in_progress
-    current_state: "正式URL https://sns-reaction-map.jp/ を sns-reaction-map リポジトリのGitHub Pagesへ設定済み。DNSチェック成功、HTTPS強制有効、旧プロジェクトURLからパスを保った301転送を確認した。投票のCORS許可はCEOがSupabaseのVOTE_ALLOWED_ORIGINSに新ドメインを追加して復旧・確認済み。課題55の段階0〜2（作業ツリーでの実装・機械検査・独立レビュー・公開候補固定）が完了し、CEOが2026-08-31に公開を承認した（company/APPROVALS.yaml の approval-20260830-003）。旧ルートissue-stance-lab.github.ioの扱いは(A)（案内ページへ置き換え、別リポジトリでの作業）に、GA4の復旧タイミングは今回の公開に含めず次回一括公開まで待つことにCEOが決定。task/domain-cutoverブランチをmainへマージ・push中。"
-    next_action: "マージ後のmainで検査を通し、pushして本番反映を確認する（release スキル④〜⑥）。反映後、新ドメインの公開ページで実際に1票入れて投票復旧を目視確認する。旧ルートの案内ページ置き換え（別リポジトリでの作業）は別途着手する。"
-    due_at: "2026-09-03"
+    current_state: "正式URL https://sns-reaction-map.jp/ で本番公開済み。DNS・HTTPS・旧URLからの301転送・投票CORSを確認済み。2026-08-31にSearch Consoleへ新ドメインを追加し、DNS TXTレコードで所有確認、サイトマップ送信の成功（検出16ページ）を確認した。AdSenseのサイト追加・再審査はCEO指示により行わない。"
+    next_action: "4週間、週1回Search Consoleのインデックス状況を確認する。並行して新ドメインで実際の投票とGA4リアルタイム計測を目視確認する。旧ルートの案内ページ置き換え（別リポジトリ）は別途着手する。"
+    due_at: "2026-09-28"
+    schedule:
+      - date: "2026-09-07"
+        title: "Search Consoleのインデックス確認（課題55・1回目）"
+        kind: check
+      - date: "2026-09-14"
+        title: "Search Consoleのインデックス確認（課題55・2回目）"
+        kind: check
+      - date: "2026-09-21"
+        title: "Search Consoleのインデックス確認（課題55・3回目）"
+        kind: check
+      - date: "2026-09-28"
+        title: "Search Consoleのインデックス確認（課題55・4回目）"
+        kind: check
     canonical_sources: ["TASK_BOARD.md", "quality/designs/domain-migration-2026-08-30.md", "company/APPROVALS.yaml", "configs/site-cases.json", "configs/theme-seo.json", "scripts/seo/generate_seo_assets.py"]
-    ceo_approval: "DNS・HTTPS設定・公開承認・旧ルートの扱い・GA4タイミングはCEO決定済み（2026-08-31）。AdSense再申請は別承認"
-    completion_evidence: ["quality/reviews/", "tests/test_domain_migration.py", "docs/sitemap.xml", "docs/robots.txt", "docs/CNAME", "company/APPROVALS.yaml"]
+    ceo_approval: "DNS・HTTPS設定・公開承認・旧ルートの扱い・GA4タイミングはCEO決定済み（2026-08-31）。AdSenseのサイト追加・再審査は行わない"
+    completion_evidence: ["quality/reviews/", "tests/test_domain_migration.py", "docs/sitemap.xml", "docs/robots.txt", "docs/CNAME", "company/APPROVALS.yaml", "Search Console（2026-08-31: 所有確認・サイトマップ送信成功）"]
 
   - id: website-reaction-planet-renewal
     department: engineering-data

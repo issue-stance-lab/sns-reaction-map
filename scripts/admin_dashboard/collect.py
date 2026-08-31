@@ -248,6 +248,20 @@ def collect_company(today: dt.date) -> dict:
         due_at = _as_date(item.get("due_at"))
         missing = [field for field in required if field not in item]
         normalized = dict(item)
+        schedule = []
+        for event in item.get("schedule") or []:
+            event_at = _as_date(event.get("date"))
+            if not event_at:
+                continue
+            schedule.append(
+                {
+                    "date": event_at,
+                    "title": event.get("title") or item.get("id") or "予定",
+                    "kind": event.get("kind") or "check",
+                }
+            )
+        schedule.sort(key=lambda event: (event["date"], event["title"]))
+        normalized["schedule"] = schedule
         normalized["due_at"] = due_at
         normalized["due_in"] = (due_at - today).days if due_at else None
         normalized["missing_fields"] = missing

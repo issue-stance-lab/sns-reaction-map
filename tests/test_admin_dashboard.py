@@ -99,6 +99,18 @@ class CompanyLedgerTests(unittest.TestCase):
         company = collect.collect_company(dt.date(2026, 8, 28))
         self.assertTrue(any(item["kind"] == "deadline" for item in company["alerts"]))
 
+    def test_handoff_schedule_is_normalized_for_calendar(self):
+        company = collect.collect_company(dt.date(2026, 8, 31))
+        migration = next(item for item in company["handoffs"] if item["id"] == "custom-domain-migration")
+        self.assertEqual([event["date"] for event in migration["schedule"]], [
+            dt.date(2026, 9, 7), dt.date(2026, 9, 14), dt.date(2026, 9, 21), dt.date(2026, 9, 28)
+        ])
+
+    def test_handoff_schedule_appears_in_calendar(self):
+        html = render.render(build_data(dt.date(2026, 8, 31)))
+        self.assertIn("確認・Search Consoleのインデックス確認（課題55・1回目）", html)
+        self.assertIn("確認・Search Consoleのインデックス確認（課題55・4回目）", html)
+
     def test_daily_report_has_exactly_four_lines(self):
         report = actions.executive_brief(build_data(dt.date(2026, 8, 27)))
         self.assertEqual([item["key"] for item in report], ["yesterday", "today", "problem", "approval"])
