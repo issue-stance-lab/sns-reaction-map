@@ -36,7 +36,8 @@ class PortalStatsTest(unittest.TestCase):
         self.assertTrue(all(count > 0 for count in stats["sample_counts"].values()))
 
     def test_top_page_matches_canonical_stats(self):
-        _lines, failures = verify_top_page()
+        # 収集期限の超過は運用上の警告であり、ページと公開データの整合とは別に確認する。
+        _lines, failures = verify_top_page(fail_on_collect_deadline=False)
 
         self.assertEqual(failures, 0)
 
