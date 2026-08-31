@@ -681,6 +681,7 @@ def section_alerts(data: dict) -> str:
 def section_schedule(data: dict) -> str:
     today = data["today"]
     themes = data["themes"]
+    handoffs = data.get("company", {}).get("handoffs") or []
 
     rows = []
     for theme in themes:
@@ -698,7 +699,7 @@ def section_schedule(data: dict) -> str:
             ]
         )
 
-    calendar = _calendar(themes, today)
+    calendar = _calendar(themes, handoffs, today)
     auto = sum(1 for t in themes if t["update_mode"] == "adapter")
     stats = (
         '<div class="stats">'
@@ -710,26 +711,29 @@ def section_schedule(data: dict) -> str:
     )
 
     return f"""<section id="schedule"><h2>3. 更新スケジュール</h2>
-<p class="lead">「収集」は投稿データを集めるだけの作業、「公開更新」は集めたデータをページに反映して公開するところまで。予定日は <code>THEMES.yaml</code> が正。</p>
+<p class="lead">「収集」は投稿データを集めるだけの作業、「公開更新」は集めたデータをページに反映して公開するところまで。テーマの予定日は <code>THEMES.yaml</code>、個別の確認予定は <code>company/HANDOFFS.yaml</code> が正です。</p>
 {stats}
-<h3>これから4週間</h3>
+<h3>これから5週間</h3>
 {calendar}
 <h3>テーマ別</h3>
 {table(["テーマ", "次の収集", "次の公開更新", "更新のしかた", "最終公開更新", "前回追加"], rows)}
 </section>"""
 
 
-def _calendar(themes: list[dict], today: dt.date) -> str:
+def _calendar(themes: list[dict], handoffs: list[dict], today: dt.date) -> str:
     events: dict[dt.date, list[tuple[str, str]]] = {}
     for theme in themes:
         if theme["collect_at"]:
             events.setdefault(theme["collect_at"], []).append(("収集", theme["title"]))
         if theme["refresh_at"]:
             events.setdefault(theme["refresh_at"], []).append(("公開", theme["title"]))
+    for handoff in handoffs:
+        for event in handoff.get("schedule") or []:
+            events.setdefault(event["date"], []).append(("確認", event["title"]))
 
     start = today - dt.timedelta(days=today.weekday())
     cells = []
-    for offset in range(28):
+    for offset in range(35):
         day = start + dt.timedelta(days=offset)
         classes = ["cal-day"]
         if day == today:
@@ -737,7 +741,7 @@ def _calendar(themes: list[dict], today: dt.date) -> str:
         if day < today:
             classes.append("past")
         items = "".join(
-            f'<div class="cal-item {"collect" if kind == "収集" else "refresh"}">{esc(kind)}・{esc(title)}</div>'
+            f'<div class="cal-item {"collect" if kind == "収集" else "refresh" if kind == "公開" else "check"}">{esc(kind)}・{esc(title)}</div>'
             for kind, title in events.get(day, [])
         )
         cells.append(f'<div class="{" ".join(classes)}"><div class="cal-date">{day.month}/{day.day}</div>{items}</div>')
@@ -1385,6 +1389,7 @@ background:color-mix(in srgb,var(--muted) 15%,transparent);color:var(--muted)}
 overflow:hidden;text-overflow:ellipsis}
 .cal-item.collect{background:color-mix(in srgb,var(--c5) 20%,transparent);color:var(--fg)}
 .cal-item.refresh{background:color-mix(in srgb,var(--c2) 22%,transparent);color:var(--fg)}
+.cal-item.check{background:color-mix(in srgb,var(--soon) 21%,transparent);color:var(--fg)}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin:14px 0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .chart{width:100%;height:auto;display:block}
