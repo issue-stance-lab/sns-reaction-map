@@ -1,4 +1,102 @@
 {
+  "claim_verification": {
+    "checked_on": "2026-08-18",
+    "claims": [
+      {
+        "claim": "高齢ドライバーの事故は増えている、多すぎる",
+        "finding": "件数としては減っており、「増えている」は資料と合わない。ただし全死亡事故に占める割合は増えているため、目立つようになったという実感の側は資料と矛盾しない。なお「2025年の統計では397件」と数字を挙げた投稿があり、これは令和7年の公表値と一致していた。",
+        "id": "increase",
+        "matched_post_count": 9,
+        "sources": [
+          {
+            "name": "警察庁 令和7年における交通事故の発生状況について（PDF）",
+            "url": "https://www.npa.go.jp/publications/statistics/koutsuu/jiko/R07bunseki.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "高齢者の事故率が高いというのは印象操作で、実際は10代20代の方が高い",
+        "finding": "10代が最も高いという部分は資料どおり。ただし20代は低い側にあり、「10代20代の方が高い」とまでは言えない。逆側の「高齢者は通常の約2倍」という投稿は、75歳以上と75歳未満を比べた場合の値としては資料と一致する。",
+        "id": "rate",
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "内閣府 令和7年版交通安全白書 第1-22図",
+            "url": "https://www8.cao.go.jp/koutu/taisaku/r07kou_haku/zenbun/genkyo/h1/h1b1s1_2.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "高齢者の免許更新はほぼ無条件に通る。実技試験は2026年から始まる",
+        "finding": "実技の検査はこれから始まるのではなく、2022年5月からすでに行われている。ただし対象は違反歴のある人に限られ、違反歴がなければ実車の合否判定はない（高齢者講習の実車指導のみ）。「無条件に通る」という言い方が、この線引きを指しているのであれば、資料と真っ向から食い違うわけではない。",
+        "id": "renewal",
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "警察庁 運転技能検査合格者の追跡調査の結果等について（PDF）",
+            "url": "https://www.npa.go.jp/news/release/2026/260625_kouhou.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "運転技能検査はザルだ。期間内なら何度でも受け直せる",
+        "finding": "繰り返し受検できることも、合格率の高さも資料どおり。警察庁自身が「運転技能が低下して交通事故を起こしやすくなっている者が、運転技能検査に合格していることがうかがわれる」として、検査内容を見直す有識者検討会を開き、令和8年8月を目途に報告書をまとめるとしている。",
+        "id": "skilltest",
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "警察庁 運転技能検査合格者の追跡調査の結果等について（PDF）",
+            "url": "https://www.npa.go.jp/news/release/2026/260625_kouhou.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "返納すれば運転経歴証明書がもらえ、タクシーやバスの割引などの特典を受けられる",
+        "finding": "証明書も特典も実在する。ただし支援の中身を決めているのは自治体や事業者で、全国一律の制度ではない。投稿に出てくるタクシー券・コミュニティバスの割引・預金金利の上乗せ・シニアカーの購入補助は、いずれもその地域だけの例として読む必要がある。",
+        "id": "benefit",
+        "matched_post_count": 10,
+        "sources": [
+          {
+            "name": "警察庁 運転免許証の自主返納について",
+            "url": "https://www.npa.go.jp/policies/application/license_renewal/jishuhennou.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "自主返納に法的な根拠はない／いや、法的には申請による免許取消し処分だ",
+        "finding": "返納は法律に手続が定められた「申請による取消し」で、件数も毎年公表されている。「根拠はない」は資料と食い違い、「申請による免許取消し処分」と書いた投稿の方が条文どおり。なお「70歳から返納者が増える」という部分は、申請取消の86.2％が70歳以上という統計と方向としては合っている。",
+        "id": "legal",
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "e-Gov法令検索 道路交通法（第百四条の四・第百五条の二）",
+            "url": "https://laws.e-gov.go.jp/law/335AC0000000105"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "返納したくても、地方はバスが1日2本で、タクシーも呼べず生活できない",
+        "finding": "路線の廃止が全国で続いていること自体は資料で確かめられた。ただし投稿が語っている暮らしの水準そのものは、公表資料からは確認できていない。投稿が誤りだという意味ではなく、確かめる材料がこちらに無いということ。",
+        "id": "transit",
+        "matched_post_count": 9,
+        "sources": [
+          {
+            "name": "国土交通省 乗合バス路線の廃止状況の推移（PDF）",
+            "url": "https://www.mlit.go.jp/jidosha/content/001898907.pdf"
+          }
+        ],
+        "verdict": "miss"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
   "collected_count": 394,
   "collection_period": {
     "end": "2026-08-20",

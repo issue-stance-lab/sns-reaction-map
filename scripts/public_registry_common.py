@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import ast
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +25,17 @@ PUBLIC_THEMES_DIR = ROOT / "data" / "public" / "themes"
 PUBLIC_CATALOG_PATH = ROOT / "data" / "public" / "catalog.json"
 
 INTENSITY_ORDER = ("low", "medium", "high")
+
+# 読者向け照合カードの正典は、各テーマの生成器にある一次資料記録である。
+# 公開JSONには投稿本文・投稿IDを入れず、確認済み件数だけを持たせる。
+CLAIM_AUDIT_SOURCES = {
+    "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
+    "constitutional-amendment": ("scripts/build_constitutional_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
+    "consumption-tax-cut": ("scripts/build_consumption_tax_page.py", "CLAIM_AUDIT", "CHECKED_ON", "say"),
+    "elderly-license-revocation": ("scripts/build_elderly_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
+    "fukushuto": ("scripts/build_fukushuto_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
+    "koshitsu-tenpakai": ("scripts/build_koshitsu_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
+}
 
 # 読者向けの「問い」。テーマ設定として明示し、表示名やHTML文言からは作らない。
 # 部活動の地域移行は configs/planet/bukatsu-chiiki.yaml で既に承認済みの表現を転記した
@@ -47,6 +59,70 @@ QUESTIONS: dict[str, str] = {
 
 class RegistryError(Exception):
     pass
+
+
+def _literal_from_python(path: Path, variable: str) -> Any:
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id == variable for target in node.targets
+        ):
+            return ast.literal_eval(node.value)
+    raise RegistryError(f"{path}: {variable} がリテラルとして見つかりません")
+
+
+def _iso_date(value: str) -> str:
+    match = re.fullmatch(r"(\d{4})年(\d{1,2})月(\d{1,2})日", value)
+    if not match:
+        raise RegistryError(f"照合日の形式が不正です: {value!r}")
+    return f"{match.group(1)}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
+
+
+def build_claim_verification(theme_id: str) -> dict[str, Any]:
+    source = CLAIM_AUDIT_SOURCES.get(theme_id)
+    if source is None:
+        return {"status": "not_started", "checked_on": None, "reviewer_type": None, "claims": []}
+
+    relative, checks_name, checked_name, claim_key = source
+    script = ROOT / relative
+    checks = _literal_from_python(script, checks_name)
+    checked_on = _iso_date(_literal_from_python(script, checked_name))
+    rows = json.loads((ROOT / "data" / "verification" / f"{theme_id}-claims.json").read_text(encoding="utf-8"))
+    counts: dict[str, int] = {}
+    for row in rows:
+        claim_id = row.get("claim")
+        if not isinstance(claim_id, str):
+            raise RegistryError(f"{theme_id}: 検証用投稿に claim がありません")
+        counts[claim_id] = counts.get(claim_id, 0) + 1
+
+    claims = []
+    for check in checks:
+        claim_id = check["key"]
+        verdict = check["verdict"]
+        if verdict not in {"fact", "gap", "miss"}:
+            raise RegistryError(f"{theme_id}/{claim_id}: 判定語が未統一です: {verdict!r}")
+        if claim_id not in counts:
+            raise RegistryError(f"{theme_id}/{claim_id}: 検証用投稿がありません")
+        if "links" in check:
+            sources = [{"name": name, "url": url} for url, name in check["links"]]
+        else:
+            sources = []
+            if check.get("url") and check.get("url_label"):
+                sources.append({"name": check["url_label"], "url": check["url"]})
+            sources.extend(
+                {"name": name, "url": url} for url, name in (check.get("extra_links") or [])
+            )
+        claims.append({
+            "id": claim_id,
+            "claim": check[claim_key],
+            "verdict": verdict,
+            "finding": check["note"],
+            "matched_post_count": counts[claim_id],
+            "sources": sources,
+        })
+    if set(counts) != {claim["id"] for claim in claims}:
+        raise RegistryError(f"{theme_id}: 検証用投稿と照合カードの主張IDが一致しません")
+    return {"status": "complete", "checked_on": checked_on, "reviewer_type": "editorial_review", "claims": claims}
 
 
 def load_themes_yaml() -> dict[str, Any]:
@@ -213,6 +289,7 @@ def build_theme_json(theme_id: str) -> dict[str, Any]:
         "opinion_count": opinion_count,
         "issue_assigned_count": assigned_total,
         "issues": issues_out,
+        "claim_verification": build_claim_verification(theme_id),
     }
 
 
@@ -404,6 +481,21 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
         errors.append(f"{tid}: collection_period status=start_only の形式が不正です")
     if status == "unknown" and (period["start"] is not None or period["end"] is not None):
         errors.append(f"{tid}: collection_period status=unknown なのに日付があります")
+
+    verification = theme_json.get("claim_verification")
+    if not isinstance(verification, dict):
+        errors.append(f"{tid}: claim_verification がありません")
+        return errors
+    claims = verification["claims"]
+    if verification["status"] == "complete":
+        if not claims or verification["checked_on"] is None or verification["reviewer_type"] != "editorial_review":
+            errors.append(f"{tid}: 完了済み照合の必須項目が不足しています")
+    if verification["status"] == "not_started":
+        if claims or verification["checked_on"] is not None or verification["reviewer_type"] is not None:
+            errors.append(f"{tid}: 未実施照合に結果が混在しています")
+    claim_ids = [claim["id"] for claim in claims]
+    if len(claim_ids) != len(set(claim_ids)):
+        errors.append(f"{tid}: 照合主張IDが重複しています")
 
     return errors
 

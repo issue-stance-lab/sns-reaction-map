@@ -5,7 +5,7 @@
   "description": "投稿本文・投稿ID・個別ハッシュ・利用者情報・AI信頼度・内部理由を含めない、公開用の集計データ。",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "theme_id", "title", "question", "page_path", "data_version", "source_sha256", "updated_on", "collection_period", "collected_count", "opinion_count", "issue_assigned_count", "issues"],
+  "required": ["schema_version", "theme_id", "title", "question", "page_path", "data_version", "source_sha256", "updated_on", "collection_period", "collected_count", "opinion_count", "issue_assigned_count", "issues", "claim_verification"],
   "properties": {
     "schema_version": {"const": "1.0"},
     "theme_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
@@ -32,7 +32,8 @@
       "type": "array",
       "minItems": 1,
       "items": {"$ref": "#/$defs/issue"}
-    }
+    },
+    "claim_verification": {"$ref": "#/$defs/claim_verification"}
   },
   "$defs": {
     "issue": {
@@ -55,6 +56,39 @@
           "minItems": 3,
           "maxItems": 3
         }
+      }
+    },
+    "claim_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "checked_on", "reviewer_type", "claims"],
+      "properties": {
+        "status": {"enum": ["complete", "not_started"]},
+        "checked_on": {"type": ["string", "null"], "format": "date"},
+        "reviewer_type": {"type": ["string", "null"], "enum": ["editorial_review", null]},
+        "claims": {"type": "array", "items": {"$ref": "#/$defs/claim"}}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "claim", "verdict", "finding", "matched_post_count", "sources"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "claim": {"type": "string", "minLength": 1},
+        "verdict": {"enum": ["fact", "gap", "miss"]},
+        "finding": {"type": "string", "minLength": 1},
+        "matched_post_count": {"type": "integer", "minimum": 0},
+        "sources": {"type": "array", "items": {"$ref": "#/$defs/claim_source"}}
+      }
+    },
+    "claim_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "url"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "pattern": "^https://"}
       }
     },
     "count_item": {
