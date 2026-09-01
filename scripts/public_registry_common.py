@@ -27,7 +27,11 @@ PUBLIC_CATALOG_PATH = ROOT / "data" / "public" / "catalog.json"
 INTENSITY_ORDER = ("low", "medium", "high")
 
 # 読者向け照合カードの正典は、各テーマの生成器にある一次資料記録である。
-# 公開JSONには投稿本文・投稿IDを入れず、確認済み件数だけを持たせる。
+# 公開JSONには投稿本文・投稿IDを入れず、確認済み件数だけを持たせる
+# （人が確定した投稿IDの正典は data/{theme}_claim_posts.json、その写しが
+#  data/verification/{theme}-claims.json。設計書14章もこの分担で記述している）。
+# 各主張は、それが争われている論点（大陸）へ結びつける。課題54の地形は論点単位で
+# 実像／ずれ／蜃気楼を塗り分けるため、この対応が無いと段階6で色を決められない。
 CLAIM_AUDIT_SOURCES = {
     "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "constitutional-amendment": ("scripts/build_constitutional_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
@@ -95,6 +99,9 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
             raise RegistryError(f"{theme_id}: 検証用投稿に claim がありません")
         counts[claim_id] = counts.get(claim_id, 0) + 1
 
+    issue_defs = load_taxonomy()[theme_id]["issues"]
+    issue_order = list(issue_defs)
+
     claims = []
     for check in checks:
         claim_id = check["key"]
@@ -103,6 +110,16 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
             raise RegistryError(f"{theme_id}/{claim_id}: 判定語が未統一です: {verdict!r}")
         if claim_id not in counts:
             raise RegistryError(f"{theme_id}/{claim_id}: 検証用投稿がありません")
+        labels = check.get("issues")
+        if labels is None:
+            raise RegistryError(f"{theme_id}/{claim_id}: 論点との対応（issues）がありません")
+        for label in labels:
+            if label not in issue_defs:
+                raise RegistryError(f"{theme_id}/{claim_id}: 対応表に無い論点です: {label!r}")
+            if issue_defs[label]["kind"] == "other":
+                raise RegistryError(f"{theme_id}/{claim_id}: 「その他」へは結びつけられません")
+        # 対応表の並び順へ正規化する（同じ入力から必ず同じ出力にする）
+        issue_ids = [issue_defs[label]["id"] for label in sorted(set(labels), key=issue_order.index)]
         if "links" in check:
             sources = [{"name": name, "url": url} for url, name in check["links"]]
         else:
@@ -112,11 +129,16 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
             sources.extend(
                 {"name": name, "url": url} for url, name in (check.get("extra_links") or [])
             )
+        if verdict != "miss" and not sources:
+            raise RegistryError(
+                f"{theme_id}/{claim_id}: 判定が {verdict} なのに一次資料が1件もありません"
+            )
         claims.append({
             "id": claim_id,
             "claim": check[claim_key],
             "verdict": verdict,
             "finding": check["note"],
+            "issue_ids": issue_ids,
             "matched_post_count": counts[claim_id],
             "sources": sources,
         })
@@ -496,6 +518,19 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
     claim_ids = [claim["id"] for claim in claims]
     if len(claim_ids) != len(set(claim_ids)):
         errors.append(f"{tid}: 照合主張IDが重複しています")
+
+    # 主張は必ず実在する論点（大陸）に結びつける。「その他」は分類限界の受け皿なので使わない。
+    known_issue_ids = {i["id"] for i in issues}
+    other_issue_ids = {i["id"] for i in issues if i["kind"] == "other"}
+    for claim in claims:
+        for issue_id in claim["issue_ids"]:
+            if issue_id not in known_issue_ids:
+                errors.append(f"{tid}/{claim['id']}: 論点IDが公開JSONに存在しません: {issue_id}")
+            elif issue_id in other_issue_ids:
+                errors.append(f"{tid}/{claim['id']}: 「その他」の論点へ結びついています")
+        # 判定が miss（資料に見当たらない）のときだけ、一次資料が0件でよい。
+        if claim["verdict"] != "miss" and not claim["sources"]:
+            errors.append(f"{tid}/{claim['id']}: 判定が {claim['verdict']} なのに一次資料が0件です")
 
     return errors
 

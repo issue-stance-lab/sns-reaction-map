@@ -14,6 +14,27 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertEqual({item["verdict"] for item in complete["claims"]}, {"fact", "gap", "miss"})
         self.assertTrue(all(item["matched_post_count"] > 0 for item in complete["claims"]))
         self.assertNotIn("tweet_id", json.dumps(complete, ensure_ascii=False))
+        # 段階6で大陸を実像／ずれ／蜃気楼に塗り分けるため、主張は必ず論点へ結びつける
+        self.assertTrue(all(item["issue_ids"] for item in complete["claims"]))
+        # miss（資料に見当たらない）以外は、一次資料が1件以上必要
+        self.assertTrue(
+            all(item["sources"] for item in complete["claims"] if item["verdict"] != "miss")
+        )
+
+    def test_claims_point_at_real_issues_and_never_at_other(self) -> None:
+        import json as _json
+        from pathlib import Path as _Path
+
+        for theme in prc.CLAIM_AUDIT_SOURCES:
+            data = _json.loads(
+                (_Path(prc.ROOT) / "data" / "public" / "themes" / f"{theme}.json").read_text(encoding="utf-8")
+            )
+            known = {i["id"] for i in data["issues"]}
+            other = {i["id"] for i in data["issues"] if i["kind"] == "other"}
+            for claim in data["claim_verification"]["claims"]:
+                for issue_id in claim["issue_ids"]:
+                    self.assertIn(issue_id, known, f"{theme}/{claim['id']}")
+                    self.assertNotIn(issue_id, other, f"{theme}/{claim['id']}")
 
         pending = prc.build_claim_verification("bukatsu-chiiki")
         self.assertEqual(pending, {"status": "not_started", "checked_on": None, "reviewer_type": None, "claims": []})

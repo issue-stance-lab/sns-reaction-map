@@ -7,7 +7,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from verify_claim_verdicts import LEGACY_CONSTITUTIONAL, audit  # noqa: E402
+from verify_claim_verdicts import (  # noqa: E402
+    LEGACY_CONSTITUTIONAL,
+    audit,
+    canonical_claim_counts,
+    public_claim_counts,
+    verification_claim_counts,
+)
 
 
 class ClaimVerdictTest(unittest.TestCase):
@@ -19,6 +25,15 @@ class ClaimVerdictTest(unittest.TestCase):
             "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai",
         })
         self.assertEqual(sum(counts.values()), 41)
+
+    def test_post_counts_agree_across_all_three_files(self) -> None:
+        # ページは data/{theme}_claim_posts.json、公開JSONは data/verification/ を読む。
+        # 片方だけ更新すると同じサイトの2か所で違う数字が出る。
+        for theme in ("bike-blue-ticket", "constitutional-amendment", "koshitsu-tenpakai"):
+            canon = canonical_claim_counts(theme)
+            self.assertTrue(canon, theme)
+            self.assertEqual(verification_claim_counts(theme), canon, theme)
+            self.assertEqual(public_claim_counts(theme), canon, theme)
 
     def test_constitutional_legacy_labels_map_to_shared_codes(self) -> None:
         self.assertEqual(LEGACY_CONSTITUTIONAL, {
