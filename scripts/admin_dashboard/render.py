@@ -653,6 +653,18 @@ def section_alerts(data: dict) -> str:
                     "投稿本数のノルマはありません。関連ポストを確認し、有効な候補がある場合のみ返信する運用です",
                 ))
 
+    primary_research = data.get("primary_research") or {}
+    for item in primary_research.get("themes") or []:
+        overdue_by = item.get("overdue_by")
+        if overdue_by is None or overdue_by <= 0:
+            continue
+        alerts.append((
+            "danger" if overdue_by > 30 else "warn",
+            f"{item['title']} の一次資料メモが再確認予定を {overdue_by} 日過ぎています",
+            f"最終確認 {fmt_full_date(item['last_verified'])}（{item['cadence_days']}日ごとが目安）。"
+            ".claude/skills/primary-research/SKILL.md の手順で見直す",
+        ))
+
     for check in data["health"]:
         if check["ok"] is False:
             alerts.append(("danger", f"{check['name']} が使えません", check["detail"]))

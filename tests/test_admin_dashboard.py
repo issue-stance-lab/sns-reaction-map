@@ -36,6 +36,7 @@ def build_data(today: dt.date = TODAY) -> dict:
         "health": collect.collect_source_health(today),
         "live": None,
         "sample_files": collect.collect_sample_files(),
+        "primary_research": collect.collect_primary_research(today),
     }
     data["next"] = actions.next_action(data)
     data["post_breakdown"] = actions.post_breakdown(data["x_posts"], today)
@@ -239,6 +240,77 @@ class MeasurementStallTests(unittest.TestCase):
         self.assertIsInstance(result["overdue"], list)
         for item in result["overdue"]:
             self.assertNotEqual(item["timing"], "waiting")
+
+
+class PrimaryResearchStallTests(unittest.TestCase):
+    """一次資料メモ（quality/research/*-primary-sources.md）の再確認が滞っていないかの検査。
+
+    `.claude/skills/primary-research/SKILL.md` で定めた「テーマごとに周期で再確認する」
+    運用を、他の定例作業と同じく「結果の滞り」で検知できるようにする。
+    """
+
+    @staticmethod
+    def _data(today: dt.date, primary_research: dict) -> dict:
+        return {
+            "today": today,
+            "themes": [],
+            "kpi": {"snapshots": [], "recurring": []},
+            "x_posts": [],
+            "health": [],
+            "live": None,
+            "primary_research": primary_research,
+        }
+
+    def test_overdue_theme_is_reported(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 9, 1),
+            {
+                "available": True,
+                "themes": [
+                    {
+                        "key": "koshitsu-tenpakai",
+                        "title": "皇室典範",
+                        "last_verified": dt.date(2026, 5, 1),
+                        "cadence_days": 90,
+                        "age_days": 123,
+                        "overdue_by": 33,
+                        "note": "",
+                    }
+                ],
+            },
+        ))
+        self.assertIn("皇室典範 の一次資料メモが再確認予定を 33 日過ぎています", html)
+        self.assertIn("primary-research/SKILL.md", html)
+
+    def test_theme_within_cadence_is_not_reported(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 9, 1),
+            {
+                "available": True,
+                "themes": [
+                    {
+                        "key": "ai-copyright",
+                        "title": "AIと著作権",
+                        "last_verified": dt.date(2026, 8, 20),
+                        "cadence_days": 90,
+                        "age_days": 12,
+                        "overdue_by": -78,
+                        "note": "",
+                    }
+                ],
+            },
+        ))
+        self.assertNotIn("一次資料メモが再確認予定を", html)
+
+    def test_missing_status_file_reports_nothing(self):
+        """まだ status.yaml が無い（task/primary-research 未マージ）ときは、遅れ扱いにしない。"""
+        html = render.section_alerts(self._data(dt.date(2026, 9, 1), {"available": False, "themes": []}))
+        self.assertNotIn("一次資料メモ", html)
+
+    def test_collector_reads_the_real_repository(self):
+        result = collect.collect_primary_research(dt.date(2026, 9, 1))
+        self.assertIn("available", result)
+        self.assertIsInstance(result["themes"], list)
 
 
 class ThemeScheduleTests(unittest.TestCase):
