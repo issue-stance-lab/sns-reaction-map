@@ -89,6 +89,12 @@ class CompanyLedgerTests(unittest.TestCase):
         self.assertNotIn("note『部活動の地域移行』第2回を公開する", summaries)
         self.assertFalse(any(item["kind"] == "approval" for item in company["alerts"]))
 
+    def test_published_note_handoffs_are_completed(self):
+        company = collect.collect_company(dt.date(2026, 9, 1))
+        handoffs = {item["id"]: item for item in company["handoffs"]}
+        self.assertEqual(handoffs["note-bukatsu-2-publication"]["status"], "completed")
+        self.assertEqual(handoffs["note-bukatsu-3-draft"]["status"], "completed")
+
     def test_unknown_costs_are_not_treated_as_zero(self):
         finance = collect.collect_company(dt.date(2026, 8, 27))["current_finance"]
         self.assertEqual(finance["cost_total"], 0)
