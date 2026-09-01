@@ -6,7 +6,9 @@ import unittest
 import urllib.error
 import urllib.request
 from pathlib import Path
+from unittest import mock
 
+from scripts.admin_dashboard import server as dashboard_server
 from scripts.admin_dashboard.codex_client import CodexAppServer, CodexProtocolError
 from scripts.admin_dashboard.jobs import JobManager, JobStore
 from scripts.admin_dashboard.server import DashboardHTTPServer
@@ -200,6 +202,30 @@ class LoopbackSecurityTests(unittest.TestCase):
         with self.assertRaises(urllib.error.HTTPError) as error:
             urllib.request.urlopen(request, timeout=5)
         self.assertEqual(error.exception.code, 404)
+
+
+class DashboardPortFallbackTests(unittest.TestCase):
+    def test_busy_default_port_retries_with_an_available_port(self):
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = Path(directory)
+            manager = mock.Mock()
+            server = mock.Mock(server_port=49231)
+            server.serve_forever.return_value = None
+            busy = OSError()
+            busy.errno = 48
+
+            with (
+                mock.patch.object(dashboard_server, "RUNTIME", runtime),
+                mock.patch.object(dashboard_server, "JobManager", return_value=manager),
+                mock.patch.object(dashboard_server, "DashboardHTTPServer", side_effect=[busy, server]) as factory,
+                mock.patch.object(dashboard_server, "idle_monitor"),
+                mock.patch.object(dashboard_server.webbrowser, "open"),
+            ):
+                self.assertEqual(dashboard_server.serve(port=8765, open_browser=False), 0)
+
+            self.assertEqual(factory.call_args_list[0].args[0], ("127.0.0.1", 8765))
+            self.assertEqual(factory.call_args_list[1].args[0], ("127.0.0.1", 0))
+            manager.close.assert_called_once()
 
 
 if __name__ == "__main__":

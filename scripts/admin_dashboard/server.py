@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import errno
 import fcntl
 import json
 import mimetypes
@@ -255,7 +256,17 @@ def serve(*, port: int = 8765, open_browser: bool = True) -> int:
         return 0
     token = secrets.token_urlsafe(32)
     manager = JobManager(root=ROOT)
-    server = DashboardHTTPServer(("127.0.0.1", port), token, manager)
+    try:
+        server = DashboardHTTPServer(("127.0.0.1", port), token, manager)
+    except OSError as exc:
+        if exc.errno != errno.EADDRINUSE or port == 0:
+            manager.close()
+            raise
+        # A previous dashboard from another worktree can still be using the
+        # default port.  Binding to port 0 asks macOS for an unused loopback
+        # port, so the dashboard remains usable without stopping that session.
+        print(f"ポート{port}はすでに使用中です。空いているポートで管理画面を開きます。")
+        server = DashboardHTTPServer(("127.0.0.1", 0), token, manager)
     threading.Thread(target=idle_monitor, args=(server,), name="dashboard-idle-monitor", daemon=True).start()
     url = f"http://127.0.0.1:{server.server_port}/?token={urllib.parse.quote(token)}"
     session_file = RUNTIME / "server-session.json"
