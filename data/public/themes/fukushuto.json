@@ -1,4 +1,75 @@
 {
+  "claim_verification": {
+    "checked_on": "2026-08-24",
+    "claims": [
+      {
+        "claim": "大阪都構想は、住民投票で二度否決された",
+        "finding": "2回とも僅差の反対多数。とくに2020年は賛成が反対を17,167票下回るだけの差だった。",
+        "id": "referendum_twice",
+        "matched_post_count": 4,
+        "sources": [
+          {
+            "name": "大阪市 大阪市における特別区の設置についての投票",
+            "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000538418.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "副首都法は、賛成123・反対121のわずか2票差で成立した",
+        "finding": "自由民主党・無所属の会99、日本維新の会19などを合わせて123。与党の議席だけでは過半数に届かず、無所属・少数会派の賛成があって成立した。",
+        "id": "vote_123_121",
+        "matched_post_count": 5,
+        "sources": [
+          {
+            "name": "参議院 本会議投票結果（2026年7月24日）",
+            "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ",
+        "finding": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。",
+        "id": "resolution_ban",
+        "matched_post_count": 4,
+        "sources": [
+          {
+            "name": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）",
+            "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm"
+          },
+          {
+            "name": "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）",
+            "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm"
+          }
+        ],
+        "verdict": "miss"
+      },
+      {
+        "claim": "副首都の整備費用は4兆円〜7.5兆円かかるとされる",
+        "finding": "数字自体は実在するが、30年近く前の別の計画（首都機能の全面移転）の試算で、2026年の副首都法（大規模災害時のバックアップ機能整備）とは対象の規模も目的も別物。政府は参院審議で、今回の法律にもとづく整備費用について「今後検討する」と答えるにとどめ、現時点で試算を示していない。",
+        "id": "cost_old_estimate",
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "国土交通省 国会等の移転ホームページ「移転費用の試算」",
+            "url": "https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "副首都の整備費用は、AIの試算で総額2兆円規模になる",
+        "finding": "出典不明の試算がそのまま数字として流通していること自体が、この論点で公式な費用試算が存在しない状態を映している。",
+        "id": "cost_ai_estimate",
+        "matched_post_count": 1,
+        "sources": [],
+        "verdict": "miss"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
   "collected_count": 1733,
   "collection_period": {
     "end": "2026-08-31",

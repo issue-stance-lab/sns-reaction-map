@@ -1,4 +1,89 @@
 {
+  "claim_verification": {
+    "checked_on": "2026-08-20",
+    "claims": [
+      {
+        "claim": "皇室典範第一条には「皇統に属する男系の男子」が継承すると書いてある",
+        "finding": "e-Gov法令検索のAPIで取得した原文（令和8年改正前の条文）で確認した。",
+        "id": "claim_1_条文第一条",
+        "matched_post_count": 5,
+        "sources": [
+          {
+            "name": "e-Gov法令検索 皇室典範",
+            "url": "https://laws.e-gov.go.jp/law/322AC0000000003"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "旧11宮家は1947年（昭和22年）に皇籍を離れた。改正皇室典範は7月24日公布・10月24日施行",
+        "finding": "旧宮家の数（11家）と施行日（10月24日）はいずれも一次資料で確認できた。",
+        "id": "claim_2_旧11宮家と改正法",
+        "matched_post_count": 5,
+        "sources": [
+          {
+            "name": "内閣官房 安定的な皇位継承の確保に関する懇談会 第11回資料1（PDF）",
+            "url": "https://www.cas.go.jp/jp/seisaku/taii_tokurei/dai11/siryou1.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "養子本人は皇位継承資格を持たないが、その子孫の男性には付与される",
+        "finding": "公布済みの改正後条文を一次資料として取得できなかったため、この主張の正否を確認できない。",
+        "id": "claim_3_養子継承資格",
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "e-Gov法令検索 皇室典範（改正後条文が反映され次第確認予定）",
+            "url": "https://laws.e-gov.go.jp/law/322AC0000000003"
+          }
+        ],
+        "verdict": "miss"
+      },
+      {
+        "claim": "有識者会議（2021年）で女性天皇または女系天皇に賛成したのは21人中11人、男系男子は7人",
+        "finding": "21名がヒアリングに参加した事実と報告書の一般的な記述は確認できた。しかし「11人賛成・7人男系」という具体的な内訳は、確認できた報告書本文の中には記載がなかった。",
+        "id": "claim_4_有識者会議意見分布",
+        "matched_post_count": 1,
+        "sources": [
+          {
+            "name": "内閣官房 有識者会議 報告書（令和3年12月22日、PDF）",
+            "url": "https://www.cas.go.jp/jp/seisaku/taii_tokurei/pdf/houkoku_honbun_20211222.pdf"
+          }
+        ],
+        "verdict": "miss"
+      },
+      {
+        "claim": "皇位継承資格者（男系男子の皇族）は現在3名しかいない",
+        "finding": "3名という数は報告書が明記しており、投稿の主張と一致する。改正法は女性皇族の皇籍維持と旧宮家の養子を対象としており、継承資格者の増加は今回の改正に含まれていない。",
+        "id": "claim_5_継承資格者3名",
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "内閣官房 有識者会議 報告書（令和3年12月22日、PDF）",
+            "url": "https://www.cas.go.jp/jp/seisaku/taii_tokurei/pdf/houkoku_honbun_20211222.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "皇室典範では継承順位は皇長子（長男）から始まり、直系を優先する",
+        "finding": "「直系優先・長を先にする」という原則は条文に明記されており、投稿の理解と一致する。e-Gov法令検索のAPIで原文を取得して確認した。",
+        "id": "claim_6_第二条継承順序",
+        "matched_post_count": 4,
+        "sources": [
+          {
+            "name": "e-Gov法令検索 皇室典範",
+            "url": "https://laws.e-gov.go.jp/law/322AC0000000003"
+          }
+        ],
+        "verdict": "fact"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
   "collected_count": 1289,
   "collection_period": {
     "end": "2026-08-23",

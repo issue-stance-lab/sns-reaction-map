@@ -1,4 +1,101 @@
 {
+  "claim_verification": {
+    "checked_on": "2026-08-19",
+    "claims": [
+      {
+        "claim": "2年たてば、食料品の消費税は10％に戻る",
+        "finding": "戻る先は10％ではなく8％。1％との差は7ポイントで、投稿が前提にしている9ポイントではない。",
+        "id": "rate10",
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」",
+            "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+          },
+          {
+            "name": "財務省「消費税の使途（令和8年度予算）」（PDF）",
+            "url": "https://www.mof.go.jp/tax_policy/summary/consumption/122.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "ゼロではなく1％にしたのは、レジなどのシステム改修が理由だ",
+        "finding": "理由の説明は会見の発言と重なる。ただし投稿によく出てくる「改修に1年かかる」という年数までは、この会見録からは確認できなかった。",
+        "id": "register",
+        "matched_post_count": 12,
+        "sources": [
+          {
+            "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」",
+            "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "食料品の消費税を下げると、年5兆円かかる",
+        "finding": "国会で政府が示した額は約4.3兆円。5兆円はそれより約7千億円大きい。桁は合っているが、答弁の数字ではない。",
+        "id": "cost5cho",
+        "matched_post_count": 15,
+        "sources": [
+          {
+            "name": "国会会議録検索システム 第219回国会 衆議院予算委員会（令和8年6月22日）片山財務大臣答弁",
+            "url": "https://kokkai.ndl.go.jp/txt/122105261X01520260622/110"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "消費税は全額が社会保障に使われている／一般会計に入るのだから使われていない",
+        "finding": "「全額を社会保障へ」は、法律と予算の建て付けとしては資料どおり。ただし4経費を消費税収でまかなえてはいない。逆に「一般会計に入るのだから社会保障には使われていない」という言い方も、条文と予算総則を見るかぎり成り立たない。どちらの言い分も、そのままでは資料と合わない。",
+        "id": "welfare",
+        "matched_post_count": 13,
+        "sources": [
+          {
+            "name": "財務省「消費税の使途に関する資料」",
+            "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm"
+          },
+          {
+            "name": "財務省「消費税率の引上げと使途の明確化」（PDF、消費税法第1条第2項の条文）",
+            "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05_1.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "輸出企業には年11.7兆円（別の投稿では7兆円）の消費税が還付されている",
+        "finding": "輸出免税で仕入れにかかった税額が控除しきれず還付が生じる仕組み自体は、国税庁が説明している。確かめられなかったのは金額のほう。7兆円は還付申告全体の額に近いが、輸出分と限った公表値ではなく、11.7兆円に至っては対応する公表値を見つけられなかった。投稿が誤りだと判定したのではなく、公表資料では確認できなかった、という結果である。",
+        "id": "refund",
+        "matched_post_count": 17,
+        "sources": [
+          {
+            "name": "国税庁「令和6年度版 国税庁レポート 適正・公平な課税・徴収」",
+            "url": "https://www.nta.go.jp/about/introduction/torikumi/report/2024/04_3.htm"
+          },
+          {
+            "name": "国税庁 タックスアンサー No.6551 輸出取引の免税",
+            "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6551.htm"
+          }
+        ],
+        "verdict": "miss"
+      },
+      {
+        "claim": "消費税は導入されてから、一度も下げられたことがない",
+        "finding": "税率が下がった例は資料に見当たらない。ただし年数の言い方は投稿ごとに割れていて、平成元年4月からだと37年になる。「30年」「40年」はどちらも実際の期間とずれる。",
+        "id": "firstcut",
+        "matched_post_count": 12,
+        "sources": [
+          {
+            "name": "財務省「日本の税の歴史を教えてください。」",
+            "url": "https://www.mof.go.jp/tax_information/qanda015.html"
+          }
+        ],
+        "verdict": "fact"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
   "collected_count": 3194,
   "collection_period": {
     "end": "2026-08-24",
