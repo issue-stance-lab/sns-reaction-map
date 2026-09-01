@@ -346,16 +346,17 @@ recurring:
     title: note 記事の執筆・公開
     cadence: 3日に1本を目安（候補なしは見送り可）+ per-theme-publish（新テーマ公開時）
     priority: critical
-    last_run: 2026-08-25    # 部活動の地域移行第1回を全面改稿し、投稿実績へ記録済み
+    last_run: 2026-09-01    # 部活動の地域移行第3回を公開し、投稿実績へ記録済み
     procedure: >-
       `.claude/skills/note-operation/SKILL.md` に従い、テーマ別分析記事を執筆する。
       記事には UTM 付きテーマページへのリンクを必ず入れる。
       投稿後は `content/note/posts.md` に記録し、7日後・28日後に GA4（sessionSource=note）を確認する。
     needs_human: note への投稿操作（ハブは note にアクセスできない）
-    next_article: bukatsu-chiiki 第2回（2026-08-29公開候補。CEO承認待ち）
+    next_article: bukatsu-chiiki 第4回（2026-09-04企画開始予定）
     notes: >-
-      2026-08-23に部活動の地域移行第1回を公開し、8/25に全面改稿した。7日後・28日後の計測予定は
-      content/note/posts.md と company/HANDOFFS.yaml を正典とする。消費税減税の既存記事はURL・公開日が未記録のまま残す。
+      2026-08-23に第1回を公開し、8/25に全面改稿した。第2回は8/29、第3回は9/1に公開済み。
+      各記事の7日後・28日後の計測予定はcontent/note/posts.md と company/HANDOFFS.yaml を正典とする。
+      消費税減税の既存記事はURL・公開日が未記録のまま残す。
 
   x-posting:
     title: X運用（新テーマ告知・引用RT・リプライ）

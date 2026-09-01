@@ -83,12 +83,11 @@ class CompanyLedgerTests(unittest.TestCase):
         self.assertEqual(len(company["departments"]), 6)
         self.assertTrue(company["handoffs"])
 
-    def test_pending_approval_is_visible(self):
+    def test_completed_note_approval_is_not_pending(self):
         company = collect.collect_company(dt.date(2026, 8, 27))
         summaries = [item["summary"] for item in company["pending_approvals"]]
-        self.assertEqual(len(summaries), 1)
-        self.assertTrue(any("note" in summary for summary in summaries))
-        self.assertTrue(any(item["kind"] == "approval" for item in company["alerts"]))
+        self.assertNotIn("note『部活動の地域移行』第2回を公開する", summaries)
+        self.assertFalse(any(item["kind"] == "approval" for item in company["alerts"]))
 
     def test_unknown_costs_are_not_treated_as_zero(self):
         finance = collect.collect_company(dt.date(2026, 8, 27))["current_finance"]
