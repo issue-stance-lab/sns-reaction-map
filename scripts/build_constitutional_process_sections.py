@@ -31,10 +31,17 @@ END = "<!-- CLAIM_AUDIT_END -->"
 
 CHECKED_AT = "2026年8月21日"
 
-# 一次資料に当たって確かめた結果。判定は 原典にある / 原典とずれる / 原典にたどり着けず の3種。
+# 一次資料に当たって確かめた結果。内部判定は全テーマ共通の fact / gap / miss。
+# 既存ページの読者向け表示は、課題54の画面刷新まで変更しない。
 # 件数は data/constitutional-amendment_claim_posts.json の tweet_id から数える。
 # 機械抽出をそのまま件数にすると無関係な投稿が混入し3〜4割ぶん多く出るため、
 # 必ず人が1件ずつ読んで確定した tweet_id を使う。
+VERDICT_LABEL = {
+    "fact": "原典にある",
+    "gap": "原典とずれる",
+    "miss": "原典にたどり着けず",
+}
+
 FACT_CHECKS = [
     {
         "key": "minimum_vote_rate",
@@ -47,7 +54,7 @@ FACT_CHECKS = [
             "「投票率が低い場合における措置について検討する」という努力義務が置かれているのみ。"
             "施行から18年が経つが、最低投票率を義務づける立法措置は講じられていない。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "過半数で成立・最低投票率なしは、いずれも条文の直接の読みとして正確。"
             "附則の検討条項は法的効力を持たない。"
@@ -65,7 +72,7 @@ FACT_CHECKS = [
             "同条はその14日間に限定して放送CMを禁止しており、それより前の期間や"
             "インターネット広告については禁止規定が本則に置かれていない。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "14日間という数字は第105条の条文どおり。"
             "14日より前は放送CM量の上限も設けられておらず、"
@@ -81,7 +88,7 @@ FACT_CHECKS = [
             "国民投票法第2条は「国民投票は、少なくとも六十日、"
             "多くとも百八十日の範囲で国会が議決した期日にこれを行う」と定める。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "60日以上180日以内という数字は第2条の条文どおり。"
             "期日の決定は国会の議決によることも明記されている。"
@@ -97,7 +104,7 @@ FACT_CHECKS = [
             "賛成で、国会が、これを発議し、国民に提案してその承認を経なければならない」と定める。"
             "「各議院の」とあるため、衆議院・参議院の両院それぞれで3分の2以上が必要。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "3分の2・各議院という条件は第96条第1項の条文どおり。"
             "「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、"
@@ -116,7 +123,7 @@ FACT_CHECKS = [
             "と定める。ただし、第64条の2では宣言には国会の承認が、政令には国会の事後承認が"
             "それぞれ必要とされており、承認を得られなければ政令は効力を失う。"
         ),
-        "verdict": "原典とずれる",
+        "verdict": "gap",
         "note": (
             "政令は閣議決定だけで制定できる段階が存在するため「国会を経ずに」という表現は"
             "一面では当たっているが、国会の事後承認がなければ効力が続かない仕組みは落ちている。"
@@ -135,7 +142,7 @@ FACT_CHECKS = [
             "これを保持しない。国の交戦権は、これを認めない」と定める。"
             "「自衛隊」の語は第9条のどの項にも存在しない。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "「自衛隊の文字がない」「戦力不保持・交戦権否認が書かれている」"
             "はいずれも第9条の条文の直接引用に基づく。"
@@ -153,7 +160,7 @@ FACT_CHECKS = [
             "自衛の措置をとることを妨げず、そのための実力組織として、法律の定めるところにより、"
             "内閣の首長たる内閣総理大臣を最高の指揮監督者とする自衛隊を保持する」と定める。"
         ),
-        "verdict": "原典とずれる",
+        "verdict": "gap",
         "note": (
             "「自衛隊」の文字を加えることに加え、「必要な自衛の措置をとることを妨げず」という"
             "留保条項と「内閣総理大臣を最高の指揮監督者とする」という指揮命令の明文化が盛り込まれている。"
@@ -173,7 +180,7 @@ FACT_CHECKS = [
             "2026年6月に衆院憲法審査会を通過したとされる改正法案の条文テキストは、"
             "公開されているe-Govのデータベースに未収録であり、条文の確認ができなかった。"
         ),
-        "verdict": "原典にたどり着けず",
+        "verdict": "miss",
         "note": (
             "現行法（令和4年版）の時点では、ネット広告規制は附則の「検討事項」であり禁止規定ではない。"
             "投稿が言及している2026年改正の条文は公式データベースに掲載がなく、"
@@ -193,7 +200,7 @@ FACT_CHECKS = [
             "自民党の条文イメージ（2018年3月）が提案する改正対象は第9条の2・第73条の2・第64条の2・"
             "第47条・第92条・第26条の6項目であり、第18条の改正は含まれていない。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。"
             "自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。"
@@ -211,7 +218,7 @@ FACT_CHECKS = [
             "同時に、政府の立場については「合憲だという立場はこれは全く揺るがない一貫した考え方」"
             "と答弁している。"
         ),
-        "verdict": "原典にある",
+        "verdict": "fact",
         "note": (
             "政府は自衛隊を合憲と解釈しているが、総理大臣自身の国会答弁で"
             "「7〜8割の憲法学者が違憲論」という学説上の並立状態を認めている。"
@@ -254,20 +261,21 @@ def build_section(samples: list[dict], claim_posts: dict) -> str:
         n = len(ids)
         total_posts += n
         verdict = check["verdict"]
-        if verdict == "原典にある":
+        verdict_label = VERDICT_LABEL[verdict]
+        if verdict == "fact":
             verdict_color = "#15803d"
-        elif verdict == "原典とずれる":
+        elif verdict == "gap":
             verdict_color = "#b45309"
         else:
             verdict_color = "#64748b"
-        cards.append(f"""      <article class="ca-card" data-verdict="{esc(verdict)}">
+        cards.append(f"""      <article class="ca-card" data-verdict="{esc(verdict_label)}">
         <div class="ca-head">
           <p class="ca-claim">{esc(check['claim'])}</p>
           <span class="ca-count">{n}件の投稿</span>
         </div>
         <div class="ca-body">
           <p class="ca-source"><strong>一次資料の記述。</strong>{esc(check['source'])}</p>
-          <p class="ca-note"><span class="ca-verdict" style="background:{verdict_color}">{esc(verdict)}</span>{esc(check['note'])}</p>
+          <p class="ca-note"><span class="ca-verdict" style="background:{verdict_color}">{esc(verdict_label)}</span>{esc(check['note'])}</p>
           <p class="ca-src"><a href="{esc(check['url'])}" target="_blank" rel="noopener noreferrer">{esc(check['url_label'])}</a></p>
         </div>
       </article>""")
