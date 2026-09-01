@@ -89,6 +89,11 @@ class CompanyLedgerTests(unittest.TestCase):
         self.assertNotIn("note『部活動の地域移行』第2回を公開する", summaries)
         self.assertFalse(any(item["kind"] == "approval" for item in company["alerts"]))
 
+    def test_completed_handoffs_are_not_shown_as_active_work(self):
+        html = render.render(build_data(dt.date(2026, 9, 1)))
+        self.assertNotIn("note-bukatsu-2-publication ・ 期日", html)
+        self.assertNotIn("note-bukatsu-3-draft ・ 期日", html)
+
     def test_published_note_handoffs_are_completed(self):
         company = collect.collect_company(dt.date(2026, 9, 1))
         handoffs = {item["id"]: item for item in company["handoffs"]}
