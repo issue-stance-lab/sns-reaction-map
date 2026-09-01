@@ -116,6 +116,46 @@ def collect_themes(today: dt.date) -> list[dict]:
     return themes
 
 
+PRIMARY_RESEARCH_DEFAULT_CADENCE_DAYS = 90
+
+
+def collect_primary_research(today: dt.date) -> dict:
+    """一次資料メモ（quality/research/*-primary-sources.md）の再確認が滞っていないかを見る。
+
+    `.claude/skills/primary-research/SKILL.md` が定める、期日駆動の定例作業。
+    `quality/research/status.yaml` に記録された最終確認日をテーマごとの
+    `THEMES.yaml` 突合で確認する。ファイルが無い（まだ task/primary-research が
+    main に merge されていない等）ときは、遅れなしではなく「未確認」として扱う。
+    """
+    raw = _read_yaml("quality/research/status.yaml")
+    if not raw:
+        return {"available": False, "themes": []}
+
+    theme_titles = {key: (value.get("title") or key) for key, value in (_read_yaml("THEMES.yaml").get("themes") or {}).items()}
+    default_cadence = raw.get("default_review_days") or PRIMARY_RESEARCH_DEFAULT_CADENCE_DAYS
+    entries = raw.get("themes") or {}
+
+    themes: list[dict] = []
+    for key, entry in entries.items():
+        last_verified = _as_date(entry.get("last_verified"))
+        cadence = entry.get("review_days") or default_cadence
+        age = (today - last_verified).days if last_verified else None
+        themes.append(
+            {
+                "key": key,
+                "title": theme_titles.get(key, key),
+                "last_verified": last_verified,
+                "cadence_days": cadence,
+                "age_days": age,
+                "overdue_by": (age - cadence) if age is not None else None,
+                "note": entry.get("note") or "",
+            }
+        )
+
+    themes.sort(key=lambda t: (t["overdue_by"] is None, -(t["overdue_by"] or 0)))
+    return {"available": True, "themes": themes}
+
+
 def collect_sample_files() -> list[str]:
     """各テーマの正典ファイルのパス。gitignore 対象なので作業コピーには入らない。
 

@@ -148,6 +148,7 @@ python3 scripts/build_admin_dashboard.py
 | **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` | 最終承認（マージ・pushは承認後にAIが実行） |
 | **note 記事** | 3日に1本を目安（候補なしは見送り可） | 前回から3日 | `.claude/skills/note-operation/SKILL.md` | 最終承認と note への投稿操作 |
 | **サイト改善を1つ進める** | 週1 | 前回から7日 | 下の「サイト改善の進め方」 | 最終承認 |
+| **一次資料メモの再確認** | テーマごと90日目安（法改正が近いテーマは短縮） | `quality/research/status.yaml` の `last_verified` + `review_days` | `.claude/skills/primary-research/SKILL.md` | 業界団体等を例外採用する場合の承認 |
 | **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` | なし |
 
 ---
@@ -187,6 +188,7 @@ python3 scripts/build_admin_dashboard.py
 | `GROWTH.yaml` `recurring.*.last_run` | その定例作業をやった直後。**実際に運用が動いた日**を書く（ループが動いた日ではない） |
 | `GROWTH.yaml` `kpi.snapshots` | KPI取得の直後（週1） |
 | `GROWTH.yaml` `activity_log` | サイト改善を進めた直後 |
+| `quality/research/status.yaml` `last_verified` | 一次資料メモを再確認した直後（`.claude/skills/primary-research/SKILL.md`） |
 | `TASK_BOARD.md` | 課題を見つけた時・片づけた時 |
 
 X日次スキルは `GROWTH.yaml` を読むだけで書かないため、
