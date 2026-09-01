@@ -355,9 +355,16 @@ exit 0（段階5で実装済みの運用警告と公開停止の分離どおり�
 `quality/reviews/2026-08-31-public-data-foundation-stage4-school-nickname-ban.md`。
 この調査の副産物として、bukatsu-chiikiの接続に同種の鮮度リスク（昇格後にbuild_public_registry.py
 の再実行を忘れると古い件数を出し続ける）があることに気づき、`source_sha256`の鮮度確認を追加した
-（古ければ止まる。**bukatsu-chiikiの次回更新`refresh_at: 2026-09-03`の前に、昇格後は
-`build_public_registry.py --topic bukatsu-chiiki`を手動で再実行すること**）。
-段階5を残り8テーマの個別接続より前に着手候補として検討する価値がある。
+（古ければ止まる）。段階5を残り8テーマの個別接続より前に着手候補として検討する価値がある。
+
+**この手動再実行の指示は段階5の完了により不要になった（2026-08-31追記）**。
+`prepare_public_candidate_bundle()`（`scripts/refresh_topic.py`）が `--promote` /
+`--prepare-promotion` のどちらでも、隔離した候補コピーの中で `build_public_registry.py --all` を
+`finalize()` の直前に必ず実行するようになったため、`source_sha256` は毎回その場で作り直された
+公開JSONと一致する。bukatsu-chiikiを含む公開10テーマすべてで、通常のデータ更新（収集→分類→
+`--promote`）を行うだけで公開JSONは自動的に最新化される。手動での `build_public_registry.py
+--topic {theme}` 実行は、通常運用では不要（このコマンド自体は残っていて、事故調査など個別に
+最新化を確認したいときに使える）。
 
 **段階4：部活動の論点カード接続（2026-08-31）**: `configs/bukatsu-chiiki-reaction-map.json` の
 `issue_counts.basis` を `public_json` に変更し、`scripts/issue_card_counts.py` に
@@ -1687,10 +1694,9 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 
 ---
 
-### 課題58: 10テーマの一次資料メモを作業ツリーで作成済み。ページへの反映が未着手
+### 課題58: 10テーマの一次資料メモをmainに反映済み。ページへの反映が未着手
 
-**状態**: 調査は完了。ページへの実装は未着手
-**作業ツリー**: `../isa-wt-primary-research`（ブランチ `task/primary-research`、54コミット）。**mainには未マージ**
+**状態**: 調査・定期更新の仕組みとも 2026-09-01 にmainへマージ・push・作業ツリー片付け完了
 **優先度**: 中（FACT_CHECK_GUIDE.mdの横展開対象4テーマ＋見直し対象6テーマの土台になる調査）
 
 **やったこと**: hermes（別モデル、kimi-k2.6）に10テーマ（takaichi除く公開中の全テーマ）の一次資料調査を
@@ -1706,13 +1712,18 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 - hermesが発言を「である調」に書き換えてから引用符で囲んでいた箇所を、機械照合で発見・原文へ訂正
 - 一次資料の記述ミス（前回自分が書いた「都への名称変更条項」）を、成立法本体をe-Govで再確認して訂正
 
+**定期更新の仕組み（2026-09-01 追加）**: 「オーナーと1件ずつ深掘りする」やり方は精度は高いが
+定期運用には向かないため、他の定例作業と同じ「期日が来たら管理ダッシュボードが検知する」方式に乗せた。
+- `quality/research/status.yaml`（`task/primary-research` 側）にテーマごとの最終確認日を記録
+- `scripts/admin_dashboard/collect.py` の `collect_primary_research()` が
+  90日（テーマによっては短縮）を過ぎた・一度も確認していないテーマを検知し、ダッシュボードに出す
+- 手順は `.claude/skills/primary-research/SKILL.md` に固定化
+
 **まだ終わっていないこと**:
 1. **`quality/research/` はページに載せる前提のメモであり、そのままでは公開しない。** 各テーマの
    実際のページ（`docs/*.html`）に「投稿の主張を一次資料と突き合わせる」セクションとして反映する作業
    （FACT_CHECK_GUIDE.mdの手順）は別途必要
 2. 一次資料メモ自体にも「確認できなかったこと」が各テーマに残っている（財源・費用系が特に弱い）
-3. 作業ツリーが古くなる前にmainの最新を取り込むか、早めに次の作業（ページ反映）に着手すること
-   （`project_shared_tree_staleness` のとおり、放置すると分岐元がずれる）
 
 **テーマ別の厚み（2026-08-31時点、偏りがあるので着手順の参考に）**:
 - **厚い**（オーナー提示のURLを多数確認済み）: ai-copyright（21本）、bike-blue-ticket、bukatsu-chiiki、
