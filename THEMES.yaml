@@ -1,50 +1,3 @@
-# THEMES.yaml — テーマ台帳（単一の真実源）
-# 最終更新: 2026-08-02
-#
-# 工程の定義（全テーマ共通のステートマシン）
-#   collect:     Yahoo検索でデータ収集済み
-#   classify:    AI分類済み（1D）
-#   classify2d:  2D分類済み（エラー率10%以下）
-#   page_v3:     v3フォーマットのHTMLが公開されている
-#   manga_data:  漫画データ・プロンプト作成済み
-#   manga_img:   画像生成・HTML反映済み（画像生成は人間の手動作業）
-#   published:   ポータル掲載・sitemap登録済み
-#
-# 各工程の値: done / partial / todo / blocked / n-a
-#
-# データ更新フィールド（2026-08-02 の部活動パイロットで意味を固定）
-#   updated_at:               検証済みデータを公開した日。全検査に合格した時だけ進める
-#   collect_delta:            今回の重複除外後・分類済み追加件数
-#   sample_period:            公開累積データの収集日の範囲（投稿日時ではない）
-#   collect_at:               次回の収集・staging作成予定日（内部運用用）
-#   collect_mode:             scheduled（既定）/ event-driven（新規0件が2回続き定期収集を停止）
-#   refresh_at:               次回の公開更新予定日。公開まで昇格できないテーマは空欄
-#   last_refresh_attempt_at:  収集を試みた日。新規0件や失敗でも記録する
-#   refresh_config:           収集条件（検索語）の正典ファイル
-#   sample_file:              ページ生成用の累積正典。本文を含むため Git 管理外のテーマがある
-#   verification_file:        本文を除いた検証用サマリ（data/verification/）。クリーンクローンとCIはこれを読む
-#   page_update_mode:         ページ更新の自動化可否（2026-08-02 の実測で判定）
-#     adapter   … stagingの候補入出力に対応し、変更候補の2回目実行で差分が出ない
-#     adapter_candidate … 現行入力では冪等だが、stagingの候補入出力には未対応
-#     migration … 一度きりの生成スクリプトしかない。再実行できないか副作用があるため自動化対象外
-#     manual    … 再実行可能な更新スクリプトが存在しない
-#
-# collect_at / refresh_at の決め方
-#   既定は前回収集から14日。1回の更新で新規意見が50件以上なら次回だけ7日後。
-#   新規意見が20件未満の回が2回続いたら28日へ下げ、新規0件が2回続いたら定期更新を止めて空欄にする。
-#   collect_at は全テーマに設定し、refresh_at は公開まで昇格できるテーマだけに設定する。
-#   collect_at を空欄にできるのは collect_mode: event-driven を明記したテーマだけ。
-#   同じ日に予定が集まらないよう、日付は意図的に分散させる（2026-08-02 に10テーマが同時期限に
-#   なった反省）。公開まで行うテーマ（page_update_mode: adapter）は1日1テーマを上限にする。
-#   収集だけのテーマは判断がほぼ発生しないため、同じ日にまとめてよい。
-#   オーナーが作業できない日が分かっている場合は、期限を過ぎさせず事前に前後へ動かす。
-#
-# バッジ自動制御フィールド（index.html JS が参照。値は sync_portal_stats.py が生成する）
-#   published_at:  初回ポータル公開日  → NEW バッジ（14日間）
-#   updated_at:    最終データ追加日    → +XX件 更新バッジ（7日間）
-#   collect_delta: 直近追加件数        → +XX件 の数字
-#   x_posted_at:   最終X投稿日         → 🔥 注目バッジ（2日間）
-
 themes:
   ai-copyright:
     title: 生成AIと著作権
@@ -52,18 +5,18 @@ themes:
     sample_file: social-samples/ai-copyright_hermes_classified.json
     verification_file: data/verification/ai-copyright.json
     refresh_config: configs/topics/ai-copyright-v2.yaml
-    sample_period: "2026-06-27"
+    sample_period: '2026-06-27'
     sample_period_source: owner_confirmed
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 931件
-    classify: done       # 708件有効（OpenCode Go / minimax-m2.7）
-    classify2d: done     # 708件、APIエラー0%
-    main_issue: done     # 669件（エラー率1.4%）OpenCode Go minimax-m2.7。6論点: 学習データ・無断利用126/クリエイター保護46/法制度79/技術競争40/利用者モラル73/AI生成物権利31/その他274
-    page_v3: done        # 論点アリーナ（極座標7セクター・2ステップ投票）実装済み 2026-07-22
-    manga_data: done     # configs/ai-copyright-reaction-map.json manga field
-    manga_img: done      # docs/images/ に漫画8枚+投票4枚
-    published: done      # sitemap・ポータル掲載済み
-    page_update_mode: adapter   # refresh_topic.py の ai_copyright adapter。2026-08-07 に3体系を正典へ統一して昇格
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    main_issue: done
+    page_v3: done
+    manga_data: done
+    manga_img: done
+    published: done
+    page_update_mode: adapter
     collect_at: 2026-09-07
     refresh_at: 2026-09-07
     collect_mode: scheduled
@@ -72,26 +25,28 @@ themes:
     updated_at: 2026-08-31
     collect_delta: 450
     x_posted_at: 2026-08-29
-    notes: "2026-07-12にYahooリアルタイム検索463件を追加収集。重複7件を除外し、新規456件中369件をOpenCode Go / minimax-m2.7で2D有効分類。2026-07-22に論点アリーナ（極座標7セクター・2ステップ投票）と論点説明カード6枚を追加。学習データ・無断利用126件最多、技術競争・AI推進のみ推進派優勢（6vs27）。2026-07-26に452件を追加収集しHermes1D分類（規制支持78→60%、推進支持22→41%の大きな変化）、「世論の潮目」ウィジェットを追加。2026-08-02に arguments（両側の強い論拠）を追加。一次情報は文化庁「AIと著作権に関する考え方について」（令和6年3月15日）と内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）。論点別件数の出所は sample_file（ai-copyright_2d_classified.json）の main_issue で、有効669件・その他274件を除く6論点が126/79/73/46/40/31。hermes_cur/prev は別タクソノミーでページには未使用。"
-
+    notes: 2026-07-12にYahooリアルタイム検索463件を追加収集。重複7件を除外し、新規456件中369件をOpenCode Go / minimax-m2.7で2D有効分類。2026-07-22に論点アリーナ（極座標7セクター・2ステップ投票）と論点説明カード6枚を追加。学習データ・無断利用126件最多、技術競争・AI推進のみ推進派優勢（6vs27）。2026-07-26に452件を追加収集しHermes1D分類（規制支持78→60%、推進支持22→41%の大きな変化）、「世論の潮目」ウィジェットを追加。2026-08-02に
+      arguments（両側の強い論拠）を追加。一次情報は文化庁「AIと著作権に関する考え方について」（令和6年3月15日）と内閣府「AI時代の知的財産権検討会
+      中間とりまとめ」（2024年5月）。論点別件数の出所は sample_file（ai-copyright_2d_classified.json）の main_issue
+      で、有効669件・その他274件を除く6論点が126/79/73/46/40/31。hermes_cur/prev は別タクソノミーでページには未使用。
   bike-blue-ticket:
     title: 自転車の青切符導入
     html: docs/bike-blue-ticket-reaction-map.html
     sample_file: social-samples/bike-blue-ticket_2d_classified.json
     refresh_config: configs/topics/bike-blue-ticket.yaml
-    sample_period: "2026-06-27〜2026-08-24"
-    sample_period_source: owner_confirmed   # 開始日はオーナー確認。終了日は最終更新（updated_at 2026-08-24）
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 累計355件（2026-08-17更新、今回新規174件）
-    classify: done       # 355件（既存181件＋2026-08-10/08-17収集回の新規174件）
-    classify2d: done     # 181件、APIエラー0%（追加174件は refresh_topic.py の分類）
-    main_issue: done     # 355件（正典 sample_file の classification.main_issue）。6論点: 取締り強化68/インフラ45/ルール曖昧34/免許制21/車道18/その他169
-    page_v3: done        # 論点アリーナ（極座標6セクター・2ステップ投票）実装済み 2026-07-23
+    sample_period: 2026-06-27〜2026-08-24
+    sample_period_source: owner_confirmed
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    main_issue: done
+    page_v3: done
     manga_data: done
-    manga_img: done      # docs/images/ に漫画8枚+投票4枚
+    manga_img: done
     published: done
-    page_update_mode: adapter   # scripts/refresh_adapters/bike.py（再読が未更新なら意図的に失敗する）
-    collect_at: 2026-09-07 # 2026-08-17収集の新規意見が50件以上のため今回だけ7日後
+    page_update_mode: adapter
+    collect_at: 2026-09-07
     refresh_at: 2026-09-07
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-24
@@ -99,25 +54,40 @@ themes:
     updated_at: 2026-08-24
     collect_delta: 29
     x_posted_at: 2026-08-30
-    notes: "2026-07-26にYahooリアルタイム検索72件を追加収集しHermes再分類。22件が意見投稿と判定。7/12収集31件との比較「世論の潮目」ウィジェットを追加（賛成54.5%↑、反対45.5%↓）。 2026-08-16にページ冒頭をテーマ固有の入口へ組み替えた。ヒーローの『議論の中心』要約を外し、STEP1集め方（検索語10本と181→115件の絞り込み）／STEP2確かめ方（投稿の主張7つを警察庁資料と突き合わせ）／STEP3分かったこと（賛成38・反対77の帯が6区分へ分解するアニメーション）の順に置いた。中心の発見は『反対77件は一つの塊ではない』こと。編集部が反対77件を全件読み直し、青切符では足りない9／対象と順番に異議30／走る場所がない10／警察の運用への不信14／制度そのものに反対14（うち8件は同一の署名定型文）に再区分した。取締り自体の否定と読めるのは115件中14件。再読の割り当ては data/bike-blue-ticket_opposition_reread.json、事実確認7主張の該当投稿IDは data/bike-blue-ticket_claim_posts.json に保存し、件数はスクリプトが毎回数え直す（本文のキーワード抽出をそのまま件数にすると3〜4割多く出たため、1件ずつ読んで確定した）。事実確認の結果は、反則金の額・対象16歳以上が一致、LUUPは野放しという前提・歩道通行で即反則金・事故の増減・取締り不在の4つが資料と食い違い、『違反113種類』のみ確認できず（警察庁の反則行為一覧は65項目。別の数え方の可能性を否定できないため誤りとは書かず両論併記）。確認日2026-08-16。全件表は反対77件を掲載し、AIがrisk=medium等と判定した11件は本文抜粋を載せずリンクのみ。insight-statsは『取締り38 vs 道路整備77』の2値表示をやめ5論点の内訳に変更しアリーナ直前へ移動。世論の潮目は5論点の後ろへ移動。conclusion-countは reread-basis セクション内に1つだけ置いてsync_issue_countsの対象を維持している。データ追加時は新規の反対投稿だけを読んで再読マッピングに追記する（件数が合わないとビルドが落ちる）。次テーマへ展開する場合はSTEP2から移すこと。STEP3は結論次第で形が変わるため定型化しない。 2026-08-17に公開更新。2026-08-10収集回（新規153件）と2026-08-17収集回（新規152件）はどちらも累積正典に取り込まれておらず、重複131件を除いた174件をまとめて統合し累計355件。追加分に is_opinion が付かないため、既存181件と同じ扱い（全件を意見として数える）で true を付与した。反対65件を1件ずつ読み直して再読マッピングへ追記し、5区分は 青切符では足りない14／対象と順番に異議41／走る場所がない18／警察の運用への不信22／制度そのものに反対47（うち29件が同一の署名定型文）。反対が77→142件へ増えた分の約半分は change.org の署名文の貼り付けで、STEP3の本文と潮目の注記に明記した。署名文の件数と全件表で本文を伏せた件数は、data/verification/bike-blue-ticket-reread.json にsignature / excerpt 列として書き出し、数字の出所検査から導けるようにした（直書きをやめた）。事実確認7主張の該当投稿も再走査して37→64件。潮目は7月26日収集回×8月17日収集回の比較へ差し替え（賛成38.7%→28.0%、反対61.3%→72.0%）。論点アリーナの点（SM_RAW）は2026-06の旧1D分類のまま181点で止まっていたので scripts/build_bike_arena_points.py を新設し、正典から355点で作り直した。要旨に一次情報の件数が入るため、この配列だけ id=bike-arena-points のscriptに入れてexclude_selectors で数字の出所検査から外している。 2026-08-17にadapterへ昇格。scripts/build_bike_arena.py が正典からアリーナの点・注目ポイント4枚・論点ごとの帯と内訳（論点×立場のクロス集計）・「本当の対立点」の論点別件数・投票の選択肢の説明文の件数を作り直し、scripts/build_bike_process_sections.py が候補input/outputに対応した。潮目は固定ファイル名をやめ、refresh_adapters/bike.py が更新回どうしを比較して作る（inject_tide_widget.py の THEMES からは prev_file/cur_file を外した）。新しい反対投稿が data/bike-blue-ticket_opposition_reread.json に無ければ、adapterが tweet_id を並べて意図的に失敗する（読む工程は自動化しない）。is_opinion は分類器が全件 true で付ける（このテーマは収集した投稿を全件母数に数える）。"
-
+    notes: 2026-07-26にYahooリアルタイム検索72件を追加収集しHermes再分類。22件が意見投稿と判定。7/12収集31件との比較「世論の潮目」ウィジェットを追加（賛成54.5%↑、反対45.5%↓）。
+      2026-08-16にページ冒頭をテーマ固有の入口へ組み替えた。ヒーローの『議論の中心』要約を外し、STEP1集め方（検索語10本と181→115件の絞り込み）／STEP2確かめ方（投稿の主張7つを警察庁資料と突き合わせ）／STEP3分かったこと（賛成38・反対77の帯が6区分へ分解するアニメーション）の順に置いた。中心の発見は『反対77件は一つの塊ではない』こと。編集部が反対77件を全件読み直し、青切符では足りない9／対象と順番に異議30／走る場所がない10／警察の運用への不信14／制度そのものに反対14（うち8件は同一の署名定型文）に再区分した。取締り自体の否定と読めるのは115件中14件。再読の割り当ては
+      data/bike-blue-ticket_opposition_reread.json、事実確認7主張の該当投稿IDは data/bike-blue-ticket_claim_posts.json
+      に保存し、件数はスクリプトが毎回数え直す（本文のキーワード抽出をそのまま件数にすると3〜4割多く出たため、1件ずつ読んで確定した）。事実確認の結果は、反則金の額・対象16歳以上が一致、LUUPは野放しという前提・歩道通行で即反則金・事故の増減・取締り不在の4つが資料と食い違い、『違反113種類』のみ確認できず（警察庁の反則行為一覧は65項目。別の数え方の可能性を否定できないため誤りとは書かず両論併記）。確認日2026-08-16。全件表は反対77件を掲載し、AIがrisk=medium等と判定した11件は本文抜粋を載せずリンクのみ。insight-statsは『取締り38
+      vs 道路整備77』の2値表示をやめ5論点の内訳に変更しアリーナ直前へ移動。世論の潮目は5論点の後ろへ移動。conclusion-countは reread-basis
+      セクション内に1つだけ置いてsync_issue_countsの対象を維持している。データ追加時は新規の反対投稿だけを読んで再読マッピングに追記する（件数が合わないとビルドが落ちる）。次テーマへ展開する場合はSTEP2から移すこと。STEP3は結論次第で形が変わるため定型化しない。
+      2026-08-17に公開更新。2026-08-10収集回（新規153件）と2026-08-17収集回（新規152件）はどちらも累積正典に取り込まれておらず、重複131件を除いた174件をまとめて統合し累計355件。追加分に
+      is_opinion が付かないため、既存181件と同じ扱い（全件を意見として数える）で true を付与した。反対65件を1件ずつ読み直して再読マッピングへ追記し、5区分は
+      青切符では足りない14／対象と順番に異議41／走る場所がない18／警察の運用への不信22／制度そのものに反対47（うち29件が同一の署名定型文）。反対が77→142件へ増えた分の約半分は
+      change.org の署名文の貼り付けで、STEP3の本文と潮目の注記に明記した。署名文の件数と全件表で本文を伏せた件数は、data/verification/bike-blue-ticket-reread.json
+      にsignature / excerpt 列として書き出し、数字の出所検査から導けるようにした（直書きをやめた）。事実確認7主張の該当投稿も再走査して37→64件。潮目は7月26日収集回×8月17日収集回の比較へ差し替え（賛成38.7%→28.0%、反対61.3%→72.0%）。論点アリーナの点（SM_RAW）は2026-06の旧1D分類のまま181点で止まっていたので
+      scripts/build_bike_arena_points.py を新設し、正典から355点で作り直した。要旨に一次情報の件数が入るため、この配列だけ
+      id=bike-arena-points のscriptに入れてexclude_selectors で数字の出所検査から外している。 2026-08-17にadapterへ昇格。scripts/build_bike_arena.py
+      が正典からアリーナの点・注目ポイント4枚・論点ごとの帯と内訳（論点×立場のクロス集計）・「本当の対立点」の論点別件数・投票の選択肢の説明文の件数を作り直し、scripts/build_bike_process_sections.py
+      が候補input/outputに対応した。潮目は固定ファイル名をやめ、refresh_adapters/bike.py が更新回どうしを比較して作る（inject_tide_widget.py
+      の THEMES からは prev_file/cur_file を外した）。新しい反対投稿が data/bike-blue-ticket_opposition_reread.json
+      に無ければ、adapterが tweet_id を並べて意図的に失敗する（読む工程は自動化しない）。is_opinion は分類器が全件 true で付ける（このテーマは収集した投稿を全件母数に数える）。
   bukatsu-chiiki:
     title: 部活動の地域移行
     html: docs/bukatsu-chiiki-reaction-map.html
     sample_file: social-samples/bukatsu-chiiki_hermes_classified.json
     verification_file: data/verification/bukatsu-chiiki.json
     refresh_config: configs/topics/bukatsu-chiiki-v2.yaml
-    sample_period: "2026-06-27〜2026-08-26"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 累計1,216件（2026-08-27更新、今回新規262件）
-    classify: done       # Hermesで1,216件分類。関連1,203件、意見993件
-    classify2d: done     # 旧2D 245件は履歴保持。公開表示はHermes論点分類へ移行
-    main_issue: done     # Hermesで7論点・4スタンス・3段階強度を分類
-    page_v3: done        # 論点アリーナ＋タイトル直下「世論の潮目」実装 2026-07-23
-    manga_data: done     # creative/manga-prompts/bukatsu-chiiki-prompts.md 作成済み
-    manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
+    sample_period: 2026-06-27〜2026-08-26
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    main_issue: done
+    page_v3: done
+    manga_data: done
+    manga_img: done
     published: done
-    page_update_mode: adapter   # refresh_topic.py --topic bukatsu-chiiki のadapter。パイロットで昇格まで実証済み
+    page_update_mode: adapter
     collect_at: 2026-09-03
     refresh_at: 2026-09-03
     collect_mode: scheduled
@@ -126,25 +96,28 @@ themes:
     updated_at: 2026-08-27
     collect_delta: 262
     x_posted_at: 2026-08-29
-    notes: "2026-07-12に新規127件を収集。2026-07-23に同一10検索語で223件を取得し、既存との重複62件を除いた新規161件を追加、累計467件。全件をHermes方式（main_issue / stance / intensity / is_relevant / is_opinion）で再分類。関連464件、意見389件。2026-08-02に同じ10検索語で222件を取得し、重複63件を除いた新規159件をHermes分類（関連159件、意見130件）。累計626件、関連623件、意見519件。7/23追加分と8/2追加分を同一条件で比較し、移行支持が6.1pt増加、教員の働き方が8.9pt増加、感情highが8.0pt減少。2026-08-14に同じ10検索語で250件を取得し、重複132件を除いた新規118件をHermes分類（関連117件、意見90件、分類エラー0件）。累計850件、関連841件、意見689件。論点は 教員の働き方212／制度・移行プロセス146／教育的意義・機会131／受け皿・指導者95／費用・家庭負担67／その他35／地域格差3、賛否は 移行支持315／慎重・反対217／条件付き・改善要求128／中立・情報29。潮目は8/8追加分80件と8/14追加分90件の比較で、条件付き・改善要求が4.3pt増、教員の働き方が4.9pt増、感情highが3.9pt減。注目ポイント4枚は生成側が無いため手で更新した（課題43の積み残し1）。分類は途中1バッチがHermesの非JSON応答で落ち、分類器の --resume で96件目から再開した。 2026-08-27定例として8/26夜に同じ10検索語から314件を取得。重複52件を除く新規262件をkimi-k2.6で分類し、関連262件、意見239件、分類エラー0件。累計1,216件、関連1,203件、意見993件。論点は 教員の働き方283／制度・移行プロセス227／教育的意義・機会189／受け皿・指導者143／費用・家庭負担97／その他45／地域格差9。賛否は 移行支持414／慎重・反対329／条件付き・改善要求206／中立・情報44。前回意見65件と今回239件の比較で、移行支持が8.2pt増、受け皿・指導者が10.3pt増、感情highは1.4pt減。ページと潮目表示を更新し、次回予定は2026-09-03とした。"
-
+    notes: 2026-07-12に新規127件を収集。2026-07-23に同一10検索語で223件を取得し、既存との重複62件を除いた新規161件を追加、累計467件。全件をHermes方式（main_issue
+      / stance / intensity / is_relevant / is_opinion）で再分類。関連464件、意見389件。2026-08-02に同じ10検索語で222件を取得し、重複63件を除いた新規159件をHermes分類（関連159件、意見130件）。累計626件、関連623件、意見519件。7/23追加分と8/2追加分を同一条件で比較し、移行支持が6.1pt増加、教員の働き方が8.9pt増加、感情highが8.0pt減少。2026-08-14に同じ10検索語で250件を取得し、重複132件を除いた新規118件をHermes分類（関連117件、意見90件、分類エラー0件）。累計850件、関連841件、意見689件。論点は
+      教員の働き方212／制度・移行プロセス146／教育的意義・機会131／受け皿・指導者95／費用・家庭負担67／その他35／地域格差3、賛否は 移行支持315／慎重・反対217／条件付き・改善要求128／中立・情報29。潮目は8/8追加分80件と8/14追加分90件の比較で、条件付き・改善要求が4.3pt増、教員の働き方が4.9pt増、感情highが3.9pt減。注目ポイント4枚は生成側が無いため手で更新した（課題43の積み残し1）。分類は途中1バッチがHermesの非JSON応答で落ち、分類器の
+      --resume で96件目から再開した。 2026-08-27定例として8/26夜に同じ10検索語から314件を取得。重複52件を除く新規262件をkimi-k2.6で分類し、関連262件、意見239件、分類エラー0件。累計1,216件、関連1,203件、意見993件。論点は
+      教員の働き方283／制度・移行プロセス227／教育的意義・機会189／受け皿・指導者143／費用・家庭負担97／その他45／地域格差9。賛否は 移行支持414／慎重・反対329／条件付き・改善要求206／中立・情報44。前回意見65件と今回239件の比較で、移行支持が8.2pt増、受け皿・指導者が10.3pt増、感情highは1.4pt減。ページと潮目表示を更新し、次回予定は2026-09-03とした。
   constitutional-amendment:
     title: 憲法改正論議
     html: docs/constitutional-amendment-reaction-map.html
     sample_file: social-samples/constitutional_amendment_hermes_arena_classified.json
     refresh_config: configs/topics/constitutional.yaml
     verification_file: data/verification/constitutional-amendment.json
-    sample_period: "2026-06-20〜2026-08-31"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 382件
-    classify: done       # 552件有効（2D累計）
-    classify2d: done     # 552件、APIエラー0%
-    page_v3: done        # smCanvasMain/smCanvasHeat実装済み
+    sample_period: 2026-06-20〜2026-08-31
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    page_v3: done
     manga_data: done
-    manga_img: done      # docs/images/ に漫画8枚+投票4枚
+    manga_img: done
     published: done
-    page_update_mode: adapter # scripts/refresh_adapters/constitutional.py（潮目は更新回どうしの比較）
-    collect_at: 2026-09-07 # 新規230件・意見198件（50件以上）のため今回だけ7日後
+    page_update_mode: adapter
+    collect_at: 2026-09-07
     refresh_at: 2026-09-07
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-31
@@ -152,26 +125,30 @@ themes:
     updated_at: 2026-08-31
     collect_delta: 225
     x_posted_at: 2026-08-18
-    notes: "2026-07-12にYahooリアルタイム検索223件を追加収集。既存rawとの重複0件、新規223件中212件をOpenCode Go / minimax-m2.7で2D有効分類。raw台帳と2D累計の母集団差あり。2026-07-23に422件をHermes / kimi-k2.6で6論点・4スタンスへ再分類し、論点アリーナ（極座標6セクター・2ステップ投票）と論点別X投稿カードへ反映。2026-08-20に「原典にある数字・原典にない数字」セクションを追加（876件から8主張を選定、一次資料: e-Gov国民投票法・e-Gov憲法・自民党2018年条文イメージPDF）。build_constitutional_process_sections.py を新設し adapter 経由で CLAIM_AUDIT_START/END マーカーを差し替える方式。2026-08-21に2点修正: ①出典を hourei.net→e-Gov に変更（憲法96条・9条の2クレーム）②推進側クレームを2件追加（憲法18条と徴兵制、自衛隊の学説上の合憲・違憲両論）、改正推進スタンスの投稿比率が 16%→27% に改善。計10主張37件。同日さらに修正: 追加した2件の出典を国会会議録（稲田防衛大臣2016年答弁・安倍総理2017年答弁）に変更し、判定文の反論調の記述を削除、「政府はこう説明している」形式に統一。引用は国会会議録のAPIで原文と照合済み（稲田答弁=発言151番、安倍答弁=発言43番に一致）。リード文の「10つの主張」を「10の主張」に直し、資料の列挙に国会会議録を加え、確認日を8月21日に更新した。"
-
+    notes: '2026-07-12にYahooリアルタイム検索223件を追加収集。既存rawとの重複0件、新規223件中212件をOpenCode Go
+      / minimax-m2.7で2D有効分類。raw台帳と2D累計の母集団差あり。2026-07-23に422件をHermes / kimi-k2.6で6論点・4スタンスへ再分類し、論点アリーナ（極座標6セクター・2ステップ投票）と論点別X投稿カードへ反映。2026-08-20に「原典にある数字・原典にない数字」セクションを追加（876件から8主張を選定、一次資料:
+      e-Gov国民投票法・e-Gov憲法・自民党2018年条文イメージPDF）。build_constitutional_process_sections.py
+      を新設し adapter 経由で CLAIM_AUDIT_START/END マーカーを差し替える方式。2026-08-21に2点修正: ①出典を hourei.net→e-Gov
+      に変更（憲法96条・9条の2クレーム）②推進側クレームを2件追加（憲法18条と徴兵制、自衛隊の学説上の合憲・違憲両論）、改正推進スタンスの投稿比率が 16%→27%
+      に改善。計10主張37件。同日さらに修正: 追加した2件の出典を国会会議録（稲田防衛大臣2016年答弁・安倍総理2017年答弁）に変更し、判定文の反論調の記述を削除、「政府はこう説明している」形式に統一。引用は国会会議録のAPIで原文と照合済み（稲田答弁=発言151番、安倍答弁=発言43番に一致）。リード文の「10つの主張」を「10の主張」に直し、資料の列挙に国会会議録を加え、確認日を8月21日に更新した。'
   elderly-license-revocation:
     title: 高齢者免許返納
     html: docs/elderly-license-revocation-reaction-map.html
     sample_file: social-samples/elderly-license_2d_classified.json
     verification_file: data/verification/elderly-license-revocation.json
     refresh_config: configs/topics/elderly-license-revocation.yaml
-    sample_period: "2026-06-27〜2026-08-20"
-    sample_period_source: owner_confirmed   # 正典の fetched_at は250/364件のみ。開始日はオーナー確認、終了日は updated_at
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 364件（累計）
+    sample_period: 2026-06-27〜2026-08-20
+    sample_period_source: owner_confirmed
+    sample_source: Yahooリアルタイム検索
+    collect: done
     classify: done
-    classify2d: done     # 211件、APIエラー0%
-    main_issue: done     # 364件。6論点: 義務化・事故防止158/その他116/適性検査強化29/自主返納支援28/地方の足・移動権21/代替交通整備12。意見233件
-    page_v3: done        # 論点アリーナ（極座標6セクター）実装済み 2026-07-24
+    classify2d: done
+    main_issue: done
+    page_v3: done
     manga_data: done
-    manga_img: done      # docs/images/ に漫画5枚+投票4枚+論点別インフォグラフィック6枚（WebP変換済み）
+    manga_img: done
     published: done
-    page_update_mode: adapter   # refresh_topic.py の elderly adapter。候補input/output・潮目更新・投票互換検査に対応
+    page_update_mode: adapter
     collect_at: 2026-09-03
     refresh_at: 2026-09-03
     collect_mode: scheduled
@@ -180,50 +157,52 @@ themes:
     updated_at: 2026-08-20
     collect_delta: 30
     x_posted_at: 2026-08-30
-    notes: "2026-08-14に課題40の未統合分（2026-07-26収集の61件）を正典へ統合し、211→272件（意見188件）。同日のYahooリアルタイム検索で保存した110件・意見59件は、その後の正典と再照合して重複18件を除き、純新規92件・意見45件を公開。累積364件・意見233件。専用adapterを整備し、ページと潮目（7月26日→8月14日。今回側は保存済み110件）を更新した。2026-08-18にSTEP2「確かめ方」（一次資料との突き合わせ）を追加。公的資料で確かめられる主張を7つ選び、警察庁・内閣府・国土交通省の公表資料と道路交通法に当たった結果、一致2件・食い違い4件・確認できず1件。該当投稿は候補を1件ずつ読んで確定し、data/elderly-license-revocation_claim_posts.json に32件のtweet_idを保存（キーワード抽出のままだと報道見出しの共有や提案だけの投稿が混ざる）。生成は scripts/build_elderly_process_sections.py で、ページの VERIFY_SECTION_START/END の間だけを差し替える。件数はclaim_postsから毎回数え直し、出所は data/verification/elderly-license-revocation-claims.json に書き出す。データを追加したときは、増えた分だけ読んで claim_posts に追記すること。一次資料は確認日から半年（2027-02-18目安）で再確認。2026-08-21に、8月20日更新で増えた30件を読み、該当6件を追記して32→38件（主張7つは据え置き）。増えた分の大半は個別の運転マナーへの苦情で、公的資料で確かめられる主張を含まない。「自主返納に法的な根拠はない」のカードは、逆に「法的には申請による免許取消し処分」と正しく書いた投稿が出たため、両論を並べる形に直した。"
-
+    notes: 2026-08-14に課題40の未統合分（2026-07-26収集の61件）を正典へ統合し、211→272件（意見188件）。同日のYahooリアルタイム検索で保存した110件・意見59件は、その後の正典と再照合して重複18件を除き、純新規92件・意見45件を公開。累積364件・意見233件。専用adapterを整備し、ページと潮目（7月26日→8月14日。今回側は保存済み110件）を更新した。2026-08-18にSTEP2「確かめ方」（一次資料との突き合わせ）を追加。公的資料で確かめられる主張を7つ選び、警察庁・内閣府・国土交通省の公表資料と道路交通法に当たった結果、一致2件・食い違い4件・確認できず1件。該当投稿は候補を1件ずつ読んで確定し、data/elderly-license-revocation_claim_posts.json
+      に32件のtweet_idを保存（キーワード抽出のままだと報道見出しの共有や提案だけの投稿が混ざる）。生成は scripts/build_elderly_process_sections.py
+      で、ページの VERIFY_SECTION_START/END の間だけを差し替える。件数はclaim_postsから毎回数え直し、出所は data/verification/elderly-license-revocation-claims.json
+      に書き出す。データを追加したときは、増えた分だけ読んで claim_posts に追記すること。一次資料は確認日から半年（2027-02-18目安）で再確認。2026-08-21に、8月20日更新で増えた30件を読み、該当6件を追記して32→38件（主張7つは据え置き）。増えた分の大半は個別の運転マナーへの苦情で、公的資料で確かめられる主張を含まない。「自主返納に法的な根拠はない」のカードは、逆に「法的には申請による免許取消し処分」と正しく書いた投稿が出たため、両論を並べる形に直した。
   school-nickname-ban:
     title: 学校でのあだ名禁止
     html: docs/school-nickname-ban-reaction-map.html
     sample_file: social-samples/school-nickname-ban_hermes_arena_classified.json
     refresh_config: configs/topics/school-nickname-ban-v2.yaml
     verification_file: data/verification/school-nickname-ban.json
-    sample_period: "2026-06-22〜2026-08-16"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 374件
-    classify: done       # 134件有効
-    classify2d: done     # 134件、APIエラー0%
-    page_v3: done        # Hermes再分類63件の論点アリーナ（極座標6セクター・2ステップ投票）2026-07-24
-    manga_data: done     # creative/manga-prompts/school-nickname-ban-{prompts,vote-prompts}.md + configs JSON manga field
-    manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚 WebP変換・HTML反映済み
-    published: done      # ポータル回遊カード復帰・sitemap掲載済み
+    sample_period: 2026-06-22〜2026-09-01
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    page_v3: done
+    manga_data: done
+    manga_img: done
+    published: done
     page_update_mode: adapter
-    collect_at: 2026-08-31
-    refresh_at: 2026-08-31
+    collect_at: 2026-09-15
+    refresh_at: 2026-09-15
     collect_mode: scheduled
-    last_refresh_attempt_at: 2026-08-17
+    last_refresh_attempt_at: 2026-09-01
     published_at: 2026-06-24
-    updated_at: 2026-08-21
-    collect_delta: 46
-    notes: "2026-08-17にYahooリアルタイム検索46件を追加収集しHermes再分類。24件が意見投稿と判定。専用adapter（scripts/refresh_adapters/nickname.py）を整備し、一度きりの移行用 upgrade_nickname_arena.js を archive/scripts/ へ退けた。ページ・アリーナの点・潮目（7月26日→8月17日）を正典から作り直す。累積420件・意見87件。最多論点はいじめ・心理的安全29件。2026-07-26の45件追加時に「世論の潮目」ウィジェットを追加している。サンプル数少なく傾向参考程度。2026-08-21に背景解説を一次資料で増補。いじめ防止対策推進法・生徒指導提要には、あだ名禁止／さん付け統一を全国一律に求める規定は確認できず、具体的な呼称ルールは学校・設置者の運用として扱う。420件中、学校の呼称ルールと無関係な投稿が278件、関連するが意見でない投稿が55件あり、意見率が低い主因を確認。次回収集予定の2026-08-31後に、意見母数と傾向を再確認する。"
-
+    updated_at: 2026-09-01
+    collect_delta: 12
+    notes: 2026-08-17にYahooリアルタイム検索46件を追加収集しHermes再分類。24件が意見投稿と判定。専用adapter（scripts/refresh_adapters/nickname.py）を整備し、一度きりの移行用
+      upgrade_nickname_arena.js を archive/scripts/ へ退けた。ページ・アリーナの点・潮目（7月26日→8月17日）を正典から作り直す。累積420件・意見87件。最多論点はいじめ・心理的安全29件。2026-07-26の45件追加時に「世論の潮目」ウィジェットを追加している。サンプル数少なく傾向参考程度。2026-08-21に背景解説を一次資料で増補。いじめ防止対策推進法・生徒指導提要には、あだ名禁止／さん付け統一を全国一律に求める規定は確認できず、具体的な呼称ルールは学校・設置者の運用として扱う。420件中、学校の呼称ルールと無関係な投稿が278件、関連するが意見でない投稿が55件あり、意見率が低い主因を確認。次回収集予定の2026-08-31後に、意見母数と傾向を再確認する。
   henoko-student-accident:
     title: 辺野古高校生死亡事故
     html: docs/henoko-student-accident-reaction-map.html
     sample_file: social-samples/henoko/henoko_hermes_arena_classified.json
-    refresh_config: configs/topics/henoko.yaml   # v2 は分類定義のみで fetch_queries を持たない
+    refresh_config: configs/topics/henoko.yaml
     verification_file: data/verification/henoko-student-accident.json
-    sample_period: "2026-06-14〜2026-08-24"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 178件
-    classify: done       # henoko_structured_redesign_final.json
-    classify2d: done     # 356件、APIエラー0% OpenCode Go minimax-m2.7
-    main_issue: done     # 265件（Hermes）。6論点: 政治的中立性53/安全管理75/追悼25/平和教育萎縮21/政治利用21/報道70
-    page_v3: done        # 論点アリーナ（極座標6セクター・2ステップ投票）実装済み 2026-07-25
-    manga_data: done     # creative/manga-prompts/henoko-student-accident-{prompts,vote-prompts}.md + configs JSON manga field
-    manga_img: done      # 漫画3枚+キャラシート2枚+投票4枚+論点別wide6枚（WebP変換済み）
-    published: done      # ポータル掲載・sitemap登録済み
-    page_update_mode: adapter   # scripts/refresh_adapters/henoko.py。2026-08-18に昇格（生成器を候補input/output対応のPythonへ作り直した）
+    sample_period: 2026-06-14〜2026-08-24
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    main_issue: done
+    page_v3: done
+    manga_data: done
+    manga_img: done
+    published: done
+    page_update_mode: adapter
     collect_at: 2026-09-07
     refresh_at: 2026-09-07
     collect_mode: scheduled
@@ -232,24 +211,28 @@ themes:
     updated_at: 2026-08-24
     collect_delta: 14
     x_posted_at: 2026-08-16
-    notes: "2026-07-26にYahooリアルタイム検索44件を追加収集しHermes再分類。6件が意見投稿と判定（6月発生の話題のため投稿減少中）。7/12収集41件との比較「世論の潮目」ウィジェットを追加。少数サンプルの傾向として参照。 2026-08-18に70件を追加収集し、重複2件を除く68件を分類（意見50件）。ページ生成器を build_henoko_arena.mjs から build_henoko_arena.py へ作り直し、件数を出しているすべての場所（リード文・調査条件・注目ポイント4枚・論点ブロックの内訳文と賛否件数・詳細データ表・アリーナの点）を正典から生成する形にして adapter へ昇格。潮目は固定ファイル名をやめ、更新回どうしの比較で作る（少数の回は注記が付く）。分類モデルは configs/refresh-pipeline.yaml で kimi-k2.7-code に固定した。既定の minimax-m2.7 は同じ39件で旧モデルとの一致が論点41%・賛否21%しかなく、正典の「切り分け」中心の分布が「中立」中心に置き換わるため採用していない（kimi-k2.7-code は82%・97%）。このモデルは10件ずつ投げると応答が空で返るため、5件ずつに分けて分類する。"
-
+    notes: 2026-07-26にYahooリアルタイム検索44件を追加収集しHermes再分類。6件が意見投稿と判定（6月発生の話題のため投稿減少中）。7/12収集41件との比較「世論の潮目」ウィジェットを追加。少数サンプルの傾向として参照。
+      2026-08-18に70件を追加収集し、重複2件を除く68件を分類（意見50件）。ページ生成器を build_henoko_arena.mjs から
+      build_henoko_arena.py へ作り直し、件数を出しているすべての場所（リード文・調査条件・注目ポイント4枚・論点ブロックの内訳文と賛否件数・詳細データ表・アリーナの点）を正典から生成する形にして
+      adapter へ昇格。潮目は固定ファイル名をやめ、更新回どうしの比較で作る（少数の回は注記が付く）。分類モデルは configs/refresh-pipeline.yaml
+      で kimi-k2.7-code に固定した。既定の minimax-m2.7 は同じ39件で旧モデルとの一致が論点41%・賛否21%しかなく、正典の「切り分け」中心の分布が「中立」中心に置き換わるため採用していない（kimi-k2.7-code
+      は82%・97%）。このモデルは10件ずつ投げると応答が空で返るため、5件ずつに分けて分類する。
   takaichi:
     title: 高市文春問題
     html: docs/takaichi-reaction-map-standard.html
     sample_file: social-samples/takaichi_hermes_arena_classified.json
     refresh_config: configs/topics/takaichi.yaml
     sample_period: unknown
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 675件（累計）
+    sample_source: Yahooリアルタイム検索
+    collect: done
     classify: done
-    classify2d: done     # 276件、APIエラー0% OpenCode Go minimax-m2.7
-    main_issue: done     # 550件（Hermes）。5論点: 中傷動画・説明責任284/文春報道の真偽100/サナエトークン疑惑99/松井健氏35/比較・政治倫理31（＋その他1）。批判・追及281/擁護・懐疑230
-    page_v3: done        # 論点アリーナ（極座標5セクター・2ステップ投票）実装済み 2026-07-24
-    manga_data: done     # creative/manga-prompts/takaichi-{prompts,vote-prompts}.md + configs JSON manga field
-    manga_img: partial   # 漫画3枚+キャラシート2枚+投票4枚 WebP変換済み。論点別wide5枚プロンプト作成済み（creative/manga-prompts/takaichi-infographic-wide-prompts.md）・未生成
-    published: unlisted  # 2026-08-21 検索・サイト内導線から外した（noindex済み・データ保持・設定を戻せば復活可）
-    page_update_mode: adapter   # 候補input/output対応、変更候補の2回目差分ゼロ確認
+    classify2d: done
+    main_issue: done
+    page_v3: done
+    manga_data: done
+    manga_img: partial
+    published: unlisted
+    page_update_mode: adapter
     collect_at: 2026-08-27
     collect_mode: scheduled
     last_refresh_attempt_at: 2026-08-20
@@ -257,23 +240,23 @@ themes:
     updated_at: 2026-08-20
     collect_delta: 86
     x_posted_at: 2026-08-21
-    notes: "2026-08-14にYahooリアルタイム検索172件を収集し88件が新規、69件が意見投稿と判定。あわせて課題40の未統合分（2026-07-26収集の140件）を正典へ統合し、累計447→675件。8/7収集分との比較「世論の潮目」は批判・追及55.1→66.7%、擁護・懐疑40.4→29.0%。注目ポイント4枚と論点内スタンス分布5本はビルダーが書かないため手で更新した。2026-08-21: 存命個人実名の疑惑が主題でコンテンツが薄く（5,058字）AdSense審査上不利なため、noindex・sitemap除外・サイト内導線削除。ページ本体とデータは残存。設定を戻せば復活できる。"
-
+    notes: '2026-08-14にYahooリアルタイム検索172件を収集し88件が新規、69件が意見投稿と判定。あわせて課題40の未統合分（2026-07-26収集の140件）を正典へ統合し、累計447→675件。8/7収集分との比較「世論の潮目」は批判・追及55.1→66.7%、擁護・懐疑40.4→29.0%。注目ポイント4枚と論点内スタンス分布5本はビルダーが書かないため手で更新した。2026-08-21:
+      存命個人実名の疑惑が主題でコンテンツが薄く（5,058字）AdSense審査上不利なため、noindex・sitemap除外・サイト内導線削除。ページ本体とデータは残存。設定を戻せば復活できる。'
   fukushuto:
     title: 副首都法案・副首都構想
     html: docs/fukushuto-reaction-map.html
     sample_file: social-samples/fukushuto_hermes_classified.json
     refresh_config: configs/topics/fukushuto.yaml
-    sample_period: "2026-07-14〜2026-08-31"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 累計897件（2026-07-14 / 07-26 / 08-08、9クエリ）
-    classify: done       # Hermesで897件分類。意見765件、分類エラー0件
-    classify2d: done     # 旧2D 255件は fukushuto_2d_classified_v1_2d_only.json に退役保存
-    page_v3: done        # 論点アリーナ形式（極座標マップ）。6論点ブロック+X埋込12件
-    manga_data: done     # creative/manga-prompts/fukushuto-prompts.md 作成済み（論点別7枚+キャラシート2枚）
-    manga_img: done      # docs/images/ に漫画7枚+キャラシート2枚+hero WebP変換済み
-    published: done      # ポータル掲載・sitemap登録済み（2026-07-16）
-    page_update_mode: adapter # scripts/refresh_adapters/fukushuto.py（build_fukushuto_arena.py を候補生成に使う）
+    sample_period: 2026-07-14〜2026-08-31
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: done
+    page_v3: done
+    manga_data: done
+    manga_img: done
+    published: done
+    page_update_mode: adapter
     collect_at: 2026-09-07
     refresh_at: 2026-09-07
     collect_mode: scheduled
@@ -282,56 +265,104 @@ themes:
     updated_at: 2026-08-31
     collect_delta: 292
     x_posted_at: 2026-08-29
-    notes: "2026-07-14のYahooリアルタイムトレンド上位「副首都」から派生。trend_judgeはGO（スコア8/10、意見率60%）。副首都法案衆院通過直前タイミングで収集。2026-08-08に正典をHermes方式へ統合（課題40）。7/14の292件と7/26の308件（いずれも公開側7論点で再分類済みのv2）を重複排除して600件にし、同日の新規297件（重複0・意見224・分類エラー0）を加えて累計897件・意見765件。旧2D正典255件は賛否ラベルを持たず、7/26分は潮目ウィジェット専用で正典に入っていなかったため、公開ページは実データの半分以下しか使えていなかった。統合後の論点は都構想・維新180／候補地174／定義・中身162／防災・災害97／優先順位70／費用・財源41／その他41、賛否は法案反対522／賛成・推進125／中立・情報118。ページ生成は scripts/build_fukushuto_arena.py に一本化し、manual から脱した。潮目ウィジェットの数字（法案反対83.3→78.9%、賛成16.7→21.1%）は統合後の正典から fetched_at で切り出して完全に再現できる。2026-08-24、FACT_CHECK_GUIDE.md に沿って「投稿の主張を、国会と選管の記録に当ててみた」セクションを追加（課題: AdSense診断でExperience項目のみNGだったための対応）。自分の文章を先に書き終えてから bike-blue-ticket のスクリプト構造だけを参照。5主張（住民投票二度否決=fact／賛成123反対121=fact／附帯決議は同日選を禁止した=gap／整備費用4〜7.5兆円=gap／AI試算2兆円=miss）を大阪市・参議院・国土交通省の一次資料と突き合わせ、該当投稿14件（延べ、実質13件）を data/fukushuto_claim_posts.json に確定。miss（AI試算2兆円）は出典が投稿内に無く一次資料を特定できなかったためそのまま残した。judgement labelは他5テーマ（bike等）の「一致する／食い違う／確認できず」と被らないよう「資料どおり／資料とズレる／裏付けなし」を採用。生成器は scripts/build_fukushuto_process_sections.py を新設（build_fukushuto_arena.py とは別スクリプトのまま、refresh_adapters/fukushuto.py の _run_builder から続けて呼ぶ形に統合。共有はせず新設。理由: arena側は論点集計のregex差し替え主体、事実確認側はSTART/ENDマーカー1ブロックの静的差し替えで設計が異なるため）。HTML内マーカーは FACT_CHECK_START/END、挿入位置は「スタンス集計」と「次に読むテーマ」の間。data/verification/fukushuto-claims.json を configs/fukushuto-reaction-map.json の number_provenance.sources に selectors:[\"fc-count\"] で登録。verify_theme_page / verify_number_provenance / verify_page_originality / strip_production_notes / add_embed_fallback / unify_site_chrome / unittest（255件・着手前と同数）を全通過、生成器2回連続実行で差分ゼロを確認。附帯決議の議事録原文（PDF）は参議院keikaページで採択の事実までは一次確認できたが、逐語全文は複数報道の引用一致にとどまり未確認（ページにもその旨を明記）。2026-08-25、レビュー指摘（コミット0451a01対象）を受けて修正。resolution_ban（附帯決議の同日選禁止解釈）は報道を根拠にgap判定していたが、FACT_CHECK_GUIDE.mdの「報道・まとめ・解説サイトは不可」に反するため、報道由来の記述を全て削除しmissへ変更。一次資料で確認できたのは①参議院keikaページに附帯決議採択の記載があること、②同日実施を禁じる法律案（参第18号）が参議院本会議で賛成117・反対127で否決されたこと（参議院 記名投票結果 221-0724-v007.htmで新規確認）の2点のみ。決議本文の文言（禁止か努力目標か）は、採択した委員会（沖縄・北方問題及び地方に関する特別委員会）の会議録が2026年8月時点で未公開のため確認不能、国会会議録検索システムでも同日分は未搭載（オーナー確認済み）。**会議録が公開され次第、fact/gapへの再判定が必要。** 他4主張（住民投票二度否決・採決123対121・整備費用4〜7.5兆円・AI試算2兆円）は変更なし（一次資料で確認済みのため対象外）。あわせて本文中に data/fukushuto_claim_posts.json という内部パスが露出していた箇所を削除（読者が開けないファイルを案内していたため）。"
-
+    notes: '2026-07-14のYahooリアルタイムトレンド上位「副首都」から派生。trend_judgeはGO（スコア8/10、意見率60%）。副首都法案衆院通過直前タイミングで収集。2026-08-08に正典をHermes方式へ統合（課題40）。7/14の292件と7/26の308件（いずれも公開側7論点で再分類済みのv2）を重複排除して600件にし、同日の新規297件（重複0・意見224・分類エラー0）を加えて累計897件・意見765件。旧2D正典255件は賛否ラベルを持たず、7/26分は潮目ウィジェット専用で正典に入っていなかったため、公開ページは実データの半分以下しか使えていなかった。統合後の論点は都構想・維新180／候補地174／定義・中身162／防災・災害97／優先順位70／費用・財源41／その他41、賛否は法案反対522／賛成・推進125／中立・情報118。ページ生成は
+      scripts/build_fukushuto_arena.py に一本化し、manual から脱した。潮目ウィジェットの数字（法案反対83.3→78.9%、賛成16.7→21.1%）は統合後の正典から
+      fetched_at で切り出して完全に再現できる。2026-08-24、FACT_CHECK_GUIDE.md に沿って「投稿の主張を、国会と選管の記録に当ててみた」セクションを追加（課題:
+      AdSense診断でExperience項目のみNGだったための対応）。自分の文章を先に書き終えてから bike-blue-ticket のスクリプト構造だけを参照。5主張（住民投票二度否決=fact／賛成123反対121=fact／附帯決議は同日選を禁止した=gap／整備費用4〜7.5兆円=gap／AI試算2兆円=miss）を大阪市・参議院・国土交通省の一次資料と突き合わせ、該当投稿14件（延べ、実質13件）を
+      data/fukushuto_claim_posts.json に確定。miss（AI試算2兆円）は出典が投稿内に無く一次資料を特定できなかったためそのまま残した。judgement
+      labelは他5テーマ（bike等）の「一致する／食い違う／確認できず」と被らないよう「資料どおり／資料とズレる／裏付けなし」を採用。生成器は scripts/build_fukushuto_process_sections.py
+      を新設（build_fukushuto_arena.py とは別スクリプトのまま、refresh_adapters/fukushuto.py の _run_builder
+      から続けて呼ぶ形に統合。共有はせず新設。理由: arena側は論点集計のregex差し替え主体、事実確認側はSTART/ENDマーカー1ブロックの静的差し替えで設計が異なるため）。HTML内マーカーは
+      FACT_CHECK_START/END、挿入位置は「スタンス集計」と「次に読むテーマ」の間。data/verification/fukushuto-claims.json
+      を configs/fukushuto-reaction-map.json の number_provenance.sources に selectors:["fc-count"]
+      で登録。verify_theme_page / verify_number_provenance / verify_page_originality /
+      strip_production_notes / add_embed_fallback / unify_site_chrome / unittest（255件・着手前と同数）を全通過、生成器2回連続実行で差分ゼロを確認。附帯決議の議事録原文（PDF）は参議院keikaページで採択の事実までは一次確認できたが、逐語全文は複数報道の引用一致にとどまり未確認（ページにもその旨を明記）。2026-08-25、レビュー指摘（コミット0451a01対象）を受けて修正。resolution_ban（附帯決議の同日選禁止解釈）は報道を根拠にgap判定していたが、FACT_CHECK_GUIDE.mdの「報道・まとめ・解説サイトは不可」に反するため、報道由来の記述を全て削除しmissへ変更。一次資料で確認できたのは①参議院keikaページに附帯決議採択の記載があること、②同日実施を禁じる法律案（参第18号）が参議院本会議で賛成117・反対127で否決されたこと（参議院
+      記名投票結果 221-0724-v007.htmで新規確認）の2点のみ。決議本文の文言（禁止か努力目標か）は、採択した委員会（沖縄・北方問題及び地方に関する特別委員会）の会議録が2026年8月時点で未公開のため確認不能、国会会議録検索システムでも同日分は未搭載（オーナー確認済み）。**会議録が公開され次第、fact/gapへの再判定が必要。**
+      他4主張（住民投票二度否決・採決123対121・整備費用4〜7.5兆円・AI試算2兆円）は変更なし（一次資料で確認済みのため対象外）。あわせて本文中に
+      data/fukushuto_claim_posts.json という内部パスが露出していた箇所を削除（読者が開けないファイルを案内していたため）。'
   koshitsu-tenpakai:
     title: 皇室典範改正（女性皇族の皇籍維持・旧宮家養子）
     html: docs/koshitsu-tenpakai-reaction-map.html
     sample_file: social-samples/koshitsu-tenpakai_hermes_cur_20260726.json
     refresh_config: configs/topics/koshitsu-tenpakai.yaml
-    sample_period: "2026-07-26〜2026-08-23"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 326件（2026-07-17、9クエリ）
-    classify: n-a        # 2D分類で直接カバー
-    classify2d: done     # 273件（エラー率2.1%）+ main_issue 268件（エラー率2.0%）
-    page_v3: done         # 比較型（温度バー＋2Dスキャッタ）2026-07-18
-    manga_data: done      # 3ページ構成（導入・対立・余韻）、キャラ2名（宮本翔×森山凛）
-    manga_img: done       # 漫画5枚 + 論点別wide図解5枚（2026-08-02に愛子さま・皇族の地位を追加）WebP変換済み
-    published: done      # ポータル掲載・sitemap登録済み（2026-07-18）
-    page_update_mode: adapter   # refresh_topic.py の koshitsu adapter。2026-08-06 に staging対応・冪等性・投票互換を確認
-    collect_at: 2026-08-31
-    refresh_at: 2026-08-31
+    sample_period: 2026-07-26〜2026-09-01
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: n-a
+    classify2d: done
+    page_v3: done
+    manga_data: done
+    manga_img: done
+    published: done
+    page_update_mode: adapter
+    collect_at: 2026-09-08
+    refresh_at: 2026-09-08
     collect_mode: scheduled
-    last_refresh_attempt_at: 2026-08-24
+    last_refresh_attempt_at: 2026-09-01
     published_at: 2026-07-18
-    updated_at: 2026-08-24
-    collect_delta: 322
+    updated_at: 2026-09-01
+    collect_delta: 316
     x_posted_at: 2026-08-23
-    notes: "2026-07-17のYahooリアルタイム検索。皇室典範改正が同日参院で可決・成立した直後で投稿殺到中。trend_judgeはGO（スコア9/10、意見率60-70%）。9クエリで326件取得済み。2D分類完了（OpenCode Go minimax-m2.7）。stance_reform（反対140/中立103/賛成30）stance_succession（男系95/中立133/女系45）。main_issue分布: 男系vs女系75/養子制度54/立法手法54/女性天皇の区別24/愛子さま5/その他56。2026-07-26に347件を追加収集しHermes1D分類（改正賛成11→20%に増加）、「世論の潮目」ウィジェットを追加（前回は2Dスタンス統計から合成）。2026-08-02にページの論点表示を正典 sample_file へ統一（S8-fix / 課題30）。それまでアリーナSM_RAW・論点カード・争点別のXの声・スタンス集計・詳細データは7/17収集分（268件）のままで、sample_file（7/26収集の347件）とURLが1件も重ならない状態だった。件数だけは「それらしい数字」だったため気づけなかった。論点カードの `女性皇族の皇籍維持` `憲法・制度上の妥当性` はAI分類ではなくページ内 arenaIssueOf() の正規表現が作った擬似ラベルで、正典に対応が無かったため廃止。scripts/build_koshitsu_arena.py が sample_file だけを読んでSM_RAW・ISSUES・VOTE_ISSUES・注目ポイント・争点別のXの声・スタンス集計・詳細データ・カード件数を再生成する（再実行可能・--checkあり）。論点は件数降順で 男系vs女系104/旧宮家養子縁組74/立法手続き・民主主義54/女性天皇・女系天皇40/愛子さま・皇族の地位17/その他58。カードは「その他」を除く5枚。arenaIssueOf() は p.i の直参照に置き換え、要約文からの推測をやめた。投票の選択肢が7→6に変わり choiceIdx の意味がずれるため topicId を v2 へ上げ、supabase/functions/cast-vote/index.ts に \"koshitsu-tenpakai-issue-stance-v2\": 24 を追加した（**Edge Function の再デプロイが必要。未デプロイだと投票が invalid_topic で失敗する**）。v1 の既存票は集計から外れる。旧2D分類由来の「皇位継承観（stance_succession）」は正典に対応データが無いため注目ポイント・スタンス集計・詳細データから削除した。「世論の潮目」ウィジェットの前回値のみ合成データ（_prev_synthetic）由来のままで、注釈で開示済み。同日、争点⑤「愛子さま・皇族の地位」のwide図解を生成・反映（1916×821px・140KB、cwebp -q 80）。初版は「サンプル17件」を画像に焼き込んでいたため同日中に数値なしの版へ差し替えた。図解に件数・％・サンプル数を入れないルールを creative/manga-prompts/koshitsu-tenpakai-infographic-prompts.md に明記した（データ補充のたびに画像だけ古くなるため）。2026-08-12に、8/10へ前倒し収集していた回（取得325・重複0・意見258・分類エラー0）を初めて --promote で昇格し、累計672件・意見541件になった。論点は 男系vs女系172／旧宮家養子縁組119／立法手続き・民主主義87／女性天皇・女系天皇57／その他56／愛子さま・皇族の地位50、賛否は改正反対286／改正賛成143／中立・情報112。これで「世論の潮目」の前回値が合成データ（_prev_synthetic）から実データ（7/26収集分347件）へ入れ替わり、課題31が解消した。同時に build_koshitsu_arena.py が調査条件の取得期間と詳細データの「収集クエリ」も生成するようにした。それまで取得期間はページに固定で書かれており、収集回が増えると THEMES.yaml の sample_period とズレて verify_theme_page.py が落ちた。検索語の一覧は7/17収集時のもの（皇室典範 改悪・愛子天皇など）が残っていたので、refresh_config の実際の9語から出すようにした。この昇格で sync_portal_stats.py の「更新バー本文」も直した。テーマ名に括弧が入ると `（.*?）` が題名の途中で切れ、2回目の実行で違う文字列になってトップページの空振り検査が落ちる（括弧つきの題名が最新更新になったのはこのテーマが初）。2026-08-20に8/20収集分（295件・意見225件）を昇格し累計967件・意見766件になった。同時に「投稿の主張を一次資料と突き合わせる」セクション（KOSHITSU_AUDIT）を追加。4主張を選定しe-Gov法令検索・内閣官房公表資料と突き合わせた結果は fact2件・miss2件（養子継承規定は改正後条文が未取得、有識者会議の賛否内訳集計表は公開資料から確認できず）。scripts/build_koshitsu_process_sections.py が data/koshitsu-tenpakai_claim_posts.json（14件）を読み KOSHITSU_AUDIT_START/END マーカー間を差し替える。data/verification/koshitsu-tenpakai-claims.json を新設し verify_number_provenance.py の pv-count 照合先にした。2026-08-21にKOSHITSU_AUDITセクションを強化（4件→6件、fact2/miss2→fact4/miss2）。追加した claim_5: 継承資格者3名（有識者会議報告書が「秋篠宮皇嗣殿下・悠仁親王殿下・常陸宮正仁親王殿下の三方」と明記、fact）、claim_6: 典範第二条の継承順序（「皇長子→皇長孫…長系を先にし、同等内では長を先にする」、fact）。claim_4（有識者会議11人/7人）は報告書本文を確認し「ヒアリングの中では、ほとんどが変更すべきでないと答え、一つのみが直ちに変更すべきと述べた」という記述は確認できたが、11人/7人という具体的内訳表は本文中になかった（参考資料8は別文書で未確認）ためmissのまま、noteを充実。書き出し文を自転車ページとの類似度が下がる表現に書き直し（0.69→改善）。"
-
+    notes: '2026-07-17のYahooリアルタイム検索。皇室典範改正が同日参院で可決・成立した直後で投稿殺到中。trend_judgeはGO（スコア9/10、意見率60-70%）。9クエリで326件取得済み。2D分類完了（OpenCode
+      Go minimax-m2.7）。stance_reform（反対140/中立103/賛成30）stance_succession（男系95/中立133/女系45）。main_issue分布:
+      男系vs女系75/養子制度54/立法手法54/女性天皇の区別24/愛子さま5/その他56。2026-07-26に347件を追加収集しHermes1D分類（改正賛成11→20%に増加）、「世論の潮目」ウィジェットを追加（前回は2Dスタンス統計から合成）。2026-08-02にページの論点表示を正典
+      sample_file へ統一（S8-fix / 課題30）。それまでアリーナSM_RAW・論点カード・争点別のXの声・スタンス集計・詳細データは7/17収集分（268件）のままで、sample_file（7/26収集の347件）とURLが1件も重ならない状態だった。件数だけは「それらしい数字」だったため気づけなかった。論点カードの
+      `女性皇族の皇籍維持` `憲法・制度上の妥当性` はAI分類ではなくページ内 arenaIssueOf() の正規表現が作った擬似ラベルで、正典に対応が無かったため廃止。scripts/build_koshitsu_arena.py
+      が sample_file だけを読んでSM_RAW・ISSUES・VOTE_ISSUES・注目ポイント・争点別のXの声・スタンス集計・詳細データ・カード件数を再生成する（再実行可能・--checkあり）。論点は件数降順で
+      男系vs女系104/旧宮家養子縁組74/立法手続き・民主主義54/女性天皇・女系天皇40/愛子さま・皇族の地位17/その他58。カードは「その他」を除く5枚。arenaIssueOf()
+      は p.i の直参照に置き換え、要約文からの推測をやめた。投票の選択肢が7→6に変わり choiceIdx の意味がずれるため topicId を v2
+      へ上げ、supabase/functions/cast-vote/index.ts に "koshitsu-tenpakai-issue-stance-v2":
+      24 を追加した（**Edge Function の再デプロイが必要。未デプロイだと投票が invalid_topic で失敗する**）。v1 の既存票は集計から外れる。旧2D分類由来の「皇位継承観（stance_succession）」は正典に対応データが無いため注目ポイント・スタンス集計・詳細データから削除した。「世論の潮目」ウィジェットの前回値のみ合成データ（_prev_synthetic）由来のままで、注釈で開示済み。同日、争点⑤「愛子さま・皇族の地位」のwide図解を生成・反映（1916×821px・140KB、cwebp
+      -q 80）。初版は「サンプル17件」を画像に焼き込んでいたため同日中に数値なしの版へ差し替えた。図解に件数・％・サンプル数を入れないルールを creative/manga-prompts/koshitsu-tenpakai-infographic-prompts.md
+      に明記した（データ補充のたびに画像だけ古くなるため）。2026-08-12に、8/10へ前倒し収集していた回（取得325・重複0・意見258・分類エラー0）を初めて
+      --promote で昇格し、累計672件・意見541件になった。論点は 男系vs女系172／旧宮家養子縁組119／立法手続き・民主主義87／女性天皇・女系天皇57／その他56／愛子さま・皇族の地位50、賛否は改正反対286／改正賛成143／中立・情報112。これで「世論の潮目」の前回値が合成データ（_prev_synthetic）から実データ（7/26収集分347件）へ入れ替わり、課題31が解消した。同時に
+      build_koshitsu_arena.py が調査条件の取得期間と詳細データの「収集クエリ」も生成するようにした。それまで取得期間はページに固定で書かれており、収集回が増えると
+      THEMES.yaml の sample_period とズレて verify_theme_page.py が落ちた。検索語の一覧は7/17収集時のもの（皇室典範
+      改悪・愛子天皇など）が残っていたので、refresh_config の実際の9語から出すようにした。この昇格で sync_portal_stats.py
+      の「更新バー本文」も直した。テーマ名に括弧が入ると `（.*?）` が題名の途中で切れ、2回目の実行で違う文字列になってトップページの空振り検査が落ちる（括弧つきの題名が最新更新になったのはこのテーマが初）。2026-08-20に8/20収集分（295件・意見225件）を昇格し累計967件・意見766件になった。同時に「投稿の主張を一次資料と突き合わせる」セクション（KOSHITSU_AUDIT）を追加。4主張を選定しe-Gov法令検索・内閣官房公表資料と突き合わせた結果は
+      fact2件・miss2件（養子継承規定は改正後条文が未取得、有識者会議の賛否内訳集計表は公開資料から確認できず）。scripts/build_koshitsu_process_sections.py
+      が data/koshitsu-tenpakai_claim_posts.json（14件）を読み KOSHITSU_AUDIT_START/END マーカー間を差し替える。data/verification/koshitsu-tenpakai-claims.json
+      を新設し verify_number_provenance.py の pv-count 照合先にした。2026-08-21にKOSHITSU_AUDITセクションを強化（4件→6件、fact2/miss2→fact4/miss2）。追加した
+      claim_5: 継承資格者3名（有識者会議報告書が「秋篠宮皇嗣殿下・悠仁親王殿下・常陸宮正仁親王殿下の三方」と明記、fact）、claim_6: 典範第二条の継承順序（「皇長子→皇長孫…長系を先にし、同等内では長を先にする」、fact）。claim_4（有識者会議11人/7人）は報告書本文を確認し「ヒアリングの中では、ほとんどが変更すべきでないと答え、一つのみが直ちに変更すべきと述べた」という記述は確認できたが、11人/7人という具体的内訳表は本文中になかった（参考資料8は別文書で未確認）ためmissのまま、noteを充実。書き出し文を自転車ページとの類似度が下がる表現に書き直し（0.69→改善）。'
   consumption-tax-cut:
     title: 消費税減税
     html: docs/consumption-tax-cut-reaction-map.html
     sample_file: social-samples/consumption-tax-cut_hermes_arena_classified.json
     refresh_config: configs/topics/consumption-tax-cut.yaml
     verification_file: data/verification/consumption-tax-cut.json
-    sample_period: "2026-07-28〜2026-08-24"
-    sample_source: "Yahooリアルタイム検索"
-    collect: done        # 667件（2026-07-28、20クエリ・重複34件除外後）
-    classify: done       # Hermes 667件。関連666件、意見612件（意見率91.8%）
-    classify2d: n-a      # Hermes論点分類で直接カバー
-    main_issue: done     # 612件。6論点: 公約と政治不信267/減税の効果114/対象範囲96/財源と社会保障64/給付など他策との比較46/事業者の実務負担19/その他6
-    page_v3: done        # 論点アリーナ（極座標7セクター・2ステップ投票・4スタンス配色）2026-07-28
+    sample_period: 2026-07-28〜2026-09-01
+    sample_source: Yahooリアルタイム検索
+    collect: done
+    classify: done
+    classify2d: n-a
+    main_issue: done
+    page_v3: done
     manga_data: todo
-    manga_img: partial   # ヒーロー1枚+論点別wide6枚 done（2026-07-29、WebP変換・HTML反映済み）。漫画・投票画像は未生成
-    published: done      # ポータル掲載・sitemap登録・回遊カード・SEO登録済み（2026-07-29）
-    page_update_mode: adapter   # scripts/refresh_adapters/consumption_tax.py。2026-08-17に昇格（生成器を自分自身のページから作り直せる形にした）
-    collect_at: 2026-08-31
-    refresh_at: 2026-08-31
+    manga_img: partial
+    published: done
+    page_update_mode: adapter
+    collect_at: 2026-09-08
+    refresh_at: 2026-09-08
     collect_mode: scheduled
-    last_refresh_attempt_at: 2026-08-24
+    last_refresh_attempt_at: 2026-09-01
     published_at: 2026-07-29
-    updated_at: 2026-08-24
-    collect_delta: 580
+    updated_at: 2026-09-01
+    collect_delta: 568
     x_posted_at: 2026-08-30
-    notes: "2026-07-28に新規テーマとして収集。trend_judgeはGO（スコア9/10、意見率100%、投稿量2、対立性2、SEO需要2、広告安全性1）。食料品への限定的な消費税減税が高市政権で決着しつつあるタイミングで収集。20クエリで667件（batch1 324件 + batch2 382件、重複34件除外）。Hermes（kimi-k2.6）で7論点・4スタンス・3段階強度を分類。関連666件、意見612件と意見率91.8%は全テーマ中最高。スタンス内訳は減税推進299（48.9%）/条件付き賛成・政府案に不満109（17.8%）/減税反対・慎重163（26.6%）/中立41（6.7%）。副首都・皇室典範の3スタンスでは「減税は賛成だが政府案は中途半端」が表現できないため部活動と同じ4スタンス構成を採用し、アリーナの点の色をx座標ベースから立場インデックスベースへ変更。論点は公約と政治不信が43.6%と突出し、税制の中身より政治の姿勢を問う投稿が中心。ページはscripts/build_consumption_tax_page.py が副首都ページをテンプレートに生成（再実行可能）。topic-modern.cssの.hero::beforeは--topic-hero-image未指定だとai-copyright-hero.webpにフォールバックするため、必ずbodyのinline styleで指定すること。2026-07-29にヒーロー画像を生成・反映（creative/manga-prompts/consumption-tax-cut-hero-prompt.md、買い物カゴ＋レシート折れ線＋値札の境界＋天秤の抽象俯瞰型、OGPも同画像）。同日、論点別インフォグラフィックwide6枚も生成・反映（creative/manga-prompts/consumption-tax-cut-infographic-wide-prompts.md、1915×821px・156〜188KB）。explainerセクションを画像つきカード＋拡大モーダル版に切り替え済み。「その他」は6件と少なく図解を作っていない（自転車青切符と同じ扱い）。テンプレート元の副首都ページはSEOスクリプトで随時書き換わるため、build_consumption_tax_page.py に生成後の自己検証（タイトル・h1・canonical・保護タグ・SM_RAW件数・副首都由来の残留参照・図解6枚・賛否バー合計100%・trustブロック・回遊カード）を組み込んである。2026-07-29に公開: configs/site-cases.json と configs/theme-seo.json に登録（両者のURL集合が一致しないとapply_theme_trust.pyが落ちる）、sitemap登録、index.htmlにトピックカード追加（hero-total-samples 5,953／公開中のテーマ11）、副首都・憲法改正から相互リンク、投票後の回遊カードを追加。 2026-08-17にadapterへ昇格し、8/3・8/10・8/17の3回分をまとめて公開更新した。build_consumption_tax_page.py は副首都ページをテンプレートに読む一度きりの生成器だったので、--input / --html-template / --output-html を付け、既定のテンプレートを自分自身の公開ページへ変えた（副首都ページはSEOスクリプトで随時書き換わり、読み続けると他テーマの変更が漏れ込む）。2回目の実行で差分が出ていたのは、回遊カードのスクリプトの追記・.side.mid の追記・潮目前後の空行の3か所。投票は「論点の番号×立場の番号」で保存されるため、件数順の並びが入れ替わると過去の投票の意味が変わる。そのため公開後は pinned_issue_order でページの並びを固定する（8/3分を足した時点で対象範囲と減税の効果が入れ替わり、adapterの投票互換性検査が実際に止めた）。調査条件（取得元・期間・件数）は昇格後に finalize が貼り直す。潮目は inject_tide_widget.py にテーマを追加し、adapterが更新回どうしを比較して作る。3回分は1回ずつ公開できない（途中の状態が collect_at 期限超過で必ず落ちる）ため、refresh_topic.py に --include-wave を足して保管済みの更新回を1つの候補へ畳み込んだ。重複40件を除いた新規1,947件で累計2,614件・意見1,730件。 2026-08-19、投稿の言い分を一次資料と突き合わせるセクション「その言い分、原典に当たるとどうなるか」を追加（FACT_CHECK_GUIDE.md。AdSense診断でExperienceだけがNGだったことへの反証）。公の記録で当否を判定できる言い分を6つ選び、該当投稿72件を1件ずつ読んで確定（data/consumption-tax-cut_claim_posts.json）。判定は原典どおり2・原典とズレ3・原典に届かず1。『2年後に10%に戻る』は軽減税率8%へ戻るので食い違い、『5兆円かかる』は片山財務大臣の答弁（衆院予算委2026-06-22）が約4.3兆円で食い違い、『全額社会保障』は消費税法1条2項と予算総則のとおりだが令和8年度予算では消費税収34.0兆円に対し社会保障4経費48.9兆円で足りていない。『輸出企業へ11.7兆円の還付』は、国税庁が公表しているのが還付申告税額の合計（令和4年で7兆円超）だけで輸出分を区分した公表値が無く、確認できずのまま残した（オーナー判断で掲載）。生成器は新設せず build_consumption_tax_page.py に組み込み、CLAIM_AUDIT_START/END の間だけを差し替える。公開ページを直すときは --claim-audit-only を使うこと。通常ビルドは潮目ウィジェットを必ず外す作り（adapterが貼り直す前提）なので、公開ページに対して素で流すと潮目が消える。件数の出所は data/verification/consumption-tax-cut-claims.json に書き出し、configs の number_provenance.sources に登録した。verify_theme_page.py のspan検査は中身が「N件」だけのspanを弾くため、表示は「該当した投稿 N件」にしてある。"
+    notes: '2026-07-28に新規テーマとして収集。trend_judgeはGO（スコア9/10、意見率100%、投稿量2、対立性2、SEO需要2、広告安全性1）。食料品への限定的な消費税減税が高市政権で決着しつつあるタイミングで収集。20クエリで667件（batch1
+      324件 + batch2 382件、重複34件除外）。Hermes（kimi-k2.6）で7論点・4スタンス・3段階強度を分類。関連666件、意見612件と意見率91.8%は全テーマ中最高。スタンス内訳は減税推進299（48.9%）/条件付き賛成・政府案に不満109（17.8%）/減税反対・慎重163（26.6%）/中立41（6.7%）。副首都・皇室典範の3スタンスでは「減税は賛成だが政府案は中途半端」が表現できないため部活動と同じ4スタンス構成を採用し、アリーナの点の色をx座標ベースから立場インデックスベースへ変更。論点は公約と政治不信が43.6%と突出し、税制の中身より政治の姿勢を問う投稿が中心。ページはscripts/build_consumption_tax_page.py
+      が副首都ページをテンプレートに生成（再実行可能）。topic-modern.cssの.hero::beforeは--topic-hero-image未指定だとai-copyright-hero.webpにフォールバックするため、必ずbodyのinline
+      styleで指定すること。2026-07-29にヒーロー画像を生成・反映（creative/manga-prompts/consumption-tax-cut-hero-prompt.md、買い物カゴ＋レシート折れ線＋値札の境界＋天秤の抽象俯瞰型、OGPも同画像）。同日、論点別インフォグラフィックwide6枚も生成・反映（creative/manga-prompts/consumption-tax-cut-infographic-wide-prompts.md、1915×821px・156〜188KB）。explainerセクションを画像つきカード＋拡大モーダル版に切り替え済み。「その他」は6件と少なく図解を作っていない（自転車青切符と同じ扱い）。テンプレート元の副首都ページはSEOスクリプトで随時書き換わるため、build_consumption_tax_page.py
+      に生成後の自己検証（タイトル・h1・canonical・保護タグ・SM_RAW件数・副首都由来の残留参照・図解6枚・賛否バー合計100%・trustブロック・回遊カード）を組み込んである。2026-07-29に公開:
+      configs/site-cases.json と configs/theme-seo.json に登録（両者のURL集合が一致しないとapply_theme_trust.pyが落ちる）、sitemap登録、index.htmlにトピックカード追加（hero-total-samples
+      5,953／公開中のテーマ11）、副首都・憲法改正から相互リンク、投票後の回遊カードを追加。 2026-08-17にadapterへ昇格し、8/3・8/10・8/17の3回分をまとめて公開更新した。build_consumption_tax_page.py
+      は副首都ページをテンプレートに読む一度きりの生成器だったので、--input / --html-template / --output-html を付け、既定のテンプレートを自分自身の公開ページへ変えた（副首都ページはSEOスクリプトで随時書き換わり、読み続けると他テーマの変更が漏れ込む）。2回目の実行で差分が出ていたのは、回遊カードのスクリプトの追記・.side.mid
+      の追記・潮目前後の空行の3か所。投票は「論点の番号×立場の番号」で保存されるため、件数順の並びが入れ替わると過去の投票の意味が変わる。そのため公開後は
+      pinned_issue_order でページの並びを固定する（8/3分を足した時点で対象範囲と減税の効果が入れ替わり、adapterの投票互換性検査が実際に止めた）。調査条件（取得元・期間・件数）は昇格後に
+      finalize が貼り直す。潮目は inject_tide_widget.py にテーマを追加し、adapterが更新回どうしを比較して作る。3回分は1回ずつ公開できない（途中の状態が
+      collect_at 期限超過で必ず落ちる）ため、refresh_topic.py に --include-wave を足して保管済みの更新回を1つの候補へ畳み込んだ。重複40件を除いた新規1,947件で累計2,614件・意見1,730件。
+      2026-08-19、投稿の言い分を一次資料と突き合わせるセクション「その言い分、原典に当たるとどうなるか」を追加（FACT_CHECK_GUIDE.md。AdSense診断でExperienceだけがNGだったことへの反証）。公の記録で当否を判定できる言い分を6つ選び、該当投稿72件を1件ずつ読んで確定（data/consumption-tax-cut_claim_posts.json）。判定は原典どおり2・原典とズレ3・原典に届かず1。『2年後に10%に戻る』は軽減税率8%へ戻るので食い違い、『5兆円かかる』は片山財務大臣の答弁（衆院予算委2026-06-22）が約4.3兆円で食い違い、『全額社会保障』は消費税法1条2項と予算総則のとおりだが令和8年度予算では消費税収34.0兆円に対し社会保障4経費48.9兆円で足りていない。『輸出企業へ11.7兆円の還付』は、国税庁が公表しているのが還付申告税額の合計（令和4年で7兆円超）だけで輸出分を区分した公表値が無く、確認できずのまま残した（オーナー判断で掲載）。生成器は新設せず
+      build_consumption_tax_page.py に組み込み、CLAIM_AUDIT_START/END の間だけを差し替える。公開ページを直すときは
+      --claim-audit-only を使うこと。通常ビルドは潮目ウィジェットを必ず外す作り（adapterが貼り直す前提）なので、公開ページに対して素で流すと潮目が消える。件数の出所は
+      data/verification/consumption-tax-cut-claims.json に書き出し、configs の number_provenance.sources
+      に登録した。verify_theme_page.py のspan検査は中身が「N件」だけのspanを弾くため、表示は「該当した投稿 N件」にしてある。'
