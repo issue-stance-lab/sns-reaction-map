@@ -655,6 +655,13 @@ def section_alerts(data: dict) -> str:
 
     primary_research = data.get("primary_research") or {}
     for item in primary_research.get("themes") or []:
+        if item.get("last_verified") is None:
+            alerts.append((
+                "warn",
+                f"{item['title']} の一次資料メモがまだ確認されていません",
+                ".claude/skills/primary-research/SKILL.md の手順で一次資料を調べる",
+            ))
+            continue
         overdue_by = item.get("overdue_by")
         if overdue_by is None or overdue_by <= 0:
             continue

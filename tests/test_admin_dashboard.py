@@ -302,6 +302,26 @@ class PrimaryResearchStallTests(unittest.TestCase):
         ))
         self.assertNotIn("一次資料メモが再確認予定を", html)
 
+    def test_never_verified_theme_is_reported(self):
+        html = render.section_alerts(self._data(
+            dt.date(2026, 9, 1),
+            {
+                "available": True,
+                "themes": [
+                    {
+                        "key": "school-nickname-ban",
+                        "title": "あだ名禁止",
+                        "last_verified": None,
+                        "cadence_days": 90,
+                        "age_days": None,
+                        "overdue_by": None,
+                        "note": "",
+                    }
+                ],
+            },
+        ))
+        self.assertIn("あだ名禁止 の一次資料メモがまだ確認されていません", html)
+
     def test_missing_status_file_reports_nothing(self):
         """まだ status.yaml が無い（task/primary-research 未マージ）ときは、遅れ扱いにしない。"""
         html = render.section_alerts(self._data(dt.date(2026, 9, 1), {"available": False, "themes": []}))
