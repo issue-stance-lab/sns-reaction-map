@@ -22,6 +22,18 @@ SNS反応まっぷの note 記事一覧・計測記録。
 
 ## 投稿記録
 
+### 部活動の地域移行（第3回：お金と送迎編）
+- 公開日: 2026-09-01
+- URL: https://note.com/sns_hanno_ma/n/nb976a699b320
+- マガジン: https://note.com/sns_hanno_ma/m/m79f52b583341
+- テーマ: bukatsu-chiiki
+- UTM: utm_campaign=note_bukatsu3_20260902（after_chart / after_verify / after_receiver / footer の4本）
+- タグ: #部活動 #地域移行 #教育 #データ分析 #子育て
+- 7日後GA4: （計測日: 2026-09-08）
+- 28日後GA4: （計測日: 2026-09-29）
+- X告知: https://x.com/sns_hannou_ma/status/2094743935713432041（9/1、utm_source=x付き）
+- メモ: 全4回シリーズの第3回。費用（1/3補助の割り算）と受け皿（引き受け手不足）の論点を扱う。一次資料5本（文科省ガイドライン／神栖市Q&A／笹川スポーツ財団／キッズドア／令和8年度概算要求）へリンクあり。
+
 ### 部活動の地域移行（第2回）
 - 公開日: 2026-08-29（予定より早め。予約投稿は有料のため通常投稿で公開）
 - URL: https://note.com/sns_hanno_ma/n/n116e7f2e739a
