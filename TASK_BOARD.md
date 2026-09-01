@@ -1674,11 +1674,9 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 
 ---
 
-### 課題58: 10テーマの一次資料メモを作業ツリーで作成済み。ページへの反映が未着手
+### 課題58: 10テーマの一次資料メモをmainに反映済み。ページへの反映が未着手
 
-**状態**: 調査は完了。定期更新の仕組みも作成済み。ページへの実装は未着手
-**作業ツリー**: `../isa-wt-primary-research`（ブランチ `task/primary-research`、一次資料メモ本体）と
-`../isa-wt-primary-research-ops`（ブランチ `task/primary-research-ops`、定期更新の検知の仕組み）の2本。**どちらもmainには未マージ**
+**状態**: 調査・定期更新の仕組みとも 2026-09-01 にmainへマージ・push・作業ツリー片付け完了
 **優先度**: 中（FACT_CHECK_GUIDE.mdの横展開対象4テーマ＋見直し対象6テーマの土台になる調査）
 
 **やったこと**: hermes（別モデル、kimi-k2.6）に10テーマ（takaichi除く公開中の全テーマ）の一次資料調査を
@@ -1697,19 +1695,15 @@ robots.txt の注意書きはスクリプトの出力に含めた。
 **定期更新の仕組み（2026-09-01 追加）**: 「オーナーと1件ずつ深掘りする」やり方は精度は高いが
 定期運用には向かないため、他の定例作業と同じ「期日が来たら管理ダッシュボードが検知する」方式に乗せた。
 - `quality/research/status.yaml`（`task/primary-research` 側）にテーマごとの最終確認日を記録
-- `scripts/admin_dashboard/collect.py` の `collect_primary_research()`（`task/primary-research-ops` 側）が
+- `scripts/admin_dashboard/collect.py` の `collect_primary_research()` が
   90日（テーマによっては短縮）を過ぎた・一度も確認していないテーマを検知し、ダッシュボードに出す
-- 手順は `.claude/skills/primary-research/SKILL.md`（`task/primary-research-ops` 側）に固定化
-- **この機能は2つのブランチがどちらもmainに入って初めて動く。** 片方だけmergeしても、
-  もう片方が無いと「status.yamlはあるがコードが無い」「コードはあるがファイルが無い」状態になる
+- 手順は `.claude/skills/primary-research/SKILL.md` に固定化
 
 **まだ終わっていないこと**:
 1. **`quality/research/` はページに載せる前提のメモであり、そのままでは公開しない。** 各テーマの
    実際のページ（`docs/*.html`）に「投稿の主張を一次資料と突き合わせる」セクションとして反映する作業
    （FACT_CHECK_GUIDE.mdの手順）は別途必要
 2. 一次資料メモ自体にも「確認できなかったこと」が各テーマに残っている（財源・費用系が特に弱い）
-3. 2本の作業ツリーが古くなる前にmainの最新を取り込むか、早めに両方をマージすること
-   （`project_shared_tree_staleness` のとおり、放置すると分岐元がずれる）
 
 **テーマ別の厚み（2026-08-31時点、偏りがあるので着手順の参考に）**:
 - **厚い**（オーナー提示のURLを多数確認済み）: ai-copyright（21本）、bike-blue-ticket、bukatsu-chiiki、
