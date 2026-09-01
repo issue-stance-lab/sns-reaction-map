@@ -355,9 +355,16 @@ exit 0（段階5で実装済みの運用警告と公開停止の分離どおり�
 `quality/reviews/2026-08-31-public-data-foundation-stage4-school-nickname-ban.md`。
 この調査の副産物として、bukatsu-chiikiの接続に同種の鮮度リスク（昇格後にbuild_public_registry.py
 の再実行を忘れると古い件数を出し続ける）があることに気づき、`source_sha256`の鮮度確認を追加した
-（古ければ止まる。**bukatsu-chiikiの次回更新`refresh_at: 2026-09-03`の前に、昇格後は
-`build_public_registry.py --topic bukatsu-chiiki`を手動で再実行すること**）。
-段階5を残り8テーマの個別接続より前に着手候補として検討する価値がある。
+（古ければ止まる）。段階5を残り8テーマの個別接続より前に着手候補として検討する価値がある。
+
+**この手動再実行の指示は段階5の完了により不要になった（2026-08-31追記）**。
+`prepare_public_candidate_bundle()`（`scripts/refresh_topic.py`）が `--promote` /
+`--prepare-promotion` のどちらでも、隔離した候補コピーの中で `build_public_registry.py --all` を
+`finalize()` の直前に必ず実行するようになったため、`source_sha256` は毎回その場で作り直された
+公開JSONと一致する。bukatsu-chiikiを含む公開10テーマすべてで、通常のデータ更新（収集→分類→
+`--promote`）を行うだけで公開JSONは自動的に最新化される。手動での `build_public_registry.py
+--topic {theme}` 実行は、通常運用では不要（このコマンド自体は残っていて、事故調査など個別に
+最新化を確認したいときに使える）。
 
 **段階4：部活動の論点カード接続（2026-08-31）**: `configs/bukatsu-chiiki-reaction-map.json` の
 `issue_counts.basis` を `public_json` に変更し、`scripts/issue_card_counts.py` に
