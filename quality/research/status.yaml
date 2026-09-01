@@ -1,0 +1,41 @@
+# scripts/admin_dashboard/collect.py の collect_primary_research() が読む。
+# 手順は .claude/skills/primary-research/SKILL.md（main側）を参照。
+#
+# last_verified: そのテーマの一次資料メモを最後に実際に確認・照合した日
+# review_days: 個別の再確認サイクル（省略時は default_review_days）
+
+default_review_days: 90
+
+themes:
+  ai-copyright:
+    last_verified: "2026-08-31"
+    note: "21本の一次資料を確認済み（厚い）。次は文化庁ガイドライン・AI事業者ガイドラインの改訂有無を見る"
+  bike-blue-ticket:
+    last_verified: "2026-08-31"
+    note: "厚い。NPA月次レポート・MLIT第3次自転車活用推進計画まで確認済み"
+  bukatsu-chiiki:
+    last_verified: "2026-08-31"
+    note: "厚い。MEXTガイドブック・東京都指導員募集・中体連規則まで確認済み"
+  constitutional-amendment:
+    last_verified: "2026-08-31"
+    note: "厚い。衆参憲法審査会資料・判例・3党の改正案まで確認済み"
+  fukushuto:
+    last_verified: "2026-08-31"
+    note: "厚い。成立法(令和八年法律第七十八号)をe-Govで確認済み。費用・財源は大阪府予算まで追った"
+  consumption-tax-cut:
+    last_verified: "2026-08-31"
+    note: "厚い。臨時閣議決定・社会保障国民会議とりまとめまで確認済み"
+  elderly-license-revocation:
+    last_verified: "2026-08-31"
+    note: "厚い。代替交通整備（四国運輸局・近畿運輸局の報告）まで埋めた"
+  henoko-student-accident:
+    last_verified: "2026-08-31"
+    review_days: 30
+    note: "薄い。教育基本法14条違反の是正指導は沖縄県議会代表質問経由で確認したが、MEXTの通知文書本体・事故調査報告書・知事発言原文の4件が未確認のまま残る"
+  koshitsu-tenpakai:
+    last_verified: "2026-08-31"
+    review_days: 30
+    note: "最も薄い。改正法(令和八年七月二四日法律第六六号)は確定したが、施行が2026-10-24頃で本文（婚姻後の皇籍維持等）はe-Gov APIが附則を抜粋にしか返さず未確認。施行後に必ず官報かブラウザで再確認する"
+  school-nickname-ban:
+    last_verified: null
+    note: "未着手。今回のURL精査セッションでは一度も扱っていない"

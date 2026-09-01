@@ -13,6 +13,13 @@
 - 出力後、全URLを curl でHTTPステータス検査した（2026-08-31 に再検査。初回の検査は
   本文の注記までURLに含めてしまい、実在するmextの2本を404と誤判定していた）
 
+## 定期的な再確認（2026-09-01 追加）
+
+一次資料は法改正・統計更新で古くなる。`status.yaml` にテーマごとの最終確認日を記録し、
+`python3 scripts/build_admin_dashboard.py`（管理ダッシュボード）が90日（テーマによっては
+短縮）を過ぎたものを自動で検知する。手順は `.claude/skills/primary-research/SKILL.md`。
+**再確認したら `status.yaml` の `last_verified` を必ずその日に書き換えること。**
+
 ## テーマ別
 
 | テーマ | ファイル | 状態 |
