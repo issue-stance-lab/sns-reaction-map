@@ -312,6 +312,9 @@ DEPARTMENT_LABELS = {
 }
 
 HANDOFF_STATUS = {
+    "completed": ("完了", "ok"),
+    "cancelled": ("中止", "calm"),
+    "withdrawn": ("取り下げ", "calm"),
     "in_progress": ("進行中", "soon"),
     "scheduled": ("予定済み", "calm"),
     "recurring": ("継続中", "ok"),
@@ -433,7 +436,11 @@ def section_company(data: dict) -> str:
     approvals_html = "".join(approval_cards) or '<p class="empty-state">現在、CEOの承認待ちはありません。</p>'
 
     work_rows = []
-    for item in (company.get("handoffs") or [])[:8]:
+    active_handoffs = [
+        item for item in (company.get("handoffs") or [])
+        if item.get("status") not in {"completed", "cancelled", "withdrawn"}
+    ]
+    for item in active_handoffs[:8]:
         status_label, tone = HANDOFF_STATUS.get(item.get("status"), (item.get("status") or "不明", "calm"))
         due_text, due_tone = days_label(item.get("due_in"))
         work_rows.append(
