@@ -32,6 +32,23 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260902-001
+    department: engineering-data
+    action: website_publication
+    summary: "部活動の地域移行テーマの2026-09-02更新候補を一般公開する"
+    reason: "最新の公開投稿サンプル179件を追加し、ページ上の集計・論点表示・トップページ・サイトマップを同じ公開データから更新するため"
+    risks:
+      - "SNS上の投稿サンプルであり、社会全体の世論を示すものではない"
+      - "公開後はGitHub Pagesの反映待ちが数分発生する"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/bukatsu-chiiki/20260902_120701/promotion-manifest.json"
+      - "data/verification/updates/bukatsu-chiiki/2026-09-02/report.json"
+      - "DATA_REFRESH.md"
+    status: approved
+    requested_at: "2026-09-02"
+    decided_at: "2026-09-02"
+    decision_note: "CEOが本対話で『公開して終了処理』と明示して承認。対象はpromotion-manifest.json（SHA256: 59c378d26388077618413cec7091be47b9e0597f73aba807b41dece63c552b81）に固定された候補。"
   - id: approval-20260831-001
     department: engineering-data
     action: important_policy_change
