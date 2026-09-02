@@ -219,3 +219,7 @@ curl -s -o /dev/null -w "%{http_code}\n" -L -I "https://www.kyoiku.metro.tokyo.l
 未着手のまま`TASK_BOARD.md`課題54の「未着手」に具体的な項目として残した。上の再現手順②
 （`p['summary']`を参照するコマンド）は`summary`を`excerpt`に置き換えた現在のファイル構造では
 そのまま動かない。当時の指摘の根拠として原文のまま残す。
+
+**2026-09-03 追記**: 指摘8も対応済み。`scripts/verify_ocean_layer.py`＋`tests/test_ocean_layer.py`
+（14件）を新設し、詳細は`TASK_BOARD.md`課題54の「指摘8の対応完了（2026-09-03）」を参照。
+指摘1〜8すべて対応済みで、この独立レビューの指摘は残っていない。

@@ -658,7 +658,16 @@ tweet_id・除外理由）を追加し、`sns_count` を「争点そのものへ
 公開ページ・公開JSONへの接続なし（`docs/`・`data/public/`差分0）、370テストOK。同じ専用worktree
 `task/planet-stage45-fix`で実施（未マージ）。
 
-**未着手のまま残す（指摘8）**: 沈んだ大陸・地下水脈の2ファイルを見る検査が0件。下の「未着手」4番参照。
+**指摘8の対応完了（2026-09-03）**: `scripts/verify_ocean_layer.py`と`tests/test_ocean_layer.py`（14件）を新設し、
+`data/verification/*-sunk-continents.json`・`*-veins.json`の組をテーマ名を決め打ちせず自動で探して検査する。
+見る内容は①沈んだ大陸1テーマ4件以内 ②各件に一次資料URL・該当箇所・`sns_count`・`sns_base`・`checked_on`・
+`checked_by`がある ③`match_rule.pattern`を正典（`social-samples/`、意見のみ）に対して再実行した結果が
+`machine_hits`と一致する ④地下水脈1テーマ2〜4本、各側の代表投稿2件以上でtweet_idが正典に実在する
+⑤`data/verification/`のファイルに`summary`/`text`（本文相当）を残さない ⑥`checked_by`が`ai_assisted`の
+まま公開JSONへ接続されていない。正典が無い環境（CI・クリーンクローン）では③④の実在確認を飛ばし、
+「飛ばしました」と明示するメッセージを出す（黙って通さない、実地確認済み）。実行すると
+`bukatsu-chiiki: OK`（既存2ファイルは基準を満たす）。384テストOK（370＋新規14）、`docs/`・`data/public/`差分0。
+専用worktree`task/task54-stage5-checks`（mainから分岐、未マージ）。
 
 **未着手（レビュー指摘・急ぎではない）**:
 1. 公開データ契約に「照合が対象にした期間」（`covered_period`）を項目として持たせ、
@@ -674,14 +683,7 @@ tweet_id・除外理由）を追加し、`sns_count` を「争点そのものへ
    差し替えを検討
 4. 主張と論点の結び付け（編集判断）と投稿の分類論点が食い違う5件（レビュー5-2）を、段階6（陸地の色塗り）前に決める
 5. `verdict` と `verdict_label`（表示文言）の対応を固定するテストが無い（段階7の前に追加）
-6. 沈んだ大陸・地下水脈（`data/verification/bukatsu-chiiki-sunk-continents.json`・`-veins.json`）を
-   見る検査が0件（レビュー指摘8）。`scripts/verify_ocean_layer.py`（仮称）＋`tests/test_ocean_layer.py`
-   を新設し、最低限次を見る：①沈んだ大陸は1テーマ4件以内 ②各件に一次資料URL・該当箇所・
-   `sns_count`・`sns_base`・`checked_on`・`checked_by`がある ③`match_rule.pattern`を実行した結果が
-   `machine_hits`と一致する ④地下水脈は1テーマ2〜4本、各側の代表投稿が2件以上でtweet_idが正典に
-   実在する ⑤`data/verification/`のファイルに本文・要約を入れない ⑥`checked_by`が`ai_assisted`の
-   ものを公開契約へ載せる経路に通さない。正典が無い環境（CI・クリーンクローン）では③④の実在確認を
-   飛ばし、飛ばしたことをメッセージで出す。段階6（陸地の色塗り）着手前に足すのが望ましい
+6. ~~沈んだ大陸・地下水脈を見る検査~~ → **完了（2026-09-03）**。上の「指摘8の対応完了」参照
 
 **（作業中の記録）ステップ0〜2完了時点**: 専用worktree `task/planet-stage3`（mainから分岐）。
 993意見から主張9件を洗い出し、一次資料10点に当てて判定した（`quality/research/bukatsu-chiiki-stage3-claims-draft.md`）。

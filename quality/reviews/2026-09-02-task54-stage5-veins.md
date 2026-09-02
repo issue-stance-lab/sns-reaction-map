@@ -97,3 +97,7 @@ print('OK: 代表投稿は全件正典に実在')
 `TASK_BOARD.md`課題54の「未着手」に、`scripts/verify_ocean_layer.py`（仮称）が満たすべき項目
 （1テーマ4件以内／一次資料URL等の必須項目／`match_rule`の再現性／水脈2〜4本・各側2件以上・
 tweet_id実在／要約非掲載／`ai_assisted`を公開契約へ通さない、の6点）として具体的に残した。
+
+**2026-09-03 追記**: 手順8を実施した。`scripts/verify_ocean_layer.py`＋`tests/test_ocean_layer.py`
+（14件）を新設し、既存2ファイル（4件・2本）が上記6点すべてを満たすことを確認済み。384テストOK、
+`docs/`・`data/public/`差分0。詳細は`TASK_BOARD.md`課題54の「指摘8の対応完了（2026-09-03）」参照。
