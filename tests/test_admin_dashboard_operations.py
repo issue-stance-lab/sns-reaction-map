@@ -1,4 +1,5 @@
 import datetime as dt
+import errno
 import json
 import tempfile
 import threading
@@ -212,7 +213,9 @@ class DashboardPortFallbackTests(unittest.TestCase):
             server = mock.Mock(server_port=49231)
             server.serve_forever.return_value = None
             busy = OSError()
-            busy.errno = 48
+            # 48はmacOSのEADDRINUSE。Linux（GitHub Actions）では98なので、
+            # 直書きすると本番コードの errno.EADDRINUSE 判定に一致せず落ちる。
+            busy.errno = errno.EADDRINUSE
 
             with (
                 mock.patch.object(dashboard_server, "RUNTIME", runtime),

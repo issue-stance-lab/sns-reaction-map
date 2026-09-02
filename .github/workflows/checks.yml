@@ -26,6 +26,6 @@ jobs:
         with:
           python-version: "3.14"
       - name: 依存を入れる
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt -r requirements-dev.txt
       - name: 公開ファイルの検査を回す
         run: python3 scripts/run_public_checks.py
