@@ -21,6 +21,7 @@ LEGACY_CONSTITUTIONAL = {
 }
 SOURCES = {
     "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS"),
+    "bukatsu-chiiki": ("scripts/build_bukatsu_process_sections.py", "FACT_CHECKS"),
     "constitutional-amendment": ("scripts/build_constitutional_process_sections.py", "FACT_CHECKS"),
     "consumption-tax-cut": ("scripts/build_consumption_tax_page.py", "CLAIM_AUDIT"),
     "elderly-license-revocation": ("scripts/build_elderly_process_sections.py", "FACT_CHECKS"),
@@ -137,7 +138,8 @@ def main() -> int:
         print("NG")
         print("\n".join(errors))
         return 1
-    print("OK: 6テーマすべてが fact / gap / miss のみを使用")
+    # テーマ数は SOURCES から数える（固定文字列にすると登録追加のたびに古くなる）
+    print(f"OK: {len(SOURCES)}テーマすべてが fact / gap / miss のみを使用")
     print("OK: 主張ごとの件数が 正典 / data\u002fverification / 公開JSON で一致")
     print("OK: 確定データに旧判定語が残っていない")
     return 0

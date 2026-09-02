@@ -1,9 +1,15 @@
-# 課題54 段階3 — ステップ1〜2（主張の洗い出しと一次資料照合）
+# 課題54 段階3 — 部活動の一次資料照合（ステップ1〜7 完了）
 
 作成: 2026-09-02 / 対象: 部活動の地域移行（bukatsu-chiiki）/ 母数: 正典993意見（2026-06-27〜2026-08-26）
 
 着手タイミングはオーナー判断で **A**（ステップ1〜2を先に進め、ステップ3の投稿確定は 9/3 の定例更新後）。
-このメモはステップ1・2の結果。**公開ページには何も反映していない。**
+その後オーナーの指示でステップ3以降も同じセッションで実施した（9/3の定例収集前に確定したので、
+追加分は `FACT_CHECK_GUIDE.md`「データを追加したときの扱い」に従って後から差分だけ読む）。
+**公開ページのHTMLは1バイトも変えていない。** 変えたのは公開JSON（`data/public/`）と検査だけ。
+
+**確定結果**: 候補176件を1件ずつ読み、30件を確定。主張は9件の洗い出しから**7件**に絞った
+（`FACT_CHECK_GUIDE.md`「主張は3〜7つに絞る」）。落としたのは「令和13年度末までが期限」（2件・fact）と
+「2027年度に約77%の自治体で実施」（1件・fact）で、どちらも工程表の話でBC-2と内容が重なるため。
 
 ## 決まりごと（守っていること）
 
@@ -16,8 +22,7 @@
 
 | ID | 投稿が事実として述べていること | 論点ID | 判定 | 根拠 |
 |---|---|---|---|---|
-| BC-1 | 休日の部活動の地域展開は令和13年度末までに原則すべてで実現することになっている | `bukatsu-chiiki-seido` | fact | 資料①。「令和８年度から令和 13 年度までの６年間を『改革実行期間』として設定」「改革実行期間内に、原則、全ての学校部活動において地域展開の実現を目指す」 |
-| BC-2 | もともとは令和7年度末（2023〜2025年度）で全国の地域移行が完了する計画だった | `bukatsu-chiiki-seido` | gap | 資料②。当時のガイドラインは「令和５年度から令和７年度までの３年間を改革推進期間と位置付けて支援」「段階的な地域連携・地域移行を進める」「可能な限り早期の実現を目指す」。**完了期限としては書かれていない** |
+| BC-2 | もともとは令和7年度末（2023〜2025年度）で全国の地域移行が完了する計画だった | `bukatsu-chiiki-seido` | gap（4件） | 資料②。当時のガイドラインは「令和５年度から令和７年度までの３年間を改革推進期間と位置付けて支援」「段階的な地域連携・地域移行を進める」「可能な限り早期の実現を目指す」。**完了期限としては書かれていない** |
 | BC-3 | 地域移行に国はほとんど金を出していない | `bukatsu-chiiki-hiyo` | gap | 資料③。令和8年度当初57億円＋令和7年度補正82億円（計139億円）。補助割合は国1/3、重点課題対応は国10/10。資料④で次長が「300億円以上の公費の負担を計画」と発言。ただし**家庭が払う会費は補助対象外**で、負担が残ること自体は否定されない |
 | BC-4 | 地域移行後の指導者の報酬は最低賃金並みで、だから人が集まらない | `bukatsu-chiiki-ukezara` | gap | 幅がある。資料⑤の熊本市の試算は顧問1,600円/h・**副顧問1,000円/h**で、資料⑥の熊本県最低賃金1,034円（令和8年1月1日発効）を下回る。一方、部活動指導員の時間額は熊本市1,600円、練馬区1,872円、東京都2,360円（資料C-3）。**一律に最低賃金並みではない** |
 | BC-5 | 部活動指導員は顧問を命じられ、大会に単独で引率できる | `bukatsu-chiiki-ukezara` | fact | 資料⑦。「学校長は、部活動指導員に部活動の顧問を命じることができる」「学校外での活動（大会・練習試合等）の引率」。※投稿にある「会計年度任用の非常勤職員」という身分は国の資料には無く、「学校の設置者は…身分、任用…を規則等で定める」とされている（自治体ごと） |
@@ -51,3 +56,46 @@ URLはすべて `curl` で200を確認済み（⑧⑨は本文PDFをテキスト
 2. `scripts/build_bukatsu_process_sections.py` に `FACT_CHECKS` / `CHECKED_AT` / `write_provenance_records()` だけを置く（HTMLへの差し込みは書かない）
 3. `data/verification/bukatsu-chiiki-claims.json` を生成し、`CLAIM_AUDIT_SOURCES` と `verify_claim_verdicts.py` の `SOURCES` に登録
 4. `tests/test_claim_verification_contract.py` の「未実施は4テーマ」を3テーマへ
+
+---
+
+## ステップ3〜7の実施記録（2026-09-02）
+
+**確定した主張と件数**（`data/bukatsu-chiiki_claim_posts.json`。以後の件数はこのIDから数える）
+
+| 主張ID | 判定 | 確定件数 | 候補件数 |
+|---|---|---|---|
+| `original-deadline` | gap | 4 | 10 |
+| `national-funding` | gap | 6 | 28 |
+| `coach-pay` | gap | 8 | 27 |
+| `shidoin-role` | fact | 4 | 47 |
+| `chutairen-entry` | fact | 4 | 34 |
+| `club-cost-survey` | miss | 3 | 4 |
+| `kyushokuchoseigaku` | gap | 1 | 21 |
+| 合計 | | **30** | 176 |
+
+候補176件のうち残ったのは30件（17%）。願望・提案・仮定（「〜すべき」「〜だとしたら」）は
+同じ語を含んでいても外した。キーワード件数をそのまま使っていたら4〜6倍に膨らんでいた。
+
+`kyushokuchoseigaku` は1件だけだが、投稿が前提にしている数字（教職調整額の率）であり、
+いちばん大きい論点「教員の働き方」（283件）に対応する唯一の主張なので残した。
+
+**変えたもの**
+
+- 新設 `scripts/build_bukatsu_process_sections.py` — `FACT_CHECKS` / `CHECKED_AT` /
+  `write_provenance_records()` のみ。**公開HTMLは書き換えない**（段階7で惑星ページとして作り直すため）
+- 新設 `data/bukatsu-chiiki_claim_posts.json`（人が確定した投稿IDの正典）
+- 生成 `data/verification/bukatsu-chiiki-claims.json`
+- 登録 `public_registry_common.py` の `CLAIM_AUDIT_SOURCES`、`verify_claim_verdicts.py` の `SOURCES`
+- 再生成 `data/public/themes/bukatsu-chiiki.json`（`not_started` → `complete`、確認者種別 `editorial_review`）
+- 検査 `tests/test_claim_verification_contract.py`（未実施4テーマ→3テーマ、部活動の完了を固定）、
+  `tests/test_claim_verdicts.py`（6テーマ41主張→7テーマ48主張）。
+  `verify_claim_verdicts.py` の「6テーマ」表示は `len(SOURCES)` から数えるようにした（登録追加で古くならないように）
+
+**検査の結果**（すべて2026-09-02）
+
+- `verify_claim_verdicts.py` → OK（7テーマ48主張、3か所の件数一致）
+- `verify_public_registry.py --public-only` / `--against-private` → どちらもOK
+- `verify_theme_page.py bukatsu-chiiki` → OK
+- `python3 -m unittest discover -s tests` → 368件OK（着手前は367件OK・失敗0）
+- 2回生成の差分0、`git status` の `docs/` 差分なし
