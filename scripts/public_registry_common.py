@@ -34,6 +34,7 @@ INTENSITY_ORDER = ("low", "medium", "high")
 # 実像／ずれ／蜃気楼を塗り分けるため、この対応が無いと段階6で色を決められない。
 CLAIM_AUDIT_SOURCES = {
     "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
+    "bukatsu-chiiki": ("scripts/build_bukatsu_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "constitutional-amendment": ("scripts/build_constitutional_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "consumption-tax-cut": ("scripts/build_consumption_tax_page.py", "CLAIM_AUDIT", "CHECKED_ON", "say"),
     "elderly-license-revocation": ("scripts/build_elderly_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),

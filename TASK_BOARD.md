@@ -578,7 +578,23 @@ HTMLや設計書の固定数字を読まない。
   （2026-09-01 23時台は高市テーマの収集・分類が実行中だった）。下読みの出力は正典
   `social-samples/bukatsu-chiiki_hermes_classified.json` へ書き戻さない（件数と潮目が動く）
 
-**着手タイミング（未決・オーナー判断待ち）**: 部活動と高齢者免許返納の定例収集が 2026-09-03 に来る。
+**着手タイミング（2026-09-02 オーナー決定: A）**: ステップ1〜2を先に進め、ステップ3の投稿確定は 9/3 の定例更新後に回す。
+
+**段階3（2026-09-02 完了）**: **ステップ0〜7すべて完了。** 専用worktree `task/planet-stage3`（mainから分岐、未マージ）。
+候補176件を1件ずつ読んで30件を確定し、主張7件（fact 2 / gap 4 / miss 1）を `data/bukatsu-chiiki_claim_posts.json` に固定。
+公開JSONを `not_started` → `complete`（確認者種別 `editorial_review`）にした。**公開HTMLは1バイトも変えていない**（段階7で作り直すため）。
+検査は `verify_claim_verdicts`（7テーマ48主張）/ `verify_public_registry`（2モード）/ `verify_theme_page bukatsu-chiiki` / 全368テストがOK、2回生成の差分0、`docs/` 差分なし。
+記録は `quality/research/bukatsu-chiiki-stage3-claims-draft.md`。
+**オーナー決定（2026-09-02）**: miss（BC-7 運動部費用 年8万4千円・保護者65%）は**そのまま載せる**。
+**残っていること**: ①本番反映（`release` スキル）②9/3の定例収集で増える分の差分読み（`FACT_CHECK_GUIDE.md`「データを追加したときの扱い」）③次は段階4（沈んだ大陸）。
+
+**（作業中の記録）ステップ0〜2完了時点**: 専用worktree `task/planet-stage3`（mainから分岐）。
+993意見から主張9件を洗い出し、一次資料10点に当てて判定した（`quality/research/bukatsu-chiiki-stage3-claims-draft.md`）。
+判定は fact 4件 / gap 4件 / miss 1件。公開ページ・公開JSONは触っていない（`docs/` 差分0、367テストOK）。
+**オーナー判断待ち1件**: miss（BC-7「運動部費用 年8万4千円・保護者65%」は公的統計に無く、民間300人のネット調査が出どころ）を載せるか外すか。
+**次**: 9/3の定例更新後にステップ3（候補投稿を1件ずつ読んで `data/bukatsu-chiiki_claim_posts.json` を確定）。
+
+**着手タイミングの元の選択肢**: 部活動と高齢者免許返納の定例収集が 2026-09-03 に来る。
 段階3は2〜3セッションかかるため必ずぶつかる。
 
 - **A（AIの推奨）**: ステップ1〜2を先に進め、ステップ3の投稿確定だけ 9/3 の定例更新後に回す。

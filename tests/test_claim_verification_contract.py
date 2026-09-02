@@ -36,13 +36,23 @@ class ClaimVerificationContractTest(unittest.TestCase):
                     self.assertIn(issue_id, known, f"{theme}/{claim['id']}")
                     self.assertNotIn(issue_id, other, f"{theme}/{claim['id']}")
 
-        pending = prc.build_claim_verification("bukatsu-chiiki")
+        pending = prc.build_claim_verification("ai-copyright")
         self.assertEqual(pending, {"status": "not_started", "checked_on": None, "reviewer_type": None, "claims": []})
+
+    def test_bukatsu_chiiki_is_verified_by_editorial_review(self) -> None:
+        # 課題54 段階3で照合済み。公開JSONを complete にできるのは人が確定した場合だけなので、
+        # 確認者種別が ai_assisted へ変わっていないことをここで固定する。
+        done = prc.build_claim_verification("bukatsu-chiiki")
+        self.assertEqual(done["status"], "complete")
+        self.assertEqual(done["reviewer_type"], "editorial_review")
+        self.assertEqual(len(done["claims"]), 7)
+        self.assertEqual({item["verdict"] for item in done["claims"]}, {"fact", "gap", "miss"})
+        self.assertNotIn("tweet_id", json.dumps(done, ensure_ascii=False))
 
     def test_all_ten_themes_have_an_explicit_status(self) -> None:
         complete = {theme for theme in prc.CLAIM_AUDIT_SOURCES if prc.build_claim_verification(theme)["status"] == "complete"}
         self.assertEqual(complete, set(prc.CLAIM_AUDIT_SOURCES))
         self.assertEqual(
             {theme for theme in prc.QUESTIONS if prc.build_claim_verification(theme)["status"] == "not_started"},
-            {"ai-copyright", "bukatsu-chiiki", "henoko-student-accident", "school-nickname-ban"},
+            {"ai-copyright", "henoko-student-accident", "school-nickname-ban"},
         )

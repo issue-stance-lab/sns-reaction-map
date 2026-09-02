@@ -21,15 +21,16 @@ class ClaimVerdictTest(unittest.TestCase):
         counts, errors = audit()
         self.assertEqual(errors, [])
         self.assertEqual(set(counts), {
-            "bike-blue-ticket", "constitutional-amendment", "consumption-tax-cut",
+            "bike-blue-ticket", "bukatsu-chiiki", "constitutional-amendment", "consumption-tax-cut",
             "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai",
         })
-        self.assertEqual(sum(counts.values()), 41)
+        # 41主張＋部活動7主張（課題54 段階3）
+        self.assertEqual(sum(counts.values()), 48)
 
     def test_post_counts_agree_across_all_three_files(self) -> None:
         # ページは data/{theme}_claim_posts.json、公開JSONは data/verification/ を読む。
         # 片方だけ更新すると同じサイトの2か所で違う数字が出る。
-        for theme in ("bike-blue-ticket", "constitutional-amendment", "koshitsu-tenpakai"):
+        for theme in ("bike-blue-ticket", "bukatsu-chiiki", "constitutional-amendment", "koshitsu-tenpakai"):
             canon = canonical_claim_counts(theme)
             self.assertTrue(canon, theme)
             self.assertEqual(verification_claim_counts(theme), canon, theme)
