@@ -118,20 +118,47 @@ def tangent_ring(center: np.ndarray, m: int, spread: float) -> np.ndarray:
 
 # ---------------------------------------------------------------- データ読み
 
-def load_records(sample_file: Path) -> list[dict]:
-    recs = json.loads(sample_file.read_text())
-    out = []
-    for r in recs:
-        c = r.get("classification") or {}
-        if c.get("is_relevant") and c.get("is_opinion"):
-            out.append(c)
-    return out
-
-
 def dig(obj, path):
     for p in path:
         obj = obj[p]
     return obj
+
+
+def load_public_theme(topic: str) -> dict:
+    """段階6: 陸地の集計は公開JSON（`data/public/themes/{topic}.json`）だけを入力にする。
+
+    非公開正典（social-samples等）を直接読まない。公開JSONは課題57の公開データ契約に
+    従って別途生成済みで、論点別の件数・スタンス内訳・強度内訳・主張の照合結果を持つ。
+    """
+    path = ROOT / "data" / "public" / "themes" / f"{topic}.json"
+    return json.loads(path.read_text())
+
+
+def load_ocean_ledger(topic: str) -> dict:
+    """沈んだ大陸・地下水脈は `data/verification/` の確認台帳から接続する。
+
+    台帳が無い論点・テーマは推測で埋めず、海面下を空のまま返す
+    （工程表「台帳に無い論点の海面下が空で出る」）。
+    """
+    sc_path = ROOT / "data" / "verification" / f"{topic}-sunk-continents.json"
+    veins_path = ROOT / "data" / "verification" / f"{topic}-veins.json"
+    sunk_continents = json.loads(sc_path.read_text())["items"] if sc_path.exists() else []
+    veins = json.loads(veins_path.read_text())["items"] if veins_path.exists() else []
+    return {"sunk_continents": sunk_continents, "veins": veins}
+
+
+# 論点1つに複数の主張が付いたときの陸地判定の決め方（設計書14章、段階6で決定）。
+# miss（蜃気楼）> gap（ずれ）> fact（実像）の順で最も厳しい判定を採用する。
+# 「無いもの」（miss）を多数決で薄めて隠さないため（3.3 の非対称性を陸地の色にも反映する）。
+_VERDICT_SEVERITY = {"miss": 2, "gap": 1, "fact": 0}
+
+
+def issue_verdict(issue_id: str, claims: list[dict]) -> tuple[str | None, list[dict]]:
+    matched = [c for c in claims if issue_id in c.get("issue_ids", [])]
+    if not matched:
+        return None, []
+    worst = max(matched, key=lambda c: _VERDICT_SEVERITY[c["verdict"]])
+    return worst["verdict"], matched
 
 
 # ---------------------------------------------------------------- 本体
@@ -141,28 +168,35 @@ def build(topic: str) -> dict:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text())
     t = themes["themes"][topic] if "themes" in themes else themes[topic]
 
-    sample_file = ROOT / t["sample_file"]
-    all_recs = json.loads(sample_file.read_text())
-    recs = load_records(sample_file)
-    n_op = len(recs)
+    public = load_public_theme(topic)
+    ocean = load_ocean_ledger(topic)
+    claim_verification = public["claim_verification"]
+
+    n_op = public["opinion_count"]
 
     stances = [s["key"] for s in cfg["stances"]]
     issues_cfg = {i["key"]: i for i in cfg["issues"]}
     geo = cfg["geometry"]
 
-    # --- 集計（正典から数え直す。設定ファイルに件数を書かない）
+    # --- 集計（公開JSONから読む。設定ファイルにも生成器にも件数を書かない）
+    id_to_key = {ic["id"]: k for k, ic in issues_cfg.items()}
     counts: dict[str, int] = {}
     cross: dict[str, dict[str, int]] = {}
     inten: dict[str, dict[str, int]] = {}
-    for c in recs:
-        k = c.get("main_issue")
-        if k not in issues_cfg:
-            k = "その他"
-        counts[k] = counts.get(k, 0) + 1
-        cross.setdefault(k, {}).setdefault(c.get("stance"), 0)
-        cross[k][c.get("stance")] += 1
-        inten.setdefault(k, {}).setdefault(c.get("intensity"), 0)
-        inten[k][c.get("intensity")] += 1
+    for pub_issue in public["issues"]:
+        k = id_to_key.get(pub_issue["id"])
+        if k is None:
+            continue
+        counts[k] = pub_issue["count"]
+        cross[k] = {s["id"]: s["count"] for s in pub_issue["stances"]}
+        inten[k] = {i["id"]: i["count"] for i in pub_issue["intensities"]}
+    # 公開JSONのスタンスidは英字。地形の色分け（cfg側は日本語key）へ合わせる。
+    stance_id_to_key = {}
+    for pub_issue in public["issues"]:
+        for s in pub_issue["stances"]:
+            stance_id_to_key[s["id"]] = s["label"]
+    for k in list(cross):
+        cross[k] = {stance_id_to_key.get(sid, sid): v for sid, v in cross[k].items()}
 
     keys = [k for k in issues_cfg if counts.get(k)]
     keys.sort(key=lambda k: -counts[k])
@@ -264,6 +298,7 @@ def build(topic: str) -> dict:
 
         st = cross.get(k, {})
         top = max(stances, key=lambda s: st.get(s, 0))
+        verdict, matched_claims = issue_verdict(ic["id"], claim_verification["claims"])
         issues.append({
             "id": ic["id"],
             "key": k,
@@ -281,6 +316,8 @@ def build(topic: str) -> dict:
             "center": centers[i].tolist(),
             "centroid": cents[i].tolist(),
             "sub": sub,
+            "verdict": verdict,
+            "claims": matched_claims,
         })
 
     return {
@@ -293,8 +330,7 @@ def build(topic: str) -> dict:
         "sample_period": t["sample_period"],
         "source_label": cfg["source_label"],
         "totals": {
-            "collected": len(all_recs),
-            "relevant": sum(1 for r in all_recs if (r.get("classification") or {}).get("is_relevant")),
+            "collected": public["collected_count"],
             "opinions": n_op,
         },
         "elevation_formula": {
@@ -302,12 +338,19 @@ def build(topic: str) -> dict:
             "p0": round(p0, 4), "k": kk, "max_pct": geo["elevation_max"],
         },
         "min_area_pct": geo["min_area_pct"],
-        "stances": [dict(s, count=sum(1 for c in recs if c.get("stance") == s["key"]))
+        "stances": [dict(s, count=sum(cross.get(k, {}).get(s["key"], 0) for k in keys))
                     for s in cfg["stances"]],
         "vote_issue_order": cfg["vote_issue_order"],
         "modes": modes,
         "weights_by_mode": weights_by_mode,
         "issues": issues,
+        "ocean": {
+            "claim_status": claim_verification["status"],
+            "checked_on": claim_verification["checked_on"],
+            "reviewer_type": claim_verification["reviewer_type"],
+            "sunk_continents": ocean["sunk_continents"],
+            "veins": ocean["veins"],
+        },
     }
 
 

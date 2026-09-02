@@ -412,8 +412,8 @@ AdSense再申請は含まない。次は独立レビュー後、部活動テー�
 
 ### 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
 
-**状態**: 方針承認・設計確定。**2026-09-01 に照合レイヤー「海・地下水脈」を追加し、課題15-Bを本課題へ統合した**（オーナー承認済み）。段階0〜3完了。**2026-09-02のレビュー指摘（①段階4修正 ②段階5読み直し）に対応済み。段階6着手可**
-**次にすること**: `task/planet-stage45-fix` の内容（段階4修正＋段階5読み直し）をオーナー承認のうえ`release`スキルでmainへ反映し、段階6（`build_planet_data.py`への接続）へ進む
+**状態**: 方針承認・設計確定。**2026-09-01 に照合レイヤー「海・地下水脈」を追加し、課題15-Bを本課題へ統合した**（オーナー承認済み）。段階0〜6完了（未マージ）。段階7着手可
+**次にすること**: `task/planet-stage6`（`build_planet_data.py`への接続）をオーナー確認のうえ`release`スキルでmainへ反映し、段階7（部活動ページの試作・非公開）へ進む
 **優先度**: **最重要**。通常の新規テーマ追加、検索記事追加、旧2Dマップの横展開より優先する
 **対象**: 公開対象10テーマすべて。最初の完成基準は `bukatsu-chiiki`（部活地域移行）。対象IDは設計書に固定する
 **正典**: `quality/designs/reaction-planet-renewal.md`
@@ -668,6 +668,19 @@ tweet_id・除外理由）を追加し、`sns_count` を「争点そのものへ
 「飛ばしました」と明示するメッセージを出す（黙って通さない、実地確認済み）。実行すると
 `bukatsu-chiiki: OK`（既存2ファイルは基準を満たす）。384テストOK（370＋新規14）、`docs/`・`data/public/`差分0。
 専用worktree`task/task54-stage5-checks`（mainから分岐、未マージ）。
+
+**段階6完了（2026-09-03）**: `scripts/build_planet_data.py` を海・地下水脈へ接続した。
+①陸地の集計（論点別件数・スタンス内訳・強度内訳）を非公開正典 `social-samples/` の直接読みから
+公開JSON（`data/public/themes/{topic}.json`）だけの読みへ切り替えた（`totals.relevant` は公開契約に
+無い値のため削除し、試作HTMLの表示文言も合わせて外した）②論点ごとに `claim_verification.claims` の
+`issue_ids` を突き合わせ `verdict`（`fact`/`gap`/`miss`）と一致した主張一覧を持たせた。1論点に複数主張が
+付く場合の規則（`miss`＞`gap`＞`fact`の最厳判定を採用、他の主張は消さず残す）を設計書14章へ追記した
+③沈んだ大陸・地下水脈は `data/verification/{topic}-sunk-continents.json` / `-veins.json` から
+テーマ単位でそのまま接続し、台帳が無いテーマは空配列で出る（推測で埋めない）。
+`bukatsu-chiiki` で2回生成の差分0、`verify_theme_page` / `verify_claim_verdicts` / `verify_ocean_layer` /
+`verify_public_registry`（2モード）/ 全384テストがOK、`docs/`・`data/public/` 差分0を確認済み。
+公開ページ・公開JSONへの接続はまだ無い（`quality/prototypes/` 配下の試作JSON/HTMLだけを更新）。
+専用worktree `task/planet-stage6`（mainから分岐、未マージ）。次は段階7（部活動ページの試作・非公開）。
 
 **未着手（レビュー指摘・急ぎではない）**:
 1. 公開データ契約に「照合が対象にした期間」（`covered_period`）を項目として持たせ、

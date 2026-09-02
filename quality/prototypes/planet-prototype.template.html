@@ -534,7 +534,7 @@ addEventListener("keydown", e=>{
 document.getElementById("q").textContent = D.question + "（" + D.title + "）";
 document.getElementById("caution").innerHTML =
   D.source_label + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
-  + "収集期間 " + D.sample_period + "／収集" + D.totals.collected + "件・関連" + D.totals.relevant
+  + "収集期間 " + D.sample_period + "／収集" + D.totals.collected
   + "件・<b>意見" + D.totals.opinions + "件</b>（惑星の母数）／更新 " + D.updated_at
   + "　<code>" + D.snapshot_id + "</code>";
 if (D.prototype_only){
