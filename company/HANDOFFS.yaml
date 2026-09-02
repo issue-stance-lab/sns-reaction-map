@@ -40,8 +40,8 @@ items:
   - id: website-reaction-planet-renewal
     department: engineering-data
     status: in_progress
-    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。課題57の公開データ基盤が完了し（2026-08-31）、data/public/catalog.jsonとdata/public/themes/が正典として揃った。2026-09-01にオーナー承認のうえ照合レイヤー『海・地下水脈』を設計書へ追加し、課題15-B（手動編集・独自価値）を本課題の段階3〜5へ統合した。陸地=SNSの分類、海面より下=人が一次資料を読んで初めて分かること、と分ける。段階2まで完了し、公開JSONは照合済み6テーマの主張・判定・一次資料・確認済み件数・結びつく論点IDを持つ。残り4テーマは not_started と明示し、投稿ID・本文・AI内部理由は公開JSONへ出さない。2026-09-01に段階1・2のレビューを実施し、指摘6件（主張と論点の対応、設計書14章と公開Schemaの矛盾、一次資料0件の禁止、確認者種別ai_assisted、件数3か所の突き合わせ検査、憲法の確定データに残っていた旧判定語）を修正済み。"
-    next_action: "工程表の段階3。部活動地域移行の主張5〜8件を一次資料と投稿本文へ1件ずつ当たり、data/bukatsu-chiiki_claim_posts.json を作る。空振りは消さずに残す。工程表はTASK_BOARD.mdの課題54が正典。オーナーの出番は段階4の文言確認、段階9の共通仕様承認、段階11・12の公開/申請承認の3か所だけ。"
+    current_state: "3D『議論の惑星』をWebsiteの中心商品にする方針をCEO承認済み。公開対象10テーマを移行し、部活地域移行を最初の完成基準とする。課題57の公開データ基盤が完了し（2026-08-31）、data/public/catalog.jsonとdata/public/themes/が正典として揃った。2026-09-01にオーナー承認のうえ照合レイヤー『海・地下水脈』を設計書へ追加し、課題15-B（手動編集・独自価値）を本課題の段階3〜5へ統合した。陸地=SNSの分類、海面より下=人が一次資料を読んで初めて分かること、と分ける。**段階3完了・本番公開済み（2026-09-02）**。部活地域移行の主張7件（fact 2 / gap 4 / miss 1）を確定投稿32件と結び付け、確認者種別 editorial_review で公開JSONへ接続した。独立レビューで『確認済み母数（993件）と公開母数（1139件）のズレ』を指摘され、9/2の部活動データ更新で増えた146件を同じ基準で読み足し（coach-payに2件追加）、母数を1139件に揃えてからmainへマージ・公開した（コミットc9d7971）。公開ページのHTMLは1バイトも変えていない（数字表示のみ最新化）。"
+    next_action: "工程表の段階4（沈んだ大陸）。部活地域移行の一次資料照合済みデータ（data/bukatsu-chiiki_claim_posts.json、quality/research/bukatsu-chiiki-primary-sources.md）から、一次資料にはあるがSNS投稿にほとんど無い論点を最大4件抽出する。オーナーの出番は段階4の文言確認（試作を見て）、段階9の共通仕様承認、段階11・12の公開/申請承認の3か所。あわせて段階3レビューの残課題（covered_period項目の追加・既存6テーマの読み直し範囲・中体連出典の差し替え・verdict表示文言の対応検査、TASK_BOARD.md課題54参照）はオーナー判断待ちのため並行して進めない。"
     due_at: null
     canonical_sources: ["TASK_BOARD.md", "quality/designs/reaction-planet-renewal.md", "quality/designs/planet-adsense-gates.md", "quality/designs/planet-bukatsu-chiiki.md", "quality/designs/public-data-foundation-rebuild.md", "quality/reviews/2026-08-30-reaction-planet-plan.md", "THEMES.yaml", "data/public/catalog.json"]
     ceo_approval: "重要方針と非公開実装は承認済み。一般公開、広告配置、AdSense再申請は別途必要"
