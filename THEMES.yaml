@@ -108,6 +108,7 @@ themes:
       2026-09-02、課題54段階5として地下水脈2本を抽出した（`data/verification/bukatsu-chiiki-veins.json`、確認者種別ai_assisted）。「指導者の待遇の低さ」（慎重・反対と条件付き・改善要求が同じ懸念を共有するが中止か改善継続かで分かれる）と「移行しても教員負担が実質減らない懸念」（同様に慎重・反対と条件付き・改善要求が分かれる）の2本。賛否の機械的な鏡像になる3本目の候補は根拠が弱く見送った。段階6（build_planet_data.pyへの接続）はまだ未着手で公開JSON・公開HTMLへの影響なし。
       2026-09-02、独立レビューで段階4「沈んだ大陸」4件の数え方に誤りを指摘され修正した（`data/verification/bukatsu-chiiki-sunk-continents.json`）。4件目「資格要件」は指導者の資格・経験を求める意見が5件あるのに「0件」としていた誤りを直し、東京都限定の但し書きと機械可読の検索式（`match_rule`）を追加。`sns_count`の意味（争点そのものへの言及件数）を4件で統一した。公開ページ・公開JSONへの接続なし。
       2026-09-02、同レビューで段階5「地下水脈」がAIの分類結果（summary）の組み替えだった指摘を受け、代表投稿12件を分類器のsummary・reasonを見ずに本文だけで読み直した（`data/verification/bukatsu-chiiki-veins.json`）。vein-1（指導者の待遇の低さ）は変更なし、vein-2（移行しても教員負担は実質減らない懸念）は6件中3件を本文検索で差し替え、論点が4つにまたがったため`issue_id`を`issue_ids`配列に変更。移行支持460件を含む水脈を探したが成立せず、2本のまま採用。`curated_by`・`checked_by`を`ai_assisted`から`editorial_review`に変更し、投稿要約は`data/verification/`の規約に合わせて削除した。段階6はまだ未着手で公開JSON・公開HTMLへの影響なし。
+      2026-09-03、段階5レビュー指摘8への対応として`scripts/verify_ocean_layer.py`を新設し、沈んだ大陸・地下水脈の2ファイルを検査対象にした（件数上限・必須項目・match_rule再現性・代表投稿の正典実在・要約非混入・checked_byの公開未接続を確認）。既存の4件・2本ともこの検査を通過。段階6はまだ未着手。
   constitutional-amendment:
     title: 憲法改正論議
     html: docs/constitutional-amendment-reaction-map.html
