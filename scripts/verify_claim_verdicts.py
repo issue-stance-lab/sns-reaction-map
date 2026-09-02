@@ -89,9 +89,42 @@ def verification_claim_counts(theme: str) -> dict[str, int]:
     return dict(Counter(row["claim"] for row in rows))
 
 
+def public_path(theme: str) -> Path:
+    return ROOT / "data" / "public" / "themes" / f"{theme}.json"
+
+
 def public_claim_counts(theme: str) -> dict[str, int]:
-    data = json.loads((ROOT / "data" / "public" / "themes" / f"{theme}.json").read_text(encoding="utf-8"))
+    data = json.loads(public_path(theme).read_text(encoding="utf-8"))
     return {c["id"]: c["matched_post_count"] for c in data["claim_verification"]["claims"]}
+
+
+def coverage_warnings() -> list[str]:
+    """人が読んだ範囲が、ページの母数に追いついているかを見る（警告のみ）。
+
+    ページの「意見◯◯件」は定例更新のたびに機械が数え直すが、主張ごとの該当件数は
+    人が読んだ時点で止まる。片方だけ動くので、同じページに範囲の違う数字が並ぶ。
+    課題54 段階3のレビューで実測した（993件時点の照合が1139件のページに載りかけた）。
+
+    件数の3か所突き合わせ（audit_counts）はこのズレを見つけられない。3か所とも
+    同じ確定データから作るため、仲良く一致してしまう。
+
+    本来は公開データ契約へ「照合が対象にした期間」を持たせる（課題54の残課題）。
+    それまでの暫定として、確認日 checked_on を読んだ範囲の代わりに使う。
+    読み直しの範囲はオーナー判断が要るため、ここでは止めずに警告だけ出す。
+    """
+    warnings: list[str] = []
+    for theme in SOURCES:
+        data = json.loads(public_path(theme).read_text(encoding="utf-8"))
+        checked_on = (data.get("claim_verification") or {}).get("checked_on")
+        period_end = (data.get("collection_period") or {}).get("end")
+        if not checked_on or not period_end:
+            continue
+        if checked_on < period_end:
+            warnings.append(
+                f"{theme}: 照合の確認日 {checked_on} が公開データの期間末 {period_end} より前です"
+                "（増えた投稿を主張へ読み足していない可能性）"
+            )
+    return warnings
 
 
 def audit_counts() -> list[str]:
@@ -142,6 +175,13 @@ def main() -> int:
     print(f"OK: {len(SOURCES)}テーマすべてが fact / gap / miss のみを使用")
     print("OK: 主張ごとの件数が 正典 / data\u002fverification / 公開JSON で一致")
     print("OK: 確定データに旧判定語が残っていない")
+    warnings = coverage_warnings()
+    if warnings:
+        print(f"警告 {len(warnings)}件: 照合が公開母数に追いついていません（終了コードは変えません）")
+        print("\n".join(f"  - {w}" for w in warnings))
+        print("  読み直す範囲はオーナー判断。TASK_BOARD.md 課題54「未着手（レビュー指摘）」を参照")
+    else:
+        print("OK: 照合の確認日が全テーマで公開データの期間末に追いついている")
     return 0
 
 

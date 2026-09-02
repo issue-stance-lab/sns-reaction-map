@@ -607,6 +607,10 @@ HTMLや設計書の固定数字を読まない。
 **未着手（レビュー指摘・急ぎではない）**:
 1. 公開データ契約に「照合が対象にした期間」（`covered_period`）を項目として持たせ、
    `collection_period.end` より前ならNGにする検査を追加する（部活動含む7テーマ横断の変更）
+   → **暫定対応済み（2026-09-02）**: `covered_period` の追加は未着手だが、確認日 `checked_on` を
+   読んだ範囲の代わりに使い、`verify_claim_verdicts.py` が**警告**として一覧を出すようにした
+   （終了コードは変えない。現在6テーマが該当）。定例更新のたびに気づける状態になったので、
+   残るのは正式な項目化と、下の2（読み直す範囲のオーナー判断）
 2. 既存6テーマ（bike-blue-ticket / constitutional-amendment / consumption-tax-cut /
    elderly-license-revocation / fukushuto / koshitsu-tenpakai）の確認済み時点と公開母数のズレを
    どこまで読み直すか、オーナー判断が必要
