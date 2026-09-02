@@ -1,63 +1,63 @@
 {
   "theme_id": "bukatsu-chiiki",
-  "method": "段階4の沈んだ大陸抽出と同じ正典（social-samples/bukatsu-chiiki_hermes_classified.json、意見1139件）から、主張の確定（段階3）で候補になった30件の投稿と、その周辺の同一論点投稿を対象に、スタンスの異なる投稿同士で『同じ具体的な懸念を語っているが結論が違う』組を探した。賛否の機械的な鏡像（同じ論点への賛成・反対の対句）は除外し、懸念の内容が実際に重なっている投稿だけを残した。",
+  "method": "段階4の沈んだ大陸抽出と同じ正典（social-samples/bukatsu-chiiki_hermes_classified.json、意見1139件）から、段階5で機械的に組んだ候補2本を、分類器の要約・理由を見ずに投稿本文だけで編集部が1件ずつ読み直した。『同じ具体的な懸念を語っているが結論が違う』かどうかを本文で判断し、当てはまらない代表投稿は外して本文検索で差し替えた。賛否の機械的な鏡像（同じ論点への賛成・反対の対句）は除外し、懸念の内容が実際に重なっている投稿だけを残した。",
   "curated_at": "2026-09-02",
-  "curated_by": "ai_assisted",
-  "note": "AIによる下読み・組み合わせ抽出。段階5は工程表上オーナー確認不要（TASK_BOARD.md課題54）だが、確認者種別は実態どおり ai_assisted と記録する。段階6で公開契約へ接続する前に、文言だけ軽く見てもらうことを推奨する。",
+  "curated_by": "editorial_review",
+  "note": "2026-09-02の独立レビュー（指摘1）で、代表投稿の要約が分類器のsummaryの組み替えだったことを指摘され、本文だけを見て読み直した。vein-1は元の代表投稿が懸念に合致していたためそのまま採用。vein-2は6件中3件（教員待遇・給特法改正など）が『外部委託でも負担が残る』という懸念と噛み合っていなかったため外し、本文検索で3件を差し替えた。差し替え後、代表投稿の論点が3論点にまたがるため issue_id を issue_ids の配列に変更し、vein-1も同じ形に揃えた。",
   "sample_file": "social-samples/bukatsu-chiiki_hermes_classified.json",
   "sample_total_opinions": 1139,
+  "explored_but_not_adopted": "意見1139件で最大勢力の『移行支持』460件を含む水脈を、教員の働き方・制度移行プロセス・受け皿指導者の3論点で探したが、賛否をまたいで同じ具体的懸念を共有する組は見つからなかった（移行支持側の投稿は『負担軽減・待遇改善への期待』が中心で、慎重・反対や条件付き・改善要求側の投稿と同じ具体的な懸念を共有していない）。3本目を無理に作らず、2本のまま採用する。",
   "items": [
     {
       "id": "bukatsu-chiiki-vein-1",
-      "issue_id": "bukatsu-chiiki-ukezara",
+      "issue_ids": ["bukatsu-chiiki-ukezara"],
       "shared_concern": "地域移行後にクラブを引き受ける指導者の謝礼・時給が低すぎて、生活が成り立たない、あるいは希望する人が集まらない。",
       "sides": [
         {
           "stance_label": "慎重・反対",
           "representative_posts": [
-            {"tweet_id": "2093070637053206602", "summary": "地域指導者の待遇が顧問より劣悪と批判"},
-            {"tweet_id": "2070447477484859720", "summary": "低賃金で指導者が見つからず地域移行は失敗すると断言"},
-            {"tweet_id": "2070078294410850366", "summary": "外部委託指導者の時給1500円は安すぎ集まらないと批判"}
+            {"tweet_id": "2093070637053206602", "excerpt": "not_listed"},
+            {"tweet_id": "2070447477484859720", "excerpt": "not_listed"},
+            {"tweet_id": "2070078294410850366", "excerpt": "not_listed"}
           ]
         },
         {
           "stance_label": "条件付き・改善要求",
           "representative_posts": [
-            {"tweet_id": "2092052657993355363", "summary": "有償指導者の低時給と国の予算不足を批判"},
-            {"tweet_id": "2093463060300329395", "summary": "外部委託指導者の時給が低く生活困難、予算増必要"},
-            {"tweet_id": "2070325146372739488", "summary": "指導者報酬が最低賃金並みで強く不満"}
+            {"tweet_id": "2092052657993355363", "excerpt": "not_listed"},
+            {"tweet_id": "2093463060300329395", "excerpt": "not_listed"},
+            {"tweet_id": "2070325146372739488", "excerpt": "not_listed"}
           ]
         }
       ],
       "diverging_reason": "同じ『低待遇では続かない』という懸念から、慎重・反対側は『待遇が上がらない前提なら地域移行自体を進めるべきではない』と結論づけ、条件付き・改善要求側は『予算を増やして待遇を改善すれば移行は続けられる』と結論づける。中止か、改善して継続かで分かれる。",
       "checked_on": "2026-09-02",
-      "checked_by": "ai_assisted"
+      "checked_by": "editorial_review"
     },
     {
       "id": "bukatsu-chiiki-vein-2",
-      "issue_id": "bukatsu-chiiki-kyoin",
+      "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-ukezara", "bukatsu-chiiki-kyoin", "bukatsu-chiiki-kakusa"],
       "shared_concern": "外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。",
       "sides": [
         {
           "stance_label": "慎重・反対",
           "representative_posts": [
-            {"tweet_id": "2079383000463331775", "summary": "外部指導者では顧問負担が減らない可能性も"},
-            {"tweet_id": "2085930540788813914", "summary": "外部指導員は法律上技術指導のみで教員負担軽減にならず"},
-            {"tweet_id": "2091133346520916410", "summary": "部活移行は教員のやる気不足ではなく待遇改善が必要"}
+            {"tweet_id": "2079383000463331775", "excerpt": "not_listed"},
+            {"tweet_id": "2085930540788813914", "excerpt": "not_listed"},
+            {"tweet_id": "2083719199449575575", "excerpt": "not_listed"}
           ]
         },
         {
           "stance_label": "条件付き・改善要求",
           "representative_posts": [
-            {"tweet_id": "2088068389046751432", "summary": "国が教員に時給払えば移行不要、保護者は国へ求めるべき"},
-            {"tweet_id": "2086914993396842912", "summary": "部活担当教員の給特法改正が必須だと主張"},
-            {"tweet_id": "2083425572500508724", "summary": "地域クラブは保護者運営でこそ教員負担が減る"}
+            {"tweet_id": "2083425572500508724", "excerpt": "not_listed"},
+            {"tweet_id": "2091827102743957633", "excerpt": "not_listed"}
           ]
         }
       ],
-      "diverging_reason": "『今のやり方では教員の負担は実質減らない』という同じ懸念から、慎重・反対側は『負担が減らないなら地域移行に固執せず、教員の待遇改善を先にすべき』と結論づけ、条件付き・改善要求側は『給特法改正や保護者運営など制度設計を変えれば、移行でも負担を減らせる』と結論づける。移行への慎重論と、制度を変えて移行を進める論に分かれる。",
+      "diverging_reason": "『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。",
       "checked_on": "2026-09-02",
-      "checked_by": "ai_assisted"
+      "checked_by": "editorial_review"
     }
   ]
 }
