@@ -1,0 +1,31 @@
+# 公開ファイルだけで確かめられる検査を、pushのたびに自動で回す。
+#
+# これまで検査は「作業した人が忘れずに手で回す」に依存していて、配信ワークフローは
+# デプロイしかしていなかった。2026-09-01に3テーマを公開したときSEO台帳が置き去りになり、
+# 翌日の部活動公開まで誰も気づかなかった（公開前検査で9件失敗）。同じ場所のズレは3回目だった。
+#
+# 非公開正典（social-samples/）はここに無いので、正典を読む検査は入っていない。
+# 中身と、なぜその線引きかは scripts/run_public_checks.py の冒頭に書いてある。
+name: 公開ファイルの検査
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  public-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: 依存を入れる
+        run: pip install -r requirements.txt
+      - name: 公開ファイルの検査を回す
+        run: python3 scripts/run_public_checks.py
