@@ -72,6 +72,12 @@ python3 -m unittest discover -s tests
 
 成功の形: それぞれ `NG 0件` / 終了コード0 / `OK`。
 
+**この4つは、非公開正典を読むので手元でしか回せない。** 公開ファイルだけで確かめられる検査
+（公開データJSONとcatalog、主張の判定と件数、**SEO台帳の更新日**、収集期間、ページ文の使い回し、
+テスト320件）は、pushのたびにGitHub Actionsが自動で回す
+（`.github/workflows/checks.yml` → `scripts/run_public_checks.py`）。
+自動側が赤いまま push しない。中身の線引きは `scripts/run_public_checks.py` の冒頭にある。
+
 **ここで初めて分かることがある。** 作業ツリーの分岐元が古いと、そこでは落ちていた
 テストが main では通る（逆もある）。2026-08-17、作業ツリーで1件失敗していた
 X投稿のテストは、分岐元が古いだけで main では通っていた。
