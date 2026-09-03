@@ -21,6 +21,7 @@
  "stances": [
   {
    "key": "移行支持",
+   "id": "bukatsu-chiiki-transition-support",
    "label": "移行支持",
    "color": "#2F8F83",
    "pattern": "plain",
@@ -28,6 +29,7 @@
   },
   {
    "key": "慎重・反対",
+   "id": "bukatsu-chiiki-cautious",
    "label": "慎重・反対",
    "color": "#7D5BA6",
    "pattern": "diagonal",
@@ -35,6 +37,7 @@
   },
   {
    "key": "条件付き・改善要求",
+   "id": "bukatsu-chiiki-conditional",
    "label": "条件付き・改善要求",
    "color": "#D9A520",
    "pattern": "dots",
@@ -42,6 +45,7 @@
   },
   {
    "key": "中立・情報",
+   "id": "bukatsu-chiiki-neutral",
    "label": "中立・情報",
    "color": "#8B9199",
    "pattern": "mesh",
@@ -452,6 +456,9 @@
      ],
      "verdict": "gap"
     }
+   ],
+   "veins": [
+    "bukatsu-chiiki-vein-2"
    ]
   },
   {
@@ -534,6 +541,9 @@
      ],
      "verdict": "gap"
     }
+   ],
+   "veins": [
+    "bukatsu-chiiki-vein-2"
    ]
   },
   {
@@ -591,7 +601,8 @@
      ],
      "verdict": "fact"
     }
-   ]
+   ],
+   "veins": []
   },
   {
    "id": "bukatsu-chiiki-ukezara",
@@ -806,6 +817,10 @@
      ],
      "verdict": "fact"
     }
+   ],
+   "veins": [
+    "bukatsu-chiiki-vein-1",
+    "bukatsu-chiiki-vein-2"
    ]
   },
   {
@@ -1009,7 +1024,8 @@
      "sources": [],
      "verdict": "miss"
     }
-   ]
+   ],
+   "veins": []
   },
   {
    "id": "bukatsu-chiiki-sonota",
@@ -1049,7 +1065,8 @@
     "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"
    },
    "verdict": null,
-   "claims": []
+   "claims": [],
+   "veins": []
   },
   {
    "id": "bukatsu-chiiki-kakusa",
@@ -1089,7 +1106,10 @@
     "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"
    },
    "verdict": null,
-   "claims": []
+   "claims": [],
+   "veins": [
+    "bukatsu-chiiki-vein-2"
+   ]
   }
  ],
  "ocean": {
@@ -1138,7 +1158,9 @@
      "count": 12
     },
     "checked_on": "2026-09-02",
-    "checked_by": "editorial_review"
+    "checked_by": "editorial_review",
+    "opinion_count_now": 1139,
+    "base_stale": false
    },
    {
     "id": "bukatsu-chiiki-sc-2",
@@ -1220,7 +1242,9 @@
      ]
     },
     "checked_on": "2026-09-02",
-    "checked_by": "editorial_review"
+    "checked_by": "editorial_review",
+    "opinion_count_now": 1139,
+    "base_stale": false
    },
    {
     "id": "bukatsu-chiiki-sc-3",
@@ -1257,7 +1281,9 @@
      ]
     },
     "checked_on": "2026-09-02",
-    "checked_by": "editorial_review"
+    "checked_by": "editorial_review",
+    "opinion_count_now": 1139,
+    "base_stale": false
    },
    {
     "id": "bukatsu-chiiki-sc-4",
@@ -1314,7 +1340,9 @@
      ]
     },
     "checked_on": "2026-09-02",
-    "checked_by": "editorial_review"
+    "checked_by": "editorial_review",
+    "opinion_count_now": 1139,
+    "base_stale": false
    }
   ],
   "veins": [
