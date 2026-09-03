@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import math
 from pathlib import Path
@@ -467,6 +468,172 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
     return ng
 
 
+# ------------------------------------------------ 出力の安定化と静的HTML
+
+def stabilize(obj, nd: int = 12):
+    """浮動小数の末尾桁のゆらぎを丸めて落とす。
+
+    重みの当てはめ（fit_weights）は行列積の足す順序で最後の1〜2桁が動く。
+    そのままだと「同じ入力なのに再生成すると差分が出る」状態になり、
+    課題34の再生成可能性と docs/ の差分0が崩れる。表示する値はすべて
+    小数2桁までなので、12桁で丸めても見た目は1ドットも変わらない。
+    """
+    if isinstance(obj, bool):
+        return obj
+    if isinstance(obj, float) or isinstance(obj, np.floating):
+        return float(round(float(obj), nd)) + 0.0   # -0.0 を 0.0 に寄せる
+    if isinstance(obj, (int, np.integer)):
+        return int(obj)
+    if isinstance(obj, dict):
+        return {k: stabilize(v, nd) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [stabilize(v, nd) for v in obj]
+    return obj
+
+
+def text_on(hex_color: str) -> str:
+    """背景色の明るさから、読める文字色を決める。"""
+    r, g, b = (int(hex_color[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    return "#0d1117" if lum > 0.5 else "#ffffff"
+
+
+def e(x) -> str:
+    return html.escape(str(x), quote=True)
+
+
+def static_question(d: dict) -> str:
+    return e(d["question"]) + "（" + e(d["title"]) + "）"
+
+
+def static_caution(d: dict) -> str:
+    t = d["totals"]
+    out = ['<p class="caution" id="caution">'
+           + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
+           + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
+           + "件・<b>意見" + str(t["opinions"]) + "件</b>（惑星の母数）／更新 " + e(d["updated_at"])
+           + '　<code>' + e(d["snapshot_id"]) + "</code></p>"]
+    if d.get("prototype_only"):
+        out.append('<p class="caution" style="border-left-color:#e5534b">'
+                   + "<b>このページは公開できません。</b>独自性の検査に落ちています。<br>・"
+                   + "<br>・".join(e(x) for x in d.get("gate_failures", [])) + "</p>")
+    return "\n  ".join(out)
+
+
+def static_meta(d: dict) -> str:
+    f = d["elevation_formula"]
+    return ("大陸＝論点、面積＝意見の数（最小" + str(d["min_area_pct"]) + "%の床あり）、"
+            "色＝いちばん多い立場（薄いほど意見が割れている）、"
+            "山の高さ＝" + e(f["definition"]) + "（小さい論点は k=" + str(f["k"])
+            + " で抑制。全体平均 " + f"{f['p0'] * 100:.1f}" + "%）。"
+            "大陸の位置は見やすさのための配置で、論点同士の近さを意味しません。<br>"
+            "このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。"
+            "データが増えたら同じコマンドを実行し直すだけで、面積・色・高さ・島が更新されます。")
+
+
+def static_fallback(d: dict) -> str:
+    """JS・canvas が使えない環境向けの静的HTMLを data から組み立てる。
+
+    ここを手書きにすると、同じページの中で数字が2通りになる（段階7のレビュー指摘1）。
+    テーマ固有の言葉・色も data から採るので、他テーマでもそのまま使える。
+    """
+    stance = {x["key"]: x for x in d["stances"]}
+    nav, panels = [], []
+    for it in d["issues"]:
+        anchor_id = "fb-" + it["id"]
+        color = stance[it["top_stance"]]["color"]
+        nav.append(
+            f'      <a class="continent" href="#{e(anchor_id)}"'
+            f' style="background:{e(color)};border-color:{e(color)};color:{text_on(color)}">'
+            f'<span class="label">{e(it["icon"])} {e(it["label"])}</span>'
+            f'<span class="count">{it["count"]}件・{it["share_pct"]}%</span></a>')
+
+        legend = "".join(
+            f'<span><i style="background:{e(stance[k]["color"])}"></i>{e(k)} {n}件</span>'
+            for k, n in it["stances"].items() if n)
+        bar = "".join(
+            f'<span style="width:{100 * n / it["count"]:.1f}%;background:{e(stance[k]["color"])};'
+            f'color:{text_on(stance[k]["color"])}">{e(k) if 100 * n / it["count"] >= 12 else ""}</span>'
+            for k, n in it["stances"].items() if n)
+
+        body = [
+            f'    <section class="landing-panel" id="{e(anchor_id)}" tabindex="-1">',
+            f'      <h2>{e(it["icon"])} {e(it["label"])}</h2>',
+            f'      <p class="sub">{it["count"]}件（{it["share_pct"]}%）'
+            f'　山の高さ：強い表現{it["high_adjusted_pct"]}%</p>',
+            f'      <div class="legend">{legend}</div>',
+            f'      <div class="bar">{bar}</div>',
+            '      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>',
+        ]
+        if it["share_pct"] < d["min_area_pct"]:
+            body.append(f'      <div class="note">3Dの惑星では、この大陸を実際の割合より大きく描いています。'
+                        f'小さすぎると押せないため、最小{d["min_area_pct"]}%まで拡大しています。</div>')
+
+        sub = it["sub"]
+        if sub["status"] == "reread":
+            items = "".join(
+                f'<li{" class=\"unread\"" if x.get("unread") else ""}>'
+                f'<span class="num">{j + 1}</span>{e(x["label"])}'
+                f'<span class="n">{x["count"]}件</span></li>'
+                for j, x in enumerate(sub["items"]))
+            body += [
+                '      <p class="sub" style="margin-top:12px">'
+                '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
+                f'      <ul class="islands">{items}</ul>',
+                f'      <div class="note">{e(sub["coverage_note"])}。読み直した{sub["reread_count"]}件は '
+                f'<code>{e(sub["source_file"].split("/")[-1])}</code> が出所です。'
+                + (f'残り{sub["unread_count"]}件は、その後に増えた分でまだ読めていません。'
+                   if sub["unread_count"] else "") + '</div>',
+            ]
+        else:
+            body.append(f'      <div class="note">{e(sub["note"])}。<br>'
+                        'AIが自動でつけた区分をここに並べることはしません。'
+                        '人が読んだ結果だけを島にします。</div>')
+
+        if it.get("claims"):
+            srcs = []
+            for c in it["claims"]:
+                links = "".join(
+                    f'<br><a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
+                    for src in c.get("sources", []))
+                srcs.append(f'<li>{e(c["claim"])}<br>{e(c["finding"])}{links}</li>')
+            body += ['      <p class="sub" style="margin-top:12px">'
+                     '<b>一次資料と照らした結果</b></p>',
+                     f'      <ul class="srclist">{"".join(srcs)}</ul>']
+
+        body.append('      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>')
+        body.append('    </section>')
+        panels.append("\n".join(body))
+
+    return ("\n".join([
+        '  <div id="fallback">',
+        '    <h3 class="sec">論点の一覧（3Dの惑星が使えないときの表示）</h3>',
+        '    <p class="sub" style="color:var(--muted);font-size:12px">'
+        'このページは、お使いの環境で3Dの惑星を描けなかったため、同じ内容を静的な一覧で表示しています。'
+        '円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>',
+        '    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">',
+    ] + nav + ['    </nav>'] + panels + ['  </div>']))
+
+
+def render_page(data: dict, template: str, payload: str) -> str:
+    """テンプレートの差し込み口を data から埋める。
+
+    数字・色・テーマ固有の言葉をここでしか作らないことで、
+    「同じページの中で数字が2通りになる」状態を作れなくする。
+    """
+    for mark, filler in (
+        ("/*__PLANET_DATA__*/null", payload),
+        ("<!--__QUESTION__-->", static_question(data)),
+        ("<!--__CAUTION__-->", static_caution(data)),
+        ("<!--__META__-->", static_meta(data)),
+        ("<!--__FALLBACK__-->", static_fallback(data)),
+    ):
+        if mark not in template:
+            raise SystemExit(f"テンプレートに差し込み口 {mark} がありません")
+        template = template.replace(mark, filler)
+    return template
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--topic", required=True)
@@ -488,6 +655,7 @@ def main() -> None:
         data["prototype_only"] = True
         data["gate_failures"] = ng
     out = Path(a.out) if a.out else ROOT / "quality/prototypes/data" / f"{a.topic}-planet.json"
+    data = stabilize(data)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, ensure_ascii=False, indent=1))
 
@@ -496,7 +664,7 @@ def main() -> None:
     if tpl.exists():
         payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
         html_out = out.parent.parent / f"{a.topic}-planet.html"
-        html_out.write_text(tpl.read_text().replace("/*__PLANET_DATA__*/null", payload))
+        html_out.write_text(render_page(data, tpl.read_text(), payload))
         print(f"wrote {html_out}")
 
     print(f"wrote {out}  意見{data['totals']['opinions']}件 / 論点{len(data['issues'])}")
