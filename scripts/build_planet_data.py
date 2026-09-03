@@ -118,20 +118,58 @@ def tangent_ring(center: np.ndarray, m: int, spread: float) -> np.ndarray:
 
 # ---------------------------------------------------------------- データ読み
 
-def load_records(sample_file: Path) -> list[dict]:
-    recs = json.loads(sample_file.read_text())
-    out = []
-    for r in recs:
-        c = r.get("classification") or {}
-        if c.get("is_relevant") and c.get("is_opinion"):
-            out.append(c)
-    return out
-
-
 def dig(obj, path):
     for p in path:
         obj = obj[p]
     return obj
+
+
+def load_public_theme(topic: str) -> dict:
+    """段階6: 陸地の集計は公開JSON（`data/public/themes/{topic}.json`）だけを入力にする。
+
+    非公開正典（social-samples等）を直接読まない。公開JSONは課題57の公開データ契約に
+    従って別途生成済みで、論点別の件数・スタンス内訳・強度内訳・主張の照合結果を持つ。
+    """
+    path = ROOT / "data" / "public" / "themes" / f"{topic}.json"
+    return json.loads(path.read_text())
+
+
+def load_ocean_ledger(topic: str) -> dict:
+    """沈んだ大陸・地下水脈は `data/verification/` の確認台帳から接続する。
+
+    台帳が無い論点・テーマは推測で埋めず、海面下を空のまま返す
+    （工程表「台帳に無い論点の海面下が空で出る」）。
+    """
+    sc_path = ROOT / "data" / "verification" / f"{topic}-sunk-continents.json"
+    veins_path = ROOT / "data" / "verification" / f"{topic}-veins.json"
+    sunk_continents = json.loads(sc_path.read_text())["items"] if sc_path.exists() else []
+    veins = json.loads(veins_path.read_text())["items"] if veins_path.exists() else []
+    return {"sunk_continents": sunk_continents, "veins": veins}
+
+
+# 論点1つに複数の主張が付いたときの陸地判定の決め方（設計書14章、段階6で決定）。
+# miss（蜃気楼）> gap（ずれ）> fact（実像）の順で最も厳しい判定を採用する。
+# 「無いもの」（miss）を多数決で薄めて隠さないため（3.3 の非対称性を陸地の色にも反映する）。
+_VERDICT_SEVERITY = {"miss": 2, "gap": 1, "fact": 0}
+
+
+def _verdict_severity(claim: dict) -> int:
+    """判定語を厳しさの順位へ直す。知らない語なら理由を示して止める。"""
+    try:
+        return _VERDICT_SEVERITY[claim["verdict"]]
+    except KeyError:
+        raise SystemExit(
+            f"主張 {claim.get('id')} の判定 '{claim.get('verdict')}' は使えません。"
+            f"使えるのは {' / '.join(_VERDICT_SEVERITY)} だけです（設計書14章、段階1で統一）。"
+        ) from None
+
+
+def issue_verdict(issue_id: str, claims: list[dict]) -> tuple[str | None, list[dict]]:
+    matched = [c for c in claims if issue_id in c.get("issue_ids", [])]
+    if not matched:
+        return None, []
+    worst = max(matched, key=_verdict_severity)
+    return worst["verdict"], matched
 
 
 # ---------------------------------------------------------------- 本体
@@ -141,28 +179,94 @@ def build(topic: str) -> dict:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text())
     t = themes["themes"][topic] if "themes" in themes else themes[topic]
 
-    sample_file = ROOT / t["sample_file"]
-    all_recs = json.loads(sample_file.read_text())
-    recs = load_records(sample_file)
-    n_op = len(recs)
+    public = load_public_theme(topic)
+    ocean = load_ocean_ledger(topic)
+    claim_verification = public["claim_verification"]
+
+    n_op = public["opinion_count"]
 
     stances = [s["key"] for s in cfg["stances"]]
     issues_cfg = {i["key"]: i for i in cfg["issues"]}
     geo = cfg["geometry"]
 
-    # --- 集計（正典から数え直す。設定ファイルに件数を書かない）
+    # --- 集計（公開JSONから読む。設定ファイルにも生成器にも件数を書かない）
+    # 論点も立場も、結ぶのは管理番号（id）だけにする。表示文言（label）では結ばない。
+    # label で結ぶと、公開側の言い換え1つで件数が黙って欠け、陸地の色が変わる。
+    id_to_key = {ic["id"]: k for k, ic in issues_cfg.items()}
+    unknown_issues = [pi["id"] for pi in public["issues"] if pi["id"] not in id_to_key]
+    if unknown_issues:
+        raise SystemExit(
+            "公開JSONに、設定ファイルへ未登録の論点があります:\n"
+            + "".join(f"  - {i}\n" for i in unknown_issues)
+            + f"configs/planet/{topic}.yaml の issues へ、この id と key・icon を追記してください。\n"
+            "（黙って捨てると、新しい論点が画面から永久に消え、合計も合わなくなります。\n"
+            " vote_issue_order は過去の投票の意味が変わるため並べ替えないこと）"
+        )
+
+    stance_id_to_key = {}
+    for sc in cfg["stances"]:
+        if "id" not in sc:
+            raise SystemExit(
+                f"configs/planet/{topic}.yaml の立場「{sc['key']}」に id がありません。"
+                "公開JSONの stances[].id を書いてください（集計は id で結びます）。"
+            )
+        stance_id_to_key[sc["id"]] = sc["key"]
+    public_stance_ids = {s["id"] for pi in public["issues"] for s in pi["stances"]}
+    unknown_stances = sorted(public_stance_ids - set(stance_id_to_key))
+    if unknown_stances:
+        raise SystemExit(
+            "公開JSONに、設定ファイルへ未登録の立場があります:\n"
+            + "".join(f"  - {i}\n" for i in unknown_stances)
+            + f"configs/planet/{topic}.yaml の stances へ id を追記してください。"
+        )
+    unused_stances = [sid for sid in stance_id_to_key if sid not in public_stance_ids]
+    if unused_stances:
+        # 件数0の立場なのか、id の書き間違いなのかは機械では区別できない。捨てずに知らせる。
+        print("注意: 公開JSONに1件も現れない立場があります（件数0か、id の誤り）: "
+              + ", ".join(unused_stances))
+
     counts: dict[str, int] = {}
     cross: dict[str, dict[str, int]] = {}
     inten: dict[str, dict[str, int]] = {}
-    for c in recs:
-        k = c.get("main_issue")
-        if k not in issues_cfg:
-            k = "その他"
-        counts[k] = counts.get(k, 0) + 1
-        cross.setdefault(k, {}).setdefault(c.get("stance"), 0)
-        cross[k][c.get("stance")] += 1
-        inten.setdefault(k, {}).setdefault(c.get("intensity"), 0)
-        inten[k][c.get("intensity")] += 1
+    for pub_issue in public["issues"]:
+        k = id_to_key[pub_issue["id"]]
+        counts[k] = pub_issue["count"]
+        cross[k] = {stance_id_to_key[s["id"]]: s["count"] for s in pub_issue["stances"]}
+        inten[k] = {i["id"]: i["count"] for i in pub_issue["intensities"]}
+
+    # 不変条件: 論点別の合計＝公開JSONの意見数（画面の合計が合わない状態で出さない）
+    assigned = public["issue_assigned_count"]
+    if sum(counts.values()) != assigned:
+        raise SystemExit(
+            f"論点別の合計 {sum(counts.values())} が公開JSONの issue_assigned_count {assigned} と違います。"
+        )
+    if assigned != n_op:
+        raise SystemExit(
+            f"公開JSONの issue_assigned_count {assigned} と opinion_count {n_op} が違います。"
+            "面積と比率の母数が食い違うため生成しません。"
+        )
+
+    # --- 海面下（指摘2）: 台帳の母数は「編集部が確認した時点」の意見数。
+    # 現在の意見数と違えば印を付けて知らせる（黙って今の数字へ差し替えない）。
+    # 件数 sns_count は人が本文を読んで確定した値なので、機械で数え直さない。
+    sunk_continents = []
+    for item in ocean["sunk_continents"]:
+        item = dict(item)
+        item["opinion_count_now"] = n_op
+        item["base_stale"] = item.get("sns_base") != n_op
+        sunk_continents.append(item)
+    stale_ids = [i["id"] for i in sunk_continents if i["base_stale"]]
+    if stale_ids:
+        print("注意: 沈んだ大陸の母数が確認時点のままです（増えた分の読み直しが要る）: "
+              + ", ".join(stale_ids))
+
+    # --- 地下水脈（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
+    for vein in ocean["veins"]:
+        unknown = [i for i in vein.get("issue_ids", []) if i not in id_to_key]
+        if unknown:
+            raise SystemExit(
+                f"地下水脈 {vein['id']} が、設定ファイルに無い論点 {', '.join(unknown)} を指しています。"
+            )
 
     keys = [k for k in issues_cfg if counts.get(k)]
     keys.sort(key=lambda k: -counts[k])
@@ -264,6 +368,7 @@ def build(topic: str) -> dict:
 
         st = cross.get(k, {})
         top = max(stances, key=lambda s: st.get(s, 0))
+        verdict, matched_claims = issue_verdict(ic["id"], claim_verification["claims"])
         issues.append({
             "id": ic["id"],
             "key": k,
@@ -281,6 +386,9 @@ def build(topic: str) -> dict:
             "center": centers[i].tolist(),
             "centroid": cents[i].tolist(),
             "sub": sub,
+            "verdict": verdict,
+            "claims": matched_claims,
+            "veins": [v["id"] for v in ocean["veins"] if ic["id"] in v.get("issue_ids", [])],
         })
 
     return {
@@ -293,8 +401,7 @@ def build(topic: str) -> dict:
         "sample_period": t["sample_period"],
         "source_label": cfg["source_label"],
         "totals": {
-            "collected": len(all_recs),
-            "relevant": sum(1 for r in all_recs if (r.get("classification") or {}).get("is_relevant")),
+            "collected": public["collected_count"],
             "opinions": n_op,
         },
         "elevation_formula": {
@@ -302,12 +409,19 @@ def build(topic: str) -> dict:
             "p0": round(p0, 4), "k": kk, "max_pct": geo["elevation_max"],
         },
         "min_area_pct": geo["min_area_pct"],
-        "stances": [dict(s, count=sum(1 for c in recs if c.get("stance") == s["key"]))
+        "stances": [dict(s, count=sum(cross.get(k, {}).get(s["key"], 0) for k in keys))
                     for s in cfg["stances"]],
         "vote_issue_order": cfg["vote_issue_order"],
         "modes": modes,
         "weights_by_mode": weights_by_mode,
         "issues": issues,
+        "ocean": {
+            "claim_status": claim_verification["status"],
+            "checked_on": claim_verification["checked_on"],
+            "reviewer_type": claim_verification["reviewer_type"],
+            "sunk_continents": sunk_continents,
+            "veins": ocean["veins"],
+        },
     }
 
 
@@ -339,7 +453,15 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
         if s["status"] == "reread" and s["unread_count"] > 0.4 * i["count"]:
             ng.append(f"「{i['label']}」の未読が{s['unread_count']}件（全{i['count']}件の4割超）")
 
-    # 4. テーマ固有の言葉が入っていること（共通テンプレだけのページを出さない）
+    # 4. 海面下の母数が現在の意見数と一致していること（指摘2）
+    for item in data["ocean"]["sunk_continents"]:
+        if item.get("base_stale"):
+            ng.append(
+                f"沈んだ大陸「{item['id']}」の母数が確認時点の{item.get('sns_base')}件のまま"
+                f"（現在は{item.get('opinion_count_now')}件）。増えた分を読み直すこと"
+            )
+
+    # 5. テーマ固有の言葉が入っていること（共通テンプレだけのページを出さない）
     if not cfg.get("question"):
         ng.append("テーマ固有の『中心の問い』が設定されていない")
     return ng

@@ -8,20 +8,26 @@ question: 学校の部活動を地域へ移すべきか
 source_label: Yahoo!リアルタイム検索
 
 # 立場（表示順・色・地表パターン）。色だけに頼らないためパターンを併用する。
+# id は公開JSON（data/public/themes/{theme}.json）の stances[].id と一致させる。
+# 集計はこの id だけで結ぶ（label は画面に出す文言なので、言い換えても集計が変わらない）。
 stances:
   - key: 移行支持
+    id: bukatsu-chiiki-transition-support
     label: 移行支持
     color: "#2F8F83"
     pattern: plain
   - key: 慎重・反対
+    id: bukatsu-chiiki-cautious
     label: 慎重・反対
     color: "#7D5BA6"
     pattern: diagonal
   - key: 条件付き・改善要求
+    id: bukatsu-chiiki-conditional
     label: 条件付き・改善要求
     color: "#D9A520"
     pattern: dots
   - key: 中立・情報
+    id: bukatsu-chiiki-neutral
     label: 中立・情報
     color: "#8B9199"
     pattern: mesh
