@@ -189,7 +189,7 @@ python3 scripts/build_admin_dashboard.py
 | `GROWTH.yaml` `kpi.snapshots` | KPI取得の直後（週1） |
 | `GROWTH.yaml` `activity_log` | サイト改善を進めた直後 |
 | `quality/research/status.yaml` `last_verified` | 一次資料メモを再確認した直後（`.claude/skills/primary-research/SKILL.md`） |
-| `TASK_BOARD.md` | 課題を見つけた時・片づけた時 |
+| `TASK_BOARD.md` と `tasks/task-{番号}.md` | 課題を見つけた時・片づけた時。索引は6欄1行ずつ、経緯は詳細ファイルへ（`python3 scripts/verify_task_board.py` で検査） |
 
 X日次スキルは `GROWTH.yaml` を読むだけで書かないため、
 `recurring.x-posting.last_run` の更新が誰の担当でもなくなっていた（2026-08-23 時点で実態と6日ずれていた）。

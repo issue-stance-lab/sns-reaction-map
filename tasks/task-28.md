@@ -1,0 +1,26 @@
+# 課題28: sample_period の unknown を埋める
+
+**状態**: 表示は対応済み（2026-08-13）。値の復元は未着手
+**概要**: S1 で THEMES.yaml に `sample_period`（収集期間）を追加したが、一部テーマが `unknown` のまま
+**2026-08-13 訂正**: 対象は**6テーマではなく4テーマ**。bukatsu-chiiki・constitutional-amendment・
+school-nickname-ban・henoko-student-accident はその後に埋まっており、記述が古かった
+**対象（実測4件）**: ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi
+**2026-08-13 対応済み**: 公開ページの表示を「取得期間: 記録なし」から
+「未記録 — 収集期間の記録を始める前に公開したテーマ」へ変更した。信頼性の表示（代表投稿の確認）の
+すぐ隣に「記録なし」と並ぶのが最も印象が悪かったため、理由を書く形にした。
+ラベルは `scripts/x_embed.py` の `period_label()` に集約（それまで4か所に散っていた）
+**残作業**: 値そのものの復元。**収集期間の始まりは復元できない**。正典に日付フィールドが無く、
+`data/verification/updates/` の記録も最新の収集回しか残っていない
+（ai-copyright 2026-08-03・08-09 / bike-blue-ticket 08-10（未昇格）/ takaichi 08-07 /
+elderly-license-revocation 記録なし）。推測で埋めないこと
+**手順**: 各テーマの `sample_file` のレコード内タイムスタンプ、または収集時の作業ログ・git log・`social-samples/*.md` から期間を特定する。**特定できない場合は推測で埋めず `unknown` のまま残し、ページ側で「取得期間: 記録なし」と正直に表示する**
+**2026-08-02 対応済み（3件）**: `sample_file` の `fetched_at` が全件そろっている constitutional-amendment（2026-06-20〜2026-07-25）/ school-nickname-ban（2026-06-22〜2026-07-12）/ henoko-student-accident（2026-06-14〜2026-06-27）を確定し、ページの「取得期間: 記録なし」も書き換えた。bukatsu-chiiki はパイロットで確定済み。
+**全11テーマ再検査**: 同じ基準を既に期間が入っていたテーマにも適用した。takaichi（276件中140件欠損）/ fukushuto（255件全件欠損）も `unknown` へ戻し、koshitsu-tenpakai は正典347件が全て7/26収集なので `2026-07-26` に修正した。現在の `unknown` は ai-copyright / bike-blue-ticket / elderly-license-revocation / takaichi / fukushuto の5件。
+**機械検査**: `data/verification/sample-periods.json` に総数・日付あり・欠損・最小日・最大日だけを保存し、`scripts/verify_sample_periods.py` で全11テーマを検査する。個別投稿の取得日は公開しない。
+**別件（課題29の一例）**: ai-copyright は `sample_period: "2026-06-10〜2026-07-26"` と書いてあったが、`sample_file` の `fetched_at` は最新が 2026-07-12（339件は欠損）。7/26に収集した452件は `sample_file` に入っておらず別ファイルにあるため、根拠のない期間を公開し続けず `unknown`／「記録なし」へ戻した。次回更新で累積を正典へ統合した時点で確定する。
+
+**2026-08-16 対応**: ai-copyright の収集期間はオーナー確認により `2026-06-27` と登録した。
+正典には取得日欠損が339件あるため、`sample_period_source: owner_confirmed` を明示し、
+自動算出値と混同しない形で検査する。
+
+**注意**: `sample_source` は全11テーマ「Yahooリアルタイム検索」で埋まっている。検索語（クエリ）は未記録なので、A-4 で表示するなら `sample_queries` フィールドの追加も併せて検討する
