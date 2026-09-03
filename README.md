@@ -68,7 +68,8 @@ archive/             運用から外れた文書・実験・スクリプト
 | [DATA_REFRESH.md](DATA_REFRESH.md) | データ更新の正典。`refresh_topic.py` の使い方と公開ゲート |
 | [THEMES.yaml](THEMES.yaml) | テーマ台帳（単一の真実源） |
 | [GROWTH.yaml](GROWTH.yaml) | グロース指標の実測値 |
-| [TASK_BOARD.md](TASK_BOARD.md) | テーマ横断の課題 |
+| [TASK_BOARD.md](TASK_BOARD.md) | テーマ横断の課題の索引（1課題数行） |
+| [tasks/](tasks/) | 課題ごとの詳細。`tasks/task-{番号}.md`。担当する課題のものだけ開く |
 | [X_POSTING_GUIDE.md](X_POSTING_GUIDE.md) | X（Twitter）投稿の型とルール |
 | [WRITING_VOICE.md](WRITING_VOICE.md) | 文体の正典。ペルソナ（社内専用）とAI臭の禁止。Website / X / note 共通 |
 | [FACT_CHECK_GUIDE.md](FACT_CHECK_GUIDE.md) | 投稿の主張を一次資料と突き合わせる手順と発注文 |
@@ -140,5 +141,6 @@ python3 -m unittest discover -s tests -v
 - `archive/planning-2026-06/` — 2026-06 の企画段階の文書。**編集者がURLを登録しSubstackで配信する**という、いまとは別のサービス構想。現在の運用とは無関係
 - `archive/pipeline-ollama/` — ローカル Ollama で分類していた時代の手順書
 - `archive/prompts/` — 実行済みのワーカーAI発注書（2026-06〜07）。結果は THEMES.yaml と TASK_BOARD.md に記録済み
-- `archive/TASK_BOARD_ARCHIVE.md` — 完了した課題
+- `archive/TASK_BOARD_ARCHIVE.md` — 完了した課題の一覧
+- `archive/tasks/` — 完了した課題の詳細（2026-09-03 に索引から移した10件）
 - `scripts/archive/ollama-era/` — Ollama 時代の分類スクリプト
