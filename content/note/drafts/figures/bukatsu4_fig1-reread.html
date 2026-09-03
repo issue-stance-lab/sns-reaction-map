@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=800,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--page:#07111E;--card-1:#0C1E35;--card-2:#0A1928;--card-3:#071522;--ink:#F0F4FF;--ink-70:rgba(240,244,255,.70);--ink-45:rgba(240,244,255,.45);--teal:#2DD4BF;--amber:#FBBF24;--gray:#64748B}
+    *{box-sizing:border-box}html,body,.canvas{width:800px;height:1130px;margin:0;overflow:hidden}
+    body{font-family:'Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;background:var(--page);color:var(--ink)}
+    .canvas{position:relative;padding:32px 32px 0;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:radial-gradient(circle at 88% 8%,rgba(45,212,191,.12),transparent 30%),repeating-linear-gradient(0deg,transparent 0 47px,rgba(255,255,255,.025) 47px 48px),repeating-linear-gradient(90deg,transparent 0 47px,rgba(255,255,255,.025) 47px 48px),linear-gradient(145deg,var(--card-1) 0%,var(--card-2) 60%,var(--card-3) 100%)}
+    h1{margin:0;font-size:42px;line-height:1.25;font-weight:700;letter-spacing:-.035em}
+    .lead{margin:12px 0 30px;font-size:25px;line-height:1.32;color:var(--ink-70)}
+    .row{position:relative;height:80px;margin-bottom:18px}.row:last-of-type{margin-bottom:0}
+    .label{height:34px;font-size:27px;line-height:1.2;font-weight:500;letter-spacing:-.045em;white-space:nowrap}
+    .bar{position:absolute;left:0;top:34px;width:420px;height:44px;background:rgba(255,255,255,.06)}
+    .fill{height:44px;border-radius:0 4px 4px 0}
+    .teal{background:var(--teal)}.amber{background:var(--amber)}.ink70{background:var(--ink-70)}.gray{background:var(--gray)}
+    .count{position:absolute;left:436px;top:32px;font-size:42px;line-height:1.1;font-weight:900;letter-spacing:-.04em;white-space:nowrap}
+    .hi .label{color:var(--amber)}.hi .count{color:var(--amber)}
+    .callout{position:absolute;left:566px;top:636px;width:202px}
+    .callout strong{display:block;color:var(--amber);font-size:33px;line-height:1.1;font-weight:900;letter-spacing:-.05em}
+    .callout span{display:block;margin-top:8px;color:var(--ink-70);font-size:21px;line-height:1.4}
+    .foot{position:absolute;left:32px;bottom:26px;width:560px;font-size:22px;line-height:1.3;color:var(--ink-45);letter-spacing:-.035em}
+    .credit{position:absolute;right:28px;bottom:28px;font-size:22px;color:var(--ink-45);letter-spacing:.08em}
+  </style>
+</head>
+<body>
+  <main class="canvas" aria-label="制度と教育的意義を語る471件の内訳">
+    <h1>制度と教育的意義を語る471件の内訳</h1>
+    <p class="lead">編集部が471件すべての本文を読んで分類しました</p>
+    <section aria-label="横棒グラフ">
+      <div class="row"><div class="label">決まっていないことの指摘</div><div class="bar"><div class="fill teal" style="width:396px"></div></div><div class="count">84件</div></div>
+      <div class="row"><div class="label">進まない理由を誰かの責任に</div><div class="bar"><div class="fill teal" style="width:373px"></div></div><div class="count">79件</div></div>
+      <div class="row"><div class="label">子どもの入り口が失われる懸念</div><div class="bar"><div class="fill ink70" style="width:283px"></div></div><div class="count">60件</div></div>
+      <div class="row"><div class="label">部活の教育的意義そのものを疑う</div><div class="bar"><div class="fill ink70" style="width:255px"></div></div><div class="count">54件</div></div>
+      <div class="row"><div class="label">具体の自治体・計画・日程</div><div class="bar"><div class="fill gray" style="width:236px"></div></div><div class="count">50件</div></div>
+      <div class="row hi"><div class="label">いまの学年・時期の当事者として</div><div class="bar"><div class="fill amber" style="width:142px"></div></div><div class="count">30件</div></div>
+      <div class="row"><div class="label">子どもの選択肢が増える期待</div><div class="bar"><div class="fill gray" style="width:118px"></div></div><div class="count">25件</div></div>
+      <div class="row"><div class="label">その他</div><div class="bar"><div class="fill gray" style="width:420px"></div></div><div class="count">89件</div></div>
+      <div class="callout"><strong>30件のうち<br>25件が慎重・反対</strong><span>移行を支持する側からは1件</span></div>
+    </section>
+    <div class="foot">※意見と判定した1,139件のうち、論点が「制度・移行プロセス」「教育的意義・機会」の471件。<br>1件は1区分にのみ数えています。キーワード抽出は使っていません</div>
+    <div class="credit">SNS反応まっぷ</div>
+  </main>
+</body>
+</html>
