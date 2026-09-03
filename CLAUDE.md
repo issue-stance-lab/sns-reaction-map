@@ -8,7 +8,9 @@
 データ更新（収集・分類・公開）は `DATA_REFRESH.md` を正典とする。
 グロースの台帳は `GROWTH.yaml`。
 
-テーマ横断の課題一覧は `TASK_BOARD.md`、完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` を参照。
+テーマ横断の課題は `TASK_BOARD.md` が索引（1課題数行）、`tasks/task-{番号}.md` が詳細。
+**索引だけを読み、担当が決まった課題の詳細ファイルだけを開くこと。**
+全部の詳細を読み込まない。完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` と `archive/tasks/`。
 
 ファイルを書き換える作業は、着手前に専用の作業ツリーを作ること（`OPERATIONS.md` ⓪）。
 共有ツリーを複数セッションで使うと、片方の `git checkout` がもう片方のファイルを消す。

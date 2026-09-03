@@ -28,6 +28,26 @@
 
 ---
 
+## 完了済み課題（2026-08〜09、詳細ファイルつき）
+
+移動日: 2026-09-03。索引（`TASK_BOARD.md`）を小さく保つため、完了した課題は本文ごとここへ移す。
+本文は `archive/tasks/task-{番号}.md` に残してあるので、経緯を追いたいときだけ開けばよい。
+
+| 課題 | 担当 | 完了日 | 概要 | 詳細 |
+|------|------|--------|------|------|
+| 課題29: ページ内件数表示と sample_file の突き合わせ | Claude Code | 2026-08-08 | 全11テーマの論点件数を正典 `sample_file` から再現できる状態にし、`data/issue-counts/` を削除 | [archive/tasks/task-29.md](tasks/task-29.md) |
+| 課題31: 「世論の潮目」ウィジェットの合成データ残存 | Claude Code | 2026-08-12 | koshitsu-tenpakai のウィジェットを実データへ差し替え | [archive/tasks/task-31.md](tasks/task-31.md) |
+| 課題34: ページ更新スクリプトが再実行できないテーマの整備 | Claude Code | 2026-08-18 | 11テーマ全件をadapter化（同じ入力で2回実行しても差分が出ない） | [archive/tasks/task-34.md](tasks/task-34.md) |
+| 課題35: デザインシステム同期の実験が宙に浮いている | Claude Code | 2026-08-27 | 休止実験として `archive/design-system-experiment/` へ格納 | [archive/tasks/task-35.md](tasks/task-35.md) |
+| 課題36: 放置された作業ツリー3本 | Claude Code | 2026-08-08 | 3本とも削除。中間成果物4件は担当ブランチへ保全 | [archive/tasks/task-36.md](tasks/task-36.md) |
+| 課題39: ポータルのカウントダウンが毎日ズレる | Claude Code | 2026-08-10 | 生成側で日付を計算するよう修正 | [archive/tasks/task-39.md](tasks/task-39.md) |
+| 課題41: AI生成画像の制作方針と問い合わせ窓口を公開する | Claude Code | 2026-08-09 | 方針ページと窓口を公開 | [archive/tasks/task-41.md](tasks/task-41.md) |
+| 課題42: AI生成画像を用途別方針へ移行する | Claude Code | 2026-08-09 | 全11テーマのヒーロー画像を統一 | [archive/tasks/task-42.md](tasks/task-42.md) |
+| 課題44: SNS反応マップの共通デザインを再設計する | Claude Code | 2026-08-30 | 課題54へ統合。既存2Dは3D完成までのフォールバックとして維持 | [archive/tasks/task-44.md](tasks/task-44.md) |
+| 課題57: 公開データ基盤と公開承認物の一本化 | Claude Code | 2026-08-31 | 段階4完了。トップページと公開10テーマすべてを公開データ基盤へ接続 | [archive/tasks/task-57.md](tasks/task-57.md) |
+
+---
+
 ## グロース課題（GROWTH.yaml へ移管）
 
 以下の課題はグロースループで管理する。詳細は `GROWTH.yaml` / `GROWTH_LOOP.md` を参照。
@@ -74,6 +94,8 @@
 | 2026-06-24 | Claude Code | Codex | レビュー全6項目対応完了 |
 | 2026-06-24 | Codex | Claude Code | 再レビュー。P3指摘 |
 | 2026-06-24 | Claude Code | Codex | P3対応完了（try/finally化） |
+| 2026-08-15 | Claude | 全員 | **ルート（`issue-stance-lab.github.io/`）は入口。説明を書き足さないこと。** 調査方法・編集方針・数字の読み方は `docs/about.html` に一本化する。ルートは `scripts/build_root_index.py` が正典から生成するので手で編集せず、変更後は `--check` で一致を確認する。読者にとってのトップは `/sns-reaction-map/` 側。詳細は課題48 |
+| 2026-08-30 | Codex | 全員 | **上の2026-08-15ルールは廃止。** `sns-reaction-map.jp/` を唯一のトップにし、`issue-stance-lab/issue-stance-lab.github.io` を唯一の公開専用リポジトリとする。公開物は `docs/` から `scripts/sync_public_site.py` で同期する。詳細は課題48と `quality/designs/domain-migration-2026-08-30.md` |
 
 
 ---

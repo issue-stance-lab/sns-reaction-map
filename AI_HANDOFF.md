@@ -17,7 +17,7 @@
 8. `README.md` — サービスとリポジトリの現状
 9. `OPERATIONS.md` — 定例作業、作業用コピー、遅れの見つけ方
 10. `THEMES.yaml` — 公開テーマと更新工程の単一の真実源
-11. `TASK_BOARD.md` — テーマ横断の課題の正典
+11. `TASK_BOARD.md` — テーマ横断の課題の索引。詳細は `tasks/task-{番号}.md` にあり、担当が決まった課題のものだけ開く
 
 その後、自分の作業に対応する `company/departments/` の部門文書を読む。
 
@@ -99,7 +99,7 @@ Website は SNS の公開投稿サンプルから、次を整理して見せる�
 | 本番反映 | `.claude/skills/release/SKILL.md` |
 | テーマの状態 | `THEMES.yaml` |
 | グロース実測 | `GROWTH.yaml` |
-| テーマ横断課題 | `TASK_BOARD.md` |
+| テーマ横断課題 | `TASK_BOARD.md`（索引）/ `tasks/task-{番号}.md`（詳細） |
 
 ## 9. リポジトリの安全ルール
 
