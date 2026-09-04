@@ -27,7 +27,7 @@
 - `scripts/build_bike_process_sections.py` — 生成スクリプトの作り（`write_provenance_records()` を必ず見る）
 - `data/bike-blue-ticket_claim_posts.json` — 主張ごとの該当投稿IDの形
 - `configs/bike-blue-ticket-reaction-map.json` の `number_provenance` — 数字の出所の登録の仕方
-- `THEMES.yaml` の `bike-blue-ticket` の `notes` に経緯
+- `themes/bike-blue-ticket.md` に経緯
 
 ## 対象テーマの選び方
 
@@ -69,7 +69,7 @@ AdSense審査で、12項目中 Experience（体験・経験）だけがNGでし�
      scripts/build_bike_process_sections.py（特に write_provenance_records()）
      data/bike-blue-ticket_claim_posts.json
      configs/bike-blue-ticket-reaction-map.json の number_provenance
-   THEMES.yaml の bike-blue-ticket の notes に経緯が全部書いてある。
+   themes/bike-blue-ticket.md に経緯が全部書いてある。
 
 ■ 手順
 1. 対象テーマの分類済みデータ（THEMES.yaml の sample_file）を読み、
@@ -105,7 +105,7 @@ AdSense審査で、12項目中 Experience（体験・経験）だけがNGでし�
    HTMLにマーカーコメントを置き、その間だけを差し替える方式にする。
    件数はデータから毎回数え直す。生成後の自己検証を必ず入れる。
    ただし新規に作る前に、既存の生成スクリプトを共有できないかを先に検討し、
-   できない理由があるときだけ新設して、その理由を THEMES.yaml の notes に書く。
+   できない理由があるときだけ新設して、その理由を themes/{テーマ名}.md に書く。
 
 ■ 他ページと同じ形にしないこと（検査で落ちます）
 `python3 scripts/verify_page_originality.py` が、ページ間で同じ文・似すぎた見出しを
@@ -176,7 +176,7 @@ AdSense審査で、12項目中 Experience（体験・経験）だけがNGでし�
 - 該当投稿IDが data/ に保存され、件数がそこから数えられている
 - miss（確認できず）の扱いがオーナーの判断を仰いだうえで決まっている
 - 検査が全部通り、生成スクリプトが再実行可能
-- THEMES.yaml の notes に経緯を追記してある
+- themes/{テーマ名}.md に経緯を追記してある
 実装後、main へのマージはオーナーが行う。マージコマンドを渡して終えること。
 ```
 

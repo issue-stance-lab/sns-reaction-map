@@ -183,7 +183,8 @@ python3 scripts/build_admin_dashboard.py
 
 | 台帳 | 更新するタイミング |
 |---|---|
-| `THEMES.yaml` | データ更新の直後（`DATA_REFRESH.md`） |
+| `THEMES.yaml` | データ更新の直後（`DATA_REFRESH.md`）。工程の状態だけを書く欄で、経緯は `themes/{テーマ名}.md` へ（`python3 scripts/verify_themes_yaml.py` で検査） |
+| `themes/{テーマ名}.md` | テーマの更新・調査の直後。そのテーマの経緯はここが唯一の置き場 |
 | `content/x/posts.md` | X投稿の直後 |
 | `GROWTH.yaml` `recurring.*.last_run` | その定例作業をやった直後。**実際に運用が動いた日**を書く（ループが動いた日ではない） |
 | `GROWTH.yaml` `kpi.snapshots` | KPI取得の直後（週1） |

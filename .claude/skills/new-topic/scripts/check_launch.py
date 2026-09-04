@@ -76,6 +76,12 @@ def check_themes_yaml(slug: str) -> tuple[str | None, str | None]:
         return None, None
     ok("THEMES.yaml", "登録あり")
 
+    notes = ROOT / "themes" / f"{slug}.md"
+    if not notes.exists():
+        ng("themes/{slug}.md".format(slug=slug), "作業記録が無い（経緯はTHEMES.yamlではなくこちらへ書く／課題60）")
+    else:
+        ok(f"themes/{slug}.md", "作業記録あり")
+
     html = scalar(block, "html")
     if not html:
         ng("THEMES.yaml html", "html: が無い")

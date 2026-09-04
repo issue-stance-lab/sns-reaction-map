@@ -106,7 +106,7 @@ node scripts/fetch_yahoo_realtime_node.mjs \
   --output social-samples/{slug}_raw.json --dedupe --wait-ms 6000
 ```
 
-重複判定は tweet_id → URL内status ID → URL → 本文ハッシュの順。除外した件数を控える（THEMES.yaml の `notes` に書く）。
+重複判定は tweet_id → URL内status ID → URL → 本文ハッシュの順。除外した件数を控える（`themes/{slug}.md` に書く）。
 
 **`fetched_at` が全件に入っていることを確認する。** ここが欠けると `sample_period`（取得期間）を
 後から復元できず `unknown` のまま残る。現在5テーマが `unknown` で埋められないままになっている（課題28）。
@@ -201,6 +201,8 @@ python3 .claude/skills/new-topic/scripts/check_launch.py {slug}
 このスクリプトが見るのは、過去に実際に抜けた項目だけ。中身は次のとおり。
 
 1. `THEMES.yaml` にテーマを追加（`page_update_mode` と `collect_at` を必ず入れる）
+   — あわせて `themes/{slug}.md` を作り、経緯はそちらへ書く
+   （`python3 scripts/verify_themes_yaml.py` が無いと落とす）
 2. `configs/site-cases.json` と `configs/theme-seo.json` の**両方**に登録
    — **URL集合が一致しないと `apply_theme_trust.py` が落ちる**
 3. `docs/sitemap.xml` に追加
@@ -295,8 +297,11 @@ document.getElementById('smCanvasHeat').getContext('2d').getImageData(300,300,1,
 （2026-08-08 に ai-copyright と takaichi が公開中のまま後退した）。実行したら
 `git status --porcelain` を見て、対象外の `docs/*.html` が出ていたら `git restore` する。
 
-**`THEMES.yaml` の `notes` は長くていい。** 次に触るAIが読む唯一の経緯なので、
+**経緯は `themes/{slug}.md` に書く。長くていい。** 次に触るAIが読む唯一の経緯なので、
 使ったクエリ数・重複除外件数・スタンス構成を選んだ理由・テンプレート元のテーマを書く。
+**`THEMES.yaml` には書かない。** あちらは毎セッション読まれる登録簿で、
+書き足した分だけ実際の作業に使える余力が減る（課題60）。
+`python3 scripts/verify_themes_yaml.py` が `notes` 欄の復活を弾く。
 
 **pytest は入っていない。** `python3 -m unittest discover -s tests` で動かす。
 
@@ -316,6 +321,7 @@ document.getElementById('smCanvasHeat').getContext('2d').getImageData(300,300,1,
 - [ ] `supabase functions deploy` をオーナーに依頼した
 - [ ] ルートリポジトリの一覧に追記した
 - [ ] `THEMES.yaml` に `collect_at`（次回収集予定）を入れた
+- [ ] `themes/{slug}.md` に経緯を書いた（`verify_themes_yaml.py` が通る）
 - [ ] 作業ツリーを片付けた
 
 ## 完了報告に含めること
