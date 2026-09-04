@@ -35,18 +35,18 @@ def public_fixture() -> dict:
 class PlanetDataTest(unittest.TestCase):
     def setUp(self) -> None:
         self.public = public_fixture()
-        self.ledger = bpd.load_ocean_ledger(TOPIC)
+        self.ledger = bpd.load_ocean_layer(TOPIC)
         self._orig_public = bpd.load_public_theme
-        self._orig_ledger = bpd.load_ocean_ledger
+        self._orig_ledger = bpd.load_ocean_layer
 
     def tearDown(self) -> None:
         bpd.load_public_theme = self._orig_public
-        bpd.load_ocean_ledger = self._orig_ledger
+        bpd.load_ocean_layer = self._orig_ledger
 
     def build(self, public: dict | None = None, ledger: dict | None = None) -> dict:
         bpd.load_public_theme = lambda topic, _p=public or self.public: copy.deepcopy(_p)
         if ledger is not None:
-            bpd.load_ocean_ledger = lambda topic, _l=ledger: copy.deepcopy(_l)
+            bpd.load_ocean_layer = lambda topic, _l=ledger: copy.deepcopy(_l)
         return bpd.build(TOPIC)
 
     # ---------------------------------------------------------------- 基本
@@ -264,3 +264,107 @@ class PlanetPageTest(unittest.TestCase):
     def test_rebuilding_gives_the_same_page(self):
         again = bpd.render_page(bpd.stabilize(bpd.build(TOPIC)), self.template, "null")
         self.assertEqual(self.page, again)
+
+
+class PlanetOceanPageTest(unittest.TestCase):
+    """段階7-B: 着陸パネルの「資料との照合」と「海面より下」が画面に出ること。
+
+    段階6で生成器が `ocean` を出していたのに、テンプレートは一度も読んでいなかった
+    （`grep ocean` が0件）。設計書4章の画面構造3・4が画面から丸ごと落ちていたので、
+    出ていることをテストで固定する。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes" / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.page = bpd.render_page(cls.data, cls.template, "null")
+        cls.static = re.sub(r"<script.*?</script>", "", cls.page, flags=re.S)
+
+    def test_template_keeps_every_insertion_point(self):
+        # 差し込み口を消すと画面からセクションが丸ごと消える。消えたら落ちるようにする
+        for mark in ("/*__PLANET_DATA__*/null", "<!--__QUESTION__-->", "<!--__CAUTION__-->",
+                     "<!--__META__-->", "<!--__FALLBACK__-->", "<!--__OCEAN__-->",
+                     "<!--__EDITORIAL__-->"):
+            self.assertIn(mark, self.template, f"差し込み口 {mark} が消えている")
+        with self.assertRaises(bpd.TemplateError):
+            bpd.render_page(self.data, self.template.replace("<!--__OCEAN__-->", ""), "null")
+
+    def test_the_planet_is_redrawn_when_its_width_changes(self):
+        # 文字の大きさは canvas の表示幅から決めている。初回の render は
+        # レイアウトが決まる前に走ることがあり、375px で文字が巨大なまま残っていた
+        self.assertIn("ResizeObserver", self.template)
+        self.assertIn("observe(cv)", self.template)
+
+    def test_verdict_labels_are_fixed(self):
+        # 課題54の「未着手」5: verdict と表示文言の対応を固定するテストが無かった
+        self.assertEqual(set(bpd.VERDICT_LABELS), {"fact", "gap", "miss"})
+        self.assertEqual(bpd.verdict_label("fact"), "実像")
+        self.assertEqual(bpd.verdict_label("gap"), "ずれ")
+        self.assertEqual(bpd.verdict_label("miss"), "蜃気楼")
+        # miss を「嘘」「誤り」と断定しない（設計書3.3の読者への注意）
+        self.assertNotIn("嘘", bpd.VERDICT_LABELS["miss"][1])
+        with self.assertRaises(SystemExit):
+            bpd.verdict_label("unknown")
+
+    def test_claims_appear_with_their_verdict(self):
+        for issue in self.data["issues"]:
+            for claim in issue.get("claims") or []:
+                self.assertIn(claim["claim"], self.static, claim["id"])
+                self.assertIn(bpd.verdict_label(claim["verdict"]), self.static)
+                for src in claim["sources"]:
+                    self.assertIn(src["url"], self.static, claim["id"])
+
+    def test_ocean_section_shows_every_item(self):
+        ocean = self.data["ocean"]
+        self.assertIn('id="ocean"', self.static)
+        for item in ocean["sunk_continents"]:
+            self.assertIn(item["topic"], self.static, item["id"])
+            self.assertIn(item["life_impact"], self.static, item["id"])
+            # 0件も「0件」と母数つきで出す（設計書3.3.2）
+            self.assertIn(f'{item["sns_count"]}件', self.static)
+            self.assertIn(f'意見{item["sns_base"]}件', self.static)
+        for vein in ocean["veins"]:
+            self.assertIn(vein["shared_concern"], self.static, vein["id"])
+            self.assertIn(vein["diverging_reason"], self.static, vein["id"])
+
+    def test_ocean_is_left_empty_when_nobody_has_read_the_sources(self):
+        # 台帳が無いテーマは推測で埋めない（設計書3.3）
+        blank = copy.deepcopy(self.data)
+        blank["ocean"] = {"claim_status": "not_started", "checked_on": None,
+                          "reviewer_type": None, "ocean_status": "not_started",
+                          "ocean_checked_on": None, "ocean_reviewer_type": None,
+                          "sunk_continents": [], "veins": []}
+        html = bpd.static_ocean(blank)
+        self.assertIn("まだ編集部が一次資料を読んで", html)
+        self.assertNotIn("沈んだ大陸 —", html)
+
+    def test_internal_field_names_do_not_reach_the_reader(self):
+        text = re.sub(r"<[^>]+>", " ", self.static)
+        for token in ("issue_bucket", "match_rule", "machine_hits", "tweet_id",
+                      "representative_posts", "classification"):
+            self.assertNotIn(token, text, f"読者向けの本文に内部の項目名『{token}』が出ている")
+
+    def test_editorial_summary_is_on_the_page(self):
+        # 設計書4章の5。論点をまたいだ整理が画面から落ちていないこと
+        ed = self.data["editorial"]
+        self.assertEqual(ed["status"], "complete")
+        self.assertIn('id="editorial"', self.static)
+        for finding in ed["findings"]:
+            self.assertIn(finding["text"], self.static, finding["id"])
+        for heading in bpd.EDITORIAL_HEADINGS.values():
+            self.assertIn(heading, self.static)
+
+    def test_editorial_is_left_empty_when_nothing_is_written(self):
+        blank = copy.deepcopy(self.data)
+        blank["editorial"] = {"status": "not_started", "checked_on": None,
+                              "reviewer_type": None, "findings": []}
+        html = bpd.static_editorial(blank)
+        self.assertIn("まだです", html)
+        for heading in bpd.EDITORIAL_HEADINGS.values():
+            self.assertNotIn(heading, html)
+
+    def test_landing_panel_html_exists_once(self):
+        # 3D版のJSは静的HTMLを複製して使う。生成HTMLに同じ塊が2つあってはいけない
+        for issue in self.data["issues"]:
+            self.assertLessEqual(self.static.count(f'id="extras-{issue["id"]}"'), 1)

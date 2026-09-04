@@ -135,17 +135,42 @@ def load_public_theme(topic: str) -> dict:
     return json.loads(path.read_text())
 
 
-def load_ocean_ledger(topic: str) -> dict:
-    """沈んだ大陸・地下水脈は `data/verification/` の確認台帳から接続する。
+def load_ocean_layer(topic: str) -> dict:
+    """沈んだ大陸・地下水脈は公開データ契約（`data/public/themes/`）から読む。
 
-    台帳が無い論点・テーマは推測で埋めず、海面下を空のまま返す
-    （工程表「台帳に無い論点の海面下が空で出る」）。
+    確認台帳（`data/verification/`）を直接読むと、投稿IDや機械一致の作業記録まで
+    惑星データへ入り、そのまま試作HTMLへ埋め込まれる。公開契約を通すことで、
+    人が一次資料を読んで確定したことだけが画面へ出る。
+
+    台帳が無いテーマは `status: not_started` で空のまま返る（推測で埋めない。
+    工程表「台帳に無い論点の海面下が空で出る」）。
     """
-    sc_path = ROOT / "data" / "verification" / f"{topic}-sunk-continents.json"
-    veins_path = ROOT / "data" / "verification" / f"{topic}-veins.json"
-    sunk_continents = json.loads(sc_path.read_text())["items"] if sc_path.exists() else []
-    veins = json.loads(veins_path.read_text())["items"] if veins_path.exists() else []
-    return {"sunk_continents": sunk_continents, "veins": veins}
+    return load_public_theme(topic).get(
+        "ocean_layer",
+        {"status": "not_started", "checked_on": None, "reviewer_type": None,
+         "sunk_continents": [], "veins": []},
+    )
+
+
+# 判定（fact/gap/miss）を読者向けの文言へ直す（設計書3.3の表）。
+# 10テーマ共通の言葉にする。テーマごとに言い換えると、同じ判定が別物に見える。
+# miss を「嘘」と書かない。「確認できなかった」で止める（3.3の読者への注意）。
+VERDICT_LABELS = {
+    "fact": ("実像", "一次資料でも確認できました。「正しい意見」という意味ではありません。"),
+    "gap": ("ずれ", "部分的には合っていますが、一次資料とずれている点があります。"),
+    "miss": ("蜃気楼", "一次資料では確認できませんでした。誤りと決まったわけではありません。"),
+}
+
+
+def verdict_label(verdict: str) -> str:
+    try:
+        return VERDICT_LABELS[verdict][0]
+    except KeyError:
+        raise SystemExit(
+            f"判定 '{verdict}' に表示文言がありません。"
+            f"使えるのは {' / '.join(VERDICT_LABELS)} だけです（設計書3.3）。"
+        ) from None
+
 
 
 # 論点1つに複数の主張が付いたときの陸地判定の決め方（設計書14章、段階6で決定）。
@@ -181,7 +206,7 @@ def build(topic: str) -> dict:
     t = themes["themes"][topic] if "themes" in themes else themes[topic]
 
     public = load_public_theme(topic)
-    ocean = load_ocean_ledger(topic)
+    ocean = load_ocean_layer(topic)
     claim_verification = public["claim_verification"]
 
     n_op = public["opinion_count"]
@@ -251,7 +276,7 @@ def build(topic: str) -> dict:
     # 現在の意見数と違えば印を付けて知らせる（黙って今の数字へ差し替えない）。
     # 件数 sns_count は人が本文を読んで確定した値なので、機械で数え直さない。
     sunk_continents = []
-    for item in ocean["sunk_continents"]:
+    for item in ocean.get("sunk_continents", []):
         item = dict(item)
         item["opinion_count_now"] = n_op
         item["base_stale"] = item.get("sns_base") != n_op
@@ -262,7 +287,7 @@ def build(topic: str) -> dict:
               + ", ".join(stale_ids))
 
     # --- 地下水脈（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
-    for vein in ocean["veins"]:
+    for vein in ocean.get("veins", []):
         unknown = [i for i in vein.get("issue_ids", []) if i not in id_to_key]
         if unknown:
             raise SystemExit(
@@ -416,12 +441,18 @@ def build(topic: str) -> dict:
         "modes": modes,
         "weights_by_mode": weights_by_mode,
         "issues": issues,
+        "editorial": public.get("editorial_summary",
+                                {"status": "not_started", "checked_on": None,
+                                 "reviewer_type": None, "findings": []}),
         "ocean": {
             "claim_status": claim_verification["status"],
             "checked_on": claim_verification["checked_on"],
             "reviewer_type": claim_verification["reviewer_type"],
+            "ocean_status": ocean.get("status", "not_started"),
+            "ocean_checked_on": ocean.get("checked_on"),
+            "ocean_reviewer_type": ocean.get("reviewer_type"),
             "sunk_continents": sunk_continents,
-            "veins": ocean["veins"],
+            "veins": ocean.get("veins", []),
         },
     }
 
@@ -601,6 +632,11 @@ def static_fallback(d: dict) -> str:
                      '<b>一次資料と照らした結果</b></p>',
                      f'      <ul class="srclist">{"".join(srcs)}</ul>']
 
+        extras = issue_extras_html(it, d)
+        if extras:
+            body.append(f'      <div class="extras" id="extras-{e(it["id"])}">')
+            body.append(extras)
+            body.append('      </div>')
         body.append('      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>')
         body.append('    </section>')
         panels.append("\n".join(body))
@@ -615,6 +651,153 @@ def static_fallback(d: dict) -> str:
     ] + nav + ['    </nav>'] + panels + ['  </div>']))
 
 
+def issue_extras_html(issue: dict, data: dict) -> str:
+    """着陸パネルの後半（資料との照合＋海面より下への導線）を組み立てる。
+
+    3D版の着陸パネルもこのHTMLを読んで使う（テンプレートのJSで複製する）。
+    同じ内容をJavaScript側にもう一度書くと、数字と文言が2通りに分かれるため。
+    """
+    ocean = data["ocean"]
+    out = []
+
+    claims = issue.get("claims") or []
+    if claims:
+        out.append('      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>')
+        rows = []
+        for c in claims:
+            label, note = VERDICT_LABELS[c["verdict"]]
+            links = "".join(
+                f'<a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
+                for src in c.get("sources", []))
+            rows.append(
+                f'<li><span class="verdict v-{e(c["verdict"])}">{e(label)}</span>'
+                f'{e(c["claim"])}<span class="finding">{e(c["finding"])}</span>'
+                f'<span class="vnote">{e(note)}</span>'
+                + (f'<span class="srcs">{links}</span>' if links else "") + '</li>')
+        out.append(f'      <ul class="claims">{"".join(rows)}</ul>')
+    elif ocean.get("claim_status") == "not_started":
+        out.append('      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>')
+
+    veins = [v for v in ocean.get("veins", []) if issue["id"] in v.get("issue_ids", [])]
+    sunk = [x for x in ocean.get("sunk_continents", [])
+            if x.get("nearest_issue_id") == issue["id"]]
+    if veins or sunk:
+        parts = []
+        if veins:
+            parts.append(f'地下水脈{len(veins)}本')
+        if sunk:
+            parts.append(f'沈んだ大陸{len(sunk)}件')
+        out.append(
+            '      <p class="sub" style="margin-top:12px">この論点に関わる海面より下：'
+            + "・".join(parts)
+            + ' <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>')
+    return "\n".join(out)
+
+
+def static_ocean(data: dict) -> str:
+    """海面より下（沈んだ大陸・地下水脈）をテーマ全体のセクションとして組み立てる。
+
+    沈んだ大陸は「どの論点にも入っていない」ことが中身なので、
+    論点の着陸パネルの中だけに置くと、論点に結びつかない件が読者から見えなくなる。
+    """
+    ocean = data["ocean"]
+    sunk, veins = ocean.get("sunk_continents", []), ocean.get("veins", [])
+    label_of = {i["id"]: i["label"] for i in data["issues"]}
+
+    head = ['  <section id="ocean" class="ocean" tabindex="-1">',
+            '    <h3 class="sec">海面より下</h3>']
+    if ocean.get("ocean_status") != "complete" or not (sunk or veins):
+        head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
+                    '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
+        return "\n".join(head + ['  </section>'])
+
+    head.append(
+        '    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
+        f'（確認日 {e(ocean.get("ocean_checked_on"))}／'
+        f'{"編集部が本文を読んで確認" if ocean.get("ocean_reviewer_type") == "editorial_review" else "AIの下読みを含む"}）</p>')
+
+    if sunk:
+        head.append('    <h4 class="subsec">沈んだ大陸 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
+        for x in sunk:
+            srcs = "".join(
+                f'<li><a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
+                + (f'<span class="when">{e(src["date"])}</span>' if src.get("date") else "")
+                + f'<span class="where">{e(src["location"])}</span></li>'
+                for src in x["sources"])
+            near = label_of.get(x.get("nearest_issue_id"))
+            head.append(
+                f'    <article class="sunk">'
+                f'<h5>{e(x["topic"])}</h5>'
+                f'<p class="impact">{e(x["life_impact"])}</p>'
+                f'<p class="count">集めた投稿での件数：<b>{x["sns_count"]}件</b>'
+                f'（意見{x["sns_base"]}件のうち）'
+                + (f'／いちばん近い論点：{e(near)}' if near else "") + '</p>'
+                f'<p class="note">{e(x["sns_note"])}</p>'
+                f'<p class="sub">一次資料</p><ul class="srclist">{srcs}</ul>'
+                '</article>')
+
+    if veins:
+        head.append('    <h4 class="subsec">地下水脈 — 立場が違っても、同じ心配を語っているところ</h4>')
+        for v in veins:
+            sides = "".join(
+                f'<li>{e(sd["stance_label"])}<span class="n">代表{sd["post_count"]}件</span></li>'
+                for sd in v["sides"])
+            issues = "・".join(e(label_of.get(i, i)) for i in v["issue_ids"])
+            head.append(
+                f'    <article class="vein">'
+                f'<h5>{e(v["shared_concern"])}</h5>'
+                f'<p class="impact">それでも結論が分かれる理由：{e(v["diverging_reason"])}</p>'
+                f'<p class="count">関わる論点：{issues}</p>'
+                f'<ul class="sides">{sides}</ul>'
+                '</article>')
+    return "\n".join(head + ['  </section>'])
+
+
+
+class TemplateError(Exception):
+    """テンプレートの差し込み口が足りないときに投げる。
+
+    SystemExit にするとテストの setUpClass でプロセスごと終わってしまい、
+    「差し込み口を消しても検査が素通りする」状態になる。
+    """
+
+
+# 横断整理の見出し（設計書4章の5）。区分と表示文言の対応をここだけで決める。
+EDITORIAL_HEADINGS = {
+    "shared_premise": "共通する前提",
+    "real_conflict": "本当の対立",
+    "still_unknown": "まだ分からないこと",
+}
+
+
+def static_editorial(data: dict) -> str:
+    """編集部の横断整理を組み立てる（設計書4章の5）。
+
+    本文は台帳（`data/verification/{テーマ}-editorial.json`）に人が書き、
+    数字は差し込みで正典から入る。ここでは並べるだけで、文章を作らない。
+    """
+    ed = data.get("editorial") or {}
+    out = ['  <section id="editorial" class="editorial" tabindex="-1">',
+           '    <h3 class="sec">編集部の横断整理</h3>']
+    findings = ed.get("findings") or []
+    if ed.get("status") != "complete" or not findings:
+        out.append('    <p class="sub">このテーマは、論点をまたいで言えることの整理がまだです。'
+                   '書けるまで、ここは空のままにします。</p>')
+        return "\n".join(out + ['  </section>'])
+
+    out.append('    <p class="sub">論点をまたいで言えることを、編集部がまとめています。'
+               f'（{e(ed.get("checked_on"))}時点）</p>')
+    for kind, heading in EDITORIAL_HEADINGS.items():
+        rows = [f for f in findings if f["kind"] == kind]
+        if not rows:
+            continue
+        out.append(f'    <h4 class="subsec">{e(heading)}</h4>')
+        out.append('    <ul class="findings">'
+                   + "".join(f'<li>{e(f["text"])}</li>' for f in rows) + '</ul>')
+    return "\n".join(out + ['  </section>'])
+
+
+
 def render_page(data: dict, template: str, payload: str) -> str:
     """テンプレートの差し込み口を data から埋める。
 
@@ -627,9 +810,11 @@ def render_page(data: dict, template: str, payload: str) -> str:
         ("<!--__CAUTION__-->", static_caution(data)),
         ("<!--__META__-->", static_meta(data)),
         ("<!--__FALLBACK__-->", static_fallback(data)),
+        ("<!--__OCEAN__-->", static_ocean(data)),
+        ("<!--__EDITORIAL__-->", static_editorial(data)),
     ):
         if mark not in template:
-            raise SystemExit(f"テンプレートに差し込み口 {mark} がありません")
+            raise TemplateError(f"テンプレートに差し込み口 {mark} がありません")
         template = template.replace(mark, filler)
     return template
 
@@ -664,7 +849,10 @@ def main() -> None:
     if tpl.exists():
         payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
         html_out = out.parent.parent / f"{a.topic}-planet.html"
-        html_out.write_text(render_page(data, tpl.read_text(), payload))
+        try:
+            html_out.write_text(render_page(data, tpl.read_text(), payload))
+        except TemplateError as exc:
+            raise SystemExit(str(exc)) from None
         print(f"wrote {html_out}")
 
     print(f"wrote {out}  意見{data['totals']['opinions']}件 / 論点{len(data['issues'])}")

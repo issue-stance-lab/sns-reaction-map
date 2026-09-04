@@ -1,0 +1,34 @@
+{
+ "theme_id": "bukatsu-chiiki",
+ "curated_at": "2026-09-04",
+ "curated_by": "editorial_review",
+ "method": "収集済みの意見を論点ごと・立場ごとに読み、論点をまたいで言えることだけを書いた。数字は本文に書かず、差し込み（{issue:<論点id>.count} など）で正典から入れる。設計書4章の5「共通する前提／本当の対立／まだ分からないこと」に対応する。",
+ "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。設計書の例文は「地域格差は9件」と書かれていたが、実データは12件になっていた。差し込みだけを書くこと。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。",
+ "findings": [
+  {
+   "id": "bukatsu-chiiki-ed-1",
+   "kind": "shared_premise",
+   "text": "賛成側も反対側も、いまの部活動が教員の負担で支えられていることは前提として共有している。分かれるのは負担をどう減らすかで、「{issue:bukatsu-chiiki-kyoin.label}」では{issue:bukatsu-chiiki-kyoin.top_stance}が{issue:bukatsu-chiiki-kyoin.top_share}を占める。"
+  },
+  {
+   "id": "bukatsu-chiiki-ed-2",
+   "kind": "real_conflict",
+   "text": "論点が変わると賛否が入れ替わる。「{issue:bukatsu-chiiki-kyoin.label}」では{issue:bukatsu-chiiki-kyoin.top_stance}が最も多い（{issue:bukatsu-chiiki-kyoin.top_share}）のに対し、「{issue:bukatsu-chiiki-kyoiku.label}」では{issue:bukatsu-chiiki-kyoiku.top_stance}が最も多い（{issue:bukatsu-chiiki-kyoiku.top_share}）。同じ人が立場を変えているのか、別々の人が別々の論点で発言しているのかは、この収集からは分からない。"
+  },
+  {
+   "id": "bukatsu-chiiki-ed-3",
+   "kind": "real_conflict",
+   "text": "お金の話になると、賛成側も条件を付ける。「{issue:bukatsu-chiiki-hiyo.label}」で無条件の移行支持は{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-transition-support.count}にとどまり、慎重・反対（{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-cautious.count}）と条件付き・改善要求（{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-conditional.count}）が大半を占める。"
+  },
+  {
+   "id": "bukatsu-chiiki-ed-4",
+   "kind": "still_unknown",
+   "text": "「{issue:bukatsu-chiiki-kakusa.label}」は{issue:bukatsu-chiiki-kakusa.count}（全体の{issue:bukatsu-chiiki-kakusa.share}）しかない。件数が少ないことは、その論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。ページ下の「海面より下」に、一次資料では争点になっているのに投稿にほとんど無いものを置いている。"
+  },
+  {
+   "id": "bukatsu-chiiki-ed-5",
+   "kind": "still_unknown",
+   "text": "ここに出ているのはYahoo!リアルタイム検索で集めた{totals.opinions}件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"
+  }
+ ]
+}

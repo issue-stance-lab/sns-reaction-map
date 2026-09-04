@@ -86,6 +86,39 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
   border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}
 .backlink:hover,.backlink:focus-visible{border-color:var(--accent);outline:none}
 
+/* 資料との照合（着陸パネルの後半） */
+.claims{list-style:none;padding:0;margin:6px 0 0}
+.claims li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.claims li:first-child{border-top:none}
+.verdict{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;
+  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}
+.v-fact{background:#3fb950}.v-gap{background:#d9a520}.v-miss{background:#a5a5a5}
+.claims .finding,.claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}
+.claims .srcs{display:block;margin-top:4px}
+.claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}
+.dive{color:var(--accent)}
+
+/* 海面より下 */
+.ocean{border-top:1px solid var(--line);margin-top:26px}
+.ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
+.subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.sunk,.vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
+  border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.vein{border-left-color:#7D5BA6}
+.sunk h5,.vein h5{font-size:13.5px;margin:0 0 6px}
+.sunk .impact,.vein .impact{font-size:12.5px;margin:0 0 6px}
+.sunk .count,.vein .count{font-size:12px;color:var(--muted);margin:0 0 6px}
+.sunk .srclist .when,.sunk .srclist .where{display:block;color:var(--muted);font-size:11px}
+.sides{list-style:none;padding:0;margin:6px 0 0;font-size:12px}
+.sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}
+.sides .n{margin-left:auto;color:var(--muted)}
+
+/* 編集部の横断整理 */
+.editorial .sec{color:var(--fg);font-size:15px}
+.findings{list-style:none;padding:0;margin:0 0 4px}
+.findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}
+
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
 html:not(.planet-live) .modes,
@@ -128,6 +161,10 @@ html:not(.planet-live) .issue-list{display:none}
   </div>
 
   <!--__FALLBACK__-->
+
+  <!--__OCEAN__-->
+
+  <!--__EDITORIAL__-->
 
   <h3 class="sec sec-live">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
   <ul class="issue-list" id="list"></ul>
@@ -491,6 +528,10 @@ function drawPanel(){
     h += '<div class="note">'+s.note+'。<br>'
        + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>';
   }
+  // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
+  // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  const extras = document.getElementById("extras-" + it.id);
+  if (extras) h += extras.innerHTML;
   h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
@@ -580,6 +621,11 @@ try {
   buildModes(); buildList(); drawPanel(); syncList(); render();
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h], false);
+  // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
+  // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
+  // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
+  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
+  else addEventListener("resize", render);
 } catch (e) {
   /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
   document.documentElement.className =
