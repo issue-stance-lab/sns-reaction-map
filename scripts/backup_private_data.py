@@ -185,7 +185,7 @@ def verify(archive: Path, *, quiet: bool = False) -> int:
     failures = 0
     with tempfile.TemporaryDirectory() as tmp:
         with tarfile.open(archive, "r:gz") as tar:
-            tar.extractall(tmp, filter="data")
+            tar.extractall(tmp)
         extracted = Path(tmp)
         manifest_path = extracted / MANIFEST_NAME
         if not manifest_path.is_file():

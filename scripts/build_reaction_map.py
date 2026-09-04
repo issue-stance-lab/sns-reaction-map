@@ -307,14 +307,18 @@ def conflict_axes_html(rows: list[dict[str, Any]], config: dict[str, Any]) -> st
     for axis in axes:
         categories = list(axis.get("categories") or [])
         count = sum(counts.get(category, 0) for category in categories)
+        tag_links = ''.join(
+            f'<a href="#sample-{_slug(category)}" style="text-decoration:none;color:inherit;"><span>{html.escape(category)}</span></a>'
+            for category in categories
+        )
         cards.append(
-            f"<article class=\"axis-card\" data-tone=\"{html.escape(str(axis.get('tone') or 'neutral'))}\">"
-            f"<div class=\"axis-kicker\">{html.escape(str(axis.get('kicker') or '対立軸'))}</div>"
-            f"<h3>{html.escape(str(axis.get('label') or ''))}</h3>"
-            f"<div class=\"axis-count\">{count}<span>件</span></div>"
-            f"<p>{html.escape(str(axis.get('description') or ''))}</p>"
-            f"<div class=\"axis-tags\">{''.join(f'<a href=\"#sample-{_slug(category)}\" style=\"text-decoration:none;color:inherit;\"><span>{html.escape(category)}</span></a>' for category in categories)}</div>"
-            "</article>"
+            f'<article class="axis-card" data-tone="{html.escape(str(axis.get("tone") or "neutral"))}">'
+            f'<div class="axis-kicker">{html.escape(str(axis.get("kicker") or "対立軸"))}</div>'
+            f'<h3>{html.escape(str(axis.get("label") or ""))}</h3>'
+            f'<div class="axis-count">{count}<span>件</span></div>'
+            f'<p>{html.escape(str(axis.get("description") or ""))}</p>'
+            f'<div class="axis-tags">{tag_links}</div>'
+            '</article>'
         )
     return (
         "<section class=\"panel conflict-panel\">"
@@ -446,12 +450,13 @@ def load_research_conditions(sample_path: str) -> dict[str, str]:
     for index, match in enumerate(matches):
         end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
         block = text[match.start():end]
-        file_match = re.search(r"^    sample_file:\s*[\"']?([^\"'#\n]+)", block, re.MULTILINE)
+        file_match = re.search(r"^    sample_file:\s*[\\\"']?([^\\\"'#\n]+)", block, re.MULTILINE)
         if not file_match or file_match.group(1).strip() != normalized:
             continue
         values: dict[str, str] = {"theme": match.group(1)}
         for field in ("sample_source", "sample_period"):
-            value_match = re.search(rf"^    {field}:\s*[\"']?([^\"'#\n]+)", block, re.MULTILINE)
+            pattern = r"^    " + re.escape(field) + r":\s*[\"']?([^\"'#\n]+)"
+            value_match = re.search(pattern, block, re.MULTILINE)
             if value_match:
                 values[field] = value_match.group(1).strip()
         return values
