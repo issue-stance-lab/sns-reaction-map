@@ -108,7 +108,6 @@ def collect_themes(today: dt.date) -> list[dict]:
                 "records": period.get("records"),
                 "sample_min": period.get("min"),
                 "sample_max": period.get("max"),
-                "notes": value.get("notes") or "",
             }
         )
 

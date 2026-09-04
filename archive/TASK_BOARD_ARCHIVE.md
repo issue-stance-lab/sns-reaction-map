@@ -45,6 +45,7 @@
 | 課題42: AI生成画像を用途別方針へ移行する | Claude Code | 2026-08-09 | 全11テーマのヒーロー画像を統一 | [archive/tasks/task-42.md](tasks/task-42.md) |
 | 課題44: SNS反応マップの共通デザインを再設計する | Claude Code | 2026-08-30 | 課題54へ統合。既存2Dは3D完成までのフォールバックとして維持 | [archive/tasks/task-44.md](tasks/task-44.md) |
 | 課題57: 公開データ基盤と公開承認物の一本化 | Claude Code | 2026-08-31 | 段階4完了。トップページと公開10テーマすべてを公開データ基盤へ接続 | [archive/tasks/task-57.md](tasks/task-57.md) |
+| 課題60: セッション開始時に読む文書を小さく保つ | Claude Code | 2026-09-04 | `TASK_BOARD.md` 索引化に続き `THEMES.yaml` を分割（44KB→9KB）。経緯は `themes/{テーマ名}.md` へ | [archive/tasks/task-60.md](tasks/task-60.md) |
 
 ---
 

@@ -3,6 +3,8 @@
 
 セッション開始時に `company/COMPANY.md` と `company/GOALS.yaml` と
 `README.md` と `OPERATIONS.md` と `THEMES.yaml` を読むこと。
+`THEMES.yaml` は工程の状態だけの登録簿で、テーマごとの経緯は `themes/{テーマ名}.md` にある。
+**担当するテーマが決まってから、その1本だけを開くこと。**
 担当する仕事が決まったら `company/departments/` の該当部門文書も読む。
 `OPERATIONS.md` が定例作業（何を・どの頻度で・誰が）の定義。
 データ更新（収集・分類・公開）は `DATA_REFRESH.md` を正典とする。
