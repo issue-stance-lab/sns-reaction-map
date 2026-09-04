@@ -272,6 +272,95 @@ def build_ocean_layer(theme_id: str) -> dict[str, Any]:
             "reviewer_type": overall, "sunk_continents": sunk, "veins": veins}
 
 
+# 横断整理の本文に書ける差し込み（設計書4章の5）。
+# 数字を手で書かせないための仕組み。台帳には差し込みだけを書き、値は生成時に正典から入れる。
+EDITORIAL_KINDS = ("shared_premise", "real_conflict", "still_unknown")
+EDITORIAL_BANNED = ("本当の問題", "見落とされている", "重要なのに", "実は")
+_EDITORIAL_REF = re.compile(r"\{([a-z]+):([A-Za-z0-9\-]+)(?:\.stance:([A-Za-z0-9\-]+))?\.([a-z_]+)\}"
+                            r"|\{(totals)\.([a-z_]+)\}")
+
+
+def _editorial_value(issues: dict, opinion_count: int, match: re.Match, where: str) -> str:
+    scope, ref_id, stance_id, field, totals, tfield = match.groups()
+    if totals:
+        if tfield != "opinions":
+            raise RegistryError(f"{where}: 使えない差し込みです: {match.group(0)}")
+        return f"{opinion_count:,}"
+    if scope != "issue" or ref_id not in issues:
+        raise RegistryError(f"{where}: 対応表に無い論点です: {match.group(0)}")
+    issue = issues[ref_id]
+    if stance_id is not None:
+        stance = next((x for x in issue["stances"] if x["id"] == stance_id), None)
+        if stance is None:
+            raise RegistryError(f"{where}: この論点に無い立場です: {match.group(0)}")
+        if field == "count":
+            return f"{stance['count']}件"
+        if field == "share":
+            return f"{100 * stance['count'] / issue['count']:.1f}%"
+        raise RegistryError(f"{where}: 使えない差し込みです: {match.group(0)}")
+    top = max(issue["stances"], key=lambda x: x["count"])
+    values = {
+        "label": issue["label"],
+        "count": f"{issue['count']}件",
+        "share": f"{100 * issue['count'] / opinion_count:.1f}%",
+        "top_stance": top["label"],
+        "top_share": f"{100 * top['count'] / issue['count']:.1f}%",
+    }
+    if field not in values:
+        raise RegistryError(f"{where}: 使えない差し込みです: {match.group(0)}")
+    return values[field]
+
+
+def build_editorial_summary(theme_id: str, issues_out: list[dict],
+                            opinion_count: int) -> dict[str, Any]:
+    """編集部の横断整理を公開データ契約へ載せる（設計書4章の5）。
+
+    本文は人が書く。ただし**数字は書かせない**。設計書の例文は
+    「地域格差は9件」と手書きされており、実データが12件になっても直らなかった。
+    台帳には `{issue:<論点id>.count}` のような差し込みだけを書き、値はここで正典から入れる。
+    """
+    path = ROOT / "data" / "verification" / f"{theme_id}-editorial.json"
+    if not path.exists():
+        return {"status": "not_started", "checked_on": None, "reviewer_type": None,
+                "findings": []}
+
+    ledger = json.loads(path.read_text(encoding="utf-8"))
+    issues = {i["id"]: i for i in issues_out}
+    findings = []
+    for item in ledger.get("findings", []):
+        where = f"{theme_id}/{item.get('id')}"
+        if item.get("kind") not in EDITORIAL_KINDS:
+            raise RegistryError(f"{where}: 区分が不正です: {item.get('kind')!r}")
+        raw = item["text"]
+        # 差し込みを外した本文に数字が残っていれば、手書きされたということ。
+        without_refs = _EDITORIAL_REF.sub("", raw)
+        if re.search(r"[0-9０-９]", without_refs):
+            raise RegistryError(
+                f"{where}: 本文に数字を直接書かないこと。"
+                f"{{issue:<論点id>.count}} のような差し込みを使う")
+        for phrase in EDITORIAL_BANNED:
+            if phrase in without_refs:
+                raise RegistryError(f"{where}: 重要度を名指しする言い方です: 「{phrase}」")
+        findings.append({
+            "id": item["id"],
+            "kind": item["kind"],
+            "text": _EDITORIAL_REF.sub(
+                lambda m: _editorial_value(issues, opinion_count, m, where), raw),
+        })
+    if not findings:
+        return {"status": "not_started", "checked_on": None, "reviewer_type": None,
+                "findings": []}
+    ids = [f["id"] for f in findings]
+    if len(ids) != len(set(ids)):
+        raise RegistryError(f"{theme_id}: 横断整理のIDが重複しています")
+    return {
+        "status": "complete",
+        "checked_on": _ocean_date(ledger["curated_at"], theme_id),
+        "reviewer_type": _ocean_reviewer(ledger["curated_by"], theme_id),
+        "findings": findings,
+    }
+
+
 def load_themes_yaml() -> dict[str, Any]:
     data = yaml.safe_load(THEMES_YAML.read_text(encoding="utf-8"))
     return data["themes"]
@@ -438,6 +527,7 @@ def build_theme_json(theme_id: str) -> dict[str, Any]:
         "issues": issues_out,
         "claim_verification": build_claim_verification(theme_id),
         "ocean_layer": build_ocean_layer(theme_id),
+        "editorial_summary": build_editorial_summary(theme_id, issues_out, opinion_count),
     }
 
 

@@ -284,10 +284,17 @@ class PlanetOceanPageTest(unittest.TestCase):
     def test_template_keeps_every_insertion_point(self):
         # 差し込み口を消すと画面からセクションが丸ごと消える。消えたら落ちるようにする
         for mark in ("/*__PLANET_DATA__*/null", "<!--__QUESTION__-->", "<!--__CAUTION__-->",
-                     "<!--__META__-->", "<!--__FALLBACK__-->", "<!--__OCEAN__-->"):
+                     "<!--__META__-->", "<!--__FALLBACK__-->", "<!--__OCEAN__-->",
+                     "<!--__EDITORIAL__-->"):
             self.assertIn(mark, self.template, f"差し込み口 {mark} が消えている")
         with self.assertRaises(bpd.TemplateError):
             bpd.render_page(self.data, self.template.replace("<!--__OCEAN__-->", ""), "null")
+
+    def test_the_planet_is_redrawn_when_its_width_changes(self):
+        # 文字の大きさは canvas の表示幅から決めている。初回の render は
+        # レイアウトが決まる前に走ることがあり、375px で文字が巨大なまま残っていた
+        self.assertIn("ResizeObserver", self.template)
+        self.assertIn("observe(cv)", self.template)
 
     def test_verdict_labels_are_fixed(self):
         # 課題54の「未着手」5: verdict と表示文言の対応を固定するテストが無かった
@@ -337,6 +344,25 @@ class PlanetOceanPageTest(unittest.TestCase):
         for token in ("issue_bucket", "match_rule", "machine_hits", "tweet_id",
                       "representative_posts", "classification"):
             self.assertNotIn(token, text, f"読者向けの本文に内部の項目名『{token}』が出ている")
+
+    def test_editorial_summary_is_on_the_page(self):
+        # 設計書4章の5。論点をまたいだ整理が画面から落ちていないこと
+        ed = self.data["editorial"]
+        self.assertEqual(ed["status"], "complete")
+        self.assertIn('id="editorial"', self.static)
+        for finding in ed["findings"]:
+            self.assertIn(finding["text"], self.static, finding["id"])
+        for heading in bpd.EDITORIAL_HEADINGS.values():
+            self.assertIn(heading, self.static)
+
+    def test_editorial_is_left_empty_when_nothing_is_written(self):
+        blank = copy.deepcopy(self.data)
+        blank["editorial"] = {"status": "not_started", "checked_on": None,
+                              "reviewer_type": None, "findings": []}
+        html = bpd.static_editorial(blank)
+        self.assertIn("まだです", html)
+        for heading in bpd.EDITORIAL_HEADINGS.values():
+            self.assertNotIn(heading, html)
 
     def test_landing_panel_html_exists_once(self):
         # 3D版のJSは静的HTMLを複製して使う。生成HTMLに同じ塊が2つあってはいけない

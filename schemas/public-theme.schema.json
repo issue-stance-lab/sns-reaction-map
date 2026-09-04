@@ -20,7 +20,8 @@
     "issue_assigned_count",
     "issues",
     "claim_verification",
-    "ocean_layer"
+    "ocean_layer",
+    "editorial_summary"
   ],
   "properties": {
     "schema_version": {
@@ -112,6 +113,9 @@
     },
     "ocean_layer": {
       "$ref": "#/$defs/ocean_layer"
+    },
+    "editorial_summary": {
+      "$ref": "#/$defs/editorial_summary"
     }
   },
   "$defs": {
@@ -532,6 +536,74 @@
         "post_count": {
           "type": "integer",
           "minimum": 2
+        }
+      }
+    },
+    "editorial_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "checked_on",
+        "reviewer_type",
+        "findings"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "complete",
+            "not_started"
+          ]
+        },
+        "checked_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "reviewer_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "editorial_review",
+            "ai_assisted",
+            null
+          ]
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/editorial_finding"
+          }
+        }
+      }
+    },
+    "editorial_finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "shared_premise",
+            "real_conflict",
+            "still_unknown"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

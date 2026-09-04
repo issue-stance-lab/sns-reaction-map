@@ -113,6 +113,12 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}
 .sides .n{margin-left:auto;color:var(--muted)}
 
+/* 編集部の横断整理 */
+.editorial .sec{color:var(--fg);font-size:15px}
+.findings{list-style:none;padding:0;margin:0 0 4px}
+.findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}
+
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
 html:not(.planet-live) .modes,
@@ -157,6 +163,8 @@ html:not(.planet-live) .issue-list{display:none}
   <!--__FALLBACK__-->
 
   <!--__OCEAN__-->
+
+  <!--__EDITORIAL__-->
 
   <h3 class="sec sec-live">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
   <ul class="issue-list" id="list"></ul>
@@ -613,6 +621,11 @@ try {
   buildModes(); buildList(); drawPanel(); syncList(); render();
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h], false);
+  // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
+  // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
+  // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
+  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
+  else addEventListener("resize", render);
 } catch (e) {
   /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
   document.documentElement.className =

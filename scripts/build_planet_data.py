@@ -441,6 +441,9 @@ def build(topic: str) -> dict:
         "modes": modes,
         "weights_by_mode": weights_by_mode,
         "issues": issues,
+        "editorial": public.get("editorial_summary",
+                                {"status": "not_started", "checked_on": None,
+                                 "reviewer_type": None, "findings": []}),
         "ocean": {
             "claim_status": claim_verification["status"],
             "checked_on": claim_verification["checked_on"],
@@ -759,6 +762,42 @@ class TemplateError(Exception):
     """
 
 
+# 横断整理の見出し（設計書4章の5）。区分と表示文言の対応をここだけで決める。
+EDITORIAL_HEADINGS = {
+    "shared_premise": "共通する前提",
+    "real_conflict": "本当の対立",
+    "still_unknown": "まだ分からないこと",
+}
+
+
+def static_editorial(data: dict) -> str:
+    """編集部の横断整理を組み立てる（設計書4章の5）。
+
+    本文は台帳（`data/verification/{テーマ}-editorial.json`）に人が書き、
+    数字は差し込みで正典から入る。ここでは並べるだけで、文章を作らない。
+    """
+    ed = data.get("editorial") or {}
+    out = ['  <section id="editorial" class="editorial" tabindex="-1">',
+           '    <h3 class="sec">編集部の横断整理</h3>']
+    findings = ed.get("findings") or []
+    if ed.get("status") != "complete" or not findings:
+        out.append('    <p class="sub">このテーマは、論点をまたいで言えることの整理がまだです。'
+                   '書けるまで、ここは空のままにします。</p>')
+        return "\n".join(out + ['  </section>'])
+
+    out.append('    <p class="sub">論点をまたいで言えることを、編集部がまとめています。'
+               f'（{e(ed.get("checked_on"))}時点）</p>')
+    for kind, heading in EDITORIAL_HEADINGS.items():
+        rows = [f for f in findings if f["kind"] == kind]
+        if not rows:
+            continue
+        out.append(f'    <h4 class="subsec">{e(heading)}</h4>')
+        out.append('    <ul class="findings">'
+                   + "".join(f'<li>{e(f["text"])}</li>' for f in rows) + '</ul>')
+    return "\n".join(out + ['  </section>'])
+
+
+
 def render_page(data: dict, template: str, payload: str) -> str:
     """テンプレートの差し込み口を data から埋める。
 
@@ -772,6 +811,7 @@ def render_page(data: dict, template: str, payload: str) -> str:
         ("<!--__META__-->", static_meta(data)),
         ("<!--__FALLBACK__-->", static_fallback(data)),
         ("<!--__OCEAN__-->", static_ocean(data)),
+        ("<!--__EDITORIAL__-->", static_editorial(data)),
     ):
         if mark not in template:
             raise TemplateError(f"テンプレートに差し込み口 {mark} がありません")
