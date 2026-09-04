@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--page:#07111E;--ink:#F0F4FF;--ink-70:rgba(240,244,255,.70);--ink-45:rgba(240,244,255,.45);--teal:#2DD4BF;--amber:#FBBF24}
+    *{box-sizing:border-box}
+    html,body,.canvas{width:1280px;height:670px;margin:0;overflow:hidden}
+    body{background:var(--page);font-family:'Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums}
+    .canvas{position:relative;background:radial-gradient(circle at 92% 6%,rgba(45,212,191,.10),transparent 34%),linear-gradient(140deg,#0C1E35 0%,#0A1928 58%,#071522 100%);border:1px solid rgba(255,255,255,.08);border-radius:16px}
+    .photo{position:absolute;right:0;top:0;width:600px;height:670px;object-fit:cover;object-position:50% 18%}
+    .veil{position:absolute;right:0;top:0;width:600px;height:670px;background:linear-gradient(90deg,rgba(7,17,30,1) 0%,rgba(7,17,30,.86) 22%,rgba(7,17,30,.42) 58%,rgba(7,17,30,.34) 100%)}
+    .content{position:absolute;z-index:1;left:72px;top:132px;width:700px;color:var(--ink)}
+    .eyebrow{margin:0 0 22px;color:var(--ink-70);font-size:32px;font-weight:500;letter-spacing:.08em;line-height:1.35}
+    h1{margin:0;font-size:76px;line-height:1.18;font-weight:900;letter-spacing:-.055em;white-space:nowrap}
+    h1 em{font-style:normal;color:var(--teal)}
+    .subtitle{margin:30px 0 0;color:var(--ink-45);font-size:29px;font-weight:400;line-height:1.5}
+    .rule{position:absolute;z-index:1;left:72px;top:112px;width:96px;height:5px;background:var(--amber)}
+    .credit{position:absolute;z-index:1;right:28px;bottom:20px;color:var(--ink-70);font-size:12px;letter-spacing:.08em}
+  </style>
+</head>
+<body>
+  <main class="canvas" aria-label="部活動の地域移行、子どもと自治体編">
+    <img class="photo" src="../photos/municipality-portrait.png" alt="自治体の担当者を思わせる人物">
+    <div class="veil"></div>
+    <div class="rule"></div>
+    <div class="content">
+      <p class="eyebrow">部活動の地域移行 ④子どもと自治体編</p>
+      <h1>その日、<br>うちの子は<em>何年生</em>か</h1>
+      <p class="subtitle">計画で先に決まるのは、<br>学校の部活が終わる日だった</p>
+    </div>
+    <div class="credit">SNS反応まっぷ</div>
+  </main>
+</body>
+</html>
