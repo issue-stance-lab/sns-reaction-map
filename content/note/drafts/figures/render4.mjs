@@ -33,7 +33,7 @@ for (const [w, h, suffix] of [[300, 157, '300px'], [375, 196, '375px']]) {
 // 図3点。375px幅のプレビューも出して、スマホで文字が読めるか確認する
 const figs = [
   ['bukatsu4_fig1-reread', 800, 1130],
-  ['bukatsu4_fig2-kyoto-kobe', 800, 1270],
+  ['bukatsu4_fig2-kyoto-kobe', 800, 1330],
   ['bukatsu4_fig3-weekday', 800, 900],
 ];
 for (const [name, w, h] of figs) {
