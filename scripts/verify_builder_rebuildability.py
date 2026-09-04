@@ -30,19 +30,30 @@ def _copy_fixture(target: Path) -> None:
     for directory in ("configs", "data", "docs", "scripts", "social-samples"):
         shutil.copytree(ROOT / directory, target / directory)
     shutil.copy2(ROOT / "THEMES.yaml", target / "THEMES.yaml")
+    # scripts/__init__.py がないと相対インポートがパッケージとして認識されない
+    (target / "scripts" / "__init__.py").touch(exist_ok=True)
 
 
 def _run(root: Path, command: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(command, cwd=root, text=True, capture_output=True)
 
 
+def _as_module_command(builder: list[str]) -> list[str]:
+    """Python スクリプトをモジュール実行に変換し、相対インポートを有効にする。"""
+    if builder[0] == sys.executable and builder[1].endswith(".py"):
+        module_path = builder[1].replace("/", ".").replace(".py", "")
+        return [sys.executable, "-m", module_path]
+    return builder
+
+
 def _verify(root: Path, theme: str, builder: list[str]) -> tuple[bool, str]:
+    module_builder = _as_module_command(builder)
     steps = (
-        ("テーマ別ビルダー", builder),
-        ("論点件数同期", [sys.executable, "scripts/sync_issue_counts.py", theme]),
-        ("信頼情報適用", [sys.executable, "scripts/seo/apply_theme_trust.py"]),
-        ("ビルダー再検査", [*builder, "--check"]),
-        ("信頼情報の2回目", [sys.executable, "scripts/seo/apply_theme_trust.py"]),
+        ("テーマ別ビルダー", module_builder),
+        ("論点件数同期", [sys.executable, "-m", "scripts.sync_issue_counts", theme]),
+        ("信頼情報適用", [sys.executable, "-m", "scripts.seo.apply_theme_trust"]),
+        ("ビルダー再検査", [*module_builder, "--check"]),
+        ("信頼情報の2回目", [sys.executable, "-m", "scripts.seo.apply_theme_trust"]),
     )
     for label, command in steps:
         result = _run(root, command)
