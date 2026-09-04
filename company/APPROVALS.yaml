@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-08-31"
+updated_at: "2026-09-04"
 
 rules:
   required_for:
@@ -32,6 +32,23 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260904-001
+    department: editorial
+    action: note_post
+    summary: "部活動の地域移行 第4回（最終回）「子どもと自治体編：計画の読み方」をnoteへ無料公開する"
+    reason: "全4回シリーズの締めとして、読者が自分の自治体の発表を読み解く手順を持ち帰れるようにするため"
+    risks:
+      - "京都市の「移行期の生徒への対応」は令和8・9年度に順次決まるため、公表され次第の追記が要る"
+      - "令和9年度の割合はすべて予定・見込みであり実績ではない（記事末と図3に明記済み）"
+    recommendation: approve
+    evidence:
+      - "content/note/drafts/bukatsu-chiiki-note4-FINAL.md"
+      - "content/note/research/bukatsu-chiiki4-plan-research.md"
+      - "quality/reviews/2026-09-03-note-bukatsu-4.md"
+    status: approved
+    requested_at: "2026-09-03"
+    decided_at: "2026-09-04"
+    decision_note: "オーナーが2026-09-04 23:01に公開。公開日は当初9/5予定だったが前倒し。"
   - id: approval-20260902-001
     department: engineering-data
     action: website_publication
