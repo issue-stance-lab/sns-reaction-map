@@ -663,6 +663,12 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
 
 
 # 公開契約へ入れてはいけない鍵。投稿を特定できるもの、AIの内部判断、機械一致の作業記録。
+# 台帳の内部項目名。作業メモの言葉が読者向けの本文へ紛れ込むのを止める。
+OCEAN_INTERNAL_TOKENS = (
+    "issue_bucket", "match_rule", "machine_hits", "sns_base", "sns_count",
+    "primary_sources", "representative_posts", "checked_by", "classification",
+)
+
 OCEAN_FORBIDDEN_KEYS = frozenset({
     "tweet_id", "post_id", "post_ids", "representative_posts", "excerpt", "text",
     "summary", "reason", "confidence", "match_rule", "machine_hits", "excluded",
@@ -722,6 +728,20 @@ def check_ocean_invariants(theme_json: dict, known_issue_ids: set[str],
     leaked = _forbidden_keys_in(ocean)
     if leaked:
         errors.append(f"{tid}: 公開契約に入れてはいけない項目があります: {', '.join(sorted(leaked))}")
+
+    # 読者が読む文章に、台帳の内部項目名が残っていないこと。
+    # 台帳は作業用に「issue_bucket参照」のような書き方をするので、そのまま画面へ出さない。
+    prose_fields = (
+        [(x.get("id"), key, x.get(key, "")) for x in sunk
+         for key in ("topic", "life_impact", "sns_note")]
+        + [(v.get("id"), key, v.get(key, "")) for v in veins
+           for key in ("shared_concern", "diverging_reason")]
+    )
+    for item_id, key, text in prose_fields:
+        for token in OCEAN_INTERNAL_TOKENS:
+            if token in text:
+                errors.append(
+                    f"{tid}/{item_id}: 読者向けの{key}に内部の項目名『{token}』が残っています")
 
     return errors
 

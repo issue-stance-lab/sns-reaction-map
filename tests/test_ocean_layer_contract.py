@@ -85,8 +85,17 @@ class OceanLayerContractTest(unittest.TestCase):
         self.assertEqual(ocean["veins"], [])
         self.assertIsNone(ocean["checked_on"])
 
-    def test_ai_assisted_is_not_shown_as_read_by_people(self) -> None:
+    def test_reviewer_type_follows_the_weakest_item(self) -> None:
         # 1件でもAIの下読みが混じれば、全体は editorial_review と名乗らない（設計書3.3）
+        reviewers = [x["reviewer_type"] for x in
+                     theme_json("bukatsu-chiiki")["ocean_layer"]["sunk_continents"]]
+        overall = theme_json("bukatsu-chiiki")["ocean_layer"]["reviewer_type"]
+        if "ai_assisted" in reviewers:
+            self.assertEqual(overall, "ai_assisted")
+        else:
+            self.assertEqual(overall, "editorial_review")
+
+    def test_a_count_above_its_denominator_is_stopped(self) -> None:
         errors = prc.check_ocean_invariants(
             {"theme_id": "t", "ocean_layer": {
                 "status": "complete", "checked_on": "2026-09-02",
