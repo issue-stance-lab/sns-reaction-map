@@ -35,18 +35,18 @@ def public_fixture() -> dict:
 class PlanetDataTest(unittest.TestCase):
     def setUp(self) -> None:
         self.public = public_fixture()
-        self.ledger = bpd.load_ocean_ledger(TOPIC)
+        self.ledger = bpd.load_ocean_layer(TOPIC)
         self._orig_public = bpd.load_public_theme
-        self._orig_ledger = bpd.load_ocean_ledger
+        self._orig_ledger = bpd.load_ocean_layer
 
     def tearDown(self) -> None:
         bpd.load_public_theme = self._orig_public
-        bpd.load_ocean_ledger = self._orig_ledger
+        bpd.load_ocean_layer = self._orig_ledger
 
     def build(self, public: dict | None = None, ledger: dict | None = None) -> dict:
         bpd.load_public_theme = lambda topic, _p=public or self.public: copy.deepcopy(_p)
         if ledger is not None:
-            bpd.load_ocean_ledger = lambda topic, _l=ledger: copy.deepcopy(_l)
+            bpd.load_ocean_layer = lambda topic, _l=ledger: copy.deepcopy(_l)
         return bpd.build(TOPIC)
 
     # ---------------------------------------------------------------- 基本

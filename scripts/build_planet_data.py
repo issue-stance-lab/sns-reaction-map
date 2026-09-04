@@ -135,17 +135,21 @@ def load_public_theme(topic: str) -> dict:
     return json.loads(path.read_text())
 
 
-def load_ocean_ledger(topic: str) -> dict:
-    """沈んだ大陸・地下水脈は `data/verification/` の確認台帳から接続する。
+def load_ocean_layer(topic: str) -> dict:
+    """沈んだ大陸・地下水脈は公開データ契約（`data/public/themes/`）から読む。
 
-    台帳が無い論点・テーマは推測で埋めず、海面下を空のまま返す
-    （工程表「台帳に無い論点の海面下が空で出る」）。
+    確認台帳（`data/verification/`）を直接読むと、投稿IDや機械一致の作業記録まで
+    惑星データへ入り、そのまま試作HTMLへ埋め込まれる。公開契約を通すことで、
+    人が一次資料を読んで確定したことだけが画面へ出る。
+
+    台帳が無いテーマは `status: not_started` で空のまま返る（推測で埋めない。
+    工程表「台帳に無い論点の海面下が空で出る」）。
     """
-    sc_path = ROOT / "data" / "verification" / f"{topic}-sunk-continents.json"
-    veins_path = ROOT / "data" / "verification" / f"{topic}-veins.json"
-    sunk_continents = json.loads(sc_path.read_text())["items"] if sc_path.exists() else []
-    veins = json.loads(veins_path.read_text())["items"] if veins_path.exists() else []
-    return {"sunk_continents": sunk_continents, "veins": veins}
+    return load_public_theme(topic).get(
+        "ocean_layer",
+        {"status": "not_started", "checked_on": None, "reviewer_type": None,
+         "sunk_continents": [], "veins": []},
+    )
 
 
 # 論点1つに複数の主張が付いたときの陸地判定の決め方（設計書14章、段階6で決定）。
@@ -181,7 +185,7 @@ def build(topic: str) -> dict:
     t = themes["themes"][topic] if "themes" in themes else themes[topic]
 
     public = load_public_theme(topic)
-    ocean = load_ocean_ledger(topic)
+    ocean = load_ocean_layer(topic)
     claim_verification = public["claim_verification"]
 
     n_op = public["opinion_count"]
@@ -251,7 +255,7 @@ def build(topic: str) -> dict:
     # 現在の意見数と違えば印を付けて知らせる（黙って今の数字へ差し替えない）。
     # 件数 sns_count は人が本文を読んで確定した値なので、機械で数え直さない。
     sunk_continents = []
-    for item in ocean["sunk_continents"]:
+    for item in ocean.get("sunk_continents", []):
         item = dict(item)
         item["opinion_count_now"] = n_op
         item["base_stale"] = item.get("sns_base") != n_op
@@ -262,7 +266,7 @@ def build(topic: str) -> dict:
               + ", ".join(stale_ids))
 
     # --- 地下水脈（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
-    for vein in ocean["veins"]:
+    for vein in ocean.get("veins", []):
         unknown = [i for i in vein.get("issue_ids", []) if i not in id_to_key]
         if unknown:
             raise SystemExit(
@@ -420,8 +424,11 @@ def build(topic: str) -> dict:
             "claim_status": claim_verification["status"],
             "checked_on": claim_verification["checked_on"],
             "reviewer_type": claim_verification["reviewer_type"],
+            "ocean_status": ocean.get("status", "not_started"),
+            "ocean_checked_on": ocean.get("checked_on"),
+            "ocean_reviewer_type": ocean.get("reviewer_type"),
             "sunk_continents": sunk_continents,
-            "veins": ocean["veins"],
+            "veins": ocean.get("veins", []),
         },
     }
 

@@ -148,6 +148,130 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
     return {"status": "complete", "checked_on": checked_on, "reviewer_type": "editorial_review", "claims": claims}
 
 
+# 公開してよい海面下の項目（設計書3.3・14章）。ここに無い鍵は落とす。
+# 投稿ID・本文・AIの内部理由（match_rule の機械一致・除外理由）は公開契約へ入れない。
+OCEAN_MAX_SUNK_CONTINENTS = 4
+OCEAN_MIN_POSTS_PER_SIDE = 2
+OCEAN_REVIEWER_TYPES = {"editorial_review", "ai_assisted"}
+
+
+def _ocean_date(value: Any, where: str) -> str:
+    """海面下の台帳の確認日はISO形式（2026-09-02）で入っている。"""
+    if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        raise RegistryError(f"{where}: 確認日の形式が不正です: {value!r}")
+    return value
+
+
+def _ocean_reviewer(value: Any, where: str) -> str:
+    if value not in OCEAN_REVIEWER_TYPES:
+        raise RegistryError(f"{where}: 確認者種別が不正です: {value!r}")
+    return value
+
+
+def build_ocean_layer(theme_id: str) -> dict[str, Any]:
+    """沈んだ大陸・地下水脈を公開データ契約へ載せる（設計書3.3、14章）。
+
+    公開するのは「人が一次資料を読んで初めて分かること」だけ。台帳にある
+    投稿ID・本文・機械一致の結果・除外理由は落とす（段階2で決めた公開契約の原則）。
+    地下水脈の代表投稿は、段階6・指摘2と同じ扱いで**件数だけ**を載せる
+    （投稿IDの正典は `data/verification/` 側に残す）。
+
+    台帳が無いテーマは、空欄ではなく `not_started` として機械判定できる形で返す。
+    """
+    empty = {"status": "not_started", "checked_on": None, "reviewer_type": None,
+             "sunk_continents": [], "veins": []}
+    sc_path = ROOT / "data" / "verification" / f"{theme_id}-sunk-continents.json"
+    veins_path = ROOT / "data" / "verification" / f"{theme_id}-veins.json"
+    sc_items = json.loads(sc_path.read_text(encoding="utf-8"))["items"] if sc_path.exists() else []
+    vein_items = json.loads(veins_path.read_text(encoding="utf-8"))["items"] if veins_path.exists() else []
+    if not sc_items and not vein_items:
+        return empty
+
+    issue_defs = load_taxonomy()[theme_id]["issues"]
+    known_issue_ids = {d["id"] for d in issue_defs.values()}
+    checked_dates: list[str] = []
+    reviewers: list[str] = []
+
+    if len(sc_items) > OCEAN_MAX_SUNK_CONTINENTS:
+        raise RegistryError(
+            f"{theme_id}: 沈んだ大陸が{len(sc_items)}件です（設計書3.3.2の上限は"
+            f"{OCEAN_MAX_SUNK_CONTINENTS}件）")
+
+    sunk = []
+    for item in sc_items:
+        where = f"{theme_id}/{item.get('id')}"
+        sources = [
+            {"name": src["name"], "url": src["url"], "location": src["location"],
+             "date": src.get("date")}
+            for src in item.get("primary_sources", [])
+        ]
+        if not sources:
+            raise RegistryError(f"{where}: 沈んだ大陸に一次資料が1件もありません")
+        bucket = item.get("issue_bucket") or {}
+        issue_id = bucket.get("issue_id")
+        if issue_id is not None and issue_id not in known_issue_ids:
+            raise RegistryError(f"{where}: 対応表に無い論点IDです: {issue_id}")
+        if item["sns_count"] > item["sns_base"]:
+            raise RegistryError(f"{where}: SNS件数が母数を超えています")
+        checked_on = _ocean_date(item["checked_on"], where)
+        reviewer = _ocean_reviewer(item["checked_by"], where)
+        checked_dates.append(checked_on)
+        reviewers.append(reviewer)
+        sunk.append({
+            "id": item["id"],
+            "topic": item["topic"],
+            "life_impact": item["life_impact"],
+            "sns_count": item["sns_count"],
+            "sns_base": item["sns_base"],
+            "sns_note": item["sns_note"],
+            "nearest_issue_id": issue_id,
+            "sources": sources,
+            "checked_on": checked_on,
+            "reviewer_type": reviewer,
+        })
+
+    ledger_reviewer = json.loads(veins_path.read_text(encoding="utf-8")).get("curated_by") \
+        if veins_path.exists() else None
+    veins = []
+    for item in vein_items:
+        where = f"{theme_id}/{item.get('id')}"
+        issue_ids = list(item.get("issue_ids") or [])
+        if not issue_ids:
+            raise RegistryError(f"{where}: 地下水脈が論点へ結びついていません")
+        for issue_id in issue_ids:
+            if issue_id not in known_issue_ids:
+                raise RegistryError(f"{where}: 対応表に無い論点IDです: {issue_id}")
+        sides = []
+        for side in item.get("sides", []):
+            posts = side.get("representative_posts", [])
+            if len(posts) < OCEAN_MIN_POSTS_PER_SIDE:
+                raise RegistryError(
+                    f"{where}: 立場「{side.get('stance_label')}」の代表投稿が{len(posts)}件です"
+                    f"（設計書3.3.3は各{OCEAN_MIN_POSTS_PER_SIDE}件以上）")
+            sides.append({"stance_label": side["stance_label"], "post_count": len(posts)})
+        if len(sides) < 2:
+            raise RegistryError(f"{where}: 地下水脈は対立する2つ以上の立場が要ります")
+        checked_on = _ocean_date(item["checked_on"], where)
+        reviewer = _ocean_reviewer(item.get("reviewer_type") or ledger_reviewer, where)
+        checked_dates.append(checked_on)
+        reviewers.append(reviewer)
+        veins.append({
+            "id": item["id"],
+            "issue_ids": issue_ids,
+            "shared_concern": item["shared_concern"],
+            "diverging_reason": item["diverging_reason"],
+            "sides": sides,
+            "checked_on": checked_on,
+            "reviewer_type": reviewer,
+        })
+
+    # 全体の確認者種別は、いちばん弱いものに合わせる。
+    # AIの下読みが1件でも混じっていれば「人が確認した」とは表示しない（設計書3.3）。
+    overall = "editorial_review" if all(r == "editorial_review" for r in reviewers) else "ai_assisted"
+    return {"status": "complete", "checked_on": max(checked_dates),
+            "reviewer_type": overall, "sunk_continents": sunk, "veins": veins}
+
+
 def load_themes_yaml() -> dict[str, Any]:
     data = yaml.safe_load(THEMES_YAML.read_text(encoding="utf-8"))
     return data["themes"]
@@ -313,6 +437,7 @@ def build_theme_json(theme_id: str) -> dict[str, Any]:
         "issue_assigned_count": assigned_total,
         "issues": issues_out,
         "claim_verification": build_claim_verification(theme_id),
+        "ocean_layer": build_ocean_layer(theme_id),
     }
 
 
@@ -532,6 +657,71 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
         # 判定が miss（資料に見当たらない）のときだけ、一次資料が0件でよい。
         if claim["verdict"] != "miss" and not claim["sources"]:
             errors.append(f"{tid}/{claim['id']}: 判定が {claim['verdict']} なのに一次資料が0件です")
+
+    errors.extend(check_ocean_invariants(theme_json, known_issue_ids, other_issue_ids))
+    return errors
+
+
+# 公開契約へ入れてはいけない鍵。投稿を特定できるもの、AIの内部判断、機械一致の作業記録。
+OCEAN_FORBIDDEN_KEYS = frozenset({
+    "tweet_id", "post_id", "post_ids", "representative_posts", "excerpt", "text",
+    "summary", "reason", "confidence", "match_rule", "machine_hits", "excluded",
+})
+
+
+def _forbidden_keys_in(node: Any) -> set[str]:
+    if isinstance(node, dict):
+        found = {k for k in node if k in OCEAN_FORBIDDEN_KEYS}
+        for value in node.values():
+            found |= _forbidden_keys_in(value)
+        return found
+    if isinstance(node, list):
+        found: set[str] = set()
+        for value in node:
+            found |= _forbidden_keys_in(value)
+        return found
+    return set()
+
+
+def check_ocean_invariants(theme_json: dict, known_issue_ids: set[str],
+                           other_issue_ids: set[str]) -> list[str]:
+    """海面下（沈んだ大陸・地下水脈）がSchemaでは表せない条件を満たすか見る。"""
+    tid = theme_json.get("theme_id", "?")
+    errors: list[str] = []
+    ocean = theme_json.get("ocean_layer")
+    if not isinstance(ocean, dict):
+        return [f"{tid}: ocean_layer がありません"]
+
+    sunk, veins = ocean["sunk_continents"], ocean["veins"]
+    if ocean["status"] == "complete":
+        if not (sunk or veins) or ocean["checked_on"] is None or ocean["reviewer_type"] is None:
+            errors.append(f"{tid}: 完了済み海面下の必須項目が不足しています")
+    if ocean["status"] == "not_started":
+        # 台帳に無い論点の海面下は、推測で埋めず空のまま出す（設計書3.3）
+        if sunk or veins or ocean["checked_on"] is not None or ocean["reviewer_type"] is not None:
+            errors.append(f"{tid}: 未実施の海面下に結果が混在しています")
+
+    ids = [x["id"] for x in sunk] + [x["id"] for x in veins]
+    if len(ids) != len(set(ids)):
+        errors.append(f"{tid}: 海面下のIDが重複しています")
+
+    for item in sunk:
+        if item["sns_count"] > item["sns_base"]:
+            errors.append(f"{tid}/{item['id']}: SNS件数が母数を超えています")
+        near = item["nearest_issue_id"]
+        if near is not None and near not in known_issue_ids:
+            errors.append(f"{tid}/{item['id']}: 論点IDが公開JSONに存在しません: {near}")
+
+    for vein in veins:
+        for issue_id in vein["issue_ids"]:
+            if issue_id not in known_issue_ids:
+                errors.append(f"{tid}/{vein['id']}: 論点IDが公開JSONに存在しません: {issue_id}")
+            elif issue_id in other_issue_ids:
+                errors.append(f"{tid}/{vein['id']}: 「その他」の論点へ結びついています")
+
+    leaked = _forbidden_keys_in(ocean)
+    if leaked:
+        errors.append(f"{tid}: 公開契約に入れてはいけない項目があります: {', '.join(sorted(leaked))}")
 
     return errors
 
