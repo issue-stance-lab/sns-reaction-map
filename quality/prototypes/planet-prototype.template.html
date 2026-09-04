@@ -66,55 +66,51 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .meta{font-size:11.5px;color:var(--muted)}
 .meta code{background:#1c2128;padding:1px 5px;border-radius:4px}
 
-/* フォールバック用スタイル */
-.planet{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 24px}
-@media(max-width:375px){.planet{grid-template-columns:repeat(2,1fr);gap:8px}}
+/* JS・canvas が使えないときの静的表示（内容は生成器が data から作る） */
+.planet{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:0 0 20px}
 .continent{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  aspect-ratio:1;border-radius:50%;border:2px solid var(--line);text-align:center;
-  padding:12px;transition:transform .15s,border-color .15s;cursor:pointer;
-  text-decoration:none;color:var(--fg)}
-.continent:hover,.continent:focus-visible{border-color:var(--accent);transform:scale(1.04);outline:none}
-.continent[data-size="large"]{grid-column:span 2;grid-row:span 2}
-.continent[data-size="medium"]{grid-column:span 1;grid-row:span 1}
-.continent[data-size="small"]{grid-column:span 1;grid-row:span 1}
-.continent[data-stance="移行支持"]{background:#2F8F83;border-color:#2F8F83}
-.continent[data-stance="慎重・反対"]{background:#7D5BA6;border-color:#7D5BA6}
-.continent[data-stance="条件付き・改善要求"]{background:#D9A520;border-color:#D9A520}
-.continent[data-stance="中立・情報"]{background:#8B9199;border-color:#8B9199}
-.continent .label{font-size:13px;font-weight:700;margin-bottom:2px}
-.continent .count{font-size:11px;color:var(--muted)}
-#fallback .landing-panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 24px}
-#fallback .landing-panel:target{display:block}
-#fallback .landing-panel h2{font-size:16px;margin:0 0 8px}
-#fallback .back{display:inline-block;margin-top:12px;background:transparent;border:1px solid var(--line);color:var(--fg);
+  aspect-ratio:1;border-radius:50%;border:2px solid transparent;text-align:center;
+  padding:12px;text-decoration:none;line-height:1.4}
+.continent:hover,.continent:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.continent .label{font-size:13px;font-weight:700}
+.continent .count{font-size:11px;opacity:.78;font-variant-numeric:tabular-nums}
+.landing-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:0 0 12px}
+.landing-panel h2{font-size:16px;margin:0 0 2px}
+.landing-panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.srclist{list-style:none;padding:0;margin:8px 0 0;font-size:12px}
+.srclist li{padding:5px 0;border-top:1px solid var(--line)}
+.srclist li:first-child{border-top:none}
+.srclist a{color:var(--accent)}
+.backlink{display:inline-block;margin-top:12px;border:1px solid var(--line);color:var(--fg);
   border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}
-#fallback .back:hover,#fallback .back:focus-visible{border-color:var(--accent);outline:none}
+.backlink:hover,.backlink:focus-visible{border-color:var(--accent);outline:none}
+
+/* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
+.planet-live #fallback{display:none}
+html:not(.planet-live) .modes,
+html:not(.planet-live) .stage,
+html:not(.planet-live) .sec-live,
+html:not(.planet-live) .issue-list{display:none}
 </style>
 
 <script>
-/* 統合版: WebGL非対応時のフォールバック */
+/* 惑星は canvas 2D で描く。JS か canvas が使えない環境では静的表示のまま残す。
+   （このクラスが付かないと #fallback が見えたままになる） */
 (function(){
-  function webgl(){
-    try {
-      var c = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-    } catch(e) { return false; }
-  }
-  document.addEventListener('DOMContentLoaded', function(){
-    if (!webgl()) {
-      var cv = document.getElementById('cv');
-      if (cv) cv.style.display = 'none';
-      var fb = document.getElementById('fallback');
-      if (fb) fb.style.display = 'block';
+  try {
+    var c = document.createElement('canvas');
+    if (c.getContext && c.getContext('2d')) {
+      document.documentElement.className += ' planet-live';
     }
-  });
+  } catch (e) {}
 })();
 </script>
 
 <div class="wrap">
   <h1>議論の惑星<span class="proto-tag">試作・非公開</span></h1>
-  <p class="q" id="q"></p>
-  <p class="caution" id="caution"></p>
+  <p class="q" id="q"><!--__QUESTION__--></p>
+  <!--__CAUTION__-->
 
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
@@ -131,69 +127,13 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
     <div class="panel" id="panel"></div>
   </div>
 
-  <!-- WebGL非対応時のフォールバック（静的HTML） -->
-  <div id="fallback" style="display:none">
-    <h3 class="sec">議論の惑星（静的表示）</h3>
-    <p class="caution">この端末はWebGLに対応していないため、静的な表示をしています。パソコンやスマートフォンのブラウザでは回転する3D惑星が見られます。</p>
-    <nav class="planet" role="navigation" aria-label="議論の惑星、論点を選択">
-      <a href="#panel-kyoin-fb" class="continent" data-size="large" data-stance="移行支持" id="continent-kyoin-fb">
-        <span class="label">教員の働き方</span>
-        <span class="count">323件 (28.5%)</span>
-      </a>
-      <a href="#panel-seido-fb" class="continent" data-size="medium" data-stance="移行支持">
-        <span class="label">制度・移行プロセス</span>
-        <span class="count">256件 (22.5%)</span>
-      </a>
-      <a href="#panel-kyoiku-fb" class="continent" data-size="medium" data-stance="慎重・反対">
-        <span class="label">教育的意義・機会</span>
-        <span class="count">215件 (18.9%)</span>
-      </a>
-      <a href="#panel-ukezara-fb" class="continent" data-size="small" data-stance="慎重・反対">
-        <span class="label">受け皿・指導者</span>
-        <span class="count">164件 (14.4%)</span>
-      </a>
-      <a href="#panel-hiyo-fb" class="continent" data-size="small" data-stance="慎重・反対">
-        <span class="label">費用・家庭負担</span>
-        <span class="count">117件 (10.3%)</span>
-      </a>
-      <a href="#panel-sonota-fb" class="continent" data-size="small" data-stance="移行支持">
-        <span class="label">その他</span>
-        <span class="count">52件 (4.6%)</span>
-      </a>
-      <a href="#panel-kakusa-fb" class="continent" data-size="small" data-stance="慎重・反対">
-        <span class="label">地域格差</span>
-        <span class="count">12件 (1.1%)</span>
-      </a>
-    </nav>
+  <!--__FALLBACK__-->
 
-    <section class="landing-panel" id="panel-kyoin-fb" tabindex="-1">
-      <h2>教員の働き方</h2>
-      <p class="sub">323件 / 意見 1,139件中 28.4% — 移行支持 56%</p>
-      <div class="legend">
-        <span><i style="background:#2F8F83"></i>移行支持 182件</span>
-        <span><i style="background:#7D5BA6"></i>慎重・反対 69件</span>
-        <span><i style="background:#D9A520"></i>条件付き・改善要求 67件</span>
-        <span><i style="background:#8B9199"></i>中立・情報 5件</span>
-      </div>
-      <div class="bar">
-        <span style="width:56.3%;background:#2F8F83">移行支持</span>
-        <span style="width:21.4%;background:#7D5BA6">慎重・反対</span>
-        <span style="width:20.7%;background:#D9A520">条件付き</span>
-        <span style="width:1.5%;background:#8B9199"></span>
-      </div>
-      <p class="note">この論点では移行支持が多いが、他の論点では慎重・反対が多い。同じ人が反対しているのではなく、<strong>論点が変わると賛否が入れ替わる</strong>構造である。</p>
-      <p style="font-size:11px;color:var(--muted);margin:8px 0">表現の強さ（high率）: 27.9%</p>
-      <a href="#continent-kyoin-fb" class="back">← 惑星全体へ戻る</a>
-    </section>
-
-    <!-- 他の着陸パネルも同様に追加可能 -->
-  </div>
-
-  <h3 class="sec">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
+  <h3 class="sec sec-live">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
   <ul class="issue-list" id="list"></ul>
 
   <h3 class="sec">この試作の見かた</h3>
-  <p class="meta" id="meta"></p>
+  <p class="meta" id="meta"><!--__META__--></p>
 </div>
 
 <script>window.PLANET_DATA=/*__PLANET_DATA__*/null;</script>
@@ -633,30 +573,18 @@ addEventListener("keydown", e=>{
 });
 
 /* ---------- 初期化 ---------- */
-document.getElementById("q").textContent = D.question + "（" + D.title + "）";
-document.getElementById("caution").innerHTML =
-  D.source_label + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
-  + "収集期間 " + D.sample_period + "／収集" + D.totals.collected
-  + "件・<b>意見" + D.totals.opinions + "件</b>（惑星の母数）／更新 " + D.updated_at
-  + "　<code>" + D.snapshot_id + "</code>";
-if (D.prototype_only){
-  const b = document.createElement("div");
-  b.className = "caution";
-  b.style.borderLeftColor = "#e5534b";
-  b.innerHTML = "<b>このページは公開できません。</b>独自性の検査に落ちています。<br>・"
-    + D.gate_failures.join("<br>・");
-  document.querySelector(".caution").after(b);
+/* 中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+   JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
+try {
+  (function initView(){ const a = anglesFor(issues[0].centroid); st.yaw=a.yaw; st.pitch=a.pitch; })();
+  buildModes(); buildList(); drawPanel(); syncList(); render();
+  const h = location.hash.slice(1);
+  if (h && idIndex[h] !== undefined) land(idIndex[h], false);
+} catch (e) {
+  /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bplanet-live\b/, "");
+  throw e;
 }
-document.getElementById("meta").innerHTML =
-  "大陸＝論点、面積＝意見の数（最小" + D.min_area_pct + "%の床あり）、色＝いちばん多い立場（薄いほど意見が割れている）、"
-  + "山の高さ＝" + D.elevation_formula.definition + "（小さい論点は k=" + D.elevation_formula.k
-  + " で抑制。全体平均 " + (D.elevation_formula.p0*100).toFixed(1) + "%）。"
-  + "大陸の位置は見やすさのための配置で、論点同士の近さを意味しません。<br>"
-  + "このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。"
-  + "データが増えたら同じコマンドを実行し直すだけで、面積・色・高さ・島が更新されます。";
-(function initView(){ const a = anglesFor(issues[0].centroid); st.yaw=a.yaw; st.pitch=a.pitch; })();
-buildModes(); buildList(); drawPanel(); syncList(); render();
-const h = location.hash.slice(1);
-if (h && idIndex[h] !== undefined) land(idIndex[h], false);
 })();
 </script>

@@ -12,6 +12,7 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -195,3 +196,71 @@ class PlanetDataTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PlanetPageTest(unittest.TestCase):
+    """段階7レビューの指摘を固定する。
+
+    試作HTMLのフォールバック（3Dが描けないときの静的表示）に、件数と割合が
+    手書きで入っていた。同じページの中で「28.5%」と「28.4%」が併存し、
+    JSを切ると本文が消え、7本のうち6本がリンク切れだった。
+    生成器が data から作る形へ直したので、手書きへ戻ったら落ちるようにする。
+    """
+
+    TEMPLATE = ROOT / "quality" / "prototypes" / "planet-prototype.template.html"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = cls.TEMPLATE.read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.page = bpd.render_page(cls.data, cls.template, "null")
+        cls.static = re.sub(r"<script.*?</script>", "", cls.page, flags=re.S)
+
+    def test_template_has_no_hardcoded_numbers(self):
+        # 「323件」「28.5%」のような数字をテンプレートへ書くと、正典とずれても誰も気づかない
+        found = re.findall(r"\d{2,4}件|\d+\.\d%", self.template)
+        self.assertEqual(found, [], f"テンプレートに手書きの数字がある: {found}")
+
+    def test_template_has_no_theme_specific_stance_labels(self):
+        # テンプレートは10テーマ共通。特定テーマの立場名でCSSを書くと他テーマで無色になる
+        for label in (s["key"] for s in self.data["stances"]):
+            self.assertNotIn(label, self.template,
+                             f"テンプレートにテーマ固有の立場名『{label}』が入っている")
+
+    def test_every_in_page_link_has_a_destination(self):
+        hrefs = set(re.findall(r'href="#([^"]+)"', self.static))
+        ids = set(re.findall(r'id="([^"]+)"', self.static))
+        self.assertEqual(hrefs - ids, set(), "飛び先の無いページ内リンクがある")
+
+    def test_readable_without_javascript(self):
+        # 完了条件「JavaScriptが使えなくても、論点・比率・理由・一次資料を読める」
+        text = re.sub(r"<[^>]+>", " ", self.static)
+        for it in self.data["issues"]:
+            self.assertIn(it["label"], text, f"JS無効時に論点『{it['label']}』が読めない")
+            self.assertIn(f"{it['count']}件", text)
+        self.assertIn("landing-panel", self.static)
+        self.assertIn("https://", self.static, "JS無効時に一次資料のリンクが無い")
+
+    def test_static_numbers_come_from_the_data(self):
+        for it in self.data["issues"]:
+            self.assertIn(f"{it['count']}件・{it['share_pct']}%", self.static)
+            self.assertIn(f"強い表現{it['high_adjusted_pct']}%", self.static)
+
+    def test_floats_are_rounded_so_rebuilds_match(self):
+        # 重みの当てはめは足す順序で最後の桁が動く。丸めないと再生成のたびに差分が出る
+        def floats(o):
+            if isinstance(o, float):
+                yield o
+            elif isinstance(o, dict):
+                for v in o.values():
+                    yield from floats(v)
+            elif isinstance(o, list):
+                for v in o:
+                    yield from floats(v)
+
+        for x in floats(self.data):
+            self.assertEqual(x, round(x, 12), f"丸められていない値がある: {x!r}")
+
+    def test_rebuilding_gives_the_same_page(self):
+        again = bpd.render_page(bpd.stabilize(bpd.build(TOPIC)), self.template, "null")
+        self.assertEqual(self.page, again)
