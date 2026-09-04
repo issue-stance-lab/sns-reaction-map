@@ -198,6 +198,138 @@ def verify_denominators(
     return lines, failures
 
 
+# 「同じ数字は1ページに1回だけ」（設計書4章 / 課題54 段階8）。
+# 自転車ページは同じ画面に「5つの論点」と「6つの論点」が同時に載っていたが、
+# 既存の検査は両方 OK と判定した。読者が同時に見る数字は1つに保つ。
+_ISSUE_COUNT_PATTERNS = (
+    r"(\d+)\s*つの論点",
+    r"(?<![0-9])(\d+)論点(?![0-9])",
+)
+_OPINION_COUNT_PATTERNS = (
+    r"意見\s*(\d[\d,]*)\s*件",
+    r"分析対象の意見\s*(\d[\d,]*)\s*件",
+)
+_COLLECTED_COUNT_PATTERNS = (
+    r"収集した(?:SNS)?投稿\s*(\d[\d,]*)\s*件",
+    r"(?:公開されている)?X?投稿\s*(\d[\d,]*)\s*件を収集",
+)
+# 「◯件のうち」のように部分を指す言い方と、過去の版を述べた文は対象外にする。
+# 「◯件のうち」「全6論点中で」のように、全体ではなく部分を指す言い方。
+# 「中」は直後に助詞が続くときだけ。空白をまたぐと「 中心の…」まで拾ってしまう。
+_SCOPING_SUFFIX = re.compile(r"^(?:のうち|の内|中(?=[でのにをはが、。]))")
+_HISTORICAL = re.compile(r"\d+年\d+月\d+日|当時|以前は|から作り直し")
+
+
+def _visible_text(page: str) -> str:
+    text = re.sub(r"<script.*?</script>|<style.*?</style>", " ", page, flags=re.DOTALL)
+    # 「関連テーマ」の紹介文は他テーマの論点数を書く（「憲法改正…をめぐる6論点」）。
+    # このページの数字ではないので外す。
+    text = re.sub(r'<section[^>]*id="related-section".*?</section>', " ", text, flags=re.DOTALL)
+    text = re.sub(r'<div[^>]*class="[^"]*related-grid[^"]*".*?</div>\s*</section>', " ", text,
+                  flags=re.DOTALL)
+    return html_lib.unescape(re.sub(r"<[^>]+>", " ", text))
+
+
+def _named_issue_count(theme: str) -> int | None:
+    """公開している論点数（「その他」を除く）。トップページと catalog が使う値。"""
+    catalog_path = ROOT / "data" / "public" / "catalog.json"
+    if catalog_path.is_file():
+        for row in json.loads(catalog_path.read_text(encoding="utf-8")).get("themes", []):
+            if row.get("theme_id") == theme and row.get("named_issue_count") is not None:
+                return int(row["named_issue_count"])
+    public_path = ROOT / "data" / "public" / "themes" / f"{theme}.json"
+    if public_path.is_file():
+        issues = json.loads(public_path.read_text(encoding="utf-8")).get("issues") or []
+        return sum(1 for issue in issues if issue.get("kind") != "other")
+    return None
+
+
+def _public_value(theme: str, key: str) -> int | None:
+    public_path = ROOT / "data" / "public" / "themes" / f"{theme}.json"
+    if not public_path.is_file():
+        return None
+    value = json.loads(public_path.read_text(encoding="utf-8")).get(key)
+    return int(value) if value is not None else None
+
+
+def _stated_totals(text: str, patterns: tuple[str, ...]) -> dict[str, list[str]]:
+    """ページ全体を指した言い方だけを拾う。部分集合と過去の版は除く。"""
+    found: dict[str, list[str]] = {}
+    for pattern in patterns:
+        for match in re.finditer(pattern, text):
+            tail = text[match.end():match.end() + 6]
+            if _SCOPING_SUFFIX.match(tail):
+                continue
+            # 過去の版を述べた文だけを除く。判定はその数字と同じ文の中に限る
+            # （前後を広く見ると、更新履歴の近くにある古い数字まで黙って見逃す）。
+            head = text[:match.start()]
+            start = max(head.rfind("。"), head.rfind("\n")) + 1
+            tail_end = text.find("。", match.end())
+            sentence = text[start:tail_end if tail_end != -1 else match.end() + 40]
+            if _HISTORICAL.search(sentence):
+                continue
+            value = match.group(1).replace(",", "")
+            found.setdefault(value, []).append(
+                re.sub(r"\s+", " ", text[max(0, match.start() - 24):match.end() + 8]).strip())
+    return found
+
+
+def verify_one_number_per_page(theme: str, page: str) -> tuple[list[str], int]:
+    """論点数・意見数・収集数が、1ページの中で2通り出ていないかを見る。"""
+    text = _visible_text(page)
+    named = _named_issue_count(theme)
+    lines: list[str] = []
+    failures = 0
+
+    for label, patterns, expected in (
+        ("意見数", _OPINION_COUNT_PATTERNS, _public_value(theme, "opinion_count")),
+        ("収集数", _COLLECTED_COUNT_PATTERNS, _public_value(theme, "collected_count")),
+    ):
+        found = _stated_totals(text, patterns)
+        if not found:
+            continue
+        if expected is not None and set(found) != {str(expected)}:
+            detail = " / ".join(
+                f"{value}（{len(spots)}か所: {spots[0]}）"
+                for value, spots in sorted(found.items(), key=lambda x: int(x[0])))
+            lines.append(f"NG  {theme}: {label}が正典（{expected}）と違う値でも書かれている: {detail}")
+            failures += 1
+        elif expected is None and len(found) > 1:
+            lines.append(f"NG  {theme}: {label}が1ページに2通り以上出ている: {' / '.join(sorted(found))}")
+            failures += 1
+        else:
+            lines.append(f"OK  {label}はページ全体で{expected if expected is not None else list(found)[0]}に統一されている")
+
+    stated = _stated_totals(text, _ISSUE_COUNT_PATTERNS)
+    if not stated:
+        lines.append("OK  論点数はページに書かれていない")
+    elif named is None:
+        # 未公開テーマは正典の論点数を持たない。せめてページの中で食い違わないことを見る
+        if len(stated) > 1:
+            lines.append(f"NG  {theme}: 論点数が1ページに2通り以上出ている: {' / '.join(sorted(stated))}")
+            failures += 1
+        else:
+            lines.append(f"OK  論点数はページ全体で{list(stated)[0]}に統一されている（未公開テーマ）")
+    elif len(stated) > 1:
+        detail = " / ".join(
+            f"{value}（{len(spots)}か所: {spots[0]}）"
+            for value, spots in sorted(stated.items(), key=lambda x: int(x[0])))
+        lines.append(
+            f"NG  {theme}: 論点数が1ページに2通り以上出ている。"
+            f"正典（「その他」を除く）は{named}: {detail}")
+        failures += 1
+    elif set(stated) != {str(named)}:
+        # ページの中では食い違っていないが、「その他」を論点に数えている。
+        # トップページと catalog は named_issue_count（「その他」を除く）を使うので、
+        # サイト内で数が2通りになる。ページを作り直すとき（段階10）にそろえる。
+        lines.append(
+            f"注意  {theme}: 論点数はページ内で{list(stated)[0]}に統一されているが、"
+            f"catalog の named_issue_count は{named}（「その他」を論点に数えている）")
+    else:
+        lines.append(f"OK  論点数はページ全体で{named}に統一されている")
+    return lines, failures
+
+
 def verify_page_count_spans(theme: str, page: str) -> tuple[list[str], int]:
     """ページ全体で、管理対象外の span に書かれた件数を拒否する。"""
     stale: list[str] = []
@@ -668,6 +800,11 @@ def verify_theme_page(
     else:
         lines.append(f"NG  論点カードの件数が分類結果と一致する: {', '.join(mismatched)}")
         failures += 1
+
+    lines.append("=== 同じ数字は1回だけ ===")
+    one_lines, one_failures = verify_one_number_per_page(theme, page)
+    lines.extend(one_lines)
+    failures += one_failures
 
     lines.append("=== ページ全体の件数表示 ===")
     count_lines, count_failures = verify_page_count_spans(theme, page)
