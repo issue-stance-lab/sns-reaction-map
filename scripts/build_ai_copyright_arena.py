@@ -53,6 +53,7 @@ from ai_copyright_taxonomy import (  # noqa: E402
     issue_index,
 )
 from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # noqa: E402
+from x_embed import period_label  # noqa: E402
 
 THEME = "ai-copyright"
 PAGE = ROOT / "docs" / "ai-copyright-reaction-map.html"
@@ -322,6 +323,14 @@ def apply_public_counts(html_text: str, public_theme: Path = PUBLIC_THEME) -> st
         f"で取得した公開投稿 {total}件",
         "調査条件の件数",
     )
+    theme = parse_themes_yaml(THEMES_YAML).get(THEME, {})
+    period = period_label(str(theme.get("sample_period") or ""))
+    page = replace_once(
+        page,
+        r"取得期間: [^\uff0f\n<]+",
+        f"取得期間: {period}",
+        "調査条件の取得期間",
+    )
     page = replace_once(
         page,
         r"分析対象となった意見[\d,]+件をAIが\d+つの論点に整理しました",
@@ -410,6 +419,14 @@ def build(
         r"で取得した公開投稿 [\d,]+件",
         f"で取得した公開投稿 {total}件",
         "調査条件の件数",
+    )
+    theme = parse_themes_yaml(THEMES_YAML).get(THEME, {})
+    period = period_label(str(theme.get("sample_period") or ""))
+    page = replace_once(
+        page,
+        r"取得期間: [^\uff0f\n<]+",
+        f"取得期間: {period}",
+        "調査条件の取得期間",
     )
     page = replace_once(
         page,

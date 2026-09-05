@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-04"
+updated_at: "2026-09-05"
 
 rules:
   required_for:
@@ -32,6 +32,23 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260905-001
+    department: engineering-data
+    action: website_publication
+    summary: "AIと著作権テーマの2026-09-05更新回を一般公開する"
+    reason: "新規の公開投稿サンプル458件を追加し、ページ上の集計と論点表示を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "公開後はGitHub Pagesの反映まで数分かかる場合がある"
+    recommendation: approve
+    evidence:
+      - "data/verification/updates/ai-copyright/2026-09-05/report.json"
+      - ".staging/refresh/ai-copyright/20260905_120301/promotion-manifest.json"
+      - "DATA_REFRESH.md"
+    status: approved
+    requested_at: "2026-09-05"
+    decided_at: "2026-09-05"
+    decision_note: "CEOが本対話で『公開まで進めて』と明示して承認。対象はpromotion manifest SHA256: 1401bfb47723d6a7895086a4a3429a93d9345bc5b1cc4561b8d1d336a3966caa。"
   - id: approval-20260904-001
     department: editorial
     action: note_post
