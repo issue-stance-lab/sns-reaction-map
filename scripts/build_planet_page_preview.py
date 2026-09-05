@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import build_planet_data as bpd  # noqa: E402
+from build_planet_data import e as esc  # noqa: E402
 
 SCOPE = "#planet-block"
 
@@ -43,6 +44,9 @@ DROP_SECTIONS = [
      "section", "投稿の分類結果（数字の重複）"),
     ('<section class="stats insight-stats"',
      "section", "4つの注目ポイント（数字の重複）"),
+    # 本文は data/verification/{テーマ}-background.json へ移し、第1部として先頭で出す
+    ('<section class="panel background-panel">',
+     "section", "この争点の背景（第1部へ移動）"),
 ]
 
 
@@ -211,6 +215,65 @@ LIGHT_SKIN = """
 """
 
 
+BG_CSS = """
+#bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+#bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+#bukatsu-background h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+#bukatsu-background p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+#bukatsu-background ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+#bukatsu-background ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+#bukatsu-background ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+#bukatsu-background ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+#bukatsu-background ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+#bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+#bukatsu-background ol.bg-tl .src a{color:var(--muted)}
+#bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+"""
+
+
+def build_background(topic: str) -> str:
+    """第1部「この問題を知る」を台帳から組み立てる。
+
+    本文は人（編集部AI）が一次資料に当たって書いたものを台帳に置き、ここでは並べるだけ。
+    件数・割合は一切入れない（同じ数字は1ページに1回だけ／段階8）。
+    """
+    src = ROOT / "data" / "verification" / f"{topic}-background.json"
+    if not src.exists():
+        return ""
+    d = json.loads(src.read_text(encoding="utf-8"))
+    if d.get("status") != "complete":
+        return ""
+    df = d["definition"]
+    out = [f"<style>{BG_CSS}</style>",
+           '<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">',
+           '<div class="panel-title"><h2 id="bg-title">この問題は、何の話か</h2>'
+           '<span>官庁の資料で確かめた範囲</span></div>',
+           f'<p class="bg-def">{esc(df["one_line"])}</p>',
+           f'<p class="bg-now">{esc(df["now"])}</p>',
+           "<h3>なぜ始まったか</h3>"]
+    out += [f"<p>{esc(t)}</p>" for t in d["cause"]]
+    out.append("<h3>これまでの経緯</h3>")
+    out.append('<ol class="bg-tl">')
+    for x in d["timeline"]:
+        links = "／".join(
+            f'<a href="{esc(s["url"])}" target="_blank" rel="noopener">{esc(s["name"])}</a>'
+            for s in x["sources"])
+        out.append(
+            f'<li><div class="when">{esc(x["when"])}<em>{esc(x["era"])}</em></div>'
+            f'<div><p class="what">{esc(x["text"])}</p>'
+            f'<span class="src">出典: {links}</span></div></li>')
+    out.append("</ol>")
+    out.append('<p class="bg-jump"><a href="#vote-section">意見のほうを先に見る →</a></p>')
+    out.append("</section>")
+    return "\n".join(out)
+
+
 def render_planet(topic: str) -> str:
     data = bpd.stabilize(bpd.build(topic))
     tpl = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text(encoding="utf-8")
@@ -303,10 +366,15 @@ def main() -> None:
 
     html, vote = take_block(html, '<section class="panel" id="vote-section"', "section")
 
-    back = '<section class="panel background-panel">'
-    if back not in html:
-        raise SystemExit("「この争点の背景」が見つかりません")
-    html = html.replace(back, trust + "\n" + back, 1)
+    rel = '<section class="panel" id="related-topics">'
+    if rel not in html:
+        raise SystemExit("「次に見るテーマ」が見つかりません")
+    html = html.replace(rel, trust + "\n" + rel, 1)
+
+    bg = build_background(a.topic)
+    bg_anchor = "<!-- BUKATSU_ENTRY_START -->"
+    if bg and bg_anchor in html:
+        html = html.replace(bg_anchor, bg + "\n" + bg_anchor, 1)
 
     section = build_section(split_prototype(render_planet(a.topic)))
     anchor = "<!-- BUKATSU_ENTRY_END -->"
