@@ -40,6 +40,14 @@ canvas.dragging{cursor:grabbing}
 .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
   font-weight:700;overflow:hidden;white-space:nowrap}
 .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+/* 立場を切り替えたときに何が起きたかの1行（すれ違い装置） */
+.panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.panel .cross b{color:#f2f6fa}
+.panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
+  background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;cursor:pointer}
+.panel .cross .spin:hover{border-color:var(--accent)}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
 .islands{list-style:none;padding:0;margin:8px 0 0}
 .islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
@@ -184,12 +192,35 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const st = {
   yaw: 0.6, pitch: -0.15, zoom: 1,
   mode: "all", landed: null, islandMix: 0,
-  dragging: false, quality: 1, anim: null
+  dragging: false, quality: 1, anim: null,
+  // 立場を切り替えたときの地形の作り替え。wCur が「いま描いている重み」で、
+  // モードの重みの間を補間する。morph は補間の進み具合と、行き先の記録。
+  wCur: null, morph: null, deltaUntil: 0
 };
 const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
 const issues = D.issues;
 const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
 const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
+
+/* ---------- 立場ごとの地形（すれ違い装置） ----------
+   同じ惑星の上で、立場を変えると大陸の大きさと順位が変わる。
+   順位・件数・大陸名はすべて data から採る。ここで書き足さない。 */
+const FLOOR = -2.6;   // 0件の大陸を確実に消すための重み（内積の差は最大2）
+function effWeights(modeId){
+  const m = modeById[modeId], W = D.weights_by_mode[modeId];
+  return issues.map((it,k) => m.counts[it.id] > 0 ? W[k] : FLOOR);
+}
+// 件数の多い順の順位。0件の論点は null（順位を持たない）
+function ranksOf(modeId){
+  const m = modeById[modeId];
+  const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
+                      .filter(x => x.n > 0)
+                      .sort((a,b) => b.n - a.n || a.k - b.k);
+  const r = issues.map(() => null);
+  order.forEach((x,i) => { r[x.k] = i + 1; });
+  return r;
+}
+function topIssueOf(modeId){ const r = ranksOf(modeId); return r.indexOf(1); }
 
 /* ---------- 色 ---------- */
 function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
@@ -236,9 +267,14 @@ const off = document.createElement("canvas");
 const octx = off.getContext("2d", {alpha:false});
 let img = null;
 
-function activeIssues(){
-  const m = modeById[st.mode];
-  return issues.map((it,i)=>({it, i, on: m.counts[it.id] > 0}));
+// いま描いている重みで「大陸が残っているか」を決める。作り替えの途中も同じ判定で見る
+function activeIssues(W){
+  return issues.map((it,i)=>({it, i, on: W[i] > FLOOR + 0.02}));
+}
+// 地形の作り替え中に、件数・パターン・島の色をどちらのモードで見せるか（中間で入れ替える）
+function shownMode(){
+  const mo = st.morph;
+  return (mo && mo.t < 0.5) ? mo.fromMode : st.mode;
 }
 
 function render(){
@@ -246,15 +282,19 @@ function render(){
   if (off.width !== size){ off.width = off.height = size; img = octx.createImageData(size,size); }
   const data = img.data;
   const R = rot(st.yaw, st.pitch);
-  const W = D.weights_by_mode[st.mode];
-  const acts = activeIssues();
-  const cols = issues.map(it => continentRGB(it, st.mode));
-  const pats = issues.map(it => PATTERN[(stanceMap[st.mode==="all"?it.top_stance:st.mode]||{}).pattern] || 0);
+  const mo = st.morph;
+  const W = st.wCur || (st.wCur = effWeights(st.mode));
+  const acts = activeIssues(W);
+  const sm = shownMode();
+  const cols = issues.map(it => mo
+    ? mix(continentRGB(it, mo.fromMode), continentRGB(it, mo.toMode), mo.t)
+    : continentRGB(it, st.mode));
+  const pats = issues.map(it => PATTERN[(stanceMap[sm==="all"?it.top_stance:sm]||{}).pattern] || 0);
   const landed = st.landed;
   const sub = landed !== null ? issues[landed].sub : null;
   const hasIsl = sub && sub.status === "reread" && st.islandMix > 0.01;
   const islCols = hasIsl
-    ? sub.items.map((x,j)=>islandRGB(issues[landed], st.mode, j, sub.items.length, x.unread))
+    ? sub.items.map((x,j)=>islandRGB(issues[landed], sm, j, sub.items.length, x.unread))
     : null;
 
   const half = size/2, radius = half*0.94*st.zoom;
@@ -344,7 +384,13 @@ function render(){
 
 // 大陸名を球の上に置く（正面を向いている大陸だけ）
 function drawLabels(R, half, radius){
-  const m = modeById[st.mode];
+  const sm = shownMode();
+  const m = modeById[sm];
+  const rank = ranksOf(sm);
+  // 順位が動いた大陸だけ、しばらく「↑2」「↓2」を出す（すれ違いの正体はここ）
+  const dl = st.deltaUntil - performance.now();
+  const showDelta = st.morph ? 1 : (dl > 0 ? Math.min(1, dl/700) : 0);
+  const prevRank = st.prevRank;
   // 画面が小さいほどキャンバスが縮小表示されるので、文字を大きくして読めるようにする
   const fs = Math.max(1, cv.width / Math.max(1, cv.clientWidth));
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
@@ -366,8 +412,19 @@ function drawLabels(R, half, radius){
     ctx.strokeText(it.label, X, Y); ctx.fillStyle = "#f2f6fa"; ctx.fillText(it.label, X, Y);
     ctx.font = "600 " + Math.round(13*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
     ctx.lineWidth = 3.5*fs;
-    const sub = n + "件", dy = (big?20:17)*fs;
+    const sub = rank[k] + "位 ・ " + n + "件", dy = (big?20:17)*fs;
     ctx.strokeText(sub, X, Y + dy); ctx.fillStyle = "#c7d1dc"; ctx.fillText(sub, X, Y + dy);
+    // 立場を切り替えて順位が動いた大陸だけ、矢印と差を添える
+    if (showDelta && prevRank && prevRank[k] && prevRank[k] !== rank[k]){
+      const d = prevRank[k] - rank[k];   // + なら上がった
+      ctx.globalAlpha = alpha * showDelta;
+      ctx.font = "700 " + Math.round(14*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
+      ctx.lineWidth = 3.5*fs;
+      const tag = (d > 0 ? "↑" : "↓") + Math.abs(d);
+      ctx.strokeText(tag, X, Y + dy*2.05);
+      ctx.fillStyle = "#f2f6fa"; ctx.fillText(tag, X, Y + dy*2.05);
+      ctx.globalAlpha = alpha;
+    }
     ctx.globalAlpha = 1;
   });
   // 島の番号（着陸後）
@@ -386,7 +443,7 @@ function drawLabels(R, half, radius){
     const X = half + a*radius, Y = half - b*radius;
     ctx.beginPath(); ctx.arc(X, Y, 12*fs, 0, 6.284);
     ctx.fillStyle = "rgba(10,13,18,.82)"; ctx.fill();
-    ctx.strokeStyle = css(islandRGB(issues[L], st.mode, j, sb.items.length, x.unread));
+    ctx.strokeStyle = css(islandRGB(issues[L], sm, j, sb.items.length, x.unread));
     ctx.stroke();
     ctx.font = "700 " + Math.round(13*fs) + "px -apple-system,sans-serif"; ctx.fillStyle = "#f2f6fa";
     ctx.fillText(String(j+1), X, Y+0.5);
@@ -404,10 +461,11 @@ function pick(mx, my){
   const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
   const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
   const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-  const W = D.weights_by_mode[st.mode], m = modeById[st.mode];
+  // 押せる大陸は「いま描かれている大陸」。作り替えの途中でも画面と食い違わせない
+  const W = st.wCur || effWeights(st.mode);
   let best=-9, bi=null;
   issues.forEach((it,k)=>{
-    if (m.counts[it.id] <= 0) return;
+    if (W[k] <= FLOOR + 0.02) return;
     const c = it.center;
     const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
     if (s > best){ best=s; bi=k; }
@@ -480,6 +538,27 @@ function legend(){
     '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
 }
 
+/* 立場を切り替えたときに何が起きたかを1行で言う。
+   順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
+function crossTalk(modeId){
+  if (modeId === "all"){
+    return '上のボタンで立場を切り替えると、<b>同じ惑星の大陸の大きさと順位が変わります</b>。';
+  }
+  const rAll = ranksOf("all"), rM = ranksOf(modeId);
+  const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
+  if (topMK < 0) return '';
+  const spin = '<button type="button" class="spin" id="spin">'
+             + '「'+issues[topMK].label+'」を正面へ</button>';
+  if (topMK === topAllK){
+    return 'この立場でいちばん大きい大陸は「'+issues[topMK].label+'」。'
+         + 'すべての意見のときと同じ1位です。' + spin;
+  }
+  const moved = rM[topAllK];
+  return 'この立場でいちばん大きい大陸は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+       + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
+       + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
+}
+
 function drawPanel(){
   const p = document.getElementById("panel");
   const m = modeById[st.mode];
@@ -488,6 +567,7 @@ function drawPanel(){
       + '<p class="sub">'+m.label+'：'+m.total+'件'
       + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
       + legend()
+      + '<p class="cross">'+crossTalk(st.mode)+'</p>'
       + '<p class="sub" style="margin:6px 0 0">大陸をクリックすると、その論点へ降ります。'
       + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。</p>'
       + (st.mode!=="all"
@@ -499,6 +579,15 @@ function drawPanel(){
              : '')
           + '</div>'
         : '');
+    // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
+    // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
+    const sp = document.getElementById("spin");
+    if (sp) sp.onclick = ()=>{
+      const k = topIssueOf(st.mode);
+      if (k < 0) return;
+      const a = anglesFor(issues[k].centroid);
+      animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:st.zoom}}, 700);
+    };
     return;
   }
   const it = issues[st.landed];
@@ -540,14 +629,17 @@ function drawPanel(){
 /* ---------- 一覧・モード ---------- */
 function syncList(){
   const m = modeById[st.mode];
+  const rank = ranksOf(st.mode);
   issues.forEach((it,i)=>{
     const b = document.getElementById("btn-"+it.id);
     if (!b) return;
     const n = m.counts[it.id];
     b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
     b.style.opacity = n ? 1 : .45;
+    // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
+    // 並びの変化を追えるようにするため。
     b.querySelector(".m").textContent =
-      (n ? n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
       + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
   });
 }
@@ -559,16 +651,65 @@ function buildList(){
     + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
   issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
 }
+/* ---------- すれ違い装置：立場を切り替えて地形を作り替える ----------
+   大陸を黙って描き直すのではなく、①面積と色を補間して育つ／縮むのを見せ
+   ②いちばん大きい大陸が変わったら、その大陸が正面に来るまで球を回し
+   ③順位が動いた大陸に「↑2」「↓2」を出す。
+   数字と大陸名はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  const fromMode = st.mode;
+  const from = (st.wCur || effWeights(fromMode)).slice();
+  const to = effWeights(toMode);
+  st.prevRank = ranksOf(fromMode);
+  st.mode = toMode;
+
+  // 着陸した大陸がこの立場で0件なら、軌道上へ戻す（無い大陸に降りたままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+    st.islandMix = 0;
+  }
+  drawPanel(); syncList();          // 本文は待たせない（着陸と同じ扱い）
+
+  // 球は勝手に回さない。新しい1位へ回すと、順位を落とした大陸が裏側へ行き、
+  // いちばん見せたい「縮むところ」が見えなくなる。入れ替わる2つの大陸が
+  // 180度近く離れていることもあり（部活動の実データで154度）、両方を同時に
+  // 正面へ置くこともできない。代わりに、下のボタンを読者が押せるようにしてある。
+  if (st.anim){ cancelAnimationFrame(st.anim); st.anim = null; }
+  if (reduce){
+    st.wCur = to; st.morph = null;
+    st.deltaUntil = performance.now() + 4000;
+    render();
+    return;
+  }
+
+  const dur = 900, t0 = performance.now();
+  st.morph = {fromMode, toMode, t: 0};
+  (function step(now){
+    const t = Math.min(1, (now - t0)/dur), e = ease(t);
+    st.morph.t = e;
+    st.wCur = from.map((w,k) => w + (to[k] - w)*e);
+    render();
+    if (t < 1){ st.anim = requestAnimationFrame(step); }
+    else {
+      st.anim = null; st.morph = null; st.wCur = to;
+      st.deltaUntil = performance.now() + 2600;
+      render();
+      // 「↑2」を消すための描き直し。放置すると矢印が残る
+      setTimeout(()=>{ if (!st.morph) render(); }, 2700);
+    }
+  })(t0);
+}
+
 function buildModes(){
   const el = document.getElementById("modes");
   el.innerHTML = D.modes.map(m =>
     '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
     + m.label+' '+m.total+'</button>').join("");
   el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
-    st.mode = b.dataset.m;
     el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
-    if (st.landed!==null && modeById[st.mode].counts[issues[st.landed].id]===0) st.landed=null;
-    drawPanel(); syncList(); render();
+    morphTo(b.dataset.m);
   });
 }
 

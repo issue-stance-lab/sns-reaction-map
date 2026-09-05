@@ -266,6 +266,61 @@ class PlanetPageTest(unittest.TestCase):
         self.assertEqual(self.page, again)
 
 
+class PlanetCrossTalkTest(unittest.TestCase):
+    """すれ違い装置（立場を切り替えると大陸の順位が入れ替わる）を固定する。
+
+    立場フィルターは以前からあったが、大陸が黙って描き直されるだけで、
+    順位が入れ替わったことは画面のどこにも出ていなかった。
+    「同じ惑星の上で立場によって地形が変わる」ことが読者に見える状態を保つ。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+        m = re.search(r"\nfunction morphTo\(.*?\n\}\n", cls.script, re.S)
+        assert m, "morphTo（地形の作り替え）がテンプレートから消えている"
+        cls.morph = m.group(0)
+
+    def test_terrain_is_interpolated_between_modes(self):
+        # 重みを直に読むと、立場を切り替えた瞬間に地形が飛ぶ（作り替えが見えない）
+        self.assertIn("st.wCur", self.script, "補間中の重み st.wCur が無い")
+        self.assertNotIn("D.weights_by_mode[st.mode]", self.script,
+                         "モードの重みを直に描いている。作り替えの途中が飛ぶ")
+
+    def test_mode_switch_does_not_turn_the_globe(self):
+        # 新しい1位へ球を回すと、順位を落とした大陸が裏側へ行き、
+        # いちばん見せたい「縮むところ」が見えなくなる（実測で確認済み）
+        for attr in ("st.yaw =", "st.pitch =", "st.yaw=", "st.pitch="):
+            self.assertNotIn(attr, self.morph,
+                             f"立場の切り替えで球を回している（{attr}）")
+
+    def test_rank_comes_from_the_data(self):
+        # 順位は data から数える。テンプレートへ書くと、データが増えて順位が
+        # 変わっても直らない。「1位」だけは例外で、いちばん大きい大陸を指す
+        # 言い方そのもの（どのテーマでも 1 のまま変わらない）。
+        self.assertIn("function ranksOf(", self.script, "順位を data から数える関数が無い")
+        found = [x for x in re.findall(r"\d+位", self.template) if x != "1位"]
+        self.assertEqual(found, [], f"テンプレートに手書きの順位がある: {found}")
+        self.assertRegex(self.script, r"moved\s*\+\s*'位'",
+                         "入れ替わった先の順位を数えずに書いている")
+
+    def test_zero_count_continents_disappear(self):
+        # 0件の論点は weights_by_mode では 0.0 のまま。そのまま描くと
+        # 「0件なのにいちばん大きい大陸」になる。確実に消える重みへ落とすこと
+        self.assertIn("FLOOR", self.script, "0件の大陸を消すための重みが無い")
+        floor = float(re.search(r"const FLOOR\s*=\s*(-?[\d.]+)", self.script).group(1))
+        self.assertLessEqual(floor, -2.0,
+                             "FLOOR が浅い。内積の差は最大2なので大陸が残る")
+
+    def test_rank_is_reachable_without_the_globe(self):
+        # 惑星が見えない読み方（キーボード操作）でも並びの変化を追えること
+        self.assertRegex(self.script, r'rank\[i\]\s*\+\s*"位',
+                         "論点一覧に順位が出ていない")
+
+
 class PlanetOceanPageTest(unittest.TestCase):
     """段階7-B: 着陸パネルの「資料との照合」と「海面より下」が画面に出ること。
 
