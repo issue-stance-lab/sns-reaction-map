@@ -193,6 +193,62 @@ class PlanetDataTest(unittest.TestCase):
         public_ids = {s["id"] for i in self.public["issues"] for s in i["stances"]}
         self.assertEqual(public_ids - cfg_ids, set())
 
+    # ---------------------------------------------------------------- 課題62
+
+    def test_read_at_with_mixed_dates_format_does_not_crash(self):
+        """`read_at` が "2026-08-24 / 2026-09-06（追記）" の形でも、最も新しい日付を拾う。"""
+        self.assertEqual(bpd.latest_read_date("2026-08-24 / 2026-09-06（追記）"),
+                         bpd.date(2026, 9, 6))
+        self.assertEqual(bpd.latest_read_date("2026-08-25"), bpd.date(2026, 8, 25))
+        with self.assertRaises(SystemExit):
+            bpd.latest_read_date("日付なし")
+
+    def test_skipped_posts_fail_the_gate_even_within_40_percent(self):
+        """読み飛ばしが1件でもあれば、4割以内でも不合格になる。"""
+        data = self.build()
+        cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
+        issue = next(i for i in data["issues"] if i["sub"]["status"] == "reread")
+        issue["sub"]["skipped_count"] = 1
+        issue["sub"]["grown_count"] = 0
+        ng = bpd.independence_gate(data, cfg)
+        self.assertTrue(any("読み飛ばしが1件" in m and issue["label"] in m for m in ng), ng)
+
+    def test_grown_after_read_passes_up_to_40_percent(self):
+        """読了後に増えた分だけなら、4割まで合格する。"""
+        data = self.build()
+        cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
+        issue = next(i for i in data["issues"] if i["sub"]["status"] == "reread")
+        issue["sub"]["skipped_count"] = 0
+        issue["sub"]["grown_count"] = int(0.4 * issue["count"])
+        ng = bpd.independence_gate(data, cfg)
+        self.assertFalse(any(issue["label"] in m for m in ng), ng)
+
+    def test_grown_after_read_over_40_percent_fails(self):
+        """増えた分でも4割を超えれば不合格になる。"""
+        data = self.build()
+        cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
+        issue = next(i for i in data["issues"] if i["sub"]["status"] == "reread")
+        issue["sub"]["skipped_count"] = 0
+        issue["sub"]["grown_count"] = int(0.4 * issue["count"]) + 1
+        ng = bpd.independence_gate(data, cfg)
+        self.assertTrue(any("増えた分" in m and issue["label"] in m for m in ng), ng)
+
+    def test_bukatsu_chiiki_teacher_issue_fails_on_real_skipped_posts(self):
+        """実データ: 教員の働き方は読み飛ばし54件で不合格になり、他の2論点は挙げられない。"""
+        data = bpd.build(TOPIC)
+        cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
+        by_label = {i["label"]: i["sub"] for i in data["issues"]}
+        self.assertEqual(by_label["教員の働き方"]["skipped_count"], 54)
+        self.assertEqual(by_label["教員の働き方"]["grown_count"], 0)
+        self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 0)
+        self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 0)
+        ng = bpd.independence_gate(data, cfg)
+        message = "\n".join(ng)
+        self.assertIn("教員の働き方", message)
+        self.assertIn("読み飛ばしが54件", message)
+        self.assertNotIn("費用・家庭負担", message)
+        self.assertNotIn("受け皿・指導者", message)
+
 
 if __name__ == "__main__":
     unittest.main()

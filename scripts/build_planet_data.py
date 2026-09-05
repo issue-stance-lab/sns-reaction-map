@@ -15,6 +15,8 @@ import hashlib
 import html
 import json
 import math
+import re
+from datetime import date, datetime
 from pathlib import Path
 
 import numpy as np
@@ -36,6 +38,43 @@ def dig(obj, path):
     for p in path:
         obj = obj[p]
     return obj
+
+
+def latest_read_date(read_at: str) -> date:
+    """`read_at` は複数の日付が並ぶことがある（例 "2026-08-24 / 2026-09-06（追記）"）。
+    1つだけ取り出す前提で書くと落ちるため、含まれる日付をすべて拾って
+    いちばん新しいもの＝読み直しが完了した時点を使う。
+    """
+    found = re.findall(r"\d{4}-\d{2}-\d{2}", read_at or "")
+    if not found:
+        raise SystemExit(f"read_at '{read_at}' から日付を取り出せません。")
+    return max(date.fromisoformat(d) for d in found)
+
+
+def split_unread(canonical: list[dict], issue_key: str, read_ids: set[str],
+                  read_at: date) -> tuple[int, int]:
+    """読み直し後もなお未読の投稿を「読み飛ばし」と「読了後に増えた分」へ分ける。
+
+    読み飛ばし＝read_at 時点で正典に既にあったのに読まれなかった投稿（fetched_at <= read_at）。
+    増えた分＝read_at より後の収集で正典へ入った投稿（fetched_at > read_at）。
+    この2つを引き算だけで区別しないと、「6割読めば終わってよい」という
+    読み飛ばしを検査が見逃す（課題62）。
+    """
+    skipped = grown = 0
+    for post in canonical:
+        c = post.get("classification") or {}
+        if not (c.get("is_relevant") and c.get("is_opinion")):
+            continue
+        if c.get("main_issue") != issue_key:
+            continue
+        if post["tweet_id"] in read_ids:
+            continue
+        fetched = datetime.fromisoformat(post["fetched_at"].replace("Z", "+00:00")).date()
+        if fetched <= read_at:
+            skipped += 1
+        else:
+            grown += 1
+    return skipped, grown
 
 
 def load_public_theme(topic: str) -> dict:
@@ -256,18 +295,34 @@ def build(topic: str) -> dict:
 
     # --- 下位論点（島）。再読データがある論点だけ割れる
     sub_cfg = cfg.get("sub_issues") or {}
+    canonical_posts = None  # 読み飛ばし判定にだけ使う。陸地の集計（counts）はここへ戻さない
     issues = []
     for i, k in enumerate(keys):
         ic = issues_cfg[k]
         sub = None
         if k in sub_cfg:
             sc = sub_cfg[k]
-            raw = dig(json.loads((ROOT / sc["file"]).read_text()), sc["path"])
+            raw_full = json.loads((ROOT / sc["file"]).read_text())
+            raw = dig(raw_full, sc["path"])
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}
                      for bid, b in raw.items()]
             items.sort(key=lambda x: -x["count"])
             reread = sum(x["count"] for x in items)
             gap = counts[k] - reread
+
+            # 未読の内訳（課題62）。読み直したあとに正典へ増えた分だけを余裕として認め、
+            # 読み直した時点で既にあったのに読まなかった分（読み飛ばし）は0件を求める
+            read_ids = {x["tweet_id"] for x in dig(raw_full, sc["path"][:-1] + ["items"])}
+            read_at = latest_read_date(raw_full.get("read_at"))
+            if canonical_posts is None:
+                canonical_posts = json.loads((ROOT / t["sample_file"]).read_text())
+            skipped, grown = split_unread(canonical_posts, k, read_ids, read_at)
+            if skipped + grown != gap:
+                raise SystemExit(
+                    f"「{k}」の未読内訳（読み飛ばし{skipped}件+増えた分{grown}件={skipped + grown}件）が"
+                    f"未読合計{gap}件と一致しません。正典と公開JSONの集計がずれています。"
+                )
+
             if gap > 0:
                 items.append({"id": "__unread__", "label": "まだ読み直していない分",
                               "count": gap, "unread": True})
@@ -281,6 +336,8 @@ def build(topic: str) -> dict:
                 "source_file": sc["file"],
                 "reread_count": reread,
                 "unread_count": max(gap, 0),
+                "skipped_count": skipped,
+                "grown_count": grown,
                 "items": items,
             }
         else:
@@ -390,11 +447,18 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
     if share < 50:
         ng.append(f"編集部が読み直した論点が意見の{share:.0f}%しかない（50%以上必要）")
 
-    # 3. 読み直し済みの論点でも、未読の残りが多すぎないこと
+    # 3. 読み直し済みの論点は、読み飛ばしが無く、読了後に増えた分だけが4割まで
+    #    （課題62: 「6割読め」のつもりが「6割読めば終わってよい」になっていた）
     for i in data["issues"]:
         s = i["sub"]
-        if s["status"] == "reread" and s["unread_count"] > 0.4 * i["count"]:
-            ng.append(f"「{i['label']}」の未読が{s['unread_count']}件（全{i['count']}件の4割超）")
+        if s["status"] != "reread":
+            continue
+        if s["skipped_count"] > 0:
+            ng.append(f"「{i['label']}」に読み飛ばしが{s['skipped_count']}件あります"
+                      "（読み直した時点で既にあったのに読まれなかった投稿。読了後に増えた分とは別）")
+        elif s["grown_count"] > 0.4 * i["count"]:
+            ng.append(f"「{i['label']}」の読了後に増えた分が{s['grown_count']}件"
+                      f"（全{i['count']}件の4割超）")
 
     # 4. 海面下の母数が現在の意見数と一致していること（指摘2）
     for item in data["ocean"]["sunk_continents"]:
