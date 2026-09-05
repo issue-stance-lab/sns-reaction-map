@@ -46,6 +46,7 @@
 | 課題44: SNS反応マップの共通デザインを再設計する | Claude Code | 2026-08-30 | 課題54へ統合。既存2Dは3D完成までのフォールバックとして維持 | [archive/tasks/task-44.md](tasks/task-44.md) |
 | 課題57: 公開データ基盤と公開承認物の一本化 | Claude Code | 2026-08-31 | 段階4完了。トップページと公開10テーマすべてを公開データ基盤へ接続 | [archive/tasks/task-57.md](tasks/task-57.md) |
 | 課題60: セッション開始時に読む文書を小さく保つ | Claude Code | 2026-09-04 | `TASK_BOARD.md` 索引化に続き `THEMES.yaml` を分割（44KB→9KB）。経緯は `themes/{テーマ名}.md` へ | [archive/tasks/task-60.md](tasks/task-60.md) |
+| 課題62: 読み直しの「4割まで残してよい」が読み飛ばしに使われている | Claude Code | 2026-09-06 | `independence_gate` の未読判定を「読み飛ばし」と「読了後に増えた分」に分離。読み飛ばしは0件を要求。部活動「教員の働き方」の読み飛ばし54件で不合格になることを確認。読む作業自体は別作業（`quality/designs/2026-09-06-stage9a-reread-brief.md`） | [archive/tasks/task-62.md](tasks/task-62.md) |
 
 ---
 
