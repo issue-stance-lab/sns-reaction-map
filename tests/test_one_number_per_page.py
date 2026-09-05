@@ -18,7 +18,17 @@ def page(body: str) -> str:
 
 
 class OneNumberPerPageTest(unittest.TestCase):
-    THEME = "bike-blue-ticket"   # 正典: 論点5（その他を除く）／意見384件
+    THEME = "bike-blue-ticket"   # 正典: 論点5（その他を除く）
+
+    @property
+    def total(self) -> int:
+        """ページの母数は正典から取る。ここを固定値にすると更新のたびに落ちる。"""
+        import json
+        from pathlib import Path
+        root = Path(__file__).resolve().parents[1]
+        return json.loads(
+            (root / "data/public/themes" / f"{self.THEME}.json").read_text(encoding="utf-8")
+        )["opinion_count"]
 
     def failures(self, body: str) -> tuple[list[str], int]:
         return verify_one_number_per_page(self.THEME, page(body))
@@ -48,7 +58,8 @@ class OneNumberPerPageTest(unittest.TestCase):
     def test_per_issue_counts_are_not_page_totals(self):
         # 「意見103件のうち100件が…」は論点ごとの内訳で、ページの母数ではない
         lines, failures = self.failures(
-            "<p>分析対象の意見384件</p><p>意見103件のうち100件が「切り分け」スタンス。</p>")
+            f"<p>分析対象の意見{self.total}件</p>"
+            "<p>意見103件のうち100件が「切り分け」スタンス。</p>")
         self.assertEqual(failures, 0, lines)
 
     def test_historical_sentences_are_not_page_totals(self):
