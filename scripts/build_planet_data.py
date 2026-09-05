@@ -331,6 +331,19 @@ def build(topic: str) -> dict:
         "vote_issue_order": cfg["vote_issue_order"],
         "modes": modes,
         "issues": issues,
+        # 一次資料クイズ用の平らな一覧。論点ごとの claims は同じ主張が複数の論点に
+        # 現れる（1主張が2論点にまたがる）ので、出題にはこちらを使う。
+        "claims": [
+            {
+                "id": c["id"],
+                "claim": c["claim"],
+                "verdict": c["verdict"],
+                "verdict_label": verdict_label(c["verdict"]),
+                "finding": c["finding"],
+                "sources": [{"name": s["name"], "url": s["url"]} for s in c.get("sources", [])],
+            }
+            for c in claim_verification["claims"]
+        ],
         "editorial": public.get("editorial_summary",
                                 {"status": "not_started", "checked_on": None,
                                  "reviewer_type": None, "findings": []}),
@@ -656,7 +669,7 @@ def static_ocean(data: dict) -> str:
                 for sd in v["sides"])
             issues = "・".join(e(label_of.get(i, i)) for i in v["issue_ids"])
             head.append(
-                f'    <article class="vein">'
+                f'    <article class="vein" data-vein="{e(v["id"])}">'
                 f'<h5>{e(v["shared_concern"])}</h5>'
                 f'<p class="impact">それでも結論が分かれる理由：{e(v["diverging_reason"])}</p>'
                 f'<p class="count">関わる論点：{issues}</p>'

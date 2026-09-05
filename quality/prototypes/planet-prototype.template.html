@@ -149,6 +149,48 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
   background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
 .dot-mech b{color:#f2f6fa}
 
+/* 探査記録（読んだ場所の記録。端末の中だけに持ち、サーバーへは送らない） */
+.progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}
+.progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.progress b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* 予想（見る前に当てる） */
+.guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}
+.guess h3{font-size:14px;margin:0 0 9px}
+.gopts{display:flex;flex-direction:column;gap:7px}
+.gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+.gopts button:hover:not(:disabled){border-color:var(--accent)}
+.gopts button:disabled{cursor:default;opacity:.5}
+.gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}
+.gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}
+.gans{margin-top:10px;font-size:12.5px;line-height:1.8}
+.gans[hidden]{display:none}
+.gans .lead{font-weight:700;margin-bottom:3px}
+
+/* 潜水 */
+.dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}
+.dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
+  border:0;border-radius:99px;padding:7px 16px;cursor:pointer}
+#seafloor{opacity:0;transition:opacity .9s ease .2s}
+.dived #seafloor{opacity:1}
+#seacover{transition:opacity .9s ease}
+.dived #seacover{opacity:.2}
+
+/* 一次資料クイズ */
+.quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}
+.qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}
+.qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}
+.qans{margin-top:12px;font-size:13px;line-height:1.85}
+.qans[hidden]{display:none}
+.qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}
+.qscore{font-size:14px;line-height:1.85}
+.qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
 html:not(.planet-live) .modes,
@@ -175,6 +217,11 @@ html:not(.planet-live) .issue-list{display:none}
   <p class="q" id="q"><!--__QUESTION__--></p>
   <!--__CAUTION__-->
 
+  <div class="progress" id="progress" hidden>
+    <span>探査記録</span><span class="track"><i id="pbar"></i></span><b id="pnum"></b>
+  </div>
+  <div id="guesses"></div>
+
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
   <div class="stage">
@@ -183,6 +230,7 @@ html:not(.planet-live) .issue-list{display:none}
       <p id="chartdesc" hidden></p>
       <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
       <p class="floor-note" id="floor-note"></p>
+      <p class="dive"><button type="button" id="dive"></button><span id="divenote"></span></p>
     </div>
     <div class="panel" id="panel"></div>
   </div>
@@ -210,6 +258,9 @@ html:not(.planet-live) .issue-list{display:none}
   </div>
 
   <!--__FALLBACK__-->
+
+  <h3 class="sec sec-live">一次資料クイズ — その主張、資料に当たるとどうなる？</h3>
+  <div class="quiz" id="quiz"></div>
 
   <!--__OCEAN__-->
 
@@ -316,6 +367,7 @@ function render(){
 
   /* 海面より下。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
   const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  p.push('<g id="seafloor">');
   if (sunk.length){
     const sw=(RIGHT-LEFT)/sunk.length;
     sunk.forEach((sc,j)=>{
@@ -332,6 +384,9 @@ function render(){
     p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">地下水脈：立場が違っても同じ心配（'+veins.length+'本）</text>');
   }
   p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">海面より下＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('</g>');
+  // 海の覆い。潜水で薄くなり、下が見えるようになる
+  p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
 
   L.live.forEach(v=>{
     const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
@@ -366,6 +421,7 @@ function render(){
 
 function land(i){
   st.landed=i;
+  visit("i:"+issues[i].id);
   location.hash=issues[i].id;
   drawPanel(); syncList(); render();
   const h=document.querySelector("#panel h2");
@@ -645,11 +701,142 @@ addEventListener("keydown", e=>{
   if (e.key === "Escape" && st.landed !== null) orbit();
 });
 
+/* ---------- 探査記録 ----------
+   予想2問＋論点＋沈んだ大陸＋主張＋地下水脈を「地点」として数える。
+   端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
+const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
+            + (D.claims||[]).length + (D.ocean.veins||[]).length;
+const seen = new Set();
+try { (JSON.parse(localStorage.getItem("isa-seen-"+D.theme_id)||"[]")).forEach(x=>seen.add(x)); } catch(e){}
+function visit(id){
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
+  paintProgress();
+}
+function paintProgress(){
+  const el = document.getElementById("progress");
+  el.hidden = false;
+  document.getElementById("pbar").style.width = Math.min(100, 100*seen.size/SPOTS) + "%";
+  document.getElementById("pnum").textContent = seen.size + " / " + SPOTS;
+}
+
+/* ---------- 予想（見る前に当てる） ----------
+   選択肢も答えも data から作る。ここに数字や論点名を書かない。 */
+function buildGuesses(){
+  const box = document.getElementById("guesses");
+  const st = D.stances.slice().sort((a,b)=>b.count-a.count);
+  const peak = issues.map(it=>({it, r: modeById.all.high_pct[it.id]}))
+                     .filter(x=>modeById.all.counts[x.it.id]>0)
+                     .sort((a,b)=>b.r-a.r);
+  const q=[];
+  q.push({
+    key:"g1", title:"① 「"+st[0].label+"」と「"+st[1].label+"」、どちらが多いと思いますか？",
+    opts:["「"+st[0].label+"」のほうが多い","「"+st[1].label+"」のほうが多い","ほぼ同じ"], right:0,
+    ans:"<b>「"+st[0].label+"」"+st[0].count+"件</b>に対し、「"+st[1].label+"」"+st[1].count+"件。"
+       +"多いのは前者で、しかも差はわずかです。"
+  });
+  q.push({
+    key:"g2", title:"② 「強い表現」がいちばん多い論点はどれだと思いますか？",
+    opts:[peak[peak.length-1].it.label, peak[1].it.label, peak[0].it.label], right:2,
+    ans:"<b>「"+peak[0].it.label+"」で"+peak[0].r+"%</b>。"
+       +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
+       +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
+  });
+  box.innerHTML = q.map(x =>
+    '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
+    + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
+    + '</div><div class="gans" hidden></div></div>').join("");
+  q.forEach(x=>{
+    const card = box.querySelector('[data-k="'+x.key+'"]');
+    const bs = card.querySelectorAll(".gopts button");
+    bs.forEach(b=>b.addEventListener("click", ()=>{
+      const pick = +b.dataset.i;
+      bs.forEach((y,j)=>{ y.disabled=true;
+        if (j===x.right) y.className="hit"; else if (j===pick) y.className="miss"; });
+      const a = card.querySelector(".gans");
+      a.innerHTML = '<p class="lead">'+(pick===x.right?"正解":"はずれ")+'</p>'+x.ans;
+      a.hidden=false;
+      visit(x.key);
+    }));
+  });
+}
+
+/* ---------- 潜水（海の水を抜く） ---------- */
+let dived=false;
+function buildDive(){
+  const b=document.getElementById("dive"), n=document.getElementById("divenote");
+  const sunk=(D.ocean.sunk_continents||[]).length;
+  if (!sunk){ b.parentElement.hidden=true; return; }
+  const box=document.getElementById("ocean");
+  function paint(){
+    b.textContent = dived ? "海を戻す" : "海の水を抜く";
+    n.innerHTML = dived
+      ? "<b>"+sunk+"つ出てきました。</b>どれも一次資料では決まっている話です。下に中身があります。"
+      : "海面より下に、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
+    document.querySelector(".chart-box").classList.toggle("dived", dived);
+    if (box) box.hidden = !dived;
+  }
+  b.addEventListener("click", ()=>{
+    dived=!dived; paint();
+    if (dived){
+      // 海面下はひとまとまり。開いたら沈んだ大陸と地下水脈をまとめて数える。
+      // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
+      (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
+      (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
+      if (box) bringIntoView(box);
+    }
+  });
+  paint();
+}
+
+/* ---------- 一次資料クイズ ---------- */
+const V_ORDER=["fact","gap","miss"];
+let qi=0, qscore=0;
+function buildQuiz(){
+  const el=document.getElementById("quiz"), cs=D.claims||[];
+  if (!cs.length){ el.parentElement.querySelector(".sec-live").hidden=true; el.hidden=true; return; }
+  if (qi>=cs.length){
+    el.innerHTML='<p class="qscore"><span class="n">'+qscore+' / '+cs.length+'</span> 問正解</p>'
+      + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
+      + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
+          return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
+      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';
+    return;
+  }
+  const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
+  const labels=V_ORDER.map(v=>{
+    const same=cs.find(x=>x.verdict===v);
+    return same ? same.verdict_label : v;
+  });
+  el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
+    + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
+    + labels.map((l,i)=>'<button type="button" data-i="'+i+'">'+l+'</button>').join("")
+    + '</div><div class="qans" hidden></div>';
+  const bs=el.querySelectorAll(".gopts button");
+  bs.forEach(b=>b.addEventListener("click", ()=>{
+    const pick=+b.dataset.i;
+    if (pick===right) qscore++;
+    bs.forEach((y,j)=>{ y.disabled=true;
+      if (j===right) y.className="hit"; else if (j===pick) y.className="miss"; });
+    const a=el.querySelector(".qans");
+    a.innerHTML='<p><span class="verdict v-'+c.verdict+'">'+c.verdict_label+'</span>'+c.finding+'</p>'
+      + (c.sources.length
+         ? '<div class="srcs">'+c.sources.map(x=>'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.name+'</a>').join("")+'</div>'
+         : '<div class="srcs"><span style="color:var(--muted)">公的資料に該当なし。</span></div>')
+      + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
+    a.hidden=false;
+    visit("c:"+c.id);
+    a.querySelector(".qnext").addEventListener("click", ()=>{ qi++; buildQuiz(); });
+  }));
+}
+
 /* ---------- 初期化 ----------
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
 try {
   buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildGuesses(); buildDive(); buildQuiz(); paintProgress();
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h]);
 } catch (e) {

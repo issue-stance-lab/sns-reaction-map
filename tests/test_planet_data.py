@@ -467,6 +467,67 @@ class PlanetDotsTest(unittest.TestCase):
                               f"{issue['label']} / {mode['label']} の割合が静的表示に無い")
 
 
+class DevicesTest(unittest.TestCase):
+    """滞在の仕掛け（予想・潜水・一次資料クイズ・探査記録）を固定する。
+
+    どれも「読ませる量を増やす」のではなく「読者に手を動かさせて答え合わせをする」
+    ための仕掛け。数字と論点名・立場名は全部 data から採る（テンプレートに書かない）。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+        cls.page = bpd.render_page(cls.data, cls.template, "null")
+        cls.static = re.sub(r"<script.*?</script>", "", cls.page, flags=re.S)
+
+    def test_quiz_uses_every_checked_claim(self):
+        """クイズの出題は、照合済みの主張ぜんぶ。"""
+        self.assertIn("claims", self.data, "平らな主張一覧が出ていない")
+        ids = [c["id"] for c in self.data["claims"]]
+        self.assertEqual(len(ids), len(set(ids)), "主張が重複している")
+        public = json.loads(
+            (ROOT / "data" / "public" / "themes" / f"{TOPIC}.json").read_text())
+        self.assertEqual(ids, [c["id"] for c in public["claim_verification"]["claims"]],
+                         "公開データの主張と数・順序が合わない")
+        for c in self.data["claims"]:
+            self.assertIn(c["verdict"], ("fact", "gap", "miss"), c["id"])
+            self.assertTrue(c["verdict_label"], c["id"])
+            self.assertTrue(c["finding"], c["id"])
+
+    def test_devices_take_their_wording_from_the_data(self):
+        # 選択肢に論点名・立場名を書くと、他テーマで意味が通らなくなる
+        for issue in self.data["issues"]:
+            self.assertNotIn(issue["label"], self.script,
+                             f"テンプレートに論点名『{issue['label']}』が入っている")
+        for stance in self.data["stances"]:
+            self.assertNotIn(stance["key"], self.script,
+                             f"テンプレートに立場名『{stance['key']}』が入っている")
+
+    def test_progress_counts_every_stop(self):
+        """探査記録の分母。数え漏らすと進み具合が100%を超える（実際に超えた）。"""
+        self.assertRegex(
+            self.script,
+            r"const SPOTS = 2 \+ issues\.length \+ .*sunk_continents.*\n?.*claims.*veins",
+            "地点の数え方が、予想2＋論点＋沈んだ大陸＋主張＋地下水脈になっていない")
+        self.assertIn("Math.min(100,", self.script, "進み具合が100%で頭打ちになっていない")
+
+    def test_progress_stays_on_the_device(self):
+        """読んだ記録は端末の中だけ。サーバーへ送らない。"""
+        self.assertIn("localStorage", self.script)
+        for sent in ("fetch(", "XMLHttpRequest", "navigator.sendBeacon"):
+            self.assertNotIn(sent, self.script, f"読んだ記録を外へ送っている（{sent}）")
+
+    def test_below_sea_is_readable_without_javascript(self):
+        """潜水はJSの飾り。JSが動かないときは海面下が出たままであること。"""
+        self.assertIn('id="ocean"', self.static, "海面下のセクションが静的HTMLに無い")
+        self.assertNotIn('id="ocean" class="ocean" hidden', self.static,
+                         "JS無効時に海面下が隠れている")
+        self.assertIn('box.hidden = !dived', self.script, "潜水がJS側で開閉していない")
+
+
 class PlanetOceanPageTest(unittest.TestCase):
     """段階7-B: 着陸パネルの「資料との照合」と「海面より下」が画面に出ること。
 
