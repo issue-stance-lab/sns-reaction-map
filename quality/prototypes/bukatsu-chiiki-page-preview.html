@@ -870,7 +870,40 @@
   transition:width .5s cubic-bezier(.4,0,.2,1)}#planet-block .progress b{color:var(--fg);font-variant-numeric:tabular-nums}#planet-block .guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}#planet-block .guess h3{font-size:14px;margin:0 0 9px}#planet-block .gopts{display:flex;flex-direction:column;gap:7px}#planet-block .gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
   border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}#planet-block .gopts button:hover:not(:disabled){border-color:var(--accent)}#planet-block .gopts button:disabled{cursor:default;opacity:.5}#planet-block .gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}#planet-block .gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}#planet-block .gans{margin-top:10px;font-size:12.5px;line-height:1.8}#planet-block .gans[hidden]{display:none}#planet-block .gans .lead{font-weight:700;margin-bottom:3px}#planet-block .dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}#planet-block .dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
   border:0;border-radius:99px;padding:7px 16px;cursor:pointer}#planet-block #seafloor{opacity:0;transition:opacity .9s ease .2s}#planet-block .dived #seafloor{opacity:1}#planet-block #seacover{transition:opacity .9s ease}#planet-block .dived #seacover{opacity:.2}#planet-block .quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}#planet-block .qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}#planet-block .qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}#planet-block .qans{margin-top:12px;font-size:13px;line-height:1.85}#planet-block .qans[hidden]{display:none}#planet-block .qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
-  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}#planet-block .qscore{font-size:14px;line-height:1.85}#planet-block .qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.planet-live #planet-block #fallback{display:none}html:not(.planet-live) #planet-block .modes,html:not(.planet-live) #planet-block .stage,html:not(.planet-live) #planet-block .sec-live,html:not(.planet-live) #planet-block .issue-list{display:none}</style>
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}#planet-block .qscore{font-size:14px;line-height:1.85}#planet-block .qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.planet-live #planet-block #fallback{display:none}html:not(.planet-live) #planet-block .modes,html:not(.planet-live) #planet-block .stage,html:not(.planet-live) #planet-block .sec-live,html:not(.planet-live) #planet-block .issue-list{display:none}
+#planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
+  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+#planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
+#planet-block .panel{box-shadow:none}
+#planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
+#planet-block .panel .cross b,#planet-block .dot-mech b{color:#0b2a5b}
+#planet-block .note,#planet-block .ro{background:#f2f6fb}
+#planet-block .meta code{background:#eef1f6}
+#planet-block .islands .num{background:#e7ecf4;color:#172033}
+#planet-block .modes button[aria-pressed=true]{background:#e4edff}
+#planet-block .dive button{color:#fff}
+#planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
+#planet-block .gopts button.hit{background:#e8f6ec}
+#planet-block .gopts button.miss{background:#fdeeee}
+#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
+#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
+#planet-block .qnext{color:#fff;background:var(--accent)}
+/* 図の箱は暗いまま。中の文字と小箱だけ暗い面に合わせ直す */
+#planet-block .dotbox{background:#0b1017;border:1px solid #2b3440;border-radius:12px;
+  padding:13px 14px;margin-top:14px;color:#e6edf3;--rest-dot:#4a525c}
+#planet-block .dotbox .legend{color:#9fb0c4}
+#planet-block .dotbox .ro{background:#161b22;border-color:#2b3440;color:#e6edf3}
+#planet-block .dotbox .dot-mech{background:#161b22;color:#e6edf3}
+#planet-block .dotbox .dot-mech b{color:#f2f6fa}
+/* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
+   論点名は海面+17pxにあるので、そこだけ残して畳み、「海の水を抜く」で開く。 */
+#planet-block .chart-box{overflow:hidden}
+#planet-block .chart-box svg{margin-bottom:-19%;transition:margin-bottom .9s ease}
+#planet-block .chart-box.dived svg{margin-bottom:0}
+@media (prefers-reduced-motion:reduce){
+  #planet-block .chart-box svg{transition:none}
+}
+</style>
 <script>
 /* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
    （このクラスが付かないと #fallback が見えたままになる） */

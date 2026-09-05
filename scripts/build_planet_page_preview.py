@@ -144,6 +144,46 @@ def drop_orphan_scripts(html: str) -> tuple[str, int]:
     return pat.sub(repl, html), n
 
 
+# 試作は単体で開く前提の暗い配色だが、公開ページは白いカードが並ぶ明るい面。
+# そのまま入れると黒い板を貼り付けたように見える（オーナー指摘 2026-09-05）。
+# ここでサイト側の配色・書体へ寄せる。図（山なみ・点の装置）だけは暗いまま残す。
+# データを見せる箱が暗いのは、旧ページの2Dマップ（#0f0e2e）と同じ扱いで、浮かない。
+LIGHT_SKIN = """
+#planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
+  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+#planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
+#planet-block .panel{box-shadow:none}
+#planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
+#planet-block .panel .cross b,#planet-block .dot-mech b{color:#0b2a5b}
+#planet-block .note,#planet-block .ro{background:#f2f6fb}
+#planet-block .meta code{background:#eef1f6}
+#planet-block .islands .num{background:#e7ecf4;color:#172033}
+#planet-block .modes button[aria-pressed=true]{background:#e4edff}
+#planet-block .dive button{color:#fff}
+#planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
+#planet-block .gopts button.hit{background:#e8f6ec}
+#planet-block .gopts button.miss{background:#fdeeee}
+#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
+#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
+#planet-block .qnext{color:#fff;background:var(--accent)}
+/* 図の箱は暗いまま。中の文字と小箱だけ暗い面に合わせ直す */
+#planet-block .dotbox{background:#0b1017;border:1px solid #2b3440;border-radius:12px;
+  padding:13px 14px;margin-top:14px;color:#e6edf3;--rest-dot:#4a525c}
+#planet-block .dotbox .legend{color:#9fb0c4}
+#planet-block .dotbox .ro{background:#161b22;border-color:#2b3440;color:#e6edf3}
+#planet-block .dotbox .dot-mech{background:#161b22;color:#e6edf3}
+#planet-block .dotbox .dot-mech b{color:#f2f6fa}
+/* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
+   論点名は海面+17pxにあるので、そこだけ残して畳み、「海の水を抜く」で開く。 */
+#planet-block .chart-box{overflow:hidden}
+#planet-block .chart-box svg{margin-bottom:-19%;transition:margin-bottom .9s ease}
+#planet-block .chart-box.dived svg{margin-bottom:0}
+@media (prefers-reduced-motion:reduce){
+  #planet-block .chart-box svg{transition:none}
+}
+"""
+
+
 def render_planet(topic: str) -> str:
     data = bpd.stabilize(bpd.build(topic))
     tpl = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text(encoding="utf-8")
@@ -185,7 +225,7 @@ def build_section(parts: dict[str, str]) -> str:
     return (
         "<!-- PLANET_SECTION_START -->\n"
         '<section class="panel planet-panel" aria-labelledby="planet-heading">\n'
-        f"<style>{scope_css(parts['css'])}</style>\n"
+        f"<style>{scope_css(parts['css'])}{LIGHT_SKIN}</style>\n"
         f"{parts['detect']}\n"
         f"{body}\n"
         "</section>\n"
