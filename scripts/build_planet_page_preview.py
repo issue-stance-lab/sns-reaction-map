@@ -143,7 +143,8 @@ def scope_selector(sel: str) -> str:
 
 # 外した部品にしか触っていない素のスクリプト。残すと null 参照でJSエラーが出る。
 # 呼び出し側はすべて if(window.…) で守られているので、落としても投票は動く。
-DEAD_SCRIPT_IDS = ("smCanvasMain", "smCanvasHeat", "sm-filters", "sm-tooltip")
+DEAD_SCRIPT_IDS = ("smCanvasMain", "smCanvasHeat", "sm-filters", "sm-tooltip",
+                   "explainer-modal", "explainer-card")
 
 
 def drop_orphan_scripts(html: str) -> tuple[str, int]:
@@ -209,6 +210,17 @@ LIGHT_SKIN = """
 #planet-block .chart-box{overflow:hidden}
 #planet-block .chart-box svg{margin-bottom:-17.5%;transition:margin-bottom .9s ease}
 #planet-block .chart-box.dived svg{margin-bottom:0}
+/* 山が押せると分からない（オーナー指摘）。触れる合図を出す */
+#planet-block .chart-box .hill path{transition:opacity .18s ease,filter .18s ease}
+#planet-block .chart-box .hill:hover path,
+#planet-block .chart-box .hill:focus-visible path{opacity:1!important;
+  filter:drop-shadow(0 0 6px rgba(7,94,242,.5))}
+#planet-block .chart-box .hill:hover text,
+#planet-block .chart-box .hill:focus-visible text{font-weight:700}
+#planet-block .tap-hint{display:flex;align-items:center;gap:8px;margin:0 0 8px;
+  padding:9px 13px;border-radius:10px;background:var(--blue-tint,#E7EEFE);
+  font-size:13.5px;font-weight:700;color:#0B3FA8;line-height:1.6}
+#planet-block .tap-hint span[aria-hidden]{font-size:16px}
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
 }
@@ -231,6 +243,22 @@ BG_CSS = """
 #bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
 #bukatsu-background ol.bg-tl .src a{color:var(--muted)}
 #bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+/* 確かめること。3列の表は375pxで潰れるので、1件1枚のカードにする */
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
 @media (max-width:560px){
   #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
 }
@@ -252,7 +280,7 @@ def build_background(topic: str) -> str:
     df = d["definition"]
     out = [f"<style>{BG_CSS}</style>",
            '<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">',
-           '<div class="panel-title"><h2 id="bg-title">この問題は、何の話か</h2>'
+           '<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2>'
            '<span>官庁の資料で確かめた範囲</span></div>',
            f'<p class="bg-def">{esc(df["one_line"])}</p>',
            f'<p class="bg-now">{esc(df["now"])}</p>',
@@ -269,13 +297,110 @@ def build_background(topic: str) -> str:
             f'<div><p class="what">{esc(x["text"])}</p>'
             f'<span class="src">出典: {links}</span></div></li>')
     out.append("</ol>")
-    out.append('<p class="bg-jump"><a href="#vote-section">意見のほうを先に見る →</a></p>')
+    out.append('<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>')
     out.append("</section>")
+
+    ck = d.get("checklist")
+    if ck:
+        out += ['<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">',
+                '<div class="panel-title"><h2 id="ck-title">学校の外へ出した後、だれが続けるか</h2>'
+                '<span>判断の前に確かめること</span></div>',
+                f'<p>{esc(ck["lead"])}</p>']
+        for x in ck["items"]:
+            links = "／".join(
+                f'<a href="{esc(t["url"])}" target="_blank" rel="noopener">{esc(t["name"])}</a>'
+                for t in x["sources"])
+            out.append(
+                f'<div class="ck"><div class="k"><b>{esc(x["label"])}</b>'
+                f'<span>{esc(x["ask"])}</span></div>'
+                f'<div class="v">{esc(x["found"])}'
+                f'<span class="src">出典: {links}</span></div></div>')
+        out.append(f'<p class="ck-note"><b>このページで未確認のこと</b><br>{esc(ck["unknown"])}'
+                   f'<br>{esc(ck["caveat"])}</p>')
+        out.append("</section>")
     return "\n".join(out)
 
 
-def render_planet(topic: str) -> str:
-    data = bpd.stabilize(bpd.build(topic))
+ISSUE_CSS = """
+#issue-cards .ic{border:1px solid var(--line);border-radius:14px;background:#fff;
+  padding:18px 20px 20px;margin:0 0 14px;scroll-margin-top:14px}
+#issue-cards .ic:target{border-color:var(--accent);box-shadow:0 0 0 3px rgba(7,94,242,.14)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+#issue-cards .ic-head h3{margin:0;font-size:18px;font-weight:900;line-height:1.5}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;color:var(--accent);font-size:15px}
+#issue-cards .ic-line{font-size:13.5px;color:var(--muted);line-height:1.8;margin:0 0 12px}
+#issue-cards .ic-body{font-size:14.5px;line-height:1.9;margin:0 0 12px}
+#issue-cards .ic figure{margin:14px 0 0}
+#issue-cards .ic img{width:100%;height:auto;border-radius:10px;display:block}
+#issue-cards .ic-back{display:inline-block;margin-top:14px;font-size:13px;font-weight:700}
+"""
+
+
+def _articles(html: str, cls: str) -> list[str]:
+    out, i = [], 0
+    needle = f'<article class="{cls}"'
+    while True:
+        i = html.find(needle, i)
+        if i < 0:
+            return out
+        rest, _ = cut_block(html[i:], needle, "article")
+        out.append(html[i:i + (len(html) - i) - len(rest)])
+        i += 1
+
+
+def merge_issue_cards(html: str, data: dict) -> tuple[str, str]:
+    """「7つの論点とXの声」と「このテーマを読み解く論点」を論点ごとに1枚へ統合する。
+
+    同じ7論点を2か所で別々に並べていたので、件数も見出しも二重に出ていた。
+    地図の山から飛べる1つの場所にまとめる（オーナー指示 2026-09-05）。
+    """
+    label2id = {it["label"]: it["id"] for it in data["issues"]}
+    posts, figs = {}, {}
+    for art in _articles(html, "hermes-issue-card"):
+        m = re.search(r"<h3>(.*?)</h3>", art, re.S)
+        if m and m.group(1).strip() in label2id:
+            posts[label2id[m.group(1).strip()]] = art
+    for art in _articles(html, "explainer-card"):
+        m = re.search(r'id="issue-count-([^"]+)"', art)
+        if m:
+            figs[m.group(1)] = art
+
+    def inner(art: str, tag: str, cls: str) -> str:
+        m = re.search(rf'<{tag} class="{cls}"[^>]*>(.*?)</{tag}>', art, re.S)
+        return m.group(1) if m else ""
+
+    out = [f"<style>{ISSUE_CSS}</style>",
+           '<section class="panel" id="issue-cards" aria-labelledby="ic-title">',
+           '<div class="panel-title"><h2 id="ic-title">論点ごとに、なかを見る</h2>'
+           '<span>地図の山を押すとここへ来ます</span></div>']
+    for it in data["issues"]:
+        iid, art_p, art_f = it["id"], posts.get(it["id"], ""), figs.get(it["id"], "")
+        out.append(f'<article class="ic" id="issue-{esc(iid)}">')
+        out.append(f'<div class="ic-head"><h3>{esc(it["icon"])} {esc(it["label"])}</h3>'
+                   f'<span class="cnt">{it["count"]}件</span></div>')
+        bar = re.search(r'<div class="hermes-stance-bar">.*?</div>\s*'
+                        r'<div class="hermes-legend">.*?</div>', art_p, re.S)
+        if bar:
+            out.append(bar.group(0))
+        desc = re.search(r'<p class="explainer-card-desc">(.*?)</p>', art_f, re.S)
+        if desc:
+            out.append(f'<p class="ic-body">{desc.group(1)}</p>')
+        sides = re.search(r'<div class="explainer-sides">.*?</div>\s*</div>', art_f, re.S)
+        if sides:
+            out.append(sides.group(0).rsplit("</div>", 1)[0])
+        img = re.search(r'<img src="[^"]*"[^>]*>', art_f)
+        if img:
+            out.append(f'<figure>{img.group(0)}</figure>')
+        samples = re.search(r'<div class="hermes-samples">.*?</div>\s*</article>', art_p, re.S)
+        if samples:
+            out.append(samples.group(0).rsplit("</article>", 1)[0])
+        out.append('<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>')
+        out.append("</article>")
+    out.append("</section>")
+    return html, "\n".join(out)
+
+
+def render_planet(data: dict) -> str:
     tpl = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text(encoding="utf-8")
     payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
     return bpd.render_page(data, tpl, payload)
@@ -302,10 +427,20 @@ def build_section(parts: dict[str, str]) -> str:
                         '<div class="panel-title"><h2>SNS反応マップ</h2>'
                         '<span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>')
     body = re.sub(r'^<div class="wrap">', f'<div id="{SCOPE[1:]}">', body)
+    # 図の上に「押せる」と書く。下の小さい灰色の一行では気づかれない
+    body = body.replace(
+        '<div class="stage">',
+        '<p class="tap-hint"><span aria-hidden="true">👆</span>'
+        '山を押すと、その論点の図解と、賛成・反対それぞれの投稿が読めます</p>'
+        '<div class="stage">', 1)
     # 試作のときの言い回しを、読者に出す言葉へ直す。
     # 「3D」は球をやめた時点で嘘になっている（段階8-B）。
     for before, after in (
         ("この試作の見かた", "このページの見かた"),
+        # 「探査記録」は惑星・海だった頃の名前。何を数えているかも分からなかった
+        ("<span>探査記録</span>",
+         '<span title="予想2問・論点7・沈んだ大陸4・一次資料クイズ7問・地下水脈2の'
+         '合計22か所のうち、開いた数です">読んだところ</span>'),
         ("論点一覧（3Dが使えなくても同じ内容へ行けます）",
          "論点一覧（図が出ないときも同じ内容へ行けます）"),
     ):
@@ -352,6 +487,20 @@ def main() -> None:
         html, hit = cut_block(html, start, tag)
         removed.append((label, hit))
 
+    data = bpd.stabilize(bpd.build(a.topic))
+
+    # 同じ7論点を2か所で並べていたので、1枚のカードへ統合してから両方を外す
+    html, issue_cards = merge_issue_cards(html, data)
+    for start, tag, label in (
+        ('<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>',
+         "section", "7つの論点とXの声（論点カードへ統合）"),
+        ('<section class="panel explainer-section" id="explainer-section">',
+         "section", "このテーマを読み解く論点（論点カードへ統合）"),
+        ('<div class="explainer-modal" id="explainer-modal"', "div", "図解の拡大表示"),
+    ):
+        html, hit = cut_block(html, start, tag)
+        removed.append((label, hit))
+
     html, dropped = drop_orphan_scripts(html)
 
     # 使い方ページの約束は「①テーマを選ぶ ②投票する ③分布と理由を読む」。
@@ -365,6 +514,9 @@ def main() -> None:
     html = html[:ti] + html[tj + len(trust_end):]
 
     html, vote = take_block(html, '<section class="panel" id="vote-section"', "section")
+    # 地図より後ろへ移したので「SNSの声を見る前に」は嘘になる
+    vote = vote.replace("<span>SNSの声を見る前に</span>",
+                        "<span>ここまで読んだうえで</span>")
 
     rel = '<section class="panel" id="related-topics">'
     if rel not in html:
@@ -372,15 +524,27 @@ def main() -> None:
     html = html.replace(rel, trust + "\n" + rel, 1)
 
     bg = build_background(a.topic)
-    bg_anchor = "<!-- BUKATSU_ENTRY_START -->"
-    if bg and bg_anchor in html:
-        html = html.replace(bg_anchor, bg + "\n" + bg_anchor, 1)
+    if bg:
+        html, old_entry = take_block(html, "<!-- BUKATSU_ENTRY_START -->", "section")
+        removed.append(("学校の外へ出した後（台帳から作り直し）", bool(old_entry)))
 
-    section = build_section(split_prototype(render_planet(a.topic)))
+    section = build_section(split_prototype(render_planet(data)))
     anchor = "<!-- BUKATSU_ENTRY_END -->"
     if anchor not in html:
         raise SystemExit(f"差し込み位置 {anchor} が見つかりません")
-    html = html.replace(anchor, anchor + "\n" + vote + "\n" + section, 1)
+    html = html.replace(anchor, bg + "\n" + anchor, 1)
+    # 地図を投票より前へ（オーナー指示「この地図の方が上に表示した方が良いのでは」）
+    html = html.replace(anchor, anchor + "\n" + section + "\n" + issue_cards + "\n" + vote, 1)
+
+    # 山を押して開くパネルから、その論点のカードへ飛べるようにする。
+    # パネルは #extras-{論点id} の中身をそのまま写すので、そこへ入れておけば出る。
+    for it in data["issues"]:
+        tag = f'<div class="extras" id="extras-{it["id"]}">'
+        if tag in html:
+            html = html.replace(
+                tag,
+                tag + f'<p class="sub" style="margin-top:12px"><a href="#issue-{it["id"]}">'
+                      f'この論点のなかを見る（図解と両側の投稿）↓</a></p>', 1)
 
     # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す
     html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",

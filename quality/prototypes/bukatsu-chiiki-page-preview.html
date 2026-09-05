@@ -810,6 +810,7 @@
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
+
 <style>
 #bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
 #bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
@@ -826,12 +827,28 @@
 #bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
 #bukatsu-background ol.bg-tl .src a{color:var(--muted)}
 #bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+/* 確かめること。3列の表は375pxで潰れるので、1件1枚のカードにする */
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
 @media (max-width:560px){
   #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
 }
 </style>
 <section class="panel" id="bukatsu-background" aria-labelledby="bg-title">
-<div class="panel-title"><h2 id="bg-title">この問題は、何の話か</h2><span>官庁の資料で確かめた範囲</span></div>
+<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
 <p class="bg-def">「部活動の地域移行」は、中学校の部活動を、学校から地域のスポーツクラブや民間団体へ移していく国の方針です。</p>
 <p class="bg-now">いまは全国で進めている途中で、担い手をだれにするか、費用をだれが払うかは、自治体ごとに違います。</p>
 <h3>なぜ始まったか</h3>
@@ -847,45 +864,18 @@
 <li><div class="when">2025年12月<em>令和7年度</em></div><div><p class="what">新しいガイドラインが出ました。名前も「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」に変わっています。</p><span class="src">出典: <a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener">文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）</a></span></div></li>
 <li><div class="when">2026年度<em>令和8年度・いま</em></div><div><p class="what">「部活動の地域展開等の全国的な実施」に国の予算が付いています。ただし補助の対象は運営にかかる経費で、家庭が払う会費そのものを国が肩代わりする仕組みではありません。教員の給与に上乗せされる教職調整額は、4%から5%へ上がりました。</p><span class="src">出典: <a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a>／<a href="https://laws.e-gov.go.jp/law/346AC0000000077" target="_blank" rel="noopener">e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条</a></span></div></li>
 </ol>
-<p class="bg-jump"><a href="#vote-section">意見のほうを先に見る →</a></p>
+<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
 </section>
-<!-- BUKATSU_ENTRY_START -->
-<section class="bukatsu-entry" aria-labelledby="bukatsu-entry-title">
-  <div class="bukatsu-entry-inner">
-    <header class="bukatsu-entry-heading">
-      <p class="bukatsu-entry-kicker">判断の前に確かめること</p>
-      <h2 id="bukatsu-entry-title">学校の外へ出した後、だれが続けるか</h2>
-      <p class="bukatsu-entry-lead">地域展開は、活動場所だけを学校の外へ変える話ではありません。<strong>学校が担ってきた運営・費用・人材・安全の責任を、地域の誰が引き受ける設計か</strong>を確認してから、意見の分布を読みます。</p>
-    </header>
-    <table class="bukatsu-entry-table">
-      <thead><tr><th scope="col">確認する機能</th><th scope="col">まず見る問い</th><th scope="col">国のガイドラインが示す担い手・条件</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">運営の責任</th><td>方針を決め、相談を受けるのは誰か</td><td>市区町村等が改革の責任主体として企画・調整を行い、運営団体・実施主体との役割を整理する。</td></tr>
-        <tr><th scope="row">費用</th><td>会費と公的負担を、誰がどの基準で決めるか</td><td>受益者負担と公的負担のバランスを、地域の実情に応じて検討する。</td></tr>
-        <tr><th scope="row">参加できる条件</th><td>指導者、活動場所、移動手段は確保されているか</td><td>市区町村等と運営団体等が、指導者・場所・移動手段を確保することが課題として示されている。</td></tr>
-        <tr><th scope="row">安全と事故</th><td>事故が起きた時、どの主体が対応・補償するか</td><td>運営主体や事故の原因により、賠償責任主体と保険の扱いが異なる。</td></tr>
-      </tbody>
-    </table>
-    <p class="bukatsu-entry-note"><strong>このページで未確認のこと：</strong>自治体ごとに上の条件がどこまで整っているかは、全国比較できる資料を確認できていません。ここでは「できている地域／できていない地域」を断定せず、次のSNS投稿で、どの条件が論点になっているかを見ます。</p>
-  </div>
+<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">
+<div class="panel-title"><h2 id="ck-title">学校の外へ出した後、だれが続けるか</h2><span>判断の前に確かめること</span></div>
+<p>地域移行は、活動場所だけを学校の外へ変える話ではありません。学校が担ってきた運営・費用・人材・安全の責任を、地域の誰が引き受ける設計かを確かめてから、意見の分布を読みます。</p>
+<div class="ck"><div class="k"><b>運営の責任</b><span>方針を決め、相談を受けるのは誰か</span></div><div class="v">市区町村等が改革の責任主体として企画・調整を行い、運営団体・実施主体との役割を整理する、とされています。<span class="src">出典: <a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" target="_blank" rel="noopener">スポーツ庁・文化庁 総合的なガイドライン（令和4年12月）</a></span></div></div>
+<div class="ck"><div class="k"><b>費用</b><span>会費と公的な負担を、誰がどの割合で持つのか</span></div><div class="v">休日の地域クラブ活動費の補助は国3分の1・都道府県3分の1・市区町村等3分の1。経済的に困窮する世帯の参加費支援は国2分の1です。ただし体育館やグラウンドの整備費は補助の対象外で、施設の費用は自治体か利用者に残ります。<span class="src">出典: <a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener">スポーツ庁 令和8年度当初予算（PDF）</a></span></div></div>
+<div class="ck"><div class="k"><b>参加できる条件</b><span>指導者・活動場所・移動手段は確保されているか</span></div><div class="v">3つとも確保が課題として示されている段階です。学校に置く部活動指導員は、技術指導だけでなく大会の引率も職務に入ります（学校設置者が服務や災害補償の規則を整えることが前提）。<span class="src">出典: <a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" target="_blank" rel="noopener">スポーツ庁・文化庁 総合的なガイドライン（令和4年12月）</a>／<a href="https://laws.e-gov.go.jp/law/322M40000080011" target="_blank" rel="noopener">e-Gov法令検索 学校教育法施行規則 第七十八条の二</a></span></div></div>
+<div class="ck"><div class="k"><b>安全と事故</b><span>事故が起きた時、どの主体が対応・補償するか</span></div><div class="v">運営主体や事故の原因によって、賠償の責任主体と保険の扱いが変わります。補助の対象経費には保険料が含まれています。<span class="src">出典: <a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" target="_blank" rel="noopener">スポーツ庁・文化庁 総合的なガイドライン（令和4年12月）</a>／<a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener">スポーツ庁 令和8年度当初予算（PDF）</a></span></div></div>
+<p class="ck-note"><b>このページで未確認のこと</b><br>自治体ごとに上の条件がどこまで整っているかは、全国を比較できる資料を確認できていません。ここでは「できている地域／できていない地域」を断定せず、次のSNS投稿で、どの条件が論点になっているかを見ます。<br>2025年12月に新しいガイドラインが出ています。上の記述は令和4年12月版と令和8年度予算に基づくもので、新版との突き合わせはまだ済んでいません。</p>
 </section>
 <!-- BUKATSU_ENTRY_END -->
-<section class="panel" id="vote-section" data-vote-topic="bukatsu-chiiki-issue-stance-v1">
-<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
-
-<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
-<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
-<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
-<div id="vote-result" style="display:none;margin-top:20px;">
-  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
-    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
-  </div>
-  <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a>
-  <button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button>
-</div>
-</section>
 <!-- PLANET_SECTION_START -->
 <section class="panel planet-panel" aria-labelledby="planet-heading">
 <style>#planet-block{
@@ -969,6 +959,17 @@
 #planet-block .chart-box{overflow:hidden}
 #planet-block .chart-box svg{margin-bottom:-17.5%;transition:margin-bottom .9s ease}
 #planet-block .chart-box.dived svg{margin-bottom:0}
+/* 山が押せると分からない（オーナー指摘）。触れる合図を出す */
+#planet-block .chart-box .hill path{transition:opacity .18s ease,filter .18s ease}
+#planet-block .chart-box .hill:hover path,
+#planet-block .chart-box .hill:focus-visible path{opacity:1!important;
+  filter:drop-shadow(0 0 6px rgba(7,94,242,.5))}
+#planet-block .chart-box .hill:hover text,
+#planet-block .chart-box .hill:focus-visible text{font-weight:700}
+#planet-block .tap-hint{display:flex;align-items:center;gap:8px;margin:0 0 8px;
+  padding:9px 13px;border-radius:10px;background:var(--blue-tint,#E7EEFE);
+  font-size:13.5px;font-weight:700;color:#0B3FA8;line-height:1.6}
+#planet-block .tap-hint span[aria-hidden]{font-size:16px}
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
 }
@@ -991,13 +992,13 @@
   <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>収集期間 2026-06-27〜2026-09-02／収集1395件・<b>意見1139件</b>（この図の母数）／更新 2026-09-02　<code>bukatsu-chiiki-20260902</code></p>
 
   <div class="progress" id="progress" hidden>
-    <span>探査記録</span><span class="track"><i id="pbar"></i></span><b id="pnum"></b>
+    <span title="予想2問・論点7・沈んだ大陸4・一次資料クイズ7問・地下水脈2の合計22か所のうち、開いた数です">読んだところ</span><span class="track"><i id="pbar"></i></span><b id="pnum"></b>
   </div>
   <div id="guesses"></div>
 
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
-  <div class="stage">
+  <p class="tap-hint"><span aria-hidden="true">👆</span>山を押すと、その論点の図解と、賛成・反対それぞれの投稿が読めます</p><div class="stage">
     <div class="chart-box">
       <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
       <p id="chartdesc" hidden></p>
@@ -1056,7 +1057,7 @@
       <div class="note">移行支持以外だけを読み直し。賛成側は未再読。読み直した87件は <code>bukatsu-chiiki_teacher-reread.json</code> が出所です。残り236件は、その後に増えた分でまだ読めていません。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>給特法は改正されたが、教職調整額は4%のままだ<br>この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。<br><a href="https://laws.e-gov.go.jp/law/346AC0000000077" rel="nofollow">e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条・附則</a></li></ul>
-      <div class="extras" id="extras-bukatsu-chiiki-kyoin">
+      <div class="extras" id="extras-bukatsu-chiiki-kyoin"><p class="sub" style="margin-top:12px"><a href="#issue-bukatsu-chiiki-kyoin">この論点のなかを見る（図解と両側の投稿）↓</a></p>
       <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
       <ul class="claims"><li><span class="verdict v-gap">ずれ</span>給特法は改正されたが、教職調整額は4%のままだ<span class="finding">この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/346AC0000000077" rel="nofollow">e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条・附則</a></span></li></ul>
       <p class="sub" style="margin-top:12px">この論点に関わる海面より下：地下水脈1本 <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>
@@ -1075,7 +1076,7 @@
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった<br>3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。<br><a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" rel="nofollow">スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）</a><br><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" rel="nofollow">文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）</a></li><li>地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ<br>国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。<br><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" rel="nofollow">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a><br><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" rel="nofollow">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></li></ul>
-      <div class="extras" id="extras-bukatsu-chiiki-seido">
+      <div class="extras" id="extras-bukatsu-chiiki-seido"><p class="sub" style="margin-top:12px"><a href="#issue-bukatsu-chiiki-seido">この論点のなかを見る（図解と両側の投稿）↓</a></p>
       <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
       <ul class="claims"><li><span class="verdict v-gap">ずれ</span>部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった<span class="finding">3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" rel="nofollow">スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）</a><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" rel="nofollow">文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）</a></span></li><li><span class="verdict v-gap">ずれ</span>地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ<span class="finding">国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" rel="nofollow">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" rel="nofollow">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></span></li></ul>
       <p class="sub" style="margin-top:12px">この論点に関わる海面より下：地下水脈1本 <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>
@@ -1094,7 +1095,7 @@
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>中体連の大会に地域クラブのチームが出られるようになっている<br>参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。<br><a href="https://www.fukui-jpa.com/data/saisoku061011.pdf" rel="nofollow">日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）</a></li></ul>
-      <div class="extras" id="extras-bukatsu-chiiki-kyoiku">
+      <div class="extras" id="extras-bukatsu-chiiki-kyoiku"><p class="sub" style="margin-top:12px"><a href="#issue-bukatsu-chiiki-kyoiku">この論点のなかを見る（図解と両側の投稿）↓</a></p>
       <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
       <ul class="claims"><li><span class="verdict v-fact">実像</span>中体連の大会に地域クラブのチームが出られるようになっている<span class="finding">参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.fukui-jpa.com/data/saisoku061011.pdf" rel="nofollow">日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）</a></span></li></ul>
       </div>
@@ -1114,7 +1115,7 @@
       <div class="note">論点全件を読み直し。読み直した100件は <code>bukatsu-chiiki_cost-receiver-reread.json</code> が出所です。残り64件は、その後に増えた分でまだ読めていません。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない<br>最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。<br><a href="https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf" rel="nofollow">熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）</a><br><a href="https://www.mhlw.go.jp/content/11200000/001571192.pdf" rel="nofollow">厚生労働省 令和7年度 地域別最低賃金 全国一覧（PDF）</a><br><a href="https://www.city.kumamoto.jp/kiji00370419/index.html" rel="nofollow">熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集</a></li><li>部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない<br>顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。<br><a href="https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf" rel="nofollow">スポーツ庁 部活動指導員の概要（PDF）</a><br><a href="https://laws.e-gov.go.jp/law/322M40000080011" rel="nofollow">e-Gov法令検索 学校教育法施行規則 第七十八条の二</a></li></ul>
-      <div class="extras" id="extras-bukatsu-chiiki-ukezara">
+      <div class="extras" id="extras-bukatsu-chiiki-ukezara"><p class="sub" style="margin-top:12px"><a href="#issue-bukatsu-chiiki-ukezara">この論点のなかを見る（図解と両側の投稿）↓</a></p>
       <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
       <ul class="claims"><li><span class="verdict v-gap">ずれ</span>地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない<span class="finding">最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf" rel="nofollow">熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）</a><a href="https://www.mhlw.go.jp/content/11200000/001571192.pdf" rel="nofollow">厚生労働省 令和7年度 地域別最低賃金 全国一覧（PDF）</a><a href="https://www.city.kumamoto.jp/kiji00370419/index.html" rel="nofollow">熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集</a></span></li><li><span class="verdict v-fact">実像</span>部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない<span class="finding">顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf" rel="nofollow">スポーツ庁 部活動指導員の概要（PDF）</a><a href="https://laws.e-gov.go.jp/law/322M40000080011" rel="nofollow">e-Gov法令検索 学校教育法施行規則 第七十八条の二</a></span></li></ul>
       <p class="sub" style="margin-top:12px">この論点に関わる海面より下：地下水脈2本 <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>
@@ -1135,7 +1136,7 @@
       <div class="note">論点全件を読み直し。読み直した72件は <code>bukatsu-chiiki_cost-receiver-reread.json</code> が出所です。残り45件は、その後に増えた分でまだ読めていません。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ<br>国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。<br><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" rel="nofollow">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a><br><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" rel="nofollow">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></li><li>運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている<br>投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。</li></ul>
-      <div class="extras" id="extras-bukatsu-chiiki-hiyo">
+      <div class="extras" id="extras-bukatsu-chiiki-hiyo"><p class="sub" style="margin-top:12px"><a href="#issue-bukatsu-chiiki-hiyo">この論点のなかを見る（図解と両側の投稿）↓</a></p>
       <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
       <ul class="claims"><li><span class="verdict v-gap">ずれ</span>地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ<span class="finding">国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" rel="nofollow">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" rel="nofollow">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></span></li><li><span class="verdict v-miss">蜃気楼</span>運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている<span class="finding">投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。</span><span class="vnote">一次資料では確認できませんでした。誤りと決まったわけではありません。</span></li></ul>
       </div>
@@ -1163,7 +1164,7 @@
       <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">12件 / 1.1%</span></li><li><span>移行支持460件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>慎重・反対390件のうち</span><span class="n">8件 / 2.1%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">4件 / 1.7%</span></li><li><span>中立・情報48件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
       <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
-      <div class="extras" id="extras-bukatsu-chiiki-kakusa">
+      <div class="extras" id="extras-bukatsu-chiiki-kakusa"><p class="sub" style="margin-top:12px"><a href="#issue-bukatsu-chiiki-kakusa">この論点のなかを見る（図解と両側の投稿）↓</a></p>
       <p class="sub" style="margin-top:12px">この論点に関わる海面より下：地下水脈1本・沈んだ大陸1件 <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>
       </div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
@@ -1780,114 +1781,126 @@ try {
 })();
 </script>
 <!-- PLANET_SECTION_END -->
-<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2><span>公開投稿を論点・立場・主張の強さで配置</span></div><div class="hermes-issue-list"><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>費用・家庭負担</h3><span class="hermes-issue-count">117件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:17.95%"></span><span class="conditional" style="width:34.19%"></span><span class="con" style="width:45.30%"></span><span class="neutral" style="width:2.56%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 21</span> <span>条件を整えて進めたい 40</span> <span>今のままでは進めにくい 53</span> <span>経験・情報を共有 3</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">家計にのしかかる会費</span><p class="hermes-sample-summary">月額8000円が家計を圧迫し反対的</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TheMirageof0/status/2070621781757726855">@TheMirageof0 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">公費が足りないと縮小・負担増</span><p class="hermes-sample-summary">公金なしの地域移行で規模縮小と保護者負担が生じている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/774nyannyan/status/2086731858579263880">@774nyannyan の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>受け皿・指導者</h3><span class="hermes-issue-count">164件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:26.83%"></span><span class="conditional" style="width:29.88%"></span><span class="con" style="width:41.46%"></span><span class="neutral" style="width:1.83%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 44</span> <span>条件を整えて進めたい 49</span> <span>今のままでは進めにくい 68</span> <span>経験・情報を共有 3</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">受け皿の人手・送迎が足りない</span><p class="hermes-sample-summary">地域移行の方向性は正しいが現場の受け皿不足</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/maru_moneyy/status/2084392638506274876">@maru_moneyy の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">地域資源に合わせた再構築を求める</span><p class="hermes-sample-summary">全クラブ分の指導者確保は困難で休日クラブ再構築が合理的</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kohei_okada_pt/status/2084608274377437341">@kohei_okada_pt の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教員の働き方</h3><span class="hermes-issue-count">323件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:56.35%"></span><span class="conditional" style="width:20.74%"></span><span class="con" style="width:21.36%"></span><span class="neutral" style="width:1.55%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 182</span> <span>条件を整えて進めたい 67</span> <span>今のままでは進めにくい 69</span> <span>経験・情報を共有 5</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">授業に専念できる環境を求める</span><p class="hermes-sample-summary">教員の授業専念のため部活地域移行を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/AtelierClutch/status/2082217044611834122">@AtelierClutch の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">善意に頼らない仕組みを求める</span><p class="hermes-sample-summary">部活を教員の善意だけに頼らぬ仕組みを要望</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Namenotblanko/status/2082969614196093400">@Namenotblanko の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教育的意義・機会</h3><span class="hermes-issue-count">215件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:40.47%"></span><span class="conditional" style="width:7.91%"></span><span class="con" style="width:49.77%"></span><span class="neutral" style="width:1.86%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 87</span> <span>条件を整えて進めたい 17</span> <span>今のままでは進めにくい 107</span> <span>経験・情報を共有 4</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">学校教育としての部活を残したい</span><p class="hermes-sample-summary">教員が外れると部活ではなくクラブになり価値を失うと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ikuji_takuto/status/2083492685223215132">@ikuji_takuto の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">生涯スポーツ・音楽につながる場にしたい</span><p class="hermes-sample-summary">地域移行で部活を生涯愛せる活動に作り替えたい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/39Md8/status/2082487864135393452">@39Md8 の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>地域格差</h3><span class="hermes-issue-count">12件</span></div><div class="hermes-stance-bar"><span class="conditional" style="width:33.33%"></span><span class="con" style="width:66.67%"></span></div><div class="hermes-legend"><span>条件を整えて進めたい 4</span> <span>今のままでは進めにくい 8</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">地方で施設が取れない</span><p class="hermes-sample-summary">田舎町で移行後の施設予約が既存クラブに阻害された</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Davestaragues/status/2085511206278939102">@Davestaragues の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">都市部への環境偏在を懸念</span><p class="hermes-sample-summary">地域移行で野球の育成環境が悪化し都市部に偏在すると懸念</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamamam4949/status/2069589990011818183">@mamamam4949 の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>制度・移行プロセス</h3><span class="hermes-issue-count">256件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:40.62%"></span><span class="conditional" style="width:24.22%"></span><span class="con" style="width:27.73%"></span><span class="neutral" style="width:7.42%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 104</span> <span>条件を整えて進めたい 62</span> <span>今のままでは進めにくい 71</span> <span>経験・情報を共有 19</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">公費と負担金の仕組みが必要</span><p class="hermes-sample-summary">公的資金と負担金の仕組みを条件に移行すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355">@4ZYVNjQOkWBSoU8 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">費用・場所・責任の設計が未解決</span><p class="hermes-sample-summary">現状のままでは地域移行が破綻すると強く懸念</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Goshiki2023/status/2078663825013031272">@Goshiki2023 の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>その他</h3><span class="hermes-issue-count">52件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:42.31%"></span><span class="conditional" style="width:3.85%"></span><span class="con" style="width:26.92%"></span><span class="neutral" style="width:26.92%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 22</span> <span>条件を整えて進めたい 2</span> <span>今のままでは進めにくい 14</span> <span>経験・情報を共有 14</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">吹奏楽は移行しにくいという経験</span><p class="hermes-sample-summary">多くの部活が移行したが吹奏楽部は進みづらい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/m727243023/status/2085525452777795616">@m727243023 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">マネージャーの役割にある性別規範を問う</span><p class="hermes-sample-summary">マネージャーのジェンダー規範から部活廃止を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamimami_koro/status/2087383840331608316">@mamimami_koro の投稿をXで見る</a></blockquote></div></div></article></div></section>
-
-<section class="panel explainer-section" id="explainer-section">
-<div class="panel-title"><h2>このテーマを読み解く論点</h2><span>活動を続ける条件を確かめる</span></div>
-<p class="explainer-lead">部活動を学校の外へ展開するとき、教員の負担だけでなく、費用、担い手、移動、安全を誰が引き受けるかが問われます。活動を続ける条件ごとに投稿を読みます。</p>
-<div class="explainer-grid">
-  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou.webp" data-alt="費用・家庭負担">
-    <div class="explainer-card-label">
-      <div class="explainer-card-body">
-        <p class="explainer-card-title">費用・家庭負担 — 「月8000円、年間28万円」<span class="explainer-count" id="issue-count-bukatsu-chiiki-hiyo">117件</span></p>
-        <p class="explainer-card-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">懸念：家計を直撃。格差が広がる</span>
-          <span class="explainer-side pro">擁護：市税補助・一律化で解決できる</span>
-        </div>
-      </div>
-    </div>
-    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou.webp" alt="費用・家庭負担インフォグラフィック" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara.webp" data-alt="受け皿・指導者">
-    <div class="explainer-card-label">
-      <div class="explainer-card-body">
-        <p class="explainer-card-title">受け皿・指導者 — 「ボランティア頼みは限界」<span class="explainer-count" id="issue-count-bukatsu-chiiki-ukezara">164件</span></p>
-        <p class="explainer-card-desc">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">懸念：報酬が安く人材が集まらない</span>
-          <span class="explainer-side pro">擁護：生活できる報酬を社会全体で保障を</span>
-        </div>
-      </div>
-    </div>
-    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara.webp" alt="受け皿・指導者インフォグラフィック" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin.webp" data-alt="教員の働き方">
-    <div class="explainer-card-label">
-      <div class="explainer-card-body">
-        <p class="explainer-card-title">教員の働き方 — 「ブラック部活の解消」が最大動機<span class="explainer-count" id="issue-count-bukatsu-chiiki-kyoin">323件</span></p>
-        <p class="explainer-card-desc">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
-        <div class="explainer-sides">
+<style>
+#issue-cards .ic{border:1px solid var(--line);border-radius:14px;background:#fff;
+  padding:18px 20px 20px;margin:0 0 14px;scroll-margin-top:14px}
+#issue-cards .ic:target{border-color:var(--accent);box-shadow:0 0 0 3px rgba(7,94,242,.14)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+#issue-cards .ic-head h3{margin:0;font-size:18px;font-weight:900;line-height:1.5}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;color:var(--accent);font-size:15px}
+#issue-cards .ic-line{font-size:13.5px;color:var(--muted);line-height:1.8;margin:0 0 12px}
+#issue-cards .ic-body{font-size:14.5px;line-height:1.9;margin:0 0 12px}
+#issue-cards .ic figure{margin:14px 0 0}
+#issue-cards .ic img{width:100%;height:auto;border-radius:10px;display:block}
+#issue-cards .ic-back{display:inline-block;margin-top:14px;font-size:13px;font-weight:700}
+</style>
+<section class="panel" id="issue-cards" aria-labelledby="ic-title">
+<div class="panel-title"><h2 id="ic-title">論点ごとに、なかを見る</h2><span>地図の山を押すとここへ来ます</span></div>
+<article class="ic" id="issue-bukatsu-chiiki-kyoin">
+<div class="ic-head"><h3>🏫 教員の働き方</h3><span class="cnt">323件</span></div>
+<div class="hermes-stance-bar"><span class="pro" style="width:56.35%"></span><span class="conditional" style="width:20.74%"></span><span class="con" style="width:21.36%"></span><span class="neutral" style="width:1.55%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 182</span> <span>条件を整えて進めたい 67</span> <span>今のままでは進めにくい 69</span> <span>経験・情報を共有 5</span></div>
+<p class="ic-body">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
+<div class="explainer-sides">
           <span class="explainer-side pro">賛成：強制をなくし教員の負担を減らせる</span>
           <span class="explainer-side con">懸念：移行後も実態は変わらない可能性</span>
         </div>
-      </div>
-    </div>
-    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin.webp" alt="教員の働き方インフォグラフィック" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku.webp" data-alt="教育的意義・機会">
-    <div class="explainer-card-label">
-      <div class="explainer-card-body">
-        <p class="explainer-card-title">教育的意義・機会 — 「子どもの夢と居場所」<span class="explainer-count" id="issue-count-bukatsu-chiiki-kyoiku">215件</span></p>
-        <p class="explainer-card-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">期待：門戸が広がり多様な子に機会を</span>
-          <span class="explainer-side con">懸念：費用・距離の壁で格差が生まれる</span>
-        </div>
-      </div>
-    </div>
-    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku.webp" alt="教育的意義・機会インフォグラフィック" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa.webp" data-alt="地域格差">
-    <div class="explainer-card-label">
-      <div class="explainer-card-body">
-        <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」<span class="explainer-count" id="issue-count-bukatsu-chiiki-kakusa">12件</span></p>
-        <p class="explainer-card-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">懸念：地方では移行自体が成立しない</span>
-          <span class="explainer-side pro">視点：地域の実情に合わせた柔軟設計を</span>
-        </div>
-      </div>
-    </div>
-    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa.webp" alt="地域格差インフォグラフィック" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido.webp" data-alt="制度・移行プロセス">
-    <div class="explainer-card-label">
-      <div class="explainer-card-body">
-        <p class="explainer-card-title">制度・移行プロセス — 「手探りのまま進んでいる」<span class="explainer-count" id="issue-count-bukatsu-chiiki-seido">256件</span></p>
-        <p class="explainer-card-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
-        <div class="explainer-sides">
+      
+<figure><img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin.webp" alt="教員の働き方インフォグラフィック" loading="lazy"></figure>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">授業に専念できる環境を求める</span><p class="hermes-sample-summary">教員の授業専念のため部活地域移行を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/AtelierClutch/status/2082217044611834122">@AtelierClutch の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">善意に頼らない仕組みを求める</span><p class="hermes-sample-summary">部活を教員の善意だけに頼らぬ仕組みを要望</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Namenotblanko/status/2082969614196093400">@Namenotblanko の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
+<article class="ic" id="issue-bukatsu-chiiki-seido">
+<div class="ic-head"><h3>📋 制度・移行プロセス</h3><span class="cnt">256件</span></div>
+<div class="hermes-stance-bar"><span class="pro" style="width:40.62%"></span><span class="conditional" style="width:24.22%"></span><span class="con" style="width:27.73%"></span><span class="neutral" style="width:7.42%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 104</span> <span>条件を整えて進めたい 62</span> <span>今のままでは進めにくい 71</span> <span>経験・情報を共有 19</span></div>
+<p class="ic-body">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
+<div class="explainer-sides">
           <span class="explainer-side con">批判：制度設計が不透明なまま進んでいる</span>
           <span class="explainer-side pro">擁護：段階的に改善していくのは当然</span>
         </div>
-      </div>
-    </div>
-    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido.webp" alt="制度・移行プロセスインフォグラフィック" loading="lazy">
-  </article>
-</div>
-<p class="explainer-note"><strong>使い方:</strong> 気になる条件を確かめてから、次の投票で「自分が一番気になる論点」を選んでください。画像はタップで拡大できます。</p>
+      
+<figure><img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido.webp" alt="制度・移行プロセスインフォグラフィック" loading="lazy"></figure>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">公費と負担金の仕組みが必要</span><p class="hermes-sample-summary">公的資金と負担金の仕組みを条件に移行すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355">@4ZYVNjQOkWBSoU8 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">費用・場所・責任の設計が未解決</span><p class="hermes-sample-summary">現状のままでは地域移行が破綻すると強く懸念</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Goshiki2023/status/2078663825013031272">@Goshiki2023 の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
+<article class="ic" id="issue-bukatsu-chiiki-kyoiku">
+<div class="ic-head"><h3>⭐ 教育的意義・機会</h3><span class="cnt">215件</span></div>
+<div class="hermes-stance-bar"><span class="pro" style="width:40.47%"></span><span class="conditional" style="width:7.91%"></span><span class="con" style="width:49.77%"></span><span class="neutral" style="width:1.86%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 87</span> <span>条件を整えて進めたい 17</span> <span>今のままでは進めにくい 107</span> <span>経験・情報を共有 4</span></div>
+<p class="ic-body">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
+<div class="explainer-sides">
+          <span class="explainer-side pro">期待：門戸が広がり多様な子に機会を</span>
+          <span class="explainer-side con">懸念：費用・距離の壁で格差が生まれる</span>
+        </div>
+      
+<figure><img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku.webp" alt="教育的意義・機会インフォグラフィック" loading="lazy"></figure>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">学校教育としての部活を残したい</span><p class="hermes-sample-summary">教員が外れると部活ではなくクラブになり価値を失うと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ikuji_takuto/status/2083492685223215132">@ikuji_takuto の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">生涯スポーツ・音楽につながる場にしたい</span><p class="hermes-sample-summary">地域移行で部活を生涯愛せる活動に作り替えたい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/39Md8/status/2082487864135393452">@39Md8 の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
+<article class="ic" id="issue-bukatsu-chiiki-ukezara">
+<div class="ic-head"><h3>👤 受け皿・指導者</h3><span class="cnt">164件</span></div>
+<div class="hermes-stance-bar"><span class="pro" style="width:26.83%"></span><span class="conditional" style="width:29.88%"></span><span class="con" style="width:41.46%"></span><span class="neutral" style="width:1.83%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 44</span> <span>条件を整えて進めたい 49</span> <span>今のままでは進めにくい 68</span> <span>経験・情報を共有 3</span></div>
+<p class="ic-body">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
+<div class="explainer-sides">
+          <span class="explainer-side con">懸念：報酬が安く人材が集まらない</span>
+          <span class="explainer-side pro">擁護：生活できる報酬を社会全体で保障を</span>
+        </div>
+      
+<figure><img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara.webp" alt="受け皿・指導者インフォグラフィック" loading="lazy"></figure>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">受け皿の人手・送迎が足りない</span><p class="hermes-sample-summary">地域移行の方向性は正しいが現場の受け皿不足</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/maru_moneyy/status/2084392638506274876">@maru_moneyy の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">地域資源に合わせた再構築を求める</span><p class="hermes-sample-summary">全クラブ分の指導者確保は困難で休日クラブ再構築が合理的</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kohei_okada_pt/status/2084608274377437341">@kohei_okada_pt の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
+<article class="ic" id="issue-bukatsu-chiiki-hiyo">
+<div class="ic-head"><h3>💴 費用・家庭負担</h3><span class="cnt">117件</span></div>
+<div class="hermes-stance-bar"><span class="pro" style="width:17.95%"></span><span class="conditional" style="width:34.19%"></span><span class="con" style="width:45.30%"></span><span class="neutral" style="width:2.56%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 21</span> <span>条件を整えて進めたい 40</span> <span>今のままでは進めにくい 53</span> <span>経験・情報を共有 3</span></div>
+<p class="ic-body">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
+<div class="explainer-sides">
+          <span class="explainer-side con">懸念：家計を直撃。格差が広がる</span>
+          <span class="explainer-side pro">擁護：市税補助・一律化で解決できる</span>
+        </div>
+      
+<figure><img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou.webp" alt="費用・家庭負担インフォグラフィック" loading="lazy"></figure>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">家計にのしかかる会費</span><p class="hermes-sample-summary">月額8000円が家計を圧迫し反対的</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TheMirageof0/status/2070621781757726855">@TheMirageof0 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">公費が足りないと縮小・負担増</span><p class="hermes-sample-summary">公金なしの地域移行で規模縮小と保護者負担が生じている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/774nyannyan/status/2086731858579263880">@774nyannyan の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
+<article class="ic" id="issue-bukatsu-chiiki-sonota">
+<div class="ic-head"><h3>💬 その他</h3><span class="cnt">52件</span></div>
+<div class="hermes-stance-bar"><span class="pro" style="width:42.31%"></span><span class="conditional" style="width:3.85%"></span><span class="con" style="width:26.92%"></span><span class="neutral" style="width:26.92%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 22</span> <span>条件を整えて進めたい 2</span> <span>今のままでは進めにくい 14</span> <span>経験・情報を共有 14</span></div>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">吹奏楽は移行しにくいという経験</span><p class="hermes-sample-summary">多くの部活が移行したが吹奏楽部は進みづらい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/m727243023/status/2085525452777795616">@m727243023 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">マネージャーの役割にある性別規範を問う</span><p class="hermes-sample-summary">マネージャーのジェンダー規範から部活廃止を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamimami_koro/status/2087383840331608316">@mamimami_koro の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
+<article class="ic" id="issue-bukatsu-chiiki-kakusa">
+<div class="ic-head"><h3>🗾 地域格差</h3><span class="cnt">12件</span></div>
+<div class="hermes-stance-bar"><span class="conditional" style="width:33.33%"></span><span class="con" style="width:66.67%"></span></div><div class="hermes-legend"><span>条件を整えて進めたい 4</span> <span>今のままでは進めにくい 8</span></div>
+<p class="ic-body">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
+<div class="explainer-sides">
+          <span class="explainer-side con">懸念：地方では移行自体が成立しない</span>
+          <span class="explainer-side pro">視点：地域の実情に合わせた柔軟設計を</span>
+        </div>
+      
+<figure><img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa.webp" alt="地域格差インフォグラフィック" loading="lazy"></figure>
+<div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">地方で施設が取れない</span><p class="hermes-sample-summary">田舎町で移行後の施設予約が既存クラブに阻害された</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Davestaragues/status/2085511206278939102">@Davestaragues の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">都市部への環境偏在を懸念</span><p class="hermes-sample-summary">地域移行で野球の育成環境が悪化し都市部に偏在すると懸念</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamamam4949/status/2069589990011818183">@mamamam4949 の投稿をXで見る</a></blockquote></div></div>
+<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
+</article>
 </section>
-<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
-  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
-  <img src="" alt="" id="explainer-modal-img">
+<section class="panel" id="vote-section" data-vote-topic="bukatsu-chiiki-issue-stance-v1">
+<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>ここまで読んだうえで</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
+
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
+<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
+  </div>
+  <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a>
+  <button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button>
 </div>
-<script>
-(function(){
-  var modal=document.getElementById('explainer-modal');
-  var mImg=document.getElementById('explainer-modal-img');
-  var mClose=document.getElementById('explainer-modal-close');
-  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
-    c.addEventListener('click',function(){
-      mImg.src=c.dataset.img;
-      mImg.alt=c.dataset.alt||'';
-      modal.classList.add('open');
-    });
-  });
-  mClose.addEventListener('click',function(){modal.classList.remove('open');});
-  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
-})();
-</script>
+</section>
+
+
+
+
 
 <!-- ARGUMENTS_START -->
 <style>
