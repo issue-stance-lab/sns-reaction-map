@@ -39,3 +39,5 @@ scripts/build_bike_arena.py が正典からアリーナの点・注目ポイン�
 潮目は固定ファイル名をやめ、refresh_adapters/bike.py が更新回どうしを比較して作る（inject_tide_widget.py の THEMES からは prev_file/cur_file を外した）。
 新しい反対投稿が data/bike-blue-ticket_opposition_reread.json に無ければ、adapterが tweet_id を並べて意図的に失敗する（読む工程は自動化しない）。
 is_opinion は分類器が全件 true で付ける（このテーマは収集した投稿を全件母数に数える）。
+
+2026-09-06に9月5日更新回を再照合。公開ページが468件、累積正典と公開データが384件になっていたため、保存済み更新回から新規84件を再統合した。累計468件、反対180件。9月5日分の反対33件を含め、編集部の再読区分180件と正典が一致することを確認したうえで、ページ・論点別件数・公開データ・トップ集計を再生成した。
