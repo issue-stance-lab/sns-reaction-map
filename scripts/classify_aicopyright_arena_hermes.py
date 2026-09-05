@@ -102,17 +102,22 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
     return rows
 
 
-def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def classify(batch: list[dict[str, Any]], *, timeout: int = 900) -> list[dict[str, Any]]:
     prompt = prompt_for(batch)
     last_error: Exception | None = None
     for _ in range(2):
-        result = subprocess.run(
-            ["hermes", "--oneshot", prompt],
-            cwd=ROOT,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+        try:
+            result = subprocess.run(
+                ["hermes", "--oneshot", prompt],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+                timeout=timeout,
+            )
+        except subprocess.TimeoutExpired:
+            last_error = RuntimeError(f"Hermes timed out after {timeout} seconds")
+            continue
         if result.returncode:
             last_error = RuntimeError(result.stderr.strip() or f"Hermes exited {result.returncode}")
             continue
@@ -168,6 +173,7 @@ def main() -> int:
     parser.add_argument("--markdown", type=Path)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--batch-size", type=int, default=12)
+    parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
@@ -183,7 +189,7 @@ def main() -> int:
 
     for offset in range(start, len(source), args.batch_size):
         batch = source[offset: offset + args.batch_size]
-        labels = classify(batch)
+        labels = classify(batch, timeout=args.timeout)
         for original, label in zip(batch, labels):
             row = dict(original)
             row["classification"] = label
