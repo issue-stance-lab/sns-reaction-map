@@ -107,7 +107,7 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}
 .dive{color:var(--accent)}
 
-/* 海面より下 */
+/* 資料にあるのに、SNSにないこと */
 .ocean{border-top:1px solid var(--line);margin-top:26px}
 .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
 .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
@@ -266,7 +266,7 @@ html:not(.planet-live) .issue-list{display:none}
 
   <!--__EDITORIAL__-->
 
-  <h3 class="sec sec-live">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
+  <h3 class="sec sec-live">論点の一覧（押すと、地図がその論点に切り替わります）</h3>
   <ul class="issue-list" id="list"></ul>
 
   <h3 class="sec">この試作の見かた</h3>
@@ -365,7 +365,7 @@ function render(){
   }
   p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
 
-  /* 海面より下。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
   const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
   p.push('<g id="seafloor">');
   if (sunk.length){
@@ -381,9 +381,9 @@ function render(){
   if (veins.length){
     p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
       +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
-    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">地下水脈：立場が違っても同じ心配（'+veins.length+'本）</text>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
   }
-  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">海面より下＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
   p.push('</g>');
   // 海の覆い。潜水で薄くなり、下が見えるようになる
   p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
@@ -562,9 +562,7 @@ function drawPanel(){
       + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
       + legend()
       + '<p class="cross">'+crossTalk(st.mode)+'</p>'
-      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点へ移ります。'
-      + '<b>幅＝意見の数、高さ＝強い表現の割合、色＝いちばん多い立場</b>です。'
-      + '幅と高さは同じ母数で数えているので、面積は強く語られた投稿の数になります。</p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
       + (st.mode!=="all"
         ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
           + '幅も高さも、この'+m.total+'件の中で数えた値です。'
@@ -597,13 +595,12 @@ function drawPanel(){
           + '<span class="num">'+(j+1)+'</span>'
           + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
           + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
-      + '<div class="note">'+s.coverage_note+'。読み直した'+s.reread_count+'件は '
-      + '<code>'+s.source_file.split("/").pop()+'</code> が出所です。'
+      + '<div class="note">'+s.coverage_note+'。'
       + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
       + '</div>';
   } else {
     h += '<div class="note">'+s.note+'。<br>'
-       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>';
+       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
   }
   // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
@@ -702,7 +699,7 @@ addEventListener("keydown", e=>{
 });
 
 /* ---------- 探査記録 ----------
-   予想2問＋論点＋沈んだ大陸＋主張＋地下水脈を「地点」として数える。
+   予想2問＋論点＋語られていない争点＋主張＋立場をこえて同じ心配を「地点」として数える。
    端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
 const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
             + (D.claims||[]).length + (D.ocean.veins||[]).length;
@@ -770,17 +767,17 @@ function buildDive(){
   if (!sunk){ b.parentElement.hidden=true; return; }
   const box=document.getElementById("ocean");
   function paint(){
-    b.textContent = dived ? "海を戻す" : "海の水を抜く";
+    b.textContent = dived ? "閉じる" : "資料にしかない話を見る";
     n.innerHTML = dived
       ? "<b>"+sunk+"つ出てきました。</b>どれも一次資料では決まっている話です。下に中身があります。"
-      : "海面より下に、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
+      : "資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
     document.querySelector(".chart-box").classList.toggle("dived", dived);
     if (box) box.hidden = !dived;
   }
   b.addEventListener("click", ()=>{
     dived=!dived; paint();
     if (dived){
-      // 海面下はひとまとまり。開いたら沈んだ大陸と地下水脈をまとめて数える。
+      // 海面下はひとまとまり。開いたら語られていない争点と立場をこえて同じ心配をまとめて数える。
       // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
       (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
       (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));

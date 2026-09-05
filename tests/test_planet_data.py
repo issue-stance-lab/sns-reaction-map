@@ -565,9 +565,9 @@ class PlanetOceanPageTest(unittest.TestCase):
     def test_verdict_labels_are_fixed(self):
         # 課題54の「未着手」5: verdict と表示文言の対応を固定するテストが無かった
         self.assertEqual(set(bpd.VERDICT_LABELS), {"fact", "gap", "miss"})
-        self.assertEqual(bpd.verdict_label("fact"), "実像")
-        self.assertEqual(bpd.verdict_label("gap"), "ずれ")
-        self.assertEqual(bpd.verdict_label("miss"), "蜃気楼")
+        self.assertEqual(bpd.verdict_label("fact"), "資料どおり")
+        self.assertEqual(bpd.verdict_label("gap"), "少しずれる")
+        self.assertEqual(bpd.verdict_label("miss"), "裏が取れない")
         # miss を「嘘」「誤り」と断定しない（設計書3.3の読者への注意）
         self.assertNotIn("嘘", bpd.VERDICT_LABELS["miss"][1])
         with self.assertRaises(SystemExit):

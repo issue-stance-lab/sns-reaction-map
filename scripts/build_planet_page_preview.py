@@ -179,8 +179,27 @@ LIGHT_SKIN = """
 #planet-block .modes button[aria-pressed=true]{background:#e4edff}
 #planet-block .dive button{color:#fff}
 #planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
-#planet-block .gopts button.hit{background:#e8f6ec}
-#planet-block .gopts button.miss{background:#fdeeee}
+/* 選択肢が押せると分からない・正誤が弱い（オーナー指摘）。触れる形と結果を強くする */
+#planet-block .gopts{gap:9px}
+#planet-block .gopts button{background:#fff;border:2px solid #D7DCE6;border-radius:10px;
+  padding:13px 15px 13px 44px;font-size:14.5px;font-weight:500;position:relative;
+  transition:border-color .15s,box-shadow .15s,transform .1s}
+#planet-block .gopts button::before{content:"";position:absolute;left:15px;top:50%;
+  width:17px;height:17px;margin-top:-8.5px;border:2px solid #B9C2D2;border-radius:50%}
+#planet-block .gopts button:hover:not(:disabled){border-color:var(--accent);
+  box-shadow:0 3px 10px rgba(7,94,242,.14);transform:translateY(-1px)}
+#planet-block .gopts button:hover:not(:disabled)::before{border-color:var(--accent)}
+#planet-block .gopts button:disabled{opacity:.55}
+#planet-block .gopts button.hit{background:#E6F6EC;border-color:#1B7A55;opacity:1;font-weight:700}
+#planet-block .gopts button.hit::before{content:"✓";border-color:#1B7A55;background:#1B7A55;
+  color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+#planet-block .gopts button.miss{background:#FDECEC;border-color:#C4392C;opacity:1}
+#planet-block .gopts button.miss::before{content:"×";border-color:#C4392C;background:#C4392C;
+  color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;line-height:1}
+#planet-block .gans,#planet-block .qans{background:#F4F7FC;border-radius:10px;padding:13px 15px;
+  margin-top:13px}
+#planet-block .gans .lead{font-size:17px;font-weight:900;margin:0 0 5px}
+#planet-block .guess:has(.hit:not(:disabled)) .gans .lead{color:#1B7A55}
 #planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
 #planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
 #planet-block .qnext{color:#fff;background:var(--accent)}
@@ -221,6 +240,19 @@ LIGHT_SKIN = """
   padding:9px 13px;border-radius:10px;background:var(--blue-tint,#E7EEFE);
   font-size:13.5px;font-weight:700;color:#0B3FA8;line-height:1.6}
 #planet-block .tap-hint span[aria-hidden]{font-size:16px}
+#planet-block a.go-card{display:inline-block;background:var(--accent);color:#fff;
+  font-weight:700;font-size:14px;text-decoration:none;border-radius:8px;padding:10px 18px}
+#planet-block a.go-card:hover{filter:brightness(1.08)}
+/* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」） */
+#progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;
+  padding:9px clamp(14px,4vw,28px);background:#fff;border-bottom:1px solid #DCE3EF;font-size:13px;color:#42527A}
+#progress .track{flex:1;height:7px;background:#E7ECF4;border-radius:99px;overflow:hidden;
+  min-width:60px;max-width:340px}
+#progress .track i{display:block;height:100%;width:0;background:var(--accent,#075EF2);
+  border-radius:99px;transition:width .4s ease}
+#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums}
+#progress .how{color:#7C89A8;font-size:12px}
+@media (max-width:640px){ #progress .how{display:none} }
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
 }
@@ -322,19 +354,20 @@ def build_background(topic: str) -> str:
 
 
 ISSUE_CSS = """
-#issue-cards .ic{border:1px solid var(--line);border-radius:14px;background:#fff;
-  padding:18px 20px 20px;margin:0 0 14px;scroll-margin-top:14px}
-#issue-cards .ic:target{border-color:var(--accent);box-shadow:0 0 0 3px rgba(7,94,242,.14)}
-#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
-#issue-cards .ic-head h3{margin:0;font-size:18px;font-weight:900;line-height:1.5}
-#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;color:var(--accent);font-size:15px}
-#issue-cards .ic-line{font-size:13.5px;color:var(--muted);line-height:1.8;margin:0 0 12px}
-#issue-cards .ic-body{font-size:14.5px;line-height:1.9;margin:0 0 12px}
-#issue-cards .ic figure{margin:14px 0 0}
-#issue-cards .ic img{width:100%;height:auto;border-radius:10px;display:block}
-#issue-cards .ic-back{display:inline-block;margin-top:14px;font-size:13px;font-weight:700}
+#issue-cards .ic{border-top:2px solid #0F1A3D;padding:22px 0 30px;scroll-margin-top:64px}
+#issue-cards .ic + .ic{border-top-color:#DCE3EF}
+#issue-cards .ic:target .ic-head h3{color:var(--accent)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+#issue-cards .ic-head .dot{width:11px;height:11px;border-radius:3px;flex:none;align-self:center}
+#issue-cards .ic-head h3{margin:0;font-size:21px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;color:#0F1A3D}
+#issue-cards .ic-head .cnt small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+#issue-cards .ic-body{font-size:15px;line-height:1.95;margin:12px 0 0;max-width:44rem}
+#issue-cards .ic figure{margin:16px 0 0}
+#issue-cards .ic img{width:100%;height:auto;border-radius:8px;display:block}
+#issue-cards .ic-back{display:inline-block;margin-top:16px;font-size:13px;font-weight:700}
 """
-
 
 def _articles(html: str, cls: str) -> list[str]:
     out, i = [], 0
@@ -355,6 +388,7 @@ def merge_issue_cards(html: str, data: dict) -> tuple[str, str]:
     地図の山から飛べる1つの場所にまとめる（オーナー指示 2026-09-05）。
     """
     label2id = {it["label"]: it["id"] for it in data["issues"]}
+    colors = {x["key"]: x.get("color") for x in data.get("stances", []) if x.get("color")}
     posts, figs = {}, {}
     for art in _articles(html, "hermes-issue-card"):
         m = re.search(r"<h3>(.*?)</h3>", art, re.S)
@@ -372,12 +406,14 @@ def merge_issue_cards(html: str, data: dict) -> tuple[str, str]:
     out = [f"<style>{ISSUE_CSS}</style>",
            '<section class="panel" id="issue-cards" aria-labelledby="ic-title">',
            '<div class="panel-title"><h2 id="ic-title">論点ごとに、なかを見る</h2>'
-           '<span>地図の山を押すとここへ来ます</span></div>']
+           '<span>7つすべてを、図解と投稿つきで</span></div>']
     for it in data["issues"]:
         iid, art_p, art_f = it["id"], posts.get(it["id"], ""), figs.get(it["id"], "")
         out.append(f'<article class="ic" id="issue-{esc(iid)}">')
-        out.append(f'<div class="ic-head"><h3>{esc(it["icon"])} {esc(it["label"])}</h3>'
-                   f'<span class="cnt">{it["count"]}件</span></div>')
+        col = colors.get(it.get("top_stance"), "#8b9199")
+        out.append(f'<div class="ic-head"><span class="dot" style="background:{esc(col)}"></span>'
+                   f'<h3>{esc(it["label"])}</h3>'
+                   f'<span class="cnt">{it["count"]}<small>件</small></span></div>')
         bar = re.search(r'<div class="hermes-stance-bar">.*?</div>\s*'
                         r'<div class="hermes-legend">.*?</div>', art_p, re.S)
         if bar:
@@ -428,6 +464,7 @@ def build_section(parts: dict[str, str]) -> str:
                         '<span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>')
     body = re.sub(r'^<div class="wrap">', f'<div id="{SCOPE[1:]}">', body)
     # 図の上に「押せる」と書く。下の小さい灰色の一行では気づかれない
+    body = re.sub(r'<div class="progress" id="progress"[^>]*>.*?</div>', "", body, flags=re.S)
     body = body.replace(
         '<div class="stage">',
         '<p class="tap-hint"><span aria-hidden="true">👆</span>'
@@ -441,8 +478,6 @@ def build_section(parts: dict[str, str]) -> str:
         ("<span>探査記録</span>",
          '<span title="予想2問・論点7・沈んだ大陸4・一次資料クイズ7問・地下水脈2の'
          '合計22か所のうち、開いた数です">読んだところ</span>'),
-        ("論点一覧（3Dが使えなくても同じ内容へ行けます）",
-         "論点一覧（図が出ないときも同じ内容へ行けます）"),
     ):
         body = body.replace(before, after)
     # 開発者向けの一文（スクリプト名とコマンドの案内）は読者に出さない
@@ -533,6 +568,12 @@ def main() -> None:
     if anchor not in html:
         raise SystemExit(f"差し込み位置 {anchor} が見つかりません")
     html = html.replace(anchor, bg + "\n" + anchor, 1)
+
+    # 進み具合はページの一番上へ。何をすれば増えるかもその場に書く
+    bar = ('<div id="progress"><span>読んだところ</span>'
+           '<span class="track"><i id="pbar"></i></span><b id="pnum">0 / 22</b>'
+           '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>')
+    html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + bar, html, count=1)
     # 地図を投票より前へ（オーナー指示「この地図の方が上に表示した方が良いのでは」）
     html = html.replace(anchor, anchor + "\n" + section + "\n" + issue_cards + "\n" + vote, 1)
 
@@ -543,8 +584,8 @@ def main() -> None:
         if tag in html:
             html = html.replace(
                 tag,
-                tag + f'<p class="sub" style="margin-top:12px"><a href="#issue-{it["id"]}">'
-                      f'この論点のなかを見る（図解と両側の投稿）↓</a></p>', 1)
+                tag + f'<p style="margin:14px 0 0"><a class="go-card" href="#issue-{it["id"]}">'
+                      f'この論点のなかを見る ↓</a></p>', 1)
 
     # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す
     html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",

@@ -49,7 +49,7 @@ def load_public_theme(topic: str) -> dict:
 
 
 def load_ocean_layer(topic: str) -> dict:
-    """沈んだ大陸・地下水脈は公開データ契約（`data/public/themes/`）から読む。
+    """語られていない争点・立場をこえて同じ心配は公開データ契約（`data/public/themes/`）から読む。
 
     確認台帳（`data/verification/`）を直接読むと、投稿IDや機械一致の作業記録まで
     惑星データへ入り、そのまま試作HTMLへ埋め込まれる。公開契約を通すことで、
@@ -69,9 +69,9 @@ def load_ocean_layer(topic: str) -> dict:
 # 10テーマ共通の言葉にする。テーマごとに言い換えると、同じ判定が別物に見える。
 # miss を「嘘」と書かない。「確認できなかった」で止める（3.3の読者への注意）。
 VERDICT_LABELS = {
-    "fact": ("実像", "一次資料でも確認できました。「正しい意見」という意味ではありません。"),
-    "gap": ("ずれ", "部分的には合っていますが、一次資料とずれている点があります。"),
-    "miss": ("蜃気楼", "一次資料では確認できませんでした。誤りと決まったわけではありません。"),
+    "fact": ("資料どおり", "一次資料でも確認できました。「正しい意見」という意味ではありません。"),
+    "gap": ("少しずれる", "部分的には合っていますが、一次資料とずれている点があります。"),
+    "miss": ("裏が取れない", "一次資料では確認できませんでした。誤りと決まったわけではありません。"),
 }
 
 
@@ -203,15 +203,15 @@ def build(topic: str) -> dict:
         sunk_continents.append(item)
     stale_ids = [i["id"] for i in sunk_continents if i["base_stale"]]
     if stale_ids:
-        print("注意: 沈んだ大陸の母数が確認時点のままです（増えた分の読み直しが要る）: "
+        print("注意: 語られていない争点の母数が確認時点のままです（増えた分の読み直しが要る）: "
               + ", ".join(stale_ids))
 
-    # --- 地下水脈（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
+    # --- 立場をこえて同じ心配（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
     for vein in ocean.get("veins", []):
         unknown = [i for i in vein.get("issue_ids", []) if i not in id_to_key]
         if unknown:
             raise SystemExit(
-                f"地下水脈 {vein['id']} が、設定ファイルに無い論点 {', '.join(unknown)} を指しています。"
+                f"立場をこえて同じ心配 {vein['id']} が、設定ファイルに無い論点 {', '.join(unknown)} を指しています。"
             )
 
     keys = [k for k in issues_cfg if counts.get(k)]
@@ -363,7 +363,7 @@ def build(topic: str) -> dict:
 
 
 def short_topic(topic: str) -> str:
-    """沈んだ大陸の見出しを図へ収まる長さにする（本文は海面下の節でそのまま出す）。"""
+    """語られていない争点の見出しを図へ収まる長さにする（本文は海面下の節でそのまま出す）。"""
     head = topic.split("（")[0].strip()
     return head if len(head) <= 14 else head[:13] + "…"
 
@@ -400,7 +400,7 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
     for item in data["ocean"]["sunk_continents"]:
         if item.get("base_stale"):
             ng.append(
-                f"沈んだ大陸「{item['id']}」の母数が確認時点の{item.get('sns_base')}件のまま"
+                f"語られていない争点「{item['id']}」の母数が確認時点の{item.get('sns_base')}件のまま"
                 f"（現在は{item.get('opinion_count_now')}件）。増えた分を読み直すこと"
             )
 
@@ -454,7 +454,7 @@ def static_caution(d: dict) -> str:
            + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
            + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
-           + '　<code>' + e(d["snapshot_id"]) + "</code></p>"]
+           + "</p>"]
     if d.get("prototype_only"):
         out.append('<p class="caution" style="border-left-color:#e5534b">'
                    + "<b>このページは公開できません。</b>独自性の検査に落ちています。<br>・"
@@ -464,14 +464,10 @@ def static_caution(d: dict) -> str:
 
 def static_meta(d: dict) -> str:
     f = d["elevation_formula"]
-    return ("山＝論点、<b>幅＝意見の数</b>、<b>高さ＝" + e(f["definition"]) + "</b>、"
-            "色＝いちばん多い立場（薄いほど意見が割れている）。"
-            "幅と高さは<b>同じ母数</b>（いま選んでいる立場の件数）で数えているので、"
-            "面積（幅×高さ）は「強く語られた投稿の数」になります。<br>"
-            "山の左右の並び順に意味はありません。"
-            "件数の少ない論点は高さが揺れやすいため、母数が小さいものは画面で断っています。<br>"
-            "このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。"
-            "データが増えたら同じコマンドを実行し直すだけで、幅・高さ・色・島が更新されます。")
+    return ("山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝" + e(f["definition"]) + "</b>、"
+            "<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>"
+            "左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、"
+            "母数が小さいものは画面で断っています。")
 
 
 def static_fallback(d: dict) -> str:
@@ -536,15 +532,14 @@ def static_fallback(d: dict) -> str:
                 '      <p class="sub" style="margin-top:12px">'
                 '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
                 f'      <ul class="islands">{items}</ul>',
-                f'      <div class="note">{e(sub["coverage_note"])}。読み直した{sub["reread_count"]}件は '
-                f'<code>{e(sub["source_file"].split("/")[-1])}</code> が出所です。'
+                f'      <div class="note">{e(sub["coverage_note"])}。'
                 + (f'残り{sub["unread_count"]}件は、その後に増えた分でまだ読めていません。'
                    if sub["unread_count"] else "") + '</div>',
             ]
         else:
             body.append(f'      <div class="note">{e(sub["note"])}。<br>'
                         'AIが自動でつけた区分をここに並べることはしません。'
-                        '人が読んだ結果だけを島にします。</div>')
+                        '人が読んだ結果だけをまとめにします。</div>')
 
         if it.get("claims"):
             srcs = []
@@ -577,7 +572,7 @@ def static_fallback(d: dict) -> str:
 
 
 def issue_extras_html(issue: dict, data: dict) -> str:
-    """着陸パネルの後半（資料との照合＋海面より下への導線）を組み立てる。
+    """着陸パネルの後半（資料との照合＋資料にあるのに、SNSにないことへの導線）を組み立てる。
 
     3D版の着陸パネルもこのHTMLを読んで使う（テンプレートのJSで複製する）。
     同じ内容をJavaScript側にもう一度書くと、数字と文言が2通りに分かれるため。
@@ -609,20 +604,20 @@ def issue_extras_html(issue: dict, data: dict) -> str:
     if veins or sunk:
         parts = []
         if veins:
-            parts.append(f'地下水脈{len(veins)}本')
+            parts.append(f'立場をこえて同じ心配{len(veins)}本')
         if sunk:
-            parts.append(f'沈んだ大陸{len(sunk)}件')
+            parts.append(f'語られていない争点{len(sunk)}件')
         out.append(
-            '      <p class="sub" style="margin-top:12px">この論点に関わる海面より下：'
+            '      <p class="sub" style="margin-top:12px">この論点に関わる資料にあるのに、SNSにないこと：'
             + "・".join(parts)
-            + ' <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>')
+            + ' <a class="dive" href="#ocean">ページ下の「資料にあるのに、SNSにないこと」で読む</a></p>')
     return "\n".join(out)
 
 
 def static_ocean(data: dict) -> str:
-    """海面より下（沈んだ大陸・地下水脈）をテーマ全体のセクションとして組み立てる。
+    """資料にあるのに、SNSにないこと（語られていない争点・立場をこえて同じ心配）をテーマ全体のセクションとして組み立てる。
 
-    沈んだ大陸は「どの論点にも入っていない」ことが中身なので、
+    語られていない争点は「どの論点にも入っていない」ことが中身なので、
     論点の着陸パネルの中だけに置くと、論点に結びつかない件が読者から見えなくなる。
     """
     ocean = data["ocean"]
@@ -630,7 +625,7 @@ def static_ocean(data: dict) -> str:
     label_of = {i["id"]: i["label"] for i in data["issues"]}
 
     head = ['  <section id="ocean" class="ocean" tabindex="-1">',
-            '    <h3 class="sec">海面より下</h3>']
+            '    <h3 class="sec">資料にあるのに、SNSにないこと</h3>']
     if ocean.get("ocean_status") != "complete" or not (sunk or veins):
         head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
                     '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
@@ -642,7 +637,7 @@ def static_ocean(data: dict) -> str:
         f'{"編集部が本文を読んで確認" if ocean.get("ocean_reviewer_type") == "editorial_review" else "AIの下読みを含む"}）</p>')
 
     if sunk:
-        head.append('    <h4 class="subsec">沈んだ大陸 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
+        head.append('    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
         for x in sunk:
             srcs = "".join(
                 f'<li><a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
@@ -662,7 +657,7 @@ def static_ocean(data: dict) -> str:
                 '</article>')
 
     if veins:
-        head.append('    <h4 class="subsec">地下水脈 — 立場が違っても、同じ心配を語っているところ</h4>')
+        head.append('    <h4 class="subsec">立場をこえて同じ心配 — 立場が違っても、同じ心配を語っているところ</h4>')
         for v in veins:
             sides = "".join(
                 f'<li>{e(sd["stance_label"])}<span class="n">代表{sd["post_count"]}件</span></li>'
