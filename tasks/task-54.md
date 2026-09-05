@@ -1,4 +1,7 @@
-# 課題54: 3D「議論の惑星」を中心とするWebsiteリニューアル（最重要）
+# 課題54: 「議論の山なみ」を中心とするWebsiteリニューアル（最重要）
+
+> 2026-09-05 に**3Dの球（議論の惑星）は廃止**し、横から見た断面図（山なみ）へ変えた。
+> 以下の文中に残る「惑星」「球」「大陸」「着陸」は、断面図より前の記述。段階8-Bを見ること。
 
 
 **状態**: 方針承認・設計確定。**2026-09-01 に照合レイヤー「海・地下水脈」を追加し、課題15-Bを本課題へ統合した**（オーナー承認済み）。段階0〜6完了（**2026-09-03 mainへ反映済み**）。**段階6レビュー指摘1〜6にも対応済み。段階7着手可**
@@ -374,8 +377,22 @@ worktree `task/planet-stage6-review`）で条件付きpass。**指摘の核心**
 **実測**: 通しで操作して探査記録が 0→2→9→15→22/22。全470テストOK、検査5本OK、
 2回生成の差分0、幅900pxで横スクロールなし。
 
-**残っていること**: ①**段階9の実測やり直し**（球のページで測った値は無効）
-②設計書 `reaction-planet-renewal.md` 本文の書き直し（冒頭に無効の注記だけ入れてある）
-③残り9テーマへの展開 ④実機スマホと「視差効果を減らす」設定の確認。
+**成果物の置き場所（新しいセッションはここから）**:
 
-**次**: 残り9テーマへの展開と、設計書 `reaction-planet-renewal.md` 本文の書き直し。
+- **作業ツリー**: `../isa-wt-planet-engagement`（ブランチ `task/planet-engagement`）
+- **main には1つも入っていない。未マージのコミットが13件ある。**
+  作業を続けるときは main で始めず、この作業ツリーへ入ること
+- 見る: `python3 scripts/build_planet_data.py --topic bukatsu-chiiki --prototype` を実行し、
+  `quality/prototypes/bukatsu-chiiki-planet.html` を開く（データを埋め込んであるのでサーバー不要）
+- 触ったファイル: `scripts/build_planet_data.py` / `scripts/public_registry_common.py` /
+  `schemas/public-theme.schema.json` / `quality/prototypes/planet-prototype.template.html` /
+  `tests/test_planet_data.py` / `tests/test_public_data_contract.py`
+
+**残っていること（上から順に）**:
+
+1. **段階9の実測やり直し**（球のページで測った値は無効。ここが次の作業）
+2. 設計書 `reaction-planet-renewal.md` 本文の書き直し（冒頭に無効の注記だけ入れてある）
+3. 残り9テーマへの展開（段階10）
+4. 実機スマホと「視差効果を減らす」設定の確認
+
+**次**: 上の1（段階9の実測やり直し）。終わったらオーナーへ共通仕様の承認を仰ぐ。
