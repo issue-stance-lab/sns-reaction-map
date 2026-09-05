@@ -32,6 +32,23 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260905-003
+    department: engineering-data
+    action: website_publication
+    summary: "憲法改正論議テーマの2026-09-05更新回を一般公開する"
+    reason: "新規の公開投稿サンプル226件（意見198件）を追加し、ページ上の集計・論点表示・取得期間を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "公開後はGitHub Pagesの反映まで数分かかる場合がある"
+    recommendation: approve
+    evidence:
+      - "data/verification/updates/constitutional-amendment/2026-09-05/report.json"
+      - ".staging/refresh/constitutional-amendment/20260905_222211/promotion-manifest.json"
+      - "DATA_REFRESH.md"
+    status: approved
+    requested_at: "2026-09-05"
+    decided_at: "2026-09-05"
+    decision_note: "CEOが本対話で『公開して』と明示して承認。対象はpromotion manifest SHA256: 3eff3b3dc5855a6f5c6ce335b05e4f1bb3ee218d1d7d7a955756b5078ecd08c2。"
   - id: approval-20260905-002
     department: engineering-data
     action: website_publication
