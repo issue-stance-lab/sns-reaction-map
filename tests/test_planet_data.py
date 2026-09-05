@@ -405,6 +405,85 @@ class PlanetSeaTest(unittest.TestCase):
         self.assertIn("青い海と海岸線の形には意味がありません", static)
 
 
+class PlanetDotsTest(unittest.TestCase):
+    """点の装置（立場を絞ると件数は減るのに割合は増える、を見せる）を固定する。
+
+    「323件→182件と減るのに 28.4%→39.6% と増える」が文章では通じなかったため、
+    投稿1件＝点1つで見せる装置を入れた。数字は data から作り、
+    3Dが使えない環境でも同じことが読めるようにしてある。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.page = bpd.render_page(cls.data, cls.template, "null")
+        cls.static = re.sub(r"<script.*?</script>", "", cls.page, flags=re.S)
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+
+    def test_device_is_built_from_the_data(self):
+        self.assertIn('id="dotbox"', self.template, "点の装置がテンプレートから消えている")
+        # 点の数は「立場ごとの件数」の合計。テンプレートに件数を書いてはいけない
+        self.assertIn("it.stances[s.key]", self.script, "点を data から作っていない")
+        self.assertIn("D.totals.opinions", self.script, "母数を data から採っていない")
+
+    def test_dot_class_does_not_collide_with_the_issue_list(self):
+        # 論点一覧の丸も .dot を使っている。同じ名前にすると打ち消し合う
+        self.assertIn(".dotframe .pdot{position:absolute", self.template,
+                      "点の装置が既存の .dot と同じ名前を使っている")
+
+    def test_every_issue_colour_separates_from_the_muted_dots(self):
+        """色つきの点と灰色の点が、明るさで見分けられること。
+
+        大陸の色はどれも白を混ぜた淡い色なので、灰を明るくすると全7色が
+        見分けの基準を下回る（実際に一度下回った。色差15に対し9〜14しか無かった）。
+        明るさの差で見るのは、色が見分けにくい人にも効くため。
+        """
+        rest = self._rgb(re.search(r'const REST_DOT = "(#[0-9a-fA-F]{6})"', self.script).group(1))
+        for issue in self.data["issues"]:
+            stance = next(s for s in self.data["stances"] if s["key"] == issue["top_stance"])
+            # continentRGB(it,"all") と同じ式: 白へ 0.58〜1.00 の割合で寄せる
+            purity = issue["purity_pct"] / 100
+            t = min(1.0, max(0.0, (purity - 0.30) / 0.45))
+            hot = [236 + (c - 236) * (0.58 + 0.42 * t) for c in self._rgb(stance["color"])]
+            ratio = self._contrast(hot, rest)
+            self.assertGreaterEqual(
+                ratio, 1.5,
+                f"{issue['label']}: 色つきの点と灰色の点の明暗差が {ratio:.2f}倍しかない")
+
+    @staticmethod
+    def _rgb(h):
+        return [int(h[i:i + 2], 16) for i in (1, 3, 5)]
+
+    @staticmethod
+    def _luminance(c):
+        def ch(v):
+            v /= 255
+            return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+        r, g, b = (ch(x) for x in c)
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+    @classmethod
+    def _contrast(cls, a, b):
+        la, lb = cls._luminance(a), cls._luminance(b)
+        return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+    def test_stance_shares_are_readable_without_javascript(self):
+        # 3Dも点も動かない環境で、同じこと（立場ごとの割合）が読めること
+        text = re.sub(r"<[^>]+>", " ", self.static)
+        self.assertIn("立場ごとに、その立場の中でこの論点が占める割合", text)
+        self.assertIn("件数が減っても、その中での割合は増えることがあります", text)
+        for issue in self.data["issues"]:
+            for mode in self.data["modes"]:
+                if not mode["total"]:
+                    continue
+                n = mode["counts"][issue["id"]]
+                want = f'{n}件 / {100 * n / mode["total"]:.1f}%'
+                self.assertIn(want, self.static,
+                              f"{issue['label']} / {mode['label']} の割合が静的表示に無い")
+
+
 class PlanetOceanPageTest(unittest.TestCase):
     """段階7-B: 着陸パネルの「資料との照合」と「海面より下」が画面に出ること。
 

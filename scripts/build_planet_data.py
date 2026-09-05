@@ -667,6 +667,23 @@ def static_fallback(d: dict) -> str:
             f'      <div class="bar">{bar}</div>',
             '      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>',
         ]
+
+        # 立場ごとの「その立場の中での割合」。JSが動く画面では点の装置が動きで見せるところ。
+        # 動かない環境でも同じことが読めるように、ここへ数字で置く（設計書6章）。
+        rows = "".join(
+            f'<li><span>{e(m["label"])}{m["total"]}件のうち</span>'
+            f'<span class="n">{m["counts"][it["id"]]}件 / '
+            f'{100 * m["counts"][it["id"]] / m["total"]:.1f}%</span></li>'
+            for m in d["modes"] if m["total"])
+        body += [
+            '      <p class="sub" style="margin:12px 0 2px">'
+            '<b>立場ごとに、その立場の中でこの論点が占める割合</b></p>',
+            f'      <ul class="sides">{rows}</ul>',
+            '      <div class="note">件数と割合は逆に動くことがあります。'
+            '立場を絞ると数える相手そのものが少なくなるので、'
+            '<b>件数が減っても、その中での割合は増えることがあります。</b></div>',
+        ]
+
         if it["share_pct"] < d["min_area_pct"]:
             body.append(f'      <div class="note">3Dの惑星では、この大陸を実際の割合より大きく描いています。'
                         f'小さすぎると押せないため、最小{d["min_area_pct"]}%まで拡大しています。</div>')

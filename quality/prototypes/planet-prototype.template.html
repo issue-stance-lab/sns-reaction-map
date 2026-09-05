@@ -127,6 +127,35 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:11px 13px;margin:0 0 8px;font-size:12.5px}
 
+/* 点の装置（立場を絞ったときの件数と割合の動き） */
+.dotbox{margin-top:26px}
+.dotbox .sec{margin-top:0}
+.dotframe{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dotframe .pdot{position:absolute;left:0;top:0;border-radius:50%;
+  transition:transform .85s cubic-bezier(.4,0,.2,1),width .85s cubic-bezier(.4,0,.2,1),
+             height .85s cubic-bezier(.4,0,.2,1),opacity .4s linear}
+#dot-legend i{border-radius:50%}
+.dot-cap{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.75}
+.dot-cap b{color:var(--fg)}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:560px){.readouts{grid-template-columns:1fr}}
+.ro{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.ro .k{font-size:11px;color:var(--muted);margin:0}
+.ro .v{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:4px 0 0}
+.ro .from{font-size:15px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.ro .ar{font-size:14px;font-weight:700}
+.ro .to{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums}
+.ro.down .ar,.ro.down .to{color:#e8a0a8}
+.ro.up .ar,.ro.up .to{color:#7ee0a8}
+.ro.flat .ar,.ro.flat .to{color:var(--fg)}
+.ro .why{font-size:11.5px;color:var(--muted);margin:5px 0 0;line-height:1.7}
+.dot-mech{font-size:12.5px;line-height:1.85;margin:12px 0 0;padding:11px 13px;
+  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0}
+.dot-mech b{color:#f2f6fa}
+.dot-mech .big{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
 html:not(.planet-live) .modes,
@@ -166,6 +195,29 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="hint">ドラッグで回転 / ホイールで拡大 / 大陸をクリックで着陸</div>
     </div>
     <div class="panel" id="panel"></div>
+  </div>
+
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、投稿1件＝点1つで見せる。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <h3 class="sec" id="dot-title"></h3>
+    <div class="dotframe" id="dotframe"></div>
+    <p class="dot-cap"><b>枠の大きさは変えていません。</b>点が減ったぶん、1つ1つが大きくなります。
+      割合とは「この枠の何割を色つきの点が占めるか」のことです。</p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数（色つきの点の数）</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+        <p class="why" id="c-why"></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（枠の中で色つきが占める割合）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+        <p class="why" id="s-why"></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
   </div>
 
   <!--__FALLBACK__-->
@@ -614,6 +666,141 @@ function crossTalk(modeId){
        + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
 }
 
+/* ---------- 点の装置 ----------
+   投稿1件＝点1つ。立場を絞ると、その立場でない点が消え、**枠の大きさは変えずに**
+   残った点だけで詰め直す。点が減るぶん1つ1つが大きくなるので、
+   色つきの点が枠の何割を占めるかが、そのまま「その立場の中での割合」になる。
+   「件数は減るのに割合は増える」が文章では通じなかったための装置。 */
+const dotBox = document.getElementById("dotbox");
+const dotFrame = document.getElementById("dotframe");
+// 追いかけていない論点の点。大陸の色はどれも白っぽいので、灰を明るくすると
+// 色つきと見分けがつかなくなる（7色すべてで色差が基準の15を下回った）。
+// この灰なら7色すべてで色差16.8以上、枠との明暗差2.4倍。凡例と静的表示が控えにある。
+const REST_DOT = "#4a525c";
+let dotEls = null;
+
+function buildDots(){
+  const html = [];
+  issues.forEach((it,k)=>{
+    D.stances.forEach((s,si)=>{
+      const n = it.stances[s.key] || 0;
+      for (let c=0;c<n;c++) html.push('<span class="pdot" data-i="'+k+'" data-s="'+si+'"></span>');
+    });
+  });
+  dotFrame.innerHTML = html.join("");
+  dotEls = Array.prototype.slice.call(dotFrame.querySelectorAll(".pdot"));
+}
+
+// n個の点がちょうど収まるマス目を探す（枠の大きさは変えない）
+function dotGrid(n, W, H){
+  let best = 0, cols = 1;
+  for (let c=1;c<=n;c++){
+    const s = W/c, rows = Math.ceil(n/c);
+    if (rows*s <= H && s > best){ best = s; cols = c; }
+  }
+  return {cell:best, cols:cols, rows:Math.ceil(n/cols)};
+}
+
+function stanceIndexOf(modeId){ return D.stances.findIndex(s => s.key === modeId); }
+
+function layoutDots(){
+  const k = st.landed;
+  if (k === null || !dotEls) return;
+  const W = dotFrame.clientWidth, H = dotFrame.clientHeight;
+  if (!W || !H) return;
+  const si = stanceIndexOf(st.mode);                 // "all" のときは -1
+  const shown = dotEls.filter(d => si < 0 || +d.dataset.s === si);
+  // 色つきを先に置く。まとまるので「枠の何割か」が面積で読める
+  shown.sort((a,b)=>{
+    const ka = (+a.dataset.i === k) ? 0 : 1, kb = (+b.dataset.i === k) ? 0 : 1;
+    return ka - kb || (+a.dataset.i) - (+b.dataset.i);
+  });
+  const g = dotGrid(shown.length, W, H);
+  const size = Math.max(2, g.cell*0.66);
+  const padX = (W - g.cols*g.cell)/2, padY = (H - g.rows*g.cell)/2;
+  const hot = css(continentRGB(issues[k], "all"));   // 大陸と同じ色にして惑星とつなぐ
+  dotEls.forEach(d => { d.style.opacity = "0"; });
+  shown.forEach((d,i)=>{
+    const c = i % g.cols, r = Math.floor(i/g.cols);
+    d.style.width = size+"px"; d.style.height = size+"px";
+    d.style.transform = "translate(" + (padX + c*g.cell + (g.cell-size)/2) + "px,"
+                                     + (padY + r*g.cell + (g.cell-size)/2) + "px)";
+    d.style.background = (+d.dataset.i === k) ? hot : REST_DOT;
+    d.style.opacity = "1";
+    d.style.transitionDelay = "0s,.3s,.3s,0s";       // 消えてから詰め直す
+  });
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!dotEls) buildDots();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  document.getElementById("dot-title").textContent =
+    "「" + it.label + "」は、立場を絞ると増えるか減るか";
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+css(continentRGB(it,"all"))+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:'+REST_DOT+'"></i>それ以外の論点</span>';
+
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+  document.getElementById("c-why").textContent = isAll
+    ? "いまは意見" + base + "件すべてを見ています。"
+    : base + "件から" + nowT + "件だけを取り出したので、数は減ります。";
+  document.getElementById("s-why").textContent = isAll
+    ? "この割合が、立場を絞ったときの比べもとになります。"
+    : "見ている相手が" + nowT + "件に変わったので、この" + nowT + "件の中での割合です。";
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を選ぶと、その立場ではない点が消えて、"
+      + "残った点だけで枠を詰め直します。<b>色つきと灰色のどちらが多く残るか</b>を見てください。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほとんど同じ割合で残ったので、割合もほとんど変わりません。</b>'
+              + 'この論点は「'+m.label+'」かどうかで語られ方が変わらない、ということです。';
+    else if (gap > 0)
+      verdict = '<b>色つきのほうが多く生き残ったので、残った中での割合は増えます。</b>'
+              + 'つまり「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>色つきのほうが多く消えたので、残った中での割合は減ります。</b>'
+              + 'つまり「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '<b>これが理由です。</b><br>'
+      + '「'+it.label+'」は <span class="big">'+keepHot.toFixed(1)+'%</span> 残り、'
+      + 'それ以外は <span class="big">'+keepRest.toFixed(1)+'%</span> 残りました。<br>' + verdict;
+  }
+  layoutDots();
+}
+
 function drawPanel(){
   const p = document.getElementById("panel");
   const m = modeById[st.mode];
@@ -644,6 +831,7 @@ function drawPanel(){
       const a = anglesFor(centroidOf(k, st.mode));
       animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:st.zoom}}, 700);
     };
+    syncDots();
     return;
   }
   const it = issues[st.landed];
@@ -680,6 +868,7 @@ function drawPanel(){
   h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
+  syncDots();
 }
 
 /* ---------- 一覧・モード ---------- */
@@ -821,8 +1010,12 @@ try {
   // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
   // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
   // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
-  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
-  else addEventListener("resize", render);
+  if (window.ResizeObserver){
+    new ResizeObserver(()=>render()).observe(cv);
+    new ResizeObserver(()=>layoutDots()).observe(dotFrame);
+  } else {
+    addEventListener("resize", ()=>{ render(); layoutDots(); });
+  }
 } catch (e) {
   /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
   document.documentElement.className =

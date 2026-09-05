@@ -127,6 +127,35 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:11px 13px;margin:0 0 8px;font-size:12.5px}
 
+/* 点の装置（立場を絞ったときの件数と割合の動き） */
+.dotbox{margin-top:26px}
+.dotbox .sec{margin-top:0}
+.dotframe{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dotframe .pdot{position:absolute;left:0;top:0;border-radius:50%;
+  transition:transform .85s cubic-bezier(.4,0,.2,1),width .85s cubic-bezier(.4,0,.2,1),
+             height .85s cubic-bezier(.4,0,.2,1),opacity .4s linear}
+#dot-legend i{border-radius:50%}
+.dot-cap{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.75}
+.dot-cap b{color:var(--fg)}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:560px){.readouts{grid-template-columns:1fr}}
+.ro{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.ro .k{font-size:11px;color:var(--muted);margin:0}
+.ro .v{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:4px 0 0}
+.ro .from{font-size:15px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.ro .ar{font-size:14px;font-weight:700}
+.ro .to{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums}
+.ro.down .ar,.ro.down .to{color:#e8a0a8}
+.ro.up .ar,.ro.up .to{color:#7ee0a8}
+.ro.flat .ar,.ro.flat .to{color:var(--fg)}
+.ro .why{font-size:11.5px;color:var(--muted);margin:5px 0 0;line-height:1.7}
+.dot-mech{font-size:12.5px;line-height:1.85;margin:12px 0 0;padding:11px 13px;
+  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0}
+.dot-mech b{color:#f2f6fa}
+.dot-mech .big{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
 html:not(.planet-live) .modes,
@@ -169,6 +198,29 @@ html:not(.planet-live) .issue-list{display:none}
     <div class="panel" id="panel"></div>
   </div>
 
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、投稿1件＝点1つで見せる。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <h3 class="sec" id="dot-title"></h3>
+    <div class="dotframe" id="dotframe"></div>
+    <p class="dot-cap"><b>枠の大きさは変えていません。</b>点が減ったぶん、1つ1つが大きくなります。
+      割合とは「この枠の何割を色つきの点が占めるか」のことです。</p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数（色つきの点の数）</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+        <p class="why" id="c-why"></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（枠の中で色つきが占める割合）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+        <p class="why" id="s-why"></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
+  </div>
+
     <div id="fallback">
     <h3 class="sec">論点の一覧（3Dの惑星が使えないときの表示）</h3>
     <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で3Dの惑星を描けなかったため、同じ内容を静的な一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
@@ -187,6 +239,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#2F8F83"></i>移行支持 182件</span><span><i style="background:#7D5BA6"></i>慎重・反対 69件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 67件</span><span><i style="background:#8B9199"></i>中立・情報 5件</span></div>
       <div class="bar"><span style="width:56.3%;background:#2F8F83;color:#ffffff">移行支持</span><span style="width:21.4%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:20.7%;background:#D9A520;color:#0d1117">条件付き・改善要求</span><span style="width:1.5%;background:#8B9199;color:#0d1117"></span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">323件 / 28.4%</span></li><li><span>移行支持460件のうち</span><span class="n">182件 / 39.6%</span></li><li><span>慎重・反対390件のうち</span><span class="n">69件 / 17.7%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">67件 / 27.8%</span></li><li><span>中立・情報48件のうち</span><span class="n">5件 / 10.4%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
       <ul class="islands"><li><span class="num">1</span>直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）<span class="n">30件</span></li><li><span class="num">2</span>その他（実態の訴え・分類が難しいもの）<span class="n">20件</span></li><li><span class="num">3</span>移しても教員の負担は減らない・むしろ増える<span class="n">17件</span></li><li><span class="num">4</span>やりたい先生だけが担えばよい（移行ではなく任意化）<span class="n">8件</span></li><li><span class="num">5</span>移行や廃止で失われるものへの不安<span class="n">8件</span></li><li><span class="num">6</span>移行ではなく部活そのものを廃止すべき<span class="n">4件</span></li><li class="unread"><span class="num">7</span>まだ読み直していない分<span class="n">236件</span></li></ul>
       <div class="note">移行支持以外だけを読み直し。賛成側は未再読。読み直した87件は <code>bukatsu-chiiki_teacher-reread.json</code> が出所です。残り236件は、その後に増えた分でまだ読めていません。</div>
@@ -205,6 +260,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#2F8F83"></i>移行支持 104件</span><span><i style="background:#7D5BA6"></i>慎重・反対 71件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 62件</span><span><i style="background:#8B9199"></i>中立・情報 19件</span></div>
       <div class="bar"><span style="width:40.6%;background:#2F8F83;color:#ffffff">移行支持</span><span style="width:27.7%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:24.2%;background:#D9A520;color:#0d1117">条件付き・改善要求</span><span style="width:7.4%;background:#8B9199;color:#0d1117"></span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">256件 / 22.5%</span></li><li><span>移行支持460件のうち</span><span class="n">104件 / 22.6%</span></li><li><span>慎重・反対390件のうち</span><span class="n">71件 / 18.2%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">62件 / 25.7%</span></li><li><span>中立・情報48件のうち</span><span class="n">19件 / 39.6%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった<br>3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。<br><a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" rel="nofollow">スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）</a><br><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" rel="nofollow">文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）</a></li><li>地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ<br>国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。<br><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" rel="nofollow">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a><br><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" rel="nofollow">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></li></ul>
@@ -221,6 +279,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#2F8F83"></i>移行支持 87件</span><span><i style="background:#7D5BA6"></i>慎重・反対 107件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 17件</span><span><i style="background:#8B9199"></i>中立・情報 4件</span></div>
       <div class="bar"><span style="width:40.5%;background:#2F8F83;color:#ffffff">移行支持</span><span style="width:49.8%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:7.9%;background:#D9A520;color:#0d1117"></span><span style="width:1.9%;background:#8B9199;color:#0d1117"></span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">215件 / 18.9%</span></li><li><span>移行支持460件のうち</span><span class="n">87件 / 18.9%</span></li><li><span>慎重・反対390件のうち</span><span class="n">107件 / 27.4%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">17件 / 7.1%</span></li><li><span>中立・情報48件のうち</span><span class="n">4件 / 8.3%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
       <ul class="srclist"><li>中体連の大会に地域クラブのチームが出られるようになっている<br>参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。<br><a href="https://www.fukui-jpa.com/data/saisoku061011.pdf" rel="nofollow">日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）</a></li></ul>
@@ -236,6 +297,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#2F8F83"></i>移行支持 44件</span><span><i style="background:#7D5BA6"></i>慎重・反対 68件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 49件</span><span><i style="background:#8B9199"></i>中立・情報 3件</span></div>
       <div class="bar"><span style="width:26.8%;background:#2F8F83;color:#ffffff">移行支持</span><span style="width:41.5%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:29.9%;background:#D9A520;color:#0d1117">条件付き・改善要求</span><span style="width:1.8%;background:#8B9199;color:#0d1117"></span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">164件 / 14.4%</span></li><li><span>移行支持460件のうち</span><span class="n">44件 / 9.6%</span></li><li><span>慎重・反対390件のうち</span><span class="n">68件 / 17.4%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">49件 / 20.3%</span></li><li><span>中立・情報48件のうち</span><span class="n">3件 / 6.2%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
       <ul class="islands"><li><span class="num">1</span>地域が引き受ける理由がない・引き受け手がいない<span class="n">23件</span></li><li><span class="num">2</span>その他<span class="n">22件</span></li><li><span class="num">3</span>報酬が安すぎて指導者が集まらない<span class="n">20件</span></li><li><span class="num">4</span>責任・安全・指導者の質への不安<span class="n">17件</span></li><li><span class="num">5</span>受け皿はできている・うまくいっている<span class="n">16件</span></li><li><span class="num">6</span>送迎・移動の課題<span class="n">2件</span></li><li class="unread"><span class="num">7</span>まだ読み直していない分<span class="n">64件</span></li></ul>
       <div class="note">論点全件を読み直し。読み直した100件は <code>bukatsu-chiiki_cost-receiver-reread.json</code> が出所です。残り64件は、その後に増えた分でまだ読めていません。</div>
@@ -254,6 +318,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#2F8F83"></i>移行支持 21件</span><span><i style="background:#7D5BA6"></i>慎重・反対 53件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 40件</span><span><i style="background:#8B9199"></i>中立・情報 3件</span></div>
       <div class="bar"><span style="width:17.9%;background:#2F8F83;color:#ffffff">移行支持</span><span style="width:45.3%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:34.2%;background:#D9A520;color:#0d1117">条件付き・改善要求</span><span style="width:2.6%;background:#8B9199;color:#0d1117"></span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">117件 / 10.3%</span></li><li><span>移行支持460件のうち</span><span class="n">21件 / 4.6%</span></li><li><span>慎重・反対390件のうち</span><span class="n">53件 / 13.6%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">40件 / 16.6%</span></li><li><span>中立・情報48件のうち</span><span class="n">3件 / 6.2%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
       <ul class="islands"><li><span class="num">1</span>誰が、いくら払うのかを決めろ（財源設計）<span class="n">21件</span></li><li><span class="num">2</span>いまの部活が安いのは、誰かの無償労働で成り立っているから<span class="n">15件</span></li><li><span class="num">3</span>お金が理由で参加できない子が出る（格差）<span class="n">13件</span></li><li><span class="num">4</span>送迎・移動の負担<span class="n">9件</span></li><li><span class="num">5</span>家庭が払えない・負担が増える<span class="n">8件</span></li><li><span class="num">6</span>その他<span class="n">6件</span></li><li class="unread"><span class="num">7</span>まだ読み直していない分<span class="n">45件</span></li></ul>
       <div class="note">論点全件を読み直し。読み直した72件は <code>bukatsu-chiiki_cost-receiver-reread.json</code> が出所です。残り45件は、その後に増えた分でまだ読めていません。</div>
@@ -271,6 +338,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#2F8F83"></i>移行支持 22件</span><span><i style="background:#7D5BA6"></i>慎重・反対 14件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 2件</span><span><i style="background:#8B9199"></i>中立・情報 14件</span></div>
       <div class="bar"><span style="width:42.3%;background:#2F8F83;color:#ffffff">移行支持</span><span style="width:26.9%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:3.8%;background:#D9A520;color:#0d1117"></span><span style="width:26.9%;background:#8B9199;color:#0d1117">中立・情報</span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">52件 / 4.6%</span></li><li><span>移行支持460件のうち</span><span class="n">22件 / 4.8%</span></li><li><span>慎重・反対390件のうち</span><span class="n">14件 / 3.6%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">2件 / 0.8%</span></li><li><span>中立・情報48件のうち</span><span class="n">14件 / 29.2%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
@@ -280,6 +350,9 @@ html:not(.planet-live) .issue-list{display:none}
       <div class="legend"><span><i style="background:#7D5BA6"></i>慎重・反対 8件</span><span><i style="background:#D9A520"></i>条件付き・改善要求 4件</span></div>
       <div class="bar"><span style="width:66.7%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:33.3%;background:#D9A520;color:#0d1117">条件付き・改善要求</span></div>
       <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">12件 / 1.1%</span></li><li><span>移行支持460件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>慎重・反対390件のうち</span><span class="n">8件 / 2.1%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">4件 / 1.7%</span></li><li><span>中立・情報48件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
       <div class="note">3Dの惑星では、この大陸を実際の割合より大きく描いています。小さすぎると押せないため、最小2.5%まで拡大しています。</div>
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <div class="extras" id="extras-bukatsu-chiiki-kakusa">
@@ -753,6 +826,141 @@ function crossTalk(modeId){
        + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
 }
 
+/* ---------- 点の装置 ----------
+   投稿1件＝点1つ。立場を絞ると、その立場でない点が消え、**枠の大きさは変えずに**
+   残った点だけで詰め直す。点が減るぶん1つ1つが大きくなるので、
+   色つきの点が枠の何割を占めるかが、そのまま「その立場の中での割合」になる。
+   「件数は減るのに割合は増える」が文章では通じなかったための装置。 */
+const dotBox = document.getElementById("dotbox");
+const dotFrame = document.getElementById("dotframe");
+// 追いかけていない論点の点。大陸の色はどれも白っぽいので、灰を明るくすると
+// 色つきと見分けがつかなくなる（7色すべてで色差が基準の15を下回った）。
+// この灰なら7色すべてで色差16.8以上、枠との明暗差2.4倍。凡例と静的表示が控えにある。
+const REST_DOT = "#4a525c";
+let dotEls = null;
+
+function buildDots(){
+  const html = [];
+  issues.forEach((it,k)=>{
+    D.stances.forEach((s,si)=>{
+      const n = it.stances[s.key] || 0;
+      for (let c=0;c<n;c++) html.push('<span class="pdot" data-i="'+k+'" data-s="'+si+'"></span>');
+    });
+  });
+  dotFrame.innerHTML = html.join("");
+  dotEls = Array.prototype.slice.call(dotFrame.querySelectorAll(".pdot"));
+}
+
+// n個の点がちょうど収まるマス目を探す（枠の大きさは変えない）
+function dotGrid(n, W, H){
+  let best = 0, cols = 1;
+  for (let c=1;c<=n;c++){
+    const s = W/c, rows = Math.ceil(n/c);
+    if (rows*s <= H && s > best){ best = s; cols = c; }
+  }
+  return {cell:best, cols:cols, rows:Math.ceil(n/cols)};
+}
+
+function stanceIndexOf(modeId){ return D.stances.findIndex(s => s.key === modeId); }
+
+function layoutDots(){
+  const k = st.landed;
+  if (k === null || !dotEls) return;
+  const W = dotFrame.clientWidth, H = dotFrame.clientHeight;
+  if (!W || !H) return;
+  const si = stanceIndexOf(st.mode);                 // "all" のときは -1
+  const shown = dotEls.filter(d => si < 0 || +d.dataset.s === si);
+  // 色つきを先に置く。まとまるので「枠の何割か」が面積で読める
+  shown.sort((a,b)=>{
+    const ka = (+a.dataset.i === k) ? 0 : 1, kb = (+b.dataset.i === k) ? 0 : 1;
+    return ka - kb || (+a.dataset.i) - (+b.dataset.i);
+  });
+  const g = dotGrid(shown.length, W, H);
+  const size = Math.max(2, g.cell*0.66);
+  const padX = (W - g.cols*g.cell)/2, padY = (H - g.rows*g.cell)/2;
+  const hot = css(continentRGB(issues[k], "all"));   // 大陸と同じ色にして惑星とつなぐ
+  dotEls.forEach(d => { d.style.opacity = "0"; });
+  shown.forEach((d,i)=>{
+    const c = i % g.cols, r = Math.floor(i/g.cols);
+    d.style.width = size+"px"; d.style.height = size+"px";
+    d.style.transform = "translate(" + (padX + c*g.cell + (g.cell-size)/2) + "px,"
+                                     + (padY + r*g.cell + (g.cell-size)/2) + "px)";
+    d.style.background = (+d.dataset.i === k) ? hot : REST_DOT;
+    d.style.opacity = "1";
+    d.style.transitionDelay = "0s,.3s,.3s,0s";       // 消えてから詰め直す
+  });
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!dotEls) buildDots();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  document.getElementById("dot-title").textContent =
+    "「" + it.label + "」は、立場を絞ると増えるか減るか";
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+css(continentRGB(it,"all"))+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:'+REST_DOT+'"></i>それ以外の論点</span>';
+
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+  document.getElementById("c-why").textContent = isAll
+    ? "いまは意見" + base + "件すべてを見ています。"
+    : base + "件から" + nowT + "件だけを取り出したので、数は減ります。";
+  document.getElementById("s-why").textContent = isAll
+    ? "この割合が、立場を絞ったときの比べもとになります。"
+    : "見ている相手が" + nowT + "件に変わったので、この" + nowT + "件の中での割合です。";
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を選ぶと、その立場ではない点が消えて、"
+      + "残った点だけで枠を詰め直します。<b>色つきと灰色のどちらが多く残るか</b>を見てください。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほとんど同じ割合で残ったので、割合もほとんど変わりません。</b>'
+              + 'この論点は「'+m.label+'」かどうかで語られ方が変わらない、ということです。';
+    else if (gap > 0)
+      verdict = '<b>色つきのほうが多く生き残ったので、残った中での割合は増えます。</b>'
+              + 'つまり「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>色つきのほうが多く消えたので、残った中での割合は減ります。</b>'
+              + 'つまり「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '<b>これが理由です。</b><br>'
+      + '「'+it.label+'」は <span class="big">'+keepHot.toFixed(1)+'%</span> 残り、'
+      + 'それ以外は <span class="big">'+keepRest.toFixed(1)+'%</span> 残りました。<br>' + verdict;
+  }
+  layoutDots();
+}
+
 function drawPanel(){
   const p = document.getElementById("panel");
   const m = modeById[st.mode];
@@ -783,6 +991,7 @@ function drawPanel(){
       const a = anglesFor(centroidOf(k, st.mode));
       animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:st.zoom}}, 700);
     };
+    syncDots();
     return;
   }
   const it = issues[st.landed];
@@ -819,6 +1028,7 @@ function drawPanel(){
   h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
+  syncDots();
 }
 
 /* ---------- 一覧・モード ---------- */
@@ -960,8 +1170,12 @@ try {
   // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
   // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
   // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
-  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
-  else addEventListener("resize", render);
+  if (window.ResizeObserver){
+    new ResizeObserver(()=>render()).observe(cv);
+    new ResizeObserver(()=>layoutDots()).observe(dotFrame);
+  } else {
+    addEventListener("resize", ()=>{ render(); layoutDots(); });
+  }
 } catch (e) {
   /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
   document.documentElement.className =
