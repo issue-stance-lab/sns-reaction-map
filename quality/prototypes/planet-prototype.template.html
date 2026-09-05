@@ -241,6 +241,19 @@ function continentRGB(it, modeId){
 }
 const PATTERN = {plain:0, diagonal:1, dots:2, mesh:3};
 const DARK=[26,32,40];
+/* 海の色。青は立場の色にも論点の色にも使っていないので、
+   「どの論点にも属さない余白」だと色だけで分かる。 */
+const DEEP=[19,58,104], SHALLOW=[62,142,182], SURF=[150,206,228];
+const COAST = D.coast_margin || 0;
+/* 海岸線のゆらぎ。まっすぐな多角形の境界だとビーチボールに見える。
+   生成器 build_planet_data.py の coast_noise / wobble と同じ式・同じ振幅にすること。
+   片方だけ変えると、生成器が測った面積と実際に描く面積がずれる。 */
+const NOISE_AMP = D.coast_noise_amp || 0;
+function coastNoise(x,y,z){
+  return (Math.sin(6.7*x + 2.9*y + 11.3*z)
+        + 0.55*Math.sin(3.1*x + 13.1*y - 7.7*z)
+        + 0.30*Math.sin(17.1*x - 5.3*y + 23.3*z)) / 1.85;
+}
 function islandRGB(it, modeId, j, m, unread){
   if (unread) return [116,124,134];
   const base = continentRGB(it, modeId);
@@ -278,7 +291,10 @@ function shownMode(){
 }
 
 function render(){
-  const size = Math.round(cv.width * (st.dragging ? 0.55 : 1));
+  // 動いている間は粗く描く。地形の作り替えは1画素ずつ塗り直すので、
+  // 原寸のままだと10fpsまで落ちて「育つ・縮む」が飛び飛びに見える（実測）。
+  const moving = st.dragging || st.morph || st.anim;
+  const size = Math.round(cv.width * (moving ? 0.55 : 1));
   if (off.width !== size){ off.width = off.height = size; img = octx.createImageData(size,size); }
   const data = img.data;
   const R = rot(st.yaw, st.pitch);
@@ -308,7 +324,13 @@ function render(){
       const o = (py*size+px)*4;
       const x = (px - half)/radius;
       const r2 = x*x + y*y;
-      if (r2 > 1){ data[o]=10;data[o+1]=13;data[o+2]=18;data[o+3]=255; continue; }
+      if (r2 > 1){
+        // 大気。球のすぐ外側を薄く光らせる（宇宙に浮いて見せるための飾り）
+        const g = Math.max(0, 1 - (Math.sqrt(r2) - 1)/0.085);
+        const a = g*g*0.85;
+        data[o]  = 10 + 44*a; data[o+1] = 13 + 92*a; data[o+2] = 18 + 150*a;
+        data[o+3]= 255; continue;
+      }
       const z = Math.sqrt(1-r2);
       // 視線座標 -> 世界座標
       const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
@@ -323,10 +345,29 @@ function render(){
         if (s > best){ second=best; best=s; bi=k; }
         else if (s > second) second=s;
       }
-      const margin = best - second;
+      let margin = best - second;
+      // 岸のまわりだけ境界を波打たせる（離れるほど弱める）。
+      // 帯の外は結果が変わらないので計算しない（1画素あたり sin 3回は重い）。
+      if (NOISE_AMP > 0){
+        const d = margin - COAST;
+        if (d > -NOISE_AMP && d < NOISE_AMP){
+          margin += NOISE_AMP * coastNoise(wx,wy,wz) * (1 - Math.abs(d)/NOISE_AMP);
+        }
+      }
       const it = issues[bi];
-      let col = cols[bi];
-      let shade = 1;
+      let col, shade = 1;
+
+      // ---- 海 ----------------------------------------------------------
+      // 1位と2位の差が COAST 未満の帯は、どの論点にも属さない海。
+      // 海は余白であって意味を持たない（面積の比は陸の中で合わせてある）。
+      const sea = margin < COAST;
+      if (sea){
+        const t = margin / COAST;               // 0=沖 1=岸
+        col = mix(DEEP, SHALLOW, t*t*t);        // 岸ぎわだけ浅く見せる
+        if (t > 0.93) col = mix(col, SURF, (t-0.93)/0.07*0.45);   // 波打ちぎわ
+        if (landed !== null) shade *= 0.80;     // 着陸中は海も少し落とす
+      } else {
+      col = cols[bi];
 
       // 着陸中は他の大陸の彩度を落とす
       if (landed !== null && bi !== landed){
@@ -350,24 +391,31 @@ function render(){
         if (item.unread && ((px+py) % 8 < 3)) col = mix(col, [64,70,80], 0.55*st.islandMix); // 未読は斜線
       }
 
-      // 標高＝等高線の本数（強い表現の割合）
+      // 標高＝等高線の本数（強い表現の割合）。海岸線から内陸へ向かって数える
+      const inland = margin - COAST;
       const rings = Math.round(it.elevation);
       const step2 = 0.020/zq;
-      const band = margin / step2;
+      const band = inland / step2;
       if (band < rings && (band % 1) < 0.20) shade *= 0.82;
 
-      // 大陸の境界
-      if (margin < 0.0045/zq) col = mix(col, [13,17,23], 0.8);
+      // 海岸線（陸側のふち）
+      if (inland < 0.009/zq) col = mix(col, [244,249,255], 0.20);
 
       // 地表パターン（色に頼らないため）
       const p = pats[bi];
       if (p===1 && (px+py)%10 < 2) shade *= 0.955;
       else if (p===2 && px%7===0 && py%7===0) shade *= 0.90;
       else if (p===3 && (px%9===0 || py%9===0)) shade *= 0.96;
+      }
+      // ------------------------------------------------------------------
 
-      // 陰影＋周縁減光
+      // 陰影＋周縁減光。水は光をまとめて返すので、陸より硬い当たり方にする
       const lam = Math.max(0, x*lx + (-y)*ly + z*lz);
-      shade *= 0.42 + 0.58*lam;
+      if (sea){
+        shade *= 0.50 + 0.44*lam + 0.22*Math.pow(lam, 32);  // 海面のてかり
+      } else {
+        shade *= 0.42 + 0.58*lam;
+      }
       shade *= 0.75 + 0.25*z;
 
       data[o]   = Math.min(255, col[0]*shade);
@@ -499,7 +547,8 @@ function animateTo(target, dur, done){
     const ei = Math.min(1, Math.max(0,(t-0.7)/0.3));
     st.islandMix = from.islandMix + ((target.end.islandMix??from.islandMix)-from.islandMix)*ei;
     render();
-    if (t < 1) st.anim = requestAnimationFrame(step); else { st.anim=null; done&&done(); }
+    if (t < 1) st.anim = requestAnimationFrame(step);
+    else { st.anim=null; render(); done&&done(); }   // 最後の1枚だけ原寸で描き直す
   })(t0);
 }
 
@@ -569,7 +618,8 @@ function drawPanel(){
       + legend()
       + '<p class="cross">'+crossTalk(st.mode)+'</p>'
       + '<p class="sub" style="margin:6px 0 0">大陸をクリックすると、その論点へ降ります。'
-      + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。</p>'
+      + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。'
+      + '<b>青い海は大陸を見分けるための余白で、意味はありません。</b></p>'
       + (st.mode!=="all"
         ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで大陸を作り直しています。'
           + '大きさはこの'+m.total+'件の中での割合です。'

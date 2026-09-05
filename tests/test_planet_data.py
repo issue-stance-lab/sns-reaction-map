@@ -302,7 +302,10 @@ class PlanetCrossTalkTest(unittest.TestCase):
         # 変わっても直らない。「1位」だけは例外で、いちばん大きい大陸を指す
         # 言い方そのもの（どのテーマでも 1 のまま変わらない）。
         self.assertIn("function ranksOf(", self.script, "順位を data から数える関数が無い")
-        found = [x for x in re.findall(r"\d+位", self.template) if x != "1位"]
+        # 見るのは画面に出る文字だけ。コメント（「1位と2位の差」など仕組みの説明）は外す
+        code = re.sub(r"/\*.*?\*/", "", self.template, flags=re.S)
+        code = re.sub(r"(?m)^[ \t]*//.*$", "", code)
+        found = [x for x in re.findall(r"\d+位", code) if x != "1位"]
         self.assertEqual(found, [], f"テンプレートに手書きの順位がある: {found}")
         self.assertRegex(self.script, r"moved\s*\+\s*'位'",
                          "入れ替わった先の順位を数えずに書いている")
@@ -319,6 +322,55 @@ class PlanetCrossTalkTest(unittest.TestCase):
         # 惑星が見えない読み方（キーボード操作）でも並びの変化を追えること
         self.assertRegex(self.script, r'rank\[i\]\s*\+\s*"位',
                          "論点一覧に順位が出ていない")
+
+
+class PlanetSeaTest(unittest.TestCase):
+    """海を入れても「面積＝意見の数」が崩れないことを固定する。
+
+    大陸のあいだを海にすると、境界のまわりが一律に削られる。何もしないと
+    周囲の長さに比例して削れるので、小さい大陸ほど損をして面積が件数と合わなくなる。
+    面積合わせを「陸の中の比」で行うことでこれを避けている。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+
+    def test_land_area_still_matches_the_opinion_counts(self):
+        for mode in self.data["modes"]:
+            for key, want in mode["area_pct"].items():
+                got = mode["area_actual_pct"][key]
+                self.assertAlmostEqual(
+                    got, want, delta=0.15,
+                    msg=f"{mode['label']} / {key}: 面積{got}% が目標{want}% と合わない")
+
+    def test_sea_takes_a_visible_share_but_never_drowns_a_continent(self):
+        for mode in self.data["modes"]:
+            self.assertGreater(mode["sea_pct"], 15, f"{mode['label']}: 海が狭すぎる")
+            self.assertLess(mode["sea_pct"], 65, f"{mode['label']}: 海が広すぎる")
+            for key, want in mode["area_pct"].items():
+                if want > 0:
+                    self.assertGreater(
+                        mode["area_actual_pct"][key], 0,
+                        f"{mode['label']} / {key}: 大陸が海に沈んで消えている")
+
+    def test_coastline_noise_is_the_same_on_both_sides(self):
+        # 生成器とテンプレートで振幅が食い違うと、測った面積と描く面積がずれる
+        self.assertEqual(self.data["coast_noise_amp"], bpd.COAST_NOISE_AMP)
+        self.assertIn("D.coast_noise_amp", self.script,
+                      "テンプレートが振幅を data から受け取っていない")
+        for term in ("6.7*x + 2.9*y + 11.3*z", "3.1*x + 13.1*y - 7.7*z",
+                     "17.1*x - 5.3*y + 23.3*z"):
+            self.assertIn(term, self.script, f"海岸線のゆらぎの式が生成器と違う: {term}")
+
+    def test_the_page_says_the_sea_has_no_meaning(self):
+        # 意味のない地形を意味ありげに見せない（設計書12）
+        page = bpd.render_page(self.data, self.template, "null")
+        static = re.sub(r"<script.*?</script>", "", page, flags=re.S)
+        self.assertIn("青い海と海岸線の形には意味がありません", static)
 
 
 class PlanetOceanPageTest(unittest.TestCase):
