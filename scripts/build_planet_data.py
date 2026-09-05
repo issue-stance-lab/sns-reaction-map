@@ -308,11 +308,18 @@ def build(topic: str) -> dict:
     counts: dict[str, int] = {}
     cross: dict[str, dict[str, int]] = {}
     inten: dict[str, dict[str, int]] = {}
+    cross_high: dict[str, dict[str, int]] = {}
     for pub_issue in public["issues"]:
         k = id_to_key[pub_issue["id"]]
         counts[k] = pub_issue["count"]
         cross[k] = {stance_id_to_key[s["id"]]: s["count"] for s in pub_issue["stances"]}
         inten[k] = {i["id"]: i["count"] for i in pub_issue["intensities"]}
+        # 立場ごとの「強い表現」件数。山の高さを立場で切り替えるのに使う
+        cross_high[k] = {
+            stance_id_to_key[s["id"]]: next(
+                (x["count"] for x in s["intensities"] if x["id"] == "high"), 0)
+            for s in pub_issue["stances"]
+        }
 
     # 不変条件: 論点別の合計＝公開JSONの意見数（画面の合計が合わない状態で出さない）
     assigned = public["issue_assigned_count"]
@@ -388,8 +395,10 @@ def build(topic: str) -> dict:
     for mode_id, label, stance_key in mode_defs:
         if stance_key is None:
             sub = {k: counts[k] for k in keys}
+            sub_high = {k: inten[k].get("high", 0) for k in keys}
         else:
             sub = {k: cross.get(k, {}).get(stance_key, 0) for k in keys}
+            sub_high = {k: cross_high.get(k, {}).get(stance_key, 0) for k in keys}
         tgt = area_targets(sub)
         w = fit_weights(pts, centers, tgt, geo["fit_iters"], coast=coast)
         assign, frac, sea = region_stats(pts, centers, w, tgt, coast)
@@ -403,6 +412,12 @@ def build(topic: str) -> dict:
             "area_pct": {issues_cfg[k]["id"]: round(float(tgt[i] * 100), 2) for i, k in enumerate(keys)},
             "area_actual_pct": {issues_cfg[k]["id"]: round(float(frac[i] * 100), 2) for i, k in enumerate(keys)},
             "sea_pct": round(float(sea * 100), 2),
+            # 山の高さ。その立場の中での「強い表現」の割合（幅と同じ母数で数える）
+            "high_pct": {
+                issues_cfg[k]["id"]: (round(100 * sub_high[k] / sub[k], 1) if sub[k] else 0.0)
+                for k in keys
+            },
+            "high_counts": {issues_cfg[k]["id"]: int(sub_high[k]) for k in keys},
         })
         if mode_id == "all":
             base_assign = assign

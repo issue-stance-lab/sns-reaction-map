@@ -67,6 +67,33 @@ class PublicDataContractTests(unittest.TestCase):
             for value in [*issues.values(), *stances.values()]:
                 self.assertTrue(value["id"].startswith(f"{slug}-"), (slug, value["id"]))
 
+    def test_each_stance_carries_its_own_intensity_split(self) -> None:
+        """立場ごとに、その立場の中での表現の強さを持つ。
+
+        これが無いと「幅は立場で絞った件数、高さは全体の割合」という
+        分母のねじれた図しか描けない（課題54の山なみ）。
+        """
+        for path in sorted((ROOT / "data" / "public" / "themes").glob("*.json")):
+            theme = json.loads(path.read_text(encoding="utf-8"))
+            slug = theme["theme_id"]
+            for issue in theme["issues"]:
+                for stance in issue["stances"]:
+                    where = f"{slug}/{issue['id']}/{stance['id']}"
+                    self.assertIn("intensities", stance, where)
+                    self.assertEqual(
+                        [x["id"] for x in stance["intensities"]],
+                        ["low", "medium", "high"], where)
+                    self.assertEqual(
+                        sum(x["count"] for x in stance["intensities"]),
+                        stance["count"], where)
+                # 立場ごとの内訳を足すと、論点の強度別件数に一致する
+                for level in ("low", "medium", "high"):
+                    per_stance = sum(
+                        x["count"] for s in issue["stances"]
+                        for x in s["intensities"] if x["id"] == level)
+                    whole = next(x["count"] for x in issue["intensities"] if x["id"] == level)
+                    self.assertEqual(per_stance, whole, f"{slug}/{issue['id']}/{level}")
+
     def test_hash_fields_explain_their_different_targets(self) -> None:
         theme_schema = json.loads(
             (ROOT / "schemas/public-theme.schema.json").read_text(encoding="utf-8")

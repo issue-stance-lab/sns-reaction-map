@@ -375,3 +375,43 @@ AdSenseの不承認理由（有用性の低いコンテンツ）への直接の�
 **オーナー判断待ち**: 案A 山なみを主役にして惑星をやめる（AIの推奨）／案B 惑星は入口として残し
 山なみを本編にする／案C いまのまま。**案Aは課題54でここまで作った惑星を捨てる判断**で、
 段階9の承認と段階10（残り9テーマ展開）の前提も変わる。
+
+---
+
+## 案A 実装（2026-09-05〜。オーナー決定: **A＝山なみを主役にし、惑星は残さない**）
+
+**着手前に潰した問題**: 立場で絞ると幅は絞った件数なのに、高さは全体の割合のままだった。
+1つの図の中で分母が2つになる（受け皿・指導者は、慎重・反対を見ているのに高さが15.9%と出る。
+本当は30.9%）。**先に公開データへ立場別の強さを持たせた。**
+
+### 段階1 完了：公開データ契約に「立場ごとの表現の強さ」を足した
+
+- `public_registry_common.py` の `stances_out` に `intensities`（low/medium/high）を追加
+- `schemas/public-theme.schema.json` に `stance_item` を新設（`count_item` は他でも使うので分けた）
+- 検査を2つ追加：立場内の強度合計＝立場件数／`low,medium,high` の順序
+- `tests/test_public_data_contract.py` に固定テストを追加（立場別の合計＝論点の強度別件数）
+- 全10テーマを再生成。`data/public/` はWebに配信していない内部の契約なので公開ページへの影響はない
+
+### 段階2 完了：生成器が立場ごとの山の高さを出す
+
+`build_planet_data.py` の各モードに `high_pct` と `high_counts` を追加。
+幅（件数）と高さ（強い表現の割合）が**同じ母数**で数えられるようになった。
+実測: 受け皿・指導者は 移行支持4.5% / 慎重・反対30.9% / 条件付き6.1%。
+
+試作の数字は正典から機械で書き出したものに差し替え済み（手書きはもう無い）。
+
+### 段階3 未着手：ページ本体を山なみへ作り替える
+
+**ここが本体で、1回では終わらない。**消す対象は次のとおり。
+
+- テンプレートの球の描画（`render` `drawLabels` `pick` `rot` `animateTo` `coastNoise`
+  `continentRGB` `activeIssues` `shownMode` `effWeights` `centroidOf` ほか約350行）
+- 生成器の球の幾何（`fibonacci_points` `seed_directions` `fit_weights` `assign_land`
+  `coast_noise` `wobble` `region_stats` `centroids` `tangent_ring`、および
+  `weights_by_mode` `centroid_by_mode` `coast_margin` `sea_pct`）
+- 球を前提にした検査（`PlanetCrossTalkTest` 6件・`PlanetSeaTest` 5件と `PlanetPageTest` の一部）
+
+**残す**: 100マス、着陸パネル、海面下（沈んだ大陸・地下水脈）、編集部の横断整理、
+JS無効時の静的表示、「同じ数字は1回だけ」の検査。
+
+段階1・2の時点で **`docs/` と公開ページには差分0**。全465テストOK、2回生成の差分0。

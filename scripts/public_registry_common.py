@@ -483,10 +483,20 @@ def build_theme_json(theme_id: str) -> dict[str, Any]:
         count = len(issue_opinions)
         assigned_total += count
 
-        stances_out = [
-            {"id": smeta["id"], "label": slabel, "count": sum(1 for c in issue_opinions if c.get("stance") == slabel)}
-            for slabel, smeta in stance_defs.items()
-        ]
+        # 立場ごとの件数に加えて、その立場の中での表現の強さも持たせる。
+        # 「幅は立場で絞った数、高さは全体の数」という分母のねじれを防ぐため（課題54の山なみ）。
+        stances_out = []
+        for slabel, smeta in stance_defs.items():
+            in_stance = [c for c in issue_opinions if c.get("stance") == slabel]
+            stances_out.append({
+                "id": smeta["id"],
+                "label": slabel,
+                "count": len(in_stance),
+                "intensities": [
+                    {"id": level, "count": sum(1 for c in in_stance if c.get("intensity") == level)}
+                    for level in INTENSITY_ORDER
+                ],
+            })
         intensities_out = [
             {"id": level, "count": sum(1 for c in issue_opinions if c.get("intensity") == level)}
             for level in INTENSITY_ORDER
@@ -703,6 +713,18 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
         stance_ids = [s["id"] for s in issue["stances"]]
         if len(stance_ids) != len(set(stance_ids)):
             errors.append(f"{tid}/{issue['id']}: 立場IDが重複しています")
+
+        for stance in issue["stances"]:
+            if "intensities" not in stance:
+                errors.append(f"{tid}/{issue['id']}/{stance['id']}: 立場ごとの表現強度がありません")
+                continue
+            si_sum = sum(x["count"] for x in stance["intensities"])
+            if si_sum != stance["count"]:
+                errors.append(
+                    f"{tid}/{issue['id']}/{stance['id']}: 立場内の表現強度合計が立場件数と不一致")
+            if [x["id"] for x in stance["intensities"]] != list(INTENSITY_ORDER):
+                errors.append(
+                    f"{tid}/{issue['id']}/{stance['id']}: intensities の順序が low/medium/high ではありません")
 
         i_sum = sum(x["count"] for x in issue["intensities"])
         if i_sum != issue["count"]:
