@@ -366,6 +366,38 @@ class PlanetSeaTest(unittest.TestCase):
                      "17.1*x - 5.3*y + 23.3*z"):
             self.assertIn(term, self.script, f"海岸線のゆらぎの式が生成器と違う: {term}")
 
+    def test_every_continent_name_sits_on_land(self):
+        """大陸名は、その立場での陸の上に置く。
+
+        名前の位置を全立場で共通にしていたため、縮んだ大陸の名前が海の上に浮いていた
+        （中立・情報の「費用・家庭負担」。3件まで縮むので陸が名前の位置まで届かない）。
+        海を入れる前は球面が隙間なく大陸で埋まっていたので起きなかった。
+        """
+        import numpy as np
+        d = self.data
+        centers = np.array([i["center"] for i in d["issues"]])
+        coast, amp = d["coast_margin"], d["coast_noise_amp"]
+        for mode in d["modes"]:
+            w = np.array(d["weights_by_mode"][mode["id"]])
+            off = np.array([0.0 if mode["counts"][i["id"]] > 0 else -10.0
+                            for i in d["issues"]])
+            spots = d["centroid_by_mode"][mode["id"]]
+            for k, issue in enumerate(d["issues"]):
+                if mode["counts"][issue["id"]] == 0:
+                    continue
+                v = np.array(spots[k])
+                score = centers @ v + w + off
+                ranked = np.sort(score)
+                margin = ranked[-1] - ranked[-2]
+                n = float(bpd.coast_noise(v.reshape(1, 3))[0])
+                margin += amp * n * max(0.0, 1 - abs(margin - coast) / amp)
+                self.assertGreaterEqual(
+                    margin, coast,
+                    f"{mode['label']} / {issue['label']}: 大陸名が海の上に浮いている")
+                self.assertEqual(
+                    int(np.argmax(score)), k,
+                    f"{mode['label']} / {issue['label']}: 大陸名が他の大陸の上にある")
+
     def test_the_page_says_the_sea_has_no_meaning(self):
         # 意味のない地形を意味ありげに見せない（設計書12）
         page = bpd.render_page(self.data, self.template, "null")

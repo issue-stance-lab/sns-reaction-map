@@ -382,6 +382,9 @@ def build(topic: str) -> dict:
     modes = []
     mode_defs = [("all", "すべての意見", None)] + [(s, s, s) for s in stances]
     weights_by_mode = {}
+    # 大陸名を置く位置は、その立場での陸の重心にする。全立場で共通の位置にすると、
+    # 縮んだ大陸の名前が海の上に浮く（中立・情報の「費用・家庭負担」で実際に起きた）。
+    centroid_by_mode = {}
     for mode_id, label, stance_key in mode_defs:
         if stance_key is None:
             sub = {k: counts[k] for k in keys}
@@ -391,6 +394,7 @@ def build(topic: str) -> dict:
         w = fit_weights(pts, centers, tgt, geo["fit_iters"], coast=coast)
         assign, frac, sea = region_stats(pts, centers, w, tgt, coast)
         weights_by_mode[mode_id] = w.tolist()
+        centroid_by_mode[mode_id] = centroids(pts, assign, len(keys)).tolist()
         modes.append({
             "id": mode_id,
             "label": label,
@@ -502,6 +506,7 @@ def build(topic: str) -> dict:
         "vote_issue_order": cfg["vote_issue_order"],
         "modes": modes,
         "weights_by_mode": weights_by_mode,
+        "centroid_by_mode": centroid_by_mode,
         "issues": issues,
         "editorial": public.get("editorial_summary",
                                 {"status": "not_started", "checked_on": None,
