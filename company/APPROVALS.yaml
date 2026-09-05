@@ -32,6 +32,23 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260905-002
+    department: engineering-data
+    action: website_publication
+    summary: "自転車の青切符導入テーマの2026-09-05更新回を一般公開する"
+    reason: "新規の公開投稿サンプル84件を追加し、ページ上の集計・論点表示・取得期間を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "公開後はGitHub Pagesの反映まで数分かかる場合がある"
+    recommendation: approve
+    evidence:
+      - "data/verification/updates/bike-blue-ticket/2026-09-05/report.json"
+      - ".staging/refresh/bike-blue-ticket/20260905_184321/promotion-manifest.json"
+      - "DATA_REFRESH.md"
+    status: approved
+    requested_at: "2026-09-05"
+    decided_at: "2026-09-05"
+    decision_note: "CEOが本対話で『公開して』と明示して承認。対象はpromotion manifest SHA256: 995c45e0c542def061a34ff2486633764069d78d6625bc4a9caa3af353c3d31f。"
   - id: approval-20260905-001
     department: engineering-data
     action: website_publication
