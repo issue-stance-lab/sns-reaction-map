@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""「議論の惑星」の表示データを正典から生成する（試作版）。
+"""「議論の山なみ」（断面図）の表示データを正典から生成する（試作版）。
 
 使い方:
     python3 scripts/build_planet_data.py --topic bukatsu-chiiki
 
 データが増えたときは、このコマンドを再実行するだけでよい。
-件数・面積・色・標高・大陸の位置はすべてここで計算し、HTMLには数字を持たせない。
+件数・幅・高さ・色はすべてここで計算し、HTMLには数字を持たせない。
 同じ入力からは必ず同じ出力になる（乱数を使わない）。
 """
 from __future__ import annotations
@@ -25,96 +25,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 # ---------------------------------------------------------------- 球面の配置
 
-def fibonacci_points(n: int) -> np.ndarray:
-    """球面上へほぼ均等に n 点を置く。面積を測るための標本点。"""
-    i = np.arange(n) + 0.5
-    phi = np.arccos(1 - 2 * i / n)
-    theta = math.pi * (1 + 5 ** 0.5) * i
-    return np.stack(
-        [np.sin(phi) * np.cos(theta), np.sin(phi) * np.sin(theta), np.cos(phi)], axis=1
-    )
-
-
 def stable_order(ids: list[str]) -> list[int]:
-    """id のハッシュで並び順を決める。論点が増減しても既存の位置が動きにくい。"""
-    keyed = sorted(range(len(ids)), key=lambda i: hashlib.sha1(ids[i].encode()).hexdigest())
-    return keyed
-
-
-def seed_directions(ids: list[str]) -> np.ndarray:
-    """論点 id から決定的に中心方向を割り当てる。"""
-    n = len(ids)
-    base = fibonacci_points(n)
-    dirs = np.zeros_like(base)
-    for slot, idx in enumerate(stable_order(ids)):
-        dirs[idx] = base[slot]
-    return dirs
-
-
-def fit_weights(points: np.ndarray, centers: np.ndarray, targets: np.ndarray,
-                iters: int, lr: float = 0.6) -> np.ndarray:
-    """加重ボロノイの重みを、面積比が targets に合うまで調整する。
-
-    score_i(p) = dot(p, center_i) + w_i   の最大値でその点の所属を決める。
-    """
-    k = len(centers)
-    w = np.zeros(k)
-    active = targets > 0
-    dots = points @ centers.T                       # (N, K)
-    neg = np.where(active, 0.0, -10.0)
-    # 重みの動かし幅を、その領域での dot のばらつきに合わせる。
-    # （大陸と島では dot の差の大きさが2桁ちがうため、固定の学習率だと島側が発散する）
-    scale = float(dots.std()) or 1.0
-    best_w, best_err = w.copy(), 1e9
-    for t in range(iters):
-        assign = np.argmax(dots + w + neg, axis=1)
-        frac = np.bincount(assign, minlength=k) / len(points)
-        err = float(np.abs(frac - targets).sum())
-        if err < best_err:
-            best_err, best_w = err, w.copy()
-        step = lr * 2 * scale * (1 - 0.85 * t / iters)
-        w += step * (targets - frac)
-        w[~active] = 0.0
-    return best_w
-
-
-def region_stats(points: np.ndarray, centers: np.ndarray, w: np.ndarray,
-                 targets: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    neg = np.where(targets > 0, 0.0, -10.0)
-    assign = np.argmax(points @ centers.T + w + neg, axis=1)
-    frac = np.bincount(assign, minlength=len(centers)) / len(points)
-    return assign, frac
-
-
-def centroids(points: np.ndarray, assign: np.ndarray, k: int) -> np.ndarray:
-    out = np.zeros((k, 3))
-    for i in range(k):
-        sel = points[assign == i]
-        if len(sel) == 0:
-            out[i] = [0, 0, 1]
-            continue
-        v = sel.mean(axis=0)
-        n = np.linalg.norm(v)
-        out[i] = v / n if n > 1e-9 else [0, 0, 1]
-    return out
-
-
-def tangent_ring(center: np.ndarray, m: int, spread: float) -> np.ndarray:
-    """中心のまわりの接平面上へ m 個の下位シードを決定的に並べる。"""
-    ref = np.array([0.0, 0.0, 1.0])
-    if abs(float(center @ ref)) > 0.9:
-        ref = np.array([1.0, 0.0, 0.0])
-    u = np.cross(center, ref)
-    u /= np.linalg.norm(u)
-    v = np.cross(center, u)
-    out = []
-    for j in range(m):
-        ang = 2 * math.pi * j / m
-        # 1つ目は中心に置き、残りを環状に配置する
-        r = 0.0 if j == 0 and m > 1 else spread
-        p = center + r * (math.cos(ang) * u + math.sin(ang) * v)
-        out.append(p / np.linalg.norm(p))
-    return np.array(out)
+    """id のハッシュで並び順を決める。論点が増減しても既存の並びが動きにくい。"""
+    return sorted(range(len(ids)), key=lambda i: hashlib.sha1(ids[i].encode()).hexdigest())
 
 
 # ---------------------------------------------------------------- データ読み
@@ -136,7 +49,7 @@ def load_public_theme(topic: str) -> dict:
 
 
 def load_ocean_layer(topic: str) -> dict:
-    """沈んだ大陸・地下水脈は公開データ契約（`data/public/themes/`）から読む。
+    """語られていない争点・立場をこえて同じ心配は公開データ契約（`data/public/themes/`）から読む。
 
     確認台帳（`data/verification/`）を直接読むと、投稿IDや機械一致の作業記録まで
     惑星データへ入り、そのまま試作HTMLへ埋め込まれる。公開契約を通すことで、
@@ -156,9 +69,9 @@ def load_ocean_layer(topic: str) -> dict:
 # 10テーマ共通の言葉にする。テーマごとに言い換えると、同じ判定が別物に見える。
 # miss を「嘘」と書かない。「確認できなかった」で止める（3.3の読者への注意）。
 VERDICT_LABELS = {
-    "fact": ("実像", "一次資料でも確認できました。「正しい意見」という意味ではありません。"),
-    "gap": ("ずれ", "部分的には合っていますが、一次資料とずれている点があります。"),
-    "miss": ("蜃気楼", "一次資料では確認できませんでした。誤りと決まったわけではありません。"),
+    "fact": ("資料どおり", "一次資料でも確認できました。「正しい意見」という意味ではありません。"),
+    "gap": ("少しずれる", "部分的には合っていますが、一次資料とずれている点があります。"),
+    "miss": ("裏が取れない", "一次資料では確認できませんでした。誤りと決まったわけではありません。"),
 }
 
 
@@ -254,11 +167,18 @@ def build(topic: str) -> dict:
     counts: dict[str, int] = {}
     cross: dict[str, dict[str, int]] = {}
     inten: dict[str, dict[str, int]] = {}
+    cross_high: dict[str, dict[str, int]] = {}
     for pub_issue in public["issues"]:
         k = id_to_key[pub_issue["id"]]
         counts[k] = pub_issue["count"]
         cross[k] = {stance_id_to_key[s["id"]]: s["count"] for s in pub_issue["stances"]}
         inten[k] = {i["id"]: i["count"] for i in pub_issue["intensities"]}
+        # 立場ごとの「強い表現」件数。山の高さを立場で切り替えるのに使う
+        cross_high[k] = {
+            stance_id_to_key[s["id"]]: next(
+                (x["count"] for x in s["intensities"] if x["id"] == "high"), 0)
+            for s in pub_issue["stances"]
+        }
 
     # 不変条件: 論点別の合計＝公開JSONの意見数（画面の合計が合わない状態で出さない）
     assigned = public["issue_assigned_count"]
@@ -283,15 +203,15 @@ def build(topic: str) -> dict:
         sunk_continents.append(item)
     stale_ids = [i["id"] for i in sunk_continents if i["base_stale"]]
     if stale_ids:
-        print("注意: 沈んだ大陸の母数が確認時点のままです（増えた分の読み直しが要る）: "
+        print("注意: 語られていない争点の母数が確認時点のままです（増えた分の読み直しが要る）: "
               + ", ".join(stale_ids))
 
-    # --- 地下水脈（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
+    # --- 立場をこえて同じ心配（指摘4）: 台帳の issue_ids で論点へ結ぶ。未登録の論点idなら止める。
     for vein in ocean.get("veins", []):
         unknown = [i for i in vein.get("issue_ids", []) if i not in id_to_key]
         if unknown:
             raise SystemExit(
-                f"地下水脈 {vein['id']} が、設定ファイルに無い論点 {', '.join(unknown)} を指しています。"
+                f"立場をこえて同じ心配 {vein['id']} が、設定ファイルに無い論点 {', '.join(unknown)} を指しています。"
             )
 
     keys = [k for k in issues_cfg if counts.get(k)]
@@ -306,45 +226,33 @@ def build(topic: str) -> dict:
     pmax = max(p_adj.values()) if p_adj else 1.0
 
     # --- 面積（最小面積の床つき）。立場フィルターごとに作り直す
-    def area_targets(sub_counts: dict[str, int]) -> np.ndarray:
-        total = sum(sub_counts.values())
-        if total == 0:
-            return np.zeros(len(keys))
-        raw = np.array([sub_counts.get(k, 0) / total * 100 for k in keys])
-        adj = np.where(raw > 0, np.maximum(raw, geo["min_area_pct"]), 0.0)
-        excess = adj.sum() - 100
-        donors = (adj > geo["min_area_pct"] + 1e-9)
-        if excess > 0 and donors.any():
-            adj[donors] -= excess * adj[donors] / adj[donors].sum()
-        return adj / 100.0
-
-    pts = fibonacci_points(geo["fit_points"])
-    centers = seed_directions(ids)
-
     modes = []
     mode_defs = [("all", "すべての意見", None)] + [(s, s, s) for s in stances]
-    weights_by_mode = {}
     for mode_id, label, stance_key in mode_defs:
         if stance_key is None:
             sub = {k: counts[k] for k in keys}
+            sub_high = {k: inten[k].get("high", 0) for k in keys}
         else:
             sub = {k: cross.get(k, {}).get(stance_key, 0) for k in keys}
-        tgt = area_targets(sub)
-        w = fit_weights(pts, centers, tgt, geo["fit_iters"])
-        assign, frac = region_stats(pts, centers, w, tgt)
-        weights_by_mode[mode_id] = w.tolist()
+            sub_high = {k: cross_high.get(k, {}).get(stance_key, 0) for k in keys}
+        total = int(sum(sub.values()))
         modes.append({
             "id": mode_id,
             "label": label,
-            "total": int(sum(sub.values())),
+            "total": total,
             "counts": {issues_cfg[k]["id"]: int(sub[k]) for k in keys},
-            "area_pct": {issues_cfg[k]["id"]: round(float(tgt[i] * 100), 2) for i, k in enumerate(keys)},
-            "area_actual_pct": {issues_cfg[k]["id"]: round(float(frac[i] * 100), 2) for i, k in enumerate(keys)},
+            # 山の幅。その立場の中で、この論点が占める割合
+            "width_pct": {
+                issues_cfg[k]["id"]: (round(100 * sub[k] / total, 2) if total else 0.0)
+                for k in keys
+            },
+            # 山の高さ。その立場の中での「強い表現」の割合（幅と同じ母数で数える）
+            "high_pct": {
+                issues_cfg[k]["id"]: (round(100 * sub_high[k] / sub[k], 1) if sub[k] else 0.0)
+                for k in keys
+            },
+            "high_counts": {issues_cfg[k]["id"]: int(sub_high[k]) for k in keys},
         })
-        if mode_id == "all":
-            base_assign = assign
-
-    cents = centroids(pts, base_assign, len(keys))
 
     # --- 下位論点（島）。再読データがある論点だけ割れる
     sub_cfg = cfg.get("sub_issues") or {}
@@ -363,20 +271,9 @@ def build(topic: str) -> dict:
             if gap > 0:
                 items.append({"id": "__unread__", "label": "まだ読み直していない分",
                               "count": gap, "unread": True})
-            m = len(items)
-            # 大陸の広がりに合わせて下位シードの散らばりを決める（はみ出さないように）
-            frac_i = float((base_assign == i).mean())
-            theta = math.acos(max(-1.0, 1 - 2 * frac_i))
-            scent = tangent_ring(cents[i], m, 0.55 * math.tan(min(theta, 1.2)))
-            stgt = np.array([x["count"] for x in items], dtype=float)
-            stgt = stgt / stgt.sum()
-            sel = pts[base_assign == i]
-            sw = fit_weights(sel, scent, stgt, 300) if len(sel) > 50 else np.zeros(m)
-            sassign, sfrac = region_stats(sel, scent, sw, stgt)
-            scents = centroids(sel, sassign, m)
-            for j, x in enumerate(items):
-                x["centroid"] = scents[j].tolist()
-                x["area_pct_in_issue"] = round(float(sfrac[j] * 100), 1)
+            total_sub = sum(x["count"] for x in items)
+            for x in items:
+                x["pct_in_issue"] = round(100 * x["count"] / total_sub, 1) if total_sub else 0.0
             sub = {
                 "status": "reread",
                 "coverage": sc["coverage"],
@@ -385,8 +282,6 @@ def build(topic: str) -> dict:
                 "reread_count": reread,
                 "unread_count": max(gap, 0),
                 "items": items,
-                "centers": scent.tolist(),
-                "weights": sw.tolist(),
             }
         else:
             sub = {"status": "not_reviewed",
@@ -408,9 +303,6 @@ def build(topic: str) -> dict:
             "intensity": {x: int(inten[k].get(x, 0)) for x in ("high", "medium", "low")},
             "high_pct": round(100 * inten[k].get("high", 0) / counts[k], 1),
             "high_adjusted_pct": round(100 * p_adj[k], 1),
-            "elevation": round(geo["elevation_max"] * p_adj[k] / pmax, 2),
-            "center": centers[i].tolist(),
-            "centroid": cents[i].tolist(),
             "sub": sub,
             "verdict": verdict,
             "claims": matched_claims,
@@ -434,13 +326,24 @@ def build(topic: str) -> dict:
             "definition": "強い表現（intensity=high）の投稿が占める割合",
             "p0": round(p0, 4), "k": kk, "max_pct": geo["elevation_max"],
         },
-        "min_area_pct": geo["min_area_pct"],
         "stances": [dict(s, count=sum(cross.get(k, {}).get(s["key"], 0) for k in keys))
                     for s in cfg["stances"]],
         "vote_issue_order": cfg["vote_issue_order"],
         "modes": modes,
-        "weights_by_mode": weights_by_mode,
         "issues": issues,
+        # 一次資料クイズ用の平らな一覧。論点ごとの claims は同じ主張が複数の論点に
+        # 現れる（1主張が2論点にまたがる）ので、出題にはこちらを使う。
+        "claims": [
+            {
+                "id": c["id"],
+                "claim": c["claim"],
+                "verdict": c["verdict"],
+                "verdict_label": verdict_label(c["verdict"]),
+                "finding": c["finding"],
+                "sources": [{"name": s["name"], "url": s["url"]} for s in c.get("sources", [])],
+            }
+            for c in claim_verification["claims"]
+        ],
         "editorial": public.get("editorial_summary",
                                 {"status": "not_started", "checked_on": None,
                                  "reviewer_type": None, "findings": []}),
@@ -451,10 +354,18 @@ def build(topic: str) -> dict:
             "ocean_status": ocean.get("status", "not_started"),
             "ocean_checked_on": ocean.get("checked_on"),
             "ocean_reviewer_type": ocean.get("reviewer_type"),
-            "sunk_continents": sunk_continents,
+            # 図に入る短い名前。長い topic をそのまま描くとはみ出す
+            "sunk_continents": [dict(x, short_label=short_topic(x.get("topic", "")))
+                                for x in sunk_continents],
             "veins": ocean.get("veins", []),
         },
     }
+
+
+def short_topic(topic: str) -> str:
+    """語られていない争点の見出しを図へ収まる長さにする（本文は海面下の節でそのまま出す）。"""
+    head = topic.split("（")[0].strip()
+    return head if len(head) <= 14 else head[:13] + "…"
 
 
 def independence_gate(data: dict, cfg: dict) -> list[str]:
@@ -489,7 +400,7 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
     for item in data["ocean"]["sunk_continents"]:
         if item.get("base_stale"):
             ng.append(
-                f"沈んだ大陸「{item['id']}」の母数が確認時点の{item.get('sns_base')}件のまま"
+                f"語られていない争点「{item['id']}」の母数が確認時点の{item.get('sns_base')}件のまま"
                 f"（現在は{item.get('opinion_count_now')}件）。増えた分を読み直すこと"
             )
 
@@ -542,8 +453,8 @@ def static_caution(d: dict) -> str:
     out = ['<p class="caution" id="caution">'
            + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
-           + "件・<b>意見" + str(t["opinions"]) + "件</b>（惑星の母数）／更新 " + e(d["updated_at"])
-           + '　<code>' + e(d["snapshot_id"]) + "</code></p>"]
+           + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
+           + "</p>"]
     if d.get("prototype_only"):
         out.append('<p class="caution" style="border-left-color:#e5534b">'
                    + "<b>このページは公開できません。</b>独自性の検査に落ちています。<br>・"
@@ -553,13 +464,10 @@ def static_caution(d: dict) -> str:
 
 def static_meta(d: dict) -> str:
     f = d["elevation_formula"]
-    return ("大陸＝論点、面積＝意見の数（最小" + str(d["min_area_pct"]) + "%の床あり）、"
-            "色＝いちばん多い立場（薄いほど意見が割れている）、"
-            "山の高さ＝" + e(f["definition"]) + "（小さい論点は k=" + str(f["k"])
-            + " で抑制。全体平均 " + f"{f['p0'] * 100:.1f}" + "%）。"
-            "大陸の位置は見やすさのための配置で、論点同士の近さを意味しません。<br>"
-            "このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。"
-            "データが増えたら同じコマンドを実行し直すだけで、面積・色・高さ・島が更新されます。")
+    return ("山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝" + e(f["definition"]) + "</b>、"
+            "<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>"
+            "左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、"
+            "母数が小さいものは画面で断っています。")
 
 
 def static_fallback(d: dict) -> str:
@@ -596,9 +504,22 @@ def static_fallback(d: dict) -> str:
             f'      <div class="bar">{bar}</div>',
             '      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>',
         ]
-        if it["share_pct"] < d["min_area_pct"]:
-            body.append(f'      <div class="note">3Dの惑星では、この大陸を実際の割合より大きく描いています。'
-                        f'小さすぎると押せないため、最小{d["min_area_pct"]}%まで拡大しています。</div>')
+
+        # 立場ごとの「その立場の中での割合」。JSが動く画面では点の装置が動きで見せるところ。
+        # 動かない環境でも同じことが読めるように、ここへ数字で置く（設計書6章）。
+        rows = "".join(
+            f'<li><span>{e(m["label"])}{m["total"]}件のうち</span>'
+            f'<span class="n">{m["counts"][it["id"]]}件 / '
+            f'{100 * m["counts"][it["id"]] / m["total"]:.1f}%</span></li>'
+            for m in d["modes"] if m["total"])
+        body += [
+            '      <p class="sub" style="margin:12px 0 2px">'
+            '<b>立場ごとに、その立場の中でこの論点が占める割合</b></p>',
+            f'      <ul class="sides">{rows}</ul>',
+            '      <div class="note">件数と割合は逆に動くことがあります。'
+            '立場を絞ると数える相手そのものが少なくなるので、'
+            '<b>件数が減っても、その中での割合は増えることがあります。</b></div>',
+        ]
 
         sub = it["sub"]
         if sub["status"] == "reread":
@@ -611,15 +532,14 @@ def static_fallback(d: dict) -> str:
                 '      <p class="sub" style="margin-top:12px">'
                 '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
                 f'      <ul class="islands">{items}</ul>',
-                f'      <div class="note">{e(sub["coverage_note"])}。読み直した{sub["reread_count"]}件は '
-                f'<code>{e(sub["source_file"].split("/")[-1])}</code> が出所です。'
+                f'      <div class="note">{e(sub["coverage_note"])}。'
                 + (f'残り{sub["unread_count"]}件は、その後に増えた分でまだ読めていません。'
                    if sub["unread_count"] else "") + '</div>',
             ]
         else:
             body.append(f'      <div class="note">{e(sub["note"])}。<br>'
                         'AIが自動でつけた区分をここに並べることはしません。'
-                        '人が読んだ結果だけを島にします。</div>')
+                        '人が読んだ結果だけをまとめにします。</div>')
 
         if it.get("claims"):
             srcs = []
@@ -643,16 +563,16 @@ def static_fallback(d: dict) -> str:
 
     return ("\n".join([
         '  <div id="fallback">',
-        '    <h3 class="sec">論点の一覧（3Dの惑星が使えないときの表示）</h3>',
+        '    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>',
         '    <p class="sub" style="color:var(--muted);font-size:12px">'
-        'このページは、お使いの環境で3Dの惑星を描けなかったため、同じ内容を静的な一覧で表示しています。'
+        'このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。'
         '円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>',
         '    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">',
     ] + nav + ['    </nav>'] + panels + ['  </div>']))
 
 
 def issue_extras_html(issue: dict, data: dict) -> str:
-    """着陸パネルの後半（資料との照合＋海面より下への導線）を組み立てる。
+    """着陸パネルの後半（資料との照合＋資料にあるのに、SNSにないことへの導線）を組み立てる。
 
     3D版の着陸パネルもこのHTMLを読んで使う（テンプレートのJSで複製する）。
     同じ内容をJavaScript側にもう一度書くと、数字と文言が2通りに分かれるため。
@@ -684,20 +604,20 @@ def issue_extras_html(issue: dict, data: dict) -> str:
     if veins or sunk:
         parts = []
         if veins:
-            parts.append(f'地下水脈{len(veins)}本')
+            parts.append(f'立場をこえて同じ心配{len(veins)}本')
         if sunk:
-            parts.append(f'沈んだ大陸{len(sunk)}件')
+            parts.append(f'語られていない争点{len(sunk)}件')
         out.append(
-            '      <p class="sub" style="margin-top:12px">この論点に関わる海面より下：'
+            '      <p class="sub" style="margin-top:12px">この論点に関わる資料にあるのに、SNSにないこと：'
             + "・".join(parts)
-            + ' <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>')
+            + ' <a class="dive" href="#ocean">ページ下の「資料にあるのに、SNSにないこと」で読む</a></p>')
     return "\n".join(out)
 
 
 def static_ocean(data: dict) -> str:
-    """海面より下（沈んだ大陸・地下水脈）をテーマ全体のセクションとして組み立てる。
+    """資料にあるのに、SNSにないこと（語られていない争点・立場をこえて同じ心配）をテーマ全体のセクションとして組み立てる。
 
-    沈んだ大陸は「どの論点にも入っていない」ことが中身なので、
+    語られていない争点は「どの論点にも入っていない」ことが中身なので、
     論点の着陸パネルの中だけに置くと、論点に結びつかない件が読者から見えなくなる。
     """
     ocean = data["ocean"]
@@ -705,7 +625,7 @@ def static_ocean(data: dict) -> str:
     label_of = {i["id"]: i["label"] for i in data["issues"]}
 
     head = ['  <section id="ocean" class="ocean" tabindex="-1">',
-            '    <h3 class="sec">海面より下</h3>']
+            '    <h3 class="sec">資料にあるのに、SNSにないこと</h3>']
     if ocean.get("ocean_status") != "complete" or not (sunk or veins):
         head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
                     '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
@@ -717,7 +637,7 @@ def static_ocean(data: dict) -> str:
         f'{"編集部が本文を読んで確認" if ocean.get("ocean_reviewer_type") == "editorial_review" else "AIの下読みを含む"}）</p>')
 
     if sunk:
-        head.append('    <h4 class="subsec">沈んだ大陸 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
+        head.append('    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
         for x in sunk:
             srcs = "".join(
                 f'<li><a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
@@ -737,14 +657,14 @@ def static_ocean(data: dict) -> str:
                 '</article>')
 
     if veins:
-        head.append('    <h4 class="subsec">地下水脈 — 立場が違っても、同じ心配を語っているところ</h4>')
+        head.append('    <h4 class="subsec">立場をこえて同じ心配 — 立場が違っても、同じ心配を語っているところ</h4>')
         for v in veins:
             sides = "".join(
                 f'<li>{e(sd["stance_label"])}<span class="n">代表{sd["post_count"]}件</span></li>'
                 for sd in v["sides"])
             issues = "・".join(e(label_of.get(i, i)) for i in v["issue_ids"])
             head.append(
-                f'    <article class="vein">'
+                f'    <article class="vein" data-vein="{e(v["id"])}">'
                 f'<h5>{e(v["shared_concern"])}</h5>'
                 f'<p class="impact">それでも結論が分かれる理由：{e(v["diverging_reason"])}</p>'
                 f'<p class="count">関わる論点：{issues}</p>'
@@ -859,8 +779,9 @@ def main() -> None:
     for i in data["issues"]:
         s = i["sub"]
         tag = f"島{len(s['items'])}（未読{s['unread_count']}）" if s["status"] == "reread" else "未再読"
-        print(f"  {i['label']:<12}{i['count']:>5}件 面積{data['modes'][0]['area_actual_pct'][i['id']]:>5.1f}% "
-              f"標高{i['elevation']:.2f} {i['top_stance']}{i['purity_pct']:.0f}% {tag}")
+        m0 = data["modes"][0]
+        print(f"  {i['label']:<12}{i['count']:>5}件 幅{m0['width_pct'][i['id']]:>5.1f}% "
+              f"高さ{m0['high_pct'][i['id']]:>5.1f}% {i['top_stance']}{i['purity_pct']:.0f}% {tag}")
 
 
 if __name__ == "__main__":

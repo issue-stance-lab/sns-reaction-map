@@ -266,6 +266,268 @@ class PlanetPageTest(unittest.TestCase):
         self.assertEqual(self.page, again)
 
 
+class PlanetCrossTalkTest(unittest.TestCase):
+    """すれ違い装置（立場を切り替えると大陸の順位が入れ替わる）を固定する。
+
+    立場フィルターは以前からあったが、大陸が黙って描き直されるだけで、
+    順位が入れ替わったことは画面のどこにも出ていなかった。
+    「同じ惑星の上で立場によって地形が変わる」ことが読者に見える状態を保つ。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+        m = re.search(r"\nfunction morphTo\(.*?\n\}\n", cls.script, re.S)
+        assert m, "morphTo（地形の作り替え）がテンプレートから消えている"
+        cls.morph = m.group(0)
+
+    def test_switching_stance_redraws_width_and_height(self):
+        # 立場を切り替えたら、幅（件数）と高さ（強い表現）を両方描き直す
+        self.assertIn("m.counts[it.id]", self.script, "幅を data から採っていない")
+        self.assertIn("m.high_pct[it.id]", self.script, "高さを data から採っていない")
+        self.assertIn("render()", self.morph, "立場を切り替えても図を描き直していない")
+
+    def test_switching_stance_keeps_the_reader_in_place(self):
+        # 図を勝手に動かさない。狭い画面でだけ、押した結果が見える位置まで運ぶ
+        self.assertIn("bringIntoView", self.morph, "狭い画面で結果まで運ぶ処理が無い")
+        self.assertIn("window.innerWidth < 820", self.morph, "画面幅の条件が無い")
+
+    def test_rank_comes_from_the_data(self):
+        # 順位は data から数える。テンプレートへ書くと、データが増えて順位が
+        # 変わっても直らない。「1位」だけは例外で、いちばん大きい大陸を指す
+        # 言い方そのもの（どのテーマでも 1 のまま変わらない）。
+        self.assertIn("function ranksOf(", self.script, "順位を data から数える関数が無い")
+        # 見るのは画面に出る文字だけ。コメント（「1位と2位の差」など仕組みの説明）は外す
+        code = re.sub(r"/\*.*?\*/", "", self.template, flags=re.S)
+        code = re.sub(r"(?m)^[ \t]*//.*$", "", code)
+        found = [x for x in re.findall(r"\d+位", code) if x != "1位"]
+        self.assertEqual(found, [], f"テンプレートに手書きの順位がある: {found}")
+        self.assertRegex(self.script, r"moved\s*\+\s*'位'",
+                         "入れ替わった先の順位を数えずに書いている")
+
+    def test_zero_count_issues_draw_no_hill(self):
+        # 0件の論点は山を描かない（幅0の山や、母数0で割った高さを出さない）
+        self.assertIn("if (!n) return;", self.script, "0件の論点を除いていない")
+
+    def test_rank_is_reachable_without_the_globe(self):
+        # 惑星が見えない読み方（キーボード操作）でも並びの変化を追えること
+        self.assertRegex(self.script, r'rank\[i\]\s*\+\s*"位',
+                         "論点一覧に順位が出ていない")
+
+
+class SkylineTest(unittest.TestCase):
+    """断面図（山なみ）の検査。球をやめた代わりに、幅と高さの意味を固定する。
+
+    幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の件数を
+    母数にする。以前は幅だけ立場で絞られ、高さが全体の割合のままで、
+    1つの図の中に分母が2つある状態だった。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+
+    def test_width_and_height_share_one_denominator(self):
+        for mode in self.data["modes"]:
+            for issue in self.data["issues"]:
+                key = issue["id"]
+                n = mode["counts"][key]
+                want_w = round(100 * n / mode["total"], 2) if mode["total"] else 0.0
+                self.assertAlmostEqual(mode["width_pct"][key], want_w, places=2,
+                                       msg=f"{mode['label']}/{key}: 幅が件数と合わない")
+                want_h = round(100 * mode["high_counts"][key] / n, 1) if n else 0.0
+                self.assertAlmostEqual(mode["high_pct"][key], want_h, places=1,
+                                       msg=f"{mode['label']}/{key}: 高さが同じ母数で数えられていない")
+
+    def test_height_really_changes_by_stance(self):
+        """立場ごとに高さが変わること。ここが変わらないなら、球のときと同じで
+        「高さが表現されていない」状態に戻っている。"""
+        rates = {m["label"]: m["high_pct"]["bukatsu-chiiki-ukezara"] for m in self.data["modes"]}
+        self.assertGreater(max(rates.values()) - min(rates.values()), 10,
+                           f"立場を変えても高さがほとんど動かない: {rates}")
+
+    def test_the_globe_is_gone(self):
+        for gone in ("canvas", "getContext", "yaw", "coastNoise", "weights_by_mode"):
+            self.assertNotIn(gone, self.script, f"球の名残が残っている: {gone}")
+        self.assertIn('id="section"', self.template, "断面図の描画先が無い")
+
+    def test_a_hill_taller_than_the_axis_is_marked(self):
+        """上限を超えた山を、上限どまりの高さのまま描かない。"""
+        self.assertIn("clippedPath", self.script, "頂上を切る描き方が無い")
+        self.assertIn("v.clipped", self.script)
+        self.assertRegex(self.script, r'v\.clipped\?"▲"', "切れた山に実測値の印が付いていない")
+
+    def test_small_samples_and_widened_hills_are_disclosed(self):
+        self.assertIn("SMALL=30", self.script.replace(" ", ""), "母数が小さい山の断りが無い")
+        self.assertIn("実際の割合より広く描いています", self.script,
+                      "押せる幅まで広げたことを書いていない")
+
+
+class PlanetDotsTest(unittest.TestCase):
+    """点の装置（立場を絞ると件数は減るのに割合は増える、を見せる）を固定する。
+
+    「323件→182件と減るのに 28.4%→39.6% と増える」が文章では通じなかったため、
+    投稿1件＝点1つで見せる装置を入れた。数字は data から作り、
+    3Dが使えない環境でも同じことが読めるようにしてある。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.page = bpd.render_page(cls.data, cls.template, "null")
+        cls.static = re.sub(r"<script.*?</script>", "", cls.page, flags=re.S)
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+
+    def test_device_is_built_from_the_data(self):
+        self.assertIn('id="waffle"', self.template, "点の装置がテンプレートから消えている")
+        self.assertIn("const CELLS = 100;", self.script, "マスの数が100でない")
+        self.assertIn("D.totals.opinions", self.script, "母数を data から採っていない")
+        self.assertIn("m.counts[it.id]", self.script, "件数を data から採っていない")
+
+    def test_device_sits_next_to_the_controls(self):
+        """升目は着陸パネルの先頭側へ置く。
+
+        最初は戻るボタンの直前（1,500px超のパネルの末尾）に置いたため、
+        立場ボタンを押しても結果が画面外で「押しても何も起きない」ように見えた。
+        """
+        slot = self.script.index('<div id="dot-slot"></div>')
+        rest = self.script.index("legend() + stanceBar(")
+        self.assertLess(slot, rest,
+                        "升目が着陸パネルの後ろにある（押した結果が画面外に出る）")
+        self.assertIn("bringIntoView(document.getElementById(\"panel\"))", self.script,
+                      "画面が狭いときに、選んだ論点のパネルまで運ぶ処理が無い")
+
+    def test_scrolling_does_not_rely_on_smooth_or_animation_frames(self):
+        """スクロールが必ず届くこと。
+
+        scrollIntoView({behavior:"smooth"}) は効かない環境があり、
+        requestAnimationFrame は画面が見えていないと止まる。どちらに頼っても届かなかった。
+        """
+        fn = re.search(r"function bringIntoView\(el\)\{.*?\n\}", self.script, re.S).group(0)
+        self.assertNotIn('behavior', fn, "効かない環境がある smooth に頼っている")
+        self.assertGreaterEqual(fn.count("setTimeout"), 2,
+                                "rAF が止まる環境向けの取りこぼし対策が無い")
+
+    def test_every_issue_colour_separates_from_the_muted_dots(self):
+        """色つきのマスと灰色のマスが、明るさで見分けられること。
+
+        大陸の色はどれも白を混ぜた淡い色なので、灰を明るくすると全7色が
+        見分けの基準を下回る（実際に一度下回った。色差15に対し9〜14しか無かった）。
+        明るさの差で見るのは、色が見分けにくい人にも効くため。
+        """
+        rest = self._rgb(re.search(r"--rest-dot:\s*(#[0-9a-fA-F]{6})", self.template).group(1))
+        for issue in self.data["issues"]:
+            stance = next(s for s in self.data["stances"] if s["key"] == issue["top_stance"])
+            # continentRGB(it,"all") と同じ式: 白へ 0.58〜1.00 の割合で寄せる
+            purity = issue["purity_pct"] / 100
+            t = min(1.0, max(0.0, (purity - 0.30) / 0.45))
+            hot = [236 + (c - 236) * (0.58 + 0.42 * t) for c in self._rgb(stance["color"])]
+            ratio = self._contrast(hot, rest)
+            self.assertGreaterEqual(
+                ratio, 1.5,
+                f"{issue['label']}: 色つきと灰色のマスの明暗差が {ratio:.2f}倍しかない")
+
+    @staticmethod
+    def _rgb(h):
+        return [int(h[i:i + 2], 16) for i in (1, 3, 5)]
+
+    @staticmethod
+    def _luminance(c):
+        def ch(v):
+            v /= 255
+            return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+        r, g, b = (ch(x) for x in c)
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+    @classmethod
+    def _contrast(cls, a, b):
+        la, lb = cls._luminance(a), cls._luminance(b)
+        return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+    def test_stance_shares_are_readable_without_javascript(self):
+        # 3Dも点も動かない環境で、同じこと（立場ごとの割合）が読めること
+        text = re.sub(r"<[^>]+>", " ", self.static)
+        self.assertIn("立場ごとに、その立場の中でこの論点が占める割合", text)
+        self.assertIn("件数が減っても、その中での割合は増えることがあります", text)
+        for issue in self.data["issues"]:
+            for mode in self.data["modes"]:
+                if not mode["total"]:
+                    continue
+                n = mode["counts"][issue["id"]]
+                want = f'{n}件 / {100 * n / mode["total"]:.1f}%'
+                self.assertIn(want, self.static,
+                              f"{issue['label']} / {mode['label']} の割合が静的表示に無い")
+
+
+class DevicesTest(unittest.TestCase):
+    """滞在の仕掛け（予想・潜水・一次資料クイズ・探査記録）を固定する。
+
+    どれも「読ませる量を増やす」のではなく「読者に手を動かさせて答え合わせをする」
+    ための仕掛け。数字と論点名・立場名は全部 data から採る（テンプレートに書かない）。
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.template = (ROOT / "quality" / "prototypes"
+                        / "planet-prototype.template.html").read_text()
+        cls.data = bpd.stabilize(bpd.build(TOPIC))
+        cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
+        cls.page = bpd.render_page(cls.data, cls.template, "null")
+        cls.static = re.sub(r"<script.*?</script>", "", cls.page, flags=re.S)
+
+    def test_quiz_uses_every_checked_claim(self):
+        """クイズの出題は、照合済みの主張ぜんぶ。"""
+        self.assertIn("claims", self.data, "平らな主張一覧が出ていない")
+        ids = [c["id"] for c in self.data["claims"]]
+        self.assertEqual(len(ids), len(set(ids)), "主張が重複している")
+        public = json.loads(
+            (ROOT / "data" / "public" / "themes" / f"{TOPIC}.json").read_text())
+        self.assertEqual(ids, [c["id"] for c in public["claim_verification"]["claims"]],
+                         "公開データの主張と数・順序が合わない")
+        for c in self.data["claims"]:
+            self.assertIn(c["verdict"], ("fact", "gap", "miss"), c["id"])
+            self.assertTrue(c["verdict_label"], c["id"])
+            self.assertTrue(c["finding"], c["id"])
+
+    def test_devices_take_their_wording_from_the_data(self):
+        # 選択肢に論点名・立場名を書くと、他テーマで意味が通らなくなる
+        for issue in self.data["issues"]:
+            self.assertNotIn(issue["label"], self.script,
+                             f"テンプレートに論点名『{issue['label']}』が入っている")
+        for stance in self.data["stances"]:
+            self.assertNotIn(stance["key"], self.script,
+                             f"テンプレートに立場名『{stance['key']}』が入っている")
+
+    def test_progress_counts_every_stop(self):
+        """探査記録の分母。数え漏らすと進み具合が100%を超える（実際に超えた）。"""
+        self.assertRegex(
+            self.script,
+            r"const SPOTS = 2 \+ issues\.length \+ .*sunk_continents.*\n?.*claims.*veins",
+            "地点の数え方が、予想2＋論点＋沈んだ大陸＋主張＋地下水脈になっていない")
+        self.assertIn("Math.min(100,", self.script, "進み具合が100%で頭打ちになっていない")
+
+    def test_progress_stays_on_the_device(self):
+        """読んだ記録は端末の中だけ。サーバーへ送らない。"""
+        self.assertIn("localStorage", self.script)
+        for sent in ("fetch(", "XMLHttpRequest", "navigator.sendBeacon"):
+            self.assertNotIn(sent, self.script, f"読んだ記録を外へ送っている（{sent}）")
+
+    def test_below_sea_is_readable_without_javascript(self):
+        """潜水はJSの飾り。JSが動かないときは海面下が出たままであること。"""
+        self.assertIn('id="ocean"', self.static, "海面下のセクションが静的HTMLに無い")
+        self.assertNotIn('id="ocean" class="ocean" hidden', self.static,
+                         "JS無効時に海面下が隠れている")
+        self.assertIn('box.hidden = !dived', self.script, "潜水がJS側で開閉していない")
+
+
 class PlanetOceanPageTest(unittest.TestCase):
     """段階7-B: 着陸パネルの「資料との照合」と「海面より下」が画面に出ること。
 
@@ -290,18 +552,22 @@ class PlanetOceanPageTest(unittest.TestCase):
         with self.assertRaises(bpd.TemplateError):
             bpd.render_page(self.data, self.template.replace("<!--__OCEAN__-->", ""), "null")
 
-    def test_the_planet_is_redrawn_when_its_width_changes(self):
-        # 文字の大きさは canvas の表示幅から決めている。初回の render は
-        # レイアウトが決まる前に走ることがあり、375px で文字が巨大なまま残っていた
-        self.assertIn("ResizeObserver", self.template)
-        self.assertIn("observe(cv)", self.template)
+    def test_the_chart_scales_with_the_screen(self):
+        """図は SVG なので、幅が変わっても描き直さずに伸縮する。
+
+        canvas のときは実寸で描いていたため、幅が変わるたびに描き直す必要があり、
+        初回に文字が巨大なまま残る不具合が出ていた。
+        """
+        self.assertIn('viewBox="0 0 900 500"', self.template, "SVG の座標系が無い")
+        self.assertIn(".chart-box svg{display:block;width:100%;height:auto}", self.template,
+                      "図が画面幅に合わせて伸縮しない")
 
     def test_verdict_labels_are_fixed(self):
         # 課題54の「未着手」5: verdict と表示文言の対応を固定するテストが無かった
         self.assertEqual(set(bpd.VERDICT_LABELS), {"fact", "gap", "miss"})
-        self.assertEqual(bpd.verdict_label("fact"), "実像")
-        self.assertEqual(bpd.verdict_label("gap"), "ずれ")
-        self.assertEqual(bpd.verdict_label("miss"), "蜃気楼")
+        self.assertEqual(bpd.verdict_label("fact"), "資料どおり")
+        self.assertEqual(bpd.verdict_label("gap"), "少しずれる")
+        self.assertEqual(bpd.verdict_label("miss"), "裏が取れない")
         # miss を「嘘」「誤り」と断定しない（設計書3.3の読者への注意）
         self.assertNotIn("嘘", bpd.VERDICT_LABELS["miss"][1])
         with self.assertRaises(SystemExit):

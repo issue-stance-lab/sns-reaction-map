@@ -2,11 +2,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>議論の惑星 試作 — 部活動の地域移行</title>
+<title>議論の山なみ 試作 — 部活動の地域移行</title>
 <style>
 :root{
   --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
   --accent:#58a6ff;
+  /* 追いかけていない分のマス。大陸の色はどれも白っぽいので、これより明るくすると
+     7色すべてで見分けの基準を下回る（実測で下回った）。明暗差1.7倍を保つこと。 */
+  --rest-dot:#4a525c;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);
@@ -23,16 +26,14 @@ h1{font-size:22px;margin:0 0 4px}
 .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
   border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
 .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
-.stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
-@media(max-width:820px){.stage{grid-template-columns:1fr}}
-.canvas-box{position:relative;background:radial-gradient(circle at 50% 40%,#12181f,#0a0d12);
-  border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
-canvas{display:block;width:100%;height:auto;cursor:grab}
-canvas.dragging{cursor:grabbing}
-.hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
-.zoombar{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:5px}
-.zoombar button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);
-  background:#161b22cc;color:var(--fg);font-size:15px;cursor:pointer;line-height:1}
+.stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}
+.chart-box svg{display:block;width:100%;height:auto}
+.chart-box .hill{cursor:pointer}
+.chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
+.floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
 .panel h2{font-size:16px;margin:0 0 2px}
 .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
@@ -40,6 +41,14 @@ canvas.dragging{cursor:grabbing}
 .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
   font-weight:700;overflow:hidden;white-space:nowrap}
 .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+/* 立場を切り替えたときに何が起きたかの1行（すれ違い装置） */
+.panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.panel .cross b{color:#f2f6fa}
+.panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
+  background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;cursor:pointer}
+.panel .cross .spin:hover{border-color:var(--accent)}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
 .islands{list-style:none;padding:0;margin:8px 0 0}
 .islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
@@ -98,7 +107,7 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}
 .dive{color:var(--accent)}
 
-/* 海面より下 */
+/* 資料にあるのに、SNSにないこと */
 .ocean{border-top:1px solid var(--line);margin-top:26px}
 .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
 .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
@@ -119,6 +128,69 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:11px 13px;margin:0 0 8px;font-size:12.5px}
 
+/* 点の装置（立場を絞ったときの件数と割合の動き）。着陸パネルの中に入る */
+.dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}
+.waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  transition:background-color .5s ease}
+.dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}
+.dot-cap b{color:var(--fg)}
+.readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.ro .k{font-size:10.5px;color:var(--muted);margin:0}
+.ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}
+.ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.ro .ar{font-size:13px;font-weight:700}
+.ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.ro.down .ar,.ro.down .to{color:#e8a0a8}
+.ro.up .ar,.ro.up .to{color:#7ee0a8}
+.ro.flat .ar,.ro.flat .to{color:var(--fg)}
+.dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.dot-mech b{color:#f2f6fa}
+
+/* 探査記録（読んだ場所の記録。端末の中だけに持ち、サーバーへは送らない） */
+.progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}
+.progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.progress b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* 予想（見る前に当てる） */
+.guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}
+.guess h3{font-size:14px;margin:0 0 9px}
+.gopts{display:flex;flex-direction:column;gap:7px}
+.gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+.gopts button:hover:not(:disabled){border-color:var(--accent)}
+.gopts button:disabled{cursor:default;opacity:.5}
+.gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}
+.gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}
+.gans{margin-top:10px;font-size:12.5px;line-height:1.8}
+.gans[hidden]{display:none}
+.gans .lead{font-weight:700;margin-bottom:3px}
+
+/* 潜水 */
+.dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}
+.dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
+  border:0;border-radius:99px;padding:7px 16px;cursor:pointer}
+#seafloor{opacity:0;transition:opacity .9s ease .2s}
+.dived #seafloor{opacity:1}
+#seacover{transition:opacity .9s ease}
+.dived #seacover{opacity:.2}
+
+/* 一次資料クイズ */
+.quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}
+.qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}
+.qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}
+.qans{margin-top:12px;font-size:13px;line-height:1.85}
+.qans[hidden]{display:none}
+.qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}
+.qscore{font-size:14px;line-height:1.85}
+.qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
 html:not(.planet-live) .modes,
@@ -128,7 +200,7 @@ html:not(.planet-live) .issue-list{display:none}
 </style>
 
 <script>
-/* 惑星は canvas 2D で描く。JS か canvas が使えない環境では静的表示のまま残す。
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
    （このクラスが付かないと #fallback が見えたままになる） */
 (function(){
   try {
@@ -141,32 +213,60 @@ html:not(.planet-live) .issue-list{display:none}
 </script>
 
 <div class="wrap">
-  <h1>議論の惑星<span class="proto-tag">試作・非公開</span></h1>
+  <h1>議論の山なみ<span class="proto-tag">試作・非公開</span></h1>
   <p class="q" id="q"><!--__QUESTION__--></p>
   <!--__CAUTION__-->
+
+  <div class="progress" id="progress" hidden>
+    <span>探査記録</span><span class="track"><i id="pbar"></i></span><b id="pnum"></b>
+  </div>
+  <div id="guesses"></div>
 
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
   <div class="stage">
-    <div class="canvas-box">
-      <canvas id="cv" width="640" height="640" tabindex="0"
-              aria-label="論点の惑星。下の一覧からも同じ内容を読めます"></canvas>
-      <div class="zoombar">
-        <button type="button" id="zin" aria-label="拡大">＋</button>
-        <button type="button" id="zout" aria-label="縮小">−</button>
-      </div>
-      <div class="hint">ドラッグで回転 / ホイールで拡大 / 大陸をクリックで着陸</div>
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
+      <p class="dive"><button type="button" id="dive"></button><span id="divenote"></span></p>
     </div>
     <div class="panel" id="panel"></div>
   </div>
 
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、100マスで見せる。
+       マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+       着陸パネルの中へ差し込むので、押したボタンのすぐそばで変化が見える。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <div class="waffle" id="waffle"></div>
+    <p class="dot-cap">マス目100個が、いま見ている立場の全部です。
+      <b>色つきのマスの数が、そのまま割合（％）になります。</b></p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（色つきのマスの数）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
+  </div>
+
   <!--__FALLBACK__-->
+
+  <h3 class="sec sec-live">一次資料クイズ — その主張、資料に当たるとどうなる？</h3>
+  <div class="quiz" id="quiz"></div>
 
   <!--__OCEAN__-->
 
   <!--__EDITORIAL__-->
 
-  <h3 class="sec sec-live">論点一覧（3Dが使えなくても同じ内容へ行けます）</h3>
+  <h3 class="sec sec-live">論点の一覧（押すと、地図がその論点に切り替わります）</h3>
   <ul class="issue-list" id="list"></ul>
 
   <h3 class="sec">この試作の見かた</h3>
@@ -181,290 +281,160 @@ const D = window.PLANET_DATA;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- 状態 ---------- */
-const st = {
-  yaw: 0.6, pitch: -0.15, zoom: 1,
-  mode: "all", landed: null, islandMix: 0,
-  dragging: false, quality: 1, anim: null
-};
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
 const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
 const issues = D.issues;
 const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
 const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
 
-/* ---------- 色 ---------- */
-function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
-function mix(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
-const WHITE=[236,240,244];
-// 大陸の色 = 最多立場の色。純度が低いほど白っぽく（＝割れている論点）
-function continentRGB(it, modeId){
-  const key = (modeId === "all") ? it.top_stance : modeId;
-  const base = hex2rgb((stanceMap[key]||stanceMap[it.top_stance]).color);
-  if (modeId !== "all"){
-    // 立場を絞ると全部同じ色になるので、明るさを少しずつ変えて大陸の区切りを見せる
-    const r = idIndex[it.id] / Math.max(1, issues.length-1);
-    return mix(mix(WHITE, base, 0.95), WHITE, 0.05 + 0.42*r);
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
+function ranksOf(modeId){
+  const m = modeById[modeId];
+  const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
+                      .filter(x => x.n > 0)
+                      .sort((a,b) => b.n - a.n || a.k - b.k);
+  const r = issues.map(() => null);
+  order.forEach((x,i) => { r[x.k] = i + 1; });
+  return r;
+}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
+
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
   }
-  const purity = it.purity_pct/100;
-  const t = Math.min(1, Math.max(0, (purity-0.30)/0.45));   // 純度30%→100%を薄い→濃いへ
-  return mix(WHITE, base, 0.58 + 0.42*t);
-}
-const PATTERN = {plain:0, diagonal:1, dots:2, mesh:3};
-const DARK=[26,32,40];
-function islandRGB(it, modeId, j, m, unread){
-  if (unread) return [116,124,134];
-  const base = continentRGB(it, modeId);
-  const t = m > 1 ? j/(m-1) : 0;
-  return mix(mix(base, DARK, 0.42), WHITE, 0.92*t);   // 濃い→淡いの段階
-}
-function css(c){ return "rgb("+c.map(v=>Math.round(v)).join(",")+")"; }
-
-/* ---------- 幾何 ---------- */
-function rot(yaw, pitch){
-  const cy=Math.cos(yaw), sy=Math.sin(yaw), cp=Math.cos(pitch), sp=Math.sin(pitch);
-  // view = Ry(yaw) then Rx(pitch);  world = Rinv * view
-  return [
-    [cy, sy*sp, sy*cp],
-    [0,  cp,   -sp   ],
-    [-sy, cy*sp, cy*cp]
-  ];
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
 }
 
-/* ---------- 描画 ---------- */
-const cv = document.getElementById("cv");
-const ctx = cv.getContext("2d", {alpha:false});
-const off = document.createElement("canvas");
-const octx = off.getContext("2d", {alpha:false});
-let img = null;
-
-function activeIssues(){
-  const m = modeById[st.mode];
-  return issues.map((it,i)=>({it, i, on: m.counts[it.id] > 0}));
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
 }
 
 function render(){
-  const size = Math.round(cv.width * (st.dragging ? 0.55 : 1));
-  if (off.width !== size){ off.width = off.height = size; img = octx.createImageData(size,size); }
-  const data = img.data;
-  const R = rot(st.yaw, st.pitch);
-  const W = D.weights_by_mode[st.mode];
-  const acts = activeIssues();
-  const cols = issues.map(it => continentRGB(it, st.mode));
-  const pats = issues.map(it => PATTERN[(stanceMap[st.mode==="all"?it.top_stance:st.mode]||{}).pattern] || 0);
-  const landed = st.landed;
-  const sub = landed !== null ? issues[landed].sub : null;
-  const hasIsl = sub && sub.status === "reread" && st.islandMix > 0.01;
-  const islCols = hasIsl
-    ? sub.items.map((x,j)=>islandRGB(issues[landed], st.mode, j, sub.items.length, x.unread))
-    : null;
-
-  const half = size/2, radius = half*0.94*st.zoom;
-  const zq = st.zoom;   // 拡大率。境界線と等高線の幅をこれで割って一定に見せる
-  // 光の向き（左上から）
-  const lx=-0.45, ly=-0.5, lz=0.74;
-
-  for (let py=0; py<size; py++){
-    const y = (py - half)/radius;
-    for (let px=0; px<size; px++){
-      const o = (py*size+px)*4;
-      const x = (px - half)/radius;
-      const r2 = x*x + y*y;
-      if (r2 > 1){ data[o]=10;data[o+1]=13;data[o+2]=18;data[o+3]=255; continue; }
-      const z = Math.sqrt(1-r2);
-      // 視線座標 -> 世界座標
-      const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
-      const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
-      const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-
-      let best=-9, second=-9, bi=0;
-      for (let k=0;k<acts.length;k++){
-        if (!acts[k].on) continue;
-        const c = issues[k].center;
-        const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
-        if (s > best){ second=best; best=s; bi=k; }
-        else if (s > second) second=s;
-      }
-      const margin = best - second;
-      const it = issues[bi];
-      let col = cols[bi];
-      let shade = 1;
-
-      // 着陸中は他の大陸の彩度を落とす
-      if (landed !== null && bi !== landed){
-        const g = 0.30*col[0]+0.59*col[1]+0.11*col[2];
-        col = mix(col, [g,g,g], 0.75*st.islandMix + 0.25);
-        shade *= 0.72;
-      }
-
-      // 島（下位論点）
-      if (hasIsl && bi === landed){
-        let sb=-9, ss=-9, sj=0;
-        for (let j=0;j<sub.centers.length;j++){
-          const c = sub.centers[j];
-          const s = wx*c[0]+wy*c[1]+wz*c[2] + sub.weights[j];
-          if (s>sb){ ss=sb; sb=s; sj=j; }
-          else if (s>ss) ss=s;
-        }
-        const item = sub.items[sj];
-        col = mix(col, islCols[sj], st.islandMix);
-        if (sb - ss < (0.003 + 0.004*st.islandMix)/zq) col = mix(col, [18,22,28], 0.8);  // 島の海岸線
-        if (item.unread && ((px+py) % 8 < 3)) col = mix(col, [64,70,80], 0.55*st.islandMix); // 未読は斜線
-      }
-
-      // 標高＝等高線の本数（強い表現の割合）
-      const rings = Math.round(it.elevation);
-      const step2 = 0.020/zq;
-      const band = margin / step2;
-      if (band < rings && (band % 1) < 0.20) shade *= 0.82;
-
-      // 大陸の境界
-      if (margin < 0.0045/zq) col = mix(col, [13,17,23], 0.8);
-
-      // 地表パターン（色に頼らないため）
-      const p = pats[bi];
-      if (p===1 && (px+py)%10 < 2) shade *= 0.955;
-      else if (p===2 && px%7===0 && py%7===0) shade *= 0.90;
-      else if (p===3 && (px%9===0 || py%9===0)) shade *= 0.96;
-
-      // 陰影＋周縁減光
-      const lam = Math.max(0, x*lx + (-y)*ly + z*lz);
-      shade *= 0.42 + 0.58*lam;
-      shade *= 0.75 + 0.25*z;
-
-      data[o]   = Math.min(255, col[0]*shade);
-      data[o+1] = Math.min(255, col[1]*shade);
-      data[o+2] = Math.min(255, col[2]*shade);
-      data[o+3] = 255;
-    }
+  const L=layout(st.mode), p=[];
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
   }
-  octx.putImageData(img, 0, 0);
-  ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(off, 0, 0, cv.width, cv.height);
-  drawLabels(R, cv.width/2, cv.width/2*0.94*st.zoom);
-}
-
-// 大陸名を球の上に置く（正面を向いている大陸だけ）
-function drawLabels(R, half, radius){
-  const m = modeById[st.mode];
-  // 画面が小さいほどキャンバスが縮小表示されるので、文字を大きくして読めるようにする
-  const fs = Math.max(1, cv.width / Math.max(1, cv.clientWidth));
-  ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  issues.forEach((it,k)=>{
-    const n = m.counts[it.id];
-    if (!n) return;
-    const v = it.centroid;
-    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
-    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
-    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
-    if (z < 0.28) return;
-    const X = half + a*radius, Y = half - b*radius;
-    const dim = (st.landed !== null && st.landed !== k);
-    const alpha = Math.min(1,(z-0.28)/0.25) * (dim ? 0.35 : 1);
-    const big = st.landed === k;
-    ctx.globalAlpha = alpha;
-    ctx.font = (big?"700 ":"600 ") + Math.round((big?21:17)*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-    ctx.lineWidth = 4*fs; ctx.strokeStyle = "rgba(8,11,15,.85)";
-    ctx.strokeText(it.label, X, Y); ctx.fillStyle = "#f2f6fa"; ctx.fillText(it.label, X, Y);
-    ctx.font = "600 " + Math.round(13*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-    ctx.lineWidth = 3.5*fs;
-    const sub = n + "件", dy = (big?20:17)*fs;
-    ctx.strokeText(sub, X, Y + dy); ctx.fillStyle = "#c7d1dc"; ctx.fillText(sub, X, Y + dy);
-    ctx.globalAlpha = 1;
-  });
-  // 島の番号（着陸後）
-  const L = st.landed;
-  if (L === null || st.islandMix < 0.55) return;
-  const sb = issues[L].sub;
-  if (sb.status !== "reread") return;
-  ctx.globalAlpha = Math.min(1,(st.islandMix-0.55)/0.35);
-  ctx.lineWidth = 2*fs;
-  sb.items.forEach((x,j)=>{
-    const v = x.centroid;
-    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
-    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
-    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
-    if (z < 0.3) return;
-    const X = half + a*radius, Y = half - b*radius;
-    ctx.beginPath(); ctx.arc(X, Y, 12*fs, 0, 6.284);
-    ctx.fillStyle = "rgba(10,13,18,.82)"; ctx.fill();
-    ctx.strokeStyle = css(islandRGB(issues[L], st.mode, j, sb.items.length, x.unread));
-    ctx.stroke();
-    ctx.font = "700 " + Math.round(13*fs) + "px -apple-system,sans-serif"; ctx.fillStyle = "#f2f6fa";
-    ctx.fillText(String(j+1), X, Y+0.5);
-  });
-  ctx.globalAlpha = 1;
-}
-
-/* ---------- 当たり判定 ---------- */
-function pick(mx, my){
-  const half = cv.width/2, radius = half*0.94*st.zoom;
-  const x = (mx - half)/radius, y = (my - half)/radius;
-  if (x*x + y*y > 1) return null;
-  const z = Math.sqrt(1-x*x-y*y);
-  const R = rot(st.yaw, st.pitch);
-  const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
-  const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
-  const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-  const W = D.weights_by_mode[st.mode], m = modeById[st.mode];
-  let best=-9, bi=null;
-  issues.forEach((it,k)=>{
-    if (m.counts[it.id] <= 0) return;
-    const c = it.center;
-    const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
-    if (s > best){ best=s; bi=k; }
-  });
-  return bi;
-}
-
-/* ---------- アニメーション（案A：球を回して降りる） ---------- */
-function anglesFor(v){ // その方向が正面に来る yaw/pitch
-  const c = Math.max(-1, Math.min(1, v[0]));
-  return { yaw: Math.asin(-c), pitch: Math.max(-0.96, Math.min(0.96, Math.atan2(v[1], v[2]))) };
-}
-function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
-
-function animateTo(target, dur, done){
-  if (st.anim) cancelAnimationFrame(st.anim);
-  if (reduce){ Object.assign(st, target.end); st.islandMix = target.end.islandMix ?? st.islandMix; render(); done&&done(); return; }
-  const from = {yaw:st.yaw, pitch:st.pitch, zoom:st.zoom, islandMix:st.islandMix};
-  let dy = target.end.yaw - from.yaw;
-  while (dy > Math.PI) dy -= 2*Math.PI;
-  while (dy < -Math.PI) dy += 2*Math.PI;
-  const t0 = performance.now();
-  (function step(now){
-    const t = Math.min(1, (now-t0)/dur), e = ease(t);
-    st.yaw   = from.yaw + dy*e;
-    st.pitch = from.pitch + (target.end.pitch-from.pitch)*e;
-    // ズームは少し遅れて始める（0.25→1.0）
-    const ez = ease(Math.min(1, Math.max(0,(t-0.25)/0.75)));
-    st.zoom  = from.zoom + (target.end.zoom-from.zoom)*ez;
-    // 島は最後に浮き上がる（0.7→1.0）
-    const ei = Math.min(1, Math.max(0,(t-0.7)/0.3));
-    st.islandMix = from.islandMix + ((target.end.islandMix??from.islandMix)-from.islandMix)*ei;
-    render();
-    if (t < 1) st.anim = requestAnimationFrame(step); else { st.anim=null; done&&done(); }
-  })(t0);
-}
-
-function land(i, focus){
-  st.landed = i;
-  drawPanel();                                   // ← 本文はアニメを待たない（0ms）
-  location.hash = issues[i].id;
-  if (focus !== false){
-    const h = document.querySelector("#panel h2");
-    if (h){ h.tabIndex = -1; h.focus({preventScroll:true}); }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
   }
-  const a = anglesFor(issues[i].centroid);
-  animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:1.5, islandMix:1}}, 900);
-  syncList();
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  p.push('<g id="seafloor">');
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('</g>');
+  // 海の覆い。潜水で薄くなり、下が見えるようになる
+  p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+}
+
+function land(i){
+  st.landed=i;
+  visit("i:"+issues[i].id);
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
 }
 function orbit(){
-  const prev = st.landed;
-  st.landed = null; drawPanel(); syncList();
+  const prev=st.landed;
+  st.landed=null;
   if (location.hash) history.replaceState(null,"",location.pathname);
-  animateTo({end:{yaw:st.yaw, pitch:st.pitch, zoom:1, islandMix:0}}, 600, ()=>{
-    const b = prev!==null && document.getElementById("btn-"+issues[prev].id);
-    if (b) b.focus({preventScroll:true});
-  });
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
 }
 
 /* ---------- パネル ---------- */
@@ -480,6 +450,109 @@ function legend(){
     '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
 }
 
+/* 立場を切り替えたときに何が起きたかを1行で言う。
+   順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
+function crossTalk(modeId){
+  if (modeId === "all"){
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
+  }
+  const rAll = ranksOf("all"), rM = ranksOf(modeId);
+  const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
+  if (topMK < 0) return '';
+  const spin = '<button type="button" class="spin" id="spin">'
+             + '「'+issues[topMK].label+'」を見る</button>';
+  if (topMK === topAllK){
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
+         + 'すべての意見のときと同じ1位です。' + spin;
+  }
+  const moved = rM[topAllK];
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+       + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
+       + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
+}
+
+/* ---------- 点の装置（100マス） ----------
+   マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+   立場を絞ると件数は減るのに割合は増えることがある。これが文章では通じなかったための装置。
+   1件1マスで意見の数だけ並べた版は「多すぎて何も分からない」と差し戻された（2026-09-05）。 */
+const dotBox = document.getElementById("dotbox");
+const CELLS = 100;
+let cells = null;
+
+function buildCells(){
+  const w = document.getElementById("waffle");
+  let h = "";
+  for (let i=0;i<CELLS;i++) h += "<span></span>";
+  w.innerHTML = h;
+  cells = Array.prototype.slice.call(w.querySelectorAll("span"));
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!cells) buildCells();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
+  const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
+  cells.forEach((c,i)=>{
+    c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
+    c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
+  });
+
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+hot+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:var(--rest-dot)"></i>それ以外の論点</span>';
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を切り替えると、<b>色つきのマスの数が変わります</b>。"
+      + "件数が減っても、マスが増えることがあります。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほぼ同じだけ残ったので、割合もほとんど変わりません。</b>';
+    else if (gap > 0)
+      verdict = '<b>この論点のほうが多く残ったので、割合は増えます。</b>'
+              + '「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>この論点のほうが多く減ったので、割合は減ります。</b>'
+              + '「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '「'+m.label+'」に絞ると、この論点は <b>'+keepHot.toFixed(1)+'%</b> 残り、'
+      + 'それ以外は <b>'+keepRest.toFixed(1)+'%</b> 残りました。<br>' + verdict;
+  }
+}
+
 function drawPanel(){
   const p = document.getElementById("panel");
   const m = modeById[st.mode];
@@ -488,66 +561,73 @@ function drawPanel(){
       + '<p class="sub">'+m.label+'：'+m.total+'件'
       + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
       + legend()
-      + '<p class="sub" style="margin:6px 0 0">大陸をクリックすると、その論点へ降ります。'
-      + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。</p>'
+      + '<p class="cross">'+crossTalk(st.mode)+'</p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
       + (st.mode!=="all"
-        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで大陸を作り直しています。'
-          + '大きさはこの'+m.total+'件の中での割合です。'
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
           + (issues.filter(it=>m.counts[it.id]===0).length
              ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
-               +' が0件のため、大陸が消えています。'
+               +' が0件のため、山が消えています。'
              : '')
           + '</div>'
         : '');
+    // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
+    // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
+    const sp = document.getElementById("spin");
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
+    syncDots();
     return;
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
   let h = '<h2>'+it.icon+' '+it.label+'</h2>'
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
-    + '　山の高さ：強い表現'+it.high_adjusted_pct+'%</p>'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
+    + '<div id="dot-slot"></div>'
     + legend() + stanceBar(it.stances, it.count)
     + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
-  if (it.share_pct < D.min_area_pct){
-    h += '<div class="note">この大陸は実際の割合（'+it.share_pct+'%）より大きく描いています。'
-       + '小さすぎると押せないため、最小'+D.min_area_pct+'%まで拡大しました。実件数は'+it.count+'件です。</div>';
-  }
   const s = it.sub;
   if (s.status === "reread"){
     h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
       + '<ul class="islands">' + s.items.map((x,j)=>
           '<li class="'+(x.unread?"unread":"")+'">'
           + '<span class="num">'+(j+1)+'</span>'
-          + '<span class="sw" style="background:'+css(islandRGB(it, st.mode, j, s.items.length, x.unread))+'"></span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
           + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
-      + '<div class="note">'+s.coverage_note+'。読み直した'+s.reread_count+'件は '
-      + '<code>'+s.source_file.split("/").pop()+'</code> が出所です。'
+      + '<div class="note">'+s.coverage_note+'。'
       + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
       + '</div>';
   } else {
     h += '<div class="note">'+s.note+'。<br>'
-       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>';
+       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
   }
   // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
-  h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
+  // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
+  document.getElementById("dot-slot").appendChild(dotBox);
+  syncDots();
 }
 
 /* ---------- 一覧・モード ---------- */
 function syncList(){
   const m = modeById[st.mode];
+  const rank = ranksOf(st.mode);
   issues.forEach((it,i)=>{
     const b = document.getElementById("btn-"+it.id);
     if (!b) return;
     const n = m.counts[it.id];
     b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
     b.style.opacity = n ? 1 : .45;
+    // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
+    // 並びの変化を追えるようにするため。
     b.querySelector(".m").textContent =
-      (n ? n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
       + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
   });
 }
@@ -559,78 +639,209 @@ function buildList(){
     + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
   issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
 }
+/* 要素が画面の中ほどへ来るまでスクロールする。
+   scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
+   画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+function bringIntoView(el){
+  // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
+  setTimeout(function(){
+    const r = el.getBoundingClientRect();
+    if (!r.height) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max,
+      window.scrollY + r.top - (window.innerHeight - r.height)/2));
+    const from = window.scrollY;
+    if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
+    const t0 = performance.now(), dur = 420;
+    (function step(now){
+      const t = Math.min(1, (now - t0)/dur);
+      window.scrollTo(0, from + (to - from)*ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);                                  // 1枚目は rAF を待たずに描く
+    // rAF が止まる環境でも必ず届かせる
+    setTimeout(function(){
+      if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
+    }, dur + 180);
+  }, 0);
+}
+
 function buildModes(){
   const el = document.getElementById("modes");
   el.innerHTML = D.modes.map(m =>
     '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
     + m.label+' '+m.total+'</button>').join("");
   el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
-    st.mode = b.dataset.m;
     el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
-    if (st.landed!==null && modeById[st.mode].counts[issues[st.landed].id]===0) st.landed=null;
-    drawPanel(); syncList(); render();
+    morphTo(b.dataset.m);
   });
 }
 
-/* ---------- 操作 ---------- */
-let px0=0, py0=0, moved=0;
-function pos(e){
-  const r = cv.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
-  return [(t.clientX-r.left)*cv.width/r.width, (t.clientY-r.top)*cv.height/r.height];
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
 }
-cv.addEventListener("pointerdown", e=>{
-  cv.setPointerCapture(e.pointerId); st.dragging=true; moved=0;
-  cv.classList.add("dragging"); [px0,py0]=pos(e);
-});
-cv.addEventListener("pointermove", e=>{
-  if (!st.dragging) return;
-  const [x,y]=pos(e), dx=x-px0, dy=y-py0;
-  moved += Math.abs(dx)+Math.abs(dy);
-  st.yaw += dx*0.006;
-  st.pitch = Math.max(-0.96, Math.min(0.96, st.pitch + dy*0.006));  // 上下55度で制限
-  px0=x; py0=y; render();
-});
-function endDrag(e){
-  if (!st.dragging) return;
-  st.dragging=false; cv.classList.remove("dragging");
-  if (moved < 6){ const i = pick(...pos(e)); if (i!==null) land(i); }
-  render();
-}
-cv.addEventListener("pointerup", endDrag);
-cv.addEventListener("pointercancel", ()=>{ st.dragging=false; cv.classList.remove("dragging"); render(); });
-cv.addEventListener("wheel", e=>{
-  e.preventDefault();
-  st.zoom = Math.max(1, Math.min(2.6, st.zoom * (e.deltaY>0?0.94:1.06))); render();
-}, {passive:false});
-document.getElementById("zin").onclick = ()=>{ st.zoom=Math.min(2.6,st.zoom*1.15); render(); };
-document.getElementById("zout").onclick= ()=>{ st.zoom=Math.max(1,st.zoom/1.15); render(); };
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
 addEventListener("keydown", e=>{
-  if (e.key === "Escape" && st.landed!==null){ orbit(); return; }
-  if (document.activeElement !== cv) return;
-  if (e.key==="ArrowLeft"){ st.yaw-=0.12; render(); e.preventDefault(); }
-  if (e.key==="ArrowRight"){ st.yaw+=0.12; render(); e.preventDefault(); }
-  if (e.key==="ArrowUp"){ st.pitch=Math.max(-0.96,st.pitch-0.1); render(); e.preventDefault(); }
-  if (e.key==="ArrowDown"){ st.pitch=Math.min(0.96,st.pitch+0.1); render(); e.preventDefault(); }
+  if (e.key === "Escape" && st.landed !== null) orbit();
 });
 
-/* ---------- 初期化 ---------- */
-/* 中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+/* ---------- 探査記録 ----------
+   予想2問＋論点＋語られていない争点＋主張＋立場をこえて同じ心配を「地点」として数える。
+   端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
+const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
+            + (D.claims||[]).length + (D.ocean.veins||[]).length;
+const seen = new Set();
+try { (JSON.parse(localStorage.getItem("isa-seen-"+D.theme_id)||"[]")).forEach(x=>seen.add(x)); } catch(e){}
+function visit(id){
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
+  paintProgress();
+}
+function paintProgress(){
+  const el = document.getElementById("progress");
+  el.hidden = false;
+  document.getElementById("pbar").style.width = Math.min(100, 100*seen.size/SPOTS) + "%";
+  document.getElementById("pnum").textContent = seen.size + " / " + SPOTS;
+}
+
+/* ---------- 予想（見る前に当てる） ----------
+   選択肢も答えも data から作る。ここに数字や論点名を書かない。 */
+function buildGuesses(){
+  const box = document.getElementById("guesses");
+  const st = D.stances.slice().sort((a,b)=>b.count-a.count);
+  const peak = issues.map(it=>({it, r: modeById.all.high_pct[it.id]}))
+                     .filter(x=>modeById.all.counts[x.it.id]>0)
+                     .sort((a,b)=>b.r-a.r);
+  const q=[];
+  q.push({
+    key:"g1", title:"① 「"+st[0].label+"」と「"+st[1].label+"」、どちらが多いと思いますか？",
+    opts:["「"+st[0].label+"」のほうが多い","「"+st[1].label+"」のほうが多い","ほぼ同じ"], right:0,
+    ans:"<b>「"+st[0].label+"」"+st[0].count+"件</b>に対し、「"+st[1].label+"」"+st[1].count+"件。"
+       +"多いのは前者で、しかも差はわずかです。"
+  });
+  q.push({
+    key:"g2", title:"② 「強い表現」がいちばん多い論点はどれだと思いますか？",
+    opts:[peak[peak.length-1].it.label, peak[1].it.label, peak[0].it.label], right:2,
+    ans:"<b>「"+peak[0].it.label+"」で"+peak[0].r+"%</b>。"
+       +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
+       +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
+  });
+  box.innerHTML = q.map(x =>
+    '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
+    + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
+    + '</div><div class="gans" hidden></div></div>').join("");
+  q.forEach(x=>{
+    const card = box.querySelector('[data-k="'+x.key+'"]');
+    const bs = card.querySelectorAll(".gopts button");
+    bs.forEach(b=>b.addEventListener("click", ()=>{
+      const pick = +b.dataset.i;
+      bs.forEach((y,j)=>{ y.disabled=true;
+        if (j===x.right) y.className="hit"; else if (j===pick) y.className="miss"; });
+      const a = card.querySelector(".gans");
+      a.innerHTML = '<p class="lead">'+(pick===x.right?"正解":"はずれ")+'</p>'+x.ans;
+      a.hidden=false;
+      visit(x.key);
+    }));
+  });
+}
+
+/* ---------- 潜水（海の水を抜く） ---------- */
+let dived=false;
+function buildDive(){
+  const b=document.getElementById("dive"), n=document.getElementById("divenote");
+  const sunk=(D.ocean.sunk_continents||[]).length;
+  if (!sunk){ b.parentElement.hidden=true; return; }
+  const box=document.getElementById("ocean");
+  function paint(){
+    b.textContent = dived ? "閉じる" : "資料にしかない話を見る";
+    n.innerHTML = dived
+      ? "<b>"+sunk+"つ出てきました。</b>どれも一次資料では決まっている話です。下に中身があります。"
+      : "資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
+    document.querySelector(".chart-box").classList.toggle("dived", dived);
+    if (box) box.hidden = !dived;
+  }
+  b.addEventListener("click", ()=>{
+    dived=!dived; paint();
+    if (dived){
+      // 海面下はひとまとまり。開いたら語られていない争点と立場をこえて同じ心配をまとめて数える。
+      // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
+      (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
+      (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
+      if (box) bringIntoView(box);
+    }
+  });
+  paint();
+}
+
+/* ---------- 一次資料クイズ ---------- */
+const V_ORDER=["fact","gap","miss"];
+let qi=0, qscore=0;
+function buildQuiz(){
+  const el=document.getElementById("quiz"), cs=D.claims||[];
+  if (!cs.length){ el.parentElement.querySelector(".sec-live").hidden=true; el.hidden=true; return; }
+  if (qi>=cs.length){
+    el.innerHTML='<p class="qscore"><span class="n">'+qscore+' / '+cs.length+'</span> 問正解</p>'
+      + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
+      + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
+          return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
+      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';
+    return;
+  }
+  const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
+  const labels=V_ORDER.map(v=>{
+    const same=cs.find(x=>x.verdict===v);
+    return same ? same.verdict_label : v;
+  });
+  el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
+    + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
+    + labels.map((l,i)=>'<button type="button" data-i="'+i+'">'+l+'</button>').join("")
+    + '</div><div class="qans" hidden></div>';
+  const bs=el.querySelectorAll(".gopts button");
+  bs.forEach(b=>b.addEventListener("click", ()=>{
+    const pick=+b.dataset.i;
+    if (pick===right) qscore++;
+    bs.forEach((y,j)=>{ y.disabled=true;
+      if (j===right) y.className="hit"; else if (j===pick) y.className="miss"; });
+    const a=el.querySelector(".qans");
+    a.innerHTML='<p><span class="verdict v-'+c.verdict+'">'+c.verdict_label+'</span>'+c.finding+'</p>'
+      + (c.sources.length
+         ? '<div class="srcs">'+c.sources.map(x=>'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.name+'</a>').join("")+'</div>'
+         : '<div class="srcs"><span style="color:var(--muted)">公的資料に該当なし。</span></div>')
+      + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
+    a.hidden=false;
+    visit("c:"+c.id);
+    a.querySelector(".qnext").addEventListener("click", ()=>{ qi++; buildQuiz(); });
+  }));
+}
+
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
 try {
-  (function initView(){ const a = anglesFor(issues[0].centroid); st.yaw=a.yaw; st.pitch=a.pitch; })();
   buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildGuesses(); buildDive(); buildQuiz(); paintProgress();
   const h = location.hash.slice(1);
-  if (h && idIndex[h] !== undefined) land(idIndex[h], false);
-  // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
-  // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
-  // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
-  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
-  else addEventListener("resize", render);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
 } catch (e) {
-  /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
   document.documentElement.className =
     document.documentElement.className.replace(/\bplanet-live\b/, "");
   throw e;
 }
+
 })();
 </script>
