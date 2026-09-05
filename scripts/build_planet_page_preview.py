@@ -297,6 +297,60 @@ BG_CSS = """
 """
 
 
+VOTE_MSG_CSS = """
+#vote-msg{margin:14px 0 0;padding:12px 15px;border-radius:10px;font-size:14px;line-height:1.8;
+  font-weight:700;display:flex;gap:9px;align-items:flex-start}
+#vote-msg[hidden]{display:none}
+#vote-msg.err{background:#FDECEC;border:1px solid #E4B4B0;color:#8E2318}
+#vote-msg.info{background:#E7EEFE;border:1px solid #B9CCE6;color:#0B3FA8}
+#vote-msg .ic{flex:none;font-size:16px;line-height:1.5}
+"""
+
+VOTE_MSG_JS = """
+(function(){
+  /* 送信に失敗したとき、ブラウザの alert ではなく画面の中に出す。
+     alert は読み上げの相性が悪く、環境によっては出ないまま黙って終わる。 */
+  window.voteMsg = function(text, kind){
+    var el = document.getElementById("vote-msg");
+    if (!el){ window.alert(text); return; }
+    el.className = (kind === "info" ? "info" : "err");
+    el.innerHTML = '<span class="ic" aria-hidden="true">'
+      + (kind === "info" ? "\u2139" : "\u26a0") + '</span><span></span>';
+    el.lastChild.textContent = text
+      + (kind === "info" ? "" : " もう一度、立場のボタンを押してください。");
+    el.hidden = false;
+  };
+  window.voteMsgClear = function(){
+    var el = document.getElementById("vote-msg");
+    if (el) el.hidden = true;
+  };
+})();
+"""
+
+
+def fix_vote_feedback(html: str) -> tuple[str, int]:
+    """投票の失敗をブラウザの alert で知らせるのをやめ、画面の中に出す。
+
+    alert は画面の外に出るため読み上げと相性が悪く、環境によっては抑止されて
+    黙って終わる。押しても何も起きないページに見える。
+    """
+    n = 0
+    pairs = [
+        ("alert(VoteStore.friendlyError(error))",
+         "voteMsg(VoteStore.friendlyError(error))"),
+        ("alert('24時間以内にすでに投票されています。前回の投票が集計されています。')",
+         "voteMsg('24時間以内にすでに投票されています。前回の投票が集計されています。','info')"),
+    ]
+    for a, b in pairs:
+        if a in html:
+            n += html.count(a)
+            html = html.replace(a, b)
+    # 送信が通ったときは前の失敗表示を消す
+    html = html.replace("if(saved)showVote(selIssue,stanceIdx);",
+                        "if(saved){voteMsgClear();showVote(selIssue,stanceIdx);}")
+    return html, n
+
+
 def build_background(topic: str) -> str:
     """第1部「この問題を知る」を台帳から組み立てる。
 
@@ -549,6 +603,13 @@ def main() -> None:
     html = html[:ti] + html[tj + len(trust_end):]
 
     html, vote = take_block(html, '<section class="panel" id="vote-section"', "section")
+    # 失敗の知らせを画面の中に出す（オーナー指示 2026-09-06）
+    html, n_alert = fix_vote_feedback(html)
+    vote = vote.replace('<div id="vote-step1">',
+                        '<p id="vote-msg" role="status" aria-live="polite" hidden></p>'
+                        '<div id="vote-step1">', 1)
+    vote = (f"<style>{VOTE_MSG_CSS}</style>" + vote
+            + f"<script>{VOTE_MSG_JS}</script>")
     # 地図より後ろへ移したので「SNSの声を見る前に」は嘘になる
     vote = vote.replace("<span>SNSの声を見る前に</span>",
                         "<span>ここまで読んだうえで</span>")
@@ -597,6 +658,7 @@ def main() -> None:
     for label, hit in removed:
         print(("外した  " if hit else "見つからず ") + label)
     print(f"外した  取り残されたスクリプト {dropped}本")
+    print(f"直した  投票の失敗の知らせ（alert → 画面の中）{n_alert}か所")
     try:
         shown = out.relative_to(ROOT)
     except ValueError:

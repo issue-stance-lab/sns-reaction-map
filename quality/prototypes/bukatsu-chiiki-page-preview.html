@@ -1911,11 +1911,18 @@ try {
 <a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>
 </article>
 </section>
-<section class="panel" id="vote-section" data-vote-topic="bukatsu-chiiki-issue-stance-v1">
+<style>
+#vote-msg{margin:14px 0 0;padding:12px 15px;border-radius:10px;font-size:14px;line-height:1.8;
+  font-weight:700;display:flex;gap:9px;align-items:flex-start}
+#vote-msg[hidden]{display:none}
+#vote-msg.err{background:#FDECEC;border:1px solid #E4B4B0;color:#8E2318}
+#vote-msg.info{background:#E7EEFE;border:1px solid #B9CCE6;color:#0B3FA8}
+#vote-msg .ic{flex:none;font-size:16px;line-height:1.5}
+</style><section class="panel" id="vote-section" data-vote-topic="bukatsu-chiiki-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>ここまで読んだうえで</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
 
-<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
+<p id="vote-msg" role="status" aria-live="polite" hidden></p><div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
 <p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
 <div id="vote-result" style="display:none;margin-top:20px;">
@@ -1926,7 +1933,26 @@ try {
   <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a>
   <button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button>
 </div>
-</section>
+</section><script>
+(function(){
+  /* 送信に失敗したとき、ブラウザの alert ではなく画面の中に出す。
+     alert は読み上げの相性が悪く、環境によっては出ないまま黙って終わる。 */
+  window.voteMsg = function(text, kind){
+    var el = document.getElementById("vote-msg");
+    if (!el){ window.alert(text); return; }
+    el.className = (kind === "info" ? "info" : "err");
+    el.innerHTML = '<span class="ic" aria-hidden="true">'
+      + (kind === "info" ? "ℹ" : "⚠") + '</span><span></span>';
+    el.lastChild.textContent = text
+      + (kind === "info" ? "" : " もう一度、立場のボタンを押してください。");
+    el.hidden = false;
+  };
+  window.voteMsgClear = function(){
+    var el = document.getElementById("vote-msg");
+    if (el) el.hidden = true;
+  };
+})();
+</script>
 
 
 
@@ -3162,9 +3188,9 @@ const SM_RAW = [
   async function saveVote(issueIdx,stanceIdx){
     try{
       var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:issueIdx*STANCES.length+stanceIdx,storageKey:STORAGE_KEY,localValue:{issueIdx:issueIdx,stanceIdx:stanceIdx}});
-      if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');
+      if(response.duplicate)voteMsg('24時間以内にすでに投票されています。前回の投票が集計されています。','info');
       return true;
-    }catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error));return false;}
+    }catch(error){console.error('Vote request failed:',error);voteMsg(VoteStore.friendlyError(error));return false;}
   }
 
   STANCES.forEach(function(st,stanceIdx){
@@ -3179,7 +3205,7 @@ const SM_RAW = [
       buttons.forEach(function(item){item.disabled=true;});
       var saved=await saveVote(selIssue,stanceIdx);
       buttons.forEach(function(item){item.disabled=false;});
-      if(saved)showVote(selIssue,stanceIdx);
+      if(saved){voteMsgClear();showVote(selIssue,stanceIdx);}
     };
     stanceBtns.appendChild(btn);
   });
