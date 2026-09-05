@@ -7,6 +7,9 @@
 :root{
   --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
   --accent:#58a6ff;
+  /* 追いかけていない分のマス。大陸の色はどれも白っぽいので、これより明るくすると
+     7色すべてで見分けの基準を下回る（実測で下回った）。明暗差1.7倍を保つこと。 */
+  --rest-dot:#4a525c;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);
@@ -28,6 +31,7 @@ h1{font-size:22px;margin:0 0 4px}
 .canvas-box{position:relative;background:radial-gradient(circle at 50% 40%,#12181f,#0a0d12);
   border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
 canvas{display:block;width:100%;height:auto;cursor:grab}
+@media(max-width:560px){canvas{max-height:52vh;object-fit:contain}}
 canvas.dragging{cursor:grabbing}
 .hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
 .zoombar{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:5px}
@@ -127,34 +131,26 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:11px 13px;margin:0 0 8px;font-size:12.5px}
 
-/* 点の装置（立場を絞ったときの件数と割合の動き） */
-.dotbox{margin-top:26px}
-.dotbox .sec{margin-top:0}
-.dotframe{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg);
-  border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.dotframe .pdot{position:absolute;left:0;top:0;border-radius:50%;
-  transition:transform .85s cubic-bezier(.4,0,.2,1),width .85s cubic-bezier(.4,0,.2,1),
-             height .85s cubic-bezier(.4,0,.2,1),opacity .4s linear}
-#dot-legend i{border-radius:50%}
-.dot-cap{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.75}
+/* 点の装置（立場を絞ったときの件数と割合の動き）。着陸パネルの中に入る */
+.dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}
+.waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  transition:background-color .5s ease}
+.dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}
 .dot-cap b{color:var(--fg)}
-.readouts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-@media(max-width:560px){.readouts{grid-template-columns:1fr}}
-.ro{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
-.ro .k{font-size:11px;color:var(--muted);margin:0}
-.ro .v{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:4px 0 0}
-.ro .from{font-size:15px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
-.ro .ar{font-size:14px;font-weight:700}
-.ro .to{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums}
+.readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.ro .k{font-size:10.5px;color:var(--muted);margin:0}
+.ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}
+.ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.ro .ar{font-size:13px;font-weight:700}
+.ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
 .ro.down .ar,.ro.down .to{color:#e8a0a8}
 .ro.up .ar,.ro.up .to{color:#7ee0a8}
 .ro.flat .ar,.ro.flat .to{color:var(--fg)}
-.ro .why{font-size:11.5px;color:var(--muted);margin:5px 0 0;line-height:1.7}
-.dot-mech{font-size:12.5px;line-height:1.85;margin:12px 0 0;padding:11px 13px;
-  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
-  border-radius:0 10px 10px 0}
+.dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
 .dot-mech b{color:#f2f6fa}
-.dot-mech .big{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
 
 /* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
 .planet-live #fallback{display:none}
@@ -197,24 +193,23 @@ html:not(.planet-live) .issue-list{display:none}
     <div class="panel" id="panel"></div>
   </div>
 
-  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、投稿1件＝点1つで見せる。
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、100マスで見せる。
+       マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+       着陸パネルの中へ差し込むので、押したボタンのすぐそばで変化が見える。
        数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
   <div class="dotbox" id="dotbox" hidden>
-    <h3 class="sec" id="dot-title"></h3>
-    <div class="dotframe" id="dotframe"></div>
-    <p class="dot-cap"><b>枠の大きさは変えていません。</b>点が減ったぶん、1つ1つが大きくなります。
-      割合とは「この枠の何割を色つきの点が占めるか」のことです。</p>
+    <div class="waffle" id="waffle"></div>
+    <p class="dot-cap">マス目100個が、いま見ている立場の全部です。
+      <b>色つきのマスの数が、そのまま割合（％）になります。</b></p>
     <div class="legend" id="dot-legend"></div>
     <div class="readouts">
       <div class="ro" id="ro-count">
-        <p class="k">件数（色つきの点の数）</p>
+        <p class="k">件数</p>
         <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
-        <p class="why" id="c-why"></p>
       </div>
       <div class="ro" id="ro-share">
-        <p class="k">割合（枠の中で色つきが占める割合）</p>
+        <p class="k">割合（色つきのマスの数）</p>
         <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
-        <p class="why" id="s-why"></p>
       </div>
     </div>
     <p class="dot-mech" id="dot-mech"></p>
@@ -666,69 +661,20 @@ function crossTalk(modeId){
        + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
 }
 
-/* ---------- 点の装置 ----------
-   投稿1件＝点1つ。立場を絞ると、その立場でない点が消え、**枠の大きさは変えずに**
-   残った点だけで詰め直す。点が減るぶん1つ1つが大きくなるので、
-   色つきの点が枠の何割を占めるかが、そのまま「その立場の中での割合」になる。
-   「件数は減るのに割合は増える」が文章では通じなかったための装置。 */
+/* ---------- 点の装置（100マス） ----------
+   マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+   立場を絞ると件数は減るのに割合は増えることがある。これが文章では通じなかったための装置。
+   1件1マスで意見の数だけ並べた版は「多すぎて何も分からない」と差し戻された（2026-09-05）。 */
 const dotBox = document.getElementById("dotbox");
-const dotFrame = document.getElementById("dotframe");
-// 追いかけていない論点の点。大陸の色はどれも白っぽいので、灰を明るくすると
-// 色つきと見分けがつかなくなる（7色すべてで色差が基準の15を下回った）。
-// この灰なら7色すべてで色差16.8以上、枠との明暗差2.4倍。凡例と静的表示が控えにある。
-const REST_DOT = "#4a525c";
-let dotEls = null;
+const CELLS = 100;
+let cells = null;
 
-function buildDots(){
-  const html = [];
-  issues.forEach((it,k)=>{
-    D.stances.forEach((s,si)=>{
-      const n = it.stances[s.key] || 0;
-      for (let c=0;c<n;c++) html.push('<span class="pdot" data-i="'+k+'" data-s="'+si+'"></span>');
-    });
-  });
-  dotFrame.innerHTML = html.join("");
-  dotEls = Array.prototype.slice.call(dotFrame.querySelectorAll(".pdot"));
-}
-
-// n個の点がちょうど収まるマス目を探す（枠の大きさは変えない）
-function dotGrid(n, W, H){
-  let best = 0, cols = 1;
-  for (let c=1;c<=n;c++){
-    const s = W/c, rows = Math.ceil(n/c);
-    if (rows*s <= H && s > best){ best = s; cols = c; }
-  }
-  return {cell:best, cols:cols, rows:Math.ceil(n/cols)};
-}
-
-function stanceIndexOf(modeId){ return D.stances.findIndex(s => s.key === modeId); }
-
-function layoutDots(){
-  const k = st.landed;
-  if (k === null || !dotEls) return;
-  const W = dotFrame.clientWidth, H = dotFrame.clientHeight;
-  if (!W || !H) return;
-  const si = stanceIndexOf(st.mode);                 // "all" のときは -1
-  const shown = dotEls.filter(d => si < 0 || +d.dataset.s === si);
-  // 色つきを先に置く。まとまるので「枠の何割か」が面積で読める
-  shown.sort((a,b)=>{
-    const ka = (+a.dataset.i === k) ? 0 : 1, kb = (+b.dataset.i === k) ? 0 : 1;
-    return ka - kb || (+a.dataset.i) - (+b.dataset.i);
-  });
-  const g = dotGrid(shown.length, W, H);
-  const size = Math.max(2, g.cell*0.66);
-  const padX = (W - g.cols*g.cell)/2, padY = (H - g.rows*g.cell)/2;
-  const hot = css(continentRGB(issues[k], "all"));   // 大陸と同じ色にして惑星とつなぐ
-  dotEls.forEach(d => { d.style.opacity = "0"; });
-  shown.forEach((d,i)=>{
-    const c = i % g.cols, r = Math.floor(i/g.cols);
-    d.style.width = size+"px"; d.style.height = size+"px";
-    d.style.transform = "translate(" + (padX + c*g.cell + (g.cell-size)/2) + "px,"
-                                     + (padY + r*g.cell + (g.cell-size)/2) + "px)";
-    d.style.background = (+d.dataset.i === k) ? hot : REST_DOT;
-    d.style.opacity = "1";
-    d.style.transitionDelay = "0s,.3s,.3s,0s";       // 消えてから詰め直す
-  });
+function buildCells(){
+  const w = document.getElementById("waffle");
+  let h = "";
+  for (let i=0;i<CELLS;i++) h += "<span></span>";
+  w.innerHTML = h;
+  cells = Array.prototype.slice.call(w.querySelectorAll("span"));
 }
 
 function dotDir(el, from, to, isAll){
@@ -744,7 +690,7 @@ function dotDir(el, from, to, isAll){
 function syncDots(){
   const k = st.landed;
   if (k === null){ dotBox.hidden = true; return; }
-  if (!dotEls) buildDots();
+  if (!cells) buildCells();
   dotBox.hidden = false;
 
   const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
@@ -752,12 +698,17 @@ function syncDots(){
   const nowN = m.counts[it.id], nowT = m.total;
   const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
 
-  document.getElementById("dot-title").textContent =
-    "「" + it.label + "」は、立場を絞ると増えるか減るか";
-  document.getElementById("dot-legend").innerHTML =
-    '<span><i style="background:'+css(continentRGB(it,"all"))+'"></i>'+it.label+'</span>'
-    + '<span><i style="background:'+REST_DOT+'"></i>それ以外の論点</span>';
+  // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
+  const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
+  const hot = css(continentRGB(it, "all"));       // 大陸と同じ色にして惑星とつなぐ
+  cells.forEach((c,i)=>{
+    c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
+    c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
+  });
 
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+hot+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:var(--rest-dot)"></i>それ以外の論点</span>';
   document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
   document.getElementById("c-to").textContent   = nowN + "件";
   document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
@@ -766,17 +717,11 @@ function syncDots(){
     dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
   document.getElementById("s-ar").textContent =
     dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
-  document.getElementById("c-why").textContent = isAll
-    ? "いまは意見" + base + "件すべてを見ています。"
-    : base + "件から" + nowT + "件だけを取り出したので、数は減ります。";
-  document.getElementById("s-why").textContent = isAll
-    ? "この割合が、立場を絞ったときの比べもとになります。"
-    : "見ている相手が" + nowT + "件に変わったので、この" + nowT + "件の中での割合です。";
 
   const mech = document.getElementById("dot-mech");
   if (isAll){
-    mech.innerHTML = "上のボタンで立場を選ぶと、その立場ではない点が消えて、"
-      + "残った点だけで枠を詰め直します。<b>色つきと灰色のどちらが多く残るか</b>を見てください。";
+    mech.innerHTML = "上のボタンで立場を切り替えると、<b>色つきのマスの数が変わります</b>。"
+      + "件数が減っても、マスが増えることがあります。";
   } else {
     // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
     const restBase = base - it.count, restNow = nowT - nowN;
@@ -786,19 +731,16 @@ function syncDots(){
     let verdict;
     if (Math.abs(gap) < 1)
       // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
-      verdict = '<b>どちらもほとんど同じ割合で残ったので、割合もほとんど変わりません。</b>'
-              + 'この論点は「'+m.label+'」かどうかで語られ方が変わらない、ということです。';
+      verdict = '<b>どちらもほぼ同じだけ残ったので、割合もほとんど変わりません。</b>';
     else if (gap > 0)
-      verdict = '<b>色つきのほうが多く生き残ったので、残った中での割合は増えます。</b>'
-              + 'つまり「'+m.label+'」の人ほど、この論点を語っているということです。';
+      verdict = '<b>この論点のほうが多く残ったので、割合は増えます。</b>'
+              + '「'+m.label+'」の人ほど、この論点を語っているということです。';
     else
-      verdict = '<b>色つきのほうが多く消えたので、残った中での割合は減ります。</b>'
-              + 'つまり「'+m.label+'」の人は、この論点をあまり語っていないということです。';
-    mech.innerHTML = '<b>これが理由です。</b><br>'
-      + '「'+it.label+'」は <span class="big">'+keepHot.toFixed(1)+'%</span> 残り、'
-      + 'それ以外は <span class="big">'+keepRest.toFixed(1)+'%</span> 残りました。<br>' + verdict;
+      verdict = '<b>この論点のほうが多く減ったので、割合は減ります。</b>'
+              + '「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '「'+m.label+'」に絞ると、この論点は <b>'+keepHot.toFixed(1)+'%</b> 残り、'
+      + 'それ以外は <b>'+keepRest.toFixed(1)+'%</b> 残りました。<br>' + verdict;
   }
-  layoutDots();
 }
 
 function drawPanel(){
@@ -839,6 +781,7 @@ function drawPanel(){
   let h = '<h2>'+it.icon+' '+it.label+'</h2>'
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　山の高さ：強い表現'+it.high_adjusted_pct+'%</p>'
+    + '<div id="dot-slot"></div>'
     + legend() + stanceBar(it.stances, it.count)
     + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
   if (it.share_pct < D.min_area_pct){
@@ -868,6 +811,8 @@ function drawPanel(){
   h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
+  // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
+  document.getElementById("dot-slot").appendChild(dotBox);
   syncDots();
 }
 
@@ -917,6 +862,10 @@ function morphTo(toMode){
   }
   drawPanel(); syncList();          // 本文は待たせない（着陸と同じ扱い）
 
+  // 画面が狭いと、立場ボタンと升目が同時に画面へ入らない。押した結果が見えないので運ぶ。
+  // scrollIntoView の behavior:"smooth" は効かない環境があったため自前で動かす（実測）。
+  if (st.landed !== null && !dotBox.hidden && window.innerWidth < 820) bringIntoView(dotBox);
+
   // 球は勝手に回さない。新しい1位へ回すと、順位を落とした大陸が裏側へ行き、
   // いちばん見せたい「縮むところ」が見えなくなる。入れ替わる2つの大陸が
   // 180度近く離れていることもあり（部活動の実データで154度）、両方を同時に
@@ -945,6 +894,32 @@ function morphTo(toMode){
       setTimeout(()=>{ if (!st.morph) render(); }, 2700);
     }
   })(t0);
+}
+
+/* 要素が画面の中ほどへ来るまでスクロールする。
+   scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
+   画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+function bringIntoView(el){
+  // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
+  setTimeout(function(){
+    const r = el.getBoundingClientRect();
+    if (!r.height) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max,
+      window.scrollY + r.top - (window.innerHeight - r.height)/2));
+    const from = window.scrollY;
+    if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
+    const t0 = performance.now(), dur = 420;
+    (function step(now){
+      const t = Math.min(1, (now - t0)/dur);
+      window.scrollTo(0, from + (to - from)*ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);                                  // 1枚目は rAF を待たずに描く
+    // rAF が止まる環境でも必ず届かせる
+    setTimeout(function(){
+      if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
+    }, dur + 180);
+  }, 0);
 }
 
 function buildModes(){
@@ -1010,12 +985,8 @@ try {
   // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
   // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
   // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
-  if (window.ResizeObserver){
-    new ResizeObserver(()=>render()).observe(cv);
-    new ResizeObserver(()=>layoutDots()).observe(dotFrame);
-  } else {
-    addEventListener("resize", ()=>{ render(); layoutDots(); });
-  }
+  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
+  else addEventListener("resize", render);
 } catch (e) {
   /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
   document.documentElement.className =

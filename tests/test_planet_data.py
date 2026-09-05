@@ -423,24 +423,43 @@ class PlanetDotsTest(unittest.TestCase):
         cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
 
     def test_device_is_built_from_the_data(self):
-        self.assertIn('id="dotbox"', self.template, "点の装置がテンプレートから消えている")
-        # 点の数は「立場ごとの件数」の合計。テンプレートに件数を書いてはいけない
-        self.assertIn("it.stances[s.key]", self.script, "点を data から作っていない")
+        self.assertIn('id="waffle"', self.template, "点の装置がテンプレートから消えている")
+        self.assertIn("const CELLS = 100;", self.script, "マスの数が100でない")
         self.assertIn("D.totals.opinions", self.script, "母数を data から採っていない")
+        self.assertIn("m.counts[it.id]", self.script, "件数を data から採っていない")
 
-    def test_dot_class_does_not_collide_with_the_issue_list(self):
-        # 論点一覧の丸も .dot を使っている。同じ名前にすると打ち消し合う
-        self.assertIn(".dotframe .pdot{position:absolute", self.template,
-                      "点の装置が既存の .dot と同じ名前を使っている")
+    def test_device_sits_next_to_the_controls(self):
+        """升目は着陸パネルの先頭側へ置く。
+
+        最初は戻るボタンの直前（1,500px超のパネルの末尾）に置いたため、
+        立場ボタンを押しても結果が画面外で「押しても何も起きない」ように見えた。
+        """
+        slot = self.script.index('<div id="dot-slot"></div>')
+        rest = self.script.index("legend() + stanceBar(")
+        self.assertLess(slot, rest,
+                        "升目が着陸パネルの後ろにある（押した結果が画面外に出る）")
+        self.assertIn("bringIntoView(dotBox)", self.script,
+                      "画面が狭いときに升目まで運ぶ処理が無い")
+
+    def test_scrolling_does_not_rely_on_smooth_or_animation_frames(self):
+        """スクロールが必ず届くこと。
+
+        scrollIntoView({behavior:"smooth"}) は効かない環境があり、
+        requestAnimationFrame は画面が見えていないと止まる。どちらに頼っても届かなかった。
+        """
+        fn = re.search(r"function bringIntoView\(el\)\{.*?\n\}", self.script, re.S).group(0)
+        self.assertNotIn('behavior', fn, "効かない環境がある smooth に頼っている")
+        self.assertGreaterEqual(fn.count("setTimeout"), 2,
+                                "rAF が止まる環境向けの取りこぼし対策が無い")
 
     def test_every_issue_colour_separates_from_the_muted_dots(self):
-        """色つきの点と灰色の点が、明るさで見分けられること。
+        """色つきのマスと灰色のマスが、明るさで見分けられること。
 
         大陸の色はどれも白を混ぜた淡い色なので、灰を明るくすると全7色が
         見分けの基準を下回る（実際に一度下回った。色差15に対し9〜14しか無かった）。
         明るさの差で見るのは、色が見分けにくい人にも効くため。
         """
-        rest = self._rgb(re.search(r'const REST_DOT = "(#[0-9a-fA-F]{6})"', self.script).group(1))
+        rest = self._rgb(re.search(r"--rest-dot:\s*(#[0-9a-fA-F]{6})", self.template).group(1))
         for issue in self.data["issues"]:
             stance = next(s for s in self.data["stances"] if s["key"] == issue["top_stance"])
             # continentRGB(it,"all") と同じ式: 白へ 0.58〜1.00 の割合で寄せる
@@ -450,7 +469,7 @@ class PlanetDotsTest(unittest.TestCase):
             ratio = self._contrast(hot, rest)
             self.assertGreaterEqual(
                 ratio, 1.5,
-                f"{issue['label']}: 色つきの点と灰色の点の明暗差が {ratio:.2f}倍しかない")
+                f"{issue['label']}: 色つきと灰色のマスの明暗差が {ratio:.2f}倍しかない")
 
     @staticmethod
     def _rgb(h):
