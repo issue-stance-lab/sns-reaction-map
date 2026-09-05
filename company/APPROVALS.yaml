@@ -49,6 +49,21 @@ items:
     requested_at: "2026-09-05"
     decided_at: "2026-09-05"
     decision_note: "CEOが本対話で『公開して』と明示して承認。対象はpromotion manifest SHA256: 3eff3b3dc5855a6f5c6ce335b05e4f1bb3ee218d1d7d7a955756b5078ecd08c2。"
+  - id: approval-20260906-001
+    department: engineering-data
+    action: website_publication
+    summary: "自転車の青切符導入テーマの2026-09-05更新回の整合を修正して公開する"
+    reason: "9月5日の新規84件が累積正典・公開ページから漏れ、384件と468件が混在したため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+    recommendation: approve
+    evidence:
+      - "data/verification/updates/bike-blue-ticket/2026-09-05/report.json"
+      - ".staging/refresh/bike-blue-ticket/20260906_reconcile/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-09-06"
+    decided_at: "2026-09-06"
+    decision_note: "CEOが本対話で『自転車も直して』と明示して承認。対象manifest SHA256: 32c4d0e617507d1f56b97f31c3de6d66cf9fe645e8cf0fbb0dc0813cd1a00db5。"
   - id: approval-20260905-002
     department: engineering-data
     action: website_publication
