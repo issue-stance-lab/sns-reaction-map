@@ -587,9 +587,11 @@ def main() -> None:
                 tag + f'<p style="margin:14px 0 0"><a class="go-card" href="#issue-{it["id"]}">'
                       f'この論点のなかを見る ↓</a></p>', 1)
 
-    # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す
-    html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",
-                  "<!-- GA_TAG: 見本では外している -->", html, flags=re.DOTALL)
+    # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す。
+    # 本番向け（--for-docs）では絶対に外さない。保護タグを落とすと数字が取れなくなる。
+    if not a.for_docs:
+        html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",
+                      "<!-- GA_TAG: 見本では外している -->", html, flags=re.DOTALL)
 
     out.write_text(html if a.for_docs else localize_assets(html), encoding="utf-8")
     for label, hit in removed:
