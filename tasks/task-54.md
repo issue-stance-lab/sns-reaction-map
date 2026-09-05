@@ -12,6 +12,7 @@
 **独立レビュー**: `quality/reviews/2026-08-30-reaction-planet-plan.md`
 **AdSense対策**: `quality/designs/planet-adsense-gates.md`（2026-08-30。生成器に独自性の検査を実装。展開順の変更提案あり）
 **部活の実装構想**: `quality/designs/planet-bukatsu-chiiki.md`（2026-08-30 作成。面積・色・標高の具体値を現行正典993意見で確定）
+**サイト構成案（滞在時間）**: `quality/designs/site-structure-for-dwell.md`（2026-09-05 作成。段階8-Bの1本道の外側。横断ページ2本・探査記録の全サイト化・URLを変えない判断。**オーナー判断待ち**）
 
 **目的**: テーマごとに雑多な情報を縦に並べるページから、読者が議論の全体像を回し、論点へ着陸し、
 理由と一次資料を読めるWebsiteへ変える。noteは論考、Xは入口、Websiteは探索できる中心商品に役割を分ける。
