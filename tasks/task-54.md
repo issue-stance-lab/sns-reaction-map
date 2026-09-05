@@ -12,6 +12,7 @@
 **独立レビュー**: `quality/reviews/2026-08-30-reaction-planet-plan.md`
 **AdSense対策**: `quality/designs/planet-adsense-gates.md`（2026-08-30。生成器に独自性の検査を実装。展開順の変更提案あり）
 **部活の実装構想**: `quality/designs/planet-bukatsu-chiiki.md`（2026-08-30 作成。面積・色・標高の具体値を現行正典993意見で確定）
+**段階10-1 自転車の指示文**: `quality/designs/2026-09-06-bike-rollout-brief.md`（2026-09-06 作成。**別セッションにそのまま渡せる形**。読み直しは350件済みで残り26件）
 **段階10 展開の指示文**: `quality/designs/2026-09-06-nine-theme-rollout-brief.md`（2026-09-06 作成。**別セッションにそのまま渡せる形**。アダプタが部活動専用であること、9テーマで読む量が約5,659件になることを実測して記載）
 **段階9-A 読み直しの指示文**: `quality/designs/2026-09-06-stage9a-reread-brief.md`（2026-09-06 作成。「教員の働き方」の賛成側182件を読む。**別セッションにそのまま渡せる形**。これを通さないと公開できない）
 **サイト構成案（滞在時間）**: `quality/designs/site-structure-for-dwell.md`（2026-09-05 作成。段階8-Bの1本道の外側。横断ページ2本・探査記録の全サイト化・URLを変えない判断）。**順番はオーナー決定済み: 段階10を先に終わらせ、横断ページは段階10と段階11のあいだに挿す**
