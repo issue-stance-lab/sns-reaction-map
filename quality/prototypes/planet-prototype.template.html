@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>議論の惑星 試作 — 部活動の地域移行</title>
+<title>議論の山なみ 試作 — 部活動の地域移行</title>
 <style>
 :root{
   --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
@@ -26,17 +26,14 @@ h1{font-size:22px;margin:0 0 4px}
 .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
   border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
 .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
-.stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
-@media(max-width:820px){.stage{grid-template-columns:1fr}}
-.canvas-box{position:relative;background:radial-gradient(circle at 50% 40%,#12181f,#0a0d12);
-  border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
-canvas{display:block;width:100%;height:auto;cursor:grab}
-@media(max-width:560px){canvas{max-height:52vh;object-fit:contain}}
-canvas.dragging{cursor:grabbing}
-.hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
-.zoombar{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:5px}
-.zoombar button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);
-  background:#161b22cc;color:var(--fg);font-size:15px;cursor:pointer;line-height:1}
+.stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}
+.chart-box svg{display:block;width:100%;height:auto}
+.chart-box .hill{cursor:pointer}
+.chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
+.floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
 .panel h2{font-size:16px;margin:0 0 2px}
 .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
@@ -161,7 +158,7 @@ html:not(.planet-live) .issue-list{display:none}
 </style>
 
 <script>
-/* 惑星は canvas 2D で描く。JS か canvas が使えない環境では静的表示のまま残す。
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
    （このクラスが付かないと #fallback が見えたままになる） */
 (function(){
   try {
@@ -174,21 +171,18 @@ html:not(.planet-live) .issue-list{display:none}
 </script>
 
 <div class="wrap">
-  <h1>議論の惑星<span class="proto-tag">試作・非公開</span></h1>
+  <h1>議論の山なみ<span class="proto-tag">試作・非公開</span></h1>
   <p class="q" id="q"><!--__QUESTION__--></p>
   <!--__CAUTION__-->
 
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
   <div class="stage">
-    <div class="canvas-box">
-      <canvas id="cv" width="640" height="640" tabindex="0"
-              aria-label="論点の惑星。下の一覧からも同じ内容を読めます"></canvas>
-      <div class="zoombar">
-        <button type="button" id="zin" aria-label="拡大">＋</button>
-        <button type="button" id="zout" aria-label="縮小">−</button>
-      </div>
-      <div class="hint">ドラッグで回転 / ホイールで拡大 / 大陸をクリックで着陸</div>
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
     </div>
     <div class="panel" id="panel"></div>
   </div>
@@ -236,28 +230,17 @@ const D = window.PLANET_DATA;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- 状態 ---------- */
-const st = {
-  yaw: 0.6, pitch: -0.15, zoom: 1,
-  mode: "all", landed: null, islandMix: 0,
-  dragging: false, quality: 1, anim: null,
-  // 立場を切り替えたときの地形の作り替え。wCur が「いま描いている重み」で、
-  // モードの重みの間を補間する。morph は補間の進み具合と、行き先の記録。
-  wCur: null, morph: null, deltaUntil: 0
-};
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
 const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
 const issues = D.issues;
 const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
 const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
 
-/* ---------- 立場ごとの地形（すれ違い装置） ----------
-   同じ惑星の上で、立場を変えると大陸の大きさと順位が変わる。
-   順位・件数・大陸名はすべて data から採る。ここで書き足さない。 */
-const FLOOR = -2.6;   // 0件の大陸を確実に消すための重み（内積の差は最大2）
-function effWeights(modeId){
-  const m = modeById[modeId], W = D.weights_by_mode[modeId];
-  return issues.map((it,k) => m.counts[it.id] > 0 ? W[k] : FLOOR);
-}
-// 件数の多い順の順位。0件の論点は null（順位を持たない）
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
 function ranksOf(modeId){
   const m = modeById[modeId];
   const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
@@ -267,364 +250,135 @@ function ranksOf(modeId){
   order.forEach((x,i) => { r[x.k] = i + 1; });
   return r;
 }
-function topIssueOf(modeId){ const r = ranksOf(modeId); return r.indexOf(1); }
-// 大陸名を置く位置。その立場での陸の重心を使う（共通の位置だと、縮んだ大陸の
-// 名前が海の上に浮く）。古いデータには無いので、無ければ全体の重心へ戻す。
-function centroidOf(k, modeId){
-  const t = D.centroid_by_mode && D.centroid_by_mode[modeId];
-  return (t && t[k]) || issues[k].centroid;
-}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
 
-/* ---------- 色 ---------- */
-function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
-function mix(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
-const WHITE=[236,240,244];
-// 大陸の色 = 最多立場の色。純度が低いほど白っぽく（＝割れている論点）
-function continentRGB(it, modeId){
-  const key = (modeId === "all") ? it.top_stance : modeId;
-  const base = hex2rgb((stanceMap[key]||stanceMap[it.top_stance]).color);
-  if (modeId !== "all"){
-    // 立場を絞ると全部同じ色になるので、明るさを少しずつ変えて大陸の区切りを見せる
-    const r = idIndex[it.id] / Math.max(1, issues.length-1);
-    return mix(mix(WHITE, base, 0.95), WHITE, 0.05 + 0.42*r);
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
   }
-  const purity = it.purity_pct/100;
-  const t = Math.min(1, Math.max(0, (purity-0.30)/0.45));   // 純度30%→100%を薄い→濃いへ
-  return mix(WHITE, base, 0.58 + 0.42*t);
-}
-const PATTERN = {plain:0, diagonal:1, dots:2, mesh:3};
-const DARK=[26,32,40];
-/* 海の色。青は立場の色にも論点の色にも使っていないので、
-   「どの論点にも属さない余白」だと色だけで分かる。 */
-const DEEP=[19,58,104], SHALLOW=[62,142,182], SURF=[150,206,228];
-const COAST = D.coast_margin || 0;
-/* 海岸線のゆらぎ。まっすぐな多角形の境界だとビーチボールに見える。
-   生成器 build_planet_data.py の coast_noise / wobble と同じ式・同じ振幅にすること。
-   片方だけ変えると、生成器が測った面積と実際に描く面積がずれる。 */
-const NOISE_AMP = D.coast_noise_amp || 0;
-function coastNoise(x,y,z){
-  return (Math.sin(6.7*x + 2.9*y + 11.3*z)
-        + 0.55*Math.sin(3.1*x + 13.1*y - 7.7*z)
-        + 0.30*Math.sin(17.1*x - 5.3*y + 23.3*z)) / 1.85;
-}
-function islandRGB(it, modeId, j, m, unread){
-  if (unread) return [116,124,134];
-  const base = continentRGB(it, modeId);
-  const t = m > 1 ? j/(m-1) : 0;
-  return mix(mix(base, DARK, 0.42), WHITE, 0.92*t);   // 濃い→淡いの段階
-}
-function css(c){ return "rgb("+c.map(v=>Math.round(v)).join(",")+")"; }
-
-/* ---------- 幾何 ---------- */
-function rot(yaw, pitch){
-  const cy=Math.cos(yaw), sy=Math.sin(yaw), cp=Math.cos(pitch), sp=Math.sin(pitch);
-  // view = Ry(yaw) then Rx(pitch);  world = Rinv * view
-  return [
-    [cy, sy*sp, sy*cp],
-    [0,  cp,   -sp   ],
-    [-sy, cy*sp, cy*cp]
-  ];
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
 }
 
-/* ---------- 描画 ---------- */
-const cv = document.getElementById("cv");
-const ctx = cv.getContext("2d", {alpha:false});
-const off = document.createElement("canvas");
-const octx = off.getContext("2d", {alpha:false});
-let img = null;
-
-// いま描いている重みで「大陸が残っているか」を決める。作り替えの途中も同じ判定で見る
-function activeIssues(W){
-  return issues.map((it,i)=>({it, i, on: W[i] > FLOOR + 0.02}));
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
 }
-// 地形の作り替え中に、件数・パターン・島の色をどちらのモードで見せるか（中間で入れ替える）
-function shownMode(){
-  const mo = st.morph;
-  return (mo && mo.t < 0.5) ? mo.fromMode : st.mode;
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
 }
 
 function render(){
-  // 動いている間は粗く描く。地形の作り替えは1画素ずつ塗り直すので、
-  // 原寸のままだと10fpsまで落ちて「育つ・縮む」が飛び飛びに見える（実測）。
-  const moving = st.dragging || st.morph || st.anim;
-  const size = Math.round(cv.width * (moving ? 0.55 : 1));
-  if (off.width !== size){ off.width = off.height = size; img = octx.createImageData(size,size); }
-  const data = img.data;
-  const R = rot(st.yaw, st.pitch);
-  const mo = st.morph;
-  const W = st.wCur || (st.wCur = effWeights(st.mode));
-  const acts = activeIssues(W);
-  const sm = shownMode();
-  const cols = issues.map(it => mo
-    ? mix(continentRGB(it, mo.fromMode), continentRGB(it, mo.toMode), mo.t)
-    : continentRGB(it, st.mode));
-  const pats = issues.map(it => PATTERN[(stanceMap[sm==="all"?it.top_stance:sm]||{}).pattern] || 0);
-  const landed = st.landed;
-  const sub = landed !== null ? issues[landed].sub : null;
-  const hasIsl = sub && sub.status === "reread" && st.islandMix > 0.01;
-  const islCols = hasIsl
-    ? sub.items.map((x,j)=>islandRGB(issues[landed], sm, j, sub.items.length, x.unread))
-    : null;
-
-  const half = size/2, radius = half*0.94*st.zoom;
-  const zq = st.zoom;   // 拡大率。境界線と等高線の幅をこれで割って一定に見せる
-  // 光の向き（左上から）
-  const lx=-0.45, ly=-0.5, lz=0.74;
-
-  for (let py=0; py<size; py++){
-    const y = (py - half)/radius;
-    for (let px=0; px<size; px++){
-      const o = (py*size+px)*4;
-      const x = (px - half)/radius;
-      const r2 = x*x + y*y;
-      if (r2 > 1){
-        // 大気。球のすぐ外側を薄く光らせる（宇宙に浮いて見せるための飾り）
-        const g = Math.max(0, 1 - (Math.sqrt(r2) - 1)/0.085);
-        const a = g*g*0.85;
-        data[o]  = 10 + 44*a; data[o+1] = 13 + 92*a; data[o+2] = 18 + 150*a;
-        data[o+3]= 255; continue;
-      }
-      const z = Math.sqrt(1-r2);
-      // 視線座標 -> 世界座標
-      const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
-      const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
-      const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-
-      let best=-9, second=-9, bi=0;
-      for (let k=0;k<acts.length;k++){
-        if (!acts[k].on) continue;
-        const c = issues[k].center;
-        const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
-        if (s > best){ second=best; best=s; bi=k; }
-        else if (s > second) second=s;
-      }
-      let margin = best - second;
-      // 岸のまわりだけ境界を波打たせる（離れるほど弱める）。
-      // 帯の外は結果が変わらないので計算しない（1画素あたり sin 3回は重い）。
-      if (NOISE_AMP > 0){
-        const d = margin - COAST;
-        if (d > -NOISE_AMP && d < NOISE_AMP){
-          margin += NOISE_AMP * coastNoise(wx,wy,wz) * (1 - Math.abs(d)/NOISE_AMP);
-        }
-      }
-      const it = issues[bi];
-      let col, shade = 1;
-
-      // ---- 海 ----------------------------------------------------------
-      // 1位と2位の差が COAST 未満の帯は、どの論点にも属さない海。
-      // 海は余白であって意味を持たない（面積の比は陸の中で合わせてある）。
-      const sea = margin < COAST;
-      if (sea){
-        const t = margin / COAST;               // 0=沖 1=岸
-        col = mix(DEEP, SHALLOW, t*t*t);        // 岸ぎわだけ浅く見せる
-        if (t > 0.93) col = mix(col, SURF, (t-0.93)/0.07*0.45);   // 波打ちぎわ
-        if (landed !== null) shade *= 0.80;     // 着陸中は海も少し落とす
-      } else {
-      col = cols[bi];
-
-      // 着陸中は他の大陸の彩度を落とす
-      if (landed !== null && bi !== landed){
-        const g = 0.30*col[0]+0.59*col[1]+0.11*col[2];
-        col = mix(col, [g,g,g], 0.75*st.islandMix + 0.25);
-        shade *= 0.72;
-      }
-
-      // 島（下位論点）
-      if (hasIsl && bi === landed){
-        let sb=-9, ss=-9, sj=0;
-        for (let j=0;j<sub.centers.length;j++){
-          const c = sub.centers[j];
-          const s = wx*c[0]+wy*c[1]+wz*c[2] + sub.weights[j];
-          if (s>sb){ ss=sb; sb=s; sj=j; }
-          else if (s>ss) ss=s;
-        }
-        const item = sub.items[sj];
-        col = mix(col, islCols[sj], st.islandMix);
-        if (sb - ss < (0.003 + 0.004*st.islandMix)/zq) col = mix(col, [18,22,28], 0.8);  // 島の海岸線
-        if (item.unread && ((px+py) % 8 < 3)) col = mix(col, [64,70,80], 0.55*st.islandMix); // 未読は斜線
-      }
-
-      // 標高＝等高線の本数（強い表現の割合）。海岸線から内陸へ向かって数える
-      const inland = margin - COAST;
-      const rings = Math.round(it.elevation);
-      const step2 = 0.020/zq;
-      const band = inland / step2;
-      if (band < rings && (band % 1) < 0.20) shade *= 0.82;
-
-      // 海岸線（陸側のふち）
-      if (inland < 0.009/zq) col = mix(col, [244,249,255], 0.20);
-
-      // 地表パターン（色に頼らないため）
-      const p = pats[bi];
-      if (p===1 && (px+py)%10 < 2) shade *= 0.955;
-      else if (p===2 && px%7===0 && py%7===0) shade *= 0.90;
-      else if (p===3 && (px%9===0 || py%9===0)) shade *= 0.96;
-      }
-      // ------------------------------------------------------------------
-
-      // 陰影＋周縁減光。水は光をまとめて返すので、陸より硬い当たり方にする
-      const lam = Math.max(0, x*lx + (-y)*ly + z*lz);
-      if (sea){
-        shade *= 0.50 + 0.44*lam + 0.22*Math.pow(lam, 32);  // 海面のてかり
-      } else {
-        shade *= 0.42 + 0.58*lam;
-      }
-      shade *= 0.75 + 0.25*z;
-
-      data[o]   = Math.min(255, col[0]*shade);
-      data[o+1] = Math.min(255, col[1]*shade);
-      data[o+2] = Math.min(255, col[2]*shade);
-      data[o+3] = 255;
-    }
+  const L=layout(st.mode), p=[];
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
   }
-  octx.putImageData(img, 0, 0);
-  ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(off, 0, 0, cv.width, cv.height);
-  drawLabels(R, cv.width/2, cv.width/2*0.94*st.zoom);
-}
-
-// 大陸名を球の上に置く（正面を向いている大陸だけ）
-function drawLabels(R, half, radius){
-  const sm = shownMode();
-  const m = modeById[sm];
-  const rank = ranksOf(sm);
-  // 順位が動いた大陸だけ、しばらく「↑2」「↓2」を出す（すれ違いの正体はここ）
-  const dl = st.deltaUntil - performance.now();
-  const showDelta = st.morph ? 1 : (dl > 0 ? Math.min(1, dl/700) : 0);
-  const prevRank = st.prevRank;
-  // 画面が小さいほどキャンバスが縮小表示されるので、文字を大きくして読めるようにする
-  const fs = Math.max(1, cv.width / Math.max(1, cv.clientWidth));
-  ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  issues.forEach((it,k)=>{
-    const n = m.counts[it.id];
-    if (!n) return;
-    const v = centroidOf(k, sm);
-    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
-    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
-    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
-    if (z < 0.28) return;
-    const X = half + a*radius, Y = half - b*radius;
-    const dim = (st.landed !== null && st.landed !== k);
-    const alpha = Math.min(1,(z-0.28)/0.25) * (dim ? 0.35 : 1);
-    const big = st.landed === k;
-    ctx.globalAlpha = alpha;
-    ctx.font = (big?"700 ":"600 ") + Math.round((big?21:17)*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-    ctx.lineWidth = 4*fs; ctx.strokeStyle = "rgba(8,11,15,.85)";
-    ctx.strokeText(it.label, X, Y); ctx.fillStyle = "#f2f6fa"; ctx.fillText(it.label, X, Y);
-    ctx.font = "600 " + Math.round(13*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-    ctx.lineWidth = 3.5*fs;
-    const sub = rank[k] + "位 ・ " + n + "件", dy = (big?20:17)*fs;
-    ctx.strokeText(sub, X, Y + dy); ctx.fillStyle = "#c7d1dc"; ctx.fillText(sub, X, Y + dy);
-    // 立場を切り替えて順位が動いた大陸だけ、矢印と差を添える
-    if (showDelta && prevRank && prevRank[k] && prevRank[k] !== rank[k]){
-      const d = prevRank[k] - rank[k];   // + なら上がった
-      ctx.globalAlpha = alpha * showDelta;
-      ctx.font = "700 " + Math.round(14*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-      ctx.lineWidth = 3.5*fs;
-      const tag = (d > 0 ? "↑" : "↓") + Math.abs(d);
-      ctx.strokeText(tag, X, Y + dy*2.05);
-      ctx.fillStyle = "#f2f6fa"; ctx.fillText(tag, X, Y + dy*2.05);
-      ctx.globalAlpha = alpha;
-    }
-    ctx.globalAlpha = 1;
-  });
-  // 島の番号（着陸後）
-  const L = st.landed;
-  if (L === null || st.islandMix < 0.55) return;
-  const sb = issues[L].sub;
-  if (sb.status !== "reread") return;
-  ctx.globalAlpha = Math.min(1,(st.islandMix-0.55)/0.35);
-  ctx.lineWidth = 2*fs;
-  sb.items.forEach((x,j)=>{
-    const v = x.centroid;
-    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
-    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
-    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
-    if (z < 0.3) return;
-    const X = half + a*radius, Y = half - b*radius;
-    ctx.beginPath(); ctx.arc(X, Y, 12*fs, 0, 6.284);
-    ctx.fillStyle = "rgba(10,13,18,.82)"; ctx.fill();
-    ctx.strokeStyle = css(islandRGB(issues[L], sm, j, sb.items.length, x.unread));
-    ctx.stroke();
-    ctx.font = "700 " + Math.round(13*fs) + "px -apple-system,sans-serif"; ctx.fillStyle = "#f2f6fa";
-    ctx.fillText(String(j+1), X, Y+0.5);
-  });
-  ctx.globalAlpha = 1;
-}
-
-/* ---------- 当たり判定 ---------- */
-function pick(mx, my){
-  const half = cv.width/2, radius = half*0.94*st.zoom;
-  const x = (mx - half)/radius, y = (my - half)/radius;
-  if (x*x + y*y > 1) return null;
-  const z = Math.sqrt(1-x*x-y*y);
-  const R = rot(st.yaw, st.pitch);
-  const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
-  const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
-  const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-  // 押せる大陸は「いま描かれている大陸」。作り替えの途中でも画面と食い違わせない
-  const W = st.wCur || effWeights(st.mode);
-  let best=-9, bi=null;
-  issues.forEach((it,k)=>{
-    if (W[k] <= FLOOR + 0.02) return;
-    const c = it.center;
-    const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
-    if (s > best){ best=s; bi=k; }
-  });
-  return bi;
-}
-
-/* ---------- アニメーション（案A：球を回して降りる） ---------- */
-function anglesFor(v){ // その方向が正面に来る yaw/pitch
-  const c = Math.max(-1, Math.min(1, v[0]));
-  return { yaw: Math.asin(-c), pitch: Math.max(-0.96, Math.min(0.96, Math.atan2(v[1], v[2]))) };
-}
-function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
-
-function animateTo(target, dur, done){
-  if (st.anim) cancelAnimationFrame(st.anim);
-  if (reduce){ Object.assign(st, target.end); st.islandMix = target.end.islandMix ?? st.islandMix; render(); done&&done(); return; }
-  const from = {yaw:st.yaw, pitch:st.pitch, zoom:st.zoom, islandMix:st.islandMix};
-  let dy = target.end.yaw - from.yaw;
-  while (dy > Math.PI) dy -= 2*Math.PI;
-  while (dy < -Math.PI) dy += 2*Math.PI;
-  const t0 = performance.now();
-  (function step(now){
-    const t = Math.min(1, (now-t0)/dur), e = ease(t);
-    st.yaw   = from.yaw + dy*e;
-    st.pitch = from.pitch + (target.end.pitch-from.pitch)*e;
-    // ズームは少し遅れて始める（0.25→1.0）
-    const ez = ease(Math.min(1, Math.max(0,(t-0.25)/0.75)));
-    st.zoom  = from.zoom + (target.end.zoom-from.zoom)*ez;
-    // 島は最後に浮き上がる（0.7→1.0）
-    const ei = Math.min(1, Math.max(0,(t-0.7)/0.3));
-    st.islandMix = from.islandMix + ((target.end.islandMix??from.islandMix)-from.islandMix)*ei;
-    render();
-    if (t < 1) st.anim = requestAnimationFrame(step);
-    else { st.anim=null; render(); done&&done(); }   // 最後の1枚だけ原寸で描き直す
-  })(t0);
-}
-
-function land(i, focus){
-  st.landed = i;
-  drawPanel();                                   // ← 本文はアニメを待たない（0ms）
-  location.hash = issues[i].id;
-  if (focus !== false){
-    const h = document.querySelector("#panel h2");
-    if (h){ h.tabIndex = -1; h.focus({preventScroll:true}); }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
   }
-  const a = anglesFor(centroidOf(i, st.mode));
-  animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:1.5, islandMix:1}}, 900);
-  syncList();
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 海面より下。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">地下水脈：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">海面より下＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+}
+
+function land(i){
+  st.landed=i;
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
 }
 function orbit(){
-  const prev = st.landed;
-  st.landed = null; drawPanel(); syncList();
+  const prev=st.landed;
+  st.landed=null;
   if (location.hash) history.replaceState(null,"",location.pathname);
-  animateTo({end:{yaw:st.yaw, pitch:st.pitch, zoom:1, islandMix:0}}, 600, ()=>{
-    const b = prev!==null && document.getElementById("btn-"+issues[prev].id);
-    if (b) b.focus({preventScroll:true});
-  });
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
 }
 
 /* ---------- パネル ---------- */
@@ -644,19 +398,19 @@ function legend(){
    順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
 function crossTalk(modeId){
   if (modeId === "all"){
-    return '上のボタンで立場を切り替えると、<b>同じ惑星の大陸の大きさと順位が変わります</b>。';
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
   }
   const rAll = ranksOf("all"), rM = ranksOf(modeId);
   const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
   if (topMK < 0) return '';
   const spin = '<button type="button" class="spin" id="spin">'
-             + '「'+issues[topMK].label+'」を正面へ</button>';
+             + '「'+issues[topMK].label+'」を見る</button>';
   if (topMK === topAllK){
-    return 'この立場でいちばん大きい大陸は「'+issues[topMK].label+'」。'
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
          + 'すべての意見のときと同じ1位です。' + spin;
   }
   const moved = rM[topAllK];
-  return 'この立場でいちばん大きい大陸は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
        + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
        + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
 }
@@ -700,7 +454,7 @@ function syncDots(){
 
   // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
   const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
-  const hot = css(continentRGB(it, "all"));       // 大陸と同じ色にして惑星とつなぐ
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
   cells.forEach((c,i)=>{
     c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
     c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
@@ -752,27 +506,22 @@ function drawPanel(){
       + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
       + legend()
       + '<p class="cross">'+crossTalk(st.mode)+'</p>'
-      + '<p class="sub" style="margin:6px 0 0">大陸をクリックすると、その論点へ降ります。'
-      + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。'
-      + '<b>青い海は大陸を見分けるための余白で、意味はありません。</b></p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点へ移ります。'
+      + '<b>幅＝意見の数、高さ＝強い表現の割合、色＝いちばん多い立場</b>です。'
+      + '幅と高さは同じ母数で数えているので、面積は強く語られた投稿の数になります。</p>'
       + (st.mode!=="all"
-        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで大陸を作り直しています。'
-          + '大きさはこの'+m.total+'件の中での割合です。'
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
           + (issues.filter(it=>m.counts[it.id]===0).length
              ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
-               +' が0件のため、大陸が消えています。'
+               +' が0件のため、山が消えています。'
              : '')
           + '</div>'
         : '');
     // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
     // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
     const sp = document.getElementById("spin");
-    if (sp) sp.onclick = ()=>{
-      const k = topIssueOf(st.mode);
-      if (k < 0) return;
-      const a = anglesFor(centroidOf(k, st.mode));
-      animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:st.zoom}}, 700);
-    };
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
     syncDots();
     return;
   }
@@ -780,21 +529,17 @@ function drawPanel(){
   const n = m.counts[it.id];
   let h = '<h2>'+it.icon+' '+it.label+'</h2>'
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
-    + '　山の高さ：強い表現'+it.high_adjusted_pct+'%</p>'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
     + legend() + stanceBar(it.stances, it.count)
     + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
-  if (it.share_pct < D.min_area_pct){
-    h += '<div class="note">この大陸は実際の割合（'+it.share_pct+'%）より大きく描いています。'
-       + '小さすぎると押せないため、最小'+D.min_area_pct+'%まで拡大しました。実件数は'+it.count+'件です。</div>';
-  }
   const s = it.sub;
   if (s.status === "reread"){
     h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
       + '<ul class="islands">' + s.items.map((x,j)=>
           '<li class="'+(x.unread?"unread":"")+'">'
           + '<span class="num">'+(j+1)+'</span>'
-          + '<span class="sw" style="background:'+css(islandRGB(it, st.mode, j, s.items.length, x.unread))+'"></span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
           + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
       + '<div class="note">'+s.coverage_note+'。読み直した'+s.reread_count+'件は '
       + '<code>'+s.source_file.split("/").pop()+'</code> が出所です。'
@@ -808,7 +553,7 @@ function drawPanel(){
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
-  h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
   // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
@@ -841,61 +586,6 @@ function buildList(){
     + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
   issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
 }
-/* ---------- すれ違い装置：立場を切り替えて地形を作り替える ----------
-   大陸を黙って描き直すのではなく、①面積と色を補間して育つ／縮むのを見せ
-   ②いちばん大きい大陸が変わったら、その大陸が正面に来るまで球を回し
-   ③順位が動いた大陸に「↑2」「↓2」を出す。
-   数字と大陸名はすべて data から採る。 */
-function morphTo(toMode){
-  if (toMode === st.mode) return;
-  const fromMode = st.mode;
-  const from = (st.wCur || effWeights(fromMode)).slice();
-  const to = effWeights(toMode);
-  st.prevRank = ranksOf(fromMode);
-  st.mode = toMode;
-
-  // 着陸した大陸がこの立場で0件なら、軌道上へ戻す（無い大陸に降りたままにしない）
-  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
-    st.landed = null;
-    if (location.hash) history.replaceState(null,"",location.pathname);
-    st.islandMix = 0;
-  }
-  drawPanel(); syncList();          // 本文は待たせない（着陸と同じ扱い）
-
-  // 画面が狭いと、立場ボタンと升目が同時に画面へ入らない。押した結果が見えないので運ぶ。
-  // scrollIntoView の behavior:"smooth" は効かない環境があったため自前で動かす（実測）。
-  if (st.landed !== null && !dotBox.hidden && window.innerWidth < 820) bringIntoView(dotBox);
-
-  // 球は勝手に回さない。新しい1位へ回すと、順位を落とした大陸が裏側へ行き、
-  // いちばん見せたい「縮むところ」が見えなくなる。入れ替わる2つの大陸が
-  // 180度近く離れていることもあり（部活動の実データで154度）、両方を同時に
-  // 正面へ置くこともできない。代わりに、下のボタンを読者が押せるようにしてある。
-  if (st.anim){ cancelAnimationFrame(st.anim); st.anim = null; }
-  if (reduce){
-    st.wCur = to; st.morph = null;
-    st.deltaUntil = performance.now() + 4000;
-    render();
-    return;
-  }
-
-  const dur = 900, t0 = performance.now();
-  st.morph = {fromMode, toMode, t: 0};
-  (function step(now){
-    const t = Math.min(1, (now - t0)/dur), e = ease(t);
-    st.morph.t = e;
-    st.wCur = from.map((w,k) => w + (to[k] - w)*e);
-    render();
-    if (t < 1){ st.anim = requestAnimationFrame(step); }
-    else {
-      st.anim = null; st.morph = null; st.wCur = to;
-      st.deltaUntil = performance.now() + 2600;
-      render();
-      // 「↑2」を消すための描き直し。放置すると矢印が残る
-      setTimeout(()=>{ if (!st.morph) render(); }, 2700);
-    }
-  })(t0);
-}
-
 /* 要素が画面の中ほどへ来るまでスクロールする。
    scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
    画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
@@ -933,65 +623,41 @@ function buildModes(){
   });
 }
 
-/* ---------- 操作 ---------- */
-let px0=0, py0=0, moved=0;
-function pos(e){
-  const r = cv.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
-  return [(t.clientX-r.left)*cv.width/r.width, (t.clientY-r.top)*cv.height/r.height];
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
 }
-cv.addEventListener("pointerdown", e=>{
-  cv.setPointerCapture(e.pointerId); st.dragging=true; moved=0;
-  cv.classList.add("dragging"); [px0,py0]=pos(e);
-});
-cv.addEventListener("pointermove", e=>{
-  if (!st.dragging) return;
-  const [x,y]=pos(e), dx=x-px0, dy=y-py0;
-  moved += Math.abs(dx)+Math.abs(dy);
-  st.yaw += dx*0.006;
-  st.pitch = Math.max(-0.96, Math.min(0.96, st.pitch + dy*0.006));  // 上下55度で制限
-  px0=x; py0=y; render();
-});
-function endDrag(e){
-  if (!st.dragging) return;
-  st.dragging=false; cv.classList.remove("dragging");
-  if (moved < 6){ const i = pick(...pos(e)); if (i!==null) land(i); }
-  render();
-}
-cv.addEventListener("pointerup", endDrag);
-cv.addEventListener("pointercancel", ()=>{ st.dragging=false; cv.classList.remove("dragging"); render(); });
-cv.addEventListener("wheel", e=>{
-  e.preventDefault();
-  st.zoom = Math.max(1, Math.min(2.6, st.zoom * (e.deltaY>0?0.94:1.06))); render();
-}, {passive:false});
-document.getElementById("zin").onclick = ()=>{ st.zoom=Math.min(2.6,st.zoom*1.15); render(); };
-document.getElementById("zout").onclick= ()=>{ st.zoom=Math.max(1,st.zoom/1.15); render(); };
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
 addEventListener("keydown", e=>{
-  if (e.key === "Escape" && st.landed!==null){ orbit(); return; }
-  if (document.activeElement !== cv) return;
-  if (e.key==="ArrowLeft"){ st.yaw-=0.12; render(); e.preventDefault(); }
-  if (e.key==="ArrowRight"){ st.yaw+=0.12; render(); e.preventDefault(); }
-  if (e.key==="ArrowUp"){ st.pitch=Math.max(-0.96,st.pitch-0.1); render(); e.preventDefault(); }
-  if (e.key==="ArrowDown"){ st.pitch=Math.min(0.96,st.pitch+0.1); render(); e.preventDefault(); }
+  if (e.key === "Escape" && st.landed !== null) orbit();
 });
 
-/* ---------- 初期化 ---------- */
-/* 中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
 try {
-  (function initView(){ const a = anglesFor(centroidOf(0, st.mode)); st.yaw=a.yaw; st.pitch=a.pitch; })();
   buildModes(); buildList(); drawPanel(); syncList(); render();
   const h = location.hash.slice(1);
-  if (h && idIndex[h] !== undefined) land(idIndex[h], false);
-  // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
-  // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
-  // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
-  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
-  else addEventListener("resize", render);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
 } catch (e) {
-  /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
   document.documentElement.className =
     document.documentElement.className.replace(/\bplanet-live\b/, "");
   throw e;
 }
+
 })();
 </script>

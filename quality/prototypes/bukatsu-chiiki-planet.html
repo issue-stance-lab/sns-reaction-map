@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>議論の惑星 試作 — 部活動の地域移行</title>
+<title>議論の山なみ 試作 — 部活動の地域移行</title>
 <style>
 :root{
   --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
@@ -26,17 +26,14 @@ h1{font-size:22px;margin:0 0 4px}
 .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
   border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
 .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
-.stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
-@media(max-width:820px){.stage{grid-template-columns:1fr}}
-.canvas-box{position:relative;background:radial-gradient(circle at 50% 40%,#12181f,#0a0d12);
-  border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none}
-canvas{display:block;width:100%;height:auto;cursor:grab}
-@media(max-width:560px){canvas{max-height:52vh;object-fit:contain}}
-canvas.dragging{cursor:grabbing}
-.hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);pointer-events:none}
-.zoombar{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:5px}
-.zoombar button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);
-  background:#161b22cc;color:var(--fg);font-size:15px;cursor:pointer;line-height:1}
+.stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}
+.chart-box svg{display:block;width:100%;height:auto}
+.chart-box .hill{cursor:pointer}
+.chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
+.floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
 .panel h2{font-size:16px;margin:0 0 2px}
 .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
@@ -161,7 +158,7 @@ html:not(.planet-live) .issue-list{display:none}
 </style>
 
 <script>
-/* 惑星は canvas 2D で描く。JS か canvas が使えない環境では静的表示のまま残す。
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
    （このクラスが付かないと #fallback が見えたままになる） */
 (function(){
   try {
@@ -174,22 +171,19 @@ html:not(.planet-live) .issue-list{display:none}
 </script>
 
 <div class="wrap">
-  <h1>議論の惑星<span class="proto-tag">試作・非公開</span></h1>
+  <h1>議論の山なみ<span class="proto-tag">試作・非公開</span></h1>
   <p class="q" id="q">学校の部活動を地域へ移すべきか（部活動の地域移行）</p>
-  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>収集期間 2026-06-27〜2026-09-02／収集1395件・<b>意見1139件</b>（惑星の母数）／更新 2026-09-02　<code>bukatsu-chiiki-20260902</code></p>
+  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>収集期間 2026-06-27〜2026-09-02／収集1395件・<b>意見1139件</b>（この図の母数）／更新 2026-09-02　<code>bukatsu-chiiki-20260902</code></p>
   <p class="caution" style="border-left-color:#e5534b"><b>このページは公開できません。</b>独自性の検査に落ちています。<br>・「教員の働き方」の未読が236件（全323件の4割超）</p>
 
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
   <div class="stage">
-    <div class="canvas-box">
-      <canvas id="cv" width="640" height="640" tabindex="0"
-              aria-label="論点の惑星。下の一覧からも同じ内容を読めます"></canvas>
-      <div class="zoombar">
-        <button type="button" id="zin" aria-label="拡大">＋</button>
-        <button type="button" id="zout" aria-label="縮小">−</button>
-      </div>
-      <div class="hint">ドラッグで回転 / ホイールで拡大 / 大陸をクリックで着陸</div>
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
     </div>
     <div class="panel" id="panel"></div>
   </div>
@@ -217,8 +211,8 @@ html:not(.planet-live) .issue-list{display:none}
   </div>
 
     <div id="fallback">
-    <h3 class="sec">論点の一覧（3Dの惑星が使えないときの表示）</h3>
-    <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で3Dの惑星を描けなかったため、同じ内容を静的な一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
+    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>
+    <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
     <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">
       <a class="continent" href="#fb-bukatsu-chiiki-kyoin" style="background:#2F8F83;border-color:#2F8F83;color:#ffffff"><span class="label">🏫 教員の働き方</span><span class="count">323件・28.4%</span></a>
       <a class="continent" href="#fb-bukatsu-chiiki-seido" style="background:#2F8F83;border-color:#2F8F83;color:#ffffff"><span class="label">📋 制度・移行プロセス</span><span class="count">256件・22.5%</span></a>
@@ -348,7 +342,6 @@ html:not(.planet-live) .issue-list{display:none}
       <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
       <ul class="sides"><li><span>すべての意見1139件のうち</span><span class="n">12件 / 1.1%</span></li><li><span>移行支持460件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>慎重・反対390件のうち</span><span class="n">8件 / 2.1%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">4件 / 1.7%</span></li><li><span>中立・情報48件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
       <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
-      <div class="note">3Dの惑星では、この大陸を実際の割合より大きく描いています。小さすぎると押せないため、最小2.5%まで拡大しています。</div>
       <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけを島にします。</div>
       <div class="extras" id="extras-bukatsu-chiiki-kakusa">
       <p class="sub" style="margin-top:12px">この論点に関わる海面より下：地下水脈1本・沈んだ大陸1件 <a class="dive" href="#ocean">ページ下の「海面より下」で読む</a></p>
@@ -385,10 +378,10 @@ html:not(.planet-live) .issue-list{display:none}
   <ul class="issue-list" id="list"></ul>
 
   <h3 class="sec">この試作の見かた</h3>
-  <p class="meta" id="meta">大陸＝論点、面積＝意見の数（最小2.5%の床あり）、色＝いちばん多い立場（薄いほど意見が割れている）、山の高さ＝強い表現（intensity=high）の投稿が占める割合（小さい論点は k=50 で抑制。全体平均 21.7%）。大陸の位置は見やすさのための配置で、論点同士の近さを意味しません。<br><b>青い海と海岸線の形には意味がありません。</b>大陸を見分けやすくするための余白で、球面の40%を占めます。面積の比は海を除いた陸の中で合わせているので、海を広げても狭めても「面積＝意見の数」は変わりません。<br>このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。データが増えたら同じコマンドを実行し直すだけで、面積・色・高さ・島が更新されます。</p>
+  <p class="meta" id="meta">山＝論点、<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、色＝いちばん多い立場（薄いほど意見が割れている）。幅と高さは<b>同じ母数</b>（いま選んでいる立場の件数）で数えているので、面積（幅×高さ）は「強く語られた投稿の数」になります。<br>山の左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいため、母数が小さいものは画面で断っています。<br>このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。データが増えたら同じコマンドを実行し直すだけで、幅・高さ・色・島が更新されます。</p>
 </div>
 
-<script>window.PLANET_DATA={"schema": 1, "theme_id": "bukatsu-chiiki", "title": "部活動の地域移行", "question": "学校の部活動を地域へ移すべきか", "snapshot_id": "bukatsu-chiiki-20260902", "updated_at": "2026-09-02", "sample_period": "2026-06-27〜2026-09-02", "source_label": "Yahoo!リアルタイム検索", "totals": {"collected": 1395, "opinions": 1139}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.2169, "k": 50, "max_pct": 4.0}, "min_area_pct": 2.5, "coast_margin": 0.22, "coast_noise_amp": 0.085, "stances": [{"key": "移行支持", "id": "bukatsu-chiiki-transition-support", "label": "移行支持", "color": "#2F8F83", "pattern": "plain", "count": 460}, {"key": "慎重・反対", "id": "bukatsu-chiiki-cautious", "label": "慎重・反対", "color": "#7D5BA6", "pattern": "diagonal", "count": 390}, {"key": "条件付き・改善要求", "id": "bukatsu-chiiki-conditional", "label": "条件付き・改善要求", "color": "#D9A520", "pattern": "dots", "count": 241}, {"key": "中立・情報", "id": "bukatsu-chiiki-neutral", "label": "中立・情報", "color": "#8B9199", "pattern": "mesh", "count": 48}], "vote_issue_order": ["費用・家庭負担", "受け皿・指導者", "教員の働き方", "教育的意義・機会", "地域格差", "制度・移行プロセス", "その他"], "modes": [{"id": "all", "label": "すべての意見", "total": 1139, "counts": {"bukatsu-chiiki-kyoin": 323, "bukatsu-chiiki-seido": 256, "bukatsu-chiiki-kyoiku": 215, "bukatsu-chiiki-ukezara": 164, "bukatsu-chiiki-hiyo": 117, "bukatsu-chiiki-sonota": 52, "bukatsu-chiiki-kakusa": 12}, "area_pct": {"bukatsu-chiiki-kyoin": 27.94, "bukatsu-chiiki-seido": 22.15, "bukatsu-chiiki-kyoiku": 18.6, "bukatsu-chiiki-ukezara": 14.19, "bukatsu-chiiki-hiyo": 10.12, "bukatsu-chiiki-sonota": 4.5, "bukatsu-chiiki-kakusa": 2.5}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 27.94, "bukatsu-chiiki-seido": 22.15, "bukatsu-chiiki-kyoiku": 18.6, "bukatsu-chiiki-ukezara": 14.19, "bukatsu-chiiki-hiyo": 10.12, "bukatsu-chiiki-sonota": 4.5, "bukatsu-chiiki-kakusa": 2.5}, "sea_pct": 40.09, "high_pct": {"bukatsu-chiiki-kyoin": 27.6, "bukatsu-chiiki-seido": 16.0, "bukatsu-chiiki-kyoiku": 21.9, "bukatsu-chiiki-ukezara": 15.9, "bukatsu-chiiki-hiyo": 19.7, "bukatsu-chiiki-sonota": 28.8, "bukatsu-chiiki-kakusa": 50.0}, "high_counts": {"bukatsu-chiiki-kyoin": 89, "bukatsu-chiiki-seido": 41, "bukatsu-chiiki-kyoiku": 47, "bukatsu-chiiki-ukezara": 26, "bukatsu-chiiki-hiyo": 23, "bukatsu-chiiki-sonota": 15, "bukatsu-chiiki-kakusa": 6}}, {"id": "移行支持", "label": "移行支持", "total": 460, "counts": {"bukatsu-chiiki-kyoin": 182, "bukatsu-chiiki-seido": 104, "bukatsu-chiiki-kyoiku": 87, "bukatsu-chiiki-ukezara": 44, "bukatsu-chiiki-hiyo": 21, "bukatsu-chiiki-sonota": 22, "bukatsu-chiiki-kakusa": 0}, "area_pct": {"bukatsu-chiiki-kyoin": 39.57, "bukatsu-chiiki-seido": 22.61, "bukatsu-chiiki-kyoiku": 18.91, "bukatsu-chiiki-ukezara": 9.57, "bukatsu-chiiki-hiyo": 4.57, "bukatsu-chiiki-sonota": 4.78, "bukatsu-chiiki-kakusa": 0.0}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 39.57, "bukatsu-chiiki-seido": 22.61, "bukatsu-chiiki-kyoiku": 18.91, "bukatsu-chiiki-ukezara": 9.57, "bukatsu-chiiki-hiyo": 4.56, "bukatsu-chiiki-sonota": 4.78, "bukatsu-chiiki-kakusa": 0.0}, "sea_pct": 37.12, "high_pct": {"bukatsu-chiiki-kyoin": 36.3, "bukatsu-chiiki-seido": 20.2, "bukatsu-chiiki-kyoiku": 29.9, "bukatsu-chiiki-ukezara": 4.5, "bukatsu-chiiki-hiyo": 19.0, "bukatsu-chiiki-sonota": 40.9, "bukatsu-chiiki-kakusa": 0.0}, "high_counts": {"bukatsu-chiiki-kyoin": 66, "bukatsu-chiiki-seido": 21, "bukatsu-chiiki-kyoiku": 26, "bukatsu-chiiki-ukezara": 2, "bukatsu-chiiki-hiyo": 4, "bukatsu-chiiki-sonota": 9, "bukatsu-chiiki-kakusa": 0}}, {"id": "慎重・反対", "label": "慎重・反対", "total": 390, "counts": {"bukatsu-chiiki-kyoin": 69, "bukatsu-chiiki-seido": 71, "bukatsu-chiiki-kyoiku": 107, "bukatsu-chiiki-ukezara": 68, "bukatsu-chiiki-hiyo": 53, "bukatsu-chiiki-sonota": 14, "bukatsu-chiiki-kakusa": 8}, "area_pct": {"bukatsu-chiiki-kyoin": 17.61, "bukatsu-chiiki-seido": 18.12, "bukatsu-chiiki-kyoiku": 27.31, "bukatsu-chiiki-ukezara": 17.36, "bukatsu-chiiki-hiyo": 13.53, "bukatsu-chiiki-sonota": 3.57, "bukatsu-chiiki-kakusa": 2.5}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 17.61, "bukatsu-chiiki-seido": 18.12, "bukatsu-chiiki-kyoiku": 27.31, "bukatsu-chiiki-ukezara": 17.36, "bukatsu-chiiki-hiyo": 13.53, "bukatsu-chiiki-sonota": 3.57, "bukatsu-chiiki-kakusa": 2.5}, "sea_pct": 39.78, "high_pct": {"bukatsu-chiiki-kyoin": 21.7, "bukatsu-chiiki-seido": 22.5, "bukatsu-chiiki-kyoiku": 19.6, "bukatsu-chiiki-ukezara": 30.9, "bukatsu-chiiki-hiyo": 22.6, "bukatsu-chiiki-sonota": 35.7, "bukatsu-chiiki-kakusa": 75.0}, "high_counts": {"bukatsu-chiiki-kyoin": 15, "bukatsu-chiiki-seido": 16, "bukatsu-chiiki-kyoiku": 21, "bukatsu-chiiki-ukezara": 21, "bukatsu-chiiki-hiyo": 12, "bukatsu-chiiki-sonota": 5, "bukatsu-chiiki-kakusa": 6}}, {"id": "条件付き・改善要求", "label": "条件付き・改善要求", "total": 241, "counts": {"bukatsu-chiiki-kyoin": 67, "bukatsu-chiiki-seido": 62, "bukatsu-chiiki-kyoiku": 17, "bukatsu-chiiki-ukezara": 49, "bukatsu-chiiki-hiyo": 40, "bukatsu-chiiki-sonota": 2, "bukatsu-chiiki-kakusa": 4}, "area_pct": {"bukatsu-chiiki-kyoin": 27.09, "bukatsu-chiiki-seido": 25.06, "bukatsu-chiiki-kyoiku": 6.87, "bukatsu-chiiki-ukezara": 19.81, "bukatsu-chiiki-hiyo": 16.17, "bukatsu-chiiki-sonota": 2.5, "bukatsu-chiiki-kakusa": 2.5}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 27.08, "bukatsu-chiiki-seido": 25.06, "bukatsu-chiiki-kyoiku": 6.87, "bukatsu-chiiki-ukezara": 19.81, "bukatsu-chiiki-hiyo": 16.17, "bukatsu-chiiki-sonota": 2.5, "bukatsu-chiiki-kakusa": 2.5}, "sea_pct": 40.59, "high_pct": {"bukatsu-chiiki-kyoin": 11.9, "bukatsu-chiiki-seido": 6.5, "bukatsu-chiiki-kyoiku": 0.0, "bukatsu-chiiki-ukezara": 6.1, "bukatsu-chiiki-hiyo": 17.5, "bukatsu-chiiki-sonota": 0.0, "bukatsu-chiiki-kakusa": 0.0}, "high_counts": {"bukatsu-chiiki-kyoin": 8, "bukatsu-chiiki-seido": 4, "bukatsu-chiiki-kyoiku": 0, "bukatsu-chiiki-ukezara": 3, "bukatsu-chiiki-hiyo": 7, "bukatsu-chiiki-sonota": 0, "bukatsu-chiiki-kakusa": 0}}, {"id": "中立・情報", "label": "中立・情報", "total": 48, "counts": {"bukatsu-chiiki-kyoin": 5, "bukatsu-chiiki-seido": 19, "bukatsu-chiiki-kyoiku": 4, "bukatsu-chiiki-ukezara": 3, "bukatsu-chiiki-hiyo": 3, "bukatsu-chiiki-sonota": 14, "bukatsu-chiiki-kakusa": 0}, "area_pct": {"bukatsu-chiiki-kyoin": 10.42, "bukatsu-chiiki-seido": 39.58, "bukatsu-chiiki-kyoiku": 8.33, "bukatsu-chiiki-ukezara": 6.25, "bukatsu-chiiki-hiyo": 6.25, "bukatsu-chiiki-sonota": 29.17, "bukatsu-chiiki-kakusa": 0.0}, "area_actual_pct": {"bukatsu-chiiki-kyoin": 10.42, "bukatsu-chiiki-seido": 39.58, "bukatsu-chiiki-kyoiku": 8.33, "bukatsu-chiiki-ukezara": 6.25, "bukatsu-chiiki-hiyo": 6.25, "bukatsu-chiiki-sonota": 29.17, "bukatsu-chiiki-kakusa": 0.0}, "sea_pct": 36.58, "high_pct": {"bukatsu-chiiki-kyoin": 0.0, "bukatsu-chiiki-seido": 0.0, "bukatsu-chiiki-kyoiku": 0.0, "bukatsu-chiiki-ukezara": 0.0, "bukatsu-chiiki-hiyo": 0.0, "bukatsu-chiiki-sonota": 7.1, "bukatsu-chiiki-kakusa": 0.0}, "high_counts": {"bukatsu-chiiki-kyoin": 0, "bukatsu-chiiki-seido": 0, "bukatsu-chiiki-kyoiku": 0, "bukatsu-chiiki-ukezara": 0, "bukatsu-chiiki-hiyo": 0, "bukatsu-chiiki-sonota": 1, "bukatsu-chiiki-kakusa": 0}}], "weights_by_mode": {"all": [0.240660131414, 0.254774725858, 0.052266887519, 0.041593566147, -0.136311547369, -0.233387825299, -0.219595938269], "移行支持": [0.409832675858, 0.243395555098, -0.045477123765, -0.077736453274, -0.322766988804, -0.207247665111, 0.0], "慎重・反対": [-0.013588010541, 0.134116238077, 0.293420760769, 0.150030733755, -0.035854787545, -0.296251998195, -0.231872936322], "条件付き・改善要求": [0.257593106838, 0.312898763394, -0.181293586372, 0.110866319133, -0.055650538374, -0.259698320473, -0.184715744146], "中立・情報": [0.056472091617, 0.35183382629, -0.259717096555, -0.064756710482, -0.309434057293, 0.225601946423, 0.0]}, "centroid_by_mode": {"all": [[0.762190782516, -0.492184974354, -0.420498706381], [-0.612960953137, -0.096708195591, -0.784172426725], [-0.688207934047, 0.274744130668, 0.671480083233], [0.075421609092, 0.982122644796, -0.172472291862], [0.234511220304, -0.446114390887, 0.863705064125], [0.769484708674, 0.443176862988, 0.459877756833], [-0.499049002229, -0.851327631249, 0.161837442038]], "移行支持": [[0.730536061778, -0.55844556769, -0.393008410048], [-0.724871891974, -0.098969078721, -0.68173738469], [-0.660504135081, 0.2442466704, 0.709984402321], [0.035362230943, 0.992002846002, -0.121160497471], [0.104224611097, -0.465836768177, 0.878711178862], [0.657886833861, 0.473257894998, 0.585842878812], [0.0, 0.0, 1.0]], "慎重・反対": [[0.738182730322, -0.484986369713, -0.468907749826], [-0.500099648994, -0.191023382481, -0.844636258055], [-0.713767413385, 0.262160512378, 0.649467432086], [0.169019207035, 0.93286126046, -0.318123209442], [0.353968841584, -0.549250159658, 0.756987662583], [0.893092009268, 0.341176930979, 0.293231929961], [-0.386684338158, -0.922176296509, 0.008130238625]], "条件付き・改善要求": [[0.780088507911, -0.474711407122, -0.4075671721], [-0.65442057908, -0.104292567022, -0.748903709525], [-0.707020440504, 0.251929380398, 0.660797763314], [0.013281841193, 0.998134199366, -0.059596247782], [0.173768837004, -0.370757099268, 0.912328649462], [0.785547771824, 0.438496659776, 0.436618114086], [-0.534567996135, -0.824919554699, 0.183697538861]], "中立・情報": [[0.582449787957, -0.714656373951, -0.38732223236], [-0.673522923103, -0.20474130634, -0.710244936295], [-0.659797308705, 0.240712415514, 0.711846222469], [-0.158682033736, 0.986526711351, -0.039812811512], [-0.128375362199, -0.658083715482, 0.741920204468], [0.829985213804, 0.349030268532, 0.435088975401], [0.0, 0.0, 1.0]]}, "issues": [{"id": "bukatsu-chiiki-kyoin", "key": "教員の働き方", "label": "教員の働き方", "icon": "🏫", "count": 323, "share_pct": 28.4, "stances": {"移行支持": 182, "慎重・反対": 69, "条件付き・改善要求": 67, "中立・情報": 5}, "top_stance": "移行支持", "purity_pct": 56.3, "intensity": {"high": 89, "medium": 207, "low": 27}, "high_pct": 27.6, "high_adjusted_pct": 26.8, "elevation": 3.94, "center": [0.661448376182, -0.485752440448, -0.571428571429], "centroid": [0.762190782516, -0.492184974354, -0.420498706381], "sub": {"status": "reread", "coverage": "partial", "coverage_note": "移行支持以外だけを読み直し。賛成側は未再読", "source_file": "data/bukatsu-chiiki_teacher-reread.json", "reread_count": 87, "unread_count": 236, "items": [{"id": "B", "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）", "count": 30, "centroid": [0.764704824768, 0.048945555574, -0.642519154241], "area_pct_in_issue": 9.3}, {"id": "F", "label": "その他（実態の訴え・分類が難しいもの）", "count": 20, "centroid": [0.400468689111, -0.353388171956, -0.845423934463], "area_pct_in_issue": 6.2}, {"id": "A", "label": "移しても教員の負担は減らない・むしろ増える", "count": 17, "centroid": [0.575350609484, 0.205666171755, -0.791626870414], "area_pct_in_issue": 5.3}, {"id": "C", "label": "やりたい先生だけが担えばよい（移行ではなく任意化）", "count": 8, "centroid": [0.719605045426, 0.411817871127, -0.559083732206], "area_pct_in_issue": 2.5}, {"id": "E", "label": "移行や廃止で失われるものへの不安", "count": 8, "centroid": [0.855652154881, 0.349217004904, -0.381977582239], "area_pct_in_issue": 2.5}, {"id": "D", "label": "移行ではなく部活そのものを廃止すべき", "count": 4, "centroid": [0.962733469106, 0.150430134247, -0.224755516447], "area_pct_in_issue": 1.2}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 236, "unread": true, "centroid": [0.707415793622, -0.655715767593, -0.263817601883], "area_pct_in_issue": 73.1}], "centers": [[0.762190782516, -0.492184974354, -0.420498706381], [0.325796463005, -0.600264512123, -0.730437663446], [0.531052294711, -0.203780177085, -0.822470120861], [0.824789671351, 0.030786612842, -0.56460090551], [0.985818357164, -0.073197719448, -0.151010796124], [0.892880467346, -0.437430850846, 0.106858419227], [0.615960128518, -0.787637804408, 0.014825961812]], "weights": [0.039841585952, 0.018477312093, -0.14360509306, -0.251351955872, -0.14440004247, 0.100637366238, 0.38040082712]}, "verdict": "gap", "claims": [{"claim": "給特法は改正されたが、教職調整額は4%のままだ", "finding": "この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。", "id": "kyushokuchoseigaku", "issue_ids": ["bukatsu-chiiki-kyoin"], "matched_post_count": 1, "sources": [{"name": "e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条・附則", "url": "https://laws.e-gov.go.jp/law/346AC0000000077"}], "verdict": "gap"}], "veins": ["bukatsu-chiiki-vein-2"]}, {"id": "bukatsu-chiiki-seido", "key": "制度・移行プロセス", "label": "制度・移行プロセス", "icon": "📋", "count": 256, "share_pct": 22.5, "stances": {"移行支持": 104, "慎重・反対": 71, "条件付き・改善要求": 62, "中立・情報": 19}, "top_stance": "移行支持", "purity_pct": 40.6, "intensity": {"high": 41, "medium": 169, "low": 46}, "high_pct": 16.0, "high_adjusted_pct": 16.9, "elevation": 2.49, "center": [-0.512066492186, -0.055624005869, -0.857142857143], "centroid": [-0.612960953137, -0.096708195591, -0.784172426725], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "gap", "claims": [{"claim": "部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった", "finding": "3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。", "id": "original-deadline", "issue_ids": ["bukatsu-chiiki-seido"], "matched_post_count": 4, "sources": [{"name": "スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）", "url": "https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf"}, {"name": "文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）", "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf"}], "verdict": "gap"}, {"claim": "地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ", "finding": "国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。", "id": "national-funding", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-hiyo"], "matched_post_count": 6, "sources": [{"name": "スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）", "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf"}, {"name": "スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録", "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"}], "verdict": "gap"}], "veins": ["bukatsu-chiiki-vein-2"]}, {"id": "bukatsu-chiiki-kyoiku", "key": "教育的意義・機会", "label": "教育的意義・機会", "icon": "⭐", "count": 215, "share_pct": 18.9, "stances": {"移行支持": 87, "慎重・反対": 107, "条件付き・改善要求": 17, "中立・情報": 4}, "top_stance": "慎重・反対", "purity_pct": 49.8, "intensity": {"high": 47, "medium": 129, "low": 39}, "high_pct": 21.9, "high_adjusted_pct": 21.8, "elevation": 3.21, "center": [-0.735946443345, 0.363114610395, 0.571428571429], "centroid": [-0.688207934047, 0.274744130668, 0.671480083233], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "fact", "claims": [{"claim": "中体連の大会に地域クラブのチームが出られるようになっている", "finding": "参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。", "id": "chutairen-entry", "issue_ids": ["bukatsu-chiiki-kyoiku"], "matched_post_count": 4, "sources": [{"name": "日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）", "url": "https://www.fukui-jpa.com/data/saisoku061011.pdf"}], "verdict": "fact"}], "veins": []}, {"id": "bukatsu-chiiki-ukezara", "key": "受け皿・指導者", "label": "受け皿・指導者", "icon": "👤", "count": 164, "share_pct": 14.4, "stances": {"移行支持": 44, "慎重・反対": 68, "条件付き・改善要求": 49, "中立・情報": 3}, "top_stance": "慎重・反対", "purity_pct": 41.5, "intensity": {"high": 26, "medium": 109, "low": 29}, "high_pct": 15.9, "high_adjusted_pct": 17.2, "elevation": 2.53, "center": [-0.186384777938, 0.940014926207, -0.285714285714], "centroid": [0.075421609092, 0.982122644796, -0.172472291862], "sub": {"status": "reread", "coverage": "full", "coverage_note": "論点全件を読み直し", "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json", "reread_count": 100, "unread_count": 64, "items": [{"id": "R2", "label": "地域が引き受ける理由がない・引き受け手がいない", "count": 23, "centroid": [-0.006661612407, 0.973306381881, -0.229412968049], "area_pct_in_issue": 14.0}, {"id": "R6", "label": "その他", "count": 22, "centroid": [0.385894470417, 0.796709826646, -0.465122467557], "area_pct_in_issue": 13.4}, {"id": "R1", "label": "報酬が安すぎて指導者が集まらない", "count": 20, "centroid": [-0.032728105589, 0.853911350573, -0.519388367666], "area_pct_in_issue": 12.2}, {"id": "R3", "label": "責任・安全・指導者の質への不安", "count": 17, "centroid": [-0.408959910827, 0.863896946327, -0.293996356207], "area_pct_in_issue": 10.4}, {"id": "R4", "label": "受け皿はできている・うまくいっている", "count": 16, "centroid": [-0.347122540044, 0.937633513074, -0.018690568603], "area_pct_in_issue": 9.8}, {"id": "R5", "label": "送迎・移動の課題", "count": 2, "centroid": [-0.165245759499, 0.971475691465, 0.170084743175], "area_pct_in_issue": 1.2}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 64, "unread": true, "centroid": [0.266087128962, 0.960926023713, 0.076281169058], "area_pct_in_issue": 39.0}], "centers": [[0.075421609092, 0.982122644796, -0.172472291862], [0.282682080021, 0.85805333638, -0.428760205199], [-0.01063653001, 0.868998815853, -0.494699830479], [-0.242673788522, 0.919263804955, -0.309941106122], [-0.238700907159, 0.970997741673, -0.01361111996], [-0.001709546618, 0.985243916479, 0.171147604397], [0.28984096487, 0.951274669175, 0.105207979117]], "weights": [0.018450745639, -0.013400288457, -0.002936177881, -0.028334621121, -0.023577866608, -0.015021318207, 0.064819526635]}, "verdict": "gap", "claims": [{"claim": "地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない", "finding": "最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。", "id": "coach-pay", "issue_ids": ["bukatsu-chiiki-ukezara"], "matched_post_count": 10, "sources": [{"name": "熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）", "url": "https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf"}, {"name": "厚生労働省 令和7年度 地域別最低賃金 全国一覧（PDF）", "url": "https://www.mhlw.go.jp/content/11200000/001571192.pdf"}, {"name": "熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集", "url": "https://www.city.kumamoto.jp/kiji00370419/index.html"}], "verdict": "gap"}, {"claim": "部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない", "finding": "顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。", "id": "shidoin-role", "issue_ids": ["bukatsu-chiiki-ukezara"], "matched_post_count": 4, "sources": [{"name": "スポーツ庁 部活動指導員の概要（PDF）", "url": "https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf"}, {"name": "e-Gov法令検索 学校教育法施行規則 第七十八条の二", "url": "https://laws.e-gov.go.jp/law/322M40000080011"}], "verdict": "fact"}], "veins": ["bukatsu-chiiki-vein-1", "bukatsu-chiiki-vein-2"]}, {"id": "bukatsu-chiiki-hiyo", "key": "費用・家庭負担", "label": "費用・家庭負担", "icon": "💴", "count": 117, "share_pct": 10.3, "stances": {"移行支持": 21, "慎重・反対": 53, "条件付き・改善要求": 40, "中立・情報": 3}, "top_stance": "慎重・反対", "purity_pct": 45.3, "intensity": {"high": 23, "medium": 84, "low": 10}, "high_pct": 19.7, "high_adjusted_pct": 20.3, "elevation": 2.98, "center": [0.186651606732, -0.480070099208, 0.857142857143], "centroid": [0.234511220304, -0.446114390887, 0.863705064125], "sub": {"status": "reread", "coverage": "full", "coverage_note": "論点全件を読み直し", "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json", "reread_count": 72, "unread_count": 45, "items": [{"id": "P4", "label": "誰が、いくら払うのかを決めろ（財源設計）", "count": 21, "centroid": [0.337592115723, -0.433981983995, 0.835279115607], "area_pct_in_issue": 18.0}, {"id": "P1", "label": "いまの部活が安いのは、誰かの無償労働で成り立っているから", "count": 15, "centroid": [0.08914644131, -0.762312051519, 0.641040753861], "area_pct_in_issue": 12.8}, {"id": "P3", "label": "お金が理由で参加できない子が出る（格差）", "count": 13, "centroid": [0.424267624936, -0.633821382989, 0.646735987012], "area_pct_in_issue": 11.1}, {"id": "P5", "label": "送迎・移動の負担", "count": 9, "centroid": [0.565243297068, -0.332126009322, 0.755110805811], "area_pct_in_issue": 7.7}, {"id": "P2", "label": "家庭が払えない・負担が増える", "count": 8, "centroid": [0.461221397561, -0.036396042795, 0.886538296127], "area_pct_in_issue": 6.8}, {"id": "P6", "label": "その他", "count": 6, "centroid": [0.315601912449, 0.075657453389, 0.945870700786], "area_pct_in_issue": 5.1}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 45, "unread": true, "centroid": [0.028857485642, -0.401605732325, 0.915357897921], "area_pct_in_issue": 38.5}], "centers": [[0.234511220304, -0.446114390887, 0.863705064125], [0.156663025585, -0.681587466166, 0.714769349077], [0.393233998248, -0.611162497099, 0.686911511595], [0.502894022121, -0.402395852129, 0.764967437676], [0.40306686257, -0.212493072982, 0.890159422931], [0.16892440684, -0.184454825665, 0.968215349012], [-0.023219300268, -0.339394482285, 0.940357511529]], "weights": [0.023041223513, -0.008788308095, -0.001995816321, -0.014811669191, -0.035559310964, -0.019689175926, 0.057803056985]}, "verdict": "miss", "claims": [{"claim": "地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ", "finding": "国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。", "id": "national-funding", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-hiyo"], "matched_post_count": 6, "sources": [{"name": "スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）", "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf"}, {"name": "スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録", "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"}], "verdict": "gap"}, {"claim": "運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている", "finding": "投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。", "id": "club-cost-survey", "issue_ids": ["bukatsu-chiiki-hiyo"], "matched_post_count": 3, "sources": [], "verdict": "miss"}], "veins": []}, {"id": "bukatsu-chiiki-sonota", "key": "その他", "label": "その他", "icon": "💬", "count": 52, "share_pct": 4.6, "stances": {"移行支持": 22, "慎重・反対": 14, "条件付き・改善要求": 2, "中立・情報": 14}, "top_stance": "移行支持", "purity_pct": 42.3, "intensity": {"high": 15, "medium": 20, "low": 17}, "high_pct": 28.8, "high_adjusted_pct": 25.3, "elevation": 3.73, "center": [0.920120823181, 0.267852604408, 0.285714285714], "centroid": [0.769484708674, 0.443176862988, 0.459877756833], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": []}, {"id": "bukatsu-chiiki-kakusa", "key": "地域格差", "label": "地域格差", "icon": "🗾", "count": 12, "share_pct": 1.1, "stances": {"移行支持": 0, "慎重・反対": 8, "条件付き・改善要求": 4, "中立・情報": 0}, "top_stance": "慎重・反対", "purity_pct": 66.7, "intensity": {"high": 6, "medium": 5, "low": 1}, "high_pct": 50.0, "high_adjusted_pct": 27.2, "elevation": 4.0, "center": [-0.519178666398, -0.854665731357, 0.0], "centroid": [-0.499049002229, -0.851327631249, 0.161837442038], "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": ["bukatsu-chiiki-vein-2"]}], "editorial": {"checked_on": "2026-09-04", "findings": [{"id": "bukatsu-chiiki-ed-1", "kind": "shared_premise", "text": "賛成側も反対側も、いまの部活動が教員の負担で支えられていることは前提として共有している。分かれるのは負担をどう減らすかで、「教員の働き方」では移行支持が56.3%を占める。"}, {"id": "bukatsu-chiiki-ed-2", "kind": "real_conflict", "text": "論点が変わると賛否が入れ替わる。「教員の働き方」では移行支持が最も多い（56.3%）のに対し、「教育的意義・機会」では慎重・反対が最も多い（49.8%）。同じ人が立場を変えているのか、別々の人が別々の論点で発言しているのかは、この収集からは分からない。"}, {"id": "bukatsu-chiiki-ed-3", "kind": "real_conflict", "text": "お金の話になると、賛成側も条件を付ける。「費用・家庭負担」で無条件の移行支持は21件にとどまり、慎重・反対（53件）と条件付き・改善要求（40件）が大半を占める。"}, {"id": "bukatsu-chiiki-ed-4", "kind": "still_unknown", "text": "「地域格差」は12件（全体の1.1%）しかない。件数が少ないことは、その論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。ページ下の「海面より下」に、一次資料では争点になっているのに投稿にほとんど無いものを置いている。"}, {"id": "bukatsu-chiiki-ed-5", "kind": "still_unknown", "text": "ここに出ているのはYahoo!リアルタイム検索で集めた1,139件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"}], "reviewer_type": "editorial_review", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-09-02", "reviewer_type": "editorial_review", "ocean_status": "complete", "ocean_checked_on": "2026-09-02", "ocean_reviewer_type": "editorial_review", "sunk_continents": [{"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-1", "life_impact": "住んでいる自治体によって、大会参加費（1人あたり数万円規模）が全額補助される場合と、家庭が全額負担する場合に分かれる。国は補助の存在は認めているが、全国一律の下限保障は設けておらず、進み方は自治体の財政・方針に委ねられている。", "nearest_issue_id": "bukatsu-chiiki-kakusa", "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 0, "sns_note": "争点そのもの（次長発言や阿賀野市のような自治体間の補助額差の具体例）に触れた意見投稿は0件。「地域格差」論点の意見投稿は12件（1.05%）あるが、都市と地方で環境が違うという抽象的な懸念にとどまる。なお徳島県・高松市など個別自治体の制度を伝える投稿が3件あるが、いずれも意見表明ではなく事実の共有のため意見1139件の母数には含まれない", "sources": [{"date": "令和8年3月3日", "location": "次長挨拶部分。「地域の格差というのはご指摘いただいたようにかなり大きく開いてきております」「地域の実情に応じた進度で」（統一の数値目標は設定しない方針の説明）", "name": "学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録・浅野スポーツ庁次長発言", "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"}, {"date": "令和8年3月25日公表", "location": "p.77。中体連主催・共催大会の参加費（交通費・宿泊費）を全額補助する仕組み。令和6年度実績で下越大会18,649円/人・県大会40,128円/人", "name": "地域クラブ活動における創設・運営ガイドブック（新潟県阿賀野市の事例）", "url": "https://www.mext.go.jp/sports/content/20260325-spt_oripara-000048484_001.pdf"}], "topic": "支援水準の自治体差（国は統一の下限を設定していない）", "opinion_count_now": 1139, "base_stale": false}, {"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-2", "life_impact": "体育館・グラウンドなど活動場所の新設・改修費用は、この国の補助メニューでは対象にならない。学校施設をそのまま使えない地域クラブでは、施設にかかる費用は自治体や利用者側の負担として残る。", "nearest_issue_id": null, "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 0, "sns_note": "「施設整備」「補助対象外」の語での一致は0件。「体育館」「グラウンド」等の広い語では11件あるが、いずれも施設の利用・管理を論じているだけで、国庫補助の対象費目という制度上の論点への言及ではない", "sources": [{"date": "令和7年12月25日時点（令和8年度予算の検討案）", "location": "補助対象経費の内訳（会議費・備品費・消耗品費・借料損料・保険料・雑役務費・委託費・補助金）と、施設整備費は補助対象外である旨の記載", "name": "「部活動の地域展開等推進事業」補助金交付要綱・概要資料", "url": "https://www.mext.go.jp/sports/content/20251225-spt_oripara-000028257-004.pdf"}], "topic": "国庫補助の対象外費目（施設整備費は補助されない）", "opinion_count_now": 1139, "base_stale": false}, {"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-3", "life_impact": "生徒が同じ指導者に継続して習えるかは制度上保障されていない。指導員は1年ごとの任用で、最長でも5年で契約が終わる可能性がある（東京都の例。金額・条件は自治体ごとに異なる）。", "nearest_issue_id": null, "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 0, "sns_note": "「会計年度」の語で指導員の身分そのものに触れた投稿は2件あるが、いずれも顧問を務められる制度上の位置づけの説明で、任用が1年更新である不安定さへの言及は0件", "sources": [{"date": "令和8年度", "location": "任用区分「地方公務員法第22条の2第1項第1号に基づく会計年度任用職員」、任期「令和8年4月1日〜令和9年3月31日」、「能力実証が良好なら4回を上限に再任用の可能性あり、ただし翌年度以降の任用を保障するものではない」", "name": "令和8年度都立学校部活動指導員募集要項（会計年度任用職員）", "url": "https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/-57"}], "topic": "部活動指導員の任期は1年更新・再任用は上限4回（東京都の例）", "opinion_count_now": 1139, "base_stale": false}, {"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-4", "life_impact": "東京都立学校の部活動指導員として応募するには、実務・指導経験の合計6年以上という条件を満たす必要がある（東京都の令和8年度募集要項の例で、条件は自治体ごとに異なる）。指導者に何らかの資格・経験を求めるべきという意見はSNSにもあるが、その具体的な水準（6年以上）は一次資料にしかない。", "nearest_issue_id": null, "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 5, "sns_note": "指導者に資格・経験を求める意見は5件あるが、東京都の実務・指導経験6年以上という具体的な数値条件そのものへの言及は0件（指導者不足を訴える投稿自体は「受け皿・指導者」論点で164件ある）", "sources": [{"date": "令和8年度", "location": "応募資格。4つのいずれかを満たす必要があり、いずれも実務・指導経験の合計6年以上を求める", "name": "令和8年度都立学校部活動指導員募集要項（会計年度任用職員）", "url": "https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/-57"}], "topic": "東京都の部活動指導員に求められる実務・指導経験6年以上という数値条件", "opinion_count_now": 1139, "base_stale": false}], "veins": [{"checked_on": "2026-09-02", "diverging_reason": "同じ『低待遇では続かない』という懸念から、慎重・反対側は『待遇が上がらない前提なら地域移行自体を進めるべきではない』と結論づけ、条件付き・改善要求側は『予算を増やして待遇を改善すれば移行は続けられる』と結論づける。中止か、改善して継続かで分かれる。", "id": "bukatsu-chiiki-vein-1", "issue_ids": ["bukatsu-chiiki-ukezara"], "reviewer_type": "editorial_review", "shared_concern": "地域移行後にクラブを引き受ける指導者の謝礼・時給が低すぎて、生活が成り立たない、あるいは希望する人が集まらない。", "sides": [{"post_count": 3, "stance_label": "慎重・反対"}, {"post_count": 3, "stance_label": "条件付き・改善要求"}]}, {"checked_on": "2026-09-02", "diverging_reason": "『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。", "id": "bukatsu-chiiki-vein-2", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-ukezara", "bukatsu-chiiki-kyoin", "bukatsu-chiiki-kakusa"], "reviewer_type": "editorial_review", "shared_concern": "外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。", "sides": [{"post_count": 3, "stance_label": "慎重・反対"}, {"post_count": 2, "stance_label": "条件付き・改善要求"}]}]}, "prototype_only": true, "gate_failures": ["「教員の働き方」の未読が236件（全323件の4割超）"]};</script>
+<script>window.PLANET_DATA={"schema": 1, "theme_id": "bukatsu-chiiki", "title": "部活動の地域移行", "question": "学校の部活動を地域へ移すべきか", "snapshot_id": "bukatsu-chiiki-20260902", "updated_at": "2026-09-02", "sample_period": "2026-06-27〜2026-09-02", "source_label": "Yahoo!リアルタイム検索", "totals": {"collected": 1395, "opinions": 1139}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.2169, "k": 50, "max_pct": 4.0}, "stances": [{"key": "移行支持", "id": "bukatsu-chiiki-transition-support", "label": "移行支持", "color": "#2F8F83", "pattern": "plain", "count": 460}, {"key": "慎重・反対", "id": "bukatsu-chiiki-cautious", "label": "慎重・反対", "color": "#7D5BA6", "pattern": "diagonal", "count": 390}, {"key": "条件付き・改善要求", "id": "bukatsu-chiiki-conditional", "label": "条件付き・改善要求", "color": "#D9A520", "pattern": "dots", "count": 241}, {"key": "中立・情報", "id": "bukatsu-chiiki-neutral", "label": "中立・情報", "color": "#8B9199", "pattern": "mesh", "count": 48}], "vote_issue_order": ["費用・家庭負担", "受け皿・指導者", "教員の働き方", "教育的意義・機会", "地域格差", "制度・移行プロセス", "その他"], "modes": [{"id": "all", "label": "すべての意見", "total": 1139, "counts": {"bukatsu-chiiki-kyoin": 323, "bukatsu-chiiki-seido": 256, "bukatsu-chiiki-kyoiku": 215, "bukatsu-chiiki-ukezara": 164, "bukatsu-chiiki-hiyo": 117, "bukatsu-chiiki-sonota": 52, "bukatsu-chiiki-kakusa": 12}, "width_pct": {"bukatsu-chiiki-kyoin": 28.36, "bukatsu-chiiki-seido": 22.48, "bukatsu-chiiki-kyoiku": 18.88, "bukatsu-chiiki-ukezara": 14.4, "bukatsu-chiiki-hiyo": 10.27, "bukatsu-chiiki-sonota": 4.57, "bukatsu-chiiki-kakusa": 1.05}, "high_pct": {"bukatsu-chiiki-kyoin": 27.6, "bukatsu-chiiki-seido": 16.0, "bukatsu-chiiki-kyoiku": 21.9, "bukatsu-chiiki-ukezara": 15.9, "bukatsu-chiiki-hiyo": 19.7, "bukatsu-chiiki-sonota": 28.8, "bukatsu-chiiki-kakusa": 50.0}, "high_counts": {"bukatsu-chiiki-kyoin": 89, "bukatsu-chiiki-seido": 41, "bukatsu-chiiki-kyoiku": 47, "bukatsu-chiiki-ukezara": 26, "bukatsu-chiiki-hiyo": 23, "bukatsu-chiiki-sonota": 15, "bukatsu-chiiki-kakusa": 6}}, {"id": "移行支持", "label": "移行支持", "total": 460, "counts": {"bukatsu-chiiki-kyoin": 182, "bukatsu-chiiki-seido": 104, "bukatsu-chiiki-kyoiku": 87, "bukatsu-chiiki-ukezara": 44, "bukatsu-chiiki-hiyo": 21, "bukatsu-chiiki-sonota": 22, "bukatsu-chiiki-kakusa": 0}, "width_pct": {"bukatsu-chiiki-kyoin": 39.57, "bukatsu-chiiki-seido": 22.61, "bukatsu-chiiki-kyoiku": 18.91, "bukatsu-chiiki-ukezara": 9.57, "bukatsu-chiiki-hiyo": 4.57, "bukatsu-chiiki-sonota": 4.78, "bukatsu-chiiki-kakusa": 0.0}, "high_pct": {"bukatsu-chiiki-kyoin": 36.3, "bukatsu-chiiki-seido": 20.2, "bukatsu-chiiki-kyoiku": 29.9, "bukatsu-chiiki-ukezara": 4.5, "bukatsu-chiiki-hiyo": 19.0, "bukatsu-chiiki-sonota": 40.9, "bukatsu-chiiki-kakusa": 0.0}, "high_counts": {"bukatsu-chiiki-kyoin": 66, "bukatsu-chiiki-seido": 21, "bukatsu-chiiki-kyoiku": 26, "bukatsu-chiiki-ukezara": 2, "bukatsu-chiiki-hiyo": 4, "bukatsu-chiiki-sonota": 9, "bukatsu-chiiki-kakusa": 0}}, {"id": "慎重・反対", "label": "慎重・反対", "total": 390, "counts": {"bukatsu-chiiki-kyoin": 69, "bukatsu-chiiki-seido": 71, "bukatsu-chiiki-kyoiku": 107, "bukatsu-chiiki-ukezara": 68, "bukatsu-chiiki-hiyo": 53, "bukatsu-chiiki-sonota": 14, "bukatsu-chiiki-kakusa": 8}, "width_pct": {"bukatsu-chiiki-kyoin": 17.69, "bukatsu-chiiki-seido": 18.21, "bukatsu-chiiki-kyoiku": 27.44, "bukatsu-chiiki-ukezara": 17.44, "bukatsu-chiiki-hiyo": 13.59, "bukatsu-chiiki-sonota": 3.59, "bukatsu-chiiki-kakusa": 2.05}, "high_pct": {"bukatsu-chiiki-kyoin": 21.7, "bukatsu-chiiki-seido": 22.5, "bukatsu-chiiki-kyoiku": 19.6, "bukatsu-chiiki-ukezara": 30.9, "bukatsu-chiiki-hiyo": 22.6, "bukatsu-chiiki-sonota": 35.7, "bukatsu-chiiki-kakusa": 75.0}, "high_counts": {"bukatsu-chiiki-kyoin": 15, "bukatsu-chiiki-seido": 16, "bukatsu-chiiki-kyoiku": 21, "bukatsu-chiiki-ukezara": 21, "bukatsu-chiiki-hiyo": 12, "bukatsu-chiiki-sonota": 5, "bukatsu-chiiki-kakusa": 6}}, {"id": "条件付き・改善要求", "label": "条件付き・改善要求", "total": 241, "counts": {"bukatsu-chiiki-kyoin": 67, "bukatsu-chiiki-seido": 62, "bukatsu-chiiki-kyoiku": 17, "bukatsu-chiiki-ukezara": 49, "bukatsu-chiiki-hiyo": 40, "bukatsu-chiiki-sonota": 2, "bukatsu-chiiki-kakusa": 4}, "width_pct": {"bukatsu-chiiki-kyoin": 27.8, "bukatsu-chiiki-seido": 25.73, "bukatsu-chiiki-kyoiku": 7.05, "bukatsu-chiiki-ukezara": 20.33, "bukatsu-chiiki-hiyo": 16.6, "bukatsu-chiiki-sonota": 0.83, "bukatsu-chiiki-kakusa": 1.66}, "high_pct": {"bukatsu-chiiki-kyoin": 11.9, "bukatsu-chiiki-seido": 6.5, "bukatsu-chiiki-kyoiku": 0.0, "bukatsu-chiiki-ukezara": 6.1, "bukatsu-chiiki-hiyo": 17.5, "bukatsu-chiiki-sonota": 0.0, "bukatsu-chiiki-kakusa": 0.0}, "high_counts": {"bukatsu-chiiki-kyoin": 8, "bukatsu-chiiki-seido": 4, "bukatsu-chiiki-kyoiku": 0, "bukatsu-chiiki-ukezara": 3, "bukatsu-chiiki-hiyo": 7, "bukatsu-chiiki-sonota": 0, "bukatsu-chiiki-kakusa": 0}}, {"id": "中立・情報", "label": "中立・情報", "total": 48, "counts": {"bukatsu-chiiki-kyoin": 5, "bukatsu-chiiki-seido": 19, "bukatsu-chiiki-kyoiku": 4, "bukatsu-chiiki-ukezara": 3, "bukatsu-chiiki-hiyo": 3, "bukatsu-chiiki-sonota": 14, "bukatsu-chiiki-kakusa": 0}, "width_pct": {"bukatsu-chiiki-kyoin": 10.42, "bukatsu-chiiki-seido": 39.58, "bukatsu-chiiki-kyoiku": 8.33, "bukatsu-chiiki-ukezara": 6.25, "bukatsu-chiiki-hiyo": 6.25, "bukatsu-chiiki-sonota": 29.17, "bukatsu-chiiki-kakusa": 0.0}, "high_pct": {"bukatsu-chiiki-kyoin": 0.0, "bukatsu-chiiki-seido": 0.0, "bukatsu-chiiki-kyoiku": 0.0, "bukatsu-chiiki-ukezara": 0.0, "bukatsu-chiiki-hiyo": 0.0, "bukatsu-chiiki-sonota": 7.1, "bukatsu-chiiki-kakusa": 0.0}, "high_counts": {"bukatsu-chiiki-kyoin": 0, "bukatsu-chiiki-seido": 0, "bukatsu-chiiki-kyoiku": 0, "bukatsu-chiiki-ukezara": 0, "bukatsu-chiiki-hiyo": 0, "bukatsu-chiiki-sonota": 1, "bukatsu-chiiki-kakusa": 0}}], "issues": [{"id": "bukatsu-chiiki-kyoin", "key": "教員の働き方", "label": "教員の働き方", "icon": "🏫", "count": 323, "share_pct": 28.4, "stances": {"移行支持": 182, "慎重・反対": 69, "条件付き・改善要求": 67, "中立・情報": 5}, "top_stance": "移行支持", "purity_pct": 56.3, "intensity": {"high": 89, "medium": 207, "low": 27}, "high_pct": 27.6, "high_adjusted_pct": 26.8, "sub": {"status": "reread", "coverage": "partial", "coverage_note": "移行支持以外だけを読み直し。賛成側は未再読", "source_file": "data/bukatsu-chiiki_teacher-reread.json", "reread_count": 87, "unread_count": 236, "items": [{"id": "B", "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）", "count": 30, "pct_in_issue": 9.3}, {"id": "F", "label": "その他（実態の訴え・分類が難しいもの）", "count": 20, "pct_in_issue": 6.2}, {"id": "A", "label": "移しても教員の負担は減らない・むしろ増える", "count": 17, "pct_in_issue": 5.3}, {"id": "C", "label": "やりたい先生だけが担えばよい（移行ではなく任意化）", "count": 8, "pct_in_issue": 2.5}, {"id": "E", "label": "移行や廃止で失われるものへの不安", "count": 8, "pct_in_issue": 2.5}, {"id": "D", "label": "移行ではなく部活そのものを廃止すべき", "count": 4, "pct_in_issue": 1.2}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 236, "unread": true, "pct_in_issue": 73.1}]}, "verdict": "gap", "claims": [{"claim": "給特法は改正されたが、教職調整額は4%のままだ", "finding": "この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。", "id": "kyushokuchoseigaku", "issue_ids": ["bukatsu-chiiki-kyoin"], "matched_post_count": 1, "sources": [{"name": "e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条・附則", "url": "https://laws.e-gov.go.jp/law/346AC0000000077"}], "verdict": "gap"}], "veins": ["bukatsu-chiiki-vein-2"]}, {"id": "bukatsu-chiiki-seido", "key": "制度・移行プロセス", "label": "制度・移行プロセス", "icon": "📋", "count": 256, "share_pct": 22.5, "stances": {"移行支持": 104, "慎重・反対": 71, "条件付き・改善要求": 62, "中立・情報": 19}, "top_stance": "移行支持", "purity_pct": 40.6, "intensity": {"high": 41, "medium": 169, "low": 46}, "high_pct": 16.0, "high_adjusted_pct": 16.9, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "gap", "claims": [{"claim": "部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった", "finding": "3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。", "id": "original-deadline", "issue_ids": ["bukatsu-chiiki-seido"], "matched_post_count": 4, "sources": [{"name": "スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）", "url": "https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf"}, {"name": "文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）", "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf"}], "verdict": "gap"}, {"claim": "地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ", "finding": "国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。", "id": "national-funding", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-hiyo"], "matched_post_count": 6, "sources": [{"name": "スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）", "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf"}, {"name": "スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録", "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"}], "verdict": "gap"}], "veins": ["bukatsu-chiiki-vein-2"]}, {"id": "bukatsu-chiiki-kyoiku", "key": "教育的意義・機会", "label": "教育的意義・機会", "icon": "⭐", "count": 215, "share_pct": 18.9, "stances": {"移行支持": 87, "慎重・反対": 107, "条件付き・改善要求": 17, "中立・情報": 4}, "top_stance": "慎重・反対", "purity_pct": 49.8, "intensity": {"high": 47, "medium": 129, "low": 39}, "high_pct": 21.9, "high_adjusted_pct": 21.8, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "fact", "claims": [{"claim": "中体連の大会に地域クラブのチームが出られるようになっている", "finding": "参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。", "id": "chutairen-entry", "issue_ids": ["bukatsu-chiiki-kyoiku"], "matched_post_count": 4, "sources": [{"name": "日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）", "url": "https://www.fukui-jpa.com/data/saisoku061011.pdf"}], "verdict": "fact"}], "veins": []}, {"id": "bukatsu-chiiki-ukezara", "key": "受け皿・指導者", "label": "受け皿・指導者", "icon": "👤", "count": 164, "share_pct": 14.4, "stances": {"移行支持": 44, "慎重・反対": 68, "条件付き・改善要求": 49, "中立・情報": 3}, "top_stance": "慎重・反対", "purity_pct": 41.5, "intensity": {"high": 26, "medium": 109, "low": 29}, "high_pct": 15.9, "high_adjusted_pct": 17.2, "sub": {"status": "reread", "coverage": "full", "coverage_note": "論点全件を読み直し", "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json", "reread_count": 100, "unread_count": 64, "items": [{"id": "R2", "label": "地域が引き受ける理由がない・引き受け手がいない", "count": 23, "pct_in_issue": 14.0}, {"id": "R6", "label": "その他", "count": 22, "pct_in_issue": 13.4}, {"id": "R1", "label": "報酬が安すぎて指導者が集まらない", "count": 20, "pct_in_issue": 12.2}, {"id": "R3", "label": "責任・安全・指導者の質への不安", "count": 17, "pct_in_issue": 10.4}, {"id": "R4", "label": "受け皿はできている・うまくいっている", "count": 16, "pct_in_issue": 9.8}, {"id": "R5", "label": "送迎・移動の課題", "count": 2, "pct_in_issue": 1.2}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 64, "unread": true, "pct_in_issue": 39.0}]}, "verdict": "gap", "claims": [{"claim": "地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない", "finding": "最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。", "id": "coach-pay", "issue_ids": ["bukatsu-chiiki-ukezara"], "matched_post_count": 10, "sources": [{"name": "熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）", "url": "https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf"}, {"name": "厚生労働省 令和7年度 地域別最低賃金 全国一覧（PDF）", "url": "https://www.mhlw.go.jp/content/11200000/001571192.pdf"}, {"name": "熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集", "url": "https://www.city.kumamoto.jp/kiji00370419/index.html"}], "verdict": "gap"}, {"claim": "部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない", "finding": "顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。", "id": "shidoin-role", "issue_ids": ["bukatsu-chiiki-ukezara"], "matched_post_count": 4, "sources": [{"name": "スポーツ庁 部活動指導員の概要（PDF）", "url": "https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf"}, {"name": "e-Gov法令検索 学校教育法施行規則 第七十八条の二", "url": "https://laws.e-gov.go.jp/law/322M40000080011"}], "verdict": "fact"}], "veins": ["bukatsu-chiiki-vein-1", "bukatsu-chiiki-vein-2"]}, {"id": "bukatsu-chiiki-hiyo", "key": "費用・家庭負担", "label": "費用・家庭負担", "icon": "💴", "count": 117, "share_pct": 10.3, "stances": {"移行支持": 21, "慎重・反対": 53, "条件付き・改善要求": 40, "中立・情報": 3}, "top_stance": "慎重・反対", "purity_pct": 45.3, "intensity": {"high": 23, "medium": 84, "low": 10}, "high_pct": 19.7, "high_adjusted_pct": 20.3, "sub": {"status": "reread", "coverage": "full", "coverage_note": "論点全件を読み直し", "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json", "reread_count": 72, "unread_count": 45, "items": [{"id": "P4", "label": "誰が、いくら払うのかを決めろ（財源設計）", "count": 21, "pct_in_issue": 17.9}, {"id": "P1", "label": "いまの部活が安いのは、誰かの無償労働で成り立っているから", "count": 15, "pct_in_issue": 12.8}, {"id": "P3", "label": "お金が理由で参加できない子が出る（格差）", "count": 13, "pct_in_issue": 11.1}, {"id": "P5", "label": "送迎・移動の負担", "count": 9, "pct_in_issue": 7.7}, {"id": "P2", "label": "家庭が払えない・負担が増える", "count": 8, "pct_in_issue": 6.8}, {"id": "P6", "label": "その他", "count": 6, "pct_in_issue": 5.1}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 45, "unread": true, "pct_in_issue": 38.5}]}, "verdict": "miss", "claims": [{"claim": "地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ", "finding": "国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。", "id": "national-funding", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-hiyo"], "matched_post_count": 6, "sources": [{"name": "スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）", "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf"}, {"name": "スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録", "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"}], "verdict": "gap"}, {"claim": "運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている", "finding": "投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。", "id": "club-cost-survey", "issue_ids": ["bukatsu-chiiki-hiyo"], "matched_post_count": 3, "sources": [], "verdict": "miss"}], "veins": []}, {"id": "bukatsu-chiiki-sonota", "key": "その他", "label": "その他", "icon": "💬", "count": 52, "share_pct": 4.6, "stances": {"移行支持": 22, "慎重・反対": 14, "条件付き・改善要求": 2, "中立・情報": 14}, "top_stance": "移行支持", "purity_pct": 42.3, "intensity": {"high": 15, "medium": 20, "low": 17}, "high_pct": 28.8, "high_adjusted_pct": 25.3, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": []}, {"id": "bukatsu-chiiki-kakusa", "key": "地域格差", "label": "地域格差", "icon": "🗾", "count": 12, "share_pct": 1.1, "stances": {"移行支持": 0, "慎重・反対": 8, "条件付き・改善要求": 4, "中立・情報": 0}, "top_stance": "慎重・反対", "purity_pct": 66.7, "intensity": {"high": 6, "medium": 5, "low": 1}, "high_pct": 50.0, "high_adjusted_pct": 27.2, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": ["bukatsu-chiiki-vein-2"]}], "editorial": {"checked_on": "2026-09-04", "findings": [{"id": "bukatsu-chiiki-ed-1", "kind": "shared_premise", "text": "賛成側も反対側も、いまの部活動が教員の負担で支えられていることは前提として共有している。分かれるのは負担をどう減らすかで、「教員の働き方」では移行支持が56.3%を占める。"}, {"id": "bukatsu-chiiki-ed-2", "kind": "real_conflict", "text": "論点が変わると賛否が入れ替わる。「教員の働き方」では移行支持が最も多い（56.3%）のに対し、「教育的意義・機会」では慎重・反対が最も多い（49.8%）。同じ人が立場を変えているのか、別々の人が別々の論点で発言しているのかは、この収集からは分からない。"}, {"id": "bukatsu-chiiki-ed-3", "kind": "real_conflict", "text": "お金の話になると、賛成側も条件を付ける。「費用・家庭負担」で無条件の移行支持は21件にとどまり、慎重・反対（53件）と条件付き・改善要求（40件）が大半を占める。"}, {"id": "bukatsu-chiiki-ed-4", "kind": "still_unknown", "text": "「地域格差」は12件（全体の1.1%）しかない。件数が少ないことは、その論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。ページ下の「海面より下」に、一次資料では争点になっているのに投稿にほとんど無いものを置いている。"}, {"id": "bukatsu-chiiki-ed-5", "kind": "still_unknown", "text": "ここに出ているのはYahoo!リアルタイム検索で集めた1,139件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"}], "reviewer_type": "editorial_review", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-09-02", "reviewer_type": "editorial_review", "ocean_status": "complete", "ocean_checked_on": "2026-09-02", "ocean_reviewer_type": "editorial_review", "sunk_continents": [{"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-1", "life_impact": "住んでいる自治体によって、大会参加費（1人あたり数万円規模）が全額補助される場合と、家庭が全額負担する場合に分かれる。国は補助の存在は認めているが、全国一律の下限保障は設けておらず、進み方は自治体の財政・方針に委ねられている。", "nearest_issue_id": "bukatsu-chiiki-kakusa", "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 0, "sns_note": "争点そのもの（次長発言や阿賀野市のような自治体間の補助額差の具体例）に触れた意見投稿は0件。「地域格差」論点の意見投稿は12件（1.05%）あるが、都市と地方で環境が違うという抽象的な懸念にとどまる。なお徳島県・高松市など個別自治体の制度を伝える投稿が3件あるが、いずれも意見表明ではなく事実の共有のため意見1139件の母数には含まれない", "sources": [{"date": "令和8年3月3日", "location": "次長挨拶部分。「地域の格差というのはご指摘いただいたようにかなり大きく開いてきております」「地域の実情に応じた進度で」（統一の数値目標は設定しない方針の説明）", "name": "学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録・浅野スポーツ庁次長発言", "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"}, {"date": "令和8年3月25日公表", "location": "p.77。中体連主催・共催大会の参加費（交通費・宿泊費）を全額補助する仕組み。令和6年度実績で下越大会18,649円/人・県大会40,128円/人", "name": "地域クラブ活動における創設・運営ガイドブック（新潟県阿賀野市の事例）", "url": "https://www.mext.go.jp/sports/content/20260325-spt_oripara-000048484_001.pdf"}], "topic": "支援水準の自治体差（国は統一の下限を設定していない）", "opinion_count_now": 1139, "base_stale": false, "short_label": "支援水準の自治体差"}, {"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-2", "life_impact": "体育館・グラウンドなど活動場所の新設・改修費用は、この国の補助メニューでは対象にならない。学校施設をそのまま使えない地域クラブでは、施設にかかる費用は自治体や利用者側の負担として残る。", "nearest_issue_id": null, "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 0, "sns_note": "「施設整備」「補助対象外」の語での一致は0件。「体育館」「グラウンド」等の広い語では11件あるが、いずれも施設の利用・管理を論じているだけで、国庫補助の対象費目という制度上の論点への言及ではない", "sources": [{"date": "令和7年12月25日時点（令和8年度予算の検討案）", "location": "補助対象経費の内訳（会議費・備品費・消耗品費・借料損料・保険料・雑役務費・委託費・補助金）と、施設整備費は補助対象外である旨の記載", "name": "「部活動の地域展開等推進事業」補助金交付要綱・概要資料", "url": "https://www.mext.go.jp/sports/content/20251225-spt_oripara-000028257-004.pdf"}], "topic": "国庫補助の対象外費目（施設整備費は補助されない）", "opinion_count_now": 1139, "base_stale": false, "short_label": "国庫補助の対象外費目"}, {"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-3", "life_impact": "生徒が同じ指導者に継続して習えるかは制度上保障されていない。指導員は1年ごとの任用で、最長でも5年で契約が終わる可能性がある（東京都の例。金額・条件は自治体ごとに異なる）。", "nearest_issue_id": null, "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 0, "sns_note": "「会計年度」の語で指導員の身分そのものに触れた投稿は2件あるが、いずれも顧問を務められる制度上の位置づけの説明で、任用が1年更新である不安定さへの言及は0件", "sources": [{"date": "令和8年度", "location": "任用区分「地方公務員法第22条の2第1項第1号に基づく会計年度任用職員」、任期「令和8年4月1日〜令和9年3月31日」、「能力実証が良好なら4回を上限に再任用の可能性あり、ただし翌年度以降の任用を保障するものではない」", "name": "令和8年度都立学校部活動指導員募集要項（会計年度任用職員）", "url": "https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/-57"}], "topic": "部活動指導員の任期は1年更新・再任用は上限4回（東京都の例）", "opinion_count_now": 1139, "base_stale": false, "short_label": "部活動指導員の任期は1年更…"}, {"checked_on": "2026-09-02", "id": "bukatsu-chiiki-sc-4", "life_impact": "東京都立学校の部活動指導員として応募するには、実務・指導経験の合計6年以上という条件を満たす必要がある（東京都の令和8年度募集要項の例で、条件は自治体ごとに異なる）。指導者に何らかの資格・経験を求めるべきという意見はSNSにもあるが、その具体的な水準（6年以上）は一次資料にしかない。", "nearest_issue_id": null, "reviewer_type": "editorial_review", "sns_base": 1139, "sns_count": 5, "sns_note": "指導者に資格・経験を求める意見は5件あるが、東京都の実務・指導経験6年以上という具体的な数値条件そのものへの言及は0件（指導者不足を訴える投稿自体は「受け皿・指導者」論点で164件ある）", "sources": [{"date": "令和8年度", "location": "応募資格。4つのいずれかを満たす必要があり、いずれも実務・指導経験の合計6年以上を求める", "name": "令和8年度都立学校部活動指導員募集要項（会計年度任用職員）", "url": "https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/-57"}], "topic": "東京都の部活動指導員に求められる実務・指導経験6年以上という数値条件", "opinion_count_now": 1139, "base_stale": false, "short_label": "東京都の部活動指導員に求め…"}], "veins": [{"checked_on": "2026-09-02", "diverging_reason": "同じ『低待遇では続かない』という懸念から、慎重・反対側は『待遇が上がらない前提なら地域移行自体を進めるべきではない』と結論づけ、条件付き・改善要求側は『予算を増やして待遇を改善すれば移行は続けられる』と結論づける。中止か、改善して継続かで分かれる。", "id": "bukatsu-chiiki-vein-1", "issue_ids": ["bukatsu-chiiki-ukezara"], "reviewer_type": "editorial_review", "shared_concern": "地域移行後にクラブを引き受ける指導者の謝礼・時給が低すぎて、生活が成り立たない、あるいは希望する人が集まらない。", "sides": [{"post_count": 3, "stance_label": "慎重・反対"}, {"post_count": 3, "stance_label": "条件付き・改善要求"}]}, {"checked_on": "2026-09-02", "diverging_reason": "『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。", "id": "bukatsu-chiiki-vein-2", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-ukezara", "bukatsu-chiiki-kyoin", "bukatsu-chiiki-kakusa"], "reviewer_type": "editorial_review", "shared_concern": "外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。", "sides": [{"post_count": 3, "stance_label": "慎重・反対"}, {"post_count": 2, "stance_label": "条件付き・改善要求"}]}]}, "prototype_only": true, "gate_failures": ["「教員の働き方」の未読が236件（全323件の4割超）"]};</script>
 <script>
 (function(){
 "use strict";
@@ -396,28 +389,17 @@ const D = window.PLANET_DATA;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- 状態 ---------- */
-const st = {
-  yaw: 0.6, pitch: -0.15, zoom: 1,
-  mode: "all", landed: null, islandMix: 0,
-  dragging: false, quality: 1, anim: null,
-  // 立場を切り替えたときの地形の作り替え。wCur が「いま描いている重み」で、
-  // モードの重みの間を補間する。morph は補間の進み具合と、行き先の記録。
-  wCur: null, morph: null, deltaUntil: 0
-};
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
 const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
 const issues = D.issues;
 const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
 const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
 
-/* ---------- 立場ごとの地形（すれ違い装置） ----------
-   同じ惑星の上で、立場を変えると大陸の大きさと順位が変わる。
-   順位・件数・大陸名はすべて data から採る。ここで書き足さない。 */
-const FLOOR = -2.6;   // 0件の大陸を確実に消すための重み（内積の差は最大2）
-function effWeights(modeId){
-  const m = modeById[modeId], W = D.weights_by_mode[modeId];
-  return issues.map((it,k) => m.counts[it.id] > 0 ? W[k] : FLOOR);
-}
-// 件数の多い順の順位。0件の論点は null（順位を持たない）
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
 function ranksOf(modeId){
   const m = modeById[modeId];
   const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
@@ -427,364 +409,135 @@ function ranksOf(modeId){
   order.forEach((x,i) => { r[x.k] = i + 1; });
   return r;
 }
-function topIssueOf(modeId){ const r = ranksOf(modeId); return r.indexOf(1); }
-// 大陸名を置く位置。その立場での陸の重心を使う（共通の位置だと、縮んだ大陸の
-// 名前が海の上に浮く）。古いデータには無いので、無ければ全体の重心へ戻す。
-function centroidOf(k, modeId){
-  const t = D.centroid_by_mode && D.centroid_by_mode[modeId];
-  return (t && t[k]) || issues[k].centroid;
-}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
 
-/* ---------- 色 ---------- */
-function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
-function mix(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
-const WHITE=[236,240,244];
-// 大陸の色 = 最多立場の色。純度が低いほど白っぽく（＝割れている論点）
-function continentRGB(it, modeId){
-  const key = (modeId === "all") ? it.top_stance : modeId;
-  const base = hex2rgb((stanceMap[key]||stanceMap[it.top_stance]).color);
-  if (modeId !== "all"){
-    // 立場を絞ると全部同じ色になるので、明るさを少しずつ変えて大陸の区切りを見せる
-    const r = idIndex[it.id] / Math.max(1, issues.length-1);
-    return mix(mix(WHITE, base, 0.95), WHITE, 0.05 + 0.42*r);
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
   }
-  const purity = it.purity_pct/100;
-  const t = Math.min(1, Math.max(0, (purity-0.30)/0.45));   // 純度30%→100%を薄い→濃いへ
-  return mix(WHITE, base, 0.58 + 0.42*t);
-}
-const PATTERN = {plain:0, diagonal:1, dots:2, mesh:3};
-const DARK=[26,32,40];
-/* 海の色。青は立場の色にも論点の色にも使っていないので、
-   「どの論点にも属さない余白」だと色だけで分かる。 */
-const DEEP=[19,58,104], SHALLOW=[62,142,182], SURF=[150,206,228];
-const COAST = D.coast_margin || 0;
-/* 海岸線のゆらぎ。まっすぐな多角形の境界だとビーチボールに見える。
-   生成器 build_planet_data.py の coast_noise / wobble と同じ式・同じ振幅にすること。
-   片方だけ変えると、生成器が測った面積と実際に描く面積がずれる。 */
-const NOISE_AMP = D.coast_noise_amp || 0;
-function coastNoise(x,y,z){
-  return (Math.sin(6.7*x + 2.9*y + 11.3*z)
-        + 0.55*Math.sin(3.1*x + 13.1*y - 7.7*z)
-        + 0.30*Math.sin(17.1*x - 5.3*y + 23.3*z)) / 1.85;
-}
-function islandRGB(it, modeId, j, m, unread){
-  if (unread) return [116,124,134];
-  const base = continentRGB(it, modeId);
-  const t = m > 1 ? j/(m-1) : 0;
-  return mix(mix(base, DARK, 0.42), WHITE, 0.92*t);   // 濃い→淡いの段階
-}
-function css(c){ return "rgb("+c.map(v=>Math.round(v)).join(",")+")"; }
-
-/* ---------- 幾何 ---------- */
-function rot(yaw, pitch){
-  const cy=Math.cos(yaw), sy=Math.sin(yaw), cp=Math.cos(pitch), sp=Math.sin(pitch);
-  // view = Ry(yaw) then Rx(pitch);  world = Rinv * view
-  return [
-    [cy, sy*sp, sy*cp],
-    [0,  cp,   -sp   ],
-    [-sy, cy*sp, cy*cp]
-  ];
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
 }
 
-/* ---------- 描画 ---------- */
-const cv = document.getElementById("cv");
-const ctx = cv.getContext("2d", {alpha:false});
-const off = document.createElement("canvas");
-const octx = off.getContext("2d", {alpha:false});
-let img = null;
-
-// いま描いている重みで「大陸が残っているか」を決める。作り替えの途中も同じ判定で見る
-function activeIssues(W){
-  return issues.map((it,i)=>({it, i, on: W[i] > FLOOR + 0.02}));
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
 }
-// 地形の作り替え中に、件数・パターン・島の色をどちらのモードで見せるか（中間で入れ替える）
-function shownMode(){
-  const mo = st.morph;
-  return (mo && mo.t < 0.5) ? mo.fromMode : st.mode;
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
 }
 
 function render(){
-  // 動いている間は粗く描く。地形の作り替えは1画素ずつ塗り直すので、
-  // 原寸のままだと10fpsまで落ちて「育つ・縮む」が飛び飛びに見える（実測）。
-  const moving = st.dragging || st.morph || st.anim;
-  const size = Math.round(cv.width * (moving ? 0.55 : 1));
-  if (off.width !== size){ off.width = off.height = size; img = octx.createImageData(size,size); }
-  const data = img.data;
-  const R = rot(st.yaw, st.pitch);
-  const mo = st.morph;
-  const W = st.wCur || (st.wCur = effWeights(st.mode));
-  const acts = activeIssues(W);
-  const sm = shownMode();
-  const cols = issues.map(it => mo
-    ? mix(continentRGB(it, mo.fromMode), continentRGB(it, mo.toMode), mo.t)
-    : continentRGB(it, st.mode));
-  const pats = issues.map(it => PATTERN[(stanceMap[sm==="all"?it.top_stance:sm]||{}).pattern] || 0);
-  const landed = st.landed;
-  const sub = landed !== null ? issues[landed].sub : null;
-  const hasIsl = sub && sub.status === "reread" && st.islandMix > 0.01;
-  const islCols = hasIsl
-    ? sub.items.map((x,j)=>islandRGB(issues[landed], sm, j, sub.items.length, x.unread))
-    : null;
-
-  const half = size/2, radius = half*0.94*st.zoom;
-  const zq = st.zoom;   // 拡大率。境界線と等高線の幅をこれで割って一定に見せる
-  // 光の向き（左上から）
-  const lx=-0.45, ly=-0.5, lz=0.74;
-
-  for (let py=0; py<size; py++){
-    const y = (py - half)/radius;
-    for (let px=0; px<size; px++){
-      const o = (py*size+px)*4;
-      const x = (px - half)/radius;
-      const r2 = x*x + y*y;
-      if (r2 > 1){
-        // 大気。球のすぐ外側を薄く光らせる（宇宙に浮いて見せるための飾り）
-        const g = Math.max(0, 1 - (Math.sqrt(r2) - 1)/0.085);
-        const a = g*g*0.85;
-        data[o]  = 10 + 44*a; data[o+1] = 13 + 92*a; data[o+2] = 18 + 150*a;
-        data[o+3]= 255; continue;
-      }
-      const z = Math.sqrt(1-r2);
-      // 視線座標 -> 世界座標
-      const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
-      const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
-      const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-
-      let best=-9, second=-9, bi=0;
-      for (let k=0;k<acts.length;k++){
-        if (!acts[k].on) continue;
-        const c = issues[k].center;
-        const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
-        if (s > best){ second=best; best=s; bi=k; }
-        else if (s > second) second=s;
-      }
-      let margin = best - second;
-      // 岸のまわりだけ境界を波打たせる（離れるほど弱める）。
-      // 帯の外は結果が変わらないので計算しない（1画素あたり sin 3回は重い）。
-      if (NOISE_AMP > 0){
-        const d = margin - COAST;
-        if (d > -NOISE_AMP && d < NOISE_AMP){
-          margin += NOISE_AMP * coastNoise(wx,wy,wz) * (1 - Math.abs(d)/NOISE_AMP);
-        }
-      }
-      const it = issues[bi];
-      let col, shade = 1;
-
-      // ---- 海 ----------------------------------------------------------
-      // 1位と2位の差が COAST 未満の帯は、どの論点にも属さない海。
-      // 海は余白であって意味を持たない（面積の比は陸の中で合わせてある）。
-      const sea = margin < COAST;
-      if (sea){
-        const t = margin / COAST;               // 0=沖 1=岸
-        col = mix(DEEP, SHALLOW, t*t*t);        // 岸ぎわだけ浅く見せる
-        if (t > 0.93) col = mix(col, SURF, (t-0.93)/0.07*0.45);   // 波打ちぎわ
-        if (landed !== null) shade *= 0.80;     // 着陸中は海も少し落とす
-      } else {
-      col = cols[bi];
-
-      // 着陸中は他の大陸の彩度を落とす
-      if (landed !== null && bi !== landed){
-        const g = 0.30*col[0]+0.59*col[1]+0.11*col[2];
-        col = mix(col, [g,g,g], 0.75*st.islandMix + 0.25);
-        shade *= 0.72;
-      }
-
-      // 島（下位論点）
-      if (hasIsl && bi === landed){
-        let sb=-9, ss=-9, sj=0;
-        for (let j=0;j<sub.centers.length;j++){
-          const c = sub.centers[j];
-          const s = wx*c[0]+wy*c[1]+wz*c[2] + sub.weights[j];
-          if (s>sb){ ss=sb; sb=s; sj=j; }
-          else if (s>ss) ss=s;
-        }
-        const item = sub.items[sj];
-        col = mix(col, islCols[sj], st.islandMix);
-        if (sb - ss < (0.003 + 0.004*st.islandMix)/zq) col = mix(col, [18,22,28], 0.8);  // 島の海岸線
-        if (item.unread && ((px+py) % 8 < 3)) col = mix(col, [64,70,80], 0.55*st.islandMix); // 未読は斜線
-      }
-
-      // 標高＝等高線の本数（強い表現の割合）。海岸線から内陸へ向かって数える
-      const inland = margin - COAST;
-      const rings = Math.round(it.elevation);
-      const step2 = 0.020/zq;
-      const band = inland / step2;
-      if (band < rings && (band % 1) < 0.20) shade *= 0.82;
-
-      // 海岸線（陸側のふち）
-      if (inland < 0.009/zq) col = mix(col, [244,249,255], 0.20);
-
-      // 地表パターン（色に頼らないため）
-      const p = pats[bi];
-      if (p===1 && (px+py)%10 < 2) shade *= 0.955;
-      else if (p===2 && px%7===0 && py%7===0) shade *= 0.90;
-      else if (p===3 && (px%9===0 || py%9===0)) shade *= 0.96;
-      }
-      // ------------------------------------------------------------------
-
-      // 陰影＋周縁減光。水は光をまとめて返すので、陸より硬い当たり方にする
-      const lam = Math.max(0, x*lx + (-y)*ly + z*lz);
-      if (sea){
-        shade *= 0.50 + 0.44*lam + 0.22*Math.pow(lam, 32);  // 海面のてかり
-      } else {
-        shade *= 0.42 + 0.58*lam;
-      }
-      shade *= 0.75 + 0.25*z;
-
-      data[o]   = Math.min(255, col[0]*shade);
-      data[o+1] = Math.min(255, col[1]*shade);
-      data[o+2] = Math.min(255, col[2]*shade);
-      data[o+3] = 255;
-    }
+  const L=layout(st.mode), p=[];
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
   }
-  octx.putImageData(img, 0, 0);
-  ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(off, 0, 0, cv.width, cv.height);
-  drawLabels(R, cv.width/2, cv.width/2*0.94*st.zoom);
-}
-
-// 大陸名を球の上に置く（正面を向いている大陸だけ）
-function drawLabels(R, half, radius){
-  const sm = shownMode();
-  const m = modeById[sm];
-  const rank = ranksOf(sm);
-  // 順位が動いた大陸だけ、しばらく「↑2」「↓2」を出す（すれ違いの正体はここ）
-  const dl = st.deltaUntil - performance.now();
-  const showDelta = st.morph ? 1 : (dl > 0 ? Math.min(1, dl/700) : 0);
-  const prevRank = st.prevRank;
-  // 画面が小さいほどキャンバスが縮小表示されるので、文字を大きくして読めるようにする
-  const fs = Math.max(1, cv.width / Math.max(1, cv.clientWidth));
-  ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  issues.forEach((it,k)=>{
-    const n = m.counts[it.id];
-    if (!n) return;
-    const v = centroidOf(k, sm);
-    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
-    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
-    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
-    if (z < 0.28) return;
-    const X = half + a*radius, Y = half - b*radius;
-    const dim = (st.landed !== null && st.landed !== k);
-    const alpha = Math.min(1,(z-0.28)/0.25) * (dim ? 0.35 : 1);
-    const big = st.landed === k;
-    ctx.globalAlpha = alpha;
-    ctx.font = (big?"700 ":"600 ") + Math.round((big?21:17)*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-    ctx.lineWidth = 4*fs; ctx.strokeStyle = "rgba(8,11,15,.85)";
-    ctx.strokeText(it.label, X, Y); ctx.fillStyle = "#f2f6fa"; ctx.fillText(it.label, X, Y);
-    ctx.font = "600 " + Math.round(13*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-    ctx.lineWidth = 3.5*fs;
-    const sub = rank[k] + "位 ・ " + n + "件", dy = (big?20:17)*fs;
-    ctx.strokeText(sub, X, Y + dy); ctx.fillStyle = "#c7d1dc"; ctx.fillText(sub, X, Y + dy);
-    // 立場を切り替えて順位が動いた大陸だけ、矢印と差を添える
-    if (showDelta && prevRank && prevRank[k] && prevRank[k] !== rank[k]){
-      const d = prevRank[k] - rank[k];   // + なら上がった
-      ctx.globalAlpha = alpha * showDelta;
-      ctx.font = "700 " + Math.round(14*fs) + "px -apple-system,'Hiragino Sans',sans-serif";
-      ctx.lineWidth = 3.5*fs;
-      const tag = (d > 0 ? "↑" : "↓") + Math.abs(d);
-      ctx.strokeText(tag, X, Y + dy*2.05);
-      ctx.fillStyle = "#f2f6fa"; ctx.fillText(tag, X, Y + dy*2.05);
-      ctx.globalAlpha = alpha;
-    }
-    ctx.globalAlpha = 1;
-  });
-  // 島の番号（着陸後）
-  const L = st.landed;
-  if (L === null || st.islandMix < 0.55) return;
-  const sb = issues[L].sub;
-  if (sb.status !== "reread") return;
-  ctx.globalAlpha = Math.min(1,(st.islandMix-0.55)/0.35);
-  ctx.lineWidth = 2*fs;
-  sb.items.forEach((x,j)=>{
-    const v = x.centroid;
-    const a = v[0]*R[0][0]+v[1]*R[0][1]+v[2]*R[0][2];
-    const b = v[0]*R[1][0]+v[1]*R[1][1]+v[2]*R[1][2];
-    const z = v[0]*R[2][0]+v[1]*R[2][1]+v[2]*R[2][2];
-    if (z < 0.3) return;
-    const X = half + a*radius, Y = half - b*radius;
-    ctx.beginPath(); ctx.arc(X, Y, 12*fs, 0, 6.284);
-    ctx.fillStyle = "rgba(10,13,18,.82)"; ctx.fill();
-    ctx.strokeStyle = css(islandRGB(issues[L], sm, j, sb.items.length, x.unread));
-    ctx.stroke();
-    ctx.font = "700 " + Math.round(13*fs) + "px -apple-system,sans-serif"; ctx.fillStyle = "#f2f6fa";
-    ctx.fillText(String(j+1), X, Y+0.5);
-  });
-  ctx.globalAlpha = 1;
-}
-
-/* ---------- 当たり判定 ---------- */
-function pick(mx, my){
-  const half = cv.width/2, radius = half*0.94*st.zoom;
-  const x = (mx - half)/radius, y = (my - half)/radius;
-  if (x*x + y*y > 1) return null;
-  const z = Math.sqrt(1-x*x-y*y);
-  const R = rot(st.yaw, st.pitch);
-  const wx = R[0][0]*x + R[1][0]*(-y) + R[2][0]*z;
-  const wy = R[0][1]*x + R[1][1]*(-y) + R[2][1]*z;
-  const wz = R[0][2]*x + R[1][2]*(-y) + R[2][2]*z;
-  // 押せる大陸は「いま描かれている大陸」。作り替えの途中でも画面と食い違わせない
-  const W = st.wCur || effWeights(st.mode);
-  let best=-9, bi=null;
-  issues.forEach((it,k)=>{
-    if (W[k] <= FLOOR + 0.02) return;
-    const c = it.center;
-    const s = wx*c[0]+wy*c[1]+wz*c[2] + W[k];
-    if (s > best){ best=s; bi=k; }
-  });
-  return bi;
-}
-
-/* ---------- アニメーション（案A：球を回して降りる） ---------- */
-function anglesFor(v){ // その方向が正面に来る yaw/pitch
-  const c = Math.max(-1, Math.min(1, v[0]));
-  return { yaw: Math.asin(-c), pitch: Math.max(-0.96, Math.min(0.96, Math.atan2(v[1], v[2]))) };
-}
-function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
-
-function animateTo(target, dur, done){
-  if (st.anim) cancelAnimationFrame(st.anim);
-  if (reduce){ Object.assign(st, target.end); st.islandMix = target.end.islandMix ?? st.islandMix; render(); done&&done(); return; }
-  const from = {yaw:st.yaw, pitch:st.pitch, zoom:st.zoom, islandMix:st.islandMix};
-  let dy = target.end.yaw - from.yaw;
-  while (dy > Math.PI) dy -= 2*Math.PI;
-  while (dy < -Math.PI) dy += 2*Math.PI;
-  const t0 = performance.now();
-  (function step(now){
-    const t = Math.min(1, (now-t0)/dur), e = ease(t);
-    st.yaw   = from.yaw + dy*e;
-    st.pitch = from.pitch + (target.end.pitch-from.pitch)*e;
-    // ズームは少し遅れて始める（0.25→1.0）
-    const ez = ease(Math.min(1, Math.max(0,(t-0.25)/0.75)));
-    st.zoom  = from.zoom + (target.end.zoom-from.zoom)*ez;
-    // 島は最後に浮き上がる（0.7→1.0）
-    const ei = Math.min(1, Math.max(0,(t-0.7)/0.3));
-    st.islandMix = from.islandMix + ((target.end.islandMix??from.islandMix)-from.islandMix)*ei;
-    render();
-    if (t < 1) st.anim = requestAnimationFrame(step);
-    else { st.anim=null; render(); done&&done(); }   // 最後の1枚だけ原寸で描き直す
-  })(t0);
-}
-
-function land(i, focus){
-  st.landed = i;
-  drawPanel();                                   // ← 本文はアニメを待たない（0ms）
-  location.hash = issues[i].id;
-  if (focus !== false){
-    const h = document.querySelector("#panel h2");
-    if (h){ h.tabIndex = -1; h.focus({preventScroll:true}); }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
   }
-  const a = anglesFor(centroidOf(i, st.mode));
-  animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:1.5, islandMix:1}}, 900);
-  syncList();
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 海面より下。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">地下水脈：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">海面より下＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+}
+
+function land(i){
+  st.landed=i;
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
 }
 function orbit(){
-  const prev = st.landed;
-  st.landed = null; drawPanel(); syncList();
+  const prev=st.landed;
+  st.landed=null;
   if (location.hash) history.replaceState(null,"",location.pathname);
-  animateTo({end:{yaw:st.yaw, pitch:st.pitch, zoom:1, islandMix:0}}, 600, ()=>{
-    const b = prev!==null && document.getElementById("btn-"+issues[prev].id);
-    if (b) b.focus({preventScroll:true});
-  });
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
 }
 
 /* ---------- パネル ---------- */
@@ -804,19 +557,19 @@ function legend(){
    順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
 function crossTalk(modeId){
   if (modeId === "all"){
-    return '上のボタンで立場を切り替えると、<b>同じ惑星の大陸の大きさと順位が変わります</b>。';
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
   }
   const rAll = ranksOf("all"), rM = ranksOf(modeId);
   const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
   if (topMK < 0) return '';
   const spin = '<button type="button" class="spin" id="spin">'
-             + '「'+issues[topMK].label+'」を正面へ</button>';
+             + '「'+issues[topMK].label+'」を見る</button>';
   if (topMK === topAllK){
-    return 'この立場でいちばん大きい大陸は「'+issues[topMK].label+'」。'
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
          + 'すべての意見のときと同じ1位です。' + spin;
   }
   const moved = rM[topAllK];
-  return 'この立場でいちばん大きい大陸は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
        + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
        + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
 }
@@ -860,7 +613,7 @@ function syncDots(){
 
   // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
   const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
-  const hot = css(continentRGB(it, "all"));       // 大陸と同じ色にして惑星とつなぐ
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
   cells.forEach((c,i)=>{
     c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
     c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
@@ -912,27 +665,22 @@ function drawPanel(){
       + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
       + legend()
       + '<p class="cross">'+crossTalk(st.mode)+'</p>'
-      + '<p class="sub" style="margin:6px 0 0">大陸をクリックすると、その論点へ降ります。'
-      + '大陸の大きさ＝意見の数、色＝いちばん多い立場、山の高さ＝強い表現の割合です。'
-      + '<b>青い海は大陸を見分けるための余白で、意味はありません。</b></p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点へ移ります。'
+      + '<b>幅＝意見の数、高さ＝強い表現の割合、色＝いちばん多い立場</b>です。'
+      + '幅と高さは同じ母数で数えているので、面積は強く語られた投稿の数になります。</p>'
       + (st.mode!=="all"
-        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで大陸を作り直しています。'
-          + '大きさはこの'+m.total+'件の中での割合です。'
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
           + (issues.filter(it=>m.counts[it.id]===0).length
              ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
-               +' が0件のため、大陸が消えています。'
+               +' が0件のため、山が消えています。'
              : '')
           + '</div>'
         : '');
     // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
     // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
     const sp = document.getElementById("spin");
-    if (sp) sp.onclick = ()=>{
-      const k = topIssueOf(st.mode);
-      if (k < 0) return;
-      const a = anglesFor(centroidOf(k, st.mode));
-      animateTo({end:{yaw:a.yaw, pitch:a.pitch, zoom:st.zoom}}, 700);
-    };
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
     syncDots();
     return;
   }
@@ -940,21 +688,17 @@ function drawPanel(){
   const n = m.counts[it.id];
   let h = '<h2>'+it.icon+' '+it.label+'</h2>'
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
-    + '　山の高さ：強い表現'+it.high_adjusted_pct+'%</p>'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
     + legend() + stanceBar(it.stances, it.count)
     + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
-  if (it.share_pct < D.min_area_pct){
-    h += '<div class="note">この大陸は実際の割合（'+it.share_pct+'%）より大きく描いています。'
-       + '小さすぎると押せないため、最小'+D.min_area_pct+'%まで拡大しました。実件数は'+it.count+'件です。</div>';
-  }
   const s = it.sub;
   if (s.status === "reread"){
     h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
       + '<ul class="islands">' + s.items.map((x,j)=>
           '<li class="'+(x.unread?"unread":"")+'">'
           + '<span class="num">'+(j+1)+'</span>'
-          + '<span class="sw" style="background:'+css(islandRGB(it, st.mode, j, s.items.length, x.unread))+'"></span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
           + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
       + '<div class="note">'+s.coverage_note+'。読み直した'+s.reread_count+'件は '
       + '<code>'+s.source_file.split("/").pop()+'</code> が出所です。'
@@ -968,7 +712,7 @@ function drawPanel(){
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
-  h += '<button class="back" id="back" type="button">← 惑星全体へ戻る（Esc）</button>';
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
   // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
@@ -1001,61 +745,6 @@ function buildList(){
     + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
   issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
 }
-/* ---------- すれ違い装置：立場を切り替えて地形を作り替える ----------
-   大陸を黙って描き直すのではなく、①面積と色を補間して育つ／縮むのを見せ
-   ②いちばん大きい大陸が変わったら、その大陸が正面に来るまで球を回し
-   ③順位が動いた大陸に「↑2」「↓2」を出す。
-   数字と大陸名はすべて data から採る。 */
-function morphTo(toMode){
-  if (toMode === st.mode) return;
-  const fromMode = st.mode;
-  const from = (st.wCur || effWeights(fromMode)).slice();
-  const to = effWeights(toMode);
-  st.prevRank = ranksOf(fromMode);
-  st.mode = toMode;
-
-  // 着陸した大陸がこの立場で0件なら、軌道上へ戻す（無い大陸に降りたままにしない）
-  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
-    st.landed = null;
-    if (location.hash) history.replaceState(null,"",location.pathname);
-    st.islandMix = 0;
-  }
-  drawPanel(); syncList();          // 本文は待たせない（着陸と同じ扱い）
-
-  // 画面が狭いと、立場ボタンと升目が同時に画面へ入らない。押した結果が見えないので運ぶ。
-  // scrollIntoView の behavior:"smooth" は効かない環境があったため自前で動かす（実測）。
-  if (st.landed !== null && !dotBox.hidden && window.innerWidth < 820) bringIntoView(dotBox);
-
-  // 球は勝手に回さない。新しい1位へ回すと、順位を落とした大陸が裏側へ行き、
-  // いちばん見せたい「縮むところ」が見えなくなる。入れ替わる2つの大陸が
-  // 180度近く離れていることもあり（部活動の実データで154度）、両方を同時に
-  // 正面へ置くこともできない。代わりに、下のボタンを読者が押せるようにしてある。
-  if (st.anim){ cancelAnimationFrame(st.anim); st.anim = null; }
-  if (reduce){
-    st.wCur = to; st.morph = null;
-    st.deltaUntil = performance.now() + 4000;
-    render();
-    return;
-  }
-
-  const dur = 900, t0 = performance.now();
-  st.morph = {fromMode, toMode, t: 0};
-  (function step(now){
-    const t = Math.min(1, (now - t0)/dur), e = ease(t);
-    st.morph.t = e;
-    st.wCur = from.map((w,k) => w + (to[k] - w)*e);
-    render();
-    if (t < 1){ st.anim = requestAnimationFrame(step); }
-    else {
-      st.anim = null; st.morph = null; st.wCur = to;
-      st.deltaUntil = performance.now() + 2600;
-      render();
-      // 「↑2」を消すための描き直し。放置すると矢印が残る
-      setTimeout(()=>{ if (!st.morph) render(); }, 2700);
-    }
-  })(t0);
-}
-
 /* 要素が画面の中ほどへ来るまでスクロールする。
    scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
    画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
@@ -1093,65 +782,41 @@ function buildModes(){
   });
 }
 
-/* ---------- 操作 ---------- */
-let px0=0, py0=0, moved=0;
-function pos(e){
-  const r = cv.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
-  return [(t.clientX-r.left)*cv.width/r.width, (t.clientY-r.top)*cv.height/r.height];
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
 }
-cv.addEventListener("pointerdown", e=>{
-  cv.setPointerCapture(e.pointerId); st.dragging=true; moved=0;
-  cv.classList.add("dragging"); [px0,py0]=pos(e);
-});
-cv.addEventListener("pointermove", e=>{
-  if (!st.dragging) return;
-  const [x,y]=pos(e), dx=x-px0, dy=y-py0;
-  moved += Math.abs(dx)+Math.abs(dy);
-  st.yaw += dx*0.006;
-  st.pitch = Math.max(-0.96, Math.min(0.96, st.pitch + dy*0.006));  // 上下55度で制限
-  px0=x; py0=y; render();
-});
-function endDrag(e){
-  if (!st.dragging) return;
-  st.dragging=false; cv.classList.remove("dragging");
-  if (moved < 6){ const i = pick(...pos(e)); if (i!==null) land(i); }
-  render();
-}
-cv.addEventListener("pointerup", endDrag);
-cv.addEventListener("pointercancel", ()=>{ st.dragging=false; cv.classList.remove("dragging"); render(); });
-cv.addEventListener("wheel", e=>{
-  e.preventDefault();
-  st.zoom = Math.max(1, Math.min(2.6, st.zoom * (e.deltaY>0?0.94:1.06))); render();
-}, {passive:false});
-document.getElementById("zin").onclick = ()=>{ st.zoom=Math.min(2.6,st.zoom*1.15); render(); };
-document.getElementById("zout").onclick= ()=>{ st.zoom=Math.max(1,st.zoom/1.15); render(); };
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
 addEventListener("keydown", e=>{
-  if (e.key === "Escape" && st.landed!==null){ orbit(); return; }
-  if (document.activeElement !== cv) return;
-  if (e.key==="ArrowLeft"){ st.yaw-=0.12; render(); e.preventDefault(); }
-  if (e.key==="ArrowRight"){ st.yaw+=0.12; render(); e.preventDefault(); }
-  if (e.key==="ArrowUp"){ st.pitch=Math.max(-0.96,st.pitch-0.1); render(); e.preventDefault(); }
-  if (e.key==="ArrowDown"){ st.pitch=Math.min(0.96,st.pitch+0.1); render(); e.preventDefault(); }
+  if (e.key === "Escape" && st.landed !== null) orbit();
 });
 
-/* ---------- 初期化 ---------- */
-/* 中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
 try {
-  (function initView(){ const a = anglesFor(centroidOf(0, st.mode)); st.yaw=a.yaw; st.pitch=a.pitch; })();
   buildModes(); buildList(); drawPanel(); syncList(); render();
   const h = location.hash.slice(1);
-  if (h && idIndex[h] !== undefined) land(idIndex[h], false);
-  // 文字の大きさは canvas の表示幅から決めている（drawLabels の fs）。初回の render は
-  // レイアウトが決まる前に走ることがあり、そのときの幅で文字が巨大なまま残っていた。
-  // 幅が変わったら描き直す（画面の回転・ウィンドウ幅の変更にも要る）。
-  if (window.ResizeObserver) new ResizeObserver(()=>render()).observe(cv);
-  else addEventListener("resize", render);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
 } catch (e) {
-  /* 描けなかったときは静的表示へ戻す（空の惑星を見せない） */
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
   document.documentElement.className =
     document.documentElement.className.replace(/\bplanet-live\b/, "");
   throw e;
 }
+
 })();
 </script>

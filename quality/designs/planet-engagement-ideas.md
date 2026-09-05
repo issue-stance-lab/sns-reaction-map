@@ -400,9 +400,9 @@ AdSenseの不承認理由（有用性の低いコンテンツ）への直接の�
 
 試作の数字は正典から機械で書き出したものに差し替え済み（手書きはもう無い）。
 
-### 段階3 未着手：ページ本体を山なみへ作り替える
+### 段階3 完了：ページ本体を山なみへ作り替えた（2026-09-05）
 
-**ここが本体で、1回では終わらない。**消す対象は次のとおり。
+**球は消した。**消したものは次のとおり。
 
 - テンプレートの球の描画（`render` `drawLabels` `pick` `rot` `animateTo` `coastNoise`
   `continentRGB` `activeIssues` `shownMode` `effWeights` `centroidOf` ほか約350行）
@@ -415,3 +415,27 @@ AdSenseの不承認理由（有用性の低いコンテンツ）への直接の�
 JS無効時の静的表示、「同じ数字は1回だけ」の検査。
 
 段階1・2の時点で **`docs/` と公開ページには差分0**。全465テストOK、2回生成の差分0。
+
+**段階3で実際に消したもの**: テンプレートの球の描画（canvas・回転・陰影・当たり判定・
+海岸線のゆらぎ・大陸の色計算・カメラのアニメーション）と、生成器の球の幾何
+（`fibonacci_points` `seed_directions` `fit_weights` `assign_land` `coast_noise` `wobble`
+`region_stats` `centroids` `tangent_ring` `area_targets`、および `weights_by_mode`
+`centroid_by_mode` `coast_margin` `coast_noise_amp` `sea_pct` `elevation` `center` `centroid`）。
+テンプレートは997行→約830行、生成器は幾何まわりを丸ごと削除。
+
+**足したもの**: モードごとの `width_pct`（幅＝件数）と `high_pct` / `high_counts`
+（高さ＝強い表現の割合）。**幅と高さが同じ母数**になった。
+
+**検査の入れ替え**: `PlanetSeaTest`（球の海5件）を `SkylineTest`（5件）へ置き換えた。
+見る内容は①幅と高さが同じ母数か ②立場で高さが実際に動くか（動かないなら球のときと同じで
+「高さが表現されていない」状態への逆戻り）③球の名残（canvas/getContext/yaw/coastNoise/
+weights_by_mode）が残っていないか ④軸の上限を超えた山に印が付くか ⑤母数の小ささと
+幅を広げたことを画面に書いているか。`PlanetCrossTalkTest` も断面図向けに書き替えた。
+
+**実測**: 受け皿・指導者に着陸して立場を切り替えると、高さが 15.9% → 30.9% と変わる
+（以前は全体の値のまま動かなかった）。全465テストOK、verify 5本OK、2回生成の差分0、
+`docs/`・`data/public/` 差分0、375px幅で横スクロールなし。
+
+**残っていること**: ①設計書 `reaction-planet-renewal.md` は冒頭に無効の注記を入れただけで、
+本文の球に関する記述はそのまま（本文の書き直しは別作業）②残り9テーマへの展開
+③実機スマホと「視差効果を減らす」設定の確認。

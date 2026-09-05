@@ -284,18 +284,16 @@ class PlanetCrossTalkTest(unittest.TestCase):
         assert m, "morphTo（地形の作り替え）がテンプレートから消えている"
         cls.morph = m.group(0)
 
-    def test_terrain_is_interpolated_between_modes(self):
-        # 重みを直に読むと、立場を切り替えた瞬間に地形が飛ぶ（作り替えが見えない）
-        self.assertIn("st.wCur", self.script, "補間中の重み st.wCur が無い")
-        self.assertNotIn("D.weights_by_mode[st.mode]", self.script,
-                         "モードの重みを直に描いている。作り替えの途中が飛ぶ")
+    def test_switching_stance_redraws_width_and_height(self):
+        # 立場を切り替えたら、幅（件数）と高さ（強い表現）を両方描き直す
+        self.assertIn("m.counts[it.id]", self.script, "幅を data から採っていない")
+        self.assertIn("m.high_pct[it.id]", self.script, "高さを data から採っていない")
+        self.assertIn("render()", self.morph, "立場を切り替えても図を描き直していない")
 
-    def test_mode_switch_does_not_turn_the_globe(self):
-        # 新しい1位へ球を回すと、順位を落とした大陸が裏側へ行き、
-        # いちばん見せたい「縮むところ」が見えなくなる（実測で確認済み）
-        for attr in ("st.yaw =", "st.pitch =", "st.yaw=", "st.pitch="):
-            self.assertNotIn(attr, self.morph,
-                             f"立場の切り替えで球を回している（{attr}）")
+    def test_switching_stance_keeps_the_reader_in_place(self):
+        # 図を勝手に動かさない。狭い画面でだけ、押した結果が見える位置まで運ぶ
+        self.assertIn("bringIntoView", self.morph, "狭い画面で結果まで運ぶ処理が無い")
+        self.assertIn("window.innerWidth < 820", self.morph, "画面幅の条件が無い")
 
     def test_rank_comes_from_the_data(self):
         # 順位は data から数える。テンプレートへ書くと、データが増えて順位が
@@ -310,13 +308,9 @@ class PlanetCrossTalkTest(unittest.TestCase):
         self.assertRegex(self.script, r"moved\s*\+\s*'位'",
                          "入れ替わった先の順位を数えずに書いている")
 
-    def test_zero_count_continents_disappear(self):
-        # 0件の論点は weights_by_mode では 0.0 のまま。そのまま描くと
-        # 「0件なのにいちばん大きい大陸」になる。確実に消える重みへ落とすこと
-        self.assertIn("FLOOR", self.script, "0件の大陸を消すための重みが無い")
-        floor = float(re.search(r"const FLOOR\s*=\s*(-?[\d.]+)", self.script).group(1))
-        self.assertLessEqual(floor, -2.0,
-                             "FLOOR が浅い。内積の差は最大2なので大陸が残る")
+    def test_zero_count_issues_draw_no_hill(self):
+        # 0件の論点は山を描かない（幅0の山や、母数0で割った高さを出さない）
+        self.assertIn("if (!n) return;", self.script, "0件の論点を除いていない")
 
     def test_rank_is_reachable_without_the_globe(self):
         # 惑星が見えない読み方（キーボード操作）でも並びの変化を追えること
@@ -324,12 +318,12 @@ class PlanetCrossTalkTest(unittest.TestCase):
                          "論点一覧に順位が出ていない")
 
 
-class PlanetSeaTest(unittest.TestCase):
-    """海を入れても「面積＝意見の数」が崩れないことを固定する。
+class SkylineTest(unittest.TestCase):
+    """断面図（山なみ）の検査。球をやめた代わりに、幅と高さの意味を固定する。
 
-    大陸のあいだを海にすると、境界のまわりが一律に削られる。何もしないと
-    周囲の長さに比例して削れるので、小さい大陸ほど損をして面積が件数と合わなくなる。
-    面積合わせを「陸の中の比」で行うことでこれを避けている。
+    幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の件数を
+    母数にする。以前は幅だけ立場で絞られ、高さが全体の割合のままで、
+    1つの図の中に分母が2つある状態だった。
     """
 
     @classmethod
@@ -339,70 +333,40 @@ class PlanetSeaTest(unittest.TestCase):
         cls.data = bpd.stabilize(bpd.build(TOPIC))
         cls.script = max(re.findall(r"<script>(.*?)</script>", cls.template, re.S), key=len)
 
-    def test_land_area_still_matches_the_opinion_counts(self):
+    def test_width_and_height_share_one_denominator(self):
         for mode in self.data["modes"]:
-            for key, want in mode["area_pct"].items():
-                got = mode["area_actual_pct"][key]
-                self.assertAlmostEqual(
-                    got, want, delta=0.15,
-                    msg=f"{mode['label']} / {key}: 面積{got}% が目標{want}% と合わない")
+            for issue in self.data["issues"]:
+                key = issue["id"]
+                n = mode["counts"][key]
+                want_w = round(100 * n / mode["total"], 2) if mode["total"] else 0.0
+                self.assertAlmostEqual(mode["width_pct"][key], want_w, places=2,
+                                       msg=f"{mode['label']}/{key}: 幅が件数と合わない")
+                want_h = round(100 * mode["high_counts"][key] / n, 1) if n else 0.0
+                self.assertAlmostEqual(mode["high_pct"][key], want_h, places=1,
+                                       msg=f"{mode['label']}/{key}: 高さが同じ母数で数えられていない")
 
-    def test_sea_takes_a_visible_share_but_never_drowns_a_continent(self):
-        for mode in self.data["modes"]:
-            self.assertGreater(mode["sea_pct"], 15, f"{mode['label']}: 海が狭すぎる")
-            self.assertLess(mode["sea_pct"], 65, f"{mode['label']}: 海が広すぎる")
-            for key, want in mode["area_pct"].items():
-                if want > 0:
-                    self.assertGreater(
-                        mode["area_actual_pct"][key], 0,
-                        f"{mode['label']} / {key}: 大陸が海に沈んで消えている")
+    def test_height_really_changes_by_stance(self):
+        """立場ごとに高さが変わること。ここが変わらないなら、球のときと同じで
+        「高さが表現されていない」状態に戻っている。"""
+        rates = {m["label"]: m["high_pct"]["bukatsu-chiiki-ukezara"] for m in self.data["modes"]}
+        self.assertGreater(max(rates.values()) - min(rates.values()), 10,
+                           f"立場を変えても高さがほとんど動かない: {rates}")
 
-    def test_coastline_noise_is_the_same_on_both_sides(self):
-        # 生成器とテンプレートで振幅が食い違うと、測った面積と描く面積がずれる
-        self.assertEqual(self.data["coast_noise_amp"], bpd.COAST_NOISE_AMP)
-        self.assertIn("D.coast_noise_amp", self.script,
-                      "テンプレートが振幅を data から受け取っていない")
-        for term in ("6.7*x + 2.9*y + 11.3*z", "3.1*x + 13.1*y - 7.7*z",
-                     "17.1*x - 5.3*y + 23.3*z"):
-            self.assertIn(term, self.script, f"海岸線のゆらぎの式が生成器と違う: {term}")
+    def test_the_globe_is_gone(self):
+        for gone in ("canvas", "getContext", "yaw", "coastNoise", "weights_by_mode"):
+            self.assertNotIn(gone, self.script, f"球の名残が残っている: {gone}")
+        self.assertIn('id="section"', self.template, "断面図の描画先が無い")
 
-    def test_every_continent_name_sits_on_land(self):
-        """大陸名は、その立場での陸の上に置く。
+    def test_a_hill_taller_than_the_axis_is_marked(self):
+        """上限を超えた山を、上限どまりの高さのまま描かない。"""
+        self.assertIn("clippedPath", self.script, "頂上を切る描き方が無い")
+        self.assertIn("v.clipped", self.script)
+        self.assertRegex(self.script, r'v\.clipped\?"▲"', "切れた山に実測値の印が付いていない")
 
-        名前の位置を全立場で共通にしていたため、縮んだ大陸の名前が海の上に浮いていた
-        （中立・情報の「費用・家庭負担」。3件まで縮むので陸が名前の位置まで届かない）。
-        海を入れる前は球面が隙間なく大陸で埋まっていたので起きなかった。
-        """
-        import numpy as np
-        d = self.data
-        centers = np.array([i["center"] for i in d["issues"]])
-        coast, amp = d["coast_margin"], d["coast_noise_amp"]
-        for mode in d["modes"]:
-            w = np.array(d["weights_by_mode"][mode["id"]])
-            off = np.array([0.0 if mode["counts"][i["id"]] > 0 else -10.0
-                            for i in d["issues"]])
-            spots = d["centroid_by_mode"][mode["id"]]
-            for k, issue in enumerate(d["issues"]):
-                if mode["counts"][issue["id"]] == 0:
-                    continue
-                v = np.array(spots[k])
-                score = centers @ v + w + off
-                ranked = np.sort(score)
-                margin = ranked[-1] - ranked[-2]
-                n = float(bpd.coast_noise(v.reshape(1, 3))[0])
-                margin += amp * n * max(0.0, 1 - abs(margin - coast) / amp)
-                self.assertGreaterEqual(
-                    margin, coast,
-                    f"{mode['label']} / {issue['label']}: 大陸名が海の上に浮いている")
-                self.assertEqual(
-                    int(np.argmax(score)), k,
-                    f"{mode['label']} / {issue['label']}: 大陸名が他の大陸の上にある")
-
-    def test_the_page_says_the_sea_has_no_meaning(self):
-        # 意味のない地形を意味ありげに見せない（設計書12）
-        page = bpd.render_page(self.data, self.template, "null")
-        static = re.sub(r"<script.*?</script>", "", page, flags=re.S)
-        self.assertIn("青い海と海岸線の形には意味がありません", static)
+    def test_small_samples_and_widened_hills_are_disclosed(self):
+        self.assertIn("SMALL=30", self.script.replace(" ", ""), "母数が小さい山の断りが無い")
+        self.assertIn("実際の割合より広く描いています", self.script,
+                      "押せる幅まで広げたことを書いていない")
 
 
 class PlanetDotsTest(unittest.TestCase):
@@ -438,8 +402,8 @@ class PlanetDotsTest(unittest.TestCase):
         rest = self.script.index("legend() + stanceBar(")
         self.assertLess(slot, rest,
                         "升目が着陸パネルの後ろにある（押した結果が画面外に出る）")
-        self.assertIn("bringIntoView(dotBox)", self.script,
-                      "画面が狭いときに升目まで運ぶ処理が無い")
+        self.assertIn("bringIntoView(document.getElementById(\"panel\"))", self.script,
+                      "画面が狭いときに、選んだ論点のパネルまで運ぶ処理が無い")
 
     def test_scrolling_does_not_rely_on_smooth_or_animation_frames(self):
         """スクロールが必ず届くこと。
@@ -527,11 +491,15 @@ class PlanetOceanPageTest(unittest.TestCase):
         with self.assertRaises(bpd.TemplateError):
             bpd.render_page(self.data, self.template.replace("<!--__OCEAN__-->", ""), "null")
 
-    def test_the_planet_is_redrawn_when_its_width_changes(self):
-        # 文字の大きさは canvas の表示幅から決めている。初回の render は
-        # レイアウトが決まる前に走ることがあり、375px で文字が巨大なまま残っていた
-        self.assertIn("ResizeObserver", self.template)
-        self.assertIn("observe(cv)", self.template)
+    def test_the_chart_scales_with_the_screen(self):
+        """図は SVG なので、幅が変わっても描き直さずに伸縮する。
+
+        canvas のときは実寸で描いていたため、幅が変わるたびに描き直す必要があり、
+        初回に文字が巨大なまま残る不具合が出ていた。
+        """
+        self.assertIn('viewBox="0 0 900 500"', self.template, "SVG の座標系が無い")
+        self.assertIn(".chart-box svg{display:block;width:100%;height:auto}", self.template,
+                      "図が画面幅に合わせて伸縮しない")
 
     def test_verdict_labels_are_fixed(self):
         # 課題54の「未着手」5: verdict と表示文言の対応を固定するテストが無かった

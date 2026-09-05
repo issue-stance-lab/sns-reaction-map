@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""「議論の惑星」の表示データを正典から生成する（試作版）。
+"""「議論の山なみ」（断面図）の表示データを正典から生成する（試作版）。
 
 使い方:
     python3 scripts/build_planet_data.py --topic bukatsu-chiiki
 
 データが増えたときは、このコマンドを再実行するだけでよい。
-件数・面積・色・標高・大陸の位置はすべてここで計算し、HTMLには数字を持たせない。
+件数・幅・高さ・色はすべてここで計算し、HTMLには数字を持たせない。
 同じ入力からは必ず同じ出力になる（乱数を使わない）。
 """
 from __future__ import annotations
@@ -25,150 +25,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 # ---------------------------------------------------------------- 球面の配置
 
-def fibonacci_points(n: int) -> np.ndarray:
-    """球面上へほぼ均等に n 点を置く。面積を測るための標本点。"""
-    i = np.arange(n) + 0.5
-    phi = np.arccos(1 - 2 * i / n)
-    theta = math.pi * (1 + 5 ** 0.5) * i
-    return np.stack(
-        [np.sin(phi) * np.cos(theta), np.sin(phi) * np.sin(theta), np.cos(phi)], axis=1
-    )
-
-
 def stable_order(ids: list[str]) -> list[int]:
-    """id のハッシュで並び順を決める。論点が増減しても既存の位置が動きにくい。"""
-    keyed = sorted(range(len(ids)), key=lambda i: hashlib.sha1(ids[i].encode()).hexdigest())
-    return keyed
-
-
-def seed_directions(ids: list[str]) -> np.ndarray:
-    """論点 id から決定的に中心方向を割り当てる。"""
-    n = len(ids)
-    base = fibonacci_points(n)
-    dirs = np.zeros_like(base)
-    for slot, idx in enumerate(stable_order(ids)):
-        dirs[idx] = base[slot]
-    return dirs
-
-
-# 海岸線のゆらぎ。真っ直ぐな多角形の境界だとビーチボールに見えるので、
-# 岸のあたりだけ境界を波打たせる。テンプレート側の coastNoise と同じ式で、
-# 同じ振幅・同じ窓関数を使う（片方だけ変えると、測った面積と描く面積がずれる）。
-COAST_NOISE_AMP = 0.085
-
-
-def coast_noise(p: np.ndarray) -> np.ndarray:
-    x, y, z = p[:, 0], p[:, 1], p[:, 2]
-    return (np.sin(6.7 * x + 2.9 * y + 11.3 * z)
-            + 0.55 * np.sin(3.1 * x + 13.1 * y - 7.7 * z)
-            + 0.30 * np.sin(17.1 * x - 5.3 * y + 23.3 * z)) / 1.85
-
-
-def wobble(margin: np.ndarray, noise: np.ndarray, coast: float) -> np.ndarray:
-    """岸から離れるほどゆらぎを弱める。振幅は margin に対して単調なので、
-    細い輪っかのような描画の破れは出ない。"""
-    if coast <= 0 or COAST_NOISE_AMP <= 0:
-        return margin
-    win = np.maximum(0.0, 1.0 - np.abs(margin - coast) / COAST_NOISE_AMP)
-    return margin + COAST_NOISE_AMP * noise * win
-
-
-def assign_land(dots: np.ndarray, w: np.ndarray, neg: np.ndarray,
-                coast: float, noise: np.ndarray | None = None) -> np.ndarray:
-    """各標本点の所属を返す。海は -1。
-
-    score_i(p) = dot(p, center_i) + w_i の最大値でその点の所属を決める。
-    1位と2位の差が coast より小さい帯は、どの大陸にも属さない海にする
-    （境界のまわりが海になるので、大陸が離れて島のように見える）。
-    """
-    s = dots + w + neg
-    if coast <= 0:
-        return np.argmax(s, axis=1)
-    part = np.partition(s, -2, axis=1)
-    margin = part[:, -1] - part[:, -2]
-    if noise is not None:
-        margin = wobble(margin, noise, coast)
-    return np.where(margin >= coast, np.argmax(s, axis=1), -1)
-
-
-def land_fractions(assign: np.ndarray, k: int, n: int) -> tuple[np.ndarray, float]:
-    """陸だけの面積比（陸の合計を1とした比）と、陸が球面に占める割合を返す。"""
-    cnt = np.bincount(assign[assign >= 0], minlength=k) / n
-    total = float(cnt.sum())
-    return (cnt / total if total > 0 else cnt), total
-
-
-def fit_weights(points: np.ndarray, centers: np.ndarray, targets: np.ndarray,
-                iters: int, lr: float = 0.6, coast: float = 0.0) -> np.ndarray:
-    """加重ボロノイの重みを、面積比が targets に合うまで調整する。
-
-    海を入れても「面積の比 = 意見数の比」を守るため、合わせるのは
-    球面全体に対する割合ではなく **陸の中での割合**。海が何割を占めても、
-    大陸どうしの大小関係は意見数のとおりになる。
-    """
-    k = len(centers)
-    w = np.zeros(k)
-    active = targets > 0
-    dots = points @ centers.T                       # (N, K)
-    neg = np.where(active, 0.0, -10.0)
-    # 重みの動かし幅を、その領域での dot のばらつきに合わせる。
-    # （大陸と島では dot の差の大きさが2桁ちがうため、固定の学習率だと島側が発散する）
-    scale = float(dots.std()) or 1.0
-    noise = coast_noise(points) if coast > 0 else None
-    best_w, best_err = w.copy(), 1e9
-    for t in range(iters):
-        assign = assign_land(dots, w, neg, coast, noise)
-        frac, _ = land_fractions(assign, k, len(points))
-        err = float(np.abs(frac - targets).sum())
-        if err < best_err:
-            best_err, best_w = err, w.copy()
-        step = lr * 2 * scale * (1 - 0.85 * t / iters)
-        w += step * (targets - frac)
-        w[~active] = 0.0
-    return best_w
-
-
-def region_stats(points: np.ndarray, centers: np.ndarray, w: np.ndarray,
-                 targets: np.ndarray, coast: float = 0.0
-                 ) -> tuple[np.ndarray, np.ndarray, float]:
-    """所属（海は -1）、陸の中での面積比、海が球面に占める割合。"""
-    neg = np.where(targets > 0, 0.0, -10.0)
-    noise = coast_noise(points) if coast > 0 else None
-    assign = assign_land(points @ centers.T, w, neg, coast, noise)
-    frac, land = land_fractions(assign, len(centers), len(points))
-    return assign, frac, 1.0 - land
-
-
-def centroids(points: np.ndarray, assign: np.ndarray, k: int) -> np.ndarray:
-    """大陸名を置く位置。海（-1）は含めないので、名前が海に浮かない。"""
-    out = np.zeros((k, 3))
-    for i in range(k):
-        sel = points[assign == i]
-        if len(sel) == 0:
-            out[i] = [0, 0, 1]
-            continue
-        v = sel.mean(axis=0)
-        n = np.linalg.norm(v)
-        out[i] = v / n if n > 1e-9 else [0, 0, 1]
-    return out
-
-
-def tangent_ring(center: np.ndarray, m: int, spread: float) -> np.ndarray:
-    """中心のまわりの接平面上へ m 個の下位シードを決定的に並べる。"""
-    ref = np.array([0.0, 0.0, 1.0])
-    if abs(float(center @ ref)) > 0.9:
-        ref = np.array([1.0, 0.0, 0.0])
-    u = np.cross(center, ref)
-    u /= np.linalg.norm(u)
-    v = np.cross(center, u)
-    out = []
-    for j in range(m):
-        ang = 2 * math.pi * j / m
-        # 1つ目は中心に置き、残りを環状に配置する
-        r = 0.0 if j == 0 and m > 1 else spread
-        p = center + r * (math.cos(ang) * u + math.sin(ang) * v)
-        out.append(p / np.linalg.norm(p))
-    return np.array(out)
+    """id のハッシュで並び順を決める。論点が増減しても既存の並びが動きにくい。"""
+    return sorted(range(len(ids)), key=lambda i: hashlib.sha1(ids[i].encode()).hexdigest())
 
 
 # ---------------------------------------------------------------- データ読み
@@ -367,31 +226,8 @@ def build(topic: str) -> dict:
     pmax = max(p_adj.values()) if p_adj else 1.0
 
     # --- 面積（最小面積の床つき）。立場フィルターごとに作り直す
-    def area_targets(sub_counts: dict[str, int]) -> np.ndarray:
-        total = sum(sub_counts.values())
-        if total == 0:
-            return np.zeros(len(keys))
-        raw = np.array([sub_counts.get(k, 0) / total * 100 for k in keys])
-        adj = np.where(raw > 0, np.maximum(raw, geo["min_area_pct"]), 0.0)
-        excess = adj.sum() - 100
-        donors = (adj > geo["min_area_pct"] + 1e-9)
-        if excess > 0 and donors.any():
-            adj[donors] -= excess * adj[donors] / adj[donors].sum()
-        return adj / 100.0
-
-    pts = fibonacci_points(geo["fit_points"])
-    centers = seed_directions(ids)
-    # 大陸のあいだの海の広さ。1位と2位の差がこれ未満の帯を海にする。
-    # 海は論点に属さない余白で、意味は持たない（設計書12「根拠のない地形の演出をしない」）。
-    # 面積の比は陸の中で合わせ直すので、海を広げても「面積＝意見数」は崩れない。
-    coast = float(geo.get("coast_margin", 0.22))
-
     modes = []
     mode_defs = [("all", "すべての意見", None)] + [(s, s, s) for s in stances]
-    weights_by_mode = {}
-    # 大陸名を置く位置は、その立場での陸の重心にする。全立場で共通の位置にすると、
-    # 縮んだ大陸の名前が海の上に浮く（中立・情報の「費用・家庭負担」で実際に起きた）。
-    centroid_by_mode = {}
     for mode_id, label, stance_key in mode_defs:
         if stance_key is None:
             sub = {k: counts[k] for k in keys}
@@ -399,19 +235,17 @@ def build(topic: str) -> dict:
         else:
             sub = {k: cross.get(k, {}).get(stance_key, 0) for k in keys}
             sub_high = {k: cross_high.get(k, {}).get(stance_key, 0) for k in keys}
-        tgt = area_targets(sub)
-        w = fit_weights(pts, centers, tgt, geo["fit_iters"], coast=coast)
-        assign, frac, sea = region_stats(pts, centers, w, tgt, coast)
-        weights_by_mode[mode_id] = w.tolist()
-        centroid_by_mode[mode_id] = centroids(pts, assign, len(keys)).tolist()
+        total = int(sum(sub.values()))
         modes.append({
             "id": mode_id,
             "label": label,
-            "total": int(sum(sub.values())),
+            "total": total,
             "counts": {issues_cfg[k]["id"]: int(sub[k]) for k in keys},
-            "area_pct": {issues_cfg[k]["id"]: round(float(tgt[i] * 100), 2) for i, k in enumerate(keys)},
-            "area_actual_pct": {issues_cfg[k]["id"]: round(float(frac[i] * 100), 2) for i, k in enumerate(keys)},
-            "sea_pct": round(float(sea * 100), 2),
+            # 山の幅。その立場の中で、この論点が占める割合
+            "width_pct": {
+                issues_cfg[k]["id"]: (round(100 * sub[k] / total, 2) if total else 0.0)
+                for k in keys
+            },
             # 山の高さ。その立場の中での「強い表現」の割合（幅と同じ母数で数える）
             "high_pct": {
                 issues_cfg[k]["id"]: (round(100 * sub_high[k] / sub[k], 1) if sub[k] else 0.0)
@@ -419,10 +253,6 @@ def build(topic: str) -> dict:
             },
             "high_counts": {issues_cfg[k]["id"]: int(sub_high[k]) for k in keys},
         })
-        if mode_id == "all":
-            base_assign = assign
-
-    cents = centroids(pts, base_assign, len(keys))
 
     # --- 下位論点（島）。再読データがある論点だけ割れる
     sub_cfg = cfg.get("sub_issues") or {}
@@ -441,21 +271,9 @@ def build(topic: str) -> dict:
             if gap > 0:
                 items.append({"id": "__unread__", "label": "まだ読み直していない分",
                               "count": gap, "unread": True})
-            m = len(items)
-            # 大陸の広がりに合わせて下位シードの散らばりを決める（はみ出さないように）
-            frac_i = float((base_assign == i).mean())
-            theta = math.acos(max(-1.0, 1 - 2 * frac_i))
-            scent = tangent_ring(cents[i], m, 0.55 * math.tan(min(theta, 1.2)))
-            stgt = np.array([x["count"] for x in items], dtype=float)
-            stgt = stgt / stgt.sum()
-            sel = pts[base_assign == i]
-            # 島は1つの大陸の中の区分けなので、島どうしの間に海は作らない（coast=0）
-            sw = fit_weights(sel, scent, stgt, 300) if len(sel) > 50 else np.zeros(m)
-            sassign, sfrac, _ = region_stats(sel, scent, sw, stgt)
-            scents = centroids(sel, sassign, m)
-            for j, x in enumerate(items):
-                x["centroid"] = scents[j].tolist()
-                x["area_pct_in_issue"] = round(float(sfrac[j] * 100), 1)
+            total_sub = sum(x["count"] for x in items)
+            for x in items:
+                x["pct_in_issue"] = round(100 * x["count"] / total_sub, 1) if total_sub else 0.0
             sub = {
                 "status": "reread",
                 "coverage": sc["coverage"],
@@ -464,8 +282,6 @@ def build(topic: str) -> dict:
                 "reread_count": reread,
                 "unread_count": max(gap, 0),
                 "items": items,
-                "centers": scent.tolist(),
-                "weights": sw.tolist(),
             }
         else:
             sub = {"status": "not_reviewed",
@@ -487,9 +303,6 @@ def build(topic: str) -> dict:
             "intensity": {x: int(inten[k].get(x, 0)) for x in ("high", "medium", "low")},
             "high_pct": round(100 * inten[k].get("high", 0) / counts[k], 1),
             "high_adjusted_pct": round(100 * p_adj[k], 1),
-            "elevation": round(geo["elevation_max"] * p_adj[k] / pmax, 2),
-            "center": centers[i].tolist(),
-            "centroid": cents[i].tolist(),
             "sub": sub,
             "verdict": verdict,
             "claims": matched_claims,
@@ -513,15 +326,10 @@ def build(topic: str) -> dict:
             "definition": "強い表現（intensity=high）の投稿が占める割合",
             "p0": round(p0, 4), "k": kk, "max_pct": geo["elevation_max"],
         },
-        "min_area_pct": geo["min_area_pct"],
-        "coast_margin": round(coast, 6),
-        "coast_noise_amp": COAST_NOISE_AMP,
         "stances": [dict(s, count=sum(cross.get(k, {}).get(s["key"], 0) for k in keys))
                     for s in cfg["stances"]],
         "vote_issue_order": cfg["vote_issue_order"],
         "modes": modes,
-        "weights_by_mode": weights_by_mode,
-        "centroid_by_mode": centroid_by_mode,
         "issues": issues,
         "editorial": public.get("editorial_summary",
                                 {"status": "not_started", "checked_on": None,
@@ -533,10 +341,18 @@ def build(topic: str) -> dict:
             "ocean_status": ocean.get("status", "not_started"),
             "ocean_checked_on": ocean.get("checked_on"),
             "ocean_reviewer_type": ocean.get("reviewer_type"),
-            "sunk_continents": sunk_continents,
+            # 図に入る短い名前。長い topic をそのまま描くとはみ出す
+            "sunk_continents": [dict(x, short_label=short_topic(x.get("topic", "")))
+                                for x in sunk_continents],
             "veins": ocean.get("veins", []),
         },
     }
+
+
+def short_topic(topic: str) -> str:
+    """沈んだ大陸の見出しを図へ収まる長さにする（本文は海面下の節でそのまま出す）。"""
+    head = topic.split("（")[0].strip()
+    return head if len(head) <= 14 else head[:13] + "…"
 
 
 def independence_gate(data: dict, cfg: dict) -> list[str]:
@@ -624,7 +440,7 @@ def static_caution(d: dict) -> str:
     out = ['<p class="caution" id="caution">'
            + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
-           + "件・<b>意見" + str(t["opinions"]) + "件</b>（惑星の母数）／更新 " + e(d["updated_at"])
+           + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
            + '　<code>' + e(d["snapshot_id"]) + "</code></p>"]
     if d.get("prototype_only"):
         out.append('<p class="caution" style="border-left-color:#e5534b">'
@@ -635,17 +451,14 @@ def static_caution(d: dict) -> str:
 
 def static_meta(d: dict) -> str:
     f = d["elevation_formula"]
-    return ("大陸＝論点、面積＝意見の数（最小" + str(d["min_area_pct"]) + "%の床あり）、"
-            "色＝いちばん多い立場（薄いほど意見が割れている）、"
-            "山の高さ＝" + e(f["definition"]) + "（小さい論点は k=" + str(f["k"])
-            + " で抑制。全体平均 " + f"{f['p0'] * 100:.1f}" + "%）。"
-            "大陸の位置は見やすさのための配置で、論点同士の近さを意味しません。<br>"
-            "<b>青い海と海岸線の形には意味がありません。</b>大陸を見分けやすくするための余白で、"
-            "球面の" + f"{d['modes'][0]['sea_pct']:.0f}" + "%を占めます。"
-            "面積の比は海を除いた陸の中で合わせているので、"
-            "海を広げても狭めても「面積＝意見の数」は変わりません。<br>"
+    return ("山＝論点、<b>幅＝意見の数</b>、<b>高さ＝" + e(f["definition"]) + "</b>、"
+            "色＝いちばん多い立場（薄いほど意見が割れている）。"
+            "幅と高さは<b>同じ母数</b>（いま選んでいる立場の件数）で数えているので、"
+            "面積（幅×高さ）は「強く語られた投稿の数」になります。<br>"
+            "山の左右の並び順に意味はありません。"
+            "件数の少ない論点は高さが揺れやすいため、母数が小さいものは画面で断っています。<br>"
             "このページの数字はすべて <code>scripts/build_planet_data.py</code> が正典から数え直したものです。"
-            "データが増えたら同じコマンドを実行し直すだけで、面積・色・高さ・島が更新されます。")
+            "データが増えたら同じコマンドを実行し直すだけで、幅・高さ・色・島が更新されます。")
 
 
 def static_fallback(d: dict) -> str:
@@ -699,10 +512,6 @@ def static_fallback(d: dict) -> str:
             '<b>件数が減っても、その中での割合は増えることがあります。</b></div>',
         ]
 
-        if it["share_pct"] < d["min_area_pct"]:
-            body.append(f'      <div class="note">3Dの惑星では、この大陸を実際の割合より大きく描いています。'
-                        f'小さすぎると押せないため、最小{d["min_area_pct"]}%まで拡大しています。</div>')
-
         sub = it["sub"]
         if sub["status"] == "reread":
             items = "".join(
@@ -746,9 +555,9 @@ def static_fallback(d: dict) -> str:
 
     return ("\n".join([
         '  <div id="fallback">',
-        '    <h3 class="sec">論点の一覧（3Dの惑星が使えないときの表示）</h3>',
+        '    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>',
         '    <p class="sub" style="color:var(--muted);font-size:12px">'
-        'このページは、お使いの環境で3Dの惑星を描けなかったため、同じ内容を静的な一覧で表示しています。'
+        'このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。'
         '円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>',
         '    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">',
     ] + nav + ['    </nav>'] + panels + ['  </div>']))
@@ -962,8 +771,9 @@ def main() -> None:
     for i in data["issues"]:
         s = i["sub"]
         tag = f"島{len(s['items'])}（未読{s['unread_count']}）" if s["status"] == "reread" else "未再読"
-        print(f"  {i['label']:<12}{i['count']:>5}件 面積{data['modes'][0]['area_actual_pct'][i['id']]:>5.1f}% "
-              f"標高{i['elevation']:.2f} {i['top_stance']}{i['purity_pct']:.0f}% {tag}")
+        m0 = data["modes"][0]
+        print(f"  {i['label']:<12}{i['count']:>5}件 幅{m0['width_pct'][i['id']]:>5.1f}% "
+              f"高さ{m0['high_pct'][i['id']]:>5.1f}% {i['top_stance']}{i['purity_pct']:.0f}% {tag}")
 
 
 if __name__ == "__main__":
