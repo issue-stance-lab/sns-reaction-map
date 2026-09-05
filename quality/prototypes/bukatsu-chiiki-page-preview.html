@@ -831,6 +831,22 @@
   </div>
 </section>
 <!-- BUKATSU_ENTRY_END -->
+<section class="panel" id="vote-section" data-vote-topic="bukatsu-chiiki-issue-stance-v1">
+<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
+<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
+
+<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
+<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
+  </div>
+  <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a>
+  <button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button>
+</div>
+</section>
 <!-- PLANET_SECTION_START -->
 <section class="panel planet-panel" aria-labelledby="planet-heading">
 <style>#planet-block{
@@ -888,17 +904,31 @@
 #planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
 #planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
 #planet-block .qnext{color:#fff;background:var(--accent)}
-/* 図の箱は暗いまま。中の文字と小箱だけ暗い面に合わせ直す */
-#planet-block .dotbox{background:#0b1017;border:1px solid #2b3440;border-radius:12px;
-  padding:13px 14px;margin-top:14px;color:#e6edf3;--rest-dot:#4a525c}
-#planet-block .dotbox .legend{color:#9fb0c4}
-#planet-block .dotbox .ro{background:#161b22;border-color:#2b3440;color:#e6edf3}
-#planet-block .dotbox .dot-mech{background:#161b22;color:#e6edf3}
-#planet-block .dotbox .dot-mech b{color:#f2f6fa}
+/* 図もサイトの色にする（オーナー指示 2026-09-05「マップの背景がまだ黒」）。
+   SVGの色は描画時に属性で付いているが、CSSのほうが強いので上から塗り替えられる。 */
+#planet-block .chart-box{background:#F2F6FD;border-color:#DCE3EF}
+#planet-block .chart-box svg rect:first-of-type{fill:#DCE9F7}
+#planet-block .chart-box svg #seacover{fill:#F2F6FD;opacity:.96}
+#planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E3E9F3}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1"]{stroke:#B9CCE6}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1.6"]{stroke:#075EF2}
+/* 目盛りの文字は線の真上に置かれていて、0%だけ海面の線に隠れる。5だけ持ち上げる */
+#planet-block .chart-box svg text[fill="#8b949e"]{fill:#667085;transform:translateY(-5px)}
+#planet-block .chart-box svg text[fill="#c7d1dc"]{fill:#172033}
+#planet-block .chart-box svg text[fill="#e6edf3"]{fill:#0F1A3D}
+#planet-block .chart-box svg path[stroke="#f2f6fa"]{stroke:#0F1A3D}
+#planet-block .chart-box svg #seafloor path[fill="#122642"]{fill:#E7F0FB;stroke:#7FA6D8}
+#planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
+#planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
+#planet-block .chart-box svg path[stroke="#e0663a"]{stroke:#C4462A}
+/* 点の装置も同じ面にそろえる */
+#planet-block .dotbox{background:#F2F6FD;border:1px solid #DCE3EF;border-radius:12px;
+  padding:13px 14px;margin-top:14px;--rest-dot:#D3DCEA}
+#planet-block .dotbox .legend{color:#667085}
 /* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
    論点名は海面+17pxにあるので、そこだけ残して畳み、「海の水を抜く」で開く。 */
 #planet-block .chart-box{overflow:hidden}
-#planet-block .chart-box svg{margin-bottom:-19%;transition:margin-bottom .9s ease}
+#planet-block .chart-box svg{margin-bottom:-17.5%;transition:margin-bottom .9s ease}
 #planet-block .chart-box.dived svg{margin-bottom:0}
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
@@ -917,7 +947,7 @@
 })();
 </script>
 <div id="planet-block">
-  <div class="panel-title"><h2>議論の山なみ</h2><span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>
+  <div class="panel-title"><h2>SNS反応マップ</h2><span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>
   <p class="q" id="q">学校の部活動を地域へ移すべきか（部活動の地域移行）</p>
   <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>収集期間 2026-06-27〜2026-09-02／収集1395件・<b>意見1139件</b>（この図の母数）／更新 2026-09-02　<code>bukatsu-chiiki-20260902</code></p>
 
@@ -1711,10 +1741,114 @@ try {
 })();
 </script>
 <!-- PLANET_SECTION_END -->
+<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2><span>公開投稿を論点・立場・主張の強さで配置</span></div><div class="hermes-issue-list"><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>費用・家庭負担</h3><span class="hermes-issue-count">117件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:17.95%"></span><span class="conditional" style="width:34.19%"></span><span class="con" style="width:45.30%"></span><span class="neutral" style="width:2.56%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 21</span> <span>条件を整えて進めたい 40</span> <span>今のままでは進めにくい 53</span> <span>経験・情報を共有 3</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">家計にのしかかる会費</span><p class="hermes-sample-summary">月額8000円が家計を圧迫し反対的</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TheMirageof0/status/2070621781757726855">@TheMirageof0 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">公費が足りないと縮小・負担増</span><p class="hermes-sample-summary">公金なしの地域移行で規模縮小と保護者負担が生じている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/774nyannyan/status/2086731858579263880">@774nyannyan の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>受け皿・指導者</h3><span class="hermes-issue-count">164件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:26.83%"></span><span class="conditional" style="width:29.88%"></span><span class="con" style="width:41.46%"></span><span class="neutral" style="width:1.83%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 44</span> <span>条件を整えて進めたい 49</span> <span>今のままでは進めにくい 68</span> <span>経験・情報を共有 3</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">受け皿の人手・送迎が足りない</span><p class="hermes-sample-summary">地域移行の方向性は正しいが現場の受け皿不足</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/maru_moneyy/status/2084392638506274876">@maru_moneyy の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">地域資源に合わせた再構築を求める</span><p class="hermes-sample-summary">全クラブ分の指導者確保は困難で休日クラブ再構築が合理的</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kohei_okada_pt/status/2084608274377437341">@kohei_okada_pt の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教員の働き方</h3><span class="hermes-issue-count">323件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:56.35%"></span><span class="conditional" style="width:20.74%"></span><span class="con" style="width:21.36%"></span><span class="neutral" style="width:1.55%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 182</span> <span>条件を整えて進めたい 67</span> <span>今のままでは進めにくい 69</span> <span>経験・情報を共有 5</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">授業に専念できる環境を求める</span><p class="hermes-sample-summary">教員の授業専念のため部活地域移行を支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/AtelierClutch/status/2082217044611834122">@AtelierClutch の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">善意に頼らない仕組みを求める</span><p class="hermes-sample-summary">部活を教員の善意だけに頼らぬ仕組みを要望</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Namenotblanko/status/2082969614196093400">@Namenotblanko の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>教育的意義・機会</h3><span class="hermes-issue-count">215件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:40.47%"></span><span class="conditional" style="width:7.91%"></span><span class="con" style="width:49.77%"></span><span class="neutral" style="width:1.86%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 87</span> <span>条件を整えて進めたい 17</span> <span>今のままでは進めにくい 107</span> <span>経験・情報を共有 4</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">学校教育としての部活を残したい</span><p class="hermes-sample-summary">教員が外れると部活ではなくクラブになり価値を失うと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ikuji_takuto/status/2083492685223215132">@ikuji_takuto の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">生涯スポーツ・音楽につながる場にしたい</span><p class="hermes-sample-summary">地域移行で部活を生涯愛せる活動に作り替えたい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/39Md8/status/2082487864135393452">@39Md8 の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>地域格差</h3><span class="hermes-issue-count">12件</span></div><div class="hermes-stance-bar"><span class="conditional" style="width:33.33%"></span><span class="con" style="width:66.67%"></span></div><div class="hermes-legend"><span>条件を整えて進めたい 4</span> <span>今のままでは進めにくい 8</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">地方で施設が取れない</span><p class="hermes-sample-summary">田舎町で移行後の施設予約が既存クラブに阻害された</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Davestaragues/status/2085511206278939102">@Davestaragues の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">都市部への環境偏在を懸念</span><p class="hermes-sample-summary">地域移行で野球の育成環境が悪化し都市部に偏在すると懸念</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamamam4949/status/2069589990011818183">@mamamam4949 の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>制度・移行プロセス</h3><span class="hermes-issue-count">256件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:40.62%"></span><span class="conditional" style="width:24.22%"></span><span class="con" style="width:27.73%"></span><span class="neutral" style="width:7.42%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 104</span> <span>条件を整えて進めたい 62</span> <span>今のままでは進めにくい 71</span> <span>経験・情報を共有 19</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">公費と負担金の仕組みが必要</span><p class="hermes-sample-summary">公的資金と負担金の仕組みを条件に移行すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355">@4ZYVNjQOkWBSoU8 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">費用・場所・責任の設計が未解決</span><p class="hermes-sample-summary">現状のままでは地域移行が破綻すると強く懸念</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Goshiki2023/status/2078663825013031272">@Goshiki2023 の投稿をXで見る</a></blockquote></div></div></article><article class="hermes-issue-card"><div class="hermes-issue-head"><h3>その他</h3><span class="hermes-issue-count">52件</span></div><div class="hermes-stance-bar"><span class="pro" style="width:42.31%"></span><span class="conditional" style="width:3.85%"></span><span class="con" style="width:26.92%"></span><span class="neutral" style="width:26.92%"></span></div><div class="hermes-legend"><span>地域で担う形を進めたい 22</span> <span>条件を整えて進めたい 2</span> <span>今のままでは進めにくい 14</span> <span>経験・情報を共有 14</span></div><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">吹奏楽は移行しにくいという経験</span><p class="hermes-sample-summary">多くの部活が移行したが吹奏楽部は進みづらい</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/m727243023/status/2085525452777795616">@m727243023 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">マネージャーの役割にある性別規範を問う</span><p class="hermes-sample-summary">マネージャーのジェンダー規範から部活廃止を主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamimami_koro/status/2087383840331608316">@mamimami_koro の投稿をXで見る</a></blockquote></div></div></article></div></section>
 
-
-
-
+<section class="panel explainer-section" id="explainer-section">
+<div class="panel-title"><h2>このテーマを読み解く論点</h2><span>活動を続ける条件を確かめる</span></div>
+<p class="explainer-lead">部活動を学校の外へ展開するとき、教員の負担だけでなく、費用、担い手、移動、安全を誰が引き受けるかが問われます。活動を続ける条件ごとに投稿を読みます。</p>
+<div class="explainer-grid">
+  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou.webp" data-alt="費用・家庭負担">
+    <div class="explainer-card-label">
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">費用・家庭負担 — 「月8000円、年間28万円」<span class="explainer-count" id="issue-count-bukatsu-chiiki-hiyo">117件</span></p>
+        <p class="explainer-card-desc">移行後の月会費が公立部活の頃より大幅に上がるケースが続出。3人きょうだいでは年間30万円近くになる家庭も。低所得家庭への補助の有無で地域差も生まれる。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：家計を直撃。格差が広がる</span>
+          <span class="explainer-side pro">擁護：市税補助・一律化で解決できる</span>
+        </div>
+      </div>
+    </div>
+    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou.webp" alt="費用・家庭負担インフォグラフィック" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara.webp" data-alt="受け皿・指導者">
+    <div class="explainer-card-label">
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">受け皿・指導者 — 「ボランティア頼みは限界」<span class="explainer-count" id="issue-count-bukatsu-chiiki-ukezara">164件</span></p>
+        <p class="explainer-card-desc">地域クラブの指導者がいない・報酬が最低賃金レベル・責任は重い。「タイミーで探した方が時給が高い」という声も。人材確保ができなければ移行自体が空洞化する。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：報酬が安く人材が集まらない</span>
+          <span class="explainer-side pro">擁護：生活できる報酬を社会全体で保障を</span>
+        </div>
+      </div>
+    </div>
+    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara.webp" alt="受け皿・指導者インフォグラフィック" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin.webp" data-alt="教員の働き方">
+    <div class="explainer-card-label">
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">教員の働き方 — 「ブラック部活の解消」が最大動機<span class="explainer-count" id="issue-count-bukatsu-chiiki-kyoin">323件</span></p>
+        <p class="explainer-card-desc">教員が土日に無償で指導する構造が長時間労働の温床に。地域移行の最大の動機は教員の働き方改革。ただし「義務がなくなっても続ける教員が多い」という現実もある。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">賛成：強制をなくし教員の負担を減らせる</span>
+          <span class="explainer-side con">懸念：移行後も実態は変わらない可能性</span>
+        </div>
+      </div>
+    </div>
+    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin.webp" alt="教員の働き方インフォグラフィック" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku.webp" data-alt="教育的意義・機会">
+    <div class="explainer-card-label">
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">教育的意義・機会 — 「子どもの夢と居場所」<span class="explainer-count" id="issue-count-bukatsu-chiiki-kyoiku">215件</span></p>
+        <p class="explainer-card-desc">部活動は競技だけでなく人間形成・チームワーク・居場所の場でもある。地域移行で不登校の子も参加しやすくなる可能性がある一方、「費用で夢を奪われる」という怒りも。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side pro">期待：門戸が広がり多様な子に機会を</span>
+          <span class="explainer-side con">懸念：費用・距離の壁で格差が生まれる</span>
+        </div>
+      </div>
+    </div>
+    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku.webp" alt="教育的意義・機会インフォグラフィック" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa.webp" data-alt="地域格差">
+    <div class="explainer-card-label">
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">地域格差 — 「都市はできるが地方は無理」<span class="explainer-count" id="issue-count-bukatsu-chiiki-kakusa">12件</span></p>
+        <p class="explainer-card-desc">都市部は代替クラブや交通手段があるが、地方では受け皿となる団体自体が存在しない。少子化で単独チームが組めない学校も増えており、移行の実現可能性が地域で大きく異なる。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">懸念：地方では移行自体が成立しない</span>
+          <span class="explainer-side pro">視点：地域の実情に合わせた柔軟設計を</span>
+        </div>
+      </div>
+    </div>
+    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa.webp" alt="地域格差インフォグラフィック" loading="lazy">
+  </article>
+  <article class="explainer-card" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido.webp" data-alt="制度・移行プロセス">
+    <div class="explainer-card-label">
+      <div class="explainer-card-body">
+        <p class="explainer-card-title">制度・移行プロセス — 「手探りのまま進んでいる」<span class="explainer-count" id="issue-count-bukatsu-chiiki-seido">256件</span></p>
+        <p class="explainer-card-desc">国の方針は出たが、担い手・費用負担のルールは自治体ごとの手探り。「クラブ化と言っているのにチームしか作っていない」という本質的な批判も。プロセス設計の問題を問う声が最多。</p>
+        <div class="explainer-sides">
+          <span class="explainer-side con">批判：制度設計が不透明なまま進んでいる</span>
+          <span class="explainer-side pro">擁護：段階的に改善していくのは当然</span>
+        </div>
+      </div>
+    </div>
+    <img src="../../docs/images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido.webp" alt="制度・移行プロセスインフォグラフィック" loading="lazy">
+  </article>
+</div>
+<p class="explainer-note"><strong>使い方:</strong> 気になる条件を確かめてから、次の投票で「自分が一番気になる論点」を選んでください。画像はタップで拡大できます。</p>
+</section>
+<div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
+  <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
+  <img src="" alt="" id="explainer-modal-img">
+</div>
+<script>
+(function(){
+  var modal=document.getElementById('explainer-modal');
+  var mImg=document.getElementById('explainer-modal-img');
+  var mClose=document.getElementById('explainer-modal-close');
+  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
+    c.addEventListener('click',function(){
+      mImg.src=c.dataset.img;
+      mImg.alt=c.dataset.alt||'';
+      modal.classList.add('open');
+    });
+  });
+  mClose.addEventListener('click',function(){modal.classList.remove('open');});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.classList.remove('open');});
+})();
+</script>
 
 <!-- ARGUMENTS_START -->
 <style>
@@ -1740,206 +1874,11 @@ try {
 </style>
 
 <!-- ARGUMENTS_END -->
-<section class="panel" id="vote-section" data-vote-topic="bukatsu-chiiki-issue-stance-v1">
-<div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
-<p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
-<!-- ARTICLE_TRUST_START -->
-<aside class="article-trust" aria-labelledby="article-trust-title">
-  <div class="article-trust-heading">
-    <p class="article-trust-kicker">編集・分析情報</p>
-    <h2 id="article-trust-title">このページの作り方</h2>
-  </div>
-  <dl class="article-trust-meta">
-    <div><dt>公開日</dt><dd><time datetime="2026-06-27">2026年6月27日</time></dd></div>
-    <div><dt>最終更新日</dt><dd><time datetime="2026-09-02">2026年9月2日</time></dd></div>
-    <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
-  </dl>
-  <div class="article-trust-method">
-    <h3>SNS投稿の収集方法</h3>
-    <p>Yahoo!リアルタイム検索で地域移行、教員負担、費用、受け皿などに関する複数の検索語を使い、公開されているX投稿を収集しました。重複を除いた累計1,395件を分類し、意見と判定した1,139件を論点分析に使用しています。</p>
-    <h3>AIを使用した工程</h3>
-    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
-    <h3>収集・分類で分かったこと</h3>
-    <ul class="article-trust-observations">
-      <li>同じ10の検索語で3回にわたって収集しています。回を重ねるごとに重複が増え、2026年8月8日の回では取得238件のうち132件（約55%）が既に取得済みの投稿でした。話題が一巡すると新しい声が出にくくなります。</li>
-      <li>7月23日の追加分と8月2日の追加分を同じ条件で比べると、移行支持が6.1ポイント増え、「教員の働き方」を論点とする投稿が8.9ポイント増えました。一方で感情の強い投稿は8.0ポイント減っています。</li>
-      <li>収集した投稿のうち意見と判定できた割合は約76〜82%でした。制度の説明や自治体の告知を共有する投稿が一定数あり、それらは分析から外しています。</li>
-    </ul>
-  </div>
-  <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
-  <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
-</aside>
-<!-- ARTICLE_TRUST_END -->
-<div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
-<div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
-<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
-<div id="vote-result" style="display:none;margin-top:20px;">
-  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
-    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
-  </div>
-  <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a>
-  <button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button>
-</div>
-</section>
 
 
-<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
-      <article class="stat insight-stat">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
-        <strong class="insight-value">1139<small>件</small></strong>
-        <p class="insight-note">関連1382件から、意見が読み取れる投稿を集計</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="debate">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">📣</span><span class="insight-label">最も多い立場</span></div>
-        <strong class="insight-value">移行支持 40%</strong>
-        <p class="insight-note">460件。教員負担の軽減を重く見る声が中心</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:40%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="topic">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
-        <strong class="insight-value">教員の働き方 323<small>件</small></strong>
-        <p class="insight-note">長時間労働と顧問負担が議論の中心</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:28%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="option">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">💡</span><span class="insight-label">条件付き・第三案</span></div>
-        <strong class="insight-value">改善条件あり 21%</strong>
-        <p class="insight-note">241件。費用、指導者、受け皿を整えれば支持</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:21%"></i></div>
-      </article>
-    </section>
-<section class="update-dashboard" aria-label="更新データと世論の潮目"><!-- TIDE_CARD_START -->
-<section class="tide-card" id="bukatsu-tide-widget" aria-label="世論の潮目 前回更新と今回更新の比較">
-  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
-    <div class="tide-widget-tabs">
-      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
-      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
-    </div>
-    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
-  </div>
-  <div class="tide-widget-summary" aria-live="polite">
-    <span class="tide-widget-period">8月26日 → 9月2日</span>
-    <strong data-tide-headline>慎重・反対の割合が5.8ポイント増加</strong>
-  </div>
-  <div class="tide-slope-wrap">
-    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="tide-slope-title tide-slope-desc">
-      <title id="tide-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="tide-slope-desc">前回追加分239件と今回追加分146件の構成比を比較します。</desc>
-      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月26日</text>
-      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 9月2日</text>
-      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
-      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
-      <g data-tide-series></g>
-    </svg>
-  </div>
-  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：前回追加分 239件／今回追加分 146件。同じ検索語セットで取得した意見投稿をAIで再分類しています。投稿サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
-</section>
 
-<script>
-(() => {
-  const root = document.getElementById("bukatsu-tide-widget");
-  if (!root) return;
-  const datasets = {"stance":{"max":50,"headline":"慎重・反対の割合が5.8ポイント増加","rows":[{"label":"移行支持","previous":34.3,"current":31.5},{"label":"条件・改善要求","previous":26.4,"current":24.0},{"label":"慎重・反対","previous":36.0,"current":41.8}]},"issue":{"max":30,"headline":"教員の働き方が4.0ポイント増加","rows":[{"label":"教員の働き方","previous":23.4,"current":27.4},{"label":"受け皿・指導者","previous":18.0,"current":14.4},{"label":"制度・移行プロセス","previous":23.4,"current":19.9},{"label":"費用・家庭負担","previous":10.5,"current":13.7}]}};
-  const svgGroup = root.querySelector("[data-tide-series]");
-  const mobileRows = root.querySelector("[data-tide-mobile]");
-  const headline = root.querySelector("[data-tide-headline]");
-  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
-  const replayButton = root.querySelector("[data-tide-replay]");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mode = "stance";
-  let animationFrame = 0;
-  let hasAutoPlayed = false;
 
-  const yFor = (value, max) => 310 - (value / max) * 235;
-  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
-  const svgElement = (name, attrs, text) => {
-    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
-    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
-    if (text !== undefined) el.textContent = text;
-    return el;
-  };
 
-  function draw(progress = 1) {
-    const data = datasets[mode];
-    svgGroup.replaceChildren();
-    mobileRows.replaceChildren();
-
-    data.rows.forEach((row, index) => {
-      const y1 = yFor(row.previous, data.max);
-      const y2Target = yFor(row.current, data.max);
-      const y2 = y1 + (y2Target - y1) * progress;
-      const shown = row.previous + (row.current - row.previous) * progress;
-      const shownDelta = shown - row.previous;
-      const seriesClass = `series-${index}`;
-
-      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2+17, class:"tide-slope-value"}, signed(shownDelta)));
-
-      const mobile = document.createElement("article");
-      mobile.className = "tide-mobile-row";
-      mobile.innerHTML =
-        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
-        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
-        `<div class="tide-mobile-bars" aria-hidden="true">` +
-          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
-          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
-        `</div>`;
-      mobileRows.appendChild(mobile);
-    });
-  }
-
-  function animate() {
-    cancelAnimationFrame(animationFrame);
-    if (reducedMotion) {
-      draw(1);
-      return;
-    }
-    const startedAt = performance.now();
-    const duration = 900;
-    const step = now => {
-      const raw = Math.min(1, (now - startedAt) / duration);
-      draw(1 - Math.pow(1 - raw, 3));
-      if (raw < 1) animationFrame = requestAnimationFrame(step);
-    };
-    animationFrame = requestAnimationFrame(step);
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-    modeButtons.forEach(button => {
-      const selected = button.dataset.tideMode === mode;
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    headline.textContent = datasets[mode].headline;
-    animate();
-  }
-
-  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
-  replayButton.addEventListener("click", animate);
-  draw(1);
-
-  if ("IntersectionObserver" in window && !reducedMotion) {
-    const observer = new IntersectionObserver(entries => {
-      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
-        hasAutoPlayed = true;
-        animate();
-        observer.disconnect();
-      }
-    }, {threshold: 0.35});
-    observer.observe(root);
-  }
-})();
-</script>
-
-<!-- TIDE_CARD_END --></section>
 
 <script>
 const SM_RAW = [
@@ -3179,13 +3118,35 @@ const SM_RAW = [
 })();
 </script>
 
-    <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">少子化と教員の長時間労働を背景に、中学校の部活動を学校から地域のスポーツクラブや民間団体へ移す「地域移行」が国の方針として進められています。まず休日の部活動から段階的に移行を進める計画で、教員の負担軽減と、少子化で単独では部活動を維持できない学校の受け皿づくりが狙いです。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「教員の働き方改革に不可欠」「専門的な指導を受けられる機会が増える」という声があります。一方で、「地域に受け皿となるクラブや指導者がいない」「会費負担が増え、家庭の経済力で子どもの機会に格差が生まれる」「学校の部活動が持っていた教育的な意義が失われる」といった懸念も根強く、特に都市部と地方の環境差が大きな論点になっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">移行の担い手や費用負担のあり方は自治体ごとに手探りの状態が続いており、現場の教員・保護者・地域それぞれの立場から異なる意見がSNS上でも交わされています。</p></section>
-    <section class="panel conflict-panel"><div class="panel-title"><h2>投稿の分類結果</h2><span>意見投稿のみ</span></div>
-<div class="hermes-summary-grid">
-<article class="hermes-summary-card"><div class="axis-kicker">最多スタンス</div><h3>支持</h3><div class="axis-count">460</div><p>支持・条件付き・慎重反対を分けて集計しています。</p></article>
-<article class="hermes-summary-card"><div class="axis-kicker">最多論点</div><h3>教員の働き方</h3><div class="axis-count">323</div><p>投稿の主眼となる論点を1つに分類しています。</p></article>
-<article class="hermes-summary-card"><div class="axis-kicker">感情強度 high</div><h3>強い訴え・批判</h3><div class="axis-count">247</div><p>表現の強さであり、意見の正しさを示す値ではありません。</p></article>
-</div></section><section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
+    <!-- ARTICLE_TRUST_START -->
+<aside class="article-trust" aria-labelledby="article-trust-title">
+  <div class="article-trust-heading">
+    <p class="article-trust-kicker">編集・分析情報</p>
+    <h2 id="article-trust-title">このページの作り方</h2>
+  </div>
+  <dl class="article-trust-meta">
+    <div><dt>公開日</dt><dd><time datetime="2026-06-27">2026年6月27日</time></dd></div>
+    <div><dt>最終更新日</dt><dd><time datetime="2026-09-02">2026年9月2日</time></dd></div>
+    <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
+  </dl>
+  <div class="article-trust-method">
+    <h3>SNS投稿の収集方法</h3>
+    <p>Yahoo!リアルタイム検索で地域移行、教員負担、費用、受け皿などに関する複数の検索語を使い、公開されているX投稿を収集しました。重複を除いた累計1,395件を分類し、意見と判定した1,139件を論点分析に使用しています。</p>
+    <h3>AIを使用した工程</h3>
+    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+    <h3>収集・分類で分かったこと</h3>
+    <ul class="article-trust-observations">
+      <li>同じ10の検索語で3回にわたって収集しています。回を重ねるごとに重複が増え、2026年8月8日の回では取得238件のうち132件（約55%）が既に取得済みの投稿でした。話題が一巡すると新しい声が出にくくなります。</li>
+      <li>7月23日の追加分と8月2日の追加分を同じ条件で比べると、移行支持が6.1ポイント増え、「教員の働き方」を論点とする投稿が8.9ポイント増えました。一方で感情の強い投稿は8.0ポイント減っています。</li>
+      <li>収集した投稿のうち意見と判定できた割合は約76〜82%でした。制度の説明や自治体の告知を共有する投稿が一定数あり、それらは分析から外しています。</li>
+    </ul>
+  </div>
+  <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
+  <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
+</aside>
+<!-- ARTICLE_TRUST_END -->
+<section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">少子化と教員の長時間労働を背景に、中学校の部活動を学校から地域のスポーツクラブや民間団体へ移す「地域移行」が国の方針として進められています。まず休日の部活動から段階的に移行を進める計画で、教員の負担軽減と、少子化で単独では部活動を維持できない学校の受け皿づくりが狙いです。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは「教員の働き方改革に不可欠」「専門的な指導を受けられる機会が増える」という声があります。一方で、「地域に受け皿となるクラブや指導者がいない」「会費負担が増え、家庭の経済力で子どもの機会に格差が生まれる」「学校の部活動が持っていた教育的な意義が失われる」といった懸念も根強く、特に都市部と地方の環境差が大きな論点になっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">移行の担い手や費用負担のあり方は自治体ごとに手探りの状態が続いており、現場の教員・保護者・地域それぞれの立場から異なる意見がSNS上でも交わされています。</p></section>
+    <section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
 <div class="related-grid">
   <a class="related-card" href="bike-blue-ticket-reaction-map.html"><img src="../../docs/images/topics/bike-blue-ticket/bike-blue-ticket-hero.webp" alt="自転車の青切符" loading="lazy"><strong>自転車の青切符</strong><span>安全のための取締りか、道路整備が先か。</span></a>
   <a class="related-card" href="ai-copyright-reaction-map.html"><img src="../../docs/images/topics/ai-copyright/ai-copyright-hero.webp" alt="生成AIと著作権" loading="lazy"><strong>生成AIと著作権</strong><span>クリエイター保護と技術革新の距離を考える。</span></a>

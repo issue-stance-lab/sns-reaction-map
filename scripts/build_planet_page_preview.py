@@ -29,16 +29,20 @@ SCOPE = "#planet-block"
 
 # 山なみが役目を引き継ぐ区間。ここを外さないと同じ数字が2回出る（段階8の検査）。
 DROP_SECTIONS = [
-    ('<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>',
-     "section", "7つの論点とXの声（2Dアリーナ）"),
-    ('<section class="panel explainer-section" id="explainer-section">',
-     "section", "このテーマを読み解く論点（論点カード6枚）"),
-    ('<div class="explainer-modal" id="explainer-modal"',
-     "div", "論点カードの拡大表示"),
+    # 編集部の横断整理が同じ役目をする
     ('<section class="panel arguments-panel" id="strongest-arguments"',
      "section", "30秒でわかる、両側の強い論拠"),
+    # 図が引き継ぐ。地図の見え方として戻す予定（切り替え）
     ('<section class="arena-section" id="stance-map-section">',
-     "section", "SNS反応マップ（2Dキャンバス）"),
+     "section", "SNS反応マップ（2Dキャンバス・切り替えとして戻す予定）"),
+    # 前回比 +5.8pt は母数146件の誤差 ±10.1pt より小さく、増減を断定できない
+    ('<section class="update-dashboard" aria-label="更新データと世論の潮目">',
+     "section", "世論の潮目（誤差の範囲内）"),
+    # 図と同じ数字（460 / 323 / 247）の繰り返し
+    ('<section class="panel conflict-panel"><div class="panel-title"><h2>投稿の分類結果</h2>',
+     "section", "投稿の分類結果（数字の重複）"),
+    ('<section class="stats insight-stats"',
+     "section", "4つの注目ポイント（数字の重複）"),
 ]
 
 
@@ -64,6 +68,16 @@ def cut_block(html: str, start: str, tag: str) -> tuple[str, bool]:
         if depth == 0:
             return html[:i] + html[pos:], True
     raise SystemExit(f"閉じタグが見つかりません: {start[:60]}")
+
+
+def take_block(html: str, start: str, tag: str) -> tuple[str, str]:
+    """start から対応する閉じタグまでを切り取り、（残り, 切り取った中身）を返す。"""
+    i = html.find(start)
+    if i < 0:
+        raise SystemExit(f"見つかりません: {start[:60]}")
+    rest, _ = cut_block(html, start, tag)
+    taken = html[i:len(html) - (len(rest) - i)]
+    return rest, taken
 
 
 def scope_css(css: str) -> str:
@@ -125,8 +139,7 @@ def scope_selector(sel: str) -> str:
 
 # 外した部品にしか触っていない素のスクリプト。残すと null 参照でJSエラーが出る。
 # 呼び出し側はすべて if(window.…) で守られているので、落としても投票は動く。
-DEAD_SCRIPT_IDS = ("explainer-modal", "explainer-card", "smCanvasMain", "smCanvasHeat",
-                   "sm-filters", "sm-tooltip")
+DEAD_SCRIPT_IDS = ("smCanvasMain", "smCanvasHeat", "sm-filters", "sm-tooltip")
 
 
 def drop_orphan_scripts(html: str) -> tuple[str, int]:
@@ -166,17 +179,31 @@ LIGHT_SKIN = """
 #planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
 #planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
 #planet-block .qnext{color:#fff;background:var(--accent)}
-/* 図の箱は暗いまま。中の文字と小箱だけ暗い面に合わせ直す */
-#planet-block .dotbox{background:#0b1017;border:1px solid #2b3440;border-radius:12px;
-  padding:13px 14px;margin-top:14px;color:#e6edf3;--rest-dot:#4a525c}
-#planet-block .dotbox .legend{color:#9fb0c4}
-#planet-block .dotbox .ro{background:#161b22;border-color:#2b3440;color:#e6edf3}
-#planet-block .dotbox .dot-mech{background:#161b22;color:#e6edf3}
-#planet-block .dotbox .dot-mech b{color:#f2f6fa}
+/* 図もサイトの色にする（オーナー指示 2026-09-05「マップの背景がまだ黒」）。
+   SVGの色は描画時に属性で付いているが、CSSのほうが強いので上から塗り替えられる。 */
+#planet-block .chart-box{background:#F2F6FD;border-color:#DCE3EF}
+#planet-block .chart-box svg rect:first-of-type{fill:#DCE9F7}
+#planet-block .chart-box svg #seacover{fill:#F2F6FD;opacity:.96}
+#planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E3E9F3}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1"]{stroke:#B9CCE6}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1.6"]{stroke:#075EF2}
+/* 目盛りの文字は線の真上に置かれていて、0%だけ海面の線に隠れる。5だけ持ち上げる */
+#planet-block .chart-box svg text[fill="#8b949e"]{fill:#667085;transform:translateY(-5px)}
+#planet-block .chart-box svg text[fill="#c7d1dc"]{fill:#172033}
+#planet-block .chart-box svg text[fill="#e6edf3"]{fill:#0F1A3D}
+#planet-block .chart-box svg path[stroke="#f2f6fa"]{stroke:#0F1A3D}
+#planet-block .chart-box svg #seafloor path[fill="#122642"]{fill:#E7F0FB;stroke:#7FA6D8}
+#planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
+#planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
+#planet-block .chart-box svg path[stroke="#e0663a"]{stroke:#C4462A}
+/* 点の装置も同じ面にそろえる */
+#planet-block .dotbox{background:#F2F6FD;border:1px solid #DCE3EF;border-radius:12px;
+  padding:13px 14px;margin-top:14px;--rest-dot:#D3DCEA}
+#planet-block .dotbox .legend{color:#667085}
 /* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
    論点名は海面+17pxにあるので、そこだけ残して畳み、「海の水を抜く」で開く。 */
 #planet-block .chart-box{overflow:hidden}
-#planet-block .chart-box svg{margin-bottom:-19%;transition:margin-bottom .9s ease}
+#planet-block .chart-box svg{margin-bottom:-17.5%;transition:margin-bottom .9s ease}
 #planet-block .chart-box.dived svg{margin-bottom:0}
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
@@ -209,7 +236,7 @@ def build_section(parts: dict[str, str]) -> str:
     body = parts["body"]
     # 試作の見出しは公開ページの体裁に合わせる（「試作・非公開」の札は外す）
     body = body.replace('<h1>議論の山なみ<span class="proto-tag">試作・非公開</span></h1>',
-                        '<div class="panel-title"><h2>議論の山なみ</h2>'
+                        '<div class="panel-title"><h2>SNS反応マップ</h2>'
                         '<span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>')
     body = re.sub(r'^<div class="wrap">', f'<div id="{SCOPE[1:]}">', body)
     # 試作のときの言い回しを、読者に出す言葉へ直す。
@@ -264,11 +291,28 @@ def main() -> None:
 
     html, dropped = drop_orphan_scripts(html)
 
+    # 使い方ページの約束は「①テーマを選ぶ ②投票する ③分布と理由を読む」。
+    # 投票が図より後ろにあると順番が逆になるので、図の前へ移す。
+    # 中に入っている「編集・分析情報」は長いので、投票からは外して後ろへ回す。
+    trust_start, trust_end = "<!-- ARTICLE_TRUST_START -->", "<!-- ARTICLE_TRUST_END -->"
+    ti, tj = html.find(trust_start), html.find(trust_end)
+    if ti < 0 or tj < 0:
+        raise SystemExit("編集・分析情報の目印が見つかりません")
+    trust = html[ti:tj + len(trust_end)]
+    html = html[:ti] + html[tj + len(trust_end):]
+
+    html, vote = take_block(html, '<section class="panel" id="vote-section"', "section")
+
+    back = '<section class="panel background-panel">'
+    if back not in html:
+        raise SystemExit("「この争点の背景」が見つかりません")
+    html = html.replace(back, trust + "\n" + back, 1)
+
     section = build_section(split_prototype(render_planet(a.topic)))
     anchor = "<!-- BUKATSU_ENTRY_END -->"
     if anchor not in html:
         raise SystemExit(f"差し込み位置 {anchor} が見つかりません")
-    html = html.replace(anchor, anchor + "\n" + section, 1)
+    html = html.replace(anchor, anchor + "\n" + vote + "\n" + section, 1)
 
     # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す
     html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",
