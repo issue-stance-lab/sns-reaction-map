@@ -984,7 +984,7 @@ def main() -> int:
             validate_classified(read_rows(stage / "classified-test.json"), classifier)
             started = time.monotonic()
             run(
-                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-wave.json"), "--markdown", str(stage / "classified-wave.md"), *classifier_args],
+                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-wave.json"), "--markdown", str(stage / "classified-wave.md"), "--resume", *classifier_args],
                 label="classify full",
             )
             classified = read_rows(stage / "classified-wave.json")
