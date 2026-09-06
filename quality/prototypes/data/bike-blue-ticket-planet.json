@@ -52,9 +52,9 @@
   "その他"
  ],
  "reread_summary": {
-  "connected_editorial_count": 206,
+  "connected_editorial_count": 468,
   "connected_issue_population": 468,
-  "not_connected_opinion_count": 262
+  "not_connected_opinion_count": 0
  },
  "modes": [
   {
@@ -230,15 +230,21 @@
    "high_adjusted_pct": 11.8,
    "sub": {
     "status": "reread",
-    "coverage": "partial",
-    "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。",
+    "coverage": "full",
+    "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。",
     "source_file": "data/bike-blue-ticket_issues-reread.json",
-    "reread_count": 63,
-    "unread_count": 150,
+    "reread_count": 213,
+    "unread_count": 0,
     "skipped_count": 0,
     "grown_count": 0,
-    "unknown_timing_count": 150,
+    "unknown_timing_count": 0,
     "items": [
+     {
+      "id": "n_information",
+      "label": "記事・制度案内・活動報告の共有",
+      "count": 54,
+      "pct_in_issue": 25.4
+     },
      {
       "id": "abolish",
       "label": "制度そのものに反対",
@@ -246,10 +252,124 @@
       "pct_in_issue": 24.4
      },
      {
+      "id": "n_education",
+      "label": "交通ルールの理解と安全運転の呼びかけ",
+      "count": 12,
+      "pct_in_issue": 5.6
+     },
+     {
+      "id": "n_other",
+      "label": "青切符への言及を含む別の主題",
+      "count": 10,
+      "pct_in_issue": 4.7
+     },
+     {
       "id": "distrust",
       "label": "警察の運用が信用できない",
       "count": 7,
       "pct_in_issue": 3.3
+     },
+     {
+      "id": "ob_safe_compliance",
+      "label": "安全運転と違反を避ける行動",
+      "count": 7,
+      "pct_in_issue": 3.3
+     },
+     {
+      "id": "n_burden",
+      "label": "利用時の負担・不安と行動への影響",
+      "count": 6,
+      "pct_in_issue": 2.8
+     },
+     {
+      "id": "n_effects",
+      "label": "導入後の違反や行動の変化への見方",
+      "count": 6,
+      "pct_in_issue": 2.8
+     },
+     {
+      "id": "n_rules",
+      "label": "交通ルールの解釈・例外・運用の整合性",
+      "count": 6,
+      "pct_in_issue": 2.8
+     },
+     {
+      "id": "n_context",
+      "label": "本人の立場や参照先の文脈が不足する反応",
+      "count": 5,
+      "pct_in_issue": 2.3
+     },
+     {
+      "id": "n_transport",
+      "label": "自転車と別の移動手段の選択",
+      "count": 5,
+      "pct_in_issue": 2.3
+     },
+     {
+      "id": "n_environment",
+      "label": "道路環境と制度の適合への意見",
+      "count": 4,
+      "pct_in_issue": 1.9
+     },
+     {
+      "id": "n_fraud",
+      "label": "反則金を口実にした詐欺への注意",
+      "count": 4,
+      "pct_in_issue": 1.9
+     },
+     {
+      "id": "n_introduction",
+      "label": "記事・動画・商品の紹介",
+      "count": 4,
+      "pct_in_issue": 1.9
+     },
+     {
+      "id": "oa_conduct_safety",
+      "label": "自転車利用者の危険行動と周囲への配慮",
+      "count": 4,
+      "pct_in_issue": 1.9
+     },
+     {
+      "id": "oa_luup_comparison",
+      "label": "LUUPとの規制・取締りの比較",
+      "count": 4,
+      "pct_in_issue": 1.9
+     },
+     {
+      "id": "ob_policy_process",
+      "label": "制度を決める進め方や政治への不信",
+      "count": 4,
+      "pct_in_issue": 1.9
+     },
+     {
+      "id": "oa_driver_enforcement",
+      "label": "自動車の駐停車への取締りと評価",
+      "count": 2,
+      "pct_in_issue": 0.9
+     },
+     {
+      "id": "oa_media_attention",
+      "label": "交通制度ごとの報道量の違い",
+      "count": 2,
+      "pct_in_issue": 0.9
+     },
+     {
+      "id": "oa_pedestrian_accountability",
+      "label": "歩行者の危険行動にも責任を求める声",
+      "count": 2,
+      "pct_in_issue": 0.9
+     },
+     {
+      "id": "ob_moped_enforcement",
+      "label": "違法モペットにも取締りを求める声",
+      "count": 2,
+      "pct_in_issue": 0.9
+     },
+     {
+      "id": "ob_political_linkage",
+      "label": "外国人政策と取締りを結び付ける記述",
+      "count": 2,
+      "pct_in_issue": 0.9
      },
      {
       "id": "place",
@@ -264,13 +384,37 @@
       "pct_in_issue": 0.9
      },
      {
-      "id": "__unread__",
-      "label": "まだ読み直していない分",
-      "count": 150,
-      "unread": true,
-      "pct_in_issue": 70.4
+      "id": "oa_fine_revenue",
+      "label": "反則金を収入源と見る受け止め",
+      "count": 1,
+      "pct_in_issue": 0.5
+     },
+     {
+      "id": "oa_joke",
+      "label": "青切符を題材にした冗談",
+      "count": 1,
+      "pct_in_issue": 0.5
+     },
+     {
+      "id": "oa_license_enforcement",
+      "label": "免許の有無と取締り実態の比較",
+      "count": 1,
+      "pct_in_issue": 0.5
+     },
+     {
+      "id": "ob_incident_followup",
+      "label": "関連事故の続報を求める声",
+      "count": 1,
+      "pct_in_issue": 0.5
+     },
+     {
+      "id": "ob_sidewalk_option",
+      "label": "車道が怖い場合の歩道利用の提案",
+      "count": 1,
+      "pct_in_issue": 0.5
      }
-    ]
+    ],
+    "classification_review_pending": 84
    },
    "verdict": null,
    "claims": [],
@@ -299,18 +443,108 @@
    "high_adjusted_pct": 27.2,
    "sub": {
     "status": "reread",
-    "coverage": "partial",
-    "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。",
+    "coverage": "full",
+    "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。",
     "source_file": "data/bike-blue-ticket_issues-reread.json",
-    "reread_count": 3,
-    "unread_count": 87,
+    "reread_count": 90,
+    "unread_count": 0,
     "skipped_count": 0,
     "grown_count": 0,
-    "unknown_timing_count": 87,
+    "unknown_timing_count": 0,
     "items": [
+     {
+      "id": "s_enforcement_gap",
+      "label": "導入後も違反が残り取締りの実効性を求める",
+      "count": 14,
+      "pct_in_issue": 15.6
+     },
+     {
+      "id": "s_dangerous_riding",
+      "label": "危険な走行を問題視し対処を望む",
+      "count": 13,
+      "pct_in_issue": 14.4
+     },
+     {
+      "id": "s_pedestrian_safety",
+      "label": "歩行者の安全を守りたい",
+      "count": 9,
+      "pct_in_issue": 10.0
+     },
+     {
+      "id": "s_shared_responsibility",
+      "label": "自転車にもルール順守と責任を求める",
+      "count": 9,
+      "pct_in_issue": 10.0
+     },
+     {
+      "id": "s_other_road_users",
+      "label": "車・歩行者・電動モビリティにも対処を求める",
+      "count": 7,
+      "pct_in_issue": 7.8
+     },
+     {
+      "id": "s_stronger_sanctions",
+      "label": "厳罰化・免許制・対象拡大などを求める",
+      "count": 6,
+      "pct_in_issue": 6.7
+     },
+     {
+      "id": "s_announcement",
+      "label": "取締りや安全運転の告知・周知が中心",
+      "count": 5,
+      "pct_in_issue": 5.6
+     },
+     {
+      "id": "s_other_topic",
+      "label": "別の問題への意見が中心",
+      "count": 5,
+      "pct_in_issue": 5.6
+     },
+     {
+      "id": "s_bike_priority",
+      "label": "車より自転車の取締りを優先したい",
+      "count": 3,
+      "pct_in_issue": 3.3
+     },
+     {
+      "id": "s_deterrence",
+      "label": "事故や違反を減らす効果を評価・期待する",
+      "count": 3,
+      "pct_in_issue": 3.3
+     },
+     {
+      "id": "s_education",
+      "label": "広報・模範運転・走行場所の明確化を求める",
+      "count": 3,
+      "pct_in_issue": 3.3
+     },
      {
       "id": "place",
       "label": "走る場所がない",
+      "count": 2,
+      "pct_in_issue": 2.2
+     },
+     {
+      "id": "s_bike_parking",
+      "label": "自転車の違法駐車にも責任を求める",
+      "count": 2,
+      "pct_in_issue": 2.2
+     },
+     {
+      "id": "s_context_unclear",
+      "label": "比較・応答だけでは青切符への立場が不明",
+      "count": 2,
+      "pct_in_issue": 2.2
+     },
+     {
+      "id": "s_penalty_assessment",
+      "label": "適用条件や処分の重さを評価する",
+      "count": 2,
+      "pct_in_issue": 2.2
+     },
+     {
+      "id": "s_unspecified_support",
+      "label": "理由を詳述せず取締り強化を求める",
       "count": 2,
       "pct_in_issue": 2.2
      },
@@ -321,13 +555,19 @@
       "pct_in_issue": 1.1
      },
      {
-      "id": "__unread__",
-      "label": "まだ読み直していない分",
-      "count": 87,
-      "unread": true,
-      "pct_in_issue": 96.7
+      "id": "s_infrastructure_concern",
+      "label": "インフラより取締りを進める姿勢に疑問",
+      "count": 1,
+      "pct_in_issue": 1.1
+     },
+     {
+      "id": "s_license_burden",
+      "label": "免許制の生活上の負担を避け取締りを選ぶ",
+      "count": 1,
+      "pct_in_issue": 1.1
      }
-    ]
+    ],
+    "classification_review_pending": 12
    },
    "verdict": "gap",
    "claims": [
@@ -389,14 +629,14 @@
    "high_adjusted_pct": 26.1,
    "sub": {
     "status": "reread",
-    "coverage": "partial",
-    "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。",
+    "coverage": "full",
+    "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。",
     "source_file": "data/bike-blue-ticket_issues-reread.json",
-    "reread_count": 54,
-    "unread_count": 4,
+    "reread_count": 58,
+    "unread_count": 0,
     "skipped_count": 0,
     "grown_count": 0,
-    "unknown_timing_count": 4,
+    "unknown_timing_count": 0,
     "items": [
      {
       "id": "scope",
@@ -423,13 +663,31 @@
       "pct_in_issue": 3.4
      },
      {
-      "id": "__unread__",
-      "label": "まだ読み直していない分",
-      "count": 4,
-      "unread": true,
-      "pct_in_issue": 6.9
+      "id": "r_admin_budget",
+      "label": "行政の事後対応と道路予算への批判",
+      "count": 1,
+      "pct_in_issue": 1.7
+     },
+     {
+      "id": "r_news_only",
+      "label": "調査記事の共有で本人の意見は不明",
+      "count": 1,
+      "pct_in_issue": 1.7
+     },
+     {
+      "id": "r_separation",
+      "label": "自転車・車・歩行者の通行空間を分ける提案",
+      "count": 1,
+      "pct_in_issue": 1.7
+     },
+     {
+      "id": "r_sidewalk_operation",
+      "label": "近所の歩道通行の運用についての観察",
+      "count": 1,
+      "pct_in_issue": 1.7
      }
-    ]
+    ],
+    "classification_review_pending": 1
    },
    "verdict": null,
    "claims": [],
@@ -459,7 +717,7 @@
    "sub": {
     "status": "reread",
     "coverage": "full",
-    "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。",
+    "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。",
     "source_file": "data/bike-blue-ticket_issues-reread.json",
     "reread_count": 58,
     "unread_count": 0,
@@ -609,14 +867,14 @@
    "high_adjusted_pct": 19.2,
    "sub": {
     "status": "reread",
-    "coverage": "partial",
-    "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。",
+    "coverage": "full",
+    "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。",
     "source_file": "data/bike-blue-ticket_issues-reread.json",
-    "reread_count": 12,
-    "unread_count": 17,
+    "reread_count": 29,
+    "unread_count": 0,
     "skipped_count": 0,
     "grown_count": 0,
-    "unknown_timing_count": 17,
+    "unknown_timing_count": 0,
     "items": [
      {
       "id": "strict",
@@ -625,19 +883,55 @@
       "pct_in_issue": 34.5
      },
      {
+      "id": "r_training_required",
+      "label": "罰則とともに交通ルールの学習を求める声",
+      "count": 6,
+      "pct_in_issue": 20.7
+     },
+     {
+      "id": "r_license_safety",
+      "label": "違反や事故を減らすための免許制要求",
+      "count": 3,
+      "pct_in_issue": 10.3
+     },
+     {
+      "id": "r_training_certification",
+      "label": "講習修了を確認する仕組みの提案",
+      "count": 3,
+      "pct_in_issue": 10.3
+     },
+     {
+      "id": "r_training_incentive",
+      "label": "講習参加を促す補助や特典の提案",
+      "count": 2,
+      "pct_in_issue": 6.9
+     },
+     {
       "id": "scope",
       "label": "対象と順番に異議",
       "count": 2,
       "pct_in_issue": 6.9
      },
      {
-      "id": "__unread__",
-      "label": "まだ読み直していない分",
-      "count": 17,
-      "unread": true,
-      "pct_in_issue": 58.6
+      "id": "r_identity_points",
+      "label": "本人確認と点数による違反管理の提案",
+      "count": 1,
+      "pct_in_issue": 3.4
+     },
+     {
+      "id": "r_luup_licensing",
+      "label": "LUUPにも免許や点数制度を求める比較",
+      "count": 1,
+      "pct_in_issue": 3.4
+     },
+     {
+      "id": "r_registered_enforcement",
+      "label": "登録・取締り強化と財源使途の提案",
+      "count": 1,
+      "pct_in_issue": 3.4
      }
-    ]
+    ],
+    "classification_review_pending": 0
    },
    "verdict": "gap",
    "claims": [
@@ -684,14 +978,14 @@
    "high_adjusted_pct": 27.4,
    "sub": {
     "status": "reread",
-    "coverage": "partial",
-    "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。",
+    "coverage": "full",
+    "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。",
     "source_file": "data/bike-blue-ticket_issues-reread.json",
-    "reread_count": 16,
-    "unread_count": 4,
+    "reread_count": 20,
+    "unread_count": 0,
     "skipped_count": 0,
     "grown_count": 0,
-    "unknown_timing_count": 4,
+    "unknown_timing_count": 0,
     "items": [
      {
       "id": "place",
@@ -718,19 +1012,37 @@
       "pct_in_issue": 5.0
      },
      {
-      "id": "strict",
-      "label": "青切符では足りない",
+      "id": "r_driver_conflict",
+      "label": "車の運転者との接触・巻き込みへの不安",
       "count": 1,
       "pct_in_issue": 5.0
      },
      {
-      "id": "__unread__",
-      "label": "まだ読み直していない分",
-      "count": 4,
-      "unread": true,
-      "pct_in_issue": 20.0
+      "id": "r_road_fear",
+      "label": "幅寄せや狭い道路への不安",
+      "count": 1,
+      "pct_in_issue": 5.0
+     },
+     {
+      "id": "r_rule_uncertainty",
+      "label": "歩道通行の条件や取締り運用への不安",
+      "count": 1,
+      "pct_in_issue": 5.0
+     },
+     {
+      "id": "r_sidewalk_rule_change",
+      "label": "歩行者優先を条件に歩道通行を認める提案",
+      "count": 1,
+      "pct_in_issue": 5.0
+     },
+     {
+      "id": "strict",
+      "label": "青切符では足りない",
+      "count": 1,
+      "pct_in_issue": 5.0
      }
-    ]
+    ],
+    "classification_review_pending": 0
    },
    "verdict": "gap",
    "claims": [
@@ -866,10 +1178,8 @@
  },
  "prototype_only": true,
  "gate_failures": [
-  "「その他」の未読150件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）",
-  "「取締り強化賛成」の未読87件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）",
-  "「インフラ整備優先」の未読4件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）",
-  "「免許制要求」の未読17件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）",
-  "「車道走行への不安」の未読4件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）"
+  "「その他」に分類の確認候補が84件あります（本文再読の完了とは別に、意見判定や論点の採用確認が必要）",
+  "「取締り強化賛成」に分類の確認候補が12件あります（本文再読の完了とは別に、意見判定や論点の採用確認が必要）",
+  "「インフラ整備優先」に分類の確認候補が1件あります（本文再読の完了とは別に、意見判定や論点の採用確認が必要）"
  ]
 }

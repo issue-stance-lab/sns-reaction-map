@@ -1,5 +1,6 @@
 """再読の過大計上と、取得日不明を後日増分へ流す誤りを防ぐ。"""
 import copy
+import hashlib
 import sys
 import unittest
 from datetime import date
@@ -67,6 +68,14 @@ class RereadEvidenceTest(unittest.TestCase):
             with self.subTest(expected=expected), self.assertRaises(SystemExit):
                 bpd.validate_reread_records(self.records, self.buckets, posts, '論点', expected)
 
+    def test_body_change_is_detected_when_review_has_fingerprint(self):
+        self.posts[0]["text"] = "before"
+        self.records[0]["text_sha256"] = hashlib.sha256(b"before").hexdigest()
+        bpd.validate_reread_records(self.records, self.buckets, self.posts, '論点', 3)
+        self.posts[0]["text"] = "after"
+        with self.assertRaises(SystemExit):
+            bpd.validate_reread_records(self.records, self.buckets, self.posts, '論点', 3)
+
     def test_unknown_timing_blocks_gate(self):
         data = {'theme_id': 'bukatsu-chiiki', 'totals': {'opinions': 3},
                 'issues': [{'count': 3, 'label': '論点', 'sub': {'status': 'reread',
@@ -77,13 +86,15 @@ class RereadEvidenceTest(unittest.TestCase):
 
 
 class ConnectedThemeRegressionTest(unittest.TestCase):
-    def test_bike_counts_only_existing_body_review_and_stops_release(self):
+    def test_bike_completed_reading_still_blocks_unresolved_classification(self):
         data = bpd.build("bike-blue-ticket")
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 206)
-        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 262)
-        self.assertEqual(sum(i["sub"]["unknown_timing_count"] for i in data["issues"]), 262)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 468)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 0)
+        self.assertEqual(sum(i["sub"]["unknown_timing_count"] for i in data["issues"]), 0)
         cfg = bpd.yaml.safe_load((bpd.ROOT / "configs/planet/bike-blue-ticket.yaml").read_text())
         self.assertTrue(bpd.independence_gate(data, cfg))
+        self.assertEqual(sum(i["sub"].get("classification_review_pending", 0) for i in data["issues"]), 97)
+        self.assertTrue(all("分類" in x for x in bpd.independence_gate(data, cfg)))
         rendered = bpd.static_fallback(data)
         self.assertNotIn("enforcement_support", rendered)
         self.assertIn("賛成（取締り強化）", rendered)

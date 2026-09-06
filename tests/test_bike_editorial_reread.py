@@ -1,5 +1,6 @@
 """自動分類を本文再読に見せた過大計上の回帰検査。"""
 import copy
+import hashlib
 import json
 import sys
 import tempfile
@@ -77,11 +78,45 @@ class BikeEditorialRereadTests(unittest.TestCase):
         self.assertTrue(rows["opposition"]["body_reviewed"])
         self.assertEqual(rows["opposition"]["review_kind"], "editorial_body_reread")
 
+    def additional(self):
+        return {"review_kind": "editorial_body_reread", "read_at": "2026-09-06", "reviewer_type": "editorial_ai", "target_sha256": "target",
+                "bucket_definitions": {"new_reason": "具体的な理由"},
+                "items": [{"tweet_id": "automatic", "main_issue": "取締り強化賛成", "bucket": "new_reason",
+                           "text_sha256": hashlib.sha256(b"fixture").hexdigest(), "read_at": "2026-09-06",
+                           "reviewer": "test_editor", "reason_sha256": hashlib.sha256(b"reason").hexdigest(),
+                           "classification_concern": "context_missing", "body_reviewed": True,
+                           "review_kind": "editorial_body_reread"}]}
+
+    def test_new_body_review_is_separate_from_automatic_origin(self):
+        data = build(self.samples, self.opposition, self.supplement, self.additional())
+        row = data["取締り強化賛成"]["items"][0]
+        self.assertEqual(sum(data["population"].values()), 3)
+        self.assertEqual(row["source_id"], "additional")
+        self.assertEqual(row["classification_concern"], "context_missing")
+        self.assertIn("text_sha256", row)
+
+    def test_new_review_requires_unchanged_body_issue_and_evidence(self):
+        for field, value in [("text_sha256", "wrong"), ("main_issue", "別論点"), ("read_at", ""),
+                             ("reviewer", ""), ("reason_sha256", ""), ("body_reviewed", False),
+                             ("review_kind", "automated_classification"), ("classification_concern", None)]:
+            additional = self.additional();additional["items"][0][field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                build(self.samples, self.opposition, self.supplement, additional)
+
+    def test_new_review_cannot_duplicate_existing_id_or_redefine_bucket(self):
+        for change in ("duplicate", "bucket"):
+            additional = self.additional()
+            if change == "duplicate": additional["items"][0]["tweet_id"] = "opposition"
+            else: additional["bucket_definitions"] = {"place": "別の定義"}
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                build(self.samples, self.opposition, self.supplement, additional)
+
     def test_checked_in_ledger_is_reproducible_from_editorial_sources(self):
         load = lambda p: json.loads((ROOT / p).read_text())
         data = build(load("social-samples/bike-blue-ticket_2d_classified.json"),
                      load("data/bike-blue-ticket_opposition_reread.json"),
-                     load("data/bike-blue-ticket_editorial-supplement.json"))
+                     load("data/bike-blue-ticket_editorial-supplement.json"),
+                     load("data/bike-blue-ticket_editorial-reread-20260906.json"))
         saved = load("data/bike-blue-ticket_issues-reread.json")
         saved.pop("input_sha256")
         self.assertEqual(data, saved)
