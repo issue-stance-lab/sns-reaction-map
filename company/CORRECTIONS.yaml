@@ -8,7 +8,7 @@ items:
     received_at: "2026-09-06"
     department: engineering-data
     summary: "課題63の旧回未統合と取得履歴欠損に伴う件数・取得期間の訂正"
-    status: in_progress
+    status: resolved
     verification_status: verified
     approval_id: approval-20260906-002
     affected_themes:
@@ -31,6 +31,21 @@ items:
       - "quality/reviews/2026-09-06-period-review.md"
       - "quality/reviews/2026-09-06-classification-independent-review.md"
       - "quality/reviews/2026-09-06-repair-integration-independent-audit.md"
-    next_action: "承認済み固定候補を適用し、既存ページの公開更新と公開後確認を完了して、修正日・公開先・結果を追記する"
-    published_at: null
-    resolved_at: null
+    result: >-
+      計画どおり593件の取得情報を補完し、旧回65件（意見43件）を追加、取得期間を訂正した。
+      2026-09-06にmainへ反映し、GitHub Pages build/deploy成功と本番7ファイルの一致を確認。
+      著作権・高市・あだ名・辺野古の既存ページに訂正内容・理由・修正日を公開した。
+      高市の非掲載・noindex、高齢者の期間・再読250件、収集予定と旧潮目比較回は維持。
+      適用後バックアップ154ファイルの復元も確認済み。あだ名1件等の保留は別作業として残る。
+    result_evidence:
+      - "quality/reviews/2026-09-06-repair-adoption.md"
+      - "quality/reviews/2026-09-06-repair-adoption-audit.md"
+      - "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/adoption/20260906-approved-v1/live-results.json"
+    published_urls:
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html#correction-20260906"
+      - "https://sns-reaction-map.jp/school-nickname-ban-reaction-map.html#correction-20260906"
+      - "https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html#correction-20260906"
+      - "https://sns-reaction-map.jp/takaichi-reaction-map-standard.html#correction-20260906"
+    next_action: null
+    published_at: "2026-09-06"
+    resolved_at: "2026-09-06"
