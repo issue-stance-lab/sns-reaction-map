@@ -189,6 +189,55 @@ def validate_reread_records(records: list[dict], buckets: dict, canonical: list[
     return set(ids)
 
 
+def load_reread_registry(topic: str, canonical: list[dict]) -> dict | None:
+    """共通台帳があるテーマは、記録の出所と現行本文の版を検査する。"""
+    path = ROOT / "data" / "verification" / "reread" / f"{topic}.json"
+    if not path.exists():
+        return None  # 未移行テーマの既存検査はそのまま継続する
+    from reread_registry import assess
+
+    try:
+        manifest = json.loads(path.read_text())
+        if manifest.get("topic") != topic:
+            raise ValueError("再読台帳のテーマが一致しません")
+        sources = manifest.get("sources")
+        if not isinstance(sources, dict) or (not sources and
+                any(r.get("review") for r in manifest.get("records", []))):
+            raise ValueError("再読台帳の出所がありません")
+        for source, expected in sources.items():
+            source_path = (ROOT / source).resolve()
+            if not source_path.is_relative_to(ROOT.resolve()):
+                raise ValueError("再読台帳の出所がリポジトリ外です")
+            if hashlib.sha256(source_path.read_bytes()).hexdigest() != expected:
+                raise ValueError(f"再読台帳の出所が変更されています: {source}")
+        result = assess(manifest, canonical)
+        reviewed = {r["post_key"] for r in manifest["records"] if r.get("review")}
+        stale = {"body_changed", "issue_changed", "opinion_changed", "removed"}
+        if any(r["post_key"] in reviewed and stale.intersection(r["statuses"])
+               for r in result["records"]):
+            raise ValueError("再読済み投稿の本文・論点・意見判定または対象集合が変わりました。再確認が必要です")
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        raise SystemExit(f"「{topic}」の再読共通台帳を利用できません: {exc}") from exc
+    return manifest
+
+
+def validate_registry_membership(manifest: dict | None, records: list[dict],
+                                 issue_key: str) -> None:
+    """生成に使う各投稿と区分を、共通台帳の編集再読記録へ結び付ける。"""
+    if manifest is None:
+        return
+    by_key = {r["post_key"]: r for r in manifest["records"]}
+    for record in records:
+        key = hashlib.sha256(str(record.get("tweet_id", "")).encode()).hexdigest()
+        registered = by_key.get(key, {})
+        review = registered.get("review") or {}
+        if (registered.get("main_issue") != issue_key or
+                registered.get("is_opinion") is not True or
+                review.get("kind") != "editorial_body_reread" or
+                review.get("bucket") != record.get("bucket")):
+            raise SystemExit(f"「{issue_key}」の再読ID・区分が共通台帳の編集再読記録と一致しません。")
+
+
 def load_public_theme(topic: str) -> dict:
     """段階6: 陸地の集計は公開JSON（`data/public/themes/{topic}.json`）だけを入力にする。
 
@@ -409,6 +458,7 @@ def build(topic: str) -> dict:
     sub_cfg = cfg.get("sub_issues") or {}
     canonical_posts = None  # 読み飛ばし判定にだけ使う。陸地の集計（counts）はここへ戻さない
     fetch_recovery: dict[str, dict] = {}
+    reread_registry = None
     issues = []
     for i, k in enumerate(keys):
         ic = issues_cfg[k]
@@ -423,11 +473,13 @@ def build(topic: str) -> dict:
             if canonical_posts is None:
                 canonical_path = ROOT / t["sample_file"]
                 canonical_posts = json.loads(canonical_path.read_text())
+                reread_registry = load_reread_registry(topic, canonical_posts)
                 # 取得日時が欠ける投稿のための復元候補（課題63 段階A）。
                 # 正典と同じ版でだけ結び付く。無ければ空で、未読は「不明」のまま止まる。
                 fetch_recovery = load_fetch_history_recovery(
                     ROOT / "data" / "verification" / f"{topic}-fetch-history-recovery.json",
                     canonical_path)
+            validate_registry_membership(reread_registry, records, k)
             read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}
                      for bid, b in raw.items()]
