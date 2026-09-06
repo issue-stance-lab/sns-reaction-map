@@ -51,6 +51,10 @@ class TakaichiAdapterTests(unittest.TestCase):
                 and row.get("classification", {}).get("is_opinion")
             )
             self.assertIn(f"公開投稿 {len(candidate)}件", page)
+            opinions = sum(bool(row.get("classification", {}).get("is_relevant")) and bool(row.get("classification", {}).get("is_opinion")) for row in candidate)
+            rendered_posts = json.loads(data_path.read_text().split("=", 1)[1].strip().rstrip(";"))
+            self.assertIn(f"収集した{len(candidate)}件のうち意見と判定した{opinions}件", page)
+            self.assertIn(f"主論点が特定できた{len(rendered_posts)}件", page)
             self.assertIn(f'issue-count-takaichi-chusho">{chusho}件', page)
 
             command[command.index("--html-template") + 1] = str(page_path)

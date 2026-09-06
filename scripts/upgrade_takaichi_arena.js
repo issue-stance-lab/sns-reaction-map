@@ -276,6 +276,13 @@ function fmtPct(n, total) { return total ? Math.round(n * 100 / total) : 0; }
 
 // === insight-stats の件数・割合を正典から自動更新 ===
 const opinionCount = opinionPosts.length;
+// 非掲載テーマはSEO台帳の一括貼り直し対象外。収集方法の母数もこの生成器で同期する。
+const collectionCounts = /(関連性と意見性を判定し、収集した)\d+(件のうち意見と判定した)\d+(件を分析対象としました。うち主論点が特定できた)\d+(件を5つの論点に整理して表示しています。)/g;
+if ([...html.matchAll(collectionCounts)].length !== 1) {
+  throw new Error('収集方法の件数文が1箇所に一致しません');
+}
+html = html.replace(collectionCounts, (_, a, b, c, d) =>
+  `${a}${allPosts.length}${b}${opinionCount}${c}${arenaPosts.length}${d}`);
 const accuseN = opinionPosts.filter((p) => p.classification.stance === '批判・追及').length;
 const defendN = opinionPosts.filter((p) => p.classification.stance === '擁護・懐疑').length;
 const debateTotalN = accuseN + defendN;
