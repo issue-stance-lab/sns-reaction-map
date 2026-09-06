@@ -28,12 +28,18 @@
 
 ## 公開と保全
 
-公開状態：専用コピーで適用済み、mainへの取り込み・公開確認は作業中。完了後、この節を更新する。
+公開状態：2026-09-06に `138dad2` でmainへ取り込み、GitHubへpush済み。公開サイトの5HTML（トップ・著作権・あだ名・辺野古・高市）で件数・期間・訂正履歴を照合し、2アリーナJSもmainとのバイト一致を確認した。高市のnoindexも維持。GitHubの[公開ファイル検査](https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/34010609219)と[Pages配信](https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/34010609223)もsuccess。
+
+マージ後のmainで標準4検査が全合格（単体テスト476件）。公開用5検査も合格し、全23採用指紋がmanifestと一致。全11テーマの期間unknownは0。独立監査は [適用監査](2026-09-06-repair-adoption-audit.md) を参照。
+
+適用後バックアップ `private-data-20260906T130419627194.tar.gz` は154ファイル／39,162,561バイト、復元確認OK。SHA-256: `acb8dd92e76bfdea8fe3fd650bf8c9c031b2d055b2292030b65b1906c5c352be`。ログ・画面・公開実物の照合結果は同保存先の `data-repairs/adoption/20260906-approved-v1/` に保全。
 
 適用前の非公開バックアップ：`private-data-20260906T125356736128.tar.gz`（154ファイル、復元確認済み）。正規保存先は `/Volumes/HD-LE-B/issue-stance-private-backups`。
 固定した修復候補・原本・再現コードは同保存先の `data-repairs/integration/20260906-steps123-v1/` に引き続き保持。
 
 戻す場合は本作業のGit差分を対象に戻し、Git管理外の変更正典3本だけを上記バックアップから復元する。実施前に最新の正典指紋を再照合し、公開後に追加された投稿を古いバックアップで上書きしない。追跡中の高齢者/高市正典はGit履歴で戻せる。公開データ・ページ・台帳を同時に戻し、全検査と公開確認をやり直す。
+
+公開前後の論点IDに追加はなく、意見に占める各論点の割合の最大差は、あだ名1.1683pt・辺野古3.9279pt。DATA_REFRESHのnote更新案を準備する基準（新論点または5pt以上の変化）には該当せず、note投稿は行っていない。
 
 ## 残る作業
 
