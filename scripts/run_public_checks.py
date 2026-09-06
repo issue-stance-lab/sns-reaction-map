@@ -49,6 +49,7 @@ PRIVATE_DATA_TESTS: dict[str, str] = {
     "test_elderly_adapter": "高齢者免許返納の更新回（非公開）を読む",
     "test_fukushuto_taxonomy": "副首都の正典レコードを分類体系と突き合わせる",
     "test_nickname_adapter": "あだ名禁止の更新回（非公開）を読む",
+    "test_planet_data": "読み飛ばし判定のため部活の正典レコード（非公開）を読む",
     "test_portal_stats": "トップページの件数を正典から数え直す",
     "test_taxonomy_continuity": "全テーマの正典ラベルが定義の内側かを見る",
 }
