@@ -1134,6 +1134,8 @@ def section_themes(data: dict) -> str:
 
 
 def section_data_assets(data: dict) -> str:
+    from .data_restore import render_card
+    restore_card = render_card(data.get("today", dt.date.today()))
     assets = data.get("data_assets") or {}
     rows = []
     for row in assets.get("themes", []):
@@ -1159,6 +1161,7 @@ def section_data_assets(data: dict) -> str:
 確認日時: {esc(backup.get("verified_at", "未確認"))} / ファイル数: {esc(fmt_num(backup.get("file_count")))}<br>
 保存物: {esc(backup.get("archive_name", "未確認"))} / 対象コミット: {esc(backup.get("git_commit", "未確認"))}</p>
 <p class="small muted">復元確認の記録を表示しています。現在の外付け接続状態は検査していません。別マシンでの復元は未実施（課題33・50）です。</p>
+{restore_card}
 <h3>継続作業の担当と期日</h3><p>{esc(assets.get("operations_status", "予定未確認"))}</p>
 {table(["作業", "担当", "期日", "状態", "課題", "次にすること"], operations)}</section>'''
 
