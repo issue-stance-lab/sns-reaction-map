@@ -1133,6 +1133,40 @@ def section_themes(data: dict) -> str:
 </section>"""
 
 
+def section_data_assets(data: dict) -> str:
+    from .data_restore import render_card
+    restore_card = render_card(data.get("today", dt.date.today()))
+    assets = data.get("data_assets") or {}
+    rows = []
+    for row in assets.get("themes", []):
+        rows.append([esc(row["title"]) + ('<br><span class="muted">公開対象</span>' if row["published"] else '<br><span class="muted">非掲載</span>'),
+                     *[esc(fmt_num(row[key])) for key in ("canonical", "saved", "pending", "unknown", "unresolved", "excluded")],
+                     esc(fmt_num(row["active"])) + ' / ' + esc(fmt_num(row["reread_excluded"])) + ' / ' + esc(fmt_num(row["unreviewed"])),
+                     esc(row["reread_status"])])
+    backup = assets.get("backup", {})
+    inventory = assets.get("inventory", {})
+    storage_labels = {"git": "Gitで保管", "private_backup": "非公開原本", "external_evidence": "採否の根拠", "private": "非公開原本", "external": "採否の根拠"}
+    inventory_counts = " / ".join(esc(storage_labels.get(k,k)) + ": " + esc(fmt_num(v)) for k, v in inventory.get("summary", {}).items())
+    coverage_rows = [[esc(storage_labels.get(k,k)), esc({"verified": "照合済み", "missing": "欠落あり", "stale": "変更あり"}[v["status"]]), esc(v["missing"]), esc(v["changed"])] for k, v in inventory.get("coverage", {}).items()]
+    operations = [[esc(op["title"]), esc(op["owner"]), esc(op["due_at"]),
+                   '完了' if op["status"] == 'done' else ('期限超過' if op["overdue"] else '予定'),
+                   esc(op["task"]), esc(op["next_action"])] for op in assets.get("operations", [])]
+    return f'''<section id="data-assets" style="overflow-wrap:anywhere"><h2>データの品質と保全</h2>
+<p class="lead">全11テーマ（公開対象10・非掲載1）の管理。保存IDは指定した保存回の範囲です。正典外は採用漏れと断定せず、判断状態を分けています。</p>
+<p>{esc(assets.get("adoption_status", "未確認"))}<br>照合日時: {esc(assets.get("snapshot_at") or "未確認")}</p>
+{table(["テーマ", "正典", "保存ID", "確認待ち", "判断不明", "記録なし", "除外確認", "再読: 意見 / 意見外 / 未読意見", "再読台帳の状態"], rows)}
+<p class="small muted">「—」は未確認です。共通台帳未管理は再読0件を意味しません。再読件数には旧記録の継承を含み、人による確認率ではありません。意見外の再読記録も正典に残っています。</p>
+<h3>保管境界と保全照合</h3><p>{esc(inventory.get("status", "未確認"))}<br>{inventory_counts}</p>
+{table(["保存区分", "照合記録", "欠落数", "変更数"], coverage_rows)}
+<h3>バックアップと復元</h3><p>{esc(backup.get("status", "記録なし・未確認"))}<br>
+確認日時: {esc(backup.get("verified_at", "未確認"))} / ファイル数: {esc(fmt_num(backup.get("file_count")))}<br>
+保存物: {esc(backup.get("archive_name", "未確認"))} / 対象コミット: {esc(backup.get("git_commit", "未確認"))}</p>
+<p class="small muted">復元確認の記録を表示しています。現在の外付け接続状態は検査していません。別マシンでの復元は未実施（課題33・50）です。</p>
+{restore_card}
+<h3>継続作業の担当と期日</h3><p>{esc(assets.get("operations_status", "予定未確認"))}</p>
+{table(["作業", "担当", "期日", "状態", "課題", "次にすること"], operations)}</section>'''
+
+
 def section_data_updates(data: dict) -> str:
     updates = data["data_updates"]
     rows = []
@@ -1743,6 +1777,7 @@ NAV = [
     ("x", "X投稿"),
     ("themes", "テーマ"),
     ("data", "データ更新"),
+    ("data-assets", "データ品質・保全"),
     ("history", "変更履歴"),
     ("tasks", "課題"),
     ("health", "取得元"),
@@ -1767,6 +1802,7 @@ def render(data: dict) -> str:
             section_x(data),
             section_themes(data),
             section_data_updates(data),
+            section_data_assets(data),
             section_history(data),
             section_tasks(data),
             section_health(data),
