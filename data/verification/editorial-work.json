@@ -1,0 +1,3666 @@
+{
+  "schema_version": 1,
+  "purpose": "Prevent repeated work; candidate decisions and limited audits are not canonical changes or registered reread credit.",
+  "sources": [
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260906-v1/pilot-input.json",
+      "kind": "packet",
+      "sha256": "0af0e9fdc0bfa35e06774230c3740a5933800da0f480fa0be0dd10e2060fac6b"
+    },
+    {
+      "storage": "repository",
+      "path": "quality/reviews/2026-09-07-editorial-review-decisions.json",
+      "kind": "journal",
+      "sha256": "0709286f7582bcad1d710c0255f3705a467c59cd545fec68dd5b09e9b66e67c0"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260906-v1/reference-20.json",
+      "kind": "evidence",
+      "sha256": "62d707d8f0126625e250c322fe25a3946705ca969b1977dbe9a6a77cef4ddbea"
+    },
+    {
+      "storage": "repository",
+      "path": "quality/reviews/2026-09-07-next20-editorial-results.json",
+      "kind": "journal",
+      "sha256": "9b1cdc3e8b2205ff6e33be8ab460c1bcd8d219c62509275614d5a451959f62c2"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-next20/packet.private.json",
+      "kind": "packet",
+      "sha256": "0b71a1827a1ce0880083ebded37cb855f752f404fb08eb19689d92024c8a5047"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-next20-review-v1/editor.private.json",
+      "kind": "evidence",
+      "sha256": "d6d1992a54dc832883c0f77864b000d9250dbe55e846b970e33079450f06fa2b"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-next20-review-v1/audit.private.json",
+      "kind": "evidence",
+      "sha256": "ed2d6582fbc0ec0cd9db4a9438cc199fd803479a52640bd5578555b21849ba1b"
+    },
+    {
+      "storage": "repository",
+      "path": "quality/reviews/2026-09-07-hundred-results.json",
+      "kind": "journal",
+      "sha256": "3c8ec046098e6f9f6e59cb79ec9ed6ca5a3098559f799385ae63bc22271d22bb"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+      "kind": "packet",
+      "sha256": "72d11934dc738d88d1763edf09f6e3ab1c411bd2b6faaf55c443f8516e63a99e"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-01/editor.private.json",
+      "kind": "evidence",
+      "sha256": "04df5f2e32ef7a820990ce111796b40a1a0520d25dd42aa30e5652616804a7e7"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-01/audit.private.json",
+      "kind": "evidence",
+      "sha256": "2e6224434d98a74e2c77fb2a94ef9dd2815d431e2fc6e5a800a0f8172db51f94"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+      "kind": "packet",
+      "sha256": "46c03b15fc2a9ca7d3ec88c9aec2e9bec1940e3154174e9e17babbc31b3d89d6"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-02/editor.private.json",
+      "kind": "evidence",
+      "sha256": "6a9965397bcabeadeebb6174f559c4ea78ea98efb1591cb115defbffb66e8f8c"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-02/audit.private.json",
+      "kind": "evidence",
+      "sha256": "62970c0e25acf6db7b59d5fe06f9df39ead3bf7de64292948ab1b1a09a9abee1"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+      "kind": "packet",
+      "sha256": "7e59927ee6384438f85aabb0d7b69cf21c8b86d64502b4e6bf33741342b9f65f"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-03/editor.private.json",
+      "kind": "evidence",
+      "sha256": "0e706edc84fd22eb408be496147a437cdc2c23a182dba0eba4a6408081ac44f3"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-03/audit.private.json",
+      "kind": "evidence",
+      "sha256": "46403c9a77b905791e05525334bbeb79a99fb519b6d7b1a488bd0d8263bc15fc"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+      "kind": "packet",
+      "sha256": "4791e7841f9df3a1a4a228b27d0f18cc9e019f7bc52cb8a46afc570d929ee676"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-04/editor.private.json",
+      "kind": "evidence",
+      "sha256": "184b8a2182e58846ff4bbac0306cb838bbcbf1f63e97146de2663a907dbc2e48"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-04/audit.private.json",
+      "kind": "evidence",
+      "sha256": "f0bfd9043bfbadbe63554c659e4713dd9ab7c0a72a5c708833d25b2482b4c538"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+      "kind": "packet",
+      "sha256": "ac2fbd7fbda20d49edda98807350be3180e18f344458c940d90f4faaff69da18"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-05/editor.private.json",
+      "kind": "evidence",
+      "sha256": "d45c0a1a154afc931c87c010a6b335924838719e93ebd392545863a67f81c7de"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-hundred-v1/batch-05/audit.private.json",
+      "kind": "evidence",
+      "sha256": "4fe82250106f3cdbf7e318ed7418b5982bf78e71e1db9b70bb3c3d41dadb4b82"
+    },
+    {
+      "storage": "repository",
+      "path": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+      "kind": "scope_audit",
+      "sha256": "2146b0da6127711ff0510ef6a72fbad4dfd0782c72e8f1d05e11241c84a1793c"
+    },
+    {
+      "storage": "repository",
+      "path": "quality/reviews/2026-09-06-body-review-values-v2.json",
+      "kind": "evidence",
+      "sha256": "b7f72a1905e94ba9c3e0dd5f4ef3f5d81ac65343323586a7f890653985e7d137"
+    },
+    {
+      "storage": "private",
+      "path": "body-review-pilot/20260907-editorial-v1/candidate-audit.private.json",
+      "kind": "evidence",
+      "sha256": "25ebe09c4edb2a5f679f0860bc4248ed01d0c4ea19f003c98fadba8aa960eaf7"
+    }
+  ],
+  "records": [
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:01dcaeff863bee1012a00f8911d6164bf636be71478fd904e2c4ffe5918da863",
+      "body_sha256": "e5b7c2de2f8f4cef2208f44d9f99899994b879017861a12bbbc1029bb0c69967",
+      "classification_sha256": "74d10e0bdfa80ee73f90acb05d93e8088de9eb636a8250f8c1ae27edb70257cd",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "007bf5f7534e7bfaff246e5ce03ebfc389e4417883c0131bab4cc1aadb89c501",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0ed1ab8a23ca5698ceca33b167efced7090f571d220db198dcce72186d7045c3",
+      "body_sha256": "a086ec02dbcdc1e86a26c2b7d7229d187ab8cee00e6b021238328a736a9aface",
+      "classification_sha256": "752d820059ee9cd1fa811c23d5a1603346c014752e4eaf3707b4faa0a9362e5f",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "013d6f550ae3f01d26a292628321910b410172a7f05470c00dfe07e6d0843aa1",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:042882662ec53cedda31a5fe7d68f9c5897aed3d623105313d6ba8d4ba6dae87",
+      "body_sha256": "5b443067f15955a8c223deff9f244ef84513b7019f3f3b4c976bfa01f01dea07",
+      "classification_sha256": "9bc865107ffe707482b232fa8820f26176ff58bd4bdfbb3c4dbae711bad1dad0",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "028272b16d9da9270e138c61c00be4b11f2498fb75d4036d45c714e404112995",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:096fac57092f6afbfa1e4f65da04f875d8b2d026d4a3fad8ba4095a59f825618",
+      "body_sha256": "8782c0fb5603c60cedd50b991e7fcc29ddd92705e33823e93dddc4e23c473d2b",
+      "classification_sha256": "5671bd002f53a76cf4f6ef03b3298d4cad44456321cff746fc3533285fdd234a",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "0335418c62c5ea2f5895fdda2095facde701fabe4929ed9321a88b92e1154076",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0456fa793ae7a78c7752ef8a597917087b1c51c2935b9eda7136f606eb4e917c",
+      "body_sha256": "5eeaef31f53266452fefea176b104a229c8fc9a4495b10d7334a61b40f4695b5",
+      "classification_sha256": "4815c1d8b8ea5aa9e5680b5909e50c57803e519f63db0ced18c9a0763321228d",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "042a26857b6f68003ef466342335d3e0bec3bb75435735530ba532b563fbef16",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:3532ed4781f6ddb8b89b90a4964fc021e858765f90329253c7d4fd4b421b88ac",
+      "body_sha256": "0cb55aad603a60e1cb4a26fbcf96acb3d87fe568861c3032e9998117fa305b75",
+      "classification_sha256": "3bf1e8ffebd80cc75d93a923f9fc3328bc69a28e1f068c311a664fe2a793bf2c",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "052fdd8b5037d41d26518b30596e36b0571e5687190c97832fa7087eca1b7736",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0082fb04bcdef29356c421597d34e87c3f75c0a72b8bae3e855c7eb2f96a346c",
+      "body_sha256": "18798d75f3ab89eed72915d1546838fdcd6bc3a7e3733f47c0261b6c9254ce8c",
+      "classification_sha256": "88fa014f2895d93e5d9e14626444cc99f47d00ababd40b8e0414076e66656b4a",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "055af5ebf99c2824808419336b9704ea7d512c40d8f6660729285d1058a41df7",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:1ca7a8fbfbb0ee30de5b972016d48b43c4bee70e8800929d455932d684593892",
+      "body_sha256": "1a39eba07cb08c2899afe3bd8da10967bae0e7edfb3c729d8a9269776426b377",
+      "classification_sha256": "250da0ce924bd9d8edc2d4071774b5b2dd1302f194ffb07c7866df34ac325e68",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "059c98aa5e8cac079530ab1727fc2ea10fdfab640dbbed0f824086dc59b5b459",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:03aaed545fdd4f89677f6955e02ebdbbd30b4f7785ef69d665e1212febdf089b",
+      "body_sha256": "69d05fa689c91d82e3ad271b6996f5f9879bf0a57568486149f15b50b9e1713c",
+      "classification_sha256": "d4b23dde4bdc5bbf50722126f8ca478e13ce043cf9094e0a33517006c6763969",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "0799bef37ee7954c2c9ba02370017bd33ef01b806c962e2b0123a00aaf5e53a5",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:003d66b7b6eb6775f1a4fea67fce5f40c103a95cb30dd0eb1d177a9dc4ec948c",
+      "body_sha256": "e10725be7712e73b2f93a037b126195ea373bd249142150f6dc1deed1998d1cc",
+      "classification_sha256": "12e23226d331a7c043496cbe437a7827269507d9d3f92e3bd7062a9ff088c920",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "09047611724038b315c287188591a448adf9d493bc3c71e447bab138e707f2c2",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00475ebcc3064c497fc982c2f6efc5ad0c36355af5c53432dcffae30a6bff340",
+      "body_sha256": "4ae731b574e1b29d40439c15bae834a32131b831ba374238f51dd293dfde48c0",
+      "classification_sha256": "eb588628d21949a83c8a0098e656d9c3c2f8542dcb69a4e214983eaebda28f5e",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "0a30b7d2e4e65edf9c9c38a10d9ed420ed675017781324c343aea4995ea5300b",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:05823c0241760c685bb2fb74be9be80ca147508af42126d8f19d89f7802581e1",
+      "body_sha256": "616ab20ad4f3215648b96f0b5c5374bd0b60d2af84a3909e14a9253e55c21fd6",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "0ceb9fb2bbe065746044a44503904b4f831c487eb8110823dd1a93a4aa95f9a1",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:02acdc496de99f0371552a79a57f7b9a2cfc798c490823c3abfd55d97a94e388",
+      "body_sha256": "fb80c80e31b25ac3dde4b7026d2cf5cf3233bd21f9d31e2fe2bbf75b809fed98",
+      "classification_sha256": "6ed3bddd4c28a4ebb721cfb7b55824337ef1dbca86ff0e3f5bb3bb0eacb2143d",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "0d6078a7c88cd0b76452e134bcf710a6d21cb8e13b6ae838c505dcad0cd69fca",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:026f023ae9915ea600a9138fa087f6429540cd488e770be540af10e008167957",
+      "body_sha256": "c4cd9b951a1eac9ba26acf9fa5c1e0f4a8a81ee4b68ef633fd94900aa23529e3",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "0d6402936c06e1732482321b5f4c77318be52f8d089fefcc2d0f49aea689ceb8",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:01ea42f91e66517baa4881fd10cc3cf095af6db1d5a44b6f9e6e847be4128597",
+      "body_sha256": "476cfee3278dced8f6fdce25967a6e4ae08c221619d152ae7c6b5c247248e47f",
+      "classification_sha256": "33b0fd1e98d5567ae5cc98b747c1e831030ee90e39b2d9c463f653be08a1753d",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "0e95be80a682f5995dfb2ee076c33ee0d6461dbd02ea437252b66612160dc096",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00af435ba3b8bf7a473cc9c508a0b543b5414284a32a7fe14f04579569cfbc30",
+      "body_sha256": "f92d1da987c492a8730c59bd238f1fc63f53392dbbac1c8d88af850ced6487ee",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "107b54aeb54fa6b19a192fde374ef0fcd47dc3676f28c2e66cd42f987a8f9913",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:04a6b43bd2bd115af12bb9ff4c0cc7a18b946b0b31ae596b1c4d5ba064606708",
+      "body_sha256": "b8ab4eb8253e2cd28dd673f1de6c693a1729d5435aab3725ffdc1b1c196623bc",
+      "classification_sha256": "dc6140d12a547dc714a51d68cbea4600ebd0eaf1ce916d01395ed4500240fc4d",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "11406e32a80da45dc6092db6ae1427f30591836cf24189f9f1d05b947571d160",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:017d863052ca7545a918bcdd82196d1295c4e04af7bbdbb089a6f75d74e6761b",
+      "body_sha256": "c435dd03086e2f4726976bf98d81ecca3ff5e88e3573f65c2a5a6bfdeabf5b84",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "130d0cca7f19de6d50bc81c6b43ba3735f565674deeca43d5b95d7a292889f53",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0a11cef24526dd653b3d8a784d6599eb51f2b95aeba60dca36deecd187f7d714",
+      "body_sha256": "176b29b931a307ddb038030e3eaab946228e7c19b3cdedd11e39454c93fdf991",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "14f9b56140f0460c4372a86ae8cbd4f356d60a9f2da5891970c71ec31e1701f2",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:006a9de38125e3a777a684394d1e15ae7a40bc1bd654831fdbe754eb7006ae25",
+      "body_sha256": "39f71aa634e0bb9c4b0cba7a31e8f2cc2dc519356d98c34290f148166e64860f",
+      "classification_sha256": "f48f60ab51ac04452fece3608ffec21c9ba0d6169bbf970ff6b975cc36134b96",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "17289e3d95cf9145a447ff2198d866e8bf97a06530f44473040986764ffb0652",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0263197e71274c18ba1f1444c7fc004f7f0924a7dfc08aa35ec5722d857a139f",
+      "body_sha256": "4862a8307a7283d9403f95f6105777302b4a3c0bb238311c37eeb2a02dcb1ee8",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "185751838e37e5ecc0c48d49e16a63706d41dadc1c2116eee4be17b989308fd5",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:0684f51bc2b09fb487bb7ea3452370c5355a83b52cc713ca49b4ed83daa19ab2",
+      "body_sha256": "a703ff6f6d44198b3c9a7b1ce0373dc5da0a66f3d4f9d9ae869bfc1145d876d6",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "1ba379af3ca158366a63bbbd879f0c62aa1a04f97dc92e0dd6d47d17f6fa2a33",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:07767b652419065a3cb0a5889325f1008ba2646ff157d8184e45a95eeba0e2c4",
+      "body_sha256": "e54d1d49b641f69897c7c61fe10e9dcac6786e2f4c248a9785fc77ee443cc189",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "1d32d90b9ee0df10e8297a4ad005b5c2fdf4175d3492b3774e89d4cc5c07cfe5",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:012b3a4e3b596876200a4d8f76341b72cd23a27a76a50e61028459e8e64ab09a",
+      "body_sha256": "10ea1e23c91f2ed3f9aa5e0478e430fd487c4e217aacbb70e10818b6e5997c49",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "1d53322b361bc9a429e101d45fae75c61331a54f7dda7e6e8a1c788344f68851",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:197555068b165586696a5607111333f512ab29b8395d1a795f82c120508e4152",
+      "body_sha256": "1f7e4b8edd5f126ccb155bdf18708f34680a8ec9873c2d1e8004d94942eed9a8",
+      "classification_sha256": "498e2d44b6425af2d162096ce65193a273d58008ccd8b6feb91a6ca48793a20c",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "1e3a20617450e758c32296f6d367611141db4f43bdf9c3ba2ce607c3869a8a88",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:00182113929991a1926586f62eb66a4113fc9fa2e10c39a523978a7b7e69c6d8",
+      "body_sha256": "d92c5aeadba9fe3801aeb3793826bc8c08f4b3868eebda1fd48d42f36e85b744",
+      "classification_sha256": "e44ac7f76d383b18e8beab3fd2490f12b7cf3b70fd909d6c052fe7b8d1ffc584",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "2143696ef61be688999b45cddecbb30288b7be79eb0d98d77fb6a2a71b6d6824",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:105b86e3a5a40b9a6fe9e7bf38654a33193e2c686304a1cd606923d3d0803a3a",
+      "body_sha256": "dc0364c5edb6054c54215adaa867c10dfdd6001843b2258c326ae69c86ac6504",
+      "classification_sha256": "a332bc21dab3305d5e2b34ffce8ddb90cecc47a0a5cfccd1eb4475fdbe8fcd23",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "21e8f5e422e7e2f7d737bf632913e56388c79ac608ac44a071584380c48af411",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:015006487046b337714f9ad6066425a07be985649b8e3554e38526de15e2a85f",
+      "body_sha256": "9b686b91a7c2a064fada6e6651ddf1630a76bc50b36355961a1c2f22c5d1b967",
+      "classification_sha256": "31d4ba006a2c1db75d078ceae3fc448632cd63b343661ba74d963605081478ba",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "259df3d45db3da540b89488e7dbceea285f457f5a4bfbbf9bf18314374750377",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:1984688aba14dbdb970af21f7a3021ce05c4f98a0567f9d3e14f5ca45c2102cf",
+      "body_sha256": "0d7bc7836b64e5c7e72af233e575d4cb39f5a98915f10346f4e7938693cec9bf",
+      "classification_sha256": "3ab49de4f5316a5a8998518b6b9a687ba7e2c2a07497b734f47e34edd6271f97",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "262c144376e1fd6a25e8191729a96d245ba544b77ab5b408a05b84d7e84df16b",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0278bfc93c74fac075a484a61f11ebe9f522f1840ab6764d2f1351f57051d68c",
+      "body_sha256": "acb1e323fadb3c9e8d22f750a114f8c32c9a09a7a365caf49f22a31326923d86",
+      "classification_sha256": "75bbb72e451833b97f6f93f17913ae9a1dc6246d4ff27f0be22b163c4c040ae8",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "2856f93a1f11706a71b25c636d95fdfec9df7554dfed71209b5b5e40a347463f",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:a180cf1077f75337ca6d965b1543eacafafaf71078afb5d880019db26c6f79b7",
+      "body_sha256": "b784caf1036c73686bc5bfb3f674f9c1d60d7f1b596acb592321584d9313e410",
+      "classification_sha256": "8a070c2ea91f9fe28ba83819cc92d201887a655e96094af72a756a3461b8c9de",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "28c304fd77067da37678b1b02a2dd2991246108989ac9c17ae8b7fd932ca4600",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:1ef770886237e2b8361d2874d85f92fdab44f1bea28c8e733a60a4625d4759bd",
+      "body_sha256": "5f520f0b6437bce1c861e8cba9c78fe83aec90e74426b5b8d61b5c257da5a119",
+      "classification_sha256": "e47958659a74c2d9deffaa1a267a76e45a44f76e555ef76e18538d46cd052505",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "290937871b17a74d603c1567c74e0a290bacd4856a916bca8b034a51a823349b",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:013fb1b5e4e2203921a65fd38ce414dbb0fa7716f3236d8f61aacd2d0d186ac3",
+      "body_sha256": "cbee2712bd97a7facf680ef3a012204c2c7e6ea15b996da3d14b59808e5c3e49",
+      "classification_sha256": "889dc371dc557d8436aaf669c53ad595a54e197bc9b474e7981dbb7c43c3e729",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "29b667b8f19f0d9617e8d16d4d6fcc930ae7c8220858d9d97d2f8734357b8cc4",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0b54ca54447966f44a43ace810c03b3de34554d275a57023a805a73422b63a11",
+      "body_sha256": "e9074358334d382ffd5b1d789719424b6cbbd1e374faefe26fa000566a7b1582",
+      "classification_sha256": "d565d7a942e4ee6683c6a3ed5b87daa15919762070318b6259f2b028e2524385",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "2a28ad1f83cbb47de31e27a491cf0b8078f00e7c5af91e94a6be4f876dc0f2ec",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:08f7fd736cd0daf5a54e8ce7a92c36b1cc510cb1830a8f176b66df9d23f3a4ec",
+      "body_sha256": "e1801f6495f6d85c82f5e01fb0f5d6b31eb0f6cd0bc60c391cac876235a9dba5",
+      "classification_sha256": "6118ad94ac1761ed1b59cece03a7eec39a5926f56c69956c28d2b541c884636e",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "2a335a573b7bbbd287dd362ac808860c6ed79512c25508b79e3b6c9f23d233d3",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:029b4041293b3c7b00f0152c9b867aa09dbefed612b0b532bfc2584e1ac51324",
+      "body_sha256": "61cfc468fbf2456cc7a8e1b9f3f3a5b56b2d58241fb2ea826f8065864fbd75ae",
+      "classification_sha256": "0647778a618c9ede1d266c245c94707975c03d66cde105545be87cdce8241639",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "2c88afb7bc6f6ac1f27aa92093204c1e7143874dd71b004a7076f32140639353",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:02577052ba6cd8eec0e92016c73b5941c5e31950f6bdcdfafa407867084b801a",
+      "body_sha256": "ba4bf759413629010ebd3230515c48419ca55d9ccc52d9a9931745963d135852",
+      "classification_sha256": "ab3ae3de16ebf89cfe4fdded6440d55fd5d0623381c298854487c6be4224a740",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "2d6b6cfc2cac02203161b34d09a569e48cbee254e87db81cdea242f2a5da05b7",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:926dca0eec609a2315991ae89b9986625f564abd1581a95093b9fba5dc9f67af",
+      "body_sha256": "8715cd68b0c0a016ed7593d044ecc5f65b71d139fc5cb6cd42d2046d7d9fb1fa",
+      "classification_sha256": "c4a2bbd29c0b965171010f283748007909ed1cb2fa7b62083bdcc0980626b759",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "2db8f2076e0f167cd0cdee9d4af5b56e86dae75be43430f50a2f2fb5a050a542",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:045a3a66d622766a486ec7ba7b67ea1fa6dcc12701311dcfc238d465678b6ca3",
+      "body_sha256": "b12e09d40104f3f92b7f59ebb6d3fdfa7177000a0c9a9f17c3b5321576e53902",
+      "classification_sha256": "bfb7022e2fdaf564e06303e48b3473b51dc26bc68b5d720059940443bba8ee04",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "2dc0a67addcb5697060115db8baa2663a0dcd163078864c8c1157acfff1b3fdf",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00179d76885f17be1d775f18138f3880b120b4fab43a3e70c98df74592345ed8",
+      "body_sha256": "cd9aa6dc5cdde0ee784e9831388acb3172cd7c604a917492936525d531f568b3",
+      "classification_sha256": "986367a2b52b0224b7f27f100622d123833046c7603eae980ba18e18248091d1",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "2dee396062298eb7561c24e6e711d040410293460fb2836c92387aefe23bb9e7",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:017e31668f2e0d5ec293b20efdd134b6391175d1785307698fc6bc4e570afa5f",
+      "body_sha256": "66d655ac71cbcd003ad244944978580b780f082335612dddee29df4c1adb3424",
+      "classification_sha256": "806764c8b687041dc96e96ef580adaff996e15b457e0376863573d3c45629159",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "2f85f609f8ddf2d59dbe0e1c9497a5ad11fd7cbe5e0674c8ecd44530b750e301",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:0350761cfbcd03d59ec7c708179e2a718b0990361f684853879a4d4657241fd7",
+      "body_sha256": "9bc0e1320eccc3bbf5b7d1b66e404ea4f97921966ce5bc1e3f4b473640e19ec9",
+      "classification_sha256": "1ddda52581902b2e6bddbab68075fa9e7492ae38786e70e1026a0425d022ead7",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "325db0b3626e0b724a23c47c13e31cf3c9f4ea3d03abd0b81c3e3a1794eccf3a",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00347583d70086d25365e1bb38ba89b1fd731f90598c30790de97fc820dce4b9",
+      "body_sha256": "adfa7513c483aa3edfdf4bf8a10f7c638190f2803e63ec3090a53f9dbfcc578b",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "331a806d70dfb5adda2b9c011bd74dce4b8a3e468837e0862a4b04fb8b658a00",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:137b3aabf6916fe2a502b97663709b4c1a2001cdb337a217046412da21b06c47",
+      "body_sha256": "b4840bf892b223493de33bc5a2ea4e8b12f3c551805cbde76ce9aee0baa347a7",
+      "classification_sha256": "5a462c467484448ec9f33822348af2c39daa607bc526798ae0724cfd185efba5",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "34606542f5b80513c05153d88e82f94aab6e9a22c7691903a3420afc192f0d82",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:01c2c79a35f9e5ab7e0b0c9037bd24b1308cff08f1011d0ea893a6732a2a3cbe",
+      "body_sha256": "1807a1f84c7fd0c35ce2a622159ed94cd90cbd7485adbdee9417d7de49e21437",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "3483050cd3c524baa397e8ac9aa02a81bbcb4fac7f85a3bc202184ce63180426",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:7090129a882bcc4864d16dac63dfcd9265ddb76b5c268a95021216356a79c553",
+      "body_sha256": "d518b77b0125d8fdb1c27cd5f6abed0adf54550f2efe525cc4cbc2cfcbb337c9",
+      "classification_sha256": "b6ff64fcc1039eb69dfeaa9663b63dca26c7e43920b1f299afdef2061810041c",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "34a49103fb0ae6a1ff90b5d8b19eac90681ec7067d5f689fe891b9d911813ddb",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:000b1daabfd93daa5964059f7af4b1086db442a7bec8164ddeea387872593f5e",
+      "body_sha256": "4b5b99224177f3998bf1571cb13c43d46f5def8681c00f886337da3c3e01fa5f",
+      "classification_sha256": "b63c1630447bb64533c6340cab9d060ea2a2d884f35115158b8e8697d7c9953c",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "34da1b806aaad15fc9841e727a3676aa33dbd1cdcf374d4a2a4c842ed754df2e",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:06f0d6fde4d81460253c74a429b74577573dc8227acb4070627f9d5b071ef777",
+      "body_sha256": "fccf3be6e3a77a962b15aac3f8c877d2879980512eae37c1868dcd87b2ea2e7f",
+      "classification_sha256": "4fca45a5235fe7f575b6ffeb134c34e6a0ca6f0e163b0c21ccc816965fe31cc4",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "34e1d963e56e7ae4dd8ba664c2face6f15f6ca74e4e067d3b1c6d7723f3baf3e",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:008d96892b216dd3feb53c2bd07db53f15be79c33f0322007b64966f1e18162b",
+      "body_sha256": "aca2b65eccb845b9cc0557aa0920b3e6c6c01bc9031bf480dc1c1d047538268b",
+      "classification_sha256": "201e628a12be9a3e6dbe557cc1de599eb77ba28a5fbb7dc6c54d84a25875fabb",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "364040486aa06aba177149697e363ec7cb6293912e7ae8d759cb7b30befc140e",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0af8087020aa678660cee8e15e95ec428ef7d35d751410bb926c0f8ec1569c9d",
+      "body_sha256": "adb41dff5cc7c737a17a986610642668e3eeb68ec74002422be8b67d545158ee",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "365ee446a263b4b50748e85f6fd86845ea2ecf2a16cd7542c6942c22c90d63d7",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:33f757efcb6e24976d1e1e433040eabe13713ef18cf8fbe8f1327b16ba3e0daf",
+      "body_sha256": "4e71661cebf2a2c432d01436dee41e1561a4261ac4253dbefeff9aa85c6cbdb3",
+      "classification_sha256": "49fc61512f74cc65a56081ef3091b4b15306959adb8b32de28e4f38f677e6cdf",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "38bfe0aa5bb779c98d0dfe0f834df5bb02c06259134e9301a662e6ac862ab477",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:05eb517972488ae16ce9d85ccd5d2f9937a108fbe120469f62e19599d1608803",
+      "body_sha256": "9cd1adb6b5a6121664d5e9789395dca54b78c2a07f3fe5a3aabb37a9771946f6",
+      "classification_sha256": "ce664330915e23599bc79f03754219bec176d2c679128dafa0c344f69479c7e0",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "39c48748e40b08f5d50f7a7aa6add5b43b98cb368e40d31ee7324bed6dd480af",
+      "state": "attempted",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "needs_review"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:a304acfbf1f94f0176ab4038f42ae807e3e5573f389ff379b9833add441c6398",
+      "body_sha256": "45a68946a0e1ce39a9d985cbe90e8f561344821a0d1911356142c0d6b247ce61",
+      "classification_sha256": "3e9b2e7811838d5f8c237969a2005b9732a1c7d1396ddc716734695db1d05690",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "3a421b08826cc7a05c6b9b373aff3e39eeda6a92db818ce2ad34701e056aed09",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:06c0c57218b245dc949525046b773ca783fa85767f72a2681d7ead62614503a9",
+      "body_sha256": "d4291dec20a531959597b0b4b8783dab2139608336a1c3a6bfb8b3b058f45077",
+      "classification_sha256": "527e865c4dc3d5b4c5811c17bd54f7be2cfd434cfd3a71b1e031b852b5fd3160",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "3bfd845c5a6b4fb2b81a39e7c93d51c8e53c316064190f35bfa5c817bfc11aab",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:06802e117fe442cef8a86ad8f92aad6d59c8aaca027fa823ed0a78d0fd804943",
+      "body_sha256": "5518b7ac593219e849bbc69ea4c5ca5294389949b9e38ea49c1150d2fa54a3a9",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "3eb06fa13854e2f47567d2987ae5c6e87b4ee4570c1d3f08b22171af197934b3",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0b3d1df95d5a964fe88fd17627cd682b3cfe4638df9c8ce36a9422ab15d1438b",
+      "body_sha256": "3f27198c8719168bd23272f43efb5313a995003fcc025fc8e866420ee563e46e",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "406a4517fac2b73568557d3db8a09e222ecc6ab654efd874fdb8a8565b7bba4c",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0023430261ff1125696670cf8ea22e9a49deb2c245ab1b3fc5882f4bb87ac848",
+      "body_sha256": "e782dbbafd87eee14ae35de81ecd55e0a0d25dbe1a06074383271e431972bf7e",
+      "classification_sha256": "8e0f142427097e84be05aa37155fd3317397835d15202a80aa022149e5a07b44",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "40d2c1f0f02e1c2793b3d77e3e29fe7f37fc9626c0eb4fe25ccc895643401890",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:01236899630bc52e62f63f1f0681089744c593741bfb4e74dbdf13a48e1c4fea",
+      "body_sha256": "6451431048b454548ee41d5961e379feec4f1b3ac2e8b5107ea71ec35837a181",
+      "classification_sha256": "74d10e0bdfa80ee73f90acb05d93e8088de9eb636a8250f8c1ae27edb70257cd",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "41094ec06295ac6f78c02e2f07cb897a6556b4958e9db4a2fdbf1c471c0ea439",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0234058949ca69a9398187d1a8db7adc38954e93e8512f5afbe88b3dc919ef75",
+      "body_sha256": "5463c9c5c0b019ff80c1ba31298747132a002895b9dab0fae33665b65599b7f4",
+      "classification_sha256": "24a319f154437f4d065309c09d82d2cf501562adf4db843065e0db6d1b9cbf70",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "42d289a4624aaf321baf7c5aae0149c35e2eb7ba2a53021f9119ffa928249bfc",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0c045bbf07ad7a3b4ede716d112239dc0ec6c1bb0bba87dab2bda25482288a1c",
+      "body_sha256": "c68e7d7d03781bd88dc1375aa253f83b139d48121fca52d09fb318155d801583",
+      "classification_sha256": "d06e70d8f92a2d73e5105ebd44e433392a995530932ec844842fd2982567f999",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "437fc10ac28f739d57284289914b931468fe31fe382fcf0b61698d5df4f1ae38",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:018b842ef09cbc0b245922a9228f73cf3084835765bcc0547189367e7eeab2ab",
+      "body_sha256": "47dfdded479d18c4575ca313b35b3766b8aff2cafd3c221eae3ccdd9d30b1e0d",
+      "classification_sha256": "b8145afd4e429b459f0a78e0c7a7561ef3bc0a78eca96614cb13ab0c0b61da20",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "43db64970852598e0048998752e7cbf08ff2beed698a3edfea310ae546133197",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:362ee26d563319188174b45bd0919ae5274eafee5b6849138614f0af81b66d3d",
+      "body_sha256": "2556c7a15af71a5c81e23fa2414eb9665d80e89520aae1c96a820df77b0977df",
+      "classification_sha256": "d6ecfa010d43eb46c1cefefeb081bb083d03cea3b349f29e853e9286c8fb89be",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "44b8d9f6bc90d0480a89569b35b57ac52d07ef96db999ed408b6a4c42fa43fff",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:01f7a27c9481ad84b718109a0f16926db8741c35477f94b675f1602ebddb9a0c",
+      "body_sha256": "8e84ed62a3952d7a87c583f8d94105b20ddf36084ce4a43818b685e2bf760f60",
+      "classification_sha256": "b23a6d23ee78029c13e303789e3aaba7caecd7d8a72b75a77fa30a963c83bf3a",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "4572451c4f9e78d8dc48c0d2715b7f694551e7edd927d59f12c8111ad17e5663",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:04eea51102fba660da20dc5e410c0abc52845ca538355ce28658675248610014",
+      "body_sha256": "3e12400540908ce694575228e99d6bd250a19032532992e42f12d896ad073c20",
+      "classification_sha256": "2cc33a7a2b81385fe5348c73c24756e9e8ff09bc511b3506e11b010ec3716a05",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "490783d0b4db1ac5d69483dd65d79e493e5bf53de2aaaec696e56aed9dc677f8",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0772841ace39e8874a20f16396e5ac1b8ed929a5e92e807f0b9cbfa7daa94293",
+      "body_sha256": "2c0a408d026b5b9e845fbabe7736d429428aaee83c0d5c794991639c6c75c145",
+      "classification_sha256": "fedd97b1ec4d154d6b870a37b0d7738dafe72aa543c8070c3918ad28d1119d51",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "49d80a955616cb27c8ca155a8f4f1958ec8522a82ce9b02df66b12ea6aa0aee2",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:05a8a0bcf6a0d509a7c99418251c37486f731dc09cb38c072240a406a76427f8",
+      "body_sha256": "c4806b79e30b41af086cc1e3b9920424f846a0a234c8130dbcdc85c5ca3fcda6",
+      "classification_sha256": "7c5d32932a50d4e186bb8cbc029199e4101df41c393caabeeb19acc6369a8822",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "4aa2af3e07dda0726b5562464b60980e532bfcdb19bdc9ed1a3ce325ff1c4a92",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:1005928f0789b15ed006396d025f10fb90049c91b3e3013a4e6544d0007127b9",
+      "body_sha256": "6ae738e28b4f15a4a6450e4b9645df6af657bcb462bde515304363ac45c1d4aa",
+      "classification_sha256": "e61b11888dce99a61ab7fe3a79b28225558580dabed1a0a17f11d79c140fbed2",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "4bae8d1da967b3340aa3807ffdd7bb698f66bd5581db5e9ca151ee95ddac4142",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:07a994e2091afa86561d66899313616c9fba62ac0dd77902edbb5735ea56141d",
+      "body_sha256": "57ec0decf1f06aebafd5ce6e6c96026164e63f6b3825e23e03ac9aa0ca3a8ce4",
+      "classification_sha256": "5fd908ec6cfc733d97ef329e3f3e76a5f0c92c0caaf141e6f2e2d3140266b546",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "4e19ac7a12b4cc080959b9ec06d005a2159d4030c83aa53b0a38c709b3c2e8e6",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:00244ebd5cfbfc35179768415f8c4075ed0c4183858c6b6818e4a4a924c871bd",
+      "body_sha256": "e2d84c5fa36d78bcd340de83a66458aa40df6514354c82c962cfdabcd8753b24",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "4e42b2c958eee35083a93a1030549bf328a9d805dc5e0e62dd47875fbec7fdfb",
+      "state": "hold",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "needs_review"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:2121a4e281ab5e757c76a80241b14c2fc594664ee085cad7d95db7b540cff9f7",
+      "body_sha256": "397d3c730ccd82645821e85ba829635cfcb1c8e0d5f24e26c4d8939b3836e268",
+      "classification_sha256": "a1169e4b9efbeb4328f104a13954106b4f65299fd25166ec3df1682874dcaf02",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "4fb557a4e5613409fef80b437df97d72d4e365a17caf377494e8004044827b69",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:00842a65bd044d9cefaddb329c08e04a6dfde1bc547df1546e2c39bb3b8452af",
+      "body_sha256": "43f46a632e50d0de53d944dcd765c0462812ce0446c0b7ed023f835b20d94e21",
+      "classification_sha256": "743ad5ad74131738d33de23434405c4f0ed90d1a4d3f5ac88819753cf056d00c",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "4fc7faed0136f8fea4ea9ded86c54fd99f14e23b8071c543d63b737b85f7f559",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00c9d2e483caa94d91519890f37d4efd1e1efedd966d3482bbf4bb754b85f830",
+      "body_sha256": "a60293c0092dc9ce12b808081ee89139672680f3c79037f0cfea765bfe1a32ee",
+      "classification_sha256": "33b647c00bba5cabd74132fe4b5d6581ce13e9a1e0a9d8b473af583544b32ae6",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "5057c2e646dada7f3a7c8f024e34894da96f53526bca9a38c287a875ffcf7cad",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:023059d12ab7aeed8ab9c972f91cd5b289942daf5bb849f4c40f2f0e956f1653",
+      "body_sha256": "d8148a9543d7e8fa9af559519753e52f358768af16551f6da5669aea90d399df",
+      "classification_sha256": "74d10e0bdfa80ee73f90acb05d93e8088de9eb636a8250f8c1ae27edb70257cd",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "516d3c948d802b03458c5acfee42e2ec2ae6871d12cb0bf1c5525df93c86a45e",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:02361df32abde4ea3b8e926ea462e09cb48e68ab1c89376512b33ac130ec7763",
+      "body_sha256": "70e2e8c8f26c183076d12fa507d69172edbcd68f9f6a188a91101976c4fa1dd6",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "51d41d60781d58ab94bce0c20a7c14639896149a272f32891d92243c268923bd",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:08d060206b869f8ee4dee7054fbf3c35246477f618f67f2ff9f0aa93a2d1148b",
+      "body_sha256": "98fb0d8cbeaf4bc1f84c21452dae35631963f291d44d78c262f596b79b0047e4",
+      "classification_sha256": "a90c7df7949a998aaa7d7e84d4899bcf06f87a5178305b9b452fd14991146a24",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "53510c6b9978c7884d2e496e00bb405c526cfbcb53f0c4b31d8d45df9cf3facc",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:afa276443395e75b4469edd5ffc5e67abc7c336f1f91dab04a80d232880d5e48",
+      "body_sha256": "c5955b51eb1542e6e5274993a784543d1eb5dc0f3bcac4d3d0ea8883f892fe95",
+      "classification_sha256": "ff60f239758f265670c6f57d361dafc4e69ce108d1b8fcb10feef6e3f7e702cc",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "54b7bf9b0d71950d9928f1a8bf7a3089874e138de4b101291cb8ebfba2c59b8f",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:01bb7081b8bcf80141f1cd10a102d04ea5ea523cb6c08b03e53f305326f5f2db",
+      "body_sha256": "53ee40d1dd19d5591c498c2effd7747cb6bbcc9d4294acbd373650db31a4b47a",
+      "classification_sha256": "91e9cc1f37430a7c169696b372cc5b07b535965234761f8270f5e0f21416acf3",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "54f23b8c6f3ae7c681d24ccdb1ca2c296fad4676b3973a9238abc32632f33b95",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:17097bb15be4a404345e5dff10109f7aba18ce28d720648d5a17d19c6bf3e70e",
+      "body_sha256": "096a83cc1c79c481a3bea1b8b9b2741da5e39a9f018fd755eb1c54b5806fdca8",
+      "classification_sha256": "da6bef5edde02eebedea50ba20f92163ff8fd6be7f6e6084157a7f616be8b25c",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "581fc9d1adb4e376aa9ed7b5ae7900e3b7246adf282ca561f33b2d2553bf54e0",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:0825452d25604b969da24c4fb046f6db3b8780aec15c56fd4ee88e42442cad24",
+      "body_sha256": "734c05a3c2d01789ac52fbd984d193d2dc23d1bf2c97d13b093a7b94df51f0ac",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "590d28632abe600e65e4f6fdf6fa3ccd52cc91ab45c847752a5cafe2e5235870",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:89bcf1f458d5676262adc665591ee527c9ecfebb28704576ca5489bc037368ce",
+      "body_sha256": "b12e6b15d2da02647b9df952a6bde8d2343117ffb434b20e25163f09ba863d5b",
+      "classification_sha256": "a58fe039c5040504525d6529e7ad6812d037ad350c20abf60727dc19e0762675",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "59bcdd6fad05f370271c3a76e057f333b13096635decfa9020b1f1a97844341b",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:275684f08ec8ada08511e67208092dc677b5fda5c5c7c46982904c8e34a66e28",
+      "body_sha256": "a416f4231e2002d020af9b111d17d3707f94e473cc9e123f214c66bc907ca159",
+      "classification_sha256": "41f7e1a84937b63988bce55cdf2051a848ece7f8539b20ae972f3f45ae67295d",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "5ae1697671b08cc18b063dfcc20aae003b82298e2646c9fb1e4965addddc53d0",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:00761f61b3e2ea3ca2420e8e1ec4abf1054aba6bc12c531d1613359eb71b9e2f",
+      "body_sha256": "b9bc60bff76954801a67dacad55b76984985d79aef869bf6cce6e45f83241efb",
+      "classification_sha256": "d5a214f9cf29dc7e136df859d4b72693bfad9c98daf02ee3aa9f8894a4c40910",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "5bc29c44b715aa945a609111260d642f3a4a48c076d16b1a51a106c4464f7e08",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:03a6edd7497d8c110a79e6b9da9ebea830048f4979029784342d1690dd5c3224",
+      "body_sha256": "1a0494c3955f5397077ef73cd1a08ce80da5005510f8f676d74477c8b43c7499",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "5c74915391d20e1a53e02625371913750d7940f13176451d84b6a64089449173",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:006ea5f60408885026155d7508577b1f0acef0fcb55aaef97f5d1132c2525147",
+      "body_sha256": "fe04610079bcee52cf4c6b5c7ae8bd531fc8452af57562b110e7a470b3418cc5",
+      "classification_sha256": "88fa014f2895d93e5d9e14626444cc99f47d00ababd40b8e0414076e66656b4a",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "5e0bddd998412f444324e45a1ca4013fe4ff50f549dd66c65475c88c17c9210d",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0351a5aa71159982232c8550887408fdddfaaee768228ac88f30c59a93113379",
+      "body_sha256": "2d36362b8d7325b63c4d0dde121ca35a70cc2adeb2874b6c9d3dec84836b87b4",
+      "classification_sha256": "fa080c4306780db3110cd83ebf5ce7b0523678965d79e51d90e4e690e1c3bf32",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "5f8fb019f7e377df90368f06e9cf8b12c8c6b17d20b053514a9fdcae696e04dc",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:02454c0cc52e15c54fe4961cd8585718355be3cae16a5c99cfedae97fff6b878",
+      "body_sha256": "01bc7380efaa60f3cfe1961bbc3027e46673b2df4c879facd2dbfa283cbd532c",
+      "classification_sha256": "ab3ae3de16ebf89cfe4fdded6440d55fd5d0623381c298854487c6be4224a740",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "6112a016bafd0bb8a83899c7fc0492d708d0a7e528c44f9aa93b0966aac43d6e",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:032f96cf5c3801e5aee34e2d7301dc4abb2e0af2cb2645d3e63323787793ea9c",
+      "body_sha256": "f3c7bca7a5a4fc9793f74e1e249c93b970c1b9278ab7694a2944e0ad06c0b294",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "6219ffbeab71b5c71f21d3daed5c26c3c6898cbf9bfb070ce4854051b005e5d2",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:013c1ab06789335a407cbab8fb1f633f1b9992de59e8d33a861e8d40c426be04",
+      "body_sha256": "dde8d1f0f9ba6e384cf84d7967aa9968fe1c8bb9cb8b3fbbd1662744256ef059",
+      "classification_sha256": "d75f72b2b17d97936318fb54ce5978b612966e5f213af5c044b13a89a936dd82",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "621f8737daaf7c95b440ba189f493f0edd1802cad1b66d06d78c138a361a302a",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:01d13b3bae2a929171715d3a4b9ac0bfcbee3e2a30c01edca46008ca4d6a3c72",
+      "body_sha256": "6c4e32c649f9e30dc8d81fe355fee0c4737049cd02d8117b119ddb355a3c9c55",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "643a0a1b86a1806c4ab97fe348f391229e6f0081838e508597738dabe76dc466",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:038065550459fed295c88436ea6b6afe9cfbf3259af07ec239dce429dfef87ef",
+      "body_sha256": "f744e119335fdb72cd73682a833cafba5eb4244a8affb7f90d2c50edb0fd8fff",
+      "classification_sha256": "78393accf46b0952cb7cc99ffb01f7b9e438e342ae789fb3f54a14453b09bdd8",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "66ea9e812a620632620ee6de9e27db9b92c4c519d5a8b4f1206c10b1d36c1996",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:06c2f7c8c53cad7005dc6cc7245b1d8c3b34a97af52ee1db40812f08726caf13",
+      "body_sha256": "2e375bb6ae9646ebcb1aa4961f8b67798fa0da38e4be478dcc215aeb18a5b2f4",
+      "classification_sha256": "f8c58d63d7a3531b578f8ca0c78a3031db301a08d9d71ddafc00afdb0c2c75ee",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "66ffb2c1e4a2c70f36a9d403710c34c9b446d17d8d096837dd1c95b292b9a6fd",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:00914caa535a87eb91776516032cdac502c70b97304eb50a3df77bfaaeec236e",
+      "body_sha256": "29f5edb937cfcba1d82a940e79192062f052a82a4eb1def60b3c3a1781e4e654",
+      "classification_sha256": "12e23226d331a7c043496cbe437a7827269507d9d3f92e3bd7062a9ff088c920",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "6713743b09d9eda3ebdd0a604192503bd5adfc8b98001a1d0104b83d55ff840f",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:15a29c52986c2f02ed2daf59e69198d5c3eb390586bd1b8615b55d275c1453b9",
+      "body_sha256": "676e689c730feee2d2f883b47d8d20bb660f56da6bbbe404ec27daab23aefc94",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "67513a26a53a2e2e38ab7470edd4b8be356370af661df442a008c3fb8d562c77",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:086c5cc4a3c6daa1f3557d26301445290f09d46ffb5a902c807b08c45b52e91a",
+      "body_sha256": "f86e002b74c1ca5176013e876c24f30099be072a7e5c64d3c701c66fb9fb6bcf",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "67eb598d0a1941dd3b01296fcb0051af8014182b2b062252f5733c90789ed51e",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:00db32980437705341be80fa752d808cbefe422160f85ec0759dc4158cea9b06",
+      "body_sha256": "6ff7f14c93d157b04f0aae432890e051eb9773a223d99e149c6dc053214e4fc1",
+      "classification_sha256": "6619fd17c80e42b08fda123cd5d127a662a2e2ba24c486172c39991b7efbb601",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "694e39f15f166494ec69313d36c6afa0d21d1464e96993b4def9b721a7047996",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0ccc660bc5e32c0cca2cc401381901d024bf117fae18ecc90be47413e76e3c1f",
+      "body_sha256": "b5dc240f585f3c3d03b3b72e1af9687acd637eda8505bf1f7184429f2639c152",
+      "classification_sha256": "6be8532f028ff3830619619a5f62304bbe666ccf349ccc98a6fd9e1acfc96c57",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "69594a7c54513ba722d66a89edc1f19f4f83a038004fad52b6dc06dd1e15e851",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:4ecc72b458d053e1b4fea6e7340dd4db63193dc9e8d4ac8013e0a7a9fd482900",
+      "body_sha256": "e212d30b8c7ad4a40df57a12f07967cfbf66ccd5b5cdb05ae2c52ab739646e89",
+      "classification_sha256": "dae9d52db310850e52b24ed10b1e3298719083fa4ea3bccdb31ca2c17dfa36cc",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "6b160b0cbd3bb0376902fbd9262134e452ba09201c96c41c6fd868c442a45d1a",
+      "state": "hold",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "needs_review"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:00699c74403bbcda173a85bd175559b17754bcadcbc49f2ecce1c0a42e34e98f",
+      "body_sha256": "aa462d17e508b2c4956d4bb02c0b7836013e56f14dec93732fb37c3b01ddb7f2",
+      "classification_sha256": "ca7de069d2551c84928786d061bceff79f899d21667f48723a79b176f0fa47ae",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "6b49b06a56abbf934e53f1a0a54632f002d46f11fe9d60fb7b8750f796fc5c51",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:0351f9f80834f93a981efd08b79cbf88593a6fc9c1b9978c3e74f1b7ef6752f2",
+      "body_sha256": "94433553f1d0e59734676c142c2dfd652a4ef75176fb862ca00e05189bef09f1",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "6b4aa6d6e869bc8691fcb741ed01427d5fe55db0809e66ac74017f77877747f3",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:00368d9abbc4bf0df20d80e55df08ad12adb0570cc32605b7bde071b3cc6778f",
+      "body_sha256": "ca9ff2b4dd991ed121c503998ba6014d33f1d28521ee5fdff8ac65c7872a70c0",
+      "classification_sha256": "78393accf46b0952cb7cc99ffb01f7b9e438e342ae789fb3f54a14453b09bdd8",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "6cc936da8a7525b28541d5aba1e0c108a4614fa858783385ccb05091ae58d0e5",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:01fd45a3a73cb78a6aa6083fd8c075fbe0c02a8925263db982f77a20d2686fc3",
+      "body_sha256": "bc37f5568b31e1eb04a7aed3e4cf6cbf03b4f10216802fd46058232625210d22",
+      "classification_sha256": "24a319f154437f4d065309c09d82d2cf501562adf4db843065e0db6d1b9cbf70",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "6d1efb97fb8343b648621f89a9fe3c331e225957cf0706f98cde3f5f4fb1f141",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:04579352b7439b57c2a84c32b3c87568e9e9dc4d76f21826efa1293aca5e98e5",
+      "body_sha256": "995ca55d436280ec5a7dd8caf88c39577a099f2228e47d866fd25d07de2feb5a",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "6d96dd5bda145a8e7c8a1ce2442d26e17350019616295b3e1eff12e6a3509fa5",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0a10abdbcbf297f1c2d0ee7ae6f14a60499cafb7dfae815340058cfad6e89d1e",
+      "body_sha256": "45440d38ec96db17060ec146054d6ec93eeea028b3925ede212a233d931736e0",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "6dbd797f6e4f45ae393e0221093a37c222ee5bac74fe89f6f2f9cb4505d0e39c",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0ac2fae05a3fba455f6af44ab0b3ab0046514c99cb795139cabe3d5d69ffeb0a",
+      "body_sha256": "56af7928d989627d9023243cbbf149f8c27289a99dd8ed00df9f1beeadce5b02",
+      "classification_sha256": "2dc7c57558b27a682d3208a96323dd25b4aa3c19312a6e0e9e74af2ba71efd6e",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "6f475670da372ad46af26da502b8789c4bbc4a65e153ed5718302d3155b27d1f",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:051cca73ee16d7ac3502d95f2d50569f6bb5770a5d8508849448ff2d724082ce",
+      "body_sha256": "896aac1d48c16fda5e4e7450cacb14e03b4896fa08ad5ae9b98a616b9cc333b1",
+      "classification_sha256": "cc5fb24baffd3c96924488fa6ab4a65559855b8e53f57721a269cc5a438b97ff",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "709cc790be3ebbeb99ece07a9f78181187a40c4d6ccc4ae98940e1bd53f8cd1a",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:01e0ecdb51ae4a00661645e0f5b9c2cd1711f053dd35fc918d8ae4f440b7fe93",
+      "body_sha256": "3d6f25ef95b93cb8d82b199571244bfbfee7c2cbe61587698bd78ca0c768f272",
+      "classification_sha256": "29964bfd52704cf6fbfecbf7c6c5c6f4782433993132ca462315f6cc499c1897",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "70fa76f76442f01de3eac09c278fe1c668b18d654bbe086acdc6fb38cfa6f7e8",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:19c50f0ecf53457d3e7b0c91edc71b416342e94031a3304bb78e7ee3177605cc",
+      "body_sha256": "92a5481aaf3fe0822fc438bf5333f11e9db0b0245fb906044266d52730158557",
+      "classification_sha256": "c318da40574ee03038d9b30a2706adad6a702f154ab6019931c826fd3c957c6a",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "72b6a7f4082fc20cb8572dfd517f94ad06aa882b54e7ad3ccdd809e58ac0c56b",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:1128012cefeaf532e0e95f223f789b62facd15b84df2205ceba373077b091652",
+      "body_sha256": "e2b94f783efebbbf5a0ff3307b5598a8d754abf03d4cc18b6b7600cb356af133",
+      "classification_sha256": "fcb385ae183003e2e2502469e7fd581dc664a8527f9298e443e7696dd6b3d751",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "758653cd826756473d2bf627615e045812bc0c1a0c9156e7f53bd1bcb14978fd",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:056fe94e7fda83a3f6374d59814218fd370b3620f44954335fd60bd4e554b682",
+      "body_sha256": "2fc56108d501a9746e1d5f7406e480a12a1c80306118cde4b6c4c4e2f6c75c46",
+      "classification_sha256": "6ed3bddd4c28a4ebb721cfb7b55824337ef1dbca86ff0e3f5bb3bb0eacb2143d",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "761b52e697a5bdb9af54c0dd13aa38e73166ae5a8637c7e9300c1184e8152901",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:33a26f9a56e3f9553de2f87ebde34bb86beee156a9ad81326b1ddbec4830c24b",
+      "body_sha256": "9cff887e551a3a6a387d6a71f8bd4c15e3827780b60350dd30503ed10992a6b7",
+      "classification_sha256": "7231dc08fb9cec75117e85899f2e01ca493a98d9d913711bf47140aa9cbba1e7",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "76aa5d0c7885a77dbecd49c7a650e1f89d142357a590b164418f7c5eed08bb65",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:006689a1da58c6289c7239d4b8a9bc587267a91de371d36417893d260888eddd",
+      "body_sha256": "8848df9ece1e54cde8ff5cd13920165e54d0d6eda72075086c0d497bae9a36d7",
+      "classification_sha256": "b8145afd4e429b459f0a78e0c7a7561ef3bc0a78eca96614cb13ab0c0b61da20",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "77bd5b77a710c6175270653385ababb26918fb151e3d1d281205002fc61e4357",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:009241086010df70d275ea758fe4df5cab5c4e208b19347590ee086312cf9ed0",
+      "body_sha256": "82eac54021558fd4ce83acf40d0ec06a2d37ec7fd6871e6ee2a019b3d83da4f2",
+      "classification_sha256": "c1c10768d3606376671f5a52378d9c9971361684c900c2962968dfbce996078f",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "781c3cf27d8f65b92c35201f1d66ebaa2606ce9369d327378d108c7604c4982c",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:008a998546aaf03af5351ea4c6cb34014f79c420b621b59b6151081e3807182d",
+      "body_sha256": "66915484985a350d25370851a6552e8a8ff761d8af8818565c6703c8817e1f99",
+      "classification_sha256": "2c3770b89f74ccaa6564baf822fa3d438860added1a35e310d7fe138eb240774",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "7931cf74756e69f731f987ab88fb4d1f6f84878c7cf84e4f9458bf30de27e889",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0e8160f99af596fd1955d7b9d63d3dfd6c269fd0aa57fe2b9196802e8533c40f",
+      "body_sha256": "75f1a3ab06d75febbe2ec053d885f066a58b9f88012b69e11de6804089c7e656",
+      "classification_sha256": "3b72f810eaf33655c093d42a9f44079d80cb6865c25af3814e3e55eeb69c2810",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "79a54e8b4e0494cf479ee0bdd327666ac7dbd70ff23b66894e16912b479433eb",
+      "state": "hold",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "consistent"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:7717e2f1e053621fdf017ce8664285c10ea205d8368d1e2a201dacdd921a0f6f",
+      "body_sha256": "4a5427ef08b884489eedf7ebfdf17d05dfcfa51546660a342d3cc4963eaaade7",
+      "classification_sha256": "b0f1e9b7e24fb4974d1ea0cf6c4115eea606cdd2c2d0857e248daaf6998812c6",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "7c14aba34b292b75f8c53b3484f0059db9f1a8218305fe4d62a632ff79d378f4",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:017845bc516f410d5813b176dcad2aa77e232eb41eaf8dd845c2a27461c31189",
+      "body_sha256": "273a3a461ed1534157a790c956b613cda3cd3a432e4a49db781c061c5900e419",
+      "classification_sha256": "20afe6e96bc88acf66ef1e23914cf3c8ad32ad4947dea8dea88118cf0afd21ab",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "7ebfe68ac36192a96134507dc8d1307eef14e222c28905494171304ddcb68138",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:01588ebb93ea703493d347336084aee8f9150122d6484442d7b2c140e278e2f7",
+      "body_sha256": "747fbcff3e76d79108693527b508d73d5277ef275b1cdbb75c197460ea75bbff",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "818c1669619932fd3001ffc7fa4a815b04891dadb047762fc0dd52fe0f23a39e",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:01666b575e9ca1dff92d8201ba50213c48881c318a830c47847402ceb25581ea",
+      "body_sha256": "f0b88cd86009c141b512e1aefde3baa57ccedc5b21c1b726c1e227a230f4f034",
+      "classification_sha256": "200cd73982b988bd2a47ec35212311260385e01b1714624970b6c54e0b670a4d",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "81f066c90972ff0b60e7f9713086b1e1b24a27d699fec4e9fb95e900572ce2c9",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:001df4adfa92f8ddd65dc4e74ad8450ba53063e2827464a1ec5f47d2ec864dab",
+      "body_sha256": "3c91f3dbfc6e92bfeb2248018fcd3402e82422c1c2682d501561d050d36310c9",
+      "classification_sha256": "e93600d95c728a199a8fc673a863d3e0282439059c89f2703e7da9e0f8577416",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "827e2f18690c1913c284c79e80e0b4fc937de17bded50b8c3405f456eb65967f",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:02f898cc9ae891073f3ca6b2207369f5ea7bb4309cef8c4e889b6c2c0d2cdcb3",
+      "body_sha256": "bce08397d8cb28d9779399bbbdafb06cd6eecd09b2e1d4dd96cb0051f149a547",
+      "classification_sha256": "1e01fba7d40fcb7fc5eeff50a180ae7cef2cf587847d8660efd3725328b1255d",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "8886b9701fde27ab7244e60e587ce23ccd1349b4e02f36d46972f7d34a8a46d6",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:197c0a3aac29b2a0017f5b388e5db91fb68d84e67ff6ac45b605ed32de98707d",
+      "body_sha256": "4442bc2d4bb6d83afebcdbb47f735218a5e2de9c1a067781688bb792d0a4d221",
+      "classification_sha256": "7b4f2908261fe02add9d049c23beeb933f557e8ceff2693e0e43ad7781754fb4",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "89b43dc52c67d02e0d4b28f2ca437d05eb18e5de6a98d5409173a6d1073f8cca",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:077985b8f8291066f029791bc307657141e979f2a096f0b2056cefa3321490a5",
+      "body_sha256": "fd8d9e0fc11c3775912f9d57f5972c71836cf2ead700e613454b5c0cd772bd1f",
+      "classification_sha256": "725f57451728f758f7f5e0038cc373507469a2c22f7cb8ca84d3502dc6828af9",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "8a21790e5c9acc6dd3269a27c4424d94485d6441951cf8f66e845ca51e9102e9",
+      "state": "retain_candidate",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "consistent"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:046030dd728223e7d471e2df018d9502a97476d57e2c09c4c8093f324b6a1fc7",
+      "body_sha256": "60b08d0d45c83474768726abeb6b90fdcc2e97c41c107d2e2a8d0f698dcbc038",
+      "classification_sha256": "a68263b528d055700c0e5fe58a4ceb85572f77596fc4293743a7ebda62aa1e40",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "8a41695c7875f60cc44fac1ab28ceb5fdd7f6d494dd4107db7f6c92236c65abc",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0312728c47b006f07d31e3b0b5980615007d7ce075b7834031d8af976a3fe2a5",
+      "body_sha256": "716aba0e189cbd45fa8092cbcd91753a7b7700e7e1a6fe0fad66a01d994ddf7a",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "8ef261af41440d6a986721a5b9a17be6928d3ceb8827675472a6a7c8a0a53fe8",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:01525fe168335f7bf49125baaafbe2c138b6ddc268bce4edaea9395626071bfb",
+      "body_sha256": "58c57dde9df90c0909c173a190e9fd77de45d992f666c5f0a1a90e17b4639191",
+      "classification_sha256": "20afe6e96bc88acf66ef1e23914cf3c8ad32ad4947dea8dea88118cf0afd21ab",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "9054b2b569fd63b2923cf566e54c461f53ab71d491e697d0dcc81a345467ae0d",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:1a3654d2f8b929dbc51fb7c01c6e0bb7a412d6ab511c14c3371b8962fed318eb",
+      "body_sha256": "8a380e58cb33d490d504d14116ea22f852f530ac315a03bf9829aa674bfcab5f",
+      "classification_sha256": "bf79504d6e93774081d4d78e882991b889bc490844215b19db6f14e316008c1c",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "90ff386bd724a038ed40bb566583570479153995f832e2ab6a751ecc0d9cf6f8",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:88a5b5b73fafe88205b25eb583b8f683654bb804962bc671e24b0e97a357caed",
+      "body_sha256": "eba3096501dbed07ef44333611dc99d10ae96f0ea32d7313b4291fe96082f155",
+      "classification_sha256": "2969fe2b2ad51b2415c5f8f0d451a29df56ec0ad8f8df5b0958d952c5c34effa",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "925c80ad6220c0fea9f1b340bdabb90928b3bba372c76d2f7f69de54f3032b06",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:012ed0969db9d537f5fb73458f2153a6fca3de0238b852e1a4856250acd320a5",
+      "body_sha256": "ae8806f497eb7cd3050a4e227610091598d67596240461d92fcc4bd58a9284be",
+      "classification_sha256": "29964bfd52704cf6fbfecbf7c6c5c6f4782433993132ca462315f6cc499c1897",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "92cfe07a5ba9771e10b021e69804f2bd2678b0683f2c7a82aad7ef8fc0895e70",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:496acbe44b533355c7ee52a82313c8f32fd19e4739c08fbbd96ae1eaad81f272",
+      "body_sha256": "fa09a1ae9b6433a0245c1e9d36ad0b40f28116be5823344ba32c1cb7c40f4fbc",
+      "classification_sha256": "506e913241d0e5588c4da0af0fbe8487c27c0b73bc6e76423a66b63b49d8fd04",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "938bf2518346a783b98f38471a221397e1cad90072b8b092b22c9a75ac9da474",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:01803364266cf95098aaf74f6ac0e4dd2f4e5fd16f4a3d1718016aced4cb297d",
+      "body_sha256": "6e3be3d5c99156a69d3fb30c4aad79b5d557e64f773c730e3a6815198c45b059",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "95791f9127eb9a1f7ad3fa05560c1818712e53976adbfb86b8dad237b85d17a8",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:39d42d711e1b80c6ad6b2a5569536bc2eb1d3a0c66759ab024f7ecd22552cf26",
+      "body_sha256": "180cdcdf7d1a3cf7cb68bfe583d41ad72c12f4fdc3bd2a8f0fc7cbf0fbce8ac3",
+      "classification_sha256": "2dc7c57558b27a682d3208a96323dd25b4aa3c19312a6e0e9e74af2ba71efd6e",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "959e7225298c4fa057a86d8cf31d19e21f4b2dc5847e7ed2056b1e3c5d868019",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0059e4b1bb407abea3fd7ea018e5ef75082a22606b5292c6cd532a83cd5d5052",
+      "body_sha256": "88d9edb823a3a37c7152300722426498af13aa5b91fae815ba03dece555e8e9f",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "9632a3a9eb2a414bd44b29bba35c74b2b5f16cd8aa7dc66e069282acace56b9a",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0768c2ee58cc3b7c2ce10c70b1ee81355b0661264fb8eaee6c12430181a08190",
+      "body_sha256": "a8e3b477ddb61d2588383dc189491177454c6f14e4b1ff279227bc03a1e3eb63",
+      "classification_sha256": "6c4c15badf9076db49e1548eb34f008c8bcc06c3ce3ce7b30f595b97e61fdb2f",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "96c97783a7aa07145b1a510e8cb6fd66327ea347f7d7080a9c8225c26f2e14b4",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0226773156f8bab052fb870e177f1fa072276db0fc02345aa2328e18c8ab0718",
+      "body_sha256": "947b70aa01c196d8e1f6022a2e1252a12bc8e9b94337a2f22e42ad7f92940aad",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "9b1e8960344cd9dc1cdf3bd4be58faeb2ea2fe5140855a320bf166a39f8d8187",
+      "state": "hold",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "consistent"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00484a1de44c77420ddf0b1ebe1cc3ff868ed9e89afc148e2424238f3427aaf9",
+      "body_sha256": "852bf097226350908fd34d3ca0ebb6f947c4ac29e284ea43b46ba6c98791eb67",
+      "classification_sha256": "05ddd1d37a4146ced84a07993adf12bdd3d1e461f13061b8118f1b57119e0241",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "9cc0ccb7c444ebcc38c59e4fdb8ae5395f3d84fec5bc10fcc4283192f76a1182",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0027cda7a3ff1f187311488f3e13f0511edde49ee7d0448f26e10f9e245ccb90",
+      "body_sha256": "e62bf95e2c9bc5376bfba01ee812e631d5e3dce6229500cb4eff01d9a67bff75",
+      "classification_sha256": "0d43f4f68e6d0ed119a0873b952c347ef9faf37f02350eb024074569a16dd681",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "9ced265a20b9acb7a98227662a43c219bc7e2b292c1f47b366460e92153865f4",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0759ba3242e71558f3422b3baebe9ea6007f844348b93ad41d9b2e6f5a153344",
+      "body_sha256": "c4964b542e2c7c4671b14fd446aa75d8243dd5ec7000afff7d15722a32ef063c",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "9f86972eadcfff1a1b13d7bcecac7340f80f6a2d308a2b97deea2d8ccd9468b5",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:02fe1f3cbccb78b4ffb2c8359330de85e3862348cd96af8a83d27f9226ba33b0",
+      "body_sha256": "bb4a53984895049e6dc8d83672cac4ce21b033553f5dfc3023409646a8eb2e87",
+      "classification_sha256": "b9bab5d9dd838f1cbb6760b157b1d652d972a0dd1bc74d6a4d408214d269aaa0",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "9fb7c13f448b460f1171d58bc7616a80070d41d36ab5b7307d0aae721454bdcb",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:01b7b7dc90a1414dc2d7f495cf23fe631d18e67e421a99190dbd6d8f59a4540b",
+      "body_sha256": "50d80149ab6fae5ce2515d28e74ec94e48e877f762b48ba0ef2a1e642432410c",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "a12cbd7ad3cf1467b3c510c19abc6ab9e9d69146b37318c027a3684dda9ed9db",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:028286c473709498fa2ad8ec8a374c770234bcbf3d838eb4840f097d8d755168",
+      "body_sha256": "aabe18e34cfec43b413d9f84d71426963f7ad55215765c8045511d7d2237ad00",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "a1b625921b7dc3ac39b6dca71e589fe95d900cecbd9451893bc5889e337b1971",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:010bfbb6ed0bd5635c7821d0f61554c30fc1de562d6c8f34d7493208c81a87ab",
+      "body_sha256": "081ceeee45e52e98cb7570abee6fe59e74eb5fada6314efa3d55a82ee6d6b638",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "a3be3447dc5ff79e4f83eaab4a691cbbea3339754051975b8ecc651d66f75449",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:00e8842224b4b2fa30ca29ded80701f6cc4398de6775b67695bbc3c51d68a271",
+      "body_sha256": "5774e2f0aab5045ed871a98f27178dda7b9aef6fc60ae377240cc9651d6ce599",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "a4590229147856cadc3597570d63c7a3e633415a584bb249c10a1e1d51e64913",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:02354908d91e65ad9bf1ebe3e09534648afcf4d23021f17f132d29115ee0947f",
+      "body_sha256": "6c69558d62900c1a6fbd93658dbc1334f6cc9d9d20108045764973f48afd0ec2",
+      "classification_sha256": "24af007addf1744f42396b28d5b3a704cb83f22b7156ea86967a14a5e8e43979",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "a523c06a7341f11ebb4d71435bfda7bc3ff984f3217f263512292638282e7e35",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:1a63dff84999084ccd0f80bf0aaf2bc16fbefadec1bf51d990ccadc26d882dc2",
+      "body_sha256": "c49d90d2378d666ff7e8cd68b62da37fe8fea4a491d1ecaf59d2b83fff9fdc29",
+      "classification_sha256": "f2462bf02e32feebfb98df41494d2239d592e8d384b2b9f7277df7f59c7fa43b",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "a5862c085c4094eb6f7f2694f78c598e4e93b5516ba5195472b3e956da687e24",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:005ae2a9768e1bb79916aeca3fa799b5231330b5b85456711ba69c0dfe3bac86",
+      "body_sha256": "22e44a085f57ae0249ccb3a6b538eb3b4c0b0d3c624642a23675cae1dabc9c81",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "a5db6271c558e97a6cc4d6f83600faffe6988aa20d3a0993e3d7548cf09ae79a",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:0266a22ed744e2c9d55bd01bcaae9392133eb2dc3e3f702725581ef2237b51c1",
+      "body_sha256": "19feb6036ff5d8c7afd4a15bc97a4e2c5fca1fe342725205280b98416db07ea0",
+      "classification_sha256": "a68263b528d055700c0e5fe58a4ceb85572f77596fc4293743a7ebda62aa1e40",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "a7d37d89f4f405950488ab65dee60c05fc4b8c7b8c7a33e414bde6f216eac764",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:07187fc69fcfa32a1c3545476caf3e7990011dc7bdc05a5e192356d25daaf11a",
+      "body_sha256": "6c783f3ba87ed40a6aa901bd8d0a1d077daba795dad0786335ab3c855439dc2a",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "ac6aa79625238f1ba52e745bee3d85476b84e1cb4ccd0394e3c589c8f6ce358c",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00d7cbb9e7511badae3f23a798ede27325e340d019137feecea41fe2d76b3999",
+      "body_sha256": "ecbdc0dd8fece770654b6feab3133f0a5fb3a87405f408db19c36e472b56d19f",
+      "classification_sha256": "88fa014f2895d93e5d9e14626444cc99f47d00ababd40b8e0414076e66656b4a",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "ae1321f4c1a5b0a51b46079300510d2e39ab3aceba3e9b407d21ece1af436908",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:019f80e2cb04bf09d6767b79620b61515fcec362b6a23d29383a278e78bc0c48",
+      "body_sha256": "7cc46babd0f6ffe4e075260e79ad5f9c500728adee05f78e8746d70f6a493486",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "ae2a191f907c23f5db640feb3ef5ea75b7b66d5e857e6004e7d3e8ace25aea48",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0377dafa59a1bdd756408ac264fa12dfb5019a9a870263b83af56787da4616df",
+      "body_sha256": "208670bbae1c72e514378233710c89b851008b22f395088ba9d1d97c42321df5",
+      "classification_sha256": "7957e664e2b0183f43461dc13ec8af2cd0614183e0d7d5350d8e757f3d8663c3",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "b0be16247105ce807cce758e4bc10f31d8dc010198b751aa1a338eb7746a8d2c",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:019c53d8cbcf0fd5f46272065a3c3f3b4f63f1e5a44920e1608b692295e088a3",
+      "body_sha256": "1279848193b3aef8c9886c302a5196c19169d18ea92a813b85ab40b673afe4fd",
+      "classification_sha256": "b8145afd4e429b459f0a78e0c7a7561ef3bc0a78eca96614cb13ab0c0b61da20",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "b3fc332e4b490fb2beea8f9737968bd230b2d96d6a83bc3b2501882459a29272",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:005715ca587c623907d56c8526b27dbb0cd53d9fde0f9d45f2e90f15c15fa35a",
+      "body_sha256": "fc0695dd396fd9fbd4b8bddfa76f67cbbe9fce5c1ce8d0cc929cc7a0f1d564ce",
+      "classification_sha256": "b63c1630447bb64533c6340cab9d060ea2a2d884f35115158b8e8697d7c9953c",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "b45c0aaa4544d910c6f04a7091f543aa545cad0d244a52d8b3f82098a5769863",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:07c9d9ce6cbb8d1cbf3cd7d16dc108adbac28b247e61527e8bad7983b7399839",
+      "body_sha256": "adb95e83c24be96dd91313e0cc3d5cb669ebfbdd949f4044078b41f14908d87b",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "b49b15b0e8c5e58386a8e0799de6f383571101d045feda3cfa5175305bb3e02d",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:022e44555c2fb9ec2594132656da397e1c431766134cf87b7cb36624747fc76b",
+      "body_sha256": "4ae2b0a9507a820968a11e5520de09cdf54a1c3d1e3d3764f6f091b77a87de10",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "b77eb10f9a7338653a81e5575c55ea1115b80bd9275702b4d14eae64a62d1e0c",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00ba77c4319a0e5cb36de6c6d97251e5ccedeeed49f09e7078c6545918b030e4",
+      "body_sha256": "3924d955c45312bc8da529f5c1e18404eb980bbe25264288be93519312c47e97",
+      "classification_sha256": "6eb139a5b21bea34dd028dfe996f0de588cb5735610ad0f7a9cd13d724c080cb",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "b859169dc2f991ce40dc952361fbb3d518a797077418b9341588ab5f7ee88538",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:02527491e360af281c8b0ab6a0f2fddadccd579a198775f60238fa618cdfb7f7",
+      "body_sha256": "5747ef0aaf4165197042ff4bcd4b5422e99b4b8ef699e7cdd22d844de9c32f93",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "b92fbc6f6c80b778f99abccd24783b6cf348bb3f762459e3f013d8e1cbc649ae",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:00a42ca0993a6c214aff5b7dc531ce3100b0eb34dad73e684dad23911d05ec89",
+      "body_sha256": "d64e512611ab8b4543b20235c1a6cfa51ec3b312ac80710174bc530090581dec",
+      "classification_sha256": "f1b3129057628b76aefc6a9320306129770d3c16ac0f7a348d60d1a16de6f0c7",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "b9462f6e76df4222de643465d8da57fbb7ef1380c5df3b8cab87d24a32b93c56",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:01890af128395c446894c22adfbf02aea47d528609ac12220ec80bf627eb0cec",
+      "body_sha256": "d7fb3b61a622a01355fd4dd41edda15cdffe7d5d0bea7eff14f1e4da926eaab8",
+      "classification_sha256": "78393accf46b0952cb7cc99ffb01f7b9e438e342ae789fb3f54a14453b09bdd8",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "bb40be75614aa0e50e99ffd467fd360323d43ea006e207dc9801e988f50bd553",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:06cf165c9f512d36ee0eaa25d753160c28a3234e920000218573b61764afe3c5",
+      "body_sha256": "73c11cf4d436eb428cc0a326ec9f1d1bbbb59a7adbca321fc0e2cdec7406cbc9",
+      "classification_sha256": "04e6559dac352e81f702b8f2a47d1cc0c7e760814d9b4ad76d349de38c506ceb",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "be1d7f4f8a25e9003c584171c00d1461f5aadd3139c29de5cbccffcecc1cd9e8",
+      "state": "attempted",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "consistent"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00a92600d06668ab6fa465685d572fbd9194c608c766d6a7a57dee5359756851",
+      "body_sha256": "57209b2352932fa5f763b8f1002b55353b6f457efaae33380a3ac469094bea99",
+      "classification_sha256": "20b02794601b9e7d827b70175afa3cae829ed0f8ac2d009c30573672cc1608a5",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "be1e808f245036fc561b9442fd81410e29fcccbaa10c33032667b19fdb6237df",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0a00ae62bb3d66c42a3300ee0e31079b5b3ddcf59cdd169c463da2827a05d64b",
+      "body_sha256": "0d88ad3d1ef296b3db1ea8a4f040342d20ec515502e234dcb8f80057d2e4766e",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "bed1bd6a117fec062627cdb46f3a511766e4e75c9663da6f41b3d5a95fca6d6b",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0ba3ff3718c8ac18f52dc80f4296063e4692a6296f829869be70ea87e106a93a",
+      "body_sha256": "1394bc5ef8d42c7fb7f8fee379c7446efc5c38baa727c02cbe784853aee8bbe8",
+      "classification_sha256": "33f33e8ffdfcb126a35ecb3ffb30810e545d9599a79219d907c05b81d8b92127",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "beefe654ea36d6dc27802ceab6908a90a00d7755433f5cf6675d7dfa99b33b67",
+      "state": "attempted",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "needs_review"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:00b173dd986545c2ea13d06b316b19cafdba73e666048f6a2c66d99b9adc8f3f",
+      "body_sha256": "1e6491657cb3141eb716d1b39cf009289c1810b35c3154c08f2b12b789d50a6c",
+      "classification_sha256": "53f8a1bc26bd1a4d390387858cf92d3402c0e8980c75cebe99d1a8a854612e9f",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "bf3e40dff521f8c0bf39a60a65d6e3c106a3bce0674dc0c9440c08f3a891326f",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0063e46deb84e7cf340ff40b54a3e85418a75a01bfd40d10878a2b90f0122560",
+      "body_sha256": "739c420d8d7b84d086d49f1c69c6a5fac92a6a657c80e116cb66fe36271f7981",
+      "classification_sha256": "eb588628d21949a83c8a0098e656d9c3c2f8542dcb69a4e214983eaebda28f5e",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "c045128bb93ba6f406abe2e1356db5764fadcfe178b0d28fdf4794a380a4a4dd",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:01820a7d67785a4f9e0db020d1be9af20745b6e466381771f2d898012c059574",
+      "body_sha256": "ea06a0bc6564032c6c520128c4228e8450b579d0fae98b8addfdf237d2eab754",
+      "classification_sha256": "29964bfd52704cf6fbfecbf7c6c5c6f4782433993132ca462315f6cc499c1897",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "c18c7a252f58eb8185a5a3ce2892858cb9432eec1fc54bdb3c5f5bfb53d18aaf",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:004416a906dbe6432b641a5ec3820ec1689d8ba1da7661d6a95c5b724410ff7f",
+      "body_sha256": "785ca510ce1638990384e49406eacd321e8030c34cf635037dd41a440878c755",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "c1cfc6648b2c3599d97270ed8847b587816c426289b556d0e93295155db325cc",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:002eecd9a4313d9c96e3706e84a9d1370344073de533f29af7f9371a4aae9d01",
+      "body_sha256": "b3ce0460cfb4573f106df9378ae1f70d97f08e57fb3457b773d54cf64cf3a7db",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "c2c65604b248a9a3d9deedca38d40673949eb07119082cf331428f372669bd89",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:596a75f45cccf5d6bbe1afb88a9d29fa5c60a9df6e73d7f5cbb9a15c7edfceb0",
+      "body_sha256": "6725076373f83454caef4a504e3eb3b78482903edda43ece58ee2ff450ba6a78",
+      "classification_sha256": "04c0ecee500736ef08e084ae360259df41e09a8dbb1dfb81bb3ea7c6975f722b",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "c30dbb691550faa05530e44c51b0d820b2d1558650a11c1c672b9a0321bac227",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0387a4700cba02b477f7647040586bc5524b8a16159ef3f080a015adeb38c1cf",
+      "body_sha256": "3514006264485102bec2d2b90f28e182e902cc4ce36fb64194f8f631dfd01e9d",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "c43b6a404574f8a9f57d0e4d85cc2d6d8ac8c09fdd44552bd6d2ee6077751dff",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:0038c8fa49ef1b5515a79c9c2b2261e19536f4373e1f3b73a4e72a6b2b78305c",
+      "body_sha256": "58cc1a4b9d97f80279afbbb8ed547096ab980c2d53db122a7649b871f68c9982",
+      "classification_sha256": "d4b23dde4bdc5bbf50722126f8ca478e13ce043cf9094e0a33517006c6763969",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "c79581d3ca1b05d611297b66f2a264dab7391724f520c584312e8f02a8d22d83",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00b4606307212454c0de8a608b3effb285f17a588acb8c4c6061ba4b9aee8b9c",
+      "body_sha256": "4df9a4ff7c2f98441e67826567278df8f8ba47ad2f847a6f3dc3a4f797d30fc4",
+      "classification_sha256": "4cea75687cc74a474df4c4b27eaf1977074506a65759eb2ee71200a00361d4e4",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "c827d1bc8d1237b79cb9991e3841964243c69cef37ef5943a9a612100966eed4",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:017ff4c21e68e0ed7c27c37332e1adbcc0f18740c8f62ca263bb34be7260ce0e",
+      "body_sha256": "823811ab8157580bc7fb4d078c2ef25d8d4a25f1052c7d23ba7241320b0c1085",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "c88af7ab305024305639c1f89b056e9c9ba3bf84390fb71ec31411267869e567",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:0576258b4c87b156700b70096a992e57d054326f817ee1f85e93f8c287d40f99",
+      "body_sha256": "bc3becf189468cd90b05db0832849010cb987769c4817f4bac3139280c93bca4",
+      "classification_sha256": "4da5aa70bc8aad874b116f63af2f23f99fc23f50bf02a0db58ef8b7cfd58b057",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "cd0658b1d71a8a3740b8b92978402515d042ab0a38a89ce8bc3be2c477099cb6",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:b266f139201a630a58e9be9b6c7f4732f76b1fd2b33342c65057d8b673254a98",
+      "body_sha256": "8f832c6d5312820f2fc718d415b18ea011a26951abbbd1a355f83b86ee3cfe52",
+      "classification_sha256": "732e5730f2a6418ab827ce1a4f2ac8b2279aab4df75ab0569f3e9a9addb717d9",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "d0801d3d051f02a3674651d2cac9e46a5f1f5dec35ce5605b57f0bdc2369d2e7",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:07448710fb61d2abea53bf6de2dcc8d5e84e40b00578f313e85146f319717eb2",
+      "body_sha256": "5c3b1de4124021aa48e7ad424a774557cc238f426b7094161ba37b58007a7e78",
+      "classification_sha256": "9db415e2c38601f5e49233807659b998cd34fbc8390760982a3f1826aaab64ba",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "d1c1fb700ec403bacde9e11e0b8613493dc60bea767256deb2b39ca620ca861a",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0ad933e91e343b1ac5be41f11b74fb0874a5d38d37b8a4d042328be6efd8989b",
+      "body_sha256": "8cb8db7bd8b25020231d21047b27a11eb4dce7d988f68284aca238b91998f8d2",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "d27747a12a3ac5a908c15e52d2fac078735944ff5e7cb8ca64876d787d18441f",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:002377343ea2b30d89345f50fa4edec6ef0a90bc86e2d55f97466097eb87de94",
+      "body_sha256": "d01e23f8dfbee2ea00883aedb5f7e31b709df61cae5e0287be2da890b5075beb",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "d29d336f1f2bfdfdb655a65bed76630e4296aadb1c46fcb5f04db846ca151beb",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:0293b1c4fe586f493b867b60d5aa1a7cc2e18e15fd6a869b705246103b10764f",
+      "body_sha256": "755f050041e3a55681d79bd6e4e47c6e1dbf45c3d63b81760dd1c81e51f92f80",
+      "classification_sha256": "78393accf46b0952cb7cc99ffb01f7b9e438e342ae789fb3f54a14453b09bdd8",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "d30a4cb34623923091ea5b901bc29fd074274cf7a6d6ded405824e6731d9404a",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0f9b6ac4a2d9fff14c96f7578b7382de6c5f4ff575d5b9cf7bc678cf91ec65f1",
+      "body_sha256": "30f526938d1e8e175f688bc637bc9c9c292d799d2bf116a999581a9602a6f146",
+      "classification_sha256": "2e6dbef1c354e6b2f671f1a71a09e6a6d2194461c2b0c502e0027bb6c2574c98",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "d38ec286ac42146f06321d33a4e35ec9e5ea8abf00a69c9c3ac4ae8288352766",
+      "state": "attempted",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "needs_review"
+        },
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "direct_reason_value_conflict"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:006ec203ad10d63792b38f7d79f00882fe69970c83a8ee955f97a91480149607",
+      "body_sha256": "b63da5a70c3179e78750a46fb1373a620d5cbfdaf4c4c1bea24f4fd5102b7d5e",
+      "classification_sha256": "986367a2b52b0224b7f27f100622d123833046c7603eae980ba18e18248091d1",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "d3bb6b9b39f93841bd18bcdf114e4bc05a62e2ad68693cd52dede7b9b872db68",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0092e1942a42d919772533b23cfe595939625fb82e8328ab8cdb3bbcf4be90bf",
+      "body_sha256": "1b486e4a71a33a8dc20770b318ececd288f78b88d380ab5ba4339d71397ffd32",
+      "classification_sha256": "88fa014f2895d93e5d9e14626444cc99f47d00ababd40b8e0414076e66656b4a",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "d3d30795bf4c3d1b27df0db146e8e5302aed3e272fca97a6e8955c722fd0a979",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:01cf3cbeb281da1729b47d8bb6a2d8409cdfcaf69dee2253fa305da819cf6af1",
+      "body_sha256": "84dbcd92a15f5948e707a07230d732e91a4b8f9d4f2024fe5d8a650408db1167",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "d3e5041a1869daa7e18182b6668a0e959ab960c57883a8bd0fafaea3317a1e6f",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0a7cb5c3606806823580cf653331b6440fe2e30850f4ca81ae116855780031d4",
+      "body_sha256": "3696abbc835b8c77e1c377c05034f56ca3ee2f184dde0ea710fe55b4a0006f1e",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "d5f9894f00549d695edf1a9945b1b2d6b6943d3a2386e72760f47567ea9fc51a",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00d75c27d62ff9f6e54d12e993761cfc1f42c2098fa66f109df5955583bf5dff",
+      "body_sha256": "c8e0167e1b79e2f5e532defed503d11061f8a953d09bc9bf65c00ead04eba1db",
+      "classification_sha256": "4cea75687cc74a474df4c4b27eaf1977074506a65759eb2ee71200a00361d4e4",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "d60db7967a4e19ee5d67dc3be68a644f2b8ca24182506c4e53efe0f581816266",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:0f4eee41f4bb5bc341f687b6fc1e19d9a7460d7f5086743c6f3567066e18e44b",
+      "body_sha256": "0c4da6d54e68d8e7b7d25af0fe4780cb83fef77fa08dc8bbbb60e7be44c1ef1c",
+      "classification_sha256": "525b4cf5f7376c8d26d81e872690e790ffe62c0f0cc5665cbfd0a4e017296d58",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "d976cdc476c079ba118ce59a112919da098d19c9dc388515200c77a00e48f090",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:051c22f190c7ac54130d12a5e229082c09081afda3244bcfdefcfe139e47738c",
+      "body_sha256": "312f8ff130a53a250d8054d3df369e176903608a8761409bb95ae6f89186ef3e",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "dada0d4d3f14e71f1acef0ac1188b106ad1f719ed0d7d130b5a9a83f00601d0e",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0a8c3458b3307bc0f4a76351b0387b26368cfee9d8b5d495817f95f5e3840193",
+      "body_sha256": "3fc44270dd2db94eb470c2137c1ffd3f2a15790c5f5fb39306ad109d72bbbec4",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "db1d2a406d6aa9a9715b358c3fa5d5a15e0d4bf814b46ba14be3063d6f0ffaae",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:05bf9198b36df1c63a0389ebe1b9551ffeb38a0c67d590369c0d5e9205575fa0",
+      "body_sha256": "65bd31c7da5972bf763039874e941f2842487feb1b2acd6e09732adf9f590ac4",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "db59048ce3c6fe6b5f6a2e5d32b73b93dce48492005fae65fcd8faf0da8a8e23",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:01313564ddc35964758d70818b446e3fcf32357706d65ec0b11c8945e2a598cf",
+      "body_sha256": "b31df6639d0d451e76ffc8404a67b2fb024b5b5def6b1ae5cf9becd9e4f488ec",
+      "classification_sha256": "12e23226d331a7c043496cbe437a7827269507d9d3f92e3bd7062a9ff088c920",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "db6d4bea2eaf7b454e3a0e1454951d9255b6bc52152cdb478db0237b9d26ba6c",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:1aa5a63913e251cdfc4548e3d9a2a6d9e3a06a3a3b0fd6916a297c2f79460009",
+      "body_sha256": "c477a0161113272ed3a711ef043b50c3ddd3ccaa64b9f19d525dd5fd296c2fc3",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "dc1e57fbc862080be10335ade77e07faa34322f7111e164e77eba8fd607dd8e8",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:05d7699de2573501a99f22f3a0280b1621e2b2b9b889bcc9c4be0ae8736d13f6",
+      "body_sha256": "b1965a0e281075b5b397306964329218d14580ca83904b8b590edf158d31d33b",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "dc36c625dfd184b6f3beb33013efb80d844c3e0cd572fa0a02015cc85eb4295b",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-03/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:008079972da87ba701772933e0cfc834f70af4550651e68352878c7b11a2401c",
+      "body_sha256": "c0349c22fc48c91cc8ba491a0a3d8da1486b99adf034cdf1d9a01c9ea70c9bad",
+      "classification_sha256": "f48f60ab51ac04452fece3608ffec21c9ba0d6169bbf970ff6b975cc36134b96",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "dc448425d19ed57cf041e5ca4da85313bc7f6dabd8395716653a09345c3e19b1",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:06d09962004a68550319b33320a8e8d2f835e15f207b139241998e604a1452f7",
+      "body_sha256": "3b91bc8f672af84176c123f54e09d7747dd55815bc018a14485940fb07233323",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "ddfaf4d76af0b90d9e3ea7054cf1bb3e8b4e5617413cf02ad4051260b4c01a68",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:01268a5f772ef4cee4271a2990207d8ee974691d905b982f7a68ac75d0a7187a",
+      "body_sha256": "3b593cafb4fbf9d76c900396a00feac875b7d069f39bf4b5cdc029ec4ea45467",
+      "classification_sha256": "889dc371dc557d8436aaf669c53ad595a54e197bc9b474e7981dbb7c43c3e729",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "dfb24442d0bee24da749191a6671b1b4892cfb6c54f2e5fa38d48e76ddf6a1c6",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:82910465826826efe8d2702e0b0c6c11ff9307cab95a15e99ab86490dc3626a7",
+      "body_sha256": "e43fbb2df7db91d5705eed7ab0478853e8df9856ccadc041145de4ad552ca6d2",
+      "classification_sha256": "dd7b216d46b5045d0676feee973258d4b5ac3780b29f05d990be38ab834eccf0",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "e0641ad668f11625ea4dcc6ef5c0b63c68a5e92d2373ad5cdb4e3575b33b2f5e",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:02262dc529d2bf1c805a0294a52cc0cafc32cce4f819fb28d85cbb358788f68a",
+      "body_sha256": "35eca48af1fef89622ea01ad3aa0efbb8c42b2d93fd4c78f5915a111eff08c0d",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "e159776ca38f780b22f3246fb6f2db1f97699a45ed80bf66271c155f464b8832",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0266d75a87f5350601b9f0d399864b57afaffedcdcc7e97955f9063fde14cadd",
+      "body_sha256": "6fc72a7669f704746769aaf3bd9e13401af4ed9ce7a34eb8f7832ede36ff69dd",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "e2698656a7a7d0dcff338de1eddc680cff7da076fe6f15be8323a760c628dccb",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00be8a6b548cfa73993d66d7ceb69504a5ddcd6509e8aff19eca961ce6a5946a",
+      "body_sha256": "29e3a1d27ab1da635325f325e49ca15e96f0985875fe4c4c8e30056de67f9e9a",
+      "classification_sha256": "7b450aaa5b9e3ea1bc45eda8981a8f8d4f97eb2146df90db1df8d021b6b89894",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "e412eb62ffa41e565d4cde908c751eaf626924d43aefb0f19aba19a3da686c92",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0425746bdf88a6826b87bedd12813a2808015c82fdfc7383fc399e4f1a5c81ca",
+      "body_sha256": "a25f172736c6b6eec5aa0b08847bc071534db5166ecfed9535ed815e066ec3cd",
+      "classification_sha256": "d2c92c39a3bf32f09eb4b74181c52497850e6365834a0a8c252e01fb0eab23ce",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "e6d3e9198048040aad79bbf09fca6ec0f940d763dbb4a73df88e0ac15b4bed49",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:00f94ba2b17bd5e5f56632e0efec62c573f55e130317a18fa173852fffc36553",
+      "body_sha256": "226fa13508a670f1161f118ff9b75a1629706410f220adf41f02a79f5765e8be",
+      "classification_sha256": "ca7de069d2551c84928786d061bceff79f899d21667f48723a79b176f0fa47ae",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "e8c078ef3b7c6a8d3c3aa7bec93d68df2de7c414a5d842c2406174abd739600c",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:034724e9266f9616ee94a9c22f28a293860b36be1bdde19c6e6a315243af183a",
+      "body_sha256": "3e4fa352e78750a8fcefa3a434337ee78c9df1a281c44f08a7021107cb6006cf",
+      "classification_sha256": "fe94ed531e0f0b24141e23c8eff6d5e41bf1866e5a701d11eee5ed0736dddc8f",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "e9717dcdcae957d402c18ea921f72e263f7b3ba87821daff42f3103010d05346",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:0252078aafc8ca2c6e6098c7d430722b37912c3ee17b62a57f28fd42377e2a47",
+      "body_sha256": "cdb256f9230a8c963bb1f837373fbc6bef0204dadc47ffca3ca52855e36ebdd9",
+      "classification_sha256": "0647778a618c9ede1d266c245c94707975c03d66cde105545be87cdce8241639",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "ea51d1a59837f25ade1f98586152feda767a2c27329be041fb537ef9d1f8de4c",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "takaichi",
+      "record_id_hash": "sha256:02b177df31f2c2f46d83fdef5585ad2aab700bd0f3df2c36ad24bd1908a44963",
+      "body_sha256": "cc2a4bdfee5e7131417d1652a70317d0a298f63edeed45fa85018a32b95e817f",
+      "classification_sha256": "b8145afd4e429b459f0a78e0c7a7561ef3bc0a78eca96614cb13ab0c0b61da20",
+      "criteria_sha256": "03773c82e59713c00c937b7b21da077fd2e58840eab38a9d9165d5fd304d2116",
+      "work_key": "ecf1cf15cad022dddbfd5f597e46e295f2e26035ea2199493dfda88d058b6cb6",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-04/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:022a6f3d4086af5dcbcf1b20e76a9ab1f543b5028901aa735bbbd8e2308bb7d1",
+      "body_sha256": "6bbf7f7760679cd87b5c66a04aa26220d54f167a1b1bee588fcdc799ff39f81f",
+      "classification_sha256": "b542fae1367052438c7eb8b4d79560ec192e2ba94265f47bb08bb2b55dd3c458",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "ed1d08fe83afa60d160caa3d7fbebba16131a8316645ccc911e5b7a3e2b9e3aa",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0007c13391bade6ee90799287c3e6f7597b12d133b735194648e8a5248374a02",
+      "body_sha256": "7dedf228d00e2456d29048e13efe44588e24e1a17fdb5a20d8fef359ea4ee781",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "c1ee9a93a48b78bdcc37af64335a3804f0eec716aa14c1d066ba67b31e87bbb1",
+      "work_key": "ee07a8e1143d0dca5361a155ae7043e6058581c91102a10f93d9e54953a16a66",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0b61faa8e78c3dd89b6ed63b83317f728f931b19ffabc7aed37aa32cd8d996fc",
+      "body_sha256": "10172b410e7a5cd5903ee34b5485bb900da4385459890ce4a3c76242797d0875",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "ee54eff6d8f556e5ff5c76861ff38ccb995b9e271ecb98a20437ff86f46d7f9c",
+      "work_key": "eea13f484cd3542ac32b5f278b91f790288e2a71b85e80f8ffac6c9940a5e6a6",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:002df1fc8b7029d6d51ac3cee5fca4213510045e6b960c24d736eb00a69d4524",
+      "body_sha256": "6935d0b1f7592eb008464b381892449867b1b5923bcec275831a9c8e142e8173",
+      "classification_sha256": "6c76fe7238975b0e14d5d2f81a521c3b65b504e8b10f22e05c2031e0a4f0a8af",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "f0e23e82bd3a1fee6e62401b9c7f002fa2f97cf512f8e8bf2bfa42446051c699",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:017ac6f6d539b91b7de83a53c6ab7abb3b5588d05cd2b4d799b6d01835e93a81",
+      "body_sha256": "460a847f4c9bf1ffeb1dc12ebf18f332ec6919a99b7f7fb7437d2a65df74b711",
+      "classification_sha256": "c4c7ed78ec9b176cd6b679b2d3a8a37e433b935cbfc7fe25140daffce3f9a770",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "f19bf0913a8a8a35bd94365ffe0aa8b11a4149d4d2342e6ca58d1c250e150105",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:01687a4eb5208eed92b9167ac966a99e66a3aa013c316cb4324092fe6ac6812a",
+      "body_sha256": "19759578b711099514cda21839e874d5de8f1418cfb171c1249d79a9d3aaace1",
+      "classification_sha256": "6e28d02627dde6b2c905a7664afb3c35f8e6a564780edd899c72405bf7532a1c",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "f23dfbca9f3948e108c212cb42317f4295b3dd8ef51fc9ff78cfcaeac3d0db88",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:096f90db3b37b6ff87d8bc005e49443cb518f8e5455fe4facd0a5580bba4a4d1",
+      "body_sha256": "a625ff55f75c09c473071779bf9b5862d18c8f5cb1a6ea81f0433de0d5384c7a",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "f30230c6c75763a24e3381f083607a2943033ef54488e7f0131c683b7d433d3f",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:18a2fbfb1de17dbc72e27cc43de95ba4e5466d38f88ace7c54a2c61f0e61fbdf",
+      "body_sha256": "c426c4af1af6a06c47df8dad6175dbb5c1bc1535b319497febb00cb8cfbd0cac",
+      "classification_sha256": "84c5c7b77c744133c74bd1565783c2789fcb4285029220cad80c32313668483c",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "f31d93dfa1ed3fe29f27e59dbf4349264f0bc2ecf0e55dae8092b28b01cc2c4f",
+      "state": "attempted",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0053d47041d1e9b77eabdc50ac40937f24bfeab5b5a661f83822eeedf56225f0",
+      "body_sha256": "0c0f4c39ec30992a0280eafe41decbc0f43568f167104cbef7f9bff510d5fbf8",
+      "classification_sha256": "94da18e7fd71cd1df5fae26700abbd8db515365180c9ccde03ab4ac07eda44fb",
+      "criteria_sha256": "ed78e32c5bd7a8ede56d0f82f7d67527234e146c4ce26fea8344c1014ef37cda",
+      "work_key": "f3dca357b2643997cdd83d11a7ba88ad97deb348aec889d9e9fa1eedbd3638e1",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-01/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:003f5ae12a1b6608ab76129390bcda8ff96b5aea7e2bcfd1f0a0aa84fcb3cf7b",
+      "body_sha256": "0b5bc3060052edd78ec77038830b742cefb4217d8a43126287450c2788bb2d5d",
+      "classification_sha256": "f48f60ab51ac04452fece3608ffec21c9ba0d6169bbf970ff6b975cc36134b96",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "f5d594772c3ebf8b90eff4bd14a7fb67a6dbc34bd5abc81cb758f3c993b1ee60",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-02/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00bb981e503724ce79518394e601e798abeb10e5bdca09403cdf95786bb5e170",
+      "body_sha256": "7cf49cada15d4099509cdda9a4ad6fe3616ef0ea7a4329a46c10f7cf8cbb4e94",
+      "classification_sha256": "4ae7cd24902c6da8ff2df07188a1412402969c5c222cf3c2f75cbe00ca743b0e",
+      "criteria_sha256": "e2161ef2ccbde725f37d9d1b504883725d2fa2530725c0527398cab48a092e87",
+      "work_key": "f787b75dc87f751049e2531424b740acf88adb9a513489ce7465caec40c0a94c",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:025908617150e533b2b95cb514c33021695e494256e800bb037960cf29bf1bd1",
+      "body_sha256": "6dc10882ece9259e18f5a8083ec8a120027c064935940fa5749cf210a6ebd7c6",
+      "classification_sha256": "b63c1630447bb64533c6340cab9d060ea2a2d884f35115158b8e8697d7c9953c",
+      "criteria_sha256": "a921f3e81f14758b053377cc7e7e3741149b4c3e9dbc7ccd61ff22a0085cc0c9",
+      "work_key": "f92d5eef5e53c4dd06eb8586defa872a9a35fddafcbb90c4f8a07cc280e0da46",
+      "state": "hold",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:01c9771e8ab6792a955861cc58e66d501c9b5357e7e4317b1e3fc3f3bf0eeeac",
+      "body_sha256": "77eb72b5d6494f824d19b4605f2fb7dbda0e7985af1467bb5a63962cfc0a6f8d",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "criteria_sha256": "427d3a04acf82ff3e8c829e050a089ad9ee7560ce94bee756959441925aeb567",
+      "work_key": "fcdf712d78d1f2bc135a5352c486d4018e04501df0edf784c9416fba22488051",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:062b3e7904f8746ad5d7774be7ffcdea7fbcfe70da2fb11044982a78aa8a3f7c",
+      "body_sha256": "314e509abc8614b8b11bef3e41f93603239a0dec2b74fe5ffc634b680b9e1a13",
+      "classification_sha256": "527e865c4dc3d5b4c5811c17bd54f7be2cfd434cfd3a71b1e031b852b5fd3160",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "fd6dd395312f27181f34d937d76949bd36d1ed36aef6ec5bafe7c87f469fa17a",
+      "state": "change_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-hundred-v1/batch-05/packet.private.json",
+        "quality/reviews/2026-09-07-hundred-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0557cfed7c4022d5b52577c578dd74654dbe7f58af819600ef7ea63ff4f2580f",
+      "body_sha256": "3ac67c9ccde2e7b214a15dcf80476738815c178b030d802e0bc94926dc881d46",
+      "classification_sha256": "e8bd59b6eaf75ed176f4a25c027728912726ba7b482ae2f8ac887a5b4e61b1ad",
+      "criteria_sha256": "060c14586619b0b7d3880661ea44027461bf372b1ffaab63be659111fd1b1de3",
+      "work_key": "fdecdbaef2a16db819572504200ea7b9292255f9b67e7aad909d6786ab07757e",
+      "state": "attempted",
+      "scope_only_audits": [
+        {
+          "evidence": "quality/reviews/2026-09-06-body-review-values-v2-audit.json",
+          "finding": "needs_review"
+        }
+      ],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:037a19196a93ad723bc2f6eeb51da8e06b64f5da20b6004b92bf658f77d2f8d9",
+      "body_sha256": "3d2bf56b3cb6f95421fb48e178a4b00de7c785b7297c0d10acab9fce150f6a7d",
+      "classification_sha256": "b537f86c363bb1a1d0b347ec423a29ab885dead05434f7b9d1f14d74422d10f6",
+      "criteria_sha256": "301d279ff3e7a15bcef9d8bf4aa9d90d04689166908e0aba213aa9860c24beda",
+      "work_key": "fdf174b4842bd868ad9aa9e1cd9bfbed2edebe795cf32789f8fd2c40a64486b7",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260906-v1/pilot-input.json",
+        "quality/reviews/2026-09-07-editorial-review-decisions.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    },
+    {
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:01eb63a93bbac467958ab52c0236c4c22f497107ea8fe915be3b172fbeba71ac",
+      "body_sha256": "7a4d1e6a6d893051ee1fc6639a08dde237997768c6d73f3fa021d77f86cf7c13",
+      "classification_sha256": "b9bab5d9dd838f1cbb6760b157b1d652d972a0dd1bc74d6a4d408214d269aaa0",
+      "criteria_sha256": "70cd73ac4022b562babe917f880b62ad7d691b862f3d6c34e363ca111633864d",
+      "work_key": "ff94419d8541c960dc0fbd207934fa5b1600acdc6acd47a07c1f748f3513d4de",
+      "state": "retain_candidate",
+      "scope_only_audits": [],
+      "evidence": [
+        "body-review-pilot/20260907-next20/packet.private.json",
+        "quality/reviews/2026-09-07-next20-editorial-results.json"
+      ],
+      "canonical_applied": false,
+      "counts_as_registered_editorial_reread": false
+    }
+  ],
+  "counts": {
+    "attempted": 80,
+    "change_candidate": 16,
+    "hold": 55,
+    "retain_candidate": 69
+  },
+  "automatic_reread_credit": 0,
+  "canonical_changes": 0
+}
