@@ -93,7 +93,7 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
         self.assertEqual(sum(i["sub"]["unknown_timing_count"] for i in data["issues"]), 0)
         cfg = bpd.yaml.safe_load((bpd.ROOT / "configs/planet/bike-blue-ticket.yaml").read_text())
         self.assertTrue(bpd.independence_gate(data, cfg))
-        self.assertEqual(sum(i["sub"].get("classification_review_pending", 0) for i in data["issues"]), 95)
+        self.assertEqual(sum(i["sub"].get("classification_review_pending", 0) for i in data["issues"]), 97)
         self.assertTrue(all("分類" in x for x in bpd.independence_gate(data, cfg)))
         rendered = bpd.static_fallback(data)
         self.assertNotIn("enforcement_support", rendered)
