@@ -1,0 +1,1103 @@
+{
+  "scope": "Ten publicly listed themes; units are (theme, post ID), opinion records only",
+  "baseline_commit": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+  "meaning": "Recorded additional reading after initial AI classification, not proof of comprehension or source truth",
+  "themes": {
+    "ai-copyright": {
+      "opinions": 2593,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 0,
+      "confirmed_body_review": 0,
+      "body_review_record_unconfirmed": 2593,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 3812,
+      "title": "生成AIと著作権",
+      "canonical_sha256": "66b304bec266758a31cc55c6761d05ed0cdf4f506d6b44cab070cdae2c208098",
+      "inventory_sha256": "12858ffe9be0198a497ade8d34b8d35cd773fa656d5cc594d29e4a24f37cec23",
+      "body_review_record_percent": 0.0,
+      "sources": [
+        {
+          "git_ref": null,
+          "kind": "canonical_population",
+          "method": "THEMES.yaml sample_file; classification flags are not False",
+          "notes": "",
+          "path": "/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/social-samples/ai-copyright_hermes_classified.json",
+          "reader": "not_applicable",
+          "sha256": "66b304bec266758a31cc55c6761d05ed0cdf4f506d6b44cab070cdae2c208098"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "connection_logic",
+          "method": "sub_issues reads sc.file/sc.path and source_file; no target config exists",
+          "notes": "",
+          "path": "scripts/build_planet_data.py",
+          "reader": "not_applicable",
+          "sha256": "f5a1bb6b411257f4c5679c152f762d6d7f6b8117e3743145cde946d2b68c1458"
+        }
+      ],
+      "caveats": [
+        "No new body reading or classification was performed by this inventory.",
+        "No human review confirmation found. Reader identities below describe existing AI records.",
+        "Absence of records is not proof that nobody has read a post.",
+        "Existing 2D automated classification/display is not a connection to the new planet page.",
+        "Reader labels from commit co-author metadata are attribution evidence, not runtime attestation.",
+        "No individual full-body editorial/focused review ledger located. Acquisition repair of 339 records is metadata matching, not semantic reading.",
+        "Classification models producing labels and summaries are excluded from confirmed body review."
+      ],
+      "issues": {
+        "学習データ・無断利用": {
+          "opinions": 657,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 657
+        },
+        "AI生成物の権利・創作性": {
+          "opinions": 165,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 165
+        },
+        "利用者モラル・倫理": {
+          "opinions": 657,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 657
+        },
+        "法制度・規制整備": {
+          "opinions": 471,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 471
+        },
+        "その他": {
+          "opinions": 223,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 223
+        },
+        "クリエイター保護・権利": {
+          "opinions": 303,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 303
+        },
+        "技術競争・推進": {
+          "opinions": 117,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 117
+        }
+      }
+    },
+    "bike-blue-ticket": {
+      "opinions": 468,
+      "editorial_main": 180,
+      "editorial_all": 206,
+      "editorial_branch_only": 26,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 143,
+      "editorial_not_connected_any": 63,
+      "editorial_not_connected_main": 206,
+      "focused_or_classification_only": 29,
+      "confirmed_body_review": 235,
+      "body_review_record_unconfirmed": 233,
+      "connected_claim_without_editorial_evidence": 93,
+      "collected": 468,
+      "title": "自転車の青切符導入",
+      "canonical_sha256": "d31918a74541532ab99a5d5db589df4a48b1cc02b78d3f77746f7b172ab6463f",
+      "inventory_sha256": "7b3428b8eadd6bd3785291ed6de675faf730d98d8e5318364fce765568a7df51",
+      "body_review_record_percent": 50.21,
+      "sources": [
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が反対77件の本文を全件読み直し、1件を1区分にのみ割り当てたもの。AIによる論点分類とは別。",
+          "notes": "Method text still says 77 and date 08-17, but actual buckets contain 180. Theme log and incremental commits document additions.",
+          "path": "data/bike-blue-ticket_opposition_reread.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "4dd8137e86c98a9cbf33bcbc6449251daefa2f94121fadfa872d832b869241be"
+        },
+        {
+          "git_ref": "70f87925fb4af783834f761ded97d7361664cbc4",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が本文を1件ずつ読み、旧6区分（今の青切符を支持する=support／制度そのものに反対=abolish／対象と順番に異議=scope／走る場所がない=place／警察の運用が信用できない=distrust／青切符では足りない=strict）へ分類したもの。キーワード抽出は使っていない。この6区分は分類対象となる論点（main_issue）をまたいで使われる、投稿の主張の向きを表す区分で、論点そのものとは別軸。2026-09-06に「ルール曖昧・不信」の未読26件を本文で読み、既存の6区分に追加で割り当てた（新しい区分は立てていない）。",
+          "notes": "Only 26 newly read IDs. 210 inherited IDs include 93 AI-only support labels.",
+          "path": "data/bike-blue-ticket_issues-reread.json",
+          "reader": "AI: Claude (commit co-author)",
+          "sha256": "a0c7228ab7990f297f94b75585b8fdd2a5b9d3fc6af4fa969a4a71f3b48a47a6"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "focused_body_review",
+          "method": "7つの主張それぞれについて、編集部が候補投稿を1件ずつ読み、実際にその主張をしている投稿だけを残したもの。機械抽出の結果をそのまま件数にはしていない。",
+          "notes": "Candidate posts read one-by-one; retained explicit IDs only.",
+          "path": "data/bike-blue-ticket_claim_posts.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "6567e0e09c7cbd06382119ffa98f135e961908cc25957e358975fc51b0205497"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "automated_classification_labels",
+          "method": "",
+          "notes": "93 support IDs mechanically derived from stance; not classified as classification_review or body reread.",
+          "path": "data/verification/bike-blue-ticket-reread.json",
+          "reader": "AI classifier; automatic export",
+          "sha256": "02ce73257980d09869e641ebc139155a2cbb6c78e6455a65ad6d2d9fa843d903"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "provenance_code",
+          "method": "",
+          "notes": "write_provenance_records creates support rows from classifier. Page explicitly states only opposition was reread.",
+          "path": "scripts/build_bike_process_sections.py",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "59929d100a7bca6b0a2ac236f6da7e98d62e68882e44416799894ed16c1ef7d2"
+        },
+        {
+          "git_ref": "70f87925fb4af783834f761ded97d7361664cbc4",
+          "kind": "method_evidence",
+          "method": "",
+          "notes": "Completion record distinguishes 26 new body readings from transformation of existing 273.",
+          "path": "tasks/task-54.md",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "9d32ab1b8dddca05eb5e9c02f2c690d346ac6916005dcc1ae6591907e0ab9396"
+        },
+        {
+          "git_ref": "1c7155a05fe8f2f203fe8c8ae194e585c255aa0e",
+          "kind": "compatibility_audit",
+          "method": "",
+          "notes": "19 old unread found after format compatibility fix; not a reread artifact.",
+          "path": "quality/reviews/2026-09-06-bike-stage-a.md",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "59fc11d4670317b92ad252551f0787c1aa45d6044c7e358fca0795611452f361"
+        },
+        {
+          "git_ref": "70f87925fb4af783834f761ded97d7361664cbc4",
+          "kind": "planet_connection",
+          "method": "",
+          "notes": "Sub-issue input IDs; issue assignment mismatch against current canonical: 0. Connection does not imply body reread evidence.",
+          "path": "configs/planet/bike-blue-ticket.yaml",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "20ff8c48d005ca275b0b2c4e4040fcb77cc471f16a6788e236212d3197a76d69"
+        }
+      ],
+      "caveats": [
+        "468 is current operational opinion definition including all collected posts; not a new semantic opinion judgment.",
+        "273 verification rows = 180 opposition rereads + 93 classifier-derived support rows. 77 is stale prose, not an additional set.",
+        "Rollout method prose incorrectly generalizes body reread to inherited support rows; only 26 additional body rereads are confirmed.",
+        "236 connected IDs in branch include 93 unsupported reread claims; qualified editorial connection is their intersection with confirmed editorial IDs.",
+        "main generator cannot reproduce bike branch with nested opinion flags; 1c7155a compatibility fix then rejects 19 skipped IDs, based on overstated 236.",
+        "No main planet config exists for bike. Branch connectivity is not a claim of publication or a passed current gate.",
+        "June article-usable audit mixes rules and classifier summaries; no identifiable set with explicit one-by-one body reading, so classification_review_ids is empty.",
+        "Historical reading records have no per-post body hash; branch canonical text/issue comparison is reported separately."
+      ],
+      "issues": {
+        "その他": {
+          "opinions": 213,
+          "editorial": 63,
+          "focused_only": 21,
+          "body_review_record_unconfirmed": 129
+        },
+        "取締り強化賛成": {
+          "opinions": 90,
+          "editorial": 3,
+          "focused_only": 5,
+          "body_review_record_unconfirmed": 82
+        },
+        "インフラ整備優先": {
+          "opinions": 58,
+          "editorial": 54,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 4
+        },
+        "車道走行への不安": {
+          "opinions": 20,
+          "editorial": 16,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 4
+        },
+        "ルール曖昧・不信": {
+          "opinions": 58,
+          "editorial": 58,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 0
+        },
+        "免許制要求": {
+          "opinions": 29,
+          "editorial": 12,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 14
+        }
+      }
+    },
+    "bukatsu-chiiki": {
+      "opinions": 1139,
+      "editorial_main": 912,
+      "editorial_all": 966,
+      "editorial_branch_only": 54,
+      "connected_main_qualified": 441,
+      "connected_any_qualified": 495,
+      "editorial_not_connected_any": 471,
+      "editorial_not_connected_main": 525,
+      "focused_or_classification_only": 5,
+      "confirmed_body_review": 971,
+      "body_review_record_unconfirmed": 168,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 1395,
+      "title": "部活動の地域移行",
+      "canonical_sha256": "fc0ed988847de9df5d926a565c1a55cd4869c074cdb7107d41bd7887a71d1d76",
+      "inventory_sha256": "7268f6b856aad549f476aa0157c4827bf9ac42b2a554c1275890607b1a1fc817",
+      "body_review_record_percent": 85.25,
+      "sources": [
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が本文を1件ずつ読み、6区分へ再分類した。キーワード抽出による件数は使っていない（3〜4割多く出るため）。 2026-09-06: 上記と同じ方法（本文を1件ずつ読み、キーワード抽出は使わない）で、移行支持182件を新しい区分（G〜P）に分類した。既存のA〜Fは移行支持以外専用の区分のため、移行支持側には流用せず新規に区分を立てた。Pは「顧問拒否の方法」という定型フォーマットを繰り返し投稿しているシリーズ（10件）で、他の意見投稿とは性質が異なるため独立区分にした。",
+          "notes": "",
+          "path": "data/bukatsu-chiiki_teacher-reread.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "ac16aeeae695a9d86c6ce43693d6b22ad9671d021c4e405ee923bec538663686"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が172件すべての本文を1件ずつ読み、それぞれの論点内で区分へ分け直した。キーワード抽出は使っていない。",
+          "notes": "",
+          "path": "data/bukatsu-chiiki_cost-receiver-reread.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "47ff8c4f3dc52219b4b38da2d76876ae62d98e4922e26b632432eeac34634434"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が471件の本文を1件ずつ読み、論点の中で内容を分け直した。分類器の summary・reason は参照していない。キーワード抽出は使っていない。1件は1区分にのみ割り当てる。",
+          "notes": "",
+          "path": "data/bukatsu-chiiki_plan-child-reread.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "9f38dc873319cc4d4b795ee88ff218cfd7f900fd21c13ed4a6be127d6f05bcb1"
+        },
+        {
+          "git_ref": "c12c50b41b06040863edcd979c29d9f721e1c002",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が本文を1件ずつ読み、6区分へ再分類した。キーワード抽出による件数は使っていない（3〜4割多く出るため）。2026-09-06: 上記と同じ方法（本文を1件ずつ読み、キーワード抽出は使わない）で、移行支持182件を新しい区分（G〜P）に分類した。既存のA〜Fは移行支持以外専用の区分のため、移行支持側には流用せず新規に区分を立てた。Pは「顧問拒否の方法」という定型フォーマットを繰り返し投稿しているシリーズ（10件）で、他の意見投稿とは性質が異なるため独立区分にした。同日時点で残っていた移行支持以外54件も本文を読み、既存のA〜Fへ追加した。",
+          "notes": "54 additional IDs; existing 269 retained.",
+          "path": "data/bukatsu-chiiki_teacher-reread.json",
+          "reader": "AI: Codex for additional 54; earlier editorial identity unspecified",
+          "sha256": "e337003f6a0c20cfc23bcedd5856666de4a262a2d2a2ff7f34d4e537c4ddc6a8"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "focused_body_review",
+          "method": "7つの主張それぞれについて、編集部が候補投稿を1件ずつ読み、実際にその主張を事実として述べている投稿だけを残したもの。キーワード一致の件数はそのまま使っていない（候補176件→確定30件）。願望・提案・仮定の話（「〜すべき」「〜だとしたら」）は、同じ語を含んでいても外した。2026-09-02の部活動データ更新で増えた146件（08-26〜09-02）も同じ基準で読み足し、`coach-pay` に2件追加した（他6主張は候補はあったが断定表現でなく見送り）。",
+          "notes": "Only retained explicit IDs count; unlisted rejected candidates and searched population do not count.",
+          "path": "data/bukatsu-chiiki_claim_posts.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "16075eedc0789ca9ba0b086baa3947fcc8d3623f636edfae3d88639757bb7409"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "focused_body_review",
+          "method": "段階4の沈んだ大陸抽出と同じ正典（social-samples/bukatsu-chiiki_hermes_classified.json、意見1139件）から、段階5で機械的に組んだ候補2本を、分類器の要約・理由を見ずに投稿本文だけで編集部が1件ずつ読み直した。『同じ具体的な懸念を語っているが結論が違う』かどうかを本文で判断し、当てはまらない代表投稿は外して本文検索で差し替えた。賛否の機械的な鏡像（同じ論点への賛成・反対の対句）は除外し、懸念の内容が実際に重なっている投稿だけを残した。",
+          "notes": "Only retained explicit IDs count; unlisted rejected candidates and searched population do not count.",
+          "path": "data/verification/bukatsu-chiiki-veins.json",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "857bb68717a531fb1484218c9f2111859b12715385ec02679ef0f6289601d676"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "planet_connection",
+          "method": "",
+          "notes": "Sub-issue input IDs; issue assignment mismatch against current canonical: 0. Connection does not imply body reread evidence.",
+          "path": "configs/planet/bukatsu-chiiki.yaml",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "76faaddd947721b58e75146c1ae39f73071bd16cad8029ba62d2d39ac77aa36e"
+        },
+        {
+          "git_ref": "c12c50b41b06040863edcd979c29d9f721e1c002",
+          "kind": "planet_connection",
+          "method": "",
+          "notes": "Sub-issue input IDs; issue assignment mismatch against current canonical: 0. Connection does not imply body reread evidence.",
+          "path": "configs/planet/bukatsu-chiiki.yaml",
+          "reader": "editorial_review; person/AI identity unspecified; human confirmation not evidenced",
+          "sha256": "70f7931798b7ab7c7856471a79d4b4647af89abe82dbaad575df334215bbcdb9"
+        }
+      ],
+      "caveats": [
+        "main detailed reread 912; branch adds 54. 471 note-purpose rereads are not connected as sub-issues.",
+        "604 is population of three reread-status issues, not the 441 IDs actually connected at main.",
+        "Claim and vein checks establish limited-purpose body review, not full issue subdivision.",
+        "Historical reread files lack per-post body hashes. Current IDs match; same body at historical reading time is not proven."
+      ],
+      "issues": {
+        "費用・家庭負担": {
+          "opinions": 117,
+          "editorial": 72,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 45
+        },
+        "受け皿・指導者": {
+          "opinions": 164,
+          "editorial": 100,
+          "focused_only": 4,
+          "body_review_record_unconfirmed": 60
+        },
+        "制度・移行プロセス": {
+          "opinions": 256,
+          "editorial": 256,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 0
+        },
+        "教育的意義・機会": {
+          "opinions": 215,
+          "editorial": 215,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 0
+        },
+        "地域格差": {
+          "opinions": 12,
+          "editorial": 0,
+          "focused_only": 1,
+          "body_review_record_unconfirmed": 11
+        },
+        "教員の働き方": {
+          "opinions": 323,
+          "editorial": 323,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 0
+        },
+        "その他": {
+          "opinions": 52,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 52
+        }
+      }
+    },
+    "constitutional-amendment": {
+      "opinions": 1372,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 34,
+      "confirmed_body_review": 34,
+      "body_review_record_unconfirmed": 1338,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 1556,
+      "title": "憲法改正論議",
+      "canonical_sha256": "60ac55ecc87fef61358e6a9ce6cc75df6cbf9684d7e6742ef8d531cdf55dd5e9",
+      "inventory_sha256": "64ff141001914980cd816ed7f8f2b26580eab3a47077cde09c20c0547c687fce",
+      "body_review_record_percent": 2.48,
+      "sources": [
+        {
+          "path": "data/constitutional-amendment_claim_posts.json",
+          "git_ref": "6e683ff410fe569a70c1ae30f82b8835321c2425",
+          "sha256": "74e0a0ea15da06b4d684dc8d0357ccdeafe0d7694dac8b6b1f46b8e50a8b0ade",
+          "kind": "focused_body_review",
+          "method": "各主張の該当投稿を1件ずつ読んで確定したtweet_idの一覧。キーワード抽出のままでは無関係な投稿が混入するため手動確認済み。",
+          "reader": "AI-assisted editorial work (Claude co-author in git history); human per-post confirmation not established",
+          "notes": "Only retained claim IDs are countable. Rejected candidates have no exhaustive saved ID list. Current body hash was not bound at reading time."
+        }
+      ],
+      "caveats": [
+        "No issue-level editorial reread record found in examined local refs/worktrees.",
+        "Claim selection is limited-purpose reading and does not establish full topic comprehension.",
+        "Automated initial classification and representative-summary difference checks excluded.",
+        "No new reading performed; absence of evidence is not proof nobody read a post."
+      ],
+      "issues": {
+        "改憲全般": {
+          "opinions": 513,
+          "editorial": 0,
+          "focused_only": 7,
+          "body_review_record_unconfirmed": 506
+        },
+        "国民投票・広告": {
+          "opinions": 196,
+          "editorial": 0,
+          "focused_only": 13,
+          "body_review_record_unconfirmed": 183
+        },
+        "政党・発議手続き": {
+          "opinions": 118,
+          "editorial": 0,
+          "focused_only": 1,
+          "body_review_record_unconfirmed": 117
+        },
+        "情報・議論の質": {
+          "opinions": 51,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 51
+        },
+        "9条・自衛隊": {
+          "opinions": 284,
+          "editorial": 0,
+          "focused_only": 10,
+          "body_review_record_unconfirmed": 274
+        },
+        "緊急事態条項": {
+          "opinions": 200,
+          "editorial": 0,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 197
+        },
+        "その他": {
+          "opinions": 10,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 10
+        }
+      }
+    },
+    "consumption-tax-cut": {
+      "opinions": 3358,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 64,
+      "confirmed_body_review": 64,
+      "body_review_record_unconfirmed": 3294,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 3762,
+      "title": "消費税減税",
+      "canonical_sha256": "ebb2910087fed775f13e6be3f3f243632f03ae4d4589c1876dd1f795ce5ed5ad",
+      "inventory_sha256": "4db072542fb954a59653653b74daaddfa1a477fc8fd105b96f0dee385d18da1f",
+      "body_review_record_percent": 1.91,
+      "sources": [
+        {
+          "path": "data/consumption-tax-cut_claim_posts.json",
+          "git_ref": "6e683ff410fe569a70c1ae30f82b8835321c2425",
+          "sha256": "f21f09fcbe7ee23e0c894598d9327d1b8f4291177c80cc46469699cc35974428",
+          "kind": "focused_body_review",
+          "method": "6つの言い分それぞれについて、キーワードで拾った候補を編集部が1件ずつ開き、実際にその言い分をしている投稿だけを残したもの。機械抽出の件数はそのまま使っていない。賛成・反対のどちらの立場かは問わずに数えている。",
+          "reader": "AI-assisted editorial work (Claude co-author in git history); human per-post confirmation not established",
+          "notes": "Only retained claim IDs are countable. Rejected candidates have no exhaustive saved ID list. Current body hash was not bound at reading time."
+        }
+      ],
+      "caveats": [
+        "No issue-level editorial reread record found in examined local refs/worktrees.",
+        "Claim selection is limited-purpose reading and does not establish full topic comprehension.",
+        "Automated initial classification and representative-summary difference checks excluded.",
+        "No new reading performed; absence of evidence is not proof nobody read a post."
+      ],
+      "issues": {
+        "減税の対象範囲": {
+          "opinions": 761,
+          "editorial": 0,
+          "focused_only": 27,
+          "body_review_record_unconfirmed": 734
+        },
+        "給付など他策との比較": {
+          "opinions": 219,
+          "editorial": 0,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 216
+        },
+        "公約と政治不信": {
+          "opinions": 1198,
+          "editorial": 0,
+          "focused_only": 13,
+          "body_review_record_unconfirmed": 1185
+        },
+        "減税の効果": {
+          "opinions": 625,
+          "editorial": 0,
+          "focused_only": 5,
+          "body_review_record_unconfirmed": 620
+        },
+        "財源と社会保障": {
+          "opinions": 416,
+          "editorial": 0,
+          "focused_only": 12,
+          "body_review_record_unconfirmed": 404
+        },
+        "その他": {
+          "opinions": 48,
+          "editorial": 0,
+          "focused_only": 2,
+          "body_review_record_unconfirmed": 46
+        },
+        "事業者の実務負担": {
+          "opinions": 91,
+          "editorial": 0,
+          "focused_only": 2,
+          "body_review_record_unconfirmed": 89
+        }
+      }
+    },
+    "elderly-license-revocation": {
+      "opinions": 353,
+      "editorial_main": 250,
+      "editorial_all": 250,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 250,
+      "editorial_not_connected_main": 250,
+      "focused_or_classification_only": 15,
+      "confirmed_body_review": 265,
+      "body_review_record_unconfirmed": 88,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 506,
+      "title": "高齢者免許返納",
+      "canonical_sha256": "f3d2af2d961b9ca6358b75a651e89379e83d2a20c1cf3477daae878aa64a4836",
+      "inventory_sha256": "aa120e09f4579126e7ab35765c092ae5298216ac7d0df4d223904ed3ae6a6c3b",
+      "body_review_record_percent": 75.07,
+      "sources": [
+        {
+          "git_ref": null,
+          "kind": "canonical_population",
+          "method": "THEMES.yaml sample_file; classification flags are not False",
+          "notes": "",
+          "path": "/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/social-samples/elderly-license_2d_classified.json",
+          "reader": "not_applicable",
+          "sha256": "f3d2af2d961b9ca6358b75a651e89379e83d2a20c1cf3477daae878aa64a4836"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "connection_logic",
+          "method": "sub_issues reads sc.file/sc.path and source_file; no target config exists",
+          "notes": "",
+          "path": "scripts/build_planet_data.py",
+          "reader": "not_applicable",
+          "sha256": "f5a1bb6b411257f4c5679c152f762d6d7f6b8117e3743145cde946d2b68c1458"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "full_body_editorial_reread",
+          "method": "編集部が本文を1件ずつ読み、区分へ再分類した。キーワード抽出による件数は使っていない",
+          "notes": "tasks/task-54.md stage 10-2a explicitly records all 250 text bodies read; 221 + 29 issue coverage.",
+          "path": "data/elderly-license_issues-reread.json",
+          "reader": "AI: Claude Sonnet 5 (e0e7e7d co-author)",
+          "sha256": "89dd1ffc4f66abda683edb44a8c46c3bd3f14d587ea1d23ae873165db190dcfd"
+        },
+        {
+          "git_ref": "5da3a48",
+          "kind": "body_version_snapshot",
+          "method": "Pre-reread snapshot compared exactly to current text",
+          "notes": "",
+          "path": "social-samples/elderly-license_2d_classified.json",
+          "reader": "not_applicable",
+          "sha256": "44a6d04bc6e95ebfdd4c77983bbe06f4368fc31119e3f0c90741172ec3a7f56a"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "editorial_procedure_evidence",
+          "method": "Stage 10-2a all 250 text bodies individually read",
+          "notes": "",
+          "path": "tasks/task-54.md",
+          "reader": "AI: Claude Sonnet 5",
+          "sha256": "e5cdf3f9c09b406f12b77c52f25261837d06439cfb72d064c3f46711450d350e"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "focused_body_review",
+          "method": "6つの主張それぞれについて、編集部が候補投稿をキーワードで集めたうえで1件ずつ読み、実際にその主張を事実として述べている投稿だけを残したもの。報道見出しの共有だけの投稿、提案・要望にとどまる投稿、当サイト自身の投稿は除いている。機械抽出の結果をそのまま件数にはしていない。 2026-08-21に、8月20日更新で増えた30件を1件ずつ読み、該当する6件を追記した（増えた分のうち大半は個別の運転マナーへの苦情で、公的資料で確かめられる主張を含んでいなかった）。",
+          "notes": "38 IDs mapped to claims after individual body confirmation; not claim_mapping_only.",
+          "path": "data/elderly-license-revocation_claim_posts.json",
+          "reader": "AI: Claude Opus 5 (bc5b39e / 24b6749 co-author)",
+          "sha256": "a154119de95d226bd6165571b209865ed1dfac6a7342d83774372e03479d9030"
+        },
+        {
+          "git_ref": null,
+          "kind": "focused_body_review",
+          "method": "Claim review record and commit 24b6749 explicitly say all 30 newly added posts were individually read.",
+          "notes": "Saved 2026-08-20 classified wave provides target IDs; report new=classified=30. 6 claims overlap, union=62.",
+          "path": "/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/social-samples/updates/elderly-license-revocation/2026-08-20/classified.json",
+          "reader": "AI: Claude Opus 5 (24b6749 co-author)",
+          "sha256": "bdb18fe75ddf1af7004f2b09dae074468646d737572bd0c790cdc242da591b46"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "scope_evidence",
+          "method": "new=classified=30 links the full increment to the explicit reading record",
+          "notes": "",
+          "path": "data/verification/updates/elderly-license-revocation/2026-08-20/report.json",
+          "reader": "not_applicable",
+          "sha256": "c10d24bfac8acf158978468032972cec503104dd5bc48dc9d3d0e9ab99faaaf7"
+        },
+        {
+          "git_ref": "24b6749",
+          "kind": "body_version_snapshot",
+          "method": "Claim update snapshot; text equals latest canonical for all 62 focused target IDs",
+          "notes": "",
+          "path": "social-samples/elderly-license_2d_classified.json",
+          "reader": "not_applicable",
+          "sha256": "ee53240e0d08f66504a931e4db9d4c784b35cb86fda43ef856baca857fcb2913"
+        }
+      ],
+      "caveats": [
+        "No new body reading or classification was performed by this inventory.",
+        "No human review confirmation found. Reader identities below describe existing AI records.",
+        "Absence of records is not proof that nobody has read a post.",
+        "Existing 2D automated classification/display is not a connection to the new planet page.",
+        "Reader labels from commit co-author metadata are attribution evidence, not runtime attestation.",
+        "Editorial result has no per-post text fingerprint; historical canonical 5da3a48 supplies matching body versions for all 250 IDs.",
+        "Brief uses human/editorial wording, but completion commit credits AI; human confirmation is not established.",
+        "38 mapped claim IDs plus full 30-post increment overlap by 6: 62 unique focused targets, 48 current opinions.",
+        "Focused confirmation is a separate purpose from issue subdivision, and is not new-page editorial coverage."
+      ],
+      "issues": {
+        "義務化・事故防止": {
+          "opinions": 221,
+          "editorial": 221,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 0
+        },
+        "適性検査強化": {
+          "opinions": 51,
+          "editorial": 0,
+          "focused_only": 8,
+          "body_review_record_unconfirmed": 43
+        },
+        "自主返納支援": {
+          "opinions": 16,
+          "editorial": 0,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 13
+        },
+        "地方の足・移動権": {
+          "opinions": 29,
+          "editorial": 29,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 0
+        },
+        "代替交通整備": {
+          "opinions": 16,
+          "editorial": 0,
+          "focused_only": 4,
+          "body_review_record_unconfirmed": 12
+        },
+        "その他": {
+          "opinions": 20,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 20
+        }
+      }
+    },
+    "fukushuto": {
+      "opinions": 1453,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 15,
+      "confirmed_body_review": 15,
+      "body_review_record_unconfirmed": 1438,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 1733,
+      "title": "副首都法案・副首都構想",
+      "canonical_sha256": "d0d46700f58a2c15f321f7d7d62a372ff5a508ca1a4c2b001e24361aabc43c0d",
+      "inventory_sha256": "367b73bb749373221850fbc27290d29a88c34b84ce38d868069e6615ecdb9a35",
+      "body_review_record_percent": 1.03,
+      "sources": [
+        {
+          "path": "data/fukushuto_claim_posts.json",
+          "git_ref": "6e683ff410fe569a70c1ae30f82b8835321c2425",
+          "sha256": "0e44ba792415ff0fac29546907a321021d9d850788d1116e6525611f9fc3e673",
+          "kind": "focused_body_review",
+          "method": "5つの主張それぞれについて、キーワードで拾った候補投稿を編集部が1件ずつ読み、実際にその主張をしている投稿だけを残したもの。機械抽出の結果をそのまま件数にはしていない。",
+          "reader": "AI-assisted editorial work (Claude co-author in git history); human per-post confirmation not established",
+          "notes": "Only retained claim IDs are countable. Rejected candidates have no exhaustive saved ID list. Current body hash was not bound at reading time."
+        }
+      ],
+      "caveats": [
+        "No issue-level editorial reread record found in examined local refs/worktrees.",
+        "Claim selection is limited-purpose reading and does not establish full topic comprehension.",
+        "Automated initial classification and representative-summary difference checks excluded.",
+        "No new reading performed; absence of evidence is not proof nobody read a post."
+      ],
+      "issues": {
+        "防災・災害": {
+          "opinions": 221,
+          "editorial": 0,
+          "focused_only": 1,
+          "body_review_record_unconfirmed": 220
+        },
+        "定義・中身": {
+          "opinions": 232,
+          "editorial": 0,
+          "focused_only": 4,
+          "body_review_record_unconfirmed": 228
+        },
+        "都構想・維新": {
+          "opinions": 407,
+          "editorial": 0,
+          "focused_only": 5,
+          "body_review_record_unconfirmed": 402
+        },
+        "候補地": {
+          "opinions": 300,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 300
+        },
+        "その他": {
+          "opinions": 89,
+          "editorial": 0,
+          "focused_only": 1,
+          "body_review_record_unconfirmed": 88
+        },
+        "優先順位": {
+          "opinions": 140,
+          "editorial": 0,
+          "focused_only": 2,
+          "body_review_record_unconfirmed": 138
+        },
+        "費用・財源": {
+          "opinions": 64,
+          "editorial": 0,
+          "focused_only": 2,
+          "body_review_record_unconfirmed": 62
+        }
+      }
+    },
+    "henoko-student-accident": {
+      "opinions": 373,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 32,
+      "confirmed_body_review": 32,
+      "body_review_record_unconfirmed": 341,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 480,
+      "title": "辺野古高校生死亡事故",
+      "canonical_sha256": "3cca77f41e89b60a6a2a9057d6242bd8e149f72150d6ef739d268f38ad8400c2",
+      "inventory_sha256": "0a4d0df0d4fedf77ba84bf3d0998de4dd21487e23725a713e7a926f4a401b93d",
+      "body_review_record_percent": 8.58,
+      "sources": [
+        {
+          "git_ref": null,
+          "kind": "canonical_population",
+          "method": "THEMES.yaml sample_file; classification flags are not False",
+          "notes": "",
+          "path": "/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/social-samples/henoko/henoko_hermes_arena_classified.json",
+          "reader": "not_applicable",
+          "sha256": "3cca77f41e89b60a6a2a9057d6242bd8e149f72150d6ef739d268f38ad8400c2"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "connection_logic",
+          "method": "sub_issues reads sc.file/sc.path and source_file; no target config exists",
+          "notes": "",
+          "path": "scripts/build_planet_data.py",
+          "reader": "not_applicable",
+          "sha256": "f5a1bb6b411257f4c5679c152f762d6d7f6b8117e3743145cde946d2b68c1458"
+        },
+        {
+          "git_ref": null,
+          "kind": "classification_review",
+          "method": "Per-post direct body confirmation for relevance/opinion/issue/stance, recorded in repair report.",
+          "notes": "Original review only; existing overlap rows were not reread.",
+          "path": "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/henoko-student-accident/20260906-u3/decisions.json",
+          "reader": "AI: Codex GPT-6 for nickname; Codex session exact model unverified for henoko",
+          "sha256": "95bda35b0c057267d107c9f51d72988d2f15e1b03378a7d28bff473f76a9f072"
+        },
+        {
+          "git_ref": null,
+          "kind": "classification_review",
+          "method": "Independent reviewer explicitly read saved original bodies individually, limited to 3 nickname / 35 henoko.",
+          "notes": "Set union removes repeated prior/independent review. Does not claim issue editorial subdivision.",
+          "path": "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/classification-review/20260906-independent-v1/review-decisions.json",
+          "reader": "AI: Codex GPT-6 (session identity, backend unverified)",
+          "sha256": "c9f400357912eb6156a844acb85eaeb001c2a1b65f0edbb1a2ca91b7a9c612d7"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "procedure_evidence",
+          "method": "Explicit saved-body review procedure and limitations",
+          "notes": "",
+          "path": "quality/reviews/2026-09-06-classification-independent-review.md",
+          "reader": "AI: Codex GPT-6",
+          "sha256": "eddc90de81464d4a79aa45521c4f32502ae1768d80cfa9ef0debcd77e01a28eb"
+        }
+      ],
+      "caveats": [
+        "No new body reading or classification was performed by this inventory.",
+        "No human review confirmation found. Reader identities below describe existing AI records.",
+        "Absence of records is not proof that nobody has read a post.",
+        "Existing 2D automated classification/display is not a connection to the new planet page.",
+        "Reader labels from commit co-author metadata are attribution evidence, not runtime attestation.",
+        "Older 2026-06-28 classification design/final audits list classification totals, without a full-body individual reading procedure and target ID ledger; excluded.",
+        "Prior review and independent review are deduplicated by ID. Nickname held record is outside canonical; non-opinions are excluded from top-level sets."
+      ],
+      "issues": {
+        "平和教育の萎縮": {
+          "opinions": 26,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 26
+        },
+        "報道・行政対応": {
+          "opinions": 69,
+          "editorial": 0,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 66
+        },
+        "政治的中立性": {
+          "opinions": 44,
+          "editorial": 0,
+          "focused_only": 1,
+          "body_review_record_unconfirmed": 43
+        },
+        "安全管理・事故原因": {
+          "opinions": 107,
+          "editorial": 0,
+          "focused_only": 4,
+          "body_review_record_unconfirmed": 103
+        },
+        "追悼・被害者の尊厳": {
+          "opinions": 50,
+          "editorial": 0,
+          "focused_only": 4,
+          "body_review_record_unconfirmed": 46
+        },
+        "政治利用・基地問題": {
+          "opinions": 77,
+          "editorial": 0,
+          "focused_only": 20,
+          "body_review_record_unconfirmed": 57
+        }
+      }
+    },
+    "koshitsu-tenpakai": {
+      "opinions": 1282,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 15,
+      "confirmed_body_review": 15,
+      "body_review_record_unconfirmed": 1267,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 1605,
+      "title": "皇室典範改正（女性皇族の皇籍維持・旧宮家養子）",
+      "canonical_sha256": "aff46757fddab66036f03f3685d0f9d1e7f40c4161160a4d4a848beab8c7569f",
+      "inventory_sha256": "67a91c4ce7f5e8d66355f238d8f2f62aca0ffc437ee5960c0d0b1b0116c92781",
+      "body_review_record_percent": 1.17,
+      "sources": [
+        {
+          "path": "data/koshitsu-tenpakai_claim_posts.json",
+          "git_ref": "6e683ff410fe569a70c1ae30f82b8835321c2425",
+          "sha256": "031ef98aa77e7ddabba7347863587aa7536220ff8e5853f5e39507995df36736",
+          "kind": "focused_body_review",
+          "method": "<p class=\"pc-note\">件数の数え方：本文の機械検索では、関係のない文脈で同じ語が出てくる投稿も拾ってしまいます。そのため候補を1件ずつ読み、実際にその主張をしている投稿だけを手で選んで数えています。賛成・反対どちらの投稿も含みます。</p>",
+          "reader": "AI-assisted editorial work (Claude co-author in git history); human per-post confirmation not established",
+          "notes": "Only retained claim IDs are countable. Rejected candidates have no exhaustive saved ID list. Current body hash was not bound at reading time."
+        }
+      ],
+      "caveats": [
+        "No issue-level editorial reread record found in examined local refs/worktrees.",
+        "Claim selection is limited-purpose reading and does not establish full topic comprehension.",
+        "Automated initial classification and representative-summary difference checks excluded.",
+        "No new reading performed; absence of evidence is not proof nobody read a post."
+      ],
+      "issues": {
+        "立法手続き・民主主義": {
+          "opinions": 185,
+          "editorial": 0,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 182
+        },
+        "旧宮家養子縁組": {
+          "opinions": 251,
+          "editorial": 0,
+          "focused_only": 4,
+          "body_review_record_unconfirmed": 247
+        },
+        "愛子さま・皇族の地位": {
+          "opinions": 133,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 133
+        },
+        "その他": {
+          "opinions": 150,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 150
+        },
+        "男系vs女系": {
+          "opinions": 402,
+          "editorial": 0,
+          "focused_only": 2,
+          "body_review_record_unconfirmed": 400
+        },
+        "女性天皇・女系天皇": {
+          "opinions": 161,
+          "editorial": 0,
+          "focused_only": 6,
+          "body_review_record_unconfirmed": 155
+        }
+      }
+    },
+    "school-nickname-ban": {
+      "opinions": 104,
+      "editorial_main": 0,
+      "editorial_all": 0,
+      "editorial_branch_only": 0,
+      "connected_main_qualified": 0,
+      "connected_any_qualified": 0,
+      "editorial_not_connected_any": 0,
+      "editorial_not_connected_main": 0,
+      "focused_or_classification_only": 11,
+      "confirmed_body_review": 11,
+      "body_review_record_unconfirmed": 93,
+      "connected_claim_without_editorial_evidence": 0,
+      "collected": 462,
+      "title": "学校でのあだ名禁止",
+      "canonical_sha256": "85c9bc0dc54742d576a035bc6ae1e282497cfd1c32028d61055ae81deaccd3d2",
+      "inventory_sha256": "7e386bb0eb7ee0dd79dfabfb86b456480ca71b241cb3ccc7c2bb750fd9b06a74",
+      "body_review_record_percent": 10.58,
+      "sources": [
+        {
+          "git_ref": null,
+          "kind": "canonical_population",
+          "method": "THEMES.yaml sample_file; classification flags are not False",
+          "notes": "",
+          "path": "/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/social-samples/school-nickname-ban_hermes_arena_classified.json",
+          "reader": "not_applicable",
+          "sha256": "85c9bc0dc54742d576a035bc6ae1e282497cfd1c32028d61055ae81deaccd3d2"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "connection_logic",
+          "method": "sub_issues reads sc.file/sc.path and source_file; no target config exists",
+          "notes": "",
+          "path": "scripts/build_planet_data.py",
+          "reader": "not_applicable",
+          "sha256": "f5a1bb6b411257f4c5679c152f762d6d7f6b8117e3743145cde946d2b68c1458"
+        },
+        {
+          "git_ref": null,
+          "kind": "classification_review",
+          "method": "Per-post direct body confirmation for relevance/opinion/issue/stance, recorded in repair report.",
+          "notes": "Original review only; existing overlap rows were not reread.",
+          "path": "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/school-nickname-ban/20260906-u2/decisions.json",
+          "reader": "AI: Codex GPT-6 for nickname; Codex session exact model unverified for henoko",
+          "sha256": "08f45d2ea6f9cad4683db89363a03a3f318fc9fdf3f30ab454da9bebe7d043c0"
+        },
+        {
+          "git_ref": null,
+          "kind": "classification_review",
+          "method": "Independent reviewer explicitly read saved original bodies individually, limited to 3 nickname / 35 henoko.",
+          "notes": "Set union removes repeated prior/independent review. Does not claim issue editorial subdivision.",
+          "path": "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/classification-review/20260906-independent-v1/review-decisions.json",
+          "reader": "AI: Codex GPT-6 (session identity, backend unverified)",
+          "sha256": "c9f400357912eb6156a844acb85eaeb001c2a1b65f0edbb1a2ca91b7a9c612d7"
+        },
+        {
+          "git_ref": "565e76bb2590bdcab29c79098780b9e8fd4233b7",
+          "kind": "procedure_evidence",
+          "method": "Explicit saved-body review procedure and limitations",
+          "notes": "",
+          "path": "quality/reviews/2026-09-06-classification-independent-review.md",
+          "reader": "AI: Codex GPT-6",
+          "sha256": "eddc90de81464d4a79aa45521c4f32502ae1768d80cfa9ef0debcd77e01a28eb"
+        }
+      ],
+      "caveats": [
+        "No new body reading or classification was performed by this inventory.",
+        "No human review confirmation found. Reader identities below describe existing AI records.",
+        "Absence of records is not proof that nobody has read a post.",
+        "Existing 2D automated classification/display is not a connection to the new planet page.",
+        "Reader labels from commit co-author metadata are attribution evidence, not runtime attestation.",
+        "Older 2026-06-28 classification design/final audits list classification totals, without a full-body individual reading procedure and target ID ledger; excluded.",
+        "Prior review and independent review are deduplicated by ID. Nickname held record is outside canonical; non-opinions are excluded from top-level sets."
+      ],
+      "issues": {
+        "学校運用・現場体験": {
+          "opinions": 11,
+          "editorial": 0,
+          "focused_only": 2,
+          "body_review_record_unconfirmed": 9
+        },
+        "いじめ・心理的安全": {
+          "opinions": 37,
+          "editorial": 0,
+          "focused_only": 5,
+          "body_review_record_unconfirmed": 32
+        },
+        "親しさ・呼称文化": {
+          "opinions": 18,
+          "editorial": 0,
+          "focused_only": 1,
+          "body_review_record_unconfirmed": 17
+        },
+        "さん付け・ジェンダー配慮": {
+          "opinions": 6,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 6
+        },
+        "一律禁止の実効性": {
+          "opinions": 26,
+          "editorial": 0,
+          "focused_only": 3,
+          "body_review_record_unconfirmed": 23
+        },
+        "本人意思・柔軟運用": {
+          "opinions": 6,
+          "editorial": 0,
+          "focused_only": 0,
+          "body_review_record_unconfirmed": 6
+        }
+      }
+    }
+  },
+  "totals": {
+    "opinions": 12495,
+    "editorial_main": 1342,
+    "editorial_all": 1422,
+    "editorial_branch_only": 80,
+    "connected_main_qualified": 441,
+    "connected_any_qualified": 638,
+    "editorial_not_connected_any": 784,
+    "editorial_not_connected_main": 981,
+    "focused_or_classification_only": 220,
+    "confirmed_body_review": 1642,
+    "body_review_record_unconfirmed": 10853,
+    "connected_claim_without_editorial_evidence": 93,
+    "collected": 15779
+  },
+  "historical_rough_estimate": {
+    "old_nine_theme_half_sum": 5659,
+    "current_nine_theme_half_sum": 5680,
+    "is_remaining_reading_count": false,
+    "reason": "Half of all opinions is not a selected issue population and did not subtract or validate prior evidence."
+  },
+  "caveats": [
+    "Initial automated classification is excluded; absence of reread evidence is not proof nobody has read a post.",
+    "Focused claim/classification checks are not issue-level editorial decomposition or a complete fact check.",
+    "Branch connection means a prototype/configuration link, not merged/publicly deployed new-page content.",
+    "Some old evidence lacks per-post read-time body hashes; evidence strength differs by source.",
+    "Current strict input hashes must be rechecked before merging, connecting, or rereading queued IDs.",
+    "No new reading, production data changes, threshold changes, or public page changes performed."
+  ]
+}
