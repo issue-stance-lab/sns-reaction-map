@@ -106,8 +106,12 @@ def verify(root=ROOT, registry_path=REGISTRY, tracked_files=None):
         check_file(data["canonical_file"], data["canonical_sha256"])
         expected_public = f"data/public/themes/{topic}.json"
         require((data["public_file"] == expected_public) == (expected_public in tracked_files), "public snapshot coverage changed")
+        public_data = None
         if data["public_file"] is not None:
             check_file(data["public_file"], data["public_sha256"], True)
+            public_data = read(data["public_file"])
+            for field in ("collected_count", "opinion_count"):
+                count(public_data.get(field))
         else:
             require(data["public_sha256"] is None, "unexpected public digest")
         source_map = {}
@@ -170,6 +174,14 @@ def verify(root=ROOT, registry_path=REGISTRY, tracked_files=None):
                 require(record["canonical_opinion"] is None, "absent canonical cannot have opinion state")
             if data["published_state"] != "done":
                 require(record["public_opinion_presence"] is False, "unpublished topic cannot be public")
+            elif public_data is not None:
+                # Current public generation treats a missing opinion flag as false.
+                # The ledger must retain None as unknown, without promoting it to True.
+                expected_public_presence = record["canonical_presence"] and record["canonical_opinion"] is True
+                require(record["public_opinion_presence"] is expected_public_presence,
+                        "public membership disagrees with canonical opinion state")
+            else:
+                require(record["public_opinion_presence"] is None, "public membership lacks public evidence")
             expected_decision = seed["decisions"].get(topic, {}).get(rid)
             require(record["decision"] == expected_decision, "decision differs from evidence seed")
             if expected_decision is not None:
@@ -192,6 +204,13 @@ def verify(root=ROOT, registry_path=REGISTRY, tracked_files=None):
                 require(obs["kind"] != "verification" or obs["body_relation"] == "unavailable", "verification source has no body proof")
                 if not record["canonical_presence"]:
                     require(obs["body_relation"] == obs["classification_relation"] == "unavailable", "comparison without canonical")
+        if public_data is not None:
+            require(public_data["collected_count"] == sum(r["canonical_presence"] for r in by_key.values()),
+                    "public collected count disagrees with canonical membership count")
+            require(public_data["opinion_count"] == sum(r["canonical_opinion"] is True for r in by_key.values()),
+                    "public opinion count disagrees with canonical opinion count")
+        # Public aggregate JSON has no full private ID list: these checks do not
+        # prove exact private canonical identity membership in a clean clone.
         require(list(by_key) == sorted(by_key), "record order is not deterministic")
         require(set(seed["decisions"].get(topic, {})) <= set(by_key), "decision identity missing")
         for sid, source in source_map.items():

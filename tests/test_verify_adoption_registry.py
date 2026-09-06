@@ -20,7 +20,7 @@ class VerifyAdoptionRegistryTests(unittest.TestCase):
         config = "configs/adoption-sources.yaml"
         self.write(config, "legacy: []\nexternal: []\n")
         self.public = "data/public/themes/bike.json"
-        self.write(self.public, "{}")
+        self.write(self.public, {"collected_count": 1, "opinion_count": 1})
         self.evidence = "quality/reviews/decision.md"
         self.write(self.evidence, "Review decision")
         current = {"tweet_id": "1", "text": "private original", "classification": {
@@ -137,6 +137,34 @@ class VerifyAdoptionRegistryTests(unittest.TestCase):
         self.registry["scope_config"]["sha256"] = self.digest(path)
         with self.assertRaisesRegex(ValueError, "declared source"):
             self.check()
+
+    def test_public_presence_mutation_cannot_hide_an_opinion(self):
+        present = next(r for r in self.registry["topics"]["bike"]["records"] if r["canonical_presence"])
+        present["public_opinion_presence"] = False
+        with self.assertRaisesRegex(ValueError, "public membership"):
+            self.check()
+
+    def test_public_presence_cannot_include_saved_only_record(self):
+        absent = next(r for r in self.registry["topics"]["bike"]["records"] if not r["canonical_presence"])
+        absent["public_opinion_presence"] = True
+        with self.assertRaisesRegex(ValueError, "public membership"):
+            self.check()
+
+    def test_public_aggregate_mismatch_stops_even_with_updated_fingerprint(self):
+        for counts in ({"collected_count": 2, "opinion_count": 1},
+                       {"collected_count": 1, "opinion_count": 0}):
+            self.write(self.public, counts)
+            self.registry["topics"]["bike"]["public_sha256"] = self.digest(self.public)
+            with self.assertRaisesRegex(ValueError, "public .* count disagrees"):
+                self.check()
+
+    def test_unknown_opinion_remains_unknown_and_is_not_public(self):
+        present = next(r for r in self.registry["topics"]["bike"]["records"] if r["canonical_presence"])
+        present["canonical_opinion"] = None
+        present["public_opinion_presence"] = False
+        self.write(self.public, {"collected_count": 1, "opinion_count": 0})
+        self.registry["topics"]["bike"]["public_sha256"] = self.digest(self.public)
+        self.assertEqual(self.check()["records"], 2)
 
     def test_unknown_fields_and_schema_boolean_are_not_accepted(self):
         self.registry["schema_version"] = True
