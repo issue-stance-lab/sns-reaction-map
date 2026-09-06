@@ -233,21 +233,21 @@ class PlanetDataTest(unittest.TestCase):
         ng = bpd.independence_gate(data, cfg)
         self.assertTrue(any("増えた分" in m and issue["label"] in m for m in ng), ng)
 
-    def test_bukatsu_chiiki_teacher_issue_fails_on_real_skipped_posts(self):
-        """実データ: 教員の働き方は読み飛ばし54件で不合格になり、他の2論点は挙げられない。"""
+    def test_bukatsu_existing_rereads_are_connected_without_skips(self):
+        """既存教員54件・制度教育471件を継承し、実読966件を接続する。"""
         data = bpd.build(TOPIC)
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         by_label = {i["label"]: i["sub"] for i in data["issues"]}
-        self.assertEqual(by_label["教員の働き方"]["skipped_count"], 54)
-        self.assertEqual(by_label["教員の働き方"]["grown_count"], 0)
+        for label, count in [("教員の働き方", 323), ("制度・移行プロセス", 256),
+                             ("教育的意義・機会", 215)]:
+            self.assertEqual(by_label[label]["reread_count"], count)
+            self.assertEqual(by_label[label]["unread_count"], 0)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 966)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 173)
+        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1075)
         self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 0)
         self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 0)
-        ng = bpd.independence_gate(data, cfg)
-        message = "\n".join(ng)
-        self.assertIn("教員の働き方", message)
-        self.assertIn("読み飛ばしが54件", message)
-        self.assertNotIn("費用・家庭負担", message)
-        self.assertNotIn("受け皿・指導者", message)
+        self.assertEqual(bpd.independence_gate(data, cfg), [])
 
 
 if __name__ == "__main__":
