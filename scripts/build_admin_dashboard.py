@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from admin_dashboard import actions, collect, render  # noqa: E402
+from admin_dashboard import actions, collect, render, data_assets  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "company" / "dashboard" / "dashboard.html"
@@ -36,6 +36,7 @@ def build(*, fetch: bool, today: dt.date, interactive: bool = False, token: str 
         "x_posts": collect.collect_x_posts(),
         "commits": collect.collect_commits(),
         "data_updates": collect.collect_data_updates(),
+        "data_assets": data_assets.collect_data_assets(today),
         "tasks": collect.collect_tasks(),
         "health": collect.collect_source_health(today),
         "x_measurement": collect.collect_x_measurement(dt.datetime.now(dt.timezone(dt.timedelta(hours=9)))),
