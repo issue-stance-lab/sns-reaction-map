@@ -247,10 +247,6 @@ class RealDataPassesTheGate(unittest.TestCase):
         self.assertEqual(failures, [], "\n".join(failures))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class ReusedClassificationModelTests(unittest.TestCase):
     """保存済みの分類を使い回した回に、いまの設定のモデル名を書かない。
 
@@ -267,8 +263,10 @@ class ReusedClassificationModelTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             raw = Path(directory) / "raw.json"
             raw.write_text("[]", encoding="utf-8")
+            config = Path(directory) / "config.yaml"
+            config.write_text("model:\n  default: fixture-model\n  provider: fixture\n")
             return refresh_topic.build_provenance(
-                ROOT, classifier, raw, [], classified=classified, reused=reused)
+                ROOT, classifier, raw, [], classified=classified, reused=reused, config_path=config)
 
     def test_reused_wave_records_unknown_instead_of_current_setting(self):
         model = self._provenance(classified=True, reused=True)["model"]
@@ -282,3 +280,157 @@ class ReusedClassificationModelTests(unittest.TestCase):
 
     def test_no_new_posts_records_no_model(self):
         self.assertIsNone(self._provenance(classified=False, reused=False)["model"])
+
+
+class ClassificationResumeIntegration(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.stage = Path(self.temp.name)
+        self.classifier = ROOT / "scripts/classify_bike_arena_hermes.py"
+        self.config = self.stage / "config.yaml"
+        self.config.write_text("model:\n  default: original-model\n  provider: test\n")
+        self.rows = [{"tweet_id": "1", "text": "example", "source": "x"}]
+        for name in ("raw.json", "new-only.json"):
+            refresh_topic.write_json(self.stage / name, self.rows)
+
+    def classify(self, resume=False):
+        return refresh_topic.classify_wave(ROOT, self.classifier, self.stage, self.rows, self.rows,
+            resume=resume, classifier_args=[], config_path=self.config)
+
+    def fake_run(self, command, **kwargs):
+        refresh_topic.write_json(Path(command[command.index("--output") + 1]), self.rows)
+
+    def fresh(self):
+        from unittest.mock import patch
+        with patch.object(refresh_topic, "run", side_effect=self.fake_run), patch.object(refresh_topic, "validate_classified"):
+            return self.classify()
+
+    def test_fresh_resume_preserves_complete_record_with_missing_current_config(self):
+        from unittest.mock import patch
+        original = self.fresh()
+        self.assertEqual(original["model"]["name"], "original-model")
+        self.config.unlink()
+        with patch.object(refresh_topic, "run", side_effect=AssertionError("must not classify")), patch.object(refresh_topic, "taxonomy_fingerprint", side_effect=AssertionError("must not read current taxonomy")):
+            resumed = self.classify(True)
+        self.assertEqual(original, resumed)
+        self.assertEqual(verifier._missing_provenance({"new": 1, "provenance": resumed}), [])
+
+    def test_legacy_report_without_sidecar_preserves_original(self):
+        original = self.fresh()
+        (self.stage / "classification-provenance.json").unlink()
+        refresh_topic.write_json(self.stage / "report.json", {"provenance": original})
+        self.config.write_text("model:\n  default: other-model\n")
+        self.assertEqual(self.classify(True), original)
+
+    def test_unknown_reuse_still_fails_required_gate(self):
+        refresh_topic.write_json(self.stage / "classified-wave.json", self.rows)
+        self.config.unlink()
+        result = self.classify(True)
+        self.assertIsNone(result["classifier"])
+        self.assertTrue(verifier._missing_provenance({"new": 1, "provenance": result}))
+
+    def test_changed_input_or_output_rejected(self):
+        self.fresh()
+        for name in ("raw.json", "new-only.json", "classified-wave.json"):
+            with self.subTest(name=name):
+                path = self.stage / name
+                saved = path.read_bytes()
+                refresh_topic.write_json(path, [{**self.rows[0], "text": "changed"}])
+                with self.assertRaisesRegex(ValueError, "一致しません"):
+                    self.classify(True)
+                path.write_bytes(saved)
+
+    def test_partial_result_stops_without_mixing_models(self):
+        from unittest.mock import patch
+        refresh_topic.write_json(self.stage / "classified-wave.json", [])
+        with patch.object(refresh_topic, "run", side_effect=AssertionError("must not classify")):
+            with self.assertRaisesRegex(ValueError, "分類途中"):
+                self.classify(True)
+
+    def test_changed_configuration_during_classification_invalidates_record(self):
+        from unittest.mock import patch
+        def changing_run(command, **kwargs):
+            self.fake_run(command, **kwargs)
+            self.config.write_text("model:\n  default: changed-model\n")
+        with patch.object(refresh_topic, "run", side_effect=changing_run), patch.object(refresh_topic, "validate_classified"):
+            with self.assertRaisesRegex(ValueError, "分類中"):
+                self.classify()
+        record = json.loads((self.stage / "classification-provenance.json").read_text())
+        self.assertIsNone(record["model"]["name"])
+        with self.assertRaisesRegex(ValueError, "未完了"):
+            self.classify(True)
+
+
+    def test_snapshot_exists_before_classifier_and_interrupted_output_cannot_be_reused(self):
+        from unittest.mock import patch
+        def interrupted(command, **kwargs):
+            record = json.loads((self.stage / "classification-provenance.json").read_text())
+            self.assertEqual(record["model"]["name"], "original-model")
+            refresh_topic.write_json(self.stage / "classified-wave.json", self.rows)
+            raise RuntimeError("interrupted")
+        with patch.object(refresh_topic, "run", side_effect=interrupted):
+            with self.assertRaises(RuntimeError):
+                self.classify()
+        with self.assertRaisesRegex(ValueError, "未完了"):
+            self.classify(True)
+
+    def test_explicit_classifier_model_is_recorded(self):
+        from unittest.mock import patch
+        with patch.object(refresh_topic, "run", side_effect=self.fake_run), patch.object(refresh_topic, "validate_classified"):
+            result = refresh_topic.classify_wave(ROOT, self.classifier, self.stage, self.rows, self.rows,
+                resume=False, classifier_args=["--model", "override-model"], config_path=self.config)
+        self.assertEqual(result["model"]["name"], "override-model")
+        self.assertEqual(result["model"]["config_source"], "classifier_args:--model")
+
+    def test_multiple_archives_preserve_each_original_model(self):
+        archive_root = self.stage / "archive-test"
+        waves = []
+        for date, model, identity in (("2026-09-19", "first", "1"), ("2026-09-20", "second", "2")):
+            rows = [{"tweet_id": identity, "text": "example"}]
+            waves.extend(rows)
+            path = archive_root / "social-samples/updates/t" / date
+            for name in ("raw.json", "classified.json"):
+                refresh_topic.write_json(path / name, rows)
+            refresh_topic.write_json(path / "report.json", {"new": 1, "provenance": {"model": {"name": model}}})
+        stage = archive_root / "stage"
+        refresh_topic.write_json(stage / "raw.json", waves)
+        result = refresh_topic.prepare_archived_resume(archive_root, "t", "2026-09-20", stage, [], ["2026-09-19"])
+        self.assertIsNone(result["provenance"]["model"])
+        self.assertEqual([wave["provenance"]["model"]["name"] for wave in result["provenance"]["reused_waves"]], ["first", "second"])
+
+
+    def test_main_refuses_unknown_post_cutoff_before_archiving(self):
+        from contextlib import ExitStack
+        from unittest.mock import patch
+        root = self.stage / "repo"
+        stage = root / ".staging/refresh/t/run"
+        row = {**self.rows[0], "fetched_at": "2026-09-20T10:00:00", "query": "test"}
+        for name, value in (("raw.json", [row]), ("new-only.json", [row]), ("classified-wave.json", [row])):
+            refresh_topic.write_json(stage / name, value)
+        refresh_topic.write_json(root / "canonical.json", [])
+        (root / "config.yaml").write_text("queries: []")
+        (root / "classifier.py").write_text("# fixture")
+        argv = ["refresh_topic.py", "--topic", "t", "--date", "2026-09-20", "--run-id", "run", "--resume", "--backup-dest", str(self.stage / "backup")]
+        with ExitStack() as stack:
+            for name, value in {
+                "ROOT": root,
+                "parse_themes_yaml": lambda: {"t": {"sample_file": "canonical.json", "refresh_config": "config.yaml"}},
+                "load_pipeline_config": lambda: {"t": {"classifier": "classifier.py"}},
+                "load_queries": lambda _: [],
+                "taxonomy_continuity": lambda *args: {"compatible": True},
+                "record_refresh_attempt": lambda *args: None,
+                "validate_classified": lambda *args: {},
+                "validate_sets": lambda *args: {"new": 1},
+            }.items():
+                stack.enter_context(patch.object(refresh_topic, name, value))
+            stack.enter_context(patch.object(sys, "argv", argv))
+            archive = stack.enter_context(patch.object(refresh_topic, "archive_wave"))
+            with self.assertRaisesRegex(ValueError, "出所記録が不十分"):
+                refresh_topic.main()
+            archive.assert_not_called()
+
+
+if __name__ == "__main__":
+    unittest.main()

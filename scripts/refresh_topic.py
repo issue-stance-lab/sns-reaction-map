@@ -225,8 +225,7 @@ def validate_record_fields(rows: list[dict[str, Any]], label: str) -> dict[str, 
 
 
 def classifier_model(config_path: Path = HERMES_CONFIG) -> dict[str, str]:
-    """分類に使うモデルを設定から読む。スクリプト側にモデル指定は無く、
-    ~/.hermes/config.yaml の model.default が全テーマ・全セッションに効く。"""
+    """既定モデルを設定から読む。分類器の明示的 --model は呼び出し側で優先する。"""
     if not config_path.exists():
         raise FileNotFoundError(
             f"分類モデルの設定が見つかりません: {config_path}。"
@@ -263,7 +262,17 @@ def build_provenance(
     classified: bool,
     reused: bool = False,
     config_path: Path = HERMES_CONFIG,
+    model_override: str | None = None,
 ) -> dict[str, Any]:
+    if reused:
+        # Historical classification metadata cannot be reconstructed from today's code.
+        return {
+            "schema_version": PROVENANCE_SCHEMA_VERSION,
+            "model": {"name": None, "note": "保存済みの分類を再利用。実行時の記録が無いため不明。"} if classified else None,
+            "classifier": None,
+            "input": None,
+            "sources": None,
+        }
     sources: dict[str, int] = {}
     for row in raw_rows:
         key = str(row.get("source") or "unknown")
@@ -281,22 +290,85 @@ def build_provenance(
         },
         "sources": dict(sorted(sources.items())),
     }
-    # 新規0件の回は分類していない。走っていない分類のモデル名は書かない（不明は不明のまま）。
-    # 保存済みの分類を使い回した回（--resume）も同じ。そのとき分類を走らせたのは
-    # 別の日で、いまの設定のモデルとは限らない。現在値を書くと「どのモデルで分類したか」
-    # が誤って残る（2026-09-06 のレビュー指摘）。
-    if not classified:
-        provenance["model"] = None
-    elif reused:
-        provenance["model"] = {
-            "name": None,
-            "provider": None,
-            "config_source": None,
-            "note": "保存済みの分類を再利用した回。分類を実行した時点のモデルは記録に無いため不明。"
-                    "現在の設定値を代わりに書かない。",
-        }
+    provenance["model"] = classifier_model(config_path) if classified else None
+    if classified and model_override:
+        provenance["model"]["name"] = model_override
+        provenance["model"]["config_source"] = "classifier_args:--model"
+    return provenance
+
+
+def saved_provenance(stage: Path, *, raw_path: Path | None = None,
+                     result_path: Path | None = None) -> dict[str, Any] | None:
+    """Read the original record, checking bindings without substituting current settings."""
+    for name in ("classification-provenance.json", "report.json"):
+        path = stage / name
+        if not path.exists():
+            continue
+        value = json.loads(path.read_text(encoding="utf-8"))
+        provenance = value if name == "classification-provenance.json" else value.get("provenance")
+        if not isinstance(provenance, dict):
+            continue
+        if name == "classification-provenance.json" and not (provenance.get("output") or {}).get("classified_sha256"):
+            raise ValueError("未完了の分類記録があります。別の更新回で再分類してください")
+        for section, key, target in (
+            ("input", "raw_sha256", raw_path or stage / "raw.json"),
+            ("input", "new_sha256", stage / "new-only.json"),
+            ("output", "classified_sha256", result_path or stage / "classified-wave.json"),
+        ):
+            expected = (provenance.get(section) or {}).get(key)
+            if expected and (not target.exists() or _file_sha256(target) != expected):
+                raise ValueError(f"保存済み分類の出所と {target.name} が一致しません")
+        return provenance
+    return None
+
+
+def classify_wave(root: Path, classifier: Path, stage: Path,
+                  raw: list[dict[str, Any]], new: list[dict[str, Any]],
+                  *, resume: bool, classifier_args: list[str],
+                  config_path: Path = HERMES_CONFIG) -> dict[str, Any]:
+    """Keep provenance alongside the classification, including before interruption."""
+    output = stage / "classified-wave.json"
+    if resume and output.exists():
+        rows = read_rows(output)
+        if len(rows) != len(new) or {identity(row) for row in rows} != {identity(row) for row in new}:
+            raise ValueError("分類途中の結果があります。モデル混在を避けるため停止します。別の更新回で再分類してください")
+        return saved_provenance(stage) or build_provenance(
+            root, classifier, stage / "raw.json", raw, classified=bool(new), reused=True)
+    if resume and (stage / "classification-provenance.json").exists():
+        raise ValueError("未完了の分類記録があります。別の更新回で再分類してください")
+    model_override = None
+    for index, argument in enumerate(classifier_args):
+        if argument == "--model":
+            if index + 1 >= len(classifier_args):
+                raise ValueError("--model にモデル名がありません")
+            model_override = classifier_args[index + 1]
+        elif argument.startswith("--model="):
+            model_override = argument.split("=", 1)[1]
+    provenance = build_provenance(root, classifier, stage / "raw.json", raw,
+                                  classified=bool(new), config_path=config_path, model_override=model_override)
+    provenance["input"]["new_sha256"] = _file_sha256(stage / "new-only.json")
+    record = stage / "classification-provenance.json"
+    write_json(record, provenance)
+    if new:
+        run([sys.executable, str(classifier), "--input", str(stage / "new-only.json"),
+             "--output", str(stage / "classified-test.json"), "--markdown", str(stage / "classified-test.md"),
+             "--limit", str(min(10, len(new))), *classifier_args], label="classify test")
+        validate_classified(read_rows(stage / "classified-test.json"), classifier)
+        run([sys.executable, str(classifier), "--input", str(stage / "new-only.json"),
+             "--output", str(output), "--markdown", str(stage / "classified-wave.md"),
+             *classifier_args], label="classify full")
+        current = build_provenance(root, classifier, stage / "raw.json", raw,
+                                   classified=True, config_path=config_path, model_override=model_override)
+        current["input"]["new_sha256"] = _file_sha256(stage / "new-only.json")
+        if current != provenance:
+            # Never leave an apparently valid snapshot attached to potentially mixed output.
+            provenance["model"] = {"name": None, "note": "分類中に設定・基準・入力が変更されたため不明"}
+            write_json(record, provenance)
+            raise ValueError("分類中に設定・基準・入力が変更されました。公開せず再確認してください")
     else:
-        provenance["model"] = classifier_model(config_path)
+        write_json(output, [])
+    provenance["output"] = {"classified_sha256": _file_sha256(output)}
+    write_json(record, provenance)
     return provenance
 
 
@@ -487,9 +559,21 @@ def prepare_archived_resume(
     publishable: list[dict[str, Any]] = []
     classified_union: set[str] = set()
     seen = set(current_ids)
+    wave_provenance = []
     for date in dates:
         paths = archives[date]
         archived_classified = read_rows(paths["classified"])
+        original = json.loads(paths["report"].read_text(encoding="utf-8"))
+        if not isinstance(original, dict):
+            raise ValueError(f"{topic}: 保存済みreportがJSONオブジェクトではありません（{date}）")
+        provenance = original.get("provenance")
+        if isinstance(provenance, dict):
+            for section, key, path in (("input", "raw_sha256", paths["raw"]),
+                                       ("output", "classified_sha256", paths["classified"])):
+                expected = (provenance.get(section) or {}).get(key)
+                if expected and _file_sha256(path) != expected:
+                    raise ValueError(f"{topic}: 保存済み {date} の {path.name} が出所記録と一致しません")
+        wave_provenance.append({"date": date, "provenance": provenance})
         archived_ids = {identity(row) for row in archived_classified}
         raw_ids = {identity(row) for row in read_rows(paths["raw"])}
         if not archived_ids <= raw_ids:
@@ -510,6 +594,13 @@ def prepare_archived_resume(
     saved_report = json.loads(paths["report"].read_text(encoding="utf-8"))
     if not isinstance(saved_report, dict):
         raise ValueError(f"{topic}: 保存済みreportがJSONオブジェクトではありません")
+    if len(dates) > 1:
+        saved_report["provenance"] = {
+            "schema_version": PROVENANCE_SCHEMA_VERSION,
+            "model": None,
+            "reused_waves": wave_provenance,
+            "note": "複数の保存済み更新回から再構成。モデル・分類基準は各回の記録を参照。",
+        }
     return saved_report
 
 
@@ -1077,8 +1168,19 @@ def main() -> int:
         timings["fetch_seconds"] = round(time.monotonic() - started, 2)
         write_json(timings_path, timings)
 
-    # 分類を走らせない分岐でも参照するので、先に決めておく
-    reused_classification = False
+    started = time.monotonic()
+    reused_wave = args.resume and (stage / "classified-wave.json").exists()
+    if archived_report is not None:
+        # Archive reconstruction may select subsets or combine waves. Keep each original
+        # record attached to its wave; never describe the combination with today's model.
+        provenance = archived_report.get("provenance") or build_provenance(
+            ROOT, classifier, stage / "raw.json", raw, classified=bool(new), reused=True)
+    else:
+        provenance = classify_wave(ROOT, classifier, stage, raw, new, resume=args.resume,
+                                   classifier_args=classifier_args)
+    if not reused_wave and archived_report is None:
+        timings["classify_seconds"] = round(time.monotonic() - started, 2)
+        write_json(timings_path, timings)
     if not new:
         write_json(stage / "classified-wave.json", [])
         report = {
@@ -1095,27 +1197,7 @@ def main() -> int:
             "timings": timings,
         }
     else:
-        test_count = min(10, len(new))
-        reusable = args.resume and (stage / "classified-wave.json").exists()
-        classified = read_rows(stage / "classified-wave.json") if reusable else []
-        if reusable and {identity(row) for row in classified} != {identity(row) for row in new}:
-            reusable = False
-        # 分類を実際に走らせたか、保存済みを使い回したかを後段の記録で使う
-        reused_classification = reusable
-        if not reusable:
-            run(
-                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-test.json"), "--markdown", str(stage / "classified-test.md"), "--limit", str(test_count), *classifier_args],
-                label="classify test",
-            )
-            validate_classified(read_rows(stage / "classified-test.json"), classifier)
-            started = time.monotonic()
-            run(
-                [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-wave.json"), "--markdown", str(stage / "classified-wave.md"), "--resume", *classifier_args],
-                label="classify full",
-            )
-            classified = read_rows(stage / "classified-wave.json")
-            timings["classify_seconds"] = round(time.monotonic() - started, 2)
-            write_json(timings_path, timings)
+        classified = read_rows(stage / "classified-wave.json")
         quality = validate_classified(classified, classifier)
         report = validate_sets(current, raw, new, classified)
         report.update(quality)
@@ -1130,10 +1212,16 @@ def main() -> int:
         })
 
     classified = read_rows(stage / "classified-wave.json")
-    report["provenance"] = build_provenance(
-        ROOT, classifier, stage / "raw.json", raw,
-        classified=bool(new), reused=bool(new) and reused_classification,
-    )
+    report["provenance"] = provenance
+    if archived_report is None:
+        try:
+            from .verify_update_provenance import REQUIRED_FROM, _missing_provenance
+        except ImportError:
+            from verify_update_provenance import REQUIRED_FROM, _missing_provenance
+        if args.date >= REQUIRED_FROM:
+            problems = _missing_provenance(report)
+            if problems:
+                raise ValueError("出所記録が不十分なため更新回を確定できません: " + " / ".join(problems))
     write_json(stage / "cumulative-candidate.json", current + classified)
     if archived_report is not None:
         report["next_collect_at"] = archived_report.get("next_collect_at")
