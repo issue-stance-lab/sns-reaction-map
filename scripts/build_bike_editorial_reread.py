@@ -30,6 +30,7 @@ def build(samples: list[dict], opposition: dict, supplement: dict, additional: d
         raise ValueError("追加根拠は本文再読記録である必要があります")
     labels = {key: label for key, label, *_ in BUCKET_META}
     assignments: dict[str, tuple[str, str]] = {}
+    excluded: list[dict] = []
     groups = [("opposition", [
         {"tweet_id": tid, "bucket": bucket}
         for bucket, ids in opposition["buckets"].items() for tid in ids
@@ -50,8 +51,22 @@ def build(samples: list[dict], opposition: dict, supplement: dict, additional: d
             tid, bucket = item["tweet_id"], item["bucket"]
             if tid in assignments:
                 raise ValueError("本文再読根拠に重複IDがあります")
-            if tid not in by_id or not is_opinion_record(by_id[tid]):
-                raise ValueError("本文再読根拠に正典意見以外のIDがあります")
+            if tid not in by_id:
+                raise ValueError("本文再読根拠に正典に無いIDがあります")
+            if not is_opinion_record(by_id[tid]):
+                # 意見から外した投稿。ただし「なぜ外したか」が正典に記録されている
+                # ときだけ受け入れる。理由の無い除外は、正典が黙って変わった合図
+                # なので今までどおり止める。
+                if not by_id[tid].get("opinion_exclusion_reason"):
+                    raise ValueError("本文再読根拠に正典意見以外のIDがあります"
+                                     "（意見から外すなら opinion_exclusion_reason を正典へ記録する）")
+                excluded.append({
+                    "tweet_id": tid, "bucket": bucket, "source_id": source_id,
+                    "main_issue_at_exclusion": by_id[tid]["classification"]["main_issue"],
+                    "exclusion_reason": by_id[tid]["opinion_exclusion_reason"],
+                    "decided_at": by_id[tid].get("opinion_exclusion_decided_at", ""),
+                })
+                continue
             if source_id == "additional":
                 if item.get("body_reviewed") is not True or item.get("review_kind") != "editorial_body_reread":
                     raise ValueError("追加項目に明示的な本文再読証拠がありません")
@@ -107,6 +122,17 @@ def build(samples: list[dict], opposition: dict, supplement: dict, additional: d
         counts = Counter(x["bucket"] for x in items)
         out["population"][issue] = len(items)
         out[issue] = {"buckets": {b: {"label": labels[b], "count": n} for b, n in sorted(counts.items())}, "items": items}
+    if excluded:
+        out["excluded_from_opinions"] = {
+            "decided_at": "2026-09-06",
+            "decided_by": "CEO（オーナー）承認",
+            "reason": "意見でない投稿（ニュース共有・制度の告知・話題の例示・文脈不足）を意見の母数から外す。"
+                      "自転車だけが全件を意見扱いにしており、他テーマと数え方が違っていた。",
+            "note": "本文を読んだ記録として保持する。意見へ戻す判断をした場合はここから復元できる。",
+            "count": len(excluded),
+            "breakdown": dict(Counter(x["exclusion_reason"] for x in excluded)),
+            "items": sorted(excluded, key=lambda x: x["tweet_id"]),
+        }
     return out
 
 
