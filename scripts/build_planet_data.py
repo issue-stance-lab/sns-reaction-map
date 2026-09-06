@@ -25,6 +25,11 @@ import yaml
 
 from public_registry_common import is_opinion_record
 
+try:
+    from .verification_data import record_id_hash
+except ImportError:
+    from verification_data import record_id_hash  # type: ignore[no-redef]
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -54,20 +59,87 @@ def latest_read_date(read_at: str) -> date:
     return max(date.fromisoformat(d) for d in found)
 
 
+def opinion_flag(post: dict) -> bool | None:
+    """新形式（classification内）と自転車の旧形式（直下）を明示的に読む。
+
+    値が無い投稿を「意見でない」として黙って捨てない。母数が静かに縮むため、
+    呼び出し側で止める（課題63 段階A）。
+    """
+    classification = post.get("classification") or {}
+    nested = classification.get("is_opinion") if isinstance(classification, dict) else None
+    if isinstance(nested, bool):
+        return nested
+    legacy = post.get("is_opinion")
+    return legacy if isinstance(legacy, bool) else None
+
+
+def _text_sha256(post: dict) -> str:
+    return hashlib.sha256(str(post.get("text") or "").encode("utf-8")).hexdigest()
+
+
+def load_fetch_history_recovery(path: Path, canonical_path: Path) -> dict[str, dict]:
+    """本文を含まない取得履歴の証拠を、同じ正典版にだけ結び付ける（課題63 段階A）。"""
+    if not path.is_file():
+        return {}
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict) or value.get("schema") != 1:
+        raise SystemExit(f"取得履歴の検証サマリの形式が不正です: {path}")
+    expected = value.get("canonical", {}).get("sha256")
+    actual = hashlib.sha256(canonical_path.read_bytes()).hexdigest()
+    if expected != actual:
+        raise SystemExit(
+            f"取得履歴の検証サマリが正典と別版です: {path}。"
+            "正典を変えたら復元候補を再照合してください。")
+    records = value.get("records")
+    if not isinstance(records, list):
+        raise SystemExit(f"取得履歴の検証サマリにrecords配列がありません: {path}")
+    indexed = {str(row.get("record_id_hash")): row for row in records if isinstance(row, dict)}
+    if len(indexed) != len(records):
+        raise SystemExit(f"取得履歴の検証サマリに重複した記録があります: {path}")
+    return indexed
+
+
+def recovered_date(post: dict, recovery: dict[str, dict]) -> date | None:
+    """正典に取得日時が無い投稿を、本文一致で確かめた旧観測記録から埋める。
+
+    正典の fetched_at を書き換えるのではない。再読時点までに存在したかを
+    判定するためだけに、本文が一致する過去の観測日時を使う。
+    確かめられないものは None を返し、呼び出し側で「不明」として検査を止める。
+    """
+    evidence = recovery.get(record_id_hash(post))
+    if not evidence or evidence.get("status") != "confirmed_observation":
+        return None
+    if evidence.get("canonical_text_sha256") != _text_sha256(post):
+        return None
+    dates = [x.get("fetched_at") for x in evidence.get("observations", []) if isinstance(x, dict)]
+    dates = [v for v in dates if isinstance(v, str) and v]
+    if not dates:
+        return None
+    return min(datetime.fromisoformat(v.replace("Z", "+00:00")).date() for v in dates)
+
+
 def unread_breakdown(canonical: list[dict], issue_key: str, read_ids: set[str],
-                     read_at: date, *, review_date_uncertain: bool = False) -> tuple[int, int, int]:
+                     read_at: date, *, review_date_uncertain: bool = False,
+                     recovery: dict[str, dict] | None = None) -> tuple[int, int, int]:
     """取得日/再読境界が不明な分を、読み飛ばしや読了後増分へ推測で割り振らない。"""
     skipped = grown = unknown = 0
+    recovery = recovery or {}
     for post in canonical:
         c = post.get("classification") or {}
-        if not is_opinion_record(post) or c.get("main_issue") != issue_key:
+        if c.get("main_issue") != issue_key:
+            continue
+        if opinion_flag(post) is None:
+            raise SystemExit(
+                f"「{issue_key}」に意見判定が無い投稿があります: {post.get('tweet_id')}。"
+                "意見でないものとして黙って除外しません。")
+        if not is_opinion_record(post):
             continue
         if str(post["tweet_id"]) in read_ids:
             continue
         try:
             fetched = datetime.fromisoformat(post["fetched_at"].replace("Z", "+00:00")).date()
         except (KeyError, TypeError, ValueError, AttributeError):
-            fetched = None
+            fetched = recovered_date(post, recovery)
         if fetched is None or review_date_uncertain:
             unknown += 1
         elif fetched <= read_at:
@@ -78,9 +150,10 @@ def unread_breakdown(canonical: list[dict], issue_key: str, read_ids: set[str],
 
 
 def split_unread(canonical: list[dict], issue_key: str, read_ids: set[str],
-                  read_at: date) -> tuple[int, int]:
+                  read_at: date, recovery: dict[str, dict] | None = None) -> tuple[int, int]:
     """従来呼出用。日時不明を黙って落とす2区分の返却は禁止する。"""
-    skipped, grown, unknown = unread_breakdown(canonical, issue_key, read_ids, read_at)
+    skipped, grown, unknown = unread_breakdown(canonical, issue_key, read_ids, read_at,
+                                               recovery=recovery)
     if unknown:
         raise SystemExit(f"「{issue_key}」の未読{unknown}件は取得日時が不明です。")
     return skipped, grown
@@ -335,6 +408,7 @@ def build(topic: str) -> dict:
     # --- 下位論点（島）。再読データがある論点だけ割れる
     sub_cfg = cfg.get("sub_issues") or {}
     canonical_posts = None  # 読み飛ばし判定にだけ使う。陸地の集計（counts）はここへ戻さない
+    fetch_recovery: dict[str, dict] = {}
     issues = []
     for i, k in enumerate(keys):
         ic = issues_cfg[k]
@@ -347,7 +421,13 @@ def build(topic: str) -> dict:
             if sc.get("item_issue_field"):
                 records = [r for r in records if r.get(sc["item_issue_field"]) == k]
             if canonical_posts is None:
-                canonical_posts = json.loads((ROOT / t["sample_file"]).read_text())
+                canonical_path = ROOT / t["sample_file"]
+                canonical_posts = json.loads(canonical_path.read_text())
+                # 取得日時が欠ける投稿のための復元候補（課題63 段階A）。
+                # 正典と同じ版でだけ結び付く。無ければ空で、未読は「不明」のまま止まる。
+                fetch_recovery = load_fetch_history_recovery(
+                    ROOT / "data" / "verification" / f"{topic}-fetch-history-recovery.json",
+                    canonical_path)
             read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}
                      for bid, b in raw.items()]
@@ -357,7 +437,8 @@ def build(topic: str) -> dict:
             read_at = latest_read_date(sc.get("read_at", raw_full.get("read_at")))
             skipped, grown, unknown = unread_breakdown(
                 canonical_posts, k, read_ids, read_at,
-                review_date_uncertain=sc.get("review_date_uncertain", False))
+                review_date_uncertain=sc.get("review_date_uncertain", False),
+                recovery=fetch_recovery)
             if skipped + grown + unknown != gap:
                 raise SystemExit(
                     f"「{k}」の未読内訳（読み飛ばし{skipped}件+増分{grown}件+時期不明{unknown}件）が"
