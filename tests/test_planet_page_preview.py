@@ -119,6 +119,21 @@ class ProgressVisibilityTest(unittest.TestCase):
                         block, r"#progress\s+\.how\{[^}]*display:\s*none",
                         "狭い画面で増やし方の説明を消している")
 
+    def test_progress_stays_below_the_sticky_header(self):
+        # ヘッダーも上へ貼り付き、こちらより手前にいる。top:0 のままだと
+        # スクロール中にヘッダーの下へ潜り込んで消える（オーナー指摘 2026-09-06）
+        for theme in self.THEMES:
+            page = ROOT / "quality/prototypes" / f"{theme}-page-preview.html"
+            if not page.exists():
+                continue
+            with self.subTest(theme=theme):
+                html = page.read_text()
+                self.assertRegex(html, r"#progress\{position:sticky;top:var\(--isa-header-h")
+                self.assertNotRegex(html, r"#progress\{position:sticky;top:0")
+                # 高さは実測して入れる。決め打ちだと共通ヘッダーが変わった日に静かに隠れる
+                self.assertIn("--isa-header-h", html)
+                self.assertIn("getBoundingClientRect().height", html)
+
     def test_template_lights_segments(self):
         # 区画を点ける処理はテンプレート側にある。落とすと入れ物が空のままになる
         tpl = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text()

@@ -243,8 +243,11 @@ LIGHT_SKIN = """
 #planet-block a.go-card{display:inline-block;background:var(--accent);color:#fff;
   font-weight:700;font-size:14px;text-decoration:none;border-radius:8px;padding:10px 18px}
 #planet-block a.go-card:hover{filter:brightness(1.08)}
-/* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」） */
-#progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;
+/* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」）。
+   ヘッダーも同じく上へ貼り付き、こちらより手前（z-index 1000）にいる。top:0 のままだと
+   スクロール中ヘッダーの下に隠れて消えて見えた（オーナー指摘 2026-09-06）。
+   ヘッダーの高さは画面幅で変わるので、下の PROGRESS_STICK_JS が実測して入れる。 */
+#progress{position:sticky;top:var(--isa-header-h,0px);z-index:60;display:flex;align-items:center;gap:10px;
   flex-wrap:wrap;row-gap:4px;
   padding:9px clamp(14px,4vw,28px);background:#fff;border-bottom:1px solid #DCE3EF;font-size:13px;color:#42527A}
 /* 帯は残すが表には出さない。paintProgress() が #pbar の幅を書き続けるので、
@@ -323,6 +326,29 @@ VOTE_MSG_CSS = """
 #vote-msg.err{background:#FDECEC;border:1px solid #E4B4B0;color:#8E2318}
 #vote-msg.info{background:#E7EEFE;border:1px solid #B9CCE6;color:#0B3FA8}
 #vote-msg .ic{flex:none;font-size:16px;line-height:1.5}
+"""
+
+PROGRESS_STICK_JS = """
+(function(){
+  /* 進み具合の帯を、貼り付いたヘッダーのすぐ下で止める。
+     ヘッダーの高さは画面幅で変わる（スマホ63px・パソコン73px）ため実測する。
+     高さを決め打ちにすると、共通ヘッダーが変わった日に静かに隠れる。 */
+  function fit(){
+    var h = document.querySelector("header.modern-site-header") || document.querySelector("header");
+    var px = 0;
+    if (h){
+      var cs = getComputedStyle(h);
+      /* 上に貼り付いているヘッダーだけ避ける。ふつうに流れるヘッダーなら避ける必要がない */
+      if ((cs.position === "sticky" || cs.position === "fixed") && parseFloat(cs.top || "0") === 0){
+        px = Math.round(h.getBoundingClientRect().height);
+      }
+    }
+    document.documentElement.style.setProperty("--isa-header-h", px + "px");
+  }
+  fit();
+  addEventListener("load", fit);
+  addEventListener("resize", fit);
+})();
 """
 
 VOTE_MSG_JS = """
@@ -751,6 +777,7 @@ def main() -> None:
            '<span class="track"><i id="pbar"></i></span>'
            '<span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b>'
            '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>')
+    bar += f"<script>{PROGRESS_STICK_JS}</script>"
     html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + bar, html, count=1)
 
     # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す。
