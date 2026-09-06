@@ -52,6 +52,14 @@ class PlanetRereadRegistryTest(unittest.TestCase):
         self.assess.assert_not_called()
         bpd.validate_registry_membership(None, [{"tweet_id": "1"}], "issue")
 
+    def test_migrated_theme_cannot_bypass_guard_by_deleting_registry(self):
+        self.write_manifest()
+        self.assertEqual(bpd.load_reread_registry("example", [], required=True), self.manifest)
+        self.path.unlink()
+        with self.assertRaisesRegex(SystemExit, "必須"):
+            bpd.load_reread_registry("example", [], required=True)
+        self.assertEqual(self.assess.call_count, 1)
+
     def test_unchanged_review_loads_and_matches_bucket(self):
         manifest = self.load()
         bpd.validate_registry_membership(manifest, [{"tweet_id": "1", "bucket": "A"}], "issue")

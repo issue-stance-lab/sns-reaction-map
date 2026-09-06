@@ -189,10 +189,13 @@ def validate_reread_records(records: list[dict], buckets: dict, canonical: list[
     return set(ids)
 
 
-def load_reread_registry(topic: str, canonical: list[dict]) -> dict | None:
+def load_reread_registry(topic: str, canonical: list[dict], *,
+                         required: bool = False) -> dict | None:
     """共通台帳があるテーマは、記録の出所と現行本文の版を検査する。"""
     path = ROOT / "data" / "verification" / "reread" / f"{topic}.json"
     if not path.exists():
+        if required:
+            raise SystemExit(f"「{topic}」の必須の再読共通台帳がありません: {path}")
         return None  # 未移行テーマの既存検査はそのまま継続する
     from reread_registry import assess
 
@@ -473,7 +476,8 @@ def build(topic: str) -> dict:
             if canonical_posts is None:
                 canonical_path = ROOT / t["sample_file"]
                 canonical_posts = json.loads(canonical_path.read_text())
-                reread_registry = load_reread_registry(topic, canonical_posts)
+                reread_registry = load_reread_registry(
+                    topic, canonical_posts, required=bool(cfg.get("reread_registry")))
                 # 取得日時が欠ける投稿のための復元候補（課題63 段階A）。
                 # 正典と同じ版でだけ結び付く。無ければ空で、未読は「不明」のまま止まる。
                 fetch_recovery = load_fetch_history_recovery(
