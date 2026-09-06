@@ -1,0 +1,452 @@
+{
+  "schema_version": 1,
+  "scope": "three supported next20 candidates; isolated only",
+  "changes": [
+    {
+      "topic": "consumption-tax-cut",
+      "index": 3,
+      "before": {
+        "collected": 3762,
+        "opinions": 3358,
+        "issues": {
+          "減税の対象範囲": 761,
+          "給付など他策との比較": 219,
+          "公約と政治不信": 1198,
+          "減税の効果": 625,
+          "財源と社会保障": 416,
+          "その他": 48,
+          "事業者の実務負担": 91
+        },
+        "stances": {
+          "条件付き賛成・政府案に不満": 585,
+          "減税推進": 1631,
+          "減税反対・慎重": 876,
+          "中立・情報": 266
+        }
+      },
+      "after": {
+        "collected": 3762,
+        "opinions": 3359,
+        "issues": {
+          "減税の対象範囲": 761,
+          "給付など他策との比較": 219,
+          "公約と政治不信": 1199,
+          "減税の効果": 625,
+          "財源と社会保障": 416,
+          "その他": 48,
+          "事業者の実務負担": 91
+        },
+        "stances": {
+          "条件付き賛成・政府案に不満": 585,
+          "減税推進": 1631,
+          "減税反対・慎重": 876,
+          "中立・情報": 267
+        }
+      },
+      "candidate_sha256": "475c9c8b92fbd17d9e1dcd22a6c093642a4997b1f947d62e876e8a9df324e712"
+    },
+    {
+      "topic": "ai-copyright",
+      "index": 10,
+      "before": {
+        "collected": 3812,
+        "opinions": 2593,
+        "issues": {
+          "学習データ・無断利用": 657,
+          "AI生成物の権利・創作性": 165,
+          "利用者モラル・倫理": 657,
+          "法制度・規制整備": 471,
+          "その他": 223,
+          "クリエイター保護・権利": 303,
+          "技術競争・推進": 117
+        },
+        "stances": {
+          "規制・制限強化支持": 1407,
+          "推進・活用支持": 609,
+          "中立・情報": 577
+        }
+      },
+      "after": {
+        "collected": 3812,
+        "opinions": 2594,
+        "issues": {
+          "学習データ・無断利用": 657,
+          "AI生成物の権利・創作性": 165,
+          "利用者モラル・倫理": 657,
+          "法制度・規制整備": 471,
+          "その他": 223,
+          "クリエイター保護・権利": 304,
+          "技術競争・推進": 117
+        },
+        "stances": {
+          "規制・制限強化支持": 1408,
+          "推進・活用支持": 609,
+          "中立・情報": 577
+        }
+      },
+      "candidate_sha256": "c4f920ec8a0411ed37998409563622cb971d04e1d6583aef0a9f4512dd1a7e1a"
+    },
+    {
+      "topic": "constitutional-amendment",
+      "index": 12,
+      "before": {
+        "collected": 1556,
+        "opinions": 1372,
+        "issues": {
+          "改憲全般": 513,
+          "国民投票・広告": 196,
+          "政党・発議手続き": 118,
+          "情報・議論の質": 51,
+          "9条・自衛隊": 284,
+          "緊急事態条項": 200,
+          "その他": 10
+        },
+        "stances": {
+          "慎重・反対": 946,
+          "中立": 97,
+          "手続き重視": 39,
+          "改正推進": 290
+        }
+      },
+      "after": {
+        "collected": 1556,
+        "opinions": 1373,
+        "issues": {
+          "改憲全般": 513,
+          "国民投票・広告": 196,
+          "政党・発議手続き": 119,
+          "情報・議論の質": 51,
+          "9条・自衛隊": 284,
+          "緊急事態条項": 200,
+          "その他": 10
+        },
+        "stances": {
+          "慎重・反対": 946,
+          "中立": 98,
+          "手続き重視": 39,
+          "改正推進": 290
+        }
+      },
+      "candidate_sha256": "64df4d0a68beff75c5f5e1d59fd3419368779d8efc709fd8d0aea3b43a9a033d"
+    }
+  ],
+  "idempotent": true,
+  "source_unchanged": true,
+  "vote_and_protected_tags_unchanged": true,
+  "canonical_promoted": false,
+  "checks": [
+    {
+      "args": [
+        "scripts/build_public_registry.py",
+        "--all"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_consumption_tax_page.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/consumption-tax-cut_hermes_arena_classified.json",
+        "--output",
+        "data/verification/consumption-tax-cut.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_ai_copyright_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/ai-copyright_hermes_classified.json",
+        "--output",
+        "data/verification/ai-copyright.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_constitutional_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/constitutional_amendment_hermes_arena_classified.json",
+        "--output",
+        "data/verification/constitutional-amendment.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_public_registry.py",
+        "--all"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_consumption_tax_page.py",
+        "--conditions-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_consumption_tax_page.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "consumption-tax-cut"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_ai_copyright_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "ai-copyright"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_constitutional_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "constitutional-amendment"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/seo/apply_theme_trust.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_portal_stats.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_public_registry.py",
+        "--all"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_consumption_tax_page.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/consumption-tax-cut_hermes_arena_classified.json",
+        "--output",
+        "data/verification/consumption-tax-cut.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_ai_copyright_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/ai-copyright_hermes_classified.json",
+        "--output",
+        "data/verification/ai-copyright.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_constitutional_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/constitutional_amendment_hermes_arena_classified.json",
+        "--output",
+        "data/verification/constitutional-amendment.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_public_registry.py",
+        "--all"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_consumption_tax_page.py",
+        "--conditions-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_consumption_tax_page.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "consumption-tax-cut"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_ai_copyright_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "ai-copyright"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_constitutional_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "constitutional-amendment"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/seo/apply_theme_trust.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_portal_stats.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_theme_page.py",
+        "consumption-tax-cut"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_number_provenance.py",
+        "consumption-tax-cut"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_theme_page.py",
+        "ai-copyright"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_number_provenance.py",
+        "ai-copyright"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_theme_page.py",
+        "constitutional-amendment"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_number_provenance.py",
+        "constitutional-amendment"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_top_page.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_public_registry.py",
+        "--against-private"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "changed_generated_hashes": {
+    "docs/index.html": "9ee9811d459d7e30d20577d833885d48eb524d1bd613465a49dfa460cdcf73e5",
+    "docs/constitutional-amendment-reaction-map.html": "2eb56d57bd950c80b12d7f035040488f05eec109802119d78a672cbaa4f5873f",
+    "docs/ai-copyright-reaction-map.html": "c2a62df1b8f9591319b0c9505269a089076bc28c4b3d889c57939778e9f5ddd9",
+    "docs/consumption-tax-cut-reaction-map.html": "5f4d14f2979b574bbf4615bead80b78bf0048f98bda5627b12ff23e105400548",
+    "docs/ai-copyright-arena-data.js": "56060cdef742878cfa2b10a6aafe50dc9237916bfb138f2507a045e84b39799c",
+    "docs/bike-blue-ticket-reaction-map.html": "2f8273838eb46ecba1654c75b18c95e943e0037a9331e7fd8cf3678c668c0acf",
+    "data/public/catalog.json": "eac3a6ca17c8097fc067667081c880a1737d98d013d7531035cc46b3fa760a6e",
+    "data/public/themes/ai-copyright.json": "10d834ff310c5aa9a588c8e941768bb373c42291b18ac41b96c7699c27410b9d",
+    "data/public/themes/consumption-tax-cut.json": "9352eff443d3ae11997fb18d5df7d6989ecc44c38e51cd43ec73123d38d6f304",
+    "data/public/themes/constitutional-amendment.json": "a62d44a1a603358d315a91c90a4850d59fd8329c7cc274064494c95e62468654"
+  }
+}
