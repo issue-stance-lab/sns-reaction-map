@@ -1,5 +1,6 @@
 """Preview composition must retain notices and vote contracts, and fail closed for publication."""
 from pathlib import Path
+import json
 import sys
 import tempfile
 import unittest
@@ -72,7 +73,9 @@ class PreviewCompositionTest(unittest.TestCase):
                 continue
             with self.subTest(theme=theme):
                 source = (ROOT / "docs" / f"{theme}-reaction-map.html").read_text()
-                data = preview.bpd.stabilize(preview.bpd.build(theme))
+                # Composition is verified from the checked-in display payload. Canonical
+                # reread membership is covered by the separate local data tests.
+                data = json.loads((ROOT / "quality/prototypes/data" / f"{theme}-planet.json").read_text())
                 if theme == "bukatsu-chiiki":
                     result, _ = preview.build_bukatsu(source, data)
                 else:
