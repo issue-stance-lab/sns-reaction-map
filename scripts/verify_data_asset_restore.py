@@ -30,9 +30,14 @@ def restore(archive,receipt,dest):
         expected={r['path']:(r['sha256'],r['bytes'],r['records']) for r in receipt['files']}
         actual={r['path']:(r['sha256'],r['bytes'],r['records']) for r in manifest['files']}
         if actual!=expected:raise ValueError('復元するファイルの範囲が記録と不一致')
+        planned=[]
         for path in expected:
             target=dest/path
+            if not target.resolve().is_relative_to(dest.resolve()) or any(p.is_symlink() for p in [target,*target.parents] if p!=dest and dest in p.parents):
+                raise ValueError('復元先のリンクが保管境界を変更しています')
             if target.exists():raise ValueError('復元先に同名ファイルがあります')
+            planned.append((path,target))
+        for path,target in planned:
             target.parent.mkdir(parents=True,exist_ok=True)
             with tar.extractfile(members[path]) as source:target.write_bytes(source.read())
 

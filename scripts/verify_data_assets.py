@@ -57,6 +57,8 @@ def verify(root=ROOT):
         if row['storage']!='external_evidence':by_path[row['path']]=row
     require({p for p in tracked if p.startswith('social-samples/')}=={r['path'] for r in data['files'] if r['storage']=='git'},'Git資産一覧の欠落・追加')
     require(data['summary']==dict(Counter(r['storage'] for r in data['files'])),'資産集計不一致')
+    persona=[r for r in data['files'] if r['path']=='configs/persona.private.json']
+    require(len(persona)==1 and persona[0]['storage']=='private_backup' and persona[0]['roles']==['private_persona'],'非公開ペルソナの保全対象が欠落')
     themes=yaml.safe_load((root/'THEMES.yaml').read_text())['themes']
     require(data['canonical']=={t:{'path':d['sample_file'],'storage':by_path[d['sample_file']]['storage']} for t,d in themes.items()},'正典保存境界不一致')
     require({r['path']:r['sha256'] for r in data['files'] if r['storage']=='external_evidence'}==external_requirements(root),'採否根拠の参照が変わっています')

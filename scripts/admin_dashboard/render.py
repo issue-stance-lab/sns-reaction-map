@@ -1145,12 +1145,13 @@ def section_data_assets(data: dict) -> str:
                      esc(row["reread_status"])])
     backup = assets.get("backup", {})
     inventory = assets.get("inventory", {})
-    inventory_counts = " / ".join(esc(k) + ": " + esc(fmt_num(v)) for k, v in inventory.get("summary", {}).items())
-    coverage_rows = [[esc(k), esc({"verified": "照合済み", "missing": "欠落あり", "stale": "変更あり"}[v["status"]]), esc(v["missing"]), esc(v["changed"])] for k, v in inventory.get("coverage", {}).items()]
+    storage_labels = {"git": "Gitで保管", "private_backup": "非公開原本", "external_evidence": "採否の根拠", "private": "非公開原本", "external": "採否の根拠"}
+    inventory_counts = " / ".join(esc(storage_labels.get(k,k)) + ": " + esc(fmt_num(v)) for k, v in inventory.get("summary", {}).items())
+    coverage_rows = [[esc(storage_labels.get(k,k)), esc({"verified": "照合済み", "missing": "欠落あり", "stale": "変更あり"}[v["status"]]), esc(v["missing"]), esc(v["changed"])] for k, v in inventory.get("coverage", {}).items()]
     operations = [[esc(op["title"]), esc(op["owner"]), esc(op["due_at"]),
                    '完了' if op["status"] == 'done' else ('期限超過' if op["overdue"] else '予定'),
                    esc(op["task"]), esc(op["next_action"])] for op in assets.get("operations", [])]
-    return f'''<section id="data-assets"><h2>データの品質と保全</h2>
+    return f'''<section id="data-assets" style="overflow-wrap:anywhere"><h2>データの品質と保全</h2>
 <p class="lead">全11テーマ（公開対象10・非掲載1）の管理。保存IDは指定した保存回の範囲です。正典外は採用漏れと断定せず、判断状態を分けています。</p>
 <p>{esc(assets.get("adoption_status", "未確認"))}<br>照合日時: {esc(assets.get("snapshot_at") or "未確認")}</p>
 {table(["テーマ", "正典", "保存ID", "確認待ち", "判断不明", "記録なし", "除外確認", "再読: 意見 / 意見外 / 未読意見", "再読台帳の状態"], rows)}

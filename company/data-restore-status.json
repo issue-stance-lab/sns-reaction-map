@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-06T14:05:09.465105+00:00",
+  "git_commit": "fdd45cb8d508b40c602043fb8f7ea16b1fbb68cd",
+  "method": "same_machine_clean_git_clone_and_two_archives",
+  "physical_other_machine": false,
+  "asset_content_sha256": "be548800163b609cd6ddfdc47f2e9843ac770b275ebb999f0284744c5fff9be8",
+  "private_archive_sha256": "e31d0872457409b97b0612ab24d8db2672b8a6af15ecdce1d7f4c43719887d2b",
+  "external_archive_sha256": "a0a9c1f053d703e92ba7cc03d94774690d65e66b40c2390869ef68cfe5ebe8d8",
+  "checks": [
+    {
+      "check": "scripts/data_asset_inventory.py",
+      "passed": true
+    },
+    {
+      "check": "scripts/build_adoption_registry.py",
+      "passed": true
+    },
+    {
+      "check": "scripts/verify_public_registry.py",
+      "passed": true
+    },
+    {
+      "check": "scripts/verify_reread_registry.py",
+      "passed": true
+    },
+    {
+      "check": "scripts/verify_builder_rebuildability.py",
+      "passed": true
+    },
+    {
+      "check": "scripts/verify_data_assets.py",
+      "passed": true
+    }
+  ],
+  "restore_and_rebuild_verified": true
+}
