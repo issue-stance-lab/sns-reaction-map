@@ -596,7 +596,8 @@ SCRIPT = """<script id="process-found-anim">
 </script>"""
 
 
-# 冒頭3セクションの件数は、AI分類ではなく編集部が1件ずつ割り当てた結果から出ている。
+# 冒頭3セクションの件数は、賛成のAI分類と反対の編集再読を併記している。
+# この数値出所配列全体を本文再読の台帳として扱わない。各行に根拠種別を付ける。
 # 数字の出所検査（scripts/verify_number_provenance.py）は「レコードの配列」しか正典に
 # できないため、割り当てを配列の形で書き出しておく。ページと同じ手順で作るので、
 # 読み直しを足し忘れればここも一緒にずれ、検査で落ちる。
@@ -617,6 +618,8 @@ def write_provenance_records(
         return {
             "tweet_id": tid,
             "bucket": bucket,
+            "review_kind": "editorial_body_reread" if listed else "automated_classification",
+            "body_reviewed": listed,
             # 本文に出る「うちN件は署名の定型文」「N件は抜粋を載せず」を、この配列から数える。
             # ページに出るのと同じ範囲でだけ "yes" / "hidden" にする。範囲を広げると、
             # 数字の出所検査（1次元の集計）とページの数字が合わなくなる。

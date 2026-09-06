@@ -1,0 +1,102 @@
+# 件数は再読台帳と正典から生成する。既存投票順を維持する。
+theme_id: bike-blue-ticket
+title: 自転車の青切符導入
+question: 自転車の交通違反に反則金（青切符）を導入すべきか
+source_label: Yahoo!リアルタイム検索
+stances:
+- key: enforcement_support
+  id: bike-blue-ticket-enforcement-support
+  label: 賛成（取締り強化）
+  color: '#e04949'
+  pattern: plain
+- key: infrastructure_first
+  id: bike-blue-ticket-infrastructure-first
+  label: 反対（インフラ・制度優先）
+  color: '#4b9cf4'
+  pattern: diagonal
+- key: neutral
+  id: bike-blue-ticket-neutral
+  label: どちらでもない
+  color: '#8B9199'
+  pattern: mesh
+issues:
+- key: 取締り強化賛成
+  id: bike-blue-ticket-enforcement-support
+  icon: 🚔
+- key: インフラ整備優先
+  id: bike-blue-ticket-infrastructure-first
+  icon: 🚲
+- key: 車道走行への不安
+  id: bike-blue-ticket-road-safety
+  icon: ⚠️
+- key: 免許制要求
+  id: bike-blue-ticket-license-requirement
+  icon: 📋
+- key: ルール曖昧・不信
+  id: bike-blue-ticket-rule-ambiguity
+  icon: ❓
+- key: その他
+  id: bike-blue-ticket-other
+  icon: 💬
+vote_issue_order:
+- 取締り強化賛成
+- インフラ整備優先
+- 車道走行への不安
+- 免許制要求
+- ルール曖昧・不信
+- その他
+sub_issues:
+  取締り強化賛成:
+    file: data/bike-blue-ticket_issues-reread.json
+    path:
+    - 取締り強化賛成
+    - buckets
+    coverage: partial
+    coverage_note: 過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。
+    review_date_uncertain: true
+  インフラ整備優先:
+    file: data/bike-blue-ticket_issues-reread.json
+    path:
+    - インフラ整備優先
+    - buckets
+    coverage: partial
+    coverage_note: 過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。
+    review_date_uncertain: true
+  車道走行への不安:
+    file: data/bike-blue-ticket_issues-reread.json
+    path:
+    - 車道走行への不安
+    - buckets
+    coverage: partial
+    coverage_note: 過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。
+    review_date_uncertain: true
+  免許制要求:
+    file: data/bike-blue-ticket_issues-reread.json
+    path:
+    - 免許制要求
+    - buckets
+    coverage: partial
+    coverage_note: 過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。
+    review_date_uncertain: true
+  ルール曖昧・不信:
+    file: data/bike-blue-ticket_issues-reread.json
+    path:
+    - ルール曖昧・不信
+    - buckets
+    coverage: full
+    coverage_note: 過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。
+    review_date_uncertain: true
+  その他:
+    file: data/bike-blue-ticket_issues-reread.json
+    path:
+    - その他
+    - buckets
+    coverage: partial
+    coverage_note: 過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。
+    review_date_uncertain: true
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
