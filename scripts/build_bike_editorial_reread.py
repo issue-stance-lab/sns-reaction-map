@@ -12,6 +12,7 @@ from collections import Counter
 from pathlib import Path
 
 from build_bike_process_sections import BUCKET_META
+from public_registry_common import is_opinion_record
 
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = "social-samples/bike-blue-ticket_2d_classified.json"
@@ -34,10 +35,12 @@ def build(samples: list[dict], opposition: dict, supplement: dict) -> dict:
     ]), ("supplement", supplement["items"])]
     for source_id, items in groups:
         for item in items:
+            if item.get("body_reviewed") is False or item.get("review_kind") == "automated_classification":
+                raise ValueError("自動分類または本文未確認の項目を再読へ変換できません")
             tid, bucket = item["tweet_id"], item["bucket"]
             if tid in assignments:
                 raise ValueError("本文再読根拠に重複IDがあります")
-            if tid not in by_id or not by_id[tid].get("is_opinion"):
+            if tid not in by_id or not is_opinion_record(by_id[tid]):
                 raise ValueError("本文再読根拠に正典意見以外のIDがあります")
             if bucket not in labels:
                 raise ValueError("本文再読根拠に未登録の区分があります")

@@ -53,6 +53,19 @@ class BikeEditorialRereadTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             build(samples, self.opposition, self.supplement)
 
+    def test_item_level_denial_cannot_be_overwritten_as_reviewed(self):
+        for flag in [{"body_reviewed": False}, {"review_kind": "automated_classification"}]:
+            supplement = copy.deepcopy(self.supplement)
+            supplement["items"][0].update(flag)
+            with self.subTest(flag=flag), self.assertRaises(ValueError):
+                build(self.samples, self.opposition, supplement)
+
+    def test_nested_opinion_flag_takes_precedence_over_legacy(self):
+        samples = copy.deepcopy(self.samples)
+        samples[1]["classification"]["is_opinion"] = False
+        with self.assertRaises(ValueError):
+            build(samples, self.opposition, self.supplement)
+
     def test_number_provenance_retains_automatic_counts_but_marks_no_body_review(self):
         with tempfile.TemporaryDirectory() as d:
             write_provenance_records(self.samples, self.opposition, {"claims": {}}, Path(d))
