@@ -76,5 +76,27 @@ class RereadEvidenceTest(unittest.TestCase):
         self.assertTrue(any('時' in f and '不明' in f for f in failures))
 
 
+class ConnectedThemeRegressionTest(unittest.TestCase):
+    def test_bike_counts_only_existing_body_review_and_stops_release(self):
+        data = bpd.build("bike-blue-ticket")
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 206)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 262)
+        self.assertEqual(sum(i["sub"]["unknown_timing_count"] for i in data["issues"]), 262)
+        cfg = bpd.yaml.safe_load((bpd.ROOT / "configs/planet/bike-blue-ticket.yaml").read_text())
+        self.assertTrue(bpd.independence_gate(data, cfg))
+        rendered = bpd.static_fallback(data)
+        self.assertNotIn("enforcement_support", rendered)
+        self.assertIn("賛成（取締り強化）", rendered)
+        self.assertEqual(data["modes"][1]["label"], cfg["stances"][0]["label"])
+        self.assertEqual(data["modes"][1]["id"], cfg["stances"][0]["key"])
+
+    def test_elderly_flat_items_filter_each_issue_without_duplication(self):
+        data = bpd.build("elderly-license-revocation")
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 250)
+        reviewed = [i for i in data["issues"] if i["sub"]["status"] == "reread"]
+        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [29, 221])
+        self.assertTrue(all(i["sub"]["unread_count"] == 0 for i in reviewed))
+
+
 if __name__ == '__main__':
     unittest.main()

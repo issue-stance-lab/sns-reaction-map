@@ -299,7 +299,7 @@ def build(topic: str) -> dict:
 
     # --- 面積（最小面積の床つき）。立場フィルターごとに作り直す
     modes = []
-    mode_defs = [("all", "すべての意見", None)] + [(s, s, s) for s in stances]
+    mode_defs = [("all", "すべての意見", None)] + [(s["key"], s["label"], s["key"]) for s in cfg["stances"]]
     for mode_id, label, stance_key in mode_defs:
         if stance_key is None:
             sub = {k: counts[k] for k in keys}
@@ -599,11 +599,11 @@ def static_fallback(d: dict) -> str:
             f'<span class="count">{it["count"]}件・{it["share_pct"]}%</span></a>')
 
         legend = "".join(
-            f'<span><i style="background:{e(stance[k]["color"])}"></i>{e(k)} {n}件</span>'
+            f'<span><i style="background:{e(stance[k]["color"])}"></i>{e(stance[k]["label"])} {n}件</span>'
             for k, n in it["stances"].items() if n)
         bar = "".join(
             f'<span style="width:{100 * n / it["count"]:.1f}%;background:{e(stance[k]["color"])};'
-            f'color:{text_on(stance[k]["color"])}">{e(k) if 100 * n / it["count"] >= 12 else ""}</span>'
+            f'color:{text_on(stance[k]["color"])}">{e(stance[k]["label"]) if 100 * n / it["count"] >= 12 else ""}</span>'
             for k, n in it["stances"].items() if n)
 
         body = [
