@@ -1,0 +1,1724 @@
+{
+  "schema_version": 1,
+  "method": "offline_saved_response_diff_v1",
+  "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+  "criteria_sha256": "0ac5e89c4f4458c96b98cc9e15386c52f06c47780ee55ed42c75beed257f5dc5",
+  "reference_sha256": "62d707d8f0126625e250c322fe25a3946705ca969b1977dbe9a6a77cef4ddbea",
+  "source_batches": {
+    "pilot-ai-copyright.json": "6dd9e9ecfeef6c9efb59d4d9be00e3c9f3fd35cbc945346a1405353e4c30559f",
+    "pilot-bukatsu-chiiki.json": "f67c6ca207a75a29767c1bd20823f82b7e89040ae5c5860443f2e86979870a5b",
+    "pilot-constitutional-amendment.json": "dc0835e65fe2c205cd985c867e695fc1700381558d07c8eeba20fc25ccd39d92",
+    "pilot-consumption-tax-cut.json": "898dab7d00ce82e24693edfa6c55cc568bd41411897e37cecaabe3aead57eee8",
+    "pilot-elderly-license-revocation.json": "73754f735a7bab18ead47cd4aad562416a4f57ed7c459704c01bd9f2d4731d05",
+    "pilot-fukushuto.json": "41948d52f79e9c694b4576104c3e56eeb1233b066819b89a53ef4b5b1fa99a6e",
+    "pilot-henoko-student-accident.json": "ca6734e3e2faa9e5b593bd3318dffbc4f2b63d2fc011c69daa2e26629f5bb2e0",
+    "pilot-koshitsu-tenpakai.json": "945a9ac6ce01a8054fd461aca2fb47ca715d7138dde4e7b92cd12d6b14cdc645",
+    "pilot-school-nickname-ban.json": "23364a4ae46108006a9f4580eec1107bbef38f1c8cc5ff791ccbfb42571cea00",
+    "pilot-takaichi.json": "a269e72b41e6c8b452c709273950483169838b3d0aa57df4e733cfcd86b9f1a9",
+    "smoke-ai-copyright.json": "75a7fa23897eb86c96b432d43049d112bf438b14fc9426806468e59e3e8325d5",
+    "smoke-bukatsu-chiiki.json": "db7b22d011151150a294e8739aab08b09f2cdf76c9fccb0b5e99de92ccc64c8e",
+    "smoke-constitutional-amendment.json": "396e172d25702ba2fa680a6617a6257540cfa32f6000ead8da4788c74e8d1409",
+    "smoke-consumption-tax-cut.json": "d1d35e93ee8936a25cd7f37c64e58fd49b1a8b4d9cac37554d0c0ac5da3c0159",
+    "smoke-elderly-license-revocation.json": "2bda901790375983c7703961f9d6ef797e065ac5a954c4f31d87a99d091b15cd",
+    "smoke-fukushuto.json": "5965f20ed607591f094b30a3f20e490681f8563769abac32aa87bd548afb1126",
+    "smoke-henoko-student-accident.json": "c80068553d2c46931fb4c7ddf7bcdcbd25758f131924f7330e8882d2c0ccca76",
+    "smoke-koshitsu-tenpakai.json": "9c9e3bd4abd710b16228ee51771af2c7f299489c5a1599cfea53afeed998d090",
+    "smoke-school-nickname-ban.json": "9b2678bb508ed364f0ec779ec15ac050d12f58cae517b29e8570ed6c2b22b401",
+    "smoke-takaichi.json": "72b36aeb09fe303ef13d427301e4c7b8aa832b74019f9630f12720b7a1de80df"
+  },
+  "unique_records": 100,
+  "additional_model_calls": 0,
+  "additional_local_model_tokens": 0,
+  "codex_conversation_tokens": "not_measured",
+  "automatic_editorial_credit": 0,
+  "canonical_changes": 0,
+  "production_rollout_allowed": false,
+  "routes": {
+    "contradictory_candidate": 55,
+    "uncertain_pending_review": 15,
+    "candidate_pending_review": 16,
+    "invalid_pending_review": 1,
+    "ok_pending_review": 13
+  },
+  "mixed_proposals_recovered": 5,
+  "priority_records": 4,
+  "journal": [
+    {
+      "sample_id": "ai-copyright:1",
+      "record_id_hash": "sha256:0e8160f99af596fd1955d7b9d63d3dfd6c269fd0aa57fe2b9196802e8533c40f",
+      "body_sha256": "75f1a3ab06d75febbe2ec053d885f066a58b9f88012b69e11de6804089c7e656",
+      "classification_sha256": "3b72f810eaf33655c093d42a9f44079d80cb6865c25af3814e3e55eeb69c2810",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "independent_disagreement"
+    },
+    {
+      "sample_id": "ai-copyright:10",
+      "record_id_hash": "sha256:002377343ea2b30d89345f50fa4edec6ef0a90bc86e2d55f97466097eb87de94",
+      "body_sha256": "d01e23f8dfbee2ea00883aedb5f7e31b709df61cae5e0287be2da890b5075beb",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:2",
+      "record_id_hash": "sha256:008d96892b216dd3feb53c2bd07db53f15be79c33f0322007b64966f1e18162b",
+      "body_sha256": "aca2b65eccb845b9cc0557aa0920b3e6c6c01bc9031bf480dc1c1d047538268b",
+      "classification_sha256": "201e628a12be9a3e6dbe557cc1de599eb77ba28a5fbb7dc6c54d84a25875fabb",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:3",
+      "record_id_hash": "sha256:00484a1de44c77420ddf0b1ebe1cc3ff868ed9e89afc148e2424238f3427aaf9",
+      "body_sha256": "852bf097226350908fd34d3ca0ebb6f947c4ac29e284ea43b46ba6c98791eb67",
+      "classification_sha256": "05ddd1d37a4146ced84a07993adf12bdd3d1e461f13061b8118f1b57119e0241",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:4",
+      "record_id_hash": "sha256:032f96cf5c3801e5aee34e2d7301dc4abb2e0af2cb2645d3e63323787793ea9c",
+      "body_sha256": "f3c7bca7a5a4fc9793f74e1e249c93b970c1b9278ab7694a2944e0ad06c0b294",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:5",
+      "record_id_hash": "sha256:013c1ab06789335a407cbab8fb1f633f1b9992de59e8d33a861e8d40c426be04",
+      "body_sha256": "dde8d1f0f9ba6e384cf84d7967aa9968fe1c8bb9cb8b3fbbd1662744256ef059",
+      "classification_sha256": "d75f72b2b17d97936318fb54ce5978b612966e5f213af5c044b13a89a936dd82",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:6",
+      "record_id_hash": "sha256:0ccc660bc5e32c0cca2cc401381901d024bf117fae18ecc90be47413e76e3c1f",
+      "body_sha256": "b5dc240f585f3c3d03b3b72e1af9687acd637eda8505bf1f7184429f2639c152",
+      "classification_sha256": "6be8532f028ff3830619619a5f62304bbe666ccf349ccc98a6fd9e1acfc96c57",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:7",
+      "record_id_hash": "sha256:17097bb15be4a404345e5dff10109f7aba18ce28d720648d5a17d19c6bf3e70e",
+      "body_sha256": "096a83cc1c79c481a3bea1b8b9b2741da5e39a9f018fd755eb1c54b5806fdca8",
+      "classification_sha256": "da6bef5edde02eebedea50ba20f92163ff8fd6be7f6e6084157a7f616be8b25c",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:8",
+      "record_id_hash": "sha256:0b54ca54447966f44a43ace810c03b3de34554d275a57023a805a73422b63a11",
+      "body_sha256": "e9074358334d382ffd5b1d789719424b6cbbd1e374faefe26fa000566a7b1582",
+      "classification_sha256": "d565d7a942e4ee6683c6a3ed5b87daa15919762070318b6259f2b028e2524385",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "ai-copyright:9",
+      "record_id_hash": "sha256:077985b8f8291066f029791bc307657141e979f2a096f0b2056cefa3321490a5",
+      "body_sha256": "fd8d9e0fc11c3775912f9d57f5972c71836cf2ead700e613454b5c0cd772bd1f",
+      "classification_sha256": "725f57451728f758f7f5e0038cc373507469a2c22f7cb8ca84d3502dc6828af9",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:1",
+      "record_id_hash": "sha256:00244ebd5cfbfc35179768415f8c4075ed0c4183858c6b6818e4a4a924c871bd",
+      "body_sha256": "e2d84c5fa36d78bcd340de83a66458aa40df6514354c82c962cfdabcd8753b24",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "independent_disagreement"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:10",
+      "record_id_hash": "sha256:0759ba3242e71558f3422b3baebe9ea6007f844348b93ad41d9b2e6f5a153344",
+      "body_sha256": "c4964b542e2c7c4671b14fd446aa75d8243dd5ec7000afff7d15722a32ef063c",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:2",
+      "record_id_hash": "sha256:0ac2fae05a3fba455f6af44ab0b3ab0046514c99cb795139cabe3d5d69ffeb0a",
+      "body_sha256": "56af7928d989627d9023243cbbf149f8c27289a99dd8ed00df9f1beeadce5b02",
+      "classification_sha256": "2dc7c57558b27a682d3208a96323dd25b4aa3c19312a6e0e9e74af2ba71efd6e",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:3",
+      "record_id_hash": "sha256:0f9b6ac4a2d9fff14c96f7578b7382de6c5f4ff575d5b9cf7bc678cf91ec65f1",
+      "body_sha256": "30f526938d1e8e175f688bc637bc9c9c292d799d2bf116a999581a9602a6f146",
+      "classification_sha256": "2e6dbef1c354e6b2f671f1a71a09e6a6d2194461c2b0c502e0027bb6c2574c98",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "受け皿・指導者"
+      },
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:4",
+      "record_id_hash": "sha256:1aa5a63913e251cdfc4548e3d9a2a6d9e3a06a3a3b0fd6916a297c2f79460009",
+      "body_sha256": "c477a0161113272ed3a711ef043b50c3ddd3ccaa64b9f19d525dd5fd296c2fc3",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:5",
+      "record_id_hash": "sha256:33a26f9a56e3f9553de2f87ebde34bb86beee156a9ad81326b1ddbec4830c24b",
+      "body_sha256": "9cff887e551a3a6a387d6a71f8bd4c15e3827780b60350dd30503ed10992a6b7",
+      "classification_sha256": "7231dc08fb9cec75117e85899f2e01ca493a98d9d913711bf47140aa9cbba1e7",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:6",
+      "record_id_hash": "sha256:15a29c52986c2f02ed2daf59e69198d5c3eb390586bd1b8615b55d275c1453b9",
+      "body_sha256": "676e689c730feee2d2f883b47d8d20bb660f56da6bbbe404ec27daab23aefc94",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:7",
+      "record_id_hash": "sha256:086c5cc4a3c6daa1f3557d26301445290f09d46ffb5a902c807b08c45b52e91a",
+      "body_sha256": "f86e002b74c1ca5176013e876c24f30099be072a7e5c64d3c701c66fb9fb6bcf",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:8",
+      "record_id_hash": "sha256:0a00ae62bb3d66c42a3300ee0e31079b5b3ddcf59cdd169c463da2827a05d64b",
+      "body_sha256": "0d88ad3d1ef296b3db1ea8a4f040342d20ec515502e234dcb8f80057d2e4766e",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "bukatsu-chiiki:9",
+      "record_id_hash": "sha256:0263197e71274c18ba1f1444c7fc004f7f0924a7dfc08aa35ec5722d857a139f",
+      "body_sha256": "4862a8307a7283d9403f95f6105777302b4a3c0bb238311c37eeb2a02dcb1ee8",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "original_status": "uncertain",
+      "route": "invalid_pending_review",
+      "error": "invalid suggestions",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:1",
+      "record_id_hash": "sha256:197c0a3aac29b2a0017f5b388e5db91fb68d84e67ff6ac45b605ed32de98707d",
+      "body_sha256": "4442bc2d4bb6d83afebcdbb47f735218a5e2de9c1a067781688bb792d0a4d221",
+      "classification_sha256": "7b4f2908261fe02add9d049c23beeb933f557e8ceff2693e0e43ad7781754fb4",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "慎重・反対"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:10",
+      "record_id_hash": "sha256:19c50f0ecf53457d3e7b0c91edc71b416342e94031a3304bb78e7ee3177605cc",
+      "body_sha256": "92a5481aaf3fe0822fc438bf5333f11e9db0b0245fb906044266d52730158557",
+      "classification_sha256": "c318da40574ee03038d9b30a2706adad6a702f154ab6019931c826fd3c957c6a",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:2",
+      "record_id_hash": "sha256:003d66b7b6eb6775f1a4fea67fce5f40c103a95cb30dd0eb1d177a9dc4ec948c",
+      "body_sha256": "e10725be7712e73b2f93a037b126195ea373bd249142150f6dc1deed1998d1cc",
+      "classification_sha256": "12e23226d331a7c043496cbe437a7827269507d9d3f92e3bd7062a9ff088c920",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:3",
+      "record_id_hash": "sha256:b266f139201a630a58e9be9b6c7f4732f76b1fd2b33342c65057d8b673254a98",
+      "body_sha256": "8f832c6d5312820f2fc718d415b18ea011a26951abbbd1a355f83b86ee3cfe52",
+      "classification_sha256": "732e5730f2a6418ab827ce1a4f2ac8b2279aab4df75ab0569f3e9a9addb717d9",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "慎重・反対"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:4",
+      "record_id_hash": "sha256:01268a5f772ef4cee4271a2990207d8ee974691d905b982f7a68ac75d0a7187a",
+      "body_sha256": "3b593cafb4fbf9d76c900396a00feac875b7d069f39bf4b5cdc029ec4ea45467",
+      "classification_sha256": "889dc371dc557d8436aaf669c53ad595a54e197bc9b474e7981dbb7c43c3e729",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:5",
+      "record_id_hash": "sha256:0351a5aa71159982232c8550887408fdddfaaee768228ac88f30c59a93113379",
+      "body_sha256": "2d36362b8d7325b63c4d0dde121ca35a70cc2adeb2874b6c9d3dec84836b87b4",
+      "classification_sha256": "fa080c4306780db3110cd83ebf5ce7b0523678965d79e51d90e4e690e1c3bf32",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:6",
+      "record_id_hash": "sha256:39d42d711e1b80c6ad6b2a5569536bc2eb1d3a0c66759ab024f7ecd22552cf26",
+      "body_sha256": "180cdcdf7d1a3cf7cb68bfe583d41ad72c12f4fdc3bd2a8f0fc7cbf0fbce8ac3",
+      "classification_sha256": "2dc7c57558b27a682d3208a96323dd25b4aa3c19312a6e0e9e74af2ba71efd6e",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:7",
+      "record_id_hash": "sha256:1128012cefeaf532e0e95f223f789b62facd15b84df2205ceba373077b091652",
+      "body_sha256": "e2b94f783efebbbf5a0ff3307b5598a8d754abf03d4cc18b6b7600cb356af133",
+      "classification_sha256": "fcb385ae183003e2e2502469e7fd581dc664a8527f9298e443e7696dd6b3d751",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:8",
+      "record_id_hash": "sha256:00b173dd986545c2ea13d06b316b19cafdba73e666048f6a2c66d99b9adc8f3f",
+      "body_sha256": "1e6491657cb3141eb716d1b39cf009289c1810b35c3154c08f2b12b789d50a6c",
+      "classification_sha256": "53f8a1bc26bd1a4d390387858cf92d3402c0e8980c75cebe99d1a8a854612e9f",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "constitutional-amendment:9",
+      "record_id_hash": "sha256:037a19196a93ad723bc2f6eeb51da8e06b64f5da20b6004b92bf658f77d2f8d9",
+      "body_sha256": "3d2bf56b3cb6f95421fb48e178a4b00de7c785b7297c0d10acab9fce150f6a7d",
+      "classification_sha256": "b537f86c363bb1a1d0b347ec423a29ab885dead05434f7b9d1f14d74422d10f6",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:1",
+      "record_id_hash": "sha256:051c22f190c7ac54130d12a5e229082c09081afda3244bcfdefcfe139e47738c",
+      "body_sha256": "312f8ff130a53a250d8054d3df369e176903608a8761409bb95ae6f89186ef3e",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:10",
+      "record_id_hash": "sha256:1a3654d2f8b929dbc51fb7c01c6e0bb7a412d6ab511c14c3371b8962fed318eb",
+      "body_sha256": "8a380e58cb33d490d504d14116ea22f852f530ac315a03bf9829aa674bfcab5f",
+      "classification_sha256": "bf79504d6e93774081d4d78e882991b889bc490844215b19db6f14e316008c1c",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:2",
+      "record_id_hash": "sha256:afa276443395e75b4469edd5ffc5e67abc7c336f1f91dab04a80d232880d5e48",
+      "body_sha256": "c5955b51eb1542e6e5274993a784543d1eb5dc0f3bcac4d3d0ea8883f892fe95",
+      "classification_sha256": "ff60f239758f265670c6f57d361dafc4e69ce108d1b8fcb10feef6e3f7e702cc",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:3",
+      "record_id_hash": "sha256:18a2fbfb1de17dbc72e27cc43de95ba4e5466d38f88ace7c54a2c61f0e61fbdf",
+      "body_sha256": "c426c4af1af6a06c47df8dad6175dbb5c1bc1535b319497febb00cb8cfbd0cac",
+      "classification_sha256": "84c5c7b77c744133c74bd1565783c2789fcb4285029220cad80c32313668483c",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:4",
+      "record_id_hash": "sha256:0c045bbf07ad7a3b4ede716d112239dc0ec6c1bb0bba87dab2bda25482288a1c",
+      "body_sha256": "c68e7d7d03781bd88dc1375aa253f83b139d48121fca52d09fb318155d801583",
+      "classification_sha256": "d06e70d8f92a2d73e5105ebd44e433392a995530932ec844842fd2982567f999",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "減税の効果"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:5",
+      "record_id_hash": "sha256:01666b575e9ca1dff92d8201ba50213c48881c318a830c47847402ceb25581ea",
+      "body_sha256": "f0b88cd86009c141b512e1aefde3baa57ccedc5b21c1b726c1e227a230f4f034",
+      "classification_sha256": "200cd73982b988bd2a47ec35212311260385e01b1714624970b6c54e0b670a4d",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:6",
+      "record_id_hash": "sha256:275684f08ec8ada08511e67208092dc677b5fda5c5c7c46982904c8e34a66e28",
+      "body_sha256": "a416f4231e2002d020af9b111d17d3707f94e473cc9e123f214c66bc907ca159",
+      "classification_sha256": "41f7e1a84937b63988bce55cdf2051a848ece7f8539b20ae972f3f45ae67295d",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:7",
+      "record_id_hash": "sha256:0772841ace39e8874a20f16396e5ac1b8ed929a5e92e807f0b9cbfa7daa94293",
+      "body_sha256": "2c0a408d026b5b9e845fbabe7736d429428aaee83c0d5c794991639c6c75c145",
+      "classification_sha256": "fedd97b1ec4d154d6b870a37b0d7738dafe72aa543c8070c3918ad28d1119d51",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:8",
+      "record_id_hash": "sha256:00a92600d06668ab6fa465685d572fbd9194c608c766d6a7a57dee5359756851",
+      "body_sha256": "57209b2352932fa5f763b8f1002b55353b6f457efaae33380a3ac469094bea99",
+      "classification_sha256": "20b02794601b9e7d827b70175afa3cae829ed0f8ac2d009c30573672cc1608a5",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "減税の対象範囲"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "consumption-tax-cut:9",
+      "record_id_hash": "sha256:096f90db3b37b6ff87d8bc005e49443cb518f8e5455fe4facd0a5580bba4a4d1",
+      "body_sha256": "a625ff55f75c09c473071779bf9b5862d18c8f5cb1a6ea81f0433de0d5384c7a",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:1",
+      "record_id_hash": "sha256:02361df32abde4ea3b8e926ea462e09cb48e68ab1c89376512b33ac130ec7763",
+      "body_sha256": "70e2e8c8f26c183076d12fa507d69172edbcd68f9f6a188a91101976c4fa1dd6",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "candidate",
+      "reference_changes": {
+        "is_relevant": false,
+        "is_opinion": false
+      },
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:10",
+      "record_id_hash": "sha256:2121a4e281ab5e757c76a80241b14c2fc594664ee085cad7d95db7b540cff9f7",
+      "body_sha256": "397d3c730ccd82645821e85ba829635cfcb1c8e0d5f24e26c4d8939b3836e268",
+      "classification_sha256": "a1169e4b9efbeb4328f104a13954106b4f65299fd25166ec3df1682874dcaf02",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:2",
+      "record_id_hash": "sha256:88a5b5b73fafe88205b25eb583b8f683654bb804962bc671e24b0e97a357caed",
+      "body_sha256": "eba3096501dbed07ef44333611dc99d10ae96f0ea32d7313b4291fe96082f155",
+      "classification_sha256": "2969fe2b2ad51b2415c5f8f0d451a29df56ec0ad8f8df5b0958d952c5c34effa",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:3",
+      "record_id_hash": "sha256:07448710fb61d2abea53bf6de2dcc8d5e84e40b00578f313e85146f319717eb2",
+      "body_sha256": "5c3b1de4124021aa48e7ad424a774557cc238f426b7094161ba37b58007a7e78",
+      "classification_sha256": "9db415e2c38601f5e49233807659b998cd34fbc8390760982a3f1826aaab64ba",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:4",
+      "record_id_hash": "sha256:3532ed4781f6ddb8b89b90a4964fc021e858765f90329253c7d4fd4b421b88ac",
+      "body_sha256": "0cb55aad603a60e1cb4a26fbcf96acb3d87fe568861c3032e9998117fa305b75",
+      "classification_sha256": "3bf1e8ffebd80cc75d93a923f9fc3328bc69a28e1f068c311a664fe2a793bf2c",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:5",
+      "record_id_hash": "sha256:1984688aba14dbdb970af21f7a3021ce05c4f98a0567f9d3e14f5ca45c2102cf",
+      "body_sha256": "0d7bc7836b64e5c7e72af233e575d4cb39f5a98915f10346f4e7938693cec9bf",
+      "classification_sha256": "3ab49de4f5316a5a8998518b6b9a687ba7e2c2a07497b734f47e34edd6271f97",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:6",
+      "record_id_hash": "sha256:1005928f0789b15ed006396d025f10fb90049c91b3e3013a4e6544d0007127b9",
+      "body_sha256": "6ae738e28b4f15a4a6450e4b9645df6af657bcb462bde515304363ac45c1d4aa",
+      "classification_sha256": "e61b11888dce99a61ab7fe3a79b28225558580dabed1a0a17f11d79c140fbed2",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:7",
+      "record_id_hash": "sha256:82910465826826efe8d2702e0b0c6c11ff9307cab95a15e99ab86490dc3626a7",
+      "body_sha256": "e43fbb2df7db91d5705eed7ab0478853e8df9856ccadc041145de4ad552ca6d2",
+      "classification_sha256": "dd7b216d46b5045d0676feee973258d4b5ac3780b29f05d990be38ab834eccf0",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:8",
+      "record_id_hash": "sha256:89bcf1f458d5676262adc665591ee527c9ecfebb28704576ca5489bc037368ce",
+      "body_sha256": "b12e6b15d2da02647b9df952a6bde8d2343117ffb434b20e25163f09ba863d5b",
+      "classification_sha256": "a58fe039c5040504525d6529e7ad6812d037ad350c20abf60727dc19e0762675",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "elderly-license-revocation:9",
+      "record_id_hash": "sha256:0007c13391bade6ee90799287c3e6f7597b12d133b735194648e8a5248374a02",
+      "body_sha256": "7dedf228d00e2456d29048e13efe44588e24e1a17fdb5a20d8fef359ea4ee781",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:1",
+      "record_id_hash": "sha256:0266d75a87f5350601b9f0d399864b57afaffedcdcc7e97955f9063fde14cadd",
+      "body_sha256": "6fc72a7669f704746769aaf3bd9e13401af4ed9ce7a34eb8f7832ede36ff69dd",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "定義・中身"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:10",
+      "record_id_hash": "sha256:0557cfed7c4022d5b52577c578dd74654dbe7f58af819600ef7ea63ff4f2580f",
+      "body_sha256": "3ac67c9ccde2e7b214a15dcf80476738815c178b030d802e0bc94926dc881d46",
+      "classification_sha256": "e8bd59b6eaf75ed176f4a25c027728912726ba7b482ae2f8ac887a5b4e61b1ad",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "法案賛成・推進"
+      },
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:2",
+      "record_id_hash": "sha256:06cf165c9f512d36ee0eaa25d753160c28a3234e920000218573b61764afe3c5",
+      "body_sha256": "73c11cf4d436eb428cc0a326ec9f1d1bbbb59a7adbca321fc0e2cdec7406cbc9",
+      "classification_sha256": "04e6559dac352e81f702b8f2a47d1cc0c7e760814d9b4ad76d349de38c506ceb",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "法案賛成・推進"
+      },
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:3",
+      "record_id_hash": "sha256:022a6f3d4086af5dcbcf1b20e76a9ab1f543b5028901aa735bbbd8e2308bb7d1",
+      "body_sha256": "6bbf7f7760679cd87b5c66a04aa26220d54f167a1b1bee588fcdc799ff39f81f",
+      "classification_sha256": "b542fae1367052438c7eb8b4d79560ec192e2ba94265f47bb08bb2b55dd3c458",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:4",
+      "record_id_hash": "sha256:05eb517972488ae16ce9d85ccd5d2f9937a108fbe120469f62e19599d1608803",
+      "body_sha256": "9cd1adb6b5a6121664d5e9789395dca54b78c2a07f3fe5a3aabb37a9771946f6",
+      "classification_sha256": "ce664330915e23599bc79f03754219bec176d2c679128dafa0c344f69479c7e0",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "法案賛成・推進"
+      },
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:5",
+      "record_id_hash": "sha256:01fd45a3a73cb78a6aa6083fd8c075fbe0c02a8925263db982f77a20d2686fc3",
+      "body_sha256": "bc37f5568b31e1eb04a7aed3e4cf6cbf03b4f10216802fd46058232625210d22",
+      "classification_sha256": "24a319f154437f4d065309c09d82d2cf501562adf4db843065e0db6d1b9cbf70",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:6",
+      "record_id_hash": "sha256:0768c2ee58cc3b7c2ce10c70b1ee81355b0661264fb8eaee6c12430181a08190",
+      "body_sha256": "a8e3b477ddb61d2588383dc189491177454c6f14e4b1ff279227bc03a1e3eb63",
+      "classification_sha256": "6c4c15badf9076db49e1548eb34f008c8bcc06c3ce3ce7b30f595b97e61fdb2f",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:7",
+      "record_id_hash": "sha256:0ba3ff3718c8ac18f52dc80f4296063e4692a6296f829869be70ea87e106a93a",
+      "body_sha256": "1394bc5ef8d42c7fb7f8fee379c7446efc5c38baa727c02cbe784853aee8bbe8",
+      "classification_sha256": "33f33e8ffdfcb126a35ecb3ffb30810e545d9599a79219d907c05b81d8b92127",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "法案反対"
+      },
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:8",
+      "record_id_hash": "sha256:00699c74403bbcda173a85bd175559b17754bcadcbc49f2ecce1c0a42e34e98f",
+      "body_sha256": "aa462d17e508b2c4956d4bb02c0b7836013e56f14dec93732fb37c3b01ddb7f2",
+      "classification_sha256": "ca7de069d2551c84928786d061bceff79f899d21667f48723a79b176f0fa47ae",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "fukushuto:9",
+      "record_id_hash": "sha256:0226773156f8bab052fb870e177f1fa072276db0fc02345aa2328e18c8ab0718",
+      "body_sha256": "947b70aa01c196d8e1f6022a2e1252a12bc8e9b94337a2f22e42ad7f92940aad",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "independent_disagreement"
+    },
+    {
+      "sample_id": "henoko-student-accident:1",
+      "record_id_hash": "sha256:4ecc72b458d053e1b4fea6e7340dd4db63193dc9e8d4ac8013e0a7a9fd482900",
+      "body_sha256": "e212d30b8c7ad4a40df57a12f07967cfbf66ccd5b5cdb05ae2c52ab739646e89",
+      "classification_sha256": "dae9d52db310850e52b24ed10b1e3298719083fa4ea3bccdb31ca2c17dfa36cc",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "independent_disagreement"
+    },
+    {
+      "sample_id": "henoko-student-accident:10",
+      "record_id_hash": "sha256:01cf3cbeb281da1729b47d8bb6a2d8409cdfcaf69dee2253fa305da819cf6af1",
+      "body_sha256": "84dbcd92a15f5948e707a07230d732e91a4b8f9d4f2024fe5d8a650408db1167",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:2",
+      "record_id_hash": "sha256:362ee26d563319188174b45bd0919ae5274eafee5b6849138614f0af81b66d3d",
+      "body_sha256": "2556c7a15af71a5c81e23fa2414eb9665d80e89520aae1c96a820df77b0977df",
+      "classification_sha256": "d6ecfa010d43eb46c1cefefeb081bb083d03cea3b349f29e853e9286c8fb89be",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "政治利用・基地問題"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:3",
+      "record_id_hash": "sha256:105b86e3a5a40b9a6fe9e7bf38654a33193e2c686304a1cd606923d3d0803a3a",
+      "body_sha256": "dc0364c5edb6054c54215adaa867c10dfdd6001843b2258c326ae69c86ac6504",
+      "classification_sha256": "a332bc21dab3305d5e2b34ffce8ddb90cecc47a0a5cfccd1eb4475fdbe8fcd23",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:4",
+      "record_id_hash": "sha256:051cca73ee16d7ac3502d95f2d50569f6bb5770a5d8508849448ff2d724082ce",
+      "body_sha256": "896aac1d48c16fda5e4e7450cacb14e03b4896fa08ad5ae9b98a616b9cc333b1",
+      "classification_sha256": "cc5fb24baffd3c96924488fa6ab4a65559855b8e53f57721a269cc5a438b97ff",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:5",
+      "record_id_hash": "sha256:a180cf1077f75337ca6d965b1543eacafafaf71078afb5d880019db26c6f79b7",
+      "body_sha256": "b784caf1036c73686bc5bfb3f674f9c1d60d7f1b596acb592321584d9313e410",
+      "classification_sha256": "8a070c2ea91f9fe28ba83819cc92d201887a655e96094af72a756a3461b8c9de",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:6",
+      "record_id_hash": "sha256:0038c8fa49ef1b5515a79c9c2b2261e19536f4373e1f3b73a4e72a6b2b78305c",
+      "body_sha256": "58cc1a4b9d97f80279afbbb8ed547096ab980c2d53db122a7649b871f68c9982",
+      "classification_sha256": "d4b23dde4bdc5bbf50722126f8ca478e13ce043cf9094e0a33517006c6763969",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:7",
+      "record_id_hash": "sha256:045a3a66d622766a486ec7ba7b67ea1fa6dcc12701311dcfc238d465678b6ca3",
+      "body_sha256": "b12e09d40104f3f92b7f59ebb6d3fdfa7177000a0c9a9f17c3b5321576e53902",
+      "classification_sha256": "bfb7022e2fdaf564e06303e48b3473b51dc26bc68b5d720059940443bba8ee04",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:8",
+      "record_id_hash": "sha256:33f757efcb6e24976d1e1e433040eabe13713ef18cf8fbe8f1327b16ba3e0daf",
+      "body_sha256": "4e71661cebf2a2c432d01436dee41e1561a4261ac4253dbefeff9aa85c6cbdb3",
+      "classification_sha256": "49fc61512f74cc65a56081ef3091b4b15306959adb8b32de28e4f38f677e6cdf",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "henoko-student-accident:9",
+      "record_id_hash": "sha256:1ef770886237e2b8361d2874d85f92fdab44f1bea28c8e733a60a4625d4759bd",
+      "body_sha256": "5f520f0b6437bce1c861e8cba9c78fe83aec90e74426b5b8d61b5c257da5a119",
+      "classification_sha256": "e47958659a74c2d9deffaa1a267a76e45a44f76e555ef76e18538d46cd052505",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:1",
+      "record_id_hash": "sha256:005ae2a9768e1bb79916aeca3fa799b5231330b5b85456711ba69c0dfe3bac86",
+      "body_sha256": "22e44a085f57ae0249ccb3a6b538eb3b4c0b0d3c624642a23675cae1dabc9c81",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:10",
+      "record_id_hash": "sha256:009241086010df70d275ea758fe4df5cab5c4e208b19347590ee086312cf9ed0",
+      "body_sha256": "82eac54021558fd4ce83acf40d0ec06a2d37ec7fd6871e6ee2a019b3d83da4f2",
+      "classification_sha256": "c1c10768d3606376671f5a52378d9c9971361684c900c2962968dfbce996078f",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:2",
+      "record_id_hash": "sha256:001df4adfa92f8ddd65dc4e74ad8450ba53063e2827464a1ec5f47d2ec864dab",
+      "body_sha256": "3c91f3dbfc6e92bfeb2248018fcd3402e82422c1c2682d501561d050d36310c9",
+      "classification_sha256": "e93600d95c728a199a8fc673a863d3e0282439059c89f2703e7da9e0f8577416",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:3",
+      "record_id_hash": "sha256:0425746bdf88a6826b87bedd12813a2808015c82fdfc7383fc399e4f1a5c81ca",
+      "body_sha256": "a25f172736c6b6eec5aa0b08847bc071534db5166ecfed9535ed815e066ec3cd",
+      "classification_sha256": "d2c92c39a3bf32f09eb4b74181c52497850e6365834a0a8c252e01fb0eab23ce",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:4",
+      "record_id_hash": "sha256:0456fa793ae7a78c7752ef8a597917087b1c51c2935b9eda7136f606eb4e917c",
+      "body_sha256": "5eeaef31f53266452fefea176b104a229c8fc9a4495b10d7334a61b40f4695b5",
+      "classification_sha256": "4815c1d8b8ea5aa9e5680b5909e50c57803e519f63db0ced18c9a0763321228d",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "男系vs女系"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:5",
+      "record_id_hash": "sha256:06f0d6fde4d81460253c74a429b74577573dc8227acb4070627f9d5b071ef777",
+      "body_sha256": "fccf3be6e3a77a962b15aac3f8c877d2879980512eae37c1868dcd87b2ea2e7f",
+      "classification_sha256": "4fca45a5235fe7f575b6ffeb134c34e6a0ca6f0e163b0c21ccc816965fe31cc4",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:6",
+      "record_id_hash": "sha256:00842a65bd044d9cefaddb329c08e04a6dfde1bc547df1546e2c39bb3b8452af",
+      "body_sha256": "43f46a632e50d0de53d944dcd765c0462812ce0446c0b7ed023f835b20d94e21",
+      "classification_sha256": "743ad5ad74131738d33de23434405c4f0ed90d1a4d3f5ac88819753cf056d00c",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:7",
+      "record_id_hash": "sha256:01bb7081b8bcf80141f1cd10a102d04ea5ea523cb6c08b03e53f305326f5f2db",
+      "body_sha256": "53ee40d1dd19d5591c498c2effd7747cb6bbcc9d4294acbd373650db31a4b47a",
+      "classification_sha256": "91e9cc1f37430a7c169696b372cc5b07b535965234761f8270f5e0f21416acf3",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:8",
+      "record_id_hash": "sha256:07a994e2091afa86561d66899313616c9fba62ac0dd77902edbb5735ea56141d",
+      "body_sha256": "57ec0decf1f06aebafd5ce6e6c96026164e63f6b3825e23e03ac9aa0ca3a8ce4",
+      "classification_sha256": "5fd908ec6cfc733d97ef329e3f3e76a5f0c92c0caaf141e6f2e2d3140266b546",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "main_issue"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "koshitsu-tenpakai:9",
+      "record_id_hash": "sha256:0312728c47b006f07d31e3b0b5980615007d7ce075b7834031d8af976a3fe2a5",
+      "body_sha256": "716aba0e189cbd45fa8092cbcd91753a7b7700e7e1a6fe0fad66a01d994ddf7a",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "main_issue": "立法手続き・民主主義"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "candidate",
+      "reference_changes": {
+        "is_opinion": true
+      },
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:1",
+      "record_id_hash": "sha256:926dca0eec609a2315991ae89b9986625f564abd1581a95093b9fba5dc9f67af",
+      "body_sha256": "8715cd68b0c0a016ed7593d044ecc5f65b71d139fc5cb6cd42d2046d7d9fb1fa",
+      "classification_sha256": "c4a2bbd29c0b965171010f283748007909ed1cb2fa7b62083bdcc0980626b759",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "is_relevant",
+        "main_issue",
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:10",
+      "record_id_hash": "sha256:a304acfbf1f94f0176ab4038f42ae807e3e5573f389ff379b9833add441c6398",
+      "body_sha256": "45a68946a0e1ce39a9d985cbe90e8f561344821a0d1911356142c0d6b247ce61",
+      "classification_sha256": "3e9b2e7811838d5f8c237969a2005b9732a1c7d1396ddc716734695db1d05690",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:2",
+      "record_id_hash": "sha256:012ed0969db9d537f5fb73458f2153a6fca3de0238b852e1a4856250acd320a5",
+      "body_sha256": "ae8806f497eb7cd3050a4e227610091598d67596240461d92fcc4bd58a9284be",
+      "classification_sha256": "29964bfd52704cf6fbfecbf7c6c5c6f4782433993132ca462315f6cc499c1897",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "禁止支持"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:3",
+      "record_id_hash": "sha256:596a75f45cccf5d6bbe1afb88a9d29fa5c60a9df6e73d7f5cbb9a15c7edfceb0",
+      "body_sha256": "6725076373f83454caef4a504e3eb3b78482903edda43ece58ee2ff450ba6a78",
+      "classification_sha256": "04c0ecee500736ef08e084ae360259df41e09a8dbb1dfb81bb3ea7c6975f722b",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "禁止支持"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:4",
+      "record_id_hash": "sha256:00761f61b3e2ea3ca2420e8e1ec4abf1054aba6bc12c531d1613359eb71b9e2f",
+      "body_sha256": "b9bc60bff76954801a67dacad55b76984985d79aef869bf6cce6e45f83241efb",
+      "classification_sha256": "d5a214f9cf29dc7e136df859d4b72693bfad9c98daf02ee3aa9f8894a4c40910",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:5",
+      "record_id_hash": "sha256:1ca7a8fbfbb0ee30de5b972016d48b43c4bee70e8800929d455932d684593892",
+      "body_sha256": "1a39eba07cb08c2899afe3bd8da10967bae0e7edfb3c729d8a9269776426b377",
+      "classification_sha256": "250da0ce924bd9d8edc2d4071774b5b2dd1302f194ffb07c7866df34ac325e68",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:6",
+      "record_id_hash": "sha256:7090129a882bcc4864d16dac63dfcd9265ddb76b5c268a95021216356a79c553",
+      "body_sha256": "d518b77b0125d8fdb1c27cd5f6abed0adf54550f2efe525cc4cbc2cfcbb337c9",
+      "classification_sha256": "b6ff64fcc1039eb69dfeaa9663b63dca26c7e43920b1f299afdef2061810041c",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:7",
+      "record_id_hash": "sha256:08d060206b869f8ee4dee7054fbf3c35246477f618f67f2ff9f0aa93a2d1148b",
+      "body_sha256": "98fb0d8cbeaf4bc1f84c21452dae35631963f291d44d78c262f596b79b0047e4",
+      "classification_sha256": "a90c7df7949a998aaa7d7e84d4899bcf06f87a5178305b9b452fd14991146a24",
+      "original_status": "candidate",
+      "route": "contradictory_candidate",
+      "changes": {},
+      "unchanged_fields": [
+        "stance"
+      ],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:8",
+      "record_id_hash": "sha256:096fac57092f6afbfa1e4f65da04f875d8b2d026d4a3fad8ba4095a59f825618",
+      "body_sha256": "8782c0fb5603c60cedd50b991e7fcc29ddd92705e33823e93dddc4e23c473d2b",
+      "classification_sha256": "5671bd002f53a76cf4f6ef03b3298d4cad44456321cff746fc3533285fdd234a",
+      "original_status": "candidate",
+      "route": "candidate_pending_review",
+      "changes": {
+        "stance": "一律禁止に反対"
+      },
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "school-nickname-ban:9",
+      "record_id_hash": "sha256:08f7fd736cd0daf5a54e8ce7a92c36b1cc510cb1830a8f176b66df9d23f3a4ec",
+      "body_sha256": "e1801f6495f6d85c82f5e01fb0f5d6b31eb0f6cd0bc60c391cac876235a9dba5",
+      "classification_sha256": "6118ad94ac1761ed1b59cece03a7eec39a5926f56c69956c28d2b541c884636e",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "uncertain",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:1",
+      "record_id_hash": "sha256:197555068b165586696a5607111333f512ab29b8395d1a795f82c120508e4152",
+      "body_sha256": "1f7e4b8edd5f126ccb155bdf18708f34680a8ec9873c2d1e8004d94942eed9a8",
+      "classification_sha256": "498e2d44b6425af2d162096ce65193a273d58008ccd8b6feb91a6ca48793a20c",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "ok",
+      "reference_changes": {},
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:10",
+      "record_id_hash": "sha256:04eea51102fba660da20dc5e410c0abc52845ca538355ce28658675248610014",
+      "body_sha256": "3e12400540908ce694575228e99d6bd250a19032532992e42f12d896ad073c20",
+      "classification_sha256": "2cc33a7a2b81385fe5348c73c24756e9e8ff09bc511b3506e11b010ec3716a05",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:2",
+      "record_id_hash": "sha256:496acbe44b533355c7ee52a82313c8f32fd19e4739c08fbbd96ae1eaad81f272",
+      "body_sha256": "fa09a1ae9b6433a0245c1e9d36ad0b40f28116be5823344ba32c1cb7c40f4fbc",
+      "classification_sha256": "506e913241d0e5588c4da0af0fbe8487c27c0b73bc6e76423a66b63b49d8fd04",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:3",
+      "record_id_hash": "sha256:1a63dff84999084ccd0f80bf0aaf2bc16fbefadec1bf51d990ccadc26d882dc2",
+      "body_sha256": "c49d90d2378d666ff7e8cd68b62da37fe8fea4a491d1ecaf59d2b83fff9fdc29",
+      "classification_sha256": "f2462bf02e32feebfb98df41494d2239d592e8d384b2b9f7277df7f59c7fa43b",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:4",
+      "record_id_hash": "sha256:02f898cc9ae891073f3ca6b2207369f5ea7bb4309cef8c4e889b6c2c0d2cdcb3",
+      "body_sha256": "bce08397d8cb28d9779399bbbdafb06cd6eecd09b2e1d4dd96cb0051f149a547",
+      "classification_sha256": "1e01fba7d40fcb7fc5eeff50a180ae7cef2cf587847d8660efd3725328b1255d",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:5",
+      "record_id_hash": "sha256:137b3aabf6916fe2a502b97663709b4c1a2001cdb337a217046412da21b06c47",
+      "body_sha256": "b4840bf892b223493de33bc5a2ea4e8b12f3c551805cbde76ce9aee0baa347a7",
+      "classification_sha256": "5a462c467484448ec9f33822348af2c39daa607bc526798ae0724cfd185efba5",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:6",
+      "record_id_hash": "sha256:7717e2f1e053621fdf017ce8664285c10ea205d8368d1e2a201dacdd921a0f6f",
+      "body_sha256": "4a5427ef08b884489eedf7ebfdf17d05dfcfa51546660a342d3cc4963eaaade7",
+      "classification_sha256": "b0f1e9b7e24fb4974d1ea0cf6c4115eea606cdd2c2d0857e248daaf6998812c6",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:7",
+      "record_id_hash": "sha256:0f4eee41f4bb5bc341f687b6fc1e19d9a7460d7f5086743c6f3567066e18e44b",
+      "body_sha256": "0c4da6d54e68d8e7b7d25af0fe4780cb83fef77fa08dc8bbbb60e7be44c1ef1c",
+      "classification_sha256": "525b4cf5f7376c8d26d81e872690e790ffe62c0f0cc5665cbfd0a4e017296d58",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:8",
+      "record_id_hash": "sha256:00368d9abbc4bf0df20d80e55df08ad12adb0570cc32605b7bde071b3cc6778f",
+      "body_sha256": "ca9ff2b4dd991ed121c503998ba6014d33f1d28521ee5fdff8ac65c7872a70c0",
+      "classification_sha256": "78393accf46b0952cb7cc99ffb01f7b9e438e342ae789fb3f54a14453b09bdd8",
+      "original_status": "ok",
+      "route": "ok_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": null,
+      "reference_changes": null,
+      "priority": "ordinary"
+    },
+    {
+      "sample_id": "takaichi:9",
+      "record_id_hash": "sha256:010bfbb6ed0bd5635c7821d0f61554c30fc1de562d6c8f34d7493208c81a87ab",
+      "body_sha256": "081ceeee45e52e98cb7570abee6fe59e74eb5fada6314efa3d55a82ee6d6b638",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "original_status": "uncertain",
+      "route": "uncertain_pending_review",
+      "changes": {},
+      "unchanged_fields": [],
+      "counts_as_editorial_reread": false,
+      "automatic_approval": false,
+      "reference_status": "candidate",
+      "reference_changes": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "stance": "批判・追及"
+      },
+      "priority": "ordinary"
+    }
+  ]
+}
