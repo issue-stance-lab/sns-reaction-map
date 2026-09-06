@@ -73,18 +73,28 @@ sub_issues:
   費用・家庭負担:
     file: data/bukatsu-chiiki_cost-receiver-reread.json
     path: [cost_side, buckets]
-    coverage: full
-    coverage_note: 論点全件を読み直し
+    coverage: partial
+    coverage_note: 読了時点の論点全件を読み直し。その後に増えた投稿は未再読
   受け皿・指導者:
     file: data/bukatsu-chiiki_cost-receiver-reread.json
     path: [receiver_side, buckets]
-    coverage: full
-    coverage_note: 論点全件を読み直し
+    coverage: partial
+    coverage_note: 読了時点の論点全件を読み直し。その後に増えた投稿は未再読
   教員の働き方:
     file: data/bukatsu-chiiki_teacher-reread.json
     path: [buckets]
-    coverage: partial
-    coverage_note: 移行支持以外だけを読み直し。賛成側は未再読
+    coverage: full
+    coverage_note: 賛成側を含む論点全件を読み直し
+  制度・移行プロセス:
+    file: data/verification/bukatsu-chiiki-plan-child-subissues.json
+    path: [plan_side, buckets]
+    coverage: full
+    coverage_note: note制作時に本文を読み直した論点全件の記録を継承
+  教育的意義・機会:
+    file: data/verification/bukatsu-chiiki-plan-child-subissues.json
+    path: [child_side, buckets]
+    coverage: full
+    coverage_note: note制作時に本文を読み直した論点全件の記録を継承
 
 geometry:
   min_area_pct: 2.5        # 小さい論点でも押せるようにする床
