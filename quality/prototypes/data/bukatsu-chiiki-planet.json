@@ -60,6 +60,11 @@
   "制度・移行プロセス",
   "その他"
  ],
+ "reread_summary": {
+  "connected_editorial_count": 966,
+  "connected_issue_population": 1075,
+  "not_connected_opinion_count": 173
+ },
  "modes": [
   {
    "id": "all",
@@ -292,17 +297,32 @@
    "high_adjusted_pct": 26.8,
    "sub": {
     "status": "reread",
-    "coverage": "partial",
-    "coverage_note": "移行支持以外だけを読み直し。賛成側は未再読",
+    "coverage": "full",
+    "coverage_note": "賛成側を含む論点全件を読み直し",
     "source_file": "data/bukatsu-chiiki_teacher-reread.json",
-    "reread_count": 269,
-    "unread_count": 54,
+    "reread_count": 323,
+    "unread_count": 0,
+    "skipped_count": 0,
+    "grown_count": 0,
+    "unknown_timing_count": 0,
     "items": [
+     {
+      "id": "B",
+      "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）",
+      "count": 51,
+      "pct_in_issue": 15.8
+     },
      {
       "id": "G",
       "label": "外部委託・専門指導者への期待（指導の質向上を含む）",
       "count": 39,
       "pct_in_issue": 12.1
+     },
+     {
+      "id": "F",
+      "label": "その他（実態の訴え・分類が難しいもの）",
+      "count": 34,
+      "pct_in_issue": 10.5
      },
      {
       "id": "L",
@@ -317,16 +337,16 @@
       "pct_in_issue": 9.6
      },
      {
-      "id": "B",
-      "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）",
-      "count": 30,
-      "pct_in_issue": 9.3
-     },
-     {
       "id": "H",
       "label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
       "count": 23,
       "pct_in_issue": 7.1
+     },
+     {
+      "id": "A",
+      "label": "移しても教員の負担は減らない・むしろ増える",
+      "count": 21,
+      "pct_in_issue": 6.5
      },
      {
       "id": "K",
@@ -335,16 +355,10 @@
       "pct_in_issue": 6.5
      },
      {
-      "id": "F",
-      "label": "その他（実態の訴え・分類が難しいもの）",
-      "count": 20,
-      "pct_in_issue": 6.2
-     },
-     {
-      "id": "A",
-      "label": "移しても教員の負担は減らない・むしろ増える",
-      "count": 17,
-      "pct_in_issue": 5.3
+      "id": "E",
+      "label": "移行や廃止で失われるものへの不安",
+      "count": 15,
+      "pct_in_issue": 4.6
      },
      {
       "id": "I",
@@ -353,22 +367,22 @@
       "pct_in_issue": 4.6
      },
      {
+      "id": "C",
+      "label": "やりたい先生だけが担えばよい（移行ではなく任意化）",
+      "count": 13,
+      "pct_in_issue": 4.0
+     },
+     {
       "id": "P",
       "label": "顧問拒否の実践を発信するシリーズ投稿（啓発目的の定型文）",
       "count": 10,
       "pct_in_issue": 3.1
      },
      {
-      "id": "C",
-      "label": "やりたい先生だけが担えばよい（移行ではなく任意化）",
-      "count": 8,
-      "pct_in_issue": 2.5
-     },
-     {
-      "id": "E",
-      "label": "移行や廃止で失われるものへの不安",
-      "count": 8,
-      "pct_in_issue": 2.5
+      "id": "D",
+      "label": "移行ではなく部活そのものを廃止すべき",
+      "count": 7,
+      "pct_in_issue": 2.2
      },
      {
       "id": "M",
@@ -377,23 +391,10 @@
       "pct_in_issue": 2.2
      },
      {
-      "id": "D",
-      "label": "移行ではなく部活そのものを廃止すべき",
-      "count": 4,
-      "pct_in_issue": 1.2
-     },
-     {
       "id": "N",
       "label": "その他（分類困難・皮肉・断片的な投稿）",
       "count": 3,
       "pct_in_issue": 0.9
-     },
-     {
-      "id": "__unread__",
-      "label": "まだ読み直していない分",
-      "count": 54,
-      "unread": true,
-      "pct_in_issue": 16.7
      }
     ]
    },
@@ -443,8 +444,65 @@
    "high_pct": 16.0,
    "high_adjusted_pct": 16.9,
    "sub": {
-    "status": "not_reviewed",
-    "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"
+    "status": "reread",
+    "coverage": "full",
+    "coverage_note": "note制作時に本文を読み直した論点全件の記録を継承",
+    "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
+    "reread_count": 256,
+    "unread_count": 0,
+    "skipped_count": 0,
+    "grown_count": 0,
+    "unknown_timing_count": 0,
+    "items": [
+     {
+      "id": "plan-undecided",
+      "label": "決まっていないことを指摘する",
+      "count": 79,
+      "pct_in_issue": 30.9
+     },
+     {
+      "id": "plan-blame",
+      "label": "進まない理由を誰かの責任に帰す",
+      "count": 74,
+      "pct_in_issue": 28.9
+     },
+     {
+      "id": "other",
+      "label": "上のどれにも当てはまらない",
+      "count": 47,
+      "pct_in_issue": 18.4
+     },
+     {
+      "id": "plan-local",
+      "label": "具体の自治体・計画・日程に触れる",
+      "count": 39,
+      "pct_in_issue": 15.2
+     },
+     {
+      "id": "child-value-doubt",
+      "label": "部活の教育的意義そのものを疑う",
+      "count": 8,
+      "pct_in_issue": 3.1
+     },
+     {
+      "id": "child-timing",
+      "label": "いまの学年・時期の当事者として書く",
+      "count": 5,
+      "pct_in_issue": 2.0
+     },
+     {
+      "id": "child-loss",
+      "label": "子どもの入り口・居場所が失われる懸念",
+      "count": 2,
+      "pct_in_issue": 0.8
+     },
+     {
+      "id": "child-gain",
+      "label": "子どもの選択肢が増えることへの期待",
+      "count": 2,
+      "pct_in_issue": 0.8
+     }
+    ]
    },
    "verdict": "gap",
    "claims": [
@@ -517,8 +575,65 @@
    "high_pct": 21.9,
    "high_adjusted_pct": 21.8,
    "sub": {
-    "status": "not_reviewed",
-    "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"
+    "status": "reread",
+    "coverage": "full",
+    "coverage_note": "note制作時に本文を読み直した論点全件の記録を継承",
+    "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
+    "reread_count": 215,
+    "unread_count": 0,
+    "skipped_count": 0,
+    "grown_count": 0,
+    "unknown_timing_count": 0,
+    "items": [
+     {
+      "id": "child-loss",
+      "label": "子どもの入り口・居場所が失われる懸念",
+      "count": 58,
+      "pct_in_issue": 27.0
+     },
+     {
+      "id": "child-value-doubt",
+      "label": "部活の教育的意義そのものを疑う",
+      "count": 46,
+      "pct_in_issue": 21.4
+     },
+     {
+      "id": "other",
+      "label": "上のどれにも当てはまらない",
+      "count": 42,
+      "pct_in_issue": 19.5
+     },
+     {
+      "id": "child-timing",
+      "label": "いまの学年・時期の当事者として書く",
+      "count": 25,
+      "pct_in_issue": 11.6
+     },
+     {
+      "id": "child-gain",
+      "label": "子どもの選択肢が増えることへの期待",
+      "count": 23,
+      "pct_in_issue": 10.7
+     },
+     {
+      "id": "plan-local",
+      "label": "具体の自治体・計画・日程に触れる",
+      "count": 11,
+      "pct_in_issue": 5.1
+     },
+     {
+      "id": "plan-blame",
+      "label": "進まない理由を誰かの責任に帰す",
+      "count": 5,
+      "pct_in_issue": 2.3
+     },
+     {
+      "id": "plan-undecided",
+      "label": "決まっていないことを指摘する",
+      "count": 5,
+      "pct_in_issue": 2.3
+     }
+    ]
    },
    "verdict": "fact",
    "claims": [
@@ -565,11 +680,14 @@
    "high_adjusted_pct": 17.2,
    "sub": {
     "status": "reread",
-    "coverage": "full",
-    "coverage_note": "論点全件を読み直し",
+    "coverage": "partial",
+    "coverage_note": "読了時点の論点全件を読み直し。その後に増えた投稿は未再読",
     "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json",
     "reread_count": 100,
     "unread_count": 64,
+    "skipped_count": 0,
+    "grown_count": 64,
+    "unknown_timing_count": 0,
     "items": [
      {
       "id": "R2",
@@ -692,11 +810,14 @@
    "high_adjusted_pct": 20.3,
    "sub": {
     "status": "reread",
-    "coverage": "full",
-    "coverage_note": "論点全件を読み直し",
+    "coverage": "partial",
+    "coverage_note": "読了時点の論点全件を読み直し。その後に増えた投稿は未再読",
     "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json",
     "reread_count": 72,
     "unread_count": 45,
+    "skipped_count": 0,
+    "grown_count": 45,
+    "unknown_timing_count": 0,
     "items": [
      {
       "id": "P4",

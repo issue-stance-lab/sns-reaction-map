@@ -1,0 +1,81 @@
+# 既存の編集再読を接続する設定。件数は公開JSONと原成果から計算する。
+theme_id: elderly-license-revocation
+title: 高齢者免許返納
+question: 高齢者の運転免許を年齢で一律に返納させるべきか
+source_label: Yahoo!リアルタイム検索
+
+stances:
+  - key: 義務化賛成
+    id: elderly-license-revocation-mandate-support
+    label: 義務化賛成
+    color: "#2F8F83"
+    pattern: plain
+  - key: 条件付き賛成
+    id: elderly-license-revocation-conditional
+    label: 条件付き賛成
+    color: "#D9A520"
+    pattern: dots
+  - key: 義務化反対
+    id: elderly-license-revocation-mandate-oppose
+    label: 義務化反対
+    color: "#7D5BA6"
+    pattern: diagonal
+  - key: 中立・情報
+    id: elderly-license-revocation-neutral
+    label: 中立・情報
+    color: "#8B9199"
+    pattern: mesh
+
+issues:
+  - key: 義務化・事故防止
+    id: elderly-license-revocation-safety
+    icon: "🚗"
+  - key: 地方の足・移動権
+    id: elderly-license-revocation-mobility-rights
+    icon: "🚌"
+  - key: 適性検査強化
+    id: elderly-license-revocation-assessment
+    icon: "📋"
+  - key: 代替交通整備
+    id: elderly-license-revocation-alternative-transport
+    icon: "🏙️"
+  - key: 自主返納支援
+    id: elderly-license-revocation-voluntary-return
+    icon: "🎁"
+  - key: その他
+    id: elderly-license-revocation-other
+    icon: "💬"
+
+# 保存済み投票の論点順を維持。画面の件数順に並べ替えない。
+vote_issue_order:
+  - 義務化・事故防止
+  - 地方の足・移動権
+  - 適性検査強化
+  - 代替交通整備
+  - 自主返納支援
+  - その他
+
+# 原成果は論点ごとのbucketsと、全論点を含む平坦なitemsを持つ。
+# itemsをmain_issueで絞るだけで、区分の判断や正典分類を変更しない。
+sub_issues:
+  義務化・事故防止:
+    file: data/elderly-license_issues-reread.json
+    path: [buckets, 義務化・事故防止]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した既存成果。趣旨不明・無関係とした区分も含み、正典分類は据え置き
+  地方の足・移動権:
+    file: data/elderly-license_issues-reread.json
+    path: [buckets, 地方の足・移動権]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した既存成果。趣旨不明・無関係とした区分も含み、正典分類は据え置き
+
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
