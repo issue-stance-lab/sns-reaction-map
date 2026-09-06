@@ -74,9 +74,50 @@ def build(stage: Path, topics: list[str], keep_ga4: bool) -> None:
              "--topic", topic, "--for-docs", "--out", str(out)],
             check=True, cwd=str(ROOT), stdout=subprocess.DEVNULL,
         )
+        html = out.read_text(encoding="utf-8")
         if not keep_ga4:
-            html = out.read_text(encoding="utf-8")
-            out.write_text(html.replace(REAL_GA4, DUMMY_GA4), encoding="utf-8")
+            html = html.replace(REAL_GA4, DUMMY_GA4)
+        html = html.replace("</body>", RESET_HTML + "</body>", 1)
+        out.write_text(html, encoding="utf-8")
+
+
+# 端末に覚えた「読んだところ」を0に戻す道具。確認のたびに数え直せないと、
+# 2回目以降は同じ場所を押しても増えず「増えない」と見える（数えるのは初回だけのため）。
+# 見本の配信だけに足す。公開ページの生成物には入れない。
+RESET_HTML = """
+<div id="isa-preview-reset" style="position:fixed;right:10px;bottom:10px;z-index:99999">
+  <button type="button" style="font:inherit;font-size:12px;font-weight:700;padding:9px 12px;
+    border-radius:999px;border:1px solid #B9CCE6;background:#fff;color:#0B3FA8;
+    box-shadow:0 2px 8px rgba(0,0,0,.18)">読んだところを0に戻す</button>
+</div>
+<script>
+(function(){
+  var b = document.querySelector("#isa-preview-reset button");
+  b.addEventListener("click", function(){
+    try {
+      Object.keys(localStorage).forEach(function(k){
+        if (k.indexOf("isa-seen-") === 0) localStorage.removeItem(k);
+      });
+    } catch (e) {}
+    location.reload();
+  });
+})();
+</script>
+"""
+
+
+class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
+    """作り直した見本が実機に届かないことがあるため、保存させない。
+
+    iPhone の Safari は前に開いた版を出し続けることがある。直したのに直っていない
+    ように見えるのを避ける。確認用の一時サーバーなので速さより新しさを優先する。
+    """
+
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
 
 
 def main() -> int:
@@ -100,7 +141,7 @@ def main() -> int:
                 print(f"  http://{addr}:{args.port}/preview-{topic}.html", flush=True)
         print(flush=True)
         print("止めるときは Control+C", flush=True)
-        handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(stage))
+        handler = functools.partial(NoCacheHandler, directory=str(stage))
         with http.server.ThreadingHTTPServer(("0.0.0.0", args.port), handler) as httpd:
             httpd.serve_forever()
     except KeyboardInterrupt:
