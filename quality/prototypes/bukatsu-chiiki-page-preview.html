@@ -789,7 +789,7 @@
 <meta name="robots" content="noindex,nofollow">
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('../../docs/images/topics/bukatsu-chiiki/bukatsu-hero.webp')">
-<div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><aside id="page-preview-status" role="note" style="padding:16px;background:#fff3cd;color:#453400"><strong>試作・非公開</strong> — 一般公開前の確認用です。</aside>
+<div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><aside id="page-preview-status" role="note" style="padding:16px;background:#fff3cd;color:#453400"><strong>試作・非公開</strong> — 一般公開前の確認用です。</aside>
   <section class="hero">
     <div class="hero-inner">
       <nav class="top-nav"><a href="index.html">トップ</a></nav>
@@ -996,16 +996,35 @@
 #planet-block a.go-card:hover{filter:brightness(1.08)}
 /* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」） */
 #progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;
+  flex-wrap:wrap;row-gap:4px;
   padding:9px clamp(14px,4vw,28px);background:#fff;border-bottom:1px solid #DCE3EF;font-size:13px;color:#42527A}
-#progress .track{flex:1;height:7px;background:#E7ECF4;border-radius:99px;overflow:hidden;
-  min-width:60px;max-width:340px}
-#progress .track i{display:block;height:100%;width:0;background:var(--accent,#075EF2);
-  border-radius:99px;transition:width .4s ease}
-#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums}
-#progress .how{color:#7C89A8;font-size:12px}
-@media (max-width:640px){ #progress .how{display:none} }
+/* 帯は残すが表には出さない。paintProgress() が #pbar の幅を書き続けるので、
+   消すとJSが止まる。見せるのは下の区画のほう。 */
+#progress .track{display:none}
+/* 1地点ぶんが帯では10pxにしかならず「動いていない」と見えた（オーナー指摘 2026-09-06）。
+   地点の数だけ区画に割り、1回の行動で1つ点灯させる。中身はJSが作る。 */
+#progress .segs{flex:1;display:flex;gap:2px;min-width:140px;max-width:340px}
+#progress .segs i{flex:1;height:9px;background:#E7ECF4;border-radius:2px;
+  transition:background .25s ease}
+#progress .segs i.on{background:var(--accent,#075EF2)}
+#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums;
+  display:inline-block}
+#progress .how{color:#7C89A8;font-size:12px;flex-basis:100%;order:9}
+/* 増やし方は0のあいだだけ。1つでも点いたら消して場所を返す */
+#progress.started .how{display:none}
+#progress.bump b{animation:isa-pnum-pop .5s ease}
+@keyframes isa-pnum-pop{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.35);color:var(--accent,#075EF2)}
+  100%{transform:scale(1)}
+}
+/* 説明は幅を問わず2行目。横一列に並べると区画が min-width まで潰れて見えなくなり、
+   スマホでは以前 display:none にしていたため、いちばん説明が要る画面で読めなかった。 */
+@media (max-width:640px){ #progress .how{font-size:11.5px} }
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
+  #progress .segs i{transition:none}
+  #progress.bump b{animation:none}
 }
 </style>
 <script>
@@ -1679,11 +1698,31 @@ function visit(id){
   try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
   paintProgress();
 }
+let painted = -1;
 function paintProgress(){
   const el = document.getElementById("progress");
   el.hidden = false;
-  document.getElementById("pbar").style.width = Math.min(100, 100*seen.size/SPOTS) + "%";
-  document.getElementById("pnum").textContent = seen.size + " / " + SPOTS;
+  const n = seen.size;
+  document.getElementById("pbar").style.width = Math.min(100, 100*n/SPOTS) + "%";
+  document.getElementById("pnum").textContent = n + " / " + SPOTS;
+  // 1地点ぶんは帯の 1/SPOTS しかなく、スマホ幅では十数ピクセルにもならない。
+  // 帯を伸ばすだけでは「動いていない」と見えるので、地点の数だけ区画に割って1つずつ点ける。
+  // 区画の入れ物が無いページ（単体の試作）では、今までどおり帯だけが伸びる。
+  const seg = document.getElementById("pseg");
+  if (seg){
+    if (seg.childElementCount !== SPOTS){
+      seg.innerHTML = "";
+      for (let i=0;i<SPOTS;i++) seg.appendChild(document.createElement("i"));
+    }
+    Array.from(seg.children).forEach((c,i)=>{ c.className = i<n ? "on" : ""; });
+  }
+  // 増えた瞬間を見逃さないよう数字をひと跳ねさせる。動きを減らす設定では止まる（CSS側）。
+  if (n > painted && painted >= 0){
+    el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+  }
+  painted = n;
+  // 増やし方の説明は、まだ0のあいだだけ出す（スマホで1行ぶん場所を取るため）。
+  el.classList.toggle("started", n > 0);
 }
 
 /* ---------- 予想（見る前に当てる） ----------

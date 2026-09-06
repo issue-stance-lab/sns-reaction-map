@@ -245,16 +245,35 @@ LIGHT_SKIN = """
 #planet-block a.go-card:hover{filter:brightness(1.08)}
 /* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」） */
 #progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;
+  flex-wrap:wrap;row-gap:4px;
   padding:9px clamp(14px,4vw,28px);background:#fff;border-bottom:1px solid #DCE3EF;font-size:13px;color:#42527A}
-#progress .track{flex:1;height:7px;background:#E7ECF4;border-radius:99px;overflow:hidden;
-  min-width:60px;max-width:340px}
-#progress .track i{display:block;height:100%;width:0;background:var(--accent,#075EF2);
-  border-radius:99px;transition:width .4s ease}
-#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums}
-#progress .how{color:#7C89A8;font-size:12px}
-@media (max-width:640px){ #progress .how{display:none} }
+/* 帯は残すが表には出さない。paintProgress() が #pbar の幅を書き続けるので、
+   消すとJSが止まる。見せるのは下の区画のほう。 */
+#progress .track{display:none}
+/* 1地点ぶんが帯では10pxにしかならず「動いていない」と見えた（オーナー指摘 2026-09-06）。
+   地点の数だけ区画に割り、1回の行動で1つ点灯させる。中身はJSが作る。 */
+#progress .segs{flex:1;display:flex;gap:2px;min-width:140px;max-width:340px}
+#progress .segs i{flex:1;height:9px;background:#E7ECF4;border-radius:2px;
+  transition:background .25s ease}
+#progress .segs i.on{background:var(--accent,#075EF2)}
+#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums;
+  display:inline-block}
+#progress .how{color:#7C89A8;font-size:12px;flex-basis:100%;order:9}
+/* 増やし方は0のあいだだけ。1つでも点いたら消して場所を返す */
+#progress.started .how{display:none}
+#progress.bump b{animation:isa-pnum-pop .5s ease}
+@keyframes isa-pnum-pop{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.35);color:var(--accent,#075EF2)}
+  100%{transform:scale(1)}
+}
+/* 説明は幅を問わず2行目。横一列に並べると区画が min-width まで潰れて見えなくなり、
+   スマホでは以前 display:none にしていたため、いちばん説明が要る画面で読めなかった。 */
+@media (max-width:640px){ #progress .how{font-size:11.5px} }
 @media (prefers-reduced-motion:reduce){
   #planet-block .chart-box svg{transition:none}
+  #progress .segs i{transition:none}
+  #progress.bump b{animation:none}
 }
 """
 
@@ -727,8 +746,10 @@ def main() -> None:
     # 進み具合はページの一番上へ。テンプレート側の paintProgress() が
     # #progress/#pbar/#pnum を前提にしており、無いとJSエラーで山なみごと止まる
     # （テーマを問わず必須。数字はJSが実測して上書きするのでここでは仮置きでよい）。
+    # #pseg は区画（1地点＝1区画）の入れ物。中身はテンプレート側の paintProgress() が作る。
     bar = ('<div id="progress"><span>読んだところ</span>'
-           '<span class="track"><i id="pbar"></i></span><b id="pnum">0</b>'
+           '<span class="track"><i id="pbar"></i></span>'
+           '<span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b>'
            '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>')
     html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + bar, html, count=1)
 
