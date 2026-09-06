@@ -1,0 +1,973 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>議論の山なみ 試作 — 部活動の地域移行</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff;
+  /* 追いかけていない分のマス。大陸の色はどれも白っぽいので、これより明るくすると
+     7色すべてで見分けの基準を下回る（実測で下回った）。明暗差1.7倍を保つこと。 */
+  --rest-dot:#4a525c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}
+.q{color:var(--muted);font-size:14px;margin:0 0 12px}
+.caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
+  border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}
+.proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
+.stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}
+.chart-box svg{display:block;width:100%;height:auto}
+.chart-box .hill{cursor:pointer}
+.chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
+.floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.panel h2{font-size:16px;margin:0 0 2px}
+.panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
+.bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  font-weight:700;overflow:hidden;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+/* 立場を切り替えたときに何が起きたかの1行（すれ違い装置） */
+.panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.panel .cross b{color:#f2f6fa}
+.panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
+  background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;cursor:pointer}
+.panel .cross .spin:hover{border-color:var(--accent)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+.islands{list-style:none;padding:0;margin:8px 0 0}
+.islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
+.islands li:first-child{border-top:none}
+.islands .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.islands .sw{width:12px;height:12px;border-radius:3px;flex:none}
+.islands .num{width:19px;height:19px;border-radius:99px;flex:none;background:#0d1117;
+  border:1px solid var(--line);font-size:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-weight:700}
+.islands li.unread{color:var(--muted)}
+.note{font-size:12px;color:var(--muted);background:#1c2128;border:1px dashed var(--line);
+  border-radius:6px;padding:9px 10px;margin-top:10px}
+.back{margin-top:12px;background:transparent;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.issue-list{list-style:none;padding:0;margin:18px 0 0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
+.issue-list button{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;color:var(--fg);cursor:pointer;font-family:inherit;font-size:13px}
+.issue-list button:hover,.issue-list button:focus-visible{border-color:var(--accent);outline:none}
+.issue-list .m{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:6px}
+h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
+  border-top:1px solid var(--line);padding-top:14px}
+.meta{font-size:11.5px;color:var(--muted)}
+.meta code{background:#1c2128;padding:1px 5px;border-radius:4px}
+
+/* JS・canvas が使えないときの静的表示（内容は生成器が data から作る） */
+.planet{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:0 0 20px}
+.continent{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  aspect-ratio:1;border-radius:50%;border:2px solid transparent;text-align:center;
+  padding:12px;text-decoration:none;line-height:1.4}
+.continent:hover,.continent:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.continent .label{font-size:13px;font-weight:700}
+.continent .count{font-size:11px;opacity:.78;font-variant-numeric:tabular-nums}
+.landing-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:0 0 12px}
+.landing-panel h2{font-size:16px;margin:0 0 2px}
+.landing-panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.srclist{list-style:none;padding:0;margin:8px 0 0;font-size:12px}
+.srclist li{padding:5px 0;border-top:1px solid var(--line)}
+.srclist li:first-child{border-top:none}
+.srclist a{color:var(--accent)}
+.backlink{display:inline-block;margin-top:12px;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}
+.backlink:hover,.backlink:focus-visible{border-color:var(--accent);outline:none}
+
+/* 資料との照合（着陸パネルの後半） */
+.claims{list-style:none;padding:0;margin:6px 0 0}
+.claims li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.claims li:first-child{border-top:none}
+.verdict{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;
+  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}
+.v-fact{background:#3fb950}.v-gap{background:#d9a520}.v-miss{background:#a5a5a5}
+.claims .finding,.claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}
+.claims .srcs{display:block;margin-top:4px}
+.claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}
+.dive{color:var(--accent)}
+
+/* 資料にあるのに、SNSにないこと */
+.ocean{border-top:1px solid var(--line);margin-top:26px}
+.ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
+.subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.sunk,.vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
+  border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.vein{border-left-color:#7D5BA6}
+.sunk h5,.vein h5{font-size:13.5px;margin:0 0 6px}
+.sunk .impact,.vein .impact{font-size:12.5px;margin:0 0 6px}
+.sunk .count,.vein .count{font-size:12px;color:var(--muted);margin:0 0 6px}
+.sunk .srclist .when,.sunk .srclist .where{display:block;color:var(--muted);font-size:11px}
+.sides{list-style:none;padding:0;margin:6px 0 0;font-size:12px}
+.sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}
+.sides .n{margin-left:auto;color:var(--muted)}
+
+/* 編集部の横断整理 */
+.editorial .sec{color:var(--fg);font-size:15px}
+.findings{list-style:none;padding:0;margin:0 0 4px}
+.findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}
+
+/* 点の装置（立場を絞ったときの件数と割合の動き）。着陸パネルの中に入る */
+.dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}
+.waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  transition:background-color .5s ease}
+.dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}
+.dot-cap b{color:var(--fg)}
+.readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.ro .k{font-size:10.5px;color:var(--muted);margin:0}
+.ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}
+.ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.ro .ar{font-size:13px;font-weight:700}
+.ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.ro.down .ar,.ro.down .to{color:#e8a0a8}
+.ro.up .ar,.ro.up .to{color:#7ee0a8}
+.ro.flat .ar,.ro.flat .to{color:var(--fg)}
+.dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.dot-mech b{color:#f2f6fa}
+
+/* 探査記録（読んだ場所の記録。端末の中だけに持ち、サーバーへは送らない） */
+.progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}
+.progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.progress b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* 予想（見る前に当てる） */
+.guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}
+.guess h3{font-size:14px;margin:0 0 9px}
+.gopts{display:flex;flex-direction:column;gap:7px}
+.gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+.gopts button:hover:not(:disabled){border-color:var(--accent)}
+.gopts button:disabled{cursor:default;opacity:.5}
+.gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}
+.gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}
+.gans{margin-top:10px;font-size:12.5px;line-height:1.8}
+.gans[hidden]{display:none}
+.gans .lead{font-weight:700;margin-bottom:3px}
+
+/* 潜水 */
+.dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}
+.dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
+  border:0;border-radius:99px;padding:7px 16px;cursor:pointer}
+#seafloor{opacity:0;transition:opacity .9s ease .2s}
+.dived #seafloor{opacity:1}
+#seacover{transition:opacity .9s ease}
+.dived #seacover{opacity:.2}
+
+/* 一次資料クイズ */
+.quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}
+.qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}
+.qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}
+.qans{margin-top:12px;font-size:13px;line-height:1.85}
+.qans[hidden]{display:none}
+.qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}
+.qscore{font-size:14px;line-height:1.85}
+.qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
+.planet-live #fallback{display:none}
+html:not(.planet-live) .modes,
+html:not(.planet-live) .stage,
+html:not(.planet-live) .sec-live,
+html:not(.planet-live) .issue-list{display:none}
+</style>
+
+<script>
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
+   （このクラスが付かないと #fallback が見えたままになる） */
+(function(){
+  try {
+    var c = document.createElement('canvas');
+    if (c.getContext && c.getContext('2d')) {
+      document.documentElement.className += ' planet-live';
+    }
+  } catch (e) {}
+})();
+</script>
+
+<div class="wrap">
+  <h1>議論の山なみ<span class="proto-tag">試作・非公開</span></h1>
+  <p class="q" id="q">自転車の交通違反に反則金（青切符）を導入すべきか（自転車の青切符導入）</p>
+  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>収集期間 2026-06-27〜2026-09-05／収集468件・<b>意見468件</b>（この図の母数）／更新 2026-09-05</p>
+  <p class="caution" style="border-left-color:#e5534b"><b>このページは公開できません。</b>独自性の検査に落ちています。<br>・「その他」の未読150件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）<br>・「取締り強化賛成」の未読87件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）<br>・「インフラ整備優先」の未読4件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）<br>・「免許制要求」の未読17件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）<br>・「車道走行への不安」の未読4件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）</p>
+
+  <div class="progress" id="progress" hidden>
+    <span>探査記録</span><span class="track"><i id="pbar"></i></span><b id="pnum"></b>
+  </div>
+  <div id="guesses"></div>
+
+  <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
+
+  <div class="stage">
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
+      <p class="dive"><button type="button" id="dive"></button><span id="divenote"></span></p>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、100マスで見せる。
+       マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+       着陸パネルの中へ差し込むので、押したボタンのすぐそばで変化が見える。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <div class="waffle" id="waffle"></div>
+    <p class="dot-cap">マス目100個が、いま見ている立場の全部です。
+      <b>色つきのマスの数が、そのまま割合（％）になります。</b></p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（色つきのマスの数）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
+  </div>
+
+    <div id="fallback">
+    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>
+    <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
+    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">
+      <a class="continent" href="#fb-bike-blue-ticket-other" style="background:#8B9199;border-color:#8B9199;color:#0d1117"><span class="label">💬 その他</span><span class="count">213件・45.5%</span></a>
+      <a class="continent" href="#fb-bike-blue-ticket-enforcement-support" style="background:#e04949;border-color:#e04949;color:#ffffff"><span class="label">🚔 取締り強化賛成</span><span class="count">90件・19.2%</span></a>
+      <a class="continent" href="#fb-bike-blue-ticket-infrastructure-first" style="background:#4b9cf4;border-color:#4b9cf4;color:#0d1117"><span class="label">🚲 インフラ整備優先</span><span class="count">58件・12.4%</span></a>
+      <a class="continent" href="#fb-bike-blue-ticket-rule-ambiguity" style="background:#4b9cf4;border-color:#4b9cf4;color:#0d1117"><span class="label">❓ ルール曖昧・不信</span><span class="count">58件・12.4%</span></a>
+      <a class="continent" href="#fb-bike-blue-ticket-license-requirement" style="background:#4b9cf4;border-color:#4b9cf4;color:#0d1117"><span class="label">📋 免許制要求</span><span class="count">29件・6.2%</span></a>
+      <a class="continent" href="#fb-bike-blue-ticket-road-safety" style="background:#4b9cf4;border-color:#4b9cf4;color:#0d1117"><span class="label">⚠️ 車道走行への不安</span><span class="count">20件・4.3%</span></a>
+    </nav>
+    <section class="landing-panel" id="fb-bike-blue-ticket-other" tabindex="-1">
+      <h2>💬 その他</h2>
+      <p class="sub">213件（45.5%）　山の高さ：強い表現11.8%</p>
+      <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 63件</span><span><i style="background:#8B9199"></i>どちらでもない 150件</span></div>
+      <div class="bar"><span style="width:29.6%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:70.4%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見468件のうち</span><span class="n">213件 / 45.5%</span></li><li><span>賛成（取締り強化）93件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>反対（インフラ・制度優先）180件のうち</span><span class="n">63件 / 35.0%</span></li><li><span>どちらでもない195件のうち</span><span class="n">150件 / 76.9%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>制度そのものに反対<span class="n">52件</span></li><li><span class="num">2</span>警察の運用が信用できない<span class="n">7件</span></li><li><span class="num">3</span>走る場所がない<span class="n">2件</span></li><li><span class="num">4</span>青切符では足りない<span class="n">2件</span></li><li class="unread"><span class="num">5</span>まだ読み直していない分<span class="n">150件</span></li></ul>
+      <div class="note">過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。。残り150件は、その後に増えた分でまだ読めていません。</div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-bike-blue-ticket-enforcement-support" tabindex="-1">
+      <h2>🚔 取締り強化賛成</h2>
+      <p class="sub">90件（19.2%）　山の高さ：強い表現27.2%</p>
+      <div class="legend"><span><i style="background:#e04949"></i>賛成（取締り強化） 84件</span><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 3件</span><span><i style="background:#8B9199"></i>どちらでもない 3件</span></div>
+      <div class="bar"><span style="width:93.3%;background:#e04949;color:#ffffff">賛成（取締り強化）</span><span style="width:3.3%;background:#4b9cf4;color:#0d1117"></span><span style="width:3.3%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見468件のうち</span><span class="n">90件 / 19.2%</span></li><li><span>賛成（取締り強化）93件のうち</span><span class="n">84件 / 90.3%</span></li><li><span>反対（インフラ・制度優先）180件のうち</span><span class="n">3件 / 1.7%</span></li><li><span>どちらでもない195件のうち</span><span class="n">3件 / 1.5%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>走る場所がない<span class="n">2件</span></li><li><span class="num">2</span>警察の運用が信用できない<span class="n">1件</span></li><li class="unread"><span class="num">3</span>まだ読み直していない分<span class="n">87件</span></li></ul>
+      <div class="note">過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。。残り87件は、その後に増えた分でまだ読めていません。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>自転車の事故は減っている／いや増えている<br>投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/info.html" rel="nofollow">警察庁 自転車は車のなかま</a></li><li>取締りなんて実際にはされていない<br>警告を含めれば、件数としては相当数が行われている。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/info.html" rel="nofollow">警察庁 自転車は車のなかま</a></li></ul>
+      <div class="extras" id="extras-bike-blue-ticket-enforcement-support">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>自転車の事故は減っている／いや増えている<span class="finding">投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/info.html" rel="nofollow">警察庁 自転車は車のなかま</a></span></li><li><span class="verdict v-gap">少しずれる</span>取締りなんて実際にはされていない<span class="finding">警告を含めれば、件数としては相当数が行われている。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/info.html" rel="nofollow">警察庁 自転車は車のなかま</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-bike-blue-ticket-infrastructure-first" tabindex="-1">
+      <h2>🚲 インフラ整備優先</h2>
+      <p class="sub">58件（12.4%）　山の高さ：強い表現26.1%</p>
+      <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 54件</span><span><i style="background:#8B9199"></i>どちらでもない 4件</span></div>
+      <div class="bar"><span style="width:93.1%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:6.9%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見468件のうち</span><span class="n">58件 / 12.4%</span></li><li><span>賛成（取締り強化）93件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>反対（インフラ・制度優先）180件のうち</span><span class="n">54件 / 30.0%</span></li><li><span>どちらでもない195件のうち</span><span class="n">4件 / 2.1%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>対象と順番に異議<span class="n">32件</span></li><li><span class="num">2</span>走る場所がない<span class="n">17件</span></li><li><span class="num">3</span>警察の運用が信用できない<span class="n">3件</span></li><li><span class="num">4</span>制度そのものに反対<span class="n">2件</span></li><li class="unread"><span class="num">5</span>まだ読み直していない分<span class="n">4件</span></li></ul>
+      <div class="note">過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。。残り4件は、その後に増えた分でまだ読めていません。</div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-bike-blue-ticket-rule-ambiguity" tabindex="-1">
+      <h2>❓ ルール曖昧・不信</h2>
+      <p class="sub">58件（12.4%）　山の高さ：強い表現22.4%</p>
+      <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 32件</span><span><i style="background:#8B9199"></i>どちらでもない 26件</span></div>
+      <div class="bar"><span style="width:55.2%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:44.8%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見468件のうち</span><span class="n">58件 / 12.4%</span></li><li><span>賛成（取締り強化）93件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>反対（インフラ・制度優先）180件のうち</span><span class="n">32件 / 17.8%</span></li><li><span>どちらでもない195件のうち</span><span class="n">26件 / 13.3%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>警察の運用が信用できない<span class="n">39件</span></li><li><span class="num">2</span>対象と順番に異議<span class="n">8件</span></li><li><span class="num">3</span>制度そのものに反対<span class="n">5件</span></li><li><span class="num">4</span>走る場所がない<span class="n">3件</span></li><li><span class="num">5</span>青切符では足りない<span class="n">3件</span></li></ul>
+      <div class="note">過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>LUUPは免許不要で野放しなのに、自転車だけ青切符だ<br>電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。<br><a href="https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html" rel="nofollow">警察庁 特定小型原動機付自転車の交通ルール</a></li><li>反則金は6,000円くらい取られる<br>投稿で挙がる6,000円は、信号無視などの区分と一致する。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf" rel="nofollow">警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）</a></li><li>対象は16歳以上だ<br>年齢の理解に食い違いは見当たらなかった。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html" rel="nofollow">警察庁 自転車の新しい制度</a></li><li>歩道を少し走っただけで即青切符・罰金<br>歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" rel="nofollow">警察庁 自転車ポータル よくある質問</a></li><li>対象になる違反は113種類もある<br>113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf" rel="nofollow">警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）</a></li></ul>
+      <div class="extras" id="extras-bike-blue-ticket-rule-ambiguity">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>LUUPは免許不要で野放しなのに、自転車だけ青切符だ<span class="finding">電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html" rel="nofollow">警察庁 特定小型原動機付自転車の交通ルール</a></span></li><li><span class="verdict v-fact">資料どおり</span>反則金は6,000円くらい取られる<span class="finding">投稿で挙がる6,000円は、信号無視などの区分と一致する。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf" rel="nofollow">警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）</a></span></li><li><span class="verdict v-fact">資料どおり</span>対象は16歳以上だ<span class="finding">年齢の理解に食い違いは見当たらなかった。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html" rel="nofollow">警察庁 自転車の新しい制度</a></span></li><li><span class="verdict v-gap">少しずれる</span>歩道を少し走っただけで即青切符・罰金<span class="finding">歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" rel="nofollow">警察庁 自転車ポータル よくある質問</a></span></li><li><span class="verdict v-miss">裏が取れない</span>対象になる違反は113種類もある<span class="finding">113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。</span><span class="vnote">一次資料では確認できませんでした。誤りと決まったわけではありません。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf" rel="nofollow">警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-bike-blue-ticket-license-requirement" tabindex="-1">
+      <h2>📋 免許制要求</h2>
+      <p class="sub">29件（6.2%）　山の高さ：強い表現19.2%</p>
+      <div class="legend"><span><i style="background:#e04949"></i>賛成（取締り強化） 9件</span><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 12件</span><span><i style="background:#8B9199"></i>どちらでもない 8件</span></div>
+      <div class="bar"><span style="width:31.0%;background:#e04949;color:#ffffff">賛成（取締り強化）</span><span style="width:41.4%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:27.6%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見468件のうち</span><span class="n">29件 / 6.2%</span></li><li><span>賛成（取締り強化）93件のうち</span><span class="n">9件 / 9.7%</span></li><li><span>反対（インフラ・制度優先）180件のうち</span><span class="n">12件 / 6.7%</span></li><li><span>どちらでもない195件のうち</span><span class="n">8件 / 4.1%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>青切符では足りない<span class="n">10件</span></li><li><span class="num">2</span>対象と順番に異議<span class="n">2件</span></li><li class="unread"><span class="num">3</span>まだ読み直していない分<span class="n">17件</span></li></ul>
+      <div class="note">過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。。残り17件は、その後に増えた分でまだ読めていません。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>LUUPは免許不要で野放しなのに、自転車だけ青切符だ<br>電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。<br><a href="https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html" rel="nofollow">警察庁 特定小型原動機付自転車の交通ルール</a></li></ul>
+      <div class="extras" id="extras-bike-blue-ticket-license-requirement">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>LUUPは免許不要で野放しなのに、自転車だけ青切符だ<span class="finding">電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html" rel="nofollow">警察庁 特定小型原動機付自転車の交通ルール</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-bike-blue-ticket-road-safety" tabindex="-1">
+      <h2>⚠️ 車道走行への不安</h2>
+      <p class="sub">20件（4.3%）　山の高さ：強い表現27.4%</p>
+      <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 16件</span><span><i style="background:#8B9199"></i>どちらでもない 4件</span></div>
+      <div class="bar"><span style="width:80.0%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:20.0%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見468件のうち</span><span class="n">20件 / 4.3%</span></li><li><span>賛成（取締り強化）93件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>反対（インフラ・制度優先）180件のうち</span><span class="n">16件 / 8.9%</span></li><li><span>どちらでもない195件のうち</span><span class="n">4件 / 2.1%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>走る場所がない<span class="n">8件</span></li><li><span class="num">2</span>警察の運用が信用できない<span class="n">3件</span></li><li><span class="num">3</span>対象と順番に異議<span class="n">3件</span></li><li><span class="num">4</span>制度そのものに反対<span class="n">1件</span></li><li><span class="num">5</span>青切符では足りない<span class="n">1件</span></li><li class="unread"><span class="num">6</span>まだ読み直していない分<span class="n">4件</span></li></ul>
+      <div class="note">過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。。残り4件は、その後に増えた分でまだ読めていません。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>歩道を少し走っただけで即青切符・罰金<br>歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。<br><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" rel="nofollow">警察庁 自転車ポータル よくある質問</a></li></ul>
+      <div class="extras" id="extras-bike-blue-ticket-road-safety">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>歩道を少し走っただけで即青切符・罰金<span class="finding">歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" rel="nofollow">警察庁 自転車ポータル よくある質問</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+  </div>
+
+  <h3 class="sec sec-live">一次資料クイズ — その主張、資料に当たるとどうなる？</h3>
+  <div class="quiz" id="quiz"></div>
+
+    <section id="ocean" class="ocean" tabindex="-1">
+    <h3 class="sec">資料にあるのに、SNSにないこと</h3>
+    <p class="sub">このテーマは、まだ編集部が一次資料を読んで「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>
+  </section>
+
+    <section id="editorial" class="editorial" tabindex="-1">
+    <h3 class="sec">編集部の横断整理</h3>
+    <p class="sub">このテーマは、論点をまたいで言えることの整理がまだです。書けるまで、ここは空のままにします。</p>
+  </section>
+
+  <h3 class="sec sec-live">論点の一覧（押すと、地図がその論点に切り替わります）</h3>
+  <ul class="issue-list" id="list"></ul>
+
+  <h3 class="sec">この試作の見かた</h3>
+  <p class="meta" id="meta">山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、母数が小さいものは画面で断っています。</p>
+</div>
+
+<script>window.PLANET_DATA={"schema": 1, "theme_id": "bike-blue-ticket", "title": "自転車の青切符導入", "question": "自転車の交通違反に反則金（青切符）を導入すべきか", "snapshot_id": "bike-blue-ticket-20260905", "updated_at": "2026-09-05", "sample_period": "2026-06-27〜2026-09-05", "source_label": "Yahoo!リアルタイム検索", "totals": {"collected": 468, "opinions": 468}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.203, "k": 50, "max_pct": 4.0}, "stances": [{"key": "enforcement_support", "id": "bike-blue-ticket-enforcement-support", "label": "賛成（取締り強化）", "color": "#e04949", "pattern": "plain", "count": 93}, {"key": "infrastructure_first", "id": "bike-blue-ticket-infrastructure-first", "label": "反対（インフラ・制度優先）", "color": "#4b9cf4", "pattern": "diagonal", "count": 180}, {"key": "neutral", "id": "bike-blue-ticket-neutral", "label": "どちらでもない", "color": "#8B9199", "pattern": "mesh", "count": 195}], "vote_issue_order": ["取締り強化賛成", "インフラ整備優先", "車道走行への不安", "免許制要求", "ルール曖昧・不信", "その他"], "reread_summary": {"connected_editorial_count": 206, "connected_issue_population": 468, "not_connected_opinion_count": 262}, "modes": [{"id": "all", "label": "すべての意見", "total": 468, "counts": {"bike-blue-ticket-other": 213, "bike-blue-ticket-enforcement-support": 90, "bike-blue-ticket-infrastructure-first": 58, "bike-blue-ticket-rule-ambiguity": 58, "bike-blue-ticket-license-requirement": 29, "bike-blue-ticket-road-safety": 20}, "width_pct": {"bike-blue-ticket-other": 45.51, "bike-blue-ticket-enforcement-support": 19.23, "bike-blue-ticket-infrastructure-first": 12.39, "bike-blue-ticket-rule-ambiguity": 12.39, "bike-blue-ticket-license-requirement": 6.2, "bike-blue-ticket-road-safety": 4.27}, "high_pct": {"bike-blue-ticket-other": 9.9, "bike-blue-ticket-enforcement-support": 31.1, "bike-blue-ticket-infrastructure-first": 31.0, "bike-blue-ticket-rule-ambiguity": 24.1, "bike-blue-ticket-license-requirement": 17.2, "bike-blue-ticket-road-safety": 45.0}, "high_counts": {"bike-blue-ticket-other": 21, "bike-blue-ticket-enforcement-support": 28, "bike-blue-ticket-infrastructure-first": 18, "bike-blue-ticket-rule-ambiguity": 14, "bike-blue-ticket-license-requirement": 5, "bike-blue-ticket-road-safety": 9}}, {"id": "enforcement_support", "label": "賛成（取締り強化）", "total": 93, "counts": {"bike-blue-ticket-other": 0, "bike-blue-ticket-enforcement-support": 84, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-license-requirement": 9, "bike-blue-ticket-road-safety": 0}, "width_pct": {"bike-blue-ticket-other": 0.0, "bike-blue-ticket-enforcement-support": 90.32, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-license-requirement": 9.68, "bike-blue-ticket-road-safety": 0.0}, "high_pct": {"bike-blue-ticket-other": 0.0, "bike-blue-ticket-enforcement-support": 31.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-license-requirement": 33.3, "bike-blue-ticket-road-safety": 0.0}, "high_counts": {"bike-blue-ticket-other": 0, "bike-blue-ticket-enforcement-support": 26, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-license-requirement": 3, "bike-blue-ticket-road-safety": 0}}, {"id": "infrastructure_first", "label": "反対（インフラ・制度優先）", "total": 180, "counts": {"bike-blue-ticket-other": 63, "bike-blue-ticket-enforcement-support": 3, "bike-blue-ticket-infrastructure-first": 54, "bike-blue-ticket-rule-ambiguity": 32, "bike-blue-ticket-license-requirement": 12, "bike-blue-ticket-road-safety": 16}, "width_pct": {"bike-blue-ticket-other": 35.0, "bike-blue-ticket-enforcement-support": 1.67, "bike-blue-ticket-infrastructure-first": 30.0, "bike-blue-ticket-rule-ambiguity": 17.78, "bike-blue-ticket-license-requirement": 6.67, "bike-blue-ticket-road-safety": 8.89}, "high_pct": {"bike-blue-ticket-other": 22.2, "bike-blue-ticket-enforcement-support": 66.7, "bike-blue-ticket-infrastructure-first": 33.3, "bike-blue-ticket-rule-ambiguity": 43.8, "bike-blue-ticket-license-requirement": 16.7, "bike-blue-ticket-road-safety": 56.2}, "high_counts": {"bike-blue-ticket-other": 14, "bike-blue-ticket-enforcement-support": 2, "bike-blue-ticket-infrastructure-first": 18, "bike-blue-ticket-rule-ambiguity": 14, "bike-blue-ticket-license-requirement": 2, "bike-blue-ticket-road-safety": 9}}, {"id": "neutral", "label": "どちらでもない", "total": 195, "counts": {"bike-blue-ticket-other": 150, "bike-blue-ticket-enforcement-support": 3, "bike-blue-ticket-infrastructure-first": 4, "bike-blue-ticket-rule-ambiguity": 26, "bike-blue-ticket-license-requirement": 8, "bike-blue-ticket-road-safety": 4}, "width_pct": {"bike-blue-ticket-other": 76.92, "bike-blue-ticket-enforcement-support": 1.54, "bike-blue-ticket-infrastructure-first": 2.05, "bike-blue-ticket-rule-ambiguity": 13.33, "bike-blue-ticket-license-requirement": 4.1, "bike-blue-ticket-road-safety": 2.05}, "high_pct": {"bike-blue-ticket-other": 4.7, "bike-blue-ticket-enforcement-support": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-license-requirement": 0.0, "bike-blue-ticket-road-safety": 0.0}, "high_counts": {"bike-blue-ticket-other": 7, "bike-blue-ticket-enforcement-support": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-license-requirement": 0, "bike-blue-ticket-road-safety": 0}}], "issues": [{"id": "bike-blue-ticket-other", "key": "その他", "label": "その他", "icon": "💬", "count": 213, "share_pct": 45.5, "stances": {"enforcement_support": 0, "infrastructure_first": 63, "neutral": 150}, "top_stance": "neutral", "purity_pct": 70.4, "intensity": {"high": 21, "medium": 58, "low": 134}, "high_pct": 9.9, "high_adjusted_pct": 11.8, "sub": {"status": "reread", "coverage": "partial", "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 63, "unread_count": 150, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 150, "items": [{"id": "abolish", "label": "制度そのものに反対", "count": 52, "pct_in_issue": 24.4}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 7, "pct_in_issue": 3.3}, {"id": "place", "label": "走る場所がない", "count": 2, "pct_in_issue": 0.9}, {"id": "strict", "label": "青切符では足りない", "count": 2, "pct_in_issue": 0.9}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 150, "unread": true, "pct_in_issue": 70.4}]}, "verdict": null, "claims": [], "veins": []}, {"id": "bike-blue-ticket-enforcement-support", "key": "取締り強化賛成", "label": "取締り強化賛成", "icon": "🚔", "count": 90, "share_pct": 19.2, "stances": {"enforcement_support": 84, "infrastructure_first": 3, "neutral": 3}, "top_stance": "enforcement_support", "purity_pct": 93.3, "intensity": {"high": 28, "medium": 50, "low": 12}, "high_pct": 31.1, "high_adjusted_pct": 27.2, "sub": {"status": "reread", "coverage": "partial", "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 3, "unread_count": 87, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 87, "items": [{"id": "place", "label": "走る場所がない", "count": 2, "pct_in_issue": 2.2}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 1, "pct_in_issue": 1.1}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 87, "unread": true, "pct_in_issue": 96.7}]}, "verdict": "gap", "claims": [{"claim": "自転車の事故は減っている／いや増えている", "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。", "id": "accident", "issue_ids": ["bike-blue-ticket-enforcement-support"], "matched_post_count": 5, "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}], "verdict": "gap"}, {"claim": "取締りなんて実際にはされていない", "finding": "警告を含めれば、件数としては相当数が行われている。", "id": "noenforce", "issue_ids": ["bike-blue-ticket-enforcement-support"], "matched_post_count": 8, "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}], "verdict": "gap"}], "veins": []}, {"id": "bike-blue-ticket-infrastructure-first", "key": "インフラ整備優先", "label": "インフラ整備優先", "icon": "🚲", "count": 58, "share_pct": 12.4, "stances": {"enforcement_support": 0, "infrastructure_first": 54, "neutral": 4}, "top_stance": "infrastructure_first", "purity_pct": 93.1, "intensity": {"high": 18, "medium": 37, "low": 3}, "high_pct": 31.0, "high_adjusted_pct": 26.1, "sub": {"status": "reread", "coverage": "partial", "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 54, "unread_count": 4, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 4, "items": [{"id": "scope", "label": "対象と順番に異議", "count": 32, "pct_in_issue": 55.2}, {"id": "place", "label": "走る場所がない", "count": 17, "pct_in_issue": 29.3}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 3, "pct_in_issue": 5.2}, {"id": "abolish", "label": "制度そのものに反対", "count": 2, "pct_in_issue": 3.4}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 4, "unread": true, "pct_in_issue": 6.9}]}, "verdict": null, "claims": [], "veins": []}, {"id": "bike-blue-ticket-rule-ambiguity", "key": "ルール曖昧・不信", "label": "ルール曖昧・不信", "icon": "❓", "count": 58, "share_pct": 12.4, "stances": {"enforcement_support": 0, "infrastructure_first": 32, "neutral": 26}, "top_stance": "infrastructure_first", "purity_pct": 55.2, "intensity": {"high": 14, "medium": 34, "low": 10}, "high_pct": 24.1, "high_adjusted_pct": 22.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 58, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "distrust", "label": "警察の運用が信用できない", "count": 39, "pct_in_issue": 67.2}, {"id": "scope", "label": "対象と順番に異議", "count": 8, "pct_in_issue": 13.8}, {"id": "abolish", "label": "制度そのものに反対", "count": 5, "pct_in_issue": 8.6}, {"id": "place", "label": "走る場所がない", "count": 3, "pct_in_issue": 5.2}, {"id": "strict", "label": "青切符では足りない", "count": 3, "pct_in_issue": 5.2}]}, "verdict": "miss", "claims": [{"claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "id": "luup", "issue_ids": ["bike-blue-ticket-license-requirement", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}], "verdict": "gap"}, {"claim": "反則金は6,000円くらい取られる", "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。", "id": "fine", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 15, "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}], "verdict": "fact"}, {"claim": "対象は16歳以上だ", "finding": "年齢の理解に食い違いは見当たらなかった。", "id": "age", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 10, "sources": [{"name": "警察庁 自転車の新しい制度", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"}], "verdict": "fact"}, {"claim": "歩道を少し走っただけで即青切符・罰金", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "id": "sidewalk", "issue_ids": ["bike-blue-ticket-road-safety", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}], "verdict": "gap"}, {"claim": "対象になる違反は113種類もある", "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。", "id": "count113", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 2, "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}], "verdict": "miss"}], "veins": []}, {"id": "bike-blue-ticket-license-requirement", "key": "免許制要求", "label": "免許制要求", "icon": "📋", "count": 29, "share_pct": 6.2, "stances": {"enforcement_support": 9, "infrastructure_first": 12, "neutral": 8}, "top_stance": "infrastructure_first", "purity_pct": 41.4, "intensity": {"high": 5, "medium": 20, "low": 4}, "high_pct": 17.2, "high_adjusted_pct": 19.2, "sub": {"status": "reread", "coverage": "partial", "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 12, "unread_count": 17, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 17, "items": [{"id": "strict", "label": "青切符では足りない", "count": 10, "pct_in_issue": 34.5}, {"id": "scope", "label": "対象と順番に異議", "count": 2, "pct_in_issue": 6.9}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 17, "unread": true, "pct_in_issue": 58.6}]}, "verdict": "gap", "claims": [{"claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "id": "luup", "issue_ids": ["bike-blue-ticket-license-requirement", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}], "verdict": "gap"}], "veins": []}, {"id": "bike-blue-ticket-road-safety", "key": "車道走行への不安", "label": "車道走行への不安", "icon": "⚠️", "count": 20, "share_pct": 4.3, "stances": {"enforcement_support": 0, "infrastructure_first": 16, "neutral": 4}, "top_stance": "infrastructure_first", "purity_pct": 80.0, "intensity": {"high": 9, "medium": 9, "low": 2}, "high_pct": 45.0, "high_adjusted_pct": 27.4, "sub": {"status": "reread", "coverage": "partial", "coverage_note": "過去の本文再読記録を引き継いだ範囲。自動分類は再読数に含めず、未確認分を分けて表示する。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 16, "unread_count": 4, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 4, "items": [{"id": "place", "label": "走る場所がない", "count": 8, "pct_in_issue": 40.0}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 3, "pct_in_issue": 15.0}, {"id": "scope", "label": "対象と順番に異議", "count": 3, "pct_in_issue": 15.0}, {"id": "abolish", "label": "制度そのものに反対", "count": 1, "pct_in_issue": 5.0}, {"id": "strict", "label": "青切符では足りない", "count": 1, "pct_in_issue": 5.0}, {"id": "__unread__", "label": "まだ読み直していない分", "count": 4, "unread": true, "pct_in_issue": 20.0}]}, "verdict": "gap", "claims": [{"claim": "歩道を少し走っただけで即青切符・罰金", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "id": "sidewalk", "issue_ids": ["bike-blue-ticket-road-safety", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}], "verdict": "gap"}], "veins": []}], "claims": [{"id": "luup", "claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "verdict": "gap", "verdict_label": "少しずれる", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}]}, {"id": "fine", "claim": "反則金は6,000円くらい取られる", "verdict": "fact", "verdict_label": "資料どおり", "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。", "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}]}, {"id": "age", "claim": "対象は16歳以上だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "年齢の理解に食い違いは見当たらなかった。", "sources": [{"name": "警察庁 自転車の新しい制度", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"}]}, {"id": "sidewalk", "claim": "歩道を少し走っただけで即青切符・罰金", "verdict": "gap", "verdict_label": "少しずれる", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}]}, {"id": "accident", "claim": "自転車の事故は減っている／いや増えている", "verdict": "gap", "verdict_label": "少しずれる", "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。", "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}]}, {"id": "noenforce", "claim": "取締りなんて実際にはされていない", "verdict": "gap", "verdict_label": "少しずれる", "finding": "警告を含めれば、件数としては相当数が行われている。", "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}]}, {"id": "count113", "claim": "対象になる違反は113種類もある", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。", "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}]}], "editorial": {"checked_on": null, "findings": [], "reviewer_type": null, "status": "not_started"}, "ocean": {"claim_status": "complete", "checked_on": "2026-08-16", "reviewer_type": "editorial_review", "ocean_status": "not_started", "ocean_checked_on": null, "ocean_reviewer_type": null, "sunk_continents": [], "veins": []}, "prototype_only": true, "gate_failures": ["「その他」の未読150件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）", "「取締り強化賛成」の未読87件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）", "「インフラ整備優先」の未読4件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）", "「免許制要求」の未読17件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）", "「車道走行への不安」の未読4件は取得日時または再読境界が不明（読み飛ばしと読了後増分を区別できないため要確認）"]};</script>
+<script>
+(function(){
+"use strict";
+const D = window.PLANET_DATA;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 状態 ---------- */
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
+const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
+const issues = D.issues;
+const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
+const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
+
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
+function ranksOf(modeId){
+  const m = modeById[modeId];
+  const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
+                      .filter(x => x.n > 0)
+                      .sort((a,b) => b.n - a.n || a.k - b.k);
+  const r = issues.map(() => null);
+  order.forEach((x,i) => { r[x.k] = i + 1; });
+  return r;
+}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
+
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
+  }
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
+}
+
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+
+function render(){
+  const L=layout(st.mode), p=[];
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
+  }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  p.push('<g id="seafloor">');
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('</g>');
+  // 海の覆い。潜水で薄くなり、下が見えるようになる
+  p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+}
+
+function land(i){
+  st.landed=i;
+  visit("i:"+issues[i].id);
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
+}
+function orbit(){
+  const prev=st.landed;
+  st.landed=null;
+  if (location.hash) history.replaceState(null,"",location.pathname);
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
+}
+
+/* ---------- パネル ---------- */
+function stanceBar(counts, total){
+  return '<div class="bar">' + D.stances.map(s=>{
+    const n = counts[s.key]||0; if(!n) return "";
+    const w = 100*n/total;
+    return '<span style="width:'+w+'%;background:'+s.color+'">'+(w>13?s.label+" "+n:(w>6?n:""))+'</span>';
+  }).join("") + '</div>';
+}
+function legend(){
+  return '<div class="legend">' + D.stances.map(s=>
+    '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
+}
+
+/* 立場を切り替えたときに何が起きたかを1行で言う。
+   順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
+function crossTalk(modeId){
+  if (modeId === "all"){
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
+  }
+  const rAll = ranksOf("all"), rM = ranksOf(modeId);
+  const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
+  if (topMK < 0) return '';
+  const spin = '<button type="button" class="spin" id="spin">'
+             + '「'+issues[topMK].label+'」を見る</button>';
+  if (topMK === topAllK){
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
+         + 'すべての意見のときと同じ1位です。' + spin;
+  }
+  const moved = rM[topAllK];
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+       + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
+       + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
+}
+
+/* ---------- 点の装置（100マス） ----------
+   マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+   立場を絞ると件数は減るのに割合は増えることがある。これが文章では通じなかったための装置。
+   1件1マスで意見の数だけ並べた版は「多すぎて何も分からない」と差し戻された（2026-09-05）。 */
+const dotBox = document.getElementById("dotbox");
+const CELLS = 100;
+let cells = null;
+
+function buildCells(){
+  const w = document.getElementById("waffle");
+  let h = "";
+  for (let i=0;i<CELLS;i++) h += "<span></span>";
+  w.innerHTML = h;
+  cells = Array.prototype.slice.call(w.querySelectorAll("span"));
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!cells) buildCells();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
+  const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
+  cells.forEach((c,i)=>{
+    c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
+    c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
+  });
+
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+hot+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:var(--rest-dot)"></i>それ以外の論点</span>';
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を切り替えると、<b>色つきのマスの数が変わります</b>。"
+      + "件数が減っても、マスが増えることがあります。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほぼ同じだけ残ったので、割合もほとんど変わりません。</b>';
+    else if (gap > 0)
+      verdict = '<b>この論点のほうが多く残ったので、割合は増えます。</b>'
+              + '「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>この論点のほうが多く減ったので、割合は減ります。</b>'
+              + '「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '「'+m.label+'」に絞ると、この論点は <b>'+keepHot.toFixed(1)+'%</b> 残り、'
+      + 'それ以外は <b>'+keepRest.toFixed(1)+'%</b> 残りました。<br>' + verdict;
+  }
+}
+
+function drawPanel(){
+  const p = document.getElementById("panel");
+  const m = modeById[st.mode];
+  if (st.landed === null){
+    p.innerHTML = '<h2>'+D.title+'</h2>'
+      + '<p class="sub">'+m.label+'：'+m.total+'件'
+      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
+      + legend()
+      + '<p class="cross">'+crossTalk(st.mode)+'</p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
+      + (st.mode!=="all"
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
+          + (issues.filter(it=>m.counts[it.id]===0).length
+             ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
+               +' が0件のため、山が消えています。'
+             : '')
+          + '</div>'
+        : '');
+    // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
+    // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
+    const sp = document.getElementById("spin");
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
+    syncDots();
+    return;
+  }
+  const it = issues[st.landed];
+  const n = m.counts[it.id];
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
+    + '<div id="dot-slot"></div>'
+    + legend() + stanceBar(it.stances, it.count)
+    + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
+  const s = it.sub;
+  if (s.status === "reread"){
+    h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
+      + '<ul class="islands">' + s.items.map((x,j)=>
+          '<li class="'+(x.unread?"unread":"")+'">'
+          + '<span class="num">'+(j+1)+'</span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
+          + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
+      + '<div class="note">'+s.coverage_note+'。'
+      + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
+      + '</div>';
+  } else {
+    h += '<div class="note">'+s.note+'。<br>'
+       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+  }
+  // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
+  // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  const extras = document.getElementById("extras-" + it.id);
+  if (extras) h += extras.innerHTML;
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
+  p.innerHTML = h;
+  document.getElementById("back").onclick = orbit;
+  // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
+  document.getElementById("dot-slot").appendChild(dotBox);
+  syncDots();
+}
+
+/* ---------- 一覧・モード ---------- */
+function syncList(){
+  const m = modeById[st.mode];
+  const rank = ranksOf(st.mode);
+  issues.forEach((it,i)=>{
+    const b = document.getElementById("btn-"+it.id);
+    if (!b) return;
+    const n = m.counts[it.id];
+    b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
+    b.style.opacity = n ? 1 : .45;
+    // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
+    // 並びの変化を追えるようにするため。
+    b.querySelector(".m").textContent =
+      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
+  });
+}
+function buildList(){
+  const ul = document.getElementById("list");
+  ul.innerHTML = issues.map(it =>
+    '<li><button type="button" id="btn-'+it.id+'" aria-pressed="false">'
+    + '<span class="dot" style="background:'+stanceMap[it.top_stance].color+'"></span>'
+    + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
+  issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
+}
+/* 要素が画面の中ほどへ来るまでスクロールする。
+   scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
+   画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+function bringIntoView(el){
+  // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
+  setTimeout(function(){
+    const r = el.getBoundingClientRect();
+    if (!r.height) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max,
+      window.scrollY + r.top - (window.innerHeight - r.height)/2));
+    const from = window.scrollY;
+    if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
+    const t0 = performance.now(), dur = 420;
+    (function step(now){
+      const t = Math.min(1, (now - t0)/dur);
+      window.scrollTo(0, from + (to - from)*ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);                                  // 1枚目は rAF を待たずに描く
+    // rAF が止まる環境でも必ず届かせる
+    setTimeout(function(){
+      if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
+    }, dur + 180);
+  }, 0);
+}
+
+function buildModes(){
+  const el = document.getElementById("modes");
+  el.innerHTML = D.modes.map(m =>
+    '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
+    + m.label+' '+m.total+'</button>').join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
+    el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    morphTo(b.dataset.m);
+  });
+}
+
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
+}
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
+addEventListener("keydown", e=>{
+  if (e.key === "Escape" && st.landed !== null) orbit();
+});
+
+/* ---------- 探査記録 ----------
+   予想2問＋論点＋語られていない争点＋主張＋立場をこえて同じ心配を「地点」として数える。
+   端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
+const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
+            + (D.claims||[]).length + (D.ocean.veins||[]).length;
+const seen = new Set();
+try { (JSON.parse(localStorage.getItem("isa-seen-"+D.theme_id)||"[]")).forEach(x=>seen.add(x)); } catch(e){}
+function visit(id){
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
+  paintProgress();
+}
+function paintProgress(){
+  const el = document.getElementById("progress");
+  el.hidden = false;
+  document.getElementById("pbar").style.width = Math.min(100, 100*seen.size/SPOTS) + "%";
+  document.getElementById("pnum").textContent = seen.size + " / " + SPOTS;
+}
+
+/* ---------- 予想（見る前に当てる） ----------
+   選択肢も答えも data から作る。ここに数字や論点名を書かない。 */
+function buildGuesses(){
+  const box = document.getElementById("guesses");
+  const st = D.stances.slice().sort((a,b)=>b.count-a.count);
+  const peak = issues.map(it=>({it, r: modeById.all.high_pct[it.id]}))
+                     .filter(x=>modeById.all.counts[x.it.id]>0)
+                     .sort((a,b)=>b.r-a.r);
+  const q=[];
+  q.push({
+    key:"g1", title:"① 「"+st[0].label+"」と「"+st[1].label+"」、どちらが多いと思いますか？",
+    opts:["「"+st[0].label+"」のほうが多い","「"+st[1].label+"」のほうが多い","ほぼ同じ"], right:0,
+    ans:"<b>「"+st[0].label+"」"+st[0].count+"件</b>に対し、「"+st[1].label+"」"+st[1].count+"件。"
+       +"多いのは前者で、しかも差はわずかです。"
+  });
+  q.push({
+    key:"g2", title:"② 「強い表現」がいちばん多い論点はどれだと思いますか？",
+    opts:[peak[peak.length-1].it.label, peak[1].it.label, peak[0].it.label], right:2,
+    ans:"<b>「"+peak[0].it.label+"」で"+peak[0].r+"%</b>。"
+       +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
+       +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
+  });
+  box.innerHTML = q.map(x =>
+    '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
+    + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
+    + '</div><div class="gans" hidden></div></div>').join("");
+  q.forEach(x=>{
+    const card = box.querySelector('[data-k="'+x.key+'"]');
+    const bs = card.querySelectorAll(".gopts button");
+    bs.forEach(b=>b.addEventListener("click", ()=>{
+      const pick = +b.dataset.i;
+      bs.forEach((y,j)=>{ y.disabled=true;
+        if (j===x.right) y.className="hit"; else if (j===pick) y.className="miss"; });
+      const a = card.querySelector(".gans");
+      a.innerHTML = '<p class="lead">'+(pick===x.right?"正解":"はずれ")+'</p>'+x.ans;
+      a.hidden=false;
+      visit(x.key);
+    }));
+  });
+}
+
+/* ---------- 潜水（海の水を抜く） ---------- */
+let dived=false;
+function buildDive(){
+  const b=document.getElementById("dive"), n=document.getElementById("divenote");
+  const sunk=(D.ocean.sunk_continents||[]).length;
+  if (!sunk){ b.parentElement.hidden=true; return; }
+  const box=document.getElementById("ocean");
+  function paint(){
+    b.textContent = dived ? "閉じる" : "資料にしかない話を見る";
+    n.innerHTML = dived
+      ? "<b>"+sunk+"つ出てきました。</b>どれも一次資料では決まっている話です。下に中身があります。"
+      : "資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
+    document.querySelector(".chart-box").classList.toggle("dived", dived);
+    if (box) box.hidden = !dived;
+  }
+  b.addEventListener("click", ()=>{
+    dived=!dived; paint();
+    if (dived){
+      // 海面下はひとまとまり。開いたら語られていない争点と立場をこえて同じ心配をまとめて数える。
+      // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
+      (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
+      (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
+      if (box) bringIntoView(box);
+    }
+  });
+  paint();
+}
+
+/* ---------- 一次資料クイズ ---------- */
+const V_ORDER=["fact","gap","miss"];
+let qi=0, qscore=0;
+function buildQuiz(){
+  const el=document.getElementById("quiz"), cs=D.claims||[];
+  if (!cs.length){ el.parentElement.querySelector(".sec-live").hidden=true; el.hidden=true; return; }
+  if (qi>=cs.length){
+    el.innerHTML='<p class="qscore"><span class="n">'+qscore+' / '+cs.length+'</span> 問正解</p>'
+      + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
+      + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
+          return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
+      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';
+    return;
+  }
+  const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
+  const labels=V_ORDER.map(v=>{
+    const same=cs.find(x=>x.verdict===v);
+    return same ? same.verdict_label : v;
+  });
+  el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
+    + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
+    + labels.map((l,i)=>'<button type="button" data-i="'+i+'">'+l+'</button>').join("")
+    + '</div><div class="qans" hidden></div>';
+  const bs=el.querySelectorAll(".gopts button");
+  bs.forEach(b=>b.addEventListener("click", ()=>{
+    const pick=+b.dataset.i;
+    if (pick===right) qscore++;
+    bs.forEach((y,j)=>{ y.disabled=true;
+      if (j===right) y.className="hit"; else if (j===pick) y.className="miss"; });
+    const a=el.querySelector(".qans");
+    a.innerHTML='<p><span class="verdict v-'+c.verdict+'">'+c.verdict_label+'</span>'+c.finding+'</p>'
+      + (c.sources.length
+         ? '<div class="srcs">'+c.sources.map(x=>'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.name+'</a>').join("")+'</div>'
+         : '<div class="srcs"><span style="color:var(--muted)">公的資料に該当なし。</span></div>')
+      + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
+    a.hidden=false;
+    visit("c:"+c.id);
+    a.querySelector(".qnext").addEventListener("click", ()=>{ qi++; buildQuiz(); });
+  }));
+}
+
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+   JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
+try {
+  buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildGuesses(); buildDive(); buildQuiz(); paintProgress();
+  const h = location.hash.slice(1);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
+} catch (e) {
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bplanet-live\b/, "");
+  throw e;
+}
+
+})();
+</script>
