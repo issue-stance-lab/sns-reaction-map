@@ -422,6 +422,13 @@ def build(topic: str) -> dict:
         "stances": [dict(s, count=sum(cross.get(k, {}).get(s["key"], 0) for k in keys))
                     for s in cfg["stances"]],
         "vote_issue_order": cfg["vote_issue_order"],
+        # 50%条件の論点母数と、実際の読了ID数を別々に残す。理解率とは呼ばない。
+        "reread_summary": {
+            "connected_editorial_count": sum(i["sub"].get("reread_count", 0) for i in issues),
+            "connected_issue_population": sum(i["count"] for i in issues
+                                               if i["sub"]["status"] == "reread"),
+            "not_connected_opinion_count": n_op - sum(i["sub"].get("reread_count", 0) for i in issues),
+        },
         "modes": modes,
         "issues": issues,
         # 一次資料クイズ用の平らな一覧。論点ごとの claims は同じ主張が複数の論点に
