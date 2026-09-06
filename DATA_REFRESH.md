@@ -19,6 +19,41 @@
   （`pgrep -fl "classify_.*hermes|refresh_topic"`）②復旧したら戻す
   ③この文書の記述を実際の設定に合わせ直す。設定を変えた瞬間に他セッションも切り替わるため、
   分類の途中だと1回の更新の中でモデルが混ざる。
+- **戻すときは `model.default` だけでなく `provider` / `base_url` / `api_mode` も戻す。**
+  `kimi-k2.6` は `provider: opencode-go` / `base_url: https://opencode.ai/zen/go/v1` /
+  `api_mode: chat_completions` とセット。`default` だけ書き換えると別の提供元へ繋がる。
+- **2026-09-06、`model.default` が `upstage/solar-pro4:free`（同日 08:18 更新）に
+  なっているのを発見し、`kimi-k2.6` へ戻した。**誰がいつ替えたかの記録は無い。
+  この間に本番のデータは作っていない（直近の収集回は 2026-09-05 まで）。
+  正確な識別子は `~/.hermes/config.yaml.bak.20260818_184335` から確認した。
+  **モデルが黙って替わってもデータからは分からない、というのがこの一件の要点。**
+  だから回ごとの記録にモデル名を残すことにした（次項）。
+
+### 回ごとの記録に残すもの（2026-09-06〜）
+
+`social-samples/updates/{テーマ}/{日付}/report.json` と、その公開側の
+`data/verification/updates/{テーマ}/{日付}/report.json` に `provenance` が入る。
+書き手は `scripts/refresh_topic.py`。
+
+| 項目 | 中身 | なぜ要るか |
+|---|---|---|
+| `model` | `name` / `provider` / 設定の出所 | どの回をどのモデルで分類したか |
+| `classifier.script_sha256` | 分類器スクリプトの指紋 | プロンプトを変えたのか判別する |
+| `classifier.taxonomy_sha256` | ISSUES / STANCES の指紋 | 分類基準を変えたのか判別する |
+| `input.raw_sha256` | 収集した生データの指紋 | 同じ入力から同じ結果が出るか後で確かめる |
+| `sources` | 取得元ごとの件数 | 投稿ごとには入っていたが回の単位に無かった |
+
+基準を変えたのか、モデルが変わったのか、世論が動いたのかを、この3つの指紋で区別する。
+
+**新規0件の回は `model` が `null`。**分類が走っていないので、走っていない分類の
+モデル名は書かない。**過去の回にはこの項目が無い。さかのぼって埋めない**
+（推測値を記録に混ぜると、記録が記録でなくなる）。必須になるのは
+`scripts/verify_update_provenance.py` の `REQUIRED_FROM`（2026-09-07）以降の回だけ。
+
+**検査**: `python3 scripts/verify_update_provenance.py`。回ごとの4項目に加えて、
+投稿ごとの必須項目（`fetched_at` / `query` / `source`）も見る。
+`refresh_topic.py` 側でも収集直後に投稿ごとの必須項目を検査して、欠けていれば止める。
+自転車の青切符の116件は、これが欠けたまま通ってしまったところから生まれた。
 - **分類モデルをまたぐ回は「世論の潮目」の扱いをオーナーに確認する（出す／出さない／注記つきで出す）。**
   潮目は前回の収集回と今回を比べる作りだが、モデルが変わるとラベルの引き方が変わり、
   世論が動いたのかモデルが変わったのか区別できない。回ごとに判断するため既定のルールは置かない。

@@ -152,6 +152,7 @@ AdSense審査で、12項目中 Experience（体験・経験）だけがNGでし�
 ■ 通すべき検査
   python3 scripts/verify_theme_page.py {テーマslug}          # NGゼロにする
   python3 scripts/verify_number_provenance.py {テーマslug}   # 説明できない数字ゼロ
+  python3 scripts/verify_update_provenance.py                # 回ごとの出所（モデル・基準の版・入力・取得元）
   python3 scripts/verify_page_originality.py                 # 言い回しの使い回しゼロ
   python3 scripts/seo/strip_production_notes.py --check      # 制作指示の混入
   python3 scripts/seo/add_embed_fallback.py --check          # 空の埋め込み
