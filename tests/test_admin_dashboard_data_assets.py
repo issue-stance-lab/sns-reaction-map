@@ -50,10 +50,16 @@ class AssetDashboardTests(unittest.TestCase):
     def test_stale_receipt(self):
         self.write('company/data-backup-status.json',{'schema_version':1,'restore_verified':True,'verified_at':'2026-08-01T00:00:00Z','archive_name':'safe.tar.gz','archive_sha256':'a'*64,'git_commit':'b'*40,'file_count':1,'total_bytes':3,'files':[{'path':'safe','bytes':3,'sha256':'c'*64}]})
         self.assertIn('7日超',self.collect()['backup']['status'])
-    def test_inventory_coverage_failure_visible(self):
-        self.write('company/data-assets.json',{'schema_version':1,'snapshot_at':'2026-09-06T00:00:00Z','files':[{'storage':'private_backup'}],'summary':{'git':0,'private_backup':1,'external_evidence':0},'backup':{'private':{'status':'missing','missing':['original.json'],'changed':[]}}})
+    @patch.object(data_assets, 'verify_assets')
+    def test_inventory_coverage_failure_visible(self, _):
+        self.write('company/data-assets.json',{'schema_version':1,'snapshot_at':'2026-09-06T00:00:00Z','files':[{'storage':'private_backup','path':'original.json'}],'summary':{'git':0,'private_backup':1,'external_evidence':0},'backup':{'private':{'status':'missing','missing':['original.json'],'changed':[]}}})
         html=render.section_data_assets({'data_assets':self.collect()})
         self.assertIn('欠落あり',html)
         self.assertNotIn('original.json',html)
+
+    @patch.object(data_assets, 'verify_assets', side_effect=ValueError('stale receipt'))
+    def test_inventory_invalid_receipt_is_not_green(self, _):
+        self.write('company/data-assets.json',{'schema_version':1})
+        self.assertIn('保管状態未確認',self.collect()['inventory']['status'])
 
 if __name__ == '__main__': unittest.main()

@@ -13,8 +13,8 @@
 
 | 項目 | 値 |
 |---|---|
-| 公開テーマ数 | 11 |
-| 累積サンプル数 | 5,723件 |
+| 公開テーマ数 | 公開10・非掲載1（`THEMES.yaml`） |
+| 累積サンプル数 | 最新値は `data/public/catalog.json` の自動集計を参照 |
 | 形態 | 静的HTML（`docs/` を公開専用リポジトリへ同期してGitHub Pagesで公開） |
 | データ源 | Yahooリアルタイム検索の公開投稿 |
 | 分類エンジン | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7） |

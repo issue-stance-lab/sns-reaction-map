@@ -10,6 +10,7 @@ import yaml
 from verify_adoption_registry import verify
 from reread_registry import validate_manifest
 from manage_reread_registry import check_sources
+from verify_data_assets import verify as verify_assets
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -92,7 +93,7 @@ def collect_data_assets(today, root=ROOT):
             raise ValueError('ファイルの指紋または容量が不正')
         if sum(f['bytes'] for f in backup['files']) != backup['total_bytes']:
             raise ValueError('バックアップの容量が不一致')
-        result['backup'] = {'status': '同じマシンの別フォルダで復元確認 / ' + _fresh(backup['verified_at'], today),
+        result['backup'] = {'status': '最終復元確認の記録（同じマシン） / ' + _fresh(backup['verified_at'], today),
                             'verified_at': backup['verified_at'], 'file_count': backup['file_count'],
                             'archive_name': backup['archive_name'], 'git_commit': backup['git_commit']}
     except FileNotFoundError:
@@ -115,6 +116,11 @@ def collect_data_assets(today, root=ROOT):
     result['inventory'] = {'status': '保管境界の記録なし・未確認'}
     try:
         inventory = _read(root / 'company/data-assets.json')
+        verify_assets(root)
+        for entry in inventory['files']:
+            path = root / entry['path']
+            if entry['storage'] == 'private_backup' and path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() != entry['sha256']:
+                raise ValueError('非公開の原本が保管記録から変わっています')
         if inventory['schema_version'] != 1:
             raise ValueError('保管境界の形式が不正')
         summary = {key: sum(f['storage'] == key for f in inventory['files']) for key in ('git', 'private_backup', 'external_evidence')}
@@ -130,6 +136,6 @@ def collect_data_assets(today, root=ROOT):
                                'coverage': {k: {'status': v['status'], 'missing': len(v['missing']), 'changed': len(v['changed'])} for k,v in coverage.items()}}
     except FileNotFoundError:
         pass
-    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
+    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError, subprocess.SubprocessError) as exc:
         result['inventory'] = {'status': '検査失敗・保管状態未確認: ' + str(exc)}
     return result

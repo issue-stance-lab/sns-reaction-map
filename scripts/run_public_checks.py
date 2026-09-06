@@ -39,6 +39,7 @@ CHECKS: tuple[tuple[str, list[str]], ...] = (
     ("収集回ごとの出所", ["scripts/verify_update_provenance.py"]),
     ("再読共通台帳の証拠と継承元", ["scripts/verify_reread_registry.py"]),
     ("保存回と正典の採用状態", ["scripts/verify_adoption_registry.py"]),
+    ("データの保存境界と復元記録", ["scripts/verify_data_assets.py"]),
 )
 
 # ここに入れなかったもの:

@@ -390,3 +390,7 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 保存回・正典・判断根拠を更新したら、同じ作業ツリーで `python3 scripts/build_adoption_registry.py` を実行し、保存回の投稿が正典に存在するかを記録する。成功時はテーマ別件数が表示される。追加・削除・分類は行わない。`python3 scripts/build_adoption_registry.py --check` がOKなら、非公開入力を含む現在の再生成結果と一致する。
 
 公開自動検査には `verify_adoption_registry.py` を接続。本文なし台帳の集計・根拠・公開ファイルの指紋に差があれば停止する。公開JSON全体の原本との照合は従来どおり `verify_public_registry.py --against-private` で行う。外付け証拠の指定方法・状態の意味・初回移行の制約は [段階Dの運用](quality/designs/2026-09-06-stage-d-adoption-registry.md) を参照。正典外を自動採用しない。
+
+## 更新後の保全と復元記録（課題63 段階E）
+
+原本・段階C/Dの台帳を更新したら、原本バックアップ、採否根拠のバックアップ、資産台帳の再生成を行い、本文なしの成功記録を同じブランチへ保存する。バックアップの失敗時に前回の成功日を進めない。[実行手順と成功の形](quality/designs/2026-09-06-stage-e-data-preservation.md)。新しい作業環境からの再生成は `verify_data_asset_restore.py` で試せる。物理的な別マシン試験は課題33/50に残す。

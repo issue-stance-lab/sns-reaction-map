@@ -1,0 +1,31 @@
+schema_version: 1
+# 日付は今後の作業期限。過去の実施日・承認日ではない。
+operations:
+  - id: data-backup-review
+    title: 原本・採否根拠の保全と台帳を再確認
+    owner: 開発・データ部
+    due_at: '2026-09-13'
+    status: pending
+    task: '63'
+    next_action: データ更新ごとにバックアップを取り、週1回は保存内容と復元記録を照合する
+  - id: unresolved-adoption-review
+    title: 正典外525件の採否確認を計画
+    owner: 編集部・品質監査
+    due_at: '2026-09-13'
+    status: pending
+    task: '63'
+    next_action: 自転車の判断記録なし17件から本文と処理履歴を確認し、採用案を作る
+  - id: reread-continuation
+    title: 新ページ横展開に必要な未読差分を確認
+    owner: 編集部・開発データ部
+    due_at: '2026-09-13'
+    status: pending
+    task: '54'
+    next_action: 既存の再読をやり直さず、差分の読む対象を固定する
+  - id: physical-restore
+    title: 別の実機で復元を確認
+    owner: オーナー・開発データ部
+    due_at: '2026-09-20'
+    status: pending
+    task: '33 / 50'
+    next_action: 別マシンを用意した時にGitと2種のアーカイブを復元し、再生成検査を実行する

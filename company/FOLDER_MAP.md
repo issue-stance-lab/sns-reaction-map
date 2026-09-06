@@ -40,7 +40,7 @@
 | ブランドとデザイン | `creative/brand-concepts/` / `creative/design/` | 管理する | 現在の制作判断に使う資料 |
 | 漫画・図解プロンプト | `creative/manga-prompts/` | 管理する | 画像生成の正典 |
 | 制作テンプレート | `creative/templates/` | 管理する | 新テーマ、ページ、ワーカー発注の雛形 |
-| データ本文を含む正典 | `social-samples/` | 非公開保全 | `.gitignore`対象。バックアップから復元する |
+| データ本文を含む正典・保存回 | `social-samples/` | Git303ファイル＋Git外153ファイル | 現状の保存境界は `company/data-assets.json`。Git外は原本アーカイブから復元 |
 | 検証用サマリ | `data/verification/` | 管理する | 本文を持たない再現用データ |
 | 公開候補の品質記録 | `quality/reviews/` | 管理する | 公開前・公開後の監査記録 |
 | 設計記録 | `quality/designs/` | 管理する | 現行設計の判断根拠 |
@@ -64,3 +64,7 @@
 3. 管理画面生成、全テーマ検査、数字の出所、トップ検査、全テストを実行する。
 4. 非公開データを共有ツリーへ戻し、バックアップの復元確認を行う。
 5. 公開物または運用手順を変える場合は品質監査とCEO承認を記録する。
+
+## Xデータの復元に必要な保全（課題63 段階E）
+
+`company/data-assets.json` がXデータ全456ファイル・非公開ペルソナ・段階Dの採否根拠7ファイルの保存境界を示す。採否根拠は既存外付けの元資料を移動せず、同じ保存先の `adoption-evidence-*.tar.gz` へ複製する。本文なしの復元成功記録は `company/data-*-status.json`、担当・期日は `company/data-operations.yaml`。[手順と限界](../quality/designs/2026-09-06-stage-e-data-preservation.md)。

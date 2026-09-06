@@ -149,6 +149,7 @@ python3 scripts/build_admin_dashboard.py
 | **note 記事** | 3日に1本を目安（候補なしは見送り可） | 前回から3日 | `.claude/skills/note-operation/SKILL.md` | 最終承認と note への投稿操作 |
 | **サイト改善を1つ進める** | 週1 | 前回から7日 | 下の「サイト改善の進め方」 | 最終承認 |
 | **一次資料メモの再確認** | テーマごと90日目安（法改正が近いテーマは短縮） | `quality/research/status.yaml` の `last_verified` + `review_days` | `.claude/skills/primary-research/SKILL.md` | 業界団体等を例外採用する場合の承認 |
+| **Xデータの保全確認** | 更新直後＋週1回 | `company/data-operations.yaml` と復元記録から7日 | [段階Eの手順](quality/designs/2026-09-06-stage-e-data-preservation.md) | 別実機の用意のみ。通常のバックアップ・復元検査はAIが実行 |
 | **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` | なし |
 
 ---
