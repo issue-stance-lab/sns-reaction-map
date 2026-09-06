@@ -49,10 +49,11 @@ def collect(run):
             'canonical_changes':0,'registered_reread_increment':0,'local_model_calls':0,'codex_tokens':'not_measured'},source
 
 
-def verify(root,run,out):
+def verify(root,run,out,*,collected=None):
     root,run,out=map(Path,[root,run,out]);started=time.time()
     if out.exists() or out.resolve().is_relative_to(root.resolve()):raise ValueError('new external output directory required')
-    aggregate,sources=collect(run);meta=yaml.safe_load((root/'THEMES.yaml').read_text())['themes']
+    aggregate,sources=collect(run) if collected is None else collected
+    meta=yaml.safe_load((root/'THEMES.yaml').read_text())['themes']
     cache={};canon_hashes={};chosen=defaultdict(list)
     for row in aggregate['journal']:
         raw,c=sources[(row['batch'],row['index'])];t=row['topic']
