@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-05"
+updated_at: "2026-09-06"
 
 rules:
   required_for:
@@ -32,6 +32,33 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260906-002
+    department: engineering-data
+    action: website_publication
+    summary: "課題63の検査済み5テーマ修復候補を正典へ採用し、期間訂正・分類変更を含む既存ページの更新を公開する"
+    reason: "元の保存回で確認した取得履歴593件を補完し、未統合だった旧回65件（意見43件）と正しい取得期間を反映するため"
+    risks:
+      - "分類案の修正は世論の変化を示さないため、旧潮目比較回を維持し、今回の修復を新着として扱わない"
+      - "あだ名1件など保留分の採否、課題63全体の共通管理、課題54の新ページ横展開は残る"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-06-repair-steps123.md"
+      - "quality/reviews/2026-09-06-period-review.md"
+      - "quality/reviews/2026-09-06-classification-independent-review.md"
+      - "quality/reviews/2026-09-06-repair-integration-independent-audit.md"
+      - "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/integration/20260906-steps123-v1/manifest.json"
+    status: approved
+    requested_at: "2026-09-06"
+    decided_at: "2026-09-06"
+    decision_note: >-
+      CEOは取得履歴593件（著作権339・高齢者114・高市140）の補完、あだ名30件と辺野古35件の追加（意見計43件増）、
+      著作権のUTC取得期間6/22〜9/5と高市のUTC取得期間6/13〜8/19への訂正、
+      高市の非掲載維持、既存ページの公開更新までの説明を受け、『これもサブエージェントを活用して進めて』と指示した。
+      この具体的候補の採用・正典適用・既存ページ公開更新を承認として記録する。
+      対象manifest SHA256: c0a3b4bd638c860aebea9624577afef2b1e7cb32d188a16c5a29ab8511938b3c。
+      旧期間指定の履歴を保存し、期間の出所はrecovered_fetched_at_utcとする。高市には日本時間6/14〜8/20を併記する。
+      収集予定・公開更新日・旧潮目比較回は進めない。今回の承認は新規収集、保留投稿追加、課題54の横展開、データ削除を含まない。
+      記録時点は適用・公開作業中であり、公開成功を意味しない。
   - id: approval-20260905-003
     department: engineering-data
     action: website_publication

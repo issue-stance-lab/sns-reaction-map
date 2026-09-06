@@ -1,6 +1,36 @@
 version: 1
-updated_at: "2026-08-27"
+updated_at: "2026-09-06"
 
 # 訂正、一時非公開、引用削除依頼の受付と対応を記録する。
 # 個人情報や連絡先そのものはここに保存しない。
-items: []
+items:
+  - id: correction-20260906-001
+    received_at: "2026-09-06"
+    department: engineering-data
+    summary: "課題63の旧回未統合と取得履歴欠損に伴う件数・取得期間の訂正"
+    status: in_progress
+    verification_status: verified
+    approval_id: approval-20260906-002
+    affected_themes:
+      - ai-copyright
+      - elderly-license-revocation
+      - takaichi
+      - school-nickname-ban
+      - henoko-student-accident
+    reason: >-
+      元の保存回と同ID・本文・旧変換処理を照合し、取得履歴593件の欠損と旧回65件の未統合を確認した。
+      著作権の旧オーナー指定6/27開始より前の6/22・23の取得記録があり、高市は履歴復元後も期間unknownが残っていた。
+    correction_plan: >-
+      著作権339件・高齢者114件・高市140件の取得情報を補完する。
+      あだ名は432件／意見93件から462件／意見104件、辺野古は445件／意見341件から480件／意見373件へ訂正する。
+      著作権の取得期間をUTCの2026-06-22〜2026-09-05、高市をUTCの2026-06-13〜2026-08-19へ訂正し、
+      出所recovered_fetched_at_utcを明示する。高市には日本時間6/14〜8/20を併記し、非掲載・noindexを維持する。
+      高齢者の期間・再読250件は維持する。旧期間指定を隠さず履歴として保存し、公開ページに訂正内容・理由・修正日を残す。
+    evidence:
+      - "quality/reviews/2026-09-06-repair-steps123.md"
+      - "quality/reviews/2026-09-06-period-review.md"
+      - "quality/reviews/2026-09-06-classification-independent-review.md"
+      - "quality/reviews/2026-09-06-repair-integration-independent-audit.md"
+    next_action: "承認済み固定候補を適用し、既存ページの公開更新と公開後確認を完了して、修正日・公開先・結果を追記する"
+    published_at: null
+    resolved_at: null
