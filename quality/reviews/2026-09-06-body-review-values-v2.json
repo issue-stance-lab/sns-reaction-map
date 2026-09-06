@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "method": "four_values_programmatic_diff_v2",
+  "sampling": "4 disagreements + 5 mixed proposals + 1 contradictory candidate; not random or accuracy estimate",
+  "unique_records": 10,
+  "requests": 10,
+  "usage": {
+    "prompt_eval_count": 10027,
+    "eval_count": 1204,
+    "total_duration": 84233264998
+  },
+  "usage_scope": "Local Ollama only; Codex conversation and independent audit not measured",
+  "routes": {
+    "uncertain": 10
+  },
+  "format_valid": 10,
+  "automatic_editorial_credit": 0,
+  "canonical_changes": 0,
+  "production_rollout_allowed": false,
+  "journal": [
+    {
+      "sample_id": "ai-copyright:1",
+      "source_sha256": "58909f383101f254a35616a3f7b99d70200187a3b114b49c2ba01a5b1409278b",
+      "request": {
+        "sample_id": "ai-copyright:1",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "86cc165e132a6d8479d758dc93effacbd8570ee38d485beabc86ddd5b7017ada",
+        "schema_sha256": "e49a2e53ba33aceeab074fd3d755e14fb2534d0410831e5a7a672ef5dd969f82",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "75f1a3ab06d75febbe2ec053d885f066a58b9f88012b69e11de6804089c7e656",
+      "classification_sha256": "3b72f810eaf33655c093d42a9f44079d80cb6865c25af3814e3e55eeb69c2810",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "ai-copyright:9",
+      "source_sha256": "21a7d577660b47478172bf7a2f9238ce3b7b559e6bee3acdc8120a33ddc51287",
+      "request": {
+        "sample_id": "ai-copyright:9",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "6a172dd681d33ed315a162818fdbc981ffb2628ae3a441784abc693e575ba5d6",
+        "schema_sha256": "e49a2e53ba33aceeab074fd3d755e14fb2534d0410831e5a7a672ef5dd969f82",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "fd8d9e0fc11c3775912f9d57f5972c71836cf2ead700e613454b5c0cd772bd1f",
+      "classification_sha256": "725f57451728f758f7f5e0038cc373507469a2c22f7cb8ca84d3502dc6828af9",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "bukatsu-chiiki:1",
+      "source_sha256": "0de36f619fd63be044e66a7e8ec7e75fd4f1d7e05f0f0e032afae48cb40736e0",
+      "request": {
+        "sample_id": "bukatsu-chiiki:1",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "1d2f40535aeaeafebd4cfc15b4edd2b8c14b755a4a8101f82e2f190cb3c5b28a",
+        "schema_sha256": "900c4d1039c254f277b40829c3dd0f132e5af5d46384088e455f72711eb26f17",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "e2d84c5fa36d78bcd340de83a66458aa40df6514354c82c962cfdabcd8753b24",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "bukatsu-chiiki:3",
+      "source_sha256": "f2e133d2cda9c231135a474d17d783371763cd06ac4ebceb0326511033647b20",
+      "request": {
+        "sample_id": "bukatsu-chiiki:3",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "051036b375b484997c08f6c764a414842f98feb5ace1e8c0a2530330ab1f425e",
+        "schema_sha256": "900c4d1039c254f277b40829c3dd0f132e5af5d46384088e455f72711eb26f17",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "30f526938d1e8e175f688bc637bc9c9c292d799d2bf116a999581a9602a6f146",
+      "classification_sha256": "2e6dbef1c354e6b2f671f1a71a09e6a6d2194461c2b0c502e0027bb6c2574c98",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {
+        "main_issue": "地域格差"
+      }
+    },
+    {
+      "sample_id": "fukushuto:10",
+      "source_sha256": "3ed27e8770dc3977c405806ff21560bbb0844b53f8cde437ff0ba42fac17aa13",
+      "request": {
+        "sample_id": "fukushuto:10",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "f8cf7f3f6e9337fae0ffc925f9c8c81e2e9a15110109cdb6cfd53cd0cb5cc3a3",
+        "schema_sha256": "ef4f8e9a4d7b731bfbb5e9d9bac6934f1566a853f6700159fa2d0262dec6531d",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "3ac67c9ccde2e7b214a15dcf80476738815c178b030d802e0bc94926dc881d46",
+      "classification_sha256": "e8bd59b6eaf75ed176f4a25c027728912726ba7b482ae2f8ac887a5b4e61b1ad",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "fukushuto:2",
+      "source_sha256": "6bd0d4467302a9c8898a1baa73c680a20c2f6263f171ad88e32a07ac09234731",
+      "request": {
+        "sample_id": "fukushuto:2",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "2cead3d74142dce3a1f63c44e89463508b5d0e3e1d66b9f2fba35c64f9adb92a",
+        "schema_sha256": "ef4f8e9a4d7b731bfbb5e9d9bac6934f1566a853f6700159fa2d0262dec6531d",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "73c11cf4d436eb428cc0a326ec9f1d1bbbb59a7adbca321fc0e2cdec7406cbc9",
+      "classification_sha256": "04e6559dac352e81f702b8f2a47d1cc0c7e760814d9b4ad76d349de38c506ceb",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "fukushuto:4",
+      "source_sha256": "d9d908621609c0cac35b73c4d3209a253bf2ec59344c2d79697de8d3a9624c07",
+      "request": {
+        "sample_id": "fukushuto:4",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "74d882d285db3aa7ca43068619169e6d57ebeba08cddda21824427305c7dea49",
+        "schema_sha256": "ef4f8e9a4d7b731bfbb5e9d9bac6934f1566a853f6700159fa2d0262dec6531d",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "9cd1adb6b5a6121664d5e9789395dca54b78c2a07f3fe5a3aabb37a9771946f6",
+      "classification_sha256": "ce664330915e23599bc79f03754219bec176d2c679128dafa0c344f69479c7e0",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "fukushuto:7",
+      "source_sha256": "a5db8ce8eb721b60f900199313e12ca2cac805346841c7c0abb7880e911df0fd",
+      "request": {
+        "sample_id": "fukushuto:7",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "d620e5c6566657faae649008a5acbf77d1bf42ab1d5dced7dd8940b62bac67ea",
+        "schema_sha256": "ef4f8e9a4d7b731bfbb5e9d9bac6934f1566a853f6700159fa2d0262dec6531d",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "1394bc5ef8d42c7fb7f8fee379c7446efc5c38baa727c02cbe784853aee8bbe8",
+      "classification_sha256": "33f33e8ffdfcb126a35ecb3ffb30810e545d9599a79219d907c05b81d8b92127",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "fukushuto:9",
+      "source_sha256": "f484f1bfade6e5749e64c0e3ed7ffeb318f0ad6df9a3d180b703ce60aa2efdb6",
+      "request": {
+        "sample_id": "fukushuto:9",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "8c7ad28464c9b91fcd607b12b3d10a5cb48bcc73d03badbbf79345820a3b658a",
+        "schema_sha256": "ef4f8e9a4d7b731bfbb5e9d9bac6934f1566a853f6700159fa2d0262dec6531d",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "947b70aa01c196d8e1f6022a2e1252a12bc8e9b94337a2f22e42ad7f92940aad",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    },
+    {
+      "sample_id": "henoko-student-accident:1",
+      "source_sha256": "7a9d3ef800067f96b79883e9f3392f98e5868c224a4ca870f19410415ddac4dc",
+      "request": {
+        "sample_id": "henoko-student-accident:1",
+        "input_sha256": "86c1588f620fa57fae9f5702b7663b946ae9a0839db319b42328d065b61cf563",
+        "prompt_sha256": "c262dbcabb6ffa4d28551d5941c04157b3e32a33c6a8e573c3e7c0b49f1e7d35",
+        "schema_sha256": "af2fad7773a35422a7460a460e6605d6251227393cd8c8bc7c4847632a39cb8e",
+        "model": "qwen2.5:7b",
+        "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "temperature": 0,
+        "num_ctx": 16384,
+        "num_predict": 384
+      },
+      "body_sha256": "e212d30b8c7ad4a40df57a12f07967cfbf66ccd5b5cdb05ae2c52ab739646e89",
+      "classification_sha256": "dae9d52db310850e52b24ed10b1e3298719083fa4ea3bccdb31ca2c17dfa36cc",
+      "status": "valid",
+      "route": "uncertain",
+      "changes": {}
+    }
+  ]
+}
