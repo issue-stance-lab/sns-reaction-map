@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "objective": "試行フェーズで最適なやり方を確立",
+  "completion_scope": "practical operating method supported by this pilot; not universal optimum, full-dataset audit or public promotion",
+  "checks": {
+    "inventory_and_reuse_evidence": "verified",
+    "small_model_stop_decision": "verified",
+    "twenty_saved_reviews_version_match": "verified",
+    "two_supported_changes_isolated_generation": "verified",
+    "idempotence_and_source_unchanged": "verified",
+    "next_twenty_deterministic_excludes_attempted_and_reserved": "verified",
+    "independent_method_audit": "PASS",
+    "unit_tests": {
+      "passed": 666,
+      "failed": 0
+    }
+  },
+  "next_batch": {
+    "prepared": 20,
+    "reviewed": 0,
+    "packet_sha256": "0b71a1827a1ce0880083ebded37cb855f752f404fb08eb19689d92024c8a5047"
+  },
+  "private_preservation": {
+    "20260907-candidate-pair-v1": {
+      "archive_sha256": "c36e6643559a64a0d92f5862f8e2b92ab06b826da85a7e0830b4ad04c39d743b",
+      "verified_file_count": 1797
+    },
+    "20260907-next20": {
+      "archive_sha256": "5f5a7df4c0119cb77942463f404e7ded38eb4cbb6556dac53f791b8e6550f8e9",
+      "verified_file_count": 1
+    }
+  },
+  "canonical_promoted": false,
+  "public_release": false,
+  "remaining": [
+    "next20 editorial decisions and workload measurement",
+    "full remaining body review",
+    "approval and application of two correction candidates"
+  ],
+  "known_token_measurement": {
+    "local_model_total": 51300,
+    "parent_and_child_codex_tokens": "not_measured",
+    "additional_local_calls_this_method_finalization": 0
+  }
+}

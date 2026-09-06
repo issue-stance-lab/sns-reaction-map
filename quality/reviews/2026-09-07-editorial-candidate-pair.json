@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "scope": "isolated two-record data/page generation trial; not public release",
+  "decisions_sha256": "0709286f7582bcad1d710c0255f3705a467c59cd545fec68dd5b09e9b66e67c0",
+  "topics": [
+    {
+      "topic": "elderly-license-revocation",
+      "sample_id": "elderly-license-revocation:1",
+      "before": {
+        "collected": 506,
+        "opinions": 353,
+        "issues": {
+          "義務化・事故防止": 221,
+          "適性検査強化": 51,
+          "自主返納支援": 16,
+          "地方の足・移動権": 29,
+          "代替交通整備": 16,
+          "その他": 20
+        },
+        "stances": {
+          "義務化賛成": 187,
+          "条件付き賛成": 76,
+          "義務化反対": 38,
+          "中立・情報": 52
+        }
+      },
+      "after": {
+        "collected": 506,
+        "opinions": 352,
+        "issues": {
+          "義務化・事故防止": 221,
+          "適性検査強化": 51,
+          "自主返納支援": 16,
+          "地方の足・移動権": 29,
+          "代替交通整備": 16,
+          "その他": 19
+        },
+        "stances": {
+          "義務化賛成": 187,
+          "条件付き賛成": 76,
+          "義務化反対": 38,
+          "中立・情報": 51
+        }
+      },
+      "canonical_before_sha256": "f3d2af2d961b9ca6358b75a651e89379e83d2a20c1cf3477daae878aa64a4836",
+      "candidate_sha256": "34a25af79689585d669a408c113dfc9d783ff329aaa5448480f9d091efe2b385",
+      "changed_records": 1
+    },
+    {
+      "topic": "koshitsu-tenpakai",
+      "sample_id": "koshitsu-tenpakai:9",
+      "before": {
+        "collected": 1605,
+        "opinions": 1282,
+        "issues": {
+          "立法手続き・民主主義": 185,
+          "旧宮家養子縁組": 251,
+          "愛子さま・皇族の地位": 133,
+          "その他": 150,
+          "男系vs女系": 402,
+          "女性天皇・女系天皇": 161
+        },
+        "stances": {
+          "中立・情報": 260,
+          "改正反対（男系維持）": 665,
+          "改正賛成（女系容認）": 357
+        }
+      },
+      "after": {
+        "collected": 1605,
+        "opinions": 1283,
+        "issues": {
+          "立法手続き・民主主義": 185,
+          "旧宮家養子縁組": 251,
+          "愛子さま・皇族の地位": 133,
+          "その他": 151,
+          "男系vs女系": 402,
+          "女性天皇・女系天皇": 161
+        },
+        "stances": {
+          "中立・情報": 261,
+          "改正反対（男系維持）": 665,
+          "改正賛成（女系容認）": 357
+        }
+      },
+      "canonical_before_sha256": "aff46757fddab66036f03f3685d0f9d1e7f40c4161160a4d4a848beab8c7569f",
+      "candidate_sha256": "687307cd0c1b816ef8e546b8a5aeccd74880db2bce6a0a585ae31a2e7aa6ebd5",
+      "changed_records": 1
+    }
+  ],
+  "idempotent": true,
+  "source_unchanged": true,
+  "canonical_promoted": false,
+  "additional_model_calls": 0,
+  "checks": [
+    {
+      "args": [
+        "scripts/build_elderly_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/elderly-license_2d_classified.json",
+        "--output",
+        "data/verification/elderly-license-revocation.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_koshitsu_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_public_registry.py",
+        "--all"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_elderly_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "elderly-license-revocation"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_koshitsu_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "koshitsu-tenpakai"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/seo/apply_theme_trust.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_portal_stats.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_elderly_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verification_data.py",
+        "--input",
+        "social-samples/elderly-license_2d_classified.json",
+        "--output",
+        "data/verification/elderly-license-revocation.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_koshitsu_arena.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_public_registry.py",
+        "--all"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_elderly_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "elderly-license-revocation"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/build_koshitsu_arena.py",
+        "--public-counts-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_issue_counts.py",
+        "koshitsu-tenpakai"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/seo/apply_theme_trust.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/sync_portal_stats.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_theme_page.py",
+        "elderly-license-revocation"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_number_provenance.py",
+        "elderly-license-revocation"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_theme_page.py",
+        "koshitsu-tenpakai"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_number_provenance.py",
+        "koshitsu-tenpakai"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_top_page.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "scripts/verify_public_registry.py",
+        "--against-private"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "generated_hashes": {
+    "docs/index.html": "c0c3471d22fbb3d4ab00b334d2885ea3992fc2fbe204bdc5d5469fb2462e3459",
+    "docs/koshitsu-tenpakai-reaction-map.html": "061b6fce7742fce5235581f92ea4c45ac6d506099251beaca1281cef6042febd",
+    "docs/elderly-license-revocation-reaction-map.html": "8ecebd11b057010a0b232cddfeb392de8aacf1b93dde10e5b6edf85d529d8cd6",
+    "docs/bike-blue-ticket-reaction-map.html": "2f8273838eb46ecba1654c75b18c95e943e0037a9331e7fd8cf3678c668c0acf",
+    "data/public/catalog.json": "3ce64f6ab150f0d0ac394b0db63212153e45e695a7fbd0970c248aeb7ad43a06",
+    "data/public/themes/koshitsu-tenpakai.json": "612ed6e1b51c90061f4294288ed0d2d5628cb3357f7098ef351693452ea4ad1d",
+    "data/public/themes/elderly-license-revocation.json": "3c9bc966487e929664066fc735403253de46017fcff19513a42ad30e850314e0"
+  },
+  "vote_and_protected_tags_unchanged": true
+}
