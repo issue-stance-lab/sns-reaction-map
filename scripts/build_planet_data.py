@@ -22,6 +22,11 @@ from pathlib import Path
 import numpy as np
 import yaml
 
+try:
+    from .verification_data import record_id_hash
+except ImportError:
+    from verification_data import record_id_hash  # type: ignore[no-redef]
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -51,8 +56,73 @@ def latest_read_date(read_at: str) -> date:
     return max(date.fromisoformat(d) for d in found)
 
 
+def _text_sha256(post: dict) -> str:
+    return hashlib.sha256(str(post.get("text") or "").encode("utf-8")).hexdigest()
+
+
+def load_fetch_history_recovery(path: Path, canonical_path: Path) -> dict[str, dict]:
+    """本文を含まない取得履歴の証拠を、同じ正典版にだけ結び付ける。"""
+    if not path.is_file():
+        return {}
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict) or value.get("schema") != 1:
+        raise SystemExit(f"取得履歴の検証サマリの形式が不正です: {path}")
+    expected = value.get("canonical", {}).get("sha256")
+    actual = hashlib.sha256(canonical_path.read_bytes()).hexdigest()
+    if expected != actual:
+        raise SystemExit(
+            f"取得履歴の検証サマリが正典と別版です: {path}。"
+            "正典を変えたら復元候補を再照合してください。"
+        )
+    records = value.get("records")
+    if not isinstance(records, list):
+        raise SystemExit(f"取得履歴の検証サマリにrecords配列がありません: {path}")
+    indexed = {str(row.get("record_id_hash")): row for row in records if isinstance(row, dict)}
+    if len(indexed) != len(records):
+        raise SystemExit(f"取得履歴の検証サマリに識別子の欠損または重複があります: {path}")
+    return indexed
+
+
+def opinion_flag(post: dict) -> bool | None:
+    """新形式（classification内）と自転車の旧形式（直下）を明示的に読む。
+
+    旧形式を新しいフラグで埋めるのではなく、既存の公開母数を出した判定を読み取る。
+    値が無い投稿は意見でないものとして黙って捨てず、呼び出し側で停止させる。
+    """
+    classification = post.get("classification") or {}
+    nested = classification.get("is_opinion") if isinstance(classification, dict) else None
+    if isinstance(nested, bool):
+        return nested
+    legacy = post.get("is_opinion")
+    return legacy if isinstance(legacy, bool) else None
+
+
+def observed_date(post: dict, recovery: dict[str, dict]) -> date:
+    """正典の日時、または本文一致の旧観測記録から再読時点の存在を確認する。"""
+    raw = post.get("fetched_at")
+    if isinstance(raw, str) and raw:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00")).date()
+
+    evidence = recovery.get(record_id_hash(post))
+    if not evidence:
+        raise SystemExit(f"取得日時が無く、復元候補もありません: {post.get('tweet_id')}")
+    if evidence.get("canonical_text_sha256") != _text_sha256(post):
+        raise SystemExit(f"取得履歴の本文指紋が正典と一致しません: {post.get('tweet_id')}")
+    if evidence.get("status") != "confirmed_observation":
+        raise SystemExit(
+            f"取得日時がIDだけの候補で、本文一致を確認できていません: {post.get('tweet_id')}"
+        )
+    dates = [item.get("fetched_at") for item in evidence.get("observations", []) if isinstance(item, dict)]
+    dates = [value for value in dates if isinstance(value, str) and value]
+    if not dates:
+        raise SystemExit(f"取得履歴の候補に日時がありません: {post.get('tweet_id')}")
+    # これは正典のfetched_atを補完しない。再読時点までに存在したかを判定するため、
+    # 本文一致で確認できた過去の観測日時を使う。複数回の観測は証拠ファイルに全て残す。
+    return min(datetime.fromisoformat(value.replace("Z", "+00:00")).date() for value in dates)
+
+
 def split_unread(canonical: list[dict], issue_key: str, read_ids: set[str],
-                  read_at: date) -> tuple[int, int]:
+                  read_at: date, recovery: dict[str, dict] | None = None) -> tuple[int, int]:
     """読み直し後もなお未読の投稿を「読み飛ばし」と「読了後に増えた分」へ分ける。
 
     読み飛ばし＝read_at 時点で正典に既にあったのに読まれなかった投稿（fetched_at <= read_at）。
@@ -61,15 +131,22 @@ def split_unread(canonical: list[dict], issue_key: str, read_ids: set[str],
     読み飛ばしを検査が見逃す（課題62）。
     """
     skipped = grown = 0
+    recovery = recovery or {}
     for post in canonical:
         c = post.get("classification") or {}
-        if not (c.get("is_relevant") and c.get("is_opinion")):
-            continue
         if c.get("main_issue") != issue_key:
+            continue
+        opinion = opinion_flag(post)
+        if opinion is None:
+            raise SystemExit(
+                f"「{issue_key}」に意見判定が無い投稿があります: {post.get('tweet_id')}。"
+                "意見でないものとして黙って除外しません。"
+            )
+        if not opinion:
             continue
         if post["tweet_id"] in read_ids:
             continue
-        fetched = datetime.fromisoformat(post["fetched_at"].replace("Z", "+00:00")).date()
+        fetched = observed_date(post, recovery)
         if fetched <= read_at:
             skipped += 1
         else:
@@ -315,8 +392,11 @@ def build(topic: str) -> dict:
             read_ids = {x["tweet_id"] for x in dig(raw_full, sc["path"][:-1] + ["items"])}
             read_at = latest_read_date(raw_full.get("read_at"))
             if canonical_posts is None:
-                canonical_posts = json.loads((ROOT / t["sample_file"]).read_text())
-            skipped, grown = split_unread(canonical_posts, k, read_ids, read_at)
+                canonical_path = ROOT / t["sample_file"]
+                canonical_posts = json.loads(canonical_path.read_text())
+                recovery_path = ROOT / "data" / "verification" / f"{topic}-fetch-history-recovery.json"
+                fetch_recovery = load_fetch_history_recovery(recovery_path, canonical_path)
+            skipped, grown = split_unread(canonical_posts, k, read_ids, read_at, fetch_recovery)
             if skipped + grown != gap:
                 raise SystemExit(
                     f"「{k}」の未読内訳（読み飛ばし{skipped}件+増えた分{grown}件={skipped + grown}件）が"
