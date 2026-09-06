@@ -99,6 +99,12 @@ def validate_reread_records(records: list[dict], buckets: dict, canonical: list[
         raise SystemExit(f"「{issue_key}」の再読記録にIDの欠損または重複があります。")
     if set(ids) - set(opinion_ids):
         raise SystemExit(f"「{issue_key}」の再読記録に現行の対象意見ではないIDがあります。")
+    by_id = {str(p["tweet_id"]): p for p in opinion_rows}
+    for record in records:
+        if "text_sha256" in record:
+            body = by_id[str(record["tweet_id"])].get("text", "")
+            if record["text_sha256"] != hashlib.sha256(body.encode()).hexdigest():
+                raise SystemExit(f"「{issue_key}」の再読時点から本文が変化しています。再確認が必要です。")
     if any(r.get("body_reviewed") is False or
            r.get("review_kind") == "automated_classification" for r in records):
         raise SystemExit(f"「{issue_key}」の再読記録に本文再読ではない自動分類が混入しています。")
@@ -376,6 +382,9 @@ def build(topic: str) -> dict:
                 "unknown_timing_count": unknown,
                 "items": items,
             }
+            if any("classification_concern" in r for r in records):
+                sub["classification_review_pending"] = sum(
+                    r.get("classification_concern", "none") != "none" for r in records)
         else:
             sub = {"status": "not_reviewed",
                    "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}
@@ -497,6 +506,9 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
         s = i["sub"]
         if s["status"] != "reread":
             continue
+        if s.get("classification_review_pending", 0):
+            ng.append(f"「{i['label']}」に分類の確認候補が{s['classification_review_pending']}件あります"
+                      "（本文再読の完了とは別に、意見判定や論点の採用確認が必要）")
         if s.get("unknown_timing_count", 0):
             ng.append(f"「{i['label']}」の未読{s['unknown_timing_count']}件は取得日時または再読境界が不明"
                       "（読み飛ばしと読了後増分を区別できないため要確認）")
