@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import hashlib
 import html
 import json
@@ -21,6 +22,8 @@ from pathlib import Path
 
 import numpy as np
 import yaml
+
+from public_registry_common import is_opinion_record
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -51,30 +54,60 @@ def latest_read_date(read_at: str) -> date:
     return max(date.fromisoformat(d) for d in found)
 
 
-def split_unread(canonical: list[dict], issue_key: str, read_ids: set[str],
-                  read_at: date) -> tuple[int, int]:
-    """読み直し後もなお未読の投稿を「読み飛ばし」と「読了後に増えた分」へ分ける。
-
-    読み飛ばし＝read_at 時点で正典に既にあったのに読まれなかった投稿（fetched_at <= read_at）。
-    増えた分＝read_at より後の収集で正典へ入った投稿（fetched_at > read_at）。
-    この2つを引き算だけで区別しないと、「6割読めば終わってよい」という
-    読み飛ばしを検査が見逃す（課題62）。
-    """
-    skipped = grown = 0
+def unread_breakdown(canonical: list[dict], issue_key: str, read_ids: set[str],
+                     read_at: date, *, review_date_uncertain: bool = False) -> tuple[int, int, int]:
+    """取得日/再読境界が不明な分を、読み飛ばしや読了後増分へ推測で割り振らない。"""
+    skipped = grown = unknown = 0
     for post in canonical:
         c = post.get("classification") or {}
-        if not (c.get("is_relevant") and c.get("is_opinion")):
+        if not is_opinion_record(post) or c.get("main_issue") != issue_key:
             continue
-        if c.get("main_issue") != issue_key:
+        if str(post["tweet_id"]) in read_ids:
             continue
-        if post["tweet_id"] in read_ids:
-            continue
-        fetched = datetime.fromisoformat(post["fetched_at"].replace("Z", "+00:00")).date()
-        if fetched <= read_at:
+        try:
+            fetched = datetime.fromisoformat(post["fetched_at"].replace("Z", "+00:00")).date()
+        except (KeyError, TypeError, ValueError, AttributeError):
+            fetched = None
+        if fetched is None or review_date_uncertain:
+            unknown += 1
+        elif fetched <= read_at:
             skipped += 1
         else:
             grown += 1
+    return skipped, grown, unknown
+
+
+def split_unread(canonical: list[dict], issue_key: str, read_ids: set[str],
+                  read_at: date) -> tuple[int, int]:
+    """従来呼出用。日時不明を黙って落とす2区分の返却は禁止する。"""
+    skipped, grown, unknown = unread_breakdown(canonical, issue_key, read_ids, read_at)
+    if unknown:
+        raise SystemExit(f"「{issue_key}」の未読{unknown}件は取得日時が不明です。")
     return skipped, grown
+
+
+def validate_reread_records(records: list[dict], buckets: dict, canonical: list[dict],
+                            issue_key: str, expected_count: int) -> set[str]:
+    """投稿単位の証拠と現行意見を照合してから、読了数を使う。"""
+    opinion_rows = [p for p in canonical if is_opinion_record(p)
+                    and (p.get("classification") or {}).get("main_issue") == issue_key]
+    opinion_ids = [str(p["tweet_id"]) for p in opinion_rows]
+    if len(set(opinion_ids)) != len(opinion_ids) or len(opinion_ids) != expected_count:
+        raise SystemExit(f"「{issue_key}」の正典ID集合と公開JSONの件数が一致しません。")
+    ids = [str(r.get("tweet_id") or "") for r in records]
+    if "" in ids or len(ids) != len(set(ids)):
+        raise SystemExit(f"「{issue_key}」の再読記録にIDの欠損または重複があります。")
+    if set(ids) - set(opinion_ids):
+        raise SystemExit(f"「{issue_key}」の再読記録に現行の対象意見ではないIDがあります。")
+    if any(r.get("body_reviewed") is False or
+           r.get("review_kind") == "automated_classification" for r in records):
+        raise SystemExit(f"「{issue_key}」の再読記録に本文再読ではない自動分類が混入しています。")
+    actual = Counter(r.get("bucket") for r in records)
+    if set(actual) - set(buckets):
+        raise SystemExit(f"「{issue_key}」の再読記録に未登録の区分があります。")
+    if any(actual.get(key, 0) != bucket["count"] for key, bucket in buckets.items()):
+        raise SystemExit(f"「{issue_key}」の区分件数が再読IDの実数と一致しません。")
+    return set(ids)
 
 
 def load_public_theme(topic: str) -> dict:
@@ -304,23 +337,25 @@ def build(topic: str) -> dict:
             sc = sub_cfg[k]
             raw_full = json.loads((ROOT / sc["file"]).read_text())
             raw = dig(raw_full, sc["path"])
+            records = dig(raw_full, sc.get("items_path", sc["path"][:-1] + ["items"]))
+            if sc.get("item_issue_field"):
+                records = [r for r in records if r.get(sc["item_issue_field"]) == k]
+            if canonical_posts is None:
+                canonical_posts = json.loads((ROOT / t["sample_file"]).read_text())
+            read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}
                      for bid, b in raw.items()]
             items.sort(key=lambda x: -x["count"])
-            reread = sum(x["count"] for x in items)
+            reread = len(read_ids)
             gap = counts[k] - reread
-
-            # 未読の内訳（課題62）。読み直したあとに正典へ増えた分だけを余裕として認め、
-            # 読み直した時点で既にあったのに読まなかった分（読み飛ばし）は0件を求める
-            read_ids = {x["tweet_id"] for x in dig(raw_full, sc["path"][:-1] + ["items"])}
-            read_at = latest_read_date(raw_full.get("read_at"))
-            if canonical_posts is None:
-                canonical_posts = json.loads((ROOT / t["sample_file"]).read_text())
-            skipped, grown = split_unread(canonical_posts, k, read_ids, read_at)
-            if skipped + grown != gap:
+            read_at = latest_read_date(sc.get("read_at", raw_full.get("read_at")))
+            skipped, grown, unknown = unread_breakdown(
+                canonical_posts, k, read_ids, read_at,
+                review_date_uncertain=sc.get("review_date_uncertain", False))
+            if skipped + grown + unknown != gap:
                 raise SystemExit(
-                    f"「{k}」の未読内訳（読み飛ばし{skipped}件+増えた分{grown}件={skipped + grown}件）が"
-                    f"未読合計{gap}件と一致しません。正典と公開JSONの集計がずれています。"
+                    f"「{k}」の未読内訳（読み飛ばし{skipped}件+増分{grown}件+時期不明{unknown}件）が"
+                    f"未読合計{gap}件と一致しません。正典と公開JSONを照合してください。"
                 )
 
             if gap > 0:
@@ -338,6 +373,7 @@ def build(topic: str) -> dict:
                 "unread_count": max(gap, 0),
                 "skipped_count": skipped,
                 "grown_count": grown,
+                "unknown_timing_count": unknown,
                 "items": items,
             }
         else:
@@ -441,7 +477,8 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
     if not claims.exists():
         ng.append(f"一次資料との突き合わせが無い（{claims.relative_to(ROOT)} が未作成）")
 
-    # 2. 人が本文を読み直した論点が、意見の半分以上を占めていること
+    # 2. 再読記録のある論点の全体件数で50%を判定する既存条件。
+    # 実読数/理解率ではない。実読数は各sub.reread_countで別に記録する。
     reread_n = sum(i["count"] for i in data["issues"] if i["sub"]["status"] == "reread")
     share = 100 * reread_n / data["totals"]["opinions"]
     if share < 50:
@@ -453,6 +490,9 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
         s = i["sub"]
         if s["status"] != "reread":
             continue
+        if s.get("unknown_timing_count", 0):
+            ng.append(f"「{i['label']}」の未読{s['unknown_timing_count']}件は取得日時または再読境界が不明"
+                      "（読み飛ばしと読了後増分を区別できないため要確認）")
         if s["skipped_count"] > 0:
             ng.append(f"「{i['label']}」に読み飛ばしが{s['skipped_count']}件あります"
                       "（読み直した時点で既にあったのに読まれなかった投稿。読了後に増えた分とは別）")
