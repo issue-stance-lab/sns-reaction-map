@@ -1,6 +1,7 @@
 """Preview composition must retain notices and vote contracts, and fail closed for publication."""
 from pathlib import Path
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -82,6 +83,47 @@ class PreviewCompositionTest(unittest.TestCase):
                     result, _ = preview.build_generic(theme, source, data)
                 preview.verify_preserved(source, result)
                 self.assertIn("<!-- PLANET_SECTION_START -->", result)
+
+
+class ProgressVisibilityTest(unittest.TestCase):
+    """進み具合が「動いて見える」ことを守る。
+
+    2026-09-06 のオーナー指摘「バーが動いていません」の再発防止。原因は2つあった。
+    帯だけを伸ばすと1回ぶんが十数ピクセルにもならず動いて見えないこと、
+    そして増やし方の説明をスマホで display:none にしていたことである。
+    """
+
+    THEMES = ("bukatsu-chiiki", "bike-blue-ticket", "elderly-license-revocation")
+
+    def test_progress_is_segmented_not_only_a_bar(self):
+        # 区画の入れ物が無いと、1回の行動が帯のわずかな伸びにしかならない
+        for theme in self.THEMES:
+            page = ROOT / "quality/prototypes" / f"{theme}-page-preview.html"
+            if not page.exists():
+                continue
+            with self.subTest(theme=theme):
+                html = page.read_text()
+                self.assertIn('id="pseg"', html)
+                self.assertRegex(html, r"#progress\s+\.track\{display:none\}")
+
+    def test_how_to_advance_is_readable_on_phones(self):
+        # スマホでこそ要る説明なので、幅の狭い画面で消してはいけない
+        for theme in self.THEMES:
+            page = ROOT / "quality/prototypes" / f"{theme}-page-preview.html"
+            if not page.exists():
+                continue
+            with self.subTest(theme=theme):
+                html = page.read_text()
+                for block in re.findall(r"@media[^{]*max-width[^{]*\{(.*?)\}\s*\}", html, flags=re.S):
+                    self.assertNotRegex(
+                        block, r"#progress\s+\.how\{[^}]*display:\s*none",
+                        "狭い画面で増やし方の説明を消している")
+
+    def test_template_lights_segments(self):
+        # 区画を点ける処理はテンプレート側にある。落とすと入れ物が空のままになる
+        tpl = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text()
+        self.assertIn('getElementById("pseg")', tpl)
+        self.assertIn('c.className = i<n ? "on" : ""', tpl)
 
 
 if __name__ == "__main__":
