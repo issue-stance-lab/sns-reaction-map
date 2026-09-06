@@ -555,28 +555,52 @@ def localize_assets(html: str) -> str:
     return html.replace("url('images/", "url('../../docs/images/")
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--topic", default="bukatsu-chiiki")
-    ap.add_argument("--page", default=None, help="入力にする公開ページ")
-    ap.add_argument("--out", default=None)
-    ap.add_argument("--for-docs", action="store_true",
-                    help="docs/ の位置から開く前提でパスを直さない（検査用）")
-    a = ap.parse_args()
+def protected_fragments(html: str) -> list[str]:
+    """Editorial notices and service contracts must survive page composition."""
+    parts = []
+    for marker in ("ARTICLE_TRUST", "RESEARCH_CONDITIONS", "ADSENSE_TAG", "GA_TAG"):
+        parts += re.findall(r"<!-- " + marker + r"_START -->.*?<!-- " + marker + r"_END -->", html, re.S)
+    for match in re.finditer(r"<aside\b[^>]*>", html):
+        _, block = take_block(html[match.start():], match.group(0), "aside")
+        parts.append(block)
+    parts += re.findall(r'<meta\b[^>]*(?:property|name)="(?:og:|twitter:)[^"]*"[^>]*>', html)
+    parts += re.findall(r'<section\b[^>]*\bid="vote-section"[^>]*>', html)
+    for script in re.findall(r"<script\b[^>]*>.*?</script>", html, re.S):
+        if "VoteStore.cast(" in script or re.search(r'\bsrc="[^\"]*vote-(?:config|store)\.js', script):
+            parts.append(script)
+    return parts
 
-    page = Path(a.page) if a.page else ROOT / "docs" / f"{a.topic}-reaction-map.html"
-    out = Path(a.out) if a.out else ROOT / "quality/prototypes" / f"{a.topic}-page-preview.html"
-    html = page.read_text(encoding="utf-8")
 
-    if "<!-- PLANET_SECTION_START -->" in html:
-        raise SystemExit("入力ページに山なみが既に入っています（見本ではなく本番の更新です）")
+def verify_preserved(source: str, result: str) -> None:
+    for fragment in protected_fragments(source):
+        # The existing bukatsu adapter changes only error presentation, not vote contracts.
+        changed, _ = fix_vote_feedback(fragment)
+        if fragment not in result and changed not in result:
+            raise SystemExit("保護された編集情報・調査条件・注記・計測・投票の要素が失われました")
 
+
+def apply_preview_policy(html: str, failures: list[str], for_docs: bool) -> str:
+    if failures and for_docs:
+        raise SystemExit("独自性の検査に不合格のため --for-docs は使えません: " + " / ".join(failures))
+    if for_docs:
+        return html
+    if re.search(r'<meta\b[^>]*name="robots"', html, re.I):
+        html = re.sub(r'<meta\b[^>]*name="robots"[^>]*>', '<meta name="robots" content="noindex,nofollow">', html, flags=re.I)
+    else:
+        html = html.replace("</head>", '<meta name="robots" content="noindex,nofollow">\n</head>', 1)
+    details = "" if not failures else "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in failures) + "</ul>"
+    notice = ('<aside id="page-preview-status" role="note" style="padding:16px;background:#fff3cd;color:#453400">'
+              '<strong>試作・非公開</strong> — 一般公開前の確認用です。' + details + '</aside>')
+    return re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + notice, html, count=1)
+
+
+# ---------------------------------------------------------------- 部活動専用（旧方式）
+
+def build_bukatsu(html: str, data: dict) -> tuple[str, list[tuple[str, bool]]]:
     removed = []
     for start, tag, label in DROP_SECTIONS:
         html, hit = cut_block(html, start, tag)
         removed.append((label, hit))
-
-    data = bpd.stabilize(bpd.build(a.topic))
 
     # 同じ7論点を2か所で並べていたので、1枚のカードへ統合してから両方を外す
     html, issue_cards = merge_issue_cards(html, data)
@@ -591,6 +615,7 @@ def main() -> None:
         removed.append((label, hit))
 
     html, dropped = drop_orphan_scripts(html)
+    removed.append((f"取り残されたスクリプト{dropped}本", dropped > 0))
 
     # 使い方ページの約束は「①テーマを選ぶ ②投票する ③分布と理由を読む」。
     # 投票が図より後ろにあると順番が逆になるので、図の前へ移す。
@@ -603,14 +628,12 @@ def main() -> None:
     html = html[:ti] + html[tj + len(trust_end):]
 
     html, vote = take_block(html, '<section class="panel" id="vote-section"', "section")
-    # 失敗の知らせを画面の中に出す（オーナー指示 2026-09-06）
     html, n_alert = fix_vote_feedback(html)
     vote = vote.replace('<div id="vote-step1">',
                         '<p id="vote-msg" role="status" aria-live="polite" hidden></p>'
                         '<div id="vote-step1">', 1)
     vote = (f"<style>{VOTE_MSG_CSS}</style>" + vote
             + f"<script>{VOTE_MSG_JS}</script>")
-    # 地図より後ろへ移したので「SNSの声を見る前に」は嘘になる
     vote = vote.replace("<span>SNSの声を見る前に</span>",
                         "<span>ここまで読んだうえで</span>")
 
@@ -619,7 +642,7 @@ def main() -> None:
         raise SystemExit("「次に見るテーマ」が見つかりません")
     html = html.replace(rel, trust + "\n" + rel, 1)
 
-    bg = build_background(a.topic)
+    bg = build_background("bukatsu-chiiki")
     if bg:
         html, old_entry = take_block(html, "<!-- BUKATSU_ENTRY_START -->", "section")
         removed.append(("学校の外へ出した後（台帳から作り直し）", bool(old_entry)))
@@ -629,17 +652,8 @@ def main() -> None:
     if anchor not in html:
         raise SystemExit(f"差し込み位置 {anchor} が見つかりません")
     html = html.replace(anchor, bg + "\n" + anchor, 1)
-
-    # 進み具合はページの一番上へ。何をすれば増えるかもその場に書く
-    bar = ('<div id="progress"><span>読んだところ</span>'
-           '<span class="track"><i id="pbar"></i></span><b id="pnum">0 / 22</b>'
-           '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>')
-    html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + bar, html, count=1)
-    # 地図を投票より前へ（オーナー指示「この地図の方が上に表示した方が良いのでは」）
     html = html.replace(anchor, anchor + "\n" + section + "\n" + issue_cards + "\n" + vote, 1)
 
-    # 山を押して開くパネルから、その論点のカードへ飛べるようにする。
-    # パネルは #extras-{論点id} の中身をそのまま写すので、そこへ入れておけば出る。
     for it in data["issues"]:
         tag = f'<div class="extras" id="extras-{it["id"]}">'
         if tag in html:
@@ -647,6 +661,76 @@ def main() -> None:
                 tag,
                 tag + f'<p style="margin:14px 0 0"><a class="go-card" href="#issue-{it["id"]}">'
                       f'この論点のなかを見る ↓</a></p>', 1)
+    return html, removed
+
+
+# ---------------------------------------------------------------- 汎用（自転車以降）
+
+def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[str, bool]]]:
+    """Replace known visual blocks, preserving all other source content and scripts."""
+    removed = []
+    ids = ("process-collect", "process-verify", "process-found", "process-table",
+           "reread-basis", "elderly-verify", "strongest-arguments", "issue-arena-section")
+    for iid in ids:
+        match = re.search(r'<section\b[^>]*\bid="' + re.escape(iid) + r'"[^>]*>', html)
+        if match:
+            html, hit = cut_block(html, match.group(0), "section")
+            removed.append((iid, hit))
+    html, hit = cut_block(html, '<section class="stats insight-stats"', "section")
+    removed.append(("旧注目ポイント", hit))
+    # This animation belongs only to the removed process-found section.
+    html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)
+    section = build_section(split_prototype(render_planet(data)))
+    marker = "<!-- RESEARCH_CONDITIONS_END -->"
+    if marker not in html:
+        raise SystemExit("調査条件の目印が見つかりません")
+    html = html.replace(marker, marker + "\n" + section, 1)
+    return html, removed
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--topic", default="bukatsu-chiiki")
+    ap.add_argument("--page", default=None, help="入力にする公開ページ")
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--for-docs", action="store_true",
+                    help="docs/ の位置から開く前提でパスを直さない（検査用）")
+    a = ap.parse_args()
+
+    page = Path(a.page) if a.page else ROOT / "docs" / f"{a.topic}-reaction-map.html"
+    out = Path(a.out) if a.out else ROOT / "quality/prototypes" / f"{a.topic}-page-preview.html"
+    if out.resolve().is_relative_to((ROOT / "docs").resolve()):
+        raise SystemExit("見本生成器は docs/ へ書き込みません。quality/prototypes/ を指定してください")
+    html = page.read_text(encoding="utf-8")
+    source_html = html
+
+    if "<!-- PLANET_SECTION_START -->" in html:
+        raise SystemExit("入力ページに山なみが既に入っています（見本ではなく本番の更新です）")
+
+    data = bpd.stabilize(bpd.build(a.topic))
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{a.topic}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        data["prototype_only"] = True
+        data["gate_failures"] = failures
+    # Reject a failing public-mode request before composing or writing any output.
+    if failures and a.for_docs:
+        apply_preview_policy(html, failures, True)
+
+    if a.topic == "bukatsu-chiiki":
+        html, removed = build_bukatsu(html, data)
+    else:
+        html, removed = build_generic(a.topic, html, data)
+    verify_preserved(source_html, html)
+    html = apply_preview_policy(html, failures, a.for_docs)
+
+    # 進み具合はページの一番上へ。テンプレート側の paintProgress() が
+    # #progress/#pbar/#pnum を前提にしており、無いとJSエラーで山なみごと止まる
+    # （テーマを問わず必須。数字はJSが実測して上書きするのでここでは仮置きでよい）。
+    bar = ('<div id="progress"><span>読んだところ</span>'
+           '<span class="track"><i id="pbar"></i></span><b id="pnum">0</b>'
+           '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>')
+    html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + bar, html, count=1)
 
     # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す。
     # 本番向け（--for-docs）では絶対に外さない。保護タグを落とすと数字が取れなくなる。
@@ -654,11 +738,10 @@ def main() -> None:
         html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",
                       "<!-- GA_TAG: 見本では外している -->", html, flags=re.DOTALL)
 
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html if a.for_docs else localize_assets(html), encoding="utf-8")
     for label, hit in removed:
         print(("外した  " if hit else "見つからず ") + label)
-    print(f"外した  取り残されたスクリプト {dropped}本")
-    print(f"直した  投票の失敗の知らせ（alert → 画面の中）{n_alert}か所")
     try:
         shown = out.relative_to(ROOT)
     except ValueError:
