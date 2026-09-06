@@ -1,0 +1,23 @@
+# 課題Dで追跡する確定した保存回。実験・テスト分類を日付だけで採用候補へ昇格しない。
+legacy:
+  - {topic: ai-copyright, path: social-samples/ai-copyright_hermes_cur_20260726.json, kind: classified}
+  - {topic: bike-blue-ticket, path: social-samples/bike-blue-ticket_hermes_cur_20260726.json, kind: classified}
+  - {topic: constitutional-amendment, path: social-samples/constitutional_hermes_classified_20260726.json, kind: classified}
+  - {topic: elderly-license-revocation, path: social-samples/elderly-license-revocation_hermes_cur_20260726.json, kind: classified}
+  - {topic: school-nickname-ban, path: social-samples/school-nickname-ban_hermes_cur_20260726.json, kind: classified}
+  - {topic: henoko-student-accident, path: social-samples/henoko_hermes_cur_20260726.json, kind: classified}
+  - {topic: takaichi, path: social-samples/takaichi_hermes_cur_20260726.json, kind: classified}
+  - {topic: fukushuto, path: social-samples/fukushuto_hermes_cur_20260726_v2.json, kind: classified}
+external:
+  - topic: constitutional-amendment
+    path: constitutional-amendment/20260906-u1/evidence/old-wave-20260808_011232/classified.json
+    kind: classified
+  - topic: henoko-student-accident
+    path: henoko-student-accident/20260906-u3/omitted-before-classification.json
+    items_key: rows
+    kind: raw
+excluded_scope:
+  - {path: social-samples/fukushuto_hermes_cur_20260726.json, reason: superseded_by_v2_taxonomy}
+  - {path: social-samples/koshitsu-tenpakai_hermes_cur_20260726.json, reason: current_canonical_not_independent_wave}
+  - {pattern: '*synthetic*', reason: not_real_collected_posts}
+  - {pattern: '*test*|*redesign*|*.staging/*', reason: experimental_outputs_not_automatically_saved_waves}

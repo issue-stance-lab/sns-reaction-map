@@ -384,3 +384,9 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 日常の差分確認・対象固定・新しい読了結果の登録は
 [段階Cの手順](quality/designs/2026-09-06-stage-c-reread-registry.md) に従う。
 既存の再読成果を再発注せず、本文を読まずに読了記録を作らない。
+
+## 保存回の採用状態を照合する（課題63 段階D）
+
+保存回・正典・判断根拠を更新したら、同じ作業ツリーで `python3 scripts/build_adoption_registry.py` を実行し、保存回の投稿が正典に存在するかを記録する。成功時はテーマ別件数が表示される。追加・削除・分類は行わない。`python3 scripts/build_adoption_registry.py --check` がOKなら、非公開入力を含む現在の再生成結果と一致する。
+
+公開自動検査には `verify_adoption_registry.py` を接続。本文なし台帳の集計・根拠・公開ファイルの指紋に差があれば停止する。公開JSON全体の原本との照合は従来どおり `verify_public_registry.py --against-private` で行う。外付け証拠の指定方法・状態の意味・初回移行の制約は [段階Dの運用](quality/designs/2026-09-06-stage-d-adoption-registry.md) を参照。正典外を自動採用しない。
