@@ -64,7 +64,7 @@ class RereadRegistryTests(unittest.TestCase):
         data[0]["text"] = "changed"
         data[1]["classification"] = {"main_issue": "other", "is_opinion": False}
         data.pop()
-        data.append({"tweet_id": "new", "text": "new", "classification": {}})
+        data.append({"tweet_id": "new", "text": "new", "classification": {"is_opinion": False}})
         summary = assess(m, data)["summary"]
         self.assertEqual(summary, {"added": 1, "removed": 1, "body_changed": 1,
                                   "issue_changed": 1, "opinion_changed": 1,
@@ -75,6 +75,7 @@ class RereadRegistryTests(unittest.TestCase):
         m["records"][0]["review"] = evidence(m["records"][0])
         m["records"][0]["review"]["text_sha256"] = "d" * 64
         self.assertEqual(assess(m, rows())["summary"]["reviewed_verified"], 0)
+        self.assertEqual(assess(m, rows())["summary"]["body_changed"], 1)
 
     def test_record_exact_target_and_preserve_input(self):
         m = manifest()
@@ -122,7 +123,7 @@ class RereadRegistryTests(unittest.TestCase):
         current = rows()
         current[0]["text"] = "new version"
         current[1]["text"] = "unread different version"
-        current.append({"tweet_id": "new", "text": "new", "classification": {}})
+        current.append({"tweet_id": "new", "text": "new", "classification": {"is_opinion": False}})
         selected = [r for r in snapshot_records(current) if r["post_key"] in
                     {hashlib.sha256(b"0").hexdigest(), hashlib.sha256(b"new").hexdigest()}]
         target = create_target(m, [r["post_key"] for r in selected], current)
@@ -134,6 +135,42 @@ class RereadRegistryTests(unittest.TestCase):
         current[0]["text"] = "changed after target prepared"
         with self.assertRaises(ValueError):
             record_reviews(m, target, [{"post_key": r["post_key"], "review": evidence(r)} for r in selected], current)
+
+    def test_optional_migration_sources_preserve_historical_date_labels(self):
+        m = manifest()
+        m.update(sources={"quality/old.json": "a" * 64},
+                 source_date_labels={"quality/old.json": "2026-08-10"},
+                 migration_note="Snapshot hashes do not prove historical body versions.")
+        self.assertIs(validate_manifest(m), m)
+        m["sources"]["quality/old.json"] = "invalid"
+        with self.assertRaises(ValueError):
+            validate_manifest(m)
+
+    def test_unknown_legacy_reviewer_is_not_inferred(self):
+        for reviewer_type in ("unspecified_editorial", "ai_or_unspecified_editorial"):
+            m = manifest()
+            review = evidence(m["records"][0], "legacy")
+            review["reviewer_type"] = reviewer_type
+            m["records"][0]["review"] = review
+            self.assertEqual(assess(m, rows())["summary"]["reviewed_legacy"], 1)
+            review.update(evidence(m["records"][0]))
+            review["reviewer_type"] = reviewer_type
+            with self.assertRaises(ValueError):
+                validate_manifest(m)
+
+    def test_missing_and_invalid_opinion_flags_do_not_become_false(self):
+        for bad in (None, "false", 0):
+            data = rows()
+            data[0]["classification"]["is_opinion"] = bad
+            with self.assertRaises(ValueError):
+                snapshot_records(data)
+        data = rows()
+        del data[0]["classification"]["is_opinion"]
+        with self.assertRaises(ValueError):
+            snapshot_records(data)
+        data[0]["is_opinion"] = False
+        self.assertFalse(next(r for r in snapshot_records(data)
+                              if r["post_key"] == hashlib.sha256(b"0").hexdigest())["is_opinion"])
 
     def test_manifest_rejects_private_fields_duplicate_keys_and_bad_schema(self):
         for mutation in (lambda m: m.update(schema_version=True),

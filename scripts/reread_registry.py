@@ -66,7 +66,13 @@ def snapshot_records(canonical_rows):
         seen.add(key)
         body = row.get("text")
         _require(isinstance(body, str), "canonical text must be a string")
-        issue = (row.get("classification") or {}).get("main_issue")
+        classification = row.get("classification") or {}
+        _require(isinstance(classification, dict), "invalid classification")
+        opinion = classification.get("is_opinion", row.get("is_opinion"))
+        _require(type(opinion) is bool, "missing or invalid is_opinion flag")
+        relevant = classification.get("is_relevant", row.get("is_relevant"))
+        _require(relevant is None or type(relevant) is bool, "invalid is_relevant flag")
+        issue = classification.get("main_issue")
         _require(issue is None or isinstance(issue, str), "invalid main_issue")
         records.append({"post_key": key, "baseline_text_sha256": hashlib.sha256(body.encode()).hexdigest(),
                         "main_issue": issue, "is_opinion": is_opinion_record(row), "review": None})
@@ -76,7 +82,10 @@ def snapshot_records(canonical_rows):
 def _validate_review(review):
     _require(isinstance(review, dict) and set(review) == REVIEW_FIELDS, "invalid review fields")
     _require(review["kind"] == "editorial_body_reread", "automated classification is not editorial rereading")
-    _require(review["reviewer_type"] in {"editorial_ai", "human"}, "invalid editorial reviewer_type")
+    allowed_reviewers = {"editorial_ai", "human"}
+    if review["evidence_quality"] == "legacy":
+        allowed_reviewers |= {"unspecified_editorial", "ai_or_unspecified_editorial"}
+    _require(review["reviewer_type"] in allowed_reviewers, "invalid editorial reviewer_type")
     _require(review["evidence_quality"] in {"legacy", "verified"}, "invalid evidence_quality")
     _require(_string(review["source_file"]) and _hash(review["source_sha256"]), "missing source evidence")
     _require(_string(review["bucket"]), "missing editorial bucket")
@@ -92,8 +101,20 @@ def _validate_review(review):
 
 
 def validate_manifest(manifest):
-    _require(isinstance(manifest, dict) and set(manifest) ==
-             {"schema_version", "topic", "snapshot_at", "canonical_sha256", "records"}, "invalid manifest fields")
+    required = {"schema_version", "topic", "snapshot_at", "canonical_sha256", "records"}
+    optional = {"sources", "source_date_labels", "migration_note"}
+    _require(isinstance(manifest, dict) and required <= set(manifest) <= required | optional,
+             "invalid manifest fields")
+    if "sources" in manifest:
+        _require(isinstance(manifest["sources"], dict) and
+                 all(_string(path) and _hash(digest) for path, digest in manifest["sources"].items()),
+                 "invalid sources")
+    if "source_date_labels" in manifest:
+        _require(isinstance(manifest["source_date_labels"], dict) and
+                 all(_string(path) and (label is None or _string(label))
+                     for path, label in manifest["source_date_labels"].items()), "invalid source_date_labels")
+    if "migration_note" in manifest:
+        _require(_string(manifest["migration_note"]), "invalid migration_note")
     _require(type(manifest["schema_version"]) is int and manifest["schema_version"] == 1, "unsupported schema_version")
     _require(_string(manifest["topic"]), "missing topic")
     _require(_timestamp(manifest["snapshot_at"]), "invalid snapshot_at timestamp")
@@ -133,6 +154,9 @@ def assess(manifest, current_rows):
                 if old[field] != now[field]:
                     statuses.append(flag)
             review = old["review"]
+            if (review is not None and review["text_sha256"] is not None and
+                    review["text_sha256"] != now["baseline_text_sha256"] and "body_changed" not in statuses):
+                statuses.append("body_changed")
             if (review is None or "body_changed" in statuses or
                     (review["text_sha256"] is not None and review["text_sha256"] != now["baseline_text_sha256"])):
                 statuses.append("unreviewed")
