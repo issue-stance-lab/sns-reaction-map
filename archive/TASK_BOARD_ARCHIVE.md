@@ -47,6 +47,7 @@
 | 課題57: 公開データ基盤と公開承認物の一本化 | Claude Code | 2026-08-31 | 段階4完了。トップページと公開10テーマすべてを公開データ基盤へ接続 | [archive/tasks/task-57.md](tasks/task-57.md) |
 | 課題60: セッション開始時に読む文書を小さく保つ | Claude Code | 2026-09-04 | `TASK_BOARD.md` 索引化に続き `THEMES.yaml` を分割（44KB→9KB）。経緯は `themes/{テーマ名}.md` へ | [archive/tasks/task-60.md](tasks/task-60.md) |
 | 課題62: 読み直しの「4割まで残してよい」が読み飛ばしに使われている | Claude Code | 2026-09-06 | `independence_gate` の未読判定を「読み飛ばし」と「読了後に増えた分」に分離。読み飛ばしは0件を要求。部活動「教員の働き方」の読み飛ばし54件で不合格になることを確認。読む作業自体は別作業（`quality/designs/2026-09-06-stage9a-reread-brief.md`） | [archive/tasks/task-62.md](tasks/task-62.md) |
+| 課題63: 公開ファイル検査が非公開正典を読んで失敗する | Codex | 2026-09-06 | 課題62で非公開正典を読むようになった `test_planet_data` を GitHub Actions の公開ファイル検査から除外。非公開データ無しの370件と、手元の対象テス56件が通ることを確認 | [archive/tasks/task-63.md](tasks/task-63.md) |
 
 ---
 
