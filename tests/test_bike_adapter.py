@@ -25,7 +25,18 @@ def count(records: list[dict], main_issue: str) -> int:
     収集回を足すたびに件数は変わる。期待値をテストに焼き込むと、
     データ更新のたびにテストが落ちて更新そのものが止まる。
     """
-    return sum(1 for row in records if row["classification"]["main_issue"] == main_issue)
+    return sum(1 for row in records if is_opinion(row)
+               and row["classification"]["main_issue"] == main_issue)
+
+
+def is_opinion(row: dict) -> bool:
+    """ビルダーと同じ規則で数える。
+
+    2026-09-06 に自転車の97件を意見から外したため、全行を数えると
+    ビルダーの出力とずれる（それ以前は全468件が意見だった）。
+    """
+    from scripts.public_registry_common import is_opinion_record
+    return is_opinion_record(row)
 
 
 class BikeArenaBuilderTests(unittest.TestCase):
@@ -67,7 +78,8 @@ class BikeArenaBuilderTests(unittest.TestCase):
         expected = count(source, "インフラ整備優先") + 1
         oppose = sum(
             1 for row in source
-            if row["classification"]["main_issue"] == "インフラ整備優先"
+            if is_opinion(row)
+            and row["classification"]["main_issue"] == "インフラ整備優先"
             and row["classification"]["stance"] == OPPOSE
         ) + 1
 

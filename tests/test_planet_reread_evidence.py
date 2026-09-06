@@ -86,15 +86,26 @@ class RereadEvidenceTest(unittest.TestCase):
 
 
 class ConnectedThemeRegressionTest(unittest.TestCase):
-    def test_bike_completed_reading_still_blocks_unresolved_classification(self):
+    def test_unresolved_classification_still_blocks(self):
+        """分類の確認候補が残っていれば止まる（仕組みそのものの歯止め）。"""
+        data = {"theme_id": "t", "totals": {"opinions": 10},
+                "issues": [{"count": 10, "label": "論点", "sub": {
+                    "status": "reread", "reread_count": 10, "skipped_count": 0,
+                    "grown_count": 0, "unknown_timing_count": 0,
+                    "classification_review_pending": 1}}],
+                "ocean": {"sunk_continents": []}}
+        failures = bpd.independence_gate(data, {"question": "問い"})
+        self.assertTrue(any("分類" in f for f in failures))
+
+    def test_bike_completed_reading_is_connected_and_decided(self):
+        """2026-09-06、97件を意見から外す判断を記録して確認候補が0になった。"""
         data = bpd.build("bike-blue-ticket")
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 468)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 371)
         self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 0)
         self.assertEqual(sum(i["sub"]["unknown_timing_count"] for i in data["issues"]), 0)
         cfg = bpd.yaml.safe_load((bpd.ROOT / "configs/planet/bike-blue-ticket.yaml").read_text())
-        self.assertTrue(bpd.independence_gate(data, cfg))
-        self.assertEqual(sum(i["sub"].get("classification_review_pending", 0) for i in data["issues"]), 97)
-        self.assertTrue(all("分類" in x for x in bpd.independence_gate(data, cfg)))
+        self.assertEqual(sum(i["sub"].get("classification_review_pending", 0) for i in data["issues"]), 0)
+        self.assertEqual(bpd.independence_gate(data, cfg), [])
         rendered = bpd.static_fallback(data)
         self.assertNotIn("enforcement_support", rendered)
         self.assertIn("賛成（取締り強化）", rendered)
