@@ -12,6 +12,7 @@
 **独立レビュー**: `quality/reviews/2026-08-30-reaction-planet-plan.md`
 **AdSense対策**: `quality/designs/planet-adsense-gates.md`（2026-08-30。生成器に独自性の検査を実装。展開順の変更提案あり）
 **部活の実装構想**: `quality/designs/planet-bukatsu-chiiki.md`（2026-08-30 作成。面積・色・標高の具体値を現行正典993意見で確定）
+**段階9 の指示文**: `quality/designs/2026-09-06-stage9-brief.md`（2026-09-06 作成。**別セッションにそのまま渡せる形**。前回の実測が無効な理由は2つで、球の版であることに加え**広告も計測タグも無いページで測っていた**ことを明記した）
 **段階10-2a 高齢者の読む作業**: `quality/designs/2026-09-06-elderly-reread-brief.md`（250件の読了記録はmainに保存済み。新規に読み直す前に棚卸しを参照）
 **段階10-1 自転車の指示文**: `quality/designs/2026-09-06-bike-rollout-brief.md`（旧見積もりに自動分類93件の混入あり。冒頭の棚卸し訂正を先に読む）
 **段階10 展開の指示文**: `quality/designs/2026-09-06-nine-theme-rollout-brief.md`（5,659件は残未読の実測ではない。冒頭に最新棚卸しへの参照を追加）
