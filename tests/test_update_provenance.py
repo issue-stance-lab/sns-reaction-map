@@ -249,3 +249,36 @@ class RealDataPassesTheGate(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReusedClassificationModelTests(unittest.TestCase):
+    """保存済みの分類を使い回した回に、いまの設定のモデル名を書かない。
+
+    2026-09-06 のレビュー指摘。--resume で分類を再利用すると、分類を実際に走らせたのは
+    別の日なのに、現在の `~/.hermes/config.yaml` の値が「そのモデルで分類した」ように
+    残っていた。段階Bが防ごうとした「どのモデルで分類したか分からない」を、
+    記録のほうが誤って埋めてしまう形だった。
+    """
+
+    def _provenance(self, *, classified: bool, reused: bool) -> dict:
+        # 非公開の正典は読まない。GitHub Actions には存在せず、読むと常に赤になる。
+        import tempfile
+        classifier = ROOT / "scripts" / "classify_bike_arena_hermes.py"
+        with tempfile.TemporaryDirectory() as directory:
+            raw = Path(directory) / "raw.json"
+            raw.write_text("[]", encoding="utf-8")
+            return refresh_topic.build_provenance(
+                ROOT, classifier, raw, [], classified=classified, reused=reused)
+
+    def test_reused_wave_records_unknown_instead_of_current_setting(self):
+        model = self._provenance(classified=True, reused=True)["model"]
+        self.assertIsNotNone(model, "再利用でも model の欄そのものは残す")
+        self.assertIsNone(model["name"], "現在の設定値を書かない")
+        self.assertIn("再利用", model["note"])
+
+    def test_fresh_wave_records_the_actual_model(self):
+        model = self._provenance(classified=True, reused=False)["model"]
+        self.assertTrue(model["name"], "実際に分類した回はモデル名を残す")
+
+    def test_no_new_posts_records_no_model(self):
+        self.assertIsNone(self._provenance(classified=False, reused=False)["model"])

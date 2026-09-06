@@ -73,7 +73,9 @@ class RefreshTopicTests(unittest.TestCase):
                 )
 
             self.assertEqual(target.read_text(encoding="utf-8"), "approved candidate")
-            self.assertEqual(mocked_run.call_count, 5)
+            # 公開反映のあとに回す検査の本数。2026-09-06 に「収集回ごとの出所」を足して6本。
+            # 増減したら、検査を足し忘れ／外し忘れていないかをここで気づける。
+            self.assertEqual(mocked_run.call_count, 6)
             mocked_backup.assert_called_once_with(root, Path("/outside-backup"))
 
     def test_promotion_manifest_binds_candidate_without_touching_target(self):
