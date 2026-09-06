@@ -181,6 +181,110 @@ def taxonomy_continuity(current: list[dict[str, Any]], classifier: Path) -> dict
     }
 
 
+# ---------------------------------------------------------------------------
+# 回ごとの出所（provenance）
+#
+# 投稿ごとには「いつ・どの検索語で・どこから」が残っていたが、回の単位には残って
+# いなかった。2026-09-06、~/.hermes/config.yaml の model.default が誰にも気づかれず
+# 別モデルへ替わっていたことが分かった。どの回をどのモデルで分類したかが記録に無い
+# ため、後から突き合わせる方法が無い。ここで回ごとに次の4つを残す。
+#
+#   model            : 分類に使ったモデル（と提供元）
+#   classifier_*     : プロンプト・分類基準の版（分類器スクリプトと taxonomy の指紋）
+#   input.raw_sha256 : 入力の指紋。同じ入力から同じ結果が出るかを後で確かめられる
+#   sources          : 取得元。投稿ごとには入っているが回の単位では残っていなかった
+#
+# 過去の回にはこれが無い。さかのぼって埋めない（推測値を記録に混ぜない）。
+# いつの回から必須になるかは scripts/verify_update_provenance.py が持つ。
+# ---------------------------------------------------------------------------
+
+PROVENANCE_SCHEMA_VERSION = 1
+HERMES_CONFIG = Path.home() / ".hermes" / "config.yaml"
+RECORD_REQUIRED_FIELDS = ("fetched_at", "query", "source")
+
+
+def validate_record_fields(rows: list[dict[str, Any]], label: str) -> dict[str, int]:
+    """投稿ごとの必須項目（取得日時・検索語・取得元）が全件そろっているか見る。
+
+    自転車の青切符で 468件中116件が fetched_at / query / source 無しのまま
+    正典に入っていた。欠けたまま通ってしまったから生まれた穴なので、ここで止める。
+    """
+    missing: dict[str, int] = {}
+    for row in rows:
+        for field in RECORD_REQUIRED_FIELDS:
+            value = row.get(field)
+            if value is None or (isinstance(value, str) and not value.strip()):
+                missing[field] = missing.get(field, 0) + 1
+    if missing:
+        detail = " / ".join(f"{field} {count}件" for field, count in sorted(missing.items()))
+        raise ValueError(
+            f"{label}: 投稿ごとの必須項目が欠けています（{detail}）。"
+            f" 欠けたまま累積すると、どの投稿がいつ・どの検索語で・どこから来たか分からなくなります。"
+        )
+    return {"records": len(rows)}
+
+
+def classifier_model(config_path: Path = HERMES_CONFIG) -> dict[str, str]:
+    """分類に使うモデルを設定から読む。スクリプト側にモデル指定は無く、
+    ~/.hermes/config.yaml の model.default が全テーマ・全セッションに効く。"""
+    if not config_path.exists():
+        raise FileNotFoundError(
+            f"分類モデルの設定が見つかりません: {config_path}。"
+            f" どのモデルで分類したかを記録できないため中止します。"
+        )
+    value = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    model = value.get("model") if isinstance(value, dict) else None
+    if not isinstance(model, dict) or not str(model.get("default") or "").strip():
+        raise ValueError(f"{config_path} に model.default がありません")
+    return {
+        "name": str(model["default"]).strip(),
+        "provider": str(model.get("provider") or "").strip(),
+        "config_source": f"{config_path.name}:model.default",
+    }
+
+
+def taxonomy_fingerprint(classifier: Path) -> str:
+    """分類基準の版。分類器が宣言する ISSUES / STANCES の集合を指紋にする。"""
+    issues, stances = classifier_schema(classifier)
+    payload = json.dumps(
+        {"issues": sorted(issues), "stances": sorted(stances)},
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def build_provenance(
+    root: Path,
+    classifier: Path,
+    raw_path: Path,
+    raw_rows: list[dict[str, Any]],
+    *,
+    classified: bool,
+    config_path: Path = HERMES_CONFIG,
+) -> dict[str, Any]:
+    sources: dict[str, int] = {}
+    for row in raw_rows:
+        key = str(row.get("source") or "unknown")
+        sources[key] = sources.get(key, 0) + 1
+    provenance: dict[str, Any] = {
+        "schema_version": PROVENANCE_SCHEMA_VERSION,
+        "classifier": {
+            "script": classifier.relative_to(root).as_posix(),
+            "script_sha256": _file_sha256(classifier),
+            "taxonomy_sha256": taxonomy_fingerprint(classifier),
+        },
+        "input": {
+            "raw_sha256": _file_sha256(raw_path),
+            "raw_records": len(raw_rows),
+        },
+        "sources": dict(sorted(sources.items())),
+    }
+    # 新規0件の回は分類していない。走っていない分類のモデル名は書かない（不明は不明のまま）。
+    provenance["model"] = classifier_model(config_path) if classified else None
+    return provenance
+
+
 def validate_classified(rows: list[dict[str, Any]], classifier: Path) -> dict[str, int]:
     issues, stances = classifier_schema(classifier)
     malformed: list[str] = []
@@ -938,6 +1042,7 @@ def main() -> int:
     archived_report: dict[str, Any] | None = None
     if args.resume:
         raw = read_rows(stage / "raw.json")
+        validate_record_fields(raw, f"{args.topic} {args.date} 保存済み収集結果")
         new = read_rows(stage / "new-only.json")
         archived_report = prepare_archived_resume(
             ROOT, args.topic, args.date, stage, current, args.include_wave
@@ -948,6 +1053,7 @@ def main() -> int:
         started = time.monotonic()
         fetch(ROOT, queries, stage / "raw.json", args.wait_ms)
         raw = unique(read_rows(stage / "raw.json"))
+        validate_record_fields(raw, f"{args.topic} {args.date} 収集結果")
         write_json(stage / "raw.json", raw)
         current_ids = {identity(row) for row in current}
         new = [row for row in raw if identity(row) not in current_ids]
@@ -1004,6 +1110,9 @@ def main() -> int:
         })
 
     classified = read_rows(stage / "classified-wave.json")
+    report["provenance"] = build_provenance(
+        ROOT, classifier, stage / "raw.json", raw, classified=bool(new)
+    )
     write_json(stage / "cumulative-candidate.json", current + classified)
     if archived_report is not None:
         report["next_collect_at"] = archived_report.get("next_collect_at")

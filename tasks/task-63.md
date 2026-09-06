@@ -6,6 +6,51 @@
 **関連**: 54 / 62（完了）/ 28 / 40 / 33 / 50 / 59 / 43 / 19
 **監査**: [2026-09-06-x-data-audit.md](../quality/reviews/2026-09-06-x-data-audit.md)
 
+## 2026-09-06：段階B（入口を整える）完了
+
+指示文: [段階B 入口を整える](../quality/designs/2026-09-06-stage-b-brief.md)。
+
+**手順0（分類モデルを戻す）は完了。**`~/.hermes/config.yaml` の `model.default` を
+`upstage/solar-pro4:free` から `kimi-k2.6` へ戻した。作業前に
+`pgrep -fl "classify_.*hermes|refresh_topic"` で他セッションが分類中でないことを確認し、
+`config.yaml.bak-202609061725` として現状を保存してから変更した。
+
+**識別子の正確な文字列は推測していない。**指示文には「証拠が残っていない」と書かれていたが、
+`~/.hermes/config.yaml.bak.20260818_184335`（2026-08-18、モデル切替の直前）が残っており、
+`default: kimi-k2.6` / `provider: opencode-go` /
+`base_url: https://opencode.ai/zen/go/v1` / `api_mode: chat_completions` を確認できた。
+**提供元まで含めてこのバックアップの値へ戻した**（現状は `provider: nous` / `base_url: ''`
+になっており、`default` だけ書き換えても別の提供元へ繋がっていた）。
+戻したあと `hermes --oneshot` で1件だけ分類を試し、応答することを確認した。
+`DATA_REFRESH.md` の記述（分類モデルは `kimi-k2.6`）と実設定は一致した状態になった。
+
+**記録項目を4つ足した。**書き手は `scripts/refresh_topic.py`。
+回ごとの `report.json` に `provenance` を足す。
+
+| 足したもの | 中身 |
+|---|---|
+| 分類モデル名 | `provenance.model`（`name` / `provider` / 設定の出所） |
+| プロンプト・分類基準の版 | `provenance.classifier.script_sha256` と `taxonomy_sha256` |
+| 入力の指紋 | `provenance.input.raw_sha256` |
+| 取得元 | `provenance.sources`（取得元ごとの件数） |
+
+**検査を2つ足した。**`scripts/verify_update_provenance.py` が
+①回ごとの4項目 ②投稿ごとの必須項目（`fetched_at` / `query` / `source`）を見る。
+`refresh_topic.py` 側でも、収集直後に投稿ごとの必須項目が欠けていれば止まる。
+テストは `tests/test_update_provenance.py`（17件）。
+
+**過去の回は対象外。**必須になるのは `REQUIRED_FROM = "2026-09-07"` 以降の回だけ。
+古い回に推測でモデル名を埋めない（「不明」は不明のまま残す）。
+
+**実際に止まることを確認済み。**項目を1つ抜いた `report.json` を作って検査に掛け、
+`NG provenance.model.name がありません（分類した回）` で終了コード1になることを確認した。
+4項目それぞれを抜いた場合もテストで落ちることを確認している。
+
+標準4検査は合格（単体テストOK・`verify_theme_page` / `verify_number_provenance` /
+`verify_top_page` すべて NG 0件）。
+
+**次は段階C。**
+
 ## 2026-09-06：段階Bの指示文と、モデル設定の食い違い（要判断）
 
 指示文: [段階B 入口を整える](../quality/designs/2026-09-06-stage-b-brief.md)。
