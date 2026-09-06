@@ -261,6 +261,7 @@ def build_provenance(
     raw_rows: list[dict[str, Any]],
     *,
     classified: bool,
+    reused: bool = False,
     config_path: Path = HERMES_CONFIG,
 ) -> dict[str, Any]:
     sources: dict[str, int] = {}
@@ -281,7 +282,21 @@ def build_provenance(
         "sources": dict(sorted(sources.items())),
     }
     # 新規0件の回は分類していない。走っていない分類のモデル名は書かない（不明は不明のまま）。
-    provenance["model"] = classifier_model(config_path) if classified else None
+    # 保存済みの分類を使い回した回（--resume）も同じ。そのとき分類を走らせたのは
+    # 別の日で、いまの設定のモデルとは限らない。現在値を書くと「どのモデルで分類したか」
+    # が誤って残る（2026-09-06 のレビュー指摘）。
+    if not classified:
+        provenance["model"] = None
+    elif reused:
+        provenance["model"] = {
+            "name": None,
+            "provider": None,
+            "config_source": None,
+            "note": "保存済みの分類を再利用した回。分類を実行した時点のモデルは記録に無いため不明。"
+                    "現在の設定値を代わりに書かない。",
+        }
+    else:
+        provenance["model"] = classifier_model(config_path)
     return provenance
 
 
@@ -911,6 +926,7 @@ def apply_manifest_targets(root: Path, stage: Path, targets: dict[Path, Path], b
             ([sys.executable, str(root / "scripts/verify_public_registry.py"), "--against-private"], "verify public registry"),
             ([sys.executable, str(root / "scripts/verify_theme_page.py")], "verify themes"),
             ([sys.executable, str(root / "scripts/verify_number_provenance.py")], "verify number provenance"),
+            ([sys.executable, str(root / "scripts/verify_update_provenance.py")], "verify update provenance"),
             ([sys.executable, str(root / "scripts/verify_top_page.py"), "--allow-overdue-collect"], "verify portal"),
             ([sys.executable, str(root / "scripts/seo/validate_theme_seo.py")], "verify SEO"),
         ):
@@ -1061,6 +1077,8 @@ def main() -> int:
         timings["fetch_seconds"] = round(time.monotonic() - started, 2)
         write_json(timings_path, timings)
 
+    # 分類を走らせない分岐でも参照するので、先に決めておく
+    reused_classification = False
     if not new:
         write_json(stage / "classified-wave.json", [])
         report = {
@@ -1082,6 +1100,8 @@ def main() -> int:
         classified = read_rows(stage / "classified-wave.json") if reusable else []
         if reusable and {identity(row) for row in classified} != {identity(row) for row in new}:
             reusable = False
+        # 分類を実際に走らせたか、保存済みを使い回したかを後段の記録で使う
+        reused_classification = reusable
         if not reusable:
             run(
                 [sys.executable, str(classifier), "--input", str(stage / "new-only.json"), "--output", str(stage / "classified-test.json"), "--markdown", str(stage / "classified-test.md"), "--limit", str(test_count), *classifier_args],
@@ -1111,7 +1131,8 @@ def main() -> int:
 
     classified = read_rows(stage / "classified-wave.json")
     report["provenance"] = build_provenance(
-        ROOT, classifier, stage / "raw.json", raw, classified=bool(new)
+        ROOT, classifier, stage / "raw.json", raw,
+        classified=bool(new), reused=bool(new) and reused_classification,
     )
     write_json(stage / "cumulative-candidate.json", current + classified)
     if archived_report is not None:
