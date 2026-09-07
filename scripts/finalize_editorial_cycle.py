@@ -100,7 +100,8 @@ def register(root,base,run,waves=2):
     def add(path,storage,kind):
         entry={'path':str(path.relative_to(root if storage=='repository' else private)),'storage':storage,'kind':kind,'sha256':sha(path)}
         existing=next((s for s in sources if (s['path'],s['storage'])==(entry['path'],entry['storage'])),None)
-        if existing is not None and existing!=entry:raise ValueError('registered evidence changed')
+        if existing is not None:
+            if existing['sha256']!=entry['sha256'] or (existing['kind']!=entry['kind'] and kind!='evidence'):raise ValueError('registered evidence changed')
         if existing is None:sources.append(entry)
     add(private/read(run/'reservation.json')['retry_of']/'invalidated.private.json','private','evidence')
     report_refs=[]

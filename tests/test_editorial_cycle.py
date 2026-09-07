@@ -70,4 +70,22 @@ class WorkLineageTests(unittest.TestCase):
         with self.assertRaises(ValueError):validate_work_lineage({'records':[]},{'records':[],'sources':[{'storage':'private','path':'invalid/batch/report.json','kind':'journal'}]},'invalid')
 
 
+class IncrementalTriageTests(unittest.TestCase):
+    def test_next_group_preserves_previous_individual_labels(self):
+        from scripts.finish_hold_triage import merge_triage
+        from scripts.verify_editorial_hundred import sha
+        with tempfile.TemporaryDirectory() as tmp:
+            d=Path(tmp)
+            rows=[{'topic':'t','record_id_hash':str(i),'reason_sha256':[str(i)],'primary_reason_hint':'other_or_unmapped'} for i in range(2)]
+            summary={'records':rows}
+            for i,category in enumerate(['quote_or_attribution','negative_not_support']):
+                p=d/f'input-{i}.json';q=d/f'output-{i}.json'
+                dump(p,{'records':[rows[i]],'categories':[category]})
+                dump(q,{'source_sha256':sha(p),'records':[{'index':0,'category':category,'brief_basis':'individual saved reason'}]})
+                summary=merge_triage(summary,p,q)
+            self.assertEqual([r['reason_group'] for r in summary['records']],['quote_or_attribution','negative_not_support'])
+            self.assertEqual(summary['grouping_methods'],{'individual_saved_reason_triage':2})
+            self.assertEqual(len(summary['triage_sources']),2)
+
+
 if __name__=='__main__':unittest.main()
