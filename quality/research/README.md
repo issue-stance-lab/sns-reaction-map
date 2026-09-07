@@ -26,7 +26,7 @@
 |---|---|---|
 | 生成AIと著作権 | ai-copyright-primary-sources.md | 再発注ずみ・URL全通 |
 | 自転車の青切符 | bike-blue-ticket-primary-sources.md | 取り直しずみ・URL全通 |
-| 部活動の地域移行 | bukatsu-chiiki-primary-sources.md | 403が2本／本文が「推定」と自認したURLが2本（実在は確認） |
+| 部活動の地域移行 | bukatsu-chiiki-primary-sources.md | 403が2本／本文が「推定」と自認したURLが2本（実在は確認）／**第7節「学習指導要領上の位置づけ」は全体が未照合**（2026-09-07、調査環境から文科省等への通信が遮断され本文を1本も開けていない） |
 | 憲法改正論議 | constitutional-amendment-primary-sources.md | 取り直しずみ・会議録は詳細URL・URL全通 |
 | 高齢者免許返納 | elderly-license-revocation-primary-sources.md | URL全通 |
 | 学校でのあだ名禁止 | school-nickname-ban-primary-sources.md | 再発注ずみ・URL全通 |
