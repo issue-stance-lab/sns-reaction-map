@@ -1,23 +1,19 @@
 {
   "schema_version": 1,
-  "scope": "Current combined editorial adoption; canonical application and legacy reread credit remain separate.",
+  "scope": "Current editorial adoption; supplemental changes preserve original proposals and history; no canonical application.",
   "reviewed_records": 2000,
   "counts": {
-    "hold": 632,
-    "accepted": 1089,
-    "pending_evidence": 19,
-    "pending_audit": 260
+    "hold": 642,
+    "accepted": 1336,
+    "pending_evidence": 22
   },
   "sources": [
     {
-      "path": "data/verification/editorial-adoption.json",
-      "sha256": "e5df874051aa7e2511ef4460969be69cac2ea9f4a6b0a84468f00571297cb5bc"
-    },
-    {
-      "path": "quality/reviews/2026-09-07-next1000-sol.json",
-      "sha256": "196d2258ffb4e321139490d44e13eb8de7045c54661255916fd5455a34a8d367"
+      "path": "quality/reviews/2026-09-07-cycle-supplement-baseline.json",
+      "sha256": "230ea1c49e70ae277ff17220c8265a78d8050ab7c4dce0c2d4d6e21cbda0b830"
     }
   ],
+  "baseline_sha256": "55fd8dc49ed4e508966663bc0fbbc7a021df18b883c6338264aec5cd0e071095",
   "records": [
     {
       "sample_id": "ai-copyright:1",
@@ -40329,10 +40325,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "pending_evidence",
+      "adoption_basis": "supplemental_insufficient_or_conflicting_evidence",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "3ca974fc35ec88ebbfea7dc816cc663d8c6b68c5eab74f04ec9d3c2497d4abc1"
     },
     {
       "index": 4,
@@ -40361,10 +40359,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "b4d5e07a82a2f1563ff851ee9dda1798d6ec45a9dac9ed97ac4a3b8d21d2cb50"
     },
     {
       "index": 5,
@@ -40393,10 +40393,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "54cb996fed6c819baab4a4aebb1fbd3021d4e26da9343ccddd7dfd2a5d831265"
     },
     {
       "index": 6,
@@ -40425,10 +40427,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "b8d0edc61005cd44f532ca6d57a06e87b1979bab4fba41ce791b504a7c4cdf5e"
     },
     {
       "index": 7,
@@ -40457,10 +40461,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "4de5ae580e9b3b2b429a7257921e5aaa86a59bc8f332ae3dff227e5b92f76faf"
     },
     {
       "index": 8,
@@ -40489,10 +40495,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "c60657eaebc600563754f3a12268606a37183077527a618d677ded4ffe17dac7"
     },
     {
       "index": 9,
@@ -40521,10 +40529,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "30e7fed8314c9a85843414a23e9460f9cd3d4285790b6bc7f028ede1011df35d"
     },
     {
       "index": 10,
@@ -40631,10 +40641,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "3c37d3109b24ddb40797ee40e2ff598be505ac27482911bba3a6cc36b333739e"
     },
     {
       "index": 13,
@@ -40663,10 +40675,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "pending_evidence",
+      "adoption_basis": "supplemental_insufficient_or_conflicting_evidence",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "5fe07ed03092669fc5d3b4c2b0fde8fd4cd3eeb1f97264d189c20a4e3618f68c"
     },
     {
       "index": 14,
@@ -40695,10 +40709,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "5ebee7d212224af3938cfbdbe07715cabbc7cff9969400b33bda4382319880f4"
     },
     {
       "index": 15,
@@ -40727,10 +40743,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "1c797ed97d9dd2cdb42bc6b717b3776a2def67c6b7d9b00543afcddf4f3ab28c"
     },
     {
       "index": 16,
@@ -40759,10 +40777,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "71a9a5164fecb017e4b83875647e6687b3c6b77cc8430ade618776a20844627c"
     },
     {
       "index": 17,
@@ -40791,10 +40811,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "ab54446d4946a80f6641f638c7cb4d1cba1817df8238c6a7ff6ee8c84c3fa975"
     },
     {
       "index": 18,
@@ -40823,10 +40845,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "pending_evidence",
+      "adoption_basis": "supplemental_insufficient_or_conflicting_evidence",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100008
+      "batch": 100008,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "8c39545dd5cd289b9998774ac66616e1d3481fa329c23e4a4215ef9c4a9761c6"
     },
     {
       "index": 19,
@@ -40971,10 +40995,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "11db1c8ac2fc75369c1e92f2fd97e1bb3ca55017ea5ed2882ad0e87646912142"
     },
     {
       "index": 3,
@@ -41077,10 +41103,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "60cf8e0c2af5bec821658cd21918f3bebf7ac2b8526dd5064b0ad1f08e858c9d"
     },
     {
       "index": 6,
@@ -41109,10 +41137,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "dbdbcd1187c267890228a081fe190140b83ab7b865410a7b2cb3c58dd21b1b2c"
     },
     {
       "index": 7,
@@ -41141,10 +41171,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "673f6ecc5b11d323e2e5a9d10ad5617465bd429cb71c1f952e98f0c5a7f10354"
     },
     {
       "index": 8,
@@ -41173,10 +41205,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "818fc187137126c7ea0489f66a90959373ab23a9dbf8732bc782b77594598f2b"
     },
     {
       "index": 9,
@@ -41285,10 +41319,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "cb32825e04d5f0174e547ee6475f3c6f2e544a5f3f3f7bb07b49ff25c1f4f146",
+      "supplemental_reason_sha256": "58e0f87f72bbfe2244a67b8df738a280ca79b7fa37ce3c5995231a8089cca4a1"
     },
     {
       "index": 12,
@@ -41317,10 +41353,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "91dfb26e487ac599fecfb5702a438221b073768feddee83d6ba4097cd1f6d549"
     },
     {
       "index": 13,
@@ -41388,10 +41426,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100009
+      "batch": 100009,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "dccff28ee8a0eee91b1e8b25c2a2ccff0db843c0f57fe3d153021d8b32a70eb2"
     },
     {
       "index": 15,
@@ -41685,10 +41725,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "a8cd44eb2127f6e74fb1c09e46de4031474fcf30acb1cff40d7fb6207d98f51d"
     },
     {
       "index": 3,
@@ -41717,10 +41759,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "cf57011337bb562d61e57c37df974a4bafcfb27b4375610caabd3c429f376bf5"
     },
     {
       "index": 4,
@@ -41749,10 +41793,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "7f6cc0f207430f5432cb65f3cf36fd8ad5ad0a6019924cb8174710891805eeb7"
     },
     {
       "index": 5,
@@ -41781,10 +41827,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "5fd18388f6b9a3b0dce1afcc2201014e932a92d0191c8e3d6f40775138561533"
     },
     {
       "index": 6,
@@ -41813,10 +41861,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "445ffa121f69957517d4b650b896f4605ed50ccbe5bd31f12882db9a68bf4539"
     },
     {
       "index": 7,
@@ -41845,10 +41895,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "e483275db888cb8e57e918d6773981d980047a99a233d8faac284782b8b62acb"
     },
     {
       "index": 8,
@@ -41877,10 +41929,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "3fb0113a21ec87e7a8b026bb7d3852468a88554789d5c1085b2ad0744a0aa0c9"
     },
     {
       "index": 9,
@@ -41909,10 +41963,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "9eb771498e5b15c4cb26757778118e878dc631ba57e8a9b8e889222aae1f50bf"
     },
     {
       "index": 10,
@@ -41941,10 +41997,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "1a181416c4db49f1213ac351b89b64e8a204388a967720121479c7cfc82ed073"
     },
     {
       "index": 11,
@@ -42014,10 +42072,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "12cdde27257d2826e5e80fdac796cc762a4f755182d8910bde44f0ef9518e675"
     },
     {
       "index": 13,
@@ -42046,10 +42106,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "aef1d1cefe882a93b43c73af8b76914d0d04b9da5365c69daa7a638682cc80c6"
     },
     {
       "index": 14,
@@ -42118,10 +42180,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "e76675cf68466da932035c550fcdda34f5dd1a703df76b7002d664ae85187e99"
     },
     {
       "index": 16,
@@ -42150,10 +42214,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "04cc4f583fe0c262e55c5808e4df82b6e72e221e0275b16bc408c18f71493d74"
     },
     {
       "index": 17,
@@ -42182,10 +42248,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "0760a822e5ba913d8ed8ed1ef4c209255eaf813b276663f1a886f0aeb2184400"
     },
     {
       "index": 18,
@@ -42253,10 +42321,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100010
+      "batch": 100010,
+      "supplemental_audit_sha256": "2108488f0ebaf9606798b6fc2133dfba952410104c48f383216da2906abb34c3",
+      "supplemental_reason_sha256": "ab0e3b25eb484e3765b030e374676def149842be075bba6f2f1c55adaf1c77ad"
     },
     {
       "index": 0,
@@ -44484,10 +44554,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "93ee6b43edc1714f6380663ecdddf807552eee941857f3a283dc7649a61a5aa4"
     },
     {
       "index": 6,
@@ -44516,10 +44588,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "15d157bacba7a1e0817213aa8ea39814673b2a0afc54240ec17c9ea52a0077de"
     },
     {
       "index": 7,
@@ -44548,10 +44622,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "a49e0ca4b54954ae001f00d71d443dda79d482a2e2025efba47d9af02872a041"
     },
     {
       "index": 8,
@@ -44580,10 +44656,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "946b80dcc8e54e795d9690022a543f00174ebd21a164a6952f07738012b2cb56"
     },
     {
       "index": 9,
@@ -44612,10 +44690,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "83f76c602330bccaf9285b5b6afe0151bd633d776d9e0871810f73ff528ba849"
     },
     {
       "index": 10,
@@ -44644,10 +44724,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "e309589fc6b24b08ae66e25fea922bebf10b52434eb7e76cc84b0e3090b1228d"
     },
     {
       "index": 11,
@@ -44676,10 +44758,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "428c0d9e4b4f6aaa8c3a71409fcff30117d545fee12c3e59acba2f1b4cd5e6d0"
     },
     {
       "index": 12,
@@ -44708,10 +44792,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "c9bdac50aaca5ab67ef776fc50379f0a0bd803d13f03774ecef15113803446d7"
     },
     {
       "index": 13,
@@ -44740,10 +44826,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "1e9dbf09cb04dfceed772a7ee06e2f1e88a33db3c656aaf2f51850f89acaa469"
     },
     {
       "index": 14,
@@ -44772,10 +44860,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "222da5b82c4a1893d6a46c12d2dab0a730570fb27aa1b7221a68f25d3a57c124"
     },
     {
       "index": 15,
@@ -44804,10 +44894,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "789daba6b6fcefa9cc2a92cfab251e6e233e2995c3f26048d5a436e74cec25d4"
     },
     {
       "index": 16,
@@ -44836,10 +44928,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "15684d3b5fe7d729000ae433b8bca9344fd31810b4e0ff50c6872584301e1c91"
     },
     {
       "index": 17,
@@ -44946,10 +45040,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100014
+      "batch": 100014,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "988de81ebab80d3d8f76f3714b6afc661efe81e38a6765a2331db9b7fa6e3591"
     },
     {
       "index": 0,
@@ -47075,10 +47171,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "22638560537a1effe190f2e1509baa161485f05d0263fcf719d5666ebee77b9f"
     },
     {
       "index": 3,
@@ -47107,10 +47205,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "6c11608724b7a53479a7819de253ce1d508563bc1bf10077ec63518c266f4acd"
     },
     {
       "index": 4,
@@ -47139,10 +47239,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "92f41eee7f55ab5b9c099991991413eac9579aed7cf9b848356b253620711e49"
     },
     {
       "index": 5,
@@ -47171,10 +47273,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "35608eee6033c1edc6d98d026ad06d86dc987f90be932fcda9b50a9da3aca441"
     },
     {
       "index": 6,
@@ -47243,10 +47347,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "cbc496a0fe2f6d12fea001b37ad0db45803ee780dd1acb14f65600bfbe45f3bc"
     },
     {
       "index": 8,
@@ -47275,10 +47381,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "22367d103723f6dd08f04b0d8568fbef6a0dff1fc9edc2b54bb6cab13530ed98"
     },
     {
       "index": 9,
@@ -47307,10 +47415,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "2d56e549dfefca0261706eb6584517c5cffd1ac6479885a622a6b6141de85226",
+      "supplemental_reason_sha256": "00091913735d429a6de1ad8c426775895f6fd0da84868fd96d52c6a4223b9891"
     },
     {
       "index": 10,
@@ -47339,10 +47449,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "2184623395b69a99a625f46956142cad6ee2a84cdca05f36feba0f4b2fb120fc"
     },
     {
       "index": 11,
@@ -47371,10 +47483,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "acc2e076b47504de7a5ac5cce154b1782cbca6712693e97de0f93ee52f15d98a"
     },
     {
       "index": 12,
@@ -47442,10 +47556,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "0a19e44c6db8aaf929f1927137c7f34bb1684e3e65ed7f1b26cd56bc8c38bdaf"
     },
     {
       "index": 14,
@@ -47474,10 +47590,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "1c6a8d9e51454d6b06172084055bb2dbb40bebb723d8e418fb46340135d44785"
     },
     {
       "index": 15,
@@ -47506,10 +47624,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "af25224dc8d77da29d9b1433506d600822881df96d9a8688fa8baa2b1eb032b9"
     },
     {
       "index": 16,
@@ -47538,10 +47658,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "0436d2e729c6ff1fb256bbb21cf2563970d1cb915ea35fbee8a385274ba9ff6b"
     },
     {
       "index": 17,
@@ -47570,10 +47692,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "41cf05e8c49d4cb32ed828453541e62fbc724ccf7da5e8b1aaa56ee18febdc2f"
     },
     {
       "index": 18,
@@ -47602,10 +47726,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "6b0d9b8f6839dbbfbe6e6da694408570ee0e8a28e365107bed5f7afccbaeb4c6"
     },
     {
       "index": 19,
@@ -47634,10 +47760,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100018
+      "batch": 100018,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "59f72bbe8562c0f81ff4c08520a37f0546b2d951211df4238f070d01aa32bdf0"
     },
     {
       "index": 0,
@@ -47740,10 +47868,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "11c9562427e1c0a534a08a583a625acfb7aed15210f1a2a7a5919c3ef2403e2b"
     },
     {
       "index": 3,
@@ -47772,10 +47902,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "ee93174616098ceaadb52c8d2d9b1fb7370c6c34dfc8c665561f4e99f1d35ad2"
     },
     {
       "index": 4,
@@ -47843,10 +47975,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "be0b99a9ee5d11dd404c0f2f4cce2cea03ae054abc11c2250dc8dee63064f571"
     },
     {
       "index": 6,
@@ -47875,10 +48009,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "c7789b6d2b15b7e72eb096e0068578fb3deecc87060aca64e48a82e7580ead71"
     },
     {
       "index": 7,
@@ -47907,10 +48043,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "89a5156577be9870506484662728055673c60f37d17dcbf694ec4b6a289905ae"
     },
     {
       "index": 8,
@@ -47939,10 +48077,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "9c7267e89cb2d9cad6b40544c67238fc962800f78e346e7cf5e720700696b708"
     },
     {
       "index": 9,
@@ -47971,10 +48111,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "274b0b465e3b317620846aeef523cfd1ba66dfe5de982f306720e45d8f765a14"
     },
     {
       "index": 10,
@@ -48003,10 +48145,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "1548a51f601b504e4b2503faaa6b92997ea356f57e0471c38c6c52743504a581"
     },
     {
       "index": 11,
@@ -48035,10 +48179,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "c1427ffbbc10dae6ccfd519ac6dc07a19b447fd625d726cc8b4ca44704cdb5ce"
     },
     {
       "index": 12,
@@ -48067,10 +48213,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "643e241a180025023be0cce4ebea9da31b66d93dee5340f18fbec1878b9e108e"
     },
     {
       "index": 13,
@@ -48131,10 +48279,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "7fd9d7dde97b466a98f5bc1f3879ffd1208c79db49bffa3f57993d927d527f23",
+      "supplemental_reason_sha256": "8fc53a08b154b8fef9be3793dfb6c61c09df175e792d2022886c7952b8df4c7c"
     },
     {
       "index": 15,
@@ -48163,10 +48313,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "ae27f1988e9a995f3940c923f70a3843b9a36d22e31f8244b270a1b0dc05783c",
+      "supplemental_reason_sha256": "2d21a2c1050f47d9780d79e9ae655000025c41843838677fb2344bb5162a4373"
     },
     {
       "index": 16,
@@ -48195,10 +48347,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "ae27f1988e9a995f3940c923f70a3843b9a36d22e31f8244b270a1b0dc05783c",
+      "supplemental_reason_sha256": "e0542c2edfecb1f576458f1e6b943a96aa4f30c81487d712dc340aa41bcd1b4e"
     },
     {
       "index": 17,
@@ -48227,10 +48381,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "ae27f1988e9a995f3940c923f70a3843b9a36d22e31f8244b270a1b0dc05783c",
+      "supplemental_reason_sha256": "285ac17d91bc05ae371613ede18a389d77815139236b1e5959d0ed4920e344b6"
     },
     {
       "index": 18,
@@ -48259,10 +48415,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "ae27f1988e9a995f3940c923f70a3843b9a36d22e31f8244b270a1b0dc05783c",
+      "supplemental_reason_sha256": "25861d3f2ca8e939d97cb07a687aee39bb5803d160b3677fa4b36eea548b6cef"
     },
     {
       "index": 19,
@@ -48291,10 +48449,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100019
+      "batch": 100019,
+      "supplemental_audit_sha256": "ae27f1988e9a995f3940c923f70a3843b9a36d22e31f8244b270a1b0dc05783c",
+      "supplemental_reason_sha256": "7fa42bb8e2741fac44d6d50add0c40a7c59add9ba22eac89364ca0635699f539"
     },
     {
       "index": 0,
@@ -49173,10 +49333,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "91dd3838e9f8100e4a25c62826d7ce8a949085fefc9969b284fcae7b5ac55d36"
     },
     {
       "index": 5,
@@ -49205,10 +49367,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "31adb2126f45f5a82328bc1735e3ba417fd50fe0542529ca0e22cff1b6daa628"
     },
     {
       "index": 6,
@@ -49271,10 +49435,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "56b5e1b2ada90bcdb0554bc7c0a0c1290b162db3514bd9563bef5ada3791d6f5"
     },
     {
       "index": 8,
@@ -49303,10 +49469,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "913768e8c0254ac81528a18710577267c8d17fb66ef61f81a4e3b053c98b9c11"
     },
     {
       "index": 9,
@@ -49406,10 +49574,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "8b14dab5e6f09f83e44f2aa6ac3ff13e0f9b6fa7774b93ca8d4e635d50557a6e"
     },
     {
       "index": 12,
@@ -49438,10 +49608,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "256ebf9333ad53dc3d0126830679c170fd98b7fe497ef5159dced9a2cb7bee78"
     },
     {
       "index": 13,
@@ -49470,10 +49642,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "2481cae1d95ad3554d417b876d1f0b88a91acef9de9eef9e077e62c933b2db96"
     },
     {
       "index": 14,
@@ -49534,10 +49708,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "82ffd451eca993d2180b36cf4ae0992d3155f1f36e16c40ded1d8d2daaa2b939"
     },
     {
       "index": 16,
@@ -49566,10 +49742,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "1090e45de1a0848c5c9f2cc891f801e19ada234b5fe7ccc41f4fc5dfaa05abbc"
     },
     {
       "index": 17,
@@ -49598,10 +49776,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "48d33faacd2785b86dfc359c583e79d6d27b3f0bf403ad2f5f64fc3f203d7d46"
     },
     {
       "index": 18,
@@ -49669,10 +49849,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100021
+      "batch": 100021,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "d382ad76f94867b4f037f6103ebd3645dcde2c99272df7e27e39a2eab981b879"
     },
     {
       "index": 0,
@@ -50440,10 +50622,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "90bebd0716d3f3c355d0ff5cab1d379faa9bdbecf23900d09c496d95da146d42"
     },
     {
       "index": 3,
@@ -50511,10 +50695,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "fa4eaa3225e1f076a45b0afa7a7b7052313429fa17167d26233acea21f3c4911"
     },
     {
       "index": 5,
@@ -50543,10 +50729,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "cfb8d6fe80102734cd7402f024c11171978974d9b512d4665c9c9fc7f2b489e4"
     },
     {
       "index": 6,
@@ -50651,10 +50839,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "0ab3766161dfc077f44734d05b569ae06407d9f030a3b5623b7ae554179f339d"
     },
     {
       "index": 9,
@@ -50683,10 +50873,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "f0d84cee28aeb3574a9c3966986aeeb6e2909cb79294a80af08a031273218063"
     },
     {
       "index": 10,
@@ -50715,10 +50907,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "42369afa08557cb0f953cdf2faab23c606bf2a942d39ac80e6205ae2a37b496f"
     },
     {
       "index": 11,
@@ -50786,10 +50980,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "6bdee029c8345f2b0e94862c49e7cf55eb7f2c5ed5ff9c1bda2c5769b5fb886f"
     },
     {
       "index": 13,
@@ -50818,10 +51014,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "1281e80a8f0b4d706decaabe7549f8497fd5366acc4d1eb6486237c17bafd35b"
     },
     {
       "index": 14,
@@ -50850,10 +51048,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "74c438e2a6dee4603e8f815d2f73a593baf6ed65121253a841c43e9b8bc0f7bf",
+      "supplemental_reason_sha256": "e5fb91cad450df0687bea10aad44d809ee7867483d55a9d02fccf6d73eb21f88"
     },
     {
       "index": 15,
@@ -50882,10 +51082,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "efcf4d281f450c178ff2ca98e4bb24b98d512974a6578833142607b944ee5ebc"
     },
     {
       "index": 16,
@@ -50914,10 +51116,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "8b3eaf8e9f5a3b3843cfaac65866539aebbd8372536c526668ed27835d8391c6"
     },
     {
       "index": 17,
@@ -50946,10 +51150,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "0715bfd1cae0cd52449bfccc05991c9a1b575056466904261978130cca7e4c71"
     },
     {
       "index": 18,
@@ -50978,10 +51184,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "f4c52924a2dbb06585d44f80ed1facc81242739a8a8ff368e27ff919a3651932"
     },
     {
       "index": 19,
@@ -51010,10 +51218,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100023
+      "batch": 100023,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "ec96a0d0e68be2c3edc58cd86b45c7c8185f9d59b30ce44147683d920c41c675"
     },
     {
       "index": 0,
@@ -53814,10 +54024,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "5f82e4992805df798e507aac3a52bbbec5822c2d7a85392a93be556c1ca14c74"
     },
     {
       "index": 3,
@@ -53846,10 +54058,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "c146f717bf95e4a770ba1974c0207ae7edbbb415b598c79ffea65dc6f4ce4014"
     },
     {
       "index": 4,
@@ -53917,10 +54131,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "368648be7d9dfad93c4e921c652c571b96c6b74389b2f0f154fdea0dbaa09a5e"
     },
     {
       "index": 6,
@@ -53949,10 +54165,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "5c87acc820fba679486b92ed5a6f84b41a986883fd3e2a48971bd85d12b1ed93"
     },
     {
       "index": 7,
@@ -53981,10 +54199,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "2d3f9954def70815c8c98dcdce87add77e26d7a90fa62f17f30ba43cd54cb27a"
     },
     {
       "index": 8,
@@ -54013,10 +54233,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "e19b4ccd25c37818bf2fe3d1f18a66c00662c448c1962a19789744b4ba722c1a"
     },
     {
       "index": 9,
@@ -54045,10 +54267,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "108973300120295b8e16460e0aafbf1ce290ce24437f5ee83397303e18c20874"
     },
     {
       "index": 10,
@@ -54077,10 +54301,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "19f522c8767ec6d2576caddcf44a7f32aaacd7b6d914f14556ee865e1c989ece"
     },
     {
       "index": 11,
@@ -54109,10 +54335,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "c80085afd0c5089e5c01f823b0c1142ce610cc3cc19a930872b6050b4dabf8dc"
     },
     {
       "index": 12,
@@ -54141,10 +54369,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "3565f1632563a897778ba8b1350e600c01e778c1cd7323c17a26f6b28a550d95"
     },
     {
       "index": 13,
@@ -54173,10 +54403,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "c06aafb399482ae26c6923a85d38d19112579cbffdb49840bbaaa62a5e855d85"
     },
     {
       "index": 14,
@@ -54205,10 +54437,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "d767a7cce7144c3db2e9c4018c72440d4c00a9bccdb5af5de01ce8097dc73043"
     },
     {
       "index": 15,
@@ -54237,10 +54471,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "0fae2ee0cf30a5b46e015ed2a47144ae5e67a8b19206f5b6a8410f416614ef8f"
     },
     {
       "index": 16,
@@ -54269,10 +54505,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "e3d8e8a036593a9a558d6e19d704b7a99ba791b245e18c6b87de3204c718d5e6"
     },
     {
       "index": 17,
@@ -54301,10 +54539,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "0ef654fbfd535d151a9352e9f0ea67e491a02e4c91515cc868bf73ddd9439859",
+      "supplemental_reason_sha256": "0fdebdd03e70616e60acc9f36f087e02d71693ac361de5c6069afb1e3f19862c"
     },
     {
       "index": 18,
@@ -54333,10 +54573,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "861b0f58ece22a14af7fc7b1cd5606eef32ebd9782d582f25229c09f66f3e5bb",
+      "supplemental_reason_sha256": "152903b1e410f045357c357d589cc12dd2ce4c6fd4cb61af3aa48a8a6b3c5fec"
     },
     {
       "index": 19,
@@ -54365,10 +54607,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100028
+      "batch": 100028,
+      "supplemental_audit_sha256": "861b0f58ece22a14af7fc7b1cd5606eef32ebd9782d582f25229c09f66f3e5bb",
+      "supplemental_reason_sha256": "6f824aa40309d7d939288582b19aae53378bcbfb9c3da8e4c36c2c49e86f9817"
     },
     {
       "index": 0,
@@ -55866,10 +56110,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "0b79c42617ff62cb3c82800e47f1888ffa7390a58d6562d8ca04416d000f75bf"
     },
     {
       "index": 5,
@@ -55898,10 +56144,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "130b51c63f78e82f7feeda2e4db07d46a69c6514a1b004e01e9e7e5651a13406"
     },
     {
       "index": 6,
@@ -55930,10 +56178,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "1b0a5617741a379dc309eeb8b33fc28bb4a6c817204db62a849b2e33491c58f9"
     },
     {
       "index": 7,
@@ -56001,10 +56251,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "e51a5aebe3628341ed870b3566758deda3e38bef790630b87529acb41884626e"
     },
     {
       "index": 9,
@@ -56033,10 +56285,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "29ac3903d7fafb992e82a6321aba7d7966e15e0f1bab3499916b3a7cfe77cc41"
     },
     {
       "index": 10,
@@ -56065,10 +56319,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "565d2f89072a5e168b683a4f1628d55ab7bf9046ee919f1da43f1ebee14e8cb7"
     },
     {
       "index": 11,
@@ -56097,10 +56353,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "4c45c7c7893c58c6155fcc234f32f6390c17898aa16d4caed4cd0dae927ed7eb"
     },
     {
       "index": 12,
@@ -56168,10 +56426,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "2ece689455517c6f79f1af0426b6c1d37ce2bb3d4b51c162dbd6d0e1b4d75008"
     },
     {
       "index": 14,
@@ -56200,10 +56460,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "2583b1798178d6e57b072a5e7f89e74c2d62d6b63abc8386f83c2b985ed7ee4b"
     },
     {
       "index": 15,
@@ -56271,10 +56533,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "c67e9ec38502079d02ad9f9ecdef9adb795b5d074f2ae4eb92ea83cce7f9c70b"
     },
     {
       "index": 17,
@@ -56303,10 +56567,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "7f769ca270c48e668ec6862bff666148141a51e6f417a52c6e1f61a414968c79"
     },
     {
       "index": 18,
@@ -56335,10 +56601,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "3915daf7c90bb3db26d0d0fd14a98f142632f53ae828b4c1cdda9d3b95b7691b"
     },
     {
       "index": 19,
@@ -56367,10 +56635,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100031
+      "batch": 100031,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "c4c48fbb40da2611460884580f11f21be4f1bdd6de6cd385f6b60edb7b441afb"
     },
     {
       "index": 0,
@@ -57851,10 +58121,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "24e17647ecb7e154553ef63d087ba2ca97d1ce6cb683d9e4b6a122a0bf842c9d"
     },
     {
       "index": 3,
@@ -57883,10 +58155,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "bf1b559b7dd79520164f8822f2427a0a10ee562a1fd65b3cf8a18f69c28445ae"
     },
     {
       "index": 4,
@@ -57954,10 +58228,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "445f7b9b3a3221895797cf3aed30c7209f3a97591f6175b4e28ba202ca63b82a"
     },
     {
       "index": 6,
@@ -58025,10 +58301,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "3b296ca38a7e58f81ec2ef1319879840b15d6d60ecb3ff4cf57ff4c32f1deab4"
     },
     {
       "index": 8,
@@ -58057,10 +58335,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "bdbed048a3c2cdddaedc4c70824e9dee771d78cc0a5f7dab1f1da8018762d2d1"
     },
     {
       "index": 9,
@@ -58089,10 +58369,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "34c2ad2c94072c3d6ab2971a855312490ed248ae1825c16a11fdad8ba18dc8ca"
     },
     {
       "index": 10,
@@ -58160,10 +58442,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "6679997ff2ac450ccf8e375aaa9bb1e88f871554218ef00421b8f5c1fe769900",
+      "supplemental_reason_sha256": "b3fae6abe5f7773d7a4d6cc3d00110e26d7069b1cefaba84f20af7406e6fd2ae"
     },
     {
       "index": 12,
@@ -58192,10 +58476,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "b00c00cd086fef3426dedc4e2d6ff7eecffc32ad3b5cc25c7761ea16c2265009"
     },
     {
       "index": 13,
@@ -58224,10 +58510,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "68dfe69551424f8824c821fb590ef64a8071f0a3c8f566ef401d656f2d68f594"
     },
     {
       "index": 14,
@@ -58256,10 +58544,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "5677e5f1278007b0bbda2511ee6dc3ab55c457e94ae1d69a988509eb8e9b8089"
     },
     {
       "index": 15,
@@ -58327,10 +58617,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "f0de9c4f43e7a1a92d6a2188e213de5c0a81d18068d2d007a5f96c068cd6beee"
     },
     {
       "index": 17,
@@ -58435,10 +58727,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100034
+      "batch": 100034,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "dca9622455f5218f7029cae6a4f7127fede060197bf05a181553be7b431a7d02"
     },
     {
       "index": 0,
@@ -58541,10 +58835,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "2071368ccb51284f4612a2c89486727656a5522388f936b700bf895f785a0d26"
     },
     {
       "index": 3,
@@ -58573,10 +58869,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "a8edf665b8e9fb9d53190f7d2ef9d8d422fe7e9d8866df8ee2627e38de8cf1f4"
     },
     {
       "index": 4,
@@ -58605,10 +58903,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "8a6e5bd1aea10df5c4ff76b413aadf13683042addc1a61d17f22c4b77670c531"
     },
     {
       "index": 5,
@@ -58637,10 +58937,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "17facfd5fecfc51432fa78ec6b9d4ac8c922a9db6f4ffd0495302a5a7047203c"
     },
     {
       "index": 6,
@@ -58669,10 +58971,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "49b43f891a4e58bc9365b152f08df9b236098d29814aa23731ecae357467323a"
     },
     {
       "index": 7,
@@ -58701,10 +59005,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "b6906ff6e4a514f11d2a716c89dcb70a095cb89cdd281c37091c13597798fd8b"
     },
     {
       "index": 8,
@@ -58733,10 +59039,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "ee522c4991caf30c929a38058ecabb69cecb1876446d3d595b81dadd63105bfe"
     },
     {
       "index": 9,
@@ -58844,10 +59152,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "6867a77e6afd385958a6a3772d780d01cdd845d43d23bee2354904c1967b2eb3"
     },
     {
       "index": 12,
@@ -58876,10 +59186,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "f7e8ffbe0bbc5fbd37e24eb5dc8a97ce7985e68c3503890d7afdc95f0a5a856f"
     },
     {
       "index": 13,
@@ -58908,10 +59220,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "cd56e852beca78ae37498211f82e95e7df40e9db5bedca19299016ef72726867"
     },
     {
       "index": 14,
@@ -58940,10 +59254,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "b046ab9fae587275cff7adbda195295a5b4f3c8885f79c4d97a7408bb50cfafa"
     },
     {
       "index": 15,
@@ -58972,10 +59288,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "b6383332b0b6ffd5ab627226f2df626de764c443adfb3f594541589790e22b63"
     },
     {
       "index": 16,
@@ -59041,10 +59359,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "78a0c4cb729118a8718f286856ce42a6135dda62cabbcebfe95b44ca1e77f70a"
     },
     {
       "index": 18,
@@ -59073,10 +59393,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "9bbc03896d71cca477818df6a8edd74d22dcb685f93fb3fc7d6314df0b488161"
     },
     {
       "index": 19,
@@ -59105,10 +59427,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100035
+      "batch": 100035,
+      "supplemental_audit_sha256": "5550e70c4aede0f6fbc2fede243f9d205aa0f81c692130dc4db6adb4ce6fd6fc",
+      "supplemental_reason_sha256": "b17b5b23712221a94debeb4e4d7a71f88f1a00795e703ac8a04dd8352b64ae15"
     },
     {
       "index": 0,
@@ -59250,10 +59574,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "9a599855ebb9093844b56b000e3f08a0f87df60ef1028e41f8da48e8f91f5eed"
     },
     {
       "index": 4,
@@ -59361,10 +59687,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "552b9efde00b3ec7ded44cfa30483e84ee8875b8844dff07cdd018a24b5a67e9"
     },
     {
       "index": 7,
@@ -59393,10 +59721,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "a5a6420889314ade0bc7eb8fb5b233fd431b7dd3b37aa3867206807c78b73822"
     },
     {
       "index": 8,
@@ -59425,10 +59755,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "8244f196d3b616243dffe1e569e7fa8610aaa07228ec392da40a0922a4dd2aa2"
     },
     {
       "index": 9,
@@ -59496,10 +59828,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "932254c1c42fecc82ab0da8969f8ce17c6a3fda6fb5d9882e57ea3dd1a99d89a"
     },
     {
       "index": 11,
@@ -59567,10 +59901,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "2b545477bca649fda6c9c79eea9fe46a6eca99d8ed2245e011a772c3fd11eed9"
     },
     {
       "index": 13,
@@ -59638,10 +59974,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "bf9174395a82b84e63820ec7944c3a89d8852e8a0afa38adbd522863ae27d379"
     },
     {
       "index": 15,
@@ -59670,10 +60008,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "c88a22837ba5dd661840a18252279121d1ee31b7b53c5e40a2bd37d9e26ceee8"
     },
     {
       "index": 16,
@@ -59780,10 +60120,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "b0d11d118eccf3026afcedd01e56e1d56b9e30722a76a24c706ac0c149e410f9"
     },
     {
       "index": 19,
@@ -59812,10 +60154,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100036
+      "batch": 100036,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "18e68196ab2726e93ad3ec00606c9a6c519a0a356f92db6ead549a7e3277cd96"
     },
     {
       "index": 0,
@@ -60758,10 +61102,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "7a61fcc6090cab8d793537a9f24e148b94ead2f872a9e712cc4315b09b55192f"
     },
     {
       "index": 7,
@@ -60985,10 +61331,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "add9c7207a9b9a527aab195ab2c7af30a02a18351c329f78f59118e9972ad830"
     },
     {
       "index": 13,
@@ -61017,10 +61365,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "hold",
+      "adoption_basis": "supplemental_disagreement_or_uncertainty",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "d498529663a4580dbb3ea683929db97ba0ee76062e307b9343c1c0ece82d8544"
     },
     {
       "index": 14,
@@ -61049,10 +61399,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "ad1964493be2dbf97de1e7d5907e8ff18fc74d586bef822f865263ae19330149"
     },
     {
       "index": 15,
@@ -61081,10 +61433,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "10cfa7de68750d0073140eeb91bd20d0b7bede4a97f8b105460aa5ff12f3b36f"
     },
     {
       "index": 16,
@@ -61152,10 +61506,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "7a72cb5097f2908de2d4d56611a378324817472c48e08dcedb9b7914747ab85e"
     },
     {
       "index": 18,
@@ -61223,10 +61579,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100038
+      "batch": 100038,
+      "supplemental_audit_sha256": "aea22a012c938871b967711f868ea49de999a75bc27afaf8ce92192d80adfc6e",
+      "supplemental_reason_sha256": "512b932590179d29f56982df3ce4a461f307874ab4107e3fe96972fc8fe55b4e"
     },
     {
       "index": 0,
@@ -63382,10 +63740,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "f32ac6afa78539e85ae2939cc08b30e5309f03985a6b91aa499d8093fa5da82e"
     },
     {
       "index": 3,
@@ -63414,10 +63774,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "5c1956504485c385502f08c9502ae104464c6d4a108216c1471d89414acace1a"
     },
     {
       "index": 4,
@@ -63446,10 +63808,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "13efd3428b4c24d0a9c20736147e74306a7304d38f03814f8b6517a11f2cb931"
     },
     {
       "index": 5,
@@ -63478,10 +63842,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "ef3b0b07ff350d93a18342726d69574d7484a1aa9a2e242dabcde3cadc6937e1"
     },
     {
       "index": 6,
@@ -63589,10 +63955,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "d7a66eca8e4c6f392e5fddacfac07a631705a5ba507c7af3343d15ca3df09866"
     },
     {
       "index": 9,
@@ -63621,10 +63989,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "aa815c622d13485002d1c5127d965798e25633ec53155f736e12890566e56051"
     },
     {
       "index": 10,
@@ -63653,10 +64023,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "a6917408d2661fa19bf8408f2da87c5942372f623efb8c5bbaa88874838d0462"
     },
     {
       "index": 11,
@@ -63685,10 +64057,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "365e416150147137bc245aac1173b516414d241a813343734ed572cb46e8d3b8"
     },
     {
       "index": 12,
@@ -63717,10 +64091,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "cb4a0e73dbf590338f2836aa402280e04531667e173deb47d21338d113464d52"
     },
     {
       "index": 13,
@@ -63749,10 +64125,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "48509cebfca412107c1123dfc29268c58f81ffdaf12382dc6ba5fd9788bbfb0d"
     },
     {
       "index": 14,
@@ -63781,10 +64159,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "26d56fb7ffc4fcc68fc06afcd3b2f1daca8c43f46e21f395df6cea2af0271d6e"
     },
     {
       "index": 15,
@@ -63813,10 +64193,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "1d772e457013df1bc17858d622616c2dc23a14e0bf80b0fe6128a59d8d325dc4"
     },
     {
       "index": 16,
@@ -63845,10 +64227,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "6f0a06652640ae1645e6fbe483357f844fefa651327e5a688a7f64c8555fc5b4"
     },
     {
       "index": 17,
@@ -63877,10 +64261,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "ab5ef084d469d17e00736ee4f89463933fece590800e80d6aeced42fc7b6c97d"
     },
     {
       "index": 18,
@@ -63909,10 +64295,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100042
+      "batch": 100042,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "6ab36eaa6ac2f85ad37cfcc5795d5aedcb2cba62c18eb8792dfc9bfd71d28dde"
     },
     {
       "index": 19,
@@ -64717,10 +65105,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "b4ed5a98c2e1bb4fa4d08d1840f60779acbbab1fb1c65d0705af2f7c1bfdd6bb"
     },
     {
       "index": 3,
@@ -64749,10 +65139,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "7d18dd18851bef9302f976354cff3651207d081e1a7fb7123ec42e74dec4b8c6"
     },
     {
       "index": 4,
@@ -64781,10 +65173,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "e7f0622836cab7711a0a08bce9459d15c92776792e49ae9d3dd5787d19ab50b8"
     },
     {
       "index": 5,
@@ -64813,10 +65207,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "8f03c1a5ea97aee13be9ac93e6959e921bb479be8a33ea2583637f79dd38e2d7"
     },
     {
       "index": 6,
@@ -64845,10 +65241,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "85c1983b0245b3ea048715b5f0545961911c235e8604a661c4943a9a29710322",
+      "supplemental_reason_sha256": "e3074ba2fb40d4063bbb54124c51fbb9e1aaff7ebd0182941d1770df08c66d65"
     },
     {
       "index": 7,
@@ -64877,10 +65275,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "2971461d6419b20e2b23f572ec1b8b8bfd78a0322d3a063811c3e8d118a6dc9a"
     },
     {
       "index": 8,
@@ -64909,10 +65309,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "66382e1cca550196ea1d20dc35db37802131de590c94a67e9961b265e46866e7"
     },
     {
       "index": 9,
@@ -64941,10 +65343,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "840b32f1ed34cf22b312e836c61ebf61f90920f5ee04b87a1d66e5f086507ce0"
     },
     {
       "index": 10,
@@ -64973,10 +65377,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "b242d1396dbbbd1526e63d09606d83f6144e405275f2c445d4173028324624e9"
     },
     {
       "index": 11,
@@ -65044,10 +65450,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "12388b98dcd4a2c2b6f7878b325027878af67d4c78c5ebba4e41cb891e0bae13"
     },
     {
       "index": 13,
@@ -65076,10 +65484,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "369bfd8ec7bf30fd269c278b6f2097034a334aea48782e4b872919f48bd2ced6"
     },
     {
       "index": 14,
@@ -65108,10 +65518,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "fe889b356b445e4ce6722770c4240eceff63922feef3e05d02695cd53517a257"
     },
     {
       "index": 15,
@@ -65140,10 +65552,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "31ffa0a9f4388a443c648f7af1e18ee37621af2ea2b62bc683c0d71dbe0cc2e4"
     },
     {
       "index": 16,
@@ -65172,10 +65586,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "060d4e639de2d5ff81b938f6544ab5823169d66adaea885bd6478ae0dc4cae5e"
     },
     {
       "index": 17,
@@ -65204,10 +65620,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "4a444ba24c7fee95d01c248e9a43181c5b7d31b0aead568b07fcc0f2a3502196"
     },
     {
       "index": 18,
@@ -65236,10 +65654,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "00178ef4297d51bbe74a27ecabf4097455b4587c3d03385495e0bcedf44352ca"
     },
     {
       "index": 19,
@@ -65268,10 +65688,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100044
+      "batch": 100044,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "52df61db26f72f118280d00b694e875a7a9797f8b911721f88dd7fa5578bffe4"
     },
     {
       "index": 0,
@@ -66075,10 +66497,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "421b666edbe6dd02b14f7db83690d587226b950b650eb3417ca1e29bb13c1d99"
     },
     {
       "index": 4,
@@ -66107,10 +66531,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "194c69c943c963d432e06cb987698e3fd542ecf5ce01be204a54be44228a0f13"
     },
     {
       "index": 5,
@@ -66139,10 +66565,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "a9f994afda8780722f308f247c0010edf347c3663461349e19c29aa64f28cb9c"
     },
     {
       "index": 6,
@@ -66171,10 +66599,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "597cce65efc597a4a74a0d0a109d68e30b63fb8b16c3d3d68335639626ed9fa7"
     },
     {
       "index": 7,
@@ -66242,10 +66672,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "940bedebedc649b56eb4be12fc00c0df603f172d3fbc06d07c2441dc9459cf14"
     },
     {
       "index": 9,
@@ -66274,10 +66706,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "2f8089b74387c882f2a08034f42c8f2217d7d235b0faf1cb9ddc8e93a152031e"
     },
     {
       "index": 10,
@@ -66306,10 +66740,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "f439584e5c82964c99968f1de3d588195569805285c5d645d4c34d14dde29cd3"
     },
     {
       "index": 11,
@@ -66338,10 +66774,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "585942c0b207ee43962e46b98e30abd04589297bfa0b611d81e83d75f57e2de1",
+      "supplemental_reason_sha256": "4ef28ce1759410e9e66a724329ee5ddc64e0bb7bbe423e4bf1ba6be5283d7784"
     },
     {
       "index": 12,
@@ -66370,10 +66808,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "c7a2c23c190392a12a208fbbf74c8cf28f84eaf38ed72f441c0041a7d70d92c0"
     },
     {
       "index": 13,
@@ -66402,10 +66842,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "2fdca593d25832ab061e4d7d5d65084fb19a787a83581eb1e4efdb4a01d22013"
     },
     {
       "index": 14,
@@ -66434,10 +66876,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "d5a5ed3d34f2661d8f2a55ee0a33958ef090d18782d13eed2bfe7ab1ff1b6732"
     },
     {
       "index": 15,
@@ -66466,10 +66910,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "5ebbcab52901ae8108708bf3401b487a164fc0c3db23eb7d0e0fd34931bfb61c"
     },
     {
       "index": 16,
@@ -66498,10 +66944,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "bb80117db3b3d1fba880409dd5675dbb2636da331fde8c0e427225d9bc8f549c"
     },
     {
       "index": 17,
@@ -66530,10 +66978,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "294bea3caf093c8f34736d729dba10d14740c7a62ce2ea971c68b699eb78a39c"
     },
     {
       "index": 18,
@@ -66562,10 +67012,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "80e5037288f9957267f82dc8ed1f760404c19e363b151f75f08a89ea78c0d00a"
     },
     {
       "index": 19,
@@ -66594,10 +67046,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100046
+      "batch": 100046,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "4d86740e653794825cc72b9b20d39b4ec135f7e9ebb5d81f994239237d8e123e"
     },
     {
       "index": 0,
@@ -67357,10 +67811,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "ed5758b1cc987dbd6aa74bfd6f5df86372bdc4f6131c141e0e52b667cf8e1f6f"
     },
     {
       "index": 3,
@@ -67428,10 +67884,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "b5bcf97c9d6f6cecb2505c64b0af5f312008e53581a28ab1bea62bb1295c2931"
     },
     {
       "index": 5,
@@ -67460,10 +67918,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "a67e5d151bfa97b021ca6479347d19ec7f6bc955a0aa2112a1fe4e321a017466"
     },
     {
       "index": 6,
@@ -67492,10 +67952,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "f49365946e869b139167668e82d2d0291a62c6ee6f429ef4134f98baa283cfc4"
     },
     {
       "index": 7,
@@ -67524,10 +67986,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "4fc7d8f05ae5be3aa1449c9ae2f2948c029d2031b9306af523706b187fc7abb5"
     },
     {
       "index": 8,
@@ -67596,10 +68060,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "1ec3beef2d395d283a63478560c1d6810c179abdf22fe170fc93a0bdbf9bc5b4"
     },
     {
       "index": 10,
@@ -67628,10 +68094,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "d854764758d9c76528b50bbeca7b74bee6387bcfc9c5ce91cc90e14031f113eb"
     },
     {
       "index": 11,
@@ -67699,10 +68167,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "e85b5da2051c458acdc13e12cf4f2c4601381d3e1122f1745f4871cb6bb5fca3"
     },
     {
       "index": 13,
@@ -67731,10 +68201,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "d9d9d52898f155aa7d91555cd10a89129be97d91cd1854d3ff2f8567f5296645"
     },
     {
       "index": 14,
@@ -67763,10 +68235,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "df4b734b539a15b391c56660bf8847106cf87e761aa0444a46ae9b3b8a323079"
     },
     {
       "index": 15,
@@ -67795,10 +68269,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "cf1a876b4a357ed97accbcfe6773fd0bb5ec3b16babff367faaab4be7f2452c8"
     },
     {
       "index": 16,
@@ -67827,10 +68303,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "3ced15ae8839ea2217c5cf1213ec20c8be3c686ca5c41045c13ee89cc27f7b4c",
+      "supplemental_reason_sha256": "15b44b0c28731d47712b4c3a690b1db07bceee0cbb5dd50c401dbdff1a21726e"
     },
     {
       "index": 17,
@@ -67859,10 +68337,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "83a1c9e50de53d8784689cb2b7621d0c89be1f40dab5e471a0c27c0c9410e4d3"
     },
     {
       "index": 18,
@@ -67891,10 +68371,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "0449e07a32c5ac482cd9390b6ac0eb03eb8908661a3f2687e1e63b48ee76b530"
     },
     {
       "index": 19,
@@ -67923,10 +68405,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100048
+      "batch": 100048,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "4845bc415ffd43202bda3eea0fcfbf553f45bd617643ff13f86454f28f6bbfd8"
     },
     {
       "index": 0,
@@ -68684,10 +69168,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "b21fa53523bb66e2ce8170e4cd713b8bcf3bb2176229a249db1fd29fc376922f"
     },
     {
       "index": 3,
@@ -68716,10 +69202,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "1d9842a2a23aa0813a89465b5c926087a1a57d58df4873255ec1ebf0e6807349"
     },
     {
       "index": 4,
@@ -68748,10 +69236,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "5ada69ca685d9c784b8fb95e4c9b51f4d77466364a47e1bbdaaca663915cddd4"
     },
     {
       "index": 5,
@@ -68817,10 +69307,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "de939691c0d8708b88e897e624a6e57c4de0e804c69525b75205379fd3f0ce20"
     },
     {
       "index": 7,
@@ -68849,10 +69341,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "0e79bdb43bc864e6c0822c1fe5dbf3730a7382db3f8ee5b0697696ac08d458c8"
     },
     {
       "index": 8,
@@ -68881,10 +69375,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "b004cb2c0f0811ea6a98d09f64408b6bec27397eff23b476a970238bb5d4a104"
     },
     {
       "index": 9,
@@ -68952,10 +69448,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "85fd4d71da6893609a65e9a97667943e9f0ca40c6776a27b34055459f57fd9e5"
     },
     {
       "index": 11,
@@ -68984,10 +69482,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "a57314076535593f310d85fc1754a8b0f797e1a0ac6d33b44b82e6e051446f27"
     },
     {
       "index": 12,
@@ -69016,10 +69516,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "41b2b1cc791935405750232f02ef053df24e4f8622658eb18e9e76db0155951b"
     },
     {
       "index": 13,
@@ -69048,10 +69550,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "c5ecf4a2790baa518bfcf20a11c3e5b3b0d4b1cb665cba8aee79a1ed5e365239"
     },
     {
       "index": 14,
@@ -69080,10 +69584,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "de6318250b2d6b08077c56a9ed6522ea999a0c46bf1ca5426fc62ed8ae57f90c"
     },
     {
       "index": 15,
@@ -69112,10 +69618,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "d5b7b37831667a9db2af7508b63e78e48df79956e337d9f37c0202ee6856830a"
     },
     {
       "index": 16,
@@ -69144,10 +69652,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "e4f4578381951e55a3e6e0fafdc1152a126847ec8ac2a956074e08b9e1180bc1"
     },
     {
       "index": 17,
@@ -69176,10 +69686,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "988161f5d551222955c8f62f5e130b54f4f2ea3b773e71dc72c6e8d2c7f2fd0c"
     },
     {
       "index": 18,
@@ -69208,10 +69720,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "8621963d248b9a942d0666e0159fa64298a0c159e8ab18830288992e32400b38"
     },
     {
       "index": 19,
@@ -69240,10 +69754,12 @@
       "independent_reason_sha256": null,
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
-      "adoption_status": "pending_audit",
-      "adoption_basis": "additional_audit_required",
+      "adoption_status": "accepted",
+      "adoption_basis": "supplemental_independent_audit",
       "policy_version": "editorial-adoption-v2",
-      "batch": 100050
+      "batch": 100050,
+      "supplemental_audit_sha256": "2e15927cae5fde088a32132d7e92283f148f576d7935d07ea5544d371a91b7f9",
+      "supplemental_reason_sha256": "259d8340790487dd4bda337dbb0af1dc6c7c7047ce37829d13a7e8dc3692fa31"
     }
   ],
   "canonical_applied": 0,
