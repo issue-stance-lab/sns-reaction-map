@@ -1,4 +1,7 @@
 import hashlib
+import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -137,6 +140,15 @@ class SupplementalEditorialAuditTest(unittest.TestCase):
     def test_prepare_rejects_change_candidate_disguised_as_pending(self):
         self.journal[0] = {**self.journal[0], 'route': 'change_candidate', 'changes': {'stance': 'no'}}
         with self.assertRaises(ValueError): prepare(self.root, self.out, self.journal, self.sources)
+
+    def test_cli_runs_from_repository_root(self):
+        prepare(self.root, self.out, self.journal, self.sources)
+        repo = Path(__file__).resolve().parents[1]
+        result = subprocess.run([sys.executable, 'scripts/supplemental_editorial_audit.py', 'ready',
+                                 '--out', str(self.out)], cwd=repo, text=True,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)['pending_batches'], [1, 2, 3])
 
 
 if __name__ == '__main__':

@@ -12,9 +12,14 @@ import json
 from pathlib import Path
 import time
 
-from scripts.editorial_work_registry import checked_packet, fingerprint
-from scripts.trial_body_review_values import validate
-from scripts.verify_editorial_hundred import dump, read, sha
+try:
+    from scripts.editorial_work_registry import checked_packet, fingerprint
+    from scripts.trial_body_review_values import validate
+    from scripts.verify_editorial_hundred import dump, read, sha
+except ModuleNotFoundError:
+    from editorial_work_registry import checked_packet, fingerprint
+    from trial_body_review_values import validate
+    from verify_editorial_hundred import dump, read, sha
 
 
 WRITER = 'supplemental_editorial_audit.save'
