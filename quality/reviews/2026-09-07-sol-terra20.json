@@ -1,0 +1,741 @@
+{
+  "schema_version": 1,
+  "sampling": "10 themes each one previously accepted (5 retain + 5 correction) and one unresolved; deterministic hash ordering, not random",
+  "records": 20,
+  "models": {
+    "sol": {
+      "requested_model": "gpt-5.6-sol",
+      "reasoning_effort": "medium",
+      "format_valid": 20,
+      "validation_errors": [],
+      "routes": {
+        "no_change": 11,
+        "uncertain": 3,
+        "candidate": 6
+      },
+      "recorded_elapsed_seconds": 112.66,
+      "tokens": null,
+      "four_values_match_parent": 15,
+      "uncertainty_match_parent": 10,
+      "previously_accepted_same_values_and_not_uncertain": 5,
+      "previously_unresolved_not_uncertain": 8,
+      "timing_scope": "after common documents, just before first packet read, through completion of decisions immediately before output creation",
+      "timing_comparable": false
+    },
+    "terra": {
+      "requested_model": "gpt-5.6-terra",
+      "reasoning_effort": "medium",
+      "format_valid": 19,
+      "validation_errors": [
+        {
+          "index": 12,
+          "error": "review identity/version mismatch"
+        }
+      ],
+      "routes": {
+        "no_change": 12,
+        "candidate": 5,
+        "uncertain": 2
+      },
+      "recorded_elapsed_seconds": 6,
+      "tokens": null,
+      "four_values_match_parent": 11,
+      "uncertainty_match_parent": 11,
+      "previously_accepted_same_values_and_not_uncertain": 6,
+      "previously_unresolved_not_uncertain": 8,
+      "timing_scope": "two clock readings after decisions, immediately before creating output; excludes actual reading and reasoning",
+      "timing_comparable": false
+    }
+  },
+  "valid_pairs": 19,
+  "pair_four_values_match": 13,
+  "pair_uncertainty_match": 16,
+  "records_compared": [
+    {
+      "index": 0,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:01c9771e8ab6792a955861cc58e66d501c9b5357e7e4317b1e3fc3f3bf0eeeac",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 1,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0023430261ff1125696670cf8ea22e9a49deb2c245ab1b3fc5882f4bb87ac848",
+      "same_four_values": true,
+      "same_uncertainty": false,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "公約と政治不信",
+            "stance": "中立・情報"
+          },
+          "uncertain": true,
+          "evidence_sufficient": false,
+          "route": "uncertain"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "公約と政治不信",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        }
+      }
+    },
+    {
+      "index": 2,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:00475ebcc3064c497fc982c2f6efc5ad0c36355af5c53432dcffae30a6bff340",
+      "same_four_values": true,
+      "same_uncertainty": false,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "給付など他策との比較",
+            "stance": "条件付き賛成・政府案に不満"
+          },
+          "uncertain": true,
+          "evidence_sufficient": false,
+          "route": "uncertain"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "給付など他策との比較",
+            "stance": "条件付き賛成・政府案に不満"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        }
+      }
+    },
+    {
+      "index": 3,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0a10abdbcbf297f1c2d0ee7ae6f14a60499cafb7dfae815340058cfad6e89d1e",
+      "same_four_values": false,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": false,
+            "main_issue": "制度・移行プロセス",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": false,
+            "main_issue": "教員の働き方",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        }
+      }
+    },
+    {
+      "index": 4,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0d2c34de79aaf00d0a6688d4ac7b80552f304c31a4ac8bf85ac5f15b875934f1",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "優先順位",
+            "stance": "法案反対"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "優先順位",
+            "stance": "法案反対"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 5,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0d2bd22216020b86c851b12a2a56a00114b8f7482212ae069696464a2f631ff4",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "男系vs女系",
+            "stance": "改正反対（男系維持）"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "男系vs女系",
+            "stance": "改正反対（男系維持）"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 6,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:0007c13391bade6ee90799287c3e6f7597b12d133b735194648e8a5248374a02",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        }
+      }
+    },
+    {
+      "index": 7,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:056c2d31f8935a028c114dcffc7803cb420bbba0504625f7b6cae5dd9d4db393",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "学習データ・無断利用",
+            "stance": "規制・制限強化支持"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "学習データ・無断利用",
+            "stance": "規制・制限強化支持"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 8,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:02354908d91e65ad9bf1ebe3e09534648afcf4d23021f17f132d29115ee0947f",
+      "same_four_values": false,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "候補地",
+            "stance": "法案賛成・推進"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "定義・中身",
+            "stance": "法案賛成・推進"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 9,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:002eecd9a4313d9c96e3706e84a9d1370344073de533f29af7f9371a4aae9d01",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 10,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0312728c47b006f07d31e3b0b5980615007d7ce075b7834031d8af976a3fe2a5",
+      "same_four_values": false,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "立法手続き・民主主義",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        }
+      }
+    },
+    {
+      "index": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:0ad933e91e343b1ac5be41f11b74fb0874a5d38d37b8a4d042328be6efd8989b",
+      "same_four_values": false,
+      "same_uncertainty": false,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "費用・家庭負担",
+            "stance": "条件付き・改善要求"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "費用・家庭負担",
+            "stance": "慎重・反対"
+          },
+          "uncertain": true,
+          "evidence_sufficient": false,
+          "route": "uncertain"
+        }
+      }
+    },
+    {
+      "index": 12,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:63bcd5f439f293543fda385fb000f35abfabecc5bb178458ef16077d8039e396",
+      "same_four_values": null,
+      "same_uncertainty": null,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": false,
+            "is_opinion": false,
+            "main_issue": "その他",
+            "stance": "中立・情報"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 13,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:03aaed545fdd4f89677f6955e02ebdbbd30b4f7785ef69d665e1212febdf089b",
+      "same_four_values": false,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "政治利用・基地問題",
+            "stance": "論点を切り分ける"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "安全管理・事故原因",
+            "stance": "論点を切り分ける"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 14,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:00182113929991a1926586f62eb66a4113fc9fa2e10c39a523978a7b7e69c6d8",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "緊急事態条項",
+            "stance": "慎重・反対"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "緊急事態条項",
+            "stance": "慎重・反対"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 15,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:00914caa535a87eb91776516032cdac502c70b97304eb50a3df77bfaaeec236e",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "9条・自衛隊",
+            "stance": "慎重・反対"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "9条・自衛隊",
+            "stance": "慎重・反対"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 16,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:01820a7d67785a4f9e0db020d1be9af20745b6e466381771f2d898012c059574",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "いじめ・心理的安全",
+            "stance": "中立・情報"
+          },
+          "uncertain": true,
+          "evidence_sufficient": false,
+          "route": "uncertain"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "いじめ・心理的安全",
+            "stance": "中立・情報"
+          },
+          "uncertain": true,
+          "evidence_sufficient": false,
+          "route": "uncertain"
+        }
+      }
+    },
+    {
+      "index": 17,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:006689a1da58c6289c7239d4b8a9bc587267a91de371d36417893d260888eddd",
+      "same_four_values": false,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "文春報道の真偽",
+            "stance": "慎重・保留"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "candidate"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "文春報道の真偽",
+            "stance": "擁護・懐疑"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 18,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:01eb63a93bbac467958ab52c0236c4c22f497107ea8fe915be3b172fbeba71ac",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "政治利用・基地問題",
+            "stance": "論点を切り分ける"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "政治利用・基地問題",
+            "stance": "論点を切り分ける"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    },
+    {
+      "index": 19,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:019c53d8cbcf0fd5f46272065a3c3f3b4f63f1e5a44920e1608b692295e088a3",
+      "same_four_values": true,
+      "same_uncertainty": true,
+      "models": {
+        "sol": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "文春報道の真偽",
+            "stance": "擁護・懐疑"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        },
+        "terra": {
+          "classification": {
+            "is_relevant": true,
+            "is_opinion": true,
+            "main_issue": "文春報道の真偽",
+            "stance": "擁護・懐疑"
+          },
+          "uncertain": false,
+          "evidence_sufficient": true,
+          "route": "no_change"
+        }
+      }
+    }
+  ],
+  "proofs": {
+    "sol.private.json": "25fbd9583d1de84d0fc823e236762f000b170ece06969a9eb700673f1511aa47",
+    "terra.private.json": "656bc1cb4ef6640c12fa0e5d22f605a5ed391bfc84b7defc83edbfffa793067e",
+    "measurement-notes.json": "fd711a787e45e8f1026cf2825f2d73ae4be27ee37a737afc2b55e8da2a78262c",
+    "plan.json": "721f632a3cf97876552858ab01eaf623d93554a610473cb1b0bc724d43c590f2",
+    "packet.private.json": "48e99fa978e22b781b30eee97138d3736e8cbb9f42d601cdda6a0e5b3fe56113",
+    "parent-before-results.private.json": "d05f03429d9c083bb4ddcad7347a17e64f9b8ff42bd81e3207eaedf35a04e2f1",
+    "historical-reference.private.json": "b0497e17c142d22f57498963905a00b4013df6e5825033ba95b9f6df802219aa",
+    "blind-map.private.json": "95f60917b3625276d6f897344743b8ce77641e736fdc7194d63efa263a98cd5d",
+    "audit-four.private.json": "e34c969666b4c7255fe7ad4f6dfb57cc3972f95ffa79a7cbb0a88a819138739a",
+    "audit-four-result.private.json": "29ebd4fc157aae2156306fbf9f486f42fce57be6e98ba393b9d6b11e9532897f",
+    "audit-clarification.json": "bf23ba975d31bffb67813d6b5fc16ff93f03b894b6b1ab3729fb27a3020205b7",
+    "parent-blinded-assessment.private.json": "95fcea916b18c4f2810c846d2592e0b012cd3ef0438dec41c634911c0bfc763d"
+  },
+  "measurement_notes": {
+    "recorded_by": "parent",
+    "source": "model agent follow-up statements, original outputs unchanged",
+    "sol": {
+      "recorded_seconds": 112.66,
+      "scope": "after common documents, just before first packet read, through completion of decisions immediately before output creation",
+      "usable_for_cross_model_speed_comparison": false
+    },
+    "terra": {
+      "recorded_seconds": 6,
+      "scope": "two clock readings after decisions, immediately before creating output; excludes actual reading and reasoning",
+      "usable_for_cross_model_speed_comparison": false,
+      "identity_failure": {
+        "index": 12,
+        "field": "classification_sha256",
+        "cause_reported_by_agent": "manual transcription error; other identity and body fields match"
+      }
+    }
+  },
+  "independent_audit": [
+    {
+      "index": 5,
+      "assessment": {
+        "sol": "needs_review",
+        "terra": "needs_review"
+      },
+      "common_criteria_issue": true
+    },
+    {
+      "index": 11,
+      "assessment": {
+        "sol": "supported",
+        "terra": "needs_review"
+      },
+      "common_criteria_issue": false
+    },
+    {
+      "index": 17,
+      "assessment": {
+        "sol": "supported",
+        "terra": "needs_review"
+      },
+      "common_criteria_issue": false
+    },
+    {
+      "index": 19,
+      "assessment": {
+        "sol": "undetermined",
+        "terra": "undetermined"
+      },
+      "common_criteria_issue": true
+    }
+  ],
+  "audit_clarification": {
+    "recorded_by": "parent",
+    "source": "compare_audit follow-up; original audit output preserved",
+    "index_11_B": "needs_review referred to the retained classification before adoption. The uncertain=true/evidence_sufficient=false hold is operationally appropriate and can be regarded as supported as a whole response.",
+    "index_19_both": "Do not adopt confident judgments before determining whether wording belongs to the poster or a shared video title."
+  },
+  "interpretation": "Agreement is not accuracy. Historical and parent judgments are fallible. Timings include agent work and tool overhead; token usage not measured.",
+  "canonical_changes": 0,
+  "adoption_changes": 0,
+  "new_review_credit": 0
+}
