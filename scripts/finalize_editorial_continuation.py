@@ -114,6 +114,8 @@ def register_work_only(root: Path, private_root: Path, run: Path) -> dict:
     add(run / 'reservation.json', 'private', 'evidence')
     add(run / 'adoption-before.private.json', 'private', 'evidence')
     add(run / 'work-before.private.json', 'private', 'evidence')
+    for history in sorted((run / 'assignment-history').glob('*.private.json')):
+        add(history, 'private', 'evidence')
     for wave_number in range(1, 5):
         folder = run / f'wave-{wave_number:02d}'
         add(folder / 'reservation.json', 'private', 'evidence')
