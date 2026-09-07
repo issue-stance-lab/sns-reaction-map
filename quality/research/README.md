@@ -26,7 +26,7 @@
 |---|---|---|
 | 生成AIと著作権 | ai-copyright-primary-sources.md | 再発注ずみ・URL全通 |
 | 自転車の青切符 | bike-blue-ticket-primary-sources.md | 取り直しずみ・URL全通 |
-| 部活動の地域移行 | bukatsu-chiiki-primary-sources.md | **2026-09-07にURL全37本を再確認し、すべて200（「403が2本」は本文中の注記をURLに含めた誤判定）**／**「推定」「検索結果より」と自認していた記述7件を本文照合して解消し、誤り3件（資料H・K・G/J）を訂正**／第7節「学習指導要領上の位置づけ」・第8節「制度の枠組み」・第9節「事故が起きたときの補償」は2026-09-07に本文照合を完了（国会答弁・法令条文の原文照合済み） |
+| 部活動の地域移行 | bukatsu-chiiki-primary-sources.md | **2026-09-07にURL全37本を再確認し、すべて200（「403が2本」は本文中の注記をURLに含めた誤判定）**／**「推定」「検索結果より」と自認していた記述7件を本文照合して解消し、誤り3件（資料H・K・G/J）を訂正**／第7節「学習指導要領上の位置づけ」・第8節「制度の枠組み」・第9節「事故が起きたときの補償」は2026-09-07に本文照合を完了（国会答弁・法令条文の原文照合済み）／**資料Wのみ民間団体（スポーツ安全協会）の自団体資料をオーナー判断で採用** |
 | 憲法改正論議 | constitutional-amendment-primary-sources.md | 取り直しずみ・会議録は詳細URL・URL全通 |
 | 高齢者免許返納 | elderly-license-revocation-primary-sources.md | URL全通 |
 | 学校でのあだ名禁止 | school-nickname-ban-primary-sources.md | 再発注ずみ・URL全通 |
