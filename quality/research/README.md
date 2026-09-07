@@ -29,7 +29,7 @@
 | 部活動の地域移行 | bukatsu-chiiki-primary-sources.md | **2026-09-07にURL全37本を再確認し、すべて200（「403が2本」は本文中の注記をURLに含めた誤判定）**／**「推定」「検索結果より」と自認していた記述7件を本文照合して解消し、誤り3件（資料H・K・G/J）を訂正**／第7節「学習指導要領上の位置づけ」・第8節「制度の枠組み」・第9節「事故が起きたときの補償」は2026-09-07に本文照合を完了（国会答弁・法令条文の原文照合済み）／**資料Wのみ民間団体（スポーツ安全協会）の自団体資料をオーナー判断で採用** |
 | 憲法改正論議 | constitutional-amendment-primary-sources.md | 取り直しずみ・会議録は詳細URL・URL全通 |
 | 高齢者免許返納 | elderly-license-revocation-primary-sources.md | URL全通 |
-| 学校でのあだ名禁止 | school-nickname-ban-primary-sources.md | 再発注ずみ・URL全通 |
+| 学校でのあだ名禁止 | school-nickname-ban-primary-sources.md | **2026-09-07に全面取り直し**（初版は8本中5本が「確認できず」の実質空メモ）／法律条文・基本方針・生徒指導提要・令和6年度問題行動等調査を本文まで取得し照合済み／URL全通 |
 | 辺野古高校生死亡事故 | henoko-student-accident-primary-sources.md | URL全通 |
 | 副首都構想 | fukushuto-primary-sources.md | 取り直しずみ・会議録は詳細URL・URL全通 |
 | 皇室典範改正 | koshitsu-tenpakai-primary-sources.md | URL全通 |
@@ -56,3 +56,17 @@
 計画本体PDF（`assets/pdf/3rd_plan.pdf`）と目標1のページ（`plan/action1/`）も合わせて確認済み。
 警察庁・内閣官房の「確認できなかったこと」2件は、URLパターンを推測しても404止まりだったため
 未解決のまま残してある（空振りを消さない方針どおり）。
+
+## 2026-09-07 「あだ名禁止」を取り直し — 空振りの原因は資料の不在ではなく環境だった
+
+初版（2026-08-30、Hermes）で「あだ名禁止」だけが実質空のメモになっていた。
+`mext.go.jp` がデータセンターIPから弾かれ、e-Gov の条文がSPAで取れず、
+国会会議録がタイムアウトした、という**調査環境側の制約**が理由で、資料が無かったのではない。
+
+Mac の作業ツリーからは3つともAPI・直接アクセスで取れる。次に薄いテーマを埋めるときも同じ手が使える。
+
+- 法令本文 → `https://laws.e-gov.go.jp/api/2/law_data/{law_id}?response_format=json` の `law_full_text`
+- 国会発言 → `https://kokkai.ndl.go.jp/api/speech?any={語}&recordPacking=json` の `speech`（全文が入るので原文照合できる）
+- 文科省PDF → ハブページのリンクを抽出 → `pdftotext -layout`。**URLは推測しない**（推測は必ず404になる）
+
+**Hermes等の外部エージェントに発注する前に、まず自分の手元で取れないか試すこと。**
