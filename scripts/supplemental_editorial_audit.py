@@ -233,7 +233,9 @@ def compare(out, batch):
 
 def _verified_audit(packet, audit):
     reviews = audit['reviews']
-    if audit.get('identity_writer') != WRITER or sorted(r.get('index') for r in reviews) != list(range(len(packet['records']))):
+    if audit.get('identity_writer') != WRITER or not isinstance(audit.get('actor'), str) or not audit['actor'].strip():
+        raise ValueError('audit writer or actor mismatch')
+    if sorted(r.get('index') for r in reviews) != list(range(len(packet['records']))):
         raise ValueError('audit coverage or writer mismatch')
     for review in reviews:
         raw = packet['records'][review['index']]
@@ -244,6 +246,20 @@ def _verified_audit(packet, audit):
         if type(review.get('evidence_sufficient')) is not bool:
             raise ValueError('explicit evidence assessment required')
     return reviews
+
+
+def _resolutions(initial, audit, reason_conflicts):
+    resolutions = []
+    for i, second in enumerate(audit):
+        first = initial[i]
+        if first['uncertain'] or second['uncertain'] or first['classification'] != second['classification']:
+            status, basis = 'hold', 'supplemental_disagreement_or_uncertainty'
+        elif first['evidence_sufficient'] is True and second['evidence_sufficient'] is True and i not in reason_conflicts:
+            status, basis = 'accepted', 'supplemental_independent_audit'
+        else:
+            status, basis = 'pending_evidence', 'supplemental_insufficient_or_conflicting_evidence'
+        resolutions.append({'index': i, 'adoption_status': status, 'adoption_basis': basis})
+    return resolutions
 
 
 def finish(out, batch, reason_conflicts, notes):
@@ -259,16 +275,7 @@ def finish(out, batch, reason_conflicts, notes):
         raise ValueError('notes must be a string')
     audit = _verified_audit(packet, read(d / 'audit.private.json'))
     initial = read(d / 'original.private.json')['records']
-    resolutions = []
-    for i, second in enumerate(audit):
-        first = initial[i]
-        if first['uncertain'] or second['uncertain'] or first['classification'] != second['classification']:
-            status, basis = 'hold', 'supplemental_disagreement_or_uncertainty'
-        elif first['evidence_sufficient'] is True and second['evidence_sufficient'] is True and i not in reason_conflicts:
-            status, basis = 'accepted', 'supplemental_independent_audit'
-        else:
-            status, basis = 'pending_evidence', 'supplemental_insufficient_or_conflicting_evidence'
-        resolutions.append({'index': i, 'adoption_status': status, 'adoption_basis': basis})
+    resolutions = _resolutions(initial, audit, reason_conflicts)
     result = {'reason_conflicts': reason_conflicts, 'notes': notes, 'resolutions': resolutions,
               'finished_epoch': time.time()}
     dump(path, result)
@@ -297,9 +304,14 @@ def collect(root, out):
             raise ValueError('audit timing mismatch')
         if draft.get('actor') != audit.get('actor') or draft.get('values') != [_compact(r) for r in reviews]:
             raise ValueError('saved audit differs from draft')
-        if len(originals) != len(expected) or len(resolution['resolutions']) != len(expected):
+        conflicts = resolution.get('reason_conflicts')
+        if not isinstance(conflicts, list) or len(set(conflicts)) != len(conflicts) or any(
+                type(i) is not int or not 0 <= i < len(expected) for i in conflicts):
+            raise ValueError('invalid saved reason conflicts')
+        recomputed = _resolutions(originals, reviews, conflicts)
+        if len(originals) != len(expected) or resolution.get('resolutions') != recomputed:
             raise ValueError('supplemental coverage mismatch')
-        by_index = {r['index']: r for r in resolution['resolutions']}
+        by_index = {r['index']: r for r in recomputed}
         if set(by_index) != set(range(len(expected))):
             raise ValueError('resolution coverage mismatch')
         for i, source in enumerate(expected):
@@ -309,8 +321,10 @@ def collect(root, out):
             seen.add(source_key)
             if originals[i]['classification'] != source['proposed'] or originals[i]['reason_sha256'] != source.get('reason_sha256'):
                 raise ValueError('initial decision differs from baseline')
+            decision = by_index[i]
             new = {**{k: v for k, v in source.items() if k not in ['source_key', 'supplemental_batch', 'supplemental_index']},
-                   **by_index[i], 'canonical_applied': False,
+                   'adoption_status': decision['adoption_status'], 'adoption_basis': decision['adoption_basis'],
+                   'canonical_applied': False,
                    'counts_as_registered_editorial_reread': False,
                    'supplemental_audit_sha256': sha(audit_path),
                    'supplemental_reason_sha256': hashlib.sha256(reviews[i]['reason'].encode()).hexdigest()}

@@ -22,18 +22,19 @@ class SupplementalEditorialAuditTest(unittest.TestCase):
         self.editor_reviews = {}
         for i in range(22):
             topic = 'a' if i < 21 else 'b'; body = f'body {i}'
+            source_index = 100 + i
             raw = {'topic': topic, 'tweet_id': str(i), 'record_id_hash': f'id-{i}', 'text': body,
                    'body_sha256': hashlib.sha256(body.encode()).hexdigest(),
                    'classification': self.current, 'classification_sha256': fingerprint(self.current)}
-            row = {'batch': 10 + i, 'index': i % 20, 'topic': topic, 'record_id_hash': f'id-{i}',
+            row = {'batch': 10 + i, 'index': source_index, 'topic': topic, 'record_id_hash': f'id-{i}',
                    'body_sha256': raw['body_sha256'], 'classification_sha256': raw['classification_sha256'],
                    'current': self.current, 'proposed': self.current, 'changes': {}, 'route': 'retain_candidate',
                    'first_route': 'no_change',
                    'adoption_status': 'pending_audit', 'adoption_basis': 'additional_audit_required'}
             reason = f'initial reason {i}'
             row['reason_sha256'] = hashlib.sha256(reason.encode()).hexdigest()
-            self.journal.append(row); self.sources[(10 + i, i % 20)] = (raw, self.criteria)
-            self.editor_reviews[(10 + i, i % 20)] = {
+            self.journal.append(row); self.sources[(10 + i, source_index)] = (raw, self.criteria)
+            self.editor_reviews[(10 + i, source_index)] = {
                 'record_id_hash': raw['record_id_hash'], 'body_sha256': raw['body_sha256'],
                 'classification_sha256': raw['classification_sha256'], 'classification': self.current,
                 'uncertain': False, 'evidence_sufficient': True, 'reason': reason}
@@ -113,10 +114,24 @@ class SupplementalEditorialAuditTest(unittest.TestCase):
         self.assertEqual(len(result['overlay']), 22)
         self.assertEqual(result['overlay'][0]['old']['adoption_status'], 'pending_audit')
         self.assertEqual(result['overlay'][0]['new']['adoption_status'], 'accepted')
-        self.assertEqual(result['overlay'][0]['source_key'], [10, 0])
+        self.assertEqual(result['overlay'][0]['source_key'], [10, 100])
+        self.assertEqual(result['overlay'][0]['new']['index'], 100)
         self.assertEqual(self.journal[0]['adoption_status'], 'pending_audit')
         draft = read(self.out / 'batch-01/audit-draft.private.json'); draft['values'][0][4] = 'no'
         dump(self.out / 'batch-01/audit-draft.private.json', draft)
+        with self.assertRaises(ValueError): collect(self.root, self.out)
+
+    def test_collect_recomputes_resolution_and_checks_actor(self):
+        prepare(self.root, self.out, self.journal, self.sources)
+        for batch in range(1, 4): self.complete(batch)
+        path = self.out / 'batch-01/resolution.private.json'; result = read(path)
+        result['resolutions'][0]['adoption_status'] = 'hold'; dump(path, result)
+        with self.assertRaises(ValueError): collect(self.root, self.out)
+        result['resolutions'][0]['adoption_status'] = 'accepted'; result['reason_conflicts'] = ['0']; dump(path, result)
+        with self.assertRaises(ValueError): collect(self.root, self.out)
+        result['reason_conflicts'] = []; dump(path, result)
+        audit_path = self.out / 'batch-01/audit.private.json'; audit = read(audit_path)
+        audit['actor'] = ''; dump(audit_path, audit)
         with self.assertRaises(ValueError): collect(self.root, self.out)
 
     def test_prepare_rejects_change_candidate_disguised_as_pending(self):
