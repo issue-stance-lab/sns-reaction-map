@@ -1,0 +1,4391 @@
+{
+  "schema_version": 1,
+  "new_records": 100,
+  "batches": [
+    {
+      "batch": 21,
+      "records": 20,
+      "independent_records": 9,
+      "routes": {
+        "change_candidate": 3,
+        "hold": 9,
+        "retain_candidate": 8
+      },
+      "adoption_counts": {
+        "accepted": 11,
+        "hold": 9
+      }
+    },
+    {
+      "batch": 22,
+      "records": 20,
+      "independent_records": 11,
+      "routes": {
+        "hold": 10,
+        "retain_candidate": 7,
+        "change_candidate": 3
+      },
+      "adoption_counts": {
+        "hold": 10,
+        "accepted": 10
+      }
+    },
+    {
+      "batch": 23,
+      "records": 20,
+      "independent_records": 6,
+      "routes": {
+        "retain_candidate": 12,
+        "hold": 6,
+        "change_candidate": 2
+      },
+      "adoption_counts": {
+        "accepted": 13,
+        "hold": 6,
+        "pending_audit": 1
+      }
+    },
+    {
+      "batch": 24,
+      "records": 20,
+      "independent_records": 8,
+      "routes": {
+        "retain_candidate": 11,
+        "change_candidate": 3,
+        "hold": 6
+      },
+      "adoption_counts": {
+        "accepted": 14,
+        "hold": 6
+      }
+    },
+    {
+      "batch": 25,
+      "records": 20,
+      "independent_records": 8,
+      "routes": {
+        "change_candidate": 2,
+        "hold": 8,
+        "retain_candidate": 10
+      },
+      "adoption_counts": {
+        "accepted": 12,
+        "hold": 8
+      }
+    }
+  ],
+  "journal": [
+    {
+      "index": 0,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:046b624f1d835fe168222740c8ff7aa1ea0c5d6b503ec01b9bc0ed3ab053283f",
+      "body_sha256": "03f72e35ca9a6da38c5b9e86715b326ae2252ad286239a948e6b07c4fe0eb96a",
+      "classification_sha256": "9504c940ce7f9f47228d02c20d1fb3390dfff49ab5faefea456d968539a5f335",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "法制度・規制整備",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_relevant": false,
+        "main_issue": "その他"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "00e56a603956af36ac589dbe8cf700482600d783e61d4b8ae9ce69e35365456f",
+      "independent_reason_sha256": "13c589b002559244d09faae4a25f0a745c93e7af1f74efdba308af1e8fb4904d",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 1,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:2b70d7fbfdf104e31571a5a1255ca434b578b0e19f7c41448cb9efbeaa77efd7",
+      "body_sha256": "06155430cdcd5d37bb49d9d5aebbc3134ba1d8609f3b61fad6d3538e924b09d5",
+      "classification_sha256": "9c8b42e996ef0ef95f066866dbba24639d1d3620553240a685a6801b693a159d",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "地域格差",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "changes": {
+        "main_issue": "費用・家庭負担"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "条件付き・改善要求"
+      },
+      "reason_sha256": "7eeea4495ac79ad1f179d8e2bdc215509a8349c8319290e95d10e81aa7d69fc6",
+      "independent_reason_sha256": "66569303c1637932d4c0610f74acda548624a8ca588fe679c143e45add39bf6c",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 2,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0b52a0796c0f82d2d125479f04aebdd513002302451d1c2a411e8bc33e8be2ca",
+      "body_sha256": "d19d5b97d8d554da34723bb19dcf3cfeb0899d6bb6985e18ca3323b4b725df6b",
+      "classification_sha256": "53f8a1bc26bd1a4d390387858cf92d3402c0e8980c75cebe99d1a8a854612e9f",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "reason_sha256": "85e51e4fa22b94997cb335f65eed8599960cc5b75de1e90909f32871b79474d2",
+      "independent_reason_sha256": "236c0f5956ebe02113b1c88eaac711a2d71e0fa9b644e4cb141cdec3636f9e2d",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 3,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:043abb2bcc97826808112dd6484660f859868c946346a7885a257f9d6e69fb7b",
+      "body_sha256": "285547f569324c4de4c1ea275299c963908ccaf80739fb7b6ed0901f66325f42",
+      "classification_sha256": "5496a9109bc47ad87393702ce1bf716734252a540e3c458422713a3886e7f953",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税反対・慎重"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税反対・慎重"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税反対・慎重"
+      },
+      "reason_sha256": "07aa41f215c306b4cc165edfcc8324cb7daa1ff32e125bedbfccc7a438736f3d",
+      "independent_reason_sha256": "c2e577b72a33797ef835bd24a90be11eaab6a8f8b93f360bc2a1a856625750fa",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 4,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:508d22144467bbe7c3dd4c54cf3bc5e6793187f9d318299832ff65f6e21a9eae",
+      "body_sha256": "f0bc1d6354f35408da9174e2e87c713902ac60a8e3df126e9dee32a4eda7ecab",
+      "classification_sha256": "75bbb72e451833b97f6f93f17913ae9a1dc6246d4ff27f0be22b163c4c040ae8",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "自主返納支援",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "自主返納支援",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "86717c4580e60dab4f313180946ee85eeaa1b6e2172a4ac38333535dbe84db2b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 5,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:08f3bbf6842db6987a6b8419295a4549f985058b9f875d26d62155117ae4213e",
+      "body_sha256": "286fe218fd0985f79a76271dc37676a63452c4488c85be3526f8fe7a1cd5c8aa",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "498c6bcb6395720f5a35c78380b3558adb48ec652af66e812eacfacd6af3526d",
+      "independent_reason_sha256": "bfc79b17a12dcf3c410c439f7bba63018c3f0a8fc462956136cddff9b3429543",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 6,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2957814dd376843717aeea8a984bdf5c08796bc6ae05fa411aa3b8be8ad0ba65",
+      "body_sha256": "46d815b7dd7b78b02863bd758f8ee17576833e36e3b5e6e3456f7fd868632ef7",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "0e4b1230782f65968ee0274995fcae5f634f83a805bc8dcb301abcf482f33e4e",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 7,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0b7994e57f11e56aaf9ef673417c117054817cda10310129ccf46030c99f693f",
+      "body_sha256": "e33fca85d220f1eb8d705899575f1ca960083052f314ea1567fdc5c98f6495fe",
+      "classification_sha256": "31d4ba006a2c1db75d078ceae3fc448632cd63b343661ba74d963605081478ba",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "立法手続き・民主主義",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "その他"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "ed625e6ce7a977c060d96b3ef32cd035e9b513eb3e87857b2c03e30e73e3bb15",
+      "independent_reason_sha256": "673d86f18976d2092c47fb16a4eafddefcea4fe1653b95800f6114c9638d2e04",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 8,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:2ce85549373422cd55c6d1aee6ea27af068e97f2edaba632176af6df19ed0945",
+      "body_sha256": "fe517d9733c0c429507339f353a01352bd6cd419caceaf49941e4a3a17b8ed33",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "da9a97358196733fa87afe6beaa33aaa4ae9959de03868439e5460c79f5088f3",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 9,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:1757420bd9485b9674c7fde7aca3f2c861760723f274b9979f5f17da427661ac",
+      "body_sha256": "b5d3e492f3c4d99d66deaff0df9c006b9562db13ad52a282945bd36882cc3057",
+      "classification_sha256": "b8145afd4e429b459f0a78e0c7a7561ef3bc0a78eca96614cb13ab0c0b61da20",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "文春報道の真偽",
+        "stance": "擁護・懐疑"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "文春報道の真偽",
+        "stance": "擁護・懐疑"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "311fe3dc59e5fc19135985a9a9a6ba99afbddf22ba5ea424812f6db160a0efb8",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 10,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:047f6608d63182f114f8bf9cee15fac5559b506939328cd8a8c16fbda908f630",
+      "body_sha256": "b7df759c27e8a8128e3174f527863b3f32088792b641ef6ca5cfc100d7d82ffe",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "4aa5c0319ddc9e320dee9601635ab076e0e35314f2cd59000f7f7072c0bda03f",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:2cdf88c9236e31031a0c687c8780cb2d4dc19832cf420037acb0b13e30170ccb",
+      "body_sha256": "8dd12c1a5e0dd22b5e620d1b3f5ff126aea5d753b12f15dea429fab92da22dd5",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": true,
+        "main_issue": "その他"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "0b0bb9a56087401e5f8e326acee1fcf4517e8a0afed01d811dbf7d97972c5eda",
+      "independent_reason_sha256": "1c65f23e053e488e1c0ad7ca95317ae65e5f8cee5f006769eaad93b3e83df3c0",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 12,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0b7c5b51229a892d86bcf264abb609a9ebe15307a44d32810fb158f1994a450c",
+      "body_sha256": "f8756291cbbc919eb0670cce43e3e7b3cbd234502204eb52db1c21c30ac9dbba",
+      "classification_sha256": "889dc371dc557d8436aaf669c53ad595a54e197bc9b474e7981dbb7c43c3e729",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "9条・自衛隊",
+        "stance": "改正推進"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "9条・自衛隊",
+        "stance": "改正推進"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "01ece5079b542b324086fbb475f962e54fa0836d7d41c70824363384177db74b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 13,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:044a863baec4eb4c20eb6da67977d618d977cf047ba3ecb121f023d133d14980",
+      "body_sha256": "6ab6d73ade1c504d0b6baf57a2efe550538a3600df9fae6febeb6e8426fb3e45",
+      "classification_sha256": "13f2165a01b1375bcc32daff4af4f563d5e9145612ee813c1ae79947716cc363",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "財源と社会保障",
+        "stance": "減税反対・慎重"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "財源と社会保障",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "3d1537396b7710726f6215fed3cb4ed28d29f15ad77937f5b27ec95f06d772da",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 14,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:52e270ece989965cda3e5ae4f4b4e08da2f5e10212b8a4b6c81218ba787534bf",
+      "body_sha256": "b15bb08e8eb39a80acb300fc95fd19d9e9945a7eb31606ef59233d69af1d3738",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "f9fffa6eb9db3551b48d4af8986a6bfc11c469c57d9feaf7804d13ed686437e6",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 15,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:095a66e982ce949901bb5c8748eb84ad119fe4b01568d6a2d3c941f2e74f0118",
+      "body_sha256": "c524f41ef0d16eb2c9db82db3e3b03a2a51f5b78fe838fd083ae28dc1b908835",
+      "classification_sha256": "b542fae1367052438c7eb8b4d79560ec192e2ba94265f47bb08bb2b55dd3c458",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "法案賛成・推進"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "定義・中身",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "30a5fcd37437fed720835845179c80f690ff1871b7e74864c400b74b4d95107e",
+      "independent_reason_sha256": "4be80d11b46fbd9a5aaa507986877bd2b2c0e271c141318d2cc62c1c32766745",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 16,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2971afd8c3b80245334eb14d725746d5980a20cfd6b0d7c6553dc05769240c8b",
+      "body_sha256": "921377c23cf5cc8b3a1d338a691a7756403814d47e801434db1dfe5a9d6adaa7",
+      "classification_sha256": "4da5aa70bc8aad874b116f63af2f23f99fc23f50bf02a0db58ef8b7cfd58b057",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "政治的中立性",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "平和教育の萎縮",
+        "stance": "中立・情報共有"
+      },
+      "changes": {
+        "main_issue": "平和教育の萎縮"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "平和教育の萎縮",
+        "stance": "中立・情報共有"
+      },
+      "reason_sha256": "6d8026c4c6d3947268196369e26018e44e314c76db2924262e9375e05ac6ab1b",
+      "independent_reason_sha256": "f9ec8060e8e0d1b4e9f14849202a2ec6b9a29b21250d34a7d482699fcd5b7cc8",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 17,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0ba06a26b0ff908c5a56a9d06c2ca4517f6a858ee16d774f7a9ab2a380174b31",
+      "body_sha256": "3b1046a24452a92f699d1a1b852e0a396233475c2f3138bbd9bcaebbcfa0679c",
+      "classification_sha256": "c67bee147dd0e4439bcf75b4b059b430c248bfcc7a2fe40007862b20191ad29a",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "f830e433863c5b22871621003c84a43b9ef43a71f26e8b67f40422536507f9a3",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 18,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:2f41d68d3c26d04cc0f3f684f13a6b05055caff08f51ef434ba705f86e4abe27",
+      "body_sha256": "39e09bf095efccd78a8c1d759677e598bb87e6e4cc64f1286919cf51a3efc083",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "9ff7cfaf442d41cc6ef8b8708555717cdf847b3a4fc56f9194682ce73a2aa1d5",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 19,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:177ac6171c414a13d35560f77eae5672069cb25447c50cd87fdf83c12daf6f7c",
+      "body_sha256": "ae77ea2fdb6e9bf258c182a2b7c9c9c952e0287bb76a45847c3abccff167d8a7",
+      "classification_sha256": "525b4cf5f7376c8d26d81e872690e790ffe62c0f0cc5665cbfd0a4e017296d58",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "中傷動画・説明責任",
+        "stance": "慎重・保留"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "文春報道の真偽",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": false,
+        "main_issue": "文春報道の真偽",
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "3d3e94926128cc22d40b43c3aac53a0ddbe399b1260b7aa343dbad78c00f2f82",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 21
+    },
+    {
+      "index": 0,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0481d8a78dd90c390507da69078c45f529caffff2bba3a9e7f085440cd0bf2cb",
+      "body_sha256": "69270e322e33db41d7301229a85f2d1adad20b5ddfc3c7938af05924548b9b66",
+      "classification_sha256": "986367a2b52b0224b7f27f100622d123833046c7603eae980ba18e18248091d1",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "規制・制限強化支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "規制・制限強化支持"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "9660f1968af43707e14f45fcb04e3932038f6dbe819e5fd59552cdf43f4bcb16",
+      "independent_reason_sha256": "2c4c75e72c26b35adffe10547c6241b0bdb82172c940f3205e4f3dd3980bb696",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 1,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:2d5929f0f81bbea4857daab451ca05a16c4a1d7b3c3699191450c6f712068b23",
+      "body_sha256": "422d587e7206acbecde4192f5e5cfaf0b154128416ff2ef79f06e86d6fa4f42c",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": true
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "c7cc0808e83b359fb67ee3d8969013211ba10a458c36fdfbe510e8650c0bfa61",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 2,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0c0b1bb2c8c88d4117e9158c2ca11aecf93e8604cb737c62cc12eb2ddaee03e0",
+      "body_sha256": "60021f5e939ee5646628a5a32a501d3a32ea9427e75fecbdbe7ec5d62a254cda",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "reason_sha256": "da46fb7fa0ba06e5315324ff2f8fc8cd71da17677649dfc1da21029b4b930118",
+      "independent_reason_sha256": "c9cdec93a1388db23676143c4dbe7b7b1ce0407fbe1791027f20601535a35a3c",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 3,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:045b8c0bbb7e0494683a95f5de316985cf02f66ff3e4b63232fe5f6cd806473c",
+      "body_sha256": "2221d55eb8636299248bbe7b32564310b46a817fa3c5d367571e9ad31bb5de6c",
+      "classification_sha256": "5496a9109bc47ad87393702ce1bf716734252a540e3c458422713a3886e7f953",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税反対・慎重"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "53a7dd5d617b3889410e09d706f37354e3c0816b820416184bbdc0d95878cbd0",
+      "independent_reason_sha256": "6b24082e6bb4fcabebc2dc89681b047dc94d7d083cddaae37051f27370aa3fb6",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 4,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:52ff78473861f0132c07ae83faf68fa0e6c94bb8bd12fb5ab5f30a95708ea5b7",
+      "body_sha256": "6e2123261d14bf5217ae06b80a7830422a175d86d414db5998af7b17aa25aef1",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "義務化・事故防止",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "義務化・事故防止"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "282bd1cfbbb42aee8231651f44d5255d774ddaec87a5dd42293bb25ad042ba8e",
+      "independent_reason_sha256": "6334c74c3f622ba363eb5adad546e96e1178579a2108e1bb34a9dc77c26dd6f9",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 5,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0966f9fb00dd84014931366d94697bb1a5a8fff05de7c631936eacd60431155f",
+      "body_sha256": "4a5c1eb0bcc70c3ceec2c7662032d924f89cc953627a9b5f7bc322b1938d23c1",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "都構想・維新",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "都構想・維新"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "都構想・維新",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "99c5396038e5bcc3cfcb82b09d1ef82c54222d0da5f35e839a83746d1bc2cbb2",
+      "independent_reason_sha256": "69ea88874ad4e8369f80815f7a95b4871758019586f4eed6b8c989a1d6ba6e55",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 6,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:29e2c16ebf803d73ab15bded62df9d1b5c1cbeefa3936e0d61c2b2c2e9860a8d",
+      "body_sha256": "39bc6b5e9d522cafa13b9454feb2afd8d3583a6683157ba62a9625a40c689bdb",
+      "classification_sha256": "641e0a0e5a9214c1eed621c1660c8746bd285d9a1a2c6921f196b2eacda6f298",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "追悼・被害者の尊厳",
+        "stance": "論点を切り分ける"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "追悼・被害者の尊厳",
+        "stance": "論点を切り分ける"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "追悼・被害者の尊厳",
+        "stance": "論点を切り分ける"
+      },
+      "reason_sha256": "b3176cb1ae6f56deea273a06268a77b0719f0aa6d7dd306119ffa09ca84dc6e9",
+      "independent_reason_sha256": "5a2d130d8f8acdf783f03583ba7307ee8e3fdf730a68278b01e69caaf6fc64ae",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 7,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0bb214af09684d7fbe1db09db8dbb9f070836ae10cf246cdb12a05cc3e263a3f",
+      "body_sha256": "e60b44c1060d2fcaeae5819c4e7429b7a5ccb39ae00f3826fb10399559200fb7",
+      "classification_sha256": "ab3ae3de16ebf89cfe4fdded6440d55fd5d0623381c298854487c6be4224a740",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "改正反対（男系維持）"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "b094a734b01df56969183e4aa644e3f6a0a2f45b720788a0ee44ee62e6613582",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 8,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:30cb05a395478306a3e1b5d0bbdb1ed9971dbb63bed7cca4f98fbc0171aad2d7",
+      "body_sha256": "0a769570b60979e53c6de6a9a458f29e6afba4dea31ed9c42df19a4f9881a8b7",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "e38eb35d9ddce0636ce43d46c1527187cf4bc5d11db911994d8403d25871517c",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 9,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:17823cb7df286ffedd8fbce84e2698ead8e1ffed0dbf8cfc23c6504ec02e5dc5",
+      "body_sha256": "1d814b28edcd02940f02cec15b699cdced45b6c8f69776559b376f579198058d",
+      "classification_sha256": "2b8806a7df46bd6c9f85f4f6db53d7eeb1df868ecbf422b194b284231f7a0e5d",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "文春報道の真偽",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "サナエトークン疑惑"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "比較・政治倫理",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "84923446a67133a0ecf43074479071f7b99bbc30a004187e9e3486d5c05d92a5",
+      "independent_reason_sha256": "bc35bb8481a622b1b0308086d0a863bf32ececd88070885e58af8b3c2fe76806",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 10,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04ab10d816de4f58b16bae66492839efc9ee2863dce04e2169fd9ee296ebb916",
+      "body_sha256": "b369f27ea28013c19d297d114382ac120c289e2478d5c0fe3c5da85470ae73be",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "ec339d5ac0d0ffce197425f109b0bb8bd5d995192b417321298ccef5da9a2b92",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:2d782d7896832e2049bcdcd410051b93920c8fae341ded24019efb816a90e595",
+      "body_sha256": "c8ecd5f5e605327a2ce973f5eb700f9c55d972e58603e4296af3b59b62e36afe",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": true
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "2b5986cac7d112684cc73a23fbd26de9eb4394045532d5b84ca61715f52d028a",
+      "independent_reason_sha256": "f815ee6ced15376b13760524b88f05a5f9d8b6064ef1f5027c1bed16e1d1572c",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 12,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0c17c9cac74126d934a5bd930ac68234b33a0dcdbb01375a16ae4f04ae28fd29",
+      "body_sha256": "e562bbb3bfeddeca9d1e0c5786316a041ca0e1a2a463db158172599da06de2ac",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "政党・発議手続き",
+        "stance": "慎重・反対"
+      },
+      "changes": {
+        "main_issue": "政党・発議手続き"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "政党・発議手続き",
+        "stance": "慎重・反対"
+      },
+      "reason_sha256": "3421bd3a938942b909b1f600ef2b3c66763d442173210b77aac1432f9b9e6fbc",
+      "independent_reason_sha256": "000bf3d3ff66b59789f4073eb724e62fbd96c517172d75a3122cce264b76e66a",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 13,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:045ed701ec7029035312646e61f3928de75c50dd2e39099b488978500b49538f",
+      "body_sha256": "7f677a1758acb6df3ff39a79495812c71cab1377f92dd2f8bfb771b334e9737a",
+      "classification_sha256": "13f2165a01b1375bcc32daff4af4f563d5e9145612ee813c1ae79947716cc363",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "財源と社会保障",
+        "stance": "減税反対・慎重"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税反対・慎重"
+      },
+      "changes": {
+        "main_issue": "減税の効果"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "給付など他策との比較",
+        "stance": "減税反対・慎重"
+      },
+      "reason_sha256": "07114eeb5a692d3abb98fbf19f3090948272d37ab56ed6babde6e14d249170c1",
+      "independent_reason_sha256": "6ba0d9b405979d34a6b6125e3229a57a096ca4ef69fea4512450d84532acfcf8",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 14,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:562dd3568e1cd67ddec49369393c58702d96312736d6b0f3e1bd7beaae9ed5f1",
+      "body_sha256": "37af7e1b83725641bcca24745ea4eada446385639d09451b2da73d0bbb2877cc",
+      "classification_sha256": "75bbb72e451833b97f6f93f17913ae9a1dc6246d4ff27f0be22b163c4c040ae8",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "自主返納支援",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "自主返納支援",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "408198f2ad74cff6d8dbead968a1981fc796e4c435f31476857696f026e9fc09",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 15,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:09fdd129141dbd521257eba785946d6f73d131a1392eb234999b276a79f15fd6",
+      "body_sha256": "fe8302521649426e316300427f012e75625c4549394eb3fab0ee56af515db7da",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "都構想・維新",
+        "stance": "法案反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "都構想・維新",
+        "stance": "法案反対"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "c4def62b508492626eb02c3e848ca450e60a6c96a1f63c3f98b02c38183c3be0",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 16,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2a16a8e66ab1ae8b33052eff718b97ad628273f8e0f53218ce427b5949481ad5",
+      "body_sha256": "3c93509d83f1dfd6231d126b03f04afb7d850d68c5210271ed63bf5614fb7416",
+      "classification_sha256": "cc5fb24baffd3c96924488fa6ab4a65559855b8e53f57721a269cc5a438b97ff",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "報道・行政対応",
+        "stance": "論点を切り分ける"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "報道・行政対応",
+        "stance": "論点を切り分ける"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "b56c36ed22ba8717a32596617f09944f07bd94ad62510050869886b6736a1e11",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 17,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0bfe9a2178a325733074a310376ac72867fb451bda093359d05e2e1a3eb0f0d8",
+      "body_sha256": "e1eb6c97985b2e16b2c707f0b26f0850a6078b150375c0548372ec77a60fd6e2",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "愛子さま・皇族の地位",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "愛子さま・皇族の地位"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "愛子さま・皇族の地位",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "230d803b27f0b8fcdc7ea464db50427c827761f58bf9a8986358edab4564c898",
+      "independent_reason_sha256": "6c3a8809fadd82e8953661d9c9a7c8c46bb2b25a67deabf6cffaa0b8b7a7142f",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 18,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:31c79e99b938eb8577d583c5cf15f43c7cbcc572c3cef3c3e82c4da159a4c2be",
+      "body_sha256": "02d0892b0ca69b29d9f770cd41b165296b7d3bea9dc9c60d3bc169ac43c3dac7",
+      "classification_sha256": "a90c7df7949a998aaa7d7e84d4899bcf06f87a5178305b9b452fd14991146a24",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "一律禁止の実効性",
+        "stance": "一律禁止に反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "一律禁止の実効性",
+        "stance": "一律禁止に反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "755821c90bc5b62a2257ea5ca0abc53537726f19d3a456156d52cab76c958ce1",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 19,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:1789cd12f077c6013805767fce62e6659f686041e11e07915b166d9fbdbe1197",
+      "body_sha256": "0ece784d0e25549fb31825710f24bc6ba8ce097a06fa6676444c346932535584",
+      "classification_sha256": "5a462c467484448ec9f33822348af2c39daa607bc526798ae0724cfd185efba5",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "擁護・懐疑"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "批判・追及"
+      },
+      "changes": {
+        "stance": "批判・追及"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "d994886e49b08cea804457458837ba41ad420d1de9ad44c6ce85357e7504e010",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 22
+    },
+    {
+      "index": 0,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04b97221811029d7584c75cee97b9f9e26ff28944ce9a61eee700dc6a802f504",
+      "body_sha256": "685f13fb03f0373171781677cda226c2434f40b63f7df4c03ab05abf40aa9acd",
+      "classification_sha256": "52624c6c2f771f2c2b22a2788a27d96e3dd311cd4e8c204fbc7bbee4ec66b8f8",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "推進・活用支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "推進・活用支持"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "推進・活用支持"
+      },
+      "reason_sha256": "fa63f54f803f99623d787b1ed51c96beb73ff11b4578994a5f7deba0df0f7aaa",
+      "independent_reason_sha256": "ef23cb683bbc45cb86ca07469dc37ba5688ce2936cb7a07e226ceba1c1d67270",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 1,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:32aa87cf088285575348df9fbe315354d055f9904db4e50ff4bcd43450260699",
+      "body_sha256": "45e559f794727046a0ee0ff440b40f602943dfe6178d309d3f784f69ab1389df",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "c94413380c3ddc63c7c51fbc5f7d599d66229bcc10f7a46c7a4e39bf63887fd4",
+      "independent_reason_sha256": "eeae943dc822182be14b8dcfa34ac92c4ef59cd2bf969c1e922b636e61db5caa",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 2,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0c5b8dd959b74cfee44d2c12ee253ba8aa30d01c040159df2191b93752f1ee62",
+      "body_sha256": "467e4f251198f16eb0657eff47a3120a2b8bb5e34707cfe7bae2b425188d31b1",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "e04ba10471570d3b2ab1c2e426ec89d9c3b57062aa5b94b1330b85cb7cf6420f",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 3,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:046dc0b7282fe4532beee3ef85e1f24eec99a727f88a0c2544b5ade777b86a4c",
+      "body_sha256": "339346a5c544a35012cbb37ce2ae88d15c407fca318e294d02c7b20688c29c3e",
+      "classification_sha256": "33b647c00bba5cabd74132fe4b5d6581ce13e9a1e0a9d8b473af583544b32ae6",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "財源と社会保障",
+        "stance": "減税推進"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "財源と社会保障",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "財源と社会保障",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "41f00bbdcd7f49eae4fc2ddfd2eeec5f40f78551bfe424f069d7fa369713d09e",
+      "independent_reason_sha256": "8eab0c7cf6a5ba4282ed3986e1ac9c4f189a0e521abc870e3fe87e18295338b4",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 4,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:569f21bd26b60bd6d7b4b768d21c2ced75ee9241482f7dd28a2bb04bd9a79843",
+      "body_sha256": "1f9238e6d383a6a9168020ac668dd9d23aa6fef325e950f4c1c12ff24607bf28",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "ca30200f610c8e2a7dc4066b6eb6e49964802390371a1f46205bdc8ee0885137",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 5,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0a3b947229328d13d9738d649e4d1dcd15d579bf6dc9d0f7807e9d23ad1a03f2",
+      "body_sha256": "717aabbddfc52625fcae010ee1bd756534ca8fe2d6f0421c2e4026a02e481c18",
+      "classification_sha256": "e8bd59b6eaf75ed176f4a25c027728912726ba7b482ae2f8ac887a5b4e61b1ad",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "候補地",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "候補地",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "1d9ce54aeab8bb7d51c16dc4e9abc4d40a2344ee9039ecc8618582157eeba5ec",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 6,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2a1f36a50baa8cbd1963cc16a090e341a486ec40358026aaf891df61c0aa4fd6",
+      "body_sha256": "9f0712616b2308961a6d358270c9de316cd132c89fbf57a44a08034a5c0289aa",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "1be6d696cad3b71d9124c6a1b9f3b00c6fdcfa56bb9a17e330964e7614707731",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 7,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0c21733dc6a8cf2ec34faefa85b780e5136c5a94fa32bff7cb0539f0e5085da2",
+      "body_sha256": "65ae93e59a9bc304242aef52b257010841cc96341d78579f7b580c8a88e46ab5",
+      "classification_sha256": "31d4ba006a2c1db75d078ceae3fc448632cd63b343661ba74d963605081478ba",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "立法手続き・民主主義",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "立法手続き・民主主義",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "2e3fd40a1eed5c18af227b5e9b0219fd4c4fec2755e8018b466c530b60ac8f64",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 8,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:323ecaa4f051c789d9b67770ec2cdd12b9b2502102052a2423835645ed7d24e9",
+      "body_sha256": "f14f61ea3613c3884ae20ca9fb7741b1f2339ba7027e8f642cba30fa42bc6c51",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "ec4e2dd354d7a935c7ff3ea6d644b2e0b3daa97598179ccbf4b5c9f52cf46182",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 9,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:17c1e6928dca47a22dfaa1dc31fba77821ba64b21c7a3d489e69b86701cbeacd",
+      "body_sha256": "7e7f680d71a74959d4413ba854adfac30d99ce260e0e47b1ac2764b061dddad7",
+      "classification_sha256": "525b4cf5f7376c8d26d81e872690e790ffe62c0f0cc5665cbfd0a4e017296d58",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "中傷動画・説明責任",
+        "stance": "慎重・保留"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "慎重・保留"
+      },
+      "changes": {
+        "main_issue": "サナエトークン疑惑"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "慎重・保留"
+      },
+      "reason_sha256": "0e60790cfe2bbedc854d50086d584cbc0dc7fd098ec5eaabf9cc9de2d3edd9db",
+      "independent_reason_sha256": "d325e60b07948c06ee832d4dd9c3a32f939bf6925602768fd06b4308e47c6927",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 10,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04c32df0950a0f044eb8071f3a43d6ca57c2f7cde81c2d73399557c06313e45f",
+      "body_sha256": "ec467c804c1ec8490816e84e1dc59f2d3ced11994bb16988b6c145c9d38c0fe0",
+      "classification_sha256": "52624c6c2f771f2c2b22a2788a27d96e3dd311cd4e8c204fbc7bbee4ec66b8f8",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "推進・活用支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "クリエイター保護・権利",
+        "stance": "推進・活用支持"
+      },
+      "changes": {
+        "main_issue": "クリエイター保護・権利"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "8681fe3c671f445c28fbafad68de67a801cbbf7aacf582d3de2ce375daeffd28",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:330cf1581a9d7c01fe297bc5c069e3279d76e4632d1e810d803da170268f7e35",
+      "body_sha256": "0f9cad445c316ff139e10ea197ca5101a83c7994e1880d7e17820cdc1ff0a116",
+      "classification_sha256": "9bc865107ffe707482b232fa8820f26176ff58bd4bdfbb3c4dbae711bad1dad0",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "7488b057fb706298da1c6af9db907a260697b7b358eb99e3f616983fe5149082",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "pending_audit",
+      "adoption_basis": "additional_audit_required",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 12,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0c8df5dacd2c4603c1cbd81cefaffd4433811a48f3149d70de7cfb03ebb0efae",
+      "body_sha256": "51d9c28a6d36d360053858283cec4f4428f9c777c57f62ba1733e00a7c286b63",
+      "classification_sha256": "837c0cc5dc3a872e8e15bc81282d9c8414ddfb2bb90f5c896ec5749928927f7f",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "手続き重視"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "9条・自衛隊",
+        "stance": "改正推進"
+      },
+      "changes": {
+        "main_issue": "9条・自衛隊",
+        "stance": "改正推進"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "413b788c94ce634d1605eb0d682902edf7ea2370e56106907a8be5549584616b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 13,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0476e4ab38d0e3d14fe41c450d0b83cbef979afb2047b62af0d4dcdd77114acf",
+      "body_sha256": "4d6dac589f9f636416fc75eb707c7d7b6d02e7ba28418a72fc7c9786fb69d1bc",
+      "classification_sha256": "e0f7e0cbd9db58e4cd3e0639bb757f9dabc0054e01fb758734fffd138fe84d20",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "減税の効果",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "公約と政治不信",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "公約と政治不信"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "公約と政治不信",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "6647f9387ebeb252fe8966bfbabc9bb105e9e4d4943c0834f5e0109f26690143",
+      "independent_reason_sha256": "88e25896ca2c3b651d18edfe330e2391a85751aade47e4ef993cd80871945c98",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 14,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:575dbb7c3a374bf8b7eb81da70a0af2c66b720c6e766319ab80bbe8586ef05b7",
+      "body_sha256": "6479329fe97db2a495a9ea9a125b97f5612b3e3f6b605833451e9470b71d3958",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "a1aa962a23d66c3f605ec7877da2390fad957b89de39a16e69a6b8dd7dab9939",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 15,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0aa03dc2f8336712fd214539c02fe4f59d1cc2a657e8a654fec7df17bd1af6fe",
+      "body_sha256": "06cea14836e9254b323257d1adfb39a55d5a7933d854e1f76ecec03565043d9b",
+      "classification_sha256": "20afe6e96bc88acf66ef1e23914cf3c8ad32ad4947dea8dea88118cf0afd21ab",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "定義・中身",
+        "stance": "法案反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "定義・中身",
+        "stance": "法案反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "3763c87b25da45f68bf1a7da4be932fbab416bb85f7dba578abcb856a1f4615d",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 16,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2a946603f725019b717a6a3b512f5da73df69159a5f3b6a8c902c7146dff6e8e",
+      "body_sha256": "c5d820f943de415cd094304ff1388911e6fa352a4e3f5fc05694e6fa7cb14a96",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "477d8e76efa1b877277df7742494942d0b8cda546ae6704dc9c18eed7f3f7c59",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 17,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0c5e6f7708aafba9febfe9541f0cf527d6966fb0eb82fc778566ce2fe9a45469",
+      "body_sha256": "db189c0cdc985c00c4b804504027188a05ae42e86de80ec117292177fac58802",
+      "classification_sha256": "6c76fe7238975b0e14d5d2f81a521c3b65b504e8b10f22e05c2031e0a4f0a8af",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "旧宮家養子縁組",
+        "stance": "改正反対（男系維持）"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "旧宮家養子縁組",
+        "stance": "改正反対（男系維持）"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "cac55e6dc9fd11ab36faaa18ca875450670c73484f9c3f1252c5ab8ff417b957",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 18,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:330c7ca98ef5bb3d890eed99bd82b27ea8641a2f630aa0abe3d89ea15d9d1566",
+      "body_sha256": "71af89122a08a1706bee17e5755f79b2c0091af2d9b604dbe3e71d318ba762f1",
+      "classification_sha256": "60c21eee764c950f5081e0b6c1162f15533ee8013f6b01762e5df249bf4a301d",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "学校運用・現場体験",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "学校運用・現場体験",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": true
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "学校運用・現場体験",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "2c9516081e35c8a5eb798d921671593d4495ca92c454553a8e29237be76ea013",
+      "independent_reason_sha256": "2f73fac89ea18fd7ddf4b27341d8b28584c65fd7e87ef68347b33e66b280c7e3",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 19,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:17d45046aa548aaa70c95b80dbc842aaea4e84759a5812e57826659884ed283c",
+      "body_sha256": "513b88cdfafada9518eaff22c729cf290e0f816d9e8a6554c3a8709ea68dc23f",
+      "classification_sha256": "1e01fba7d40fcb7fc5eeff50a180ae7cef2cf587847d8660efd3725328b1255d",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "批判・追及"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "9c193270f8f06b44e96acb46126b15749585c33ed1f33d05f4ca0278e9fd9589",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 23
+    },
+    {
+      "index": 0,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04cb05c5da915df8e256550188364e78913454b0fe027f3e0adea500cb4c7211",
+      "body_sha256": "627fcf2a30c5b9e311567f49977c899a0e6b6fcfbe2ea93f1e6032f7c85c8461",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "04da191190789d1a93976e6e2a721c5b028294ac00a1ccf258b064042c3f80e0",
+      "independent_reason_sha256": "58805a9ed8a39315da2e2b3b8155b0550338bcd045ec857805292947ba35d838",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 1,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:33ff9bede08ee5c1e117fb4c7f3e85d1c3147acbf282a00f373e353ac79d1ff5",
+      "body_sha256": "b9fb1d64eccb25079fb050d487bdfecbc05076874f4a67a9c14c5344d8fb5b03",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "移行支持"
+      },
+      "changes": {
+        "main_issue": "制度・移行プロセス",
+        "stance": "移行支持"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "移行支持"
+      },
+      "reason_sha256": "38f25ed2dc53fa142c02f91d3a920fd724965e6a66fe0d123fd67bda6b7647f2",
+      "independent_reason_sha256": "4961d548bcb8b34b1f1ab7a956150ae43566c1e4ed28fe1964a4ca95c913229e",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 2,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0c8fb560355f22bfa78183e99e03eec51a5c42a3d6193c24646709c97d3b5d7d",
+      "body_sha256": "0479be9b850cc6e2018d6ee1dbe498ad1eb61084f416c42b232462708212b9f0",
+      "classification_sha256": "b23a6d23ee78029c13e303789e3aaba7caecd7d8a72b75a77fa30a963c83bf3a",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "政党・発議手続き",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "changes": {
+        "main_issue": "国民投票・広告"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "reason_sha256": "255dc8ab2bf99b1d31a1d594398f0b0ea96b349f287856a377e62604c1be8c1b",
+      "independent_reason_sha256": "d000dda3352c08990a98e44f27e4e5c8315ab27acb1dbf377cea5172a9111758",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 3,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:047d498c9bd975a929de88b5662e2fb0bb199fe8d250615c98323b05a44c7420",
+      "body_sha256": "7dfe5460dd5188ed11844dce96e34a0481e17c0ed535d9b783bfa8aabba8fb9d",
+      "classification_sha256": "cdcc45002524ec3b3416f85fe0e2b40a91c186c2ecf753675a32306424ff6160",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "公約と政治不信",
+        "stance": "減税反対・慎重"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "給付など他策との比較",
+        "stance": "減税反対・慎重"
+      },
+      "changes": {
+        "main_issue": "給付など他策との比較"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "給付など他策との比較",
+        "stance": "減税反対・慎重"
+      },
+      "reason_sha256": "353a96e41d901e53a888fd0646d7b236c21676dc0f8ea1b32fa017f70521cbbd",
+      "independent_reason_sha256": "fb880fadb706c35ede63a19930e733143597464e52244f9584a2efada273afcc",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 4,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:5a92e4858029907d088e0c011e71b84a5d4dd172df94f543bfa299813845ab9d",
+      "body_sha256": "bbda068fffe11180791b74cfcd679a8c44aabbf35a0a65167cd9f6bad27b08f4",
+      "classification_sha256": "6ed3bddd4c28a4ebb721cfb7b55824337ef1dbca86ff0e3f5bb3bb0eacb2143d",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "適性検査強化",
+        "stance": "条件付き賛成"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "適性検査強化",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "適性検査強化",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "619ba24fb03a4921d051e6f24aa4e3b5fecf8b7b679ed06abfb7ce98ffe69d6d",
+      "independent_reason_sha256": "d444ce5b8ec4d19b5b113ec51dc311044f9e3dcb81c8e910e051eca0f21ffe5d",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 5,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0aa84def4608f73d5e4e7cb2610a86132dfce3aa40d7784b8a6cc31a79c03ff4",
+      "body_sha256": "4ebf0fb6b11f87778cd8b0094f9f412a49e5e644be1b140b237d8e86f91dc7df",
+      "classification_sha256": "a88b75555f799e0b9c3a60a9af2f86d9b0f2e8b765bc37015063fdf18eabb260",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "費用・財源",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・財源",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": true
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・財源",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "4555d8f5420228fbc2cea3120df0cd2eb6dc4da9712b12716f0ef377c2751e96",
+      "independent_reason_sha256": "36816bcf9333038686efe4190c166de349ac7d15c5b5c472466092258a2f262d",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 6,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2ab295589b27fd4ca23f05cd5c899a807d19e1fdb9ee75a685a8bb1212111d92",
+      "body_sha256": "f48ca4d27a2a98f01fa9bb7562ee785e46995034255b2301d257e11c0dcdccb4",
+      "classification_sha256": "cc5fb24baffd3c96924488fa6ab4a65559855b8e53f57721a269cc5a438b97ff",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "報道・行政対応",
+        "stance": "論点を切り分ける"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "報道・行政対応",
+        "stance": "論点を切り分ける"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "報道・行政対応",
+        "stance": "論点を切り分ける"
+      },
+      "reason_sha256": "a6d779f4d218b409d542b4816b5488548808c7969c16e7ab3f8fa5b92ca66c47",
+      "independent_reason_sha256": "a4ec474532cbbad278f71bcdfc6b365854a662dd65b1b4322ee9e378e1e50ae1",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 7,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0c6a8ecced6f1d4d004e0792299f994d9bbadbb693d2fe0378e7de666c8e34e8",
+      "body_sha256": "8d13cb0f99123a3742e5b4932bab30d4c48ff07963a6c05a04dea4a45e6d57eb",
+      "classification_sha256": "ab3ae3de16ebf89cfe4fdded6440d55fd5d0623381c298854487c6be4224a740",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "改正反対（男系維持）"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "改正反対（男系維持）"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "735fa9795d18abeb86bfaf89a8ff58af35b5fb30293b2699f1754679d1fa96f0",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 8,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:334f829c0a6c833dbbb7d8dcc02a1571280df1b3da12596db1dc6a36866db658",
+      "body_sha256": "22b11248674d9ed8cbfa9b700ed193875a260e487fe3fd5a94282cab8631e1bf",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "221ba1b557dab1dd9ea843499ba927110eaa7c6ae9cb8436d1aba1df579de023",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 9,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:18baa4a7bd121ec4c76b125cff24191c706a8249ac856ca18c5cbf2b5831bae2",
+      "body_sha256": "cde6b2c490ed6b6b9937ff9fae52afa206f7c944f9a1b71034b58b54b9335e8a",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "批判・追及"
+      },
+      "changes": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "stance": "批判・追及"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "比較・政治倫理",
+        "stance": "批判・追及"
+      },
+      "reason_sha256": "1355ea8bdb61cf52d664a5ff5be659b3c2b911a3c1ab98cb989c790d801e7558",
+      "independent_reason_sha256": "70440d024182c6ec0bde867bbb1663c32f79aa75a4857a7dca1228310dfc856e",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 10,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04dfa93c4f26d5c7bfd7905d55774339c050cd69c2e8e72af852aaed5306397b",
+      "body_sha256": "9f8e7cecb88f17ac24740ad39f58bad864eac8f4ab22f5c3534894aaee65d4ac",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "利用者モラル・倫理"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "dc3ff3e3ba67bd53bc530e2ba8911921177af5b1447fc77f8635538adc38d788",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:3412fdb333ba7390d56b3ed02eeb7d3c8fc2348bcdbab8c61636f8fb0d70f4f3",
+      "body_sha256": "32b51a25da2e6bc8d5def4d50b368aa1bdfff9f05c2c8ce3bc2e7339e311cad7",
+      "classification_sha256": "7c5d32932a50d4e186bb8cbc029199e4101df41c393caabeeb19acc6369a8822",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "費用・家庭負担",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "費用・家庭負担",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "93007b3d02e15fa230275556f1b50038b72c21f7b106b4b635d34e558a2577aa",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 12,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0cd398a9cd5c62b60fbe132f6856600842fa921badcd29a4e9e911742a79b9a6",
+      "body_sha256": "d695da720871cf08398db3916fef69e245a1314530da9b46893cbec3eff765f3",
+      "classification_sha256": "2c3770b89f74ccaa6564baf822fa3d438860added1a35e310d7fe138eb240774",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "政党・発議手続き",
+        "stance": "中立"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "政党・発議手続き",
+        "stance": "中立"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "93484b2232c9827ad0c84348d172060460353b75257dd2f70c408fd74a61728b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 13,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0489cda8f3a45236742e6c2ef63ccd0fe1fdb62febaceef3d906f338b940ac54",
+      "body_sha256": "b3df4375d65a93486f5cee5634daa57b6db67a92a1ea1dbb615cdfce1e45dc69",
+      "classification_sha256": "fafd01fd08b1ccb8900d0fc4f15c1a6aa6ef544bd7beb996267ed845ca55d2e4",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税推進"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税推進"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "949823389554ed723eb7b35737faed8383fe6a96da583b2477f1094b8842ab9e",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 14,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:5d5c2998a22f14efe7494e0fce5a469909c6265b75fc36354a573d2b3075d2d1",
+      "body_sha256": "659a999d62d06b6b6367bb2bb6c272e71d85915d8b09ea966972b14ca775f4c3",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "a9e69f0015c26a216d97bcac1e13dc7e0136b8394ec513a07b741c71c20e3bfc",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 15,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0aeb02ab7166c8c6224c1a1cbd8af6fb5d852aab5d7baafab2bbc0d0a6687002",
+      "body_sha256": "f188a4b78b0174919fed6144dc87c2c8a754537bf45d34c671ade60929e99120",
+      "classification_sha256": "9a088c1d3d5c750b11d3ba9cdb950448efd6945e63c3cace6b6ba76d57bf2c67",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・財源",
+        "stance": "法案反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・財源",
+        "stance": "法案反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "f87a579dc3d5736ee337e74a6504d05643c6dbf2737f68c7fb909f566299902c",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 16,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2b0605f6deb32e0b9c89c844994443b3c00f854d7562b3a8a345d6c70264254c",
+      "body_sha256": "909eb8a316d98d68228699b1e6373b6b3c42972789d960863cfa7d510fe701a0",
+      "classification_sha256": "7bc79e82e49604df93e95f29f849ef6bee45eabdbf70bd5aedb7982985dc78f5",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "追悼・被害者の尊厳",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "追悼・被害者の尊厳",
+        "stance": "中立・情報共有"
+      },
+      "changes": {},
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "fce404cc9b545eaa704f93f1ff485c119278004565c89b211eb2c507e4e1f17b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 17,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0c9db265aab150b64f2a3cc86cbaf337655103b4c095b22f35d800038dde7c2d",
+      "body_sha256": "90612efa54dc07eb1d649bd8e83a4a47b4090e34859195111df740db6201f00c",
+      "classification_sha256": "2fc49027ddc79a8599e95479b6e4a7e27e45c6e2a0b0a0ce8776343410921882",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "立法手続き・民主主義",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "立法手続き・民主主義",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "e2f49d43e1d5dfbfd6417f7a17c38c9c63258eaad0db2edf1e2ea388e879be8d",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 18,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:33c3b89abcbbeee7acf87604c5569639489f4adf472ceb0b2f91f115f821bdc9",
+      "body_sha256": "505244a15c86028def0bf224179be758d20685e5a591d9a61e1358e2fbb47826",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "12cc1229aeba7fd64dce6d4d3b65bddbe5a8e9166401d45f10660e64e0c446cb",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 19,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:1a5c7ed5ba01f743e6ebb9b7f61e9bf5734fd9051ec9a43911fee469ddc7ee1e",
+      "body_sha256": "59333e997e0f9283291f0cdf5615628ed716bd1ec389f6fb01c9fccd0638a422",
+      "classification_sha256": "806764c8b687041dc96e96ef580adaff996e15b457e0376863573d3c45629159",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "松井健氏・工作の実態",
+        "stance": "批判・追及"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "松井健氏・工作の実態",
+        "stance": "批判・追及"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "120b7f96020cbd66e2e7269236263323e3b8603069d97c8ebb7fffc64469c4c8",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 24
+    },
+    {
+      "index": 0,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04eeaeb15524ed7a20e4ee5db7fff408a58d5afba01610204a8442415af975d6",
+      "body_sha256": "cfabac0a09a382271304bbd4fb523a633cdf5e700d47c26f333353d0bc46a976",
+      "classification_sha256": "9504c940ce7f9f47228d02c20d1fb3390dfff49ab5faefea456d968539a5f335",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "法制度・規制整備",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_relevant": false,
+        "main_issue": "その他"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "5bc8b5c2667b3389c901c0ca27593762702573156d0317bcf5fb1565ae0d422c",
+      "independent_reason_sha256": "94e0b2abfc8c67947f1b7c97e5fb01957e6c7177cb172a497ee74a4ef5a9f836",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 1,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:34412fd8bf11747fc7208a09d6f0e1c08bb16ef24a5120fbe2db91e2395539d6",
+      "body_sha256": "e112a324db1df793b74b515ba9774f40a2a46dbcec2ab9e3c0ede8604cd6d05e",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "e4e65797d5f48158e87f95721df49019c6f00ac47fd095b5b5253cc47c505d89",
+      "independent_reason_sha256": "dc010337137f38707afccb295c2c3a351acf16c0db34bd9180a067bca26fbf39",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 2,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0cd536977d5a328a3e2c80599f310320ed3ea242e245d109847f7e0c6ccde7f0",
+      "body_sha256": "03a0ec5d0bf9ba6dd1731fff944d45341b46bf7854bbaed62265ad8e86154299",
+      "classification_sha256": "53f8a1bc26bd1a4d390387858cf92d3402c0e8980c75cebe99d1a8a854612e9f",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "国民投票・広告",
+        "stance": "慎重・反対"
+      },
+      "reason_sha256": "9aae46961b81823c67e3c9bad488db9a3d6bb334a6182e4ada173a8c043cb0de",
+      "independent_reason_sha256": "25be63e29325f75ffd800c93095173720d7b08f06e7f1a79b40104a7dd491f6d",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 3,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:048f0792bfc7f45207fe5c72fda9c749de05cc56948504e2a4167d6abc375a28",
+      "body_sha256": "9725897239c62592130d25dd2ac57b30fb77fad32c2dd57ab6af90c711e6bd75",
+      "classification_sha256": "fafd01fd08b1ccb8900d0fc4f15c1a6aa6ef544bd7beb996267ed845ca55d2e4",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税推進"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "減税の効果",
+        "stance": "減税反対・慎重"
+      },
+      "changes": {
+        "stance": "減税反対・慎重"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "bc54476485de4cc2b8c3caab65bf260903a32f86afd5aefffa0dfa77ef1098df",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 4,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:5d759a8bb4d798d749bc7ebfc3f19813a0343593a1b4f7f3a3dd2491a7deafaa",
+      "body_sha256": "07107973d62009d0355c482b7949c179de7053a9daed554817ef2814d9310d80",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_relevant": true,
+        "is_opinion": true
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "義務化・事故防止",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "a29d31a05233c2e195d829096d3fd03ee67406feb1c1c2a0536537e956691e3b",
+      "independent_reason_sha256": "d90dc6bf358973eb37d1e5fd7c8bc217afc8f5790dcbb52a36e00529fb4d350a",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 5,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0af040edb2557410fde859123fe8afbba579ea7884132d2da3c879373d191e47",
+      "body_sha256": "ef549acf34c74d8713767c028ea1c3cab3a38b5fc22d667bf27ee354c2a52fed",
+      "classification_sha256": "04e6559dac352e81f702b8f2a47d1cc0c7e760814d9b4ad76d349de38c506ceb",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "法案反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "法案反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "法案反対"
+      },
+      "reason_sha256": "466aa05ce0fe9ad4f2805fe4f710374684de61e6f289bf0675741488e0a35d5e",
+      "independent_reason_sha256": "d0fe306031cc2af768e4cfab8325e7e2e20a25e2d223da8ccd95729e6ce8e65d",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 6,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2c0271c102add2726bf21031daf25e167025c3d8a177e24894432323fc2a7ec3",
+      "body_sha256": "777e1cf22ed291c71011ef813faceb0bfcb2879ad7995f6c67e18d003d57239c",
+      "classification_sha256": "37b99d33658eb16878c4d3278fa5a8c7deafd6c7bb91031c01b9d3e2361b3267",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "b79a60902832ffab7c979c5cba47b9c34fd48ba8b335efe11adcfc82ad993061",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 7,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0ca79656012381daba6fc56f0b5a1df33a6b1a6c714368243b77960e0c5f5c2a",
+      "body_sha256": "8214b3fc69b436f08f3c44a26ddb938ac8308f0e244461561a28b2860d7bfb7a",
+      "classification_sha256": "ab3ae3de16ebf89cfe4fdded6440d55fd5d0623381c298854487c6be4224a740",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "改正反対（男系維持）"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "改正反対（男系維持）"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "6d137ab20a7ee4f67ee0b8d40cb27867d20d0fd44f8d8c3d4c6a7537bd738c7b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 8,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:341ddec55cb5c81a217735855aecc5ccc0911510aac4eec7667488271f0d8525",
+      "body_sha256": "4d56244d447c55c6a35831df139ea0d35ad9d307e2d0a3df22ce92ecfd069efe",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "023347e3d3fa5c7b8d9f86a25a4a477f07dbb328b4d5e47633fedae4b06dfc07",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 9,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:1ab30f751614520e5edc6cd68b261e4e9b1e99ec1c14859ad7f2cc2e48ba0678",
+      "body_sha256": "2db9e28d6ce1414f3782abbe1ddba5d9f99088ceadc9fca700fca91b85420b25",
+      "classification_sha256": "b8145afd4e429b459f0a78e0c7a7561ef3bc0a78eca96614cb13ab0c0b61da20",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "文春報道の真偽",
+        "stance": "擁護・懐疑"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "文春報道の真偽",
+        "stance": "擁護・懐疑"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "d573a31b63026c42ab98683b8d2bbb2b9939049451caf2c7e92f4a96776c6f3e",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 10,
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:04f5593e36de6c254bbcc5f1c0b213101af9d9de708e05fe4b6b380c7fbf4cd6",
+      "body_sha256": "6600d995156f7375325f97153f9b8898771955288e8355e3a8b318960c067c43",
+      "classification_sha256": "986367a2b52b0224b7f27f100622d123833046c7603eae980ba18e18248091d1",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "利用者モラル・倫理",
+        "stance": "規制・制限強化支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "route": "change_candidate",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "reason_sha256": "4808a9f8d76448288d9a7096c508e044766222d2a0dd4ac17bc1262ac0578a6c",
+      "independent_reason_sha256": "62750a3caef780c08df54894b127c133274ad7ea5e7c580a5b7d31d5d62cd923",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:36f6bddabf806a407d333b6db2e95cb4d94303e3b08c040f1d8ae251152931bc",
+      "body_sha256": "8d0aed8f336b5e1de7016c977f3f78da72ac16ceda8787e6e9e28c2610733c9f",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "is_opinion": true
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "条件付き・改善要求"
+      },
+      "reason_sha256": "146a46083602efabd28ab3f64b9b430805bfd32f3dfa4e988292c62870d006d2",
+      "independent_reason_sha256": "438ad445b5773aad4342fc22ee22f648764b20b2b96cc75001883880fc767a0a",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 12,
+      "topic": "constitutional-amendment",
+      "record_id_hash": "sha256:0d4552328537e8370075b23638397de84451e7844a0f0cc77a1c4865820d3766",
+      "body_sha256": "21a21d56c7838c3b0775f17a9fba644000c38392c82a2cbc2b78fc6d9c84d181",
+      "classification_sha256": "cd8f74a6956c906ce6ecf1ebe4be62b39ac5f9f75660bc56ec059fae2162102c",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "改憲全般",
+        "stance": "慎重・反対"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "1e02d543c1daf8b8147e09443f228c81b46065effad141ab861afa93ebdecada",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 13,
+      "topic": "consumption-tax-cut",
+      "record_id_hash": "sha256:0494aeaf6cb17a709c4b91977d845c50abb355e82340c0f69384581f3019f3d5",
+      "body_sha256": "86130ba52a40b0f674dfb2758a72e55b938985cc1be83f73664de96a3cc3a702",
+      "classification_sha256": "7b450aaa5b9e3ea1bc45eda8981a8f8d4f97eb2146df90db1df8d021b6b89894",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "公約と政治不信",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "公約と政治不信",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "ab00d5f5f7cb16dd82adde0c99f93f208cf1a455b55d0f8a748b2abc49f2844f",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 14,
+      "topic": "elderly-license-revocation",
+      "record_id_hash": "sha256:5d9e776a71f6e38ea2576db5e9d13ecbfd4cecfcd06a008628af6df12338eb1b",
+      "body_sha256": "05a881f33a50f930d0f8a22ca57b39c7881d37afaf23b99f1df3c47b501c40d1",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "a6adcde69bdb23d89abfdbb6835e45e051bdc56c0adf28bff63807b72ae0b33b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 15,
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0b111e212de81473b02174fdb444d16f6e10fb837efef0ce012b193c620022bb",
+      "body_sha256": "8f24bbd8522935853b17849219878db3d95a5c80c7a3308c23a8628f71591572",
+      "classification_sha256": "5b6c5f67bd4843ba0e5a4000800ce999bd2b8e205baa930d725b05bcee52a4d2",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "都構想・維新",
+        "stance": "法案反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "定義・中身",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "定義・中身",
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "566a12e084c675ac06cf9daf31f45e4c612154beee0cf37243874234655746c4",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 16,
+      "topic": "henoko-student-accident",
+      "record_id_hash": "sha256:2c4965fa7a7fe36880f7b44549545e798e78b6f9aeee069e8cfeecfeda0e9014",
+      "body_sha256": "55aa208b835d067b8dba555c02560af37f7b5fb7cce7a29477bd9b479723c0c8",
+      "classification_sha256": "6619fd17c80e42b08fda123cd5d127a662a2e2ba24c486172c39991b7efbb601",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "安全管理・事故原因",
+        "stance": "中立・情報共有"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "報道・行政対応",
+        "stance": "中立・情報共有"
+      },
+      "changes": {
+        "main_issue": "報道・行政対応"
+      },
+      "route": "hold",
+      "first_route": "candidate",
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "安全管理・事故原因",
+        "stance": "中立・情報共有"
+      },
+      "reason_sha256": "01d77c4cd5d99fac4e102394b5c2d4d7e83bcff67ca223dd9fe46e355ea07c56",
+      "independent_reason_sha256": "835e235f594840b0ef4af6a8cf1a9dbe9a400440609e773851910e1d19007e98",
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 17,
+      "topic": "koshitsu-tenpakai",
+      "record_id_hash": "sha256:0d0395fc8c25bd470b0ea806238c0f2662583def60b001519177d6206b3c60ee",
+      "body_sha256": "22d14284bb40c9580a04056f07437d09c6d9c31de64fc31cb240559e5b7cae7c",
+      "classification_sha256": "ab3ae3de16ebf89cfe4fdded6440d55fd5d0623381c298854487c6be4224a740",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "男系vs女系",
+        "stance": "改正反対（男系維持）"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "68bc3f73ac80a1ca893602c39aa0fb6906927054f8057a8388526dcdd16c557b",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 18,
+      "topic": "school-nickname-ban",
+      "record_id_hash": "sha256:346c0770120db5ce09abc690084c282c0e127f93f67aa4d0cdab79c26812410e",
+      "body_sha256": "aed830790455673ffa3ecc24df7a6603a1590408f47644178887f62233994e00",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "changes": {},
+      "route": "retain_candidate",
+      "first_route": "no_change",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "532d92ad386cbfcbd78174af268e94140ba77f184ddbdc51a2cc5540a6fb0ab6",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "accepted",
+      "adoption_basis": "sampled_batch",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    },
+    {
+      "index": 19,
+      "topic": "takaichi",
+      "record_id_hash": "sha256:1b1ee7e3322298d34065274a1d31cb835e99c7c35932b8d455a6c6deccef333a",
+      "body_sha256": "d5af1eb1f4d92b088c438d7360d974ecd93b6b70cde7141668f6f5140f8f12d2",
+      "classification_sha256": "5a462c467484448ec9f33822348af2c39daa607bc526798ae0724cfd185efba5",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "サナエトークン疑惑",
+        "stance": "擁護・懐疑"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "比較・政治倫理",
+        "stance": "中立・情報"
+      },
+      "changes": {
+        "main_issue": "比較・政治倫理",
+        "stance": "中立・情報"
+      },
+      "route": "hold",
+      "first_route": "uncertain",
+      "independently_checked": false,
+      "independent_proposed": null,
+      "reason_sha256": "42b3c690c93c8783cfa38a2665c3280f09e9ac7eb9929db9939c24bada324e63",
+      "independent_reason_sha256": null,
+      "counts_as_registered_editorial_reread": false,
+      "canonical_applied": false,
+      "adoption_status": "hold",
+      "adoption_basis": "uncertain_or_disagreement",
+      "policy_version": "editorial-adoption-v2",
+      "batch": 25
+    }
+  ],
+  "routes": {
+    "change_candidate": 13,
+    "hold": 39,
+    "retain_candidate": 48
+  },
+  "adoption_counts": {
+    "accepted": 60,
+    "hold": 39,
+    "pending_audit": 1
+  },
+  "independent_records": 42,
+  "proofs": {
+    "batch-21/packet.private.json": "486d7b09a8d7a74cea248de6a1a323836d1af9c14482133b7755d7b211052876",
+    "batch-21/editor.private.json": "193e9917cd25d72a65f74922702acea41bb694ac9e2beeb1d9cad130102734ad",
+    "batch-21/audit.private.json": "846d146f1b8e0e6a09cc8953f7c838fba920d26c4d3db60bce7b69b8851cebf8",
+    "batch-21/quality_gate.private.json": "9344a922563b6014773a865829e98f25c1932423727ae2c3e893c19a57473cf0",
+    "batch-22/packet.private.json": "845a7e174dda49fc6a554d6c3438fc7cd47e18a7c62ae1762498f2f6169d5ec5",
+    "batch-22/editor.private.json": "d2077212c6e8759c0d55eff240ee879259a1418969c48d427e163f55037bca34",
+    "batch-22/audit.private.json": "5fe319f915d4e3f929d9480c1eb446999b1a17ee8957ba03dcca8c8dfc7266d6",
+    "batch-22/quality_gate.private.json": "4e54ec385ceadc1009ca4a5dd72467fb08435dc00df21babe2852d2e6c289854",
+    "batch-23/packet.private.json": "f1f1cb1e018654b1a5b84cc6d3f040097879c3daf6c01e8f1a38a742519ac400",
+    "batch-23/editor.private.json": "94f46a77607642ea08caec488578ab7be36f51726f2f91c59f4b3bb8df125d81",
+    "batch-23/audit.private.json": "393482624f9d5e2e7cf3a96b25e7a6d2bb2fa0c0c94bf0728946ff70f0135937",
+    "batch-23/quality_gate.private.json": "17e3dd07ca6cf9774c67a1635e23964c7abd269a261f97ea6803b4cc5697096d",
+    "batch-24/packet.private.json": "176b632f9371017d55927821c272a544840f285a3faa3a6a6cbcff69041c380e",
+    "batch-24/editor.private.json": "b347d6e3f76e302a4735fd4678148b5d9f91cd14bdf617eeebb9d1864b9b19e2",
+    "batch-24/audit.private.json": "82684b4723ee06bd649eafb9af1ddf33fdd69dd0414d85f02f31aff40ca1bce8",
+    "batch-24/quality_gate.private.json": "aaddf3879b0f905e22f197b760ab07cac7764422c3173070d6c125628e8b9e96",
+    "batch-25/packet.private.json": "3cccabefe2552bacd45995b4a8301b96e5d483ea9994b01898bb8a54955b086e",
+    "batch-25/editor.private.json": "14bd3ea6ca8f2e99af059682c22e9c33c936752effab8cb1ad794c3ce742efad",
+    "batch-25/audit.private.json": "f2766c21f783a84d9026cd44971089defde8f07009cd92e757c6cf0d14b24c76",
+    "batch-25/quality_gate.private.json": "1305ec4e8de5dd42cb0663ad4c191b5c78e6b6579be0b3d37a93d67e34c99c5b"
+  },
+  "policy_sha256": "151972bc9630dfb0f9183c64ca69d7ba1f9c37cbf31f541f3c0670257cd701ff",
+  "canonical_changes": 0,
+  "registered_reread_increment": 0,
+  "codex_tokens": null,
+  "local_model_calls": 0,
+  "generation": {
+    "impacts": [
+      {
+        "topic": "ai-copyright",
+        "changed_records": 3,
+        "before": {
+          "collected": 3812,
+          "opinions": 2593,
+          "issues": {
+            "学習データ・無断利用": 657,
+            "AI生成物の権利・創作性": 165,
+            "利用者モラル・倫理": 657,
+            "法制度・規制整備": 471,
+            "その他": 223,
+            "クリエイター保護・権利": 303,
+            "技術競争・推進": 117
+          },
+          "stances": {
+            "規制・制限強化支持": 1407,
+            "推進・活用支持": 609,
+            "中立・情報": 577
+          }
+        },
+        "after": {
+          "collected": 3812,
+          "opinions": 2593,
+          "issues": {
+            "学習データ・無断利用": 657,
+            "AI生成物の権利・創作性": 165,
+            "利用者モラル・倫理": 656,
+            "法制度・規制整備": 471,
+            "その他": 224,
+            "クリエイター保護・権利": 303,
+            "技術競争・推進": 117
+          },
+          "stances": {
+            "規制・制限強化支持": 1406,
+            "推進・活用支持": 609,
+            "中立・情報": 578
+          }
+        },
+        "source_sha256": "66b304bec266758a31cc55c6761d05ed0cdf4f506d6b44cab070cdae2c208098",
+        "candidate_sha256": "315fbabf2d8c0fac83d4acd429df113685ea4b0e8aede807a18a3a22dad1ecc4"
+      },
+      {
+        "topic": "bukatsu-chiiki",
+        "changed_records": 1,
+        "before": {
+          "collected": 1395,
+          "opinions": 1139,
+          "issues": {
+            "費用・家庭負担": 117,
+            "受け皿・指導者": 164,
+            "制度・移行プロセス": 256,
+            "教育的意義・機会": 215,
+            "地域格差": 12,
+            "教員の働き方": 323,
+            "その他": 52
+          },
+          "stances": {
+            "移行支持": 460,
+            "慎重・反対": 390,
+            "条件付き・改善要求": 241,
+            "中立・情報": 48
+          }
+        },
+        "after": {
+          "collected": 1395,
+          "opinions": 1139,
+          "issues": {
+            "費用・家庭負担": 117,
+            "受け皿・指導者": 163,
+            "制度・移行プロセス": 257,
+            "教育的意義・機会": 215,
+            "地域格差": 12,
+            "教員の働き方": 323,
+            "その他": 52
+          },
+          "stances": {
+            "移行支持": 461,
+            "慎重・反対": 390,
+            "条件付き・改善要求": 240,
+            "中立・情報": 48
+          }
+        },
+        "source_sha256": "fc0ed988847de9df5d926a565c1a55cd4869c074cdb7107d41bd7887a71d1d76",
+        "candidate_sha256": "21b203ee6126677c7cca2f9050aae92519f1d6c31b210285cd8c2431750a6836"
+      },
+      {
+        "topic": "constitutional-amendment",
+        "changed_records": 1,
+        "before": {
+          "collected": 1556,
+          "opinions": 1372,
+          "issues": {
+            "改憲全般": 513,
+            "国民投票・広告": 196,
+            "政党・発議手続き": 118,
+            "情報・議論の質": 51,
+            "9条・自衛隊": 284,
+            "緊急事態条項": 200,
+            "その他": 10
+          },
+          "stances": {
+            "慎重・反対": 946,
+            "中立": 97,
+            "手続き重視": 39,
+            "改正推進": 290
+          }
+        },
+        "after": {
+          "collected": 1556,
+          "opinions": 1372,
+          "issues": {
+            "改憲全般": 512,
+            "国民投票・広告": 196,
+            "政党・発議手続き": 119,
+            "情報・議論の質": 51,
+            "9条・自衛隊": 284,
+            "緊急事態条項": 200,
+            "その他": 10
+          },
+          "stances": {
+            "慎重・反対": 946,
+            "中立": 97,
+            "手続き重視": 39,
+            "改正推進": 290
+          }
+        },
+        "source_sha256": "60ac55ecc87fef61358e6a9ce6cc75df6cbf9684d7e6742ef8d531cdf55dd5e9",
+        "candidate_sha256": "ca47a64e70be461ead1be046c9d90c239563ac37ede65b870f42c254c5683c82"
+      },
+      {
+        "topic": "consumption-tax-cut",
+        "changed_records": 3,
+        "before": {
+          "collected": 3762,
+          "opinions": 3358,
+          "issues": {
+            "減税の対象範囲": 761,
+            "給付など他策との比較": 219,
+            "公約と政治不信": 1198,
+            "減税の効果": 625,
+            "財源と社会保障": 416,
+            "その他": 48,
+            "事業者の実務負担": 91
+          },
+          "stances": {
+            "条件付き賛成・政府案に不満": 585,
+            "減税推進": 1631,
+            "減税反対・慎重": 876,
+            "中立・情報": 266
+          }
+        },
+        "after": {
+          "collected": 3762,
+          "opinions": 3358,
+          "issues": {
+            "減税の対象範囲": 761,
+            "給付など他策との比較": 220,
+            "公約と政治不信": 1197,
+            "減税の効果": 625,
+            "財源と社会保障": 416,
+            "その他": 48,
+            "事業者の実務負担": 91
+          },
+          "stances": {
+            "条件付き賛成・政府案に不満": 585,
+            "減税推進": 1631,
+            "減税反対・慎重": 875,
+            "中立・情報": 267
+          }
+        },
+        "source_sha256": "ebb2910087fed775f13e6be3f3f243632f03ae4d4589c1876dd1f795ce5ed5ad",
+        "candidate_sha256": "9e0663811a537395db191d9d0a76e0743393296f8a3e5ec8a00bd63694f73ab6"
+      },
+      {
+        "topic": "fukushuto",
+        "changed_records": 1,
+        "before": {
+          "collected": 1733,
+          "opinions": 1453,
+          "issues": {
+            "防災・災害": 221,
+            "定義・中身": 232,
+            "都構想・維新": 407,
+            "候補地": 300,
+            "その他": 89,
+            "優先順位": 140,
+            "費用・財源": 64
+          },
+          "stances": {
+            "法案反対": 964,
+            "法案賛成・推進": 291,
+            "中立・情報": 198
+          }
+        },
+        "after": {
+          "collected": 1733,
+          "opinions": 1454,
+          "issues": {
+            "防災・災害": 221,
+            "定義・中身": 232,
+            "都構想・維新": 407,
+            "候補地": 300,
+            "その他": 89,
+            "優先順位": 140,
+            "費用・財源": 65
+          },
+          "stances": {
+            "法案反対": 964,
+            "法案賛成・推進": 291,
+            "中立・情報": 199
+          }
+        },
+        "source_sha256": "d0d46700f58a2c15f321f7d7d62a372ff5a508ca1a4c2b001e24361aabc43c0d",
+        "candidate_sha256": "570f55a0e001f069ff406f274d43a9c7561757abcd51d32793ad7463251da706"
+      },
+      {
+        "topic": "henoko-student-accident",
+        "changed_records": 1,
+        "before": {
+          "collected": 480,
+          "opinions": 373,
+          "issues": {
+            "平和教育の萎縮": 26,
+            "報道・行政対応": 69,
+            "政治的中立性": 44,
+            "安全管理・事故原因": 107,
+            "追悼・被害者の尊厳": 50,
+            "政治利用・基地問題": 77
+          },
+          "stances": {
+            "文科省判断を支持": 47,
+            "文科省判断に反発": 20,
+            "論点を切り分ける": 300,
+            "中立・情報共有": 6
+          }
+        },
+        "after": {
+          "collected": 480,
+          "opinions": 373,
+          "issues": {
+            "平和教育の萎縮": 26,
+            "報道・行政対応": 69,
+            "政治的中立性": 44,
+            "安全管理・事故原因": 107,
+            "追悼・被害者の尊厳": 50,
+            "政治利用・基地問題": 77
+          },
+          "stances": {
+            "文科省判断を支持": 47,
+            "文科省判断に反発": 20,
+            "論点を切り分ける": 300,
+            "中立・情報共有": 6
+          }
+        },
+        "source_sha256": "3cca77f41e89b60a6a2a9057d6242bd8e149f72150d6ef739d268f38ad8400c2",
+        "candidate_sha256": "65ae2d990b8229e3c67c25ab6ed46a18e3dd9dd126dbd53f55b6f98fbb8a6d81"
+      },
+      {
+        "topic": "koshitsu-tenpakai",
+        "changed_records": 2,
+        "before": {
+          "collected": 1605,
+          "opinions": 1282,
+          "issues": {
+            "立法手続き・民主主義": 185,
+            "旧宮家養子縁組": 251,
+            "愛子さま・皇族の地位": 133,
+            "その他": 150,
+            "男系vs女系": 402,
+            "女性天皇・女系天皇": 161
+          },
+          "stances": {
+            "中立・情報": 260,
+            "改正反対（男系維持）": 665,
+            "改正賛成（女系容認）": 357
+          }
+        },
+        "after": {
+          "collected": 1605,
+          "opinions": 1282,
+          "issues": {
+            "立法手続き・民主主義": 184,
+            "旧宮家養子縁組": 251,
+            "愛子さま・皇族の地位": 133,
+            "その他": 151,
+            "男系vs女系": 402,
+            "女性天皇・女系天皇": 161
+          },
+          "stances": {
+            "中立・情報": 260,
+            "改正反対（男系維持）": 665,
+            "改正賛成（女系容認）": 357
+          }
+        },
+        "source_sha256": "aff46757fddab66036f03f3685d0f9d1e7f40c4161160a4d4a848beab8c7569f",
+        "candidate_sha256": "12a0fe1db9ab8ff747089a7203f5f4db8e02e651d854571352a93261d6832c9f"
+      },
+      {
+        "topic": "takaichi",
+        "changed_records": 1,
+        "before": {
+          "collected": 761,
+          "opinions": 621,
+          "issues": {
+            "中傷動画・説明責任": 315,
+            "文春報道の真偽": 105,
+            "松井健氏・工作の実態": 37,
+            "比較・政治倫理": 41,
+            "サナエトークン疑惑": 122,
+            "その他": 1
+          },
+          "stances": {
+            "批判・追及": 329,
+            "擁護・懐疑": 249,
+            "慎重・保留": 38,
+            "中立・情報": 5
+          }
+        },
+        "after": {
+          "collected": 761,
+          "opinions": 621,
+          "issues": {
+            "中傷動画・説明責任": 314,
+            "文春報道の真偽": 105,
+            "松井健氏・工作の実態": 37,
+            "比較・政治倫理": 41,
+            "サナエトークン疑惑": 123,
+            "その他": 1
+          },
+          "stances": {
+            "批判・追及": 329,
+            "擁護・懐疑": 249,
+            "慎重・保留": 38,
+            "中立・情報": 5
+          }
+        },
+        "source_sha256": "aee97f77330a187e3264a31a35ce9736c953cbfaae73979972bb0e96e39e0d74",
+        "candidate_sha256": "7c7f0a3c2063573057a0cea7ca355155e61f6ad40d94ad68b0a844afae7efa1e"
+      }
+    ],
+    "source_unchanged": true,
+    "idempotent": true,
+    "vote_and_protected_tags_unchanged": true,
+    "candidate_editorial_edits": [],
+    "elapsed_seconds": 32.23,
+    "checks": [
+      {
+        "args": [
+          "scripts/build_public_registry.py",
+          "--all"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/ai-copyright_hermes_classified.json",
+          "--output",
+          "data/verification/ai-copyright.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "ai-copyright"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/build_bukatsu_arena.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/bukatsu-chiiki_hermes_classified.json",
+          "--output",
+          "data/verification/bukatsu-chiiki.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "bukatsu-chiiki"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/constitutional_amendment_hermes_arena_classified.json",
+          "--output",
+          "data/verification/constitutional-amendment.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "constitutional-amendment"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/consumption-tax-cut_hermes_arena_classified.json",
+          "--output",
+          "data/verification/consumption-tax-cut.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "consumption-tax-cut"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "fukushuto"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/henoko/henoko_hermes_arena_classified.json",
+          "--output",
+          "data/verification/henoko-student-accident.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "henoko-student-accident"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "koshitsu-tenpakai"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "takaichi"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/seo/apply_theme_trust.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_portal_stats.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/build_public_registry.py",
+          "--all"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/ai-copyright_hermes_classified.json",
+          "--output",
+          "data/verification/ai-copyright.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "ai-copyright"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/build_bukatsu_arena.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/bukatsu-chiiki_hermes_classified.json",
+          "--output",
+          "data/verification/bukatsu-chiiki.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "bukatsu-chiiki"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/constitutional_amendment_hermes_arena_classified.json",
+          "--output",
+          "data/verification/constitutional-amendment.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "constitutional-amendment"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/consumption-tax-cut_hermes_arena_classified.json",
+          "--output",
+          "data/verification/consumption-tax-cut.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "consumption-tax-cut"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "fukushuto"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verification_data.py",
+          "--input",
+          "social-samples/henoko/henoko_hermes_arena_classified.json",
+          "--output",
+          "data/verification/henoko-student-accident.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "henoko-student-accident"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "koshitsu-tenpakai"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_issue_counts.py",
+          "takaichi"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/seo/apply_theme_trust.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/sync_portal_stats.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "ai-copyright"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "ai-copyright"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "bukatsu-chiiki"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "bukatsu-chiiki"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "constitutional-amendment"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "constitutional-amendment"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "consumption-tax-cut"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "consumption-tax-cut"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "fukushuto"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "fukushuto"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "henoko-student-accident"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "henoko-student-accident"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "koshitsu-tenpakai"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "koshitsu-tenpakai"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_theme_page.py",
+          "takaichi"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_number_provenance.py",
+          "takaichi"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_top_page.py"
+        ],
+        "exit_code": 0
+      },
+      {
+        "args": [
+          "scripts/verify_public_registry.py",
+          "--against-private"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "changed_hashes": {
+      "docs/takaichi-reaction-map-standard.html": "d70e10843cfee1c4f2c4d0851e32fa3d88febe9b4ef46d268d922f5c0989c201",
+      "docs/index.html": "8aa99b68c34f00fe2660cae497c5b3b1c40716cc897a465e42a2560039318baf",
+      "docs/takaichi-arena-data.js": "cce1d7c6f0b56bf5ec5529babde93dd41633c11dec134bf4daf6c54fbe355880",
+      "docs/constitutional-amendment-reaction-map.html": "64ee2f2f0f6af162b8348a8b4bd23f0bd4d952b7f365fe9c798b5a3dc4b38b21",
+      "docs/koshitsu-tenpakai-reaction-map.html": "05f0122ef453457ac9b7ee8b2cb4a8c126779b501e0cb06b1d11a5f71fa30c5f",
+      "docs/ai-copyright-reaction-map.html": "0ee6240db3c7dc0a05e837cb11364e8637eb4f8fac6ec2ea0e694d55c23269c3",
+      "docs/consumption-tax-cut-reaction-map.html": "38f63339b9bf461f614681b42f0b34fa9519fa918df26acfa7493da6af83f250",
+      "docs/bukatsu-chiiki-reaction-map.html": "8ccaa239b27d0b60ebf7cd63cabc4a15914a5ff1cd5a042a528baf91e89b0009",
+      "docs/ai-copyright-arena-data.js": "fc2c9de5d599b9c23a6505da4a92063508296cf8d84cc4d756cbc28ce574d4ef",
+      "docs/fukushuto-reaction-map.html": "58a5a7b1403f75f08f4187ac08d1429721c00d5c916e6e008c584bcbbd30e882",
+      "docs/fukushuto-claims.json": "d747161e6511c41031c5afaa106285a6dc95842374d8d591f7f968112037c668",
+      "docs/bike-blue-ticket-reaction-map.html": "2f8273838eb46ecba1654c75b18c95e943e0037a9331e7fd8cf3678c668c0acf",
+      "docs/verification/constitutional-amendment-claims.json": "6b2ecdb19e48b4db146ff85c33469d9e9032e065ec119e70c30d07a51cc7063a",
+      "data/public/catalog.json": "4a32bdb7f1b165331cb7576323d32eb63aea57561431b517b858129921624cf8",
+      "data/public/themes/koshitsu-tenpakai.json": "a9c6caf7fc39aae815ae798a601067eddfcc1dabe69791a739e1adc7a287c7f4",
+      "data/public/themes/ai-copyright.json": "2d3a04bbc29be06c897684953e3a065eac58867700bb61090f56ce57d49bf9cf",
+      "data/public/themes/consumption-tax-cut.json": "307ac584776e82eca16d5e574210b812f19a0c99919c896bae18fc4df36c8a57",
+      "data/public/themes/constitutional-amendment.json": "8adcb7c3cf677e270ba4b2b6069b150f3c7f6d3ebc5421d81cf11473e5c0ab83",
+      "data/public/themes/henoko-student-accident.json": "3bb167ca6aac9c15fa8d74981768da1b9a4ac2c08865d2efb45bbcf0d30af3e4",
+      "data/public/themes/fukushuto.json": "686662ceacb0effbf81851f2c5bad0997a3a9109acf95780a21805ab96a1060d",
+      "data/public/themes/bukatsu-chiiki.json": "fbd49eeb5663f5b4534989e1376f3b627f6f4f67e898f7cd14d8ddb303417f09"
+    }
+  }
+}

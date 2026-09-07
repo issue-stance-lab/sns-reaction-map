@@ -1,0 +1,31 @@
+{
+  "recorded_by": "parent",
+  "independent_reviewer": "/root/to1000_auditor",
+  "scope": "code and evidence registry audit; no new body review credit",
+  "result": "no_remaining_blocker",
+  "fixed_finding": "Evidence-insufficient or reason-conflicting retained samples now block unaudited records in the same topic and batch.",
+  "checks": [
+    "1000 adoption decisions rebuilt from evidence",
+    "1080 work records validated",
+    "supplemental records version checked",
+    "accepted changes only enter generation",
+    "candidate numeric/map updates idempotent",
+    "henoko split and neutral counts displayed separately",
+    "original provenance verifier unchanged"
+  ],
+  "source_sha256": {
+    "scripts/editorial_acceptance.py": "151972bc9630dfb0f9183c64ca69d7ba1f9c37cbf31f541f3c0670257cd701ff",
+    "scripts/assess_prior_editorial.py": "a57b20d85c750e0afdbabd13f0e2ad464aebcb60ac3bd016a5a25afb844b08a9",
+    "scripts/verify_editorial_wave.py": "6196637d1021a3f2726621a6dee5a9563ac3accdc5c0250c85d574351fde1c70",
+    "scripts/verify_editorial_thousand.py": "21ea358236eb598dfaa65927e59055a2bbeff77850ce4ef0ef019250eb1a35be",
+    "scripts/verify_editorial_hundred.py": "a9ce0fb58009f8cf6f6309ae56220b1e33d335c7152d291311a21bccb1184011",
+    "scripts/prepare_editorial_candidate_text.py": "ac25b4877fd76f9b372e29b8456337553e5c7055f9d028d18075e370348355d1",
+    "scripts/build_henoko_arena.py": "34a5029431c9ca3b6b97815288505cba8c9373e3559f7a165ee64f96c324e2ad"
+  },
+  "full_tests": {
+    "count": 700,
+    "passed": true
+  },
+  "canonical_applied": 0,
+  "codex_tokens": null
+}

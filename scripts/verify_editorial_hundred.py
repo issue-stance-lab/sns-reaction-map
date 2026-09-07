@@ -49,7 +49,7 @@ def collect(run):
             'canonical_changes':0,'registered_reread_increment':0,'local_model_calls':0,'codex_tokens':'not_measured'},source
 
 
-def verify(root,run,out,*,collected=None):
+def verify(root,run,out,*,collected=None,prepare_candidate=None):
     root,run,out=map(Path,[root,run,out]);started=time.time()
     if out.exists() or out.resolve().is_relative_to(root.resolve()):raise ValueError('new external output directory required')
     aggregate,sources=collect(run) if collected is None else collected
@@ -83,6 +83,7 @@ def verify(root,run,out,*,collected=None):
         dump(path,candidate)
         impacts.append({'topic':t,'changed_records':len(changes),'before':counts(original),'after':counts(candidate),
                         'source_sha256':canon_hashes[t],'candidate_sha256':sha(path)})
+    candidate_edits=prepare_candidate(tree) if prepare_candidate else []
     logs=[]
     def command(args):
         r=subprocess.run([sys.executable,*args],cwd=tree,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
@@ -94,7 +95,10 @@ def verify(root,run,out,*,collected=None):
         command(['scripts/build_public_registry.py','--all'])
         for t,adapter in sorted(adapters.items()):
             page=tree/meta[t]['html'];canonical=tree/meta[t]['sample_file']
-            if t=='bukatsu-chiiki':command(['scripts/build_bukatsu_arena.py'])
+            if t=='bukatsu-chiiki':
+                command(['scripts/build_bukatsu_arena.py'])
+                from scripts.prepare_editorial_candidate_text import sync_bukatsu_summary
+                sync_bukatsu_summary(tree)
             else:
                 args=[tree,canonical,page,page]
                 if len(inspect.signature(adapter._run_builder).parameters)==5:args.append(tree/adapter.ARENA_DATA)
@@ -123,7 +127,7 @@ def verify(root,run,out,*,collected=None):
     command(['scripts/verify_top_page.py']);command(['scripts/verify_public_registry.py','--against-private'])
     if any(sha(root/rel)!=value for rel,value in before.items()):raise ValueError('source tree changed during generation')
     aggregate.update({'generation':{'impacts':impacts,'source_unchanged':True,'idempotent':True,'vote_and_protected_tags_unchanged':True,
-                    'elapsed_seconds':round(time.time()-started,2),'checks':[{'args':r['args'],'exit_code':r['exit_code']} for r in logs],
+                    'candidate_editorial_edits':candidate_edits,'elapsed_seconds':round(time.time()-started,2),'checks':[{'args':r['args'],'exit_code':r['exit_code']} for r in logs],
                     'changed_hashes':{rel:value for rel,value in first.items() if not (root/rel).exists() or sha(root/rel)!=value}}})
     dump(out/'report.json',aggregate);return aggregate
 

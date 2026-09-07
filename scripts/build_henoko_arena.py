@@ -446,6 +446,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
     page = replace_number(page, r"<span>(\d+)件 \| Hermes再分類", [total], "SNS反応マップの見出し")
     page = replace_number(page, r"<span>(\d+)件 Hermes再分類</span>", [total], "論点別Xの声の見出し")
+    page = political_split_summary(page, stats["政治利用・基地問題"])
     for pattern, values, label in issue_rewrites(stats):
         page = replace_number(page, pattern, values, label)
     return page
@@ -486,6 +487,16 @@ def _substitute(found: re.Match[str], values: list[int]) -> str:
         cursor = end
     pieces.append(text[cursor - found.start() :])
     return "".join(pieces)
+
+
+def political_split_summary(page: str, stats: IssueStats) -> str:
+    """Keep the two editorial categories visible instead of an unexplained sum."""
+    pattern = r"<strong>(?:事実整理・責任追及（\d+件）|論点の切り分け（\d+件）・中立情報（\d+件）)</strong>"
+    replacement = f"<strong>論点の切り分け（{stats.split}件）・中立情報（{stats.neutral}件）</strong>"
+    page, matched = re.subn(pattern, lambda _: replacement, page)
+    if matched != 1:
+        raise IssueCountError("政治利用の立場内訳が1か所必要です")
+    return page
 
 
 def issue_rewrites(stats: dict[str, IssueStats]) -> list[tuple[str, list[int], str]]:
@@ -536,11 +547,6 @@ def issue_rewrites(stats: dict[str, IssueStats]) -> list[tuple[str, list[int], s
             r"(\d+)%が「切り分け・中立」で、文科省判断",
             [seiji.share(seiji.split_and_neutral)],
             "政治利用の内訳文",
-        ),
-        (
-            r"<strong>事実整理・責任追及（(\d+)件）</strong>",
-            [seiji.split_and_neutral],
-            "政治利用の切り分け件数",
         ),
         (
             r"(\d+)%が「切り分け・中立」で事実確認",
@@ -595,6 +601,7 @@ def build_page(
         page, r"<span>(\d+)件 \| Hermes再分類", [total], "SNS反応マップの見出し"
     )
     page = replace_number(page, r"<span>(\d+)件 Hermes再分類</span>", [total], "論点別Xの声の見出し")
+    page = political_split_summary(page, stats["政治利用・基地問題"])
     for pattern, values, label in issue_rewrites(stats):
         page = replace_number(page, pattern, values, label)
     return page
