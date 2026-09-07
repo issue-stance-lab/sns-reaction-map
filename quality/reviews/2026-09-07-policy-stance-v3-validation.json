@@ -1,0 +1,1052 @@
+{
+  "schema_version": 1,
+  "scope": "Policy stance mapping v3 bounded validation; not an accuracy estimate or production application.",
+  "spec_sha256": "4257382de41c30481b530cb3dd6dd0dfff16f02198b8c4ef0ca6f0e9a2c8dbb9",
+  "packet_fingerprint": "0dac0174f567d42d1484ce9ef57680500bee753c9a1db744daf9abb90a4e1bc7",
+  "counts": {
+    "agreement": 18,
+    "ai-copyright_agreement": 8,
+    "known_boundary_agreement": 2,
+    "fukushuto_agreement": 10,
+    "unused_twenty_agreement": 16,
+    "disagreement": 4,
+    "ai-copyright_disagreement": 3,
+    "unused_twenty_disagreement": 4,
+    "fukushuto_disagreement": 1
+  },
+  "field_agreements": {
+    "candidate_four_fields": 19,
+    "decision_route": 20,
+    "ai_use_position": 11,
+    "fukushuto_target_scope": 10,
+    "fukushuto_target_stance": 11,
+    "fukushuto_whole_policy_stance": 10,
+    "fukushuto_aggregation_route": 10
+  },
+  "field_denominators": {
+    "candidate_four_fields": 22,
+    "decision_route": 22,
+    "ai_use_position": 11,
+    "fukushuto_target_scope": 11,
+    "fukushuto_target_stance": 11,
+    "fukushuto_whole_policy_stance": 11,
+    "fukushuto_aggregation_route": 11
+  },
+  "comparison_definition": "Exact agreement compares structured fields only. Free-form stance_target, evidence, and reason wording are preserved privately but do not create false disagreements.",
+  "known_boundary_checks": {
+    "known-ai-04": {
+      "reviewer_a_matches_v3": true,
+      "reviewer_b_matches_v3": true
+    },
+    "known-fuku-18": {
+      "reviewer_a_matches_v3": true,
+      "reviewer_b_matches_v3": true
+    }
+  },
+  "target_scope_counts": {
+    "reviewer_a": {
+      "local_bid": 6,
+      "whole_policy": 3,
+      "unknown": 1,
+      "other": 1
+    },
+    "reviewer_b": {
+      "local_bid": 6,
+      "whole_policy": 4,
+      "other": 1
+    }
+  },
+  "records": [
+    {
+      "case_id": "known-ai-04",
+      "set": "known_boundary",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:1b5bfd32334d90022ba2c9b13e5b4acbc4bf760f535d158090462e17014af98f",
+      "body_sha256": "1622f682f7e4789d5e0057f4133f495069d319a43b0b2e1f04e791a12413c739",
+      "selection_reason": "known_boundary",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "known-ai-04",
+        "record_id_hash": "sha256:1b5bfd32334d90022ba2c9b13e5b4acbc4bf760f535d158090462e17014af98f",
+        "body_sha256": "1622f682f7e4789d5e0057f4133f495069d319a43b0b2e1f04e791a12413c739",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "AI生成物の権利・創作性",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "known-ai-04",
+        "record_id_hash": "sha256:1b5bfd32334d90022ba2c9b13e5b4acbc4bf760f535d158090462e17014af98f",
+        "body_sha256": "1622f682f7e4789d5e0057f4133f495069d319a43b0b2e1f04e791a12413c739",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "AI生成物の権利・創作性",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "known-fuku-18",
+      "set": "known_boundary",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:32edf6c7a4377aa9d5208a651e5fe4eddf9b025e6d6f8d2bc6229da1edda8bb6",
+      "body_sha256": "170c52ef5153d73db1284eac47be6bf1050e63e3ff323ea24dc17ae82a179f63",
+      "selection_reason": "known_boundary",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "known-fuku-18",
+        "record_id_hash": "sha256:32edf6c7a4377aa9d5208a651e5fe4eddf9b025e6d6f8d2bc6229da1edda8bb6",
+        "body_sha256": "170c52ef5153d73db1284eac47be6bf1050e63e3ff323ea24dc17ae82a179f63",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "費用・財源",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      },
+      "reviewer_b": {
+        "case_id": "known-fuku-18",
+        "record_id_hash": "sha256:32edf6c7a4377aa9d5208a651e5fe4eddf9b025e6d6f8d2bc6229da1edda8bb6",
+        "body_sha256": "170c52ef5153d73db1284eac47be6bf1050e63e3ff323ea24dc17ae82a179f63",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "費用・財源",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      }
+    },
+    {
+      "case_id": "ai-new-01",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0e8160f99af596fd1955d7b9d63d3dfd6c269fd0aa57fe2b9196802e8533c40f",
+      "body_sha256": "75f1a3ab06d75febbe2ec053d885f066a58b9f88012b69e11de6804089c7e656",
+      "selection_reason": "use_and_rights_anxiety",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-01",
+        "record_id_hash": "sha256:0e8160f99af596fd1955d7b9d63d3dfd6c269fd0aa57fe2b9196802e8533c40f",
+        "body_sha256": "75f1a3ab06d75febbe2ec053d885f066a58b9f88012b69e11de6804089c7e656",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "AI生成物の権利・創作性",
+          "stance": "推進・活用支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "support",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-01",
+        "record_id_hash": "sha256:0e8160f99af596fd1955d7b9d63d3dfd6c269fd0aa57fe2b9196802e8533c40f",
+        "body_sha256": "75f1a3ab06d75febbe2ec053d885f066a58b9f88012b69e11de6804089c7e656",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "AI生成物の権利・創作性",
+          "stance": "推進・活用支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "support",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-02",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:03327b26e38b84a53e13caeba7c307cabd35289c0b24a9d235d76935e500c548",
+      "body_sha256": "6d47071b36c73a3f6d669e0e92910950410e547a7109eace5f76c730d5ee3d90",
+      "selection_reason": "rights_view_negative",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-02",
+        "record_id_hash": "sha256:03327b26e38b84a53e13caeba7c307cabd35289c0b24a9d235d76935e500c548",
+        "body_sha256": "6d47071b36c73a3f6d669e0e92910950410e547a7109eace5f76c730d5ee3d90",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "AI生成物の権利・創作性",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-02",
+        "record_id_hash": "sha256:03327b26e38b84a53e13caeba7c307cabd35289c0b24a9d235d76935e500c548",
+        "body_sha256": "6d47071b36c73a3f6d669e0e92910950410e547a7109eace5f76c730d5ee3d90",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "AI生成物の権利・創作性",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-03",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0177abee2bbc334897ca2efb0910075666a9d3eace000e41c5a486663d709f93",
+      "body_sha256": "83b6a3f8d134d5840b559832dfc28187796f3251d00ab05f69b02dc25a84d074",
+      "selection_reason": "legal_view_only",
+      "outcome": "disagreement",
+      "different_fields": [
+        "candidate"
+      ],
+      "reviewer_a": {
+        "case_id": "ai-new-03",
+        "record_id_hash": "sha256:0177abee2bbc334897ca2efb0910075666a9d3eace000e41c5a486663d709f93",
+        "body_sha256": "83b6a3f8d134d5840b559832dfc28187796f3251d00ab05f69b02dc25a84d074",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": false,
+          "main_issue": "法制度・規制整備",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-03",
+        "record_id_hash": "sha256:0177abee2bbc334897ca2efb0910075666a9d3eace000e41c5a486663d709f93",
+        "body_sha256": "83b6a3f8d134d5840b559832dfc28187796f3251d00ab05f69b02dc25a84d074",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "法制度・規制整備",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-04",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:00ba77c4319a0e5cb36de6c6d97251e5ccedeeed49f09e7078c6545918b030e4",
+      "body_sha256": "3924d955c45312bc8da529f5c1e18404eb980bbe25264288be93519312c47e97",
+      "selection_reason": "explicit_use_support_with_limits",
+      "outcome": "disagreement",
+      "different_fields": [
+        "candidate"
+      ],
+      "reviewer_a": {
+        "case_id": "ai-new-04",
+        "record_id_hash": "sha256:00ba77c4319a0e5cb36de6c6d97251e5ccedeeed49f09e7078c6545918b030e4",
+        "body_sha256": "3924d955c45312bc8da529f5c1e18404eb980bbe25264288be93519312c47e97",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "技術競争・推進",
+          "stance": "推進・活用支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "support",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-04",
+        "record_id_hash": "sha256:00ba77c4319a0e5cb36de6c6d97251e5ccedeeed49f09e7078c6545918b030e4",
+        "body_sha256": "3924d955c45312bc8da529f5c1e18404eb980bbe25264288be93519312c47e97",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "利用者モラル・倫理",
+          "stance": "推進・活用支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "support",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-05",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:01bc72766c93bb41e22eab71e039eea1dbedb3a32ebea31f817958f7206cdbe7",
+      "body_sha256": "bb638826fd06af037901b1ea711470a3f5787a379fa77161799efae3f6660bfa",
+      "selection_reason": "explicit_use_benefit",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-05",
+        "record_id_hash": "sha256:01bc72766c93bb41e22eab71e039eea1dbedb3a32ebea31f817958f7206cdbe7",
+        "body_sha256": "bb638826fd06af037901b1ea711470a3f5787a379fa77161799efae3f6660bfa",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "技術競争・推進",
+          "stance": "推進・活用支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "support",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-05",
+        "record_id_hash": "sha256:01bc72766c93bb41e22eab71e039eea1dbedb3a32ebea31f817958f7206cdbe7",
+        "body_sha256": "bb638826fd06af037901b1ea711470a3f5787a379fa77161799efae3f6660bfa",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "技術競争・推進",
+          "stance": "推進・活用支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "support",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-06",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:008079972da87ba701772933e0cfc834f70af4550651e68352878c7b11a2401c",
+      "body_sha256": "c0349c22fc48c91cc8ba491a0a3d8da1486b99adf034cdf1d9a01c9ea70c9bad",
+      "selection_reason": "training_harm",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-06",
+        "record_id_hash": "sha256:008079972da87ba701772933e0cfc834f70af4550651e68352878c7b11a2401c",
+        "body_sha256": "c0349c22fc48c91cc8ba491a0a3d8da1486b99adf034cdf1d9a01c9ea70c9bad",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "学習データ・無断利用",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "restrict",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-06",
+        "record_id_hash": "sha256:008079972da87ba701772933e0cfc834f70af4550651e68352878c7b11a2401c",
+        "body_sha256": "c0349c22fc48c91cc8ba491a0a3d8da1486b99adf034cdf1d9a01c9ea70c9bad",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "学習データ・無断利用",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "restrict",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-07",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:02b931696f0c84c04af7e0562dcac6e5da76ae2acb2b9df462d77a4ca3271813",
+      "body_sha256": "fba4706d640f6b813d1c0fc8292736f3d38ecee3c1924f082a6936ee4265fd22",
+      "selection_reason": "use_restriction",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-07",
+        "record_id_hash": "sha256:02b931696f0c84c04af7e0562dcac6e5da76ae2acb2b9df462d77a4ca3271813",
+        "body_sha256": "fba4706d640f6b813d1c0fc8292736f3d38ecee3c1924f082a6936ee4265fd22",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "利用者モラル・倫理",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "restrict",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-07",
+        "record_id_hash": "sha256:02b931696f0c84c04af7e0562dcac6e5da76ae2acb2b9df462d77a4ca3271813",
+        "body_sha256": "fba4706d640f6b813d1c0fc8292736f3d38ecee3c1924f082a6936ee4265fd22",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "利用者モラル・倫理",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "restrict",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-08",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0434abff4a4b7c819576f3c057feaea70633b4fa6267eb70f2947cb01db669e6",
+      "body_sha256": "b546fa9937add9b6be166848ef3c89680fd00d681b99f095adaf91a17d887413",
+      "selection_reason": "positive_expression_and_training_ban",
+      "outcome": "disagreement",
+      "different_fields": [
+        "decision_route"
+      ],
+      "reviewer_a": {
+        "case_id": "ai-new-08",
+        "record_id_hash": "sha256:0434abff4a4b7c819576f3c057feaea70633b4fa6267eb70f2947cb01db669e6",
+        "body_sha256": "b546fa9937add9b6be166848ef3c89680fd00d681b99f095adaf91a17d887413",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "学習データ・無断利用",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "criteria_needed",
+        "ai_use_position": "mixed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-08",
+        "record_id_hash": "sha256:0434abff4a4b7c819576f3c057feaea70633b4fa6267eb70f2947cb01db669e6",
+        "body_sha256": "b546fa9937add9b6be166848ef3c89680fd00d681b99f095adaf91a17d887413",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "学習データ・無断利用",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "mixed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-09",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0222b4dca037f9dd2a6c98db3798f52e465d4989726379500c237c40a3cc06d5",
+      "body_sha256": "33afdf27bbcc0aee09db6c9bbf6ae8638c802c2f9b84d30bb00035a31d18cabc",
+      "selection_reason": "support_and_restriction",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-09",
+        "record_id_hash": "sha256:0222b4dca037f9dd2a6c98db3798f52e465d4989726379500c237c40a3cc06d5",
+        "body_sha256": "33afdf27bbcc0aee09db6c9bbf6ae8638c802c2f9b84d30bb00035a31d18cabc",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "法制度・規制整備",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "criteria_needed",
+        "ai_use_position": "mixed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-09",
+        "record_id_hash": "sha256:0222b4dca037f9dd2a6c98db3798f52e465d4989726379500c237c40a3cc06d5",
+        "body_sha256": "33afdf27bbcc0aee09db6c9bbf6ae8638c802c2f9b84d30bb00035a31d18cabc",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "法制度・規制整備",
+          "stance": "規制・制限強化支持"
+        },
+        "decision_route": "criteria_needed",
+        "ai_use_position": "mixed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "ai-new-10",
+      "set": "unused_twenty",
+      "topic": "ai-copyright",
+      "record_id_hash": "sha256:0387b313756a83e7b6b4fff6983d803d46a9b65344d14c195905df2e7edd3eb6",
+      "body_sha256": "d80aa0d2dcac20e322720dcd0b8b04cc2e552c8dc3b6086b6aa7e4ef97fe682b",
+      "selection_reason": "opponent_criticism_boundary",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "ai-new-10",
+        "record_id_hash": "sha256:0387b313756a83e7b6b4fff6983d803d46a9b65344d14c195905df2e7edd3eb6",
+        "body_sha256": "d80aa0d2dcac20e322720dcd0b8b04cc2e552c8dc3b6086b6aa7e4ef97fe682b",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "技術競争・推進",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      },
+      "reviewer_b": {
+        "case_id": "ai-new-10",
+        "record_id_hash": "sha256:0387b313756a83e7b6b4fff6983d803d46a9b65344d14c195905df2e7edd3eb6",
+        "body_sha256": "d80aa0d2dcac20e322720dcd0b8b04cc2e552c8dc3b6086b6aa7e4ef97fe682b",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "技術競争・推進",
+          "stance": "中立・情報"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": "unexpressed",
+        "target_scope": null,
+        "target_stance": null,
+        "whole_policy_stance": null,
+        "aggregation_route": null
+      }
+    },
+    {
+      "case_id": "fuku-new-01",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:1699669d8288f2ffb567fd3dbbebf7dba5743104d90912e2b50c309de322c854",
+      "body_sha256": "bbdf6950d0e9db3752ad46fd3b3fe86daaa78f19ddc647567b2a1d88a43f579f",
+      "selection_reason": "local_bid_oppose_fukuoka",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-01",
+        "record_id_hash": "sha256:1699669d8288f2ffb567fd3dbbebf7dba5743104d90912e2b50c309de322c854",
+        "body_sha256": "bbdf6950d0e9db3752ad46fd3b3fe86daaa78f19ddc647567b2a1d88a43f579f",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-01",
+        "record_id_hash": "sha256:1699669d8288f2ffb567fd3dbbebf7dba5743104d90912e2b50c309de322c854",
+        "body_sha256": "bbdf6950d0e9db3752ad46fd3b3fe86daaa78f19ddc647567b2a1d88a43f579f",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      }
+    },
+    {
+      "case_id": "fuku-new-02",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:14cc7799a35bd35d5d8b85d5a9a4918cc1bcf1a95b43e4b98b37a8e1bb0cae10",
+      "body_sha256": "b2ed4ba8c69256b357817d2053056ca30b6a11dc185bba7bfaca0255a631b2a9",
+      "selection_reason": "local_bid_oppose_osaka",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-02",
+        "record_id_hash": "sha256:14cc7799a35bd35d5d8b85d5a9a4918cc1bcf1a95b43e4b98b37a8e1bb0cae10",
+        "body_sha256": "b2ed4ba8c69256b357817d2053056ca30b6a11dc185bba7bfaca0255a631b2a9",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-02",
+        "record_id_hash": "sha256:14cc7799a35bd35d5d8b85d5a9a4918cc1bcf1a95b43e4b98b37a8e1bb0cae10",
+        "body_sha256": "b2ed4ba8c69256b357817d2053056ca30b6a11dc185bba7bfaca0255a631b2a9",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      }
+    },
+    {
+      "case_id": "fuku-new-03",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:137260cc7f8acd72199222553a60135426593da696870786a8377833c4a02578",
+      "body_sha256": "e62ca2c04abfd3e0e1c1914cdf586b85c06ffd8cce9e1298d11ef6700e2df5bd",
+      "selection_reason": "local_bid_support_gunma",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-03",
+        "record_id_hash": "sha256:137260cc7f8acd72199222553a60135426593da696870786a8377833c4a02578",
+        "body_sha256": "e62ca2c04abfd3e0e1c1914cdf586b85c06ffd8cce9e1298d11ef6700e2df5bd",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "support",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-03",
+        "record_id_hash": "sha256:137260cc7f8acd72199222553a60135426593da696870786a8377833c4a02578",
+        "body_sha256": "e62ca2c04abfd3e0e1c1914cdf586b85c06ffd8cce9e1298d11ef6700e2df5bd",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "support",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      }
+    },
+    {
+      "case_id": "fuku-new-04",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:15c14f015729b06a250ac0d7ecbac4cc3f1d64c1356327662d716fa85ebd7913",
+      "body_sha256": "0accefc6ad4f6b2ac38d61f6955db22bfeb5c6491c9d4254f86e6ee0b66ab9fe",
+      "selection_reason": "local_bid_mixed",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-04",
+        "record_id_hash": "sha256:15c14f015729b06a250ac0d7ecbac4cc3f1d64c1356327662d716fa85ebd7913",
+        "body_sha256": "0accefc6ad4f6b2ac38d61f6955db22bfeb5c6491c9d4254f86e6ee0b66ab9fe",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "mixed",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-04",
+        "record_id_hash": "sha256:15c14f015729b06a250ac0d7ecbac4cc3f1d64c1356327662d716fa85ebd7913",
+        "body_sha256": "0accefc6ad4f6b2ac38d61f6955db22bfeb5c6491c9d4254f86e6ee0b66ab9fe",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "mixed",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      }
+    },
+    {
+      "case_id": "fuku-new-05",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:102c2dfce049f47315ab3d119ecb03f25e492d72da6751470c526e33794e2d8c",
+      "body_sha256": "91746b3583900c61ada8193104b03692a645c95873ef02f9cab2488f2f504ce6",
+      "selection_reason": "whole_support_local_oppose",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-05",
+        "record_id_hash": "sha256:102c2dfce049f47315ab3d119ecb03f25e492d72da6751470c526e33794e2d8c",
+        "body_sha256": "91746b3583900c61ada8193104b03692a645c95873ef02f9cab2488f2f504ce6",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": "法案賛成・推進"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": "法案賛成・推進",
+        "aggregation_route": "whole_policy"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-05",
+        "record_id_hash": "sha256:102c2dfce049f47315ab3d119ecb03f25e492d72da6751470c526e33794e2d8c",
+        "body_sha256": "91746b3583900c61ada8193104b03692a645c95873ef02f9cab2488f2f504ce6",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": "法案賛成・推進"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "local_bid",
+        "target_stance": "oppose",
+        "whole_policy_stance": "法案賛成・推進",
+        "aggregation_route": "whole_policy"
+      }
+    },
+    {
+      "case_id": "fuku-new-06",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:037ef70a8e5b3e98ea51bf0be5c679a2b515aa5bf3481367d2388f4f0dbe0d24",
+      "body_sha256": "b92c8a4ff417ff9860886f786b31e8a6692a0afbc22a9960a217b30a805b3d0b",
+      "selection_reason": "whole_oppose_all_locations",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-06",
+        "record_id_hash": "sha256:037ef70a8e5b3e98ea51bf0be5c679a2b515aa5bf3481367d2388f4f0dbe0d24",
+        "body_sha256": "b92c8a4ff417ff9860886f786b31e8a6692a0afbc22a9960a217b30a805b3d0b",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "定義・中身",
+          "stance": "法案反対"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "oppose",
+        "whole_policy_stance": "法案反対",
+        "aggregation_route": "whole_policy"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-06",
+        "record_id_hash": "sha256:037ef70a8e5b3e98ea51bf0be5c679a2b515aa5bf3481367d2388f4f0dbe0d24",
+        "body_sha256": "b92c8a4ff417ff9860886f786b31e8a6692a0afbc22a9960a217b30a805b3d0b",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "定義・中身",
+          "stance": "法案反対"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "oppose",
+        "whole_policy_stance": "法案反対",
+        "aggregation_route": "whole_policy"
+      }
+    },
+    {
+      "case_id": "fuku-new-07",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:06d9753ffdf7c81fe1bc01ab90f2c5c69cc7e4c25489cd2990235c3cdbedbb65",
+      "body_sha256": "f35d00d2d0dea8e4b409bea64f8373325d5badb4d732c435cb64106802f5994f",
+      "selection_reason": "whole_support_with_location_options",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-07",
+        "record_id_hash": "sha256:06d9753ffdf7c81fe1bc01ab90f2c5c69cc7e4c25489cd2990235c3cdbedbb65",
+        "body_sha256": "f35d00d2d0dea8e4b409bea64f8373325d5badb4d732c435cb64106802f5994f",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": "法案賛成・推進"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "support",
+        "whole_policy_stance": "法案賛成・推進",
+        "aggregation_route": "whole_policy"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-07",
+        "record_id_hash": "sha256:06d9753ffdf7c81fe1bc01ab90f2c5c69cc7e4c25489cd2990235c3cdbedbb65",
+        "body_sha256": "f35d00d2d0dea8e4b409bea64f8373325d5badb4d732c435cb64106802f5994f",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "候補地",
+          "stance": "法案賛成・推進"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "support",
+        "whole_policy_stance": "法案賛成・推進",
+        "aggregation_route": "whole_policy"
+      }
+    },
+    {
+      "case_id": "fuku-new-08",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:1968f3fc78cd5ffd3a76bc87caa582fd386f4cce5758ded34c4af998a0e7df78",
+      "body_sha256": "bffcc71a7ea701f0c8243117c6c4f11cd85bb48032b1a7081225564412121edf",
+      "selection_reason": "explicit_whole_support",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-08",
+        "record_id_hash": "sha256:1968f3fc78cd5ffd3a76bc87caa582fd386f4cce5758ded34c4af998a0e7df78",
+        "body_sha256": "bffcc71a7ea701f0c8243117c6c4f11cd85bb48032b1a7081225564412121edf",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "防災・災害",
+          "stance": "法案賛成・推進"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "support",
+        "whole_policy_stance": "法案賛成・推進",
+        "aggregation_route": "whole_policy"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-08",
+        "record_id_hash": "sha256:1968f3fc78cd5ffd3a76bc87caa582fd386f4cce5758ded34c4af998a0e7df78",
+        "body_sha256": "bffcc71a7ea701f0c8243117c6c4f11cd85bb48032b1a7081225564412121edf",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "防災・災害",
+          "stance": "法案賛成・推進"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "support",
+        "whole_policy_stance": "法案賛成・推進",
+        "aggregation_route": "whole_policy"
+      }
+    },
+    {
+      "case_id": "fuku-new-09",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:0888335a0865e2c8b76d5e666787aefa5a7b6f49723efd185912500f7013bc04",
+      "body_sha256": "829b809a78e60075f142cfc619f1cff6112fb27ae388b35b3b52fdbf90999938",
+      "selection_reason": "explicit_whole_oppose",
+      "outcome": "disagreement",
+      "different_fields": [
+        "candidate",
+        "decision_route",
+        "target_scope",
+        "whole_policy_stance",
+        "aggregation_route"
+      ],
+      "reviewer_a": {
+        "case_id": "fuku-new-09",
+        "record_id_hash": "sha256:0888335a0865e2c8b76d5e666787aefa5a7b6f49723efd185912500f7013bc04",
+        "body_sha256": "829b809a78e60075f142cfc619f1cff6112fb27ae388b35b3b52fdbf90999938",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "その他",
+          "stance": null
+        },
+        "decision_route": "context_needed",
+        "ai_use_position": null,
+        "target_scope": "unknown",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "context_needed"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-09",
+        "record_id_hash": "sha256:0888335a0865e2c8b76d5e666787aefa5a7b6f49723efd185912500f7013bc04",
+        "body_sha256": "829b809a78e60075f142cfc619f1cff6112fb27ae388b35b3b52fdbf90999938",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "その他",
+          "stance": "法案反対"
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "whole_policy",
+        "target_stance": "oppose",
+        "whole_policy_stance": "法案反対",
+        "aggregation_route": "whole_policy"
+      }
+    },
+    {
+      "case_id": "fuku-new-10",
+      "set": "unused_twenty",
+      "topic": "fukushuto",
+      "record_id_hash": "sha256:054fd9cffcdea1111ac476010ef5f34bc7cac03b0e80a28f20c13e7a57dfcc83",
+      "body_sha256": "176e0d5966ac9840570de5168e5e8fa123ad2f3038b183105d34322841daf6f9",
+      "selection_reason": "priority_oppose",
+      "outcome": "agreement",
+      "different_fields": [],
+      "reviewer_a": {
+        "case_id": "fuku-new-10",
+        "record_id_hash": "sha256:054fd9cffcdea1111ac476010ef5f34bc7cac03b0e80a28f20c13e7a57dfcc83",
+        "body_sha256": "176e0d5966ac9840570de5168e5e8fa123ad2f3038b183105d34322841daf6f9",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "優先順位",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "other",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      },
+      "reviewer_b": {
+        "case_id": "fuku-new-10",
+        "record_id_hash": "sha256:054fd9cffcdea1111ac476010ef5f34bc7cac03b0e80a28f20c13e7a57dfcc83",
+        "body_sha256": "176e0d5966ac9840570de5168e5e8fa123ad2f3038b183105d34322841daf6f9",
+        "candidate": {
+          "is_relevant": true,
+          "is_opinion": true,
+          "main_issue": "優先順位",
+          "stance": null
+        },
+        "decision_route": "candidate",
+        "ai_use_position": null,
+        "target_scope": "other",
+        "target_stance": "oppose",
+        "whole_policy_stance": null,
+        "aggregation_route": "scoped_only"
+      }
+    }
+  ],
+  "reviewed_records_before": 4000,
+  "reviewed_records_after": 4000,
+  "new_review_credit": 0,
+  "adoption_counts_unchanged": {
+    "accepted": 2214,
+    "hold": 1764,
+    "pending_evidence": 22
+  },
+  "canonical_changes": 0,
+  "adoption_changes": 0,
+  "public_changes": 0
+}
