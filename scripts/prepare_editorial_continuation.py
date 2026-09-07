@@ -25,6 +25,18 @@ except ModuleNotFoundError:
 WAVES = 4
 RECORDS_PER_WAVE = 1000
 BATCH_SIZE = 20
+RUNBOOK_TOPIC_QUOTAS = {
+    'ai-copyright': 560,
+    'bukatsu-chiiki': 300,
+    'constitutional-amendment': 520,
+    'consumption-tax-cut': 520,
+    'elderly-license-revocation': 100,
+    'fukushuto': 520,
+    'henoko-student-accident': 120,
+    'koshitsu-tenpakai': 520,
+    'school-nickname-ban': 320,
+    'takaichi': 520,
+}
 
 
 def build_criteria(root: Path) -> dict:
@@ -78,6 +90,27 @@ def select_records(queues: dict, attempted: list, limit: int = WAVES * RECORDS_P
     return chosen
 
 
+def select_topic_homogeneous_records(queues: dict, attempted: list, quotas: dict) -> list:
+    if any(type(value) is not int or value <= 0 or value % BATCH_SIZE for value in quotas.values()):
+        raise ValueError('every topic quota must be a positive multiple of 20')
+    seen = {(r['topic'], r['body_sha256'], r['classification_sha256']) for r in attempted}
+    chosen = []
+    for topic, quota in sorted(quotas.items()):
+        topic_rows = []
+        for row in queues.get(topic, []):
+            identity = (topic, row['body_sha256'], row['classification_sha256'])
+            if identity in seen:
+                continue
+            seen.add(identity)
+            topic_rows.append({**row, 'topic': topic})
+            if len(topic_rows) == quota:
+                break
+        if len(topic_rows) != quota:
+            raise ValueError(f'{topic} has only {len(topic_rows)} unique unattempted records; {quota} required')
+        chosen.extend(topic_rows)
+    return chosen
+
+
 def alternating_assignments(actor_a: str, actor_b: str) -> dict:
     odd = list(range(1, 51, 2))
     even = list(range(2, 51, 2))
@@ -103,7 +136,9 @@ def prepare(root: Path, private_root: Path, run: Path, actors: tuple[str, str], 
     registry_path = root / 'data/verification/editorial-work.json'
     registry = load_registry(registry_path, root, private_root)
     attempted = current_attempts(registry, criteria)
-    selected = select_records(queues, attempted)
+    selected = select_topic_homogeneous_records(queues, attempted, RUNBOOK_TOPIC_QUOTAS)
+    if len(selected) != WAVES * RECORDS_PER_WAVE:
+        raise ValueError('topic quotas must total 4,000')
 
     run.mkdir(parents=True)
     shutil.copy2(root / 'data/verification/editorial-adoption-current.json', run / 'adoption-before.private.json')
@@ -181,7 +216,7 @@ def prepare(root: Path, private_root: Path, run: Path, actors: tuple[str, str], 
         'topic_counts': topic_counts,
         'opinion_counts': opinion_counts,
         'canonical_hashes': canonical_hashes,
-        'selection': 'Deterministic topic round-robin over current unconfirmed records after excluding all 4,080 registered body/classification identities.',
+        'selection': 'Deterministic topic-homogeneous 20-record packets after excluding all 4,080 registered body/classification identities. Topic quotas are multiples of 20 so systemic criteria issues cannot spill into another theme.',
         'status': 'reserved_not_reviewed',
         'canonical_changes': 0,
         'registered_reread_increment': 0,
