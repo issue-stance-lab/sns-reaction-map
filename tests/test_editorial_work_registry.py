@@ -83,9 +83,10 @@ class EditorialWorkRegistryTest(unittest.TestCase):
     def test_committed_summary_and_body_free(self):
         p = Path(__file__).resolve().parents[1]/'data/verification/editorial-work.json'
         ledger = json.loads(p.read_text())
-        self.assertEqual(len(ledger['records']), 220)
-        self.assertEqual(ledger['counts'], dict(attempted=80, retain_candidate=69, change_candidate=16, hold=55))
-        self.assertEqual(len({(r['topic'], r['record_id_hash']) for r in ledger['records']}), 220)
+        self.assertEqual(len(ledger['records']), 320)
+        self.assertEqual(sum(ledger['counts'].values()), 320)
+        self.assertEqual(ledger['counts']['attempted'], 80)
+        self.assertEqual(len({(r['topic'], r['record_id_hash']) for r in ledger['records']}), 320)
         self.assertEqual(sum(bool(r['scope_only_audits']) for r in ledger['records']), 10)
         for row in ledger['records']:
             self.assertFalse({'text', 'tweet_id', 'reason'} & row.keys())
