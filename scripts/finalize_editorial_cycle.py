@@ -10,6 +10,19 @@ from scripts.verify_editorial_hundred import read,sha,dump
 from scripts.editorial_work_registry import fingerprint,load_registry,build_registry
 
 
+def validate_work_lineage(baseline,updated,retry_of):
+    for source in updated['sources']:
+        if source['storage']=='private' and Path(source['path']).is_relative_to(retry_of) and source['kind'] not in {'packet','evidence'}:
+            raise ValueError('invalidated attempt cannot supply decisions')
+    bykey={r['work_key']:r for r in updated['records']}
+    for old in baseline['records']:
+        if old['work_key'] not in bykey:raise ValueError('baseline work identity lost')
+        new=bykey[old['work_key']]
+        for field in ['state','scope_only_audits','canonical_applied','counts_as_registered_editorial_reread']:
+            if new[field]!=old[field]:raise ValueError('baseline work state changed')
+        if not set(old['evidence']).issubset(new['evidence']):raise ValueError('baseline evidence lost')
+
+
 def apply_overlay(journal,report):
     bykey={(r['batch'],r['index']):r for r in journal}
     if len(bykey)!=len(journal):raise ValueError('duplicate source keys')
@@ -29,6 +42,11 @@ def apply_overlay(journal,report):
 def collect(root,base,run,waves=2,require_supplements=True):
     root,base,run=map(Path,[root,base,run]);reservation=read(run/'reservation.json')
     if reservation!=read(root/'quality/reviews/2026-09-07-cycle-next2000-reservation-v2.json'):raise ValueError('top-level reservation differs from registered manifest')
+    policy=read(root/'quality/reviews/2026-09-07-cycle-policy-integrity.json')
+    if any(sha(root/p)!=h for p,h in policy['policy_sha256'].items()):raise ValueError('acceptance policy changed')
+    if sha(run/'work-before.private.json')!=reservation['baseline_work_sha256']:raise ValueError('baseline work changed')
+    baseline_work=load_registry(run/'work-before.private.json',root,base.parent)
+    validate_work_lineage(baseline_work,load_registry(root/'data/verification/editorial-work.json',root,base.parent),reservation['retry_of'])
     metadata=yaml.safe_load((root/'THEMES.yaml').read_text())['themes']
     if any(sha(root/metadata[t]['sample_file'])!=h for t,h in reservation['canonical_hashes'].items()):raise ValueError('canonical snapshot changed')
     invalidation=base.parent/reservation['retry_of']/'invalidated.private.json'
@@ -93,6 +111,7 @@ def register(root,base,run,waves=2):
         report_refs.append({'path':str(path.relative_to(root)),'sha256':sha(path)})
         for p in (run/name).rglob('*.json'):add(p,'private','evidence')
     updated=build_registry(sources,root,private)
+    validate_work_lineage(read(run/'work-before.private.json'),updated,read(run/'reservation.json')['retry_of'])
     if len(updated['records'])!=4080 or updated['counts'].get('attempted',0)!=80+(2-waves)*1000:raise ValueError('work coverage mismatch')
     view={'schema_version':1,'scope':'Current editorial adoption; supplemental changes preserve original proposals and history; no canonical application.',
           'reviewed_records':result['reviewed_records'],'counts':result['adoption_counts'],'sources':report_refs,

@@ -56,4 +56,18 @@ class OverlayTests(unittest.TestCase):
         for change in [{'index':0},{'proposed':{'stance':'no'}},{'body_sha256':'other'}]:
             with self.assertRaises(ValueError):apply_overlay([old],{'overlay':[{'source_key':[old['batch'],old['index']],'old':old,'new':{**old,'adoption_status':'accepted',**change}}]})
 
+class WorkLineageTests(unittest.TestCase):
+    def test_equal_count_identity_swap_is_rejected(self):
+        from scripts.finalize_editorial_cycle import validate_work_lineage
+        old={'work_key':'old','state':'attempted','scope_only_audits':[], 'canonical_applied':False,'counts_as_registered_editorial_reread':False,'evidence':['packet']}
+        base={'records':[old]}
+        with self.assertRaises(ValueError):validate_work_lineage(base,{'records':[{**old,'work_key':'other'}],'sources':[]},'invalid')
+        with self.assertRaises(ValueError):validate_work_lineage(base,{'records':[{**old,'state':'retain_candidate'}],'sources':[]},'invalid')
+        validate_work_lineage(base,{'records':[old],'sources':[]},'invalid')
+
+    def test_invalid_run_cannot_supply_journal(self):
+        from scripts.finalize_editorial_cycle import validate_work_lineage
+        with self.assertRaises(ValueError):validate_work_lineage({'records':[]},{'records':[],'sources':[{'storage':'private','path':'invalid/batch/report.json','kind':'journal'}]},'invalid')
+
+
 if __name__=='__main__':unittest.main()
