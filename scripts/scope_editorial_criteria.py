@@ -19,9 +19,10 @@ SCOPES = {
 }
 
 
-def build(root, run):
+def build(root, run, *, ledger=None):
     ledger_path = root / 'data/verification/editorial-adoption.json'
-    ledger = read(ledger_path)
+    from scripts.reassess_editorial_criteria import load_baseline, digest
+    ledger = load_baseline(root) if ledger is None else ledger
     targets = [r for r in ledger['records'] if r['adoption_basis'] == 'criteria_issue']
     if len(targets) != 65 or {r['batch'] for r in targets} != set(SCOPES):
         raise ValueError('snapshot scope changed; requires a new scope review')
@@ -60,9 +61,9 @@ def build(root, run):
     assert len(output) == 65
     assert len({(r['batch'], r['index']) for r in output}) == 65
     return {'schema_version': 1, 'purpose': 'scope_only_not_adoption',
-            'ledger_sha256': sha(ledger_path),
+            'ledger_sha256': digest(ledger),
             'policy_sha256': sha(root / 'scripts/editorial_acceptance.py'),
-            'scoped_topics_by_batch': SCOPES, 'proofs': proofs,
+            'scoped_topics_by_batch': {str(k): v for k, v in SCOPES.items()}, 'proofs': proofs,
             'counts': dict(Counter(r['queue'] for r in output)),
             'topic_counts': {t: dict(Counter(r['queue'] for r in output if r['topic'] == t))
                              for t in sorted({r['topic'] for r in output})},

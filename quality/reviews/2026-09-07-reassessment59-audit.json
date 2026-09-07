@@ -1,0 +1,26 @@
+{
+  "recorded_by": "parent",
+  "independent_reviewer": "/root/reassessment_audit",
+  "result": "PASS",
+  "scope": "code, scope evidence replay, original ledger restoration; no independent body reread",
+  "checks": [
+    "original ledger byte SHA matches Git baseline and saved scope",
+    "59 specified records changed; other 941 unchanged",
+    "all adopted corrections independently checked",
+    "scope and private source hashes replayed",
+    "1000 decisions reconstructed as 576 accepted / 405 hold / 19 pending"
+  ],
+  "source_sha256": {
+    "scripts/reassess_editorial_criteria.py": "307d65cce941f5e0c1143cffb6cd9b2bfcb11659905ad75e622ad7096cb213dc",
+    "scripts/scope_editorial_criteria.py": "ad71bd00b19349f540c0af5fb29dc87014e2abd9d93aa0c0f2b877d261cfd046",
+    "scripts/verify_editorial_thousand.py": "d46659bc7b1236c81ab2b55626301f156c77c804be9b1b049506dab0e8557604",
+    "scripts/editorial_acceptance.py": "151972bc9630dfb0f9183c64ca69d7ba1f9c37cbf31f541f3c0670257cd701ff"
+  },
+  "full_tests": {
+    "count": 707,
+    "passed": true
+  },
+  "canonical_applied": 0,
+  "registered_reread_increment": 0,
+  "codex_tokens": null
+}

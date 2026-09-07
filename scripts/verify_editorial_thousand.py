@@ -36,12 +36,18 @@ def collect_thousand(root,base):
             supported=not review['uncertain'] and review['evidence_sufficient'] and review['classification']==row['proposed']
             row['adoption_status']='accepted' if supported else 'hold';row['adoption_basis']='supplemental_parent_review' if supported else 'supplemental_uncertainty';supplemental+=1
         proofs['supplement-'+name]={'packet':sha(p),'audit':sha(ap)}
-    ledger=read(root/'data/verification/editorial-adoption.json')
+    from scripts.reassess_editorial_criteria import verify_reassessment, BASIS, EVENT
+    ledger, reassessment = verify_reassessment(root, run)
     if ledger['policy_sha256']!=sha(root/'scripts/editorial_acceptance.py'):raise ValueError('adoption policy changed')
     saved={(r['topic'],r['record_id_hash']):r for r in ledger['records']}
     if len(ledger['records'])!=1000 or set(saved)!=set(bykey):raise ValueError('adoption ledger coverage')
     for key,row in bykey.items():
         if any(saved[key].get(k)!=row.get(k) for k in ['body_sha256','classification_sha256','current','proposed','route','reason_sha256','adoption_status','adoption_basis']):raise ValueError('adoption ledger differs from evidence')
+    if reassessment:
+        for change in reassessment['records']:
+            key=(change['before']['topic'],change['before']['record_id_hash'])
+            bykey[key].update(adoption_status='accepted', adoption_basis=BASIS, reassessment_event=EVENT)
+        proofs['reassessment'] = {'history': sha(root/'quality/reviews/2026-09-07-criteria-reassessment59.json')}
     return {'schema_version':1,'reviewed_records':1000,'new_records':760,'routes':dict(Counter(r['route'] for r in journal)),
             'adoption_counts':dict(Counter(r['adoption_status'] for r in journal)),'journal':journal,'proofs':proofs,'supplemental_reviews':supplemental,
             'canonical_changes':0,'registered_reread_increment':0,'policy_sha256':sha(root/'scripts/editorial_acceptance.py'),'ledger_sha256':sha(root/'data/verification/editorial-adoption.json')},sources
