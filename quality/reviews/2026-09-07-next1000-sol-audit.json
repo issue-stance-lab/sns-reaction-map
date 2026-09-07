@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "recorded_epoch": 1788780240.5672882,
+  "status": "qualified",
+  "auditor_task": "/root/continuous_auditor",
+  "scope": "Body-free replay audit of the completed 50-batch run, combined adoption view, work registry, and evidence linkage.",
+  "checks": {
+    "all_50_quality_gates_present": true,
+    "new_report_matches_collect_run_replay": true,
+    "current_view_matches_combine_replay": true,
+    "draft_and_saved_review_match_checked_for_all_batches": true,
+    "packet_and_review_identity_hashes_checked_for_all_batches": true,
+    "attested_assigned_output_hashes_match_saved_files": true,
+    "prior_adoption_hash_matches_reservation": true,
+    "prior_adoption_ledger_not_modified_by_registration": true,
+    "accepted_changes_pass_same_adoption_policy": true,
+    "canonical_changes": 0,
+    "registered_reread_increment": 0
+  },
+  "new_run": {
+    "reviewed_records": 1000,
+    "independent_records": 305,
+    "adoption_counts": {
+      "accepted": 513,
+      "hold": 227,
+      "pending_audit": 260
+    },
+    "accepted_routes": {
+      "retain_candidate": 425,
+      "change_candidate": 88
+    }
+  },
+  "combined": {
+    "reviewed_records": 2000,
+    "adoption_counts": {
+      "accepted": 1089,
+      "hold": 632,
+      "pending_evidence": 19,
+      "pending_audit": 260
+    },
+    "accepted_routes": {
+      "retain_candidate": 850,
+      "change_candidate": 239
+    }
+  },
+  "work_registry": {
+    "records": 2080,
+    "counts": {
+      "attempted": 80,
+      "change_candidate": 241,
+      "hold": 627,
+      "retain_candidate": 1132
+    },
+    "automatic_reread_credit": 0,
+    "canonical_changes": 0
+  },
+  "proof_sha256": {
+    "prior_adoption": "e5df874051aa7e2511ef4460969be69cac2ea9f4a6b0a84468f00571297cb5bc",
+    "new_report": "196d2258ffb4e321139490d44e13eb8de7045c54661255916fd5455a34a8d367",
+    "current_view": "55fd8dc49ed4e508966663bc0fbbc7a021df18b883c6338264aec5cd0e071095",
+    "work_registry": "0c8c54a831e08ac9de8d8a55a8712ae5300b218e1f199bde0d200b58bde5b434",
+    "verify_script": "264760b964000cf7d7578124a08a85dddd49c45438747a4fa5fcf665720add35",
+    "register_script": "20dd3f8b06a69915d57afd4f82c0b7fd5ce2f217731136c3548c62bf92bf7289",
+    "auditor_attestation": "79dd39ec63b638ba908ada1b26dc6a6a892c3b25d67c27c4a3ab0e6b491b14d8",
+    "editor_a_attestation": "61b976ecd371b687233df555ab9ca8fbe8ad80139fc89da1494ca282bea7029f",
+    "editor_b_attestation": "e04d730c6614ac9aff9278c963594b11630bbae2aa56b448c7872625feac22e5"
+  },
+  "qualification": "担当割当と各担当の事後申告は保存済み出力のハッシュへ一致する。ただし保存済みレビュー自体は実行エージェントを認証しないため、self-audit回避の証拠は親の割当会話と担当者の自己申告に依存し、暗号学的な実行者認証ではない。",
+  "repository_files_modified_by_auditor": false,
+  "body_reread_performed_for_final_ledger_audit": false
+}
