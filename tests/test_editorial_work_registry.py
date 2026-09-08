@@ -83,12 +83,13 @@ class EditorialWorkRegistryTest(unittest.TestCase):
     def test_committed_summary_and_body_free(self):
         p = Path(__file__).resolve().parents[1]/'data/verification/editorial-work.json'
         ledger = json.loads(p.read_text())
-        self.assertEqual(len(ledger['records']), 4080)
-        self.assertEqual(sum(ledger['counts'].values()), 4080)
+        self.assertEqual(len(ledger['records']), 8080)
+        self.assertEqual(sum(ledger['counts'].values()), 8080)
         current = json.loads((p.parent/'editorial-adoption-current.json').read_text())
-        self.assertIn(current['reviewed_records'], [2000, 3000, 4000])
-        self.assertEqual(ledger['counts']['attempted'], 4080-current['reviewed_records'])
-        self.assertEqual(len({(r['topic'], r['record_id_hash']) for r in ledger['records']}), 4080)
+        # The extra 4,000 are completed work only; adoption remains at its baseline.
+        self.assertEqual(current['reviewed_records'], 4000)
+        self.assertEqual(ledger['counts']['attempted'], 80)
+        self.assertEqual(len({(r['topic'], r['record_id_hash']) for r in ledger['records']}), 8080)
         self.assertEqual(sum(bool(r['scope_only_audits']) for r in ledger['records']), 10)
         for row in ledger['records']:
             self.assertFalse({'text', 'tweet_id', 'reason'} & row.keys())
