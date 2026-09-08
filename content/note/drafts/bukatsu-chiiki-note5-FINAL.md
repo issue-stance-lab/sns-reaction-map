@@ -99,7 +99,7 @@
 地域との連携は、平成29年の時点ですでに書き込まれています。地域移行は、要領の急な方針転換ではありません。
 
 👉 制度・移行プロセスを語る投稿と、実際の声を見る
-https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=after_history
+https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=after_history
 
 ## 【令和6年12月、国は何を書き足した？】
 
@@ -134,7 +134,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.
 答申は令和8年冬頃、告示は令和8年度末が、いまの予定です。中学校で新しい要領が全面的に使われるのは、令和13年度、2031年度からです。
 
 👉 次の改訂に向けた議論と、実際の声を見る
-https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=after_schedule
+https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=after_schedule
 
 ## 【じゃあ、誰が地域移行を決めているの？】
 
@@ -158,7 +158,7 @@ https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.
 編集部が次に見るのは、令和8年度末に予定される、告示の本文です。「双方を記載する」という方向性が、実際にどれくらいの分量で書かれるかは、まだ確定していません。
 
 👉 部活動の地域移行の論点別分布を見る
-https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=after_conclusion
+https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=after_conclusion
 
 ## このシリーズについて
 
@@ -176,6 +176,6 @@ https://note.com/sns_hanno_ma/m/m79f52b583341
 SNS反応まっぷ編集部は、部活動の地域移行についての公開投稿を、立場と論点で分類してきました。この記事だけは、学習指導要領・国の会議資料・国会答弁という一次資料を扱います。SNS投稿の分布や実際の声は、次のページで確認できます。
 
 👉 SNS反応まっぷ｜部活動の地域移行
-https://issue-stance-lab.github.io/sns-reaction-map/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=footer
+https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_bukatsu5_20260908&utm_content=footer
 
 データについて：この記事はYahoo!リアルタイム検索で取得した公開投稿の集計は使っていません（第1回〜第4回で扱った投稿サンプルは1,395件収集・1,139件を意見と判定したもので、詳細は第1回〜第4回の記事末に記載しています）。本記事の記述は、中学校学習指導要領（平成29年文部科学省告示）解説 総則編、「部活動改革に伴う学習指導要領解説の一部改訂について（通知）」（６ス庁第1761号・令和6年12月25日）、スポーツ庁「学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ」第1回・第2回議事録（令和8年2月6日・3月3日）および第2回配付資料「学習指導要領における部活動・地域クラブ活動の取扱いについて（たたき台）」（令和8年3月）、中央教育審議会教育課程企画特別部会「次期学習指導要領等に向けた審議まとめ（素案）」（令和8年8月31日、素案段階）、同部会「改訂スケジュール（イメージ）」（令和8年7月8日）、松本洋平文部科学大臣の参議院文教科学委員会における答弁（2025年11月20日、国会会議録検索システムで原文照合）、スポーツ基本法（平成23年法律第78号、令和7年改正・2025年9月1日施行）第17条の2に拠りました。すべてのURLは2026-09-07に到達・条文照合を確認済みです。教育新聞の2022年報道（学習指導要領からの削除を含めて見直すとする大臣発言があったとする記事）は、該当する年の国会会議録に同旨の答弁が見当たらなかったため、本記事では採用していません。中教審の審議まとめは2026年9月時点で素案であり、最終的な答申・告示までに文言が変わる可能性があります。記事中の評価と主張は編集部のものです。
