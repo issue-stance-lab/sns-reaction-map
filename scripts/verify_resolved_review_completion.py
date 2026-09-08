@@ -7,6 +7,7 @@ from scripts.short_resolved_review import collect as collect_short
 from scripts.editorial_work_registry import load_registry
 from scripts.resolve_remaining_review_scope import load_resolution
 from scripts.verify_editorial_hundred import read, sha
+from scripts.review_completion_identity_counts import identity_counts
 
 
 def verify(root, private, shared, cycles, short_run):
@@ -55,7 +56,14 @@ def verify(root, private, shared, cycles, short_run):
     aliases = [r for r in short['journal'] if r['scope_route'].startswith('verify_distinct_id_')]
     if len(aliases) != 127 or any(not r['independently_checked'] for r in aliases):
         raise ValueError('distinct-ID verification lacks independent completion')
+    baseline_path = private / 'body-review-pilot/20260908-nonkoshitsu-cycle01/work-before.private.json'
+    if sha(baseline_path) != scope['provenance']['work_registry_sha256']:
+        raise ValueError('initial completed-work baseline changed')
+    identities = identity_counts([r['journal'] for r in reports], scope, read(baseline_path))
+    if any(identities['blocking'].values()):
+        raise ValueError('duplicate completed post or input version')
     return {'schema_version': 1, 'completed_target_records': len(rows),
+            'identity_counts': identities,
             'new_body_reviews': len(rows) - len(aliases), 'distinct_id_verifications': len(aliases),
             'independent_audits': sum(r['independent_records'] for r in reports),
             'supplemental_audits': sum(r.get('supplemental_audits', 0) for r in reports),

@@ -41,6 +41,11 @@ class CompletionIntegrityTests(unittest.TestCase):
                        body_sha256=f'royal-body-{i}', classification_sha256='labels',
                        criteria_sha256='criteria') for i in range(782)]
         self.scope = {'records': copy.deepcopy(self.rows + paused)}
+        for row in self.scope['records']:
+            row['route'] = row.get('scope_route', 'new_body_review')
+        self.baseline_path = self.private / 'body-review-pilot/20260908-nonkoshitsu-cycle01/work-before.private.json'
+        dump(self.baseline_path, {'records': []})
+        self.scope['provenance'] = {'work_registry_sha256': sha(self.baseline_path)}
         self.work = {'records': [{**r, 'state': 'hold'} for r in copy.deepcopy(self.rows)]}
         dump(self.root / 'data/verification/editorial-review-scope.json', {})
         self.cycles = [(self.private / f'cycle-{i}', f'reports/cycle-{i}.json') for i in range(4)]
@@ -68,6 +73,12 @@ class CompletionIntegrityTests(unittest.TestCase):
         self.assertEqual(result['remaining_public_opinion_records'], 782)
         self.assertEqual(result['remaining_non_royal_records'], 0)
         self.assertEqual(result['protected_files_unchanged'], 1)
+        self.assertFalse(any(result['identity_counts']['blocking'].values()))
+
+    def test_initial_work_baseline_tampering_stops(self):
+        dump(self.baseline_path, {'records': [], 'changed': True})
+        with self.assertRaisesRegex(ValueError, 'initial completed-work baseline changed'):
+            self.verify()
 
     def test_missing_parent_protected_file_cannot_be_counted_unchanged(self):
         self.verify()  # Prove fixture is complete before deleting one file.
