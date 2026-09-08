@@ -4,6 +4,7 @@ import hashlib
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from scripts import verify_extra_held_audits as held
 from scripts.editorial_work_registry import fingerprint
@@ -15,6 +16,20 @@ class ExtraHeldAuditIntegrityTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         self.run = Path(temp.name).resolve() / 'run'
+        actual_root = Path(held.__file__).resolve().parents[1]
+        self.code_root = self.run.parent / 'synthetic-code'
+        self.code_paths = ('scripts/verify_extra_held_audits.py',
+                           'scripts/summarize_editorial_batch.py',
+                           'scripts/verify_editorial_hundred.py')
+        for relative in self.code_paths:
+            path = self.code_root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes((actual_root / relative).read_bytes())
+        module_path = patch.object(held, '__file__', str(self.code_root / self.code_paths[0]))
+        module_path.start()
+        self.addCleanup(module_path.stop)
+        self.pin_path = self.run / 'extra-held-code-integrity.private.json'
+        dump(self.pin_path, {'code_sha256': {relative: sha(self.code_root / relative) for relative in self.code_paths}})
         self.source = self.run / 'wave-01/batch-01'
         self.folder = self.run / 'extra-held-audit-01'
         self.label = dict(is_relevant=True, is_opinion=True, main_issue='issue', stance='neutral')
@@ -157,6 +172,41 @@ class ExtraHeldAuditIntegrityTests(unittest.TestCase):
         self.flush()
         with self.assertRaisesRegex(ValueError, 'identity or credit differs'):
             held.overlay(self.run, self.result)
+
+    def test_extra_audit_requires_code_pin_but_old_cycles_do_not(self):
+        self.pin_path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            held.overlay(self.run, self.result)
+        self.assertIs(held.overlay(self.run.parent / 'cycle01', self.result), self.result)
+        self.assertIs(held.overlay(self.run.parent / 'cycle02', self.result), self.result)
+
+    def test_each_changed_decision_dependency_is_rejected(self):
+        for relative in self.code_paths:
+            path = self.code_root / relative
+            original = path.read_bytes()
+            with self.subTest(dependency=relative):
+                path.write_bytes(original + b'\n# changed implementation\n')
+                try:
+                    with self.assertRaisesRegex(ValueError, 'verification code changed'):
+                        held.overlay(self.run, self.result)
+                finally:
+                    path.write_bytes(original)
+
+    def test_pin_requires_exact_dependency_path_set(self):
+        original = read(self.pin_path)
+        for extra in (False, True):
+            changed = copy.deepcopy(original)
+            if extra:
+                changed['code_sha256']['scripts/unexpected.py'] = 'unexpected'
+            else:
+                del changed['code_sha256'][self.code_paths[0]]
+            with self.subTest(extra=extra):
+                dump(self.pin_path, changed)
+                try:
+                    with self.assertRaisesRegex(ValueError, 'verification code changed'):
+                        held.overlay(self.run, self.result)
+                finally:
+                    dump(self.pin_path, original)
 
 
 if __name__ == '__main__':
