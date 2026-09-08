@@ -6,7 +6,9 @@ from unittest.mock import patch
 from scripts.verify_editorial_hundred import dump, sha
 from scripts.editorial_work_registry import fingerprint
 
-from scripts.finalize_editorial_continuation import combine_journals, overlay_supplements
+from scripts.finalize_editorial_continuation import (
+    combine_journals, overlay_supplements, register_work_only, RESULT_PREFIX,
+)
 
 
 def journal(record, status='accepted', route='retain_candidate'):
@@ -100,6 +102,36 @@ class SupplementOverlayTest(unittest.TestCase):
         dump(self.run / 'reservation.json', {'version': 2})
         with self.assertRaisesRegex(ValueError, 'another source wave or version'):
             self.call()
+
+
+class WorkRegistrationFailureTest(unittest.TestCase):
+    def test_conflicting_report_does_not_write_work_registry(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root, private = Path(temp) / 'root', Path(temp) / 'private'
+            run = private / 'run'
+            work_path = root / 'data/verification/editorial-work.json'
+            old = {'sources': [], 'records': []}
+            dump(work_path, old)
+            before = work_path.read_bytes()
+            dump(run / 'work-before.private.json', old)
+            dump(run / 'adoption-before.private.json', {})
+            dump(run / 'reservation.json', {
+                'baseline_work_records': 0, 'topic_counts': {}, 'opinion_counts': {},
+            })
+            for n in range(1, 5):
+                dump(run / f'wave-{n:02d}/reservation.json', {})
+            dump(root / 'quality/reviews' / f'{RESULT_PREFIX}-results.json', {'conflict': True})
+            combined = {'new_records': 1, 'baseline_records': 0,
+                        'reviewed_records_if_adoption_is_applied': 1,
+                        'new_adoption_counts': {}, 'cumulative_adoption_counts_if_applied': {},
+                        'new_routes': {}, 'independent_new_records': 0}
+            with patch('scripts.finalize_editorial_continuation.verify_and_collect', return_value=(combined, [])), \
+                 patch('scripts.finalize_editorial_continuation.load_registry', return_value=old), \
+                 patch('scripts.finalize_editorial_continuation.build_registry', return_value={'records': [{}]}), \
+                 patch('scripts.finalize_editorial_continuation.validate_work_lineage'):
+                with self.assertRaisesRegex(ValueError, 'different result report'):
+                    register_work_only(root, private, run)
+            self.assertEqual(work_path.read_bytes(), before)
 
 
 if __name__ == '__main__':

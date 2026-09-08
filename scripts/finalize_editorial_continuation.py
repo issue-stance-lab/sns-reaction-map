@@ -186,9 +186,6 @@ def register_work_only(root: Path, private_root: Path, run: Path, supplements=No
     validate_work_lineage(baseline_work, updated, 'no-invalidated-retry')
     if len(updated['records']) != reservation_record_count(run) + combined['new_records']:
         raise ValueError('work registry coverage mismatch')
-    dump(work_path, updated)
-    load_registry(work_path, root, private_root)
-
     result = {
         'schema_version': 1,
         'scope': 'Four thousand new body reviews, recorded as work and staged adoption candidates only.',
@@ -213,6 +210,10 @@ def register_work_only(root: Path, private_root: Path, run: Path, supplements=No
     if result_path.exists() and read(result_path) != result:
         raise ValueError('refusing to overwrite a different result report')
     dump(result_path, result)
+    if sha(work_path) != sha(run / 'work-before.private.json'):
+        raise ValueError('work registry changed during registration')
+    dump(work_path, updated)
+    load_registry(work_path, root, private_root)
     return result
 
 
