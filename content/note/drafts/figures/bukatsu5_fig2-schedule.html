@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=800,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--page:#07111E;--card-1:#0C1E35;--card-2:#0A1928;--card-3:#071522;--ink:#F0F4FF;--ink-70:rgba(240,244,255,.70);--ink-45:rgba(240,244,255,.45);--teal:#2DD4BF;--amber:#FBBF24}
+    *{box-sizing:border-box} html,body,.canvas{width:800px;height:1490px;margin:0;overflow:hidden}
+    body{background:var(--page);color:var(--ink);font-family:'Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums}
+    .canvas{position:relative;padding:42px 38px 0;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:radial-gradient(circle at 88% 7%,rgba(45,212,191,.12),transparent 30%),repeating-linear-gradient(0deg,transparent 0 47px,rgba(255,255,255,.025) 47px 48px),repeating-linear-gradient(90deg,transparent 0 47px,rgba(255,255,255,.025) 47px 48px),linear-gradient(145deg,var(--card-1) 0%,var(--card-2) 60%,var(--card-3) 100%)}
+    h1{margin:0;font-size:44px;line-height:1.27;font-weight:700;letter-spacing:-.05em}.lead{margin:14px 0 28px;color:var(--ink-70);font-size:26px;line-height:1.42}
+    .steps{position:relative;padding-left:0}.steps::before{content:"";position:absolute;left:27px;top:36px;bottom:34px;width:1px;background:rgba(255,255,255,.06)}
+    .step{position:relative;min-height:146px;margin:0 0 10px;padding:21px 28px 20px 78px;border:1px solid rgba(45,212,191,.30);border-radius:14px;background:rgba(45,212,191,.055)}
+    .step::before{content:"";position:absolute;left:20px;top:34px;width:15px;height:15px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 7px rgba(7,17,30,.95)}
+    .step.future{border:2px dashed rgba(251,191,36,.70);background:rgba(251,191,36,.035)}.step.future::before{background:var(--amber)}
+    .name{font-size:30px;line-height:1.32;font-weight:700;letter-spacing:-.045em}.when{display:block;margin-top:7px;color:var(--teal);font-size:30px;line-height:1.32;font-weight:500;letter-spacing:-.045em}.future .when{color:var(--amber)}
+    .tag{display:inline-block;margin-left:12px;padding:2px 9px;border-radius:999px;color:var(--amber);background:rgba(251,191,36,.14);font-size:24px;line-height:1.3;font-weight:700;letter-spacing:.03em;vertical-align:3px}.done{color:var(--teal);font-size:24px;font-weight:700}
+    .final{min-height:174px}.final .when{margin-top:4px;font-size:48px;line-height:1.13;font-weight:900;letter-spacing:-.055em}.final .yearline{display:block;margin-top:7px;font-size:30px;font-weight:500;letter-spacing:-.045em}
+    .note{position:absolute;left:38px;right:38px;bottom:64px;margin:0;color:var(--ink-45);font-size:24px;line-height:1.42;letter-spacing:-.035em}.credit{position:absolute;right:28px;bottom:24px;color:var(--ink-45);font-size:24px;letter-spacing:.08em}
+  </style>
+</head>
+<body>
+  <main class="canvas" aria-label="次の学習指導要領に向けた工程">
+    <h1>次の学習指導要領が中学校で<br>使われるまで</h1>
+    <p class="lead">上から下へ進む予定の工程</p>
+    <section class="steps">
+      <article class="step"><div class="name">審議まとめ（素案） <span class="done">済。ただし素案</span></div><span class="when">令和8年8月31日</span></article>
+      <article class="step future"><div class="name">答申 <span class="tag">予定</span></div><span class="when">令和8年冬頃</span></article>
+      <article class="step future"><div class="name">告示 <span class="tag">予定</span></div><span class="when">令和8年度末</span></article>
+      <article class="step future"><div class="name">周知 <span class="tag">予定</span></div><span class="when">告示のあと</span></article>
+      <article class="step future"><div class="name">先行実施 <span class="tag">予定</span></div><span class="when">周知のあと</span></article>
+      <article class="step future final"><div class="name">全面実施（中学校） <span class="tag">予定</span></div><span class="when">令和13年度<span class="yearline">（2031年度）</span></span></article>
+    </section>
+    <p class="note">※中央教育審議会教育課程企画特別部会「改訂スケジュール（イメージ）」（令和8年7月8日）、同「次期学習指導要領等に向けた審議まとめ（素案）」（令和8年8月31日）より。審議まとめは素案段階で、答申・告示までに変わる可能性があります。</p>
+    <div class="credit">SNS反応まっぷ</div>
+  </main>
+</body>
+</html>
