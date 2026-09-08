@@ -119,11 +119,14 @@ def collect(root,run):
         p=packet(run,b);checked_packet(p,root);d=run/f'batch-{b:02d}'
         for role in ('editor','audit'):
             value=read(d/(role+'.private.json'));start=read(d/(role+'-start.private.json'));draft=read(d/(role+'-draft.private.json'))
+            if value.get('identity_writer')!='short_resolved_review.save':raise ValueError('unrecognized decision writer')
             actor=next(a for a,bs in r['assignments'][role].items() if b in bs)
             if read(d/(role+'-actor.private.json')) != {'actor':actor,'worktree':r['worktrees'][actor],'reservation_sha256':sha(run/'reservation.json')}:raise ValueError('actor binding mismatch')
             if value['packet_sha256'] != sha(d/'packet.private.json') or value['packet_sha256'] != start['packet_sha256'] or value['started_epoch'] != start['started_epoch'] or not value['started_epoch'] <= draft['recorded_epoch'] <= value['finished_epoch']:raise ValueError('timing or packet mismatch')
             compact=[[x['index'],*[x['classification'][k] for k in ('is_relevant','is_opinion','main_issue','stance')],x['uncertain'],x['evidence_sufficient'],x['reason']] for x in value['reviews']]
             if compact != draft['values']:raise ValueError('draft mismatch')
+        if read(d/'audit.private.json')['started_epoch'] < read(d/'editor.private.json')['finished_epoch']:
+            raise ValueError('audit began before editor completion')
         result=assess_all(p,read(d/'editor.private.json'),read(d/'audit.private.json'),read(d/'quality_gate.private.json'))
         for row,raw in zip(result['journal'],p['records']):journal.append({**row,'batch':b,'scope_route':raw['scope_route'],'scope_dependency':raw.get('scope_dependency')})
         for f in d.glob('*.private.json'):proofs[str(f.relative_to(run))]=sha(f)
