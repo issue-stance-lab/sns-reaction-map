@@ -251,4 +251,5 @@ X運用を表示数だけで判断せず、「価値 → 会話 → 学習」の
   出典は `quality/research/bukatsu-chiiki-primary-sources.md` 第9節 資料T・U・W。
 - **30〜60分後に足すURL返信**: 部活動テーマページへ（初期確認時点では未投稿）
   `https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html?utm_source=x&utm_medium=social&utm_campaign=post_20260908`
+  実施: 2026-09-08 23:04:58に自己返信として投稿（本体から約64分後）。予定の30〜60分を約4分超えたため、方式Bは実施記録として残すが、URLの有無だけを厳密に比べた結果とは扱わない。
 - 方式A（比較用の2本目）は週の後半に別途用意する。
