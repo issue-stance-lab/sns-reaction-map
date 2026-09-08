@@ -26,6 +26,20 @@ def input_key(row):
     return row['topic'], row['body_sha256'], row['classification_sha256']
 
 
+def global_id_counts(rows, previous):
+    ids = {r['record_id_hash'] for r in rows}
+    versions = {(r['record_id_hash'], r['body_sha256'], r['classification_sha256']) for r in rows}
+    return {
+        'topic_record_count': len(rows), 'global_post_id_unique': len(ids),
+        'global_post_id_duplicate_excess': len(rows) - len(ids),
+        'post_id_body_classification_unique': len(versions),
+        'post_id_body_classification_duplicate_excess': len(rows) - len(versions),
+        'previous_global_post_id_overlap': len(ids & {r['record_id_hash'] for r in previous}),
+        'previous_post_id_body_classification_overlap': len(versions & {
+            (r['record_id_hash'], r['body_sha256'], r['classification_sha256']) for r in previous}),
+    }
+
+
 def partition(rows, reasons, previously_seen_inputs, previously_seen_ids=()):
     """Retain all unresolved IDs even when their input cannot be reserved again."""
     seen = set(previously_seen_inputs)
@@ -182,6 +196,12 @@ def inspect(root, canonical_root, private_root, run):
         'eligible_by_topic': dict(sorted(Counter(r['topic'] for r in eligible).items())),
         'unconfirmed_but_ineligible_ids': len(excluded),
         'invalid_runs': invalid_summary,
+        'global_identity_checks': {
+            'raw_remaining': global_id_counts(raw_remaining, old + valid_new),
+            'eligible_inventory_only': global_id_counts(eligible, old + valid_new),
+            'previous_valid_reviews': global_id_counts(old + valid_new, []),
+            'interpretation': 'Counts above use topic/post ID. Repeated global IDs differ in both body and classification; do not carry reading credit across those versions.',
+        },
         'canonical_sha256': canonical,
         'criteria_source_sha256': {r['criteria_sha256'] for r in work},
         'new_body_reviews': 0, 'registered_work_records': 0, 'reservations_created': 0,
