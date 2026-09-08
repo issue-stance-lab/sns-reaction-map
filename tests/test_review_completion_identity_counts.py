@@ -28,13 +28,29 @@ class IdentityCountsTests(unittest.TestCase):
         self.assertEqual(result['reference']['baseline_completed_records'], 1)
 
     def test_cross_theme_global_id_is_reference_only(self):
-        result = self.inspect([row('tax', 'same-id')], [row('fuku', 'same-id')])
+        tax = row('tax', 'same-id', body='tax-body')
+        fuku = {**row('fuku', 'same-id', body='fuku-body'), 'classification_sha256': 'fuku-labels'}
+        result = self.inspect([tax], [fuku])
         self.assertFalse(any(result['blocking'].values()))
         self.assertEqual(result['reference']['global_id_reappears_in_baseline_completed_count'], 1)
         self.assertEqual(result['reference']['global_id_reappears_in_baseline_completed'][0]['baseline_topics'], ['fuku'])
-        result = self.inspect([row('tax', 'same-id'), row('fuku', 'same-id')])
+        result = self.inspect([tax, fuku])
         self.assertFalse(any(result['blocking'].values()))
         self.assertEqual(len(result['reference']['global_id_across_theme_recurrences']), 1)
+
+    def test_cross_theme_exact_id_body_classification_repeat_blocks(self):
+        tax, fuku = row('tax', 'same-id'), row('fuku', 'same-id')
+        result = self.inspect([tax, fuku])
+        self.assertEqual(result['blocking']['global_id_body_classification_duplicate_excess_rows'], 1)
+        self.assertEqual(result['blocking']['topic_id_duplicate_excess_rows'], 0)
+        result = self.inspect([tax], [fuku])
+        self.assertEqual(result['blocking']['previously_completed_global_id_body_classification_rows'], 1)
+        self.assertEqual(result['blocking']['previously_completed_topic_id_rows'], 0)
+
+    def test_same_body_and_classification_with_distinct_ids_still_pass(self):
+        rows = [row('tax', 'new-id-a'), row('fuku', 'new-id-b')]
+        result = self.inspect(rows, [row('fuku', 'old-id')])
+        self.assertFalse(any(result['blocking'].values()))
 
     def test_same_topic_id_repeat_counts_even_across_journals(self):
         original = row('tax', 'id')
