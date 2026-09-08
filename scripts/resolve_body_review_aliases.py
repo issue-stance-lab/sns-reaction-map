@@ -99,7 +99,12 @@ def inspect(root, canonical_root, private_root, inventory_path):
     inv = read(inventory_path)
     registry_path = root / 'data/verification/editorial-work.json'
     registry = load_registry(registry_path, root, private_root)
-    proofs = {str(inventory_path): sha(inventory_path), str(registry_path): sha(registry_path)}
+    def reference(path, storage, base):
+        return {'storage': storage, 'path': str(path.relative_to(base)), 'sha256': sha(path)}
+    proofs = [reference(inventory_path, 'private', private_root),
+              reference(registry_path, 'repository', root)]
+    work_evidence = {s['path']: {k: s[k] for k in ('storage', 'path', 'sha256')}
+                     for s in registry['sources']}
     criteria = {}
     for row in registry['records']:
         topic = row['topic']
@@ -112,11 +117,12 @@ def inspect(root, canonical_root, private_root, inventory_path):
     decisions = {}
     for path in decision_paths:
         data = read(path)
-        proofs[str(path)] = sha(path)
+        ref = reference(path, 'repository', root)
+        proofs.append(ref)
         for row in data.get('records', data.get('journal', [])):
             if post_key(row) in decisions:
                 raise ValueError('duplicate final decision')
-            decisions[post_key(row)] = {**row, '_evidence': str(path)}
+            decisions[post_key(row)] = {**row, '_evidence': ref}
     aliases = link_aliases(inv, registry['records'], criteria, decisions)
     meta = yaml.safe_load((root / 'THEMES.yaml').read_text())['themes']
     canonical = {}
@@ -124,7 +130,7 @@ def inspect(root, canonical_root, private_root, inventory_path):
         path = canonical_root / meta[topic]['sample_file']
         if sha(path) != expected:
             raise ValueError('canonical changed: ' + topic)
-        proofs[str(path)] = expected
+        proofs.append(reference(path, 'canonical_repository', canonical_root))
         rows = read(path)
         for raw in rows:
             key = (topic, record_id_hash(raw))
@@ -132,6 +138,7 @@ def inspect(root, canonical_root, private_root, inventory_path):
                 raise ValueError('duplicate canonical ID')
             canonical[key] = raw
     for alias in aliases:
+        alias['source']['work_evidence'] = [work_evidence[p] for p in alias['source']['work_evidence']]
         raw_alias, raw_source = canonical[post_key(alias)], canonical[post_key(alias['source'])]
         for expected, raw in [(alias, raw_alias), (alias['source'], raw_source)]:
             classification = {k: (raw.get('classification') or {}).get(k, raw.get(k)) for k in FIELDS}
@@ -144,7 +151,7 @@ def inspect(root, canonical_root, private_root, inventory_path):
         alias['stored_user_id_comparison'] = stored_user_comparison(a, b)
         alias['identity_hash_checks'] = {'topic': True, 'distinct_post_ids': True, 'body': True, 'classification': True, 'criteria': True, 'canonical_version': True}
     summary = {
-        'schema_version': 1, 'purpose': 'Resolve duplicate-input dependencies only; not a reservation or reading result.',
+        'schema_version': 2, 'purpose': 'Resolve duplicate-input dependencies only; not a reservation or reading result.',
         'alias_ids': len(aliases),
         'by_source_kind': dict(Counter(r['source_kind'] for r in aliases)),
         'existing_source_final_status': dict(Counter(r['source']['final_status'] for r in aliases if r['source_kind'] == 'existing_work')),
@@ -161,7 +168,7 @@ def inspect(root, canonical_root, private_root, inventory_path):
         'work_registry_records_verified': len(registry['records']),
         'work_registry_source_files_verified': len(registry['sources']),
         'canonical_changes': 0, 'adoption_changes': 0, 'public_changes': 0,
-        'input_evidence_sha256': proofs,
+        'input_evidence': proofs,
     }
     return summary, {'summary': summary, 'aliases': aliases}
 
@@ -179,4 +186,4 @@ if __name__ == '__main__':
     for path, data in [(a.summary_out, summary), (a.private_out, evidence)]:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
-    print(json.dumps({k: v for k, v in summary.items() if k != 'input_evidence_sha256'}, ensure_ascii=False, indent=2))
+    print(json.dumps({k: v for k, v in summary.items() if k != 'input_evidence'}, ensure_ascii=False, indent=2))

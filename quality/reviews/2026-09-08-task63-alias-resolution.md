@@ -48,8 +48,10 @@
 
 ID別対応先・元の最終状態・証拠参照はリポジトリ外の次のファイルに保存した。
 
-`/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/body-review-inventory/20260908-scope-resolution/alias-links-v2.private.json`
+`/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/body-review-inventory/20260908-scope-resolution/alias-links-v3.private.json`
 
-最初の保存版 `alias-links.private.json` と `alias-summary-v1.json` も保持した。v2は保存user_idの比較名と欠落・代替文字列の区別を明示した版であり、対応ID・本文ハッシュ・分類・最終判断・件数は不変。
+最初の保存版とv2のリンク・サマリも保持した。v2は保存user_idの比較名と欠落・代替文字列の区別を明示した版。v3は削除予定worktreeへの絶対参照を、保存区分（repository/private/canonical_repository）・相対パス・SHA256の安定参照に置き換えた版。840参照を照合し、対応ID・本文ハッシュ・分類・最終判断・件数は旧版と不変。canonical_repositoryは共有リポジトリの正典を指す。
+
+v3のSHA256は `a9cc4ce7d9ac70b94ddc82d8b097369ec034db1858967fb06613576f538b5176`。
 
 再現コードは `scripts/resolve_body_review_aliases.py`。13テストで同テーマ制約、本文・基準変化、複数元ID、同一ID・重複ID、最終判断欠落、監査待ち、元の保持候補から採用を推測しないこと、旧未完の非昇格、複数別IDからの読了非加算、空・代替メタデータの扱いを確認した。実データの8,080作業記録・272対応・全11正典ハッシュ照合は合格した。
