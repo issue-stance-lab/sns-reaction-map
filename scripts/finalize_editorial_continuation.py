@@ -9,13 +9,54 @@ from pathlib import Path
 
 import yaml
 
-from scripts import editorial_cycle
+from scripts import editorial_cycle, supplemental_editorial_audit
 from scripts.editorial_work_registry import build_registry, load_registry
-from scripts.finalize_editorial_cycle import validate_work_lineage
+from scripts.finalize_editorial_cycle import validate_work_lineage, apply_overlay
+from scripts.editorial_work_registry import fingerprint
 from scripts.verify_editorial_hundred import dump, read, sha
 
 
-RESULT_PREFIX = '2026-09-07-cycle-next4000'
+RESULT_PREFIX = '2026-09-08-cycle-next4000-final'
+
+
+def overlay_supplements(root, run, wave_name, result, folders):
+    """Replay only explicitly supplied, completed audits of this exact wave."""
+    original = result['journal']
+    rows = original
+    reports = []
+    for folder in folders:
+        folder = Path(folder).resolve()
+        reservation = read(folder / 'reservation.json')
+        baseline = read(folder / 'baseline.private.json')
+        provenance = reservation.get('source_provenance', {})
+        if provenance != baseline.get('source_provenance'):
+            raise ValueError('supplement provenance differs')
+        expected = {
+            'source_run': str(run.resolve()),
+            'source_top_reservation_sha256': sha(run / 'reservation.json'),
+            'source_wave': wave_name,
+            'source_wave_reservation_sha256': sha(run / wave_name / 'reservation.json'),
+        }
+        if any(provenance.get(k) != v for k, v in expected.items()):
+            raise ValueError('supplement belongs to another source wave or version')
+        batches = provenance.get('source_batches', [])
+        if not batches or len(set(batches)) != len(batches) or not set(batches) <= {r['batch'] for r in original}:
+            raise ValueError('invalid supplemental source batches')
+        projection = [r for r in original if r['batch'] in batches]
+        if fingerprint(projection) != baseline['source_journal_sha256']:
+            raise ValueError('supplement source journal differs')
+        report = supplemental_editorial_audit.collect(root, folder)
+        for item in baseline['records']:
+            audit = read(folder / f"batch-{item['supplemental_batch']:02d}" / 'audit.private.json')
+            editor = read(run / wave_name / f"batch-{item['source_key'][0]:02d}" / 'editor-actor.private.json')
+            if audit['actor'] == editor['actor']:
+                raise ValueError('supplemental self audit')
+        rows = apply_overlay(rows, report)
+        reports.append({'path': str(folder), 'report': report})
+    return {**result, 'journal': rows,
+            'adoption_counts': dict(Counter(r['adoption_status'] for r in rows)),
+            'supplemental_audits': sum(s['report']['supplemental_audits'] for s in reports),
+            'supplements': reports}
 
 
 def combine_journals(baseline: list, wave_results: list, expected_new: int = 4000) -> dict:
@@ -47,9 +88,12 @@ def combine_journals(baseline: list, wave_results: list, expected_new: int = 400
     }
 
 
-def verify_and_collect(root: Path, private_root: Path, run: Path) -> tuple[dict, list]:
+def verify_and_collect(root: Path, private_root: Path, run: Path, supplements=None) -> tuple[dict, list]:
     root, private_root, run = root.resolve(), private_root.resolve(), run.resolve()
     reservation = read(run / 'reservation.json')
+    supplements = supplements or {}
+    if not set(supplements) <= set(reservation['waves']):
+        raise ValueError('unknown supplemental wave')
     if reservation['new_records'] != 4000 or len(reservation['waves']) != 4:
         raise ValueError('expected a frozen four-wave reservation')
     if sha(run / 'adoption-before.private.json') != reservation['baseline_adoption_sha256']:
@@ -78,6 +122,7 @@ def verify_and_collect(root: Path, private_root: Path, run: Path) -> tuple[dict,
         if sha(root / 'scripts/editorial_cycle.py') != wave_reservation['cycle_writer_sha256']:
             raise ValueError('cycle collector changed')
         result, _ = editorial_cycle.collect(root, folder)
+        result = overlay_supplements(root, run, name, result, supplements.get(name, []))
         wave_results.append(result)
 
     baseline = read(run / 'adoption-before.private.json')
@@ -87,9 +132,9 @@ def verify_and_collect(root: Path, private_root: Path, run: Path) -> tuple[dict,
     return combined, wave_results
 
 
-def register_work_only(root: Path, private_root: Path, run: Path) -> dict:
+def register_work_only(root: Path, private_root: Path, run: Path, supplements=None) -> dict:
     root, private_root, run = root.resolve(), private_root.resolve(), run.resolve()
-    combined, wave_results = verify_and_collect(root, private_root, run)
+    combined, wave_results = verify_and_collect(root, private_root, run, supplements)
     work_path = root / 'data/verification/editorial-work.json'
     baseline_work = load_registry(run / 'work-before.private.json', root, private_root)
     sources = baseline_work['sources'][:]
@@ -127,6 +172,9 @@ def register_work_only(root: Path, private_root: Path, run: Path) -> dict:
 
     report_refs = []
     for wave_number, result in enumerate(wave_results, 1):
+        for supplement in result['supplements']:
+            for proof in supplement['report']['proofs']:
+                add(Path(supplement['path']) / proof, 'private', 'evidence')
         path = root / 'quality/reviews' / f'{RESULT_PREFIX}-wave-{wave_number:02d}.json'
         if path.exists() and read(path) != result:
             raise ValueError('refusing to overwrite a different wave report')
@@ -151,6 +199,7 @@ def register_work_only(root: Path, private_root: Path, run: Path) -> dict:
         'cumulative_adoption_counts_if_applied': combined['cumulative_adoption_counts_if_applied'],
         'new_routes': combined['new_routes'],
         'independent_new_records': combined['independent_new_records'],
+        'supplemental_audits': sum(w['supplemental_audits'] for w in wave_results),
         'topic_counts': read(run / 'reservation.json')['topic_counts'],
         'opinion_counts': read(run / 'reservation.json')['opinion_counts'],
         'wave_reports': report_refs,
@@ -176,6 +225,9 @@ if __name__ == '__main__':
     parser.add_argument('--root', type=Path, required=True)
     parser.add_argument('--private-root', type=Path, required=True)
     parser.add_argument('--run', type=Path, required=True)
+    parser.add_argument('--supplement-manifest', type=Path,
+                        help='Explicit mapping of wave names to private supplement directories')
     args = parser.parse_args()
-    result = register_work_only(args.root, args.private_root, args.run)
+    result = register_work_only(args.root, args.private_root, args.run,
+                                read(args.supplement_manifest) if args.supplement_manifest else None)
     print(json.dumps(result, ensure_ascii=False))
