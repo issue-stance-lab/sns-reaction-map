@@ -34,7 +34,29 @@ def ids(value):
     elif isinstance(value,str) and re.fullmatch(r'\d{15,22}',value):yield value
 
 
+def resolve_legacy_source(value,root,external):
+    """Resolve old evidence references only inside the supplied restore roots."""
+    root=Path(root).resolve();external=Path(external).resolve()
+    path=Path(value)
+    if path.is_absolute():
+        if path.is_relative_to(EXTERNAL):
+            base=external;relative=path.relative_to(EXTERNAL)
+        elif path.is_relative_to(external):
+            base=external;relative=path.relative_to(external)
+        elif path.is_relative_to(root):
+            base=root;relative=path.relative_to(root)
+        elif '/issue-stance-aggregator/' in value:
+            base=root;relative=Path(value.split('/issue-stance-aggregator/',1)[1])
+        else:raise ValueError('限定確認の出所が指定ルート外: '+value)
+    else:base=root;relative=path
+    resolved=(base/relative).resolve()
+    if '..' in relative.parts or not resolved.is_relative_to(base):
+        raise ValueError('限定確認の出所が指定ルート外: '+value)
+    return resolved
+
+
 def inventory(root,external):
+    root=Path(root).resolve();external=Path(external).resolve()
     metadata=yaml.safe_load((root/'THEMES.yaml').read_text())['themes']
     report={'schema_version':1,'snapshot_at':datetime.now(timezone.utc).isoformat(),'topics':{},'totals':{},
             'measurement_stage':'before_low_token_pilot','meaning':'Existing additional reading records by scope, not full four-field classification correctness, human approval or proof of comprehension.'}
@@ -53,10 +75,8 @@ def inventory(root,external):
             # Revalidate reading evidence files, not stale source scripts/old configuration references.
             for source in old['sources']:
                 if source.get('kind') not in {'focused_body_review','classification_review','classification_body_review'}:continue
-                relative=source['path']
-                if relative.startswith('/'):relative=relative.split('/issue-stance-aggregator/',1)[-1]
-                p=root/relative
-                if not p.is_file() or sha(p)!=source['sha256']:raise ValueError('限定確認の出所が欠落・変化: '+relative)
+                p=resolve_legacy_source(source['path'],root,external)
+                if not p.is_file() or sha(p)!=source['sha256']:raise ValueError('限定確認の出所が欠落・変化: '+source['path'])
                 source_ref=str(p.relative_to(external)) if p.is_relative_to(external) else str(p.relative_to(root))
                 source_fingerprints[source_ref]=sha(p)
         ledger=root/'data/verification/reread'/f'{topic}.json'
