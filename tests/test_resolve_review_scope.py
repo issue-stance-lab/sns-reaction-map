@@ -1,7 +1,11 @@
 import copy
 import unittest
-from scripts.resolve_remaining_review_scope import build_resolution
+import tempfile
+import json
+from pathlib import Path
+from scripts.resolve_remaining_review_scope import build_resolution, freeze, load_resolution
 from scripts.editorial_work_registry import fingerprint
+from scripts.verify_editorial_hundred import sha
 
 
 class ScopeResolutionTests(unittest.TestCase):
@@ -88,6 +92,25 @@ class ScopeResolutionTests(unittest.TestCase):
         self.inventory['excluded_unconfirmed'][0]['exclusion_reasons'].append('invalid_run_reserved_id')
         with self.assertRaisesRegex(ValueError, 'overlapping exclusion'):
             self.run_resolution()
+
+    def test_scope_cannot_be_mistaken_for_execution_reservation(self):
+        result = self.run_resolution()
+        result['records'][0]['reservation_state'] = 'reserved'
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'resolution.json'
+            path.write_text(json.dumps(result))
+            summary = {k: v for k, v in result.items() if k != 'records'}
+            summary.update(resolution_path=path.name, resolution_sha256=sha(path))
+            with self.assertRaisesRegex(ValueError, 'cannot grant completion'):
+                load_resolution(summary, Path(temp))
+
+    def test_outside_private_root_rejected_before_reading_inputs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            with self.assertRaisesRegex(ValueError, 'private evidence directory'):
+                freeze(base/'root', base/'canonical', base/'private', base/'run',
+                       base/'inventory', base/'outside')
+            self.assertFalse((base/'outside').exists())
 
 
 if __name__ == '__main__':

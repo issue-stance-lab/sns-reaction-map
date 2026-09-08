@@ -138,7 +138,7 @@ def build_resolution(inventory, work, criteria):
 def freeze(root, canonical_root, private_root, run, inventory_path, out):
     root, canonical_root, private_root, run, inventory_path, out = map(
         lambda p: Path(p).resolve(), (root, canonical_root, private_root, run, inventory_path, out))
-    if out.exists() or out.is_relative_to(root):
+    if out.exists() or out.is_relative_to(root) or not out.is_relative_to(private_root):
         raise ValueError('new private evidence directory required')
     old_inventory = json.loads(inventory_path.read_text())
     summary, current = inspect(root, canonical_root, private_root, run)
@@ -176,7 +176,7 @@ def load_resolution(summary, private_root):
     if {k: v for k, v in result.items() if k != 'records'} != {
             k: v for k, v in summary.items() if k not in {'resolution_path', 'resolution_sha256'}}:
         raise ValueError('summary differs from routing evidence')
-    if any(r['state'] != 'unconfirmed' or r['post_completion_credit'] or
+    if any(r['state'] != 'unconfirmed' or r['reservation_state'] != 'not_reserved' or r['post_completion_credit'] or
            r['body_review_credit'] or r['adoption_transfer_allowed'] for r in result['records']):
         raise ValueError('routing evidence cannot grant completion or adoption')
     return result

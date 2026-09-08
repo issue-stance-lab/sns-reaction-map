@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "scope": "Resolved routing only; not execution reservations or reading evidence.",
+  "target_topic_post_records": 5134,
+  "target_global_post_ids": 5133,
+  "route_counts": {
+    "new_body_review": 4769,
+    "restart_invalid_reservation": 30,
+    "resume_unfinished_review": 63,
+    "verify_distinct_id_after_primary_review": 10,
+    "verify_distinct_id_against_existing_review": 262
+  },
+  "primary_body_review_inputs": 4862,
+  "distinct_id_verification_records": 272,
+  "total_distinct_input_versions": 4922,
+  "koshitsu_gated_records": 782,
+  "new_body_reviews": 0,
+  "completed_post_ids": 0,
+  "reservations_created": 0,
+  "execution_constraints": {
+    "cycle_records_max": 1000,
+    "body_packet_records_max": 20,
+    "one_topic_per_packet": true,
+    "last_134_topic_homogeneous_packets_max_20": true,
+    "completed_source_review_is_not_alias_id_completion": true,
+    "old_attempts_and_invalid_reservations_preserved": true,
+    "new_execution_reservations_require_fresh_checks": true
+  },
+  "provenance": {
+    "inventory_sha256": "b67c90d7ad909b8eebb8cac953eb9443f603c99ca6c4db2b209d3f0f7068b0a7",
+    "work_registry_sha256": "2a71520d205f934f52ab12ca9bacbb80df032f49ed2181cb64b32d76c27b361a",
+    "run_reservation_sha256": "6196fe5a87bd2cdcf93a0f39fb418bfa65b1e2becc4fc7847552a33e515b58d0",
+    "canonical_sha256": {
+      "ai-copyright": "66b304bec266758a31cc55c6761d05ed0cdf4f506d6b44cab070cdae2c208098",
+      "bike-blue-ticket": "23edd58fc4f5eae513d4b7a500da5ee0254fbe2008b2b6e9e57d41896fe55f6e",
+      "bukatsu-chiiki": "fc0ed988847de9df5d926a565c1a55cd4869c074cdb7107d41bd7887a71d1d76",
+      "constitutional-amendment": "60ac55ecc87fef61358e6a9ce6cc75df6cbf9684d7e6742ef8d531cdf55dd5e9",
+      "elderly-license-revocation": "f3d2af2d961b9ca6358b75a651e89379e83d2a20c1cf3477daae878aa64a4836",
+      "school-nickname-ban": "85c9bc0dc54742d576a035bc6ae1e282497cfd1c32028d61055ae81deaccd3d2",
+      "henoko-student-accident": "3cca77f41e89b60a6a2a9057d6242bd8e149f72150d6ef739d268f38ad8400c2",
+      "takaichi": "aee97f77330a187e3264a31a35ce9736c953cbfaae73979972bb0e96e39e0d74",
+      "fukushuto": "d0d46700f58a2c15f321f7d7d62a372ff5a508ca1a4c2b001e24361aabc43c0d",
+      "koshitsu-tenpakai": "aff46757fddab66036f03f3685d0f9d1e7f40c4161160a4d4a848beab8c7569f",
+      "consumption-tax-cut": "ebb2910087fed775f13e6be3f3f243632f03ae4d4589c1876dd1f795ce5ed5ad"
+    },
+    "authorization": "Owner requested discrepancy-resolution work after the 365-record difference report."
+  },
+  "resolution_path": "body-review-inventory/20260908-scope-resolution/final-targets/scope-resolution.private.json",
+  "resolution_sha256": "4806edeca91511c2ceac2c87e43cb546209f74ae6da033dadba3e8b71f8e838a"
+}
