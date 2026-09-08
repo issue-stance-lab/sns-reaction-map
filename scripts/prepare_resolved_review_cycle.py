@@ -32,6 +32,7 @@ def select_ordinary(scope, raw, criteria, used, quotas):
 
 def prepare(root, private, run, quotas, worktrees, prior_runs=()):
     root, private, run = (Path(p).resolve() for p in (root, private, run))
+    worktrees={actor:str(Path(path).resolve()) for actor,path in worktrees.items()}
     if run.exists() or not run.is_relative_to(private) or run.is_relative_to(root):
         raise ValueError('new private run required')
     if set(worktrees) != {'editor_a', 'editor_b', 'auditor'} or len(set(worktrees.values())) != 3:
@@ -98,4 +99,6 @@ def prepare(root, private, run, quotas, worktrees, prior_runs=()):
          'policy_sha256':policy,'koshitsu_paused':782,'non_koshitsu_target':4352,'status':'reserved_not_reviewed','registered_reread_increment':0,
          'activity_check':'Only current editor_a/editor_b/auditor are assigned; prior task actors completed; parent confirmed live status before dispatch.'}
     dump(run/'reservation.json',top)
+    code_files=('continuous_editorial_review.py','editorial_cycle.py','editorial_acceptance.py','summarize_editorial_batch.py','trial_body_review_values.py','editorial_work_registry.py','supplemental_editorial_audit.py')
+    dump(run/'decision-code-integrity.private.json',{'observed_epoch':time.time(),'code_sha256':{'scripts/'+f:sha(root/'scripts'/f) for f in code_files},'new_review_credit':0})
     return top

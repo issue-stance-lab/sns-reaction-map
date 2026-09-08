@@ -17,9 +17,23 @@ def boundary_holds(result, wave):
     overlays=[]
     for path in sorted(wave.glob('editor-*-boundary-flags.private.json')):
         flags=read(path)
-        if flags['new_review_credit'] != 0 or flags['preserves_saved_editor_results'] is not True:
-            raise ValueError('boundary flags cannot grant credit or rewrite answers')
-        for flag in flags['flags']:
+        if 'flags' in flags:
+            if flags['new_review_credit'] != 0 or flags['preserves_saved_editor_results'] is not True:
+                raise ValueError('boundary flags cannot grant credit or rewrite answers')
+            items=flags['flags']
+        else:
+            items=[]
+            for item in flags['rows']:
+                if item['new_reading_credit'] != 0 or item['recommendation'] != 'criteria_scope_hold':
+                    raise ValueError('invalid retrospective boundary recommendation')
+                editor_path=wave/f"batch-{item['batch']:02d}"/'editor.private.json'
+                if sha(editor_path) != item['editor_sha256']:
+                    raise ValueError('boundary editor evidence changed')
+                old=rows[(item['batch'],item['index'])]
+                if any(old[k] != item[k] for k in ('record_id_hash','body_sha256')):
+                    raise ValueError('boundary identity changed')
+                items.append({**item,'route':'criteria_needed','uncertain':True,'evidence_sufficient':False})
+        for flag in items:
             key=(flag['batch'],flag['index']);old=rows[key]
             actor=read(wave/f'batch-{key[0]:02d}'/'editor-actor.private.json')['actor']
             if actor != flags['actor'] or flag['route'] != 'criteria_needed' or not flag['uncertain'] or flag['evidence_sufficient']:
@@ -35,6 +49,8 @@ def boundary_holds(result, wave):
 def collect(root, private, run, supplements=()):
     root, private, run = map(Path, (root, private, run))
     top = read(run/'reservation.json')
+    integrity=read(run/'decision-code-integrity.private.json')
+    if any(sha(root/f)!=h for f,h in integrity['code_sha256'].items()):raise ValueError('decision code changed')
     if top['new_records'] != 1000 or set(top['waves']) != {'wave-01'}:
         raise ValueError('expected one frozen 1000-record cycle')
     for name in ('work','adoption'):
@@ -82,10 +98,14 @@ def register(root, private, run, report_prefix, supplements=()):
         if old and old != entry:raise ValueError('source changed')
         if not old:sources.append(entry)
     report=root/'quality/reviews'/f'{report_prefix}-wave.json'
-    if report.exists():raise ValueError('never overwrite cycle report')
-    dump(report,result);add(report,'journal')
+    if report.exists():
+        if read(report)!=result:raise ValueError('never overwrite cycle report')
+    else:dump(report,result)
+    add(report,'journal')
     for path in run.rglob('*'):
-        if path.is_file():add(path,'packet' if path.name=='packet.private.json' else 'evidence')
+        if path.is_file() and path.suffix=='.json':
+            is_packet=path.name=='packet.private.json' and path.parent.parent==run/'wave-01'
+            add(path,'packet' if is_packet else 'evidence')
     for supplement in result['supplements']:
         for rel in supplement['report']['proofs']:add(Path(supplement['path'])/rel,'evidence')
     updated=build_registry(sources,root,private)
