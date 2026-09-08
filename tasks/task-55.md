@@ -1,8 +1,22 @@
 # 課題55: カスタムドメイン移行と公開元の一本化（課題54・15-Cの前提）
 
 
-**状態**: ドメイン取得・DNS・GitHub Pages・HTTPS設定は完了。**ただし新ドメインでは投票とGA4が停止している**（2026-08-31 のレビューで実測検出。段階0で先に直す）。公開HTML内のURL移行と検索エンジン移行は未完了
-**優先度**: **最優先の基盤作業**。課題54の公開実装および課題15-Cより先に完了する
+**状態**: 2026-08-31 に段階0〜5-2まで実施し、`sns-reaction-map.jp` を正式URLとして本番公開した。残るのは経過観察と、旧ルート（別リポジトリ）の案内ページ化だけ。**現状はこのファイル末尾の「状態（更新）」を正とする。**
+**優先度**: 中。本番は動いているので、課題54の公開実装・課題15-Cを待たせる理由はなくなった
+
+> **この行より下の「段階0」「段階1」などの記述は、2026-08-31 に着手する前の状況をそのまま残した作業記録です。**
+> 「新ドメインでは投票とGA4が停止している」という記述もその時点のもので、**いまは両方とも直っています。**
+> 2026-09-08 に本番へ直接あてて再確認した結果:
+>
+> | 見たこと | 結果 |
+> |---|---|
+> | `https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html` | 200 |
+> | 公開HTMLのGA4ホスト判定 | `allowedHosts = ["sns-reaction-map.jp"]` |
+> | 公開11ページの canonical / og:url | 全ページ新ドメイン |
+> | robots.txt / sitemap.xml | 新ドメイン |
+> | 投票（cast-vote の preflight） | `access-control-allow-origin: https://sns-reaction-map.jp` |
+> | 旧URL | UTMを保ったまま301で新URLへ転送 |
+> | `scripts/` `configs/` `docs/` に残る旧オリジン | `configs/prompts/codex/20260802_ogp-header-replace.md` の1件のみ（当時の作業記録なので残す） |
 **正式URL**: `https://sns-reaction-map.jp/`
 
 **公開元（2026-08-31 確定）**: `issue-stance-lab/sns-reaction-map` の GitHub Pages（GitHub Actions公開・`.github/workflows/deploy.yml`）。
@@ -171,3 +185,7 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
 1. 段階5-3: 4週間、週1回Search Consoleのインデックス状況を見る
 2. 旧ルート（別リポジトリ `issue-stance-lab/issue-stance-lab.github.io`）を案内ページへ置き換え（CEO決定A、未着手）
 3. 新ドメインでGA4のリアルタイムに実アクセスが出ることをブラウザで目視確認する
+
+**2026-09-08 追記**: 上の1〜3は未着手のまま。ただし本番の状態はこの日に再実測して正常だった（内容はファイル冒頭の表）。
+`content/note/drafts/bukatsu-chiiki-note5-FINAL.md` のリンクを新ドメインへ直した。
+第1〜4回の公開済みnote記事は旧URLのままだが、301でUTMごと転送されるので計測は切れていない。
