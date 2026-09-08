@@ -8,7 +8,7 @@ from scripts.verify_resolved_review_completion import verify
 from scripts.handoff_archive_dependencies import collect_handoff_inputs, verify_handoff_manifest
 
 
-def archive_handoff(root, private, shared, additional_folders=()):
+def archive_handoff(root, private, shared, additional_folders=(), additional_sources=()):
     root, private, shared = (Path(p).resolve() for p in (root, private, shared))
     pilot = private / 'body-review-pilot'
     runs = [pilot / f'20260908-nonkoshitsu-cycle{i:02d}' for i in range(1, 5)]
@@ -39,7 +39,8 @@ def archive_handoff(root, private, shared, additional_folders=()):
         folders.extend(Path(s['path']) for s in read(root / report)['supplements'])
     dependencies, expected = collect_handoff_inputs(
         root, private, ledger, read(root / 'data/verification/editorial-review-scope.json'),
-        [short_run, *folders], pilot / '20260908-finish5134-handoff/protected-before.private.json')
+        [short_run, *folders], pilot / '20260908-finish5134-handoff/protected-before.private.json',
+        additional_sources=additional_sources)
     receipt = archive(root, private, short_run, folders, prefix,
                       extra_paths=[*extras, *dependencies])
     verify_handoff_manifest(private, receipt, expected)

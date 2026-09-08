@@ -54,9 +54,32 @@ class HandoffDependencyTests(unittest.TestCase):
         dump(self.root / 'original.json', {'unchanged': True})
         dump(self.protected, {'original.json': sha(self.root / 'original.json')})
 
-    def collect(self, folders=None):
+    def collect(self, folders=None, additional_sources=()):
         return collect_handoff_inputs(self.root, self.private, self.ledger, self.scope,
-                                      [self.run] if folders is None else folders, self.protected)
+                                      [self.run] if folders is None else folders, self.protected,
+                                      additional_sources=additional_sources)
+
+    def test_old_limited_review_evidence_is_restored_at_its_original_relative_path(self):
+        evidence = self.private / 'older-limited-review/decisions.json'
+        dump(evidence, {'reviewed_ids': ['previously-excluded-synthetic-id']})
+        source = {'storage': 'private', 'path': str(evidence.relative_to(self.private)),
+                  'sha256': sha(evidence)}
+        paths, expected = self.collect(additional_sources=[source])
+        receipt = self.make_archive(paths)
+        verify_handoff_manifest(self.private, receipt, expected)
+        restored = self.base / 'restored-limited'
+        with tarfile.open(self.private / receipt['archive']) as tar:
+            tar.extractall(restored, filter='data')
+        self.assertEqual(read(restored / 'private' / source['path']), read(evidence))
+
+    def test_changed_old_limited_evidence_cannot_be_pinned_as_current(self):
+        evidence = self.private / 'older-limited-review/decisions.json'
+        dump(evidence, {'reviewed_ids': ['original']})
+        source = {'storage': 'private', 'path': str(evidence.relative_to(self.private)),
+                  'sha256': sha(evidence)}
+        dump(evidence, {'reviewed_ids': ['changed']})
+        with self.assertRaisesRegex(ValueError, 'evidence missing or changed'):
+            self.collect(additional_sources=[source])
 
     def make_archive(self, paths, mutate_manifest=None):
         destination = self.private / 'archive'

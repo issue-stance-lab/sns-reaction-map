@@ -10,7 +10,7 @@ from scripts.editorial_work_registry import resolve_source
 from scripts.verify_editorial_hundred import read, sha
 
 
-def collect_handoff_inputs(root, private, ledger, scope_summary, folders, protected_path):
+def collect_handoff_inputs(root, private, ledger, scope_summary, folders, protected_path, additional_sources=()):
     root, private = Path(root).resolve(), Path(private).resolve()
     paths, expected = {}, {}
 
@@ -48,6 +48,10 @@ def collect_handoff_inputs(root, private, ledger, scope_summary, folders, protec
                 dependency = {'storage': 'repository', 'path': criteria['source'],
                               'sha256': criteria['source_sha256']}
                 pin(resolve_source(dependency, root, private), dependency['sha256'])
+    # Fresh public-inventory checks also depend on older, limited-review evidence
+    # that may never have been a source of the newer work ledger.
+    for source in additional_sources:
+        pin(resolve_source(source, root, private), source['sha256'])
     resolution = {'storage': 'private', 'path': scope_summary['resolution_path'],
                   'sha256': scope_summary['resolution_sha256']}
     pin(resolve_source(resolution, root, private), resolution['sha256'])
