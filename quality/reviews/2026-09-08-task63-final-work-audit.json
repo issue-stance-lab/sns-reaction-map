@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "verdict": "PASS",
+  "reviewer": "scope_inventory",
+  "audit_method": "Read-only source-file replay with editorial_cycle.collect, exact supplemental overlays and rebuilt work registry; no self-reported counts used.",
+  "source_editor_records": 4000,
+  "source_independent_audit_records": 1548,
+  "source_quality_gate_batches": 200,
+  "source_supplemental_audits": 338,
+  "supplemental_audits_prior_completed": 57,
+  "supplemental_audits_this_handoff": 281,
+  "final_candidate_counts": {
+    "accepted": 2159,
+    "hold": 1251,
+    "pending_evidence": 590
+  },
+  "pending_audit": 0,
+  "baseline_work_records_preserved_exactly": 4080,
+  "new_unique_work_records": 4000,
+  "final_work_records": 8080,
+  "legacy_attempted_records_preserved": 80,
+  "new_work_states": {
+    "change_candidate": 536,
+    "hold": 1146,
+    "retain_candidate": 2318
+  },
+  "selector_excludes_all_new_work": true,
+  "unfinished_batches": [],
+  "self_audited_batches": [],
+  "canonical_hashes_matched": 11,
+  "public_files_unchanged": 237,
+  "adoption_ledger_unchanged": true,
+  "new_public_opinion_reviews_in_current_run": 1923,
+  "public_unconfirmed_topic_post_records": 5134,
+  "public_unconfirmed_global_post_ids": 5133,
+  "new_scope_5134_reviews": 0,
+  "unconfirmed_but_ineligible_topic_post_records": 365,
+  "new_scope_reservations": 0,
+  "canonical_changes": 0,
+  "adoption_changes": 0,
+  "public_changes": 0,
+  "wave_results": {
+    "wave-01": {
+      "new_records": 1000,
+      "audit_records": 551,
+      "before_supplement_counts": {
+        "accepted": 406,
+        "hold": 284,
+        "pending_audit": 57,
+        "pending_evidence": 253
+      },
+      "final_counts": {
+        "accepted": 456,
+        "hold": 291,
+        "pending_evidence": 253
+      }
+    },
+    "wave-02": {
+      "new_records": 1000,
+      "audit_records": 354,
+      "before_supplement_counts": {
+        "accepted": 618,
+        "hold": 263,
+        "pending_audit": 100,
+        "pending_evidence": 19
+      },
+      "final_counts": {
+        "accepted": 679,
+        "hold": 302,
+        "pending_evidence": 19
+      }
+    },
+    "wave-03": {
+      "new_records": 1000,
+      "audit_records": 345,
+      "before_supplement_counts": {
+        "hold": 324,
+        "accepted": 343,
+        "pending_audit": 113,
+        "pending_evidence": 220
+      },
+      "final_counts": {
+        "hold": 370,
+        "accepted": 409,
+        "pending_evidence": 221
+      }
+    },
+    "wave-04": {
+      "new_records": 1000,
+      "audit_records": 298,
+      "before_supplement_counts": {
+        "hold": 275,
+        "pending_evidence": 97,
+        "accepted": 560,
+        "pending_audit": 68
+      },
+      "final_counts": {
+        "hold": 288,
+        "pending_evidence": 97,
+        "accepted": 615
+      }
+    }
+  },
+  "supplemental_sources": {
+    "20260908-cycle-next4000-v3-supplement-wave01-pending57-auditor": 57,
+    "20260908-cycle-next4000-v3-supplement-wave02-pending100-finish5134-auditor": 100,
+    "20260908-cycle-next4000-v3-supplement-wave03-pending113-finish5134-auditor": 113,
+    "20260908-cycle-next4000-v3-supplement-wave04-pending68-finish5134-auditor": 68
+  },
+  "work_registry_sha256": "2a71520d205f934f52ab12ca9bacbb80df032f49ed2181cb64b32d76c27b361a",
+  "results_sha256": "600b0e1569c8e98a5bd95211566883f12276b5ba3b08c8f2b5b58420a6b68478",
+  "supplement_manifest_sha256": "87844e67c50cb5d8db94ac8dc24e762d92022544129cb443192ca6daba6511dc",
+  "limitations": [
+    "Actor/worktree bindings are operational attribution, not cryptographic agent authentication.",
+    "Independent ledger audit does not constitute another reading of 4,000 post bodies.",
+    "5,134 unresolved topic/post records remain unresolved; duplicate-input exclusions do not grant reading credit."
+  ]
+}
