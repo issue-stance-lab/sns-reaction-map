@@ -9,6 +9,7 @@ from scripts.finalize_editorial_continuation import overlay_supplements
 from scripts.editorial_work_registry import build_registry, load_registry
 from scripts.resolve_remaining_review_scope import load_resolution
 from scripts.verify_editorial_hundred import read, sha, dump
+from scripts.verify_extra_held_audits import overlay as held_audit_overlay
 
 
 def boundary_holds(result, wave):
@@ -71,6 +72,7 @@ def collect(root, private, run, supplements=()):
     result=overlay_supplements(root,run,'wave-01',result,supplements)
     if result['adoption_counts'].get('pending_audit',0):raise ValueError('additional audits remain')
     result=boundary_holds(result,wave)
+    result=held_audit_overlay(run,result)
     scope=load_resolution(read(root/'data/verification/editorial-review-scope.json'),private)
     scope_by_id={(r['topic'],r['record_id_hash']):r for r in scope['records']}
     for row in result['journal']:

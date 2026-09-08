@@ -8,7 +8,7 @@ import time
 from scripts.verify_editorial_hundred import sha, dump
 
 
-def archive(root, private, run, supplements, prefix):
+def archive(root, private, run, supplements, prefix, extra_paths=()):
     root, private, run = (Path(p).resolve() for p in (root, private, run))
     dest = private / 'body-review-archives' / prefix
     if dest.exists():
@@ -18,6 +18,13 @@ def archive(root, private, run, supplements, prefix):
         for path in folder.rglob('*'):
             if path.is_file():
                 paths['private/' + str(path.relative_to(private))] = path
+    for path in map(Path, extra_paths):
+        path = path.resolve()
+        base = root if path.is_relative_to(root) else private
+        if not path.is_file() or not path.is_relative_to(base):
+            raise ValueError('extra evidence must be an existing repository or private file')
+        storage = 'repository/' if base == root else 'private/'
+        paths[storage + str(path.relative_to(base))] = path
     integrity = run / 'decision-code-integrity.private.json'
     if integrity.exists():
         for rel, expected in json.loads(integrity.read_text())['code_sha256'].items():
@@ -29,6 +36,8 @@ def archive(root, private, run, supplements, prefix):
                  *sorted((root / 'quality/reviews').glob(prefix + '*')),
                  *sorted((root / 'scripts').glob('*resolved*review*.py')),
                  *sorted((root / 'scripts').glob('*short*resolved*.py')),
+                 root / 'scripts/review_completion_identity_counts.py',
+                 root / 'scripts/verify_extra_held_audits.py',
                  root / 'scripts/finalize_resolved_review_cycle.py']:
         paths['repository/' + str(path.relative_to(root))] = path
     manifest = {rel: sha(path) for rel, path in sorted(paths.items())}
