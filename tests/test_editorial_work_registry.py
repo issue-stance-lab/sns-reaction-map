@@ -136,6 +136,18 @@ class EditorialWorkRegistryTest(unittest.TestCase):
         reports = {f.name: json.loads(f.read_text()) for f in
                    (p.parents[2]/'quality/reviews').glob('2026-09-08-nonkoshitsu-*-results.json')}
         expected, attempted = registered_cycle_expectations(reports)
+        # Royal three-domain reviews retain the old taxonomy fingerprint and
+        # promote only the explicitly linked unfinished work rows. Count their
+        # completed per-batch journals, not an adoption total or target quota.
+        royal = [json.loads(f.read_text()) for f in
+                 (p.parents[2]/'quality/reviews/royal782').glob('batch-*.json')]
+        royal_rows = [row for manifest in royal for row in manifest['journal']]
+        self.assertEqual(len({(r['topic'], r['record_id_hash']) for r in royal_rows}), len(royal_rows))
+        resumed = sum(r['scope_route'] == 'resume_unfinished_review' for r in royal_rows)
+        expected += len(royal_rows) - resumed
+        attempted -= resumed
+        self.assertTrue(all(r['route'] == 'hold' and not r['canonical_applied'] for r in royal_rows))
+        self.assertTrue(all(m['legacy_adoption_allowed'] is False for m in royal))
         self.assertEqual(len(ledger['records']), expected)
         self.assertEqual(sum(ledger['counts'].values()), expected)
         current = json.loads((p.parent/'editorial-adoption-current.json').read_text())
