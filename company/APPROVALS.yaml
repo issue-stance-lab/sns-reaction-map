@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-06"
+updated_at: "2026-09-09"
 
 rules:
   required_for:
@@ -190,6 +190,23 @@ items:
     requested_at: "2026-08-31"
     decided_at: "2026-08-31"
     decision_note: "CEOが本対話で、分かりやすい説明を確認した上で『承認』と回答。公開ページの変更・一般公開・AdSense再申請は含まない。"
+  - id: approval-20260909-001
+    department: data
+    action: important_policy_change
+    summary: "部活動の論点（main_issue）は増やさず、既存7論点への寄せ方を明文化する。増設は課題66で溜め置く"
+    reason: "投票は論点の番号で保存されるため、論点を増やすと公開済みの投票の意味が変わり、1,395件の再分類でページ完成が後ろへずれるため"
+    risks:
+      - "送迎・移動の安全／公費と運営費の負担主体／子どもの安全と事故対応／活動場所の確保は、当面「その他」等へ寄せることになり、実態との差が残る"
+      - "寄せ方の明文化を先に固めないと、担当ごとに違う寄せ方をして131件の判定がまた割れる"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-09-09-bukatsu-triage312.md
+      - tasks/task-66.md
+      - tasks/task-63.md
+    status: approved
+    requested_at: "2026-09-09"
+    decided_at: "2026-09-09"
+    decision_note: "CEOが本対話で「論点は増やさない、ただし課題管理して今後増やす」と回答。増設候補4件は課題66へ登録した。今回の決定に公開ページ・正典・採用台帳の変更は含まない。"
   - id: approval-20260830-002
     department: executive
     action: important_policy_change
