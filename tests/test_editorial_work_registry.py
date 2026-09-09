@@ -1,4 +1,5 @@
 import copy
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -151,8 +152,12 @@ class EditorialWorkRegistryTest(unittest.TestCase):
         self.assertEqual(len(ledger['records']), expected)
         self.assertEqual(sum(ledger['counts'].values()), expected)
         current = json.loads((p.parent/'editorial-adoption-current.json').read_text())
-        # The extra 4,000 are completed work only; adoption remains at its baseline.
-        self.assertEqual(current['reviewed_records'], 4000)
+        # Work-only cycles must not apply classifications or grant reread credit.
+        # Later, separately recorded adjudications can grow the adoption view.
+        self.assertEqual(current['reviewed_records'], len(current['records']))
+        self.assertEqual(current['counts'], dict(Counter(r['adoption_status'] for r in current['records'])))
+        self.assertEqual(current['canonical_applied'], 0)
+        self.assertEqual(current['registered_reread_increment'], 0)
         self.assertEqual(ledger['counts']['attempted'], attempted)
         self.assertEqual(len({(r['topic'], r['record_id_hash']) for r in ledger['records']}), expected)
         self.assertEqual(sum(bool(r['scope_only_audits']) for r in ledger['records']), 10)
