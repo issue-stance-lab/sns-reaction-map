@@ -1,0 +1,31 @@
+{
+  "scope": "Corrections and saved-reason routing only. Evidence archive restored and byte hashes verified; full pipeline restore was not performed.",
+  "protected_files": [
+    {
+      "tree": "correction_worktree",
+      "files_checked": 254,
+      "changed": 0
+    },
+    {
+      "tree": "main",
+      "files_checked": 299,
+      "changed": 0
+    }
+  ],
+  "archive_path": "/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/body-review-archives/2026-09-09-bukatsu-triage-fix/evidence.tar.gz",
+  "archive_sha256": "2402b115ec3235bf6319262bd9a0f0b176e55d5374e46b061036fa711b74081c",
+  "archive_payload_files": 179,
+  "restored_payload_files": 179,
+  "restore_hash_mismatches": 0,
+  "new_body_reviews": 0,
+  "new_adoption_decisions": 0,
+  "canonical_changes": 0,
+  "public_changes": 0,
+  "validation": [
+    "source-backed set and version checks passed",
+    "saved-reason hashes and 27-record coverage passed",
+    "current 305-record snapshot matched on repeated calculation",
+    "verify_task_board.py passed",
+    "git diff --check passed"
+  ]
+}
