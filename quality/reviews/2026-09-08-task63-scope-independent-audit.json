@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "reviewed_commit": "a87446b",
+  "reviewer_worktree": "task/task63-scope-alias",
+  "result": "PASS",
+  "review_scope": "Read-only implementation and actual 5,134-record routing reconstruction; no body judgments.",
+  "tests_passed": 9,
+  "topic_post_records": 5134,
+  "global_post_ids": 5133,
+  "route_counts": {
+    "new_body_review": 4769,
+    "restart_invalid_reservation": 30,
+    "resume_unfinished_review": 63,
+    "verify_distinct_id_after_primary_review": 10,
+    "verify_distinct_id_against_existing_review": 262
+  },
+  "unique_primary_body_inputs": 4862,
+  "distinct_input_versions": 4922,
+  "independently_reconstructed_alias_dependency_matches": 272,
+  "all_unconfirmed": true,
+  "all_not_reserved": true,
+  "all_zero_body_and_post_credit": true,
+  "all_adoption_transfer_disallowed": true,
+  "blocking_findings": [],
+  "nonblocking_recommendations": [
+    "Validate not_reserved explicitly in load_resolution.",
+    "Reject out outside private_root before creating any evidence directory."
+  ],
+  "source_code_sha256": {
+    "scripts/resolve_remaining_review_scope.py": "5bb9b49dcd988da3c470c11052377a2797815945ba2620cab338efd123542d1a",
+    "tests/test_resolve_review_scope.py": "7a46985e98cc07135437c498503aca71fbd31c06da0fdf8799bd8517ac0510a1"
+  },
+  "new_body_reviews": 0,
+  "independent_body_audits": 0,
+  "adoption_changes": 0,
+  "public_changes": 0
+}

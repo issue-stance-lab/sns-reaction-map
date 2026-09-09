@@ -81,13 +81,15 @@ def _packet(out, batch):
     return packet, expected
 
 
-def prepare(root, out, journal, sources, editor_reviews=None):
+def prepare(root, out, journal, sources, editor_reviews=None, source_provenance=None):
     """Freeze pending-audit retains into homogeneous packets of at most 20."""
     root, out = Path(root), Path(out)
     if out.exists() or out.resolve().is_relative_to(root.resolve()):
         raise ValueError('new private output outside the repository required')
     rows = journal['journal'] if isinstance(journal, dict) else journal
-    if not isinstance(rows, list) or not isinstance(sources, dict) or editor_reviews is not None and not isinstance(editor_reviews, dict):
+    if (not isinstance(rows, list) or not isinstance(sources, dict) or
+            editor_reviews is not None and not isinstance(editor_reviews, dict) or
+            source_provenance is not None and not isinstance(source_provenance, dict)):
         raise ValueError('journal and sources are required')
     selected = []
     seen = set()
@@ -161,12 +163,16 @@ def prepare(root, out, journal, sources, editor_reviews=None):
     baseline = {'schema_version': 1, 'records': baseline_records,
                 'source_journal_sha256': fingerprint(rows), 'pending_audit_records': len(selected),
                 'canonical_changes': 0, 'registered_reread_increment': 0}
+    if source_provenance is not None:
+        baseline['source_provenance'] = copy.deepcopy(source_provenance)
     dump(out / BASELINE, baseline)
     reservation = {'schema_version': 1, 'prepared_epoch': time.time(), 'batch_count': batch,
                    'pending_audit_records': len(selected), 'baseline_sha256': sha(out / BASELINE),
                    'policy_sha256': sha(root / 'scripts/editorial_acceptance.py'),
                    'packet_hashes': {str(p.relative_to(out)): sha(p) for p in packets},
                    'original_hashes': {str(p.relative_to(out)): sha(p) for p in originals_paths}}
+    if source_provenance is not None:
+        reservation['source_provenance'] = copy.deepcopy(source_provenance)
     dump(out / RESERVATION, reservation)
     return {'batches': batch, 'records': len(selected), 'topics': dict(Counter(r[0]['topic'] for r in selected)),
             'canonical_changes': 0, 'registered_reread_increment': 0}
