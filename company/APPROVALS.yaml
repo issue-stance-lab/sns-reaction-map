@@ -190,6 +190,23 @@ items:
     requested_at: "2026-08-31"
     decided_at: "2026-08-31"
     decision_note: "CEOが本対話で、分かりやすい説明を確認した上で『承認』と回答。公開ページの変更・一般公開・AdSense再申請は含まない。"
+  - id: approval-20260909-003
+    department: data
+    action: website_publication
+    summary: "ルール7-b（要求の無い問題指摘のみは中立・情報）を追加し、論点2つの公開説明文を広げる"
+    reason: "ルール7が問題指摘だけの投稿の置き場を決めておらず判定が割れたこと、および承認済みルール2・4が公開ページの論点説明文と食い違っていたため"
+    risks:
+      - "論点の名前・並び・番号は変えないため過去の投票への影響は無いが、説明文はページ本文の変更にあたる"
+      - "説明文は投票結果画面にだけ表示される。375pxで1行に収まることを実機幅で確認済み"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-09-09-bukatsu-rules11.md
+      - quality/designs/2026-09-09-bukatsu-classification-rules.md
+      - configs/bukatsu-chiiki-reaction-map.json
+    status: approved
+    requested_at: "2026-09-09"
+    decided_at: "2026-09-09"
+    decision_note: "CEOが本対話で「どちらも推奨で進めて」と回答。費用・家庭負担は「月会費・家計の負担、公費と運営費の負担」、受け皿・指導者は「指導者・運営体制の確保、活動場所と安全」へ変更した。本番反映（push）はまだ行っていない。"
   - id: approval-20260909-002
     department: data
     action: important_policy_change

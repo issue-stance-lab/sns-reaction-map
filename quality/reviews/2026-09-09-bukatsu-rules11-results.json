@@ -5,8 +5,8 @@
   "rules_source": "quality/designs/2026-09-09-bukatsu-classification-rules.md",
   "approval": "approval-20260909-002",
   "target": 11,
-  "resolved_by_rule": 6,
-  "still_hold": 5,
+  "resolved_by_rule": 7,
+  "still_hold": 4,
   "independent_reviewer": "fresh subagent, given bodies and the seven approved rules only; no saved candidates, no saved reasons, no parent judgement",
   "blindness_note": "親判断は規則を書いた同じセッションが下したため、独立性は担当分離のみで担保している。多数決による採用はしていない。",
   "new_body_reviews": 11,
@@ -255,24 +255,21 @@
         "stance": "中立・情報"
       },
       "rule_applied": true,
-      "decision": "hold",
+      "decision": "resolved_by_rule",
       "proposed": {
-        "is_relevant": null,
-        "is_opinion": null,
-        "main_issue": null,
-        "stance": null
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
       },
-      "differing_fields": [
-        "stance"
-      ],
-      "unresolved_fields": [
-        "stance"
-      ],
-      "apply_candidate": false,
-      "reason_sha256": "8bde7c6f88a95042a6a533294334d4ffdd72925c0f9853e2be5c24e201288248",
+      "differing_fields": [],
+      "unresolved_fields": [],
+      "apply_candidate": true,
+      "reason_sha256": "8f999ad5a8cd081688efb962c6bd8ac3fb72822efc827a70b1bb75fd031a7b5b",
       "independent_reason_sha256": "c689421c5f2b0f2ff5a9f2b47e7529f63491bebcc899f87d7cd2774ca5423554",
       "canonical_applied": false,
-      "counts_as_registered_editorial_reread": false
+      "counts_as_registered_editorial_reread": false,
+      "rule_note": "ルール7-b（2026-09-09 追加承認）を適用。親判断を追加規則に合わせて修正した。独立担当は規則追加前から中立・情報と判定しており、同じ値になったのは多数決ではない。"
     },
     {
       "id": 38,
@@ -303,7 +300,8 @@
       "reason_sha256": "848597bae371a9e9ae939885544522e3ee5ec6c780926c02eb20a8d5adb1635c",
       "independent_reason_sha256": "abbfb679bf5a647dd2503283eabe072efd286438280bf491bb754456c1520fee",
       "canonical_applied": false,
-      "counts_as_registered_editorial_reread": false
+      "counts_as_registered_editorial_reread": false,
+      "rule_note": "ルール7-bにより親判断は中立・情報へ変わるが、独立担当は慎重・反対のままで相違が残るため保留を維持する。"
     },
     {
       "id": 40,
@@ -332,5 +330,6 @@
       "canonical_applied": false,
       "counts_as_registered_editorial_reread": false
     }
-  ]
+  ],
+  "rules_addendum": "ルール7-b（要求の無い問題指摘のみは中立・情報）を approval-20260909-003 で追加した。"
 }
