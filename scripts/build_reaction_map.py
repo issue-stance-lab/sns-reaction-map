@@ -465,10 +465,20 @@ def load_research_conditions(sample_path: str) -> dict[str, str]:
 
 def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
     """Update only editorial inserts in a hand-curated page, preserving its UI and protected tags."""
+    # 山なみ（課題54）へ差し替えたページは、区間の切り出しが <section>...</section>
+    # だけを外す作りのため、それを挟む <!-- ARGUMENTS_START/END --> コメント自体は
+    # 中身が空（直前のCSSだけ）になって残る。このコメントの「存在」を
+    # 「まだ元の論拠区間がある」と読んで中身を書き戻すと、消したはずの
+    # 「30秒でわかる論拠」区間が定例更新のたびに復活する
+    # （山なみ側は同じ役目を編集部の横断整理が受け持つ）。
+    # PLANET_SECTION_START の有無で区別し、山なみ側ではこの区間に触れない。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in source
     arguments = arguments_html(config)
     conditions = research_conditions_html(config, len(rows))
 
-    if "<!-- ARGUMENTS_START -->" in source:
+    if planet_mode:
+        pass
+    elif "<!-- ARGUMENTS_START -->" in source:
         source = re.sub(r"<!-- ARGUMENTS_START -->.*?<!-- ARGUMENTS_END -->", arguments, source, flags=re.DOTALL)
     elif arguments:
         vote_match = re.search(r'<section\b[^>]*\bid=["\']vote-section["\'][^>]*>', source)
@@ -476,7 +486,13 @@ def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[s
             raise ValueError("arguments の挿入先（投票セクション）が見つかりません")
         source = source[:vote_match.start()] + arguments + "\n" + source[vote_match.start():]
 
-    if "<!-- RESEARCH_CONDITIONS_START -->" in source:
+    # 調査条件（RESEARCH_CONDITIONS）の再挿入先は「<section class="stats」で、
+    # これは山なみが引き継ぐ4つの注目ポイント（insight-stats）と同じ要素
+    # （"stats" で始まる class 名の前方一致）。山なみ側ではこの錨が無く、
+    # 見つからないとエラーで止まる。既存のRESEARCH_CONDITIONS_START自体は
+    # 山なみ側にも残るため、山なみ側では除去・再挿入のどちらもせず現状維持する
+    # （挿入先の設計はStage3で決める。中身は更新されないまま残る既知の未解決点）。
+    if "<!-- RESEARCH_CONDITIONS_START -->" in source and not planet_mode:
         source = re.sub(
             r"\n?<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->\n?",
             "\n",
@@ -484,7 +500,7 @@ def update_existing_html(source: str, rows: list[dict[str, Any]], config: dict[s
             count=1,
             flags=re.DOTALL,
         )
-    if conditions:
+    if conditions and not planet_mode:
         stats_match = re.search(r'<section class="stats\b', source)
         if not stats_match:
             raise ValueError("調査条件の挿入先（stats）が見つかりません")

@@ -273,7 +273,7 @@ html:not(.planet-live) .issue-list{display:none}
   <p class="meta" id="meta"><!--__META__--></p>
 </div>
 
-<script>window.PLANET_DATA=/*__PLANET_DATA__*/null;</script>
+<script id="planet-data">window.PLANET_DATA=/*__PLANET_DATA__*/null;</script>
 <script>
 (function(){
 "use strict";
@@ -426,7 +426,10 @@ function land(i){
   drawPanel(); syncList(); render();
   const h=document.querySelector("#panel h2");
   if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
-  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
+  // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
+  // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
+  // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
+  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
 }
 function orbit(){
   const prev=st.landed;
@@ -844,7 +847,12 @@ function buildQuiz(){
       + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
     a.hidden=false;
     visit("c:"+c.id);
-    a.querySelector(".qnext").addEventListener("click", ()=>{ qi++; buildQuiz(); });
+    a.querySelector(".qnext").addEventListener("click", ()=>{
+      qi++; buildQuiz();
+      // 次の問題を出した直後、答え欄の下までスクロールしたままだと新しい問題文が
+      // 画面外になる（オーナー指摘2026-09-10）。問題の見出しを画面中央へ運ぶ。
+      bringIntoView(el.querySelector(".qh") || el);
+    });
   }));
 }
 

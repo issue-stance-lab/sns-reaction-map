@@ -138,6 +138,12 @@ def embed_hermes_samples(html: str) -> str:
 
 def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     """Keep the theme-specific entry and the first reading sequence idempotent."""
+    # 山なみ（課題54）へ差し替えたページは、調査条件の再配置・4つの注目ポイント/
+    # 世論の潮目の退避・7つの論点パネルの差し替え・専用の「学校の外へ出した後」欄の
+    # 挿入・SNS反応マップの位置合わせが、対象区間ごと無くなっている。
+    # 無条件に実行すると stance-map-section が見つからずエラーで止まる
+    # （課題54段階3で発見。段階1で直した箇所とは別の関数だった）。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in html
     if "/* BUKATSU_ENTRY_START */" in html:
         html = re.sub(r"/\* BUKATSU_ENTRY_START \*/.*?/\* BUKATSU_ENTRY_END \*/", ENTRY_CSS.strip(), html, flags=re.DOTALL)
     else:
@@ -156,60 +162,61 @@ def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     hero = re.sub(r'(<p class="lead">.*?</p>)', r'\1' + summary, hero, count=1, flags=re.DOTALL)
     html = html[:hero_start] + hero + html[hero_end:]
 
-    # The common data-provenance block must remain before the first numerical
-    # display, even after the numerical cards themselves have been moved later.
-    conditions_match = re.search(
-        r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
-        html,
-        flags=re.DOTALL,
-    )
-    if not conditions_match:
-        raise ValueError("research conditions marker not found")
-    conditions = conditions_match.group(0)
-    html = html[:conditions_match.start()] + html[conditions_match.end():]
-    main_end = html.find("<main>") + len("<main>")
-    if main_end < len("<main>"):
-        raise ValueError("main element not found")
-    html = html[:main_end] + "\n\n" + conditions + html[main_end:]
+    if not planet_mode:
+        # The common data-provenance block must remain before the first numerical
+        # display, even after the numerical cards themselves have been moved later.
+        conditions_match = re.search(
+            r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
+            html,
+            flags=re.DOTALL,
+        )
+        if not conditions_match:
+            raise ValueError("research conditions marker not found")
+        conditions = conditions_match.group(0)
+        html = html[:conditions_match.start()] + html[conditions_match.end():]
+        main_end = html.find("<main>") + len("<main>")
+        if main_end < len("<main>"):
+            raise ValueError("main element not found")
+        html = html[:main_end] + "\n\n" + conditions + html[main_end:]
 
-    # The sample-count cards and the update comparison are useful after readers
-    # have seen the material, not as the premise for their decision.
-    moved_blocks: list[str] = []
-    for marker in ('<section class="stats insight-stats"', '<section class="update-dashboard"'):
-        start = html.find(marker)
-        if start >= 0:
-            end = _section_end(html, start)
-            moved_blocks.append(html[start:end])
-            html = html[:start] + html[end:]
+        # The sample-count cards and the update comparison are useful after readers
+        # have seen the material, not as the premise for their decision.
+        moved_blocks: list[str] = []
+        for marker in ('<section class="stats insight-stats"', '<section class="update-dashboard"'):
+            start = html.find(marker)
+            if start >= 0:
+                end = _section_end(html, start)
+                moved_blocks.append(html[start:end])
+                html = html[:start] + html[end:]
 
-    # Put the actual classified issue voices immediately after the entry. This
-    # replaces the generic six-card primer as the next reading step.
-    conflict_start = html.find('<section class="panel conflict-panel">')
-    conflict = ""
-    if conflict_start >= 0:
-        conflict_end = _section_end(html, conflict_start)
-        conflict = html[conflict_start:conflict_end]
-        html = html[:conflict_start] + html[conflict_end:]
-        # Representative posts are selected from the current full dataset,
-        # including the most recently added X posts, rather than preserving
-        # an older page snapshot.
-        opinion_rows = [
-            row for row in rows
-            if row.get("classification", {}).get("is_relevant")
-            and row.get("classification", {}).get("is_opinion")
-        ]
-        conflict = hermes_issue_panel(opinion_rows)
+        # Put the actual classified issue voices immediately after the entry. This
+        # replaces the generic six-card primer as the next reading step.
+        conflict_start = html.find('<section class="panel conflict-panel">')
+        conflict = ""
+        if conflict_start >= 0:
+            conflict_end = _section_end(html, conflict_start)
+            conflict = html[conflict_start:conflict_end]
+            html = html[:conflict_start] + html[conflict_end:]
+            # Representative posts are selected from the current full dataset,
+            # including the most recently added X posts, rather than preserving
+            # an older page snapshot.
+            opinion_rows = [
+                row for row in rows
+                if row.get("classification", {}).get("is_relevant")
+                and row.get("classification", {}).get("is_opinion")
+            ]
+            conflict = hermes_issue_panel(opinion_rows)
 
-    conditions_end = html.find("<!-- RESEARCH_CONDITIONS_END -->")
-    conditions_end = html.find("\n", conditions_end)
-    html = html[:conditions_end] + "\n" + ENTRY_SECTION + ("\n" + conflict if conflict else "") + html[conditions_end:]
+        conditions_end = html.find("<!-- RESEARCH_CONDITIONS_END -->")
+        conditions_end = html.find("\n", conditions_end)
+        html = html[:conditions_end] + "\n" + ENTRY_SECTION + ("\n" + conflict if conflict else "") + html[conditions_end:]
 
-    arena_start = html.find('<section class="arena-section" id="stance-map-section">')
-    if arena_start < 0:
-        raise ValueError("stance map section not found")
-    arena_end = _section_end(html, arena_start)
-    after_arena = "\n" + "\n".join(moved_blocks) if moved_blocks else ""
-    html = html[:arena_end] + after_arena + html[arena_end:]
+        arena_start = html.find('<section class="arena-section" id="stance-map-section">')
+        if arena_start < 0:
+            raise ValueError("stance map section not found")
+        arena_end = _section_end(html, arena_start)
+        after_arena = "\n" + "\n".join(moved_blocks) if moved_blocks else ""
+        html = html[:arena_end] + after_arena + html[arena_end:]
 
     # Keep the hand-curated explainer free from generic pro/con framing and
     # ordinal labels. These substitutions also update pages built before the
@@ -798,11 +805,15 @@ if __name__ == "__main__":
     new_html = transform(html)
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     sample_file = parse_themes_yaml()["bukatsu-chiiki"]["sample_file"]
-    new_html = apply_counts(
-        new_html,
-        "bukatsu-chiiki",
-        card_counts("bukatsu-chiiki", config, sample_file),
-    )
+    if "<!-- PLANET_SECTION_START -->" not in new_html:
+        # 山なみ（課題54）形式は explainer-card（論点カード）ごと外れており、
+        # sync_issue_counts.apply_counts が挿入先を1件も見つけられずエラーで止まる。
+        # 山なみ側の論点件数は verify_theme_page.py の内訳検算（段階2）が見る。
+        new_html = apply_counts(
+            new_html,
+            "bukatsu-chiiki",
+            card_counts("bukatsu-chiiki", config, sample_file),
+        )
     changed = new_html != html
     if changed and not args.check:
         HTML_PATH.write_text(new_html)

@@ -434,7 +434,9 @@
         "issue-sides",
         "heat-table",
         "explainer-card-desc",
-        "sm-stat-cards"
+        "sm-stat-cards",
+        "sides",
+        "legend"
       ],
       "wave": [
         "tide-card"
@@ -447,7 +449,15 @@
     },
     "exclude_selectors": [
       "review-note",
-      "article-trust-observations"
+      "article-trust-observations",
+      "islands",
+      "note",
+      "findings",
+      "sunk",
+      "#planet-data"
+    ],
+    "allow": [
+      { "value": 0, "reason": "山なみ(課題54)のJS内、0件時の表示分岐を説明するコメント・フォールバック文字列。特定の主張ではない" }
     ]
   }
 }

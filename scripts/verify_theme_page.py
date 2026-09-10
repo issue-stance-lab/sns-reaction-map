@@ -252,6 +252,78 @@ def _public_value(theme: str, key: str) -> int | None:
     return int(value) if value is not None else None
 
 
+def _planet_data(page: str) -> dict[str, Any] | None:
+    """山なみ（課題54）形式のページに埋め込まれた PLANET_DATA を取り出す。
+
+    無ければ None（旧デザインのページ）。取り出せるが壊れている場合は例外を
+    そのまま伝える（検査を「対象外」で静かに通さないため）。
+    """
+    marker = "window.PLANET_DATA="
+    i = page.find(marker)
+    if i < 0:
+        return None
+    return json.JSONDecoder().raw_decode(page[i + len(marker):])[0]
+
+
+def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tuple[list[str], int]:
+    """山なみの論点ごとの内訳（島・立場別シェア）が、論点の合計と表示の両方に一致するかを見る。
+
+    「管理対象外の件数」検査が山なみ特有のこの2種類の内訳をまとめて拒否しないよう、
+    ここで能動的に検算する（足し算が合うかだけでなく、埋め込みJSONの値と
+    ページに実際に描画された文字列も突き合わせる。テンプレート側のバグで
+    JSONは正しいのに表示だけずれる、という事故を拾うため）。
+    """
+    lines: list[str] = []
+    failures = 0
+    for issue in data.get("issues", []):
+        issue_id = issue.get("id")
+        total = issue.get("count")
+
+        items = ((issue.get("sub") or {}).get("items")) or []
+        if items:
+            island_sum = sum(int(item["count"]) for item in items)
+            if island_sum != total:
+                lines.append(
+                    f"NG  {issue_id}: 島の内訳を足すと{island_sum}件だが、論点の合計は{total}件"
+                )
+                failures += 1
+            else:
+                lines.append(f"OK  {issue_id}: 島{len(items)}件の内訳の合計が論点の合計と一致する（{total}件）")
+            mismatched = [
+                item["label"] for item in items
+                if f'{item["count"]}件</span>' not in page
+            ]
+            if mismatched:
+                lines.append(
+                    f"NG  {issue_id}: 島の件数がJSONと表示で食い違う可能性: {', '.join(mismatched[:5])}"
+                    + ("…" if len(mismatched) > 5 else "")
+                )
+                failures += 1
+
+        stances = issue.get("stances") or {}
+        if stances:
+            stance_sum = sum(int(v) for v in stances.values())
+            if stance_sum != total:
+                lines.append(
+                    f"NG  {issue_id}: 立場別の内訳を足すと{stance_sum}件だが、論点の合計は{total}件"
+                )
+                failures += 1
+            else:
+                lines.append(f"OK  {issue_id}: 立場{len(stances)}区分の内訳の合計が論点の合計と一致する（{total}件）")
+
+        # 論点一覧（山への入口）の凡例。<a class="continent">...<span class="count">
+        # N件・X%</span></a> に、同じ論点合計と共有率を出している。
+        share = issue.get("share_pct")
+        if share is not None and f'href="#fb-{issue_id}"' in page:
+            expected = f"{total}件・{share}%"
+            if f'<span class="count">{expected}</span>' in page:
+                lines.append(f"OK  {issue_id}: 論点一覧の凡例（{expected}）が論点の合計と一致する")
+            else:
+                lines.append(f"NG  {issue_id}: 論点一覧の凡例が論点の合計と食い違う可能性（期待: {expected}）")
+                failures += 1
+    return lines, failures
+
+
 def _stated_totals(text: str, patterns: tuple[str, ...]) -> dict[str, list[str]]:
     """ページ全体を指した言い方だけを拾う。部分集合と過去の版は除く。"""
     found: dict[str, list[str]] = {}
@@ -330,10 +402,30 @@ def verify_one_number_per_page(theme: str, page: str) -> tuple[list[str], int]:
     return lines, failures
 
 
-def verify_page_count_spans(theme: str, page: str) -> tuple[list[str], int]:
-    """ページ全体で、管理対象外の span に書かれた件数を拒否する。"""
+def verify_page_count_spans(theme: str, page: str, planet_mode: bool = False) -> tuple[list[str], int]:
+    """ページ全体で、管理対象外の span に書かれた件数を拒否する。
+
+    山なみ（課題54）形式は、論点ごとの「島」（編集部の内訳）・「立場別シェア」・
+    「論点一覧の凡例」を class="n"／class="count" の span で示す。これは
+    verify_planet_breakdowns が実際に検算しているので、ここでは（山なみ形式の
+    ときだけ）その3種類の一覧の中に限って除外する。class 名だけで丸ごと許可は
+    しない＝検算していない野良の件数は今まで通り拾う。
+    """
+    exempt_ranges: list[tuple[int, int]] = []
+    if planet_mode:
+        for list_class in ("islands", "sides"):
+            for block in re.finditer(rf'<ul class="{list_class}">.*?</ul>', page, flags=re.DOTALL):
+                exempt_ranges.append(block.span())
+        for block in re.finditer(r'<nav class="planet" id="fallback-nav".*?</nav>', page, flags=re.DOTALL):
+            exempt_ranges.append(block.span())
+
+    def _exempt(pos: int) -> bool:
+        return any(start <= pos < end for start, end in exempt_ranges)
+
     stale: list[str] = []
     for match in re.finditer(r"<span(?P<attrs>[^>]*)>\s*(?P<count>\d+)件\s*</span>", page):
+        if _exempt(match.start()):
+            continue
         attrs = match.group("attrs")
         class_match = re.search(r'class=["\']([^"\']*)["\']', attrs)
         classes = set(class_match.group(1).split()) if class_match else set()
@@ -583,6 +675,11 @@ def verify_theme_page(
     rows = load_sample_records(root, theme, verification_file)
     count = len(rows)
     arguments = config.get("arguments")
+    # 山なみ（課題54）形式は、旧デザイン前提のいくつかの検査が目印を見失う
+    # （課題54段階2）。ページに埋め込まれた PLANET_DATA の有無で判定し、
+    # 該当する検査だけ山なみ向けの検算に差し替える。他10テーマは今まで通り。
+    planet_data = _planet_data(page)
+    planet_mode = planet_data is not None
     lines = [f"=== {theme} ==="]
     failures = 0
 
@@ -607,30 +704,45 @@ def verify_theme_page(
             lines.append(f"NG  sources のリンクが全て有効（HTTP 200）: {detail}")
             failures += 1
 
-    arguments_pos = page.find('id="strongest-arguments"')
-    issue_voices = re.search(r"\d+つの論点とXの声", page)
-    representative_positions = [
-        pos for pos in (
-            page.find("象限別の代表的な声"),
-            page.find("代表サンプル"),
-            issue_voices.start() if issue_voices else -1,
-        ) if pos >= 0
-    ]
-    representative_pos = min(representative_positions, default=-1)
-    if arguments is not None:
-        entry_pos = page.find('id="bukatsu-entry-title"')
-        bukatsu_reading_order = (
-            theme == "bukatsu-chiiki"
-            and entry_pos >= 0
-            and representative_pos >= 0
-            and arguments_pos >= 0
-            and entry_pos < representative_pos < arguments_pos
-        )
-        if arguments_pos >= 0 and representative_pos >= 0 and (arguments_pos < representative_pos or bukatsu_reading_order):
-            lines.append("OK  論拠と代表投稿の並びがテーマ設計に一致する")
+    if planet_mode:
+        # 「30秒でわかる論拠」の役目は #planet-block の編集部横断整理（editorial.findings）
+        # が引き継ぐ。位置の突き合わせではなく、その役目が実際に果たされているか
+        # （3種の観点が最低1件ずつ揃っているか）を見る。
+        findings = (planet_data.get("editorial") or {}).get("findings") or []
+        kinds = {f.get("kind") for f in findings}
+        required_kinds = {"shared_premise", "real_conflict", "still_unknown"}
+        missing_kinds = required_kinds - kinds
+        if findings and not missing_kinds:
+            lines.append(f"OK  編集部の横断整理が論拠の役目を引き継いでいる（{len(findings)}件、3観点とも有）")
         else:
-            lines.append("NG  論拠と代表投稿の並びがテーマ設計に一致する")
+            detail = "findings が空" if not findings else f"欠落: {', '.join(sorted(missing_kinds))}"
+            lines.append(f"NG  編集部の横断整理が論拠の役目を引き継いでいる: {detail}")
             failures += 1
+    else:
+        arguments_pos = page.find('id="strongest-arguments"')
+        issue_voices = re.search(r"\d+つの論点とXの声", page)
+        representative_positions = [
+            pos for pos in (
+                page.find("象限別の代表的な声"),
+                page.find("代表サンプル"),
+                issue_voices.start() if issue_voices else -1,
+            ) if pos >= 0
+        ]
+        representative_pos = min(representative_positions, default=-1)
+        if arguments is not None:
+            entry_pos = page.find('id="bukatsu-entry-title"')
+            bukatsu_reading_order = (
+                theme == "bukatsu-chiiki"
+                and entry_pos >= 0
+                and representative_pos >= 0
+                and arguments_pos >= 0
+                and entry_pos < representative_pos < arguments_pos
+            )
+            if arguments_pos >= 0 and representative_pos >= 0 and (arguments_pos < representative_pos or bukatsu_reading_order):
+                lines.append("OK  論拠と代表投稿の並びがテーマ設計に一致する")
+            else:
+                lines.append("NG  論拠と代表投稿の並びがテーマ設計に一致する")
+                failures += 1
 
     lines.append("=== 数字の分離 ===")
 
@@ -642,7 +754,18 @@ def verify_theme_page(
 
     conditions_pos = page.find("<!-- RESEARCH_CONDITIONS_START -->")
     stats_pos = page.find('<section class="stats')
-    if conditions_pos >= 0 and stats_pos >= 0 and conditions_pos < stats_pos:
+    if planet_mode:
+        # この検査が守っていたのは「4つの注目ポイント（insight-stats）より注意書きが先」。
+        # 山なみはinsight-statsごと#planet-blockに置き換えており、
+        # 該当セクションが本当に無いことを確認したうえでOKとする
+        # （stats_pos>=0のまま残っていたら旧デザインの生成物が混入している証拠なので拾う）。
+        caution_pos = page.find('id="caution"')
+        if conditions_pos >= 0 and caution_pos >= 0 and stats_pos < 0:
+            lines.append("OK  注意書きが最初の数値表示より前にある（insight-statsは山なみに引き継がれ不在）")
+        else:
+            lines.append("NG  注意書きが最初の数値表示より前にある（山なみ形式）")
+            failures += 1
+    elif conditions_pos >= 0 and stats_pos >= 0 and conditions_pos < stats_pos:
         lines.append("OK  注意書きが最初の数値表示より前にある")
     else:
         lines.append("NG  注意書きが最初の数値表示より前にある")
@@ -707,17 +830,29 @@ def verify_theme_page(
         lines.append(f"NG  投票ゲートが存在する: {', '.join(found_gates)}")
         failures += 1
 
-    if arguments is not None:
-        expected_count_texts = (f"公開投稿 {count}件", f"公開投稿{count}件")
-        opinion_count = sum(
-            1
-            for row in rows
-            if bool(
-                (row.get("classification") or row).get(
-                    "is_opinion", row.get("is_opinion")
-                )
+    opinion_count = sum(
+        1
+        for row in rows
+        if bool(
+            (row.get("classification") or row).get(
+                "is_opinion", row.get("is_opinion")
             )
         )
+    )
+    if planet_mode:
+        # HTML内の文言探しではなく、埋め込みJSON自身の総数を正典（sample_file実数）
+        # と突き合わせる。表示文言が変わっても壊れない。
+        totals = planet_data.get("totals") or {}
+        if totals.get("collected") == count and totals.get("opinions") == opinion_count:
+            lines.append(f"OK  件数表示が sample_file の実数と一致する（全{count}件 / 意見{opinion_count}件）")
+        else:
+            lines.append(
+                f"NG  件数表示が sample_file の実数と一致する"
+                f"（期待: 全{count}件/意見{opinion_count}件、PLANET_DATA: {totals}）"
+            )
+            failures += 1
+    elif arguments is not None:
+        expected_count_texts = (f"公開投稿 {count}件", f"公開投稿{count}件")
         classified_count = sum(
             1
             for row in rows
@@ -741,17 +876,23 @@ def verify_theme_page(
             lines.append(f"NG  件数表示が sample_file の実数と一致する（期待: {count}件）")
             failures += 1
 
-    explainer_pos = page.find('id="explainer-section"')
-    map_pos = page.find("<h2>SNS反応マップ</h2>")
-    if map_pos < 0:
-        # 見出し文言に依存しない目印（再設計後のページ）
-        map_pos = page.find('id="issue-arena-section"')
-    if arguments is not None:
-        if explainer_pos >= 0 and arguments_pos > explainer_pos and map_pos > arguments_pos:
-            lines.append("OK  arguments は6つの論点の後、SNS反応マップの前にある")
-        else:
-            lines.append("NG  arguments は6つの論点の後、SNS反応マップの前にある")
-            failures += 1
+    if planet_mode:
+        # 論点カード→SNS反応マップという旧デザインの順序概念が無いため対象外。
+        # 同じ役目（論点をひと通り見せてから編集部整理を出す）は
+        # 山なみ本体の描画順そのもので担保され、上の編集部横断整理の検査で見ている。
+        lines.append("OK  arguments は6つの論点の後、SNS反応マップの前にある（山なみ形式のため対象外）")
+    else:
+        explainer_pos = page.find('id="explainer-section"')
+        map_pos = page.find("<h2>SNS反応マップ</h2>")
+        if map_pos < 0:
+            # 見出し文言に依存しない目印（再設計後のページ）
+            map_pos = page.find('id="issue-arena-section"')
+        if arguments is not None:
+            if explainer_pos >= 0 and arguments_pos > explainer_pos and map_pos > arguments_pos:
+                lines.append("OK  arguments は6つの論点の後、SNS反応マップの前にある")
+            else:
+                lines.append("NG  arguments は6つの論点の後、SNS反応マップの前にある")
+                failures += 1
 
     lines.append("=== 論点カードのデータ整合 ===")
     source_lines, source_failures = verify_issue_count_source(
@@ -767,39 +908,52 @@ def verify_theme_page(
     lines.extend(denominator_lines)
     failures += denominator_failures
 
-    lines.append("=== 論点カード ===")
-    try:
-        cards = card_counts(theme, config, verification_file)
-    except IssueCountError as exc:
-        lines.append(f"NG  論点カードの件数を分類結果から計算できる: {exc}")
-        return lines, failures + 1
-
-    missing = [
-        card["slug"]
-        for card in cards
-        if f'id="{span_id(theme, str(card["slug"]))}"' not in page
-    ]
-    if not missing:
-        lines.append(f"OK  全カードに件数が併記されている（id付き、{len(cards)}枚）")
+    cards: list[dict[str, Any]] = []
+    if planet_mode:
+        lines.append("=== 論点ごとの内訳（島・立場別シェア） ===")
+        breakdown_lines, breakdown_failures = verify_planet_breakdowns(theme, page, planet_data)
+        lines.extend(breakdown_lines)
+        failures += breakdown_failures
+        # 最大勢力バッジ検査が使う counts（旧デザインのカード構造は無いので
+        # PLANET_DATA の論点合計から作る。card_counts は呼ばない）。
+        cards = [
+            {"slug": issue["id"], "count": issue["count"]}
+            for issue in planet_data.get("issues", [])
+        ]
     else:
-        lines.append(f"NG  全カードに件数が併記されている（id付き）: 欠落 {', '.join(missing)}")
-        failures += 1
+        lines.append("=== 論点カード ===")
+        try:
+            cards = card_counts(theme, config, verification_file)
+        except IssueCountError as exc:
+            lines.append(f"NG  論点カードの件数を分類結果から計算できる: {exc}")
+            return lines, failures + 1
 
-    mismatched = []
-    for card in cards:
-        marker = re.search(
-            rf'<span class="explainer-count" id="{re.escape(span_id(theme, str(card["slug"])))}">(\d+)件</span>',
-            page,
-        )
-        if not marker or int(marker.group(1)) != int(card["count"]):
-            shown = marker.group(1) + "件" if marker else "なし"
-            mismatched.append(f'{card["slug"]}（表示{shown} / 分類{card["count"]}件）')
-    if not mismatched:
-        detail = " / ".join(f'{card["slug"]}={card["count"]}' for card in cards)
-        lines.append(f"OK  論点カードの件数が分類結果と一致する（{detail}）")
-    else:
-        lines.append(f"NG  論点カードの件数が分類結果と一致する: {', '.join(mismatched)}")
-        failures += 1
+        missing = [
+            card["slug"]
+            for card in cards
+            if f'id="{span_id(theme, str(card["slug"]))}"' not in page
+        ]
+        if not missing:
+            lines.append(f"OK  全カードに件数が併記されている（id付き、{len(cards)}枚）")
+        else:
+            lines.append(f"NG  全カードに件数が併記されている（id付き）: 欠落 {', '.join(missing)}")
+            failures += 1
+
+        mismatched = []
+        for card in cards:
+            marker = re.search(
+                rf'<span class="explainer-count" id="{re.escape(span_id(theme, str(card["slug"])))}">(\d+)件</span>',
+                page,
+            )
+            if not marker or int(marker.group(1)) != int(card["count"]):
+                shown = marker.group(1) + "件" if marker else "なし"
+                mismatched.append(f'{card["slug"]}（表示{shown} / 分類{card["count"]}件）')
+        if not mismatched:
+            detail = " / ".join(f'{card["slug"]}={card["count"]}' for card in cards)
+            lines.append(f"OK  論点カードの件数が分類結果と一致する（{detail}）")
+        else:
+            lines.append(f"NG  論点カードの件数が分類結果と一致する: {', '.join(mismatched)}")
+            failures += 1
 
     lines.append("=== 同じ数字は1回だけ ===")
     one_lines, one_failures = verify_one_number_per_page(theme, page)
@@ -807,7 +961,7 @@ def verify_theme_page(
     failures += one_failures
 
     lines.append("=== ページ全体の件数表示 ===")
-    count_lines, count_failures = verify_page_count_spans(theme, page)
+    count_lines, count_failures = verify_page_count_spans(theme, page, planet_mode)
     lines.extend(count_lines)
     failures += count_failures
 

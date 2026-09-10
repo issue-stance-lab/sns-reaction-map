@@ -553,47 +553,55 @@ def main() -> int:
         f'<strong>{focus_title}</strong><span class="conclusion-detail">{focus_detail}</span></li></ul></div>'
     )
     page = replace_once(page, r'<div class="thirty-summary".*?</div>', summary, "30 second summary", flags=re.DOTALL)
-    dashboard = f'<section class="update-dashboard" aria-label="更新データと世論の潮目">{card}</section>'
-    if '<section class="update-dashboard"' in page:
+
+    # 山なみ（課題54）へ差し替えたページは、更新データ・SNS反応マップ（アリーナ）・
+    # 論点別内訳の3区間を #planet-block が引き継ぎ、区間ごと外している。
+    # ここを無条件で書こうとすると対象が見つからずエラーで止まる
+    # （定例更新のたびに失敗し、部活動の収集だけが止まる）。
+    # PLANET_SECTION_START の有無で区別し、山なみ側ではこの3区間を書かない。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in page
+    if not planet_mode:
+        dashboard = f'<section class="update-dashboard" aria-label="更新データと世論の潮目">{card}</section>'
+        if '<section class="update-dashboard"' in page:
+            page = replace_once(
+                page,
+                r'<section class="update-dashboard".*?<!-- TIDE_CARD_END --></section>',
+                dashboard,
+                "update dashboard",
+                flags=re.DOTALL,
+            )
+        else:
+            page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
+            page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
         page = replace_once(
             page,
-            r'<section class="update-dashboard".*?<!-- TIDE_CARD_END --></section>',
-            dashboard,
-            "update dashboard",
+            r'<div class="panel-title"><h2>(?:論点アリーナ|SNS反応マップ)</h2><span>.*?</span></div>',
+            f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{len(all_opinions)}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場</span></div>',
+            "arena heading",
+        )
+        page = replace_once(page, r"const SM_RAW = \[.*?\n\];", sm_raw(all_opinions), "SM_RAW", flags=re.DOTALL)
+        issue_js = "const ISSUES=[\n" + ",\n".join(
+            f"    {{k:{js(issue)},n:{issue_counts[issue]}}}" for issue in ISSUES
+        ) + "\n  ];"
+        arena_pos = page.index("<h2>SNS反応マップ</h2>")
+        before, after = page[:arena_pos], page[arena_pos:]
+        after = replace_once(after, r"const ISSUES=\[.*?\n  \];", issue_js, "arena issues", flags=re.DOTALL)
+        page = before + after
+
+        page = replace_once(
+            page,
+            r'<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>.*?(?=<section class="panel explainer-section")',
+            issue_panel(all_opinions),
+            "issue panel",
             flags=re.DOTALL,
         )
-    else:
-        page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
-        page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
-    page = replace_once(
-        page,
-        r'<div class="panel-title"><h2>(?:論点アリーナ|SNS反応マップ)</h2><span>.*?</span></div>',
-        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{len(all_opinions)}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場</span></div>',
-        "arena heading",
-    )
-    page = replace_once(page, r"const SM_RAW = \[.*?\n\];", sm_raw(all_opinions), "SM_RAW", flags=re.DOTALL)
-    issue_js = "const ISSUES=[\n" + ",\n".join(
-        f"    {{k:{js(issue)},n:{issue_counts[issue]}}}" for issue in ISSUES
-    ) + "\n  ];"
-    arena_pos = page.index("<h2>SNS反応マップ</h2>")
-    before, after = page[:arena_pos], page[arena_pos:]
-    after = replace_once(after, r"const ISSUES=\[.*?\n  \];", issue_js, "arena issues", flags=re.DOTALL)
-    page = before + after
-
-    page = replace_once(
-        page,
-        r'<section class="panel conflict-panel"><div class="panel-title"><h2>7つの論点とXの声</h2>.*?(?=<section class="panel explainer-section")',
-        issue_panel(all_opinions),
-        "issue panel",
-        flags=re.DOTALL,
-    )
-    page = replace_once(
-        page,
-        r'<section class="panel conflict-panel"><div class="panel-title"><h2>(?:スタンス集計|Hermes分類サマリー|投稿の分類結果)</h2>.*?(?=<section class="panel" id="related-topics">)',
-        summary_panel(all_opinions),
-        "summary panel",
-        flags=re.DOTALL,
-    )
+        page = replace_once(
+            page,
+            r'<section class="panel conflict-panel"><div class="panel-title"><h2>(?:スタンス集計|Hermes分類サマリー|投稿の分類結果)</h2>.*?(?=<section class="panel" id="related-topics">)',
+            summary_panel(all_opinions),
+            "summary panel",
+            flags=re.DOTALL,
+        )
     page = replace_once(
         page,
         r'<section class="panel details-panel" id="detail-data">.*?</section>(?=\s*</main>)',
