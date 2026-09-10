@@ -1135,3 +1135,11 @@ main > .article-trust {
    論点アリーナの点の色と揃えるため橙を使う。 */
 .temp-seg.mid { background: #f59e0b; }
 .temp-bar-legend i.mid { background: #f59e0b; }
+
+/* 先に直す2点(2/2): AdSense自動広告は所定のスロットを持たず、挿入された瞬間に
+   周りの帯が動く（実測CLS寄与0.076、quality/reviews/2026-09-06-task54-stage9-measurements.md）。
+   Googleは自動挿入時もins要素にadsbygoogleクラスを付けるため、挿入前から高さを
+   確保しておける。広告の実サイズはページ幅・面によって変わるため、
+   一般的なレスポンシブ単位の下限に合わせた控えめな値にとどめる。
+   実広告での改善量は未検証（テスト環境では広告が配信されないため）。 */
+ins.adsbygoogle { min-height: 100px; }
