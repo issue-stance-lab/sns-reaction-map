@@ -1,0 +1,2808 @@
+{
+  "schema_version": 1,
+  "topic": "bukatsu-chiiki",
+  "scope": "B1の保存理由判定。83件は独立確認の欠落を確認しただけで本文判断済みへ加算しない。",
+  "saved_at": "2026-09-09T22:31:48.569042+00:00",
+  "counts": {
+    "hold": 19,
+    "pending_audit": 83,
+    "accepted": 29
+  },
+  "saved_reason_pairs_reviewed": 48,
+  "new_body_reviews": 0,
+  "canonical_applied": 0,
+  "unresolved_before": 301,
+  "unresolved_after": 272,
+  "sources_sha256": {
+    "b1-alternatives-independent.private.json": "9aef916cbd925c41c93c0ecb671d3be06e6bd4654bbfa923792c962dce14b77d",
+    "b1-batch01-independent.private.json": "fbcae85e3d339243a95c358379ce43b30b82a0b32dc3f48516ed6b2d6f86d807",
+    "b1-batch01-packet.private.json": "4f23c12559413c952a35ef069f7c55ce50b186aa657ec38e720a828c2ca933f9",
+    "b1-batch01-parent.private.json": "55a9aa1227ff90dd6f68598605696da5ca577746c3086f49383fbcb491388d73",
+    "b1-batch02-independent.private.json": "b3b6b69aec3c7943a929804c78e0036ca8fa8ec3595156aa0bcecb8013c7c2d6",
+    "b1-batch02-packet.private.json": "76d2a740c56fd5528f83f730ccce36ff06bb551bedc1052e36fbd53cdb203bfa",
+    "b1-batch02-parent.private.json": "71ce67f18fa875a38a7a9884a5f53ed200a16ba945b291e799f2e82f1a27ea1a",
+    "b1-batch03-independent.private.json": "ea2a3a72475e6f502964bdff57b5dead6ca6514e656f1d003297b27cae0505d8",
+    "b1-batch03-packet.private.json": "620cc8b000e6f7ba0691c467aaac4bc8dd9ecb991fbd0cb544831924d83f13b9",
+    "b1-batch03-parent.private.json": "8c81784445ddc391b8cf5834faadde2de356929dfa3ef14ec9bcd97ce6ae1b7a",
+    "b1-batch04-independent.private.json": "525c8e590921b4f6b2f6c6c93e69a6c0cd6ba1c73e56464e56b0bdbfd5d43adb",
+    "b1-batch04-packet.private.json": "5c8e1376cc6ac76c0f4a2efe7fa709167c9327b399d642b846092fd5ae1deaed",
+    "b1-batch04-parent.private.json": "6da5b901f356f3a0e0fb4c88ef370a0fd1dfa4f0219c0d09020946194240c5d8",
+    "b1-batch05-independent.private.json": "afad547b7fbc8acd70dd6b81e0388940fc86e99ef0c699d9edf3a70d3729826f",
+    "b1-batch05-packet.private.json": "000b5a4ebd993f6169ba077bbc21bbb6bab8907da9f8fb00500e31a31b3b96ec",
+    "b1-batch05-parent.private.json": "f0e260b22018346f0fbb6274f524b2295c77ab48cbeeb6eb51ab9821ef5eeb3e",
+    "b1-batch06-independent.private.json": "3bd65aae8a54213a28a17ab6fe208a196e42e5266c67b6e8283807ce097bab5d",
+    "b1-batch06-packet.private.json": "0fd352199146616380fa6098022dfa459880da0a4ba5e8e10bd65510f2003ecc",
+    "b1-batch06-parent.private.json": "215e729d34b421e81a5b7476d85796a3ad115439ed9d239d0dc11f1cb30662b8",
+    "b1-batch07-independent.private.json": "627b9bd15a475a0dcea0f9cddf56466f8ce488f0a235cbc9785327313ca78798",
+    "b1-batch07-packet.private.json": "621ab2309cfac5c63f86805c8a5b996b48acb1c103523f489c9670bac7aa6ab8",
+    "b1-batch07-parent.private.json": "9412061aadcfc3ff14484427385a9acfffba1d1ce752eaf03ad90db102f17d66"
+  },
+  "rules_sha256": "c36a9e3b6afcaf94f6bc12c5a25f86a0cc5d3424c5972bf5ba61ac98a56d801b",
+  "records": [
+    {
+      "id": 1,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:631e1f3bba95827818fbaa9971f8b62714f51eeeb04d9790ac8b416e009c990a",
+      "body_sha256": "e263d9681bc8ed309c9d6fc43d3f958b94f9de745b7ae1af08bf1741d66fc8dd",
+      "classification_sha256": "718d3d54e6ef9da54e0aec3c1edd4a0858c31e95f567f2886b304ebd2ac88a49",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "accept_saved",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "6890a11791e9f24b71b517a70b1463ca335da504aeb43f2116219b1a142b332b",
+      "independent_reason_sha256": "27ddde8900d26fe306a620ad16b47585092c094dcc0b3b0239130ce44decab33",
+      "applied": false
+    },
+    {
+      "id": 2,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:649b67cb1503c25ec0d34f2ace8ac9deed72953a33e34cb65fe12636677d2c1e",
+      "body_sha256": "582c3e34de02e63abb7164c48aadde007d91f83831082e051d3fe16590f33bc1",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "60cca655d2936d5f66b6c378ae0d243b86e22b85675af29c8743fcbb6ed0494b",
+      "applied": false
+    },
+    {
+      "id": 3,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:66190ed2d892d85e856081c8818fbfbc11f5b588007a92bae4173f8c06d3840f",
+      "body_sha256": "7eaa72b940e22bc19122ab004da8d4a8fed681867810e492f7c89399eb231f80",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "973c8c6a7d99436e60f1124ab882b30abb9dc912401d73ceb1ba536ad4c1733e",
+      "applied": false
+    },
+    {
+      "id": 4,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:666084b6673781655ccdf7bf399c2eb885352dc94d1979e7a6bc498cc21c04a8",
+      "body_sha256": "499990c9e9261f8d0d836900488d9554159552e32be6973d6ec695c8ab6d2cc1",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "ef61e30074b4d3fdc72e133126214c2e13815b5604339757250940a516aa8e30",
+      "applied": false
+    },
+    {
+      "id": 5,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:67bda649e0054d162f1d6a29f94a312e966dd1c57fcb07661566d9f45fde13e5",
+      "body_sha256": "c17314c2b3cee6b10cbb51fe9b8e7683fff48ea54ef3adae16d7cd90b8009954",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "86da638e4b38564afe8a8ab404c89f348c5f38ab5cd3de029b0d68f891e240c8",
+      "applied": false
+    },
+    {
+      "id": 6,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:685c1cad0bbf5c0369d196d233f3b8d5ef95a40a0bcde10b519f14b2aeb7ac26",
+      "body_sha256": "6fa8cee8ea491dd933abeee17c146fdb1e593eabd811b9140b9f4dcc91f8d390",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "cd6209d42d5bde68a6e31d95924b4ce2f3ba242c272b19cb9586281e6609ed02",
+      "independent_reason_sha256": "3b040e7a928feb5d8724b3109c5cbc909e96520a4afbeb034701bfb42c6d0ab8",
+      "applied": false
+    },
+    {
+      "id": 7,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:68f922b9a6fe7957f781e5e57ff3c1e98eb0cc8212fc90b926a8c9d6124a6377",
+      "body_sha256": "28f7f0f67e04fe7617d128c9df0c3752179a9176948f89a42f8297c4cff723a6",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "c00f1a1cf451d63c34412a4f62e81b8ffde5b52a5556fa69025d70f0406a9cae",
+      "independent_reason_sha256": "3e8e3d43255475c5403b97f4a48dcbf5e32bc4601b7c4af01ced17033798acea",
+      "applied": false
+    },
+    {
+      "id": 8,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:691ec25b92ea25aeedb01a6852e35557d81e6f83533aaf2b683dab6cf037434a",
+      "body_sha256": "476539f051fcc7402e020b15517caa45df1e919e630727e34c5c8ed3f76287c9",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "e4fe27768f2e8636883194ee3ab44b3067d41fc7e1e6594d153999c693e47a39",
+      "independent_reason_sha256": "039690d55e32e8b1eb01594fb1f8575c8a19fc0ce2a6d166aca149eb26c6dbff",
+      "applied": false
+    },
+    {
+      "id": 9,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:6a0d357a3c11f656bb2afc462e8ad0bd8b42561e118724f23a5e6a867a58ee3e",
+      "body_sha256": "3c50feeb1bdd0827abb0dbd4ef8e591131d6a873a451846b9140b601c788ab74",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "94e2884f3c51b1ffd3db223e550f482a512ca29ba67dea1a80d99854c1c47862",
+      "applied": false
+    },
+    {
+      "id": 10,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:6a7dbfe6ec632cbd2c0efbada74b60f71fedf34a416aaf992294802fef02fdc3",
+      "body_sha256": "0889292e3f194b115bc31f8fabe87a19e6a9888910908322a797e2e74a0a3a1e",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "ce9dc67c8c31cf155e317df5168b9795c02c9a3652bbfc9db7b7a18d59b38180",
+      "applied": false
+    },
+    {
+      "id": 11,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:6a9d8c3a04f6ee3738caac3a90e9bb67b622f5c0ae569e8f6d2ed2017329b16c",
+      "body_sha256": "d6b628c6f85ff1d51f23e66283dd987a1e1dbadac61817428abb33bbc8738ccd",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "0f9e2b4bed974c3db3f26cd18ef9999fd229f6f49181f5e0ad3e63fe0468dc57",
+      "applied": false
+    },
+    {
+      "id": 12,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:6a9dd43792a6790ae94686b36d26a5823bc8a5d1da3eb20753bbf29dcba5cd96",
+      "body_sha256": "212a3c6f4c41de9cf71187eef0c9c7a898debf1960a15d33ee8814c5ae979a99",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "f6c6031df0818a2e55ab0977fa799a12ec359720402d987dfbed7754693c06a7",
+      "applied": false
+    },
+    {
+      "id": 13,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:6d47f021b49c3582a4a085f4ca189c83c218de10578eb0b7379444ff40ff232d",
+      "body_sha256": "8f9cc2cd71a7b75df588a9636ee8e7e706277027e36596a1e5a727e23bb6bff9",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "adda4ef14d20f0379bf6f4579dbd6f126055486d467b4e2ae5a983745302ff71",
+      "applied": false
+    },
+    {
+      "id": 14,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:6d5706bba229882632f0c28fd3ae8875be86dadb606a56b360f2e8d09a3b2f57",
+      "body_sha256": "90e81ddec15dbcd2cd6e4149d36b93013212fdcc974047fc0019ad8946cf13a8",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "c39c7386a47bbfd535878b5cd43ddeb9140c63b799408653a5c710ac9252ddd3",
+      "independent_reason_sha256": "039114b2dca97ed0ace44a3a83d762ab6549a60322131b813ea1ccbd86a33eee",
+      "applied": false
+    },
+    {
+      "id": 15,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7ad66a1f55a72b8a480b708bab17e7a183669e6f457ecda7087924a1b63932fd",
+      "body_sha256": "56405aa57fec26db191b5df4962990a2be6eb55e80c535d7fde01e8f224efbcc",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "121dc38342048efc13cc31090a50eb940cec6f19f03a8ffa2233e43a801b78e1",
+      "applied": false
+    },
+    {
+      "id": 16,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7b3911e576b8c4a745f078fbea46e1aa9155fd9d1adebc3c9c0c8d8e86ee6b9b",
+      "body_sha256": "d27b3331ef2bbcbe46a507e0e0dfd1bd13d27eb9778910614ccb1eb34bb5d0b6",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "b94e73a7ed2e16a589a328e02e924ed24e2e605fcce9180575d739ae6a3c0bc9",
+      "applied": false
+    },
+    {
+      "id": 17,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7b3bc143f47d611b7441ce87f6efebd0c9cc1e175e0686286d491e0fc45d7273",
+      "body_sha256": "f2c740c1930d1f51004dccb0d933b11a1fbad05811d79907520c3c9606925708",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "62e1a38fb2a116cccb06ddc24ed4abe49372b8aa628410d2a612e8b9da42fa84",
+      "applied": false
+    },
+    {
+      "id": 18,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7c9d31c91b9c06bb3f201aa7c3981a58b287d7fbdf7b064541c8b23284f424ae",
+      "body_sha256": "199e4db445f800ce63b37764dff35a385839d49a8bae21eb3f81270757a565e1",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "f97ff78723143fa99512879d62bab74161efb97ec0cfcd5203cb4582314ab8b7",
+      "applied": false
+    },
+    {
+      "id": 19,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7d479709b4921ffa2d28ccb6d24ae1a4cbe1212d64736e56a99edb6871f868fc",
+      "body_sha256": "36ecaaa00fb8e1c28345cc32c8a7ef32df733a2c1f686614b144ed121c272c13",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "4e093953a1d67c178c41db4b4cd07af938903bc7f372381a2c167e4d0ff9f9f7",
+      "applied": false
+    },
+    {
+      "id": 20,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7dd9f4a0b3ee1123bd52a7f1d9fea6cc2e4782f6654c67ed6eea6d1a140d572d",
+      "body_sha256": "279560217ad9c4962acb637cb19ced12f49f461d9e89e14dba5418383ba15151",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "6a8eee1f4d95517bef0e80ac89a53e8382034f9bcb713cce775d32c9b55c70b8",
+      "applied": false
+    },
+    {
+      "id": 21,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7e9bfe3be1f050bd8e420687a73e975f6bba742c682b5d73cf7006bb3a9d1380",
+      "body_sha256": "31b56351b8aad7f4a4278c1f18100ba54a31b4f97eee18a2f7e677cb23e34b0a",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "f2ebb085d4699c22b40e1a07e5c4b69327a581cb1f4e6cc433c03e5a6b26c3fc",
+      "applied": false
+    },
+    {
+      "id": 22,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:7f58f36c33d98d3c05e22f8ad36aa9a02b98d466aa5eac0ed1773af165fc4fcf",
+      "body_sha256": "c873d87c7e9ea4a34c580b5b82163e966f0cf90fa8438079b24e69950d1f9c03",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "8f5afa20fa4a74d43b5ef568353de1ef373488f739ec06dac27a41ee600a03ef",
+      "applied": false
+    },
+    {
+      "id": 23,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:80567ce1c334e2fa643b3e59ba2796fdaaa8b263ba67bc88540b3509de0739aa",
+      "body_sha256": "cb025a1da2b59544feffa6b5ca7531e5c39c33f216f72b87cc847fe82404b232",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "f53787f7144f0cd285ea3d8fff64fed0d3aa5a566af11b7ae838621834c0ce8d",
+      "applied": false
+    },
+    {
+      "id": 24,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:81ac0cca838a48415d8c96f0af39b8bddf7e2e7475349949dc6340075eb11b57",
+      "body_sha256": "e8e3136f2600f9542fc02e5960f6d9a3a7760aac4dfa824526a6e279ef83b422",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "c70960afb6d50e2c4fadcbf20bb9221c02faeadfc5aaed4459369205e14e2756",
+      "independent_reason_sha256": "169c06ec5056873ac8892e92aa4da559dd8d8b3e2fa991d36a1d3cebd06d3bea",
+      "applied": false
+    },
+    {
+      "id": 25,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:82fc22b8a53943ae2ed141d115c61149dff9fd89fd52d296a63b6dc390cb4dc3",
+      "body_sha256": "17c35431bbba067205255e6b953947032b6dd8f073ea846a51b081c263522a9e",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "f2d3fa14de5b1e91bb553962d4313f7cce3b81bcaf0315b9dafc7ee0d5b17807",
+      "applied": false
+    },
+    {
+      "id": 26,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:838f4fbb1a50d852057029b0cc2c9f51a05ea427e0ea113f8f0292ad9174f4ba",
+      "body_sha256": "87c6c18c1988520768e755960a4253de361af65d9d04adacec849399b700dd85",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "9c1c57619f301d4383ea2127385ac012f48045c2217ff20c46775328a4e59193",
+      "independent_reason_sha256": "40bb0460258f2b5166a00f805009d7e490f4539913887d7cd258c5b85434f13e",
+      "applied": false
+    },
+    {
+      "id": 27,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:83c01d76d821b9edfdd012f289bd5671d4002e3052e1d1de0dab0ecfb2b2ed33",
+      "body_sha256": "d67f3532bf1fef9071ff083cb81aad4e6e2db61fa611ac1c74d845152a4c76ef",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_alternative",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "8ed7bb277082ebc762c3b64a1509cf8665a13908304001e05a300f18ad72fafe",
+      "independent_reason_sha256": "516ba2e951c2d56db30475468527204219ef72421a26687e5d8840329b9e3d46",
+      "applied": false
+    },
+    {
+      "id": 28,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:83defc56355c799602ac1184407006978c4b7de43b59f8aed214ed7a0856eeaa",
+      "body_sha256": "586a093b65b56c6922246aa838fe8b5d1ceec16959d0afd69aec1258520d4f1f",
+      "classification_sha256": "b32f6a5ce84b61d8a1420a5cccfdf4b654519130b12e395bc8ac7a1a5a87ed4f",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "地域格差",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "343a0fe7aedad5d2a56261803d14e06a5ad7f0586095e0b558f8342259fc561b",
+      "independent_reason_sha256": "b7780c951b4f912d0b7e7b28ab57a97a74936b6eb79dcb199416bb5c9bf3dc09",
+      "applied": false
+    },
+    {
+      "id": 29,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8437dd234ce6cff79fadc212735acf896b74af19fc95a1cbec59e4e706265805",
+      "body_sha256": "13d4765888e8b088ee7ff818994b0ed65befe07e839025b5521b536c80c263cd",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "85037d96c3ae2a547e2d63ce596fa13aa398cec0760f6caba06831933f30b4e2",
+      "independent_reason_sha256": "9b37da416d070db3f7aa5232d9a125f0be126bf8cacf008ed698ff3e6fad6862",
+      "applied": false
+    },
+    {
+      "id": 30,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8581a0b90444d3e8586a93da0217b7f8df52ed2b650ef96f212053762d8126a5",
+      "body_sha256": "75c80f56e079228c25e93b1e3335a7c73f480c5bc6d00bca810e112638551b03",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "移行支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "parent_decision": "accept_alternative",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "076952fa823b385489023fa4502af540f64a96aa4dd92f2700db280d310c8d18",
+      "independent_reason_sha256": "608cb3c27d90f741a81c2cb73b9b90a22df6d48e46c63487e145db35b6f7d1df",
+      "applied": false
+    },
+    {
+      "id": 31,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:863442bce8e8b4071e9fc4924c7170d21ebd28e63e73a7b30dc66b007b1d7767",
+      "body_sha256": "936c27b3b0eeb7aa8cfeae1e1f2450e7205d1343bda1d4028d12eb5a18c9bfec",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "df73a1f52938b5e5bed4453344e376d79a08724dfc978c4aeff6f0b0fed2d1fb",
+      "applied": false
+    },
+    {
+      "id": 32,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8681392b7d26bbb6b57e8d71356c65fd45ea778118f7674ababf80394b90cbf1",
+      "body_sha256": "af715f89e696b3aac2ba4636695102642ef421ce1e076205b0f8a0104ac80339",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "cc5d2fa176ca09219707958f0dd8264defca500777f3ec2d594afbd5576d6ad2",
+      "applied": false
+    },
+    {
+      "id": 33,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:86c2f1d94e54f0178b3798f3bc2a1b943ae3cf781609b37e51351f6e72faa69c",
+      "body_sha256": "637ee00472d7dd727aa2a9eb42ac1250f369bc28de994d85fc6939146eb70f21",
+      "classification_sha256": "9bc865107ffe707482b232fa8820f26176ff58bd4bdfbb3c4dbae711bad1dad0",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "740967272f01f9e88250b83ad455dab81dc9a01be736a95b2367e3c8f5fb5392",
+      "applied": false
+    },
+    {
+      "id": 34,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8827c8e8610307a17bc5081d6665f17c6799b9cc612db6f0ee1ef545984f511e",
+      "body_sha256": "955cf03d82a6f130678bc3ab1c17208623e0054d8a45a03c2c5bfce38311a7e9",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "ffc8682a3203d107387b3d04829ace855afc6399883459aef7db8bdfa420cf39",
+      "applied": false
+    },
+    {
+      "id": 35,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8a6b4dd2d41d14fe8f6de1d45de575efe6ab6a93ef306821e4e12b635e12b5be",
+      "body_sha256": "ec055ee96472d3e3ccf3f8965a302708af8aaf9eff9aa4006ebaac491bb965d3",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "9b77162f74a2ea2e6f9df49eef56caa8c8ba3ffa975093cd510d5aa30dff662e",
+      "applied": false
+    },
+    {
+      "id": 36,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8b8de74238201e8810b2ba0883bf70b872fa3b2f01340a4dbdf9ff97f755f2ea",
+      "body_sha256": "5dc076fefb67566489460df10f8265c7432d605c694fdc7af77f39d3f2933a01",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "c3b21dbe0929d6ae19abec5d71cf7c4fa814d250dbd5b8f6cb1c7e4bd9f06752",
+      "applied": false
+    },
+    {
+      "id": 37,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8c5b8cbf23c79a06d001d299c679538d2cf4cffba4fa7f5fac82d5c75dd79b09",
+      "body_sha256": "bb77433a0481ce07e9089c1b08e19e3f9b08baee5ab6e2678ffc052fca356f3f",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "95d994bde191c73c26874bd4f15c584f1fb78e6257a800366ab3663fc91db2ce",
+      "applied": false
+    },
+    {
+      "id": 38,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8c617f5956d034d60bc2253b6b1d1ca02b61cc705bf784a614f86562e573eb39",
+      "body_sha256": "16d58f2bc7ce8887e3a1edd4544710bfd483350582ece63f02a6ee3798707735",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "4712378e89788657ab0663b82b6db58e7218f65193d68097f7c8d7ce001a3d3e",
+      "applied": false
+    },
+    {
+      "id": 39,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8ca4459c2ab5160c14982b4580997f0a1b09dc3878125063bd5f073294f36e86",
+      "body_sha256": "266fe817aae5559ec872c35625206bf50fe2b92d04b57165a1bb6de627fd69ec",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "制度・移行プロセス",
+        "stance": "移行支持"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "4d7d0ec2123c45bfa2f92f81b3977df94b1717618df2d853fdef91786cecb788",
+      "independent_reason_sha256": "0e79618b42d838f88ba3f021985b7c894a043b5055e4330532e85a52df68157f",
+      "applied": false
+    },
+    {
+      "id": 40,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8d4ced93905089a6b87e51f1c4f5e70a6418a8bac6544bd8f254b1878b533070",
+      "body_sha256": "b5324623eddda545779ced0a268425d09e216583d004129b9b4a2ac65d2fea67",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "191d11944c3427c3257c5e2b0c55cbeb59f6d564bdddc55877102319b628e6f9",
+      "applied": false
+    },
+    {
+      "id": 41,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8dfd2126c030476350909aed3596ec494c11f459ee641b6dab1fe3e5aaa8888d",
+      "body_sha256": "c21737cd5368aa9d0215deb3d7210dd24324469c8969103e5344199e7f15820e",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "c6094bddf78a7d6b474e9bef2e24cd9a7f50dd648989d8b03c365a3883324e1f",
+      "applied": false
+    },
+    {
+      "id": 42,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:8eba283862374c2a9bf9a368b6b7aedf7e1973511fcd5f2287f92e3190e7174b",
+      "body_sha256": "166bff357c737c5039eb179bd5a633af9e5d38070abea2d78ebe21b15834ccc2",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "e9a0d1217e657eb6d9fe9503633a7e1fbb5f27b38c236c6c24190ed47870894c",
+      "independent_reason_sha256": "b165184bea75557b60484e083e013b760feace4df43974c17f715c1236dde134",
+      "applied": false
+    },
+    {
+      "id": 43,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:931b84f070ccce9f7ba851452c238e4896ec4f2260e258338738384e563698dc",
+      "body_sha256": "96f8c5b48e576e509afd41616f56f2919d967315fed677ea63101183d376830f",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "8d2daf5dcdec05de2a0deb2123305369809e8a919395eb0a814388eb748b9ee1",
+      "applied": false
+    },
+    {
+      "id": 44,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9487f76f2bfc639f8f2ad1da7df2cb2f473ce233061605acf14b0e71b7743beb",
+      "body_sha256": "97dfc42ffbcc7ac9594e00bdb214ceabef743361c8769199a09d4d19437e2790",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "72d8e17e89802d3d10d97733e60ce702ba8a362394eb9a95cdc82f9dc739e80e",
+      "applied": false
+    },
+    {
+      "id": 45,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:949d80dc13bf9a46a413d1f527c4236d3dc0322b8e9b64fc4dd56f906649a6cb",
+      "body_sha256": "e5300f6441d8fb14a680110e83d206093a98afdf3bb443cd6cde878972ccb79e",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "6b42e262828e5ac928e23cd54dabd25f1c70c4a198b916ee3320866b7d0ec69a",
+      "applied": false
+    },
+    {
+      "id": 46,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:957d4cff4ad722e677b4e58f75e812a42942e8cc8b3c52c1d5bf36ce1302d728",
+      "body_sha256": "1e5c1ca8972f5f40596588deb5378b41bf567e0c30aaa1226930c2ca41deae68",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "5f6df4bd662a48713bd9e941a673ebaa41a47fc6a92dab440845495b3d56f709",
+      "applied": false
+    },
+    {
+      "id": 47,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:96041e27327431cf3cc69b2410644789fb13a32010c462b32e316355bdc2938c",
+      "body_sha256": "3bd8288dfbdd88f5694dd999abc7062b623fac77f7cec10c1a297c141e1411d0",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "8837c2dc550aee531ce0f3b126cdfc22e2c8c6cc16bb930184a4210d69174cd2",
+      "independent_reason_sha256": "a2ca0624d6b37b5215cb31b0d2ef39731799ad3cdc779b19eec50b15defc00b8",
+      "applied": false
+    },
+    {
+      "id": 48,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9697468982959985ad2db132f5a921d3abc3b1cf0d160971394fbfc4f6c44925",
+      "body_sha256": "8499f018014e0ceadc6bd7666baec0a2558705d48e9ef323d740fc29bce7ab56",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "98006cc1cff4945fe5fccf9288b1a74c4f309daa777d213afa27bbd40e1441a9",
+      "applied": false
+    },
+    {
+      "id": 49,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9769aa025269588048b408eeb0012414a90f88340c97aa2b25d25075995b4a22",
+      "body_sha256": "162d37f415eb1c35c1af334a219ec783efc1d9e8b37e8f6285467f43121ec4df",
+      "classification_sha256": "9c8b42e996ef0ef95f066866dbba24639d1d3620553240a685a6801b693a159d",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "地域格差",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "9f1fd14d411d53d76fe68d8c98ff6bcbba19b125b1d866869efca1225e92b446",
+      "applied": false
+    },
+    {
+      "id": 50,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:978089f3113906e230395e0e698db9ac0841c9fcd627581f95f1f5618594c2a6",
+      "body_sha256": "a6885e7bc4530d844c31bb5266923f18807c5ecc6ac260fa598728a327cc70f7",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "787d2eeaa9448ff9520560471fc23821e283c743f25fc2cc5c4547497ebb8dc9",
+      "applied": false
+    },
+    {
+      "id": 51,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:99a9d4630f74a6fa6d9cf45142eef262efe93734aa2647c129c668adef5f8874",
+      "body_sha256": "bf5bdda7402360aa7faf089f496b17d0e2986c678af192947967e8d3578cdad5",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "ed94bdbab26a71123ded666b29582ec96c17206cd608f4c5777c3aec85d8e0ef",
+      "applied": false
+    },
+    {
+      "id": 52,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:99d2a7385d0908c4fbe7c5a2e24798aba12ca433d209dc6e4928a8deef3ff859",
+      "body_sha256": "45a0c5bb5aeee38373371b07eae7c9fabda1ecc6d9de947bdff0361e01b10b6e",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "e00359a1853d83cdb4f180703ea8c2cd7af2c8d2cd04ee8f2922da892f5b5b77",
+      "applied": false
+    },
+    {
+      "id": 53,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9a45fe62daf03d6864379ae0633ba8db4c7e10b9016c54d8276081b2c2705d81",
+      "body_sha256": "d9f72c937d116d728a2bfb8d00e5b02ac453db4aca30b83319d6754280f1876b",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "966b780cab12f7937f2cf1e41061f5ca24f2f840ffad03a76d3d3bc32b7839e9",
+      "applied": false
+    },
+    {
+      "id": 54,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9bb8cf020d9754fbfcb51943affa4316c3fb3e99849fa30dd84482e5025e2934",
+      "body_sha256": "05280af62a56e517c60a51722ba12b169b9800afa739b355ff412ad1386dd337",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "c211d9ffd8114de77c9355da7b4dee24adc0de0533e8eaf1fe635fce3be319a7",
+      "independent_reason_sha256": "3572a1d1508a5f2eb76d4a75f7a57927a2988bec4329d902b0d6d0f8cf03ec52",
+      "applied": false
+    },
+    {
+      "id": 55,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9df5ba279ae5c1bf4234eea8134903e030f251eb35ccb22972fe432138e4c8e4",
+      "body_sha256": "bf5996cd97682c5ffbc662735ffcdfd4692173dffc6cce8fb8b2eb09f24a03de",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "029faf918c3b2e43699d2943fc3114d731f9fbc16e76a12cc2ed74245089872e",
+      "applied": false
+    },
+    {
+      "id": 56,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9eb3c16e71f0c01391cf368f449a2be5207094278ba3e0ce872d330adfe5a143",
+      "body_sha256": "fe8ee3e9a8f7199d1d0880a85bf9da5fce07ca55e9c81c6a6330916d65c0b99e",
+      "classification_sha256": "79883d3c5f86671a71c12300dc34379c5b336cd8016f34bcec12f66de995aebe",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "地域格差",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "72f1e7e0fc10ab6dbfea55e9143f3c7e3c0f16eed91736032e8f08c6eb9e4b3f",
+      "independent_reason_sha256": "0df7b6f0328008edbca22a25cbb8c4be263a3bcbce2c1bcc9b4d98433174d558",
+      "applied": false
+    },
+    {
+      "id": 57,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:9ecf39b780bac7704791afde1f18a58a4d151fb3e2e8132abce5dd797538ad0b",
+      "body_sha256": "86d185cfaea03ad9691ab5d304881a1a3d108802301322caa98a116363952b54",
+      "classification_sha256": "7c5d32932a50d4e186bb8cbc029199e4101df41c393caabeeb19acc6369a8822",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "費用・家庭負担",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "9a9babd691e158a0f3a2aab898301e6221a5b742d007464dbfc35230c96ff388",
+      "applied": false
+    },
+    {
+      "id": 58,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a0aebf0bcf03cbc48a1722665af95a76efa2d5213f5fc8bf97434ddcd087c25c",
+      "body_sha256": "b5283de3f7b344843cccd9c90416d91ad472865c771021538e4427bd94efa797",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "d33432fa7e9f35ac4f728212c748d4ddd0a9b0a0abd01517259a81d4173d3cba",
+      "applied": false
+    },
+    {
+      "id": 59,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a0bffb656f001acbdaf7bd925650b2d68d742db2f37d94f8bee83925a9f80c5d",
+      "body_sha256": "21ba1dbe26067a67af8c46e454caffdabc4d66663c7dee3e93e7634efdb0098b",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "6b2a3ea734594b62c8c81534e5c16d449831a906b0e3448844c92783823dd18d",
+      "independent_reason_sha256": "7c4f104aa338de63797da05435124ce7733e7df72521ca64ab3a20967eabe791",
+      "applied": false
+    },
+    {
+      "id": 60,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a1acb9af91d655ce3c27bad86f6c1ff455ce2cc584d968a77676cbeb3389cb6a",
+      "body_sha256": "205dd70216bb2992f12bb4ab5ff475d089004ca74e661a58d7e5fd28bae29d00",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "578e18195677e37f4fff5cd3dc8f8dbe0ac31014bc8ebd9a566f3cd90fbf0a68",
+      "applied": false
+    },
+    {
+      "id": 61,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a2db93a03209d408bf35a199ff71d41915a4aba430c2e5663fec4ed180806a0b",
+      "body_sha256": "76d573133b09fe78c1412f158a60184aa7666b528ffa0410d6f8412d0f3ec568",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "206d31661f6ffe904290804209df9f24e9ec813cb088cc6e1a0a80ab6b735f46",
+      "applied": false
+    },
+    {
+      "id": 62,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a534fcb1a6ce7c14cc2fa22e0c3a83303ddb39455b90d221b265056073ad7ac4",
+      "body_sha256": "05b714c44b8a8d829ed1bf5b24ad3027e75d4d8355d17737e73c64f34232c532",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "caadf524febd2c9a0b6c76d8f7a37444471fa11c8ab3b05407aa3bf1ac68e9ed",
+      "applied": false
+    },
+    {
+      "id": 63,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a5c0099d9f9ee479b9619899daf65a7643602ac358d406061f76012e1c5ee3bb",
+      "body_sha256": "96f63d8317065b4cfe1547d69e9b36853a07395f39c181762fb7240dd1633ce2",
+      "classification_sha256": "7c5d32932a50d4e186bb8cbc029199e4101df41c393caabeeb19acc6369a8822",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "費用・家庭負担",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "accept_saved",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "662389b57f79ce4016c2274fc4bd6c709264a894e1a9954a36084e5022b1b068",
+      "independent_reason_sha256": "13ceecd5f098a50346767ffb2b781d32ec5a6f2dede7db6263d6d8ccad8f8787",
+      "applied": false
+    },
+    {
+      "id": 64,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a677daf7480398f752cf2fb99f0b75964469f2aed3da61f08e8d6c475216ef1f",
+      "body_sha256": "ac15b346547b74990b4f7310511680521e024ede9b3aa210198d4cc9c5592f83",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "e17e9a14e640fb96c6c4f81deec9b44cbaf72b79b8a2b5e17a552933b62151c4",
+      "applied": false
+    },
+    {
+      "id": 65,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a6c9586d88d362537bc807219e2dbf55b746c67f3599ed0bcff82404ae9b55ce",
+      "body_sha256": "1d85de4501f320f2c3cceaec56e5e41db85fe7b32b3e6e1d3c1587173060161b",
+      "classification_sha256": "bdb83d220e432cb3314111c159a82e3b88e421375440e03b08cdaa7d26ce5982",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "4930b44f7e1f57b78beb72f75dcf8edcec518c2fc8f34cf1630d577ada0ecee1",
+      "applied": false
+    },
+    {
+      "id": 66,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:a7f15e17322d2ecb651584f445d6aaed123474c4474e7464ed0fc8f0dd00507e",
+      "body_sha256": "3a15bbb6f1f070dbd6036495fd1008827f7b4309714fc067d8c742e29a6c4143",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_alternative",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "f7b1e708f85bf277e10629f997dc2e4ba7e1b87aba24edd1dcccf10facbfdff9",
+      "independent_reason_sha256": "750bd2c3f005dff1145faf94189b8fb93dfd8e4a31914fb2b18c8b81138d38b2",
+      "applied": false
+    },
+    {
+      "id": 67,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:aae07b8bf29438a65d896076bfe2f7359c938aea3f2e8eae4950269c7b4350b1",
+      "body_sha256": "574009fd07e7d181a4ed9d6cb34f4c9c62f72aa026b100a2293d33f4d85bc335",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "4062e6b7c472e45f5fac5752a1928e4e261e33327d46a618dfbfcfe9d4f9aaa3",
+      "independent_reason_sha256": "4acb887846e68e92732a7b7f723401747b4c6783954efc26b3343eeb91c1f598",
+      "applied": false
+    },
+    {
+      "id": 68,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ab3eaefff5117fbbb7c4ef8da49ef700465584aa6c321be3cb76c8745717a95b",
+      "body_sha256": "e162f21de97c7140037e0e88aa243087d5addd923311ae44ea63116111fb6ea9",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "d7a34fb47e328747d2aedfb5020e41468e69317b69cfa9d330d5c0e0e49f6879",
+      "applied": false
+    },
+    {
+      "id": 69,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ab8c7ea6dff6448fb08f27f0056689d8beb7a06811733b6e83b7e1871ead8284",
+      "body_sha256": "f74321c85c68c5e1e09656d2e64824e7ea505547ae7abd3ce7ac80883967e338",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "1fda1cc18726e3dfeb00682d3ad55276a67f7cec7d5b305932408af35380c5f2",
+      "independent_reason_sha256": "128ac867c4f3e22c28652277c3f40b7276c93bf0691e7457abee66fd6f922966",
+      "applied": false
+    },
+    {
+      "id": 70,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:abce04b69af3e901b1b835aecb64eba4a62e4e6bff83909d2433990d517c598e",
+      "body_sha256": "1e9a73c3dc96db1f642aa6ad7cebd80783fd5a102fe084a43edd99c9c8994f31",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "e38cf550ab644a5838dea5d3ccc5dd6feffbc06475c23018eee8a9cc81810f19",
+      "independent_reason_sha256": "c2000dc6b3b2aa71c57725e2f9b1e93be5c21235171a6368609a6342ede3063e",
+      "applied": false
+    },
+    {
+      "id": 71,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:abf7a545c75eeaa05e5238d5bed670a197f298e90180f886020a1eda8b1dfd5e",
+      "body_sha256": "b1e25fbcc1afa81478d40dda1792fbabebf420fd2e091e6ec4ac9ae2a3ade160",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "3185e2046374e4ad3c19c8c62c01c4bc14c0ca72905e4c166f614c8918e0b894",
+      "applied": false
+    },
+    {
+      "id": 72,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ac28c2309c688ee13aaf524fbab40dea107185c4928bb5b55dc2696ed1a315d8",
+      "body_sha256": "80aa1189f7766169bcbb791ff2f1147a2a1e6ffb918fce872f16f93ba8a10146",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "d295de48ce0fa2cf7e319a480a4614b80024ceba6dd0ff752a159b6f955a3eb7",
+      "independent_reason_sha256": "2718985cb697aef927484d7df963d57f2915fb33e92e1808201873fd347751cf",
+      "applied": false
+    },
+    {
+      "id": 73,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ac98f90a53649f08839fc8d0f95756ff9942eabcb23a8229e91d0e72c86d1ff3",
+      "body_sha256": "0366ee350b417707bd8aafd9ef62f855705bbcae98b3c1e0ee551535fa82da6b",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "b0e8bd870d47a3df7bb54180f21c1bb171efd46e70d92c826c043923838e908e",
+      "applied": false
+    },
+    {
+      "id": 74,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ae035b6874f0d9422fb4fcf8c1312c692e48cd406d65f3ef32543f4df0ebdccf",
+      "body_sha256": "727e128081c207c32617749e60458dc7594554b4f289aff56942016837f0286e",
+      "classification_sha256": "79883d3c5f86671a71c12300dc34379c5b336cd8016f34bcec12f66de995aebe",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "地域格差",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "ea73b7b1fd8c5878a6f884a66e400393b471151a6d0abdad54bc740dcf96fb0c",
+      "independent_reason_sha256": "ca580547a915b3d871e809604a360b600074b47d4a8286184b62f0ad2cdd9ed0",
+      "applied": false
+    },
+    {
+      "id": 75,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:aef5a6e382f2898c379fc67fc65c57559756770424a0f671c7a996af13e3f1f9",
+      "body_sha256": "4b2be7ece9bdb9ddbe152acfbd524a368f7dd6cb5c0e5a57b196f0fd6e159143",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_alternative",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "9ab4f6e55b9b796471ca008865fcff9981e11881b51a94295a4ddaf1d3b02549",
+      "independent_reason_sha256": "feae253b6bc4a67f873ed3d67b02bb00484224087f04669123dbf1da37feb052",
+      "applied": false
+    },
+    {
+      "id": 76,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:af0b822206013314d29f285f147c8f3f73e57bff0f31b5737f7e9691e120ff1f",
+      "body_sha256": "caaf28ff80b77d64284275e8f2905f67a1fa844232ead7cd140b5edbdcf894d9",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "c6a385782e6a70ff4e1946186f1bcb25c4f1d8de97c2a8848070bb8e2d73b306",
+      "applied": false
+    },
+    {
+      "id": 77,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:af59180ebff0d0d61664a6c4837a3a1c52b57ff82221e28b1a3f89bd74dbaf7e",
+      "body_sha256": "e1fb16cf228786bf3f4d9eb20768fbc118aad0a482f17cf72fb87dbfbdfc9b01",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "dad576dafe7110e7f4af7a211918df569463ebb3d5ce3dfc17e615d93851d4fa",
+      "applied": false
+    },
+    {
+      "id": 78,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:af5d98440b92e4230ed55f7971691ee41b8650cc3959a5fc94efc1a116efbec2",
+      "body_sha256": "afa42d31dcfb0c96f6aa1dac9b221245a58084210cfdd45661a3f152dd128854",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "8e60110a61872bc975448c8b07c11c39e0cd6b26af2808a6503c60c344f7d2e8",
+      "independent_reason_sha256": "848be0586da52c20b7933ac557832102bec6e083e5c70013de2550cc0e1b9215",
+      "applied": false
+    },
+    {
+      "id": 79,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b2b7eb43b0f314e5669d7fcbb595196ea5cb76ba51ae7de37ee6e0fa5e28eeb4",
+      "body_sha256": "f86a39e7e3976cbf662b1768c957699213a60ceaa233ca74682fe54253325ba2",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "24f008eee16e3867643479b27df2a04078d49d273a19bf34515be873313aec5b",
+      "applied": false
+    },
+    {
+      "id": 80,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b3aad8c34e9e25b85cdaff1796ec2b50cc4d463dbb185ef498f4aaa3c481a227",
+      "body_sha256": "89db7fc15b7fdf3f8eafbe9aeb45ded2f6aa12c29b16a7ffece4fab511aa4747",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "40cd9bb4d594c16fc5009dd2fa1a17e541749f51bfdb7e99500c845cebc34018",
+      "independent_reason_sha256": "5caafde4e517a0a85d536069e2c2bb251c45ef875259de2396e2a41715f5a6af",
+      "applied": false
+    },
+    {
+      "id": 81,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b53784f02b734ac1b93ff44883f5274b73fcd5c8bf6ab7cb50ea41479dcd0e7b",
+      "body_sha256": "42159e8b824c28c7c16bb7a3110bb0bf0b9ce92975577d44fa1383e4b8add45d",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "066deb89b0d9630fc0ae5f2a5ffba07d6e06369da51342e903917ee2fced940f",
+      "independent_reason_sha256": "94058480d9cad7bd8eec39b05353315569060c91386c79e0af85056737dd843e",
+      "applied": false
+    },
+    {
+      "id": 82,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b5aad524a55cdc7c5b0f4ed8fcd219030903a025b06e478efb3aa328b583683a",
+      "body_sha256": "b0e2de1240becd5f524605b90f26537755cae9a64c0e8e2c37ac865ce41b8151",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "346634e74e1a2cf85f127bd4a2fad55070a17bd4bc4261fd4c382cd8a8eff156",
+      "independent_reason_sha256": "c27b2c1dd05f578415e9fa61e5d6103060d1fb54471d8190c2767897009747a2",
+      "applied": false
+    },
+    {
+      "id": 83,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b5e7ddfd5182c1d6eeadefd0904d5aab4dea9b3cca9bfb556ae0db87606a4c4d",
+      "body_sha256": "ddddb7fdb6d2c947cb6c36cfc392d2ef585b6d6071ce6f44e27d235d0b1c1877",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "4724375388dfa7642509a41d22aa452ae74f67e7a91c844fcce23ee453741cfc",
+      "independent_reason_sha256": "4e36b3a57981ccefcd3d27282adb678225ca3a1a3ec5a0f68580ea6bb9bc60b7",
+      "applied": false
+    },
+    {
+      "id": 84,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b6a7a653a98ec9a4abf2056485145ae0cdac1946bffb4df175c510fab86b66c3",
+      "body_sha256": "a531a2b8b511baf2fcca89e5ba82ad313acbff3c73d562c0edce8b11d2dcc20b",
+      "classification_sha256": "718d3d54e6ef9da54e0aec3c1edd4a0858c31e95f567f2886b304ebd2ac88a49",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "46bd7690918c0626ed4a698ebb8ef3410222f33ceb59f9ea8da41e34294cd002",
+      "independent_reason_sha256": "2d59639902fec44b326c1e01d081edd072c13ee37665ddbe90fc96f268b1bf5a",
+      "applied": false
+    },
+    {
+      "id": 85,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b766f3c0da02111a7295ca59d1624b3dbc2614da9138cedf3969d049a3ead021",
+      "body_sha256": "643248b4a161fafaea7e32dc4b85336c766bbfa6c5a02bd6b8ec8be13e68e0b2",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "0a3bea0d8d9863e21e8014dd82c6ce53d5f11ae7806ee2024032de1ff79caf88",
+      "applied": false
+    },
+    {
+      "id": 86,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:b8f206d5960b54b07404e23379f2e07e2c0647667c1e5e8ffc335623175a1451",
+      "body_sha256": "a2cab531c4acac36f597fb2b254383a6c04fe2a241f81628a5cbd1f2098b184b",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "51520ebd8489ef322c2d25b4c33b5d85894e96dc228661a4b4a859c2d3df1fb9",
+      "applied": false
+    },
+    {
+      "id": 87,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c0092480c61d0336f381eefebc82fc24306dcdb8eeba228c9cb7586da0a6c9e9",
+      "body_sha256": "23ba6fe878e65766d66ecdbc334fd4067ca876085a31ebe04a5cf54e59b8fd11",
+      "classification_sha256": "9bc865107ffe707482b232fa8820f26176ff58bd4bdfbb3c4dbae711bad1dad0",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "815375cc3f7088451c818104986b4b62e2964e448ac9c32850effbd8bc9fbfd9",
+      "independent_reason_sha256": "26ae9407609c3ecb793fe2decc2d48b8aad1e6e8f139989d60ebe85afe591896",
+      "applied": false
+    },
+    {
+      "id": 88,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c0a4931f9b7573e796c5213ab6374d21d07b96f9227dab60e50c3c2d3a19dc6e",
+      "body_sha256": "19ae9c4c0494981e77d6be0937a1f6579e87283dfe0c426f95701906d2fcf682",
+      "classification_sha256": "9bc865107ffe707482b232fa8820f26176ff58bd4bdfbb3c4dbae711bad1dad0",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "19c10af589d4512e8ea3404fc1eb8c7118a3aac3dbfcf531430fb9f30ceb5b16",
+      "applied": false
+    },
+    {
+      "id": 89,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c21d088210b86f9ce8ebc54dce96a5756608f00adb98e2e0da214e313255b1a6",
+      "body_sha256": "1df7a063c65231c99937cda37ecabb95186f9332715ab143aeff2055b7712cb5",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "16e269f7ac662749e38c0e007a0c39cfc5d94b322e8e40cbe2f81a7f5c79ef31",
+      "applied": false
+    },
+    {
+      "id": 90,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c23207ecbf411b7e9f7e7a04a94b9e16a14ed88fab51b8318aa2ccac14983a93",
+      "body_sha256": "4947b2dfb1fd25df192029348bd7c6306918f3c1314290c19035b333f36869de",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "dfde6c6341704c897edffc432848299a32fce3250397f827c093d788ea3970ca",
+      "independent_reason_sha256": "24c06eb50e315c98411a82a451ef065d99fd03f2cd0e4dd9451b78437cc5d865",
+      "applied": false
+    },
+    {
+      "id": 91,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c29b91a3adf35ed0c98e1a0740a517c9a6bc329796c9409b79372cef01eb1083",
+      "body_sha256": "2c6b59fc2a9c2c5e83c2b58bca3e63cc0a54c7096dd386583bec4b45a7d88f8a",
+      "classification_sha256": "7c5d32932a50d4e186bb8cbc029199e4101df41c393caabeeb19acc6369a8822",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "費用・家庭負担",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "7da7960d1dbde999b648a914d47c2555917cfada1efc52b06825ec6ef41f15fa",
+      "applied": false
+    },
+    {
+      "id": 92,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c40f4616730bb4dbd1b4ce735980881baafffdd86c6c48770c48b7cf2602c69d",
+      "body_sha256": "afee4a96f51300f09e62c39b51a6f8b9d406f04e9549435cdda5297e7451c5cd",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "e9ea8e8e7ada8080e77a030fc42ef6bd227eb6b1d4a9a43f8e9fd19a2171fb1d",
+      "applied": false
+    },
+    {
+      "id": 93,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c6397c1ebcd96d1703d1ac4859d215a2806e10821e0b10dda7da5ead838ec492",
+      "body_sha256": "fd6d7d519ee8e0cfbe040b909da39ddcf61c4cba8c0b82ae62c67e0f989287b5",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "cc0f19a6a92abff4235bb0ca1730556975802344b27698c2d03e2e6c8bf89c20",
+      "independent_reason_sha256": "ee227870634fd6d6ed63b021f22e3c3298af2c09aedd16b45dd2ca10aa4f8b41",
+      "applied": false
+    },
+    {
+      "id": 94,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c6e694e0d9745781f29bb3bc63330160b8cf406f7c8b502b70b2888c713ee02a",
+      "body_sha256": "5c254f06b83381e60e7ea84a0799f7c0ea6c091d807da474887ebd9767ba538f",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_alternative",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "15fecd8725d13c0cf4798d4cd1979d4a6718c21fde4ba739314896ede30f0bcb",
+      "independent_reason_sha256": "c4998df5ca9900a3e0a8ef592b51f54721e5db4b51211ef4999102b24feefdea",
+      "applied": false
+    },
+    {
+      "id": 95,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c797cf34a0173c3bd6aeb5d8ca1a8cb64f5b503eb43e60a723f197b1209d90a5",
+      "body_sha256": "615cc9481a3dc5d478b86ffe38d433f4f7b4e1ec1cf5c9b1253395ec53c77bd0",
+      "classification_sha256": "dc752629b23ac8fd4a1cd5b5da5f363007c34d4afa6f15540612969cc6c9de69",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "47495edb2daaa6ec87af2f12aa57eb8d8557b0f800753193665c1c0deb1f0178",
+      "applied": false
+    },
+    {
+      "id": 96,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c7ca34811945997d30c42fe300b1b77fe8415f7f246ce7c542388cc401dccd88",
+      "body_sha256": "bc6976755a12bf45a0de59b8dcfe43bc247ce39ea8d3e0eb999d951236a36fd6",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "589deef9ca4825002473fe7e75f395208809055c26c791683565d2efef18a643",
+      "applied": false
+    },
+    {
+      "id": 97,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c7f9d0abc496605521a020ab858a3b112491247610e6e48193260426eaa07ca4",
+      "body_sha256": "97e0be04206d1727c89cb660a1b8d6e100b59633e528e273d750f40a360c6bc7",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "7611f9ae9c96e81532da237e70912ed44857e849973f164323f1ac2bbc0c7cff",
+      "applied": false
+    },
+    {
+      "id": 98,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c820508e83d265e7e21ca0dad2aaf60f7a2bac9999d6a8f2ef22b63bca00e77e",
+      "body_sha256": "1f5e1a346e1ff115195d2146c92219768af96abbacb910fa14d8106baccd7006",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "1af301904cacab1fabef1dad465deee1fe32f6c5cbbac777a2699badb8d555c5",
+      "applied": false
+    },
+    {
+      "id": 99,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c8cbf89e6fe0262c62f733be0957ce93a4ed63239e5df172c7e61a02e5e379c1",
+      "body_sha256": "e3fd329437d982a9a8306135789eeb0f443b101f46d17b717ad1010a135aef25",
+      "classification_sha256": "c7b3896b5e084662ee3473a2c0069af1cc4cb162881ab0b3fe5ffbbf10ca42b2",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "ec9613d4abbe9529cf5e5e7de9854cb05586ab79e831e9ed31bae33c4b1304ac",
+      "applied": false
+    },
+    {
+      "id": 100,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:c96efaf796001b75e7ac88f04c8a04e843bf7e700ae75995fba2d37630e0e436",
+      "body_sha256": "e9bd9aeb0fe817eed6deea2bb87d9eabb6ca7bdb30e3f41faf712b10a5f25530",
+      "classification_sha256": "cddb1185deaa83182f5eaeabfb572bb1ab39822a4fb0e3a146d85bcf7224d530",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "a524925dda7fe43ca12b58d0964103a70a8cc692253c463a33c20ae6945e28f1",
+      "applied": false
+    },
+    {
+      "id": 101,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:cb4e8f42005fc436f468cb38189daadd4185d3879b5babdf781a43ab7cf14242",
+      "body_sha256": "41993bf0a0d93c46dce47a5fc45387ebea86c9253564c34a147c306e50eb3835",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "682337072a92c5e06845f6f465b798d746fc76f05aabbaf318f49f5496d9ef6d",
+      "independent_reason_sha256": "82a3f10c2d0f5eaf1a8f7b45d292a4d24cf876ab07cd6484bf8668024ed77055",
+      "applied": false
+    },
+    {
+      "id": 102,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:cc8c42dd9a917d8f89f5a7ca50376fcd4b1def640619faff2435d9e772f1906e",
+      "body_sha256": "c6c109f8f412d9e5eb0fe4b79314e31d67e970279d3f90c7b9d7837a5fe9b317",
+      "classification_sha256": "f5d06e12d575775680a74a205975372a1d2046e56d139fe3efb6d6f1752bdb7c",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "39b050958f67f27e1244f24d66e6997438e6e89ca95a8b3e434aa761c4992d8e",
+      "applied": false
+    },
+    {
+      "id": 103,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:cd09f8933b2171b72739440e8a1c0cdf4804cf0e9486c9489fbe9dbcd7ac25c0",
+      "body_sha256": "2987dfd27d91f30f9888a47da5f92dab4e0b6f912afff191eb42d2393c0e838f",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "99e51a93a573640a7168997f9bb464485b6514e76f5ca4e554f06beeb9427bad",
+      "applied": false
+    },
+    {
+      "id": 104,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:cd718cc7abdd79fa23b75d605bb2aae238134708943285c2969891883bc98c37",
+      "body_sha256": "3ee89655fec708edd33ee7c73d433b7e69ea4880e68ebd0373e9408fcc7cde24",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "bb4dbc0c749e7b8e9bc2d2da442c48f54d93b71836abc2dcb3f92ba91dad6506",
+      "applied": false
+    },
+    {
+      "id": 105,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:cd7499fc6845f42b0d291823704929c96bd206f076c9fa920f39a76792d75cdb",
+      "body_sha256": "68b54172e01460508ee5cbadd0e9e3b2f5fe8ccb3f21f5768c7c434afd3b9950",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "88c960008918d4ac8f52d4c8b4da800212be7c0776eceb1d1c02a17fd43a0c44",
+      "applied": false
+    },
+    {
+      "id": 106,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:d4a6d44dc9424f894cee8955e9765ca9d1729e4e4b7071454cf972239d3a29aa",
+      "body_sha256": "c2806ed00d83f1600fd70b41d0a3a5c377b9776048b6845c292ca05097c7274d",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "1b3be2213c5e23a03b96f20e56a47daf5d5f41ea29f80be8dae36db1c8fb135a",
+      "independent_reason_sha256": "2b42fc0d0256e2d2c73bd39d00befd249d0bb259663c9a276ed657076ccdeb20",
+      "applied": false
+    },
+    {
+      "id": 107,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:d695157a8118ad79fcc23a5afc617c4f1149753e105a01334da00699574880ed",
+      "body_sha256": "d326fc8b386c22a1f7baee4b7ab3d26f9af08bf0f688304ef77f4fd814bc94dd",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "移行支持"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "移行支持"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "6f665c9f9ece829cd4d6cc8922393fcf05f4eae6fea21a44ba1b18a10ba3b39d",
+      "independent_reason_sha256": "4d029a02002db1a00191cdcce25565f3d42e0b2411c8200785e93ff8ed0403ed",
+      "applied": false
+    },
+    {
+      "id": 108,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:d6c1e0281df28a2c23b593b84dc2b796861ae4e48bd73bc2172651b6f86c4a3a",
+      "body_sha256": "de7d9c065573ccc86cfbb061a9a85544bbdbe94717a8120bd05efc5c884dd3c0",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "b8fae4a0b7916394baa7b962a63d67884f5837e8933c9810a1525c0084f1736c",
+      "applied": false
+    },
+    {
+      "id": 109,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:d71bf2108a09456a6a5d4c4ac989f93a225fadad2eb7987f5bcd4611b76d9b14",
+      "body_sha256": "288becb0f68e1b13e22970059ebc311150500309c81c254dde2f51cc263efc8b",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "17fe0d54324a2075d475fa72d4c45e4e27af02ef139cb9d3be04a9774c706ffa",
+      "applied": false
+    },
+    {
+      "id": 110,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:d74f6199b63eb1025e42e17ae7bd3c0126e17c635755963950dfcbb6d107ce1b",
+      "body_sha256": "4016c58f731fa47bf084db13fc8606868022f573fb85ed7aa691e63d793dd9b7",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "53323d9d756537a4a811f163705a940a498401a9146cbb8a445d13cc5a45fcbd",
+      "applied": false
+    },
+    {
+      "id": 111,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:d870da74517174de490ca9aad402d6934fce367cefaf248e0c041e0ee57048e4",
+      "body_sha256": "9375521622991d35fb5b638034d2df426253232059aa8e586052a980af97a2cf",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "0cfd122e2acd53432df55010446d9b1117c08e091b40f2087aa8b60f3c14ed6e",
+      "applied": false
+    },
+    {
+      "id": 112,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:dad71ec3cddbf6ef5164dffaf1fc8f9250f386bc321b9c26d5d0b90e4679b60a",
+      "body_sha256": "1c25364af57d5367e71adfdf224af12e8d0e22d45f97b8ea4dc9afbb5a02d8cf",
+      "classification_sha256": "dcd98546eedb850a8717e3ecae3c933cd6b5f8eab9b2849de3270964b3ff658a",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "その他",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "fe9616077a5f1b23c3c772de6697956ed87cd8d577947ec748bcd1cf1a0df931",
+      "applied": false
+    },
+    {
+      "id": 113,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:dae636d8dff49630eeb836979420be52b64ba32005c8e0754edc0c8487907cfb",
+      "body_sha256": "d00873c11a58f17568f3e3738e8f7157ef4d6fcc7d26ed935e4a72dc08d3d97f",
+      "classification_sha256": "718d3d54e6ef9da54e0aec3c1edd4a0858c31e95f567f2886b304ebd2ac88a49",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "eef522d677592f5fbf50a1780b3588d3e324a03c4a305187af908606f6293c7a",
+      "independent_reason_sha256": "611b8294021ead728c903579dd59cf85d8f8273e9fc2958990894440a7dd23b7",
+      "applied": false
+    },
+    {
+      "id": 114,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:db1106a3f0a1d107de7c59a29cb01ddc9076617a4ffaa2721cdd8cc8e3c95e5a",
+      "body_sha256": "080b6f2dc0235c16e3b2cf5f37511efa8565fc6d079f49b06511dc8e508b9e6e",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "b401cf5fe58039cfafe1a05fcebf9d022b4758f419dc1f46d2beb76e2dad2548",
+      "applied": false
+    },
+    {
+      "id": 115,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:db675d872d76fc6f3de2cd434af325108689dce2490ebe58a15c676869de7f09",
+      "body_sha256": "1a4fb73834f6f5681d9f4916d2afacda4ededb1c5934834afb63caf4105da771",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "6c93f21238380c06d14d7e51e1a44228a58378c745ea1066fbc603307206d120",
+      "applied": false
+    },
+    {
+      "id": 116,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:e9a779f9725ac87562343a79bb2dd5f14cc7724ba0d8ad23f999189aebe4fe74",
+      "body_sha256": "d6d4428940590f64b0222c3c9aa29f54c09a715d0fa14e744e598d5523e30770",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "0f2d47371908c858b7b0236e203ff617df80039a895584bf874ea08cb4dfd484",
+      "independent_reason_sha256": "a67575745ac9788742dd747a34b8de483b0e020088edf320d4252d9fcc375935",
+      "applied": false
+    },
+    {
+      "id": 117,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ea67ac630052cf7c2902a72a40dee4f9127d03d0d274ff46bb637287b8e345d8",
+      "body_sha256": "7969d55ce15efa4a2f0e3a23aafccdad7fbbf1bd7416b9ef20e2544b4870a341",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "c381911e80e5ac51aadb1ff22e1be27c80ee97a6bcb45eb685585e75ace82304",
+      "independent_reason_sha256": "6686f1e371ad236f7b3c2c5331a3a23f5203d3a3a5564d1f69ea59c4f4808145",
+      "applied": false
+    },
+    {
+      "id": 118,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:eb05b1111e047acf56433c96f045e948d44aa775dfa52eab959700e35426522d",
+      "body_sha256": "2f89bd877fca70ac4ce57a7fd1c82278f4ed54ef617f3dfe9239b5d67e60db09",
+      "classification_sha256": "f5d06e12d575775680a74a205975372a1d2046e56d139fe3efb6d6f1752bdb7c",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "78038ef3cdf3fb4d4728c0140b4a7edd9519005513ff2483c5bea300be0ef5e6",
+      "applied": false
+    },
+    {
+      "id": 119,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ecfbc20409e3ef32b628860b0d14006d765df9e522e83578241ced2a73c05fba",
+      "body_sha256": "0072ff970e2aca5359c734cdb2c213a803e16cc8b4f33a87b96b64dbd052792f",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "教育的意義・機会",
+        "stance": "条件付き・改善要求"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "9a1cc25093f6c414e2372e85d2a3756382cda6811da98345ce3afbebc2cd23b4",
+      "independent_reason_sha256": "3f1b217c7ea61d1c58b79573b85cc99a0315e26d8626b17e25346ec100250c95",
+      "applied": false
+    },
+    {
+      "id": 120,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:edd875c8f2a638fe5a8a738eb90509d17e800ed062027ce5cfdb7ebb27e96090",
+      "body_sha256": "fd06e52b4d9adc2168bbe1f05458cfb810d5107f676ae7908bba2e390c02dff4",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "1bcd05d8f79ec915bdab13af8c16525581b2854ff627c5be266e798c016d15a1",
+      "applied": false
+    },
+    {
+      "id": 121,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:ef03c0c9afa53dc0d923479c30c8e836915f9ef399220a1701c5636a491a4e36",
+      "body_sha256": "8676e379ed12cce7c3d03f406590936be08cfa58edaf27488462bbe54296f58d",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "accept_saved",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "1bf8e3af14e8d4880ab2b446ad8cfb912388dc5a2b1439393e5a93daaf130dc9",
+      "independent_reason_sha256": "e8cde60924c5078d7da68ee866056da806b79d9ce959ba78a15d4e8c344b6ace",
+      "applied": false
+    },
+    {
+      "id": 122,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f02b53bf4c66174d6e10b37ec127ce7a81253d1f0abe8fa3cbb622563ab8e352",
+      "body_sha256": "866e905ba43906161cf15049a2d0cdd843747ab70355918bd739943559bcc1d1",
+      "classification_sha256": "e7fc204ab7d97fd801ec9dbb5979a1b8022c80fff7aac27aded835516600c894",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "慎重・反対"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "054cce4082b2dec520a221d553af85ae3d188b7a8a40b4684820c1cb22ac590f",
+      "applied": false
+    },
+    {
+      "id": 123,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f06823e1a0d44617866017d696ed6883b434ed6795b14eea123606df644a9f1a",
+      "body_sha256": "baca25a994c3b13e8165dbc4921a0bf89493ff81400d54fe2c23e4fac02485a5",
+      "classification_sha256": "9bc865107ffe707482b232fa8820f26176ff58bd4bdfbb3c4dbae711bad1dad0",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "費用・家庭負担",
+        "stance": "条件付き・改善要求"
+      },
+      "parent_decision": "accept_alternative",
+      "independent_decision": "accept_alternative",
+      "parent_reason_sha256": "ea15c6868815a43c0eb616e30cb36a7a4e8169d0885fccaf884f570e85e4f458",
+      "independent_reason_sha256": "f0f1582e488892adf8d6b637dcce5275e30e88ec0b70e2a157bfe6f53a66b5f7",
+      "applied": false
+    },
+    {
+      "id": 124,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f0b8554634c4dfc9fde92011b478157ec784dd105c66ceda0a851b227e9414cb",
+      "body_sha256": "7416f9e3508f1408527bb291720c3a0f7ec1c732769a73048bf751b077cd3cf2",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "3b825064553c98abaeb2953d03071cba40d1a4ceee079c22af7473226e36c429",
+      "applied": false
+    },
+    {
+      "id": 125,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f0e6bed9022b924951842fda4a53894030e544cd8543e21e7b18f7d13d3402c7",
+      "body_sha256": "1ea9177df09eb68dda778de233355b490b478f359992b02b33776b301fe250d5",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "hold",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "accept_saved",
+      "independent_decision": "hold",
+      "parent_reason_sha256": "be7dbf58c1b5f2b2da48f12f25dec1e96229eaf9d657b4338462aabb4ea14536",
+      "independent_reason_sha256": "b2438594ce5300b7dd358a74f7643a6c21c0ba5411415f1e3cfea3d75cdd369b",
+      "applied": false
+    },
+    {
+      "id": 126,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f0fd0a92ccd5232a8c69128afb207b9ef6b696c74bb5a5cac2459dbdd9879e10",
+      "body_sha256": "3207bcec20999293cb3321c3ef40be56aca0bf140f74e163f2bbee9a896b5dfd",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "46fe8cab5509fbe1f1653c26f70999e51f7e34aa83925c6329c759d68835734f",
+      "independent_reason_sha256": "490c69a34907d9a55f56a7bafd51265e4ece1e5d18e57c62b42fd407faa3327c",
+      "applied": false
+    },
+    {
+      "id": 127,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f133e8a1b81a9b334f54909fbbc6d8d4ec3262efca22764a0ccb55f86e4f653b",
+      "body_sha256": "86d3f0ec976d3f7a0b7fe77c33807b99365b8ce338f58dea1696412197c73b5e",
+      "classification_sha256": "f8c7e6e47e1afe2690d4c09b909125b6b0d9da1832c8ecd2115addcc33ac0528",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "移行支持"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "52076ca3713de8697ee5ce3518137ddb63d4d5eb8545c5b8458c3768c80a0721",
+      "applied": false
+    },
+    {
+      "id": 128,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f20fb68ca4bdf061c90f06868cb8bc876ebce6ab48180d1deecf3a5aa909066c",
+      "body_sha256": "cdcfe6534626058d6ea3737e11a762263b097fcf523fae427473552ca68b9a31",
+      "classification_sha256": "98e7b5a812925f61dbd7f5fa79e3a48576320e5a9a8b307b10cc405bf84fdd71",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "制度・移行プロセス",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "140948fe76def9dfc14551d7e15c94794b471acd2740c48dab04a0a2ab1c2bca",
+      "applied": false
+    },
+    {
+      "id": 129,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f243a3af3f32dd7f94ae577b166a4c08b1ffb946d31bdf65a4fe8f5406785305",
+      "body_sha256": "5da86d6688177cb5970068c00e18b31e3a78c7caf25e7bcb4416259ee3582988",
+      "classification_sha256": "dcfb1a58d2f6027df863053710a67a3d57ccd6e38f240f77479c53d37ebe0245",
+      "decision": "pending_audit",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教員の働き方",
+        "stance": "中立・情報"
+      },
+      "proposed": null,
+      "parent_decision": "needs_body",
+      "independent_decision": "needs_body",
+      "parent_reason_sha256": "6817b544c095d3aa75b255cc8ccc7665c73e0da8020f04b5e703639cb7e33fc0",
+      "independent_reason_sha256": "77903bd753f0d7eecbdbf762b30025538b3f300379be6f668eee6ec809b348ef",
+      "applied": false
+    },
+    {
+      "id": 130,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f24fa2d070822df58127d06b3e007d99f06299810dd5a1652d4a942a693d95cf",
+      "body_sha256": "a3d496b8d1bd4f23b08f243b200f93601337a9cc3525e48cbef9919c501eaf51",
+      "classification_sha256": "fe6efaa5dceaecbd9a294daa3d9ba2e85ace06c3270d54ffbbe324439baf19d7",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "慎重・反対"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "受け皿・指導者",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "b8790a70e9145f168835344dc76168d699b99dc7164660d96f67f172fcf89610",
+      "independent_reason_sha256": "48953a45140d36332101b004d4cccec64388026b95fd75e75648a8a16ae8c3c3",
+      "applied": false
+    },
+    {
+      "id": 131,
+      "topic": "bukatsu-chiiki",
+      "record_id_hash": "sha256:f261889a211fcfa598eb0ebc00518f66a7660e0e96e143b67611cbaf534a73b8",
+      "body_sha256": "77c888eec974779fe0b73ebeae2645ccb4bbd331b9b77f69c0b8dea7ed0857ed",
+      "classification_sha256": "4a76ee79c819dbf2edf4486404e9e7913df5ef006a19c37efb5b2d812c656519",
+      "decision": "accepted",
+      "current": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
+      "proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "教育的意義・機会",
+        "stance": "中立・情報"
+      },
+      "parent_decision": "accept_saved",
+      "independent_decision": "accept_saved",
+      "parent_reason_sha256": "8052571d78f79684ac50fe451f9e761fe77a6b03ebcc156d379f45d2a4b805ee",
+      "independent_reason_sha256": "dd57f2b9fbb2a37fbd42d23df973691651378418831c232e3c4ee6674a775643",
+      "applied": false
+    }
+  ]
+}

@@ -50,6 +50,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- 先に直す2点(1/2): 主役画像はCSS背景のためbodyのstyleを解析するまで発見されず、
+       LCPが遅い(実測1.63秒→preloadで0.2秒台、quality/reviews/2026-09-06-task54-stage9-measurements.md)。
+       画像パスはbody要素のstyle="--topic-hero-image:..."と同じ値を手で同期する。 -->
+  <link rel="preload" as="image" href="images/topics/bukatsu-chiiki/bukatsu-hero.webp">
   <link rel="stylesheet" href="site-tokens.css?v=2">
   <style>
     :root {
