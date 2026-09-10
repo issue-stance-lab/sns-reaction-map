@@ -847,7 +847,12 @@ function buildQuiz(){
       + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
     a.hidden=false;
     visit("c:"+c.id);
-    a.querySelector(".qnext").addEventListener("click", ()=>{ qi++; buildQuiz(); });
+    a.querySelector(".qnext").addEventListener("click", ()=>{
+      qi++; buildQuiz();
+      // 次の問題を出した直後、答え欄の下までスクロールしたままだと新しい問題文が
+      // 画面外になる（オーナー指摘2026-09-10）。問題の見出しを画面中央へ運ぶ。
+      bringIntoView(el.querySelector(".qh") || el);
+    });
   }));
 }
 
