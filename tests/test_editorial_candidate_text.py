@@ -22,18 +22,26 @@ class CandidateCopyTest(unittest.TestCase):
                 self.assertEqual(page,(tree/'docs/ai-copyright-reaction-map.html').read_text())
 
     def test_bukatsu_stance_notes_meters_and_arena_are_recomputed(self):
+        # 課題54段階3で本番の部活動ページは山なみ形式へ差し替え済み。この関数が
+        # 同期していた4つの注目ポイント・アリーナは #planet-block が役目を
+        # 引き継ぎ、対象の要素が無い。現行の docs/ を入力にすると関数は
+        # 何もしない（sync_issue_counts.py 等と同じ判定）。この検査は
+        # その安全な no-op を見る。旧形式向けの計算式そのものは、コードに残る
+        # ロジックとして保存してあるが、実データでの再検査対象ではなくなった。
         from scripts.prepare_editorial_candidate_text import sync_bukatsu_summary
         root=Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as tmp:
             tree=Path(tmp);(tree/'docs').mkdir();(tree/'social-samples').mkdir()
             p=tree/'docs/bukatsu-chiiki-reaction-map.html';shutil.copy2(root/'docs/bukatsu-chiiki-reaction-map.html',p)
+            self.assertIn('<!-- PLANET_SECTION_START -->',p.read_text())
             (tree/'social-samples/bukatsu-chiiki_hermes_classified.json').write_text('[]')
             values={'opinions':1000,'stances':{'移行支持':450,'条件付き・改善要求':230},'issues':{'教員の働き方':330,'受け皿・指導者':165,'制度・移行プロセス':255}}
             with patch('scripts.prepare_editorial_candidate_text.counts',return_value=values):
-                sync_bukatsu_summary(tree);first=p.read_text();sync_bukatsu_summary(tree);self.assertEqual(first,p.read_text())
-                self.assertIn('450件。教員負担',first);self.assertIn('230件。費用',first);self.assertIn('移行支持 45%',first);self.assertIn('改善条件あり 23%',first);self.assertIn('n:165',first);self.assertIn('関連0件から',first);self.assertIn('教員の働き方 330',first);self.assertIn('1000<small>件',first)
+                before=p.read_text();sync_bukatsu_summary(tree)
+                self.assertEqual(before,p.read_text())
 
     def test_bukatsu_new_opinion_rebuilds_actual_map_population(self):
+        # 同上（山なみ形式では no-op）。
         from scripts.prepare_editorial_candidate_text import sync_bukatsu_summary
         root=Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as tmp:
@@ -41,6 +49,5 @@ class CandidateCopyTest(unittest.TestCase):
             p=tree/'docs/bukatsu-chiiki-reaction-map.html';shutil.copy2(root/'docs/bukatsu-chiiki-reaction-map.html',p)
             rows=[{'classification':{'is_relevant':True,'is_opinion':True,'main_issue':issue,'stance':stance,'summary':'test'}} for issue,stance in [('教員の働き方','移行支持'),('教員の働き方','移行支持'),('受け皿・指導者','条件付き・改善要求')]]
             (tree/'social-samples/bukatsu-chiiki_hermes_classified.json').write_text(json.dumps(rows))
-            sync_bukatsu_summary(tree);page=p.read_text();block=page.split('const SM_RAW = [',1)[1].split('\n];',1)[0]
-            self.assertEqual(block.count('{x:'),3);self.assertIn('意見3件 | セクター=',page);self.assertIn('関連3件から',page)
-            sync_bukatsu_summary(tree);self.assertEqual(page,p.read_text())
+            before=p.read_text();sync_bukatsu_summary(tree)
+            self.assertEqual(before,p.read_text())

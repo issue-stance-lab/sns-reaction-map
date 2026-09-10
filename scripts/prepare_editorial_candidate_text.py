@@ -30,6 +30,11 @@ def prepare_conclusion(tree):
 def sync_bukatsu_summary(tree):
     """Refresh existing summary numbers after the arena builder; no collection wave."""
     tree=Path(tree);p=tree/'docs/bukatsu-chiiki-reaction-map.html';page=p.read_text()
+    if '<!-- PLANET_SECTION_START -->' in page:
+        # 課題54段階3で本番差し替え済み。この関数が同期する4つの注目ポイント・
+        # SNS反応マップ・アリーナのISSUES配列は、山なみ形式ではどれも存在しない
+        # （#planet-blockが役目を引き継いだ）。書くものが無いので何もしない。
+        return
     rows=json.loads((tree/'social-samples/bukatsu-chiiki_hermes_classified.json').read_text());data=counts(rows)
     if max(data['stances'],key=data['stances'].get)!='移行支持' or max(data['issues'],key=data['issues'].get)!='教員の働き方':
         raise ValueError('bukatsu leading interpretation needs editorial review')

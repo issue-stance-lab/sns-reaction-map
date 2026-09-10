@@ -290,6 +290,12 @@ def sync_theme(theme: str, *, check: bool = False) -> tuple[str, bool]:
         )
 
     before = html_path.read_text(encoding="utf-8")
+    if "<!-- PLANET_SECTION_START -->" in before:
+        # 山なみ（課題54）形式は explainer-card（論点カード）ごと外れており、
+        # このツール全体（論点カード・見出し・ナビ・議論の中心・アリーナ・
+        # lead・注記への件数同期）の挿入先が無い。山なみ側の件数整合は
+        # verify_theme_page.py の内訳検算（段階2）が別に見ている。
+        return f"{theme}: 山なみ形式のため論点カード同期は対象外", False
     after = apply_counts(before, theme, cards)
     if "headings" in sync:
         after = apply_headings(after, theme, cards)

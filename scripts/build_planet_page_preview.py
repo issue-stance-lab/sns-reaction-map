@@ -545,7 +545,7 @@ def split_prototype(html: str) -> dict[str, str]:
     s0 = html.index("<style>") + len("<style>")
     s1 = html.index("</style>")
     w0 = html.index('<div class="wrap">')
-    d0 = html.index('<script>window.PLANET_DATA')
+    d0 = html.index('<script id="planet-data">window.PLANET_DATA')
     end = html.rindex("</script>") + len("</script>")
     return {
         "css": html[s0:s1],
@@ -744,8 +744,11 @@ def main() -> None:
 
     page = Path(a.page) if a.page else ROOT / "docs" / f"{a.topic}-reaction-map.html"
     out = Path(a.out) if a.out else ROOT / "quality/prototypes" / f"{a.topic}-page-preview.html"
-    if out.resolve().is_relative_to((ROOT / "docs").resolve()):
-        raise SystemExit("見本生成器は docs/ へ書き込みません。quality/prototypes/ を指定してください")
+    if out.resolve().is_relative_to((ROOT / "docs").resolve()) and not a.for_docs:
+        raise SystemExit(
+            "docs/ への書き込みには --for-docs が要ります"
+            "（見本のときは quality/prototypes/ を指定するか --for-docs を外してください）"
+        )
     html = page.read_text(encoding="utf-8")
     source_html = html
 

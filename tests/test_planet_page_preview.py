@@ -57,7 +57,12 @@ class PreviewCompositionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             out = Path(td) / "candidate.html"
             out.write_text("keep existing")
-            with patch.object(sys, "argv", ["preview", "--for-docs", "--out", str(out)]), patch.object(preview.bpd, "build", return_value={}), patch.object(preview.bpd, "independence_gate", return_value=["未読"]):
+            # 部活動は課題54段階3で本番差し替え済みで、既定の --page（docs/bukatsu-chiiki-
+            # reaction-map.html）は既に山なみ形式。この検査は「独自性の検査に落ちたら
+            # 書かない」ことを見たいので、山なみ未挿入の入力ページを別途用意する。
+            page = Path(td) / "source.html"
+            page.write_text("<html><head></head><body></body></html>")
+            with patch.object(sys, "argv", ["preview", "--for-docs", "--page", str(page), "--out", str(out)]), patch.object(preview.bpd, "build", return_value={}), patch.object(preview.bpd, "independence_gate", return_value=["未読"]):
                 with self.assertRaisesRegex(SystemExit, "--for-docs"):
                     preview.main()
             self.assertEqual(out.read_text(), "keep existing")
@@ -74,6 +79,14 @@ class PreviewCompositionTest(unittest.TestCase):
                 continue
             with self.subTest(theme=theme):
                 source = (ROOT / "docs" / f"{theme}-reaction-map.html").read_text()
+                if "<!-- PLANET_SECTION_START -->" in source:
+                    # 課題54段階3で本番差し替え済み（部活動）。build_bukatsu/build_generic は
+                    # 「まだ差し替えていない旧形式」を入力に想定しており、差し替え済みの
+                    # ページを渡すと本番の更新モードと誤認してエラーで止まる（意図した挙動）。
+                    # 初回差し替え時の保護区間チェックは既に通っており、この検査の対象は
+                    # 今後は「初回差し替えがまだのテーマ」だけになる。
+                    self.assertIn('id="planet-data"', source)
+                    continue
                 # Composition is verified from the checked-in display payload. Canonical
                 # reread membership is covered by the separate local data tests.
                 data = json.loads((ROOT / "quality/prototypes/data" / f"{theme}-planet.json").read_text())
