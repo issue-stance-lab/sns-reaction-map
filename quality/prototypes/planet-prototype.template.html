@@ -426,7 +426,10 @@ function land(i){
   drawPanel(); syncList(); render();
   const h=document.querySelector("#panel h2");
   if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
-  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
+  // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
+  // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
+  // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
+  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
 }
 function orbit(){
   const prev=st.landed;

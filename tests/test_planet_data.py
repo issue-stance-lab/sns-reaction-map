@@ -458,8 +458,11 @@ class PlanetDotsTest(unittest.TestCase):
         rest = self.script.index("legend() + stanceBar(")
         self.assertLess(slot, rest,
                         "升目が着陸パネルの後ろにある（押した結果が画面外に出る）")
-        self.assertIn("bringIntoView(document.getElementById(\"panel\"))", self.script,
-                      "画面が狭いときに、選んだ論点のパネルまで運ぶ処理が無い")
+        # 2026-09-10: パネル全体を画面中央合わせすると、パネルの丈が画面何個分もあり
+        # 見出しが上に消えて別の位置（バーなど）で止まって見えた（オーナー指摘）。
+        # 見出し要素があればそれを、無ければパネルそのものを運ぶ形に直した。
+        self.assertIn('bringIntoView(h || document.getElementById("panel"))', self.script,
+                      "画面が狭いときに、選んだ論点の見出しまで運ぶ処理が無い")
 
     def test_scrolling_does_not_rely_on_smooth_or_animation_frames(self):
         """スクロールが必ず届くこと。
