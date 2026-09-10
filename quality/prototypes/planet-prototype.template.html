@@ -804,7 +804,11 @@ function buildDive(){
       // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
       (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
       (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
-      if (box) bringIntoView(box);
+      // box全体（複数の語られていない争点・立場をこえて同じ心配を全部含み、
+      // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
+      // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
+      // 見出しだけを中央合わせにする。
+      if (box) bringIntoView(box.querySelector("h3") || box);
     }
   });
   paint();
