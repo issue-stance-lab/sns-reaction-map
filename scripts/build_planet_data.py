@@ -558,6 +558,7 @@ def build(topic: str) -> dict:
         "updated_at": str(t["updated_at"]),
         "sample_period": t["sample_period"],
         "source_label": cfg["source_label"],
+        "show_unreviewed_note": cfg.get("show_unreviewed_note", True),
         "totals": {
             "collected": public["collected_count"],
             "opinions": n_op,
@@ -799,9 +800,10 @@ def static_fallback(d: dict) -> str:
                    if sub.get("show_coverage_note", True) else [])),
             ]
         else:
-            body.append(f'      <div class="note">{e(sub["note"])}。<br>'
-                        'AIが自動でつけた区分をここに並べることはしません。'
-                        '人が読んだ結果だけをまとめにします。</div>')
+            if d.get("show_unreviewed_note", True):
+                body.append(f'      <div class="note">{e(sub["note"])}。<br>'
+                            'AIが自動でつけた区分をここに並べることはしません。'
+                            '人が読んだ結果だけをまとめにします。</div>')
 
         if it.get("claims"):
             srcs = []
