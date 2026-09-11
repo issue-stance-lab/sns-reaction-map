@@ -714,8 +714,14 @@ def build_bukatsu(html: str, data: dict) -> tuple[str, list[tuple[str, bool]]]:
 def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[str, bool]]]:
     """Replace known visual blocks, preserving all other source content and scripts."""
     removed = []
+    # 「詳細データ」（id="detail-data"）は山なみでも残す（bukatsu-chiikiの実例と同じ）。
+    # 「論点別サマリー」「スタンス集計」は山なみ本体と内容が重複するため除く
+    # （2026-09-11、高齢者テーマの検査で実際に見つかった: 旧「論点1・最大勢力」の
+    # バッジ表示が残ったまま新しい山なみ側と二重表示になり、最大勢力バッジ検査が
+    # 対応するカード設定を見つけられず落ちた）。
     ids = ("process-collect", "process-verify", "process-found", "process-table",
-           "reread-basis", "elderly-verify", "strongest-arguments", "issue-arena-section")
+           "reread-basis", "elderly-verify", "strongest-arguments", "issue-arena-section",
+           "issue-blocks-section")
     for iid in ids:
         match = re.search(r'<section\b[^>]*\bid="' + re.escape(iid) + r'"[^>]*>', html)
         if match:
@@ -723,13 +729,25 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
             removed.append((iid, hit))
     html, hit = cut_block(html, '<section class="stats insight-stats"', "section")
     removed.append(("旧注目ポイント", hit))
+    match = re.search(r'<section\b[^>]*\bclass="panel conflict-panel"[^>]*>', html)
+    if match:
+        html, hit = cut_block(html, match.group(0), "section")
+        removed.append(("スタンス集計", hit))
+    # 旧「この争点の背景」は本文ごと外し、data/verification/{topic}-background.json が
+    # あれば第1部として山なみ本体の前に出す（build_bukatsu() と同じ扱い。2026-09-11、
+    # 高齢者テーマで、外しただけで差し込みを忘れ「経緯が見当たらない」と指摘された）。
+    match = re.search(r'<section\b[^>]*\bclass="panel background-panel"[^>]*>', html)
+    if match:
+        html, hit = cut_block(html, match.group(0), "section")
+        removed.append(("この争点の背景（旧・件数無しの短文）", hit))
+    background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)
     section = build_section(split_prototype(render_planet(data)))
     marker = "<!-- RESEARCH_CONDITIONS_END -->"
     if marker not in html:
         raise SystemExit("調査条件の目印が見つかりません")
-    html = html.replace(marker, marker + "\n" + section, 1)
+    html = html.replace(marker, marker + "\n" + background + section, 1)
     return html, removed
 
 

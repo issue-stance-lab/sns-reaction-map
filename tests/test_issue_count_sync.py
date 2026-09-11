@@ -57,6 +57,14 @@ class IssueCountSyncTest(unittest.TestCase):
             (ROOT / "data/public/themes/elderly-license-revocation.json").read_text(encoding="utf-8")
         )
         page = (ROOT / "docs/elderly-license-revocation-reaction-map.html").read_text(encoding="utf-8")
+        if "<!-- PLANET_SECTION_START -->" in page:
+            # 課題54段階3で本番は山なみ形式へ差し替え済み。旧「SNS反応マップ」見出しは
+            # 消えている（同じクラス名・見出し文言を山なみ本体側が別の意味で使うため、
+            # 単純な文字列一致では別要素を拾ってしまう。build_generic() 側の対策は
+            # scripts/build_elderly_arena.py の apply_public_counts() のコメントを参照）。
+            # 山なみ側の件数一致は verify_theme_page.py の論点ごとの内訳検査が担う。
+            self.assertIn('window.PLANET_DATA=', page)
+            return
         match = re.search(r'<h2>SNS反応マップ</h2><span>([\d,]+)件 \|', page)
         self.assertIsNotNone(match)
         self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])

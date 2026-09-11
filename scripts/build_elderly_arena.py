@@ -265,16 +265,26 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     collected, total, issues, stances, intensities = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
-    lead = (
-        f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件を分析対象としています。'
-        '世論調査ではなく、SNS反応サンプルの論点比較です。</p>'
-    )
-    page = replace_once(page, r'<p class="lead">.*?</p>', lead, "リード文", flags=re.S)
+    # 山なみ差し替え後は、この3か所だけ触ってはいけない（課題54: 高齢者段階1）。
+    # ・リード文：新テンプレ側にも <p class="lead"> がクイズのJS文字列内に含まれ、
+    #   1箇所一致の前提が崩れて落ちる（2箇所ヒット）
+    # ・注目ポイント：旧セクションごと削除済みで、対象が見つからず落ちる（0箇所）
+    # ・マップ見出し：旧セクションは消えるが、新テンプレの山なみ本体に同じクラス名・
+    #   同じ見出し文言の要素が別の意味で存在し、1箇所一致してしまう。気づかず直すと
+    #   新テンプレ側の表示を壊す（サイレントな誤爆）
+    planet_mode = "<!-- PLANET_SECTION_START -->" in page
+    if not planet_mode:
+        lead = (
+            f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件を分析対象としています。'
+            '世論調査ではなく、SNS反応サンプルの論点比較です。</p>'
+        )
+        page = replace_once(page, r'<p class="lead">.*?</p>', lead, "リード文", flags=re.S)
     research = f'<strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件を分析対象としています。<br>'
     page = replace_once(page, r'<strong style="color:var\(--ink\);">このマップの元データ:</strong>.*?<br>', research, "調査条件", flags=re.S)
     page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>', f'<span class="conclusion-count"><b>{issues[ISSUE_ORDER[0]]}</b>件</span>', "議論の中心")
-    page = replace_once(page, r'<section class="stats insight-stats".*?</section>', build_stats_from_counts(issues, stances, total, collected), "注目ポイント", flags=re.S)
-    page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]+</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>', "マップ見出し")
+    if not planet_mode:
+        page = replace_once(page, r'<section class="stats insight-stats".*?</section>', build_stats_from_counts(issues, stances, total, collected), "注目ポイント", flags=re.S)
+        page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]+</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>', "マップ見出し")
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>', build_details_from_counts(issues, stances, intensities, total), "詳細データ", flags=re.S)
     return page
 
@@ -325,15 +335,19 @@ def build(
     destination = output_html or public_path
     before = template.read_text(encoding="utf-8")
     page = before
+    # 山なみ差し替え後の落とし穴は apply_public_counts() と同じ3か所
+    # （課題54: 高齢者段階1。詳しい理由はそちらのコメントを参照）。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in page
 
     page = replace_once(page, r"const SM_RAW = \[.*?\n\];", build_sm_raw(rows), "SM_RAW", flags=re.S)
     page = replace_once(page, r"const ISSUES=\[.*?\n  \];", build_issues(), "ISSUES", flags=re.S)
     count_line = "  SM_RAW.forEach(p=>{if(ISSUES[p.i])ISSUES[p.i].n+=1;});\n"
     if count_line not in page:
         page = replace_once(page, r"  const total=ISSUES\.reduce", count_line + "  const total=ISSUES.reduce", "SM_RAWからの件数集計")
-    page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]+</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>', "マップ見出し")
-    lead = f'Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{len(rows)}件を分析対象としています。世論調査ではなく、SNS反応サンプルの論点比較です。'
-    page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">{lead}</p>', "リード文", flags=re.S)
+    if not planet_mode:
+        page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]+</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>', "マップ見出し")
+        lead = f'Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{len(rows)}件を分析対象としています。世論調査ではなく、SNS反応サンプルの論点比較です。'
+        page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">{lead}</p>', "リード文", flags=re.S)
     research = f'<strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{len(rows)}件を分析対象としています。<br>'
     page = replace_once(page, r'<strong style="color:var\(--ink\);">このマップの元データ:</strong>.*?<br>', research, "調査条件", flags=re.S)
     # 取得期間も台帳（THEMES.yaml の sample_period）から書く。ページに直書きすると、
@@ -352,9 +366,12 @@ def build(
     # 1つの文の書き手は1つに保つ。
     page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>', f'<span class="conclusion-count"><b>{counts[ISSUE_ORDER[0]]}</b>件</span>', "議論の中心")
     page = sync_vote_counts(page, counts)
-    page = replace_once(page, r'<section class="stats insight-stats".*?</section>', build_stats(rows, collected), "注目ポイント", flags=re.S)
-    page = replace_once(page, r'<section class="panel" id="issue-blocks-section">.*?</section>', build_issue_blocks(rows), "論点別サマリー", flags=re.S)
-    page = replace_once(page, r'<section class="panel conflict-panel">.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
+    if not planet_mode:
+        # 「論点別サマリー」「スタンス集計」は山なみ側の内容と重複するため
+        # build_generic() が削除する（2026-09-11、高齢者段階2で発見）。
+        page = replace_once(page, r'<section class="stats insight-stats".*?</section>', build_stats(rows, collected), "注目ポイント", flags=re.S)
+        page = replace_once(page, r'<section class="panel" id="issue-blocks-section">.*?</section>', build_issue_blocks(rows), "論点別サマリー", flags=re.S)
+        page = replace_once(page, r'<section class="panel conflict-panel">.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>', build_details(rows), "詳細データ", flags=re.S)
 
     for card in config["issue_counts"]["cards"]:

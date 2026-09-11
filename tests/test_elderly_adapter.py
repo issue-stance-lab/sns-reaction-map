@@ -108,10 +108,22 @@ class ElderlyAdapterTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_public_counts_replace_page_aggregates(self):
+        # 課題54段階2-3で本番は山なみ形式へ差し替え済み。旧「SNS反応マップ」見出しは
+        # 消えており、同じクラス名・同じ見出し文言を山なみ本体側が別の意味で使っている
+        # ため、この関数は誤って書き換えないよう更新自体をやめる（サイレントな誤爆を
+        # 避けるための設計。2026-09-11に実際の不具合として見つかった）。
+        # このテストはその安全なno-opを見る。
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertIn("<!-- PLANET_SECTION_START -->", source)
         public = ROOT / "data/public/themes/elderly-license-revocation.json"
-        page = apply_public_counts(PAGE.read_text(encoding="utf-8"), public)
         data = json.loads(public.read_text(encoding="utf-8"))
-        self.assertIn(f'>{data["opinion_count"]}件 | セクター=論点', page)
+        page = apply_public_counts(source, public)
+        self.assertIn(
+            '<div class="panel-title"><h2>SNS反応マップ</h2><span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>',
+            page,
+        )
+        # 「調査条件」（このマップの元データ）は山なみ形式でも生きているので、
+        # そちらは引き続き貼り直されることを確かめる。
         self.assertIn(f'公開投稿{data["collected_count"]}件', page)
 
 

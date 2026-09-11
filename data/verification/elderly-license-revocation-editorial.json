@@ -1,0 +1,34 @@
+{
+ "theme_id": "elderly-license-revocation",
+ "curated_at": "2026-09-11",
+ "curated_by": "ai_assisted",
+ "method": "収集済みの意見を論点ごと・立場ごとに読み、論点をまたいで言えることだけを書いた。数字は本文に書かず、差し込み（{issue:<論点id>.count} など）で正典から入れる。設計書4章の5「共通する前提／本当の対立／まだ分からないこと」に対応する。部活動（data/verification/bukatsu-chiiki-editorial.json）と同じ形式。オーナー確認前のAI下書き（承認後に editorial_review へ変更する）。",
+ "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。",
+ "findings": [
+  {
+   "id": "elderly-license-revocation-ed-1",
+   "kind": "shared_premise",
+   "text": "義務化に賛成する側も反対する側も、「今のままでよい」とは言っていない。「{issue:elderly-license-revocation-assessment.label}」（{issue:elderly-license-revocation-assessment.count}）では{issue:elderly-license-revocation-assessment.top_stance}が{issue:elderly-license-revocation-assessment.top_share}を占め、年齢で一律に区切るのではなく検査を強化する形の対応を求める声が最も多い。"
+  },
+  {
+   "id": "elderly-license-revocation-ed-2",
+   "kind": "real_conflict",
+   "text": "論点が変わると賛否が入れ替わる。「{issue:elderly-license-revocation-safety.label}」では{issue:elderly-license-revocation-safety.top_stance}が最も多い（{issue:elderly-license-revocation-safety.top_share}）のに対し、「{issue:elderly-license-revocation-mobility-rights.label}」では{issue:elderly-license-revocation-mobility-rights.top_stance}が最も多い（{issue:elderly-license-revocation-mobility-rights.top_share}）。同じ人が立場を変えているのか、別々の人が別々の論点で発言しているのかは、この収集からは分からない。"
+  },
+  {
+   "id": "elderly-license-revocation-ed-3",
+   "kind": "real_conflict",
+   "text": "「{issue:elderly-license-revocation-mobility-rights.label}」で、義務化賛成は{issue:elderly-license-revocation-mobility-rights.stance:elderly-license-revocation-mandate-support.count}にとどまり、義務化反対（{issue:elderly-license-revocation-mobility-rights.stance:elderly-license-revocation-mandate-oppose.count}）が大半を占める。安全側の心配と、生活の足としての心配は、同じ「運転をどうするか」という話の中でも別の答えを求めている。"
+  },
+  {
+   "id": "elderly-license-revocation-ed-4",
+   "kind": "still_unknown",
+   "text": "「{issue:elderly-license-revocation-voluntary-return.label}」は{issue:elderly-license-revocation-voluntary-return.count}（全体の{issue:elderly-license-revocation-voluntary-return.share}）しかなく、その大半（{issue:elderly-license-revocation-voluntary-return.top_share}）が{issue:elderly-license-revocation-voluntary-return.top_stance}にとどまる。件数が少ないことは、その論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。"
+  },
+  {
+   "id": "elderly-license-revocation-ed-5",
+   "kind": "still_unknown",
+   "text": "ここに出ているのはYahoo!リアルタイム検索で集めた{totals.opinions}件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"
+  }
+ ]
+}
