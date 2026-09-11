@@ -227,6 +227,11 @@ def _visible_text(page: str) -> str:
     text = re.sub(r'<section[^>]*id="related-section".*?</section>', " ", text, flags=re.DOTALL)
     text = re.sub(r'<div[^>]*class="[^"]*related-grid[^"]*".*?</div>\s*</section>', " ", text,
                   flags=re.DOTALL)
+    # 山なみの「島」一覧は、再読の区分名（例:「安全技術・自動運転による対策を求める意見」）
+    # がそのままラベルになり、直後にその区分だけの件数が続く。区分名が「意見」で終わる
+    # ことがあり、タグを外すと「意見 12件」のように見えて、ページ全体の意見数（正典）と
+    # 食い違う値として誤検知する（2026-09-11、高齢者テーマで実際に発生）。
+    text = re.sub(r'<ul class="islands">.*?</ul>', " ", text, flags=re.DOTALL)
     return html_lib.unescape(re.sub(r"<[^>]+>", " ", text))
 
 
