@@ -98,6 +98,16 @@ noteのビュー数はGA4では取得できないため、次回も同じ方法�
 
 ## 投稿記録
 
+### 学習指導要領から分かる、部活の地域移行
+- 公開日: 2026-09-11（23:01）
+- URL: https://note.com/sns_hanno_ma/n/n6ec8c2a71ef0
+- テーマ: bukatsu-chiiki
+- UTM: utm_campaign=note_bukatsu5_20260908
+- タグ: #部活動 #地域移行 #教育 #データ分析 #子育て
+- 7日後GA4: （計測日: 2026-09-18）
+- 28日後GA4: （計測日: 2026-10-09）
+- メモ: 学習指導要領上の部活動の位置づけ、令和6年12月の解説改訂、次期学習指導要領での扱い、地域クラブ活動への移行との関係を扱う。根拠は `archive/tasks/task-64.md` と `quality/research/bukatsu-chiiki-primary-sources.md`。
+
 ### 部活動の地域移行（第4回・最終回：子どもと自治体編）
 - 公開日: 2026-09-04（予定は9/5。オーナーが前倒しで公開）
 - URL: https://note.com/sns_hanno_ma/n/n2291c21ae987
