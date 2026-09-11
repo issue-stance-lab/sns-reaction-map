@@ -1,0 +1,127 @@
+{
+  "theme_id": "bike-blue-ticket",
+  "items": [
+    {
+      "id": "bike-blue-ticket-sc-1",
+      "topic": "「基本は指導警告、検挙は悪質・危険な場合だけ」という運用ルール",
+      "primary_sources": [
+        {
+          "name": "警察庁 取締りについて｜自転車ポータルサイト",
+          "date": "2026年4月1日以降",
+          "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html",
+          "location": "「取締りの基本的考え方」"
+        },
+        {
+          "name": "警察庁 よくある質問｜自転車ポータルサイト",
+          "date": "2026年4月1日以降",
+          "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html",
+          "location": "Q.自転車で違反をしただけで、取締りを受けるのですか。"
+        }
+      ],
+      "life_impact": "青切符と聞くと「違反すれば即座に反則金」と思われがちだが、警察庁自身の説明では、単なる歩道通行のような違反は原則として指導警告にとどまり、悪質・危険な違反や、指導に従わずあえて違反を続けた場合だけが検挙・青切符の対象になる。「取締りの範囲が広すぎる」という不安と「もっと厳しく取り締まってほしい」という期待の両方が、この運用の実態を踏まえずに語られている可能性がある。",
+      "sns_count": 1,
+      "sns_base": 371,
+      "sns_note": "「指導警告」という言葉そのものが出てくる意見は371件中1件だけで、その1件も「それはそう」と前置きしたうえで実情の歩道の少なさを語る文脈。基本ルールの説明として書かれた投稿は見当たらない。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "指導警告|基本的には現場",
+        "scope": "text",
+        "machine_hits": ["2086098880874311993"],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "bike-blue-ticket-rule-ambiguity",
+        "label": "ルール曖昧・不信",
+        "count": 58
+      },
+      "checked_on": "2026-09-11",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "bike-blue-ticket-sc-2",
+      "topic": "導入1か月の実績は、指導警告13万5,855件に対し青切符2,147件（約63倍の差）",
+      "primary_sources": [
+        {
+          "name": "警察庁交通局交通企画課 自転車に対する交通反則通告制度導入後１月間の運用状況について（PDF）",
+          "date": "令和8年5月14日",
+          "url": "https://www.npa.go.jp/news/release/2026/20260514.pdf",
+          "location": "全文（2ページ）"
+        }
+      ],
+      "life_impact": "「青切符」という名前の強さから、切符を切られる自転車利用者が多いという印象を持たれやすい。しかし警察庁が公表した導入後1か月間の実績では、青切符の交付は2,147件だったのに対し、指導警告は13万5,855件で、その差は約63倍にのぼる。取締りの「量」を議論するなら、この比率が土台になる。",
+      "sns_count": 0,
+      "sns_base": 371,
+      "sns_note": "青切符の交付数「2,147件」自体に触れた意見は371件中1件あり、反則金5,000円換算の試算までしている。しかし指導警告13万5,855件や、その約63倍という比較に触れた意見は0件だった。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "135,?855|63倍",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "bike-blue-ticket-enforcement-support",
+        "label": "取締り強化賛成",
+        "count": 78
+      },
+      "checked_on": "2026-09-11",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "bike-blue-ticket-sc-3",
+      "topic": "自転車の青切符と同じ日に、自動車側にも「側方通過」の新しい義務が生まれた",
+      "primary_sources": [
+        {
+          "name": "警察庁 よくある質問｜自転車ポータルサイト",
+          "date": "2026年4月1日施行",
+          "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html",
+          "location": "Q.令和8年4月1日から施行された「側方通過」の規定とは何ですか。"
+        }
+      ],
+      "life_impact": "自転車の青切符ばかりが話題になるが、同じ2026年4月1日に、自動車が自転車を追い抜く際に十分な間隔と安全な速度を保つ「側方通過」の規定も施行されている。「自転車だけが取り締まられている」という受け止め方と、自動車側にも同時に新しい法的義務が生まれたという事実は、SNSの意見の中ではほとんど結びついていない。",
+      "sns_count": 0,
+      "sns_base": 371,
+      "sns_note": "「側方通過」「追い越し」に関する間隔規定を含む意見は371件中0件。全468件中で唯一この規定に触れた1件も、他の法改正と並べて事実を列挙するニュース系の投稿で、意見（is_opinion）には分類されていない。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "側方通過|追い越し.{0,10}間隔|追い抜き.{0,10}間隔",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": ["2094534086782304316"]
+      },
+      "issue_bucket": null,
+      "checked_on": "2026-09-11",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "bike-blue-ticket-sc-4",
+      "topic": "政府はすでに数値目標入りの自転車インフラ整備計画を閣議決定している",
+      "primary_sources": [
+        {
+          "name": "国土交通省 自転車活用推進計画（本体、令和8年5月・PDF）",
+          "date": "令和8年5月",
+          "url": "https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/assets/pdf/3rd_plan.pdf",
+          "location": "目標１〜２の〔指標〕（p.18・p.20）"
+        }
+      ],
+      "life_impact": "「インフラを整備してから取り締まるべきだ」という意見の裏付けとして、政府はすでに数値目標入りの整備計画を閣議決定している（自転車通行空間を9,841kmから12,000kmへ、自転車損害賠償責任保険等の加入率を65.4%から69.9%へ、など）。ただし具体的な予算額（円建ての数字）は計画書に明記されておらず、目標と裏付けの間には差がある。この目標の有無・中身のどちらも、SNSの意見にはほとんど出てこない。",
+      "sns_count": 0,
+      "sns_base": 371,
+      "sns_note": "「自転車活用推進計画」「9,841」「12,000km」「保険加入率65.4」等いずれのキーワードも371件の意見の中に見当たらない。保険に触れる意見はあるが、いずれも個人の提案（簡易ライセンス化とセットでの加入義務化など）として書かれ、既存の政府目標には触れていない。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "9,?841|12,?000\\s?km|第3次自転車活用推進計画|自転車活用推進計画|69\\.9|65\\.4",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "bike-blue-ticket-infrastructure-first",
+        "label": "インフラ整備優先",
+        "count": 57
+      },
+      "checked_on": "2026-09-11",
+      "checked_by": "ai_assisted"
+    }
+  ]
+}
