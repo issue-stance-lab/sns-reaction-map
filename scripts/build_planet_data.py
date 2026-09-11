@@ -511,6 +511,7 @@ def build(topic: str) -> dict:
                 "status": "reread",
                 "coverage": sc["coverage"],
                 "coverage_note": sc["coverage_note"],
+                "show_coverage_note": sc.get("show_coverage_note", True),
                 "source_file": sc["file"],
                 "reread_count": reread,
                 "unread_count": max(gap, 0),
@@ -792,9 +793,10 @@ def static_fallback(d: dict) -> str:
                 '      <p class="sub" style="margin-top:12px">'
                 '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
                 f'      <ul class="islands">{items}</ul>',
-                f'      <div class="note">{e(sub["coverage_note"])}。'
-                + (f'残り{sub["unread_count"]}件は、その後に増えた分でまだ読めていません。'
-                   if sub["unread_count"] else "") + '</div>',
+                *(([f'      <div class="note">{e(sub["coverage_note"])}。'
+                    + (f'残り{sub["unread_count"]}件は、その後に増えた分でまだ読めていません。'
+                       if sub["unread_count"] else "") + '</div>']
+                   if sub.get("show_coverage_note", True) else [])),
             ]
         else:
             body.append(f'      <div class="note">{e(sub["note"])}。<br>'
