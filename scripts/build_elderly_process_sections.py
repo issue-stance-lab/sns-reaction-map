@@ -247,6 +247,20 @@ def build(
     template_path = html_template or public_path
     page_path = output_html or public_path
     page = before = template_path.read_text(encoding="utf-8")
+    total = sum(counts.values())
+
+    # 山なみ差し替え後は id="elderly-verify" ごと本文が削除されるが、目印コメント
+    # （VERIFY_SECTION_START/END）自体は section の外にあるため残る（課題54:
+    # 高齢者段階1。部活動の同種の不具合と同じ構造）。数え直したものをこの目印の
+    # 間へ差し込み続けると、表示されない旧セクションを本文に復活させてしまう。
+    # 一方、投稿対応表（{THEME}-claims.json）は一次資料クイズ側が引き続き読むため、
+    # そちらの更新だけは山なみ形式でも続ける。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in page
+    if planet_mode:
+        if not check:
+            write_provenance_records(claim_posts, verification_dest)
+        return f"{THEME}: 山なみ形式のためSTEP2表示は対象外（投稿対応表のみ更新、主張{len(FACT_CHECKS)}件 / 該当投稿{total}件）", False
+
     if page.count(START) != 1 or page.count(END) != 1:
         raise SystemExit(f"{START} / {END} が1つずつ必要です")
     head, rest = page.split(START, 1)
@@ -272,7 +286,6 @@ def build(
         write_provenance_records(claim_posts, verification_dest)
         page_path.parent.mkdir(parents=True, exist_ok=True)
         page_path.write_text(page, encoding="utf-8")
-    total = sum(counts.values())
     return f"OK  {page_path.name} のSTEP2を更新（主張{len(FACT_CHECKS)}件 / 該当投稿{total}件）", changed
 
 
