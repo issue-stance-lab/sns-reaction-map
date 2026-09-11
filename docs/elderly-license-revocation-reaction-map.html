@@ -1151,6 +1151,10 @@
 (function(){
 "use strict";
 const D = window.PLANET_DATA;
+ D.show_unreviewed_note = false;
+ D.issues.forEach(function(issue){
+   if (issue.sub && issue.sub.status === "reread") issue.sub.show_coverage_note = false;
+ });
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- 状態 ---------- */
@@ -1471,12 +1475,15 @@ function drawPanel(){
           + '<span class="num">'+(j+1)+'</span>'
           + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
           + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
-      + '<div class="note">'+s.coverage_note+'。'
-      + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
-      + '</div>';
+      + (s.show_coverage_note === false ? ''
+        : '<div class="note">'+s.coverage_note+'。'
+          + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
+          + '</div>');
   } else {
-    h += '<div class="note">'+s.note+'。<br>'
-       + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    if (D.show_unreviewed_note !== false){
+      h += '<div class="note">'+s.note+'。<br>'
+         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    }
   }
   // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
