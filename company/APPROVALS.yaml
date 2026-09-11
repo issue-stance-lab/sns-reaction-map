@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-09"
+updated_at: "2026-09-12"
 
 rules:
   required_for:
@@ -32,6 +32,21 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260912-001
+    department: editorial
+    action: website_publication
+    summary: "『このサイトについて』の運営者情報を人数を断定しない表現へ統一し、最終更新日を2026年9月12日に更新して公開する"
+    reason: "運営体制の説明を実態に合わせ、人数を断定しない表現に見直すため"
+    risks:
+      - "運営者の実名・個人連絡先は公開しない方針を維持する"
+    recommendation: approve
+    evidence:
+      - "docs/about.html"
+    status: approved
+    requested_at: "2026-09-12"
+    decided_at: "2026-09-12"
+    decision_note: "CEOが本対話で、運営者情報の文言統一と最終更新日の更新、本番公開を明示的に承認した。"
+
   - id: approval-20260906-002
     department: engineering-data
     action: website_publication
