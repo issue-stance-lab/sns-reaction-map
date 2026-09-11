@@ -66,3 +66,14 @@ stanceに判定順序（賛否の明示→具体的要求の有無→中立）�
 残る不一致は今後、10%抜き取り確認（検討中の新しいチェック方式）で継続的に監視する方針。
 この作業は`../isa-wt-bukatsu-check-pilot`（ブランチ`task/bukatsu-check-pilot`、mainへマージ済み・作業ツリー削除済み）で行い、
 既存の正典・採用台帳・公開ページには一切触れていない。
+
+ 2026-09-12、課題63の「独立確認が不足している別群28件」に着手。対象一覧が記録に残っておらず再現できなかったため、
+`data/verification/editorial-adoption-current.json`から`independently_checked=false`の部活動記録を機械的に数え直すと38件だった
+（TASK_BOARDの「28件」とは数が合わないが、これが唯一再現可能な定義）。本文のみを渡し現行案を見せずにClaudeが独立に判定し、
+現行案と比較した結果、24件が一致・14件が不一致だった。オーナー判断により、**一致した24件だけをadoption_status=acceptedとして
+正式に確定し、不一致だった14件は採用せず台帳に一切触れていない**（保留のまま）。台帳の`counts`集計欄も再計算した。
+不一致14件の判定内容は[quality/reviews/2026-09-12-bukatsu-missing-independent-38.json](../quality/reviews/2026-09-12-bukatsu-missing-independent-38.json)に
+証拠として保存済み。原本（social-samples）・公開ページへの反映はまだ行っていない。
+作業は`../isa-wt-bukatsu-task63-28`（ブランチ`task/bukatsu-task63-28items`、mainへマージ済み・作業ツリー削除済み）で行った。
+なお着手前、`build_adoption_registry.py --check`と`verify_adoption_registry.py`が高齢者テーマのスナップショット指紋ズレで
+NGだったため、オーナーが別途修正するまで台帳への書き込みを保留していた（修正確認後に本作業を実施）。
