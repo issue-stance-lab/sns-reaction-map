@@ -793,9 +793,9 @@ def static_fallback(d: dict) -> str:
                 '      <p class="sub" style="margin-top:12px">'
                 '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
                 f'      <ul class="islands">{items}</ul>',
-                *(([f'      <div class="note">{e(sub["coverage_note"])}。'
-                    + (f'残り{sub["unread_count"]}件は、その後に増えた分でまだ読めていません。'
-                       if sub["unread_count"] else "") + '</div>']
+                *(([f'      <div class="note">本文確認後に追加された投稿{sub["unread_count"]}件は、本文確認の対象外です。</div>']
+                   if sub.get("unread_count") else
+                   [f'      <div class="note">{e(sub["coverage_note"])}。</div>']
                    if sub.get("show_coverage_note", True) else [])),
             ]
         else:
