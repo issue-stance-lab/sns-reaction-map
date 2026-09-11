@@ -739,7 +739,60 @@
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
-<!-- PLANET_SECTION_START -->
+<style>
+#bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+#bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+#bukatsu-background h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+#bukatsu-background p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+#bukatsu-background ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+#bukatsu-background ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+#bukatsu-background ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+#bukatsu-background ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+#bukatsu-background ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+#bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+#bukatsu-background ol.bg-tl .src a{color:var(--muted)}
+#bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+/* 確かめること。3列の表は375pxで潰れるので、1件1枚のカードにする */
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+</style>
+<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">
+<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
+<p class="bg-def">「高齢者の運転免許自主返納の義務化」は、一定の年齢に達した運転者に、運転免許の返納を国の制度として義務づけるべきかどうかという政策論争です。</p>
+<p class="bg-now">いまの制度では返納はあくまで任意で、75歳以上の人には認知機能検査、一定の違反歴がある人には運転技能検査が課されています。年齢による一律の義務化は、制度化されていません。</p>
+<h3>なぜ始まったか</h3>
+<p>高齢ドライバーによる重大事故が繰り返し報道されたことを背景に、一定年齢での免許返納を義務化すべきだという主張が広がりました。政府の統計でも、免許人口10万人あたりの交通死亡事故件数は85歳以上が全年齢層平均の約3.4倍、ブレーキとアクセルの踏み間違いによる死亡事故は80〜84歳で65歳未満の約20倍にのぼるなど、年齢が上がるほど事故の特徴に違いが出ることが示されています。</p>
+<p>義務化に賛成する立場からは「加齢による判断力・身体能力の低下は避けられず、事故を未然に防ぐべきだ」という主張があります。一方で反対する立場からは、「地方では車がなければ生活が成り立たない」「年齢で一律に区切るのは合理的でない」という反論に加え、「自主返納によって高齢運転者の事故がどれだけ減少しているかは一概に言えない」と政府自身が国会で答弁している点も指摘されています。</p>
+<p>現在は年齢による一律の義務化ではなく、75歳以上への認知機能検査、一定の違反歴がある人への運転技能検査、衝突被害軽減ブレーキなどを備えた車に限る「サポートカー限定免許」といった、条件を絞った対策が段階的に進められています。</p>
+<h3>これまでの経緯</h3>
+<ol class="bg-tl">
+<li><div class="when">2016〜17年<em>平成28〜29年度</em></div><div><p class="what">内閣総理大臣の指示で「高齢運転者による交通事故防止対策に関する関係閣僚会議」が開かれ、警察庁の有識者会議・分科会が対策の検討を始めました。</p><span class="src">出典: <a href="https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf" target="_blank" rel="noopener">警察庁 高齢運転者交通事故防止対策に関する調査研究 報告書（令和2年3月・PDF）</a></span></div></li>
+<li><div class="when">2020年3月<em>令和2年度</em></div><div><p class="what">警察庁の有識者会議が報告書をまとめました。「認知機能検査の結果が問題なしとされた人が死亡事故のうち約半数を占める」という分析を根拠に、記憶力だけでなく運転技能そのものを検査する新しい仕組みの導入を提言しています。</p><span class="src">出典: <a href="https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf" target="_blank" rel="noopener">同報告書（PDF）</a></span></div></li>
+<li><div class="when">2022年5月<em>令和4年度</em></div><div><p class="what">改正道路交通法（令和2年法律第42号）が施行され、一定の違反歴がある75歳以上の人を対象に「運転技能検査」が実際に始まりました。</p><span class="src">出典: <a href="https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html" target="_blank" rel="noopener">内閣府 令和6年交通安全白書 第2章第2節</a></span></div></li>
+<li><div class="when">2026年4月<em>令和8年度</em></div><div><p class="what">国会（衆議院内閣委員会）で、免許の義務的な取消しを求める意見と、地方での移動手段を心配する意見の両方が取り上げられました。</p><span class="src">出典: <a href="https://kokkai.ndl.go.jp" target="_blank" rel="noopener">国立国会図書館 国会会議録検索システム（第221回国会）</a></span></div></li>
+<li><div class="when">2026年6月<em>令和8年度・いま</em></div><div><p class="what">運転技能検査に合格した人の10万人あたりの事故件数が、検査の対象ではない人より多いという追跡調査の結果を受け、警察庁が検査内容を見直す有識者検討会を開いています。令和8年8月を目途に報告書をまとめる予定です。</p><span class="src">出典: <a href="https://www.npa.go.jp/news/release/2026/260625_kouhou.pdf" target="_blank" rel="noopener">警察庁 運転技能検査合格者の追跡調査の結果等について（令和8年6月・PDF）</a></span></div></li>
+</ol>
+<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
+</section><!-- PLANET_SECTION_START -->
 <section class="panel planet-panel" aria-labelledby="planet-heading">
 <style>#planet-block{
   --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
@@ -2773,24 +2826,7 @@ const SM_RAW = [
 </div>
 </div></article>
 </div></section>
-    <section class="panel background-panel" id="elderly-background" aria-labelledby="bg-title">
-<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
-<p class="bg-def">「高齢者の運転免許自主返納の義務化」は、一定の年齢に達した運転者に、運転免許の返納を国の制度として義務づけるべきかどうかという政策論争です。</p>
-<p class="bg-now">いまの制度では返納はあくまで任意で、75歳以上の人には認知機能検査、一定の違反歴がある人には運転技能検査が課されています。年齢による一律の義務化は、制度化されていません。</p>
-<h3>なぜ始まったか</h3>
-<p>高齢ドライバーによる重大事故が繰り返し報道されたことを背景に、一定年齢での免許返納を義務化すべきだという主張が広がりました。政府の統計でも、免許人口10万人あたりの交通死亡事故件数は85歳以上が全年齢層平均の約3.4倍、ブレーキとアクセルの踏み間違いによる死亡事故は80〜84歳で65歳未満の約20倍にのぼるなど、年齢が上がるほど事故の特徴に違いが出ることが示されています。</p>
-<p>義務化に賛成する立場からは「加齢による判断力・身体能力の低下は避けられず、事故を未然に防ぐべきだ」という主張があります。一方で反対する立場からは、「地方では車がなければ生活が成り立たない」「年齢で一律に区切るのは合理的でない」という反論に加え、「自主返納によって高齢運転者の事故がどれだけ減少しているかは一概に言えない」と政府自身が国会で答弁している点も指摘されています。</p>
-<p>現在は年齢による一律の義務化ではなく、75歳以上への認知機能検査、一定の違反歴がある人への運転技能検査、衝突被害軽減ブレーキなどを備えた車に限る「サポートカー限定免許」といった、条件を絞った対策が段階的に進められています。</p>
-<h3>これまでの経緯</h3>
-<ol class="bg-tl">
-<li><div class="when">2016〜17年<em>平成28〜29年度</em></div><div><p class="what">内閣総理大臣の指示で「高齢運転者による交通事故防止対策に関する関係閣僚会議」が開かれ、警察庁の有識者会議・分科会が対策の検討を始めました。</p><span class="src">出典: <a href="https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf" target="_blank" rel="noopener">警察庁 高齢運転者交通事故防止対策に関する調査研究 報告書（令和2年3月・PDF）</a></span></div></li>
-<li><div class="when">2020年3月<em>令和2年度</em></div><div><p class="what">警察庁の有識者会議が報告書をまとめました。「認知機能検査の結果が問題なしとされた人が死亡事故のうち約半数を占める」という分析を根拠に、記憶力だけでなく運転技能そのものを検査する新しい仕組みの導入を提言しています。</p><span class="src">出典: <a href="https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf" target="_blank" rel="noopener">同報告書（PDF）</a></span></div></li>
-<li><div class="when">2022年5月<em>令和4年度</em></div><div><p class="what">改正道路交通法（令和2年法律第42号）が施行され、一定の違反歴がある75歳以上の人を対象に「運転技能検査」が実際に始まりました。</p><span class="src">出典: <a href="https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html" target="_blank" rel="noopener">内閣府 令和6年交通安全白書 第2章第2節</a></span></div></li>
-<li><div class="when">2026年4月<em>令和8年度</em></div><div><p class="what">国会（衆議院内閣委員会）で、免許の義務的な取消しを求める意見と、地方での移動手段を心配する意見の両方が取り上げられました。</p><span class="src">出典: <a href="https://kokkai.ndl.go.jp" target="_blank" rel="noopener">国立国会図書館 国会会議録検索システム（第221回国会）</a></span></div></li>
-<li><div class="when">2026年6月<em>令和8年度・いま</em></div><div><p class="what">運転技能検査に合格した人の10万人あたりの事故件数が、検査の対象ではない人より多いという追跡調査の結果を受け、警察庁が検査内容を見直す有識者検討会を開いています。令和8年8月を目途に報告書をまとめる予定です。</p><span class="src">出典: <a href="https://www.npa.go.jp/news/release/2026/260625_kouhou.pdf" target="_blank" rel="noopener">警察庁 運転技能検査合格者の追跡調査の結果等について（令和8年6月・PDF）</a></span></div></li>
-</ol>
-<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
-</section>
+    
     
     <section class="panel" id="related-topics"><div class="panel-title"><h2>次に見るテーマ</h2><span>このテーマに投票した人はこれも見ています</span></div>
 <div class="related-grid">

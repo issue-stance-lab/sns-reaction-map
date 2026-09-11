@@ -733,13 +733,21 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     if match:
         html, hit = cut_block(html, match.group(0), "section")
         removed.append(("スタンス集計", hit))
+    # 旧「この争点の背景」は本文ごと外し、data/verification/{topic}-background.json が
+    # あれば第1部として山なみ本体の前に出す（build_bukatsu() と同じ扱い。2026-09-11、
+    # 高齢者テーマで、外しただけで差し込みを忘れ「経緯が見当たらない」と指摘された）。
+    match = re.search(r'<section\b[^>]*\bclass="panel background-panel"[^>]*>', html)
+    if match:
+        html, hit = cut_block(html, match.group(0), "section")
+        removed.append(("この争点の背景（旧・件数無しの短文）", hit))
+    background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)
     section = build_section(split_prototype(render_planet(data)))
     marker = "<!-- RESEARCH_CONDITIONS_END -->"
     if marker not in html:
         raise SystemExit("調査条件の目印が見つかりません")
-    html = html.replace(marker, marker + "\n" + section, 1)
+    html = html.replace(marker, marker + "\n" + background + section, 1)
     return html, removed
 
 
