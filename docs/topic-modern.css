@@ -1143,3 +1143,25 @@ main > .article-trust {
    一般的なレスポンシブ単位の下限に合わせた控えめな値にとどめる。
    実広告での改善量は未検証（テスト環境では広告が配信されないため）。 */
 ins.adsbygoogle { min-height: 100px; }
+
+/* 「この争点の背景」（山なみページ共通、課題54）。bukatsu-chiiki は #bukatsu-background に
+   同じ見た目を個別に書いていたが（2026-09-05）、2テーマ目からはこの共通クラスを使う。
+   class="background-panel" を付けたテーマだけに効く。 */
+.background-panel .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+.background-panel .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+.background-panel h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+.background-panel p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+.background-panel ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+.background-panel ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+.background-panel ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+.background-panel ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+.background-panel ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+.background-panel ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+.background-panel ol.bg-tl .src a{color:var(--muted)}
+.background-panel .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+@media (max-width:560px){
+  .background-panel ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
