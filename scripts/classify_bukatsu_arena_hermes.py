@@ -28,7 +28,13 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
         f"{index}. {item['label']} ─ {item['description']}"
         for index, item in enumerate(ISSUE_DEFS, 1)
     )
-    stance_options = "\n".join(f"- {stance}" for stance in STANCES)
+    stance_options = """1. 地域移行・外部委託・部活廃止について、投稿者が明確に「賛成・推進したい」「反対・やめるべき／うまくいかないという強い悲観」を表明しているか確認する。
+   - 明確に賛成・推進・肯定的評価 → 「移行支持」
+   - 明確に反対、または「失敗する」「機能しない」という強い悲観の表明 → 「慎重・反対」
+2. 明確な賛否が無い場合、「〜してほしい」「〜すべき」「〜が必要」のような具体的な要求・提案・条件を伴っているか確認する。
+   - 具体的な要求・提案・条件がある → 「条件付き・改善要求」
+3. 上記どちらにも当たらない場合（事実・体験・問題点を述べるだけで、賛否表明も具体的要求も無い） → 「中立・情報」
+   - 要求を伴わない問題点の指摘だけの投稿はここに入る。例：「指導者不足が課題だ」だけなら中立・情報。「指導者を増やしてほしい」なら条件付き・改善要求。"""
     return f"""あなたは「部活動の地域移行」に関するX投稿の分類者です。
 次の投稿を、投稿者自身の主張に基づいて1投稿1分類してください。
 
@@ -49,7 +55,7 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
 main_issue（完全一致7択）:
 {issue_options}
 
-stance（完全一致4択）:
+stance（完全一致4択。次の順序で判定する）:
 {stance_options}
 
 intensity: low / medium / high
