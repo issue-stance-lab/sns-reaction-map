@@ -114,9 +114,9 @@ def markdown(d):
 def render_preview(d, examples, template):
     from fukushuto_target_data import aggregate_targets
     from build_planet_page_preview import build_background
-    payload={k:v for k,v in d.items() if k not in ('records','pending','issue_moves_retained')}
+    payload={k:d[k] for k in ('candidate_opinions','original_total','concept','law_by_scope','law_unexpressed','locations','decisions','same_text')}
+    payload['issues'] = [{'name':x['name'], 'after':x['after']} for x in d['issues']]
     payload['target_breakdown'] = aggregate_targets(d['records'])
-    payload['examples']=[x for x in examples if x['number'] in (1,2,5,7,8,18)]
     body='<table><caption>旧表示の立場（母数 '+str(d['old_opinions'])+'件）</caption><thead><tr><th>立場</th><th>件数</th></tr></thead><tbody>'
     body+=''.join('<tr><td>'+html.escape(k)+'</td><td>'+str(v)+'</td></tr>' for k,v in d['old_stances'].items())
     body+='</tbody></table><table><caption>論点別の変更前後</caption><thead><tr><th>論点</th><th>前</th><th>案</th><th>差</th></tr></thead><tbody>'
