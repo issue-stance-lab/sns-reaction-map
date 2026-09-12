@@ -69,3 +69,17 @@ class BikeCollectionReviewTests(unittest.TestCase):
         held["items"][0]["decision"] = "hold"
         with self.assertRaises(ValueError):
             apply_review_updates(copy.deepcopy(self.data), self.rows, {"wave.json": held})
+
+
+class BikeVerificationTests(unittest.TestCase):
+    def test_legacy_flags_and_nested_override_survive_without_raw_text(self):
+        from build_bike_verification import build
+        rows = [{"tweet_id": "1", "text": "private body", "is_opinion": True,
+                 "classification": {"main_issue": "その他"}},
+                {"tweet_id": "2", "text": "private body", "is_opinion": True,
+                 "classification": {"is_opinion": False}}]
+        original = copy.deepcopy(rows)
+        safe = build(rows)
+        self.assertEqual(sum(r["classification"]["is_opinion"] is True for r in safe), 1)
+        self.assertEqual(rows, original)
+        self.assertTrue(all(set(r) == {"record_id_hash", "classification"} for r in safe))
