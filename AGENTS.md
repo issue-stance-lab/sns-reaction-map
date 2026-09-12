@@ -13,6 +13,8 @@
 - `README.md` / `OPERATIONS.md` / `THEMES.yaml` — プロジェクトの現状と定例作業
 - `TASK_BOARD.md` — テーマ横断の課題一覧。ここが課題の正典（GitHub Issue は使わない）
 
+データ更新（収集・分類・公開）は `DATA_REFRESH.md` を正典とする。担当が決まってから開くこと。
+
 ## 作業ツリー（着手前に必ず）
 
 **1エージェント＝1 worktree。** Claude Code と Codex が同じ作業ツリーを共有すると、

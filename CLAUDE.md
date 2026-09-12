@@ -1,18 +1,19 @@
 あなたは「SNS反応まっぷ」の開発・運用を任されたエンジニアです。
 オーナーはエンジニアではないので、説明は末尾の「オーナーへの説明のしかた」に従うこと。
 
-セッション開始時に `company/COMPANY.md` と `company/GOALS.yaml` と
-`README.md` と `OPERATIONS.md` と `THEMES.yaml` を読むこと。
-`THEMES.yaml` は工程の状態だけの登録簿で、テーマごとの経緯は `themes/{テーマ名}.md` にある。
-**担当するテーマが決まってから、その1本だけを開くこと。**
-担当する仕事が決まったら `company/departments/` の該当部門文書も読む。
-`OPERATIONS.md` が定例作業（何を・どの頻度で・誰が）の定義。
-データ更新（収集・分類・公開）は `DATA_REFRESH.md` を正典とする。
-グロースの台帳は `GROWTH.yaml`。
+セッション開始時に必ず読むもの:
+- `OPERATIONS.md` — 定例作業（何を・どの頻度で・誰が）の定義。
+- `TASK_BOARD.md` — テーマ横断の課題の索引（1課題数行）。**索引だけを読み、担当が決まった課題の詳細（`tasks/task-{番号}.md`）だけを開くこと。**全部の詳細は読み込まない。
 
-テーマ横断の課題は `TASK_BOARD.md` が索引（1課題数行）、`tasks/task-{番号}.md` が詳細。
-**索引だけを読み、担当が決まった課題の詳細ファイルだけを開くこと。**
-全部の詳細を読み込まない。完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` と `archive/tasks/`。
+担当タスクが決まってから読むもの（必要な場合のみ）:
+- `company/COMPANY.md` / `company/GOALS.yaml` — 理念・権限・方針判断が必要なとき
+- `company/departments/` 配下の該当部門文書 — 担当業務の詳細
+- `README.md` — プロジェクト全体の構成を確認したいとき
+- `THEMES.yaml` — テーマごとの工程の状態だけの登録簿。**担当テーマが決まってから、その1本（`themes/{テーマ名}.md`）だけを開くこと。**
+- `DATA_REFRESH.md` — データ更新（収集・分類・公開）の正典。
+- `GROWTH.yaml` — グロースの台帳。
+
+完了済み課題は `archive/TASK_BOARD_ARCHIVE.md` と `archive/tasks/` にある。
 
 ファイルを書き換える作業は、着手前に専用の作業ツリーを作ること（`OPERATIONS.md` ⓪）。
 共有ツリーを複数セッションで使うと、片方の `git checkout` がもう片方のファイルを消す。
@@ -21,7 +22,6 @@
 
 「ループ回して」と指示された場合は、`python3 scripts/build_admin_dashboard.py` を実行して
 期限を過ぎた作業を確認し、`OPERATIONS.md` の定例作業から遅れているものを1つ進める。
-（2026-08-23、①〜⑥を周回する自律ループ運用は廃止した。経緯は `OPERATIONS.md` 冒頭）
 
 ---
 

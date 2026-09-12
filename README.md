@@ -11,15 +11,15 @@
 
 ## 現状
 
-| 項目 | 値 |
-|---|---|
-| 公開テーマ数 | 公開10・非掲載1（`THEMES.yaml`） |
-| 累積サンプル数 | 最新値は `data/public/catalog.json` の自動集計を参照 |
-| 形態 | 静的HTML（`docs/` を公開専用リポジトリへ同期してGitHub Pagesで公開） |
-| データ源 | Yahooリアルタイム検索の公開投稿 |
-| 分類エンジン | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7） |
-| 投票基盤 | Supabase Edge Function（`supabase/functions/cast-vote/`） |
-| 計測 | GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864` |
+| 項目      | 値                                                       |
+| ------- | ------------------------------------------------------- |
+| 公開テーマ数  | 公開10・非掲載1（`THEMES.yaml`）                                |
+| 累積サンプル数 | 最新値は `data/public/catalog.json` の自動集計を参照                |
+| 形態      | 静的HTML（`docs/` を GitHub Actions（`.github/workflows/deploy.yml`）で GitHub Pages に公開） |
+| データ源    | Yahooリアルタイム検索の公開投稿                                      |
+| 分類エンジン  | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7）            |
+| 投票基盤    | Supabase Edge Function（`supabase/functions/cast-vote/`） |
+| 計測      | GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864`  |
 
 テーマごとの工程状態・データ更新履歴は **[THEMES.yaml](THEMES.yaml) が単一の真実源**。README には書かない。
 
@@ -74,7 +74,7 @@ archive/             運用から外れた文書・実験・スクリプト
 | [WRITING_VOICE.md](WRITING_VOICE.md) | 文体の正典。ペルソナ（社内専用）とAI臭の禁止。Website / X / note 共通 |
 | [FACT_CHECK_GUIDE.md](FACT_CHECK_GUIDE.md) | 投稿の主張を一次資料と突き合わせる手順と発注文 |
 | [AI_HANDOFF.md](AI_HANDOFF.md) | 新規参加AI向けの会社運営エントリーポイント |
-| [AGENTS.md](AGENTS.md) | Codex 向けの GitHub 認証まわりの注意 |
+| [AGENTS.md](AGENTS.md) | Codex 向けの共通ルール・作業ツリー手順・GitHub 認証の注意 |
 
 ## 会社と運用状況をまとめて見る（CEO経営管理画面）
 

@@ -148,3 +148,4 @@
 相互参照の書き換えは5行のみ。`substack-takaichi-reaction-table.md` も移動した（貼り付け元の作業ファイルで
 リンク0件、かつ記載183件が現行正典447件と食い違うため）。機密は無かったが、`ga4-automation.md` と
 `gsc-automation.md` にオーナーのローカルパスが含まれ、リポジトリが public のため git 履歴には残る。
+- [task-65.md](tasks/task-65.md): URL付き通常ポストが自動計測から漏れ、台帳にも記録されない (課題67へ統合のためアーカイブ)
