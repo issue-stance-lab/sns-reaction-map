@@ -140,6 +140,12 @@ def finalize(root: Path, current_date: str) -> None:
         check=True,
     )
 
+    if "<!-- PLANET_SECTION_START -->" in (root / PAGE).read_text(encoding="utf-8"):
+        subprocess.run(
+            [sys.executable, str(root / "scripts" / "refresh_planet_section.py"),
+             "--topic", TOPIC, "--for-docs"], cwd=root, check=True,
+        )
+
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""

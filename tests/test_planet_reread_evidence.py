@@ -122,3 +122,24 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class AnonymousRereadKeyTest(unittest.TestCase):
+    def test_resolves_current_key_without_mutating_stored_evidence(self):
+        key = hashlib.sha256(b'a').hexdigest()
+        records = [{'post_key': key, 'bucket': 'A'}]
+        resolved = bpd.resolve_reread_keys(records, [{'tweet_id': 'a'}], '論点')
+        self.assertEqual(resolved[0]['tweet_id'], 'a')
+        self.assertNotIn('tweet_id', records[0])
+
+    def test_unknown_mixed_or_conflicting_identifiers_fail_closed(self):
+        key = hashlib.sha256(b'a').hexdigest()
+        for records in ([{'post_key': 'unknown'}],
+                        [{'post_key': key}, {'tweet_id': 'a'}],
+                        [{'post_key': key, 'tweet_id': 'b'}]):
+            with self.subTest(records=records), self.assertRaises(SystemExit):
+                bpd.resolve_reread_keys(records, [{'tweet_id': 'a'}], '論点')
+
+    def test_existing_id_records_keep_their_format(self):
+        records = [{'tweet_id': 'a'}]
+        self.assertEqual(bpd.resolve_reread_keys(records, [{'tweet_id': 'a'}], '論点'), records)

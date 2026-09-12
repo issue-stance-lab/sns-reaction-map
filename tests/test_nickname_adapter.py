@@ -84,7 +84,15 @@ class NicknameArenaBuilderTests(unittest.TestCase):
             result = self._build(source + [added], work)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             page = (work / "page.html").read_text(encoding="utf-8")
-            for needle in (
+            if '<!-- PLANET_SECTION_START -->' in page:
+                needles = (f'関連する意見{opinions}件',
+                           f'<th>{SAFETY}</th><td>{expected}</td>',
+                           f'"key":"safety","title":"{SAFETY}"')
+                self.assertNotIn('id="issue-arena-section"', page)
+                original_block = PAGE.read_text().split('<!-- PLANET_SECTION_START -->')[1].split('<!-- PLANET_SECTION_END -->')[0]
+                self.assertIn(original_block, page)
+            else:
+                needles = (
                 f"分析対象となった意見{opinions}件",                     # リード文
                 f'<strong class="insight-value">{opinions}<small>件',    # 注目ポイント
                 f'id="issue-count-school-nickname-ban-ijime">{expected}件',  # 論点カード
@@ -93,7 +101,8 @@ class NicknameArenaBuilderTests(unittest.TestCase):
                 f'<span class="issue-count">{expected}件</span>',        # 論点ブロックの見出し
                 f"<th>{SAFETY}</th><td>{expected}</td>",                 # 詳細データ表
                 f"関連する意見{opinions}件",                             # 詳細データの見出し
-            ):
+                )
+            for needle in needles:
                 # ページ全体を差分に出すと読めないので、見つからない文字列だけを出す
                 self.assertTrue(needle in page, f"ページに {needle!r} がありません")
             self.assertIn(f'"count":{expected}', page)  # 投票ボタンの「(N件)」

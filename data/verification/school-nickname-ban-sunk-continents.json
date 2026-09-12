@@ -1,0 +1,83 @@
+{
+  "theme_id": "school-nickname-ban",
+  "items": [
+    {
+      "id": "school-nickname-ban-review-rule",
+      "topic": "校則を見直す手続きにも、子供や保護者の意見を入れる",
+      "primary_sources": [
+        {
+          "name": "文部科学省：生徒指導提要（改訂版）",
+          "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf",
+          "location": "3.6.1、本文101〜102頁（PDF104〜105頁）",
+          "date": "2022年12月"
+        }
+      ],
+      "life_impact": "生徒指導提要は、校則の内容だけでなく、誰の意見を聞き、どう見直すかも示すよう求めています。ルールへの不満を伝えるときには、話し合う場と変更の手続きを確かめられます。",
+      "sns_count": 0,
+      "sns_base": 88,
+      "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な手続きへの言及はありませんでした。いじめへの関心がないという意味ではありません。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "生徒会|保護者会|校則.{0,10}見直|見直.{0,10}校則",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": null,
+      "checked_on": "2026-09-12",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "school-nickname-ban-share-case",
+      "topic": "柔軟に対応した場合にも、いじめの情報は組織へ共有する",
+      "primary_sources": [
+        {
+          "name": "文部科学省：いじめの防止等のための基本的な方針",
+          "url": "https://www.mext.go.jp/component/a_menu/education/detail/__icsFiles/afieldfile/2019/06/26/1400030_007.pdf",
+          "location": "第1・5、本文5頁（PDF9頁）",
+          "date": "2017年3月14日改定"
+        }
+      ],
+      "life_impact": "国の基本方針は、謝罪して関係を修復した場合などに柔軟な対処を認めつつ、いじめに該当する事案は学校の対策組織へ共有すると説明しています。先生個人が知っていることと、学校として対応を引き継げることは別です。",
+      "sns_count": 0,
+      "sns_base": 88,
+      "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な手続きへの言及はありませんでした。いじめへの関心がないという意味ではありません。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "いじめ対策組織|情報共有|組織.{0,12}共有",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": null,
+      "checked_on": "2026-09-12",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "school-nickname-ban-follow-up",
+      "topic": "謝ったことだけで、いじめの解消とはしない",
+      "primary_sources": [
+        {
+          "name": "文部科学省：いじめの防止等のための基本的な方針",
+          "url": "https://www.mext.go.jp/component/a_menu/education/detail/__icsFiles/afieldfile/2019/06/26/1400030_007.pdf",
+          "location": "第2・3（4）、本文30〜31頁（PDF34〜35頁）",
+          "date": "2017年3月14日改定"
+        }
+      ],
+      "life_impact": "国の基本方針では、行為が止まった状態が続くことと、本人が苦痛を感じていないことを確かめます。行為の停止は少なくとも3か月が目安です。期間だけを満たせば解消とする意味ではありません。",
+      "sns_count": 0,
+      "sns_base": 88,
+      "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な手続きへの言及はありませんでした。いじめへの関心がないという意味ではありません。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "[3３三].{0,2}か月|[3３三].{0,2}ヶ月|解消.{0,10}面談",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": null,
+      "checked_on": "2026-09-12",
+      "checked_by": "ai_assisted"
+    }
+  ]
+}

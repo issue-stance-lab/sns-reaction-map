@@ -48,10 +48,16 @@ class NicknamePublicCountsTests(unittest.TestCase):
 
         updated = apply_public_counts(self.page, self._write(data))
         opinions = int(self.public["opinion_count"]) + 1
-        self.assertIn(f'分析対象となった意見{opinions}件', updated)
-        self.assertIn(f'<span>{opinions}件 | セクター=論点', updated)
+        if '<!-- PLANET_SECTION_START -->' in self.page:
+            self.assertIn(f'関連する意見{opinions}件', updated)
+            before_block = self.page.split('<!-- PLANET_SECTION_START -->')[1].split('<!-- PLANET_SECTION_END -->')[0]
+            self.assertIn(before_block, updated)  # 本体は finalize の再読検査後に再生成する
+            self.assertNotIn('id="issue-arena-section"', updated)
+        else:
+            self.assertIn(f'分析対象となった意見{opinions}件', updated)
+            self.assertIn(f'<span>{opinions}件 | セクター=論点', updated)
         self.assertIn(f'公開投稿 {int(self.public["collected_count"]) + 1}件', updated)
-        self.assertIn(f'<span class="issue-count">{before + 1}件</span>', updated)
+        self.assertIn(f'<th>いじめ・心理的安全</th><td>{before + 1}</td>', updated)
         self.assertIn(f'"key":"safety"', updated)
         issues = re.search(r"var issues=(\[[^\n]*?\]);", updated)
         assert issues is not None

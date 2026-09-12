@@ -156,3 +156,28 @@ class ProgressVisibilityTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NicknameCompositionTest(unittest.TestCase):
+    def test_legacy_map_is_removed_but_its_guarded_vote_call_survives(self):
+        source = """<body><!-- RESEARCH_CONDITIONS_END -->
+<section id="issue-arena-section">旧マップ</section>
+<script>
+(function(){
+  var canvas=document.getElementById('nickname-arena'),ctx=canvas.getContext('2d');
+})();
+</script>
+<script>VoteStore.cast({choiceIdx:0}); document.getElementById('nickname-arena')?.scrollIntoView();</script>
+<section class="panel" id="explainer-section">旧カード</section>
+<section class="panel" id="vote-section"></section></body>"""
+        with patch.object(preview, 'render_planet', return_value=''), patch.object(preview, 'split_prototype', return_value={}), patch.object(preview, 'build_section', return_value='<section>新マップ</section>'):
+            result, _ = preview.build_generic('school-nickname-ban', source, {})
+        preview.verify_preserved(source, result)
+        self.assertNotIn("ctx=canvas.getContext", result)
+        self.assertIn('VoteStore.cast({choiceIdx:0})', result)
+        self.assertNotIn('旧カード', result)
+
+    def test_quiz_labels_exist_even_when_a_verdict_has_no_claims(self):
+        template = (ROOT / 'quality/prototypes/planet-prototype.template.html').read_text()
+        self.assertNotIn('return same ? same.verdict_label : v;', template)
+        self.assertIn('gap:"少しずれる"', template)

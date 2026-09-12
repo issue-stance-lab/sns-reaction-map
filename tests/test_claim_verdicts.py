@@ -28,10 +28,10 @@ class ClaimVerdictTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(set(counts), {
             "bike-blue-ticket", "bukatsu-chiiki", "constitutional-amendment", "consumption-tax-cut",
-            "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai",
+            "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai", "school-nickname-ban",
         })
-        # 41主張＋部活動7主張（課題54 段階3）
-        self.assertEqual(sum(counts.values()), 48)
+        # 既存48主張＋あだ名禁止4主張（課題54 横展開）
+        self.assertEqual(sum(counts.values()), 52)
 
     def test_post_counts_agree_across_all_three_files(self) -> None:
         # ページは data/{theme}_claim_posts.json、公開JSONは data/verification/ を読む。

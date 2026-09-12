@@ -643,10 +643,10 @@ def build_details(rows: list[dict[str, Any]], collected: int) -> str:
         f"<details open><summary>論点別件数（関連する意見{len(rows)}件）</summary>"
         f'<div class="table-wrap"><table><tbody>{body}</tbody></table></div></details>'
         "<details><summary>分類対象と注意</summary><ul>"
-        f"<li>Yahooリアルタイム検索で取得した{collected}件をHermesが再分類し、"
+        f"<li>Yahooリアルタイム検索で取得した{collected}件をAI分類後に本文と照合し、"
         f"関連性と意見性がともに認められた{len(rows)}件を表示しています。</li>"
         "<li>これは世論調査ではなく、検索語・取得時点・検索サービスの表示仕様による偏りがあります。</li>"
-        "<li>論点・立場・熱量・要約はHermesによる自動分類で、誤分類を含む可能性があります。</li>"
+        "<li>論点・立場は本文との照合を反映しています。表現の強さと要約はAI分類に基づき、誤りを含む可能性があります。</li>"
         "</ul></details></section>"
     )
 
@@ -712,6 +712,15 @@ def _public_rows(data: dict[str, Any]) -> tuple[int, str, list[dict[str, Any]]]:
     return int(data["collected_count"]), _public_period(data), rows
 
 
+def apply_planet_counts(page: str, rows: list[dict], collected: int, period: str) -> str:
+    """山なみの本体を保ち、調査条件・投票説明・詳細表を同期する。"""
+    page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
+                        build_research_conditions(collected, period), "調査条件", flags=re.S)
+    page = replace_once(page, r"var issues=\[[^\n]*?\];", build_vote_issues(rows) + ";", "投票の論点")
+    return replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>',
+                        build_details(rows, collected), "詳細データ", flags=re.S)
+
+
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の集計表示を貼り直す。
 
@@ -730,6 +739,8 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
             key: value for key, value in fresh.items() if key in counts
         }:
             raise IssueCountError(f"公開JSONの論点別件数が食い違います: {dict(counts)} / {fresh}")
+    if "<!-- PLANET_SECTION_START -->" in page:
+        return apply_planet_counts(page, rows, collected, period)
     largest = max(counts.values())
     page = replace_once(page, r'<p class="lead">.*?</p>', build_lead(rows), "リード文", flags=re.S)
     page = replace_once(
@@ -806,62 +817,65 @@ def build(
 
     before = template.read_text(encoding="utf-8")
     page = before
-    page = replace_once(page, r'<p class="lead">.*?</p>', build_lead(rows), "リード文", flags=re.S)
-    page = replace_once(
-        page,
-        r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
-        build_research_conditions(collected, sample_period(records)),
-        "調査条件",
-        flags=re.S,
-    )
-    page = replace_once(
-        page,
-        r'<section class="stats insight-stats".*?</section>',
-        build_stats(rows, collected),
-        "注目ポイント",
-        flags=re.S,
-    )
-    page = replace_once(
-        page,
-        r'<div class="explainer-grid">.*?<p class="explainer-note">.*?</p>',
-        build_explainer_cards(rows),
-        "論点カード",
-        flags=re.S,
-    )
-    page = replace_once(
-        page,
-        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
-        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | '
-        "セクター=論点 / 外側ほど熱量が高い / 色=立場</span></div>",
-        "マップ見出し",
-    )
-    # 「var issues=[...]」はページに2箇所ある（投票STEP1とアリーナ）。両方が件数を持つので
-    # 両方を書き換える。片方だけを狙う正規表現にすると、貪欲さの違いで間のスクリプトを
-    # 丸ごと飲み込む（実装中に投票処理ごと消えた）。終端の文字までアンカーに含める。
-    vote_issues = build_vote_issues(rows)
-    # どちらも1行に収まっているので、改行を跨がせない。re.S を付けて .*? を跨がせると、
-    # 投票側から始まった照合がアリーナ側の終端まで伸び、間の投票処理を丸ごと飲み込む。
-    page = replace_once(page, r"var issues=\[[^\n]*?\];", vote_issues + ";", "投票の論点")
-    page = replace_once(
-        page,
-        r"var issues=\[[^\n]*?\],posts=window\.NICKNAME_ARENA_DATA",
-        vote_issues + ",posts=window.NICKNAME_ARENA_DATA",
-        "アリーナの論点",
-    )
-    page = replace_once(
-        page,
-        r'<section class="panel conflict-panel" id="issue-voices-section">.*?\n</section>',
-        build_issue_blocks(rows),
-        "論点ブロック",
-        flags=re.S,
-    )
-    page = replace_once(
-        page,
-        r'<section class="panel details-panel" id="detail-data">.*?</section>',
-        build_details(rows, collected),
-        "詳細データ",
-        flags=re.S,
-    )
+    if "<!-- PLANET_SECTION_START -->" in page:
+        page = apply_planet_counts(page, rows, collected, sample_period(records))
+    else:
+        page = replace_once(page, r'<p class="lead">.*?</p>', build_lead(rows), "リード文", flags=re.S)
+        page = replace_once(
+            page,
+            r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
+            build_research_conditions(collected, sample_period(records)),
+            "調査条件",
+            flags=re.S,
+        )
+        page = replace_once(
+            page,
+            r'<section class="stats insight-stats".*?</section>',
+            build_stats(rows, collected),
+            "注目ポイント",
+            flags=re.S,
+        )
+        page = replace_once(
+            page,
+            r'<div class="explainer-grid">.*?<p class="explainer-note">.*?</p>',
+            build_explainer_cards(rows),
+            "論点カード",
+            flags=re.S,
+        )
+        page = replace_once(
+            page,
+            r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
+            f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | '
+            "セクター=論点 / 外側ほど熱量が高い / 色=立場</span></div>",
+            "マップ見出し",
+        )
+        # 「var issues=[...]」はページに2箇所ある（投票STEP1とアリーナ）。両方が件数を持つので
+        # 両方を書き換える。片方だけを狙う正規表現にすると、貪欲さの違いで間のスクリプトを
+        # 丸ごと飲み込む（実装中に投票処理ごと消えた）。終端の文字までアンカーに含める。
+        vote_issues = build_vote_issues(rows)
+        # どちらも1行に収まっているので、改行を跨がせない。re.S を付けて .*? を跨がせると、
+        # 投票側から始まった照合がアリーナ側の終端まで伸び、間の投票処理を丸ごと飲み込む。
+        page = replace_once(page, r"var issues=\[[^\n]*?\];", vote_issues + ";", "投票の論点")
+        page = replace_once(
+            page,
+            r"var issues=\[[^\n]*?\],posts=window\.NICKNAME_ARENA_DATA",
+            vote_issues + ",posts=window.NICKNAME_ARENA_DATA",
+            "アリーナの論点",
+        )
+        page = replace_once(
+            page,
+            r'<section class="panel conflict-panel" id="issue-voices-section">.*?\n</section>',
+            build_issue_blocks(rows),
+            "論点ブロック",
+            flags=re.S,
+        )
+        page = replace_once(
+            page,
+            r'<section class="panel details-panel" id="detail-data">.*?</section>',
+            build_details(rows, collected),
+            "詳細データ",
+            flags=re.S,
+        )
 
     arena_before = arena_destination.read_text(encoding="utf-8") if arena_destination.is_file() else ""
     arena_after = build_arena_data(rows)

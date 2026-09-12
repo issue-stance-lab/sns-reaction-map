@@ -834,7 +834,7 @@ function buildQuiz(){
   const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
   const labels=V_ORDER.map(v=>{
     const same=cs.find(x=>x.verdict===v);
-    return same ? same.verdict_label : v;
+    return same ? same.verdict_label : ({fact:"資料どおり",gap:"少しずれる",miss:"裏が取れない"})[v];
   });
   el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
     + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'

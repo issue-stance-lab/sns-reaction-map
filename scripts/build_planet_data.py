@@ -316,6 +316,21 @@ def issue_verdict(issue_id: str, claims: list[dict]) -> tuple[str | None, list[d
 
 # ---------------------------------------------------------------- 本体
 
+def resolve_reread_keys(records: list[dict], posts: list[dict], issue: str) -> list[dict]:
+    """匿名化した再読キーを、検査中だけ正典のIDへ結び付ける。"""
+    if not any("post_key" in record for record in records):
+        return records
+    by_key = {hashlib.sha256(str(p["tweet_id"]).encode()).hexdigest(): str(p["tweet_id"])
+              for p in posts}
+    resolved = []
+    for record in records:
+        key = record.get("post_key")
+        if key is None or key not in by_key or "tweet_id" in record:
+            raise SystemExit(f"「{issue}」の再読の匿名キーが正典と一致しません。")
+        resolved.append({**record, "tweet_id": by_key[key]})
+    return resolved
+
+
 def build(topic: str) -> dict:
     cfg = yaml.safe_load((ROOT / "configs" / "planet" / f"{topic}.yaml").read_text())
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text())
@@ -483,6 +498,7 @@ def build(topic: str) -> dict:
                 fetch_recovery = load_fetch_history_recovery(
                     ROOT / "data" / "verification" / f"{topic}-fetch-history-recovery.json",
                     canonical_path)
+            records = resolve_reread_keys(records, canonical_posts, k)
             validate_registry_membership(reread_registry, records, k)
             read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}

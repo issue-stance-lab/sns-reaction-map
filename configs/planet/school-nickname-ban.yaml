@@ -1,0 +1,128 @@
+reread_registry: true
+theme_id: school-nickname-ban
+title: 学校でのあだ名禁止
+question: 学校で「あだ名禁止」を指導すべきか
+source_label: Yahoo!リアルタイム検索
+stances:
+- key: 禁止支持
+  label: 禁止支持
+  id: school-nickname-ban-ban-support
+  color: '#2F8F83'
+  pattern: plain
+- key: 条件付き・個別対応
+  label: 条件付き・個別対応
+  id: school-nickname-ban-conditional
+  color: '#D9A520'
+  pattern: dots
+- key: 一律禁止に反対
+  label: 一律禁止に反対
+  id: school-nickname-ban-ban-oppose
+  color: '#7D5BA6'
+  pattern: diagonal
+- key: 中立・情報
+  label: 中立・情報
+  id: school-nickname-ban-neutral
+  color: '#8B9199'
+  pattern: mesh
+issues:
+- key: いじめ・心理的安全
+  id: school-nickname-ban-psychological-safety
+  icon: 🛡️
+- key: さん付け・ジェンダー配慮
+  id: school-nickname-ban-gender-consideration
+  icon: 🏷️
+- key: 一律禁止の実効性
+  id: school-nickname-ban-uniform-rule
+  icon: 📏
+- key: 学校運用・現場体験
+  id: school-nickname-ban-school-practice
+  icon: 🏫
+- key: 本人意思・柔軟運用
+  id: school-nickname-ban-individual-choice
+  icon: 💬
+- key: 親しさ・呼称文化
+  id: school-nickname-ban-naming-culture
+  icon: 🤝
+- key: その他
+  id: school-nickname-ban-other
+  icon: ◯
+vote_issue_order:
+- いじめ・心理的安全
+- 一律禁止の実効性
+- 親しさ・呼称文化
+- 学校運用・現場体験
+- さん付け・ジェンダー配慮
+- 本人意思・柔軟運用
+sub_issues:
+  学校運用・現場体験:
+    file: data/school-nickname-ban_issues-reread.json
+    path:
+    - buckets
+    - 学校運用・現場体験
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 収集した本文を読み、発言の理由で分けました。被害体験は一律禁止への賛成と分けています。
+    show_coverage_note: true
+  いじめ・心理的安全:
+    file: data/school-nickname-ban_issues-reread.json
+    path:
+    - buckets
+    - いじめ・心理的安全
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 収集した本文を読み、発言の理由で分けました。被害体験は一律禁止への賛成と分けています。
+    show_coverage_note: true
+  親しさ・呼称文化:
+    file: data/school-nickname-ban_issues-reread.json
+    path:
+    - buckets
+    - 親しさ・呼称文化
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 収集した本文を読み、発言の理由で分けました。被害体験は一律禁止への賛成と分けています。
+    show_coverage_note: true
+  さん付け・ジェンダー配慮:
+    file: data/school-nickname-ban_issues-reread.json
+    path:
+    - buckets
+    - さん付け・ジェンダー配慮
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 収集した本文を読み、発言の理由で分けました。被害体験は一律禁止への賛成と分けています。
+    show_coverage_note: true
+  一律禁止の実効性:
+    file: data/school-nickname-ban_issues-reread.json
+    path:
+    - buckets
+    - 一律禁止の実効性
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 収集した本文を読み、発言の理由で分けました。被害体験は一律禁止への賛成と分けています。
+    show_coverage_note: true
+  本人意思・柔軟運用:
+    file: data/school-nickname-ban_issues-reread.json
+    path:
+    - buckets
+    - 本人意思・柔軟運用
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 収集した本文を読み、発言の理由で分けました。被害体験は一律禁止への賛成と分けています。
+    show_coverage_note: true
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400

@@ -54,5 +54,5 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertEqual(complete, set(prc.CLAIM_AUDIT_SOURCES))
         self.assertEqual(
             {theme for theme in prc.QUESTIONS if prc.build_claim_verification(theme)["status"] == "not_started"},
-            {"ai-copyright", "henoko-student-accident", "school-nickname-ban"},
+            {"ai-copyright", "henoko-student-accident"},
         )
