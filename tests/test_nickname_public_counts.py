@@ -12,9 +12,10 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_nickname_arena import SOURCE, IssueCountError, apply_public_counts
+from scripts.build_nickname_arena import IssueCountError, apply_public_counts
 
 ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "social-samples/school-nickname-ban_hermes_arena_classified.json"
 PAGE = ROOT / "docs/school-nickname-ban-reaction-map.html"
 PUBLIC = ROOT / "data/public/themes/school-nickname-ban.json"
 TMP = ROOT / ".tmp-nickname-public-counts.json"
