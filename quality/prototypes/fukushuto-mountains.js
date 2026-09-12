@@ -26,7 +26,7 @@ function drawMountains(rows,total,targetLabel){
  const grid=document.createElement('div');grid.className='waffle';grid.setAttribute('aria-hidden','true');const lit=Math.round(pct);for(let i=0;i<100;i++){const cell=document.createElement('span');if(i<lit)cell.style.background=colors[rows.indexOf(r)];grid.append(cell)}panel.append(grid);
  const caption=document.createElement('p');caption.className='note';caption.textContent=total?'100マスが選択中の投稿全体、色つきがこの論点です。1マス＝約1%。端数は四捨五入しています。':'選択中の投稿は0件です。割合を計算できないため、色つきのマスはありません。';panel.append(caption);
  const baseline=D.issues.find(x=>x.name===r.name);const stats=document.createElement('div');stats.className='matrix-stats';
- for(const [label,value] of [['選択中の件数',`${fmt(r.count)}件`],['選択中での割合',total?`${pct.toFixed(1)}%`:'—'],['全意見での件数',`${fmt(baseline.after)}件`],['全意見での割合',`${(100*baseline.after/D.candidate_opinions).toFixed(1)}%`]]){const card=document.createElement('div');const l=document.createElement('span');l.textContent=label;const v=document.createElement('strong');v.textContent=value;card.append(l,v);stats.append(card)}panel.append(stats);
+ for(const [label,value] of [['選択中の件数',`${fmt(r.count)}件`],['選択中での割合',total?`${pct.toFixed(1)}%`:'—'],['全意見での件数',`${fmt(baseline.after)}件`],['全意見での割合',`${(100*baseline.after/D.candidate_opinions).toFixed(1)}%`]]){const card=document.createElement('div');const l=document.createElement('span');l.textContent=label;const v=document.createElement('strong');v.textContent=value;card.append(l,v);stats.append(card)}panel.append(stats);const link=document.createElement("a");link.href="#reader-issue-"+D.issues.findIndex(x=>x.name===r.name);link.textContent="この論点の図解を見る →";panel.append(link);
  }
  update();
 }
