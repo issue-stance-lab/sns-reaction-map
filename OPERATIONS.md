@@ -124,20 +124,22 @@ python3 scripts/build_admin_dashboard.py
 - 管理画面を閉じても実行中の作業は継続する。作業がなく、画面が開かれていなければ2分後に終了する。
 - Xは最後の投稿操作を自動化しない。公開は `ready_for_ceo` と候補ハッシュを確認した後のCEO承認でのみ進む。
 
-| 作業 | 頻度 | 期日の決まり方 | 正典 | 人間が必要なこと |
-|---|---|---|---|---|
-| **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` | 公開側への昇格は最終承認／自転車青切符は再読工程あり |
-| **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` | 最終承認と実際の投稿操作 |
-| **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` | なし（ログイン済みChromeが開いていること） |
-| **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー | なし |
-| **KPIスナップショット** | 週1（月曜） | 前回から7日 | `scripts/fetch_growth_kpi.py` → `GROWTH.yaml` | OAuth再認証・フォロワー数の手動確認 |
-| **新テーマの追加** | 不定期 | オーナーの指示 | `.claude/skills/new-topic/SKILL.md` | 画像生成（GPTimage2） |
-| **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` | 最終承認（マージ・pushは承認後にAIが実行） |
-| **note 記事** | 3日に1本を目安（候補なしは見送り可） | 前回から3日 | `.claude/skills/note-operation/SKILL.md` | 最終承認と note への投稿操作 |
-| **サイト改善を1つ進める** | 週1 | 前回から7日 | 下の「サイト改善の進め方」 | 最終承認 |
-| **一次資料メモの再確認** | テーマごと90日目安（法改正が近いテーマは短縮） | `quality/research/status.yaml` の `last_verified` + `review_days` | `.claude/skills/primary-research/SKILL.md` | 業界団体等を例外採用する場合の承認 |
-| **Xデータの保全確認** | 更新直後＋週1回 | `company/data-operations.yaml` と復元記録から7日 | [段階Eの手順](quality/designs/2026-09-06-stage-e-data-preservation.md) | 別実機の用意のみ。通常のバックアップ・復元検査はAIが実行 |
-| **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` | なし |
+※ 承認が必要な作業の一覧は `company/COMPANY.md` の「権限の原則」を参照すること。
+
+| 作業 | 頻度 | 期日の決まり方 | 正典 |
+|---|---|---|---|
+| **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` |
+| **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` |
+| **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
+| **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー |
+| **KPIスナップショット** | 週1（月曜） | 前回から7日 | `scripts/fetch_growth_kpi.py` → `GROWTH.yaml` |
+| **新テーマの追加** | 不定期 | オーナーの指示 | `.claude/skills/new-topic/SKILL.md` |
+| **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` |
+| **note 記事** | 3日に1本を目安（候補なしは見送り可） | 前回から3日 | `.claude/skills/note-operation/SKILL.md` |
+| **サイト改善を1つ進める** | 週1 | 前回から7日 | 下の「サイト改善の進め方」 |
+| **一次資料メモの再確認** | テーマごと90日目安（法改正が近いテーマは短縮） | `quality/research/status.yaml` の `last_verified` + `review_days` | `.claude/skills/primary-research/SKILL.md` |
+| **Xデータの保全確認** | 更新直後＋週1回 | `company/data-operations.yaml` と復元記録から7日 | [段階Eの手順](quality/designs/2026-09-06-stage-e-data-preservation.md) |
+| **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` |
 
 ---
 
