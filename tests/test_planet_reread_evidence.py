@@ -100,7 +100,8 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
     def test_bike_completed_reading_is_connected_and_decided(self):
         """2026-09-06、97件を意見から外す判断を記録して確認候補が0になった。"""
         data = bpd.build("bike-blue-ticket")
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 371)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], data["totals"]["opinions"])
+        self.assertGreaterEqual(data["reread_summary"]["connected_editorial_count"], 371)
         self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 0)
         self.assertEqual(sum(i["sub"]["unknown_timing_count"] for i in data["issues"]), 0)
         cfg = bpd.yaml.safe_load((bpd.ROOT / "configs/planet/bike-blue-ticket.yaml").read_text())

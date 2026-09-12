@@ -6,9 +6,9 @@
 （この課題54・63の反映作業で実際に発生し、この専用スクリプトを新設した）。
 
 このスクリプトは <!-- PLANET_SECTION_START --> 〜 <!-- PLANET_SECTION_END --> の
-区間だけを、最新の正典データから作り直した内容へ置き換える。区間の外
-（ヘッダー・フッター・投票・SNS投稿サンプル・関連テーマ・広告枠・OGP・進捗バーの入れ物）は
-文字列として一切変更しない。
+区間を、最新の正典データから作り直した内容へ置き換える。区間の外では
+テーマ別に登録された冒頭・調査条件の件数説明も更新する。ヘッダー・フッター・
+投票・SNS投稿サンプル・関連テーマ・広告枠・OGP・進捗バーの入れ物は変更しない。
 
 同じ入力で2回実行しても差分が出ない（課題34の冪等性）。
 """
@@ -26,7 +26,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import build_planet_data as bpd  # noqa: E402
 from build_planet_page_preview import build_section, render_planet, split_prototype  # noqa: E402
 from issue_card_counts import card_counts, load_records, other_count  # noqa: E402
-from sync_issue_counts import apply_lead, apply_note  # noqa: E402
+from sync_issue_counts import apply_counts, apply_lead, apply_note  # noqa: E402
 
 START = "<!-- PLANET_SECTION_START -->"
 END = "<!-- PLANET_SECTION_END -->"
@@ -51,6 +51,8 @@ def _sync_lead_and_note(html: str, topic: str, themes: dict) -> str:
     theme_data = themes[topic]
     sample_file = theme_data.get("verification_file") or theme_data.get("sample_file")
     cards = card_counts(topic, config, sample_file)
+    if topic == "bike-blue-ticket":
+        html = apply_counts(html, topic, cards)
     if "lead" in sync:
         html = apply_lead(html, topic, cards, other_count(topic, config, sample_file))
     if "note" in sync:
@@ -119,10 +121,34 @@ def _sync_elderly_method_text(html: str, data: dict) -> str:
     return new_html
 
 
+def _sync_bike_method_text(html: str, data: dict) -> str:
+    """山なみ化後に旧ビルダが飛ばす冒頭・調査条件の母数を揃える。"""
+    collected = data["totals"]["collected"]
+    opinions = data["totals"]["opinions"]
+    other = next(issue["count"] for issue in data["issues"] if issue["key"] == "その他")
+    patterns = [
+        (r'(<p class="lead">収集したSNS投稿)[\d,]+(件のうち、分析対象の意見)[\d,]+(件をAIで整理し、主要5論点)[\d,]+(件に分類し、残る)[\d,]+',
+         lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}{opinions - other}{m[4]}{other}"),
+        (r'(収集した)[\d,]+(件のうち意見と判定した)[\d,]+(件を論点分析の対象にしています)',
+         lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}"),
+    ]
+    for pattern, replacement in patterns:
+        html, count = re.subn(pattern, replacement, html)
+        if count != 1:
+            raise SystemExit(f"自転車の母数説明が想定箇所数(1)と一致しません: {count}件")
+    html, count = re.subn(
+        r'(このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 )[\d,]+(件<br>\s*（取得期間: )[^／<]+',
+        lambda m: f"{m[1]}{collected}{m[2]}{data['sample_period']}", html)
+    if count != 1:
+        raise SystemExit(f"自転車の冒頭の調査条件が想定箇所数(1)と一致しません: {count}件")
+    return html
+
+
 TOPIC_ENRICH = {"bukatsu-chiiki": _inject_bukatsu_go_cards}
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
     "elderly-license-revocation": _sync_elderly_method_text,
+    "bike-blue-ticket": _sync_bike_method_text,
 }
 
 

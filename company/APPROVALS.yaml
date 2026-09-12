@@ -405,3 +405,20 @@ items:
     requested_at: "2026-09-12"
     decided_at: "2026-09-12"
     decision_note: "オーナーが本対話で「push」と明示的に承認した。"
+
+  - id: approval-20260912-004
+    department: engineering-data
+    action: website_publication
+    summary: "自転車の定期収集で確認した意見21件を山なみへ追加し、意見371→392件の候補を公開する"
+    reason: "オーナーが非公開の山なみ候補を確認後に、プッシュして本番反映と明示的に指示したため"
+    risks:
+      - "新規39件のうち21件採用、15件除外、3件保留。保留は原文の保存回に保持し、公開集計へ入れない"
+      - "本文原本は非公開保全へ切り替え、公開側には本文なし検証データを保存する"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-09-12-bike-periodic-refresh.md
+      - data/bike-blue-ticket_editorial-updates/20260912.json
+    status: approved
+    requested_at: "2026-09-12"
+    decided_at: "2026-09-12"
+    decision_note: "本対話でユーザーが『プッシュして本番反映』と承認した。追加の公開確認は不要。"
