@@ -92,6 +92,13 @@ class IssueCountSyncTest(unittest.TestCase):
             (ROOT / "data/public/themes/bike-blue-ticket.json").read_text(encoding="utf-8")
         )
         page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        if "<!-- PLANET_SECTION_START -->" in page:
+            # 課題54段階3で本番は山なみ形式へ差し替え済み（2026-09-11）。旧「SNS反応マップ」
+            # 見出しの単純一致では山なみ本体側の同名見出しを拾ってしまうため対象外にする
+            # （elderly-license-revocationと同じ扱い）。山なみ側の件数一致は
+            # verify_theme_page.py の論点ごとの内訳検査が担う。
+            self.assertIn('window.PLANET_DATA=', page)
+            return
         match = re.search(r'<h2>SNS反応マップ</h2><span>([\d,]+)件 \|', page)
         self.assertIsNotNone(match)
         self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])

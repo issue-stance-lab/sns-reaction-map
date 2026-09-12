@@ -484,47 +484,54 @@ def apply_public_counts(html: str, public_theme: Path = PUBLIC_THEME) -> str:
     five = sum(totals.values())
     other = sum(table["その他"].values())
     largest = max(totals.values())
+    # 山なみ形式では、ヒーロー文・アリーナ見出し・注目ポイント・論点帯・本当の対立点は
+    # 山なみ本体か編集部の横断整理が引き継ぐ（旧セクションごと除かれる）。投票の説明文
+    # （vote-section）は山なみでも残るので、そこだけは通常どおり更新する
+    # （2026-09-11、高齢者テーマの展開で確立したガード。段階1）。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in html
 
-    html = replace_once(
-        html,
-        r'<p class="lead">収集したSNS投稿.*?</p>',
-        f'<p class="lead">収集したSNS投稿{collected}件のうち、分析対象の意見{opinions}件をAIで整理し、'
-        f'主要5論点{five}件に分類し、残る{other}件は「その他・分類保留」としました。'
-        '世論調査ではなく、SNS反応サンプルの論点比較です。</p>',
-        "ヒーローの収集数・意見数・論点数",
-        flags=re.S,
-    )
-    html = replace_once(
-        html,
-        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
-        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{opinions}件 | '
-        'セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>',
-        "アリーナ見出し",
-    )
-    html = replace_once(
-        html,
-        r'<section class="stats insight-stats".*?</section>',
-        _build_insight_stats(opinions, table),
-        "注目ポイント",
-        flags=re.S,
-    )
-    for number, block in enumerate(BLOCKS, start=1):
-        counts = table[str(block["issue"])]
+    if not planet_mode:
         html = replace_once(
             html,
-            rf'<article class="issue-block" id="{block["anchor"]}">.*?\n</article>',
-            build_issue_block(block, number, counts, sum(counts.values()) == largest),
-            f'論点ブロック {block["anchor"]}',
+            r'<p class="lead">収集したSNS投稿.*?</p>',
+            f'<p class="lead">収集したSNS投稿{collected}件のうち、分析対象の意見{opinions}件をAIで整理し、'
+            f'主要5論点{five}件に分類し、残る{other}件は「その他・分類保留」としました。'
+            '世論調査ではなく、SNS反応サンプルの論点比較です。</p>',
+            "ヒーローの収集数・意見数・論点数",
             flags=re.S,
         )
+        html = replace_once(
+            html,
+            r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
+            f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{opinions}件 | '
+            'セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>',
+            "アリーナ見出し",
+        )
+        html = replace_once(
+            html,
+            r'<section class="stats insight-stats".*?</section>',
+            _build_insight_stats(opinions, table),
+            "注目ポイント",
+            flags=re.S,
+        )
+        for number, block in enumerate(BLOCKS, start=1):
+            counts = table[str(block["issue"])]
+            html = replace_once(
+                html,
+                rf'<article class="issue-block" id="{block["anchor"]}">.*?\n</article>',
+                build_issue_block(block, number, counts, sum(counts.values()) == largest),
+                f'論点ブロック {block["anchor"]}',
+                flags=re.S,
+            )
     html = sync_vote_counts(html, totals)
-    html = replace_once(
-        html,
-        r'<article class="argument-point"><h3>本当の対立点</h3>.*?</article>',
-        build_conflict_paragraph(table),
-        "本当の対立点",
-        flags=re.S,
-    )
+    if not planet_mode:
+        html = replace_once(
+            html,
+            r'<article class="argument-point"><h3>本当の対立点</h3>.*?</article>',
+            build_conflict_paragraph(table),
+            "本当の対立点",
+            flags=re.S,
+        )
     return html
 
 
@@ -546,6 +553,7 @@ def build(
     destination = output_html or public_path
     before = template.read_text(encoding="utf-8")
     page = before
+    planet_mode = "<!-- PLANET_SECTION_START -->" in page
 
     known = {str(record.get("tweet_id")) for record in rows}
     for block in BLOCKS:
@@ -556,41 +564,43 @@ def build(
                     f"{block['issue']}: 代表投稿が正典の意見にありません（削除・分類変更）: {url}"
                 )
 
-    if '<script id="bike-arena-points">' not in page:
-        # 要旨には「7159件」のような一次情報の数字が入る。数字の出所検査から外すために
-        # この配列だけを id 付きの <script> に入れてある（configs の exclude_selectors）。
-        raise IssueCountError('SM_RAW を囲む <script id="bike-arena-points"> がありません')
-    page = replace_once(page, r"const SM_RAW = \[.*?\n\];", build_sm_raw(rows), "SM_RAW", flags=re.S)
-    page = replace_once(
-        page,
-        r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
-        f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>',
-        "アリーナ見出し",
-    )
-    page = replace_once(
-        page,
-        r'<section class="stats insight-stats".*?</section>',
-        build_insight_stats(rows, table),
-        "注目ポイント",
-        flags=re.S,
-    )
-    for number, block in enumerate(BLOCKS, start=1):
-        counts = table[str(block["issue"])]
+    if not planet_mode:
+        if '<script id="bike-arena-points">' not in page:
+            # 要旨には「7159件」のような一次情報の数字が入る。数字の出所検査から外すために
+            # この配列だけを id 付きの <script> に入れてある（configs の exclude_selectors）。
+            raise IssueCountError('SM_RAW を囲む <script id="bike-arena-points"> がありません')
+        page = replace_once(page, r"const SM_RAW = \[.*?\n\];", build_sm_raw(rows), "SM_RAW", flags=re.S)
         page = replace_once(
             page,
-            rf'<article class="issue-block" id="{block["anchor"]}">.*?\n</article>',
-            build_issue_block(block, number, counts, sum(counts.values()) == largest),
-            f'論点ブロック {block["anchor"]}',
+            r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
+            f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{len(rows)}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>',
+            "アリーナ見出し",
+        )
+        page = replace_once(
+            page,
+            r'<section class="stats insight-stats".*?</section>',
+            build_insight_stats(rows, table),
+            "注目ポイント",
             flags=re.S,
         )
+        for number, block in enumerate(BLOCKS, start=1):
+            counts = table[str(block["issue"])]
+            page = replace_once(
+                page,
+                rf'<article class="issue-block" id="{block["anchor"]}">.*?\n</article>',
+                build_issue_block(block, number, counts, sum(counts.values()) == largest),
+                f'論点ブロック {block["anchor"]}',
+                flags=re.S,
+            )
     page = sync_vote_counts(page, totals)
-    page = replace_once(
-        page,
-        r'<article class="argument-point"><h3>本当の対立点</h3>.*?</article>',
-        build_conflict_paragraph(table),
-        "本当の対立点",
-        flags=re.S,
-    )
+    if not planet_mode:
+        page = replace_once(
+            page,
+            r'<article class="argument-point"><h3>本当の対立点</h3>.*?</article>',
+            build_conflict_paragraph(table),
+            "本当の対立点",
+            flags=re.S,
+        )
 
     changed = page != before
     if not check:

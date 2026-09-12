@@ -146,15 +146,22 @@ def scope_selector(sel: str) -> str:
 DEAD_SCRIPT_IDS = ("smCanvasMain", "smCanvasHeat", "sm-filters", "sm-tooltip",
                    "explainer-modal", "explainer-card")
 
+# build_generic() 用。explainer-modal/explainer-card は削らない
+# ——「このテーマを読み解く」画像カード（id="explainer-section"）は山なみでも残す共通部品で、
+# その画像を拡大するスクリプトを一緒に落とすとクリックが無反応になる（2026-09-11、
+# 自転車テーマの検査で気づいた。bukatsu-chiiki 側は stance-map-section ごと
+# 別のexplainer-modal相当を落としているため安全だったが、build_generic() では違う）。
+GENERIC_DEAD_SCRIPT_IDS = ("smCanvasMain", "smCanvasHeat", "sm-filters", "sm-tooltip")
 
-def drop_orphan_scripts(html: str) -> tuple[str, int]:
+
+def drop_orphan_scripts(html: str, ids: tuple[str, ...] = DEAD_SCRIPT_IDS) -> tuple[str, int]:
     pat = re.compile(r"\n?<script(?![^>]*\bsrc=)[^>]*>.*?</script>", re.S)
     n = 0
 
     def repl(m: re.Match) -> str:
         nonlocal n
         body = m.group(0)
-        if any(k in body for k in DEAD_SCRIPT_IDS):
+        if any(k in body for k in ids):
             n += 1
             return ""
         return body
@@ -434,8 +441,8 @@ def build_background(topic: str) -> str:
     ck = d.get("checklist")
     if ck:
         out += ['<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">',
-                '<div class="panel-title"><h2 id="ck-title">学校の外へ出した後、だれが続けるか</h2>'
-                '<span>判断の前に確かめること</span></div>',
+                f'<div class="panel-title"><h2 id="ck-title">{esc(ck["title"])}</h2>'
+                f'<span>{esc(ck["subtitle"])}</span></div>',
                 f'<p>{esc(ck["lead"])}</p>']
         for x in ck["items"]:
             links = "／".join(
@@ -743,6 +750,11 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)
+    # issue-arena-section を消しても、その隣の描画スクリプト（getElementByIdで
+    # 参照するだけの素の<script>）は消えずに残ってしまう（2026-09-11、自転車テーマで
+    # 実際にHTMLを見て発覚。高齢者の本番ページにも同じ取り残しがある）。
+    html, dropped = drop_orphan_scripts(html, GENERIC_DEAD_SCRIPT_IDS)
+    removed.append((f"取り残されたスクリプト{dropped}本", dropped > 0))
     section = build_section(split_prototype(render_planet(data)))
     marker = "<!-- RESEARCH_CONDITIONS_END -->"
     if marker not in html:

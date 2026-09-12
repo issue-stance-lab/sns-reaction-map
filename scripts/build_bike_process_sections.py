@@ -656,6 +656,25 @@ def main() -> int:
 
     samples, config, reread, claim_posts, period = load(args.input)
     counts = build_counts(samples, reread)
+
+    public_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    template_path = args.html_template or public_path
+    page_path = args.output_html or public_path
+    page = template_path.read_text(encoding="utf-8")
+
+    # 山なみ形式では STEP1〜3（process-collect/verify/found/table）と reread-basis を
+    # 山なみ本体・編集部の横断整理が引き継ぐため、ここのHTML差し替えは対象外にする。
+    # ただし一次資料クイズが読む投稿対応表（write_provenance_records）は更新し続ける
+    # （2026-09-11、高齢者テーマの展開で確立したガード。段階1）。
+    if "<!-- PLANET_SECTION_START -->" in page:
+        write_provenance_records(samples, reread, claim_posts, args.verification_dest)
+        claim_total = sum(len(v) for v in claim_posts["claims"].values())
+        print(
+            f"{THEME}: 山なみ形式のためSTEP1〜3表示は対象外"
+            f"（投稿対応表のみ更新、母数{counts['_total']}件 / 事実確認の該当投稿{claim_total}件）"
+        )
+        return 0
+
     blocks = "\n\n".join([
         CSS,
         build_collect(samples, config, counts, period),
@@ -664,10 +683,6 @@ def main() -> int:
         build_table(samples, reread, counts),
         SCRIPT,
     ])
-    public_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
-    template_path = args.html_template or public_path
-    page_path = args.output_html or public_path
-    page = template_path.read_text(encoding="utf-8")
     for a, b in ((START, END), (BASIS_START, BASIS_END)):
         if page.count(a) != 1 or page.count(b) != 1:
             raise SystemExit(f"{a} / {b} が1つずつ必要です")

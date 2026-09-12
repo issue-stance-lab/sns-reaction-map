@@ -108,7 +108,7 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
         self.assertEqual(bpd.independence_gate(data, cfg), [])
         rendered = bpd.static_fallback(data)
         self.assertNotIn("enforcement_support", rendered)
-        self.assertIn("賛成（取締り強化）", rendered)
+        self.assertIn("賛成（取締り強化支持）", rendered)
         self.assertEqual(data["modes"][1]["label"], cfg["stances"][0]["label"])
         self.assertEqual(data["modes"][1]["id"], cfg["stances"][0]["key"])
 

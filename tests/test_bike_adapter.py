@@ -63,9 +63,12 @@ class BikeArenaBuilderTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_added_opinion_moves_every_place_that_shows_the_count(self):
-        """1件足すと、帯・内訳・投票の説明文・「本当の対立点」がまとめて動く。
+        """1件足すと、投票の説明文（山なみでも残る）が動き、山なみ本体は壊さない。
 
-        更新のたびに手で直していた場所なので、どこか1つだけ古いまま残らないことを見る。
+        山なみ形式では帯・内訳・「本当の対立点」は山なみ本体（公開JSON側）が
+        引き継ぐため、このHTML生成器では対象外になる（2026-09-11、段階1）。
+        ここでは、投票の説明文だけは通常どおり更新され続けること、
+        山なみの目印を壊さないことを見る。
         """
         source = canonical()
         added = json.loads(json.dumps(next(
@@ -76,27 +79,15 @@ class BikeArenaBuilderTests(unittest.TestCase):
         added["tweet_id"] = "adapter-test-only"
         added["url"] = "https://example.invalid/adapter-test-only"
         expected = count(source, "インフラ整備優先") + 1
-        oppose = sum(
-            1 for row in source
-            if is_opinion(row)
-            and row["classification"]["main_issue"] == "インフラ整備優先"
-            and row["classification"]["stance"] == OPPOSE
-        ) + 1
 
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
             result = self._build(source + [added], work)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn(f"インフラ整備優先={expected}", result.stdout)
             page = (work / "page.html").read_text(encoding="utf-8")
-            for needle in (
-                f"<b>{expected}件</b>",                        # 注目ポイントの内訳
-                f"インフラ優先 {oppose}",                       # 帯の右の内訳
-                f"インフラ整備優先派（{oppose}件）",             # issue-sides
-                f"専用レーンなど道路整備が先決（{expected}件）",  # 投票の説明文
-                f"インフラ整備優先{expected}件と",               # 「本当の対立点」
-            ):
-                # ページ全体を差分に出すと読めないので、見つからない文字列だけを出す
-                self.assertTrue(needle in page, f"ページに {needle!r} がありません")
+            self.assertIn("<!-- PLANET_SECTION_START -->", page)
+            self.assertIn(f"専用レーンなど道路整備が先決（{expected}件）", page)  # 投票の説明文
 
             # 2回目は差分ゼロ
             first = (work / "page.html").read_bytes()
@@ -178,18 +169,19 @@ class BikeRereadGateTests(unittest.TestCase):
 
 class BikeAdapterTests(unittest.TestCase):
     def test_public_json_drives_page_level_counts(self):
+        # 山なみ形式（PLANET_SECTION_START）では、ヒーロー文・アリーナ見出しは
+        # 山なみ本体が引き継ぐため対象外（2026-09-11、段階1）。ここでは安全な
+        # no-opであること（壊さず・山なみの目印を保つこと）だけを見る。
         from scripts.build_bike_arena import apply_public_counts
 
         public_path = ROOT / "data/public/themes/bike-blue-ticket.json"
         public = json.loads(public_path.read_text(encoding="utf-8"))
-        named = [issue for issue in public["issues"] if issue["kind"] == "named"]
-        other = next(issue for issue in public["issues"] if issue["kind"] == "other")
-        five = sum(int(issue["count"]) for issue in named)
-        page = apply_public_counts(PAGE.read_text(encoding="utf-8"), public_path)
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertIn("<!-- PLANET_SECTION_START -->", source)
+        page = apply_public_counts(source, public_path)
 
-        self.assertIn(f'分析対象の意見{public["opinion_count"]}件をAIで整理', page)
-        self.assertIn(f'主要5論点{five}件に分類し、残る{other["count"]}件は「その他・分類保留」', page)
-        self.assertIn(f'<h2>SNS反応マップ</h2><span>{public["opinion_count"]}件 |', page)
+        self.assertIn("<!-- PLANET_SECTION_START -->", page)
+        self.assertIn(f'公開投稿 {public["collected_count"]}件', page)
 
     def test_issue_cards_use_public_json(self):
         config = json.loads(

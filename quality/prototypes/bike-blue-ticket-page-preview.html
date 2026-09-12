@@ -795,7 +795,70 @@
   <strong>社会全体の世論調査ではありません。</strong></p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
-<!-- PLANET_SECTION_START -->
+<style>
+#bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+#bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+#bukatsu-background h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+#bukatsu-background p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+#bukatsu-background ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+#bukatsu-background ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+#bukatsu-background ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+#bukatsu-background ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+#bukatsu-background ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+#bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+#bukatsu-background ol.bg-tl .src a{color:var(--muted)}
+#bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+/* 確かめること。3列の表は375pxで潰れるので、1件1枚のカードにする */
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+</style>
+<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">
+<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
+<p class="bg-def">「自転車の青切符」は、2026年4月に始まった、自転車の交通違反にも反則金（青切符）で処理する新しい制度です。</p>
+<p class="bg-now">自動車やバイクにはすでにあった交通反則通告制度が、自転車にも広がりました。対象は16歳以上で、違反の多くはこれまでどおり指導警告どまりですが、悪質・危険な違反は反則金の対象になります。</p>
+<h3>なぜ始まったか</h3>
+<p>警察庁は、自転車が関わる死亡・重傷事故の約4分の3で自転車側にも法令違反があったと説明しています。これまで自転車の違反は検挙されても不起訴になることが多く、責任追及が不十分だったという課題があり、青切符（交通反則通告制度）を自転車にも広げることで、簡易・迅速な手続きで実効性のある処理をねらいました。</p>
+<p>同時に、国は自転車が走る環境の整備も進めています。令和8年5月に閣議決定した第3次自転車活用推進計画では、自転車通行空間を令和6年度の9,841kmから令和12年度に12,000kmへ延ばす目標などを掲げています。ただし、この計画には具体的な予算額（円建ての数字）は明記されておらず、財源の裏づけは別の資料で確認する必要があります。</p>
+<p>制度が始まった直後から、SNS上では「取締りを支持する」「対象が広すぎる／順番が違う」「走る場所がない」「警察の運用が信用できない」「自転車も免許制にすべき」など、立場の異なる意見が交わされています。警察庁自身も、違反のほとんどは今までどおり指導警告で処理すると説明しており、制度の建て付けと世間の受け止め方にずれが生まれやすい状況です。</p>
+<h3>これまでの経緯</h3>
+<ol class="bg-tl">
+<li><div class="when">2023年8月<em>令和5年度</em></div><div><p class="what">道路交通法改正案が国会に提出されるより前の段階で、公明党が党の主張として自転車への青切符導入を後押しするコラムを公式サイトに掲載しました。当時の自転車検挙件数（前年24,549件・10年で約3.4倍）を根拠に挙げつつ、「対象年齢など具体的な中身は慎重に議論する必要がある」とも述べています。</p><span class="src">出典: <a href="https://www.komei.or.jp/komeinews/p313411/" target="_blank" rel="noopener">公明党 【主張】自転車違反に青切符 ルール順守の意識高める契機に</a></span></div></li>
+<li><div class="when">2024年<em>令和6年度</em></div><div><p class="what">道路交通法の一部を改正する法律（令和6年法律第34号）が成立しました。16歳以上の自転車運転者を交通反則通告制度（青切符）の対象とすることが定められ、16歳未満は対象から明確に除外されました。</p><span class="src">出典: <a href="https://laws.e-gov.go.jp/law/335AC0000000105" target="_blank" rel="noopener">e-Gov法令検索 道路交通法 第百二十五条第2項</a></span></div></li>
+<li><div class="when">2026年4月1日<em>令和8年度</em></div><div><p class="what">改正道路交通法が施行され、自転車の青切符制度が始まりました。対象となる違反は信号無視・指定場所一時不停止・通行区分違反（右側通行・歩道通行等）・携帯電話使用等・傘差し運転など100種類以上（大阪府の表現）。同じ日に、自動車が自転車を追い抜く際に十分な間隔と速度を保つ「側方通過」の規定も施行されました。</p><span class="src">出典: <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html" target="_blank" rel="noopener">警察庁 自転車の新しい制度｜自転車ポータルサイト</a>／<a href="https://www.pref.osaka.lg.jp/o130080/kotsukeikaku/anzentaisaku/jitennsyanhenokoutuuhannsokutukokuseidodounyuu.html" target="_blank" rel="noopener">大阪府 自転車への交通反則通告制度（青切符）導入について</a></span></div></li>
+<li><div class="when">2026年4月〜5月<em>令和8年度・第221回国会</em></div><div><p class="what">衆参の国土交通委員会・法務委員会で、自転車の交通反則通告制度に関する質疑が行われました。衆議院国土交通委員会では「自転車は原則車道とされながらも、通行区分が分かりにくい」といった指摘も出ています。</p><span class="src">出典: <a href="https://kokkai.ndl.go.jp/#/detail?minId=122104319X00720260424" target="_blank" rel="noopener">国立国会図書館 国会会議録検索システム（衆議院国土交通委員会第7号）</a></span></div></li>
+<li><div class="when">2026年5月14日<em>令和8年度</em></div><div><p class="what">警察庁が、制度導入から1か月間（暫定値）の運用状況を公表しました。青切符による告知件数は2,147件（指定場所一時不停止40%・携帯電話使用33%・信号無視14%など）で、指導警告票の交付は135,855件（青切符の約63倍）でした。</p><span class="src">出典: <a href="https://www.npa.go.jp/news/release/2026/20260514.pdf" target="_blank" rel="noopener">警察庁交通局交通企画課 自転車に対する交通反則通告制度導入後１月間の運用状況について（PDF）</a></span></div></li>
+<li><div class="when">2026年5月29日<em>令和8年度</em></div><div><p class="what">政府が第3次自転車活用推進計画を閣議決定しました。自転車が走る環境の整備を目標に掲げ、自転車通行空間の整備延長を令和12年度までに12,000kmへ伸ばすとしています。青切符の根拠法（道路交通法）とは別の法律（自転車活用推進法）に基づく計画です。</p><span class="src">出典: <a href="https://www.kantei.go.jp/contents/topics/47968_ext_7_0.pdf?response-content-disposition=inline%3B%20filename%3D%22080529gijiroku.pdf%22" target="_blank" rel="noopener">首相官邸 令和8年5月29日定例閣議 議事録（PDF）</a>／<a href="https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/assets/pdf/3rd_plan.pdf" target="_blank" rel="noopener">国土交通省 自転車活用推進計画（本体・PDF）</a></span></div></li>
+</ol>
+<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
+</section>
+<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">
+<div class="panel-title"><h2 id="ck-title">青切符は、だれが対象で何をされるのか</h2><span>判断の前に確かめること</span></div>
+<p>「青切符」という言葉だけを見ると、違反したら即座に反則金という制度に見えます。しかし警察庁自身が説明する運用の実態は少し違います。誰が対象で、何をすると切符になり、どこを走ってよいのかを確かめてから、意見の分布を読みます。</p>
+<div class="ck"><div class="k"><b>対象</b><span>青切符の対象になるのは誰で、どんな違反か</span></div><div class="v">対象は16歳以上の自転車運転者。信号無視・指定場所一時不停止・通行区分違反・携帯電話使用等・傘差し運転など100種類以上の違反行為が対象とされています（大阪府の表現。道路交通法本体は種別を政令に委ねており、細目の正確な件数はこのメモでは照合できていません）。16歳未満は対象外で、これまでどおり指導警告が中心です。<span class="src">出典: <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html" target="_blank" rel="noopener">警察庁 自転車の新しい制度｜自転車ポータルサイト</a>／<a href="https://www.pref.osaka.lg.jp/o130080/kotsukeikaku/anzentaisaku/jitennsyanhenokoutuuhannsokutukokuseidodounyuu.html" target="_blank" rel="noopener">大阪府 自転車への交通反則通告制度（青切符）導入について</a></span></div></div>
+<div class="ck"><div class="k"><b>運用の実際</b><span>違反したら必ず切符を切られるのか</span></div><div class="v">警察庁は「基本的には現場で指導警告を行う」と説明しています。歩行者や他の車両にとって危険性・迷惑性が高い「悪質・危険な違反」の場合や、指導警告に従わずあえて違反を続けた場合に検挙・青切符の対象になります。単に歩道を通行しただけでは、原則として指導警告にとどまります。<span class="src">出典: <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html" target="_blank" rel="noopener">警察庁 取締りについて｜自転車ポータルサイト</a>／<a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" target="_blank" rel="noopener">警察庁 よくある質問｜自転車ポータルサイト</a></span></div></div>
+<div class="ck"><div class="k"><b>走る場所</b><span>自転車はどこを走ってよいのか</span></div><div class="v">歩道は歩行者のために整備されているため、自転車は原則として車道を通行します。ただし13歳未満の子どもや子乗せ自転車は歩道を通行でき、車道の通行が危険な具体的な状況があれば大人も歩道を通行できます。歩道を通行するときは、歩道の中央から車道寄りを徐行する必要があります。<span class="src">出典: <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" target="_blank" rel="noopener">警察庁 よくある質問｜自転車ポータルサイト</a></span></div></div>
+<div class="ck"><div class="k"><b>運転免許との関係</b><span>自転車の違反は運転免許に影響するのか</span></div><div class="v">運転免許を持つ人が自転車で交通違反をしても、通常は運転免許に点数は付きません。ただし、ひき逃げや死亡事故など重大な事故を起こした場合や、飲酒運転など特に悪質・危険な違反をした場合は、公安委員会の判断で運転免許の停止処分になることがあります。免許を持たない人は、マイナンバーカードや学生証などで本人確認が行われます。<span class="src">出典: <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" target="_blank" rel="noopener">警察庁 よくある質問｜自転車ポータルサイト</a></span></div></div>
+<p class="ck-note"><b>このページで未確認のこと</b><br>「違反は113種類」「65項目」といった数字の正確な根拠（道路交通法施行令の該当箇所）は、このメモではまだ特定・照合できていません。自転車インフラ整備計画の具体的な予算額（円建ての数字）も、計画書には抽象的な記述しかなく未確認です。自民・立憲・維新など他党の公式な立場表明・公約集も今回は確認していません。<br>制度が始まってからまだ半年に満たない時点の資料にもとづきます。警察庁の運用状況の数字は導入後1か月間の暫定値で、その後の推移は別途確認が必要です。</p>
+</section><!-- PLANET_SECTION_START -->
 <section class="panel planet-panel" aria-labelledby="planet-heading">
 <style>#planet-block{
   --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
@@ -1143,7 +1206,7 @@
   <p class="meta" id="meta">山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、母数が小さいものは画面で断っています。</p>
 </div>
 </section>
-<script>window.PLANET_DATA={"schema": 1, "theme_id": "bike-blue-ticket", "title": "自転車の青切符導入", "question": "自転車の交通違反に反則金（青切符）を導入すべきか", "snapshot_id": "bike-blue-ticket-20260905", "updated_at": "2026-09-05", "sample_period": "2026-06-27〜2026-09-05", "source_label": "Yahoo!リアルタイム検索", "totals": {"collected": 468, "opinions": 371}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.2399, "k": 50, "max_pct": 4.0}, "stances": [{"key": "enforcement_support", "id": "bike-blue-ticket-enforcement-support", "label": "賛成（取締り強化）", "color": "#e04949", "pattern": "plain", "count": 84}, {"key": "infrastructure_first", "id": "bike-blue-ticket-infrastructure-first", "label": "反対（インフラ・制度優先）", "color": "#4b9cf4", "pattern": "diagonal", "count": 180}, {"key": "neutral", "id": "bike-blue-ticket-neutral", "label": "どちらでもない", "color": "#8B9199", "pattern": "mesh", "count": 107}], "vote_issue_order": ["取締り強化賛成", "インフラ整備優先", "車道走行への不安", "免許制要求", "ルール曖昧・不信", "その他"], "reread_summary": {"connected_editorial_count": 371, "connected_issue_population": 371, "not_connected_opinion_count": 0}, "modes": [{"id": "all", "label": "すべての意見", "total": 371, "counts": {"bike-blue-ticket-other": 129, "bike-blue-ticket-enforcement-support": 78, "bike-blue-ticket-rule-ambiguity": 58, "bike-blue-ticket-infrastructure-first": 57, "bike-blue-ticket-license-requirement": 29, "bike-blue-ticket-road-safety": 20}, "width_pct": {"bike-blue-ticket-other": 34.77, "bike-blue-ticket-enforcement-support": 21.02, "bike-blue-ticket-rule-ambiguity": 15.63, "bike-blue-ticket-infrastructure-first": 15.36, "bike-blue-ticket-license-requirement": 7.82, "bike-blue-ticket-road-safety": 5.39}, "high_pct": {"bike-blue-ticket-other": 14.0, "bike-blue-ticket-enforcement-support": 32.1, "bike-blue-ticket-rule-ambiguity": 24.1, "bike-blue-ticket-infrastructure-first": 31.6, "bike-blue-ticket-license-requirement": 17.2, "bike-blue-ticket-road-safety": 45.0}, "high_counts": {"bike-blue-ticket-other": 18, "bike-blue-ticket-enforcement-support": 25, "bike-blue-ticket-rule-ambiguity": 14, "bike-blue-ticket-infrastructure-first": 18, "bike-blue-ticket-license-requirement": 5, "bike-blue-ticket-road-safety": 9}}, {"id": "enforcement_support", "label": "賛成（取締り強化）", "total": 84, "counts": {"bike-blue-ticket-other": 0, "bike-blue-ticket-enforcement-support": 75, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-license-requirement": 9, "bike-blue-ticket-road-safety": 0}, "width_pct": {"bike-blue-ticket-other": 0.0, "bike-blue-ticket-enforcement-support": 89.29, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-license-requirement": 10.71, "bike-blue-ticket-road-safety": 0.0}, "high_pct": {"bike-blue-ticket-other": 0.0, "bike-blue-ticket-enforcement-support": 30.7, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-license-requirement": 33.3, "bike-blue-ticket-road-safety": 0.0}, "high_counts": {"bike-blue-ticket-other": 0, "bike-blue-ticket-enforcement-support": 23, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-license-requirement": 3, "bike-blue-ticket-road-safety": 0}}, {"id": "infrastructure_first", "label": "反対（インフラ・制度優先）", "total": 180, "counts": {"bike-blue-ticket-other": 63, "bike-blue-ticket-enforcement-support": 3, "bike-blue-ticket-rule-ambiguity": 32, "bike-blue-ticket-infrastructure-first": 54, "bike-blue-ticket-license-requirement": 12, "bike-blue-ticket-road-safety": 16}, "width_pct": {"bike-blue-ticket-other": 35.0, "bike-blue-ticket-enforcement-support": 1.67, "bike-blue-ticket-rule-ambiguity": 17.78, "bike-blue-ticket-infrastructure-first": 30.0, "bike-blue-ticket-license-requirement": 6.67, "bike-blue-ticket-road-safety": 8.89}, "high_pct": {"bike-blue-ticket-other": 22.2, "bike-blue-ticket-enforcement-support": 66.7, "bike-blue-ticket-rule-ambiguity": 43.8, "bike-blue-ticket-infrastructure-first": 33.3, "bike-blue-ticket-license-requirement": 16.7, "bike-blue-ticket-road-safety": 56.2}, "high_counts": {"bike-blue-ticket-other": 14, "bike-blue-ticket-enforcement-support": 2, "bike-blue-ticket-rule-ambiguity": 14, "bike-blue-ticket-infrastructure-first": 18, "bike-blue-ticket-license-requirement": 2, "bike-blue-ticket-road-safety": 9}}, {"id": "neutral", "label": "どちらでもない", "total": 107, "counts": {"bike-blue-ticket-other": 66, "bike-blue-ticket-enforcement-support": 0, "bike-blue-ticket-rule-ambiguity": 26, "bike-blue-ticket-infrastructure-first": 3, "bike-blue-ticket-license-requirement": 8, "bike-blue-ticket-road-safety": 4}, "width_pct": {"bike-blue-ticket-other": 61.68, "bike-blue-ticket-enforcement-support": 0.0, "bike-blue-ticket-rule-ambiguity": 24.3, "bike-blue-ticket-infrastructure-first": 2.8, "bike-blue-ticket-license-requirement": 7.48, "bike-blue-ticket-road-safety": 3.74}, "high_pct": {"bike-blue-ticket-other": 6.1, "bike-blue-ticket-enforcement-support": 0.0, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-license-requirement": 0.0, "bike-blue-ticket-road-safety": 0.0}, "high_counts": {"bike-blue-ticket-other": 4, "bike-blue-ticket-enforcement-support": 0, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-license-requirement": 0, "bike-blue-ticket-road-safety": 0}}], "issues": [{"id": "bike-blue-ticket-other", "key": "その他", "label": "その他", "icon": "💬", "count": 129, "share_pct": 34.8, "stances": {"enforcement_support": 0, "infrastructure_first": 63, "neutral": 66}, "top_stance": "neutral", "purity_pct": 51.2, "intensity": {"high": 18, "medium": 55, "low": 56}, "high_pct": 14.0, "high_adjusted_pct": 16.8, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 129, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "abolish", "label": "制度そのものに反対", "count": 52, "pct_in_issue": 40.3}, {"id": "n_education", "label": "交通ルールの理解と安全運転の呼びかけ", "count": 8, "pct_in_issue": 6.2}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 7, "pct_in_issue": 5.4}, {"id": "n_burden", "label": "利用時の負担・不安と行動への影響", "count": 6, "pct_in_issue": 4.7}, {"id": "n_effects", "label": "導入後の違反や行動の変化への見方", "count": 6, "pct_in_issue": 4.7}, {"id": "n_rules", "label": "交通ルールの解釈・例外・運用の整合性", "count": 6, "pct_in_issue": 4.7}, {"id": "n_transport", "label": "自転車と別の移動手段の選択", "count": 5, "pct_in_issue": 3.9}, {"id": "ob_safe_compliance", "label": "安全運転と違反を避ける行動", "count": 5, "pct_in_issue": 3.9}, {"id": "n_environment", "label": "道路環境と制度の適合への意見", "count": 4, "pct_in_issue": 3.1}, {"id": "oa_conduct_safety", "label": "自転車利用者の危険行動と周囲への配慮", "count": 4, "pct_in_issue": 3.1}, {"id": "oa_luup_comparison", "label": "LUUPとの規制・取締りの比較", "count": 4, "pct_in_issue": 3.1}, {"id": "ob_policy_process", "label": "制度を決める進め方や政治への不信", "count": 4, "pct_in_issue": 3.1}, {"id": "n_fraud", "label": "反則金を口実にした詐欺への注意", "count": 2, "pct_in_issue": 1.6}, {"id": "oa_driver_enforcement", "label": "自動車の駐停車への取締りと評価", "count": 2, "pct_in_issue": 1.6}, {"id": "oa_media_attention", "label": "交通制度ごとの報道量の違い", "count": 2, "pct_in_issue": 1.6}, {"id": "oa_pedestrian_accountability", "label": "歩行者の危険行動にも責任を求める声", "count": 2, "pct_in_issue": 1.6}, {"id": "place", "label": "走る場所がない", "count": 2, "pct_in_issue": 1.6}, {"id": "strict", "label": "青切符では足りない", "count": 2, "pct_in_issue": 1.6}, {"id": "n_other", "label": "青切符への言及を含む別の主題", "count": 1, "pct_in_issue": 0.8}, {"id": "oa_fine_revenue", "label": "反則金を収入源と見る受け止め", "count": 1, "pct_in_issue": 0.8}, {"id": "oa_license_enforcement", "label": "免許の有無と取締り実態の比較", "count": 1, "pct_in_issue": 0.8}, {"id": "ob_incident_followup", "label": "関連事故の続報を求める声", "count": 1, "pct_in_issue": 0.8}, {"id": "ob_moped_enforcement", "label": "違法モペットにも取締りを求める声", "count": 1, "pct_in_issue": 0.8}, {"id": "ob_sidewalk_option", "label": "車道が怖い場合の歩道利用の提案", "count": 1, "pct_in_issue": 0.8}], "classification_review_pending": 0}, "verdict": null, "claims": [], "veins": []}, {"id": "bike-blue-ticket-enforcement-support", "key": "取締り強化賛成", "label": "取締り強化賛成", "icon": "🚔", "count": 78, "share_pct": 21.0, "stances": {"enforcement_support": 75, "infrastructure_first": 3, "neutral": 0}, "top_stance": "enforcement_support", "purity_pct": 96.2, "intensity": {"high": 25, "medium": 46, "low": 7}, "high_pct": 32.1, "high_adjusted_pct": 28.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 78, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "s_enforcement_gap", "label": "導入後も違反が残り取締りの実効性を求める", "count": 14, "pct_in_issue": 17.9}, {"id": "s_dangerous_riding", "label": "危険な走行を問題視し対処を望む", "count": 13, "pct_in_issue": 16.7}, {"id": "s_pedestrian_safety", "label": "歩行者の安全を守りたい", "count": 9, "pct_in_issue": 11.5}, {"id": "s_shared_responsibility", "label": "自転車にもルール順守と責任を求める", "count": 9, "pct_in_issue": 11.5}, {"id": "s_other_road_users", "label": "車・歩行者・電動モビリティにも対処を求める", "count": 7, "pct_in_issue": 9.0}, {"id": "s_stronger_sanctions", "label": "厳罰化・免許制・対象拡大などを求める", "count": 6, "pct_in_issue": 7.7}, {"id": "s_bike_priority", "label": "車より自転車の取締りを優先したい", "count": 3, "pct_in_issue": 3.8}, {"id": "s_deterrence", "label": "事故や違反を減らす効果を評価・期待する", "count": 3, "pct_in_issue": 3.8}, {"id": "s_education", "label": "広報・模範運転・走行場所の明確化を求める", "count": 3, "pct_in_issue": 3.8}, {"id": "place", "label": "走る場所がない", "count": 2, "pct_in_issue": 2.6}, {"id": "s_bike_parking", "label": "自転車の違法駐車にも責任を求める", "count": 2, "pct_in_issue": 2.6}, {"id": "s_penalty_assessment", "label": "適用条件や処分の重さを評価する", "count": 2, "pct_in_issue": 2.6}, {"id": "s_unspecified_support", "label": "理由を詳述せず取締り強化を求める", "count": 2, "pct_in_issue": 2.6}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 1, "pct_in_issue": 1.3}, {"id": "s_infrastructure_concern", "label": "インフラより取締りを進める姿勢に疑問", "count": 1, "pct_in_issue": 1.3}, {"id": "s_license_burden", "label": "免許制の生活上の負担を避け取締りを選ぶ", "count": 1, "pct_in_issue": 1.3}], "classification_review_pending": 0}, "verdict": "gap", "claims": [{"claim": "自転車の事故は減っている／いや増えている", "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。", "id": "accident", "issue_ids": ["bike-blue-ticket-enforcement-support"], "matched_post_count": 5, "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}], "verdict": "gap"}, {"claim": "取締りなんて実際にはされていない", "finding": "警告を含めれば、件数としては相当数が行われている。", "id": "noenforce", "issue_ids": ["bike-blue-ticket-enforcement-support"], "matched_post_count": 8, "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}], "verdict": "gap"}], "veins": []}, {"id": "bike-blue-ticket-rule-ambiguity", "key": "ルール曖昧・不信", "label": "ルール曖昧・不信", "icon": "❓", "count": 58, "share_pct": 15.6, "stances": {"enforcement_support": 0, "infrastructure_first": 32, "neutral": 26}, "top_stance": "infrastructure_first", "purity_pct": 55.2, "intensity": {"high": 14, "medium": 34, "low": 10}, "high_pct": 24.1, "high_adjusted_pct": 24.1, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 58, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "distrust", "label": "警察の運用が信用できない", "count": 39, "pct_in_issue": 67.2}, {"id": "scope", "label": "対象と順番に異議", "count": 8, "pct_in_issue": 13.8}, {"id": "abolish", "label": "制度そのものに反対", "count": 5, "pct_in_issue": 8.6}, {"id": "place", "label": "走る場所がない", "count": 3, "pct_in_issue": 5.2}, {"id": "strict", "label": "青切符では足りない", "count": 3, "pct_in_issue": 5.2}]}, "verdict": "miss", "claims": [{"claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "id": "luup", "issue_ids": ["bike-blue-ticket-license-requirement", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}], "verdict": "gap"}, {"claim": "反則金は6,000円くらい取られる", "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。", "id": "fine", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 15, "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}], "verdict": "fact"}, {"claim": "対象は16歳以上だ", "finding": "年齢の理解に食い違いは見当たらなかった。", "id": "age", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 10, "sources": [{"name": "警察庁 自転車の新しい制度", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"}], "verdict": "fact"}, {"claim": "歩道を少し走っただけで即青切符・罰金", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "id": "sidewalk", "issue_ids": ["bike-blue-ticket-road-safety", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}], "verdict": "gap"}, {"claim": "対象になる違反は113種類もある", "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。", "id": "count113", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 2, "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}], "verdict": "miss"}], "veins": []}, {"id": "bike-blue-ticket-infrastructure-first", "key": "インフラ整備優先", "label": "インフラ整備優先", "icon": "🚲", "count": 57, "share_pct": 15.4, "stances": {"enforcement_support": 0, "infrastructure_first": 54, "neutral": 3}, "top_stance": "infrastructure_first", "purity_pct": 94.7, "intensity": {"high": 18, "medium": 37, "low": 2}, "high_pct": 31.6, "high_adjusted_pct": 28.0, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 57, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "scope", "label": "対象と順番に異議", "count": 32, "pct_in_issue": 56.1}, {"id": "place", "label": "走る場所がない", "count": 17, "pct_in_issue": 29.8}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 3, "pct_in_issue": 5.3}, {"id": "abolish", "label": "制度そのものに反対", "count": 2, "pct_in_issue": 3.5}, {"id": "r_admin_budget", "label": "行政の事後対応と道路予算への批判", "count": 1, "pct_in_issue": 1.8}, {"id": "r_separation", "label": "自転車・車・歩行者の通行空間を分ける提案", "count": 1, "pct_in_issue": 1.8}, {"id": "r_sidewalk_operation", "label": "近所の歩道通行の運用についての観察", "count": 1, "pct_in_issue": 1.8}], "classification_review_pending": 0}, "verdict": null, "claims": [], "veins": []}, {"id": "bike-blue-ticket-license-requirement", "key": "免許制要求", "label": "免許制要求", "icon": "📋", "count": 29, "share_pct": 7.8, "stances": {"enforcement_support": 9, "infrastructure_first": 12, "neutral": 8}, "top_stance": "infrastructure_first", "purity_pct": 41.4, "intensity": {"high": 5, "medium": 20, "low": 4}, "high_pct": 17.2, "high_adjusted_pct": 21.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 29, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "strict", "label": "青切符では足りない", "count": 10, "pct_in_issue": 34.5}, {"id": "r_training_required", "label": "罰則とともに交通ルールの学習を求める声", "count": 6, "pct_in_issue": 20.7}, {"id": "r_license_safety", "label": "違反や事故を減らすための免許制要求", "count": 3, "pct_in_issue": 10.3}, {"id": "r_training_certification", "label": "講習修了を確認する仕組みの提案", "count": 3, "pct_in_issue": 10.3}, {"id": "r_training_incentive", "label": "講習参加を促す補助や特典の提案", "count": 2, "pct_in_issue": 6.9}, {"id": "scope", "label": "対象と順番に異議", "count": 2, "pct_in_issue": 6.9}, {"id": "r_identity_points", "label": "本人確認と点数による違反管理の提案", "count": 1, "pct_in_issue": 3.4}, {"id": "r_luup_licensing", "label": "LUUPにも免許や点数制度を求める比較", "count": 1, "pct_in_issue": 3.4}, {"id": "r_registered_enforcement", "label": "登録・取締り強化と財源使途の提案", "count": 1, "pct_in_issue": 3.4}], "classification_review_pending": 0}, "verdict": "gap", "claims": [{"claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "id": "luup", "issue_ids": ["bike-blue-ticket-license-requirement", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}], "verdict": "gap"}], "veins": []}, {"id": "bike-blue-ticket-road-safety", "key": "車道走行への不安", "label": "車道走行への不安", "icon": "⚠️", "count": 20, "share_pct": 5.4, "stances": {"enforcement_support": 0, "infrastructure_first": 16, "neutral": 4}, "top_stance": "infrastructure_first", "purity_pct": 80.0, "intensity": {"high": 9, "medium": 9, "low": 2}, "high_pct": 45.0, "high_adjusted_pct": 30.0, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 20, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "place", "label": "走る場所がない", "count": 8, "pct_in_issue": 40.0}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 3, "pct_in_issue": 15.0}, {"id": "scope", "label": "対象と順番に異議", "count": 3, "pct_in_issue": 15.0}, {"id": "abolish", "label": "制度そのものに反対", "count": 1, "pct_in_issue": 5.0}, {"id": "r_driver_conflict", "label": "車の運転者との接触・巻き込みへの不安", "count": 1, "pct_in_issue": 5.0}, {"id": "r_road_fear", "label": "幅寄せや狭い道路への不安", "count": 1, "pct_in_issue": 5.0}, {"id": "r_rule_uncertainty", "label": "歩道通行の条件や取締り運用への不安", "count": 1, "pct_in_issue": 5.0}, {"id": "r_sidewalk_rule_change", "label": "歩行者優先を条件に歩道通行を認める提案", "count": 1, "pct_in_issue": 5.0}, {"id": "strict", "label": "青切符では足りない", "count": 1, "pct_in_issue": 5.0}], "classification_review_pending": 0}, "verdict": "gap", "claims": [{"claim": "歩道を少し走っただけで即青切符・罰金", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "id": "sidewalk", "issue_ids": ["bike-blue-ticket-road-safety", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}], "verdict": "gap"}], "veins": []}], "claims": [{"id": "luup", "claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "verdict": "gap", "verdict_label": "少しずれる", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}]}, {"id": "fine", "claim": "反則金は6,000円くらい取られる", "verdict": "fact", "verdict_label": "資料どおり", "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。", "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}]}, {"id": "age", "claim": "対象は16歳以上だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "年齢の理解に食い違いは見当たらなかった。", "sources": [{"name": "警察庁 自転車の新しい制度", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"}]}, {"id": "sidewalk", "claim": "歩道を少し走っただけで即青切符・罰金", "verdict": "gap", "verdict_label": "少しずれる", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}]}, {"id": "accident", "claim": "自転車の事故は減っている／いや増えている", "verdict": "gap", "verdict_label": "少しずれる", "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。", "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}]}, {"id": "noenforce", "claim": "取締りなんて実際にはされていない", "verdict": "gap", "verdict_label": "少しずれる", "finding": "警告を含めれば、件数としては相当数が行われている。", "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}]}, {"id": "count113", "claim": "対象になる違反は113種類もある", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。", "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}]}], "editorial": {"checked_on": null, "findings": [], "reviewer_type": null, "status": "not_started"}, "ocean": {"claim_status": "complete", "checked_on": "2026-08-16", "reviewer_type": "editorial_review", "ocean_status": "not_started", "ocean_checked_on": null, "ocean_reviewer_type": null, "sunk_continents": [], "veins": []}};</script>
+<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "bike-blue-ticket", "title": "自転車の青切符導入", "question": "自転車の交通違反に反則金（青切符）を導入すべきか", "snapshot_id": "bike-blue-ticket-20260905", "updated_at": "2026-09-05", "sample_period": "2026-06-27〜2026-09-05", "source_label": "Yahoo!リアルタイム検索", "totals": {"collected": 468, "opinions": 371}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.2399, "k": 50, "max_pct": 4.0}, "stances": [{"key": "enforcement_support", "id": "bike-blue-ticket-enforcement-support", "label": "賛成（取締り強化）", "color": "#e04949", "pattern": "plain", "count": 84}, {"key": "infrastructure_first", "id": "bike-blue-ticket-infrastructure-first", "label": "反対（インフラ・制度優先）", "color": "#4b9cf4", "pattern": "diagonal", "count": 180}, {"key": "neutral", "id": "bike-blue-ticket-neutral", "label": "どちらでもない", "color": "#8B9199", "pattern": "mesh", "count": 107}], "vote_issue_order": ["取締り強化賛成", "インフラ整備優先", "車道走行への不安", "免許制要求", "ルール曖昧・不信", "その他"], "reread_summary": {"connected_editorial_count": 371, "connected_issue_population": 371, "not_connected_opinion_count": 0}, "modes": [{"id": "all", "label": "すべての意見", "total": 371, "counts": {"bike-blue-ticket-other": 129, "bike-blue-ticket-enforcement-support": 78, "bike-blue-ticket-rule-ambiguity": 58, "bike-blue-ticket-infrastructure-first": 57, "bike-blue-ticket-license-requirement": 29, "bike-blue-ticket-road-safety": 20}, "width_pct": {"bike-blue-ticket-other": 34.77, "bike-blue-ticket-enforcement-support": 21.02, "bike-blue-ticket-rule-ambiguity": 15.63, "bike-blue-ticket-infrastructure-first": 15.36, "bike-blue-ticket-license-requirement": 7.82, "bike-blue-ticket-road-safety": 5.39}, "high_pct": {"bike-blue-ticket-other": 14.0, "bike-blue-ticket-enforcement-support": 32.1, "bike-blue-ticket-rule-ambiguity": 24.1, "bike-blue-ticket-infrastructure-first": 31.6, "bike-blue-ticket-license-requirement": 17.2, "bike-blue-ticket-road-safety": 45.0}, "high_counts": {"bike-blue-ticket-other": 18, "bike-blue-ticket-enforcement-support": 25, "bike-blue-ticket-rule-ambiguity": 14, "bike-blue-ticket-infrastructure-first": 18, "bike-blue-ticket-license-requirement": 5, "bike-blue-ticket-road-safety": 9}}, {"id": "enforcement_support", "label": "賛成（取締り強化）", "total": 84, "counts": {"bike-blue-ticket-other": 0, "bike-blue-ticket-enforcement-support": 75, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-license-requirement": 9, "bike-blue-ticket-road-safety": 0}, "width_pct": {"bike-blue-ticket-other": 0.0, "bike-blue-ticket-enforcement-support": 89.29, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-license-requirement": 10.71, "bike-blue-ticket-road-safety": 0.0}, "high_pct": {"bike-blue-ticket-other": 0.0, "bike-blue-ticket-enforcement-support": 30.7, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-license-requirement": 33.3, "bike-blue-ticket-road-safety": 0.0}, "high_counts": {"bike-blue-ticket-other": 0, "bike-blue-ticket-enforcement-support": 23, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-license-requirement": 3, "bike-blue-ticket-road-safety": 0}}, {"id": "infrastructure_first", "label": "反対（インフラ・制度優先）", "total": 180, "counts": {"bike-blue-ticket-other": 63, "bike-blue-ticket-enforcement-support": 3, "bike-blue-ticket-rule-ambiguity": 32, "bike-blue-ticket-infrastructure-first": 54, "bike-blue-ticket-license-requirement": 12, "bike-blue-ticket-road-safety": 16}, "width_pct": {"bike-blue-ticket-other": 35.0, "bike-blue-ticket-enforcement-support": 1.67, "bike-blue-ticket-rule-ambiguity": 17.78, "bike-blue-ticket-infrastructure-first": 30.0, "bike-blue-ticket-license-requirement": 6.67, "bike-blue-ticket-road-safety": 8.89}, "high_pct": {"bike-blue-ticket-other": 22.2, "bike-blue-ticket-enforcement-support": 66.7, "bike-blue-ticket-rule-ambiguity": 43.8, "bike-blue-ticket-infrastructure-first": 33.3, "bike-blue-ticket-license-requirement": 16.7, "bike-blue-ticket-road-safety": 56.2}, "high_counts": {"bike-blue-ticket-other": 14, "bike-blue-ticket-enforcement-support": 2, "bike-blue-ticket-rule-ambiguity": 14, "bike-blue-ticket-infrastructure-first": 18, "bike-blue-ticket-license-requirement": 2, "bike-blue-ticket-road-safety": 9}}, {"id": "neutral", "label": "どちらでもない", "total": 107, "counts": {"bike-blue-ticket-other": 66, "bike-blue-ticket-enforcement-support": 0, "bike-blue-ticket-rule-ambiguity": 26, "bike-blue-ticket-infrastructure-first": 3, "bike-blue-ticket-license-requirement": 8, "bike-blue-ticket-road-safety": 4}, "width_pct": {"bike-blue-ticket-other": 61.68, "bike-blue-ticket-enforcement-support": 0.0, "bike-blue-ticket-rule-ambiguity": 24.3, "bike-blue-ticket-infrastructure-first": 2.8, "bike-blue-ticket-license-requirement": 7.48, "bike-blue-ticket-road-safety": 3.74}, "high_pct": {"bike-blue-ticket-other": 6.1, "bike-blue-ticket-enforcement-support": 0.0, "bike-blue-ticket-rule-ambiguity": 0.0, "bike-blue-ticket-infrastructure-first": 0.0, "bike-blue-ticket-license-requirement": 0.0, "bike-blue-ticket-road-safety": 0.0}, "high_counts": {"bike-blue-ticket-other": 4, "bike-blue-ticket-enforcement-support": 0, "bike-blue-ticket-rule-ambiguity": 0, "bike-blue-ticket-infrastructure-first": 0, "bike-blue-ticket-license-requirement": 0, "bike-blue-ticket-road-safety": 0}}], "issues": [{"id": "bike-blue-ticket-other", "key": "その他", "label": "その他", "icon": "💬", "count": 129, "share_pct": 34.8, "stances": {"enforcement_support": 0, "infrastructure_first": 63, "neutral": 66}, "top_stance": "neutral", "purity_pct": 51.2, "intensity": {"high": 18, "medium": 55, "low": 56}, "high_pct": 14.0, "high_adjusted_pct": 16.8, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 129, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "abolish", "label": "制度そのものに反対", "count": 52, "pct_in_issue": 40.3}, {"id": "n_education", "label": "交通ルールの理解と安全運転の呼びかけ", "count": 8, "pct_in_issue": 6.2}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 7, "pct_in_issue": 5.4}, {"id": "n_burden", "label": "利用時の負担・不安と行動への影響", "count": 6, "pct_in_issue": 4.7}, {"id": "n_effects", "label": "導入後の違反や行動の変化への見方", "count": 6, "pct_in_issue": 4.7}, {"id": "n_rules", "label": "交通ルールの解釈・例外・運用の整合性", "count": 6, "pct_in_issue": 4.7}, {"id": "n_transport", "label": "自転車と別の移動手段の選択", "count": 5, "pct_in_issue": 3.9}, {"id": "ob_safe_compliance", "label": "安全運転と違反を避ける行動", "count": 5, "pct_in_issue": 3.9}, {"id": "n_environment", "label": "道路環境と制度の適合への意見", "count": 4, "pct_in_issue": 3.1}, {"id": "oa_conduct_safety", "label": "自転車利用者の危険行動と周囲への配慮", "count": 4, "pct_in_issue": 3.1}, {"id": "oa_luup_comparison", "label": "LUUPとの規制・取締りの比較", "count": 4, "pct_in_issue": 3.1}, {"id": "ob_policy_process", "label": "制度を決める進め方や政治への不信", "count": 4, "pct_in_issue": 3.1}, {"id": "n_fraud", "label": "反則金を口実にした詐欺への注意", "count": 2, "pct_in_issue": 1.6}, {"id": "oa_driver_enforcement", "label": "自動車の駐停車への取締りと評価", "count": 2, "pct_in_issue": 1.6}, {"id": "oa_media_attention", "label": "交通制度ごとの報道量の違い", "count": 2, "pct_in_issue": 1.6}, {"id": "oa_pedestrian_accountability", "label": "歩行者の危険行動にも責任を求める声", "count": 2, "pct_in_issue": 1.6}, {"id": "place", "label": "走る場所がない", "count": 2, "pct_in_issue": 1.6}, {"id": "strict", "label": "青切符では足りない", "count": 2, "pct_in_issue": 1.6}, {"id": "n_other", "label": "青切符への言及を含む別の主題", "count": 1, "pct_in_issue": 0.8}, {"id": "oa_fine_revenue", "label": "反則金を収入源と見る受け止め", "count": 1, "pct_in_issue": 0.8}, {"id": "oa_license_enforcement", "label": "免許の有無と取締り実態の比較", "count": 1, "pct_in_issue": 0.8}, {"id": "ob_incident_followup", "label": "関連事故の続報を求める声", "count": 1, "pct_in_issue": 0.8}, {"id": "ob_moped_enforcement", "label": "違法モペットにも取締りを求める声", "count": 1, "pct_in_issue": 0.8}, {"id": "ob_sidewalk_option", "label": "車道が怖い場合の歩道利用の提案", "count": 1, "pct_in_issue": 0.8}], "classification_review_pending": 0}, "verdict": null, "claims": [], "veins": []}, {"id": "bike-blue-ticket-enforcement-support", "key": "取締り強化賛成", "label": "取締り強化賛成", "icon": "🚔", "count": 78, "share_pct": 21.0, "stances": {"enforcement_support": 75, "infrastructure_first": 3, "neutral": 0}, "top_stance": "enforcement_support", "purity_pct": 96.2, "intensity": {"high": 25, "medium": 46, "low": 7}, "high_pct": 32.1, "high_adjusted_pct": 28.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 78, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "s_enforcement_gap", "label": "導入後も違反が残り取締りの実効性を求める", "count": 14, "pct_in_issue": 17.9}, {"id": "s_dangerous_riding", "label": "危険な走行を問題視し対処を望む", "count": 13, "pct_in_issue": 16.7}, {"id": "s_pedestrian_safety", "label": "歩行者の安全を守りたい", "count": 9, "pct_in_issue": 11.5}, {"id": "s_shared_responsibility", "label": "自転車にもルール順守と責任を求める", "count": 9, "pct_in_issue": 11.5}, {"id": "s_other_road_users", "label": "車・歩行者・電動モビリティにも対処を求める", "count": 7, "pct_in_issue": 9.0}, {"id": "s_stronger_sanctions", "label": "厳罰化・免許制・対象拡大などを求める", "count": 6, "pct_in_issue": 7.7}, {"id": "s_bike_priority", "label": "車より自転車の取締りを優先したい", "count": 3, "pct_in_issue": 3.8}, {"id": "s_deterrence", "label": "事故や違反を減らす効果を評価・期待する", "count": 3, "pct_in_issue": 3.8}, {"id": "s_education", "label": "広報・模範運転・走行場所の明確化を求める", "count": 3, "pct_in_issue": 3.8}, {"id": "place", "label": "走る場所がない", "count": 2, "pct_in_issue": 2.6}, {"id": "s_bike_parking", "label": "自転車の違法駐車にも責任を求める", "count": 2, "pct_in_issue": 2.6}, {"id": "s_penalty_assessment", "label": "適用条件や処分の重さを評価する", "count": 2, "pct_in_issue": 2.6}, {"id": "s_unspecified_support", "label": "理由を詳述せず取締り強化を求める", "count": 2, "pct_in_issue": 2.6}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 1, "pct_in_issue": 1.3}, {"id": "s_infrastructure_concern", "label": "インフラより取締りを進める姿勢に疑問", "count": 1, "pct_in_issue": 1.3}, {"id": "s_license_burden", "label": "免許制の生活上の負担を避け取締りを選ぶ", "count": 1, "pct_in_issue": 1.3}], "classification_review_pending": 0}, "verdict": "gap", "claims": [{"claim": "自転車の事故は減っている／いや増えている", "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。", "id": "accident", "issue_ids": ["bike-blue-ticket-enforcement-support"], "matched_post_count": 5, "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}], "verdict": "gap"}, {"claim": "取締りなんて実際にはされていない", "finding": "警告を含めれば、件数としては相当数が行われている。", "id": "noenforce", "issue_ids": ["bike-blue-ticket-enforcement-support"], "matched_post_count": 8, "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}], "verdict": "gap"}], "veins": []}, {"id": "bike-blue-ticket-rule-ambiguity", "key": "ルール曖昧・不信", "label": "ルール曖昧・不信", "icon": "❓", "count": 58, "share_pct": 15.6, "stances": {"enforcement_support": 0, "infrastructure_first": 32, "neutral": 26}, "top_stance": "infrastructure_first", "purity_pct": 55.2, "intensity": {"high": 14, "medium": 34, "low": 10}, "high_pct": 24.1, "high_adjusted_pct": 24.1, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 58, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "distrust", "label": "警察の運用が信用できない", "count": 39, "pct_in_issue": 67.2}, {"id": "scope", "label": "対象と順番に異議", "count": 8, "pct_in_issue": 13.8}, {"id": "abolish", "label": "制度そのものに反対", "count": 5, "pct_in_issue": 8.6}, {"id": "place", "label": "走る場所がない", "count": 3, "pct_in_issue": 5.2}, {"id": "strict", "label": "青切符では足りない", "count": 3, "pct_in_issue": 5.2}]}, "verdict": "miss", "claims": [{"claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "id": "luup", "issue_ids": ["bike-blue-ticket-license-requirement", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}], "verdict": "gap"}, {"claim": "反則金は6,000円くらい取られる", "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。", "id": "fine", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 15, "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}], "verdict": "fact"}, {"claim": "対象は16歳以上だ", "finding": "年齢の理解に食い違いは見当たらなかった。", "id": "age", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 10, "sources": [{"name": "警察庁 自転車の新しい制度", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"}], "verdict": "fact"}, {"claim": "歩道を少し走っただけで即青切符・罰金", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "id": "sidewalk", "issue_ids": ["bike-blue-ticket-road-safety", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}], "verdict": "gap"}, {"claim": "対象になる違反は113種類もある", "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。", "id": "count113", "issue_ids": ["bike-blue-ticket-rule-ambiguity"], "matched_post_count": 2, "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}], "verdict": "miss"}], "veins": []}, {"id": "bike-blue-ticket-infrastructure-first", "key": "インフラ整備優先", "label": "インフラ整備優先", "icon": "🚲", "count": 57, "share_pct": 15.4, "stances": {"enforcement_support": 0, "infrastructure_first": 54, "neutral": 3}, "top_stance": "infrastructure_first", "purity_pct": 94.7, "intensity": {"high": 18, "medium": 37, "low": 2}, "high_pct": 31.6, "high_adjusted_pct": 28.0, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 57, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "scope", "label": "対象と順番に異議", "count": 32, "pct_in_issue": 56.1}, {"id": "place", "label": "走る場所がない", "count": 17, "pct_in_issue": 29.8}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 3, "pct_in_issue": 5.3}, {"id": "abolish", "label": "制度そのものに反対", "count": 2, "pct_in_issue": 3.5}, {"id": "r_admin_budget", "label": "行政の事後対応と道路予算への批判", "count": 1, "pct_in_issue": 1.8}, {"id": "r_separation", "label": "自転車・車・歩行者の通行空間を分ける提案", "count": 1, "pct_in_issue": 1.8}, {"id": "r_sidewalk_operation", "label": "近所の歩道通行の運用についての観察", "count": 1, "pct_in_issue": 1.8}], "classification_review_pending": 0}, "verdict": null, "claims": [], "veins": []}, {"id": "bike-blue-ticket-license-requirement", "key": "免許制要求", "label": "免許制要求", "icon": "📋", "count": 29, "share_pct": 7.8, "stances": {"enforcement_support": 9, "infrastructure_first": 12, "neutral": 8}, "top_stance": "infrastructure_first", "purity_pct": 41.4, "intensity": {"high": 5, "medium": 20, "low": 4}, "high_pct": 17.2, "high_adjusted_pct": 21.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 29, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "strict", "label": "青切符では足りない", "count": 10, "pct_in_issue": 34.5}, {"id": "r_training_required", "label": "罰則とともに交通ルールの学習を求める声", "count": 6, "pct_in_issue": 20.7}, {"id": "r_license_safety", "label": "違反や事故を減らすための免許制要求", "count": 3, "pct_in_issue": 10.3}, {"id": "r_training_certification", "label": "講習修了を確認する仕組みの提案", "count": 3, "pct_in_issue": 10.3}, {"id": "r_training_incentive", "label": "講習参加を促す補助や特典の提案", "count": 2, "pct_in_issue": 6.9}, {"id": "scope", "label": "対象と順番に異議", "count": 2, "pct_in_issue": 6.9}, {"id": "r_identity_points", "label": "本人確認と点数による違反管理の提案", "count": 1, "pct_in_issue": 3.4}, {"id": "r_luup_licensing", "label": "LUUPにも免許や点数制度を求める比較", "count": 1, "pct_in_issue": 3.4}, {"id": "r_registered_enforcement", "label": "登録・取締り強化と財源使途の提案", "count": 1, "pct_in_issue": 3.4}], "classification_review_pending": 0}, "verdict": "gap", "claims": [{"claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "id": "luup", "issue_ids": ["bike-blue-ticket-license-requirement", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}], "verdict": "gap"}], "veins": []}, {"id": "bike-blue-ticket-road-safety", "key": "車道走行への不安", "label": "車道走行への不安", "icon": "⚠️", "count": 20, "share_pct": 5.4, "stances": {"enforcement_support": 0, "infrastructure_first": 16, "neutral": 4}, "top_stance": "infrastructure_first", "purity_pct": 80.0, "intensity": {"high": 9, "medium": 9, "low": 2}, "high_pct": 45.0, "high_adjusted_pct": 30.0, "sub": {"status": "reread", "coverage": "full", "coverage_note": "既存の再読と今回の本文確認を合わせた内訳。記事共有や文脈が足りない投稿も区別しています。", "source_file": "data/bike-blue-ticket_issues-reread.json", "reread_count": 20, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "place", "label": "走る場所がない", "count": 8, "pct_in_issue": 40.0}, {"id": "distrust", "label": "警察の運用が信用できない", "count": 3, "pct_in_issue": 15.0}, {"id": "scope", "label": "対象と順番に異議", "count": 3, "pct_in_issue": 15.0}, {"id": "abolish", "label": "制度そのものに反対", "count": 1, "pct_in_issue": 5.0}, {"id": "r_driver_conflict", "label": "車の運転者との接触・巻き込みへの不安", "count": 1, "pct_in_issue": 5.0}, {"id": "r_road_fear", "label": "幅寄せや狭い道路への不安", "count": 1, "pct_in_issue": 5.0}, {"id": "r_rule_uncertainty", "label": "歩道通行の条件や取締り運用への不安", "count": 1, "pct_in_issue": 5.0}, {"id": "r_sidewalk_rule_change", "label": "歩行者優先を条件に歩道通行を認める提案", "count": 1, "pct_in_issue": 5.0}, {"id": "strict", "label": "青切符では足りない", "count": 1, "pct_in_issue": 5.0}], "classification_review_pending": 0}, "verdict": "gap", "claims": [{"claim": "歩道を少し走っただけで即青切符・罰金", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "id": "sidewalk", "issue_ids": ["bike-blue-ticket-road-safety", "bike-blue-ticket-rule-ambiguity"], "matched_post_count": 12, "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}], "verdict": "gap"}], "veins": []}], "claims": [{"id": "luup", "claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ", "verdict": "gap", "verdict_label": "少しずれる", "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。", "sources": [{"name": "警察庁 特定小型原動機付自転車の交通ルール", "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"}]}, {"id": "fine", "claim": "反則金は6,000円くらい取られる", "verdict": "fact", "verdict_label": "資料どおり", "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。", "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}]}, {"id": "age", "claim": "対象は16歳以上だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "年齢の理解に食い違いは見当たらなかった。", "sources": [{"name": "警察庁 自転車の新しい制度", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"}]}, {"id": "sidewalk", "claim": "歩道を少し走っただけで即青切符・罰金", "verdict": "gap", "verdict_label": "少しずれる", "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。", "sources": [{"name": "警察庁 自転車ポータル よくある質問", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"}]}, {"id": "accident", "claim": "自転車の事故は減っている／いや増えている", "verdict": "gap", "verdict_label": "少しずれる", "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。", "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}]}, {"id": "noenforce", "claim": "取締りなんて実際にはされていない", "verdict": "gap", "verdict_label": "少しずれる", "finding": "警告を含めれば、件数としては相当数が行われている。", "sources": [{"name": "警察庁 自転車は車のなかま", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"}]}, {"id": "count113", "claim": "対象になる違反は113種類もある", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。", "sources": [{"name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）", "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"}]}], "editorial": {"checked_on": null, "findings": [], "reviewer_type": null, "status": "not_started"}, "ocean": {"claim_status": "complete", "checked_on": "2026-08-16", "reviewer_type": "editorial_review", "ocean_status": "not_started", "ocean_checked_on": null, "ocean_reviewer_type": null, "sunk_continents": [], "veins": []}};</script>
 <script>
 (function(){
 "use strict";
@@ -1296,7 +1359,10 @@ function land(i){
   drawPanel(); syncList(); render();
   const h=document.querySelector("#panel h2");
   if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
-  if (window.innerWidth < 820) bringIntoView(document.getElementById("panel"));
+  // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
+  // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
+  // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
+  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
 }
 function orbit(){
   const prev=st.landed;
@@ -1671,7 +1737,11 @@ function buildDive(){
       // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
       (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
       (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
-      if (box) bringIntoView(box);
+      // box全体（複数の語られていない争点・立場をこえて同じ心配を全部含み、
+      // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
+      // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
+      // 見出しだけを中央合わせにする。
+      if (box) bringIntoView(box.querySelector("h3") || box);
     }
   });
   paint();
@@ -1714,7 +1784,12 @@ function buildQuiz(){
       + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
     a.hidden=false;
     visit("c:"+c.id);
-    a.querySelector(".qnext").addEventListener("click", ()=>{ qi++; buildQuiz(); });
+    a.querySelector(".qnext").addEventListener("click", ()=>{
+      qi++; buildQuiz();
+      // 次の問題を出した直後、答え欄の下までスクロールしたままだと新しい問題文が
+      // 画面外になる（オーナー指摘2026-09-10）。問題の見出しを画面中央へ運ぶ。
+      bringIntoView(el.querySelector(".qh") || el);
+    });
   }));
 }
 
@@ -2630,235 +2705,9 @@ const SM_RAW = [
   {x:-2.0,y:0.0,e:2.0,c:0.75,s:"罰則化が現場で無視され危険運転自転車が減らない現状への不満と、反則金収入をドライバーで穴埋めしたり移動式オービスを乱立させるのではとの不信・懸念。",u:"https://x.com/kissingman_jp/status/2092789561646858494",i:4}
 ];
 </script>
-<script>
-(function(){
-  'use strict';
-  const ISSUES=[
-    {k:'取締り強化賛成',   n:78},
-    {k:'インフラ整備優先', n:57},
-    {k:'車道走行への不安', n:20},
-    {k:'免許制要求',       n:29},
-    {k:'ルール曖昧・不信', n:58},
-    {k:'その他',           n:129},
-  ];
-  const W=640,CX=320,CY=320,R_MIN=64,R_MAX=214,R_HOLE=56,R_LBL=244;
-  const PAD_DEG=2.5;
-  const canvasMain=document.getElementById('arenaMain');
-  const canvasHeat=document.getElementById('arenaHeat');
-  if(!canvasMain||!canvasHeat)return;
-  const ctx=canvasMain.getContext('2d');
-  const hctx=canvasHeat.getContext('2d');
-  const tooltip=document.getElementById('sm-tooltip');
 
-  const total=ISSUES.reduce((a,b)=>a+b.n,0);
-  const usable=360-PAD_DEG*2*ISSUES.length;
-  let acc=-90;
-  ISSUES.forEach(iss=>{
-    const span=usable*iss.n/total;
-    iss.a0=acc+PAD_DEG;iss.a1=iss.a0+span;iss.mid=(iss.a0+iss.a1)/2;
-    acc=iss.a1+PAD_DEG;
-  });
-
-  function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
-  function colorOf(p){return p.x>=0.5?'#e04949':(p.x<=-0.5?'#4b9cf4':'#64748b');}
-
-  const pts=[];
-  SM_RAW.forEach((p,idx)=>{
-    const iss=ISSUES[p.i];if(!iss)return;
-    const a=iss.a0+rnd(idx)*(iss.a1-iss.a0);
-    let r=R_MIN+8+Math.abs(p.e)/3.5*(R_MAX-R_MIN-30)+(rnd(idx+500)-0.5)*20;
-    r=Math.max(R_MIN+2,Math.min(R_MAX-4,r));
-    const rad=a*Math.PI/180;
-    pts.push({px:CX+r*Math.cos(rad),py:CY+r*Math.sin(rad),c:colorOf(p),p:p});
-  });
-
-  function drawHeat(){
-    hctx.clearRect(0,0,W,W);
-    hctx.fillStyle='#0f0e2e';hctx.fillRect(0,0,W,W);
-    const maxN=Math.max(...ISSUES.map(i=>i.n));
-    ISSUES.forEach(iss=>{
-      hctx.beginPath();
-      hctx.moveTo(CX+R_MIN*Math.cos(iss.a0*Math.PI/180),CY+R_MIN*Math.sin(iss.a0*Math.PI/180));
-      hctx.arc(CX,CY,R_MAX,iss.a0*Math.PI/180,iss.a1*Math.PI/180);
-      hctx.arc(CX,CY,R_MIN,iss.a1*Math.PI/180,iss.a0*Math.PI/180,true);
-      hctx.closePath();
-      hctx.fillStyle='rgba(13,148,136,'+(0.04+iss.n/maxN*0.14).toFixed(3)+')';
-      hctx.fill();
-    });
-    hctx.setLineDash([3,5]);hctx.strokeStyle='rgba(100,116,139,.2)';hctx.lineWidth=1;
-    [110,160,R_MAX].forEach(r=>{hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke();});
-    hctx.setLineDash([]);
-    ISSUES.forEach(iss=>{
-      hctx.strokeStyle='rgba(100,116,139,.22)';
-      [iss.a0*Math.PI/180,iss.a1*Math.PI/180].forEach(rd=>{
-        hctx.beginPath();hctx.moveTo(CX+R_MIN*Math.cos(rd),CY+R_MIN*Math.sin(rd));hctx.lineTo(CX+R_MAX*Math.cos(rd),CY+R_MAX*Math.sin(rd));hctx.stroke();
-      });
-    });
-    // Center label
-    hctx.fillStyle='rgba(255,255,255,.85)';hctx.font='900 13px sans-serif';hctx.textAlign='center';hctx.textBaseline='middle';
-    hctx.fillText('自転車',CX,CY-8);hctx.fillText('青切符',CX,CY+8);
-    // Sector labels
-    hctx.font='800 11px sans-serif';hctx.fillStyle='rgba(255,255,255,.75)';
-    ISSUES.forEach(iss=>{
-      const rad=iss.mid*Math.PI/180;
-      const lx=CX+R_LBL*Math.cos(rad);const ly=CY+R_LBL*Math.sin(rad);
-      hctx.fillText(iss.k,lx,ly);
-    });
-  }
-
-  let filterIdx=-1;let voteMarker=null;
-
-  function drawMain(){
-    ctx.clearRect(0,0,W,W);
-    // Draw inner ring
-    ctx.beginPath();ctx.arc(CX,CY,R_HOLE,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.06)';ctx.fill();
-    // Draw points
-    pts.forEach(pt=>{
-      if(filterIdx>=0&&pt.p.i!==filterIdx)return;
-      ctx.beginPath();ctx.arc(pt.px,pt.py,4.5,0,Math.PI*2);ctx.fillStyle=pt.c;ctx.fill();
-    });
-    // Vote marker
-    if(voteMarker){
-      const {sectorIdx,color}=voteMarker;
-      const iss=ISSUES[sectorIdx];if(iss){
-        const rad=iss.mid*Math.PI/180;
-        const r=(R_MIN+R_MAX)/2;
-        const mx=CX+r*Math.cos(rad);const my=CY+r*Math.sin(rad);
-        if(window.drawArenaSectorHighlight){
-          window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:R_MIN,outerRadius:R_MAX,startAngle:iss.a0,endAngle:iss.a1,color:color,degrees:true});
-        }
-        if(window.drawArenaUserMarker){
-          window.drawArenaUserMarker(ctx,{x:mx,y:my,color:color,canvasSize:W});
-        }
-      }
-    }
-    ctx.textAlign='left';ctx.textBaseline='alphabetic';
-  }
-
-  window.setArenaVoteMarker=function(sectorIdx,color){
-    voteMarker={sectorIdx,color};
-    drawMain();
-    var note=document.getElementById('your-marker-note-arena');
-    if(note)note.style.display='block';
-  };
-  window.clearArenaVoteMarker=function(){
-    voteMarker=null;drawMain();
-    var note=document.getElementById('your-marker-note-arena');
-    if(note)note.style.display='none';
-  };
-
-  // Filters
-  const filtersEl=document.getElementById('sm-filters');
-  function addBtn(label,idx){
-    const b=document.createElement('button');b.className='sm-fbtn'+(idx===-1?' active':'');b.textContent=label;
-    b.onclick=function(){filterIdx=idx;document.querySelectorAll('.sm-fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');drawMain();};
-    filtersEl.appendChild(b);
-  }
-  addBtn('全件 ('+total+')',-1);
-  ISSUES.forEach((iss,i)=>{if(iss.k!=='その他')addBtn(iss.k+' ('+iss.n+')',i);});
-
-  function evtPos(ev){const rect=canvasMain.getBoundingClientRect();const scale=W/rect.width;return{x:(ev.clientX-rect.left)*scale,y:(ev.clientY-rect.top)*scale};}
-  function nearest(pos){let best=null,bd=196;pts.forEach(pt=>{if(filterIdx>=0&&pt.p.i!==filterIdx)return;const d=(pt.px-pos.x)**2+(pt.py-pos.y)**2;if(d<bd){bd=d;best=pt;}});return best;}
-  canvasMain.addEventListener('mousemove',function(ev){const pt=nearest(evtPos(ev));if(pt){tooltip.style.display='block';tooltip.style.left=(ev.offsetX+14)+'px';tooltip.style.top=(ev.offsetY+14)+'px';tooltip.innerHTML='<strong>'+ISSUES[pt.p.i].k+'</strong><br>'+pt.p.s;}else{tooltip.style.display='none';}});
-  canvasMain.addEventListener('mouseleave',function(){tooltip.style.display='none';});
-  canvasMain.addEventListener('click',function(ev){const pt=nearest(evtPos(ev));if(pt&&pt.p.u)window.open(pt.p.u,'_blank','noopener');});
-  canvasMain.addEventListener('touchstart',function(ev){if(ev.touches.length!==1)return;const t=ev.touches[0];const pt=nearest(evtPos(t));if(pt&&pt.p.u){ev.preventDefault();window.open(pt.p.u,'_blank','noopener');}},{passive:false});
-
-  drawHeat();drawMain();
-})();
-</script>
-
-    <section class="panel conflict-panel" id="issue-voices-section">
-<div class="panel-title"><h2>5つの論点とXの声</h2><span>論点ごとの賛否分布と代表的な投稿</span></div>
-<nav class="quadrant-nav"><a href="#issue-mensyo">免許制 29</a><a href="#issue-torishimari">取締り 78</a><a href="#issue-infra">インフラ 57</a><a href="#issue-sharido">車道 20</a><a href="#issue-ambiguity">ルール曖昧 58</a></nav>
-
-<article class="issue-block" id="issue-torishimari">
-<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span>
-<h3>取締り強化賛成・マナー違反を止めよ</h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>取締り強化への姿勢</span><span>取締り支持 75 / 中立 0 / 反対 3</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:96.2%">96%</div><div class="temp-seg neu" style="width:0.0%"></div><div class="temp-seg pos" style="width:3.8%"></div></div>
-<div class="temp-bar-legend"><span><i style="background:#e04949"></i>取締り強化を支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>慎重・反対</span></div>
-</div>
-<p class="issue-desc">信号無視・ながらスマホ・歩道の無謀走行など、自転車の危険行為を止めるために取り締まりは当然という立場。「歩行者が怖い思いをしている」という視点から、青切符による制裁強化を支持します。</p>
-<div class="issue-sides"><div class="side neg"><strong>取締り強化支持（75件）</strong>マナーの悪い自転車をこのまま放置するのはおかしい。事故が起きてからでは遅い。</div><div class="side pos"><strong>中立・反対（3件）</strong>取締りの話題に触れつつ、賛否を示さない投稿と、進め方に異議を示す投稿。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">取締り支持 / 感情やや高め</div><p>無法状態の自転車に怒り、青切符でも甘いとして厳格な対応を要求</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shocker108/status/2061387437340045705">@shocker108 の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">取締り支持 / 安全優先</div><p>自転車の一時不停止に怒り、厳格な取り締まりを強く求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bjayway/status/2070305605852836233">@bjayway の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-infra">
-<div class="issue-head"><span class="axis-kicker">論点2</span>
-<h3>インフラ整備が先・専用レーンなしに取締りは不公平</h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>インフラ整備への立場</span><span>取締り寄り 0 / 中立 3 / インフラ優先 54</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:0.0%"></div><div class="temp-seg neu" style="width:5.3%"></div><div class="temp-seg pos" style="width:94.7%">95%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#e04949"></i>取締り支持（条件付き含む）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>インフラ整備が先</span></div>
-</div>
-<p class="issue-desc">「安全に走れる自転車専用レーンがないのに、車道を走れというのは無理だ」という立場。インフラ整備なしの罰則強化は自転車利用者への一方的な押しつけで、本末転倒という批判です。</p>
-<div class="issue-sides"><div class="side pos"><strong>インフラ整備優先派（54件）</strong>自転車レーンが整備されてから取り締まるべき。先にルールありきでは混乱するだけ。</div><div class="side neu"><strong>中立（3件）</strong>インフラ整備と取り締まりを並行して進める現実的な視点。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">インフラ優先 / 感情高め</div><p>インフラ整備不足を批判し、青切符制度に強く反対する声</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/15jacnamagiga/status/2070261164618158443">@15jacnamagiga の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">条件付き支持 / 冷静</div><p>インフラ整備優先を主張しつつ青切符制度を条件付きで支持</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/suzuking408/status/2069735857695891855">@suzuking408 の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-sharido">
-<div class="issue-head"><span class="axis-kicker">論点3</span>
-<h3>車道走行への不安・「車道を走れ」は危険</h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>車道走行ルールへの評価</span><span>歩道批判 0 / 中立 4 / 車道不安派 16</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:0.0%"></div><div class="temp-seg neu" style="width:20.0%">20%</div><div class="temp-seg pos" style="width:80.0%">80%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#e04949"></i>ルール強化支持（歩行者目線）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>車道走行が怖い（自転車目線）</span></div>
-</div>
-<p class="issue-desc">青切符と合わせて「自転車は原則車道」というルールが強調されることへの不安。「子どもを車道に出せるか」「路駐があって走れない」といった現実的な危険を訴える声があります。一方で、歩道を飛ばす自転車が危険だという歩行者目線も存在します。</p>
-<div class="issue-sides"><div class="side pos"><strong>車道走行が怖い（16件）</strong>車道はトラックや路駐車があって危険。子どもや高齢者には無理なルールだ。</div><div class="side neu"><strong>中立（4件）</strong>車道・歩道どちらにも問題があるという複合的な視点。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">車道不安 / 感情高め</div><p>青切符への疑念と子どもへの車道走行要求に強く反対</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/isaiah8_1/status/2067988251760345275">@isaiah8_1 の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">歩行者安全重視 / 感情高め</div><p>路駐問題の解消と自転車の安全確保を要望する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Mid_observatory/status/2021148538013671884">@Mid_observatory の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-mensyo">
-<div class="issue-head"><span class="axis-kicker">論点4</span>
-<h3>免許制が必要・青切符だけでは不十分</h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>免許制度要求への立場</span><span>免許制支持 9 / 中立 8 / 慎重 12</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:31.0%">31%</div><div class="temp-seg neu" style="width:27.6%">28%</div><div class="temp-seg pos" style="width:41.4%">41%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#e04949"></i>免許制・講習義務化を支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>慎重・反対</span></div>
-</div>
-<p class="issue-desc">「青切符だけでは甘い」「自転車にも免許制度か事前講習を義務付けるべきだ」という主張です。標識を理解していない自転車利用者が多いため、罰則より先に教育が必要という考え方です。</p>
-<div class="issue-sides"><div class="side neg"><strong>免許・講習義務化派（9件）</strong>自転車にもルールを学ぶ機会が必要。原付のように免許制か事前講習で知識を担保すべき。</div><div class="side pos"><strong>慎重・反対派（12件）</strong>免許制は自転車利用の障壁になる。費用や手続き負担が増えて利便性が下がる。</div><div class="side neu"><strong>中立（8件）</strong>条件次第では免許制や講習義務化もあり得るという立場。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">免許制支持 / 感情高め</div><p>自転車への免許制や講習制度の導入を強く主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/r70OylZbSZeiIIz/status/2070149487566418240">@r70OylZbSZeiIIz の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">免許制支持 / 安全優先</div><p>自転車に免許制導入を提唱し安全優先の立場から現行ルールに疑問</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/yamazakibusu/status/2070074656128917921">@yamazakibusu の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-ambiguity">
-<div class="issue-head"><span class="axis-kicker">論点5</span>
-<h3>ルールが曖昧・警察への不信感</h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>ルール整備への評価</span><span>取締り支持 0 / 中立 26 / 慎重・反対 32</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:0.0%"></div><div class="temp-seg neu" style="width:44.8%">45%</div><div class="temp-seg pos" style="width:55.2%">55%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#e04949"></i>ルール整備後の取締り支持</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>現行のルールへの疑念</span></div>
-</div>
-<p class="issue-desc">「何が違反になるのか現場でわからない」「警察が恣意的に取り締まるのではないか」という不信感が中心。「113種類もの違反基準は覚えられない」「点数稼ぎ目的ではないか」という批判です。</p>
-<div class="issue-sides"><div class="side pos"><strong>ルール不信派（32件）</strong>違反の基準が複雑すぎる。警察の裁量が広く、正直者がバカを見る取り締まりになりかねない。</div><div class="side neu"><strong>中立（26件）</strong>ルールの周知や整備状況を見ながら判断したい。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">ルール不信 / 感情高め</div><p>青切符に強く反対、監視社会的な取り締まりへの怒り</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kress813/status/2032229649317814760">@kress813 の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">基準複雑さへの批判</div><p>113種は多すぎ、簡略化と周知整備の後に実施すべきと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Clifrennie/status/2068026232860537188">@Clifrennie の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-</section>
-    <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">2024年に成立した改正道路交通法により、自転車の交通違反にも「青切符」（交通反則通告制度）が導入されることになりました。16歳以上を対象に、信号無視や一時不停止、ながらスマホなどの違反に対して反則金が科されます。これまで自転車の違反は刑事罰の対象となる「赤切符」しかなく、実際にはほとんど検挙されてこなかったため、取り締まりの実効性を高める狙いがあります。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">賛成する立場からは、歩道での危険走行や事故の増加を踏まえ「歩行者の安全を守るために必要」「ルールを守らない自転車が多すぎる」という声が上がっています。一方で反対・慎重な立場からは、「自転車レーンなどのインフラ整備が先ではないか」「車道走行を強いられると、かえって事故が増える」「違反の基準が曖昧で現場が混乱する」といった懸念が示されています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">また、そもそも自転車にはルールを学ぶ機会が免許制度のように用意されていないため、「取り締まりの前に講習や免許制が必要だ」という意見も一定数あり、単純な賛否では割り切れない構図になっています。</p></section>
+    
+    
     <section class="panel" id="related-topics">
 <div class="panel-title"><h2>次はこのテーマ</h2><span>他の争点も見比べる</span></div>
 <div class="related-grid">
