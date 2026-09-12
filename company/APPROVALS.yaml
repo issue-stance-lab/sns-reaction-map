@@ -47,6 +47,22 @@ items:
     decided_at: "2026-09-12"
     decision_note: "CEOが本対話で、運営者情報の文言統一と最終更新日の更新、本番公開を明示的に承認した。"
 
+  - id: approval-20260912-002
+    department: engineering-data
+    action: website_publication
+    summary: "部活動の地域移行ページ、独立確認で確定した投稿1件の意見判定修正（意見1,139→1,140件）を公開ページへ反映する"
+    reason: "課題63の独立確認不足38件を精査し、確定した1件（tweet 2086309235479265726）が実際には意見と判定すべきだったため、原本・公開データ契約は既に修正済み。公開ページ（docs/）だけが未反映"
+    risks:
+      - "件数表示が1件分（1,139→1,140）変わる。論点・沈んだ大陸・下位論点データは既に整合済みで確認済み"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-12-bukatsu-missing-independent-38.json"
+      - "themes/bukatsu-chiiki.md"
+    status: approved
+    requested_at: "2026-09-12"
+    decided_at: "2026-09-12"
+    decision_note: "CEOが本対話で、公開ページへの反映（プッシュまで）を明示的に承認した。"
+
   - id: approval-20260906-002
     department: engineering-data
     action: website_publication
