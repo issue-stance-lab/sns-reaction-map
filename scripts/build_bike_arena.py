@@ -564,12 +564,11 @@ def build(
                     f"{block['issue']}: 代表投稿が正典の意見にありません（削除・分類変更）: {url}"
                 )
 
+    # 山なみページにも残る旧配列は、現行分類から再生成できる。母数を古いまま残さない。
+    if '<script id="bike-arena-points">' not in page:
+        raise IssueCountError('SM_RAW を囲む <script id="bike-arena-points"> がありません')
+    page = replace_once(page, r"const SM_RAW = \[.*?\n\];", build_sm_raw(rows), "SM_RAW", flags=re.S)
     if not planet_mode:
-        if '<script id="bike-arena-points">' not in page:
-            # 要旨には「7159件」のような一次情報の数字が入る。数字の出所検査から外すために
-            # この配列だけを id 付きの <script> に入れてある（configs の exclude_selectors）。
-            raise IssueCountError('SM_RAW を囲む <script id="bike-arena-points"> がありません')
-        page = replace_once(page, r"const SM_RAW = \[.*?\n\];", build_sm_raw(rows), "SM_RAW", flags=re.S)
         page = replace_once(
             page,
             r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>',
