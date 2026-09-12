@@ -129,6 +129,7 @@ def render_preview(d, examples, template):
     hero_css += '\n@media(max-width:1050px){.hero::before{inset:0 0 0 52%!important;opacity:.72!important}}'
     mobile = modern[modern.index('  .hero {', modern.index('@media (max-width: 720px)')):modern.index('  .thirty-summary li', modern.index('@media (max-width: 720px)'))]
     hero_css += '\n@media(max-width:720px){' + mobile + '}'
+    template = template.replace('__MOUNTAINS_JS__',(root/'quality/prototypes/fukushuto-mountains.js').read_text())
     hero_image = base64.b64encode((root/'docs/images/topics/fukushuto/fukushuto-hero.webp').read_bytes()).decode()
     template = template.replace('__HERO_CSS__',hero_css).replace('__HERO_IMAGE__','data:image/webp;base64,'+hero_image)
     template = template.replace('__OPINIONS__',format(d['candidate_opinions'],',')).replace('__COLLECTED__',format(d['original_total'],','))

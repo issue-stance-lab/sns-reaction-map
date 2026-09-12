@@ -13,6 +13,7 @@ __HERO_CSS__
 :root{--navy:#0f1a3d;--topic-shadow:0 16px 42px rgba(30,50,90,.08)}
 .hero{position:relative;overflow:hidden}.hero::before{content:"";position:absolute}.hero h1{font-weight:900}.hero .badge{border-radius:999px;font-weight:800}.hero .top-nav a{text-decoration:none}
 .guess{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin:12px 0}.guess h3{font-size:16px;margin:0 0 12px}.gopts{display:flex;flex-direction:column;gap:9px}.gopts button{background:#fff;border:2px solid #d7dce6;border-radius:10px;padding:13px 15px;text-align:left;font-size:14.5px}.gopts button:hover:not(:disabled){border-color:var(--accent)}.gopts button:disabled{opacity:.55}.gopts button.hit{background:#e6f6ec;border-color:#1b7a55;opacity:1}.gopts button.miss{background:#fdecec;border-color:#c4392c;opacity:1}.gans{background:#f4f7fc;border-radius:10px;padding:13px 15px;margin-top:13px}.gans strong{display:block}
+.mountains{display:block;width:100%;min-height:150px;background:#f2f6fd;border-radius:12px}.mountains path{cursor:pointer;stroke:white;stroke-width:1}.mountains path[aria-pressed=true]{stroke:#172033;stroke-width:3}.mountains path:focus-visible{outline:3px solid #b77920}.mountain-keys{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.mountain-keys button{background:white;border:1px solid var(--line);border-radius:6px;padding:8px;font-size:13px}.mountain-keys button[aria-pressed=true]{background:#e4edff}.mountain-detail{border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:16px}.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}.waffle span{aspect-ratio:1;background:#e7ecf4;border-radius:2px}.matrix-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.matrix-stats>div{background:#f2f6fb;padding:12px;border-radius:8px}.matrix-stats span{display:block;font-size:12px}.matrix-stats strong{font-size:22px}
 </style></head><body style="--topic-hero-image:url('__HERO_IMAGE__')">
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="https://sns-reaction-map.jp/" data-topic-title="副首都">トップ</a></nav><span class="badge">統治機構・地方</span><h1>副首都法案とは？候補地・費用・防災をめぐる論点</h1><p class="question-line">副首都、本当に必要？ 場所は大阪でいい？</p><p class="lead">収集したSNS投稿__COLLECTED__件のうち、意見__OPINIONS__件を七つの論点に整理しています。世論調査ではなく、SNS反応サンプルの論点比較です。</p></div></section>
 <main><p class="note">背景資料の確認日：2026年9月12日</p>
@@ -38,14 +39,14 @@ else {const l=D.locations[Number($('location').value)];c=l.counts;title=`${l.nam
 const evaluated=labels.reduce((s,l)=>s+c[l],0);$('target-title').textContent=title;$('denominator').textContent=`意見 ${fmt(n)}投稿のうち、この表示に評価を記録：${fmt(evaluated)}件`;$('unsaid').textContent=extra;$('target-note').textContent=note;$('chart').replaceChildren();const max=Math.max(1,...labels.map(l=>c[l]));labels.forEach((l,i)=>{const row=document.createElement('div');row.className='chart-row';const lab=document.createElement('span');lab.textContent=names[l];const track=document.createElement('div');track.className='track';track.setAttribute('aria-hidden','true');const fill=document.createElement('div');fill.className='fill';fill.style.width=`${100*c[l]/max}%`;fill.style.background=colors[i];track.append(fill);const count=document.createElement('span');count.className='count';count.textContent=`${fmt(c[l])}件`;row.append(lab,track,count);$('chart').append(row)});
 renderBreakdown();
 }
+__MOUNTAINS_JS__
 function renderBreakdown(){
 const target=D.target_breakdown.targets.find(t=>mode==='concept'?t.kind==='concept':mode==='law'?t.kind==='law'&&t.label===$('scope').value:t.kind==='location'&&t.label===D.locations[Number($('location').value)].name);
 const selected=$('evaluation').value;
 const rows=target.issues.map(x=>({name:x.issue,count:selected==='すべての評価'?labels.reduce((n,s)=>n+x.counts[s],0):x.counts[selected]}));
 const total=rows.reduce((n,x)=>n+x.count,0),max=Math.max(1,...rows.map(x=>x.count));
 $('breakdown-base').textContent=`${target.label} ／ ${names[selected]||selected}：${fmt(total)}件。${total?'七つの主論点に分けた内訳です。':'該当する投稿はありません。'}`;
-$('target-issues').replaceChildren();
-rows.forEach(x=>{const r=document.createElement('div');r.className='issue';const l=document.createElement('span');l.textContent=x.name;const track=document.createElement('div');track.className='track';track.setAttribute('aria-hidden','true');const f=document.createElement('div');f.className='fill';f.style.width=`${100*x.count/max}%`;track.append(f);const c=document.createElement('span');c.className='count';c.textContent=fmt(x.count);r.append(l,track,c);$('target-issues').append(r)});
+drawMountains(rows,total,`${target.label} ／ ${names[selected]||selected}`);
 }
 function buildGuesses(){
 const ranked=[...D.issues].sort((a,b)=>b.after-a.after);
