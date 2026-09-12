@@ -442,11 +442,11 @@ def refresh_verified_planet(
     """候補・原本・再読証拠・公開集計が同じ版のときだけ図全体を作る。"""
     if __package__:
         from .build_planet_page_preview import (
-            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll,
+            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll, clean_henoko_layout,
         )
     else:
         from build_planet_page_preview import (
-            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll,
+            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll, clean_henoko_layout,
         )
 
     if __package__:
@@ -462,7 +462,7 @@ def refresh_verified_planet(
     block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
     page = replace_block(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                          block, "山なみ全体")
-    return fix_henoko_vote_scroll(page)
+    return clean_henoko_layout(fix_henoko_vote_scroll(page))
 
 
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
@@ -605,7 +605,7 @@ def build_page(
     if "<!-- PLANET_SECTION_START -->" in page:
         page = refresh_verified_planet(page, records, opinions)
         page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables(rows), "詳細データ表")
-        page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", research_conditions(records, opinions), "調査条件")
+        page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->", "調査条件（山なみ内に表示）")
         return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
 
     page = replace_block(

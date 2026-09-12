@@ -566,6 +566,8 @@ def build(topic: str) -> dict:
         })
 
     return {
+        **({"stance_note": cfg["stance_note"]} if cfg.get("stance_note") else {}),
+        **({"reading_questions": cfg["reading_questions"]} if cfg.get("reading_questions") else {}),
         "schema": 1,
         "theme_id": cfg["theme_id"],
         "title": cfg["title"],
@@ -733,6 +735,11 @@ def static_caution(d: dict) -> str:
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
            + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
            + "</p>"]
+    if d.get("theme_id") == "henoko-student-accident":
+        out[0] = out[0].replace("社会全体の世論ではありません。", "社会全体の世論調査ではありません。")
+        out[0] = out[0].replace("</p>", '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>')
+    if d.get("stance_note"):
+        out.append('<p class="note" id="stance-definition">' + e(d["stance_note"]) + "</p>")
     if d.get("prototype_only"):
         out.append('<p class="caution" style="border-left-color:#e5534b">'
                    + "<b>このページは公開できません。</b>独自性の検査に落ちています。<br>・"
@@ -812,7 +819,7 @@ def static_fallback(d: dict) -> str:
                 f'      <ul class="islands">{items}</ul>',
                 *(([f'      <div class="note">本文確認後に追加された投稿{sub["unread_count"]}件は、本文確認の対象外です。</div>']
                    if sub.get("unread_count") else
-                   [f'      <div class="note">{e(sub["coverage_note"])}。</div>']
+                   [f'      <div class="note">{e(sub["coverage_note"].rstrip("。") if d["theme_id"] == "henoko-student-accident" else sub["coverage_note"])}。</div>']
                    if sub.get("show_coverage_note", True) else [])),
             ]
         else:
@@ -1000,6 +1007,9 @@ def static_editorial(data: dict) -> str:
 
 def render_page(data: dict, template: str, payload: str) -> str:
     if data["theme_id"] == "henoko-student-accident":
+        template = template.replace("s.coverage_note+'。'", "s.coverage_note.replace(/。+$/, '')+'。'")
+        template = template.replace('  const q=[];', '  const q = D.reading_questions ? D.reading_questions.map(x=>({...x, title:esc(x.title), opts:x.opts.map(esc), ans:esc(x.ans)})) : [];\n  if (!D.reading_questions) {', 1)
+        template = template.replace('  box.innerHTML = q.map(x =>', '  }\n  box.innerHTML = q.map(x =>', 1)
         # This sample has a large stance gap; inherited demo wording would
         # misstate it, generalize to all SNS, and imply a human source review.
         for old, new in (

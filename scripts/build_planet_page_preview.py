@@ -422,7 +422,7 @@ def build_background(topic: str) -> str:
            '<span>官庁の資料で確かめた範囲</span></div>',
            f'<p class="bg-def">{esc(df["one_line"])}</p>',
            f'<p class="bg-now">{esc(df["now"])}</p>',
-           "<h3>なぜ始まったか</h3>"]
+           f'<h3>{esc(d.get("cause_title", "なぜ始まったか"))}</h3>']
     out += [f"<p>{esc(t)}</p>" for t in d["cause"]]
     out.append("<h3>これまでの経緯</h3>")
     out.append('<ol class="bg-tl">')
@@ -634,7 +634,19 @@ def fix_henoko_vote_scroll(html: str) -> str:
     )
 
 
+def clean_henoko_layout(html: str) -> str:
+    """2026-09-13 owner comments: remove duplicate source box, correction and dividers."""
+    if "var TOPIC='henoko-student-accident-issue-stance-v1'" not in html:
+        return html
+    html = re.sub(r'<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->',
+                  '<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->', html, flags=re.S)
+    html = re.sub(r'<aside\b[^>]*id="correction-20260906"[^>]*>.*?</aside>', '', html, flags=re.S)
+    html = re.sub(r'<div class="arena-divider">.*?</div>', '', html, flags=re.S)
+    return html
+
+
 def verify_preserved(source: str, result: str) -> None:
+    source = clean_henoko_layout(source)
     for fragment in protected_fragments(source):
         # The existing bukatsu adapter changes only error presentation, not vote contracts.
         changed, _ = fix_vote_feedback(fragment)
@@ -775,7 +787,7 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
         removed.append(("旧固定件数の要約", hit))
         html, hit = cut_block(html, '<section class="panel" id="explainer-section">', "section")
         removed.append(("旧論点カード（山なみへ統合）", hit))
-        html = fix_henoko_vote_scroll(html)
+        html = clean_henoko_layout(fix_henoko_vote_scroll(html))
         # Remove the retired map scripts; the vote result now remains in view.
         html = re.sub(r'<script id="henoko-arena-data">.*?</script>', "", html, flags=re.S)
         html, _ = drop_orphan_scripts(html, ("HENOKO_ARENA_RAW",))
