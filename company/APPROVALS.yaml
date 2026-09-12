@@ -422,3 +422,18 @@ items:
     requested_at: "2026-09-12"
     decided_at: "2026-09-12"
     decision_note: "本対話でユーザーが『プッシュして本番反映』と承認した。追加の公開確認は不要。"
+
+  - id: approval-20260912-005
+    department: engineering-data
+    action: website_publication
+    summary: "あだ名禁止の独立再監査合格87意見と新しい山なみページを本番反映する"
+    reason: "オーナーが再監査結果を受けて本番反映と明示したため"
+    risks:
+      - "再分類により意見104→87件。462件の本文・IDは保持する"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-09-12-nickname-fix-reaudit.md
+    status: approved
+    requested_at: "2026-09-12"
+    decided_at: "2026-09-12"
+    decision_note: "本対話の『本番反映』を公開承認として記録。"
