@@ -396,5 +396,5 @@ Stage 0全体は未完了。作業枝 `task/nickname-stage0`、main未統合。
 ## 2026-09-12：あだ名禁止の独立監査・修正再監査完了
 
 [初回監査](../quality/reviews/2026-09-12-nickname-independent-audit.md)の5点を修正。別担当2名の再監査で全点解消。
-87意見・6論点・理由13区分。本文・IDを保持し、原本104意見・本番は未変更。
-[修正・再監査記録](../quality/reviews/2026-09-12-nickname-fix-reaudit.md)。**再監査合格。次は完成見本の公開確認。**
+87意見・6論点・理由13区分。本文・IDを保持し、承認後に正典・本番へ反映済み。
+[修正・再監査記録](../quality/reviews/2026-09-12-nickname-fix-reaudit.md)。**再監査合格・本番反映済み。** [公開確認](../quality/reviews/2026-09-12-nickname-release.md)。
