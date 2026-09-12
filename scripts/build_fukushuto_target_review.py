@@ -5,6 +5,7 @@ No classification by keywords; no canonical or docs writes. Output has counts,
 reviewer paraphrases and hashed evidence only. It is NOT a public-data payload.
 """
 import argparse
+import base64
 from collections import Counter, defaultdict
 import hashlib
 import html
@@ -122,6 +123,15 @@ def render_preview(d, examples, template):
     body+='</tbody></table><table><caption>論点別の変更前後</caption><thead><tr><th>論点</th><th>前</th><th>案</th><th>差</th></tr></thead><tbody>'
     body+=''.join('<tr><td>'+html.escape(x['name'])+'</td><td>'+str(x['before'])+'</td><td>'+str(x['after'])+'</td><td>'+format(x['delta'],'+')+'</td></tr>' for x in d['issues'])
     body+='</tbody></table>'
+    root = Path(__file__).resolve().parents[1]
+    modern = (root/'docs/topic-modern.css').read_text()
+    hero_css = modern[modern.index('.hero {'):modern.index('.thirty-summary {')]
+    hero_css += '\n@media(max-width:1050px){.hero::before{inset:0 0 0 52%!important;opacity:.72!important}}'
+    mobile = modern[modern.index('  .hero {', modern.index('@media (max-width: 720px)')):modern.index('  .thirty-summary li', modern.index('@media (max-width: 720px)'))]
+    hero_css += '\n@media(max-width:720px){' + mobile + '}'
+    hero_image = base64.b64encode((root/'docs/images/topics/fukushuto/fukushuto-hero.webp').read_bytes()).decode()
+    template = template.replace('__HERO_CSS__',hero_css).replace('__HERO_IMAGE__','data:image/webp;base64,'+hero_image)
+    template = template.replace('__OPINIONS__',format(d['candidate_opinions'],',')).replace('__COLLECTED__',format(d['original_total'],','))
     encoded=json.dumps(payload,ensure_ascii=False).replace('<','\\u003c').replace('>','\\u003e').replace('&','\\u0026')
     return template.replace('__DATA__',encoded).replace('__STATIC_TABLES__',body).replace('__BACKGROUND__',build_background('fukushuto'))
 
