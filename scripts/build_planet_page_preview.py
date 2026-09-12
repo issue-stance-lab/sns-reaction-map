@@ -845,6 +845,7 @@ def main() -> None:
             html = html.replace("</head>", '<script>if(window.VoteStore){window.VoteStore=Object.assign({},window.VoteStore,{cast:async function(){return {duplicate:false};},isRemote:function(){return false;},clear:function(){}});document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".vote-storage-note").forEach(function(n){n.textContent="※ 見本の投票は動作確認用です。回答は送信・保存されません。";});});}</script></head>', 1)
             html = html.replace('id="page-preview-status"', 'data-vote-preview="local-only" id="page-preview-status"', 1)
             html = html.replace("一般公開前の確認用です。", "一般公開前の確認用です。分類変更は独立監査前です。見本の投票は回答を送信・保存しません。", 1)
+            html = re.sub(r"[ \t]+\n", "\n", html)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html if a.for_docs else localize_assets(html), encoding="utf-8")
