@@ -30,6 +30,10 @@ def _copy_fixture(target: Path) -> None:
     for directory in ("configs", "data", "docs", "scripts", "social-samples"):
         shutil.copytree(ROOT / directory, target / directory)
     shutil.copy2(ROOT / "THEMES.yaml", target / "THEMES.yaml")
+    # 山なみの直接生成にも、正規テンプレートが必要。
+    template = Path("quality/prototypes/planet-prototype.template.html")
+    (target / template.parent).mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ROOT / template, target / template)
     # scripts/__init__.py がないと相対インポートがパッケージとして認識されない
     (target / "scripts" / "__init__.py").touch(exist_ok=True)
 

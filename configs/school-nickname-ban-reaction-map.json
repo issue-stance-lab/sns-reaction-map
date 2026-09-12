@@ -347,7 +347,9 @@
         "issue-sides",
         "heat-table",
         "explainer-card-desc",
-        "sm-stat-cards"
+        "sm-stat-cards",
+        "sides",
+        "legend"
       ],
       "wave": [
         "tide-card"
@@ -360,7 +362,19 @@
     },
     "exclude_selectors": [
       "review-note",
-      "article-trust-observations"
+      "article-trust-observations",
+      "islands",
+      "findings",
+      "sunk",
+      "srclist",
+      "claims",
+      "#planet-data"
+    ],
+    "allow": [
+      {
+        "value": 0,
+        "reason": "山なみの実行時表示に使うゼロ件（該当意見がない立場と、順位を持たない論点）。JavaScriptの初期値と説明文。"
+      }
     ]
   }
 }

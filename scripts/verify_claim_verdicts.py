@@ -20,6 +20,7 @@ LEGACY_CONSTITUTIONAL = {
     "原典にたどり着けず": "miss",
 }
 SOURCES = {
+    "school-nickname-ban": ("scripts/build_nickname_process_sections.py", "FACT_CHECKS"),
     "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS"),
     "bukatsu-chiiki": ("scripts/build_bukatsu_process_sections.py", "FACT_CHECKS"),
     "constitutional-amendment": ("scripts/build_constitutional_process_sections.py", "FACT_CHECKS"),

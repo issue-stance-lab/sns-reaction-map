@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -105,6 +106,12 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
 
 
 def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> None:
+    if "<!-- PLANET_SECTION_START -->" in template.read_text(encoding="utf-8"):
+        # 初段は未更新の完全なページを保持する。新しい正典・公開JSON・再読台帳が
+        # 候補ツリーに揃う finalize で初めて全体を生成する（途中の数字を公開しない）。
+        shutil.copy2(template, output)
+        shutil.copy2(root / ARENA_DATA, output.parent / ARENA_DATA.name)
+        return
     subprocess.run(
         [
             sys.executable,
@@ -128,16 +135,16 @@ def finalize(root: Path, current_date: str) -> None:
     候補ツリーでは `build_public_registry.py` が同じ候補から公開JSONを作り直した
     あとにここが走るため、ページの数字の出所が公開データ契約側へ一本化される。
     """
+    # 図だけを先／後に書き換えず、全体の検査が済んでから書く。
+    # 新しい正典に対応する再読が未完了なら builder が書き込み前に停止する。
     subprocess.run(
-        [
-            sys.executable,
-            str(root / "scripts" / "build_nickname_arena.py"),
-            "--public-counts-only",
-            "--output-html",
-            str(root / PAGE),
-        ],
-        cwd=root,
-        check=True,
+        [sys.executable, str(root / "scripts" / "build_nickname_arena.py")],
+        cwd=root, check=True,
+    )
+    subprocess.run(
+        [sys.executable, str(root / "scripts" / "build_nickname_arena.py"),
+         "--public-counts-only", "--output-html", str(root / PAGE)],
+        cwd=root, check=True,
     )
 
 

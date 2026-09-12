@@ -353,6 +353,9 @@ function clippedPath(x0,x1,top){
 
 function render(){
   const L=layout(st.mode), p=[];
+  // 表現強度が0でも押せるよう、見た目とは別の透明な操作領域を置く。
+  // 画面上で44pxの高さを確保し、山の高さや比率そのものは変えない。
+  const hitHeight = Math.min(SEA-TOP, 44*SVG_W/(svg.getBoundingClientRect().width || SVG_W));
   p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
   for (let d=1;d<=4;d++){
     const y=SEA+(BOT-SEA)*d/5;
@@ -393,9 +396,14 @@ function render(){
     const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
     p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
       +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    const hitTop = Math.min(v.top, SEA-hitHeight);
+    p.push('<rect class="hill-hit" x="'+v.x0+'" y="'+hitTop+'" width="'+v.w
+      +'" height="'+(SEA-hitTop+4)+'" fill="transparent" pointer-events="all"/>');
     p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
       +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
       +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.rate===0)
+      p.push('<circle class="zero-mark" cx="'+v.cx+'" cy="'+SEA+'" r="3" fill="'+col+'"/>');
     if (v.w>34||v.clipped)
       p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
         +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
@@ -403,7 +411,7 @@ function render(){
       p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
     p.push('</g>');
   });
-  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6"/>');
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6" pointer-events="none" aria-hidden="true"/>');
 
   svg.innerHTML=p.join("");
   svg.querySelectorAll(".hill").forEach(g=>{
@@ -417,6 +425,8 @@ function render(){
   fn.textContent = L.floored.length
     ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
     : "";
+  if (L.live.some(v=>v.rate===0))
+    fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
 }
 
 function land(i){
@@ -834,7 +844,7 @@ function buildQuiz(){
   const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
   const labels=V_ORDER.map(v=>{
     const same=cs.find(x=>x.verdict===v);
-    return same ? same.verdict_label : v;
+    return same ? same.verdict_label : ({fact:"資料どおり",gap:"少しずれる",miss:"裏が取れない"})[v];
   });
   el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
     + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
@@ -869,6 +879,11 @@ function buildQuiz(){
 try {
   buildModes(); buildList(); drawPanel(); syncList(); render();
   buildGuesses(); buildDive(); buildQuiz(); paintProgress();
+  let resizeFrame;
+  window.addEventListener("resize", ()=>{
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame=requestAnimationFrame(render);
+  });
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h]);
 } catch (e) {

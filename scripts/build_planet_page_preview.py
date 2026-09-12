@@ -588,6 +588,7 @@ def build_section(parts: dict[str, str]) -> str:
         body = body.replace(before, after)
     # 開発者向けの一文（スクリプト名とコマンドの案内）は読者に出さない
     body = re.sub(r"このページの数字はすべて.*?更新されます。", "", body, flags=re.S)
+    body = re.sub(r"(?m)^[ \t]+$", "", body)
     return (
         "<!-- PLANET_SECTION_START -->\n"
         '<section class="panel planet-panel" aria-labelledby="planet-heading">\n'
@@ -728,7 +729,7 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     # 対応するカード設定を見つけられず落ちた）。
     ids = ("process-collect", "process-verify", "process-found", "process-table",
            "reread-basis", "elderly-verify", "strongest-arguments", "issue-arena-section",
-           "issue-blocks-section")
+           "issue-blocks-section", "issue-voices-section")
     for iid in ids:
         match = re.search(r'<section\b[^>]*\bid="' + re.escape(iid) + r'"[^>]*>', html)
         if match:
@@ -747,6 +748,17 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     if match:
         html, hit = cut_block(html, match.group(0), "section")
         removed.append(("この争点の背景（旧・件数無しの短文）", hit))
+    if topic == "school-nickname-ban":
+        html, hit = cut_block(html, '<section class="panel" id="explainer-section">', "section")
+        removed.append(("旧論点カード", hit))
+        html = re.sub(r"<script>\s*\(function\(\)\{\s*var canvas=document\.getElementById\('nickname-arena'\).*?</script>", "", html, flags=re.S)
+        html, hit = cut_block(html, '<div class="thirty-summary"', "div")
+        removed.append(("旧固定件数の要約", hit))
+        html = re.sub(r'<p class="lead">.*?</p>',
+                      '<p class="lead">傷つく呼び方への対応と、親しい呼び名を一律に禁止すること。'
+                      '意見の違いを、学校での経験と公的資料からたどります。</p>',
+                      html, count=1, flags=re.S)
+        html = re.sub(r'<script\b[^>]*src="[^"]*school-nickname-ban-arena-data\.js[^"]*"[^>]*></script>', "", html)
     background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)

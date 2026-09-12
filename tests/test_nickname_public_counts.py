@@ -12,7 +12,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_nickname_arena import apply_public_counts
+from scripts.build_nickname_arena import IssueCountError, apply_public_counts
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "docs/school-nickname-ban-reaction-map.html"
@@ -31,7 +31,7 @@ class NicknamePublicCountsTests(unittest.TestCase):
         return TMP
 
     def test_public_json_reproduces_published_page(self) -> None:
-        """公開JSONだけから、いま公開しているページと同じバイト列に戻せる。"""
+        """公開JSONと検証済み正典から、現在のページと同じバイト列に戻せる。"""
         self.assertEqual(apply_public_counts(self.page, PUBLIC), self.page)
 
     def test_new_opinion_reaches_every_count_on_the_page(self) -> None:
@@ -46,12 +46,16 @@ class NicknamePublicCountsTests(unittest.TestCase):
         data["issue_assigned_count"] += 1
         data["collected_count"] += 1
 
+        if '<!-- PLANET_SECTION_START -->' in self.page:
+            with self.assertRaisesRegex(IssueCountError, "正典に一致"):
+                apply_public_counts(self.page, self._write(data))
+            return
         updated = apply_public_counts(self.page, self._write(data))
         opinions = int(self.public["opinion_count"]) + 1
         self.assertIn(f'分析対象となった意見{opinions}件', updated)
         self.assertIn(f'<span>{opinions}件 | セクター=論点', updated)
         self.assertIn(f'公開投稿 {int(self.public["collected_count"]) + 1}件', updated)
-        self.assertIn(f'<span class="issue-count">{before + 1}件</span>', updated)
+        self.assertIn(f'<th>いじめ・心理的安全</th><td>{before + 1}</td>', updated)
         self.assertIn(f'"key":"safety"', updated)
         issues = re.search(r"var issues=(\[[^\n]*?\]);", updated)
         assert issues is not None

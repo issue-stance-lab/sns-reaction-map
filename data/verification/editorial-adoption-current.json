@@ -63,6 +63,10 @@
     {
       "path": "quality/reviews/2026-09-10-bukatsu-c1-decisions.json",
       "sha256": "9477aec19fca2bd5d1f8dd02e5b172ba806c7b3ec321620a44c5e8b0c96d150d"
+    },
+    {
+      "path": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "sha256": "b7513a894ef8fb92e815e7b21d605c1f3c7de53ad1098b31d366dbf62be500fa"
     }
   ],
   "baseline_sha256": "55fd8dc49ed4e508966663bc0fbbc7a021df18b883c6338264aec5cd0e071095",
@@ -670,13 +674,23 @@
       "batch": 0,
       "index": 16,
       "changes": {},
-      "independently_checked": false,
+      "independently_checked": true,
       "canonical_applied": false,
       "first_route": "no_change",
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "counts_as_registered_editorial_reread": false
+      "counts_as_registered_editorial_reread": false,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "一律禁止に反対"
+      },
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_reason_sha256": "62d4aa5b9b370ccd6be7a36ffcef590e71c1fa7444af07bc7b1324fb55ba3840",
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "sample_id": "school-nickname-ban:9",
@@ -704,13 +718,23 @@
       "batch": 0,
       "index": 17,
       "changes": {},
-      "independently_checked": false,
+      "independently_checked": true,
       "canonical_applied": false,
       "first_route": "no_change",
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "counts_as_registered_editorial_reread": false
+      "counts_as_registered_editorial_reread": false,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_reason_sha256": "b8a048117d92d5e697475e7f084342c8d77f039fd39ce05bbddc30f0fb1ddc05",
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "sample_id": "takaichi:1",
@@ -1091,16 +1115,26 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "2a7752494328247a824428b93a60daf81a05bb51348cc5227baab8c87d18798a",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "e046c668bc0696a6e8250eb02f78e8daf0b5cd76244d4edfcf8adbd628a96404",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 1,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
-      "policy_version": "editorial-adoption-v2"
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 9,
@@ -1443,16 +1477,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "76b0a304ab738ca5bacad2425fb37004fa396f13db2deab231864663ad88f7fb",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "d9d2a99886d684187bd8d6060dbdc65f03e1ae504c6c74c5c880bb5dc6636e6b",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 1,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -1787,16 +1829,26 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "70609ffc3c6f621a966f55166bd2e207c584b21a1f492c4f03160307acaf32f4",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "45030f81fb2f532980461a3cd860491950c30e499a78fae8341b676cf0f5983f",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 2,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
-      "policy_version": "editorial-adoption-v2"
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 9,
@@ -2476,16 +2528,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "e0cdbadf156c05be09b38db1127d4dce4bc97698754a40b26bfe42ff49b32c6c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "add75d24f1b5c359cecdfd6003878a6f84f23f4b56d4677fe26d665f957b707e",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 3,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -2813,16 +2873,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "9db560b33af8fe9e49bc6a1de98b3eef986c63f3463241bf6105e492eeecaff6",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6f83c5bab008dcba6fe2e022573d7f5bbfb44de465f47c83cd70c223fdf85028",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 3,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -3168,16 +3236,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "1e9c9b1cbb377c80422b4588b880883aa6878278c8edab4e541bffa78d887b24",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "b4a58679b9bd8f5f7da915a2e3c2cf0f6cee898fc600eb3e211626b2dfb02b90",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 4,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -3513,16 +3589,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "9a7c6d7410ff5cbf03b688fcaa087d01191be13499aabe5cd3cbc1cc57172208",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "2e49d0d47eb76ba6dd469a917ab8e4b039d8790ab7e3426ac74a74a2b61b06cf",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 4,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -3853,16 +3937,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "23f518db583260c344b488036b9c3e2765a60353cdd9157c26c6fc047a496836",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6e8cf7ac04815bd1ec607a464f557e786ec3cd3d1e129a8659ecdc0c54b984a5",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 5,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -4192,16 +4284,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "c6ccb79a69e34cfe0b069da62828a4e92ef4c739cc31090a605533b4b1b718eb",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "3d5bea232abfe2e42a4694bb37d24ddccf23b619508bfe4fbb8cf53dad204be8",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 5,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -4546,16 +4646,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "a897b5d844c61bdc48cbee5d4811fdb908653d3520ef3e9bfed301cd36c0fbfb",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "a18c37ba7b105be7cd107c856eb3c9dd487bb9fd45fc10010cb337ca2924ee8a",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 6,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -4876,16 +4984,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "cd645c8debad90036e3e7e40bb229de6570441eae7b9f8fc314598f32c91e1cc",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6a1f4fe2b760e0d313ce2fd31fa53b02279f08edcb74bc5bb5026decfe9473ca",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 6,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -5227,16 +5343,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "ab2d49a1e914feaa1018c880349544d65df8cfa859df2aa15e71bee51b39d927",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "a32adc4d64a1941c1e25e08b69f2d6656886f64e24613cb332e1fa6bbcbe107a",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 101,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -5932,16 +6056,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "812c76a11288f2a18785ba6219783da1622439665602bfd9626950b8913c99a1",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "7d33b22fc07f241ba6de95fde1bea7a4e009c560a017191f3a47ade65493e878",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 102,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -6262,16 +6394,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "f2085dfdba23ad09f2357a7416b5f6ce5edc1431bce6117a3f53625f187c5386",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "7ee8d2b7af9b84edf99c37b3e60fe6cfab1000abc9900c2409e7a25a685db513",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 102,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -6625,16 +6765,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "bd2fadb854389b119f7d078416b5240d855f15d2edd0337dc8510231ef2cda7d",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "b19b3a846a283871363de574dd782160e6ae8725e823c965107281484fdab6f2",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 103,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -6991,16 +7139,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "一律禁止の実効性",
+        "stance": "一律禁止に反対"
+      },
       "reason_sha256": "39839efc2b0264648bba143bdb9f162fbf2de0b16f5e1a01b51e438e7a28d7c7",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "7861bddc2213700fe83ae7ee20a7da2aedc588c15a71d22496ee32c0e3a3f63b",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 103,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -7342,16 +7498,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "dfa37785e32924ad9d4caf725e0ceb451cae11537c07b02d2f4dfc6636c177b4",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "f7acc15bf982a19402e4fcc500b0d1bbbc8c2fa3ee61dec5a0b2af378d7df396",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 104,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -7690,16 +7854,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "親しさ・呼称文化",
+        "stance": "一律禁止に反対"
+      },
       "reason_sha256": "85c38127b8c91a9b4ed619fba5c4003b3bd02acff9e57531123e59b2c9b6fb31",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "b2aa60f59863891400ccd7a50b2273694af4437a3477e1c3b3f6d4cc321456ab",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 104,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -8050,16 +8222,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "a379f2ef20ec6f2acaaa7eb24d2fc6a75d8f11691ad978096e64860a6ca64e2c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "5de1542f1b92a18de6225f3fe918d98e3d5bd2a235a0da34fa2e2a01ddc9f112",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 105,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
-      "policy_version": "editorial-adoption-v2"
+      "adoption_basis": "independent",
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -8390,16 +8570,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "76497ea97d633c013c9b4be7c6ac7812242db1a23266297df59032fb736f6495",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "46dd6310a128e025be37fed8bbe791cd43660a9e204b7f3ded21ef6f22e51935",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "batch": 105,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
-      "policy_version": "editorial-adoption-v2"
+      "policy_version": "editorial-adoption-v2",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -8743,16 +8931,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "81f174f1a7d21d28f19e9b8c4e55d745ff078d486a91011d1db22b20460ac3b7",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6e40c93efe9407e0c97599ef14005267ce620bc713cac71a4c428a22281a6e9c",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1001
+      "batch": 1001,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -9096,16 +9292,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "1552b9eb17041eddb48dc5afff305ed23e4753f8def5f699b66ec47e24213349",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "0ce585fde77320e9e281bde9380b5ac293a8a78cad90b3d604eec03d81f70f47",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1001
+      "batch": 1001,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -9806,16 +10010,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "一律禁止の実効性",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "39975f34ad653fe87213d8ec53b1cae23f2c8a1b6e439b64e8d6314ef2a472d9",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "15605c535435990bbf0770b66740cffcff8e9a129b41199a54ce7db7e1032828",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1002
+      "batch": 1002,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -10163,16 +10375,26 @@
       },
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "親しさ・呼称文化",
+        "stance": "条件付き・個別対応"
+      },
       "reason_sha256": "48c67bf4a81a047d79d3dfbde572a0dfb15852cc2907a6e3e403e14a7d2d2a67",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "a7491f8d1524f7fbc465a3ff1e8ff69dc77d68d333a83328723b053365058546",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1003
+      "batch": 1003,
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 9,
@@ -10499,16 +10721,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "1fd8852a9c47ecc463a5091a149e41228d0dfa0df669cc99912600ffa4e62189",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "d1eb174641ceb55dd70f5f6c889513ae1135dbd097518eff67915fb48dd57d59",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1003
+      "batch": 1003,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -10856,16 +11086,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "f00187409288e6f11ab25513205cc6c4dfa7e392cab09c78b1b5bf045d1ea4a1",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "bb6e1ad4e7056ba29722a308a7ed7baf80b6e6b231b6d32501952e9fcd14db05",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1004
+      "batch": 1004,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -11574,16 +11812,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "ad41bb3f17417a63386c99ecf34cb8615e6fd4555952a0bf2301825a9a18cd85",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "b97fb5b54966afba2e21f8428ede40242951e2ad47f4bd8f49e35f8b1fa92cdf",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1005
+      "batch": 1005,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -11932,16 +12178,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "b2bc570c4421f699aa9432a0b2f47b80cd5e699109e625b0e372a19dcb7c74df",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "f613f575c3351155e382771f34f047bd562761edbaadfd412afdf50ad0eb38e5",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 1005
+      "batch": 1005,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -12675,17 +12929,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "d08029ba1c0d5082518e5ba8c9910d5716d877e3272dbe7ca19244b290db0bfb",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "c754b553ca1639c3292e8b27fc436587e3659ca8c6f3b7d0169dfd1a4f16dbca",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 2006,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -13035,16 +13297,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "学校運用・現場体験",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "83c13a00f56356a5da4d33ff4635f99fd79500e2b1ffe8e8c3fc1f353d259617",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "c0e9844fdb02f61959b984ed3a80ab8920618250b24e2e7d571c318749e5aab4",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2007
+      "batch": 2007,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -13379,16 +13649,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "5e2f896f955bee4726374685d31c0fa34aa40b584fc210ee96fc9b52357bcdf2",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "2d1bad1981f7aad1890531ee7fc0e6e9c6243fc4a1bdc7f15de6229868e81f9b",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2007
+      "batch": 2007,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -13742,16 +14020,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "6445f089fdd8f8b5a3981c8e0e8a93ae63eea4d5c7545d8421d5b11fcbc1b700",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "9015f099dfeaca60f74ed411142b1d92a5f7d981e704c9c8722192d315b8ae29",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2008
+      "batch": 2008,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -14111,16 +14397,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "b5b662529c430780827901ad4c2381e5d43c716e7ed7cc43a3d9d331eae8f8c0",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "4635a1f09db58f3e00f57f14a77d6ad0842036a3e2ae431c6f8765f1ff0e5875",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2008
+      "batch": 2008,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -14463,16 +14757,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "ca73797879b00aedf4e6095bdcd555c5b586a72813eb7211d8da14881545c98c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "0f03cbb272f07b1c171c009ee7443456f60e346c63b151acb6c3f78f46b83e8d",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2009
+      "batch": 2009,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -15176,16 +15478,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "a897b153bb40fe812d74e56758714c6f0c023940f3af3a0dea6c2b9dec6af3e3",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "7b558795f12c34ecd7e4cede2b4af1148ec61de2c768b2fa1ea78c6ee2286f82",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2010
+      "batch": 2010,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -15529,16 +15839,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "ce7ca170fc5b3d87b052613b20b3fde75da7bf38132722dec6cd70e11fb50b7c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "2be128a5c0ed5b704a55c94c29b6b97a28ee425a90279ceecc21952a4e8ce666",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 2010
+      "batch": 2010,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -15890,16 +16208,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "禁止支持"
+      },
       "reason_sha256": "ad28a63a84cdf6d362d6d2d4c9776e4632e57288bbde8fbdb7b280b17f9c9396",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "f137d34aaae0fc5e5d161ba2d068daf75350aaad5e534a28e391d3b89a3f4798",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 3011
+      "batch": 3011,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -16240,16 +16566,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "448ff9fca7cb32707a726f9fdb6a3ada70edf1a889c73b9d96941121ce674883",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6c9233937bf851a405d53286f23717f1e40bd08deb02d34c38a4ce812ebf1ac1",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 3011
+      "batch": 3011,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -16611,17 +16945,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "2d6a9b3edba4e48da1c54e936454702ec28dc9cc0cd7ead116d915a7d1711145",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "593919cf5ad395cd338326ffb487abaa35f156759d4f9d373b6a3e2c7ec0253d",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 3012,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -16961,17 +17303,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "e1b54c2685d4ac2991108960b9c20191439f2a05cb51a97f1b87680fc867d963",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "d9e9b9e457bb8bd07ce00706ad5bfa1ecf733185bcb6659602294b23c6f1fb4d",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 3012,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -17321,16 +17671,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "31f858114e4ab1e6b4320c9b8c245612931e8f12e7de7fc1a60a853b536c769e",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "dac5402cb1fb2b7e5c878ce427ac7b1be981d1ead7958e8398148dcaa3b9be71",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 3013
+      "batch": 3013,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -17673,16 +18031,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "6129066fff424e13c8df5c3d455a38db2d5f8177365267205e7a412ac3629256",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "791aa71782dfdcc314cc572753e2f701db49b7c16d7348cd79653ee52af2ef00",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 3013
+      "batch": 3013,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -19124,16 +19490,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "7ada7f1c75e63a6d73b69516372b70372ca4b6d904fe9e83cef594a8079caa8e",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "f1b7d3cb65e6784db6695e9f3034ae011404ad6ec0306ae7c4acb173dfcfb742",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 3015
+      "batch": 3015,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -19843,16 +20217,26 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "6cd8effea1cc508d0b0edf1519a73e97ae5339b1c43001f491cebb928e9dee4a",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "87433dbf064bc4e6a465a7805f29cae17fa962d7a101b81049ae18839d15d146",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4016
+      "batch": 4016,
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 19,
@@ -20202,16 +20586,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "0cf3ecac70c6a19f24ff23b0526ba616527aaf2b2a0e1d6815e7e1b12d836a1d",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6a4d5d11aa67bac6c46bcbddce56d1aabcfb09ac39648606e3b0929fbacfcad9",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4017
+      "batch": 4017,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -20537,16 +20929,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "一律禁止の実効性",
+        "stance": "一律禁止に反対"
+      },
       "reason_sha256": "4f2d4d6c0d0cc3f9011aec4debb41a70d66e0aee25a9c2670bc837bcd5834b44",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "65da1814d0c11b84fc51e095b6162b592c24a63bec9b849be700788c1681959b",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4017
+      "batch": 4017,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -20897,16 +21297,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "77ae0afc354e7b40db26d045edf767f2a9a7c87cc0b5a4787d8957dc04ba39cb",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "d401ed887ee494c81aa3cdff41687884abc8c6120e95c4da8d319c04589b73dc",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4018
+      "batch": 4018,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -21258,16 +21666,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "3363df6281d128b95ddcf77d3023e84423ae18c0a23070a3c2ffa34f9307175b",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "3b42183546654894cad26d1cfdb13f0b0ed6c49f4d1ecfe33da51dd6af13c7b8",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4018
+      "batch": 4018,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -21621,16 +22037,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "f44c92521cf7cd5723fefa577bb20643210d6df58148d7867fd33adc58dce805",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "228f524cbf7739bedfb37466d691327a45e0a3e669d5422390c844382211e560",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4019
+      "batch": 4019,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -21977,16 +22401,24 @@
       },
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "19ff4087d0294a80baae450c69d5497d3fdaae554a7d3a43811dbbf1e7ef562c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "e79159a1551ab6f558ca5db3f599c9438a3ee2709ef8e4eae18fa697536e358f",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4019
+      "batch": 4019,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -22351,16 +22783,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "0607833dccd700c5b7ac4e712a0e95d47883b2ce5f10e136d0c6dd4537afc37c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "e2d316f5e8fdd7c8bcd31a060658a51be067ca456552d29deb4eeee874c61fab",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 4020
+      "batch": 4020,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -23081,16 +23521,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "da9a97358196733fa87afe6beaa33aaa4ae9959de03868439e5460c79f5088f3",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "56bb0c322444618f37a622e8bb63c974050523af25d7936eaa6957047fd17bc9",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5021
+      "batch": 5021,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -23432,16 +23880,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "9ff7cfaf442d41cc6ef8b8708555717cdf847b3a4fc56f9194682ce73a2aa1d5",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "8fb798950a82c2338663c4f9f3d1c1015e6a4944ebc5057addeb73323024eede",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5021
+      "batch": 5021,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -23803,16 +24259,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "e38eb35d9ddce0636ce43d46c1527187cf4bc5d11db911994d8403d25871517c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "5a3322005cc42c2f6ae05efa2266ef93335a24932029728fa01cea4e0cbb2704",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5022
+      "batch": 5022,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -24163,16 +24627,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "一律禁止の実効性",
+        "stance": "一律禁止に反対"
+      },
       "reason_sha256": "755821c90bc5b62a2257ea5ca0abc53537726f19d3a456156d52cab76c958ce1",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "516aac56d15319c06797b3e0e0bd50e8965bf8b740dfbcf722db7aff98696034",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5022
+      "batch": 5022,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -24513,16 +24985,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "ec4e2dd354d7a935c7ff3ea6d644b2e0b3daa97598179ccbf4b5c9f52cf46182",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "6283a57dcc4777f02289fd6629b85884e6e0c7f78e50c3db022d94d16a8a2b91",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5023
+      "batch": 5023,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -25237,16 +25717,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "221ba1b557dab1dd9ea843499ba927110eaa7c6ae9cb8436d1aba1df579de023",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "69d6176cfa36f16122364cc2b621148ee9b879446569093d976ba368693867a1",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5024
+      "batch": 5024,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -25578,16 +26066,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "12cc1229aeba7fd64dce6d4d3b65bddbe5a8e9166401d45f10660e64e0c446cb",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "a132f95920529efd39b67993e2fe657a177cb175b4e5aea027e0ca4c2e45c96b",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5024
+      "batch": 5024,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -25934,16 +26430,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "023347e3d3fa5c7b8d9f86a25a4a477f07dbb328b4d5e47633fedae4b06dfc07",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "5f6738c87107eb52143c55166e9c05148352fbac1f24e89cf4b3025e21b24021",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5025
+      "batch": 5025,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -26290,16 +26794,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "532d92ad386cbfcbd78174af268e94140ba77f184ddbdc51a2cc5540a6fb0ab6",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "e3a60a9c59ac1fab3a0b22bafef887711e4e23bb6031f8ae5562eacd82cc0b43",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 5025
+      "batch": 5025,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -26668,17 +27180,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "ae6aacaa56cafd6ad00df45fd73bfbe145c32426495dc075c88be0f51ad8f05f",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "520ad3238f44b157c2af8d83a7c4b4e9511df460b224a4a0876b9af3dbe100eb",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 6026,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -27029,17 +27549,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "親しさ・呼称文化",
+        "stance": "一律禁止に反対"
+      },
       "reason_sha256": "86a8caecbc86a29d9ebf09940a9b4299954cdb5cf531153a9925860a7a29f1c9",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "7724fa48368f3dd7c0e35794e2c8d481167c08eb671fe5508506bb91bd5160fc",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 6026,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -27381,16 +27909,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "dd2ec47b2fcc9215a8e1aa8fa34ddd6fe443d96afd4979c1711857cd8d719672",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "7fbb6652be6e3bf53444f0de5b3ed2c6a3be8c6ed7a2c9835db96f89567333e5",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 6027
+      "batch": 6027,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -27734,16 +28270,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "dfc96d36eb7e2545c15ef748e17356e739c503045ce389aa5807696a23c555f3",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "80465e4974f8058ebe134c420cade5f6cce4b3ca68365cd5b031d0ed0c98a05b",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 6027
+      "batch": 6027,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -28107,17 +28651,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "3185d18c1614653bbe880e165c0d0b5bc75f0bb973bfdd22e46b41f8fdc612e0",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "71c1f2d6e8869f224dc548857e02413aa466cc581dff7152fa1b181a365d9496",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 6028,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -28486,17 +29038,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "a02ad3c0090338ff46ea22b08bcfff0f98ab9ed6879dcf2720fe4781d9f8804f",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "faba9674de9d6f0da7013c35a60bae2b46a3d703402e36590304ed97ff09c5f2",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 6028,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -29218,16 +29778,26 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "0925413ce2771ff69432ff90fa84fc9a0314ed0ac5dea60280b7442fc0c6d63c",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "d23cdb082273103d145419c4beb7ae38d100348e4067da75b298be0d4afd644e",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 6029
+      "batch": 6029,
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 19,
@@ -29570,16 +30140,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "e1e9650dfdee0765ed5ecbbf6ba0934a79dd799773bb359a257a144d5c5b2178",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "77aeec448a3f80643d32a77c1567f2db0ea23633c45831660fe70ba52ce57dfb",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 6030
+      "batch": 6030,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -29932,16 +30510,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "5346b52ee9b7750e1f77f122a63ab38ad888047b50f18b787af7e69ec63ff9fe",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "c1ccd027104cdb996af772f4813d35b0af1668b18a2c44cfb9a6e7df8aae4df8",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 6030
+      "batch": 6030,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -30283,16 +30869,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "20efc715109c9a87212391ae182f2af19e66aadee79baf8855260da99a9c8ca3",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "b87d5f3514655a73d235d839c58519b6ccc3d36ca234bb4b0e3bf132cdc6148a",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7031
+      "batch": 7031,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -30656,16 +31250,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "d1d0453802b6540f65dd341f288e79febc0cec0d7bf4247f10bf4fb44662a292",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "5f717917c9ed2eb70b0286f7e213518a6088cc8da276a0a96f9c9e4db9eea352",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7031
+      "batch": 7031,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -31036,16 +31638,26 @@
       },
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "本人意思・柔軟運用",
+        "stance": "条件付き・個別対応"
+      },
       "reason_sha256": "539e2000cf42b6a2e0dc1966108c5b32171e5be5d43a029366f92b88f4f9c664",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "cb08325379025a1814916098bbd364e7112ad404e9cd1a475e90d5234c748ca0",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7032
+      "batch": 7032,
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 9,
@@ -31399,16 +32011,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "68bc2a95618fb2467b0f6d111734343f545faaa33b0e63c827a283f8805ac2bc",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "9f8d4997f7316f840ef12c2d303ecc92df9890bfd6b3304c3da536e832d80df6",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7032
+      "batch": 7032,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -31748,16 +32368,26 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "4527900581860bcd55911f926ee6d09e09a901a3987af5d93b0b3b7d8e83599a",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "94b4516807d6288dab8bec8253ddf5eb5b56c29526eb626b08bcc3991a389373",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7033
+      "batch": 7033,
+      "independent_uncertain": true,
+      "independent_evidence_sufficient": false,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+      "disposition": "pending_editorial_decision",
+      "counts_as_editorial_reread": false
     },
     {
       "index": 9,
@@ -32108,16 +32738,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": true,
+        "main_issue": "一律禁止の実効性",
+        "stance": "一律禁止に反対"
+      },
       "reason_sha256": "543fa31e7a4e0cae40acbf1e6070e9bd5972102aa504e9cb04b929b9770fbdb5",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "bdf210d6694284b16e3d1c2c068452e88312131964efe9bad8bf2014f2c8431f",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7033
+      "batch": 7033,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -32468,17 +33106,25 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "11c987b9fb286a7dc2103b0a8c5b6f2f220180a39443702d65199f69b0974a44",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "fc6683a1cf03b1c1e94454084449bb5dc871c655f68f2d0d827af003385580e9",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "scoped_criteria_reassessment",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
       "batch": 7034,
-      "reassessment_event": "criteria-scope65-reassessment59-v1"
+      "reassessment_event": "criteria-scope65-reassessment59-v1",
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -33200,16 +33846,24 @@
       "changes": {},
       "route": "hold",
       "first_route": "uncertain",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "いじめ・心理的安全",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "eac3ec5e22e2ca836ebadc0c049f28c2cfa2378c428e5cb1e3a7e0c4ce2e1ed7",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "5cf7dfaec649a877fa7a5f47205b8673d355b3d35b6b2c765731f9823a93790f",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "hold",
       "adoption_basis": "uncertain_or_disagreement",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7035
+      "batch": 7035,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -33558,16 +34212,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "3769bf764fe1ae607f5d4b437a2da9af2b3d085dc9aff6c85d3f7431d554a372",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "66e9e53b0bfa949e12df58948d1ea1c5dc4cfa98ce41342e3386d21b826b8620",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 7035
+      "batch": 7035,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -33926,16 +34588,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "773d77c5f95642127474c71737c3016d5aad8076852b36226863f6c114fe00e8",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "19cdfb05ada58580aa83e2c112e8df5c4c033794c4220e5a0dfc242d3ea5c684",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 8036
+      "batch": 8036,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -34650,16 +35320,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": false,
+        "is_opinion": false,
+        "main_issue": "その他",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "6c5395b07c5b7bec19dd39be9a6c46f308451606f22209810f679e8047132667",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "93cd3b299ad2ce04fedb86c2a961e8df973c51af57f3a87303fbb5d4a824e97c",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 8037
+      "batch": 8037,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 9,
@@ -34988,16 +35666,24 @@
       "changes": {},
       "route": "retain_candidate",
       "first_route": "no_change",
-      "independently_checked": false,
-      "independent_proposed": null,
+      "independently_checked": true,
+      "independent_proposed": {
+        "is_relevant": true,
+        "is_opinion": false,
+        "main_issue": "学校運用・現場体験",
+        "stance": "中立・情報"
+      },
       "reason_sha256": "94b04ad541a2c03ef372c7a9d44aa8efd3bfead8edc418c02ffb9ba2421d4b98",
-      "independent_reason_sha256": null,
+      "independent_reason_sha256": "2e3d2ab6983252128c4fec4d379297892c7dd65af164b2194586f38783ca7e64",
       "counts_as_registered_editorial_reread": false,
       "canonical_applied": false,
       "adoption_status": "accepted",
-      "adoption_basis": "sampled_batch",
+      "adoption_basis": "independent",
       "policy_version": "editorial-adoption-v2",
-      "batch": 8037
+      "batch": 8037,
+      "independent_uncertain": false,
+      "independent_evidence_sufficient": true,
+      "independent_review_source": "quality/reviews/2026-09-12-nickname-stage0-independent.json"
     },
     {
       "index": 19,
@@ -149418,12 +150104,13 @@
   "canonical_applied": 0,
   "registered_reread_increment": 0,
   "latest_adjudication": {
-    "source": "quality/reviews/2026-09-10-bukatsu-c1-decisions.json",
-    "previous_view_sha256": "3090f84b7b4885574535c6ee59af427c3b3423e462b17d09904f284d10913418",
-    "added_unique_records": 87,
-    "updated_existing_records": 23,
+    "source": "quality/reviews/2026-09-12-nickname-stage0-independent.json",
+    "previous_view_sha256": "a8577c4f89ddf946aa4555854bfedb9ed4a1a207b5c21ce0a6d8aa9d9dac1fda",
+    "added_unique_records": 0,
+    "updated_existing_records": 83,
     "new_unique_body_reviews": 0,
-    "additional_parent_body_reviews": 110,
-    "additional_independent_body_reviews": 110
+    "additional_parent_body_reviews": 0,
+    "additional_independent_body_reviews": 83,
+    "note": "独立読みの追記。先行holdは解除せず、正典・登録再読は変更していない。"
   }
 }
