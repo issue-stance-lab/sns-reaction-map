@@ -714,12 +714,10 @@ def _public_rows(data: dict[str, Any]) -> tuple[int, str, list[dict[str, Any]]]:
 
 def refresh_verified_planet(page: str, rows: list[dict], collected: int) -> str:
     """再読検査と正典の一致を確認してから、図全体をメモリ内で作り直す。"""
-    try:
-        from . import build_planet_data as bpd
-        from .build_planet_page_preview import build_section, render_planet, split_prototype
-    except ImportError:
-        import build_planet_data as bpd
-        from build_planet_page_preview import build_section, render_planet, split_prototype
+    if __package__:
+        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+    else:
+        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
 
     canonical_rows, _, canonical_records = load_opinions()
     def counts(records: list[dict]) -> Counter:

@@ -152,7 +152,7 @@ class NicknameArenaBuilderTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "page.html"
             output.write_text("previous page")
-            with patch("scripts.build_planet_data.independence_gate", return_value=["再読が未完了"]):
+            with patch("scripts.build_planet_page_preview.bpd.independence_gate", return_value=["再読が未完了"]):
                 with self.assertRaisesRegex(builder.IssueCountError, "再読が未完了"):
                     builder.build(html_template=PAGE, output_html=output)
             self.assertEqual(output.read_text(), "previous page")

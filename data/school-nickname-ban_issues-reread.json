@@ -40,10 +40,6 @@
       "group-9": {
         "label": "愛称のよさと嫌な呼び名への対応",
         "count": 2
-      },
-      "group-10": {
-        "label": "昔と今の呼称を比べる",
-        "count": 1
       }
     },
     "さん付け・ジェンダー配慮": {
@@ -68,7 +64,7 @@
     },
     "本人意思・柔軟運用": {
       "group-13": {
-        "label": "本人が選ぶ呼び方",
+        "label": "悪意の有無・本人の選択",
         "count": 3
       }
     }
@@ -410,8 +406,8 @@
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "d518b77b0125d8fdb1c27cd5f6abed0adf54550f2efe525cc4cbc2cfcbb337c9",
-      "reason_sha256": "341f9c3c1b02cb2ac898f29becb3ff5770de7233709f0025d310c0d1c9b0c8c2",
-      "read_at": "2026-09-12T13:16:39.983629+00:00",
+      "reason_sha256": "c613763d1d8b4b3ace2856c543df95d299fea6d0d6643bfe50040020003431c7",
+      "read_at": "2026-09-12T13:59:08.336471+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "493a227dc28cdebbed291a1a5738a81be0ea9433dae1efe3a9f50cf859f03787"
     },
@@ -535,17 +531,6 @@
       "read_at": "2026-09-12T13:16:39.983629+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "dd45627c4ed4672f749148f9adc4e01a27cae2696f84e1dff31dcc0b5eda5dd2"
-    },
-    {
-      "main_issue": "親しさ・呼称文化",
-      "bucket": "group-10",
-      "body_reviewed": true,
-      "review_kind": "editorial_body_reread",
-      "text_sha256": "fc54df501056e14f141fb9f68e8def38fb6dfb427a985121751bd687fcfa75b0",
-      "reason_sha256": "6e50d344066e93ae765c1333c63afd8161b01b1b154b75d855d1bc07a4481828",
-      "read_at": "2026-09-12T13:16:39.983629+00:00",
-      "reviewer": "Codex (GPT-6)",
-      "post_key": "bb84a1dc5a2b8f2776ed9e19a0710d9747e46916e6a2a1fd3c5ff49b1644c23e"
     },
     {
       "main_issue": "いじめ・心理的安全",
@@ -1042,5 +1027,26 @@
       "reviewer": "Codex (GPT-6)",
       "post_key": "bc34d2e84f48c8196aea0aa182f46504139105c3bf08a3aecbacb52c89debd52"
     }
-  ]
+  ],
+  "excluded_items": [
+    {
+      "main_issue": "親しさ・呼称文化",
+      "bucket": "group-10",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "text_sha256": "fc54df501056e14f141fb9f68e8def38fb6dfb427a985121751bd687fcfa75b0",
+      "reason_sha256": "b1ed21df17ab09a8f1a6c2ee4c75d7798b18a55c9a18dc7560f1108cde360185",
+      "read_at": "2026-09-12T13:59:08.336471+00:00",
+      "reviewer": "Codex (GPT-6)",
+      "post_key": "bb84a1dc5a2b8f2776ed9e19a0710d9747e46916e6a2a1fd3c5ff49b1644c23e",
+      "exclusion_reason": "関連する非意見。質問のみのため意見集計から除外。"
+    }
+  ],
+  "audit_correction": {
+    "audit": "quality/reviews/2026-09-12-nickname-independent-audit.md",
+    "corrected_at": "2026-09-12T13:59:08.336471+00:00",
+    "opinion_count": 87,
+    "excluded_reviewed_count": 1,
+    "note": "未変更の読了記録を継承し、監査指摘2件と区分見出しを修正。除外後も本文を読んだ記録を保持。"
+  }
 }
