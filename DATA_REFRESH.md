@@ -112,6 +112,48 @@
 この節は山なみ向けの更新手順。下記の既存ページ用adapterの個別手順で
 「手動再読不要」とある場合も、それを山なみの本文確認を省く根拠にはしない。
 
+### 公開済みの山なみページを更新する（2026-09-12〜）
+
+**`build_planet_page_preview.py`は「旧デザイン→山なみ」の1回きりの変換専用で、
+既に山なみが入ったページに使うと安全装置が拒否する。** `build_bukatsu_arena.py`／
+`update_bukatsu_tide.py`／`sync_issue_counts.py`は、いずれも山なみ判定
+（`<!-- PLANET_SECTION_START -->`の有無）で件数更新を意図的にスキップする作りで、
+公開後の更新手段そのものが無かった（2026-09-10のコード内コメントに「段階3で
+挿入先を設計する」と将来の宿題のまま残っていた。課題63の反映作業で実際に発生し発覚）。
+
+本文確認が済み、正典（social-samples）を更新した後は次を使う。
+
+```sh
+python3 scripts/refresh_planet_section.py --topic bukatsu-chiiki --for-docs
+```
+
+`<!-- PLANET_SECTION_START -->`〜`END`の区間だけを最新の正典データで作り直す。
+区間の外（ヘッダー・フッター・投票・SNS投稿サンプル・関連テーマ・広告枠・OGP）は
+変更しない。同じ入力で2回実行しても差分が出ない。成功の形: 2回目の実行が
+`OK. Lines: N → N`（差分なし）になること。
+
+**テーマ固有の追加処理が要る場合がある。** bukatsu-chiikiでは以下3つを
+`refresh_planet_section.py`内に実装済み（他テーマを山なみへ移すときは、同様の
+見落としが無いか、初回変換時の`build_bukatsu()`／`build_generic()`の後処理を
+必ず確認すること）。
+
+1. **セクション本体が作らない、テーマ固有のリンク挿入。** bukatsu-chiikiの
+   「この論点のなかを見る」リンク（go-card）は`build_section()`自体には無く、
+   初回変換時の`build_bukatsu()`内の後処理でのみ挿入されていた。再現しないと
+   再生成のたびに消える（課題47と同型）
+2. **lead文・data-methodテキスト等、論点カード構造に依存しない単純な文字列。**
+   山なみ判定で`sync_issue_counts.py`／`build_bukatsu_arena.py`から素通り
+   されるため、`apply_lead`/`apply_note`（`sync_issue_counts.py`）を直接呼ぶか、
+   個別の正規表現で揃える
+3. **生成できない旧データ（例: 旧2Dスタンスマップのsm_raw）。** 現行分類器に無い
+   専用フィールドが要る等で再生成できないものは、無理に作らず
+   `configs/{テーマ}-reaction-map.json`の`denominator_exceptions`へ
+   理由付きで登録する（不確実な再生成より、更新しない理由を残す方を選ぶ）
+
+反映後は`data/verification/{テーマ}.json`（仮名化検証データ）の再生成
+（`scripts/verification_data.py --input <sample_file> --output <verification_file>`）と、
+トップページの同期（`scripts/sync_portal_stats.py`）も忘れないこと。
+
 ## 実行前ゲート
 
 **作業場所**: 収集・更新は専用の git worktree で行う（`git worktree add ../isa-wt-{テーマ} -b task/{テーマ}`）。

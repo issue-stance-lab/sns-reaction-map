@@ -96,3 +96,34 @@ currentとだけ比較していた。さらに、不一致とした14件のう�
 **`docs/bukatsu-chiiki-reaction-map.html`（公開ページ）はまだ更新していない。** 標準検査は単体テスト917件中914件OK
 （2件はdocs/未更新による既知の差分、1件はcollect_at期限超過で無関係）、`build_planet_data.py`の独自性検査に合格。
 公開ページへの反映はCEO承認後の`release`手順で行う。
+
+ 2026-09-12、CEO承認（`company/APPROVALS.yaml` の `approval-20260912-002`）を得て公開ページへ反映した。
+その過程で**「公開済みの山なみページを、公開後に更新する手段がこのプロジェクトに存在しない」ことが判明した**
+（`build_planet_page_preview.py`は旧→新の1回きりの変換専用で、既に山なみが入ったページは安全装置が拒否する。
+`build_bukatsu_arena.py`／`update_bukatsu_tide.py`／`sync_issue_counts.py`はいずれも山なみ判定で件数更新を
+意図的にスキップしており、2026-09-10のコード内コメントに「段階3で挿入先を設計する」と将来の宿題のまま
+残っていた）。bukatsu-chiiki・elderly-license-revocationは2日前に変換されたばかりで、公開後の更新は今回が初めて。
+
+そこで[scripts/refresh_planet_section.py](../scripts/refresh_planet_section.py)を新設した。
+`PLANET_SECTION_START/END`の区間だけを最新の正典データで作り直し、区間の外（ヘッダー・フッター・投票等）は
+変更しない。既存のrender_planet/split_prototype/build_section（`build_planet_page_preview.py`）をそのまま
+再利用し、同じ入力で2回実行しても差分が出ないことを確認済み。今後のbukatsu-chiiki・elderly-license-revocationの
+定期更新や、残り8テーマが山なみへ移った後にも使える。
+
+実装中に3つの副作用を発見・対応した：
+1. bukatsu-chiiki専用の「この論点のなかを見る」リンク（go-card）が`build_section()`自体には無く、
+   `build_bukatsu()`内の後処理でのみ挿入されていた。同じ処理を再現しないと再生成のたびに消えるところだった
+   （課題47と同型の欠落）
+2. lead文・調査条件内のdata-methodテキストは、山なみ判定により`sync_issue_counts.py`／`build_bukatsu_arena.py`
+   のどちらからも素通りされ、初回変換以来更新されていなかった。既存の`apply_lead`/`apply_note`を直接呼んで揃えた
+3. 旧2Dスタンスマップ（SM_RAW）は「切り替えとして戻す予定」でデータを保持したまま表示だけ外されている。
+   生成には現行分類器に無い旧専用フィールドが要るため、山なみ運用中は対象外と
+   `configs/bukatsu-chiiki-reaction-map.json`の`denominator_exceptions`へ理由付きで明記した
+
+反映後、`data/verification/bukatsu-chiiki.json`（仮名化検証データ）の再生成、トップページ
+（`scripts/sync_portal_stats.py`）の同期も行った。標準検査は単体テスト917件**全件OK**
+（事前から存在した無関係の1件も本反映で解消）、verify_theme_page.py／verify_number_provenance.py／
+verify_top_page.py（期限超過6テーマは既知）／verify_adoption_registry.py／verify_page_originality.py
+すべて合格。公開URLで実際に「意見1,140件」表示を確認済み。
+
+作業は`../isa-wt-bukatsu-publish`（ブランチ`task/bukatsu-publish-38fix`、mainへマージ済み・作業ツリー削除済み）で行った。
