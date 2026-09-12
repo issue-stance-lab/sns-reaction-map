@@ -776,6 +776,15 @@ function buildGuesses(){
        +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
        +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
   });
+  if (D.theme_id === "constitutional-amendment") {
+    q.splice(0, q.length,
+      {key:"g1", title:"① この図から、国民全体の改憲への賛否は分かりますか？",
+       opts:["国民全体の賛否が分かる","今回集めた投稿の傾向が分かる","国民投票の結果を予測できる"], right:1,
+       ans:"<b>分かるのは、今回集めた投稿の傾向です。</b>検索語に合うSNS投稿を集めたもので、国民全体を代表する世論調査ではありません。"},
+      {key:"g2", title:"② この図の山の高さは、何を表していますか？",
+       opts:["その論点の重要度","その論点に賛成する人の割合","その論点で強い表現を使った投稿の割合"], right:2,
+       ans:"<b>山の高さは、その論点で強い表現を使った投稿の割合です。</b>山が高くても、重要度が高い、賛成者が多いという意味ではありません。投稿の件数は山の幅で表します。"});
+  }
   box.innerHTML = q.map(x =>
     '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
     + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
