@@ -108,11 +108,13 @@ def markdown(d):
     for x in d['locations'][:12]:lines.append(row(x['name'],x['counts']))
     lines += ['',f'地域の評価がある投稿は{d["location_evaluating_posts"]:,}件。地域は原文に表れた単位で保持し、福岡市と北九州市、大阪と関西などを自動で合算しません。全地域は画面案で選択できます。三つの対象に賛否を示していない意見は{d["no_target_stance_posts"]:,}件あり、主に優先順位・政治姿勢・説明を求める意見などとして残します。', '', '## 読み方と品質上の残り', '']
     lines += ['- '+x for x in d['caveats']]
-    lines += [f'- 投稿全体の採否を保留した{d["decisions"]["hold"]}件に加え、一部地域の記号を確定できない投稿が1件。未解決は合計{d["pending_posts"]}投稿です。未解決を無理に賛否へ割り振りません。',f'- 同一本文の繰り返しは{d["same_text"]["repeated_text_groups"]}組、該当{d["same_text"]["posts_in_repeated_groups"]}投稿。投稿IDは全件一意で、同文の別投稿を黙って削除していません。', '- 10件を対象に始めたHermes試験は、最初の処理で判断理由の空欄が3回続き、有効な出力を得られず不採用。全件を担当者が本文から直接点検しました。', '- 先に確認した20例は、対象評価・採否とも今回の記録と一致しています。質問だけの投稿を本人の判断保留とする読み過ぎは原文で再確認し修正しました。', '- 原本・公開JSON・公開ページ・21の投票選択肢は未変更です。', '', '## 次の作業', '', 'この数値案を確認した後、未解決の文脈確認、理由別の編集再読と独立監査、山なみ生成器への接続を進めます。画面案は対象別表示の確認用で、山なみの完成版ではありません。', '', '数字の採用と本番公開は別です。公開前には分類・編集再読・ページ検査を満たす必要があります。', '']
+    lines += [f'- 投稿全体の採否を保留した{d["decisions"]["hold"]}件に加え、一部地域の記号を確定できない投稿が1件。未解決は合計{d["pending_posts"]}投稿です。未解決を無理に賛否へ割り振りません。',f'- 同一本文の繰り返しは{d["same_text"]["repeated_text_groups"]}組、該当{d["same_text"]["posts_in_repeated_groups"]}投稿。投稿IDは全件一意で、同文の別投稿を黙って削除していません。', '- 10件を対象に始めたHermes試験は、最初の処理で判断理由の空欄が3回続き、有効な出力を得られず不採用。全件を担当者が本文から直接点検しました。', '- 先に確認した20例は、対象評価・採否とも今回の記録と一致しています。質問だけの投稿を本人の判断保留とする読み過ぎは原文で再確認し修正しました。', '- 原本・公開JSON・公開ページ・21の投票選択肢は未変更です。', '', '## 次の作業', '', '数値案を受けたオーナーの「進めて」に従い、対象別×論点別の集計と確認画面の接続を実装しました。未解決の文脈確認、理由別の編集再読と独立監査、山なみ生成器への接続を続けます。画面案は対象別表示の確認用で、山なみの完成版ではありません。', '', '数字の採用と本番公開は別です。公開前には分類・編集再読・ページ検査を満たす必要があります。', '']
     return '\n'.join(lines)
 
 def render_preview(d, examples, template):
+    from fukushuto_target_data import aggregate_targets
     payload={k:v for k,v in d.items() if k not in ('records','pending','issue_moves_retained')}
+    payload['target_breakdown'] = aggregate_targets(d['records'])
     payload['examples']=[x for x in examples if x['number'] in (1,2,5,7,8,18)]
     body='<table><caption>旧表示の立場（母数 '+str(d['old_opinions'])+'件）</caption><thead><tr><th>立場</th><th>件数</th></tr></thead><tbody>'
     body+=''.join('<tr><td>'+html.escape(k)+'</td><td>'+str(v)+'</td></tr>' for k,v in d['old_stances'].items())
@@ -128,9 +130,12 @@ def main():
         a.error('公開領域には出力できません')
     raw=args.baseline.read_bytes(); evidence=args.review.read_bytes()
     d=compile_review(json.loads(raw),json.loads(evidence));d['provenance']={'baseline_sha256':digest(raw),'review_sha256':digest(evidence),'builder_sha256':digest(Path(__file__).read_bytes())}
+    from fukushuto_target_data import aggregate_targets
+    targets = aggregate_targets(d['records'])
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.with_suffix('.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
     args.output.with_suffix('.md').write_text(markdown(d))
+    args.output.with_name(args.output.name + '-counts').with_suffix('.json').write_text(json.dumps(targets,ensure_ascii=False,indent=2)+'\n')
     root=Path(__file__).resolve().parents[1]
     examples=json.loads((root/'quality/reviews/2026-09-12-fukushuto-20-comparison.json').read_text())
     if isinstance(examples,dict): examples=examples['items']
