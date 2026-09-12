@@ -388,3 +388,20 @@ items:
     requested_at: "2026-08-27"
     decided_at: "2026-08-29"
     decision_note: "CEO承認後、2026-08-29にnoteへ公開済み。公開URL・UTM・X告知はcontent/note/posts.mdに記録済み。"
+
+  - id: approval-20260912-003
+    department: engineering-data
+    action: website_publication
+    summary: "高齢者の運転免許自主返納ページ、独立確認で確定した投稿2件の分類修正（意見353→354件）を公開ページへ反映する"
+    reason: "課題63の独立確認不足53件を精査し、確定した2件（tweet 2078335331653521707のis_opinion修正、tweet 2093553448533045737のmain_issue/stance修正）が実際には別の分類をすべきだったため、原本・公開データ契約は既に修正済み。公開ページ（docs/）だけが未反映"
+    risks:
+      - "件数表示が1件分（353→354）変わる。論点・沈んだ大陸データは既に整合済みで確認済み"
+      - "旧2D形式の埋め込みデータ（SM_RAW/ISSUES）も部活動と異なりdormantでなかったため合わせて更新済み。表示上は山なみ形式のみが見えるため影響なし"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-12-elderly-missing-independent-53.json"
+      - "themes/elderly-license-revocation.md"
+    status: approved
+    requested_at: "2026-09-12"
+    decided_at: "2026-09-12"
+    decision_note: "オーナーが本対話で「push」と明示的に承認した。"
