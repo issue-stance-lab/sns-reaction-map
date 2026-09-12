@@ -348,6 +348,38 @@ def build_details_from_counts(
     )
 
 
+def add_featured_posts(page: str, rows: list[dict], data: dict) -> str:
+    """本文照合した投稿を図解に添え、山の詳細と相互リンクする。"""
+    import hashlib
+    selected = json.loads((ROOT / "data/constitutional-amendment-featured-posts.json").read_text())["items"]
+    by_key = {hashlib.sha256(str(r["tweet_id"]).encode()).hexdigest(): r for r in rows}
+    issue_ids = {it["label"]: it["id"] for it in data["issues"]}
+    page = re.sub(r"<!-- FEATURED_POSTS_START -->.*?<!-- FEATURED_POSTS_END -->", "", page, flags=re.S)
+    def card(match):
+        art = match.group(0)
+        issue = re.search(r'data-alt="([^"]+)"', art).group(1)
+        iid = issue_ids[issue]
+        art = re.sub(r' id="figure-[^"]+"', '', art, count=1)
+        art = art.replace('<article ', f'<article id="figure-{iid}" ', 1)
+        samples = []
+        for item in selected:
+            if item["issue"] != issue:
+                continue
+            row = by_key.get(item["post_key"])
+            if row is None or classification(row)["main_issue"] != issue or hashlib.sha256(row["text"].encode()).hexdigest() != item["text_sha256"]:
+                raise IssueCountError("代表投稿の本文・論点が変わっています: " + item["post_key"])
+            samples.append('<div class="featured-post"><strong>' + html.escape(item["label"]) + '</strong><p>' + html.escape(item["summary"]) + '</p>' + embed_html(row["url"]) + '</div>')
+        if len(samples) != 2:
+            raise IssueCountError("図解には確認済み投稿2件が必要です: " + issue)
+        extra = '<!-- FEATURED_POSTS_START --><div class="featured-posts">' + ''.join(samples) + '</div><a class="featured-issue-link" href="#' + iid + '">この論点の内訳を見る →</a><!-- FEATURED_POSTS_END -->'
+        return art.replace('</article>', extra + '</article>')
+    page = re.sub(r'<article[^>]*class="explainer-card"[^>]*>.*?</article>', card, page, flags=re.S)
+    css = '<!-- FEATURED_POSTS_START --><style>#explainer-section .explainer-grid{grid-template-columns:1fr}#explainer-section .explainer-card{cursor:default;scroll-margin-top:140px}.featured-posts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px}.featured-post{min-width:0;border:1px solid #dce3ef;border-radius:10px;padding:14px;font-size:14px;line-height:1.7;overflow-wrap:anywhere}.featured-post p{margin:8px 0}.featured-post iframe{max-width:100%!important}.featured-issue-link{display:inline-block;margin:0 16px 18px;font-weight:700}@media(max-width:600px){.featured-posts{grid-template-columns:1fr}}</style><!-- FEATURED_POSTS_END -->'
+    page = page.replace('<section class="panel" id="explainer-section">', css + '<section class="panel" id="explainer-section">')
+    page = page.replace("card.addEventListener('click',function(){", "card.addEventListener('click',function(e){if(e.target.tagName!=='IMG')return;")
+    return page
+
+
 def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
                         stances: Counter, intensities: Counter) -> str:
     """正典との集計一致と再読ゲートを確認し、山なみと残す集計を同時に更新する。"""
@@ -388,6 +420,7 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
         page = replace_once(page,
             rf'<span class="explainer-count" id="issue-count-{THEME}-{card["slug"]}">\d+件</span>',
             span_html(THEME, str(card["slug"]), count), f'論点カード {card["slug"]}')
+    page = add_featured_posts(page, rows, data)
     return page.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
 
 

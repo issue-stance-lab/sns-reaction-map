@@ -620,6 +620,7 @@ function drawPanel(){
   }
   // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  if (D.theme_id === "constitutional-amendment" && it.label !== "その他") h += '<p><a href="#figure-'+it.id+'">この論点の図解とX投稿を見る →</a></p>';
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
   h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
@@ -892,6 +893,14 @@ try {
   window.addEventListener("resize", ()=>{
     cancelAnimationFrame(resizeFrame);
     resizeFrame=requestAnimationFrame(render);
+  });
+  if (D.theme_id === "constitutional-amendment") document.addEventListener("click", e=>{
+    const a=e.target.closest("a.featured-issue-link");
+    if (!a) return;
+    const k=idIndex[a.hash.slice(1)];
+    if (k===undefined) return;
+    e.preventDefault(); land(k);
+    bringIntoView(document.querySelector("#panel h2"));
   });
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h]);
