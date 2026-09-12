@@ -352,9 +352,9 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
                         stances: Counter, intensities: Counter) -> str:
     """正典との集計一致と再読ゲートを確認し、山なみと残す集計を同時に更新する。"""
     if __package__:
-        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype, build_background
     else:
-        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype, build_background
     rows, canonical_collected, _, period = load_canon(None)
     expected = (canonical_collected, len(rows),
                 Counter(classification(r)["main_issue"] for r in rows),
@@ -379,6 +379,9 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>',
                         build_details_from_counts(issues, stances, intensities, total), "詳細データ", flags=re.S)
     page = replace_once(page, r'（取得期間: .*?／', f'（取得期間: {period}／', "取得期間")
+    page = replace_once(page,
+        r'(?<=<!-- RESEARCH_CONDITIONS_END -->).*?(?=<!-- PLANET_SECTION_START -->)',
+        "\n" + build_background(THEME) + "\n", "背景と確認事項", flags=re.S)
     config = json.loads(CONFIG.read_text())
     for card in config["issue_counts"]["cards"]:
         count = sum(issues[str(issue)] for issue in card["main_issue"])
@@ -394,6 +397,12 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
     if "<!-- PLANET_SECTION_START -->" in page:
+        if __package__:
+            from .public_registry_common import build_theme_json, dumps_theme_json
+        else:
+            from public_registry_common import build_theme_json, dumps_theme_json
+        if dumps_theme_json(json.loads(public_theme.read_text())) != dumps_theme_json(build_theme_json(THEME)):
+            raise IssueCountError("公開JSONが現在の正典・照合資料と一致しません")
         return apply_planet_counts(page, collected, total, issues, stances, intensities)
     lead = (
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'
@@ -456,6 +465,10 @@ def build(
     before = template.read_text(encoding="utf-8")
     page = before
     if "<!-- PLANET_SECTION_START -->" in page:
+        if input_path is not None:
+            sample = yaml.safe_load((ROOT / "THEMES.yaml").read_text())["themes"][THEME]["sample_file"]
+            if json.loads(input_path.read_text()) != json.loads((ROOT / sample).read_text()):
+                raise IssueCountError("山なみの候補入力が正典の全レコードと一致しません")
         intensities = Counter(str(classification(r)["intensity"]) for r in rows)
         page = apply_planet_counts(page, collected, total, issue_counts, stance_counts, intensities)
         changed = page != before

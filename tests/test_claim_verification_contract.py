@@ -10,8 +10,8 @@ class ClaimVerificationContractTest(unittest.TestCase):
     def test_completed_and_not_started_are_distinguished(self) -> None:
         complete = prc.build_claim_verification("constitutional-amendment")
         self.assertEqual(complete["status"], "complete")
-        self.assertEqual(len(complete["claims"]), 10)
-        self.assertEqual({item["verdict"] for item in complete["claims"]}, {"fact", "gap", "miss"})
+        self.assertEqual(len(complete["claims"]), 6)
+        self.assertEqual({item["verdict"] for item in complete["claims"]}, {"fact", "miss"})
         self.assertTrue(all(item["matched_post_count"] > 0 for item in complete["claims"]))
         self.assertNotIn("tweet_id", json.dumps(complete, ensure_ascii=False))
         # 段階6で大陸を実像／ずれ／蜃気楼に塗り分けるため、主張は必ず論点へ結びつける

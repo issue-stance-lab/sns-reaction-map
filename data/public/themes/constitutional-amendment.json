@@ -1,10 +1,10 @@
 {
   "claim_verification": {
-    "checked_on": "2026-08-21",
+    "checked_on": "2026-09-13",
     "claims": [
       {
-        "claim": "国民投票は有効投票の過半数で成立し、最低投票率の規定はない",
-        "finding": "成立条件の分母は賛成票と反対票の合計。投票者数や有権者数の過半数とは異なる。",
+        "claim": "国民投票には最低投票率の規定がない",
+        "finding": "国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。",
         "id": "minimum_vote_rate",
         "issue_ids": [
           "constitutional-amendment-referendum"
@@ -19,23 +19,7 @@
         "verdict": "fact"
       },
       {
-        "claim": "国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ",
-        "finding": "14日という期間は確認できる。ただし105条だけから、それ以前にはあらゆる制限がないと結論することはできない。対象も広告放送一般ではなく国民投票運動のための広告放送。",
-        "id": "cm_broadcast_14days",
-        "issue_ids": [
-          "constitutional-amendment-referendum"
-        ],
-        "matched_post_count": 5,
-        "sources": [
-          {
-            "name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）",
-            "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
-          }
-        ],
-        "verdict": "gap"
-      },
-      {
-        "claim": "国会が発議してから国民投票まで最短60日、最長180日だ",
+        "claim": "国会の発議から国民投票まで最短60日だ",
         "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。",
         "id": "period_60days",
         "issue_ids": [
@@ -51,13 +35,13 @@
         "verdict": "fact"
       },
       {
-        "claim": "衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない",
+        "claim": "憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ",
         "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。",
         "id": "two_thirds",
         "issue_ids": [
           "constitutional-amendment-procedure"
         ],
-        "matched_post_count": 5,
+        "matched_post_count": 4,
         "sources": [
           {
             "name": "e-Gov法令検索 日本国憲法 第96条",
@@ -67,72 +51,28 @@
         "verdict": "fact"
       },
       {
-        "claim": "自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる",
-        "finding": "国会の法律制定を待たずに政令を制定する案だが、災害・特別の事情という条件と国会の承認を求める手続きがある。現行法ではなく2018年の提案。承認されない場合の自動失効までこの条文イメージに書かれているわけではない。",
+        "claim": "緊急事態条項案では内閣が国会を経ずに法律を作れる",
+        "finding": "この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。",
         "id": "emergency_law_making",
         "issue_ids": [
           "constitutional-amendment-emergency"
         ],
-        "matched_post_count": 3,
+        "matched_post_count": 1,
         "sources": [
           {
             "name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF",
             "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"
-          }
-        ],
-        "verdict": "gap"
-      },
-      {
-        "claim": "現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている",
-        "finding": "第9条に自衛隊という語がなく、戦力不保持と交戦権否認の規定があることは確認できる。この文言の有無だけで、自衛隊の合憲性についての解釈を決めることはできない。",
-        "id": "article9_no_jieitai",
-        "issue_ids": [
-          "constitutional-amendment-article9"
-        ],
-        "matched_post_count": 5,
-        "sources": [
+          },
           {
-            "name": "e-Gov法令検索 日本国憲法 第9条",
-            "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"
-          }
-        ],
-        "verdict": "fact"
-      },
-      {
-        "claim": "自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない",
-        "finding": "名称に加えて、自衛の措置と指揮監督者についての文言も追加する案。法的効果がどの程度変わるかは解釈の論点であり、文字の追加だけで実質的な影響の有無は断定しない。",
-        "id": "jieitai_inscription_only",
-        "issue_ids": [
-          "constitutional-amendment-article9"
-        ],
-        "matched_post_count": 4,
-        "sources": [
-          {
-            "name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF",
-            "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"
-          }
-        ],
-        "verdict": "gap"
-      },
-      {
-        "claim": "2026年の国民投票法改正でインターネット広告規制が明文化された",
-        "finding": "根拠となる改正法と具体的条文を特定できていないため、未確認とする。確認できなかったことは、その改正や規制が存在しないことの証明ではない。",
-        "id": "net_ad_regulation",
-        "issue_ids": [
-          "constitutional-amendment-referendum"
-        ],
-        "matched_post_count": 5,
-        "sources": [
-          {
-            "name": "e-Gov 国民投票法（照合先）",
-            "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
+            "name": "自民党 2026年解説版 p.7",
+            "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"
           }
         ],
         "verdict": "miss"
       },
       {
-        "claim": "9条に自衛隊を明記しても18条（苦役の禁止）を変えない限り、徴兵制は憲法上できない",
-        "finding": "政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。",
+        "claim": "徴兵制は憲法18条の苦役禁止に当たる",
+        "finding": "2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。",
         "id": "article18_conscription",
         "issue_ids": [
           "constitutional-amendment-article9"
@@ -147,13 +87,13 @@
         "verdict": "fact"
       },
       {
-        "claim": "憲法学説では自衛隊の存在を違憲とする解釈と合憲とする解釈が並立している",
+        "claim": "自衛隊を違憲とする解釈がある",
         "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。",
         "id": "jieitai_iken_gaku",
         "issue_ids": [
           "constitutional-amendment-article9"
         ],
-        "matched_post_count": 3,
+        "matched_post_count": 2,
         "sources": [
           {
             "name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁",
@@ -172,7 +112,7 @@
     "start": "2026-06-20",
     "status": "known"
   },
-  "data_version": "v1-806ae3b47c74ca6a",
+  "data_version": "v1-3731ee273cadb7b1",
   "editorial_summary": {
     "checked_on": "2026-09-12",
     "findings": [
@@ -266,7 +206,7 @@
           "label": "慎重・反対"
         },
         {
-          "count": 20,
+          "count": 21,
           "id": "constitutional-amendment-procedure-focus",
           "intensities": [
             {
@@ -274,7 +214,7 @@
               "id": "low"
             },
             {
-              "count": 14,
+              "count": 15,
               "id": "medium"
             },
             {
@@ -285,7 +225,7 @@
           "label": "手続き重視"
         },
         {
-          "count": 96,
+          "count": 95,
           "id": "constitutional-amendment-neutral",
           "intensities": [
             {
@@ -293,7 +233,7 @@
               "id": "low"
             },
             {
-              "count": 53,
+              "count": 52,
               "id": "medium"
             },
             {
@@ -443,7 +383,7 @@
           "label": "改正推進"
         },
         {
-          "count": 177,
+          "count": 176,
           "id": "constitutional-amendment-cautious",
           "intensities": [
             {
@@ -455,7 +395,7 @@
               "id": "medium"
             },
             {
-              "count": 101,
+              "count": 100,
               "id": "high"
             }
           ],
@@ -481,7 +421,7 @@
           "label": "手続き重視"
         },
         {
-          "count": 18,
+          "count": 19,
           "id": "constitutional-amendment-neutral",
           "intensities": [
             {
@@ -493,7 +433,7 @@
               "id": "medium"
             },
             {
-              "count": 4,
+              "count": 5,
               "id": "high"
             }
           ],
@@ -947,7 +887,7 @@
           "constitutional-amendment-general"
         ],
         "reviewer_type": "ai_assisted",
-        "shared_concern": "自分や家族が戦争で命を失うことを避けたい。",
+        "shared_concern": "戦争を避けたい。",
         "sides": [
           {
             "post_count": 2,
@@ -965,7 +905,7 @@
   "page_path": "constitutional-amendment-reaction-map.html",
   "question": "憲法を改正すべきか",
   "schema_version": "1.0",
-  "source_sha256": "806ae3b47c74ca6ac0107bbfedcd93bffb1ac98b0e93dfc0d37ddcb67c960a9f",
+  "source_sha256": "3731ee273cadb7b1c13190f19d0723b966caa838d8661e749dcf97b7c4966e91",
   "theme_id": "constitutional-amendment",
   "title": "憲法改正論議",
   "updated_on": "2026-09-05"

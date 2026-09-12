@@ -419,7 +419,7 @@ def build_background(topic: str) -> str:
     out = [f"<style>{BG_CSS}</style>",
            '<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">',
            '<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2>'
-           '<span>官庁の資料で確かめた範囲</span></div>',
+           f'<span>{esc(d.get("source_scope_label", "官庁の資料で確かめた範囲"))}</span></div>',
            f'<p class="bg-def">{esc(df["one_line"])}</p>',
            f'<p class="bg-now">{esc(df["now"])}</p>',
            "<h3>なぜ始まったか</h3>"]
