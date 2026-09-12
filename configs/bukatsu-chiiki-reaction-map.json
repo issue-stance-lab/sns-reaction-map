@@ -382,6 +382,12 @@
     "sync": [
       "lead"
     ],
+    "denominator_exceptions": {
+      "map": {
+        "reason": "旧2Dスタンスマップ（SM_RAW）は山なみ形式への切り替え時に表示セクションだけを外し、データは「切り替えとして戻す予定」で残してある（build_planet_page_preview.py DROP_SECTIONSのコメント）。生成には現行分類器に無いstance_transfer等の旧専用フィールドが要り、山なみ運用中は更新対象外とする。2026-09-12、課題63の独立確認1件の反映で母数が1139→1140になり差分が生じた。",
+        "difference": 1
+      }
+    },
     "cards": [
       {
         "slug": "hiyo",
