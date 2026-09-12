@@ -1246,7 +1246,6 @@
       <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
       <ul class="sides"><li><span>すべての意見1140件のうち</span><span class="n">52件 / 4.6%</span></li><li><span>移行支持460件のうち</span><span class="n">22件 / 4.8%</span></li><li><span>慎重・反対390件のうち</span><span class="n">14件 / 3.6%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">2件 / 0.8%</span></li><li><span>中立・情報49件のうち</span><span class="n">14件 / 28.6%</span></li></ul>
       <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
-      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-bukatsu-chiiki-kakusa" tabindex="-1">
@@ -1258,7 +1257,6 @@
       <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
       <ul class="sides"><li><span>すべての意見1140件のうち</span><span class="n">12件 / 1.1%</span></li><li><span>移行支持460件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>慎重・反対390件のうち</span><span class="n">8件 / 2.1%</span></li><li><span>条件付き・改善要求241件のうち</span><span class="n">4件 / 1.7%</span></li><li><span>中立・情報49件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
       <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
-      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
       <div class="extras" id="extras-bukatsu-chiiki-kakusa"><p style="margin:14px 0 0"><a class="go-card" href="#issue-bukatsu-chiiki-kakusa">この論点のなかを見る ↓</a></p>
       <p class="sub" style="margin-top:12px">この論点に関わる資料にあるのに、SNSにないこと：立場をこえて同じ心配1本・語られていない争点1件 <a class="dive" href="#ocean">ページ下の「資料にあるのに、SNSにないこと」で読む</a></p>
       </div>
@@ -1305,6 +1303,12 @@
 (function(){
 "use strict";
 const D = window.PLANET_DATA;
+ D.show_unreviewed_note = false;
+ D.issues.forEach(function(issue){
+   if (issue.id === "bukatsu-chiiki-seido" || issue.id === "bukatsu-chiiki-kyoiku") {
+     if (issue.sub) issue.sub.show_coverage_note = false;
+   }
+ });
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- 状態 ---------- */
