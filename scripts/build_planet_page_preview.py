@@ -642,6 +642,7 @@ def clean_henoko_layout(html: str) -> str:
                   '<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->', html, flags=re.S)
     html = re.sub(r'<aside\b[^>]*id="correction-20260906"[^>]*>.*?</aside>', '', html, flags=re.S)
     html = re.sub(r'<div class="arena-divider">.*?</div>', '', html, flags=re.S)
+    html = html.replace('<div id="issue-arena-section" aria-hidden="true"></div>', "")
     return html
 
 
@@ -800,8 +801,6 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     html, dropped = drop_orphan_scripts(html, GENERIC_DEAD_SCRIPT_IDS)
     removed.append((f"取り残されたスクリプト{dropped}本", dropped > 0))
     section = build_section(split_prototype(render_planet(data)))
-    if topic == "henoko-student-accident":
-        section = '<div id="issue-arena-section" aria-hidden="true"></div>' + section
     marker = "<!-- RESEARCH_CONDITIONS_END -->"
     if marker not in html:
         raise SystemExit("調査条件の目印が見つかりません")

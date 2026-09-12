@@ -23,7 +23,7 @@ class HenokoPlanetTests(unittest.TestCase):
             self.assertEqual(build_page(page, records, opinions), fix_henoko_vote_scroll(page))
         self.assertEqual(apply_public_counts(page), fix_henoko_vote_scroll(page))
         self.assertNotIn('HENOKO_ARENA_RAW', page)
-        self.assertIn('id="issue-arena-section"', page)
+        self.assertNotIn('id="issue-arena-section"', page)
         self.assertIn("choiceIdx:selected*STANCES.length+index", page)
 
     def test_claim_and_common_concern_evidence_exists_in_current_opinions(self):

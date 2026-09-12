@@ -1022,7 +1022,7 @@ def render_page(data: dict, template: str, payload: str) -> str:
             ("その論点の図解と、賛成・反対それぞれの投稿が読めます", "その論点の理由の内訳と、一次資料との照合結果が読めます"),
         ):
             template = template.replace(old, new)
-        template = template.replace("</style>", ".gans .lead{color:#0b1937}\n</style>", 1)
+        template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
     """テンプレートの差し込み口を data から埋める。
 
     数字・色・テーマ固有の言葉をここでしか作らないことで、
