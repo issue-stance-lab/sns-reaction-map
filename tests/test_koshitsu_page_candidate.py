@@ -20,6 +20,20 @@ class KoshitsuCandidateTests(unittest.TestCase):
         cls.original=(ROOT/'docs/koshitsu-tenpakai-reaction-map.html').read_text()
         cls.preview=(ROOT/'quality/prototypes/koshitsu-tenpakai-page-preview.html').read_text()
 
+    def test_issue_media_and_destinations(self):
+        from bs4 import BeautifulSoup
+        page=BeautifulSoup(self.preview, 'html.parser')
+        for issue in self.public['issues']:
+            iid=issue['id']
+            card=page.find(id='issue-'+iid)
+            self.assertIsNotNone(card)
+            image=card.find('img')
+            self.assertTrue((ROOT/'quality/prototypes'/image['src']).resolve().is_file())
+            self.assertEqual(len(card.select('blockquote.twitter-tweet a')),2)
+            self.assertIsNotNone(page.find(id='fb-'+iid).find('a',href='#issue-'+iid))
+        self.assertIn('href="#issue-\'+it.id',self.preview)
+        self.assertEqual(len(page.select('#issue-cards article')),6)
+
     def test_public_contract_and_complete_cross_table(self):
         self.assertEqual(validate_public_theme(self.public)+check_theme_invariants(self.public),[])
         self.assertEqual(sum(i['count'] for i in self.public['issues']),self.public['opinion_count'])

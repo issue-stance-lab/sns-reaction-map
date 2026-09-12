@@ -209,7 +209,22 @@
 .explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
 <meta name="robots" content="noindex,nofollow">
-</head>
+<style>
+#issue-cards .ic{border-top:2px solid #0F1A3D;padding:22px 0 30px;scroll-margin-top:64px}
+#issue-cards .ic + .ic{border-top-color:#DCE3EF}
+#issue-cards .ic:target .ic-head h3{color:var(--accent)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+#issue-cards .ic-head .dot{width:11px;height:11px;border-radius:3px;flex:none;align-self:center}
+#issue-cards .ic-head h3{margin:0;font-size:21px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;color:#0F1A3D}
+#issue-cards .ic-head .cnt small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+#issue-cards .ic-body{font-size:15px;line-height:1.95;margin:12px 0 0;max-width:44rem}
+#issue-cards .ic figure{margin:16px 0 0}
+#issue-cards .ic img{width:100%;height:auto;border-radius:8px;display:block}
+#issue-cards .ic-back{display:inline-block;margin-top:16px;font-size:13px;font-weight:700}
+
+#issue-cards .hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px}#issue-cards .hermes-sample{min-width:0}#issue-cards figcaption{font-size:13px;line-height:1.8;margin-top:10px;color:#596174}#issue-cards .hermes-sample-meta{font-weight:800}@media(max-width:640px){#issue-cards .hermes-samples{grid-template-columns:1fr}}</style></head>
 <body class="summary-on-light" style="--topic-hero-image:url('../../docs/images/topics/koshitsu-tenpakai/koshitsu-hero.webp')"><aside class="candidate-note" style="margin:18px auto;padding:16px;max-width:1120px;background:#fff4d6;border:1px solid #caa65b;border-radius:12px"><strong>確認用ページ・未公開（2026年9月13日作成）</strong> — 分類基準を見直した候補です。追加分の独立監査は未実施です。下の投票はこの画面だけの動作見本で、サイトへ送信されません。</aside>
 <div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
 (function(){
@@ -478,7 +493,7 @@
 
   <p class="axis-note" style="margin:16px 0;padding:16px;background:#eef3f8;border-left:4px solid #73869a"><strong>色は「今回案全体」への評価です。</strong>女性天皇への希望や養子制度への意見だけで、改正全体への賛否は決めていません。<strong>未表明は、中立や無関心の意味ではありません。</strong></p><div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
 
-  <p class="tap-hint"><span aria-hidden="true">👆</span>山を押すと、理由の内訳と一次資料との照合結果を読めます</p><div class="stage">
+  <p class="tap-hint"><span aria-hidden="true">👆</span>山を押すと理由の内訳が開き、論点ごとの図解とX投稿へ進めます</p><div class="stage">
     <div class="chart-box">
       <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
       <p id="chartdesc" hidden></p>
@@ -522,7 +537,7 @@
       <a class="continent" href="#fb-koshitsu-tenpakai-princess-aiko" style="background:#8B9199;border-color:#8B9199;color:#0d1117"><span class="label">👑 愛子さま・皇族の地位</span><span class="count">147件・11.8%</span></a>
       <a class="continent" href="#fb-koshitsu-tenpakai-female-emperor" style="background:#8B9199;border-color:#8B9199;color:#0d1117"><span class="label">🌿 女性天皇・女系天皇</span><span class="count">140件・11.2%</span></a>
     </nav>
-    <section class="landing-panel" id="fb-koshitsu-tenpakai-patrilineal-matrilineal" tabindex="-1">
+    <section class="landing-panel" id="fb-koshitsu-tenpakai-patrilineal-matrilineal" tabindex="-1"><p><a href="#issue-koshitsu-tenpakai-patrilineal-matrilineal">この論点の図解とX投稿を見る ↓</a></p>
       <h2>⚖️ 男系vs女系</h2>
       <p class="sub">355件（28.5%）　山の高さ：強い表現38.6%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 5件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 34件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 316件</span></div>
@@ -543,7 +558,7 @@
       </div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
-    <section class="landing-panel" id="fb-koshitsu-tenpakai-former-royal-adoption" tabindex="-1">
+    <section class="landing-panel" id="fb-koshitsu-tenpakai-former-royal-adoption" tabindex="-1"><p><a href="#issue-koshitsu-tenpakai-former-royal-adoption">この論点の図解とX投稿を見る ↓</a></p>
       <h2>🏛️ 旧宮家養子縁組</h2>
       <p class="sub">227件（18.2%）　山の高さ：強い表現44.9%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 3件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 32件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 192件</span></div>
@@ -564,7 +579,7 @@
       </div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
-    <section class="landing-panel" id="fb-koshitsu-tenpakai-legislative-process" tabindex="-1">
+    <section class="landing-panel" id="fb-koshitsu-tenpakai-legislative-process" tabindex="-1"><p><a href="#issue-koshitsu-tenpakai-legislative-process">この論点の図解とX投稿を見る ↓</a></p>
       <h2>🗳️ 立法手続き・民主主義</h2>
       <p class="sub">201件（16.1%）　山の高さ：強い表現30.3%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 1件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 53件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 147件</span></div>
@@ -578,7 +593,7 @@
       <div class="note">本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。。</div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
-    <section class="landing-panel" id="fb-koshitsu-tenpakai-other" tabindex="-1">
+    <section class="landing-panel" id="fb-koshitsu-tenpakai-other" tabindex="-1"><p><a href="#issue-koshitsu-tenpakai-other">この論点の図解とX投稿を見る ↓</a></p>
       <h2>◯ その他</h2>
       <p class="sub">175件（14.1%）　山の高さ：強い表現31.4%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 8件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 22件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 144件</span><span><i style="background:#B8ACA2"></i>全体評価を読み取れない 1件</span></div>
@@ -592,7 +607,7 @@
       <div class="note">本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。。</div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
-    <section class="landing-panel" id="fb-koshitsu-tenpakai-princess-aiko" tabindex="-1">
+    <section class="landing-panel" id="fb-koshitsu-tenpakai-princess-aiko" tabindex="-1"><p><a href="#issue-koshitsu-tenpakai-princess-aiko">この論点の図解とX投稿を見る ↓</a></p>
       <h2>👑 愛子さま・皇族の地位</h2>
       <p class="sub">147件（11.8%）　山の高さ：強い表現44.2%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 2件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 12件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 133件</span></div>
@@ -606,7 +621,7 @@
       <div class="note">本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。。</div>
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
-    <section class="landing-panel" id="fb-koshitsu-tenpakai-female-emperor" tabindex="-1">
+    <section class="landing-panel" id="fb-koshitsu-tenpakai-female-emperor" tabindex="-1"><p><a href="#issue-koshitsu-tenpakai-female-emperor">この論点の図解とX投稿を見る ↓</a></p>
       <h2>🌿 女性天皇・女系天皇</h2>
       <p class="sub">140件（11.2%）　山の高さ：強い表現49.3%</p>
       <div class="legend"><span><i style="background:#7D5BA6"></i>今回案全体に反対 16件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 124件</span></div>
@@ -1008,6 +1023,7 @@ function drawPanel(){
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
+  h += '<p><a class="go-card" href="#issue-'+it.id+'">この論点の図解とX投稿を見る ↓</a></p>';
   h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
@@ -1281,7 +1297,7 @@ try {
 
 })();
 </script>
-<!-- PLANET_SECTION_END -->
+<!-- PLANET_SECTION_END --><section class="panel" id="issue-cards"><div class="panel-title"><h2>論点ごとの図解とX投稿</h2></div><p>投稿の要旨は編集部による要約です。各論点の考え方の例であり、今回案全体への賛否を表すものとは限りません。埋め込みが表示されない場合は、投稿リンクからXで確認できます。</p><article class="ic" id="issue-koshitsu-tenpakai-patrilineal-matrilineal"><div class="ic-head"><h3>男系vs女系</h3><span class="cnt">355<small>件</small></span></div><figure><a href="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho.webp" target="_blank" rel="noopener"><img src="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho.webp" alt="男系vs女系の既存図解" loading="lazy"></a><figcaption>旧図解です。継承資格の変更を見送ったことと、今回の改正法の成立は別です。人数・伝統年数の表記は現状を検証した数値ではありません。</figcaption></figure><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">男系の継承を重視</span><p class="hermes-sample-summary">女性天皇への否定とは分けて、男系の継承を続けたいと述べています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/benjymin84/status/2081234225664262600">@benjymin84 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">男女を問わない安定継承を求める</span><p class="hermes-sample-summary">従来の仕組みを続ける難しさを挙げ、男女を問わず継承できる制度を求めています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/a_aok04352/status/2080825663821615144">@a_aok04352 の投稿をXで見る</a></blockquote></div></div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article><article class="ic" id="issue-koshitsu-tenpakai-female-emperor"><div class="ic-head"><h3>女性天皇・女系天皇</h3><span class="cnt">140<small>件</small></span></div><figure><a href="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno.webp" target="_blank" rel="noopener"><img src="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno.webp" alt="女性天皇・女系天皇の既存図解" loading="lazy"></a><figcaption>旧図解です。画像の支持率には出典の再確認が必要です。また、在位中の天皇を皇位継承順位に含める表記は誤りです。女性天皇と女系天皇は異なる概念です。</figcaption></figure><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">女系への移行を懸念</span><p class="hermes-sample-summary">女性皇族の婚姻後の地位と、女系による継承への懸念を結び付けています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/5VcfqTGE08SrXGE/status/2081146247327760862">@5VcfqTGE08SrXGE の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">女性天皇となる可能性に言及</span><p class="hermes-sample-summary">投稿者は、愛子さまの教育方針を、将来のさまざまな立場に備えるものと捉えています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ayumuchan3/status/2081231595923734681">@ayumuchan3 の投稿をXで見る</a></blockquote></div></div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article><article class="ic" id="issue-koshitsu-tenpakai-former-royal-adoption"><div class="ic-head"><h3>旧宮家養子縁組</h3><span class="cnt">227<small>件</small></span></div><figure><a href="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi.webp" target="_blank" rel="noopener"><img src="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi.webp" alt="旧宮家養子縁組の既存図解" loading="lazy"></a><figcaption>制度案を議論していた時点の旧図解です。現在は改正後第三十八条を確認済みです。1947年から2026年までは79年で、画像の「80年以上」「未確定」は現状の説明ではありません。</figcaption></figure><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">法の下の平等との関係を問う</span><p class="hermes-sample-summary">旧宮家の男系男子を対象にすることについて、憲法との関係を議論すべきだと問いかけています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kazuhi2024/status/2081201410503492037">@kazuhi2024 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">養子による男系の維持を評価</span><p class="hermes-sample-summary">旧宮家からの養子によって、男系の宮家を存続させる考えを支持しています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/fi44504/status/2081220792025764197">@fi44504 の投稿をXで見る</a></blockquote></div></div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article><article class="ic" id="issue-koshitsu-tenpakai-princess-aiko"><div class="ic-head"><h3>愛子さま・皇族の地位</h3><span class="cnt">147<small>件</small></span></div><figure><a href="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko.webp" target="_blank" rel="noopener"><img src="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko.webp" alt="愛子さま・皇族の地位の既存図解" loading="lazy"></a><figcaption>旧図解です。「件数極少」は今回の集計を表しません。今回の改正では、婚姻後も皇族となる女性皇族の配偶者と子は皇族としない整理です。</figcaption></figure><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">現行の継承資格を重視</span><p class="hermes-sample-summary">個人への支持と、法律で定める継承資格を分けて考える立場です。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/so_far_away0712/status/2081023992228630655">@so_far_away0712 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">女性皇族と子の地位を提案</span><p class="hermes-sample-summary">女性皇族の婚姻後の皇籍維持に加え、その子も皇族とする解決策を提案しています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Aruhuvrv0/status/2081152597432688720">@Aruhuvrv0 の投稿をXで見る</a></blockquote></div></div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article><article class="ic" id="issue-koshitsu-tenpakai-legislative-process"><div class="ic-head"><h3>立法手続き・民主主義</h3><span class="cnt">201<small>件</small></span></div><figure><a href="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-shingi.webp" target="_blank" rel="noopener"><img src="../../docs/images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-shingi.webp" alt="立法手続き・民主主義の既存図解" loading="lazy"></a><figcaption>旧図解です。画像内の審議時間と主要法案の平均との比較は、根拠を再確認するまで確定した数値として扱いません。</figcaption></figure><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">安定継承の議論を求める</span><p class="hermes-sample-summary">安定的な皇位継承の議論を置いたまま決定が進んだことを批判しています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/oaVVaHIYjJ2s8Y6/status/2081235016089309556">@oaVVaHIYjJ2s8Y6 の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">議論の長期化を懸念</span><p class="hermes-sample-summary">時間をかけること自体を評価する姿勢に異議を唱え、政策の停滞を懸念しています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/dainankosan/status/2081237426488688766">@dainankosan の投稿をXで見る</a></blockquote></div></div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article><article class="ic" id="issue-koshitsu-tenpakai-other"><div class="ic-head"><h3>その他</h3><span class="cnt">175<small>件</small></span></div><figure><a href="../../docs/images/topics/koshitsu-tenpakai/koshitsu-vote-sonota.webp" target="_blank" rel="noopener"><img src="../../docs/images/topics/koshitsu-tenpakai/koshitsu-vote-sonota.webp" alt="その他の既存図解" loading="lazy"></a><figcaption>複数の話題を整理する補助図です。「その他」は、今回案への「未表明」や「判断困難」と同じ分類ではありません。</figcaption></figure><div class="hermes-samples"><div class="hermes-sample"><span class="hermes-sample-meta">報道に多様な視点を求める</span><p class="hermes-sample-summary">国会と新聞の論調の違いに違和感を示し、公平で多様な視点の報道を求めています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/77tMf5niwphliBQ/status/2081235258192904235">@77tMf5niwphliBQ の投稿をXで見る</a></blockquote></div><div class="hermes-sample"><span class="hermes-sample-meta">記事の受け取り方に異議</span><p class="hermes-sample-summary">政治家への支持とは別に、記事に左右されることへの異議を述べています。</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/fRdpHzPfSK70519/status/2081230489516720571">@fRdpHzPfSK70519 の投稿をXで見る</a></blockquote></div></div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article></section>
 
 
 

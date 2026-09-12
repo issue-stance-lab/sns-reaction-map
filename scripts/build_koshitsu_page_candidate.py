@@ -19,6 +19,7 @@ TOPIC = 'koshitsu-tenpakai'
 sys.path.insert(0, str(ROOT / 'scripts'))
 from build_planet_page_preview import cut_block
 from refresh_adapters.koshitsu import vote_fingerprint
+from koshitsu_issue_media import restore_issue_media
 
 
 def prepare_template(source: str, public: dict) -> str:
@@ -75,7 +76,7 @@ def main():
     # Require the real gate before invoking the common preview assembler.
     subprocess.run([sys.executable,'-c',"import sys;sys.path.insert(0,sys.argv[1]);import build_planet_data as b,yaml;d=b.build('koshitsu-tenpakai');f=b.independence_gate(d,yaml.safe_load((b.ROOT/'configs/planet/koshitsu-tenpakai.yaml').read_text()));assert not f,f;print('独自性検査: OK')",str(stage/'scripts')],check=True)
     subprocess.run([sys.executable,str(stage/'scripts/build_planet_page_preview.py'),'--topic',TOPIC,'--page',str(template),'--out',str(out)],check=True)
-    text=out.read_text()
+    text=restore_issue_media(out.read_text(), public)
     # The common static fallback still displays the older smoothed height.
     # Match its visible percentage to the raw ratio used by the interactive graph.
     for issue in public['issues']:
@@ -92,7 +93,7 @@ def main():
     text=text.replace('SNSの声を見る前に','読んだあとのあなたの考え')
     text=text.replace('<dt>最終更新日</dt>','<dt>公開元の最終更新日</dt>')
     text=text.replace('／更新 2026-09-01','／収集データの更新 2026-09-01')
-    text=text.replace('山を押すと、その論点の図解と、賛成・反対それぞれの投稿が読めます','山を押すと、理由の内訳と一次資料との照合結果を読めます')
+    text=text.replace('山を押すと、その論点の図解と、賛成・反対それぞれの投稿が読めます','山を押すと理由の内訳が開き、論点ごとの図解とX投稿へ進めます')
     # Explain the color axis before the reader reaches the graph.
     note_axis='<p class="axis-note" style="margin:16px 0;padding:16px;background:#eef3f8;border-left:4px solid #73869a"><strong>色は「今回案全体」への評価です。</strong>女性天皇への希望や養子制度への意見だけで、改正全体への賛否は決めていません。<strong>未表明は、中立や無関心の意味ではありません。</strong></p>'
     text=text.replace('<div class="modes"',note_axis+'<div class="modes"',1)
