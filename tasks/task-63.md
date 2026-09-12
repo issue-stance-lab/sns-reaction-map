@@ -352,3 +352,13 @@ X投稿はこの事業の原本資産だが、テーマごとに意見判定、�
 追加：上記23件を親が承認済みルールと本文で最終確認し、18件が一致、5件は保留。確定207・未解決203。規則適用131件は合計98件確定・33件保留となった。旧基準で不一致だった別群110件の最終確認へ進む。原本と公開は変更していない。
 
 追加：旧不一致群110件を承認済みルールで親・独立担当が一度ずつ本文確認し、58件一致・52件保留。確定265・未解決145。採用台帳は新規87件追加と既存23件の対象更新で4,224件となり、対象外の旧3,977件を保持、更新前の版も保全した。関連する分類判断・採用登録と、原本適用・公開は別。次は独立確認が不足する別群28件の補完。[110件の判定](../quality/reviews/2026-09-10-bukatsu-c1-decisions.json)。
+
+## 部活動：チェック方式の簡素化と、独立確認が不足している別群38件の解消・公開反映（2026-09-12）
+
+これまでの二重独立読み（20件単位・不一致は保留のまま）は精度に対して時間がかかりすぎるという指摘を受け、方式を簡素化した。分類器のstance判定に手順（賛否→具体的要求→中立の順で判定）が無かったことが46%agreement（30件の独立読みとの比較）の主因と判明し、判定手順を追加して70%へ改善（`e81f86b`）。今後は「1回の独立読みで判断し、current/proposedが食い違う場合はproposedを比較基準にする」方式へ統一する（二重読み・保留の強制解消は行わない）。
+
+editorial-adoption-current.jsonのbukatsu-chiiki記録のうちindependently_checked=falseだった38件（[独立読みの記録](../quality/reviews/2026-09-12-bukatsu-missing-independent-38.json)、比較基準の誤り訂正後の最終値は確定23件・保留15件）を解消し、確定分を正典（tweet 2086309235479265726のis_opinion False→True）・再読共通台帳（confirmed 23・disputed_unresolved 15）・公開JSONへ反映（意見1,139→1,140件）。**公開済みの山なみページを事後に更新する手段が無かったため、新規に `scripts/refresh_planet_section.py` を作成**（build_planet_page_preview.pyの初回変換用パイプラインを再利用）。展開時にgo-cardリンク消失・lead/データ出典/調査条件テキストの素通り・旧2Dマップ用データの再生成不能の3件を発見・対処（最後の1件は`denominator_exceptions`で正式に例外登録）。オーナー承認（`approval-20260912-002`）を得て本番push・GitHub Pages反映まで完了。詳細は[themes/bukatsu-chiiki.md](../themes/bukatsu-chiiki.md)。
+
+## 高齢者：独立確認が不足している別群53件の解消・原本反映（2026-09-12）
+
+部活動と同じ簡易チェック方式を適用。elderly-license-revocation記録のうちindependently_checked=falseだった53件（部活動の38件よりやや規模が大きい）を全件独立に読み、42件確認・11件保留（[判定記録](../quality/reviews/2026-09-12-elderly-missing-independent-53.json)）。current/proposedが食い違う7件のうち独立読みと一致したのは2件のみで正典へ適用、意見353→354件。再読共通台帳・仮名化検証データ・公開JSON・「語られていない争点」4件の母数を同期し、`refresh_planet_section.py`で山なみページ本体を更新。同スクリプトにelderly-license-revocation専用のlead/データ出典/調査条件テキスト同期を追加（issue_counts.syncが未設定で既存のapply_lead/apply_noteが素通りしていた3か所）。**部活動と異なり、build_elderly_arena.pyの旧SM_RAW/ISSUES埋め込みデータはdormantではなく現行分類器で再生成可能だったため、build_elderly_arena.py本体も合わせて更新した**（この差異はテーマごとに旧2D資産の扱いを個別確認する必要があることを示す）。データ資産棚卸し・DATA_SHEET・トップページ・採用台帳スナップショットを再生成し、単体テスト917件・標準検査すべて合格（`collect_at`期限超過6テーマの既知NGのみ残存）。原本・採用台帳はmainへ反映済み。**公開ページへのpushはオーナー承認待ち。**次は残り8テーマ（自転車以外）の同種の別群解消・原本反映。詳細は[themes/elderly-license-revocation.md](../themes/elderly-license-revocation.md)。

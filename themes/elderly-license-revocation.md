@@ -32,3 +32,9 @@
 ## 2026-09-06 課題63：適用・公開確認完了
 
 取得情報114件を正典へ補完し、採用指紋とバックアップ復元を確認。投稿506件・意見353件、既存再読250件、オーナー確認済み期間を維持した。公開集計への変更はない。承認済み5テーマをmain `138dad2` へまとめて反映し、GitHub Pagesのbuild/deploy成功を確認。収集予定・公開更新日を進めず、旧回の修復として反映した。適用後バックアップ154ファイルの復元確認済み。[適用・公開結果](../quality/reviews/2026-09-06-repair-adoption.md)。
+
+## 2026-09-12 課題63：独立確認が不足している別群53件を解消し、公開まで反映
+
+部活動で確立した簡易チェック方式（本文のみを渡した1回の独立読み、current/proposedが食い違う場合はproposedを比較基準にする）を適用。`editorial-adoption-current.json` のelderly-license-revocation記録のうちindependently_checked=falseだった53件を全件独立に読み、42件確認・11件保留（[判定記録](../quality/reviews/2026-09-12-elderly-missing-independent-53.json)）。current/proposedが食い違う7件のうち独立読みと一致したのは2件だけで、正典へ適用（tweet 2078335331653521707のis_opinion False→True、tweet 2093553448533045737のmain_issue「適性検査強化」→「その他」・stance「条件付き賛成」→「中立・情報」）。意見353→354件。
+
+再読共通台帳（confirmed 42・disputed_unresolved 11）、仮名化検証データ、公開JSON、「語られていない争点」4件の母数（353→354）を同期。`scripts/refresh_planet_section.py` で本番の山なみページを更新（同スクリプトにelderly-license-revocation専用のlead/データ出典/調査条件テキスト同期を追加。issue_counts.syncが未設定のため既存のapply_lead/apply_noteが素通りしていた3か所）。`build_elderly_arena.py` が今も維持している旧SM_RAW/ISSUES埋め込みデータも合わせて更新（部活動と異なりdormantではなく現行分類器で再生成可能）。データ資産棚卸し・DATA_SHEET・トップページ・採用台帳スナップショットを再生成し、単体テスト917件全件合格、標準検査すべて合格（`collect_at`期限超過6テーマの既知NGのみ残存）。原本・採用台帳・山なみページはmainへ反映済み。**GitHub Pagesへのpush（本番公開）はオーナー承認待ち。**
