@@ -1,0 +1,43 @@
+=== constitutional-amendment ===
+OK  編集部の横断整理が論拠の役目を引き継いでいる（5件、3観点とも有）
+=== 数字の分離 ===
+OK  「世論調査ではありません」が存在する
+OK  注意書きが最初の数値表示より前にある（insight-statsは山なみに引き継がれ不在）
+OK  参加者投票に n=表記がある
+OK  調査条件（取得元・期間・件数）が表示されている（2026-06-20〜2026-09-05）
+OK  代表投稿の確認表示が台帳と一致する（AI分類。代表投稿は編集部が選定）
+OK  投票ゲート（blur / lockArenaUntilVote）が存在しない
+OK  件数表示が sample_file の実数と一致する（全1556件 / 意見1369件）
+OK  arguments は6つの論点の後、SNS反応マップの前にある（山なみ形式のため対象外）
+=== 論点カードのデータ整合 ===
+OK  公開データJSONの論点別件数が仮名化検証データと一致する（7論点）
+OK  全カードの main_issue が公開データJSONに実在する（7ラベル）
+=== 母数の統一 ===
+OK  母数は issue_counts.basis=public_json（1369件）
+OK  論点の合計が母数と一致する（1369件）
+OK  マップの合計が母数と一致する（1369件）
+OK  賛否の合計が母数と一致する（1369件）
+=== 論点ごとの内訳（島・立場別シェア） ===
+OK  constitutional-amendment-general: 島10件の内訳の合計が論点の合計と一致する（511件）
+OK  constitutional-amendment-general: 立場4区分の内訳の合計が論点の合計と一致する（511件）
+OK  constitutional-amendment-general: 論点一覧の凡例（511件・37.3%）が論点の合計と一致する
+OK  constitutional-amendment-article9: 立場4区分の内訳の合計が論点の合計と一致する（284件）
+OK  constitutional-amendment-article9: 論点一覧の凡例（284件・20.7%）が論点の合計と一致する
+OK  constitutional-amendment-emergency: 島11件の内訳の合計が論点の合計と一致する（199件）
+OK  constitutional-amendment-emergency: 立場4区分の内訳の合計が論点の合計と一致する（199件）
+OK  constitutional-amendment-emergency: 論点一覧の凡例（199件・14.5%）が論点の合計と一致する
+OK  constitutional-amendment-referendum: 立場4区分の内訳の合計が論点の合計と一致する（196件）
+OK  constitutional-amendment-referendum: 論点一覧の凡例（196件・14.3%）が論点の合計と一致する
+OK  constitutional-amendment-procedure: 立場4区分の内訳の合計が論点の合計と一致する（118件）
+OK  constitutional-amendment-procedure: 論点一覧の凡例（118件・8.6%）が論点の合計と一致する
+OK  constitutional-amendment-deliberation: 立場4区分の内訳の合計が論点の合計と一致する（51件）
+OK  constitutional-amendment-deliberation: 論点一覧の凡例（51件・3.7%）が論点の合計と一致する
+OK  constitutional-amendment-other: 立場4区分の内訳の合計が論点の合計と一致する（10件）
+OK  constitutional-amendment-other: 論点一覧の凡例（10件・0.7%）が論点の合計と一致する
+=== 同じ数字は1回だけ ===
+OK  意見数はページ全体で1369に統一されている
+OK  論点数はページ全体で6に統一されている
+=== ページ全体の件数表示 ===
+OK  ページ全体に管理対象外の件数が残っていない
+=== 最大勢力バッジ ===
+OK  最大勢力・論点1の強調表示はない
