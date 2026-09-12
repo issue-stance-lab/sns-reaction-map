@@ -1,0 +1,104 @@
+=== 数値の出所 ===
+収集した投稿   15,815   ← sample_file の実レコード合計（10テーマ）
+分析対象の意見 12,404   ← 課題57 公開データcatalog（data/public/catalog.json）
+公開テーマ数      10   ← THEMES.yaml published:done
+最終更新    2026-09-12  ← THEMES.yaml updated_at 最大
+次回更新    2026-09-15  ← THEMES.yaml refresh_at の今日以降の最小
+
+=== 置換の空振り検査 ===
+OK  収集した投稿の用語                1件マッチ
+OK  hero-total-samples       1件マッチ
+OK  公開中のテーマ                  1件マッチ
+OK  投票受付中                    1件マッチ
+OK  em更新日                    1件マッチ
+OK  更新バー本文                   1件マッチ
+NG  update-bar次回更新           1件マッチ（値不一致）
+NG  JS次回更新                   1件マッチ（値不一致）
+OK  JS期限超過表示                 1件マッチ
+OK  バッジデータ                   1件マッチ
+OK  hero-total-opinions      1件マッチ
+OK  注目の問い件数 ai-copyright     1件マッチ
+OK  注目の問い件数 bike-blue-ticket 1件マッチ
+OK  注目の問い件数 bukatsu-chiiki   1件マッチ
+OK  注目の問い件数 consumption-tax-cut 1件マッチ
+OK  テーマカード件数 ai-copyright    1件マッチ
+OK  テーマカード件数 bike-blue-ticket 1件マッチ
+OK  テーマカード件数 bukatsu-chiiki  1件マッチ
+OK  テーマカード件数 constitutional-amendment 1件マッチ
+OK  テーマカード件数 elderly-license-revocation 1件マッチ
+OK  テーマカード件数 school-nickname-ban 1件マッチ
+OK  テーマカード件数 henoko-student-accident 1件マッチ
+OK  テーマカード件数 fukushuto       1件マッチ
+OK  テーマカード件数 koshitsu-tenpakai 1件マッチ
+OK  テーマカード件数 consumption-tax-cut 1件マッチ
+OK  テーマカード意見数 ai-copyright   1件マッチ
+OK  テーマカード意見数 bike-blue-ticket 1件マッチ
+OK  テーマカード意見数 bukatsu-chiiki 1件マッチ
+OK  テーマカード意見数 constitutional-amendment 1件マッチ
+OK  テーマカード意見数 elderly-license-revocation 1件マッチ
+OK  テーマカード意見数 school-nickname-ban 1件マッチ
+OK  テーマカード意見数 henoko-student-accident 1件マッチ
+OK  テーマカード意見数 fukushuto      1件マッチ
+OK  テーマカード意見数 koshitsu-tenpakai 1件マッチ
+OK  テーマカード意見数 consumption-tax-cut 1件マッチ
+OK  テーマカード主要論点数 ai-copyright 1件マッチ
+OK  テーマカード主要論点数 bike-blue-ticket 1件マッチ
+OK  テーマカード主要論点数 bukatsu-chiiki 1件マッチ
+OK  テーマカード主要論点数 constitutional-amendment 1件マッチ
+OK  テーマカード主要論点数 elderly-license-revocation 1件マッチ
+OK  テーマカード主要論点数 school-nickname-ban 1件マッチ
+OK  テーマカード主要論点数 henoko-student-accident 1件マッチ
+OK  テーマカード主要論点数 fukushuto    1件マッチ
+OK  テーマカード主要論点数 koshitsu-tenpakai 1件マッチ
+OK  テーマカード主要論点数 consumption-tax-cut 1件マッチ
+
+=== 件数の網羅検査 ===
+OK  ページ内の「○件」表示は全て id 付き（手入力の件数が残っていない）
+OK  テーマカード10枚の件数が sample_file と一致する
+OK  問いカード4枚の件数が sample_file と一致する
+OK  テーマカード合計 15,815 = ヒーロー表示 15,815
+OK  件数の用語が「収集」で統一されている
+
+=== 意見数・主要論点数（課題57 公開データcatalog） ===
+OK  テーマカードの意見数・主要論点数が公開データcatalogと一致する
+OK  ヒーローの意見数合計 12,404 が公開データcatalogと一致する
+
+=== 正典ファイル検査 ===
+OK  ai-copyright                 synthetic 0件
+OK  bike-blue-ticket             synthetic 0件
+OK  bukatsu-chiiki               synthetic 0件
+OK  constitutional-amendment     synthetic 0件
+OK  elderly-license-revocation   synthetic 0件
+OK  school-nickname-ban          synthetic 0件
+OK  henoko-student-accident      synthetic 0件
+OK  fukushuto                    synthetic 0件
+OK  koshitsu-tenpakai            synthetic 0件
+OK  consumption-tax-cut          synthetic 0件
+
+=== 日付検査 ===
+OK  期限超過 8テーマを「更新予定を確認中」と表示
+OK  refresh_at 空欄 0件
+NG  collect_at 期限超過: ai-copyright（2026-09-12）, bukatsu-chiiki（2026-09-09）, constitutional-amendment（2026-09-12）, elderly-license-revocation（2026-09-11）, henoko-student-accident（2026-09-07）, fukushuto（2026-09-07）, koshitsu-tenpakai（2026-09-08）, consumption-tax-cut（2026-09-08）
+OK  collect_at 空欄 0件
+
+=== 禁止表示 ===
+OK  「割れ度」なし
+OK  「公開テーマの分類比率」なし
+OK  「どっちが多い」なし
+OK  30日以上前の日付を含む要素なし
+OK  ハードコードされた割合（NN%）なし
+
+=== リンク ===
+OK  問いカード 4/4 リンク有効（リンク先HTMLが実在する）
+OK  今週の注目テーマ fukushuto が GROWTH.yaml の featured と一致する
+OK  #ranking 参照なし
+OK  ナビの全リンク先が実在する（5件）
+
+=== レスポンシブ ===
+OK  .hero-side に display:none を適用するメディアクエリなし
+OK  「世論調査ではありません」がページ内に存在する
+OK  注意書きが hero-stats より前に出現する
+
+=== 公開ディレクトリの衛生 ===
+OK  docs/ に .md が無い（運用メモは content/website/internal/ へ）
+OK  docs/404.html がある
