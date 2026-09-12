@@ -712,8 +712,34 @@ def _public_rows(data: dict[str, Any]) -> tuple[int, str, list[dict[str, Any]]]:
     return int(data["collected_count"]), _public_period(data), rows
 
 
+def refresh_verified_planet(page: str, rows: list[dict], collected: int) -> str:
+    """再読検査と正典の一致を確認してから、図全体をメモリ内で作り直す。"""
+    try:
+        from . import build_planet_data as bpd
+        from .build_planet_page_preview import build_section, render_planet, split_prototype
+    except ImportError:
+        import build_planet_data as bpd
+        from build_planet_page_preview import build_section, render_planet, split_prototype
+
+    canonical_rows, _, canonical_records = load_opinions()
+    def counts(records: list[dict]) -> Counter:
+        return Counter((classification(row).get("main_issue"), field, classification(row).get(field))
+                       for row in records for field in ("stance", "intensity"))
+    if collected != len(canonical_records) or counts(rows) != counts(canonical_rows):
+        raise IssueCountError("山なみと集計の入力が正典に一致しません。refresh_topic.py の候補検証を通してください")
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    return replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                        block, "山なみ全体", flags=re.S)
+
+
 def apply_planet_counts(page: str, rows: list[dict], collected: int, period: str) -> str:
-    """山なみの本体を保ち、調査条件・投票説明・詳細表を同期する。"""
+    """図を再読検査付きで再生成し、調査条件・投票説明・詳細表を同期する。"""
+    page = refresh_verified_planet(page, rows, collected)
     page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
                         build_research_conditions(collected, period), "調査条件", flags=re.S)
     page = replace_once(page, r"var issues=\[[^\n]*?\];", build_vote_issues(rows) + ";", "投票の論点")
@@ -818,6 +844,8 @@ def build(
     before = template.read_text(encoding="utf-8")
     page = before
     if "<!-- PLANET_SECTION_START -->" in page:
+        if records != load_opinions()[2]:
+            raise IssueCountError("山なみの候補入力は正典と異なります。refresh_topic.py の候補検証を通してください")
         page = apply_planet_counts(page, rows, collected, sample_period(records))
     else:
         page = replace_once(page, r'<p class="lead">.*?</p>', build_lead(rows), "リード文", flags=re.S)

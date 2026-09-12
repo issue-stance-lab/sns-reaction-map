@@ -3,6 +3,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -81,27 +82,32 @@ class NicknameArenaBuilderTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
+            # 山なみは個々の投稿の再読が必須。未確認の追加分を数だけ足して
+            # exit 0 にせず、既存の出力ファイルを触る前に停止する。
+            if '<!-- PLANET_SECTION_START -->' in PAGE.read_text():
+                output = work / "page.html"
+                arena = work / ARENA_DATA.name
+                output.write_text("existing page")
+                arena.write_text("existing arena")
+                result = self._build(source + [added], work)
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertIn("候補検証", result.stderr)
+                self.assertEqual(output.read_text(), "existing page")
+                self.assertEqual(arena.read_text(), "existing arena")
+                return
             result = self._build(source + [added], work)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             page = (work / "page.html").read_text(encoding="utf-8")
-            if '<!-- PLANET_SECTION_START -->' in page:
-                needles = (f'関連する意見{opinions}件',
-                           f'<th>{SAFETY}</th><td>{expected}</td>',
-                           f'"key":"safety","title":"{SAFETY}"')
-                self.assertNotIn('id="issue-arena-section"', page)
-                original_block = PAGE.read_text().split('<!-- PLANET_SECTION_START -->')[1].split('<!-- PLANET_SECTION_END -->')[0]
-                self.assertIn(original_block, page)
-            else:
-                needles = (
-                f"分析対象となった意見{opinions}件",                     # リード文
-                f'<strong class="insight-value">{opinions}<small>件',    # 注目ポイント
-                f'id="issue-count-school-nickname-ban-ijime">{expected}件',  # 論点カード
-                f'"key":"safety","title":"{SAFETY}"',                    # 投票の論点（keyは不変）
-                f'<a href="#issue-safety">心理的安全 {expected}</a>',    # 論点ナビ
-                f'<span class="issue-count">{expected}件</span>',        # 論点ブロックの見出し
-                f"<th>{SAFETY}</th><td>{expected}</td>",                 # 詳細データ表
-                f"関連する意見{opinions}件",                             # 詳細データの見出し
-                )
+            needles = (
+            f"分析対象となった意見{opinions}件",                     # リード文
+            f'<strong class="insight-value">{opinions}<small>件',    # 注目ポイント
+            f'id="issue-count-school-nickname-ban-ijime">{expected}件',  # 論点カード
+            f'"key":"safety","title":"{SAFETY}"',                    # 投票の論点（keyは不変）
+            f'<a href="#issue-safety">心理的安全 {expected}</a>',    # 論点ナビ
+            f'<span class="issue-count">{expected}件</span>',        # 論点ブロックの見出し
+            f"<th>{SAFETY}</th><td>{expected}</td>",                 # 詳細データ表
+            f"関連する意見{opinions}件",                             # 詳細データの見出し
+            )
             for needle in needles:
                 # ページ全体を差分に出すと読めないので、見つからない文字列だけを出す
                 self.assertTrue(needle in page, f"ページに {needle!r} がありません")
@@ -121,6 +127,44 @@ class NicknameArenaBuilderTests(unittest.TestCase):
             )
             self.assertEqual(first_page, (work / "page.html").read_bytes())
             self.assertEqual(first_arena, (work / ARENA_DATA.name).read_bytes())
+
+    def test_same_counts_with_unreviewed_body_are_rejected(self):
+        source = canonical()
+        source[0]["text"] = "unreviewed replacement with identical counts"
+        with tempfile.TemporaryDirectory() as directory:
+            work = Path(directory)
+            result = self._build(source, work)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertFalse((work / "page.html").exists())
+
+    def test_planet_is_regenerated_instead_of_preserved(self):
+        import scripts.build_nickname_arena as builder
+        page = PAGE.read_text()
+        self.assertIn('<!-- PLANET_SECTION_START -->', page)
+        damaged = page.replace('window.PLANET_DATA=', 'window.STALE_DATA=')
+        self.assertTrue(page != damaged)
+        rows, _, records = builder.load_opinions()
+        restored = builder.apply_planet_counts(damaged, rows, len(records), builder.sample_period(records))
+        self.assertTrue(restored == page, "再生成後のページが正典から作ったページと異なります")
+
+    def test_failed_reread_gate_leaves_destination_untouched(self):
+        import scripts.build_nickname_arena as builder
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "page.html"
+            output.write_text("previous page")
+            with patch("scripts.build_planet_data.independence_gate", return_value=["再読が未完了"]):
+                with self.assertRaisesRegex(builder.IssueCountError, "再読が未完了"):
+                    builder.build(html_template=PAGE, output_html=output)
+            self.assertEqual(output.read_text(), "previous page")
+            self.assertFalse((output.parent / ARENA_DATA.name).exists())
+
+    def test_public_counts_reject_stale_stances_before_writing(self):
+        import scripts.build_nickname_arena as builder
+        rows, _, records = builder.load_opinions()
+        rows = json.loads(json.dumps(rows))
+        rows[0]["classification"]["stance"] = (SUPPORT if rows[0]["classification"]["stance"] != SUPPORT else "中立・情報")
+        with self.assertRaisesRegex(builder.IssueCountError, "正典に一致"):
+            builder.apply_planet_counts(PAGE.read_text(), rows, len(records), builder.sample_period(records))
 
     def test_missing_is_opinion_stops_with_an_error(self):
         """is_opinion が無いレコードは静かに落とさず止める。
@@ -170,6 +214,29 @@ class NicknameArenaBuilderTests(unittest.TestCase):
 
 
 class NicknameAdapterTests(unittest.TestCase):
+    def test_planet_preparation_keeps_whole_previous_snapshot(self):
+        from scripts.refresh_adapters.nickname import _run_builder
+        with tempfile.TemporaryDirectory() as directory:
+            work = Path(directory)
+            candidate = work / "candidate.json"
+            candidate.write_text("[]")
+            output = work / "page.html"
+            with patch("scripts.refresh_adapters.nickname.subprocess.run") as run:
+                _run_builder(ROOT, candidate, PAGE, output)
+            run.assert_not_called()
+            self.assertEqual(output.read_bytes(), PAGE.read_bytes())
+            self.assertEqual((work / ARENA_DATA.name).read_bytes(), ARENA_DATA.read_bytes())
+
+    def test_finalize_runs_checked_whole_page_builder_first(self):
+        from scripts.refresh_adapters.nickname import finalize
+        with patch("scripts.refresh_adapters.nickname.subprocess.run") as run:
+            finalize(ROOT, "2026-09-12")
+        calls = run.call_args_list
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(calls[0].args[0], [sys.executable, str(BUILDER)])
+        self.assertIn("--public-counts-only", calls[1].args[0])
+        self.assertTrue(all(call.kwargs["check"] for call in calls))
+
     def test_vote_definition_stays_v1_with_18_choices(self):
         sys.path.insert(0, str(ROOT))
         from scripts.refresh_adapters.nickname import VOTE_CHOICES, VOTE_TOPIC, vote_fingerprint
