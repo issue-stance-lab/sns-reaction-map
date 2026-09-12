@@ -234,17 +234,17 @@ class PlanetDataTest(unittest.TestCase):
         self.assertTrue(any("増えた分" in m and issue["label"] in m for m in ng), ng)
 
     def test_bukatsu_existing_rereads_are_connected_without_skips(self):
-        """既存教員54件・制度教育471件を継承し、実読966件を接続する。"""
+        """既存教員54件・制度教育471件を継承し、実読967件を接続する（2026-09-12、独立確認で#12が制度・移行プロセスへ1件増）。"""
         data = bpd.build(TOPIC)
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         by_label = {i["label"]: i["sub"] for i in data["issues"]}
-        for label, count in [("教員の働き方", 323), ("制度・移行プロセス", 256),
+        for label, count in [("教員の働き方", 323), ("制度・移行プロセス", 257),
                              ("教育的意義・機会", 215)]:
             self.assertEqual(by_label[label]["reread_count"], count)
             self.assertEqual(by_label[label]["unread_count"], 0)
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 966)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 967)
         self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 173)
-        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1075)
+        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1076)
         self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 0)
         self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 0)
         self.assertEqual(bpd.independence_gate(data, cfg), [])
