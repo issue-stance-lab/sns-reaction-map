@@ -77,3 +77,22 @@ stanceに判定順序（賛否の明示→具体的要求の有無→中立）�
 作業は`../isa-wt-bukatsu-task63-28`（ブランチ`task/bukatsu-task63-28items`、mainへマージ済み・作業ツリー削除済み）で行った。
 なお着手前、`build_adoption_registry.py --check`と`verify_adoption_registry.py`が高齢者テーマのスナップショット指紋ズレで
 NGだったため、オーナーが別途修正するまで台帳への書き込みを保留していた（修正確認後に本作業を実施）。
+
+ 2026-09-12、上記38件を精査し直し、**24件・14件という区分は誤りだったため訂正した。** 38件中9件には
+既存の修正案（proposed）が付いており、独立確認はcurrentではなくproposedと比較すべきところを誤って
+currentとだけ比較していた。さらに、不一致とした14件のうち5件（既にaccepted状態だった分）は「触れない」
+という判断のせいで、独立確認で食い違いが見つかったのに台帳上は無風のacceptedのまま残ってしまっていた。
+正しく仕分け直すと**確定23件・保留15件**（[quality/reviews/2026-09-12-bukatsu-missing-independent-38.json](../quality/reviews/2026-09-12-bukatsu-missing-independent-38.json)に詳細）。
+
+保留15件は、台帳上`adoption_status=hold`に加え、共通再読台帳（`data/verification/reread/bukatsu-chiiki.json`）
+へも`evidence_quality=verified`・`bucket=disputed_unresolved`として登録した。**「未確認」ではなく
+「確認済みだが判定できず保留」と区別して記録できる。** 確定23件のうち1件（tweet 2086309235479265726、
+論点=制度・移行プロセス）は実際にis_opinion: false→trueへ原本を修正する必要があり、適用した
+（意見1,139→1,140件）。この1件に連動して、公開データJSON・DATA_SHEET・沈んだ大陸4件の母数・
+下位論点（島）ファイル・採用台帳（段階D）のスナップショットをすべて揃え直した（新規1件はいずれの
+沈んだ大陸にも該当しないことをmatch_ruleで確認済み）。
+
+作業は`../isa-wt-bukatsu-apply`（ブランチ`task/bukatsu-apply-accepted`、mainへマージ済み・作業ツリー削除済み）で行った。
+**`docs/bukatsu-chiiki-reaction-map.html`（公開ページ）はまだ更新していない。** 標準検査は単体テスト917件中914件OK
+（2件はdocs/未更新による既知の差分、1件はcollect_at期限超過で無関係）、`build_planet_data.py`の独自性検査に合格。
+公開ページへの反映はCEO承認後の`release`手順で行う。
