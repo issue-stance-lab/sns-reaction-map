@@ -33,6 +33,7 @@ INTENSITY_ORDER = ("low", "medium", "high")
 # 各主張は、それが争われている論点（大陸）へ結びつける。課題54の地形は論点単位で
 # 実像／ずれ／蜃気楼を塗り分けるため、この対応が無いと段階6で色を決められない。
 CLAIM_AUDIT_SOURCES = {
+    "henoko-student-accident": ("scripts/build_henoko_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "school-nickname-ban": ("scripts/build_nickname_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "bukatsu-chiiki": ("scripts/build_bukatsu_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
@@ -146,7 +147,9 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
         })
     if set(counts) != {claim["id"] for claim in claims}:
         raise RegistryError(f"{theme_id}: 検証用投稿と照合カードの主張IDが一致しません")
-    return {"status": "complete", "checked_on": checked_on, "reviewer_type": "editorial_review", "claims": claims}
+    # The new ledger records an AI source review; do not present it as a human review.
+    reviewer_type = "ai_assisted" if theme_id == "henoko-student-accident" else "editorial_review"
+    return {"status": "complete", "checked_on": checked_on, "reviewer_type": reviewer_type, "claims": claims}
 
 
 # 公開してよい海面下の項目（設計書3.3・14章）。ここに無い鍵は落とす。
@@ -749,7 +752,7 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
         return errors
     claims = verification["claims"]
     if verification["status"] == "complete":
-        if not claims or verification["checked_on"] is None or verification["reviewer_type"] != "editorial_review":
+        if not claims or verification["checked_on"] is None or verification["reviewer_type"] not in {"editorial_review", "ai_assisted"}:
             errors.append(f"{tid}: 完了済み照合の必須項目が不足しています")
     if verification["status"] == "not_started":
         if claims or verification["checked_on"] is not None or verification["reviewer_type"] is not None:
