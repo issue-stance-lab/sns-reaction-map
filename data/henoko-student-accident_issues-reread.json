@@ -2,7 +2,7 @@
   "read_at": "2026-09-12T14:41:35.477672+00:00",
   "reviewer_type": "editorial_ai",
   "reviewer": "Codex (GPT-6)",
-  "method": "480件の本文を20件ずつ個別に読み、投稿者の評価と引用・告知を区別し、発言理由を手作業で割り当てた。コードは保存と件数計算のみ。別担当の独立監査・採用は未了。",
+  "method": "480件の本文を20件ずつ個別に読み、投稿者の評価と引用・告知を区別し、発言理由を手作業で割り当てた。コードは保存と件数計算のみ。2026-09-13の独立監査に基づき、同文投稿の整合性、賛否の明示性、理由見出しと本文の対応を再確認して修正。独立監査の確認範囲・結果は quality/reviews/2026-09-13-henoko-fix-reaudit.md を参照。正式採用は未了。",
   "buckets": {
     "平和教育の萎縮": {
       "peace-restrict": {
@@ -10,7 +10,7 @@
         "count": 11
       },
       "peace-opportunity": {
-        "label": "安全と生徒が学ぶ機会を両立する",
+        "label": "学ぶ機会・権利と生徒の自主性",
         "count": 7
       },
       "peace-question": {
@@ -25,7 +25,7 @@
     "報道・行政対応": {
       "media-bias": {
         "label": "報道の量・取り上げ方への疑問",
-        "count": 44
+        "count": 43
       },
       "media-authority": {
         "label": "行政・政党の説明と調査",
@@ -47,11 +47,11 @@
       },
       "neutral-government": {
         "label": "国の教育内容への介入を疑問視する",
-        "count": 2
+        "count": 3
       },
       "neutral-consistency": {
         "label": "比較する場面でも同じ基準を求める",
-        "count": 9
+        "count": 8
       },
       "neutral-links": {
         "label": "教組・宗教団体と教育の関係",
@@ -87,7 +87,7 @@
       },
       "dignity-priority": {
         "label": "犠牲者への配慮を先にしてほしい",
-        "count": 22
+        "count": 23
       },
       "dignity-mourning": {
         "label": "命を悼み、遺族や生徒の立場を考える",
@@ -100,11 +100,11 @@
     },
     "政治利用・基地問題": {
       "politics-links": {
-        "label": "活動団体と政党・教育機関の関係",
+        "label": "活動団体・政党・教育機関への批判と関係",
         "count": 29
       },
       "politics-base": {
-        "label": "基地政策そのものを問い直す",
+        "label": "基地政策・反対運動の是非",
         "count": 3
       },
       "politics-double": {
@@ -362,12 +362,12 @@
     },
     {
       "main_issue": "政治的中立性",
-      "bucket": "neutral-consistency",
+      "bucket": "neutral-government",
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "413b65f4fa3e228348751ffb951a717ebc367ec6935cb82e859747c22fd942b8",
-      "reason_sha256": "110786bbfead9311118546a6086c472009e75fd72cb853a59d611f35d0f92a5b",
-      "read_at": "2026-09-12T14:41:35.477672+00:00",
+      "reason_sha256": "1c8a08c8043ef8888473538d4662de8b7f2b39b64d77f18f37590d2c316b548b",
+      "read_at": "2026-09-12T22:57:05.604197+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "08900c71e26b33fe2e78730708468076016a36669671388dd3b6101370dd6ae1"
     },
@@ -713,13 +713,13 @@
       "post_key": "1bd10c016204c39a46ff69c264ca46b48dc7abc8473a4d444f9ddf6757ff92fd"
     },
     {
-      "main_issue": "報道・行政対応",
-      "bucket": "media-bias",
+      "main_issue": "追悼・被害者の尊厳",
+      "bucket": "dignity-priority",
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "9c9cab42f1c95dc2ee7d58a4760fdb5485de640b161b36fc6e37759dfddf23d3",
-      "reason_sha256": "e6f7d0423b35eea83e63e9cecfa6b468038d4278da97b9bd255b45eb0892f30a",
-      "read_at": "2026-09-12T14:41:35.477672+00:00",
+      "reason_sha256": "283c2f4915b119b10d3b6ee1e9db344bae2090b15cad170e7df4891fb9c24c97",
+      "read_at": "2026-09-12T22:57:05.604197+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "a49ec94ed62258dc9ab8175393eebe87342bd154c6282637a6a2686adf0f519a"
     },
@@ -751,8 +751,8 @@
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "d5aae5d19183b1e730fb5dd7bd6c96a1d10b804593633597f606c4270403ad23",
-      "reason_sha256": "5a919be1ac51948c036b72216c4775fb8baab07b6fb8381b8dc25097aa7affd0",
-      "read_at": "2026-09-12T14:41:35.477672+00:00",
+      "reason_sha256": "99c2ac0cb80c9b564730ac9ba44992a85d4a454376297534d447c9313d9e0455",
+      "read_at": "2026-09-12T22:57:05.604197+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "a7c2f65380d50717be23266db9fd6bfe22107ebfff4cb53eae0043674d707e04"
     },
@@ -817,8 +817,8 @@
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "f33f8d38b6c753a9fe10b4d0f7a4721a6189c6aa6dccd11346987076bc7f5920",
-      "reason_sha256": "659c73044d42617f7eaa7352285b6c01efb3626976059a4ffdada9c950362615",
-      "read_at": "2026-09-12T14:41:35.477672+00:00",
+      "reason_sha256": "b92814c957a09e8a7d03bad69713e3d8af98519f26c87b376c8ef37031fa565e",
+      "read_at": "2026-09-12T22:57:05.604197+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "42b55a6a1ada1ed89f493e06f7f8e3b11da8da1978f8b814c1cecb9ce7d70d1c"
     },
@@ -2027,8 +2027,8 @@
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "8ad3afb68fb05fd96d91f6f49f88674383194943f27d0074500d92d02fc205a6",
-      "reason_sha256": "a8241cb3953a773a022c3802c314931b2ad796872ef40dfd70693759c7f88b69",
-      "read_at": "2026-09-12T14:41:35.477672+00:00",
+      "reason_sha256": "05ff515b5bdf5e97c11de40b86ac5e31fc2da81c315ab22b67401f3dc2489e64",
+      "read_at": "2026-09-12T22:57:05.604197+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "3930a0057c3963d01182bab1d595cff46295872b542e307657444aca089239e2"
     },
@@ -3534,8 +3534,8 @@
       "body_reviewed": true,
       "review_kind": "editorial_body_reread",
       "text_sha256": "f59b58c282cc2fa4687752951ef9dc4f164874f84e6693996960cbf0404cab75",
-      "reason_sha256": "905bc718bdab93a00fed62e68e3a9c276318fcfefec50c286baa0fa5eff8fa29",
-      "read_at": "2026-09-12T14:41:35.477672+00:00",
+      "reason_sha256": "7df546c7257ff4f433726dbcf60b3f111aa4b9bd6f133e816441c1a802f399c2",
+      "read_at": "2026-09-12T22:57:05.604197+00:00",
       "reviewer": "Codex (GPT-6)",
       "post_key": "670ed3e0bd5a2805f7eda7e2f2de9c39b78e7cce89b370c6385a4aece3b79ac0"
     },
