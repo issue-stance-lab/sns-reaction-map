@@ -15,6 +15,7 @@ from pathlib import Path
 from scripts.build_nickname_arena import IssueCountError, apply_public_counts
 
 ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "social-samples/school-nickname-ban_hermes_arena_classified.json"
 PAGE = ROOT / "docs/school-nickname-ban-reaction-map.html"
 PUBLIC = ROOT / "data/public/themes/school-nickname-ban.json"
 TMP = ROOT / ".tmp-nickname-public-counts.json"
@@ -30,10 +31,12 @@ class NicknamePublicCountsTests(unittest.TestCase):
         TMP.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
         return TMP
 
+    @unittest.skipUnless(SOURCE.exists(), "検証済み非公開正典との照合は手元の全体検査で実行する")
     def test_public_json_reproduces_published_page(self) -> None:
         """公開JSONと検証済み正典から、現在のページと同じバイト列に戻せる。"""
         self.assertEqual(apply_public_counts(self.page, PUBLIC), self.page)
 
+    @unittest.skipUnless(SOURCE.exists(), "検証済み非公開正典との照合は手元の全体検査で実行する")
     def test_new_opinion_reaches_every_count_on_the_page(self) -> None:
         """公開JSONの件数が増えたら、ページの各所の数字も増える。"""
         data = json.loads(json.dumps(self.public))
