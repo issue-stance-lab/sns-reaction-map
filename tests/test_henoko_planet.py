@@ -21,7 +21,7 @@ class HenokoPlanetTests(unittest.TestCase):
         if (ROOT / 'social-samples/henoko/henoko_hermes_arena_classified.json').exists():
             records, opinions = load_records(None)
             self.assertEqual(build_page(page, records, opinions), fix_henoko_vote_scroll(page))
-        self.assertEqual(apply_public_counts(page), fix_henoko_vote_scroll(page))
+            self.assertEqual(apply_public_counts(page), fix_henoko_vote_scroll(page))
         self.assertNotIn('HENOKO_ARENA_RAW', page)
         self.assertNotIn('id="issue-arena-section"', page)
         self.assertIn("choiceIdx:selected*STANCES.length+index", page)

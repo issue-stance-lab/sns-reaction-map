@@ -12,6 +12,7 @@ PUBLIC = ROOT / "data/public/themes/henoko-student-accident.json"
 
 
 class HenokoPublicCountsTests(unittest.TestCase):
+    @unittest.skipUnless((ROOT / "social-samples/henoko/henoko_hermes_arena_classified.json").exists(), "requires private canonical; checked locally")
     def test_public_counts_replace_page_aggregates(self) -> None:
         data = json.loads(PUBLIC.read_text(encoding="utf-8"))
         page = apply_public_counts(PAGE.read_text(encoding="utf-8"), PUBLIC)

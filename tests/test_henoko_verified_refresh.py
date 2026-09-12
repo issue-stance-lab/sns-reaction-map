@@ -31,6 +31,7 @@ class VoteScrollTests(unittest.TestCase):
         self.assertEqual(preview.fix_henoko_vote_scroll(other), other)
 
 
+@unittest.skipUnless((ROOT / "social-samples/henoko/henoko_hermes_arena_classified.json").exists(), "requires private canonical; checked locally before publication")
 class VerifiedRefreshTests(unittest.TestCase):
     def setUp(self):
         self.records, self.opinions = builder.load_records(None)
