@@ -1,0 +1,69 @@
+{
+  "status": "independent_reaudit_pass_not_published",
+  "resolved": [
+    "HEN-A1",
+    "HEN-A2",
+    "HEN-A3",
+    "HEN-A4",
+    "HEN-A5",
+    "HEN-A6",
+    "HEN-A7",
+    "HEN-A8",
+    "RA-C1"
+  ],
+  "classification": {
+    "verdict": "pass_for_requested_fix_scope",
+    "body_read_count": 87,
+    "changed_count": 53,
+    "bucket_count": 25,
+    "issue_counts": {
+      "平和教育の萎縮": 25,
+      "報道・行政対応": 68,
+      "政治的中立性": 44,
+      "安全管理・事故原因": 105,
+      "追悼・被害者の尊厳": 51,
+      "政治利用・基地問題": 76
+    },
+    "stance_counts": {
+      "論点を切り分ける": 321,
+      "文科省判断を支持": 27,
+      "文科省判断に反発": 18,
+      "中立・情報共有": 3
+    },
+    "mechanical_failures": [],
+    "method_note_followup": {
+      "verdict": "pass",
+      "verification": "旧methodだけに戻した再読JSONが前回固定SHA256と完全一致。台帳のsource hashだけを旧値に戻した内容も前回固定SHA256と完全一致。正典とpublicのSHA256は不変。本文再読なし。",
+      "previous_source_sha256": "def72eef4f9c6541385461872c3e3c2e5058449033e04632d1785640dd81b601",
+      "current_source_sha256": "62e81d7e1853d154aa1e23e37db7a6fa5c322904531cca38a4b5adaf31c53d94"
+    }
+  },
+  "sources": {
+    "result": "pass_for_source_data_scope",
+    "education_finding_posts": 6,
+    "shared_concern_side_counts": [
+      2,
+      2
+    ],
+    "reason_group_body_reads": 39,
+    "public_html_checked": true,
+    "method_note_only_followup": "source file method field changed after source audit; classification auditor independently verified no individual reason/body/item changes"
+  },
+  "tests": {
+    "unittest_passed": 950,
+    "unittest_failed": 0,
+    "rebuild_themes": 11,
+    "rebuild_failures": 0,
+    "number_provenance_counts": 109,
+    "unexplained_counts": 0,
+    "browser_vote_combinations": 36,
+    "real_post_requests": 0
+  },
+  "shared_canonical_matches_original_semantically": true,
+  "shared_canonical_sha256": "3cca77f41e89b60a6a2a9057d6242bd8e149f72150d6ef739d268f38ad8400c2",
+  "private_evidence_sha256": {
+    "henoko-fix-code-audit.json": "b4f23d029793513b5a01cfb34ee333172f18a32508bb5515b592fa6d436f443e",
+    "henoko-fix-classification-audit.private.json": "b27b8ad8d65691d64a958749f1685be71d1bf16df6d8caedc93c263cd7edac40",
+    "henoko-fix-source-audit.private.json": "72117327f04ec0b1127b880fe45e33e0ff7b356e51e87307266b3959f6d65ca7"
+  }
+}

@@ -397,4 +397,4 @@ Stage 0全体は未完了。作業枝 `task/nickname-stage0`、main未統合。
 [初回監査](../quality/reviews/2026-09-12-nickname-independent-audit.md)の5点を修正。別担当2名の再監査で全点解消。
 87意見・6論点・理由13区分。本文・IDを保持し、承認後に正典・本番へ反映済み。[修正・再監査記録](../quality/reviews/2026-09-12-nickname-fix-reaudit.md)。**再監査合格・本番反映済み。** [公開確認](../quality/reviews/2026-09-12-nickname-release.md)。
 
-**2026-09-13 辺野古の新ページ見本・独立監査**: [制作記録](../quality/reviews/2026-09-12-henoko-page.md)の369意見候補を別担当3名が監査。分類480件・資料のみ3項目の対象369件を全件実読。投票後の移動、再生成、分類一貫性、理由表示、照合対応等に指摘があり、修正・再監査が必要。[独立監査記録](../quality/reviews/2026-09-13-henoko-independent-audit.md)。候補・共有原本・本番は変更せず、正式採用・一般公開は未了。
+**2026-09-13 辺野古の修正・独立再監査完了**: [初回監査](../quality/reviews/2026-09-13-henoko-independent-audit.md)の8指摘と再監査で発見した初回変換の検証漏れを修正。分類・資料・実装の別担当再監査が合格。369意見・6論点・理由25区分、950テスト成功。[修正・再監査記録](../quality/reviews/2026-09-13-henoko-fix-reaudit.md)。共有原本・本番は未変更。次は修正見本の確認と正式採用・一般公開の承認。
