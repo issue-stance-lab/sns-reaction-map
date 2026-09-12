@@ -76,6 +76,14 @@ sub_issues:
     coverage: full
     coverage_note: この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。
     show_coverage_note: true
+  国民投票・広告:
+    file: data/constitutional-amendment_issues-reread.json
+    path: [buckets, 国民投票・広告]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、主な理由ごとに分けました。不正や情報操作への懸念は投稿者の意見で、事実と確認されたことを意味しません。本文だけでは理由を特定できない投稿は別にしています
+    show_coverage_note: true
 geometry:
   min_area_pct: 2.5
   elevation_k: 50
