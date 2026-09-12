@@ -113,6 +113,7 @@ def markdown(d):
 
 def render_preview(d, examples, template):
     from fukushuto_target_data import aggregate_targets
+    from build_planet_page_preview import build_background
     payload={k:v for k,v in d.items() if k not in ('records','pending','issue_moves_retained')}
     payload['target_breakdown'] = aggregate_targets(d['records'])
     payload['examples']=[x for x in examples if x['number'] in (1,2,5,7,8,18)]
@@ -122,7 +123,7 @@ def render_preview(d, examples, template):
     body+=''.join('<tr><td>'+html.escape(x['name'])+'</td><td>'+str(x['before'])+'</td><td>'+str(x['after'])+'</td><td>'+format(x['delta'],'+')+'</td></tr>' for x in d['issues'])
     body+='</tbody></table>'
     encoded=json.dumps(payload,ensure_ascii=False).replace('<','\\u003c').replace('>','\\u003e').replace('&','\\u0026')
-    return template.replace('__DATA__',encoded).replace('__STATIC_TABLES__',body)
+    return template.replace('__DATA__',encoded).replace('__STATIC_TABLES__',body).replace('__BACKGROUND__',build_background('fukushuto'))
 
 def main():
     a=argparse.ArgumentParser();a.add_argument('--baseline',type=Path,required=True);a.add_argument('--review',type=Path,required=True);a.add_argument('--output',type=Path,required=True);args=a.parse_args()

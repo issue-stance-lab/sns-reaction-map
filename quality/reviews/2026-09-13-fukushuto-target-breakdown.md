@@ -27,3 +27,7 @@
 件数専用データは `quality/reviews/2026-09-13-fukushuto-target-review-counts.json`、確認画面は `quality/prototypes/fukushuto-target-review.html`。
 
 非公開資料と今回の生成器を `/Volumes/HD-LE-B/issue-stance-private-backups/data-repairs/fukushuto/20260913-target-breakdown/` に保存し、一時フォルダへの復元で全ファイルのハッシュ一致を検査した。未完了のため作業ツリーを保持する。
+
+## デザインの追加指示を反映
+
+冒頭に他テーマと同じ `build_background` の出力を接続。「何が、どこまで進んでいるのか」「なぜ始まったか」「これまでの経緯」、確認項目、SNS反応マップの順序とした。見出し・書体・色・パネルの余白を公開済みテーマへ寄せた。背景は9/12確認資料を再利用し、確認日を新しく見せていない。対象別分類の切替と件数は維持。375px／1280pxの切替検査と27テストが成功。
