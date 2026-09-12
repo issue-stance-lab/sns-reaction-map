@@ -108,6 +108,35 @@ class VerifiedRefreshTests(unittest.TestCase):
                 builder.main()
         self.assertEqual(output.read_text(), self.page)
 
+    def test_initial_conversion_rejects_stale_inputs_in_preview_and_public_modes(self):
+        legacy = self.root / 'legacy.html'
+        legacy.write_text('<html><body>Old arena before conversion</body></html>')
+        output = self.root / 'converted.html'
+        for kind in ['body', 'stance', 'add']:
+            rows = copy.deepcopy(self.records)
+            item = next(x for x in rows if x == self.opinions[0])
+            if kind == 'body':
+                item['text'] += ' changed'
+            elif kind == 'stance':
+                item['classification']['stance'] = 'changed stance'
+            else:
+                extra = copy.deepcopy(item)
+                extra['tweet_id'] = 'audit-added'
+                rows.append(extra)
+            self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
+            for for_docs in [False, True]:
+                with self.subTest(kind=kind, for_docs=for_docs):
+                    output.write_text('HTML sentinel')
+                    argv = ['build_planet_page_preview.py', '--topic', TOPIC,
+                            '--page', str(legacy), '--out', str(output)]
+                    if for_docs:
+                        argv.append('--for-docs')
+                    with patch.object(sys, 'argv', argv), patch.object(preview.bpd, 'build') as build:
+                        with self.assertRaisesRegex(builder.IssueCountError, '再読台帳'):
+                            preview.main()
+                        build.assert_not_called()
+                    self.assertEqual(output.read_text(), 'HTML sentinel')
+
     def test_public_argument_is_not_ignored(self):
         data = json.loads(self.public.read_text())
         data['opinion_count'] += 1

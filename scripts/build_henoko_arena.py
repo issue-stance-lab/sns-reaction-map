@@ -24,7 +24,6 @@ from __future__ import annotations
 
 import argparse
 import html
-import hashlib
 import json
 import re
 import sys
@@ -450,34 +449,11 @@ def refresh_verified_planet(
             bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll,
         )
 
-    public_theme = public_theme or PUBLIC_THEME
-    canonical, canonical_opinions = load_records(None)
-    if records != canonical or opinions != canonical_opinions:
-        raise IssueCountError("山なみの入力候補の本文・分類が正典に一致しません。候補の再読・公開集計を更新してください")
-    themes = parse_themes_yaml(THEMES_YAML)
-    canonical_path = ROOT / str(themes[THEME]["sample_file"])
-    registry = json.loads((ROOT / "data/verification/reread" / f"{THEME}.json").read_text())
-    if registry.get("canonical_sha256") != hashlib.sha256(canonical_path.read_bytes()).hexdigest():
-        raise IssueCountError("山なみの再読台帳と正典の版が一致しません。本文・分類変更の再確認が必要です")
-
-    public = json.loads(public_theme.read_text(encoding="utf-8"))
-    # build_planet_data reads this registered public source. Do not silently ignore
-    # an alternative function argument whose counts happen to have the same total.
-    if public != json.loads(PUBLIC_THEME.read_text(encoding="utf-8")):
-        raise IssueCountError("山なみの候補公開JSONが登録済みの公開JSONに一致しません")
-    collected, total, *_ = _public_counts(public)
-    if collected != len(records) or total != len(opinions):
-        raise IssueCountError("山なみの公開件数が正典に一致しません")
-    for issue in public["issues"]:
-        rows = [r for r in opinions if classification(r)["main_issue"] == issue["label"]]
-        if int(issue["count"]) != len(rows):
-            raise IssueCountError("山なみの論点別件数が正典に一致しません")
-        for field, values, key in (("stance", "stances", "label"),
-                                    ("intensity", "intensities", "id")):
-            actual = Counter(classification(r).get(field) for r in rows)
-            expected = Counter({v[key]: int(v["count"]) for v in issue[values]})
-            if actual != expected:
-                raise IssueCountError("山なみの公開分類が正典に一致しません: " + issue["label"])
+    if __package__:
+        from .henoko_planet_guard import verify_inputs
+    else:
+        from henoko_planet_guard import verify_inputs
+    verify_inputs(records, opinions, public_theme)
     data = bpd.build(THEME)
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)

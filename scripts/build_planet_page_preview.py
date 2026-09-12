@@ -819,6 +819,13 @@ def main() -> None:
     if "<!-- PLANET_SECTION_START -->" in html:
         raise SystemExit("入力ページに山なみが既に入っています（見本ではなく本番の更新です）")
 
+    if a.topic == "henoko-student-accident":
+        if __package__:
+            from .henoko_planet_guard import verify_inputs
+        else:
+            from henoko_planet_guard import verify_inputs
+        verify_inputs()
+
     data = bpd.stabilize(bpd.build(a.topic))
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{a.topic}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)
