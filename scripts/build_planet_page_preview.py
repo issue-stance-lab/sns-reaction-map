@@ -424,6 +424,11 @@ def build_background(topic: str) -> str:
            f'<p class="bg-now">{esc(df["now"])}</p>',
            "<h3>なぜ始まったか</h3>"]
     out += [f"<p>{esc(t)}</p>" for t in d["cause"]]
+    if d.get("cause_sources"):
+        links = "／".join(
+            f'<a href="{esc(s["url"])}" target="_blank" rel="noopener">{esc(s["name"])}</a>'
+            for s in d["cause_sources"])
+        out.append(f'<p class="src">背景の出典: {links}</p>')
     out.append("<h3>これまでの経緯</h3>")
     out.append('<ol class="bg-tl">')
     for x in d["timeline"]:
