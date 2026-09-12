@@ -169,6 +169,7 @@ class VerifiedRefreshTests(unittest.TestCase):
                 builder.build_page(self.page, self.records, self.opinions)
 
 
+@unittest.skipUnless((ROOT / "social-samples/henoko/henoko_hermes_arena_classified.json").exists(), "requires private canonical; checked locally before publication")
 class CliAtomicityTests(unittest.TestCase):
     def test_script_and_module_reject_changed_candidate_without_writing(self):
         records, _ = builder.load_records(None)
