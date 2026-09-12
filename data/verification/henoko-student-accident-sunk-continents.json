@@ -1,0 +1,89 @@
+{
+  "theme_id": "henoko-student-accident",
+  "items": [
+    {
+      "id": "henoko-student-accident-alternative",
+      "topic": "悪天候の代案を、出発前に決めておく",
+      "primary_sources": [
+        {
+          "name": "文部科学省：4月7日通知",
+          "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf",
+          "location": "3頁",
+          "date": "2026年4月7日"
+        }
+      ],
+      "life_impact": "中止をためらわないためには、その後の行程も必要です。4月通知は悪天候で変更・中止する場合の代案を先に決めるよう挙げています。",
+      "sns_count": 0,
+      "sns_base": 369,
+      "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "代案|代替.{0,6}(活動|行程)|中止.{0,6}(計画|プラン)",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "henoko-student-accident-safety"
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "henoko-student-accident-check-registration",
+      "topic": "登録や安全情報を、学校から外部へ確認できる",
+      "primary_sources": [
+        {
+          "name": "文部科学省：船舶運送利用時の安全確保",
+          "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm",
+          "location": "本文・補足資料",
+          "date": "2026年6月30日"
+        }
+      ],
+      "life_impact": "6月通知は事業者や地方運輸局への確認、安全情報の検索サイトを案内しています。無登録を非難することと、予約前の確認先を知ることは別です。",
+      "sns_count": 0,
+      "sns_base": 369,
+      "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "地方運輸局|安全情報検索|事業者検索サイト",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "henoko-student-accident-safety"
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "ai_assisted"
+    },
+    {
+      "id": "henoko-student-accident-backup",
+      "topic": "引率する人が乗れない場合の体制も決めておく",
+      "primary_sources": [
+        {
+          "name": "文部科学省：研修旅行の検証見解",
+          "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf",
+          "location": "2頁",
+          "date": "2026年5月22日"
+        }
+      ],
+      "life_impact": "文科省見解は、当日の教員の体調不良に対応する体制も問題にしています。予定した人を置くだけでなく、代わりの人員や中止の判断を確かめられます。",
+      "sns_count": 0,
+      "sns_base": 369,
+      "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "体調不良|乗り物酔い|バックアップ|代わりの(先生|教員)|代替.{0,4}(引率|教員)",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "henoko-student-accident-safety"
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "ai_assisted"
+    }
+  ]
+}

@@ -442,6 +442,8 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     )
     by_issue = Counter({ISSUE_INDEX[name]: values.total for name, values in stats.items()})
     page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total), "詳細データ表")
+    if "<!-- PLANET_SECTION_START -->" in page:
+        return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
     page = replace_block(page, r"<!-- INSIGHT_STATS_START -->.*?<!-- INSIGHT_STATS_END -->", insight_stats_from_counts(total, sum(values.split for values in stats.values()), stats), "注目ポイント")
     page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
     page = replace_number(page, r"<span>(\d+)件 \| Hermes再分類", [total], "SNS反応マップの見出し")
@@ -566,6 +568,11 @@ def build_page(
     rows = arena_rows(opinions)
     stats = {str(issue["main_issue"]): IssueStats(opinions, issue) for issue in ISSUE_DEFS}
     total = len(opinions)
+
+    if "<!-- PLANET_SECTION_START -->" in page:
+        page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables(rows), "詳細データ表")
+        page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", research_conditions(records, opinions), "調査条件")
+        return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
 
     page = replace_block(
         page,

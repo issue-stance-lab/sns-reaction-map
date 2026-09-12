@@ -16,7 +16,8 @@ class HenokoPublicCountsTests(unittest.TestCase):
         data = json.loads(PUBLIC.read_text(encoding="utf-8"))
         page = apply_public_counts(PAGE.read_text(encoding="utf-8"), PUBLIC)
         self.assertIn(f"公開投稿{data['collected_count']}件", page)
-        self.assertIn(f">{data['opinion_count']}件 | Hermes再分類", page)
+        self.assertIn(f"意見と判定した{data['opinion_count']}件をAIが", page)
+        self.assertNotIn("HENOKO_ARENA_RAW", page)
 
     def test_zero_count_other_matches_verification_data(self) -> None:
         _lines, failures = verify_theme_page("henoko-student-accident")

@@ -759,6 +759,15 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
                       '意見の違いを、学校での経験と公的資料からたどります。</p>',
                       html, count=1, flags=re.S)
         html = re.sub(r'<script\b[^>]*src="[^"]*school-nickname-ban-arena-data\.js[^"]*"[^>]*></script>', "", html)
+    if topic == "henoko-student-accident":
+        html, hit = cut_block(html, '<div class="thirty-summary"', "div")
+        removed.append(("旧固定件数の要約", hit))
+        html, hit = cut_block(html, '<section class="panel" id="explainer-section">', "section")
+        removed.append(("旧論点カード（山なみへ統合）", hit))
+        # The legacy vote script still scrolls to this id; preserve its contract
+        # with a small anchor and remove only the separate retired map scripts.
+        html = re.sub(r'<script id="henoko-arena-data">.*?</script>', "", html, flags=re.S)
+        html, _ = drop_orphan_scripts(html, ("HENOKO_ARENA_RAW",))
     background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)
@@ -768,6 +777,8 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     html, dropped = drop_orphan_scripts(html, GENERIC_DEAD_SCRIPT_IDS)
     removed.append((f"取り残されたスクリプト{dropped}本", dropped > 0))
     section = build_section(split_prototype(render_planet(data)))
+    if topic == "henoko-student-accident":
+        section = '<div id="issue-arena-section" aria-hidden="true"></div>' + section
     marker = "<!-- RESEARCH_CONDITIONS_END -->"
     if marker not in html:
         raise SystemExit("調査条件の目印が見つかりません")
@@ -830,6 +841,10 @@ def main() -> None:
     if not a.for_docs:
         html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",
                       "<!-- GA_TAG: 見本では外している -->", html, flags=re.DOTALL)
+        if a.topic == "henoko-student-accident":
+            html = html.replace("</head>", '<script>if(window.VoteStore){window.VoteStore=Object.assign({},window.VoteStore,{cast:async function(){return {duplicate:false};},isRemote:function(){return false;},clear:function(){}});document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".vote-storage-note").forEach(function(n){n.textContent="※ 見本の投票は動作確認用です。回答は送信・保存されません。";});});}</script></head>', 1)
+            html = html.replace('id="page-preview-status"', 'data-vote-preview="local-only" id="page-preview-status"', 1)
+            html = html.replace("一般公開前の確認用です。", "一般公開前の確認用です。分類変更は独立監査前です。見本の投票は回答を送信・保存しません。", 1)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html if a.for_docs else localize_assets(html), encoding="utf-8")

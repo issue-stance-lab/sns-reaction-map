@@ -54,5 +54,10 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertEqual(complete, set(prc.CLAIM_AUDIT_SOURCES))
         self.assertEqual(
             {theme for theme in prc.QUESTIONS if prc.build_claim_verification(theme)["status"] == "not_started"},
-            {"ai-copyright", "henoko-student-accident"},
+            {"ai-copyright"},
         )
+
+    def test_henoko_ai_review_is_not_described_as_human(self):
+        done = prc.build_claim_verification("henoko-student-accident")
+        self.assertEqual(done["reviewer_type"], "ai_assisted")
+        self.assertEqual(len(done["claims"]), 6)

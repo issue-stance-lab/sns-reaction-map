@@ -999,6 +999,20 @@ def static_editorial(data: dict) -> str:
 
 
 def render_page(data: dict, template: str, payload: str) -> str:
+    if data["theme_id"] == "henoko-student-accident":
+        # This sample has a large stance gap; inherited demo wording would
+        # misstate it, generalize to all SNS, and imply a human source review.
+        for old, new in (
+            ("多いのは前者で、しかも差はわずかです。", "収集した投稿では前者が多くなっています。"),
+            ("件しかないのに、これがいちばん高い山です。", "件で、強い表現の割合がいちばん高い山です。"),
+            ("どれも一次資料では決まっている話です。下に中身があります。", "一次資料に記された内容です。下に確認した範囲と出典があります。"),
+            ("資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。", "一次資料にある内容で、<b>今回収集した意見には見当たらなかった</b>ものがあります。"),
+            ("一次資料に当たった人にしか作れない問題", "一次資料を照合して作った問題"),
+            ("SNSでよく見る主張", "収集した投稿にあった主張"),
+            ("その論点の図解と、賛成・反対それぞれの投稿が読めます", "その論点の理由の内訳と、一次資料との照合結果が読めます"),
+        ):
+            template = template.replace(old, new)
+        template = template.replace("</style>", ".gans .lead{color:#0b1937}\n</style>", 1)
     """テンプレートの差し込み口を data から埋める。
 
     数字・色・テーマ固有の言葉をここでしか作らないことで、

@@ -1,0 +1,128 @@
+reread_registry: true
+theme_id: henoko-student-accident
+title: 辺野古高校生死亡事故
+question: 辺野古の修学旅行中の事故を、学校はどう検証すべきか
+source_label: Yahoo!リアルタイム検索
+stances:
+- key: 文科省判断を支持
+  label: 文科省判断を支持
+  id: henoko-student-accident-ministry-support
+  color: '#2F8F83'
+  pattern: plain
+- key: 文科省判断に反発
+  label: 文科省判断に反発
+  id: henoko-student-accident-ministry-oppose
+  color: '#7D5BA6'
+  pattern: diagonal
+- key: 論点を切り分ける
+  label: 論点を切り分ける
+  id: henoko-student-accident-distinguish-issues
+  color: '#D9A520'
+  pattern: dots
+- key: 中立・情報共有
+  label: 中立・情報共有
+  id: henoko-student-accident-neutral
+  color: '#8B9199'
+  pattern: mesh
+issues:
+- key: 安全管理・事故原因
+  id: henoko-student-accident-safety
+  icon: 🛟
+- key: 政治的中立性
+  id: henoko-student-accident-neutrality
+  icon: ⚖️
+- key: 平和教育の萎縮
+  id: henoko-student-accident-peace-education
+  icon: 📚
+- key: 政治利用・基地問題
+  id: henoko-student-accident-base-politics
+  icon: 🏛️
+- key: 報道・行政対応
+  id: henoko-student-accident-public-response
+  icon: 📰
+- key: 追悼・被害者の尊厳
+  id: henoko-student-accident-victim-dignity
+  icon: 🕊️
+- key: その他
+  id: henoko-student-accident-other
+  icon: ◯
+vote_issue_order:
+- 政治的中立性
+- 安全管理・事故原因
+- 追悼・被害者の尊厳
+- 平和教育の萎縮
+- 政治利用・基地問題
+- 報道・行政対応
+sub_issues:
+  平和教育の萎縮:
+    file: data/henoko-student-accident_issues-reread.json
+    path:
+    - buckets
+    - 平和教育の萎縮
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。
+    show_coverage_note: true
+  報道・行政対応:
+    file: data/henoko-student-accident_issues-reread.json
+    path:
+    - buckets
+    - 報道・行政対応
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。
+    show_coverage_note: true
+  政治的中立性:
+    file: data/henoko-student-accident_issues-reread.json
+    path:
+    - buckets
+    - 政治的中立性
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。
+    show_coverage_note: true
+  安全管理・事故原因:
+    file: data/henoko-student-accident_issues-reread.json
+    path:
+    - buckets
+    - 安全管理・事故原因
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。
+    show_coverage_note: true
+  追悼・被害者の尊厳:
+    file: data/henoko-student-accident_issues-reread.json
+    path:
+    - buckets
+    - 追悼・被害者の尊厳
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。
+    show_coverage_note: true
+  政治利用・基地問題:
+    file: data/henoko-student-accident_issues-reread.json
+    path:
+    - buckets
+    - 政治利用・基地問題
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。
+    show_coverage_note: true
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
