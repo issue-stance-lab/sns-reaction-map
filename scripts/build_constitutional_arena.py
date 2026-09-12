@@ -348,11 +348,53 @@ def build_details_from_counts(
     )
 
 
+def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
+                        stances: Counter, intensities: Counter) -> str:
+    """正典との集計一致と再読ゲートを確認し、山なみと残す集計を同時に更新する。"""
+    if __package__:
+        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+    else:
+        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+    rows, canonical_collected, _, period = load_canon(None)
+    expected = (canonical_collected, len(rows),
+                Counter(classification(r)["main_issue"] for r in rows),
+                Counter(classification(r)["stance"] for r in rows),
+                Counter(classification(r)["intensity"] for r in rows))
+    if (collected, total, issues, stances, intensities) != expected:
+        raise IssueCountError("山なみと集計の入力が正典に一致しません")
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                        block, "山なみ全体", flags=re.S)
+    page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>',
+                        f'<span class="conclusion-count"><b>{issues["改憲全般"]}</b>件</span>', "議論の中心")
+    page = replace_once(page,
+        r'Yahooリアルタイム検索で取得した公開投稿 \d+件のうち、\s*意見と判定した\d+件を分析対象としています。',
+        f'Yahooリアルタイム検索で取得した公開投稿 {collected}件のうち、意見と判定した{total}件を分析対象としています。',
+        "調査条件の件数", flags=re.S)
+    page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>',
+                        build_details_from_counts(issues, stances, intensities, total), "詳細データ", flags=re.S)
+    page = replace_once(page, r'（取得期間: .*?／', f'（取得期間: {period}／', "取得期間")
+    config = json.loads(CONFIG.read_text())
+    for card in config["issue_counts"]["cards"]:
+        count = sum(issues[str(issue)] for issue in card["main_issue"])
+        page = replace_once(page,
+            rf'<span class="explainer-count" id="issue-count-{THEME}-{card["slug"]}">\d+件</span>',
+            span_html(THEME, str(card["slug"]), count), f'論点カード {card["slug"]}')
+    return page.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
+
+
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の集計表示を貼り直す。"""
     collected, total, issues, stances, intensities = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
+    if "<!-- PLANET_SECTION_START -->" in page:
+        return apply_planet_counts(page, collected, total, issues, stances, intensities)
     lead = (
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'
         f'意見と判定した{total}件を分析対象としています。AIが主要6論点とその他に整理しました。'
@@ -413,6 +455,14 @@ def build(
     destination = output_html or PAGE
     before = template.read_text(encoding="utf-8")
     page = before
+    if "<!-- PLANET_SECTION_START -->" in page:
+        intensities = Counter(str(classification(r)["intensity"]) for r in rows)
+        page = apply_planet_counts(page, collected, total, issue_counts, stance_counts, intensities)
+        changed = page != before
+        if not check and (changed or destination != template):
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(page, encoding="utf-8")
+        return [f"山なみ: 収集{collected}件 / 意見{total}件（再読ゲート確認済み）"], changed
 
     lead = (
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'

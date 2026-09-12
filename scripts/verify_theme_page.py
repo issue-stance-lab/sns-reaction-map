@@ -114,6 +114,9 @@ def _field(record: dict[str, Any], name: str) -> Any:
 
 def _arena_points(root: Path, page: str, theme: str) -> int | None:
     """公開マップの点数を数える。外部JS化されたテーマも同じ定義を使う。"""
+    planet = _planet_data(page)
+    if planet is not None:
+        return sum(int(issue["count"]) for issue in planet["issues"])
     sources = [page]
     external = root / "docs" / f"{theme}-arena-data.js"
     if external.is_file():

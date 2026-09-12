@@ -759,6 +759,16 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
                       '意見の違いを、学校での経験と公的資料からたどります。</p>',
                       html, count=1, flags=re.S)
         html = re.sub(r'<script\b[^>]*src="[^"]*school-nickname-ban-arena-data\.js[^"]*"[^>]*></script>', "", html)
+    if topic == "constitutional-amendment":
+        html = html.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
+        for iid in ("stance-map-section", "claim-audit"):
+            match = re.search(r'<section\b[^>]*\bid="' + iid + r'"[^>]*>', html)
+            if match:
+                html, hit = cut_block(html, match.group(0), "section")
+                removed.append((iid, hit))
+        html = re.sub(r'<p class="lead">.*?</p>',
+                      '<p class="lead">変える条文と、変えるための条件。平和や暮らしを守る方法について、'
+                      'SNSの意見の違いと一次資料をたどります。</p>', html, count=1, flags=re.S)
     background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)

@@ -1,0 +1,1041 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>議論の山なみ 試作 — 部活動の地域移行</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff;
+  /* 追いかけていない分のマス。大陸の色はどれも白っぽいので、これより明るくすると
+     7色すべてで見分けの基準を下回る（実測で下回った）。明暗差1.7倍を保つこと。 */
+  --rest-dot:#4a525c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}
+.q{color:var(--muted);font-size:14px;margin:0 0 12px}
+.caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
+  border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}
+.proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
+.stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}
+.chart-box svg{display:block;width:100%;height:auto}
+.chart-box .hill{cursor:pointer}
+.chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
+.floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.panel h2{font-size:16px;margin:0 0 2px}
+.panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
+.bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  font-weight:700;overflow:hidden;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+/* 立場を切り替えたときに何が起きたかの1行（すれ違い装置） */
+.panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.panel .cross b{color:#f2f6fa}
+.panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
+  background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;cursor:pointer}
+.panel .cross .spin:hover{border-color:var(--accent)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+.islands{list-style:none;padding:0;margin:8px 0 0}
+.islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
+.islands li:first-child{border-top:none}
+.islands .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.islands .sw{width:12px;height:12px;border-radius:3px;flex:none}
+.islands .num{width:19px;height:19px;border-radius:99px;flex:none;background:#0d1117;
+  border:1px solid var(--line);font-size:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-weight:700}
+.islands li.unread{color:var(--muted)}
+.note{font-size:12px;color:var(--muted);background:#1c2128;border:1px dashed var(--line);
+  border-radius:6px;padding:9px 10px;margin-top:10px}
+.back{margin-top:12px;background:transparent;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.issue-list{list-style:none;padding:0;margin:18px 0 0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
+.issue-list button{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;color:var(--fg);cursor:pointer;font-family:inherit;font-size:13px}
+.issue-list button:hover,.issue-list button:focus-visible{border-color:var(--accent);outline:none}
+.issue-list .m{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:6px}
+h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
+  border-top:1px solid var(--line);padding-top:14px}
+.meta{font-size:11.5px;color:var(--muted)}
+.meta code{background:#1c2128;padding:1px 5px;border-radius:4px}
+
+/* JS・canvas が使えないときの静的表示（内容は生成器が data から作る） */
+.planet{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:0 0 20px}
+.continent{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  aspect-ratio:1;border-radius:50%;border:2px solid transparent;text-align:center;
+  padding:12px;text-decoration:none;line-height:1.4}
+.continent:hover,.continent:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.continent .label{font-size:13px;font-weight:700}
+.continent .count{font-size:11px;opacity:.78;font-variant-numeric:tabular-nums}
+.landing-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:0 0 12px}
+.landing-panel h2{font-size:16px;margin:0 0 2px}
+.landing-panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.srclist{list-style:none;padding:0;margin:8px 0 0;font-size:12px}
+.srclist li{padding:5px 0;border-top:1px solid var(--line)}
+.srclist li:first-child{border-top:none}
+.srclist a{color:var(--accent)}
+.backlink{display:inline-block;margin-top:12px;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}
+.backlink:hover,.backlink:focus-visible{border-color:var(--accent);outline:none}
+
+/* 資料との照合（着陸パネルの後半） */
+.claims{list-style:none;padding:0;margin:6px 0 0}
+.claims li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.claims li:first-child{border-top:none}
+.verdict{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;
+  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}
+.v-fact{background:#3fb950}.v-gap{background:#d9a520}.v-miss{background:#a5a5a5}
+.claims .finding,.claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}
+.claims .srcs{display:block;margin-top:4px}
+.claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}
+.dive{color:var(--accent)}
+
+/* 資料にあるのに、SNSにないこと */
+.ocean{border-top:1px solid var(--line);margin-top:26px}
+.ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
+.subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.sunk,.vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
+  border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.vein{border-left-color:#7D5BA6}
+.sunk h5,.vein h5{font-size:13.5px;margin:0 0 6px}
+.sunk .impact,.vein .impact{font-size:12.5px;margin:0 0 6px}
+.sunk .count,.vein .count{font-size:12px;color:var(--muted);margin:0 0 6px}
+.sunk .srclist .when,.sunk .srclist .where{display:block;color:var(--muted);font-size:11px}
+.sides{list-style:none;padding:0;margin:6px 0 0;font-size:12px}
+.sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}
+.sides .n{margin-left:auto;color:var(--muted)}
+
+/* 編集部の横断整理 */
+.editorial .sec{color:var(--fg);font-size:15px}
+.findings{list-style:none;padding:0;margin:0 0 4px}
+.findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}
+
+/* 点の装置（立場を絞ったときの件数と割合の動き）。着陸パネルの中に入る */
+.dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}
+.waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  transition:background-color .5s ease}
+.dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}
+.dot-cap b{color:var(--fg)}
+.readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.ro .k{font-size:10.5px;color:var(--muted);margin:0}
+.ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}
+.ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.ro .ar{font-size:13px;font-weight:700}
+.ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.ro.down .ar,.ro.down .to{color:#e8a0a8}
+.ro.up .ar,.ro.up .to{color:#7ee0a8}
+.ro.flat .ar,.ro.flat .to{color:var(--fg)}
+.dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.dot-mech b{color:#f2f6fa}
+
+/* 探査記録（読んだ場所の記録。端末の中だけに持ち、サーバーへは送らない） */
+.progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}
+.progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.progress b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* 予想（見る前に当てる） */
+.guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}
+.guess h3{font-size:14px;margin:0 0 9px}
+.gopts{display:flex;flex-direction:column;gap:7px}
+.gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+.gopts button:hover:not(:disabled){border-color:var(--accent)}
+.gopts button:disabled{cursor:default;opacity:.5}
+.gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}
+.gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}
+.gans{margin-top:10px;font-size:12.5px;line-height:1.8}
+.gans[hidden]{display:none}
+.gans .lead{font-weight:700;margin-bottom:3px}
+
+/* 潜水 */
+.dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}
+.dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
+  border:0;border-radius:99px;padding:7px 16px;cursor:pointer}
+#seafloor{opacity:0;transition:opacity .9s ease .2s}
+.dived #seafloor{opacity:1}
+#seacover{transition:opacity .9s ease}
+.dived #seacover{opacity:.2}
+
+/* 一次資料クイズ */
+.quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}
+.qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}
+.qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}
+.qans{margin-top:12px;font-size:13px;line-height:1.85}
+.qans[hidden]{display:none}
+.qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}
+.qscore{font-size:14px;line-height:1.85}
+.qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* 惑星が描けたときだけ静的表示を隠す。描けないときは操作系を隠す */
+.planet-live #fallback{display:none}
+html:not(.planet-live) .modes,
+html:not(.planet-live) .stage,
+html:not(.planet-live) .sec-live,
+html:not(.planet-live) .issue-list{display:none}
+</style>
+
+<script>
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
+   （このクラスが付かないと #fallback が見えたままになる） */
+(function(){
+  try {
+    var c = document.createElement('canvas');
+    if (c.getContext && c.getContext('2d')) {
+      document.documentElement.className += ' planet-live';
+    }
+  } catch (e) {}
+})();
+</script>
+
+<div class="wrap">
+  <h1>議論の山なみ<span class="proto-tag">試作・非公開</span></h1>
+  <p class="q" id="q">憲法の何を、どんな条件で変えるのか（憲法改正論議）</p>
+  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>収集期間 2026-06-20〜2026-09-05／収集1556件・<b>意見1369件</b>（この図の母数）／更新 2026-09-05</p>
+
+  <div class="progress" id="progress" hidden>
+    <span>探査記録</span><span class="track"><i id="pbar"></i></span><b id="pnum"></b>
+  </div>
+  <div id="guesses"></div>
+
+  <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
+
+  <div class="stage">
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
+      <p class="dive"><button type="button" id="dive"></button><span id="divenote"></span></p>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、100マスで見せる。
+       マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+       着陸パネルの中へ差し込むので、押したボタンのすぐそばで変化が見える。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <div class="waffle" id="waffle"></div>
+    <p class="dot-cap">マス目100個が、いま見ている立場の全部です。
+      <b>色つきのマスの数が、そのまま割合（％）になります。</b></p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（色つきのマスの数）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
+  </div>
+
+    <div id="fallback">
+    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>
+    <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
+    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">
+      <a class="continent" href="#fb-constitutional-amendment-general" style="background:#7D5BA6;border-color:#7D5BA6;color:#ffffff"><span class="label">📜 改憲全般</span><span class="count">511件・37.3%</span></a>
+      <a class="continent" href="#fb-constitutional-amendment-article9" style="background:#2F8F83;border-color:#2F8F83;color:#ffffff"><span class="label">🛡️ 9条・自衛隊</span><span class="count">284件・20.7%</span></a>
+      <a class="continent" href="#fb-constitutional-amendment-emergency" style="background:#7D5BA6;border-color:#7D5BA6;color:#ffffff"><span class="label">⚖️ 緊急事態条項</span><span class="count">199件・14.5%</span></a>
+      <a class="continent" href="#fb-constitutional-amendment-referendum" style="background:#7D5BA6;border-color:#7D5BA6;color:#ffffff"><span class="label">🗳️ 国民投票・広告</span><span class="count">196件・14.3%</span></a>
+      <a class="continent" href="#fb-constitutional-amendment-procedure" style="background:#7D5BA6;border-color:#7D5BA6;color:#ffffff"><span class="label">🏛️ 政党・発議手続き</span><span class="count">118件・8.6%</span></a>
+      <a class="continent" href="#fb-constitutional-amendment-deliberation" style="background:#8B9199;border-color:#8B9199;color:#0d1117"><span class="label">💬 情報・議論の質</span><span class="count">51件・3.7%</span></a>
+      <a class="continent" href="#fb-constitutional-amendment-other" style="background:#8B9199;border-color:#8B9199;color:#0d1117"><span class="label">◯ その他</span><span class="count">10件・0.7%</span></a>
+    </nav>
+    <section class="landing-panel" id="fb-constitutional-amendment-general" tabindex="-1">
+      <h2>📜 改憲全般</h2>
+      <p class="sub">511件（37.3%）　山の高さ：強い表現38.6%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 56件</span><span><i style="background:#7D5BA6"></i>慎重・反対 339件</span><span><i style="background:#D9A520"></i>手続き重視 20件</span><span><i style="background:#8B9199"></i>中立 96件</span></div>
+      <div class="bar"><span style="width:11.0%;background:#2F8F83;color:#ffffff"></span><span style="width:66.3%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:3.9%;background:#D9A520;color:#0d1117"></span><span style="width:18.8%;background:#8B9199;color:#0d1117">中立</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">511件 / 37.3%</span></li><li><span>改正推進219件のうち</span><span class="n">56件 / 25.6%</span></li><li><span>慎重・反対907件のうち</span><span class="n">339件 / 37.4%</span></li><li><span>手続き重視52件のうち</span><span class="n">20件 / 38.5%</span></li><li><span>中立191件のうち</span><span class="n">96件 / 50.3%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>賛否の表明・運動と議論の仕方<span class="n">143件</span></li><li><span class="num">2</span>戦争を避ける方法と防衛<span class="n">130件</span></li><li><span class="num">3</span>改正を担う政権・政党への評価<span class="n">85件</span></li><li><span class="num">4</span>国民投票で決めることへの評価<span class="n">77件</span></li><li><span class="num">5</span>変更する条項と暮らし・権利<span class="n">71件</span></li><li><span class="num">6</span>政治への不信と関連政策<span class="n">2件</span></li><li><span class="num">7</span>戦争・動員との結びつきへの懸念<span class="n">1件</span></li><li><span class="num">8</span>権限集中と自由への制約<span class="n">1件</span></li><li><span class="num">9</span>既存制度と条項の必要性<span class="n">1件</span></li></ul>
+      <div class="note">この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。。</div>
+      <div class="extras" id="extras-constitutional-amendment-general">
+      <p class="sub" style="margin-top:12px">この論点に関わる資料にあるのに、SNSにないこと：立場をこえて同じ心配1本 <a class="dive" href="#ocean">ページ下の「資料にあるのに、SNSにないこと」で読む</a></p>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-constitutional-amendment-article9" tabindex="-1">
+      <h2>🛡️ 9条・自衛隊</h2>
+      <p class="sub">284件（20.7%）　山の高さ：強い表現40.3%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 139件</span><span><i style="background:#7D5BA6"></i>慎重・反対 130件</span><span><i style="background:#D9A520"></i>手続き重視 2件</span><span><i style="background:#8B9199"></i>中立 13件</span></div>
+      <div class="bar"><span style="width:48.9%;background:#2F8F83;color:#ffffff">改正推進</span><span style="width:45.8%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:0.7%;background:#D9A520;color:#0d1117"></span><span style="width:4.6%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">284件 / 20.7%</span></li><li><span>改正推進219件のうち</span><span class="n">139件 / 63.5%</span></li><li><span>慎重・反対907件のうち</span><span class="n">130件 / 14.3%</span></li><li><span>手続き重視52件のうち</span><span class="n">2件 / 3.8%</span></li><li><span>中立191件のうち</span><span class="n">13件 / 6.8%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている<br>第9条に自衛隊という語がなく、戦力不保持と交戦権否認の規定があることは確認できる。この文言の有無だけで、自衛隊の合憲性についての解釈を決めることはできない。<br><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" rel="nofollow">e-Gov法令検索 日本国憲法 第9条</a></li><li>自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない<br>名称に加えて、自衛の措置と指揮監督者についての文言も追加する案。法的効果がどの程度変わるかは解釈の論点であり、文字の追加だけで実質的な影響の有無は断定しない。<br><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" rel="nofollow">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></li><li>9条に自衛隊を明記しても18条（苦役の禁止）を変えない限り、徴兵制は憲法上できない<br>政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。<br><a href="https://kokkai.ndl.go.jp/txt/119215261X00320161011/151" rel="nofollow">国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁</a></li><li>憲法学説では自衛隊の存在を違憲とする解釈と合憲とする解釈が並立している<br>当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。<br><a href="https://kokkai.ndl.go.jp/txt/119315261X01820170509/43" rel="nofollow">国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁</a></li></ul>
+      <div class="extras" id="extras-constitutional-amendment-article9">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-fact">資料どおり</span>現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている<span class="finding">第9条に自衛隊という語がなく、戦力不保持と交戦権否認の規定があることは確認できる。この文言の有無だけで、自衛隊の合憲性についての解釈を決めることはできない。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" rel="nofollow">e-Gov法令検索 日本国憲法 第9条</a></span></li><li><span class="verdict v-gap">少しずれる</span>自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない<span class="finding">名称に加えて、自衛の措置と指揮監督者についての文言も追加する案。法的効果がどの程度変わるかは解釈の論点であり、文字の追加だけで実質的な影響の有無は断定しない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" rel="nofollow">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></span></li><li><span class="verdict v-fact">資料どおり</span>9条に自衛隊を明記しても18条（苦役の禁止）を変えない限り、徴兵制は憲法上できない<span class="finding">政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://kokkai.ndl.go.jp/txt/119215261X00320161011/151" rel="nofollow">国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁</a></span></li><li><span class="verdict v-fact">資料どおり</span>憲法学説では自衛隊の存在を違憲とする解釈と合憲とする解釈が並立している<span class="finding">当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://kokkai.ndl.go.jp/txt/119315261X01820170509/43" rel="nofollow">国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-constitutional-amendment-emergency" tabindex="-1">
+      <h2>⚖️ 緊急事態条項</h2>
+      <p class="sub">199件（14.5%）　山の高さ：強い表現50.1%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 2件</span><span><i style="background:#7D5BA6"></i>慎重・反対 177件</span><span><i style="background:#D9A520"></i>手続き重視 2件</span><span><i style="background:#8B9199"></i>中立 18件</span></div>
+      <div class="bar"><span style="width:1.0%;background:#2F8F83;color:#ffffff"></span><span style="width:88.9%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:1.0%;background:#D9A520;color:#0d1117"></span><span style="width:9.0%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">199件 / 14.5%</span></li><li><span>改正推進219件のうち</span><span class="n">2件 / 0.9%</span></li><li><span>慎重・反対907件のうち</span><span class="n">177件 / 19.5%</span></li><li><span>手続き重視52件のうち</span><span class="n">2件 / 3.8%</span></li><li><span>中立191件のうち</span><span class="n">18件 / 9.4%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>権限集中と自由への制約<span class="n">52件</span></li><li><span class="num">2</span>政治への不信と関連政策<span class="n">42件</span></li><li><span class="num">3</span>既存制度と条項の必要性<span class="n">33件</span></li><li><span class="num">4</span>戦争・動員との結びつきへの懸念<span class="n">22件</span></li><li><span class="num">5</span>任期延長と選挙の機会<span class="n">16件</span></li><li><span class="num">6</span>他者の説明・立場への批評<span class="n">11件</span></li><li><span class="num">7</span>発動・延長・検証の条件<span class="n">9件</span></li><li><span class="num">8</span>変更する条項と暮らし・権利<span class="n">5件</span></li><li><span class="num">9</span>戦争を避ける方法と防衛<span class="n">5件</span></li><li><span class="num">10</span>改正を担う政権・政党への評価<span class="n">4件</span></li></ul>
+      <div class="note">この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる<br>国会の法律制定を待たずに政令を制定する案だが、災害・特別の事情という条件と国会の承認を求める手続きがある。現行法ではなく2018年の提案。承認されない場合の自動失効までこの条文イメージに書かれているわけではない。<br><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" rel="nofollow">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></li></ul>
+      <div class="extras" id="extras-constitutional-amendment-emergency">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる<span class="finding">国会の法律制定を待たずに政令を制定する案だが、災害・特別の事情という条件と国会の承認を求める手続きがある。現行法ではなく2018年の提案。承認されない場合の自動失効までこの条文イメージに書かれているわけではない。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" rel="nofollow">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-constitutional-amendment-referendum" tabindex="-1">
+      <h2>🗳️ 国民投票・広告</h2>
+      <p class="sub">196件（14.3%）　山の高さ：強い表現41.7%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 7件</span><span><i style="background:#7D5BA6"></i>慎重・反対 163件</span><span><i style="background:#D9A520"></i>手続き重視 18件</span><span><i style="background:#8B9199"></i>中立 8件</span></div>
+      <div class="bar"><span style="width:3.6%;background:#2F8F83;color:#ffffff"></span><span style="width:83.2%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:9.2%;background:#D9A520;color:#0d1117"></span><span style="width:4.1%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">196件 / 14.3%</span></li><li><span>改正推進219件のうち</span><span class="n">7件 / 3.2%</span></li><li><span>慎重・反対907件のうち</span><span class="n">163件 / 18.0%</span></li><li><span>手続き重視52件のうち</span><span class="n">18件 / 34.6%</span></li><li><span>中立191件のうち</span><span class="n">8件 / 4.2%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>国民投票は有効投票の過半数で成立し、最低投票率の規定はない<br>成立条件の分母は賛成票と反対票の合計。投票者数や有権者数の過半数とは異なる。<br><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></li><li>国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ<br>14日という期間は確認できる。ただし105条だけから、それ以前にはあらゆる制限がないと結論することはできない。対象も広告放送一般ではなく国民投票運動のための広告放送。<br><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></li><li>国会が発議してから国民投票まで最短60日、最長180日だ<br>60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。<br><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></li><li>2026年の国民投票法改正でインターネット広告規制が明文化された<br>根拠となる改正法と具体的条文を特定できていないため、未確認とする。確認できなかったことは、その改正や規制が存在しないことの証明ではない。<br><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（照合先）</a></li></ul>
+      <div class="extras" id="extras-constitutional-amendment-referendum">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-fact">資料どおり</span>国民投票は有効投票の過半数で成立し、最低投票率の規定はない<span class="finding">成立条件の分母は賛成票と反対票の合計。投票者数や有権者数の過半数とは異なる。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></span></li><li><span class="verdict v-gap">少しずれる</span>国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ<span class="finding">14日という期間は確認できる。ただし105条だけから、それ以前にはあらゆる制限がないと結論することはできない。対象も広告放送一般ではなく国民投票運動のための広告放送。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></span></li><li><span class="verdict v-fact">資料どおり</span>国会が発議してから国民投票まで最短60日、最長180日だ<span class="finding">60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></span></li><li><span class="verdict v-miss">裏が取れない</span>2026年の国民投票法改正でインターネット広告規制が明文化された<span class="finding">根拠となる改正法と具体的条文を特定できていないため、未確認とする。確認できなかったことは、その改正や規制が存在しないことの証明ではない。</span><span class="vnote">一次資料では確認できませんでした。誤りと決まったわけではありません。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov 国民投票法（照合先）</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-constitutional-amendment-procedure" tabindex="-1">
+      <h2>🏛️ 政党・発議手続き</h2>
+      <p class="sub">118件（8.6%）　山の高さ：強い表現33.1%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 13件</span><span><i style="background:#7D5BA6"></i>慎重・反対 81件</span><span><i style="background:#D9A520"></i>手続き重視 8件</span><span><i style="background:#8B9199"></i>中立 16件</span></div>
+      <div class="bar"><span style="width:11.0%;background:#2F8F83;color:#ffffff"></span><span style="width:68.6%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:6.8%;background:#D9A520;color:#0d1117"></span><span style="width:13.6%;background:#8B9199;color:#0d1117">中立</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">118件 / 8.6%</span></li><li><span>改正推進219件のうち</span><span class="n">13件 / 5.9%</span></li><li><span>慎重・反対907件のうち</span><span class="n">81件 / 8.9%</span></li><li><span>手続き重視52件のうち</span><span class="n">8件 / 15.4%</span></li><li><span>中立191件のうち</span><span class="n">16件 / 8.4%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない<br>3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。<br><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" rel="nofollow">e-Gov法令検索 日本国憲法 第96条</a></li></ul>
+      <div class="extras" id="extras-constitutional-amendment-procedure">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-fact">資料どおり</span>衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない<span class="finding">3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" rel="nofollow">e-Gov法令検索 日本国憲法 第96条</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-constitutional-amendment-deliberation" tabindex="-1">
+      <h2>💬 情報・議論の質</h2>
+      <p class="sub">51件（3.7%）　山の高さ：強い表現21.5%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 2件</span><span><i style="background:#7D5BA6"></i>慎重・反対 16件</span><span><i style="background:#D9A520"></i>手続き重視 2件</span><span><i style="background:#8B9199"></i>中立 31件</span></div>
+      <div class="bar"><span style="width:3.9%;background:#2F8F83;color:#ffffff"></span><span style="width:31.4%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:3.9%;background:#D9A520;color:#0d1117"></span><span style="width:60.8%;background:#8B9199;color:#0d1117">中立</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">51件 / 3.7%</span></li><li><span>改正推進219件のうち</span><span class="n">2件 / 0.9%</span></li><li><span>慎重・反対907件のうち</span><span class="n">16件 / 1.8%</span></li><li><span>手続き重視52件のうち</span><span class="n">2件 / 3.8%</span></li><li><span>中立191件のうち</span><span class="n">31件 / 16.2%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-constitutional-amendment-other" tabindex="-1">
+      <h2>◯ その他</h2>
+      <p class="sub">10件（0.7%）　山の高さ：強い表現34.5%</p>
+      <div class="legend"><span><i style="background:#7D5BA6"></i>慎重・反対 1件</span><span><i style="background:#8B9199"></i>中立 9件</span></div>
+      <div class="bar"><span style="width:10.0%;background:#7D5BA6;color:#ffffff"></span><span style="width:90.0%;background:#8B9199;color:#0d1117">中立</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見1369件のうち</span><span class="n">10件 / 0.7%</span></li><li><span>改正推進219件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>慎重・反対907件のうち</span><span class="n">1件 / 0.1%</span></li><li><span>手続き重視52件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>中立191件のうち</span><span class="n">9件 / 4.7%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+  </div>
+
+  <h3 class="sec sec-live">一次資料クイズ — その主張、資料に当たるとどうなる？</h3>
+  <div class="quiz" id="quiz"></div>
+
+    <section id="ocean" class="ocean" tabindex="-1">
+    <h3 class="sec">資料にあるのに、SNSにないこと</h3>
+    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。（確認日 2026-09-12／AIの下読みを含む）</p>
+    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>
+    <article class="sunk"><h5>国民投票の結果に異議を申し立てる手続き</h5><p class="impact">国民投票に異議がある投票人は、結果の告示から30日以内に東京高等裁判所へ訴訟を起こせます。不正への不安を語ることとは別に、結果に異議を申し立てる期限と相手が法定されています。</p><p class="count">集めた投稿での件数：<b>0件</b>（意見1369件のうち）</p><p class="note">全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。</p><p class="sub">一次資料</p><ul class="srclist"><li><a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="nofollow">e-Gov：国民投票法</a><span class="when">2026-09-12確認</span><span class="where">第127条</span></li></ul></article>
+    <article class="sunk"><h5>参議院の緊急集会で採った措置の、その後</h5><p class="impact">参議院の緊急集会で採った措置は臨時のものです。次の国会が開かれてから10日以内に衆議院の同意がなければ効力を失います。緊急時に決める仕組みには、後から確かめる手続きもあります。</p><p class="count">集めた投稿での件数：<b>0件</b>（意見1369件のうち）</p><p class="note">全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。</p><p class="sub">一次資料</p><ul class="srclist"><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" rel="nofollow">e-Gov：日本国憲法</a><span class="when">2026-09-12確認</span><span class="where">第54条第3項</span></li></ul></article>
+    <h4 class="subsec">立場をこえて同じ心配 — 立場が違っても、同じ心配を語っているところ</h4>
+    <article class="vein" data-vein="constitutional-amendment-avoid-war"><h5>自分や家族が戦争で命を失うことを避けたい。</h5><p class="impact">それでも結論が分かれる理由：推進側は防衛力や抑止のための改正が戦争を防ぐと考え、反対側は憲法を変えることで戦争に関わる危険が増すと考えています。守りたい平和が共通でも、頼りにする方法が異なります。</p><p class="count">関わる論点：改憲全般</p><ul class="sides"><li>改正推進<span class="n">代表2件</span></li><li>慎重・反対<span class="n">代表2件</span></li></ul></article>
+  </section>
+
+    <section id="editorial" class="editorial" tabindex="-1">
+    <h3 class="sec">編集部の横断整理</h3>
+    <p class="sub">論点をまたいで言えることを、編集部がまとめています。（2026-09-12時点）</p>
+    <h4 class="subsec">共通する前提</h4>
+    <ul class="findings"><li>戦争を避けたいという思いは、改正を進めたい投稿にも、改正に反対する投稿にもありました。防衛の仕組みを変えることと、現行憲法による歯止めを保つことの、どちらを頼りにするかで分かれています。</li></ul>
+    <h4 class="subsec">本当の対立</h4>
+    <ul class="findings"><li>改正そのものを認める投稿でも、いまの政権が出す案には反対する場合があります。「誰が変えるか」と「どこを変えるか」を分けると、単純な賛否では見えない条件が読めます。</li><li>国民投票まで進めて国民が判断すればよいという意見と、広告や情報、投開票への不信から発議前に止めたいという意見があります。投票で決めることへの信頼も争点です。</li></ul>
+    <h4 class="subsec">まだ分からないこと</h4>
+    <ul class="findings"><li>反対派を批判しただけの投稿から、書き手自身が改正案を支持しているとは限りません。本文に立場が明示されているかと、何を評価しているかを分けて整理しています。</li><li>過去の草案、現在の提案、現行の条文を混ぜると、同じ言葉でも別の制度について話してしまいます。資料に書かれている範囲と、投稿者が予測していることを区別します。</li></ul>
+  </section>
+
+  <h3 class="sec sec-live">論点の一覧（押すと、地図がその論点に切り替わります）</h3>
+  <ul class="issue-list" id="list"></ul>
+
+  <h3 class="sec">この試作の見かた</h3>
+  <p class="meta" id="meta">山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、母数が小さいものは画面で断っています。</p>
+</div>
+
+<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "constitutional-amendment", "title": "憲法改正論議", "question": "憲法の何を、どんな条件で変えるのか", "snapshot_id": "constitutional-amendment-20260905", "updated_at": "2026-09-05", "sample_period": "2026-06-20〜2026-09-05", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": true, "totals": {"collected": 1556, "opinions": 1369}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.3937, "k": 50, "max_pct": 4.0}, "stances": [{"key": "改正推進", "label": "改正推進", "id": "constitutional-amendment-support", "color": "#2F8F83", "pattern": "plain", "count": 219}, {"key": "慎重・反対", "label": "慎重・反対", "id": "constitutional-amendment-cautious", "color": "#7D5BA6", "pattern": "diagonal", "count": 907}, {"key": "手続き重視", "label": "手続き重視", "id": "constitutional-amendment-procedure-focus", "color": "#D9A520", "pattern": "dots", "count": 52}, {"key": "中立", "label": "中立", "id": "constitutional-amendment-neutral", "color": "#8B9199", "pattern": "mesh", "count": 191}], "vote_issue_order": ["改憲全般", "9条・自衛隊", "緊急事態条項", "国民投票・広告", "政党・発議手続き", "情報・議論の質"], "reread_summary": {"connected_editorial_count": 710, "connected_issue_population": 710, "not_connected_opinion_count": 659}, "modes": [{"id": "all", "label": "すべての意見", "total": 1369, "counts": {"constitutional-amendment-general": 511, "constitutional-amendment-article9": 284, "constitutional-amendment-emergency": 199, "constitutional-amendment-referendum": 196, "constitutional-amendment-procedure": 118, "constitutional-amendment-deliberation": 51, "constitutional-amendment-other": 10}, "width_pct": {"constitutional-amendment-general": 37.33, "constitutional-amendment-article9": 20.75, "constitutional-amendment-emergency": 14.54, "constitutional-amendment-referendum": 14.32, "constitutional-amendment-procedure": 8.62, "constitutional-amendment-deliberation": 3.73, "constitutional-amendment-other": 0.73}, "high_pct": {"constitutional-amendment-general": 38.6, "constitutional-amendment-article9": 40.5, "constitutional-amendment-emergency": 52.8, "constitutional-amendment-referendum": 42.3, "constitutional-amendment-procedure": 30.5, "constitutional-amendment-deliberation": 3.9, "constitutional-amendment-other": 10.0}, "high_counts": {"constitutional-amendment-general": 197, "constitutional-amendment-article9": 115, "constitutional-amendment-emergency": 105, "constitutional-amendment-referendum": 83, "constitutional-amendment-procedure": 36, "constitutional-amendment-deliberation": 2, "constitutional-amendment-other": 1}}, {"id": "改正推進", "label": "改正推進", "total": 219, "counts": {"constitutional-amendment-general": 56, "constitutional-amendment-article9": 139, "constitutional-amendment-emergency": 2, "constitutional-amendment-referendum": 7, "constitutional-amendment-procedure": 13, "constitutional-amendment-deliberation": 2, "constitutional-amendment-other": 0}, "width_pct": {"constitutional-amendment-general": 25.57, "constitutional-amendment-article9": 63.47, "constitutional-amendment-emergency": 0.91, "constitutional-amendment-referendum": 3.2, "constitutional-amendment-procedure": 5.94, "constitutional-amendment-deliberation": 0.91, "constitutional-amendment-other": 0.0}, "high_pct": {"constitutional-amendment-general": 30.4, "constitutional-amendment-article9": 45.3, "constitutional-amendment-emergency": 0.0, "constitutional-amendment-referendum": 14.3, "constitutional-amendment-procedure": 23.1, "constitutional-amendment-deliberation": 0.0, "constitutional-amendment-other": 0.0}, "high_counts": {"constitutional-amendment-general": 17, "constitutional-amendment-article9": 63, "constitutional-amendment-emergency": 0, "constitutional-amendment-referendum": 1, "constitutional-amendment-procedure": 3, "constitutional-amendment-deliberation": 0, "constitutional-amendment-other": 0}}, {"id": "慎重・反対", "label": "慎重・反対", "total": 907, "counts": {"constitutional-amendment-general": 339, "constitutional-amendment-article9": 130, "constitutional-amendment-emergency": 177, "constitutional-amendment-referendum": 163, "constitutional-amendment-procedure": 81, "constitutional-amendment-deliberation": 16, "constitutional-amendment-other": 1}, "width_pct": {"constitutional-amendment-general": 37.38, "constitutional-amendment-article9": 14.33, "constitutional-amendment-emergency": 19.51, "constitutional-amendment-referendum": 17.97, "constitutional-amendment-procedure": 8.93, "constitutional-amendment-deliberation": 1.76, "constitutional-amendment-other": 0.11}, "high_pct": {"constitutional-amendment-general": 48.1, "constitutional-amendment-article9": 40.0, "constitutional-amendment-emergency": 57.1, "constitutional-amendment-referendum": 49.7, "constitutional-amendment-procedure": 38.3, "constitutional-amendment-deliberation": 6.2, "constitutional-amendment-other": 0.0}, "high_counts": {"constitutional-amendment-general": 163, "constitutional-amendment-article9": 52, "constitutional-amendment-emergency": 101, "constitutional-amendment-referendum": 81, "constitutional-amendment-procedure": 31, "constitutional-amendment-deliberation": 1, "constitutional-amendment-other": 0}}, {"id": "手続き重視", "label": "手続き重視", "total": 52, "counts": {"constitutional-amendment-general": 20, "constitutional-amendment-article9": 2, "constitutional-amendment-emergency": 2, "constitutional-amendment-referendum": 18, "constitutional-amendment-procedure": 8, "constitutional-amendment-deliberation": 2, "constitutional-amendment-other": 0}, "width_pct": {"constitutional-amendment-general": 38.46, "constitutional-amendment-article9": 3.85, "constitutional-amendment-emergency": 3.85, "constitutional-amendment-referendum": 34.62, "constitutional-amendment-procedure": 15.38, "constitutional-amendment-deliberation": 3.85, "constitutional-amendment-other": 0.0}, "high_pct": {"constitutional-amendment-general": 10.0, "constitutional-amendment-article9": 0.0, "constitutional-amendment-emergency": 0.0, "constitutional-amendment-referendum": 5.6, "constitutional-amendment-procedure": 0.0, "constitutional-amendment-deliberation": 0.0, "constitutional-amendment-other": 0.0}, "high_counts": {"constitutional-amendment-general": 2, "constitutional-amendment-article9": 0, "constitutional-amendment-emergency": 0, "constitutional-amendment-referendum": 1, "constitutional-amendment-procedure": 0, "constitutional-amendment-deliberation": 0, "constitutional-amendment-other": 0}}, {"id": "中立", "label": "中立", "total": 191, "counts": {"constitutional-amendment-general": 96, "constitutional-amendment-article9": 13, "constitutional-amendment-emergency": 18, "constitutional-amendment-referendum": 8, "constitutional-amendment-procedure": 16, "constitutional-amendment-deliberation": 31, "constitutional-amendment-other": 9}, "width_pct": {"constitutional-amendment-general": 50.26, "constitutional-amendment-article9": 6.81, "constitutional-amendment-emergency": 9.42, "constitutional-amendment-referendum": 4.19, "constitutional-amendment-procedure": 8.38, "constitutional-amendment-deliberation": 16.23, "constitutional-amendment-other": 4.71}, "high_pct": {"constitutional-amendment-general": 15.6, "constitutional-amendment-article9": 0.0, "constitutional-amendment-emergency": 22.2, "constitutional-amendment-referendum": 0.0, "constitutional-amendment-procedure": 12.5, "constitutional-amendment-deliberation": 3.2, "constitutional-amendment-other": 11.1}, "high_counts": {"constitutional-amendment-general": 15, "constitutional-amendment-article9": 0, "constitutional-amendment-emergency": 4, "constitutional-amendment-referendum": 0, "constitutional-amendment-procedure": 2, "constitutional-amendment-deliberation": 1, "constitutional-amendment-other": 1}}], "issues": [{"id": "constitutional-amendment-general", "key": "改憲全般", "label": "改憲全般", "icon": "📜", "count": 511, "share_pct": 37.3, "stances": {"改正推進": 56, "慎重・反対": 339, "手続き重視": 20, "中立": 96}, "top_stance": "慎重・反対", "purity_pct": 66.3, "intensity": {"high": 197, "medium": 238, "low": 76}, "high_pct": 38.6, "high_adjusted_pct": 38.6, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。", "show_coverage_note": true, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 511, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "debate-conditions", "label": "賛否の表明・運動と議論の仕方", "count": 143, "pct_in_issue": 28.0}, {"id": "peace-security", "label": "戦争を避ける方法と防衛", "count": 130, "pct_in_issue": 25.4}, {"id": "political-trust", "label": "改正を担う政権・政党への評価", "count": 85, "pct_in_issue": 16.6}, {"id": "referendum", "label": "国民投票で決めることへの評価", "count": 77, "pct_in_issue": 15.1}, {"id": "rights-scope", "label": "変更する条項と暮らし・権利", "count": 71, "pct_in_issue": 13.9}, {"id": "em-political", "label": "政治への不信と関連政策", "count": 2, "pct_in_issue": 0.4}, {"id": "em-war", "label": "戦争・動員との結びつきへの懸念", "count": 1, "pct_in_issue": 0.2}, {"id": "em-control", "label": "権限集中と自由への制約", "count": 1, "pct_in_issue": 0.2}, {"id": "em-necessity", "label": "既存制度と条項の必要性", "count": 1, "pct_in_issue": 0.2}]}, "verdict": null, "claims": [], "veins": ["constitutional-amendment-avoid-war"]}, {"id": "constitutional-amendment-article9", "key": "9条・自衛隊", "label": "9条・自衛隊", "icon": "🛡️", "count": 284, "share_pct": 20.7, "stances": {"改正推進": 139, "慎重・反対": 130, "手続き重視": 2, "中立": 13}, "top_stance": "改正推進", "purity_pct": 48.9, "intensity": {"high": 115, "medium": 153, "low": 16}, "high_pct": 40.5, "high_adjusted_pct": 40.3, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "gap", "claims": [{"claim": "現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている", "finding": "第9条に自衛隊という語がなく、戦力不保持と交戦権否認の規定があることは確認できる。この文言の有無だけで、自衛隊の合憲性についての解釈を決めることはできない。", "id": "article9_no_jieitai", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 5, "sources": [{"name": "e-Gov法令検索 日本国憲法 第9条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "verdict": "fact"}, {"claim": "自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない", "finding": "名称に加えて、自衛の措置と指揮監督者についての文言も追加する案。法的効果がどの程度変わるかは解釈の論点であり、文字の追加だけで実質的な影響の有無は断定しない。", "id": "jieitai_inscription_only", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 4, "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}], "verdict": "gap"}, {"claim": "9条に自衛隊を明記しても18条（苦役の禁止）を変えない限り、徴兵制は憲法上できない", "finding": "政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。", "id": "article18_conscription", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 1, "sources": [{"name": "国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁", "url": "https://kokkai.ndl.go.jp/txt/119215261X00320161011/151"}], "verdict": "fact"}, {"claim": "憲法学説では自衛隊の存在を違憲とする解釈と合憲とする解釈が並立している", "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。", "id": "jieitai_iken_gaku", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 3, "sources": [{"name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁", "url": "https://kokkai.ndl.go.jp/txt/119315261X01820170509/43"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-emergency", "key": "緊急事態条項", "label": "緊急事態条項", "icon": "⚖️", "count": 199, "share_pct": 14.5, "stances": {"改正推進": 2, "慎重・反対": 177, "手続き重視": 2, "中立": 18}, "top_stance": "慎重・反対", "purity_pct": 88.9, "intensity": {"high": 105, "medium": 89, "low": 5}, "high_pct": 52.8, "high_adjusted_pct": 50.1, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。", "show_coverage_note": true, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 199, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "em-control", "label": "権限集中と自由への制約", "count": 52, "pct_in_issue": 26.1}, {"id": "em-political", "label": "政治への不信と関連政策", "count": 42, "pct_in_issue": 21.1}, {"id": "em-necessity", "label": "既存制度と条項の必要性", "count": 33, "pct_in_issue": 16.6}, {"id": "em-war", "label": "戦争・動員との結びつきへの懸念", "count": 22, "pct_in_issue": 11.1}, {"id": "em-election", "label": "任期延長と選挙の機会", "count": 16, "pct_in_issue": 8.0}, {"id": "em-commentator", "label": "他者の説明・立場への批評", "count": 11, "pct_in_issue": 5.5}, {"id": "em-conditions", "label": "発動・延長・検証の条件", "count": 9, "pct_in_issue": 4.5}, {"id": "rights-scope", "label": "変更する条項と暮らし・権利", "count": 5, "pct_in_issue": 2.5}, {"id": "peace-security", "label": "戦争を避ける方法と防衛", "count": 5, "pct_in_issue": 2.5}, {"id": "political-trust", "label": "改正を担う政権・政党への評価", "count": 4, "pct_in_issue": 2.0}]}, "verdict": "gap", "claims": [{"claim": "自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる", "finding": "国会の法律制定を待たずに政令を制定する案だが、災害・特別の事情という条件と国会の承認を求める手続きがある。現行法ではなく2018年の提案。承認されない場合の自動失効までこの条文イメージに書かれているわけではない。", "id": "emergency_law_making", "issue_ids": ["constitutional-amendment-emergency"], "matched_post_count": 3, "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}], "verdict": "gap"}], "veins": []}, {"id": "constitutional-amendment-referendum", "key": "国民投票・広告", "label": "国民投票・広告", "icon": "🗳️", "count": 196, "share_pct": 14.3, "stances": {"改正推進": 7, "慎重・反対": 163, "手続き重視": 18, "中立": 8}, "top_stance": "慎重・反対", "purity_pct": 83.2, "intensity": {"high": 83, "medium": 97, "low": 16}, "high_pct": 42.3, "high_adjusted_pct": 41.7, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "miss", "claims": [{"claim": "国民投票は有効投票の過半数で成立し、最低投票率の規定はない", "finding": "成立条件の分母は賛成票と反対票の合計。投票者数や有権者数の過半数とは異なる。", "id": "minimum_vote_rate", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 5, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "fact"}, {"claim": "国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ", "finding": "14日という期間は確認できる。ただし105条だけから、それ以前にはあらゆる制限がないと結論することはできない。対象も広告放送一般ではなく国民投票運動のための広告放送。", "id": "cm_broadcast_14days", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 5, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "gap"}, {"claim": "国会が発議してから国民投票まで最短60日、最長180日だ", "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。", "id": "period_60days", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 1, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "fact"}, {"claim": "2026年の国民投票法改正でインターネット広告規制が明文化された", "finding": "根拠となる改正法と具体的条文を特定できていないため、未確認とする。確認できなかったことは、その改正や規制が存在しないことの証明ではない。", "id": "net_ad_regulation", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 5, "sources": [{"name": "e-Gov 国民投票法（照合先）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "miss"}], "veins": []}, {"id": "constitutional-amendment-procedure", "key": "政党・発議手続き", "label": "政党・発議手続き", "icon": "🏛️", "count": 118, "share_pct": 8.6, "stances": {"改正推進": 13, "慎重・反対": 81, "手続き重視": 8, "中立": 16}, "top_stance": "慎重・反対", "purity_pct": 68.6, "intensity": {"high": 36, "medium": 67, "low": 15}, "high_pct": 30.5, "high_adjusted_pct": 33.1, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "fact", "claims": [{"claim": "衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない", "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。", "id": "two_thirds", "issue_ids": ["constitutional-amendment-procedure"], "matched_post_count": 5, "sources": [{"name": "e-Gov法令検索 日本国憲法 第96条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-deliberation", "key": "情報・議論の質", "label": "情報・議論の質", "icon": "💬", "count": 51, "share_pct": 3.7, "stances": {"改正推進": 2, "慎重・反対": 16, "手続き重視": 2, "中立": 31}, "top_stance": "中立", "purity_pct": 60.8, "intensity": {"high": 2, "medium": 40, "low": 9}, "high_pct": 3.9, "high_adjusted_pct": 21.5, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": []}, {"id": "constitutional-amendment-other", "key": "その他", "label": "その他", "icon": "◯", "count": 10, "share_pct": 0.7, "stances": {"改正推進": 0, "慎重・反対": 1, "手続き重視": 0, "中立": 9}, "top_stance": "中立", "purity_pct": 90.0, "intensity": {"high": 1, "medium": 4, "low": 5}, "high_pct": 10.0, "high_adjusted_pct": 34.5, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": []}], "claims": [{"id": "minimum_vote_rate", "claim": "国民投票は有効投票の過半数で成立し、最低投票率の規定はない", "verdict": "fact", "verdict_label": "資料どおり", "finding": "成立条件の分母は賛成票と反対票の合計。投票者数や有権者数の過半数とは異なる。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "cm_broadcast_14days", "claim": "国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ", "verdict": "gap", "verdict_label": "少しずれる", "finding": "14日という期間は確認できる。ただし105条だけから、それ以前にはあらゆる制限がないと結論することはできない。対象も広告放送一般ではなく国民投票運動のための広告放送。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "period_60days", "claim": "国会が発議してから国民投票まで最短60日、最長180日だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "two_thirds", "claim": "衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない", "verdict": "fact", "verdict_label": "資料どおり", "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。", "sources": [{"name": "e-Gov法令検索 日本国憲法 第96条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}]}, {"id": "emergency_law_making", "claim": "自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる", "verdict": "gap", "verdict_label": "少しずれる", "finding": "国会の法律制定を待たずに政令を制定する案だが、災害・特別の事情という条件と国会の承認を求める手続きがある。現行法ではなく2018年の提案。承認されない場合の自動失効までこの条文イメージに書かれているわけではない。", "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}]}, {"id": "article9_no_jieitai", "claim": "現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている", "verdict": "fact", "verdict_label": "資料どおり", "finding": "第9条に自衛隊という語がなく、戦力不保持と交戦権否認の規定があることは確認できる。この文言の有無だけで、自衛隊の合憲性についての解釈を決めることはできない。", "sources": [{"name": "e-Gov法令検索 日本国憲法 第9条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}]}, {"id": "jieitai_inscription_only", "claim": "自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない", "verdict": "gap", "verdict_label": "少しずれる", "finding": "名称に加えて、自衛の措置と指揮監督者についての文言も追加する案。法的効果がどの程度変わるかは解釈の論点であり、文字の追加だけで実質的な影響の有無は断定しない。", "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}]}, {"id": "net_ad_regulation", "claim": "2026年の国民投票法改正でインターネット広告規制が明文化された", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "根拠となる改正法と具体的条文を特定できていないため、未確認とする。確認できなかったことは、その改正や規制が存在しないことの証明ではない。", "sources": [{"name": "e-Gov 国民投票法（照合先）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "article18_conscription", "claim": "9条に自衛隊を明記しても18条（苦役の禁止）を変えない限り、徴兵制は憲法上できない", "verdict": "fact", "verdict_label": "資料どおり", "finding": "政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。", "sources": [{"name": "国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁", "url": "https://kokkai.ndl.go.jp/txt/119215261X00320161011/151"}]}, {"id": "jieitai_iken_gaku", "claim": "憲法学説では自衛隊の存在を違憲とする解釈と合憲とする解釈が並立している", "verdict": "fact", "verdict_label": "資料どおり", "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。", "sources": [{"name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁", "url": "https://kokkai.ndl.go.jp/txt/119315261X01820170509/43"}]}], "editorial": {"checked_on": "2026-09-12", "findings": [{"id": "constitutional-amendment-ed-1", "kind": "shared_premise", "text": "戦争を避けたいという思いは、改正を進めたい投稿にも、改正に反対する投稿にもありました。防衛の仕組みを変えることと、現行憲法による歯止めを保つことの、どちらを頼りにするかで分かれています。"}, {"id": "constitutional-amendment-ed-2", "kind": "real_conflict", "text": "改正そのものを認める投稿でも、いまの政権が出す案には反対する場合があります。「誰が変えるか」と「どこを変えるか」を分けると、単純な賛否では見えない条件が読めます。"}, {"id": "constitutional-amendment-ed-3", "kind": "real_conflict", "text": "国民投票まで進めて国民が判断すればよいという意見と、広告や情報、投開票への不信から発議前に止めたいという意見があります。投票で決めることへの信頼も争点です。"}, {"id": "constitutional-amendment-ed-4", "kind": "still_unknown", "text": "反対派を批判しただけの投稿から、書き手自身が改正案を支持しているとは限りません。本文に立場が明示されているかと、何を評価しているかを分けて整理しています。"}, {"id": "constitutional-amendment-ed-5", "kind": "still_unknown", "text": "過去の草案、現在の提案、現行の条文を混ぜると、同じ言葉でも別の制度について話してしまいます。資料に書かれている範囲と、投稿者が予測していることを区別します。"}], "reviewer_type": "ai_assisted", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-08-21", "reviewer_type": "editorial_review", "ocean_status": "complete", "ocean_checked_on": "2026-09-12", "ocean_reviewer_type": "ai_assisted", "sunk_continents": [{"checked_on": "2026-09-12", "id": "constitutional-amendment-challenge", "life_impact": "国民投票に異議がある投票人は、結果の告示から30日以内に東京高等裁判所へ訴訟を起こせます。不正への不安を語ることとは別に、結果に異議を申し立てる期限と相手が法定されています。", "nearest_issue_id": null, "reviewer_type": "ai_assisted", "sns_base": 1369, "sns_count": 0, "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。", "sources": [{"date": "2026-09-12確認", "location": "第127条", "name": "e-Gov：国民投票法", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "topic": "国民投票の結果に異議を申し立てる手続き", "opinion_count_now": 1369, "base_stale": false, "short_label": "国民投票の結果に異議を申し…"}, {"checked_on": "2026-09-12", "id": "constitutional-amendment-emergency-review", "life_impact": "参議院の緊急集会で採った措置は臨時のものです。次の国会が開かれてから10日以内に衆議院の同意がなければ効力を失います。緊急時に決める仕組みには、後から確かめる手続きもあります。", "nearest_issue_id": null, "reviewer_type": "ai_assisted", "sns_base": 1369, "sns_count": 0, "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。", "sources": [{"date": "2026-09-12確認", "location": "第54条第3項", "name": "e-Gov：日本国憲法", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "topic": "参議院の緊急集会で採った措置の、その後", "opinion_count_now": 1369, "base_stale": false, "short_label": "参議院の緊急集会で採った措…"}], "veins": [{"checked_on": "2026-09-12", "diverging_reason": "推進側は防衛力や抑止のための改正が戦争を防ぐと考え、反対側は憲法を変えることで戦争に関わる危険が増すと考えています。守りたい平和が共通でも、頼りにする方法が異なります。", "id": "constitutional-amendment-avoid-war", "issue_ids": ["constitutional-amendment-general"], "reviewer_type": "ai_assisted", "shared_concern": "自分や家族が戦争で命を失うことを避けたい。", "sides": [{"post_count": 2, "stance_label": "改正推進"}, {"post_count": 2, "stance_label": "慎重・反対"}]}]}};</script>
+<script>
+(function(){
+"use strict";
+const D = window.PLANET_DATA;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 状態 ---------- */
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
+const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
+const issues = D.issues;
+const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
+const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
+
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
+function ranksOf(modeId){
+  const m = modeById[modeId];
+  const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
+                      .filter(x => x.n > 0)
+                      .sort((a,b) => b.n - a.n || a.k - b.k);
+  const r = issues.map(() => null);
+  order.forEach((x,i) => { r[x.k] = i + 1; });
+  return r;
+}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
+
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
+  }
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
+}
+
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+
+function render(){
+  const L=layout(st.mode), p=[];
+  // 表現強度が0でも押せるよう、見た目とは別の透明な操作領域を置く。
+  // 画面上で44pxの高さを確保し、山の高さや比率そのものは変えない。
+  const hitHeight = Math.min(SEA-TOP, 44*SVG_W/(svg.getBoundingClientRect().width || SVG_W));
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
+  }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  p.push('<g id="seafloor">');
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('</g>');
+  // 海の覆い。潜水で薄くなり、下が見えるようになる
+  p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    const hitTop = Math.min(v.top, SEA-hitHeight);
+    p.push('<rect class="hill-hit" x="'+v.x0+'" y="'+hitTop+'" width="'+v.w
+      +'" height="'+(SEA-hitTop+4)+'" fill="transparent" pointer-events="all"/>');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.rate===0)
+      p.push('<circle class="zero-mark" cx="'+v.cx+'" cy="'+SEA+'" r="3" fill="'+col+'"/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6" pointer-events="none" aria-hidden="true"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+  if (L.live.some(v=>v.rate===0))
+    fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
+}
+
+function land(i){
+  st.landed=i;
+  visit("i:"+issues[i].id);
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
+  // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
+  // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
+  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
+}
+function orbit(){
+  const prev=st.landed;
+  st.landed=null;
+  if (location.hash) history.replaceState(null,"",location.pathname);
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
+}
+
+/* ---------- パネル ---------- */
+function stanceBar(counts, total){
+  return '<div class="bar">' + D.stances.map(s=>{
+    const n = counts[s.key]||0; if(!n) return "";
+    const w = 100*n/total;
+    return '<span style="width:'+w+'%;background:'+s.color+'">'+(w>13?s.label+" "+n:(w>6?n:""))+'</span>';
+  }).join("") + '</div>';
+}
+function legend(){
+  return '<div class="legend">' + D.stances.map(s=>
+    '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
+}
+
+/* 立場を切り替えたときに何が起きたかを1行で言う。
+   順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
+function crossTalk(modeId){
+  if (modeId === "all"){
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
+  }
+  const rAll = ranksOf("all"), rM = ranksOf(modeId);
+  const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
+  if (topMK < 0) return '';
+  const spin = '<button type="button" class="spin" id="spin">'
+             + '「'+issues[topMK].label+'」を見る</button>';
+  if (topMK === topAllK){
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
+         + 'すべての意見のときと同じ1位です。' + spin;
+  }
+  const moved = rM[topAllK];
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+       + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
+       + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
+}
+
+/* ---------- 点の装置（100マス） ----------
+   マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+   立場を絞ると件数は減るのに割合は増えることがある。これが文章では通じなかったための装置。
+   1件1マスで意見の数だけ並べた版は「多すぎて何も分からない」と差し戻された（2026-09-05）。 */
+const dotBox = document.getElementById("dotbox");
+const CELLS = 100;
+let cells = null;
+
+function buildCells(){
+  const w = document.getElementById("waffle");
+  let h = "";
+  for (let i=0;i<CELLS;i++) h += "<span></span>";
+  w.innerHTML = h;
+  cells = Array.prototype.slice.call(w.querySelectorAll("span"));
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!cells) buildCells();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
+  const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
+  cells.forEach((c,i)=>{
+    c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
+    c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
+  });
+
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+hot+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:var(--rest-dot)"></i>それ以外の論点</span>';
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を切り替えると、<b>色つきのマスの数が変わります</b>。"
+      + "件数が減っても、マスが増えることがあります。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほぼ同じだけ残ったので、割合もほとんど変わりません。</b>';
+    else if (gap > 0)
+      verdict = '<b>この論点のほうが多く残ったので、割合は増えます。</b>'
+              + '「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>この論点のほうが多く減ったので、割合は減ります。</b>'
+              + '「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '「'+m.label+'」に絞ると、この論点は <b>'+keepHot.toFixed(1)+'%</b> 残り、'
+      + 'それ以外は <b>'+keepRest.toFixed(1)+'%</b> 残りました。<br>' + verdict;
+  }
+}
+
+function drawPanel(){
+  const p = document.getElementById("panel");
+  const m = modeById[st.mode];
+  if (st.landed === null){
+    p.innerHTML = '<h2>'+D.title+'</h2>'
+      + '<p class="sub">'+m.label+'：'+m.total+'件'
+      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
+      + legend()
+      + '<p class="cross">'+crossTalk(st.mode)+'</p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
+      + (st.mode!=="all"
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
+          + (issues.filter(it=>m.counts[it.id]===0).length
+             ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
+               +' が0件のため、山が消えています。'
+             : '')
+          + '</div>'
+        : '');
+    // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
+    // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
+    const sp = document.getElementById("spin");
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
+    syncDots();
+    return;
+  }
+  const it = issues[st.landed];
+  const n = m.counts[it.id];
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
+    + '<div id="dot-slot"></div>'
+    + legend() + stanceBar(it.stances, it.count)
+    + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
+  const s = it.sub;
+  if (s.status === "reread"){
+    h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
+      + '<ul class="islands">' + s.items.map((x,j)=>
+          '<li class="'+(x.unread?"unread":"")+'">'
+          + '<span class="num">'+(j+1)+'</span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
+          + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
+      + (s.show_coverage_note === false ? ''
+        : '<div class="note">'+s.coverage_note+'。'
+          + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
+          + '</div>');
+  } else {
+    if (D.show_unreviewed_note !== false){
+      h += '<div class="note">'+s.note+'。<br>'
+         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    }
+  }
+  // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
+  // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  const extras = document.getElementById("extras-" + it.id);
+  if (extras) h += extras.innerHTML;
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
+  p.innerHTML = h;
+  document.getElementById("back").onclick = orbit;
+  // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
+  document.getElementById("dot-slot").appendChild(dotBox);
+  syncDots();
+}
+
+/* ---------- 一覧・モード ---------- */
+function syncList(){
+  const m = modeById[st.mode];
+  const rank = ranksOf(st.mode);
+  issues.forEach((it,i)=>{
+    const b = document.getElementById("btn-"+it.id);
+    if (!b) return;
+    const n = m.counts[it.id];
+    b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
+    b.style.opacity = n ? 1 : .45;
+    // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
+    // 並びの変化を追えるようにするため。
+    b.querySelector(".m").textContent =
+      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
+  });
+}
+function buildList(){
+  const ul = document.getElementById("list");
+  ul.innerHTML = issues.map(it =>
+    '<li><button type="button" id="btn-'+it.id+'" aria-pressed="false">'
+    + '<span class="dot" style="background:'+stanceMap[it.top_stance].color+'"></span>'
+    + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
+  issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
+}
+/* 要素が画面の中ほどへ来るまでスクロールする。
+   scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
+   画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+function bringIntoView(el){
+  // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
+  setTimeout(function(){
+    const r = el.getBoundingClientRect();
+    if (!r.height) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max,
+      window.scrollY + r.top - (window.innerHeight - r.height)/2));
+    const from = window.scrollY;
+    if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
+    const t0 = performance.now(), dur = 420;
+    (function step(now){
+      const t = Math.min(1, (now - t0)/dur);
+      window.scrollTo(0, from + (to - from)*ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);                                  // 1枚目は rAF を待たずに描く
+    // rAF が止まる環境でも必ず届かせる
+    setTimeout(function(){
+      if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
+    }, dur + 180);
+  }, 0);
+}
+
+function buildModes(){
+  const el = document.getElementById("modes");
+  el.innerHTML = D.modes.map(m =>
+    '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
+    + m.label+' '+m.total+'</button>').join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
+    el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    morphTo(b.dataset.m);
+  });
+}
+
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
+}
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
+addEventListener("keydown", e=>{
+  if (e.key === "Escape" && st.landed !== null) orbit();
+});
+
+/* ---------- 探査記録 ----------
+   予想2問＋論点＋語られていない争点＋主張＋立場をこえて同じ心配を「地点」として数える。
+   端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
+const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
+            + (D.claims||[]).length + (D.ocean.veins||[]).length;
+const seen = new Set();
+try { (JSON.parse(localStorage.getItem("isa-seen-"+D.theme_id)||"[]")).forEach(x=>seen.add(x)); } catch(e){}
+function visit(id){
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
+  paintProgress();
+}
+let painted = -1;
+function paintProgress(){
+  const el = document.getElementById("progress");
+  el.hidden = false;
+  const n = seen.size;
+  document.getElementById("pbar").style.width = Math.min(100, 100*n/SPOTS) + "%";
+  document.getElementById("pnum").textContent = n + " / " + SPOTS;
+  // 1地点ぶんは帯の 1/SPOTS しかなく、スマホ幅では十数ピクセルにもならない。
+  // 帯を伸ばすだけでは「動いていない」と見えるので、地点の数だけ区画に割って1つずつ点ける。
+  // 区画の入れ物が無いページ（単体の試作）では、今までどおり帯だけが伸びる。
+  const seg = document.getElementById("pseg");
+  if (seg){
+    if (seg.childElementCount !== SPOTS){
+      seg.innerHTML = "";
+      for (let i=0;i<SPOTS;i++) seg.appendChild(document.createElement("i"));
+    }
+    Array.from(seg.children).forEach((c,i)=>{ c.className = i<n ? "on" : ""; });
+  }
+  // 増えた瞬間を見逃さないよう数字をひと跳ねさせる。動きを減らす設定では止まる（CSS側）。
+  if (n > painted && painted >= 0){
+    el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+  }
+  painted = n;
+  // 増やし方の説明は、まだ0のあいだだけ出す（スマホで1行ぶん場所を取るため）。
+  el.classList.toggle("started", n > 0);
+}
+
+/* ---------- 予想（見る前に当てる） ----------
+   選択肢も答えも data から作る。ここに数字や論点名を書かない。 */
+function buildGuesses(){
+  const box = document.getElementById("guesses");
+  const st = D.stances.slice().sort((a,b)=>b.count-a.count);
+  const peak = issues.map(it=>({it, r: modeById.all.high_pct[it.id]}))
+                     .filter(x=>modeById.all.counts[x.it.id]>0)
+                     .sort((a,b)=>b.r-a.r);
+  const q=[];
+  q.push({
+    key:"g1", title:"① 「"+st[0].label+"」と「"+st[1].label+"」、どちらが多いと思いますか？",
+    opts:["「"+st[0].label+"」のほうが多い","「"+st[1].label+"」のほうが多い","ほぼ同じ"], right:0,
+    ans:"<b>「"+st[0].label+"」"+st[0].count+"件</b>に対し、「"+st[1].label+"」"+st[1].count+"件。"
+       +"多いのは前者で、しかも差はわずかです。"
+  });
+  q.push({
+    key:"g2", title:"② 「強い表現」がいちばん多い論点はどれだと思いますか？",
+    opts:[peak[peak.length-1].it.label, peak[1].it.label, peak[0].it.label], right:2,
+    ans:"<b>「"+peak[0].it.label+"」で"+peak[0].r+"%</b>。"
+       +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
+       +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
+  });
+  box.innerHTML = q.map(x =>
+    '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
+    + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
+    + '</div><div class="gans" hidden></div></div>').join("");
+  q.forEach(x=>{
+    const card = box.querySelector('[data-k="'+x.key+'"]');
+    const bs = card.querySelectorAll(".gopts button");
+    bs.forEach(b=>b.addEventListener("click", ()=>{
+      const pick = +b.dataset.i;
+      bs.forEach((y,j)=>{ y.disabled=true;
+        if (j===x.right) y.className="hit"; else if (j===pick) y.className="miss"; });
+      const a = card.querySelector(".gans");
+      a.innerHTML = '<p class="lead">'+(pick===x.right?"正解":"はずれ")+'</p>'+x.ans;
+      a.hidden=false;
+      visit(x.key);
+    }));
+  });
+}
+
+/* ---------- 潜水（海の水を抜く） ---------- */
+let dived=false;
+function buildDive(){
+  const b=document.getElementById("dive"), n=document.getElementById("divenote");
+  const sunk=(D.ocean.sunk_continents||[]).length;
+  if (!sunk){ b.parentElement.hidden=true; return; }
+  const box=document.getElementById("ocean");
+  function paint(){
+    b.textContent = dived ? "閉じる" : "資料にしかない話を見る";
+    n.innerHTML = dived
+      ? "<b>"+sunk+"つ出てきました。</b>どれも一次資料では決まっている話です。下に中身があります。"
+      : "資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
+    document.querySelector(".chart-box").classList.toggle("dived", dived);
+    if (box) box.hidden = !dived;
+  }
+  b.addEventListener("click", ()=>{
+    dived=!dived; paint();
+    if (dived){
+      // 海面下はひとまとまり。開いたら語られていない争点と立場をこえて同じ心配をまとめて数える。
+      // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
+      (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
+      (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
+      // box全体（複数の語られていない争点・立場をこえて同じ心配を全部含み、
+      // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
+      // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
+      // 見出しだけを中央合わせにする。
+      if (box) bringIntoView(box.querySelector("h3") || box);
+    }
+  });
+  paint();
+}
+
+/* ---------- 一次資料クイズ ---------- */
+const V_ORDER=["fact","gap","miss"];
+let qi=0, qscore=0;
+function buildQuiz(){
+  const el=document.getElementById("quiz"), cs=D.claims||[];
+  if (!cs.length){ el.parentElement.querySelector(".sec-live").hidden=true; el.hidden=true; return; }
+  if (qi>=cs.length){
+    el.innerHTML='<p class="qscore"><span class="n">'+qscore+' / '+cs.length+'</span> 問正解</p>'
+      + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
+      + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
+          return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
+      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';
+    return;
+  }
+  const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
+  const labels=V_ORDER.map(v=>{
+    const same=cs.find(x=>x.verdict===v);
+    return same ? same.verdict_label : ({fact:"資料どおり",gap:"少しずれる",miss:"裏が取れない"})[v];
+  });
+  el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
+    + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
+    + labels.map((l,i)=>'<button type="button" data-i="'+i+'">'+l+'</button>').join("")
+    + '</div><div class="qans" hidden></div>';
+  const bs=el.querySelectorAll(".gopts button");
+  bs.forEach(b=>b.addEventListener("click", ()=>{
+    const pick=+b.dataset.i;
+    if (pick===right) qscore++;
+    bs.forEach((y,j)=>{ y.disabled=true;
+      if (j===right) y.className="hit"; else if (j===pick) y.className="miss"; });
+    const a=el.querySelector(".qans");
+    a.innerHTML='<p><span class="verdict v-'+c.verdict+'">'+c.verdict_label+'</span>'+c.finding+'</p>'
+      + (c.sources.length
+         ? '<div class="srcs">'+c.sources.map(x=>'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.name+'</a>').join("")+'</div>'
+         : '<div class="srcs"><span style="color:var(--muted)">公的資料に該当なし。</span></div>')
+      + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
+    a.hidden=false;
+    visit("c:"+c.id);
+    a.querySelector(".qnext").addEventListener("click", ()=>{
+      qi++; buildQuiz();
+      // 次の問題を出した直後、答え欄の下までスクロールしたままだと新しい問題文が
+      // 画面外になる（オーナー指摘2026-09-10）。問題の見出しを画面中央へ運ぶ。
+      bringIntoView(el.querySelector(".qh") || el);
+    });
+  }));
+}
+
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+   JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
+try {
+  buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildGuesses(); buildDive(); buildQuiz(); paintProgress();
+  let resizeFrame;
+  window.addEventListener("resize", ()=>{
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame=requestAnimationFrame(render);
+  });
+  const h = location.hash.slice(1);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
+} catch (e) {
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bplanet-live\b/, "");
+  throw e;
+}
+
+})();
+</script>
