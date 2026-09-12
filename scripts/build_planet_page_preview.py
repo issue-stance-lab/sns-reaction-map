@@ -624,11 +624,22 @@ def protected_fragments(html: str) -> list[str]:
     return parts
 
 
+def fix_henoko_vote_scroll(html: str) -> str:
+    """旧地図を撤去しても、投票結果を読み終える位置を失わない。"""
+    if "var TOPIC='henoko-student-accident-issue-stance-v1'" not in html:
+        return html
+    return html.replace(
+        "document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth',block:'center'})",
+        "document.getElementById('vote-result').scrollIntoView({behavior:'smooth',block:'center'})",
+    )
+
+
 def verify_preserved(source: str, result: str) -> None:
     for fragment in protected_fragments(source):
         # The existing bukatsu adapter changes only error presentation, not vote contracts.
         changed, _ = fix_vote_feedback(fragment)
-        if fragment not in result and changed not in result:
+        if (fragment not in result and changed not in result
+                and fix_henoko_vote_scroll(fragment) not in result):
             raise SystemExit("保護された編集情報・調査条件・注記・計測・投票の要素が失われました")
 
 
@@ -764,8 +775,8 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
         removed.append(("旧固定件数の要約", hit))
         html, hit = cut_block(html, '<section class="panel" id="explainer-section">', "section")
         removed.append(("旧論点カード（山なみへ統合）", hit))
-        # The legacy vote script still scrolls to this id; preserve its contract
-        # with a small anchor and remove only the separate retired map scripts.
+        html = fix_henoko_vote_scroll(html)
+        # Remove the retired map scripts; the vote result now remains in view.
         html = re.sub(r'<script id="henoko-arena-data">.*?</script>', "", html, flags=re.S)
         html, _ = drop_orphan_scripts(html, ("HENOKO_ARENA_RAW",))
     background = build_background(topic)

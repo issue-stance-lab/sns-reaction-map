@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 from scripts.build_henoko_arena import build_page, load_records, apply_public_counts
 from scripts.verify_theme_page import _arena_points
+from scripts.build_planet_page_preview import fix_henoko_vote_scroll
 
 ROOT = Path(__file__).resolve().parents[1]
 TOPIC = 'henoko-student-accident'
@@ -19,8 +20,8 @@ class HenokoPlanetTests(unittest.TestCase):
         page = (ROOT / 'docs' / (TOPIC + '-reaction-map.html')).read_text()
         if (ROOT / 'social-samples/henoko/henoko_hermes_arena_classified.json').exists():
             records, opinions = load_records(None)
-            self.assertEqual(build_page(page, records, opinions), page)
-        self.assertEqual(apply_public_counts(page), page)
+            self.assertEqual(build_page(page, records, opinions), fix_henoko_vote_scroll(page))
+        self.assertEqual(apply_public_counts(page), fix_henoko_vote_scroll(page))
         self.assertNotIn('HENOKO_ARENA_RAW', page)
         self.assertIn('id="issue-arena-section"', page)
         self.assertIn("choiceIdx:selected*STANCES.length+index", page)

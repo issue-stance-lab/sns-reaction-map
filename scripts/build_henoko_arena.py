@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import hashlib
 import json
 import re
 import sys
@@ -435,8 +436,64 @@ def _public_counts(
     return collected, opinions, stats, by_stance, by_intensity, by_cross
 
 
+def refresh_verified_planet(
+    page: str, records: list[dict[str, Any]], opinions: list[dict[str, Any]],
+    public_theme: Path | None = None,
+) -> str:
+    """候補・原本・再読証拠・公開集計が同じ版のときだけ図全体を作る。"""
+    if __package__:
+        from .build_planet_page_preview import (
+            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll,
+        )
+    else:
+        from build_planet_page_preview import (
+            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll,
+        )
+
+    public_theme = public_theme or PUBLIC_THEME
+    canonical, canonical_opinions = load_records(None)
+    if records != canonical or opinions != canonical_opinions:
+        raise IssueCountError("山なみの入力候補の本文・分類が正典に一致しません。候補の再読・公開集計を更新してください")
+    themes = parse_themes_yaml(THEMES_YAML)
+    canonical_path = ROOT / str(themes[THEME]["sample_file"])
+    registry = json.loads((ROOT / "data/verification/reread" / f"{THEME}.json").read_text())
+    if registry.get("canonical_sha256") != hashlib.sha256(canonical_path.read_bytes()).hexdigest():
+        raise IssueCountError("山なみの再読台帳と正典の版が一致しません。本文・分類変更の再確認が必要です")
+
+    public = json.loads(public_theme.read_text(encoding="utf-8"))
+    # build_planet_data reads this registered public source. Do not silently ignore
+    # an alternative function argument whose counts happen to have the same total.
+    if public != json.loads(PUBLIC_THEME.read_text(encoding="utf-8")):
+        raise IssueCountError("山なみの候補公開JSONが登録済みの公開JSONに一致しません")
+    collected, total, *_ = _public_counts(public)
+    if collected != len(records) or total != len(opinions):
+        raise IssueCountError("山なみの公開件数が正典に一致しません")
+    for issue in public["issues"]:
+        rows = [r for r in opinions if classification(r)["main_issue"] == issue["label"]]
+        if int(issue["count"]) != len(rows):
+            raise IssueCountError("山なみの論点別件数が正典に一致しません")
+        for field, values, key in (("stance", "stances", "label"),
+                                    ("intensity", "intensities", "id")):
+            actual = Counter(classification(r).get(field) for r in rows)
+            expected = Counter({v[key]: int(v["count"]) for v in issue[values]})
+            if actual != expected:
+                raise IssueCountError("山なみの公開分類が正典に一致しません: " + issue["label"])
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    page = replace_block(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                         block, "山なみ全体")
+    return fix_henoko_vote_scroll(page)
+
+
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の集計表示を貼り直す。"""
+    if "<!-- PLANET_SECTION_START -->" in page:
+        records, opinions = load_records(None)
+        page = refresh_verified_planet(page, records, opinions, public_theme)
     collected, total, stats, by_stance, by_intensity, by_cross = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
@@ -570,6 +627,7 @@ def build_page(
     total = len(opinions)
 
     if "<!-- PLANET_SECTION_START -->" in page:
+        page = refresh_verified_planet(page, records, opinions)
         page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables(rows), "詳細データ表")
         page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", research_conditions(records, opinions), "調査条件")
         return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
