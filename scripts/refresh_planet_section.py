@@ -97,8 +97,33 @@ def _sync_bukatsu_method_text(html: str, data: dict) -> str:
     return new_html
 
 
+ELDERLY_OPINION_COUNT_RE = re.compile(r"(意見と判定した)([\d,]+)(件)")
+
+
+def _sync_elderly_method_text(html: str, data: dict) -> str:
+    """本文中に3か所ある「意見と判定したN件」（lead文・データ出典・調査条件）を揃える。
+
+    configs/elderly-license-revocation-reaction-map.json に issue_counts.sync が
+    無いため sync_issue_counts.py の apply_lead/apply_note は素通りし、かつ
+    そのLEAD_RE/NOTE_REが探す定型文（「分析対象となった意見N件を...」等）とも
+    文言が違って一致しない。3か所とも山なみ区間の外にあり、build_section()の
+    再生成対象にも入らないため、初回変換以来だれも更新していなかった
+    （部活動の「調査条件」文と同じ失われ方）。elderly-license-revocation専用。
+    """
+    opinions = data["totals"]["opinions"]
+    new_html, n = ELDERLY_OPINION_COUNT_RE.subn(
+        lambda m: f"{m.group(1)}{opinions:,}{m.group(3)}", html
+    )
+    if n != 3:
+        raise SystemExit(f"「意見と判定したN件」の想定箇所数(3)と一致しません（elderly-license-revocation）: {n}件")
+    return new_html
+
+
 TOPIC_ENRICH = {"bukatsu-chiiki": _inject_bukatsu_go_cards}
-TOPIC_METHOD_TEXT = {"bukatsu-chiiki": _sync_bukatsu_method_text}
+TOPIC_METHOD_TEXT = {
+    "bukatsu-chiiki": _sync_bukatsu_method_text,
+    "elderly-license-revocation": _sync_elderly_method_text,
+}
 
 
 def refresh(topic: str) -> tuple[str, str, list[str]]:

@@ -1,137 +1,140 @@
 {
- "theme_id": "elderly-license-revocation",
- "items": [
-  {
-   "id": "elderly-license-revocation-sc-1",
-   "topic": "サポートカー限定免許という選択肢（一律の返納・停止ではない別の道）",
-   "primary_sources": [
+  "theme_id": "elderly-license-revocation",
+  "items": [
     {
-     "name": "警察庁「高齢運転者交通事故防止対策に関する調査研究」調査研究報告書",
-     "date": "令和2年3月",
-     "url": "https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf",
-     "location": "4（1）ア 運転技能検査の導入。国民アンケートで「一定の事故抑止効果や被害軽減効果を有する車に限定」が最多（62.7%）で、サポートカー限定免許制度の民意的根拠になったと明記"
+      "id": "elderly-license-revocation-sc-1",
+      "topic": "サポートカー限定免許という選択肢（一律の返納・停止ではない別の道）",
+      "primary_sources": [
+        {
+          "name": "警察庁「高齢運転者交通事故防止対策に関する調査研究」調査研究報告書",
+          "date": "令和2年3月",
+          "url": "https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf",
+          "location": "4（1）ア 運転技能検査の導入。国民アンケートで「一定の事故抑止効果や被害軽減効果を有する車に限定」が最多（62.7%）で、サポートカー限定免許制度の民意的根拠になったと明記"
+        },
+        {
+          "name": "内閣府 令和6年交通安全白書 特集第2章第2節「高齢運転者による交通事故防止のための取組」",
+          "date": "令和6年",
+          "url": "https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html",
+          "location": "1 高齢者の安全運転を支える対策の推進。サポートカーの定義（衝突被害軽減ブレーキ＋ペダル踏み間違い急発進抑制装置の両方搭載）と、実車指導で客観的評価が既に行われていることを明記"
+        }
+      ],
+      "life_impact": "免許を取り上げるか、そのまま乗り続けるかの二択ではない。衝突被害軽減ブレーキとペダル踏み間違い急発進抑制装置の両方を備えた「サポートカー」に限って運転を続けられる制度が、国民アンケートの結果も踏まえてすでに用意されている。対象は普通自動車で、実車指導でも客観的な指標による評価が行われている。",
+      "sns_count": 2,
+      "sns_base": 354,
+      "sns_note": "「サポカー限定」「ペダル踏み間違い防止」という言葉自体は2件出てくるが、どちらも『議論を進めてほしい』『義務付けてほしい』という今後への要望として書かれている。この制度が2022年から実在し、対象車の技術要件まで決まっているという「もうある」側の事実には、2件とも触れていない(2026-09-12再確認: 独立確認で新たに意見と判定された1件を照合、該当なし)",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "サポートカー|サポカー|限定免許|衝突被害軽減ブレーキ|ペダル踏み間違い",
+        "scope": "text",
+        "machine_hits": [
+          "2063532471581585713",
+          "2077607744333627841"
+        ],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "elderly-license-revocation-safety",
+        "label": "義務化・事故防止",
+        "count": 2
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "editorial_review"
     },
     {
-     "name": "内閣府 令和6年交通安全白書 特集第2章第2節「高齢運転者による交通事故防止のための取組」",
-     "date": "令和6年",
-     "url": "https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html",
-     "location": "1 高齢者の安全運転を支える対策の推進。サポートカーの定義（衝突被害軽減ブレーキ＋ペダル踏み間違い急発進抑制装置の両方搭載）と、実車指導で客観的評価が既に行われていることを明記"
-    }
-   ],
-   "life_impact": "免許を取り上げるか、そのまま乗り続けるかの二択ではない。衝突被害軽減ブレーキとペダル踏み間違い急発進抑制装置の両方を備えた「サポートカー」に限って運転を続けられる制度が、国民アンケートの結果も踏まえてすでに用意されている。対象は普通自動車で、実車指導でも客観的な指標による評価が行われている。",
-   "sns_count": 2,
-   "sns_base": 353,
-   "sns_note": "「サポカー限定」「ペダル踏み間違い防止」という言葉自体は2件出てくるが、どちらも『議論を進めてほしい』『義務付けてほしい』という今後への要望として書かれている。この制度が2022年から実在し、対象車の技術要件まで決まっているという「もうある」側の事実には、2件とも触れていない",
-   "match_rule": {
-    "type": "regex",
-    "pattern": "サポートカー|サポカー|限定免許|衝突被害軽減ブレーキ|ペダル踏み間違い",
-    "scope": "text",
-    "machine_hits": ["2063532471581585713", "2077607744333627841"],
-    "excluded": []
-   },
-   "issue_bucket": {
-    "issue_id": "elderly-license-revocation-safety",
-    "label": "義務化・事故防止",
-    "count": 2
-   },
-   "checked_on": "2026-09-11",
-   "checked_by": "ai_assisted"
-  },
-  {
-   "id": "elderly-license-revocation-sc-2",
-   "topic": "バス路線の廃止は行政コストを減らすとは限らない（クロスセクター効果）",
-   "primary_sources": [
-    {
-     "name": "国土交通省 近畿運輸局「地域公共交通のクロスセクター効果『地域公共交通 赤字＝廃止でいいの？』」",
-     "date": "平成30年3月",
-     "url": "https://wwwtb.mlit.go.jp/hokushin/content/000104020.pdf",
-     "location": "全文。クロスセクター効果の定義（廃止した場合に追加で必要になる医療送迎・スクールバス等の代替費用と、行政の財政支出を比較する分析手法）。廃止すると行政コストがかえって増加する可能性があると明記し、医療・福祉・教育など12分野への波及を図示"
-    }
-   ],
-   "life_impact": "コミュニティバスなどが「収支が赤字」というだけで単純に廃止されると、その分は病院への送迎バスやスクールバスといった代替手段の費用として、結局は行政が別の形で負担することになる場合がある、と国の運輸局自身が分析している。「赤字だから廃止」は、行政コスト全体で見ると必ずしも正しくない。",
-   "sns_count": 0,
-   "sns_base": 353,
-   "sns_note": "廃止した場合の医療送迎・スクールバス等の代替コストに触れた投稿は0件。バスやタクシーが「減った」「無い」という現状への言及はあるが、廃止の是非を行政コスト全体で論じた投稿は見つからなかった",
-   "match_rule": {
-    "type": "regex",
-    "pattern": "クロスセクター|廃止.{0,15}(コスト増|かえって|行政.{0,5}増)|赤字.{0,10}廃止",
-    "scope": "text",
-    "machine_hits": [],
-    "excluded": []
-   },
-   "issue_bucket": {
-    "issue_id": "elderly-license-revocation-alternative-transport",
-    "label": "代替交通整備",
-    "count": 0
-   },
-   "checked_on": "2026-09-11",
-   "checked_by": "ai_assisted"
-  },
-  {
-   "id": "elderly-license-revocation-sc-3",
-   "topic": "運転技能検査は、記憶力の検査だけでは見逃していた人を拾うために作られた",
-   "primary_sources": [
-    {
-     "name": "警察庁「高齢運転者交通事故防止対策に関する調査研究」調査研究報告書",
-     "date": "令和2年3月",
-     "url": "https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf",
-     "location": "4（1）ア 運転技能検査の導入。死亡事故を起こした者のうち、直前の認知機能検査で「第3分類（認知機能低下のおそれがない）」と判定されていた者が約半数を占めていたと分析し、認知機能検査だけでは不十分だと結論づけている"
-    }
-   ],
-   "life_impact": "免許更新時の検査は、記憶力や判断力をみる「認知機能検査」だけでは、実際に死亡事故を起こした高齢運転者の約半数を「問題なし」と判定してしまっていた。この反省から、身体の運転技能そのものを実車でみる「運転技能検査」が新たに作られた。",
-   "sns_count": 0,
-   "sns_base": 353,
-   "sns_note": "運転技能検査がなぜ作られたか（記憶力検査だけでは死亡事故の約半数を見逃していたこと）に触れた投稿は0件。技能検査を「ザルだ」と批判する投稿はあるが、それが作られた経緯とは別の話",
-   "match_rule": {
-    "type": "regex",
-    "pattern": "認知機能検査.{0,20}(不十分|半数|防げ)|技能検査.{0,10}(導入|できた|始まった).{0,15}理由",
-    "scope": "text",
-    "machine_hits": [],
-    "excluded": []
-   },
-   "issue_bucket": {
-    "issue_id": "elderly-license-revocation-safety",
-    "label": "義務化・事故防止",
-    "count": 0
-   },
-   "checked_on": "2026-09-11",
-   "checked_by": "ai_assisted"
-  },
-  {
-   "id": "elderly-license-revocation-sc-4",
-   "topic": "運転に不安があるとき、全国共通で相談できる窓口がある（＃8080）",
-   "primary_sources": [
-    {
-     "name": "内閣府 令和7年版高齢社会白書 第2章第2節（5）「認知機能の変化に応じた交通安全対策」",
-     "date": "令和7年",
-     "url": "https://www8.cao.go.jp/kourei/whitepaper/w-2025/html/zenbun/s2_2_4.html",
-     "location": "全文。全国統一の安全運転相談ダイヤル「＃8080」を整備し、運転に不安を持つ運転者・家族からの相談に対応していると明記"
+      "id": "elderly-license-revocation-sc-2",
+      "topic": "バス路線の廃止は行政コストを減らすとは限らない（クロスセクター効果）",
+      "primary_sources": [
+        {
+          "name": "国土交通省 近畿運輸局「地域公共交通のクロスセクター効果『地域公共交通 赤字＝廃止でいいの？』」",
+          "date": "平成30年3月",
+          "url": "https://wwwtb.mlit.go.jp/hokushin/content/000104020.pdf",
+          "location": "全文。クロスセクター効果の定義（廃止した場合に追加で必要になる医療送迎・スクールバス等の代替費用と、行政の財政支出を比較する分析手法）。廃止すると行政コストがかえって増加する可能性があると明記し、医療・福祉・教育など12分野への波及を図示"
+        }
+      ],
+      "life_impact": "コミュニティバスなどが「収支が赤字」というだけで単純に廃止されると、その分は病院への送迎バスやスクールバスといった代替手段の費用として、結局は行政が別の形で負担することになる場合がある、と国の運輸局自身が分析している。「赤字だから廃止」は、行政コスト全体で見ると必ずしも正しくない。",
+      "sns_count": 0,
+      "sns_base": 354,
+      "sns_note": "廃止した場合の医療送迎・スクールバス等の代替コストに触れた投稿は0件。バスやタクシーが「減った」「無い」という現状への言及はあるが、廃止の是非を行政コスト全体で論じた投稿は見つからなかった(2026-09-12再確認: 独立確認で新たに意見と判定された1件を照合、該当なし)",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "クロスセクター|廃止.{0,15}(コスト増|かえって|行政.{0,5}増)|赤字.{0,10}廃止",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "elderly-license-revocation-alternative-transport",
+        "label": "代替交通整備",
+        "count": 0
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "editorial_review"
     },
     {
-     "name": "内閣府 令和6年交通安全白書 特集第2章第2節「高齢運転者による交通事故防止のための取組」",
-     "date": "令和6年",
-     "url": "https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html",
-     "location": "＃8080には看護師資格を有する職員を含む専門知識のある職員を配置し、相談終了後も継続的に連絡を取り、必要に応じて医師を紹介するなど、案内窓口を超えた医療的な相談支援を行っていると明記"
+      "id": "elderly-license-revocation-sc-3",
+      "topic": "運転技能検査は、記憶力の検査だけでは見逃していた人を拾うために作られた",
+      "primary_sources": [
+        {
+          "name": "警察庁「高齢運転者交通事故防止対策に関する調査研究」調査研究報告書",
+          "date": "令和2年3月",
+          "url": "https://www.npa.go.jp/koutsuu/kikaku/koureiunten/menkyoseido-bunkakai/prevention/final_report.pdf",
+          "location": "4（1）ア 運転技能検査の導入。死亡事故を起こした者のうち、直前の認知機能検査で「第3分類（認知機能低下のおそれがない）」と判定されていた者が約半数を占めていたと分析し、認知機能検査だけでは不十分だと結論づけている"
+        }
+      ],
+      "life_impact": "免許更新時の検査は、記憶力や判断力をみる「認知機能検査」だけでは、実際に死亡事故を起こした高齢運転者の約半数を「問題なし」と判定してしまっていた。この反省から、身体の運転技能そのものを実車でみる「運転技能検査」が新たに作られた。",
+      "sns_count": 0,
+      "sns_base": 354,
+      "sns_note": "運転技能検査がなぜ作られたか（記憶力検査だけでは死亡事故の約半数を見逃していたこと）に触れた投稿は0件。技能検査を「ザルだ」と批判する投稿はあるが、それが作られた経緯とは別の話(2026-09-12再確認: 独立確認で新たに意見と判定された1件を照合、該当なし)",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "認知機能検査.{0,20}(不十分|半数|防げ)|技能検査.{0,10}(導入|できた|始まった).{0,15}理由",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "elderly-license-revocation-safety",
+        "label": "義務化・事故防止",
+        "count": 0
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "editorial_review"
+    },
+    {
+      "id": "elderly-license-revocation-sc-4",
+      "topic": "運転に不安があるとき、全国共通で相談できる窓口がある（＃8080）",
+      "primary_sources": [
+        {
+          "name": "内閣府 令和7年版高齢社会白書 第2章第2節（5）「認知機能の変化に応じた交通安全対策」",
+          "date": "令和7年",
+          "url": "https://www8.cao.go.jp/kourei/whitepaper/w-2025/html/zenbun/s2_2_4.html",
+          "location": "全文。全国統一の安全運転相談ダイヤル「＃8080」を整備し、運転に不安を持つ運転者・家族からの相談に対応していると明記"
+        },
+        {
+          "name": "内閣府 令和6年交通安全白書 特集第2章第2節「高齢運転者による交通事故防止のための取組」",
+          "date": "令和6年",
+          "url": "https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html",
+          "location": "＃8080には看護師資格を有する職員を含む専門知識のある職員を配置し、相談終了後も継続的に連絡を取り、必要に応じて医師を紹介するなど、案内窓口を超えた医療的な相談支援を行っていると明記"
+        }
+      ],
+      "life_impact": "自分の運転が心配になったとき、あるいは家族の運転を心配しているとき、どこに相談すればいいか分からないまま悩む人がいる。「＃8080」（安全運転相談ダイヤル）は全国共通の窓口で、看護師資格を持つ職員も配置され、相談後も継続して連絡を取り、必要なら医師を紹介するところまで対応している。",
+      "sns_count": 0,
+      "sns_base": 354,
+      "sns_note": "「＃8080」や「安全運転相談ダイヤル」という言葉に触れた投稿は0件。「家族が心配」「本人に言えない」といった悩みの投稿はあるが、この窓口の存在にたどり着いている様子は見られなかった(2026-09-12再確認: 独立確認で新たに意見と判定された1件を照合、該当なし)",
+      "match_rule": {
+        "type": "regex",
+        "pattern": "#?8080|相談ダイヤル|安全運転相談",
+        "scope": "text",
+        "machine_hits": [],
+        "excluded": []
+      },
+      "issue_bucket": {
+        "issue_id": "elderly-license-revocation-voluntary-return",
+        "label": "自主返納支援",
+        "count": 0
+      },
+      "checked_on": "2026-09-12",
+      "checked_by": "editorial_review"
     }
-   ],
-   "life_impact": "自分の運転が心配になったとき、あるいは家族の運転を心配しているとき、どこに相談すればいいか分からないまま悩む人がいる。「＃8080」（安全運転相談ダイヤル）は全国共通の窓口で、看護師資格を持つ職員も配置され、相談後も継続して連絡を取り、必要なら医師を紹介するところまで対応している。",
-   "sns_count": 0,
-   "sns_base": 353,
-   "sns_note": "「＃8080」や「安全運転相談ダイヤル」という言葉に触れた投稿は0件。「家族が心配」「本人に言えない」といった悩みの投稿はあるが、この窓口の存在にたどり着いている様子は見られなかった",
-   "match_rule": {
-    "type": "regex",
-    "pattern": "#?8080|相談ダイヤル|安全運転相談",
-    "scope": "text",
-    "machine_hits": [],
-    "excluded": []
-   },
-   "issue_bucket": {
-    "issue_id": "elderly-license-revocation-voluntary-return",
-    "label": "自主返納支援",
-    "count": 0
-   },
-   "checked_on": "2026-09-11",
-   "checked_by": "ai_assisted"
-  }
- ]
+  ]
 }
