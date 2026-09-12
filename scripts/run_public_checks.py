@@ -50,6 +50,10 @@ CHECKS: tuple[tuple[str, list[str]], ...] = (
 
 # 非公開正典を読むテスト。除外する理由を1件ずつ書く（理由の書けない除外を増やさないため）。
 PRIVATE_DATA_TESTS: dict[str, str] = {
+    "test_bike_adapter": "自転車の非公開正典から旧反対再読と再生成を検査する",
+    "test_bike_editorial_reread": "自転車の非公開正典と全件の編集再読を照合する",
+    "test_bike_fetch_history_recovery": "自転車の非公開正典と取得履歴を突き合わせる",
+    "test_planet_reread_evidence": "自転車などの非公開正典から読了接続と独立性を検査する",
     "test_builder_rebuildability": "全テーマのビルダーを正典から再生成して比べる",
     "test_data_sheet": "DATA_SHEET.md を正典から作り直して比べる",
     "test_elderly_adapter": "高齢者免許返納の更新回（非公開）を読む",

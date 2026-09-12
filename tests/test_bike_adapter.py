@@ -135,7 +135,8 @@ class BikeRereadGateTests(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts"))
         from build_bike_process_sections import RereadGapError, check_reread_coverage
 
-        source = canonical()
+        # 旧反対再読の対応範囲。新規回は editorial-updates の別ゲートで検査する。
+        source = [row for row in canonical() if not row.get("editorial_review")]
         reread = json.loads(REREAD.read_text(encoding="utf-8"))
 
         # そのままなら通る
@@ -157,7 +158,8 @@ class BikeRereadGateTests(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts"))
         from build_bike_process_sections import RereadGapError, check_reread_coverage
 
-        source = canonical()
+        # 旧反対再読の対応範囲。新規回は editorial-updates の別ゲートで検査する。
+        source = [row for row in canonical() if not row.get("editorial_review")]
         reread = json.loads(json.dumps(json.loads(REREAD.read_text(encoding="utf-8"))))
         reread["buckets"]["abolish"][0] = "stale-assignment"
         with self.assertRaises(RereadGapError) as raised:
