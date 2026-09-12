@@ -154,6 +154,34 @@ python3 scripts/refresh_planet_section.py --topic bukatsu-chiiki --for-docs
 （`scripts/verification_data.py --input <sample_file> --output <verification_file>`）と、
 トップページの同期（`scripts/sync_portal_stats.py`）も忘れないこと。
 
+### 自転車の定期回を山なみへ接続する（2026-09-12〜）
+
+`data/bike-blue-ticket_editorial-updates/*.json` に収集回ごとの本文確認を保存し、
+`build_bike_editorial_reread.py` が既存の468件の確認成果に追加する。ファイルには
+`review_kind: editorial_body_reread`、`read_at`、`finalized_by` と投稿別の `items` が必要。
+各項目は `tweet_id`、本文の `text_sha256`、`decision`（adopt / exclude / hold）、
+`main_issue`、`stance`、既存の `bucket`、個別の `reason` とその指紋 `reason_sha256` を持つ。
+各投稿にも `body_reviewed: true`、`review_kind: editorial_body_reread`、
+`independently_checked: true`、`reviewer`、`read_at` が必要で、未確認項目は拒否する。
+強度は山の高さにも使うので、採用分の `intensity` と確認根拠も保存する。
+本文を読まずにこの記録を生成しない。原文付きの入力・Hermes出力は非公開側で保全する。
+
+候補では保留投稿を原本へ追加せず、更新回の原文と判断理由を別に保持する。
+除外投稿は理由付きで候補に残し、意見数から外す。既存の確認成果と重複するID、
+本文・論点・賛否の不一致、保留の混入、未登録区分は生成を止める。
+追加記録を再読共通台帳の `create_target` / `record_reviews` と対応させ、派生資料を
+再生成した後に出所の指紋を更新する。既存の読了日時は進めない。
+
+自転車は `build_bike_arena.py` で残存する旧配列と投票件数を同期し、
+`refresh_planet_section.py` で山なみ・冒頭・調査条件・横断整理の件数を同期する。
+取得履歴の検証サマリも `build_bike_fetch_history_recovery.py` で再照合する。
+「語られていない争点」は追加本文を確認してから母数・該当投稿・説明を更新する。
+同じ入力での再生成一致と、自転車のページ・数字出所・再読・公開JSON検査を確認する。
+
+今回の自動分類器には全件を意見扱いにする旧処理が残る。自動分類の保存回を
+本文確認済みの採用データと混同しない。新規収集と確認済み候補の件数差は、
+各回の結果報告に明示する。定期日の登録は時刻指定の自動起動を意味しない。
+
 ## 実行前ゲート
 
 **作業場所**: 収集・更新は専用の git worktree で行う（`git worktree add ../isa-wt-{テーマ} -b task/{テーマ}`）。

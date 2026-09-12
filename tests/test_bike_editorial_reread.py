@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from build_bike_editorial_reread import build
+from build_bike_editorial_reread import build, apply_review_updates, UPDATES
 from build_bike_process_sections import write_provenance_records
 
 
@@ -117,6 +117,9 @@ class BikeEditorialRereadTests(unittest.TestCase):
                      load("data/bike-blue-ticket_opposition_reread.json"),
                      load("data/bike-blue-ticket_editorial-supplement.json"),
                      load("data/bike-blue-ticket_editorial-reread-20260906.json"))
+        updates = {p.relative_to(ROOT).as_posix(): json.loads(p.read_text())
+                   for p in sorted((ROOT / UPDATES).glob("*.json"))}
+        data = apply_review_updates(data, load("social-samples/bike-blue-ticket_2d_classified.json"), updates)
         saved = load("data/bike-blue-ticket_issues-reread.json")
         saved.pop("input_sha256")
         self.assertEqual(data, saved)

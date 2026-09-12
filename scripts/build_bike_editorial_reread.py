@@ -20,6 +20,7 @@ OPPOSITION = "data/bike-blue-ticket_opposition_reread.json"
 SUPPLEMENT = "data/bike-blue-ticket_editorial-supplement.json"
 OUTPUT = "data/bike-blue-ticket_issues-reread.json"
 ADDITIONAL = "data/bike-blue-ticket_editorial-reread-20260906.json"
+UPDATES = "data/bike-blue-ticket_editorial-updates"
 
 
 def build(samples: list[dict], opposition: dict, supplement: dict, additional: dict | None = None) -> dict:
@@ -136,9 +137,82 @@ def build(samples: list[dict], opposition: dict, supplement: dict, additional: d
     return out
 
 
+def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dict]) -> dict:
+    """定期収集の確認記録を接続し、次の再生成で追加分が消えるのを防ぐ。"""
+    by_id = {str(row["tweet_id"]): row for row in samples}
+    seen = {str(item["tweet_id"]) for issue in data["population"] for item in data[issue]["items"]}
+    seen.update(str(item["tweet_id"]) for item in data.get("excluded_from_opinions", {}).get("items", []))
+    for source, update in sorted(updates.items()):
+        if (update.get("review_kind") != "editorial_body_reread" or
+                not update.get("finalized_by") or not update.get("read_at")):
+            raise ValueError("定期更新には本文確認・最終確認者・読了日時が必要です")
+        excluded = []
+        held = []
+        for item in update["items"]:
+            if (item.get("body_reviewed") is not True or
+                    item.get("review_kind") != "editorial_body_reread" or
+                    item.get("independently_checked") is not True or
+                    not item.get("reviewer") or not item.get("read_at") or
+                    not item.get("reason") or
+                    item.get("reason_sha256") != hashlib.sha256(item["reason"].encode()).hexdigest()):
+                raise ValueError("定期更新の各投稿に本文確認・独立確認・個別根拠の記録が必要です")
+            tid = str(item["tweet_id"])
+            if tid in seen:
+                raise ValueError("定期更新の本文確認IDが既存記録または更新回と重複しています")
+            seen.add(tid)
+            if item["decision"] == "hold":
+                if tid in by_id:
+                    raise ValueError("保留投稿を正式候補へ混ぜることはできません")
+                held.append(tid)
+                continue
+            row = by_id.get(tid)
+            if (row is None or item.get("text_sha256") != hashlib.sha256(row["text"].encode()).hexdigest()
+                    or item.get("main_issue") != row["classification"]["main_issue"]
+                    or item.get("stance") != row["classification"]["stance"] or not item.get("reason")):
+                raise ValueError("定期更新の本文・論点・賛否・確認根拠が候補と一致しません")
+            if item["decision"] == "exclude":
+                if is_opinion_record(row) or not row.get("opinion_exclusion_reason"):
+                    raise ValueError("除外記録と候補の意見判定・理由が一致しません")
+                excluded.append(tid)
+                continue
+            if item["decision"] != "adopt" or not is_opinion_record(row):
+                raise ValueError("定期更新の採用状態が不正です")
+            if (item.get("intensity") not in ("low", "medium", "high") or
+                    item["intensity"] != row["classification"].get("intensity")):
+                raise ValueError("定期更新の表現強度の確認が候補と一致しません")
+            group = data[item["main_issue"]]
+            bucket = item["bucket"]
+            if bucket not in group["buckets"]:
+                raise ValueError("定期更新の区分が既存の論点内区分にありません")
+            group["items"].append({"tweet_id": tid, "bucket": bucket,
+                "bucket_label": group["buckets"][bucket]["label"],
+                "review_kind": "editorial_body_reread", "body_reviewed": True,
+                "source_id": source, "text_sha256": item["text_sha256"],
+                "classification_concern": "none"})
+        data["sources"][source] = {"file": source, "read_at": update["read_at"],
+                                   "reviewer_type": "editorial_ai"}
+        data.setdefault("update_dispositions", {})[source] = {
+            "excluded_ids": excluded, "held_ids": held,
+            "note": "過去の除外承認とは別の今回の本文確認。保留は原本候補の外に保持。"}
+    for issue in data["population"]:
+        group = data[issue]
+        group["items"].sort(key=lambda item: str(item["tweet_id"]))
+        counts = Counter(item["bucket"] for item in group["items"])
+        for key, bucket in group["buckets"].items():
+            bucket["count"] = counts[key]
+        data["population"][issue] = len(group["items"])
+    return data
+
+
 def main() -> None:
     inputs = {p: (ROOT / p).read_bytes() for p in (CANONICAL, OPPOSITION, SUPPLEMENT, ADDITIONAL)}
     data = build(*(json.loads(inputs[p]) for p in (CANONICAL, OPPOSITION, SUPPLEMENT, ADDITIONAL)))
+    updates = {path.relative_to(ROOT).as_posix(): path.read_bytes()
+               for path in sorted((ROOT / UPDATES).glob("*.json"))}
+    if updates:
+        data = apply_review_updates(data, json.loads(inputs[CANONICAL]),
+                                    {path: json.loads(raw) for path, raw in updates.items()})
+        inputs.update(updates)
     data["input_sha256"] = {p: hashlib.sha256(raw).hexdigest() for p, raw in inputs.items()}
     (ROOT / OUTPUT).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"本文再読の根拠 {sum(data['population'].values())} 件を接続しました")
