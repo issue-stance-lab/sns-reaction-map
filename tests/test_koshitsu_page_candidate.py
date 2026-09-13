@@ -20,6 +20,17 @@ class KoshitsuCandidateTests(unittest.TestCase):
         cls.original=(ROOT/'docs/koshitsu-tenpakai-reaction-map.html').read_text()
         cls.preview=(ROOT/'quality/prototypes/koshitsu-tenpakai-page-preview.html').read_text()
 
+    def test_background_sources_and_chart_hit_area(self):
+        from bs4 import BeautifulSoup
+        page=BeautifulSoup(self.preview,'html.parser')
+        sections=page.select('#bukatsu-background .bg-detail')
+        self.assertEqual(len(sections),5)
+        self.assertTrue(all(s.select('.bg-source a') for s in sections))
+        self.assertNotIn('svg rect:first-of-type{',self.preview)
+        self.assertIn('svg > rect:first-of-type{',self.preview)
+        self.assertIn('.hill-hit{fill:transparent}',self.preview)
+        self.assertNotIn('婚姻歴がなく',self.preview)
+
     def test_issue_media_and_destinations(self):
         from bs4 import BeautifulSoup
         page=BeautifulSoup(self.preview, 'html.parser')

@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 from build_planet_page_preview import cut_block
 from refresh_adapters.koshitsu import vote_fingerprint
 from koshitsu_issue_media import restore_issue_media
+from koshitsu_background_detail import expand_background
 
 
 def prepare_template(source: str, public: dict) -> str:
@@ -76,7 +77,7 @@ def main():
     # Require the real gate before invoking the common preview assembler.
     subprocess.run([sys.executable,'-c',"import sys;sys.path.insert(0,sys.argv[1]);import build_planet_data as b,yaml;d=b.build('koshitsu-tenpakai');f=b.independence_gate(d,yaml.safe_load((b.ROOT/'configs/planet/koshitsu-tenpakai.yaml').read_text()));assert not f,f;print('独自性検査: OK')",str(stage/'scripts')],check=True)
     subprocess.run([sys.executable,str(stage/'scripts/build_planet_page_preview.py'),'--topic',TOPIC,'--page',str(template),'--out',str(out)],check=True)
-    text=restore_issue_media(out.read_text(), public)
+    text=expand_background(restore_issue_media(out.read_text(), public))
     # The common static fallback still displays the older smoothed height.
     # Match its visible percentage to the raw ratio used by the interactive graph.
     for issue in public['issues']:
