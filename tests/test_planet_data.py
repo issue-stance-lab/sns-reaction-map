@@ -203,15 +203,15 @@ class PlanetDataTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             bpd.latest_read_date("日付なし")
 
-    def test_skipped_posts_fail_the_gate_even_within_40_percent(self):
-        """読み飛ばしが1件でもあれば、4割以内でも不合格になる。"""
+    def test_skipped_posts_pass_the_gate_within_40_percent(self):
+        """読み飛ばしも、読了後の増分と合算して4割以内なら合格する（2026-09-13、オーナー判断で統合）。"""
         data = self.build()
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         issue = next(i for i in data["issues"] if i["sub"]["status"] == "reread")
         issue["sub"]["skipped_count"] = 1
         issue["sub"]["grown_count"] = 0
         ng = bpd.independence_gate(data, cfg)
-        self.assertTrue(any("読み飛ばしが1件" in m and issue["label"] in m for m in ng), ng)
+        self.assertFalse(any(issue["label"] in m for m in ng), ng)
 
     def test_grown_after_read_passes_up_to_40_percent(self):
         """読了後に増えた分だけなら、4割まで合格する。"""
@@ -231,7 +231,18 @@ class PlanetDataTest(unittest.TestCase):
         issue["sub"]["skipped_count"] = 0
         issue["sub"]["grown_count"] = int(0.4 * issue["count"]) + 1
         ng = bpd.independence_gate(data, cfg)
-        self.assertTrue(any("増えた分" in m and issue["label"] in m for m in ng), ng)
+        self.assertTrue(any("未読合計" in m and issue["label"] in m for m in ng), ng)
+
+    def test_skipped_plus_grown_over_40_percent_fails(self):
+        """読み飛ばし＋増分の合計が4割を超えれば、内訳に関わらず不合格になる。"""
+        data = self.build()
+        cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
+        issue = next(i for i in data["issues"] if i["sub"]["status"] == "reread")
+        half = int(0.2 * issue["count"]) + 1
+        issue["sub"]["skipped_count"] = half
+        issue["sub"]["grown_count"] = half
+        ng = bpd.independence_gate(data, cfg)
+        self.assertTrue(any("未読合計" in m and issue["label"] in m for m in ng), ng)
 
     def test_bukatsu_existing_rereads_are_connected_without_skips(self):
         """既存教員54件・制度教育471件を継承し、実読967件を接続する（2026-09-12、独立確認で#12が制度・移行プロセスへ1件増）。"""

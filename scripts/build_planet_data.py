@@ -657,7 +657,7 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
     if share < 50:
         ng.append(f"編集部が読み直した論点が意見の{share:.0f}%しかない（50%以上必要）")
 
-    # 3. 読み直し済みの論点は、読み飛ばしが無く、読了後に増えた分だけが4割まで
+    # 3. 読み直し済みの論点は、読み飛ばし＋読了後に増えた分の合計が4割まで
     #    （課題62: 「6割読め」のつもりが「6割読めば終わってよい」になっていた）
     for i in data["issues"]:
         s = i["sub"]
@@ -669,11 +669,14 @@ def independence_gate(data: dict, cfg: dict) -> list[str]:
         if s.get("unknown_timing_count", 0):
             ng.append(f"「{i['label']}」の未読{s['unknown_timing_count']}件は取得日時または再読境界が不明"
                       "（読み飛ばしと読了後増分を区別できないため要確認）")
-        if s["skipped_count"] > 0:
-            ng.append(f"「{i['label']}」に読み飛ばしが{s['skipped_count']}件あります"
-                      "（読み直した時点で既にあったのに読まれなかった投稿。読了後に増えた分とは別）")
-        elif s["grown_count"] > 0.4 * i["count"]:
-            ng.append(f"「{i['label']}」の読了後に増えた分が{s['grown_count']}件"
+        # 2026-09-13、オーナー判断で「読み飛ばし0件」の別枠扱いを廃止し、収集中テーマの
+        # 「読了後に増えた分」と同じ4割の枠へ統合した（読み飛ばし・増分とも、結局は
+        # 「その時点で読めていない」という同じ状態で、既に収集中テーマは4割まで許容していた）。
+        # 課題62の教訓（「6割読め」→「6割で終わってよい」の骨抜き）は、合計の上限4割は
+        # 変えないことで維持する。詳細は tasks/task-54.md 2026-09-13 の記録。
+        unread_total = s["skipped_count"] + s["grown_count"]
+        if unread_total > 0.4 * i["count"]:
+            ng.append(f"「{i['label']}」の未読合計が{unread_total}件"
                       f"（全{i['count']}件の4割超）")
 
     # 4. 海面下の母数が現在の意見数と一致していること（指摘2）
