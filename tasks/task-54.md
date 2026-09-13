@@ -396,3 +396,23 @@ Stage 0全体は未完了。作業枝 `task/nickname-stage0`、main未統合。
 per-投稿の読了記録なし）ため、上記件数はほぼそのまま新規に読む必要がある。合計約2,194件。
 指示文（副首都の`quality/designs/2026-09-13-fukushuto-reread-5issues-brief.md`と同形式）は
 着手する回に作成する。
+
+## 2026-09-14：生成AIの編集再読・完了確認
+
+[指示文](../quality/designs/2026-09-13-ai-copyright-reread-brief.md)どおり、別AIが
+学習データ・無断利用(657)／クリエイター保護・権利(303)／その他(223)／AI生成物の権利・
+創作性(165)／技術競争・推進(117)の5論点・意見1,465件（56.5%）を全件読了。上記表の
+「1,300件・782件」試算は使わず、指示文で置き換えた56.5%・全件読了を実施した。
+
+`configs/planet/ai-copyright.yaml`（初回作成）と`data/ai-copyright_issues-reread.json`を検証:
+ランダム抽出40件で本文ハッシュ・main_issue・stanceの不整合0件、バケット割当も本文と照らして
+妥当（機械的な要約流用ではなく実際の論拠で分かれている）、重複ID・自動分類混入フラグ0件。
+`build_planet_data.independence_gate()`を実際に実行し、残るNGは指示文で対象外とした
+「一次資料との突き合わせが無い」1件のみ（想定どおり）。50%条件・論点ごとの4割条件はいずれも
+クリア。作業中に`scripts/build_planet_data.py`（共通コード）へ無関係な差分（static_fallbackの
+書き方変更、出力は同一と確認済み）が混入していたため、検証時に元へ戻した。
+
+**残作業**: 一次資料との突き合わせ（`quality/research/ai-copyright-primary-sources.md`から
+`data/ai-copyright_claim_posts.json`を作る、指示文の対象外1）、`editorial-adoption-current.json`の
+149件の分類確認（対象外2、`quality/designs/body-review/`の別工程）、山なみページの実際の生成・
+標準検査・本番反映（対象外3）はいずれも未着手。

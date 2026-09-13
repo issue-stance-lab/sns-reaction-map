@@ -1,0 +1,99 @@
+reread_registry: false
+theme_id: ai-copyright
+title: 生成AIと著作権
+question: 生成AIによる著作物の利用・学習をどこまで認めるべきか
+source_label: Yahoo!リアルタイム検索
+show_unreviewed_note: true
+
+stances:
+  - key: 規制・制限強化支持
+    id: ai-copyright-regulation-support
+    label: 規制・制限強化支持
+    color: "#ff5426"
+    pattern: plain
+  - key: 中立・情報
+    id: ai-copyright-neutral
+    label: 中立・情報
+    color: "#64748b"
+    pattern: dots
+  - key: 推進・活用支持
+    id: ai-copyright-promotion-support
+    label: 推進・活用支持
+    color: "#075ef2"
+    pattern: diagonal
+
+issues:
+  - key: 学習データ・無断利用
+    id: ai-copyright-learning-data
+    icon: "📚"
+  - key: 法制度・規制整備
+    id: ai-copyright-legal-framework
+    icon: "⚖️"
+  - key: 利用者モラル・倫理
+    id: ai-copyright-user-ethics
+    icon: "💬"
+  - key: クリエイター保護・権利
+    id: ai-copyright-creator-rights
+    icon: "🎨"
+  - key: 技術競争・推進
+    id: ai-copyright-tech-promotion
+    icon: "🚀"
+  - key: AI生成物の権利・創作性
+    id: ai-copyright-generated-work-rights
+    icon: "✨"
+  - key: その他
+    id: ai-copyright-other
+    icon: "🤔"
+
+vote_issue_order:
+  - 学習データ・無断利用
+  - 法制度・規制整備
+  - 利用者モラル・倫理
+  - クリエイター保護・権利
+  - 技術競争・推進
+  - AI生成物の権利・創作性
+  - その他
+
+sub_issues:
+  学習データ・無断利用:
+    file: data/ai-copyright_issues-reread.json
+    path: [learning_data, buckets]
+    items_path: [learning_data, items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  クリエイター保護・権利:
+    file: data/ai-copyright_issues-reread.json
+    path: [creator_rights, buckets]
+    items_path: [creator_rights, items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  その他:
+    file: data/ai-copyright_issues-reread.json
+    path: [other, buckets]
+    items_path: [other, items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  AI生成物の権利・創作性:
+    file: data/ai-copyright_issues-reread.json
+    path: [generated_work_rights, buckets]
+    items_path: [generated_work_rights, items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  技術競争・推進:
+    file: data/ai-copyright_issues-reread.json
+    path: [tech_promotion, buckets]
+    items_path: [tech_promotion, items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
