@@ -399,7 +399,7 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
     failures = bpd.independence_gate(data, cfg)
     if failures:
         raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
-    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data)))).replace(".chart-box svg rect:first-of-type", ".chart-box svg > rect:first-of-type")
     page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                         block, "山なみ全体", flags=re.S)
     page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>',

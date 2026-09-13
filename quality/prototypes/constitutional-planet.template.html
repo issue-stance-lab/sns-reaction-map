@@ -53,7 +53,7 @@ h1{font-size:22px;margin:0 0 4px}
 .islands{list-style:none;padding:0;margin:8px 0 0}
 .islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
 .islands li:first-child{border-top:none}
-.islands .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.islands .n{white-space:nowrap;flex-shrink:0;margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
 .islands .sw{width:12px;height:12px;border-radius:3px;flex:none}
 .islands .num{width:19px;height:19px;border-radius:99px;flex:none;background:#0d1117;
   border:1px solid var(--line);font-size:11px;display:flex;align-items:center;justify-content:center;
@@ -620,6 +620,7 @@ function drawPanel(){
   }
   // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  if (D.theme_id === "constitutional-amendment" && it.label !== "その他") h += '<p><a href="#figure-'+it.id+'">この論点の図解とX投稿を見る →</a></p>';
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
   h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
@@ -776,6 +777,15 @@ function buildGuesses(){
        +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
        +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
   });
+  if (D.theme_id === "constitutional-amendment") {
+    q.splice(0, q.length,
+      {key:"g1", title:"① 憲法を変えるとき、国民も投票しますか？",
+       opts:["国民も投票する","国会議員だけで決める","首相だけで決める"], right:0,
+       ans:"<b>国民も投票します。</b>国会が提案した憲法の改正案に、国民投票で賛成か反対かを示します。国会や首相だけでは決められません。"},
+      {key:"g2", title:"② 憲法9条をめぐって、話し合われているのは？",
+       opts:["消費税を何％にするか","自衛隊を憲法に書くか","国会議員の給料をいくらにするか"], right:1,
+       ans:"<b>自衛隊を憲法に書くか、という議論です。</b>「自衛隊の位置づけをはっきりさせたい」という意見と、「戦争を防ぐ歯止めが弱まらないか」という懸念があります。何を書き加えるかが、判断のポイントです。"});
+  }
   box.innerHTML = q.map(x =>
     '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
     + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
@@ -883,6 +893,14 @@ try {
   window.addEventListener("resize", ()=>{
     cancelAnimationFrame(resizeFrame);
     resizeFrame=requestAnimationFrame(render);
+  });
+  if (D.theme_id === "constitutional-amendment") document.addEventListener("click", e=>{
+    const a=e.target.closest("a.featured-issue-link");
+    if (!a) return;
+    const k=idIndex[a.hash.slice(1)];
+    if (k===undefined) return;
+    e.preventDefault(); land(k);
+    bringIntoView(document.querySelector("#panel h2"));
   });
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h]);

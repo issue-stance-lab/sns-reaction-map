@@ -1069,7 +1069,7 @@ def main() -> None:
     out.write_text(json.dumps(data, ensure_ascii=False, indent=1))
 
     # 試作HTMLへデータを埋め込む（file:// のままダブルクリックで開けるようにする）
-    tpl = ROOT / "quality/prototypes/planet-prototype.template.html"
+    tpl = ROOT / "quality/prototypes" / ("constitutional-planet.template.html" if a.topic == "constitutional-amendment" else "planet-prototype.template.html")
     if tpl.exists():
         payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
         html_out = out.parent.parent / f"{a.topic}-planet.html"
