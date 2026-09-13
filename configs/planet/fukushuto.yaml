@@ -49,7 +49,32 @@ vote_issue_order:
 - 費用・財源
 - 優先順位
 - その他
-sub_issues: {}
+sub_issues:
+  候補地:
+    file: data/fukushuto_5issues-reread.json
+    path: [candidate_site, buckets]
+    coverage: full
+    coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+  防災・災害:
+    file: data/fukushuto_5issues-reread.json
+    path: [disaster_prep, buckets]
+    coverage: full
+    coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+  優先順位:
+    file: data/fukushuto_5issues-reread.json
+    path: [priority, buckets]
+    coverage: full
+    coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+  その他:
+    file: data/fukushuto_5issues-reread.json
+    path: [other, buckets]
+    coverage: full
+    coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+  費用・財源:
+    file: data/fukushuto_5issues-reread.json
+    path: [cost_funding, buckets]
+    coverage: full
+    coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
 geometry:
   min_area_pct: 2.5
   elevation_k: 50
