@@ -213,7 +213,12 @@ LIGHT_SKIN = """
 /* 図もサイトの色にする（オーナー指示 2026-09-05「マップの背景がまだ黒」）。
    SVGの色は描画時に属性で付いているが、CSSのほうが強いので上から塗り替えられる。 */
 #planet-block .chart-box{background:#F2F6FD;border-color:#DCE3EF}
-#planet-block .chart-box svg rect:first-of-type{fill:#DCE9F7}
+/* svg直下の1個目のrect（海面帯の背景）だけを狙うつもりが、:first-of-typeは
+   親要素ごとに数えるため、山1つずつの中にある透明なクリック判定用rect
+   （.hill-hit、1個の<g class="hill">につき1個で「その中の1個目」に該当）
+   にも掛かってしまい、本来透明であるべき四角が山の数だけ薄い水色に見えていた
+   （2026-09-13、副首都で発覚）。直下の子要素だけに絞る「>」を入れて防ぐ。 */
+#planet-block .chart-box svg>rect:first-of-type{fill:#DCE9F7}
 #planet-block .chart-box svg #seacover{fill:#F2F6FD;opacity:.96}
 #planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E3E9F3}
 #planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1"]{stroke:#B9CCE6}
