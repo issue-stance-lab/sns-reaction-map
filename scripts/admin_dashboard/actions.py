@@ -22,6 +22,10 @@ from pathlib import Path
 
 from .collect import ROOT, backup_root
 
+import sys as _sys
+_sys.path.insert(0, str(ROOT / "scripts"))
+from verify_reread_headroom import headroom_findings  # noqa: E402
+
 # 収集した非公開データの保管先。DATA_REFRESH.md と同じ場所を指す
 BACKUP_DEST = "/Volumes/HD-LE-B/issue-stance-private-backups"
 
@@ -605,6 +609,15 @@ def anomalies(data: dict) -> list[dict]:
                 "detail": "使い終わったものは git worktree remove で片付けてください。放置すると、どれが最新か分からなくなります",
             }
         )
+
+    # 編集再読の「読了後に増えた分」が上限（4割）に近づいているテーマ・論点。
+    # 定期収集のたびに増え続けるので、超えてから気づくと「読み直しが要らないはず」
+    # という誤った判断につながる（2026-09-13、副首都の展開作業で実際に発生）。
+    try:
+        found.extend(headroom_findings())
+    except Exception as exc:  # 早期警告の機能自体で管理画面全体を止めない
+        found.append({"tone": "warn", "title": "編集再読の残量チェックが実行できませんでした",
+                     "detail": str(exc)})
 
     order = {"danger": 0, "warn": 1, "ok": 2}
     found.sort(key=lambda item: order.get(item["tone"], 3))
