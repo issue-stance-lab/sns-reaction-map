@@ -45,6 +45,10 @@ class IssueCountSyncTest(unittest.TestCase):
     def test_fukushuto_map_heading_matches_public_json(self) -> None:
         public = json.loads((ROOT / "data/public/themes/fukushuto.json").read_text(encoding="utf-8"))
         page = (ROOT / "docs/fukushuto-reaction-map.html").read_text(encoding="utf-8")
+        if "<!-- PLANET_SECTION_START -->" in page:
+            from scripts.verify_theme_page import _arena_points
+            self.assertEqual(_arena_points(ROOT, page, "fukushuto"), public["opinion_count"])
+            return
         match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
         self.assertIsNotNone(match)
         self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
