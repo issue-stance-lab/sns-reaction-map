@@ -1,0 +1,83 @@
+{
+  "scope": "Implementation audit, commit 24a82b8 against 4f12b10",
+  "root": "/Volumes/M2-WorkSpace/Projects/副業/isa-wt-henoko-page",
+  "read_only": true,
+  "browser": {
+    "engine": "Playwright Chromium with installed Google Chrome, headless",
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "url": "http://localhost:8764/quality/prototypes/henoko-student-accident-page-preview.html",
+    "network_policy": "Only localhost:8764 GET allowed, all other requests aborted",
+    "steps": [
+      "Click .vote-issue-btn nth(1)",
+      "Click .vote-stance-btn nth(0)",
+      "Wait 1200ms",
+      "Read geometry, localStorage and marker function"
+    ],
+    "observed": {
+      "scrollWidth": 375,
+      "marker_type": "undefined",
+      "scrollY": 4137,
+      "anchor_top": 147.421875,
+      "result_top": 6560.078125,
+      "result": "論点：安全管理・事故原因　評価：文科省判断を評価",
+      "saved_vote": null,
+      "post_attempts": [],
+      "page_errors": []
+    },
+    "quiz": {
+      "steps": "For all 6 questions click first answer then next",
+      "result": "4 / 6 問正解; 資料どおり4件 / 少しずれる2件"
+    }
+  },
+  "regeneration": {
+    "method": "load_records(None), deepcopy records, write temporary JSON, load_records(path), build_page(original_html, records, opinions)",
+    "add": {
+      "change": "Copy first opinion and change tweet_id to audit-only-new-id, append",
+      "records": 481,
+      "opinions": 370,
+      "returned_normally": true,
+      "planet_section_identical": true,
+      "whole_html_identical": false
+    },
+    "same_count_text": {
+      "change": "Change first opinion text to 監査用の本文差し替え。元の意見と異なる文章です。",
+      "records": 480,
+      "opinions": 369,
+      "returned_normally": true,
+      "planet_section_identical": true,
+      "whole_html_identical": true
+    },
+    "limitation": "Did not test downstream full publication pipeline"
+  },
+  "other_checks": {
+    "unittest_runs": [
+      {
+        "count": 31,
+        "result": "OK",
+        "modules": [
+          "tests.test_henoko_planet",
+          "tests.test_claim_verdicts",
+          "tests.test_claim_verification_contract",
+          "tests.test_henoko_public_counts",
+          "tests.test_issue_count_sync"
+        ]
+      },
+      {
+        "count": 76,
+        "result": "OK",
+        "modules": [
+          "tests.test_planet_data",
+          "tests.test_planet_page_preview",
+          "tests.test_bike_planet_refresh"
+        ]
+      }
+    ],
+    "normal_refresh_identical": true,
+    "independence_gate_failures": [],
+    "vote_fingerprint_equal_to_base": true,
+    "GA_OGP_AdSense_vote_script_references_equal_to_base": true
+  }
+}

@@ -214,7 +214,7 @@
     ]
   },
   "issue_counts": {
-  "basis": "public_json",
+    "basis": "public_json",
     "cards": [
       {
         "slug": "chuuritsu",
@@ -292,10 +292,6 @@
           "tide-card"
         ],
         "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
-      },
-      {
-        "path": "social-samples/henoko_student_accident_2d_classified.json",
-        "reason": "旧2Dスタンスマップ（文科省判断への評価 × 議論の焦点）の出所。散布図の点と象限集計はこの356件から作られている"
       }
     ],
     "regions": {
@@ -305,7 +301,9 @@
         "issue-desc",
         "heat-table",
         "explainer-card-desc",
-        "sm-stat-cards"
+        "sm-stat-cards",
+        "sides",
+        "legend"
       ],
       "wave": [
         "tide-card"
@@ -317,13 +315,19 @@
     },
     "allow": [
       {
-        "value": 78,
-        "reason": "旧2D正典で stance_focus<0（安全・追悼重視／下方向）= 78件"
+        "value": 0,
+        "reason": "山なみの実行時表示に使うゼロ件。該当意見がない立場、資料の論点、順位を持たない論点の初期値・説明。"
       }
     ],
     "exclude_selectors": [
       "review-note",
-      "article-trust-observations"
+      "article-trust-observations",
+      "islands",
+      "findings",
+      "sunk",
+      "srclist",
+      "claims",
+      "#planet-data"
     ]
   }
 }

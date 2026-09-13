@@ -33,7 +33,7 @@
     "@id": "https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html"
   },
   "datePublished": "2026-06-24",
-  "dateModified": "2026-08-24",
+  "dateModified": "2026-09-13",
   "author": {
     "@type": "Organization",
     "name": "SNS反応まっぷ編集部",
@@ -187,49 +187,1091 @@
 </style>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/henoko-student-accident/henoko-hero.webp')">
-<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・事故・基地問題</span><h1>辺野古高校生死亡事故をめぐる論点―安全管理・教育・報道</h1><p class="question-line">事故の検証と教育の評価、どの論点を重く見る？</p><p class="lead">Yahooリアルタイム検索で取得した公開投稿480件のうち、意見と判定した373件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>107</b>件</span><strong>まず事故原因を検証し、再発を防げるか</strong><span class="conclusion-detail">教育への評価とは切り分け、事故検証と再発防止を求める声が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
+<div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
+(function(){
+  /* 進み具合の帯を、貼り付いたヘッダーのすぐ下で止める。
+     ヘッダーの高さは画面幅で変わる（スマホ63px・パソコン73px）ため実測する。
+     高さを決め打ちにすると、共通ヘッダーが変わった日に静かに隠れる。 */
+  function fit(){
+    var h = document.querySelector("header.modern-site-header") || document.querySelector("header");
+    var px = 0;
+    if (h){
+      var cs = getComputedStyle(h);
+      /* 上に貼り付いているヘッダーだけ避ける。ふつうに流れるヘッダーなら避ける必要がない */
+      if ((cs.position === "sticky" || cs.position === "fixed") && parseFloat(cs.top || "0") === 0){
+        px = Math.round(h.getBoundingClientRect().height);
+      }
+    }
+    document.documentElement.style.setProperty("--isa-header-h", px + "px");
+  }
+  fit();
+  addEventListener("load", fit);
+  addEventListener("resize", fit);
+})();
+</script>
+<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・事故・基地問題</span><h1>辺野古高校生死亡事故をめぐる論点―安全管理・教育・報道</h1><p class="question-line">事故の検証と教育の評価、どの論点を重く見る？</p><p class="lead">Yahooリアルタイム検索で取得した公開投稿480件のうち、意見と判定した369件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
 
 
 
-<!-- RESEARCH_CONDITIONS_START -->
-<aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
-  <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 480件のうち、意見と判定した373件<br>
-  （取得期間: 2026-06-14〜2026-08-24／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>
-  <strong>社会全体の世論調査ではありません。</strong></p>
-</aside>
-<!-- RESEARCH_CONDITIONS_END -->
-<aside id="correction-20260906" aria-label="訂正履歴" style="max-width:1000px;margin:12px auto;padding:12px 20px;font-size:13px;line-height:1.8;">
-<p><strong>2026年9月6日 訂正</strong> — 7月26日の保存分を照合し、未反映だった投稿を追加して集計と代表例を更新しました。分類の修正を含むため、この差を時期による意見の変化としては扱っていません。</p>
-</aside>
+<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->
+<style>
+#bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+#bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+#bukatsu-background h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+#bukatsu-background p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+#bukatsu-background ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+#bukatsu-background ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+#bukatsu-background ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+#bukatsu-background ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+#bukatsu-background ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+#bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+#bukatsu-background ol.bg-tl .src a{color:var(--muted)}
+#bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+/* 確かめること。3列の表は375pxで潰れるので、1件1枚のカードにする */
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+</style>
+<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">
+<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
+<p class="bg-def">研修旅行中の生徒が亡くなった辺野古沖の船舶事故。学校の安全管理と、平和学習の内容をどう検証するかが問われています。</p>
+<p class="bg-now">事故を防ぐ責任と、教育に国がどこまで関わるか。同じ出来事を語っていても、投稿が答えようとしている問いは違います。</p>
+<h3>何が争点になっているのか</h3>
+<p>文科省は学校の安全管理と教育活動を調べて指導しました。これに対し、教育の自由が狭まると懸念する見解も示され、事故検証の範囲が争点になりました。</p>
+<p>このページでは、公表された行政の判断と、その判断に対する意見を分けます。個人の故意や刑事責任、遺族の意向を投稿から推測して決めることはしません。</p>
+<h3>これまでの経緯</h3>
+<ol class="bg-tl">
+<li><div class="when">2026年3月16日<em>研修旅行中に事故</em></div><div><p class="what">同志社国際高校の研修旅行中、辺野古沖で船舶事故が発生。文科省は京都府を通じて確認し、後に合同の現地調査を行いました。</p><span class="src">出典: <a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1302902_00005.htm" target="_blank" rel="noopener">文部科学省：事案と調査の経緯</a></span></div></li>
+<li><div class="when">2026年4月7日<em>学校へ通知</em></div><div><p class="what">文科省が校外活動の安全確保と教育活動の留意点を周知。学校が活動の内容を点検し、必要に応じて見直すことを求めました。</p><span class="src">出典: <a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener">文部科学省：校外活動の通知</a></span></div></li>
+<li><div class="when">2026年5月22日<em>行政の判断を公表</em></div><div><p class="what">文科省が学校の改善指導を公表。同日、国交省は不屈の船長の無登録運送について違反と判断し、告発すると発表しました。</p><span class="src">出典: <a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1302902_00005.htm" target="_blank" rel="noopener">文部科学省：改善指導の公表</a>／<a href="https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html" target="_blank" rel="noopener">国土交通省：事業登録に関する判断</a></span></div></li>
+<li><div class="when">2026年5月29日<em>教育への介入を疑問視</em></div><div><p class="what">玉城知事は定例会見で、事故への厳正な対応と平和教育を分ける考えを示し、事故を契機に国が教育内容を点検することに異議を唱えました。</p><span class="src">出典: <a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/477/260529_kaiken.pdf" target="_blank" rel="noopener">沖縄県：定例記者会見録（7頁）</a></span></div></li>
+<li><div class="when">2026年6月30日<em>船の利用前の確認を周知</em></div><div><p class="what">文科省が事業者の登録や保険加入を確認する手段を学校へ再周知しました。</p><span class="src">出典: <a href="https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm" target="_blank" rel="noopener">文部科学省：船舶運送利用時の安全確保</a></span></div></li>
+<li><div class="when">2026年7月14日<em>文科省が判断の範囲を説明</em></div><div><p class="what">参議院総務委員会で文科省は、辺野古への移設工事を学習で扱うこと自体を問題にしたのではなく、抗議船の利用などを総合して判断したと説明しました。</p><span class="src">出典: <a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/115" target="_blank" rel="noopener">国会会議録：文科省の答弁</a></span></div></li>
+<li><div class="when">2026年7月14日<em>学校の取組調査について答弁</em></div><div><p class="what">文科相は、4月通知を受けた安全確保や教育活動の取組状況を調べていると答弁。回答期限を7月末とし、取りまとめ後に結果を公表する予定を示しました。これは当日の予定説明であり、調査結果の公表ではありません。</p><span class="src">出典: <a href="https://kokkai.ndl.go.jp/txt/122115104X01220260714/51" target="_blank" rel="noopener">国会会議録：文科相の答弁</a></span></div></li>
+<li><div class="when">2026年7月14日<em>NHKが報道の内容を説明</em></div><div><p class="what">参議院総務委員会で報道表現が問われ、NHK副会長は、文科省の見解と会見を基に報じ、教育の自由への懸念や見学先を変更する動きも伝えていると説明しました。</p><span class="src">出典: <a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/119" target="_blank" rel="noopener">国会会議録：NHK副会長の答弁</a></span></div></li>
+<li><div class="when">2026年8月19日<em>県議会の調査日程</em></div><div><p class="what">沖縄県議会の調査特別委員会の審査日程には、「視察・調査」と「委員会の進め方」が記載されています。この日程資料から審査の結論までは分かりません。</p><span class="src">出典: <a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/367/r80819henokonittei.pdf" target="_blank" rel="noopener">沖縄県議会：調査特別委員会の審査日程</a></span></div></li>
+</ol>
+<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
+</section>
+<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">
+<div class="panel-title"><h2 id="ck-title">学校の説明で、何を確かめるか</h2><span>事故と教育を、具体的な確認へ</span></div>
+<p>責任を問う言葉だけでは、次の活動の安全は分かりません。学校行事の説明にも使える確認事項です。</p>
+<div class="ck"><div class="k"><b>運送の手配</b><span>事業登録と保険を、誰がどう確かめたか</span></div><div class="v">事業者への質問に加え、地方運輸局や安全情報の検索サイトを使えます。親しい相手というだけでは確認になりません。<span class="src">出典: <a href="https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm" target="_blank" rel="noopener">文部科学省：登録・保険の確認方法</a></span></div></div>
+<div class="ck"><div class="k"><b>中止できる準備</b><span>天候が悪いとき、別の活動へ変更できるか</span></div><div class="v">4月通知は、悪天候を想定した代案を先に決めることを挙げています。中止の判断と、その後の行き先を一緒に確かめます。<span class="src">出典: <a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener">文部科学省：4月7日通知（3頁）</a></span></div></div>
+<div class="ck"><div class="k"><b>生徒と保護者への説明</b><span>活動の目的と具体的な行程が伝わっているか</span></div><div class="v">旅行のねらいだけでなく、内容と行程を事前に説明するよう求められています。<span class="src">出典: <a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener">文部科学省：4月7日通知（4頁）</a></span></div></div>
+<div class="ck"><div class="k"><b>教育の内容</b><span>異なる見解を知り、自分で考える機会があるか</span></div><div class="v">通知の別添は、結論を押しつけず、異なる意見を理解して自分の考えも検討する過程を重視しています。<span class="src">出典: <a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener">文部科学省：4月7日通知の別添（7〜8頁）</a></span></div></div>
+<p class="ck-note"><b>このページで未確認のこと</b><br>ここで照合した資料だけでは、個人ごとの刑事責任や事故原因の最終結論、全国の平和学習への影響の大きさまでは判断できません。<br>行政の確認事項、学校の説明、知事の見解は、それぞれ発言主体を分けて記載しています。年表は照合に使った資料の経緯で、すべての続報の一覧ではありません。</p>
+</section><!-- PLANET_SECTION_START -->
+<section class="panel planet-panel" aria-labelledby="planet-heading">
+<style>#planet-block{
+  --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff;
+  /* 追いかけていない分のマス。大陸の色はどれも白っぽいので、これより明るくすると
+     7色すべてで見分けの基準を下回る（実測で下回った）。明暗差1.7倍を保つこと。 */
+  --rest-dot:#4a525c;
+}#planet-block,#planet-block *{box-sizing:border-box}#planet-block{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}#planet-block .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}#planet-block h1{font-size:22px;margin:0 0 4px}#planet-block .q{color:var(--muted);font-size:14px;margin:0 0 12px}#planet-block .caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
+  border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}#planet-block .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#planet-block .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}#planet-block .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  font-weight:700;overflow:hidden;white-space:nowrap}#planet-block .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}#planet-block .panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .panel .cross b{color:#f2f6fa}#planet-block .panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
+  background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;cursor:pointer}#planet-block .panel .cross .spin:hover{border-color:var(--accent)}#planet-block .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}#planet-block .islands{list-style:none;padding:0;margin:8px 0 0}#planet-block .islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}#planet-block .islands li:first-child{border-top:none}#planet-block .islands .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}#planet-block .islands .sw{width:12px;height:12px;border-radius:3px;flex:none}#planet-block .islands .num{width:19px;height:19px;border-radius:99px;flex:none;background:#0d1117;
+  border:1px solid var(--line);font-size:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-weight:700}#planet-block .islands li.unread{color:var(--muted)}#planet-block .note{font-size:12px;color:var(--muted);background:#1c2128;border:1px dashed var(--line);
+  border-radius:6px;padding:9px 10px;margin-top:10px}#planet-block .back{margin-top:12px;background:transparent;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .issue-list{list-style:none;padding:0;margin:18px 0 0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}#planet-block .issue-list button{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;color:var(--fg);cursor:pointer;font-family:inherit;font-size:13px}#planet-block .issue-list button:hover,#planet-block .issue-list button:focus-visible{border-color:var(--accent);outline:none}#planet-block .issue-list .m{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}#planet-block .dot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:6px}#planet-block h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
+  border-top:1px solid var(--line);padding-top:14px}#planet-block .meta{font-size:11.5px;color:var(--muted)}#planet-block .meta code{background:#1c2128;padding:1px 5px;border-radius:4px}#planet-block .planet{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:0 0 20px}#planet-block .continent{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  aspect-ratio:1;border-radius:50%;border:2px solid transparent;text-align:center;
+  padding:12px;text-decoration:none;line-height:1.4}#planet-block .continent:hover,#planet-block .continent:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .continent .label{font-size:13px;font-weight:700}#planet-block .continent .count{font-size:11px;opacity:.78;font-variant-numeric:tabular-nums}#planet-block .landing-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:0 0 12px}#planet-block .landing-panel h2{font-size:16px;margin:0 0 2px}#planet-block .landing-panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .srclist{list-style:none;padding:0;margin:8px 0 0;font-size:12px}#planet-block .srclist li{padding:5px 0;border-top:1px solid var(--line)}#planet-block .srclist li:first-child{border-top:none}#planet-block .srclist a{color:var(--accent)}#planet-block .backlink{display:inline-block;margin-top:12px;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}#planet-block .backlink:hover,#planet-block .backlink:focus-visible{border-color:var(--accent);outline:none}#planet-block .claims{list-style:none;padding:0;margin:6px 0 0}#planet-block .claims li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}#planet-block .claims li:first-child{border-top:none}#planet-block .verdict{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;
+  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}#planet-block .v-fact{background:#3fb950}#planet-block .v-gap{background:#d9a520}#planet-block .v-miss{background:#a5a5a5}#planet-block .claims .finding,#planet-block .claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}#planet-block .claims .srcs{display:block;margin-top:4px}#planet-block .claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}#planet-block .dive{color:var(--accent)}#planet-block .ocean{border-top:1px solid var(--line);margin-top:26px}#planet-block .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}#planet-block .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}#planet-block .sunk,#planet-block .vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
+  border-radius:10px;padding:12px 14px;margin:0 0 10px}#planet-block .vein{border-left-color:#7D5BA6}#planet-block .sunk h5,#planet-block .vein h5{font-size:13.5px;margin:0 0 6px}#planet-block .sunk .impact,#planet-block .vein .impact{font-size:12.5px;margin:0 0 6px}#planet-block .sunk .count,#planet-block .vein .count{font-size:12px;color:var(--muted);margin:0 0 6px}#planet-block .sunk .srclist .when,#planet-block .sunk .srclist .where{display:block;color:var(--muted);font-size:11px}#planet-block .sides{list-style:none;padding:0;margin:6px 0 0;font-size:12px}#planet-block .sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}#planet-block .sides .n{margin-left:auto;color:var(--muted)}#planet-block .editorial .sec{color:var(--fg);font-size:15px}#planet-block .findings{list-style:none;padding:0;margin:0 0 4px}#planet-block .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}#planet-block .dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}#planet-block .waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}#planet-block .waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  transition:background-color .5s ease}#planet-block .dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}#planet-block .dot-cap b{color:var(--fg)}#planet-block .readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#planet-block .ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}#planet-block .ro .k{font-size:10.5px;color:var(--muted);margin:0}#planet-block .ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}#planet-block .ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}#planet-block .ro .ar{font-size:13px;font-weight:700}#planet-block .ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#e8a0a8}#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#7ee0a8}#planet-block .ro.flat .ar,#planet-block .ro.flat .to{color:var(--fg)}#planet-block .dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .dot-mech b{color:#f2f6fa}#planet-block .progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}#planet-block .progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}#planet-block .progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}#planet-block .progress b{color:var(--fg);font-variant-numeric:tabular-nums}#planet-block .guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}#planet-block .guess h3{font-size:14px;margin:0 0 9px}#planet-block .gopts{display:flex;flex-direction:column;gap:7px}#planet-block .gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}#planet-block .gopts button:hover:not(:disabled){border-color:var(--accent)}#planet-block .gopts button:disabled{cursor:default;opacity:.5}#planet-block .gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}#planet-block .gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}#planet-block .gans{margin-top:10px;font-size:12.5px;line-height:1.8}#planet-block .gans[hidden]{display:none}#planet-block .gans .lead{font-weight:700;margin-bottom:3px}#planet-block .dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}#planet-block .dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
+  border:0;border-radius:99px;padding:7px 16px;cursor:pointer}#planet-block #seafloor{opacity:0;transition:opacity .9s ease .2s}#planet-block .dived #seafloor{opacity:1}#planet-block #seacover{transition:opacity .9s ease}#planet-block .dived #seacover{opacity:.2}#planet-block .quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}#planet-block .qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}#planet-block .qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}#planet-block .qans{margin-top:12px;font-size:13px;line-height:1.85}#planet-block .qans[hidden]{display:none}#planet-block .qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}#planet-block .qscore{font-size:14px;line-height:1.85}#planet-block .qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.planet-live #planet-block #fallback{display:none}html:not(.planet-live) #planet-block .modes,html:not(.planet-live) #planet-block .stage,html:not(.planet-live) #planet-block .sec-live,html:not(.planet-live) #planet-block .issue-list{display:none}#planet-block .gans .lead{color:#0b1937}#planet-block .chart-box svg rect.hill-hit{fill:transparent!important}
+#planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
+  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+#planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
+#planet-block .panel{box-shadow:none}
+#planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
+#planet-block .panel .cross b,#planet-block .dot-mech b{color:#0b2a5b}
+#planet-block .note,#planet-block .ro{background:#f2f6fb}
+#planet-block .meta code{background:#eef1f6}
+#planet-block .islands .num{background:#e7ecf4;color:#172033}
+#planet-block .modes button[aria-pressed=true]{background:#e4edff}
+#planet-block .dive button{color:#fff}
+#planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
+/* 選択肢が押せると分からない・正誤が弱い（オーナー指摘）。触れる形と結果を強くする */
+#planet-block .gopts{gap:9px}
+#planet-block .gopts button{background:#fff;border:2px solid #D7DCE6;border-radius:10px;
+  padding:13px 15px 13px 44px;font-size:14.5px;font-weight:500;position:relative;
+  transition:border-color .15s,box-shadow .15s,transform .1s}
+#planet-block .gopts button::before{content:"";position:absolute;left:15px;top:50%;
+  width:17px;height:17px;margin-top:-8.5px;border:2px solid #B9C2D2;border-radius:50%}
+#planet-block .gopts button:hover:not(:disabled){border-color:var(--accent);
+  box-shadow:0 3px 10px rgba(7,94,242,.14);transform:translateY(-1px)}
+#planet-block .gopts button:hover:not(:disabled)::before{border-color:var(--accent)}
+#planet-block .gopts button:disabled{opacity:.55}
+#planet-block .gopts button.hit{background:#E6F6EC;border-color:#1B7A55;opacity:1;font-weight:700}
+#planet-block .gopts button.hit::before{content:"✓";border-color:#1B7A55;background:#1B7A55;
+  color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+#planet-block .gopts button.miss{background:#FDECEC;border-color:#C4392C;opacity:1}
+#planet-block .gopts button.miss::before{content:"×";border-color:#C4392C;background:#C4392C;
+  color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;line-height:1}
+#planet-block .gans,#planet-block .qans{background:#F4F7FC;border-radius:10px;padding:13px 15px;
+  margin-top:13px}
+#planet-block .gans .lead{font-size:17px;font-weight:900;margin:0 0 5px}
+#planet-block .guess:has(.hit:not(:disabled)) .gans .lead{color:#1B7A55}
+#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
+#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
+#planet-block .qnext{color:#fff;background:var(--accent)}
+/* 図もサイトの色にする（オーナー指示 2026-09-05「マップの背景がまだ黒」）。
+   SVGの色は描画時に属性で付いているが、CSSのほうが強いので上から塗り替えられる。 */
+#planet-block .chart-box{background:#F2F6FD;border-color:#DCE3EF}
+#planet-block .chart-box svg rect:first-of-type{fill:#DCE9F7}
+#planet-block .chart-box svg #seacover{fill:#F2F6FD;opacity:.96}
+#planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E3E9F3}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1"]{stroke:#B9CCE6}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1.6"]{stroke:#075EF2}
+/* 目盛りの文字は線の真上に置かれていて、0%だけ海面の線に隠れる。5だけ持ち上げる */
+#planet-block .chart-box svg text[fill="#8b949e"]{fill:#667085;transform:translateY(-5px)}
+#planet-block .chart-box svg text[fill="#c7d1dc"]{fill:#172033}
+#planet-block .chart-box svg text[fill="#e6edf3"]{fill:#0F1A3D}
+#planet-block .chart-box svg path[stroke="#f2f6fa"]{stroke:#0F1A3D}
+#planet-block .chart-box svg #seafloor path[fill="#122642"]{fill:#E7F0FB;stroke:#7FA6D8}
+#planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
+#planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
+#planet-block .chart-box svg path[stroke="#e0663a"]{stroke:#C4462A}
+/* 点の装置も同じ面にそろえる */
+#planet-block .dotbox{background:#F2F6FD;border:1px solid #DCE3EF;border-radius:12px;
+  padding:13px 14px;margin-top:14px;--rest-dot:#D3DCEA}
+#planet-block .dotbox .legend{color:#667085}
+/* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
+   論点名は海面+17pxにあるので、そこだけ残して畳み、「海の水を抜く」で開く。 */
+#planet-block .chart-box{overflow:hidden}
+#planet-block .chart-box svg{margin-bottom:-17.5%;transition:margin-bottom .9s ease}
+#planet-block .chart-box.dived svg{margin-bottom:0}
+/* 山が押せると分からない（オーナー指摘）。触れる合図を出す */
+#planet-block .chart-box .hill path{transition:opacity .18s ease,filter .18s ease}
+#planet-block .chart-box .hill:hover path,
+#planet-block .chart-box .hill:focus-visible path{opacity:1!important;
+  filter:drop-shadow(0 0 6px rgba(7,94,242,.5))}
+#planet-block .chart-box .hill:hover text,
+#planet-block .chart-box .hill:focus-visible text{font-weight:700}
+#planet-block .tap-hint{display:flex;align-items:center;gap:8px;margin:0 0 8px;
+  padding:9px 13px;border-radius:10px;background:var(--blue-tint,#E7EEFE);
+  font-size:13.5px;font-weight:700;color:#0B3FA8;line-height:1.6}
+#planet-block .tap-hint span[aria-hidden]{font-size:16px}
+#planet-block a.go-card{display:inline-block;background:var(--accent);color:#fff;
+  font-weight:700;font-size:14px;text-decoration:none;border-radius:8px;padding:10px 18px}
+#planet-block a.go-card:hover{filter:brightness(1.08)}
+/* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」）。
+   ヘッダーも同じく上へ貼り付き、こちらより手前（z-index 1000）にいる。top:0 のままだと
+   スクロール中ヘッダーの下に隠れて消えて見えた（オーナー指摘 2026-09-06）。
+   ヘッダーの高さは画面幅で変わるので、下の PROGRESS_STICK_JS が実測して入れる。 */
+#progress{position:sticky;top:var(--isa-header-h,0px);z-index:60;display:flex;align-items:center;gap:10px;
+  flex-wrap:wrap;row-gap:4px;
+  padding:9px clamp(14px,4vw,28px);background:#fff;border-bottom:1px solid #DCE3EF;font-size:13px;color:#42527A}
+/* 帯は残すが表には出さない。paintProgress() が #pbar の幅を書き続けるので、
+   消すとJSが止まる。見せるのは下の区画のほう。 */
+#progress .track{display:none}
+/* 1地点ぶんが帯では10pxにしかならず「動いていない」と見えた（オーナー指摘 2026-09-06）。
+   地点の数だけ区画に割り、1回の行動で1つ点灯させる。中身はJSが作る。 */
+#progress .segs{flex:1;display:flex;gap:2px;min-width:140px;max-width:340px}
+#progress .segs i{flex:1;height:9px;background:#E7ECF4;border-radius:2px;
+  transition:background .25s ease}
+#progress .segs i.on{background:var(--accent,#075EF2)}
+#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums;
+  display:inline-block}
+#progress .how{color:#7C89A8;font-size:12px;flex-basis:100%;order:9}
+/* 増やし方は0のあいだだけ。1つでも点いたら消して場所を返す */
+#progress.started .how{display:none}
+#progress.bump b{animation:isa-pnum-pop .5s ease}
+@keyframes isa-pnum-pop{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.35);color:var(--accent,#075EF2)}
+  100%{transform:scale(1)}
+}
+/* 説明は幅を問わず2行目。横一列に並べると区画が min-width まで潰れて見えなくなり、
+   スマホでは以前 display:none にしていたため、いちばん説明が要る画面で読めなかった。 */
+@media (max-width:640px){ #progress .how{font-size:11.5px} }
+@media (prefers-reduced-motion:reduce){
+  #planet-block .chart-box svg{transition:none}
+  #progress .segs i{transition:none}
+  #progress.bump b{animation:none}
+}
+</style>
+<script>
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
+   （このクラスが付かないと #fallback が見えたままになる） */
+(function(){
+  try {
+    var c = document.createElement('canvas');
+    if (c.getContext && c.getContext('2d')) {
+      document.documentElement.className += ' planet-live';
+    }
+  } catch (e) {}
+})();
+</script>
+<div id="planet-block">
+  <div class="panel-title"><h2>SNS反応マップ</h2><span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>
+  <p class="q" id="q">辺野古の修学旅行中の事故を、学校はどう検証すべきか（辺野古高校生死亡事故）</p>
+  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>収集期間 2026-06-14〜2026-08-24／収集480件・<b>意見369件</b>（この図の母数）／更新 2026-09-13<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>
+  <p class="note" id="stance-definition">このマップには「論点を切り分ける」という分類があります。文科省判断への賛否を明示せず、事故や報道など別の問題を語る意見も含みます。全員が同じ解決策を支持しているわけではありません。</p>
+
+
+  <div id="guesses"></div>
+
+  <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
+
+  <p class="tap-hint"><span aria-hidden="true">👆</span>山を押すと、その論点の図解と、賛成・反対それぞれの投稿が読めます</p><div class="stage">
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
+      <p class="dive"><button type="button" id="dive"></button><span id="divenote"></span></p>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、100マスで見せる。
+       マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+       着陸パネルの中へ差し込むので、押したボタンのすぐそばで変化が見える。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <div class="waffle" id="waffle"></div>
+    <p class="dot-cap">マス目100個が、いま見ている立場の全部です。
+      <b>色つきのマスの数が、そのまま割合（％）になります。</b></p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（色つきのマスの数）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
+  </div>
+
+    <div id="fallback">
+    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>
+    <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
+    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">
+      <a class="continent" href="#fb-henoko-student-accident-safety" style="background:#D9A520;border-color:#D9A520;color:#0d1117"><span class="label">🛟 安全管理・事故原因</span><span class="count">105件・28.5%</span></a>
+      <a class="continent" href="#fb-henoko-student-accident-base-politics" style="background:#D9A520;border-color:#D9A520;color:#0d1117"><span class="label">🏛️ 政治利用・基地問題</span><span class="count">76件・20.6%</span></a>
+      <a class="continent" href="#fb-henoko-student-accident-public-response" style="background:#D9A520;border-color:#D9A520;color:#0d1117"><span class="label">📰 報道・行政対応</span><span class="count">68件・18.4%</span></a>
+      <a class="continent" href="#fb-henoko-student-accident-victim-dignity" style="background:#D9A520;border-color:#D9A520;color:#0d1117"><span class="label">🕊️ 追悼・被害者の尊厳</span><span class="count">51件・13.8%</span></a>
+      <a class="continent" href="#fb-henoko-student-accident-neutrality" style="background:#2F8F83;border-color:#2F8F83;color:#ffffff"><span class="label">⚖️ 政治的中立性</span><span class="count">44件・11.9%</span></a>
+      <a class="continent" href="#fb-henoko-student-accident-peace-education" style="background:#D9A520;border-color:#D9A520;color:#0d1117"><span class="label">📚 平和教育の萎縮</span><span class="count">25件・6.8%</span></a>
+    </nav>
+    <section class="landing-panel" id="fb-henoko-student-accident-safety" tabindex="-1">
+      <h2>🛟 安全管理・事故原因</h2>
+      <p class="sub">105件（28.5%）　山の高さ：強い表現38.9%</p>
+      <div class="legend"><span><i style="background:#D9A520"></i>論点を切り分ける 105件</span></div>
+      <div class="bar"><span style="width:100.0%;background:#D9A520;color:#0d1117">論点を切り分ける</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見369件のうち</span><span class="n">105件 / 28.5%</span></li><li><span>文科省判断を支持27件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>文科省判断に反発18件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>論点を切り分ける321件のうち</span><span class="n">105件 / 32.7%</span></li><li><span>中立・情報共有3件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>責任の所在・調査と説明を求める<span class="n">42件</span></li><li><span class="num">2</span>学校の計画・引率・生徒への説明<span class="n">23件</span></li><li><span class="num">3</span>船の選定・運航判断・契約<span class="n">15件</span></li><li><span class="num">4</span>再発防止と安全確認を優先する<span class="n">14件</span></li><li><span class="num">5</span>活動の目的より安全を優先してほしい<span class="n">11件</span></li></ul>
+      <div class="note">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>転覆時、生徒が乗る船に引率教員は同行していなかった<br>文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。<br><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：研修旅行の検証見解（2頁）</a></li><li>当日は波浪警報が出ていた<br>文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。<br><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：安全管理の確認事項（3〜4頁）</a></li><li>事故の船は、海上運送法の事業登録を受けずに運送していた<br>国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。<br><a href="https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html" rel="nofollow">国土交通省：海上運送法違反について（5月22日）</a></li></ul>
+      <div class="extras" id="extras-henoko-student-accident-safety">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-fact">資料どおり</span>転覆時、生徒が乗る船に引率教員は同行していなかった<span class="finding">文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：研修旅行の検証見解（2頁）</a></span></li><li><span class="verdict v-gap">少しずれる</span>当日は波浪警報が出ていた<span class="finding">文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：安全管理の確認事項（3〜4頁）</a></span></li><li><span class="verdict v-fact">資料どおり</span>事故の船は、海上運送法の事業登録を受けずに運送していた<span class="finding">国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html" rel="nofollow">国土交通省：海上運送法違反について（5月22日）</a></span></li></ul>
+      <p class="sub" style="margin-top:12px">この論点に関わる資料にあるのに、SNSにないこと：立場をこえて同じ心配1本・語られていない争点3件 <a class="dive" href="#ocean">ページ下の「資料にあるのに、SNSにないこと」で読む</a></p>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-henoko-student-accident-base-politics" tabindex="-1">
+      <h2>🏛️ 政治利用・基地問題</h2>
+      <p class="sub">76件（20.6%）　山の高さ：強い表現61.4%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>文科省判断を支持 2件</span><span><i style="background:#D9A520"></i>論点を切り分ける 74件</span></div>
+      <div class="bar"><span style="width:2.6%;background:#2F8F83;color:#ffffff"></span><span style="width:97.4%;background:#D9A520;color:#0d1117">論点を切り分ける</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見369件のうち</span><span class="n">76件 / 20.6%</span></li><li><span>文科省判断を支持27件のうち</span><span class="n">2件 / 7.4%</span></li><li><span>文科省判断に反発18件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>論点を切り分ける321件のうち</span><span class="n">74件 / 23.1%</span></li><li><span>中立・情報共有3件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>活動団体・政党・教育機関への批判と関係<span class="n">29件</span></li><li><span class="num">2</span>批判する側にも説明と反省を求める<span class="n">27件</span></li><li><span class="num">3</span>事故対応を選挙や政治家の評価につなげる<span class="n">17件</span></li><li><span class="num">4</span>基地政策・反対運動の是非<span class="n">3件</span></li></ul>
+      <div class="note">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>当日は波浪警報が出ていた<br>文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。<br><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：安全管理の確認事項（3〜4頁）</a></li></ul>
+      <div class="extras" id="extras-henoko-student-accident-base-politics">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>当日は波浪警報が出ていた<span class="finding">文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：安全管理の確認事項（3〜4頁）</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-henoko-student-accident-public-response" tabindex="-1">
+      <h2>📰 報道・行政対応</h2>
+      <p class="sub">68件（18.4%）　山の高さ：強い表現37.6%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>文科省判断を支持 2件</span><span><i style="background:#7D5BA6"></i>文科省判断に反発 2件</span><span><i style="background:#D9A520"></i>論点を切り分ける 62件</span><span><i style="background:#8B9199"></i>中立・情報共有 2件</span></div>
+      <div class="bar"><span style="width:2.9%;background:#2F8F83;color:#ffffff"></span><span style="width:2.9%;background:#7D5BA6;color:#ffffff"></span><span style="width:91.2%;background:#D9A520;color:#0d1117">論点を切り分ける</span><span style="width:2.9%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見369件のうち</span><span class="n">68件 / 18.4%</span></li><li><span>文科省判断を支持27件のうち</span><span class="n">2件 / 7.4%</span></li><li><span>文科省判断に反発18件のうち</span><span class="n">2件 / 11.1%</span></li><li><span>論点を切り分ける321件のうち</span><span class="n">62件 / 19.3%</span></li><li><span>中立・情報共有3件のうち</span><span class="n">2件 / 66.7%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>報道の量・取り上げ方への疑問<span class="n">43件</span></li><li><span class="num">2</span>行政・政党の説明と調査<span class="n">21件</span></li><li><span class="num">3</span>会見や遺族の記録への受け止め<span class="n">4件</span></li></ul>
+      <div class="note">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-henoko-student-accident-victim-dignity" tabindex="-1">
+      <h2>🕊️ 追悼・被害者の尊厳</h2>
+      <p class="sub">51件（13.8%）　山の高さ：強い表現48.9%</p>
+      <div class="legend"><span><i style="background:#D9A520"></i>論点を切り分ける 50件</span><span><i style="background:#8B9199"></i>中立・情報共有 1件</span></div>
+      <div class="bar"><span style="width:98.0%;background:#D9A520;color:#0d1117">論点を切り分ける</span><span style="width:2.0%;background:#8B9199;color:#0d1117"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見369件のうち</span><span class="n">51件 / 13.8%</span></li><li><span>文科省判断を支持27件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>文科省判断に反発18件のうち</span><span class="n">0件 / 0.0%</span></li><li><span>論点を切り分ける321件のうち</span><span class="n">50件 / 15.6%</span></li><li><span>中立・情報共有3件のうち</span><span class="n">1件 / 33.3%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>犠牲者への配慮を先にしてほしい<span class="n">23件</span></li><li><span class="num">2</span>追悼や謝罪の時期・場所・対応<span class="n">11件</span></li><li><span class="num">3</span>慰霊の場と政治的抗議を分ける<span class="n">11件</span></li><li><span class="num">4</span>命を悼み、遺族や生徒の立場を考える<span class="n">6件</span></li></ul>
+      <div class="note">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-henoko-student-accident-neutrality" tabindex="-1">
+      <h2>⚖️ 政治的中立性</h2>
+      <p class="sub">44件（11.9%）　山の高さ：強い表現38.7%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>文科省判断を支持 21件</span><span><i style="background:#7D5BA6"></i>文科省判断に反発 7件</span><span><i style="background:#D9A520"></i>論点を切り分ける 16件</span></div>
+      <div class="bar"><span style="width:47.7%;background:#2F8F83;color:#ffffff">文科省判断を支持</span><span style="width:15.9%;background:#7D5BA6;color:#ffffff">文科省判断に反発</span><span style="width:36.4%;background:#D9A520;color:#0d1117">論点を切り分ける</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見369件のうち</span><span class="n">44件 / 11.9%</span></li><li><span>文科省判断を支持27件のうち</span><span class="n">21件 / 77.8%</span></li><li><span>文科省判断に反発18件のうち</span><span class="n">7件 / 38.9%</span></li><li><span>論点を切り分ける321件のうち</span><span class="n">16件 / 5.0%</span></li><li><span>中立・情報共有3件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>政治活動と学校教育の境界<span class="n">20件</span></li><li><span class="num">2</span>比較する場面でも同じ基準を求める<span class="n">8件</span></li><li><span class="num">3</span>教育論の前に学校と運動の責任を問う<span class="n">7件</span></li><li><span class="num">4</span>教組・宗教団体と教育の関係<span class="n">6件</span></li><li><span class="num">5</span>国の教育内容への介入を疑問視する<span class="n">3件</span></li></ul>
+      <div class="note">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した<br>文科省は当時把握した情報に基づき、様々な見解の提示、抗議船の利用、しおり等を総合して、辺野古への移設工事に関する学習が同法第14条第2項に反すると判断しています。その判断への賛否と、判断が公表された事実は別です。<br><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：教育活動についての見解（7頁）</a></li><li>教育基本法は、政治的教養を学ぶこと自体を否定していない<br>4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。<br><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" rel="nofollow">文部科学省：4月7日通知の別添（7〜8頁）</a></li></ul>
+      <div class="extras" id="extras-henoko-student-accident-neutrality">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-fact">資料どおり</span>文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した<span class="finding">文科省は当時把握した情報に基づき、様々な見解の提示、抗議船の利用、しおり等を総合して、辺野古への移設工事に関する学習が同法第14条第2項に反すると判断しています。その判断への賛否と、判断が公表された事実は別です。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：教育活動についての見解（7頁）</a></span></li><li><span class="verdict v-fact">資料どおり</span>教育基本法は、政治的教養を学ぶこと自体を否定していない<span class="finding">4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。</span><span class="vnote">一次資料でも確認できました。「正しい意見」という意味ではありません。</span><span class="srcs"><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" rel="nofollow">文部科学省：4月7日通知の別添（7〜8頁）</a></span></li></ul>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-henoko-student-accident-peace-education" tabindex="-1">
+      <h2>📚 平和教育の萎縮</h2>
+      <p class="sub">25件（6.8%）　山の高さ：強い表現41.8%</p>
+      <div class="legend"><span><i style="background:#2F8F83"></i>文科省判断を支持 2件</span><span><i style="background:#7D5BA6"></i>文科省判断に反発 9件</span><span><i style="background:#D9A520"></i>論点を切り分ける 14件</span></div>
+      <div class="bar"><span style="width:8.0%;background:#2F8F83;color:#ffffff"></span><span style="width:36.0%;background:#7D5BA6;color:#ffffff">文科省判断に反発</span><span style="width:56.0%;background:#D9A520;color:#0d1117">論点を切り分ける</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見369件のうち</span><span class="n">25件 / 6.8%</span></li><li><span>文科省判断を支持27件のうち</span><span class="n">2件 / 7.4%</span></li><li><span>文科省判断に反発18件のうち</span><span class="n">9件 / 50.0%</span></li><li><span>論点を切り分ける321件のうち</span><span class="n">14件 / 4.4%</span></li><li><span>中立・情報共有3件のうち</span><span class="n">0件 / 0.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>危険な活動・一面的な教育を見直す<span class="n">11件</span></li><li><span class="num">2</span>学ぶ機会・権利と生徒の自主性<span class="n">7件</span></li><li><span class="num">3</span>教育の自由と国家の介入を考える<span class="n">6件</span></li><li><span class="num">4</span>政治家に教育のあり方を問う<span class="n">1件</span></li></ul>
+      <div class="note">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</div>
+      <p class="sub" style="margin-top:12px"><b>一次資料と照らした結果</b></p>
+      <ul class="srclist"><li>文科省が指摘したのは、危険な乗船をやめることだけだ<br>見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。<br><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：安全管理・教育活動の見解（3〜8頁）</a></li></ul>
+      <div class="extras" id="extras-henoko-student-accident-peace-education">
+      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>
+      <ul class="claims"><li><span class="verdict v-gap">少しずれる</span>文科省が指摘したのは、危険な乗船をやめることだけだ<span class="finding">見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。</span><span class="vnote">部分的には合っていますが、一次資料とずれている点があります。</span><span class="srcs"><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：安全管理・教育活動の見解（3〜8頁）</a></span></li></ul>
+      <p class="sub" style="margin-top:12px">この論点に関わる資料にあるのに、SNSにないこと：立場をこえて同じ心配1本 <a class="dive" href="#ocean">ページ下の「資料にあるのに、SNSにないこと」で読む</a></p>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+  </div>
+
+  <h3 class="sec sec-live">一次資料クイズ — その主張、資料に当たるとどうなる？</h3>
+  <div class="quiz" id="quiz"></div>
+
+    <section id="ocean" class="ocean" tabindex="-1">
+    <h3 class="sec">資料にあるのに、SNSにないこと</h3>
+    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。（確認日 2026-09-13／AIの下読みを含む）</p>
+    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>
+    <article class="sunk"><h5>悪天候の代案を、出発前に決めておく</h5><p class="impact">中止をためらわないためには、その後の行程も必要です。4月通知は悪天候で変更・中止する場合の代案を先に決めるよう挙げています。</p><p class="count">集めた投稿での件数：<b>0件</b>（意見369件のうち）／いちばん近い論点：安全管理・事故原因</p><p class="note">今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。</p><p class="sub">一次資料</p><ul class="srclist"><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" rel="nofollow">文部科学省：4月7日通知</a><span class="when">2026年4月7日</span><span class="where">3頁</span></li></ul></article>
+    <article class="sunk"><h5>登録や安全情報を、学校から外部へ確認できる</h5><p class="impact">6月通知は事業者や地方運輸局への確認、安全情報の検索サイトを案内しています。無登録を非難することと、予約前の確認先を知ることは別です。</p><p class="count">集めた投稿での件数：<b>0件</b>（意見369件のうち）／いちばん近い論点：安全管理・事故原因</p><p class="note">今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。</p><p class="sub">一次資料</p><ul class="srclist"><li><a href="https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm" rel="nofollow">文部科学省：船舶運送利用時の安全確保</a><span class="when">2026年6月30日</span><span class="where">本文・補足資料</span></li></ul></article>
+    <article class="sunk"><h5>引率する人が乗れない場合の体制も決めておく</h5><p class="impact">文科省見解は、当日の教員の体調不良に対応する体制も問題にしています。予定した人を置くだけでなく、代わりの人員や中止の判断を確かめられます。</p><p class="count">集めた投稿での件数：<b>0件</b>（意見369件のうち）／いちばん近い論点：安全管理・事故原因</p><p class="note">今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。</p><p class="sub">一次資料</p><ul class="srclist"><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" rel="nofollow">文部科学省：研修旅行の検証見解</a><span class="when">2026年5月22日</span><span class="where">2頁</span></li></ul></article>
+    <h4 class="subsec">立場をこえて同じ心配 — 立場が違っても、同じ心配を語っているところ</h4>
+    <article class="vein" data-vein="henoko-student-accident-vein-safety"><h5>学校行事で子供の安全を軽く扱ってはならない。</h5><p class="impact">それでも結論が分かれる理由：文科省判断を支持する投稿は、危険な政治活動との接続を含めた見直しを求めています。反発する投稿も安全管理の不備を批判しますが、国が教育内容に踏み込むことには反対します。安全への懸念が共通でも、国がどこまで是正するかで分かれます。</p><p class="count">関わる論点：安全管理・事故原因・平和教育の萎縮</p><ul class="sides"><li>文科省判断を支持<span class="n">代表2件</span></li><li>文科省判断に反発<span class="n">代表2件</span></li></ul></article>
+  </section>
+
+    <section id="editorial" class="editorial" tabindex="-1">
+    <h3 class="sec">編集部の横断整理</h3>
+    <p class="sub">論点をまたいで言えることを、編集部がまとめています。（2026-09-12時点）</p>
+    <h4 class="subsec">共通する前提</h4>
+    <ul class="findings"><li>安全管理の不備は許されないという声は、文科省判断を支持する側にも、教育への介入に反発する側にもありました。事故を軽く見ているかどうかだけでは、対立の理由を説明できません。</li></ul>
+    <h4 class="subsec">本当の対立</h4>
+    <ul class="findings"><li>分かれるのは検証の範囲です。政治活動との接続まで学校の責任として見直すか、安全の是正と教育内容への国の介入を分けるか。安全と教育は関連しますが、同じ問いではありません。</li><li>安全管理・事故原因の意見（105件）にも、船の選定、学校の引率、事故後の説明という違いがあります。責任を求める声の多さは、特定の人の過失が証明された数ではありません。</li></ul>
+    <h4 class="subsec">まだ分からないこと</h4>
+    <ul class="findings"><li>「論点を切り分ける」は、投稿者が明示的に切り分けを主張した場合だけでなく、文科省判断への賛否を示さず事故や報道を語った場合も含む分類名です。全員が同じ解決策を支持しているわけではありません。</li><li>同じ趣旨の繰り返し投稿もあります。検索で集めた投稿数を数えており、人数や世論全体の支持率を示してはいません。報道が少ないとの意見についても、放送時間や記事総数を実測した結果ではありません。</li></ul>
+  </section>
+
+  <h3 class="sec sec-live">論点の一覧（押すと、地図がその論点に切り替わります）</h3>
+  <ul class="issue-list" id="list"></ul>
+
+  <h3 class="sec">このページの見かた</h3>
+  <p class="meta" id="meta">山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、母数が小さいものは画面で断っています。</p>
+</div>
+</section>
+<script id="planet-data">window.PLANET_DATA={"stance_note": "このマップには「論点を切り分ける」という分類があります。文科省判断への賛否を明示せず、事故や報道など別の問題を語る意見も含みます。全員が同じ解決策を支持しているわけではありません。", "reading_questions": [{"key": "g1", "title": "① 安全管理に問題があったと考える人は、文科省判断にも賛成しているのでしょうか？", "opts": ["安全を重視するなら、文科省判断にも賛成している", "安全への懸念だけでは、文科省判断への賛否は分からない", "文科省判断に反対する人は、安全管理を問題にしていない"], "right": 1, "ans": "支持する投稿にも反発する投稿にも、安全管理への懸念がありました。安全の是正が必要かという問いと、国が教育内容にどこまで関わるかという問いは分けて読めます。"}, {"key": "g2", "title": "② 「論点を切り分ける」に含まれるのは、どのような投稿でしょうか？", "opts": ["文科省判断への賛否を示さず、事故や報道の問題を語る意見", "文科省判断に賛成する投稿だけ", "記事の見出しを共有するだけで、独自の意見がない投稿"], "right": 0, "ans": "「論点を切り分ける」には、当該判断への賛否を明示しない意見も含めています。投稿者全員が、明示的に論点を切り分けるよう提案したという意味ではありません。"}], "schema": 1, "theme_id": "henoko-student-accident", "title": "辺野古高校生死亡事故", "question": "辺野古の修学旅行中の事故を、学校はどう検証すべきか", "snapshot_id": "henoko-student-accident-20260913", "updated_at": "2026-09-13", "sample_period": "2026-06-14〜2026-08-24", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": true, "totals": {"collected": 480, "opinions": 369}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.4472, "k": 50, "max_pct": 4.0}, "stances": [{"key": "文科省判断を支持", "label": "文科省判断を支持", "id": "henoko-student-accident-ministry-support", "color": "#2F8F83", "pattern": "plain", "count": 27}, {"key": "文科省判断に反発", "label": "文科省判断に反発", "id": "henoko-student-accident-ministry-oppose", "color": "#7D5BA6", "pattern": "diagonal", "count": 18}, {"key": "論点を切り分ける", "label": "論点を切り分ける", "id": "henoko-student-accident-distinguish-issues", "color": "#D9A520", "pattern": "dots", "count": 321}, {"key": "中立・情報共有", "label": "中立・情報共有", "id": "henoko-student-accident-neutral", "color": "#8B9199", "pattern": "mesh", "count": 3}], "vote_issue_order": ["政治的中立性", "安全管理・事故原因", "追悼・被害者の尊厳", "平和教育の萎縮", "政治利用・基地問題", "報道・行政対応"], "reread_summary": {"connected_editorial_count": 369, "connected_issue_population": 369, "not_connected_opinion_count": 0}, "modes": [{"id": "all", "label": "すべての意見", "total": 369, "counts": {"henoko-student-accident-safety": 105, "henoko-student-accident-base-politics": 76, "henoko-student-accident-public-response": 68, "henoko-student-accident-victim-dignity": 51, "henoko-student-accident-neutrality": 44, "henoko-student-accident-peace-education": 25}, "width_pct": {"henoko-student-accident-safety": 28.46, "henoko-student-accident-base-politics": 20.6, "henoko-student-accident-public-response": 18.43, "henoko-student-accident-victim-dignity": 13.82, "henoko-student-accident-neutrality": 11.92, "henoko-student-accident-peace-education": 6.78}, "high_pct": {"henoko-student-accident-safety": 36.2, "henoko-student-accident-base-politics": 72.4, "henoko-student-accident-public-response": 32.4, "henoko-student-accident-victim-dignity": 52.9, "henoko-student-accident-neutrality": 31.8, "henoko-student-accident-peace-education": 36.0}, "high_counts": {"henoko-student-accident-safety": 38, "henoko-student-accident-base-politics": 55, "henoko-student-accident-public-response": 22, "henoko-student-accident-victim-dignity": 27, "henoko-student-accident-neutrality": 14, "henoko-student-accident-peace-education": 9}}, {"id": "文科省判断を支持", "label": "文科省判断を支持", "total": 27, "counts": {"henoko-student-accident-safety": 0, "henoko-student-accident-base-politics": 2, "henoko-student-accident-public-response": 2, "henoko-student-accident-victim-dignity": 0, "henoko-student-accident-neutrality": 21, "henoko-student-accident-peace-education": 2}, "width_pct": {"henoko-student-accident-safety": 0.0, "henoko-student-accident-base-politics": 7.41, "henoko-student-accident-public-response": 7.41, "henoko-student-accident-victim-dignity": 0.0, "henoko-student-accident-neutrality": 77.78, "henoko-student-accident-peace-education": 7.41}, "high_pct": {"henoko-student-accident-safety": 0.0, "henoko-student-accident-base-politics": 50.0, "henoko-student-accident-public-response": 100.0, "henoko-student-accident-victim-dignity": 0.0, "henoko-student-accident-neutrality": 42.9, "henoko-student-accident-peace-education": 50.0}, "high_counts": {"henoko-student-accident-safety": 0, "henoko-student-accident-base-politics": 1, "henoko-student-accident-public-response": 2, "henoko-student-accident-victim-dignity": 0, "henoko-student-accident-neutrality": 9, "henoko-student-accident-peace-education": 1}}, {"id": "文科省判断に反発", "label": "文科省判断に反発", "total": 18, "counts": {"henoko-student-accident-safety": 0, "henoko-student-accident-base-politics": 0, "henoko-student-accident-public-response": 2, "henoko-student-accident-victim-dignity": 0, "henoko-student-accident-neutrality": 7, "henoko-student-accident-peace-education": 9}, "width_pct": {"henoko-student-accident-safety": 0.0, "henoko-student-accident-base-politics": 0.0, "henoko-student-accident-public-response": 11.11, "henoko-student-accident-victim-dignity": 0.0, "henoko-student-accident-neutrality": 38.89, "henoko-student-accident-peace-education": 50.0}, "high_pct": {"henoko-student-accident-safety": 0.0, "henoko-student-accident-base-politics": 0.0, "henoko-student-accident-public-response": 50.0, "henoko-student-accident-victim-dignity": 0.0, "henoko-student-accident-neutrality": 14.3, "henoko-student-accident-peace-education": 33.3}, "high_counts": {"henoko-student-accident-safety": 0, "henoko-student-accident-base-politics": 0, "henoko-student-accident-public-response": 1, "henoko-student-accident-victim-dignity": 0, "henoko-student-accident-neutrality": 1, "henoko-student-accident-peace-education": 3}}, {"id": "論点を切り分ける", "label": "論点を切り分ける", "total": 321, "counts": {"henoko-student-accident-safety": 105, "henoko-student-accident-base-politics": 74, "henoko-student-accident-public-response": 62, "henoko-student-accident-victim-dignity": 50, "henoko-student-accident-neutrality": 16, "henoko-student-accident-peace-education": 14}, "width_pct": {"henoko-student-accident-safety": 32.71, "henoko-student-accident-base-politics": 23.05, "henoko-student-accident-public-response": 19.31, "henoko-student-accident-victim-dignity": 15.58, "henoko-student-accident-neutrality": 4.98, "henoko-student-accident-peace-education": 4.36}, "high_pct": {"henoko-student-accident-safety": 36.2, "henoko-student-accident-base-politics": 73.0, "henoko-student-accident-public-response": 30.6, "henoko-student-accident-victim-dignity": 54.0, "henoko-student-accident-neutrality": 25.0, "henoko-student-accident-peace-education": 35.7}, "high_counts": {"henoko-student-accident-safety": 38, "henoko-student-accident-base-politics": 54, "henoko-student-accident-public-response": 19, "henoko-student-accident-victim-dignity": 27, "henoko-student-accident-neutrality": 4, "henoko-student-accident-peace-education": 5}}, {"id": "中立・情報共有", "label": "中立・情報共有", "total": 3, "counts": {"henoko-student-accident-safety": 0, "henoko-student-accident-base-politics": 0, "henoko-student-accident-public-response": 2, "henoko-student-accident-victim-dignity": 1, "henoko-student-accident-neutrality": 0, "henoko-student-accident-peace-education": 0}, "width_pct": {"henoko-student-accident-safety": 0.0, "henoko-student-accident-base-politics": 0.0, "henoko-student-accident-public-response": 66.67, "henoko-student-accident-victim-dignity": 33.33, "henoko-student-accident-neutrality": 0.0, "henoko-student-accident-peace-education": 0.0}, "high_pct": {"henoko-student-accident-safety": 0.0, "henoko-student-accident-base-politics": 0.0, "henoko-student-accident-public-response": 0.0, "henoko-student-accident-victim-dignity": 0.0, "henoko-student-accident-neutrality": 0.0, "henoko-student-accident-peace-education": 0.0}, "high_counts": {"henoko-student-accident-safety": 0, "henoko-student-accident-base-politics": 0, "henoko-student-accident-public-response": 0, "henoko-student-accident-victim-dignity": 0, "henoko-student-accident-neutrality": 0, "henoko-student-accident-peace-education": 0}}], "issues": [{"id": "henoko-student-accident-safety", "key": "安全管理・事故原因", "label": "安全管理・事故原因", "icon": "🛟", "count": 105, "share_pct": 28.5, "stances": {"文科省判断を支持": 0, "文科省判断に反発": 0, "論点を切り分ける": 105, "中立・情報共有": 0}, "top_stance": "論点を切り分ける", "purity_pct": 100.0, "intensity": {"high": 38, "medium": 62, "low": 5}, "high_pct": 36.2, "high_adjusted_pct": 38.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。", "show_coverage_note": true, "source_file": "data/henoko-student-accident_issues-reread.json", "reread_count": 105, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "safety-accountability", "label": "責任の所在・調査と説明を求める", "count": 42, "pct_in_issue": 40.0}, {"id": "safety-school", "label": "学校の計画・引率・生徒への説明", "count": 23, "pct_in_issue": 21.9}, {"id": "safety-transport", "label": "船の選定・運航判断・契約", "count": 15, "pct_in_issue": 14.3}, {"id": "safety-prevention", "label": "再発防止と安全確認を優先する", "count": 14, "pct_in_issue": 13.3}, {"id": "safety-ideology", "label": "活動の目的より安全を優先してほしい", "count": 11, "pct_in_issue": 10.5}]}, "verdict": "gap", "claims": [{"claim": "転覆時、生徒が乗る船に引率教員は同行していなかった", "finding": "文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。", "id": "school-escort", "issue_ids": ["henoko-student-accident-safety"], "matched_post_count": 2, "sources": [{"name": "文部科学省：研修旅行の検証見解（2頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}], "verdict": "fact"}, {"claim": "当日は波浪警報が出ていた", "finding": "文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。", "id": "weather-advisory", "issue_ids": ["henoko-student-accident-safety", "henoko-student-accident-base-politics"], "matched_post_count": 3, "sources": [{"name": "文部科学省：安全管理の確認事項（3〜4頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}], "verdict": "gap"}, {"claim": "事故の船は、海上運送法の事業登録を受けずに運送していた", "finding": "国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。", "id": "unregistered-service", "issue_ids": ["henoko-student-accident-safety"], "matched_post_count": 1, "sources": [{"name": "国土交通省：海上運送法違反について（5月22日）", "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"}], "verdict": "fact"}], "veins": ["henoko-student-accident-vein-safety"]}, {"id": "henoko-student-accident-base-politics", "key": "政治利用・基地問題", "label": "政治利用・基地問題", "icon": "🏛️", "count": 76, "share_pct": 20.6, "stances": {"文科省判断を支持": 2, "文科省判断に反発": 0, "論点を切り分ける": 74, "中立・情報共有": 0}, "top_stance": "論点を切り分ける", "purity_pct": 97.4, "intensity": {"high": 55, "medium": 21, "low": 0}, "high_pct": 72.4, "high_adjusted_pct": 61.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。", "show_coverage_note": true, "source_file": "data/henoko-student-accident_issues-reread.json", "reread_count": 76, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "politics-links", "label": "活動団体・政党・教育機関への批判と関係", "count": 29, "pct_in_issue": 38.2}, {"id": "politics-double", "label": "批判する側にも説明と反省を求める", "count": 27, "pct_in_issue": 35.5}, {"id": "politics-election", "label": "事故対応を選挙や政治家の評価につなげる", "count": 17, "pct_in_issue": 22.4}, {"id": "politics-base", "label": "基地政策・反対運動の是非", "count": 3, "pct_in_issue": 3.9}]}, "verdict": "gap", "claims": [{"claim": "当日は波浪警報が出ていた", "finding": "文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。", "id": "weather-advisory", "issue_ids": ["henoko-student-accident-safety", "henoko-student-accident-base-politics"], "matched_post_count": 3, "sources": [{"name": "文部科学省：安全管理の確認事項（3〜4頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}], "verdict": "gap"}], "veins": []}, {"id": "henoko-student-accident-public-response", "key": "報道・行政対応", "label": "報道・行政対応", "icon": "📰", "count": 68, "share_pct": 18.4, "stances": {"文科省判断を支持": 2, "文科省判断に反発": 2, "論点を切り分ける": 62, "中立・情報共有": 2}, "top_stance": "論点を切り分ける", "purity_pct": 91.2, "intensity": {"high": 22, "medium": 39, "low": 7}, "high_pct": 32.4, "high_adjusted_pct": 37.6, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。", "show_coverage_note": true, "source_file": "data/henoko-student-accident_issues-reread.json", "reread_count": 68, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "media-bias", "label": "報道の量・取り上げ方への疑問", "count": 43, "pct_in_issue": 63.2}, {"id": "media-authority", "label": "行政・政党の説明と調査", "count": 21, "pct_in_issue": 30.9}, {"id": "media-response", "label": "会見や遺族の記録への受け止め", "count": 4, "pct_in_issue": 5.9}]}, "verdict": null, "claims": [], "veins": []}, {"id": "henoko-student-accident-victim-dignity", "key": "追悼・被害者の尊厳", "label": "追悼・被害者の尊厳", "icon": "🕊️", "count": 51, "share_pct": 13.8, "stances": {"文科省判断を支持": 0, "文科省判断に反発": 0, "論点を切り分ける": 50, "中立・情報共有": 1}, "top_stance": "論点を切り分ける", "purity_pct": 98.0, "intensity": {"high": 27, "medium": 21, "low": 3}, "high_pct": 52.9, "high_adjusted_pct": 48.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。", "show_coverage_note": true, "source_file": "data/henoko-student-accident_issues-reread.json", "reread_count": 51, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "dignity-priority", "label": "犠牲者への配慮を先にしてほしい", "count": 23, "pct_in_issue": 45.1}, {"id": "dignity-school", "label": "追悼や謝罪の時期・場所・対応", "count": 11, "pct_in_issue": 21.6}, {"id": "dignity-ceremony", "label": "慰霊の場と政治的抗議を分ける", "count": 11, "pct_in_issue": 21.6}, {"id": "dignity-mourning", "label": "命を悼み、遺族や生徒の立場を考える", "count": 6, "pct_in_issue": 11.8}]}, "verdict": null, "claims": [], "veins": []}, {"id": "henoko-student-accident-neutrality", "key": "政治的中立性", "label": "政治的中立性", "icon": "⚖️", "count": 44, "share_pct": 11.9, "stances": {"文科省判断を支持": 21, "文科省判断に反発": 7, "論点を切り分ける": 16, "中立・情報共有": 0}, "top_stance": "文科省判断を支持", "purity_pct": 47.7, "intensity": {"high": 14, "medium": 29, "low": 1}, "high_pct": 31.8, "high_adjusted_pct": 38.7, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。", "show_coverage_note": true, "source_file": "data/henoko-student-accident_issues-reread.json", "reread_count": 44, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "neutral-political", "label": "政治活動と学校教育の境界", "count": 20, "pct_in_issue": 45.5}, {"id": "neutral-consistency", "label": "比較する場面でも同じ基準を求める", "count": 8, "pct_in_issue": 18.2}, {"id": "neutral-responsibility", "label": "教育論の前に学校と運動の責任を問う", "count": 7, "pct_in_issue": 15.9}, {"id": "neutral-links", "label": "教組・宗教団体と教育の関係", "count": 6, "pct_in_issue": 13.6}, {"id": "neutral-government", "label": "国の教育内容への介入を疑問視する", "count": 3, "pct_in_issue": 6.8}]}, "verdict": "fact", "claims": [{"claim": "文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した", "finding": "文科省は当時把握した情報に基づき、様々な見解の提示、抗議船の利用、しおり等を総合して、辺野古への移設工事に関する学習が同法第14条第2項に反すると判断しています。その判断への賛否と、判断が公表された事実は別です。", "id": "education-finding", "issue_ids": ["henoko-student-accident-neutrality"], "matched_post_count": 6, "sources": [{"name": "文部科学省：教育活動についての見解（7頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}], "verdict": "fact"}, {"claim": "教育基本法は、政治的教養を学ぶこと自体を否定していない", "finding": "4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。", "id": "political-learning", "issue_ids": ["henoko-student-accident-neutrality"], "matched_post_count": 1, "sources": [{"name": "文部科学省：4月7日通知の別添（7〜8頁）", "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf"}], "verdict": "fact"}], "veins": []}, {"id": "henoko-student-accident-peace-education", "key": "平和教育の萎縮", "label": "平和教育の萎縮", "icon": "📚", "count": 25, "share_pct": 6.8, "stances": {"文科省判断を支持": 2, "文科省判断に反発": 9, "論点を切り分ける": 14, "中立・情報共有": 0}, "top_stance": "論点を切り分ける", "purity_pct": 56.0, "intensity": {"high": 9, "medium": 15, "low": 1}, "high_pct": 36.0, "high_adjusted_pct": 41.8, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。", "show_coverage_note": true, "source_file": "data/henoko-student-accident_issues-reread.json", "reread_count": 25, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "peace-restrict", "label": "危険な活動・一面的な教育を見直す", "count": 11, "pct_in_issue": 44.0}, {"id": "peace-opportunity", "label": "学ぶ機会・権利と生徒の自主性", "count": 7, "pct_in_issue": 28.0}, {"id": "peace-autonomy", "label": "教育の自由と国家の介入を考える", "count": 6, "pct_in_issue": 24.0}, {"id": "peace-question", "label": "政治家に教育のあり方を問う", "count": 1, "pct_in_issue": 4.0}]}, "verdict": "gap", "claims": [{"claim": "文科省が指摘したのは、危険な乗船をやめることだけだ", "finding": "見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。", "id": "not-safety-only", "issue_ids": ["henoko-student-accident-peace-education"], "matched_post_count": 1, "sources": [{"name": "文部科学省：安全管理・教育活動の見解（3〜8頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}], "verdict": "gap"}], "veins": ["henoko-student-accident-vein-safety"]}], "claims": [{"id": "school-escort", "claim": "転覆時、生徒が乗る船に引率教員は同行していなかった", "verdict": "fact", "verdict_label": "資料どおり", "finding": "文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。", "sources": [{"name": "文部科学省：研修旅行の検証見解（2頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}]}, {"id": "weather-advisory", "claim": "当日は波浪警報が出ていた", "verdict": "gap", "verdict_label": "少しずれる", "finding": "文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。", "sources": [{"name": "文部科学省：安全管理の確認事項（3〜4頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}]}, {"id": "education-finding", "claim": "文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した", "verdict": "fact", "verdict_label": "資料どおり", "finding": "文科省は当時把握した情報に基づき、様々な見解の提示、抗議船の利用、しおり等を総合して、辺野古への移設工事に関する学習が同法第14条第2項に反すると判断しています。その判断への賛否と、判断が公表された事実は別です。", "sources": [{"name": "文部科学省：教育活動についての見解（7頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}]}, {"id": "not-safety-only", "claim": "文科省が指摘したのは、危険な乗船をやめることだけだ", "verdict": "gap", "verdict_label": "少しずれる", "finding": "見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。", "sources": [{"name": "文部科学省：安全管理・教育活動の見解（3〜8頁）", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}]}, {"id": "unregistered-service", "claim": "事故の船は、海上運送法の事業登録を受けずに運送していた", "verdict": "fact", "verdict_label": "資料どおり", "finding": "国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。", "sources": [{"name": "国土交通省：海上運送法違反について（5月22日）", "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"}]}, {"id": "political-learning", "claim": "教育基本法は、政治的教養を学ぶこと自体を否定していない", "verdict": "fact", "verdict_label": "資料どおり", "finding": "4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。", "sources": [{"name": "文部科学省：4月7日通知の別添（7〜8頁）", "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf"}]}], "editorial": {"checked_on": "2026-09-12", "findings": [{"id": "henoko-student-accident-ed-1", "kind": "shared_premise", "text": "安全管理の不備は許されないという声は、文科省判断を支持する側にも、教育への介入に反発する側にもありました。事故を軽く見ているかどうかだけでは、対立の理由を説明できません。"}, {"id": "henoko-student-accident-ed-2", "kind": "real_conflict", "text": "分かれるのは検証の範囲です。政治活動との接続まで学校の責任として見直すか、安全の是正と教育内容への国の介入を分けるか。安全と教育は関連しますが、同じ問いではありません。"}, {"id": "henoko-student-accident-ed-3", "kind": "real_conflict", "text": "安全管理・事故原因の意見（105件）にも、船の選定、学校の引率、事故後の説明という違いがあります。責任を求める声の多さは、特定の人の過失が証明された数ではありません。"}, {"id": "henoko-student-accident-ed-4", "kind": "still_unknown", "text": "「論点を切り分ける」は、投稿者が明示的に切り分けを主張した場合だけでなく、文科省判断への賛否を示さず事故や報道を語った場合も含む分類名です。全員が同じ解決策を支持しているわけではありません。"}, {"id": "henoko-student-accident-ed-5", "kind": "still_unknown", "text": "同じ趣旨の繰り返し投稿もあります。検索で集めた投稿数を数えており、人数や世論全体の支持率を示してはいません。報道が少ないとの意見についても、放送時間や記事総数を実測した結果ではありません。"}], "reviewer_type": "ai_assisted", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-09-13", "reviewer_type": "ai_assisted", "ocean_status": "complete", "ocean_checked_on": "2026-09-13", "ocean_reviewer_type": "ai_assisted", "sunk_continents": [{"checked_on": "2026-09-12", "id": "henoko-student-accident-alternative", "life_impact": "中止をためらわないためには、その後の行程も必要です。4月通知は悪天候で変更・中止する場合の代案を先に決めるよう挙げています。", "nearest_issue_id": "henoko-student-accident-safety", "reviewer_type": "ai_assisted", "sns_base": 369, "sns_count": 0, "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。", "sources": [{"date": "2026年4月7日", "location": "3頁", "name": "文部科学省：4月7日通知", "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf"}], "topic": "悪天候の代案を、出発前に決めておく", "opinion_count_now": 369, "base_stale": false, "short_label": "悪天候の代案を、出発前に決…"}, {"checked_on": "2026-09-12", "id": "henoko-student-accident-check-registration", "life_impact": "6月通知は事業者や地方運輸局への確認、安全情報の検索サイトを案内しています。無登録を非難することと、予約前の確認先を知ることは別です。", "nearest_issue_id": "henoko-student-accident-safety", "reviewer_type": "ai_assisted", "sns_base": 369, "sns_count": 0, "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。", "sources": [{"date": "2026年6月30日", "location": "本文・補足資料", "name": "文部科学省：船舶運送利用時の安全確保", "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm"}], "topic": "登録や安全情報を、学校から外部へ確認できる", "opinion_count_now": 369, "base_stale": false, "short_label": "登録や安全情報を、学校から…"}, {"checked_on": "2026-09-12", "id": "henoko-student-accident-backup", "life_impact": "文科省見解は、当日の教員の体調不良に対応する体制も問題にしています。予定した人を置くだけでなく、代わりの人員や中止の判断を確かめられます。", "nearest_issue_id": "henoko-student-accident-safety", "reviewer_type": "ai_assisted", "sns_base": 369, "sns_count": 0, "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。", "sources": [{"date": "2026年5月22日", "location": "2頁", "name": "文部科学省：研修旅行の検証見解", "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"}], "topic": "引率する人が乗れない場合の体制も決めておく", "opinion_count_now": 369, "base_stale": false, "short_label": "引率する人が乗れない場合の…"}], "veins": [{"checked_on": "2026-09-13", "diverging_reason": "文科省判断を支持する投稿は、危険な政治活動との接続を含めた見直しを求めています。反発する投稿も安全管理の不備を批判しますが、国が教育内容に踏み込むことには反対します。安全への懸念が共通でも、国がどこまで是正するかで分かれます。", "id": "henoko-student-accident-vein-safety", "issue_ids": ["henoko-student-accident-safety", "henoko-student-accident-peace-education"], "reviewer_type": "ai_assisted", "shared_concern": "学校行事で子供の安全を軽く扱ってはならない。", "sides": [{"post_count": 2, "stance_label": "文科省判断を支持"}, {"post_count": 2, "stance_label": "文科省判断に反発"}]}]}};</script>
+<script>
+(function(){
+"use strict";
+const D = window.PLANET_DATA;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 状態 ---------- */
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
+const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
+const issues = D.issues;
+const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
+const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
+
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
+function ranksOf(modeId){
+  const m = modeById[modeId];
+  const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
+                      .filter(x => x.n > 0)
+                      .sort((a,b) => b.n - a.n || a.k - b.k);
+  const r = issues.map(() => null);
+  order.forEach((x,i) => { r[x.k] = i + 1; });
+  return r;
+}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
+
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
+  }
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
+}
+
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+
+function render(){
+  const L=layout(st.mode), p=[];
+  // 表現強度が0でも押せるよう、見た目とは別の透明な操作領域を置く。
+  // 画面上で44pxの高さを確保し、山の高さや比率そのものは変えない。
+  const hitHeight = Math.min(SEA-TOP, 44*SVG_W/(svg.getBoundingClientRect().width || SVG_W));
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
+  }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  p.push('<g id="seafloor">');
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('</g>');
+  // 海の覆い。潜水で薄くなり、下が見えるようになる
+  p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    const hitTop = Math.min(v.top, SEA-hitHeight);
+    p.push('<rect class="hill-hit" x="'+v.x0+'" y="'+hitTop+'" width="'+v.w
+      +'" height="'+(SEA-hitTop+4)+'" fill="transparent" pointer-events="all"/>');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.rate===0)
+      p.push('<circle class="zero-mark" cx="'+v.cx+'" cy="'+SEA+'" r="3" fill="'+col+'"/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6" pointer-events="none" aria-hidden="true"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+  if (L.live.some(v=>v.rate===0))
+    fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
+}
+
+function land(i){
+  st.landed=i;
+  visit("i:"+issues[i].id);
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
+  // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
+  // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
+  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
+}
+function orbit(){
+  const prev=st.landed;
+  st.landed=null;
+  if (location.hash) history.replaceState(null,"",location.pathname);
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
+}
+
+/* ---------- パネル ---------- */
+function stanceBar(counts, total){
+  return '<div class="bar">' + D.stances.map(s=>{
+    const n = counts[s.key]||0; if(!n) return "";
+    const w = 100*n/total;
+    return '<span style="width:'+w+'%;background:'+s.color+'">'+(w>13?s.label+" "+n:(w>6?n:""))+'</span>';
+  }).join("") + '</div>';
+}
+function legend(){
+  return '<div class="legend">' + D.stances.map(s=>
+    '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
+}
+
+/* 立場を切り替えたときに何が起きたかを1行で言う。
+   順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
+function crossTalk(modeId){
+  if (modeId === "all"){
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
+  }
+  const rAll = ranksOf("all"), rM = ranksOf(modeId);
+  const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
+  if (topMK < 0) return '';
+  const spin = '<button type="button" class="spin" id="spin">'
+             + '「'+issues[topMK].label+'」を見る</button>';
+  if (topMK === topAllK){
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
+         + 'すべての意見のときと同じ1位です。' + spin;
+  }
+  const moved = rM[topAllK];
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+       + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
+       + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
+}
+
+/* ---------- 点の装置（100マス） ----------
+   マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+   立場を絞ると件数は減るのに割合は増えることがある。これが文章では通じなかったための装置。
+   1件1マスで意見の数だけ並べた版は「多すぎて何も分からない」と差し戻された（2026-09-05）。 */
+const dotBox = document.getElementById("dotbox");
+const CELLS = 100;
+let cells = null;
+
+function buildCells(){
+  const w = document.getElementById("waffle");
+  let h = "";
+  for (let i=0;i<CELLS;i++) h += "<span></span>";
+  w.innerHTML = h;
+  cells = Array.prototype.slice.call(w.querySelectorAll("span"));
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!cells) buildCells();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
+  const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
+  cells.forEach((c,i)=>{
+    c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
+    c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
+  });
+
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+hot+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:var(--rest-dot)"></i>それ以外の論点</span>';
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を切り替えると、<b>色つきのマスの数が変わります</b>。"
+      + "件数が減っても、マスが増えることがあります。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほぼ同じだけ残ったので、割合もほとんど変わりません。</b>';
+    else if (gap > 0)
+      verdict = '<b>この論点のほうが多く残ったので、割合は増えます。</b>'
+              + '「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>この論点のほうが多く減ったので、割合は減ります。</b>'
+              + '「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '「'+m.label+'」に絞ると、この論点は <b>'+keepHot.toFixed(1)+'%</b> 残り、'
+      + 'それ以外は <b>'+keepRest.toFixed(1)+'%</b> 残りました。<br>' + verdict;
+  }
+}
+
+function drawPanel(){
+  const p = document.getElementById("panel");
+  const m = modeById[st.mode];
+  if (st.landed === null){
+    p.innerHTML = '<h2>'+D.title+'</h2>'
+      + '<p class="sub">'+m.label+'：'+m.total+'件'
+      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
+      + legend()
+      + '<p class="cross">'+crossTalk(st.mode)+'</p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
+      + (st.mode!=="all"
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
+          + (issues.filter(it=>m.counts[it.id]===0).length
+             ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
+               +' が0件のため、山が消えています。'
+             : '')
+          + '</div>'
+        : '');
+    // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
+    // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
+    const sp = document.getElementById("spin");
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
+    syncDots();
+    return;
+  }
+  const it = issues[st.landed];
+  const n = m.counts[it.id];
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
+    + '<div id="dot-slot"></div>'
+    + legend() + stanceBar(it.stances, it.count)
+    + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
+  const s = it.sub;
+  if (s.status === "reread"){
+    h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
+      + '<ul class="islands">' + s.items.map((x,j)=>
+          '<li class="'+(x.unread?"unread":"")+'">'
+          + '<span class="num">'+(j+1)+'</span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
+          + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
+      + (s.show_coverage_note === false ? ''
+        : '<div class="note">'+s.coverage_note.replace(/。+$/, '')+'。'
+          + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
+          + '</div>');
+  } else {
+    if (D.show_unreviewed_note !== false){
+      h += '<div class="note">'+s.note+'。<br>'
+         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    }
+  }
+  // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
+  // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  const extras = document.getElementById("extras-" + it.id);
+  if (extras) h += extras.innerHTML;
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
+  p.innerHTML = h;
+  document.getElementById("back").onclick = orbit;
+  // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
+  document.getElementById("dot-slot").appendChild(dotBox);
+  syncDots();
+}
+
+/* ---------- 一覧・モード ---------- */
+function syncList(){
+  const m = modeById[st.mode];
+  const rank = ranksOf(st.mode);
+  issues.forEach((it,i)=>{
+    const b = document.getElementById("btn-"+it.id);
+    if (!b) return;
+    const n = m.counts[it.id];
+    b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
+    b.style.opacity = n ? 1 : .45;
+    // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
+    // 並びの変化を追えるようにするため。
+    b.querySelector(".m").textContent =
+      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
+  });
+}
+function buildList(){
+  const ul = document.getElementById("list");
+  ul.innerHTML = issues.map(it =>
+    '<li><button type="button" id="btn-'+it.id+'" aria-pressed="false">'
+    + '<span class="dot" style="background:'+stanceMap[it.top_stance].color+'"></span>'
+    + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
+  issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
+}
+/* 要素が画面の中ほどへ来るまでスクロールする。
+   scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
+   画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+function bringIntoView(el){
+  // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
+  setTimeout(function(){
+    const r = el.getBoundingClientRect();
+    if (!r.height) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max,
+      window.scrollY + r.top - (window.innerHeight - r.height)/2));
+    const from = window.scrollY;
+    if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
+    const t0 = performance.now(), dur = 420;
+    (function step(now){
+      const t = Math.min(1, (now - t0)/dur);
+      window.scrollTo(0, from + (to - from)*ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);                                  // 1枚目は rAF を待たずに描く
+    // rAF が止まる環境でも必ず届かせる
+    setTimeout(function(){
+      if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
+    }, dur + 180);
+  }, 0);
+}
+
+function buildModes(){
+  const el = document.getElementById("modes");
+  el.innerHTML = D.modes.map(m =>
+    '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
+    + m.label+' '+m.total+'</button>').join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
+    el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    morphTo(b.dataset.m);
+  });
+}
+
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
+}
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
+addEventListener("keydown", e=>{
+  if (e.key === "Escape" && st.landed !== null) orbit();
+});
+
+/* ---------- 探査記録 ----------
+   予想2問＋論点＋語られていない争点＋主張＋立場をこえて同じ心配を「地点」として数える。
+   端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
+const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
+            + (D.claims||[]).length + (D.ocean.veins||[]).length;
+const seen = new Set();
+try { (JSON.parse(localStorage.getItem("isa-seen-"+D.theme_id)||"[]")).forEach(x=>seen.add(x)); } catch(e){}
+function visit(id){
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
+  paintProgress();
+}
+let painted = -1;
+function paintProgress(){
+  const el = document.getElementById("progress");
+  el.hidden = false;
+  const n = seen.size;
+  document.getElementById("pbar").style.width = Math.min(100, 100*n/SPOTS) + "%";
+  document.getElementById("pnum").textContent = n + " / " + SPOTS;
+  // 1地点ぶんは帯の 1/SPOTS しかなく、スマホ幅では十数ピクセルにもならない。
+  // 帯を伸ばすだけでは「動いていない」と見えるので、地点の数だけ区画に割って1つずつ点ける。
+  // 区画の入れ物が無いページ（単体の試作）では、今までどおり帯だけが伸びる。
+  const seg = document.getElementById("pseg");
+  if (seg){
+    if (seg.childElementCount !== SPOTS){
+      seg.innerHTML = "";
+      for (let i=0;i<SPOTS;i++) seg.appendChild(document.createElement("i"));
+    }
+    Array.from(seg.children).forEach((c,i)=>{ c.className = i<n ? "on" : ""; });
+  }
+  // 増えた瞬間を見逃さないよう数字をひと跳ねさせる。動きを減らす設定では止まる（CSS側）。
+  if (n > painted && painted >= 0){
+    el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+  }
+  painted = n;
+  // 増やし方の説明は、まだ0のあいだだけ出す（スマホで1行ぶん場所を取るため）。
+  el.classList.toggle("started", n > 0);
+}
+
+/* ---------- 予想（見る前に当てる） ----------
+   選択肢も答えも data から作る。ここに数字や論点名を書かない。 */
+function buildGuesses(){
+  const box = document.getElementById("guesses");
+  const st = D.stances.slice().sort((a,b)=>b.count-a.count);
+  const peak = issues.map(it=>({it, r: modeById.all.high_pct[it.id]}))
+                     .filter(x=>modeById.all.counts[x.it.id]>0)
+                     .sort((a,b)=>b.r-a.r);
+  const q = D.reading_questions ? D.reading_questions.map(x=>({...x, title:esc(x.title), opts:x.opts.map(esc), ans:esc(x.ans)})) : [];
+  if (!D.reading_questions) {
+  q.push({
+    key:"g1", title:"① 「"+st[0].label+"」と「"+st[1].label+"」、どちらが多いと思いますか？",
+    opts:["「"+st[0].label+"」のほうが多い","「"+st[1].label+"」のほうが多い","ほぼ同じ"], right:0,
+    ans:"<b>「"+st[0].label+"」"+st[0].count+"件</b>に対し、「"+st[1].label+"」"+st[1].count+"件。"
+       +"収集した投稿では前者が多くなっています。"
+  });
+  q.push({
+    key:"g2", title:"② 「強い表現」がいちばん多い論点はどれだと思いますか？",
+    opts:[peak[peak.length-1].it.label, peak[1].it.label, peak[0].it.label], right:2,
+    ans:"<b>「"+peak[0].it.label+"」で"+peak[0].r+"%</b>。"
+       +"意見は"+modeById.all.counts[peak[0].it.id]+"件で、強い表現の割合がいちばん高い山です。"
+       +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
+  });
+  }
+  box.innerHTML = q.map(x =>
+    '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
+    + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
+    + '</div><div class="gans" hidden></div></div>').join("");
+  q.forEach(x=>{
+    const card = box.querySelector('[data-k="'+x.key+'"]');
+    const bs = card.querySelectorAll(".gopts button");
+    bs.forEach(b=>b.addEventListener("click", ()=>{
+      const pick = +b.dataset.i;
+      bs.forEach((y,j)=>{ y.disabled=true;
+        if (j===x.right) y.className="hit"; else if (j===pick) y.className="miss"; });
+      const a = card.querySelector(".gans");
+      a.innerHTML = '<p class="lead">'+(pick===x.right?"正解":"はずれ")+'</p>'+x.ans;
+      a.hidden=false;
+      visit(x.key);
+    }));
+  });
+}
+
+/* ---------- 潜水（海の水を抜く） ---------- */
+let dived=false;
+function buildDive(){
+  const b=document.getElementById("dive"), n=document.getElementById("divenote");
+  const sunk=(D.ocean.sunk_continents||[]).length;
+  if (!sunk){ b.parentElement.hidden=true; return; }
+  const box=document.getElementById("ocean");
+  function paint(){
+    b.textContent = dived ? "閉じる" : "資料にしかない話を見る";
+    n.innerHTML = dived
+      ? "<b>"+sunk+"つ出てきました。</b>一次資料に記された内容です。下に確認した範囲と出典があります。"
+      : "一次資料にある内容で、<b>今回収集した意見には見当たらなかった</b>ものがあります。";
+    document.querySelector(".chart-box").classList.toggle("dived", dived);
+    if (box) box.hidden = !dived;
+  }
+  b.addEventListener("click", ()=>{
+    dived=!dived; paint();
+    if (dived){
+      // 海面下はひとまとまり。開いたら語られていない争点と立場をこえて同じ心配をまとめて数える。
+      // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
+      (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
+      (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
+      // box全体（複数の語られていない争点・立場をこえて同じ心配を全部含み、
+      // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
+      // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
+      // 見出しだけを中央合わせにする。
+      if (box) bringIntoView(box.querySelector("h3") || box);
+    }
+  });
+  paint();
+}
+
+/* ---------- 一次資料クイズ ---------- */
+const V_ORDER=["fact","gap","miss"];
+let qi=0, qscore=0;
+function buildQuiz(){
+  const el=document.getElementById("quiz"), cs=D.claims||[];
+  if (!cs.length){ el.parentElement.querySelector(".sec-live").hidden=true; el.hidden=true; return; }
+  if (qi>=cs.length){
+    el.innerHTML='<p class="qscore"><span class="n">'+qscore+' / '+cs.length+'</span> 問正解</p>'
+      + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
+      + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
+          return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
+      + '。<b>一次資料を照合して作った問題</b>です。</p>';
+    return;
+  }
+  const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
+  const labels=V_ORDER.map(v=>{
+    const same=cs.find(x=>x.verdict===v);
+    return same ? same.verdict_label : ({fact:"資料どおり",gap:"少しずれる",miss:"裏が取れない"})[v];
+  });
+  el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>収集した投稿にあった主張</span></div>'
+    + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
+    + labels.map((l,i)=>'<button type="button" data-i="'+i+'">'+l+'</button>').join("")
+    + '</div><div class="qans" hidden></div>';
+  const bs=el.querySelectorAll(".gopts button");
+  bs.forEach(b=>b.addEventListener("click", ()=>{
+    const pick=+b.dataset.i;
+    if (pick===right) qscore++;
+    bs.forEach((y,j)=>{ y.disabled=true;
+      if (j===right) y.className="hit"; else if (j===pick) y.className="miss"; });
+    const a=el.querySelector(".qans");
+    a.innerHTML='<p><span class="verdict v-'+c.verdict+'">'+c.verdict_label+'</span>'+c.finding+'</p>'
+      + (c.sources.length
+         ? '<div class="srcs">'+c.sources.map(x=>'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.name+'</a>').join("")+'</div>'
+         : '<div class="srcs"><span style="color:var(--muted)">公的資料に該当なし。</span></div>')
+      + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
+    a.hidden=false;
+    visit("c:"+c.id);
+    a.querySelector(".qnext").addEventListener("click", ()=>{
+      qi++; buildQuiz();
+      // 次の問題を出した直後、答え欄の下までスクロールしたままだと新しい問題文が
+      // 画面外になる（オーナー指摘2026-09-10）。問題の見出しを画面中央へ運ぶ。
+      bringIntoView(el.querySelector(".qh") || el);
+    });
+  }));
+}
+
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+   JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
+try {
+  buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildGuesses(); buildDive(); buildQuiz(); paintProgress();
+  let resizeFrame;
+  window.addEventListener("resize", ()=>{
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame=requestAnimationFrame(render);
+  });
+  const h = location.hash.slice(1);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
+} catch (e) {
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bplanet-live\b/, "");
+  throw e;
+}
+
+})();
+</script>
+<!-- PLANET_SECTION_END -->
+
 
 <!-- INSIGHT_STATS_START -->
-<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
-  <article class="stat insight-stat">
-    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
-    <strong class="insight-value">373<small>件</small></strong>
-    <p class="insight-note">事故、教育、政治、追悼を切り分けて比較</p>
-    <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
-  </article>
-  <article class="stat insight-stat" data-tone="topic">
-    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
-    <strong class="insight-value">安全管理 107<small>件</small></strong>
-    <p class="insight-note">乗船判断、引率責任、事故原因と再発防止</p>
-    <div class="insight-meter" aria-hidden="true"><i style="width:29%"></i></div>
-  </article>
-  <article class="stat insight-stat" data-tone="option">
-    <div class="insight-head"><span class="insight-icon" aria-hidden="true">✂️</span><span class="insight-label">単純な賛否ではない声</span></div>
-    <strong class="insight-value">論点を切り分け 300<small>件</small></strong>
-    <p class="insight-note">事故検証と教育・政治評価を分ける声が最多</p>
-    <div class="insight-meter" aria-hidden="true"><i style="width:80%"></i></div>
-  </article>
-  <article class="stat insight-stat" data-tone="debate">
-    <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚔️</span><span class="insight-label">最も意見が割れた論点</span></div>
-    <span class="insight-chip">政治的中立性</span>
-    <div class="insight-versus"><span>認定を評価<b>61%</b></span><em>VS</em><span>認定に疑問<b>14%</b></span></div>
-    <div class="insight-split" aria-hidden="true"><i style="width:82%"></i><i style="width:18%"></i></div>
-  </article>
-</section>
+
 <!-- INSIGHT_STATS_END -->
 <section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
 <section class="tide-card" id="henoko-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
@@ -354,19 +1396,7 @@
 </script>
 <!-- TIDE_CARD_END --></section>
 
-<section class="panel" id="explainer-section">
-<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>事故・教育・基地問題を切り分ける</span></div>
-<p class="explainer-lead">この話題には、事故の検証と教育内容への評価という別々の問いが重なっています。「文科省判断への賛否」だけでまとめず、SNSで語られた6つの論点を先に確認してから、自分が重く見る論点を選んでください。</p>
-<div class="explainer-grid">
-  <article class="explainer-card" data-img="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-churitsu.webp" data-alt="辺野古論点1、政治的中立性を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点1の図解を拡大表示"><div class="explainer-card-label"><span class="explainer-num">論点①</span><div><p class="explainer-card-title">⚖️ 政治的中立性 — 「修学旅行に政治活動は含まれるか」<span class="explainer-count" id="issue-count-henoko-student-accident-chuuritsu">44件</span></p><p class="explainer-card-desc">修学旅行中の活動が教育として許される範囲を越えたのか。文科省が教育基本法違反を認定した核心論点。</p><div class="explainer-sides"><span class="explainer-side pro">認定を評価：学校教育の中立性を守る</span><span class="explainer-side con">認定に疑問：教育内容への介入を警戒</span></div></div></div><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-churitsu.webp" alt="辺野古論点1、政治的中立性を解説するインフォグラフィック" loading="lazy" width="1915" height="821"></article>
-  <article class="explainer-card" data-img="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-anzen.webp" data-alt="辺野古論点2、安全管理・事故原因を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点2の図解を拡大表示"><div class="explainer-card-label"><span class="explainer-num">論点②</span><div><p class="explainer-card-title">🛟 安全管理・事故原因 — 「乗船判断と引率体制は適切だったか」<span class="explainer-count" id="issue-count-henoko-student-accident-anzen">107件</span></p><p class="explainer-card-desc">教育内容への評価とは切り離して、乗船判断・運航体制・引率責任・再発防止を問う論点。</p><div class="explainer-sides"><span class="explainer-side pro">責任追及：安全確保と説明を優先</span><span class="explainer-side con">切り分け：未確認の断定を避ける</span></div></div></div><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-anzen.webp" alt="辺野古論点2、安全管理・事故原因を解説するインフォグラフィック" loading="lazy" width="1915" height="821"></article>
-  <article class="explainer-card" data-img="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-tsuito.webp" data-alt="辺野古論点3、追悼と被害者の尊厳を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点3の図解を拡大表示"><div class="explainer-card-label"><span class="explainer-num">論点③</span><div><p class="explainer-card-title">🕊️ 追悼と被害者の尊厳 — 「政治論争より先に悼むべきか」<span class="explainer-count" id="issue-count-henoko-student-accident-tsuito">50件</span></p><p class="explainer-card-desc">政治的対立より先に、亡くなった生徒への追悼と遺族への配慮を置くべきではないかという問い。</p><div class="explainer-sides"><span class="explainer-side pro">追悼を優先：尊厳と静かな検証を</span><span class="explainer-side con">検証も必要：風化させず再発防止へ</span></div></div></div><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-tsuito.webp" alt="辺野古論点3、追悼と被害者の尊厳を解説するインフォグラフィック" loading="lazy" width="1915" height="821"></article>
-  <article class="explainer-card" data-img="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-heiwa.webp" data-alt="辺野古論点4、平和教育の萎縮を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点4の図解を拡大表示"><div class="explainer-card-label"><span class="explainer-num">論点④</span><div><p class="explainer-card-title">📚 平和教育の萎縮 — 「違反認定が沖縄平和学習を萎縮させるか」<span class="explainer-count" id="issue-count-henoko-student-accident-heiwa">26件</span></p><p class="explainer-card-desc">教育基本法違反認定が、沖縄戦や基地問題を扱う教育現場の自己規制を生むかを問う。</p><div class="explainer-sides"><span class="explainer-side pro">懸念：平和学習の自由を守る</span><span class="explainer-side con">反論：中立性と平和教育は両立可能</span></div></div></div><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-heiwa.webp" alt="辺野古論点4、平和教育の萎縮を解説するインフォグラフィック" loading="lazy" width="1915" height="821"></article>
-  <article class="explainer-card" data-img="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-seiji.webp" data-alt="辺野古論点5、政治利用・基地問題を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点5の図解を拡大表示"><div class="explainer-card-label"><span class="explainer-num">論点⑤</span><div><p class="explainer-card-title">📣 政治利用・基地問題 — 「教育か、運動への動員か」<span class="explainer-count" id="issue-count-henoko-student-accident-seijiriyo">77件</span></p><p class="explainer-card-desc">生徒を基地反対運動へ巻き込んだのか、地域の現実を学ぶ正当な教育活動だったのかを問う。</p><div class="explainer-sides"><span class="explainer-side pro">批判：未成年の政治利用を避ける</span><span class="explainer-side con">擁護：現地学習の意義を認める</span></div></div></div><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-seiji.webp" alt="辺野古論点5、政治利用・基地問題を解説するインフォグラフィック" loading="lazy" width="1915" height="821"></article>
-  <article class="explainer-card" data-img="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-houdou.webp" data-alt="辺野古論点6、報道・行政対応を解説するインフォグラフィック" tabindex="0" role="button" aria-label="論点6の図解を拡大表示"><div class="explainer-card-label"><span class="explainer-num">論点⑥</span><div><p class="explainer-card-title">📰 報道・行政対応 — 「事故と教育問題を結びつけた報道は適切か」<span class="explainer-count" id="issue-count-henoko-student-accident-hodo">69件</span></p><p class="explainer-card-desc">事故・安全管理・教育内容を報道・行政がどう関連づけ、どの事実を強調したかを問う。</p><div class="explainer-sides"><span class="explainer-side pro">説明を求める：一次資料と根拠を示す</span><span class="explainer-side con">慎重に読む：見出しだけで断定しない</span></div></div></div><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-houdou.webp" alt="辺野古論点6、報道・行政対応を解説するインフォグラフィック" loading="lazy" width="1915" height="821"></article>
-</div>
-<p class="explainer-note"><strong>使い方：</strong> 次の投票で「最も重く見る論点」と「文科省判断への評価」を選ぶと、SNS反応マップにあなたの位置が表示されます。</p>
-</section>
+
 <section class="panel" id="vote-section" data-vote-topic="henoko-student-accident-issue-stance-v1">
 <div class="panel-title"><h2>あなたはどの論点を重く見る？</h2><span>SNSの声を見る前に</span></div>
 <p>事故の責任、教育の中立性、平和教育への影響は別々に考えられます。まず最も重く見る論点を選び、次に文科省判断への総合評価を選んでください。</p>
@@ -378,12 +1408,12 @@
   </div>
   <dl class="article-trust-meta">
     <div><dt>公開日</dt><dd><time datetime="2026-06-24">2026年6月24日</time></dd></div>
-    <div><dt>最終更新日</dt><dd><time datetime="2026-08-24">2026年8月24日</time></dd></div>
+    <div><dt>最終更新日</dt><dd><time datetime="2026-09-13">2026年9月13日</time></dd></div>
     <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
   </dl>
   <div class="article-trust-method">
     <h3>SNS投稿の収集方法</h3>
-    <p>Yahoo!リアルタイム検索で「辺野古」「高校生」「死亡事故」「教育基本法」など複数の検索語を使い、公開されているX投稿を収集しました。収集した480件のうち意見と判定した373件を論点分析に表示しています。</p>
+    <p>Yahoo!リアルタイム検索で「辺野古」「高校生」「死亡事故」「教育基本法」など複数の検索語を使い、公開されているX投稿を収集しました。収集した480件のうち意見と判定した369件を論点分析に表示しています。</p>
     <h3>AIを使用した工程</h3>
     <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
     <h3>収集・分類で分かったこと</h3>
@@ -422,231 +1452,20 @@
   ];
   var selected=-1,step1=document.getElementById('vote-step1'),step2=document.getElementById('vote-step2'),result=document.getElementById('vote-result');
   ISSUES.forEach(function(issue,index){var button=document.createElement('button');button.type='button';button.className='vote-issue-btn';button.innerHTML='<span class="vote-issue-icon">'+issue.icon+'</span><span class="vote-issue-title">'+issue.k+'</span>';button.onclick=function(){selected=index;step1.style.display='none';step2.style.display='block'};document.getElementById('vote-issue-btns').appendChild(button)});
-  function showVote(issueIndex,stanceIndex,scroll){var issue=ISSUES[issueIndex],stance=STANCES[stanceIndex];selected=issueIndex;step1.style.display='none';step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+issue.k+'　評価：'+stance.k;document.getElementById('vote-position-text').textContent=issue.desc;document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent('辺野古高校生死亡事故で私が重く見る論点は「'+issue.k+'」。'+stance.k+'の立場です。')+'&url='+encodeURIComponent(location.href.split('#')[0]);if(window.setHenokoArenaMarker)window.setHenokoArenaMarker(issueIndex,stance.color);setTimeout(function(){if(window.setHenokoArenaMarker)window.setHenokoArenaMarker(issueIndex,stance.color);if(scroll!==false)document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth',block:'center'})},200)}
+  function showVote(issueIndex,stanceIndex,scroll){var issue=ISSUES[issueIndex],stance=STANCES[stanceIndex];selected=issueIndex;step1.style.display='none';step2.style.display='none';result.style.display='block';document.getElementById('vote-position-label').textContent='論点：'+issue.k+'　評価：'+stance.k;document.getElementById('vote-position-text').textContent=issue.desc;document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent('辺野古高校生死亡事故で私が重く見る論点は「'+issue.k+'」。'+stance.k+'の立場です。')+'&url='+encodeURIComponent(location.href.split('#')[0]);if(window.setHenokoArenaMarker)window.setHenokoArenaMarker(issueIndex,stance.color);setTimeout(function(){if(window.setHenokoArenaMarker)window.setHenokoArenaMarker(issueIndex,stance.color);if(scroll!==false)document.getElementById('vote-result').scrollIntoView({behavior:'smooth',block:'center'})},200)}
   STANCES.forEach(function(stance,index){var button=document.createElement('button');button.type='button';button.className='vote-stance-btn';button.style.setProperty('--stance-color',stance.color);button.style.setProperty('--stance-bg',stance.bg);button.innerHTML='<span class="vote-stance-title">'+stance.k+'</span><span class="vote-stance-desc">'+stance.desc+'</span>';button.onclick=async function(){var box=document.getElementById('vote-stance-btns');VoteStore.setBusy(box,true);try{var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:selected*STANCES.length+index,storageKey:KEY,localValue:{issue:selected,stance:index}});if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');showVote(selected,index,true)}catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error))}finally{VoteStore.setBusy(box,false)}};document.getElementById('vote-stance-btns').appendChild(button)});
   document.getElementById('vote-redo-btn').onclick=function(){VoteStore.clear(KEY);selected=-1;step1.style.display='block';step2.style.display='none';result.style.display='none';if(window.clearHenokoArenaMarker)window.clearHenokoArenaMarker()};
   try{var saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&Number.isInteger(saved.issue)&&Number.isInteger(saved.stance)&&saved.issue>=0&&saved.issue<ISSUES.length&&saved.stance>=0&&saved.stance<STANCES.length)showVote(saved.issue,saved.stance,false)}catch(error){localStorage.removeItem(KEY)}
   if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
 })();
 </script>
-<section class="polar-arena-section" id="issue-arena-section">
-<div id="issue-arena-inner">
-<div class="panel-title"><h2>SNS反応マップ</h2><span>373件 | Hermes再分類 / セクター=論点 / 外側ほど強い反応 / 色=文科省判断への評価</span></div>
-<p class="arena-caption">中心の「辺野古高校生死亡事故」を6つの論点が囲みます。扇の大きさは投稿数、中心からの距離は反応の強さ、点の色は文科省判断への評価です。点を選ぶと投稿の要旨を確認でき、クリックでXを開きます。</p>
-<div id="arena-wrap"><canvas id="arenaHeat" width="640" height="640"></canvas><canvas id="arenaMain" width="640" height="640"></canvas><div id="arena-tooltip"></div></div>
-<p id="arena-marker-note" style="display:none;color:rgba(255,255,255,.72);font-size:12px;text-align:center">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
-<div class="arena-controls"><div class="arena-legend"><span><i style="background:#38bdf8"></i>文科省判断を評価</span><span><i style="background:#fb923c"></i>判断に疑問</span><span><i style="background:#94a3b8"></i>その他・切り分け</span><span style="opacity:.55">中心＝冷静 / 外周＝強い反応</span></div><div id="arena-filters"></div></div>
-</div>
-</section>
-<div class="arena-divider"><img src="images/shared/arena-divider.webp" alt="" loading="lazy"></div>
-<script id="henoko-arena-data">/* HENOKO_ARENA_DATA_START */
-const HENOKO_ARENA_RAW=[{"i":3,"e":0.94,"x":1,"s":"被爆者団体の抗議声明を批判し、高校生の死亡を踏まえて平和教育の萎縮をむしろ支持する強い主張を表明","u":"https://x.com/FwlpAj/status/2064205114018328990"},{"i":5,"e":0.94,"x":1,"s":"NHKの報道姿勢を偏向だと批判し、文科省の判断は明白な違反だと支持する主張","u":"https://x.com/otonanokensiki/status/2061546696744874123"},{"i":0,"e":0.62,"x":1,"s":"同志社国際高校の修学旅行は平和学習ではなく政治的中立性違反だと断定","u":"https://x.com/festiva1202/status/2059978990698574267"},{"i":0,"e":0.62,"x":1,"s":"高校生死亡事故は政治的中立性違反であり、文科省を非難する共産党と社民党を批判","u":"https://x.com/festiva1202/status/2059963013260877866"},{"i":0,"e":0.62,"x":1,"s":"高校生死亡事故は政治的中立性違反であり、文科省を非難する共産党と社民党を批判","u":"https://x.com/festiva1202/status/2059962656833032654"},{"i":0,"e":0.62,"x":1,"s":"文科省の違反認定に賛同し、高校生を政治運動現場に接触させたことの問題性を指摘する。","u":"https://x.com/YAMASHI50684916/status/2059596987708936607"},{"i":0,"e":0.62,"x":1,"s":"左派は活動家と学校の非を先に認めよと主張し、教育基本法問題での饒舌化を批判する。","u":"https://x.com/kikumaco/status/2058755459604226156"},{"i":0,"e":0.62,"x":-1,"s":"前川喜平のコラムを称賛し、現文科大臣の発言が教育基本法に逸脱すると評価する。","u":"https://x.com/Kp6Cv/status/2058252039189311842"},{"i":0,"e":0.62,"x":-1,"s":"文科相の判断に対し、米軍基地でのエアガン射撃訓練も違反ではないかと二重基準を指摘する。","u":"https://x.com/Letusplaytwo/status/2058128960652038208"},{"i":0,"e":0.62,"x":-1,"s":"文科相の判断に対し、米軍基地でのエアガン射撃訓練も中立性違反ではないかと問う。","u":"https://x.com/Letusplaytwo/status/2058126132315394417"},{"i":0,"e":0.62,"x":-1,"s":"文科相の判断に対し、米軍基地でのエアガン訓練も中立性違反ではないかと問う。","u":"https://x.com/Letusplaytwo/status/2058119179065233869"},{"i":0,"e":0.94,"x":1,"s":"文科省の教育基本法違反認定を支持し、同志社国際高校の偏向教育とメディアの批判を展開","u":"https://x.com/anokorono_boku/status/2061607962528112917"},{"i":1,"e":0.94,"x":0,"s":"学校法人の謝罪を受け、担当教員と校長の責任と処分の公表を強く求める","u":"https://x.com/Wahaha11zo/status/2061597702484607045"},{"i":0,"e":0.94,"x":1,"s":"文科省判断を支持し、平和活動家と共産主義的教員が事故を招いたと断罪","u":"https://x.com/JudgeBob35/status/2061382120380186734"},{"i":5,"e":0.62,"x":1,"s":"辺野古事故を報じなかったマスコミと野党が文科省判断後に騒ぎ出した矛盾を指摘","u":"https://x.com/nakatsukuniaki/status/2060194216102564120"},{"i":5,"e":0.62,"x":-1,"s":"辺野古事故で検察・警察が動くとし、文科省統一文書のねつ造を断定的に指摘","u":"https://x.com/shiro557755/status/2059959990975386063"},{"i":2,"e":0.62,"x":0,"s":"文科省報告書発表後の偲ぶ会開催タイミングと校長の「リスタート」発言に疑問","u":"https://x.com/niko3143/status/2059940577328976370"},{"i":0,"e":0.62,"x":1,"s":"野党代表の文科省判断への違和感表明を、事故後の優先順位として批判","u":"https://x.com/datsuryoku01/status/2059704247558779318"},{"i":2,"e":0.62,"x":1,"s":"死者2名の事故後に教職員組合が文科省結果を「恣意的」と批判したことに憤りを示す","u":"https://x.com/hosohiro0518/status/2059618686567407945"},{"i":2,"e":0.62,"x":1,"s":"教職員組合の文科省調査結果への撤回要求を、死者への配慮から批判し左派的と評する","u":"https://x.com/1rlcxV7SHU78175/status/2059606755169259989"},{"i":3,"e":0.62,"x":-1,"s":"文科省が船長の抗議活動説明を問題視したことに対し、民主主義教育の意義を反論","u":"https://x.com/NowHenoko/status/2059180322890408011"},{"i":2,"e":0.62,"x":1,"s":"玉城知事の「踏み込みすぎ」発言を批判し、死者より守りたいものがあると指摘する","u":"https://x.com/miyabi_Gplub/status/2058857255181979948"},{"i":0,"e":0.62,"x":-1,"s":"現地視察こそ中立性を保つと主張し、文科省の違反認定に疑問を呈する","u":"https://x.com/BakuonK/status/2058744539322761271"},{"i":1,"e":0.28,"x":0,"s":"辺野古事故と教育現場のイデオロギー持ち込みで子供が巻き込まれることを懸念する","u":"https://x.com/Hww8l_dare/status/2065888839403819047"},{"i":5,"e":0.62,"x":0,"s":"デニー知事の実績として辺野古事故など複数の問題を列挙し批判する","u":"https://x.com/iwashipeperon/status/2065774168277459082"},{"i":3,"e":0.94,"x":1,"s":"事故は共産党と教育関係者の政治刷り込みの犠牲であり教師は社会の害と断罪する","u":"https://x.com/PvPx4x2gON69285/status/2065680853234245838"},{"i":1,"e":0.62,"x":0,"s":"志位和夫に対し辺野古高校生死亡事故の責任を取るよう求める","u":"https://x.com/atu0511/status/2065642890332864888"},{"i":5,"e":0.62,"x":0,"s":"辺野古事故時と他事件の対応の違いを比較し行政の不一致を指摘する","u":"https://x.com/32kisu/status/2065615127186128911"},{"i":1,"e":0.62,"x":0,"s":"デニー知事の下で活動家が野放しになり事故が起きたと責任を追及する","u":"https://x.com/shrmru/status/2065294367997542817"},{"i":1,"e":0.62,"x":0,"s":"知事が死亡事故に協力的でないことと平和教育の意味を疑問視する","u":"https://x.com/y5xuSAjuMgPaGMO/status/2065278971445731638"},{"i":3,"e":0.62,"x":1,"s":"辺野古事故と平和教育をいつわりと断じ、強い嫌悪感を表明する","u":"https://x.com/fei_shi46434/status/2065255420961391060"},{"i":3,"e":0.62,"x":0,"s":"打越さくらに対し、辺野古事故と平和教育についての考えを問い、税金無駄遣いを指摘する。","u":"https://x.com/fei_shi46434/status/2065253970210378128"},{"i":4,"e":0.94,"x":0,"s":"辺野古事故で教育現場への共産党介入の可能性を指摘し、関係議員の実名公開を求める。","u":"https://x.com/19bcf03c466948e/status/2065239241656033577"},{"i":1,"e":0.94,"x":0,"s":"事故から3か月経過し、共産党員の船長が野放しにならないかと懸念を表明する。","u":"https://x.com/lucky_75757/status/2065096538205159703"},{"i":2,"e":0.94,"x":0,"s":"打越さくらに対し、平和教育のあり方と被害者の命の重さについて問う。","u":"https://x.com/fei_shi46434/status/2064966726417306024"},{"i":1,"e":0.62,"x":0,"s":"塩村あやかに対し、沖縄県の安全対策と法律違反放置について追及する。","u":"https://x.com/fei_shi46434/status/2064651470893658154"},{"i":1,"e":0.62,"x":0,"s":"辺野古事故の徹底解明と再発防止、協議会の責任追求を主張する。","u":"https://x.com/66etam/status/2064578114269872323"},{"i":0,"e":0.62,"x":0,"s":"教職員組合が辺野古基金に協賛していることへの懸念表明","u":"https://x.com/Slhc3/status/2064526003872112853"},{"i":5,"e":0.94,"x":0,"s":"赤旗日刊紙が辺野古事故を特集すべきと求める不満投稿","u":"https://x.com/popo8366/status/2064510729114595521"},{"i":1,"e":0.62,"x":0,"s":"辺野古高校生死亡事故の再発防止が最優先だと主張","u":"https://x.com/UJF_UNAFOO/status/2064366710048817520"},{"i":2,"e":0.62,"x":0,"s":"辰巳孝太郎氏に辺野古事故への発信義務があると訴える","u":"https://x.com/fei_shi46434/status/2064346866347819055"},{"i":5,"e":0.94,"x":0,"s":"辺野古事故より先に参考人招致すべきと他案件と比較","u":"https://x.com/WdtqBGcH5L78862/status/2064339986858856779"},{"i":1,"e":0.94,"x":0,"s":"辺野古事故で高校生の命の安全を無視していると批判","u":"https://x.com/popo8366/status/2064203000126824643"},{"i":4,"e":0.62,"x":0,"s":"辺野古事故後も追悼謝罪がない日本基督教団界隈を批判","u":"https://x.com/Tobidase_ningen/status/2064187497664708877"},{"i":5,"e":0.94,"x":0,"s":"辺野古事故のヒアリング協力を求め船長の政党所属を指摘","u":"https://x.com/sado_no_umare/status/2064172296898793825"},{"i":3,"e":0.62,"x":0,"s":"平和教育ではなく船の恐怖が子どもに与える影響を主張","u":"https://x.com/mq50803/status/2064129850051621085"},{"i":1,"e":0.94,"x":0,"s":"旅客会社なら経営責任者が辞任する例と比較し、玉城デニー知事が事故責任を回避していると批判している。","u":"https://x.com/bravo1q6/status/2064088656965730600"},{"i":1,"e":0.62,"x":0,"s":"辺野古事故は避けられない必然的事故で、再発防止のための抜本的な措置が必要だと主張している。","u":"https://x.com/momochan2012/status/2063773265609544042"},{"i":5,"e":0.94,"x":0,"s":"文春が辺野古事故を追及せず、外部からの圧力により取材が抑制されている可能性を示唆している。","u":"https://x.com/popo8366/status/2063771207024144791"},{"i":5,"e":0.94,"x":0,"s":"文春が辺野古事故を深く取材せず、反対団体や知事らに忖度しているのではと疑問を呈している。","u":"https://x.com/popo8366/status/2063743948297036092"},{"i":1,"e":0.62,"x":0,"s":"多数派が共産党に事故責任を追及すれば、マイノリティ抗議と同様に首謀者を辞任させられると主張している。","u":"https://x.com/mainasuion7584/status/2063662624550916187"},{"i":5,"e":0.62,"x":0,"s":"共産党が事故後の対応を誤り、世論を見て謝罪に転じたことは民主集中制の弊害だと批判している。","u":"https://x.com/VylAxP3SHz50780/status/2063518186524574043"},{"i":5,"e":0.62,"x":0,"s":"共産党に辺野古事故の詳細説明と、関係者の諸喜田タケル氏の現状を明らかにするよう求めている。","u":"https://x.com/tianbianre2412/status/2063462730456301857"},{"i":5,"e":0.94,"x":0,"s":"共産党に辺野古事故の事実を隠さず調査し、国民に対して真相を開示すべきだと強く要求している。","u":"https://x.com/popo8366/status/2063446891367727365"},{"i":5,"e":0.62,"x":0,"s":"報道が平和教育の萎縮論に終始し、亡くなった高校生の責任検証を軽視していると指摘している。","u":"https://x.com/1tika8tika/status/2066084351331455318"},{"i":5,"e":0.62,"x":0,"s":"報道が高校生の安全ではなく抗議活動の正当性を優先しており、本来の論点を見誤っていると支持している。","u":"https://x.com/G4qXd1as/status/2066078244600946722"},{"i":3,"e":0.62,"x":-1,"s":"辺野古事故は警察に任せるべきで文科省の関与は不当であり、高校生の抗議活動は正当と主張","u":"https://x.com/s1omori/status/2066039925032812799"},{"i":0,"e":0.62,"x":1,"s":"玉城知事が文科省判断を踏み込みすぎとした発言に疑問を呈し、教育の政治的中立性から支持を示す","u":"https://x.com/hide_Q_/status/2065623058514387165"},{"i":0,"e":0.62,"x":1,"s":"辺野古への教育基本法違反認定と比べ、他のイベントでの高校生動員に同様指摘がないことへの不公平感を表明","u":"https://x.com/pj1EyUnlZAaxSlh/status/2064998767343042983"},{"i":0,"e":0.94,"x":1,"s":"橋下氏に被害者家族の立場を尊重した発言を求め、社民共産の指導する教育は偏向で文科省認定は妥当と主張","u":"https://x.com/tok66064/status/2064312119840117233"},{"i":3,"e":0.94,"x":1,"s":"報道が辺野古事件を無視し偏向平和教育を正当化していると批判し、その萎縮を望む","u":"https://x.com/maedaosamu1962/status/2063406741690396736"},{"i":3,"e":0.94,"x":1,"s":"報道が辺野古事件を無視し偏向平和教育を正当化していると批判し、その萎縮を望む","u":"https://x.com/maedaosamu1962/status/2063406242740224207"},{"i":3,"e":0.62,"x":0,"s":"学校の安全管理不備を指摘しつつ、文科省の教育内容への介入は不当だと切り分けて批判","u":"https://x.com/asuno_jiyuu/status/2062856444035375187"},{"i":3,"e":0.62,"x":-1,"s":"文科省の教育基本法違反認定を中立の名目だと批判し、高校生の政治活動の自由を擁護","u":"https://x.com/koueihei6869/status/2062842607399841986"},{"i":3,"e":0.28,"x":-1,"s":"高校生の政治活動の自由と教員の教育の自由の重要性を論じ、文科省介入に反対する立場を示す","u":"https://x.com/koueihei6869/status/2062788367407018083"},{"i":1,"e":0.62,"x":0,"s":"高校生死亡事故の法的責任追究を優先し、教育基本法問題は政争化すると後回しにすべきと主張","u":"https://x.com/Odorius/status/2062631161898377512"},{"i":0,"e":0.62,"x":1,"s":"玉城デニー知事が文科省の教育基本法違反認定を「踏み込み過ぎ」としたことに対し、投稿者は明らかな違反だとし知事を批判。","u":"https://x.com/kanamaji148350/status/2062523568957886687"},{"i":3,"e":0.94,"x":-1,"s":"文科省の教育基本法違反認定は「中立を名目に」したもので、高校生の政治活動の自由こそが土台だと主張。","u":"https://x.com/koueihei6869/status/2062408943465562573"},{"i":5,"e":0.62,"x":0,"s":"TBS報道1930の松原耕二の発言を引用し、テレビ局が高校生の命を軽視していると報道姿勢を批判。","u":"https://x.com/german_fan_jp/status/2062175927313051824"},{"i":0,"e":0.62,"x":1,"s":"辺野古研修の教育基本法違反認定は妥当で、共産党の反論は屁理屈だと支持の意を表明。","u":"https://x.com/LaLaLaClassy1/status/2062168385098846508"},{"i":0,"e":0.62,"x":1,"s":"同志社国際高の辺野古研修の教育基本法違反認定は妥当で、偏ったメッセージの植え付けは誘導だと主張。","u":"https://x.com/godmilkwhite/status/2061819948712984626"},{"i":0,"e":0.62,"x":1,"s":"高校生の保護者として、共産党員が抗議船船長として関与した辺野古研修は教育基本法違反だと判断。","u":"https://x.com/RURI178537/status/2061571984782475325"},{"i":5,"e":0.62,"x":0,"s":"サンデーモーニングが辺野古事故を報じず、教育基本法違反のみを取り上げていると報道姿勢を批判。","u":"https://x.com/yaone_no_sekai/status/2061571296149025093"},{"i":4,"e":0.94,"x":-1,"s":"辺野古基地建設を強行する日米軍産・自衛隊が事故の源だと主張し、全国の高校生の怒りを伝えている。","u":"https://x.com/shibuyahatiko/status/2061418914396209616"},{"i":1,"e":0.94,"x":1,"s":"現役教師らの平和教育萎縮懸念の会見に対し、共産社民など左派団体が高校生を殺したと非難している。","u":"https://x.com/USrYdeuUfm6685/status/2061390287763820880"},{"i":1,"e":0.62,"x":1,"s":"ヘリ基地反対協議会が平和学習で高校生を死傷させ謝罪しないと批判し、事故の責任を追及している。","u":"https://x.com/cyji36x/status/2061389381966221620"},{"i":1,"e":0.94,"x":0,"s":"現役教師らが平和教育萎縮を懸念する中、投稿者は荒れた海に高校生を乗せる活動実態を批判する。","u":"https://x.com/8TYuRKTKUp91826/status/2061375106644120006"},{"i":3,"e":0.94,"x":-1,"s":"斎藤氏の文科省支持姿勢に抗議し、抗議船乗船を違反とするのは論理の飛躍で政府による教育弾圧だと主張する。","u":"https://x.com/rodousyatou/status/2060997014570312057"},{"i":1,"e":0.94,"x":0,"s":"事故を「殺人事件」と断定し、関係者に地位性別関係なく厳罰を受けるべきだと法治国家として訴える。","u":"https://x.com/stinger015/status/2060944876045541679"},{"i":4,"e":0.62,"x":0,"s":"文春の報道を引用し、真っ白な高校生を左翼が政治利用し学校も相乗りしたと批判する。","u":"https://x.com/shounan2246/status/2060868145406185872"},{"i":4,"e":0.62,"x":1,"s":"赤嶺氏の産経批判に対し、平和学習と称した政治利用で文科省が違反認定したのは当然だと反論する。","u":"https://x.com/kotaro20241103/status/2060846210353930711"},{"i":3,"e":0.62,"x":-1,"s":"元文科事務次官の解説動画を宣伝し、辺野古平和学習への批判は高市政権・統一教会に都合が悪いからだと示唆する。","u":"https://x.com/JIN377731/status/2060793106153562303"},{"i":5,"e":0.94,"x":1,"s":"共産党赤旗と赤嶺議員の政治介入を批判し、教育基本法違反を助長するとして「人でなし」と糾弾する。","u":"https://x.com/canonfist123/status/2060742714308862285"},{"i":0,"e":0.62,"x":1,"s":"イデオロギーの自己実現に無辜の若い生命が巻き込まれたなら教育基本法違反は当然と大糾弾する。","u":"https://x.com/aaa1414210356/status/2060585484833968151"},{"i":4,"e":0.94,"x":1,"s":"辺野古事故の教育基本法違反や安全軽視を左派カルテルが隠蔽していると批判","u":"https://x.com/abe_ism/status/2060373724654907495"},{"i":2,"e":0.94,"x":0,"s":"自衛隊追悼式と対比し、辺野古高校生追悼への与党の姿勢を心の欠如と批判","u":"https://x.com/yasosima/status/2061278841675685914"},{"i":1,"e":0.62,"x":0,"s":"辺野古事故の追悼歌を紹介し、知らされず船に乗せられた安全管理問題を指摘","u":"https://x.com/yumi777zx/status/2060961480900771867"},{"i":2,"e":0.62,"x":0,"s":"辺野古事故の追悼集会なら理解できるが、現在の状況には疑問を呈する","u":"https://x.com/TanukidaPonkiti/status/2060658363143475634"},{"i":2,"e":0.94,"x":0,"s":"共産党員が辺野古で高校生を殺害したと断定し、追悼の欠如を強く批判","u":"https://x.com/tamate_bako/status/2060598166278537359"},{"i":2,"e":0.94,"x":0,"s":"日本基督教団九州教区議長が抗議活動の誹謗中傷を残念がり、犠牲高校生への追悼を怠ったことを批判","u":"https://x.com/Jios100/status/2052329920857260490"},{"i":1,"e":0.62,"x":0,"s":"抗議船運航団体が高校生を追悼したことに対し、船長が未だ会見しないことを疑問視","u":"https://x.com/lucky_75757/status/2050979291471786392"},{"i":5,"e":0.62,"x":0,"s":"琉球新報が事故詳細より抗議活動を報じることや、喪章が追悼になるかを疑問視","u":"https://x.com/wascshacordante/status/2039559701931897343"},{"i":2,"e":0.94,"x":0,"s":"船長が逃走し逮捕されないことと、高校長が新学期に黙祷を怠ったことを許せないと批判","u":"https://x.com/wenny555twist/status/2060852205813641458"},{"i":2,"e":0.94,"x":0,"s":"辺野古死亡高校生への黙祷を唱えつつ、日本共産党の即刻退場を強く主張","u":"https://x.com/tomsly1001Japan/status/2059789948707065989"},{"i":2,"e":0.94,"x":0,"s":"共産党委員長の謝罪を評価する一方、同志社国際校長が黙祷なく責任を否認したことを批判","u":"https://x.com/vgreenkazoku/status/2056176583099203756"},{"i":5,"e":0.62,"x":0,"s":"デニー知事が辺野古高校生死亡事故に対応せず他の仕事をしていると批判","u":"https://x.com/Onaka_weak/status/2063242919021264963"},{"i":5,"e":0.28,"x":0,"s":"小泉防衛相が国会で沖縄メディアの事故報道不足と遺族noteの読了を呼びかけた発言を評価","u":"https://x.com/FX_longer/status/2063229573828063323"},{"i":4,"e":0.94,"x":0,"s":"沖縄の危機としてオール沖縄との決別を主張し、辺野古事故と左翼組織の関連を指摘する。","u":"https://x.com/waterrat_taka/status/2063152188025946444"},{"i":5,"e":0.62,"x":0,"s":"安和桟橋事故の送検を評価しつつ、県警対応と左翼活動の継続性に懸念を示す。","u":"https://x.com/hidemaro1976/status/2062824772107706390"},{"i":5,"e":0.94,"x":0,"s":"文科省に沖縄事故問題への対応を求め、日教組など左翼組織への批判を展開する。","u":"https://x.com/yarisu2023815/status/2062512270819885246"},{"i":4,"e":0.94,"x":0,"s":"左翼とデニー知事を批判し、辺野古事故を契機に県警が正義の鉄槌を下せたと評価する。","u":"https://x.com/uZO9YrtLOv18422/status/2062461374027251843"},{"i":4,"e":0.94,"x":0,"s":"山添拓氏と共産党を事故を喜んでいるかのように批判し、デニー支持を問題視する。","u":"https://x.com/amakei1973/status/2061656324044431671"},{"i":4,"e":0.94,"x":0,"s":"デニー知事と共産党に事故責任を求め、反基地運動による高校生犠牲を批判する。","u":"https://x.com/tamiroom/status/2061229715466371422"},{"i":1,"e":0.94,"x":0,"s":"沖縄県の政治状態を批判し、県警の締め付け不足が事故の人災だと断定する。","u":"https://x.com/Submarine9999/status/2060001073256120558"},{"i":5,"e":0.62,"x":0,"s":"政治奪還を揶揄し、沖縄県の複数疑惑を指摘して行政の浄化を期待する。","u":"https://x.com/mogJungii/status/2059523550374158773"},{"i":4,"e":0.62,"x":0,"s":"今井絵理子氏の基地反対の動機を批判し、高校生遺族への配慮欠如を指摘する。","u":"https://x.com/fujimi19032/status/2059058192819306675"},{"i":0,"e":0.62,"x":0,"s":"おおた氏が反基地活動の是非から議論を避けていると批判し、主張の一貫性に疑問を呈する。","u":"https://x.com/yaruriyuuwokan1/status/2058513906449182755"},{"i":1,"e":0.62,"x":0,"s":"文科省対応に言及し、過去の事故と比較しながら安全管理徹底を訴える","u":"https://x.com/AMG_GLK30S/status/2058093192260861970"},{"i":1,"e":0.62,"x":0,"s":"他事件と比較し、反基地団体の運航体質など構造的問題の徹底解明を求める","u":"https://x.com/hiruandon_0/status/2058080258117832718"},{"i":4,"e":0.94,"x":0,"s":"左翼妨害運動と部活顧問の「治外法権」を批判し玉城知事の辞任を求める","u":"https://x.com/Wahaha11zo/status/2058002571856687606"},{"i":0,"e":0.94,"x":-1,"s":"責任追求と教育介入を分け、辺野古学習自体を違反とすることは危ういと主張","u":"https://x.com/zoo50022/status/2058001978375258224"},{"i":0,"e":0.62,"x":0,"s":"政治的中立性の重要性を説き、亡くなった高校生と県民の命の価値を同等に語る","u":"https://x.com/Hiroaki4093/status/2057801949114990967"},{"i":5,"e":0.62,"x":0,"s":"沖縄の報道機関が中立公正を欠き、反基地側に傾倒していると批判する","u":"https://x.com/LpEftM7wdG74796/status/2057672737523732515"},{"i":4,"e":0.94,"x":0,"s":"平和教育を名とした反基地活動と座り込み妨害活動の即時停止を求める","u":"https://x.com/Dr7340644932843/status/2056965603509121449"},{"i":5,"e":0.62,"x":0,"s":"沖縄知事選記事を共有し、現職知事が辺野古事故で責任を果たさないと批判した","u":"https://x.com/erotici49484373/status/2056520290226872357"},{"i":2,"e":0.62,"x":0,"s":"共産党の謝罪は生徒と保護者の前で行うべきだと謝罪の場を不十分だと批判した","u":"https://x.com/te36n1kk1/status/2056016313320100315"},{"i":4,"e":0.94,"x":0,"s":"京都の保育園が平和キャンプで幼児を沖縄に送り込んでいると指摘し危険性を警告した","u":"https://x.com/syunka2019vol1/status/2055926540538651003"},{"i":1,"e":0.62,"x":0,"s":"事故当日に海保の船も転覆していたことから救助環境が厳しかったと推論した","u":"https://x.com/HS1022/status/2055792870280618142"},{"i":5,"e":0.94,"x":0,"s":"報道メディアが事件を軽視し船長の実名報道もなく平和学習への思想押しつけに反発した","u":"https://x.com/seshiru0602/status/2044040390014382273"},{"i":4,"e":0.62,"x":0,"s":"2024年の警備員事故時の対応と比較し抗議側のダブルスタンダードを皮肉った","u":"https://x.com/tsukuru_ouu/status/2038036020814606776"},{"i":1,"e":0.94,"x":0,"s":"活動が子どもを守るものではなく危険に晒しているとし2隻の転覆経緯を指摘した","u":"https://x.com/doctor_birkin/status/2034027034872320370"},{"i":1,"e":0.62,"x":0,"s":"産経新聞が同志社国際高校校長の発言と学生の行動に齟齬があると報じたことを共有した","u":"https://x.com/kotobukichand/status/2068130376367952097"},{"i":1,"e":0.62,"x":0,"s":"他校事故と比較し教員の臨機応変を評価、辺野古事故の報道検証不足を指摘","u":"https://x.com/Setubi5_osaka/status/2068127275711864899"},{"i":1,"e":0.94,"x":0,"s":"学校側の発言が事実なら終わっていると批判し生徒の意見を支持","u":"https://x.com/daigakuzaimu/status/2068124032629956888"},{"i":1,"e":0.94,"x":0,"s":"上念司氏の動画を共有し西田校長の迅速対応説を虚偽と糾弾","u":"https://x.com/Kirihidedodonpa/status/2068121013863465051"},{"i":4,"e":0.62,"x":0,"s":"当事者が謝罪しているのにリベラル側が炎上を煽っていると批判","u":"https://x.com/nagoyan2gou/status/2068105840528408878"},{"i":1,"e":0.94,"x":0,"s":"防犯カメラ情報を基に引率教師の無申告・虚偽対応を強く批判","u":"https://x.com/zundamotisuki/status/2068087227071303790"},{"i":1,"e":0.28,"x":0,"s":"辺野古の教師に他の適切な対応を見習ってほしいと批判的に示唆","u":"https://x.com/Muro92626/status/2068026371406962709"},{"i":1,"e":0.94,"x":0,"s":"引率教師が船に同乗せず転覆後の生徒点呼確認も怠ったと非難","u":"https://x.com/UuLvvKiZqf9XGQe/status/2067894876667248868"},{"i":0,"e":0.94,"x":0,"s":"日教組と同志社国際高校の左派平和学習を批判し、子供への悪影響を主張する投稿。","u":"https://x.com/athlonxp_m/status/2067854241021198770"},{"i":1,"e":0.94,"x":0,"s":"学校側の説明と記者証言の食い違いを指摘。引率教員が点呼を取らなかったとする情報を共有。","u":"https://x.com/sakurarts810/status/2067839055740735761"},{"i":5,"e":0.28,"x":0,"s":"事故の事実と校長の対応を確認し、事態の深刻さに悲痛の意を示す短文の投稿。","u":"https://x.com/tokoma921182/status/2067828427353444409"},{"i":1,"e":0.94,"x":0,"s":"主催者と学校側の不祥事、教員の不適切な対応を指摘し、事故の防止策を問う投稿。","u":"https://x.com/bonyandera/status/2067788013174915443"},{"i":5,"e":0.62,"x":0,"s":"同志社国際高校の記者会見で、校長が不適切な態度を見せたと主観的に批判する投稿。","u":"https://x.com/Jcgt64InEY1172/status/2067758578711359669"},{"i":1,"e":0.62,"x":0,"s":"船長の責任を認めつつ、同志社国際高校の教員と学校側の安全管理も杜撰だったと主張する。","u":"https://x.com/nana0504/status/2067748404063805632"},{"i":1,"e":0.94,"x":0,"s":"同志社国際高校を強く断罪し、平和学習以前の安全管理問題として「殺人」と批判する投稿。","u":"https://x.com/sr_chiro_Tr/status/2067733267756065009"},{"i":0,"e":0.62,"x":0,"s":"辺野古の修学旅行を「平和学習ではなく抗議学習」と評価し、政治的中立性に問題があるとの見解を示す。","u":"https://x.com/simo_yan/status/2067681264308814216"},{"i":5,"e":0.28,"x":0,"s":"沖縄総合事務局の調査結果に対し、「何年分か」「知っている話と違う」と調査の範囲や網羅性に疑問を呈する。","u":"https://x.com/st_ttic_/status/2067614708916711857"},{"i":1,"e":0.62,"x":0,"s":"同志社国際高校だけが抗議船に修学旅行生を乗せていたとの報道に対し、「オリジナルじゃん」と皮肉を込めてコメント。","u":"https://x.com/akima125x/status/2067564516028932149"},{"i":2,"e":0.94,"x":0,"s":"亡くなった生徒の母親への訃報連絡時、西田校長が謝罪せずスマホを操作しながら淡々と報告していた様子を批判。","u":"https://x.com/lucky_75757/status/2067550207907377268"},{"i":2,"e":0.94,"x":0,"s":"西田校長が遺族より先に玉城知事と面会したことに疑問を呈し、記者会見を共有。保護責任者遺棄致死罪や教育基本法違反の可能性を示唆。","u":"https://x.com/7redgold/status/2067509777408852452"},{"i":1,"e":0.94,"x":0,"s":"防犯カメラ映像を根拠に、同志社国際高校の教師が転覆直後に点呼を取らず、生徒の安否確認を怠っていたとする動画を共有・批判。","u":"https://x.com/urauchimae1/status/2067485084421353727"},{"i":1,"e":0.62,"x":0,"s":"辺野古転覆事故で引率教師や校長の対応に疑問を呈する映像を紹介し、学校側の責任を問題視している。","u":"https://x.com/sekitoba_/status/2067454134647931056"},{"i":1,"e":0.62,"x":0,"s":"辺野古沖転覆事故の被害状況を整理し、船長への報酬の有無と安全管理責任は別々の論点として切り分けるべきだと主張している。","u":"https://x.com/min1_now/status/2064904104015769844"},{"i":0,"e":0.94,"x":1,"s":"当初の報道の少なさに疑問を呈し、平和教育の理念が子どもの命より優先されたのではないかと懸念する","u":"https://x.com/yutakarlson/status/2062112055046652375"},{"i":1,"e":0.62,"x":0,"s":"共産党関連団体の安全管理徹底を求め、無登録運航や過去の事故歴を指摘する","u":"https://x.com/higetatsu1/status/2060871174691922326"},{"i":1,"e":0.94,"x":0,"s":"高校生を知らせず抗議船に乗せた活動家側の安全管理義務怠慢を厳しく批判する","u":"https://x.com/BOY1142926/status/2060713186031018185"},{"i":3,"e":0.62,"x":-1,"s":"安全管理のずさんさは許せないとしつつ、きちんと管理した上での学習を応援し、国家による教育統制を警戒する","u":"https://x.com/moggtan/status/2060164627686883331"},{"i":3,"e":0.94,"x":-1,"s":"安全管理のずさんさは平和教育だからといって許されないとしつつ、国家権力の教育内容統制に強い危機感を表明する","u":"https://x.com/moggtan/status/2059939623435170216"},{"i":3,"e":0.62,"x":1,"s":"文科省判断への「踏み込みすぎ」批判に反論し、高校生の死亡事実を優先し安全管理と政治活動接続の見直しを主張する","u":"https://x.com/tsudzukifirm/status/2059401694719639672"},{"i":1,"e":0.94,"x":0,"s":"事故検証を要求し、沖縄の「運動を守る空気」や検証のタブー化を批判し、安全管理責任を追及する","u":"https://x.com/RyunosukeOnline/status/2058700071240155524"},{"i":5,"e":0.62,"x":0,"s":"メディアに辺野古転覆事故の特集報道を求め、安全管理と報道責任を問う投稿","u":"https://x.com/kf_ankylo/status/2058348332918186391"},{"i":1,"e":0.62,"x":0,"s":"平和学習を優先し安全管理を軽視した結果、辺野古の悲劇が起きたと批判","u":"https://x.com/juggler777v/status/2058021680669503505"},{"i":1,"e":0.62,"x":0,"s":"船長の刑事告発を受け、運動団体との関係と安全管理の検証を必要と主張","u":"https://x.com/TakaManako_/status/2057938320341049703"},{"i":2,"e":0.62,"x":0,"s":"女子高校生への哀悼と、安全管理・基地問題への抗議・諦念は併立すると主張","u":"https://x.com/NEPROchannel/status/2057803243703656477"},{"i":1,"e":0.94,"x":0,"s":"学校が抗議船であることを隠蔽し安全管理を放棄したと事故構造を整理して批判","u":"https://x.com/horror_nagashi/status/2037855039608521077"},{"i":4,"e":0.94,"x":0,"s":"辺野古抗議船事故を「殺人事件」と呼び、共産党への追及を避けていると批判","u":"https://x.com/haruto_shimizu_/status/2068120925183336850"},{"i":4,"e":0.62,"x":0,"s":"辺野古転覆事故を左翼団体が起こしたとし、日教組の支援関係を指摘する主張","u":"https://x.com/31kpFtTcpsCoWNG/status/2067748505171722515"},{"i":1,"e":0.62,"x":0,"s":"事故の責任追及を訴え、沖縄県知事選の争点化を予測している","u":"https://x.com/hiranonishi/status/2067525300762849521"},{"i":1,"e":0.62,"x":0,"s":"琉球新報の報道意図を批判し、平和丸船長の謝罪を求めている","u":"https://x.com/cnakayama1958/status/2067342499107287375"},{"i":1,"e":0.62,"x":0,"s":"共産党が抗議船転覆事件を隠蔽しようとしていると主張している","u":"https://x.com/CANDY3dayo/status/2067288692788707340"},{"i":1,"e":0.62,"x":0,"s":"他の事件と同じ「臭さ」を感じると述べ、事件への懸念を表明している","u":"https://x.com/tubasa7098/status/2067238442589896895"},{"i":1,"e":0.94,"x":0,"s":"平和丸船長に対して強い憤慨を表明し、姿を見せるよう要求している","u":"https://x.com/Beauty_Turtle_H/status/2067210344351801796"},{"i":5,"e":0.62,"x":0,"s":"メディアに対し、抗議船事件への取材を強く要請している","u":"https://x.com/FTzURAzyONcb6nx/status/2067178181900263894"},{"i":1,"e":0.62,"x":0,"s":"抗議船への高校生乗船を非難し、琉球新報の記事を批判している","u":"https://x.com/study_tks/status/2067175445192401269"},{"i":5,"e":0.62,"x":0,"s":"30年後の報道特集を要求し、メディアの継続的取材を求めている","u":"https://x.com/Nagapiii/status/2067172017133265123"},{"i":4,"e":0.62,"x":0,"s":"基地反対派が事故を政治利用し偽善的だと批判し、被害者の意向を曲解したと指摘する","u":"https://x.com/yarai_neko/status/2067069368857747607"},{"i":1,"e":0.94,"x":0,"s":"抗議船の安全ルール不備と引率責任を批判し、平和教育に携わる者の資質を問題視する","u":"https://x.com/komatonshi/status/2066883312828961061"},{"i":1,"e":0.94,"x":0,"s":"抗議船への高校生搭載と海保警告無視を批判し、事故全容解明を強く求める","u":"https://x.com/SubMarn707/status/2066873723882459245"},{"i":5,"e":0.94,"x":0,"s":"辺野古事故の女子高校生遺族を利用した報道だとリベラルとメディアを批判する","u":"https://x.com/KawauchiYoshin1/status/2066795731198054898"},{"i":5,"e":0.28,"x":0,"s":"辺野古転覆事故3カ月、遺族noteの内容と文科省認定・海保聴取の現状を伝える","u":"https://x.com/basuta007/status/2066716786981265520"},{"i":4,"e":0.62,"x":0,"s":"辺野古事故での高校生無視や中傷動画、自衛隊ヘイトを挙げてリベラル政党を批判する","u":"https://x.com/cuqbb903/status/2066643148240195847"},{"i":1,"e":0.62,"x":0,"s":"辺野古抗議船転覆事故は海難事故に留まらず、学校や市民団体、基督教団の責任も問われると主張する","u":"https://x.com/pgKPmEYSuT/status/2066529723216502974"},{"i":1,"e":0.62,"x":0,"s":"抗議船船長が、高校生の危険を承知で操船していたのかという疑問を投げかけている。","u":"https://x.com/duvinchicode/status/2066457062226424278"},{"i":2,"e":0.62,"x":0,"s":"沖縄のスローガンに対し、辺野古事故と安和桟橋事故の犠牲者が取り残されていると皮肉を込めて指摘している。","u":"https://x.com/ukVnZoVxQds98Lj/status/2066294852464349289"},{"i":1,"e":0.94,"x":1,"s":"国の対応を批判する報道に反論し、事故の責任は抗議運動側と学校の無謀な計画にあると主張している。","u":"https://x.com/almond223685202/status/2065948884611006705"},{"i":1,"e":0.94,"x":0,"s":"無届け抗議船の違法運行が高校生の死を招き、海上保安庁の家宅捜査は当然だと感情を込めて主張している。","u":"https://x.com/9HdrnnDhbd34514/status/2065885610238484957"},{"i":1,"e":0.62,"x":0,"s":"無許可の抗議船に高校生を乗せ、操縦させたことへの疑問と批判的な不満を示している。","u":"https://x.com/as6tmVRuYV87648/status/2065627782529617970"},{"i":2,"e":0.94,"x":0,"s":"事故関係者が犠牲者への哀悼の意を示さず、無許可船への乗船を強いたことを強く批判している。","u":"https://x.com/as6tmVRuYV87648/status/2065626725573402960"},{"i":0,"e":0.62,"x":1,"s":"被爆者団体の文科省判断への批判に対し、高校生は抗議活動として認識していたと反論している。","u":"https://x.com/ikasan_vb/status/2065622074375491966"},{"i":3,"e":0.62,"x":0,"s":"教育現場の萎縮の原因は文科省ではなく教職員組合にあり、辺野古事件も偏向教育の犠牲と主張。","u":"https://x.com/Iga_Ninja9027/status/2065468302697369773"},{"i":0,"e":0.94,"x":0,"s":"辺野古の事故や日教組出身議員の発言を挙げ、共産党と日教組の道義的・倫理的問題を強く非難。","u":"https://x.com/KohnoSiouxsie/status/2068151496727007252"},{"i":3,"e":0.94,"x":0,"s":"辺野古の事故と北陸高の事故を並べ、日本の平和教育は「教え込み」「洗脳」だと批判する。","u":"https://x.com/Wahaha11zo/status/2068107571127627909"},{"i":3,"e":0.62,"x":0,"s":"平和教育の強制性と利権を批判し、辺野古事故や土下座させる修学旅行を具体例として挙げる。","u":"https://x.com/YamaHir92799797/status/2064102357819085261"},{"i":1,"e":0.62,"x":0,"s":"平和学習で高校生を抗議船に乗せ危険に晒したことは、「平和」の名のもとの矛盾だと批判。","u":"https://x.com/kageyamagyaku/status/2063773509504086156"},{"i":4,"e":0.94,"x":0,"s":"左翼は子供を利用する者ばかりと主張し、辺野古事故で高校生が犠牲になったことに憤りを表明。","u":"https://x.com/alperenntmzz/status/2063286676298871190"},{"i":3,"e":0.62,"x":0,"s":"抗議船乗船は政治活動であり教育ではなく、右翼の政治活動と同じだと平和教育の線引きを主張。","u":"https://x.com/akireta774/status/2062832490595922019"},{"i":1,"e":0.28,"x":0,"s":"高校生を船に乗せたこと自体が誤りか、それとも船長の判断が誤りかと安全管理の責任所在を問う。","u":"https://x.com/ingoti/status/2062536090708545636"},{"i":1,"e":0.62,"x":0,"s":"共産党の実務能力不足を批判し、高校生を抗議船に乗せた判断を問題視している","u":"https://x.com/Shirosan001/status/2062456120619524381"},{"i":0,"e":0.62,"x":0,"s":"偏った思想の学校は萎縮すべきだと主張し、教員の引率不在と高校生の死亡を厳しく批判している","u":"https://x.com/megbba/status/2061459903282376715"},{"i":1,"e":0.62,"x":0,"s":"抗議船転覆で高校生が死亡した事故の責任の取り方を問うている","u":"https://x.com/Lovelyhoneybees/status/2061444177972584849"},{"i":1,"e":0.62,"x":0,"s":"抗議船の違法性自体は追及不要としつつ、高校生の修学旅行に乗船を組み入れた学校側の責任を批判している","u":"https://x.com/chei3/status/2061385296588288222"},{"i":5,"e":0.28,"x":0,"s":"NHKニュースで辺野古転覆事件と活動家の責任について報じられたかを問うている","u":"https://x.com/kh11h/status/2061030676535898432"},{"i":1,"e":0.94,"x":0,"s":"辺野古活動家の実態を批判し、真相究明と責任者の処罰を強く求めている","u":"https://x.com/Ys_goroneko/status/2060704766863561030"},{"i":5,"e":0.94,"x":0,"s":"特定人物とテレビ局の報道控えを批判し、左派全体を異常だと断じている","u":"https://x.com/erosphiliagapee/status/2060675600273260818"},{"i":4,"e":0.94,"x":0,"s":"修学旅行のしおりに座り込みが含まれていることに憤慨し、高校生を政治活動に利用していると批判している","u":"https://x.com/taka56068292/status/2060551547764068390"},{"i":1,"e":0.62,"x":0,"s":"修学旅行で高校生を抗議船に乗せることの不自然さを指摘し、当事者である生徒目線の意見が欠如していると主張する。","u":"https://x.com/45ydxoq/status/2060471729508729321"},{"i":4,"e":0.94,"x":0,"s":"抗議船に高校生を乗せることへの強い憤りと、根拠のない資金源の推測を表明している。","u":"https://x.com/mWleeLYURuuEFhv/status/2060347133681885589"},{"i":1,"e":0.94,"x":0,"s":"日本共産党と同志社国際高校の安全管理責任を厳しく追及し、事件の再発防止を求めている。","u":"https://x.com/RnjQLcqbscVfY9l/status/2060231977937326328"},{"i":3,"e":0.62,"x":0,"s":"平和学習としての抗議船乗船の危険性を指摘し、平和教育後退論への違和感を表明している。","u":"https://x.com/mWleeLYURuuEFhv/status/2059978379651338637"},{"i":2,"e":0.62,"x":0,"s":"高校生にとって抗議船の現場がいかに過酷であったかを推測し、被害者の心情に寄り添っている。","u":"https://x.com/Earthling2024/status/2059913915350560977"},{"i":4,"e":0.94,"x":0,"s":"批判対象は反基地団体であり沖縄県民全体ではないと主張し、責任の所在を明確にしている。","u":"https://x.com/kiyasum/status/2059883359510396991"},{"i":3,"e":0.94,"x":1,"s":"文科省の指摘は危険行為への警告に過ぎず、平和教育全体の否定とする反論は拡大解釈だと主張する。","u":"https://x.com/mWleeLYURuuEFhv/status/2059665173837955530"},{"i":0,"e":0.94,"x":0,"s":"教育基本法の意義を説き、保護者同意なき修学旅行での抗議船乗船を異常だと断ずる。","u":"https://x.com/RURI178537/status/2059228656552260001"},{"i":1,"e":0.94,"x":0,"s":"国会での民間人招致議論より、学校側の下見なき抗議船乗船の解明を最優先に求めている。","u":"https://x.com/uverpride1/status/2058922295087997036"},{"i":1,"e":0.94,"x":0,"s":"学校側の責任は認めつつ、抗議団体の安全管理不足が主たる責任だと主張している。","u":"https://x.com/0ny7wVAFDqQROM9/status/2058750408739496189"},{"i":2,"e":0.94,"x":0,"s":"慰霊の場での礼節を求め、左翼の追悼式での行動を遺族の気持ちから批判している。","u":"https://x.com/Xm3H3r2oB1nfcjE/status/2070265280287408441"},{"i":1,"e":0.62,"x":0,"s":"辺野古抗議船側への謝罪を要求し、事故に対する責任追及の姿勢を示している。","u":"https://x.com/awayukinosuke/status/2070006642234843317"},{"i":1,"e":0.62,"x":0,"s":"AIや法律家の見解を引用し、学校側の安全管理責任と法的告発の可能性を論じている。","u":"https://x.com/DailyMemoNotes/status/2069886112932466719"},{"i":2,"e":0.94,"x":0,"s":"共産党員による事故真相究明の遅れを指摘し、慰霊の場での政治的行動を批判している。","u":"https://x.com/Willie699669/status/2069736977252143338"},{"i":4,"e":0.94,"x":0,"s":"辺野古の事故後も自らを省みない平和運動を断罪し、国民の賛同は得られないと主張している。","u":"https://x.com/ryownaka/status/2069685976344252569"},{"i":1,"e":0.62,"x":0,"s":"志位和夫に対し、共産党関係者が関与した事故の真相究明も求めるべきだと反論している。","u":"https://x.com/mattariver3/status/2069641673047703957"},{"i":1,"e":0.94,"x":0,"s":"バス転倒の比喩を用い、事故現場での対応と責任の所在を問うている。","u":"https://x.com/Wahaha11zo/status/2069569448089092517"},{"i":1,"e":0.62,"x":0,"s":"共産党員の船長が関与した事故の真相を明らかにすべきだと訴えている。","u":"https://x.com/airi_fact_555/status/2069532272521560169"},{"i":1,"e":0.62,"x":0,"s":"リポスト削除を理由に、共産党員関与の事故真相究明を求める内容を拡散している。","u":"https://x.com/EbisuKs/status/2069518219648573542"},{"i":1,"e":0.28,"x":0,"s":"辺野古の高校生死亡事故を、共産党関連の抗議船転覆事故として言及している。","u":"https://x.com/yoskoike/status/2069450196166283385"},{"i":1,"e":0.62,"x":0,"s":"主催者の安全管理が甘いから事故が起きたとの主張を述べている。","u":"https://x.com/daihuku0333/status/2069371738153226260"},{"i":5,"e":0.62,"x":0,"s":"他の学校事故と比較し、マスコミが辺野古事故を報道しない温度差を指摘。","u":"https://x.com/A_kaigi_teikoku/status/2069331661259755899"},{"i":5,"e":0.62,"x":0,"s":"沖縄タイムズが他の事件は報道しながら辺野古事故を報じないと批判。","u":"https://x.com/kisakurou/status/2069307452433285328"},{"i":3,"e":0.62,"x":0,"s":"高校生事故を機に洗脳教育が是正されるかと平和教育の在り方に言及。","u":"https://x.com/Labo1972Nyaguma/status/2069293642557391130"},{"i":5,"e":0.62,"x":0,"s":"左寄りメディアが辺野古の高校生死亡事故を無視していると批判している。","u":"https://x.com/GELGOOG_MS_14BR/status/2069198379167744251"},{"i":5,"e":0.62,"x":0,"s":"他の高校生殺人事件と比較し、辺野古事故が社会現象化しない点に疑問。","u":"https://x.com/Aniki_Matsuri/status/2069192742308294661"},{"i":5,"e":0.62,"x":0,"s":"遺族の記事から学校の無責任さとメディアの無関心を指摘している。","u":"https://x.com/smile_running/status/2069020907608457294"},{"i":1,"e":0.62,"x":0,"s":"辺野古沖の転覆事故の真相を明らかにすべきだと訴えている。","u":"https://x.com/lucky_75757/status/2069019855320408430"},{"i":1,"e":0.94,"x":0,"s":"船長に過失あり警察は圧力で動けず沖縄県は狂っていると主張","u":"https://x.com/Wahaha11zo/status/2068826313708994716"},{"i":5,"e":0.94,"x":0,"s":"共同通信は新華社の下僕犯人隠避に加担するなと報道を批判","u":"https://x.com/Joltimore2nd/status/2068817768103948644"},{"i":4,"e":0.62,"x":0,"s":"辺野古事故と共産党区長を結びつけ杉並区長選で落選を呼びかけ","u":"https://x.com/R743fOkyvy1079/status/2068499266272895339"},{"i":5,"e":0.62,"x":0,"s":"磐越道事故と比べ辺野古事故の報道が少なくマスコミは汚いと批判","u":"https://x.com/shin79810841/status/2068425680057139213"},{"i":1,"e":0.62,"x":0,"s":"抗議運動の中で犠牲は避けられなかったか複雑な心情を表明","u":"https://x.com/Chihiro_BLUES/status/2068328992894279683"},{"i":5,"e":0.94,"x":0,"s":"事故前の報道と反基地無罪の風潮が高校生の死を招いたと批判","u":"https://x.com/akireta774/status/2068287210726822201"},{"i":1,"e":0.62,"x":0,"s":"両事故は日本の狂った教育の犠牲引率者の制止権を教えれば防げた","u":"https://x.com/Wahaha11zo/status/2068108071784821118"},{"i":1,"e":0.62,"x":0,"s":"両事故と教員発言から左翼思想が遵法性低下の遠因かと疑問を呈す","u":"https://x.com/skydiveresort/status/2067631168833683640"},{"i":1,"e":0.62,"x":0,"s":"知床観光船事故と辺野古事故を対比し、後者で誰も逮捕されていないことに疑問を呈する","u":"https://x.com/lucky_75757/status/2067370091952603327"},{"i":5,"e":0.94,"x":0,"s":"京都事件やバス事故で辺野古事故の報道を減らしているという陰謀論的主張","u":"https://x.com/taka39_123/status/2067369139677884479"},{"i":1,"e":0.62,"x":0,"s":"知床観光船事故と辺野古事故を比較し、両方とも波浪注意報を軽視したプロの判断ミスだと指摘","u":"https://x.com/sho94949434/status/2067140774698127586"},{"i":1,"e":0.94,"x":0,"s":"転覆後に高校生が通報したことに触れ、左翼活動家の対応を批判し逮捕を求める","u":"https://x.com/zundamotisuki/status/2067131117011108024"},{"i":4,"e":0.62,"x":0,"s":"共産党と社民党が政治活動に高校生を巻き込んだ責任は重いと主張する","u":"https://x.com/nKmlNE0zVzws3Le/status/2067053099492274608"},{"i":4,"e":0.62,"x":0,"s":"左派はまず活動家組織と学校の非を認めるべきだと菊池誠氏の発言を引用して主張","u":"https://x.com/4nza7p/status/2066876516659781656"},{"i":0,"e":0.94,"x":1,"s":"文科省が教育基本法違反と認定したことを支持し、幼児の自衛隊体験と対比して明確な違いがあると主張","u":"https://x.com/mogutarousun/status/2070739413735461133"},{"i":3,"e":0.62,"x":-1,"s":"政府が憲法違反判断するなというハッシュタグ付きで辺野古事故と文科省認定のニュースを投稿","u":"https://x.com/tachannotinpo/status/2070429354526384176"},{"i":0,"e":0.62,"x":1,"s":"玉城知事が文科省判断を「踏み込みすぎ」と批判したことに異議を示し、高校生の安全管理こそ問題だと主張","u":"https://x.com/pgKPmEYSuT/status/2070054197714882704"},{"i":0,"e":0.94,"x":1,"s":"文科省の指摘に反対する教職員組合を批判し、高校生を左翼活動に強制参加させる教育現場を非難","u":"https://x.com/Quma_ShiroKuro/status/2069000572771131726"},{"i":2,"e":0.94,"x":1,"s":"文科省判断に「不当介入」と抗議した市民団体を、高校生の命を顧みないと批判","u":"https://x.com/karakara2204/status/2067816201112465850"},{"i":1,"e":0.62,"x":0,"s":"文科省の認定は論点ずらしで、本来は学校保健安全法や安全管理が議論の中心だと主張","u":"https://x.com/GodStone1192/status/2067772116402131337"},{"i":0,"e":0.94,"x":1,"s":"辺野古運動は平和学習でなく政治活動であり、高校生の犠牲を出した以上教育基本法違反だと主張","u":"https://x.com/madokan28/status/2066844295710347511"},{"i":2,"e":0.62,"x":1,"s":"小笠原理恵の論説を「ド正論」と評価し、報道は高校生の未来を抗議活動の正当性より優先すべきだと支持","u":"https://x.com/G4qXd1as/status/2066803307449102420"},{"i":0,"e":0.94,"x":1,"s":"平和教育は左翼の利益目的だと主張し、報道の萎縮論や活動の正当化を強く批判","u":"https://x.com/mare_kakurega/status/2066247394753421323"},{"i":0,"e":0.62,"x":0,"s":"文科相の移設工事学習違反発言に対し、米軍基地内エアガン射撃訓練も同様に教育基本法違反ではないかとの整合性を問うている。","u":"https://x.com/Letusplaytwo/status/2058083775888990604"},{"i":5,"e":0.94,"x":-1,"s":"辺野古高校生死亡事故の際に文科相が移設工事学習を教育基本法違反としたことは、命の政治利用だと批判している。","u":"https://x.com/NOSUKE0607/status/2057649618721407081"},{"i":4,"e":0.94,"x":0,"s":"追悼式での政治的行為を批判し、辺野古事故もヘリ基地協議会がイデオロギーに利用していると主張。","u":"https://x.com/_yuizousan/status/2070125918211993658"},{"i":2,"e":0.94,"x":0,"s":"追悼式の私物化は辺野古事故を起こした過激派と同じ思考であり、遺族の祈りを踏みにじる暴力だと批判。","u":"https://x.com/neo81443786/status/2070106604406763620"},{"i":2,"e":0.62,"x":0,"s":"特定勢力が追悼式で騒ぎ、辺野古事故の高校生を勝手に代弁して遺族感情を傷つけると批判。","u":"https://x.com/amanda369292874/status/2070002380322795806"},{"i":4,"e":0.94,"x":0,"s":"追悼式でのヤジを許す沖縄の甘えが、辺野古での法令無視と高校生の死につながったと主張。","u":"https://x.com/shinshifuku_bon/status/2069973870359261458"},{"i":2,"e":0.62,"x":0,"s":"追悼式で遺族の感情より政治信条を優先するのは、辺野古事故の高校生や家族を活動に利用するのと同じだと批判。","u":"https://x.com/SbF1s2/status/2069944444800102525"},{"i":2,"e":0.94,"x":0,"s":"追悼式でのヤジと会見での服装問題を同じ傲慢と断じ、辺野古事故の問題点を直す意志がないと批判。","u":"https://x.com/namelessaegis/status/2069786509243490570"},{"i":2,"e":0.94,"x":0,"s":"追悼式でヤジが許される甘えが辺野古の高校生死亡事故に繋がったと主張し反省を求める。","u":"https://x.com/shinshifuku_bon/status/2069738320226320860"},{"i":2,"e":0.94,"x":0,"s":"追悼式での暴力的な考えが辺野古のボート転覆事故で高校生の犠牲を生んだと主張しルール遵守を求める。","u":"https://x.com/kanji_taki/status/2069719459762495520"},{"i":2,"e":0.94,"x":0,"s":"追悼式での政治的主張はヤジであり、マナーとルールを守れない左翼の傲慢さが辺野古事故の背景にあると批判","u":"https://x.com/yuu355/status/2069716976721957210"},{"i":2,"e":0.94,"x":0,"s":"追悼の場での政治的主張は批判されるべきであり、平和を叫びながらルールを無視する姿勢が辺野古事故につながると主張","u":"https://x.com/yuu355/status/2069702536777617833"},{"i":1,"e":0.94,"x":0,"s":"辺野古転覆事故で活動家側が船長に責任を押し付け、生きている船長を隠し解散させて無責任に逃げたと批判","u":"https://x.com/midogaruru1/status/2069641779150987515"},{"i":2,"e":0.62,"x":0,"s":"戦死者への追悼の念を持てない人々の姿勢が、辺野古での高校生の死を招いていると主張","u":"https://x.com/bAWxx1zeFZ64873/status/2069568954113437969"},{"i":4,"e":0.94,"x":0,"s":"沖縄全戦没者追悼式は左翼の活動のためのものであり、辺野古事故も高校生を利用したものだと共産党を批判","u":"https://x.com/FnWGGasqyG83205/status/2069418710209818983"},{"i":4,"e":0.94,"x":0,"s":"追悼式は左翼にとって沖縄利用の道具であり、辺野古事故も高校生を利用したものだと共産党を批判","u":"https://x.com/FnWGGasqyG83205/status/2069415440783474981"},{"i":4,"e":0.94,"x":0,"s":"追悼式の妨害行為を批判。沖縄と高校生を左翼が利用していると主張し、共産党に遵法精神や敬意がないと非難","u":"https://x.com/FnWGGasqyG83205/status/2069412683284348940"},{"i":4,"e":0.94,"x":0,"s":"追悼式の妨害行為を批判。沖縄と高校生を左翼が利用していると主張し、共産党に遵法精神や敬意がないと非難","u":"https://x.com/FnWGGasqyG83205/status/2069411722348449864"},{"i":4,"e":0.94,"x":0,"s":"沖縄全戦没追悼式は左翼の活動のためのものであり、辺野古事故も高校生を利用したものだと共産党を批判","u":"https://x.com/FnWGGasqyG83205/status/2069399196680245483"},{"i":2,"e":0.94,"x":0,"s":"沖縄追悼式でのヤジと辺野古事故の活動家を同質同類とする批判","u":"https://x.com/HideSim/status/2069391023747576212"},{"i":4,"e":0.94,"x":0,"s":"沖縄追悼式での左翼活動家を批判し、辺野古高校生事故を再提起","u":"https://x.com/09047160271/status/2069384258725282133"},{"i":1,"e":0.62,"x":0,"s":"辺野古事故で知事が謝罪しないことを批判し、再選を望まない","u":"https://x.com/twsatuma1982893/status/2069377682178187660"},{"i":4,"e":0.94,"x":0,"s":"沖縄追悼式のヤジより、辺野古左翼活動への糾弾を優先すべきと主張","u":"https://x.com/Muku0719/status/2069328072768422399"},{"i":5,"e":0.62,"x":0,"s":"テレビが沖縄追悼を報道する一方、辺野古高校生事故を報じないと批判","u":"https://x.com/monositii/status/2069263339130421523"},{"i":2,"e":0.94,"x":0,"s":"マスコミの「二人死亡」表現と知事の追悼文を、遺族の尊厳観点から批判","u":"https://x.com/cnakayama1958/status/2067125036226666925"},{"i":2,"e":0.62,"x":0,"s":"事故3カ月の現場追悼が漁港を避けて別の場所で行われたことに違和感を示す","u":"https://x.com/naname_type2/status/2066843009451467192"},{"i":2,"e":0.94,"x":0,"s":"辺野古事故の追悼を地上波放送する姿勢を「嘘くさい」と否定","u":"https://x.com/tanakadaisuke38/status/2066800806012313611"},{"i":0,"e":0.28,"x":0,"s":"宗教団体が他者をカルトと評しながら、辺野古事案で自らを省みないと批判","u":"https://x.com/pgKPmEYSuT/status/2066545324613906503"},{"i":2,"e":0.94,"x":0,"s":"辺野古の高校生の追悼を強く求める感情的な投稿","u":"https://x.com/5VWnitQ3hF90701/status/2066486188459098523"},{"i":2,"e":0.62,"x":0,"s":"辺野古反対協議会の追悼行事が遺族への配慮なくカメラ前のパフォーマンスだと批判","u":"https://x.com/chihaya0425/status/2051113901694366141"},{"i":2,"e":0.62,"x":0,"s":"保守派に辺野古の犠牲高校生への黙祷を求め、愛国心の在り方を問う","u":"https://x.com/amigurumu/status/2068471703467077806"},{"i":1,"e":0.62,"x":0,"s":"辺野古の高校生死亡事故で、海保の責任を必死に否定する議論を不合理だと評価","u":"https://x.com/ruhiginoue/status/2089258990786244690"},{"i":4,"e":0.94,"x":0,"s":"志位氏に対し、辺野古の抗議船死亡事故の謝罪を先にすべきだと強く主張","u":"https://x.com/fei_shi46434/status/2088784707844776021"},{"i":4,"e":0.62,"x":0,"s":"辺野古の抗議船死亡事故の事実を、支持者は本当に知っているか疑問視","u":"https://x.com/fei_shi46434/status/2087469650754011326"},{"i":1,"e":0.62,"x":0,"s":"調査の結果、事故は学校側に回避機会があったと指摘し遺族を案じる","u":"https://x.com/momochan2012/status/2087319699294146864"},{"i":5,"e":0.62,"x":0,"s":"米国事務所問題と辺野古事故を比較し、知事や共産党、マスコミの報道抑制を批判","u":"https://x.com/kachika76890776/status/2086583460710518942"},{"i":1,"e":0.62,"x":0,"s":"辺野古沖転覆事故から5カ月、人災で高校生が亡くなった事件を風化させず逮捕を求める","u":"https://x.com/lucky_75757/status/2086487124602446184"},{"i":5,"e":0.62,"x":0,"s":"オールドメディアが辺野古沖抗議船転覆事故を深く報じない闇を指摘、高校生が乗ったのは抗議船だと訴える","u":"https://x.com/tkhourai/status/2086212685419745388"},{"i":4,"e":0.94,"x":0,"s":"ダンプカー警備員事故と辺野古高校生事故を隠蔽したデニー知事と左翼を潰すべきだと主張","u":"https://x.com/yu_tas_private/status/2086092408908099973"},{"i":0,"e":0.62,"x":0,"s":"杉尾氏の公平性を批判し、辺野古高校生事故への無関心と仲間庇いを指摘している。","u":"https://x.com/fei_shi46434/status/2085913997979861079"},{"i":5,"e":0.62,"x":0,"s":"メディア関係者が辺野古高校生事故を取材・報じていないことを批判し、ジャーナリスト資格を疑問視している。","u":"https://x.com/fei_shi46434/status/2085577876708139127"},{"i":1,"e":0.94,"x":0,"s":"抗議船転覆で高校生が犠牲になった事故の背景に過激集団の影があり、県民の安全が軽視されていると主張している。","u":"https://x.com/OkiPrefGikai_d/status/2085576504466079881"},{"i":4,"e":0.62,"x":0,"s":"辺野古基地の押し付けが事故の根本原因であり、マスコミが報じなくなったと主張している。","u":"https://x.com/Reds3039/status/2085542025601204456"},{"i":1,"e":0.62,"x":0,"s":"いのちの党に辺野古高校生死亡事故の責任追及を優先し、命を重視する主張の前に事故への対応を求めている。","u":"https://x.com/gonta10kg/status/2085516385225187577"},{"i":1,"e":0.94,"x":0,"s":"辺野古の抗議船による高校生死亡事故について、かばさわ洋平氏と共産党に責任を認めるよう求めている。","u":"https://x.com/fei_shi46434/status/2085251941932871889"},{"i":5,"e":0.62,"x":0,"s":"森本毅郎氏に中間選挙予想より辺野古の高校生死亡事故を解説してほしいと求め、政治・教育面での重要性を訴えている。","u":"https://x.com/hachcircle/status/2085177169815413105"},{"i":5,"e":0.62,"x":0,"s":"森本毅郎氏の番組が高市氏のPR問題を取り上げることより、辺野古の高校生死亡事故を公共電波で放送すべきだと主張している。","u":"https://x.com/hachcircle/status/2085174987770728906"},{"i":1,"e":0.94,"x":0,"s":"辺野古抗議船による高校生死亡事故を重大な人災とし、運行団体や共産党、支持者に責任認定と遺族への配慮を求めている。","u":"https://x.com/tanukichuneko/status/2084954819081781639"},{"i":4,"e":0.62,"x":0,"s":"共産党に説明責任を求め、辺野古の事故や活動支援を批判している。","u":"https://x.com/Dr7340644932843/status/2084915501462143433"},{"i":5,"e":0.62,"x":0,"s":"テレビ局がイオン爆発事故と辺野古事故を差別報道していると批判している。","u":"https://x.com/RW11924M/status/2084878991861907632"},{"i":0,"e":0.62,"x":1,"s":"東浩紀氏の論法に疑問を示し、同志社国際高校の平和教育が政治的中立を欠いていると指摘。","u":"https://x.com/dokusidokurai/status/2084724214385545264"},{"i":4,"e":0.62,"x":0,"s":"共産党が辺野古高校生死亡事故の活動支援を誤っていたとして修正を求めている。","u":"https://x.com/gonta10kg/status/2084595692874698786"},{"i":1,"e":0.62,"x":0,"s":"反基地団体と学校側双方に、危険な船に高校生を見せたことへの驚きを示している","u":"https://x.com/2Masada2018/status/2084396023456432547"},{"i":5,"e":0.94,"x":0,"s":"玉城知事が高校生死亡事故の責任を取らず、沖縄修学旅行は危険と主張している","u":"https://x.com/lucky_75757/status/2084211184455295447"},{"i":4,"e":0.62,"x":0,"s":"しばき隊や共産党が辺野古高校生死亡事故を無視していると批判している","u":"https://x.com/sqVBzoUuI910147/status/2083912541756137514"},{"i":2,"e":0.94,"x":0,"s":"遺族謝罪の遅延や募金着服疑惑など、反対協議会を追及している","u":"https://x.com/iEZ5ccQ9S50B8K6/status/2083886915128856858"},{"i":4,"e":0.94,"x":0,"s":"日本共産党やしばき隊が辺野古の高校生死亡事故を無視していると批判","u":"https://x.com/sqVBzoUuI910147/status/2083867981969588653"},{"i":4,"e":0.94,"x":0,"s":"赤旗の辺野古報道と共産党員船長による事故、党の反省欠如を批判","u":"https://x.com/lucky_75757/status/2083839525751779726"},{"i":1,"e":0.62,"x":0,"s":"辺野古抗議船による高校生死亡事故への説明責任を問う投稿","u":"https://x.com/fei_shi46434/status/2083826255636422892"},{"i":4,"e":0.62,"x":0,"s":"安和と辺野古の事故を起こした反基地活動家の後ろ盾を報道すべきと主張","u":"https://x.com/daisankeihin2/status/2083796677459378451"},{"i":5,"e":0.94,"x":0,"s":"左翼番組が高校生の命より辺野古事故の加害者側を優先していると批判","u":"https://x.com/MEnI2LCOOY22590/status/2083740295066419265"},{"i":4,"e":0.62,"x":0,"s":"辺野古事故とデニー知事・活動家の関係から、無条件支持を疑問視","u":"https://x.com/kikumaco/status/2083709902296653959"},{"i":4,"e":0.94,"x":0,"s":"普段正しいことを言う活動家が、重大事件を大目に見ろとしていると批判","u":"https://x.com/N6MMA1108/status/2083539949723455761"},{"i":5,"e":0.62,"x":0,"s":"辺野古抗議船事故の総括から始まる主張に説得力がないと評価","u":"https://x.com/bubu84885394/status/2083528025757696459"},{"i":4,"e":0.62,"x":0,"s":"左派が事故直後から教育基本法違反認定への反発へ論点をずらしたと整理","u":"https://x.com/denkochan_plc/status/2085353416898076763"},{"i":5,"e":0.62,"x":0,"s":"朝日新聞が文科省の教育基本法違反認定を学者が非難する形で報じたことに疑問","u":"https://x.com/isako134/status/2083319560401559917"},{"i":0,"e":0.94,"x":1,"s":"文科省の認定を支持し、平和学習には賛成派と推進派の双方の意見が必要と主張","u":"https://x.com/66etam/status/2083146403321385076"},{"i":4,"e":0.94,"x":-1,"s":"辺野古事故を機に文科省が出した認定は日本会議の思想を反映していると批判","u":"https://x.com/S0U9R8D1O713477/status/2081204234440388824"},{"i":4,"e":0.94,"x":0,"s":"辺野古事故を日本基督教団の責任に結びつけ、質問権行使や解散命令請求を求める主張。","u":"https://x.com/shinfuken/status/2088951834581029288"},{"i":1,"e":0.62,"x":0,"s":"事故船の整備不良や安全管理欠如を指摘し、マスコミ偏向と遺族対応を批判、文科省調査を求める。","u":"https://x.com/HgqXtzz8K385837/status/2080193199218598139"},{"i":5,"e":0.94,"x":0,"s":"政府と警察・司法の偏向を批判し、沖縄高校生事故の徹底追及がされていないと主張","u":"https://x.com/mamadahiro59/status/2082541594880905295"},{"i":5,"e":0.62,"x":0,"s":"辺野古高校生死亡事故で海保が学校を家宅捜索したことへの称賛投稿","u":"https://x.com/Titricst1/status/2081860612112728421"},{"i":4,"e":0.94,"x":0,"s":"辺野古事故を左派が無かったかのように冷遇し、沖縄左派政権とメディアを批判する意見","u":"https://x.com/yoshi_yoshi46/status/2081235433225339375"},{"i":5,"e":0.94,"x":0,"s":"辺野古事故から4カ月、調査特別委員会設置反対に断固として風化させないと訴え逮捕を求める","u":"https://x.com/lucky_75757/status/2075876896424985074"},{"i":2,"e":0.62,"x":0,"s":"辺野古平和学習で亡くなった女子高校生への追悼を共産党が口にしないと批判する意見","u":"https://x.com/BfMjZ6i3vZjgnCS/status/2088580036542800310"},{"i":4,"e":0.62,"x":0,"s":"戦没者追悼の自由を主張しつつ、辺野古沖高校生死傷事件の責任を共産党に問う意見","u":"https://x.com/1RRguRZNLmCZoLM/status/2088367091527389322"},{"i":2,"e":0.94,"x":0,"s":"共産党や玉城知事支援団体が高校生を「殺した」とし、追悼や謝罪を怠ると批判している。","u":"https://x.com/1jUTuQIA9i1898P/status/2086983991379493122"},{"i":2,"e":0.62,"x":0,"s":"辺野古の高校生事故死に追悼がなされず、関係者に責任意識がないのかと問うている。","u":"https://x.com/Avitable148804/status/2086607504755368033"},{"i":2,"e":0.94,"x":0,"s":"辺野古の高校生事故に対する追悼がないことを「クズ」と罵り強く非難している。","u":"https://x.com/qingshuis064/status/2081765159727763589"},{"i":2,"e":0.28,"x":0,"s":"辺野古高校生事件の追悼が行われたことに安堵し、感謝の意を述べている。","u":"https://x.com/Nakayam22190938/status/2081301513541239178"},{"i":5,"e":0.62,"x":0,"s":"神奈川新聞の報道が高校生の追悼を欠き抗議船操業者擁護に偏り、名古屋大名誉教授の認識も批判している。","u":"https://x.com/ayumi_hagiyama/status/2079590176565923892"},{"i":4,"e":0.94,"x":0,"s":"辺野古の警備員・高校生死亡事故を無視するデニー知事と左翼を非難し、沖縄の帰属を問題視。","u":"https://x.com/yumi328606577/status/2091663787057414424"},{"i":5,"e":0.62,"x":0,"s":"NHKが辺野古高校生死亡事故などを報じないなど偏向報道を行い、公共放送の資格がないと批判。","u":"https://x.com/N0088038864178/status/2091452736982360383"},{"i":4,"e":0.94,"x":0,"s":"沖縄県知事が辺野古の警備員・高校生死亡事故を無かったことにしているのではと知事を批判。","u":"https://x.com/zYPSCJKuP35136/status/2091339012611133612"},{"i":5,"e":0.94,"x":0,"s":"県に指導権限がないとしながら校長と会談し、事故防止策も講じない知事の対応を批判。","u":"https://x.com/pengin_seikotsu/status/2090996976972435619"},{"i":5,"e":0.94,"x":0,"s":"サンデーモーニングが高校生2人死亡事故の場面で抗議運動の正当性を語ったことに遺族配慮が欠けると批判。","u":"https://x.com/mattariver2/status/2090951086417051833"},{"i":1,"e":0.62,"x":0,"s":"辰巳孝太郎氏と共産党に、事故への関与と説明責任があると主張している","u":"https://x.com/fei_shi46434/status/2090625263923331084"},{"i":1,"e":0.62,"x":0,"s":"東武グループの関与を指摘し、安全管理の不備を批判している","u":"https://x.com/tekutarou5/status/2090375142136516627"},{"i":4,"e":0.94,"x":0,"s":"共産党支持者や自衛隊・憲法9条反対派に事故責任を押し付けている","u":"https://x.com/dadaichi7317/status/2090067748156305814"},{"i":1,"e":0.28,"x":0,"s":"デニー知事を選んだ沖縄県民への責任転嫁に反論している","u":"https://x.com/GeqQv/status/2089703990019883159"},{"i":1,"e":0.62,"x":0,"s":"高校生を乗せた抗議船が「人間の盾」として使われた可能性を指摘している","u":"https://x.com/ShinichiUeyama/status/2089695082895315204"},{"i":0,"e":0.94,"x":1,"s":"田村智子に対し、文科省の教育基本法違反認定を受け入れ遺族に謝罪すべきだと批判","u":"https://x.com/isako134/status/2091348963815535059"},{"i":1,"e":0.94,"x":0,"s":"政治的中立を求められて萎縮する平和教育は不要であり、高校生を危険に晒す平和学習を批判","u":"https://x.com/mssg3580/status/2089872685711200353"},{"i":5,"e":0.62,"x":0,"s":"メディアが表現の自由を都合よく使い分け、高校生死亡の責任を理解していないと批判","u":"https://x.com/shiawasenohebi/status/2089842213719310466"},{"i":5,"e":0.62,"x":0,"s":"NHKなどメディアが辺野古高校生事故を報じず、風化させていると批判する。","u":"https://x.com/momochan2012/status/2080471003864691186"},{"i":5,"e":0.62,"x":0,"s":"メディアが中国側発信を無批判に流し、辺野古事故報道にも矜持がないと批判。","u":"https://x.com/tachitsuteto38/status/2080107336627376602"},{"i":1,"e":0.94,"x":0,"s":"玉城知事の安心安全宣言と矛盾し、共産党関連団体の抗議船が人災を招いたと主張。","u":"https://x.com/NESARAGESARARV/status/2079977435198533939"},{"i":4,"e":0.94,"x":0,"s":"事故の責任を取らない活動家を表に出し、選挙結果に不満を述べる姿勢を批判する","u":"https://x.com/sakeshiki/status/2079928100054581384"},{"i":1,"e":0.94,"x":0,"s":"侮辱的な加害者推測を交え、辺野古事故も含めた徹底捜査を求める","u":"https://x.com/C1H7g/status/2079684667645763726"},{"i":4,"e":0.94,"x":0,"s":"辺野古事故の被害高校生を悼み、支援団体への憤りと風化防止を訴える。","u":"https://x.com/popo8366/status/2079506510972121497"},{"i":2,"e":0.62,"x":0,"s":"人権派が辺野古事故被害者家族の人権を擁護しないことを指摘し、矛盾を問う。","u":"https://x.com/momochan2012/status/2079311332609003940"},{"i":5,"e":0.62,"x":0,"s":"政治家が辺野古事故や平和教育を追及しないことへの不満を表明する。","u":"https://x.com/fei_shi46434/status/2079006833226957272"},{"i":1,"e":0.62,"x":0,"s":"オスプレイへの不安だけでなく、辺野古事故など県内の安全問題にも目を向けるべきと訴える","u":"https://x.com/k93e17nWcJ82310/status/2078684460011434464"},{"i":2,"e":0.28,"x":0,"s":"事故から4カ月、遺族のメッセージを共有し風化防止を訴える","u":"https://x.com/dedballmizta/status/2077860557122929059"},{"i":2,"e":0.62,"x":0,"s":"運航団体が遺族に直接謝罪できていないことへの疑問を呈する","u":"https://x.com/lucky_75757/status/2077775512269894044"},{"i":4,"e":0.94,"x":0,"s":"事故と普天間質疑を結びつけ、中国侵略の伏線だと主張する","u":"https://x.com/MMD_life_visual/status/2077741165093560654"},{"i":4,"e":0.94,"x":0,"s":"共産党支援団体が事故を起こしたとし、会見対応を批判する","u":"https://x.com/popo8366/status/2077642713676341726"},{"i":4,"e":0.94,"x":0,"s":"政治思想の押し付けの犠牲となった高校生の責任追及を求める","u":"https://x.com/yamato_kokoro01/status/2077383059025097191"},{"i":4,"e":0.62,"x":0,"s":"知事と船長の関係を示唆し、拡散を控えるよう皮肉を込めて書く","u":"https://x.com/lucky_75757/status/2077320633592185339"},{"i":4,"e":0.94,"x":0,"s":"共産党が事故に関わっていると断定し憤りを表明する","u":"https://x.com/popo8366/status/2077171156126433424"},{"i":1,"e":0.62,"x":0,"s":"辺野古の高校生死亡事故から4ヶ月が経過したことに触れ、事故は人災であり風化させてはならないと訴えている。","u":"https://x.com/lucky_75757/status/2076963144073929192"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076946685671153829"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076938353329791214"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076920891536232730"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076915508482634044"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076912968378585120"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076912382484619444"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076911844967723511"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076911634094968924"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故を引き合いに出し、共産党を絶対に許さないと激しく非難している。","u":"https://x.com/popo8366/status/2076911135035658326"},{"i":4,"e":0.94,"x":0,"s":"辺野古の高校生死亡事故について、共産党の責任を厳しく追及している。","u":"https://x.com/popo8366/status/2076908009146757217"},{"i":4,"e":0.94,"x":0,"s":"辺野古事故の責任を玉城知事に求め、隠蔽を批判している。","u":"https://x.com/biggiants11/status/2076875423292789177"},{"i":4,"e":0.94,"x":0,"s":"左翼が辺野古事故の真実から逃げていると批判している。","u":"https://x.com/Narukissoslphe/status/2076863601470775410"},{"i":2,"e":0.94,"x":0,"s":"事故直後の反基地活動家の談笑を問題視し、命の尊厳を訴えている。","u":"https://x.com/Seth3jr/status/2076789969985618004"},{"i":4,"e":0.94,"x":0,"s":"共産党の「成果」として辺野古事故の教育基本法違反を挙げている。","u":"https://x.com/OnogaHatsudaiMM/status/2077302650891301138"},{"i":0,"e":0.62,"x":1,"s":"辺野古見学の教育基本法違反と自衛隊体験を対比し、文科省判断を支持している。","u":"https://x.com/mogutarousun/status/2070736635260756335"}];
-/* HENOKO_ARENA_DATA_END */</script>
-<script>
-(function(){
-  var ISSUES=[
-    {k:'政治的中立性',n:44},
-    {k:'安全管理・事故原因',n:107},
-    {k:'追悼・尊厳',n:50},
-    {k:'平和教育の萎縮',n:26},
-    {k:'政治利用・基地問題',n:77},
-    {k:'報道・行政',n:69}
-  ];
-  var RAW=typeof HENOKO_ARENA_RAW==='undefined'?[]:HENOKO_ARENA_RAW,W=640,CX=320,CY=320,RMIN=68,RMAX=216,RLABEL=248,PAD=2.5;
-  var main=document.getElementById('arenaMain'),heat=document.getElementById('arenaHeat'),tooltip=document.getElementById('arena-tooltip');
-  if(!main||!heat)return;
-  var ctx=main.getContext('2d'),hctx=heat.getContext('2d'),total=ISSUES.reduce(function(sum,item){return sum+item.n},0),usable=360-PAD*2*ISSUES.length,angle=-90;
-  ISSUES.forEach(function(issue){var span=usable*issue.n/total;issue.a0=angle+PAD;issue.a1=issue.a0+span;issue.mid=(issue.a0+issue.a1)/2;angle=issue.a1+PAD});
-  function random(seed){var value=Math.sin(seed*127.1+311.7)*43758.5453;return value-Math.floor(value)}
-  function color(point){return point.x>0?'#38bdf8':point.x<0?'#fb923c':'#94a3b8'}
-  var points=RAW.map(function(point,index){var issue=ISSUES[point.i];if(!issue)return null;var a=issue.a0+random(index)*(issue.a1-issue.a0),r=RMIN+9+point.e*(RMAX-RMIN-24)+(random(index+500)-.5)*16,rad=a*Math.PI/180;r=Math.max(RMIN+3,Math.min(RMAX-4,r));return{px:CX+r*Math.cos(rad),py:CY+r*Math.sin(rad),p:point,c:color(point)}}).filter(Boolean);
-  function drawHeat(){
-    hctx.clearRect(0,0,W,W);hctx.fillStyle='#082f49';hctx.fillRect(0,0,W,W);
-    var max=Math.max.apply(null,ISSUES.map(function(issue){return issue.n}));
-    ISSUES.forEach(function(issue){hctx.beginPath();hctx.moveTo(CX+RMIN*Math.cos(issue.a0*Math.PI/180),CY+RMIN*Math.sin(issue.a0*Math.PI/180));hctx.arc(CX,CY,RMAX,issue.a0*Math.PI/180,issue.a1*Math.PI/180);hctx.arc(CX,CY,RMIN,issue.a1*Math.PI/180,issue.a0*Math.PI/180,true);hctx.closePath();hctx.fillStyle='rgba(34,211,238,'+(0.04+issue.n/max*.14)+')';hctx.fill()});
-    hctx.setLineDash([3,5]);hctx.strokeStyle='rgba(255,255,255,.14)';[112,164,RMAX].forEach(function(r){hctx.beginPath();hctx.arc(CX,CY,r,0,Math.PI*2);hctx.stroke()});hctx.setLineDash([]);
-  }
-  var filter=-1,marker=null,pulse=null;
-  function draw(){
-    ctx.clearRect(0,0,W,W);
-    points.forEach(function(point){ctx.globalAlpha=(filter>=0&&point.p.i!==filter)?0.06:0.82;ctx.beginPath();ctx.arc(point.px,point.py,4,0,Math.PI*2);ctx.fillStyle=point.c;ctx.fill()});ctx.globalAlpha=1;
-    ctx.font='bold 11px "Noto Sans JP",sans-serif';ISSUES.forEach(function(issue,index){var rad=issue.mid*Math.PI/180,x=CX+RLABEL*Math.cos(rad),y=CY+RLABEL*Math.sin(rad),cos=Math.cos(rad);ctx.textAlign=cos>.35?'left':cos<-.35?'right':'center';ctx.textBaseline='middle';ctx.fillStyle=filter>=0&&index!==filter?'rgba(255,255,255,.25)':'rgba(255,255,255,.9)';ctx.fillText(issue.k+' '+issue.n,x,y)});
-    ctx.beginPath();ctx.arc(CX,CY,58,0,Math.PI*2);ctx.fillStyle='#082f49';ctx.fill();ctx.strokeStyle='rgba(34,211,238,.5)';ctx.lineWidth=1.5;ctx.stroke();ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 11px "Noto Sans JP",sans-serif';ctx.fillText('辺野古高校生',CX,CY-8);ctx.fillText('死亡事故',CX,CY+10);
-    if(marker){var issue=ISSUES[marker.issue],rad=issue.mid*Math.PI/180,r=142;marker.x=CX+r*Math.cos(rad);marker.y=CY+r*Math.sin(rad);if(window.drawArenaSectorHighlight)window.drawArenaSectorHighlight(ctx,{cx:CX,cy:CY,innerRadius:RMIN,outerRadius:RMAX,startAngle:issue.a0,endAngle:issue.a1,color:marker.color,degrees:true});if(window.drawArenaUserMarker)window.drawArenaUserMarker(ctx,{x:marker.x,y:marker.y,color:marker.color,canvasSize:W})}
-  }
-  var inner=document.getElementById('issue-arena-inner'),section=document.getElementById('issue-arena-section');
-  function reveal(){inner.style.transition='filter .45s';inner.style.filter='none';inner.style.pointerEvents='auto';var overlay=document.getElementById('arena-overlay');if(overlay)overlay.remove()}
-  window.setHenokoArenaMarker=function(issue,colorValue){marker={issue:issue,color:colorValue||'#22d3ee'};document.getElementById('arena-marker-note').style.display='block';if(pulse)cancelAnimationFrame(pulse);(function loop(){draw();pulse=requestAnimationFrame(loop)})()};
-  window.clearHenokoArenaMarker=function(){if(pulse)cancelAnimationFrame(pulse);pulse=null;marker=null;document.getElementById('arena-marker-note').style.display='none';draw();blur()};
-  function addFilter(label,index){var button=document.createElement('button');button.className='arena-filter'+(index===-1?' active':'');button.textContent=label;button.onclick=function(){filter=index;document.querySelectorAll('.arena-filter').forEach(function(item){item.classList.remove('active')});button.classList.add('active');draw()};document.getElementById('arena-filters').appendChild(button)}
-  addFilter('全件 ('+total+')',-1);ISSUES.forEach(function(issue,index){addFilter(issue.k+' ('+issue.n+')',index)});
-  function position(event){var rect=main.getBoundingClientRect(),scale=W/rect.width;return{x:(event.clientX-rect.left)*scale,y:(event.clientY-rect.top)*scale}}
-  function nearest(pos){var best=null,distance=210;points.forEach(function(point){if(filter>=0&&point.p.i!==filter)return;var d=(point.px-pos.x)**2+(point.py-pos.y)**2;if(d<distance){distance=d;best=point}});return best}
-  main.addEventListener('mousemove',function(event){var point=nearest(position(event));if(!point){tooltip.style.display='none';return}tooltip.style.display='block';tooltip.style.left=Math.min(event.offsetX+14,main.clientWidth-280)+'px';tooltip.style.top=event.offsetY+14+'px';tooltip.innerHTML='<strong>'+ISSUES[point.p.i].k+'</strong><br>'+String(point.p.s).replace(/</g,'&lt;')+'<br><span style="opacity:.65">クリックでXへ</span>'});
-  main.addEventListener('mouseleave',function(){tooltip.style.display='none'});main.addEventListener('click',function(event){var point=nearest(position(event));if(point&&point.p.u)window.open(point.p.u,'_blank','noopener')});
-  drawHeat();draw();
-})();
-</script>
-<section class="panel conflict-panel" id="issue-voices-section">
-<div class="panel-title"><h2>論点別Xの声</h2><span>373件 Hermes再分類</span></div>
-<nav class="quadrant-nav">
-  <a href="#issue-churitsu">⚖️ 政治的中立性 44</a>
-  <a href="#issue-anzen">🛟 安全管理 107</a>
-  <a href="#issue-tsuito">🕊️ 追悼・尊厳 50</a>
-  <a href="#issue-heiwa">📚 平和教育 26</a>
-  <a href="#issue-seiji">📣 政治利用 77</a>
-  <a href="#issue-houdou">📰 報道・行政 69</a>
-</nav>
 
-<article class="issue-block" id="issue-churitsu">
-  <div class="issue-head">
-    <span class="axis-kicker">論点① · 最多二極化論点</span>
-    <h3>⚖️ 政治的中立性 — 「修学旅行に政治活動は含まれるか」<span class="issue-count">44件</span></h3>
-    <div class="temp-bar-wrap">
-      <div class="temp-bar-label"><span>文科省判断への評価</span><span>疑問 6 / 切り分け 10 / 評価 23</span></div>
-      <div class="temp-bar">
-        <div class="temp-seg neg" style="width:15%">15%</div>
-        <div class="temp-seg neu" style="width:26%"></div>
-        <div class="temp-seg pos" style="width:59%">59%</div>
-      </div>
-      <div class="temp-bar-legend"><span><i style="background:#fb923c"></i>判断に疑問</span><span><i style="background:#94a3b8"></i>切り分け</span><span><i style="background:#38bdf8"></i>判断を評価</span></div>
-    </div>
-    <p class="issue-desc">文科省の教育基本法違反認定を評価する声が61%で最多。修学旅行中の活動が教育として許される範囲を越えて特定の政治活動に接近していたかを問う論点で、疑問視する声は14%。</p>
-    <div class="issue-sides">
-      <div class="side pos"><strong>認定を評価（27件）</strong>学校教育には政治的中立性が求められる。修学旅行で抗議活動に参加させることは教育基本法の趣旨に反する。</div>
-      <div class="side neg"><strong>認定に疑問（6件）</strong>事故の責任と教育内容への国の介入は切り分けるべき。辺野古学習を違反とする判断は平和教育全体を萎縮させる。</div>
-    </div>
-  </div>
-  <div class="sample-grid">
-    <div class="sample-card"><div class="meta">文科省判断を評価</div><p>違反認定を支持し偏向教育にメスが入ったと評価。TV業界の放送法違反調査も求める</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/anokorono_boku/status/2061607962528112917">@anokorono_boku の投稿をXで見る</a></blockquote></div>
-    <div class="sample-card"><div class="meta">判断に疑問</div><p>前川喜平氏のコラムを引用し、松本大臣の判断が教育基本法逸脱との指摘を支持する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Kp6Cv/status/2058252039189311842">@Kp6Cv の投稿をXで見る</a></blockquote></div>
-  </div>
-</article>
 
-<article class="issue-block" id="issue-anzen">
-  <div class="issue-head">
-    <span class="axis-kicker">論点② · 最多件数論点</span>
-    <h3>🛟 安全管理・事故原因 — 「乗船判断と引率体制は適切だったか」<span class="issue-count">107件</span></h3>
-    <div class="temp-bar-wrap">
-      <div class="temp-bar-label"><span>この論点の性質</span><span>切り分け 85 / 評価 3</span></div>
-      <div class="temp-bar">
-        <div class="temp-seg neu" style="width:97%">97%・論点切り分け</div>
-        <div class="temp-seg pos" style="width:3%"></div>
-      </div>
-      <div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>文科省の教育認定には言及せず、事故原因・安全管理・再発防止のみを論じる投稿</span></div>
-    </div>
-    <p class="issue-desc">教育内容の評価とは独立して、乗船判断・運航体制・引率責任・原因究明・再発防止を問う声が集中。意見107件のうち104件が「切り分け」スタンスで、文科省の教育認定とは別に事故責任を問うべきという立場が中心。</p>
-    <div class="issue-sides">
-      <div class="side neg" style="background:#f1f5f9;border-left-color:#94a3b8"><strong>事故責任の切り分けを主張（104件）</strong>安全管理の不備・業務上過失致死・再発防止は、教育内容の政治的評価とは全く別の問題として扱うべきだ。</div>
-    </div>
-  </div>
-  <div class="sample-grid">
-    <div class="sample-card"><div class="meta">安全管理の切り分け</div><p>同志社国際高校の安全管理不備を批判し、担当教員と校長の責任追及と処分公表を求めている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Wahaha11zo/status/2061597702484607045">@Wahaha11zo の投稿をXで見る</a></blockquote></div>
-    <div class="sample-card"><div class="meta">教育問題との分離</div><p>業務上過失致死の裁きを主張し、教育基本法問題は後回しにすべきと分離して論点を整理する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Odorius/status/2062631161898377512">@Odorius の投稿をXで見る</a></blockquote></div>
-  </div>
-</article>
 
-<article class="issue-block" id="issue-tsuito">
-  <div class="issue-head">
-    <span class="axis-kicker">論点③ · 追悼・尊厳</span>
-    <h3>🕊️ 追悼と被害者の尊厳 — 「政治論争より先に悼むべきか」<span class="issue-count">50件</span></h3>
-    <div class="temp-bar-wrap">
-      <div class="temp-bar-label"><span>この論点の性質</span><span>切り分け 35 / 評価 5</span></div>
-      <div class="temp-bar">
-        <div class="temp-seg pos" style="width:12%">12%</div>
-        <div class="temp-seg neu" style="width:88%">88%・追悼と切り分け</div>
-      </div>
-      <div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>遺族への配慮・追悼・事実共有が主目的で、文科省判断の評価とは独立した投稿</span><span><i style="background:#38bdf8"></i>判断を評価</span></div>
-    </div>
-    <p class="issue-desc">政治的対立を超えて、亡くなった生徒への追悼と遺族への配慮を前に置く声。88%が切り分けスタンスで、対立よりも静かな悼みを優先する意見が中心。</p>
-    <div class="issue-sides">
-      <div class="side neg" style="background:#f1f5f9;border-left-color:#94a3b8"><strong>追悼を優先（44件）</strong>政治論争より先に亡くなった生徒への悼みを。遺族が発信した言葉を伝えることを優先すべきだ。</div>
-    </div>
-  </div>
-  <div class="sample-grid">
-    <div class="sample-card"><div class="meta">遺族の声を伝える</div><p>遺族のnoteに言及し報道メディアがスルーしていると批判、平和学習に思想を押しつけるなと強く訴える</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/seshiru0602/status/2044040390014382273">@seshiru0602 の投稿をXで見る</a></blockquote></div>
-    <div class="sample-card"><div class="meta">遺族・安全管理の視点</div><p>遺族のnoteを紹介し、学校対応の不誠実さと文科省の不適切認定を裏付けとして引用している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/basuta007/status/2066716786981265520">@basuta007 の投稿をXで見る</a></blockquote></div>
-  </div>
-</article>
 
-<article class="issue-block" id="issue-heiwa">
-  <div class="issue-head">
-    <span class="axis-kicker">論点④ · 平和教育への影響</span>
-    <h3>📚 平和教育の萎縮 — 「違反認定が沖縄平和学習を萎縮させるか」<span class="issue-count">26件</span></h3>
-    <div class="temp-bar-wrap">
-      <div class="temp-bar-label"><span>平和教育への影響評価</span><span>疑問 10 / 切り分け 9 / 評価 7</span></div>
-      <div class="temp-bar">
-        <div class="temp-seg neg" style="width:38%">38%</div>
-        <div class="temp-seg neu" style="width:35%">35%</div>
-        <div class="temp-seg pos" style="width:27%">27%</div>
-      </div>
-      <div class="temp-bar-legend"><span><i style="background:#fb923c"></i>萎縮を懸念</span><span><i style="background:#94a3b8"></i>切り分け</span><span><i style="background:#38bdf8"></i>違反認定を評価</span></div>
-    </div>
-    <p class="issue-desc">教育基本法違反認定によって沖縄戦・基地問題を扱う教育現場が萎縮しないかを問う。認定に疑問を示す声が38%、認定を評価する声が27%で、平和教育への影響をめぐる対立が見える。</p>
-    <div class="issue-sides">
-      <div class="side pos"><strong>認定を評価・萎縮は当然（7件）</strong>偏向した政治活動の場に生徒を連れて行く教育こそ問題。今回の認定は平和教育ではなく政治活動への歯止めだ。</div>
-      <div class="side neg"><strong>萎縮を懸念（10件）</strong>事故は警察が扱うべき問題で、文科省が教育内容への介入口実にすることへの抗議。</div>
-    </div>
-  </div>
-  <div class="sample-grid">
-    <div class="sample-card"><div class="meta">違反認定を評価</div><p>死亡事故にもかかわらず平和教育の萎縮を危惧する抗議声明に反発し、むしろ萎縮すべきだと主張</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/FwlpAj/status/2064205114018328990">@FwlpAj の投稿をXで見る</a></blockquote></div>
-    <div class="sample-card"><div class="meta">萎縮を懸念</div><p>事故は警察に任せるべきで文科省の関与は行きすぎだと抗議活動の正当性を主張する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/s1omori/status/2066039925032812799">@s1omori の投稿をXで見る</a></blockquote></div>
-  </div>
-</article>
 
-<article class="issue-block" id="issue-seiji">
-  <div class="issue-head">
-    <span class="axis-kicker">論点⑤ · 政治利用・基地問題</span>
-    <h3>📣 政治利用・基地問題 — 「教育か、運動への動員か」<span class="issue-count">77件</span></h3>
-    <div class="temp-bar-wrap">
-      <div class="temp-bar-label"><span>この論点の性質</span><span>疑問 1 / 切り分け・中立 34 / 評価 2</span></div>
-      <div class="temp-bar">
-        <div class="temp-seg neg" style="width:3%"></div>
-        <div class="temp-seg neu" style="width:92%">92%・事実整理・責任追及</div>
-        <div class="temp-seg pos" style="width:5%"></div>
-      </div>
-      <div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>共産党議員・知事・無登録船など関係者の関与を整理する投稿。文科省の教育認定評価とは独立</span><span><i style="background:#38bdf8"></i>判断を評価</span></div>
-    </div>
-    <p class="issue-desc">生徒を基地反対運動に巻き込んだのか、共産党や玉城知事の関与をどう評価するか。95%が「切り分け・中立」で、文科省判断への評価とは別に関係者の責任・関与を問う声が中心。</p>
-    <div class="issue-sides">
-      <div class="side neg" style="background:#f1f5f9;border-left-color:#94a3b8"><strong>事実整理・責任追及（73件）</strong>共産党所属議員が船長だった事実、知事の関与、無登録船への動員など、関係者の責任を具体的に問う。</div>
-    </div>
-  </div>
-  <div class="sample-grid">
-    <div class="sample-card"><div class="meta">関係者の責任を問う</div><p>共産党所属議員が船長だったことに触れ、国会でのヒアリング協力を要求する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sado_no_umare/status/2064172296898793825">@sado_no_umare の投稿をXで見る</a></blockquote></div>
-    <div class="sample-card"><div class="meta">知事の関与を批判</div><p>無登録船への高校生動員と転覆事故の責任から玉城デニー知事を批判する</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bravo1q6/status/2064088656965730600">@bravo1q6 の投稿をXで見る</a></blockquote></div>
-  </div>
-</article>
-
-<article class="issue-block" id="issue-houdou">
-  <div class="issue-head">
-    <span class="axis-kicker">論点⑥ · 報道・行政対応</span>
-    <h3>📰 報道・行政対応 — 「事故と教育問題を結びつけた報道は適切か」<span class="issue-count">69件</span></h3>
-    <div class="temp-bar-wrap">
-      <div class="temp-bar-label"><span>この論点の性質</span><span>疑問 2 / 切り分け・中立 43 / 評価 3</span></div>
-      <div class="temp-bar">
-        <div class="temp-seg neg" style="width:4%"></div>
-        <div class="temp-seg neu" style="width:90%">90%・報道批判・事実確認</div>
-        <div class="temp-seg pos" style="width:6%">6%</div>
-      </div>
-      <div class="temp-bar-legend"><span><i style="background:#94a3b8"></i>NHK・共産党機関紙など左右双方のメディアへの批判と事実確認。教育認定の評価とは独立</span><span><i style="background:#38bdf8"></i>行政対応を評価</span><span><i style="background:#fb923c"></i>報道に疑問</span></div>
-    </div>
-    <p class="issue-desc">メディア報道の偏り・行政（知事・文科省）の対応姿勢を問う。93%が「切り分け・中立」で事実確認・報道批判が中心。NHKへの批判も、共産党機関紙への批判も共存している。</p>
-    <div class="issue-sides">
-      <div class="side pos"><strong>対応を評価（3件）</strong>文科省が教育基本法違反を認定したことを適切な行政対応と評価し、今後の報道や行政指導に期待する声。</div>
-      <div class="side neg"><strong>報道・行政に疑問（2件）</strong>文科相の発言が命の政治利用にあたると批判。事故の本質的な問題が教育論争に埋もれていると訴える。</div>
-    </div>
-  </div>
-  <div class="sample-grid">
-    <div class="sample-card"><div class="meta">NHK報道を批判</div><p>NHKが文科省判断に反発する側に偏っているとし、偏向報道であると批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/otonanokensiki/status/2061546696744874123">@otonanokensiki の投稿をXで見る</a></blockquote></div>
-    <div class="sample-card"><div class="meta">行政対応に疑問</div><p>事故の本質を見誤り、文科相の教育基本法違反発言は命の政治利用だと批判</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NOSUKE0607/status/2057649618721407081">@NOSUKE0607 の投稿をXで見る</a></blockquote></div>
-  </div>
-</article>
-
-</section>
-<section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">沖縄・辺野古を修学旅行で訪れていた高校生が死亡した事故をめぐり、学校の安全管理や旅行行程のあり方に加え、文部科学省が当該校の平和教育の内容を「教育基本法違反」と認定したことが大きな議論を呼んでいます。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">文科省の認定を支持する立場からは「学校教育には政治的中立性が求められる」「特定の政治的立場に偏った教育は是正されるべきだ」という声があります。一方で批判する立場からは「事故の責任と教育内容の問題を結びつけるのは筋違い」「国の認定によって沖縄の平和教育・基地問題学習そのものが萎縮する」という懸念が示されています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">亡くなった生徒への追悼の声が広くあがる一方で、事故そのものの原因究明や再発防止と、教育内容への国の関与の是非という異なる論点が絡み合い、SNS上の反応も複雑に分かれています。</p><!-- BACKGROUND_SOURCES_START --><div class="background-sources"><h3>一次情報</h3><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener noreferrer">文部科学省「同志社国際高等学校の研修旅行等について（これまでの把握事項と文部科学省の見解）」（令和8年5月22日）</a></li><li><a href="https://www.mext.go.jp/b_menu/daijin/detail/mext_00684.html" target="_blank" rel="noopener noreferrer">松本洋平 文部科学大臣 記者会見録（令和8年4月14日）</a></li><li><a href="https://anzenkyouiku.mext.go.jp/guideline-jikotaiou/index.html" target="_blank" rel="noopener noreferrer">文部科学省「学校事故対応に関する指針【改訂版】」（令和6年3月）</a></li></ul></div><!-- BACKGROUND_SOURCES_END --></section>
 <section class="panel" id="related-topics"><div class="panel-title"><h2>次に読むテーマ</h2><span>他のv3テーマ</span></div><div class="related-grid"><a class="related-card" href="ai-copyright-reaction-map.html"><img src="images/topics/ai-copyright/ai-copyright-hero.webp" alt="生成AIと著作権" loading="lazy"><div><strong>生成AIと著作権</strong><p>規制か技術革新か。</p></div></a><a class="related-card" href="school-nickname-ban-reaction-map.html"><img src="images/topics/school-nickname-ban/school-nickname-hero.webp" alt="学校でのあだ名禁止の是非" loading="lazy"><div><strong>学校でのあだ名禁止の是非</strong><p>いじめ防止か行き過ぎか。</p></div></a><a class="related-card" href="bukatsu-chiiki-reaction-map.html"><img src="images/topics/bukatsu-chiiki/bukatsu-hero.webp" alt="部活動の地域移行" loading="lazy"><div><strong>部活動の地域移行</strong><p>教員負担と家庭負担の間で。</p></div></a></div></section>
-<section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2><span>折りたたみ</span></div><!-- DETAIL_TABLES_START --><details open><summary>論点別件数</summary><div class="table-wrap"><table><tbody><tr><th>政治的中立性</th><td>44</td></tr><tr><th>安全管理・事故原因</th><td>107</td></tr><tr><th>追悼と被害者の尊厳</th><td>50</td></tr><tr><th>平和教育の萎縮</th><td>26</td></tr><tr><th>政治利用・基地問題</th><td>77</td></tr><tr><th>報道・行政の伝え方</th><td>69</td></tr><tr><th style="font-weight:900">合計（意見投稿）</th><td style="font-weight:900">373</td></tr></tbody></table></div></details><details><summary>立場別件数</summary><div class="table-wrap"><table><tbody><tr><th>文科省判断を評価</th><td>47</td></tr><tr><th>判断を保留・切り分ける</th><td>306</td></tr><tr><th>文科省判断に疑問</th><td>20</td></tr><tr><th style="font-weight:900">合計（意見投稿）</th><td style="font-weight:900">373</td></tr></tbody></table></div></details><details><summary>論点×立場のクロス集計</summary><div class="table-wrap"><table><thead><tr><th>論点</th><th>評価</th><th>保留</th><th>疑問</th><th>計</th></tr></thead><tbody><tr><th>政治的中立性</th><td>27</td><td>11</td><td>6</td><td>44</td></tr><tr><th>安全管理・事故原因</th><td>3</td><td>104</td><td>0</td><td>107</td></tr><tr><th>追悼と被害者の尊厳</th><td>5</td><td>45</td><td>0</td><td>50</td></tr><tr><th>平和教育の萎縮</th><td>7</td><td>9</td><td>10</td><td>26</td></tr><tr><th>政治利用・基地問題</th><td>2</td><td>73</td><td>2</td><td>77</td></tr><tr><th>報道・行政の伝え方</th><td>3</td><td>64</td><td>2</td><td>69</td></tr><tr><th style="font-weight:900">合計</th><td style="font-weight:900">47</td><td style="font-weight:900">306</td><td style="font-weight:900">20</td><td style="font-weight:900">373</td></tr></tbody></table></div></details><details><summary>感情の強さ（intensity）</summary><div class="table-wrap"><table><tbody><tr><th>high（強い）</th><td>166</td></tr><tr><th>medium（中）</th><td>193</td></tr><tr><th>low（弱い）</th><td>14</td></tr><tr><th style="font-weight:900">合計（意見投稿）</th><td style="font-weight:900">373</td></tr></tbody></table></div></details><!-- DETAIL_TABLES_END --><details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>今回の検索語は「辺野古」「高校生」「死亡事故」「教育基本法」に寄っているため、教育基本法違反認定をめぐる反応が多く出やすいです。</li><li>文科省・慰霊を直接含む検索語では取得件数が少なく、実際の反応軸は教育基本法認定への賛否に寄っています。</li></ul></details></section>
+<section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2><span>折りたたみ</span></div><!-- DETAIL_TABLES_START --><details open><summary>論点別件数</summary><div class="table-wrap"><table><tbody><tr><th>政治的中立性</th><td>44</td></tr><tr><th>安全管理・事故原因</th><td>105</td></tr><tr><th>追悼と被害者の尊厳</th><td>51</td></tr><tr><th>平和教育の萎縮</th><td>25</td></tr><tr><th>政治利用・基地問題</th><td>76</td></tr><tr><th>報道・行政の伝え方</th><td>68</td></tr><tr><th style="font-weight:900">合計（意見投稿）</th><td style="font-weight:900">369</td></tr></tbody></table></div></details><details><summary>立場別件数</summary><div class="table-wrap"><table><tbody><tr><th>文科省判断を評価</th><td>27</td></tr><tr><th>判断を保留・切り分ける</th><td>324</td></tr><tr><th>文科省判断に疑問</th><td>18</td></tr><tr><th style="font-weight:900">合計（意見投稿）</th><td style="font-weight:900">369</td></tr></tbody></table></div></details><details><summary>論点×立場のクロス集計</summary><div class="table-wrap"><table><thead><tr><th>論点</th><th>評価</th><th>保留</th><th>疑問</th><th>計</th></tr></thead><tbody><tr><th>政治的中立性</th><td>21</td><td>16</td><td>7</td><td>44</td></tr><tr><th>安全管理・事故原因</th><td>0</td><td>105</td><td>0</td><td>105</td></tr><tr><th>追悼と被害者の尊厳</th><td>0</td><td>51</td><td>0</td><td>51</td></tr><tr><th>平和教育の萎縮</th><td>2</td><td>14</td><td>9</td><td>25</td></tr><tr><th>政治利用・基地問題</th><td>2</td><td>74</td><td>0</td><td>76</td></tr><tr><th>報道・行政の伝え方</th><td>2</td><td>64</td><td>2</td><td>68</td></tr><tr><th style="font-weight:900">合計</th><td style="font-weight:900">27</td><td style="font-weight:900">324</td><td style="font-weight:900">18</td><td style="font-weight:900">369</td></tr></tbody></table></div></details><details><summary>感情の強さ（intensity）</summary><div class="table-wrap"><table><tbody><tr><th>high（強い）</th><td>165</td></tr><tr><th>medium（中）</th><td>187</td></tr><tr><th>low（弱い）</th><td>17</td></tr><tr><th style="font-weight:900">合計（意見投稿）</th><td style="font-weight:900">369</td></tr></tbody></table></div></details><!-- DETAIL_TABLES_END --><details><summary>注意</summary><ul><li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li><li>今回の検索語は「辺野古」「高校生」「死亡事故」「教育基本法」に寄っているため、教育基本法違反認定をめぐる反応が多く出やすいです。</li><li>文科省・慰霊を直接含む検索語では取得件数が少なく、実際の反応軸は教育基本法認定への賛否に寄っています。</li></ul></details></section>
 </main><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="manga-viewer.js"></script>
 <script>

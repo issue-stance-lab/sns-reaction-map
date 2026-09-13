@@ -1,9 +1,107 @@
 {
   "claim_verification": {
-    "checked_on": null,
-    "claims": [],
-    "reviewer_type": null,
-    "status": "not_started"
+    "checked_on": "2026-09-13",
+    "claims": [
+      {
+        "claim": "転覆時、生徒が乗る船に引率教員は同行していなかった",
+        "finding": "文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。",
+        "id": "school-escort",
+        "issue_ids": [
+          "henoko-student-accident-safety"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "文部科学省：研修旅行の検証見解（2頁）",
+            "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "当日は波浪警報が出ていた",
+        "finding": "文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。",
+        "id": "weather-advisory",
+        "issue_ids": [
+          "henoko-student-accident-safety",
+          "henoko-student-accident-base-politics"
+        ],
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "文部科学省：安全管理の確認事項（3〜4頁）",
+            "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した",
+        "finding": "文科省は当時把握した情報に基づき、様々な見解の提示、抗議船の利用、しおり等を総合して、辺野古への移設工事に関する学習が同法第14条第2項に反すると判断しています。その判断への賛否と、判断が公表された事実は別です。",
+        "id": "education-finding",
+        "issue_ids": [
+          "henoko-student-accident-neutrality"
+        ],
+        "matched_post_count": 6,
+        "sources": [
+          {
+            "name": "文部科学省：教育活動についての見解（7頁）",
+            "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "文科省が指摘したのは、危険な乗船をやめることだけだ",
+        "finding": "見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。",
+        "id": "not-safety-only",
+        "issue_ids": [
+          "henoko-student-accident-peace-education"
+        ],
+        "matched_post_count": 1,
+        "sources": [
+          {
+            "name": "文部科学省：安全管理・教育活動の見解（3〜8頁）",
+            "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "事故の船は、海上運送法の事業登録を受けずに運送していた",
+        "finding": "国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。",
+        "id": "unregistered-service",
+        "issue_ids": [
+          "henoko-student-accident-safety"
+        ],
+        "matched_post_count": 1,
+        "sources": [
+          {
+            "name": "国土交通省：海上運送法違反について（5月22日）",
+            "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "教育基本法は、政治的教養を学ぶこと自体を否定していない",
+        "finding": "4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。",
+        "id": "political-learning",
+        "issue_ids": [
+          "henoko-student-accident-neutrality"
+        ],
+        "matched_post_count": 1,
+        "sources": [
+          {
+            "name": "文部科学省：4月7日通知の別添（7〜8頁）",
+            "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf"
+          }
+        ],
+        "verdict": "fact"
+      }
+    ],
+    "reviewer_type": "ai_assisted",
+    "status": "complete"
   },
   "collected_count": 480,
   "collection_period": {
@@ -11,17 +109,43 @@
     "start": "2026-06-14",
     "status": "known"
   },
-  "data_version": "v1-4551a4a3fca9cfc1",
+  "data_version": "v1-20f3d364ac79b6d2",
   "editorial_summary": {
-    "checked_on": null,
-    "findings": [],
-    "reviewer_type": null,
-    "status": "not_started"
+    "checked_on": "2026-09-12",
+    "findings": [
+      {
+        "id": "henoko-student-accident-ed-1",
+        "kind": "shared_premise",
+        "text": "安全管理の不備は許されないという声は、文科省判断を支持する側にも、教育への介入に反発する側にもありました。事故を軽く見ているかどうかだけでは、対立の理由を説明できません。"
+      },
+      {
+        "id": "henoko-student-accident-ed-2",
+        "kind": "real_conflict",
+        "text": "分かれるのは検証の範囲です。政治活動との接続まで学校の責任として見直すか、安全の是正と教育内容への国の介入を分けるか。安全と教育は関連しますが、同じ問いではありません。"
+      },
+      {
+        "id": "henoko-student-accident-ed-3",
+        "kind": "real_conflict",
+        "text": "安全管理・事故原因の意見（105件）にも、船の選定、学校の引率、事故後の説明という違いがあります。責任を求める声の多さは、特定の人の過失が証明された数ではありません。"
+      },
+      {
+        "id": "henoko-student-accident-ed-4",
+        "kind": "still_unknown",
+        "text": "「論点を切り分ける」は、投稿者が明示的に切り分けを主張した場合だけでなく、文科省判断への賛否を示さず事故や報道を語った場合も含む分類名です。全員が同じ解決策を支持しているわけではありません。"
+      },
+      {
+        "id": "henoko-student-accident-ed-5",
+        "kind": "still_unknown",
+        "text": "同じ趣旨の繰り返し投稿もあります。検索で集めた投稿数を数えており、人数や世論全体の支持率を示してはいません。報道が少ないとの意見についても、放送時間や記事総数を実測した結果ではありません。"
+      }
+    ],
+    "reviewer_type": "ai_assisted",
+    "status": "complete"
   },
-  "issue_assigned_count": 373,
+  "issue_assigned_count": 369,
   "issues": [
     {
-      "count": 107,
+      "count": 105,
       "id": "henoko-student-accident-safety",
       "intensities": [
         {
@@ -29,11 +153,11 @@
           "id": "low"
         },
         {
-          "count": 63,
+          "count": 62,
           "id": "medium"
         },
         {
-          "count": 39,
+          "count": 38,
           "id": "high"
         }
       ],
@@ -41,7 +165,7 @@
       "label": "安全管理・事故原因",
       "stances": [
         {
-          "count": 3,
+          "count": 0,
           "id": "henoko-student-accident-ministry-support",
           "intensities": [
             {
@@ -49,11 +173,11 @@
               "id": "low"
             },
             {
-              "count": 1,
+              "count": 0,
               "id": "medium"
             },
             {
-              "count": 2,
+              "count": 0,
               "id": "high"
             }
           ],
@@ -79,7 +203,7 @@
           "label": "文科省判断に反発"
         },
         {
-          "count": 104,
+          "count": 105,
           "id": "henoko-student-accident-distinguish-issues",
           "intensities": [
             {
@@ -91,7 +215,7 @@
               "id": "medium"
             },
             {
-              "count": 37,
+              "count": 38,
               "id": "high"
             }
           ],
@@ -139,7 +263,7 @@
       "label": "政治的中立性",
       "stances": [
         {
-          "count": 27,
+          "count": 21,
           "id": "henoko-student-accident-ministry-support",
           "intensities": [
             {
@@ -147,18 +271,18 @@
               "id": "low"
             },
             {
-              "count": 17,
+              "count": 12,
               "id": "medium"
             },
             {
-              "count": 10,
+              "count": 9,
               "id": "high"
             }
           ],
           "label": "文科省判断を支持"
         },
         {
-          "count": 6,
+          "count": 7,
           "id": "henoko-student-accident-ministry-oppose",
           "intensities": [
             {
@@ -166,7 +290,7 @@
               "id": "low"
             },
             {
-              "count": 5,
+              "count": 6,
               "id": "medium"
             },
             {
@@ -177,7 +301,7 @@
           "label": "文科省判断に反発"
         },
         {
-          "count": 11,
+          "count": 16,
           "id": "henoko-student-accident-distinguish-issues",
           "intensities": [
             {
@@ -185,11 +309,11 @@
               "id": "low"
             },
             {
-              "count": 7,
+              "count": 11,
               "id": "medium"
             },
             {
-              "count": 3,
+              "count": 4,
               "id": "high"
             }
           ],
@@ -217,7 +341,7 @@
       ]
     },
     {
-      "count": 26,
+      "count": 25,
       "id": "henoko-student-accident-peace-education",
       "intensities": [
         {
@@ -225,7 +349,7 @@
           "id": "low"
         },
         {
-          "count": 16,
+          "count": 15,
           "id": "medium"
         },
         {
@@ -237,7 +361,7 @@
       "label": "平和教育の萎縮",
       "stances": [
         {
-          "count": 7,
+          "count": 2,
           "id": "henoko-student-accident-ministry-support",
           "intensities": [
             {
@@ -245,22 +369,22 @@
               "id": "low"
             },
             {
-              "count": 2,
+              "count": 1,
               "id": "medium"
             },
             {
-              "count": 5,
+              "count": 1,
               "id": "high"
             }
           ],
           "label": "文科省判断を支持"
         },
         {
-          "count": 10,
+          "count": 9,
           "id": "henoko-student-accident-ministry-oppose",
           "intensities": [
             {
-              "count": 1,
+              "count": 0,
               "id": "low"
             },
             {
@@ -275,11 +399,11 @@
           "label": "文科省判断に反発"
         },
         {
-          "count": 9,
+          "count": 14,
           "id": "henoko-student-accident-distinguish-issues",
           "intensities": [
             {
-              "count": 0,
+              "count": 1,
               "id": "low"
             },
             {
@@ -287,7 +411,7 @@
               "id": "medium"
             },
             {
-              "count": 1,
+              "count": 5,
               "id": "high"
             }
           ],
@@ -315,7 +439,7 @@
       ]
     },
     {
-      "count": 77,
+      "count": 76,
       "id": "henoko-student-accident-base-politics",
       "intensities": [
         {
@@ -323,7 +447,7 @@
           "id": "low"
         },
         {
-          "count": 22,
+          "count": 21,
           "id": "medium"
         },
         {
@@ -354,7 +478,7 @@
           "label": "文科省判断を支持"
         },
         {
-          "count": 2,
+          "count": 0,
           "id": "henoko-student-accident-ministry-oppose",
           "intensities": [
             {
@@ -366,14 +490,14 @@
               "id": "medium"
             },
             {
-              "count": 2,
+              "count": 0,
               "id": "high"
             }
           ],
           "label": "文科省判断に反発"
         },
         {
-          "count": 71,
+          "count": 74,
           "id": "henoko-student-accident-distinguish-issues",
           "intensities": [
             {
@@ -381,18 +505,18 @@
               "id": "low"
             },
             {
-              "count": 21,
+              "count": 20,
               "id": "medium"
             },
             {
-              "count": 50,
+              "count": 54,
               "id": "high"
             }
           ],
           "label": "論点を切り分ける"
         },
         {
-          "count": 2,
+          "count": 0,
           "id": "henoko-student-accident-neutral",
           "intensities": [
             {
@@ -404,7 +528,7 @@
               "id": "medium"
             },
             {
-              "count": 2,
+              "count": 0,
               "id": "high"
             }
           ],
@@ -413,15 +537,15 @@
       ]
     },
     {
-      "count": 69,
+      "count": 68,
       "id": "henoko-student-accident-public-response",
       "intensities": [
         {
-          "count": 5,
+          "count": 7,
           "id": "low"
         },
         {
-          "count": 42,
+          "count": 39,
           "id": "medium"
         },
         {
@@ -433,7 +557,7 @@
       "label": "報道・行政対応",
       "stances": [
         {
-          "count": 3,
+          "count": 2,
           "id": "henoko-student-accident-ministry-support",
           "intensities": [
             {
@@ -441,7 +565,7 @@
               "id": "low"
             },
             {
-              "count": 1,
+              "count": 0,
               "id": "medium"
             },
             {
@@ -471,15 +595,15 @@
           "label": "文科省判断に反発"
         },
         {
-          "count": 61,
+          "count": 62,
           "id": "henoko-student-accident-distinguish-issues",
           "intensities": [
             {
-              "count": 3,
+              "count": 5,
               "id": "low"
             },
             {
-              "count": 39,
+              "count": 38,
               "id": "medium"
             },
             {
@@ -490,7 +614,7 @@
           "label": "論点を切り分ける"
         },
         {
-          "count": 3,
+          "count": 2,
           "id": "henoko-student-accident-neutral",
           "intensities": [
             {
@@ -498,7 +622,7 @@
               "id": "low"
             },
             {
-              "count": 1,
+              "count": 0,
               "id": "medium"
             },
             {
@@ -511,11 +635,11 @@
       ]
     },
     {
-      "count": 50,
+      "count": 51,
       "id": "henoko-student-accident-victim-dignity",
       "intensities": [
         {
-          "count": 2,
+          "count": 3,
           "id": "low"
         },
         {
@@ -531,7 +655,7 @@
       "label": "追悼・被害者の尊厳",
       "stances": [
         {
-          "count": 5,
+          "count": 0,
           "id": "henoko-student-accident-ministry-support",
           "intensities": [
             {
@@ -539,11 +663,11 @@
               "id": "low"
             },
             {
-              "count": 4,
+              "count": 0,
               "id": "medium"
             },
             {
-              "count": 1,
+              "count": 0,
               "id": "high"
             }
           ],
@@ -569,19 +693,19 @@
           "label": "文科省判断に反発"
         },
         {
-          "count": 44,
+          "count": 50,
           "id": "henoko-student-accident-distinguish-issues",
           "intensities": [
             {
-              "count": 1,
+              "count": 2,
               "id": "low"
             },
             {
-              "count": 17,
+              "count": 21,
               "id": "medium"
             },
             {
-              "count": 26,
+              "count": 27,
               "id": "high"
             }
           ],
@@ -708,18 +832,98 @@
     }
   ],
   "ocean_layer": {
-    "checked_on": null,
-    "reviewer_type": null,
-    "status": "not_started",
-    "sunk_continents": [],
-    "veins": []
+    "checked_on": "2026-09-13",
+    "reviewer_type": "ai_assisted",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-12",
+        "id": "henoko-student-accident-alternative",
+        "life_impact": "中止をためらわないためには、その後の行程も必要です。4月通知は悪天候で変更・中止する場合の代案を先に決めるよう挙げています。",
+        "nearest_issue_id": "henoko-student-accident-safety",
+        "reviewer_type": "ai_assisted",
+        "sns_base": 369,
+        "sns_count": 0,
+        "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。",
+        "sources": [
+          {
+            "date": "2026年4月7日",
+            "location": "3頁",
+            "name": "文部科学省：4月7日通知",
+            "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf"
+          }
+        ],
+        "topic": "悪天候の代案を、出発前に決めておく"
+      },
+      {
+        "checked_on": "2026-09-12",
+        "id": "henoko-student-accident-check-registration",
+        "life_impact": "6月通知は事業者や地方運輸局への確認、安全情報の検索サイトを案内しています。無登録を非難することと、予約前の確認先を知ることは別です。",
+        "nearest_issue_id": "henoko-student-accident-safety",
+        "reviewer_type": "ai_assisted",
+        "sns_base": 369,
+        "sns_count": 0,
+        "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。",
+        "sources": [
+          {
+            "date": "2026年6月30日",
+            "location": "本文・補足資料",
+            "name": "文部科学省：船舶運送利用時の安全確保",
+            "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm"
+          }
+        ],
+        "topic": "登録や安全情報を、学校から外部へ確認できる"
+      },
+      {
+        "checked_on": "2026-09-12",
+        "id": "henoko-student-accident-backup",
+        "life_impact": "文科省見解は、当日の教員の体調不良に対応する体制も問題にしています。予定した人を置くだけでなく、代わりの人員や中止の判断を確かめられます。",
+        "nearest_issue_id": "henoko-student-accident-safety",
+        "reviewer_type": "ai_assisted",
+        "sns_base": 369,
+        "sns_count": 0,
+        "sns_note": "今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。",
+        "sources": [
+          {
+            "date": "2026年5月22日",
+            "location": "2頁",
+            "name": "文部科学省：研修旅行の検証見解",
+            "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+          }
+        ],
+        "topic": "引率する人が乗れない場合の体制も決めておく"
+      }
+    ],
+    "veins": [
+      {
+        "checked_on": "2026-09-13",
+        "diverging_reason": "文科省判断を支持する投稿は、危険な政治活動との接続を含めた見直しを求めています。反発する投稿も安全管理の不備を批判しますが、国が教育内容に踏み込むことには反対します。安全への懸念が共通でも、国がどこまで是正するかで分かれます。",
+        "id": "henoko-student-accident-vein-safety",
+        "issue_ids": [
+          "henoko-student-accident-safety",
+          "henoko-student-accident-peace-education"
+        ],
+        "reviewer_type": "ai_assisted",
+        "shared_concern": "学校行事で子供の安全を軽く扱ってはならない。",
+        "sides": [
+          {
+            "post_count": 2,
+            "stance_label": "文科省判断を支持"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "文科省判断に反発"
+          }
+        ]
+      }
+    ]
   },
-  "opinion_count": 373,
+  "opinion_count": 369,
   "page_path": "henoko-student-accident-reaction-map.html",
   "question": "辺野古の修学旅行中の事故を、学校はどう検証すべきか",
   "schema_version": "1.0",
-  "source_sha256": "4551a4a3fca9cfc1512497b86666cbf566c79f9a30d9e205b12703cb3cbe0591",
+  "source_sha256": "20f3d364ac79b6d278225d3a3c373fdd845729be497ac6cc7cd42ac50c9af6a0",
   "theme_id": "henoko-student-accident",
   "title": "辺野古高校生死亡事故",
-  "updated_on": "2026-08-24"
+  "updated_on": "2026-09-13"
 }

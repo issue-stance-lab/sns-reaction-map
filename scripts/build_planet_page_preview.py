@@ -422,7 +422,7 @@ def build_background(topic: str) -> str:
            '<span>官庁の資料で確かめた範囲</span></div>',
            f'<p class="bg-def">{esc(df["one_line"])}</p>',
            f'<p class="bg-now">{esc(df["now"])}</p>',
-           "<h3>なぜ始まったか</h3>"]
+           f'<h3>{esc(d.get("cause_title", "なぜ始まったか"))}</h3>']
     out += [f"<p>{esc(t)}</p>" for t in d["cause"]]
     out.append("<h3>これまでの経緯</h3>")
     out.append('<ol class="bg-tl">')
@@ -624,11 +624,35 @@ def protected_fragments(html: str) -> list[str]:
     return parts
 
 
+def fix_henoko_vote_scroll(html: str) -> str:
+    """旧地図を撤去しても、投票結果を読み終える位置を失わない。"""
+    if "var TOPIC='henoko-student-accident-issue-stance-v1'" not in html:
+        return html
+    return html.replace(
+        "document.getElementById('issue-arena-section').scrollIntoView({behavior:'smooth',block:'center'})",
+        "document.getElementById('vote-result').scrollIntoView({behavior:'smooth',block:'center'})",
+    )
+
+
+def clean_henoko_layout(html: str) -> str:
+    """2026-09-13 owner comments: remove duplicate source box, correction and dividers."""
+    if "var TOPIC='henoko-student-accident-issue-stance-v1'" not in html:
+        return html
+    html = re.sub(r'<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->',
+                  '<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->', html, flags=re.S)
+    html = re.sub(r'<aside\b[^>]*id="correction-20260906"[^>]*>.*?</aside>', '', html, flags=re.S)
+    html = re.sub(r'<div class="arena-divider">.*?</div>', '', html, flags=re.S)
+    html = html.replace('<div id="issue-arena-section" aria-hidden="true"></div>', "")
+    return html
+
+
 def verify_preserved(source: str, result: str) -> None:
+    source = clean_henoko_layout(source)
     for fragment in protected_fragments(source):
         # The existing bukatsu adapter changes only error presentation, not vote contracts.
         changed, _ = fix_vote_feedback(fragment)
-        if fragment not in result and changed not in result:
+        if (fragment not in result and changed not in result
+                and fix_henoko_vote_scroll(fragment) not in result):
             raise SystemExit("保護された編集情報・調査条件・注記・計測・投票の要素が失われました")
 
 
@@ -759,6 +783,15 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
                       '意見の違いを、学校での経験と公的資料からたどります。</p>',
                       html, count=1, flags=re.S)
         html = re.sub(r'<script\b[^>]*src="[^"]*school-nickname-ban-arena-data\.js[^"]*"[^>]*></script>', "", html)
+    if topic == "henoko-student-accident":
+        html, hit = cut_block(html, '<div class="thirty-summary"', "div")
+        removed.append(("旧固定件数の要約", hit))
+        html, hit = cut_block(html, '<section class="panel" id="explainer-section">', "section")
+        removed.append(("旧論点カード（山なみへ統合）", hit))
+        html = clean_henoko_layout(fix_henoko_vote_scroll(html))
+        # Remove the retired map scripts; the vote result now remains in view.
+        html = re.sub(r'<script id="henoko-arena-data">.*?</script>', "", html, flags=re.S)
+        html, _ = drop_orphan_scripts(html, ("HENOKO_ARENA_RAW",))
     background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)
@@ -797,6 +830,13 @@ def main() -> None:
     if "<!-- PLANET_SECTION_START -->" in html:
         raise SystemExit("入力ページに山なみが既に入っています（見本ではなく本番の更新です）")
 
+    if a.topic == "henoko-student-accident":
+        if __package__:
+            from .henoko_planet_guard import verify_inputs
+        else:
+            from henoko_planet_guard import verify_inputs
+        verify_inputs()
+
     data = bpd.stabilize(bpd.build(a.topic))
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{a.topic}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)
@@ -830,6 +870,11 @@ def main() -> None:
     if not a.for_docs:
         html = re.sub(r"<!-- GA_TAG_START -->.*?<!-- GA_TAG_END -->",
                       "<!-- GA_TAG: 見本では外している -->", html, flags=re.DOTALL)
+        if a.topic == "henoko-student-accident":
+            html = html.replace("</head>", '<script>if(window.VoteStore){window.VoteStore=Object.assign({},window.VoteStore,{cast:async function(){return {duplicate:false};},isRemote:function(){return false;},clear:function(){}});document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".vote-storage-note").forEach(function(n){n.textContent="※ 見本の投票は動作確認用です。回答は送信・保存されません。";});});}</script></head>', 1)
+            html = html.replace('id="page-preview-status"', 'data-vote-preview="local-only" id="page-preview-status"', 1)
+            html = html.replace("一般公開前の確認用です。", "一般公開前の確認用です。分類変更は公開前の確認中です。見本の投票は回答を送信・保存しません。", 1)
+            html = re.sub(r"[ \t]+\n", "\n", html)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html if a.for_docs else localize_assets(html), encoding="utf-8")

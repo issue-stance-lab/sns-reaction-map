@@ -435,13 +435,48 @@ def _public_counts(
     return collected, opinions, stats, by_stance, by_intensity, by_cross
 
 
+def refresh_verified_planet(
+    page: str, records: list[dict[str, Any]], opinions: list[dict[str, Any]],
+    public_theme: Path | None = None,
+) -> str:
+    """候補・原本・再読証拠・公開集計が同じ版のときだけ図全体を作る。"""
+    if __package__:
+        from .build_planet_page_preview import (
+            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll, clean_henoko_layout,
+        )
+    else:
+        from build_planet_page_preview import (
+            bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll, clean_henoko_layout,
+        )
+
+    if __package__:
+        from .henoko_planet_guard import verify_inputs
+    else:
+        from henoko_planet_guard import verify_inputs
+    verify_inputs(records, opinions, public_theme)
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    page = replace_block(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                         block, "山なみ全体")
+    return clean_henoko_layout(fix_henoko_vote_scroll(page))
+
+
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の集計表示を貼り直す。"""
+    if "<!-- PLANET_SECTION_START -->" in page:
+        records, opinions = load_records(None)
+        page = refresh_verified_planet(page, records, opinions, public_theme)
     collected, total, stats, by_stance, by_intensity, by_cross = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
     by_issue = Counter({ISSUE_INDEX[name]: values.total for name, values in stats.items()})
     page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total), "詳細データ表")
+    if "<!-- PLANET_SECTION_START -->" in page:
+        return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
     page = replace_block(page, r"<!-- INSIGHT_STATS_START -->.*?<!-- INSIGHT_STATS_END -->", insight_stats_from_counts(total, sum(values.split for values in stats.values()), stats), "注目ポイント")
     page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
     page = replace_number(page, r"<span>(\d+)件 \| Hermes再分類", [total], "SNS反応マップの見出し")
@@ -566,6 +601,12 @@ def build_page(
     rows = arena_rows(opinions)
     stats = {str(issue["main_issue"]): IssueStats(opinions, issue) for issue in ISSUE_DEFS}
     total = len(opinions)
+
+    if "<!-- PLANET_SECTION_START -->" in page:
+        page = refresh_verified_planet(page, records, opinions)
+        page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables(rows), "詳細データ表")
+        page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->", "調査条件（山なみ内に表示）")
+        return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
 
     page = replace_block(
         page,
