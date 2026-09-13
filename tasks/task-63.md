@@ -375,7 +375,17 @@ editorial-adoption-current.jsonのbukatsu-chiiki記録のうちindependently_che
 
 **リスク**: 独立読み（判定の正しさの二重確認）が、そのテーマの54展開まで後回しになる。ただし54のStage 0自体に構造的な不整合の検査（config・正典データの突き合わせ）は既にあり、自転車テーマで実際に2件発見済み。後回しになるのは分類判定そのものの正しさの二重確認のみで、部活動・高齢者の実績では影響は+1件程度だった。
 
+**2026-09-13、fukushutoで対象範囲の誤りが発覚。** 上記「current/proposedが食い違う候補だけを読む」という書き方を字面どおりに解釈し、562件中134件（食い違いのある分だけ）を独立読みした。しかし高齢者・部活動の実例（`quality/reviews/2026-09-12-elderly-missing-independent-53.json` 等）を確認すると、実際の対象は「independently_checked=false全件」（高齢者は53件＝全件を読み、うち食い違いは7件のみだった）で、差分の有無に関わらず全件を読み直す設計だった。134件の結果（一致83件・不一致51件）は適用済み（`data/verification/editorial-adoption-current.json`、commit `0bd20b8`）。**残り428件（差分なしの分）も同日中に独立読みを完了。** 結果は一致421件・不一致7件（1.6%）で、一致分を採用台帳へ反映（正典は無変更）。fukushutoのindependently_checked=falseは0件となり、独立読み残の解消（Stage 0の一部）を完了した。記録は `quality/reviews/2026-09-13-fukushuto-missing-independent-428.json`。他6テーマの残件数（ai-copyright等）も、同じ誤読で「食い違いのある分だけ」を対象と誤解している可能性があり、着手時に本節を再確認すること。
+
 原本・採用台帳・公開ページの変更は無し（書き方の整理のみ）。
+
+**同日、「編集再読」でも同種の誤判断が起き、オーナーの指摘で訂正した。** `configs/planet/fukushuto.yaml` の `sub_issues` が空で、`reread_registry.py` の docstring（「分類結果から編集証跡を作らない」）だけを読んで「独立監査とは別に、ゼロから726件（意見の50%）を新規に読む必要がある」と判断した。実際には bukatsu-chiiki の再読台帳（`data/verification/reread/bukatsu-chiiki.json`）に、部活動の38件独立監査ファイルがそのまま `source_file` として使われている実例があり、独立監査（本文を実際に読んで判定する形式）は編集再読の証拠として使える。誤りの原因は、**検査のコード・docstringの文面だけで結論を出し、既に合格している実例（bukatsu-chiiki）を先に見なかったこと。** 部活動・高齢者の展開時にも同種の誤り（independently_checked=falseの対象範囲）が一度起きており、同じ失敗パターンが2回連続で起きたことになる。
+
+**今後この手の判断をするときの手順（次にこの種の検査に当たったら、まずこれをやる）**:
+1. 「このテーマにはXが無いから、ゼロから作る必要がある」と結論する前に、**既にそのXを満たして合格しているテーマの実データファイルを直接開く**（コードのdocstringや設計意図の文章だけで判断しない）
+2. 副首都の独立監査（`quality/reviews/2026-09-13-fukushuto-missing-independent-*.json`）は、そのままの形式で `data/verification/reread/fukushuto.json` の `source_file` として使える見込み。ただし現状のカバー率（各論点35〜40%程度）では単独では足りず、`grown_count`（読了後に増えた分）が論点ごとの4割上限に収まる範囲でしか登録できない（=最低6割は実際に読む必要がある）。都構想・維新（399件）・候補地（300件）の2論点に絞って追加で150〜250件程度読めば、意見全体の50%ゲートに届く見込み（未着手）
+
+**副首都とは別に、この調査で発覚した既存テーマのリスク**: 全6テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket / constitutional-amendment / school-nickname-ban / henoko-student-accident）の編集再読カバー率を実測したところ、**bukatsu-chiikiの「受け皿・指導者」が39%、「費用・家庭負担」が38%**で、上限40%まで実質1〜2ポイントしかない（他5テーマは余裕あり）。次の部活動の定期収集がこの2論点に数件でも当たれば、次回生成時に `independence_gate` がNGになる。早期警告として `scripts/verify_reread_headroom.py` を新設し、`build_admin_dashboard.py` の異常検知（毎セッション開始時に実行）へ組み込んだ（commit `837d087`）。bukatsu-chiiki側の追い読み自体は未着手（このタスクの担当範囲外）。
 
 ## 自転車の定期収集を実行し、山なみ候補を作成（2026-09-12）
 

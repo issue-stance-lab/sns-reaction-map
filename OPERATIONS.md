@@ -81,6 +81,9 @@ python3 scripts/build_admin_dashboard.py
 - 週次KPIの記録が止まっている日数
 - X の候補確認日（`recurring.x-posting.last_run`）が未記録
 - 数字の取得元（GA4 / Search Console / Supabase）が壊れていないか
+- 編集再読の「読了後に増えた分」が上限（4割）に近づいているテーマ・論点
+  （`scripts/verify_reread_headroom.py`。定期収集のたびに増え続けるため、
+  超えてから気づくと手遅れになる。2026-09-13、bukatsu-chiikiの2論点で39%・38%を検出）
 
 **この一覧に出ないものは、定例作業として成立していない。**
 新しく定例にしたい作業があるときは、下の表に足すだけでなく、

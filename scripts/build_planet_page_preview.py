@@ -213,7 +213,12 @@ LIGHT_SKIN = """
 /* 図もサイトの色にする（オーナー指示 2026-09-05「マップの背景がまだ黒」）。
    SVGの色は描画時に属性で付いているが、CSSのほうが強いので上から塗り替えられる。 */
 #planet-block .chart-box{background:#F2F6FD;border-color:#DCE3EF}
-#planet-block .chart-box svg rect:first-of-type{fill:#DCE9F7}
+/* svg直下の1個目のrect（海面帯の背景）だけを狙うつもりが、:first-of-typeは
+   親要素ごとに数えるため、山1つずつの中にある透明なクリック判定用rect
+   （.hill-hit、1個の<g class="hill">につき1個で「その中の1個目」に該当）
+   にも掛かってしまい、本来透明であるべき四角が山の数だけ薄い水色に見えていた
+   （2026-09-13、副首都で発覚）。直下の子要素だけに絞る「>」を入れて防ぐ。 */
+#planet-block .chart-box svg>rect:first-of-type{fill:#DCE9F7}
 #planet-block .chart-box svg #seacover{fill:#F2F6FD;opacity:.96}
 #planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E3E9F3}
 #planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1"]{stroke:#B9CCE6}
@@ -222,7 +227,11 @@ LIGHT_SKIN = """
 #planet-block .chart-box svg text[fill="#8b949e"]{fill:#667085;transform:translateY(-5px)}
 #planet-block .chart-box svg text[fill="#c7d1dc"]{fill:#172033}
 #planet-block .chart-box svg text[fill="#e6edf3"]{fill:#0F1A3D}
-#planet-block .chart-box svg path[stroke="#f2f6fa"]{stroke:#0F1A3D}
+/* 「選ばれている山」の縁取りは、山ごとに色が違うため濃紺だと衝突する
+   テーマがある（2026-09-13、副首都の紫い山で発覚）。どの山の色とも
+   競合しない中間グレーに変える（#2b3440はこのファイル内の他の縁取り
+   グレーと同系色）。 */
+#planet-block .chart-box svg path[stroke="#f2f6fa"]{stroke:#2b3440}
 #planet-block .chart-box svg #seafloor path[fill="#122642"]{fill:#E7F0FB;stroke:#7FA6D8}
 #planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
 #planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
@@ -808,6 +817,26 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
         # Remove the retired map scripts; the vote result now remains in view.
         html = re.sub(r'<script id="henoko-arena-data">.*?</script>', "", html, flags=re.S)
         html, _ = drop_orphan_scripts(html, ("HENOKO_ARENA_RAW",))
+    if topic == "fukushuto":
+        # 旧2Dスタンスマップ（散布図＋ヒートマップ）は山なみの升目表示と役割が
+        # 重複するため外す（constitutional-amendmentの stance-map-section と同じ形）。
+        match = re.search(r'<section\b[^>]*\bid="stance-map-section"[^>]*>', html)
+        if match:
+            html, hit = cut_block(html, match.group(0), "section")
+            removed.append(("旧2Dスタンスマップ", hit))
+        # 旧2Dマップの描画スクリプトは自己完結した<script>1本で、他の投票用
+        # スクリプトとは別タグに分かれている（本文中の smCanvasMain 参照で識別）。
+        before = html
+        html = re.sub(
+            r"<script>\s*\(function\(\)\{\s*'use strict';\s*const ISSUES = \[.*?\}\)\(\);\s*</script>\n?",
+            "", html, count=1, flags=re.S)
+        removed.append(("旧2Dマップの描画スクリプト", html != before))
+        # 旧・事実確認欄（FACT_CHECK_START/END）は山なみのクイズ（bukatsu-check）に
+        # 役割が移るため外す。CSSも同じマーカーの内側にあるので一緒に外れる。
+        before = html
+        html = re.sub(r"<!-- FACT_CHECK_START -->.*?<!-- FACT_CHECK_END -->\n?", "",
+                      html, flags=re.S)
+        removed.append(("旧事実確認欄", html != before))
     background = build_background(topic)
     # This animation belongs only to the removed process-found section.
     html = re.sub(r'<script\b[^>]*id="process-found-anim"[^>]*>.*?</script>', "", html, flags=re.S)

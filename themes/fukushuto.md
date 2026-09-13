@@ -55,3 +55,13 @@ resolution_ban（附帯決議の同日選禁止解釈）は報道を根拠にgap
 部活動ページを参照して構成を復元。論点画像6枚を「論点ごとに、なかを見る」に戻し、画像拡大、山から論点図解への導線、作り方・関連テーマ・折りたたみ詳細データを追加。旧件数は再利用せず対象別候補の件数を表示。投票・一次資料クイズと編集理由の接続は残る。
 
 部活ページの部品を細部まで確認して適用。4枚の注目カード、元データ注意、論点7カード（画像6）、画像拡大、投票UI、作り方、画像付き関連テーマ、詳細データを共通順序で配置。既存副首都の旧件数・旧比較文は表示せず、対象別候補の件数を使用。
+
+2026-09-13、地域・自転車・高齢者との構造比較（本番ページが山なみ未接続であることの確認）を受けて、編集部の横断整理 `data/verification/fukushuto-editorial.json` を新設。現行の正典（7論点・意見1,453件、対象別の分類変更は未適用のもの）から、共通する前提1件・本当の対立2件・まだ分からないこと3件を差し込み形式で記述。`build_editorial_summary()` で実際に解決を確認済み（最初の下書きは `.count` の二重「件」表記と「実は」誤検知で2箇所修正）。`build_public_registry.py --topic fukushuto` を実行し `data/public/themes/fukushuto.json` の `editorial_summary` に反映、`data/public/catalog.json` のfukushuto分のハッシュも追随（他テーマの数値は不変）。オーナー確認待ち。独立監査・山なみ本体への接続は引き続き未着手。作業枝 `task/fukushuto-editorial`。
+
+続けて課題63「独立読み残の解消」に着手。`editorial-adoption-current.json` のfukushuto記録800件中、independently_checked=falseは562件、うち current!=proposed（判定が変わりうる候補）は134件（部活動38件・高齢者53件と比べて明確に多い）。本文を正典（`social-samples/fukushuto_hermes_classified.json`）から`record_id_hash`で突き合わせ、既存のcurrent/proposedを見せずに134件全件を独立に判定（is_relevant/is_opinion/main_issue/stance）。結果は一致83件・不一致51件（38%、高齢者の約21%より高い）、うち原文と明確に矛盾する高確信の訂正候補が9件（「大阪は論外！」等の明確な拒絶をproposedが法案賛成・推進へ反転、「断固反対」を明言する投稿をproposedが意見でなしと判定、等）。記録は `quality/reviews/2026-09-13-fukushuto-missing-independent-134.json`（bukatsu/elderly回と同じ形式）。
+
+高齢者回の適用ルールを実例照合で確認した結果、当初案（9件のみ適用）は誤りと判明。実際のルールは「一致83件を適用（canonical_applied=true）、不一致51件（9件を含む）は理由の強さを問わず保留」で、disagreement側は独立読み1回では正典を書き換えない設計だった。正しいルールに従い、一致83件を正典・採用台帳（independently_checked/independent_proposed/independent_reason_sha256/canonical_applied）へ適用し、`build_public_registry.py --topic fukushuto` で公開データを作り直した（意見1,453→1,452件、7件は他フィールドのみの変更で意見数自体は不変）。オーナーの端末で `git commit`（0bd20b8）済み。不一致51件（9件の高確信候補を含む）は保留のまま。
+
+**新たに判明した点**: bukatsu/elderly回の対象は「independently_checked=false全件」（高齢者は53件＝全件、うちcurrent!=proposedは7件のみ）であり、今回の134件（fukushuto全562件中のcurrent!=proposed部分のみ）より狭い対象だった。残り428件（現在との差分なし）は、高齢者回の実例では差分なしでも独立読みで新たな不一致が見つかっていたため、未読のまま。この428件をどう扱うかはオーナー判断待ち。作業枝 `task/fukushuto-editorial`。
+
+残り428件も同じ方式（本文のみを渡し、既存分類を見せずにClaude(Sonnet 5)が独立に4項目を判定してから比較）で独立読みを完了。結果は一致421件・不一致7件（1.6%、134件側の38%より大幅に低い——差分が無いという事前判定自体が概ね正しかったことの裏返し）。不一致7件は、既存の中立・情報を「はっきりしない」等の理解不足表明に留まると読み直した2件、逆に中立・情報だったものを名指しの批判を根拠に法案反対へ引き上げた2件、opinion=Falseを助言的な文言を根拠にTrueへ訂正した1件など。記録は `quality/reviews/2026-09-13-fukushuto-missing-independent-428.json`。一致421件を採用台帳（canonical_applied=true）へ反映——正典自体はすべて既にcurrentと一致していたため差分ゼロ、意見数は不変（1,452件）。不一致7件は保留のまま。これでfukushutoのindependently_checked=falseは0件となり、独立読み残の解消（Stage 0の一部）を完了した。
