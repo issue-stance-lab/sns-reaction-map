@@ -29,9 +29,9 @@ class ClaimVerdictTest(unittest.TestCase):
         self.assertEqual(set(counts), {
             "bike-blue-ticket", "bukatsu-chiiki", "constitutional-amendment", "consumption-tax-cut",
             "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai", "school-nickname-ban",
+            "henoko-student-accident",
         })
-        # 憲法改正の独立監査で根拠のない4主張を除外（52→48）。
-        self.assertEqual(sum(counts.values()), 48)
+        self.assertEqual(sum(counts.values()), 54)
 
     def test_post_counts_agree_across_all_three_files(self) -> None:
         # ページは data/{theme}_claim_posts.json、公開JSONは data/verification/ を読む。

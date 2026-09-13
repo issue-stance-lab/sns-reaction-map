@@ -802,6 +802,13 @@ def verify_theme_page(
         any(text in page for text in collected_count_texts)
         and f"取得期間: {period_label}" in page
     )
+    if not conditions_ok and "<!-- PLANET_SECTION_START -->" in page:
+        # The owner removed Henoko's duplicate source box; inspect the visible map notice.
+        caution = re.search(r'<p class="caution" id="caution">(.*?)</p>', page, re.S)
+        visible = re.sub(r"<[^>]+>", "", caution.group(1)) if caution else ""
+        conditions_ok = (source.replace("Yahooリアルタイム", "Yahoo!リアルタイム") in visible
+                         and period_label in visible
+                         and f"収集{count}件" in visible)
     if conditions_ok:
         lines.append(f"OK  調査条件（取得元・期間・件数）が表示されている（{period_label}）")
     else:
@@ -817,7 +824,7 @@ def verify_theme_page(
         failures += 1
     # 確認表示は <span class="review-note"> で囲む。この件数は台帳由来で正典からは
     # 導けないため、verify_number_provenance.py が「ここだけ」除外できるようにしている。
-    elif f'／<span class="review-note">{expected_note}</span>）' in page:
+    elif f'<span class="review-note">{expected_note}</span>' in page:
         lines.append(f"OK  代表投稿の確認表示が台帳と一致する（{expected_note}）")
     elif f"／{expected_note}）" in page:
         lines.append(

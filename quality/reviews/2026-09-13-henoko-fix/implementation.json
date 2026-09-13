@@ -1,0 +1,276 @@
+{
+  "audit": "independent code re-audit",
+  "status": "pass",
+  "reviewed_commit": "1ef26aacbf4dfd435f18860f11459e070907fd14",
+  "findings": [
+    {
+      "id": "RA-C1",
+      "priority": 2,
+      "file": "scripts/build_planet_page_preview.py",
+      "line": 823,
+      "status": "resolved in 1ef26aa; exact same-count stance swap now rejected before output overwrite",
+      "description": "Initial legacy-to-planet --for-docs conversion bypasses the new canonical hash and public classification consistency checks. Swap valid stances of two same-issue opinion rows in a temporary canonical copy while retaining public JSON and reread registry: preview.main writes HTML successfully. Existing-planet refresh correctly rejects the same unreviewed candidate."
+    }
+  ],
+  "tests": {
+    "focused": {
+      "passed": 15,
+      "failed": 0
+    },
+    "common_planet_regressions": {
+      "passed": 107,
+      "failed": 0
+    },
+    "script_and_module_temp_output": {
+      "write_exit_codes": [
+        0,
+        0
+      ],
+      "check_exit_codes": [
+        0,
+        0
+      ]
+    },
+    "browser": {
+      "postRequests": 0,
+      "blockedExternal": 42,
+      "cases": [
+        {
+          "width": 1440,
+          "choiceIdx": 0,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 1,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 2,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 3,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 4,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 5,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 6,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 7,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 8,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 9,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 10,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 11,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 12,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 13,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 14,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 15,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 16,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 1440,
+          "choiceIdx": 17,
+          "top": 395.421875,
+          "bottom": 592.859375
+        },
+        {
+          "width": 390,
+          "choiceIdx": 0,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 1,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 2,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 3,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 4,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 5,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 6,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 7,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 8,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 9,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 10,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 11,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 12,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 13,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 14,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 15,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 16,
+          "top": 350.5,
+          "bottom": 582.171875
+        },
+        {
+          "width": 390,
+          "choiceIdx": 17,
+          "top": 350.5,
+          "bottom": 582.171875
+        }
+      ],
+      "errors": []
+    },
+    "initial_conversion": {
+      "script_exit_code": 0,
+      "module_exit_code": 0,
+      "same_count_stance_swap": "rejected before write; sentinel unchanged"
+    }
+  },
+  "limitations": [
+    "Audit limited to A1/A2 and related code behavior, not classification/source semantics.",
+    "Browser vote storage calls were stubbed; no production remote vote service test, real POST, publication, or merge."
+  ],
+  "sha256": {
+    "scripts/build_henoko_arena.py": "48388a7cf8f607bcff1e409be32faed89ab3dd2eb70f8f1afd38be53767a754e",
+    "scripts/build_planet_page_preview.py": "1d6e8a12f35f75f7a55f5f585014cb71dc6a91e00582e4dba0ae66d8c224661a",
+    "scripts/henoko_planet_guard.py": "3b066912e4ed9941e09fed33c47d56727242d36764d69ebe5a6f37349a560e30",
+    "docs/henoko-student-accident-reaction-map.html": "52b2c3210d8f296a376ff6cb608694bfaf120c7d18dce9e2bb1442f0edce162c",
+    "quality/prototypes/henoko-student-accident-page-preview.html": "94ff202ca35cbb59615d9adb23d66f765ce1318754be58cd9dd13bd983aa35e5",
+    "data/verification/reread/henoko-student-accident.json": "22e01ee77437764535f92089b9df3a3472e0e943fc6ba89dcc13965eb0ccaf7c"
+  },
+  "private_canonical_sha256": "80465b7b326054d1f1b75f6955ca38072c926031d734ae602bd8ec7ab4807bf9"
+}
