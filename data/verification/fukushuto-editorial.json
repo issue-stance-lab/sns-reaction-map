@@ -1,0 +1,39 @@
+{
+ "theme_id": "fukushuto",
+ "curated_at": "2026-09-13",
+ "curated_by": "editorial_review",
+ "method": "収集済みの意見を論点ごと・立場ごとに読み、論点をまたいで言えることだけを書いた。数字は本文に書かず、差し込み（{issue:<論点id>.count} など）で正典から入れる。設計書4章の5「共通する前提／本当の対立／まだ分からないこと」に対応する。",
+ "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。差し込みだけを書くこと。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。",
+ "findings": [
+  {
+   "id": "fukushuto-ed-1",
+   "kind": "shared_premise",
+   "text": "どの論点でも「法案反対」が最多という点は共通している。賛成がもっとも伸びる「{issue:fukushuto-disaster-preparedness.label}」でも賛成は{issue:fukushuto-disaster-preparedness.stance:fukushuto-bill-support.share}にとどまり、反対（{issue:fukushuto-disaster-preparedness.top_share}）には届かない。"
+  },
+  {
+   "id": "fukushuto-ed-2",
+   "kind": "real_conflict",
+   "text": "同じ「反対」でも、論点によって強さがまるで違う。「{issue:fukushuto-osaka-restoration.label}」では反対が{issue:fukushuto-osaka-restoration.top_share}、「{issue:fukushuto-priority.label}」でも{issue:fukushuto-priority.top_share}に達するのに対し、「{issue:fukushuto-location.label}」では{issue:fukushuto-location.top_share}にとどまる。反対の的は副首都という発想そのものより、「なぜ今」「なぜ大阪・維新なのか」という動機と優先順位への疑いに集中している。"
+  },
+  {
+   "id": "fukushuto-ed-3",
+   "kind": "real_conflict",
+   "text": "賛成の実数がもっとも集まっているのは「{issue:fukushuto-location.label}」の{issue:fukushuto-location.stance:fukushuto-bill-support.count}で、「{issue:fukushuto-osaka-restoration.label}」の{issue:fukushuto-osaka-restoration.stance:fukushuto-bill-support.count}を上回る。都構想・維新という切り口では賛成の足場がほとんど残らないのに対し、どこに置くかという具体的な話になると賛成の声も相対的に出やすい。"
+  },
+  {
+   "id": "fukushuto-ed-4",
+   "kind": "still_unknown",
+   "text": "「{issue:fukushuto-finance.label}」は{issue:fukushuto-finance.count}で、全体の{issue:fukushuto-finance.share}にあたり、他の論点と比べて最も少ない。整備費用の金額は投稿にも登場したが、事実確認では別の古い計画の試算と判明している。件数の少なさは論点の重要度が低いという意味ではなく、根拠のある数字が出回っていないことの裏返しである可能性がある。"
+  },
+  {
+   "id": "fukushuto-ed-5",
+   "kind": "still_unknown",
+   "text": "住民投票と統一地方選の同日実施を禁じる附帯決議が採択されたことは参議院の記録で確認できたが、決議本文の文言が禁止なのか努力目標なのかは、採択した委員会の会議録が執筆時点でまだ公開されておらず確認できていない。「{issue:fukushuto-osaka-restoration.label}」を語る投稿の一部は、この未確定な理解のまま書かれている可能性があり、会議録の公開後に確認欄とあわせて再確認が要る。"
+  },
+  {
+   "id": "fukushuto-ed-6",
+   "kind": "still_unknown",
+   "text": "ここに出ているのはYahoo!リアルタイム検索で集めた{totals.opinions}件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りや、副首都法案の審議が集中した時期に収集期間が重なっていることの影響は測っていない。"
+  }
+ ]
+}
