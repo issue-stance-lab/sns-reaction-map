@@ -731,13 +731,11 @@ def static_question(d: dict) -> str:
 def static_caution(d: dict) -> str:
     t = d["totals"]
     out = ['<p class="caution" id="caution">'
-           + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論ではありません。<br>"
+           + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
            + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
+           + '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>'
            + "</p>"]
-    if d.get("theme_id") == "henoko-student-accident":
-        out[0] = out[0].replace("社会全体の世論ではありません。", "社会全体の世論調査ではありません。")
-        out[0] = out[0].replace("</p>", '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>')
     if d.get("stance_note"):
         out.append('<p class="note" id="stance-definition">' + e(d["stance_note"]) + "</p>")
     if d.get("prototype_only"):
