@@ -15,7 +15,7 @@ class FukushutoPublicCountsTests(unittest.TestCase):
         data = json.loads(PUBLIC.read_text(encoding="utf-8"))
         page = apply_public_counts(PAGE.read_text(encoding="utf-8"), PUBLIC)
         self.assertIn(f"公開投稿{data['collected_count']}件", page)
-        self.assertIn(f"意見{data['opinion_count']}件 | セクター=論点", page)
+        self.assertIn(f"意見と判定した{data['opinion_count']}件をAI", page)
 
 
 if __name__ == "__main__":

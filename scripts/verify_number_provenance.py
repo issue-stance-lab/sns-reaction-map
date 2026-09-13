@@ -342,9 +342,12 @@ class Derived:
     def lookup(self, value: int, levels: Iterable[str], label: str | None) -> str | None:
         """value を説明する根拠。label が添えられた数字は、そのラベルの集計に限る。"""
         levels = list(levels)
-        # クロス集計は組み合わせが無い＝0件のセルも表に出る。0だけは相手を問わない。
-        if value == 0 and "cross_tab" in levels:
-            return f"{self.label}: クロス集計の空セル"
+        # 0は「何も無い」を表すだけで、水増しや誤誘導の材料にならない。出所を問わない。
+        # （山なみ共通テンプレートのJS内フォールバック文言「0件のため山が消えています」等が、
+        # そのテーマの実データに0件のセルが1つも無いと未説明として引っかかっていた。
+        # 2026-09-14、副首都で発覚。他テーマはたまたま実データに0件セルがあり素通りしていた）
+        if value == 0:
+            return f"{self.label}: 0はどの集計から見ても0"
         for level in levels:
             entry = self.values[level].get(value)
             if entry is None:

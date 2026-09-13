@@ -2,6 +2,10 @@
 
 2026-07-26 に新設した Hermes 分類器が公開ページの論点定義を参照せず、切り口ごと分岐した
 （公開側7論点・分類器5論点）。件数の検査は両方とも通ってしまうため、ラベルと並びを別に見る。
+
+2026-09-14、山なみ形式へ切り替え、旧2Dスキャッター描画（`const ISSUES = [...]`・`colorOf()`）を
+削除した。両方を検査していた2件は対象が無くなったため削除。SM_RAWの座標計算（arena_x/arena_e）は
+山なみ本体の元データとして引き続き使うので、その検査（test_arena_coordinates_stay_inside...）は残す。
 """
 
 import json
@@ -42,12 +46,6 @@ class FukushutoTaxonomyTest(unittest.TestCase):
         example = json.loads(re.search(r'\{"id":0,.*?"risk":"low"\}', prompt).group(0))
         self.assertIn(example["main_issue"], taxonomy.ISSUES)
         self.assertIn(example["stance"], taxonomy.STANCES)
-
-    def test_published_arena_sectors_match_the_issue_order(self):
-        block = re.search(r"const ISSUES = \[(.*?)\];", self.html, re.DOTALL)
-        self.assertIsNotNone(block)
-        published = re.findall(r"\{k:'([^']+)'", block.group(1))
-        self.assertEqual(published, list(taxonomy.ISSUE_ORDER))
 
     def test_published_vote_choices_match_the_vote_order(self):
         self.assertIn(f"var TOPIC='{taxonomy.TOPIC_ID}'", self.html)
@@ -153,19 +151,12 @@ class FukushutoTaxonomyTest(unittest.TestCase):
                 e = taxonomy.arena_e(intensity)
                 self.assertLessEqual(abs(x), taxonomy.COORD_LIMIT)
                 self.assertLessEqual(abs(e), taxonomy.COORD_LIMIT)
-                # ページの colorOf() は ±0.5 を境に赤／青／灰へ塗り分ける。
                 if stance == taxonomy.NEUTRAL_STANCE:
                     self.assertLess(abs(x), taxonomy.COLOR_THRESHOLD)
                 elif stance == "法案反対":
                     self.assertLessEqual(x, -taxonomy.COLOR_THRESHOLD)
                 else:
                     self.assertGreaterEqual(x, taxonomy.COLOR_THRESHOLD)
-
-    def test_page_color_thresholds_have_not_moved(self):
-        color = re.search(r"function colorOf\(p\)\{return ([^}]+)\}", self.html)
-        self.assertIsNotNone(color)
-        self.assertIn(f"p.x>={taxonomy.COLOR_THRESHOLD}", color.group(1))
-        self.assertIn(f"p.x<=-{taxonomy.COLOR_THRESHOLD}", color.group(1))
 
 
 if __name__ == "__main__":
