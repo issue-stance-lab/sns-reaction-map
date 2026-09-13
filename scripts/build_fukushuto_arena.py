@@ -469,8 +469,16 @@ def _public_rows(data: dict[str, Any]) -> tuple[int, list[dict[str, Any]]]:
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の管理対象集計を貼り直す。"""
     collected, rows = _public_rows(json.loads(public_theme.read_text(encoding="utf-8")))
-    counts = Counter(str(classification(row)["main_issue"]) for row in rows)
     total = len(rows)
+    if "<!-- PLANET_SECTION_START -->" in page:
+        page = refresh_verified_planet(page)
+        return replace_once(
+            page,
+            r"公開投稿\d+件のうち、意見と判定した\d+件をAI",
+            f"公開投稿{collected}件のうち、意見と判定した{total}件をAI",
+            "リード文",
+        )
+    counts = Counter(str(classification(row)["main_issue"]) for row in rows)
     top = ranked_issues(counts)[0]
     config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
     blocks = config["arena"]["issue_blocks"]
@@ -491,6 +499,33 @@ def replace_once(page: str, pattern: str, replacement: str, label: str, *, flags
     if count != 1:
         raise IssueCountError(f"{label}: 1箇所だけ一致する必要があります（{count}箇所）")
     return result
+
+
+def refresh_verified_planet(page: str) -> str:
+    """山なみ形式に切り替わったあとは、正典から図全体を作り直すだけでよい。
+
+    旧2D形式の各セクション（SM_RAW・ISSUES・6つの論点とXの声 等）はbuild_planet_page_preview.py
+    が既に本文から削除済みなので、このあとの旧形式向け置換はすべて対象が無く失敗する
+    （他テーマの山なみ展開時と同じ、旧ビルダーへのガード追加。reference_planetpage_rollout参照）。
+    """
+    if __package__:
+        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+    else:
+        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                        block, "山なみ全体", flags=re.S)
+    return replace_once(
+        page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
+        "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->",
+        "調査条件（山なみ内に表示）", flags=re.S,
+    )
 
 
 def build(
@@ -529,6 +564,17 @@ def build(
     html_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
     before = html_path.read_text(encoding="utf-8")
     page = before
+
+    if "<!-- PLANET_SECTION_START -->" in page:
+        page = refresh_verified_planet(page)
+        if not check and (page != before or output is not None):
+            target = Path(output) if output else html_path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(page, encoding="utf-8")
+        return (
+            [f"山なみ全体を正典から再生成しました（意見{total}件）"],
+            page != before,
+        )
 
     top = ranked_issues(counts)[0]
 
