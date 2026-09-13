@@ -49,3 +49,5 @@ build_constitutional_process_sections.py を新設し adapter 経由で CLAIM_AU
 この共有ツリー（main）は、公開に使われた版とは別に「副首都」の未配信作業（13コミット）を抱えて分岐しており、配信済みの版が反映されないまま残っていた（非公開の元データ・`THEMES.yaml`・公開ページ等が9/5時点の古い版のまま）。憲法改正に関係するファイルと非公開の元データを、配信済みの内容と`source_sha256`が一致することを確認したうえで同期した。副首都側のファイル・`TASK_BOARD.md`・`tasks/task-54.md`・`company/APPROVALS.yaml` には触れていない（両方の作業が書き換えており、自動では1本にまとまらないため）。
 
 **`TASK_BOARD.md` と `tasks/task-54.md` の課題54進捗欄は、まだこの本番反映を反映していない**（本番反映済みは6テーマのはずが、索引はまだ5テーマと書かれたまま）。次にこの2ファイルを更新するセッションが、副首都の分岐解消と合わせて直すこと。
+
+- 2026-09-13 上記の分岐を解消：`origin/main`（憲法改正の本番反映・追加確認作業）と、この共有ツリー（副首都の課題54ローカル接続・課題63の早期警告新設）を1本にマージした。`TASK_BOARD.md`・`tasks/task-54.md`・`company/APPROVALS.yaml`（承認IDの重複を`-002`＝憲法改正／`-003`＝副首都に整理）を手動で統合し、`data/public/catalog.json`は`build_public_registry.py --all`で再生成した。
