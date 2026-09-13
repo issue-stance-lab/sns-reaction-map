@@ -115,7 +115,7 @@ def markdown(d):
 def render_preview(d, examples, template):
     from fukushuto_target_data import aggregate_targets
     from build_planet_page_preview import build_background
-    from fukushuto_reader_sections import render_sections
+    from fukushuto_reader_sections import render_sections, render_overview
     payload={k:d[k] for k in ('candidate_opinions','original_total','concept','law_by_scope','law_unexpressed','locations','decisions','same_text')}
     payload['issues'] = [{'name':x['name'], 'after':x['after']} for x in d['issues']]
     payload['target_breakdown'] = aggregate_targets(d['records'])
@@ -135,7 +135,7 @@ def render_preview(d, examples, template):
     template = template.replace('__HERO_CSS__',hero_css).replace('__HERO_IMAGE__','data:image/webp;base64,'+hero_image)
     template = template.replace('__OPINIONS__',format(d['candidate_opinions'],',')).replace('__COLLECTED__',format(d['original_total'],','))
     encoded=json.dumps(payload,ensure_ascii=False).replace('<','\\u003c').replace('>','\\u003e').replace('&','\\u0026')
-    return template.replace('__DATA__',encoded).replace('__STATIC_TABLES__',body).replace('__BACKGROUND__',build_background('fukushuto')).replace('__READER_SECTIONS__',render_sections(d))
+    return template.replace('__DATA__',encoded).replace('__STATIC_TABLES__',body).replace('__BACKGROUND__',build_background('fukushuto')).replace('__OVERVIEW__',render_overview(d)).replace('__READER_SECTIONS__',render_sections(d))
 
 def main():
     a=argparse.ArgumentParser();a.add_argument('--baseline',type=Path,required=True);a.add_argument('--review',type=Path,required=True);a.add_argument('--output',type=Path,required=True);args=a.parse_args()
