@@ -1,0 +1,58 @@
+reread_registry: true
+theme_id: fukushuto
+title: 副首都法案・副首都構想
+question: 副首都の必要性、制度の中身、候補地をどう考えるか
+source_label: Yahoo!リアルタイム検索
+stances:
+- key: 法案賛成・推進
+  label: 法案賛成・推進
+  id: fukushuto-bill-support
+  color: '#2F8F83'
+  pattern: plain
+- key: 法案反対
+  label: 法案反対
+  id: fukushuto-bill-oppose
+  color: '#7D5BA6'
+  pattern: diagonal
+- key: 中立・情報
+  label: 中立・情報
+  id: fukushuto-neutral
+  color: '#8B9199'
+  pattern: mesh
+issues:
+- key: 定義・中身
+  id: fukushuto-definition
+  icon: 📋
+- key: 候補地
+  id: fukushuto-location
+  icon: 📍
+- key: 防災・災害
+  id: fukushuto-disaster-preparedness
+  icon: 🛡️
+- key: 都構想・維新
+  id: fukushuto-osaka-restoration
+  icon: 🏛️
+- key: 費用・財源
+  id: fukushuto-finance
+  icon: 💰
+- key: 優先順位
+  id: fukushuto-priority
+  icon: ⚖️
+- key: その他
+  id: fukushuto-other
+  icon: 💬
+vote_issue_order:
+- 定義・中身
+- 候補地
+- 都構想・維新
+- 防災・災害
+- 費用・財源
+- 優先順位
+- その他
+sub_issues: {}
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
