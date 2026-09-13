@@ -348,11 +348,95 @@ def build_details_from_counts(
     )
 
 
+def add_featured_posts(page: str, rows: list[dict], data: dict) -> str:
+    """本文照合した投稿を図解に添え、山の詳細と相互リンクする。"""
+    import hashlib
+    selected = json.loads((ROOT / "data/constitutional-amendment-featured-posts.json").read_text())["items"]
+    by_key = {hashlib.sha256(str(r["tweet_id"]).encode()).hexdigest(): r for r in rows}
+    issue_ids = {it["label"]: it["id"] for it in data["issues"]}
+    page = re.sub(r"<!-- FEATURED_POSTS_START -->.*?<!-- FEATURED_POSTS_END -->", "", page, flags=re.S)
+    def card(match):
+        art = match.group(0)
+        issue = re.search(r'data-alt="([^"]+)"', art).group(1)
+        iid = issue_ids[issue]
+        art = re.sub(r' id="figure-[^"]+"', '', art, count=1)
+        art = art.replace('<article ', f'<article id="figure-{iid}" ', 1)
+        samples = []
+        for item in selected:
+            if item["issue"] != issue:
+                continue
+            row = by_key.get(item["post_key"])
+            if row is None or classification(row)["main_issue"] != issue or hashlib.sha256(row["text"].encode()).hexdigest() != item["text_sha256"]:
+                raise IssueCountError("代表投稿の本文・論点が変わっています: " + item["post_key"])
+            samples.append('<div class="featured-post"><strong>' + html.escape(item["label"]) + '</strong><p>' + html.escape(item["summary"]) + '</p>' + embed_html(row["url"]) + '</div>')
+        if len(samples) != 2:
+            raise IssueCountError("図解には確認済み投稿2件が必要です: " + issue)
+        extra = '<!-- FEATURED_POSTS_START --><div class="featured-posts">' + ''.join(samples) + '</div><a class="featured-issue-link" href="#' + iid + '">この論点の内訳を見る →</a><!-- FEATURED_POSTS_END -->'
+        return art.replace('</article>', extra + '</article>')
+    page = re.sub(r'<article[^>]*class="explainer-card"[^>]*>.*?</article>', card, page, flags=re.S)
+    css = '<!-- FEATURED_POSTS_START --><style>#explainer-section .explainer-grid{grid-template-columns:1fr}#explainer-section .explainer-card{cursor:default;scroll-margin-top:140px}.featured-posts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px}.featured-post{min-width:0;border:1px solid #dce3ef;border-radius:10px;padding:14px;font-size:14px;line-height:1.7;overflow-wrap:anywhere}.featured-post p{margin:8px 0}.featured-post iframe{max-width:100%!important}.featured-issue-link{display:inline-block;margin:0 16px 18px;font-weight:700}@media(max-width:600px){.featured-posts{grid-template-columns:1fr}}</style><!-- FEATURED_POSTS_END -->'
+    page = page.replace('<section class="panel" id="explainer-section">', css + '<section class="panel" id="explainer-section">')
+    page = page.replace("card.addEventListener('click',function(){", "card.addEventListener('click',function(e){if(e.target.tagName!=='IMG')return;")
+    return page
+
+
+def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
+                        stances: Counter, intensities: Counter) -> str:
+    """正典との集計一致と再読ゲートを確認し、山なみと残す集計を同時に更新する。"""
+    if __package__:
+        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype, build_background
+    else:
+        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype, build_background
+    rows, canonical_collected, _, period = load_canon(None)
+    expected = (canonical_collected, len(rows),
+                Counter(classification(r)["main_issue"] for r in rows),
+                Counter(classification(r)["stance"] for r in rows),
+                Counter(classification(r)["intensity"] for r in rows))
+    if (collected, total, issues, stances, intensities) != expected:
+        raise IssueCountError("山なみと集計の入力が正典に一致しません")
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data)))).replace(".chart-box svg rect:first-of-type", ".chart-box svg > rect:first-of-type")
+    page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                        block, "山なみ全体", flags=re.S)
+    page = replace_once(page, r'<span class="conclusion-count"><b>\d+</b>件</span>',
+                        f'<span class="conclusion-count"><b>{issues["改憲全般"]}</b>件</span>', "議論の中心")
+    page = replace_once(page,
+        r'Yahooリアルタイム検索で取得した公開投稿 \d+件のうち、\s*意見と判定した\d+件を分析対象としています。',
+        f'Yahooリアルタイム検索で取得した公開投稿 {collected}件のうち、意見と判定した{total}件を分析対象としています。',
+        "調査条件の件数", flags=re.S)
+    page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>',
+                        build_details_from_counts(issues, stances, intensities, total), "詳細データ", flags=re.S)
+    page = replace_once(page, r'（取得期間: .*?／', f'（取得期間: {period}／', "取得期間")
+    page = replace_once(page,
+        r'(?<=<!-- RESEARCH_CONDITIONS_END -->).*?(?=<!-- PLANET_SECTION_START -->)',
+        "\n" + build_background(THEME) + "\n", "背景と確認事項", flags=re.S)
+    config = json.loads(CONFIG.read_text())
+    for card in config["issue_counts"]["cards"]:
+        count = sum(issues[str(issue)] for issue in card["main_issue"])
+        page = replace_once(page,
+            rf'<span class="explainer-count" id="issue-count-{THEME}-{card["slug"]}">\d+件</span>',
+            span_html(THEME, str(card["slug"]), count), f'論点カード {card["slug"]}')
+    page = add_featured_posts(page, rows, data)
+    return page.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
+
+
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の集計表示を貼り直す。"""
     collected, total, issues, stances, intensities = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
+    if "<!-- PLANET_SECTION_START -->" in page:
+        if __package__:
+            from .public_registry_common import build_theme_json, dumps_theme_json
+        else:
+            from public_registry_common import build_theme_json, dumps_theme_json
+        if dumps_theme_json(json.loads(public_theme.read_text())) != dumps_theme_json(build_theme_json(THEME)):
+            raise IssueCountError("公開JSONが現在の正典・照合資料と一致しません")
+        return apply_planet_counts(page, collected, total, issues, stances, intensities)
     lead = (
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'
         f'意見と判定した{total}件を分析対象としています。AIが主要6論点とその他に整理しました。'
@@ -413,6 +497,18 @@ def build(
     destination = output_html or PAGE
     before = template.read_text(encoding="utf-8")
     page = before
+    if "<!-- PLANET_SECTION_START -->" in page:
+        if input_path is not None:
+            sample = yaml.safe_load((ROOT / "THEMES.yaml").read_text())["themes"][THEME]["sample_file"]
+            if json.loads(input_path.read_text()) != json.loads((ROOT / sample).read_text()):
+                raise IssueCountError("山なみの候補入力が正典の全レコードと一致しません")
+        intensities = Counter(str(classification(r)["intensity"]) for r in rows)
+        page = apply_planet_counts(page, collected, total, issue_counts, stance_counts, intensities)
+        changed = page != before
+        if not check and (changed or destination != template):
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(page, encoding="utf-8")
+        return [f"山なみ: 収集{collected}件 / 意見{total}件（再読ゲート確認済み）"], changed
 
     lead = (
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'

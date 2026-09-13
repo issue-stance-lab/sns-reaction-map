@@ -31,8 +31,7 @@ class ClaimVerdictTest(unittest.TestCase):
             "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai", "school-nickname-ban",
             "henoko-student-accident",
         })
-        # 既存48主張＋あだ名禁止4主張＋辺野古6主張（課題54 横展開）
-        self.assertEqual(sum(counts.values()), 58)
+        self.assertEqual(sum(counts.values()), 54)
 
     def test_post_counts_agree_across_all_three_files(self) -> None:
         # ページは data/{theme}_claim_posts.json、公開JSONは data/verification/ を読む。

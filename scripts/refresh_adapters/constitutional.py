@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -112,6 +113,10 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
 
 
 def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> None:
+    if "<!-- PLANET_SECTION_START -->" in template.read_text(encoding="utf-8"):
+        # 候補の正典・公開集計・再読台帳が揃う finalize で図全体を生成する。
+        shutil.copy2(template, output)
+        return
     subprocess.run(
         [
             sys.executable,

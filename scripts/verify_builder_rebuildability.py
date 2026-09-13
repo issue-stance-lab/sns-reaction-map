@@ -34,6 +34,8 @@ def _copy_fixture(target: Path) -> None:
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / template, target / template)
+    constitutional_template = Path("quality/prototypes/constitutional-planet.template.html")
+    shutil.copy2(ROOT / constitutional_template, target / constitutional_template)
     # scripts/__init__.py がないと相対インポートがパッケージとして認識されない
     (target / "scripts" / "__init__.py").touch(exist_ok=True)
 

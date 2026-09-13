@@ -84,6 +84,10 @@ class IssueCountSyncTest(unittest.TestCase):
             (ROOT / "data/public/themes/constitutional-amendment.json").read_text(encoding="utf-8")
         )
         page = (ROOT / "docs/constitutional-amendment-reaction-map.html").read_text(encoding="utf-8")
+        if "<!-- PLANET_SECTION_START -->" in page:
+            from scripts.verify_theme_page import _planet_data
+            self.assertEqual(sum(i["count"] for i in _planet_data(page)["issues"]), public["opinion_count"])
+            return
         match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
         self.assertIsNotNone(match)
         self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])

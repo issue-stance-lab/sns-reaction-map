@@ -419,11 +419,16 @@ def build_background(topic: str) -> str:
     out = [f"<style>{BG_CSS}</style>",
            '<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">',
            '<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2>'
-           '<span>官庁の資料で確かめた範囲</span></div>',
+           f'<span>{esc(d.get("source_scope_label", "官庁の資料で確かめた範囲"))}</span></div>',
            f'<p class="bg-def">{esc(df["one_line"])}</p>',
            f'<p class="bg-now">{esc(df["now"])}</p>',
            f'<h3>{esc(d.get("cause_title", "なぜ始まったか"))}</h3>']
     out += [f"<p>{esc(t)}</p>" for t in d["cause"]]
+    if d.get("cause_sources"):
+        links = "／".join(
+            f'<a href="{esc(s["url"])}" target="_blank" rel="noopener">{esc(s["name"])}</a>'
+            for s in d["cause_sources"])
+        out.append(f'<p class="src">背景の出典: {links}</p>')
     out.append("<h3>これまでの経緯</h3>")
     out.append('<ol class="bg-tl">')
     for x in d["timeline"]:
@@ -543,7 +548,8 @@ def merge_issue_cards(html: str, data: dict) -> tuple[str, str]:
 
 
 def render_planet(data: dict) -> str:
-    tpl = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text(encoding="utf-8")
+    template_name = "constitutional-planet.template.html" if data["theme_id"] == "constitutional-amendment" else "planet-prototype.template.html"
+    tpl = (ROOT / "quality/prototypes" / template_name).read_text(encoding="utf-8")
     payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
     return bpd.render_page(data, tpl, payload)
 
@@ -783,6 +789,16 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
                       '意見の違いを、学校での経験と公的資料からたどります。</p>',
                       html, count=1, flags=re.S)
         html = re.sub(r'<script\b[^>]*src="[^"]*school-nickname-ban-arena-data\.js[^"]*"[^>]*></script>', "", html)
+    if topic == "constitutional-amendment":
+        html = html.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
+        for iid in ("stance-map-section", "claim-audit"):
+            match = re.search(r'<section\b[^>]*\bid="' + iid + r'"[^>]*>', html)
+            if match:
+                html, hit = cut_block(html, match.group(0), "section")
+                removed.append((iid, hit))
+        html = re.sub(r'<p class="lead">.*?</p>',
+                      '<p class="lead">変える条文と、変えるための条件。平和や暮らしを守る方法について、'
+                      'SNSの意見の違いと一次資料をたどります。</p>', html, count=1, flags=re.S)
     if topic == "henoko-student-accident":
         html, hit = cut_block(html, '<div class="thirty-summary"', "div")
         removed.append(("旧固定件数の要約", hit))

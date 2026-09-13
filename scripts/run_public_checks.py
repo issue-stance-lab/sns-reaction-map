@@ -50,6 +50,8 @@ CHECKS: tuple[tuple[str, list[str]], ...] = (
 
 # 非公開正典を読むテスト。除外する理由を1件ずつ書く（理由の書けない除外を増やさないため）。
 PRIVATE_DATA_TESTS: dict[str, str] = {
+    "test_constitutional_planet_refresh": "憲法改正の非公開正典を読み、再生成・原文改変拒否を検査する",
+    "test_constitutional_public_counts": "憲法改正の再生成で公開JSONと非公開正典の一致を確認する",
     "test_bike_adapter": "自転車の非公開正典から旧反対再読と再生成を検査する",
     "test_bike_editorial_reread": "自転車の非公開正典と全件の編集再読を照合する",
     "test_bike_fetch_history_recovery": "自転車の非公開正典と取得履歴を突き合わせる",

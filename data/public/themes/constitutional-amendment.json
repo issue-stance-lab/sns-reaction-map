@@ -1,10 +1,10 @@
 {
   "claim_verification": {
-    "checked_on": "2026-08-21",
+    "checked_on": "2026-09-13",
     "claims": [
       {
-        "claim": "国民投票は有効投票の過半数で成立し、最低投票率の規定はない",
-        "finding": "過半数で成立・最低投票率なしは、いずれも条文の直接の読みとして正確。附則の検討条項は法的効力を持たない。",
+        "claim": "国民投票には最低投票率の規定がない",
+        "finding": "国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。",
         "id": "minimum_vote_rate",
         "issue_ids": [
           "constitutional-amendment-referendum"
@@ -19,23 +19,7 @@
         "verdict": "fact"
       },
       {
-        "claim": "国民投票の放送CM規制は投票日前14日間だけで、それ以前は無制限だ",
-        "finding": "14日間という数字は第105条の条文どおり。14日より前は放送CM量の上限も設けられておらず、「それ以前は無制限」という読みも条文上は否定できない。",
-        "id": "cm_broadcast_14days",
-        "issue_ids": [
-          "constitutional-amendment-referendum"
-        ],
-        "matched_post_count": 5,
-        "sources": [
-          {
-            "name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）",
-            "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
-          }
-        ],
-        "verdict": "fact"
-      },
-      {
-        "claim": "国会が発議してから国民投票まで最短60日、最長180日だ",
+        "claim": "国会の発議から国民投票まで最短60日だ",
         "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。",
         "id": "period_60days",
         "issue_ids": [
@@ -51,13 +35,13 @@
         "verdict": "fact"
       },
       {
-        "claim": "衆参両院それぞれで総議員の3分の2以上の賛成がないと発議できない",
+        "claim": "憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ",
         "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。",
         "id": "two_thirds",
         "issue_ids": [
           "constitutional-amendment-procedure"
         ],
-        "matched_post_count": 5,
+        "matched_post_count": 4,
         "sources": [
           {
             "name": "e-Gov法令検索 日本国憲法 第96条",
@@ -67,72 +51,28 @@
         "verdict": "fact"
       },
       {
-        "claim": "自民党の改憲案では緊急事態条項が通ると内閣が国会を経ずに法律を作れる",
-        "finding": "政令は閣議決定だけで制定できる段階が存在するため「国会を経ずに」という表現は一面では当たっているが、国会の事後承認がなければ効力が続かない仕組みは落ちている。「国会を完全に迂回して永続的に効力を持つ法律を作れる」という読みは条文と合わない。",
+        "claim": "緊急事態条項案では内閣が国会を経ずに法律を作れる",
+        "finding": "この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。",
         "id": "emergency_law_making",
         "issue_ids": [
           "constitutional-amendment-emergency"
         ],
-        "matched_post_count": 3,
+        "matched_post_count": 1,
         "sources": [
           {
             "name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF",
             "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"
-          }
-        ],
-        "verdict": "gap"
-      },
-      {
-        "claim": "現行の9条には「自衛隊」という文字はなく、戦力不保持と交戦権の否認が書かれている",
-        "finding": "「自衛隊の文字がない」「戦力不保持・交戦権否認が書かれている」はいずれも第9条の条文の直接引用に基づく。自衛隊の存在根拠を9条の枠外に求める政府解釈については第9条に条文はない。",
-        "id": "article9_no_jieitai",
-        "issue_ids": [
-          "constitutional-amendment-article9"
-        ],
-        "matched_post_count": 5,
-        "sources": [
+          },
           {
-            "name": "e-Gov法令検索 日本国憲法 第9条",
-            "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"
-          }
-        ],
-        "verdict": "fact"
-      },
-      {
-        "claim": "自民党の改憲案は9条に「自衛隊」を書き加えるだけで、実質は変わらない",
-        "finding": "「自衛隊」の文字を加えることに加え、「必要な自衛の措置をとることを妨げず」という留保条項と「内閣総理大臣を最高の指揮監督者とする」という指揮命令の明文化が盛り込まれている。現行9条には存在しないこれらの文言が追加されるため、「書き加えるだけ」という表現は変化の範囲を過小評価している。",
-        "id": "jieitai_inscription_only",
-        "issue_ids": [
-          "constitutional-amendment-article9"
-        ],
-        "matched_post_count": 4,
-        "sources": [
-          {
-            "name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF",
-            "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"
-          }
-        ],
-        "verdict": "gap"
-      },
-      {
-        "claim": "2026年の国民投票法改正でインターネット広告規制が明文化された",
-        "finding": "現行法（令和4年版）の時点では、ネット広告規制は附則の「検討事項」であり禁止規定ではない。投稿が言及している2026年改正の条文は公式データベースに掲載がなく、「明文化された」かどうかを確認する原典にたどり着けなかった。",
-        "id": "net_ad_regulation",
-        "issue_ids": [
-          "constitutional-amendment-referendum"
-        ],
-        "matched_post_count": 5,
-        "sources": [
-          {
-            "name": "e-Gov 国民投票法（令和4年改正時点、2026年改正は未収録）",
-            "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
+            "name": "自民党 2026年解説版 p.7",
+            "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"
           }
         ],
         "verdict": "miss"
       },
       {
-        "claim": "9条に自衛隊を明記しても18条（苦役の禁止）を変えない限り、徴兵制は憲法上できない",
-        "finding": "政府は徴兵制を「憲法18条が禁じる苦役に当たる」と国会で説明している。自民党の条文イメージ（2018年3月）に第18条の改正が含まれていないことは原文から確認できる。",
+        "claim": "徴兵制は憲法18条の苦役禁止に当たる",
+        "finding": "2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。",
         "id": "article18_conscription",
         "issue_ids": [
           "constitutional-amendment-article9"
@@ -147,13 +87,13 @@
         "verdict": "fact"
       },
       {
-        "claim": "憲法学説では自衛隊の存在を違憲とする解釈と合憲とする解釈が並立している",
-        "finding": "政府は自衛隊を合憲と解釈しているが、総理大臣自身の国会答弁で「7〜8割の憲法学者が違憲論」という学説上の並立状態を認めている。合憲・違憲どちらが正しいかについては、この答弁は判断していない。",
+        "claim": "自衛隊を違憲とする解釈がある",
+        "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。",
         "id": "jieitai_iken_gaku",
         "issue_ids": [
           "constitutional-amendment-article9"
         ],
-        "matched_post_count": 3,
+        "matched_post_count": 2,
         "sources": [
           {
             "name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁",
@@ -172,25 +112,51 @@
     "start": "2026-06-20",
     "status": "known"
   },
-  "data_version": "v1-9bf4425e8ebb5d08",
+  "data_version": "v1-35b4039a0bfe40ba",
   "editorial_summary": {
-    "checked_on": null,
-    "findings": [],
-    "reviewer_type": null,
-    "status": "not_started"
+    "checked_on": "2026-09-12",
+    "findings": [
+      {
+        "id": "constitutional-amendment-ed-1",
+        "kind": "shared_premise",
+        "text": "戦争を避けたいという思いは、改正を進めたい投稿にも、改正に反対する投稿にもありました。防衛の仕組みを変えることと、現行憲法による歯止めを保つことの、どちらを頼りにするかで分かれています。"
+      },
+      {
+        "id": "constitutional-amendment-ed-2",
+        "kind": "real_conflict",
+        "text": "改正そのものを認める投稿でも、いまの政権が出す案には反対する場合があります。「誰が変えるか」と「どこを変えるか」を分けると、単純な賛否では見えない条件が読めます。"
+      },
+      {
+        "id": "constitutional-amendment-ed-3",
+        "kind": "real_conflict",
+        "text": "国民投票まで進めて国民が判断すればよいという意見と、広告や情報、投開票への不信から発議前に止めたいという意見があります。投票で決めることへの信頼も争点です。"
+      },
+      {
+        "id": "constitutional-amendment-ed-4",
+        "kind": "still_unknown",
+        "text": "反対派を批判しただけの投稿から、書き手自身が改正案を支持しているとは限りません。本文に立場が明示されているかと、何を評価しているかを分けて整理しています。"
+      },
+      {
+        "id": "constitutional-amendment-ed-5",
+        "kind": "still_unknown",
+        "text": "過去の草案、現在の提案、現行の条文を混ぜると、同じ言葉でも別の制度について話してしまいます。資料に書かれている範囲と、投稿者が予測していることを区別します。"
+      }
+    ],
+    "reviewer_type": "ai_assisted",
+    "status": "complete"
   },
-  "issue_assigned_count": 1372,
+  "issue_assigned_count": 1369,
   "issues": [
     {
-      "count": 513,
+      "count": 511,
       "id": "constitutional-amendment-general",
       "intensities": [
         {
-          "count": 77,
+          "count": 76,
           "id": "low"
         },
         {
-          "count": 239,
+          "count": 238,
           "id": "medium"
         },
         {
@@ -202,76 +168,76 @@
       "label": "改憲全般",
       "stances": [
         {
-          "count": 124,
+          "count": 56,
           "id": "constitutional-amendment-support",
           "intensities": [
             {
-              "count": 16,
+              "count": 7,
               "id": "low"
             },
             {
-              "count": 77,
+              "count": 32,
               "id": "medium"
             },
             {
-              "count": 31,
+              "count": 17,
               "id": "high"
             }
           ],
           "label": "改正推進"
         },
         {
-          "count": 357,
+          "count": 338,
           "id": "constitutional-amendment-cautious",
           "intensities": [
             {
-              "count": 43,
+              "count": 37,
               "id": "low"
             },
             {
-              "count": 149,
+              "count": 138,
               "id": "medium"
             },
             {
-              "count": 165,
+              "count": 163,
               "id": "high"
             }
           ],
           "label": "慎重・反対"
         },
         {
-          "count": 8,
+          "count": 21,
           "id": "constitutional-amendment-procedure-focus",
           "intensities": [
             {
-              "count": 2,
+              "count": 4,
               "id": "low"
             },
             {
-              "count": 6,
+              "count": 15,
               "id": "medium"
             },
             {
-              "count": 0,
+              "count": 2,
               "id": "high"
             }
           ],
           "label": "手続き重視"
         },
         {
-          "count": 24,
+          "count": 96,
           "id": "constitutional-amendment-neutral",
           "intensities": [
             {
-              "count": 16,
+              "count": 28,
               "id": "low"
             },
             {
-              "count": 7,
+              "count": 53,
               "id": "medium"
             },
             {
-              "count": 1,
+              "count": 15,
               "id": "high"
             }
           ],
@@ -378,7 +344,7 @@
       ]
     },
     {
-      "count": 200,
+      "count": 199,
       "id": "constitutional-amendment-emergency",
       "intensities": [
         {
@@ -386,7 +352,7 @@
           "id": "low"
         },
         {
-          "count": 90,
+          "count": 89,
           "id": "medium"
         },
         {
@@ -398,7 +364,7 @@
       "label": "緊急事態条項",
       "stances": [
         {
-          "count": 4,
+          "count": 2,
           "id": "constitutional-amendment-support",
           "intensities": [
             {
@@ -406,41 +372,41 @@
               "id": "low"
             },
             {
-              "count": 3,
+              "count": 2,
               "id": "medium"
             },
             {
-              "count": 1,
+              "count": 0,
               "id": "high"
             }
           ],
           "label": "改正推進"
         },
         {
-          "count": 194,
+          "count": 176,
           "id": "constitutional-amendment-cautious",
           "intensities": [
             {
-              "count": 5,
+              "count": 3,
               "id": "low"
             },
             {
-              "count": 85,
+              "count": 73,
               "id": "medium"
             },
             {
-              "count": 104,
+              "count": 100,
               "id": "high"
             }
           ],
           "label": "慎重・反対"
         },
         {
-          "count": 1,
+          "count": 2,
           "id": "constitutional-amendment-procedure-focus",
           "intensities": [
             {
-              "count": 0,
+              "count": 1,
               "id": "low"
             },
             {
@@ -455,19 +421,19 @@
           "label": "手続き重視"
         },
         {
-          "count": 1,
+          "count": 19,
           "id": "constitutional-amendment-neutral",
           "intensities": [
             {
-              "count": 0,
+              "count": 1,
               "id": "low"
             },
             {
-              "count": 1,
+              "count": 13,
               "id": "medium"
             },
             {
-              "count": 0,
+              "count": 5,
               "id": "high"
             }
           ],
@@ -594,7 +560,7 @@
       "label": "政党・発議手続き",
       "stances": [
         {
-          "count": 14,
+          "count": 13,
           "id": "constitutional-amendment-support",
           "intensities": [
             {
@@ -602,7 +568,7 @@
               "id": "low"
             },
             {
-              "count": 9,
+              "count": 8,
               "id": "medium"
             },
             {
@@ -651,7 +617,7 @@
           "label": "手続き重視"
         },
         {
-          "count": 15,
+          "count": 16,
           "id": "constitutional-amendment-neutral",
           "intensities": [
             {
@@ -659,7 +625,7 @@
               "id": "low"
             },
             {
-              "count": 7,
+              "count": 8,
               "id": "medium"
             },
             {
@@ -711,7 +677,7 @@
           "label": "改正推進"
         },
         {
-          "count": 20,
+          "count": 16,
           "id": "constitutional-amendment-cautious",
           "intensities": [
             {
@@ -719,7 +685,7 @@
               "id": "low"
             },
             {
-              "count": 16,
+              "count": 12,
               "id": "medium"
             },
             {
@@ -749,7 +715,7 @@
           "label": "手続き重視"
         },
         {
-          "count": 27,
+          "count": 31,
           "id": "constitutional-amendment-neutral",
           "intensities": [
             {
@@ -757,7 +723,7 @@
               "id": "low"
             },
             {
-              "count": 21,
+              "count": 25,
               "id": "medium"
             },
             {
@@ -869,18 +835,78 @@
     }
   ],
   "ocean_layer": {
-    "checked_on": null,
-    "reviewer_type": null,
-    "status": "not_started",
-    "sunk_continents": [],
-    "veins": []
+    "checked_on": "2026-09-12",
+    "reviewer_type": "ai_assisted",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-12",
+        "id": "constitutional-amendment-challenge",
+        "life_impact": "国民投票に異議がある投票人は、結果の告示から30日以内に東京高等裁判所へ訴訟を起こせます。不正への不安を語ることとは別に、結果に異議を申し立てる期限と相手が法定されています。",
+        "nearest_issue_id": null,
+        "reviewer_type": "ai_assisted",
+        "sns_base": 1369,
+        "sns_count": 0,
+        "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。",
+        "sources": [
+          {
+            "date": "2026-09-12確認",
+            "location": "第127条",
+            "name": "e-Gov：国民投票法",
+            "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
+          }
+        ],
+        "topic": "国民投票の結果に異議を申し立てる手続き"
+      },
+      {
+        "checked_on": "2026-09-12",
+        "id": "constitutional-amendment-emergency-review",
+        "life_impact": "参議院の緊急集会で採った措置は臨時のものです。次の国会が開かれてから10日以内に衆議院の同意がなければ効力を失います。緊急時に決める仕組みには、後から確かめる手続きもあります。",
+        "nearest_issue_id": null,
+        "reviewer_type": "ai_assisted",
+        "sns_base": 1369,
+        "sns_count": 0,
+        "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。",
+        "sources": [
+          {
+            "date": "2026-09-12確認",
+            "location": "第54条第3項",
+            "name": "e-Gov：日本国憲法",
+            "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"
+          }
+        ],
+        "topic": "参議院の緊急集会で採った措置の、その後"
+      }
+    ],
+    "veins": [
+      {
+        "checked_on": "2026-09-12",
+        "diverging_reason": "推進側は防衛力や抑止のための改正が戦争を防ぐと考え、反対側は憲法を変えることで戦争に関わる危険が増すと考えています。守りたい平和が共通でも、頼りにする方法が異なります。",
+        "id": "constitutional-amendment-avoid-war",
+        "issue_ids": [
+          "constitutional-amendment-general"
+        ],
+        "reviewer_type": "ai_assisted",
+        "shared_concern": "戦争を避けたい。",
+        "sides": [
+          {
+            "post_count": 2,
+            "stance_label": "改正推進"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "慎重・反対"
+          }
+        ]
+      }
+    ]
   },
-  "opinion_count": 1372,
+  "opinion_count": 1369,
   "page_path": "constitutional-amendment-reaction-map.html",
   "question": "憲法を改正すべきか",
   "schema_version": "1.0",
-  "source_sha256": "9bf4425e8ebb5d088063cd0b5554b0ac8d0789730f07415cb2259fe39aff6ee6",
+  "source_sha256": "35b4039a0bfe40bae51ae15ee7a9c976eeba9db83b323a244ddaffa01ea4e169",
   "theme_id": "constitutional-amendment",
   "title": "憲法改正論議",
-  "updated_on": "2026-09-05"
+  "updated_on": "2026-09-13"
 }

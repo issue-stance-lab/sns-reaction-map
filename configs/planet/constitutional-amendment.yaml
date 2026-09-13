@@ -1,0 +1,124 @@
+reread_registry: true
+theme_id: constitutional-amendment
+title: 憲法改正論議
+question: 憲法の何を、どんな条件で変えるのか
+source_label: Yahoo!リアルタイム検索
+stances:
+- key: 改正推進
+  label: 改正推進
+  id: constitutional-amendment-support
+  color: '#2F8F83'
+  pattern: plain
+- key: 慎重・反対
+  label: 慎重・反対
+  id: constitutional-amendment-cautious
+  color: '#7D5BA6'
+  pattern: diagonal
+- key: 手続き重視
+  label: 手続き重視
+  id: constitutional-amendment-procedure-focus
+  color: '#D9A520'
+  pattern: dots
+- key: 中立
+  label: 中立
+  id: constitutional-amendment-neutral
+  color: '#8B9199'
+  pattern: mesh
+issues:
+- key: 改憲全般
+  id: constitutional-amendment-general
+  icon: 📜
+- key: 9条・自衛隊
+  id: constitutional-amendment-article9
+  icon: 🛡️
+- key: 緊急事態条項
+  id: constitutional-amendment-emergency
+  icon: ⚖️
+- key: 国民投票・広告
+  id: constitutional-amendment-referendum
+  icon: 🗳️
+- key: 政党・発議手続き
+  id: constitutional-amendment-procedure
+  icon: 🏛️
+- key: 情報・議論の質
+  id: constitutional-amendment-deliberation
+  icon: 💬
+- key: その他
+  id: constitutional-amendment-other
+  icon: ◯
+vote_issue_order:
+- 改憲全般
+- 9条・自衛隊
+- 緊急事態条項
+- 国民投票・広告
+- 政党・発議手続き
+- 情報・議論の質
+sub_issues:
+  改憲全般:
+    file: data/constitutional-amendment_issues-reread.json
+    path:
+    - buckets
+    - 改憲全般
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。
+    show_coverage_note: true
+  緊急事態条項:
+    file: data/constitutional-amendment_issues-reread.json
+    path:
+    - buckets
+    - 緊急事態条項
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。
+    show_coverage_note: true
+  国民投票・広告:
+    file: data/constitutional-amendment_issues-reread.json
+    path: [buckets, 国民投票・広告]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、主な理由ごとに分けました。不正や情報操作への懸念は投稿者の意見で、事実と確認されたことを意味しません。本文だけでは理由を特定できない投稿は別にしています
+    show_coverage_note: true
+  情報・議論の質:
+    file: data/constitutional-amendment_issues-reread.json
+    path: [buckets, 情報・議論の質]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません
+    show_coverage_note: true
+  その他:
+    file: data/constitutional-amendment_issues-reread.json
+    path: [buckets, その他]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません
+    show_coverage_note: true
+  政党・発議手続き:
+    file: data/constitutional-amendment_issues-reread.json
+    path: [buckets, 政党・発議手続き]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません
+    show_coverage_note: true
+  9条・自衛隊:
+    file: data/constitutional-amendment_issues-reread.json
+    path: [buckets, 9条・自衛隊]
+    items_path: [items]
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません。皇室典範の9条に言及する3件は別枠にしています
+    show_coverage_note: true
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
