@@ -299,26 +299,9 @@ Stage 0全体は未完了。作業枝 `task/nickname-stage0`、main未統合。
 
 ## 2026-09-13：共有ツリーの分岐解消・共通CSSバグの本番5テーマへの反映漏れを発見・修正
 
-副首都のローカル接続作業（このmain）と、別セッションが直接originへpushした憲法改正の本番反映作業が、
-気づかれずに27対15コミット分岐していた。統合し、`TASK_BOARD.md`・`company/APPROVALS.yaml`（承認ID重複）・
-`data/public/catalog.json`（再生成）を解消（マージ`ec90448`）。
-
-統合後に全テストを通したところ、副首都で見つけた共通コードのCSSバグ2件の修正
-（[[reference_planetpage_rollout]]参照）が、生成器（`build_planet_page_preview.py`）側では直っていたのに、
-**既に公開済みの5テーマ（部活動・高齢者・自転車・あだ名禁止・辺野古）の本番ページには一度も反映されていなかった**
-ことが判明した。透明なクリック判定用rectへの誤着色は5テーマ全てで実際に発生していた（紫系の山の縁取り色衝突は
-発生範囲がテーマの色次第で未確認）。5テーマの本番ページ・見本を生成器と同じ文言で修正し、関連テストを解消
-（マージ`24af3b0`）。**教訓**: 共通コード側の不具合修正は、修正した瞬間に効くのは次回生成分だけで、
-既に公開済みのページには自動で及ばない。修正後は必ず全テーマの本番ページに対して全テストを回し、
-「直したはずなのに古いまま」を機械的に検出すること。
-
-同じタイミングで、副首都の独立監査による意見数訂正（1453→1452）がトップページ（`docs/index.html`）・
-`DATA_SHEET.md`に未反映だったことも判明し、`sync_portal_stats.py`・`build_data_sheet.py`で同期した。
-
-**副首都の本番ページ自体（`docs/fukushuto-reaction-map.html`）はまだ旧2D形式のままで、論点別の内訳表示は
-訂正後の正典とずれている。** 編集再読・山なみ生成器への接続が完了するまでの既知の未了作業であり、
-`test_issue_count_sync.py`・`test_number_provenance.py`の副首都分はこの理由で意図的にNGのまま残す。
-[制作・確認の経緯](../quality/reviews/2026-09-13-constitutional-task-history.md)。
+副首都と憲法改正の並行作業で27対15コミットの分岐が生じ統合（マージ`ec90448`）。統合後、副首都で見つけた
+共通CSSバグ2件の修正が既公開5テーマの本番ページには未反映と判明し解消（マージ`24af3b0`）。**教訓**:
+共通コード修正は次回生成分にしか効かず、既公開ページには自動で及ばない。詳細は[記録](../quality/reviews/2026-09-13-shared-tree-divergence-css-bug.md)。
 
 ## 2026-09-13：副首都の編集再読、追加513件の指示文を作成
 
@@ -334,36 +317,7 @@ Stage 0全体は未完了。作業枝 `task/nickname-stage0`、main未統合。
 
 ## 2026-09-14：副首都の編集再読・追加513件の読了記録
 
-**作業ツリー**: `../isa-wt-fukushuto-reread`（ブランチ `task/fukushuto-reread`）
-
-### やったこと
-1. **対象の抽出**: 正典 `social-samples/fukushuto_hermes_classified.json` から対象5論点の意見823件を抽出。独立監査済み310件と新規513件に分離。
-2. **新規513件の本文読み**: 1件ずつ `text` を読み、論点ごとにバケットへ分類した。キーワード抽出は使っていない。
-3. **既監査310件の区分付け**: `prior_independent_reason` を手がかりに機械的に割り振り。迷う件だけ本文を確認。
-4. **成果物作成**: `data/fukushuto_5issues-reread.json` を新規作成。5論点を1ファイルにまとめた。
-5. **設定更新**: `configs/planet/fukushuto.yaml` の `sub_issues: {}` を5論点分の `full` カバレッジで置き換え。
-6. **検査**: `build_planet_data.py` の `independence_gate` を実行し、**判定「通る」を確認**。
-
-### 分類結果（新規513件＋既監査310件＝823件）
-
-| 論点 | 合計 | バケット内訳 |
-|---|---|---|
-| **候補地** | 303件 | A「大阪は南海トラフで不適」104件 / B「日本海側・遠隔地」42件 / C「原則論」26件 / D「大阪推し」41件 / E「複数分散」11件 / F「代替候補提案」53件 / G「その他」26件 |
-| **防災・災害** | 215件 | A「南海トラフ・同時被災リスクで大阪は不適」96件 / B「東京一極集中は危険・バックアップ必要」79件 / C「その他の反対・批判」40件 |
-| **優先順位** | 140件 | A「物価高・生活対策が先」72件 / B「防災・災害対策が先」40件 / C「法案の卓速・中身なし・強行採決批判」22件 / D「賛成・推進」6件 |
-| **その他** | 96件 | A「法案そのものへの反対」32件 / B「政党・選挙・派閥対立」20件 / C「他政策との関連・比較」21件 / D「賛成・推進」16件 / G「その他」7件 |
-| **費用・財源** | 69件 | A「費用不明・財源なしで進めるな」40件 / B「兆円規模・増税・国債の具体的懸念」14件 / C「擁護・自腹・中立的批判」11件 / D「経済効果・建設業期待」4件 |
-
-### 確認結果
-- **読了率**: 823件 / 意見全体1,452件＝**56.7%**（条件1「50%以上」をクリア）
-- **読み飛ばし**: **0件**（副首都は追加収集停止中のため、100%読了が必須。条件2をクリア）
-- **`independence_gate` 判定**: **通る**（不合格0件）
-- **ファイル**: `data/fukushuto_5issues-reread.json`（新規作成）
-- **設定**: `configs/planet/fukushuto.yaml`（`sub_issues` を更新）
-
-### 残作業（2026-09-13 完了）
-上記はすべて完了。山なみページ生成・標準4検査・`data/public/themes/fukushuto.json`再生成・
-本番反映（マージ`0447912`・push・公開確認）まで実施済み。副首都は7テーマ目として本番公開中。
+新規513件＋既監査310件＝823件（意見全体1,452件の56.7%）を5論点へ分類、`independence_gate`判定「通る」を確認。山なみページ生成・標準4検査・本番反映（マージ`0447912`）まで実施済み。副首都は7テーマ目として本番公開中。詳細は[読了記録](../quality/reviews/2026-09-14-fukushuto-reread-513-record.md)へ切り出した。
 
 ## 2026-09-13：編集再読の合格ラインを見直し（読み飛ばし0件の廃止）
 
@@ -416,3 +370,26 @@ per-投稿の読了記録なし）ため、上記件数はほぼそのまま新�
 `data/ai-copyright_claim_posts.json`を作る、指示文の対象外1）、`editorial-adoption-current.json`の
 149件の分類確認（対象外2、`quality/designs/body-review/`の別工程）、山なみページの実際の生成・
 標準検査・本番反映（対象外3）はいずれも未着手。
+
+## 2026-09-14：生成AIのローカルページ生成・検査完了（本番反映はまだ）
+
+一次資料突き合わせ（`data/ai-copyright_claim_posts.json`、6主張・代表投稿12件）と編集部の横断整理
+（`data/verification/ai-copyright-editorial.json`、5件・3観点とも有）を新規作成し、
+`independence_gate`が**通る**ことを確認。`build_planet_page_preview.py --topic ai-copyright --for-docs`で
+山なみへ差し替え。差し替え時に2件修正: ①`verify_preserved`が旧アリーナの論点フィルタ欄
+（`<aside class="sm-controls">`）を編集通知と誤認識していたため`clean_aicopyright_layout()`を新設
+（henokoの`clean_henoko_layout()`と同形、ai-copyright専用分岐）②`build_ai_copyright_arena.py`の
+`build()`/`apply_public_counts()`両方に他テーマ同型の`PLANET_SECTION_START`ガードを追加（後者は
+「調査条件」の貼り直しだけ残す設計に）。
+
+標準検査を実行。数字の出所検査は当初71件「説明できない」だったが、山なみ新設の内訳表示を
+`configs/ai-copyright-reaction-map.json`の`number_provenance`へ追加し0件（他テーマ共通の9項目）。
+ai-copyright固有の単体テスト4ファイルを新形式へ更新（旧「question spine」実験の回帰テストは
+山なみに置き換わったため`skipTest`で退役）。400行超過分は[副首都の記録](../quality/reviews/2026-09-14-fukushuto-reread-513-record.md)と
+[共有ツリー分岐の記録](../quality/reviews/2026-09-13-shared-tree-divergence-css-bug.md)へ切り出した。
+
+**確認済み**: `independence_gate`通る、標準3検査NG0件、ai-copyright関連の単体テスト全件OK、
+2回生成の差分0。**未確認**: 実機スマホ、全テーマ通しの単体テスト（このワークツリーは他9テーマの
+非公開正典を複製していないため実行不可。ai-copyright以外の失敗は環境固有で無関係と判断）。
+**本番への反映（マージ・push・公開）はまだ行っていない。** 公開サイトは旧デザインのまま。
+作業ツリー: `../isa-wt-ai-copyright-planet`（ブランチ `task/ai-copyright-planet`）。

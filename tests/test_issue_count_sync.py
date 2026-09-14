@@ -101,6 +101,13 @@ class IssueCountSyncTest(unittest.TestCase):
             (ROOT / "data/public/themes/ai-copyright.json").read_text(encoding="utf-8")
         )
         page = (ROOT / "docs/ai-copyright-reaction-map.html").read_text(encoding="utf-8")
+        if "<!-- PLANET_SECTION_START -->" in page:
+            # 課題54段階3で本番は山なみ形式へ差し替え済み。旧アリーナの
+            # data-arena-total 属性はセクションごと撤去済みで対象外にする
+            # （bike-blue-ticket / elderly-license-revocationと同じ扱い）。
+            # 山なみ側の件数一致は verify_theme_page.py の論点ごとの内訳検査が担う。
+            self.assertIn('window.PLANET_DATA=', page)
+            return
         match = re.search(r'data-arena-total="([\d,]+)"', page)
         self.assertIsNotNone(match)
         self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])

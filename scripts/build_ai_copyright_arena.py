@@ -337,36 +337,43 @@ def apply_public_counts(html_text: str, public_theme: Path = PUBLIC_THEME) -> st
         f"分析対象となった意見{opinion_total}件をAIが{len(ISSUE_ORDER) - 1}つの論点に整理しました",
         "lead文の件数",
     )
-    page = replace_once(page, r'data-arena-total="[\d,]*"', f'data-arena-total="{opinion_total}"', "アリーナの母数")
-    page = replace_once(
-        page,
-        r"問いから分かれる、[\d,]+件の意見",
-        f"問いから分かれる、{opinion_total:,}件の意見",
-        "アリーナの見出し件数",
-    )
-    page = replace_once(
-        page,
-        r"の\d+つの論点と分類保留に[\d,]+件の意見を配置した図",
-        f"の{len(ISSUE_ORDER) - 1}つの論点と分類保留に{opinion_total:,}件の意見を配置した図",
-        "アリーナ図の代替テキスト",
-    )
-    page = set_insight(
-        page, "分析対象の意見", f"{opinion_total:,}<small>件</small>",
-        "権利保護、規制、競争力、モラルの声を整理", 100,
-    )
-    page = set_insight(
-        page, "最も多い立場", f"{SHORT_STANCE_LABELS.get(top_stance, top_stance)} {stance_pct}%",
-        f"{top_stance_count:,}件。{STANCE_NOTES.get(top_stance, '')}", stance_pct,
-    )
-    page = set_insight(
-        page, "最も話された論点",
-        f"{SHORT_ISSUE_LABELS.get(top_issue, top_issue)} {top_issue_count:,}<small>件</small>",
-        "学習データを許諾なしで使えるかが最大争点", issue_pct,
-    )
-    marker = re.search(r"(<!-- THEME_ATLAS_START -->)(.*?)(<!-- THEME_ATLAS_END -->)", page, re.S)
-    if not marker:
-        raise BuildError("論点アトラスの位置（THEME_ATLAS_START / END）を特定できません")
-    page = page[: marker.start(2)] + "\n" + build_theme_atlas(issue_counts) + "\n  " + page[marker.end(2) :]
+    # 山なみ形式（課題54）へ差し替え後は、この下のアリーナ専用の書き換え
+    # （母数属性・見出し・代替テキスト・注目ポイント・論点アトラス）を行わない。
+    # 対象セクションごと撤去済みで、置換先が無く即エラーになる（0箇所マッチ）。
+    # 「調査条件」「詳細データ（分類別件数）」は山なみ形式でも生きているので、
+    # 上と下（分類別件数以降）は引き続き貼り直す。
+    planet_mode = "<!-- PLANET_SECTION_START -->" in page
+    if not planet_mode:
+        page = replace_once(page, r'data-arena-total="[\d,]*"', f'data-arena-total="{opinion_total}"', "アリーナの母数")
+        page = replace_once(
+            page,
+            r"問いから分かれる、[\d,]+件の意見",
+            f"問いから分かれる、{opinion_total:,}件の意見",
+            "アリーナの見出し件数",
+        )
+        page = replace_once(
+            page,
+            r"の\d+つの論点と分類保留に[\d,]+件の意見を配置した図",
+            f"の{len(ISSUE_ORDER) - 1}つの論点と分類保留に{opinion_total:,}件の意見を配置した図",
+            "アリーナ図の代替テキスト",
+        )
+        page = set_insight(
+            page, "分析対象の意見", f"{opinion_total:,}<small>件</small>",
+            "権利保護、規制、競争力、モラルの声を整理", 100,
+        )
+        page = set_insight(
+            page, "最も多い立場", f"{SHORT_STANCE_LABELS.get(top_stance, top_stance)} {stance_pct}%",
+            f"{top_stance_count:,}件。{STANCE_NOTES.get(top_stance, '')}", stance_pct,
+        )
+        page = set_insight(
+            page, "最も話された論点",
+            f"{SHORT_ISSUE_LABELS.get(top_issue, top_issue)} {top_issue_count:,}<small>件</small>",
+            "学習データを許諾なしで使えるかが最大争点", issue_pct,
+        )
+        marker = re.search(r"(<!-- THEME_ATLAS_START -->)(.*?)(<!-- THEME_ATLAS_END -->)", page, re.S)
+        if not marker:
+            raise BuildError("論点アトラスの位置（THEME_ATLAS_START / END）を特定できません")
+        page = page[: marker.start(2)] + "\n" + build_theme_atlas(issue_counts) + "\n  " + page[marker.end(2) :]
     marker = re.search(
         r'(<summary>分類別件数</summary>\s*<div class="details-body">\s*<div class="bar-list">)(.*?)(</div>\s*</div>\s*</details>)',
         page, re.S,
@@ -413,6 +420,32 @@ def build(
     html_path = Path(template) if template else PAGE
     before = html_path.read_text(encoding="utf-8")
     page = before
+
+    # 山なみ形式へ差し替え済みのページは、旧2D形式専用の書き換え（調査条件・
+    # アリーナ関連の見出し・論点アトラス・潮目など）を一切行わない。課題54の
+    # 展開手順（reference_planetpage_rollout）どおり、この定例更新が山なみ本体を
+    # 壊す/巻き戻すのを防ぐガード。アリーナ用の生データ（arena_path）だけは
+    # 引き続き更新する（無害・現在は未使用）。調査条件などの文言が更新されない
+    # まま残るのは既知の制限で、挿入先は段階3以降で別途設計する。
+    if "<!-- PLANET_SECTION_START -->" in before:
+        changed_arena = arena_text != arena_before
+        if not check:
+            if changed_arena or data_output is not None:
+                arena_path.parent.mkdir(parents=True, exist_ok=True)
+                arena_path.write_text(arena_text, encoding="utf-8")
+            if output is not None:
+                target = Path(output)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(page, encoding="utf-8")
+        detail = " / ".join(f"{n}={c}" for n, c in issue_counts.most_common())
+        lines = [
+            f"出所: {label}（全{total}件 / 意見{opinion_total}件）",
+            f"論点: {detail}",
+            "立場: " + " / ".join(f"{n}={stance_counts.get(n, 0)}" for n in STANCE_ORDER),
+            f"アリーナの点: {len(arena_rows)}件",
+            "山なみ形式のため、旧2D形式の書き換えはスキップしました",
+        ]
+        return lines, changed_arena
 
     page = replace_once(
         page,

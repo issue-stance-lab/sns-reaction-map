@@ -661,8 +661,16 @@ def clean_henoko_layout(html: str) -> str:
     return html
 
 
+def clean_aicopyright_layout(html: str) -> str:
+    """旧2Dアリーナの論点フィルタ操作欄は、山なみへの差し替えで意図して撤去する。"""
+    if "var TOPIC='ai-copyright-issue-stance-v1'" not in html:
+        return html
+    return re.sub(r'<aside class="sm-controls"[^>]*>.*?</aside>', '', html, flags=re.S)
+
+
 def verify_preserved(source: str, result: str) -> None:
     source = clean_henoko_layout(source)
+    source = clean_aicopyright_layout(source)
     for fragment in protected_fragments(source):
         # The existing bukatsu adapter changes only error presentation, not vote contracts.
         changed, _ = fix_vote_feedback(fragment)
