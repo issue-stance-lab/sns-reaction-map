@@ -1,0 +1,93 @@
+reread_registry: false
+theme_id: consumption-tax-cut
+title: 消費税減税
+question: 消費税減税は何を対象に、どう実現すべきか
+source_label: Yahoo!リアルタイム検索
+show_unreviewed_note: true
+
+stances:
+  - key: 減税推進
+    id: consumption-tax-cut-support
+    label: 減税推進
+    color: "#2F8F83"
+    pattern: plain
+  - key: 条件付き賛成・政府案に不満
+    id: consumption-tax-cut-conditional
+    label: 条件付き賛成・政府案に不満
+    color: "#D9A520"
+    pattern: dots
+  - key: 減税反対・慎重
+    id: consumption-tax-cut-cautious
+    label: 減税反対・慎重
+    color: "#7D5BA6"
+    pattern: diagonal
+  - key: 中立・情報
+    id: consumption-tax-cut-neutral
+    label: 中立・情報
+    color: "#8B9199"
+    pattern: mesh
+
+issues:
+  - key: 公約と政治不信
+    id: consumption-tax-cut-political-trust
+    icon: "🗳️"
+  - key: 減税の効果
+    id: consumption-tax-cut-effect
+    icon: "📉"
+  - key: 減税の対象範囲
+    id: consumption-tax-cut-scope
+    icon: "🧾"
+  - key: 財源と社会保障
+    id: consumption-tax-cut-finance-welfare
+    icon: "🏛️"
+  - key: 給付など他策との比較
+    id: consumption-tax-cut-alternatives
+    icon: "💴"
+  - key: 事業者の実務負担
+    id: consumption-tax-cut-business-burden
+    icon: "🏪"
+  - key: その他
+    id: consumption-tax-cut-other
+    icon: "💬"
+
+vote_issue_order:
+  - 公約と政治不信
+  - 減税の効果
+  - 減税の対象範囲
+  - 財源と社会保障
+  - 給付など他策との比較
+  - 事業者の実務負担
+  - その他
+
+sub_issues:
+  減税の対象範囲:
+    file: data/consumption-tax-cut_4issues-reread.json
+    path: [hani, buckets]
+    items_path: [hani, items]
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  減税の効果:
+    file: data/consumption-tax-cut_4issues-reread.json
+    path: [kouka, buckets]
+    items_path: [kouka, items]
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  給付など他策との比較:
+    file: data/consumption-tax-cut_4issues-reread.json
+    path: [kyufu, buckets]
+    items_path: [kyufu, items]
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+  事業者の実務負担:
+    file: data/consumption-tax-cut_4issues-reread.json
+    path: [jigyosha, buckets]
+    items_path: [jigyosha, items]
+    coverage: full
+    coverage_note: この論点の全件をAIが本文再読した
+
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400

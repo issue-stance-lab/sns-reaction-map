@@ -1,0 +1,34 @@
+{
+ "theme_id": "consumption-tax-cut",
+ "curated_at": "2026-09-14",
+ "curated_by": "editorial_review",
+ "method": "収集済みの意見を論点ごと・立場ごとに読み、論点をまたいで言えることだけを書いた。数字は本文に書かず、差し込み（{issue:<論点id>.count} など）で正典から入れる。設計書4章の5「共通する前提／本当の対立／まだ分からないこと」に対応する。",
+ "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。",
+ "findings": [
+  {
+   "id": "consumption-tax-cut-ed-1",
+   "kind": "shared_premise",
+   "text": "「{issue:consumption-tax-cut-scope.label}」は減税推進が{issue:consumption-tax-cut-scope.stance:consumption-tax-cut-support.share}、条件付き賛成・政府案に不満が{issue:consumption-tax-cut-scope.stance:consumption-tax-cut-conditional.share}を占め、減税反対・慎重は{issue:consumption-tax-cut-scope.stance:consumption-tax-cut-cautious.share}にとどまる。対象を一律にするか食料品限定にするかで割れているだけで、減税そのものをやめるべきという意見は少数派にとどまっている。"
+  },
+  {
+   "id": "consumption-tax-cut-ed-2",
+   "kind": "real_conflict",
+   "text": "「{issue:consumption-tax-cut-scope.label}」では減税推進が{issue:consumption-tax-cut-scope.stance:consumption-tax-cut-support.share}で最も多い立場だが、「{issue:consumption-tax-cut-effect.label}」では減税反対・慎重が{issue:consumption-tax-cut-effect.stance:consumption-tax-cut-cautious.share}を占め、勢力が入れ替わる。対象の広さでは減税を求める声が優勢でも、実際の効果には強い懐疑が向けられている。同じ人が論点によって立場を変えているのか、対象範囲を語る人と効果を語る人が違うのかは、この収集からは分からない。"
+  },
+  {
+   "id": "consumption-tax-cut-ed-3",
+   "kind": "real_conflict",
+   "text": "「{issue:consumption-tax-cut-finance-welfare.label}」は減税推進{issue:consumption-tax-cut-finance-welfare.stance:consumption-tax-cut-support.share}、減税反対・慎重{issue:consumption-tax-cut-finance-welfare.stance:consumption-tax-cut-cautious.share}と、他の論点のように一方が大勢を占める構図になっていない。財源や社会保障への影響をどう見るかは、意見が拮抗したまま割れている。"
+  },
+  {
+   "id": "consumption-tax-cut-ed-4",
+   "kind": "still_unknown",
+   "text": "「{issue:consumption-tax-cut-business-burden.label}」は{issue:consumption-tax-cut-business-burden.count}（全体の{issue:consumption-tax-cut-business-burden.share}）と、他のどの論点よりも少ない。件数が少ないことは論点として軽いという意味ではなく、この収集のなかで語られた量が少なかったという意味しかない。"
+  },
+  {
+   "id": "consumption-tax-cut-ed-5",
+   "kind": "still_unknown",
+   "text": "ここに出ているのはYahoo!リアルタイム検索で集めた{totals.opinions}件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"
+  }
+ ]
+}
