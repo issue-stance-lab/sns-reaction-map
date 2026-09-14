@@ -16,19 +16,22 @@ def digest(path: Path) -> str:
 
 class AiCopyrightAdapterTests(unittest.TestCase):
     def test_public_json_drives_page_level_counts(self):
+        # 課題54段階2-3で本番は山なみ形式へ差し替え済み。旧アリーナの母数属性・
+        # 見出し・注目ポイントは対象セクションごと撤去されており、この関数は
+        # それらへ触ろうとするとエラーになるため更新自体をやめる（safe no-op、
+        # elderly/build_elderly_arena.pyと同じ設計）。「調査条件」（このマップの
+        # 元データ）は山なみ形式でも生きているので、そちらは引き続き貼り直される
+        # ことを確かめる。
         from scripts.build_ai_copyright_arena import apply_public_counts
 
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertIn("<!-- PLANET_SECTION_START -->", source)
         public_path = ROOT / "data/public/themes/ai-copyright.json"
         public = json.loads(public_path.read_text(encoding="utf-8"))
-        page = apply_public_counts(PAGE.read_text(encoding="utf-8"), public_path)
-        top_issue = max(
-            (issue for issue in public["issues"] if issue["kind"] == "named"),
-            key=lambda issue: int(issue["count"]),
-        )
+        page = apply_public_counts(source, public_path)
 
-        self.assertIn(f'data-arena-total="{public["opinion_count"]}"', page)
-        self.assertIn(f'問いから分かれる、{public["opinion_count"]:,}件の意見', page)
-        self.assertIn(f'>{top_issue["count"]}<small>件</small>', page)
+        self.assertIn(f'で取得した公開投稿 {public["collected_count"]}件', page)
+        self.assertNotIn("data-arena-total", page)
 
     def _canonical(self):
         import yaml
@@ -36,9 +39,16 @@ class AiCopyrightAdapterTests(unittest.TestCase):
         return ROOT / themes["ai-copyright"]["sample_file"]
 
     def test_changed_candidate_updates_once_then_is_idempotent(self):
+        # 課題54段階2-3で本番は山なみ形式へ差し替え済み（PAGEは新テンプレ）。
+        # このビルダーは山なみ形式の入力に対して旧2D形式の書き換えを一切行わない
+        # 安全なno-opになる（build_ai_copyright_arena.build()のガード参照）。
+        # ページ本文は入力のまま変わらず、アリーナ用の生データ（現在は未使用だが
+        # 無害に更新され続ける）だけが候補件数に応じて動くことを確かめる。
         canon = self._canonical()
         if not canon.is_file():
             self.skipTest(f"非公開の正典がない環境: {canon.name}")
+        source_html = PAGE.read_text(encoding="utf-8")
+        self.assertIn("<!-- PLANET_SECTION_START -->", source_html)
         source = json.loads(canon.read_text(encoding="utf-8"))
         added = json.loads(json.dumps(next(
             r for r in source
@@ -48,7 +58,6 @@ class AiCopyrightAdapterTests(unittest.TestCase):
         added["tweet_id"] = "adapter-test-only"
         added["url"] = "https://example.invalid/adapter-test-only"
         candidate = source + [added]
-        opinions = sum(1 for r in candidate if r.get("classification", {}).get("is_opinion"))
 
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
@@ -67,9 +76,7 @@ class AiCopyrightAdapterTests(unittest.TestCase):
             ]
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
             first = (digest(page_path), digest(data_path))
-            page = page_path.read_text(encoding="utf-8")
-            self.assertIn(f"公開投稿 {len(candidate)}件", page)
-            self.assertIn(f'data-arena-total="{opinions}"', page)
+            self.assertEqual(page_path.read_text(encoding="utf-8"), source_html)
 
             command[command.index("--html-template") + 1] = str(page_path)
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)

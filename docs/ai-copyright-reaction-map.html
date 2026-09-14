@@ -860,6 +860,28 @@
 </style>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/ai-copyright/ai-copyright-hero.webp')">
+<div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
+(function(){
+  /* 進み具合の帯を、貼り付いたヘッダーのすぐ下で止める。
+     ヘッダーの高さは画面幅で変わる（スマホ63px・パソコン73px）ため実測する。
+     高さを決め打ちにすると、共通ヘッダーが変わった日に静かに隠れる。 */
+  function fit(){
+    var h = document.querySelector("header.modern-site-header") || document.querySelector("header");
+    var px = 0;
+    if (h){
+      var cs = getComputedStyle(h);
+      /* 上に貼り付いているヘッダーだけ避ける。ふつうに流れるヘッダーなら避ける必要がない */
+      if ((cs.position === "sticky" || cs.position === "fixed") && parseFloat(cs.top || "0") === 0){
+        px = Math.round(h.getBoundingClientRect().height);
+      }
+    }
+    document.documentElement.style.setProperty("--isa-header-h", px + "px");
+  }
+  fit();
+  addEventListener("load", fit);
+  addEventListener("resize", fit);
+})();
+</script>
   <header class="modern-site-header">
     <div class="modern-header-inner">
       <a class="modern-logo" href="index.html" aria-label="SNS反応まっぷ トップ">
@@ -901,6 +923,1000 @@
 <p class="repair-period-note" style="max-width:1000px;margin:8px auto 0;font-size:13px;line-height:1.8;">保存された取得日時のUTC日付に基づく範囲です。</p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
+<!-- PLANET_SECTION_START -->
+<section class="panel planet-panel" aria-labelledby="planet-heading">
+<style>#planet-block{
+  --bg:#0d1117; --panel:#161b22; --line:#2b3440; --fg:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff;
+  /* 追いかけていない分のマス。大陸の色はどれも白っぽいので、これより明るくすると
+     7色すべてで見分けの基準を下回る（実測で下回った）。明暗差1.7倍を保つこと。 */
+  --rest-dot:#4a525c;
+}#planet-block,#planet-block *{box-sizing:border-box}#planet-block{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}#planet-block .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}#planet-block h1{font-size:22px;margin:0 0 4px}#planet-block .q{color:var(--muted);font-size:14px;margin:0 0 12px}#planet-block .caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
+  border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}#planet-block .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#planet-block .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}#planet-block .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  font-weight:700;overflow:hidden;white-space:nowrap}#planet-block .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}#planet-block .panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .panel .cross b{color:#f2f6fa}#planet-block .panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
+  background:var(--panel);color:var(--fg);border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;cursor:pointer}#planet-block .panel .cross .spin:hover{border-color:var(--accent)}#planet-block .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}#planet-block .islands{list-style:none;padding:0;margin:8px 0 0}#planet-block .islands li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}#planet-block .islands li:first-child{border-top:none}#planet-block .islands .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}#planet-block .islands .sw{width:12px;height:12px;border-radius:3px;flex:none}#planet-block .islands .num{width:19px;height:19px;border-radius:99px;flex:none;background:#0d1117;
+  border:1px solid var(--line);font-size:11px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-weight:700}#planet-block .islands li.unread{color:var(--muted)}#planet-block .note{font-size:12px;color:var(--muted);background:#1c2128;border:1px dashed var(--line);
+  border-radius:6px;padding:9px 10px;margin-top:10px}#planet-block .back{margin-top:12px;background:transparent;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .issue-list{list-style:none;padding:0;margin:18px 0 0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}#planet-block .issue-list button{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;color:var(--fg);cursor:pointer;font-family:inherit;font-size:13px}#planet-block .issue-list button:hover,#planet-block .issue-list button:focus-visible{border-color:var(--accent);outline:none}#planet-block .issue-list .m{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}#planet-block .dot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:6px}#planet-block h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
+  border-top:1px solid var(--line);padding-top:14px}#planet-block .meta{font-size:11.5px;color:var(--muted)}#planet-block .meta code{background:#1c2128;padding:1px 5px;border-radius:4px}#planet-block .planet{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:0 0 20px}#planet-block .continent{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  aspect-ratio:1;border-radius:50%;border:2px solid transparent;text-align:center;
+  padding:12px;text-decoration:none;line-height:1.4}#planet-block .continent:hover,#planet-block .continent:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .continent .label{font-size:13px;font-weight:700}#planet-block .continent .count{font-size:11px;opacity:.78;font-variant-numeric:tabular-nums}#planet-block .landing-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:0 0 12px}#planet-block .landing-panel h2{font-size:16px;margin:0 0 2px}#planet-block .landing-panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .srclist{list-style:none;padding:0;margin:8px 0 0;font-size:12px}#planet-block .srclist li{padding:5px 0;border-top:1px solid var(--line)}#planet-block .srclist li:first-child{border-top:none}#planet-block .srclist a{color:var(--accent)}#planet-block .backlink{display:inline-block;margin-top:12px;border:1px solid var(--line);color:var(--fg);
+  border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}#planet-block .backlink:hover,#planet-block .backlink:focus-visible{border-color:var(--accent);outline:none}#planet-block .claims{list-style:none;padding:0;margin:6px 0 0}#planet-block .claims li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}#planet-block .claims li:first-child{border-top:none}#planet-block .verdict{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;
+  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}#planet-block .v-fact{background:#3fb950}#planet-block .v-gap{background:#d9a520}#planet-block .v-miss{background:#a5a5a5}#planet-block .claims .finding,#planet-block .claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}#planet-block .claims .srcs{display:block;margin-top:4px}#planet-block .claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}#planet-block .dive{color:var(--accent)}#planet-block .ocean{border-top:1px solid var(--line);margin-top:26px}#planet-block .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}#planet-block .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}#planet-block .sunk,#planet-block .vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
+  border-radius:10px;padding:12px 14px;margin:0 0 10px}#planet-block .vein{border-left-color:#7D5BA6}#planet-block .sunk h5,#planet-block .vein h5{font-size:13.5px;margin:0 0 6px}#planet-block .sunk .impact,#planet-block .vein .impact{font-size:12.5px;margin:0 0 6px}#planet-block .sunk .count,#planet-block .vein .count{font-size:12px;color:var(--muted);margin:0 0 6px}#planet-block .sunk .srclist .when,#planet-block .sunk .srclist .where{display:block;color:var(--muted);font-size:11px}#planet-block .sides{list-style:none;padding:0;margin:6px 0 0;font-size:12px}#planet-block .sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}#planet-block .sides .n{margin-left:auto;color:var(--muted)}#planet-block .editorial .sec{color:var(--fg);font-size:15px}#planet-block .findings{list-style:none;padding:0;margin:0 0 4px}#planet-block .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}#planet-block .dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}#planet-block .waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}#planet-block .waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  transition:background-color .5s ease}#planet-block .dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}#planet-block .dot-cap b{color:var(--fg)}#planet-block .readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#planet-block .ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}#planet-block .ro .k{font-size:10.5px;color:var(--muted);margin:0}#planet-block .ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}#planet-block .ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}#planet-block .ro .ar{font-size:13px;font-weight:700}#planet-block .ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#e8a0a8}#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#7ee0a8}#planet-block .ro.flat .ar,#planet-block .ro.flat .to{color:var(--fg)}#planet-block .dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
+  background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .dot-mech b{color:#f2f6fa}#planet-block .progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}#planet-block .progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}#planet-block .progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}#planet-block .progress b{color:var(--fg);font-variant-numeric:tabular-nums}#planet-block .guess{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:0 0 12px}#planet-block .guess h3{font-size:14px;margin:0 0 9px}#planet-block .gopts{display:flex;flex-direction:column;gap:7px}#planet-block .gopts button{font:inherit;font-size:13px;text-align:left;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}#planet-block .gopts button:hover:not(:disabled){border-color:var(--accent)}#planet-block .gopts button:disabled{cursor:default;opacity:.5}#planet-block .gopts button.hit{border-color:#3fb950;background:#12281a;opacity:1}#planet-block .gopts button.miss{border-color:#a44a4a;background:#2a1517;opacity:1}#planet-block .gans{margin-top:10px;font-size:12.5px;line-height:1.8}#planet-block .gans[hidden]{display:none}#planet-block .gans .lead{font-weight:700;margin-bottom:3px}#planet-block .dive{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 0;font-size:12px;color:var(--muted)}#planet-block .dive button{font:inherit;font-size:13px;font-weight:700;background:var(--accent);color:#0d1117;
+  border:0;border-radius:99px;padding:7px 16px;cursor:pointer}#planet-block #seafloor{opacity:0;transition:opacity .9s ease .2s}#planet-block .dived #seafloor{opacity:1}#planet-block #seacover{transition:opacity .9s ease}#planet-block .dived #seacover{opacity:.2}#planet-block .quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}#planet-block .qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}#planet-block .qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}#planet-block .qans{margin-top:12px;font-size:13px;line-height:1.85}#planet-block .qans[hidden]{display:none}#planet-block .qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
+  border:0;border-radius:8px;padding:7px 14px;cursor:pointer}#planet-block .qscore{font-size:14px;line-height:1.85}#planet-block .qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.planet-live #planet-block #fallback{display:none}html:not(.planet-live) #planet-block .modes,html:not(.planet-live) #planet-block .stage,html:not(.planet-live) #planet-block .sec-live,html:not(.planet-live) #planet-block .issue-list{display:none}
+#planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
+  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+#planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
+#planet-block .panel{box-shadow:none}
+#planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
+#planet-block .panel .cross b,#planet-block .dot-mech b{color:#0b2a5b}
+#planet-block .note,#planet-block .ro{background:#f2f6fb}
+#planet-block .meta code{background:#eef1f6}
+#planet-block .islands .num{background:#e7ecf4;color:#172033}
+#planet-block .modes button[aria-pressed=true]{background:#e4edff}
+#planet-block .dive button{color:#fff}
+#planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
+/* 選択肢が押せると分からない・正誤が弱い（オーナー指摘）。触れる形と結果を強くする */
+#planet-block .gopts{gap:9px}
+#planet-block .gopts button{background:#fff;border:2px solid #D7DCE6;border-radius:10px;
+  padding:13px 15px 13px 44px;font-size:14.5px;font-weight:500;position:relative;
+  transition:border-color .15s,box-shadow .15s,transform .1s}
+#planet-block .gopts button::before{content:"";position:absolute;left:15px;top:50%;
+  width:17px;height:17px;margin-top:-8.5px;border:2px solid #B9C2D2;border-radius:50%}
+#planet-block .gopts button:hover:not(:disabled){border-color:var(--accent);
+  box-shadow:0 3px 10px rgba(7,94,242,.14);transform:translateY(-1px)}
+#planet-block .gopts button:hover:not(:disabled)::before{border-color:var(--accent)}
+#planet-block .gopts button:disabled{opacity:.55}
+#planet-block .gopts button.hit{background:#E6F6EC;border-color:#1B7A55;opacity:1;font-weight:700}
+#planet-block .gopts button.hit::before{content:"✓";border-color:#1B7A55;background:#1B7A55;
+  color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+#planet-block .gopts button.miss{background:#FDECEC;border-color:#C4392C;opacity:1}
+#planet-block .gopts button.miss::before{content:"×";border-color:#C4392C;background:#C4392C;
+  color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center;line-height:1}
+#planet-block .gans,#planet-block .qans{background:#F4F7FC;border-radius:10px;padding:13px 15px;
+  margin-top:13px}
+#planet-block .gans .lead{font-size:17px;font-weight:900;margin:0 0 5px}
+#planet-block .guess:has(.hit:not(:disabled)) .gans .lead{color:#1B7A55}
+#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#b23a48}
+#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#15734a}
+#planet-block .qnext{color:#fff;background:var(--accent)}
+/* 図もサイトの色にする（オーナー指示 2026-09-05「マップの背景がまだ黒」）。
+   SVGの色は描画時に属性で付いているが、CSSのほうが強いので上から塗り替えられる。 */
+#planet-block .chart-box{background:#F2F6FD;border-color:#DCE3EF}
+/* svg直下の1個目のrect（海面帯の背景）だけを狙うつもりが、:first-of-typeは
+   親要素ごとに数えるため、山1つずつの中にある透明なクリック判定用rect
+   （.hill-hit、1個の<g class="hill">につき1個で「その中の1個目」に該当）
+   にも掛かってしまい、本来透明であるべき四角が山の数だけ薄い水色に見えていた
+   （2026-09-13、副首都で発覚）。直下の子要素だけに絞る「>」を入れて防ぐ。 */
+#planet-block .chart-box svg>rect:first-of-type{fill:#DCE9F7}
+#planet-block .chart-box svg #seacover{fill:#F2F6FD;opacity:.96}
+#planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E3E9F3}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1"]{stroke:#B9CCE6}
+#planet-block .chart-box svg line[stroke="#5b9bf0"][stroke-width="1.6"]{stroke:#075EF2}
+/* 目盛りの文字は線の真上に置かれていて、0%だけ海面の線に隠れる。5だけ持ち上げる */
+#planet-block .chart-box svg text[fill="#8b949e"]{fill:#667085;transform:translateY(-5px)}
+#planet-block .chart-box svg text[fill="#c7d1dc"]{fill:#172033}
+#planet-block .chart-box svg text[fill="#e6edf3"]{fill:#0F1A3D}
+/* 「選ばれている山」の縁取りは、山ごとに色が違うため濃紺だと衝突する
+   テーマがある（2026-09-13、副首都の紫い山で発覚）。どの山の色とも
+   競合しない中間グレーに変える（#2b3440はこのファイル内の他の縁取り
+   グレーと同系色）。 */
+#planet-block .chart-box svg path[stroke="#f2f6fa"]{stroke:#2b3440}
+#planet-block .chart-box svg #seafloor path[fill="#122642"]{fill:#E7F0FB;stroke:#7FA6D8}
+#planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
+#planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
+#planet-block .chart-box svg path[stroke="#e0663a"]{stroke:#C4462A}
+/* 点の装置も同じ面にそろえる */
+#planet-block .dotbox{background:#F2F6FD;border:1px solid #DCE3EF;border-radius:12px;
+  padding:13px 14px;margin-top:14px;--rest-dot:#D3DCEA}
+#planet-block .dotbox .legend{color:#667085}
+/* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
+   論点名は海面+17pxにあるので、そこだけ残して畳み、「海の水を抜く」で開く。 */
+#planet-block .chart-box{overflow:hidden}
+#planet-block .chart-box svg{margin-bottom:-17.5%;transition:margin-bottom .9s ease}
+#planet-block .chart-box.dived svg{margin-bottom:0}
+/* 山が押せると分からない（オーナー指摘）。触れる合図を出す */
+#planet-block .chart-box .hill path{transition:opacity .18s ease,filter .18s ease}
+#planet-block .chart-box .hill:hover path,
+#planet-block .chart-box .hill:focus-visible path{opacity:1!important;
+  filter:drop-shadow(0 0 6px rgba(7,94,242,.5))}
+#planet-block .chart-box .hill:hover text,
+#planet-block .chart-box .hill:focus-visible text{font-weight:700}
+#planet-block .tap-hint{display:flex;align-items:center;gap:8px;margin:0 0 8px;
+  padding:9px 13px;border-radius:10px;background:var(--blue-tint,#E7EEFE);
+  font-size:13.5px;font-weight:700;color:#0B3FA8;line-height:1.6}
+#planet-block .tap-hint span[aria-hidden]{font-size:16px}
+#planet-block a.go-card{display:inline-block;background:var(--accent);color:#fff;
+  font-weight:700;font-size:14px;text-decoration:none;border-radius:8px;padding:10px 18px}
+#planet-block a.go-card:hover{filter:brightness(1.08)}
+/* 進み具合はページの一番上に固定する（オーナー指示「常に上に表示してアピールしたい」）。
+   ヘッダーも同じく上へ貼り付き、こちらより手前（z-index 1000）にいる。top:0 のままだと
+   スクロール中ヘッダーの下に隠れて消えて見えた（オーナー指摘 2026-09-06）。
+   ヘッダーの高さは画面幅で変わるので、下の PROGRESS_STICK_JS が実測して入れる。 */
+#progress{position:sticky;top:var(--isa-header-h,0px);z-index:60;display:flex;align-items:center;gap:10px;
+  flex-wrap:wrap;row-gap:4px;
+  padding:9px clamp(14px,4vw,28px);background:#fff;border-bottom:1px solid #DCE3EF;font-size:13px;color:#42527A}
+/* 帯は残すが表には出さない。paintProgress() が #pbar の幅を書き続けるので、
+   消すとJSが止まる。見せるのは下の区画のほう。 */
+#progress .track{display:none}
+/* 1地点ぶんが帯では10pxにしかならず「動いていない」と見えた（オーナー指摘 2026-09-06）。
+   地点の数だけ区画に割り、1回の行動で1つ点灯させる。中身はJSが作る。 */
+#progress .segs{flex:1;display:flex;gap:2px;min-width:140px;max-width:340px}
+#progress .segs i{flex:1;height:9px;background:#E7ECF4;border-radius:2px;
+  transition:background .25s ease}
+#progress .segs i.on{background:var(--accent,#075EF2)}
+#progress b{font-weight:900;color:#0F1A3D;font-variant-numeric:tabular-nums;
+  display:inline-block}
+#progress .how{color:#7C89A8;font-size:12px;flex-basis:100%;order:9}
+/* 増やし方は0のあいだだけ。1つでも点いたら消して場所を返す */
+#progress.started .how{display:none}
+#progress.bump b{animation:isa-pnum-pop .5s ease}
+@keyframes isa-pnum-pop{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.35);color:var(--accent,#075EF2)}
+  100%{transform:scale(1)}
+}
+/* 説明は幅を問わず2行目。横一列に並べると区画が min-width まで潰れて見えなくなり、
+   スマホでは以前 display:none にしていたため、いちばん説明が要る画面で読めなかった。 */
+@media (max-width:640px){ #progress .how{font-size:11.5px} }
+@media (prefers-reduced-motion:reduce){
+  #planet-block .chart-box svg{transition:none}
+  #progress .segs i{transition:none}
+  #progress.bump b{animation:none}
+}
+</style>
+<script>
+/* 図は SVG で描く。JSが動かない環境では静的表示のまま残す。
+   （このクラスが付かないと #fallback が見えたままになる） */
+(function(){
+  try {
+    var c = document.createElement('canvas');
+    if (c.getContext && c.getContext('2d')) {
+      document.documentElement.className += ' planet-live';
+    }
+  } catch (e) {}
+})();
+</script>
+<div id="planet-block">
+  <div class="panel-title"><h2>SNS反応マップ</h2><span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>
+  <p class="q" id="q">生成AIによる著作物の利用・学習をどこまで認めるべきか（生成AIと著作権）</p>
+  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>収集期間 2026-06-22〜2026-09-05／収集3812件・<b>意見2593件</b>（この図の母数）／更新 2026-09-05<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>
+
+
+  <div id="guesses"></div>
+
+  <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
+
+  <p class="tap-hint"><span aria-hidden="true">👆</span>山を押すと、その論点の図解と、賛成・反対それぞれの投稿が読めます</p><div class="stage">
+    <div class="chart-box">
+      <svg id="section" viewBox="0 0 900 500" role="img" aria-labelledby="chartdesc"></svg>
+      <p id="chartdesc" hidden></p>
+      <p class="hint">山を押すと、その論点へ移ります（面積＝強く語られた投稿の数）</p>
+      <p class="floor-note" id="floor-note"></p>
+      <p class="dive"><button type="button" id="dive"></button><span id="divenote"></span></p>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <!-- 立場を絞ると「件数は減るのに割合は増える」ことを、100マスで見せる。
+       マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+       着陸パネルの中へ差し込むので、押したボタンのすぐそばで変化が見える。
+       数字・論点名・立場名はすべて data から入れる（ここには書かない）。 -->
+  <div class="dotbox" id="dotbox" hidden>
+    <div class="waffle" id="waffle"></div>
+    <p class="dot-cap">マス目100個が、いま見ている立場の全部です。
+      <b>色つきのマスの数が、そのまま割合（％）になります。</b></p>
+    <div class="legend" id="dot-legend"></div>
+    <div class="readouts">
+      <div class="ro" id="ro-count">
+        <p class="k">件数</p>
+        <p class="v"><span class="from" id="c-from"></span><span class="ar" id="c-ar"></span><span class="to" id="c-to"></span></p>
+      </div>
+      <div class="ro" id="ro-share">
+        <p class="k">割合（色つきのマスの数）</p>
+        <p class="v"><span class="from" id="s-from"></span><span class="ar" id="s-ar"></span><span class="to" id="s-to"></span></p>
+      </div>
+    </div>
+    <p class="dot-mech" id="dot-mech"></p>
+  </div>
+
+    <div id="fallback">
+    <h3 class="sec">論点の一覧（図が使えないときの表示）</h3>
+    <p class="sub" style="color:var(--muted);font-size:12px">このページは、お使いの環境で図を描けなかったため、同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。円の色はいちばん多い立場です。</p>
+    <nav class="planet" id="fallback-nav" aria-label="論点をえらぶ">
+      <a class="continent" href="#fb-ai-copyright-learning-data" style="background:#ff5426;border-color:#ff5426;color:#ffffff"><span class="label">📚 学習データ・無断利用</span><span class="count">657件・25.3%</span></a>
+      <a class="continent" href="#fb-ai-copyright-user-ethics" style="background:#ff5426;border-color:#ff5426;color:#ffffff"><span class="label">💬 利用者モラル・倫理</span><span class="count">657件・25.3%</span></a>
+      <a class="continent" href="#fb-ai-copyright-legal-framework" style="background:#ff5426;border-color:#ff5426;color:#ffffff"><span class="label">⚖️ 法制度・規制整備</span><span class="count">471件・18.2%</span></a>
+      <a class="continent" href="#fb-ai-copyright-creator-rights" style="background:#ff5426;border-color:#ff5426;color:#ffffff"><span class="label">🎨 クリエイター保護・権利</span><span class="count">303件・11.7%</span></a>
+      <a class="continent" href="#fb-ai-copyright-other" style="background:#64748b;border-color:#64748b;color:#ffffff"><span class="label">🤔 その他</span><span class="count">223件・8.6%</span></a>
+      <a class="continent" href="#fb-ai-copyright-generated-work-rights" style="background:#075ef2;border-color:#075ef2;color:#ffffff"><span class="label">✨ AI生成物の権利・創作性</span><span class="count">165件・6.4%</span></a>
+      <a class="continent" href="#fb-ai-copyright-tech-promotion" style="background:#075ef2;border-color:#075ef2;color:#ffffff"><span class="label">🚀 技術競争・推進</span><span class="count">117件・4.5%</span></a>
+    </nav>
+    <section class="landing-panel" id="fb-ai-copyright-learning-data" tabindex="-1">
+      <h2>📚 学習データ・無断利用</h2>
+      <p class="sub">657件（25.3%）　山の高さ：強い表現32.7%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 495件</span><span><i style="background:#64748b"></i>中立・情報 52件</span><span><i style="background:#075ef2"></i>推進・活用支持 110件</span></div>
+      <div class="bar"><span style="width:75.3%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:7.9%;background:#64748b;color:#ffffff"></span><span style="width:16.7%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">657件 / 25.3%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">495件 / 35.2%</span></li><li><span>中立・情報577件のうち</span><span class="n">52件 / 9.0%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">110件 / 18.1%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>無断学習は著作権侵害（一般）<span class="n">369件</span></li><li><span class="num">2</span>個人の作品保護・肖像権<span class="n">104件</span></li><li><span class="num">3</span>経済的搾取・対価不払い<span class="n">38件</span></li><li><span class="num">4</span>学習は合法、出力が問題<span class="n">31件</span></li><li><span class="num">5</span>規制・法整備の必要性<span class="n">26件</span></li><li><span class="num">6</span>二次創作との二重基準批判<span class="n">22件</span></li><li><span class="num">7</span>その他<span class="n">21件</span></li><li><span class="num">8</span>創作環境・文化への悪影響<span class="n">20件</span></li><li><span class="num">9</span>学習元の透明性・開示<span class="n">12件</span></li><li><span class="num">10</span>補償・opt-out権の創設<span class="n">8件</span></li><li><span class="num">11</span>AI学習と人間の模傭は同等<span class="n">3件</span></li><li><span class="num">12</span>技術的対策（出力フィルタ等）<span class="n">3件</span></li></ul>
+      <div class="note">この論点の全件をAIが本文再読した。</div>
+      <div class="extras" id="extras-ai-copyright-learning-data">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-ai-copyright-user-ethics" tabindex="-1">
+      <h2>💬 利用者モラル・倫理</h2>
+      <p class="sub">657件（25.3%）　山の高さ：強い表現13.8%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 326件</span><span><i style="background:#64748b"></i>中立・情報 200件</span><span><i style="background:#075ef2"></i>推進・活用支持 131件</span></div>
+      <div class="bar"><span style="width:49.6%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:30.4%;background:#64748b;color:#ffffff">中立・情報</span><span style="width:19.9%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">657件 / 25.3%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">326件 / 23.2%</span></li><li><span>中立・情報577件のうち</span><span class="n">200件 / 34.7%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">131件 / 21.5%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <div class="extras" id="extras-ai-copyright-user-ethics">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-ai-copyright-legal-framework" tabindex="-1">
+      <h2>⚖️ 法制度・規制整備</h2>
+      <p class="sub">471件（18.2%）　山の高さ：強い表現24.8%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 255件</span><span><i style="background:#64748b"></i>中立・情報 88件</span><span><i style="background:#075ef2"></i>推進・活用支持 128件</span></div>
+      <div class="bar"><span style="width:54.1%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:18.7%;background:#64748b;color:#ffffff">中立・情報</span><span style="width:27.2%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">471件 / 18.2%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">255件 / 18.1%</span></li><li><span>中立・情報577件のうち</span><span class="n">88件 / 15.3%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">128件 / 21.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。<br>AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>
+      <div class="extras" id="extras-ai-copyright-legal-framework">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-ai-copyright-creator-rights" tabindex="-1">
+      <h2>🎨 クリエイター保護・権利</h2>
+      <p class="sub">303件（11.7%）　山の高さ：強い表現30.4%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 229件</span><span><i style="background:#64748b"></i>中立・情報 41件</span><span><i style="background:#075ef2"></i>推進・活用支持 33件</span></div>
+      <div class="bar"><span style="width:75.6%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:13.5%;background:#64748b;color:#ffffff">中立・情報</span><span style="width:10.9%;background:#075ef2;color:#ffffff"></span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">303件 / 11.7%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">229件 / 16.3%</span></li><li><span>中立・情報577件のうち</span><span class="n">41件 / 7.1%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">33件 / 5.4%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>クリエイターの権利侵害・搾取（一般）<span class="n">156件</span></li><li><span class="num">2</span>オプトアウト・自分の作品保護<span class="n">50件</span></li><li><span class="num">3</span>画風・表現の模倣・盗用<span class="n">45件</span></li><li><span class="num">4</span>生成AI品質の低さ・敬意欠如<span class="n">10件</span></li><li><span class="num">5</span>その他<span class="n">10件</span></li><li><span class="num">6</span>規制・法整備の必要性<span class="n">8件</span></li><li><span class="num">7</span>公正取引・行政への批判<span class="n">7件</span></li><li><span class="num">8</span>クリエイターの生存権・雇用・収入<span class="n">6件</span></li><li><span class="num">9</span>企業・事務所のAI利用批判<span class="n">6件</span></li><li><span class="num">10</span>二次創作・同人との関係<span class="n">5件</span></li></ul>
+      <div class="note">この論点の全件をAIが本文再読した。</div>
+      <div class="extras" id="extras-ai-copyright-creator-rights">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-ai-copyright-other" tabindex="-1">
+      <h2>🤔 その他</h2>
+      <p class="sub">223件（8.6%）　山の高さ：強い表現12.9%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 33件</span><span><i style="background:#64748b"></i>中立・情報 141件</span><span><i style="background:#075ef2"></i>推進・活用支持 49件</span></div>
+      <div class="bar"><span style="width:14.8%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:63.2%;background:#64748b;color:#ffffff">中立・情報</span><span style="width:22.0%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">223件 / 8.6%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">33件 / 2.3%</span></li><li><span>中立・情報577件のうち</span><span class="n">141件 / 24.4%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">49件 / 8.0%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>派閥対立・意見の差異<span class="n">60件</span></li><li><span class="num">2</span>その他<span class="n">55件</span></li><li><span class="num">3</span>技術的評価・品質・便利性<span class="n">38件</span></li><li><span class="num">4</span>生成AI全般に支持（実用的）<span class="n">33件</span></li><li><span class="num">5</span>生成AI全般に反対（感情的）<span class="n">28件</span></li><li><span class="num">6</span>個人情報保護との関連<span class="n">6件</span></li><li><span class="num">7</span>法的議論（非特定）<span class="n">3件</span></li></ul>
+      <div class="note">この論点の全件をAIが本文再読した。</div>
+      <div class="extras" id="extras-ai-copyright-other">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-ai-copyright-generated-work-rights" tabindex="-1">
+      <h2>✨ AI生成物の権利・創作性</h2>
+      <p class="sub">165件（6.4%）　山の高さ：強い表現14.5%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 58件</span><span><i style="background:#64748b"></i>中立・情報 41件</span><span><i style="background:#075ef2"></i>推進・活用支持 66件</span></div>
+      <div class="bar"><span style="width:35.2%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:24.8%;background:#64748b;color:#ffffff">中立・情報</span><span style="width:40.0%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">165件 / 6.4%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">58件 / 4.1%</span></li><li><span>中立・情報577件のうち</span><span class="n">41件 / 7.1%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">66件 / 10.8%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>AI生成物に著作権認めない<span class="n">50件</span></li><li><span class="num">2</span>AI生成物に著作権認めるべき<span class="n">45件</span></li><li><span class="num">3</span>その他<span class="n">32件</span></li><li><span class="num">4</span>人間の創作的寄与が必要<span class="n">16件</span></li><li><span class="num">5</span>創作vsコピーの境界<span class="n">16件</span></li><li><span class="num">6</span>依拘性・類似性で判断<span class="n">4件</span></li><li><span class="num">7</span>一次創作はOK、二次創作は問題<span class="n">2件</span></li></ul>
+      <div class="note">この論点の全件をAIが本文再読した。</div>
+      <div class="extras" id="extras-ai-copyright-generated-work-rights">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+    <section class="landing-panel" id="fb-ai-copyright-tech-promotion" tabindex="-1">
+      <h2>🚀 技術競争・推進</h2>
+      <p class="sub">117件（4.5%）　山の高さ：強い表現18.1%</p>
+      <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 11件</span><span><i style="background:#64748b"></i>中立・情報 14件</span><span><i style="background:#075ef2"></i>推進・活用支持 92件</span></div>
+      <div class="bar"><span style="width:9.4%;background:#ff5426;color:#ffffff"></span><span style="width:12.0%;background:#64748b;color:#ffffff"></span><span style="width:78.6%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
+      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>
+      <p class="sub" style="margin:12px 0 2px"><b>立場ごとに、その立場の中でこの論点が占める割合</b></p>
+      <ul class="sides"><li><span>すべての意見2593件のうち</span><span class="n">117件 / 4.5%</span></li><li><span>規制・制限強化支持1407件のうち</span><span class="n">11件 / 0.8%</span></li><li><span>中立・情報577件のうち</span><span class="n">14件 / 2.4%</span></li><li><span>推進・活用支持609件のうち</span><span class="n">92件 / 15.1%</span></li></ul>
+      <div class="note">件数と割合は逆に動くことがあります。立場を絞ると数える相手そのものが少なくなるので、<b>件数が減っても、その中での割合は増えることがあります。</b></div>
+      <p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>
+      <ul class="islands"><li><span class="num">1</span>技術革新・産業競争力の向上<span class="n">71件</span></li><li><span class="num">2</span>その他<span class="n">18件</span></li><li><span class="num">3</span>実用性・便利性の評価<span class="n">14件</span></li><li><span class="num">4</span>クリエイターとの共存・共生<span class="n">10件</span></li><li><span class="num">5</span>規制より適応・差別化を<span class="n">3件</span></li><li><span class="num">6</span>クリーンAI・国産AIの推進<span class="n">1件</span></li></ul>
+      <div class="note">この論点の全件をAIが本文再読した。</div>
+      <div class="extras" id="extras-ai-copyright-tech-promotion">
+      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>
+      </div>
+      <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
+    </section>
+  </div>
+
+  <h3 class="sec sec-live">一次資料クイズ — その主張、資料に当たるとどうなる？</h3>
+  <div class="quiz" id="quiz"></div>
+
+    <section id="ocean" class="ocean" tabindex="-1">
+    <h3 class="sec">資料にあるのに、SNSにないこと</h3>
+    <p class="sub">このテーマは、まだ編集部が一次資料を読んで「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>
+  </section>
+
+    <section id="editorial" class="editorial" tabindex="-1">
+    <h3 class="sec">編集部の横断整理</h3>
+    <p class="sub">論点をまたいで言えることを、編集部がまとめています。（2026-09-14時点）</p>
+    <h4 class="subsec">共通する前提</h4>
+    <ul class="findings"><li>「AI生成物の権利・創作性」は推進・活用支持40.0%、規制・制限強化支持35.2%と、他の論点に比べて割れている。争点は「学習の是非」ではなく「生成物が著作物として保護されるか、他者の権利を侵害しているとみなされるか」で、規制強化を求める側にも活用を推す側にも、学習行為そのものと生成物の扱いを分けて考える意見がある。</li></ul>
+    <h4 class="subsec">本当の対立</h4>
+    <ul class="findings"><li>論点が変わると賛否の重心が入れ替わる。「学習データ・無断利用」は規制・制限強化支持が75.3%を占めるのに対し、「技術競争・推進」は推進・活用支持が78.6%を占め、ほぼ逆転している。同じ人が論点によって立場を変えているのか、別々の人が別々の論点を語っているのかは、この収集からは分からない。</li><li>クリエイターの保護を掲げる論点では規制支持が大半を占めるが、AI生成物そのものの権利に話が及ぶと割れる。「クリエイター保護・権利」の規制・制限強化支持は75.6%に上るのに対し、「AI生成物の権利・創作性」では35.2%にとどまる。「クリエイターを守る」という総論と「AIの生成物をどう扱うか」という各論では、同じ規制強化支持でも一致の強さが違う。</li></ul>
+    <h4 class="subsec">まだ分からないこと</h4>
+    <ul class="findings"><li>「技術競争・推進」は117件（全体の4.5%）と、他の論点と比べて最も少ない。件数が少ないことは論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。</li><li>ここに出ているのはYahoo!リアルタイム検索で集めた2,593件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。</li></ul>
+  </section>
+
+  <h3 class="sec sec-live">論点の一覧（押すと、地図がその論点に切り替わります）</h3>
+  <ul class="issue-list" id="list"></ul>
+
+  <h3 class="sec">このページの見かた</h3>
+  <p class="meta" id="meta">山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、母数が小さいものは画面で断っています。</p>
+</div>
+</section>
+<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "ai-copyright", "title": "生成AIと著作権", "question": "生成AIによる著作物の利用・学習をどこまで認めるべきか", "snapshot_id": "ai-copyright-20260905", "updated_at": "2026-09-05", "sample_period": "2026-06-22〜2026-09-05", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": true, "totals": {"collected": 3812, "opinions": 2593}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.2248, "k": 50, "max_pct": 4.0}, "stances": [{"key": "規制・制限強化支持", "id": "ai-copyright-regulation-support", "label": "規制・制限強化支持", "color": "#ff5426", "pattern": "plain", "count": 1407}, {"key": "中立・情報", "id": "ai-copyright-neutral", "label": "中立・情報", "color": "#64748b", "pattern": "dots", "count": 577}, {"key": "推進・活用支持", "id": "ai-copyright-promotion-support", "label": "推進・活用支持", "color": "#075ef2", "pattern": "diagonal", "count": 609}], "vote_issue_order": ["学習データ・無断利用", "法制度・規制整備", "利用者モラル・倫理", "クリエイター保護・権利", "技術競争・推進", "AI生成物の権利・創作性", "その他"], "reread_summary": {"connected_editorial_count": 1465, "connected_issue_population": 1465, "not_connected_opinion_count": 1128}, "modes": [{"id": "all", "label": "すべての意見", "total": 2593, "counts": {"ai-copyright-learning-data": 657, "ai-copyright-user-ethics": 657, "ai-copyright-legal-framework": 471, "ai-copyright-creator-rights": 303, "ai-copyright-other": 223, "ai-copyright-generated-work-rights": 165, "ai-copyright-tech-promotion": 117}, "width_pct": {"ai-copyright-learning-data": 25.34, "ai-copyright-user-ethics": 25.34, "ai-copyright-legal-framework": 18.16, "ai-copyright-creator-rights": 11.69, "ai-copyright-other": 8.6, "ai-copyright-generated-work-rights": 6.36, "ai-copyright-tech-promotion": 4.51}, "high_pct": {"ai-copyright-learning-data": 33.5, "ai-copyright-user-ethics": 13.1, "ai-copyright-legal-framework": 25.1, "ai-copyright-creator-rights": 31.7, "ai-copyright-other": 10.8, "ai-copyright-generated-work-rights": 12.1, "ai-copyright-tech-promotion": 16.2}, "high_counts": {"ai-copyright-learning-data": 220, "ai-copyright-user-ethics": 86, "ai-copyright-legal-framework": 118, "ai-copyright-creator-rights": 96, "ai-copyright-other": 24, "ai-copyright-generated-work-rights": 20, "ai-copyright-tech-promotion": 19}}, {"id": "規制・制限強化支持", "label": "規制・制限強化支持", "total": 1407, "counts": {"ai-copyright-learning-data": 495, "ai-copyright-user-ethics": 326, "ai-copyright-legal-framework": 255, "ai-copyright-creator-rights": 229, "ai-copyright-other": 33, "ai-copyright-generated-work-rights": 58, "ai-copyright-tech-promotion": 11}, "width_pct": {"ai-copyright-learning-data": 35.18, "ai-copyright-user-ethics": 23.17, "ai-copyright-legal-framework": 18.12, "ai-copyright-creator-rights": 16.28, "ai-copyright-other": 2.35, "ai-copyright-generated-work-rights": 4.12, "ai-copyright-tech-promotion": 0.78}, "high_pct": {"ai-copyright-learning-data": 39.0, "ai-copyright-user-ethics": 22.1, "ai-copyright-legal-framework": 38.0, "ai-copyright-creator-rights": 38.4, "ai-copyright-other": 36.4, "ai-copyright-generated-work-rights": 29.3, "ai-copyright-tech-promotion": 54.5}, "high_counts": {"ai-copyright-learning-data": 193, "ai-copyright-user-ethics": 72, "ai-copyright-legal-framework": 97, "ai-copyright-creator-rights": 88, "ai-copyright-other": 12, "ai-copyright-generated-work-rights": 17, "ai-copyright-tech-promotion": 6}}, {"id": "中立・情報", "label": "中立・情報", "total": 577, "counts": {"ai-copyright-learning-data": 52, "ai-copyright-user-ethics": 200, "ai-copyright-legal-framework": 88, "ai-copyright-creator-rights": 41, "ai-copyright-other": 141, "ai-copyright-generated-work-rights": 41, "ai-copyright-tech-promotion": 14}, "width_pct": {"ai-copyright-learning-data": 9.01, "ai-copyright-user-ethics": 34.66, "ai-copyright-legal-framework": 15.25, "ai-copyright-creator-rights": 7.11, "ai-copyright-other": 24.44, "ai-copyright-generated-work-rights": 7.11, "ai-copyright-tech-promotion": 2.43}, "high_pct": {"ai-copyright-learning-data": 1.9, "ai-copyright-user-ethics": 0.5, "ai-copyright-legal-framework": 4.5, "ai-copyright-creator-rights": 2.4, "ai-copyright-other": 2.1, "ai-copyright-generated-work-rights": 0.0, "ai-copyright-tech-promotion": 0.0}, "high_counts": {"ai-copyright-learning-data": 1, "ai-copyright-user-ethics": 1, "ai-copyright-legal-framework": 4, "ai-copyright-creator-rights": 1, "ai-copyright-other": 3, "ai-copyright-generated-work-rights": 0, "ai-copyright-tech-promotion": 0}}, {"id": "推進・活用支持", "label": "推進・活用支持", "total": 609, "counts": {"ai-copyright-learning-data": 110, "ai-copyright-user-ethics": 131, "ai-copyright-legal-framework": 128, "ai-copyright-creator-rights": 33, "ai-copyright-other": 49, "ai-copyright-generated-work-rights": 66, "ai-copyright-tech-promotion": 92}, "width_pct": {"ai-copyright-learning-data": 18.06, "ai-copyright-user-ethics": 21.51, "ai-copyright-legal-framework": 21.02, "ai-copyright-creator-rights": 5.42, "ai-copyright-other": 8.05, "ai-copyright-generated-work-rights": 10.84, "ai-copyright-tech-promotion": 15.11}, "high_pct": {"ai-copyright-learning-data": 23.6, "ai-copyright-user-ethics": 9.9, "ai-copyright-legal-framework": 13.3, "ai-copyright-creator-rights": 21.2, "ai-copyright-other": 18.4, "ai-copyright-generated-work-rights": 4.5, "ai-copyright-tech-promotion": 14.1}, "high_counts": {"ai-copyright-learning-data": 26, "ai-copyright-user-ethics": 13, "ai-copyright-legal-framework": 17, "ai-copyright-creator-rights": 7, "ai-copyright-other": 9, "ai-copyright-generated-work-rights": 3, "ai-copyright-tech-promotion": 13}}], "issues": [{"id": "ai-copyright-learning-data", "key": "学習データ・無断利用", "label": "学習データ・無断利用", "icon": "📚", "count": 657, "share_pct": 25.3, "stances": {"規制・制限強化支持": 495, "中立・情報": 52, "推進・活用支持": 110}, "top_stance": "規制・制限強化支持", "purity_pct": 75.3, "intensity": {"high": 220, "medium": 347, "low": 90}, "high_pct": 33.5, "high_adjusted_pct": 32.7, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の全件をAIが本文再読した", "show_coverage_note": true, "source_file": "data/ai-copyright_issues-reread.json", "reread_count": 657, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A1", "label": "無断学習は著作権侵害（一般）", "count": 369, "pct_in_issue": 56.2}, {"id": "A4", "label": "個人の作品保護・肖像権", "count": 104, "pct_in_issue": 15.8}, {"id": "A2", "label": "経済的搾取・対価不払い", "count": 38, "pct_in_issue": 5.8}, {"id": "B", "label": "学習は合法、出力が問題", "count": 31, "pct_in_issue": 4.7}, {"id": "G", "label": "規制・法整備の必要性", "count": 26, "pct_in_issue": 4.0}, {"id": "F", "label": "二次創作との二重基準批判", "count": 22, "pct_in_issue": 3.3}, {"id": "J", "label": "その他", "count": 21, "pct_in_issue": 3.2}, {"id": "A3", "label": "創作環境・文化への悪影響", "count": 20, "pct_in_issue": 3.0}, {"id": "D", "label": "学習元の透明性・開示", "count": 12, "pct_in_issue": 1.8}, {"id": "C", "label": "補償・opt-out権の創設", "count": 8, "pct_in_issue": 1.2}, {"id": "E", "label": "AI学習と人間の模傭は同等", "count": 3, "pct_in_issue": 0.5}, {"id": "I", "label": "技術的対策（出力フィルタ等）", "count": 3, "pct_in_issue": 0.5}]}, "verdict": null, "claims": [], "veins": []}, {"id": "ai-copyright-user-ethics", "key": "利用者モラル・倫理", "label": "利用者モラル・倫理", "icon": "💬", "count": 657, "share_pct": 25.3, "stances": {"規制・制限強化支持": 326, "中立・情報": 200, "推進・活用支持": 131}, "top_stance": "規制・制限強化支持", "purity_pct": 49.6, "intensity": {"high": 86, "medium": 381, "low": 190}, "high_pct": 13.1, "high_adjusted_pct": 13.8, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": []}, {"id": "ai-copyright-legal-framework", "key": "法制度・規制整備", "label": "法制度・規制整備", "icon": "⚖️", "count": 471, "share_pct": 18.2, "stances": {"規制・制限強化支持": 255, "中立・情報": 88, "推進・活用支持": 128}, "top_stance": "規制・制限強化支持", "purity_pct": 54.1, "intensity": {"high": 118, "medium": 281, "low": 72}, "high_pct": 25.1, "high_adjusted_pct": 24.8, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": null, "claims": [], "veins": []}, {"id": "ai-copyright-creator-rights", "key": "クリエイター保護・権利", "label": "クリエイター保護・権利", "icon": "🎨", "count": 303, "share_pct": 11.7, "stances": {"規制・制限強化支持": 229, "中立・情報": 41, "推進・活用支持": 33}, "top_stance": "規制・制限強化支持", "purity_pct": 75.6, "intensity": {"high": 96, "medium": 138, "low": 69}, "high_pct": 31.7, "high_adjusted_pct": 30.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の全件をAIが本文再読した", "show_coverage_note": true, "source_file": "data/ai-copyright_issues-reread.json", "reread_count": 303, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "D1", "label": "クリエイターの権利侵害・搾取（一般）", "count": 156, "pct_in_issue": 51.5}, {"id": "C", "label": "オプトアウト・自分の作品保護", "count": 50, "pct_in_issue": 16.5}, {"id": "A", "label": "画風・表現の模倣・盗用", "count": 45, "pct_in_issue": 14.9}, {"id": "E", "label": "生成AI品質の低さ・敬意欠如", "count": 10, "pct_in_issue": 3.3}, {"id": "J", "label": "その他", "count": 10, "pct_in_issue": 3.3}, {"id": "G", "label": "規制・法整備の必要性", "count": 8, "pct_in_issue": 2.6}, {"id": "D2", "label": "公正取引・行政への批判", "count": 7, "pct_in_issue": 2.3}, {"id": "B", "label": "クリエイターの生存権・雇用・収入", "count": 6, "pct_in_issue": 2.0}, {"id": "D3", "label": "企業・事務所のAI利用批判", "count": 6, "pct_in_issue": 2.0}, {"id": "F", "label": "二次創作・同人との関係", "count": 5, "pct_in_issue": 1.7}]}, "verdict": null, "claims": [], "veins": []}, {"id": "ai-copyright-other", "key": "その他", "label": "その他", "icon": "🤔", "count": 223, "share_pct": 8.6, "stances": {"規制・制限強化支持": 33, "中立・情報": 141, "推進・活用支持": 49}, "top_stance": "中立・情報", "purity_pct": 63.2, "intensity": {"high": 24, "medium": 67, "low": 132}, "high_pct": 10.8, "high_adjusted_pct": 12.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の全件をAIが本文再読した", "show_coverage_note": true, "source_file": "data/ai-copyright_issues-reread.json", "reread_count": 223, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "F", "label": "派閥対立・意見の差異", "count": 60, "pct_in_issue": 26.9}, {"id": "J", "label": "その他", "count": 55, "pct_in_issue": 24.7}, {"id": "D", "label": "技術的評価・品質・便利性", "count": 38, "pct_in_issue": 17.0}, {"id": "B", "label": "生成AI全般に支持（実用的）", "count": 33, "pct_in_issue": 14.8}, {"id": "A", "label": "生成AI全般に反対（感情的）", "count": 28, "pct_in_issue": 12.6}, {"id": "C", "label": "個人情報保護との関連", "count": 6, "pct_in_issue": 2.7}, {"id": "E", "label": "法的議論（非特定）", "count": 3, "pct_in_issue": 1.3}]}, "verdict": null, "claims": [], "veins": []}, {"id": "ai-copyright-generated-work-rights", "key": "AI生成物の権利・創作性", "label": "AI生成物の権利・創作性", "icon": "✨", "count": 165, "share_pct": 6.4, "stances": {"規制・制限強化支持": 58, "中立・情報": 41, "推進・活用支持": 66}, "top_stance": "推進・活用支持", "purity_pct": 40.0, "intensity": {"high": 20, "medium": 77, "low": 68}, "high_pct": 12.1, "high_adjusted_pct": 14.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の全件をAIが本文再読した", "show_coverage_note": true, "source_file": "data/ai-copyright_issues-reread.json", "reread_count": 165, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "B", "label": "AI生成物に著作権認めない", "count": 50, "pct_in_issue": 30.3}, {"id": "A", "label": "AI生成物に著作権認めるべき", "count": 45, "pct_in_issue": 27.3}, {"id": "J", "label": "その他", "count": 32, "pct_in_issue": 19.4}, {"id": "C", "label": "人間の創作的寄与が必要", "count": 16, "pct_in_issue": 9.7}, {"id": "F", "label": "創作vsコピーの境界", "count": 16, "pct_in_issue": 9.7}, {"id": "E", "label": "依拘性・類似性で判断", "count": 4, "pct_in_issue": 2.4}, {"id": "D", "label": "一次創作はOK、二次創作は問題", "count": 2, "pct_in_issue": 1.2}]}, "verdict": null, "claims": [], "veins": []}, {"id": "ai-copyright-tech-promotion", "key": "技術競争・推進", "label": "技術競争・推進", "icon": "🚀", "count": 117, "share_pct": 4.5, "stances": {"規制・制限強化支持": 11, "中立・情報": 14, "推進・活用支持": 92}, "top_stance": "推進・活用支持", "purity_pct": 78.6, "intensity": {"high": 19, "medium": 65, "low": 33}, "high_pct": 16.2, "high_adjusted_pct": 18.1, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の全件をAIが本文再読した", "show_coverage_note": true, "source_file": "data/ai-copyright_issues-reread.json", "reread_count": 117, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "技術革新・産業競争力の向上", "count": 71, "pct_in_issue": 60.7}, {"id": "J", "label": "その他", "count": 18, "pct_in_issue": 15.4}, {"id": "B", "label": "実用性・便利性の評価", "count": 14, "pct_in_issue": 12.0}, {"id": "C", "label": "クリエイターとの共存・共生", "count": 10, "pct_in_issue": 8.5}, {"id": "D", "label": "規制より適応・差別化を", "count": 3, "pct_in_issue": 2.6}, {"id": "E", "label": "クリーンAI・国産AIの推進", "count": 1, "pct_in_issue": 0.9}]}, "verdict": null, "claims": [], "veins": []}], "claims": [], "editorial": {"checked_on": "2026-09-14", "findings": [{"id": "ai-copyright-ed-1", "kind": "shared_premise", "text": "「AI生成物の権利・創作性」は推進・活用支持40.0%、規制・制限強化支持35.2%と、他の論点に比べて割れている。争点は「学習の是非」ではなく「生成物が著作物として保護されるか、他者の権利を侵害しているとみなされるか」で、規制強化を求める側にも活用を推す側にも、学習行為そのものと生成物の扱いを分けて考える意見がある。"}, {"id": "ai-copyright-ed-2", "kind": "real_conflict", "text": "論点が変わると賛否の重心が入れ替わる。「学習データ・無断利用」は規制・制限強化支持が75.3%を占めるのに対し、「技術競争・推進」は推進・活用支持が78.6%を占め、ほぼ逆転している。同じ人が論点によって立場を変えているのか、別々の人が別々の論点を語っているのかは、この収集からは分からない。"}, {"id": "ai-copyright-ed-3", "kind": "real_conflict", "text": "クリエイターの保護を掲げる論点では規制支持が大半を占めるが、AI生成物そのものの権利に話が及ぶと割れる。「クリエイター保護・権利」の規制・制限強化支持は75.6%に上るのに対し、「AI生成物の権利・創作性」では35.2%にとどまる。「クリエイターを守る」という総論と「AIの生成物をどう扱うか」という各論では、同じ規制強化支持でも一致の強さが違う。"}, {"id": "ai-copyright-ed-4", "kind": "still_unknown", "text": "「技術競争・推進」は117件（全体の4.5%）と、他の論点と比べて最も少ない。件数が少ないことは論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。"}, {"id": "ai-copyright-ed-5", "kind": "still_unknown", "text": "ここに出ているのはYahoo!リアルタイム検索で集めた2,593件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"}], "reviewer_type": "editorial_review", "status": "complete"}, "ocean": {"claim_status": "not_started", "checked_on": null, "reviewer_type": null, "ocean_status": "not_started", "ocean_checked_on": null, "ocean_reviewer_type": null, "sunk_continents": [], "veins": []}};</script>
+<script>
+(function(){
+"use strict";
+const D = window.PLANET_DATA;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 状態 ---------- */
+const st = { mode: "all", landed: null, floored: [], prevRank: null, deltaUntil: 0 };
+const stanceMap = {}; D.stances.forEach(s => stanceMap[s.key] = s);
+const issues = D.issues;
+const idIndex = {}; issues.forEach((it,i) => idIndex[it.id] = i);
+const modeById = {}; D.modes.forEach(m => modeById[m.id] = m);
+
+function stanceColor(key){ return (stanceMap[key]||{}).color || "#8b9199"; }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+/* 件数の多い順の順位。0件の論点は null（順位を持たない） */
+function ranksOf(modeId){
+  const m = modeById[modeId];
+  const order = issues.map((it,k) => ({k, n: m.counts[it.id]}))
+                      .filter(x => x.n > 0)
+                      .sort((a,b) => b.n - a.n || a.k - b.k);
+  const r = issues.map(() => null);
+  order.forEach((x,i) => { r[x.k] = i + 1; });
+  return r;
+}
+function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
+
+/* ---------- 断面図の描画 ----------
+   山＝論点。幅＝意見の数、高さ＝強い表現の割合。どちらも「いま選んでいる立場」の
+   件数を母数にして数えるので、面積（幅×高さ）は強く語られた投稿の数になる。
+   球をやめた理由: 標高を球面の等高線で描いていたため、回しても正面から読めなかった。 */
+const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
+const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
+const SMALL=30;      // これ未満は母数が小さいので破線＋注記
+const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const svg = document.getElementById("section");
+
+function layout(modeId){
+  const m=modeById[modeId], live=[];
+  issues.forEach((it,i)=>{
+    const n=m.counts[it.id];
+    if (!n) return;
+    live.push({i, it, n, hi:m.high_counts[it.id], rate:m.high_pct[it.id], share:m.width_pct[it.id]});
+  });
+  const gap=12, usable=(RIGHT-LEFT)-gap*(live.length+1);
+  const sum=live.reduce((a,x)=>a+x.n,0);
+  const floored=[];
+  live.forEach(x=>{ x.w=usable*x.n/sum; if (x.w<MIN_W){ x.w=MIN_W; floored.push(x.it.label); } });
+  const over=live.reduce((a,x)=>a+x.w,0)-usable;
+  if (over>0){
+    const donors=live.filter(x=>x.w>MIN_W+0.5), dsum=donors.reduce((a,x)=>a+x.w,0);
+    donors.forEach(x=>{ x.w-=over*x.w/dsum; });
+  }
+  let x=LEFT+gap;
+  live.forEach(v=>{
+    v.x0=x; v.x1=x+v.w; v.cx=x+v.w/2;
+    v.clipped=v.rate>Y_MAX;
+    v.top=SEA-(SEA-TOP)*Math.min(1, v.rate/Y_MAX);
+    x=v.x1+gap;
+  });
+  return {live, total:m.total, floored};
+}
+
+function hillPath(x0,x1,top){
+  const cx=(x0+x1)/2, k=(x1-x0)*0.32;
+  return "M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+top+" "+cx+","+top
+       + " C"+(x1-k*0.9)+","+top+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+function clippedPath(x0,x1,top){
+  const k=(x1-x0)*0.32, cx=(x0+x1)/2;
+  let d="M"+x0+","+SEA+" C"+(x0+k)+","+SEA+" "+(x0+k*0.9)+","+(top+10)+" "+(x0+(cx-x0)*0.55)+","+(top+8);
+  for (let j=0;j<6;j++) d+=" L"+(x0+(x1-x0)*(0.28+0.44*j/5))+","+(top+(j%2?7:0));
+  return d+" C"+(x1-k*0.9)+","+(top+10)+" "+(x1-k)+","+SEA+" "+x1+","+SEA+" Z";
+}
+
+function render(){
+  const L=layout(st.mode), p=[];
+  // 表現強度が0でも押せるよう、見た目とは別の透明な操作領域を置く。
+  // 画面上で44pxの高さを確保し、山の高さや比率そのものは変えない。
+  const hitHeight = Math.min(SEA-TOP, 44*SVG_W/(svg.getBoundingClientRect().width || SVG_W));
+  p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
+  for (let d=1;d<=4;d++){
+    const y=SEA+(BOT-SEA)*d/5;
+    p.push('<line x1="0" y1="'+y+'" x2="'+SVG_W+'" y2="'+y+'" stroke="#5b9bf0" stroke-width="1" opacity="0.13"/>');
+  }
+  for (let v=0;v<=Y_MAX;v+=20){
+    const y=SEA-(SEA-TOP)*v/Y_MAX;
+    if (v>0) p.push('<line x1="'+LEFT+'" y1="'+y+'" x2="'+RIGHT+'" y2="'+y+'" stroke="#2b3440" stroke-width="1"/>');
+    p.push('<text x="'+(LEFT-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#8b949e">'+v+'%</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
+
+  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
+  const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
+  p.push('<g id="seafloor">');
+  if (sunk.length){
+    const sw=(RIGHT-LEFT)/sunk.length;
+    sunk.forEach((sc,j)=>{
+      const x0=LEFT+sw*j+16, x1=LEFT+sw*(j+1)-16, cx=(x0+x1)/2, t=SEA+92, b=SEA+150;
+      p.push('<path d="M'+x0+','+t+' C'+(x0+(x1-x0)*0.3)+','+(t-14)+' '+(x1-(x1-x0)*0.3)+','+(t-14)+' '+x1+','+t
+        +' C'+(x1+16)+','+b+' '+(x0-16)+','+b+' '+x0+','+t+' Z" fill="#122642" stroke="#5b9bf0" stroke-width="1.4" stroke-dasharray="6 4"/>');
+      p.push('<text x="'+cx+'" y="'+(t+17)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7fb3c4">'+esc(sc.short_label)+'</text>');
+      p.push('<text x="'+cx+'" y="'+(t+32)+'" text-anchor="middle" font-size="10" fill="#7fb3c4" opacity="0.85">SNSでの言及 '+sc.sns_count+'件</text>');
+    });
+  }
+  if (veins.length){
+    p.push('<path d="M'+LEFT+','+(SEA+52)+' C240,'+(SEA+34)+' 330,'+(SEA+68)+' 470,'+(SEA+48)
+      +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
+    p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
+  }
+  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
+  p.push('</g>');
+  // 海の覆い。潜水で薄くなり、下が見えるようになる
+  p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
+
+  L.live.forEach(v=>{
+    const col=stanceColor(v.it.top_stance), sel=(v.i===st.landed);
+    const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
+      +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    const hitTop = Math.min(v.top, SEA-hitHeight);
+    p.push('<rect class="hill-hit" x="'+v.x0+'" y="'+hitTop+'" width="'+v.w
+      +'" height="'+(SEA-hitTop+4)+'" fill="transparent" pointer-events="all"/>');
+    p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
+      +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
+      +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.rate===0)
+      p.push('<circle class="zero-mark" cx="'+v.cx+'" cy="'+SEA+'" r="3" fill="'+col+'"/>');
+    if (v.w>34||v.clipped)
+      p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
+        +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
+    if (v.w>50)
+      p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
+    p.push('</g>');
+  });
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6" pointer-events="none" aria-hidden="true"/>');
+
+  svg.innerHTML=p.join("");
+  svg.querySelectorAll(".hill").forEach(g=>{
+    const go=()=>land(+g.dataset.i);
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+  document.getElementById("chartdesc").textContent =
+    "断面図。"+L.live.map(v=>v.it.label+" "+v.n+"件、強い表現"+v.rate.toFixed(1)+"%").join("。");
+  const fn=document.getElementById("floor-note");
+  fn.textContent = L.floored.length
+    ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
+    : "";
+  if (L.live.some(v=>v.rate===0))
+    fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
+}
+
+function land(i){
+  st.landed=i;
+  visit("i:"+issues[i].id);
+  location.hash=issues[i].id;
+  drawPanel(); syncList(); render();
+  const h=document.querySelector("#panel h2");
+  if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
+  // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
+  // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
+  // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
+  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
+}
+function orbit(){
+  const prev=st.landed;
+  st.landed=null;
+  if (location.hash) history.replaceState(null,"",location.pathname);
+  drawPanel(); syncList(); render();
+  const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
+  if (b) b.focus({preventScroll:true});
+}
+
+/* ---------- パネル ---------- */
+function stanceBar(counts, total){
+  return '<div class="bar">' + D.stances.map(s=>{
+    const n = counts[s.key]||0; if(!n) return "";
+    const w = 100*n/total;
+    return '<span style="width:'+w+'%;background:'+s.color+'">'+(w>13?s.label+" "+n:(w>6?n:""))+'</span>';
+  }).join("") + '</div>';
+}
+function legend(){
+  return '<div class="legend">' + D.stances.map(s=>
+    '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
+}
+
+/* 立場を切り替えたときに何が起きたかを1行で言う。
+   順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
+function crossTalk(modeId){
+  if (modeId === "all"){
+    return '上のボタンで立場を切り替えると、<b>山の幅（意見の数）と高さ（強い表現の割合）が変わります</b>。';
+  }
+  const rAll = ranksOf("all"), rM = ranksOf(modeId);
+  const topAllK = rAll.indexOf(1), topMK = rM.indexOf(1);
+  if (topMK < 0) return '';
+  const spin = '<button type="button" class="spin" id="spin">'
+             + '「'+issues[topMK].label+'」を見る</button>';
+  if (topMK === topAllK){
+    return 'この立場でいちばん幅の広い山は「'+issues[topMK].label+'」。'
+         + 'すべての意見のときと同じ1位です。' + spin;
+  }
+  const moved = rM[topAllK];
+  return 'この立場でいちばん幅の広い山は<b>「'+issues[topMK].label+'」</b>に変わりました。'
+       + 'すべての意見で1位だった「'+issues[topAllK].label+'」は、ここでは<b>'
+       + (moved === null ? '0件' : moved+'位') + '</b>です。' + spin;
+}
+
+/* ---------- 点の装置（100マス） ----------
+   マス目100個＝いま見ている立場の全部。色つきのマスの数がそのまま割合（%）になる。
+   立場を絞ると件数は減るのに割合は増えることがある。これが文章では通じなかったための装置。
+   1件1マスで意見の数だけ並べた版は「多すぎて何も分からない」と差し戻された（2026-09-05）。 */
+const dotBox = document.getElementById("dotbox");
+const CELLS = 100;
+let cells = null;
+
+function buildCells(){
+  const w = document.getElementById("waffle");
+  let h = "";
+  for (let i=0;i<CELLS;i++) h += "<span></span>";
+  w.innerHTML = h;
+  cells = Array.prototype.slice.call(w.querySelectorAll("span"));
+}
+
+function dotDir(el, from, to, isAll){
+  let cls = "ro";
+  if (isAll) cls += " flat";
+  else if (to > from + 0.05) cls += " up";
+  else if (to < from - 0.05) cls += " down";
+  else cls += " flat";
+  el.className = cls;
+  return isAll ? "" : (to > from + 0.05 ? "↑" : (to < from - 0.05 ? "↓" : "→"));
+}
+
+function syncDots(){
+  const k = st.landed;
+  if (k === null){ dotBox.hidden = true; return; }
+  if (!cells) buildCells();
+  dotBox.hidden = false;
+
+  const it = issues[k], m = modeById[st.mode], isAll = (st.mode === "all");
+  const base = D.totals.opinions;
+  const nowN = m.counts[it.id], nowT = m.total;
+  const baseP = 100*it.count/base, nowP = nowT ? 100*nowN/nowT : 0;
+
+  // 色つきのマスの数＝割合。0件でないのに0マスにはしない（消えたと誤解されるため）
+  const lit = nowN > 0 ? Math.max(1, Math.round(nowP)) : 0;
+  const hot = stanceColor(it.top_stance);   // 山と同じ色にして図とつなぐ
+  cells.forEach((c,i)=>{
+    c.style.background = i < lit ? hot : "";      // 空にすると CSS の灰色へ戻る
+    c.style.transitionDelay = (i*4) + "ms";       // 端から順に染まる
+  });
+
+  document.getElementById("dot-legend").innerHTML =
+    '<span><i style="background:'+hot+'"></i>'+it.label+'</span>'
+    + '<span><i style="background:var(--rest-dot)"></i>それ以外の論点</span>';
+  document.getElementById("c-from").textContent = isAll ? "" : it.count + "件";
+  document.getElementById("c-to").textContent   = nowN + "件";
+  document.getElementById("s-from").textContent = isAll ? "" : baseP.toFixed(1) + "%";
+  document.getElementById("s-to").textContent   = nowP.toFixed(1) + "%";
+  document.getElementById("c-ar").textContent =
+    dotDir(document.getElementById("ro-count"), it.count, nowN, isAll);
+  document.getElementById("s-ar").textContent =
+    dotDir(document.getElementById("ro-share"), baseP, nowP, isAll);
+
+  const mech = document.getElementById("dot-mech");
+  if (isAll){
+    mech.innerHTML = "上のボタンで立場を切り替えると、<b>色つきのマスの数が変わります</b>。"
+      + "件数が減っても、マスが増えることがあります。";
+  } else {
+    // 「なぜ動くのか」。残り方の差が理由そのものなので、毎回この2つを出す
+    const restBase = base - it.count, restNow = nowT - nowN;
+    const keepHot  = it.count ? 100*nowN/it.count : 0;
+    const keepRest = restBase ? 100*restNow/restBase : 0;
+    const gap = keepHot - keepRest;
+    let verdict;
+    if (Math.abs(gap) < 1)
+      // 小数を丸めると同じ数字が並び、言い切った文と食い違って見える
+      verdict = '<b>どちらもほぼ同じだけ残ったので、割合もほとんど変わりません。</b>';
+    else if (gap > 0)
+      verdict = '<b>この論点のほうが多く残ったので、割合は増えます。</b>'
+              + '「'+m.label+'」の人ほど、この論点を語っているということです。';
+    else
+      verdict = '<b>この論点のほうが多く減ったので、割合は減ります。</b>'
+              + '「'+m.label+'」の人は、この論点をあまり語っていないということです。';
+    mech.innerHTML = '「'+m.label+'」に絞ると、この論点は <b>'+keepHot.toFixed(1)+'%</b> 残り、'
+      + 'それ以外は <b>'+keepRest.toFixed(1)+'%</b> 残りました。<br>' + verdict;
+  }
+}
+
+function drawPanel(){
+  const p = document.getElementById("panel");
+  const m = modeById[st.mode];
+  if (st.landed === null){
+    p.innerHTML = '<h2>'+D.title+'</h2>'
+      + '<p class="sub">'+m.label+'：'+m.total+'件'
+      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
+      + legend()
+      + '<p class="cross">'+crossTalk(st.mode)+'</p>'
+      + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
+      + (st.mode!=="all"
+        ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
+          + '幅も高さも、この'+m.total+'件の中で数えた値です。'
+          + (issues.filter(it=>m.counts[it.id]===0).length
+             ? '<br>この立場では '+issues.filter(it=>m.counts[it.id]===0).map(it=>it.label).join("・")
+               +' が0件のため、山が消えています。'
+             : '')
+          + '</div>'
+        : '');
+    // 「1位の大陸を正面へ」。立場を切り替えても球は勝手に回さないので、
+    // 裏側になった1位を見に行く手段を読者に渡す（回すだけで、着陸はしない）。
+    const sp = document.getElementById("spin");
+    if (sp) sp.onclick = ()=>{ const k = topIssueOf(st.mode); if (k >= 0) land(k); };
+    syncDots();
+    return;
+  }
+  const it = issues[st.landed];
+  const n = m.counts[it.id];
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
+    + '<div id="dot-slot"></div>'
+    + legend() + stanceBar(it.stances, it.count)
+    + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
+  const s = it.sub;
+  if (s.status === "reread"){
+    h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
+      + '<ul class="islands">' + s.items.map((x,j)=>
+          '<li class="'+(x.unread?"unread":"")+'">'
+          + '<span class="num">'+(j+1)+'</span>'
+          + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
+          + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
+      + (s.show_coverage_note === false ? ''
+        : '<div class="note">'+s.coverage_note+'。'
+          + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
+          + '</div>');
+  } else {
+    if (D.show_unreviewed_note !== false){
+      h += '<div class="note">'+s.note+'。<br>'
+         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    }
+  }
+  // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
+  // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
+  const extras = document.getElementById("extras-" + it.id);
+  if (extras) h += extras.innerHTML;
+  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
+  p.innerHTML = h;
+  document.getElementById("back").onclick = orbit;
+  // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
+  document.getElementById("dot-slot").appendChild(dotBox);
+  syncDots();
+}
+
+/* ---------- 一覧・モード ---------- */
+function syncList(){
+  const m = modeById[st.mode];
+  const rank = ranksOf(st.mode);
+  issues.forEach((it,i)=>{
+    const b = document.getElementById("btn-"+it.id);
+    if (!b) return;
+    const n = m.counts[it.id];
+    b.setAttribute("aria-pressed", st.landed===i ? "true":"false");
+    b.style.opacity = n ? 1 : .45;
+    // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
+    // 並びの変化を追えるようにするため。
+    b.querySelector(".m").textContent =
+      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+      + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
+  });
+}
+function buildList(){
+  const ul = document.getElementById("list");
+  ul.innerHTML = issues.map(it =>
+    '<li><button type="button" id="btn-'+it.id+'" aria-pressed="false">'
+    + '<span class="dot" style="background:'+stanceMap[it.top_stance].color+'"></span>'
+    + it.icon+' '+it.label+'<span class="m"></span></button></li>').join("");
+  issues.forEach((it,i)=>{ document.getElementById("btn-"+it.id).onclick = ()=>land(i); });
+}
+/* 要素が画面の中ほどへ来るまでスクロールする。
+   scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
+   画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+function bringIntoView(el){
+  // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
+  setTimeout(function(){
+    const r = el.getBoundingClientRect();
+    if (!r.height) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max,
+      window.scrollY + r.top - (window.innerHeight - r.height)/2));
+    const from = window.scrollY;
+    if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
+    const t0 = performance.now(), dur = 420;
+    (function step(now){
+      const t = Math.min(1, (now - t0)/dur);
+      window.scrollTo(0, from + (to - from)*ease(t));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);                                  // 1枚目は rAF を待たずに描く
+    // rAF が止まる環境でも必ず届かせる
+    setTimeout(function(){
+      if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
+    }, dur + 180);
+  }, 0);
+}
+
+function buildModes(){
+  const el = document.getElementById("modes");
+  el.innerHTML = D.modes.map(m =>
+    '<button type="button" data-m="'+m.id+'" aria-pressed="'+(m.id==="all")+'">'
+    + m.label+' '+m.total+'</button>').join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = ()=>{
+    el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    morphTo(b.dataset.m);
+  });
+}
+
+/* ---------- すれ違い装置：立場を切り替えて山なみを作り替える ----------
+   幅（件数）と高さ（強い表現の割合）を同時に描き直す。数字はすべて data から採る。 */
+function morphTo(toMode){
+  if (toMode === st.mode) return;
+  st.prevRank = ranksOf(st.mode);
+  st.mode = toMode;
+  // 選んだ論点がこの立場で0件なら選択を外す（無い山を選んだままにしない）
+  if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+    st.landed = null;
+    if (location.hash) history.replaceState(null,"",location.pathname);
+  }
+  drawPanel(); syncList(); render();
+  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
+  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
+}
+
+/* ---------- 操作 ----------
+   球を回す操作は無くなった。図はクリックとキーボードだけで動く。 */
+addEventListener("keydown", e=>{
+  if (e.key === "Escape" && st.landed !== null) orbit();
+});
+
+/* ---------- 探査記録 ----------
+   予想2問＋論点＋語られていない争点＋主張＋立場をこえて同じ心配を「地点」として数える。
+   端末の中（localStorage）だけに覚える。サーバーへは送らない。 */
+const SPOTS = 2 + issues.length + (D.ocean.sunk_continents||[]).length
+            + (D.claims||[]).length + (D.ocean.veins||[]).length;
+const seen = new Set();
+try { (JSON.parse(localStorage.getItem("isa-seen-"+D.theme_id)||"[]")).forEach(x=>seen.add(x)); } catch(e){}
+function visit(id){
+  if (seen.has(id)) return;
+  seen.add(id);
+  try { localStorage.setItem("isa-seen-"+D.theme_id, JSON.stringify([...seen])); } catch(e){}
+  paintProgress();
+}
+let painted = -1;
+function paintProgress(){
+  const el = document.getElementById("progress");
+  el.hidden = false;
+  const n = seen.size;
+  document.getElementById("pbar").style.width = Math.min(100, 100*n/SPOTS) + "%";
+  document.getElementById("pnum").textContent = n + " / " + SPOTS;
+  // 1地点ぶんは帯の 1/SPOTS しかなく、スマホ幅では十数ピクセルにもならない。
+  // 帯を伸ばすだけでは「動いていない」と見えるので、地点の数だけ区画に割って1つずつ点ける。
+  // 区画の入れ物が無いページ（単体の試作）では、今までどおり帯だけが伸びる。
+  const seg = document.getElementById("pseg");
+  if (seg){
+    if (seg.childElementCount !== SPOTS){
+      seg.innerHTML = "";
+      for (let i=0;i<SPOTS;i++) seg.appendChild(document.createElement("i"));
+    }
+    Array.from(seg.children).forEach((c,i)=>{ c.className = i<n ? "on" : ""; });
+  }
+  // 増えた瞬間を見逃さないよう数字をひと跳ねさせる。動きを減らす設定では止まる（CSS側）。
+  if (n > painted && painted >= 0){
+    el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+  }
+  painted = n;
+  // 増やし方の説明は、まだ0のあいだだけ出す（スマホで1行ぶん場所を取るため）。
+  el.classList.toggle("started", n > 0);
+}
+
+/* ---------- 予想（見る前に当てる） ----------
+   選択肢も答えも data から作る。ここに数字や論点名を書かない。 */
+function buildGuesses(){
+  const box = document.getElementById("guesses");
+  const st = D.stances.slice().sort((a,b)=>b.count-a.count);
+  const peak = issues.map(it=>({it, r: modeById.all.high_pct[it.id]}))
+                     .filter(x=>modeById.all.counts[x.it.id]>0)
+                     .sort((a,b)=>b.r-a.r);
+  const q=[];
+  q.push({
+    key:"g1", title:"① 「"+st[0].label+"」と「"+st[1].label+"」、どちらが多いと思いますか？",
+    opts:["「"+st[0].label+"」のほうが多い","「"+st[1].label+"」のほうが多い","ほぼ同じ"], right:0,
+    ans:"<b>「"+st[0].label+"」"+st[0].count+"件</b>に対し、「"+st[1].label+"」"+st[1].count+"件。"
+       +"多いのは前者で、しかも差はわずかです。"
+  });
+  q.push({
+    key:"g2", title:"② 「強い表現」がいちばん多い論点はどれだと思いますか？",
+    opts:[peak[peak.length-1].it.label, peak[1].it.label, peak[0].it.label], right:2,
+    ans:"<b>「"+peak[0].it.label+"」で"+peak[0].r+"%</b>。"
+       +"意見は"+modeById.all.counts[peak[0].it.id]+"件しかないのに、これがいちばん高い山です。"
+       +"<b>件数の多さと、語られ方の激しさは別物です。</b>"
+  });
+  box.innerHTML = q.map(x =>
+    '<div class="guess" data-k="'+x.key+'"><h3>'+x.title+'</h3><div class="gopts">'
+    + x.opts.map((o,i)=>'<button type="button" data-i="'+i+'">'+o+'</button>').join("")
+    + '</div><div class="gans" hidden></div></div>').join("");
+  q.forEach(x=>{
+    const card = box.querySelector('[data-k="'+x.key+'"]');
+    const bs = card.querySelectorAll(".gopts button");
+    bs.forEach(b=>b.addEventListener("click", ()=>{
+      const pick = +b.dataset.i;
+      bs.forEach((y,j)=>{ y.disabled=true;
+        if (j===x.right) y.className="hit"; else if (j===pick) y.className="miss"; });
+      const a = card.querySelector(".gans");
+      a.innerHTML = '<p class="lead">'+(pick===x.right?"正解":"はずれ")+'</p>'+x.ans;
+      a.hidden=false;
+      visit(x.key);
+    }));
+  });
+}
+
+/* ---------- 潜水（海の水を抜く） ---------- */
+let dived=false;
+function buildDive(){
+  const b=document.getElementById("dive"), n=document.getElementById("divenote");
+  const sunk=(D.ocean.sunk_continents||[]).length;
+  if (!sunk){ b.parentElement.hidden=true; return; }
+  const box=document.getElementById("ocean");
+  function paint(){
+    b.textContent = dived ? "閉じる" : "資料にしかない話を見る";
+    n.innerHTML = dived
+      ? "<b>"+sunk+"つ出てきました。</b>どれも一次資料では決まっている話です。下に中身があります。"
+      : "資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。";
+    document.querySelector(".chart-box").classList.toggle("dived", dived);
+    if (box) box.hidden = !dived;
+  }
+  b.addEventListener("click", ()=>{
+    dived=!dived; paint();
+    if (dived){
+      // 海面下はひとまとまり。開いたら語られていない争点と立場をこえて同じ心配をまとめて数える。
+      // 「画面に入ったら数える」も試したが、隠れている間は交差が起きず取りこぼした。
+      (D.ocean.sunk_continents||[]).forEach(x=>visit("s:"+x.id));
+      (D.ocean.veins||[]).forEach(x=>visit("v:"+x.id));
+      // box全体（複数の語られていない争点・立場をこえて同じ心配を全部含み、
+      // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
+      // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
+      // 見出しだけを中央合わせにする。
+      if (box) bringIntoView(box.querySelector("h3") || box);
+    }
+  });
+  paint();
+}
+
+/* ---------- 一次資料クイズ ---------- */
+const V_ORDER=["fact","gap","miss"];
+let qi=0, qscore=0;
+function buildQuiz(){
+  const el=document.getElementById("quiz"), cs=D.claims||[];
+  if (!cs.length){ el.parentElement.querySelector(".sec-live").hidden=true; el.hidden=true; return; }
+  if (qi>=cs.length){
+    el.innerHTML='<p class="qscore"><span class="n">'+qscore+' / '+cs.length+'</span> 問正解</p>'
+      + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
+      + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
+          return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
+      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';
+    return;
+  }
+  const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
+  const labels=V_ORDER.map(v=>{
+    const same=cs.find(x=>x.verdict===v);
+    return same ? same.verdict_label : ({fact:"資料どおり",gap:"少しずれる",miss:"裏が取れない"})[v];
+  });
+  el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
+    + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
+    + labels.map((l,i)=>'<button type="button" data-i="'+i+'">'+l+'</button>').join("")
+    + '</div><div class="qans" hidden></div>';
+  const bs=el.querySelectorAll(".gopts button");
+  bs.forEach(b=>b.addEventListener("click", ()=>{
+    const pick=+b.dataset.i;
+    if (pick===right) qscore++;
+    bs.forEach((y,j)=>{ y.disabled=true;
+      if (j===right) y.className="hit"; else if (j===pick) y.className="miss"; });
+    const a=el.querySelector(".qans");
+    a.innerHTML='<p><span class="verdict v-'+c.verdict+'">'+c.verdict_label+'</span>'+c.finding+'</p>'
+      + (c.sources.length
+         ? '<div class="srcs">'+c.sources.map(x=>'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.name+'</a>').join("")+'</div>'
+         : '<div class="srcs"><span style="color:var(--muted)">公的資料に該当なし。</span></div>')
+      + '<button type="button" class="qnext">'+(qi===D.claims.length-1?"結果を見る":"次の問題 →")+'</button>';
+    a.hidden=false;
+    visit("c:"+c.id);
+    a.querySelector(".qnext").addEventListener("click", ()=>{
+      qi++; buildQuiz();
+      // 次の問題を出した直後、答え欄の下までスクロールしたままだと新しい問題文が
+      // 画面外になる（オーナー指摘2026-09-10）。問題の見出しを画面中央へ運ぶ。
+      bringIntoView(el.querySelector(".qh") || el);
+    });
+  }));
+}
+
+/* ---------- 初期化 ----------
+   中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
+   JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
+try {
+  buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildGuesses(); buildDive(); buildQuiz(); paintProgress();
+  let resizeFrame;
+  window.addEventListener("resize", ()=>{
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame=requestAnimationFrame(render);
+  });
+  const h = location.hash.slice(1);
+  if (h && idIndex[h] !== undefined) land(idIndex[h]);
+} catch (e) {
+  /* 描けなかったときは静的表示へ戻す（空の図を見せない） */
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bplanet-live\b/, "");
+  throw e;
+}
+
+})();
+</script>
+<!-- PLANET_SECTION_END -->
 <aside id="correction-20260906" aria-label="訂正履歴" style="max-width:1000px;margin:12px auto;padding:12px 20px;font-size:13px;line-height:1.8;">
 <p><strong>2026年9月6日 訂正</strong> — 保存された取得履歴に6月22日・23日の記録があるため、取得期間の開始を6月27日から6月22日に訂正しました。投稿と意見の集計数は変わりません。</p>
 </aside>
@@ -948,32 +1964,7 @@
   </ol>
   <p class="copyright-entry-sources">判断の根拠は、<a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化庁「AIと著作権に関する考え方について」</a>と、<a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf" target="_blank" rel="noopener noreferrer">内閣府「AI時代の知的財産権検討会 中間とりまとめ」</a>です。</p>
 </section>
-<section class="stats insight-stats" aria-label="このテーマの4つの注目ポイント">
-      <article class="stat insight-stat">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span><span class="insight-label">分析対象の意見</span></div>
-        <strong class="insight-value">2,593<small>件</small></strong>
-        <p class="insight-note">権利保護、規制、競争力、モラルの声を整理</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="debate">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">⚖️</span><span class="insight-label">最も多い立場</span></div>
-        <strong class="insight-value">規制支持 54%</strong>
-        <p class="insight-note">1,407件。無断学習への反発とクリエイター保護を重視</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:54%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="topic">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">🔥</span><span class="insight-label">最も話された論点</span></div>
-        <strong class="insight-value">無断学習 657<small>件</small></strong>
-        <p class="insight-note">学習データを許諾なしで使えるかが最大争点</p>
-        <div class="insight-meter" aria-hidden="true"><i style="width:25%"></i></div>
-      </article>
-      <article class="stat insight-stat" data-tone="insight">
-        <div class="insight-head"><span class="insight-icon" aria-hidden="true">↔</span><span class="insight-label">判断を分ける核心</span></div>
-        <span class="insight-chip">対立の中心</span>
-        <strong class="insight-value">権利保護 × 技術革新</strong>
-        <p class="insight-note">全面禁止ではなく、対価やオプトアウトが接点</p>
-      </article>
-    </section>
+
 <!-- ===== 論点Explainer ===== -->
 <section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
 <section class="tide-card" id="ai-copyright-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
@@ -1227,21 +2218,7 @@
   .argument-sources li,.argument-criteria li{font-size:13px;line-height:1.8;margin-bottom:4px}
   @media(max-width:720px){.argument-grid{grid-template-columns:1fr}.arguments-panel .argument-summary{font-size:15px;padding:15px}}
 </style>
-<section class="panel arguments-panel" id="strongest-arguments" aria-labelledby="arguments-title">
-  <div class="panel-title"><h2 id="arguments-title">30秒でわかる、両側の強い論拠</h2></div>
-  <p class="argument-summary">著作物をAIの学習に使うことの是非が議論されています。ルール強化を求める側の最も強い根拠は、著作権法30条の4が許諾を不要としている理由が「非享受目的の利用は権利者の経済的利益を通常害さない」という前提にあり、学習した作品と同じ市場に出力が供給される生成AIではその前提を問い直す必要がある、という点です。現行の枠組みを維持すべき側の最も強い根拠は、著作権が保護するのは創作的表現でありアイデアや作風ではないこと、そして実際に損害が生じるのは学習ではなく出力の公開・販売の段階で、そこは現行法でも侵害になり得ることです。争点は「学習が合法か」ではなく、対価と開示を法律で義務づけるのか、契約と技術で作るのかにあります。</p>
-  <div class="argument-grid"><article class="argument-side argument-side-a"><p class="argument-side-label">学習利用にルールと対価が必要</p><h3>最も強い論拠</h3><p>学習そのものを一律に違法とする主張には無理があります。著作権法が保護するのは創作的表現であって、アイデアや作風は保護対象ではありません。統計的な特徴を抽出する処理は、作品を人に読ませ・見せる行為とは性質が異なります。ここは規制を求める側も認めるべき点です。</p><p>そのうえで、許諾が要らないことと、対価が要らないことは別の問題です。法30条の4が許諾を不要としているのは、「著作権者が著作物から得ている経済的利益は、知的・精神的欲求を満たすという効用の対価として支払われるものであり、非享受目的の行為は、その経済的利益を通常害するものではない」という前提に立つからです。ところが生成AIは、学習に用いた作品と同じ需要に向けて出力を供給します。前提が成り立つかどうかが変わったのであれば、その前提の上に置かれた結論も検証し直す必要がある、というのが規制を求める側の主張です。加えて、権利者には自分の作品が学習に使われたかどうかを知る手段が実質的にありません。交渉も対価も「使われたことがわかる」ところから始まる以上、学習元の開示、収集拒否の実効性、ライセンス市場の整備を先に用意すべきだ、という要求は、対価還元を契約に委ねる立場から見ても筋が通ります。</p><div class="argument-basis"><strong>根拠</strong><p>文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）は、法30条の4の趣旨を、非享受目的の行為は著作権者の経済的利益を通常害さない点に求めています。同時に、主たる目的が非享受目的でも「享受する目的が併存している場合」には同条は適用されないとし、特定のクリエイターの少量の作品群に対する意図的な追加学習で、共通する創作的表現を出力させることを目的とする場合は享受目的が併存すると整理しています。また、情報解析に活用できる形で有償提供されているデータベースを無償で複製する行為や、AI学習用の複製を防ぐ技術的措置を回避して収集する行為は、同条ただし書の「著作権者の利益を不当に害することとなる場合」に当たり得るとしています。海賊版等と知りながらの学習データ収集については「厳にこれを慎むべき」とされ、規範的行為主体として侵害責任を問われる可能性が高まると示されています。開示手段については、内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）が、学習元データの個別追跡は学習済みモデルの作成者において可能性があるにとどまり、その余の追跡は今後の研究開発の成果が待たれる、としています。関心の広がりを示す公的な数字として、素案に対する意見募集には24,938件（うち法人・団体73）の意見が提出されています。</p></div></article><article class="argument-side argument-side-b"><p class="argument-side-label">現行の権利制限を維持すべき</p><h3>最も強い論拠</h3><p>無断で使われた側が納得できないという反発は、法律論では解消できません。「合法だから問題ない」という説明が、実際に仕事が減りつつある人に届かないことは、技術推進を支持する側も認めるべきです。</p><p>そのうえで、学習の段階に一律の許諾義務を課す設計は、守りたいものに対して効きが悪いという問題があります。作風はアイデアにとどまる限り著作権では保護されないため、学習を止めても作風の模倣自体はなくなりません。他方、実際に権利者の損害が生じるのは、出力が既存の作品と創作的表現において類似し、それを公開・販売する段階であり、そこは現行法でも侵害となり得ます。差止めや廃棄の請求、学習用データセットからの除去請求といった手当ても、現行の枠組みの中に用意されています。さらに、許諾を前提にすると、権利者を特定できない大量のデータが使えなくなり、正規ライセンスを買える資本力のある事業者だけが開発を続けられる状態に近づきます。それは個人クリエイターの交渉力を上げるより、むしろ下げかねません。権利制限は維持したうえで、対価は契約で、AI生成物であることの識別は技術で担保する方が、実際に手が届く解決だ、というのが推進側の主張です。</p><div class="argument-basis"><strong>根拠</strong><p>「AIと著作権に関する考え方について」は、AI生成物をアップロードして公表したり複製物を販売したりする場合、通常の著作権侵害と同様の基準、すなわち既存の著作物との類似性（創作的表現が共通していること）と依拠性（既存の著作物をもとに創作したこと）で判断されるとしています。依拠性については、既存の著作物が学習データに含まれているか不明でも、権利者がアクセス可能性や高度な類似性を立証すれば推認させることができ、学習されていた場合はAI利用者が認識していなくても通常は依拠性が推認されるとされています。権利者が取り得る措置として、新たな侵害物の生成の差止め、既に生成された侵害物の利用の差止め、生成物の廃棄請求のほか、一定の場合には学習用データセットからの除去請求や侵害予防に必要な措置の請求が可能と整理されています。契約による対価については、内閣府「AI時代の知的財産権検討会 中間とりまとめ」が、法30条の4により許諾を要さず利用できる場合であっても、開発者・提供者が自ら進んで権利者と合意のうえで対価還元策を講じることは可能であり、良質な学習データに係るライセンス市場の形成と対価還元の実現が期待されるとし、拠出者へ報酬を配分する民間の取組事例を列挙しています。技術による識別については、電子透かしや、C2PA規格に準拠した改ざん防止メタデータで来歴を記録する仕組みが同とりまとめに事例として挙げられています。</p></div></article></div>
-  <div class="argument-points">
-    <article class="argument-point"><h3>共有している前提</h3><p>海賊版など権利侵害複製物を掲載していると知りながら、そこから学習データを収集することは認められない、という点は双方で一致しています。また、人間による創作活動が続かなければ生成AI技術の持続的な発展もあり得ない、という認識も、文化庁の整理では共有された前提として示されています。</p></article>
-    <article class="argument-point"><h3>本当の対立点</h3><p>対立しているのは「AI学習が合法か」ではありません。第一に、法30条の4が置いた「非享受目的の利用は権利者の経済的利益を通常害さない」という前提が、学習元と同じ市場に出力を供給する生成AIでも成り立つのか。第二に、対価と学習元の開示を、法律で義務づけるのか、契約と技術に委ねるのか。第三に、AI生成物であることの表示を誰の義務とし、どこまでを対象にするのか。この3点が本当の対立点です。</p></article>
-    <article class="argument-point"><h3>まだ確認できていない点</h3><p>「AIと著作権に関する考え方について」は、それ自体が法的な拘束力を有するものではなく、AIと著作権の関係を直接的に取り扱った判例・裁判例が未だ乏しい状態である、と明記しています。したがって、ここで整理されている解釈が司法で確定しているわけではありません。また、このページの調査では、日本国内で生成AIの普及によりクリエイターの収入がどれだけ変化したかを示す公的統計を確認できませんでした。対価還元の前提となる学習元データの個別追跡についても、中間とりまとめは技術的に確立していないとしており、還元すべき対価の規模を推計できる段階にありません。AI生成物であることの表示についても、表示を付す場合の「AI生成物」の範囲や表示主体には多様な手法や考え方があり得るとされ、決まっていません。</p></article>
-  </div>
-  <div class="argument-sources"><h3>一次情報・公的資料</h3><ul><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）</a></li><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94057901_01.pdf" target="_blank" rel="noopener noreferrer">文化庁著作権課「AIと著作権に関する考え方について【概要】」（令和6年4月）</a></li><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/bunkakai/69/pdf/94022801_05.pdf" target="_blank" rel="noopener noreferrer">文化庁著作権課「『AIと著作権に関する考え方について（素案）』に関するパブリックコメントの結果について」（令和6年2月29日）</a></li><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf" target="_blank" rel="noopener noreferrer">AI時代の知的財産権検討会「中間とりまとめ」（2024年5月・内閣府知的財産戦略推進事務局）</a></li><li><a href="https://www.bunka.go.jp/seisaku/chosakuken/pdf/94097701_01.pdf" target="_blank" rel="noopener noreferrer">文化庁「AIと著作権に関するチェックリスト＆ガイダンス」（令和6年7月31日）</a></li><li><a href="https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html" target="_blank" rel="noopener noreferrer">文化庁「AIと著作権について」（関連資料一覧）</a></li></ul></div>
-  <details class="argument-criteria"><summary>論拠の選定基準</summary><ul>
-    <li>具体的な根拠がある</li><li>人物攻撃ではない</li><li>検証可能である</li>
-    <li>相手の立場を単純化していない</li><li>高リスク・未確認情報でない</li>
-  </ul></details>
-</section>
+
 <!-- ARGUMENTS_END -->
 <section class="panel" id="vote-section" data-vote-topic="ai-copyright-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
@@ -1353,310 +2330,12 @@
 </script>
 
 <!-- ===== 問いの背骨 SNS反応マップ ===== -->
-<section class="polar-arena-section" id="issue-arena-section" data-arena-total="2593">
-<div id="issue-arena-inner">
-<div class="theme-atlas-pilot" aria-labelledby="theme-atlas-pilot-title">
-  <h2 id="theme-atlas-pilot-title">生成AIと著作権 — 論点アトラス</h2>
-  <p>このテーマの論点と、それぞれに分類された意見の件数です。件数と並び順は下の図と同じ分類結果から生成しています。</p>
-  <!-- THEME_ATLAS_START -->
-<div class="theme-atlas-row"><span class="theme-atlas-label">学習データ・無断利用</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:100%"></span><strong class="theme-atlas-count">657<small>件</small></strong></span></div>
-<div class="theme-atlas-row"><span class="theme-atlas-label">クリエイター保護・権利</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:46%"></span><strong class="theme-atlas-count">303<small>件</small></strong></span></div>
-<div class="theme-atlas-row"><span class="theme-atlas-label">法制度・規制整備</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:72%"></span><strong class="theme-atlas-count">471<small>件</small></strong></span></div>
-<div class="theme-atlas-row"><span class="theme-atlas-label">技術競争・AI推進</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:18%"></span><strong class="theme-atlas-count">117<small>件</small></strong></span></div>
-<div class="theme-atlas-row"><span class="theme-atlas-label">利用者モラル・倫理</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:100%"></span><strong class="theme-atlas-count">657<small>件</small></strong></span></div>
-<div class="theme-atlas-row"><span class="theme-atlas-label">AI生成物の権利・創作性</span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:25%"></span><strong class="theme-atlas-count">165<small>件</small></strong></span></div>
-<div class="theme-atlas-row is-other"><span class="theme-atlas-label">その他<small>分類保留</small></span><span class="theme-atlas-track"><span class="theme-atlas-bar" style="width:34%"></span><strong class="theme-atlas-count">223<small>件</small></strong></span></div>
-  <!-- THEME_ATLAS_END -->
-</div>
-<div class="panel-title"><h2>問いから分かれる、2,593件の意見</h2><span>公開投稿を論点・立場・主張の強さで配置</span></div>
-<p class="map-caption">中央の線は、まだ答えの出ていない問いです。そこから左へ伸びるほど権利保護・規制を求める主張が強く、右へ伸びるほどAI活用・推進を支持する主張が強くなります。点を選ぶと元のXポストを開きます。</p>
-<div class="arena-spine-key" aria-label="反応の配置方向">
-  <span>← 権利保護・規制</span>
-  <span>未解決の問い</span>
-  <span>AI活用・推進 →</span>
-</div>
-<div class="arena-spine-layout">
-  <div>
-    <div id="sm-wrap">
-      <canvas id="arenaHeat" width="760" height="720" role="img" aria-label="生成AIと著作権の6つの論点と分類保留に2,593件の意見を配置した図。詳細は下の論点一覧を参照してください。" style="display:block;width:100%;"></canvas>
-      <canvas id="arenaMain" width="760" height="720" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;cursor:crosshair;"></canvas>
-      <div id="sm-tooltip" style="position:absolute"></div>
-    </div>
-    <p id="your-marker-note-arena" style="display:none;font-size:12px;text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
-  </div>
-  <aside class="sm-controls" aria-label="表示する論点">
-    <p class="arena-filter-heading">論点をたどる</p>
-    <div class="sm-filters" id="sm-filters"></div>
-  </aside>
-</div>
-</div>
-</section>
+
 <script src="ai-copyright-arena-data.js"></script>
-<script>
-(function(){
-  'use strict';
-  const ISSUES=[
-    {k:'学習データ・無断利用',   n:657},
-    {k:'クリエイター保護・権利', n:303},
-    {k:'法制度・規制整備',       n:471},
-    {k:'技術競争・AI推進',       n:117},
-    {k:'利用者モラル・倫理',     n:657},
-    {k:'AI生成物の権利・創作性', n:165},
-    {k:'その他',                 n:223}
-  ];
-  const W=760,H=720,CX=W/2,TOP=82,BOTTOM=660,MAX_SPREAD=300;
-  const canvasMain=document.getElementById('arenaMain');
-  const canvasHeat=document.getElementById('arenaHeat');
-  if(!canvasMain||!canvasHeat)return;
-  const ctx=canvasMain.getContext('2d');
-  const hctx=canvasHeat.getContext('2d');
-  const tooltip=document.getElementById('sm-tooltip');
-
-  const total=ISSUES.reduce((a,b)=>a+b.n,0);
-  const rowGap=(BOTTOM-TOP)/(ISSUES.length-1);
-  ISSUES.forEach((iss,i)=>{iss.y=TOP+i*rowGap;});
-
-  function rnd(seed){const x=Math.sin(seed*127.1+311.7)*43758.5453;return x-Math.floor(x);}
-  function colorOf(p){return p.x>=0.5?'#ff5426':(p.x<=-0.5?'#075ef2':'#64748b');}
-  function sideOf(p){return p.x>=0.5?-1:(p.x<=-0.5?1:0);}
-
-  const pts=[];
-  SM_RAW.forEach((p,idx)=>{
-    const iss=ISSUES[p.i];if(!iss)return;
-    const side=sideOf(p);
-    const strength=Math.min(1,Math.abs(p.e)/3.5);
-    const spread=side===0?(rnd(idx+900)-.5)*42:side*(44+strength*(MAX_SPREAD-44)+(rnd(idx+500)-.5)*20);
-    const jitter=(rnd(idx+1800)-.5)*42;
-    pts.push({px:Math.max(25,Math.min(W-25,CX+spread)),py:iss.y+jitter,c:colorOf(p),p:p});
-  });
-
-  function drawHeat(){
-    hctx.clearRect(0,0,W,H);
-    hctx.fillStyle='#fbfcfe';hctx.fillRect(0,0,W,H);
-    const maxN=Math.max(...ISSUES.map(i=>i.n));
-    const leftWash=hctx.createLinearGradient(CX,0,34,0);leftWash.addColorStop(0,'rgba(255,84,38,0)');leftWash.addColorStop(1,'rgba(255,84,38,.07)');
-    hctx.fillStyle=leftWash;hctx.fillRect(0,0,CX,H);
-    const rightWash=hctx.createLinearGradient(CX,0,W-34,0);rightWash.addColorStop(0,'rgba(7,94,242,0)');rightWash.addColorStop(1,'rgba(7,94,242,.07)');
-    hctx.fillStyle=rightWash;hctx.fillRect(CX,0,CX,H);
-    hctx.setLineDash([3,7]);hctx.strokeStyle='#c4d0df';hctx.lineWidth=1;
-    [80,160,240].forEach(d=>{
-      hctx.beginPath();hctx.moveTo(CX-d,30);hctx.lineTo(CX-d,H-24);hctx.stroke();
-      hctx.beginPath();hctx.moveTo(CX+d,30);hctx.lineTo(CX+d,H-24);hctx.stroke();
-    });
-    hctx.setLineDash([]);
-    ISSUES.forEach((iss,i)=>{
-      const alpha=(.10+iss.n/maxN*.10).toFixed(3);
-      hctx.lineWidth=18;hctx.lineCap='round';
-      hctx.strokeStyle='rgba(255,84,38,'+alpha+')';
-      hctx.beginPath();hctx.moveTo(CX-18,iss.y);hctx.bezierCurveTo(CX-90,iss.y-10,CX-210,iss.y+10,42,iss.y);hctx.stroke();
-      hctx.strokeStyle='rgba(7,94,242,'+alpha+')';
-      hctx.beginPath();hctx.moveTo(CX+18,iss.y);hctx.bezierCurveTo(CX+90,iss.y+10,CX+210,iss.y-10,W-42,iss.y);hctx.stroke();
-      hctx.strokeStyle='#c8d3e1';hctx.lineWidth=1;
-      hctx.beginPath();hctx.moveTo(38,iss.y);hctx.bezierCurveTo(CX-150,iss.y,CX-70,iss.y,CX,iss.y);hctx.bezierCurveTo(CX+70,iss.y,CX+150,iss.y,W-38,iss.y);hctx.stroke();
-      if(i<ISSUES.length-1){hctx.strokeStyle='rgba(178,191,208,.55)';hctx.beginPath();hctx.moveTo(30,iss.y+rowGap/2);hctx.lineTo(W-30,iss.y+rowGap/2);hctx.stroke();}
-    });
-    hctx.strokeStyle='#071a3d';hctx.lineWidth=3;hctx.beginPath();hctx.moveTo(CX,28);hctx.lineTo(CX,H-24);hctx.stroke();
-  }
-
-  let filterIdx=-1;let voteMarker=null;
-
-  function drawMain(){
-    ctx.clearRect(0,0,W,H);
-    if(filterIdx>=0){
-      const active=ISSUES[filterIdx];
-      ctx.fillStyle='rgba(7,26,61,.045)';ctx.fillRect(16,active.y-rowGap*.43,W-32,rowGap*.86);
-      ctx.strokeStyle='#071a3d';ctx.lineWidth=1.5;ctx.strokeRect(16,active.y-rowGap*.43,W-32,rowGap*.86);
-    }
-    pts.forEach(pt=>{
-      const dim=filterIdx>=0&&pt.p.i!==filterIdx;
-      ctx.globalAlpha=dim?0.035:0.78;
-      ctx.beginPath();ctx.arc(pt.px,pt.py,3.8,0,Math.PI*2);ctx.fillStyle=pt.c;ctx.fill();
-      ctx.strokeStyle='#fff';ctx.lineWidth=.8;ctx.stroke();
-    });
-    ctx.globalAlpha=1;
-    ctx.textBaseline='middle';ctx.textAlign='center';
-    ISSUES.forEach((iss,i)=>{
-      const dim=filterIdx>=0&&i!==filterIdx;
-      const label=iss.k+'  '+iss.n+'件';
-      ctx.font='900 11px "Noto Sans JP","Yu Gothic",sans-serif';
-      ctx.textAlign='left';ctx.fillStyle=dim?'#718096':'#071a3d';ctx.fillText(label,14,iss.y-29);
-    });
-    ctx.font='800 10px "Noto Sans JP","Yu Gothic",sans-serif';ctx.fillStyle='#748198';
-    ctx.textAlign='left';ctx.fillText('強い主張',18,18);ctx.textAlign='center';ctx.fillText('判断保留・確認',CX,18);ctx.textAlign='right';ctx.fillText('強い主張',W-18,18);
-    if(voteMarker){
-      const mc=voteMarker.color||'#7c3aed';
-      const vi=ISSUES[voteMarker.sector];
-      const pulse=(Date.now()%1400)/1400;
-      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,10+pulse*16,0,Math.PI*2);
-      ctx.strokeStyle=mc;ctx.globalAlpha=0.55*(1-pulse);ctx.lineWidth=3;ctx.stroke();ctx.globalAlpha=1;
-      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,11,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
-      ctx.beginPath();ctx.arc(voteMarker.x,voteMarker.y,8,0,Math.PI*2);ctx.fillStyle=mc;ctx.fill();
-      ctx.font='bold 12px "Noto Sans JP",sans-serif';
-      const txt='あなたはここ';const tw=ctx.measureText(txt).width;
-      const bx=Math.max(tw/2+10,Math.min(W-tw/2-10,voteMarker.x));const by=voteMarker.y-32;
-      ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx-tw/2-8,by-11,tw+16,22,11);else ctx.rect(bx-tw/2-8,by-11,tw+16,22);
-      ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=mc;ctx.lineWidth=2;ctx.stroke();
-      ctx.fillStyle=mc;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(txt,bx,by+1);
-      ctx.textBaseline='alphabetic';
-      ctx.beginPath();ctx.moveTo(voteMarker.x-4,by+11);ctx.lineTo(voteMarker.x,by+17);ctx.lineTo(voteMarker.x+4,by+11);ctx.fillStyle=mc;ctx.fill();
-    }
-  }
-
-  let pulseRAF=null;
-  window.setArenaVoteMarker=function(issueIdx,stanceColor){
-    const iss=ISSUES[issueIdx]||ISSUES[0];
-    const isProtect=stanceColor==='#e04949'||stanceColor==='#ff5426';
-    const isPromote=stanceColor==='#4b9cf4'||stanceColor==='#075ef2';
-    const voteSide=isProtect?-1:(isPromote?1:0);
-    const voteStrength=.62;
-    const voteDistance=44+voteStrength*(MAX_SPREAD-44);
-    voteMarker={x:CX+voteSide*voteDistance,y:iss.y,color:stanceColor||'#7c3aed',sector:issueIdx};
-    const note=document.getElementById('your-marker-note-arena');if(note)note.style.display='block';
-    if(pulseRAF)cancelAnimationFrame(pulseRAF);
-    (function loop(){drawMain();pulseRAF=requestAnimationFrame(loop);})();
-  };
-  window.clearArenaVoteMarker=function(){
-    if(pulseRAF){cancelAnimationFrame(pulseRAF);pulseRAF=null;}
-    voteMarker=null;
-    const note=document.getElementById('your-marker-note-arena');if(note)note.style.display='none';
-    drawMain();
-  };
-
-  const filtersEl=document.getElementById('sm-filters');
-  function addBtn(label,idx,count){
-    const b=document.createElement('button');b.className='sm-fbtn'+(idx===-1?' active':'');
-    b.type='button';b.setAttribute('aria-pressed',idx===-1?'true':'false');
-    b.innerHTML='<span class="sm-fbtn-label">'+label+'</span><span class="sm-fbtn-count">'+count+'件</span>';
-    b.onclick=function(){
-      filterIdx=idx;
-      filtersEl.querySelectorAll('.sm-fbtn').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false');});
-      b.classList.add('active');b.setAttribute('aria-pressed','true');drawMain();
-    };
-    filtersEl.appendChild(b);
-  }
-  addBtn('すべての論点',-1,total);
-  ISSUES.forEach((iss,i)=>addBtn(iss.k,i,iss.n));
-
-  function evtPos(ev){const rect=canvasMain.getBoundingClientRect();return{x:(ev.clientX-rect.left)*W/rect.width,y:(ev.clientY-rect.top)*H/rect.height};}
-  function nearest(pos){let best=null,bd=196;pts.forEach(pt=>{if(filterIdx>=0&&pt.p.i!==filterIdx)return;const d=(pt.px-pos.x)**2+(pt.py-pos.y)**2;if(d<bd){bd=d;best=pt;}});return best;}
-  canvasMain.addEventListener('mousemove',function(ev){const pt=nearest(evtPos(ev));if(pt){tooltip.style.display='block';tooltip.style.left=(ev.offsetX+14)+'px';tooltip.style.top=(ev.offsetY+14)+'px';tooltip.innerHTML='<strong>'+ISSUES[pt.p.i].k+'</strong><br>'+pt.p.s;}else{tooltip.style.display='none';}});
-  canvasMain.addEventListener('mouseleave',function(){tooltip.style.display='none';});
-  canvasMain.addEventListener('click',function(ev){const pt=nearest(evtPos(ev));if(pt&&pt.p.u)window.open(pt.p.u,'_blank','noopener');});
-  canvasMain.addEventListener('touchstart',function(ev){if(ev.touches.length!==1)return;const t=ev.touches[0];const pt=nearest(evtPos(t));if(pt&&pt.p.u){ev.preventDefault();window.open(pt.p.u,'_blank','noopener');}},{passive:false});
-
-  drawHeat();drawMain();
-})();
-</script>
 
 
-<section class="panel conflict-panel" id="issue-voices-section">
-<div class="panel-title"><h2>6つの論点とXの声</h2><span>6論点の賛否分布と代表的な投稿</span></div>
-<nav class="quadrant-nav"><a href="#issue-gakushu">学習データ 657</a><a href="#issue-hoseibi">法制度 471</a><a href="#issue-moraru">利用者モラル 657</a><a href="#issue-creator">クリエイター保護 303</a><a href="#issue-gijutsu">技術競争 117</a><a href="#issue-seiseibutsu">AI生成物 165</a></nav>
 
-<article class="issue-block" id="issue-gakushu">
-<div class="issue-head"><span class="axis-kicker">論点1・最大勢力</span>
-<h3>学習データ・無断利用 — 「漫画村と同じ」は本当か<span class="issue-count">657件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>学習データ問題における規制論調</span><span>規制賛成 93 / 中立 5 / AI推進 28</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:73.8%">74%</div><div class="temp-seg neu" style="width:4.0%"></div><div class="temp-seg pos" style="width:22.2%">22%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>無断学習は著作権侵害・規制が必要</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>学習行為は合法・AI推進を支持</span></div>
-</div>
-<p class="issue-desc">最多の論点。「AI学習は漫画村と同じ無断利用だ」という批判が中心です。「対価もなく作品を取り込む仕組みは著作権侵害」という明確な立場から、「学習行為自体は合法であり表現の模倣は別問題」という反論まで、法的な解釈をめぐる議論が続いています。</p>
-<div class="issue-sides"><div class="side neg"><strong>規制賛成（93件）</strong>AIの学習行為そのものが著作権侵害であり、許諾なしの学習データ利用は禁止すべきだ。</div><div class="side pos"><strong>AI推進寄り（28件）</strong>著作権法30条の4により学習行為は合法。規制するなら学習ではなく生成・出力段階に限るべき。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">規制・制限強化支持 / conf 0.90</div><p>生成AIへの学習と、画像認識などの機械学習を区別している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/alpha31415926/status/2086100570797154655">@alpha31415926 の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">推進・活用支持 / conf 0.75</div><p>海賊版データなどの問題と、クリーンなAI利用を分けて考えている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/99_ex_zero/status/2086178341804196202">@99_ex_zero の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-hoseibi">
-<div class="issue-head"><span class="axis-kicker">論点2</span>
-<h3>法制度・規制整備 — ライセンス制度で解決できるか<span class="issue-count">471件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>法整備・ライセンス制度への評価</span><span>規制賛成 46 / 中立 12 / AI推進 21</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:58.2%">58%</div><div class="temp-seg neu" style="width:15.2%"></div><div class="temp-seg pos" style="width:26.6%">27%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>許諾義務化・ライセンス整備を求める</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>現行法で十分・過剰規制は不要</span></div>
-</div>
-<p class="issue-desc">「許諾なし学習の禁止」「オプトアウト制度」「ライセンス料の徴収」など具体的な法整備を求める投稿が多い論点です。政府の対応の遅さへの批判と、「過剰な規制は産業を萎縮させる」という反論が対立しています。</p>
-<div class="issue-sides"><div class="side neg"><strong>規制賛成（46件）</strong>EUのAI法のようにライセンス制度・許諾要件を整備し、権利者への対価還元を義務化すべき。</div><div class="side pos"><strong>AI推進寄り（21件）</strong>規制は最小限にとどめ、利用者の自主的なクレジット表記などモラルで対応すべき。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">規制・制限強化支持 / conf 0.80</div><p>データセットと著作権を十分に検討したうえでの実装を望んでいる</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/napy011235813/status/2086226179246461247">@napy011235813 の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">推進・活用支持 / conf 0.85</div><p>学習データ・利用方法・出力を個別に見るべきだと主張している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/nanoru_hodo/status/2086078103810634162">@nanoru_hodo の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-moraru">
-<div class="issue-head"><span class="axis-kicker">論点3</span>
-<h3>利用者モラル・倫理 — クレジット表記と配慮の欠如<span class="issue-count">657件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>利用者行動への道徳的評価</span><span>規制賛成 47 / 中立 8 / AI推進 18</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:64.4%">64%</div><div class="temp-seg neu" style="width:11.0%"></div><div class="temp-seg pos" style="width:24.7%">25%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>AI生成隠し・無断模倣はモラル違反</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>個人の自由・法的問題がなければOK</span></div>
-</div>
-<p class="issue-desc">「AI生成と隠してSNSに投稿する」「クレジット表記すらしない」という個人の使い方への批判が中心です。法整備よりも利用者モラルを問う声で、「ルールがないから何でもいいと思っている人が問題」という意見が目立ちます。</p>
-<div class="issue-sides"><div class="side neg"><strong>モラル問題派（47件）</strong>AI生成物をオリジナルとして公開したり、元の作者に配慮しない使い方が問題の本質だ。</div><div class="side pos"><strong>自衛・自己責任派（18件）</strong>利用者の行動は個人の判断。嫌なら公開しない、AIを使わないという自衛が基本。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">中立・情報 / conf 0.85</div><p>AIを使った制作で、元絵を明記する慣行について述べている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sinoatoiumonoar/status/2086253206175437160">@sinoatoiumonoar の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">規制・制限強化支持 / conf 0.85</div><p>AIイラストの有償販売に倫理的な疑問を示している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/astarte776/status/2086236367424749971">@astarte776 の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-creator">
-<div class="issue-head"><span class="axis-kicker">論点4</span>
-<h3>クリエイター保護・権利 — 廃業の危機は現実か<span class="issue-count">303件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>クリエイターへの影響評価</span><span>規制賛成 33 / 中立 4 / AI推進 9</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:71.7%">72%</div><div class="temp-seg neu" style="width:8.7%"></div><div class="temp-seg pos" style="width:19.6%">20%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>廃業の危機・クリエイター保護が急務</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>技術適応・AIと共存できる</span></div>
-</div>
-<p class="issue-desc">「イラストレーターが次々と廃業している」「10年かけた作風が一瞬で真似される」というクリエイターの生計への影響を訴える論点です。「AI自体は道具であり問題は使い方」という反論と、「仕事が奪われる現実を直視すべき」という訴えが対立しています。</p>
-<div class="issue-sides"><div class="side neg"><strong>クリエイター保護派（33件）</strong>生成AIの普及でイラスト・小説・音楽など創作の仕事が消滅しつつある。権利と生活を守る制度が必要。</div><div class="side pos"><strong>現実受容派（9件）</strong>技術革新で職業が変わるのは歴史的必然。AIを使いこなすスキルに転換すべき。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">規制・制限強化支持 / conf 0.90</div><p>技術そのものより、クリエイターの権利保護が不十分なことを問題にしている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/HazukiInori_sub/status/2086126161479012804">@HazukiInori_sub の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">推進・活用支持 / conf 0.85</div><p>作者が法に沿った利用であればAIによるファンアートを認めている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/HidouRIA_vtuber/status/2084225708423819269">@HidouRIA_vtuber の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-gijutsu">
-<div class="issue-head"><span class="axis-kicker">論点5・唯一AI推進派多数</span>
-<h3>技術競争・AI推進 — 規制したら日本が負ける<span class="issue-count">117件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>AI規制と国際競争への評価</span><span>規制賛成 6 / 中立 7 / AI推進 27</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:15.0%">15%</div><div class="temp-seg neu" style="width:17.5%"></div><div class="temp-seg pos" style="width:67.5%">68%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>文化保護優先・規制を支持（少数）</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>規制より競争力優先・AI推進多数</span></div>
-</div>
-<p class="issue-desc">このテーマで唯一、AI推進派が多数を占める論点。「日本が規制を強化すれば中国・米国に遅れる」「過度な規制は技術革新と経済を損なう」という産業競争力の観点からの主張が中心です。</p>
-<div class="issue-sides"><div class="side pos"><strong>AI推進派（27件）</strong>日本だけが規制強化すれば国際競争から取り残される。学習規制より出力・利用段階での対策を。</div><div class="side neg"><strong>規制賛成（6件）</strong>競争力の議論は著作権侵害の正当化にならない。ルールの中で競争すべき。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">推進・活用支持 / conf 0.85</div><p>イラスト規制と、生成AIを使う業務システム開発は別だと主張している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/y4zdgj/status/2086212885391523993">@y4zdgj の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">推進・活用支持 / conf 0.85</div><p>AI活用を支持しつつ、クリエイター保護も必要だと述べている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/teto_rimino/status/2081004371496866054">@teto_rimino の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-<article class="issue-block" id="issue-seiseibutsu">
-<div class="issue-head"><span class="axis-kicker">論点6</span>
-<h3>AI生成物の権利・創作性 — プロンプトに著作権はあるか<span class="issue-count">165件</span></h3>
-<div class="temp-bar-wrap">
-<div class="temp-bar-label"><span>AI生成物の著作権認定への論調</span><span>規制賛成 14 / 中立 10 / AI推進 7</span></div>
-<div class="temp-bar"><div class="temp-seg neg" style="width:45.2%">45%</div><div class="temp-seg neu" style="width:32.3%"></div><div class="temp-seg pos" style="width:22.6%">23%</div></div>
-<div class="temp-bar-legend"><span><i style="background:#dc2626"></i>人の創意なければ著作権は生じない</span><span><i style="background:#94a3b8"></i>中立</span><span><i style="background:#4b9cf4"></i>プロンプトにも創作性・権利を認める</span></div>
-</div>
-<p class="issue-desc">「プロンプト入力だけで著作権が生じるのはおかしい」「AIが作ったものに創作性を認めるべきか」という権利の定義をめぐる論点です。AI生成物を二次創作の延長と見るか、全く別のカテゴリとして扱うかで意見が分かれています。</p>
-<div class="issue-sides"><div class="side neg"><strong>著作権否定派（14件）</strong>人間の創意工夫なしに生成されたものに著作権は発生しない。AI出力の著作物性を認めるべきでない。</div><div class="side pos"><strong>認定賛成派（7件）</strong>プロンプトの工夫や編集作業には創作性がある。AIを道具として使った作品に著作権を認めるべき。</div></div>
-</div>
-<div class="sample-grid">
-<div class="sample-card"><div class="meta">規制・制限強化支持 / conf 0.85</div><p>AI生成物の著作権性は、人間の創作的な関与の度合いによると述べている</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/sZfLrvjJQUGOFXY/status/2076269421937750131">@sZfLrvjJQUGOFXY の投稿をXで見る</a></blockquote></div>
-<div class="sample-card"><div class="meta">中立・情報 / conf 0.85</div><p>学習元の問題と、AI生成物を人の創作物といえるかを分けて整理している</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/05_minya/status/2081128302702666115">@05_minya の投稿をXで見る</a></blockquote></div>
-</div>
-</article>
-
-</section>
-    <section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2><span>なにが起きていて、なぜ意見が割れるのか</span></div><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">画像や文章を自動生成する生成AIの普及に伴い、AIの学習データとして既存の作品が無断で使われることの是非が大きな争点になっています。日本の著作権法では、機械学習のための著作物利用は原則として認められていますが（30条の4）、イラストレーターや漫画家などのクリエイターからは「作風の模倣で仕事が奪われる」「対価もなく作品が使われるのは不当だ」という声が上がっています。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">一方で、AI開発を推進する立場からは「学習を規制すれば日本のAI産業が国際競争から取り残される」「作風やアイデアはもともと著作権では保護されない」という反論があります。文化庁は考え方の整理を公表していますが、既存の権利者の保護とAI技術の発展をどう両立させるかについて、明確な社会的合意はまだ形成されていません。</p><p style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;">この問題は、法規制のあり方だけでなく、AI生成物を公開・販売する利用者側のモラル、プラットフォームの対応、クリエイターへの対価還元の仕組みなど、多くの論点が絡み合っており、SNS上でも立場によって意見が大きく分かれています。</p></section>
+    
     <section class="panel" id="related-topics">
 <div class="panel-title"><h2>次はこのテーマ</h2><span>他の争点も見比べる</span></div>
 <div class="related-grid">
