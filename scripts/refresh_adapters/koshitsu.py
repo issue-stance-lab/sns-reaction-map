@@ -129,6 +129,12 @@ def finalize(root: Path, current_date: str) -> None:
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
+    if '<!-- PLANET_SECTION_START -->' in (root / PAGE).read_text():
+        sys.path.insert(0,str(root/'scripts'))
+        from koshitsu_production import build as build_planet
+        out=stage/'page-candidate.html'
+        build_planet(source=stage/'cumulative-candidate.json',output=out)
+        return {PAGE:out}
     candidate = stage / "cumulative-candidate.json"
     current_page = root / PAGE
     first_page = stage / "page-candidate.html"

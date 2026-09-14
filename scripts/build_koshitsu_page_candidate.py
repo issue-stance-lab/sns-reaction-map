@@ -69,7 +69,7 @@ def main():
     if out.is_relative_to((ROOT/'docs').resolve()):raise SystemExit('候補生成器はdocsへ書き込めません')
     if stage==ROOT or stage.is_relative_to(ROOT):raise SystemExit('集計入力はリポジトリ外の非公開領域を指定してください')
     public=json.loads((stage/'data/public/themes'/f'{TOPIC}.json').read_text())
-    source=(ROOT/'docs'/f'{TOPIC}-reaction-map.html').read_text()
+    source=(ROOT/'quality/candidates'/TOPIC/'original-page.html').read_text()
     manifest=json.loads((ROOT/'quality/candidates'/TOPIC/'manifest.json').read_text())
     if hashlib.sha256(source.encode()).hexdigest()!=manifest['original_html_sha256']:
         raise SystemExit('元ページが候補作成時から変わっています。差分確認してから再生成してください')

@@ -490,6 +490,10 @@ def build(
     template: Path | None = None,
     output: Path | None = None,
 ) -> tuple[list[str], bool]:
+    page_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
+    if '<!-- PLANET_SECTION_START -->' in page_path.read_text():
+        from koshitsu_production import build as build_planet
+        return build_planet(check=check,source=source,output=output or page_path)
     rows, sample_file, collected, period = load_canon(source)
     config_path = ROOT / "configs" / f"{THEME}-reaction-map.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
@@ -677,6 +681,12 @@ def main() -> int:
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     parser.add_argument("--public-counts-only", action="store_true")
     args = parser.parse_args()
+    target=args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
+    if args.public_counts_only and '<!-- PLANET_SECTION_START -->' in target.read_text():
+        from koshitsu_production import build as build_planet
+        build_planet(output=target)
+        return 0
+
     try:
         if args.public_counts_only:
             if args.check or args.input or args.html_template:

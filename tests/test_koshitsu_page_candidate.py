@@ -17,7 +17,7 @@ class KoshitsuCandidateTests(unittest.TestCase):
     def setUpClass(cls):
         cls.base=ROOT/'quality/candidates/koshitsu-tenpakai'
         cls.public=json.loads((cls.base/'inputs/data/public/themes/koshitsu-tenpakai.json').read_text())
-        cls.original=(ROOT/'docs/koshitsu-tenpakai-reaction-map.html').read_text()
+        cls.original=(cls.base/'original-page.html').read_text()
         cls.preview=(ROOT/'quality/prototypes/koshitsu-tenpakai-page-preview.html').read_text()
 
     def test_background_sources_and_chart_hit_area(self):
@@ -79,7 +79,7 @@ class KoshitsuCandidateTests(unittest.TestCase):
         self.assertIn('未表明は、中立や無関心の意味ではありません',self.preview)
         claims={x['id']:x for x in self.public['claim_verification']['claims']}
         self.assertEqual(claims['claim_3_養子継承資格']['verdict'],'fact')
-        self.assertEqual(claims['claim_5_継承資格者3名']['verdict'],'gap')
+        self.assertEqual(claims['claim_5_継承資格者3名']['verdict'],'miss')
         self.assertEqual(claims['claim_6_第二条継承順序']['matched_post_count'],1)
 
     def test_no_raw_post_identity_or_body_in_safe_inputs(self):

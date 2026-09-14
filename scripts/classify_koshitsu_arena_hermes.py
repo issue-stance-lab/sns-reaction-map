@@ -21,7 +21,7 @@ ISSUES = {
     "愛子さま・皇族の地位",
     "その他",
 }
-STANCES = {"改正反対（男系維持）", "改正賛成（女系容認）", "中立・情報"}
+STANCES = {"今回案全体を支持", "今回案全体に反対", "全体評価は条件付き", "今回案全体は未表明", "全体評価を読み取れない"}
 INTENSITIES = {"low", "medium", "high"}
 RISKS = {"low", "medium", "high"}
 
@@ -53,17 +53,19 @@ main_issue（完全一致6択）:
 5. 愛子さま・皇族の地位 ─ 愛子内親王や現皇族の具体的な地位・処遇
 6. その他 ─ 上記に当てはまらない、論点不明、無関係
 
-stance（完全一致3択）:
-- 改正反対（男系維持） ─ 皇室典範改正に反対、男系継承の維持を支持
-- 改正賛成（女系容認） ─ 皇室典範改正を支持、女系・旧宮家養子縁組を容認
-- 中立・情報 ─ ニュース・情報共有、または立場が不明
+stance（完全一致5択）:
+- 今回案全体に反対 ─ 今回案全体を否定。男系維持だけでは反対としない
+- 今回案全体を支持 ─ 今回案全体を肯定。女性天皇や養子案への支持だけでは全体支持としない
+- 全体評価は条件付き ─ 今回案全体への条件付き評価
+- 今回案全体は未表明 ─ 個別制度や継承資格等への意見のみで全体評価はない
+- 全体評価を読み取れない ─ 否定・見直し要求等はあるが今回案全体が対象か特定できない
 
 intensity: low / medium / high
 risk: low / medium / high
 confidence: 0から1
 
 JSON配列だけを返してください。各要素は必ず次のキーを持ち、idは入力と一致させてください:
-{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"男系vs女系","stance":"改正反対（男系維持）","intensity":"high","summary":"男系継承維持が日本の伝統として重要","reason":"...","confidence":0.85,"article_usable":true,"risk":"low"}}
+{{"id":0,"is_relevant":true,"is_opinion":true,"main_issue":"男系vs女系","stance":"今回案全体は未表明","intensity":"high","summary":"男系継承維持が日本の伝統として重要","reason":"...","confidence":0.85,"article_usable":true,"risk":"low"}}
 
 入力:
 {json.dumps(payload, ensure_ascii=False)}
