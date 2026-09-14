@@ -3,8 +3,8 @@
 > 2026-09-05 に**3Dの球（議論の惑星）は廃止**し、横から見た断面図（山なみ）へ変えた。
 > 以下の文中に残る「惑星」「球」「大陸」「着陸」は、断面図より前の記述。段階8-Bを見ること。
 
-**状態**: 方針承認・設計確定。**2026-09-01 に照合レイヤー「海・地下水脈」を追加し、課題15-Bを本課題へ統合した**（オーナー承認済み）。段階0〜9完了（段階0〜6は **2026-09-03 mainへ反映済み**。段階7〜9は 2026-09-06 完了）。**8テーマ（bukatsu-chiiki・elderly-license-revocation・bike-blue-ticket・school-nickname-ban・henoko-student-accident・constitutional-amendment・fukushuto・ai-copyright）が本番反映済み（直近は ai-copyright、2026-09-14）。残り2テーマ（消費税減税・皇室典範）は未公開のまま。**
-**次にすること**: 残り2テーマへ、段階10（残り展開）以降の作業を進める。段階9の承認を重ねて求めない。一般公開は段階11の監査・公開承認後。
+**状態**: 方針承認・設計確定。**2026-09-01 に照合レイヤー「海・地下水脈」を追加し、課題15-Bを本課題へ統合した**（オーナー承認済み）。段階0〜9完了（段階0〜6は **2026-09-03 mainへ反映済み**。段階7〜9は 2026-09-06 完了）。**対象10テーマ全て（bukatsu-chiiki・elderly-license-revocation・bike-blue-ticket・school-nickname-ban・henoko-student-accident・constitutional-amendment・fukushuto・ai-copyright・consumption-tax-cut・koshitsu-tenpakai）が本番反映済み（直近は koshitsu-tenpakai、2026-09-15）。**
+**次にすること**: 10テーマ揃ったので、段階11（総合監査→一般公開・15-C）へ進めてよいかオーナーに確認する。段階9の承認を重ねて求めない。憲法改正の追加659件の独立確認は継続中（別課題として残る）。
 **副首都（9/13更新）**: 対象別ルールで全1,733件の本文点検完了。意見1,453→1,497件の候補、除外215・全体保留21・一部地域保留1。[数値対照表・残作業](../quality/reviews/2026-09-13-fukushuto-target-review.md)、[表示確認版](../quality/prototypes/fukushuto-target-review.html)。原本・本番未変更。数値案への続行指示を受領。対象別×七論点の集計・切替表示を実装、27テストと375px/1280px確認が成功。[接続準備の記録](../quality/reviews/2026-09-13-fukushuto-target-breakdown.md)。編集再読・独立監査・山なみ生成器への接続は未了。オーナー指示で冒頭・経緯・デザインは他テーマの共通構成に統一し、確認版にも共通背景部品を接続。読者に無関係な旧版比較・変更前後の件数・制作経過は本文から撤去し、監査記録だけに保存。3テーマを参照し旧題名・画像と共通表紙を復元、マップ直下に三択2問を接続。件数を幅にした山なみとクリック後の100マス・件数・割合を実装。高さは一定と明記（強度確認・編集再読等は未了）。部活構成を細部まで反映し、4枚の注目カード、論点7カード・図解6枚・拡大、投票UI、作り方、画像付き関連テーマ、詳細折りたたみ表を接続。375px/1280px確認済み。作業枝 `codex/fukushuto-page`。
 **優先度**: **最重要**。通常の新規テーマ追加、検索記事追加、旧2Dマップの横展開より優先する
 **対象**: 公開対象10テーマすべて。最初の完成基準は `bukatsu-chiiki`（部活地域移行）。対象IDは設計書に固定する
@@ -86,7 +86,7 @@ HTMLや設計書の固定数字を読まない。
 | 8 | 「同じ数字は1回だけ」を検査にする | **済（2026-09-05）**。`verify_theme_page.py` が論点数・意見数・収集数の二重表示で止まる。11テーマ中5テーマで6件見つけて直した（自転車の「5つの論点／6つの論点」を含む）。記録は `quality/reviews/2026-09-05-task54-stage8-one-number.md` | 済 | 不要 |
 | 8-B | 表示を球から山なみへ作り替え、滞在の仕掛けを載せる | **済（2026-09-05）**。球を廃止し断面図（幅＝意見の数／高さ＝強い表現の割合）にした。公開データ契約へ立場別の表現の強さを追加。予想2問・潜水・一次資料クイズ7問・100マス・探査記録22地点を実装。検査 `SkylineTest` 5件・`DevicesTest` 5件・`PlanetCrossTalkTest` 改訂を追加。全470テストOK、2回生成の差分0、`docs/`・`data/public/` 差分0 | 済 | 方向承認（済＝案A） |
 | 9 | 品質監査を受け、共通仕様として承認を得る | **実測・オーナー承認済み（2026-09-06）**。山なみ版・保護タグ入り・3テーマで測り直した。記録 `quality/reviews/2026-09-06-task54-stage9-measurements.md`／承認材料 `quality/reviews/2026-09-06-task54-stage9-approval-brief.md`。**INP・CLS（2テーマ）・横スクロールは目標内。JSエラーは自転車・高齢者で各1件を記録（詳細は実測記録）。LCPは3テーマとも目標超過（7.6〜8.8秒）だが、対照した現行公開ページ（8.7〜9.4秒）より速く、原因は新形式ではなくサイト共通の重さ**。「視差効果を減らす」は3テーマとも正常。**計測時点では実機未確認だったが、同日オーナーがiPhoneで見本を確認し、残り7テーマ展開を承認**。性能目標未達と実広告なしの計測限界は残る | 済 | 共通仕様承認（済） |
-| 10 | 残り7テーマへ展開する（自転車・高齢者の見本は作成済み） | うち生成AI・辺野古・あだ名禁止は段階3から実施（一次資料照合が未実施）。10テーマすべてが同じ生成器で再生成でき、確認台帳に記録される | 8〜12 | 不要 |
+| 10 | 残り7テーマへ展開する（自転車・高齢者の見本は作成済み） | **済（2026-09-15）**。10テーマすべてが同じ生成器で再生成でき、確認台帳に記録される。最後の皇室典範は候補統合（9/13マージ）後の公開検査・数字出所修正を経て本番反映 | 8〜12 | 不要 |
 | 11 | 総合監査 → 公開（15-C） | 10テーマ・トップ・sitemapの総合監査後、CEO承認を得て公開元へ反映。Search Consoleで新ドメインの最新版取得を確認 | 2〜3 | **公開承認（必須）** |
 | 12 | AdSense再申請（15-D） | 10テーマの品質証拠と再クロール確認がそろってから、CEO事前承認を得て申請 | 1 | **再申請承認（必須）** |
 
@@ -124,43 +124,9 @@ HTMLや設計書の固定数字を読まない。
 
 ## 段階8-B：山なみへの作り替えと滞在の仕掛け（2026-09-05）
 
-オーナー指示「10分以上とどまらせる仕掛けを」から始まり、**球の廃止（案A）**まで進んだ一連の作業。
-**経緯・やめた案・検査の中身は `quality/designs/planet-engagement-ideas.md` が正典。**
-
-**やったこと**: ①球を廃止し、横から見た断面図（山なみ）にした。標高を球面の等高線で描いていたため
-回しても正面から読めなかったのが理由 ②公開データ契約へ立場ごとの表現の強さを追加し、
-幅と高さを同じ母数で数えられるようにした（受け皿・指導者の高さが立場により 15.9%→30.9% と動く）
-③予想2問・潜水・一次資料クイズ7問・100マス・探査記録22地点を実装した。
-
-**触っていないもの**: `docs/`（公開サイト）と `data/public/` の表示内容。差分0。
-
-**実測**: 通しで操作して探査記録が 0→2→9→15→22/22。全470テストOK、検査5本OK、
-2回生成の差分0、幅900pxで横スクロールなし。
-
-**成果物の置き場所（新しいセッションはここから）**:
-
-- **作業ツリー**: `../isa-wt-planet-engagement`（ブランチ `task/planet-engagement`）
-- **main には1つも入っていない。未マージのコミットが13件ある。**
-  作業を続けるときは main で始めず、この作業ツリーへ入ること
-- 見る: `python3 scripts/build_planet_data.py --topic bukatsu-chiiki --prototype` を実行し、
-  `quality/prototypes/bukatsu-chiiki-planet.html` を開く（データを埋め込んであるのでサーバー不要）
-- 触ったファイル: `scripts/build_planet_data.py` / `scripts/public_registry_common.py` /
-  `schemas/public-theme.schema.json` / `quality/prototypes/planet-prototype.template.html` /
-  `tests/test_planet_data.py` / `tests/test_public_data_contract.py`
-
-**現在残っていること（2026-09-06のオーナー承認を反映）**:
-
-1. **公開前に直す2点**: 表紙画像の先読み指定（`<link rel="preload">`）と
-   広告枠の高さ確保（`min-height`）。共通部分を修正して効果を確認する
-2. 設計書 `reaction-planet-renewal.md` 本文の書き直し（冒頭に無効の注記だけ入れてある）
-3. 残り7テーマへの展開（段階10）
-4. 段階11の総合監査と公開承認。段階9の共通仕様承認を公開承認とは扱わない
-
-**確認済みの範囲**: オーナーのiPhoneでの見本確認と横展開承認は済んだ。
-AIによるiPhone実機上の進み具合の再現確認はできていない（冒頭の修正記録参照）。
-実広告が配信された状態での性能も未測定。「視差効果を減らす」設定は3テーマとも確認済み。
-
-**次**: 上の1（公開前の2点修正）。承認済みの段階9を繰り返さない。
+球を廃止し断面図（山なみ）へ作り替え、公開データ契約へ立場別の表現強さを追加、予想2問・潜水・
+一次資料クイズ7問・100マス・探査記録22地点を実装した。詳細は
+`quality/reviews/2026-09-05-task54-stage8b-planet-engagement.md` へ切り出した（2026-09-15）。
 
 ---
 
@@ -386,3 +352,28 @@ summary（要約欄）を目視点検すると3論点1,015件（87%）で本文�
 **確認済み**: 本物の`independence_gate`通る、`verify_theme_page.py`・`verify_number_provenance.py`ともNG0、375px幅・コンソールエラー0。`verify_top_page.py`のcollect_at超過は8テーマ共通の既知の状態で無関係。
 
 **残作業**: 全テーマ通しの単体テスト実行、本番反映（マージ・push・公開確認）は`release`スキルに従う。
+
+## 2026-09-15：皇室典範の公開前残作業を完了・10テーマ目として本番反映
+
+前回セッション（別ブランチ `codex/koshitsu-page`、作業ツリー `isa-wt-koshitsu-page`）が候補統合と独立監査2件（分類監査・一次資料監査）の是正をmainへマージ済み（コミット `228bfb3`→`bef5300`、2026-09-14 23時台）だったが、pushと台帳更新をしないままセッションが終わっていた。着手時に確認したところ、独立監査の指摘（15件のU→H是正・代表要旨1件の修正・claim5のgap→miss）と一次資料監査の指摘（条文位置・婚姻歴表記）はすべて反映済みだったが、公開前の標準検査は未実施だった。
+
+**事故と復旧**: `release`スキルの手順どおり作業ツリーから`social-samples/`を共有ツリーへrsyncしたところ、`constitutional_amendment_hermes_arena_classified.json`・`fukushuto_hermes_classified.json`・`henoko/henoko_hermes_arena_classified.json`の3ファイルが、皇室典範の作業ツリー分岐時点の**古い内容へ巻き戻された**（この3テーマは皇室典範のブランチ作成後に別セッションが正典を更新していた）。直後の検査でconstitutional-amendmentのsource_sha256不一致として発覚し、同日23時台のバックアップ（`private-data-20260914T213356593523.tar.gz`）から3ファイルを復元して解消した。**教訓**: `rsync -an --itemize-changes`のdry-run出力で`>f.st....`（サイズも違う＝中身が違う）と出たファイルは、今回のタスクに無関係なテーマでも機械的に本コピーしない。他セッションが後から更新した可能性があるため、該当ファイルだけは「どちらが新しいか」を`source_sha256`等で確認してから決める。
+
+**公開検査で見つかった不具合5点**（いずれもmainへ反映済み）:
+1. `scripts/koshitsu_production.py`が`from refresh_adapters.koshitsu import ...`と絶対importしていたため、`verify_builder_rebuildability.py`の`-mモジュール実行`（`sys.path[0]`がrootになる）で解決できなかった。`build_koshitsu_arena.py`側の`from koshitsu_production import build`も同様。両方try/exceptで両対応にした
+2. `scripts/verify_builder_rebuildability.py`の隔離コピー対象に`quality`が無く、候補の承認manifest（`quality/candidates/koshitsu-tenpakai/manifest.json`）を読めなかった。コピー対象に追加
+3. `koshitsu_production.py`の`render()`がページ全体を候補プレビューHTMLから作り直す設計のため、`apply_theme_trust.py`が管理するARTICLE_TRUST区間（最終更新日表記・観察事項）を毎回候補側の古い内容で上書きしてしまい、apply_theme_trust実行後の再ビルドで差分が出ていた。既存docsのTRUST区間を保持する処理を追加
+4. `configs/koshitsu-tenpakai-reaction-map.json`のnumber_provenanceに、山なみ新設の内訳表示（sides・legend・島=islands）がcross_tab未登録で、`verify_number_provenance.py`が83件を「説明できない」と判定。sides/legend/islandsをcross_tabへ追加し、理由区分の内訳データ（`data/koshitsu-tenpakai_issues-reread.json`のitems、1,245件）を`data/verification/koshitsu-tenpakai-issues-reread.json`として抽出しsourcesに登録して解消
+5. `data/verification/koshitsu-tenpakai-claims.json`（主張別の確定投稿の写し）が、正典`data/koshitsu-tenpakai_claim_posts.json`の実際の件数（5/5/3/1/3/4）より少ない件数（4/1/2/1/1/1）のまま古くなっていた。正典から再生成して解消（`test_claim_verdicts.py`3件が該当）
+
+**付随して見つけた品質問題2点**（検査には出ないが公開前に修正）:
+- `configs/theme-seo.json`の観察事項（SEO用「収集・分類で分かったこと」）に、現在の論点体系に存在しない「女性天皇と女系天皇の違い」という論点名と古い件数（57件）が残っていた。現在の論点名・件数（女性天皇・女系天皇、140件）に合わせて修正
+- 候補プレビューHTML内の理由区分注記に「。。」という二重句点バグがあり、6箇所に複製されていた。修正して統一
+
+**旧デザイン専用テストの整理**: `koshitsu_production.py`への完全委譲により、`build_koshitsu_arena.py`の旧ロジック（`--input`で候補データを受け取り2Dアリーナとして再計算する経路）が到達不能コードになっていた。`tests/test_koshitsu_adapter.py`の3テストと`tests/test_koshitsu_public_counts.py`（旧ロジックのテスト）を、bukatsu-chiiki山なみ移行時の前例（`test_bukatsu_adapter.py`削除）に倣って整理した。`tests/test_issue_count_sync.py`のkoshitsuテストは、fukushuto/school-nickname-banの前例と同じPLANET_SECTION_START分岐を追加して山なみ対応させた。
+
+**副次的に解消した既存の同期漏れ**: `build_public_registry.py --all`と`sync_portal_stats.py`を再実行した際、constitutional-amendment・fukushuto・school-nickname-banのcatalog値も同時に最新化された（皇室典範の作業とは無関係に、他セッションの並行作業でズレていたもの）。個別テーマの公開HTML自体には影響していない（catalog.jsonとdocs/index.htmlのみ）。
+
+**確認済み**: 全970単体テストOK、`verify_theme_page.py`・`verify_number_provenance.py`ともNG0（11テーマ）、`verify_top_page.py`はcollect_at期限超過のみ（既知）。本番反映（マージ済みコミットのpush、`18c2848..aba5a18`）・GitHub Pages反映確認・トップページの意見数合計（12,359件）反映確認済み。バックアップ取得・作業ツリー削除済み。
+
+**残作業**: 憲法改正の追加659件の独立確認（別途進行中）。段階11（総合監査→一般公開・15-C）はCEO承認が必須のため、10テーマ揃ったことをもってオーナーに着手可否を確認する。
