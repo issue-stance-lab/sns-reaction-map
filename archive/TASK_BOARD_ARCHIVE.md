@@ -149,3 +149,4 @@
 リンク0件、かつ記載183件が現行正典447件と食い違うため）。機密は無かったが、`ga4-automation.md` と
 `gsc-automation.md` にオーナーのローカルパスが含まれ、リポジトリが public のため git 履歴には残る。
 - [task-65.md](tasks/task-65.md): URL付き通常ポストが自動計測から漏れ、台帳にも記録されない (課題67へ統合のためアーカイブ)
+- [task-68.md](tasks/task-68.md): ai-copyright採用台帳の指紋不一致でCIが赤い (2026-09-15完了。実際はconsumption-tax-cut・koshitsu-tenpakaiも同時に不一致だったと判明し、3テーマとも`build_adoption_registry.py`で再生成・本番反映)
