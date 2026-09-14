@@ -1,0 +1,130 @@
+reread_registry: true
+theme_id: koshitsu-tenpakai
+title: 皇室典範改正
+question: 今回の皇室典範改正をどう評価するか
+source_label: Yahoo!リアルタイム検索
+stances:
+- key: 今回案全体を支持
+  label: 今回案全体を支持
+  id: koshitsu-tenpakai-package-support
+  color: '#2F8F83'
+  pattern: plain
+- key: 今回案全体に反対
+  label: 今回案全体に反対
+  id: koshitsu-tenpakai-package-oppose
+  color: '#7D5BA6'
+  pattern: diagonal
+- key: 全体評価は条件付き
+  label: 全体評価は条件付き
+  id: koshitsu-tenpakai-package-conditional
+  color: '#D9A520'
+  pattern: dots
+- key: 今回案全体は未表明
+  label: 今回案全体は未表明
+  id: koshitsu-tenpakai-package-unexpressed
+  color: '#8B9199'
+  pattern: mesh
+- key: 全体評価を読み取れない
+  label: 全体評価を読み取れない
+  id: koshitsu-tenpakai-package-unclear
+  color: '#B8ACA2'
+  pattern: dots
+issues:
+- key: 男系vs女系
+  id: koshitsu-tenpakai-patrilineal-matrilineal
+  icon: ⚖️
+- key: 女性天皇・女系天皇
+  id: koshitsu-tenpakai-female-emperor
+  icon: 🌿
+- key: 旧宮家養子縁組
+  id: koshitsu-tenpakai-former-royal-adoption
+  icon: 🏛️
+- key: 愛子さま・皇族の地位
+  id: koshitsu-tenpakai-princess-aiko
+  icon: 👑
+- key: 立法手続き・民主主義
+  id: koshitsu-tenpakai-legislative-process
+  icon: 🗳️
+- key: その他
+  id: koshitsu-tenpakai-other
+  icon: ◯
+vote_issue_order:
+- 男系vs女系
+- 旧宮家養子縁組
+- 立法手続き・民主主義
+- 女性天皇・女系天皇
+- 愛子さま・皇族の地位
+- その他
+sub_issues:
+  男系vs女系:
+    file: data/koshitsu-tenpakai_issues-reread.json
+    path:
+    - buckets
+    - 男系vs女系
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。
+    show_coverage_note: true
+  女性天皇・女系天皇:
+    file: data/koshitsu-tenpakai_issues-reread.json
+    path:
+    - buckets
+    - 女性天皇・女系天皇
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。
+    show_coverage_note: true
+  旧宮家養子縁組:
+    file: data/koshitsu-tenpakai_issues-reread.json
+    path:
+    - buckets
+    - 旧宮家養子縁組
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。
+    show_coverage_note: true
+  愛子さま・皇族の地位:
+    file: data/koshitsu-tenpakai_issues-reread.json
+    path:
+    - buckets
+    - 愛子さま・皇族の地位
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。
+    show_coverage_note: true
+  立法手続き・民主主義:
+    file: data/koshitsu-tenpakai_issues-reread.json
+    path:
+    - buckets
+    - 立法手続き・民主主義
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。
+    show_coverage_note: true
+  その他:
+    file: data/koshitsu-tenpakai_issues-reread.json
+    path:
+    - buckets
+    - その他
+    items_path:
+    - items
+    item_issue_field: main_issue
+    coverage: full
+    coverage_note: 本文の確認記録から理由を分けました。旧782件の記録を引き継ぎ、追加500件と判断が分かれた43件・追加1件を読み直しています。
+    show_coverage_note: true
+geometry:
+  min_area_pct: 2.5
+  elevation_k: 50
+  elevation_max: 4.0
+  fit_points: 30000
+  fit_iters: 400
