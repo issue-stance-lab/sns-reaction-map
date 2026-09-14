@@ -35,10 +35,6 @@ ai-copyright.jsonの指紋で上書きするだけなら技術的には可能だ
 追いつき」なのか「未承認の変更を追認してしまう」のか、課題63・ai-copyright山なみ移行の
 文脈を持つ担当でないと判断できない。
 
-**次にすること**: `data/verification/adoption/registry.json` のai-copyright関連エントリを、
-2026-09-14のai-copyright変更（`a6b8340`）の内容を確認した上で、正しい指紋に更新する。
-`python3 scripts/verify_adoption_registry.py` がOKになることを確認する。
-
 **判断待ち**: 上記の指紋更新が妥当か（課題63担当、またはai-copyright山なみ移行の経緯を
 把握しているセッション）。
 
@@ -47,3 +43,26 @@ ai-copyright.jsonの指紋で上書きするだけなら技術的には可能だ
 CIの「公開ファイルの検査」は2026-09-13 13:17以降、この1件により失敗し続けている
 （Deploy自体は別ジョブで成功しており、公開サイトへの反映は妨げられていない）。
 赤が常態化すると、次に本当に重大な壊れ方が起きても気づきにくくなる。
+
+## 対応・完了（2026-09-15）
+
+課題54の段階11（総合監査）の一環で `python3 scripts/verify_adoption_registry.py` を実行したところ、
+ai-copyrightに加えて **consumption-tax-cut・koshitsu-tenpakaiの2テーマも同種の指紋不一致**を検出した
+（`verify_adoption_registry.py` は`require()`で最初のNGだけ報告して打ち切る実装のため、ai-copyright以外は
+これまで報告されていなかった）。`build_adoption_registry.py --check` で差分を確認し、3テーマとも
+`public_sha256` のみが変化（koshitsu-tenpakaiのみ`canonical_file`もTHEMES.yamlの現行`sample_file`
+（`social-samples/koshitsu-tenpakai_release_20260913.json`、9/13候補統合分）と一致する形で変化）。
+`records` 件数はai-copyright 3812・consumption-tax-cut 3762・koshitsu-tenpakai 1605のいずれも変化なしで、
+`decision_seed`・`scope_config`・`cohorts`も無変化と確認した。3テーマとも課題54の正規の山なみ移行手順
+（一次資料照合・編集部の横断整理→independence_gate通過→標準検査→本番反映）を経た承認済みの変更であり、
+`build_adoption_registry.py`（「追加・削除・再分類は行わない」照合専用ツール）が機械的に指紋を再集計した
+だけと判断できたため、`task/task68-adoption-registry` で再生成・検証して本番反映した。
+
+**確認済み**: `verify_adoption_registry.py` OK（11トピック / 17,104レコード / 121ファイル）、
+`test_adoption_registry.py` 12件OK、変化したトピックはai-copyright・consumption-tax-cut・
+koshitsu-tenpakaiの3件のみ（他8テーマ・decision_seed等は無変化）。
+
+**教訓**: 採用台帳（`data/verification/adoption/registry.json`）の再生成は、テーマの公開データ（`data/public/themes/*.json`）
+を更新する山なみ移行作業の標準手順に含まれていない。今回のように複数テーマで同時に漏れる。
+`release` スキルの本番反映チェックリストに `build_adoption_registry.py --check` を追加するか検討の余地がある
+（課題63・課題54のどちらが担当するかは別途判断）。
