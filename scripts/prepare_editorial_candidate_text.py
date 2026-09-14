@@ -7,13 +7,19 @@ from scripts.verify_editorial_candidate_pair import counts
 
 def prepare_conclusion(tree):
     tree=Path(tree);config_path=tree/'configs/ai-copyright-reaction-map.json';config=json.loads(config_path.read_text())
+    page_path=tree/'docs/ai-copyright-reaction-map.html'
+    if '<!-- PLANET_SECTION_START -->' in page_path.read_text():
+        # 課題54でai-copyrightは山なみ形式へ本番差し替え済み。この関数が同期していた
+        # 「30秒でわかる論拠」の最大勢力バッジ・conclusion文言はどちらも山なみ形式では
+        # 存在しない（#planet-blockが役目を引き継いだ）。書くものが無いので何もしない。
+        return []
     canonical=tree/'social-samples/ai-copyright_hermes_classified.json'
     totals=counts(json.loads(canonical.read_text()))['issues'];block=config['issue_counts']
     card_totals={c['slug']:sum(totals.get(k,0) for k in c['main_issue']) for c in block['cards']}
     current=block['conclusion'];top=max(card_totals,key=card_totals.get)
     if card_totals[current]>=card_totals[top]:return []
     if current!='gakushu' or top!='moraru':raise ValueError('unreviewed leading issue requires editorial copy')
-    page_path=tree/'docs/ai-copyright-reaction-map.html';page=page_path.read_text()
+    page=page_path.read_text()
     pattern=r'(<li class="conclusion-focus"><span class="conclusion-count"><b>)[0-9,]+(</b>件</span>)<strong>学習データの無断利用を、どこまで認めるのか</strong><span class="conclusion-detail">許諾なしの学習は権利侵害か、合法な技術利用かに議論が集中しています。</span>'
     page,n=re.subn(pattern,lambda m:m[1]+str(card_totals[top])+m[2]+'<strong>AI生成物の使い方や表示・二次利用をどう考えるか</strong><span class="conclusion-detail">この収集サンプルでは、利用者モラル・倫理に分類された意見が最多です。</span>',page)
     if n!=1:raise ValueError('unrecognized conclusion copy')

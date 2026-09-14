@@ -8,18 +8,23 @@ from scripts.prepare_editorial_candidate_text import prepare_conclusion
 
 class CandidateCopyTest(unittest.TestCase):
     def test_leader_change_updates_text_config_and_badge_idempotently(self):
+        # 課題54でai-copyrightは山なみ形式へ本番差し替え済み。この関数が同期していた
+        # 「30秒でわかる論拠」のconclusion文言・最大勢力バッジは山なみ形式では
+        # 存在しない（#planet-blockが役目を引き継いだ）。現行のdocs/を入力にすると
+        # 関数は何もしない（sync_bukatsu_summaryと同じ判定）。この検査はその安全な
+        # no-opを見る。旧形式向けの書き換えロジックそのものは、コードに残る
+        # ロジックとして保存してあるが、実データでの再検査対象ではなくなった。
         root=Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as tmp:
             tree=Path(tmp)
             for f in ['configs/ai-copyright-reaction-map.json','docs/ai-copyright-reaction-map.html']:
                 (tree/f).parent.mkdir(parents=True,exist_ok=True);shutil.copy2(root/f,tree/f)
+            self.assertIn('<!-- PLANET_SECTION_START -->',(tree/'docs/ai-copyright-reaction-map.html').read_text())
             (tree/'social-samples').mkdir();(tree/'social-samples/ai-copyright_hermes_classified.json').write_text('[]')
             with patch('scripts.prepare_editorial_candidate_text.counts',return_value={'issues':{'学習データ・無断利用':657,'利用者モラル・倫理':658}}):
-                result=prepare_conclusion(tree);self.assertEqual(result[0]['to'],'moraru')
-                page=(tree/'docs/ai-copyright-reaction-map.html').read_text()
-                self.assertNotIn('論点1・最大勢力',page);self.assertIn('論点・最大勢力',page);self.assertIn('利用者モラル・倫理に分類された意見が最多',page)
+                before=(tree/'docs/ai-copyright-reaction-map.html').read_text()
                 self.assertEqual(prepare_conclusion(tree),[])
-                self.assertEqual(page,(tree/'docs/ai-copyright-reaction-map.html').read_text())
+                self.assertEqual(before,(tree/'docs/ai-copyright-reaction-map.html').read_text())
 
     def test_bukatsu_stance_notes_meters_and_arena_are_recomputed(self):
         # 課題54段階3で本番の部活動ページは山なみ形式へ差し替え済み。この関数が
