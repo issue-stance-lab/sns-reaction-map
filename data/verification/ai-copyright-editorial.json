@@ -1,0 +1,34 @@
+{
+ "theme_id": "ai-copyright",
+ "curated_at": "2026-09-14",
+ "curated_by": "editorial_review",
+ "method": "収集済みの意見を論点ごと・立場ごとに読み、論点をまたいで言えることだけを書いた。数字は本文に書かず、差し込み（{issue:<論点id>.count} など）で正典から入れる。設計書4章の5「共通する前提／本当の対立／まだ分からないこと」に対応する。",
+ "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。",
+ "findings": [
+  {
+   "id": "ai-copyright-ed-1",
+   "kind": "shared_premise",
+   "text": "「{issue:ai-copyright-generated-work-rights.label}」は推進・活用支持{issue:ai-copyright-generated-work-rights.stance:ai-copyright-promotion-support.share}、規制・制限強化支持{issue:ai-copyright-generated-work-rights.stance:ai-copyright-regulation-support.share}と、他の論点に比べて割れている。争点は「学習の是非」ではなく「生成物が著作物として保護されるか、他者の権利を侵害しているとみなされるか」で、規制強化を求める側にも活用を推す側にも、学習行為そのものと生成物の扱いを分けて考える意見がある。"
+  },
+  {
+   "id": "ai-copyright-ed-2",
+   "kind": "real_conflict",
+   "text": "論点が変わると賛否の重心が入れ替わる。「{issue:ai-copyright-learning-data.label}」は規制・制限強化支持が{issue:ai-copyright-learning-data.stance:ai-copyright-regulation-support.share}を占めるのに対し、「{issue:ai-copyright-tech-promotion.label}」は推進・活用支持が{issue:ai-copyright-tech-promotion.stance:ai-copyright-promotion-support.share}を占め、ほぼ逆転している。同じ人が論点によって立場を変えているのか、別々の人が別々の論点を語っているのかは、この収集からは分からない。"
+  },
+  {
+   "id": "ai-copyright-ed-3",
+   "kind": "real_conflict",
+   "text": "クリエイターの保護を掲げる論点では規制支持が大半を占めるが、AI生成物そのものの権利に話が及ぶと割れる。「{issue:ai-copyright-creator-rights.label}」の規制・制限強化支持は{issue:ai-copyright-creator-rights.stance:ai-copyright-regulation-support.share}に上るのに対し、「{issue:ai-copyright-generated-work-rights.label}」では{issue:ai-copyright-generated-work-rights.stance:ai-copyright-regulation-support.share}にとどまる。「クリエイターを守る」という総論と「AIの生成物をどう扱うか」という各論では、同じ規制強化支持でも一致の強さが違う。"
+  },
+  {
+   "id": "ai-copyright-ed-4",
+   "kind": "still_unknown",
+   "text": "「{issue:ai-copyright-tech-promotion.label}」は{issue:ai-copyright-tech-promotion.count}（全体の{issue:ai-copyright-tech-promotion.share}）と、他の論点と比べて最も少ない。件数が少ないことは論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。"
+  },
+  {
+   "id": "ai-copyright-ed-5",
+   "kind": "still_unknown",
+   "text": "ここに出ているのはYahoo!リアルタイム検索で集めた{totals.opinions}件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"
+  }
+ ]
+}

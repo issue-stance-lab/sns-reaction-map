@@ -20,6 +20,19 @@ class AiCopyrightTaxonomyTest(unittest.TestCase):
         self.html = PAGE.read_text(encoding="utf-8")
 
     def test_arena_sectors_match_taxonomy(self):
+        # 課題54段階2-3で本番は山なみ形式へ差し替え済み。旧アリーナの
+        # `const ISSUES=[...]`（セクター順）はセクションごと撤去されている。
+        # 新形式では configs/planet/ai-copyright.yaml の issues がこのモジュールの
+        # ISSUE_ORDER と同じ論点集合を持つことで、二重定義を防ぐ役目を引き継ぐ。
+        if "<!-- PLANET_SECTION_START -->" in self.html:
+            import yaml
+
+            cfg = yaml.safe_load(
+                (ROOT / "configs/planet/ai-copyright.yaml").read_text(encoding="utf-8")
+            )
+            yaml_keys = {issue["key"] for issue in cfg["issues"]}
+            self.assertEqual(yaml_keys, set(tx.ISSUE_ORDER))
+            return
         block = re.search(r"const ISSUES=\[(.*?)\];", self.html, re.S)
         self.assertIsNotNone(block)
         sectors = tuple(re.findall(r"['\"]([^'\"]{2,30})['\"]", block.group(1)))

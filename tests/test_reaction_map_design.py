@@ -8,21 +8,34 @@ INDEX = ROOT / "docs" / "index.html"
 
 
 class ReactionMapDesignPilotTests(unittest.TestCase):
+    """ai-copyright だけに行った「question spine」2Dデザイン実験の回帰検査。
+
+    課題54で本番が山なみ形式へ差し替え済み（オーナー承認済みの後継デザイン）。
+    この実験自体が山なみに置き換えられて役目を終えたため、対応する旧マーカーが
+    無いテストは山なみ形式では対象外にする（is_planet ガード）。トップページ側の
+    論点アトラス（全10テーマ比較）は本テストの対象外で別物のため、山なみ移行の
+    影響を受けない。
+    """
+
     @classmethod
     def setUpClass(cls):
         cls.source = PAGE.read_text(encoding="utf-8")
         cls.index_source = INDEX.read_text(encoding="utf-8")
+        cls.is_planet = "<!-- PLANET_SECTION_START -->" in cls.source
 
     def test_index_and_first_theme_have_scalable_atlas_overview(self):
-        for source, markers in (
-            (self.index_source, ('id="topic-atlas-overview"', 'id="topic-atlas-title"', 'topic-atlas-rows', '10テーマの論点アトラス')),
-            (self.source, ('id="theme-atlas-pilot"', 'theme-atlas-row', '生成AIと著作権 — 論点アトラス')),
-        ):
-            for marker in markers:
-                with self.subTest(marker=marker):
-                    self.assertIn(marker, source)
+        for marker in ('id="topic-atlas-overview"', 'id="topic-atlas-title"', 'topic-atlas-rows', '10テーマの論点アトラス'):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, self.index_source)
+        if self.is_planet:
+            self.skipTest("ai-copyright は山なみ形式へ差し替え済み。テーマページ側のテーマ別アトラスは実験ごと廃止された")
+        for marker in ('id="theme-atlas-pilot"', 'theme-atlas-row', '生成AIと著作権 — 論点アトラス'):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, self.source)
 
     def test_pilot_uses_question_spine_layout(self):
+        if self.is_planet:
+            self.skipTest("ai-copyright は山なみ形式へ差し替え済み。question spine実験は山なみに置き換わった")
         for marker in (
             'id="arena-question-spine-pilot"',
             'class="arena-spine-layout"',
@@ -40,6 +53,8 @@ class ReactionMapDesignPilotTests(unittest.TestCase):
         self.assertIn("6つの論点とXの声", self.source)
 
     def test_pilot_encodes_stance_and_strength_without_polar_sectors(self):
+        if self.is_planet:
+            self.skipTest("ai-copyright は山なみ形式へ差し替え済み。極座標の代替だったspine実験は山なみに置き換わった")
         for marker in (
             "const voteDistance=44+voteStrength*(MAX_SPREAD-44)",
             "権利保護・規制",
@@ -50,6 +65,8 @@ class ReactionMapDesignPilotTests(unittest.TestCase):
         self.assertNotIn("drawArenaSectorHighlight(ctx", self.source)
 
     def test_pilot_keeps_all_seven_issue_sectors_and_source_links(self):
+        if self.is_planet:
+            self.skipTest("ai-copyright は山なみ形式へ差し替え済み。旧アリーナのセクター描画は撤去済み（7論点は山なみ本体のissuesが引き継ぐ）")
         self.assertIn("ISSUES.forEach((iss,i)=>addBtn(iss.k,i,iss.n));", self.source)
         self.assertIn("const ISSUES=[", self.source)
         self.assertIn("{k:'その他',", self.source)
