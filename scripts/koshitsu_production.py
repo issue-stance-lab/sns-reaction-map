@@ -24,7 +24,7 @@ def verify_inputs(source=None):
         if actual.get(field)!=expected.get(field):raise ValueError('皇室の公開集計が監査候補と異なります: '+field)
 
 
-def render():
+def render(existing_trust=None):
     verify_inputs()
     text=(ROOT/'quality/prototypes/koshitsu-tenpakai-page-preview.html').read_text()
     original=(BASE/'original-page.html').read_text()
@@ -40,15 +40,24 @@ def render():
     text=text.replace('この確認用ページの回答はブラウザー内だけに保存されます。本番へ送信されません。','回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。')
     text=text.replace('従来の非意見323件','従来の情報共有などの投稿323件')
     text=text.replace('追加分の確認はAI編集者によるもので、別の担当者による監査はまだ行っていません。','追加分はAI編集者が確認し、公開前に別のAI担当者が本文と判断根拠を照合しました。')
-    from refresh_adapters.koshitsu import vote_fingerprint
+    try:
+        from refresh_adapters.koshitsu import vote_fingerprint
+    except ImportError:
+        from scripts.refresh_adapters.koshitsu import vote_fingerprint
     assert vote_fingerprint(original)==vote_fingerprint(text)
     assert 'sns_preview_vote_' not in text and 'noindex' not in text
+    if existing_trust is not None:
+        text=re.sub(r'<!-- ARTICLE_TRUST_START -->.*?<!-- ARTICLE_TRUST_END -->',lambda m:existing_trust,text,count=1,flags=re.S)
     return text
 
 
 def build(check=False,source=None,output=None):
     verify_inputs(source)
     out=Path(output) if output else ROOT/'docs'/f'{TOPIC}-reaction-map.html'
-    text=render();changed=not out.exists() or out.read_text()!=text
+    existing_trust=None
+    if out.exists():
+        m=re.search(r'<!-- ARTICLE_TRUST_START -->.*?<!-- ARTICLE_TRUST_END -->',out.read_text(),re.S)
+        if m:existing_trust=m.group(0)
+    text=render(existing_trust=existing_trust);changed=not out.exists() or out.read_text()!=text
     if not check:out.write_text(text)
     return ['皇室典範：監査済み山なみを生成（未監査入力は拒否）'],changed

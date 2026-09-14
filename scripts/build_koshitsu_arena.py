@@ -492,7 +492,10 @@ def build(
 ) -> tuple[list[str], bool]:
     page_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
     if '<!-- PLANET_SECTION_START -->' in page_path.read_text():
-        from koshitsu_production import build as build_planet
+        try:
+            from .koshitsu_production import build as build_planet
+        except ImportError:
+            from koshitsu_production import build as build_planet
         return build_planet(check=check,source=source,output=output or page_path)
     rows, sample_file, collected, period = load_canon(source)
     config_path = ROOT / "configs" / f"{THEME}-reaction-map.json"

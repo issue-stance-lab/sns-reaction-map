@@ -264,6 +264,13 @@
           "pv-count"
         ],
         "reason": "「N件の投稿」。主張ごとに編集部が確定した該当投稿（scripts/build_koshitsu_process_sections.py が生成）"
+      },
+      {
+        "path": "data/verification/koshitsu-tenpakai-issues-reread.json",
+        "selectors": [
+          "islands"
+        ],
+        "reason": "論点ごとの理由区分（島）の内訳件数。data/koshitsu-tenpakai_issues-reread.json の items をそのまま抽出（本文確認記録、公開前独立監査で確定）"
       }
     ],
     "regions": {
@@ -272,7 +279,10 @@
         "issue-sides",
         "heat-table",
         "explainer-card-desc",
-        "sm-stat-cards"
+        "sm-stat-cards",
+        "sides",
+        "legend",
+        "islands"
       ],
       "wave": [
         "tide-card"

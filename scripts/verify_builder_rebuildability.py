@@ -27,7 +27,7 @@ BUILDERS: tuple[tuple[str, list[str]], ...] = (
 
 
 def _copy_fixture(target: Path) -> None:
-    for directory in ("configs", "data", "docs", "scripts", "social-samples"):
+    for directory in ("configs", "data", "docs", "quality", "scripts", "social-samples"):
         shutil.copytree(ROOT / directory, target / directory)
     shutil.copy2(ROOT / "THEMES.yaml", target / "THEMES.yaml")
     # 山なみの直接生成にも、正規テンプレートが必要。
