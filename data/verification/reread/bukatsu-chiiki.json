@@ -4,7 +4,7 @@
   "snapshot_at": "2026-09-06T13:22:53.827514+00:00",
   "canonical_sha256": "fc0ed988847de9df5d926a565c1a55cd4869c074cdb7107d41bd7887a71d1d76",
   "sources": {
-    "data/bukatsu-chiiki_cost-receiver-reread.json": "47ff8c4f3dc52219b4b38da2d76876ae62d98e4922e26b632432eeac34634434",
+    "data/bukatsu-chiiki_cost-receiver-reread.json": "e544f287251a7d038ca16aaea9acd5f40fe7ccfd04bc8bc54d3495847c1e55c0",
     "data/bukatsu-chiiki_teacher-reread.json": "e337003f6a0c20cfc23bcedd5856666de4a262a2d2a2ff7f34d4e537c4ddc6a8",
     "data/verification/bukatsu-chiiki-plan-child-subissues.json": "c6d27322b658cfdbf98e69ea80052d2f8732028175c6c588ddda613f0324dbdc"
   },
@@ -207,6 +207,25 @@
       "review": null
     },
     {
+      "baseline_text_sha256": "477dac28eabb2f871e7e7f3ed63039e18e81cb082ae19405d3db3a2a502d4622",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "02cf5ab6af2092ce0592c73787667988a0ec9420d26ab1e760792eb5b0d06d5b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "477dac28eabb2f871e7e7f3ed63039e18e81cb082ae19405d3db3a2a502d4622",
+        "reason_sha256": "6e8378faad0df7658b8dfeaa42124d69a445fc099fe7cb47cc2a946dca0f7e3a",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
+    },
+    {
       "post_key": "02df141bd8dcbda51de7e2d07af3d63862acf87824ad132dd633bdaf5f7cf1b4",
       "baseline_text_sha256": "e156fa21c3522ef1f362f1116cf9baada5099a0b30a8a8c8b35bbf33006ec573",
       "main_issue": "教員の働き方",
@@ -226,11 +245,42 @@
       }
     },
     {
-      "post_key": "0325d52f75b8f5670801e4bb8be6ebb1c7d0ee0144796f46e405748c30f80f0a",
       "baseline_text_sha256": "8ce5937132f74a2c7181a3a82b210350fadaa6e4b3829838a943d58f343a5be8",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "0325d52f75b8f5670801e4bb8be6ebb1c7d0ee0144796f46e405748c30f80f0a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8ce5937132f74a2c7181a3a82b210350fadaa6e4b3829838a943d58f343a5be8",
+        "reason_sha256": "7edce6e3e3e4fc8e7153b1d6fd94a5b8aede13751a977a744f4cac09c59897cd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
+      "baseline_text_sha256": "5e8420d25b6d90351990fa25b48b39aa823ed250e4610a66d13c79515c223689",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "03307e28bd071379b8f3944181672384835598593a42d39fef74ce0955834555",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5e8420d25b6d90351990fa25b48b39aa823ed250e4610a66d13c79515c223689",
+        "reason_sha256": "02614081326574aff5090b6197ed52191e1e2534155775d76786cf2f8e69db56",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "033d57c137330cd2af4648965ac2b822af3417b1f8f54acef6f022aeb359ae23",
@@ -510,6 +560,25 @@
       }
     },
     {
+      "baseline_text_sha256": "5e8420d25b6d90351990fa25b48b39aa823ed250e4610a66d13c79515c223689",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "0758984270981a6886e7bed3884bc88f675e98963dbd32561ff290eb78587dea",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5e8420d25b6d90351990fa25b48b39aa823ed250e4610a66d13c79515c223689",
+        "reason_sha256": "914eeb248e1526a85c9483ddd0ad539370c2432c3f4d631621db8af8c1026f8f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
+    },
+    {
       "post_key": "075dec43f3b547794f4ad01de8e39bc7b4608df6f4b55fec2cf42a5969165760",
       "baseline_text_sha256": "5b69eb1ef71b06f0c5d3f15a278d4f25c2de53550e2eab32805a1eddc0df93b1",
       "main_issue": "教員の働き方",
@@ -783,11 +852,42 @@
       }
     },
     {
-      "post_key": "09a7b657f49b6bdfee891e32304d3c44d2d026a907f07911aede0695c91af36c",
       "baseline_text_sha256": "1d226a89bb927be23ec5488d27b53a666a8fe9010de13c963713d541dace309a",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "09a7b657f49b6bdfee891e32304d3c44d2d026a907f07911aede0695c91af36c",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1d226a89bb927be23ec5488d27b53a666a8fe9010de13c963713d541dace309a",
+        "reason_sha256": "6681032ca3c4fb2c25edf95982c8e4caf965495a30db04903359be2d6698b657",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
+      "baseline_text_sha256": "9ee1c15b56f1bd6977831367de8684bfecc7a651ae45c8e4d415a3d33780ba83",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "09d1a0a1c57c1f64f950ec0b1ed7033545fb76d4d8e760ddedd442777bb81c80",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9ee1c15b56f1bd6977831367de8684bfecc7a651ae45c8e4d415a3d33780ba83",
+        "reason_sha256": "e049463512e7925893dc6b13762468bad72d8bf3d0f0f739f6d57034ce0a3fc1",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "0a8005cac72c3e1fa260f3a582d8830d015f3c770a48ca35ae6fac86e372c476",
@@ -901,6 +1001,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "child-loss"
+      }
+    },
+    {
+      "baseline_text_sha256": "8b5ccea413d22b22795ca4b92405337b5f494c2998d7ed6d7bdb208c812889a4",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "0b9bbbb1d2cf21e3692a34de9267767cdb92f04c8cbcc01729089fcd6e98786d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8b5ccea413d22b22795ca4b92405337b5f494c2998d7ed6d7bdb208c812889a4",
+        "reason_sha256": "c9943aa4728a60a77aa62f8fad303b434e713f1137fb1343b3422e66982c6ff9",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
       }
     },
     {
@@ -1119,6 +1238,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "plan-blame"
+      }
+    },
+    {
+      "baseline_text_sha256": "407618e4ceab76492603d938d41e7a707fa41a74052e77a42089592fab4c7ee5",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "100e3e6cecefaf484e7b73f2c6d68c668685157c31668c627cfe50411d30acbb",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "407618e4ceab76492603d938d41e7a707fa41a74052e77a42089592fab4c7ee5",
+        "reason_sha256": "197310e7c395548ceb313c5d7e36db10e01611a6fc0d36f6db1186cc0819c0be",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
       }
     },
     {
@@ -1468,18 +1606,42 @@
       }
     },
     {
-      "post_key": "1507fad40ee73f2a9da04f4fe80065495650aace020b8bf393007ce612596225",
       "baseline_text_sha256": "3eb21a69ca0b181f94dc53564195695763359d9fc4e93fd3904bafb4c9c99837",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "1507fad40ee73f2a9da04f4fe80065495650aace020b8bf393007ce612596225",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "3eb21a69ca0b181f94dc53564195695763359d9fc4e93fd3904bafb4c9c99837",
+        "reason_sha256": "f17ff87b4c860a9f88deeade59eadf0c286c6ff7ccfcdaa6398b61a150698a76",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
-      "post_key": "1527e72273d5dab6a12d28645dee1951da9d163dbb0d9411dc74d2a22ccb2231",
       "baseline_text_sha256": "8826d496b8aab5497a6ebf2428dddb617ad1edc010cefb82b1e3b95662c84d7b",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "1527e72273d5dab6a12d28645dee1951da9d163dbb0d9411dc74d2a22ccb2231",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8826d496b8aab5497a6ebf2428dddb617ad1edc010cefb82b1e3b95662c84d7b",
+        "reason_sha256": "0916c0083c2ad938ef8163c7f4df89e388cf546868ef0c4fb47b30f6818e3ed3",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "15488bcdc6e1e8b85c3f0ddf6d978ec0151df43ca5e76644ecdf32b212d63e61",
@@ -1527,11 +1689,23 @@
       "review": null
     },
     {
-      "post_key": "15ffa73618a4ad0761bfa750b9bc6d0416fcc89681bff21bdc6a005586129b72",
       "baseline_text_sha256": "38ad0a970159cdfe9ab5a5b579c49ab182c289b6e6b431732264518fc6bb4a0d",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "15ffa73618a4ad0761bfa750b9bc6d0416fcc89681bff21bdc6a005586129b72",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "38ad0a970159cdfe9ab5a5b579c49ab182c289b6e6b431732264518fc6bb4a0d",
+        "reason_sha256": "6d0658102df363d6bc31486aa905624de7d14c3f65e09187f705a994efaaa5fe",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "1647ac681276c72b5024da37bdb5dc0e5d864dbb075deb644b12415d2cb2f065",
@@ -2108,6 +2282,25 @@
       }
     },
     {
+      "baseline_text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "1c5e3a5161748c8c627d091ffa145107ade6f8e195a8c4952c3c71c43c3abb46",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+        "reason_sha256": "fdd6e2cc45f0088cab15a3271bb9ae5531b9d03502a1c8da57763a9524711c69",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
+    },
+    {
       "post_key": "1cedadd6b0c1946a9a66e0c2c59ef15a230103e8045b02e310073134a041d9c9",
       "baseline_text_sha256": "d8b985a5c008d9bdb767047df5d373cc4cbfcf00b7233909912d4d73b0567e91",
       "main_issue": "制度・移行プロセス",
@@ -2248,11 +2441,42 @@
       }
     },
     {
-      "post_key": "1ee892e263fc9e445f8ad3eb98e66674f956dde4c03e71d41b3babba9e5f15e1",
-      "baseline_text_sha256": "a3e949c63e62a9fc1d0a50a127c37625027f80f4eb0ba242fa99add46ef27004",
-      "main_issue": "費用・家庭負担",
+      "baseline_text_sha256": "9a050c877351c0beb200a5994359b7516c1111dee74b1e2bdd2137aa1548e05e",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "1e7946a05b15c5977845386f5c56dbbec8a2ce1e30f4d341405d642af1f2817b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9a050c877351c0beb200a5994359b7516c1111dee74b1e2bdd2137aa1548e05e",
+        "reason_sha256": "e19adf0522bd6fa90a3e37b08d1e30fb37ca25765cff87ea2bfcb962dc9420d2",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R4"
+      }
+    },
+    {
+      "baseline_text_sha256": "a3e949c63e62a9fc1d0a50a127c37625027f80f4eb0ba242fa99add46ef27004",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "1ee892e263fc9e445f8ad3eb98e66674f956dde4c03e71d41b3babba9e5f15e1",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a3e949c63e62a9fc1d0a50a127c37625027f80f4eb0ba242fa99add46ef27004",
+        "reason_sha256": "d6a70b84a20fda80a37d653b1f94afe965970228aa360a7bddcd796872e19341",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "1ef0f5fcafb5efea29007fd632fe6c6c6a3d35099fe1c86ad8141d11199c3c04",
@@ -2274,11 +2498,23 @@
       }
     },
     {
-      "post_key": "1f11fbfedf51cf61759391d4105a521df9d5ead1a3638f8858fa8502551c57b8",
       "baseline_text_sha256": "8cfad43caed4fa91b11ca5f12759c5316a9477df6b1e1f01f1f0cd2976d5b9d1",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "1f11fbfedf51cf61759391d4105a521df9d5ead1a3638f8858fa8502551c57b8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8cfad43caed4fa91b11ca5f12759c5316a9477df6b1e1f01f1f0cd2976d5b9d1",
+        "reason_sha256": "7d39a67feb63e59223d1409115c2116e3b760ce4da43520c65f1994f910f21e7",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "1f29b00841f6631c7e6b618c9a34999c46e3029ad8119e396aa443b564860ff7",
@@ -2402,6 +2638,25 @@
       "main_issue": "制度・移行プロセス",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "50ed9da6e527461a842497cb94e60e2f19e0c6bc1911bc231cfa819bc0f97028",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "217b7cb5736bf5b70daf0e89500b94c572656a5af0a1fafa93d08996f6438f36",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "50ed9da6e527461a842497cb94e60e2f19e0c6bc1911bc231cfa819bc0f97028",
+        "reason_sha256": "70c6076ea58c0d485024cdd9c3a3b1207c4742f4318357b1d1b2d0b41d784ea0",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "21ca4b70fb36cd58b8a60bf69ee490a12bf64b3c07c4c036a1b62868aea03d91",
@@ -2971,11 +3226,23 @@
       }
     },
     {
-      "post_key": "265d6c80d0c5cbd11bfbdbec420add6ee9268158838132e5ab289c20a67fe427",
       "baseline_text_sha256": "41993bf0a0d93c46dce47a5fc45387ebea86c9253564c34a147c306e50eb3835",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "265d6c80d0c5cbd11bfbdbec420add6ee9268158838132e5ab289c20a67fe427",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "41993bf0a0d93c46dce47a5fc45387ebea86c9253564c34a147c306e50eb3835",
+        "reason_sha256": "32dcaa93450342f5ec4de5304e5bb0c92801b4aac8af362d622c3e64c90a32e4",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "2671f177e92678b6dfe837d9ecd337baf7e9cee8058e0098c27a0f5c1700ddab",
@@ -2997,11 +3264,23 @@
       }
     },
     {
-      "post_key": "269aff536f4d3d1d827d66229fd03553e67efca9143a45fa45e7984ff9c45bbb",
       "baseline_text_sha256": "1bb02636eded288f916e04c5a62d68c2ed8f8fa4e90dce4313ef3ce42f16a449",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "269aff536f4d3d1d827d66229fd03553e67efca9143a45fa45e7984ff9c45bbb",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1bb02636eded288f916e04c5a62d68c2ed8f8fa4e90dce4313ef3ce42f16a449",
+        "reason_sha256": "7100ec54f976b0d2f8f3f7c07f56a9a4eadfeaf139279e324878d3909564087c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "26f5e02a0c18a425d975232b61071012f8f80c3242c6dfa6082a2bee2703e237",
@@ -3030,11 +3309,23 @@
       }
     },
     {
-      "post_key": "27b1b783b92a7c6ee22e74de880fa1019805ab665bc65201125e2862021e3017",
       "baseline_text_sha256": "a6885e7bc4530d844c31bb5266923f18807c5ecc6ac260fa598728a327cc70f7",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "27b1b783b92a7c6ee22e74de880fa1019805ab665bc65201125e2862021e3017",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a6885e7bc4530d844c31bb5266923f18807c5ecc6ac260fa598728a327cc70f7",
+        "reason_sha256": "db01450889b663f2625248a4b5bba5bd6f0fa5e3991d6c062b820412a3ffcbb2",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "27bc23ac51f7835c49a2c89eb8efc0491e3b2c5832ab93ff6836eb2a472039c8",
@@ -3094,6 +3385,25 @@
       }
     },
     {
+      "baseline_text_sha256": "86f2f02ff0e01fd7e31a4fe55f65101f6c6eb4dca12568dee526a32899231c21",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "28a8a73c18bac436827210be510401fd7a5335c10e7862d2a0a318c1d9eeb4e0",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "86f2f02ff0e01fd7e31a4fe55f65101f6c6eb4dca12568dee526a32899231c21",
+        "reason_sha256": "1d01e896a5585b1b3e1474ce41c53e0698bccb315d33d8fe6eb5d4e572ead780",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
+    },
+    {
       "post_key": "28c4cb33bc6c191fe9ae13c6f7d61506c6e3c1c64f12c06542d66e66b4e17ed8",
       "baseline_text_sha256": "c19ff01afcf9ea57f08dd4e9461f803ed61a93ee7eecfef777d38bbb9bf3528d",
       "main_issue": "教員の働き方",
@@ -3110,6 +3420,25 @@
         "source_file": "data/bukatsu-chiiki_teacher-reread.json",
         "source_sha256": "e337003f6a0c20cfc23bcedd5856666de4a262a2d2a2ff7f34d4e537c4ddc6a8",
         "bucket": "E"
+      }
+    },
+    {
+      "baseline_text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "28dee03054e5a1a374647cd95dd1665433cc8abb16feb139286343d16d8dd0a6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+        "reason_sha256": "e9179ba144ff9edec1fc54b03d986304566aae09b0443961c7619548f0584c68",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
       }
     },
     {
@@ -3196,11 +3525,23 @@
       }
     },
     {
-      "post_key": "2a54755eb38147de94739e7aa74571733510830b5688b2909d9ba16e5ae3c46b",
       "baseline_text_sha256": "97dfc42ffbcc7ac9594e00bdb214ceabef743361c8769199a09d4d19437e2790",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "2a54755eb38147de94739e7aa74571733510830b5688b2909d9ba16e5ae3c46b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "97dfc42ffbcc7ac9594e00bdb214ceabef743361c8769199a09d4d19437e2790",
+        "reason_sha256": "87db081a883a68a9851264c66a9f6384d94617ae046025f6d22fa230374a79c4",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "2a7242f4dc53ae16f76974e742d5506c49a9e454912a6cc7b98c3e384c4dc7e7",
@@ -3459,6 +3800,25 @@
       }
     },
     {
+      "baseline_text_sha256": "9133dd7012178c13884a6f453aadd7326f9ba78a0a60ddf5ef5ae01765b39684",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "2ce44feb834f0b56d24d576b3b5dd36607935f3c4b7f54f1df658081ccea5225",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9133dd7012178c13884a6f453aadd7326f9ba78a0a60ddf5ef5ae01765b39684",
+        "reason_sha256": "9c9c727c7a324863f3f2223ed8d7780331709bb3eb511d504cee8b6a1235b1fe",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
+    },
+    {
       "post_key": "2cfe9148b8a76dbd98e88cc6f47f29ec0e872603f4dbba647b1a12311ceef63d",
       "baseline_text_sha256": "fd814954dec9fb986e41f3f1499df38e9da88f929cec5e50d9cfcd8099755945",
       "main_issue": "その他",
@@ -3684,18 +4044,61 @@
       }
     },
     {
-      "post_key": "2eedb805fc980222b05e32d017c0944e467cc7a7c562d4554b71986b4032b4f5",
       "baseline_text_sha256": "cf855446c00218e6451ecf29778f8eaa19ee02b72aa296e4c256e400d23cc62d",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "2eedb805fc980222b05e32d017c0944e467cc7a7c562d4554b71986b4032b4f5",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "cf855446c00218e6451ecf29778f8eaa19ee02b72aa296e4c256e400d23cc62d",
+        "reason_sha256": "ec4b10719034cae9f0251a44c01b5016127e00c6b9face478fe8a2c7df650abd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
-      "post_key": "2f592890c9f4401a8330c3d621fca958a6db7892d18852f4880f93bace0a7b65",
       "baseline_text_sha256": "a3d2b2cdf25e5b9b5a5547714caacc0e632df5ac9a51bcf1ac9a87b4c6140333",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "2f592890c9f4401a8330c3d621fca958a6db7892d18852f4880f93bace0a7b65",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a3d2b2cdf25e5b9b5a5547714caacc0e632df5ac9a51bcf1ac9a87b4c6140333",
+        "reason_sha256": "4087a7d0d08570066f5a2600916f03a8874d5774d6a17906b18c5a931b9c04f6",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
+    },
+    {
+      "baseline_text_sha256": "2d0759c241213dd70a840d1c94fe10fe9148748a11ad6ecc9f302f13f33622ed",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "2f9367a9bfc078c36d1826d8cc6f4bacdbe2d7c85db1bbfb605e066435723ca9",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "2d0759c241213dd70a840d1c94fe10fe9148748a11ad6ecc9f302f13f33622ed",
+        "reason_sha256": "a5fe29f36d9fd4ff4ea0770802a666c8f2ca152bb173bc3e7384d4db1230c628",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "2f99115243f0643e7efbc1f39b3ab549ad63b11be35f38e18693c02376a8de1a",
@@ -3807,11 +4210,23 @@
       "review": null
     },
     {
-      "post_key": "3136d01bf0235ac44eda2069ed987e958bac9f4fd12152b71989a4e25f86c92e",
       "baseline_text_sha256": "c6c109f8f412d9e5eb0fe4b79314e31d67e970279d3f90c7b9d7837a5fe9b317",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "3136d01bf0235ac44eda2069ed987e958bac9f4fd12152b71989a4e25f86c92e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "c6c109f8f412d9e5eb0fe4b79314e31d67e970279d3f90c7b9d7837a5fe9b317",
+        "reason_sha256": "e584585248c8a165568e3f9bf0e1f09068cb4d4f8578747553af32f8baf3927c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "314805e67d7b59bb3e5ee9274dc2bde6a0083356f5ab2a916be8fb4730716c43",
@@ -3913,6 +4328,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "child-value-doubt"
+      }
+    },
+    {
+      "baseline_text_sha256": "360534a38049ace3a35c683d0d1062d99b1f2f790f4dfb35d82007f487f5b0f8",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "319a19b76d0aca147a0db8eab6177aa781d12db211662926ee6cb84ef2dedd90",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "360534a38049ace3a35c683d0d1062d99b1f2f790f4dfb35d82007f487f5b0f8",
+        "reason_sha256": "3b53ae527d8cdac9288e6a1cd32406b22ab472363548a3e6d668a445873bfa28",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
       }
     },
     {
@@ -4212,11 +4646,23 @@
       }
     },
     {
-      "post_key": "34c046949c326697bd94b3dfa1e854a0b061e795bd0de8a4e737b06d5309b09b",
       "baseline_text_sha256": "a35605cffd14bab4e3daf197747f39a2a70572d1d5c0fbd539b21bdc65659180",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "34c046949c326697bd94b3dfa1e854a0b061e795bd0de8a4e737b06d5309b09b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a35605cffd14bab4e3daf197747f39a2a70572d1d5c0fbd539b21bdc65659180",
+        "reason_sha256": "5d7bb0c8cca79466b25c2566b176664d7eff647dfbd43633ab36236cd9a5b64a",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "35743ff0ff1daeddb11a05cc2f6b29da5b5edf0b28c134c19ca5909dbb80ed96",
@@ -4254,6 +4700,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "other"
+      }
+    },
+    {
+      "baseline_text_sha256": "5e93fa050d5b5de0bad960c14196d485d01c7b88e7877494862c0eb892ce5c6e",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "35a150b5d234d8165282328350aa8b9c1c492de7361b9622314e46b35ecade3f",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5e93fa050d5b5de0bad960c14196d485d01c7b88e7877494862c0eb892ce5c6e",
+        "reason_sha256": "c506b151477b95277952a8571ee2f6a596459e7a8a8996ba767f9613e7c9783f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
       }
     },
     {
@@ -4359,11 +4824,23 @@
       }
     },
     {
-      "post_key": "36d67e79ddc07c47d253c0fd7d34de2518b335b5c54afeb721fb34e1b6643969",
       "baseline_text_sha256": "6fa8cee8ea491dd933abeee17c146fdb1e593eabd811b9140b9f4dcc91f8d390",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "36d67e79ddc07c47d253c0fd7d34de2518b335b5c54afeb721fb34e1b6643969",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "6fa8cee8ea491dd933abeee17c146fdb1e593eabd811b9140b9f4dcc91f8d390",
+        "reason_sha256": "de9e15ea1b86152ced44859e9c8d1d7ee15a664adfe1a4b223eb8cf8c9ad6f46",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "37715cffc60d153d147de64bb90226eb5239c8a8d34bfd99b31b0a5d71464418",
@@ -4456,11 +4933,23 @@
       }
     },
     {
-      "post_key": "383a0c30bb4239de18c44b8e8dcbd925bc8a7ff117f6835637c25e47c7296c00",
       "baseline_text_sha256": "42159e8b824c28c7c16bb7a3110bb0bf0b9ce92975577d44fa1383e4b8add45d",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "383a0c30bb4239de18c44b8e8dcbd925bc8a7ff117f6835637c25e47c7296c00",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "42159e8b824c28c7c16bb7a3110bb0bf0b9ce92975577d44fa1383e4b8add45d",
+        "reason_sha256": "a6757eadca91db4dec25b0956827908d1c10bb3a09d4b86fde2155cd43aa4456",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "384ab00be8e8fea37a3abac5f73e42611a4ecfa0f0f4693d9ed08161a4e8daf4",
@@ -4520,6 +5009,25 @@
       "main_issue": "その他",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "9dbbb8d14d6f7b811078b9a48dd365a8153bdf983556098eecd2009b428f6b79",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "3899a567e89cb45127ccb20d5c9a4e6fde3defbcff38c8a735596332f21187ce",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9dbbb8d14d6f7b811078b9a48dd365a8153bdf983556098eecd2009b428f6b79",
+        "reason_sha256": "78c89fc01451929190fc14aab97d7c9a03bdd879a7f233911c66658e82f1a4da",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "38a30441926a0c7173ced3c530c3e0e7ea3994aff1a7ab128c0bf762ca634ed2",
@@ -4652,11 +5160,23 @@
       }
     },
     {
-      "post_key": "3a180752dcb588780b3cc76edf264d440408528e0cd9443d1aaafca56579b582",
       "baseline_text_sha256": "d78cad2b290b81a2ef961e975ce71210f7d0e07c985f4a3216aaac5e04870b34",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "3a180752dcb588780b3cc76edf264d440408528e0cd9443d1aaafca56579b582",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d78cad2b290b81a2ef961e975ce71210f7d0e07c985f4a3216aaac5e04870b34",
+        "reason_sha256": "91b49d324f1bf7a122eb7b8de3d5c98b692e86a36ea4c543792c922d2ce19b96",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "3a2016c73a3355a16a381c08a236aeb1ce73d70cf2dd7c603646f37d04c98148",
@@ -4716,11 +5236,23 @@
       }
     },
     {
-      "post_key": "3af8bf8085980fbd07de6fbe367c8c57202413ac5c75c9511fcd808d11898034",
       "baseline_text_sha256": "d326fc8b386c22a1f7baee4b7ab3d26f9af08bf0f688304ef77f4fd814bc94dd",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "3af8bf8085980fbd07de6fbe367c8c57202413ac5c75c9511fcd808d11898034",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d326fc8b386c22a1f7baee4b7ab3d26f9af08bf0f688304ef77f4fd814bc94dd",
+        "reason_sha256": "38f577c863d6e3c33f676a30be8f71db5be26b19e041360e3e1f666193444950",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "3b5240fe0f7a5dc8c46b6e273b0bc68244be348a6e8545b887988ee548610324",
@@ -4747,6 +5279,25 @@
       "main_issue": "制度・移行プロセス",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "26632ec4afa4bfaf8a1fd9ad3f05d92f1efc0817738d5757489f95752eeefab2",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "3b97570c2f005edb241688c69af576a5a9d6a4db75593f55c2718aea8928c907",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "26632ec4afa4bfaf8a1fd9ad3f05d92f1efc0817738d5757489f95752eeefab2",
+        "reason_sha256": "7c7dacda3261b13e40c628467deac1b33e5091c3ccd7a6e2fc62e4edcab2d42d",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "3ba6bba2301529c800a92c9b26645de244d2317facd51a15cafa92dfce63a8a1",
@@ -4787,6 +5338,25 @@
       }
     },
     {
+      "baseline_text_sha256": "25c6fe6b5e2b9e2a0a1410dd1455c20eb958a2f272ca408916e9c329ed619c8e",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "3c2edd7c74996897d6003036c7417fd01215d2869281abda6e04ef12e9027cd4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "25c6fe6b5e2b9e2a0a1410dd1455c20eb958a2f272ca408916e9c329ed619c8e",
+        "reason_sha256": "21ef2321ae57c84d78bbeb688f3aa7f9fadce430aee30fd676809c0462e5cc41",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
+    },
+    {
       "post_key": "3c5a559b25547d1f08407c6dd321e5107c9385f5fd5f7833f7a90032ad084f83",
       "baseline_text_sha256": "a8f7da2929d57a96107b7daea5574045d78f333a8b7e460622fb36181fa25466",
       "main_issue": "受け皿・指導者",
@@ -4822,6 +5392,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "other"
+      }
+    },
+    {
+      "baseline_text_sha256": "b9edb53b1218723a5a4b902ff7d20f9e262f04a9d604fb75834f9604f5828c81",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "3cc248d69ebb8c917a3e8616e2f021dedcceb3877c3e86146a3fb789183500b8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "b9edb53b1218723a5a4b902ff7d20f9e262f04a9d604fb75834f9604f5828c81",
+        "reason_sha256": "8b83381b61557d15e2fa45b96e7192e169417ffb28062f1d6fbd85ebbedea58f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
       }
     },
     {
@@ -4927,11 +5516,23 @@
       "review": null
     },
     {
-      "post_key": "3ded7021dae715a61e6ca09ff75b2afa8dbedeacdcf8cefa611cfa5288ffea16",
       "baseline_text_sha256": "3db24a7d8a5896fbc1a903caed28781b2570a3bf7fa31486cebb904fc00a6744",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "3ded7021dae715a61e6ca09ff75b2afa8dbedeacdcf8cefa611cfa5288ffea16",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "3db24a7d8a5896fbc1a903caed28781b2570a3bf7fa31486cebb904fc00a6744",
+        "reason_sha256": "d437e3151c6b7814fe33d9c4105a8918c608d19d106f1d72e90ace5321cfe816",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "3e0d88c94e3f9999e5add3ed5b8ff9337e43674c2d2bc7bcc7fec04d90911607",
@@ -4977,6 +5578,25 @@
       "main_issue": "その他",
       "is_opinion": true,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "e90501a8b7ae90f2ee243a4967b476860db1419210a845a084d85b277139bd88",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "3f01051897101412d6f3b624e0efd9109d82c23a6b4a6a9856a60da5b54bb129",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "e90501a8b7ae90f2ee243a4967b476860db1419210a845a084d85b277139bd88",
+        "reason_sha256": "28b511b0d5bf80f3bedb8ae2ce606596da9fa68756365481afad4d703e146e7c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "3f18c1b870c8393e6ca8055c3eef1fd023eb301b0be9f69a2bd09198cda91d3f",
@@ -5228,11 +5848,23 @@
       }
     },
     {
-      "post_key": "4209613693bf4552a3d863ed6a3f70dd4d019c55cdd0d2441d171438616265df",
       "baseline_text_sha256": "c6f44738d27d183b5b5c506451250d812fc2b997939e23098c7975793d10fdfb",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "4209613693bf4552a3d863ed6a3f70dd4d019c55cdd0d2441d171438616265df",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "c6f44738d27d183b5b5c506451250d812fc2b997939e23098c7975793d10fdfb",
+        "reason_sha256": "4a2165543465ce464b6a6c657616e5ff3baa5425dd8265bce7edbc8ced5347a8",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "423c3c9834e11de28431b8909010d3d6df97c4c234e030353b8f13958e7aaa7a",
@@ -5256,11 +5888,23 @@
       "review": null
     },
     {
-      "post_key": "43018591a156a50e493ea88e6ffcadc8f7afee7b033393f7ba99a033a77bc01b",
       "baseline_text_sha256": "65d1beb5dd1db13de5e486502768322e97a4fc1e423691278a448537e8e649e4",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "43018591a156a50e493ea88e6ffcadc8f7afee7b033393f7ba99a033a77bc01b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "65d1beb5dd1db13de5e486502768322e97a4fc1e423691278a448537e8e649e4",
+        "reason_sha256": "2713e5da3bbf653a5e0d1e5e477ae4e8a7d56caaf92255fd2218f38593f903c4",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "431689e626418aedfda863721d36fbe7a22e5a5a765a8b8bea9c2aad735601fa",
@@ -5339,18 +5983,42 @@
       }
     },
     {
-      "post_key": "438ab1939cdc27c33436f25be3601f49b13580cb992d18c34497afcf1d263976",
       "baseline_text_sha256": "2f89bd877fca70ac4ce57a7fd1c82278f4ed54ef617f3dfe9239b5d67e60db09",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "438ab1939cdc27c33436f25be3601f49b13580cb992d18c34497afcf1d263976",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "2f89bd877fca70ac4ce57a7fd1c82278f4ed54ef617f3dfe9239b5d67e60db09",
+        "reason_sha256": "948a87792d91cdccf6a2c437a509802d1247d0dcd040d6e5be13961044d9c2cc",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
-      "post_key": "43a35856c5f98e7312a6e965041ae579ff5e4dde0f70aa00d4da3fa03b53329e",
       "baseline_text_sha256": "23364685b657da3c2f03f02b6bdfca835812eb1f53bf36bb63fa7bce87223a2e",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "43a35856c5f98e7312a6e965041ae579ff5e4dde0f70aa00d4da3fa03b53329e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "23364685b657da3c2f03f02b6bdfca835812eb1f53bf36bb63fa7bce87223a2e",
+        "reason_sha256": "32c66234cc9b71cefd91fb1ef89ef962ad7897735c038b7bd6f940c88ba99b9b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "43d1f07cf721e1aa06431590f50cf88c56ade4f0f757197e47e2f92fa23ea507",
@@ -5858,11 +6526,23 @@
       "review": null
     },
     {
-      "post_key": "48f617e6baadf38b955ead09cdd37706540e63f8b6ce782f8af411f28fca3b2c",
       "baseline_text_sha256": "f86e002b74c1ca5176013e876c24f30099be072a7e5c64d3c701c66fb9fb6bcf",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "48f617e6baadf38b955ead09cdd37706540e63f8b6ce782f8af411f28fca3b2c",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "f86e002b74c1ca5176013e876c24f30099be072a7e5c64d3c701c66fb9fb6bcf",
+        "reason_sha256": "fb040f06c2cb5a645ef437a121a9b97c221b388d09e98b1af79b9eabc5d2f3f6",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "48fda76c479a2c5eee5fed026d0111e54cba5ce964cc7532f3e3ed82d509aedc",
@@ -5974,11 +6654,23 @@
       "review": null
     },
     {
-      "post_key": "49bef1d61b3d77bc88804a9f3994d925b3866b1a0e0974ea64b091c8d51f3e08",
       "baseline_text_sha256": "866e905ba43906161cf15049a2d0cdd843747ab70355918bd739943559bcc1d1",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "49bef1d61b3d77bc88804a9f3994d925b3866b1a0e0974ea64b091c8d51f3e08",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "866e905ba43906161cf15049a2d0cdd843747ab70355918bd739943559bcc1d1",
+        "reason_sha256": "e02442cb3b1f90244b2029a4dbce2192681893c7e3c0f4fdb44ba90cde182b2b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "49c3f4b8968723b6a65d38db2badd3be98d2cf0a685fcc0bc42dab6fc63974b4",
@@ -6071,11 +6763,23 @@
       }
     },
     {
-      "post_key": "4b7b2120566141116c43067fe0c33dadb18c70f1d5f0676059bcf95bce748111",
       "baseline_text_sha256": "e9bd9aeb0fe817eed6deea2bb87d9eabb6ca7bdb30e3f41faf712b10a5f25530",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "4b7b2120566141116c43067fe0c33dadb18c70f1d5f0676059bcf95bce748111",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "e9bd9aeb0fe817eed6deea2bb87d9eabb6ca7bdb30e3f41faf712b10a5f25530",
+        "reason_sha256": "c8c51bf8eac255812729c8f761bcc2ff8fc7938acedb9df7a9a3e85f34b1d96e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "4b89019031fb1dd86e184a38e0eea9b342afe7db997e9ad3577f8004a0f58109",
@@ -6244,11 +6948,23 @@
       }
     },
     {
-      "post_key": "4d19d7da09b596f9fbc198a15809cca87081a3c990cce0045771ceb84ede95c6",
       "baseline_text_sha256": "56405aa57fec26db191b5df4962990a2be6eb55e80c535d7fde01e8f224efbcc",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "4d19d7da09b596f9fbc198a15809cca87081a3c990cce0045771ceb84ede95c6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "56405aa57fec26db191b5df4962990a2be6eb55e80c535d7fde01e8f224efbcc",
+        "reason_sha256": "05958f95434d9987d9701269f3265bece137d57e756c7b0789ace55317b432c3",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "4d3ff02a1fc8f3a9f80a18470aedd79f7c8fefe030d7bfcf1f77aae4e1893dd8",
@@ -6289,11 +7005,23 @@
       }
     },
     {
-      "post_key": "4db5876e923e035c582c1f8840e68412d74e1905650cb2be2ef63c68803dabb7",
       "baseline_text_sha256": "8d7bb5c686798387de434c689e20405d9e57d1eafa3fb48650662dd1839bcb24",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "4db5876e923e035c582c1f8840e68412d74e1905650cb2be2ef63c68803dabb7",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8d7bb5c686798387de434c689e20405d9e57d1eafa3fb48650662dd1839bcb24",
+        "reason_sha256": "4b06211e1a2b5216b54bf2d54ad845a37753c663b2f1b2d7268d30a0537c729f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "4df73ac0b040777a184e7d157f63cf6ad950d16a700751eb6ee148ac604d245f",
@@ -6410,11 +7138,23 @@
       }
     },
     {
-      "post_key": "4edf85a2f202a7aeb8324189b1ae2c2af6dffc291884d9835475d2f14478dc87",
       "baseline_text_sha256": "bf00893358b0c5823a97ee84f93cf17f8fdfc5f1fb454612b98c9d0c6910862a",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "4edf85a2f202a7aeb8324189b1ae2c2af6dffc291884d9835475d2f14478dc87",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "bf00893358b0c5823a97ee84f93cf17f8fdfc5f1fb454612b98c9d0c6910862a",
+        "reason_sha256": "76f3400ddd068dc953859bb5d875314d854ad5387035b6eb4e6b0ef834101544",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "4efa944d401e4c4e18e0c796fc36da37d14f8a86a4efa9163e44d459aad48804",
@@ -6436,11 +7176,23 @@
       }
     },
     {
-      "post_key": "4f0f822ee922f3d1a2b3934d5d5fc7a8ea14e0d3a08645f2d7cd72a99c36bcc0",
       "baseline_text_sha256": "060918ee2c07d396e53b8c73b1956e7c4f5a759e2d11f2b12d76a64cec5e76f7",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "4f0f822ee922f3d1a2b3934d5d5fc7a8ea14e0d3a08645f2d7cd72a99c36bcc0",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "060918ee2c07d396e53b8c73b1956e7c4f5a759e2d11f2b12d76a64cec5e76f7",
+        "reason_sha256": "ba315c6b924b59d146688ad43ebcdd275f5886c6b417475d3d8c4dcfa20caca6",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "4f813dd2c54f1d0a3edb0262495ebf1e1b5cb02fa2d39fbd6a088d075f23c2ac",
@@ -6611,11 +7363,23 @@
       "review": null
     },
     {
-      "post_key": "5222accc03f4f738a1f0ed6d3424a64ea8a951ac165cce129cab2a7bd3aca355",
       "baseline_text_sha256": "baca25a994c3b13e8165dbc4921a0bf89493ff81400d54fe2c23e4fac02485a5",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "5222accc03f4f738a1f0ed6d3424a64ea8a951ac165cce129cab2a7bd3aca355",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "baca25a994c3b13e8165dbc4921a0bf89493ff81400d54fe2c23e4fac02485a5",
+        "reason_sha256": "5433805222df7beb4141239c723a8fcd0acfe724a5b0adb54632d3d14f51c9e6",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "523400f72183cde66962993190cb3b25d0778b4ffd90bf5abca16d10f6c66354",
@@ -6924,11 +7688,23 @@
       }
     },
     {
-      "post_key": "545840cd991e846125b63a6844cfa6f1c1f78b295802220c14ba16f2903d577f",
       "baseline_text_sha256": "a3d496b8d1bd4f23b08f243b200f93601337a9cc3525e48cbef9919c501eaf51",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "545840cd991e846125b63a6844cfa6f1c1f78b295802220c14ba16f2903d577f",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a3d496b8d1bd4f23b08f243b200f93601337a9cc3525e48cbef9919c501eaf51",
+        "reason_sha256": "81915e796187da4eee35a88951a76f7cd8b179faee14905dcca217185300911b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "54760fd854dd7f013bca9aaca2e1acd55c53c982ac079becee482becb3469b68",
@@ -7068,6 +7844,25 @@
         "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json",
         "source_sha256": "47ff8c4f3dc52219b4b38da2d76876ae62d98e4922e26b632432eeac34634434",
         "bucket": "R3"
+      }
+    },
+    {
+      "baseline_text_sha256": "34e0dd5372646fb004443c27acaf4967fb687f40ccdfff80160b44ef3a8d8b6d",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "567ebbdfe49510a79789ae108af98b0973a1414b024f5bc80b955f7c52a5d357",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "34e0dd5372646fb004443c27acaf4967fb687f40ccdfff80160b44ef3a8d8b6d",
+        "reason_sha256": "78761ee6dbb149ad7dc1d457dbfee600e77fa977920720a40cb20ac1427e4afa",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
       }
     },
     {
@@ -7365,11 +8160,23 @@
       }
     },
     {
-      "post_key": "5b3c9c0798ea6c9a59ae89eca00f8f25984b7a9bda467f743afaa66539678248",
       "baseline_text_sha256": "bf5bdda7402360aa7faf089f496b17d0e2986c678af192947967e8d3578cdad5",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "5b3c9c0798ea6c9a59ae89eca00f8f25984b7a9bda467f743afaa66539678248",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "bf5bdda7402360aa7faf089f496b17d0e2986c678af192947967e8d3578cdad5",
+        "reason_sha256": "5b7fdb5e65d7e277df69014ce5190852c4a479e4e12bb4ff3eed053c443d0c91",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "5b6c28485742ed11513004e30b3774659e1aa5960e52b30402006cc4d74fb96f",
@@ -7391,11 +8198,23 @@
       }
     },
     {
-      "post_key": "5b6de0a3ab7c70047f9d8e919606ce49fd880836d0f706ab0e18df1bac55aea3",
       "baseline_text_sha256": "75c80f56e079228c25e93b1e3335a7c73f480c5bc6d00bca810e112638551b03",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "5b6de0a3ab7c70047f9d8e919606ce49fd880836d0f706ab0e18df1bac55aea3",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "75c80f56e079228c25e93b1e3335a7c73f480c5bc6d00bca810e112638551b03",
+        "reason_sha256": "5dbf2aea793c42cad971bc0d1b87255297cd94ae6c6f4ad4e4d5abdc9aea9b50",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "5b771f38b0d3c81f1d7b8558003422ae075a69eebaac139c51328d337b055be5",
@@ -7488,11 +8307,42 @@
       "review": null
     },
     {
-      "post_key": "5c8958be28a2ac70b9b94359229416c9b79abc50ea72227e0db4833b523f5691",
-      "baseline_text_sha256": "4f8c55bfce03cb885453b492299c4da7b2a1f0e8a06b98c0193fa42ab5bd2711",
-      "main_issue": "受け皿・指導者",
+      "baseline_text_sha256": "1c3c47f6a8441462c4e90af0f224f8ad2867008b7b62b47dfa9ab2bd703e97f8",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "5c3c9a1e4054a36300a16b66c42e31fcd9a02756e80d97db990f807d3571e5d9",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1c3c47f6a8441462c4e90af0f224f8ad2867008b7b62b47dfa9ab2bd703e97f8",
+        "reason_sha256": "5184546db256570a731764d4b1b046ad6a38aab2a578c3d1276bfa86d84ed4e8",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P1"
+      }
+    },
+    {
+      "baseline_text_sha256": "4f8c55bfce03cb885453b492299c4da7b2a1f0e8a06b98c0193fa42ab5bd2711",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "5c8958be28a2ac70b9b94359229416c9b79abc50ea72227e0db4833b523f5691",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "4f8c55bfce03cb885453b492299c4da7b2a1f0e8a06b98c0193fa42ab5bd2711",
+        "reason_sha256": "02cbcb8c2ab4ebbb8e541f0f89941c39100217988e0818d7c8e95089543a9b94",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "5c8b1038aa5618e988a6c980f4848730c0b935f8742c13a4e718f5b2fea26785",
@@ -7604,11 +8454,23 @@
       }
     },
     {
-      "post_key": "5e2bd3579415a6c1b185a980fa83ba3518cbb492cf406b6b1ad3d5d612be38b4",
       "baseline_text_sha256": "5dc076fefb67566489460df10f8265c7432d605c694fdc7af77f39d3f2933a01",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "5e2bd3579415a6c1b185a980fa83ba3518cbb492cf406b6b1ad3d5d612be38b4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5dc076fefb67566489460df10f8265c7432d605c694fdc7af77f39d3f2933a01",
+        "reason_sha256": "fa9289ad70781cfad9be6943cbe561d09af3b48ebdce2631a1091753918b52e9",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "5ede84c1fc71971d71edcbe967bc9b9d12961c45ec20db577c257b3146655c3d",
@@ -7635,6 +8497,44 @@
       "main_issue": "教員の働き方",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "5fd4295665e00419e264b95ac6a23a68287800e3b715d41a2ed7d7b9c484d030",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+        "reason_sha256": "87f94dda903e041733c4d382e0e6bd14bd3ba144d24edeb53974a61ac4b91c8b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
+    },
+    {
+      "baseline_text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "5fd57446c400c53dae1fbef940f934b58e75e5677979f7faf1781a894c221765",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9e615844959a35faf6b01668ca9a9973e1b62d75a97bb56a7d729844065b495e",
+        "reason_sha256": "8ddd1bd4442b230a99fc9cae32b04f4fdea34deab5423a3ccd3b3fc52f0093b9",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "6002eef15097892aa205a035d86c56c93aad7690e572a33178c7f6d4c9625356",
@@ -7760,11 +8660,42 @@
       }
     },
     {
-      "post_key": "6112f5324e00f4740899d42af49c37aa141514908500f74138e1f98e7d102c3a",
       "baseline_text_sha256": "b9fb1d64eccb25079fb050d487bdfecbc05076874f4a67a9c14c5344d8fb5b03",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "6112f5324e00f4740899d42af49c37aa141514908500f74138e1f98e7d102c3a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "b9fb1d64eccb25079fb050d487bdfecbc05076874f4a67a9c14c5344d8fb5b03",
+        "reason_sha256": "9a79c9787ec495162abb57754aca31288d4511f78992fc18792530af2ddf78b4",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
+    },
+    {
+      "baseline_text_sha256": "99fd735d5cb524d4b036577a06a17872f103ccd792300fbd3114c63f2fd3417d",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "6113067508f6d26a1e84417612c12c0e0ffec097302e4dda7d568ab13247cc56",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "99fd735d5cb524d4b036577a06a17872f103ccd792300fbd3114c63f2fd3417d",
+        "reason_sha256": "ba7bb3d03b3155dc826292e2aef1896a32daad095e10c5265e6bc6abefb21d1c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P1"
+      }
     },
     {
       "post_key": "615c284ad47d19e1747d61c3cddc4db1bcf12845800f0a08ed345102f3b148e5",
@@ -7786,11 +8717,23 @@
       }
     },
     {
-      "post_key": "61d16df6641306e70c98621a526e74c2fd31ff10140ebc226b529dd058b39853",
       "baseline_text_sha256": "23ba6fe878e65766d66ecdbc334fd4067ca876085a31ebe04a5cf54e59b8fd11",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "61d16df6641306e70c98621a526e74c2fd31ff10140ebc226b529dd058b39853",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "23ba6fe878e65766d66ecdbc334fd4067ca876085a31ebe04a5cf54e59b8fd11",
+        "reason_sha256": "e1c4a2934ad7c03bb7db03dd59873f19bb092ef848e333a1ceaee6b0b47dd0a7",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "61fa77ec6a82f6991394f1a940f9a610fdb6a663ff0caacd8b8d53f82dcf1f8b",
@@ -7838,11 +8781,23 @@
       }
     },
     {
-      "post_key": "62fa66c599f43b449a6357f9eefc41be05483b546343a459e9699693932bd485",
       "baseline_text_sha256": "e112a324db1df793b74b515ba9774f40a2a46dbcec2ab9e3c0ede8604cd6d05e",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "62fa66c599f43b449a6357f9eefc41be05483b546343a459e9699693932bd485",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "e112a324db1df793b74b515ba9774f40a2a46dbcec2ab9e3c0ede8604cd6d05e",
+        "reason_sha256": "b462787bc12f2244a1dda23a4ee62e4eff853f5485bc63f4c6e3dd1db34238ae",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "6324dc782ebcdfa7bdf5b12731254930376bcf464031bdc74540be3c71cc3768",
@@ -8042,6 +8997,25 @@
       }
     },
     {
+      "baseline_text_sha256": "f39ac319e207fe799f570b50d39668f316079e2bb5d25f57b76c4eacdb42dbc8",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "641daeb486eb68206af33baa3bdf88d30c916038871ed4ad0dce884edbb83f53",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "f39ac319e207fe799f570b50d39668f316079e2bb5d25f57b76c4eacdb42dbc8",
+        "reason_sha256": "8bd8e1fe4a680dcb44dc25e59cf80ea5313cd604b7e038c26940cf42467dfebb",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
+    },
+    {
       "post_key": "642e477d0f748ade4a066043166c1f3316fa3e55a5d9a67c99a11cfce68a874f",
       "baseline_text_sha256": "bbbee554c66e37011f83d9ce06022a136f611770761a2eccd95226f34ea9cfae",
       "main_issue": "受け皿・指導者",
@@ -8132,11 +9106,23 @@
       }
     },
     {
-      "post_key": "64b20470745cad6a4838090e9eb3d6f81d401f5c49a1fee7aefd213b5f5729a6",
       "baseline_text_sha256": "9cff887e551a3a6a387d6a71f8bd4c15e3827780b60350dd30503ed10992a6b7",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "64b20470745cad6a4838090e9eb3d6f81d401f5c49a1fee7aefd213b5f5729a6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9cff887e551a3a6a387d6a71f8bd4c15e3827780b60350dd30503ed10992a6b7",
+        "reason_sha256": "bc5608554ae2335421eb6af8a8cb2731de7af053a8a871e71c3f1b26d160f9f8",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "64e1c51d45ebe05e744d4d0480d09099be2058faf930a4fc2d6ea9dcdc22aba7",
@@ -8369,6 +9355,25 @@
       }
     },
     {
+      "baseline_text_sha256": "c90c18422d0d39f1ff716f802cf5df3ca866e0137063994e454ff4e596b16843",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "67435effe3cf920bb1483f2470d5e03669359a7e92e3508ec1e91a7c793d3b87",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "c90c18422d0d39f1ff716f802cf5df3ca866e0137063994e454ff4e596b16843",
+        "reason_sha256": "f79fab0a404b326398c526eed898818ab9a9b4a4a435c822a4dedd5fcb2ca73f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
+    },
+    {
       "post_key": "675e4bb1bc7ec84a3a61704e7b8127889d59338266f23d46d73aa5cb73d355ea",
       "baseline_text_sha256": "494615fbb803ada5b6c46ea078c6f2c065dbcfd93b48b3b5b1047184c0f0623a",
       "main_issue": "教育的意義・機会",
@@ -8568,11 +9573,23 @@
       "review": null
     },
     {
-      "post_key": "69f194f48a2b87ef002d3d4d007d3182b7c33a868c9bc46c2f12dacd36973ab3",
       "baseline_text_sha256": "1ae2edeb9902e249f400838f1841f389a84ff3bd27978a805acdfe7b537e7545",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "69f194f48a2b87ef002d3d4d007d3182b7c33a868c9bc46c2f12dacd36973ab3",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1ae2edeb9902e249f400838f1841f389a84ff3bd27978a805acdfe7b537e7545",
+        "reason_sha256": "5a43217a8fdd79127ed76f30eb71f64d295eb2a5dd03c58762b0b5e13c66734a",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "6a6db85760c03bba091eaaeffbfa3186a016a65e15329941ec0cda940ac7adf2",
@@ -9175,11 +10192,23 @@
       }
     },
     {
-      "post_key": "71e7ac6f83448a4a6f83e852715aeb7b9983096c46b77f67b74cd984ce928064",
       "baseline_text_sha256": "d130bd7ef28d9129dc742cfc4447a9a4c5732ca4846a7c20ec97b70d3e77d767",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "71e7ac6f83448a4a6f83e852715aeb7b9983096c46b77f67b74cd984ce928064",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d130bd7ef28d9129dc742cfc4447a9a4c5732ca4846a7c20ec97b70d3e77d767",
+        "reason_sha256": "028fb937137973d6f330ffc465dea0b9a98d648e26cb633f7f9da1dc77d10a76",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "71f0a5ac7f90c1fca4e8ee6551d4db8d117daf05e804f82c8ac07c4251b7a7a0",
@@ -9272,11 +10301,23 @@
       }
     },
     {
-      "post_key": "72a84348d68e363d9b741d88f718d807afb3b22327eb819e0d2c837577f1daf7",
       "baseline_text_sha256": "3c09a06baac7b38ad017183a4c7cb654b5ddb09f3f6f602e73d0d0f0a55b159d",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "72a84348d68e363d9b741d88f718d807afb3b22327eb819e0d2c837577f1daf7",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "3c09a06baac7b38ad017183a4c7cb654b5ddb09f3f6f602e73d0d0f0a55b159d",
+        "reason_sha256": "58f38ff09d98f39941d7337bb54f004690c0cf468fb03ba4e43a577b3a15fece",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P6"
+      }
     },
     {
       "post_key": "73233fe02525cf0808a3ce62daa105bc8ee74887d4c8ca7732449c320cbb9e86",
@@ -9421,6 +10462,25 @@
       }
     },
     {
+      "baseline_text_sha256": "5ad5a6625842b7d28661acf6f79f465eca64887fdf602ce968a4cc23e45c121f",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "74a3065cb59aabf7b93d5567c26b3a339f178ab4b60461219a1982cd0a7850c2",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5ad5a6625842b7d28661acf6f79f465eca64887fdf602ce968a4cc23e45c121f",
+        "reason_sha256": "c45a549c7aeb96656406f4f1e1e22ca11eab86d1ba336761c25e29384888fc7b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
       "post_key": "74ac86faa55a8dd72054aa89aa7c512a9e38ec9f2b6cdb13292bdcaeeee0d3bc",
       "baseline_text_sha256": "13cfaaea3733262cbea3de3eec733fd883975a4cd579d783c15234752b5bb4c4",
       "main_issue": "教員の働き方",
@@ -9530,11 +10590,23 @@
       }
     },
     {
-      "post_key": "75de0b580ac84fc20f90f80f5bd90b68e5b913e94b0a33478c0b6b2af16f7dc3",
       "baseline_text_sha256": "0d88ad3d1ef296b3db1ea8a4f040342d20ec515502e234dcb8f80057d2e4766e",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "75de0b580ac84fc20f90f80f5bd90b68e5b913e94b0a33478c0b6b2af16f7dc3",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "0d88ad3d1ef296b3db1ea8a4f040342d20ec515502e234dcb8f80057d2e4766e",
+        "reason_sha256": "9d2869c7fece7dfefa9b24f55fc3d0dcc92d7b39d3a943798a60ab246c36f99e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R4"
+      }
     },
     {
       "post_key": "760183a4a024e540a97d2a655ccab33e00aad192ab50d7b08a0a0bd0197b8bd4",
@@ -9658,11 +10730,23 @@
       }
     },
     {
-      "post_key": "76b9e5113ee312f4142161ebab869ad87b9bb15fba95f75b4f3a1cf05e4f4b21",
       "baseline_text_sha256": "b482e583a481eaca1bafdbea40b4c67978f343b5686db4089a74b5ed39d31d3d",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "76b9e5113ee312f4142161ebab869ad87b9bb15fba95f75b4f3a1cf05e4f4b21",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "b482e583a481eaca1bafdbea40b4c67978f343b5686db4089a74b5ed39d31d3d",
+        "reason_sha256": "6768940a5151f7bf89237f519c3e929dd11555724169f34b77b52ca1f367d090",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P6"
+      }
     },
     {
       "post_key": "7708bb27feff07f3b3ae552c819754a59cb981c707fca4ac2ed7ca5880eee13d",
@@ -9760,6 +10844,25 @@
       }
     },
     {
+      "baseline_text_sha256": "6724d6efad5feb0b47175cbf92b5de18838cd93fe2414424be822181ddbe944f",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "788097645d3f083e7bead775f059b1f76fecf231d9129912839a59eb09e39940",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "6724d6efad5feb0b47175cbf92b5de18838cd93fe2414424be822181ddbe944f",
+        "reason_sha256": "960e0eaafcddf1cf4c830e95f39e4baf4844b1f445f411c44a7d1d6bd55fa69d",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P5"
+      }
+    },
+    {
       "post_key": "789289ff4cc7284b0959f1e961d13e548791a65d1f06f5a97c7d6f23bb311bbf",
       "baseline_text_sha256": "1c25364af57d5367e71adfdf224af12e8d0e22d45f97b8ea4dc9afbb5a02d8cf",
       "main_issue": "その他",
@@ -9819,11 +10922,42 @@
       "review": null
     },
     {
-      "post_key": "78f1634999da7f9777299e0a0a100edbeb164912058f662b27e7c1c435c48918",
-      "baseline_text_sha256": "2e0a3b2bdb17acafe462c59685962c5a289d984ef2ce78014cd8d710068a264c",
-      "main_issue": "費用・家庭負担",
+      "baseline_text_sha256": "984f2f1387548573c0a2730dd7cf8ddc6ad37c4bfaf3e3693c90da5e44a1d109",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "78e4f2eb1f0582b4ec574e1bed2b622c63cb67749879c270e8880ac684c5105f",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "984f2f1387548573c0a2730dd7cf8ddc6ad37c4bfaf3e3693c90da5e44a1d109",
+        "reason_sha256": "d89a2557ca41c16eefb9d2c3b8d1d84558638f5f988e645ec46ddb5adb89980a",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
+      "baseline_text_sha256": "2e0a3b2bdb17acafe462c59685962c5a289d984ef2ce78014cd8d710068a264c",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "78f1634999da7f9777299e0a0a100edbeb164912058f662b27e7c1c435c48918",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "2e0a3b2bdb17acafe462c59685962c5a289d984ef2ce78014cd8d710068a264c",
+        "reason_sha256": "23ea134de26f67e1fde092f3f8bd6b4c6727f18835c0ac82682b0e3a609a02a1",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "791a3d3b2a52366d1d0bd2fa9c1aa8981b106cdba05b90abf3e6dcc62eb0e636",
@@ -10139,11 +11273,23 @@
       }
     },
     {
-      "post_key": "7ca171d9216c83fcaff9cf63ad565e9a9030cd1cb552721fdbb89e6b3c2a06ba",
       "baseline_text_sha256": "13d4765888e8b088ee7ff818994b0ed65befe07e839025b5521b536c80c263cd",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "7ca171d9216c83fcaff9cf63ad565e9a9030cd1cb552721fdbb89e6b3c2a06ba",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "13d4765888e8b088ee7ff818994b0ed65befe07e839025b5521b536c80c263cd",
+        "reason_sha256": "5687fa9e1555e4bdd4efabc1d67028548d7389f1bffaab9bbe84bc475231a3d5",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "7cb1d2667babe8f081e7e49d323967736fd337cf884040379cf4adcf9d421ef6",
@@ -10184,11 +11330,23 @@
       }
     },
     {
-      "post_key": "7d8b55b0c231600f3b877187afb993a921b18187082d98529f73a8fa561015bf",
       "baseline_text_sha256": "4963c0cb41974768cf6ba6c6354693b4087a4946000c785c2031242f55bf8458",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "7d8b55b0c231600f3b877187afb993a921b18187082d98529f73a8fa561015bf",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "4963c0cb41974768cf6ba6c6354693b4087a4946000c785c2031242f55bf8458",
+        "reason_sha256": "56ab8c2b779295ba77ca96d77156218c530c9ddb81d47b8bd8362b6542fbf8b2",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R4"
+      }
     },
     {
       "post_key": "7d99d063b0b1715d67fd4bf7ec007a305eb85f2d4f86860d726c6e1e683ece36",
@@ -10229,11 +11387,23 @@
       }
     },
     {
-      "post_key": "7dcaa11feb129619929238b0e5d8160ec39b9fc0b739942b4050707e026a3dfd",
       "baseline_text_sha256": "19ae9c4c0494981e77d6be0937a1f6579e87283dfe0c426f95701906d2fcf682",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "7dcaa11feb129619929238b0e5d8160ec39b9fc0b739942b4050707e026a3dfd",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "19ae9c4c0494981e77d6be0937a1f6579e87283dfe0c426f95701906d2fcf682",
+        "reason_sha256": "677838da031d3f8709ac84debdcb363991466183c4a1e088aa0b01d9f021b3a0",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "7e0088f6bf787ccc85fc2c3c57685a87dade479ee75401dc48ac6ddc6d64bbbb",
@@ -10274,11 +11444,23 @@
       }
     },
     {
-      "post_key": "7e0aa8283af237077d9b9527241b3d4582846b1f3a6697c819185296c3c27af0",
       "baseline_text_sha256": "a81d89da071b488b7d672e6416971094eadb1c474d6a991c5ee0ba7f29fc7033",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "7e0aa8283af237077d9b9527241b3d4582846b1f3a6697c819185296c3c27af0",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a81d89da071b488b7d672e6416971094eadb1c474d6a991c5ee0ba7f29fc7033",
+        "reason_sha256": "f1940973dd30a2e3017be2503cb5f590897c94b1332d3852147da4c436dd45dd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P5"
+      }
     },
     {
       "post_key": "7e394e7104df8788f9d4904f52edd3de19eaf6954c22239b84f8fc2f66e0994b",
@@ -10620,11 +11802,23 @@
       }
     },
     {
-      "post_key": "835a18969a3c3e68386d3a9838c5dc4844165bae8f89a1907b13b84d5782528b",
       "baseline_text_sha256": "70a5937bda1c6bbf6b9b7715173b8f4ea7b720f9e7b64674acc5b745d4480806",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "835a18969a3c3e68386d3a9838c5dc4844165bae8f89a1907b13b84d5782528b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "70a5937bda1c6bbf6b9b7715173b8f4ea7b720f9e7b64674acc5b745d4480806",
+        "reason_sha256": "729ab564fc022c6f3e77623649b384f866dfc2c0c0317a799267c01663660418",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "837ca53123c30f63e9a1feb50bb3a76400d0315f52859c49486a0ee4ad658c4a",
@@ -11075,6 +12269,25 @@
       "review": null
     },
     {
+      "baseline_text_sha256": "1c932752d4401e09984ddaf8880de8d8b4ec04383679170303c039fbaa0ca88b",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "880f862dd80d95e341fc3e64eb3efc4e936a48ddd4c0f8d1df9163f9d875592d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1c932752d4401e09984ddaf8880de8d8b4ec04383679170303c039fbaa0ca88b",
+        "reason_sha256": "9f9314c1f70277f3156418b245ef1cd1b40516d5c9f02c1705bae5f4c52877cd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
+    },
+    {
       "post_key": "8810c735d0477ecd3bc6337bbe061ec52f1c14b4241119e10f4073981cb20143",
       "baseline_text_sha256": "cbd75df1b069952f0d8b97d7e89a0539305e041c639f34c76b662597f371551d",
       "main_issue": "受け皿・指導者",
@@ -11516,11 +12729,23 @@
       }
     },
     {
-      "post_key": "8c9176bf1f2b7e2a27c6ab3b380cf8467cc9c78628d4cd41306759d1e610ed28",
       "baseline_text_sha256": "4d9c409c12c6ecfae7772a19753228cbe1a47195f15d997a7183a5d85d5a0e83",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "8c9176bf1f2b7e2a27c6ab3b380cf8467cc9c78628d4cd41306759d1e610ed28",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "4d9c409c12c6ecfae7772a19753228cbe1a47195f15d997a7183a5d85d5a0e83",
+        "reason_sha256": "6c37c2b4a670b3cde3afd5859c1a42886601a5e176730e21895e424d6d6b4407",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "8cc78f1e5a49900705ee02ef6cf42d8b8a2dcbdf890e6d2f4c58d6bb69089b8c",
@@ -11561,11 +12786,23 @@
       }
     },
     {
-      "post_key": "8d3d2297b0ac3702b9432b77793874d1a5504d9204f7cb1f152724a5d5d85432",
       "baseline_text_sha256": "1469c29a8cdcbc04137c11716622f7b69189efab40fb6c713476da09868d753a",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "8d3d2297b0ac3702b9432b77793874d1a5504d9204f7cb1f152724a5d5d85432",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1469c29a8cdcbc04137c11716622f7b69189efab40fb6c713476da09868d753a",
+        "reason_sha256": "cdf63a91596482cd98618906134fc2baec0e31aecd7c94c083744699ec47c16e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "8d701c33ad600c0b7fef4d6970b7b24685324edf335d6cc946e7953bea569c70",
@@ -11606,11 +12843,23 @@
       }
     },
     {
-      "post_key": "8dca89bc9a17ca215f6c6b3939aeb69ca3badd10645d164be34474bcd8729830",
       "baseline_text_sha256": "fb61c9316fd5ee0f8d8dc38079a8f0b62bf08792efbaa58a1183fdef7922e7ae",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "8dca89bc9a17ca215f6c6b3939aeb69ca3badd10645d164be34474bcd8729830",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "fb61c9316fd5ee0f8d8dc38079a8f0b62bf08792efbaa58a1183fdef7922e7ae",
+        "reason_sha256": "d651e729404a26778ecd5b7afebdbb8e2c57db181539293af921bb79c0aad28c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "8de59e2e43006b4f6d5ac7b136c0d03ddaa8dcf2309741e018b9e2f6bdf94a3d",
@@ -11651,11 +12900,23 @@
       }
     },
     {
-      "post_key": "8e3f58e0830ae6c178a0b17be91213d5cad19c3ffa84bf8d231502d28e5dd2b7",
       "baseline_text_sha256": "802048e8f9bd5167a959eb0e61048bb5164c5fbd80dd94559772a71086b59aad",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "8e3f58e0830ae6c178a0b17be91213d5cad19c3ffa84bf8d231502d28e5dd2b7",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "802048e8f9bd5167a959eb0e61048bb5164c5fbd80dd94559772a71086b59aad",
+        "reason_sha256": "5fca69e6e17a4201eab2f778738053f6123278167ce7fe5bee168c60b5872da9",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "8e4222cdb453cad64241bfc7409d326f6e315f8855d430f477558301c319a73f",
@@ -11691,25 +12952,80 @@
       "review": null
     },
     {
-      "post_key": "8f1c87c34ac07e4feb1a0eefa4acd18545b67b4056188c5daa42d2e0b2dc4289",
+      "baseline_text_sha256": "d204193fa1d03c7e27669c2e2d2a2c9b15dc4f8650499642cd3bf42b35932764",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "8ef84136221dff1f1d67f271aa15056661db7f214842112ca0ae3e06bedbc317",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d204193fa1d03c7e27669c2e2d2a2c9b15dc4f8650499642cd3bf42b35932764",
+        "reason_sha256": "600fdef1d127271f9e10bd1b3e7d76c2324b5a2e441321936023fe3bd1a19838",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
+    },
+    {
       "baseline_text_sha256": "da5f1bd97188d088eebdc8b1e6f19fb33300cc3293cfe6ba806f0e77e60ceabf",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "8f1c87c34ac07e4feb1a0eefa4acd18545b67b4056188c5daa42d2e0b2dc4289",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "da5f1bd97188d088eebdc8b1e6f19fb33300cc3293cfe6ba806f0e77e60ceabf",
+        "reason_sha256": "7543bb99a9e30e4d239fca93e7d6a2bd8aac4919c6d5bc9e17ca1a385c9cc5b6",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
-      "post_key": "8fcd546ce75c848896ff826b4ab4a61fca3cbd0e16f93f9cc0ec5c02ecd56376",
       "baseline_text_sha256": "d6d4428940590f64b0222c3c9aa29f54c09a715d0fa14e744e598d5523e30770",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "8fcd546ce75c848896ff826b4ab4a61fca3cbd0e16f93f9cc0ec5c02ecd56376",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d6d4428940590f64b0222c3c9aa29f54c09a715d0fa14e744e598d5523e30770",
+        "reason_sha256": "235642cf57a5b2406a708cbbfc1010050ea084c058fa7cc944c0f381e239e7ee",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
-      "post_key": "8fd66af935526b47717649b1525af6efa0f25ea0cc8fc860552f7a09db6dc3c8",
       "baseline_text_sha256": "bc6b7c2321b149560f0443d98f84a4d8b11188701a1fc255fa49bb0870c2727c",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "8fd66af935526b47717649b1525af6efa0f25ea0cc8fc860552f7a09db6dc3c8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "bc6b7c2321b149560f0443d98f84a4d8b11188701a1fc255fa49bb0870c2727c",
+        "reason_sha256": "c352869a1040417b0aa24f278cc5f4f44d16e5d1853d5cb772ae5fc0ef964b80",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "8fd81c2f044394437b62413edfe00ea202de2d0c788c4175b16abf3a0e139711",
@@ -11747,6 +13063,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "other"
+      }
+    },
+    {
+      "baseline_text_sha256": "759d706f7b66272a0024692b6b20f0c9dea9f810e6dc5914f4a55e43bbfbbcf7",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "8ff54bfeb7424e89a2b0e498c416d8c85f1dfc5d67b10b234df394ce2df5f494",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "759d706f7b66272a0024692b6b20f0c9dea9f810e6dc5914f4a55e43bbfbbcf7",
+        "reason_sha256": "74a015708f5502b28a87fb95570796e3c083e0476490fde09760b3d7a9b69e9a",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
       }
     },
     {
@@ -11814,11 +13149,23 @@
       }
     },
     {
-      "post_key": "90c5959ec28c1c0f3bd58b6e6f64759f327fa9535f8045abf46b94f0e0aa2e1d",
       "baseline_text_sha256": "d90032dae438c16b6ae39c08e72e19285ed75413211107116f3ceb27330798db",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "90c5959ec28c1c0f3bd58b6e6f64759f327fa9535f8045abf46b94f0e0aa2e1d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d90032dae438c16b6ae39c08e72e19285ed75413211107116f3ceb27330798db",
+        "reason_sha256": "01a3138a90fdbc80492427f0aa123d65ad19aeafe379bdde1492ff0a283dcb79",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "90e585c314ef8079f2ee77fb039ea197b8f496d5b10e60aec28dfb863c4e6c9f",
@@ -12288,11 +13635,23 @@
       }
     },
     {
-      "post_key": "93e4a5e7ec4f0da4e6aabdb3ed4e9ec546be667f7321f9db7d602e47ec70975a",
       "baseline_text_sha256": "80cbdffe8424f5dc66c227b379480c716cc1cd6a760b9c2232b547d6bdc01dfe",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "93e4a5e7ec4f0da4e6aabdb3ed4e9ec546be667f7321f9db7d602e47ec70975a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "80cbdffe8424f5dc66c227b379480c716cc1cd6a760b9c2232b547d6bdc01dfe",
+        "reason_sha256": "0bef8d536870820252dcc1321ce298b112a21a31417631c2cb8580842593c3e3",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "93e9e3e3f0e4783d4c6a26543354238fe6f57cd955dcd86656c125801ed4087a",
@@ -12416,11 +13775,23 @@
       "review": null
     },
     {
-      "post_key": "9543e79527883c72c3ec162a4d2fdf79b015e375d48169128871b33dfeca8190",
       "baseline_text_sha256": "5e6e0c9036feeb54410183e04714295aeaf0a346600106d18da2248a3ae3dba4",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "9543e79527883c72c3ec162a4d2fdf79b015e375d48169128871b33dfeca8190",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5e6e0c9036feeb54410183e04714295aeaf0a346600106d18da2248a3ae3dba4",
+        "reason_sha256": "e97916879c543ce3c9d6360d78feb8158c88d17b57a092c7636ccd72409f9004",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "95644fb1ab3e7bb13f2c4a245ca5c8d299a4d2523ba2d9b5175c9b82895e4f42",
@@ -12456,11 +13827,23 @@
       }
     },
     {
-      "post_key": "960ac92567800e2dc4fff5453591c9995f81105492a74a70df53601d2098ba70",
       "baseline_text_sha256": "a0893e3964314ccc527d3428e6141d5025e6f9f9f5b39ba653b4d413446ec4a1",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "960ac92567800e2dc4fff5453591c9995f81105492a74a70df53601d2098ba70",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a0893e3964314ccc527d3428e6141d5025e6f9f9f5b39ba653b4d413446ec4a1",
+        "reason_sha256": "19d79dda2c928930a197d47a1a3a747088dbba6178454b5c55358e46c861e12f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "960f3c4533ba7e3522e7eb86f225c3ec6af370d782b98c8c1ed651055391b24b",
@@ -12470,11 +13853,23 @@
       "review": null
     },
     {
-      "post_key": "962001081e7b12125ebbb082a881edfb0b3ebde87e6f14585dd614cd5d7be92a",
       "baseline_text_sha256": "a2cab531c4acac36f597fb2b254383a6c04fe2a241f81628a5cbd1f2098b184b",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "962001081e7b12125ebbb082a881edfb0b3ebde87e6f14585dd614cd5d7be92a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a2cab531c4acac36f597fb2b254383a6c04fe2a241f81628a5cbd1f2098b184b",
+        "reason_sha256": "7a19e704e1d06c64bd8d2daaa3c13387fde9a0c04c9698f0a73a207246935f0e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "9626e626a83d509b5c4e4ecf38ac1b1526ae24441137fed4219fe35ec85d361d",
@@ -12553,11 +13948,23 @@
       }
     },
     {
-      "post_key": "96cdd8aa7c1cb0a1924b44848694950e861ca54f35c2966ba211068927c1e459",
       "baseline_text_sha256": "7416f9e3508f1408527bb291720c3a0f7ec1c732769a73048bf751b077cd3cf2",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "96cdd8aa7c1cb0a1924b44848694950e861ca54f35c2966ba211068927c1e459",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "7416f9e3508f1408527bb291720c3a0f7ec1c732769a73048bf751b077cd3cf2",
+        "reason_sha256": "83ebc3bf99853ef684c9b43e0c99d57ba376bcc3333a187ac79216958e82b6f5",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "972657573b25233162d8add33d315c628c07df2d5c7a46c9308811a3976d92bf",
@@ -12614,6 +14021,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "plan-undecided"
+      }
+    },
+    {
+      "baseline_text_sha256": "b6569e72b953fa82c1d0359507ab3f2cd75c441e5b404574d462ccb6dbadf0ad",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "97cac6a146980efd39f7cea7bc472c0a4123d55956d07f9599319e264391a150",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "b6569e72b953fa82c1d0359507ab3f2cd75c441e5b404574d462ccb6dbadf0ad",
+        "reason_sha256": "f0ea6609943113f4dfec02a3a1adaf59ab81964252adc5396c620c3978d160ee",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
       }
     },
     {
@@ -12935,6 +14361,25 @@
       }
     },
     {
+      "baseline_text_sha256": "26317dc647a478efa0540fba64290b3b83dbb1c7b9b2fb1505056c3fb29eb39d",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "9bf1fa7988ad64600492223c509b07c8c208e56b0ac695fa56e8c0a7f5bdfcf6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "26317dc647a478efa0540fba64290b3b83dbb1c7b9b2fb1505056c3fb29eb39d",
+        "reason_sha256": "916b40ad1bff0173c9e952ed00e44a41cb27e1db0dc1b5154aefc53cfa1984ed",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
+    },
+    {
       "post_key": "9c25c64d060d68e33ab235a97d42a1bb0c09558fe9e304cfaa8492b8149c6949",
       "baseline_text_sha256": "6978de3263ff105e864864e11b08d9b8a2247f9a5a4989b9c829a088bc0e4da9",
       "main_issue": "制度・移行プロセス",
@@ -12989,6 +14434,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "plan-blame"
+      }
+    },
+    {
+      "baseline_text_sha256": "02a3fb89ab237bd98f09388fe4588eac7b8419e139b0038694e833e58da69d5c",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "9c420edcdf8dfa3b095c7048540313002da29d12beb2d0fefb237014b7ee1799",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "02a3fb89ab237bd98f09388fe4588eac7b8419e139b0038694e833e58da69d5c",
+        "reason_sha256": "66f4c8ab2342586e6bd52ffa093dd1e0bae5d6995e4fbe077ce6b0d22c5b5afb",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
       }
     },
     {
@@ -13286,11 +14750,23 @@
       }
     },
     {
-      "post_key": "9e9fd63bc55d66437d340f5ebca6ea45746a6e530a3b896efbc2d0b53a84303f",
       "baseline_text_sha256": "44802c0fdda8698ce63b76b177cad4e615ffd2e8413a786e2ec42e642497af70",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "9e9fd63bc55d66437d340f5ebca6ea45746a6e530a3b896efbc2d0b53a84303f",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "44802c0fdda8698ce63b76b177cad4e615ffd2e8413a786e2ec42e642497af70",
+        "reason_sha256": "d0a7b3226070dff9f0057839fa7e71406cbd169442fcb23cd7f0635f09fdbd54",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "9eb6c34905fb5814c3a40ace7af3d32baa1682d3f3374f797df4ffa8c0f7aa22",
@@ -13347,6 +14823,25 @@
         "source_file": "quality/reviews/2026-09-12-bukatsu-missing-independent-38.json",
         "source_sha256": "0fd919a92d47a7e283a5a68b5fd717f103b388f6f9d89140c7f31ef2703194ac",
         "bucket": "disputed_unresolved"
+      }
+    },
+    {
+      "baseline_text_sha256": "be4c3f7b55cfbaaa273692465a493b7c1e0068457b6db0e91e5f4e4630204079",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "9f4fd0d74d43785a847af665a324df2938bddd18b9ecaacd6d7c421d1056fd39",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "be4c3f7b55cfbaaa273692465a493b7c1e0068457b6db0e91e5f4e4630204079",
+        "reason_sha256": "360616e5be65d108c817b2c5a3c314cb402abc88930a65ef34fb8690f0167e3b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
       }
     },
     {
@@ -13516,11 +15011,23 @@
       }
     },
     {
-      "post_key": "a1a9c4fce8b70ffa963348ab15ad322685c7add6521fbb4b430936dfb5292b5d",
       "baseline_text_sha256": "7a2fc00b6d334fbcab8bfe508252669073d0c10446a10d5dad55fe177953b568",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "a1a9c4fce8b70ffa963348ab15ad322685c7add6521fbb4b430936dfb5292b5d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "7a2fc00b6d334fbcab8bfe508252669073d0c10446a10d5dad55fe177953b568",
+        "reason_sha256": "06acf72f7b0e6b506d3d8502fe612657972e807e239a0148407a0ea1bddfc5ef",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "a1dbbd295659fadda598544238d245a55e1dba68dbd03a4b26d18a3bb888a6c9",
@@ -13625,11 +15132,23 @@
       }
     },
     {
-      "post_key": "a3620b8a92abb8880b3d95df4b1bb296f66da76a0c8f4bee3582459b7f964d05",
       "baseline_text_sha256": "f8a1df4c4653c368ff322aa74adf8b160a7dac78c4d76a0c0192b1b2d418057a",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "a3620b8a92abb8880b3d95df4b1bb296f66da76a0c8f4bee3582459b7f964d05",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "f8a1df4c4653c368ff322aa74adf8b160a7dac78c4d76a0c0192b1b2d418057a",
+        "reason_sha256": "76b2008bebeaa0dd3a44a66ec80be44c4df1288a7c2001bd745113c35ae4ccfc",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "a3727b614fb3a7f27d7646e2fa32c6b30d9798d62670886739cfabd8eb2b7c66",
@@ -13727,11 +15246,23 @@
       }
     },
     {
-      "post_key": "a426272a3a14c6e24de6bb7b3fe91ae1cc90ae0fccc7babba10c265b7d1b9568",
       "baseline_text_sha256": "8fdc058c85421ba8cf36840491df56409dbb7337d1ff808f38806a658211f32d",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "a426272a3a14c6e24de6bb7b3fe91ae1cc90ae0fccc7babba10c265b7d1b9568",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8fdc058c85421ba8cf36840491df56409dbb7337d1ff808f38806a658211f32d",
+        "reason_sha256": "9cdcc8697450790804d9f09f4445c495095947d24311ee68da5511174144ecc5",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "a43588b4805dbe623704108821dae7b30315923c0e31d0798973224ed907cee4",
@@ -14028,11 +15559,23 @@
       }
     },
     {
-      "post_key": "a5a90a4f146310dbb85fc2d58f1061fe6624c2029cfbe739b7a7d64057830ff2",
       "baseline_text_sha256": "1a4fb73834f6f5681d9f4916d2afacda4ededb1c5934834afb63caf4105da771",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "a5a90a4f146310dbb85fc2d58f1061fe6624c2029cfbe739b7a7d64057830ff2",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1a4fb73834f6f5681d9f4916d2afacda4ededb1c5934834afb63caf4105da771",
+        "reason_sha256": "e7bcec0afcf1184bb320ee78e7b14fb4d611d20a09fcb06903fd77fc25511b73",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "a5ab463854d5ddd0152be1ba4c7a59e45d216294601239755fc5a681054970d4",
@@ -14054,11 +15597,23 @@
       }
     },
     {
-      "post_key": "a5bb0c5294388dd58714515ba5f56c64b603f2be89d258b1d4db29a00b61bbbd",
       "baseline_text_sha256": "31b56351b8aad7f4a4278c1f18100ba54a31b4f97eee18a2f7e677cb23e34b0a",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "a5bb0c5294388dd58714515ba5f56c64b603f2be89d258b1d4db29a00b61bbbd",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "31b56351b8aad7f4a4278c1f18100ba54a31b4f97eee18a2f7e677cb23e34b0a",
+        "reason_sha256": "90a84d34335c497d6a37929779a218f2f4c04ff27d164e70bf69169f64def3b7",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "a5c60a98c95dd0a7f4eb6577bc2e20c920b26bed70690b65dd5586ab43fb2758",
@@ -14569,11 +16124,23 @@
       }
     },
     {
-      "post_key": "ac13da664b7babfdb0cb44ea64a07fb93afc528f7d92279679cfb36cd1bd9cac",
       "baseline_text_sha256": "422afd7938b45a7f20e97e6b2b98457daff9ca08ca51a9f32454d5a73023ca0b",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "ac13da664b7babfdb0cb44ea64a07fb93afc528f7d92279679cfb36cd1bd9cac",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "422afd7938b45a7f20e97e6b2b98457daff9ca08ca51a9f32454d5a73023ca0b",
+        "reason_sha256": "6f425ee44bc90e2d7a68386dc67bac2d68b4e59c7887d1a307706d70de0aaf7c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "ac360aacfaea353bfb1dfb255f777b55f520baea8ae1594f045f2b741c37102a",
@@ -14704,11 +16271,23 @@
       "review": null
     },
     {
-      "post_key": "ad800f5b44de67d65eb8c2b831ff0f4ae4d67cb812c4a2ab13976f3b71e808d9",
       "baseline_text_sha256": "676e689c730feee2d2f883b47d8d20bb660f56da6bbbe404ec27daab23aefc94",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "ad800f5b44de67d65eb8c2b831ff0f4ae4d67cb812c4a2ab13976f3b71e808d9",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "676e689c730feee2d2f883b47d8d20bb660f56da6bbbe404ec27daab23aefc94",
+        "reason_sha256": "f08a01dec6d05c56510c0ae54a2baf7d3722cd71ad4fd2016b07531d94b591c0",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "add00992b201224e8ec39ebca6c256e5c19e4e5fed884fee0558d0f64ea4654d",
@@ -15451,6 +17030,25 @@
       }
     },
     {
+      "baseline_text_sha256": "5641c2a56f93e0f4d75339002565035c829fdf2b6d315e0ab8e4529ab57d5dd7",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "b4e92d8839b91de2709c5869ca5c77ae426f64c6c9e7dc76ea38c6acc17ac3c4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5641c2a56f93e0f4d75339002565035c829fdf2b6d315e0ab8e4529ab57d5dd7",
+        "reason_sha256": "b3daaf29968c0e3ed73a6c9ae24bc430b736083143f85f97b5a091ed6f95f128",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
       "post_key": "b4f7efed1b24d2a3a94e6b49ea0d0a19404ab1fee9f856c42d896771b7212839",
       "baseline_text_sha256": "2a5966867237ad987a1adc77d6d144fffcda125b6c3c2823078bee7766eac210",
       "main_issue": "費用・家庭負担",
@@ -15631,11 +17229,23 @@
       }
     },
     {
-      "post_key": "b66ff10779c75de7469f4f8ee14fa898f4df4515f3fd9a8f50d4220f9bf7d99c",
       "baseline_text_sha256": "9f6ccaab4afc8cc286a93cb6b6d879788d5c77871fa6b2456e3cc0a35f2c4c72",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "b66ff10779c75de7469f4f8ee14fa898f4df4515f3fd9a8f50d4220f9bf7d99c",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9f6ccaab4afc8cc286a93cb6b6d879788d5c77871fa6b2456e3cc0a35f2c4c72",
+        "reason_sha256": "9f94b75f72f9c51e8ca5a2db24bbf0af07f0092762983586a3a709123d08e07f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "b6c5e9039a255624e9e267f8380662cb7b111f91f07f1214d7d32ec9d2200569",
@@ -15797,11 +17407,23 @@
       }
     },
     {
-      "post_key": "b98142e5cb184df18da1a385568cd91e427a47971fd5c16470b289c5cbe183e7",
       "baseline_text_sha256": "5c9de2d4c22fe28f04b85a5c7ac347f2a9fe891bacd54a5c81e12665789ce9b2",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "b98142e5cb184df18da1a385568cd91e427a47971fd5c16470b289c5cbe183e7",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5c9de2d4c22fe28f04b85a5c7ac347f2a9fe891bacd54a5c81e12665789ce9b2",
+        "reason_sha256": "cda2effc9c0a4efe1974072f44af699a96b4c32710d0b011e1992a539082754c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "b9c93d90079685243a3c7048fffb87b8ff868050232261d97c5dec5c1669a843",
@@ -15849,11 +17471,23 @@
       "review": null
     },
     {
-      "post_key": "ba48e856c58210df79d004eff6afb11ef09e7f1eaf0178e37cde5a74c853c681",
       "baseline_text_sha256": "637ee00472d7dd727aa2a9eb42ac1250f369bc28de994d85fc6939146eb70f21",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "ba48e856c58210df79d004eff6afb11ef09e7f1eaf0178e37cde5a74c853c681",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "637ee00472d7dd727aa2a9eb42ac1250f369bc28de994d85fc6939146eb70f21",
+        "reason_sha256": "f0eb71d48498c0417aaffdd4f3f9162625d15c8110141ed6aace5a2f1fb1ebdf",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "ba53e540b5efc7b227bb4fa24c4779ca859dee8912eae97588fd8ff4d5f6419d",
@@ -15894,11 +17528,23 @@
       }
     },
     {
-      "post_key": "baf0ba2002bcde1bf95d2e3488d54e0a803631e38a83738359e49da74a0f64bd",
       "baseline_text_sha256": "9fd822d6672903c48ef884581bfe3b92db09995968506d0aad95b8279db873a1",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "baf0ba2002bcde1bf95d2e3488d54e0a803631e38a83738359e49da74a0f64bd",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9fd822d6672903c48ef884581bfe3b92db09995968506d0aad95b8279db873a1",
+        "reason_sha256": "ab55efd1b057b42fdca99bc1ff1b0fa6fc01e50623bbe20c4ec5b1f678b0bbda",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "bb1ac2fd5524b174f2914456ef2a074dfc4112d458d00cd07e6414eed6a0e002",
@@ -16171,6 +17817,44 @@
       "review": null
     },
     {
+      "baseline_text_sha256": "732ea41af6dcee0762d73d55f668d1b326c351018afff9b5db6754fd60a5c712",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "beb0cf93562f0f59a5032d588e0d24db14302931a2d0397a4f1f0ec91f16d635",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "732ea41af6dcee0762d73d55f668d1b326c351018afff9b5db6754fd60a5c712",
+        "reason_sha256": "fc2ad0b61c84a3fb57c43fdaaaec1a9d880d1756b03fb20d51d4a6b1af868b2b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R5"
+      }
+    },
+    {
+      "baseline_text_sha256": "5c86bf169901927ffb62e7648017adc3c0a93f2171087ae52eb883a25285f001",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "bf33c3eb86a0220bb461135cf5add99564ae7b37f7479ea4ad8ad7608cdcc205",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "5c86bf169901927ffb62e7648017adc3c0a93f2171087ae52eb883a25285f001",
+        "reason_sha256": "e5ece98d0af126d4c9f5801c566621255233e9c5c8cde2bc09300fc2d7b1e9cd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
+    },
+    {
       "post_key": "bf7a28519826a1754f1c1b402277a0041195a053ff6d7f0b4c252b131dbd34f2",
       "baseline_text_sha256": "9a23381d242f3c1ac91ebec867e06b61ab7d665242d19b7c3ddde5c3a30c985f",
       "main_issue": "教育的意義・機会",
@@ -16399,6 +18083,25 @@
       }
     },
     {
+      "baseline_text_sha256": "dfb40ab7409e17b1224f1f0c646bf6f40d8aec9f88534f3ce9fd5a5e2663722d",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "c1595df4e57dc271248673c5315f18e8c9a6738831a7e1e4adc3030b2f3ef959",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "dfb40ab7409e17b1224f1f0c646bf6f40d8aec9f88534f3ce9fd5a5e2663722d",
+        "reason_sha256": "53b0e028efabdb3e049dc79f91dd206c3dea79ecc3392ff9692edb491e483abf",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
       "post_key": "c15ead86522a18c3976da04f9641a6bfcd682a6c2d08eeffc4fba49f82deeac1",
       "baseline_text_sha256": "59eab4b8f03519a374a361c31ad69081e84b1e02cdae2ee6d9b4ad1d5c6d6e19",
       "main_issue": "教員の働き方",
@@ -16572,18 +18275,42 @@
       }
     },
     {
-      "post_key": "c3521e7fa770f8a5faaf63d8806072b5c9b321c77f4736a4c50a44d5a0382557",
       "baseline_text_sha256": "270fcb573f0c069e267e328e9522cece87912eb27efadcf20a99c9315782a8ce",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "c3521e7fa770f8a5faaf63d8806072b5c9b321c77f4736a4c50a44d5a0382557",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "270fcb573f0c069e267e328e9522cece87912eb27efadcf20a99c9315782a8ce",
+        "reason_sha256": "3a2a6021e6ffcdfe68c051b2aaa5a3cd8e49a8e9a61d858c1119f119a9d318e5",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
-      "post_key": "c37cca16abd1003ff0857613ff634d0425b29ea873253f586a6578ccffe204f8",
       "baseline_text_sha256": "da9ff65044eb41a5c32f97909facfed2b8c3cde047c1d408b2032c7d12530b00",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "c37cca16abd1003ff0857613ff634d0425b29ea873253f586a6578ccffe204f8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "da9ff65044eb41a5c32f97909facfed2b8c3cde047c1d408b2032c7d12530b00",
+        "reason_sha256": "a1a223d1837ab659d0d7cd1f3ce01a9eb743871f95315dff82549dd1912e68b9",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "c38a9995403286e5949f4ef2162b2fa3672a06270f8ce336f9af1abc988292af",
@@ -16752,11 +18479,23 @@
       }
     },
     {
-      "post_key": "c57d1fde04f4d01e6c7728ff2c0b8592ea5b7b81bf5be9ae198b00f6d737eb7b",
       "baseline_text_sha256": "e7a0a4478ee27f912960793b1cbf2f33f1e567f9b550e8c0f2413c1e8f5d430c",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "c57d1fde04f4d01e6c7728ff2c0b8592ea5b7b81bf5be9ae198b00f6d737eb7b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "e7a0a4478ee27f912960793b1cbf2f33f1e567f9b550e8c0f2413c1e8f5d430c",
+        "reason_sha256": "84c18423f8da06280023011900000537f83219a81233cd6f400b62b16e75f380",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "c5a5cc1c96b2564efa64ec1c2c0ca6c1f261658f594dfd39aef20cd3d128ec77",
@@ -17086,11 +18825,23 @@
       }
     },
     {
-      "post_key": "c950345c8ab74ea8f9d60f2f90ae62b51995303abd00446f8e16bfb74ec24e8a",
       "baseline_text_sha256": "bc6976755a12bf45a0de59b8dcfe43bc247ce39ea8d3e0eb999d951236a36fd6",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "c950345c8ab74ea8f9d60f2f90ae62b51995303abd00446f8e16bfb74ec24e8a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "bc6976755a12bf45a0de59b8dcfe43bc247ce39ea8d3e0eb999d951236a36fd6",
+        "reason_sha256": "8ec0b62a304ee299a82404ed5a39ecfd4bfc404a1409c3450243710102d4987f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "c96423a1d8a74de5ca73fa3f33a3f8fe03d949d2d9220b475f54374aa55b3147",
@@ -17406,6 +19157,25 @@
       }
     },
     {
+      "baseline_text_sha256": "c2e2b9f67ec679ce61d819dc43f35d5c9fd830a1027bdb5fac71839b412bf606",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "cd852f578b6d1760ae5d0a767b22b1a9c8ec98342b76ea1ee78bd494cbae8dff",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "c2e2b9f67ec679ce61d819dc43f35d5c9fd830a1027bdb5fac71839b412bf606",
+        "reason_sha256": "c27ff6082958fbbf36a60a1f9dac82551d85e78629197f8f5e43e248a0fa3b90",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
+    },
+    {
       "post_key": "ce3f617b1723b0f70f43a35603ae520be5216d63294396fa3108ae5a03d075e4",
       "baseline_text_sha256": "57a088ff37960c1c4f247c7878ce0aa3736d8334e17aa77569232a1a62e372a3",
       "main_issue": "教員の働き方",
@@ -17425,6 +19195,25 @@
       }
     },
     {
+      "baseline_text_sha256": "6e53a348afca91c5f764fad78488595b72c157409c01e08d32b6ca3b1f4bf8a4",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "ce9d3331231acb59718ef77ec6a0cb3c9cdf4583c9d5c072a5444d9a1f45e19b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "6e53a348afca91c5f764fad78488595b72c157409c01e08d32b6ca3b1f4bf8a4",
+        "reason_sha256": "b56c429bf409a8b4bd5202c8375d176b355db8ea0aaf23797ab5b4be9a8c144f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
+    },
+    {
       "post_key": "ceb8a78601b7a31101dc8ed453e074a54e85261587f08306ff416e384965115e",
       "baseline_text_sha256": "4016c58f731fa47bf084db13fc8606868022f573fb85ed7aa691e63d793dd9b7",
       "main_issue": "その他",
@@ -17432,11 +19221,23 @@
       "review": null
     },
     {
-      "post_key": "cedf2966fc3b7145b829cbaf6bd981636777d91c389ec7e6660952e84b304c7e",
       "baseline_text_sha256": "db92a4e038177d849eee4c45898cf313464299996176dfec4dc1cd7d9c6d571d",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "cedf2966fc3b7145b829cbaf6bd981636777d91c389ec7e6660952e84b304c7e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "db92a4e038177d849eee4c45898cf313464299996176dfec4dc1cd7d9c6d571d",
+        "reason_sha256": "2101f883a540caf7369adeec90ea79bb29772bf820c346811b2ddd2da82a7a3b",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "cee4550c5d79af049905485a2e5fcbe4dca756a2031d59a7b429db38f5baa1f1",
@@ -17458,11 +19259,23 @@
       }
     },
     {
-      "post_key": "cf647ca64edbae23ce66db9391307a9f0412216a129f24da230c2be6da30b77d",
       "baseline_text_sha256": "1972e4a54c018d05590f6ef6656cc3a8768ca87c9213bb80270dcd6cfd8f9039",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "cf647ca64edbae23ce66db9391307a9f0412216a129f24da230c2be6da30b77d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1972e4a54c018d05590f6ef6656cc3a8768ca87c9213bb80270dcd6cfd8f9039",
+        "reason_sha256": "a37c9f8243d07b07a62d6eb8ec9159442cbe104eed27684d51012521dee82d63",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "cf9b04cf87c36b80a333f0315ccb0ff3d322f3b3fe24060875d2266aeaa5fe0a",
@@ -17804,18 +19617,42 @@
       }
     },
     {
-      "post_key": "d3905c8234cdd534f225bbde9de8e8637024f433eac02d63750abe8f23d0c782",
       "baseline_text_sha256": "94bf21c4f5389853d3a8a53d89024d54fdff0c3e20f1d79ba84acd8769f27af1",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "d3905c8234cdd534f225bbde9de8e8637024f433eac02d63750abe8f23d0c782",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "94bf21c4f5389853d3a8a53d89024d54fdff0c3e20f1d79ba84acd8769f27af1",
+        "reason_sha256": "fe974077ed7d8dac4c481420674b909c5967d51a40e05ba6bbc4ce698720ccda",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
-      "post_key": "d3a45c6144e38b72c70b7f1006338731f833f6ef2327a13720e7c3a17ef95ce6",
       "baseline_text_sha256": "d5619d83f8dff3cc59e787ff89f89ed249fe6760cbc963272e2ff71d930b74f5",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "d3a45c6144e38b72c70b7f1006338731f833f6ef2327a13720e7c3a17ef95ce6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d5619d83f8dff3cc59e787ff89f89ed249fe6760cbc963272e2ff71d930b74f5",
+        "reason_sha256": "1a5ebe8e8a06d50c9d1306e816003156e367b622ccffb295a7bd5e35e895f03c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "d3b1f830a33018a2792ab16f6f86c4295dfaa55796086a143d5512177fcdf6d2",
@@ -17856,11 +19693,23 @@
       }
     },
     {
-      "post_key": "d3df02b029b5c500b98aad212a025b40c69a14bc8e06d0045c5d690ee9cc847a",
       "baseline_text_sha256": "0072ff970e2aca5359c734cdb2c213a803e16cc8b4f33a87b96b64dbd052792f",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "d3df02b029b5c500b98aad212a025b40c69a14bc8e06d0045c5d690ee9cc847a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "0072ff970e2aca5359c734cdb2c213a803e16cc8b4f33a87b96b64dbd052792f",
+        "reason_sha256": "6032f91cacdf282c440a2a0130d2d2d69cb0265bb8d34817fd2d64fa45ab79e8",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "d3e5e30feac99a4e13618e640878b91ecfc57959e89d5ccf8a56f082ccf2e428",
@@ -17901,18 +19750,42 @@
       }
     },
     {
-      "post_key": "d420b652023b1a6b2def251973ea9a78dd7d8a48b378b2f16f13fbc4a1a42469",
       "baseline_text_sha256": "c7c0cab2534aa584ef6b796afa674b76f4677c2cabf304e7e8dd8a7c67fd609b",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "d420b652023b1a6b2def251973ea9a78dd7d8a48b378b2f16f13fbc4a1a42469",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "c7c0cab2534aa584ef6b796afa674b76f4677c2cabf304e7e8dd8a7c67fd609b",
+        "reason_sha256": "84bbd7f11230d0ffb8371354a6dfe703ff0c2d9c0fe29af184830ffc19d09069",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
-      "post_key": "d429b68daa8d45b2c985c981cbc8783af0ed899908bc6882875d9b4ac79511ef",
       "baseline_text_sha256": "99eac2df293c601169f7b7d6a471472faec877c5a0047d9be2f921188a889179",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "d429b68daa8d45b2c985c981cbc8783af0ed899908bc6882875d9b4ac79511ef",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "99eac2df293c601169f7b7d6a471472faec877c5a0047d9be2f921188a889179",
+        "reason_sha256": "903fb5fa6c2d42ccd483655ff4ea738d70c97392c994c1c4f9f78608983cfcc2",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "d44dc01d37aba4c2b19fca496cfa4eba58c674862df1c197fdd55fffd62a6269",
@@ -17931,6 +19804,25 @@
         "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
         "source_sha256": "d38ef8f8a2be9501b6ec2765e9ab5a3ef95e4c3c213b778e42dc3bdced5df957",
         "bucket": "other"
+      }
+    },
+    {
+      "baseline_text_sha256": "3e3e3eadb6dbf9696ccd564a84456e586ae62e810c05ae7937bbc63d2c995471",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "d48d9ff5c2321aa6f674270f019c35f4cb71bf5edf9d39dc088547de506f04e8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "3e3e3eadb6dbf9696ccd564a84456e586ae62e810c05ae7937bbc63d2c995471",
+        "reason_sha256": "2c6d7e9675854d0bbcaa511f05ad092c56901bd95bc530550677f32769ec525f",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
       }
     },
     {
@@ -18259,18 +20151,42 @@
       }
     },
     {
-      "post_key": "d7bc660e6d97d7920cc9481d857d37be5ffc0e567bb26df982991af89f9f97d9",
       "baseline_text_sha256": "ddd54b9f045059cc31802a64a8727c759fd7664e902ae4fa8a4ba637273ee7de",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "d7bc660e6d97d7920cc9481d857d37be5ffc0e567bb26df982991af89f9f97d9",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "ddd54b9f045059cc31802a64a8727c759fd7664e902ae4fa8a4ba637273ee7de",
+        "reason_sha256": "f0f72dd961afa1ded50be7de82de5311f5310840d6b49258e6aa1e7de52c435e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
-      "post_key": "d7c8e51ba4602eea11e5702a8c1b8e7bc7ab05543497799befc2b46dc8be2f15",
       "baseline_text_sha256": "86d3f0ec976d3f7a0b7fe77c33807b99365b8ce338f58dea1696412197c73b5e",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "d7c8e51ba4602eea11e5702a8c1b8e7bc7ab05543497799befc2b46dc8be2f15",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "86d3f0ec976d3f7a0b7fe77c33807b99365b8ce338f58dea1696412197c73b5e",
+        "reason_sha256": "84f41e9eb892465b2e7bfcb65cc44e9df9853622980bb1f4dd5429b9d816cf96",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
     },
     {
       "post_key": "d7e73eb7f543cba5f58aa6ad6ab5ee7c5458cec74deeaf8a295c7aa4d16b5e8a",
@@ -18289,6 +20205,25 @@
         "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json",
         "source_sha256": "47ff8c4f3dc52219b4b38da2d76876ae62d98e4922e26b632432eeac34634434",
         "bucket": "P4"
+      }
+    },
+    {
+      "baseline_text_sha256": "00424d14e5afef70447d20ba32f3b9f2e64f796eeb30a42ac65ebd1443201f53",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "d80c6432aae3a7558b568e9ed476fa9451a68822fab8483fc8c8c9d5d36a7d5a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "00424d14e5afef70447d20ba32f3b9f2e64f796eeb30a42ac65ebd1443201f53",
+        "reason_sha256": "b45c986ed8cf5d99e0052632440ba119097ad4714988bd0e756cc3d0d6c6decf",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P5"
       }
     },
     {
@@ -18648,6 +20583,25 @@
       "main_issue": "制度・移行プロセス",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "76f6b4cf2f242f45699eceb2046b358dd0903abd415afeeda765e0cf082dbd4a",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "db4b5c05f7b6f9aec04dbdcef5bc191c8ac31d45229edbf9a404665986cefb57",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "76f6b4cf2f242f45699eceb2046b358dd0903abd415afeeda765e0cf082dbd4a",
+        "reason_sha256": "c8f226c23c7f2e27eecdd2968e023b8b56bc76d2452ec735fa3fece45f90c53c",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P5"
+      }
     },
     {
       "post_key": "db9d133de6025ebd711609f04fd9ea3025a0149c51501e5b903432ca4d2c81e4",
@@ -19297,6 +21251,25 @@
       }
     },
     {
+      "baseline_text_sha256": "853e278e0747cfa4f87099b8281a53c904d8db7f959aa085fd2d754361a55223",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "e1dfa428a1f4b272e4a954a715968ad1567124f0ab3e9200f2d0fce6b981a896",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "853e278e0747cfa4f87099b8281a53c904d8db7f959aa085fd2d754361a55223",
+        "reason_sha256": "33923a0972b3a8c9b4b1fad553c60896b1be9f8cca75bd874e2cf950dfe9fdcb",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
+    },
+    {
       "post_key": "e1e473e87c359b90584bbd42261a484dd52d9ada6452febd8212c2ee95b08a36",
       "baseline_text_sha256": "34ccb749debc571ef6c6912b5faad2458c01d9c9a674e54ea80278b16fbb922b",
       "main_issue": "制度・移行プロセス",
@@ -19425,11 +21398,23 @@
       }
     },
     {
-      "post_key": "e35f66d7116c8b9343cffdefdb403de5d21eaa9aba9f06f5a9514f92f7c20fd1",
       "baseline_text_sha256": "8cb8db7bd8b25020231d21047b27a11eb4dce7d988f68284aca238b91998f8d2",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "e35f66d7116c8b9343cffdefdb403de5d21eaa9aba9f06f5a9514f92f7c20fd1",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8cb8db7bd8b25020231d21047b27a11eb4dce7d988f68284aca238b91998f8d2",
+        "reason_sha256": "9202b57cdf972ba62a2b1d3474884384a25a0f4cdcb232b567ddf73fe14fc8cd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "e3807ed1b247147e762774dcacbd782a27435ba0802a63cc0274fa2e5e565f92",
@@ -19546,11 +21531,23 @@
       }
     },
     {
-      "post_key": "e3fe3905b92053361a2957541ae414c1cada9807ec58b34c101637ca7f3f4686",
       "baseline_text_sha256": "c7d30e852a88f6625d66483032f0dcedea3eb53eab1a62c91bfb4e1ebf752d0b",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "e3fe3905b92053361a2957541ae414c1cada9807ec58b34c101637ca7f3f4686",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "c7d30e852a88f6625d66483032f0dcedea3eb53eab1a62c91bfb4e1ebf752d0b",
+        "reason_sha256": "c3c7bc9f0e3763d6c8924bd367d89cfaa13fb86204cb408e90c5830f9c7679e4",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
     },
     {
       "post_key": "e428a554f2b7dcb45051442daf904ff9e44d16d1f10a45ff96b4723a3fd56d63",
@@ -19622,6 +21619,25 @@
       "main_issue": "制度・移行プロセス",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "9dfa9877d4e12066871f3093e8c4e52dbb4ff4aaf65b51bfbabf70bd1b14bfee",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "e4c91f6c7fea8723ac3b8e853ad3f251a96ba4b8a150809060b137759f347454",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9dfa9877d4e12066871f3093e8c4e52dbb4ff4aaf65b51bfbabf70bd1b14bfee",
+        "reason_sha256": "b27cd0f8988ff3fec342dcf698d588c7423b23641e94206aed3ccedc018462e3",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "e4cd9921c6b8a241500631be87cfbb643d9ea3895958d7e843b71ff90ae3a811",
@@ -19697,6 +21713,44 @@
         "source_file": "data/bukatsu-chiiki_teacher-reread.json",
         "source_sha256": "e337003f6a0c20cfc23bcedd5856666de4a262a2d2a2ff7f34d4e537c4ddc6a8",
         "bucket": "G"
+      }
+    },
+    {
+      "baseline_text_sha256": "b742194d01fca353db40e8ace8bc8c590c6b83482c480315b63b8588f853a355",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "e55fe05b71832671b2fcdfbaaa8f3d5c5ac681d9c9f6b6e2f031b4263daf4c48",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "b742194d01fca353db40e8ace8bc8c590c6b83482c480315b63b8588f853a355",
+        "reason_sha256": "943056a90b00db30e57644a7e8551848e84abb3d79b6a5b8c133eddb5420a96e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R4"
+      }
+    },
+    {
+      "baseline_text_sha256": "a58f5b1ab73a9b91aebe8588f47a0c664f4afd3c8b9169b9da6408dc1c19143e",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "e582054bdac45c0d3a3b1bd351cb7dfa6058dd031801ade0d4f4520f3bdcb3f8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "a58f5b1ab73a9b91aebe8588f47a0c664f4afd3c8b9169b9da6408dc1c19143e",
+        "reason_sha256": "b5522b344287da3fb7f316dcfbe5859de21dfb7f3a064019bdbed434e71baa43",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
       }
     },
     {
@@ -19899,6 +21953,25 @@
       }
     },
     {
+      "baseline_text_sha256": "8a6e29cdfdb17fab56575594f38ad432019beeadc8287f11dd8a3f3ddef66df2",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "e906d31b33d9f27139ab63aa35d6b2221401bdfb55e33675bfe7dfd695b9d558",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "8a6e29cdfdb17fab56575594f38ad432019beeadc8287f11dd8a3f3ddef66df2",
+        "reason_sha256": "ce5477211b6b2e8816fa851c2083131f1101df1b978359b6f81097afac67cae6",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
+    },
+    {
       "post_key": "e929dc85f0f0ff14bd699718cfe56258f581d5347b077bb64e048c29e909fe13",
       "baseline_text_sha256": "2faabd90d180a781f3e35d50f760edb725870dedb67a48506b311e9086539a25",
       "main_issue": "制度・移行プロセス",
@@ -19977,11 +22050,42 @@
       }
     },
     {
-      "post_key": "eac6044f055c36eceb07ededce4159cdf0631f160ba0986edb8316c8e675f70d",
-      "baseline_text_sha256": "9b01cc5449c1c00e9ce77ea19d2c56af729946100620306978f1473b2b5a6f88",
-      "main_issue": "受け皿・指導者",
+      "baseline_text_sha256": "d7cc079b2e20a35f8fe4f5c73a4bb68a14e6ec662d04ca9a4dedefb2d13c84be",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "ea60a110971d3399611fc2b71e4a435adba4f9b0df8853bd16277b4866d335ef",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d7cc079b2e20a35f8fe4f5c73a4bb68a14e6ec662d04ca9a4dedefb2d13c84be",
+        "reason_sha256": "e4ce54e5365cb6e96d77850af69139176c2328098c419b313df1e0cc4a0a5d72",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
+    },
+    {
+      "baseline_text_sha256": "9b01cc5449c1c00e9ce77ea19d2c56af729946100620306978f1473b2b5a6f88",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "eac6044f055c36eceb07ededce4159cdf0631f160ba0986edb8316c8e675f70d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9b01cc5449c1c00e9ce77ea19d2c56af729946100620306978f1473b2b5a6f88",
+        "reason_sha256": "98c74010f25dba33f041f705015c02ae5534bd17d609bd4d7f1da83809774548",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R4"
+      }
     },
     {
       "post_key": "eace1030da75abf45e48489b1a98e1c9c5f8bfe62433244ec70216399dca8ec8",
@@ -20366,6 +22470,25 @@
       }
     },
     {
+      "baseline_text_sha256": "f402d731f8396a1573af3f3b1b9a1a32cdfea3c4088e6ea25c15aa40488088f4",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "ed6c71555e22b1c7cab85e49238603ea82c9db3c05d8557166b3d7fa6716470c",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "f402d731f8396a1573af3f3b1b9a1a32cdfea3c4088e6ea25c15aa40488088f4",
+        "reason_sha256": "38d2a45e08fd7f48f58bd5ef86020b0fbfaa39449b6b28e538a46ebd1405f8a8",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R3"
+      }
+    },
+    {
       "post_key": "edf67b8b51612448f8160ac71cf6273afa16d391e1068b4d864a3da59bf57318",
       "baseline_text_sha256": "bf3e2dbdfed53bb6d1bca7ca5ec6d26c372095ef5acd7295426eae1fa80e7ca3",
       "main_issue": "教育的意義・機会",
@@ -20428,6 +22551,25 @@
       "main_issue": "制度・移行プロセス",
       "is_opinion": false,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "4777565ae2c54d78866083bb24f23c3f8313181ec02b669e18ece803d394d41f",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "eeb93baa926d2a52e00e13e9e62c0915e4eb526c2a94f51d95592f90293e735e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "4777565ae2c54d78866083bb24f23c3f8313181ec02b669e18ece803d394d41f",
+        "reason_sha256": "1e5b5c92794269efb263ef63852b320054848cce56bfb4b293f1dd16ab310555",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P5"
+      }
     },
     {
       "post_key": "eeda7f428f01bc1fd67efd86e11fc43580cfc14f5f7961d410351a8b03f5cc72",
@@ -20719,11 +22861,23 @@
       }
     },
     {
-      "post_key": "f29604085dd26909f2f734de1196d700ad57536707706c87790fb377d510aa31",
       "baseline_text_sha256": "1df7a063c65231c99937cda37ecabb95186f9332715ab143aeff2055b7712cb5",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "f29604085dd26909f2f734de1196d700ad57536707706c87790fb377d510aa31",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "1df7a063c65231c99937cda37ecabb95186f9332715ab143aeff2055b7712cb5",
+        "reason_sha256": "123f3e35ac4727abbfcd5ac83b30d18e4adbd260951d3230d32beedc20396939",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R4"
+      }
     },
     {
       "post_key": "f2fc725fded1cae7417837a2397bb8986b1fd4551c706b7496deb57402848b0d",
@@ -20821,11 +22975,23 @@
       }
     },
     {
-      "post_key": "f368ffdacb8893530f55be5717ba356890472ab931a4a7a2b18d225b5867a5f5",
       "baseline_text_sha256": "80ad50f658134f698bfa707b3097fd2bf2b19d2f13467ee4635036ab985954fb",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "f368ffdacb8893530f55be5717ba356890472ab931a4a7a2b18d225b5867a5f5",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "80ad50f658134f698bfa707b3097fd2bf2b19d2f13467ee4635036ab985954fb",
+        "reason_sha256": "b4447c72594d3f0ff9dd8641ceb9525cb0081037375fbed8bf66104badf0a715",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R1"
+      }
     },
     {
       "post_key": "f3f06526663dceaf9266628feefa4a75270d9ec2cdd17dbb46eeaf9247443b04",
@@ -21086,11 +23252,23 @@
       "review": null
     },
     {
-      "post_key": "f76a17e69cbc7623af3f5370d254bf1c778fb7341397808bb2716493871b938e",
       "baseline_text_sha256": "acd9a2bd5883a6fc2e8b0239ea82158d00905c7cfe1de669e1a5057b956d1df3",
-      "main_issue": "受け皿・指導者",
       "is_opinion": true,
-      "review": null
+      "main_issue": "受け皿・指導者",
+      "post_key": "f76a17e69cbc7623af3f5370d254bf1c778fb7341397808bb2716493871b938e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "acd9a2bd5883a6fc2e8b0239ea82158d00905c7cfe1de669e1a5057b956d1df3",
+        "reason_sha256": "732b21f802b6194ac3517c96f017ca1512d26c361f2fb64c2ea76ddecc0ab3dd",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
     },
     {
       "post_key": "f76ea12da5cf5814d6abf535a1407d3f7b6edaf1f5523943b1cb351c01327a14",
@@ -21131,11 +23309,23 @@
       }
     },
     {
-      "post_key": "f7b4dee2399b4f4a5f6fc7a67e2bb73a819f407ef288aee31cdb1bffdce174fb",
       "baseline_text_sha256": "166bff357c737c5039eb179bd5a633af9e5d38070abea2d78ebe21b15834ccc2",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "f7b4dee2399b4f4a5f6fc7a67e2bb73a819f407ef288aee31cdb1bffdce174fb",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g2",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "166bff357c737c5039eb179bd5a633af9e5d38070abea2d78ebe21b15834ccc2",
+        "reason_sha256": "5261633087e53559007da95b8a983ad9265a9f9b5b43680cc7e3ff3f6d00a7d3",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P3"
+      }
     },
     {
       "post_key": "f7d047013e92d04716d5ba72a534da92c3a2d9fb53a71b884fe397dbf459d05a",
@@ -21240,11 +23430,23 @@
       "review": null
     },
     {
-      "post_key": "f8692c241d240512779bc44e6acc24a936afb45bb317fc7b2f62f916a8074b32",
       "baseline_text_sha256": "fdfd92dfbc38863f274d497180a0622d1a78dfa012ac95b69824577a0944b769",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "f8692c241d240512779bc44e6acc24a936afb45bb317fc7b2f62f916a8074b32",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "fdfd92dfbc38863f274d497180a0622d1a78dfa012ac95b69824577a0944b769",
+        "reason_sha256": "ec4b2c99fb3d7d205976c75877fe0d0190f67b0c5cc1a117c0a295ce0000664e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "f89adc017e9f309372754178d9c55663247121924f580d569102479639f0aa70",
@@ -21392,6 +23594,25 @@
       "main_issue": "地域格差",
       "is_opinion": true,
       "review": null
+    },
+    {
+      "baseline_text_sha256": "9713fad3589255ab964acee575225f8038933e2d8967849f84620b7bf22c4c8e",
+      "is_opinion": true,
+      "main_issue": "費用・家庭負担",
+      "post_key": "fa79cd57cbebd3cf2504472439673227cfab500ed32648b7a794ddc82d5b5e65",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "9713fad3589255ab964acee575225f8038933e2d8967849f84620b7bf22c4c8e",
+        "reason_sha256": "178c8d1f4bcff6b96df5e42d67501bd159bcd1c7d953d1f8a571e115d237f8f1",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P2"
+      }
     },
     {
       "post_key": "faef71faf92e62e93f00b45ef5431b76afc25aafca67b1f28f363593e6b64911",
@@ -21605,6 +23826,25 @@
       }
     },
     {
+      "baseline_text_sha256": "d17e71a15ed806282188c837537b67ffabd68d1b12f6145e4bee3135a5d545aa",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "fd246ea74f65485bb67e70a20fb8cf71b04bcf8905bcb51d2e6147090d3bcb44",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g4",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "d17e71a15ed806282188c837537b67ffabd68d1b12f6145e4bee3135a5d545aa",
+        "reason_sha256": "f5c7eaea5589f8689c3cd4c30ba018eaf0ee0ffc790dc400feb5e3bfa0967b8e",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R6"
+      }
+    },
+    {
       "baseline_text_sha256": "cd6be8b7b5b222b1c297f78233d367ff3196330b69e9fd62cdf42f9df949f1b7",
       "is_opinion": true,
       "main_issue": "受け皿・指導者",
@@ -21700,6 +23940,25 @@
       }
     },
     {
+      "baseline_text_sha256": "6e30f8b0af73e99019f1c49e05977900b866b69ffcbfb7a1e630f83bca771ee1",
+      "is_opinion": true,
+      "main_issue": "受け皿・指導者",
+      "post_key": "feb1ad35d755a6c96860f48ee946d6259a0db4599dfb21d78cd2c9ece914e53d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-receiver_g3",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "6e30f8b0af73e99019f1c49e05977900b866b69ffcbfb7a1e630f83bca771ee1",
+        "reason_sha256": "fe16033c15bedf117e9fb369549baa96f6323a12f15db1ca0a158ad5e3d01c66",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "R2"
+      }
+    },
+    {
       "post_key": "fefdcedecf7d5af29ab32b79930fcae9a604fe3c97e25798075b21ff326ab6a7",
       "baseline_text_sha256": "aa9d5c3ed49f7fc4ddb708d20ba584223fb4e46bfde1932b4b4265e17d9b2996",
       "main_issue": "制度・移行プロセス",
@@ -21783,11 +24042,23 @@
       }
     },
     {
-      "post_key": "ff5269e9dd91f4d7ad9eaeea7aaa9920564cd76cc142b1dc7086a169e9f9787c",
       "baseline_text_sha256": "00d117d93fb22e5b2c726ea0495d8e4a5e222f935130bb30ff014077c5600e47",
-      "main_issue": "費用・家庭負担",
       "is_opinion": true,
-      "review": null
+      "main_issue": "費用・家庭負担",
+      "post_key": "ff5269e9dd91f4d7ad9eaeea7aaa9920564cd76cc142b1dc7086a169e9f9787c",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-09-15T00:00:00+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "claude-subagent-cost_g1",
+        "method_version": "sha256:843fcc7ae9f691c7a2fd395869c01c8cf11b8c11a8635fc32327096b07e61495",
+        "text_sha256": "00d117d93fb22e5b2c726ea0495d8e4a5e222f935130bb30ff014077c5600e47",
+        "reason_sha256": "f06236506e06f654eea33533b2b48735c06cb001c3ee3da4e59f314f19c68bf8",
+        "source_file": "quality/reviews/2026-09-15-bukatsu-headroom-catchup.json",
+        "source_sha256": "542ac57d230bd04a38183eaec91f0d8239aa3465b8d218699d039315f5e55979",
+        "bucket": "P4"
+      }
     },
     {
       "post_key": "ff582b7b3b9ba9a39f6ed5273bc91a458c14b10f2f40705f870580ef57fbafd5",

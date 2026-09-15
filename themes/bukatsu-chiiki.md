@@ -127,3 +127,30 @@ verify_top_page.py（期限超過6テーマは既知）／verify_adoption_regist
 すべて合格。公開URLで実際に「意見1,140件」表示を確認済み。
 
 作業は`../isa-wt-bukatsu-publish`（ブランチ`task/bukatsu-publish-38fix`、mainへマージ済み・作業ツリー削除済み）で行った。
+
+2026-09-15、課題54完了後の定期収集再開1テーマ目として、課題69の「1テーマ分の標準手順」を
+この実例で確立した。新規223件（意見179件）を収集し正典1,618件に統合（次回収集9/22）。
+
+収集直後の独自性検査への影響試算で、教員の働き方・制度・移行プロセスの2論点が上限40%に
+迫ることを確認。読み込み確認（4論点・166件、1件ずつ本文を読んで判定、`quality/reviews/
+2026-09-15-bukatsu-headroom-catchup.json`）を実施し、最終的な未読件数は教員の働き方52件・
+制度・移行プロセス42件・教育的意義・機会23件（いずれも上限内）。専用ファイル
+（`data/bukatsu-chiiki_cost-receiver-reread.json`）の指紋同期のため、新設した
+`manage_reread_registry.py resync-source`で共通台帳との一致を確認してから進めた。
+
+既存の別プロセス（課題63・2026-09-12の部活動38件独立確認）でレビュー済みだが今回の区分
+形式（P1-P6/R1-R6）を持たない投稿が10件（receiver 6件・cost 4件）見つかったが、独自性検査
+への影響が軽微なため持ち越した。
+
+山なみ区間の表示更新（`refresh_planet_section.py --for-docs`）で、このテーマ固有の見落とし
+を2件新規発見・修正した：調査条件の取得件数・取得期間テキスト、`#issue-cards`の論点カード
+件数（いずれも山なみ区間の外にあり、初回変換時にしか同期されていなかった）。
+
+沈んだ大陸（語られていない争点、`data/verification/bukatsu-chiiki-sunk-continents.json`）
+4件の母数（sns_base）を1,140→1,319へ更新。sc-4のみ新規1件がmatch_ruleにヒットしたが、
+内容確認のうえ除外相当と判断し記録した。
+
+標準検査（verify_theme_page.py／verify_number_provenance.py／verify_top_page.py／
+verify_sample_periods.py／verify_adoption_registry.py／unittest 970件）すべて合格。
+
+作業は`../isa-wt-task69-bukatsu`（ブランチ`task/task69-bukatsu-refresh`）で行った。
