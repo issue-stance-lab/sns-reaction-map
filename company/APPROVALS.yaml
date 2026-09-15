@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-12"
+updated_at: "2026-09-15"
 
 rules:
   required_for:
@@ -479,3 +479,20 @@ items:
     requested_at: "2026-09-13"
     decided_at: "2026-09-13"
     decision_note: "本対話の『進めて』を数値案によるページ制作の続行指示として記録。一般公開・pushの承認ではない。"
+
+  - id: approval-20260915-001
+    department: engineering-data
+    action: website_publication
+    summary: "課題54段階11：10テーマ・トップ・sitemapの総合監査完了を受け、一般公開（15-C）へ進む"
+    reason: "10テーマ全て本番反映済みとなり、工程表どおり段階11の総合監査を実施。標準検査（unittest 970件・verify_theme_page.py・verify_number_provenance.py・verify_public_registry.py --against-private・verify_page_originality.py・test_domain_migration.py）はすべて健全と確認したうえでオーナーに可否を確認した"
+    risks:
+      - "Google Search ConsoleのAPI取得が権限エラー（403）で自動確認できず、新ドメインの最新版取得状況は未確認（オーナーのOAuth再認証等が必要）"
+      - "投票の実クリック確認（やり直しボタンまでの動作）は未実施。CORS疎通のみAPIで確認済み"
+      - "bukatsu-chiiki・consumption-tax-cutで編集再読の余裕が上限40%に接近（現状31〜39%で合格域内）"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-09-15-task54-stage11-audit.md
+    status: approved
+    requested_at: "2026-09-15"
+    decided_at: "2026-09-15"
+    decision_note: "総合監査の結果報告に対し、オーナーが選択式の確認で『承認する』を選択。段階12（AdSense再申請15-D）の承認は別途必要。"
