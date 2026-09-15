@@ -1,0 +1,60 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 80,
+  "duplicates": 8,
+  "new": 72,
+  "relevant": 72,
+  "opinions": 61,
+  "opinion_flag_available": true,
+  "candidate": 552,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "henoko-student-accident",
+  "date": "2026-09-16",
+  "run_id": "20260916_071304",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 6.85,
+    "fetch_seconds": 46.15
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_henoko_arena_hermes.py",
+      "script_sha256": "142d9094b920c96aef7a4930bc414e5e35c907522473a56ff61e659ccf6b523d",
+      "taxonomy_sha256": "33097337e26c9052254e7ffcd1e4b374994b385106d6d5d5dda7c01dea8b3fa5"
+    },
+    "input": {
+      "raw_sha256": "a1c70514e5ca0da1aed0282110143579d57005e4da3d6e1bfa986d6bf5d62725",
+      "raw_records": 80,
+      "new_sha256": "c2274dbe9cc7d29bd280154e115627460e5024566b0ca004067fd10e6ff320af",
+      "new_records_excluded": {
+        "count": 1,
+        "reason": "classifier API (opencode-go/kimi-k2.7-code) rejected request as high-risk (HTTP 400); saved separately for manual review",
+        "file": "excluded-high-risk.json"
+      }
+    },
+    "sources": {
+      "yahoo_realtime": 80
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "classifier_args:--model"
+    },
+    "output": {
+      "classified_sha256": "b30e67ffc818a1abe33e2c293caab94eae014f15e75cd92ef2efb63f29636d91"
+    }
+  },
+  "next_collect_at": "2026-09-23"
+}
