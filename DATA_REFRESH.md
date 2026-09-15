@@ -624,12 +624,24 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
     見落としが起きやすい。** 見つけたら`refresh_planet_section.py`のテーマ別
     関数（`TOPIC_METHOD_TEXT`等）へ同期処理を追加する（他テーマへは影響しない
     ようテーマ専用関数の中に閉じる）
-13. **後処理をまとめて実行する**（`python3 -m unittest discover -s tests`で
+13. `configs/theme-seo.json`の対象テーマの`dateModified`を今回の日付へ更新し、
+    `python3 scripts/seo/apply_theme_trust.py`（`--check`で対象確認→本実行）で
+    ページ内「編集・分析情報」の最終更新日とJSON-LDの`dateModified`に反映する。
+    **この値は`THEMES.yaml`の`updated_at`から自動では追随しない**（`collection`
+    欄の件数はテンプレートに埋め込むため毎回最新化されるが、`dateModified`は
+    config内の静的な値。verify_theme_page.py等の機械検査もここは見ていない
+    ため、機械検査が全部OKでも古いまま残る）
+14. **後処理をまとめて実行する**（`python3 -m unittest discover -s tests`で
     まとめて検出できる）: `build_data_sheet.py` / `sync_portal_stats.py` /
     `verify_sample_periods.py --generate` / `build_adoption_registry.py`。
     正典を更新すると採用台帳（`data/verification/adoption/registry.json`）の
     指紋も古くなる（課題68と同型）
-14. 全体テスト・標準4検査を最終確認してからコミットする
+15. 全体テスト・標準4検査を最終確認してからコミットする
+16. **公開後、実際のページをブラウザで開いて目視確認する。** 機械検査は
+    「ページ内の数字同士が矛盾していないか」は見るが、「表示されている値が
+    最新かどうか」まではテーマによって見ていない項目がある（13の
+    `dateModified`はこの方法で発見した）。件数・調査期間だけでなく、
+    ページ末尾の「このページの作り方」欄も含めて一通り読む
 
 ### 読み込み確認のやり方（質と速さの両立）
 

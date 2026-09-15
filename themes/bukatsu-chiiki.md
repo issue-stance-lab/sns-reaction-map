@@ -143,8 +143,11 @@ verify_top_page.py（期限超過6テーマは既知）／verify_adoption_regist
 への影響が軽微なため持ち越した。
 
 山なみ区間の表示更新（`refresh_planet_section.py --for-docs`）で、このテーマ固有の見落とし
-を2件新規発見・修正した：調査条件の取得件数・取得期間テキスト、`#issue-cards`の論点カード
-件数（いずれも山なみ区間の外にあり、初回変換時にしか同期されていなかった）。
+を3件新規発見・修正した：調査条件の取得件数・取得期間テキスト、`#issue-cards`の論点カード
+件数、`configs/theme-seo.json`の`dateModified`（ページ末尾「最終更新日」とJSON-LD。
+`scripts/seo/apply_theme_trust.py`で反映）。いずれも山なみ区間の外にあり、初回変換時にしか
+同期されていなかった。3件目は標準検査では検出されず、公開後に実ページをブラウザで確認して
+見つけた。
 
 沈んだ大陸（語られていない争点、`data/verification/bukatsu-chiiki-sunk-continents.json`）
 4件の母数（sns_base）を1,140→1,319へ更新。sc-4のみ新規1件がmatch_ruleにヒットしたが、
