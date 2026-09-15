@@ -146,6 +146,11 @@ def validate_classified(rows: list[dict[str, Any]]) -> None:
 
 
 def sync_candidate_issue_counts(page: str, rows: list[dict[str, Any]]) -> str:
+    if "<!-- PLANET_SECTION_START -->" in page:
+        # 山なみ（課題54）形式は explainer-card（論点カード）ごと外れており、
+        # このマーカーの挿入先が無い。件数整合は verify_theme_page.py の内訳検算が
+        # 別に見ている。update_bukatsu_tide.py・build_bukatsu_arena.py と同じ判定基準。
+        return page
     opinions = [row for row in rows if classification(row).get("is_opinion")]
     counts = {issue: sum(classification(row).get("main_issue") == issue for row in opinions) for issue in ISSUES}
     config = json.loads((ROOT / "configs" / "bukatsu-chiiki-reaction-map.json").read_text(encoding="utf-8"))
