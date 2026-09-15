@@ -560,3 +560,99 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
    残骸を発見。自動検査では見つからない）
 
 自転車正典の本文なし検証データは `python3 scripts/build_bike_verification.py` で作る。旧形式のトップ階層 `is_opinion` と新形式の分類内フラグを、公開集計と同じ優先順で保持する（収集回の保存済み検証ファイルは変更しない）。
+
+## 収集と山なみ区画の表示更新は別の判断基準で優先順位を決める（2026-09-15〜）
+
+課題54完了に伴い定期収集を再開するにあたり、「収集」と「山なみ区画の表示更新」を
+別の判断基準で優先順位付けする。理由：`independence_gate()`（`build_planet_data.py`）は
+`scripts/refresh_topic.py`（`--promote`を含む）には一切組み込まれておらず（grep 0件）、
+山なみテーマの`--promote`もadapterのfinalize（例: `build_bukatsu_arena.py`）が
+`planet_mode`判定で山なみ区画をスキップするため検査に触れない。検査が実際に効くのは
+`scripts/refresh_planet_section.py --topic <topic> --for-docs`（または初回変換の
+`build_planet_page_preview.py --for-docs`）を実行した瞬間だけである。
+
+**収集（`--promote`まで含む正典保存）**: `collect_at`/`refresh_at`の超過日数順（超過が
+大きいテーマから）で進めてよい。独自性検査の逼迫度は収集そのものには影響しない。
+
+**山なみ区画の表示更新**: 実行前に必ず`python3 scripts/verify_reread_headroom.py`で
+そのテーマの状態を確認する。`danger`（40%以上）の論点があれば`--for-docs`が確実に
+失敗する。`warn`（30%以上）は、そのテーマ自身の次回収集より前に追い読みを検討する。
+
+## 定期更新1回分の実務手順（課題69、2026-09-15〜、bukatsu-chiikiで確立）
+
+「収集してから最短で公開まで反映する」1テーマ分の通し手順。山なみ移行済みテーマで
+実際に動かして確立した。山なみ以外・独自性検査の対象外テーマではステップ4-9・12の
+一部が不要になる。
+
+1. **収集する**（`refresh_topic.py`、`--promote`なし）。正典・公開ページには触れない
+2. **収集直後にTHEMES.yaml等の変更をコミットする。** `--apply-promotion`は
+   `ensure_promotion_targets_clean()`で「THEMES.yaml・docs/配下に未コミット差分が
+   ないこと」を前提とする。コミットせずに進むと `公開対象に未コミット差分があります`
+   で止まる
+3. `--resume --prepare-promotion` で候補（`cumulative-candidate.json`等）を作る
+   （正典・公開ページはまだ変更しない）
+4. **独自性検査への影響を、正典に統合する前に試算する。** `build_planet_data`の
+   `unread_breakdown()`等を直接呼び、候補データを`canonical`として渡せば、
+   正典もTHEMES.yamlも書き換えずに「この収集をこのまま反映すると何件読む必要が
+   出るか」を正確に計算できる（詳細な例は`quality/reviews/2026-09-15-task54-stage11-audit.md`
+   と同日の課題69実施記録を参照）
+5. 必要な読み込み確認の対象件数が確定したら、下記「読み込み確認のやり方」に従って読む
+6. **山なみテーマは、正典だけを先に候補データへ置き換える。** `--apply-promotion`は
+   正典と山なみ区画を同時に検査するため、山なみ区画がまだ古いまま（読み込み確認前）
+   だと`verify_theme_page.py`の「件数表示が一致する」検査で必ず落ちる。正典
+   （`social-samples/{topic}_*.json`、バックアップを取ってから）だけを先に候補へ
+   差し替え、山なみ区画の更新（ステップ10）を後から追いつかせる
+7. `manage_reread_registry.py prepare`（`--issue`で論点ごとに）→ 読む →
+   `record`で共通台帳（`data/verification/reread/{topic}.json`）を更新する
+8. **テーマ固有の専用ファイル（`data/{topic}_*-reread.json`等）を更新したら、
+   `manage_reread_registry.py resync-source --source <path> --out ...`で
+   共通台帳の`sources`指紋を合わせる。** `record`は共通台帳の`records`だけを
+   更新し、`sub_issues`が参照する専用ファイルは書き換えない。専用ファイル側を
+   直接更新すると`check_sources()`が「継承元が変わった」と正しく検知して以後の
+   コマンドが止まるため、この専用コマンドで「専用ファイルの中身が共通台帳の
+   読了記録と1件ずつ一致すること」を確認してから指紋を進める（検査を緩めるの
+   ではなく、別の角度からの一致確認を挟んでから進める設計。2026-09-15新設）
+9. `build_public_registry.py --topic <topic>` で公開データ契約を再生成する
+   （`independence_gate`は`data/public/themes/{topic}.json`を読むため、これを
+   忘れると正典・共通台帳を直しても検査に反映されない）
+10. `refresh_planet_section.py --topic <topic> --for-docs` で山なみ区画を更新する
+11. テーマ別のfinalize相当（例: `build_bukatsu_arena.py`）を実行する
+12. `verify_theme_page.py <topic>`・`verify_number_provenance.py <topic>`を実行し、
+    残ったNGを1つずつ潰す。**山なみ区画の外側にあるのに件数を持つ箇所
+    （bukatsu-chiikiでは「調査条件」の取得期間・件数、`#issue-cards`の論点カード
+    件数）は、`build_planet_page_preview.py`の初回変換時にしか更新されない
+    見落としが起きやすい。** 見つけたら`refresh_planet_section.py`のテーマ別
+    関数（`TOPIC_METHOD_TEXT`等）へ同期処理を追加する（他テーマへは影響しない
+    ようテーマ専用関数の中に閉じる）
+13. **後処理をまとめて実行する**（`python3 -m unittest discover -s tests`で
+    まとめて検出できる）: `build_data_sheet.py` / `sync_portal_stats.py` /
+    `verify_sample_periods.py --generate` / `build_adoption_registry.py`。
+    正典を更新すると採用台帳（`data/verification/adoption/registry.json`）の
+    指紋も古くなる（課題68と同型）
+14. 全体テスト・標準4検査を最終確認してからコミットする
+
+### 読み込み確認のやり方（質と速さの両立）
+
+消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した
+要約だった。`tasks/task-54.md`参照）を踏まえ、次を型として固定する。
+
+- **件数の目安**: 対象件数 ÷ 25件くらいを、同時に読む人数（AIの並列数）の目安にする
+- **徹底事項**: 「1件ずつ本文を読んで判定する。件数が多くても自動判定プログラムに
+  置き換えない」ことを毎回明記する
+- **完了確認**: 論点ごとに最低10件を抜き取り、「本文の内容と記録された要約が
+  本当に一致しているか」を別の目で確認してから完了とする。summaryのユニーク率
+  100%・マークアップ（`START`/`END`等の抽出マーカー）残留0件も機械確認する
+- **記録**: 対象・件数・確認結果を`quality/reviews/`へ本文なしで保存し、
+  `manage_reread_registry.py record`の`--reviews`の`source_file`として参照する
+
+### 既存の別プロセスで確認済みだが、この論点固有の区分を持たない投稿
+
+`manage_reread_registry.py prepare`が選ぶ対象と、正典から独自に計算した対象は
+一致しないことがある。差分は多くの場合、その投稿が既に別の独立確認プロセス
+（例: 課題63の部活動38件独立確認）でレビュー済みだが、`review.bucket`が
+今回の論点固有の区分（例: P1-P6/R1-R6）ではなく別形式（例: `confirmed`）の
+ままになっているケース。共通台帳の`review`は投稿1件につき1つしか持てないため、
+これらは`unread_breakdown()`上は「読み飛ばし」として残る。独自性検査（4割上限）
+に抵触しない範囲なら、無理に今回のスコープへ含めず、件数を記録して持ち越してよい
+（2026-09-15、bukatsu-chiikiで10件発見。`tests/test_planet_data.py`の
+該当テストに経緯を記録）。

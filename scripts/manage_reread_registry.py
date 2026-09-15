@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 from collections import Counter
+from copy import deepcopy
 import hashlib
 import json
 from datetime import datetime, timezone
@@ -124,13 +125,60 @@ def initialize(root, topic, snapshot_at):
     return manifest
 
 
-def check_sources(root, manifest):
+def check_sources(root, manifest, *, skip=frozenset()):
     for source, expected in manifest.get('sources', {}).items():
+        if source in skip:
+            continue
         path = (root / source).resolve()
         if not path.is_relative_to(root.resolve()):
             raise ValueError('継承元はリポジトリ内に指定してください')
         if not path.is_file() or digest(path) != expected:
             raise ValueError(f'継承元の再読記録が変わっています: {source}。対象と証拠を確認してください')
+
+
+def resync_source(root, topic, manifest, source_rel):
+    """録済みの共通台帳と食い違わないことを確かめてから、継承元ファイルの指紋だけ更新する。
+
+    manage_reread_registry.py record は共通台帳の records だけを更新し、
+    sub_issues が参照する継承元ファイル（例: data/{topic}_*.json の items/buckets）
+    は書き換えない。record 後にその継承元ファイルへ同じ読了結果を反映すると、
+    check_sources が「継承元が変わった」と正しく検知して止まる。この関数は、
+    継承元ファイルの新しい中身が共通台帳の review と1件ずつ一致することを
+    確認できた場合だけ、その継承元の指紋を更新後の値へ進める。一致しない
+    投稿・区分が1件でもあれば更新せず停止する（検査を緩めるのではなく、
+    継承元と共通台帳の対応が取れていることを別の角度から確かめてから進める）。
+    """
+    check_sources(root, manifest, skip={source_rel})
+    cfg_path = root / 'configs/planet' / f'{topic}.yaml'
+    cfg = yaml.safe_load(cfg_path.read_text()) if cfg_path.exists() else {}
+    by_key = {r['post_key']: r for r in manifest['records']}
+    data = read(root / source_rel)
+    checked = 0
+    for issue, spec in (cfg.get('sub_issues') or {}).items():
+        if spec['file'] != source_rel:
+            continue
+        items = dig(data, spec.get('items_path', spec['path'][:-1] + ['items']))
+        buckets = dig(data, spec['path'])
+        for item in items:
+            pk = key(item['tweet_id'])
+            row = by_key.get(pk)
+            review = (row or {}).get('review') or {}
+            if (row is None or row.get('main_issue') != issue or row.get('is_opinion') is not True
+                    or review.get('kind') != 'editorial_body_reread'
+                    or review.get('bucket') != item.get('bucket')):
+                raise ValueError(
+                    f'継承元の投稿が共通台帳の読了記録と一致しません（論点「{issue}」tweet_id={item["tweet_id"]}）。'
+                    'record で先に登録してから resync-source を実行してください')
+            checked += 1
+        actual = Counter(item.get('bucket') for item in items)
+        if set(actual) - set(buckets) or any(actual.get(k2, 0) != v['count'] for k2, v in buckets.items()):
+            raise ValueError(f'「{issue}」の区分件数と投稿の実数が一致しません（継承元ファイルの集計を確認してください）')
+    if checked == 0:
+        raise ValueError(f'{source_rel} を参照する sub_issues が見つかりません')
+    manifest = deepcopy(manifest)
+    manifest['sources'][source_rel] = digest(root / source_rel)
+    print(f'{source_rel}: 投稿{checked}件が共通台帳の読了記録と一致したため、指紋を更新しました')
+    return manifest
 
 
 def summarize(manifest, rows):
@@ -145,7 +193,7 @@ def summarize(manifest, rows):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['initialize', 'status', 'prepare', 'record'])
+    parser.add_argument('command', choices=['initialize', 'status', 'prepare', 'record', 'resync-source'])
     parser.add_argument('--topic', required=True)
     parser.add_argument('--out', type=Path)
     parser.add_argument('--snapshot-at')
@@ -153,6 +201,7 @@ def main():
     parser.add_argument('--target', type=Path)
     parser.add_argument('--reviews', type=Path)
     parser.add_argument('--private-input', type=Path)
+    parser.add_argument('--source', help='resync-source: 指紋を更新する継承元ファイル（configs/planet/{topic}.yaml の sub_issues[].file と同じ相対パス）')
     args = parser.parse_args()
     path, rows = canonical(ROOT, args.topic)
     ledger_path = registry_path(ROOT, args.topic)
@@ -162,7 +211,8 @@ def main():
         write(args.out or ledger_path, manifest)
     else:
         manifest = read(ledger_path)
-        check_sources(ROOT, manifest)
+        if args.command != 'resync-source':
+            check_sources(ROOT, manifest)
         if args.command == 'prepare':
             if args.out is None:
                 parser.error('prepare は --out に固定対象の保存先を指定してください')
@@ -200,6 +250,13 @@ def main():
             # 次版として保存。既存台帳の差し替えは、差分・対象・証拠を確認してから行う。
             if args.out is None:
                 parser.error('record は --out に次版台帳の保存先を指定してください')
+            write(args.out, manifest)
+        if args.command == 'resync-source':
+            if not args.source:
+                parser.error('resync-source は --source に継承元ファイルを指定してください')
+            if args.out is None:
+                parser.error('resync-source は --out に次版台帳の保存先を指定してください')
+            manifest = resync_source(ROOT, args.topic, manifest, args.source)
             write(args.out, manifest)
     print(json.dumps(summarize(manifest, rows), ensure_ascii=False, indent=2))
     return 0

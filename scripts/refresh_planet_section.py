@@ -83,12 +83,20 @@ def _inject_bukatsu_go_cards(block: str, data: dict) -> str:
 METHOD_TEXT_RE = re.compile(r"(重複を除いた累計)([\d,]+)(件を分類し、意見と判定した)([\d,]+)(件を論点分析に使用しています)")
 
 
+BUKATSU_RESEARCH_CONDITIONS_RE = re.compile(
+    r"(Yahooリアルタイム検索で取得した公開投稿 )[\d,]+(件<br>\s*\n\s*（取得期間: )[^／<]+"
+)
+
+
 def _sync_bukatsu_method_text(html: str, data: dict) -> str:
-    """「調査条件」内の集計方法テキスト（累計N件・意見M件）を揃える。
+    """「調査条件」内の集計方法テキスト（累計N件・意見M件）と、収集件数・取得期間を揃える。
 
     このテキストはbuild_bukatsu_arena.py・sync_issue_counts.pyのどちらの生成対象にも
     入っておらず（山なみ移行前からの静的文で、山なみ判定によるスキップの対象にすら
     なっていない）、初回変換以来だれも更新していなかった。bukatsu-chiiki専用。
+    2026-09-15、課題69の定期収集で「収集した公開投稿N件」「取得期間」も同じ理由で
+    未更新のまま残っていたと判明し、あわせて揃えるようにした（自転車の
+    _sync_bike_method_text と同じパターン）。
     """
     collected, opinions = data["totals"]["collected"], data["totals"]["opinions"]
     new_html, n = METHOD_TEXT_RE.subn(
@@ -96,7 +104,35 @@ def _sync_bukatsu_method_text(html: str, data: dict) -> str:
     )
     if n != 1:
         raise SystemExit("調査条件の集計方法テキストが見つからないか複数あります（bukatsu-chiiki）")
-    return new_html
+    new_html, n = BUKATSU_RESEARCH_CONDITIONS_RE.subn(
+        lambda m: f"{m.group(1)}{collected:,}{m.group(2)}{data['sample_period']}", new_html, count=1
+    )
+    if n != 1:
+        raise SystemExit("調査条件の取得件数・取得期間が見つからないか複数あります（bukatsu-chiiki）")
+    return _sync_bukatsu_issue_card_counts(new_html, data)
+
+
+def _sync_bukatsu_issue_card_counts(html: str, data: dict) -> str:
+    """「論点ごとに、なかを見る」（#issue-cards）にある論点カードの件数を揃える。
+
+    このセクションは build_planet_page_preview.py の merge_issue_cards() が
+    初回の山なみ変換時にだけ作る静的HTMLで、PLANET_SECTION_END より後ろ
+    （山なみ区間の外）にある。update_bukatsu_tide.py・build_bukatsu_arena.py・
+    sync_issue_counts.py のどの山なみ判定にも掛からず、refresh_planet_section.py も
+    今まで山なみ区間の中しか書き換えていなかったため、初回変換以来だれも
+    更新していなかった（verify_number_provenance.py だけがこの残存を検出する。
+    verify_theme_page.py の「論点カードのデータ整合」検査対象には入っていない）。
+    bukatsu-chiiki専用。
+    """
+    counts = {it["id"]: it["count"] for it in data["issues"]}
+    for issue_id, count in counts.items():
+        pattern = re.compile(
+            rf'(<article class="ic" id="issue-{re.escape(issue_id)}">.*?<span class="cnt">)'
+            r'[\d,]+(<small>件</small></span>)', re.S)
+        html, n = pattern.subn(lambda m: f"{m.group(1)}{count:,}{m.group(2)}", html, count=1)
+        if n != 1:
+            raise SystemExit(f"論点カード「{issue_id}」の件数表示が見つかりません（bukatsu-chiiki #issue-cards）")
+    return html
 
 
 ELDERLY_OPINION_COUNT_RE = re.compile(r"(意見と判定した)([\d,]+)(件)")
