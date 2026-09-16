@@ -190,6 +190,49 @@ reread.json`、2026-09-13時点で823件を区分済み）で内訳表示して�
 ままでも合格済みで、これは合否ではなく表示の内訳精度の問題）。「都構想・維新」
 「定義・中身」の2論点はもともと区分表示を持たない「未再読」扱いのため対象外。
 
-作業ツリー（`../isa-wt-task69-fukushuto`、ブランチ`task/task69-fukushuto-refresh`）は
-FACT_CHECK復元・ビルダー修正ともコミット済みのまま保持（`--prepare-promotion`から
-やり直せる状態）。
+**128件の編集再読**: 5論点それぞれについて並列で読み（新規サブエージェント5体、
+既存区分（バケット）へ割り当てるだけで新しい区分は作らない条件）、件数・ID集合・
+summary重複・不正区分の機械検査に加え、いくつかは実際の投稿本文と区分の対応も
+抜き取り確認した。5論点合計は823件→951件（`885cb15`）。
+
+**4件目**: 上記を反映して`--prepare-promotion`を再実行しても同じ「候補地」エラーが
+再発。原因は`refresh_verified_planet()`（`build_planet_data.bpd.build(THEME)`）が
+`--input`の候補を無視し、`THEMES.yaml`が指す**実際の正典ファイルを直接読む**設計
+だったため。`DATA_REFRESH.md`「山なみテーマは、正典だけを先に候補データへ置き換える」
+の指示はこのための手順と判明——正典（`social-samples/fukushuto_hermes_classified.json`）
+とpublic JSON（`build_public_registry.py --topic fukushuto`）を候補の内容へ実際に
+差し替えてから`--prepare-promotion`をやり直し、`status: prepared`まで到達した。
+
+**5件目**: `--apply-promotion`で`verify_number_provenance.py`がNG6件
+（`issue-count-fukushuto-{slug}`という論点解説カードの件数span）。
+`sync_issue_counts.py`は`<!-- PLANET_SECTION_START -->`があるページを
+「explainer-cardごと無い」前提で同期対象から外すが、fukushutoは山なみ導入後も
+この解説カード群（画像・説明文・批判/対案の一言つき）を残しており、件数だけが
+同期されないまま取り残されていた。`apply_public_counts()`に、正典データから
+直接この6spanを更新する処理を追加して解消（`29063eb`）。
+
+**6件目（自己招来）**: 修正後の`--apply-promotion`は成功したが、`THEMES.yaml`の
+`collect_delta`が`0`になっていた。原因は自分自身の手順——4件目の対応で正典を
+事前に手動で候補へ差し替えたため、`refresh_topic.py`が`--resume`時に取り直す
+raw.jsonと現行正典のdiffが0件になった（正典に既に入っていたため「新規」が
+無くなった）。実際の追加意見数（229）へ手で修正し、`sync_portal_stats.py`で
+トップページの「+229件」表示を作り直した。**教訓**: 山なみテーマの正典事前差し替えは
+`--apply-promotion`の直前1回に留め、直後に`collect_delta`が動いていないか確認すること。
+
+**本番反映**: 完了（2026-09-17、`a5d9256`でmainへマージ、衝突なし）。マージ後の
+main検査（`verify_theme_page.py`・`verify_number_provenance.py`・
+`unittest discover`・`run_public_checks.py`）は最終的に全てNG0件。公開サイトで
+実ページの件数・一次資料照合セクション・論点解説カード・トップページの「+229件」
+表示を確認済み。作業ツリー（`../isa-wt-task69-fukushuto`）は反映後に削除済み。
+
+**残り課題（持ち越し）**: koshitsu-tenpakai・bike-blue-ticket・constitutional-amendment
+も`refresh_adapters/*.py`が昇格のたびに専用の`*_process_sections.py`を自動実行する
+同型構成で、現行ページのFACT_CHECK系マーカーが0件（3件目の発見時点で確認済み）。
+この3テーマの定期更新に着手するときは、fukushutoで踏んだ手順
+（①FACT_CHECK復元 → ②apply_public_countsの山なみ分岐に漏れが無いか確認 →
+③正典を先に候補へ差し替えてから独自性検査・prepare-promotion → ④論点解説カード等
+「山なみ区画の外だが件数を持つ」箇所の同期漏れがないかverify_number_provenance.py
+で確認）を先に想定してから着手すると同じ発見の繰り返しを避けられる。ただし
+2件目・5件目の不具合は「山なみ形式である」ことだけが条件で他テーマにも起きうる
+（`apply_public_counts`の分岐構造自体は全山なみテーマ共通のため、koshitsu/bike/
+constitutionalが同じ関数を使っていれば同種の見落としがないか個別に確認要）。
