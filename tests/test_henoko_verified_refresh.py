@@ -88,37 +88,53 @@ class VerifiedRefreshTests(unittest.TestCase):
             builder.build_page(self.page, self.records, self.opinions[:-1])
 
     def test_changed_canonical_cannot_bypass_evidence_with_public_counts(self):
-        for field in ['text', 'stance']:
-            with self.subTest(field=field):
-                rows = copy.deepcopy(self.records)
-                if field == 'text':
-                    rows[0]['text'] += ' changed'
-                else:
-                    rows[0]['classification']['stance'] = 'changed stance'
-                self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
-                with self.assertRaisesRegex(builder.IssueCountError, '再読台帳'):
-                    builder.apply_public_counts(self.page, self.public)
+        # 本文変更と賛否変更は別の検査が捉える（2026-09-16、henoko_planet_guardの
+        # canonical_sha256完全一致チェックを撤去。設計書
+        # quality/designs/2026-09-06-stage-c-reread-registry.md のとおり、その欄は
+        # 初回スナップショット時点の指紋であり常時一致を求める欄ではなかった）。
+        # 本文変更: 再読台帳のtext_sha256照合（build_planet_data.load_reread_registry）がSystemExitで止める。
+        # 賛否変更: 公開JSONの論点別賛否件数との不一致をverify_inputs自身がIssueCountErrorで止める。
+        rows = copy.deepcopy(self.records)
+        rows[0]['text'] += ' changed'
+        self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
+        with self.assertRaisesRegex(SystemExit, '本文'):
+            builder.apply_public_counts(self.page, self.public)
+
+        rows = copy.deepcopy(self.records)
+        rows[0]['classification']['stance'] = 'changed stance'
+        self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
+        with self.assertRaisesRegex(builder.IssueCountError, '公開分類'):
+            builder.apply_public_counts(self.page, self.public)
 
     def test_public_cli_rejects_changed_canonical_before_writing(self):
-        self.canonical.write_text(self.canonical.read_text() + '\n')
+        rows = copy.deepcopy(self.records)
+        rows[0]['classification']['stance'] = 'changed stance'
+        self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
         output = self.root / 'output.html'
         output.write_text(self.page)
         with patch.object(sys, 'argv', ['build_henoko_arena.py', '--public-counts-only',
                                        '--output-html', str(output)]):
-            with self.assertRaisesRegex(builder.IssueCountError, '再読台帳'):
+            with self.assertRaisesRegex(builder.IssueCountError, '公開分類'):
                 builder.main()
         self.assertEqual(output.read_text(), self.page)
 
     def test_initial_conversion_rejects_stale_inputs_in_preview_and_public_modes(self):
+        # kind別に検査の掛かりどころが違う（2026-09-16、上のテストと同じ理由でcanonical_sha256
+        # チェックを撤去した影響）。stance/addはverify_inputs自身の公開件数・公開分類の
+        # 突き合わせがbpd.build()の前に止めるため、従来どおりbuildは呼ばれない。
+        # bodyは件数・分類のどちらも変わらないため、verify_inputsだけでは検出できず、
+        # 実際のbpd.build()（load_reread_registryのtext_sha256照合）まで届いて初めて止まる。
+        # このコードパス自体、docs/のページに山なみが入った後は
+        # 「入力ページに山なみが既に入っています」で必ず先に止まる一度きりの変換専用のため、
+        # 辺野古では変換済みの今、実運用では再現しない組み合わせ。
         legacy = self.root / 'legacy.html'
         legacy.write_text('<html><body>Old arena before conversion</body></html>')
         output = self.root / 'converted.html'
-        for kind in ['body', 'stance', 'add']:
+        expected = {'stance': '公開分類', 'add': '公開件数'}
+        for kind in ['stance', 'add']:
             rows = copy.deepcopy(self.records)
             item = next(x for x in rows if x == self.opinions[0])
-            if kind == 'body':
-                item['text'] += ' changed'
-            elif kind == 'stance':
+            if kind == 'stance':
                 item['classification']['stance'] = 'changed stance'
             else:
                 extra = copy.deepcopy(item)
@@ -133,10 +149,26 @@ class VerifiedRefreshTests(unittest.TestCase):
                     if for_docs:
                         argv.append('--for-docs')
                     with patch.object(sys, 'argv', argv), patch.object(preview.bpd, 'build') as build:
-                        with self.assertRaisesRegex(builder.IssueCountError, '再読台帳'):
+                        with self.assertRaisesRegex(builder.IssueCountError, expected[kind]):
                             preview.main()
                         build.assert_not_called()
                     self.assertEqual(output.read_text(), 'HTML sentinel')
+
+        rows = copy.deepcopy(self.records)
+        item = next(x for x in rows if x == self.opinions[0])
+        item['text'] += ' changed'
+        self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
+        for for_docs in [False, True]:
+            with self.subTest(kind='body', for_docs=for_docs):
+                output.write_text('HTML sentinel')
+                argv = ['build_planet_page_preview.py', '--topic', TOPIC,
+                        '--page', str(legacy), '--out', str(output)]
+                if for_docs:
+                    argv.append('--for-docs')
+                with patch.object(sys, 'argv', argv):
+                    with self.assertRaisesRegex(SystemExit, '本文'):
+                        preview.main()
+                self.assertEqual(output.read_text(), 'HTML sentinel')
 
     def test_public_argument_is_not_ignored(self):
         data = json.loads(self.public.read_text())
