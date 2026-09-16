@@ -111,5 +111,27 @@ resync-source`コマンドを新設し、正規の手順で解消した。
 970件（skip4件）全通過。`refresh_planet_section.py --for-docs`の冪等性（2回目は
 `OK. Lines: N → N`）も確認済み。
 
-**本番反映**: 未実施。オーナー確認待ち。作業ツリー（`../isa-wt-task69-henoko`）は
-反映後に削除予定。
+**本番反映**: 完了（2026-09-17、`07fceef`でmainへマージ）。マージ時に
+`company/data-backup-status.json`で衝突が発生（bukatsu-chiikiと同型 —
+実行のたびに全体を書き直すファイルの同じ行に、別ブランチの再生成が重なったため）。
+中身は矛盾しておらず、手で行を書き換えず`backup_private_data.py`で作り直して解消した。
+
+マージ後のmain検査で新たに2件発見・解消:
+1. `TASK_BOARD.md`課題69の「状態」欄が180文字で上限（120文字）超過
+   （`verify_task_board.py`／`test_task_board.py`で検出）。経緯をこのファイルへ
+   寄せて索引を簡潔化した。
+2. `THEMES.yaml`の`updated_at`が旧日付（09-13）のまま、`configs/theme-seo.json`の
+   `dateModified`だけ09-16へ更新済みという食い違い（`validate_theme_seo.py`／
+   `docs/sitemap.xml`のlastmodも同様に旧日付のまま）。作業ツリーでの表示更新時に
+   `DATA_REFRESH.md`「2. THEMES.yaml」の`updated_at`更新が漏れていた。
+   `updated_at`とsitemapを09-16へ揃えたところ、今度は`docs/henoko-student-accident-
+   reaction-map.html`内の山なみ区画の「更新」表示が旧日付のまま`build_henoko_arena.py`の
+   期待値と食い違い、`test_henoko_planet.py`・`test_portal_stats.py`・`test_data_sheet.py`
+   が連鎖して落ちた。`refresh_planet_section.py --topic henoko-student-accident --for-docs`
+   （冪等性確認済み）・`build_data_sheet.py`・`sync_portal_stats.py`・
+   `data_asset_inventory.py`を再実行して解消（`run_public_checks.py`・
+   `unittest discover`とも最終的にNG0件）。**教訓**: `updated_at`を直すと、そこから
+   逆算する表示・統計・資産台帳が連鎖して古くなる。1箇所直したら
+   `python3 scripts/run_public_checks.py`まで通して初めて完了とみなす。
+
+作業ツリー（`../isa-wt-task69-henoko`）は反映後に削除予定。
