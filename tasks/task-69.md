@@ -40,6 +40,15 @@ reread.json`）へ反映する際、直接指紋を書き換える操作がClaud
 読了記録と1件ずつ一致することを確認してから指紋を進める」`manage_reread_registry.py
 resync-source`コマンドを新設し、正規の手順で解消した。
 
+**2026-09-16 追記（CI発見分）**: 本番反映の数日後、CI「公開ファイルの検査」が2回連続で
+失敗した。原因は表示更新チェックリストの漏れがもう2箇所あったこと — `docs/sitemap.xml`
+の該当lastmod（`最終更新日表示`とは別の場所）と、非公開データの保全台帳
+`company/data-assets.json`（山なみ区間の外で、かつローカルの通常チェックリストにも
+無い項目）。前者はDATA_REFRESH.mdのsitemapチェックリストに`validate_theme_seo.py`の
+ローカル実行を追記して以後の見落としを検査で止めるようにした。残り7テーマの表示更新
+では、チェックリスト完了後に`python3 scripts/run_public_checks.py`まで通すこと
+（`verify_theme_page.py`だけでは拾えない）。
+
 **表示更新**: `refresh_planet_section.py --for-docs`で山なみ区間を更新。このテーマ固有の
 見落としを3件発見・修正（調査条件の取得件数・期間テキスト、`#issue-cards`の論点カード
 件数、`configs/theme-seo.json`の`dateModified`〔ページ末尾「最終更新日」とJSON-LD〕
