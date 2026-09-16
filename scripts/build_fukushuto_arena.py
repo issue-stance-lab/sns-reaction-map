@@ -496,6 +496,21 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     page = replace_once(page, r'<li class="conclusion-focus">.*?</li>', '<li class="conclusion-focus">' + f'<span class="conclusion-count"><b>{counts[top]}</b>件</span><strong>{html.escape(str(conclusion["headline"]))}</strong><span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span></li>', "議論の中心", flags=re.S)
     page = replace_once(page, r'<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?\n</section>', build_details(rows, collected, load_queries()), "詳細データ", flags=re.S)
+    # 論点解説カード（explainer-card）も山なみ変換後に残ったまま件数が同期されなくなっていた
+    # （sync_issue_counts.pyはPLANET_SECTIONがあるページを「explainer-cardごと無い」前提で
+    # 対象外にするが、fukushutoは山なみ導入後もこのカード群を残している。課題69で発見）。
+    # id接尾辞はconfigのslugと綴りが微妙に異なるため、HTML側の実際のidに合わせて直書きする。
+    explainer_id_to_issue = {
+        "teigi": "定義・中身", "kohochi": "候補地", "tokoso": "都構想・維新",
+        "bosai": "防災・災害", "hiyo": "費用・財源", "yusen": "優先順位",
+    }
+    for suffix, issue in explainer_id_to_issue.items():
+        page = replace_once(
+            page,
+            rf'id="issue-count-fukushuto-{suffix}">\d+件</span>',
+            f'id="issue-count-fukushuto-{suffix}">{counts[issue]}件</span>',
+            f"論点解説カード({suffix})",
+        )
     return page
 
 
