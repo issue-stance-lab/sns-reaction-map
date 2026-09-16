@@ -135,3 +135,44 @@ resync-source`コマンドを新設し、正規の手順で解消した。
    `python3 scripts/run_public_checks.py`まで通して初めて完了とみなす。
 
 作業ツリー（`../isa-wt-task69-henoko`）は反映後に削除予定。
+
+### 2026-09-17 fukushuto（3テーマ目）で収集完了、公開候補作成が既存バグで停止
+
+**収集**: 新規291件（うち意見229件）を取得。1回目は作業ツリーへの`node_modules`複製漏れで
+疎通確認が失敗（`OPERATIONS.md`⓪の既知の手順を後追いで実施）、2回目は分類完了後の
+バックアップ工程で`configs/persona.private.json`未復元により失敗。いずれも同じ
+worktreeで`--resume`して解消し、累積正典1,733件・意見1,452件へ統合できる状態まで進んだ
+（`--promote`はまだ）。次回収集は9/24。
+
+**`--resume --prepare-promotion`で新しい不具合を発見（他テーマには無い、fukushuto含む
+4テーマ共通）**: `refresh_adapters/fukushuto.py`は昇格のたびに`build_fukushuto_arena.py`と
+`build_fukushuto_process_sections.py`（「投稿の主張を、国会と選管の記録に当ててみた」
+一次資料照合セクション、2026-08-24追加）を連続実行するが、後者は`docs/`ページ内に
+`<!-- FACT_CHECK_START/END -->`が1組必要という前提で、無いと即エラーで止まる。
+
+2026-09-13の「副首都を山なみ形式で本番反映」（`0447912`）でページを山なみテンプレートへ
+作り直した際、このfukushuto専用セクションが引き継がれず消えていた（`git show
+0447912^:docs/fukushuto-reaction-map.html`には2422〜2515行に存在、現行は0件）。
+山なみ変換後にfukushutoの定期更新を実行したのは今回が初めてで、これまで発覚していなかった。
+
+`refresh_adapters/*.py`を確認したところ、昇格のたびに専用の`*_process_sections.py`を
+自動実行しているのは **bike / fukushuto / constitutional / koshitsu の4テーマだけ**
+（henoko・bukatsu・elderly・nicknameは該当スクリプトを持っていても昇格経路からは
+呼ばない）。この4テーマの現行ページを確認したところ、**bike-blue-ticket・
+constitutional-amendment・koshitsu-tenpakaiも同様にFACT_CHECK系マーカーが0件** —
+同じ山なみ変換で同種のセクションが失われており、これらのテーマの定期更新を初めて
+実行したときに同じ場所で止まる。現行公開ページの表示自体は壊れていない
+（欠けているのは次の昇格が失敗する、という形でのみ表面化する）。
+
+**今回はここで停止（未解決）**: 内容を1テーマぶん勝手に復元・書き換えると、
+山なみ変換前の文面が正しいかどうか（数値・出典が古くなっていないか）をオーナー確認
+なしに再度公開することになるため、対応方針の判断を仰いでから着手する。
+
+**次にすること**: 対応方針をオーナーに確認する（①旧文面を山なみ用に作り直して復元 /
+②機能自体を廃止してビルダーからチェックを外す、の二択。詳細は本体の報告を参照）。
+方針が決まり次第、fukushuto→koshitsu-tenpakai→bike-blue-ticket→constitutional-amendment
+（このうち期限超過順で早いテーマから）の順に同じ対応を適用してから、
+それぞれの`--apply-promotion`以降（表示更新・検査・本番反映）を進める。
+
+作業ツリー（`../isa-wt-task69-fukushuto`、ブランチ`task/task69-fukushuto-refresh`）は
+収集分をコミット済みのまま保持（`--prepare-promotion`からやり直せる状態）。
