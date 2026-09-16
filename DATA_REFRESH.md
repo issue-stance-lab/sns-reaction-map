@@ -466,6 +466,7 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 ### 6. sitemap.xml
 
 - [ ] 該当テーマの `lastmod` → 今日の日付
+- [ ] `python3 scripts/seo/validate_theme_seo.py` が exit 0（ここを飛ばすとpush後のCI「公開ファイルの検査」で初めて発覚する。2026-09-15のbukatsu-chiiki更新で実際に発生）
 
 ### 7. 論点カードの件数
 

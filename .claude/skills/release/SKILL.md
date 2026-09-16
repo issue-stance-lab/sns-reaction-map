@@ -68,15 +68,24 @@ python3 scripts/verify_theme_page.py
 python3 scripts/verify_number_provenance.py
 python3 scripts/verify_top_page.py
 python3 -m unittest discover -s tests
+python3 scripts/run_public_checks.py
 ```
 
-成功の形: それぞれ `NG 0件` / 終了コード0 / `OK`。
+成功の形: 上から順に `NG 0件` / 終了コード0 / `OK` / 終了コード0 /
+`OK: 公開ファイルだけで確かめられる範囲はすべて通りました`（終了コード0）。
 
-**この4つは、非公開正典を読むので手元でしか回せない。** 公開ファイルだけで確かめられる検査
-（公開データJSONとcatalog、主張の判定と件数、**SEO台帳の更新日**、収集期間、ページ文の使い回し、
-テスト320件）は、pushのたびにGitHub Actionsが自動で回す
-（`.github/workflows/checks.yml` → `scripts/run_public_checks.py`）。
-自動側が赤いまま push しない。中身の線引きは `scripts/run_public_checks.py` の冒頭にある。
+**最初の4つは、非公開正典を読むので手元でしか回せない。** 最後の
+`run_public_checks.py` は非公開データが無くても回せる検査で、**GitHub Actionsの
+「公開ファイルの検査」（`.github/workflows/checks.yml`）が push 後に回すのと同じ中身**
+（公開データJSONとcatalog、主張の判定と件数、**SEO台帳・sitemap.xmlの更新日**、
+収集期間、ページ文の使い回し、データ保全台帳の整合、テスト808件）。
+
+**push前にここで回す。push後のCI通知を待って気づく、にしない。**
+2026-09-15のbukatsu-chiiki更新で、`docs/sitemap.xml`の該当lastmodと
+`company/data-assets.json`（非公開データの保全台帳）の更新漏れが、この工程を
+飛ばしてpushしたために2回連続でCIが落ちてから発覚した（DATA_REFRESH.mdの
+チェックリストにも同種の項目はあったが、それだけでは見落としを防げなかった）。
+中身の線引きは `scripts/run_public_checks.py` の冒頭にある。
 
 **ここで初めて分かることがある。** 作業ツリーの分岐元が古いと、そこでは落ちていた
 テストが main では通る（逆もある）。2026-08-17、作業ツリーで1件失敗していた

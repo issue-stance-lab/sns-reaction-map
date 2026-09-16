@@ -218,3 +218,4 @@
 | 2026-08-01 | Claude | 全員 | S1完了。トップの数値は `THEMES.yaml` の `sample_file` の実レコード数から生成される。**数値をHTMLに直接書かないこと。** 変更後は必ず `python3 scripts/verify_top_page.py` を実行し、NG（exit 1）がないことを確認する |
 | 2026-08-10 | Claude | 全員 | 課題44は生成AIのみ完了。アリーナの母数は `data-arena-total` 属性が正典。表示文字列を検査・ビルダーの目印にしないこと |
 | 2026-08-31 | Claude | 全員 | **公開元の一本化（2026-08-15・2026-08-30の旧メモは廃止し `archive/TASK_BOARD_ARCHIVE.md` へ移した）。** 公開元は `issue-stance-lab/sns-reaction-map` の GitHub Pages（`.github/workflows/deploy.yml`）1本、正式URLは `https://sns-reaction-map.jp/`。公開専用リポジトリと `scripts/sync_public_site.py` は使わない。詳細は課題55 |
+| 2026-09-16 | Claude | 全員 | CI「公開ファイルの検査」が9/15夜から2回連続で失敗していたのを修正しmainへ反映（`9f065db`）。原因は9/15のbukatsu-chiiki更新（課題69）で `docs/sitemap.xml` の該当lastmod更新と `company/data-assets.json` の再生成が漏れていたため。`DATA_REFRESH.md` のsitemapチェックリストに `validate_theme_seo.py` のローカル実行を追記済み（課題69残り7テーマでの再発防止）。`verify_top_page.py` は課題69の収集停止8テーマ起因で従来どおりrc=1のまま（今回の修正と無関係、既知） |
