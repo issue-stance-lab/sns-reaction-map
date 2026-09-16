@@ -1,5 +1,5 @@
 # GROWTH.yaml — グロース台帳（単一の真実源）
-# 最終更新: 2026-08-27
+# 最終更新: 2026-09-16
 #
 # 目的: 来訪者・回遊・投票・SNSシェアを増やす施策の台帳。
 # 制作・品質維持は THEMES.yaml / DATA_REFRESH.md の管轄（このファイルでは扱わない）。
@@ -44,6 +44,22 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-09-16
+      weekly_users: null         # 未取得（今回はx_followersのみ確認。次回の週次スナップショットで取得）
+      pageviews: null            # 未取得
+      pages_per_session: null    # 未取得
+      votes_total: null          # 未取得
+      votes_week: null           # Supabase: 未取得
+      gsc_impressions: null      # 未取得
+      gsc_clicks: null           # 未取得
+      x_followers: 20            # Xプロフィール画面（x.com/sns_hannou_ma）を直接開いて確認した実測値
+      notes: >-
+        オーナーから「フォロワーが増えない」と相談を受け確認した。直近スナップショット（8/22）の
+        x_followers=118 が自己矛盾（同じ行のnotesに「手動確認が必要」とありながら値は「手動確認済み」、
+        かつ「8/10から変化なし」としながら8/10行の実測値は18）していたため、118は誤記録と判断し
+        8/22行はnullに訂正した（下記参照）。実際の推移は 1人(7/6) → 18人(8/10) → 20人(9/16、本行)で、
+        8月上旬以降ほぼ横ばい。プロフィール文・固定ポスト（「SNS反応まっぷとは？」8/2投稿）は既に整備済みで、
+        x-profile recurring が想定していた未着手状態ではなかった。他のKPIは今回未取得。
     - date: 2026-08-22
       weekly_users: 11           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
       pageviews: 170             # GA4: 過去7日（公開ホスト限定）
@@ -52,12 +68,18 @@ kpi:
       votes_week: null           # Supabase: 未取得
       gsc_impressions: 3         # Search Console: 28日間
       gsc_clicks: 0              # Search Console: 28日間
-      x_followers: 118  # 手動確認済み（8/10から変化なし）
+      x_followers: null  # 【2026-09-16 訂正】旧値118は誤記録。真値不明のためnull（詳細はnotes末尾）
       notes: >-
         8/10比でweekly_users 9→11、PV 90→170、pages/session 3.750→4.146、votes_total 15→16。
         GSCは28日間の値でimpressions 27→3、clicks 1→0と急減しているが、これは28日窓が前回8/10から
         約12日しか経過しておらず、過去期間がリセットされたわけではなく期間内のデータが少ない可能性がある。
         x_followersは手動確認が必要。GA4・Supabase・GSCの自動取得はすべて正常。
+
+
+        【2026-09-16 訂正】x_followersは当初「118（手動確認済み・8/10から変化なし）」と記録されていたが誤りだった。
+        直前の段落に「x_followersは手動確認が必要」とあるとおり実際は未確認のまま118という値だけが入っており、
+        「8/10から変化なし」という記述も8/10行の実測値18と矛盾していた。真値は遡って確認できないためnullに訂正する。
+        2026-09-16にXプロフィール画面を直接確認した実測値は20人（本ファイル内の2026-09-16スナップショット行を参照）。
     - date: 2026-08-10
       weekly_users: 9           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
       pageviews: 90             # GA4: 過去7日（公開ホスト限定）
@@ -468,4 +490,12 @@ activity_log:
     detail: 公開テーマ10ページへ、根拠のある公開日・最終更新日、編集・分析主体、SNS投稿の収集方法、AI利用工程、サンプル分類の注意書き、訂正窓口を表示。検索タイトル・description・OGP・Xカードを内容別に整理し、Article JSON-LDとページ別lastmodを追加
     target_pages: 10
     metrics: GSC impressions、GSC clicks、GSC CTR、GA4 Google Organic users
+    related_capability: null
+  - date: 2026-09-16
+    type: measurement
+    detail: >-
+      kpi.snapshots の x_followers 記録の誤りを発見・修正。8/22行の118人は8/10行(18人)・同じ行のnotesと
+      矛盾する誤記録と判明したためnullに訂正し、Xプロフィール画面を直接確認した実測20人を新規スナップショットとして追加。
+      推移は1人(7/6)→18人(8/10)→20人(9/16)で、8月上旬以降ほぼ横ばいと判明した。プロフィール文・固定ポストは
+      既に整備済み（x-profile recurring が想定していた未着手状態ではなかった）。
     related_capability: null
