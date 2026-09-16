@@ -470,25 +470,30 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """候補公開JSONを正典に、ページ上の管理対象集計を貼り直す。"""
     collected, rows = _public_rows(json.loads(public_theme.read_text(encoding="utf-8")))
     total = len(rows)
-    if "<!-- PLANET_SECTION_START -->" in page:
-        page = refresh_verified_planet(page)
-        return replace_once(
-            page,
-            r"公開投稿\d+件のうち、意見と判定した\d+件をAI",
-            f"公開投稿{collected}件のうち、意見と判定した{total}件をAI",
-            "リード文",
-        )
     counts = Counter(str(classification(row)["main_issue"]) for row in rows)
     top = ranked_issues(counts)[0]
     config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
     blocks = config["arena"]["issue_blocks"]
     conclusion = {str(block["main_issue"]): block["conclusion"] for block in blocks}[top]
-    page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
-    page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
+    if "<!-- PLANET_SECTION_START -->" in page:
+        page = refresh_verified_planet(page)
+        page = replace_once(
+            page,
+            r"公開投稿\d+件のうち、意見と判定した\d+件をAI",
+            f"公開投稿{collected}件のうち、意見と判定した{total}件をAI",
+            "リード文",
+        )
+    else:
+        page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
+        page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
+        page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + '  （取得期間: ' + re.search(r'（取得期間: ([^／]+)／', page).group(1) + '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
+        page = replace_once(page, r'<section class="stats insight-stats".*?\n</section>', build_insight_stats(rows, collected), "注目ポイント", flags=re.S)
+        page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し")
+    # 山なみ変換後もページ外に残る2パネル（スタンス集計・詳細データ）と「議論の中心」は、
+    # 旧デザイン専用ではなくどちらの版にも存在するため、分岐の外で必ず更新する。
+    # 山なみ変換(0447912)ではこの3箇所が更新対象から漏れ、定期更新のたびに古い値のまま
+    # 固定されていた（課題69で発見）。
     page = replace_once(page, r'<li class="conclusion-focus">.*?</li>', '<li class="conclusion-focus">' + f'<span class="conclusion-count"><b>{counts[top]}</b>件</span><strong>{html.escape(str(conclusion["headline"]))}</strong><span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span></li>', "議論の中心", flags=re.S)
-    page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + '  （取得期間: ' + re.search(r'（取得期間: ([^／]+)／', page).group(1) + '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
-    page = replace_once(page, r'<section class="stats insight-stats".*?\n</section>', build_insight_stats(rows, collected), "注目ポイント", flags=re.S)
-    page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し")
     page = replace_once(page, r'<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?\n</section>', build_details(rows, collected, load_queries()), "詳細データ", flags=re.S)
     return page
