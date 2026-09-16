@@ -74,3 +74,42 @@ resync-source`コマンドを新設し、正規の手順で解消した。
 正しく含む結果になった）。公開確認後、ブラウザで実ページを見て最終更新日の見落とし
 （3件目、上記）を発見・追加修正しmainへ反映。作業ツリー（`../isa-wt-task69-bukatsu`）は
 削除済み。
+
+### 2026-09-16 辺野古高校生死亡事故（2テーマ目）を収集から標準検査まで実施
+
+**収集**: 新規80件（意見72件）を取得。分類モデル（`kimi-k2.7-code`、`--batch-size 5`）が
+1件だけ「高リスク」判定でAPI拒否（HTTP 400、内容は通常の政治コメントで実際に危険な
+内容ではない）。この1件を今回の分類対象から除外し（`raw.json`・`new-only.json`双方から
+除いて集合検査の整合を保つ）、次回以降の収集で再取得されるのを待つ扱いとした。
+残り72件（うち意見61件）を正常に分類し、累積552件・意見430件へ統合。次回収集は9/23。
+
+**独自性検査への影響試算**: 候補データを`build_planet_data`へ直接通し、6論点すべてで
+読み飛ばし＋増分が上限40%未満（最大28.3%、政治利用・基地問題）と確認。bukatsu-chiikiと
+異なり、今回は追い読みなしで反映して問題ない水準だった。
+
+**発見した既存の不具合（辺野古専用、他テーマには無い）**:
+1. `henoko_planet_guard.py`の`canonical_sha256`完全一致チェックが、再読台帳の指紋を
+   「常に最新の正典と一致すべき値」として扱っており、設計書
+   （`quality/designs/2026-09-06-stage-c-reread-registry.md`）の定義（初回スナップショット
+   時点の指紋であり、以後の正典更新に追随させる欄ではない）と矛盾していた。このため
+   辺野古は正典が1件でも増減するたびに、定期更新の最終段階（`build_henoko_arena.py
+   --public-counts-only`）が必ず失敗する状態だった。他9テーマの`build_*_arena.py`には
+   同種のチェックは存在しない。オーナー承認を得て撤去。実際の改ざん検出は
+   `load_reread_registry`の本文指紋照合と`verify_inputs`自身の公開件数・公開分類の
+   突き合わせが別途担っており、撤去後も`tests/test_henoko_verified_refresh.py`
+   （期待するエラーの種類・文言を実態に合わせて更新）で維持を確認した。
+2. 山なみ区画の外にある「SNS投稿の収集方法」段落（552件/430件への言い換え）が
+   初回の山なみ変換以来同期されていなかった（bukatsu-chiikiの「調査条件」文と同型の
+   見落とし）。`refresh_planet_section.py`にhenoko専用の同期関数を追加して解消。
+3. `configs/henoko-student-accident-reaction-map.json`の`number_provenance.exclude_selectors`
+   に`note`が無く、「本文確認後に追加された投稿N件は、本文確認の対象外です」という
+   正しい注記が「説明できない数字」として`verify_number_provenance.py`に拾われていた。
+   他テーマ（bukatsu-chiiki等）の設定と揃え、`note`を追加して解消。
+
+**標準検査**: `verify_theme_page.py`・`verify_number_provenance.py`・`verify_themes_yaml.py`・
+`verify_update_provenance.py`いずれもNG0件。`python3 -m unittest discover -s tests`
+970件（skip4件）全通過。`refresh_planet_section.py --for-docs`の冪等性（2回目は
+`OK. Lines: N → N`）も確認済み。
+
+**本番反映**: 未実施。オーナー確認待ち。作業ツリー（`../isa-wt-task69-henoko`）は
+反映後に削除予定。

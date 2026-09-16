@@ -180,11 +180,29 @@ def _sync_bike_method_text(html: str, data: dict) -> str:
     return html
 
 
+def _sync_henoko_method_text(html: str, data: dict) -> str:
+    """「SNS投稿の収集方法」段落の集計件数を揃える。
+
+    「編集・分析情報」内の静的文で、build_section()の再生成対象（山なみ区間の外）
+    にも sync_issue_counts.py の LEAD_RE/NOTE_RE（探す定型文が違う）にも掛からず、
+    初回変換以来だれも更新していなかった（他テーマと同じ失われ方。2026-09-16、
+    課題69の辺野古1回目で発覚）。henoko-student-accident専用。
+    """
+    collected = data["totals"]["collected"]
+    opinions = data["totals"]["opinions"]
+    pattern = re.compile(r"(収集した)[\d,]+(件のうち意見と判定した)[\d,]+(件を論点分析に表示しています)")
+    new_html, n = pattern.subn(lambda m: f"{m[1]}{collected:,}{m[2]}{opinions:,}{m[3]}", html)
+    if n != 1:
+        raise SystemExit(f"「収集したN件のうち意見と判定したM件」の想定箇所数(1)と一致しません（henoko-student-accident）: {n}件")
+    return new_html
+
+
 TOPIC_ENRICH = {"bukatsu-chiiki": _inject_bukatsu_go_cards}
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
     "elderly-license-revocation": _sync_elderly_method_text,
     "bike-blue-ticket": _sync_bike_method_text,
+    "henoko-student-accident": _sync_henoko_method_text,
 }
 
 
