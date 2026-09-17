@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 656,
+  "duplicates": 32,
+  "new": 624,
+  "relevant": 622,
+  "opinions": 532,
+  "opinion_flag_available": true,
+  "candidate": 4386,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "consumption-tax-cut",
+  "date": "2026-09-17",
+  "run_id": "20260917_213816",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.35,
+    "fetch_seconds": 108.86,
+    "classify_seconds": 13044.36
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_consumption_tax_arena_hermes.py",
+      "script_sha256": "b19f2defed77aeb179bca9b81765e3f04d6d3c785d5819e75e7dc4ee1bea6058",
+      "taxonomy_sha256": "2bcb5dfb901de2cc46a83a9515252168e21b771eb280a1c7ba90299fe41944be"
+    },
+    "input": {
+      "raw_sha256": "153b7c3ea2b3d91346a94e076728fb5050ac579b97a2aa31b38a4dcfebbad485",
+      "raw_records": 656,
+      "new_sha256": "f3ec82d6a54bcfd0477972919fd6be501295ae6bd00144ac79588f126b2f6b02"
+    },
+    "sources": {
+      "yahoo_realtime": 656
+    },
+    "model": {
+      "name": "kimi-k2.6",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "5d32f4e830037ae52debf564bf364d306f0a1472a15e8ec9d79e42bb59fe25f1"
+    }
+  },
+  "next_collect_at": "2026-09-24"
+}
