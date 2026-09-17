@@ -154,6 +154,11 @@ python3 scripts/refresh_planet_section.py --topic bukatsu-chiiki --for-docs
 （`scripts/verification_data.py --input <sample_file> --output <verification_file>`）と、
 トップページの同期（`scripts/sync_portal_stats.py`）も忘れないこと。
 
+`updated_at`が動く反映では、`scripts/refresh_featured_slots.py`（トップページ
+「今週の注目テーマ」「いま考えたい4つの問い」の自動選定。基準は
+`GROWTH.yaml`の`featured_questions.criteria`）も`sync_portal_stats.py`と
+セットで実行する。同じ入力なら「変更なし」と出るだけなので、毎回実行して構わない。
+
 ### 自転車の定期回を山なみへ接続する（2026-09-12〜）
 
 `data/bike-blue-ticket_editorial-updates/*.json` に収集回ごとの本文確認を保存し、
