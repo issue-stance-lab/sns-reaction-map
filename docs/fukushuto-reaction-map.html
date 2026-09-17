@@ -1005,9 +1005,9 @@ function drawPanel(){
   const it = issues[st.landed];
   const n = m.counts[it.id];
   const imgSlug = {"fukushuto-osaka-restoration":"tokoso","fukushuto-location":"kouhochi","fukushuto-definition":"teigi","fukushuto-disaster-preparedness":"bousai","fukushuto-priority":"yusen","fukushuto-finance":"hiyou"}[it.id];
-  const imgHtml = imgSlug ? ('<div class="explainer-card landing-image" data-img="images/topics/fukushuto/fukushuto-infographic-wide-'
-    +imgSlug+'.webp" data-alt="'+it.label+'"><img src="images/topics/fukushuto/fukushuto-infographic-wide-'
-    +imgSlug+'.webp" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
+  const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';
+  const imgHtml = imgSlug ? ('<div class="explainer-card landing-image" data-img="'+imgPath+'" data-alt="'+it.label+'">'
+    +'<img src="'+imgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
   let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'

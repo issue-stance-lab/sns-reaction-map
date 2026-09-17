@@ -551,11 +551,15 @@ def apply_landing_images(page: str) -> str:
         "let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
         "    + '<p class=\"sub\">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'"
     )
+    # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
+    # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
+    # validate_theme_seo.py の参照チェック（href|src="…"の正規表現）が実在しない
+    # パスとして誤検知する（課題69・起承転結の再構成で発見）。
     new_draw_panel_head = (
         "const imgSlug = {" + slug_map_js + "}[it.id];\n"
-        "  const imgHtml = imgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"images/topics/fukushuto/fukushuto-infographic-wide-'\n"
-        "    +imgSlug+'.webp\" data-alt=\"'+it.label+'\"><img src=\"images/topics/fukushuto/fukushuto-infographic-wide-'\n"
-        "    +imgSlug+'.webp\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
+        "  const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';\n"
+        "  const imgHtml = imgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+imgPath+'\" data-alt=\"'+it.label+'\">'\n"
+        "    +'<img src=\"'+imgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
         "  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml\n"
         "    + '<p class=\"sub\">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'"
     )
