@@ -129,7 +129,7 @@
     .manga-page-card img{display:block;width:100%;aspect-ratio:2/3;object-fit:cover;background:var(--accent-soft)}
     .manga-page-card span{display:block;padding:10px 12px;color:var(--ink);font-size:13px;font-weight:900;line-height:1.4}
     .explainer-grid{display:flex;flex-direction:column;gap:18px;margin-top:18px}
-    #planet-block .landing-panel .landing-image{margin:0 0 10px;box-shadow:none;border-color:var(--line)}
+    #planet-block .landing-image{margin:0 0 10px;box-shadow:none;border-color:var(--line)}
     .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}
     .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
     .explainer-card img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;background:var(--accent-soft)}
@@ -1010,7 +1010,13 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+  const imgSlug = {"fukushuto-osaka-restoration":"tokoso","fukushuto-location":"kouhochi",
+    "fukushuto-definition":"teigi","fukushuto-disaster-preparedness":"bousai",
+    "fukushuto-priority":"yusen","fukushuto-finance":"hiyou"}[it.id];
+  const imgHtml = imgSlug ? ('<div class="explainer-card landing-image" data-img="images/topics/fukushuto/fukushuto-infographic-wide-'
+    +imgSlug+'.webp" data-alt="'+it.label+'"><img src="images/topics/fukushuto/fukushuto-infographic-wide-'
+    +imgSlug+'.webp" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
@@ -1542,12 +1548,12 @@ try {
   var modal=document.getElementById('explainer-modal');
   var mImg=document.getElementById('explainer-modal-img');
   var mClose=document.getElementById('explainer-modal-close');
-  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
-    c.addEventListener('click',function(){
-      mImg.src=c.dataset.img;
-      mImg.alt=c.dataset.alt||'';
-      modal.classList.add('open');
-    });
+  document.addEventListener('click',function(e){
+    var c=e.target.closest('.explainer-card[data-img]');
+    if(!c) return;
+    mImg.src=c.dataset.img;
+    mImg.alt=c.dataset.alt||'';
+    modal.classList.add('open');
   });
   mClose.addEventListener('click',function(){modal.classList.remove('open');});
   modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
