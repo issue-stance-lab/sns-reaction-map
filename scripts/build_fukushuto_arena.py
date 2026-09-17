@@ -477,6 +477,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     conclusion = {str(block["main_issue"]): block["conclusion"] for block in blocks}[top]
     if "<!-- PLANET_SECTION_START -->" in page:
         page = refresh_verified_planet(page)
+        page = apply_landing_images(page)
         page = replace_once(
             page,
             r"公開投稿\d+件のうち、意見と判定した\d+件をAI",
@@ -489,28 +490,105 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + '  （取得期間: ' + re.search(r'（取得期間: ([^／]+)／', page).group(1) + '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
         page = replace_once(page, r'<section class="stats insight-stats".*?\n</section>', build_insight_stats(rows, collected), "注目ポイント", flags=re.S)
         page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し")
-    # 山なみ変換後もページ外に残る2パネル（スタンス集計・詳細データ）と「議論の中心」は、
-    # 旧デザイン専用ではなくどちらの版にも存在するため、分岐の外で必ず更新する。
-    # 山なみ変換(0447912)ではこの3箇所が更新対象から漏れ、定期更新のたびに古い値のまま
-    # 固定されていた（課題69で発見）。
+    # 山なみ変換後もページ外に残る「議論の中心」は、旧デザイン専用ではなく
+    # どちらの版にも存在するため、分岐の外で必ず更新する。詳細データパネルも同様。
+    # スタンス集計パネルと論点解説カード（explainer-card）は課題69・起承転結の
+    # 再構成（プロトタイプ）で削除済みのため、ここでの同期は不要になった。
     page = replace_once(page, r'<li class="conclusion-focus">.*?</li>', '<li class="conclusion-focus">' + f'<span class="conclusion-count"><b>{counts[top]}</b>件</span><strong>{html.escape(str(conclusion["headline"]))}</strong><span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span></li>', "議論の中心", flags=re.S)
-    page = replace_once(page, r'<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?\n</section>', build_details(rows, collected, load_queries()), "詳細データ", flags=re.S)
-    # 論点解説カード（explainer-card）も山なみ変換後に残ったまま件数が同期されなくなっていた
-    # （sync_issue_counts.pyはPLANET_SECTIONがあるページを「explainer-cardごと無い」前提で
-    # 対象外にするが、fukushutoは山なみ導入後もこのカード群を残している。課題69で発見）。
-    # id接尾辞はconfigのslugと綴りが微妙に異なるため、HTML側の実際のidに合わせて直書きする。
-    explainer_id_to_issue = {
-        "teigi": "定義・中身", "kohochi": "候補地", "tokoso": "都構想・維新",
-        "bosai": "防災・災害", "hiyo": "費用・財源", "yusen": "優先順位",
-    }
-    for suffix, issue in explainer_id_to_issue.items():
-        page = replace_once(
-            page,
-            rf'id="issue-count-fukushuto-{suffix}">\d+件</span>',
-            f'id="issue-count-fukushuto-{suffix}">{counts[issue]}件</span>',
-            f"論点解説カード({suffix})",
+    return page
+
+
+# 各論点の図解画像（画像はwebp・件数などの動的データは持たない静的アセット）。
+# slugはファイル名の接尾辞、labelはalt文字列用（h2はアイコン付きなのでここは別に持つ）。
+LANDING_IMAGE_BY_ISSUE_ID = {
+    "fukushuto-osaka-restoration": ("tokoso", "都構想・維新"),
+    "fukushuto-location": ("kouhochi", "候補地"),
+    "fukushuto-definition": ("teigi", "定義・中身"),
+    "fukushuto-disaster-preparedness": ("bousai", "防災・災害"),
+    "fukushuto-priority": ("yusen", "優先順位"),
+    "fukushuto-finance": ("hiyou", "費用・財源"),
+}
+
+
+def _landing_image_html(slug: str, label: str) -> str:
+    path = f"images/topics/fukushuto/fukushuto-infographic-wide-{slug}.webp"
+    return (
+        f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{html.escape(label)}">'
+        f'<img src="{path}" alt="論点図解：{html.escape(label)}" loading="lazy"></div>'
+    )
+
+
+def apply_landing_images(page: str) -> str:
+    """論点ごとの図解画像を、山なみ再生成後のページへ差し戻す。
+
+    render_planet()（build_planet_page_preview.py、10テーマ共通）は
+    fukushuto専用の画像を知らないため、refresh_verified_planet() が山なみ区画
+    全体を作り直すたびにこの画像が消える。無JS用フォールバック（#fallback配下の
+    landing-panel）と、実際の操作画面を作るJS（drawPanel()）の両方に差し戻す
+    （課題69・起承転結の再構成で発見）。
+    """
+    def add_to_fallback(m: re.Match) -> str:
+        issue_id, heading = m.group(1), m.group(0)
+        found = LANDING_IMAGE_BY_ISSUE_ID.get(issue_id)
+        if not found:
+            return heading
+        slug, label = found
+        return heading + _landing_image_html(slug, label)
+
+    page, n = re.subn(
+        r'<section class="landing-panel" id="fb-(fukushuto-[a-z-]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        add_to_fallback,
+        page,
+    )
+    if n != len(ISSUE_ORDER):
+        raise IssueCountError(
+            f"論点画像(フォールバック側): landing-panelが{len(ISSUE_ORDER)}件必要です（{n}件）"
         )
+
+    slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in LANDING_IMAGE_BY_ISSUE_ID.items())
+    old_draw_panel_head = (
+        "let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + '<p class=\"sub\">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'"
+    )
+    # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
+    # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
+    # validate_theme_seo.py の参照チェック（href|src="…"の正規表現）が実在しない
+    # パスとして誤検知する（課題69・起承転結の再構成で発見）。
+    new_draw_panel_head = (
+        "const imgSlug = {" + slug_map_js + "}[it.id];\n"
+        "  const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';\n"
+        "  const imgHtml = imgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+imgPath+'\" data-alt=\"'+it.label+'\">'\n"
+        "    +'<img src=\"'+imgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml\n"
+        "    + '<p class=\"sub\">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'"
+    )
+    if old_draw_panel_head not in page:
+        raise IssueCountError("論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません")
+    page = page.replace(old_draw_panel_head, new_draw_panel_head, 1)
+
+    old_modal_js = (
+        "document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){\n"
+        "    c.addEventListener('click',function(){\n"
+        "      mImg.src=c.dataset.img;\n"
+        "      mImg.alt=c.dataset.alt||'';\n"
+        "      modal.classList.add('open');\n"
+        "    });\n"
+        "  });"
+    )
+    new_modal_js = (
+        "document.addEventListener('click',function(e){\n"
+        "    var c=e.target.closest('.explainer-card[data-img]');\n"
+        "    if(!c) return;\n"
+        "    mImg.src=c.dataset.img;\n"
+        "    mImg.alt=c.dataset.alt||'';\n"
+        "    modal.classList.add('open');\n"
+        "  });"
+    )
+    # モーダルのクリック検知は山なみ区画の外（ページ末尾）にあり、山なみ再生成の
+    # たびに壊れるわけではないが、初回だけ委譲方式へ直せば以後は触らなくて済む。
+    if old_modal_js in page:
+        page = page.replace(old_modal_js, new_modal_js, 1)
     return page
 
 
@@ -587,6 +665,7 @@ def build(
 
     if "<!-- PLANET_SECTION_START -->" in page:
         page = refresh_verified_planet(page)
+        page = apply_landing_images(page)
         if not check and (page != before or output is not None):
             target = Path(output) if output else html_path
             target.parent.mkdir(parents=True, exist_ok=True)
