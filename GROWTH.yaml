@@ -368,17 +368,20 @@ recurring:
     title: note 記事の執筆・公開
     cadence: 3日に1本を目安（候補なしは見送り可）+ per-theme-publish（新テーマ公開時）
     priority: critical
-    last_run: 2026-09-04    # 部活動の地域移行第4回（最終回）を公開し、投稿実績へ記録済み
+    last_run: 2026-09-11    # 部活動の地域移行第5回（学習指導要領編）を公開し、投稿実績へ記録済み
     procedure: >-
       `.claude/skills/note-operation/SKILL.md` に従い、テーマ別分析記事を執筆する。
       記事には UTM 付きテーマページへのリンクを必ず入れる。
       投稿後は `content/note/posts.md` に記録し、7日後・28日後に GA4（sessionSource=note）を確認する。
     needs_human: note への投稿操作（ハブは note にアクセスできない）
-    next_article: bukatsu-chiiki 第4回（2026-09-04企画開始予定）
+    next_article: "consumption-tax-cut 全4回シリーズ第1回（2026-09-16企画開始。着手ブリーフは content/note/drafts/consumption-tax-cut-note-SERIES-BRIEF.md）"
     notes: >-
-      2026-08-23に第1回を公開し、8/25に全面改稿した。第2回は8/29、第3回は9/1に公開済み。
+      部活動の地域移行シリーズ（全5回、2026-08-23〜09-11公開）はビューが102→33→11→11と
+      回を追うごとに下がり、7日流入157PVに対しサイト流入2セッション（約1.3%）にとどまったため、
+      2026-09-16にオーナーと合意のうえ一区切りとした。次は消費税減税へ切り替える
+      （直近収集2026-09-01時点で新規568件、公開10テーマ中最大。一次資料メモも準備済み）。
       各記事の7日後・28日後の計測予定はcontent/note/posts.md と company/HANDOFFS.yaml を正典とする。
-      消費税減税の既存記事はURL・公開日が未記録のまま残す。
+      消費税減税の既存記事（consumption_tax_01、URL・公開日不明）は引き続き既存記事とみなさない。
 
   x-posting:
     title: X運用（新テーマ告知・引用RT・リプライ）
@@ -406,24 +409,25 @@ recurring:
       2026-07-09はURLなしリプライ3本実施（辺野古遺族/@narumita・憲法改正/@hashimoto_lo・生成AI著作権/@Henry66239746）。
       2026-07-26に生成AI著作権ページのSEOタイトル改善後、計測用UTM付き告知を投稿（https://x.com/sns_hannou_ma/status/2081234241497833523）。
 
-featured: fukushuto   # 現在のポータル注目テーマ
+featured: fukushuto   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
-  updated_at: 2026-08-01
+  updated_at: 2026-09-17
   criteria: |
-    - 賛否が価値観の対立に還元できる（事実確認だけで決着しない）
-    - 読者自身がコストを負担する立場になりうる
-    - 分類済み件数が原則300件以上
-    - 交通ルールとインフラ整備の対比を含めるため、bike-blue-ticket（181件）は例外とする
+    - 公開テーマのうち意見300件以上を対象にする
+    - THEMES.yaml の updated_at が新しい順に5件選び、1件目を「今週の注目テーマ」、
+      2〜5件目を「いま考えたい4つの問い」にする
+    - 選定は scripts/refresh_featured_slots.py が自動で行い、
+      実行のたびにこのファイルとページを同期する
   items:
-    - theme: ai-copyright
-      question: AI学習が合法なら、創作者への対価は不要なのか？
-    - theme: bike-blue-ticket
-      question: 自転車の取り締まりと道路整備、どちらが先か？
+    - theme: henoko-student-accident
+      question: 事故の検証と教育の評価、どの論点を重く見る？
     - theme: bukatsu-chiiki
-      question: 教員の負担を減らして、家庭の負担が増えてもよいか？
-    - theme: consumption-tax-cut
-      question: 減税で浮いた分を、10年後の自分の年金から出してもよいか？
+      question: 教員の限界を地域で支える改革か、家庭負担と地域格差を広げる移行か？
+    - theme: constitutional-amendment
+      question: 現実の安全保障に合わせて改正するのか、平和主義と権力制限を守るのか？
+    - theme: bike-blue-ticket
+      question: 危険運転を減らす青切符か、道路整備が追いつかないままの罰則強化か？
 
 activity_log:
   # 計測中施策と並行して行った変更を記録する

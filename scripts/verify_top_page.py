@@ -30,13 +30,6 @@ except ImportError:  # python3 scripts/verify_top_page.py
     )
 
 
-FEATURED_QUESTION_LINKS = {
-    "ai-copyright": "ai-copyright-reaction-map.html",
-    "bike-blue-ticket": "bike-blue-ticket-reaction-map.html",
-    "bukatsu-chiiki": "bukatsu-chiiki-reaction-map.html",
-    "consumption-tax-cut": "consumption-tax-cut-reaction-map.html",
-}
-
 TOPIC_CARD_LINKS = {
     "ai-copyright": "ai-copyright-reaction-map.html",
     "bike-blue-ticket": "bike-blue-ticket-reaction-map.html",
@@ -193,7 +186,7 @@ def verify_top_page(
     ]
 
     failures = 0
-    for label, pattern, replacement in replacement_specs(stats):
+    for label, pattern, replacement in replacement_specs(stats, html):
         matches = len(re.findall(pattern, html))
         replaced = re.sub(pattern, replacement, html)
         if matches > 0 and replaced == html:
@@ -267,10 +260,17 @@ def verify_top_page(
         parsed = _card_count(body, css_class="question-count", id_prefix="featured-count")
         if parsed and parsed[0] == theme:
             question_counts[theme] = parsed[1]
+    question_themes = {theme for theme, _body in question_cards}
     expected_question_counts = {
-        theme: stats["sample_counts"][theme] for theme in FEATURED_QUESTION_LINKS
+        theme: stats["sample_counts"][theme]
+        for theme in question_themes
+        if theme in stats["sample_counts"]
     }
-    if len(question_cards) == 4 and question_counts == expected_question_counts:
+    if (
+        len(question_cards) == 4
+        and len(question_themes) == 4
+        and question_counts == expected_question_counts
+    ):
         lines.append("OK  問いカード4枚の件数が sample_file と一致する")
     else:
         lines.append("NG  問いカード4枚の件数が sample_file と一致する")
@@ -424,9 +424,13 @@ def verify_top_page(
         r'<a\s+class="question-card"\s+data-theme="([^"]+)"\s+href="([^"]+)"',
         html,
     )
+
+    def _expected_href(theme: str) -> str | None:
+        theme_info = themes.get(theme)
+        return Path(theme_info["html"]).name if theme_info and theme_info.get("html") else None
+
     valid_cards = sum(
-        FEATURED_QUESTION_LINKS.get(theme) == href
-        and _link_target_exists(index_path, href)
+        _expected_href(theme) == href and _link_target_exists(index_path, href)
         for theme, href in cards
     )
     if len(cards) == 4 and valid_cards == 4 and len(dict(cards)) == 4:

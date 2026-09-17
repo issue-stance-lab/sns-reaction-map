@@ -245,7 +245,45 @@ def compute_stats(
     }
 
 
-def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
+FEATURED_MIN_OPINIONS = 300
+
+
+def select_featured_themes(
+    themes: dict[str, dict[str, Any]],
+    stats: dict[str, Any],
+    *,
+    count: int = 5,
+) -> list[str]:
+    """公開テーマから注目枠を選ぶ。updated_at が新しい順、意見300件未満は対象外（課題「トップの動的表示」）。"""
+    opinion_counts = stats.get("opinion_counts") or {}
+    eligible = [
+        name
+        for name, theme in themes.items()
+        if theme["published"] and opinion_counts.get(name, 0) >= FEATURED_MIN_OPINIONS
+    ]
+    if len(eligible) < count:
+        raise PortalStatsError(
+            f"注目枠に必要な{count}テーマに届きません"
+            f"（意見{FEATURED_MIN_OPINIONS}件以上の公開テーマが{len(eligible)}件）"
+        )
+    # 名前昇順を土台にした安定ソートで、updated_at が同日のときは名前昇順で揃える。
+    ordered = sorted(eligible)
+    ordered.sort(key=lambda name: themes[name]["updated_at"], reverse=True)
+    return ordered[:count]
+
+
+def _current_feature_theme(html: str) -> str | None:
+    match = re.search(
+        r'<a class="feature-card"[^>]*>.*?id="feature-count-([\w-]+)"', html, re.DOTALL
+    )
+    return match.group(1) if match else None
+
+
+def _current_question_themes(html: str) -> list[str]:
+    return re.findall(r'<a class="question-card" data-theme="([\w-]+)"', html)
+
+
+def replacement_specs(stats: dict[str, Any], html: str) -> list[tuple[str, str, str]]:
     last_updated: date = stats["last_updated"]
     next_update: date | None = stats["next_update"]
     updated_short = f"{last_updated.month}/{last_updated.day}"
@@ -297,12 +335,18 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
                 rf'\g<1>{stats["total_opinions"]:,}\2',
             )
         )
-    for theme in (
-        "ai-copyright",
-        "bike-blue-ticket",
-        "bukatsu-chiiki",
-        "consumption-tax-cut",
-    ):
+    feature_theme = _current_feature_theme(html)
+    if feature_theme and feature_theme in stats["sample_counts"]:
+        specs.append(
+            (
+                f"注目テーマ件数 {feature_theme}",
+                rf'(<strong id="feature-count-{re.escape(feature_theme)}">)[^<]*(</strong>)',
+                rf'\g<1>{stats["sample_counts"][feature_theme]:,}\2',
+            )
+        )
+    for theme in _current_question_themes(html):
+        if theme not in stats["sample_counts"]:
+            continue
         specs.append(
             (
                 f"注目の問い件数 {theme}",
@@ -338,7 +382,7 @@ def replacement_specs(stats: dict[str, Any]) -> list[tuple[str, str, str]]:
 
 
 def update_html(html: str, stats: dict[str, Any]) -> str:
-    for label, pattern, replacement in replacement_specs(stats):
+    for label, pattern, replacement in replacement_specs(stats, html):
         html, count = re.subn(pattern, replacement, html)
         if count == 0:
             raise PortalStatsError(f"置換が0件です: {label}")
