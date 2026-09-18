@@ -57,23 +57,18 @@ resync-source`コマンドを新設し、正規の手順で解消した。
 （`verify_theme_page.py`等はページ内の数字同士の整合は見るが、この値が最新かどうかは
 見ていない）。
 
-**持ち越し事項**: 読み込み確認の対象選定で、既に別の独立確認プロセス（課題63・2026-09-12の
-部活動38件確認）でレビュー済みだが区分（bucket）が今回の形式（P1-P6/R1-R6）でない投稿が
-10件見つかった（receiver 6件・cost 4件）。独自性検査への影響が軽微なため、無理に今回の
-スコープへ含めず持ち越した（詳細は`tests/test_planet_data.py`の該当テストに記載）。
+**持ち越し事項**: 既に別プロセス（課題63・9/12の部活動38件確認）でレビュー済みだが
+区分（bucket）が今回の形式でない投稿が10件見つかった。独自性検査への影響が軽微なため
+持ち越した（詳細は`tests/test_planet_data.py`）。
 
 **確立した型**: 上記の手順を`DATA_REFRESH.md`の「定期更新1回分の実務手順」として固定した。
 残り7テーマ（期限超過順）は、この手順をそのまま当てはめて1つずつ消化する。
 
-**本番反映**: オーナー確認後、mainへマージ。マージ時に`docs/index.html`・
-`company/data-backup-status.json`で衝突が発生（別セッションのX投稿日次記録が同じ日に
-2回mainへ反映しており、実行のたびに全体を書き直す2ファイルの同じ行に両方の変更が
-重なったため）。中身は矛盾しておらず、オーナー確認のうえ手で行を書き換えず
-`sync_portal_stats.py`／`backup_private_data.py`で作り直して解消した（`docs/index.html`は
-`THEMES.yaml`が衝突なく自動マージ済みだったため、再生成だけで両セッションの変更を
-正しく含む結果になった）。公開確認後、ブラウザで実ページを見て最終更新日の見落とし
-（3件目、上記）を発見・追加修正しmainへ反映。作業ツリー（`../isa-wt-task69-bukatsu`）は
-削除済み。
+**本番反映**: オーナー確認後mainへマージ。`docs/index.html`・`company/data-backup-status.json`
+で衝突（別セッションのX投稿日次記録との重複、実行のたびに全体を書き直す2ファイルの
+同じ行に両方の変更が重なったため）。中身は矛盾せず、手で書き換えず`sync_portal_stats.py`／
+`backup_private_data.py`で作り直して解消（以後同種の衝突はこの手順で解消、下記も同様）。
+公開後にブラウザで最終更新日の見落とし（3件目、上記）を発見・追加修正。作業ツリー削除済み。
 
 ### 2026-09-16 辺野古高校生死亡事故（2テーマ目）を収集から標準検査まで実施
 
@@ -385,16 +380,21 @@ number_provenance同期漏れの3点を個別に確認すること。
 - 転: 一次資料照合（最後尾＝97%地点にあった）を山なみ直後へ前倒し
 - 結: スタンス集計（山なみの凡例と数字が重複）を削除
 
-**fukushutoとの違い**: fukushutoはPLANET_SECTION内を`build_fukushuto_arena.py`が
-直接作り直すため、そこに`apply_landing_images()`を足せば済んだ。
-consumption-tax-cutは`build_consumption_tax_page.py`（テキスト系）と
-`refresh_planet_section.py`（PLANET_SECTION）が分業しており、論点画像の
-後付け補完（`_inject_ctc_landing_images()`）は後者のTOPIC_ENRICH
-（bukatsu-chiikiと同じ仕組み）に置いた。一次資料照合は前者側で「マーカーが
-どこにあっても毎回PLANET_SECTION_END直後へ動かす」方式にし、以後の定期更新
-でも位置がずれないようにした。
+**fukushutoとの違い**: consumption-tax-cutは`build_consumption_tax_page.py`
+（テキスト系）と`refresh_planet_section.py`（PLANET_SECTION）が分業しており、
+論点画像の後付け補完（`_inject_ctc_landing_images()`）は後者のTOPIC_ENRICHへ
+置いた。一次資料照合は前者側で「マーカーがどこにあっても毎回
+PLANET_SECTION_END直後へ動かす」方式にした。標準検査4種・unittest 970件・
+`run_public_checks.py`はNG0件、ブラウザでも確認済み。
 
-標準検査4種・unittest 970件・`run_public_checks.py`はNG0件、ブラウザでも確認済み。
+**残り課題**: 残る3テーマにも同種の重複がないか、着手前に確認する価値がある。
 
-**残り課題**: 残る3テーマにも同種の重複（論点解説カード・スタンス集計・
-一次資料照合の位置）がないか、着手前に一度ページ構成を確認する価値がある。
+### 2026-09-18 consumption-tax-cut: 投票結果が旧アリーナ地図（空白）へ自動スクロールする不具合を解消
+
+オーナー報告「論点をタップすると前のマップが出てきます」を調査。9/14の山なみ切り替え
+（`4b973a4`）で旧アリーナ（`stance-map-section`、canvas散布図）の描画スクリプトが
+削除されたのに、HTMLの器とSM_RAWだけが残存し、投票後は毎回この空の器へ自動
+スクロールしていた（`6ff0878`）。同じ切り替えを受けたfukushuto・bukatsu-chiiki・
+koshitsu-tenpakaiは器ごと撤去済みと確認し、同じ形に揃えて削除
+（`getElementById`は元からnullガード済み）。SM_RAWは`build_consumption_tax_page.py`が
+毎回検査する対象のため残した。標準検査・unittest 970件・`run_public_checks.py`はNG0件。
