@@ -38,11 +38,11 @@
 **詳細**: [tasks/task-63.md](tasks/task-63.md)
 
 ### 課題69: 定期データ更新の通常運用の型を確立する
-**状態**: 進行中。部活動・辺野古・fukushuto・消費税減税の4テーマ完了・本番反映済み。koshitsu-tenpakaiは収集完了（新規345件）・分類バグ修正済みだが、公開は同テーマ固有の監査ゲートで停止中
+**状態**: 進行中。部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakaiの5テーマ完了・本番反映済み
 **優先度**: 高（収集停止7テーマの再開の土台。1テーマずつ確実に進める）
-**次にすること**: koshitsu-tenpakaiの公開可否をオーナーへ確認（新規280件の意見の手動監査が必要、詳細task-69.md）
-**判断待ち**: koshitsu-tenpakaiの監査を今回実施するか保留するか／起承転結の再構成を残り3テーマにも適用するか
-**関連テーマ**: 全10テーマ（部活動・辺野古・fukushuto・消費税減税が完了。koshitsu-tenpakai着手中。残りbike-blue-ticket・constitutional-amendment）
+**次にすること**: 同型バグを抱えるbike-blue-ticket・constitutional-amendmentへ展開
+**判断待ち**: 起承転結の再構成を残り2テーマにも適用するか
+**関連テーマ**: 全10テーマ（部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakaiが完了。残りbike-blue-ticket・constitutional-amendment）
 **詳細**: [tasks/task-69.md](tasks/task-69.md)
 
 

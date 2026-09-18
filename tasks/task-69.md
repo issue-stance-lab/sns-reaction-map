@@ -21,115 +21,17 @@
 
 ## 実施記録
 
-### 2026-09-15 部活動の地域移行（1テーマ目）を収集から表示更新まで一気通貫で実施
+### 2026-09-15〜16 部活動の地域移行・辺野古高校生死亡事故（1〜2テーマ目）を完了
 
-**収集**: 新規223件（うち意見179件）を取得、正典1,618件に統合（`--promote`）。次回収集は9/22。
-
-**独自性検査への影響試算**: 正典統合前に候補データを直接`build_planet_data`へ通し、
-教員の働き方・制度・移行プロセスの2論点が上限40%に迫ることを事前に確認。費用・家庭負担／
-受け皿・指導者の2論点は専用の下位分類（cost_side/receiver_side）を持つため別集計が必要と判明。
-
-**読み込み確認**: 4論点・対象166件を1件ずつ本文を読んで判定（`quality/reviews/
-2026-09-15-bukatsu-headroom-catchup.json`）。完了後、論点ごと10件以上を抜き取り
-本文と記録の一致を確認。結果、最終的な未読件数は教員の働き方52件・制度・移行プロセス
-42件・教育的意義・機会23件で、いずれも独自性検査の上限（40%）には抵触しない。
-
-**専用ファイルの指紋同期**: 読了記録を専用ファイル（`data/bukatsu-chiiki_cost-receiver-
-reread.json`）へ反映する際、直接指紋を書き換える操作がClaude Codeのセキュリティ機構に
-ブロックされた。オーナーに状況を報告し承認を得たうえで、「専用ファイルの中身が共通台帳の
-読了記録と1件ずつ一致することを確認してから指紋を進める」`manage_reread_registry.py
-resync-source`コマンドを新設し、正規の手順で解消した。
-
-**2026-09-16 追記（CI発見分）**: 本番反映の数日後、CI「公開ファイルの検査」が2回連続で
-失敗した。原因は表示更新チェックリストの漏れがもう2箇所あったこと — `docs/sitemap.xml`
-の該当lastmod（`最終更新日表示`とは別の場所）と、非公開データの保全台帳
-`company/data-assets.json`（山なみ区間の外で、かつローカルの通常チェックリストにも
-無い項目）。前者はDATA_REFRESH.mdのsitemapチェックリストに`validate_theme_seo.py`の
-ローカル実行を追記して以後の見落としを検査で止めるようにした。残り7テーマの表示更新
-では、チェックリスト完了後に`python3 scripts/run_public_checks.py`まで通すこと
-（`verify_theme_page.py`だけでは拾えない）。
-
-**表示更新**: `refresh_planet_section.py --for-docs`で山なみ区間を更新。このテーマ固有の
-見落としを3件発見・修正（調査条件の取得件数・期間テキスト、`#issue-cards`の論点カード
-件数、`configs/theme-seo.json`の`dateModified`〔ページ末尾「最終更新日」とJSON-LD〕
-— いずれも山なみ区間の外にあり初回変換時にしか同期されていなかった）。3件目は
-機械検査では見つからず、本番反映後にページを実際にブラウザで開いて発見した
-（`verify_theme_page.py`等はページ内の数字同士の整合は見るが、この値が最新かどうかは
-見ていない）。
-
-**持ち越し事項**: 既に別プロセス（課題63・9/12の部活動38件確認）でレビュー済みだが
-区分（bucket）が今回の形式でない投稿が10件見つかった。独自性検査への影響が軽微なため
-持ち越した（詳細は`tests/test_planet_data.py`）。
-
-**確立した型**: 上記の手順を`DATA_REFRESH.md`の「定期更新1回分の実務手順」として固定した。
-残り7テーマ（期限超過順）は、この手順をそのまま当てはめて1つずつ消化する。
-
-**本番反映**: オーナー確認後mainへマージ。`docs/index.html`・`company/data-backup-status.json`
-で衝突（別セッションのX投稿日次記録との重複、実行のたびに全体を書き直す2ファイルの
-同じ行に両方の変更が重なったため）。中身は矛盾せず、手で書き換えず`sync_portal_stats.py`／
-`backup_private_data.py`で作り直して解消（以後同種の衝突はこの手順で解消、下記も同様）。
-公開後にブラウザで最終更新日の見落とし（3件目、上記）を発見・追加修正。作業ツリー削除済み。
-
-### 2026-09-16 辺野古高校生死亡事故（2テーマ目）を収集から標準検査まで実施
-
-**収集**: 新規80件（意見72件）を取得。分類モデル（`kimi-k2.7-code`、`--batch-size 5`）が
-1件だけ「高リスク」判定でAPI拒否（HTTP 400、内容は通常の政治コメントで実際に危険な
-内容ではない）。この1件を今回の分類対象から除外し（`raw.json`・`new-only.json`双方から
-除いて集合検査の整合を保つ）、次回以降の収集で再取得されるのを待つ扱いとした。
-残り72件（うち意見61件）を正常に分類し、累積552件・意見430件へ統合。次回収集は9/23。
-
-**独自性検査への影響試算**: 候補データを`build_planet_data`へ直接通し、6論点すべてで
-読み飛ばし＋増分が上限40%未満（最大28.3%、政治利用・基地問題）と確認。bukatsu-chiikiと
-異なり、今回は追い読みなしで反映して問題ない水準だった。
-
-**発見した既存の不具合（辺野古専用、他テーマには無い）**:
-1. `henoko_planet_guard.py`の`canonical_sha256`完全一致チェックが、再読台帳の指紋を
-   「常に最新の正典と一致すべき値」として扱っており、設計書
-   （`quality/designs/2026-09-06-stage-c-reread-registry.md`）の定義（初回スナップショット
-   時点の指紋であり、以後の正典更新に追随させる欄ではない）と矛盾していた。このため
-   辺野古は正典が1件でも増減するたびに、定期更新の最終段階（`build_henoko_arena.py
-   --public-counts-only`）が必ず失敗する状態だった。他9テーマの`build_*_arena.py`には
-   同種のチェックは存在しない。オーナー承認を得て撤去。実際の改ざん検出は
-   `load_reread_registry`の本文指紋照合と`verify_inputs`自身の公開件数・公開分類の
-   突き合わせが別途担っており、撤去後も`tests/test_henoko_verified_refresh.py`
-   （期待するエラーの種類・文言を実態に合わせて更新）で維持を確認した。
-2. 山なみ区画の外にある「SNS投稿の収集方法」段落（552件/430件への言い換え）が
-   初回の山なみ変換以来同期されていなかった（bukatsu-chiikiの「調査条件」文と同型の
-   見落とし）。`refresh_planet_section.py`にhenoko専用の同期関数を追加して解消。
-3. `configs/henoko-student-accident-reaction-map.json`の`number_provenance.exclude_selectors`
-   に`note`が無く、「本文確認後に追加された投稿N件は、本文確認の対象外です」という
-   正しい注記が「説明できない数字」として`verify_number_provenance.py`に拾われていた。
-   他テーマ（bukatsu-chiiki等）の設定と揃え、`note`を追加して解消。
-
-**標準検査**: `verify_theme_page.py`・`verify_number_provenance.py`・`verify_themes_yaml.py`・
-`verify_update_provenance.py`いずれもNG0件。`python3 -m unittest discover -s tests`
-970件（skip4件）全通過。`refresh_planet_section.py --for-docs`の冪等性（2回目は
-`OK. Lines: N → N`）も確認済み。
-
-**本番反映**: 完了（2026-09-17、`07fceef`でmainへマージ）。マージ時に
-`company/data-backup-status.json`で衝突が発生（bukatsu-chiikiと同型 —
-実行のたびに全体を書き直すファイルの同じ行に、別ブランチの再生成が重なったため）。
-中身は矛盾しておらず、手で行を書き換えず`backup_private_data.py`で作り直して解消した。
-
-マージ後のmain検査で新たに2件発見・解消:
-1. `TASK_BOARD.md`課題69の「状態」欄が180文字で上限（120文字）超過
-   （`verify_task_board.py`／`test_task_board.py`で検出）。経緯をこのファイルへ
-   寄せて索引を簡潔化した。
-2. `THEMES.yaml`の`updated_at`が旧日付（09-13）のまま、`configs/theme-seo.json`の
-   `dateModified`だけ09-16へ更新済みという食い違い（`validate_theme_seo.py`／
-   `docs/sitemap.xml`のlastmodも同様に旧日付のまま）。作業ツリーでの表示更新時に
-   `DATA_REFRESH.md`「2. THEMES.yaml」の`updated_at`更新が漏れていた。
-   `updated_at`とsitemapを09-16へ揃えたところ、今度は`docs/henoko-student-accident-
-   reaction-map.html`内の山なみ区画の「更新」表示が旧日付のまま`build_henoko_arena.py`の
-   期待値と食い違い、`test_henoko_planet.py`・`test_portal_stats.py`・`test_data_sheet.py`
-   が連鎖して落ちた。`refresh_planet_section.py --topic henoko-student-accident --for-docs`
-   （冪等性確認済み）・`build_data_sheet.py`・`sync_portal_stats.py`・
-   `data_asset_inventory.py`を再実行して解消（`run_public_checks.py`・
-   `unittest discover`とも最終的にNG0件）。**教訓**: `updated_at`を直すと、そこから
-   逆算する表示・統計・資産台帳が連鎖して古くなる。1箇所直したら
-   `python3 scripts/run_public_checks.py`まで通して初めて完了とみなす。
-
-作業ツリー（`../isa-wt-task69-henoko`）は反映後に削除予定。
+詳細は[quality/reviews/2026-09-15-task69-bukatsu-henoko-details.md](../quality/reviews/2026-09-15-task69-bukatsu-henoko-details.md)
+に切り出した（400行上限のため、2026-09-18）。要点:
+- 部活動: 新規223件（意見179件）→正典1,618件。読み込み確認166件。ここで
+  「定期更新1回分の実務手順」（`DATA_REFRESH.md`）を確立
+- 辺野古: 新規80件（意見72件、API拒否1件除外）→正典552件・意見430件。
+  辺野古専用の過剰な指紋チェックを撤去（[[project_henoko_guard_bug]]）
+- 両テーマとも本番反映済み。マージ時の`docs/index.html`・`data-backup-status.json`
+  衝突は「手で書き換えず`sync_portal_stats.py`／`backup_private_data.py`で
+  作り直す」で解消——以後の同型衝突もこの手順が前例になった
 
 ### 2026-09-17 fukushuto（3テーマ目）で収集完了、公開候補作成が既存バグで停止
 
@@ -398,3 +300,71 @@ PLANET_SECTION_END直後へ動かす」方式にした。標準検査4種・unit
 koshitsu-tenpakaiは器ごと撤去済みと確認し、同じ形に揃えて削除
 （`getElementById`は元からnullガード済み）。SM_RAWは`build_consumption_tax_page.py`が
 毎回検査する対象のため残した。標準検査・unittest 970件・`run_public_checks.py`はNG0件。
+
+### 2026-09-18 koshitsu-tenpakai: 候補統合方式を廃止し、標準adapter経路へ接続・本番反映まで完了（6テーマ目）
+
+オーナーへ「候補統合方式を続けるか、他9テーマと同じ標準の型へ繋ぎ直すか」を確認し、
+繋ぎ直しの承認を得た。実施内容は`feef38a`（作業ツリー`../isa-wt-task69-koshitsu`）。
+
+**分かったこと（着手前の想定より深刻だった）**: koshitsu_production.pyは正典が
+承認済み候補と一致するかを検査するだけで、**山なみ本体を正典データから作り直す
+機能自体を持っていなかった**（2026-09-13に一度だけ作った固定プロトタイプを
+毎回貼り直すだけ）。`build_koshitsu_arena.py`自身の`build()`もPLANET_SECTION
+判定でこの経路へ委譲するだけで、他9テーマが使う`build_planet_page_preview.py`
+（`bpd.build()`・`independence_gate()`・`render_planet()`等）には一度も
+繋がっていなかった。
+
+**実施**:
+1. `build_koshitsu_arena.py`に`refresh_verified_planet()`（fukushuto等と同型、
+   `bpd.build(THEME)`→`independence_gate`→`render_planet`→PLANET_SECTION差し替え）
+   を追加し、`build()`・`--public-counts-only`の両方でkoshitsu_production.pyへの
+   委譲を置き換えた
+2. `apply_koshitsu_extras()`を新設。共通ジェネレータが知らない皇室典範専用の
+   3箇所（軸の注記「色は今回案全体への評価です」・論点ジャンプリンク6件・
+   「詳細データ」の論点×評価テーブル）を、再生成のたびに差し戻す。3件目の
+   詳細データテーブルは`--prepare-promotion`を実際に走らせて初めて発覚した
+   （山なみ区画の外にあり件数を持つ箇所、[[reference_planet_regen_wipes_hand_edits]]
+   と同型）。公開JSON（`data/public/themes/koshitsu-tenpakai.json`）から
+   論点×評価の集計表を作り直す`build_koshitsu_detail_table()`を新設して対応
+3. `refresh_adapters/koshitsu.py`の`build()`から冗長な二重分岐を削除し、
+   他テーマと同じ`_run_builder→_run_process_sections→_apply_tide`経路へ統一
+
+**実機検証**: `--resume --prepare-promotion`を実行し`status: prepared`まで到達
+（2回目、詳細データテーブル修正後）。副産物として、山なみ変換後の共通コード側
+修正2件（副首都で発見・修正済みのCSSバグ）が皇室典範の公開ページには未反映
+だったことも判明（同じ入力でも再生成のたびに差分が出続ける形で残っていた）。
+
+**独自性検査（軽量版）で実際に必要だった作業**: `independence_gate`が
+「語られていない争点」2件（`koshitsu-tenpakai-adoption-age`・`-birth-pressure`、
+`data/verification/koshitsu-tenpakai-sunk-continents.json`）の母数(sns_base)が
+旧意見数1245のままだとNG。新規280件（意見）を候補語で再検索し、既存の一致条件
+（一次資料の論点に直接触れているか）と照らして新規の一致が無いことを確認した
+うえで母数を1525へ更新。**全280件の個別監査は不要で、他9テーマと同じ軽量な
+再読ルールで足りた**——これが今回オーナーへ確認した本題への回答。
+
+**apply-promotion時に新たなNG33件（number_provenance）を発見・解消**:
+標準経路へ繋いだことで初めて効くようになった検査が、他に2種類の見落としを
+検出した。①`exclude_selectors`が旧2項目（review-note・article-trust-observations）
+のままで、他9テーマ共通の基準セット（`note`・`findings`・`sunk`・`#planet-data`）が
+未反映（「本文確認後に追加された投稿N件」の注記6箇所・coverage_note内の
+一次監査由来の数字が該当）。②山なみ本体の外にあるのに件数を持つ箇所が
+2箇所（ヒーローの`<p class="lead">`・`#issue-cards`の論点別バッジ6件）、
+2026-09-13当時の値のまま取り残されていた。`apply_koshitsu_hero_lead()`・
+`apply_koshitsu_issue_card_counts()`を新設して解消（`6c5cd47`）。
+
+**本番反映**: 完了。`--apply-promotion`成功（`status: promoted`、正典1,950件・
+意見1,525件）。マージ時に`TASK_BOARD.md`・`company/data-assets.json`・
+`company/data-backup-status.json`・`data/public/catalog.json`・
+`data/verification/adoption/registry.json`・`docs/index.html`・本ファイルで
+衝突（consumption-tax-cutの同日反映と同型）。台帳・登録簿類は手で行を
+書き換えず`build_adoption_registry.py`・`data_asset_inventory.py`・
+`sync_portal_stats.py`で作り直し、文書は両セッションの記述を残す形で解消。
+標準検査4種・`unittest`970件（`test_published_page_matches_canonical`含め
+全通過）・`run_public_checks.py`いずれも最終的にNG0件。次回収集は9/25。
+作業ツリー（`../isa-wt-task69-koshitsu`）は反映後に削除予定。
+
+**残り課題**: bike-blue-ticket・constitutional-amendmentは、koshitsuと同じ
+「候補統合方式」ではなく標準adapter経路を最初から使っているため今回の
+繋ぎ替え作業は不要。ただし山なみ本体の外にあるのに件数を持つ箇所
+（ヒーローのlead・詳細データ表・カード件数バッジ等）は個別に存在しうるため、
+着手時に`verify_number_provenance.py`で必ず確認すること。
