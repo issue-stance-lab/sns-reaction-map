@@ -197,7 +197,84 @@ def _sync_henoko_method_text(html: str, data: dict) -> str:
     return new_html
 
 
-TOPIC_ENRICH = {"bukatsu-chiiki": _inject_bukatsu_go_cards}
+# consumption-tax-cutの論点ごとの図解画像。slugはファイル名の接尾辞、labelはalt文字列用
+# （h2はアイコン付きなのでここは別に持つ）。「その他」は図解を持たない。
+CTC_LANDING_IMAGE_BY_ISSUE_ID = {
+    "consumption-tax-cut-political-trust": ("kouyaku", "公約・政治不信"),
+    "consumption-tax-cut-scope": ("taishou", "対象範囲"),
+    "consumption-tax-cut-effect": ("kouka", "減税の効果"),
+    "consumption-tax-cut-finance-welfare": ("zaigen", "財源・社会保障"),
+    "consumption-tax-cut-alternatives": ("kyufu", "給付との比較"),
+    "consumption-tax-cut-business-burden": ("jigyousha", "事業者の負担"),
+}
+
+
+def _ctc_landing_image_html(slug: str, label: str) -> str:
+    path = f"images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-{slug}.webp"
+    return (
+        f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{label}">'
+        f'<img src="{path}" alt="論点図解：{label}" loading="lazy"></div>'
+    )
+
+
+def _inject_ctc_landing_images(block: str, data: dict) -> str:
+    """論点ごとの図解画像を、山なみ再生成後のブロックへ差し戻す。
+
+    render_planet()（build_planet_page_preview.py、10テーマ共通）はconsumption-tax-cut
+    専用の画像を知らないため、refresh()がPLANET_SECTION全体を作り直すたびにこの画像が
+    消える。無JS用フォールバック（#fallback配下のlanding-panel）と、実際の操作画面を
+    作るJS（drawPanel相当）の両方に差し戻す。もとは「このテーマを読み解く、6つの論点」
+    という別建てのカードだったが、山なみの各論点パネルと内容が重複するため、起承転結の
+    再構成（課題69、fukushutoのapply_landing_images()と同型）でこちらへ一本化した。
+    """
+    def add_to_fallback(m: re.Match) -> str:
+        issue_id, heading = m.group(1), m.group(0)
+        found = CTC_LANDING_IMAGE_BY_ISSUE_ID.get(issue_id)
+        if not found:
+            return heading
+        slug, label = found
+        return heading + _ctc_landing_image_html(slug, label)
+
+    block, n = re.subn(
+        r'<section class="landing-panel" id="fb-(consumption-tax-cut-[a-z-]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        add_to_fallback,
+        block,
+    )
+    expected_panels = len(data["issues"])
+    if n != expected_panels:
+        raise SystemExit(
+            f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件）"
+        )
+
+    slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in CTC_LANDING_IMAGE_BY_ISSUE_ID.items())
+    old_draw_panel_head = (
+        "  const it = issues[st.landed];\n"
+        "  const n = m.counts[it.id];\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'"
+    )
+    # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
+    # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
+    # validate_theme_seo.py の参照チェック（href|src="…"の正規表現）が実在しない
+    # パスとして誤検知する（fukushutoの起承転結の再構成で発見、課題69）。
+    new_draw_panel_head = (
+        "  const it = issues[st.landed];\n"
+        "  const n = m.counts[it.id];\n"
+        "  const ctcImgSlug = {" + slug_map_js + "}[it.id];\n"
+        "  const ctcImgPath = ctcImgSlug ? ('images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-'+ctcImgSlug+'.webp') : '';\n"
+        "  const ctcImgHtml = ctcImgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+ctcImgPath+'\" data-alt=\"'+it.label+'\">'\n"
+        "    +'<img src=\"'+ctcImgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + ctcImgHtml"
+    )
+    if old_draw_panel_head not in block:
+        raise SystemExit("論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません（consumption-tax-cut）")
+    block = block.replace(old_draw_panel_head, new_draw_panel_head, 1)
+    return block
+
+
+TOPIC_ENRICH = {
+    "bukatsu-chiiki": _inject_bukatsu_go_cards,
+    "consumption-tax-cut": _inject_ctc_landing_images,
+}
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
     "elderly-license-revocation": _sync_elderly_method_text,

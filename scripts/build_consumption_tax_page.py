@@ -515,8 +515,10 @@ def arena_data(classified: Path | None) -> tuple[dict, list[dict]]:
 CLAIM_POSTS = ROOT / "data" / "consumption-tax-cut_claim_posts.json"
 CLAIM_START = "<!-- CLAIM_AUDIT_START -->"
 CLAIM_END = "<!-- CLAIM_AUDIT_END -->"
-# 差し込む位置。「この争点の背景」で制度と経緯を読んだ直後に置く。
-CLAIM_ANCHOR = '<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>'
+# 差し込む位置（マーカーがまだ無い、テンプレート初回のときだけ使う）。
+# 起承転結の再構成（課題69、fukushutoのFACT_CHECKと同型）で、山なみ図を
+# 読んだ直後に置くよう変更した（以前は最後尾に近い「スタンス集計」の手前だった）。
+CLAIM_ANCHOR = "<!-- PLANET_SECTION_END -->"
 CHECKED_ON = "2026年8月19日"
 
 # 判定の呼び名。他テーマと同じ言い方にしないこと（verify_page_originality.py が見る）。
@@ -902,54 +904,34 @@ def build(
         html = html[:start] + html[end:]
     # 潮目を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
     # 空行が増えていき、adapterの冪等性検査（2回目で差分なし）が通らない。
-    html = re.sub(r"\n\s*\n+(<section class=\"panel\" id=\"explainer-section\">)", r"\n\n\1", html)
-
-    # --- 6. explainer（論点別インフォグラフィック＋拡大モーダル） --------
-    circled = "①②③④⑤⑥⑦"
-    cards = []
-    for n, name in enumerate(named, 1):
-        meta = ISSUE_META[name]
-        img = f"images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-{meta['slug']}.webp"
-        cards.append(
-            f'  <article class="explainer-card" data-img="{img}" data-alt="{meta["short"]}">\n'
-            f'    <div class="explainer-card-label">\n'
-            f'      <span class="explainer-num">論点{circled[n - 1]}</span>\n'
-            f"      <div>\n"
-            f'        <p class="explainer-card-title">{meta["short"]} — {meta["headline"]}</p>\n'
-            f'        <p class="explainer-card-desc">{meta["desc"]}</p>\n'
-            f'        <div class="explainer-sides">\n'
-            f'          <span class="explainer-side con">反対・慎重：{meta["args"]["減税反対・慎重"]}</span>\n'
-            f'          <span class="explainer-side pro">推進：{meta["args"]["減税推進"]}</span>\n'
-            f"        </div>\n"
-            f"      </div>\n"
-            f"    </div>\n"
-            f'    <img src="{img}" alt="論点{circled[n - 1]} {meta["short"]}" loading="lazy">\n'
-            f"  </article>"
-        )
-    explainer = (
-        '<section class="panel" id="explainer-section">\n'
-        '<div class="panel-title"><h2>このテーマを読み解く、6つの論点</h2><span>図解で全論点をチェック</span></div>\n'
-        '<p class="explainer-lead">消費税減税の議論は「賛成か反対か」だけではありません。'
-        "対象は食料品だけでいいのか、財源はどうするのか、そもそも生活に効くのか——"
-        "6つの論点を図解で把握してから投票に進んでください。画像はタップで拡大できます。</p>\n"
-        '<div class="explainer-grid">\n' + "\n".join(cards) + "\n</div>\n"
-        '<p class="explainer-note"><strong>使い方:</strong> 6つの論点を図解で確認してから、'
-        "次の投票で「自分が一番気になる論点」を選んでください。</p>\n"
-        "</section>"
+    # 次に来るのは、テンプレートに「6つの論点」セクションが残っている初回だけ
+    # explainer-section、削除済みなら拡大モーダルのdiv。
+    html = re.sub(
+        r'\n\s*\n+(<section class="panel" id="explainer-section">|<div class="explainer-modal" id="explainer-modal")',
+        r"\n\n\1",
+        html,
     )
-    # 投票セクションの開始タグは data-vote-topic 属性が後から足されている。
-    # 位置の目印にも、書き戻す開始タグにも、いま付いている属性ごと使う。
+    # --- 6. 拡大モーダル（論点別図解は各論点パネルへ移設済み） -----------
+    # 「6つの論点」解説カードは、山なみ図の各論点パネルと内容が重複するため
+    # 起承転結の再構成（課題69）で削除した。画像は refresh_planet_section.py の
+    # _inject_ctc_landing_images() が山なみ再生成のたびに各論点パネルへ差し戻す。
+    # モーダル本体（拡大表示の器）とその開閉スクリプトはテンプレートのものを
+    # そのまま使い、位置だけ投票セクションの直前へそろえる。
     vote_open = re.search(r'<section class="panel" id="vote-section"[^>]*>', html)
     if not vote_open:
         raise SystemExit("投票セクションが見つかりません")
 
-    # モーダルと開閉スクリプトはテンプレートのものをそのまま使う
     modal_start = html.index('<div class="explainer-modal" id="explainer-modal"')
     modal_end = vote_open.start()
     modal = html[modal_start:modal_end]
 
-    start = html.index('<section class="panel" id="explainer-section">')
-    html = html[:start] + explainer + "\n\n" + modal + html[modal_end:]
+    # 「このテーマを読み解く、6つの論点」セクションがまだ残っているテンプレート
+    # （初回のみ）はそこから、すでに削除済みのテンプレートはモーダル自身の位置から
+    # 差し替える（冪等）。
+    start = html.index(
+        '<section class="panel" id="explainer-section">'
+    ) if '<section class="panel" id="explainer-section">' in html else modal_start
+    html = html[:start] + modal + html[modal_end:]
     vote_open_tag = vote_open.group(0)
 
     # --- 7. 投票セクション ---------------------------------------------
@@ -1078,33 +1060,19 @@ def build(
         f"encodeURIComponent('{PAGE_URL}')",
     )
 
-    # --- 13. スタンス集計 ------------------------------------------------
+    # --- 13. スタンス集計（削除済み） -------------------------------------
     # 「6つの論点とXの声」「この争点の背景」の2セクションは、2026-09-14の
     # 山なみ形式への切り替え（4b973a4）でページから無くなった。同じ内容は
     # 山なみの論点別パネル（一次資料との照合込み）と投票セクションの導入文に
     # 統合済みのため、ここでの再構築は行わない。
-    hottest = max(named, key=lambda k: counts[k])
-    summary = (
-        '<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>'
-        "<span>Hermes分類のサマリー</span></div><div class=\"axis-grid\">\n"
-        f'<article class="axis-card"><div class="axis-kicker">減税への態度</div><h3>{STANCE_META[top_stance]["label"]}が最多</h3>'
-        f'<div class="axis-count">{stance_counts[top_stance]}</div>'
-        f'<p>意見{opinions}件の内訳は、減税推進{stance_counts.get("減税推進", 0)}件・'
-        f'条件付き賛成{stance_counts.get("条件付き賛成・政府案に不満", 0)}件・'
-        f'反対・慎重{stance_counts.get("減税反対・慎重", 0)}件・中立{stance_counts.get("中立・情報", 0)}件。</p></article>\n'
-        f'<article class="axis-card"><div class="axis-kicker">前向き vs 慎重</div><h3>前向きが{pro / max(pro + con, 1) * 100:.0f}%</h3>'
-        f'<div class="axis-count">{pro}</div>'
-        f"<p>減税推進と条件付き賛成を合わせると{pro}件。反対・慎重は{con}件で、"
-        "前向きな声が多数を占めます。ただし前向きの中身は一律派と限定容認派に割れています。</p></article>\n"
-        f'<article class="axis-card"><div class="axis-kicker">論点の集中</div><h3>{ISSUE_META[hottest]["short"]}が中心</h3>'
-        f'<div class="axis-count">{counts[hottest]}</div>'
-        f'<p>{ISSUE_META[hottest]["short"]}が{counts[hottest]}件で最多。'
-        f'次いで{ISSUE_META[named[1]]["short"]}{counts[named[1]]}件、{ISSUE_META[named[2]]["short"]}{counts[named[2]]}件と続きます。</p></article>\n'
-        "</div></section>"
-    )
-    start = html.index('<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>')
-    end = html.index('<section class="panel" id="related-topics">')
-    html = html[:start] + summary + "\n\n" + html[end:]
+    # スタンス集計（数字が山なみの凡例と重複）自体も、起承転結の再構成（課題69、
+    # fukushutoと同型）で削除した。テンプレートに古いセクションが残っていれば
+    # ここで取り除く（冪等: 無ければ何もしない）。
+    stance_summary_start = '<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>'
+    if stance_summary_start in html:
+        start = html.index(stance_summary_start)
+        end = html.index('<section class="panel" id="related-topics">')
+        html = html[:start] + html[end:]
 
     # --- 14. 次に読むテーマ ----------------------------------------------
     related = (
@@ -1173,15 +1141,17 @@ def build(
         html = html[:idx] + "\n" + block + html[idx:]
 
     # --- 17. 投稿の言い分と一次資料の突き合わせ ---------------------------
-    # マーカーの間だけを差し替える。初回はマーカーごと「スタンス集計」の手前へ入れる。
+    # マーカーごと、山なみ図を読んだ直後（PLANET_SECTION_ENDの直後）へ置く。
+    # 既存のマーカーがどこにあっても（以前は最後尾に近い位置だった）毎回そこへ
+    # 動かすことで、起承転結の再構成後は常に正しい位置にそろう（fukushutoの
+    # FACT_CHECKと同じ「後付けの補完処理」方式、課題69）。
     audit = claim_audit(rows)
     if CLAIM_START in html and CLAIM_END in html:
         start = html.index(CLAIM_START)
         end = html.index(CLAIM_END) + len(CLAIM_END)
-        html = html[:start] + audit + html[end:]
-    else:
-        idx = html.index(CLAIM_ANCHOR)
-        html = html[:idx] + audit + "\n" + html[idx:]
+        html = html[:start] + html[end:]
+    idx = html.index(CLAIM_ANCHOR) + len(CLAIM_ANCHOR)
+    html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
     verify(html, opinions)
@@ -1236,9 +1206,6 @@ def verify(html: str, opinions: int) -> None:
         # 候補ページを stage に書くときも、画像の在り処は公開ディレクトリで見る
         if not (PAGE.parent / src).exists():
             problems.append(f"参照画像が存在しない: {src}")
-    cards = len(re.findall(r'<article class="explainer-card"', html))
-    if cards != 6:
-        problems.append(f"論点解説カードが6枚でない: {cards}枚")
     if '<div class="explainer-modal"' not in html:
         problems.append("図解の拡大モーダルが失われている")
     if '<aside class="article-trust"' not in html:
@@ -1370,10 +1337,9 @@ def main() -> int:
         if CLAIM_START in html and CLAIM_END in html:
             start = html.index(CLAIM_START)
             end = html.index(CLAIM_END) + len(CLAIM_END)
-            html = html[:start] + audit + html[end:]
-        else:
-            idx = html.index(CLAIM_ANCHOR)
-            html = html[:idx] + audit + "\n" + html[idx:]
+            html = html[:start] + html[end:]
+        idx = html.index(CLAIM_ANCHOR) + len(CLAIM_ANCHOR)
+        html = html[:idx] + "\n\n" + audit + html[idx:]
         write_claim_provenance(args.verification_dest)
         page.write_text(html, encoding="utf-8")
         print(f"updated claim audit in {page}")
