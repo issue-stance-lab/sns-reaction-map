@@ -40,8 +40,8 @@ def prompt_for(batch: list[dict[str, Any]]) -> str:
 - 引用・批判対象の意見を投稿者本人の意見と混同しない。
 - is_relevantは皇室典範改正・皇族・皇位継承に関係すればtrue。
 - is_opinionは投稿者自身の評価・提案・懸念・感情が読み取れる場合だけtrue。
-- ニュース共有・告知だけならis_relevant=true、is_opinion=false、stanceは「中立・情報」。
-- 無関係ならis_relevant=false、is_opinion=false、main_issueは「その他」、stanceは「中立・情報」。
+- ニュース共有・告知だけならis_relevant=true、is_opinion=false、stanceは「今回案全体は未表明」。
+- 無関係ならis_relevant=false、is_opinion=false、main_issueは「その他」、stanceは「今回案全体は未表明」。
 - raw本文をsummaryへ転載せず、攻撃的表現を中和して50字以内で要約する。
 - 複数論点がある場合は、投稿の主眼をmain_issueにする。
 
@@ -98,10 +98,10 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
         if not row["is_relevant"]:
             row["is_opinion"] = False
             row["main_issue"] = "その他"
-            row["stance"] = "中立・情報"
+            row["stance"] = "今回案全体は未表明"
             row["article_usable"] = False
         elif not row["is_opinion"]:
-            row["stance"] = "中立・情報"
+            row["stance"] = "今回案全体は未表明"
         row["confidence"] = max(0.0, min(1.0, float(row.get("confidence", 0))))
         row.pop("id", None)
     return rows
