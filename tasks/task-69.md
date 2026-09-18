@@ -373,3 +373,28 @@ X投稿日次記録との重複、bukatsu-chiiki等と同型）。オーナー�
 （上記koshitsu-tenpakaiの訂正記録を参照）。この2テーマの定期更新に着手する際は
 「マーカー消失」ではなく、apply_public_countsの山なみ分岐漏れ・正典先行差し替え・
 number_provenance同期漏れの3点を個別に確認すること。
+
+### 2026-09-18 consumption-tax-cutをfukushutoと同じ起承転結型へ再編（本番反映済み）
+
+オーナー指摘（「副首都と同じであっちいったりこっちいったりする」）で確認したところ、
+副首都の9/17再編前と同じ3種類の重複と判明し、承認のうえ再編した
+（`517972f`、作業ツリー`../isa-wt-ctc-narrative`は削除済み）。
+
+- 承: 「6つの論点」解説カード6枚（山なみの論点別パネルと内容重複）を削除し
+  画像は各論点パネルへ移設
+- 転: 一次資料照合（最後尾＝97%地点にあった）を山なみ直後へ前倒し
+- 結: スタンス集計（山なみの凡例と数字が重複）を削除
+
+**fukushutoとの違い**: fukushutoはPLANET_SECTION内を`build_fukushuto_arena.py`が
+直接作り直すため、そこに`apply_landing_images()`を足せば済んだ。
+consumption-tax-cutは`build_consumption_tax_page.py`（テキスト系）と
+`refresh_planet_section.py`（PLANET_SECTION）が分業しており、論点画像の
+後付け補完（`_inject_ctc_landing_images()`）は後者のTOPIC_ENRICH
+（bukatsu-chiikiと同じ仕組み）に置いた。一次資料照合は前者側で「マーカーが
+どこにあっても毎回PLANET_SECTION_END直後へ動かす」方式にし、以後の定期更新
+でも位置がずれないようにした。
+
+標準検査4種・unittest 970件・`run_public_checks.py`はNG0件、ブラウザでも確認済み。
+
+**残り課題**: 残る3テーマにも同種の重複（論点解説カード・スタンス集計・
+一次資料照合の位置）がないか、着手前に一度ページ構成を確認する価値がある。
