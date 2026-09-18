@@ -483,6 +483,112 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     return page
 
 
+def refresh_verified_planet(page: str) -> str:
+    """山なみ形式に切り替わったあとは、正典から図全体を作り直すだけでよい。
+
+    旧2D形式の各セクション（SM_RAW・ISSUES・6論点とXの声 等）はbuild_planet_page_preview.py
+    が既に本文から削除済みなので、このあとの旧形式向け置換はすべて対象が無く失敗する
+    （他テーマの山なみ展開時と同じ、旧ビルダーへのガード。reference_planetpage_rollout参照）。
+    """
+    if __package__:
+        from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+    else:
+        from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
+
+    data = bpd.build(THEME)
+    cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    failures = bpd.independence_gate(data, cfg)
+    if failures:
+        raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
+    block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
+                        block, "山なみ全体", flags=re.S)
+    return replace_once(
+        page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
+        "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->",
+        "調査条件（山なみ内に表示）", flags=re.S,
+    )
+
+
+def build_koshitsu_detail_table(public_theme: Path = PUBLIC_THEME) -> str:
+    """「詳細データ」テーブル（論点×今回案全体への評価）を公開JSONから作り直す。
+
+    このテーブルは山なみ本体（PLANET_SECTION）の外にあるため、render_planet()は
+    関知せず、refresh_verified_planet()だけでは更新されない。fukushutoの一次資料
+    照合セクションと同型の「山なみ区画の外だが件数を持つ箇所」（課題69・koshitsu
+    標準化で発見。更新し忘れると意見総数が変わった回だけ数字が食い違う）。
+    """
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    cfg = yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
+    issue_order = [str(item["key"]) for item in cfg["issues"]]
+    stance_order = [str(item["key"]) for item in cfg["stances"]]
+    by_issue = {str(item["label"]): item for item in data["issues"]}
+    total = int(data["opinion_count"])
+
+    header = "".join(f'<th scope="col">{html.escape(s)}</th>' for s in stance_order)
+    body_rows = []
+    for issue in issue_order:
+        item = by_issue.get(issue)
+        if not item:
+            raise IssueCountError(f"詳細データ: 公開JSONに論点がありません: {issue}")
+        stance_counts = {str(s["label"]): int(s["count"]) for s in item.get("stances", [])}
+        if set(stance_counts) != set(stance_order):
+            raise IssueCountError(f"詳細データ: {issue} の立場集計が設定と一致しません")
+        cells = "".join(f"<td>{stance_counts[s]}</td>" for s in stance_order)
+        body_rows.append(
+            f'<tr><th scope="row">{html.escape(issue)}</th><td>{item["count"]}</td>{cells}</tr>'
+        )
+    return (
+        f"<table><caption>意見{total}件。人数・世論の割合ではありません。</caption>"
+        f'<thead><tr><th scope="col">論点</th><th scope="col">計</th>{header}</tr></thead>'
+        f"<tbody>{''.join(body_rows)}</tbody></table>"
+    )
+
+
+def apply_koshitsu_extras(page: str) -> str:
+    """山なみ再生成後、皇室典範専用の3箇所を差し戻す。
+
+    render_planet()（build_planet_page_preview.py、10テーマ共通）は皇室典範専用の
+    軸の注記・論点ジャンプリンク・詳細データテーブルを知らないため、
+    refresh_verified_planet() が山なみ区画全体を作り直すたびに消える、または
+    古いまま取り残される（課題69・koshitsu標準化で発見）。
+    """
+    axis_note = (
+        '<p class="axis-note" style="margin:16px 0;padding:16px;background:#eef3f8;'
+        'border-left:4px solid #73869a"><strong>色は「今回案全体」への評価です。</strong>'
+        '女性天皇への希望や養子制度への意見だけで、改正全体への賛否は決めていません。'
+        '<strong>未表明は、中立や無関心の意味ではありません。</strong></p>'
+    )
+    page, n = re.subn(
+        r'<div class="modes" id="modes"',
+        lambda m: axis_note + m.group(0),
+        page,
+        count=1,
+    )
+    if n != 1:
+        raise IssueCountError("軸の注記: 差し込み位置(#modes)が見つかりません")
+
+    def add_jump_link(m: re.Match) -> str:
+        return m.group(0) + f'<p><a href="#issue-{m.group(1)}">この論点の図解とX投稿を見る ↓</a></p>'
+
+    page, n = re.subn(
+        r'<section class="landing-panel" id="fb-(koshitsu-tenpakai-[a-z-]+)" tabindex="-1">',
+        add_jump_link,
+        page,
+    )
+    if n != 6:
+        raise IssueCountError(f"論点ジャンプリンク: landing-panelが6件必要です（{n}件）")
+
+    page = replace_once(
+        page,
+        r"<table><caption>意見[\d,]+件。人数・世論の割合ではありません。</caption>.*?</table>",
+        build_koshitsu_detail_table(),
+        "詳細データテーブル",
+        flags=re.S,
+    )
+    return page
+
+
 def build(
     *,
     check: bool = False,
@@ -491,12 +597,14 @@ def build(
     output: Path | None = None,
 ) -> tuple[list[str], bool]:
     page_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
-    if '<!-- PLANET_SECTION_START -->' in page_path.read_text():
-        try:
-            from .koshitsu_production import build as build_planet
-        except ImportError:
-            from koshitsu_production import build as build_planet
-        return build_planet(check=check,source=source,output=output or page_path)
+    before = page_path.read_text(encoding="utf-8")
+    if '<!-- PLANET_SECTION_START -->' in before:
+        page = apply_koshitsu_extras(refresh_verified_planet(before))
+        if not check and (page != before or output is not None):
+            target = Path(output) if output else page_path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(page, encoding="utf-8")
+        return (["皇室典範：山なみ全体を正典から再生成しました"], page != before)
     rows, sample_file, collected, period = load_canon(source)
     config_path = ROOT / "configs" / f"{THEME}-reaction-map.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
@@ -686,8 +794,10 @@ def main() -> int:
     args = parser.parse_args()
     target=args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
     if args.public_counts_only and '<!-- PLANET_SECTION_START -->' in target.read_text():
-        from koshitsu_production import build as build_planet
-        build_planet(output=target)
+        before = target.read_text(encoding="utf-8")
+        page = apply_koshitsu_extras(refresh_verified_planet(before))
+        target.write_text(page, encoding="utf-8")
+        print("OK: 山なみ全体を正典から再生成しました")
         return 0
 
     try:

@@ -128,13 +128,13 @@ def finalize(root: Path, current_date: str) -> None:
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
-    """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
-    if '<!-- PLANET_SECTION_START -->' in (root / PAGE).read_text():
-        sys.path.insert(0,str(root/'scripts'))
-        from koshitsu_production import build as build_planet
-        out=stage/'page-candidate.html'
-        build_planet(source=stage/'cumulative-candidate.json',output=out)
-        return {PAGE:out}
+    """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。
+
+    候補統合方式（koshitsu_production.py）は2026-09-15の候補統合時点でのみ使う
+    1回きりの経路だった。定期更新では他9テーマと同じく、build_koshitsu_arena.py
+    自身のPLANET_SECTION分岐（refresh_verified_planet + apply_koshitsu_extras）
+    が正典から山なみ全体を作り直す（課題69・koshitsu標準化）。
+    """
     candidate = stage / "cumulative-candidate.json"
     current_page = root / PAGE
     first_page = stage / "page-candidate.html"
