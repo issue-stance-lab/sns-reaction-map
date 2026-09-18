@@ -380,6 +380,82 @@ def add_featured_posts(page: str, rows: list[dict], data: dict) -> str:
     return page
 
 
+# 論点ごとの図解画像。キーは山なみの issue id、値は (画像ファイルの接尾辞, ラベル)。
+# ファイル名の接尾辞とissue idの接尾辞が一致しない2件（procedure→process、
+# deliberation→information）があるため、決め打ちで対応づける。「その他」は図解を持たない。
+LANDING_IMAGE_BY_ISSUE_ID = {
+    "constitutional-amendment-general": ("general", "改憲全般"),
+    "constitutional-amendment-article9": ("article9", "9条・自衛隊"),
+    "constitutional-amendment-emergency": ("emergency", "緊急事態条項"),
+    "constitutional-amendment-referendum": ("referendum", "国民投票・広告"),
+    "constitutional-amendment-procedure": ("process", "政党・発議手続き"),
+    "constitutional-amendment-deliberation": ("information", "情報・議論の質"),
+}
+
+
+def _landing_image_html(slug: str, label: str) -> str:
+    path = f"images/topics/constitutional-amendment/constitutional-infographic-wide-{slug}.webp"
+    return (
+        f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{label}">'
+        f'<img src="{path}" alt="論点図解：{label}" loading="lazy"></div>'
+    )
+
+
+def apply_landing_images(page: str) -> str:
+    """論点ごとの図解画像を、山なみ再生成後の各論点パネルへ差し戻す。
+
+    render_planet()（build_planet_page_preview.py、10テーマ共通）は憲法改正専用の
+    画像を知らないため、apply_planet_counts() が山なみ区画（PLANET_SECTION）全体を
+    作り直すたびにこの画像が消える。もとは「このテーマを読み解く、6つの論点」という
+    別建てのカード（explainer-section）にあったが、山なみの各論点パネルと内容が
+    重複するため、起承転結の再構成（課題69・オーナー指摘、fukushuto の
+    apply_landing_images() と同型）でこちらへ一本化した。フォールバック側（無JS用の
+    #fallback 配下）と、実際の操作画面を作るJS（drawPanel相当）の両方に差し戻す。
+    """
+    def add_to_fallback(m: re.Match) -> str:
+        issue_id, heading = m.group(1), m.group(0)
+        found = LANDING_IMAGE_BY_ISSUE_ID.get(issue_id)
+        if not found:
+            return heading
+        slug, label = found
+        return heading + _landing_image_html(slug, label)
+
+    page, n = re.subn(
+        r'<section class="landing-panel" id="fb-(constitutional-amendment-[a-z0-9]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        add_to_fallback,
+        page,
+    )
+    expected_panels = len(LANDING_IMAGE_BY_ISSUE_ID) + 1  # 「その他」を含む全landing-panel数
+    if n != expected_panels:
+        raise IssueCountError(
+            f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件）"
+        )
+
+    slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in LANDING_IMAGE_BY_ISSUE_ID.items())
+    old_draw_panel_head = (
+        "  const it = issues[st.landed];\n"
+        "  const n = m.counts[it.id];\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'"
+    )
+    # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
+    # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
+    # validate_theme_seo.py の参照チェックが実在しないパスとして誤検知する
+    # （fukushuto・consumption-tax-cutの起承転結の再構成で発見、課題69）。
+    new_draw_panel_head = (
+        "  const it = issues[st.landed];\n"
+        "  const n = m.counts[it.id];\n"
+        "  const caImgSlug = {" + slug_map_js + "}[it.id];\n"
+        "  const caImgPath = caImgSlug ? ('images/topics/constitutional-amendment/constitutional-infographic-wide-'+caImgSlug+'.webp') : '';\n"
+        "  const caImgHtml = caImgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+caImgPath+'\" data-alt=\"'+it.label+'\">'\n"
+        "    +'<img src=\"'+caImgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + caImgHtml"
+    )
+    if old_draw_panel_head not in page:
+        raise IssueCountError("論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません")
+    page = page.replace(old_draw_panel_head, new_draw_panel_head, 1)
+    return page
+
+
 def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
                         stances: Counter, intensities: Counter) -> str:
     """正典との集計一致と再読ゲートを確認し、山なみと残す集計を同時に更新する。"""
@@ -421,6 +497,7 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
             rf'<span class="explainer-count" id="issue-count-{THEME}-{card["slug"]}">\d+件</span>',
             span_html(THEME, str(card["slug"]), count), f'論点カード {card["slug"]}')
     page = add_featured_posts(page, rows, data)
+    page = apply_landing_images(page)
     return page.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
 
 
