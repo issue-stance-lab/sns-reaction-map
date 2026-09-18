@@ -761,12 +761,6 @@ def build(
     period = collection_period(rows)
     html = template.read_text(encoding="utf-8")
     published_at, modified_at = existing_dates(html)
-    # 一次情報の囲みは scripts/seo/apply_background_sources.py が書くもので、
-    # 公開更新の工程では流れない。背景セクションを作り直すときに持ち越す。
-    sources = re.search(
-        r"<!-- BACKGROUND_SOURCES_START -->.*?<!-- BACKGROUND_SOURCES_END -->", html, re.S
-    )
-    background_sources = sources.group(0) if sources else ""
 
     opinions = data["opinions"]
     relevant = data["relevant"]
@@ -775,7 +769,6 @@ def build(
     counts = data["issue_counts"]
     stance_counts = data["stance_counts"]
     stance_share = data["stance_share"]
-    per_issue = data["per_issue_stance"]
     named = [k for k in order if k != "その他"]
 
     top_issue = named[0]
@@ -1085,108 +1078,11 @@ def build(
         f"encodeURIComponent('{PAGE_URL}')",
     )
 
-    # --- 11. 論点とXの声 ------------------------------------------------
-    blocks = []
-    nav = []
-    for n, name in enumerate(named, 1):
-        meta = ISSUE_META[name]
-        breakdown = per_issue.get(name, {})
-        nav.append(f'<a href="#issue-{meta["slug"]}">{meta["short"]} {counts[name]}</a>')
-        # 中立を除く3スタンスのうち件数上位2つを、その立場の論拠とともに表示する
-        ranked = sorted(
-            (s for s in STANCE_ORDER if s != "中立・情報" and breakdown.get(s)),
-            key=lambda s: breakdown[s],
-            reverse=True,
-        )[:2]
-        # 反対側を左（neg）、前向き側を右（pos）に置く
-        ranked.sort(key=lambda s: STANCE_ORDER.index(s), reverse=True)
-        side_class = {"減税反対・慎重": "neg", "条件付き賛成・政府案に不満": "mid", "減税推進": "pos"}
-        sides = [
-            f'<div class="side {side_class[stance]}">'
-            f'<strong>{meta["bar_stances"][stance]}（{breakdown[stance]}件）</strong>{meta["args"][stance]}</div>'
-            for stance in ranked
-        ]
-        cards = []
-        for stance in STANCE_ORDER:
-            for sample in data["samples"][name][stance][:1]:
-                cards.append(
-                    f'<div class="sample-card"><div class="meta">{meta["bar_stances"][stance]} / conf {sample["confidence"]}</div>'
-                    f'<p>{esc(sample["summary"])}</p>'
-                    f'{embed_html(sample["url"])}</div>'
-                )
-            if len(cards) >= 4:
-                break
-        # 論点内の立場構成バー（他テーマの .temp-bar と同じ形。CSSは topic-modern.css）
-        seg_class = {
-            "減税推進": "process",
-            "条件付き賛成・政府案に不満": "mid",
-            "減税反対・慎重": "con",
-            "中立・情報": "neutral",
-        }
-        present = [s for s in STANCE_ORDER if breakdown.get(s)]
-        segs = []
-        legend = []
-        for stance in present:
-            share = breakdown[stance] / counts[name] * 100
-            # 幅が狭いセグメントに数字を入れると潰れて読めなくなる
-            text = f"{share:.0f}%" if share >= 9 else ""
-            segs.append(
-                f'<div class="temp-seg {seg_class[stance]}" style="width:{share:.1f}%">{text}</div>'
-            )
-            legend.append(
-                f'<span><i class="{seg_class[stance]}"></i>{meta["bar_stances"][stance]} {breakdown[stance]}件</span>'
-            )
-        # 論点固有の文言は長いので、右肩は最多の立場だけを出す
-        top = max(present, key=lambda s: breakdown[s])
-        counts_text = f'最多は「{meta["bar_stances"][top]}」{breakdown[top]}件'
-        temp_bar = (
-            '<div class="temp-bar-wrap">\n'
-            f'<div class="temp-bar-label"><span>{meta["bar_label"]}</span><span>{counts_text}</span></div>\n'
-            f'<div class="temp-bar">{"".join(segs)}</div>\n'
-            f'<div class="temp-bar-legend">{"".join(legend)}</div>\n'
-            "</div>"
-        )
-        blocks.append(
-            f'<article class="issue-block" id="issue-{meta["slug"]}">\n'
-            f'<div class="issue-head"><span class="axis-kicker">論点{n}</span>'
-            f'<h3>{meta["short"]} — {meta["headline"]}<span class="issue-count">{counts[name]}件</span></h3>\n'
-            f"{temp_bar}\n"
-            f'<p class="issue-desc">{meta["desc"]}</p>\n'
-            f'<div class="issue-sides">{"".join(sides)}</div>\n'
-            f"</div>\n"
-            f'<div class="sample-grid">\n' + "\n".join(cards) + "\n</div>\n</article>"
-        )
-    voices = (
-        '<section class="panel conflict-panel"><div class="panel-title"><h2>6つの論点とXの声</h2>'
-        "<span>論点ごとに立場の違う投稿を読む</span></div>\n"
-        f'<nav class="quadrant-nav">{"".join(nav)}</nav>\n\n' + "\n\n".join(blocks) + "\n</section>"
-    )
-    start = html.index('<section class="panel conflict-panel"><div class="panel-title"><h2>6つの論点とXの声</h2>')
-    end = html.index('<section class="panel background-panel">')
-    html = html[:start] + voices + "\n\n" + html[end:]
-
-    # --- 12. 背景 -------------------------------------------------------
-    p = 'style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px;"'
-    background = (
-        '<section class="panel background-panel"><div class="panel-title"><h2>この争点の背景</h2>'
-        "<span>なにが起きていて、なぜ意見が割れるのか</span></div>\n"
-        f"<p {p}>消費税は税率10%（食料品などは軽減税率8%）で、社会保障の主要財源とされてきました。"
-        "物価高が続くなかで各党が減税を掲げ、2026年7月には食料品に対象を絞った減税をめぐる調整が大詰めを迎えています。"
-        "対象範囲・税率・実施時期・恒久化の有無が、いずれも決着の焦点になっています。</p>\n"
-        f"<p {p}>推進する立場からは「物価高対策として最も早く広く効く」「可処分所得が直接増える」という主張があります。"
-        "慎重な立場からは「社会保障の財源が細る」「値下げに反映されず事業者の利益になる」"
-        "「供給が追いつかないなかで需要を刺激すればインフレが加速する」という反論が出ています。</p>\n"
-        f"<p {p}>SNS上では減税に前向きな声が多数ですが、その中身は一枚岩ではありません。"
-        "「一律・恒久でなければ意味がない」という不満、「財源を示さない減税は無責任」という批判、"
-        "「公約を掲げた政党が採決でどう動いたか」という政治不信が、論点ごとに別々の対立軸をつくっています。</p>\n"
-        + background_sources
-        + "</section>"
-    )
-    start = html.index('<section class="panel background-panel">')
-    end = html.index('<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>')
-    html = html[:start] + background + "\n\n" + html[end:]
-
     # --- 13. スタンス集計 ------------------------------------------------
+    # 「6つの論点とXの声」「この争点の背景」の2セクションは、2026-09-14の
+    # 山なみ形式への切り替え（4b973a4）でページから無くなった。同じ内容は
+    # 山なみの論点別パネル（一次資料との照合込み）と投票セクションの導入文に
+    # 統合済みのため、ここでの再構築は行わない。
     hottest = max(named, key=lambda k: counts[k])
     summary = (
         '<section class="panel conflict-panel"><div class="panel-title"><h2>スタンス集計</h2>'
@@ -1323,7 +1219,10 @@ def verify(html: str, opinions: int) -> None:
     if ".hero:before" in html and "fukushuto" in re.search(r"\.hero:before\{[^}]*\}", html).group(0):
         problems.append(".hero:before が副首都のヒーロー画像を参照している")
 
-    if html.count("{x:") - 2 != opinions:
+    sm_raw_match = re.search(r"const SM_RAW = \[.*?\n\];", html, re.S)
+    if not sm_raw_match:
+        problems.append("SM_RAW がページから見つからない")
+    elif sm_raw_match.group(0).count("{x:") != opinions:
         problems.append("SM_RAW の件数が意見件数と一致しない")
     # 投票の保存先は supabase 直叩きから vote-store.js 経由へ移っている
     for token in ("G-K10S4YCZFH", "ca-pub-2542211932832864", "vote-store.js", "topic-modern.js"):
@@ -1371,15 +1270,6 @@ def verify(html: str, opinions: int) -> None:
         ]
         if shown != expected:
             problems.append(f"突き合わせの件数が出所ファイルと合わない: {shown} != {expected}")
-    bars = len(re.findall(r'<div class="temp-bar-wrap">', html))
-    if bars != 6:
-        problems.append(f"論点別の立場構成バーが6本でない: {bars}本")
-    for m in re.finditer(r'<div class="temp-bar-wrap">(.*?)<div class="temp-bar-legend"', html, re.S):
-        widths = [float(w) for w in re.findall(r'temp-seg [a-z]+" style="width:([\d.]+)%', m.group(1))]
-        if not widths:
-            problems.append("立場構成バーにセグメントがない")
-        elif abs(sum(widths) - 100) > 0.5:
-            problems.append(f"立場構成バーの合計が100%でない: {sum(widths):.1f}%")
 
     if problems:
         raise SystemExit("ビルド検証に失敗しました:\n  - " + "\n  - ".join(problems))
