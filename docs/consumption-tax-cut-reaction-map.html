@@ -83,23 +83,7 @@
     .vote-comparison{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 16px}
     .comparison-card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff}
     .bar-row{margin:10px 0}.bar-track{height:10px;border-radius:999px;background:#e7e7f7;overflow:hidden}.bar-fill{height:100%;background:var(--accent)}
-    .stance-map-section,#stance-map-section{position:relative;background:#0f0e2e url('images/shared/arena-bg.webp') center/cover no-repeat!important;border-top:0}
-    .stance-map-section .panel-title h2{color:#fff}.stance-map-section .panel-title span{color:rgba(255,255,255,.7)}
-    .stance-map-section #stance-map-inner{position:relative;max-width:720px;margin:0 auto}
-    #sm-wrap{position:relative;width:100%;max-width:660px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.35);padding:6px}
-    #sm-wrap canvas{display:block;width:100%;border:0;border-radius:8px}
-    #sm-wrap #smCanvasMain{cursor:crosshair;position:relative;z-index:2;background:transparent}
-    #sm-wrap #smCanvasHeat{position:absolute;top:6px;left:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:8px;pointer-events:none;z-index:1;background:#fdfdff}
-    .map-caption{max-width:760px;margin:12px auto 0;color:rgba(255,255,255,.72);font-size:13px}
-    #your-marker-note{color:rgba(255,255,255,.7)!important}
-    .sm-controls{max-width:660px;margin:14px auto 0;display:flex;flex-direction:column;gap:10px}
-    .sm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:800;color:rgba(255,255,255,.8);align-items:center}
-    .sm-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
-    .sm-filters{display:flex;gap:6px;flex-wrap:wrap}
-    .sm-fbtn{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);cursor:pointer;font-size:12px;font-weight:800}
-    .sm-fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
     .arena-divider{line-height:0;margin:0}.arena-divider img{width:100%;height:auto;display:block}
-    #sm-tooltip{position:absolute;display:none;z-index:5;max-width:260px;background:#1e1b4b;color:#fff;font-size:12px;line-height:1.5;border-radius:8px;padding:10px 12px;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.3)}
     .quadrant-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
     .quadrant-nav a{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#fff;text-decoration:none;font-weight:800;font-size:13px}
     .sample-grid{grid-template-columns:repeat(2,1fr)}
@@ -1522,28 +1506,6 @@ try {
 <p style="font-size:11px;color:var(--muted);margin-top:14px;">※ 世論調査ではありません。</p>
 <div id="vote-result" style="display:none;margin-top:20px;"><div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;"><div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div><div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div></div><a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;margin-top:4px;padding:8px 16px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-weight:800;">Xでシェア</a><button id="vote-redo-btn" type="button" style="margin-left:8px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:800;">投票をやり直す</button></div></section>
 
-<section class="panel stance-map-section" id="stance-map-section">
-<div id="stance-map-inner">
-<div class="panel-title"><h2>SNS反応マップ</h2><span>意見3890件 | セクター=論点 / 中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span></div>
-<div id="sm-wrap">
-  <canvas id="smCanvasHeat" width="640" height="640"></canvas>
-  <canvas id="smCanvasMain" width="640" height="640"></canvas>
-</div>
-<p class="map-caption">中心の「消費税減税」を6つの論点と「その他」のセクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色は立場（緑=減税推進 / 橙=条件付き賛成 / 赤=反対・慎重 / 灰=中立）。点をクリックすると元のXポストを開きます。</p>
-<p id="your-marker-note" style="display:none;font-size:12px;color:var(--muted);text-align:center;margin:8px 0 0;">投票した選択肢を「あなたはここ」マーカーで表示しています。</p>
-<div class="sm-controls">
-  <div class="sm-legend">
-    <span><i style="background:#059669"></i>減税推進</span>
-    <span><i style="background:#f59e0b"></i>条件付き賛成</span>
-    <span><i style="background:#dc2626"></i>反対・慎重</span>
-    <span><i style="background:#64748b"></i>中立</span>
-    <span style="color:#888">中心＝冷静 / 外周＝感情的</span>
-  </div>
-  <div class="sm-filters" id="sm-filters"></div>
-</div>
-<div id="sm-tooltip"></div>
-</div>
-</section>
 <div class="arena-divider"><img src="images/shared/arena-divider.webp" alt="" loading="lazy"></div>
 
 <script>

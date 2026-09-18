@@ -137,6 +137,14 @@ class IssueCountSyncTest(unittest.TestCase):
             (ROOT / "data/public/themes/consumption-tax-cut.json").read_text(encoding="utf-8")
         )
         page = (ROOT / "docs/consumption-tax-cut-reaction-map.html").read_text(encoding="utf-8")
+        if "<!-- PLANET_SECTION_START -->" in page:
+            # 山なみ形式への切り替え後、旧アリーナ（stance-map-section、SM_RAW由来の
+            # 散布図）の描画スクリプトが失われたまま画面だけ残っていたのを2026-09-18に
+            # 撤去した（elderly-license-revocationと同じ扱い）。旧「SNS反応マップ」見出しは
+            # 消えており、山なみ側の件数一致は verify_theme_page.py の論点ごとの
+            # 内訳検査が担う。
+            self.assertIn('window.PLANET_DATA=', page)
+            return
         match = re.search(r'<h2>SNS反応マップ</h2><span>意見([\d,]+)件 \|', page)
         self.assertIsNotNone(match)
         self.assertEqual(int(match.group(1).replace(",", "")), public["opinion_count"])
