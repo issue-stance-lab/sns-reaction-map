@@ -334,3 +334,52 @@ FACT_CHECK消失・apply_public_counts分岐漏れと同型、[[reference_planet
 未公開のまま保留してオーナーに次の方針（都度フル監査を続けるか、他9テーマ同様の
 標準adapter経路へ将来的に移行するか）を確認するかは、単独セッションの判断を
 超えると判断し、オーナーへ報告のうえ次の一手を確認する。
+
+### 2026-09-18 koshitsu-tenpakai: 候補統合方式を廃止し、標準adapter経路へ接続（オーナー承認済み・実装完了・公開は未実施）
+
+オーナーへ「候補統合方式を続けるか、他9テーマと同じ標準の型へ繋ぎ直すか」を確認し、
+繋ぎ直しの承認を得た。実施内容は`feef38a`（作業ツリー`../isa-wt-task69-koshitsu`）。
+
+**分かったこと（着手前の想定より深刻だった）**: koshitsu_production.pyは正典が
+承認済み候補と一致するかを検査するだけで、**山なみ本体を正典データから作り直す
+機能自体を持っていなかった**（2026-09-13に一度だけ作った固定プロトタイプを
+毎回貼り直すだけ）。`build_koshitsu_arena.py`自身の`build()`もPLANET_SECTION
+判定でこの経路へ委譲するだけで、他9テーマが使う`build_planet_page_preview.py`
+（`bpd.build()`・`independence_gate()`・`render_planet()`等）には一度も
+繋がっていなかった。
+
+**実施**:
+1. `build_koshitsu_arena.py`に`refresh_verified_planet()`（fukushuto等と同型、
+   `bpd.build(THEME)`→`independence_gate`→`render_planet`→PLANET_SECTION差し替え）
+   を追加し、`build()`・`--public-counts-only`の両方でkoshitsu_production.pyへの
+   委譲を置き換えた
+2. `apply_koshitsu_extras()`を新設。共通ジェネレータが知らない皇室典範専用の
+   3箇所（軸の注記「色は今回案全体への評価です」・論点ジャンプリンク6件・
+   「詳細データ」の論点×評価テーブル）を、再生成のたびに差し戻す。3件目の
+   詳細データテーブルは`--prepare-promotion`を実際に走らせて初めて発覚した
+   （山なみ区画の外にあり件数を持つ箇所、[[reference_planet_regen_wipes_hand_edits]]
+   と同型）。公開JSON（`data/public/themes/koshitsu-tenpakai.json`）から
+   論点×評価の集計表を作り直す`build_koshitsu_detail_table()`を新設して対応
+3. `refresh_adapters/koshitsu.py`の`build()`から冗長な二重分岐を削除し、
+   他テーマと同じ`_run_builder→_run_process_sections→_apply_tide`経路へ統一
+
+**実機検証**: `--resume --prepare-promotion`を実行し`status: prepared`まで到達
+（2回目、詳細データテーブル修正後）。副産物として、山なみ変換後の共通コード側
+修正2件（副首都で発見・修正済みのCSSバグ）が皇室典範の公開ページには未反映
+だったことも判明（同じ入力でも再生成のたびに差分が出続ける形で残っていた）。
+
+**独自性検査（軽量版）で実際に必要だった作業**: `independence_gate`が
+「語られていない争点」2件（`koshitsu-tenpakai-adoption-age`・`-birth-pressure`、
+`data/verification/koshitsu-tenpakai-sunk-continents.json`）の母数(sns_base)が
+旧意見数1245のままだとNG。新規280件（意見）を候補語で再検索し、既存の一致条件
+（一次資料の論点に直接触れているか）と照らして新規の一致が無いことを確認した
+うえで母数を1525へ更新。**全280件の個別監査は不要で、他9テーマと同じ軽量な
+再読ルールで足りた**——これが今回オーナーへ確認した本題への回答。
+
+**未実施（オーナー確認済み・意図的に止めている）**: 実際のページ更新
+（`--apply-promotion`）と本番反映（release）。`tests/test_koshitsu_adapter.py`の
+`test_published_page_matches_canonical`が現在red——今回初めて有効になった
+再生成経路と、まだ古いままの公開ページ（正典データの差ではなく、上記の
+未反映バグ3件と言い回し統一）が一致しないため。`--apply-promotion`でページを
+実際に更新すれば解消する見込みだが未確認。次のセッションが引き継ぐ場合、
+公開判断（品質監査→CEO承認→apply-promotion→release）から着手する。
