@@ -40,7 +40,7 @@
 ### 課題69: 定期データ更新の通常運用の型を確立する
 **状態**: 進行中。部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakaiの5テーマ完了・本番反映済み
 **優先度**: 高（収集停止7テーマの再開の土台。1テーマずつ確実に進める）
-**次にすること**: 同型バグを抱えるbike-blue-ticket・constitutional-amendmentへ展開
+**次にすること**: koshitsu-tenpakaiの起承転結再編（ブランチ止まり）をマージ・本番反映 → bike-blue-ticket・constitutional-amendmentへ同型確認を展開
 **判断待ち**: 起承転結の再構成を残り2テーマにも適用するか
 **関連テーマ**: 全10テーマ（部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakaiが完了。残りbike-blue-ticket・constitutional-amendment）
 **詳細**: [tasks/task-69.md](tasks/task-69.md)

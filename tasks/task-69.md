@@ -35,104 +35,14 @@
 
 ### 2026-09-17 fukushuto（3テーマ目）で収集完了、公開候補作成が既存バグで停止
 
-**収集**: 新規291件（うち意見229件）を取得。1回目は作業ツリーへの`node_modules`複製漏れで
-疎通確認が失敗（`OPERATIONS.md`⓪の既知の手順を後追いで実施）、2回目は分類完了後の
-バックアップ工程で`configs/persona.private.json`未復元により失敗。いずれも同じ
-worktreeで`--resume`して解消し、累積正典1,733件・意見1,452件へ統合できる状態まで進んだ
-（`--promote`はまだ）。次回収集は9/24。
-
-**`--resume --prepare-promotion`で新しい不具合を発見（他テーマには無い、fukushuto含む
-4テーマ共通）**: `refresh_adapters/fukushuto.py`は昇格のたびに`build_fukushuto_arena.py`と
-`build_fukushuto_process_sections.py`（「投稿の主張を、国会と選管の記録に当ててみた」
-一次資料照合セクション、2026-08-24追加）を連続実行するが、後者は`docs/`ページ内に
-`<!-- FACT_CHECK_START/END -->`が1組必要という前提で、無いと即エラーで止まる。
-
-2026-09-13の「副首都を山なみ形式で本番反映」（`0447912`）でページを山なみテンプレートへ
-作り直した際、このfukushuto専用セクションが引き継がれず消えていた（`git show
-0447912^:docs/fukushuto-reaction-map.html`には2422〜2515行に存在、現行は0件）。
-山なみ変換後にfukushutoの定期更新を実行したのは今回が初めてで、これまで発覚していなかった。
-
-`refresh_adapters/*.py`を確認したところ、昇格のたびに専用の`*_process_sections.py`を
-自動実行しているのは **bike / fukushuto / constitutional / koshitsu の4テーマだけ**
-（henoko・bukatsu・elderly・nicknameは該当スクリプトを持っていても昇格経路からは
-呼ばない）。この4テーマの現行ページを確認したところ、**bike-blue-ticket・
-constitutional-amendment・koshitsu-tenpakaiも同様にFACT_CHECK系マーカーが0件** —
-同じ山なみ変換で同種のセクションが失われており、これらのテーマの定期更新を初めて
-実行したときに同じ場所で止まる。現行公開ページの表示自体は壊れていない
-（欠けているのは次の昇格が失敗する、という形でのみ表面化する）。
-
-**オーナー判断（2026-09-17）**: 「復元して再開」。旧文面（2026-08-24確認当時のまま、
-内容更新はせず）を山なみ後の同じ位置（スタンス集計の直後・次に読むテーマの直前）へ
-復元し、`build_fukushuto_process_sections.py`で再生成した（`4ca596f`）。参照する5主張・
-16投稿は現行正典に全件残存を確認済み。
-
-**`--resume --prepare-promotion`は成功**したが、続けて発見した2件目の不具合:
-`build_fukushuto_arena.py`の`apply_public_counts()`（`--public-counts-only`で
-「管理対象集計」をページへ貼り直す関数）が、`<!-- PLANET_SECTION_START -->`が
-ある場合に早期`return`しており、スタンス集計パネル・詳細データパネル・
-「議論の中心」の3箇所が更新対象から漏れていた（0447912の山なみ変換時にこの分岐が
-追加された際の見落とし。他テーマ同様、初回の定期更新でしか発覚しない類）。
-この3箇所を分岐の外へ移し、両方の版で必ず更新されるよう修正した。
-
-**3件目、今回はここで停止（編集判断待ち）**: 修正後の`--prepare-promotion`で、
-今度は`build_planet_data.py`の`validate_reread_records`が
-「候補地の正典ID集合と公開JSONの件数が一致しません」で停止。原因は独自性検査
-（`independence_gate`）とは別の、表示用の内訳（山・立場別シェア）の話。fukushutoは
-共通の再読台帳（`data/verification/reread/`）に未移行で、`候補地・防災災害・
-優先順位・その他・費用財源`の5論点だけ専用ファイル（`data/fukushuto_5issues-
-reread.json`、2026-09-13時点で823件を区分済み）で内訳表示している。今回の新規91件
-（意見）のうちこの5論点に振り分けられた分だけ、内訳の区分（バケット）が未登録のまま
-残っており、候補地51件・防災災害25件・優先順位26件・その他14件・費用財源12件、
-**合計128件の本文を読んで既存区分へ割り当てる必要がある**（独自性検査自体は候補データの
-ままでも合格済みで、これは合否ではなく表示の内訳精度の問題）。「都構想・維新」
-「定義・中身」の2論点はもともと区分表示を持たない「未再読」扱いのため対象外。
-
-**128件の編集再読**: 5論点それぞれについて並列で読み（新規サブエージェント5体、
-既存区分（バケット）へ割り当てるだけで新しい区分は作らない条件）、件数・ID集合・
-summary重複・不正区分の機械検査に加え、いくつかは実際の投稿本文と区分の対応も
-抜き取り確認した。5論点合計は823件→951件（`885cb15`）。
-
-**4件目**: 上記を反映して`--prepare-promotion`を再実行しても同じ「候補地」エラーが
-再発。原因は`refresh_verified_planet()`（`build_planet_data.bpd.build(THEME)`）が
-`--input`の候補を無視し、`THEMES.yaml`が指す**実際の正典ファイルを直接読む**設計
-だったため。`DATA_REFRESH.md`「山なみテーマは、正典だけを先に候補データへ置き換える」
-の指示はこのための手順と判明——正典（`social-samples/fukushuto_hermes_classified.json`）
-とpublic JSON（`build_public_registry.py --topic fukushuto`）を候補の内容へ実際に
-差し替えてから`--prepare-promotion`をやり直し、`status: prepared`まで到達した。
-
-**5件目**: `--apply-promotion`で`verify_number_provenance.py`がNG6件
-（`issue-count-fukushuto-{slug}`という論点解説カードの件数span）。
-`sync_issue_counts.py`は`<!-- PLANET_SECTION_START -->`があるページを
-「explainer-cardごと無い」前提で同期対象から外すが、fukushutoは山なみ導入後も
-この解説カード群（画像・説明文・批判/対案の一言つき）を残しており、件数だけが
-同期されないまま取り残されていた。`apply_public_counts()`に、正典データから
-直接この6spanを更新する処理を追加して解消（`29063eb`）。
-
-**6件目（自己招来）**: 修正後の`--apply-promotion`は成功したが、`THEMES.yaml`の
-`collect_delta`が`0`になっていた。原因は自分自身の手順——4件目の対応で正典を
-事前に手動で候補へ差し替えたため、`refresh_topic.py`が`--resume`時に取り直す
-raw.jsonと現行正典のdiffが0件になった（正典に既に入っていたため「新規」が
-無くなった）。実際の追加意見数（229）へ手で修正し、`sync_portal_stats.py`で
-トップページの「+229件」表示を作り直した。**教訓**: 山なみテーマの正典事前差し替えは
-`--apply-promotion`の直前1回に留め、直後に`collect_delta`が動いていないか確認すること。
-
-**本番反映**: 完了（2026-09-17、`a5d9256`でmainへマージ、衝突なし）。マージ後の
-main検査（`verify_theme_page.py`・`verify_number_provenance.py`・
-`unittest discover`・`run_public_checks.py`）は最終的に全てNG0件。公開サイトで
-実ページの件数・一次資料照合セクション・論点解説カード・トップページの「+229件」
-表示を確認済み。作業ツリー（`../isa-wt-task69-fukushuto`）は反映後に削除済み。
-
-**残り課題（持ち越し）**: koshitsu-tenpakai・bike-blue-ticket・constitutional-amendment
-も`refresh_adapters/*.py`が昇格のたびに専用の`*_process_sections.py`を自動実行する
-同型構成で、現行ページのFACT_CHECK系マーカーが0件（3件目の発見時点で確認済み）。
-この3テーマの定期更新に着手するときは、fukushutoで踏んだ手順
-（①FACT_CHECK復元 → ②apply_public_countsの山なみ分岐に漏れが無いか確認 →
-③正典を先に候補へ差し替えてから独自性検査・prepare-promotion → ④論点解説カード等
-「山なみ区画の外だが件数を持つ」箇所の同期漏れがないかverify_number_provenance.py
-で確認）を先に想定してから着手すると同じ発見の繰り返しを避けられる。ただし
-2件目・5件目の不具合は「山なみ形式である」ことだけが条件で他テーマにも起きうる
-（`apply_public_counts`の分岐構造自体は全山なみテーマ共通のため、koshitsu/bike/
-constitutionalが同じ関数を使っていれば同種の見落としがないか個別に確認要）。
+詳細は[quality/reviews/2026-09-17-task69-fukushuto-details.md](../quality/reviews/2026-09-17-task69-fukushuto-details.md)
+に切り出した（400行上限のため、2026-09-18）。要点:
+- 新規291件（意見229件）→累積正典1,733件・意見1,452件
+- 山なみ変換で消えた一次資料照合セクション（FACT_CHECK）を復元。6件の不具合を
+  発見・解消して`--apply-promotion`成功、本番反映済み（`a5d9256`）
+- 持ち越しで「koshitsu/bike/constitutionalもFACT_CHECK系マーカー0件」と記録したが、
+  **2026-09-18に誤りと判明**（koshitsu標準化の節を参照。各テーマ固有のマーカー名
+  ではなくfukushuto固有の文字列で検索した誤検知と推測）
 
 ### 2026-09-17 fukushutoページの構成をオーナー指示で起承転結型に再編（本番反映済み）
 
@@ -395,3 +305,37 @@ conclusion（headline/detail）を追加。文言は各論点の理由内訳（i
 検出できない。他テーマとの横並び比較（画面を直接見比べる）でしか見つからない
 見落としがある。bike-blue-ticket・constitutional-amendmentの着手前にも、
 他4テーマとページ構成を横並びで確認する価値がある。
+
+### 2026-09-18 koshitsu-tenpakai: オーナー指摘「あっちこっち行っていそう」で起承転結型へ再編（本番反映済み）
+
+オーナーが「皇室典範テーマもどうもあっち行ったりこっち行ったりしていそう」と指摘
+（fukushuto・consumption-tax-cutで既に直した「構成が行ったり来たりする」問題と同種の
+懸念）。fukushutoの現行構成と直接比較し、2つの問題を確認した。
+
+1. 「論点ごとの図解とX投稿」が山（対話パネル）とは別セクションになっており、
+   山を押しても図解は出ず、ジャンプリンクで画面下まで飛ばす構造だった
+   （fukushutoが再編前に持っていた重複と同型）。
+2. 一次資料照合（koshitsu-audit）が資料系セクション群（クイズ・資料にあるのに・
+   編集部横断整理）から離れ、投票の後ろに取り残されていた。
+
+対応: ①論点の図解画像を各論点の詳細パネル（`extras-{id}`、山を押したときにJSが
+`innerHTML`で読み込む唯一の場所）へ差し戻す`apply_koshitsu_landing_images()`を新設
+（6論点中3論点は詳細パネル自体が無かったため新設）。②モーダル拡大表示のクリック
+判定を、静的な`querySelectorAll+forEach`からイベント委譲（`closest()`）へ変更
+——動的に挿入した画像はページ読み込み時に存在しないため静的判定では反応しない
+（fukushutoの同じ修正と同型）。③koshitsu-auditセクションをissue-cardsより前
+（`PLANET_SECTION_END`直後）へ移動し、資料系4セクションが連続するよう並べ替えた。
+④issue-cardsから重複した画像を削除、見出しを「論点ごとの図解とX投稿」→
+「論点ごとのX投稿」に変更（位置は変えていない）。
+
+**作業中の訂正**: セクション移動の際、`#ocean`・`#editorial`もPLANET_SECTION外だと
+誤認し、koshitsu-auditを両者の間へ移動しようとしたが、実際はどちらもPLANET_SECTION内
+（山なみジェネレータが毎回まるごと作り直す領域）だった。`build_koshitsu_arena.py
+--check`の冪等性検査（「landing-panelが6件必要なのに0件」）が本番反映前に検出、
+`html.index()`で実位置を確認してから正しい位置（PLANET_SECTION_END直後）へ
+やり直した。詳細は[[reference_planet_regen_wipes_hand_edits]]に追記済み。
+
+標準検査4種・unittest 970件・run_public_checksいずれもNG0件、ブラウザで
+山クリック→画像表示→モーダル拡大まで実地確認済み。作業は
+`task/koshitsu-narrative-restructure`ブランチへコミット済み（`23d453b`）、
+mainへのマージ・本番反映はこれから。

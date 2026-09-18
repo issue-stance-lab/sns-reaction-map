@@ -666,11 +666,96 @@ def apply_koshitsu_review_note(page: str) -> str:
     )
 
 
+LANDING_IMAGE_BY_ISSUE_ID = {
+    "koshitsu-tenpakai-patrilineal-matrilineal": (
+        "koshitsu-infographic-wide-keisho.webp",
+        "旧図解です。継承資格の変更を見送ったことと、今回の改正法の成立は別です。"
+        "人数・伝統年数の表記は現状を検証した数値ではありません。",
+    ),
+    "koshitsu-tenpakai-female-emperor": (
+        "koshitsu-infographic-wide-josei-tenno.webp",
+        "旧図解です。画像の支持率には出典の再確認が必要です。また、在位中の天皇を"
+        "皇位継承順位に含める表記は誤りです。女性天皇と女系天皇は異なる概念です。",
+    ),
+    "koshitsu-tenpakai-former-royal-adoption": (
+        "koshitsu-infographic-wide-yoshi.webp",
+        "制度案を議論していた時点の旧図解です。現在は改正後第三十八条を確認済みです。"
+        "1947年から2026年までは79年で、画像の「80年以上」「未確定」は現状の説明ではありません。",
+    ),
+    "koshitsu-tenpakai-princess-aiko": (
+        "koshitsu-infographic-wide-aiko.webp",
+        "旧図解です。「件数極少」は今回の集計を表しません。今回の改正では、"
+        "婚姻後も皇族となる女性皇族の配偶者と子は皇族としない整理です。",
+    ),
+    "koshitsu-tenpakai-legislative-process": (
+        "koshitsu-infographic-wide-shingi.webp",
+        "旧図解です。画像内の審議時間と主要法案の平均との比較は、"
+        "根拠を再確認するまで確定した数値として扱いません。",
+    ),
+    "koshitsu-tenpakai-other": (
+        "koshitsu-vote-sonota.webp",
+        "複数の話題を整理する補助図です。「その他」は、今回案への「未表明」や"
+        "「判断困難」と同じ分類ではありません。",
+    ),
+}
+
+
+def apply_koshitsu_landing_images(page: str) -> str:
+    """論点の図解画像を、山なみ再生成後の詳細パネル（extras）へ差し戻す。
+
+    render_planet()（10テーマ共通）はこの画像を知らないため、
+    refresh_verified_planet()が山なみ区画全体を作り直すたびに消える
+    （fukushutoのapply_landing_imagesと同型、課題69・オーナー指摘で発見）。
+    extras-{id}はJS版（land()関数、drawPanel相当）が`extras.innerHTML`で
+    読み込む唯一の場所なので、ここへ入れればフォールバック側・実際の操作画面側の
+    両方に反映される。6論点中3論点（一次資料の主張照合を持たない論点）は
+    extras区画自体が無いため、その3件は新設する。
+    """
+    def figure_html(issue_id: str) -> str:
+        filename, caption = LANDING_IMAGE_BY_ISSUE_ID[issue_id]
+        path = f"images/topics/koshitsu-tenpakai/{filename}"
+        return (
+            f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{html.escape(caption)}">'
+            f'<img src="{path}" alt="{html.escape(caption)}" loading="lazy"></div>'
+        )
+
+    def add_to_existing_extras(m: re.Match) -> str:
+        return m.group(0) + figure_html(m.group(1))
+
+    page, total = re.subn(
+        r'<div class="extras" id="extras-(koshitsu-tenpakai-[a-z-]+)">',
+        add_to_existing_extras,
+        page,
+    )
+
+    for issue_id in LANDING_IMAGE_BY_ISSUE_ID:
+        if f'id="extras-{issue_id}"' in page:
+            continue
+        section_pattern = re.compile(
+            r'(<section class="landing-panel" id="fb-' + re.escape(issue_id) + r'"[^>]*>.*?)'
+            r'(<a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>)',
+            re.S,
+        )
+        page, n = section_pattern.subn(
+            lambda m: m.group(1)
+            + f'<div class="extras" id="extras-{issue_id}">{figure_html(issue_id)}</div>'
+            + m.group(2),
+            page,
+            count=1,
+        )
+        if n != 1:
+            raise IssueCountError(f"論点図解: 挿入位置が見つかりません（{issue_id}）")
+        total += 1
+    if total != 6:
+        raise IssueCountError(f"論点図解: 対象が6件必要です（{total}件）")
+    return page
+
+
 def apply_koshitsu_extras(page: str) -> str:
     """山なみ再生成後、皇室典範専用の7箇所を差し戻す。
 
     render_planet()（build_planet_page_preview.py、10テーマ共通）は皇室典範専用の
-    軸の注記・論点ジャンプリンク・詳細データテーブル・確認表示の文言・議論の中心を
+    軸の注記・論点図解・詳細データテーブル・確認表示の文言・議論の中心を
     知らないため、refresh_verified_planet() が山なみ区画全体を作り直すたびに消える、
     または古いまま取り残される（課題69・koshitsu標準化で発見）。
     """
@@ -689,16 +774,7 @@ def apply_koshitsu_extras(page: str) -> str:
     if n != 1:
         raise IssueCountError("軸の注記: 差し込み位置(#modes)が見つかりません")
 
-    def add_jump_link(m: re.Match) -> str:
-        return m.group(0) + f'<p><a href="#issue-{m.group(1)}">この論点の図解とX投稿を見る ↓</a></p>'
-
-    page, n = re.subn(
-        r'<section class="landing-panel" id="fb-(koshitsu-tenpakai-[a-z-]+)" tabindex="-1">',
-        add_jump_link,
-        page,
-    )
-    if n != 6:
-        raise IssueCountError(f"論点ジャンプリンク: landing-panelが6件必要です（{n}件）")
+    page = apply_koshitsu_landing_images(page)
 
     page = replace_once(
         page,
