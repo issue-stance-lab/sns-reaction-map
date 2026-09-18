@@ -368,3 +368,30 @@ koshitsu-tenpakaiは器ごと撤去済みと確認し、同じ形に揃えて削
 繋ぎ替え作業は不要。ただし山なみ本体の外にあるのに件数を持つ箇所
 （ヒーローのlead・詳細データ表・カード件数バッジ等）は個別に存在しうるため、
 着手時に`verify_number_provenance.py`で必ず確認すること。
+
+### 2026-09-18 koshitsu-tenpakai: オーナー指摘でヒーロー内「議論の中心」を追加（本番反映済み）
+
+公開後、オーナーが実際の画面を見て「他のテーマにはある『議論の中心』が無い」と指摘
+（fukushutoのスクリーンショット添付）。他の山なみテーマ（bukatsu-chiiki・fukushuto・
+constitutional-amendment・consumption-tax-cut）はヒーロー直下に最大論点の要約
+「議論の中心」を持つが、皇室典範の2026-09-13候補には最初から含まれておらず、
+現行ページとの差分比較（both-sides-missing）では気づけなかった項目だった。
+
+`configs/koshitsu-tenpakai-reaction-map.json`のarena.issue_blocks全5件に
+conclusion（headline/detail）を追加。文言は各論点の理由内訳（islands）で最も多い
+カテゴリを根拠にした。`apply_koshitsu_conclusion()`を新設し、公開JSONの最大論点に
+対応するconclusionをヒーローのlead直後へ差し込む（初回挿入・以後の差し替え両対応、
+最大論点が入れ替わっても壊れないよう5論点分すべて用意）。
+
+**確認方法**: ローカルの/tmpに直接置くと画像・フォントが読み込めず見た目が壊れて
+見えた（[[feedback_artifact_standalone_page_preview]]と同型の罠）。作業ツリーの
+`docs/`配下に一時ファイルを置いて自作サーバーで配信し、実際のアセットが読み込まれる
+状態でオーナーと一緒にスクリーンショットを確認してから公開した。
+
+標準検査4種・unittest 970件・run_public_checksいずれもNG0件、本番反映後にブラウザで
+実ページを確認済み。作業ツリー（`../isa-wt-koshitsu-conclusion`）は削除済み。
+
+**教訓**: 差分ベースの点検（現行ページと再生成結果を比較）は「両方に無い要素」を
+検出できない。他テーマとの横並び比較（画面を直接見比べる）でしか見つからない
+見落としがある。bike-blue-ticket・constitutional-amendmentの着手前にも、
+他4テーマとページ構成を横並びで確認する価値がある。
