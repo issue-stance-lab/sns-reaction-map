@@ -545,11 +545,85 @@ def build_koshitsu_detail_table(public_theme: Path = PUBLIC_THEME) -> str:
     )
 
 
+def apply_koshitsu_issue_card_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """「論点ごとの図解とX投稿」(#issue-cards)見出し脇の件数バッジを公開JSONへ揃える。
+
+    #issue-cardsは山なみ本体の外（PLANET_SECTION_ENDの直後）にあり、
+    render_planet()は関知しない。件数は論点見出し（h3）直後のspan.cntだけが
+    対象で、図解画像・代表投稿の抜粋そのものは変更しない（課題69・koshitsu
+    標準化で発見。verify_number_provenance.pyが旧集計時点の内訳6件を
+    説明できない数字として検出した）。
+    """
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    by_label = {str(item["label"]): int(item["count"]) for item in data["issues"]}
+
+    def replace_count(m: re.Match) -> str:
+        label = html.unescape(m.group(1))
+        if label not in by_label:
+            raise IssueCountError(f"論点カード件数: 公開JSONに論点がありません: {label}")
+        return f'<h3>{m.group(1)}</h3><span class="cnt">{by_label[label]}<small>件</small></span>'
+
+    page, n = re.subn(
+        r'<h3>([^<]+)</h3><span class="cnt">\d+<small>件</small></span>',
+        replace_count,
+        page,
+    )
+    if n != 6:
+        raise IssueCountError(f"論点カード件数: landing-panelが6件必要です（{n}件）")
+    return page
+
+
+def apply_koshitsu_hero_lead(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """ヒーローの<p class="lead">内の件数を公開JSONの最新値に合わせる。
+
+    山なみ本体の外（ヒーロー見出し直下）にあるため、render_planet()もこの
+    テーマ固有の文（「今回の改正への評価と…分けてたどります」）を知らず、
+    件数部分だけが2026-09-13当時のまま取り残されていた（課題69・koshitsu
+    標準化で発見。verify_number_provenance.pyが1,605/1,245を説明できない
+    数字として検出）。文面自体は他テーマの定型句へ差し替えず、数字だけを
+    最新の公開JSONへ揃える。
+    """
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    collected = int(data["collected_count"])
+    opinions = int(data["opinion_count"])
+    return replace_once(
+        page,
+        r"収集した[\d,]+件から、意見を含む[\d,]+件を整理しました。",
+        f"収集した{collected:,}件から、意見を含む{opinions:,}件を整理しました。",
+        "ヒーローのlead件数",
+    )
+
+
+def apply_koshitsu_review_note(page: str) -> str:
+    """山なみのcautionパラグラフ内review-noteを、data/review-ledger.jsonの記録に合わせる。
+
+    scripts/seo/apply_review_note.py は「（取得期間: …／<span>…</span>）」という
+    旧2D形式の一文だけを対象にした正規表現で、山なみのcautionパラグラフ
+    （調査条件がRESEARCH_CONDITIONSの外・#caution内にまとまる形）にはそもそも
+    対応していない（fukushuto・henokoも同型で本来は非対応だが、台帳の期待値が
+    render_planet()の既定文言「代表投稿は編集部が選定」とたまたま一致しており
+    表面化していなかった。皇室典範はstatus=reviewedのため既定文言のままだと
+    ずれる。課題69・koshitsu標準化で発見）。
+    """
+    ledger = json.loads((ROOT / "data/review-ledger.json").read_text(encoding="utf-8"))
+    entry = (ledger.get("themes") or {}).get(THEME) or {}
+    if entry.get("status") == "reviewed":
+        expected = f"AI分類。代表投稿{int(entry['samples'])}件の要旨を編集部が確認"
+    else:
+        expected = "AI分類。代表投稿は編集部が選定"
+    return replace_once(
+        page,
+        r'<span class="review-note">[^<]*</span>',
+        f'<span class="review-note">{html.escape(expected)}</span>',
+        "代表投稿の確認表示（review-note）",
+    )
+
+
 def apply_koshitsu_extras(page: str) -> str:
-    """山なみ再生成後、皇室典範専用の3箇所を差し戻す。
+    """山なみ再生成後、皇室典範専用の6箇所を差し戻す。
 
     render_planet()（build_planet_page_preview.py、10テーマ共通）は皇室典範専用の
-    軸の注記・論点ジャンプリンク・詳細データテーブルを知らないため、
+    軸の注記・論点ジャンプリンク・詳細データテーブル・確認表示の文言を知らないため、
     refresh_verified_planet() が山なみ区画全体を作り直すたびに消える、または
     古いまま取り残される（課題69・koshitsu標準化で発見）。
     """
@@ -586,6 +660,9 @@ def apply_koshitsu_extras(page: str) -> str:
         "詳細データテーブル",
         flags=re.S,
     )
+    page = apply_koshitsu_review_note(page)
+    page = apply_koshitsu_hero_lead(page)
+    page = apply_koshitsu_issue_card_counts(page)
     return page
 
 
