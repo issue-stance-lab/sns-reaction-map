@@ -545,6 +545,53 @@ def build_koshitsu_detail_table(public_theme: Path = PUBLIC_THEME) -> str:
     )
 
 
+def apply_koshitsu_conclusion(page: str, public_theme: Path = PUBLIC_THEME) -> str:
+    """ヒーロー内の「議論の中心」を、最大論点のconclusionから作る。
+
+    他の山なみテーマ（bukatsu-chiiki・fukushuto・constitutional-amendment・
+    consumption-tax-cut）にはあるが、皇室典範の2026-09-13候補には最初から
+    含まれていなかった（山なみ本体の外・ヒーロー直下にある要素で、
+    render_planet()は関知しない。2026-09-18、オーナー指摘で発見）。
+    最大論点が入れ替わったときに備え、configs/koshitsu-tenpakai-reaction-map.json
+    のarena.issue_blocks全5件にconclusion（headline/detail）を用意した。
+    """
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
+    blocks = {str(b["main_issue"]): b for b in config["arena"]["issue_blocks"]}
+    top_item = max(data["issues"], key=lambda i: int(i["count"]))
+    top_label = str(top_item["label"])
+    block = blocks.get(top_label)
+    if block is None or not block.get("conclusion"):
+        raise IssueCountError(f"議論の中心: 最大論点「{top_label}」にconclusionがありません")
+    conclusion = block["conclusion"]
+    summary_html = (
+        '<div class="thirty-summary" aria-label="議論の中心">'
+        '<header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>'
+        '<li class="conclusion-focus">'
+        f'<span class="conclusion-count"><b>{int(top_item["count"])}</b>件</span>'
+        f'<strong>{html.escape(str(conclusion["headline"]))}</strong>'
+        f'<span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span>'
+        "</li></ul></div>"
+    )
+    if '<div class="thirty-summary"' in page:
+        return replace_once(
+            page,
+            r'<div class="thirty-summary".*?</div>',
+            summary_html,
+            "議論の中心",
+            flags=re.S,
+        )
+    page, n = re.subn(
+        r'(<p class="lead">[^<]*</p>)',
+        lambda m: m.group(1) + summary_html,
+        page,
+        count=1,
+    )
+    if n != 1:
+        raise IssueCountError("議論の中心: 差し込み位置(lead直後)が見つかりません")
+    return page
+
+
 def apply_koshitsu_issue_card_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     """「論点ごとの図解とX投稿」(#issue-cards)見出し脇の件数バッジを公開JSONへ揃える。
 
@@ -620,12 +667,12 @@ def apply_koshitsu_review_note(page: str) -> str:
 
 
 def apply_koshitsu_extras(page: str) -> str:
-    """山なみ再生成後、皇室典範専用の6箇所を差し戻す。
+    """山なみ再生成後、皇室典範専用の7箇所を差し戻す。
 
     render_planet()（build_planet_page_preview.py、10テーマ共通）は皇室典範専用の
-    軸の注記・論点ジャンプリンク・詳細データテーブル・確認表示の文言を知らないため、
-    refresh_verified_planet() が山なみ区画全体を作り直すたびに消える、または
-    古いまま取り残される（課題69・koshitsu標準化で発見）。
+    軸の注記・論点ジャンプリンク・詳細データテーブル・確認表示の文言・議論の中心を
+    知らないため、refresh_verified_planet() が山なみ区画全体を作り直すたびに消える、
+    または古いまま取り残される（課題69・koshitsu標準化で発見）。
     """
     axis_note = (
         '<p class="axis-note" style="margin:16px 0;padding:16px;background:#eef3f8;'
@@ -662,6 +709,7 @@ def apply_koshitsu_extras(page: str) -> str:
     )
     page = apply_koshitsu_review_note(page)
     page = apply_koshitsu_hero_lead(page)
+    page = apply_koshitsu_conclusion(page)
     page = apply_koshitsu_issue_card_counts(page)
     return page
 
