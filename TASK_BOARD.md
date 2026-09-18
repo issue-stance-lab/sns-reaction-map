@@ -38,11 +38,11 @@
 **詳細**: [tasks/task-63.md](tasks/task-63.md)
 
 ### 課題69: 定期データ更新の通常運用の型を確立する
-**状態**: 進行中。部活動・辺野古・fukushutoの3テーマ完了。fukushutoは山なみ変換由来の不具合3件の修正に加え、オーナー指摘で起承転結型に構成し直して本番反映済み
+**状態**: 進行中。部活動・辺野古・fukushutoの3テーマ完了。koshitsu-tenpakai着手中（別セッションが消費税減税を並行着手）
 **優先度**: 高（収集停止7テーマの再開の土台。1テーマずつ確実に進める）
-**次にすること**: 同型バグを抱えるkoshitsu/bike/constitutionalへ展開。起承転結の構成見直しも同様に行うかは未定・要オーナー確認（詳細はtask-69.md）
+**次にすること**: koshitsu-tenpakaiを収集から本番反映まで実施。旧記録「bike/constitutionalもFACT_CHECK系マーカー0件」は誤りと判明済み（詳細task-69.md）
 **判断待ち**: 起承転結の再構成を残り3テーマにも適用するか
-**関連テーマ**: 全10テーマ（部活動・辺野古・fukushutoが完了。残り5テーマのうちkoshitsu/bike/constitutionalは同型バグの修正込みで着手）
+**関連テーマ**: 全10テーマ（部活動・辺野古・fukushutoが完了。koshitsu-tenpakai着手中、消費税減税も別セッションで並行着手）
 **詳細**: [tasks/task-69.md](tasks/task-69.md)
 
 

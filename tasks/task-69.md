@@ -264,3 +264,31 @@ koshitsu-tenpakai・bike-blue-ticket・constitutional-amendmentの定期更新�
 際、これらのテーマにも同種の「画像・カード・集計の重複」がないか、着手前に一度
 ページ構成を確認する価値がある（今回のような重複はfukushuto固有の可能性が高いが
 未確認）。
+
+### 2026-09-18 koshitsu-tenpakai（4テーマ目）着手前の確認で、上記「FACT_CHECKマーカー0件」が3テーマとも誤りと判明
+
+作業ツリー（`../isa-wt-task69-koshitsu`）で着手する前に、上記持ち越し課題の前提
+（bike-blue-ticket・constitutional-amendment・koshitsu-tenpakaiもFACT_CHECK系
+マーカーが0件）を実機で確認したところ、**3テーマとも該当マーカーは最初から存在し、
+一度も欠落していなかった**。
+
+- koshitsu-tenpakai: `KOSHITSU_AUDIT_START/END`が現行ページに存在（1461/1463行）。
+  `refresh_adapters/koshitsu.py`の`_run_process_sections`が呼ぶ
+  `build_koshitsu_process_sections.py`も存在し、正常に動く経路
+- bike-blue-ticket: `PROCESS_SECTIONS_START/END`が存在（1856/1956行）。
+  `git log -S`で2026-08-16の導入以来、削除された履歴なし
+- constitutional-amendment: `CLAIM_AUDIT_START/END`が存在（2464/2493行）。
+  `git log -S`で2026-08-20の導入以来、削除された履歴なし
+- koshitsu-tenpakaiは2026-09-15の候補統合（`aba5a18`、課題54側の作業）で
+  この山なみページ自体が作られており、fukushutoの調査（2026-09-17）時点でも
+  マーカーは既に存在していたはず。それでも「0件」と記録されたのは、おそらく
+  各テーマ固有のマーカー名（`KOSHITSU_AUDIT`/`PROCESS_SECTIONS`/`CLAIM_AUDIT`）
+  ではなく、fukushuto固有の`FACT_CHECK`という文字列で検索した誤検知と推測される
+  （3テーマとも実際のマーカー名がFACT_CHECKとは異なる）
+
+**教訓**: 「他テーマも同じ壊れ方をしているはず」という推測は、そのテーマの実際の
+マーカー名で個別に確認するまで確定させない（[[feedback_verify_against_precedent]]
+と同じ考え方）。この訂正により、①FACT_CHECK復元は3テーマとも不要と判明。
+残る②〜④（apply_public_countsの山なみ分岐漏れ・正典先行差し替え・
+number_provenance同期漏れ）は山なみ共通アーキテクチャの論点であり、
+個別マーカーの有無とは独立に確認が必要。
