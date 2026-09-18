@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題の索引）
 
-最終更新: 2026-09-18（課題69: koshitsu-tenpakaiを起承転結型へ再編・本番反映）
+最終更新: 2026-09-19（課題69: 憲法改正論議を収集から本番反映まで実施）
 
 > **このファイルは索引です。** 1課題につき数行だけを置き、経緯・調査記録・手順は
 > `tasks/task-{番号}.md` に分けてあります。**担当する課題の詳細ファイルだけを開いてください。**
@@ -38,11 +38,11 @@
 **詳細**: [tasks/task-63.md](tasks/task-63.md)
 
 ### 課題69: 定期データ更新の通常運用の型を確立する
-**状態**: 進行中。部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakaiの5テーマ完了・本番反映済み
+**状態**: 進行中。部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakai・憲法改正論議の6テーマ完了・本番反映済み
 **優先度**: 高（収集停止7テーマの再開の土台。1テーマずつ確実に進める）
-**次にすること**: koshitsu-tenpakaiの起承転結再編を本番反映済み。bike-blue-ticket・constitutional-amendmentへ同型確認を展開
-**判断待ち**: 起承転結の再構成を残り2テーマにも適用するか
-**関連テーマ**: 全10テーマ（部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakaiが完了。残りbike-blue-ticket・constitutional-amendment）
+**次にすること**: 残るbike-blue-ticketへ展開（次回収集予定9/26、現時点では期限超過なし）
+**判断待ち**: 起承転結の再構成を残り1テーマ（bike-blue-ticket）にも適用するか
+**関連テーマ**: 全10テーマ（部活動・辺野古・fukushuto・消費税減税・koshitsu-tenpakai・憲法改正論議が完了。残りbike-blue-ticket）
 **詳細**: [tasks/task-69.md](tasks/task-69.md)
 
 
