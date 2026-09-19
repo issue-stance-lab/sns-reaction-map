@@ -622,7 +622,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-fukushuto-other" tabindex="-1">
-      <h2>💬 その他</h2>
+      <h2>💬 その他</h2><div class="explainer-card landing-image" data-img="images/topics/fukushuto/fukushuto-infographic-wide-sonota-v2.webp" data-alt="その他"><img src="images/topics/fukushuto/fukushuto-infographic-wide-sonota-v2.webp" alt="論点図解：その他" loading="lazy"></div>
       <p class="sub">110件（6.5%）　山の高さ：強い表現31.9%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>法案賛成・推進 21件</span><span><i style="background:#7D5BA6"></i>法案反対 49件</span><span><i style="background:#8B9199"></i>中立・情報 40件</span></div>
       <div class="bar"><span style="width:19.1%;background:#2F8F83;color:#ffffff">法案賛成・推進</span><span style="width:44.5%;background:#7D5BA6;color:#ffffff">法案反対</span><span style="width:36.4%;background:#8B9199;color:#0d1117">中立・情報</span></div>
@@ -1004,7 +1004,7 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  const imgSlug = {"fukushuto-osaka-restoration":"tokoso-v2","fukushuto-location":"kouhochi-v4","fukushuto-definition":"teigi-v2","fukushuto-disaster-preparedness":"bousai-v2","fukushuto-priority":"yusen-v2","fukushuto-finance":"hiyou-v2"}[it.id];
+  const imgSlug = {"fukushuto-osaka-restoration":"tokoso-v2","fukushuto-location":"kouhochi-v4","fukushuto-definition":"teigi-v2","fukushuto-disaster-preparedness":"bousai-v2","fukushuto-priority":"yusen-v2","fukushuto-finance":"hiyou-v2","fukushuto-other":"sonota-v2"}[it.id];
   const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';
   const imgHtml = imgSlug ? ('<div class="explainer-card landing-image" data-img="'+imgPath+'" data-alt="'+it.label+'">'
     +'<img src="'+imgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';

@@ -508,6 +508,7 @@ LANDING_IMAGE_BY_ISSUE_ID = {
     "fukushuto-disaster-preparedness": ("bousai-v2", "防災・災害"),
     "fukushuto-priority": ("yusen-v2", "優先順位"),
     "fukushuto-finance": ("hiyou-v2", "費用・財源"),
+    "fukushuto-other": ("sonota-v2", "その他"),
 }
 
 
