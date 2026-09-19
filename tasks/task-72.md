@@ -387,3 +387,13 @@ takaichiは山なみ変換自体が別スコープのため、着手するかど
 継続時間延長）・`task/bukatsu-chiiki-planet-rollout`（残りテーマ展開の1テーマ目、
 SEO日付整合の修正含む）。いずれもmainへマージ・反映済み。worktreeは全て
 片付け済み。継続する場合は新しいworktreeを作る
+
+## デザイン改訂（v9、2026-09-19・升目カードと背景チャートの重なり解消）
+
+詳細は[quality/reviews/2026-09-19-task72-chart-backdrop-shift-details.md](../quality/reviews/2026-09-19-task72-chart-backdrop-shift-details.md)
+に切り出した（400行上限のため）。要点: 常に左寄せの升目カードと山なみ1位の山が
+重なっていたのを`scaleX(.78)`（右端基準）で解消し9テーマへ反映（`fdc09b8`）。
+再生成時にconstitutional-amendmentの論点画像消失・数字入り論点IDでの画像差し戻し
+失敗を発見・修正。koshitsu-tenpakaiは独自の手当てが未登録で消えるためCSS行のみ
+直接書き換え、TOPIC_ENRICH登録は持ち越し（チップで提案）。標準検査・unittest
+983件・run_public_checks.pyいずれもNG0件。
