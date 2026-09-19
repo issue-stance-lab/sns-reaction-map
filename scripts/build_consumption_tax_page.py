@@ -761,11 +761,16 @@ def write_claim_provenance(destination: Path | None = None) -> None:
 # セクションの1文にまで縮んでいた。オーナー指摘（2026-09-19）で発覚し、9/15の
 # 大綱閣議決定にあわせて内容を書き直して復元する。
 #
-# CLAIM_AUDITと同じ「後付けの補完処理」方式。CLAIM_ENDの直後に毎回そろえる
-# （PLANET_SECTIONの再生成やCLAIM_AUDITの再構築では消えない）。
+# CLAIM_AUDITと同じ「後付けの補完処理」方式。山なみ図（PLANET_SECTION_START）の
+# 直前に毎回そろえる（PLANET_SECTIONの再生成やCLAIM_AUDITの再構築では消えない）。
+# 当初CLAIM_ENDの直後（一次資料照合コーナーの後ろ）に置いたが、オーナー報告
+# （2026-09-19、「ヒーローの直後がすぐSNS反応マップになる」）で、山の図・クイズ・
+# 照合コーナーを全部読み終えた後という位置は「地図を見る前に経緯を知りたい」
+# という読み方に合わないと判明し、地図より前へ動かした。
 # ---------------------------------------------------------------------------
 BACKGROUND_START = "<!-- BACKGROUND_CONTEXT_START -->"
 BACKGROUND_END = "<!-- BACKGROUND_CONTEXT_END -->"
+BACKGROUND_ANCHOR = "<!-- PLANET_SECTION_START -->"
 
 # 一次情報は quality/research/consumption-tax-cut-primary-sources.md で
 # 確認済みの資料（H-2・N・O・P、確認日2026-09-17）から選んだ。新しい数字を
@@ -1214,14 +1219,17 @@ def build(
     write_claim_provenance(verification_dest)
 
     # --- 18. この争点の背景（政策の現在地） --------------------------------
-    # CLAIM_AUDITと同じ「後付けの補完処理」。CLAIM_ENDの直後（=一次資料照合の
-    # すぐ後ろ）に毎回そろえる。
+    # CLAIM_AUDITと同じ「後付けの補完処理」。山なみ図（PLANET_SECTION_START）の
+    # 直前に毎回そろえる。オーナー報告（2026-09-19、「ヒーローの直後がすぐ
+    # SNS反応マップになる」）で、CLAIM_ENDの直後＝クイズや照合コーナーを
+    # 全部読んだ後という位置は「地図を見る前に経緯を知りたい」という読み方に
+    # 合わないと判明したため、地図より前に動かした。
     if BACKGROUND_START in html and BACKGROUND_END in html:
         start = html.index(BACKGROUND_START)
         end = html.index(BACKGROUND_END) + len(BACKGROUND_END)
         html = html[:start] + html[end:]
-    idx = html.index(CLAIM_END) + len(CLAIM_END)
-    html = html[:idx] + "\n\n" + background_context() + html[idx:]
+    idx = html.index(BACKGROUND_ANCHOR)
+    html = html[:idx] + background_context() + "\n\n" + html[idx:]
 
     verify(html, opinions)
     output.write_text(html, encoding="utf-8")
@@ -1316,6 +1324,15 @@ def verify(html: str, opinions: int) -> None:
     for url, _label in BACKGROUND_SOURCES:
         if f'href="{url}"' not in html:
             problems.append(f"この争点の背景: 一次情報リンクが見つからない: {url}")
+    # 位置も検査する。山なみ図（PLANET_SECTION_START）より後ろにあると、読者が
+    # 地図・クイズ・照合コーナーを全部読み終えるまで経緯に出会えない
+    # （2026-09-19にオーナー報告で発覚した位置の問題の再発防止）。
+    if (
+        BACKGROUND_START in html
+        and BACKGROUND_ANCHOR in html
+        and html.index(BACKGROUND_START) > html.index(BACKGROUND_ANCHOR)
+    ):
+        problems.append("この争点の背景が山なみ図より後ろにある（地図より前に置くこと）")
 
     if problems:
         raise SystemExit("ビルド検証に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -1432,14 +1449,14 @@ def main() -> int:
     if args.background_only:
         page = args.output_html
         html = page.read_text(encoding="utf-8")
-        if CLAIM_END not in html:
-            raise SystemExit("CLAIM_AUDIT_END が見つかりません（先に --claim-audit-only を実行すること）")
+        if BACKGROUND_ANCHOR not in html:
+            raise SystemExit("PLANET_SECTION_START が見つかりません（まだ山なみ形式ではない）")
         if BACKGROUND_START in html and BACKGROUND_END in html:
             start = html.index(BACKGROUND_START)
             end = html.index(BACKGROUND_END) + len(BACKGROUND_END)
             html = html[:start] + html[end:]
-        idx = html.index(CLAIM_END) + len(CLAIM_END)
-        html = html[:idx] + "\n\n" + background_context() + html[idx:]
+        idx = html.index(BACKGROUND_ANCHOR)
+        html = html[:idx] + background_context() + "\n\n" + html[idx:]
         page.write_text(html, encoding="utf-8")
         print(f"updated background context in {page}")
         return 0
