@@ -156,6 +156,13 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 /* 資料にあるのに、SNSにないこと */
 .ocean{border-top:1px solid var(--line);margin-top:26px}
 .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
+/* 「資料にしかない話を見る」を押した後にふわっと現れる動き＋帯の点滅
+   （オーナー指摘2026-09-19「どこに出たか分からない」）は、LIGHT_SKIN側
+   （build_planet_page_preview.py、scope_css()を経由しない領域）で定義する。
+   ここで@keyframesを書くと、scope_css()が「}の直後1文字が@かどうか」でしか
+   @keyframesを判定しない実装のため、直前に改行1つ挟むだけでも普通のセレクタと
+   誤認され#planet-block接頭辞が付いてアニメーションごと無効になる
+   （実際にこの位置で書いて発生・発見した）。 */
 .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
 .sunk,.vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
   border-radius:10px;padding:12px 14px;margin:0 0 10px}
@@ -926,7 +933,14 @@ function buildDive(){
       // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
       // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
       // 見出しだけを中央合わせにする。
-      if (box) bringIntoView(box.querySelector("h3") || box);
+      if (box) {
+        bringIntoView(box.querySelector("h3") || box);
+        // 閉じてすぐ開き直してもアニメーションを再生させるため、
+        // 一度クラスを外して強制的に再描画してから付け直す。
+        box.classList.remove("just-revealed");
+        void box.offsetWidth;
+        box.classList.add("just-revealed");
+      }
     }
   });
   paint();

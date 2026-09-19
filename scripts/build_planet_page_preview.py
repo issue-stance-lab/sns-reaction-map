@@ -175,7 +175,18 @@ def drop_orphan_scripts(html: str, ids: tuple[str, ...] = DEAD_SCRIPT_IDS) -> tu
 # データを見せる箱が暗いのは、旧ページの2Dマップ（#0f0e2e）と同じ扱いで、浮かない。
 LIGHT_SKIN = """
 #planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
-  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+  --accent:#075ef2;--rest-dot:#c9d2e0;--reveal-flash:#e4edff;font-family:inherit;line-height:1.8}
+/* 「資料にしかない話を見る」は一次資料クイズの下という離れた場所に開くため、
+   「どこに出たか分からない」との指摘（オーナー2026-09-19）。スクロール先に
+   ふわっと現れる動き＋帯の点滅を足して、到着点を分かりやすくする。
+   scope_css()を経由しないLIGHT_SKIN側に置く（quality/prototypes側のCSSに
+   書くと、scope_css()が「}の直後1文字が@かどうか」でしか@keyframesを
+   判定しない実装のため直前に改行を挟むだけで誤ってセレクタ扱いされ、
+   アニメーションごと無効になる。実際にこの順で書いて発生・発見した）。 */
+@keyframes isa-ocean-reveal{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes isa-ocean-flash{0%{background-color:var(--reveal-flash)}100%{background-color:transparent}}
+#planet-block .ocean.just-revealed{animation:isa-ocean-reveal .5s ease-out,isa-ocean-flash 1.8s ease-out;
+  border-radius:10px}
 #planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
 #planet-block .panel{box-shadow:none}
 #planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
