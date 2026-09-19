@@ -56,34 +56,11 @@
   dateModifiedをhenoko-student-accident分だけ2026-09-19へ揃え、
   `validate_theme_seo.py` OKを確認
 
-**既知の一時的な差分（対応不要・追跡中）**: マージ統合後、`python3 -m unittest discover -s tests`が
-5件FAILのまま残る。全て「公開済みページが、いま正典から作り直した内容と一致すること」を
-確認する系のテストで、対象は全て**このタスクで意図的にdocs/を再生成していない**（＝
-オーナーがhenoko-student-accidentの本番を確認してから展開する）3テーマに限られる:
-
-- `tests/test_bike_planet_refresh.py::test_refresh_runs_on_published_page_without_changes`
-  （bike-blue-ticket）
-- `tests/test_koshitsu_adapter.py::KoshitsuAdapterTests::test_published_page_matches_canonical`
-  （koshitsu-tenpakai）
-- `tests/test_nickname_adapter.py::NicknameArenaBuilderTests::test_planet_is_regenerated_instead_of_preserved`
-  ／`test_published_page_matches_canonical`、`tests/test_nickname_public_counts.py::
-  test_public_json_reproduces_published_page`（school-nickname-ban）
-
-3テーマとも、実際の差分をその場で`difflib`により直接計算して確認済みで、
-`issueTabs(m)`の追加（`.issue-tabs`のCSS・JS関数・`land(i)`への配線）だけで、
-他の変更は無い。koshitsu-tenpakaiは専用の`refresh_verified_planet()`/
-`apply_koshitsu_extras()`（`build_koshitsu_arena.py`内）が正しい比較対象で、
-共通の`refresh_planet_section.refresh()`で比較すると無関係な差分が出るため
-注意（実際に一度誤診断しかけた）。
-
-いずれも非公開データ（`social-samples/`）が無いと`skipUnless`でスキップされる
-仕様（CI「公開ファイルの検査」には含まれない）ので、公開への影響はない。
-各テーマへのタブ展開時に自然に解消する。main単体（マージ前）ではこの5件は
-全てPASSすることを確認済みで、原因は今回の統合作業に限定されている。
-
-**解消（2026-09-19、残り7テーマ展開）**: 上記3テーマ（bike-blue-ticket・
-koshitsu-tenpakai・school-nickname-ban）へ実際にタブUIを展開し、この5件は
-全てPASSに戻った。詳細は下記「残りテーマへの展開（2〜8テーマ目）」参照。
+**既知の一時的な差分（解消済み）**: マージ統合直後、docs/未再生成の3テーマ
+（bike-blue-ticket・koshitsu-tenpakai・school-nickname-ban）で「公開済み
+ページが正典と一致すること」を確認するテスト5件がFAILしていた（`issueTabs(m)`
+追加だけが差分、非公開データ無しではCIにも影響しない）。下記「残りテーマへの
+展開」で3テーマへ実際にタブUIを展開し、全てPASSに戻った。
 
 ## デザイン改訂（v2、2026-09-19・オーナーの実地フィードバック2件）
 
@@ -398,3 +375,13 @@ SEO日付整合の修正含む）。いずれもmainへマージ・反映済み�
 詳細は[quality/reviews/2026-09-19-task72-scroll-race-fix-details.md](../quality/reviews/2026-09-19-task72-scroll-race-fix-details.md)。
 `bringIntoView()`に世代番号を導入し連続クリック時の競合を解消、9テーマへ反映
 （`2ac2722`）。症状は自動テストで未再現、再発時は手順を要確認。
+
+## デザイン改訂（v11、2026-09-19・真因はスクロールアンカリングだった）
+
+詳細は[quality/reviews/2026-09-19-task72-scroll-anchor-fix-details.md](../quality/reviews/2026-09-19-task72-scroll-anchor-fix-details.md)。
+v10では直らず、オーナーへ確認した再現条件（chrome mac・クリック1回）を手がかりに
+Claude in Chromeで実機調査。真因はChromeの「スクロールアンカリング」（デスクトップ
+幅ではbringIntoView()自体が未呼び出しなのに、ブラウザが自動でスクロール位置を
+調整していた）。`#planet-block{overflow-anchor:none}`と、幅820px未満に限っていた
+`land()`のbringIntoView呼び出し制限の撤廃、両方で解消し9テーマへ反映（`ef10bcd`）。
+本番ページの実機（Claude in Chrome）で着地位置の正常化を確認済み。
