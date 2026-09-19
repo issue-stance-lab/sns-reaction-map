@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題の索引）
 
-最終更新: 2026-09-20（課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み／課題71: consumption-tax-cutの海面より下データを新規作成／課題69: 自転車青切符を起承転結型へ再編）
+最終更新: 2026-09-20（課題74: AIっぽい言い回し・AI帰属の誤りを新規登録・consumption-tax-cut対応済み／課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み／課題71: consumption-tax-cutの海面より下データを新規作成）
 
 > **このファイルは索引です。** 1課題につき数行だけを置き、経緯・調査記録・手順は
 > `tasks/task-{番号}.md` に分けてあります。**担当する課題の詳細ファイルだけを開いてください。**
@@ -98,6 +98,13 @@
 **次にすること**: 読者への実害が最も大きいai-copyright（外部JS402KBを毎回読み込む）から着手する
 **関連テーマ**: ai-copyright / fukushuto / bukatsu-chiiki / bike-blue-ticket / elderly-license-revocation（軽微な別件2テーマは詳細参照）
 **詳細**: [tasks/task-73.md](tasks/task-73.md)
+
+### 課題74: 山なみ共通雛形のAIっぽい言い回し・AI帰属の誤りを残りテーマへ展開する
+**状態**: 未着手。consumption-tax-cutのみ対応済み（2026-09-20）。残り9テーマの現状調査のみ完了
+**優先度**: 低〜中（CIは落ちていない。ai-copyrightのみAI帰属の誤りが読者に表示されており実害あり）
+**次にすること**: 実害のあるai-copyright（AI帰属の誤り）から着手する。他は読みやすさの問題で実害なし
+**関連テーマ**: 山なみ形式の9テーマ（takaichi・consumption-tax-cut以外、詳細はtask-74.md参照）
+**詳細**: [tasks/task-74.md](tasks/task-74.md)
 
 ### 課題61: 一次資料メモを「使う」側の運用がない
 **状態**: 未着手。維持（90日再確認・ダッシュボード検知）は仕組み化済みだが、使用の導線が無い
