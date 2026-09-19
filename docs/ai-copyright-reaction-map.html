@@ -1826,9 +1826,18 @@ function buildList(){
 /* 要素が画面の中ほどへ来るまでスクロールする。
    scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
    画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+// land()・morphTo()・クイズ操作など複数の場所から呼ばれる。前の呼び出しの
+// アニメーションが終わる前（420ms+180ms以内）に次を呼ぶと、2つのrAFループが
+// 同時にscrollToを取り合い、どちらでもない位置（体感では「一次資料クイズあたり」）
+// へ飛ぶことがあった（オーナー報告2026-09-19、「山なみが画面の上の方でクリックすると
+// スクロールしすぎる」）。山を連続でタップ/クリックしたときに起きやすい。
+// 呼び出しごとに世代番号を振り、後発の呼び出しが来たら前の世代は書き込みをやめる。
+let bringIntoViewGen = 0;
 function bringIntoView(el){
+  const gen = ++bringIntoViewGen;
   // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
   setTimeout(function(){
+    if (gen !== bringIntoViewGen) return;
     const r = el.getBoundingClientRect();
     if (!r.height) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -1838,12 +1847,14 @@ function bringIntoView(el){
     if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
     const t0 = performance.now(), dur = 420;
     (function step(now){
+      if (gen !== bringIntoViewGen) return;    // 新しい呼び出しに道を譲る
       const t = Math.min(1, (now - t0)/dur);
       window.scrollTo(0, from + (to - from)*ease(t));
       if (t < 1) requestAnimationFrame(step);
     })(t0);                                  // 1枚目は rAF を待たずに描く
     // rAF が止まる環境でも必ず届かせる
     setTimeout(function(){
+      if (gen !== bringIntoViewGen) return;
       if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
     }, dur + 180);
   }, 0);
