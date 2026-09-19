@@ -27,7 +27,11 @@ from pathlib import Path
 
 SCOPES = ["https://www.googleapis.com/auth/webmasters.readonly"]
 TOKEN_PATH = Path("secrets/gsc-oauth-token.json")
-DEFAULT_SITE_URL = "https://sns-reaction-map.jp/"
+# sns-reaction-map.jp is registered as a Search Console *domain* property, whose
+# Search Analytics API site identifier must be "sc-domain:<host>", not a plain
+# URL. Passing "https://sns-reaction-map.jp/" returns 403 insufficient-permission
+# even for the verified owner, because that literal URL-prefix property doesn't exist.
+DEFAULT_SITE_URL = "sc-domain:sns-reaction-map.jp"
 
 
 def load_dotenv(path: Path) -> None:

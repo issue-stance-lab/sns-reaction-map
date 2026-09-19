@@ -168,6 +168,13 @@
 **状態（更新）**: **2026-08-31、段階0〜5-2が完了し `sns-reaction-map.jp` を正式URLとして本番公開した。**
 CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3-3、段階4）まで実行済み。**ここで一区切り。**
 **次にすること**（優先度順。いずれも着手可能・急ぎではない）:
-1. 段階5-3: 4週間、週1回Search Consoleのインデックス状況を見る。**2026-09-15、課題54段階11の監査で `fetch_gsc_metrics.py` を試したところGSC APIが403（権限不足）を返し自動確認できなかった**。コード側の既定ホストは新ドメインに向いている（問題なし）ため、オーナーのOAuth再認証か新ドメインプロパティへのアクセス権限付与が必要と見られる
+1. 段階5-3: 4週間、週1回Search Consoleのインデックス状況を見る。**2026-09-15、課題54段階11の監査で `fetch_gsc_metrics.py` を試したところGSC APIが403（権限不足）を返し自動確認できなかった**。
+   **2026-09-20に原因特定・修正済み。** 権限不足ではなかった（GSC画面の「設定 > ユーザーと権限」で `politicstokyo@gmail.com` は既にオーナー・確認済みとオーナーが確認）。
+   実際の原因は `scripts/fetch_gsc_metrics.py` の `DEFAULT_SITE_URL` が `https://sns-reaction-map.jp/` という通常URL形式だったこと。
+   `sns-reaction-map.jp` はSearch Console上で「ドメインプロパティ」として登録されており、APIには `sc-domain:sns-reaction-map.jp` という専用書式を渡す必要がある（画面のオーナー権限とは無関係にURL形式だけで403になる）。
+   `sc-domain:sns-reaction-map.jp` を指定して再実行し、200 OKで28日間 clicks 0 / impressions 0 を取得できることを確認した
+   （2026-09-17に収集開始したばかりのため、直近28日間の値自体はまだ0。エラーが直ったことの確認が目的）。
+   `DEFAULT_SITE_URL` を修正し、`content/website/internal/gsc-automation.md` に経緯を記録した（詳細は「よくある失敗」節）。
+   次回以降は通常の週次確認（`fetch_gsc_metrics.py --days 28 --json`）で数字が返るはずなので、1〜2週後にimpressionsが0から動いているか見る
 2. 旧ルート（別リポジトリ `issue-stance-lab/issue-stance-lab.github.io`）を案内ページへ置き換え（CEO決定A、未着手）
 3. ~~新ドメインでGA4のリアルタイムに実アクセスが出ることをブラウザで目視確認する~~ **2026-09-15、課題54段階11の監査で`fetch_ga4_metrics.py`を実行し解消**。直近7日: activeUsers 28 / screenPageViews 126 / sessions 55 / eventCount 321（ホストは既定で新ドメイン）。ブラウザでの目視ではないが実データ取得により計測機能を確認できたため完了扱いとする

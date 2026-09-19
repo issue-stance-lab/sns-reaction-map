@@ -50,19 +50,24 @@ position: 15.7500
 
 ## 対象URL
 
-デフォルト対象:
+デフォルト対象（2026-09-20更新。旧ホスト時代の記述が残っていたため訂正）:
 
 ```text
-https://issue-stance-lab.github.io/sns-reaction-map/
+sc-domain:sns-reaction-map.jp
 ```
 
-必要なら `.env` に以下を追加して上書きできる。
+`sns-reaction-map.jp` はSearch Console上で「ドメインプロパティ」として登録されている。この種類のプロパティは、
+画面上の見た目や実際のサイトURLとは違い、APIでは `sc-domain:` から始まる専用の識別子を使う。
+
+必要なら `.env` に以下を追加して上書きできる（例: 旧ホストを見る場合。こちらは通常のURL形式の
+「URLプレフィックスプロパティ」なので `sc-domain:` は付けない）。
 
 ```bash
 GSC_SITE_URL="https://issue-stance-lab.github.io/sns-reaction-map/"
 ```
 
-Search Console APIでは、GSCに登録済みのプロパティURLと完全一致している必要がある。
+Search Console APIでは、GSCに登録済みのプロパティの識別子と完全一致している必要がある。
+プロパティの種類ごとに書式が違う点に注意（下記「よくある失敗」参照）。
 
 ## 必要な.env設定
 
@@ -240,6 +245,33 @@ OAuthコールバック用に127.0.0.1で一時サーバーを立てる必要が
 対応:
 
 Codex環境では権限付きで再実行する。
+
+### ドメインプロパティなのに通常URLを指定した（403）
+
+失敗例:
+
+```text
+GSC HTTP error 403: {"error": {"code": 403, "message": "User does not have sufficient
+permission for site 'https://sns-reaction-map.jp/'.", ...}}
+```
+
+原因:
+
+```text
+sns-reaction-map.jp はSearch Console上で「ドメインプロパティ」として登録されている。
+Search Console画面でオーナー権限（確認済み）があっても、Search Analytics APIに渡す
+サイト識別子が通常のURL（https://sns-reaction-map.jp/）のままだと、Googleは
+「そのURLプレフィックスのプロパティは存在しない」として403を返す。権限不足ではない。
+```
+
+対応:
+
+```text
+2026-09-20に発生・特定し、DEFAULT_SITE_URL を sc-domain:sns-reaction-map.jp に修正済み。
+--site-url で上書きするときも、ドメインプロパティを指定する場合はこの書式を使う。
+GSC画面の「設定 > ユーザーと権限」でオーナー/フルが付いているのにこのエラーが出たら、
+まずこの書式のずれを疑う（権限を疑って再設定しても直らない）。
+```
 
 ## 次にやるとよいこと
 
