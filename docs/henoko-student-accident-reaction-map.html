@@ -331,7 +331,18 @@
   border:0;border-radius:99px;padding:7px 16px;cursor:pointer}#planet-block #seafloor{opacity:0;transition:opacity .9s ease .2s}#planet-block .dived #seafloor{opacity:1}#planet-block #seacover{transition:opacity .9s ease}#planet-block .dived #seacover{opacity:.2}#planet-block .quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}#planet-block .qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}#planet-block .qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}#planet-block .qans{margin-top:12px;font-size:13px;line-height:1.85}#planet-block .qans[hidden]{display:none}#planet-block .qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
   border:0;border-radius:8px;padding:7px 14px;cursor:pointer}#planet-block .qscore{font-size:14px;line-height:1.85}#planet-block .qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.planet-live #planet-block #fallback{display:none}html:not(.planet-live) #planet-block .modes,html:not(.planet-live) #planet-block .stage,html:not(.planet-live) #planet-block .sec-live,html:not(.planet-live) #planet-block .issue-list{display:none}#planet-block .gans .lead{color:#0b1937}#planet-block .chart-box svg rect.hill-hit{fill:transparent!important}
 #planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
-  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+  --accent:#075ef2;--rest-dot:#c9d2e0;--reveal-flash:#e4edff;font-family:inherit;line-height:1.8}
+/* 「資料にしかない話を見る」は一次資料クイズの下という離れた場所に開くため、
+   「どこに出たか分からない」との指摘（オーナー2026-09-19）。スクロール先に
+   ふわっと現れる動き＋帯の点滅を足して、到着点を分かりやすくする。
+   scope_css()を経由しないLIGHT_SKIN側に置く（quality/prototypes側のCSSに
+   書くと、scope_css()が「}の直後1文字が@かどうか」でしか@keyframesを
+   判定しない実装のため直前に改行を挟むだけで誤ってセレクタ扱いされ、
+   アニメーションごと無効になる。実際にこの順で書いて発生・発見した）。 */
+@keyframes isa-ocean-reveal{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes isa-ocean-flash{0%{background-color:var(--reveal-flash)}100%{background-color:transparent}}
+#planet-block .ocean.just-revealed{animation:isa-ocean-reveal .5s ease-out,isa-ocean-flash 1.8s ease-out;
+  border-radius:10px}
 #planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
 #planet-block .panel{box-shadow:none}
 #planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
@@ -1263,7 +1274,14 @@ function buildDive(){
       // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
       // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
       // 見出しだけを中央合わせにする。
-      if (box) bringIntoView(box.querySelector("h3") || box);
+      if (box) {
+        bringIntoView(box.querySelector("h3") || box);
+        // 閉じてすぐ開き直してもアニメーションを再生させるため、
+        // 一度クラスを外して強制的に再描画してから付け直す。
+        box.classList.remove("just-revealed");
+        void box.offsetWidth;
+        box.classList.add("just-revealed");
+      }
     }
   });
   paint();
