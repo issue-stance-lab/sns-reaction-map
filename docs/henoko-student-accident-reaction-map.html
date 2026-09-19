@@ -1139,8 +1139,13 @@ function morphTo(toMode){
   // （land()/orbit()と同じ理由でchart-boxを先に退避する必要がある）
   evacuateChart();
   drawPanel(); syncList(); render(); placeChart();
-  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
-  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
+  // 画面が狭いと、立場ボタンと結果（パネルの数値）が同時に画面へ入らない。
+  // 押した結果が見えないので運ぶ。以前は#section（山なみの図）自体へ運んでいたが、
+  // 論点を選んだ状態ではchart-boxが升目カードの背後の巨大な背景要素になっており
+  // （as-backdrop、#dot-slotの高さいっぱいまで伸びる）、これを中心に合わせようと
+  // すると見出しや数値のほうが画面外へ出てしまっていた（オーナー指摘2026-09-19
+  // 「スクロール位置が下すぎる」）。land()と同じくパネルの見出しへ運ぶ。
+  if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
 }
 
 /* ---------- 操作 ----------
