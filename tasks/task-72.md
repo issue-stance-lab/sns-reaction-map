@@ -106,24 +106,33 @@ henoko-student-accident本番反映後、オーナーが実際の画面を見て
 だったため）。LIGHT_SKIN側の旧上書き（`.modes button[aria-pressed=true]{background:
 #e4edff}`）は新CSSと衝突するため削除した。
 
+## デザイン改訂（v3、2026-09-19・オーナーの実地フィードバック3件目）
+
+**「全ての意見は第分類なので区別してタブ表示した方が良いのでは」**: 「すべての意見」は
+実際の立場（文科省判断を支持/反発・論点を切り分ける・中立）の1つではなく絞り込み
+無しを表す別種の項目であることを、間隔（`margin-right:14px`）と薄い仕切り線
+（`::after`擬似要素）で示した。`buildModes()`が既に付与している`data-m="all"`属性を
+そのままCSSセレクタに使ったため、JS側の変更は不要だった（ブランチ
+`task/issue-tabs-ui-v3`）。
+
 ## 状態
 
-進行中。henoko-student-accidentを2026-09-19に本番反映済み（オーナー指示
-「辺野古だけ先に公開してチェックします」）→オーナー実地確認→上記2件のデザイン
-改訂も同日中に本番反映済み。本番 https://sns-reaction-map.jp/
+進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
+デザイン改訂3件（タブ形状・タブ間距離・「すべての意見」の区別）を同日中に
+順次本番反映済み。本番 https://sns-reaction-map.jp/
 henoko-student-accident-reaction-map.html で最終形を実機確認済み（デスクトップ・
-375px、山クリック時のスクロールも含む）。マージ時、別セッションのbike-blue-ticket
-起承転結再編・ocean-layer修正（課題69・課題71）と競合したため、
+375px、山クリック時のスクロール・立場タブ切り替えも含む）。マージ時、別セッションの
+bike-blue-ticket起承転結再編・ocean-layer修正（課題69・課題71）と競合したため、
 `scripts/refresh_planet_section.py`の一般化された`_inject_landing_images()`へ
 同じ修正を再適用して統合した（詳細は上記「マージ時の追記」）。fukushutoは
-初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2デザインへの追従と本番反映は
-まだ（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
+初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2・v3デザインへの追従と
+本番反映はまだ（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
 
 残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
 constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
 反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
-のみ済み、v2への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
+のみ済み、v2・v3への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
 見て確認してから展開する。
 
 ## 次にすること
@@ -135,6 +144,6 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 
 ## 詳細
 
-実装ブランチ: `task/issue-tabs-ui`（初版）・`task/issue-tabs-ui-v2`（デザイン改訂）。
-どちらもmainへマージ・反映済み。worktreeはどちらも片付け済み。継続する場合は
-新しいworktreeを作る
+実装ブランチ: `task/issue-tabs-ui`（初版）・`task/issue-tabs-ui-v2`（タブ形状・
+タブ間距離）・`task/issue-tabs-ui-v3`（「すべての意見」の区別）。いずれもmainへ
+マージ・反映済み。worktreeは全て片付け済み。継続する場合は新しいworktreeを作る
