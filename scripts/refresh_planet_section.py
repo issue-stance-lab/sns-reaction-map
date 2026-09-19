@@ -219,15 +219,22 @@ BIKE_LANDING_IMAGE_BY_ISSUE_ID = {
 }
 
 
-def _landing_image_html(topic: str, slug: str, label: str) -> str:
-    path = f"images/topics/{topic}/{topic}-infographic-wide-{slug}.webp"
+def _landing_image_html(topic: str, slug: str, label: str, filename_prefix: str) -> str:
+    path = f"images/topics/{topic}/{filename_prefix}-infographic-wide-{slug}.webp"
     return (
         f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{label}">'
         f'<img src="{path}" alt="論点図解：{label}" loading="lazy"></div>'
     )
 
 
-def _inject_landing_images(block: str, data: dict, topic: str, images: dict, js_prefix: str) -> str:
+def _inject_landing_images(
+    block: str,
+    data: dict,
+    topic: str,
+    images: dict,
+    js_prefix: str,
+    filename_prefix: str | None = None,
+) -> str:
     """論点ごとの図解画像を、山なみ再生成後のブロックへ差し戻す。
 
     render_planet()（build_planet_page_preview.py、10テーマ共通）はテーマ専用の画像を
@@ -237,17 +244,25 @@ def _inject_landing_images(block: str, data: dict, topic: str, images: dict, js_
     という別建てのカードだったが、山なみの各論点パネルと内容が重複するため、起承転結の
     再構成（課題69、fukushutoのapply_landing_images()と同型）でこちらへ一本化した。
     js_prefix はJS変数名の接頭辞（既存ページの出力を変えないためテーマごとに固定）。
+    filename_prefix は画像ファイル名の接頭辞。省略時はtopicと同じだが、
+    constitutional-amendmentは画像ファイルだけ短い旧名（"constitutional-"）の
+    ままなので個別に指定する（2026-09-19、この関数を初めて適用した際に判明）。
     """
+    fname_prefix = filename_prefix or topic
+
     def add_to_fallback(m: re.Match) -> str:
         issue_id, heading = m.group(1), m.group(0)
         found = images.get(issue_id)
         if not found:
             return heading
         slug, label = found
-        return heading + _landing_image_html(topic, slug, label)
+        return heading + _landing_image_html(topic, slug, label, fname_prefix)
 
     block, n = re.subn(
-        rf'<section class="landing-panel" id="fb-({re.escape(topic)}-[a-z-]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        # [a-z0-9-]+: 論点IDに数字が入るテーマがある（constitutional-amendmentの
+        # "article9"）。[a-z-]+のままだと該当パネルにマッチせず、期待件数チェックが
+        # 常に1件少なく出て失敗する（2026-09-19発見）。
+        rf'<section class="landing-panel" id="fb-({re.escape(topic)}-[a-z0-9-]+)"[^>]*>\s*<h2>[^<]*</h2>',
         add_to_fallback,
         block,
     )
@@ -276,7 +291,7 @@ def _inject_landing_images(block: str, data: dict, topic: str, images: dict, js_
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
         f"  const {v_slug} = {{" + slug_map_js + "}[it.id];\n"
-        f"  const {v_path} = {v_slug} ? ('images/topics/{topic}/{topic}-infographic-wide-'+{v_slug}+'.webp') : '';\n"
+        f"  const {v_path} = {v_slug} ? ('images/topics/{topic}/{fname_prefix}-infographic-wide-'+{v_slug}+'.webp') : '';\n"
         f"  const {v_html} = {v_slug} ? ('<div class=\"explainer-card landing-image\" data-img=\"'+{v_path}+'\" data-alt=\"'+it.label+'\">'\n"
         f"    +'<img src=\"'+{v_path}+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
         "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
@@ -300,10 +315,32 @@ def _inject_bike_landing_images(block: str, data: dict) -> str:
     )
 
 
+# constitutional-amendmentの論点ごとの図解画像。これまでrefresh_planet_section.pyの
+# 手当てが無く、このスクリプトでの再生成のたびに黙って消えていた（2026-09-19、
+# 山なみ図の背景チャート位置調整のついでに発見。画像自体は生きたまま公開ページに
+# 残っていたので、消えたコミットを介さず現行docs/から復元した）。
+CONSTITUTIONAL_LANDING_IMAGE_BY_ISSUE_ID = {
+    "constitutional-amendment-general": ("general", "改憲全般"),
+    "constitutional-amendment-article9": ("article9", "9条・自衛隊"),
+    "constitutional-amendment-emergency": ("emergency", "緊急事態条項"),
+    "constitutional-amendment-referendum": ("referendum", "国民投票・広告"),
+    "constitutional-amendment-procedure": ("process", "政党・発議手続き"),
+    "constitutional-amendment-deliberation": ("information", "情報・議論の質"),
+}
+
+
+def _inject_constitutional_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "constitutional-amendment", CONSTITUTIONAL_LANDING_IMAGE_BY_ISSUE_ID, "ca",
+        filename_prefix="constitutional",
+    )
+
+
 TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_go_cards,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,
+    "constitutional-amendment": _inject_constitutional_landing_images,
 }
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
