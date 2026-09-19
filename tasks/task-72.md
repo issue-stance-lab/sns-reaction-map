@@ -137,25 +137,36 @@ chart-boxごと消え、直後の`render()`が`#chartdesc`等を見失って
 よう修正。`#dotbox`の背景（LIGHT_SKIN）も完全不透明だと山なみを隠すため
 `rgba(242,246,253,.82)`に変更した。
 
+## デザイン改訂（v5、2026-09-19・オーナーの実地フィードバック5件目）
+
+**「透けてないです、全然見えません」**: v4の`opacity:.22`（chart-box）×
+`rgba(...,.82)`（`#dotbox`背景）の組み合わせは、掛け合わせると実効的な
+可視度が約4%しかなく、意図に反してほぼ見えていなかった。chart-boxを`.42`、
+`#dotbox`の背景を`rgba(242,246,253,.4)`まで引き上げ、可視度を約25%へ
+大幅に強めた（ブランチ`task/issue-tabs-ui-v5`）。件数・割合等の数値は
+`.ro`/`.dot-mech`側の個別の不透明背景で別途確保されているため、この変更で
+読みにくくなる数値表示は無い。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
-デザイン改訂4件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
-背景表示化）を同日中に順次本番反映済み。本番 https://sns-reaction-map.jp/
-henoko-student-accident-reaction-map.html で最終形を実機確認済み（デスクトップ・
-375px、山クリック時のスクロール・立場タブ切り替え・論点タブを跨いだ連続切替も
-含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer修正
-（課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
-一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した
-（詳細は上記「マージ時の追記」）。fukushutoは初版（丸ピル型）のdocs/を
-再生成し実機確認済みだが、v2〜v4デザインへの追従と本番反映はまだ
-（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
+デザイン改訂5件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
+背景表示化・背景の不透明度強化）を同日中に順次本番反映済み。本番
+https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
+最終形を実機確認済み（デスクトップ・375px、山クリック時のスクロール・
+立場タブ切り替え・論点タブを跨いだ連続切替、背景の山なみが実際に視認できる
+ことも含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・
+ocean-layer修正（課題69・課題71）と競合したため、
+`scripts/refresh_planet_section.py`の一般化された`_inject_landing_images()`へ
+同じ修正を再適用して統合した（詳細は上記「マージ時の追記」）。fukushutoは
+初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2〜v5デザインへの追従と
+本番反映はまだ（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
 
 残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
 constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
 反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
-のみ済み、v2〜v4への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
+のみ済み、v2〜v5への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
 見て確認してから展開する。
 
 ## 次にすること
@@ -169,6 +180,6 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 
 実装ブランチ: `task/issue-tabs-ui`（初版）・`task/issue-tabs-ui-v2`（タブ形状・
 タブ間距離）・`task/issue-tabs-ui-v3`（「すべての意見」の区別）・
-`task/issue-tabs-ui-v4`（山なみの背景表示化、drawPanel()クラッシュの修正含む）。
-いずれもmainへマージ・反映済み。worktreeは全て片付け済み。継続する場合は
-新しいworktreeを作る
+`task/issue-tabs-ui-v4`（山なみの背景表示化、drawPanel()クラッシュの修正含む）・
+`task/issue-tabs-ui-v5`（背景の不透明度強化）。いずれもmainへマージ・反映済み。
+worktreeは全て片付け済み。継続する場合は新しいworktreeを作る
