@@ -219,6 +219,37 @@ HTMLで`#planet-block @keyframes isa-ocean-reveal{...}`という無効なCSSに�
 `verify_theme_page.py`・`verify_number_provenance.py`ともOK。本番反映後、
 実機でバッジ・カード・スクロール到達を再確認。
 
+## 残りテーマへの展開（1テーマ目: bukatsu-chiiki、2026-09-19）
+
+オーナー指示「まず地域テーマから進めて」を受け、残り8テーマのうち
+bukatsu-chiiki（部活動の地域移行）から展開を開始した（ブランチ
+`task/bukatsu-chiiki-planet-rollout`）。
+
+- `scripts/refresh_planet_section.py --topic bukatsu-chiiki --for-docs` で
+  共通テンプレートの最終形（v2〜v8）を反映。bukatsu-chiiki専用の後付け処理
+  （`_inject_bukatsu_go_cards`）は`<div class="extras" id="extras-{id}">`を
+  アンカーにしており、新設の`issueTabs(m)`（`<h2>`直後に挿入）とは挿入位置が
+  重ならないため、fukushuto等で起きた「見出し→タブ→画像」の順序不具合
+  （上記「見つけた副作用と対処」参照）は再発しなかった
+- `verify_theme_page.py`・`verify_number_provenance.py`・`verify_page_originality.py`
+  とも OK。`python3 -m unittest discover -s tests`は983件中、bike-blue-ticket・
+  koshitsu-tenpakai・school-nickname-banの既知5件のみ残存（bukatsu-chiiki分は
+  0件、既知の差分に変化なし）
+- ローカルプレビュー（一時HTTPサーバー経由）でデスクトップ・375pxモバイル幅とも
+  実機確認: 山をクリックすると論点タブが7つ表示され論点名・アイコンが正しいこと、
+  タブ間の直接切り替え（山なみへ戻らない）が機能すること、山なみが升目カードの
+  背後にうっすら見えること、「資料にしかない話を見る」を押すと薄い青のカードが
+  常時表示され`#editorial`（白背景のまま）との境界が色で明確なこと、を確認
+- 本番反映後、同じ内容を`javascript_tool`でも再確認（論点タブ7件・バッジ文言・
+  カード背景色・アニメーション登録）
+- **追加で見つけた差分**: デザイン反映だけでは`THEMES.yaml`のupdated_at・
+  `docs/sitemap.xml`のlastmod・`configs/theme-seo.json`のdateModified・
+  ページ自身のJSON-LD dateModified・可視の「最終更新日」表示が2026-09-15の
+  まま揃っておらず、`scripts/seo/validate_theme_seo.py`がJSON-LD不一致と
+  可視日付欠落を検出した。5箇所を2026-09-19へ揃えて解消（[[reference_updated_at_cascade]]
+  と同じ落とし穴）。henoko-student-accidentのv1反映時にも同じ調整をしていたが、
+  今回は「デザインのみの反映では自動で揃わない」ことを実際に踏んで再確認した形
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
@@ -233,23 +264,24 @@ https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
 含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer修正
 （課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
 一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した
-（詳細は上記「マージ時の追記」）。fukushutoは初版（丸ピル型）のdocs/を
-再生成し実機確認済みだが、v2〜v6デザインへの追従と本番反映はまだ
-（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
+（詳細は上記「マージ時の追記」）。続けてbukatsu-chiiki（部活動の地域移行）へ
+共通テンプレート最終形を展開し本番反映済み（上記「残りテーマへの展開」）。
+fukushutoは初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2〜v8
+デザインへの追従と本番反映はまだ。
 
-残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
-school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
-constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
-反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
-のみ済み、v2〜v8への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
-見て確認してから展開する。
+残り7テーマ（elderly-license-revocation / bike-blue-ticket / school-nickname-ban /
+koshitsu-tenpakai / ai-copyright / takaichi / constitutional-amendment・
+consumption-tax-cutは共通コード側は最終形まで反映済みだがdocs/の再生成・
+本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成のみ済み、v2〜v8への
+再生成が必要）は、順次同じ手順で展開する。
 
 ## 次にすること
 
-オーナーが本番の辺野古ページ（最終デザイン）を見て問題なければ、残りのテーマへ
-同じ手順（各テーマの `build_<theme>_arena.py`（または対応するビルダー）を実行して
-docs/を再生成→標準検査→`release`スキルで本番反映）で展開する。fukushutoは
-v1のdocs/再生成が残っているため、再度ビルドし直してから展開する。
+残りのテーマへ同じ手順（`scripts/refresh_planet_section.py --topic <theme>
+--for-docs`、theme固有の後付け処理があれば併せて確認→標準検査→ブラウザで
+実機確認→`release`スキルで本番反映→`scripts/seo/validate_theme_seo.py`で
+日付整合も確認）で展開する。fukushutoは通常の`refresh_planet_section.py`が
+まだ通っていない可能性があるため、v1のdocs/再生成を再度確認してから展開する。
 
 ## 詳細
 
@@ -260,5 +292,6 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 （立場フィルター切替時のスクロール先修正）・`task/issue-tabs-ui-v7`
 （「資料にしかない話を見る」の到着演出、scope_css()の@keyframes不具合の発見と回避
 含む）・`task/issue-tabs-ui-v8`（同演出の常時カード化・バッジ追加、演出の
-継続時間延長）。いずれもmainへマージ・反映済み。worktreeは全て片付け済み。
-継続する場合は新しいworktreeを作る
+継続時間延長）・`task/bukatsu-chiiki-planet-rollout`（残りテーマ展開の1テーマ目、
+SEO日付整合の修正含む）。いずれもmainへマージ・反映済み。worktreeは全て
+片付け済み。継続する場合は新しいworktreeを作る
