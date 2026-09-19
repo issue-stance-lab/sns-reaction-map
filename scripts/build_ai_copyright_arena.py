@@ -52,6 +52,7 @@ from ai_copyright_taxonomy import (  # noqa: E402
     arena_x,
     issue_index,
 )
+from build_planet_page_preview import build_background  # noqa: E402
 from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # noqa: E402
 from x_embed import period_label  # noqa: E402
 
@@ -145,6 +146,28 @@ def apply_tide(page_path: Path, records: list[dict[str, Any]]) -> None:
         current = load_classified(paths["cur"], base["use_relevance_filter"])
     tide = generate_tide_section(base, previous, current)
     page_path.write_text(inject_into_html(page_path, tide, _load_tide_css()), encoding="utf-8")
+
+
+def apply_background(page: str) -> str:
+    """「何が、どこまで進んでいるのか」を後付けで貼り直す。
+
+    他8テーマ（bukatsu-chiiki等）と同じ、data/verification/{THEME}-background.json
+    を唯一の出所とする共通処理（build_planet_page_preview.build_background）。
+    山なみ変換（2026-09-14）時点ではこのJSONが無く、節ごと省略されていた。
+    山なみ本体（PLANET_SECTION）は再生成しない、範囲を絞った貼り直し。
+    """
+    if "<!-- PLANET_SECTION_START -->" not in page:
+        raise BuildError("PLANET_SECTION_START が見つかりません（まだ山なみ形式ではない）")
+    block = build_background(THEME)
+    if not block:
+        raise BuildError(f"data/verification/{THEME}-background.json が未整備です")
+    return replace_once(
+        page,
+        r"(?<=<!-- RESEARCH_CONDITIONS_END -->).*?(?=<!-- PLANET_SECTION_START -->)",
+        "\n" + block + "\n",
+        "背景と確認事項",
+        flags=re.S,
+    )
 
 
 def set_insight(page: str, label: str, value: str, note: str, meter: int) -> str:
@@ -427,14 +450,18 @@ def build(
     # 壊す/巻き戻すのを防ぐガード。アリーナ用の生データ（arena_path）だけは
     # 引き続き更新する（無害・現在は未使用）。調査条件などの文言が更新されない
     # まま残るのは既知の制限で、挿入先は段階3以降で別途設計する。
+    # 「何が、どこまで進んでいるのか」だけは、他8テーマと同じ後付けの補完処理
+    # （apply_background）で毎回貼り直す（山なみ本体の再生成では消えない）。
     if "<!-- PLANET_SECTION_START -->" in before:
+        page = apply_background(page)
+        changed_page = page != before
         changed_arena = arena_text != arena_before
         if not check:
             if changed_arena or data_output is not None:
                 arena_path.parent.mkdir(parents=True, exist_ok=True)
                 arena_path.write_text(arena_text, encoding="utf-8")
-            if output is not None:
-                target = Path(output)
+            if changed_page or output is not None:
+                target = Path(output) if output else html_path
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text(page, encoding="utf-8")
         detail = " / ".join(f"{n}={c}" for n, c in issue_counts.most_common())
@@ -443,9 +470,9 @@ def build(
             f"論点: {detail}",
             "立場: " + " / ".join(f"{n}={stance_counts.get(n, 0)}" for n in STANCE_ORDER),
             f"アリーナの点: {len(arena_rows)}件",
-            "山なみ形式のため、旧2D形式の書き換えはスキップしました",
+            "山なみ形式のため、背景セクション以外の旧2D形式の書き換えはスキップしました",
         ]
-        return lines, changed_arena
+        return lines, (changed_page or changed_arena)
 
     page = replace_once(
         page,
