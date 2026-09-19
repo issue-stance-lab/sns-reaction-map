@@ -379,6 +379,13 @@
           "tide-card"
         ],
         "reason": "「世論の潮目」今回収集回の分類結果（scripts/inject_tide_widget.py の cur_file）"
+      },
+      {
+        "path": "data/verification/ai-copyright-claims.json",
+        "selectors": [
+          "ca-n"
+        ],
+        "reason": "「その言い分、一次資料に当たるとどうなるか」の「該当した投稿N件」。主張ごとに編集部が確定した該当投稿（scripts/build_ai_copyright_process_sections.py が生成）"
       }
     ],
     "regions": {
@@ -409,6 +416,13 @@
       {
         "value": 99,
         "reason": "同パブリックコメントのうち法人・団体からの提出件数（一次情報、経緯タイムライン）"
+      },
+      {
+        "value": 12,
+        "selectors": [
+          "ca-how"
+        ],
+        "reason": "「その言い分、一次資料に当たるとどうなるか」の該当投稿合計（6主張×各2件、data/verification/ai-copyright-claims.jsonの件数合計）"
       }
     ],
     "exclude_selectors": [

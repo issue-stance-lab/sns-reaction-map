@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
 """生成AIと著作権 — 一次資料照合の判定リテラルと、その出所ファイルの書き出し。
 
-**このスクリプトは公開HTMLを書き換えない。** 他9テーマの同名スクリプトと同じく、
-ここに置くのは公開JSONの入力になる `FACT_CHECKS` / `CHECKED_AT` と、人が確定した
-投稿IDの写しを `data/verification/` へ出す `write_provenance_records()` だけ。
-実際のクイズ描画は共通の惑星ジェネレータ（`build_planet_data.py`）が
-`data/public/themes/ai-copyright.json` の `claim_verification` を読んで行う。
+`FACT_CHECKS` / `CHECKED_AT` は公開JSONの入力でもある。他9テーマの同名スクリプトと
+同じく、人が確定した投稿IDの写しを `data/verification/` へ出す
+`write_provenance_records()` を持つ。実際のクイズ描画は共通の惑星ジェネレータ
+（`build_planet_data.py`）が `data/public/themes/ai-copyright.json` の
+`claim_verification` を読んで行う（こちらは変更しない）。
 
 件数の正典は `data/ai-copyright_claim_posts.json`（2026-09-13、編集部が1件ずつ読んで
 確定したもの）。ここでは数え直すだけで、キーワード抽出の結果は使わない。
 
 山なみ変換（2026-09-14）の時点でこのスクリプトが作られず、`CLAIM_AUDIT_SOURCES`
 （`scripts/public_registry_common.py`）にも未登録だったため、`claim_posts.json`が
-存在するのに一次資料クイズが空のまま公開されていた（オーナー報告で発覚）。
+存在するのに一次資料クイズが空のまま公開されていた（オーナー報告で発覚、2026-09-19）。
+
+2026-09-20、オーナー指摘で「その言い分、一次資料に当たるとどうなるか」という
+独立セクションを追加（consumption-tax-cut・koshitsu-tenpakaiと同型、同じ
+FACT_CHECKSを流用）。こちらは公開HTMLを書き換える（`build_audit_section()` /
+`inject_audit()` / `--write-html`）。
+
+    python3 scripts/build_ai_copyright_process_sections.py --write-html
 """
 from __future__ import annotations
 
 import argparse
+import html
 import json
 from pathlib import Path
 
@@ -141,14 +149,138 @@ def write_provenance_records(posts: dict, destination: Path | None = None) -> li
     return rows
 
 
+# ---------------------------------------------------------------------------
+# 「その言い分、一次資料に当たるとどうなるか」— consumption-tax-cut・
+# koshitsu-tenpakaiと同型の独立セクション（2026-09-20、オーナー指摘）。
+# 見出し・導入文・まとめ文は verify_page_originality.py の対象なので、
+# 他テーマの言い回しをそのまま流用しない。判定バッジ（原典どおり／原典とズレ／
+# 原典に届かず）は3〜5文字の定型語で20文字未満のため、他テーマと重ねてよい
+# （koshitsu-tenpakaiが2026-09-20に同じ語を採用済み。しきい値は
+# scripts/verify_page_originality.pyの「20文字以上の文」を参照）。
+# ---------------------------------------------------------------------------
+DEFAULT_PAGE = ROOT / "docs" / "ai-copyright-reaction-map.html"
+AUDIT_START = "<!-- AI_COPYRIGHT_AUDIT_START -->"
+AUDIT_END = "<!-- AI_COPYRIGHT_AUDIT_END -->"
+
+AUDIT_H2 = "その言い分、一次資料に当たるとどうなるか"
+AUDIT_SUBTITLE = "文化庁資料・内閣府検討会・国会答弁で1件ずつ照合"
+VERDICT_MARK = {"fact": "原典どおり", "gap": "原典とズレ", "miss": "原典に届かず"}
+
+# consumption-tax-cut・koshitsu-tenpakaiと同じ見た目に揃える（同じCSS）。
+AUDIT_CSS = """<style>
+.claim-audit .ca-lead{margin:0 0 18px;line-height:1.9}
+.claim-audit .ca-list{display:grid;gap:14px}
+.claim-audit .ca-item{border:1px solid var(--line,#dcdfe6);border-radius:12px;padding:16px 18px;background:var(--card,#fff)}
+.claim-audit .ca-item[data-verdict="gap"]{border-left:5px solid #d1603d}
+.claim-audit .ca-item[data-verdict="fact"]{border-left:5px solid #3f7d58}
+.claim-audit .ca-item[data-verdict="miss"]{border-left:5px solid #8a8fa3;border-style:dashed;border-left-style:solid}
+.claim-audit .ca-say{margin:0 0 10px;font-weight:700;font-size:1.02rem;line-height:1.7}
+.claim-audit .ca-n{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:rgba(120,130,150,.14);font-size:.78rem;font-weight:600;white-space:nowrap;vertical-align:middle}
+.claim-audit .ca-detail{margin:0;display:grid;grid-template-columns:8.4em 1fr;gap:6px 14px}
+.claim-audit .ca-detail dt{font-size:.8rem;font-weight:700;opacity:.72;white-space:normal}
+.claim-audit .ca-detail dd{margin:0;line-height:1.85;white-space:normal}
+.claim-audit .ca-mark{display:inline-block;margin-right:.5em;padding:1px 8px;border-radius:5px;background:rgba(120,130,150,.16);font-size:.82rem}
+.claim-audit .ca-item[data-verdict="gap"] .ca-mark{background:rgba(209,96,61,.16);color:#a34526}
+.claim-audit .ca-item[data-verdict="fact"] .ca-mark{background:rgba(63,125,88,.16);color:#2f6144}
+.claim-audit .ca-item[data-verdict="miss"] .ca-mark{background:rgba(138,143,163,.2)}
+.claim-audit .ca-src{margin:10px 0 0;font-size:.82rem;line-height:1.8}
+.claim-audit .ca-src a{word-break:break-word}
+.claim-audit .ca-how{margin:18px 0 0;padding:12px 14px;border-radius:10px;background:rgba(120,130,150,.09);font-size:.86rem;line-height:1.85}
+@media (max-width:640px){.claim-audit .ca-detail{grid-template-columns:1fr;gap:2px}
+.claim-audit .ca-detail dt{margin-top:8px}}
+</style>"""
+
+
+def esc(text: str) -> str:
+    return html.escape(text, quote=True)
+
+
+def build_audit_section(posts: dict) -> str:
+    """FACT_CHECKSとclaim_postsから、独立セクションのHTMLを組み立てる。"""
+    claims_map = posts["claims"]
+    items = []
+    counts = []
+    for check in FACT_CHECKS:
+        ids = claims_map[check["key"]]
+        counts.append(len(ids))
+        links = [(check["url"], check["url_label"]), *check.get("extra_links", [])]
+        src_html = " ／ ".join(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
+            for url, label in links
+        )
+        items.append(f"""  <article class="ca-item" data-verdict="{check['verdict']}">
+    <p class="ca-say">「{esc(check['claim'])}」<span class="ca-n">該当した投稿 {len(ids)}件</span></p>
+    <dl class="ca-detail">
+      <dt>原典はこう書いている</dt><dd>{esc(check['source'])}</dd>
+      <dt>突き合わせた結果</dt><dd><b class="ca-mark">{VERDICT_MARK[check['verdict']]}</b>{esc(check['note'])}</dd>
+    </dl>
+    <p class="ca-src">{src_html}</p>
+  </article>""")
+    body = "\n".join(items)
+    total = sum(counts)
+    lead = (
+        "生成AIと著作権をめぐる投稿には、法律の条文名や政府資料を挙げて語られる"
+        "ものが目立ちます。名前が本物でも、書いてある中身まで正確とは限りません。"
+        f"ここでは投稿でよく見かける言い分のうち、公表資料で当否を確かめられるものを"
+        f"{len(FACT_CHECKS)}つ取り出し、文化庁の考え方、内閣府の検討会資料、著作権法の条文、"
+        f"国会答弁に当たりました。照合したのは{CHECKED_AT}です。"
+    )
+    how = (
+        "件数の数え方について。キーワードだけで拾うと、無関係な文脈で同じ語を使った"
+        "投稿も混ざります。ここでは候補となった投稿を1件ずつ本文で確認し、実際にその"
+        f"言い分を述べている投稿だけを数えました（合わせて{total}件）。規制に賛成か"
+        "推進に賛成かは問うていません。投稿の本文はこの節には載せず、件数と照合結果"
+        "だけを示しています。"
+    )
+    return f"""<section class="panel claim-audit" id="ai-copyright-audit">
+{AUDIT_CSS}
+<div class="panel-title"><h2>{AUDIT_H2}</h2><span>{AUDIT_SUBTITLE}</span></div>
+<p class="ca-lead">{lead}</p>
+<div class="ca-list">
+{body}
+</div>
+<p class="ca-how">{how}</p>
+</section>"""
+
+
+def inject_audit(page_text: str, section_html: str) -> str:
+    """AI_COPYRIGHT_AUDIT_START/ENDの間だけを差し替える。
+
+    マーカーがまだ無い（このセクションを初めて入れる）ときは、PLANET_SECTION_END
+    の直後へ新規に挿入する（consumption-tax-cutと同じ、山なみ図を読んだ直後の位置）。
+    """
+    if AUDIT_START in page_text:
+        import re
+
+        pattern = re.compile(re.escape(AUDIT_START) + r".*?" + re.escape(AUDIT_END), re.S)
+        return pattern.sub(f"{AUDIT_START}\n{section_html}\n{AUDIT_END}", page_text)
+    anchor = "<!-- PLANET_SECTION_END -->"
+    if anchor not in page_text:
+        raise SystemExit(f"{anchor} が見つかりません（まだ山なみ形式ではない）")
+    return page_text.replace(
+        anchor, f"{anchor}\n{AUDIT_START}\n{section_html}\n{AUDIT_END}", 1
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--claim-posts", type=Path, help="確定済み投稿IDの正典（省略時は data/ の既定）")
     parser.add_argument("--verification-dest", type=Path, help="出所ファイルの書き出し先（省略時は data/verification）")
+    parser.add_argument("--write-html", action="store_true", help="独立セクションをdocs/へ書き込む")
+    parser.add_argument("--page", type=Path, help="--write-html の対象HTML（省略時はdocs/の既定）")
     args = parser.parse_args()
-    rows = write_provenance_records(claim_posts(args.claim_posts), args.verification_dest)
+    posts = claim_posts(args.claim_posts)
+    rows = write_provenance_records(posts, args.verification_dest)
     print(f"OK  主張{len(FACT_CHECKS)}件 / 確定投稿{len(rows)}件 → ai-copyright-claims.json")
-    print("    このスクリプトは公開HTMLを書き換えません")
+    if args.write_html:
+        page_path = args.page or DEFAULT_PAGE
+        original = page_path.read_text(encoding="utf-8")
+        updated = inject_audit(original, build_audit_section(posts))
+        if updated != original:
+            page_path.write_text(updated, encoding="utf-8")
+            print(f"OK  {page_path} を更新しました（AI_COPYRIGHT_AUDIT セクション）")
+        else:
+            print(f"OK  {page_path} は差分なし")
     return 0
 
 
