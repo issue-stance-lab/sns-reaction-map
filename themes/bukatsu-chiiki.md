@@ -179,3 +179,16 @@ verify_page_originality.py）・`python3 -m unittest discover -s tests`984件・
 遷移が自然であることを、デスクトップ・375pxモバイル幅の両方で確認した。
 
 作業は`../isa-wt-bukatsu-landing-image`（ブランチ`task/bukatsu-landing-image`）で行った。
+
+2026-09-20、オーナー指示で「その言い分、原典に当たるとどうなるか」節を新設した
+（consumption-tax-cut・koshitsu-tenpakaiと同じ見た目）。使ったのは新規調査ではなく、
+`scripts/build_bukatsu_process_sections.py`に既にあった`FACT_CHECKS`（一次資料照合7件、
+2026-09-02確定）。PLANET_SECTIONの外側（`<!-- BUKATSU_AUDIT_START/END -->`、定期更新の
+たびに書き換わらない区間）に置き、`build_bukatsu_process_sections.py`の`main()`が
+`write_provenance_records()`と併せてHTMLへ書き込むようにした。
+`configs/bukatsu-chiiki-reaction-map.json`の`number_provenance.sources`に
+`data/verification/bukatsu-chiiki-claims.json`（`ca-n`/`ca-how`）を追加登録。
+標準検査4種・unittest 984件・run_public_checks.py・verify_claim_verdicts.pyすべて合格。
+経緯の詳細は[tasks/task-58.md](../tasks/task-58.md)「bukatsu-chikiiでのパイロット実施」節。
+
+作業は`../isa-wt-bukatsu-claim-audit`（ブランチ`task/bukatsu-claim-audit`）で行った。

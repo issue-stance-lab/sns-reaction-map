@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
-"""部活動の地域移行 — 一次資料照合の判定リテラルと、その出所ファイルの書き出し。
+"""部活動の地域移行 — 一次資料照合の判定リテラルと、公開ページへの反映。
 
-**このスクリプトは公開HTMLを書き換えない。** 他6テーマの同名スクリプトはページに
-事実確認セクションを描くが、部活動は課題54の段階7で惑星ページとして作り直すため、
-いまページへ差し込むと段階1の「公開ページのHTMLはバイト単位で変わらない」を破る。
-ここに置くのは、公開JSONの入力になる `FACT_CHECKS` / `CHECKED_AT` と、人が確定した
-投稿IDの写しを `data/verification/` へ出す `write_provenance_records()` だけ。
+公開JSONの入力になる `FACT_CHECKS` / `CHECKED_AT`、人が確定した投稿IDの写しを
+`data/verification/` へ出す `write_provenance_records()`、そして
+`docs/bukatsu-chiiki-reaction-map.html` の `<!-- BUKATSU_AUDIT_START/END -->` 区間へ
+「その言い分、原典に当たるとどうなるか」節を書き込む `main()` を持つ。
+
+**2026-09-20まではHTMLを書き換えなかった。** 部活動は課題54の段階7で惑星ページ
+（山なみ）として作り直す予定があり、それまでは段階1の「公開ページのHTMLはバイト単位で
+変わらない」を破ることになるため据え置いていた。山なみ移行は完了済みで、かつ
+consumption-tax-cut・koshitsu-tenpakaiと同じ「PLANET_SECTIONの外側に後付けで
+差し込む」区間方式（refresh_planet_section.pyの定期再生成では書き換わらない）を
+使えるため、この制約は無くなった。オーナー指示で消費税と同じ見た目のセクションを追加した。
 
 件数の正典は `data/bukatsu-chiiki_claim_posts.json`（編集部が1件ずつ読んで確定したもの）。
 ここでは数え直すだけで、キーワード抽出の結果は使わない。
@@ -13,10 +19,53 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_PAGE = ROOT / "docs" / "bukatsu-chiiki-reaction-map.html"
+
+START = "<!-- BUKATSU_AUDIT_START -->"
+END = "<!-- BUKATSU_AUDIT_END -->"
+
+# 消費税減税・皇室典範のclaim-auditと同じ見た目に揃える（2026-09-20）。
+# 判定マーク（原典どおり/原典とズレ/原典に届かず）は両テーマと共通の固定3語。
+# FACT_CHECKSの各カードが持つ独自のverdict_label（例:「公表資料で確認できた」）は
+# 2026-09-02時点で「他テーマと表現を重ねない」方針のもとに書かれたものだが、
+# その後の見た目統一（オーナー指摘、koshitsu-tenpakaiで先行）で不要になったため
+# この節では使わない（verdict_label自体は削除せず、他用途のため残す）。
+AUDIT_H2 = "その言い分、原典に当たるとどうなるか"
+AUDIT_SUBTITLE = "スポーツ庁・文部科学省・自治体資料と法令条文で1件ずつ照合"
+VERDICT_MARK = {"fact": "原典どおり", "gap": "原典とズレ", "miss": "原典に届かず"}
+
+AUDIT_CSS = """<style>
+.claim-audit .ca-lead{margin:0 0 18px;line-height:1.9}
+.claim-audit .ca-list{display:grid;gap:14px}
+.claim-audit .ca-item{border:1px solid var(--line,#dcdfe6);border-radius:12px;padding:16px 18px;background:var(--card,#fff)}
+.claim-audit .ca-item[data-verdict="gap"]{border-left:5px solid #d1603d}
+.claim-audit .ca-item[data-verdict="fact"]{border-left:5px solid #3f7d58}
+.claim-audit .ca-item[data-verdict="miss"]{border-left:5px solid #8a8fa3;border-style:dashed;border-left-style:solid}
+.claim-audit .ca-say{margin:0 0 10px;font-weight:700;font-size:1.02rem;line-height:1.7}
+.claim-audit .ca-n{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:rgba(120,130,150,.14);font-size:.78rem;font-weight:600;white-space:nowrap;vertical-align:middle}
+.claim-audit .ca-detail{margin:0;display:grid;grid-template-columns:8.4em 1fr;gap:6px 14px}
+.claim-audit .ca-detail dt{font-size:.8rem;font-weight:700;opacity:.72;white-space:normal}
+.claim-audit .ca-detail dd{margin:0;line-height:1.85;white-space:normal}
+.claim-audit .ca-mark{display:inline-block;margin-right:.5em;padding:1px 8px;border-radius:5px;background:rgba(120,130,150,.16);font-size:.82rem}
+.claim-audit .ca-item[data-verdict="gap"] .ca-mark{background:rgba(209,96,61,.16);color:#a34526}
+.claim-audit .ca-item[data-verdict="fact"] .ca-mark{background:rgba(63,125,88,.16);color:#2f6144}
+.claim-audit .ca-item[data-verdict="miss"] .ca-mark{background:rgba(138,143,163,.2)}
+.claim-audit .ca-src{margin:10px 0 0;font-size:.82rem;line-height:1.8}
+.claim-audit .ca-src a{word-break:break-word}
+.claim-audit .ca-how{margin:18px 0 0;padding:12px 14px;border-radius:10px;background:rgba(120,130,150,.09);font-size:.86rem;line-height:1.85}
+@media (max-width:640px){.claim-audit .ca-detail{grid-template-columns:1fr;gap:2px}
+.claim-audit .ca-detail dt{margin-top:8px}}
+</style>"""
+
+
+def esc(text: str) -> str:
+    return html.escape(text, quote=True)
 
 CHECKED_AT = "2026年9月2日"
 
@@ -163,14 +212,87 @@ def write_provenance_records(posts: dict, destination: Path | None = None) -> li
     return rows
 
 
+def build_section(claims_by_key: dict[str, list[str]]) -> str:
+    """「その言い分、原典に当たるとどうなるか」節のHTMLを組み立てる（consumption-tax-cut・
+    koshitsu-tenpakaiと同じ見た目）。claims_by_keyは主張キー→確定投稿IDのマップ。
+    """
+    items = []
+    counts = []
+    for check in FACT_CHECKS:
+        ids = claims_by_key[check["key"]]
+        counts.append(len(ids))
+        # club-cost-surveyのように、公表資料そのものが見つからず url を持たない
+        # miss判定が1件ある。その場合は出典行を出さない（無い物をあるように見せない）。
+        src_p = ""
+        if check.get("url"):
+            links = [(check["url"], check["url_label"]), *check.get("extra_links", [])]
+            src_html = " ／ ".join(
+                f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
+                for url, label in links
+            )
+            src_p = f'\n    <p class="ca-src">{src_html}</p>'
+        items.append(f"""  <article class="ca-item" data-verdict="{check['verdict']}">
+    <p class="ca-say">「{esc(check['claim'])}」<span class="ca-n">該当した投稿 {len(ids)}件</span></p>
+    <dl class="ca-detail">
+      <dt>原典はこう書いている</dt><dd>{esc(check['source'])}</dd>
+      <dt>突き合わせた結果</dt><dd><b class="ca-mark">{VERDICT_MARK[check['verdict']]}</b>{esc(check['note'])}</dd>
+    </dl>{src_p}
+  </article>""")
+    body = "\n".join(items)
+    total = sum(counts)
+    miss_total = sum(1 for c in FACT_CHECKS if c["verdict"] == "miss")
+    lead = (
+        "部活動の地域移行も、制度の名前や金額を挙げたほうが説得力があるように見えます。"
+        "だからこそ、その中身が公表資料どおりかを見ておきたい。"
+        "ここでは投稿にくり返し出てくる言い分のうち、公の記録で当否を判定できる"
+        f"ものを{len(FACT_CHECKS)}つ取り出し、スポーツ庁・文部科学省のガイドライン、"
+        "熊本市教育委員会の資料、給特法の条文、日本中学校体育連盟の細則に当たりました。"
+        f"照合したのは{CHECKED_AT}です。資料で裏付けが取れなかった{miss_total}件についても、"
+        "その結果をそのまま載せています。"
+    )
+    how = (
+        "件数の数え方について。単純なキーワード検索では、同じ語句を別の文脈・別の意味で"
+        "使っている投稿まで一緒に数えてしまいます。候補を1件ずつ本文まで読み、実際に"
+        f"その言い分を述べている投稿だけをカウントに残しました（合計{total}件）。"
+        "地域移行に賛成か反対かは問うていません。投稿本文そのものはこの節に掲載せず、"
+        "件数と照合結果のみを示しています。"
+    )
+    return f"""<section class="panel claim-audit" id="bukatsu-chiiki-audit">
+{AUDIT_CSS}
+<div class="panel-title"><h2>{AUDIT_H2}</h2><span>{AUDIT_SUBTITLE}</span></div>
+<p class="ca-lead">{lead}</p>
+<div class="ca-list">
+{body}
+</div>
+<p class="ca-how">{how}</p>
+</section>"""
+
+
+def inject(page_text: str, section_html: str) -> str:
+    pattern = re.compile(re.escape(START) + r".*?" + re.escape(END), re.DOTALL)
+    if not pattern.search(page_text):
+        raise SystemExit(f"マーカーが見つかりません: {START!r} / {END!r}")
+    return pattern.sub(f"{START}\n{section_html}\n{END}", page_text)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--claim-posts", type=Path, help="確定済み投稿IDの正典（省略時は data/ の既定）")
     parser.add_argument("--verification-dest", type=Path, help="出所ファイルの書き出し先（省略時は data/verification）")
+    parser.add_argument("--output-html", type=Path, help="書き込み先HTML（省略時は docs/bukatsu-chiiki-reaction-map.html）")
     args = parser.parse_args()
-    rows = write_provenance_records(claim_posts(args.claim_posts), args.verification_dest)
+
+    posts = claim_posts(args.claim_posts)
+    rows = write_provenance_records(posts, args.verification_dest)
+
+    page = args.output_html or DEFAULT_PAGE
+    if not page.exists():
+        raise SystemExit(f"HTMLが見つかりません: {page}")
+    section_html = build_section(posts["claims"])
+    page.write_text(inject(page.read_text(encoding="utf-8"), section_html), encoding="utf-8")
+
     print(f"OK  主張{len(FACT_CHECKS)}件 / 確定投稿{len(rows)}件 → bukatsu-chiiki-claims.json")
-    print("    このスクリプトは公開HTMLを書き換えません（課題54 段階7でページを作り直すため）")
+    print(f"OK  {page} のBUKATSU_AUDIT区間を更新しました")
     return 0
 
 
