@@ -14,12 +14,15 @@ description: 作業ブランチの成果を main に取り込み、GitHub Pages 
 短い工程だが、ここで失敗すると「手元では直っているのに公開版が古い」「マージ後に
 検査が落ちる」という、あとから気づきにくい壊れ方をする。
 
-## 最初に読む2行
+## 最初に読む3行
 
 - **オーナーにコマンドを渡さない。マージも push もAIが実行する。**
   `-m` を付けない `git merge` はエディタ（vim）を開き、オーナーは抜け方が分からず止まる。
   2026-08-17 とそれ以前に実際に起きた。
 - **検査は「マージした後の main」で通す。** 作業ツリーで通したかどうかは根拠にならない。
+- **push後は`gh run list`で実際のCI結果を見るまで安心しない。** ローカルの
+  `run_public_checks.py`が「いつもの既知のNGと同じ件数・同じ理由」に見えても、
+  CIが同じ理由で落ちているとは限らない（下記⑤.5参照）。
 
 ## 手順
 
@@ -80,6 +83,15 @@ python3 scripts/run_public_checks.py
 （公開データJSONとcatalog、主張の判定と件数、**SEO台帳・sitemap.xmlの更新日**、
 収集期間、ページ文の使い回し、データ保全台帳の整合、テスト808件）。
 
+**「同じ中身」は「同じ結果になる」の保証ではない。** 非公開正典（`social-samples/`）が
+手元にはあってCIには無いという環境差そのものが、まれに結果を変える。
+`@unittest.skipUnless`でCI用に除外されているはずのテストが、実は漏れていると
+（新設テストで起きやすい）、**手元では正典が読めて普通に通り、CIでだけ失敗する**
+（2026-09-19、`test_ocean_layer.py`の新設テストが1件漏れていて、v6反映から
+bukatsu-chiiki反映までCIが赤いまま6件連続で気づかれなかった）。手元の「NG 1件」が
+毎回同じ2テーマ（既知の差分）かどうかを**テスト名で**確認すること。件数が同じでも
+中身が違えば別の問題。
+
 **push前にここで回す。push後のCI通知を待って気づく、にしない。**
 2026-09-15のbukatsu-chiiki更新で、`docs/sitemap.xml`の該当lastmodと
 `company/data-assets.json`（非公開データの保全台帳）の更新漏れが、この工程を
@@ -103,6 +115,28 @@ git push
 
 1行目で、これから送る内容を確かめてから送る。
 成功の形: `0811403..d41564e  main -> main` のような行が出る。
+
+### ⑤.5 実際のCI結果を確認する
+
+```sh
+until gh run list --branch main --limit 3 \
+    --json status,conclusion,workflowName,displayTitle \
+    -q '.[] | select(.workflowName=="公開ファイルの検査")' \
+  | head -1 | grep -q '"status":"completed"'; do sleep 8; done
+gh run list --branch main --limit 3
+```
+
+成功の形: 直近pushの行が `completed  success  公開ファイルの検査`。
+
+**「Deploy to GitHub Pages」が成功していても、この検査が赤いままのことがある。**
+2つは別ワークフローで、サイトの見た目が正しく更新されたかどうかと、この検査が
+通っているかどうかは独立している（⑥は前者しか見ていない）。ここを飛ばすと、
+サイトは正しく見えるのにCIだけ赤い状態に何回pushしても気づけない
+（2026-09-19、6回連続のpushでこれが起きた）。
+
+`failure` なら `gh run view <run-id> --log-failed` で具体的な失敗テスト名を見る。
+ローカルの「NG 1件」と**テスト名が一致するか**を確認し、一致しなければ
+別原因（下記コラム参照）。
 
 ### ⑥ 公開サイトで実物を確認する
 
@@ -138,7 +172,19 @@ git worktree remove <作業ツリー>
 
 公開まで行った更新なら、`THEMES.yaml` の `updated_at` / `collect_at` / `refresh_at` /
 `collect_delta` が今回の値になっているか確かめる（本来は反映前に済んでいるはず。
-ここは最後の網）。テーマ横断の課題が片付いたなら `TASK_BOARD.md` も直す。
+ここは最後の網）。テーマ横断の課題が片付いたなら `TASK_BOARD.md` も直す
+（**`TASK_BOARD.md`の「状態」「次にすること」は120文字上限**、
+`tests/test_task_board.py`が検査する。索引は要点だけにし詳細は`tasks/task-{番号}.md`へ）。
+
+**`THEMES.yaml`の`updated_at`を（データ更新を伴わない）手直しだけで変えたときは、
+連鎖先3つの再生成も忘れずに**: `python3 scripts/build_data_sheet.py`
+（`DATA_SHEET.md`）・`python3 scripts/sync_portal_stats.py`（`docs/index.html`の
+更新バー・埋め込みJS）・本スキルの④で回した`validate_theme_seo.py`
+（sitemap・JSON-LD・可視の最終更新日）。3つとも非公開正典を読む
+`unittest discover`側のテストが検出するが`run_public_checks.py`には
+含まれない（`PRIVATE_DATA_TESTS`除外のため）ので、④で全部飛ばしていないか
+テスト名で確認すること（2026-09-19、bukatsu-chiikiのupdated_at手直しで
+この2つの再生成を忘れて発覚）。
 
 ## やらないこと
 
