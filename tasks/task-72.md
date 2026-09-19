@@ -147,26 +147,40 @@ chart-boxごと消え、直後の`render()`が`#chartdesc`等を見失って
 `.ro`/`.dot-mech`側の個別の不透明背景で別途確保されているため、この変更で
 読みにくくなる数値表示は無い。
 
+## デザイン改訂（v6、2026-09-19・オーナーの実地フィードバック6件目）
+
+**「全ての意見などクリックした時のスクロール位置が下すぎるので、位置を確認」**:
+`morphTo()`（立場フィルター切替）の狭い画面向けスクロールが、`#section`
+（山なみの図そのもの）を対象にしたままだったのが原因。v4でchart-boxを
+升目カードの背後の背景要素（`as-backdrop`）にした際、これは`height:100%`で
+`#dot-slot`の高さいっぱい（実測688px、モバイル画面の8割超）まで伸びるため、
+これを中心に合わせようとする`bringIntoView()`の計算が`scrollY`を大きく
+ずらし、`.modes`が画面上端より453px上に押し出されていた（実機再現・計測済み）。
+`land()`と同じくパネルの見出し（`#panel h2`）へ運ぶよう変更（ブランチ
+`task/issue-tabs-ui-v6`）。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
-デザイン改訂5件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
-背景表示化・背景の不透明度強化）を同日中に順次本番反映済み。本番
+デザイン改訂6件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
+背景表示化・背景の不透明度強化・立場フィルター切替時のスクロール先修正）を
+同日中に順次本番反映済み。本番
 https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
 最終形を実機確認済み（デスクトップ・375px、山クリック時のスクロール・
 立場タブ切り替え・論点タブを跨いだ連続切替、背景の山なみが実際に視認できる
-ことも含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・
-ocean-layer修正（課題69・課題71）と競合したため、
-`scripts/refresh_planet_section.py`の一般化された`_inject_landing_images()`へ
-同じ修正を再適用して統合した（詳細は上記「マージ時の追記」）。fukushutoは
-初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2〜v5デザインへの追従と
-本番反映はまだ（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
+こと、立場フィルター切替後にモードボタンとパネルが同じ画面に収まることも
+含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer修正
+（課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
+一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した
+（詳細は上記「マージ時の追記」）。fukushutoは初版（丸ピル型）のdocs/を
+再生成し実機確認済みだが、v2〜v6デザインへの追従と本番反映はまだ
+（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
 
 残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
 constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
 反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
-のみ済み、v2〜v5への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
+のみ済み、v2〜v6への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
 見て確認してから展開する。
 
 ## 次にすること
@@ -181,5 +195,6 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 実装ブランチ: `task/issue-tabs-ui`（初版）・`task/issue-tabs-ui-v2`（タブ形状・
 タブ間距離）・`task/issue-tabs-ui-v3`（「すべての意見」の区別）・
 `task/issue-tabs-ui-v4`（山なみの背景表示化、drawPanel()クラッシュの修正含む）・
-`task/issue-tabs-ui-v5`（背景の不透明度強化）。いずれもmainへマージ・反映済み。
+`task/issue-tabs-ui-v5`（背景の不透明度強化）・`task/issue-tabs-ui-v6`
+（立場フィルター切替時のスクロール先修正）。いずれもmainへマージ・反映済み。
 worktreeは全て片付け済み。継続する場合は新しいworktreeを作る
