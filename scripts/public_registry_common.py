@@ -33,6 +33,7 @@ INTENSITY_ORDER = ("low", "medium", "high")
 # 各主張は、それが争われている論点（大陸）へ結びつける。課題54の地形は論点単位で
 # 実像／ずれ／蜃気楼を塗り分けるため、この対応が無いと段階6で色を決められない。
 CLAIM_AUDIT_SOURCES = {
+    "ai-copyright": ("scripts/build_ai_copyright_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "henoko-student-accident": ("scripts/build_henoko_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "school-nickname-ban": ("scripts/build_nickname_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
     "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS", "CHECKED_AT", "claim"),
