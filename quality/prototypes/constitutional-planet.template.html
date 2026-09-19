@@ -22,32 +22,49 @@ h1{font-size:22px;margin:0 0 4px}
   border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}
 .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
   padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}
-.modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
-.modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
-  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
-.modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
+/* 立場フィルターも論点タブと同じ「本物のタブ」の形に揃える
+   （オーナー指摘「全ての意見・文科省判断指示、の項目も画像のようにタブ表示した方が」2026-09-19）。 */
+.modes{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:0 0 12px}
+.modes button{background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
+  border-bottom:3px solid var(--line);border-radius:11px 11px 0 0;
+  padding:7px 13px 6px;font-size:12.5px;font-family:inherit;cursor:pointer;line-height:1.4;
+  transform:translateY(3px);transition:transform .12s,background-color .12s,color .12s}
+.modes button:nth-child(3n+1){border-radius:11px 5px 0 0}
+.modes button:nth-child(3n+2){border-radius:6px 12px 0 0}
+.modes button:nth-child(3n){border-radius:9px 8px 0 0}
+.modes button:hover,.modes button:focus-visible{color:var(--fg);outline:none;transform:translateY(1px)}
+.modes button[aria-pressed=true]{background:var(--panel);color:var(--fg);font-weight:700;
+  border-color:var(--accent);border-bottom-color:var(--panel);transform:translateY(0)}
 .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
-.chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+/* パネル（論点タブを含む）を山なみチャートより先に表示する。立場フィルターのタブと
+   論点タブの間に山ひとつぶんの高さが挟まって遠いとの指摘（オーナー2026-09-19）。
+   DOM順は変えず表示順だけ入れ替えるので、山クリックやスクロール系のJSに影響しない。 */
+.chart-box{order:2;position:relative;background:#0b1017;border:1px solid var(--line);
   border-radius:12px;overflow:hidden;padding:10px 8px 4px}
 .chart-box svg{display:block;width:100%;height:auto}
 .chart-box .hill{cursor:pointer}
 .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
 .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.panel{order:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
 .panel h2{font-size:16px;margin:0 0 2px}
 .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
 /* 論点タブ。他の論点を見るのに山なみへ戻らなくて済むよう見出しの下に置く（オーナー要望2026-09-19）。
-   角丸を非対称にして手描き感を出す。押下時の配色は .modes と同じ言語を流用する。 */
-.issue-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
-.issue-tabs button{font:inherit;font-size:12.5px;line-height:1.5;cursor:pointer;
-  background:var(--panel);color:var(--fg);border:1.5px solid var(--line);
-  border-radius:13px 7px 12px 6px/6px 13px 7px 12px;padding:5px 12px 6px}
-.issue-tabs button:nth-child(odd){transform:rotate(-0.6deg)}
-.issue-tabs button:nth-child(even){transform:rotate(0.5deg)}
-.issue-tabs button:hover,.issue-tabs button:focus-visible{border-color:var(--accent);outline:none}
-.issue-tabs button[aria-pressed=true]{border-color:var(--accent);border-width:2px;
-  background:#1f6feb33;font-weight:700}
+   上だけ角丸・下は直線の台形にして「タブ」の形にする。選んでいるタブだけ下の縁を
+   パネルと同じ色にして地続きに見せ、それ以外は少し下げて背後にあるように見せる
+   （オーナー指摘「本当のタブのようなデザインにはならないの？」2026-09-19）。 */
+.issue-tabs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:10px 0 0}
+.issue-tabs button{font:inherit;font-size:12.5px;line-height:1.4;cursor:pointer;
+  background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
+  border-bottom:3px solid var(--line);padding:7px 13px 6px;
+  transform:translateY(3px);transition:transform .12s,background-color .12s,color .12s}
+.issue-tabs button:nth-child(3n+1){border-radius:11px 5px 0 0}
+.issue-tabs button:nth-child(3n+2){border-radius:6px 12px 0 0}
+.issue-tabs button:nth-child(3n){border-radius:9px 8px 0 0}
+.issue-tabs button:hover,.issue-tabs button:focus-visible{color:var(--fg);outline:none;transform:translateY(1px)}
+.issue-tabs button[aria-pressed=true]{
+  background:var(--panel);color:var(--fg);font-weight:700;
+  border-color:var(--accent);border-bottom-color:var(--panel);transform:translateY(0)}
 .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
 .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
   font-weight:700;overflow:hidden;white-space:nowrap}
