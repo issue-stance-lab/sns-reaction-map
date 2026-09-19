@@ -549,18 +549,23 @@ def apply_landing_images(page: str) -> str:
     slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in LANDING_IMAGE_BY_ISSUE_ID.items())
     old_draw_panel_head = (
         "let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m)\n"
         "    + '<p class=\"sub\">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'"
     )
     # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
     # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
     # validate_theme_seo.py の参照チェック（href|src="…"の正規表現）が実在しない
     # パスとして誤検知する（課題69・起承転結の再構成で発見）。
+    # issueTabs(m)（他の論点への切り替えタブ）は見出し直後に固定し、画像はその後ろへ
+    # 差し戻す。テーマをまたいで「見出しの次は必ずタブ」という並びを崩さないため
+    # （課題69・論点タブUI追加、2026-09-19）。
     new_draw_panel_head = (
         "const imgSlug = {" + slug_map_js + "}[it.id];\n"
         "  const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';\n"
         "  const imgHtml = imgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+imgPath+'\" data-alt=\"'+it.label+'\">'\n"
         "    +'<img src=\"'+imgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
-        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m) + imgHtml\n"
         "    + '<p class=\"sub\">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'"
     )
     if old_draw_panel_head not in page:

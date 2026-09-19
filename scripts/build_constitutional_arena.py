@@ -435,12 +435,16 @@ def apply_landing_images(page: str) -> str:
     old_draw_panel_head = (
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
-        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m)"
     )
     # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
     # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
     # validate_theme_seo.py の参照チェックが実在しないパスとして誤検知する
     # （fukushuto・consumption-tax-cutの起承転結の再構成で発見、課題69）。
+    # issueTabs(m)（他の論点への切り替えタブ）は見出し直後に固定し、画像はその後ろへ
+    # 差し戻す。テーマをまたいで「見出しの次は必ずタブ」という並びを崩さないため
+    # （課題69・論点タブUI追加、2026-09-19）。
     new_draw_panel_head = (
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
@@ -448,7 +452,8 @@ def apply_landing_images(page: str) -> str:
         "  const caImgPath = caImgSlug ? ('images/topics/constitutional-amendment/constitutional-infographic-wide-'+caImgSlug+'.webp') : '';\n"
         "  const caImgHtml = caImgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+caImgPath+'\" data-alt=\"'+it.label+'\">'\n"
         "    +'<img src=\"'+caImgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
-        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + caImgHtml"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m) + caImgHtml"
     )
     if old_draw_panel_head not in page:
         raise IssueCountError("論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません")
