@@ -752,6 +752,65 @@ def write_claim_provenance(destination: Path | None = None) -> None:
     )
 
 
+# ---------------------------------------------------------------------------
+# この争点の背景（政策の現在地）
+#
+# 山なみ変換（4b973a4、2026-09-14）で消えたまま、2026-09-18に「山なみの論点
+# パネルと投票セクションに統合済み」と誤認され、本文ごと削除された（54d4888、
+# 課題69）。実際は一次情報4本のうち3本が失われ、3段落あった説明文も投票
+# セクションの1文にまで縮んでいた。オーナー指摘（2026-09-19）で発覚し、9/15の
+# 大綱閣議決定にあわせて内容を書き直して復元する。
+#
+# CLAIM_AUDITと同じ「後付けの補完処理」方式。CLAIM_ENDの直後に毎回そろえる
+# （PLANET_SECTIONの再生成やCLAIM_AUDITの再構築では消えない）。
+# ---------------------------------------------------------------------------
+BACKGROUND_START = "<!-- BACKGROUND_CONTEXT_START -->"
+BACKGROUND_END = "<!-- BACKGROUND_CONTEXT_END -->"
+
+# 一次情報は quality/research/consumption-tax-cut-primary-sources.md で
+# 確認済みの資料（H-2・N・O・P、確認日2026-09-17）から選んだ。新しい数字を
+# ここで足さないこと（足す場合は先に一次資料メモへ確認日つきで記録する）。
+BACKGROUND_SOURCES = [
+    (
+        "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou5.pdf",
+        "内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」概要（令和8年9月15日閣議決定）",
+    ),
+    (
+        "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+        "同、大綱本文",
+    ),
+    (
+        "https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html",
+        "首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）",
+    ),
+    (
+        "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm",
+        "財務省「消費税の使途」",
+    ),
+]
+
+
+def background_context() -> str:
+    """「この争点の背景」セクションを組み立てる（静的な編集部原稿）。"""
+    links = "\n".join(
+        f'<li><a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a></li>'
+        for url, label in BACKGROUND_SOURCES
+    )
+    p = 'style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px"'
+    return f"""{BACKGROUND_START}
+<section class="panel issue-background" id="issue-background">
+<div class="panel-title"><h2>この争点の背景</h2><span>なにが決まっていて、なにがこれからなのか（2026年9月19日時点）</span></div>
+<p {p}>消費税は標準税率10%、食料品などは軽減税率8%です。物価高が続くなか各党が減税を掲げていましたが、2026年9月15日、政府は食料品の消費税率を2027年4月から2029年3月までの2年間、1%まで引き下げる方針を閣議決定しました。対象は現行の軽減税率と同じ飲食料品で、対象範囲そのものは広げません。あわせて、中低所得の勤労者向けに「就業者負担軽減支援金」を2027年4月に導入し、2029年度には「給付付き税額控除」として本格化させる設計も固まっています。</p>
+<p {p}>決まっているのは政府の方針（大綱）までで、法律はまだ成立していません。政府はこの大綱をもとに法案を作り、臨時国会に提出して成立を目指すとしています（報道では10月召集が見込まれています）。2年間の財源は「赤字国債に頼らない」とされていますが、具体的な内訳は年末の予算編成まで示されていません。</p>
+<p {p}>推進する立場からは「物価高対策として早く広く効く」「可処分所得が直接増える」という主張があります。慎重な立場からは「社会保障の財源が細る」「値下げに反映されず事業者の利益になる」「2年後に税率が戻るときの反動が大きい」という反論が出ています。</p>
+<p {p}>SNS上では減税に前向きな声が多数ですが、その中身は一枚岩ではありません。「対象が食料品だけでは物足りない、一律にすべきだ」という不満、「財源の内訳を示さないまま決めるのは無責任」という批判、「公約を掲げた政党が採決でどう動くか」という政治不信が、論点ごとに別々の対立軸をつくっています。</p>
+<div class="background-sources"><h3 style="font-size:14px;margin:22px 0 10px">一次情報</h3><ul class="srclist">
+{links}
+</ul></div>
+</section>
+{BACKGROUND_END}"""
+
+
 def build(
     *,
     classified: Path | None = None,
@@ -1154,6 +1213,16 @@ def build(
     html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
+    # --- 18. この争点の背景（政策の現在地） --------------------------------
+    # CLAIM_AUDITと同じ「後付けの補完処理」。CLAIM_ENDの直後（=一次資料照合の
+    # すぐ後ろ）に毎回そろえる。
+    if BACKGROUND_START in html and BACKGROUND_END in html:
+        start = html.index(BACKGROUND_START)
+        end = html.index(BACKGROUND_END) + len(BACKGROUND_END)
+        html = html[:start] + html[end:]
+    idx = html.index(CLAIM_END) + len(CLAIM_END)
+    html = html[:idx] + "\n\n" + background_context() + html[idx:]
+
     verify(html, opinions)
     output.write_text(html, encoding="utf-8")
     print(f"wrote {output} ({len(html.splitlines())} lines)")
@@ -1237,6 +1306,16 @@ def verify(html: str, opinions: int) -> None:
         ]
         if shown != expected:
             problems.append(f"突き合わせの件数が出所ファイルと合わない: {shown} != {expected}")
+
+    # この争点の背景。マーカー1組・見出し・一次情報4本が揃っているか
+    # （2026-09-18に「山なみへ統合済み」と誤認され削除された再発防止）。
+    if html.count(BACKGROUND_START) != 1 or html.count(BACKGROUND_END) != 1:
+        problems.append("この争点の背景セクションのマーカーが1組でない")
+    if "<h2>この争点の背景</h2>" not in html:
+        problems.append("この争点の背景の見出しがページにない")
+    for url, _label in BACKGROUND_SOURCES:
+        if f'href="{url}"' not in html:
+            problems.append(f"この争点の背景: 一次情報リンクが見つからない: {url}")
 
     if problems:
         raise SystemExit("ビルド検証に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -1323,6 +1402,11 @@ def main() -> int:
         help="一次資料との突き合わせセクションだけを貼り直す（潮目ウィジェットを落とさない）",
     )
     parser.add_argument(
+        "--background-only",
+        action="store_true",
+        help="「この争点の背景」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
+    )
+    parser.add_argument(
         "--skip-issue-counts",
         action="store_true",
         help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
@@ -1343,6 +1427,21 @@ def main() -> int:
         write_claim_provenance(args.verification_dest)
         page.write_text(html, encoding="utf-8")
         print(f"updated claim audit in {page}")
+        return 0
+
+    if args.background_only:
+        page = args.output_html
+        html = page.read_text(encoding="utf-8")
+        if CLAIM_END not in html:
+            raise SystemExit("CLAIM_AUDIT_END が見つかりません（先に --claim-audit-only を実行すること）")
+        if BACKGROUND_START in html and BACKGROUND_END in html:
+            start = html.index(BACKGROUND_START)
+            end = html.index(BACKGROUND_END) + len(BACKGROUND_END)
+            html = html[:start] + html[end:]
+        idx = html.index(CLAIM_END) + len(CLAIM_END)
+        html = html[:idx] + "\n\n" + background_context() + html[idx:]
+        page.write_text(html, encoding="utf-8")
+        print(f"updated background context in {page}")
         return 0
 
     if args.conditions_only:
