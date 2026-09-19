@@ -60,6 +60,41 @@ class OceanLayerTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(vol.verify_no_text_leak("bukatsu-chiiki", veins_path), [])
 
+    def test_existing_koshitsu_tenpakai_sunk_continents_passes(self) -> None:
+        """editorial_confirmation 型（機械の正規表現ではなく人が候補を選ぶ形式）が正しく通ることを確認する。
+
+        以前は type: editorial_confirmation を認識できず、全件が
+        「match_rule.pattern がありません」という無関係なNGになっていた（2026-09-19修正）。
+        """
+        pairs = vol.find_theme_files()
+        self.assertIn("koshitsu-tenpakai", pairs)
+        sunk_path, _veins_path = pairs["koshitsu-tenpakai"]
+        errors, skipped = vol.verify_sunk_continents("koshitsu-tenpakai", sunk_path)
+        self.assertEqual(errors, [])
+        self.assertEqual(skipped, [])
+
+    def test_no_real_theme_has_unsupported_match_rule_type(self) -> None:
+        """全テーマの match_rule.type を、正典データが無くても検査できる形で見る。
+
+        機械で再現できない未対応の type が紛れ込むと「match_rule.pattern がありません」等の
+        無関係なNGになり、原因が分からないまま放置されやすい（koshitsu-tenpakaiで実際に発生）。
+        """
+        pairs = vol.find_theme_files()
+        self.assertGreater(len(pairs), 0)
+        for theme, (sunk_path, _veins_path) in pairs.items():
+            errors, _skipped = vol.verify_sunk_continents(theme, sunk_path)
+            unsupported = [e for e in errors if "match_rule.type が未対応です" in e]
+            self.assertEqual(unsupported, [], f"{theme}: {unsupported}")
+
+    def test_all_real_themes_run_without_crashing(self) -> None:
+        pairs = vol.find_theme_files()
+        self.assertGreater(len(pairs), 0)
+        for theme, (sunk_path, veins_path) in pairs.items():
+            sunk_errors, _skipped = vol.verify_sunk_continents(theme, sunk_path)
+            self.assertIsInstance(sunk_errors, list)
+            vein_errors, _skipped2 = vol.verify_veins(theme, veins_path)
+            self.assertIsInstance(vein_errors, list)
+
     def test_sunk_continents_over_four_items_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "t-sunk-continents.json"
@@ -102,6 +137,103 @@ class OceanLayerTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(skipped, ["t-sc-1"])
 
+    def test_regex_rule_with_sha256_hits_fails(self) -> None:
+        """machine_hits に sha256 ハッシュが入っている（tweet_idではない）ことを検出する。
+
+        constitutional-amendment で実際に起きていた不具合の再現（2026-09-19）。
+        record_id_hash() 形式のハッシュは type: editorial_confirmation の selected 用で、
+        type: regex の machine_hits は生の tweet_id を使う設計（bukatsu-chiiki が実例）。
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={
+                "type": "regex", "pattern": "foo", "scope": "text",
+                "machine_hits": ["sha256:" + "0" * 64],
+            })
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            with mock.patch.object(vol, "run_match_rule") as mocked:
+                errors, skipped = vol.verify_sunk_continents("t", path)
+        mocked.assert_not_called()
+        self.assertFalse(skipped)
+        self.assertTrue(any("sha256 ハッシュが" in e for e in errors), errors)
+
+    def test_unknown_match_rule_type_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={"type": "manual_guess"})
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            errors, skipped = vol.verify_sunk_continents("t", path)
+        self.assertFalse(skipped)
+        self.assertTrue(any("match_rule.type が未対応です" in e for e in errors), errors)
+
+    def test_editorial_confirmation_valid_passes(self) -> None:
+        digest = "sha256:" + "1" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={
+                "type": "editorial_confirmation", "scope": "text",
+                "selected": [digest], "evidence": "review/ocean-search.private.json の候補を本文確認",
+            })
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            with mock.patch.object(vol, "load_canonical_hashes", return_value={digest}):
+                errors, skipped = vol.verify_sunk_continents("t", path)
+        self.assertEqual(errors, [])
+        self.assertFalse(skipped)
+
+    def test_editorial_confirmation_missing_selected_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={"type": "editorial_confirmation", "evidence": "x"})
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            errors, _skipped = vol.verify_sunk_continents("t", path)
+        self.assertTrue(any("match_rule.selected がありません" in e for e in errors), errors)
+
+    def test_editorial_confirmation_missing_evidence_fails(self) -> None:
+        digest = "sha256:" + "2" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={"type": "editorial_confirmation", "selected": [digest]})
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            with mock.patch.object(vol, "load_canonical_hashes", return_value={digest}):
+                errors, _skipped = vol.verify_sunk_continents("t", path)
+        self.assertTrue(any("match_rule.evidence がありません" in e for e in errors), errors)
+
+    def test_editorial_confirmation_malformed_selected_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={
+                "type": "editorial_confirmation", "evidence": "x", "selected": ["12345"],
+            })
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            errors, _skipped = vol.verify_sunk_continents("t", path)
+        self.assertTrue(any("sha256:形式でない値" in e for e in errors), errors)
+
+    def test_editorial_confirmation_hash_not_in_canonical_fails(self) -> None:
+        digest = "sha256:" + "3" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={
+                "type": "editorial_confirmation", "evidence": "x", "selected": [digest],
+            })
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            with mock.patch.object(vol, "load_canonical_hashes", return_value=set()):
+                errors, skipped = vol.verify_sunk_continents("t", path)
+        self.assertFalse(skipped)
+        self.assertTrue(any("正典に実在しません" in e for e in errors), errors)
+
+    def test_editorial_confirmation_skipped_when_no_canonical(self) -> None:
+        digest = "sha256:" + "4" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-sunk-continents.json"
+            item = sunk_item(match_rule={
+                "type": "editorial_confirmation", "evidence": "x", "selected": [digest],
+            })
+            path.write_text(json.dumps(make_sunk([item])), encoding="utf-8")
+            with mock.patch.object(vol, "load_canonical_hashes", return_value=None):
+                errors, skipped = vol.verify_sunk_continents("t", path)
+        self.assertEqual(errors, [])
+        self.assertTrue(skipped)
+
     def test_run_match_rule_only_scans_opinion_records(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             sample_path = Path(tmp) / "sample.json"
@@ -143,6 +275,29 @@ class OceanLayerTest(unittest.TestCase):
                     errors, skipped = vol.verify_veins("t", path)
         self.assertFalse(skipped)
         self.assertTrue(any("正典に実在しません" in e for e in errors))
+
+    def test_vein_missing_tweet_id_reports_clear_message(self) -> None:
+        """tweet_id が None（未設定）のとき、実在しないIDではなく未設定と分けて報告する。
+
+        constitutional-amendment / henoko-student-accident / koshitsu-tenpakai /
+        school-nickname-ban の地下水脈が代表投稿のtweet_idを埋めないまま置かれていた
+        不具合の再現（2026-09-19）。
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "t-veins.json"
+            item = vein_item(sides=[
+                {"stance_label": "a", "representative_posts": [{"tweet_id": None}, {"tweet_id": None}]},
+                {"stance_label": "b", "representative_posts": [{"tweet_id": "3"}, {"tweet_id": "4"}]},
+            ])
+            path.write_text(json.dumps(make_vein([item, vein_item(id="t-vein-2")])), encoding="utf-8")
+            with mock.patch.object(vol, "find_sample_file", return_value="sample.json"):
+                sample_path = Path(tmp) / "sample.json"
+                sample_path.write_text(json.dumps([{"tweet_id": "3"}, {"tweet_id": "4"}]), encoding="utf-8")
+                with mock.patch.object(vol, "ROOT", Path(tmp)):
+                    errors, skipped = vol.verify_veins("t", path)
+        self.assertFalse(skipped)
+        self.assertTrue(any("tweet_id が未設定です" in e for e in errors), errors)
+        self.assertFalse(any("代表投稿 None" in e for e in errors), errors)
 
     def test_vein_existence_check_skipped_without_canonical(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

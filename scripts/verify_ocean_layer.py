@@ -11,6 +11,8 @@ import json
 import re
 from pathlib import Path
 
+from verification_data import record_id_hash
+
 ROOT = Path(__file__).resolve().parents[1]
 VERIFICATION_DIR = ROOT / "data" / "verification"
 MAX_SUNK_CONTINENTS = 4
@@ -18,6 +20,7 @@ MIN_VEIN_COUNT = 2
 MAX_VEIN_COUNT = 4
 MIN_REPRESENTATIVE_POSTS_PER_SIDE = 2
 NON_EDITORIAL_CHECKED_BY = {"ai_assisted"}
+SUPPORTED_MATCH_RULE_TYPES = {"regex", "editorial_confirmation"}
 
 
 def find_theme_files() -> dict[str, tuple[Path, Path]]:
@@ -44,6 +47,7 @@ def verify_sunk_continents(theme: str, path: Path) -> tuple[list[str], list[str]
         errors.append(f"{theme}: 沈んだ大陸が{len(items)}件で、1テーマ{MAX_SUNK_CONTINENTS}件以内（3.3.2）を超えています")
 
     required_fields = ["primary_sources", "sns_count", "sns_base", "checked_on", "checked_by"]
+    canonical_hashes = load_canonical_hashes(theme)
     for item in items:
         item_id = item.get("id", "?")
         missing = [f for f in required_fields if not item.get(f) and item.get(f) != 0]
@@ -59,20 +63,104 @@ def verify_sunk_continents(theme: str, path: Path) -> tuple[list[str], list[str]
         if not rule:
             errors.append(f"{theme}/{item_id}: match_rule がありません（3.3.2「機械で再現できる条件」）")
             continue
-        pattern = rule.get("pattern")
-        recorded_hits = set(rule.get("machine_hits", []))
-        if pattern is None:
-            errors.append(f"{theme}/{item_id}: match_rule.pattern がありません")
-            continue
-        actual_hits = run_match_rule(theme, rule)
-        if actual_hits is None:
-            skipped_match_rule.append(item_id)
-        elif actual_hits != recorded_hits:
-            errors.append(
-                f"{theme}/{item_id}: match_rule を再実行した結果が machine_hits と一致しません "
-                f"(記録={sorted(recorded_hits)} / 実行={sorted(actual_hits)})"
+
+        rule_type = rule.get("type", "regex")
+        if rule_type == "editorial_confirmation":
+            rule_errors, skipped = verify_editorial_confirmation_rule(theme, item_id, rule, canonical_hashes)
+        elif rule_type == "regex":
+            rule_errors, skipped = verify_regex_rule(theme, item_id, rule)
+        else:
+            rule_errors, skipped = (
+                [
+                    f"{theme}/{item_id}: match_rule.type が未対応です（対応形式: "
+                    f"{sorted(SUPPORTED_MATCH_RULE_TYPES)}）: {rule_type!r}"
+                ],
+                False,
             )
+        errors.extend(rule_errors)
+        if skipped:
+            skipped_match_rule.append(item_id)
     return errors, skipped_match_rule
+
+
+def verify_regex_rule(theme: str, item_id: str, rule: dict) -> tuple[list[str], bool]:
+    """type: regex の match_rule を検査する。
+
+    machine_hits は生の tweet_id の集合として記録する設計（bukatsu-chiiki で採用済み・
+    `run_match_rule()` が再現するのも同じ形式）。sha256 ハッシュで記録したい場合は
+    type: editorial_confirmation の `selected` を使う（koshitsu-tenpakai を参照）。
+    """
+    errors: list[str] = []
+    pattern = rule.get("pattern")
+    if pattern is None:
+        errors.append(f"{theme}/{item_id}: match_rule.pattern がありません")
+        return errors, False
+
+    recorded_hits = rule.get("machine_hits", [])
+    hashed_like = [h for h in recorded_hits if isinstance(h, str) and h.startswith("sha256:")]
+    if hashed_like:
+        errors.append(
+            f"{theme}/{item_id}: match_rule.machine_hits に tweet_id ではなく sha256 ハッシュが"
+            f"入っています（type: regex は生の tweet_id を使う設計。sha256 で記録するなら "
+            f"type: editorial_confirmation の selected を使う）: {hashed_like}"
+        )
+        return errors, False
+
+    actual_hits = run_match_rule(theme, rule)
+    if actual_hits is None:
+        return errors, True
+    if actual_hits != set(recorded_hits):
+        errors.append(
+            f"{theme}/{item_id}: match_rule を再実行した結果が machine_hits と一致しません "
+            f"(記録={sorted(set(recorded_hits))} / 実行={sorted(actual_hits)})"
+        )
+    return errors, False
+
+
+def verify_editorial_confirmation_rule(
+    theme: str, item_id: str, rule: dict, canonical_hashes: set[str] | None
+) -> tuple[list[str], bool]:
+    """type: editorial_confirmation の match_rule を検査する。
+
+    正規表現では過検出になり機械的に再現できない場合に、候補（`review/*.private.json` 等）を
+    人が読んで選んだ結果を `selected`（record_id_hash() 形式の sha256）として残す形式
+    （koshitsu-tenpakai を参照）。選定の根拠は `evidence` に残す。選び方そのものは
+    人の判断のため再実行できないが、selected の各ハッシュが現行正典に実在することは検査する。
+    """
+    errors: list[str] = []
+    selected = rule.get("selected")
+    if not isinstance(selected, list):
+        errors.append(f"{theme}/{item_id}: match_rule.selected がありません（type: editorial_confirmation）")
+        return errors, False
+    if not rule.get("evidence"):
+        errors.append(f"{theme}/{item_id}: match_rule.evidence がありません（type: editorial_confirmation）")
+
+    malformed = [h for h in selected if not (isinstance(h, str) and h.startswith("sha256:") and len(h) == 71)]
+    if malformed:
+        errors.append(f"{theme}/{item_id}: match_rule.selected に sha256:形式でない値があります: {malformed}")
+        return errors, False
+
+    if canonical_hashes is None:
+        return errors, True
+    missing = [h for h in selected if h not in canonical_hashes]
+    if missing:
+        errors.append(f"{theme}/{item_id}: match_rule.selected が正典に実在しません: {missing}")
+    return errors, False
+
+
+def load_canonical_hashes(theme: str) -> set[str] | None:
+    """正典（social-samples/、Git管理外）の各投稿を record_id_hash() 形式へ変換した集合を返す。
+
+    正典が無い環境では None を返す（run_match_rule() と同じ「飛ばした」扱い）。
+    """
+    sample_relpath = find_sample_file(theme)
+    if sample_relpath is None:
+        return None
+    sample_path = ROOT / sample_relpath
+    if not sample_path.exists():
+        return None
+    records = json.loads(sample_path.read_text(encoding="utf-8"))
+    return {record_id_hash(record) for record in records}
 
 
 def run_match_rule(theme: str, rule: dict) -> set[str] | None:
@@ -149,7 +237,11 @@ def verify_veins(theme: str, path: Path) -> tuple[list[str], bool]:
                 )
             if canonical_ids is not None:
                 for post in posts:
-                    tweet_id = str(post.get("tweet_id"))
+                    tweet_id = post.get("tweet_id")
+                    if tweet_id is None:
+                        errors.append(f"{theme}/{item_id}: 代表投稿の tweet_id が未設定です（11章）")
+                        continue
+                    tweet_id = str(tweet_id)
                     if tweet_id not in canonical_ids:
                         errors.append(f"{theme}/{item_id}: 代表投稿 {tweet_id} が正典に実在しません（11章）")
     return errors, skipped_existence_check
