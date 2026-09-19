@@ -1098,8 +1098,8 @@ def build(
         f'{vote_open_tag}<div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2>'
         "<span>SNSの声を見る前に</span></div>"
         "<p>2026年7月、物価高対策として食料品に対象を絞った消費税減税の議論が大詰めを迎えました。"
-        "「限定的で中途半端」という不満、「財源と社会保障はどうするのか」という懸念、"
-        "「そもそも値下げに反映されるのか」という疑問が同時に噴き出しています。</p>"
+        "「対象が限定的で中途半端だ」という不満に加え、財源や社会保障への影響を心配する声、"
+        "値下げが実際の価格に反映されるのかを疑う声も上がっています。</p>"
         + trust_block(total, relevant, opinions, published_at, modified_at)
     )
     start = html.index(vote_open_tag)

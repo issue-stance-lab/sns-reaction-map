@@ -825,9 +825,16 @@ def static_fallback(d: dict) -> str:
             ]
         else:
             if d.get("show_unreviewed_note", True):
+                # consumption-tax-cut既定文言はAI帰属の誤りを含む。他テーマの
+                # 検査済みページはまだ直していないため、このテーマだけ個別に直す。
+                unreviewed_suffix = (
+                    'この論点の中身（内訳）は、編集部が確認してから表示します。'
+                    if d["theme_id"] == "consumption-tax-cut" else
+                    'AIが自動でつけた区分をここに並べることはしません。'
+                    '人が読んだ結果だけをまとめにします。'
+                )
                 body.append(f'      <div class="note">{e(sub["note"])}。<br>'
-                            'AIが自動でつけた区分をここに並べることはしません。'
-                            '人が読んだ結果だけをまとめにします。</div>')
+                            f'{unreviewed_suffix}</div>')
 
         if it.get("claims"):
             srcs = []
@@ -1028,6 +1035,17 @@ def render_page(data: dict, template: str, payload: str) -> str:
         ):
             template = template.replace(old, new)
         template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
+    if data["theme_id"] == "consumption-tax-cut":
+        # 既定文言は本文再読の作業をAIに誤って帰属させている
+        # （data/consumption-tax-cut_4issues-reread.json の method は
+        # 「編集部が本文を1件ずつ読み」と明記）。既定文言はまだ他テーマの
+        # 検査済みページに残っているため、ここではこのテーマだけ個別に直す
+        # （henoko-student-accidentと同じやり方。課題73と同種の「共有雛形の
+        # 言い回し」の残りは別テーマで個別に対応する）。
+        template = template.replace(
+            "AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。",
+            "この論点の中身（内訳）は、編集部が確認してから表示します。")
+        template = template.replace("← 全体へ戻る（Esc）", "← 論点の一覧へ戻る（Esc）")
     """テンプレートの差し込み口を data から埋める。
 
     数字・色・テーマ固有の言葉をここでしか作らないことで、
