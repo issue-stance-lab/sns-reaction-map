@@ -60,11 +60,21 @@ class OceanLayerTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(vol.verify_no_text_leak("bukatsu-chiiki", veins_path), [])
 
+    @unittest.skipUnless(
+        (ROOT / "social-samples/koshitsu-tenpakai_release_20260913.json").is_file(),
+        "match_rule.selected の正典照合には非公開正典（social-samples/）が要る",
+    )
     def test_existing_koshitsu_tenpakai_sunk_continents_passes(self) -> None:
         """editorial_confirmation 型（機械の正規表現ではなく人が候補を選ぶ形式）が正しく通ることを確認する。
 
         以前は type: editorial_confirmation を認識できず、全件が
         「match_rule.pattern がありません」という無関係なNGになっていた（2026-09-19修正）。
+
+        skipped（=正典照合を飛ばした件数）が0件であることの確認は、非公開正典
+        （social-samples/）が無いと original に成立しない（load_canonical_hashes()が
+        Noneを返しverify_editorial_confirmation_ruleが必ずskipped=Trueを返す）。
+        CI（非公開データ無し）ではこの前提が成立しないため、他の非公開データ依存テストと
+        同じくskipUnlessで飛ばす（2026-09-19、GitHub Actions「公開ファイルの検査」で発覚）。
         """
         pairs = vol.find_theme_files()
         self.assertIn("koshitsu-tenpakai", pairs)
