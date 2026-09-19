@@ -154,8 +154,16 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
 .dive{color:var(--accent)}
 
 /* 資料にあるのに、SNSにないこと */
-.ocean{border-top:1px solid var(--line);margin-top:26px}
+/* すぐ下の「編集部の横断整理」(.editorial) と見出し・カードの見た目がほぼ同じで、
+   出たのかどうか区別しづらいとの指摘（オーナー2026-09-19「差があまりないから
+   出たのかどうかがわかりずらい」）。アニメーションが終わった後も見た目が残るよう、
+   このセクション全体を色付きの1枚カードにする（背景・枠線・影の色はLIGHT_SKIN側の
+   変数。var()の既定値が無いテーマプレビュー単体表示では透明になるだけで壊れない）。 */
+.ocean{margin-top:26px;background:var(--ocean-bg);border:1px solid var(--ocean-border);
+  border-radius:14px;padding:18px 16px 6px;box-shadow:0 1px 3px rgba(47,111,214,.12)}
 .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}
+.ocean-badge{display:inline-block;background:#2f6fd6;color:#fff;font-size:11.5px;
+  font-weight:700;padding:4px 11px;border-radius:999px;margin:0 0 10px}
 /* 「資料にしかない話を見る」を押した後にふわっと現れる動き＋帯の点滅
    （オーナー指摘2026-09-19「どこに出たか分からない」）は、LIGHT_SKIN側
    （build_planet_page_preview.py、scope_css()を経由しない領域）で定義する。

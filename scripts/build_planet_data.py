@@ -919,6 +919,10 @@ def static_ocean(data: dict) -> str:
                     '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
         return "\n".join(head + ['  </section>'])
 
+    # すぐ下の編集部の横断整理(static_editorial)と見出し・カードが同じ見た目で、
+    # 「押して開いた内容」だと分かりづらいとの指摘（オーナー2026-09-19）。
+    # バッジで「ここが、押して開いた内容」であることを明示する。
+    head.append('    <p class="ocean-badge">🔍 資料にしかない話</p>')
     head.append(
         '    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
         f'（確認日 {e(ocean.get("ocean_checked_on"))}／'
