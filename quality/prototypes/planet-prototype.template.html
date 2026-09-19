@@ -42,6 +42,16 @@ h1{font-size:22px;margin:0 0 4px}
 .modes button[data-m="all"]::after{content:"";position:absolute;right:-9px;top:20%;bottom:20%;
   width:1.5px;background:var(--line)}
 .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+/* land()が#panelの中身をまるごと作り直すと（高さが数百px→1000px超に変わる）、
+   Chromeの「スクロールアンカリング」（overflow-anchor、既定でauto）が、変化の
+   起きた場所に合わせて勝手にスクロール位置を調整することがある。JS側の
+   scrollTo/scrollIntoViewを一切使わない、ブラウザの自動補正であるため、
+   bringIntoView()を差し込んでも防げない。着地点はどのアンカーを選ぶかで
+   ページごとに変わり、「一次資料クイズのあたりまで飛ぶ」という体感になっていた
+   （オーナー報告2026-09-19、実機のスクロール量計測とoverflow-anchor:noneでの
+   再現・解消で確認。デスクトップ幅でも起きる——後述のbringIntoView呼び出し幅
+   制限とは無関係）。山なみ区画をアンカー候補から外し、自動補正そのものを止める。 */
+:root{overflow-anchor:none}
 /* パネル（論点タブを含む）を山なみチャートより先に表示する。立場フィルターのタブと
    論点タブの間に山ひとつぶんの高さが挟まって遠いとの指摘（オーナー2026-09-19）。
    ここはCSSのorderだけで見た目の順序を変えている（全体を見ている間の並び）。
@@ -534,7 +544,13 @@ function land(i){
   // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
   // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
   // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
-  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
+  // 幅で絞らない: .stageは常に1カラム（grid-template-columns:1fr）で、
+  // 山なみを見た後の詳細パネルは画面幅に関係なく大きく高さが変わる。以前は
+  // 820px未満だけに絞っていたが、広い画面でここを呼ばないままにすると、
+  // 上のoverflow-anchor:noneでスクロール位置が「動かされない」だけになり、
+  // 見出しが画面の外（上）に切れたまま止まることがあった（オーナー報告
+  // 2026-09-19、Chrome/Mac・デスクトップ幅で発生を確認）。
+  bringIntoView(h || document.getElementById("panel"));
 }
 function orbit(){
   const prev=st.landed;
@@ -767,9 +783,18 @@ function buildList(){
 /* 要素が画面の中ほどへ来るまでスクロールする。
    scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
    画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+// land()・morphTo()・クイズ操作など複数の場所から呼ばれる。前の呼び出しの
+// アニメーションが終わる前（420ms+180ms以内）に次を呼ぶと、2つのrAFループが
+// 同時にscrollToを取り合い、どちらでもない位置（体感では「一次資料クイズあたり」）
+// へ飛ぶことがあった（オーナー報告2026-09-19、「山なみが画面の上の方でクリックすると
+// スクロールしすぎる」）。山を連続でタップ/クリックしたときに起きやすい。
+// 呼び出しごとに世代番号を振り、後発の呼び出しが来たら前の世代は書き込みをやめる。
+let bringIntoViewGen = 0;
 function bringIntoView(el){
+  const gen = ++bringIntoViewGen;
   // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
   setTimeout(function(){
+    if (gen !== bringIntoViewGen) return;
     const r = el.getBoundingClientRect();
     if (!r.height) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -779,12 +804,14 @@ function bringIntoView(el){
     if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
     const t0 = performance.now(), dur = 420;
     (function step(now){
+      if (gen !== bringIntoViewGen) return;    // 新しい呼び出しに道を譲る
       const t = Math.min(1, (now - t0)/dur);
       window.scrollTo(0, from + (to - from)*ease(t));
       if (t < 1) requestAnimationFrame(step);
     })(t0);                                  // 1枚目は rAF を待たずに描く
     // rAF が止まる環境でも必ず届かせる
     setTimeout(function(){
+      if (gen !== bringIntoViewGen) return;
       if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
     }, dur + 180);
   }, 0);
