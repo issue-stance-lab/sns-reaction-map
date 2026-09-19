@@ -281,9 +281,9 @@
       {
         "path": "data/verification/koshitsu-tenpakai-claims.json",
         "selectors": [
-          "pv-count"
+          "ca-n"
         ],
-        "reason": "「N件の投稿」。主張ごとに編集部が確定した該当投稿（scripts/build_koshitsu_process_sections.py が生成）"
+        "reason": "「該当した投稿N件」。主張ごとに編集部が確定した該当投稿（scripts/build_koshitsu_process_sections.py が生成。旧pv-countから2026-09-20にクラス名変更）"
       },
       {
         "path": "data/verification/koshitsu-tenpakai-issues-reread.json",
@@ -317,6 +317,10 @@
       {
         "value": 0,
         "reason": "アリーナのセクター件数は SM_RAW から実行時に数える。ISSUES の n は置き字（例: scripts/build_elderly_arena.py の build_issues）"
+      },
+      {
+        "value": 21,
+        "reason": "「合わせて21件」。data/verification/koshitsu-tenpakai-claims.json の該当投稿6主張ぶんの単純合計（scripts/build_koshitsu_process_sections.py が算出、重複なし）"
       }
     ],
     "exclude_selectors": [
