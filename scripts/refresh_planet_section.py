@@ -26,7 +26,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import build_planet_data as bpd  # noqa: E402
 from build_planet_page_preview import build_section, render_planet, split_prototype  # noqa: E402
 from issue_card_counts import card_counts, load_records, other_count  # noqa: E402
-from sync_issue_counts import apply_counts, apply_lead, apply_note  # noqa: E402
+from sync_issue_counts import apply_lead, apply_note  # noqa: E402
 
 START = "<!-- PLANET_SECTION_START -->"
 END = "<!-- PLANET_SECTION_END -->"
@@ -51,8 +51,8 @@ def _sync_lead_and_note(html: str, topic: str, themes: dict) -> str:
     theme_data = themes[topic]
     sample_file = theme_data.get("verification_file") or theme_data.get("sample_file")
     cards = card_counts(topic, config, sample_file)
-    if topic == "bike-blue-ticket":
-        html = apply_counts(html, topic, cards)
+    # bike-blue-ticketは以前ここで論点カード（explainer-card）の件数も揃えていたが、
+    # 起承転結の再構成（課題69）でカードを山なみの論点パネルへ一本化したため不要になった。
     if "lead" in sync:
         html = apply_lead(html, topic, cards, other_count(topic, config, sample_file))
     if "note" in sync:
@@ -209,44 +209,56 @@ CTC_LANDING_IMAGE_BY_ISSUE_ID = {
 }
 
 
-def _ctc_landing_image_html(slug: str, label: str) -> str:
-    path = f"images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-{slug}.webp"
+# bike-blue-ticketの論点ごとの図解画像（consumption-tax-cutと同じ形）。「その他」は図解を持たない。
+BIKE_LANDING_IMAGE_BY_ISSUE_ID = {
+    "bike-blue-ticket-enforcement-support": ("torishimari", "取締り強化賛成"),
+    "bike-blue-ticket-infrastructure-first": ("infra", "インフラ整備優先"),
+    "bike-blue-ticket-road-safety": ("sharido", "車道走行への不安"),
+    "bike-blue-ticket-license-requirement": ("menkyo", "免許制要求"),
+    "bike-blue-ticket-rule-ambiguity": ("ambiguity", "ルール曖昧・不信"),
+}
+
+
+def _landing_image_html(topic: str, slug: str, label: str) -> str:
+    path = f"images/topics/{topic}/{topic}-infographic-wide-{slug}.webp"
     return (
         f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{label}">'
         f'<img src="{path}" alt="論点図解：{label}" loading="lazy"></div>'
     )
 
 
-def _inject_ctc_landing_images(block: str, data: dict) -> str:
+def _inject_landing_images(block: str, data: dict, topic: str, images: dict, js_prefix: str) -> str:
     """論点ごとの図解画像を、山なみ再生成後のブロックへ差し戻す。
 
-    render_planet()（build_planet_page_preview.py、10テーマ共通）はconsumption-tax-cut
-    専用の画像を知らないため、refresh()がPLANET_SECTION全体を作り直すたびにこの画像が
-    消える。無JS用フォールバック（#fallback配下のlanding-panel）と、実際の操作画面を
-    作るJS（drawPanel相当）の両方に差し戻す。もとは「このテーマを読み解く、6つの論点」
+    render_planet()（build_planet_page_preview.py、10テーマ共通）はテーマ専用の画像を
+    知らないため、refresh()がPLANET_SECTION全体を作り直すたびにこの画像が消える。
+    無JS用フォールバック（#fallback配下のlanding-panel）と、実際の操作画面を作るJS
+    （drawPanel相当）の両方に差し戻す。もとは「このテーマを読み解く、N つの論点」
     という別建てのカードだったが、山なみの各論点パネルと内容が重複するため、起承転結の
     再構成（課題69、fukushutoのapply_landing_images()と同型）でこちらへ一本化した。
+    js_prefix はJS変数名の接頭辞（既存ページの出力を変えないためテーマごとに固定）。
     """
     def add_to_fallback(m: re.Match) -> str:
         issue_id, heading = m.group(1), m.group(0)
-        found = CTC_LANDING_IMAGE_BY_ISSUE_ID.get(issue_id)
+        found = images.get(issue_id)
         if not found:
             return heading
         slug, label = found
-        return heading + _ctc_landing_image_html(slug, label)
+        return heading + _landing_image_html(topic, slug, label)
 
     block, n = re.subn(
-        r'<section class="landing-panel" id="fb-(consumption-tax-cut-[a-z-]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        rf'<section class="landing-panel" id="fb-({re.escape(topic)}-[a-z-]+)"[^>]*>\s*<h2>[^<]*</h2>',
         add_to_fallback,
         block,
     )
     expected_panels = len(data["issues"])
     if n != expected_panels:
         raise SystemExit(
-            f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件）"
+            f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件、{topic}）"
         )
 
-    slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in CTC_LANDING_IMAGE_BY_ISSUE_ID.items())
+    slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in images.items())
+    v_slug, v_path, v_html = f"{js_prefix}ImgSlug", f"{js_prefix}ImgPath", f"{js_prefix}ImgHtml"
     old_draw_panel_head = (
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
@@ -263,22 +275,35 @@ def _inject_ctc_landing_images(block: str, data: dict) -> str:
     new_draw_panel_head = (
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
-        "  const ctcImgSlug = {" + slug_map_js + "}[it.id];\n"
-        "  const ctcImgPath = ctcImgSlug ? ('images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-'+ctcImgSlug+'.webp') : '';\n"
-        "  const ctcImgHtml = ctcImgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+ctcImgPath+'\" data-alt=\"'+it.label+'\">'\n"
-        "    +'<img src=\"'+ctcImgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
+        f"  const {v_slug} = {{" + slug_map_js + "}[it.id];\n"
+        f"  const {v_path} = {v_slug} ? ('images/topics/{topic}/{topic}-infographic-wide-'+{v_slug}+'.webp') : '';\n"
+        f"  const {v_html} = {v_slug} ? ('<div class=\"explainer-card landing-image\" data-img=\"'+{v_path}+'\" data-alt=\"'+it.label+'\">'\n"
+        f"    +'<img src=\"'+{v_path}+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
         "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
-        "    + issueTabs(m) + ctcImgHtml"
+        f"    + issueTabs(m) + {v_html}"
     )
     if old_draw_panel_head not in block:
-        raise SystemExit("論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません（consumption-tax-cut）")
+        raise SystemExit(f"論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません（{topic}）")
     block = block.replace(old_draw_panel_head, new_draw_panel_head, 1)
     return block
+
+
+def _inject_ctc_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "consumption-tax-cut", CTC_LANDING_IMAGE_BY_ISSUE_ID, "ctc"
+    )
+
+
+def _inject_bike_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "bike-blue-ticket", BIKE_LANDING_IMAGE_BY_ISSUE_ID, "bike"
+    )
 
 
 TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_go_cards,
     "consumption-tax-cut": _inject_ctc_landing_images,
+    "bike-blue-ticket": _inject_bike_landing_images,
 }
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,

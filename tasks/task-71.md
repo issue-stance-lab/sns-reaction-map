@@ -1,70 +1,69 @@
-# 課題71: 論点タブUI（山なみへ戻らず他の論点へ切り替え）
+# 課題71: 海面より下（沈んだ大陸・地下水脈）のデータ品質を仕上げる
 
-## 背景
+**登録日**: 2026-09-19
+**状態**: 未着手
+**優先度**: 中（`verify_ocean_layer.py` がCIに繋がっていないため公開は止まっていないが、
+公開中の「語られていない争点」の裏付けデータが古いままの箇所がある）
 
-オーナーから、henoko-student-accidentページのスクリーンショット（手書き注釈付き）で要望。
-論点カード（例:「🏛️ 政治利用・基地問題」）の内訳を見るたびに山なみチャートへ戻って
-クリックし直すのが面倒。見出しの下に、他の論点へ直接切り替えられる手描き風タブを
-追加したい、という依頼（2026-09-19）。
+## 何が起きたか
 
-## 実装
+`scripts/verify_ocean_layer.py`（沈んだ大陸・地下水脈の検査）を単体実行すると、複数テーマでNGが出る
+という報告を受けて調査した。原因を切り分けた結果、2種類の別々の問題だと分かった。
 
-- 共通テンプレート `quality/prototypes/planet-prototype.template.html` と
-  そのフォーク `quality/prototypes/constitutional-planet.template.html` の
-  `drawPanel()` に `issueTabs(m)` を追加。`<h2>` 直後・`<p class="sub">` 直前に
-  常に挿入する（テーマ間で位置を統一する）。押すと `land(i)` で即座に切り替わる
-  （既存の `.issue-list`/`buildList()` と同じ経路。状態管理・aria-pressedの
-  扱いを流用しただけで、新しい状態は増やしていない）。
-- 見た目は `.modes`（立場フィルター）と同じ選択色言語（`var(--accent)`）を使い、
-  角丸を非対称にして手描き感を出した（CSSのみ。新規フォント・画像・JSライブラリは
-  追加していない）。
+1. **検査スクリプト側の不具合（このセッションで修正済み）**: `koshitsu-tenpakai` は
+   正規表現ではなく人が候補を読んで選ぶ新形式（`match_rule.type: "editorial_confirmation"`）を
+   使っていたが、検査スクリプトがこの形式を知らず、無関係な「match_rule.pattern がありません」
+   というNGを出していた。`verify_sunk_continents()` に type ごとの分岐を足し、
+   `editorial_confirmation` を認識するようにした（`selected` の各ハッシュが正典に実在するかも検査する）。
+   あわせて、`machine_hits` に生の tweet_id ではなく sha256 ハッシュが紛れ込んだときに
+   はっきりしたエラーを出す防御も足した（次の2番の不具合を直接検出する）。
+   再発防止のテストは `tests/test_ocean_layer.py` に追加済み（実データでのkoshitsu-tenpakai検査・
+   全テーマのtype検査を含む）。
 
-## 見つけた副作用と対処
+2. **データ側の未解決の問題（このセッションでは直していない、要判断）**:
 
-影響範囲の洗い出し中、fukushuto・constitutional-amendment・consumption-tax-cutの
-3テーマが持つ「論点ごとの図解画像」の後付け補完処理（`apply_landing_images()`等、
-[[reference_planet_regen_wipes_hand_edits]]と同じパターン）が、`drawPanel()`内の
-同じ挿入位置（`<h2>`直後）を文字列一致で探していた。fukushutoは実際に
-`verify_builder_rebuildability.py`でクラッシュを検出（他2テーマはたまたま
-アンカー文字列が短く、クラッシュはしないが「見出し→画像→タブ」という
-意図しない順序になっていた）。3スクリプトとも「見出し→タブ→画像→統計」の順で
-固定されるようアンカー文字列を修正済み:
+   **(a) constitutional-amendment の「沈んだ大陸」2件が、現行の正典と照合できない。**
+   `constitutional-amendment-challenge`（国民投票への異議申立手続き）と
+   `constitutional-amendment-emergency-review`（参議院緊急集会の事後審査）の
+   `match_rule.machine_hits` / `excluded` が sha256 ハッシュ（`record_id_hash()` 形式）で
+   記録されているが、これは `type: regex` の設計（bukatsu-chiiki が実例。生の tweet_id で記録する）
+   から外れている。さらに、記録されているハッシュのうち大半（challengeは6件中6件、
+   emergency-reviewは6件中4件）が、現行の正典1,779件のどのレコードをハッシュ化しても
+   一致しない＝現行データから再現できない状態になっている（2026-09-18に追加された最新2件は
+   正しく再現できる。古い分だけがずれている）。中身が改ざんされた形跡ではなく、
+   2026-09-12前後の判定以降にサンプルの重複整理か何かで対象の投稿が入れ替わった可能性が高いが、
+   確証はない。`sns_count: 0` という結論自体が誤りだとは確認していない
+   （現行データで同じ正規表現を再実行しても新たな一致は無い）が、**裏付けの再現性が崩れている**。
 
-- `scripts/build_fukushuto_arena.py`（`apply_landing_images`）
-- `scripts/build_constitutional_arena.py`（`apply_landing_images`）
-- `scripts/refresh_planet_section.py`（`_inject_ctc_landing_images`、consumption-tax-cut担当）
+   **(b) 4テーマの「地下水脈」が実質空のプレースホルダのまま。**
+   `constitutional-amendment` / `henoko-student-accident` / `koshitsu-tenpakai` /
+   `school-nickname-ban` の `data/verification/{テーマ}-veins.json` は、いずれも水脈1本のみ
+   （設計書3.3.3は1テーマ2〜4本必須）で、代表投稿の `tweet_id` が全側・全件 `None`（未設定）。
+   `shared_concern`（共有している具体的な懸念）の文章自体は書かれているが、それを裏付ける
+   実在の投稿IDが1件も埋まっていない。bukatsu-chiiki（2本、tweet_idも実在）だけが完成している。
 
-## 検証済み
+## 対応方針の案（次のセッションへの申し送り）
 
-- henoko-student-accident: ブラウザで実際にタブ切り替えを確認（デスクトップ・375px
-  モバイル幅とも正常、タブを押すと即座に見出し・統計・ヒートマップが切り替わる）。
-  `verify_theme_page.py` OK（37件）・`verify_number_provenance.py` OK
-- fukushuto: 図解画像付きの論点（都構想・維新）で「見出し→タブ→画像→統計」の順を
-  実機確認。`verify_theme_page.py` OK（38件）
-- 全11テーマ: `verify_builder_rebuildability.py` NG 0件（fukushuto修正前はNG 1件）
-- 全テーマ: `verify_page_originality.py` OK・`validate_theme_seo.py` OK
-- 関連ユニットテスト95件 OK（`test_henoko_planet` / `test_henoko_verified_refresh` /
-  `test_henoko_public_counts` / `test_constitutional_planet_refresh` /
-  `test_constitutional_public_counts` / `test_fukushuto_public_counts` /
-  `test_planet_data` / `test_planet_page_preview`）
+(a)(b) とも、一次資料や正規表現の話ではなく「実際の投稿を読んで人が判断する」編集作業そのものなので、
+このセッションでは代筆・推測での穴埋めをしていない。
 
-## 状態
+- **(a)**: 現行の正典に対して同じ条件語（`訴訟|裁判|異議`／`緊急集会`）で再度ヒットを取り、
+  該当する投稿本文を実際に読んで除外理由を書き直す（`checked_by: ai_assisted` のままでよい）。
+  `machine_hits` は生の tweet_id 形式に揃える。再現できないという理由だけで `sns_count` を
+  変更しない（本文を読んだ上で判断する）
+- **(b)**: 各テーマの意見データから、対立する2立場が同じ具体的懸念を語っている箇所を
+  編集部（AI可）が読み、設計書3.3.3の基準で水脈をあと1〜3本ずつ作る。または、
+  「1本で足りる」と基準を見直すならオーナー確認を取り、`MIN_VEIN_COUNT` を変える
 
-進行中。henoko-student-accidentとfukushutoでdocs/を実際に再生成し、実機確認・標準検査を
-通した。残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
-school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
-constitutional-amendment・consumption-tax-cutは共通コード側は修正済みだが
-docs/の再生成はまだ）は、オーナーが手描き風タブの見た目を確認してから展開する
-（新しいビジュアル要素のため、10テーマ分を先に展開してから見た目を直すより、
-1テーマで確認を取ってからのほうが手戻りが少ないと判断）。
+いずれも公開中のページ（海面より下のセクション）に関わる編集判断のため、
+着手前に CLAUDE.md「オーナーへの説明のしかた」に沿って方針をオーナーに確認すること。
 
 ## 次にすること
 
-オーナーがスクリーンショットを見て問題なければ、残り8テーマへ同じ手順
-（各テーマの `build_<theme>_arena.py`（または対応するビルダー）を実行して
-docs/を再生成→標準検査）で展開し、`release` スキルで本番反映する。
+優先度は中（CIを落としていない）。課題69・課題70などの優先作業が一段落してから着手する。
+着手するときは、まず (a) constitutional-amendment の2件だけを直し、
+`python3 scripts/verify_ocean_layer.py` で該当エラーが消えることを確認してから (b) に進む。
 
-## 詳細
+## 進捗
 
-ブランチ: `task/issue-tabs-ui`（worktree: `isa-wt-issue-tabs`、
-`/Volumes/M2-WorkSpace/Projects/副業/isa-wt-issue-tabs`）
+（未着手）
