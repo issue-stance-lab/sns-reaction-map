@@ -115,24 +115,47 @@ henoko-student-accident本番反映後、オーナーが実際の画面を見て
 そのままCSSセレクタに使ったため、JS側の変更は不要だった（ブランチ
 `task/issue-tabs-ui-v3`）。
 
+## デザイン改訂（v4、2026-09-19・オーナーの実地フィードバック4件目）
+
+**「意見をクリックすると下の図にスライドして見ずらい。図も下だと見ずらい。
+クリックした後は、図をマトリックス図の後ろに薄くすかせて表示させたりは
+できますか？」**: 論点を選んだ後、山なみ（chart-box要素）を升目カード
+（`#dotbox`）の背後へ移し、`opacity:.22`・`pointer-events:none`で薄く重ねる
+ようにした。別セクションへスクロールしなくても山の形が升目カードの余白に
+うっすら見える。要素を作り直さず同じchart-boxを動かす方式（`placeChart()`/
+`evacuateChart()`、ブランチ`task/issue-tabs-ui-v4`）。
+
+**実装中に見つけた不具合（本番反映前にローカルで検出・修正済み）**:
+`drawPanel()`は`#panel`のinnerHTMLを丸ごと作り直すため、chart-boxが
+`#dot-slot`の中（`#panel`の子孫）にいる状態で`drawPanel()`を呼ぶと
+chart-boxごと消え、直後の`render()`が`#chartdesc`等を見失って
+`TypeError: Cannot set properties of null`が発生していた。論点タブで
+別の論点へ切り替えたとき（2回目以降の`land()`）に実際にクラッシュを再現し、
+コンソールエラーで発見した。`evacuateChart()`を新設し、`land()`・`orbit()`・
+`morphTo()`（立場フィルター切替で`st.landed`が0件にならず残るケース）の
+`drawPanel()`呼び出し全てで、呼ぶ前に必ずchart-boxを`.stage`側へ退避させる
+よう修正。`#dotbox`の背景（LIGHT_SKIN）も完全不透明だと山なみを隠すため
+`rgba(242,246,253,.82)`に変更した。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
-デザイン改訂3件（タブ形状・タブ間距離・「すべての意見」の区別）を同日中に
-順次本番反映済み。本番 https://sns-reaction-map.jp/
+デザイン改訂4件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
+背景表示化）を同日中に順次本番反映済み。本番 https://sns-reaction-map.jp/
 henoko-student-accident-reaction-map.html で最終形を実機確認済み（デスクトップ・
-375px、山クリック時のスクロール・立場タブ切り替えも含む）。マージ時、別セッションの
-bike-blue-ticket起承転結再編・ocean-layer修正（課題69・課題71）と競合したため、
-`scripts/refresh_planet_section.py`の一般化された`_inject_landing_images()`へ
-同じ修正を再適用して統合した（詳細は上記「マージ時の追記」）。fukushutoは
-初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2・v3デザインへの追従と
-本番反映はまだ（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
+375px、山クリック時のスクロール・立場タブ切り替え・論点タブを跨いだ連続切替も
+含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer修正
+（課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
+一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した
+（詳細は上記「マージ時の追記」）。fukushutoは初版（丸ピル型）のdocs/を
+再生成し実機確認済みだが、v2〜v4デザインへの追従と本番反映はまだ
+（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
 
 残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
 constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
 反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
-のみ済み、v2・v3への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
+のみ済み、v2〜v4への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
 見て確認してから展開する。
 
 ## 次にすること
@@ -145,5 +168,7 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 ## 詳細
 
 実装ブランチ: `task/issue-tabs-ui`（初版）・`task/issue-tabs-ui-v2`（タブ形状・
-タブ間距離）・`task/issue-tabs-ui-v3`（「すべての意見」の区別）。いずれもmainへ
-マージ・反映済み。worktreeは全て片付け済み。継続する場合は新しいworktreeを作る
+タブ間距離）・`task/issue-tabs-ui-v3`（「すべての意見」の区別）・
+`task/issue-tabs-ui-v4`（山なみの背景表示化、drawPanel()クラッシュの修正含む）。
+いずれもmainへマージ・反映済み。worktreeは全て片付け済み。継続する場合は
+新しいworktreeを作る
