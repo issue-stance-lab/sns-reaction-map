@@ -86,30 +86,55 @@
 各テーマへのタブ展開時に自然に解消する。main単体（マージ前）ではこの5件は
 全てPASSすることを確認済みで、原因は今回の統合作業に限定されている。
 
+## デザイン改訂（v2、2026-09-19・オーナーの実地フィードバック2件）
+
+henoko-student-accident本番反映後、オーナーが実際の画面を見て2件指摘し、その場で
+両方直して再反映した（ブランチ`task/issue-tabs-ui-v2`）。
+
+1. **「本当のタブのようなデザインにはならないの？」**: 初版は丸いピル型（`.modes`と
+   同じ形）で、タブというよりフィルターチップに見えていた。上だけ角丸・下は直線の
+   台形シルエットに作り直し、選んでいるタブだけ下の縁をパネルと同じ色にして本文と
+   地続きに見せ、選んでいないタブは`translateY(3px)`で少し下げて背後にあるように
+   見せた（実際のブラウザタブ・ファイルフォルダのタブと同じ視覚言語）。
+2. **「二つのタブの位置が遠いので使いずらい」**: `.modes`（立場フィルター）の直後に
+   山なみチャート本体（数百px）が挟まり、論点タブ（パネル内）までの距離が遠かった。
+   `.stage`内の`.chart-box`と`.panel`にCSS `order`を設定し、表示順だけを
+   panel→chart-boxへ入れ替えた（DOM順・JSは無変更）。結果、立場フィルターと論点
+   タブが案内文1行を挟むだけの近さになった。
+
+ついでに、`.modes`自体も論点タブと同じタブ形状へ揃えた（指摘1はタブ全般の形の話
+だったため）。LIGHT_SKIN側の旧上書き（`.modes button[aria-pressed=true]{background:
+#e4edff}`）は新CSSと衝突するため削除した。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映済み（オーナー指示
-「辺野古だけ先に公開してチェックします」）。本番 https://sns-reaction-map.jp/
-henoko-student-accident-reaction-map.html でタブの表示・切り替え・モバイル幅とも
-実機確認済み。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer
-修正（課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
-一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した（詳細は
-上記「マージ時の追記」）。fukushutoもdocs/を再生成し実機確認済みだが、本番反映は
-このタスクでは見送っている（オーナーの「辺野古だけ先に」指示の範囲外）。
+「辺野古だけ先に公開してチェックします」）→オーナー実地確認→上記2件のデザイン
+改訂も同日中に本番反映済み。本番 https://sns-reaction-map.jp/
+henoko-student-accident-reaction-map.html で最終形を実機確認済み（デスクトップ・
+375px、山クリック時のスクロールも含む）。マージ時、別セッションのbike-blue-ticket
+起承転結再編・ocean-layer修正（課題69・課題71）と競合したため、
+`scripts/refresh_planet_section.py`の一般化された`_inject_landing_images()`へ
+同じ修正を再適用して統合した（詳細は上記「マージ時の追記」）。fukushutoは
+初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2デザインへの追従と本番反映は
+まだ（オーナーの「辺野古だけ先に」指示の範囲外のため見送っている）。
 
 残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
-constitutional-amendment・consumption-tax-cutは共通コード側は修正済みだが
-docs/の再生成・本番反映はまだ。fukushutoはdocs/再生成のみ済み）は、オーナーが
-本番のhenoko-student-accidentページを見て確認してから展開する。
+constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
+反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
+のみ済み、v2への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
+見て確認してから展開する。
 
 ## 次にすること
 
-オーナーが本番の辺野古ページを見て問題なければ、残りのテーマへ同じ手順
-（各テーマの `build_<theme>_arena.py`（または対応するビルダー）を実行して
-docs/を再生成→標準検査→`release`スキルで本番反映）で展開する。
+オーナーが本番の辺野古ページ（最終デザイン）を見て問題なければ、残りのテーマへ
+同じ手順（各テーマの `build_<theme>_arena.py`（または対応するビルダー）を実行して
+docs/を再生成→標準検査→`release`スキルで本番反映）で展開する。fukushutoは
+v1のdocs/再生成が残っているため、再度ビルドし直してから展開する。
 
 ## 詳細
 
-実装ブランチ: `task/issue-tabs-ui`（mainへマージ・反映済み。worktreeは
-片付け済み。継続する場合は新しいworktreeを作る）
+実装ブランチ: `task/issue-tabs-ui`（初版）・`task/issue-tabs-ui-v2`（デザイン改訂）。
+どちらもmainへマージ・反映済み。worktreeはどちらも片付け済み。継続する場合は
+新しいworktreeを作る
