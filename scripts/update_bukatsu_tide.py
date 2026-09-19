@@ -554,25 +554,38 @@ def main() -> int:
     )
     page = replace_once(page, r'<div class="thirty-summary".*?</div>', summary, "30 second summary", flags=re.DOTALL)
 
-    # 山なみ（課題54）へ差し替えたページは、更新データ・SNS反応マップ（アリーナ）・
-    # 論点別内訳の3区間を #planet-block が引き継ぎ、区間ごと外している。
-    # ここを無条件で書こうとすると対象が見つからずエラーで止まる
-    # （定例更新のたびに失敗し、部活動の収集だけが止まる）。
-    # PLANET_SECTION_START の有無で区別し、山なみ側ではこの3区間を書かない。
+    # 山なみ（課題54）へ差し替えたページは、SNS反応マップ（アリーナ）・論点別内訳の
+    # 2区間を #planet-block が引き継ぎ、区間ごと外している。ここを無条件で書こうと
+    # すると対象が見つからずエラーで止まる（定例更新のたびに失敗し、部活動の収集だけが
+    # 止まる）。PLANET_SECTION_START の有無で区別し、山なみ側ではこの2区間を書かない。
+    #
+    # 潮目カード自体は山なみ側にも書く（2026-09-20まではここも丸ごとスキップしており、
+    # 「立場の変化」「論点の変化」タブが公開後は一度も更新されない状態だった。
+    # consumption-tax-cut・koshitsu-tenpakai等と同じく、PLANET_SECTIONの外
+    # （山を押しても書き換わらない区間）に置く）。
     planet_mode = "<!-- PLANET_SECTION_START -->" in page
+    aria_label = "世論の潮目" if planet_mode else "更新データと世論の潮目"
+    dashboard = f'<section class="update-dashboard" aria-label="{aria_label}">{card}</section>'
+    if '<section class="update-dashboard"' in page:
+        page = replace_once(
+            page,
+            r'<section class="update-dashboard".*?<!-- TIDE_CARD_END --></section>',
+            dashboard,
+            "update dashboard",
+            flags=re.DOTALL,
+        )
+    elif planet_mode:
+        # 初回のみ。以後はすぐ上の分岐（既存のupdate-dashboard節を丸ごと置換）を通る。
+        page = replace_once(
+            page,
+            r"<!-- PLANET_SECTION_END -->",
+            f"<!-- PLANET_SECTION_END -->\n\n{dashboard}",
+            "planet tide dashboard (initial insertion)",
+        )
+    else:
+        page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
+        page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
     if not planet_mode:
-        dashboard = f'<section class="update-dashboard" aria-label="更新データと世論の潮目">{card}</section>'
-        if '<section class="update-dashboard"' in page:
-            page = replace_once(
-                page,
-                r'<section class="update-dashboard".*?<!-- TIDE_CARD_END --></section>',
-                dashboard,
-                "update dashboard",
-                flags=re.DOTALL,
-            )
-        else:
-            page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
-            page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
         page = replace_once(
             page,
             r'<div class="panel-title"><h2>(?:論点アリーナ|SNS反応マップ)</h2><span>.*?</span></div>',

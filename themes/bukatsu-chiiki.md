@@ -192,3 +192,29 @@ verify_page_originality.py）・`python3 -m unittest discover -s tests`984件・
 経緯の詳細は[tasks/task-58.md](../tasks/task-58.md)「bukatsu-chikiiでのパイロット実施」節。
 
 作業は`../isa-wt-bukatsu-claim-audit`（ブランチ`task/bukatsu-claim-audit`）で行った。
+
+2026-09-20、オーナー指示で「立場の変化」「論点の変化」（世論の潮目カード）を山なみ
+ページにも表示できるようにした（consumption-tax-cut等と同じ見た目・機能）。
+
+このカード自体はbukatsu-chiiki専用の`scripts/update_bukatsu_tide.py`が定例更新の
+たびに毎回計算していたが、`<!-- PLANET_SECTION_START -->`の有無で山なみ判定を行い、
+SNS反応マップ（アリーナ）・論点別内訳と同じ扱いで丸ごとスキップしていたため、
+2026-09-12の山なみ移行以降、公開ページには一度も差し込まれていなかった
+（計算自体は実行されレポートJSONには出ていたため、定例更新のログでは気づけない
+壊れ方だった）。アリーナ・論点別内訳は山なみでは`#planet-block`に完全に置き換わって
+おり恒久的に対象外だが、潮目カードには対応する山なみ側の入れ物が無かっただけで、
+消す理由は無かった。
+
+`update_bukatsu_tide.py`のPLANET_SECTION判定分岐を、潮目カードのみ
+PLANET_SECTIONの外（`<!-- PLANET_SECTION_END -->`直後、山を押しても書き換わらない
+区間）へ差し込む経路に分離して解消した。初回はマーカー直後へ新設し、以後は
+既存の`<section class="update-dashboard">`区間を丸ごと置換するため、定例更新の
+たびに実行しても増殖しない（2回連続実行でバイト単位の差分なしを確認済み）。
+
+社内の直接実行で2026-09-02→2026-09-15の実データを比較し、標準検査4種・
+unittest 984件・run_public_checks.pyいずれもNG0件、ブラウザでタブ切替・
+再生アニメーション・375pxモバイル幅を確認した。副作用として、同じ関数が
+無条件に更新する「編集・分析情報」内の詳細データ件数（累計収集投稿等）も
+2026-09-15更新以来ページに反映されていなかった旧い値から現在値へ揃った。
+
+作業は`../isa-wt-bukatsu-tide`（ブランチ`task/bukatsu-tide-widget`）で行った。
