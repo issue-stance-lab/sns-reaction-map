@@ -60,7 +60,14 @@ h1{font-size:22px;margin:0 0 4px}
    このクラスを付ける。数値・ヒント文は読む対象ではなくなるため隠す。 */
 .chart-box.as-backdrop{position:absolute;inset:0;order:0;z-index:0;opacity:.42;
   pointer-events:none;padding:0;border:none;border-radius:0;background:transparent;overflow:visible}
-.chart-box.as-backdrop svg{height:100%}
+/* 山の絵は左側の余白が広く、升目カード（#waffle、常に左寄せ・固定230px）と
+   ほぼ同じ位置に一番大きい山（順位1位）が重なっていた（オーナー指摘2026-09-19、
+   スクリーンショット）。右端を基準に0.78倍へ縮めると、1位の山が升目カードの
+   右側へ完全に外れ、右側の余白（元は約50px、山なみが描かれていない部分）が
+   埋まる。#dot-slotの箱の大きさ自体は変えない（transformはレイアウトに
+   影響しないため他要素とは無関係）。幅の狭いスマホでは升目カード自体が
+   #dot-slotの大半を占めるため効果は小さいが、悪化はしない。 */
+.chart-box.as-backdrop svg{height:100%;transform-origin:right center;transform:scaleX(.78)}
 .chart-box.as-backdrop .hint,.chart-box.as-backdrop .floor-note,.chart-box.as-backdrop .dive{display:none}
 .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
 .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
