@@ -1,0 +1,61 @@
+{
+  "theme_id": "ai-copyright",
+  "method": "沈んだ大陸の抽出と同じ正典（social-samples/ai-copyright_hermes_classified.json、意見2593件）から、対立する2つの立場（規制・制限強化支持／推進・活用支持）それぞれの投稿本文を読み、『同じ具体的な懸念を語っているが結論が違う』組を探した。分類器の要約・理由ではなく投稿本文で判断し、賛否の機械的な鏡像（同じ論点への賛成・反対の対句）は除外した。",
+  "curated_at": "2026-09-19",
+  "curated_by": "editorial_review",
+  "explored_but_not_adopted": "『クリエイターへの敬意』（敬意・リスペクト・尊重）を語る投稿は規制側21件・推進側12件と多いが、読み込むと『AI利用は敬意の欠如だ』（規制側）と『法的に問題ない利用まで敬意の欠如と決めつけるな』（推進側）という直接の反論関係で、同じ懸念を共有しているとは言えず賛否の鏡像に近いため採用しなかった。『過学習・追加学習』による享受目的の併存という法的な論点も候補にしたが、規制側の投稿に条文の趣旨を正確に理解した言及が複数あり、対立する2つの立場が『共有』している懸念とは言えないため、沈んだ大陸としても水脈としても採用しなかった。",
+  "sample_file": "social-samples/ai-copyright_hermes_classified.json",
+  "sample_total_opinions": 2593,
+  "items": [
+    {
+      "id": "ai-copyright-vein-1",
+      "issue_ids": ["ai-copyright-legal-framework", "ai-copyright-tech-promotion"],
+      "shared_concern": "生成AIの進化・普及のスピードに対して、日本の政策対応（法整備・規制の議論）が遅れている、追いついていない。",
+      "sides": [
+        {
+          "stance_label": "規制・制限強化支持",
+          "representative_posts": [
+            {"tweet_id": "2075881811075535090", "excerpt": "not_listed"},
+            {"tweet_id": "2084575218924974558", "excerpt": "not_listed"},
+            {"tweet_id": "2094274280850952478", "excerpt": "not_listed"}
+          ]
+        },
+        {
+          "stance_label": "推進・活用支持",
+          "representative_posts": [
+            {"tweet_id": "2069291894950051944", "excerpt": "not_listed"},
+            {"tweet_id": "2088805326950653973", "excerpt": "not_listed"}
+          ]
+        }
+      ],
+      "diverging_reason": "同じ『政策対応が遅い』という不満から、規制・制限強化支持側は『だからこそ韓国のように迅速で厳格な法規制を急ぐべきだ』と結論づけ、推進・活用支持側は『だからこそインドのように迅速な規制緩和・活用推進を急ぐべきだ』と結論づける。急ぐべき方向が正反対に分かれる。",
+      "checked_on": "2026-09-19",
+      "reviewer_type": "editorial_review"
+    },
+    {
+      "id": "ai-copyright-vein-2",
+      "issue_ids": ["ai-copyright-legal-framework", "ai-copyright-user-ethics"],
+      "shared_concern": "自分の実際の主張が、単純化されたレッテル（「反AI」「盗人」等）に置き換えられて誤解され、まともに取り合ってもらえていない。",
+      "sides": [
+        {
+          "stance_label": "規制・制限強化支持",
+          "representative_posts": [
+            {"tweet_id": "2075372095400448495", "excerpt": "not_listed"},
+            {"tweet_id": "2084166659431088248", "excerpt": "not_listed"},
+            {"tweet_id": "2082641414513709222", "excerpt": "not_listed"}
+          ]
+        },
+        {
+          "stance_label": "推進・活用支持",
+          "representative_posts": [
+            {"tweet_id": "2068601800123666904", "excerpt": "not_listed"},
+            {"tweet_id": "2081113924578292042", "excerpt": "not_listed"}
+          ]
+        }
+      ],
+      "diverging_reason": "同じ『レッテルで誤解されている』という不満から、規制・制限強化支持側は『反AIという語をやめ、無断学習の一部データセットの違法性のみに反対しているという実際の主張（規制派・生成規制論）で呼んでほしい』と求め、推進・活用支持側は『AI利用者を一律に盗人・非人道的と決めつけず、適法な利用として尊重してほしい』と求める。誤解の中身と、求める再定義の内容が逆向きになる。",
+      "checked_on": "2026-09-19",
+      "reviewer_type": "editorial_review"
+    }
+  ]
+}
