@@ -44,12 +44,22 @@ h1{font-size:22px;margin:0 0 4px}
 .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 /* パネル（論点タブを含む）を山なみチャートより先に表示する。立場フィルターのタブと
    論点タブの間に山ひとつぶんの高さが挟まって遠いとの指摘（オーナー2026-09-19）。
-   DOM順は変えず表示順だけ入れ替えるので、山クリックやスクロール系のJSに影響しない。 */
+   ここはCSSのorderだけで見た目の順序を変えている（全体を見ている間の並び）。
+   論点を選んだ後は、JS（placeChart()）がchart-box要素自体を#dot-slotの中へ動かすため
+   このorderは無関係になる（下のas-backdrop参照）。 */
 .chart-box{order:2;position:relative;background:#0b1017;border:1px solid var(--line);
   border-radius:12px;overflow:hidden;padding:10px 8px 4px}
 .chart-box svg{display:block;width:100%;height:auto}
 .chart-box .hill{cursor:pointer}
 .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* 論点を選んだ後、山なみを升目（マトリックス）カードの背後へ薄く敷く
+   （オーナー指摘2026-09-19「クリックすると下の図にスライドして見ずらい」「図を
+   マトリックス図の後ろに薄くすかせて表示」）。placeChart()（JS）が同じchart-box要素を
+   #dot-slotの中へ移し、このクラスを付ける。数値・ヒント文は読む対象ではなくなるため隠す。 */
+.chart-box.as-backdrop{position:absolute;inset:0;order:0;z-index:0;opacity:.22;
+  pointer-events:none;padding:0;border:none;border-radius:0;background:transparent;overflow:visible}
+.chart-box.as-backdrop svg{height:100%}
+.chart-box.as-backdrop .hint,.chart-box.as-backdrop .floor-note,.chart-box.as-backdrop .dive{display:none}
 .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}
 .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}
 .panel{order:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
@@ -163,7 +173,8 @@ h3.sec{font-size:13px;color:var(--muted);font-weight:700;margin:26px 0 6px;
   padding:11px 13px;margin:0 0 8px;font-size:12.5px}
 
 /* 点の装置（立場を絞ったときの件数と割合の動き）。着陸パネルの中に入る */
-.dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+#dot-slot{position:relative}
+.dotbox{position:relative;z-index:1;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
 .waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}
 .waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
   transition:background-color .5s ease}
@@ -346,6 +357,8 @@ const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切�
 const SMALL=30;      // これ未満は母数が小さいので破線＋注記
 const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
 const svg = document.getElementById("section");
+const chartBox = document.querySelector(".chart-box");
+const stageEl = document.querySelector(".stage");
 
 function layout(modeId){
   const m=modeById[modeId], live=[];
@@ -463,11 +476,35 @@ function render(){
     fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
 }
 
+/* 論点を選んだ後は、山なみを升目（マトリックス）カードの背後へ薄く重ねて表示する。
+   タブで論点を切り替えられるようになった今、山を見るためだけに別セクションへ
+   スクロールするのは遠回りだった（オーナー指摘2026-09-19「クリックすると下の図に
+   スライドして見ずらい」）。chart-box要素自体を#dot-slotの中へ移し、CSSで
+   #dotboxの背後に敷く。作り直さず同じ要素を動かすので、hillのクリック判定や
+   render()の対象（svgのid）はそのまま使える。
+   ⚠️ drawPanel() は #panel の innerHTML を丸ごと作り直すため、chart-box が
+   #dot-slot の中（＝#panelの子孫）にいる間に呼ぶと一緒に消えてしまい、続く
+   render() が chart-box 内の要素（#chartdesc等）を見失ってエラーになる。
+   必ず evacuateChart() で .stage 側へ退避させてから drawPanel() を呼ぶこと。 */
+function evacuateChart(){
+  if (chartBox.parentElement !== stageEl){
+    chartBox.classList.remove("as-backdrop");
+    stageEl.insertBefore(chartBox, document.getElementById("panel"));
+  }
+}
+function placeChart(){
+  const slot = document.getElementById("dot-slot");
+  if (st.landed !== null && slot){
+    chartBox.classList.add("as-backdrop");
+    slot.insertBefore(chartBox, slot.firstChild);
+  }
+}
 function land(i){
   st.landed=i;
   visit("i:"+issues[i].id);
   location.hash=issues[i].id;
-  drawPanel(); syncList(); render();
+  evacuateChart();
+  drawPanel(); syncList(); render(); placeChart();
   const h=document.querySelector("#panel h2");
   if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
   // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
@@ -479,7 +516,8 @@ function orbit(){
   const prev=st.landed;
   st.landed=null;
   if (location.hash) history.replaceState(null,"",location.pathname);
-  drawPanel(); syncList(); render();
+  evacuateChart();
+  drawPanel(); syncList(); render(); placeChart();
   const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
   if (b) b.focus({preventScroll:true});
 }
@@ -750,7 +788,10 @@ function morphTo(toMode){
     st.landed = null;
     if (location.hash) history.replaceState(null,"",location.pathname);
   }
-  drawPanel(); syncList(); render();
+  // st.landed が0件にならず残るケースでも drawPanel() は #panel を作り直す
+  // （land()/orbit()と同じ理由でchart-boxを先に退避する必要がある）
+  evacuateChart();
+  drawPanel(); syncList(); render(); placeChart();
   // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
   if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
 }
@@ -924,7 +965,7 @@ function buildQuiz(){
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
 try {
-  buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildModes(); buildList(); drawPanel(); syncList(); render(); placeChart();
   buildGuesses(); buildDive(); buildQuiz(); paintProgress();
   let resizeFrame;
   window.addEventListener("resize", ()=>{

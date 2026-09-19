@@ -235,8 +235,10 @@ LIGHT_SKIN = """
 #planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
 #planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
 #planet-block .chart-box svg path[stroke="#e0663a"]{stroke:#C4462A}
-/* 点の装置も同じ面にそろえる */
-#planet-block .dotbox{background:#F2F6FD;border:1px solid #DCE3EF;border-radius:12px;
+/* 点の装置も同じ面にそろえる。背景は完全不透明にしない。論点を選んだ後、
+   山なみが#dot-slotの中でこのカードの背後に薄く重なるため（chart-box.as-backdrop
+   参照）、不透明だと隠れて見えなくなる（オーナー指摘2026-09-19）。 */
+#planet-block .dotbox{background:rgba(242,246,253,.82);border:1px solid #DCE3EF;border-radius:12px;
   padding:13px 14px;margin-top:14px;--rest-dot:#D3DCEA}
 #planet-block .dotbox .legend{color:#667085}
 /* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
