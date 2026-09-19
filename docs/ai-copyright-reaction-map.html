@@ -923,6 +923,69 @@
 <p class="repair-period-note" style="max-width:1000px;margin:8px auto 0;font-size:13px;line-height:1.8;">保存された取得日時のUTC日付に基づく範囲です。</p>
 </aside>
 <!-- RESEARCH_CONDITIONS_END -->
+<style>
+#bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+#bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+#bukatsu-background h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+#bukatsu-background p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+#bukatsu-background ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+#bukatsu-background ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+#bukatsu-background ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+#bukatsu-background ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+#bukatsu-background ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+#bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+#bukatsu-background ol.bg-tl .src a{color:var(--muted)}
+#bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+/* 確かめること。3列の表は375pxで潰れるので、1件1枚のカードにする */
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+</style>
+<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">
+<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
+<p class="bg-def">生成AIと著作権の問題は、AIが文章・画像・音楽などを学習したり作り出したりする際に、既存の著作物をどこまで無断で使ってよいかという論点です。著作権法第30条の4は、著作物を「思想又は感情の享受を目的としない」利用であれば、原則として権利者の許諾なく使えると定めています。</p>
+<p class="bg-now">著作権法そのものは変わっていません。政府がまとめてきたのは、この条文をどう解釈するかという「考え方」と、AI事業者に情報開示を求める任意のルール「プリンシプル・コード」までで、法律の改正には至っていません。</p>
+<h3>なぜ始まったか</h3>
+<p>生成AIの急速な普及に伴い、既存の著作物が無断でAIの学習に利用されているのではないかという懸念がクリエイターや権利者団体から強まりました。一方でAI開発・提供事業者からは、学習段階の利用を過度に制限すると技術革新や国際競争力が損なわれるとの声もあり、権利者・事業者・利用者それぞれの立場から議論が続いています。</p>
+<p>文化庁と内閣府が別々に検討を進めてきました。文化庁は既存の著作権法（特に第30条の4）の解釈を整理し、内閣府の検討会はAI法の制定や、AI事業者に学習データの出所開示を求める任意ルール「プリンシプル・コード」づくりを進めています。どちらも著作権法そのものを書き換えるものではありません。</p>
+<h3>これまでの経緯</h3>
+<ol class="bg-tl">
+<li><div class="when">2024年3月15日<em>文化庁が学習段階の考え方を公表</em></div><div><p class="what">文化審議会著作権分科会が、AIの学習段階での著作物利用について著作権法第30条の4の適用範囲を整理し公表しました。学習のための利用は原則対象外ですが、学習データの創作的表現をそのまま出力させる目的が併存する場合などは対象外になりうるとしています。</p><span class="src">出典: <a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener">文化庁「AIと著作権に関する考え方について」（令和6年3月15日）</a></span></div></li>
+<li><div class="when">2024年5月<em>内閣府検討会が中間とりまとめを公表</em></div><div><p class="what">内閣府「AI時代の知的財産権検討会」が、開発・学習段階と生成・利用段階に分けて著作権法上の課題を整理した中間とりまとめを公表しました。</p><span class="src">出典: <a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf" target="_blank" rel="noopener">内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）</a></span></div></li>
+<li><div class="when">2025年6月4日<em>AI法が公布</em></div><div><p class="what">AI技術全般の研究開発・活用を推進する法律（AI法）が公布されました。著作権法とは別の法律で、この後まとまる「プリンシプル・コード」の根拠になっています。</p><span class="src">出典: <a href="https://laws.e-gov.go.jp/law/507AC0000000053" target="_blank" rel="noopener">e-Gov法令検索「人工知能関連技術の研究開発及び活用の推進に関する法律」（令和七年法律第五十三号、2025年6月4日公布）</a></span></div></li>
+<li><div class="when">2025年12月12日<em>「プリンシプル・コード」案が固まる</em></div><div><p class="what">内閣府検討会（第10回）で、AI事業者に学習データの出所などの開示を求める「プリンシプル・コード」案が事務局から示されました。開示は義務ではありません。実施するか、しない場合は理由を説明する「コンプライ・オア・エクスプレイン」方式が採られており、この後パブリックコメントにかけられました。</p><span class="src">出典: <a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/dai10/gijiroku.pdf" target="_blank" rel="noopener">内閣府「AI時代の知的財産権検討会」第10回議事録（2025年12月12日開催）</a></span></div></li>
+<li><div class="when">2026年4月21日・23日<em>パブリックコメント結果を公表、関係団体にヒアリング</em></div><div><p class="what">プリンシプル・コード案に寄せられた2,161件の意見（うち法人・団体99件）が報告されました。新聞・出版・放送・音楽の権利者団体は開示義務の強化を求め、AI事業者側の業界団体（BSA）は開示義務そのものに反対するなど、意見が分かれています。</p><span class="src">出典: <a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/gijisidai/dai12/gijiroku.pdf" target="_blank" rel="noopener">内閣府「AI時代の知的財産権検討会」第12回議事録（2026年4月23日開催）</a>／<a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/gijisidai/dai11/gijiroku.pdf" target="_blank" rel="noopener">同 第11回議事録（2026年4月21日開催）</a></span></div></li>
+<li><div class="when">2026年6月<em>「知的財産推進計画2026」を決定</em></div><div><p class="what">政府の知的財産推進計画に、著作権法の対象外である声・作風の模倣についてパブリシティ権や不正競争防止法での対応を「引き続き議論」する方針と、プリンシプル・コードの普及を進める方針が盛り込まれました。いずれも具体的な法改正は伴っていません。一次資料で確認できた範囲では、これが最も新しい動きです。</p><span class="src">出典: <a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/260612/keikaku_all.pdf" target="_blank" rel="noopener">内閣府「知的財産推進計画2026」（2026年6月決定）</a></span></div></li>
+</ol>
+<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
+</section>
+<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">
+<div class="panel-title"><h2 id="ck-title">「法律」と「任意のルール」を分けて確かめる</h2><span>著作権法・その解釈・自主ルールを混同しない</span></div>
+<p>生成AIと著作権をめぐっては、著作権法そのものと、その解釈を示した「考え方」、AI事業者向けの任意ルール「プリンシプル・コード」が並行して存在します。どれについての話かを区別しないと、賛否の理由がかみ合わなくなります。</p>
+<div class="ck"><div class="k"><b>AI学習と著作権侵害</b><span>「無断学習」は一律に違法なのか</span></div><div class="v">一律には決まっていません。著作権法第30条の4により学習のための利用は原則として権利者の許諾が不要ですが、学習データの創作的表現をそのまま出力させる目的が併存する場合などは対象外になりうるという考え方が文化庁から示されています。個別の裁判例の蓄積はまだありません。<span class="src">出典: <a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener">文化庁「AIと著作権に関する考え方について」（令和6年3月15日）</a>／<a href="https://laws.e-gov.go.jp/law/345AC0000000048" target="_blank" rel="noopener">e-Gov 著作権法 第30条の4</a></span></div></div>
+<div class="ck"><div class="k"><b>学習データの情報開示</b><span>AI事業者は出所を明かす義務があるのか</span></div><div class="v">義務ではありません。政府が示した「プリンシプル・コード」は、開示するか、開示しない場合はその理由を説明する「コンプライ・オア・エクスプレイン」方式の任意ルールで、法律による強制ではありません。<span class="src">出典: <a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf" target="_blank" rel="noopener">内閣府「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」</a></span></div></div>
+<div class="ck"><div class="k"><b>2026年の著作権法改正</b><span>SNSで話題の「著作権法改正」とAI学習の関係</span></div><div class="v">無関係です。令和8年の著作権法改正は実演家の二次使用料に関するもので、AI学習の適法性に関わる第30条の4・第47条の5は改正されていません。<span class="src">出典: <a href="https://www.bunka.go.jp/seisaku/chosakuken/hokaisei/r08_hokaisei/" target="_blank" rel="noopener">文化庁「著作権法の一部を改正する法律」（令和8年法律第48号）改正ページ</a></span></div></div>
+<div class="ck"><div class="k"><b>声・作風の保護</b><span>似せて作られた声や画風への対応</span></div><div class="v">方針だけが示されています。声の模倣についてはパブリシティ権や不正競争防止法での対応を「引き続き議論」するとされていますが、著作権法によって声や作風そのものを保護する規定はまだありません。<span class="src">出典: <a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/260612/keikaku_all.pdf" target="_blank" rel="noopener">内閣府「知的財産推進計画2026」（2026年6月決定）</a>／<a href="https://kokkai.ndl.go.jp/#/detail?minId=122115104X01120260616&amp;current=1" target="_blank" rel="noopener">第221回国会 参議院 文教科学委員会 第11号（令和8年6月16日、谷合正明君発言）</a></span></div></div>
+<p class="ck-note"><b>このページで未確認のこと</b><br>AI生成物の著作権を直接扱った日本の確定判例は確認できていません。プリンシプル・コードの届出（コンプライ・オア・エクスプレイン）を実際に行った事業者の一覧も、本資料確認では確かめられていません。<br>「違法」か「合法」かという二択で判断せず、確定した法律の条文なのか、その解釈を示した考え方なのか、事業者の任意ルールなのかを区別して読む必要があります。</p>
+</section>
 <!-- PLANET_SECTION_START -->
 <section class="panel planet-panel" aria-labelledby="planet-heading">
 <style>#planet-block{
