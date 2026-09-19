@@ -48,6 +48,16 @@
    tweet_idも実在。`verify_ocean_layer.py`のai-copyright分はNG0件）。bukatsu-chiikiに
    加えて、地下水脈を1本から2〜4本へ増やす際の実例として参照できる。
 
+   **2026-09-20追記**: consumption-tax-cutも同じく`-sunk-continents.json`・
+   `-veins.json`自体が存在しない「未着手」状態だった（オーナーから「他のテーマにはある
+   『資料にしか無い話を見る』が無い」と指摘され着手）。大綱（内閣、令和8年9月15日閣議決定）
+   を一次資料に、沈んだ大陸4件・地下水脈2本を新規作成。いずれも正典3890件を正規表現で
+   検索した上で、ヒットした投稿を1件ずつ本文で読んで除外理由を書いた（要約・理由の
+   使い回しはしていない）。`verify_ocean_layer.py`のconsumption-tax-cut分・
+   `verify_adoption_registry.py`ともNG0件、標準検査4種・unittest 984件・
+   `run_public_checks.py`もNG0件。ai-copyright・bukatsu-chiikiに加えて3件目の
+   完成例になる。
+
 ## 対応方針の案（次のセッションへの申し送り）
 
 (a)(b) とも、一次資料や正規表現の話ではなく「実際の投稿を読んで人が判断する」編集作業そのものなので、
