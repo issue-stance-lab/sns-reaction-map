@@ -601,11 +601,131 @@
     }
   ],
   "ocean_layer": {
-    "checked_on": null,
-    "reviewer_type": null,
-    "status": "not_started",
-    "sunk_continents": [],
-    "veins": []
+    "checked_on": "2026-09-19",
+    "reviewer_type": "editorial_review",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-1",
+        "life_impact": "無断で自分の作品をAIに学習されたと考える権利者は、著作権侵害が認められれば、AI生成物の廃棄請求や、一定の場合には学習用データセットからの除去請求を行える可能性がある。「無断で使われたら泣き寝入りするしかない」という認識でいる人にとっては、実際に取れる手段が想定より残っている。",
+        "nearest_issue_id": "ai-copyright-learning-data",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「廃棄」「除去請求」の語での一致は1件あるが、米カリフォルニア州でのアンソロピック社に対する別訴訟の報道で、日本の著作権法の解釈に基づく権利者の救済手段への言及ではないため除外。「差止め」まで広げると1件（AI生成物利用者側の炎上リスクとしての言及）が加わるが、権利者が行使できる救済手段としての言及ではなく除外。廃棄請求・データセットからの除去請求という具体的な手段そのものへの言及は0件。",
+        "sources": [
+          {
+            "date": "令和6年3月15日",
+            "location": "5.（2）生成・利用段階、権利者の救済手段の整理箇所。新たな侵害物の生成の差止め、生成物の廃棄請求のほか、一定の場合には学習用データセットからの除去請求や侵害予防に必要な措置の請求が可能と整理",
+            "name": "文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）",
+            "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf"
+          }
+        ],
+        "topic": "無断学習された側は、現行法の解釈でも生成物の廃棄請求や学習用データセットからの除去請求を行える場合がある"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-2",
+        "life_impact": "無断でAIに声を模倣された実演家は、著名性の要件を満たせばパブリシティ権で対抗できる可能性があるが、要件のハードルが高く、若手・中堅の実演家ほど法的な対抗手段を持ちにくい。著作権法には声そのものを直接保護する規定がないため、この空白は著作権法の改正では埋まらない。",
+        "nearest_issue_id": "ai-copyright-creator-rights",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「パブリシティ」の語での一致は4件あるが、いずれもパブリシティ権と著作権の混同への指摘や特定の報道・判決の内容整理であり、著名性の要件が若手・中堅実演家を保護から実質的に排除しているという論点への言及は0件。",
+        "sources": [
+          {
+            "date": "令和8年6月16日",
+            "location": "発言番号073（谷合正明君）。「現行の著作権法には、声そのものを直接保護する規定はありません」「著名人の顧客吸引力を保護するパブリシティー権は存在するが、著名人の要件などハードルが高くて、若手や中堅のクリエーターは極めて不安定な状態に置かれている」との質疑",
+            "name": "第221回国会 参議院 文教科学委員会 第11号",
+            "url": "https://kokkai.ndl.go.jp/#/detail?minId=122115104X01120260616&current=1"
+          }
+        ],
+        "topic": "パブリシティ権には著名性の要件があり、若手・中堅の実演家ほど無断でのAI声真似に対抗しにくい"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-3",
+        "life_impact": "プリンシプル・コードを受け入れたAI事業者は、電子透かしやC2PA等の技術で学習データの出所や生成物の来歴を示す措置を検討することが期待される。ただし義務ではなく、実施しない場合は理由を説明すればよい「コンプライ・オア・エクスプレイン」の任意の枠組みにとどまる。",
+        "nearest_issue_id": "ai-copyright-legal-framework",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「電子透かし」「C2PA」「来歴」の語での一致は8件あるが、すべて音楽生成AI「Suno」が自社製品に電子透かしを導入したという個別企業のニュースへの反応で、プリンシプル・コードが求める透明性確保の技術的措置という政府の政策枠組みへの言及ではないため除外。",
+        "sources": [
+          {
+            "date": "2026年（第10回検討会で案確定）",
+            "location": "2.この文書が示す原則及び例外、【原則1】(1)透明性確保のための措置。電子透かし、C2PAその他のコンテンツの出所や来歴を証明する技術の導入等をAI事業者に求める記載",
+            "name": "内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf"
+          }
+        ],
+        "topic": "プリンシプル・コードは、AI事業者に電子透かしやC2PA等による学習データの出所・生成物の来歴の開示を求めている（義務ではなく任意）"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-4",
+        "life_impact": "自作品をAI学習から守りたい権利者が、robots.txtへの記載や利用規約への明示でオプトアウトを表明しても、それを尊重しないクローラーには効かず、別サイトへ転載された作品がそこから収集されることも防げない。「オプトアウトを表明すれば守られる」という認識では、実際の防御力を過大評価する可能性がある。",
+        "nearest_issue_id": "ai-copyright-learning-data",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「robots.txt」「クローラ」「オプトアウト」の語での一致は4件あるが、企業版サービスの契約上のオプトアウトやEU方式の集中管理オプトアウトへの言及、robots.txt等の存在を紹介するにとどまる投稿、オプトアウトが機能していないという抽象的な不満にとどまり、クローラーが記載を無視する具体的な仕組みや転載経由での回避不可能性への言及は0件。",
+        "sources": [
+          {
+            "date": "2024年11月",
+            "location": "3.権利者に期待される取組事項例（p.8〜）、オプトアウトの方法（p.19以降）。「robots.txtの記載による収集制限を尊重しないクローラも存在している」「人力でrobots.txtの記載のあるサイトから作品をダウンロードされ、記載のない別サイトに転載されてしまった場合、そこから収集されることは防げない」との記載",
+            "name": "内閣府知的財産戦略推進事務局「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf"
+          }
+        ],
+        "topic": "robots.txtや利用規約でのAI学習拒否の明示は、それを尊重しないクローラーや転載経由の収集を防げない"
+      }
+    ],
+    "veins": [
+      {
+        "checked_on": "2026-09-19",
+        "diverging_reason": "同じ『政策対応が遅い』という不満から、規制・制限強化支持側は『だからこそ韓国のように迅速で厳格な法規制を急ぐべきだ』と結論づけ、推進・活用支持側は『だからこそインドのように迅速な規制緩和・活用推進を急ぐべきだ』と結論づける。急ぐべき方向が正反対に分かれる。",
+        "id": "ai-copyright-vein-1",
+        "issue_ids": [
+          "ai-copyright-legal-framework",
+          "ai-copyright-tech-promotion"
+        ],
+        "reviewer_type": "editorial_review",
+        "shared_concern": "生成AIの進化・普及のスピードに対して、日本の政策対応（法整備・規制の議論）が遅れている、追いついていない。",
+        "sides": [
+          {
+            "post_count": 3,
+            "stance_label": "規制・制限強化支持"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "推進・活用支持"
+          }
+        ]
+      },
+      {
+        "checked_on": "2026-09-19",
+        "diverging_reason": "同じ『レッテルで誤解されている』という不満から、規制・制限強化支持側は『反AIという語をやめ、無断学習の一部データセットの違法性のみに反対しているという実際の主張（規制派・生成規制論）で呼んでほしい』と求め、推進・活用支持側は『AI利用者を一律に盗人・非人道的と決めつけず、適法な利用として尊重してほしい』と求める。誤解の中身と、求める再定義の内容が逆向きになる。",
+        "id": "ai-copyright-vein-2",
+        "issue_ids": [
+          "ai-copyright-legal-framework",
+          "ai-copyright-user-ethics"
+        ],
+        "reviewer_type": "editorial_review",
+        "shared_concern": "自分の実際の主張が、単純化されたレッテル（「反AI」「盗人」等）に置き換えられて誤解され、まともに取り合ってもらえていない。",
+        "sides": [
+          {
+            "post_count": 3,
+            "stance_label": "規制・制限強化支持"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "推進・活用支持"
+          }
+        ]
+      }
+    ]
   },
   "opinion_count": 2593,
   "page_path": "ai-copyright-reaction-map.html",
