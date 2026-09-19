@@ -188,12 +188,44 @@ HTMLで`#planet-block @keyframes isa-ocean-reveal{...}`という無効なCSSに�
 スクロール（0→4689px、見出しが画面内に到達）とアニメーション登録
 （`getComputedStyle().animationName`が`isa-ocean-reveal, isa-ocean-flash`）を再確認。
 
+## デザイン改訂（v8、2026-09-19・オーナーの実地フィードバック8件目）
+
+**「その下の編集部の横断整理との差があまりないから出たのかどうかがわかりずらい／
+ふあっと出るけど、短い／カードなどを駆使してもっとわかりやすくして」**: v7で
+到着演出（アニメーション）は付けたが、アニメーションが終わった後の見た目が、
+すぐ下にある常時表示の「編集部の横断整理」(`#editorial`)とほぼ同じだった。
+両セクションとも同じ`h3.sec`見出し・ほぼ同じカード配色
+（`.sunk`/`.vein`と`.findings li`はどちらも`background:var(--panel)`、
+角丸10px、薄い枠線）を使っており、一時的な点滅が終わると見分けがつかなく
+なるのが実態だった（ブランチ`task/issue-tabs-ui-v8`）。
+
+- `#ocean`セクション全体を、薄い青の背景・枠線・角丸14px・影を持つ1枚の
+  カードに変更（常時。アニメーションが終わっても残る）。`#editorial`は
+  白背景のまま変更せず、`#ocean`だけを「特別な内容」として浮き上がらせた
+- 見出し直下に「🔍 資料にしかない話」のバッジ（濃い青の丸ピル）を追加
+  （`scripts/build_planet_data.py`の`static_ocean()`。この関数は全テーマ
+  共通のため、展開時は自動的に同じバッジが付く）
+- 到着演出の継続時間を伸ばした（フェード0.5s→0.7s、点滅1.8s→2.6s）。
+  点滅の着地点も「透明」から「常時の背景色（薄い青）」に変更し、光った後も
+  色が消えずに残るようにした（`scripts/build_planet_page_preview.py`の
+  `LIGHT_SKIN`）
+
+**検証**: henoko-student-accidentのローカルプレビューでデスクトップ・375px
+モバイル幅とも、`#ocean`終端と`#editorial`開始の境界が色で明確に分かることを
+スクリーンショットで確認。アニメーションは`getComputedStyle`で開始色
+（`--reveal-flash`）から常時色（`--ocean-bg`）への推移を確認（自動テストの
+ポーリングでは描画が進まず値が固まって見える環境依存の癖があったため、
+実際に画面を描画させるスクリーンショット越しの計測で確認し直した）。
+`verify_theme_page.py`・`verify_number_provenance.py`ともOK。本番反映後、
+実機でバッジ・カード・スクロール到達を再確認。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
-デザイン改訂7件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
+デザイン改訂8件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
 背景表示化・背景の不透明度強化・立場フィルター切替時のスクロール先修正・
-「資料にしかない話を見る」の到着演出）を同日中に順次本番反映済み。本番
+「資料にしかない話を見る」の到着演出・同演出のカード化とバッジ追加）を
+同日中に順次本番反映済み。本番
 https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
 最終形を実機確認済み（デスクトップ・375px、山クリック時のスクロール・
 立場タブ切り替え・論点タブを跨いだ連続切替、背景の山なみが実際に視認できる
@@ -209,7 +241,7 @@ https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
 constitutional-amendment・consumption-tax-cutは共通コード側は最終形まで
 反映済みだがdocs/の再生成・本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成
-のみ済み、v2〜v6への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
+のみ済み、v2〜v8への再生成が必要）は、オーナーが本番のhenoko-student-accidentページを
 見て確認してから展開する。
 
 ## 次にすること
@@ -227,5 +259,6 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 `task/issue-tabs-ui-v5`（背景の不透明度強化）・`task/issue-tabs-ui-v6`
 （立場フィルター切替時のスクロール先修正）・`task/issue-tabs-ui-v7`
 （「資料にしかない話を見る」の到着演出、scope_css()の@keyframes不具合の発見と回避
-含む）。いずれもmainへマージ・反映済み。worktreeは全て片付け済み。継続する場合は
-新しいworktreeを作る
+含む）・`task/issue-tabs-ui-v8`（同演出の常時カード化・バッジ追加、演出の
+継続時間延長）。いずれもmainへマージ・反映済み。worktreeは全て片付け済み。
+継続する場合は新しいworktreeを作る
