@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題の索引）
 
-最終更新: 2026-09-20（課題71: consumption-tax-cutの海面より下データを新規作成／課題69: 自転車青切符を起承転結型へ再編／課題72: 論点タブUIを9テーマへ展開・本番反映）
+最終更新: 2026-09-20（課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み／課題71: consumption-tax-cutの海面より下データを新規作成／課題69: 自転車青切符を起承転結型へ再編）
 
 > **このファイルは索引です。** 1課題につき数行だけを置き、経緯・調査記録・手順は
 > `tasks/task-{番号}.md` に分けてあります。**担当する課題の詳細ファイルだけを開いてください。**
@@ -91,6 +91,13 @@
 **判断待ち**: 地下水脈が1本しかない4テーマへの対応（実データで追加作成するか、基準を見直すか）
 **関連テーマ**: constitutional-amendment / henoko-student-accident / koshitsu-tenpakai / school-nickname-ban
 **詳細**: [tasks/task-71.md](tasks/task-71.md)
+
+### 課題73: 旧アリーナ形式の死んだデータ（SM_RAW）を残り5テーマから削除する
+**状態**: 未着手。consumption-tax-cutは対応済み（2026-09-20、842KB→225KB）。残り5テーマの現状調査のみ完了
+**優先度**: 中（CIは落ちていないが、ai-copyrightは読者が毎回402KBを無駄にダウンロードしており実害あり）
+**次にすること**: 読者への実害が最も大きいai-copyright（外部JS402KBを毎回読み込む）から着手する
+**関連テーマ**: ai-copyright / fukushuto / bukatsu-chiiki / bike-blue-ticket / elderly-license-revocation（軽微な別件2テーマは詳細参照）
+**詳細**: [tasks/task-73.md](tasks/task-73.md)
 
 ### 課題61: 一次資料メモを「使う」側の運用がない
 **状態**: 未着手。維持（90日再確認・ダッシュボード検知）は仕組み化済みだが、使用の導線が無い
