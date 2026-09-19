@@ -53,9 +53,9 @@
 **詳細**: [tasks/task-70.md](tasks/task-70.md)
 
 ### 課題72: 論点タブUI（山なみへ戻らず他の論点へ切り替え）
-**状態**: 進行中。henoko-student-accidentを本番反映後、オーナーの実地指摘8件で即日デザイン改訂し再反映済み。オーナー指示「まず地域テーマから」を受けbukatsu-chiikiへ展開・本番反映済み（2026-09-19、詳細は task-72.md）。fukushutoは旧デザインのままdocs/再生成のみ済み
+**状態**: 進行中。henoko-student-accident・bukatsu-chiikiへ展開・本番反映済み（2026-09-19、詳細はtask-72.md）。fukushutoはdocs/再生成のみ済み
 **優先度**: 中（オーナー要望のUI改善）
-**次にすること**: 残り7テーマ（elderly-license-revocation / bike-blue-ticket / school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi / constitutional-amendment・consumption-tax-cut）へ同じ手順で展開し`release`スキルで本番反映
+**次にすること**: 残り7テーマへ同じ手順で順次展開し`release`スキルで本番反映（一覧はtask-72.md）
 **判断待ち**: なし（展開の順序・進め方はオーナー指示どおり進行中）
 **関連テーマ**: 全10テーマ共通の山なみテンプレート（henoko-student-accident・bukatsu-chiikiは最終デザインで本番反映済み、fukushutoは旧デザインのみ検証済み）
 **詳細**: [tasks/task-72.md](tasks/task-72.md)
