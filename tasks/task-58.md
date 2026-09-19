@@ -58,3 +58,39 @@
 情報がどの程度使えるか検証する（FACT_CHECK_GUIDE.mdの発注文に沿う）。
 koshitsu-tenpakaiは施行日（令和8年10月24日頃）以降にe-Govをブラウザで直接開くか
 官報で附則全文を確認するのが本筋で、これは上とは独立に進められる。
+
+## bukatsu-chikiiでのパイロット実施（2026-09-20）
+
+オーナー指示（消費税減税の「その言い分、原典に当たるとどうなるか」をbukatsu-chiikiにも作れるか）を
+きっかけに、保留を解いて着手した。ただし対象は`quality/research/bukatsu-chiiki-primary-sources.md`
+（全9節・約30本）そのものではなく、そこから既に切り出されて`scripts/build_bukatsu_process_sections.py`の
+`FACT_CHECKS`（7件、2026-09-02時点で確定）として構造化済みだった一次資料照合カードのほう。
+このデータは`public_registry_common.py`のCLAIM_AUDIT_SOURCESに既に登録されており、公開JSONの
+`claim_verification`も既に生成されていたが、**ページ側（docs/bukatsu-chiiki-reaction-map.html）には
+一度も表示されていなかった**（他8テーマの同種スクリプトも同じ状態。表示済みなのは
+consumption-tax-cut・koshitsu-tenpakaiの2テーマだけと判明）。
+
+koshitsu-tenpakaiが2026-09-20（同日）に「消費税と同じ見た目に揃える」形でオーナー指摘を受けて
+作り直したばかりだったため、そのbuild_koshitsu_process_sections.pyを最新の型として複製した。
+PLANET_SECTIONの外（`<!-- BUKATSU_AUDIT_START/END -->`、定期更新では書き換わらない区間）へ
+「その言い分、原典に当たるとどうなるか」節を新設し、`build_bukatsu_process_sections.py`の`main()`が
+`write_provenance_records()`と併せてHTMLへ差し込むよう変更した。判定マーク（原典どおり/原典とズレ/
+原典に届かず）は消費税・皇室典範と共通の固定3語にし、bukatsu-chiiki独自だった`verdict_label`
+（2026-09-02時点の「他テーマと表現を重ねない」方針の名残）はこの節では使っていない。
+
+**素の複製では通らなかった点**: lead/how文をconsumption-tax-cutの文面からほぼそのまま流用したところ、
+`verify_page_originality.py`が4文の使い回しを検出（NG）。koshitsu-tenpakaiは独自に言い換えていたため
+気づかず、bukatsu独自の言い回しに書き直して解消した。件数（`ca-n`・`ca-how`）の出所は
+`configs/bukatsu-chiiki-reaction-map.json`の`number_provenance.sources`にconsumption-tax-cutと
+同じ形で登録が必要だった（未登録だと`verify_number_provenance.py`がNG）。
+
+標準検査4種・unittest 984件・run_public_checks.py・verify_claim_verdicts.pyいずれもNG0件。
+ブラウザでデスクトップ・375pxモバイル幅とも表示を確認済み。
+
+**まだ終わっていないこと（変わらず）**: 一次資料メモ本体（全9節）のうち、ページに反映したのは
+FACT_CHECKSの7件（事実確認カード）だけ。指導者・送迎・学習指導要領など、それ以外の記述を
+ページへどう載せるか（第9節「事故が起きたときの補償」を含む）は未着手のまま。
+なお「これまでの経緯」（背景タイムライン）は`build_background()`経由で別途既に反映済みで、
+これも一次資料メモが原資料になっている。
+
+作業は`../isa-wt-bukatsu-claim-audit`（ブランチ`task/bukatsu-claim-audit`）で行った。
