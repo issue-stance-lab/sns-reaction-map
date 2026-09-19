@@ -685,26 +685,13 @@
 
 
 /* ===== 論点Explainerカード ===== */
-.explainer-lead{font-size:14px;line-height:1.85;color:var(--ink);margin:0 0 20px;max-width:920px}
-#explainer-section .explainer-lead{max-width:920px!important}
-#explainer-section .explainer-grid{max-width:920px!important;margin-left:auto!important;margin-right:auto!important}
-.explainer-grid{display:flex;flex-direction:column;gap:18px;margin:0 0 18px}
 .explainer-card{border-radius:12px;overflow:hidden;background:#fff;border:1.5px solid #e4eaf3;box-shadow:0 8px 24px rgba(16,24,40,.08);cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}
 .explainer-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,24,40,.14);border-color:#c7d4ea}
 .explainer-card img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;background:var(--accent-soft)}
-.explainer-card-label{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#fff;border-bottom:1.5px solid #e4eaf3;pointer-events:none;user-select:none}
-.explainer-num{flex-shrink:0;background:#1e1b4b;color:#fff;font-size:11px;font-weight:900;letter-spacing:.05em;border-radius:6px;padding:4px 10px;margin-top:3px;line-height:1.3}
-.explainer-card-title{font-size:15px;font-weight:900;color:#1e1b4b;margin:0 0 4px;line-height:1.35;letter-spacing:-.02em}
-.explainer-card-desc{font-size:12px;color:#637089;margin:0 0 7px;line-height:1.65}
-.explainer-sides{display:flex;gap:6px;flex-wrap:wrap}
-.explainer-side{font-size:11px;font-weight:800;border-radius:5px;padding:3px 9px;line-height:1.4}
-.explainer-side.pro{background:#eff6ff;color:#075ef2;border:1px solid #bfdbfe}
-.explainer-side.con{background:#fff2ee;color:#c0410f;border:1px solid #fdbcaa}
 .explainer-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.88)}
 .explainer-modal.open{display:flex}
 .explainer-modal img{max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain}
 .explainer-modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:40px;height:40px;color:#fff;font-size:22px;cursor:pointer;line-height:40px;text-align:center}
-.explainer-note{font-size:12px;color:var(--muted);margin:4px 0 0}
   
 /* TIDE_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
@@ -762,7 +749,6 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
 <!-- ADSENSE_TAG_END -->
 <style>/* issue-count: scripts/sync_issue_counts.py */
-.explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/bike-blue-ticket/bike-blue-ticket-hero.webp')">
@@ -1050,7 +1036,7 @@
   <p class="q" id="q">自転車の交通違反に反則金（青切符）を導入すべきか（自転車の青切符導入）</p>
   <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>収集期間 2026-06-27〜2026-09-12／収集504件・<b>意見392件</b>（この図の母数）／更新 2026-09-12<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>
 
-  
+
   <div id="guesses"></div>
 
   <div class="modes" id="modes" role="group" aria-label="立場フィルター"></div>
@@ -1114,7 +1100,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-bike-blue-ticket-enforcement-support" tabindex="-1">
-      <h2>🚔 取締り強化賛成</h2>
+      <h2>🚔 取締り強化賛成</h2><div class="explainer-card landing-image" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" data-alt="取締り強化賛成"><img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" alt="論点図解：取締り強化賛成" loading="lazy"></div>
       <p class="sub">81件（20.7%）　山の高さ：強い表現29.6%</p>
       <div class="legend"><span><i style="background:#e04949"></i>賛成（取締り強化支持） 78件</span><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 3件</span></div>
       <div class="bar"><span style="width:96.3%;background:#e04949;color:#ffffff">賛成（取締り強化支持）</span><span style="width:3.7%;background:#4b9cf4;color:#0d1117"></span></div>
@@ -1135,7 +1121,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-bike-blue-ticket-infrastructure-first" tabindex="-1">
-      <h2>🚲 インフラ整備優先</h2>
+      <h2>🚲 インフラ整備優先</h2><div class="explainer-card landing-image" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" data-alt="インフラ整備優先"><img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" alt="論点図解：インフラ整備優先" loading="lazy"></div>
       <p class="sub">60件（15.3%）　山の高さ：強い表現28.9%</p>
       <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 55件</span><span><i style="background:#8B9199"></i>どちらでもない 5件</span></div>
       <div class="bar"><span style="width:91.7%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:8.3%;background:#8B9199;color:#0d1117"></span></div>
@@ -1152,7 +1138,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-bike-blue-ticket-rule-ambiguity" tabindex="-1">
-      <h2>❓ ルール曖昧・不信</h2>
+      <h2>❓ ルール曖昧・不信</h2><div class="explainer-card landing-image" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" data-alt="ルール曖昧・不信"><img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" alt="論点図解：ルール曖昧・不信" loading="lazy"></div>
       <p class="sub">60件（15.3%）　山の高さ：強い表現26.1%</p>
       <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 34件</span><span><i style="background:#8B9199"></i>どちらでもない 26件</span></div>
       <div class="bar"><span style="width:56.7%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:43.3%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
@@ -1173,7 +1159,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-bike-blue-ticket-license-requirement" tabindex="-1">
-      <h2>📋 免許制要求</h2>
+      <h2>📋 免許制要求</h2><div class="explainer-card landing-image" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" data-alt="免許制要求"><img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" alt="論点図解：免許制要求" loading="lazy"></div>
       <p class="sub">31件（7.9%）　山の高さ：強い表現23.2%</p>
       <div class="legend"><span><i style="background:#e04949"></i>賛成（取締り強化支持） 10件</span><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 12件</span><span><i style="background:#8B9199"></i>どちらでもない 9件</span></div>
       <div class="bar"><span style="width:32.3%;background:#e04949;color:#ffffff">賛成（取締り強化支持）</span><span style="width:38.7%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:29.0%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
@@ -1193,7 +1179,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-bike-blue-ticket-road-safety" tabindex="-1">
-      <h2>⚠️ 車道走行への不安</h2>
+      <h2>⚠️ 車道走行への不安</h2><div class="explainer-card landing-image" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" data-alt="車道走行への不安"><img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" alt="論点図解：車道走行への不安" loading="lazy"></div>
       <p class="sub">20件（5.1%）　山の高さ：強い表現31.1%</p>
       <div class="legend"><span><i style="background:#4b9cf4"></i>反対（インフラ・制度優先） 16件</span><span><i style="background:#8B9199"></i>どちらでもない 4件</span></div>
       <div class="bar"><span style="width:80.0%;background:#4b9cf4;color:#0d1117">反対（インフラ・制度優先）</span><span style="width:20.0%;background:#8B9199;color:#0d1117">どちらでもない</span></div>
@@ -1325,6 +1311,9 @@ function clippedPath(x0,x1,top){
 
 function render(){
   const L=layout(st.mode), p=[];
+  // 表現強度が0でも押せるよう、見た目とは別の透明な操作領域を置く。
+  // 画面上で44pxの高さを確保し、山の高さや比率そのものは変えない。
+  const hitHeight = Math.min(SEA-TOP, 44*SVG_W/(svg.getBoundingClientRect().width || SVG_W));
   p.push('<rect x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#12314f" opacity="0.5"/>');
   for (let d=1;d<=4;d++){
     const y=SEA+(BOT-SEA)*d/5;
@@ -1365,9 +1354,14 @@ function render(){
     const d=v.clipped?clippedPath(v.x0,v.x1,v.top):hillPath(v.x0,v.x1,v.top);
     p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-label="'
       +esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">');
+    const hitTop = Math.min(v.top, SEA-hitHeight);
+    p.push('<rect class="hill-hit" x="'+v.x0+'" y="'+hitTop+'" width="'+v.w
+      +'" height="'+(SEA-hitTop+4)+'" fill="transparent" pointer-events="all"/>');
     p.push('<path d="'+d+'" fill="'+col+'" opacity="'+(v.n<SMALL?0.5:(sel?1:0.82))+'"'
       +(v.n<SMALL?' stroke="'+col+'" stroke-width="1.2" stroke-dasharray="4 3"':'')
       +(sel?' stroke="#f2f6fa" stroke-width="1.8"':'')+'/>');
+    if (v.rate===0)
+      p.push('<circle class="zero-mark" cx="'+v.cx+'" cy="'+SEA+'" r="3" fill="'+col+'"/>');
     if (v.w>34||v.clipped)
       p.push('<text x="'+v.cx+'" y="'+(v.top-8)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#e6edf3">'
         +(v.clipped?"▲":"")+v.rate.toFixed(0)+'%</text>');
@@ -1375,7 +1369,7 @@ function render(){
       p.push('<text x="'+v.cx+'" y="'+(SEA+17)+'" text-anchor="middle" font-size="10.5" fill="#c7d1dc">'+esc(v.it.label)+'</text>');
     p.push('</g>');
   });
-  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6"/>');
+  p.push('<line x1="0" y1="'+SEA+'" x2="'+SVG_W+'" y2="'+SEA+'" stroke="#5b9bf0" stroke-width="1.6" pointer-events="none" aria-hidden="true"/>');
 
   svg.innerHTML=p.join("");
   svg.querySelectorAll(".hill").forEach(g=>{
@@ -1389,6 +1383,8 @@ function render(){
   fn.textContent = L.floored.length
     ? "※ "+L.floored.join("・")+" は細すぎて押せないため、実際の割合より広く描いています。正確な幅は下の一覧を見てください。"
     : "";
+  if (L.live.some(v=>v.rate===0))
+    fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
 }
 
 function land(i){
@@ -1556,7 +1552,11 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+  const bikeImgSlug = {"bike-blue-ticket-enforcement-support":"torishimari","bike-blue-ticket-infrastructure-first":"infra","bike-blue-ticket-road-safety":"sharido","bike-blue-ticket-license-requirement":"menkyo","bike-blue-ticket-rule-ambiguity":"ambiguity"}[it.id];
+  const bikeImgPath = bikeImgSlug ? ('images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-'+bikeImgSlug+'.webp') : '';
+  const bikeImgHtml = bikeImgSlug ? ('<div class="explainer-card landing-image" data-img="'+bikeImgPath+'" data-alt="'+it.label+'">'
+    +'<img src="'+bikeImgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + bikeImgHtml
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
@@ -1806,7 +1806,7 @@ function buildQuiz(){
   const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
   const labels=V_ORDER.map(v=>{
     const same=cs.find(x=>x.verdict===v);
-    return same ? same.verdict_label : v;
+    return same ? same.verdict_label : ({fact:"資料どおり",gap:"少しずれる",miss:"裏が取れない"})[v];
   });
   el.innerHTML='<div class="qh"><span>問 '+(qi+1)+' / '+cs.length+'</span><span>SNSでよく見る主張</span></div>'
     + '<p class="qclaim">「'+c.claim+'」</p><div class="gopts">'
@@ -1841,6 +1841,11 @@ function buildQuiz(){
 try {
   buildModes(); buildList(); drawPanel(); syncList(); render();
   buildGuesses(); buildDive(); buildQuiz(); paintProgress();
+  let resizeFrame;
+  window.addEventListener("resize", ()=>{
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame=requestAnimationFrame(render);
+  });
   const h = location.hash.slice(1);
   if (h && idIndex[h] !== undefined) land(idIndex[h]);
 } catch (e) {
@@ -1954,85 +1959,6 @@ try {
 
 
 <!-- PROCESS_SECTIONS_END -->
-    <!-- ===== 論点Explainer ===== -->
-
-<section class="panel" id="explainer-section">
-<div class="panel-title"><h2>このテーマを読み解く、5つの論点</h2><span>それぞれの問いを把握してから</span></div>
-<p class="explainer-lead">「自転車の青切符」の議論は「賛成か反対か」だけではありません。取り締まりの是非・インフラ整備の順番・車道走行の危険性・免許制の必要性・ルールの曖昧さ——5つの論点を整理してから投票に進んでください。</p>
-<div class="explainer-grid">
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" data-alt="取締り強化賛成">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点①</span>
-      <div>
-        <p class="explainer-card-title">取締り強化賛成 — 「危険な自転車に青切符は当然か」<span class="explainer-count" id="issue-count-bike-blue-ticket-torishimari">81件</span></p>
-        <p class="explainer-card-desc">信号無視・ながらスマホ・歩道の無謀走行への抑止力として青切符を歓迎。SNS上ではこの論点だけ、全員が取締り強化を支持。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">支持：歩行者の安全のため抑止力が必要</span>
-          <span class="explainer-side pro">焦点：どの違反行為を対象にするか</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-torishimari.webp" alt="論点① 取締り強化賛成" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" data-alt="インフラ整備優先">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点②</span>
-      <div>
-        <p class="explainer-card-title">インフラ整備優先 — 「自転車レーンがないのに取り締まれるか」<span class="explainer-count" id="issue-count-bike-blue-ticket-infra">60件</span></p>
-        <p class="explainer-card-desc">うち27件（93%）が反対。専用レーンなしの罰則先行は理不尽という立場。「整備が先、取締りは後」という順番論が中心。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">反対：レーン整備なしの取締りは理不尽</span>
-          <span class="explainer-side con">条件付き：整備と並行なら取締りに賛成</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-infra.webp" alt="論点② インフラ整備優先" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" data-alt="車道走行への不安">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点③</span>
-      <div>
-        <p class="explainer-card-title">車道走行への不安 — 「「車道を走れ」というルールは安全か」<span class="explainer-count" id="issue-count-bike-blue-ticket-shado">20件</span></p>
-        <p class="explainer-card-desc">うち12件（86%）が不安を訴える。路駐・トラック・子ども・高齢者の問題。歩道を飛ばす自転車への歩行者の怒りとも交差する。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">不安：路駐や大型車で車道は危険</span>
-          <span class="explainer-side con">歩行者：歩道の自転車のほうが問題</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-sharido.webp" alt="論点③ 車道走行への不安" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" data-alt="免許制要求">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点④</span>
-      <div>
-        <p class="explainer-card-title">免許制要求 — 「罰則の前に、ルールを教えるべきでは？」<span class="explainer-count" id="issue-count-bike-blue-ticket-menkyo">31件</span></p>
-        <p class="explainer-card-desc">取締り支持12%・中立44%・反対44%と最も拮抗。「知らずに違反させる前に免許・講習を義務化すべき」という提案型の論点。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side con">提案：事前講習・免許制を義務化すべき</span>
-          <span class="explainer-side pro">反対：免許制は自転車利用の障壁になる</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-menkyo.webp" alt="論点④ 免許制要求" loading="lazy">
-  </article>
-  <article class="explainer-card" data-img="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" data-alt="ルール曖昧・不信">
-    <div class="explainer-card-label">
-      <span class="explainer-num">論点⑤</span>
-      <div>
-        <p class="explainer-card-title">ルール曖昧・不信 — 「113種類の違反基準——誰が全部わかるか」<span class="explainer-count" id="issue-count-bike-blue-ticket-rule">60件</span></p>
-        <p class="explainer-card-desc">うち12件（67%）が反対・不信。「何が違反かわからない」「警察の恣意的運用が怖い」。基準の整理と周知なしでの取締りに強く反対。</p>
-        <div class="explainer-sides">
-          <span class="explainer-side pro">不信：基準が複雑で警察の裁量が広すぎる</span>
-          <span class="explainer-side con">条件：周知・整理後なら取締りに賛成</span>
-        </div>
-      </div>
-    </div>
-    <img src="images/topics/bike-blue-ticket/bike-blue-ticket-infographic-wide-ambiguity.webp" alt="論点⑤ ルール曖昧・不信" loading="lazy">
-  </article>
-</div>
-<p class="explainer-note"><strong>使い方:</strong> 5つの論点を把握してから、次の投票で「自分が一番気になる論点」を選んでください。</p>
-</section>
 <div class="explainer-modal" id="explainer-modal" role="dialog" aria-modal="true">
   <button class="explainer-modal-close" id="explainer-modal-close" aria-label="閉じる">×</button>
   <img src="" alt="" id="explainer-modal-img">
@@ -2041,8 +1967,10 @@ try {
   var modal=document.getElementById('explainer-modal');
   var mImg=document.getElementById('explainer-modal-img');
   var mClose=document.getElementById('explainer-modal-close');
-  document.querySelectorAll('.explainer-card[data-img]').forEach(function(c){
-    c.addEventListener('click',function(){mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');});
+  document.addEventListener('click',function(e){
+    var c=e.target.closest('.explainer-card[data-img]');
+    if(!c) return;
+    mImg.src=c.dataset.img;mImg.alt=c.dataset.alt||'';modal.classList.add('open');
   });
   mClose.addEventListener('click',function(){modal.classList.remove('open');});
   modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
