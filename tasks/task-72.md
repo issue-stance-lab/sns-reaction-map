@@ -4,8 +4,7 @@
 
 オーナーから、henoko-student-accidentページのスクリーンショット（手書き注釈付き）で要望。
 論点カード（例:「🏛️ 政治利用・基地問題」）の内訳を見るたびに山なみチャートへ戻って
-クリックし直すのが面倒。見出しの下に、他の論点へ直接切り替えられる手描き風タブを
-追加したい、という依頼（2026-09-19）。
+クリックし直すのが面倒。見出しの下に、他の論点へ直接切り替えられる手描き風タブを追加したい（2026-09-19）。
 
 ## 実装
 
@@ -35,14 +34,10 @@
 - `scripts/refresh_planet_section.py`（`_inject_landing_images`、consumption-tax-cut・
   bike-blue-ticket共通担当）
 
-**マージ時の追記（2026-09-19）**: mainへの反映直前に、別セッションが
-`scripts/refresh_planet_section.py`の同じ関数（当時の名前は`_inject_ctc_landing_images`）を
-「bike-blue-ticketにも同じ図解画像パッチを適用できるよう一般化する」形で作り直し、
-`_inject_landing_images(block, data, topic, images, js_prefix)`へ先に統合していた
-（課題69のbike-blue-ticket起承転結再編の一部）。競合したため、向こうの一般化された
-関数に対して同じ「見出し→タブ→画像」の順の修正を再適用した。中身が対立していた
-わけではなく、たまたま同じ場所を触っていただけだったため、両方の変更が両立する形へ
-統合した。
+**マージ時の追記（2026-09-19）**: mainへの反映直前、別セッションが同じ関数を
+`_inject_landing_images(block, data, topic, images, js_prefix)`へ一般化していた
+（課題69のbike-blue-ticket起承転結再編）。競合したため、一般化後の関数へ同じ
+「見出し→タブ→画像」順の修正を再適用し両立させた。
 
 ## 検証済み
 
@@ -397,3 +392,9 @@ SEO日付整合の修正含む）。いずれもmainへマージ・反映済み�
 失敗を発見・修正。koshitsu-tenpakaiは独自の手当てが未登録で消えるためCSS行のみ
 直接書き換え、TOPIC_ENRICH登録は持ち越し（チップで提案）。標準検査・unittest
 983件・run_public_checks.pyいずれもNG0件。
+
+## デザイン改訂（v10、2026-09-19・連続クリック時のスクロール競合）
+
+詳細は[quality/reviews/2026-09-19-task72-scroll-race-fix-details.md](../quality/reviews/2026-09-19-task72-scroll-race-fix-details.md)。
+`bringIntoView()`に世代番号を導入し連続クリック時の競合を解消、9テーマへ反映
+（`2ac2722`）。症状は自動テストで未再現、再発時は手順を要確認。
