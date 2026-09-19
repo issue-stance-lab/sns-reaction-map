@@ -62,24 +62,6 @@ def _sync_lead_and_note(html: str, topic: str, themes: dict) -> str:
     return html
 
 
-def _inject_bukatsu_go_cards(block: str, data: dict) -> str:
-    """build_bukatsu() が本文中に足す「この論点のなかを見る」リンクを再現する。
-
-    build_section() 自体は作らない（build_planet_page_preview.py:build_bukatsu の
-    セクション挿入後の一手間）。ここを飛ばすと、初回変換時に足された既存のリンクが
-    再生成のたびに消える（課題47と同じ失われ方）。bukatsu-chiiki専用（他テーマの
-    build_generic() には無い一手間のため、他テーマでは呼ばない）。
-    """
-    for it in data["issues"]:
-        tag = f'<div class="extras" id="extras-{it["id"]}">'
-        if tag in block and f'href="#issue-{it["id"]}"' not in block:
-            block = block.replace(
-                tag,
-                tag + f'<p style="margin:14px 0 0"><a class="go-card" href="#issue-{it["id"]}">'
-                      f'この論点のなかを見る ↓</a></p>', 1)
-    return block
-
-
 METHOD_TEXT_RE = re.compile(r"(重複を除いた累計)([\d,]+)(件を分類し、意見と判定した)([\d,]+)(件を論点分析に使用しています)")
 
 
@@ -109,30 +91,7 @@ def _sync_bukatsu_method_text(html: str, data: dict) -> str:
     )
     if n != 1:
         raise SystemExit("調査条件の取得件数・取得期間が見つからないか複数あります（bukatsu-chiiki）")
-    return _sync_bukatsu_issue_card_counts(new_html, data)
-
-
-def _sync_bukatsu_issue_card_counts(html: str, data: dict) -> str:
-    """「論点ごとに、なかを見る」（#issue-cards）にある論点カードの件数を揃える。
-
-    このセクションは build_planet_page_preview.py の merge_issue_cards() が
-    初回の山なみ変換時にだけ作る静的HTMLで、PLANET_SECTION_END より後ろ
-    （山なみ区間の外）にある。update_bukatsu_tide.py・build_bukatsu_arena.py・
-    sync_issue_counts.py のどの山なみ判定にも掛からず、refresh_planet_section.py も
-    今まで山なみ区間の中しか書き換えていなかったため、初回変換以来だれも
-    更新していなかった（verify_number_provenance.py だけがこの残存を検出する。
-    verify_theme_page.py の「論点カードのデータ整合」検査対象には入っていない）。
-    bukatsu-chiiki専用。
-    """
-    counts = {it["id"]: it["count"] for it in data["issues"]}
-    for issue_id, count in counts.items():
-        pattern = re.compile(
-            rf'(<article class="ic" id="issue-{re.escape(issue_id)}">.*?<span class="cnt">)'
-            r'[\d,]+(<small>件</small></span>)', re.S)
-        html, n = pattern.subn(lambda m: f"{m.group(1)}{count:,}{m.group(2)}", html, count=1)
-        if n != 1:
-            raise SystemExit(f"論点カード「{issue_id}」の件数表示が見つかりません（bukatsu-chiiki #issue-cards）")
-    return html
+    return new_html
 
 
 ELDERLY_OPINION_COUNT_RE = re.compile(r"(意見と判定した)([\d,]+)(件)")
@@ -356,8 +315,32 @@ def _inject_ai_copyright_landing_images(block: str, data: dict) -> str:
     )
 
 
+# bukatsu-chiikiの論点ごとの図解画像（consumption-tax-cutと同じ形）。画像自体は
+# 旧デザイン時代からdocs/images/topics/bukatsu-chiiki/に既にあり、#issue-cards
+# （「論点ごとに、なかを見る」）の各論点でも使われ続けているが、山なみの論点パネルには
+# 「この論点のなかを見る ↓」という#issue-cardsへの誘導リンク（旧_inject_bukatsu_go_cards）
+# でしか触れられていなかった。オーナー指示でリンクを廃し、画像を論点パネルへ直接
+# 差し込む形へ変更した。「その他」は図解を持たない。スラグは既存figureのimg srcと
+# 揃える（論点IDの表記そのものとは違う箇所がある: 受け皿→ukesara、費用→hiyou、
+# 地域格差→kousa）。
+BUKATSU_LANDING_IMAGE_BY_ISSUE_ID = {
+    "bukatsu-chiiki-kyoin": ("kyoin", "教員の働き方"),
+    "bukatsu-chiiki-seido": ("seido", "制度・移行プロセス"),
+    "bukatsu-chiiki-kyoiku": ("kyoiku", "教育的意義・機会"),
+    "bukatsu-chiiki-ukezara": ("ukesara", "受け皿・指導者"),
+    "bukatsu-chiiki-hiyo": ("hiyou", "費用・家庭負担"),
+    "bukatsu-chiiki-kakusa": ("kousa", "地域格差"),
+}
+
+
+def _inject_bukatsu_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "bukatsu-chiiki", BUKATSU_LANDING_IMAGE_BY_ISSUE_ID, "bkt"
+    )
+
+
 TOPIC_ENRICH = {
-    "bukatsu-chiiki": _inject_bukatsu_go_cards,
+    "bukatsu-chiiki": _inject_bukatsu_landing_images,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,
     "constitutional-amendment": _inject_constitutional_landing_images,
