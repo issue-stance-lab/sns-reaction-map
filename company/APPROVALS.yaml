@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-15"
+updated_at: "2026-09-19"
 
 rules:
   required_for:
@@ -526,3 +526,19 @@ items:
       Google側の案内では通常数日、長い場合2〜4週間で結果が出る見込み。
     result_evidence:
       - "本対話内のAdSense管理画面スクリーンショット（サイト詳細『審査待ち』『リクエスト日時: 15 9月 2026 23:50』）"
+
+  - id: approval-20260919-001
+    department: engineering-data
+    action: website_publication
+    summary: "皇室典範ページの論点画像5枚を承認済みの画像生成版へ差し替える"
+    reason: "オーナーが5枚を順に確認し、最後に『現在の画像と差し替えて』と指示したため"
+    risks:
+      - "課題70の全68枚の点検は継続中。点検が終わるまで図解をX投稿に添えない"
+    recommendation: approve
+    evidence:
+      - quality/plans/2026-09-19-task70-koshitsu-infographics.md
+      - tasks/task-70.md
+    status: approved
+    requested_at: "2026-09-19"
+    decided_at: "2026-09-19"
+    decision_note: "本対話の『現在の画像と差し替えて』を、承認済み5枚のページ画像差し替えと本番反映の承認として記録。"

@@ -668,29 +668,29 @@ def apply_koshitsu_review_note(page: str) -> str:
 
 LANDING_IMAGE_BY_ISSUE_ID = {
     "koshitsu-tenpakai-patrilineal-matrilineal": (
-        "koshitsu-infographic-wide-keisho.webp",
-        "旧図解です。継承資格の変更を見送ったことと、今回の改正法の成立は別です。"
-        "人数・伝統年数の表記は現状を検証した数値ではありません。",
+        "koshitsu-infographic-wide-keisho-v4.webp",
+        "男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は"
+        "男系の男子と定め、女性天皇と女系天皇の違いを示す図解。",
     ),
     "koshitsu-tenpakai-female-emperor": (
-        "koshitsu-infographic-wide-josei-tenno.webp",
-        "旧図解です。画像の支持率には出典の再確認が必要です。また、在位中の天皇を"
-        "皇位継承順位に含める表記は誤りです。女性天皇と女系天皇は異なる概念です。",
+        "koshitsu-infographic-wide-josei-tenno-v2.webp",
+        "女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながる"
+        "という違いと、現行の継承資格を示す図解。",
     ),
     "koshitsu-tenpakai-former-royal-adoption": (
-        "koshitsu-infographic-wide-yoshi.webp",
-        "制度案を議論していた時点の旧図解です。現在は改正後第三十八条を確認済みです。"
-        "1947年から2026年までは79年で、画像の「80年以上」「未確定」は現状の説明ではありません。",
+        "koshitsu-infographic-wide-yoshi-v2.webp",
+        "旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の"
+        "継承資格の違いを示す図解。",
     ),
     "koshitsu-tenpakai-princess-aiko": (
-        "koshitsu-infographic-wide-aiko.webp",
-        "旧図解です。「件数極少」は今回の集計を表しません。今回の改正では、"
-        "婚姻後も皇族となる女性皇族の配偶者と子は皇族としない整理です。",
+        "koshitsu-infographic-wide-aiko-v2.webp",
+        "愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、"
+        "変更されない皇位継承資格を示す図解。",
     ),
     "koshitsu-tenpakai-legislative-process": (
-        "koshitsu-infographic-wide-shingi.webp",
-        "旧図解です。画像内の審議時間と主要法案の平均との比較は、"
-        "根拠を再確認するまで確定した数値として扱いません。",
+        "koshitsu-infographic-wide-shingi-v2.webp",
+        "立法府の取りまとめ、政府の法案提出、衆参両院の可決と公布までの"
+        "流れを示す図解。",
     ),
     "koshitsu-tenpakai-other": (
         "koshitsu-vote-sonota.webp",
