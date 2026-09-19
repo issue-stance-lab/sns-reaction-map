@@ -753,65 +753,160 @@ def write_claim_provenance(destination: Path | None = None) -> None:
 
 
 # ---------------------------------------------------------------------------
-# この争点の背景（政策の現在地）
+# 何が、どこまで進んでいるのか／決まったこととまだのこと
 #
-# 山なみ変換（4b973a4、2026-09-14）で消えたまま、2026-09-18に「山なみの論点
-# パネルと投票セクションに統合済み」と誤認され、本文ごと削除された（54d4888、
-# 課題69）。実際は一次情報4本のうち3本が失われ、3段落あった説明文も投票
-# セクションの1文にまで縮んでいた。オーナー指摘（2026-09-19）で発覚し、9/15の
-# 大綱閣議決定にあわせて内容を書き直して復元する。
+# 山なみ変換（4b973a4、2026-09-14）で「この争点の背景」が消えたまま、
+# 2026-09-18に「山なみへ統合済み」と誤認され本文ごと削除された（54d4888、
+# 課題69）。2026-09-19、オーナー指摘で発覚し書き直して復元したが、当初案は
+# 独自形式（`issue-background`）だった。オーナーから「他のテーマのように」と
+# 追加指摘があり、9テーマ共通の型（`#bukatsu-background`＋`#bukatsu-check`、
+# 起承転結の再構成でfukushuto向けに作られ他8テーマへ複製済み）に作り直した。
+# IDは他テーマと同じ `bukatsu-background`/`bukatsu-check` を使う（テーマをまたぐ
+# 固有の命名ではなく、各テーマのHTMLファイル内で完結するローカルなID）。
 #
 # CLAIM_AUDITと同じ「後付けの補完処理」方式。山なみ図（PLANET_SECTION_START）の
 # 直前に毎回そろえる（PLANET_SECTIONの再生成やCLAIM_AUDITの再構築では消えない）。
-# 当初CLAIM_ENDの直後（一次資料照合コーナーの後ろ）に置いたが、オーナー報告
-# （2026-09-19、「ヒーローの直後がすぐSNS反応マップになる」）で、山の図・クイズ・
-# 照合コーナーを全部読み終えた後という位置は「地図を見る前に経緯を知りたい」
-# という読み方に合わないと判明し、地図より前へ動かした。
 # ---------------------------------------------------------------------------
 BACKGROUND_START = "<!-- BACKGROUND_CONTEXT_START -->"
 BACKGROUND_END = "<!-- BACKGROUND_CONTEXT_END -->"
 BACKGROUND_ANCHOR = "<!-- PLANET_SECTION_START -->"
 
+# 他テーマ（bukatsu-chiiki・fukushuto等）の埋め込み<style>と同一（コピー）。
+# セレクタがID指定のため、テーマごとにHTMLファイルが別なら衝突しない。
+BACKGROUND_CSS = """<style>
+#bukatsu-background .bg-def{font-size:17px;font-weight:700;line-height:1.85;margin:0 0 6px}
+#bukatsu-background .bg-now{font-size:14px;color:var(--muted);margin:0 0 20px}
+#bukatsu-background h3{font-size:15px;font-weight:900;margin:24px 0 8px;padding-left:10px;
+  border-left:3px solid var(--accent);line-height:1.5}
+#bukatsu-background p{font-size:14.5px;line-height:1.95;margin:0 0 .9em}
+#bukatsu-background ol.bg-tl{list-style:none;margin:6px 0 0;padding:0}
+#bukatsu-background ol.bg-tl li{display:grid;grid-template-columns:132px 1fr;gap:18px;
+  padding:14px 0;border-top:1px solid var(--line)}
+#bukatsu-background ol.bg-tl .when{font-size:13px;font-weight:900;color:var(--accent);line-height:1.6}
+#bukatsu-background ol.bg-tl .when em{display:block;font-style:normal;font-size:11.5px;
+  font-weight:400;color:var(--muted)}
+#bukatsu-background ol.bg-tl .what{font-size:14.5px;line-height:1.9;margin:0}
+#bukatsu-background ol.bg-tl .src{display:block;margin-top:6px;font-size:12px;line-height:1.7}
+#bukatsu-background ol.bg-tl .src a{color:var(--muted)}
+#bukatsu-background .bg-jump{margin:22px 0 0;font-size:14px;font-weight:700}
+#bukatsu-check .ck{display:grid;grid-template-columns:150px 1fr;gap:0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+#bukatsu-check .ck .k{background:#F2F6FD;padding:14px 16px;border-right:1px solid var(--line)}
+#bukatsu-check .ck .k b{display:block;font-size:15px;font-weight:900;line-height:1.5}
+#bukatsu-check .ck .k span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);
+  line-height:1.7}
+#bukatsu-check .ck .v{padding:14px 18px;font-size:14.5px;line-height:1.9}
+#bukatsu-check .ck .v .src{display:block;margin-top:7px;font-size:11.5px;line-height:1.7}
+#bukatsu-check .ck .v .src a{color:var(--muted)}
+#bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
+  background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+</style>"""
+
 # 一次情報は quality/research/consumption-tax-cut-primary-sources.md で
 # 確認済みの資料（H-2・N・O・P、確認日2026-09-17）から選んだ。新しい数字を
 # ここで足さないこと（足す場合は先に一次資料メモへ確認日つきで記録する）。
-BACKGROUND_SOURCES = [
+BACKGROUND_TIMELINE = [
     (
-        "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou5.pdf",
-        "内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」概要（令和8年9月15日閣議決定）",
+        "2026年7月30日",
+        "税率引下げと給付付き税額控除の検討を表明",
+        "首相官邸の会見で、軽減税率対象の飲食料品について、税率引下げと給付付き税額控除の両方をあわせて検討していると説明されました。",
+        [("https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html",
+          "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）")],
     ),
     (
-        "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
-        "同、大綱本文",
+        "2026年8月5日",
+        "「1%・2年間」の方針を初めて閣議決定",
+        "政府として、令和9年4月から2年間、軽減税率対象の飲食料品の消費税率を1%とする方針を正式に決定しました。財源は歳出・歳入の見直しで確保し、赤字国債には頼らないとしています。",
+        [("https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html",
+          "首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）")],
     ),
     (
-        "https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html",
-        "首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）",
+        "2026年9月15日",
+        "大綱を閣議決定、制度設計が確定",
+        "税率引下げの期間（2027年4月〜2029年3月）、就業者負担軽減支援金の対象・支給額、事業者向けの経過措置など、法案のもとになる制度設計が固まりました。本ページ確認時点で、これが到達している最新の段階です。",
+        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+          "内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日閣議決定）")],
+    ),
+]
+
+BACKGROUND_CHECKS = [
+    (
+        "対象範囲",
+        "食料品だけか、広がるのか",
+        "決まっています。現行の軽減税率が適用される飲食料品（酒類・外食を除く）のままで、対象を広げる決定はしていません。",
+        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "内閣「大綱」（令和8年9月15日閣議決定）第二")],
     ),
     (
-        "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm",
-        "財務省「消費税の使途」",
+        "税率と期間",
+        "いつから、何%、いつまでか",
+        "決まっています。2027年4月1日から2029年3月31日までの2年間、税率を1%（軽減税率8%から引下げ）とします。",
+        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "同大綱")],
+    ),
+    (
+        "給付との関係",
+        "減税と給付、どちらか一方か",
+        "決まっています。両方を組み合わせる設計です。2027年4月から「就業者負担軽減支援金」を導入し、2029年度には「給付付き税額控除」として本格化させます。",
+        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "同大綱（就業者負担軽減支援金の制度設計）")],
+    ),
+    (
+        "財源",
+        "いくらかかり、どう賄うか",
+        "方針だけ決まっています。「赤字国債に頼らない」という原則は閣議決定されましたが、具体的な金額の内訳は令和9年度の予算編成まで示されていません。",
+        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "同大綱")],
     ),
 ]
 
 
-def background_context() -> str:
-    """「この争点の背景」セクションを組み立てる（静的な編集部原稿）。"""
-    links = "\n".join(
-        f'<li><a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a></li>'
-        for url, label in BACKGROUND_SOURCES
+def _bg_sources(links: list[tuple[str, str]]) -> str:
+    return " ／ ".join(
+        f'<a href="{url}" target="_blank" rel="noopener">{esc(label)}</a>' for url, label in links
     )
-    p = 'style="font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 14px"'
+
+
+def background_context() -> str:
+    """「何が、どこまで進んでいるのか」「決まったこと・まだのこと」を組み立てる。
+
+    他9テーマ（fukushuto等）と同じ`#bukatsu-background`＋`#bukatsu-check`型
+    （静的な編集部原稿）。
+    """
+    timeline = "\n".join(
+        f'<li><div class="when">{esc(when)}<em>{esc(title)}</em></div>'
+        f'<div><p class="what">{esc(body)}</p>'
+        f'<span class="src">出典: {_bg_sources(links)}</span></div></li>'
+        for when, title, body, links in BACKGROUND_TIMELINE
+    )
+    checks = "\n".join(
+        f'<div class="ck"><div class="k"><b>{esc(key)}</b><span>{esc(question)}</span></div>'
+        f'<div class="v">{esc(body)}<span class="src">出典: {_bg_sources(links)}</span></div></div>'
+        for key, question, body, links in BACKGROUND_CHECKS
+    )
     return f"""{BACKGROUND_START}
-<section class="panel issue-background" id="issue-background">
-<div class="panel-title"><h2>この争点の背景</h2><span>なにが決まっていて、なにがこれからなのか（2026年9月19日時点）</span></div>
-<p {p}>消費税は標準税率10%、食料品などは軽減税率8%です。物価高が続くなか各党が減税を掲げていましたが、2026年9月15日、政府は食料品の消費税率を2027年4月から2029年3月までの2年間、1%まで引き下げる方針を閣議決定しました。対象は現行の軽減税率と同じ飲食料品で、対象範囲そのものは広げません。あわせて、中低所得の勤労者向けに「就業者負担軽減支援金」を2027年4月に導入し、2029年度には「給付付き税額控除」として本格化させる設計も固まっています。</p>
-<p {p}>決まっているのは政府の方針（大綱）までで、法律はまだ成立していません。政府はこの大綱をもとに法案を作り、臨時国会に提出して成立を目指すとしています（報道では10月召集が見込まれています）。2年間の財源は「赤字国債に頼らない」とされていますが、具体的な内訳は年末の予算編成まで示されていません。</p>
-<p {p}>推進する立場からは「物価高対策として早く広く効く」「可処分所得が直接増える」という主張があります。慎重な立場からは「社会保障の財源が細る」「値下げに反映されず事業者の利益になる」「2年後に税率が戻るときの反動が大きい」という反論が出ています。</p>
-<p {p}>SNS上では減税に前向きな声が多数ですが、その中身は一枚岩ではありません。「対象が食料品だけでは物足りない、一律にすべきだ」という不満、「財源の内訳を示さないまま決めるのは無責任」という批判、「公約を掲げた政党が採決でどう動くか」という政治不信が、論点ごとに別々の対立軸をつくっています。</p>
-<div class="background-sources"><h3 style="font-size:14px;margin:22px 0 10px">一次情報</h3><ul class="srclist">
-{links}
-</ul></div>
+{BACKGROUND_CSS}
+<section class="panel" id="bukatsu-background" aria-labelledby="bg-title">
+<div class="panel-title"><h2 id="bg-title">何が、どこまで進んでいるのか</h2><span>官庁の資料で確かめた範囲</span></div>
+<p class="bg-def">消費税減税（食料品分）は、物価高への対策として、飲食料品にかかる消費税率を時限的に引き下げる政策です。現在は標準税率10%、飲食料品などには軽減税率8%が適用されています。</p>
+<p class="bg-now">法律はまだ成立していません。政府が決めたのは法案のもとになる方針（大綱）までで、これから法案を作り、臨時国会に提出して審議されます。</p>
+<h3>なぜ始まったか</h3>
+<p>物価高が続くなか、各党が消費税や物価対策としての減税・給付を公約や提言として掲げてきました。国民民主党は消費税の一律5%への引下げを、立憲民主党は食料品のゼロ税率化を提言するなど、政党によって対象・税率・実施方法は分かれていました。</p>
+<p>2026年に入り、政府・与党内でも食料品に対象を絞った引下げの検討が進み、8月5日には政府として初めて「税率1%・2年間」という具体的な方針を閣議決定しました。9月15日には、この方針をもとにした大綱が閣議決定され、期間や支援金の制度設計が固まりました。</p>
+<h3>これまでの経緯</h3>
+<ol class="bg-tl">
+{timeline}
+</ol>
+<p class="bg-jump"><a href="#planet-block">意見の分布のほうを先に見る →</a></p>
+</section>
+<section class="panel" id="bukatsu-check" aria-labelledby="ck-title">
+<div class="panel-title"><h2 id="ck-title">「決まった」と「まだ」を分けて確かめる</h2><span>大綱と、これからの法案審議を見分ける</span></div>
+<p>「消費税が下がる」と一言で言っても、対象・税率・期間・財源のうち、政府がすでに決めた部分と、これから決める部分があります。混同すると、賛否の理由がかみ合わなくなります。</p>
+{checks}
+<p class="ck-note"><b>このページで未確認のこと</b><br>決まっているのは政府の方針（大綱）までで、法律はまだ成立していません。臨時国会への法案提出時期や審議の見通しは報道に基づくもので、政府の公式発表として確認できた日程はありません（本ページ確認: 2026年9月19日）。</p>
 </section>
 {BACKGROUND_END}"""
 
@@ -1218,12 +1313,9 @@ def build(
     html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
-    # --- 18. この争点の背景（政策の現在地） --------------------------------
+    # --- 18. 何が、どこまで進んでいるのか／決まったこと・まだのこと ---------
     # CLAIM_AUDITと同じ「後付けの補完処理」。山なみ図（PLANET_SECTION_START）の
-    # 直前に毎回そろえる。オーナー報告（2026-09-19、「ヒーローの直後がすぐ
-    # SNS反応マップになる」）で、CLAIM_ENDの直後＝クイズや照合コーナーを
-    # 全部読んだ後という位置は「地図を見る前に経緯を知りたい」という読み方に
-    # 合わないと判明したため、地図より前に動かした。
+    # 直前に毎回そろえる。他9テーマと同じ`#bukatsu-background`＋`#bukatsu-check`型。
     if BACKGROUND_START in html and BACKGROUND_END in html:
         start = html.index(BACKGROUND_START)
         end = html.index(BACKGROUND_END) + len(BACKGROUND_END)
@@ -1315,15 +1407,28 @@ def verify(html: str, opinions: int) -> None:
         if shown != expected:
             problems.append(f"突き合わせの件数が出所ファイルと合わない: {shown} != {expected}")
 
-    # この争点の背景。マーカー1組・見出し・一次情報4本が揃っているか
-    # （2026-09-18に「山なみへ統合済み」と誤認され削除された再発防止）。
+    # 何が、どこまで進んでいるのか／決まったこと・まだのこと。マーカー1組・
+    # 見出し2つ・タイムライン・確認観点・出典が揃っているか（2026-09-18に
+    # 「山なみへ統合済み」と誤認され削除された再発防止）。
     if html.count(BACKGROUND_START) != 1 or html.count(BACKGROUND_END) != 1:
-        problems.append("この争点の背景セクションのマーカーが1組でない")
-    if "<h2>この争点の背景</h2>" not in html:
-        problems.append("この争点の背景の見出しがページにない")
-    for url, _label in BACKGROUND_SOURCES:
-        if f'href="{url}"' not in html:
-            problems.append(f"この争点の背景: 一次情報リンクが見つからない: {url}")
+        problems.append("背景セクションのマーカーが1組でない")
+    if '<h2 id="bg-title">何が、どこまで進んでいるのか</h2>' not in html:
+        problems.append("「何が、どこまで進んでいるのか」の見出しがページにない")
+    if '<h2 id="ck-title">「決まった」と「まだ」を分けて確かめる</h2>' not in html:
+        problems.append("「決まった」と「まだ」を分けて確かめるの見出しがページにない")
+    timeline_items = len(re.findall(r'<ol class="bg-tl">(.*?)</ol>', html, re.S))
+    if timeline_items != 1:
+        problems.append("これまでの経緯のタイムラインが1つでない")
+    if html.count('<div class="ck">') != len(BACKGROUND_CHECKS):
+        problems.append(f"確かめる観点が{len(BACKGROUND_CHECKS)}件でない")
+    for _when, _title, _body, links in BACKGROUND_TIMELINE:
+        for url, _label in links:
+            if f'href="{url}"' not in html:
+                problems.append(f"これまでの経緯: 出典リンクが見つからない: {url}")
+    for _key, _question, _body, links in BACKGROUND_CHECKS:
+        for url, _label in links:
+            if f'href="{url}"' not in html:
+                problems.append(f"確かめる観点: 出典リンクが見つからない: {url}")
     # 位置も検査する。山なみ図（PLANET_SECTION_START）より後ろにあると、読者が
     # 地図・クイズ・照合コーナーを全部読み終えるまで経緯に出会えない
     # （2026-09-19にオーナー報告で発覚した位置の問題の再発防止）。
@@ -1332,7 +1437,7 @@ def verify(html: str, opinions: int) -> None:
         and BACKGROUND_ANCHOR in html
         and html.index(BACKGROUND_START) > html.index(BACKGROUND_ANCHOR)
     ):
-        problems.append("この争点の背景が山なみ図より後ろにある（地図より前に置くこと）")
+        problems.append("背景セクションが山なみ図より後ろにある（地図より前に置くこと）")
 
     if problems:
         raise SystemExit("ビルド検証に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -1421,7 +1526,7 @@ def main() -> int:
     parser.add_argument(
         "--background-only",
         action="store_true",
-        help="「この争点の背景」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
+        help="「何が、どこまで進んでいるのか」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
     )
     parser.add_argument(
         "--skip-issue-counts",
