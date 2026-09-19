@@ -1151,30 +1151,6 @@ def build(
         legend,
     )
 
-    # --- 9. SM_RAW / ISSUES / colorOf ----------------------------------
-    html = re.sub(r"const SM_RAW = \[.*?\n\];", lambda _: data["sm_raw_js"], html, count=1, flags=re.S)
-    html = re.sub(r"const ISSUES = \[.*?\n  \];", lambda _: data["issues_js"], html, count=1, flags=re.S)
-    html = html.replace(
-        "function colorOf(p){return p.x>=0.5?'#059669':(p.x<=-0.5?'#dc2626':'#64748b');}",
-        "const STANCE_COLORS=['#059669','#f59e0b','#dc2626','#64748b'];\n"
-        "  function colorOf(p){return STANCE_COLORS[p.st]||'#64748b';}",
-    )
-    html = html.replace("ctx.fillText('副首都',CX,CY-9);\n    ctx.fillText('法案',CX,CY+11);", "ctx.fillText('消費税',CX,CY-9);\n    ctx.fillText('減税',CX,CY+11);")
-
-    # 論点名が副首都テーマより長く、右端のラベルが640px幅からはみ出すため
-    # ラベル半径と文字サイズを詰める。加えて、扇が細い論点（その他・事業者の負担）は
-    # ラベルが重なるので半径を交互にずらす。
-    html = html.replace("R_MAX=214, R_HOLE=56, R_LBL=242;", "R_MAX=214, R_HOLE=56, R_LBL=224;")
-    html = html.replace(
-        "ctx.font='900 13px \"Noto Sans JP\",sans-serif';\n    ISSUES.forEach((iss,i)=>{\n"
-        "      const rad=iss.mid*Math.PI/180;\n"
-        "      const lx=CX+R_LBL*Math.cos(rad), ly=CY+R_LBL*Math.sin(rad);",
-        "ctx.font='900 12px \"Noto Sans JP\",sans-serif';\n    let narrowSeen=0;\n    ISSUES.forEach((iss,i)=>{\n"
-        "      const rad=iss.mid*Math.PI/180;\n"
-        "      const rl=R_LBL+((iss.a1-iss.a0)<14?(narrowSeen++%2?36:14):0);\n"
-        "      const lx=CX+rl*Math.cos(rad), ly=CY+rl*Math.sin(rad);",
-    )
-
     # --- 10. 投票UIのJSデータ ------------------------------------------
     vote_issues = ",\n    ".join(
         f'{{k:\'{ISSUE_META[name]["short"]}\', icon:\'{ISSUE_META[name]["icon"]}\', desc:\'{ISSUE_META[name]["headline"]}\'}}'
@@ -1358,11 +1334,11 @@ def verify(html: str, opinions: int) -> None:
     if ".hero:before" in html and "fukushuto" in re.search(r"\.hero:before\{[^}]*\}", html).group(0):
         problems.append(".hero:before が副首都のヒーロー画像を参照している")
 
-    sm_raw_match = re.search(r"const SM_RAW = \[.*?\n\];", html, re.S)
-    if not sm_raw_match:
-        problems.append("SM_RAW がページから見つからない")
-    elif sm_raw_match.group(0).count("{x:") != opinions:
-        problems.append("SM_RAW の件数が意見件数と一致しない")
+    if re.search(r"const SM_RAW = \[", html):
+        problems.append(
+            "SM_RAW（旧アリーナ形式の投稿別データ。山なみ形式には無い機能で"
+            "2026-09-20に撤去済み）が復活している"
+        )
     # 投票の保存先は supabase 直叩きから vote-store.js 経由へ移っている
     for token in ("G-K10S4YCZFH", "ca-pub-2542211932832864", "vote-store.js", "topic-modern.js"):
         if token not in html:
