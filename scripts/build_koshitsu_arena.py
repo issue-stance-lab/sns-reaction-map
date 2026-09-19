@@ -701,15 +701,20 @@ LANDING_IMAGE_BY_ISSUE_ID = {
 
 
 def apply_koshitsu_landing_images(page: str) -> str:
-    """論点の図解画像を、山なみ再生成後の詳細パネル（extras）へ差し戻す。
+    """論点の図解画像を、山なみ再生成後のページへ差し戻す。
 
     render_planet()（10テーマ共通）はこの画像を知らないため、
     refresh_verified_planet()が山なみ区画全体を作り直すたびに消える
     （fukushutoのapply_landing_imagesと同型、課題69・オーナー指摘で発見）。
-    extras-{id}はJS版（land()関数、drawPanel相当）が`extras.innerHTML`で
-    読み込む唯一の場所なので、ここへ入れればフォールバック側・実際の操作画面側の
-    両方に反映される。6論点中3論点（一次資料の主張照合を持たない論点）は
-    extras区画自体が無いため、その3件は新設する。
+    無JS用フォールバック（#fallback配下のlanding-panel）と、実際の操作画面を
+    作るJS（drawPanel相当）の両方、見出し・タブの直後へ差し戻す。以前はJS版が
+    `extras.innerHTML`で読み込む`extras-{id}`の中に画像を入れていたが、
+    そこは「資料との照合」の近く＝内訳やクイズより下で、論点を押しても画像が
+    すぐ見えなかった（消費税減税・fukushutoと同じ「見出し→タブ→画像→統計」の
+    並びに揃える。課題72、2026-09-19オーナー指摘で発見）。
+    ファイル名がテーマ内で不揃い（-v2/-v4サフィックス、「その他」だけ
+    `koshitsu-vote-*`）なので、slug結合ではなくID→フルパスの対応表をJSへ
+    そのまま埋め込む。
     """
     def figure_html(issue_id: str) -> str:
         filename, caption = LANDING_IMAGE_BY_ISSUE_ID[issue_id]
@@ -719,35 +724,50 @@ def apply_koshitsu_landing_images(page: str) -> str:
             f'<img src="{path}" alt="{html.escape(caption)}" loading="lazy"></div>'
         )
 
-    def add_to_existing_extras(m: re.Match) -> str:
-        return m.group(0) + figure_html(m.group(1))
+    def add_to_fallback(m: re.Match) -> str:
+        issue_id, heading = m.group(1), m.group(0)
+        if issue_id not in LANDING_IMAGE_BY_ISSUE_ID:
+            return heading
+        return heading + figure_html(issue_id)
 
     page, total = re.subn(
-        r'<div class="extras" id="extras-(koshitsu-tenpakai-[a-z-]+)">',
-        add_to_existing_extras,
+        r'<section class="landing-panel" id="fb-(koshitsu-tenpakai-[a-z-]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        add_to_fallback,
         page,
     )
+    if total != len(LANDING_IMAGE_BY_ISSUE_ID):
+        raise IssueCountError(
+            f"論点図解(フォールバック側): landing-panelが{len(LANDING_IMAGE_BY_ISSUE_ID)}件必要です（{total}件）"
+        )
 
-    for issue_id in LANDING_IMAGE_BY_ISSUE_ID:
-        if f'id="extras-{issue_id}"' in page:
-            continue
-        section_pattern = re.compile(
-            r'(<section class="landing-panel" id="fb-' + re.escape(issue_id) + r'"[^>]*>.*?)'
-            r'(<a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>)',
-            re.S,
-        )
-        page, n = section_pattern.subn(
-            lambda m: m.group(1)
-            + f'<div class="extras" id="extras-{issue_id}">{figure_html(issue_id)}</div>'
-            + m.group(2),
-            page,
-            count=1,
-        )
-        if n != 1:
-            raise IssueCountError(f"論点図解: 挿入位置が見つかりません（{issue_id}）")
-        total += 1
-    if total != 6:
-        raise IssueCountError(f"論点図解: 対象が6件必要です（{total}件）")
+    # パスと注記は先に1つの変数へ組み立ててからsrc/data-altへ埋め込む。
+    # 直前に固定の"images/…"が付いたまま結合前で切れると、validate_theme_seo.py
+    # の参照チェックが実在しないローカルパスの断片として誤検知する
+    # （reference_planet_regen_wipes_hand_edits、課題69・fukushutoで発見）。
+    path_map_js = ",".join(
+        f"{json.dumps(issue_id, ensure_ascii=False)}:"
+        f"{json.dumps('images/topics/koshitsu-tenpakai/' + filename, ensure_ascii=False)}"
+        for issue_id, (filename, _caption) in LANDING_IMAGE_BY_ISSUE_ID.items()
+    )
+    alt_map_js = ",".join(
+        f"{json.dumps(issue_id, ensure_ascii=False)}:{json.dumps(caption, ensure_ascii=False)}"
+        for issue_id, (_filename, caption) in LANDING_IMAGE_BY_ISSUE_ID.items()
+    )
+    old_draw_panel_head = (
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m)"
+    )
+    new_draw_panel_head = (
+        f"  const koshitsuImgPath = {{{path_map_js}}}[it.id];\n"
+        f"  const koshitsuImgAlt = {{{alt_map_js}}}[it.id] || '';\n"
+        "  const koshitsuImgHtml = koshitsuImgPath ? ('<div class=\"explainer-card landing-image\" data-img=\"'+koshitsuImgPath+'\" data-alt=\"'+koshitsuImgAlt+'\">'\n"
+        "    +'<img src=\"'+koshitsuImgPath+'\" alt=\"'+koshitsuImgAlt+'\" loading=\"lazy\"></div>') : '';\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m) + koshitsuImgHtml"
+    )
+    if old_draw_panel_head not in page:
+        raise IssueCountError("論点図解(drawPanel側): JSテンプレートの差し込み位置が見つかりません")
+    page = page.replace(old_draw_panel_head, new_draw_panel_head, 1)
     return page
 
 
