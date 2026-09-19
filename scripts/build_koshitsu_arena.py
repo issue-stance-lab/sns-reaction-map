@@ -693,9 +693,9 @@ LANDING_IMAGE_BY_ISSUE_ID = {
         "流れを示す図解。",
     ),
     "koshitsu-tenpakai-other": (
-        "koshitsu-vote-sonota.webp",
-        "複数の話題を整理する補助図です。「その他」は、今回案への「未表明」や"
-        "「判断困難」と同じ分類ではありません。",
+        "koshitsu-infographic-wide-sonota-v2.webp",
+        "「その他」に入った公開投稿の意見例。報道の論調、記事の受け止め、"
+        "調査の設問、政党の評価についての四つの視点を示す図解。",
     ),
 }
 
@@ -712,8 +712,8 @@ def apply_koshitsu_landing_images(page: str) -> str:
     そこは「資料との照合」の近く＝内訳やクイズより下で、論点を押しても画像が
     すぐ見えなかった（消費税減税・fukushutoと同じ「見出し→タブ→画像→統計」の
     並びに揃える。課題72、2026-09-19オーナー指摘で発見）。
-    ファイル名がテーマ内で不揃い（-v2/-v4サフィックス、「その他」だけ
-    `koshitsu-vote-*`）なので、slug結合ではなくID→フルパスの対応表をJSへ
+    ファイル名がテーマ内で不揃い（-v2/-v4サフィックス）なので、
+    slug結合ではなくID→フルパスの対応表をJSへ
     そのまま埋め込む。
     """
     def figure_html(issue_id: str) -> str:
