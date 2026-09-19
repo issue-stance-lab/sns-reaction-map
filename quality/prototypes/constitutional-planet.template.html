@@ -22,10 +22,19 @@ h1{font-size:22px;margin:0 0 4px}
   border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}
 .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
   padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}
-.modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
-.modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
-  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
-.modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}
+/* 立場フィルターも論点タブと同じ「本物のタブ」の形に揃える
+   （オーナー指摘「全ての意見・文科省判断指示、の項目も画像のようにタブ表示した方が」2026-09-19）。 */
+.modes{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:0 0 12px}
+.modes button{background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
+  border-bottom:3px solid var(--line);border-radius:11px 11px 0 0;
+  padding:7px 13px 6px;font-size:12.5px;font-family:inherit;cursor:pointer;line-height:1.4;
+  transform:translateY(3px);transition:transform .12s,background-color .12s,color .12s}
+.modes button:nth-child(3n+1){border-radius:11px 5px 0 0}
+.modes button:nth-child(3n+2){border-radius:6px 12px 0 0}
+.modes button:nth-child(3n){border-radius:9px 8px 0 0}
+.modes button:hover,.modes button:focus-visible{color:var(--fg);outline:none;transform:translateY(1px)}
+.modes button[aria-pressed=true]{background:var(--panel);color:var(--fg);font-weight:700;
+  border-color:var(--accent);border-bottom-color:var(--panel);transform:translateY(0)}
 .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
   border-radius:12px;overflow:hidden;padding:10px 8px 4px}

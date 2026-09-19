@@ -183,7 +183,6 @@ LIGHT_SKIN = """
 #planet-block .note,#planet-block .ro{background:#f2f6fb}
 #planet-block .meta code{background:#eef1f6}
 #planet-block .islands .num{background:#e7ecf4;color:#172033}
-#planet-block .modes button[aria-pressed=true]{background:#e4edff}
 #planet-block .dive button{color:#fff}
 #planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
 /* 選択肢が押せると分からない・正誤が弱い（オーナー指摘）。触れる形と結果を強くする */

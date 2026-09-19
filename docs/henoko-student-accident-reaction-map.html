@@ -292,8 +292,11 @@
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
   line-height:1.7;-webkit-text-size-adjust:100%}#planet-block .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}#planet-block h1{font-size:22px;margin:0 0 4px}#planet-block .q{color:var(--muted);font-size:14px;margin:0 0 12px}#planet-block .caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
   border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}#planet-block .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
-  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#planet-block .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
-  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:0 0 12px}#planet-block .modes button{background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
+  border-bottom:3px solid var(--line);border-radius:11px 11px 0 0;
+  padding:7px 13px 6px;font-size:12.5px;font-family:inherit;cursor:pointer;line-height:1.4;
+  transform:translateY(3px);transition:transform .12s,background-color .12s,color .12s}#planet-block .modes button:nth-child(3n+1){border-radius:11px 5px 0 0}#planet-block .modes button:nth-child(3n+2){border-radius:6px 12px 0 0}#planet-block .modes button:nth-child(3n){border-radius:9px 8px 0 0}#planet-block .modes button:hover,#planet-block .modes button:focus-visible{color:var(--fg);outline:none;transform:translateY(1px)}#planet-block .modes button[aria-pressed=true]{background:var(--panel);color:var(--fg);font-weight:700;
+  border-color:var(--accent);border-bottom-color:var(--panel);transform:translateY(0)}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
   border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .issue-tabs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:10px 0 0}#planet-block .issue-tabs button{font:inherit;font-size:12.5px;line-height:1.4;cursor:pointer;
   background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
   border-bottom:3px solid var(--line);padding:7px 13px 6px;
@@ -334,7 +337,6 @@
 #planet-block .note,#planet-block .ro{background:#f2f6fb}
 #planet-block .meta code{background:#eef1f6}
 #planet-block .islands .num{background:#e7ecf4;color:#172033}
-#planet-block .modes button[aria-pressed=true]{background:#e4edff}
 #planet-block .dive button{color:#fff}
 #planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
 /* 選択肢が押せると分からない・正誤が弱い（オーナー指摘）。触れる形と結果を強くする */
