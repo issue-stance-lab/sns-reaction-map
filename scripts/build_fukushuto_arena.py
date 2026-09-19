@@ -502,12 +502,12 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
 # 各論点の図解画像（画像はwebp・件数などの動的データは持たない静的アセット）。
 # slugはファイル名の接尾辞、labelはalt文字列用（h2はアイコン付きなのでここは別に持つ）。
 LANDING_IMAGE_BY_ISSUE_ID = {
-    "fukushuto-osaka-restoration": ("tokoso", "都構想・維新"),
-    "fukushuto-location": ("kouhochi", "候補地"),
-    "fukushuto-definition": ("teigi", "定義・中身"),
-    "fukushuto-disaster-preparedness": ("bousai", "防災・災害"),
-    "fukushuto-priority": ("yusen", "優先順位"),
-    "fukushuto-finance": ("hiyou", "費用・財源"),
+    "fukushuto-osaka-restoration": ("tokoso-v2", "都構想・維新"),
+    "fukushuto-location": ("kouhochi-v4", "候補地"),
+    "fukushuto-definition": ("teigi-v2", "定義・中身"),
+    "fukushuto-disaster-preparedness": ("bousai-v2", "防災・災害"),
+    "fukushuto-priority": ("yusen-v2", "優先順位"),
+    "fukushuto-finance": ("hiyou-v2", "費用・財源"),
 }
 
 
