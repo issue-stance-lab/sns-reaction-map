@@ -336,11 +336,32 @@ def _inject_constitutional_landing_images(block: str, data: dict) -> str:
     )
 
 
+# ai-copyrightの論点ごとの図解画像（consumption-tax-cutと同じ形）。画像自体は既にあったが
+# （2026年初出時の制作分）、旧デザイン「判断が分かれる、6つの問い」という独立カードに
+# しか使われておらず、山なみの各論点パネルには一度も差し込まれていなかった。「その他」は
+# 図解を持たない。ラベルはARENA_LABELSと表記を揃える（既存カードのdata-altと同じ文言）。
+AI_COPYRIGHT_LANDING_IMAGE_BY_ISSUE_ID = {
+    "ai-copyright-learning-data": ("gakushu", "学習データ・無断利用"),
+    "ai-copyright-creator-rights": ("creator", "クリエイター保護・権利"),
+    "ai-copyright-legal-framework": ("hoseibi", "法制度・規制整備"),
+    "ai-copyright-tech-promotion": ("gijutsu", "技術競争・AI推進"),
+    "ai-copyright-user-ethics": ("moraru", "利用者モラル・倫理"),
+    "ai-copyright-generated-work-rights": ("seiseibutsu", "AI生成物の権利・創作性"),
+}
+
+
+def _inject_ai_copyright_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "ai-copyright", AI_COPYRIGHT_LANDING_IMAGE_BY_ISSUE_ID, "aic"
+    )
+
+
 TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_go_cards,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,
     "constitutional-amendment": _inject_constitutional_landing_images,
+    "ai-copyright": _inject_ai_copyright_landing_images,
 }
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
