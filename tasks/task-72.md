@@ -159,12 +159,41 @@ chart-boxごと消え、直後の`render()`が`#chartdesc`等を見失って
 `land()`と同じくパネルの見出し（`#panel h2`）へ運ぶよう変更（ブランチ
 `task/issue-tabs-ui-v6`）。
 
+## デザイン改訂（v7、2026-09-19・オーナーの実地フィードバック7件目）
+
+**「資料にしかない話を見る、を推してもどこに出たかわかりにくい、アニメーションして
+出てくるようにできる？」**: 「資料にしかない話を見る」ボタンは一次資料クイズの下という
+離れた場所に`#ocean`セクションを開くが、スクロール自体は起きていた（実測確認済み）ため
+「起きたことが分かりにくい」が実態だった。スクロール先の見出しに、ふわっと現れる動き
+（0.5s フェード+上からのスライド）と帯の点滅（1.8s、`--reveal-flash:#e4edff`から透明へ）を
+追加し、到着点を分かりやすくした。閉じてすぐ開き直しても再生されるよう、
+`just-revealed`クラスを一度外して強制再描画してから付け直す（ブランチ
+`task/issue-tabs-ui-v7`）。
+
+**実装中に見つけた不具合（本番反映前にローカルで検出・修正済み）**: 新設した
+`@keyframes isa-ocean-reveal`/`isa-ocean-flash`を、共通テンプレート
+（`quality/prototypes/*.template.html`）の`<style>`内にそのまま書いたところ、生成後の
+HTMLで`#planet-block @keyframes isa-ocean-reveal{...}`という無効なCSSになり、
+アニメーションが発火しなかった。原因は`scripts/build_planet_page_preview.py`の
+`scope_css()`が「直前の`}`の次の1文字が`@`かどうか」だけで`@keyframes`を判定する実装
+のため、改行を1つ挟むだけで通常のセレクタと誤認され`#planet-block`が誤って
+前置されていた。`scope_css()`を経由しない`LIGHT_SKIN`側（同スクリプト内、既存の
+`@keyframes isa-pnum-pop`と同じ場所）へ移し、`#planet-block`を手動で前置することで
+回避した（`scope_css()`自体は共有の既存関数のため変更していない）。
+
+**検証**: henoko-student-accidentのローカルプレビューでデスクトップ・375pxモバイル幅
+とも、`getComputedStyle`によるアニメーション再生確認（`opacity`0→1、背景色が
+`--reveal-flash`から透明へ推移）とスクロール先（`scrollY`の到達値が一致）を確認。
+`verify_theme_page.py`・`verify_number_provenance.py`ともOK。本番反映後、実機で
+スクロール（0→4689px、見出しが画面内に到達）とアニメーション登録
+（`getComputedStyle().animationName`が`isa-ocean-reveal, isa-ocean-flash`）を再確認。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
-デザイン改訂6件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
-背景表示化・背景の不透明度強化・立場フィルター切替時のスクロール先修正）を
-同日中に順次本番反映済み。本番
+デザイン改訂7件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
+背景表示化・背景の不透明度強化・立場フィルター切替時のスクロール先修正・
+「資料にしかない話を見る」の到着演出）を同日中に順次本番反映済み。本番
 https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
 最終形を実機確認済み（デスクトップ・375px、山クリック時のスクロール・
 立場タブ切り替え・論点タブを跨いだ連続切替、背景の山なみが実際に視認できる
@@ -196,5 +225,7 @@ v1のdocs/再生成が残っているため、再度ビルドし直してから�
 タブ間距離）・`task/issue-tabs-ui-v3`（「すべての意見」の区別）・
 `task/issue-tabs-ui-v4`（山なみの背景表示化、drawPanel()クラッシュの修正含む）・
 `task/issue-tabs-ui-v5`（背景の不透明度強化）・`task/issue-tabs-ui-v6`
-（立場フィルター切替時のスクロール先修正）。いずれもmainへマージ・反映済み。
-worktreeは全て片付け済み。継続する場合は新しいworktreeを作る
+（立場フィルター切替時のスクロール先修正）・`task/issue-tabs-ui-v7`
+（「資料にしかない話を見る」の到着演出、scope_css()の@keyframes不具合の発見と回避
+含む）。いずれもmainへマージ・反映済み。worktreeは全て片付け済み。継続する場合は
+新しいworktreeを作る
