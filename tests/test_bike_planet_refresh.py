@@ -31,6 +31,25 @@ class BikeMethodTextTests(unittest.TestCase):
                 "issues": [{"key": "その他", "count": 140}], "sample_period": "2026-06-27〜2026-09-12"})
 
 
+
+@unittest.skipUnless((ROOT / "social-samples/bike-blue-ticket_2d_classified.json").is_file(),
+                     "非公開の正典が無い環境（CI）では回さない")
+class BikePlanetRefreshTests(unittest.TestCase):
+    def test_refresh_runs_on_published_page_without_changes(self):
+        """次回の定期更新が、起承転結の再構成後のページで止まらず差分も出ないこと。
+
+        論点カード（explainer-card）を削除したあとも、refresh() が旧カードの件数同期を
+        呼んで止まっていた（課題69、2026-09-19）。unittestでは refresh() 自体が
+        一度も通されておらず、次の収集日まで気づけなかった。
+        """
+        from refresh_planet_section import refresh
+        old, new, failures = refresh("bike-blue-ticket")
+        self.assertEqual(failures, [])
+        self.assertEqual(old, new)
+        self.assertNotIn('id="explainer-section"', new)
+        self.assertEqual(new.count('class="explainer-card landing-image"'), 5 + 1)  # 無JS用5枚＋JS側1箇所
+        self.assertIn("document.addEventListener('click',function(e){\n    var c=e.target.closest('.explainer-card[data-img]')", new)
+
 class BikeCollectionReviewTests(unittest.TestCase):
     def setUp(self):
         self.data = {"population": {"その他": 1}, "sources": {}, "その他": {
