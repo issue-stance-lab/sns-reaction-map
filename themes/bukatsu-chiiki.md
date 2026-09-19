@@ -157,3 +157,25 @@ verify_top_page.py（期限超過6テーマは既知）／verify_adoption_regist
 verify_sample_periods.py／verify_adoption_registry.py／unittest 970件）すべて合格。
 
 作業は`../isa-wt-task69-bukatsu`（ブランチ`task/task69-bukatsu-refresh`）で行った。
+
+2026-09-20、オーナー指示で「この論点のなかを見る ↓」リンクを廃止し、山なみの論点パネルへ
+論点ごとの図解画像を直接表示する形へ変更した（consumption-tax-cut・ai-copyright等と同型）。
+`refresh_planet_section.py`の`_inject_bukatsu_go_cards`を削除し、`_inject_bukatsu_landing_images`
+（`BUKATSU_LANDING_IMAGE_BY_ISSUE_ID`、画像は既存の`docs/images/topics/bukatsu-chiiki/`を再利用）
+に置き換えた。フォールバック側・JS drawPanel側の両方へ画像を差し込み、クリックで拡大する
+モーダル（`explainer-modal`、consumption-tax-cutと同じ委譲方式のクリック検知）を新設した。
+
+リンクの飛び先だった「論点ごとに、なかを見る」（`#issue-cards`）は、画像が論点パネルへ
+移ったことで画像部分が完全に重複するため、オーナー確認のうえ節ごと削除した（消費税等の
+前例と同型）。この節にしかなかった埋め込みツイート12件（各論点2件）と短い解説文
+（`ic-body`・`explainer-sides`）も一緒に失われる。削除に伴い、この節の件数表示を同期していた
+`_sync_bukatsu_issue_card_counts`（`_sync_bukatsu_method_text`が呼んでいた）も削除した。
+残していると次回リフレッシュ時に対象が見つからずSystemExitで落ちるところだった。
+
+標準検査4種（verify_theme_page.py・verify_number_provenance.py・verify_builder_rebuildability.py・
+verify_page_originality.py）・`python3 -m unittest discover -s tests`984件・run_public_checks.py
+いずれもNG0件。ブラウザで論点パネルの画像表示・タブ切替時の差し替え・拡大モーダルのクリック動作・
+「その他」で画像が出ないこと・`#issue-cards`削除後のページ末尾（山なみ一覧→投票セクション）の
+遷移が自然であることを、デスクトップ・375pxモバイル幅の両方で確認した。
+
+作業は`../isa-wt-bukatsu-landing-image`（ブランチ`task/bukatsu-landing-image`）で行った。

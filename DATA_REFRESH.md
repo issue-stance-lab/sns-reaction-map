@@ -137,10 +137,13 @@ python3 scripts/refresh_planet_section.py --topic bukatsu-chiiki --for-docs
 見落としが無いか、初回変換時の`build_bukatsu()`／`build_generic()`の後処理を
 必ず確認すること）。
 
-1. **セクション本体が作らない、テーマ固有のリンク挿入。** bukatsu-chiikiの
-   「この論点のなかを見る」リンク（go-card）は`build_section()`自体には無く、
-   初回変換時の`build_bukatsu()`内の後処理でのみ挿入されていた。再現しないと
-   再生成のたびに消える（課題47と同型）
+1. **セクション本体が作らない、テーマ固有の要素差し込み。** bukatsu-chiikiは
+   論点ごとの図解画像（`_inject_bukatsu_landing_images`、consumption-tax-cut等と
+   同型）を`<h2>`直後とJSのdrawPanel相当の両方へ差し込んでいる。`build_section()`
+   自体は作らないため、再現しないと再生成のたびに消える（課題47と同型）。
+   2026-09-20までは同じ位置に「この論点のなかを見る」リンク（go-card）を
+   挿入していたが、オーナー指示で画像表示へ置き換えて廃止した
+   （[themes/bukatsu-chiiki.md](themes/bukatsu-chiiki.md)参照）
 2. **lead文・data-methodテキスト等、論点カード構造に依存しない単純な文字列。**
    山なみ判定で`sync_issue_counts.py`／`build_bukatsu_arena.py`から素通り
    されるため、`apply_lead`/`apply_note`（`sync_issue_counts.py`）を直接呼ぶか、
