@@ -37,6 +37,17 @@ h1{font-size:22px;margin:0 0 4px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
 .panel h2{font-size:16px;margin:0 0 2px}
 .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+/* 論点タブ。他の論点を見るのに山なみへ戻らなくて済むよう見出しの下に置く（オーナー要望2026-09-19）。
+   角丸を非対称にして手描き感を出す。押下時の配色は .modes と同じ言語を流用する。 */
+.issue-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.issue-tabs button{font:inherit;font-size:12.5px;line-height:1.5;cursor:pointer;
+  background:var(--panel);color:var(--fg);border:1.5px solid var(--line);
+  border-radius:13px 7px 12px 6px/6px 13px 7px 12px;padding:5px 12px 6px}
+.issue-tabs button:nth-child(odd){transform:rotate(-0.6deg)}
+.issue-tabs button:nth-child(even){transform:rotate(0.5deg)}
+.issue-tabs button:hover,.issue-tabs button:focus-visible{border-color:var(--accent);outline:none}
+.issue-tabs button[aria-pressed=true]{border-color:var(--accent);border-width:2px;
+  background:#1f6feb33;font-weight:700}
 .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
 .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
   font-weight:700;overflow:hidden;white-space:nowrap}
@@ -463,6 +474,15 @@ function legend(){
     '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
 }
 
+/* 論点タブ。いま開いている論点から、山なみへ戻らず他の論点へ直接飛べるようにする。
+   0件（いまの立場フィルターでは出ない）論点は .issue-list と同じく薄くするが押せなくはしない。 */
+function issueTabs(m){
+  return '<div class="issue-tabs">' + issues.map((it,i)=>
+    '<button type="button" data-i="'+i+'" aria-pressed="'+(i===st.landed?"true":"false")+'"'
+    + (m.counts[it.id] ? '' : ' style="opacity:.45"')
+    + '>'+it.icon+' '+esc(it.label)+'</button>').join("") + '</div>';
+}
+
 /* 立場を切り替えたときに何が起きたかを1行で言う。
    順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
 function crossTalk(modeId){
@@ -595,6 +615,7 @@ function drawPanel(){
   const it = issues[st.landed];
   const n = m.counts[it.id];
   let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + issueTabs(m)
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
@@ -626,6 +647,9 @@ function drawPanel(){
   h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
+  p.querySelectorAll(".issue-tabs button").forEach(b=>{
+    b.addEventListener("click", ()=>land(+b.dataset.i));
+  });
   // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
   document.getElementById("dot-slot").appendChild(dotBox);
   syncDots();

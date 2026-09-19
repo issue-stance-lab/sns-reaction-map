@@ -262,12 +262,16 @@ def _inject_landing_images(block: str, data: dict, topic: str, images: dict, js_
     old_draw_panel_head = (
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
-        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m)"
     )
     # 画像パスは先に1つの変数へ組み立ててから src / data-img へ埋め込む。
     # "images/…-" のように末尾が結合前で切れた断片を直接 src="…" の形で書くと、
     # validate_theme_seo.py の参照チェック（href|src="…"の正規表現）が実在しない
     # パスとして誤検知する（fukushutoの起承転結の再構成で発見、課題69）。
+    # issueTabs(m)（他の論点への切り替えタブ）は見出し直後に固定し、画像はその後ろへ
+    # 差し戻す。テーマをまたいで「見出しの次は必ずタブ」という並びを崩さないため
+    # （課題69・論点タブUI追加、2026-09-19）。
     new_draw_panel_head = (
         "  const it = issues[st.landed];\n"
         "  const n = m.counts[it.id];\n"
@@ -275,7 +279,8 @@ def _inject_landing_images(block: str, data: dict, topic: str, images: dict, js_
         f"  const {v_path} = {v_slug} ? ('images/topics/{topic}/{topic}-infographic-wide-'+{v_slug}+'.webp') : '';\n"
         f"  const {v_html} = {v_slug} ? ('<div class=\"explainer-card landing-image\" data-img=\"'+{v_path}+'\" data-alt=\"'+it.label+'\">'\n"
         f"    +'<img src=\"'+{v_path}+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
-        f"  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + {v_html}"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        f"    + issueTabs(m) + {v_html}"
     )
     if old_draw_panel_head not in block:
         raise SystemExit(f"論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません（{topic}）")
