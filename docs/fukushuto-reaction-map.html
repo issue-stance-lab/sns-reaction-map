@@ -329,10 +329,7 @@
   border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}#planet-block .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
   padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#planet-block .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
   border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
-  border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .issue-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}#planet-block .issue-tabs button{font:inherit;font-size:12.5px;line-height:1.5;cursor:pointer;
-  background:var(--panel);color:var(--fg);border:1.5px solid var(--line);
-  border-radius:13px 7px 12px 6px/6px 13px 7px 12px;padding:5px 12px 6px}#planet-block .issue-tabs button:nth-child(odd){transform:rotate(-0.6deg)}#planet-block .issue-tabs button:nth-child(even){transform:rotate(0.5deg)}#planet-block .issue-tabs button:hover,#planet-block .issue-tabs button:focus-visible{border-color:var(--accent);outline:none}#planet-block .issue-tabs button[aria-pressed=true]{border-color:var(--accent);border-width:2px;
-  background:#1f6feb33;font-weight:700}#planet-block .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}#planet-block .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}#planet-block .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
   font-weight:700;overflow:hidden;white-space:nowrap}#planet-block .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}#planet-block .panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
   background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .panel .cross b{color:#f2f6fa}#planet-block .panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
   background:var(--panel);color:var(--fg);border:1px solid var(--line);
@@ -876,15 +873,6 @@ function legend(){
     '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
 }
 
-/* 論点タブ。いま開いている論点から、山なみへ戻らず他の論点へ直接飛べるようにする。
-   0件（いまの立場フィルターでは出ない）論点は .issue-list と同じく薄くするが押せなくはしない。 */
-function issueTabs(m){
-  return '<div class="issue-tabs">' + issues.map((it,i)=>
-    '<button type="button" data-i="'+i+'" aria-pressed="'+(i===st.landed?"true":"false")+'"'
-    + (m.counts[it.id] ? '' : ' style="opacity:.45"')
-    + '>'+it.icon+' '+esc(it.label)+'</button>').join("") + '</div>';
-}
-
 /* 立場を切り替えたときに何が起きたかを1行で言う。
    順位と大陸名だけを言い、件数・割合は足さない（同じ数字を2度出さないため）。 */
 function crossTalk(modeId){
@@ -1020,8 +1008,7 @@ function drawPanel(){
   const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';
   const imgHtml = imgSlug ? ('<div class="explainer-card landing-image" data-img="'+imgPath+'" data-alt="'+it.label+'">'
     +'<img src="'+imgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
-  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
-    + issueTabs(m) + imgHtml
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
@@ -1052,9 +1039,6 @@ function drawPanel(){
   h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
-  p.querySelectorAll(".issue-tabs button").forEach(b=>{
-    b.addEventListener("click", ()=>land(+b.dataset.i));
-  });
   // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
   document.getElementById("dot-slot").appendChild(dotBox);
   syncDots();
