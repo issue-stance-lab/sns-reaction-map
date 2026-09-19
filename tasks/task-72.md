@@ -250,6 +250,46 @@ bukatsu-chiiki（部活動の地域移行）から展開を開始した（ブラ
   と同じ落とし穴）。henoko-student-accidentのv1反映時にも同じ調整をしていたが、
   今回は「デザインのみの反映では自動で揃わない」ことを実際に踏んで再確認した形
 
+### CI障害の発見と修正（2026-09-19、オーナーの失敗通知メールで発覚）
+
+bukatsu-chiiki反映後の報告直後、オーナーからGitHub Actions「公開ファイルの検査」
+failureメールのスクリーンショットが届いた。`gh run list`で確認すると、実は
+**`task/issue-tabs-ui-v6`のマージ（2026-09-19 03:07頃）以降ずっと赤いまま**
+だったと判明（v6〜v8・bukatsu-chiikiのどの反映報告のときも、ローカルの
+`run_public_checks.py`が「既知の2件（bike-blue-ticket・school-nickname-ban）
+だけのNG」と一致していたため、CIも同じだと思い込み`gh run list`で実際のCI結果を
+確かめていなかった。[[reference_planetpage_rollout]]に書かれている「CIが赤いまま
+放置されていないか、pushする前にgh run listで確かめる」という教訓を今回も
+怠っていた）。原因は2つあり、両方とも修正・push・グリーン化を確認した:
+
+1. **自分の作業による回帰（2件）**:
+   - TASK_BOARD.mdの課題72行を更新した際、「状態」「次にすること」が文字数上限
+     （120文字、`tests/test_task_board.py`）を超えていた。索引側を短縮し詳細は
+     本ファイルへ寄せて解消
+   - `THEMES.yaml`のbukatsu-chiiki.updated_atを2026-09-19へ揃えた際、連鎖先の
+     `DATA_SHEET.md`（`scripts/build_data_sheet.py`）と`docs/index.html`の
+     更新バー・埋め込みJS（`scripts/sync_portal_stats.py`）の再生成を忘れていた
+     （`validate_theme_seo.py`と`verify_top_page.py`は確認したが、この2つは
+     どちらの検査対象にも入っておらず、手元の`unittest discover`をSEO修正後に
+     再度回すまで気づけなかった）。両スクリプトを再実行して解消
+2. **課題72と無関係の既存不具合（1件、修正はしたが本来は別課題）**:
+   `tests/test_ocean_layer.py::test_existing_koshitsu_tenpakai_sunk_continents_passes`
+   （課題71「海面より下データの検査不具合を修正」で2026-09-19に新設された
+   テスト、v6反映と同時期）が、非公開正典（`social-samples/`）が無い環境では
+   `skipped`が必ず0件でなくなる作り（`verify_ocean_layer.load_canonical_hashes()`
+   がNoneを返すと`verify_editorial_confirmation_rule()`は常に`skipped=True`を
+   返す）にもかかわらず、他の非公開データ依存テストと違い`skipUnless`で
+   CIから除外されていなかった。同じ`skipUnless`パターンを追加して解消
+   （ブランチ`fix/ocean-layer-ci-skip`）。この不具合自体はbukatsu-chiikiの
+   反映内容とは無関係で、たまたま同じタイミングで気づいた
+
+いずれも`gh run list`でグリーン化（`公開ファイルの検査`が`success`）を実際に
+確認済み。**教訓**: ローカルの`run_public_checks.py`が「既知のNGと一致している」
+ことは、CIが同じ理由で落ちていることの証明にはならない。今回はたまたま別の
+原因（ローカルでは非公開正典がありCI専用の不具合が再現しない）で同じ「NG 1件」
+という表示になっていただけだった。**push後は`gh run list`で実際のCI結果を
+見るまで安心しない**こと。
+
 ## 状態
 
 進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
