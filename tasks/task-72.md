@@ -86,6 +86,10 @@
 各テーマへのタブ展開時に自然に解消する。main単体（マージ前）ではこの5件は
 全てPASSすることを確認済みで、原因は今回の統合作業に限定されている。
 
+**解消（2026-09-19、残り7テーマ展開）**: 上記3テーマ（bike-blue-ticket・
+koshitsu-tenpakai・school-nickname-ban）へ実際にタブUIを展開し、この5件は
+全てPASSに戻った。詳細は下記「残りテーマへの展開（2〜8テーマ目）」参照。
+
 ## デザイン改訂（v2、2026-09-19・オーナーの実地フィードバック2件）
 
 henoko-student-accident本番反映後、オーナーが実際の画面を見て2件指摘し、その場で
@@ -290,38 +294,86 @@ failureメールのスクリーンショットが届いた。`gh run list`で確
 という表示になっていただけだった。**push後は`gh run list`で実際のCI結果を
 見るまで安心しない**こと。
 
+## 残りテーマへの展開（2〜8テーマ目、2026-09-19）
+
+オーナー指示「残り7テーマも続けて進めて」を受け、bukatsu-chiiki以外の残り7テーマ
+（elderly-license-revocation・bike-blue-ticket・school-nickname-ban・
+koshitsu-tenpakai・ai-copyright・constitutional-amendment・consumption-tax-cut）
+へ一括展開した（ブランチ`task/planet-rollout-batch2`）。takaichiは対象外
+（下記「takaichiは対象外」参照）。
+
+**テーマごとに再生成経路が違う**（着手前に必ず確認すること）:
+- 汎用（`refresh_planet_section.py --topic <theme> --for-docs`）:
+  elderly-license-revocation・bike-blue-ticket・ai-copyright・consumption-tax-cut
+- 専用ビルダー・無引数で実行: `build_nickname_arena.py`（school-nickname-ban）・
+  `build_constitutional_arena.py`（constitutional-amendment）
+- 専用ビルダー・`--public-counts-only`付きで実行: `build_koshitsu_arena.py`
+  （koshitsu-tenpakai。他2つの`--public-counts-only`とは意味が違うので注意）
+
+7テーマとも`verify_theme_page.py`・`verify_number_provenance.py`・
+`verify_page_originality.py`OK。ブラウザでの実機確認は3経路を代表して
+elderly-license-revocation（汎用）・school-nickname-ban（専用・無引数）・
+koshitsu-tenpakai（専用・`--public-counts-only`）を選び、山クリック→論点タブ
+7件切り替え→「資料にしかない話を見る」のカード表示までデスクトップで確認
+（コードは全テーマ共通のため、残り4テーマは`verify_theme_page.py`等の
+スクリプト検査とJS越しの構造確認〈タブ数・ocean存在・fukushuto系3テーマの
+「見出し→タブ→画像」順序〉で代替）。`unittest discover`は983件が**全通過**
+（bike-blue-ticket・koshitsu-tenpakai・school-nickname-banの既知5件の差分も
+これで解消——task-72.md冒頭の「既知の一時的な差分」節は本ラウンドで解消済み）。
+
+**「最終更新日」の連鎖で、bukatsu-chiiki単体のときには気づけなかった不具合を
+3つ踏んだ（全て解消済み）**:
+1. `THEMES.yaml`の`updated_at`は、`build_planet_data.py`がPLANET_SECTION内の
+   「／更新 」キャプションに焼き込む。updated_atを先に変えてからPLANET_SECTIONを
+   作り直さないと、キャプションだけ古い日付のまま残る（一度、逆順で踏んで
+   全7テーマを再生成し直した）
+2. `updated_at`は`data/public/themes/{theme}.json`の`updated_on`
+   （`public_registry_common.py`）にも焼き込まれる。`build_public_registry.py
+   --all`で作り直さないと、`apply_public_counts()`の正典照合が
+   「公開JSONが現在の正典・照合資料と一致しません」で落ちる
+   （constitutional-amendment専用テストが検出）。このとき、henoko-student-accident・
+   bukatsu-chiikiのpublic JSON（過去の反映時に取り残されていた分）もあわせて
+   最新化された
+3. bike-blue-ticket・elderly-license-revocationは`sample_period_source:
+   owner_confirmed`で取得期間が手動固定されており、`updated_at`を
+   `sample_period`終端より後ろへ進めると`verify_sample_periods.py`が
+   「取得期間の終わりが最終更新日と違う」で落ちる。この2テーマだけ`updated_at`を
+   元の値（2026-09-12・2026-09-04）へ戻した。**データ収集を伴わないデザインだけの
+   反映では、この2テーマの「最終更新日」表示は据え置くのが正しい**
+4. （テスト自体には出ないが同種）`data/verification/adoption/registry.json`
+   （採否根拠のsnapshot fingerprint）も、`build_public_registry.py --all`で
+   変わった7ファイル分が食い違い`verify_adoption_registry.py`がNGになった。
+   `build_adoption_registry.py`で再スナップショットして解消
+
+bukatsu-chiiki自身も、前ラウンドの反映時に上記1・2を踏んでおり
+（PLANET_SECTIONのキャプションとpublic JSONのupdated_onがTHEMES.yaml側
+（09-19）に追従していなかった）、このラウンドであわせて再生成し解消した。
+
+本番反映後、7テーマとも`curl`で「issue-tabs」文字列の出現を確認。
+`gh run list`で「公開ファイルの検査」がgreenであることも確認済み
+（release スキルの新設⑤.5）。
+
+**takaichiは対象外**: `THEMES.yaml`で`published: unlisted`（サイト内ナビ・
+sitemap.xmlに載らない）かつ`docs/takaichi-reaction-map-standard.html`は
+そもそもPLANET_SECTIONマーカーを持たない別形式のページで、他10テーマの
+「山なみ」変換（課題54）を経ていない。今回の「デザイン再生成」の対象ではなく、
+含めるなら課題54相当の新規変換が要る別スコープの作業。オーナーへ報告のうえ
+このラウンドでは触れていない。
+
 ## 状態
 
-進行中。henoko-student-accidentを2026-09-19に本番反映→オーナー実地確認→
-デザイン改訂8件（タブ形状・タブ間距離・「すべての意見」の区別・山なみの
-背景表示化・背景の不透明度強化・立場フィルター切替時のスクロール先修正・
-「資料にしかない話を見る」の到着演出・同演出のカード化とバッジ追加）を
-同日中に順次本番反映済み。本番
-https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html で
-最終形を実機確認済み（デスクトップ・375px、山クリック時のスクロール・
-立場タブ切り替え・論点タブを跨いだ連続切替、背景の山なみが実際に視認できる
-こと、立場フィルター切替後にモードボタンとパネルが同じ画面に収まることも
-含む）。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer修正
-（課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
-一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した
-（詳細は上記「マージ時の追記」）。続けてbukatsu-chiiki（部活動の地域移行）へ
-共通テンプレート最終形を展開し本番反映済み（上記「残りテーマへの展開」）。
-fukushutoは初版（丸ピル型）のdocs/を再生成し実機確認済みだが、v2〜v8
-デザインへの追従と本番反映はまだ。
-
-残り7テーマ（elderly-license-revocation / bike-blue-ticket / school-nickname-ban /
-koshitsu-tenpakai / ai-copyright / takaichi / constitutional-amendment・
-consumption-tax-cutは共通コード側は最終形まで反映済みだがdocs/の再生成・
-本番反映はまだ。fukushutoは旧v1見た目のままdocs/再生成のみ済み、v2〜v8への
-再生成が必要）は、順次同じ手順で展開する。
+henoko-student-accident・bukatsu-chiiki・elderly-license-revocation・
+bike-blue-ticket・school-nickname-ban・koshitsu-tenpakai・ai-copyright・
+constitutional-amendment・consumption-tax-cut（9テーマ）に共通テンプレート
+最終形（論点タブ・山なみの背景表示・「資料にしかない話」のカード化）を
+本番反映済み。残るのはfukushuto（v1のまま、v2〜v8への再生成が必要）と
+takaichi（別スコープ、上記参照）の2テーマ。
 
 ## 次にすること
 
-残りのテーマへ同じ手順（`scripts/refresh_planet_section.py --topic <theme>
---for-docs`、theme固有の後付け処理があれば併せて確認→標準検査→ブラウザで
-実機確認→`release`スキルで本番反映→`scripts/seo/validate_theme_seo.py`で
-日付整合も確認）で展開する。fukushutoは通常の`refresh_planet_section.py`が
-まだ通っていない可能性があるため、v1のdocs/再生成を再度確認してから展開する。
+fukushutoへの展開（`build_fukushuto_arena.py`、`apply_landing_images()`の
+「見出し→タブ→画像」順序は既に対応済み）をオーナーに確認のうえ進める。
+takaichiは山なみ変換自体が別スコープのため、着手するかどうかオーナー判断。
 
 ## 詳細
 
