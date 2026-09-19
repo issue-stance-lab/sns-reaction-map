@@ -361,3 +361,40 @@ constitutional-amendment、bukatsu-chiiki/henokoは元から重複なし）が�
 標準検査・unittest・`run_public_checks.py`いずれもNG0件。ローカル配信でデスクトップ・
 モバイル幅とも「山を押す→対応する図解→タップで拡大→Escで閉じる」、横スクロールなしを確認。
 
+### 2026-09-19 consumption-tax-cut: 上記「山なみへ統合済み」の判断が誤りと判明、「この争点の背景」を書き直して復元
+
+詳細は[quality/reviews/2026-09-19-task69-consumption-tax-background-details.md](../quality/reviews/2026-09-19-task69-consumption-tax-background-details.md)
+に切り出した（400行上限のため、2026-09-19）。要点:
+- オーナー報告「経緯が消えた」で発覚。2026-09-18の記録「山なみへ統合済み」は誤りで、
+  一次情報4本中3本と説明文の大半が実際には失われていた（[[feedback_verify_against_precedent]]と同型）
+- 内容を9/15の大綱閣議決定にあわせて書き直し（`f16d5c6`）、位置をヒーロー直後・山なみ図の
+  前へ（`8bcb726`）、形式を他9テーマと同じ`#bukatsu-background`＋`#bukatsu-check`型へ
+  （`a88bc5c`）、指摘のたびに3段階で作り直した
+- 標準検査4種・unittest 983件・`run_public_checks.py`いずれもNG0件、都度公開確認済み
+- 教訓: 消えたものの復元は、git履歴の「過去の自分」でなく他テーマの「今の姿」を先にgrepすべきだった
+
+### 2026-09-19 ai-copyright: 「経緯」が最初から欠落していたと判明、他8テーマと同じ共通の仕組みで新設
+
+オーナー指示で確認。consumption-tax-cutは「復元」だったが、ai-copyrightは山なみ変換
+（2026-09-14、8テーマ目）時点から`#bukatsu-background`／`#bukatsu-check`が一度も
+存在しなかった（`docs/*.html`を10テーマ横断でgrepし判明）。`data/verification/
+ai-copyright-background.json`が未作成で、共通generator（`build_planet_page_preview.
+build_background()`）が空文字を返し節ごと省略されていたことが原因。
+
+**前例との相違点**: consumption-tax-cutはこの共通generatorを使わずHTML/CSSを
+スクリプト内に手書きする独自方式だった。他8テーマは`data/verification/{topic}-
+background.json`を出所とする共通方式で統一されており、CTCが例外だった
+（[[feedback_verify_against_precedent]]、前例を鵜呑みにせず確認して発覚）。共通方式へ乗せた。
+
+- 一次資料メモ（資料B-2・C-2・C-4〜C-6・C-8・D・J・K・L）から経緯6段階（2024年3月の
+  文化庁「考え方」〜2026年6月の知財推進計画2026）と確認観点4件を作成。AI法の公布日は
+  e-Gov法令検索APIで再確認した
+- `build_ai_copyright_arena.py`に`apply_background()`を追加。共通generatorの
+  `build_background(THEME)`を呼び`RESEARCH_CONDITIONS_END`〜`PLANET_SECTION_START`
+  間だけ貼り直す後付け処理。`build()`のplanet_mode分岐から毎回呼び定期更新でも消えない
+- `number_provenance.allow`に2,161・99を追加。AI臭検査（「ではなく」3連用）に一度
+  落ち、2件を言い換えて解消。標準検査4種・unittest 983件・`run_public_checks.py`
+  いずれもNG0件（`9b4b577`・マージ`9d4cced`、作業ツリーは反映後に削除済み）
+- 確認済み: elderly-license-revocationは背景JSONが既にあり欠落なし。takaichiは
+  glob対象外で山なみ形式かどうかも含め未確認のまま残る
+
