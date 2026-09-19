@@ -88,22 +88,28 @@
 
 ## 状態
 
-進行中。henoko-student-accidentとfukushutoでdocs/を実際に再生成し、実機確認・標準検査を
-通した。オーナーの指示で、まずhenoko-student-accidentだけを先に本番反映する
-（2026-09-19、「辺野古だけ先に公開してチェックします」）。残り8テーマ
-（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
+進行中。henoko-student-accidentを2026-09-19に本番反映済み（オーナー指示
+「辺野古だけ先に公開してチェックします」）。本番 https://sns-reaction-map.jp/
+henoko-student-accident-reaction-map.html でタブの表示・切り替え・モバイル幅とも
+実機確認済み。マージ時、別セッションのbike-blue-ticket起承転結再編・ocean-layer
+修正（課題69・課題71）と競合したため、`scripts/refresh_planet_section.py`の
+一般化された`_inject_landing_images()`へ同じ修正を再適用して統合した（詳細は
+上記「マージ時の追記」）。fukushutoもdocs/を再生成し実機確認済みだが、本番反映は
+このタスクでは見送っている（オーナーの「辺野古だけ先に」指示の範囲外）。
+
+残り8テーマ（bukatsu-chiiki / elderly-license-revocation / bike-blue-ticket /
 school-nickname-ban / koshitsu-tenpakai / ai-copyright / takaichi /
 constitutional-amendment・consumption-tax-cutは共通コード側は修正済みだが
-docs/の再生成はまだ）は、オーナーが本番のhenoko-student-accidentページを見て
-確認してから展開する。
+docs/の再生成・本番反映はまだ。fukushutoはdocs/再生成のみ済み）は、オーナーが
+本番のhenoko-student-accidentページを見て確認してから展開する。
 
 ## 次にすること
 
-オーナーが本番の辺野古ページを見て問題なければ、残り8テーマへ同じ手順
+オーナーが本番の辺野古ページを見て問題なければ、残りのテーマへ同じ手順
 （各テーマの `build_<theme>_arena.py`（または対応するビルダー）を実行して
-docs/を再生成→標準検査）で展開し、`release` スキルで本番反映する。
+docs/を再生成→標準検査→`release`スキルで本番反映）で展開する。
 
 ## 詳細
 
-ブランチ: `task/issue-tabs-ui`（worktree: `isa-wt-issue-tabs`、
-`/Volumes/M2-WorkSpace/Projects/副業/isa-wt-issue-tabs`）
+実装ブランチ: `task/issue-tabs-ui`（mainへマージ・反映済み。worktreeは
+片付け済み。継続する場合は新しいworktreeを作る）

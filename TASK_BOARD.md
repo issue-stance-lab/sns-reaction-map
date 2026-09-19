@@ -53,11 +53,11 @@
 **詳細**: [tasks/task-70.md](tasks/task-70.md)
 
 ### 課題72: 論点タブUI（山なみへ戻らず他の論点へ切り替え）
-**状態**: 進行中。henoko-student-accident・fukushutoでdocs/再生成・実機確認・標準検査全通過。オーナー指示でhenoko-student-accidentのみ先行公開中
+**状態**: 進行中。henoko-student-accidentを2026-09-19に本番反映・実機確認済み（オーナー指示で先行公開）。fukushutoはdocs/再生成・実機確認のみ済み、本番反映は保留中
 **優先度**: 中（オーナー要望のUI改善）
-**次にすること**: 本番の辺野古ページをオーナーが確認後、残り8テーマへ展開し`release`スキルで本番反映
+**次にすること**: 本番の辺野古ページをオーナーが確認後、残りテーマへ展開し`release`スキルで本番反映
 **判断待ち**: オーナー（本番の見た目でよいか。問題なければ残りテーマへ展開）
-**関連テーマ**: 全10テーマ共通の山なみテンプレート（henoko-student-accident・fukushutoで確認済み）
+**関連テーマ**: 全10テーマ共通の山なみテンプレート（henoko-student-accidentは本番反映済み、fukushutoは検証済み）
 **詳細**: [tasks/task-72.md](tasks/task-72.md)
 
 ### 課題15: AdSense審査対応 & 広告配置設計
