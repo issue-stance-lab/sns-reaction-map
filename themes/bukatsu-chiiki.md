@@ -241,3 +241,35 @@ koshitsu-tenpakaiの現行仕様（画像なし・編集部要約なし、ラベ
 7論点すべての埋め込み表示・タブ間の遷移・375pxモバイル幅を確認した。
 
 作業は`../isa-wt-bukatsu-x-posts`（ブランチ`task/bukatsu-x-posts`）で行った。
+
+## 2026-09-20 論点の内訳注記をconsumption-tax-cutと同じ扱いに揃える（課題74）
+
+オーナー指摘（別テーマのconsumption-tax-cutで先に修正）を受け、共通雛形由来の
+「AIっぽい・言い訳がましい」文言2種を本テーマにも展開した（課題74のA・B）。
+
+- 戻るボタン「← 全体へ戻る（Esc）」→「← 論点の一覧へ戻る（Esc）」
+  （`scripts/build_planet_data.py`の`render_page()`、theme_id分岐に追加）
+- 論点の内訳を開いたときの「読み直し中」の注記のうち、まだ非表示になっていなかった
+  3論点分（教員の働き方／費用・家庭負担／受け皿・指導者）→ 非表示
+  （`configs/planet/bukatsu-chiiki.yaml`の各`sub_issues`に`show_coverage_note: false`
+  を追加。理由はconsumption-tax-cutと同じで、すぐ上の見出し「この論点の中身
+  （編集部が本文を読んで分けたもの）」の言い直しに過ぎなかったため）
+- 「未再読の論点」注記（その他／地域格差）は、本テーマは元々`show_unreviewed_note: false`
+  で非表示済みだったため対象外（山なみ移行前からの設定と見られる）
+
+標準検査5種（`verify_theme_page.py`・`verify_number_provenance.py`・`verify_top_page.py`・
+unittest 986件・`run_public_checks.py`）いずれもNG0件。ローカルにサーバーを立てて
+ブラウザで戻るボタンの文言変更と、注記が消えていることを実際の画面で確認した。
+
+あわせて、本テーマ独自の文章（「その言い分、原典に当たるとどうなるか」の説明文・
+「論点ごとのX投稿」の説明文・編集部の横断整理）を読み直し、AIっぽい言い回しが
+無いか点検したが、大きな問題は見つからなかった。一方、この点検の過程で
+ai-copyright・fukushutoの2テーマは`show_unreviewed_note`が既定のtrueのままで
+「AIが自動でつけた区分をここに並べることはしません」が実際に読者へ表示されている
+ことが分かった（ai-copyrightは同日中に別コミットで対応済み。fukushutoは未対応、
+詳細は[tasks/task-74.md](../tasks/task-74.md)参照）。
+
+作業は`../isa-wt-bukatsu-wording`（ブランチ`task/bukatsu-wording-cleanup`）で行った。
+マージ時、ai-copyright対応（別セッション、コミット`17626c5`）と同じ箇所
+（`render_page()`のtheme_id分岐タプル）で衝突したため、両方の追加を残す形で
+手動解消した（オーナーへ報告のうえ対応）。

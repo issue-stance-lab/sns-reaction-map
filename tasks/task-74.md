@@ -1,9 +1,11 @@
 # 課題74: 山なみ共通雛形のAIっぽい言い回し・AI帰属の誤りを残りテーマへ展開する
 
 **登録日**: 2026-09-20
-**状態**: 未着手（consumption-tax-cutのみ対応済み、別コミットで完了）
-**優先度**: 低〜中（CIは落ちていない。ただしCの「AI帰属の誤り」はai-copyrightの公開ページに
-実際に表示されており、事実として不正確）
+**状態**: 進行中（consumption-tax-cut／koshitsu-tenpakai／ai-copyright／bukatsu-chiiki
+対応済み。残り6テーマ: bike-blue-ticket・constitutional-amendment・
+elderly-license-revocation・fukushuto・henoko-student-accident・school-nickname-ban）
+**優先度**: 低〜中（CIは落ちていない。Cの「AI帰属の誤り」はai-copyrightで対応済み。
+残りはA・Bのみで、うちfukushutoは実際に読者へ表示されている＝優先度やや高）
 
 ## 何が起きたか
 
@@ -78,10 +80,23 @@ consumption-tax-cutで確立した手順をテーマごとに繰り返す。
 
 ## 次にすること
 
-優先度は低〜中。着手するときは、実際に読者に誤った内容（AI帰属の誤り）を見せている
-**Cのai-copyright**から始めるのが妥当。それ以外（A・B・D）は表現の読みやすさの問題で
+残り6テーマ（bike-blue-ticket・constitutional-amendment・elderly-license-revocation・
+fukushuto・henoko-student-accident・school-nickname-ban）はA・Bのみが対象（Cのai-copyright
+は対応済み）。このうち**fukushuto**はshow_unreviewed_noteが既定のtrueで、かつ未再読の論点が
+実在するため、「AIが自動でつけた区分をここに並べることはしません」がすでに読者へ表示されて
+いる（2026-09-20確認）。優先度はここがいちばん高い。残り5テーマは戻るボタンの文言のみで、
 実害はない。
+
+**表記の揺れに注意**: Bの直し方が2通り混在している。consumption-tax-cut・koshitsu-tenpakai・
+bukatsu-chiikiは注記そのものを非表示（show_unreviewed_note/show_coverage_note: false）に
+した。ai-copyrightだけ、注記を残したまま文言を差し替える方式（render_page()のtheme_id分岐で
+文字列置換）を採った。残りテーマは非表示方式に揃えるのが妥当（オーナー指摘の原文
+「言い訳がましい」を踏まえると、注記自体を消すほうが元の指摘に近い）。
 
 ## 進捗
 
-（未着手。2026-09-20にconsumption-tax-cutのみ対応・残り9テーマの現状調査のみ完了）
+- 2026-09-20 consumption-tax-cut対応（A・B・C全て。B・Cは注記ごと削除）
+- 2026-09-20 koshitsu-tenpakai対応（A・B、非表示方式）
+- 2026-09-20 ai-copyright対応（A・B・C、Bは文言差し替え方式）
+- 2026-09-20 bukatsu-chiiki対応（A・B、非表示方式。Bは元々3論点のみ表示状態だった）
+- 残り6テーマは未着手

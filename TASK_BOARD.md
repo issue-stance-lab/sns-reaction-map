@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題の索引）
 
-最終更新: 2026-09-20（課題71: fukushutoの海面より下データを新規作成・検査の不具合2件目を修正／課題72: fukushutoへの論点タブUI展開が完了しアーカイブへ移動／課題75: 一次資料メモの年度ラベルのずれを新規登録・部活動メモの2行は訂正済み／課題74: AIっぽい言い回し・AI帰属の誤りを新規登録・consumption-tax-cut対応済み／課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み）
+最終更新: 2026-09-20（課題71: fukushutoの海面より下データを新規作成・検査の不具合2件目を修正／課題72: fukushutoへの論点タブUI展開が完了しアーカイブへ移動／課題75: 一次資料メモの年度ラベルのずれを新規登録・部活動メモの2行は訂正済み／課題74: AIっぽい言い回し・AI帰属の誤りを4テーマ対応済み（consumption-tax-cut・koshitsu-tenpakai・ai-copyright・bukatsu-chiiki）・残り6テーマ／課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み）
 
 > **このファイルは索引です。** 1課題につき数行だけを置き、経緯・調査記録・手順は
 > `tasks/task-{番号}.md` に分けてあります。**担当する課題の詳細ファイルだけを開いてください。**
@@ -92,9 +92,9 @@
 **詳細**: [tasks/task-73.md](tasks/task-73.md)
 
 ### 課題74: 山なみ共通雛形のAIっぽい言い回し・AI帰属の誤りを残りテーマへ展開する
-**状態**: 未着手。consumption-tax-cutのみ対応済み（2026-09-20）。残り9テーマの現状調査のみ完了
-**優先度**: 低〜中（CIは落ちていない。ai-copyrightのみAI帰属の誤りが読者に表示されており実害あり）
-**次にすること**: 実害のあるai-copyright（AI帰属の誤り）から着手する。他は読みやすさの問題で実害なし
+**状態**: 進行中。consumption-tax-cut・koshitsu-tenpakai・ai-copyright・bukatsu-chiiki対応済み。残り6テーマは未着手（2026-09-20）
+**優先度**: 低〜中（CIは落ちていない。AI帰属の誤り＝Cはai-copyrightで解消済み）
+**次にすること**: 次はfukushuto。show_unreviewed_note既定trueで注記が読者に表示中。残り5テーマは戻るボタンのみで実害なし
 **関連テーマ**: 山なみ形式の9テーマ（takaichi・consumption-tax-cut以外、詳細はtask-74.md参照）
 **詳細**: [tasks/task-74.md](tasks/task-74.md)
 
