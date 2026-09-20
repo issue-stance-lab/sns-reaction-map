@@ -1,13 +1,12 @@
-# 課題76: 山なみ10テーマの構成監査 — 残るはC-5のみ（意図的に未着手）
+# 課題79: 山なみ10テーマの構成監査 — 完了
 
 **登録日**: 2026-09-20
-**状態**: 進行中。A-1・A-2・B系のai-copyrightは実機検証で「対応不要」と判明、
+**状態**: 完了。A-1・A-2・B系のai-copyrightは実機検証で「対応不要」と判明、
 A-3（3テーマ）・B系のelderly-license-revocation・school-nickname-ban・
-C系（清掃、7テーマ分）はすべて対応・本番反映済み（2026-09-20）。
-C-5（調査条件ボックスの新設、3テーマ）だけは「清掃」ではなく新規実装のため対象外とし、
-未着手のまま残した
-**優先度**: 低（新たな対応の予定なし。C-5は課題73または将来のUI改善と合流する形での
-着手を推奨。詳細はC-5参照）
+C系（清掃、7テーマ分）・C-5（調査条件ボックス、fukushuto・koshitsu-tenpakaiの2テーマ）は
+すべて対応・本番反映済み（2026-09-20）。henoko-student-accidentだけは
+2026-09-13のオーナーの明示決定により対象外（C-5参照）
+**優先度**: なし（全項目が対応済みまたは対応不要と判明）
 **関連**: 54（山なみ移行本体）/ 69（起承転結の再編、今回見つかった差分の多くがこの過程で発生）/
 73（死んだデータ）/ 74（AIっぽい言い回し）
 
@@ -187,12 +186,47 @@ A-1・A-2と違い、この3テーマは`build_planet_page_preview.py`の`build_
   トップレベル資料照合マーカー＋CSSをまるごと削除した（内容は山なみ本体の
   各論点パネルへ移設済みで実害は無かった）
 - **【対応済み】C-4 henoko-student-accident**: 完全に空だった`INSIGHT_STATS_START`〜`END`を削除
-- **【未着手・意図的に見送り】C-5 fukushuto・henoko-student-accident・koshitsu-tenpakai**:
-  「調査条件」の独立した説明ボックス（`<aside class="research-conditions">`）が無い。
-  データ出典・取得期間の情報自体は山なみ本体内の注記（`.caution`）にあるため実害は小さいが、
-  他7テーマより目立たない位置になっている。**これは「死骸の削除」ではなく「無い要素の新規追加」
-  であり、他のC系と性質が違う**（A-3の「議論の中心」追加に近い作業量）ため、今回のC系
-  清掃パスには含めず、着手するなら別枠で判断してよい
+- **【対応済み】C-5 fukushuto・koshitsu-tenpakaiに「調査条件」ボックスを追加**（2026-09-20、
+  作業ツリー`../isa-wt-task76-c5-research-conditions`、ブランチ`task/task76-c5-research-conditions`）:
+  他7テーマにある`<aside class="research-conditions">`（データ出典・取得期間・
+  「世論調査ではありません」の3行）が無く、情報自体は山なみ本体内の注記（`.caution`）に
+  あるため実害は小さいが目立たない位置だった。`scripts/research_conditions.py`に
+  共通の組み立て関数を新設し、`refresh_planet_section.py`のTOPIC_METHOD_TEXTと
+  各テーマの専用ビルダー（`build_fukushuto_arena.py`・`build_koshitsu_arena.py`の
+  `refresh_verified_planet()`）の両方から呼ぶ形にした（同じテーマをどちらの経路で
+  更新しても同じ文面になる）。
+
+  **henoko-student-accidentは対象外**: 当初は3テーマ共通の抜けだと考えて実装しかけたが、
+  `test_henoko_verified_refresh.py`の保護検査で失敗し原因を追うと、
+  `build_planet_page_preview.py`の`clean_henoko_layout()`が「2026-09-13 owner comments:
+  remove duplicate source box」というコメント付きでこの区間を明示的に空へ揃えていた。
+  `quality/reviews/2026-09-13-henoko-comments.md`（項目3）を確認したところ、
+  独立監査済み候補へのオーナー自身のブラウザコメントで「重複する『このマップの元データ』欄」
+  として削除を指示し、情報は図の直前の`.caution`注記へ一本化する方針だったと判明した。
+  これは今回の監査より前の、オーナーによる明示的な意思決定であり、課題79が「元に戻すべき
+  抜け」と誤認していた。henokoは対象から外し、`refresh_planet_section.py`の
+  `_sync_henoko_method_text`にこの経緯を記録した
+
+  **実装中に見つかった副次的な不具合（あわせて修正）**:
+  - koshitsu-tenpakai: `refresh_planet_section.py`はkoshitsu専用の後付け処理
+    （`build_koshitsu_arena.py`の`apply_koshitsu_extras()` — 軸の注記・論点図解6枚・
+    詳細データテーブル・議論の中心など7箇所）を一度も経由していなかった
+    （このツールでkoshitsuを更新したのが今回が初めてだったため、これまで気づかれて
+    いなかった）。`apply_koshitsu_extras()`を呼ぶよう配線し直した。あわせて、
+    `apply_koshitsu_review_note()`が「review-noteは1箇所だけ」という前提
+    （`replace_once`）だったため、調査条件ボックス追加でreview-noteが2箇所になり
+    落ちた。見つかった分だけ全部を書き換えるよう修正した
+  - fukushuto: 同様に`build_fukushuto_arena.py`の`apply_landing_images()`
+    （論点図解7枚の差し戻し）も未経由と判明したが、**画像ファイル自体
+    （`images/topics/fukushuto/`配下）が実在しない**ことが分かり、呼ぶのを見送った
+    （課題70＝図解68枚の一次資料点検待ちで、fukushutoの図解はそもそも未整備。
+    `build_fukushuto_arena.py --check`は本課題と無関係に前から「一致しません」を
+    返しており、今回新たに発生させたものではない）
+
+  標準検査4種・`verify_page_originality.py`・`unittest discover`（988件、skip4）は
+  いずれもNG0件/OK。fukushuto・koshitsu-tenpakaiとも`refresh_planet_section.py --for-docs`を
+  3回実行し差分ゼロ（冪等性）を確認、実機（ローカルサーバー）で表示・6枚の論点図解・
+  軸の注記が揃っていることを確認した
 - **【対応済み】課題74の記録訂正**: `tasks/task-74.md`は「資料にしかない話を見る」ボックスの
   説明文について「henoko-student-accidentのみ個別対応済み、残り8テーマ未対応」と
   記録していたが、実際に10テーマを確認したところ対象は「henoko以外の9テーマ」
@@ -230,11 +264,13 @@ A-1・A-2と違い、この3テーマは`build_planet_page_preview.py`の`build_
    school-nickname-ban分は対応済み（2026-09-20、いずれも本番反映済み。B参照）
 5. ~~C-1〜C-4（清掃）・課題74記録訂正~~ 対応済み（2026-09-20、7テーマ分のマーカー・CSS・
    スクリプトを削除し本番反映済み。C参照）
-6. **C-5（調査条件ボックスの新設、3テーマ）**: 唯一の未着手項目。次に着手するとすれば、
-   専用の作業ツリーで1テーマずつ、A-3と同じ手順（`refresh_planet_section.py`の
-   `TOPIC_METHOD_TEXT`経由での挿入、標準検査4種、実機確認）で行う
+6. ~~C-5（調査条件ボックスの新設）~~ fukushuto・koshitsu-tenpakaiは対応済み（2026-09-20、
+   本番反映済み）。henoko-student-accidentは2026-09-13のオーナーの明示決定により対象外。
+   C-5参照
 
 ## 判断待ち
 
-なし。課題76はC-5以外すべて完了。C-5だけ「清掃」ではなく新規追加のため意図的に見送った
-（優先度は低いまま。着手するかはオーナー判断）。
+なし。課題79は全項目が完了。残っているのは課題73（旧アリーナの死んだデータ、
+ai-copyrightの411KB外部JS等）・課題70（図解68枚の一次資料点検。完了までfukushutoの
+論点図解は追加しない）という、今回の監査中に見つけたが範囲外の別課題のみで、
+どちらも既存の課題として管理されている。

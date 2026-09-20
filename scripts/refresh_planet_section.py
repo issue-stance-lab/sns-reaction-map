@@ -28,6 +28,8 @@ import build_planet_data as bpd  # noqa: E402
 from build_planet_page_preview import build_section, render_planet, split_prototype  # noqa: E402
 from issue_card_counts import card_counts, load_records, other_count  # noqa: E402
 from sync_issue_counts import apply_lead, apply_note  # noqa: E402
+from build_koshitsu_arena import apply_koshitsu_extras  # noqa: E402
+from research_conditions import apply_research_conditions, research_conditions_html  # noqa: E402
 
 START = "<!-- PLANET_SECTION_START -->"
 END = "<!-- PLANET_SECTION_END -->"
@@ -249,6 +251,16 @@ def _sync_henoko_method_text(html: str, data: dict) -> str:
     にも sync_issue_counts.py の LEAD_RE/NOTE_RE（探す定型文が違う）にも掛からず、
     初回変換以来だれも更新していなかった（他テーマと同じ失われ方。2026-09-16、
     課題69の辺野古1回目で発覚）。henoko-student-accident専用。
+
+    RESEARCH_CONDITIONSはここでは触らない。他7テーマにある「調査条件」ボックスは
+    henokoにも一度あったが、2026-09-13にオーナーが独立監査済み候補へのブラウザ
+    コメントで「重複する『このマップの元データ』欄」として明示的に削除を指示し
+    （quality/reviews/2026-09-13-henoko-comments.md 項目3）、情報は図の直前の
+    #caution注記へ一本化された。build_planet_page_preview.pyのclean_henoko_layout()が
+    このテーマだけ再生成のたびに空へ戻すのはその実装（2026-09-20、課題79 C-5で
+    fukushuto・koshitsu-tenpakaiに同種のボックスを追加した際、henokoにも機械的に
+    足しかけて test_henoko_verified_refresh.py の保護検査で発覚。オーナーの明示決定に
+    従い、henokoだけは対象から外した）。
     """
     collected = data["totals"]["collected"]
     opinions = data["totals"]["opinions"]
@@ -298,13 +310,54 @@ def _sync_nickname_method_text(html: str, data: dict) -> str:
 
     school-nickname-banは山なみ変換時に旧「固定件数の要約」を削除したまま
     （build_planet_page_preview.pyのbuild_generic()、topic=="school-nickname-ban"の分岐）、
-    件数が動的に更新される新しい形での再設置がされていなかった（2026-09-20、課題76で発覚）。
+    件数が動的に更新される新しい形での再設置がされていなかった（2026-09-20、課題79で発覚）。
     """
     top_item = _top_issue(data)
     conclusion = NICKNAME_CONCLUSION_BY_ISSUE_ID.get(top_item["id"])
     if conclusion is None:
         raise SystemExit(f"議論の中心: 最大論点「{top_item['id']}」にconclusionがありません（school-nickname-ban）")
     return _apply_thirty_summary(html, _thirty_summary_html(top_item, conclusion), "school-nickname-ban")
+
+
+def _sync_fukushuto_method_text(html: str, data: dict) -> str:
+    """「調査条件」ボックスを埋める。
+
+    build_fukushuto_arena.pyのrefresh_verified_planet()は山なみ変換時にこの区間を
+    空へ揃えるだけで、中身の再設置は行っていない（他7テーマにある形が無かった。
+    2026-09-20、課題79 C-5で発覚）。fukushutoのヒーロー等は無カンマ表記のため合わせる。
+
+    apply_landing_images()（論点図解7枚の差し戻し）はここでは呼ばない。build()の
+    planet_mode分岐はこれも呼ぶが、肝心の画像ファイル（images/topics/fukushuto/配下）
+    が実在しない（課題70待ちで画像自体が未整備。build_fukushuto_arena.py --checkは
+    今も「一致しません」を返す、この空リンク問題は本課題より前からの別件）。ここで
+    呼ぶと存在しない画像への<img>を7個差し込んでしまうため、あえて省いた。
+    """
+    collected = data["totals"]["collected"]
+    return apply_research_conditions(
+        html, research_conditions_html(str(collected), data["sample_period"]), "fukushuto"
+    )
+
+
+def _sync_koshitsu_method_text(html: str, data: dict) -> str:
+    """koshitsu専用の7箇所（軸の注記・論点図解等）を差し戻し、「調査条件」ボックスを埋める。
+
+    build_koshitsu_arena.pyのbuild()は山なみ形式のとき
+    `apply_koshitsu_extras(refresh_verified_planet(page))`という順で両方呼ぶが、
+    refresh_planet_section.pyはrender_planet()を直接呼ぶだけでapply_koshitsu_extras()
+    を経由しないため、このツールでkoshitsuを更新すると軸の注記・6枚の論点図解・
+    詳細データテーブル・議論の中心などが消える（2026-09-20、課題79 C-5の実装中に発覚。
+    それまでkoshitsuではこのツールを使ったことが無く、気づかれていなかった）。
+    「調査条件」（このツールにしか無い区間）を先に埋めてから apply_koshitsu_extras() を
+    呼ぶ（逆順にすると、このツールが今回書いたreview-noteだけ台帳の値に揃うのが1回遅れる。
+    apply_koshitsu_extras内のapply_koshitsu_review_noteは見つかった分だけ全部を
+    書き換えるよう2026-09-20に直したので、先に区間を作ってから流せば1回で揃う）。
+    koshitsu-tenpakaiの既存表記（例:「収集した1,950件」）に合わせてカンマ区切りにする。
+    """
+    collected = data["totals"]["collected"]
+    html = apply_research_conditions(
+        html, research_conditions_html(f"{collected:,}", data["sample_period"]), "koshitsu-tenpakai"
+    )
+    return apply_koshitsu_extras(html)
 
 
 # consumption-tax-cutの論点ごとの図解画像。slugはファイル名の接尾辞、labelはalt文字列用
@@ -549,6 +602,8 @@ TOPIC_METHOD_TEXT = {
     "bike-blue-ticket": _sync_bike_method_text,
     "henoko-student-accident": _sync_henoko_method_text,
     "school-nickname-ban": _sync_nickname_method_text,
+    "fukushuto": _sync_fukushuto_method_text,
+    "koshitsu-tenpakai": _sync_koshitsu_method_text,
 }
 
 

@@ -51,10 +51,12 @@ try:
     from .issue_card_counts import IssueCountError, span_html
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
+    from .research_conditions import apply_research_conditions, research_conditions_html
 except ImportError:  # python3 scripts/build_koshitsu_arena.py
     from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
+    from research_conditions import apply_research_conditions, research_conditions_html  # type: ignore[no-redef]
 
 THEME = "koshitsu-tenpakai"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
@@ -489,6 +491,10 @@ def refresh_verified_planet(page: str) -> str:
     旧2D形式の各セクション（SM_RAW・ISSUES・6論点とXの声 等）はbuild_planet_page_preview.py
     が既に本文から削除済みなので、このあとの旧形式向け置換はすべて対象が無く失敗する
     （他テーマの山なみ展開時と同じ、旧ビルダーへのガード。reference_planetpage_rollout参照）。
+
+    「調査条件」は以前ここで空へ揃えるだけだったため、他7テーマにあるボックスが無いまま
+    だった（2026-09-20、課題79 C-5で発覚）。ここで埋めてからbuild()側で
+    apply_koshitsu_extras()（review-noteを台帳の値へ揃える処理を含む）を呼ぶ順にする。
     """
     if __package__:
         from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
@@ -503,11 +509,9 @@ def refresh_verified_planet(page: str) -> str:
     block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
     page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                         block, "山なみ全体", flags=re.S)
-    return replace_once(
-        page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
-        "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->",
-        "調査条件（山なみ内に表示）", flags=re.S,
-    )
+    collected = data["totals"]["collected"]
+    conditions = research_conditions_html(f"{collected:,}", data["sample_period"])
+    return apply_research_conditions(page, conditions, "koshitsu-tenpakai")
 
 
 def build_koshitsu_detail_table(public_theme: Path = PUBLIC_THEME) -> str:
@@ -651,6 +655,11 @@ def apply_koshitsu_review_note(page: str) -> str:
     render_planet()の既定文言「代表投稿は編集部が選定」とたまたま一致しており
     表面化していなかった。皇室典範はstatus=reviewedのため既定文言のままだと
     ずれる。課題69・koshitsu標準化で発見）。
+
+    2026-09-20、課題79 C-5でkoshitsuにもRESEARCH_CONDITIONS（他7テーマにある
+    「調査条件」ボックス）を追加した結果、review-noteが#caution内と2箇所になった。
+    どちらも同じ台帳の値で揃えるべきなので、1箇所だけを想定するreplace_once ではなく
+    見つかった分だけ全部を書き換える。
     """
     ledger = json.loads((ROOT / "data/review-ledger.json").read_text(encoding="utf-8"))
     entry = (ledger.get("themes") or {}).get(THEME) or {}
@@ -658,12 +667,14 @@ def apply_koshitsu_review_note(page: str) -> str:
         expected = f"AI分類。代表投稿{int(entry['samples'])}件の要旨を編集部が確認"
     else:
         expected = "AI分類。代表投稿は編集部が選定"
-    return replace_once(
-        page,
+    new_page, n = re.subn(
         r'<span class="review-note">[^<]*</span>',
         f'<span class="review-note">{html.escape(expected)}</span>',
-        "代表投稿の確認表示（review-note）",
+        page,
     )
+    if n < 1:
+        raise IssueCountError("代表投稿の確認表示（review-note）: 1箇所以上必要です（0箇所）")
+    return new_page
 
 
 LANDING_IMAGE_BY_ISSUE_ID = {
