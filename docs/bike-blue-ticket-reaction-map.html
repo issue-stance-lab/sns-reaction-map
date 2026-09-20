@@ -726,6 +726,7 @@
   .tide-slope-wrap{display:none}.tide-mobile-rows{display:block;margin-top:12px}
 }
 /* TIDE_CARD_END */
+.arena-divider{line-height:0;margin:0}.arena-divider img{width:100%;height:auto;display:block}
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=28">
   <script src="topic-modern.js?v=13" defer></script>
@@ -2277,6 +2278,27 @@ try {
 <section class="panel" id="vote-section" data-vote-topic="bike-blue-ticket-issue-stance-v1">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">2024年に道路交通法が改正され、自転車の違反に「青切符」（反則金）が導入されます。取り締まりを強化すべきか、まずインフラ整備が先か。あなたが最も気になる論点はどれですか？</p>
+<div id="vote-step1">
+  <p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p>
+  <div id="vote-issue-btns"></div>
+</div>
+<div id="vote-step2" style="display:none;margin-top:4px;">
+  <p class="vote-step-label"><span class="step-num">2</span>青切符導入への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p>
+  <div id="vote-stance-btns"></div>
+</div>
+<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
+<div id="vote-result" style="display:none;margin-top:20px;">
+  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
+    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
+    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">𝕏 でシェア</a>
+    <button id="vote-redo-btn" style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">投票をやり直す</button>
+  </div>
+</div>
+</section>
+<div class="arena-divider"><img src="images/shared/arena-divider.webp" alt="" loading="lazy"></div>
 <!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
@@ -2304,26 +2326,6 @@ try {
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
 <!-- ARTICLE_TRUST_END -->
-<div id="vote-step1">
-  <p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p>
-  <div id="vote-issue-btns"></div>
-</div>
-<div id="vote-step2" style="display:none;margin-top:4px;">
-  <p class="vote-step-label"><span class="step-num">2</span>青切符導入への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p>
-  <div id="vote-stance-btns"></div>
-</div>
-<p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
-<div id="vote-result" style="display:none;margin-top:20px;">
-  <div style="background:var(--accent-soft);border-radius:10px;padding:16px;margin-bottom:16px;">
-    <div id="vote-position-label" style="font-weight:900;font-size:16px;color:var(--accent);margin-bottom:6px;"></div>
-    <div id="vote-position-text" style="font-size:12px;color:var(--muted);"></div>
-  </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <a id="share-x" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:#000;color:#fff;text-decoration:none;font-size:13px;font-weight:700;">𝕏 でシェア</a>
-    <button id="vote-redo-btn" style="padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:13px;font-weight:600;">投票をやり直す</button>
-  </div>
-</div>
-</section>
 <script>
 (function(){
   'use strict';
