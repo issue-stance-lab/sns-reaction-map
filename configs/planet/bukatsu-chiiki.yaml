@@ -77,16 +77,19 @@ sub_issues:
     path: [cost_side, buckets]
     coverage: partial
     coverage_note: 読了時点の論点全件を読み直し。その後に増えた投稿は未再読
+    show_coverage_note: false
   受け皿・指導者:
     file: data/bukatsu-chiiki_cost-receiver-reread.json
     path: [receiver_side, buckets]
     coverage: partial
     coverage_note: 読了時点の論点全件を読み直し。その後に増えた投稿は未再読
+    show_coverage_note: false
   教員の働き方:
     file: data/bukatsu-chiiki_teacher-reread.json
     path: [buckets]
     coverage: full
     coverage_note: 賛成側を含む論点全件を読み直し
+    show_coverage_note: false
   制度・移行プロセス:
     file: data/verification/bukatsu-chiiki-plan-child-subissues.json
     path: [plan_side, buckets]
