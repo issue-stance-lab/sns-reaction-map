@@ -1,9 +1,9 @@
 # 課題77: 集客の仕掛け6案（引用され・検索される構造ほか）の登録と採用判断
 
 **登録日**: 2026-09-20
-**状態**: 未着手。外部提案8案の現状判定と新案6件を整理し、`GROWTH.yaml` の `capabilities` に idea 5件を登録した
+**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。発注書 `configs/prompts/20260920_growth-cite-and-search-structure.md` を作成し、別セッションの着手待ち。案3〜6は `GROWTH.yaml` に idea として登録済み
 **優先度**: 中（来訪者がいなくても効く案1・案2を先に。シェア系の案3・案4は来訪者が増えてから）
-**判断待ち**: オーナー（案1+2の採用可否／案5の図表・データの利用条件／案6の費用上限）
+**判断待ち**: オーナー（案5の図表・データの利用条件／案6の費用上限）。案1+2は採用済み、公開時にCEO承認
 **関連**: 51（記事の公開先設計）/ 54・15（AdSense審査中）/ 70（図解の点検中）/ 55（ドメイン移行の残作業）/
 `GROWTH.yaml` capabilities（`cite-and-search-structure` ほか）
 
@@ -126,10 +126,11 @@
 
 - 段階0: `GROWTH.yaml` で判定日（9/7）を過ぎたまま残っている計測2件（share-after-vote / related-themes-block）を
   `OPERATIONS.md`「サイト改善の進め方」1に従って片づける（観察ログを書いて延長するか closed_undecided で閉じる）。**未着手**
-- 段階1: オーナーが案1+2の採用可否を決める。**判断待ち**
-- 段階2: 採用なら発注書 `configs/prompts/{YYYYMMDD}_growth-cite-and-search-structure.md` を書き、
-  ブランチ `task/growth-cite-and-search-structure` で実装する。機械向けファイルは noindex。
-  公開はCEO承認のうえ `release` スキルで行う
+- 段階1: オーナーが案1+2の採用可否を決める。**採用（2026-09-20、「案1と2の作業を別セッションで行う」との指示）**
+- 段階2: 発注書 `configs/prompts/20260920_growth-cite-and-search-structure.md` を作成済み（2026-09-20）。
+  Part A（案1）はブランチ `task/growth-cite-and-search-structure`、Part B（案2）は `-b` で別セッションが実装する。
+  機械向けファイル（JSON・llms.txt）は sitemap に載せず robots.txt でも塞がない（HTML でないので noindex は付けられない。
+  塞ぐとAIに読まれない）。公開はCEO承認のうえ `release` スキルで行う。**別セッションの着手待ち**
 - 段階3: 公開後4週間、GA4参照元とGSC検索語で計測し、`GROWTH.yaml` の judge_at で判定する
 - 段階4: 案5 → 案3 → 案4 → 案6 の順に、同じ型で1つずつ進める（measuring は同時に1つまで）
 
