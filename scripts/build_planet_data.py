@@ -727,6 +727,16 @@ def e(x) -> str:
     return html.escape(str(x), quote=True)
 
 
+# 課題77 案1: 「この論点を引用」ボタン・外部からの固定リンクは id="issue-{id}" を指す。
+# この5テーマは #issue-cards（画像＋X投稿カード、*_issue_media.py 等が生成）が既に
+# 同じ id="issue-{iid}" を使っているため、論点の一覧側では付けない
+# （同一ページで id が重複すると #issue-{id} の行き先が不定になる）。
+ISSUE_CARDS_OWNS_ANCHOR_ID = {
+    "ai-copyright", "bike-blue-ticket", "bukatsu-chiiki",
+    "consumption-tax-cut", "koshitsu-tenpakai",
+}
+
+
 def static_question(d: dict) -> str:
     return e(d["question"]) + "（" + e(d["title"]) + "）"
 
@@ -781,7 +791,12 @@ def static_fallback(d: dict) -> str:
             f'color:{text_on(stance[k]["color"])}">{e(stance[k]["label"]) if 100 * n / it["count"] >= 12 else ""}</span>'
             for k, n in it["stances"].items() if n)
 
-        body = [
+        body = []
+        if d["theme_id"] not in ISSUE_CARDS_OWNS_ANCHOR_ID:
+            # 引用ボタン・外部リンクが指す固定id。パネル本体の直前に置く空の目印で、
+            # 見た目もfb-{id}の既存の挙動（戻るリンク等）も変えない。
+            body.append(f'    <span class="issue-anchor" id="issue-{e(it["id"])}"></span>')
+        body += [
             f'    <section class="landing-panel" id="{e(anchor_id)}" tabindex="-1">',
             f'      <h2>{e(it["icon"])} {e(it["label"])}</h2>',
             f'      <p class="sub">{it["count"]}件（{it["share_pct"]}%）'

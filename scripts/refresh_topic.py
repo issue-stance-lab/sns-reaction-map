@@ -901,6 +901,8 @@ def prepare_public_candidate_bundle(
         run(command, label="prepare public candidate", root=candidate_root)
 
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
+    # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
+    # ここに足し忘れると候補コピー内では生成されても本番へは反映されない。
     targets = [
         canonical,
         Path("THEMES.yaml"),
@@ -908,8 +910,11 @@ def prepare_public_candidate_bundle(
         Path("data/verification/sample-periods.json"),
         Path("DATA_SHEET.md"),
         Path("data/public/catalog.json"),
+        Path("docs/data/catalog.json"),
+        Path("docs/llms.txt"),
         Path("docs/index.html"), Path("docs/sitemap.xml"), Path("docs/robots.txt"),
         *[Path("data/public/themes") / path.name for path in sorted((candidate_root / "data/public/themes").glob("*.json"))],
+        *[Path("docs/data/themes") / path.name for path in sorted((candidate_root / "docs/data/themes").glob("*.json"))],
         *adapter_targets.keys(),
     ]
     if theme.get("verification_file"):

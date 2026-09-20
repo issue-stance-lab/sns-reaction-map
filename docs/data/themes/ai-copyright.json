@@ -1,0 +1,845 @@
+{
+  "claim_verification": {
+    "checked_on": "2026-09-19",
+    "claims": [
+      {
+        "claim": "AIによる無断学習は、著作権法上、常に著作権侵害にあたる",
+        "finding": "無断で著作物が使われていること自体は事実で、懸念には根拠がある。ただし著作権法は学習のための利用を原則として権利者の許諾が不要な行為と位置づけており、常に著作権侵害にあたるとまでは言えない。享受目的が併存する場合など例外的に問題になりうる、という整理がより正確。",
+        "id": "unauthorized_learning_infringement",
+        "issue_ids": [
+          "ai-copyright-learning-data"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）",
+            "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf"
+          },
+          {
+            "name": "e-Gov法令検索 著作権法 第30条の4",
+            "url": "https://laws.e-gov.go.jp/law/345AC0000000048"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "学習データの出所開示をAI事業者に法律で義務づける制度は、日本にはまだ無い",
+        "finding": "そのとおりです。政府（内閣府）が用意しているのは、開示するか、しない場合は理由を説明すればよい任意の枠組み（プリンシプル・コード）で、開示を法律で義務づけるものではありません。",
+        "id": "data_disclosure_needed",
+        "issue_ids": [
+          "ai-copyright-learning-data",
+          "ai-copyright-legal-framework"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "AI事業者に、学習データの利用について対価の支払いを義務づける法律は無い",
+        "finding": "そのとおりです。著作権法第30条の4は、非享受目的の利用であれば権利者の許諾も対価の支払いも法律上の要件としていません。契約に基づき自主的に対価を還元する事業者の取組事例は資料にありますが、法律上の義務ではありません。",
+        "id": "compensation_required",
+        "issue_ids": [
+          "ai-copyright-creator-rights"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "無断でAIに学習された作品の作者は、対抗する手段を持たない",
+        "finding": "オプトアウトの手段が不完全であることは資料にも明記されており、無力感には根拠がある。ただし著作権侵害が認められた場合の救済手段（廃棄請求・除去請求等）は制度として存在しており、対抗手段が皆無というわけではない。",
+        "id": "creator_protection_insufficient",
+        "issue_ids": [
+          "ai-copyright-creator-rights"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "内閣府「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」（2024年11月）",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf"
+          },
+          {
+            "name": "文化庁「AIと著作権に関する考え方について」（救済手段の整理箇所）",
+            "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "AIが生成した作品にも、通常の著作物と同じように著作権が認められる",
+        "finding": "AI生成物が一律に著作物として保護される、あるいは一律に保護されないという単純な結論は資料には無い。人の創作的寄与の有無によってケースごとに判断される論点として扱われており、これを直接確定させた判例もまだ確認できていない。",
+        "id": "ai_output_has_copyright",
+        "issue_ids": [
+          "ai-copyright-generated-work-rights"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（生成物の著作物性の議論）",
+            "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "生成AIへの法規制はほとんど進んでおらず、野放し状態にある",
+        "finding": "著作権法上のAI学習に関する条文が改正されていないのは事実だが、AI法の制定やプリンシプル・コードの整備は進んでおり、法制度の対応が「ほとんど進んでいない」「野放し」とまでは言えない。",
+        "id": "tech_innovation_over_regulation",
+        "issue_ids": [
+          "ai-copyright-legal-framework",
+          "ai-copyright-tech-promotion"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "e-Gov法令検索「人工知能関連技術の研究開発及び活用の推進に関する法律」（令和七年法律第五十三号、2025年6月4日公布）",
+            "url": "https://laws.e-gov.go.jp/law/507AC0000000053"
+          }
+        ],
+        "verdict": "gap"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "collected_count": 3812,
+  "collection_period": {
+    "end": "2026-09-05",
+    "start": "2026-06-22",
+    "status": "known"
+  },
+  "data_version": "v1-6a98851877f306fb",
+  "editorial_summary": {
+    "checked_on": "2026-09-14",
+    "findings": [
+      {
+        "id": "ai-copyright-ed-1",
+        "kind": "shared_premise",
+        "text": "「AI生成物の権利・創作性」は推進・活用支持40.0%、規制・制限強化支持35.2%と、他の論点に比べて割れている。争点は「学習の是非」ではなく「生成物が著作物として保護されるか、他者の権利を侵害しているとみなされるか」で、規制強化を求める側にも活用を推す側にも、学習行為そのものと生成物の扱いを分けて考える意見がある。"
+      },
+      {
+        "id": "ai-copyright-ed-2",
+        "kind": "real_conflict",
+        "text": "論点が変わると賛否の重心が入れ替わる。「学習データ・無断利用」は規制・制限強化支持が75.3%を占めるのに対し、「技術競争・推進」は推進・活用支持が78.6%を占め、ほぼ逆転している。同じ人が論点によって立場を変えているのか、別々の人が別々の論点を語っているのかは、この収集からは分からない。"
+      },
+      {
+        "id": "ai-copyright-ed-3",
+        "kind": "real_conflict",
+        "text": "クリエイターの保護を掲げる論点では規制支持が大半を占めるが、AI生成物そのものの権利に話が及ぶと割れる。「クリエイター保護・権利」の規制・制限強化支持は75.6%に上るのに対し、「AI生成物の権利・創作性」では35.2%にとどまる。「クリエイターを守る」という総論と「AIの生成物をどう扱うか」という各論では、同じ規制強化支持でも一致の強さが違う。"
+      },
+      {
+        "id": "ai-copyright-ed-4",
+        "kind": "still_unknown",
+        "text": "「技術競争・推進」は117件（全体の4.5%）と、他の論点と比べて最も少ない。件数が少ないことは論点が小さいという意味ではなく、この収集で語られなかったという意味しかない。"
+      },
+      {
+        "id": "ai-copyright-ed-5",
+        "kind": "still_unknown",
+        "text": "ここに出ているのはYahoo!リアルタイム検索で集めた2,593件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "issue_assigned_count": 2593,
+  "issues": [
+    {
+      "count": 657,
+      "id": "ai-copyright-learning-data",
+      "intensities": [
+        {
+          "count": 90,
+          "id": "low"
+        },
+        {
+          "count": 347,
+          "id": "medium"
+        },
+        {
+          "count": 220,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "学習データ・無断利用",
+      "stances": [
+        {
+          "count": 495,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 49,
+              "id": "low"
+            },
+            {
+              "count": 253,
+              "id": "medium"
+            },
+            {
+              "count": 193,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 52,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 25,
+              "id": "low"
+            },
+            {
+              "count": 26,
+              "id": "medium"
+            },
+            {
+              "count": 1,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 110,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 16,
+              "id": "low"
+            },
+            {
+              "count": 68,
+              "id": "medium"
+            },
+            {
+              "count": 26,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    },
+    {
+      "count": 303,
+      "id": "ai-copyright-creator-rights",
+      "intensities": [
+        {
+          "count": 69,
+          "id": "low"
+        },
+        {
+          "count": 138,
+          "id": "medium"
+        },
+        {
+          "count": 96,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "クリエイター保護・権利",
+      "stances": [
+        {
+          "count": 229,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 38,
+              "id": "low"
+            },
+            {
+              "count": 103,
+              "id": "medium"
+            },
+            {
+              "count": 88,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 41,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 24,
+              "id": "low"
+            },
+            {
+              "count": 16,
+              "id": "medium"
+            },
+            {
+              "count": 1,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 33,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 7,
+              "id": "low"
+            },
+            {
+              "count": 19,
+              "id": "medium"
+            },
+            {
+              "count": 7,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    },
+    {
+      "count": 471,
+      "id": "ai-copyright-legal-framework",
+      "intensities": [
+        {
+          "count": 72,
+          "id": "low"
+        },
+        {
+          "count": 281,
+          "id": "medium"
+        },
+        {
+          "count": 118,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "法制度・規制整備",
+      "stances": [
+        {
+          "count": 255,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 14,
+              "id": "low"
+            },
+            {
+              "count": 144,
+              "id": "medium"
+            },
+            {
+              "count": 97,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 88,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 43,
+              "id": "low"
+            },
+            {
+              "count": 41,
+              "id": "medium"
+            },
+            {
+              "count": 4,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 128,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 15,
+              "id": "low"
+            },
+            {
+              "count": 96,
+              "id": "medium"
+            },
+            {
+              "count": 17,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    },
+    {
+      "count": 117,
+      "id": "ai-copyright-tech-promotion",
+      "intensities": [
+        {
+          "count": 33,
+          "id": "low"
+        },
+        {
+          "count": 65,
+          "id": "medium"
+        },
+        {
+          "count": 19,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "技術競争・推進",
+      "stances": [
+        {
+          "count": 11,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 5,
+              "id": "medium"
+            },
+            {
+              "count": 6,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 14,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 7,
+              "id": "low"
+            },
+            {
+              "count": 7,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 92,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 26,
+              "id": "low"
+            },
+            {
+              "count": 53,
+              "id": "medium"
+            },
+            {
+              "count": 13,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    },
+    {
+      "count": 657,
+      "id": "ai-copyright-user-ethics",
+      "intensities": [
+        {
+          "count": 190,
+          "id": "low"
+        },
+        {
+          "count": 381,
+          "id": "medium"
+        },
+        {
+          "count": 86,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "利用者モラル・倫理",
+      "stances": [
+        {
+          "count": 326,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 37,
+              "id": "low"
+            },
+            {
+              "count": 217,
+              "id": "medium"
+            },
+            {
+              "count": 72,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 200,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 107,
+              "id": "low"
+            },
+            {
+              "count": 92,
+              "id": "medium"
+            },
+            {
+              "count": 1,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 131,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 46,
+              "id": "low"
+            },
+            {
+              "count": 72,
+              "id": "medium"
+            },
+            {
+              "count": 13,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    },
+    {
+      "count": 165,
+      "id": "ai-copyright-generated-work-rights",
+      "intensities": [
+        {
+          "count": 68,
+          "id": "low"
+        },
+        {
+          "count": 77,
+          "id": "medium"
+        },
+        {
+          "count": 20,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "AI生成物の権利・創作性",
+      "stances": [
+        {
+          "count": 58,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 5,
+              "id": "low"
+            },
+            {
+              "count": 36,
+              "id": "medium"
+            },
+            {
+              "count": 17,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 41,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 35,
+              "id": "low"
+            },
+            {
+              "count": 6,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 66,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 28,
+              "id": "low"
+            },
+            {
+              "count": 35,
+              "id": "medium"
+            },
+            {
+              "count": 3,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    },
+    {
+      "count": 223,
+      "id": "ai-copyright-other",
+      "intensities": [
+        {
+          "count": 132,
+          "id": "low"
+        },
+        {
+          "count": 67,
+          "id": "medium"
+        },
+        {
+          "count": 24,
+          "id": "high"
+        }
+      ],
+      "kind": "other",
+      "label": "その他",
+      "stances": [
+        {
+          "count": 33,
+          "id": "ai-copyright-regulation-support",
+          "intensities": [
+            {
+              "count": 9,
+              "id": "low"
+            },
+            {
+              "count": 12,
+              "id": "medium"
+            },
+            {
+              "count": 12,
+              "id": "high"
+            }
+          ],
+          "label": "規制・制限強化支持"
+        },
+        {
+          "count": 141,
+          "id": "ai-copyright-neutral",
+          "intensities": [
+            {
+              "count": 100,
+              "id": "low"
+            },
+            {
+              "count": 38,
+              "id": "medium"
+            },
+            {
+              "count": 3,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        },
+        {
+          "count": 49,
+          "id": "ai-copyright-promotion-support",
+          "intensities": [
+            {
+              "count": 23,
+              "id": "low"
+            },
+            {
+              "count": 17,
+              "id": "medium"
+            },
+            {
+              "count": 9,
+              "id": "high"
+            }
+          ],
+          "label": "推進・活用支持"
+        }
+      ]
+    }
+  ],
+  "ocean_layer": {
+    "checked_on": "2026-09-19",
+    "reviewer_type": "editorial_review",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-1",
+        "life_impact": "無断で自分の作品をAIに学習されたと考える権利者は、著作権侵害が認められれば、AI生成物の廃棄請求や、一定の場合には学習用データセットからの除去請求を行える可能性がある。「無断で使われたら泣き寝入りするしかない」という認識でいる人にとっては、実際に取れる手段が想定より残っている。",
+        "nearest_issue_id": "ai-copyright-learning-data",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「廃棄」「除去請求」の語での一致は1件あるが、米カリフォルニア州でのアンソロピック社に対する別訴訟の報道で、日本の著作権法の解釈に基づく権利者の救済手段への言及ではないため除外。「差止め」まで広げると1件（AI生成物利用者側の炎上リスクとしての言及）が加わるが、権利者が行使できる救済手段としての言及ではなく除外。廃棄請求・データセットからの除去請求という具体的な手段そのものへの言及は0件。",
+        "sources": [
+          {
+            "date": "令和6年3月15日",
+            "location": "5.（2）生成・利用段階、権利者の救済手段の整理箇所。新たな侵害物の生成の差止め、生成物の廃棄請求のほか、一定の場合には学習用データセットからの除去請求や侵害予防に必要な措置の請求が可能と整理",
+            "name": "文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）",
+            "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf"
+          }
+        ],
+        "topic": "無断学習された側は、現行法の解釈でも生成物の廃棄請求や学習用データセットからの除去請求を行える場合がある"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-2",
+        "life_impact": "無断でAIに声を模倣された実演家は、著名性の要件を満たせばパブリシティ権で対抗できる可能性があるが、要件のハードルが高く、若手・中堅の実演家ほど法的な対抗手段を持ちにくい。著作権法には声そのものを直接保護する規定がないため、この空白は著作権法の改正では埋まらない。",
+        "nearest_issue_id": "ai-copyright-creator-rights",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「パブリシティ」の語での一致は4件あるが、いずれもパブリシティ権と著作権の混同への指摘や特定の報道・判決の内容整理であり、著名性の要件が若手・中堅実演家を保護から実質的に排除しているという論点への言及は0件。",
+        "sources": [
+          {
+            "date": "令和8年6月16日",
+            "location": "発言番号073（谷合正明君）。「現行の著作権法には、声そのものを直接保護する規定はありません」「著名人の顧客吸引力を保護するパブリシティー権は存在するが、著名人の要件などハードルが高くて、若手や中堅のクリエーターは極めて不安定な状態に置かれている」との質疑",
+            "name": "第221回国会 参議院 文教科学委員会 第11号",
+            "url": "https://kokkai.ndl.go.jp/#/detail?minId=122115104X01120260616&current=1"
+          }
+        ],
+        "topic": "パブリシティ権には著名性の要件があり、若手・中堅の実演家ほど無断でのAI声真似に対抗しにくい"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-3",
+        "life_impact": "プリンシプル・コードを受け入れたAI事業者は、電子透かしやC2PA等の技術で学習データの出所や生成物の来歴を示す措置を検討することが期待される。ただし義務ではなく、実施しない場合は理由を説明すればよい「コンプライ・オア・エクスプレイン」の任意の枠組みにとどまる。",
+        "nearest_issue_id": "ai-copyright-legal-framework",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「電子透かし」「C2PA」「来歴」の語での一致は8件あるが、すべて音楽生成AI「Suno」が自社製品に電子透かしを導入したという個別企業のニュースへの反応で、プリンシプル・コードが求める透明性確保の技術的措置という政府の政策枠組みへの言及ではないため除外。",
+        "sources": [
+          {
+            "date": "2026年（第10回検討会で案確定）",
+            "location": "2.この文書が示す原則及び例外、【原則1】(1)透明性確保のための措置。電子透かし、C2PAその他のコンテンツの出所や来歴を証明する技術の導入等をAI事業者に求める記載",
+            "name": "内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf"
+          }
+        ],
+        "topic": "プリンシプル・コードは、AI事業者に電子透かしやC2PA等による学習データの出所・生成物の来歴の開示を求めている（義務ではなく任意）"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "ai-copyright-sc-4",
+        "life_impact": "自作品をAI学習から守りたい権利者が、robots.txtへの記載や利用規約への明示でオプトアウトを表明しても、それを尊重しないクローラーには効かず、別サイトへ転載された作品がそこから収集されることも防げない。「オプトアウトを表明すれば守られる」という認識では、実際の防御力を過大評価する可能性がある。",
+        "nearest_issue_id": "ai-copyright-learning-data",
+        "reviewer_type": "editorial_review",
+        "sns_base": 2593,
+        "sns_count": 0,
+        "sns_note": "「robots.txt」「クローラ」「オプトアウト」の語での一致は4件あるが、企業版サービスの契約上のオプトアウトやEU方式の集中管理オプトアウトへの言及、robots.txt等の存在を紹介するにとどまる投稿、オプトアウトが機能していないという抽象的な不満にとどまり、クローラーが記載を無視する具体的な仕組みや転載経由での回避不可能性への言及は0件。",
+        "sources": [
+          {
+            "date": "2024年11月",
+            "location": "3.権利者に期待される取組事項例（p.8〜）、オプトアウトの方法（p.19以降）。「robots.txtの記載による収集制限を尊重しないクローラも存在している」「人力でrobots.txtの記載のあるサイトから作品をダウンロードされ、記載のない別サイトに転載されてしまった場合、そこから収集されることは防げない」との記載",
+            "name": "内閣府知的財産戦略推進事務局「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」",
+            "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf"
+          }
+        ],
+        "topic": "robots.txtや利用規約でのAI学習拒否の明示は、それを尊重しないクローラーや転載経由の収集を防げない"
+      }
+    ],
+    "veins": [
+      {
+        "checked_on": "2026-09-19",
+        "diverging_reason": "同じ『政策対応が遅い』という不満から、規制・制限強化支持側は『だからこそ韓国のように迅速で厳格な法規制を急ぐべきだ』と結論づけ、推進・活用支持側は『だからこそインドのように迅速な規制緩和・活用推進を急ぐべきだ』と結論づける。急ぐべき方向が正反対に分かれる。",
+        "id": "ai-copyright-vein-1",
+        "issue_ids": [
+          "ai-copyright-legal-framework",
+          "ai-copyright-tech-promotion"
+        ],
+        "reviewer_type": "editorial_review",
+        "shared_concern": "生成AIの進化・普及のスピードに対して、日本の政策対応（法整備・規制の議論）が遅れている、追いついていない。",
+        "sides": [
+          {
+            "post_count": 3,
+            "stance_label": "規制・制限強化支持"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "推進・活用支持"
+          }
+        ]
+      },
+      {
+        "checked_on": "2026-09-19",
+        "diverging_reason": "同じ『レッテルで誤解されている』という不満から、規制・制限強化支持側は『反AIという語をやめ、無断学習の一部データセットの違法性のみに反対しているという実際の主張（規制派・生成規制論）で呼んでほしい』と求め、推進・活用支持側は『AI利用者を一律に盗人・非人道的と決めつけず、適法な利用として尊重してほしい』と求める。誤解の中身と、求める再定義の内容が逆向きになる。",
+        "id": "ai-copyright-vein-2",
+        "issue_ids": [
+          "ai-copyright-legal-framework",
+          "ai-copyright-user-ethics"
+        ],
+        "reviewer_type": "editorial_review",
+        "shared_concern": "自分の実際の主張が、単純化されたレッテル（「反AI」「盗人」等）に置き換えられて誤解され、まともに取り合ってもらえていない。",
+        "sides": [
+          {
+            "post_count": 3,
+            "stance_label": "規制・制限強化支持"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "推進・活用支持"
+          }
+        ]
+      }
+    ]
+  },
+  "opinion_count": 2593,
+  "page_path": "ai-copyright-reaction-map.html",
+  "question": "生成AIによる著作物の無断学習をどこまで認めるか",
+  "schema_version": "1.0",
+  "source_sha256": "6a98851877f306fb19dc5ff8557628eb094dc77d7fd7ebfdc073c7b0a5b60650",
+  "theme_id": "ai-copyright",
+  "title": "生成AIと著作権",
+  "updated_on": "2026-09-19"
+}

@@ -1001,6 +1001,55 @@ main > .article-trust {
   margin-top: 12px;
 }
 
+/* 「この論点を引用」ボタン（課題77 案1 A-4）。論点の一覧の見出し・論点カードの
+   見出しの直後へJS（topic-modern.js）が差し込む。 */
+.cite-copy-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 6px 0 0;
+}
+.cite-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  margin: 0;
+  padding: 0 11px;
+  border: 1px solid var(--line, #dde5f0);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--navy, #0F1A3D);
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+.cite-copy-btn:hover,
+.cite-copy-btn:focus-visible {
+  border-color: var(--blue, #075ef2);
+  color: var(--blue, #075ef2);
+  outline: none;
+}
+.cite-copy-toast {
+  margin-left: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--navy, #0F1A3D);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .cite-copy-toast {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin: 4px 0 0;
+    z-index: 2;
+  }
+}
+
 @media (max-width: 1050px) {
   .modern-nav { display: none; }
   .modern-header-button { margin-left: auto; }

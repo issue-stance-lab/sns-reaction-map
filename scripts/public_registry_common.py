@@ -23,6 +23,10 @@ PUBLIC_THEME_SCHEMA_PATH = ROOT / "schemas" / "public-theme.schema.json"
 PUBLIC_CATALOG_SCHEMA_PATH = ROOT / "schemas" / "public-catalog.schema.json"
 PUBLIC_THEMES_DIR = ROOT / "data" / "public" / "themes"
 PUBLIC_CATALOG_PATH = ROOT / "data" / "public" / "catalog.json"
+# サイトから実際に fetch される写し（課題77 案1）。data/public/ が正典で、
+# ここは build_public_registry.py が同じバイト列を書くだけの配布先。手編集しない。
+PUBLIC_DOCS_THEMES_DIR = ROOT / "docs" / "data" / "themes"
+PUBLIC_DOCS_CATALOG_PATH = ROOT / "docs" / "data" / "catalog.json"
 
 INTENSITY_ORDER = ("low", "medium", "high")
 

@@ -1,0 +1,737 @@
+{
+  "claim_verification": {
+    "checked_on": "2026-08-16",
+    "claims": [
+      {
+        "claim": "LUUPは免許不要で野放しなのに、自転車だけ青切符だ",
+        "finding": "電動キックボードも青切符の対象。「自転車だけ」という前提は資料では成立しない。",
+        "id": "luup",
+        "issue_ids": [
+          "bike-blue-ticket-license-requirement",
+          "bike-blue-ticket-rule-ambiguity"
+        ],
+        "matched_post_count": 12,
+        "sources": [
+          {
+            "name": "警察庁 特定小型原動機付自転車の交通ルール",
+            "url": "https://www.npa.go.jp/bureau/traffic/anzen/tokuteikogata.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "反則金は6,000円くらい取られる",
+        "finding": "投稿で挙がる6,000円は、信号無視などの区分と一致する。",
+        "id": "fine",
+        "issue_ids": [
+          "bike-blue-ticket-rule-ambiguity"
+        ],
+        "matched_post_count": 15,
+        "sources": [
+          {
+            "name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "対象は16歳以上だ",
+        "finding": "年齢の理解に食い違いは見当たらなかった。",
+        "id": "age",
+        "issue_ids": [
+          "bike-blue-ticket-rule-ambiguity"
+        ],
+        "matched_post_count": 10,
+        "sources": [
+          {
+            "name": "警察庁 自転車の新しい制度",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "歩道を少し走っただけで即青切符・罰金",
+        "finding": "歩道を走った全員がその場で反則金、という運用は資料からは読み取れない。",
+        "id": "sidewalk",
+        "issue_ids": [
+          "bike-blue-ticket-road-safety",
+          "bike-blue-ticket-rule-ambiguity"
+        ],
+        "matched_post_count": 12,
+        "sources": [
+          {
+            "name": "警察庁 自転車ポータル よくある質問",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "自転車の事故は減っている／いや増えている",
+        "finding": "投稿には「めちゃくちゃ減っている」と「死亡事故が増加中」の両方がある。公表値はほぼ横ばいで、増加とも大幅減とも読めない。",
+        "id": "accident",
+        "issue_ids": [
+          "bike-blue-ticket-enforcement-support"
+        ],
+        "matched_post_count": 5,
+        "sources": [
+          {
+            "name": "警察庁 自転車は車のなかま",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "取締りなんて実際にはされていない",
+        "finding": "警告を含めれば、件数としては相当数が行われている。",
+        "id": "noenforce",
+        "issue_ids": [
+          "bike-blue-ticket-enforcement-support"
+        ],
+        "matched_post_count": 8,
+        "sources": [
+          {
+            "name": "警察庁 自転車は車のなかま",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "対象になる違反は113種類もある",
+        "finding": "113が別の数え方（罰則のみの違反を含める、条文の号ごとに数えるなど）から出ている可能性を否定できないため、投稿が誤りとは書けない。数え方が公開資料から一意に定まらないこと自体を、そのまま残す。",
+        "id": "count113",
+        "issue_ids": [
+          "bike-blue-ticket-rule-ambiguity"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "警察庁 自転車をはじめとする軽車両の反則行為と反則金の額（PDF）",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/pdf/jitensyahansokukoui.pdf"
+          }
+        ],
+        "verdict": "miss"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "collected_count": 504,
+  "collection_period": {
+    "end": "2026-09-12",
+    "start": "2026-06-27",
+    "status": "known"
+  },
+  "data_version": "v1-246ea03b04759df5",
+  "editorial_summary": {
+    "checked_on": "2026-09-11",
+    "findings": [
+      {
+        "id": "bike-blue-ticket-ed-1",
+        "kind": "real_conflict",
+        "text": "取締り強化に賛成する意見（81件）は96.3%が同じ賛成の立場から出ており、インフラ整備を優先する意見（60件）は91.7%が反対の立場から出ている。同じ制度をめぐりながら、語っている陣営がほとんど重ならない。"
+      },
+      {
+        "id": "bike-blue-ticket-ed-2",
+        "kind": "shared_premise",
+        "text": "免許制を求める意見（31件）は、取締り強化に賛成する立場からも（32.3%）、インフラ整備を優先する立場からも（38.7%）出ている。取締りか整備かでは割れていても、運転者を何らかの形で管理すべきだという発想には重なりがある。"
+      },
+      {
+        "id": "bike-blue-ticket-ed-3",
+        "kind": "real_conflict",
+        "text": "ルールが分かりにくい、という意見（60件）のうち、取締り強化に賛成する立場から出ているものは0.0%にとどまる。同じ制度を見ても、分かりにくいと感じるかどうか自体が、賛否の立場によって分かれている。"
+      },
+      {
+        "id": "bike-blue-ticket-ed-4",
+        "kind": "still_unknown",
+        "text": "特定の論点にまとまらない意見（140件）は、全体の意見（392件）の中でも大きな塊になっている。これらがどの立場に近いのかは、今のデータだけでは分からない。"
+      },
+      {
+        "id": "bike-blue-ticket-ed-5",
+        "kind": "still_unknown",
+        "text": "車道を走ることへの不安を挙げる意見（20件）が、青切符の対象になる違反行為とどこまで重なっているのかは、この意見データだけでは分からない。"
+      }
+    ],
+    "reviewer_type": "ai_assisted",
+    "status": "complete"
+  },
+  "issue_assigned_count": 392,
+  "issues": [
+    {
+      "count": 81,
+      "id": "bike-blue-ticket-enforcement-support",
+      "intensities": [
+        {
+          "count": 7,
+          "id": "low"
+        },
+        {
+          "count": 48,
+          "id": "medium"
+        },
+        {
+          "count": 26,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "取締り強化賛成",
+      "stances": [
+        {
+          "count": 78,
+          "id": "bike-blue-ticket-enforcement-support",
+          "intensities": [
+            {
+              "count": 7,
+              "id": "low"
+            },
+            {
+              "count": 47,
+              "id": "medium"
+            },
+            {
+              "count": 24,
+              "id": "high"
+            }
+          ],
+          "label": "賛成（取締り強化支持）"
+        },
+        {
+          "count": 0,
+          "id": "bike-blue-ticket-neutral",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 0,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "どちらでもない"
+        },
+        {
+          "count": 3,
+          "id": "bike-blue-ticket-infrastructure-first",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 1,
+              "id": "medium"
+            },
+            {
+              "count": 2,
+              "id": "high"
+            }
+          ],
+          "label": "反対（インフラ・制度優先）"
+        }
+      ]
+    },
+    {
+      "count": 60,
+      "id": "bike-blue-ticket-infrastructure-first",
+      "intensities": [
+        {
+          "count": 4,
+          "id": "low"
+        },
+        {
+          "count": 37,
+          "id": "medium"
+        },
+        {
+          "count": 19,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "インフラ整備優先",
+      "stances": [
+        {
+          "count": 0,
+          "id": "bike-blue-ticket-enforcement-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 0,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "賛成（取締り強化支持）"
+        },
+        {
+          "count": 5,
+          "id": "bike-blue-ticket-neutral",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 2,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "どちらでもない"
+        },
+        {
+          "count": 55,
+          "id": "bike-blue-ticket-infrastructure-first",
+          "intensities": [
+            {
+              "count": 1,
+              "id": "low"
+            },
+            {
+              "count": 35,
+              "id": "medium"
+            },
+            {
+              "count": 19,
+              "id": "high"
+            }
+          ],
+          "label": "反対（インフラ・制度優先）"
+        }
+      ]
+    },
+    {
+      "count": 20,
+      "id": "bike-blue-ticket-road-safety",
+      "intensities": [
+        {
+          "count": 2,
+          "id": "low"
+        },
+        {
+          "count": 9,
+          "id": "medium"
+        },
+        {
+          "count": 9,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "車道走行への不安",
+      "stances": [
+        {
+          "count": 0,
+          "id": "bike-blue-ticket-enforcement-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 0,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "賛成（取締り強化支持）"
+        },
+        {
+          "count": 4,
+          "id": "bike-blue-ticket-neutral",
+          "intensities": [
+            {
+              "count": 2,
+              "id": "low"
+            },
+            {
+              "count": 2,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "どちらでもない"
+        },
+        {
+          "count": 16,
+          "id": "bike-blue-ticket-infrastructure-first",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 7,
+              "id": "medium"
+            },
+            {
+              "count": 9,
+              "id": "high"
+            }
+          ],
+          "label": "反対（インフラ・制度優先）"
+        }
+      ]
+    },
+    {
+      "count": 31,
+      "id": "bike-blue-ticket-license-requirement",
+      "intensities": [
+        {
+          "count": 4,
+          "id": "low"
+        },
+        {
+          "count": 21,
+          "id": "medium"
+        },
+        {
+          "count": 6,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "免許制要求",
+      "stances": [
+        {
+          "count": 10,
+          "id": "bike-blue-ticket-enforcement-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 6,
+              "id": "medium"
+            },
+            {
+              "count": 4,
+              "id": "high"
+            }
+          ],
+          "label": "賛成（取締り強化支持）"
+        },
+        {
+          "count": 9,
+          "id": "bike-blue-ticket-neutral",
+          "intensities": [
+            {
+              "count": 4,
+              "id": "low"
+            },
+            {
+              "count": 5,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "どちらでもない"
+        },
+        {
+          "count": 12,
+          "id": "bike-blue-ticket-infrastructure-first",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 10,
+              "id": "medium"
+            },
+            {
+              "count": 2,
+              "id": "high"
+            }
+          ],
+          "label": "反対（インフラ・制度優先）"
+        }
+      ]
+    },
+    {
+      "count": 60,
+      "id": "bike-blue-ticket-rule-ambiguity",
+      "intensities": [
+        {
+          "count": 10,
+          "id": "low"
+        },
+        {
+          "count": 34,
+          "id": "medium"
+        },
+        {
+          "count": 16,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "ルール曖昧・不信",
+      "stances": [
+        {
+          "count": 0,
+          "id": "bike-blue-ticket-enforcement-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 0,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "賛成（取締り強化支持）"
+        },
+        {
+          "count": 26,
+          "id": "bike-blue-ticket-neutral",
+          "intensities": [
+            {
+              "count": 10,
+              "id": "low"
+            },
+            {
+              "count": 16,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "どちらでもない"
+        },
+        {
+          "count": 34,
+          "id": "bike-blue-ticket-infrastructure-first",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 18,
+              "id": "medium"
+            },
+            {
+              "count": 16,
+              "id": "high"
+            }
+          ],
+          "label": "反対（インフラ・制度優先）"
+        }
+      ]
+    },
+    {
+      "count": 140,
+      "id": "bike-blue-ticket-other",
+      "intensities": [
+        {
+          "count": 60,
+          "id": "low"
+        },
+        {
+          "count": 56,
+          "id": "medium"
+        },
+        {
+          "count": 24,
+          "id": "high"
+        }
+      ],
+      "kind": "other",
+      "label": "その他",
+      "stances": [
+        {
+          "count": 0,
+          "id": "bike-blue-ticket-enforcement-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 0,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "賛成（取締り強化支持）"
+        },
+        {
+          "count": 72,
+          "id": "bike-blue-ticket-neutral",
+          "intensities": [
+            {
+              "count": 51,
+              "id": "low"
+            },
+            {
+              "count": 16,
+              "id": "medium"
+            },
+            {
+              "count": 5,
+              "id": "high"
+            }
+          ],
+          "label": "どちらでもない"
+        },
+        {
+          "count": 68,
+          "id": "bike-blue-ticket-infrastructure-first",
+          "intensities": [
+            {
+              "count": 9,
+              "id": "low"
+            },
+            {
+              "count": 40,
+              "id": "medium"
+            },
+            {
+              "count": 19,
+              "id": "high"
+            }
+          ],
+          "label": "反対（インフラ・制度優先）"
+        }
+      ]
+    }
+  ],
+  "ocean_layer": {
+    "checked_on": "2026-09-12",
+    "reviewer_type": "ai_assisted",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-12",
+        "id": "bike-blue-ticket-sc-1",
+        "life_impact": "青切符と聞くと「違反すれば即座に反則金」と思われがちだが、警察庁自身の説明では、単なる歩道通行のような違反は原則として指導警告にとどまり、悪質・危険な違反や、指導に従わずあえて違反を続けた場合だけが検挙・青切符の対象になる。「取締りの範囲が広すぎる」という不安と「もっと厳しく取り締まってほしい」という期待の両方が、この運用の実態を踏まえずに語られている可能性がある。",
+        "nearest_issue_id": "bike-blue-ticket-rule-ambiguity",
+        "reviewer_type": "ai_assisted",
+        "sns_base": 392,
+        "sns_count": 2,
+        "sns_note": "「指導警告」に直接触れた意見は392件中2件。従来の1件は歩道の少なさを語り、今回の1件は特定原付との取締りの違いを比較して、自転車の軽微な違反はまず指導警告になると説明している。",
+        "sources": [
+          {
+            "date": "2026年4月1日以降",
+            "location": "「取締りの基本的考え方」",
+            "name": "警察庁 取締りについて｜自転車ポータルサイト",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html"
+          },
+          {
+            "date": "2026年4月1日以降",
+            "location": "Q.自転車で違反をしただけで、取締りを受けるのですか。",
+            "name": "警察庁 よくある質問｜自転車ポータルサイト",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"
+          }
+        ],
+        "topic": "「基本は指導警告、検挙は悪質・危険な場合だけ」という運用ルール"
+      },
+      {
+        "checked_on": "2026-09-12",
+        "id": "bike-blue-ticket-sc-2",
+        "life_impact": "「青切符」という名前の強さから、切符を切られる自転車利用者が多いという印象を持たれやすい。しかし警察庁が公表した導入後1か月間の実績では、青切符の交付は2,147件だったのに対し、指導警告は13万5,855件で、その差は約63倍にのぼる。取締りの「量」を議論するなら、この比率が土台になる。",
+        "nearest_issue_id": "bike-blue-ticket-enforcement-support",
+        "reviewer_type": "ai_assisted",
+        "sns_base": 392,
+        "sns_count": 0,
+        "sns_note": "青切符の交付数「2,147件」自体に触れた意見は392件中1件あり、反則金5,000円換算の試算までしている。しかし指導警告13万5,855件や、その約63倍という比較に触れた意見は0件だった。",
+        "sources": [
+          {
+            "date": "令和8年5月14日",
+            "location": "全文（2ページ）",
+            "name": "警察庁交通局交通企画課 自転車に対する交通反則通告制度導入後１月間の運用状況について（PDF）",
+            "url": "https://www.npa.go.jp/news/release/2026/20260514.pdf"
+          }
+        ],
+        "topic": "導入1か月の実績は、指導警告13万5,855件に対し青切符2,147件（約63倍の差）"
+      },
+      {
+        "checked_on": "2026-09-12",
+        "id": "bike-blue-ticket-sc-3",
+        "life_impact": "自転車の青切符ばかりが話題になるが、同じ2026年4月1日に、自動車が自転車を追い抜く際に十分な間隔と安全な速度を保つ「側方通過」の規定も施行されている。「自転車だけが取り締まられている」という受け止め方と、自動車側にも同時に新しい法的義務が生まれたという事実は、SNSの意見の中ではほとんど結びついていない。",
+        "nearest_issue_id": null,
+        "reviewer_type": "ai_assisted",
+        "sns_base": 392,
+        "sns_count": 0,
+        "sns_note": "「側方通過」「追い越し」に関する間隔規定を含む意見は392件中0件。全504件中で唯一この規定に触れた1件も、他の法改正と並べて事実を列挙するニュース系の投稿で、意見（is_opinion）には分類されていない。",
+        "sources": [
+          {
+            "date": "2026年4月1日施行",
+            "location": "Q.令和8年4月1日から施行された「側方通過」の規定とは何ですか。",
+            "name": "警察庁 よくある質問｜自転車ポータルサイト",
+            "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html"
+          }
+        ],
+        "topic": "自転車の青切符と同じ日に、自動車側にも「側方通過」の新しい義務が生まれた"
+      },
+      {
+        "checked_on": "2026-09-12",
+        "id": "bike-blue-ticket-sc-4",
+        "life_impact": "「インフラを整備してから取り締まるべきだ」という意見の裏付けとして、政府はすでに数値目標入りの整備計画を閣議決定している（自転車通行空間を9,841kmから12,000kmへ、自転車損害賠償責任保険等の加入率を65.4%から69.9%へ、など）。ただし具体的な予算額（円建ての数字）は計画書に明記されておらず、目標と裏付けの間には差がある。この目標の有無・中身のどちらも、SNSの意見にはほとんど出てこない。",
+        "nearest_issue_id": "bike-blue-ticket-infrastructure-first",
+        "reviewer_type": "ai_assisted",
+        "sns_base": 392,
+        "sns_count": 0,
+        "sns_note": "「自転車活用推進計画」「9,841」「12,000km」「保険加入率65.4」等いずれのキーワードも392件の意見の中に見当たらない。保険に触れる意見はあるが、いずれも個人の提案（簡易ライセンス化とセットでの加入義務化など）として書かれ、既存の政府目標には触れていない。",
+        "sources": [
+          {
+            "date": "令和8年5月",
+            "location": "目標１〜２の〔指標〕（p.18・p.20）",
+            "name": "国土交通省 自転車活用推進計画（本体、令和8年5月・PDF）",
+            "url": "https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/assets/pdf/3rd_plan.pdf"
+          }
+        ],
+        "topic": "政府はすでに数値目標入りの自転車インフラ整備計画を閣議決定している"
+      }
+    ],
+    "veins": []
+  },
+  "opinion_count": 392,
+  "page_path": "bike-blue-ticket-reaction-map.html",
+  "question": "自転車の交通違反に青切符（反則金）を導入すべきか",
+  "schema_version": "1.0",
+  "source_sha256": "246ea03b04759df5940594c0429f0ee0130ddabaa7845eed58b3342cc413a347",
+  "theme_id": "bike-blue-ticket",
+  "title": "自転車の青切符導入",
+  "updated_on": "2026-09-12"
+}
