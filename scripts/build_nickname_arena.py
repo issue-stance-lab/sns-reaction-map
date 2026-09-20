@@ -712,6 +712,81 @@ def _public_rows(data: dict[str, Any]) -> tuple[int, str, list[dict[str, Any]]]:
     return int(data["collected_count"]), _public_period(data), rows
 
 
+# 論点ごとの図解画像。キーは山なみの issue id、値は (画像ファイルの接尾辞, ラベル)。
+# 画像自体は旧デザイン時代（2026-07-24）から docs/images/topics/school-nickname-ban/に
+# あり、当時は独立した「論点1」〜「論点6」のexplainer-cardで使われていたが、2026-09-12の
+# 山なみ形式への変換でそのカードごと失われた。render_planet()（10テーマ共通）はこのテーマ
+# 専用の画像を知らないため、refresh_verified_planet() が山なみ区画を作り直すたびに
+# 消えたままになる（constitutional-amendmentのapply_landing_images()と同型）。
+# 「その他」は図解を持たない。
+LANDING_IMAGE_BY_ISSUE_ID = {
+    "school-nickname-ban-psychological-safety": ("safety", "いじめ・心理的安全"),
+    "school-nickname-ban-uniform-rule": ("effectiveness", "一律禁止の実効性"),
+    "school-nickname-ban-naming-culture": ("culture", "親しさ・呼称文化"),
+    "school-nickname-ban-school-practice": ("field", "学校運用・現場体験"),
+    "school-nickname-ban-gender-consideration": ("gender", "さん付け・ジェンダー配慮"),
+    "school-nickname-ban-individual-choice": ("choice", "本人意思・柔軟運用"),
+}
+
+
+def _landing_image_html(slug: str, label: str) -> str:
+    path = f"images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-{slug}.webp"
+    return (
+        f'<div class="explainer-card landing-image" data-img="{path}" data-alt="{label}">'
+        f'<img src="{path}" alt="論点図解：{label}" loading="lazy"></div>'
+    )
+
+
+def apply_landing_images(block: str, expected_panels: int) -> str:
+    """論点ごとの図解画像を、山なみ再生成後の各論点パネルへ差し戻す。
+
+    フォールバック側（無JS用の#fallback配下のlanding-panel）と、実際の操作画面を
+    作るJS（drawPanel相当）の両方に差し戻す。expected_panelsはdata["issues"]の件数
+    （呼び出し側から渡す）。このテーマは「その他」の実件数が0でlanding-panel自体が
+    生成されず、常に6件（LANDING_IMAGE_BY_ISSUE_IDと同数）だが、他テーマのように
+    「+1」を決め打ちすると「その他」に投稿が付いた回に件数不一致で誤って落ちる。
+    """
+    def add_to_fallback(m: re.Match) -> str:
+        issue_id, heading = m.group(1), m.group(0)
+        found = LANDING_IMAGE_BY_ISSUE_ID.get(issue_id)
+        if not found:
+            return heading
+        slug, label = found
+        return heading + _landing_image_html(slug, label)
+
+    block, n = re.subn(
+        r'<section class="landing-panel" id="fb-(school-nickname-ban-[a-z0-9-]+)"[^>]*>\s*<h2>[^<]*</h2>',
+        add_to_fallback,
+        block,
+    )
+    if n != expected_panels:
+        raise IssueCountError(
+            f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件）"
+        )
+
+    slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in LANDING_IMAGE_BY_ISSUE_ID.items())
+    old_draw_panel_head = (
+        "  const it = issues[st.landed];\n"
+        "  const n = m.counts[it.id];\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m)"
+    )
+    new_draw_panel_head = (
+        "  const it = issues[st.landed];\n"
+        "  const n = m.counts[it.id];\n"
+        "  const snbImgSlug = {" + slug_map_js + "}[it.id];\n"
+        "  const snbImgPath = snbImgSlug ? ('images/topics/school-nickname-ban/school-nickname-ban-infographic-wide-'+snbImgSlug+'.webp') : '';\n"
+        "  const snbImgHtml = snbImgSlug ? ('<div class=\"explainer-card landing-image\" data-img=\"'+snbImgPath+'\" data-alt=\"'+it.label+'\">'\n"
+        "    +'<img src=\"'+snbImgPath+'\" alt=\"論点図解：'+it.label+'\" loading=\"lazy\"></div>') : '';\n"
+        "  let h = '<h2>'+it.icon+' '+it.label+'</h2>'\n"
+        "    + issueTabs(m) + snbImgHtml"
+    )
+    if old_draw_panel_head not in block:
+        raise IssueCountError("論点画像(drawPanel側): JSテンプレートの差し込み位置が見つかりません")
+    block = block.replace(old_draw_panel_head, new_draw_panel_head, 1)
+    return block
+
+
 def refresh_verified_planet(page: str, rows: list[dict], collected: int) -> str:
     """再読検査と正典の一致を確認してから、図全体をメモリ内で作り直す。"""
     if __package__:
@@ -731,6 +806,7 @@ def refresh_verified_planet(page: str, rows: list[dict], collected: int) -> str:
     if failures:
         raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
     block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    block = apply_landing_images(block, len(data["issues"]))
     return replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                         block, "山なみ全体", flags=re.S)
 

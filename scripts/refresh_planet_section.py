@@ -339,12 +339,34 @@ def _inject_bukatsu_landing_images(block: str, data: dict) -> str:
     )
 
 
+# school-nickname-banの論点ごとの図解画像。画像自体は旧デザイン時代（2026-07-24）から
+# docs/images/topics/school-nickname-ban/にあり、当時は独立した「論点1」〜「論点6」の
+# explainer-cardで使われていたが、2026-09-12の山なみ形式への変換でそのカードごと失われ、
+# 山なみの論点パネルには一度も差し込まれていなかった（ai-copyright・bukatsu-chiikiと
+# 同じ失われ方）。「その他」は図解を持たない。ラベルはconfigs/planet/の論点keyと揃える。
+SCHOOL_NICKNAME_BAN_LANDING_IMAGE_BY_ISSUE_ID = {
+    "school-nickname-ban-psychological-safety": ("safety", "いじめ・心理的安全"),
+    "school-nickname-ban-uniform-rule": ("effectiveness", "一律禁止の実効性"),
+    "school-nickname-ban-naming-culture": ("culture", "親しさ・呼称文化"),
+    "school-nickname-ban-school-practice": ("field", "学校運用・現場体験"),
+    "school-nickname-ban-gender-consideration": ("gender", "さん付け・ジェンダー配慮"),
+    "school-nickname-ban-individual-choice": ("choice", "本人意思・柔軟運用"),
+}
+
+
+def _inject_nickname_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "school-nickname-ban", SCHOOL_NICKNAME_BAN_LANDING_IMAGE_BY_ISSUE_ID, "snb"
+    )
+
+
 TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_landing_images,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,
     "constitutional-amendment": _inject_constitutional_landing_images,
     "ai-copyright": _inject_ai_copyright_landing_images,
+    "school-nickname-ban": _inject_nickname_landing_images,
 }
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
