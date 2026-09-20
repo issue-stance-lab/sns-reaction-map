@@ -1,9 +1,8 @@
-# 課題76: 山なみ10テーマの構成監査 — 「議論の中心」欠落など
+# 課題76: 山なみ10テーマの構成監査 — 数字の食い違いなど
 
 **登録日**: 2026-09-20
-**状態**: 未着手（A-1・A-2は2026-09-20の実機検証で「対応不要」と判明。実質的に残るのはA-3のみ）
-**優先度**: 中（A-3「議論の中心」の欠落は3テーマに残るが、事実誤りや機能欠落ではなく
-見た目の統一感の話。B系の数字の食い違いのほうが読者への実害としては先に直す価値がある）
+**状態**: 進行中。A-1・A-2は実機検証で「対応不要」と判明、A-3は3テーマとも実装・本番反映済み。残るはB系（数字の食い違い3件）とC系（清掃）のみ
+**優先度**: 低（残るB系は数字の食い違いだが公開ページへの実害は小さい表記ゆれの範囲。C系はさらに優先度が低い）
 **関連**: 54（山なみ移行本体）/ 69（起承転結の再編、今回見つかった差分の多くがこの過程で発生）/
 73（死んだデータ）/ 74（AIっぽい言い回し）
 
@@ -97,11 +96,33 @@ constitutional-amendment 4・bike-blue-ticket 4・elderly-license-revocation 5�
 空のマーカー＋CSS約20〜30行が、読まれない飾りとして残っているだけ（`ARGUMENTS_START`等と
 同種の残骸）。下記C系の清掃項目へ格下げした。
 
-#### A-3. 「議論の中心」（ヒーロー直下の最大論点要約）が3テーマに無い
+#### A-3. 【2026-09-20 対応済み】「議論の中心」（ヒーロー直下の最大論点要約）が3テーマに無かった
 
 `bike-blue-ticket`・`henoko-student-accident`・`school-nickname-ban`の3テーマだけ、
-`class="thirty-summary"`（他7テーマにある要約カード）が無い。
+`class="thirty-summary"`（他7テーマにある要約カード）が無かった。
 （皇室典範で2026-09-18に一度見つかった同種の抜けが、実は他に3件潜んでいた）
+
+A-1・A-2と違い、この3テーマは`build_planet_page_preview.py`の`build_generic()`が
+山なみ変換時に旧「固定件数の要約」を意図的に`cut_block()`で除去しており
+（コメント「旧固定件数の要約」）、henoko・school-nickname-banの`ARTICLE_TRUST`等
+どこにも代替が無いことを確認したうえで実装した（bike-blue-ticketは`build_bike_process_sections.py`に
+`#reread-basis`スコープの未使用の試作コードがあったが、置き場所が他テーマと違い、
+最大論点が固定（取締り強化賛成のみ）だったため使わず、新規実装した）。
+
+**実装**: `scripts/refresh_planet_section.py`に共通ヘルパー`_top_issue()`
+（「その他」を除く最大論点を選ぶ。koshitsu-tenpakaiの`configs/koshitsu-tenpakai-reaction-map.json`の
+`arena.issue_blocks`が「その他」を含んでいないのと同じ考え方）・`_thirty_summary_html()`・
+`_apply_thirty_summary()`を追加し、`TOPIC_METHOD_TEXT`経由でテーマごとに呼ぶ形にした
+（`_sync_bike_method_text`・`_sync_henoko_method_text`を拡張、`_sync_nickname_method_text`を新設）。
+最大論点が入れ替わっても書き直しが要らないよう、「その他」を除く全論点ぶんの見出し・説明文
+（`BIKE_CONCLUSION_BY_ISSUE_ID`・`HENOKO_CONCLUSION_BY_ISSUE_ID`・`NICKNAME_CONCLUSION_BY_ISSUE_ID`）を
+用意した（bike 5件・henoko 6件・school-nickname-ban 6件）。文面は各論点パネルの内訳・一次資料照合
+から作成し、他テーマの見出し文体（質問形式、例:「そもそも、憲法を変えるべきなのか」）に揃えた。
+
+3テーマとも`refresh_planet_section.py --topic <テーマ> --for-docs`を2回実行し差分ゼロ（冪等性）を確認、
+実機（ローカルサーバー）で表示を確認、標準検査4種＋`verify_page_originality.py`はNG0件。
+`tests/test_bike_planet_refresh.py`の既存テストが「その他」しか論点を持たないダミーデータで
+落ちたため、非その他の論点を1件加えて修正した。
 
 確認コマンド: `grep -c "議論の中心" docs/{theme}-reaction-map.html` → 3テーマとも`0`
 
@@ -172,8 +193,7 @@ constitutional-amendment 4・bike-blue-ticket 4・elderly-license-revocation 5�
 1. ~~A-1 constitutional-amendmentのXシェアボタン~~ 対応不要（2026-09-20、実機検証で
    誤報と判明。A-1参照）
 2. ~~A-2 一次資料照合の復元~~ 対応不要（2026-09-20、山なみ本体へ移設済みと判明。A-2参照）
-3. **A-3 「議論の中心」の追加**: koshitsu-tenpakaiで確立済みの追加手順
-   （`apply_koshitsu_conclusion()`相当）を3テーマに展開する
+3. ~~A-3 「議論の中心」の追加~~ 対応済み（2026-09-20、3テーマとも実装・本番反映済み。A-3参照）
 4. **B系（数字の食い違い）**: 該当箇所の文章をオーナー確認のうえ現行データに
    合わせて書き直す。[[feedback_verify_against_precedent]]のとおり、書き直す前に
    他テーマの「今の実物」の書き方を確認すること
@@ -182,6 +202,5 @@ constitutional-amendment 4・bike-blue-ticket 4・elderly-license-revocation 5�
 
 ## 判断待ち
 
-なし。次に着手するならA-3（「議論の中心」の追加、3テーマ）かB系（数字の食い違い、
-3件）のどちらでもよい。B系のほうが読者に見えている数字そのものの誤りなので、
-先に直す価値がある。
+なし。次に着手するならB系（数字の食い違い、3件）。読者に見えている数字そのものの
+誤りなので、C系（清掃）より先に直す価値がある。
