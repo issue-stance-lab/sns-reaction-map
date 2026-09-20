@@ -361,14 +361,15 @@ def _sync_koshitsu_method_text(html: str, data: dict) -> str:
 
 
 # consumption-tax-cutの論点ごとの図解画像。slugはファイル名の接尾辞、labelはalt文字列用
-# （h2はアイコン付きなのでここは別に持つ）。「その他」は図解を持たない。
+# （h2はアイコン付きなのでここは別に持つ）。
 CTC_LANDING_IMAGE_BY_ISSUE_ID = {
-    "consumption-tax-cut-political-trust": ("kouyaku", "公約・政治不信"),
-    "consumption-tax-cut-scope": ("taishou", "対象範囲"),
+    "consumption-tax-cut-political-trust": ("kouyaku-v2", "公約・政治不信"),
+    "consumption-tax-cut-scope": ("taishou-v2", "対象範囲"),
     "consumption-tax-cut-effect": ("kouka-v2", "減税の効果"),
-    "consumption-tax-cut-finance-welfare": ("zaigen", "財源・社会保障"),
-    "consumption-tax-cut-alternatives": ("kyufu", "給付との比較"),
-    "consumption-tax-cut-business-burden": ("jigyousha", "事業者の負担"),
+    "consumption-tax-cut-finance-welfare": ("zaigen-v2", "財源・社会保障"),
+    "consumption-tax-cut-alternatives": ("kyufu-v3", "給付との比較"),
+    "consumption-tax-cut-business-burden": ("jigyousha-v2", "事業者の負担"),
+    "consumption-tax-cut-other": ("sonota-v2", "その他に見られた意見例"),
 }
 
 
