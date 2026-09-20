@@ -176,5 +176,20 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
    （2026-09-17に収集開始したばかりのため、直近28日間の値自体はまだ0。エラーが直ったことの確認が目的）。
    `DEFAULT_SITE_URL` を修正し、`content/website/internal/gsc-automation.md` に経緯を記録した（詳細は「よくある失敗」節）。
    次回以降は通常の週次確認（`fetch_gsc_metrics.py --days 28 --json`）で数字が返るはずなので、1〜2週後にimpressionsが0から動いているか見る
+   **2026-09-21、3週目の確認。** オーナーがSearch Console「ページのインデックス登録」レポートで新しい要因
+   「ページにリダイレクトがあります」の通知メールを受け取り、対応を確認した。URL検査API
+   （`urlInspection.index:inspect`、`scripts/fetch_gsc_metrics.py` と同じOAuthトークンを流用）でサイト内の
+   既知URL18件（サイトマップ16件＋`/`＋`www.`）を個別に検査した結果、**リダイレクト判定は
+   `https://www.sns-reaction-map.jp/` の1件のみ**で、Googleが判定した正規URLは
+   `https://sns-reaction-map.jp/`（8/31に設定・確認済みのwww→正式URL転送が想定どおり機能しているだけ）。
+   **修正不要。バグではない。**
+   内訳（18件中）: 登録済み5件（`/`・bike-blue-ticket・constitutional-amendment・disclaimer・image-policy、
+   スクリーンショットの「登録済み5」と一致）／Discovered・未クロール4件（bukatsu-chiiki・consumption-tax-cut・
+   koshitsu-tenpakai・school-nickname-ban。サイトマップ経由で発見済みだがGoogleがまだ本文を取りに来ていない状態）／
+   URL自体が未認識7件（index.html・about・ai-copyright・elderly-license-revocation・fukushuto・
+   henoko-student-accident・privacy・usage。一度もクロールされていない）／www冒頭のリダイレクト1件。
+   公開から3週間というドメインの若さを踏まえると異常な遅れではなく、4週間観測の範囲内と判断。
+   次回4週目（目安1週間後）に登録済み件数が5件から増えているかを見る。早めたい場合はオーナーが
+   Search Console画面から該当ページを開き「インデックス登録をリクエスト」を押す方法があるが、必須ではない
 2. 旧ルート（別リポジトリ `issue-stance-lab/issue-stance-lab.github.io`）を案内ページへ置き換え（CEO決定A、未着手）
 3. ~~新ドメインでGA4のリアルタイムに実アクセスが出ることをブラウザで目視確認する~~ **2026-09-15、課題54段階11の監査で`fetch_ga4_metrics.py`を実行し解消**。直近7日: activeUsers 28 / screenPageViews 126 / sessions 55 / eventCount 321（ホストは既定で新ドメイン）。ブラウザでの目視ではないが実データ取得により計測機能を確認できたため完了扱いとする
