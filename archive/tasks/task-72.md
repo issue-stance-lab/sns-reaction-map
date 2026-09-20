@@ -334,18 +334,20 @@ sitemap.xmlに載らない）かつ`docs/takaichi-reaction-map-standard.html`は
 
 ## 状態
 
-henoko-student-accident・bukatsu-chiiki・elderly-license-revocation・
-bike-blue-ticket・school-nickname-ban・koshitsu-tenpakai・ai-copyright・
-constitutional-amendment・consumption-tax-cut（9テーマ）に共通テンプレート
-最終形（論点タブ・山なみの背景表示・「資料にしかない話」のカード化）を
-本番反映済み。残るのはfukushuto（v1のまま、v2〜v8への再生成が必要）と
-takaichi（別スコープ、上記参照）の2テーマ。
+**完了（2026-09-20）。** henoko-student-accident・bukatsu-chiiki・
+elderly-license-revocation・bike-blue-ticket・school-nickname-ban・
+koshitsu-tenpakai・ai-copyright・constitutional-amendment・
+consumption-tax-cut・fukushuto（10テーマ、山なみ変換済みの全テーマ）に
+共通テンプレート最終形（論点タブ・山なみの背景表示・「資料にしかない話」の
+カード化）を本番反映済み。takaichiは山なみ変換自体が別スコープのため対象外
+（下記「fukushutoへの展開」参照、[[project_planet_bukatsu_live]]が言う
+「対象10テーマ」にtakaichiは元々含まれていない）。
 
 ## 次にすること
 
-fukushutoへの展開（`build_fukushuto_arena.py`、`apply_landing_images()`の
-「見出し→タブ→画像」順序は既に対応済み）をオーナーに確認のうえ進める。
-takaichiは山なみ変換自体が別スコープのため、着手するかどうかオーナー判断。
+無し（本課題は完了）。takaichiを将来「山なみ」化する場合は、課題54相当の
+新規変換（別課題）の中で本課題のテンプレート最終形が自動的に付いてくる
+ため、改めて課題72相当の作業を起こす必要はない。
 
 ## 詳細
 
@@ -385,3 +387,37 @@ Claude in Chromeで実機調査。真因はChromeの「スクロールアンカ�
 調整していた）。`#planet-block{overflow-anchor:none}`と、幅820px未満に限っていた
 `land()`のbringIntoView呼び出し制限の撤廃、両方で解消し9テーマへ反映（`ef10bcd`）。
 本番ページの実機（Claude in Chrome）で着地位置の正常化を確認済み。
+
+## 残りテーマへの展開（9〜10テーマ目・最終: fukushuto、2026-09-20）
+
+オーナー指示「副首都ページ修正、山並みの表示を部活動や消費税減税のようにしてほしい」を
+受け、最後の1テーマfukushutoへ展開した（worktree `isa-wt-fukushuto-planet-rollout`、
+ブランチ`task/fukushuto-planet-rollout`）。着手前にfukushuto専用の
+`build_fukushuto_arena.py`を確認し、`apply_landing_images()`の「見出し→タブ→画像」順序
+修正（本ラウンド冒頭「見つけた副作用と対処」参照）が既に実装済みであることを
+コード上で確認してから進めた。
+
+- `python3 scripts/build_fukushuto_arena.py`（引数無し。`verify_builder_rebuildability.py`
+  が使う標準呼び出しと同じ）で山なみ区画を再生成。実行前に`--check`でNG（差分あり）を、
+  実行後に`--check`でOK（差分なし・冪等）を確認
+- `THEMES.yaml`のupdated_atを先に2026-09-20へ進めてから再生成した（[[reference_updated_at_cascade]]
+  の順序どおり）。連鎖先5点（`build_public_registry.py --topic fukushuto`・
+  `configs/theme-seo.json`のdateModified・`apply_theme_trust.py`・`docs/sitemap.xml`の
+  lastmod・可視の最終更新日）をすべて2026-09-20へ揃え、`validate_theme_seo.py` OKを確認
+- `build_data_sheet.py`が「意見1681件 / マップの点1452件」のずれを報告したが、これは
+  課題73（旧アリーナ形式の死んだSM_RAWデータ）が未対応のfukushutoで、同スクリプトが
+  今も昔のSM_RAW配列の要素数を数えているために生じる既知の表示上のずれで、今回の
+  変更が原因ではない（`SM_RAW`はPLANET_SECTIONの外にあり、再生成の対象外であることを
+  `html.index()`で位置確認済み）。exit codeも0（非ブロッキング）
+- 標準4検査（`verify_theme_page.py fukushuto`・`verify_number_provenance.py fukushuto`・
+  `verify_page_originality.py`・`verify_builder_rebuildability.py`）と
+  `validate_theme_seo.py`、`python3 -m unittest discover -s tests`（984件）すべてOK
+- ローカルプレビュー（一時HTTPサーバー経由）でデスクトップ・375pxモバイル幅とも実機確認:
+  山（都構想・維新）をクリックすると論点タブ7件が見出し直後に表示され、そのすぐ後ろに
+  図解画像が続く順序（本ラウンドの修正どおり）、タブ間の直接切り替え（山なみへ戻らない）、
+  山なみが升目カードの背後にうっすら見える背景表示、いずれも正常。コンソールエラー無し
+- fukushutoの`#ocean`（「資料にあるのに、SNSにないこと」）は`{theme}-sunk-continents.json`
+  未作成のプレースホルダ表示のままだった。これは課題71（海面より下データの品質）の対象で、
+  本課題のスコープ外のため触っていない
+
+これで山なみ変換済み全10テーマに共通テンプレート最終形が揃った。

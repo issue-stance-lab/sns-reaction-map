@@ -150,3 +150,4 @@
 `gsc-automation.md` にオーナーのローカルパスが含まれ、リポジトリが public のため git 履歴には残る。
 - [task-65.md](tasks/task-65.md): URL付き通常ポストが自動計測から漏れ、台帳にも記録されない (課題67へ統合のためアーカイブ)
 - [task-68.md](tasks/task-68.md): ai-copyright採用台帳の指紋不一致でCIが赤い (2026-09-15完了。実際はconsumption-tax-cut・koshitsu-tenpakaiも同時に不一致だったと判明し、3テーマとも`build_adoption_registry.py`で再生成・本番反映)
+- [task-72.md](tasks/task-72.md): 論点タブUI（山なみへ戻らず他の論点へ切り替え） (2026-09-20完了。山なみ変換済み全10テーマへ本番反映。takaichiは山なみ未変換のため対象外のまま)

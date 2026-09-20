@@ -33,7 +33,7 @@
     "@id": "https://sns-reaction-map.jp/fukushuto-reaction-map.html"
   },
   "datePublished": "2026-07-15",
-  "dateModified": "2026-09-17",
+  "dateModified": "2026-09-20",
   "author": {
     "@type": "Organization",
     "name": "SNS反応まっぷ編集部",
@@ -329,9 +329,19 @@
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
   line-height:1.7;-webkit-text-size-adjust:100%}#planet-block .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 64px}#planet-block h1{font-size:22px;margin:0 0 4px}#planet-block .q{color:var(--muted);font-size:14px;margin:0 0 12px}#planet-block .caution{background:#1c2128;border:1px solid var(--line);border-left:3px solid #d9a520;
   border-radius:6px;padding:10px 12px;font-size:12.5px;color:#c9d1d9;margin:0 0 16px}#planet-block .proto-tag{display:inline-block;background:#d9a520;color:#1c2128;font-size:11px;font-weight:700;
-  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#planet-block .modes button{background:var(--panel);color:var(--fg);border:1px solid var(--line);
-  border-radius:99px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}#planet-block .modes button[aria-pressed=true]{border-color:var(--accent);background:#1f6feb33;font-weight:700}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block .chart-box{position:relative;background:#0b1017;border:1px solid var(--line);
-  border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}#planet-block .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
+  padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}#planet-block .modes{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:0 0 12px}#planet-block .modes button{background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
+  border-bottom:3px solid var(--line);border-radius:11px 11px 0 0;
+  padding:7px 13px 6px;font-size:12.5px;font-family:inherit;cursor:pointer;line-height:1.4;
+  transform:translateY(3px);transition:transform .12s,background-color .12s,color .12s}#planet-block .modes button:nth-child(3n+1){border-radius:11px 5px 0 0}#planet-block .modes button:nth-child(3n+2){border-radius:6px 12px 0 0}#planet-block .modes button:nth-child(3n){border-radius:9px 8px 0 0}#planet-block .modes button:hover,#planet-block .modes button:focus-visible{color:var(--fg);outline:none;transform:translateY(1px)}#planet-block .modes button[aria-pressed=true]{background:var(--panel);color:var(--fg);font-weight:700;
+  border-color:var(--accent);border-bottom-color:var(--panel);transform:translateY(0)}#planet-block .modes button[data-m="all"]{position:relative;margin-right:14px}#planet-block .modes button[data-m="all"]::after{content:"";position:absolute;right:-9px;top:20%;bottom:20%;
+  width:1.5px;background:var(--line)}#planet-block .stage{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}#planet-block{overflow-anchor:none}#planet-block .chart-box{order:2;position:relative;background:#0b1017;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;padding:10px 8px 4px}#planet-block .chart-box svg{display:block;width:100%;height:auto}#planet-block .chart-box .hill{cursor:pointer}#planet-block .chart-box .hill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .chart-box.as-backdrop{position:absolute;inset:0;order:0;z-index:0;opacity:.42;
+  pointer-events:none;padding:0;border:none;border-radius:0;background:transparent;overflow:visible}#planet-block .chart-box.as-backdrop svg{height:100%;transform-origin:right center;transform:scaleX(.78)}#planet-block .chart-box.as-backdrop .hint,#planet-block .chart-box.as-backdrop .floor-note,#planet-block .chart-box.as-backdrop .dive{display:none}#planet-block .hint{font-size:11px;color:var(--muted);margin:2px 0 0;padding:0 6px}#planet-block .floor-note{font-size:11px;color:var(--muted);margin:4px 0 6px;padding:0 6px;line-height:1.7}#planet-block .panel{order:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px}#planet-block .panel h2{font-size:16px;margin:0 0 2px}#planet-block .panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .issue-tabs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px;margin:10px 0 0}#planet-block .issue-tabs button{font:inherit;font-size:12.5px;line-height:1.4;cursor:pointer;
+  background:var(--bg);color:var(--muted);border:1.5px solid var(--line);
+  border-bottom:3px solid var(--line);padding:7px 13px 6px;
+  transform:translateY(3px);transition:transform .12s,background-color .12s,color .12s}#planet-block .issue-tabs button:nth-child(3n+1){border-radius:11px 5px 0 0}#planet-block .issue-tabs button:nth-child(3n+2){border-radius:6px 12px 0 0}#planet-block .issue-tabs button:nth-child(3n){border-radius:9px 8px 0 0}#planet-block .issue-tabs button:hover,#planet-block .issue-tabs button:focus-visible{color:var(--fg);outline:none;transform:translateY(1px)}#planet-block .issue-tabs button[aria-pressed=true]{
+  background:var(--panel);color:var(--fg);font-weight:700;
+  border-color:var(--accent);border-bottom-color:var(--panel);transform:translateY(0)}#planet-block .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 4px}#planet-block .bar span{display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#0d1117;
   font-weight:700;overflow:hidden;white-space:nowrap}#planet-block .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-bottom:10px}#planet-block .panel .cross{font-size:13px;line-height:1.75;margin:0;padding:9px 11px;
   background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .panel .cross b{color:#f2f6fa}#planet-block .panel .cross .spin{display:inline-block;margin:8px 0 0;font:inherit;font-size:12px;
   background:var(--panel);color:var(--fg);border:1px solid var(--line);
@@ -347,9 +357,11 @@
   padding:12px;text-decoration:none;line-height:1.4}#planet-block .continent:hover,#planet-block .continent:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#planet-block .continent .label{font-size:13px;font-weight:700}#planet-block .continent .count{font-size:11px;opacity:.78;font-variant-numeric:tabular-nums}#planet-block .landing-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:14px 15px;margin:0 0 12px}#planet-block .landing-panel h2{font-size:16px;margin:0 0 2px}#planet-block .landing-panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}#planet-block .srclist{list-style:none;padding:0;margin:8px 0 0;font-size:12px}#planet-block .srclist li{padding:5px 0;border-top:1px solid var(--line)}#planet-block .srclist li:first-child{border-top:none}#planet-block .srclist a{color:var(--accent)}#planet-block .backlink{display:inline-block;margin-top:12px;border:1px solid var(--line);color:var(--fg);
   border-radius:7px;padding:6px 12px;font-size:12.5px;text-decoration:none}#planet-block .backlink:hover,#planet-block .backlink:focus-visible{border-color:var(--accent);outline:none}#planet-block .claims{list-style:none;padding:0;margin:6px 0 0}#planet-block .claims li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}#planet-block .claims li:first-child{border-top:none}#planet-block .verdict{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;
-  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}#planet-block .v-fact{background:#3fb950}#planet-block .v-gap{background:#d9a520}#planet-block .v-miss{background:#a5a5a5}#planet-block .claims .finding,#planet-block .claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}#planet-block .claims .srcs{display:block;margin-top:4px}#planet-block .claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}#planet-block .dive{color:var(--accent)}#planet-block .ocean{border-top:1px solid var(--line);margin-top:26px}#planet-block .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}#planet-block .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}#planet-block .sunk,#planet-block .vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
+  padding:1px 7px;margin-right:7px;color:#0d1117;vertical-align:2px}#planet-block .v-fact{background:#3fb950}#planet-block .v-gap{background:#d9a520}#planet-block .v-miss{background:#a5a5a5}#planet-block .claims .finding,#planet-block .claims .vnote{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}#planet-block .claims .srcs{display:block;margin-top:4px}#planet-block .claims .srcs a{color:var(--accent);font-size:11.5px;margin-right:10px}#planet-block .dive{color:var(--accent)}#planet-block .ocean{margin-top:26px;background:var(--ocean-bg);border:1px solid var(--ocean-border);
+  border-radius:14px;padding:18px 16px 6px;box-shadow:0 1px 3px rgba(47,111,214,.12)}#planet-block .ocean .sec{border-top:none;padding-top:0;color:var(--fg);font-size:15px}#planet-block .ocean-badge{display:inline-block;background:#2f6fd6;color:#fff;font-size:11.5px;
+  font-weight:700;padding:4px 11px;border-radius:999px;margin:0 0 10px}#planet-block .subsec{font-size:12.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}#planet-block .sunk,#planet-block .vein{background:var(--panel);border:1px solid var(--line);border-left:3px solid #2d6b8f;
   border-radius:10px;padding:12px 14px;margin:0 0 10px}#planet-block .vein{border-left-color:#7D5BA6}#planet-block .sunk h5,#planet-block .vein h5{font-size:13.5px;margin:0 0 6px}#planet-block .sunk .impact,#planet-block .vein .impact{font-size:12.5px;margin:0 0 6px}#planet-block .sunk .count,#planet-block .vein .count{font-size:12px;color:var(--muted);margin:0 0 6px}#planet-block .sunk .srclist .when,#planet-block .sunk .srclist .where{display:block;color:var(--muted);font-size:11px}#planet-block .sides{list-style:none;padding:0;margin:6px 0 0;font-size:12px}#planet-block .sides li{display:flex;padding:4px 0;border-top:1px solid var(--line)}#planet-block .sides .n{margin-left:auto;color:var(--muted)}#planet-block .editorial .sec{color:var(--fg);font-size:15px}#planet-block .findings{list-style:none;padding:0;margin:0 0 4px}#planet-block .findings li{background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:11px 13px;margin:0 0 8px;font-size:12.5px}#planet-block .dotbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}#planet-block .waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}#planet-block .waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
+  padding:11px 13px;margin:0 0 8px;font-size:12.5px}#planet-block #dot-slot{position:relative}#planet-block .dotbox{position:relative;z-index:1;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}#planet-block .waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:230px}#planet-block .waffle span{aspect-ratio:1;border-radius:2px;background:var(--rest-dot);
   transition:background-color .5s ease}#planet-block .dot-cap{font-size:11.5px;color:var(--muted);margin:8px 0 0;line-height:1.7}#planet-block .dot-cap b{color:var(--fg)}#planet-block .readouts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#planet-block .ro{flex:1 1 130px;background:#1c2128;border:1px solid var(--line);border-radius:8px;padding:8px 10px}#planet-block .ro .k{font-size:10.5px;color:var(--muted);margin:0}#planet-block .ro .v{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin:2px 0 0}#planet-block .ro .from{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}#planet-block .ro .ar{font-size:13px;font-weight:700}#planet-block .ro .to{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}#planet-block .ro.down .ar,#planet-block .ro.down .to{color:#e8a0a8}#planet-block .ro.up .ar,#planet-block .ro.up .to{color:#7ee0a8}#planet-block .ro.flat .ar,#planet-block .ro.flat .to{color:var(--fg)}#planet-block .dot-mech{font-size:12px;line-height:1.8;margin:10px 0 0;padding:9px 11px;
   background:#1c2128;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}#planet-block .dot-mech b{color:#f2f6fa}#planet-block .progress{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
   padding:8px 0;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}#planet-block .progress .track{flex:1;height:6px;background:var(--panel);border-radius:99px;overflow:hidden;min-width:70px}#planet-block .progress .track i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
@@ -358,7 +370,22 @@
   border:0;border-radius:99px;padding:7px 16px;cursor:pointer}#planet-block #seafloor{opacity:0;transition:opacity .9s ease .2s}#planet-block .dived #seafloor{opacity:1}#planet-block #seacover{transition:opacity .9s ease}#planet-block .dived #seacover{opacity:.2}#planet-block .quiz{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}#planet-block .qh{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-bottom:9px}#planet-block .qclaim{border-left:2px solid var(--line);padding:2px 0 2px 12px;font-size:14px;line-height:1.8;margin-bottom:12px}#planet-block .qans{margin-top:12px;font-size:13px;line-height:1.85}#planet-block .qans[hidden]{display:none}#planet-block .qnext{margin-top:10px;font:inherit;font-size:12.5px;font-weight:700;background:var(--fg);color:var(--bg);
   border:0;border-radius:8px;padding:7px 14px;cursor:pointer}#planet-block .qscore{font-size:14px;line-height:1.85}#planet-block .qscore .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.planet-live #planet-block #fallback{display:none}html:not(.planet-live) #planet-block .modes,html:not(.planet-live) #planet-block .stage,html:not(.planet-live) #planet-block .sec-live,html:not(.planet-live) #planet-block .issue-list{display:none}
 #planet-block{--bg:#fff;--panel:#f7f9fc;--line:#d7dce6;--fg:#172033;--muted:#667085;
-  --accent:#075ef2;--rest-dot:#c9d2e0;font-family:inherit;line-height:1.8}
+  --accent:#075ef2;--rest-dot:#c9d2e0;--reveal-flash:#bcdaff;--ocean-bg:#eaf2ff;
+  --ocean-border:#b9d4f5;font-family:inherit;line-height:1.8}
+/* 「資料にしかない話を見る」は一次資料クイズの下という離れた場所に開くため、
+   「どこに出たか分からない」との指摘（オーナー2026-09-19）。スクロール先に
+   ふわっと現れる動き＋帯の点滅を足して、到着点を分かりやすくする。
+   scope_css()を経由しないLIGHT_SKIN側に置く（quality/prototypes側のCSSに
+   書くと、scope_css()が「}の直後1文字が@かどうか」でしか@keyframesを
+   判定しない実装のため直前に改行を挟むだけで誤ってセレクタ扱いされ、
+   アニメーションごと無効になる。実際にこの順で書いて発生・発見した）。
+   v8: 「ふわっと出るけど短い」「下の編集部の横断整理と差が無く出たのか
+   わかりずらい」の指摘（オーナー2026-09-19）を受け、(1) 継続時間を伸ばし、
+   (2) 点滅の着地点を透明ではなく常時の背景色 --ocean-bg にして、光った後も
+   色が残るようにした（常時の背景・枠線は quality/prototypes 側の .ocean 本体で設定）。 */
+@keyframes isa-ocean-reveal{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes isa-ocean-flash{0%{background-color:var(--reveal-flash)}100%{background-color:var(--ocean-bg)}}
+#planet-block .ocean.just-revealed{animation:isa-ocean-reveal .7s ease-out,isa-ocean-flash 2.6s ease-out}
 #planet-block .caution{background:#fbf8ec;color:#5a5340;border-left-color:#c9971a}
 #planet-block .panel{box-shadow:none}
 #planet-block .panel .cross,#planet-block .dot-mech{background:#eef3fb}
@@ -366,7 +393,6 @@
 #planet-block .note,#planet-block .ro{background:#f2f6fb}
 #planet-block .meta code{background:#eef1f6}
 #planet-block .islands .num{background:#e7ecf4;color:#172033}
-#planet-block .modes button[aria-pressed=true]{background:#e4edff}
 #planet-block .dive button{color:#fff}
 #planet-block .bar span{color:#fff;text-shadow:0 1px 2px rgba(12,20,35,.45)}
 /* 選択肢が押せると分からない・正誤が弱い（オーナー指摘）。触れる形と結果を強くする */
@@ -419,8 +445,12 @@
 #planet-block .chart-box svg #seafloor text[fill="#7fb3c4"]{fill:#2C5C8F}
 #planet-block .chart-box svg text[fill="#e0663a"]{fill:#C4462A}
 #planet-block .chart-box svg path[stroke="#e0663a"]{stroke:#C4462A}
-/* 点の装置も同じ面にそろえる */
-#planet-block .dotbox{background:#F2F6FD;border:1px solid #DCE3EF;border-radius:12px;
+/* 点の装置も同じ面にそろえる。背景は完全不透明にしない。論点を選んだ後、
+   山なみが#dot-slotの中でこのカードの背後に重なるため（chart-box.as-backdrop
+   参照）、不透明だと隠れて見えなくなる（オーナー指摘2026-09-19「全然見えません」
+   を受けて.82→.4へ大幅に下げた。数値・割合等は.ro/.dot-mech側の個別背景で
+   別途不透明を保っているのでここを下げても読みにくくならない）。 */
+#planet-block .dotbox{background:rgba(242,246,253,.4);border:1px solid #DCE3EF;border-radius:12px;
   padding:13px 14px;margin-top:14px;--rest-dot:#D3DCEA}
 #planet-block .dotbox .legend{color:#667085}
 /* 潜る前は海面より下（図の高さの38%）が黒い空白のまま残り、作りかけに見える。
@@ -493,7 +523,7 @@
 <div id="planet-block">
   <div class="panel-title"><h2>SNS反応マップ</h2><span>幅＝意見の数 / 高さ＝強い表現の割合</span></div>
   <p class="q" id="q">副首都の必要性、制度の中身、候補地をどう考えるか（副首都法案・副首都構想）</p>
-  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>収集期間 2026-07-14〜2026-09-16／収集2024件・<b>意見1681件</b>（この図の母数）／更新 2026-09-17<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>
+  <p class="caution" id="caution">Yahoo!リアルタイム検索で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>収集期間 2026-07-14〜2026-09-16／収集2024件・<b>意見1681件</b>（この図の母数）／更新 2026-09-20<br><span class="review-note">AI分類。代表投稿は編集部が選定</span></p>
 
 
   <div id="guesses"></div>
@@ -685,7 +715,7 @@
   <p class="meta" id="meta">山ひとつが論点ひとつです。<b>幅＝意見の数</b>、<b>高さ＝強い表現（intensity=high）の投稿が占める割合</b>、<b>色＝いちばん多い立場</b>（薄いほど意見が割れています）。<br>左右の並び順に意味はありません。件数の少ない論点は高さが揺れやすいので、母数が小さいものは画面で断っています。</p>
 </div>
 </section>
-<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "fukushuto", "title": "副首都法案・副首都構想", "question": "副首都の必要性、制度の中身、候補地をどう考えるか", "snapshot_id": "fukushuto-20260917", "updated_at": "2026-09-17", "sample_period": "2026-07-14〜2026-09-16", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": true, "totals": {"collected": 2024, "opinions": 1681}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.3403, "k": 50, "max_pct": 4.0}, "stances": [{"key": "法案賛成・推進", "label": "法案賛成・推進", "id": "fukushuto-bill-support", "color": "#2F8F83", "pattern": "plain", "count": 362}, {"key": "法案反対", "label": "法案反対", "id": "fukushuto-bill-oppose", "color": "#7D5BA6", "pattern": "diagonal", "count": 1060}, {"key": "中立・情報", "label": "中立・情報", "id": "fukushuto-neutral", "color": "#8B9199", "pattern": "mesh", "count": 259}], "vote_issue_order": ["定義・中身", "候補地", "都構想・維新", "防災・災害", "費用・財源", "優先順位", "その他"], "reread_summary": {"connected_editorial_count": 951, "connected_issue_population": 951, "not_connected_opinion_count": 730}, "modes": [{"id": "all", "label": "すべての意見", "total": 1681, "counts": {"fukushuto-osaka-restoration": 474, "fukushuto-location": 354, "fukushuto-definition": 256, "fukushuto-disaster-preparedness": 240, "fukushuto-priority": 166, "fukushuto-other": 110, "fukushuto-finance": 81}, "width_pct": {"fukushuto-osaka-restoration": 28.2, "fukushuto-location": 21.06, "fukushuto-definition": 15.23, "fukushuto-disaster-preparedness": 14.28, "fukushuto-priority": 9.88, "fukushuto-other": 6.54, "fukushuto-finance": 4.82}, "high_pct": {"fukushuto-osaka-restoration": 52.3, "fukushuto-location": 18.4, "fukushuto-definition": 22.3, "fukushuto-disaster-preparedness": 30.0, "fukushuto-priority": 41.0, "fukushuto-other": 30.9, "fukushuto-finance": 34.6}, "high_counts": {"fukushuto-osaka-restoration": 248, "fukushuto-location": 65, "fukushuto-definition": 57, "fukushuto-disaster-preparedness": 72, "fukushuto-priority": 68, "fukushuto-other": 34, "fukushuto-finance": 28}}, {"id": "法案賛成・推進", "label": "法案賛成・推進", "total": 362, "counts": {"fukushuto-osaka-restoration": 67, "fukushuto-location": 134, "fukushuto-definition": 53, "fukushuto-disaster-preparedness": 70, "fukushuto-priority": 6, "fukushuto-other": 21, "fukushuto-finance": 11}, "width_pct": {"fukushuto-osaka-restoration": 18.51, "fukushuto-location": 37.02, "fukushuto-definition": 14.64, "fukushuto-disaster-preparedness": 19.34, "fukushuto-priority": 1.66, "fukushuto-other": 5.8, "fukushuto-finance": 3.04}, "high_pct": {"fukushuto-osaka-restoration": 22.4, "fukushuto-location": 5.2, "fukushuto-definition": 11.3, "fukushuto-disaster-preparedness": 15.7, "fukushuto-priority": 0.0, "fukushuto-other": 23.8, "fukushuto-finance": 0.0}, "high_counts": {"fukushuto-osaka-restoration": 15, "fukushuto-location": 7, "fukushuto-definition": 6, "fukushuto-disaster-preparedness": 11, "fukushuto-priority": 0, "fukushuto-other": 5, "fukushuto-finance": 0}}, {"id": "法案反対", "label": "法案反対", "total": 1060, "counts": {"fukushuto-osaka-restoration": 371, "fukushuto-location": 151, "fukushuto-definition": 143, "fukushuto-disaster-preparedness": 141, "fukushuto-priority": 141, "fukushuto-other": 49, "fukushuto-finance": 64}, "width_pct": {"fukushuto-osaka-restoration": 35.0, "fukushuto-location": 14.25, "fukushuto-definition": 13.49, "fukushuto-disaster-preparedness": 13.3, "fukushuto-priority": 13.3, "fukushuto-other": 4.62, "fukushuto-finance": 6.04}, "high_pct": {"fukushuto-osaka-restoration": 62.5, "fukushuto-location": 35.8, "fukushuto-definition": 35.0, "fukushuto-disaster-preparedness": 43.3, "fukushuto-priority": 46.1, "fukushuto-other": 51.0, "fukushuto-finance": 43.8}, "high_counts": {"fukushuto-osaka-restoration": 232, "fukushuto-location": 54, "fukushuto-definition": 50, "fukushuto-disaster-preparedness": 61, "fukushuto-priority": 65, "fukushuto-other": 25, "fukushuto-finance": 28}}, {"id": "中立・情報", "label": "中立・情報", "total": 259, "counts": {"fukushuto-osaka-restoration": 36, "fukushuto-location": 69, "fukushuto-definition": 60, "fukushuto-disaster-preparedness": 29, "fukushuto-priority": 19, "fukushuto-other": 40, "fukushuto-finance": 6}, "width_pct": {"fukushuto-osaka-restoration": 13.9, "fukushuto-location": 26.64, "fukushuto-definition": 23.17, "fukushuto-disaster-preparedness": 11.2, "fukushuto-priority": 7.34, "fukushuto-other": 15.44, "fukushuto-finance": 2.32}, "high_pct": {"fukushuto-osaka-restoration": 2.8, "fukushuto-location": 5.8, "fukushuto-definition": 1.7, "fukushuto-disaster-preparedness": 0.0, "fukushuto-priority": 15.8, "fukushuto-other": 10.0, "fukushuto-finance": 0.0}, "high_counts": {"fukushuto-osaka-restoration": 1, "fukushuto-location": 4, "fukushuto-definition": 1, "fukushuto-disaster-preparedness": 0, "fukushuto-priority": 3, "fukushuto-other": 4, "fukushuto-finance": 0}}], "issues": [{"id": "fukushuto-osaka-restoration", "key": "都構想・維新", "label": "都構想・維新", "icon": "🏛️", "count": 474, "share_pct": 28.2, "stances": {"法案賛成・推進": 67, "法案反対": 371, "中立・情報": 36}, "top_stance": "法案反対", "purity_pct": 78.3, "intensity": {"high": 248, "medium": 193, "low": 33}, "high_pct": 52.3, "high_adjusted_pct": 50.6, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "miss", "claims": [{"claim": "大阪都構想は、住民投票で二度否決された", "finding": "2回とも僅差の反対多数。とくに2020年は賛成が反対を17,167票下回るだけの差だった。", "id": "referendum_twice", "issue_ids": ["fukushuto-osaka-restoration"], "matched_post_count": 4, "sources": [{"name": "大阪市 大阪市における特別区の設置についての投票", "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000538418.html"}], "verdict": "fact"}, {"claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ", "finding": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。", "id": "resolution_ban", "issue_ids": ["fukushuto-osaka-restoration"], "matched_post_count": 4, "sources": [{"name": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）", "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm"}, {"name": "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm"}], "verdict": "miss"}], "veins": []}, {"id": "fukushuto-location", "key": "候補地", "label": "候補地", "icon": "📍", "count": 354, "share_pct": 21.1, "stances": {"法案賛成・推進": 134, "法案反対": 151, "中立・情報": 69}, "top_stance": "法案反対", "purity_pct": 42.7, "intensity": {"high": 65, "medium": 182, "low": 107}, "high_pct": 18.4, "high_adjusted_pct": 20.3, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 354, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "大阪は南海トラフで不適（反対）", "count": 106, "pct_in_issue": 29.9}, {"id": "F", "label": "具体的代替候補提案（中立・賛成）", "count": 82, "pct_in_issue": 23.2}, {"id": "D", "label": "大阪・関西推し（賛成）", "count": 45, "pct_in_issue": 12.7}, {"id": "B", "label": "日本海側・遠隔地を推す（反対・中立）", "count": 44, "pct_in_issue": 12.4}, {"id": "G", "label": "その他（中立・情報）", "count": 35, "pct_in_issue": 9.9}, {"id": "C", "label": "首都を先に定義すべき・原則論", "count": 26, "pct_in_issue": 7.3}, {"id": "E", "label": "複数分散型（賛成・中立）", "count": 16, "pct_in_issue": 4.5}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-definition", "key": "定義・中身", "label": "定義・中身", "icon": "📋", "count": 256, "share_pct": 15.2, "stances": {"法案賛成・推進": 53, "法案反対": 143, "中立・情報": 60}, "top_stance": "法案反対", "purity_pct": 55.9, "intensity": {"high": 57, "medium": 139, "low": 60}, "high_pct": 22.3, "high_adjusted_pct": 24.2, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "fact", "claims": [{"claim": "副首都法は、賛成123・反対121のわずか2票差で成立した", "finding": "自由民主党・無所属の会99、日本維新の会19などを合わせて123。与党の議席だけでは過半数に届かず、無所属・少数会派の賛成があって成立した。", "id": "vote_123_121", "issue_ids": ["fukushuto-definition"], "matched_post_count": 5, "sources": [{"name": "参議院 本会議投票結果（2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm"}], "verdict": "fact"}], "veins": []}, {"id": "fukushuto-disaster-preparedness", "key": "防災・災害", "label": "防災・災害", "icon": "🛡️", "count": 240, "share_pct": 14.3, "stances": {"法案賛成・推進": 70, "法案反対": 141, "中立・情報": 29}, "top_stance": "法案反対", "purity_pct": 58.8, "intensity": {"high": 72, "medium": 132, "low": 36}, "high_pct": 30.0, "high_adjusted_pct": 30.7, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 240, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "南海トラフ・同時被災リスクで大阪は不適（反対）", "count": 106, "pct_in_issue": 44.2}, {"id": "B", "label": "東京一極集中は危険・バックアップ必要（賛成）", "count": 87, "pct_in_issue": 36.2}, {"id": "C", "label": "その他の反対・批判（具体策の欠如・箱物批判・予算配分批判等）", "count": 47, "pct_in_issue": 19.6}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-priority", "key": "優先順位", "label": "優先順位", "icon": "⚖️", "count": 166, "share_pct": 9.9, "stances": {"法案賛成・推進": 6, "法案反対": 141, "中立・情報": 19}, "top_stance": "法案反対", "purity_pct": 84.9, "intensity": {"high": 68, "medium": 87, "low": 11}, "high_pct": 41.0, "high_adjusted_pct": 39.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 166, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "物価高・生活対策が先（緊急の課題優先）", "count": 87, "pct_in_issue": 52.4}, {"id": "B", "label": "防災・災害対策が先", "count": 46, "pct_in_issue": 27.7}, {"id": "C", "label": "法案の拙速・中身なし・強行採決批判", "count": 26, "pct_in_issue": 15.7}, {"id": "D", "label": "賛成・推進・実現期待", "count": 7, "pct_in_issue": 4.2}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-other", "key": "その他", "label": "その他", "icon": "💬", "count": 110, "share_pct": 6.5, "stances": {"法案賛成・推進": 21, "法案反対": 49, "中立・情報": 40}, "top_stance": "法案反対", "purity_pct": 44.5, "intensity": {"high": 34, "medium": 40, "low": 36}, "high_pct": 30.9, "high_adjusted_pct": 31.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 110, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "法案そのものへの反対（制度批判）", "count": 38, "pct_in_issue": 34.5}, {"id": "B", "label": "政党・選挙・派閥対立", "count": 23, "pct_in_issue": 20.9}, {"id": "C", "label": "他政策との関連・比較（皇室典範・防災・遷都等）", "count": 22, "pct_in_issue": 20.0}, {"id": "D", "label": "賛成・推進・実現期待", "count": 17, "pct_in_issue": 15.5}, {"id": "G", "label": "その他（中立・情報）", "count": 10, "pct_in_issue": 9.1}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-finance", "key": "費用・財源", "label": "費用・財源", "icon": "💰", "count": 81, "share_pct": 4.8, "stances": {"法案賛成・推進": 11, "法案反対": 64, "中立・情報": 6}, "top_stance": "法案反対", "purity_pct": 79.0, "intensity": {"high": 28, "medium": 44, "low": 9}, "high_pct": 34.6, "high_adjusted_pct": 34.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 81, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "費用不明・財源なしで進めるな", "count": 49, "pct_in_issue": 60.5}, {"id": "B", "label": "兆円規模・増税・国債の具体的懸念", "count": 14, "pct_in_issue": 17.3}, {"id": "C", "label": "擁護・自腹・中立的批判", "count": 14, "pct_in_issue": 17.3}, {"id": "D", "label": "経済効果・建設業期待", "count": 4, "pct_in_issue": 4.9}]}, "verdict": "miss", "claims": [{"claim": "副首都の整備費用は4兆円〜7.5兆円かかるとされる", "finding": "数字自体は実在するが、30年近く前の別の計画（首都機能の全面移転）の試算で、2026年の副首都法（大規模災害時のバックアップ機能整備）とは対象の規模も目的も別物。政府は参院審議で、今回の法律にもとづく整備費用について「今後検討する」と答えるにとどめ、現時点で試算を示していない。", "id": "cost_old_estimate", "issue_ids": ["fukushuto-finance"], "matched_post_count": 2, "sources": [{"name": "国土交通省 国会等の移転ホームページ「移転費用の試算」", "url": "https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html"}], "verdict": "gap"}, {"claim": "副首都の整備費用は、AIの試算で総額2兆円規模になる", "finding": "出典不明の試算がそのまま数字として流通していること自体が、この論点で公式な費用試算が存在しない状態を映している。", "id": "cost_ai_estimate", "issue_ids": ["fukushuto-finance"], "matched_post_count": 1, "sources": [], "verdict": "miss"}], "veins": []}], "claims": [{"id": "referendum_twice", "claim": "大阪都構想は、住民投票で二度否決された", "verdict": "fact", "verdict_label": "資料どおり", "finding": "2回とも僅差の反対多数。とくに2020年は賛成が反対を17,167票下回るだけの差だった。", "sources": [{"name": "大阪市 大阪市における特別区の設置についての投票", "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000538418.html"}]}, {"id": "vote_123_121", "claim": "副首都法は、賛成123・反対121のわずか2票差で成立した", "verdict": "fact", "verdict_label": "資料どおり", "finding": "自由民主党・無所属の会99、日本維新の会19などを合わせて123。与党の議席だけでは過半数に届かず、無所属・少数会派の賛成があって成立した。", "sources": [{"name": "参議院 本会議投票結果（2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm"}]}, {"id": "resolution_ban", "claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。", "sources": [{"name": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）", "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm"}, {"name": "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm"}]}, {"id": "cost_old_estimate", "claim": "副首都の整備費用は4兆円〜7.5兆円かかるとされる", "verdict": "gap", "verdict_label": "少しずれる", "finding": "数字自体は実在するが、30年近く前の別の計画（首都機能の全面移転）の試算で、2026年の副首都法（大規模災害時のバックアップ機能整備）とは対象の規模も目的も別物。政府は参院審議で、今回の法律にもとづく整備費用について「今後検討する」と答えるにとどめ、現時点で試算を示していない。", "sources": [{"name": "国土交通省 国会等の移転ホームページ「移転費用の試算」", "url": "https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html"}]}, {"id": "cost_ai_estimate", "claim": "副首都の整備費用は、AIの試算で総額2兆円規模になる", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "出典不明の試算がそのまま数字として流通していること自体が、この論点で公式な費用試算が存在しない状態を映している。", "sources": []}], "editorial": {"checked_on": "2026-09-13", "findings": [{"id": "fukushuto-ed-1", "kind": "shared_premise", "text": "どの論点でも「法案反対」が最多という点は共通している。賛成がもっとも伸びる「防災・災害」でも賛成は29.2%にとどまり、反対（58.8%）には届かない。"}, {"id": "fukushuto-ed-2", "kind": "real_conflict", "text": "同じ「反対」でも、論点によって強さがまるで違う。「都構想・維新」では反対が78.3%、「優先順位」でも84.9%に達するのに対し、「候補地」では42.7%にとどまる。反対の的は副首都という発想そのものより、「なぜ今」「なぜ大阪・維新なのか」という動機と優先順位への疑いに集中している。"}, {"id": "fukushuto-ed-3", "kind": "real_conflict", "text": "賛成の実数がもっとも集まっているのは「候補地」の134件で、「都構想・維新」の67件を上回る。都構想・維新という切り口では賛成の足場がほとんど残らないのに対し、どこに置くかという具体的な話になると賛成の声も相対的に出やすい。"}, {"id": "fukushuto-ed-4", "kind": "still_unknown", "text": "「費用・財源」は81件で、全体の4.8%にあたり、他の論点と比べて最も少ない。整備費用の金額は投稿にも登場したが、事実確認では別の古い計画の試算と判明している。件数の少なさは論点の重要度が低いという意味ではなく、根拠のある数字が出回っていないことの裏返しである可能性がある。"}, {"id": "fukushuto-ed-5", "kind": "still_unknown", "text": "住民投票と統一地方選の同日実施を禁じる附帯決議が採択されたことは参議院の記録で確認できたが、決議本文の文言が禁止なのか努力目標なのかは、採択した委員会の会議録が執筆時点でまだ公開されておらず確認できていない。「都構想・維新」を語る投稿の一部は、この未確定な理解のまま書かれている可能性があり、会議録の公開後に確認欄とあわせて再確認が要る。"}, {"id": "fukushuto-ed-6", "kind": "still_unknown", "text": "ここに出ているのはYahoo!リアルタイム検索で集めた1,681件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りや、副首都法案の審議が集中した時期に収集期間が重なっていることの影響は測っていない。"}], "reviewer_type": "editorial_review", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-08-24", "reviewer_type": "editorial_review", "ocean_status": "not_started", "ocean_checked_on": null, "ocean_reviewer_type": null, "sunk_continents": [], "veins": []}};</script>
+<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "fukushuto", "title": "副首都法案・副首都構想", "question": "副首都の必要性、制度の中身、候補地をどう考えるか", "snapshot_id": "fukushuto-20260920", "updated_at": "2026-09-20", "sample_period": "2026-07-14〜2026-09-16", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": true, "totals": {"collected": 2024, "opinions": 1681}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.3403, "k": 50, "max_pct": 4.0}, "stances": [{"key": "法案賛成・推進", "label": "法案賛成・推進", "id": "fukushuto-bill-support", "color": "#2F8F83", "pattern": "plain", "count": 362}, {"key": "法案反対", "label": "法案反対", "id": "fukushuto-bill-oppose", "color": "#7D5BA6", "pattern": "diagonal", "count": 1060}, {"key": "中立・情報", "label": "中立・情報", "id": "fukushuto-neutral", "color": "#8B9199", "pattern": "mesh", "count": 259}], "vote_issue_order": ["定義・中身", "候補地", "都構想・維新", "防災・災害", "費用・財源", "優先順位", "その他"], "reread_summary": {"connected_editorial_count": 951, "connected_issue_population": 951, "not_connected_opinion_count": 730}, "modes": [{"id": "all", "label": "すべての意見", "total": 1681, "counts": {"fukushuto-osaka-restoration": 474, "fukushuto-location": 354, "fukushuto-definition": 256, "fukushuto-disaster-preparedness": 240, "fukushuto-priority": 166, "fukushuto-other": 110, "fukushuto-finance": 81}, "width_pct": {"fukushuto-osaka-restoration": 28.2, "fukushuto-location": 21.06, "fukushuto-definition": 15.23, "fukushuto-disaster-preparedness": 14.28, "fukushuto-priority": 9.88, "fukushuto-other": 6.54, "fukushuto-finance": 4.82}, "high_pct": {"fukushuto-osaka-restoration": 52.3, "fukushuto-location": 18.4, "fukushuto-definition": 22.3, "fukushuto-disaster-preparedness": 30.0, "fukushuto-priority": 41.0, "fukushuto-other": 30.9, "fukushuto-finance": 34.6}, "high_counts": {"fukushuto-osaka-restoration": 248, "fukushuto-location": 65, "fukushuto-definition": 57, "fukushuto-disaster-preparedness": 72, "fukushuto-priority": 68, "fukushuto-other": 34, "fukushuto-finance": 28}}, {"id": "法案賛成・推進", "label": "法案賛成・推進", "total": 362, "counts": {"fukushuto-osaka-restoration": 67, "fukushuto-location": 134, "fukushuto-definition": 53, "fukushuto-disaster-preparedness": 70, "fukushuto-priority": 6, "fukushuto-other": 21, "fukushuto-finance": 11}, "width_pct": {"fukushuto-osaka-restoration": 18.51, "fukushuto-location": 37.02, "fukushuto-definition": 14.64, "fukushuto-disaster-preparedness": 19.34, "fukushuto-priority": 1.66, "fukushuto-other": 5.8, "fukushuto-finance": 3.04}, "high_pct": {"fukushuto-osaka-restoration": 22.4, "fukushuto-location": 5.2, "fukushuto-definition": 11.3, "fukushuto-disaster-preparedness": 15.7, "fukushuto-priority": 0.0, "fukushuto-other": 23.8, "fukushuto-finance": 0.0}, "high_counts": {"fukushuto-osaka-restoration": 15, "fukushuto-location": 7, "fukushuto-definition": 6, "fukushuto-disaster-preparedness": 11, "fukushuto-priority": 0, "fukushuto-other": 5, "fukushuto-finance": 0}}, {"id": "法案反対", "label": "法案反対", "total": 1060, "counts": {"fukushuto-osaka-restoration": 371, "fukushuto-location": 151, "fukushuto-definition": 143, "fukushuto-disaster-preparedness": 141, "fukushuto-priority": 141, "fukushuto-other": 49, "fukushuto-finance": 64}, "width_pct": {"fukushuto-osaka-restoration": 35.0, "fukushuto-location": 14.25, "fukushuto-definition": 13.49, "fukushuto-disaster-preparedness": 13.3, "fukushuto-priority": 13.3, "fukushuto-other": 4.62, "fukushuto-finance": 6.04}, "high_pct": {"fukushuto-osaka-restoration": 62.5, "fukushuto-location": 35.8, "fukushuto-definition": 35.0, "fukushuto-disaster-preparedness": 43.3, "fukushuto-priority": 46.1, "fukushuto-other": 51.0, "fukushuto-finance": 43.8}, "high_counts": {"fukushuto-osaka-restoration": 232, "fukushuto-location": 54, "fukushuto-definition": 50, "fukushuto-disaster-preparedness": 61, "fukushuto-priority": 65, "fukushuto-other": 25, "fukushuto-finance": 28}}, {"id": "中立・情報", "label": "中立・情報", "total": 259, "counts": {"fukushuto-osaka-restoration": 36, "fukushuto-location": 69, "fukushuto-definition": 60, "fukushuto-disaster-preparedness": 29, "fukushuto-priority": 19, "fukushuto-other": 40, "fukushuto-finance": 6}, "width_pct": {"fukushuto-osaka-restoration": 13.9, "fukushuto-location": 26.64, "fukushuto-definition": 23.17, "fukushuto-disaster-preparedness": 11.2, "fukushuto-priority": 7.34, "fukushuto-other": 15.44, "fukushuto-finance": 2.32}, "high_pct": {"fukushuto-osaka-restoration": 2.8, "fukushuto-location": 5.8, "fukushuto-definition": 1.7, "fukushuto-disaster-preparedness": 0.0, "fukushuto-priority": 15.8, "fukushuto-other": 10.0, "fukushuto-finance": 0.0}, "high_counts": {"fukushuto-osaka-restoration": 1, "fukushuto-location": 4, "fukushuto-definition": 1, "fukushuto-disaster-preparedness": 0, "fukushuto-priority": 3, "fukushuto-other": 4, "fukushuto-finance": 0}}], "issues": [{"id": "fukushuto-osaka-restoration", "key": "都構想・維新", "label": "都構想・維新", "icon": "🏛️", "count": 474, "share_pct": 28.2, "stances": {"法案賛成・推進": 67, "法案反対": 371, "中立・情報": 36}, "top_stance": "法案反対", "purity_pct": 78.3, "intensity": {"high": 248, "medium": 193, "low": 33}, "high_pct": 52.3, "high_adjusted_pct": 50.6, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "miss", "claims": [{"claim": "大阪都構想は、住民投票で二度否決された", "finding": "2回とも僅差の反対多数。とくに2020年は賛成が反対を17,167票下回るだけの差だった。", "id": "referendum_twice", "issue_ids": ["fukushuto-osaka-restoration"], "matched_post_count": 4, "sources": [{"name": "大阪市 大阪市における特別区の設置についての投票", "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000538418.html"}], "verdict": "fact"}, {"claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ", "finding": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。", "id": "resolution_ban", "issue_ids": ["fukushuto-osaka-restoration"], "matched_post_count": 4, "sources": [{"name": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）", "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm"}, {"name": "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm"}], "verdict": "miss"}], "veins": []}, {"id": "fukushuto-location", "key": "候補地", "label": "候補地", "icon": "📍", "count": 354, "share_pct": 21.1, "stances": {"法案賛成・推進": 134, "法案反対": 151, "中立・情報": 69}, "top_stance": "法案反対", "purity_pct": 42.7, "intensity": {"high": 65, "medium": 182, "low": 107}, "high_pct": 18.4, "high_adjusted_pct": 20.3, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 354, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "大阪は南海トラフで不適（反対）", "count": 106, "pct_in_issue": 29.9}, {"id": "F", "label": "具体的代替候補提案（中立・賛成）", "count": 82, "pct_in_issue": 23.2}, {"id": "D", "label": "大阪・関西推し（賛成）", "count": 45, "pct_in_issue": 12.7}, {"id": "B", "label": "日本海側・遠隔地を推す（反対・中立）", "count": 44, "pct_in_issue": 12.4}, {"id": "G", "label": "その他（中立・情報）", "count": 35, "pct_in_issue": 9.9}, {"id": "C", "label": "首都を先に定義すべき・原則論", "count": 26, "pct_in_issue": 7.3}, {"id": "E", "label": "複数分散型（賛成・中立）", "count": 16, "pct_in_issue": 4.5}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-definition", "key": "定義・中身", "label": "定義・中身", "icon": "📋", "count": 256, "share_pct": 15.2, "stances": {"法案賛成・推進": 53, "法案反対": 143, "中立・情報": 60}, "top_stance": "法案反対", "purity_pct": 55.9, "intensity": {"high": 57, "medium": 139, "low": 60}, "high_pct": 22.3, "high_adjusted_pct": 24.2, "sub": {"status": "not_reviewed", "note": "この論点は、まだ編集部が投稿を1件ずつ読み直していません"}, "verdict": "fact", "claims": [{"claim": "副首都法は、賛成123・反対121のわずか2票差で成立した", "finding": "自由民主党・無所属の会99、日本維新の会19などを合わせて123。与党の議席だけでは過半数に届かず、無所属・少数会派の賛成があって成立した。", "id": "vote_123_121", "issue_ids": ["fukushuto-definition"], "matched_post_count": 5, "sources": [{"name": "参議院 本会議投票結果（2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm"}], "verdict": "fact"}], "veins": []}, {"id": "fukushuto-disaster-preparedness", "key": "防災・災害", "label": "防災・災害", "icon": "🛡️", "count": 240, "share_pct": 14.3, "stances": {"法案賛成・推進": 70, "法案反対": 141, "中立・情報": 29}, "top_stance": "法案反対", "purity_pct": 58.8, "intensity": {"high": 72, "medium": 132, "low": 36}, "high_pct": 30.0, "high_adjusted_pct": 30.7, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 240, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "南海トラフ・同時被災リスクで大阪は不適（反対）", "count": 106, "pct_in_issue": 44.2}, {"id": "B", "label": "東京一極集中は危険・バックアップ必要（賛成）", "count": 87, "pct_in_issue": 36.2}, {"id": "C", "label": "その他の反対・批判（具体策の欠如・箱物批判・予算配分批判等）", "count": 47, "pct_in_issue": 19.6}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-priority", "key": "優先順位", "label": "優先順位", "icon": "⚖️", "count": 166, "share_pct": 9.9, "stances": {"法案賛成・推進": 6, "法案反対": 141, "中立・情報": 19}, "top_stance": "法案反対", "purity_pct": 84.9, "intensity": {"high": 68, "medium": 87, "low": 11}, "high_pct": 41.0, "high_adjusted_pct": 39.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 166, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "物価高・生活対策が先（緊急の課題優先）", "count": 87, "pct_in_issue": 52.4}, {"id": "B", "label": "防災・災害対策が先", "count": 46, "pct_in_issue": 27.7}, {"id": "C", "label": "法案の拙速・中身なし・強行採決批判", "count": 26, "pct_in_issue": 15.7}, {"id": "D", "label": "賛成・推進・実現期待", "count": 7, "pct_in_issue": 4.2}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-other", "key": "その他", "label": "その他", "icon": "💬", "count": 110, "share_pct": 6.5, "stances": {"法案賛成・推進": 21, "法案反対": 49, "中立・情報": 40}, "top_stance": "法案反対", "purity_pct": 44.5, "intensity": {"high": 34, "medium": 40, "low": 36}, "high_pct": 30.9, "high_adjusted_pct": 31.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 110, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "法案そのものへの反対（制度批判）", "count": 38, "pct_in_issue": 34.5}, {"id": "B", "label": "政党・選挙・派閥対立", "count": 23, "pct_in_issue": 20.9}, {"id": "C", "label": "他政策との関連・比較（皇室典範・防災・遷都等）", "count": 22, "pct_in_issue": 20.0}, {"id": "D", "label": "賛成・推進・実現期待", "count": 17, "pct_in_issue": 15.5}, {"id": "G", "label": "その他（中立・情報）", "count": 10, "pct_in_issue": 9.1}]}, "verdict": null, "claims": [], "veins": []}, {"id": "fukushuto-finance", "key": "費用・財源", "label": "費用・財源", "icon": "💰", "count": 81, "share_pct": 4.8, "stances": {"法案賛成・推進": 11, "法案反対": 64, "中立・情報": 6}, "top_stance": "法案反対", "purity_pct": 79.0, "intensity": {"high": 28, "medium": 44, "low": 9}, "high_pct": 34.6, "high_adjusted_pct": 34.4, "sub": {"status": "reread", "coverage": "full", "coverage_note": "独立監査の再読記録と追加の本文読み直しを合わせて全件読了", "show_coverage_note": true, "source_file": "data/fukushuto_5issues-reread.json", "reread_count": 81, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "A", "label": "費用不明・財源なしで進めるな", "count": 49, "pct_in_issue": 60.5}, {"id": "B", "label": "兆円規模・増税・国債の具体的懸念", "count": 14, "pct_in_issue": 17.3}, {"id": "C", "label": "擁護・自腹・中立的批判", "count": 14, "pct_in_issue": 17.3}, {"id": "D", "label": "経済効果・建設業期待", "count": 4, "pct_in_issue": 4.9}]}, "verdict": "miss", "claims": [{"claim": "副首都の整備費用は4兆円〜7.5兆円かかるとされる", "finding": "数字自体は実在するが、30年近く前の別の計画（首都機能の全面移転）の試算で、2026年の副首都法（大規模災害時のバックアップ機能整備）とは対象の規模も目的も別物。政府は参院審議で、今回の法律にもとづく整備費用について「今後検討する」と答えるにとどめ、現時点で試算を示していない。", "id": "cost_old_estimate", "issue_ids": ["fukushuto-finance"], "matched_post_count": 2, "sources": [{"name": "国土交通省 国会等の移転ホームページ「移転費用の試算」", "url": "https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html"}], "verdict": "gap"}, {"claim": "副首都の整備費用は、AIの試算で総額2兆円規模になる", "finding": "出典不明の試算がそのまま数字として流通していること自体が、この論点で公式な費用試算が存在しない状態を映している。", "id": "cost_ai_estimate", "issue_ids": ["fukushuto-finance"], "matched_post_count": 1, "sources": [], "verdict": "miss"}], "veins": []}], "claims": [{"id": "referendum_twice", "claim": "大阪都構想は、住民投票で二度否決された", "verdict": "fact", "verdict_label": "資料どおり", "finding": "2回とも僅差の反対多数。とくに2020年は賛成が反対を17,167票下回るだけの差だった。", "sources": [{"name": "大阪市 大阪市における特別区の設置についての投票", "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000538418.html"}]}, {"id": "vote_123_121", "claim": "副首都法は、賛成123・反対121のわずか2票差で成立した", "verdict": "fact", "verdict_label": "資料どおり", "finding": "自由民主党・無所属の会99、日本維新の会19などを合わせて123。与党の議席だけでは過半数に届かず、無所属・少数会派の賛成があって成立した。", "sources": [{"name": "参議院 本会議投票結果（2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm"}]}, {"id": "resolution_ban", "claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。", "sources": [{"name": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）", "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm"}, {"name": "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）", "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm"}]}, {"id": "cost_old_estimate", "claim": "副首都の整備費用は4兆円〜7.5兆円かかるとされる", "verdict": "gap", "verdict_label": "少しずれる", "finding": "数字自体は実在するが、30年近く前の別の計画（首都機能の全面移転）の試算で、2026年の副首都法（大規模災害時のバックアップ機能整備）とは対象の規模も目的も別物。政府は参院審議で、今回の法律にもとづく整備費用について「今後検討する」と答えるにとどめ、現時点で試算を示していない。", "sources": [{"name": "国土交通省 国会等の移転ホームページ「移転費用の試算」", "url": "https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html"}]}, {"id": "cost_ai_estimate", "claim": "副首都の整備費用は、AIの試算で総額2兆円規模になる", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "出典不明の試算がそのまま数字として流通していること自体が、この論点で公式な費用試算が存在しない状態を映している。", "sources": []}], "editorial": {"checked_on": "2026-09-13", "findings": [{"id": "fukushuto-ed-1", "kind": "shared_premise", "text": "どの論点でも「法案反対」が最多という点は共通している。賛成がもっとも伸びる「防災・災害」でも賛成は29.2%にとどまり、反対（58.8%）には届かない。"}, {"id": "fukushuto-ed-2", "kind": "real_conflict", "text": "同じ「反対」でも、論点によって強さがまるで違う。「都構想・維新」では反対が78.3%、「優先順位」でも84.9%に達するのに対し、「候補地」では42.7%にとどまる。反対の的は副首都という発想そのものより、「なぜ今」「なぜ大阪・維新なのか」という動機と優先順位への疑いに集中している。"}, {"id": "fukushuto-ed-3", "kind": "real_conflict", "text": "賛成の実数がもっとも集まっているのは「候補地」の134件で、「都構想・維新」の67件を上回る。都構想・維新という切り口では賛成の足場がほとんど残らないのに対し、どこに置くかという具体的な話になると賛成の声も相対的に出やすい。"}, {"id": "fukushuto-ed-4", "kind": "still_unknown", "text": "「費用・財源」は81件で、全体の4.8%にあたり、他の論点と比べて最も少ない。整備費用の金額は投稿にも登場したが、事実確認では別の古い計画の試算と判明している。件数の少なさは論点の重要度が低いという意味ではなく、根拠のある数字が出回っていないことの裏返しである可能性がある。"}, {"id": "fukushuto-ed-5", "kind": "still_unknown", "text": "住民投票と統一地方選の同日実施を禁じる附帯決議が採択されたことは参議院の記録で確認できたが、決議本文の文言が禁止なのか努力目標なのかは、採択した委員会の会議録が執筆時点でまだ公開されておらず確認できていない。「都構想・維新」を語る投稿の一部は、この未確定な理解のまま書かれている可能性があり、会議録の公開後に確認欄とあわせて再確認が要る。"}, {"id": "fukushuto-ed-6", "kind": "still_unknown", "text": "ここに出ているのはYahoo!リアルタイム検索で集めた1,681件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りや、副首都法案の審議が集中した時期に収集期間が重なっていることの影響は測っていない。"}], "reviewer_type": "editorial_review", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-08-24", "reviewer_type": "editorial_review", "ocean_status": "not_started", "ocean_checked_on": null, "ocean_reviewer_type": null, "sunk_continents": [], "veins": []}};</script>
 <script>
 (function(){
 "use strict";
@@ -724,6 +754,8 @@ const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切�
 const SMALL=30;      // これ未満は母数が小さいので破線＋注記
 const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
 const svg = document.getElementById("section");
+const chartBox = document.querySelector(".chart-box");
+const stageEl = document.querySelector(".stage");
 
 function layout(modeId){
   const m=modeById[modeId], live=[];
@@ -841,23 +873,54 @@ function render(){
     fn.textContent += " 強い表現が0%の論点は、基準線上の点を押せます。";
 }
 
+/* 論点を選んだ後は、山なみを升目（マトリックス）カードの背後へ薄く重ねて表示する。
+   タブで論点を切り替えられるようになった今、山を見るためだけに別セクションへ
+   スクロールするのは遠回りだった（オーナー指摘2026-09-19「クリックすると下の図に
+   スライドして見ずらい」）。chart-box要素自体を#dot-slotの中へ移し、CSSで
+   #dotboxの背後に敷く。作り直さず同じ要素を動かすので、hillのクリック判定や
+   render()の対象（svgのid）はそのまま使える。
+   ⚠️ drawPanel() は #panel の innerHTML を丸ごと作り直すため、chart-box が
+   #dot-slot の中（＝#panelの子孫）にいる間に呼ぶと一緒に消えてしまい、続く
+   render() が chart-box 内の要素（#chartdesc等）を見失ってエラーになる。
+   必ず evacuateChart() で .stage 側へ退避させてから drawPanel() を呼ぶこと。 */
+function evacuateChart(){
+  if (chartBox.parentElement !== stageEl){
+    chartBox.classList.remove("as-backdrop");
+    stageEl.insertBefore(chartBox, document.getElementById("panel"));
+  }
+}
+function placeChart(){
+  const slot = document.getElementById("dot-slot");
+  if (st.landed !== null && slot){
+    chartBox.classList.add("as-backdrop");
+    slot.insertBefore(chartBox, slot.firstChild);
+  }
+}
 function land(i){
   st.landed=i;
   visit("i:"+issues[i].id);
   location.hash=issues[i].id;
-  drawPanel(); syncList(); render();
+  evacuateChart();
+  drawPanel(); syncList(); render(); placeChart();
   const h=document.querySelector("#panel h2");
   if (h){ h.tabIndex=-1; h.focus({preventScroll:true}); }
   // #panel 自体（立場別シェア・島の一覧・一次資料まで含む）を画面中央に
   // 合わせると、丈が画面何個分もあるため見出しが上に消えてバーの位置で
   // 止まって見える（オーナー指摘2026-09-10）。見出しだけを中央合わせにする。
-  if (window.innerWidth < 820) bringIntoView(h || document.getElementById("panel"));
+  // 幅で絞らない: .stageは常に1カラム（grid-template-columns:1fr）で、
+  // 山なみを見た後の詳細パネルは画面幅に関係なく大きく高さが変わる。以前は
+  // 820px未満だけに絞っていたが、広い画面でここを呼ばないままにすると、
+  // 上のoverflow-anchor:noneでスクロール位置が「動かされない」だけになり、
+  // 見出しが画面の外（上）に切れたまま止まることがあった（オーナー報告
+  // 2026-09-19、Chrome/Mac・デスクトップ幅で発生を確認）。
+  bringIntoView(h || document.getElementById("panel"));
 }
 function orbit(){
   const prev=st.landed;
   st.landed=null;
   if (location.hash) history.replaceState(null,"",location.pathname);
-  drawPanel(); syncList(); render();
+  evacuateChart();
+  drawPanel(); syncList(); render(); placeChart();
   const b=prev!==null&&document.getElementById("btn-"+issues[prev].id);
   if (b) b.focus({preventScroll:true});
 }
@@ -873,6 +936,15 @@ function stanceBar(counts, total){
 function legend(){
   return '<div class="legend">' + D.stances.map(s=>
     '<span><i style="background:'+s.color+'"></i>'+s.label+'</span>').join("") + '</div>';
+}
+
+/* 論点タブ。いま開いている論点から、山なみへ戻らず他の論点へ直接飛べるようにする。
+   0件（いまの立場フィルターでは出ない）論点は .issue-list と同じく薄くするが押せなくはしない。 */
+function issueTabs(m){
+  return '<div class="issue-tabs">' + issues.map((it,i)=>
+    '<button type="button" data-i="'+i+'" aria-pressed="'+(i===st.landed?"true":"false")+'"'
+    + (m.counts[it.id] ? '' : ' style="opacity:.45"')
+    + '>'+it.icon+' '+esc(it.label)+'</button>').join("") + '</div>';
 }
 
 /* 立場を切り替えたときに何が起きたかを1行で言う。
@@ -1010,7 +1082,8 @@ function drawPanel(){
   const imgPath = imgSlug ? ('images/topics/fukushuto/fukushuto-infographic-wide-'+imgSlug+'.webp') : '';
   const imgHtml = imgSlug ? ('<div class="explainer-card landing-image" data-img="'+imgPath+'" data-alt="'+it.label+'">'
     +'<img src="'+imgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
-  let h = '<h2>'+it.icon+' '+it.label+'</h2>' + imgHtml
+  let h = '<h2>'+it.icon+' '+it.label+'</h2>'
+    + issueTabs(m) + imgHtml
     + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
     + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
     + '<div id="dot-slot"></div>'
@@ -1041,6 +1114,9 @@ function drawPanel(){
   h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
+  p.querySelectorAll(".issue-tabs button").forEach(b=>{
+    b.addEventListener("click", ()=>land(+b.dataset.i));
+  });
   // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
   document.getElementById("dot-slot").appendChild(dotBox);
   syncDots();
@@ -1074,9 +1150,18 @@ function buildList(){
 /* 要素が画面の中ほどへ来るまでスクロールする。
    scrollIntoView({behavior:"smooth"}) は動かない環境があり、requestAnimationFrame も
    画面が見えていないと止まる。どちらにも頼らずに必ず届くようにする（実測して確認）。 */
+// land()・morphTo()・クイズ操作など複数の場所から呼ばれる。前の呼び出しの
+// アニメーションが終わる前（420ms+180ms以内）に次を呼ぶと、2つのrAFループが
+// 同時にscrollToを取り合い、どちらでもない位置（体感では「一次資料クイズあたり」）
+// へ飛ぶことがあった（オーナー報告2026-09-19、「山なみが画面の上の方でクリックすると
+// スクロールしすぎる」）。山を連続でタップ/クリックしたときに起きやすい。
+// 呼び出しごとに世代番号を振り、後発の呼び出しが来たら前の世代は書き込みをやめる。
+let bringIntoViewGen = 0;
 function bringIntoView(el){
+  const gen = ++bringIntoViewGen;
   // 差し込んだ直後は大きさが確定しておらず、測ると0になって先頭へ飛ぶ
   setTimeout(function(){
+    if (gen !== bringIntoViewGen) return;
     const r = el.getBoundingClientRect();
     if (!r.height) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -1086,12 +1171,14 @@ function bringIntoView(el){
     if (reduce || Math.abs(to - from) < 8){ window.scrollTo(0, to); return; }
     const t0 = performance.now(), dur = 420;
     (function step(now){
+      if (gen !== bringIntoViewGen) return;    // 新しい呼び出しに道を譲る
       const t = Math.min(1, (now - t0)/dur);
       window.scrollTo(0, from + (to - from)*ease(t));
       if (t < 1) requestAnimationFrame(step);
     })(t0);                                  // 1枚目は rAF を待たずに描く
     // rAF が止まる環境でも必ず届かせる
     setTimeout(function(){
+      if (gen !== bringIntoViewGen) return;
       if (Math.abs(window.scrollY - to) > 4) window.scrollTo(0, to);
     }, dur + 180);
   }, 0);
@@ -1119,9 +1206,17 @@ function morphTo(toMode){
     st.landed = null;
     if (location.hash) history.replaceState(null,"",location.pathname);
   }
-  drawPanel(); syncList(); render();
-  // 画面が狭いと、立場ボタンと図が同時に画面へ入らない。押した結果が見えないので運ぶ
-  if (window.innerWidth < 820) bringIntoView(document.getElementById("section"));
+  // st.landed が0件にならず残るケースでも drawPanel() は #panel を作り直す
+  // （land()/orbit()と同じ理由でchart-boxを先に退避する必要がある）
+  evacuateChart();
+  drawPanel(); syncList(); render(); placeChart();
+  // 画面が狭いと、立場ボタンと結果（パネルの数値）が同時に画面へ入らない。
+  // 押した結果が見えないので運ぶ。以前は#section（山なみの図）自体へ運んでいたが、
+  // 論点を選んだ状態ではchart-boxが升目カードの背後の巨大な背景要素になっており
+  // （as-backdrop、#dot-slotの高さいっぱいまで伸びる）、これを中心に合わせようと
+  // すると見出しや数値のほうが画面外へ出てしまっていた（オーナー指摘2026-09-19
+  // 「スクロール位置が下すぎる」）。land()と同じくパネルの見出しへ運ぶ。
+  if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
 }
 
 /* ---------- 操作 ----------
@@ -1237,7 +1332,14 @@ function buildDive(){
       // 画面何個分もある）を中央合わせすると、先頭の見出しが画面外に出て
       // 途中の記事が中央に来る（オーナー指摘2026-09-11、山・クイズと同じ不具合）。
       // 見出しだけを中央合わせにする。
-      if (box) bringIntoView(box.querySelector("h3") || box);
+      if (box) {
+        bringIntoView(box.querySelector("h3") || box);
+        // 閉じてすぐ開き直してもアニメーションを再生させるため、
+        // 一度クラスを外して強制的に再描画してから付け直す。
+        box.classList.remove("just-revealed");
+        void box.offsetWidth;
+        box.classList.add("just-revealed");
+      }
     }
   });
   paint();
@@ -1293,7 +1395,7 @@ function buildQuiz(){
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
 try {
-  buildModes(); buildList(); drawPanel(); syncList(); render();
+  buildModes(); buildList(); drawPanel(); syncList(); render(); placeChart();
   buildGuesses(); buildDive(); buildQuiz(); paintProgress();
   let resizeFrame;
   window.addEventListener("resize", ()=>{
@@ -1578,7 +1680,7 @@ try {
   </div>
   <dl class="article-trust-meta">
     <div><dt>公開日</dt><dd><time datetime="2026-07-15">2026年7月15日</time></dd></div>
-    <div><dt>最終更新日</dt><dd><time datetime="2026-09-17">2026年9月17日</time></dd></div>
+    <div><dt>最終更新日</dt><dd><time datetime="2026-09-20">2026年9月20日</time></dd></div>
     <div><dt>編集・分析</dt><dd><a href="about.html">SNS反応まっぷ編集部</a></dd></div>
   </dl>
   <div class="article-trust-method">
