@@ -573,12 +573,12 @@ def _inject_nickname_landing_images(block: str, data: dict) -> str:
 # （sonota）にも専用の図解が用意されているため、6論点すべてを対象にする（他テーマで
 # 「その他は図解を持たない」としているのは画像自体が無いための除外であって、方針ではない）。
 ELDERLY_LANDING_IMAGE_BY_ISSUE_ID = {
-    "elderly-license-revocation-safety": ("gizuka", "義務化・事故防止"),
-    "elderly-license-revocation-mobility-rights": ("chiho", "地方の足・移動権"),
-    "elderly-license-revocation-assessment": ("tekisei", "適性検査強化"),
-    "elderly-license-revocation-alternative-transport": ("infra", "代替交通整備"),
-    "elderly-license-revocation-voluntary-return": ("jishu", "自主返納支援"),
-    "elderly-license-revocation-other": ("sonota", "その他"),
+    "elderly-license-revocation-safety": ("gizuka-v2", "義務化・事故防止"),
+    "elderly-license-revocation-mobility-rights": ("chiho-v2", "地方の足・移動権"),
+    "elderly-license-revocation-assessment": ("tekisei-v2", "適性検査強化"),
+    "elderly-license-revocation-alternative-transport": ("infra-v2", "代替交通整備"),
+    "elderly-license-revocation-voluntary-return": ("jishu-v2", "自主返納支援"),
+    "elderly-license-revocation-other": ("sonota-v2", "その他"),
 }
 
 
