@@ -825,9 +825,14 @@ def static_fallback(d: dict) -> str:
             ]
         else:
             if d.get("show_unreviewed_note", True):
+                unread_detail = (
+                    "この論点の中身（内訳）は、編集部が確認してから表示します。"
+                    if d["theme_id"] == "ai-copyright" else
+                    "AIが自動でつけた区分をここに並べることはしません。"
+                    "人が読んだ結果だけをまとめにします。"
+                )
                 body.append(f'      <div class="note">{e(sub["note"])}。<br>'
-                            'AIが自動でつけた区分をここに並べることはしません。'
-                            '人が読んだ結果だけをまとめにします。</div>')
+                            f'{unread_detail}</div>')
 
         if it.get("claims"):
             srcs = []
@@ -1028,8 +1033,13 @@ def render_page(data: dict, template: str, payload: str) -> str:
         ):
             template = template.replace(old, new)
         template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
-    if data["theme_id"] in ("consumption-tax-cut", "koshitsu-tenpakai"):
+    if data["theme_id"] in ("consumption-tax-cut", "koshitsu-tenpakai", "ai-copyright"):
         template = template.replace("← 全体へ戻る（Esc）", "← 論点の一覧へ戻る（Esc）")
+    if data["theme_id"] == "ai-copyright":
+        template = template.replace(
+            "AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。",
+            "この論点の中身（内訳）は、編集部が確認してから表示します。",
+        )
     """テンプレートの差し込み口を data から埋める。
 
     数字・色・テーマ固有の言葉をここでしか作らないことで、
