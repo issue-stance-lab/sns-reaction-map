@@ -3,6 +3,7 @@ theme_id: constitutional-amendment
 title: 憲法改正論議
 question: 憲法の何を、どんな条件で変えるのか
 source_label: Yahoo!リアルタイム検索
+show_unreviewed_note: false
 stances:
 - key: 改正推進
   label: 改正推進
@@ -64,7 +65,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。
-    show_coverage_note: true
+    show_coverage_note: false
   緊急事態条項:
     file: data/constitutional-amendment_issues-reread.json
     path:
@@ -75,7 +76,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。
-    show_coverage_note: true
+    show_coverage_note: false
   国民投票・広告:
     file: data/constitutional-amendment_issues-reread.json
     path: [buckets, 国民投票・広告]
@@ -83,7 +84,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 投稿本文を読み、主な理由ごとに分けました。不正や情報操作への懸念は投稿者の意見で、事実と確認されたことを意味しません。本文だけでは理由を特定できない投稿は別にしています
-    show_coverage_note: true
+    show_coverage_note: false
   情報・議論の質:
     file: data/constitutional-amendment_issues-reread.json
     path: [buckets, 情報・議論の質]
@@ -91,7 +92,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません
-    show_coverage_note: true
+    show_coverage_note: false
   その他:
     file: data/constitutional-amendment_issues-reread.json
     path: [buckets, その他]
@@ -99,7 +100,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません
-    show_coverage_note: true
+    show_coverage_note: false
   政党・発議手続き:
     file: data/constitutional-amendment_issues-reread.json
     path: [buckets, 政党・発議手続き]
@@ -107,7 +108,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません
-    show_coverage_note: true
+    show_coverage_note: false
   9条・自衛隊:
     file: data/constitutional-amendment_issues-reread.json
     path: [buckets, 9条・自衛隊]
@@ -115,7 +116,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません。皇室典範の9条に言及する3件は別枠にしています
-    show_coverage_note: true
+    show_coverage_note: false
 geometry:
   min_area_pct: 2.5
   elevation_k: 50
