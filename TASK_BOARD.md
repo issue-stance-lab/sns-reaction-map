@@ -1,6 +1,6 @@
 # TASK_BOARD — SNS反応まっぷ（テーマ横断課題の索引）
 
-最終更新: 2026-09-20（課題71: fukushutoの海面より下データを新規作成・検査の不具合2件目を修正／課題72: fukushutoへの論点タブUI展開が完了しアーカイブへ移動／課題75: 一次資料メモの年度ラベルのずれを新規登録・部活動メモの2行は訂正済み／課題74: AIっぽい言い回し・AI帰属の誤りを4テーマ対応済み（consumption-tax-cut・koshitsu-tenpakai・ai-copyright・bukatsu-chiiki）・残り6テーマ／課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み）
+最終更新: 2026-09-20（課題71: 全10テーマで「沈んだ大陸」が上限4件に到達・既存不整合は発注書化して別セッションへ／課題72: fukushutoへの論点タブUI展開が完了しアーカイブへ移動／課題75: 一次資料メモの年度ラベルのずれを新規登録・部活動メモの2行は訂正済み／課題74: AIっぽい言い回し・AI帰属の誤りを4テーマ対応済み（consumption-tax-cut・koshitsu-tenpakai・ai-copyright・bukatsu-chiiki）・残り6テーマ／課題73: 旧アリーナの死んだデータを新規登録・consumption-tax-cut対応済み）
 
 > **このファイルは索引です。** 1課題につき数行だけを置き、経緯・調査記録・手順は
 > `tasks/task-{番号}.md` に分けてあります。**担当する課題の詳細ファイルだけを開いてください。**
@@ -77,9 +77,9 @@
 
 
 ### 課題71: 海面より下（沈んだ大陸・地下水脈）のデータ品質を仕上げる
-**状態**: 未着手。検査の不具合2件目（沈んだ大陸単独テーマが検査対象から漏れる）を2026-09-20に修正、bike-blue-ticketにも(a)と同型の不一致を新規発見
+**状態**: 進行中。「沈んだ大陸」新規作成は全10テーマで上限4件に到達（2026-09-20）。既存分の不整合(a)は未着手
 **優先度**: 中（`verify_ocean_layer.py` はCIに未接続のため公開は止まっていない）
-**次にすること**: constitutional-amendment・bike-blue-ticketの沈んだ大陸を実データで読み直し、machine_hitsを正典と再照合する
+**次にすること**: 発注書(configs/prompts/codex/20260920_ocean-layer-stale-hits.md)を別セッションへ渡し、2テーマの沈んだ大陸を読み直す
 **判断待ち**: 地下水脈が1本しかない4テーマへの対応（実データで追加作成するか、基準を見直すか）
 **関連テーマ**: constitutional-amendment / henoko-student-accident / koshitsu-tenpakai / school-nickname-ban / bike-blue-ticket
 **詳細**: [tasks/task-71.md](tasks/task-71.md)
