@@ -22,11 +22,18 @@ def restore_issue_media(text, public):
         samples = ''
         for identity, label, summary in posts:
             user, post = identity.split('/')
-            samples += f'<div class="hermes-sample"><span class="hermes-sample-meta">{esc(label)}</span><p class="hermes-sample-summary">{esc(summary)}</p><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/{user}/status/{post}">@{user} の投稿をXで見る</a></blockquote></div>'
+            post_url = f'https://x.com/{user}/status/{post}'
+            post_label = f'@{user} の投稿をXで見る'
+            samples += (
+                f'<div class="hermes-sample"><span class="hermes-sample-meta">{esc(label)}</span>'
+                f'<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
+                f'<a href="{post_url}">{post_label}</a></blockquote>'
+                f'<div class="x-embed-fallback"><a href="{post_url}">{post_label}</a></div></div>'
+            )
         cards.append(f'<article class="ic" id="issue-{iid}"><div class="ic-head"><h3>{esc(issue["label"])}</h3><span class="cnt">{issue["count"]}<small>件</small></span></div><figure><a href="{url}" target="_blank" rel="noopener"><img src="{url}" alt="{esc(issue["label"])}の論点図解" loading="lazy"></a><figcaption>{esc(note)}</figcaption></figure><div class="hermes-samples">{samples}</div><a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article>')
     block = '<section class="panel" id="issue-cards"><div class="panel-title"><h2>論点ごとの図解とX投稿</h2></div><p>投稿の要旨は編集部による要約です。各論点の考え方の例であり、今回案全体への賛否を表すものとは限りません。埋め込みが表示されない場合は、投稿リンクからXで確認できます。</p>' + ''.join(cards) + '</section>'
     text = text.replace('<!-- PLANET_SECTION_END -->', '<!-- PLANET_SECTION_END -->' + block, 1)
-    text = text.replace('</head>', '<style>'+ ISSUE_CSS + '\n#issue-cards .hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px}#issue-cards .hermes-sample{min-width:0}#issue-cards figcaption{font-size:13px;line-height:1.8;margin-top:10px;color:#596174}#issue-cards .hermes-sample-meta{font-weight:800}@media(max-width:640px){#issue-cards .hermes-samples{grid-template-columns:1fr}}</style></head>', 1)
+    text = text.replace('</head>', '<style>'+ ISSUE_CSS + '\n#issue-cards .hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px}#issue-cards .hermes-sample{min-width:0}#issue-cards figcaption{font-size:13px;line-height:1.8;margin-top:10px;color:#596174}#issue-cards .hermes-sample-meta{font-weight:800}#issue-cards .x-embed-fallback{margin:6px 0 0;font-size:12px}#issue-cards .x-embed-fallback a{color:var(--muted)}#issue-cards blockquote.twitter-tweet a{font-size:12px;color:var(--muted)}@media(max-width:640px){#issue-cards .hermes-samples{grid-template-columns:1fr}}</style></head>', 1)
     marker = 'if (extras) h += extras.innerHTML;'
     assert text.count(marker) == 1
     text = text.replace(marker, marker + '\n  h += \'<p><a class="go-card" href="#issue-\'+it.id+\'">この論点の図解とX投稿を見る ↓</a></p>\';')

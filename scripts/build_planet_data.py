@@ -1028,6 +1028,8 @@ def render_page(data: dict, template: str, payload: str) -> str:
         ):
             template = template.replace(old, new)
         template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
+    if data["theme_id"] == "consumption-tax-cut":
+        template = template.replace("← 全体へ戻る（Esc）", "← 論点の一覧へ戻る（Esc）")
     """テンプレートの差し込み口を data から埋める。
 
     数字・色・テーマ固有の言葉をここでしか作らないことで、

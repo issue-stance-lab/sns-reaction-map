@@ -179,3 +179,65 @@ verify_page_originality.py）・`python3 -m unittest discover -s tests`984件・
 遷移が自然であることを、デスクトップ・375pxモバイル幅の両方で確認した。
 
 作業は`../isa-wt-bukatsu-landing-image`（ブランチ`task/bukatsu-landing-image`）で行った。
+
+2026-09-20、オーナー指示で「その言い分、原典に当たるとどうなるか」節を新設した
+（consumption-tax-cut・koshitsu-tenpakaiと同じ見た目）。使ったのは新規調査ではなく、
+`scripts/build_bukatsu_process_sections.py`に既にあった`FACT_CHECKS`（一次資料照合7件、
+2026-09-02確定）。PLANET_SECTIONの外側（`<!-- BUKATSU_AUDIT_START/END -->`、定期更新の
+たびに書き換わらない区間）に置き、`build_bukatsu_process_sections.py`の`main()`が
+`write_provenance_records()`と併せてHTMLへ書き込むようにした。
+`configs/bukatsu-chiiki-reaction-map.json`の`number_provenance.sources`に
+`data/verification/bukatsu-chiiki-claims.json`（`ca-n`/`ca-how`）を追加登録。
+標準検査4種・unittest 984件・run_public_checks.py・verify_claim_verdicts.pyすべて合格。
+経緯の詳細は[tasks/task-58.md](../tasks/task-58.md)「bukatsu-chikiiでのパイロット実施」節。
+
+作業は`../isa-wt-bukatsu-claim-audit`（ブランチ`task/bukatsu-claim-audit`）で行った。
+
+2026-09-20、オーナー指示で「立場の変化」「論点の変化」（世論の潮目カード）を山なみ
+ページにも表示できるようにした（consumption-tax-cut等と同じ見た目・機能）。
+
+このカード自体はbukatsu-chiiki専用の`scripts/update_bukatsu_tide.py`が定例更新の
+たびに毎回計算していたが、`<!-- PLANET_SECTION_START -->`の有無で山なみ判定を行い、
+SNS反応マップ（アリーナ）・論点別内訳と同じ扱いで丸ごとスキップしていたため、
+2026-09-12の山なみ移行以降、公開ページには一度も差し込まれていなかった
+（計算自体は実行されレポートJSONには出ていたため、定例更新のログでは気づけない
+壊れ方だった）。アリーナ・論点別内訳は山なみでは`#planet-block`に完全に置き換わって
+おり恒久的に対象外だが、潮目カードには対応する山なみ側の入れ物が無かっただけで、
+消す理由は無かった。
+
+`update_bukatsu_tide.py`のPLANET_SECTION判定分岐を、潮目カードのみ
+PLANET_SECTIONの外（`<!-- PLANET_SECTION_END -->`直後、山を押しても書き換わらない
+区間）へ差し込む経路に分離して解消した。初回はマーカー直後へ新設し、以後は
+既存の`<section class="update-dashboard">`区間を丸ごと置換するため、定例更新の
+たびに実行しても増殖しない（2回連続実行でバイト単位の差分なしを確認済み）。
+
+社内の直接実行で2026-09-02→2026-09-15の実データを比較し、標準検査4種・
+unittest 984件・run_public_checks.pyいずれもNG0件、ブラウザでタブ切替・
+再生アニメーション・375pxモバイル幅を確認した。副作用として、同じ関数が
+無条件に更新する「編集・分析情報」内の詳細データ件数（累計収集投稿等）も
+2026-09-15更新以来ページに反映されていなかった旧い値から現在値へ揃った。
+
+作業は`../isa-wt-bukatsu-tide`（ブランチ`task/bukatsu-tide-widget`）で行った。
+
+2026-09-20、オーナー指示で「論点ごとのX投稿」を山なみページに表示できるようにした
+（koshitsu-tenpakaiの同名セクションと同じ見た目・機能）。
+
+代表投稿を選ぶロジック自体（`REPRESENTATIVE_POSTS`を優先し、URLが現行データから
+消えていればconfidence順のフォールバックに戻る）はbukatsu-chiiki専用の
+`scripts/update_bukatsu_tide.py`に旧2D版の`issue_panel()`としてすでにあったが、
+`issue_panel()`ごと山なみ判定でスキップされる対象だったため、2026-09-12の山なみ移行
+以降は一度も呼ばれていなかった。ロジックはそのまま再利用し、表示形式だけ
+koshitsu-tenpakaiの現行仕様（画像なし・編集部要約なし、ラベル＋埋め込みのみ、
+2026-09-20の同テーマでの見直しに揃える）に合わせて`x_posts_panel()`として新設。
+潮目カードと同じくPLANET_SECTIONの外（BUKATSU_AUDIT直後）に置き、定期更新の
+たびに実行しても増殖しない。
+
+代表投稿の実データは、2026-09-20に「消費税と同じく節ごと削除」した旧`#issue-cards`
+（「論点ごとに、なかを見る」）と偶然一致した——`REPRESENTATIVE_POSTS`はその節の
+埋め込みと同じ投稿を指しており、フォールバックを使わず全7論点14件とも
+そのまま復元できた。
+
+標準検査4種・unittest 984件・run_public_checks.pyいずれもNG0件。ブラウザで
+7論点すべての埋め込み表示・タブ間の遷移・375pxモバイル幅を確認した。
+
+作業は`../isa-wt-bukatsu-x-posts`（ブランチ`task/bukatsu-x-posts`）で行った。

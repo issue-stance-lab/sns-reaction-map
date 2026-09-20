@@ -442,6 +442,10 @@ def japanese_date(value: str) -> str:
     return f"{int(year)}年{int(month)}月{int(day)}日"
 
 
+ARTICLE_TRUST_START = "<!-- ARTICLE_TRUST_START -->"
+ARTICLE_TRUST_END = "<!-- ARTICLE_TRUST_END -->"
+
+
 def trust_block(total: int, relevant: int, opinions: int, published_at: str, modified_at: str) -> str:
     """他テーマと同じ「このページの作り方」ブロック。
 
@@ -457,7 +461,7 @@ def trust_block(total: int, relevant: int, opinions: int, published_at: str, mod
     を実行して戻すこと。再生成可能性の検査（scripts/verify_builder_rebuildability.py）は
     consumption-tax-cut に build_consumption_tax_arena.py を使うため、ここは検査に出ない。
     """
-    return f"""<!-- ARTICLE_TRUST_START -->
+    return f"""{ARTICLE_TRUST_START}
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
     <p class="article-trust-kicker">編集・分析情報</p>
@@ -477,7 +481,7 @@ def trust_block(total: int, relevant: int, opinions: int, published_at: str, mod
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
-<!-- ARTICLE_TRUST_END -->"""
+{ARTICLE_TRUST_END}"""
 
 
 def esc(text: str) -> str:
@@ -749,6 +753,107 @@ def write_claim_provenance(destination: Path | None = None) -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "consumption-tax-cut-claims.json").write_text(
         json.dumps(records, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+# ---------------------------------------------------------------------------
+# 論点ごとのX投稿
+#
+# 皇室典範（#issue-cards）と同じ位置（一次資料クイズの直後）・同じ簡潔な形。
+# 要約文は付けない。皇室典範は2026-09-20にオーナー指示で要約(hermes-sample-summary)を
+# 撤去済み（同じ文の反復が「質の低いコンテンツ」の兆候として審査対策上逆効果、と
+# x_embed.pyにも明記されている）。ラベルは編集部が短く言い換えたもので、要約ではない。
+# ---------------------------------------------------------------------------
+ISSUE_CARDS_START = "<!-- ISSUE_CARDS_START -->"
+ISSUE_CARDS_END = "<!-- ISSUE_CARDS_END -->"
+# claim_audit の直後（起承転結の並びで、一次資料クイズの次）に置く。
+ISSUE_CARDS_ANCHOR = CLAIM_END
+
+# 各論点で、具体的に違う角度から語っている実際の投稿を2件ずつ選んだ
+# （veins.json（地下水脈）と同じ基準＝要約だけで選ばず、本文を1件ずつ読んで選定。
+# 他セクションで既に使っている投稿とは重複させていない）。2026-09-20選定。
+ISSUE_CARDS_POSTS: dict[str, list[tuple[str, str]]] = {
+    "consumption-tax-cut-scope": [
+        ("https://x.com/siki2364/status/2084241343036219545", "一律減税でなければ意味がない"),
+        ("https://x.com/148pv9yuZKv7Hox/status/2086203743704637530", "一律は非現実的、まず食料品から実現を"),
+    ],
+    "consumption-tax-cut-effect": [
+        ("https://x.com/mina_713713/status/2091198301052055950", "対応が遅く物価高に追いつかない"),
+        ("https://x.com/longtallsagi/status/2093939866065371202", "減税がなければ値上がりしていた分、恩恵はある"),
+    ],
+    "consumption-tax-cut-finance-welfare": [
+        ("https://x.com/Culena0/status/2085897628005650517", "社会保障の削減が先ではないか"),
+        ("https://x.com/Yan0321Asa/status/2086480295843504503", "財源論より歳出の使い道を議論すべき"),
+    ],
+    "consumption-tax-cut-alternatives": [
+        ("https://x.com/fukmaru2020/status/2083093838630142393", "非課税の事業者には届かず給付の方が確実"),
+        ("https://x.com/gasnukiaccount/status/2094004743136063806", "給付は一時的、減税は恒久的な効果"),
+    ],
+    "consumption-tax-cut-business-burden": [
+        ("https://x.com/NobodyR01/status/2083849357380694468", "改修費の支援策がまだ議論されていない"),
+        ("https://x.com/koto_cat_/status/2081981547775995905", "増税の時は問題にならなかった話"),
+    ],
+    "consumption-tax-cut-political-trust": [
+        ("https://x.com/shigani_kisyain/status/2082021002566095151", "公約から実現までの遅さへの不満"),
+        ("https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560", "党内議論の報道のされ方に疑問"),
+    ],
+    "consumption-tax-cut-other": [
+        ("https://x.com/kawanashigaikot/status/2091675832569979076", "世論調査の聞き方が公平でないと指摘"),
+        ("https://x.com/KayoRabbit/status/2084228125450482119", "制度の説明が分かりにくいと指摘"),
+    ],
+}
+
+ISSUE_CARDS_CSS = """<style>
+#issue-cards .ic{border-top:2px solid #0F1A3D;padding:22px 0 30px;scroll-margin-top:64px}
+#issue-cards .ic:first-of-type{border-top:none;padding-top:0}
+#issue-cards .ic:target .ic-head h3{color:var(--accent)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+#issue-cards .ic-head h3{margin:0;font-size:21px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;color:#0F1A3D}
+#issue-cards .ic-head .cnt small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+#issue-cards .ic-back{display:inline-block;margin-top:16px;font-size:13px;font-weight:700}
+#issue-cards .hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:6px}
+#issue-cards .hermes-sample{min-width:0}
+#issue-cards .hermes-sample-meta{font-weight:800;display:block;margin-bottom:8px;font-size:14.5px}
+@media (max-width:640px){#issue-cards .hermes-samples{grid-template-columns:1fr}}
+</style>"""
+
+
+def issue_cards(public_theme: Path = PUBLIC_THEME) -> str:
+    """「論点ごとのX投稿」セクションを組み立てる（皇室典範と同じ位置・同じ形）。"""
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    if data.get("theme_id") != "consumption-tax-cut":
+        raise ValueError(f"消費税減税の公開JSONではありません: {public_theme}")
+    by_id = {issue["id"]: issue for issue in data["issues"]}
+    missing = set(ISSUE_CARDS_POSTS) - set(by_id)
+    if missing:
+        raise ValueError(f"論点IDが公開JSONに無い: {missing}")
+
+    cards = []
+    for iid, posts in sorted(ISSUE_CARDS_POSTS.items(), key=lambda kv: -by_id[kv[0]]["count"]):
+        issue = by_id[iid]
+        samples = "".join(
+            f'<div class="hermes-sample"><span class="hermes-sample-meta">{esc(label)}</span>'
+            f'{embed_html(url)}</div>'
+            for url, label in posts
+        )
+        cards.append(
+            f'<article class="ic" id="issue-{esc(iid)}">'
+            f'<div class="ic-head"><h3>{esc(issue["label"])}</h3>'
+            f'<span class="cnt">{issue["count"]}<small>件</small></span></div>'
+            f'<div class="hermes-samples">{samples}</div>'
+            f'<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article>'
+        )
+    return (
+        f'{ISSUE_CARDS_START}\n'
+        f'<section class="panel" id="issue-cards">{ISSUE_CARDS_CSS}'
+        f'<div class="panel-title"><h2>論点ごとのX投稿</h2></div>'
+        f'<p>それぞれの論点について、実際に投稿された2件を編集部が選んで載せています。'
+        f'ここでの選び方は、その論点全体の賛否の比率を表すものではありません。'
+        f'うまく表示されないときは、リンクからXで元の投稿を確認してください。</p>'
+        + "".join(cards)
+        + f'</section>\n{ISSUE_CARDS_END}'
     )
 
 
@@ -1052,15 +1157,20 @@ def build(
         flags=re.S,
     )
 
-    # --- 5. 潮目ウィジェットを外す ---------------------------------------
-    # 中身は「前回の収集回 × 今回の収集回」で決まり、このスクリプトは回の区別を持たない。
-    # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに貼り直すので、
-    # ここでは残っていれば必ず外す。外さないと古い比較が居座る。
-    marker = "<!-- TIDE_CARD_END --></section>"
-    if '<section class="update-dashboard"' in html and marker in html:
-        start = html.index('<section class="update-dashboard"')
-        end = html.index(marker) + len(marker)
-        html = html[:start] + html[end:]
+    # --- 5. 潮目ウィジェットの位置をそろえる -------------------------------
+    # 中身（前回の収集回×今回の収集回の比較）はこのスクリプトの管轄外で、
+    # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに
+    # 貼り直す。ここでは中身は作り直さず、既にあれば抜き出していったん外し、
+    # bukatsu-chiikiと同じ位置（claim-audit＝一次資料クイズの直前）へ戻す
+    # （オーナー指摘 2026-09-20。以前はexplainer-section跡地＝issue-cardsの後ろに
+    # 居座っていた）。
+    tide_marker = "<!-- TIDE_CARD_END --></section>"
+    existing_tide = ""
+    if '<section class="update-dashboard"' in html and tide_marker in html:
+        tide_start = html.index('<section class="update-dashboard"')
+        tide_end = html.index(tide_marker) + len(tide_marker)
+        existing_tide = html[tide_start:tide_end]
+        html = html[:tide_start] + html[tide_end:]
     # 潮目を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
     # 空行が増えていき、adapterの冪等性検査（2回目で差分なし）が通らない。
     # 次に来るのは、テンプレートに「6つの論点」セクションが残っている初回だけ
@@ -1070,6 +1180,10 @@ def build(
         r"\n\n\1",
         html,
     )
+    if existing_tide:
+        if CLAIM_START not in html:
+            raise SystemExit("潮目ウィジェットの貼り直し先（一次資料クイズのマーカー）が見つかりません")
+        html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
     # --- 6. 拡大モーダル（論点別図解は各論点パネルへ移設済み） -----------
     # 「6つの論点」解説カードは、山なみ図の各論点パネルと内容が重複するため
     # 起承転結の再構成（課題69）で削除した。画像は refresh_planet_section.py の
@@ -1094,13 +1208,26 @@ def build(
     vote_open_tag = vote_open.group(0)
 
     # --- 7. 投票セクション ---------------------------------------------
+    # 「このページの作り方」(article-trust) は、皇室典範と同じく投票セクションの
+    # 外（次のパネルの直前）に独立して置く。以前は投票への導入文に続けて
+    # 投票セクションの中へ差し込んでいたため、「あなたが一番気になる論点は？」と
+    # 「このページの作り方」が1つのパネルに同居していた（オーナー指摘 2026-09-20）。
+    # 既存のarticle-trustをそのまま抜き出して移す（trust_block()で作り直すと、
+    # apply_theme_trust.py が書き足す「収集・分類で分かったこと」が消える）。
+    if ARTICLE_TRUST_START in html and ARTICLE_TRUST_END in html:
+        ts = html.index(ARTICLE_TRUST_START)
+        te = html.index(ARTICLE_TRUST_END) + len(ARTICLE_TRUST_END)
+        existing_trust = html[ts:te]
+        html = html[:ts] + html[te:]
+    else:
+        existing_trust = trust_block(total, relevant, opinions, published_at, modified_at)
+
     vote_intro = (
         f'{vote_open_tag}<div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2>'
         "<span>SNSの声を見る前に</span></div>"
         "<p>2026年7月、物価高対策として食料品に対象を絞った消費税減税の議論が大詰めを迎えました。"
-        "「限定的で中途半端」という不満、「財源と社会保障はどうするのか」という懸念、"
-        "「そもそも値下げに反映されるのか」という疑問が同時に噴き出しています。</p>"
-        + trust_block(total, relevant, opinions, published_at, modified_at)
+        "「対象が限定的で中途半端だ」という不満に加え、財源や社会保障への影響を心配する声、"
+        "値下げが実際の価格に反映されるのかを疑う声も上がっています。</p>"
     )
     start = html.index(vote_open_tag)
     end = html.index('<div id="vote-step1">')
@@ -1108,6 +1235,15 @@ def build(
     html = html.replace(
         '<span class="step-num">2</span>副首都構想への賛否は？',
         '<span class="step-num">2</span>消費税減税への立場は？',
+    )
+
+    # 投票セクションを閉じた直後（次のパネルの直前）に独立して置く。
+    trust_anchor = html.index('<section class="panel" id="related-topics"')
+    html = (
+        html[:trust_anchor]
+        + existing_trust
+        + "\n\n"
+        + html[trust_anchor:]
     )
 
     # --- 8. アリーナ見出し・凡例 ---------------------------------------
@@ -1289,6 +1425,15 @@ def build(
     html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
+    # --- 17.5. 論点ごとのX投稿 -------------------------------------------
+    # CLAIM_AUDITと同じ「後付けの補完処理」。claim_auditの直後（CLAIM_END）に置く。
+    if ISSUE_CARDS_START in html and ISSUE_CARDS_END in html:
+        start = html.index(ISSUE_CARDS_START)
+        end = html.index(ISSUE_CARDS_END) + len(ISSUE_CARDS_END)
+        html = html[:start] + html[end:]
+    idx = html.index(ISSUE_CARDS_ANCHOR) + len(ISSUE_CARDS_ANCHOR)
+    html = html[:idx] + "\n\n" + issue_cards() + html[idx:]
+
     # --- 18. 何が、どこまで進んでいるのか／決まったこと・まだのこと ---------
     # CLAIM_AUDITと同じ「後付けの補完処理」。山なみ図（PLANET_SECTION_START）の
     # 直前に毎回そろえる。他9テーマと同じ`#bukatsu-background`＋`#bukatsu-check`型。
@@ -1355,6 +1500,24 @@ def verify(html: str, opinions: int) -> None:
         problems.append("図解の拡大モーダルが失われている")
     if '<aside class="article-trust"' not in html:
         problems.append("「このページの作り方」ブロックがない（他テーマと不揃いになる）")
+    elif '<section class="panel" id="vote-section"' in html:
+        # 皇室典範と同じく、投票セクション（あなたが一番気になる論点は？）の
+        # 外に独立して置くこと（2026-09-20オーナー指摘の再発防止）。
+        vote_start = html.index('<section class="panel" id="vote-section"')
+        vote_end = html.index("</section>", vote_start) + len("</section>")
+        trust_start = html.index('<aside class="article-trust"')
+        if vote_start < trust_start < vote_end:
+            problems.append(
+                "「このページの作り方」が投票セクションの中に同居している"
+                "（皇室典範と同じく、投票セクションの外に分けること）"
+            )
+    # 潮目ウィジェットがあるなら、bukatsu-chiikiと同じ位置（一次資料クイズの直前）か。
+    if '<section class="update-dashboard"' in html and CLAIM_START in html:
+        if html.index('<section class="update-dashboard"') > html.index(CLAIM_START):
+            problems.append(
+                "潮目ウィジェットが一次資料クイズより後ろにある"
+                "（bukatsu-chiikiと同じく、その直前に置くこと）"
+            )
     if 'id="related-theme-tracking"' not in html:
         problems.append("投票後の回遊カードのスクリプトがない")
 
@@ -1382,6 +1545,28 @@ def verify(html: str, opinions: int) -> None:
         ]
         if shown != expected:
             problems.append(f"突き合わせの件数が出所ファイルと合わない: {shown} != {expected}")
+
+    # 論点ごとのX投稿。マーカー1組・論点数分のカード・投稿2件ずつ・
+    # 一次資料クイズ（claim-audit）の直後にあるかを検査する。
+    if html.count(ISSUE_CARDS_START) != 1 or html.count(ISSUE_CARDS_END) != 1:
+        problems.append("論点ごとのX投稿のマーカーが1組でない")
+    ic_cards = len(re.findall(r'<article class="ic" id="issue-', html))
+    if ic_cards != len(ISSUE_CARDS_POSTS):
+        problems.append(f"論点ごとのX投稿のカードが{len(ISSUE_CARDS_POSTS)}枚でない: {ic_cards}枚")
+    ic_samples = len(re.findall(r'<div class="hermes-sample">', html))
+    expected_samples = sum(len(posts) for posts in ISSUE_CARDS_POSTS.values())
+    if ic_samples != expected_samples:
+        problems.append(f"論点ごとのX投稿の投稿数が{expected_samples}件でない: {ic_samples}件")
+    for posts in ISSUE_CARDS_POSTS.values():
+        for url, _label in posts:
+            if f'href="{url}"' not in html:
+                problems.append(f"論点ごとのX投稿: リンクが見つからない: {url}")
+    if (
+        ISSUE_CARDS_START in html
+        and CLAIM_END in html
+        and html.index(ISSUE_CARDS_START) < html.index(CLAIM_END)
+    ):
+        problems.append("論点ごとのX投稿が一次資料クイズより前にある（クイズの直後に置くこと）")
 
     # 何が、どこまで進んでいるのか／決まったこと・まだのこと。マーカー1組・
     # 見出し2つ・タイムライン・確認観点・出典が揃っているか（2026-09-18に
@@ -1505,6 +1690,11 @@ def main() -> int:
         help="「何が、どこまで進んでいるのか」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
     )
     parser.add_argument(
+        "--issue-cards-only",
+        action="store_true",
+        help="「論点ごとのX投稿」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
+    )
+    parser.add_argument(
         "--skip-issue-counts",
         action="store_true",
         help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
@@ -1540,6 +1730,19 @@ def main() -> int:
         html = html[:idx] + background_context() + "\n\n" + html[idx:]
         page.write_text(html, encoding="utf-8")
         print(f"updated background context in {page}")
+        return 0
+
+    if args.issue_cards_only:
+        page = args.output_html
+        html = page.read_text(encoding="utf-8")
+        if ISSUE_CARDS_START in html and ISSUE_CARDS_END in html:
+            start = html.index(ISSUE_CARDS_START)
+            end = html.index(ISSUE_CARDS_END) + len(ISSUE_CARDS_END)
+            html = html[:start] + html[end:]
+        idx = html.index(ISSUE_CARDS_ANCHOR) + len(ISSUE_CARDS_ANCHOR)
+        html = html[:idx] + "\n\n" + issue_cards() + html[idx:]
+        page.write_text(html, encoding="utf-8")
+        print(f"updated issue cards in {page}")
         return 0
 
     if args.conditions_only:

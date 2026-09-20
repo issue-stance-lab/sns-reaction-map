@@ -129,6 +129,8 @@ TIDE_CSS = """
 .tide-slope-line{fill:none;stroke-width:5;stroke-linecap:round}.tide-slope-point{stroke:#fff;stroke-width:3}
 .tide-slope-line.series-0{stroke:#10b981}.tide-slope-line.series-1{stroke:#f59e0b}.tide-slope-line.series-2{stroke:#ef476f}.tide-slope-line.series-3{stroke:#64748b}
 .tide-slope-point.series-0{fill:#10b981}.tide-slope-point.series-1{fill:#f59e0b}.tide-slope-point.series-2{fill:#ef476f}.tide-slope-point.series-3{fill:#64748b}
+.tide-slope-line.series-4{stroke:#3b82f6}.tide-slope-line.series-5{stroke:#8b5cf6}
+.tide-slope-point.series-4{fill:#3b82f6}.tide-slope-point.series-5{fill:#8b5cf6}
 .tide-mobile-rows{display:none}.tide-widget-note{margin:4px 0 0;padding-top:14px;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.7}
 .tide-mobile-row{padding:14px 0;border-bottom:1px solid #e4e9f1}.tide-mobile-row:last-child{border-bottom:0}.tide-mobile-head{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:900}
 .tide-mobile-values{margin-top:5px;color:#465873;font-size:13px;font-weight:800}.tide-mobile-bars{display:grid;gap:5px;margin-top:9px}.tide-mobile-bar{height:8px;border-radius:999px;background:#e5eaf1;overflow:hidden}.tide-mobile-bar span{display:block;height:100%;border-radius:inherit}.tide-mobile-bar.previous span{background:#a8b4c5}.tide-mobile-bar.current span{background:#315bd8}
@@ -181,22 +183,35 @@ TIDE_WIDGET_JS = r"""
     svgGroup.replaceChildren();
     mobileRows.replaceChildren();
 
+    const resolveLabelYs = rawYs => {
+      const minGap = 34;
+      const order = rawYs.map((_, i) => i).sort((a, b) => rawYs[a] - rawYs[b]);
+      const resolved = rawYs.slice();
+      for (let k = 1; k < order.length; k++) {
+        const gap = resolved[order[k]] - resolved[order[k - 1]];
+        if (gap < minGap) resolved[order[k]] = resolved[order[k - 1]] + minGap;
+      }
+      return resolved;
+    };
+    const y1s = data.rows.map(row => yFor(row.previous, data.max));
+    const y2s = data.rows.map((row, index) => y1s[index] + (yFor(row.current, data.max) - y1s[index]) * progress);
+    const y1Labels = resolveLabelYs(y1s);
+    const y2Labels = resolveLabelYs(y2s);
     data.rows.forEach((row, index) => {
-      const y1 = yFor(row.previous, data.max);
-      const y2Target = yFor(row.current, data.max);
-      const y2 = y1 + (y2Target - y1) * progress;
+      const y1 = y1s[index];
+      const y2 = y2s[index];
+      const y1Label = y1Labels[index];
+      const y2Label = y2Labels[index];
       const shown = row.previous + (row.current - row.previous) * progress;
       const shownDelta = shown - row.previous;
       const seriesClass = `series-${index}`;
-
       svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
       svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
       svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2+17, class:"tide-slope-value"}, signed(shownDelta)));
-
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label+17, class:"tide-slope-value"}, signed(shownDelta)));
       const mobile = document.createElement("article");
       mobile.className = "tide-mobile-row";
       mobile.innerHTML =
@@ -479,6 +494,92 @@ def tweet_sample(row: dict[str, Any], detail_label: str) -> str:
     )
 
 
+# 論点ID・アイコンはconfigs/planet/bukatsu-chiiki.yamlのissues:と揃える
+# （id・並び順はURLアンカー・投票互換のため変更禁止）。件数の多い順。
+X_POSTS_ISSUE_ORDER = [
+    ("教員の働き方", "kyoin", "🏫"),
+    ("制度・移行プロセス", "seido", "📋"),
+    ("教育的意義・機会", "kyoiku", "⭐"),
+    ("受け皿・指導者", "ukezara", "👤"),
+    ("費用・家庭負担", "hiyo", "💴"),
+    ("その他", "sonota", "💬"),
+    ("地域格差", "kakusa", "🗾"),
+]
+
+X_POSTS_CSS = """<style>
+#issue-cards .ic{border-top:2px solid #0F1A3D;padding:22px 0 30px;scroll-margin-top:64px}
+#issue-cards .ic + .ic{border-top-color:#DCE3EF}
+#issue-cards .ic:target .ic-head h3{color:var(--accent)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+#issue-cards .ic-head h3{margin:0;font-size:21px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;color:#0F1A3D}
+#issue-cards .ic-head .cnt small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+#issue-cards .ic-back{display:inline-block;margin-top:16px;font-size:13px;font-weight:700}
+</style>"""
+
+
+def x_post_sample(row: dict[str, Any], label: str) -> str:
+    """koshitsu-tenpakaiと同じ形（2026-09-20に編集部要約を外したもの）。ラベルと埋め込みのみ。"""
+    url = html.escape(str(row.get("url") or ""), quote=True)
+    handle = re.search(r"x\.com/([^/]+)/status/", str(row.get("url") or ""))
+    account = f"@{handle.group(1)}" if handle else "この投稿"
+    return (
+        '<div class="hermes-sample">'
+        f'<span class="hermes-sample-meta">{html.escape(label)}</span>'
+        '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
+        f'<a href="{url}">{account} の投稿をXで見る</a></blockquote>'
+        "</div>"
+    )
+
+
+def x_posts_panel(rows: list[dict[str, Any]]) -> str:
+    """「論点ごとのX投稿」節（koshitsu-tenpakaiと同型）。PLANET_SECTIONの外に置く。
+
+    代表投稿はREPRESENTATIVE_POSTSを優先し、収集の入れ替わり等でURLが現行データから
+    消えていればconfidence順のフォールバックに戻る（issue_panel()と同じロジック。
+    山なみでは使われなくなったissue_panel()自体は呼ばず、ロジックだけをここに複製する）。
+    """
+    cards = []
+    for issue, slug, icon in X_POSTS_ISSUE_ORDER:
+        group = [row for row in rows if classification(row).get("main_issue") == issue]
+        usable = [row for row in group if classification(row).get("article_usable") and row.get("url")]
+        candidates_by_url = {str(row["url"]): row for row in usable}
+        candidates = [
+            (candidates_by_url[url], label)
+            for url, label in REPRESENTATIVE_POSTS.get(issue, [])
+            if url in candidates_by_url
+        ]
+        fallback = sorted(
+            [row for row in usable if row not in [candidate[0] for candidate in candidates]],
+            key=lambda row: float(classification(row).get("confidence", 0)),
+            reverse=True,
+        )
+        fallback_samples = [
+            (row, ISSUE_STANCE_LABEL.get(str(classification(row).get("stance")), "投稿の視点"))
+            for row in fallback
+        ]
+        candidates = (candidates + fallback_samples)[:2]
+        samples = "".join(x_post_sample(row, label) for row, label in candidates)
+        cards.append(
+            f'<article class="ic" id="issue-bukatsu-chiiki-{slug}">'
+            f'<div class="ic-head"><h3>{icon} {html.escape(issue)}</h3>'
+            f'<span class="cnt">{len(group)}<small>件</small></span></div>'
+            f'<div class="hermes-samples">{samples}</div>'
+            '<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>'
+            "</article>"
+        )
+    return (
+        '<section class="panel" id="issue-cards">'
+        f"{X_POSTS_CSS}"
+        '<div class="panel-title"><h2>論点ごとのX投稿</h2></div>'
+        "<p>投稿の例は、それぞれの論点でよく見られる言い分を編集部がXから選びました。"
+        "地域移行全体への賛否を代表するものではありません。"
+        "うまく表示されないときは、リンク先のXで直接確認できます。</p>"
+        + "".join(cards) + "</section>"
+    )
+
+
 def summary_panel(rows: list[dict[str, Any]]) -> str:
     stance_counts = Counter(classification(row).get("stance") for row in rows)
     issue_counts = Counter(classification(row).get("main_issue") for row in rows)
@@ -554,25 +655,61 @@ def main() -> int:
     )
     page = replace_once(page, r'<div class="thirty-summary".*?</div>', summary, "30 second summary", flags=re.DOTALL)
 
-    # 山なみ（課題54）へ差し替えたページは、更新データ・SNS反応マップ（アリーナ）・
-    # 論点別内訳の3区間を #planet-block が引き継ぎ、区間ごと外している。
-    # ここを無条件で書こうとすると対象が見つからずエラーで止まる
-    # （定例更新のたびに失敗し、部活動の収集だけが止まる）。
-    # PLANET_SECTION_START の有無で区別し、山なみ側ではこの3区間を書かない。
+    # 山なみ（課題54）へ差し替えたページは、SNS反応マップ（アリーナ）・論点別内訳の
+    # 2区間を #planet-block が引き継ぎ、区間ごと外している。ここを無条件で書こうと
+    # すると対象が見つからずエラーで止まる（定例更新のたびに失敗し、部活動の収集だけが
+    # 止まる）。PLANET_SECTION_START の有無で区別し、山なみ側ではこの2区間を書かない。
+    #
+    # 潮目カード自体は山なみ側にも書く（2026-09-20まではここも丸ごとスキップしており、
+    # 「立場の変化」「論点の変化」タブが公開後は一度も更新されない状態だった。
+    # consumption-tax-cut・koshitsu-tenpakai等と同じく、PLANET_SECTIONの外
+    # （山を押しても書き換わらない区間）に置く）。
     planet_mode = "<!-- PLANET_SECTION_START -->" in page
-    if not planet_mode:
-        dashboard = f'<section class="update-dashboard" aria-label="更新データと世論の潮目">{card}</section>'
-        if '<section class="update-dashboard"' in page:
+    aria_label = "世論の潮目" if planet_mode else "更新データと世論の潮目"
+    dashboard = f'<section class="update-dashboard" aria-label="{aria_label}">{card}</section>'
+    if '<section class="update-dashboard"' in page:
+        page = replace_once(
+            page,
+            r'<section class="update-dashboard".*?<!-- TIDE_CARD_END --></section>',
+            dashboard,
+            "update dashboard",
+            flags=re.DOTALL,
+        )
+    elif planet_mode:
+        # 初回のみ。以後はすぐ上の分岐（既存のupdate-dashboard節を丸ごと置換）を通る。
+        page = replace_once(
+            page,
+            r"<!-- PLANET_SECTION_END -->",
+            f"<!-- PLANET_SECTION_END -->\n\n{dashboard}",
+            "planet tide dashboard (initial insertion)",
+        )
+    else:
+        page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
+        page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
+
+    if planet_mode:
+        # 「論点ごとのX投稿」（koshitsu-tenpakaiと同型）。山なみでは2026-09-20まで
+        # issue_panel()自体が丸ごとスキップされ、対応する入れ物が無かった。
+        # BUKATSU_AUDIT（一次資料照合）の直後、無ければPLANET_SECTION_END直後に置く。
+        x_posts = x_posts_panel(all_opinions)
+        if 'id="issue-cards"' in page:
             page = replace_once(
                 page,
-                r'<section class="update-dashboard".*?<!-- TIDE_CARD_END --></section>',
-                dashboard,
-                "update dashboard",
+                r'<section class="panel" id="issue-cards">.*?</section>',
+                x_posts,
+                "x posts panel",
                 flags=re.DOTALL,
             )
         else:
-            page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
-            page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
+            anchor = "<!-- BUKATSU_AUDIT_END -->" if "<!-- BUKATSU_AUDIT_END -->" in page else "<!-- PLANET_SECTION_END -->"
+            page = replace_once(
+                page,
+                re.escape(anchor),
+                f"{anchor}\n\n{x_posts}",
+                "x posts panel (initial insertion)",
+            )
+
+    if not planet_mode:
         page = replace_once(
             page,
             r'<div class="panel-title"><h2>(?:論点アリーナ|SNS反応マップ)</h2><span>.*?</span></div>',
