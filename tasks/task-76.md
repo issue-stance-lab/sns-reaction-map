@@ -1,10 +1,9 @@
-# 課題76: 山なみ10テーマの構成監査 — 一次資料照合の消失・Xシェアボタン欠落など
+# 課題76: 山なみ10テーマの構成監査 — 一次資料照合の消失など
 
 **登録日**: 2026-09-20
-**状態**: 未着手
-**優先度**: 高（一次資料照合セクションの消失とconstitutional-amendmentのXシェアボタン欠落は
-読者に実害があり、自動検査（verify_theme_page.py・verify_number_provenance.py・
-再生成可能性検査）をすべてすり抜けている）
+**状態**: 未着手（A-1は2026-09-20に実機検証のうえ「対応不要」と判明済み）
+**優先度**: 高（一次資料照合セクションの消失は読者に実害があり、自動検査
+（verify_theme_page.py・verify_number_provenance.py・再生成可能性検査）をすり抜けている）
 **関連**: 54（山なみ移行本体）/ 69（起承転結の再編、今回見つかった欠落の多くがこの過程で発生）/
 73（死んだデータ）/ 74（AIっぽい言い回し）
 
@@ -26,13 +25,33 @@
 
 ### A. 高優先度 — 機能が消えている（読者に実害）
 
-#### A-1. constitutional-amendment: 投票後の「Xでシェア」ボタンが存在しない
+#### A-1. 【2026-09-20 訂正・実害なしと判明】constitutional-amendmentの「Xでシェア」ボタン欠落は誤報だった
 
-投票完了画面に、他9テーマ全部にある「Xでシェア」ボタンが無い。`share-x-btn.js`は
-`<script>`で読み込まれているが、紐づく先の`id="share-x"`要素がページに1つも無い。
+**結論**: 静的HTMLのgrepだけで判定したのが誤りで、実際にブラウザで投票を完了させると
+問題なく「Xでシェア」ボタンが表示される。修正は不要。
 
-確認コマンド: `grep -c 'id="share-x"' docs/constitutional-amendment-reaction-map.html` → `0`
-（他テーマは全て1以上）
+**当初の誤診断**: 投票完了画面に、他9テーマ全部にある「Xでシェア」ボタンが無いと報告した
+（`grep -c 'id="share-x"' docs/constitutional-amendment-reaction-map.html` → `0`）。
+
+**実機検証で判明したこと**: `docs/topic-modern.js`（全10テーマ共通で読み込まれる）に
+`normalizeVoteResult()`という関数があり、`#vote-result`が投票完了で可視化されるのを
+`MutationObserver`で監視し、その場で「Xでシェア」ボタンが無ければ自動生成し、
+「投票をやり直す」ボタンの文言も統一している。constitutional-amendmentの投票結果コード
+（`<strong>あなたの選択</strong><p>「○○」を重視し、総合的には「○○」</p>`という形式）は、
+この`normalizeVoteResult()`が検出する定型パターンにちょうど一致するため、静的HTMLに
+`id="share-x"`が無くても、投票した瞬間にJSが補って正しく動く。
+
+ローカルの簡易HTTPサーバーで実際に投票を完了させ（Supabaseへの投票保存はCORSでブロックされる
+環境だったため、投票結果表示だけを直接再現）、ブラウザのJS実行で
+`document.getElementById('share-x')`が実在し、正しいX投稿リンク（UTM付き）と
+「𝕏 でシェア」の表示文言を持つことを確認した。**静的HTMLのgrepだけで「ボタンが無い」と
+判定したのが誤りだった**（[[feedback_verify_against_precedent]]・
+[[reference_repro_match_reported_env]]と同種の教訓——「コードを読んだだけ」ではなく
+実際に動かして確認する必要があった）。
+
+**対応**: 一度コードを追加してみたが、`topic-modern.js`側が独自にhrefを組み立て直すため
+二重管理になるだけで意味が無いと判明し、変更は入れずに元のコードへ戻した
+（作業ツリー`../isa-wt-task76-share-x`のstashを破棄）。
 
 #### A-2. 「一次資料照合」セクションが3テーマで中身ごと空
 
@@ -102,7 +121,8 @@
   修正版を確認
 - 投票欄の重複免責文言（課題74で3テーマ修正済みのもの）: 全10テーマで0件、再発なし
 - モバイル用CSS（`@media(max-width:720px)`）・投票完了後ボタンの存在: 全テーマにあり
-  （constitutional-amendmentのシェアボタンを除く。A-1参照）
+- constitutional-amendmentの「Xでシェア」ボタン: 静的HTMLには無いが、`topic-modern.js`の
+  自動補完で実際には正しく表示される（A-1参照、2026-09-20訂正）
 - `verify_number_provenance.py`・`verify_theme_page.py`・再生成可能性検査:
   11テーマ全てNG0件（2026-09-20時点で実行して確認）
 - モーダルのイベント委譲パターン（`closest('.explainer-card[data-img]')`）:
@@ -117,12 +137,8 @@
 優先度順に、専用の作業ツリーで1件（またはテーマ1つ）ずつ対応する。
 すべて標準検査4種・実機確認・本番反映まで行うこと。
 
-1. **A-1 constitutional-amendmentのXシェアボタン**: 他テーマ（例: fukushutoの
-   投票結果HTML生成箇所）を手本に、投票完了時の`innerHTML`へ`id="share-x"`の
-   リンクを追加する。このテーマは専用テンプレート（`constitutional-planet.template.html`）を
-   使うため、共有雛形の一括修正では直らない点に注意
-   （[[reference_shared_template_default_breaks_other_themes]]と同じ考え方で、
-   theme_id分岐が必要になる可能性がある）
+1. ~~A-1 constitutional-amendmentのXシェアボタン~~ 対応不要（2026-09-20、実機検証で
+   誤報と判明。A-1参照）
 2. **A-2 一次資料照合の復元**: 3テーマとも「山なみ変換前のコミット」
    （`constitutional-amendment`は`67e586a`の親、`bike-blue-ticket`は`00b693e`の親、
    `elderly-license-revocation`は`6813bf1`の親）に元のカード本文が残っているため、
