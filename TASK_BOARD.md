@@ -79,7 +79,7 @@
 ### 課題71: 海面より下（沈んだ大陸・地下水脈）のデータ品質を仕上げる
 **状態**: 未着手。検査の不具合2件目（沈んだ大陸単独テーマが検査対象から漏れる）を2026-09-20に修正、bike-blue-ticketにも(a)と同型の不一致を新規発見
 **優先度**: 中（`verify_ocean_layer.py` はCIに未接続のため公開は止まっていない）
-**次にすること**: constitutional-amendment・bike-blue-ticketの沈んだ大陸を実データで読み直し、machine_hitsを正典と再照合する
+**次にすること**: 発注書(configs/prompts/codex/20260920_ocean-layer-stale-hits.md)を別セッションへ渡し、2テーマの沈んだ大陸を読み直す
 **判断待ち**: 地下水脈が1本しかない4テーマへの対応（実データで追加作成するか、基準を見直すか）
 **関連テーマ**: constitutional-amendment / henoko-student-accident / koshitsu-tenpakai / school-nickname-ban / bike-blue-ticket
 **詳細**: [tasks/task-71.md](tasks/task-71.md)
