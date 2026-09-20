@@ -333,26 +333,37 @@ capabilities:
       論点ごとの固定リンク、「この論点を引用」ボタン（出典・年月・サンプル件数の定型文をコピー）。
       (b) テーマごとに「授業・ディベートで使う」節（賛成の理由3・反対の理由3・確かめる一次資料・印刷用ワークシート）。
       公開先URLは TASK_BOARD 課題51 の設計と合わせる
-    status: built
+    status: measuring
     priority: 1
     metric: >-
       GA4 参照元（chatgpt.com / perplexity.ai / gemini.google.com / copilot）のセッション数と、
       GSC の検索語（ディベート・探究・メリット デメリット）の表示回数・クリック
+    started_at: 2026-09-21
+    judge_at: 2026-10-19       # 公開（2026-09-21）から4週間
+    closed_at: null
+    reopen_when: null
     notes: >-
       2026-09-20 登録（TASK_BOARD 課題77、案1＋案2）。同日オーナーが採用し、発注書
       configs/prompts/20260920_growth-cite-and-search-structure.md（Part A=案1、Part B=案2）を作成。
-      公開は別途CEO承認。機械向けファイル（JSON・llms.txt）は
-      sitemap に載せず robots.txt でも塞がない（HTMLでないので noindex は付けられない。塞ぐとAIに読まれない）。
+      機械向けファイル（JSON・llms.txt）は sitemap に載せず robots.txt でも塞がない
+      （HTMLでないので noindex は付けられない。塞ぐとAIに読まれない）。
       JSONには投稿本文を含めない（公開済みの数字だけ）。
       2026-09-20 Part A（案1）を作業ツリー isa-wt-growth-cite-search・ブランチ
-      task/growth-cite-and-search-structure で実装完了（未コミット・未マージ・未公開）。
-      A-1〜A-4は実装・検証済み。A-5（GA4のAI参照元セッション表）はコード実装済みだが
-      .env が共有ツリーにしかないためここでは動作未確認（共有ツリーで --days 7 の確認が必要）。
+      task/growth-cite-and-search-structure で実装。品質監査（別セッション、
+      quality/reviews/2026-09-20-website-task77-parta.md）で ready_for_ceo（条件付き）
+      判定。条件2件（mainの取り込み・10ページ作り直し／副首都の論点画像復活を
+      CEO承認時に伝える）を実装セッションが解消し、2026-09-21 オーナー承認のうえ
+      release スキルで本番反映（マージ 68732e9、push 889b759..68732e9、CI・実機とも確認済み）。
+      A-5（GA4のAI参照元セッション表）は品質監査が共有ツリーで --details --days 28 を実行し、
+      chatgpt.com 経由5セッションを確認済み。
       設計変更点: A-3の論点アンカーは、issue-cardsが既に同じidを使う5テーマ
       （ai-copyright/bike-blue-ticket/bukatsu-chiiki/consumption-tax-cut/koshitsu-tenpakai）では
       新規に付けず既存idを再利用。山なみのライブ選択パネル（#panel）はdrawPanel()がland()の
       たびにinnerHTMLごと作り直すため、引用ボタンはテンプレートを編集せずMutationObserverで
-      外部から差し込む方式にした（テンプレート編集は論点画像差し込み処理の文字列一致を壊すため）
+      外部から差し込む方式にした（テンプレート編集は論点画像差し込み処理の文字列一致を壊すため）。
+      推奨修正（Part B着手前まででよい、品質監査より）: 同一ページ内でハッシュだけ変わる
+      hashchangeでは論点が切り替わらない。Part Bの内部リンク実装前に
+      window.addEventListener('hashchange', citeRestoreFromHash) を足すこと
 
   press-kit-embed:
     title: 報道・研究向け「引用パック」ページと埋め込み（iframe）
@@ -601,4 +612,11 @@ activity_log:
       cite-and-search-structure Part A（案1）を実装。公開JSON・catalogをdocs/data/へ写し（build_public_registry.pyが同時に書く）、docs/llms.txtを新設、
       公開10テーマの論点に固定リンク（id="issue-{id}"、issue-cards保有5テーマは既存idを再利用）、「この論点を引用」ボタン（論点の一覧・論点カード・山なみのライブ選択パネルの3箇所、MutationObserverで差し込み）を追加。
       GA4のAI参照元セッション表をfetch_ga4_metrics.pyへ追加（動作確認は共有ツリーで要実施）。standard 4検査・run_public_checks.py・新規テスト3ファイルいずれもNG0。未コミット・未マージ・未公開（CEO承認待ち）
+    related_capability: cite-and-search-structure
+  - date: 2026-09-21
+    type: site_improvement
+    detail: >-
+      cite-and-search-structure Part A（案1）を本番反映。品質監査（quality/reviews/2026-09-20-website-task77-parta.md）の
+      ready_for_ceo判定を受け、オーナー承認のうえ公開前2件（mainの取り込み・10ページ再生成／副首都の論点画像復活の申し送り）を
+      解消してreleaseスキルで反映（マージ68732e9、CI・実機確認OK）。built → measuring、judge_at 2026-10-19
     related_capability: cite-and-search-structure
