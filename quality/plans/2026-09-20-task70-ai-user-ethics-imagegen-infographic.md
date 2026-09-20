@@ -1,6 +1,6 @@
 # 課題70: AI「利用者モラル・倫理」ImageGen版
 
-- 状態: オーナー確認用。公開ページは未変更。
+- 状態: オーナー承認済み。AIテーマページの参照先を本画像へ変更。
 - 画像: `docs/images/topics/ai-copyright/ai-copyright-infographic-wide-moraru-v2.webp`（1916 × 821）
 - 作成方法: 公開中の `ai-copyright-infographic-wide-moraru.webp` を ImageGen 2.5 に読み込み、青白・紫の配色、スマートフォン、角丸カードをデザイン参照にした。文字は一次資料に照らして作り直した。
 

@@ -1,6 +1,6 @@
 # 課題70: AI「技術競争・AI推進」ImageGen版
 
-- 状態: オーナー確認用。公開ページは未変更。
+- 状態: オーナー承認済み。AIテーマページの参照先を本画像へ変更。
 - 画像: `docs/images/topics/ai-copyright/ai-copyright-infographic-wide-gijutsu-v2.webp`（1916 × 821）
 - 作成方法: 公開中の `ai-copyright-infographic-wide-gijutsu.webp` を ImageGen 2.5 に読み込み、青白の配色・ロケット・世界地図・カード構成を参照した。内容は一次資料で作り直した。
 

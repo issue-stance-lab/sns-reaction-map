@@ -1,6 +1,6 @@
 # 課題70: AI「学習データ・無断利用」図解 v2
 
-- 状態: オーナー確認用。公開ページは未変更。
+- 状態: オーナー承認済み。AIテーマページの参照先を本画像へ変更。
 - 画像: `docs/images/topics/ai-copyright/ai-copyright-infographic-wide-gakushu-v2.webp`
 - 制作: imagegen。既存の `gakushu.webp` をデザイン参照として使い、文言・構図を再生成。
 

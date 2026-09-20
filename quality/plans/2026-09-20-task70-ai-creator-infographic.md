@@ -1,6 +1,6 @@
 # 課題70: AI「クリエイター保護・権利」図解 v2
 
-- 状態: オーナー確認用。公開ページは未変更。
+- 状態: オーナー承認済み。AIテーマページの参照先を本画像へ変更。
 - 画像: `docs/images/topics/ai-copyright/ai-copyright-infographic-wide-creator-v2.webp`
 - 制作: imagegen。既存の creator 図解と、承認済みの学習データ v2 をデザイン参照に使用。
 

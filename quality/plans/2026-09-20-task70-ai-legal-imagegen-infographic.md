@@ -1,6 +1,6 @@
 # 課題70: AI「法制度・規制整備」ImageGen版
 
-- 状態: オーナー確認用。公開ページは未変更。
+- 状態: オーナー承認済み。AIテーマページの参照先を本画像へ変更。
 - 画像: `docs/images/topics/ai-copyright/ai-copyright-infographic-wide-hoseibi-v2.webp`（1916 × 821）
 - 作成方法: 公開中の `ai-copyright-infographic-wide-hoseibi.webp` を ImageGen 2.5 に読み込み、配色・天秤・左右の構図を参照した。内容は下記の一次資料で作り直した。
 
