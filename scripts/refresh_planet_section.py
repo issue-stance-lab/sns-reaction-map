@@ -300,12 +300,12 @@ def _inject_constitutional_landing_images(block: str, data: dict) -> str:
 # しか使われておらず、山なみの各論点パネルには一度も差し込まれていなかった。「その他」は
 # 図解を持たない。ラベルはARENA_LABELSと表記を揃える（既存カードのdata-altと同じ文言）。
 AI_COPYRIGHT_LANDING_IMAGE_BY_ISSUE_ID = {
-    "ai-copyright-learning-data": ("gakushu", "学習データ・無断利用"),
-    "ai-copyright-creator-rights": ("creator", "クリエイター保護・権利"),
-    "ai-copyright-legal-framework": ("hoseibi", "法制度・規制整備"),
-    "ai-copyright-tech-promotion": ("gijutsu", "技術競争・AI推進"),
-    "ai-copyright-user-ethics": ("moraru", "利用者モラル・倫理"),
-    "ai-copyright-generated-work-rights": ("seiseibutsu", "AI生成物の権利・創作性"),
+    "ai-copyright-learning-data": ("gakushu-v2", "学習データ・無断利用"),
+    "ai-copyright-creator-rights": ("creator-v2", "クリエイター保護・権利"),
+    "ai-copyright-legal-framework": ("hoseibi-v2", "法制度・規制整備"),
+    "ai-copyright-tech-promotion": ("gijutsu-v2", "技術競争・AI推進"),
+    "ai-copyright-user-ethics": ("moraru-v2", "利用者モラル・倫理"),
+    "ai-copyright-generated-work-rights": ("seiseibutsu-v2", "AI生成物の権利・創作性"),
 }
 
 

@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-19"
+updated_at: "2026-09-20"
 
 rules:
   required_for:
@@ -542,3 +542,23 @@ items:
     requested_at: "2026-09-19"
     decided_at: "2026-09-19"
     decision_note: "本対話の『現在の画像と差し替えて』を、承認済み5枚のページ画像差し替えと本番反映の承認として記録。"
+
+  - id: approval-20260920-001
+    department: engineering-data
+    action: website_publication
+    summary: "AIと著作権ページの論点画像6枚を承認済みのImageGen 2.5版へ差し替える"
+    reason: "オーナーが6枚を順に確認し、最後に『画像の差し替え』と指示したため"
+    risks:
+      - "課題70の全図解点検は継続中。点検完了まで図解をX投稿に添えない"
+    recommendation: approve
+    evidence:
+      - quality/plans/2026-09-20-task70-ai-learning-infographic.md
+      - quality/plans/2026-09-20-task70-ai-creator-infographic.md
+      - quality/plans/2026-09-20-task70-ai-legal-imagegen-infographic.md
+      - quality/plans/2026-09-20-task70-ai-tech-imagegen-infographic.md
+      - quality/plans/2026-09-20-task70-ai-user-ethics-imagegen-infographic.md
+      - quality/plans/2026-09-20-task70-ai-generated-work-imagegen-infographic.md
+    status: approved
+    requested_at: "2026-09-20"
+    decided_at: "2026-09-20"
+    decision_note: "本対話の『画像の差し替え』を、承認済み6枚のページ画像差し替えと本番反映の承認として記録。"

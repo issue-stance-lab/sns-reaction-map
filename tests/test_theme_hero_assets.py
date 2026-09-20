@@ -74,12 +74,18 @@ class ThemeHeroAssetTests(unittest.TestCase):
             self.assertEqual(image.size, (1536, 1024))
             self.assertEqual(image.format, "WEBP")
 
-    def test_existing_infographics_are_unchanged_in_the_page(self):
+    def test_ai_issue_panels_use_approved_infographics(self):
         html = PAGE.read_text(encoding="utf-8")
         infographic_sources = set(
-            re.findall(r'images/topics/ai-copyright/ai-copyright-infographic-wide-[a-z]+\.webp', html)
+            re.findall(r'images/topics/ai-copyright/ai-copyright-infographic-wide-[a-z]+(?:-v\d+)?\.webp', html)
         )
-        self.assertEqual(len(infographic_sources), 6)
+        expected = {
+            f"images/topics/ai-copyright/ai-copyright-infographic-wide-{slug}-v2.webp"
+            for slug in ("gakushu", "creator", "hoseibi", "gijutsu", "moraru", "seiseibutsu")
+        }
+        self.assertEqual(infographic_sources, expected)
+        for slug in ("gakushu", "creator", "hoseibi", "gijutsu", "moraru", "seiseibutsu"):
+            self.assertEqual(html.count(f'":"{slug}-v2"'), 1)
 
     def test_bike_page_uses_the_canonical_hero_and_keeps_protected_features(self):
         html = BIKE_PAGE.read_text(encoding="utf-8")
