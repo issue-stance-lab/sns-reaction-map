@@ -1157,15 +1157,20 @@ def build(
         flags=re.S,
     )
 
-    # --- 5. 潮目ウィジェットを外す ---------------------------------------
-    # 中身は「前回の収集回 × 今回の収集回」で決まり、このスクリプトは回の区別を持たない。
-    # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに貼り直すので、
-    # ここでは残っていれば必ず外す。外さないと古い比較が居座る。
-    marker = "<!-- TIDE_CARD_END --></section>"
-    if '<section class="update-dashboard"' in html and marker in html:
-        start = html.index('<section class="update-dashboard"')
-        end = html.index(marker) + len(marker)
-        html = html[:start] + html[end:]
+    # --- 5. 潮目ウィジェットの位置をそろえる -------------------------------
+    # 中身（前回の収集回×今回の収集回の比較）はこのスクリプトの管轄外で、
+    # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに
+    # 貼り直す。ここでは中身は作り直さず、既にあれば抜き出していったん外し、
+    # bukatsu-chiikiと同じ位置（claim-audit＝一次資料クイズの直前）へ戻す
+    # （オーナー指摘 2026-09-20。以前はexplainer-section跡地＝issue-cardsの後ろに
+    # 居座っていた）。
+    tide_marker = "<!-- TIDE_CARD_END --></section>"
+    existing_tide = ""
+    if '<section class="update-dashboard"' in html and tide_marker in html:
+        tide_start = html.index('<section class="update-dashboard"')
+        tide_end = html.index(tide_marker) + len(tide_marker)
+        existing_tide = html[tide_start:tide_end]
+        html = html[:tide_start] + html[tide_end:]
     # 潮目を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
     # 空行が増えていき、adapterの冪等性検査（2回目で差分なし）が通らない。
     # 次に来るのは、テンプレートに「6つの論点」セクションが残っている初回だけ
@@ -1175,6 +1180,10 @@ def build(
         r"\n\n\1",
         html,
     )
+    if existing_tide:
+        if CLAIM_START not in html:
+            raise SystemExit("潮目ウィジェットの貼り直し先（一次資料クイズのマーカー）が見つかりません")
+        html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
     # --- 6. 拡大モーダル（論点別図解は各論点パネルへ移設済み） -----------
     # 「6つの論点」解説カードは、山なみ図の各論点パネルと内容が重複するため
     # 起承転結の再構成（課題69）で削除した。画像は refresh_planet_section.py の
@@ -1501,6 +1510,13 @@ def verify(html: str, opinions: int) -> None:
             problems.append(
                 "「このページの作り方」が投票セクションの中に同居している"
                 "（皇室典範と同じく、投票セクションの外に分けること）"
+            )
+    # 潮目ウィジェットがあるなら、bukatsu-chiikiと同じ位置（一次資料クイズの直前）か。
+    if '<section class="update-dashboard"' in html and CLAIM_START in html:
+        if html.index('<section class="update-dashboard"') > html.index(CLAIM_START):
+            problems.append(
+                "潮目ウィジェットが一次資料クイズより後ろにある"
+                "（bukatsu-chiikiと同じく、その直前に置くこと）"
             )
     if 'id="related-theme-tracking"' not in html:
         problems.append("投票後の回遊カードのスクリプトがない")
