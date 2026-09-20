@@ -3,7 +3,7 @@ theme_id: ai-copyright
 title: 生成AIと著作権
 question: 生成AIによる著作物の利用・学習をどこまで認めるべきか
 source_label: Yahoo!リアルタイム検索
-show_unreviewed_note: true
+show_unreviewed_note: false
 
 stances:
   - key: 規制・制限強化支持
@@ -62,6 +62,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   クリエイター保護・権利:
     file: data/ai-copyright_issues-reread.json
     path: [creator_rights, buckets]
@@ -69,6 +70,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   その他:
     file: data/ai-copyright_issues-reread.json
     path: [other, buckets]
@@ -76,6 +78,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   AI生成物の権利・創作性:
     file: data/ai-copyright_issues-reread.json
     path: [generated_work_rights, buckets]
@@ -83,6 +86,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   技術競争・推進:
     file: data/ai-copyright_issues-reread.json
     path: [tech_promotion, buckets]
@@ -90,6 +94,7 @@ sub_issues:
     item_issue_field: main_issue
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
 
 geometry:
   min_area_pct: 2.5
