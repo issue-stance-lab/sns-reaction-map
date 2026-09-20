@@ -333,6 +333,10 @@ class RefreshTopicTests(unittest.TestCase):
             history = root / "social-samples/updates/topic/2026-08-04"
             self.assertFalse(history.exists())
 
+    @unittest.skipUnless(
+        (ROOT / "social-samples/takaichi_hermes_arena_classified.json").exists(),
+        "高市文春問題の非公開正典（2026-09-20にGit追跡から除外）が無い環境では回せない",
+    )
     def test_takaichi_adapter_preserves_vote_and_is_idempotent(self):
         source = json.loads(
             (ROOT / "social-samples/takaichi_hermes_arena_classified.json").read_text(encoding="utf-8")
