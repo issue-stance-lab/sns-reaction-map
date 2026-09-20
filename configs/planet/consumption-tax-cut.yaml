@@ -3,7 +3,7 @@ theme_id: consumption-tax-cut
 title: 消費税減税
 question: 消費税減税は何を対象に、どう実現すべきか
 source_label: Yahoo!リアルタイム検索
-show_unreviewed_note: true
+show_unreviewed_note: false
 
 stances:
   - key: 減税推進
@@ -66,24 +66,28 @@ sub_issues:
     items_path: [hani, items]
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   減税の効果:
     file: data/consumption-tax-cut_4issues-reread.json
     path: [kouka, buckets]
     items_path: [kouka, items]
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   給付など他策との比較:
     file: data/consumption-tax-cut_4issues-reread.json
     path: [kyufu, buckets]
     items_path: [kyufu, items]
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
   事業者の実務負担:
     file: data/consumption-tax-cut_4issues-reread.json
     path: [jigyosha, buckets]
     items_path: [jigyosha, items]
     coverage: full
     coverage_note: 編集部が投稿本文を1件ずつ読み、理由で分類した論点全件の記録
+    show_coverage_note: false
 
 geometry:
   min_area_pct: 2.5
