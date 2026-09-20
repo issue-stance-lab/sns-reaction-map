@@ -1,12 +1,11 @@
 # 課題74: 山なみ共通雛形のAIっぽい言い回し・AI帰属の誤りを残りテーマへ展開する
 
 **登録日**: 2026-09-20
-**状態**: 進行中（consumption-tax-cut／koshitsu-tenpakai／ai-copyright／bukatsu-chiiki
-対応済み、4テーマとも注記は非表示方式で統一。残り6テーマ: bike-blue-ticket・
-constitutional-amendment・elderly-license-revocation・fukushuto・
-henoko-student-accident・school-nickname-ban）
-**優先度**: 低〜中（CIは落ちていない。Cの「AI帰属の誤り」はai-copyrightで対応済み。
-残りはA・Bのみで、うちfukushutoは実際に読者へ表示されている＝優先度やや高）
+**状態**: A・Bは完了（2026-09-20、山なみ形式の全10テーマ＝takaichi以外すべて）。
+Cもai-copyright（読者表示あり）は対応済み、elderly-license-revocationは
+表示されていないため実害なし。残るのはD（8テーマ、別件・低優先度）のみ
+**優先度**: 低（AとBは全テーマで解消。Cの実害があった箇所も解消済み。
+残るDは読みやすさの問題で実害なし）
 
 ## 何が起きたか
 
@@ -25,13 +24,16 @@ consumption-tax-cutは、共有雛形の既定文言そのものは変更せず�
 
 ### A・B: 論点の内訳を開いたときの注記とボタン文言（`planet-prototype.template.html`由来）
 
-| 残存箇所 | 現在の文言 | 対応状況 |
+| 残存箇所 | 旧文言 | 対応状況 |
 |---|---|---|
-| 戻るボタン | 「← 全体へ戻る（Esc）」 | 「← 論点の一覧へ戻る（Esc）」に統一。consumption-tax-cut・koshitsu-tenpakai・bukatsu-chiiki・ai-copyrightで対応済み |
-| 未読論点の注記 | 「AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。」 | 対応済みの4テーマとも`show_unreviewed_note: false`で注記自体を非表示にする方式に統一（ai-copyrightは当初、注記を残したまま文言だけ差し替える方式で対応したが、2026-09-20にオーナー指摘で非表示方式へ変更） |
+| 戻るボタン | 「← 全体へ戻る（Esc）」 | 「← 論点の一覧へ戻る（Esc）」に統一。**全10テーマ（takaichi以外）で対応済み**（2026-09-20完了） |
+| 未読論点の注記 | 「AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。」 | **全10テーマ（takaichi以外）で`show_unreviewed_note: false`により非表示化済み**（2026-09-20完了。ai-copyrightは当初、文言だけ差し替える方式で着手したが、オーナー指摘で非表示方式へ変更し、他テーマと統一） |
 
-残存テーマ（戻るボタン・注記とも未対応）: bike-blue-ticket / constitutional-amendment /
-elderly-license-revocation / fukushuto / henoko-student-accident / school-nickname-ban（6テーマ）
+残存テーマ: なし。bike-blue-ticket・constitutional-amendment・elderly-license-revocation・
+fukushuto・henoko-student-accident・school-nickname-banの6テーマも2026-09-20に対応完了
+（`task/task74-remaining-6-themes`）。constitutional-amendmentは専用テンプレート
+（`constitutional-planet.template.html`）だが、`render_page()`の文字列置換は
+テンプレート本文に対して行うため、同じ`theme_id`分岐で問題なく反映できた。
 
 ### C: 「この論点の全件をAIが本文再読した」（`configs/planet/{テーマ}.yaml`の`coverage_note`）
 
@@ -44,7 +46,11 @@ elderly-license-revocation / fukushuto / henoko-student-accident / school-nickna
 | テーマ | 読者への表示 |
 |---|---|
 | **ai-copyright** | 対応済み（2026-09-20。文言も編集部作業として書き直した上で、最終的に`show_coverage_note: false`で非表示に） |
-| elderly-license-revocation | 表示されていない（`show_coverage_note: false`のため実害なし。文言は誤ったまま未対応） |
+| elderly-license-revocation | 表示されていない（`show_coverage_note: false`のため実害なし。文言「この論点の全件をAIが本文再読した既存成果」は誤ったまま未対応。非表示のため優先度は低いまま） |
+
+**なお**、残り6テーマの`coverage_note`はもともと編集部作業として正しく書かれていたが、
+2026-09-20に全て`show_coverage_note: false`へ変更し、対応済みの4テーマと表示を統一した
+（文言の正しさとは別に、この種の注記自体を出さない方針にオーナーが揃えたため）。
 
 ### D: 「資料にしかない話を見る」ボックスの説明文（課題73調査時に発見済み、今回のオーナー指摘とは別件）
 
@@ -80,19 +86,13 @@ consumption-tax-cutで確立した手順をテーマごとに繰り返す。
 
 ## 次にすること
 
-残り6テーマ（bike-blue-ticket・constitutional-amendment・elderly-license-revocation・
-fukushuto・henoko-student-accident・school-nickname-ban）はA・Bのみが対象（Cのai-copyright
-は対応済み）。このうち**fukushuto**はshow_unreviewed_noteが既定のtrueで、かつ未再読の論点が
-実在するため、「AIが自動でつけた区分をここに並べることはしません」がすでに読者へ表示されて
-いる（2026-09-20確認）。優先度はここがいちばん高い。残り5テーマは戻るボタンの文言のみで、
-実害はない。対応するときは、非表示方式（`show_unreviewed_note`/`show_coverage_note: false`）
-に統一する（後述のとおりオーナー指摘を踏まえて4テーマともこの方式に揃えた）。
-
-**表記の揺れは解消済み**: 当初、Bの直し方がconsumption-tax-cut・koshitsu-tenpakai・
-bukatsu-chiikiの非表示方式と、ai-copyrightの文言差し替え方式の2通りに分かれていたが、
-2026-09-20にオーナーから直接「この表記を削除」と指摘があり、ai-copyrightも非表示方式へ
-統一した（オーナー指摘の原文「言い訳がましい」とも整合）。今後の残り6テーマも非表示方式で
-揃えること。
+A・B・C（実害があった箇所）は全て解消済み。残るのはDのみ（8テーマ、`henoko-student-accident`
+除く：ai-copyright・bike-blue-ticket・bukatsu-chiiki・constitutional-amendment・
+elderly-license-revocation・fukushuto・koshitsu-tenpakai・school-nickname-ban）。
+Dは「資料にしかない話を見る」ボックスの読みにくい一文で、実害はない。優先度は低いままで
+急ぐ必要はないが、着手するときはconsumption-tax-cutのA・Bと同じ`theme_id`分岐方式でよい
+（`henoko-student-accident`の既存修正が実例）。**注意**: constitutional-amendmentは
+専用テンプレートのため、共有雛形をまとめて直しても反映されない。
 
 ## 進捗
 
@@ -103,4 +103,10 @@ bukatsu-chiikiの非表示方式と、ai-copyrightの文言差し替え方式の
   `show_unreviewed_note`/`show_coverage_note: false`）。文言差し替え用に追加していた
   `render_page()`のtheme_id分岐コードは不要になったため削除
 - 2026-09-20 bukatsu-chiiki対応（A・B、非表示方式。Bは元々3論点のみ表示状態だった）
-- 残り6テーマは未着手
+- 2026-09-20 残り6テーマ（bike-blue-ticket・constitutional-amendment・
+  elderly-license-revocation・fukushuto・henoko-student-accident・school-nickname-ban）に
+  A・Bを一括対応（オーナー指示「残り6テーマも同じ非表示方式で対応して」、
+  `task/task74-remaining-6-themes`）。これで山なみ形式の全10テーマ（takaichi以外）が
+  戻るボタン・未読論点の注記とも同じ方式に揃った。coverage_noteが既にあった6テーマ分も
+  `show_coverage_note: false`へ統一（wordingは元々正しかったため文言変更なし）
+- 残るのはD（8テーマ）のみ。低優先度のため未着手
