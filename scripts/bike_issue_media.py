@@ -90,7 +90,7 @@ def build_section(public: dict) -> str:
             f'<div class="hermes-sample"><span class="hermes-sample-meta">{esc(label)}</span>'
             f'<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
             f'<a href="https://x.com/{user}/status/{tweet_id}">@{user} の投稿をXで見る</a></blockquote>'
-            f'<p class="x-embed-fallback"><a href="https://x.com/{user}/status/{tweet_id}">@{user} の投稿をXで見る</a></p></div>'
+            f'<div class="x-embed-fallback"><a href="https://x.com/{user}/status/{tweet_id}">@{user} の投稿をXで見る</a></div></div>'
             for user, tweet_id, label in posts
         )
         cards.append(
@@ -101,9 +101,9 @@ def build_section(public: dict) -> str:
             '<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article>'
         )
     lead = (
-        "各論点でどんな声が上がっているか、編集部が代表的な投稿を選びました。"
-        "ここに挙げた投稿は考え方の一例で、全体の賛否の割合を表すものでは"
-        "ありません。埋め込みが表示されないときは、投稿へのリンクからXで見られます。"
+        "青切符をめぐって実際にどんな投稿があったか、論点ごとに編集部が2件ずつ選び"
+        "ました。全体の意見の割合を示すものではなく、あくまで論点の中身を具体的に"
+        "知るための例です。埋め込みが出ないときは、リンク先のXで本文を確認できます。"
     )
     return (
         f'<section class="panel" id="issue-cards">{CSS}'
