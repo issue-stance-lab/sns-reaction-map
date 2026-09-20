@@ -72,7 +72,7 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
     match = re.search(r"\[[\s\S]*\]", cleaned)
     if not match:
         raise ValueError("Hermes response did not contain a JSON array")
-    rows = json.loads(match.group(0))
+    rows = json.loads(match.group(0), strict=False)
     if not isinstance(rows, list) or len(rows) != expected:
         raise ValueError(f"expected {expected} classifications, got {len(rows) if isinstance(rows, list) else type(rows)}")
     rows.sort(key=lambda row: int(row.get("id", -1)))

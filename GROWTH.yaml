@@ -504,10 +504,10 @@ recurring:
       2026-07-09はURLなしリプライ3本実施（辺野古遺族/@narumita・憲法改正/@hashimoto_lo・生成AI著作権/@Henry66239746）。
       2026-07-26に生成AI著作権ページのSEOタイトル改善後、計測用UTM付き告知を投稿（https://x.com/sns_hannou_ma/status/2081234241497833523）。
 
-featured: constitutional-amendment   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
+featured: ai-copyright   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
-  updated_at: 2026-09-20
+  updated_at: 2026-09-21
   criteria: |
     - 公開テーマのうち意見300件以上を対象にする
     - THEMES.yaml の updated_at が新しい順に5件選び、1件目を「今週の注目テーマ」、
@@ -515,14 +515,14 @@ featured_questions:
     - 選定は scripts/refresh_featured_slots.py が自動で行い、
       実行のたびにこのファイルとページを同期する
   items:
+    - theme: constitutional-amendment
+      question: 現実の安全保障に合わせて改正するのか、平和主義と権力制限を守るのか？
     - theme: fukushuto
       question: 副首都、本当に必要？ 場所は大阪でいい？
     - theme: henoko-student-accident
       question: 事故の検証と教育の評価、どの論点を重く見る？
     - theme: koshitsu-tenpakai
       question: 皇族の人数と、皇位を継ぐ資格。二つを分けて読む。
-    - theme: ai-copyright
-      question: 創作の権利を守るため、生成AIにはどこまでルールが必要か？
 
 activity_log:
   # 計測中施策と並行して行った変更を記録する

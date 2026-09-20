@@ -588,6 +588,58 @@ def _inject_elderly_landing_images(block: str, data: dict) -> str:
     )
 
 
+# 生成AIの論点別「議論の中心」。現時点で最大論点になったことがある1件のみ登録
+# （他テーマのBIKE_CONCLUSION_BY_ISSUE_ID等と同じ形。最大論点が入れ替わったら
+# その論点のheadline/detailを追加すること。無いまま入れ替わるとSystemExitで止まる）。
+AI_COPYRIGHT_CONCLUSION_BY_ISSUE_ID = {
+    "ai-copyright-learning-data": {
+        "headline": "学習データの無断利用を、どこまで認めるのか",
+        "detail": "許諾なしの学習は権利侵害か、合法な技術利用かに議論が集中しています。",
+    },
+}
+
+
+def _sync_ai_copyright_method_text(html: str, data: dict) -> str:
+    """山なみ化後にビルダが飛ばす、論点別X投稿カードの件数・議論の中心・編集分析情報の母数を揃える。
+
+    build_ai_copyright_arena.py の build() は山なみ形式のページに対して
+    apply_background() だけを呼び、旧2D形式向けの書き換えを一切行わない設計
+    （課題54のガード）。そのため #issue-cards の件数バッジ（ai_copyright_issue_media.py
+    が初回生成した静的な数字）・ヒーローの「議論の中心」・編集・分析情報内の
+    収集件数説明は、この専用関数が無いと定期更新のたびに古いまま取り残される
+    （bukatsu-chiikiの調査条件文言と同型の失われ方）。
+    """
+    collected = data["totals"]["collected"]
+    opinions = data["totals"]["opinions"]
+
+    for issue in data["issues"]:
+        pattern = (
+            r'(id="issue-' + re.escape(issue["id"]) + r'"><div class="ic-head">'
+            r'<h3>[^<]*</h3><span class="cnt">)[\d,]+(<small>件</small></span>)'
+        )
+        html, count = re.subn(
+            pattern, lambda m, c=issue["count"]: f"{m[1]}{c}{m[2]}", html
+        )
+        if count != 1:
+            raise SystemExit(
+                f"論点ごとのX投稿カード件数の想定箇所数(1)と一致しません（ai-copyright・{issue['id']}）: {count}件"
+            )
+
+    html, count = re.subn(
+        r'(収集した)[\d,]+(件のうち、意見と判定した)[\d,]+(件を論点分析に表示しています)',
+        lambda m: f"{m[1]}{collected:,}{m[2]}{opinions:,}{m[3]}", html
+    )
+    if count != 1:
+        raise SystemExit(f"生成AIの収集方法説明の想定箇所数(1)と一致しません: {count}件")
+
+    top_item = _top_issue(data)
+    conclusion = AI_COPYRIGHT_CONCLUSION_BY_ISSUE_ID.get(top_item["id"])
+    if conclusion is None:
+        raise SystemExit(f"議論の中心: 最大論点「{top_item['id']}」にconclusionがありません（ai-copyright）")
+    html = _apply_thirty_summary(html, _thirty_summary_html(top_item, conclusion), "ai-copyright")
+    return html
+
+
 TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_landing_images,
     "consumption-tax-cut": _inject_ctc_landing_images,
@@ -605,6 +657,7 @@ TOPIC_METHOD_TEXT = {
     "school-nickname-ban": _sync_nickname_method_text,
     "fukushuto": _sync_fukushuto_method_text,
     "koshitsu-tenpakai": _sync_koshitsu_method_text,
+    "ai-copyright": _sync_ai_copyright_method_text,
 }
 
 
