@@ -168,13 +168,14 @@ CTC_LANDING_IMAGE_BY_ISSUE_ID = {
 }
 
 
-# bike-blue-ticketの論点ごとの図解画像（consumption-tax-cutと同じ形）。「その他」は図解を持たない。
+# bike-blue-ticketの論点ごとの図解画像（consumption-tax-cutと同じ形）。
 BIKE_LANDING_IMAGE_BY_ISSUE_ID = {
-    "bike-blue-ticket-enforcement-support": ("torishimari", "取締り強化賛成"),
-    "bike-blue-ticket-infrastructure-first": ("infra", "インフラ整備優先"),
-    "bike-blue-ticket-road-safety": ("sharido", "車道走行への不安"),
-    "bike-blue-ticket-license-requirement": ("menkyo", "免許制要求"),
-    "bike-blue-ticket-rule-ambiguity": ("ambiguity", "ルール曖昧・不信"),
+    "bike-blue-ticket-other": ("sonota-v2", "その他に見られた意見例"),
+    "bike-blue-ticket-enforcement-support": ("torishimari-v2", "取締り強化賛成"),
+    "bike-blue-ticket-infrastructure-first": ("infra-v2", "インフラ整備優先"),
+    "bike-blue-ticket-road-safety": ("sharido-v2", "車道走行への不安"),
+    "bike-blue-ticket-license-requirement": ("menkyo-v2", "免許制要求"),
+    "bike-blue-ticket-rule-ambiguity": ("ambiguity-v3", "ルール曖昧・不信"),
 }
 
 
