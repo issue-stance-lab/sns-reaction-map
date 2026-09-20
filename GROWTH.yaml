@@ -349,7 +349,7 @@ recurring:
     last_run: 2026-08-22
     procedure: kpi.snapshots に1行追加。scripts/fetch_growth_kpi.py で自動取得（人間依頼は自動取得失敗時のみ）
     needs_human: 自動取得が失敗した場合のみ、各管理画面の数値取得。OAuth再認証は必ず人間の操作が要る
-    notes: 2026-08-10に3つの取得元をすべて復旧させて再開。最新はweekly_users 9 / pageviews 90 / pages_per_session 3.750 / votes_total 15 / gsc_impressions 27 / gsc_clicks 1。x_followers のみ引き続き手動。**7/26から15日間、記録が取れていなかった。** 原因は(1)GA4・GSCのOAuthトークン失効（アプリの公開範囲が「テスト中」のため、Googleの仕様で7日ごとに強制失効する。恒久対策は同意画面を「本番」へ切り替えること。未実施）(2)投票取得の故障（2026-07-31のsecurity migrationで経路が消えていた。2026-08-10に修正済み）。取得元が生きているかは `python3 scripts/build_admin_dashboard.py` の「9. 数字の取得元の状態」で確認できる
+    notes: 2026-08-10に3つの取得元をすべて復旧させて再開。最新はweekly_users 9 / pageviews 90 / pages_per_session 3.750 / votes_total 15 / gsc_impressions 27 / gsc_clicks 1。x_followers のみ引き続き手動。**7/26から15日間、記録が取れていなかった。** 原因は(1)GA4・GSCのOAuthトークン失効（アプリの公開範囲が「テスト中」のため、Googleの仕様で7日ごとに強制失効する。恒久対策は同意画面を「本番」へ切り替えること。未実施）(2)投票取得の故障（2026-07-31のsecurity migrationで経路が消えていた。2026-08-10に修正済み）。取得元が生きているかは `python3 scripts/build_admin_dashboard.py` の「9. 数字の取得元の状態」で確認できる。**2026-09-20追記。取得スクリプトは実行した場所の直下の `.env` と `secrets/` を読む。この2つはGitに入れていないため作業ツリー（git worktree）には存在せず、作業ツリーで実行すると必ず「GA4_PROPERTY_ID is required」で落ちる。週次レビューが3週続けてGA4を「取得失敗」と記録した原因はこれで、OAuth失効ではない。取得は共有ツリー（issue-stance-aggregator 本体）で実行すること**
 
   x-profile:
     title: Xプロフィール・固定ポスト改善
