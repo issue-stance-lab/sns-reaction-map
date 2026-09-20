@@ -3,6 +3,7 @@ theme_id: fukushuto
 title: 副首都法案・副首都構想
 question: 副首都の必要性、制度の中身、候補地をどう考えるか
 source_label: Yahoo!リアルタイム検索
+show_unreviewed_note: false
 stances:
 - key: 法案賛成・推進
   label: 法案賛成・推進
@@ -55,26 +56,31 @@ sub_issues:
     path: [candidate_site, buckets]
     coverage: full
     coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+    show_coverage_note: false
   防災・災害:
     file: data/fukushuto_5issues-reread.json
     path: [disaster_prep, buckets]
     coverage: full
     coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+    show_coverage_note: false
   優先順位:
     file: data/fukushuto_5issues-reread.json
     path: [priority, buckets]
     coverage: full
     coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+    show_coverage_note: false
   その他:
     file: data/fukushuto_5issues-reread.json
     path: [other, buckets]
     coverage: full
     coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+    show_coverage_note: false
   費用・財源:
     file: data/fukushuto_5issues-reread.json
     path: [cost_funding, buckets]
     coverage: full
     coverage_note: 独立監査の再読記録と追加の本文読み直しを合わせて全件読了
+    show_coverage_note: false
 geometry:
   min_area_pct: 2.5
   elevation_k: 50

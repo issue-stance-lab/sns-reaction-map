@@ -1568,7 +1568,7 @@ function drawPanel(){
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
   const extras = document.getElementById("extras-" + it.id);
   if (extras) h += extras.innerHTML;
-  h += '<button class="back" id="back" type="button">← 全体へ戻る（Esc）</button>';
+  h += '<button class="back" id="back" type="button">← 論点の一覧へ戻る（Esc）</button>';
   p.innerHTML = h;
   document.getElementById("back").onclick = orbit;
   p.querySelectorAll(".issue-tabs button").forEach(b=>{
