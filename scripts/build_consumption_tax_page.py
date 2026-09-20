@@ -753,6 +753,107 @@ def write_claim_provenance(destination: Path | None = None) -> None:
 
 
 # ---------------------------------------------------------------------------
+# 論点ごとのX投稿
+#
+# 皇室典範（#issue-cards）と同じ位置（一次資料クイズの直後）・同じ簡潔な形。
+# 要約文は付けない。皇室典範は2026-09-20にオーナー指示で要約(hermes-sample-summary)を
+# 撤去済み（同じ文の反復が「質の低いコンテンツ」の兆候として審査対策上逆効果、と
+# x_embed.pyにも明記されている）。ラベルは編集部が短く言い換えたもので、要約ではない。
+# ---------------------------------------------------------------------------
+ISSUE_CARDS_START = "<!-- ISSUE_CARDS_START -->"
+ISSUE_CARDS_END = "<!-- ISSUE_CARDS_END -->"
+# claim_audit の直後（起承転結の並びで、一次資料クイズの次）に置く。
+ISSUE_CARDS_ANCHOR = CLAIM_END
+
+# 各論点で、具体的に違う角度から語っている実際の投稿を2件ずつ選んだ
+# （veins.json（地下水脈）と同じ基準＝要約だけで選ばず、本文を1件ずつ読んで選定。
+# 他セクションで既に使っている投稿とは重複させていない）。2026-09-20選定。
+ISSUE_CARDS_POSTS: dict[str, list[tuple[str, str]]] = {
+    "consumption-tax-cut-scope": [
+        ("https://x.com/siki2364/status/2084241343036219545", "一律減税でなければ意味がない"),
+        ("https://x.com/148pv9yuZKv7Hox/status/2086203743704637530", "一律は非現実的、まず食料品から実現を"),
+    ],
+    "consumption-tax-cut-effect": [
+        ("https://x.com/mina_713713/status/2091198301052055950", "対応が遅く物価高に追いつかない"),
+        ("https://x.com/longtallsagi/status/2093939866065371202", "減税がなければ値上がりしていた分、恩恵はある"),
+    ],
+    "consumption-tax-cut-finance-welfare": [
+        ("https://x.com/Culena0/status/2085897628005650517", "社会保障の削減が先ではないか"),
+        ("https://x.com/Yan0321Asa/status/2086480295843504503", "財源論より歳出の使い道を議論すべき"),
+    ],
+    "consumption-tax-cut-alternatives": [
+        ("https://x.com/fukmaru2020/status/2083093838630142393", "非課税の事業者には届かず給付の方が確実"),
+        ("https://x.com/gasnukiaccount/status/2094004743136063806", "給付は一時的、減税は恒久的な効果"),
+    ],
+    "consumption-tax-cut-business-burden": [
+        ("https://x.com/NobodyR01/status/2083849357380694468", "改修費の支援策がまだ議論されていない"),
+        ("https://x.com/koto_cat_/status/2081981547775995905", "増税の時は問題にならなかった話"),
+    ],
+    "consumption-tax-cut-political-trust": [
+        ("https://x.com/shigani_kisyain/status/2082021002566095151", "公約から実現までの遅さへの不満"),
+        ("https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560", "党内議論の報道のされ方に疑問"),
+    ],
+    "consumption-tax-cut-other": [
+        ("https://x.com/kawanashigaikot/status/2091675832569979076", "世論調査の聞き方が公平でないと指摘"),
+        ("https://x.com/KayoRabbit/status/2084228125450482119", "制度の説明が分かりにくいと指摘"),
+    ],
+}
+
+ISSUE_CARDS_CSS = """<style>
+#issue-cards .ic{border-top:2px solid #0F1A3D;padding:22px 0 30px;scroll-margin-top:64px}
+#issue-cards .ic:first-of-type{border-top:none;padding-top:0}
+#issue-cards .ic:target .ic-head h3{color:var(--accent)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+#issue-cards .ic-head h3{margin:0;font-size:21px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;color:#0F1A3D}
+#issue-cards .ic-head .cnt small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+#issue-cards .ic-back{display:inline-block;margin-top:16px;font-size:13px;font-weight:700}
+#issue-cards .hermes-samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:6px}
+#issue-cards .hermes-sample{min-width:0}
+#issue-cards .hermes-sample-meta{font-weight:800;display:block;margin-bottom:8px;font-size:14.5px}
+@media (max-width:640px){#issue-cards .hermes-samples{grid-template-columns:1fr}}
+</style>"""
+
+
+def issue_cards(public_theme: Path = PUBLIC_THEME) -> str:
+    """「論点ごとのX投稿」セクションを組み立てる（皇室典範と同じ位置・同じ形）。"""
+    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    if data.get("theme_id") != "consumption-tax-cut":
+        raise ValueError(f"消費税減税の公開JSONではありません: {public_theme}")
+    by_id = {issue["id"]: issue for issue in data["issues"]}
+    missing = set(ISSUE_CARDS_POSTS) - set(by_id)
+    if missing:
+        raise ValueError(f"論点IDが公開JSONに無い: {missing}")
+
+    cards = []
+    for iid, posts in sorted(ISSUE_CARDS_POSTS.items(), key=lambda kv: -by_id[kv[0]]["count"]):
+        issue = by_id[iid]
+        samples = "".join(
+            f'<div class="hermes-sample"><span class="hermes-sample-meta">{esc(label)}</span>'
+            f'{embed_html(url)}</div>'
+            for url, label in posts
+        )
+        cards.append(
+            f'<article class="ic" id="issue-{esc(iid)}">'
+            f'<div class="ic-head"><h3>{esc(issue["label"])}</h3>'
+            f'<span class="cnt">{issue["count"]}<small>件</small></span></div>'
+            f'<div class="hermes-samples">{samples}</div>'
+            f'<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article>'
+        )
+    return (
+        f'{ISSUE_CARDS_START}\n'
+        f'<section class="panel" id="issue-cards">{ISSUE_CARDS_CSS}'
+        f'<div class="panel-title"><h2>論点ごとのX投稿</h2></div>'
+        f'<p>それぞれの論点について、実際に投稿された2件を編集部が選んで載せています。'
+        f'ここでの選び方は、その論点全体の賛否の比率を表すものではありません。'
+        f'うまく表示されないときは、リンクからXで元の投稿を確認してください。</p>'
+        + "".join(cards)
+        + f'</section>\n{ISSUE_CARDS_END}'
+    )
+
+
+# ---------------------------------------------------------------------------
 # 何が、どこまで進んでいるのか／決まったこととまだのこと
 #
 # 山なみ変換（4b973a4、2026-09-14）で「この争点の背景」が消えたまま、
@@ -1289,6 +1390,15 @@ def build(
     html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
+    # --- 17.5. 論点ごとのX投稿 -------------------------------------------
+    # CLAIM_AUDITと同じ「後付けの補完処理」。claim_auditの直後（CLAIM_END）に置く。
+    if ISSUE_CARDS_START in html and ISSUE_CARDS_END in html:
+        start = html.index(ISSUE_CARDS_START)
+        end = html.index(ISSUE_CARDS_END) + len(ISSUE_CARDS_END)
+        html = html[:start] + html[end:]
+    idx = html.index(ISSUE_CARDS_ANCHOR) + len(ISSUE_CARDS_ANCHOR)
+    html = html[:idx] + "\n\n" + issue_cards() + html[idx:]
+
     # --- 18. 何が、どこまで進んでいるのか／決まったこと・まだのこと ---------
     # CLAIM_AUDITと同じ「後付けの補完処理」。山なみ図（PLANET_SECTION_START）の
     # 直前に毎回そろえる。他9テーマと同じ`#bukatsu-background`＋`#bukatsu-check`型。
@@ -1382,6 +1492,28 @@ def verify(html: str, opinions: int) -> None:
         ]
         if shown != expected:
             problems.append(f"突き合わせの件数が出所ファイルと合わない: {shown} != {expected}")
+
+    # 論点ごとのX投稿。マーカー1組・論点数分のカード・投稿2件ずつ・
+    # 一次資料クイズ（claim-audit）の直後にあるかを検査する。
+    if html.count(ISSUE_CARDS_START) != 1 or html.count(ISSUE_CARDS_END) != 1:
+        problems.append("論点ごとのX投稿のマーカーが1組でない")
+    ic_cards = len(re.findall(r'<article class="ic" id="issue-', html))
+    if ic_cards != len(ISSUE_CARDS_POSTS):
+        problems.append(f"論点ごとのX投稿のカードが{len(ISSUE_CARDS_POSTS)}枚でない: {ic_cards}枚")
+    ic_samples = len(re.findall(r'<div class="hermes-sample">', html))
+    expected_samples = sum(len(posts) for posts in ISSUE_CARDS_POSTS.values())
+    if ic_samples != expected_samples:
+        problems.append(f"論点ごとのX投稿の投稿数が{expected_samples}件でない: {ic_samples}件")
+    for posts in ISSUE_CARDS_POSTS.values():
+        for url, _label in posts:
+            if f'href="{url}"' not in html:
+                problems.append(f"論点ごとのX投稿: リンクが見つからない: {url}")
+    if (
+        ISSUE_CARDS_START in html
+        and CLAIM_END in html
+        and html.index(ISSUE_CARDS_START) < html.index(CLAIM_END)
+    ):
+        problems.append("論点ごとのX投稿が一次資料クイズより前にある（クイズの直後に置くこと）")
 
     # 何が、どこまで進んでいるのか／決まったこと・まだのこと。マーカー1組・
     # 見出し2つ・タイムライン・確認観点・出典が揃っているか（2026-09-18に
@@ -1505,6 +1637,11 @@ def main() -> int:
         help="「何が、どこまで進んでいるのか」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
     )
     parser.add_argument(
+        "--issue-cards-only",
+        action="store_true",
+        help="「論点ごとのX投稿」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
+    )
+    parser.add_argument(
         "--skip-issue-counts",
         action="store_true",
         help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
@@ -1540,6 +1677,19 @@ def main() -> int:
         html = html[:idx] + background_context() + "\n\n" + html[idx:]
         page.write_text(html, encoding="utf-8")
         print(f"updated background context in {page}")
+        return 0
+
+    if args.issue_cards_only:
+        page = args.output_html
+        html = page.read_text(encoding="utf-8")
+        if ISSUE_CARDS_START in html and ISSUE_CARDS_END in html:
+            start = html.index(ISSUE_CARDS_START)
+            end = html.index(ISSUE_CARDS_END) + len(ISSUE_CARDS_END)
+            html = html[:start] + html[end:]
+        idx = html.index(ISSUE_CARDS_ANCHOR) + len(ISSUE_CARDS_ANCHOR)
+        html = html[:idx] + "\n\n" + issue_cards() + html[idx:]
+        page.write_text(html, encoding="utf-8")
+        print(f"updated issue cards in {page}")
         return 0
 
     if args.conditions_only:
