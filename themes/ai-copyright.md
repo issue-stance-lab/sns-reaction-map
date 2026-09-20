@@ -31,3 +31,19 @@ CEO承認後、同更新回を累積正典と公開候補へ昇格。公開ペ�
 ## 2026-09-06 課題63：適用・公開確認完了
 
 取得情報339件を補完し、UTC取得期間6/22〜9/5と訂正履歴を本番確認。件数3,812・意見2,593は維持。旧6/27指定の履歴は残し、出所を `recovered_fetched_at_utc` とした。承認済み5テーマをmain `138dad2` へまとめて反映し、GitHub Pagesのbuild/deploy成功を確認。収集予定・公開更新日を進めず、旧回の修復として反映した。適用後バックアップ154ファイルの復元確認済み。[適用・公開結果](../quality/reviews/2026-09-06-repair-adoption.md)。
+
+## 2026-09-20 課題69型の定期収集・本番反映（8日超過分の解消）
+
+**収集**: Yahooリアルタイム検索478件を取得、重複10件を除く新規468件をHermes（kimi-k2.6）で分類。関連354件・意見272件。累積正典3,812→4,280件・意見2,593→2,865件へ統合。取得期間2026-06-22〜2026-09-20（`sample_period_source: recovered_fetched_at_utc`）。次回収集は9/27。
+
+**分類器のバグを発見・修正**: `classify_aicopyright_arena_hermes.py` の `parse_response()` が468件中180件目で停止（`json.loads()` の既定 `strict=True` が、投稿本文のハイライトマーカー `\tSTART\t...\tEND\t` 由来の生タブ文字をHermesが要約・理由へそのまま引用した際に拒否）。`strict=False` へ変更し、`--resume` で残り288件を再分類して解消。分類基準・プロンプト・taxonomyは無変更。
+
+**「語られていない争点」4件の母数更新**: 新規272件（意見）を各争点の検索語（廃棄|除去請求／パブリシティ／電子透かし|C2PA|来歴／robots.txt|クローラ|オプトアウト）で再検索し、新規の一致なしを確認（関連投稿全体でも1件のみヒットしたが意見でなく別文脈のため対象外）。母数を2593→2865へ更新（`data/verification/ai-copyright-sunk-continents.json`）。編集再読5論点はいずれも未読率10%前後で上限40%に余裕があり、追い読みは不要と判断。
+
+**山なみ区画の外にあるのに件数を持つ箇所を発見・解消**（他テーマと同型の見落とし）: 「論点ごとのX投稿」（`#issue-cards`）の件数バッジ・ヒーローの「議論の中心」・「編集・分析情報」内の収集件数説明文が、`build_ai_copyright_arena.py` の山なみ移行後ガード（山なみページには`apply_background()`以外の書き換えを行わない設計）の対象外のまま初回変換以来更新されていなかった。`refresh_planet_section.py` に `_sync_ai_copyright_method_text()` を新設し `TOPIC_METHOD_TEXT` へ登録して解消。あわせて `number_provenance.exclude_selectors` に `note` が無く「本文確認後に追加された投稿N件」の注記が説明できない数字として検出されていた不具合も解消（他テーマと同型）。山なみでは無害・未使用のアリーナデータJS（`docs/ai-copyright-arena-data.js`）も正典追従が漏れており `test_published_page_matches_canonical` が失敗、`build_ai_copyright_arena.py`（`--skip-issue-counts`のみ、`--public-counts-only`ではない）を実行して解消。
+
+**検査・確認**: 標準4検査（`verify_theme_page.py`／`verify_number_provenance.py`／`verify_themes_yaml.py`／`verify_update_provenance.py`）・unittest 988件・`run_public_checks.py`・`verify_top_page.py --allow-overdue-collect`いずれもNG0件（elderly-license-revocationの期限超過NGのみ残るが本テーマと無関係の既知の状態）。ローカルサーバーでデスクトップ・375px幅とも実機確認（意見数・議論の中心・論点別内訳・論点ごとのX投稿・編集分析情報の件数、コンソールエラー0件、横スクロールなし）。
+
+**note記事の更新要否**: 前回公開時（意見2593件）との比較で、スタンス・論点とも比率変化は最大0.5pt。更新不要と判断しスキップ。
+
+保全（バックアップ・復元確認・資産台帳再生成）まで完了。作業ツリー `../isa-wt-ai-copyright-20260920`。

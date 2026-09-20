@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-20"
+updated_at: "2026-09-21"
 
 rules:
   required_for:
@@ -606,3 +606,36 @@ items:
       6d4d8e28b872b1d6dbb1d1e49acfbad851c4504bb9ae6affca043ddbf7818a61。
       標準検査（verify_theme_page/verify_number_provenance/verify_page_originality/
       verify_top_page/validate_theme_seo/unittest 986件）すべてNG無し。
+
+  - id: approval-20260921-001
+    department: engineering-growth
+    action: website_publication
+    summary: "課題77 Part A（案1）: AI引用・検索向けの機械可読データ・論点固定リンク・引用ボタンを公開10テーマへ本番反映する"
+    reason: "オーナーが案1+2の実装を承認（2026-09-20）。品質監査（別セッション）でready_for_ceo（条件付き）と判定され、オーナーが公開を承認した（本対話）"
+    risks:
+      - "副首都ページの論点画像7枚が、9/20の別の反映（課題74・134a6a0）で本番から脱落したままだったところ、本件の10ページ再生成で副産物として復活する。画像自体は課題70でオーナーが承認済みのもの。脱落経路そのものの再発防止は課題80として別途対応する"
+      - "AI経由の来訪がどれだけ増えるかは未知数（公開前のGA4実測は28日でchatgpt.com経由5セッションのみ）"
+      - "llms.txtはllmstxt.orgの慣例であり標準化されたものではない"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-09-20-website-task77-parta.md
+      - configs/prompts/20260920_growth-cite-and-search-structure.md
+      - tasks/task-77.md
+      - tasks/task-80.md
+    status: approved
+    requested_at: "2026-09-20"
+    decided_at: "2026-09-21"
+    decision_note: "本対話の『課題77 Part A は品質監査で ready_for_ceo。公開を承認する』を承認として記録。副首都の論点画像復活は本記録で開示。"
+    completed_at: "2026-09-21"
+    result_note: >-
+      品質監査の「公開前にやること」2件（mainを取り込んで10ページを作り直し検査をやり直す／
+      副首都の論点画像復活をCEO承認時に伝える）を実装セッションが解消してから反映した。
+      main取り込みは課題79（fukushuto・koshitsu-tenpakaiへの調査条件ボックス追加）・
+      課題70（消費税減税の論点画像更新）と衝突なくマージ（ort戦略）。10ページ再生成後、
+      標準検査（verify_theme_page/verify_number_provenance/verify_top_page/
+      verify_public_registry --against-private/validate_theme_seo/unittest 1,007件/
+      run_public_checks.py）すべてNG無し（verify_top_pageの1件は本件と無関係な既知の
+      collect_at期限超過）。マージ 68732e9、push（889b759..68732e9）、CI
+      （公開ファイルの検査／Deploy to GitHub Pages とも success）、本番URL
+      （llms.txt・data/catalog.json・論点アンカー・引用ボタンJS・副首都の論点画像7枚・
+      調査条件ボックス）を確認。GROWTH.yaml built → measuring、judge_at 2026-10-19。
