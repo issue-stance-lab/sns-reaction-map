@@ -442,6 +442,10 @@ def japanese_date(value: str) -> str:
     return f"{int(year)}年{int(month)}月{int(day)}日"
 
 
+ARTICLE_TRUST_START = "<!-- ARTICLE_TRUST_START -->"
+ARTICLE_TRUST_END = "<!-- ARTICLE_TRUST_END -->"
+
+
 def trust_block(total: int, relevant: int, opinions: int, published_at: str, modified_at: str) -> str:
     """他テーマと同じ「このページの作り方」ブロック。
 
@@ -457,7 +461,7 @@ def trust_block(total: int, relevant: int, opinions: int, published_at: str, mod
     を実行して戻すこと。再生成可能性の検査（scripts/verify_builder_rebuildability.py）は
     consumption-tax-cut に build_consumption_tax_arena.py を使うため、ここは検査に出ない。
     """
-    return f"""<!-- ARTICLE_TRUST_START -->
+    return f"""{ARTICLE_TRUST_START}
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">
     <p class="article-trust-kicker">編集・分析情報</p>
@@ -477,7 +481,7 @@ def trust_block(total: int, relevant: int, opinions: int, published_at: str, mod
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
-<!-- ARTICLE_TRUST_END -->"""
+{ARTICLE_TRUST_END}"""
 
 
 def esc(text: str) -> str:
@@ -1195,13 +1199,26 @@ def build(
     vote_open_tag = vote_open.group(0)
 
     # --- 7. 投票セクション ---------------------------------------------
+    # 「このページの作り方」(article-trust) は、皇室典範と同じく投票セクションの
+    # 外（次のパネルの直前）に独立して置く。以前は投票への導入文に続けて
+    # 投票セクションの中へ差し込んでいたため、「あなたが一番気になる論点は？」と
+    # 「このページの作り方」が1つのパネルに同居していた（オーナー指摘 2026-09-20）。
+    # 既存のarticle-trustをそのまま抜き出して移す（trust_block()で作り直すと、
+    # apply_theme_trust.py が書き足す「収集・分類で分かったこと」が消える）。
+    if ARTICLE_TRUST_START in html and ARTICLE_TRUST_END in html:
+        ts = html.index(ARTICLE_TRUST_START)
+        te = html.index(ARTICLE_TRUST_END) + len(ARTICLE_TRUST_END)
+        existing_trust = html[ts:te]
+        html = html[:ts] + html[te:]
+    else:
+        existing_trust = trust_block(total, relevant, opinions, published_at, modified_at)
+
     vote_intro = (
         f'{vote_open_tag}<div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2>'
         "<span>SNSの声を見る前に</span></div>"
         "<p>2026年7月、物価高対策として食料品に対象を絞った消費税減税の議論が大詰めを迎えました。"
         "「対象が限定的で中途半端だ」という不満に加え、財源や社会保障への影響を心配する声、"
         "値下げが実際の価格に反映されるのかを疑う声も上がっています。</p>"
-        + trust_block(total, relevant, opinions, published_at, modified_at)
     )
     start = html.index(vote_open_tag)
     end = html.index('<div id="vote-step1">')
@@ -1209,6 +1226,15 @@ def build(
     html = html.replace(
         '<span class="step-num">2</span>副首都構想への賛否は？',
         '<span class="step-num">2</span>消費税減税への立場は？',
+    )
+
+    # 投票セクションを閉じた直後（次のパネルの直前）に独立して置く。
+    trust_anchor = html.index('<section class="panel" id="related-topics"')
+    html = (
+        html[:trust_anchor]
+        + existing_trust
+        + "\n\n"
+        + html[trust_anchor:]
     )
 
     # --- 8. アリーナ見出し・凡例 ---------------------------------------
@@ -1465,6 +1491,17 @@ def verify(html: str, opinions: int) -> None:
         problems.append("図解の拡大モーダルが失われている")
     if '<aside class="article-trust"' not in html:
         problems.append("「このページの作り方」ブロックがない（他テーマと不揃いになる）")
+    elif '<section class="panel" id="vote-section"' in html:
+        # 皇室典範と同じく、投票セクション（あなたが一番気になる論点は？）の
+        # 外に独立して置くこと（2026-09-20オーナー指摘の再発防止）。
+        vote_start = html.index('<section class="panel" id="vote-section"')
+        vote_end = html.index("</section>", vote_start) + len("</section>")
+        trust_start = html.index('<aside class="article-trust"')
+        if vote_start < trust_start < vote_end:
+            problems.append(
+                "「このページの作り方」が投票セクションの中に同居している"
+                "（皇室典範と同じく、投票セクションの外に分けること）"
+            )
     if 'id="related-theme-tracking"' not in html:
         problems.append("投票後の回遊カードのスクリプトがない")
 
