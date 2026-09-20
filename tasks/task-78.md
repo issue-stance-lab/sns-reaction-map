@@ -1,6 +1,6 @@
 # 課題78: 高齢者免許返納・高市文春問題の正典がGit（公開リポジトリ）に追跡されたまま残っていた
 
-**状態**: 進行中（追跡は解消・外付けバックアップは確認済み。過去分の履歴削除は未着手）
+**状態**: 進行中（追跡解消・外付けバックアップ・main反映・CI緑化まで完了。過去分の履歴削除は未着手）
 **発見**: 2026-09-20（課題69系、高齢者免許返納の定期更新作業中に発見）
 **関連**: 69（定期データ更新）
 
@@ -44,7 +44,29 @@ koshitsu-tenpakai / bike-blue-ticket）はこの方針どおり`.gitignore`対�
    で復元検査OK。`company/data-restore-status.json`を更新
 6. `unittest discover`986件（4件skip）・`run_public_checks.py`いずれもNG0件
 
-このブランチはmainへのマージ・push（オーナー確認後）待ち。
+mainへマージ・push（`0f202ca`まで）。CIで検知された不具合と対応は次項。
+
+## 2026-09-20: マージ後にCIが落ちた（非公開データが無い環境を想定できていなかった）
+
+`run_public_checks.py`は手元（正典が復元済み）では全部OKだったが、push後のCI
+「公開ファイルの検査」が失敗した。別セッション（課題77担当）からの指摘で発覚。
+`test_refresh_topic.py`・`test_takaichi_adapter.py`・`test_issue_count_sync.py`の3件が
+`social-samples/takaichi_hermes_arena_classified.json`を直接読んでおり、非公開データの
+無い環境（CIと同じ）で`FileNotFoundError`になっていた（elderly-license-revocation側は
+既存の`test_elderly_adapter`除外で問題なし）。
+
+**この教訓は`release`スキルに既に書かれていた**（「同じ中身は同じ結果になるの保証ではない」）
+にもかかわらず、push前にクリーンな環境で検査していなかったために踏んだ。
+
+**対応（`task/canonical-gitignore-hotfix`、`0f202ca`）**:
+- `data/verification/takaichi.json`を新設し、`THEMES.yaml`に`verification_file`として登録。
+  他10テーマと同じく、`sync_issue_counts.py`が非公開正典を読まずに論点カード件数を
+  検算できるようにした（実際の検証能力は落とさず、公開データ経由に付け替えただけ）
+- `test_refresh_topic.py`のtakaichi専用テスト1件に`skipUnless`を追加
+- `test_takaichi_adapter.py`（takaichi専用ファイル）を`PRIVATE_DATA_TESTS`へ追加
+- **修正後、`git clone`した完全にクリーンな環境（非公開データ0件）で
+  `run_public_checks.py`を実際に実行して確認してからpush**。CI結果も
+  `gh run list`で緑を確認済み
 
 ## 残っている課題（未着手）
 
