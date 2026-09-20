@@ -67,6 +67,34 @@ class XPostViewsTests(unittest.TestCase):
         self.assertEqual(pending[TABLE_ID].timing, "due")
         self.assertEqual(pending[FOLLOW_ID].timing, "overdue")
 
+    def test_follow_heading_with_a_parenthesised_suffix_is_detected(self):
+        """見出しの「（投稿済み）」で会話フォローが検出から漏れていた（課題76）。"""
+        sample = f"""## リプライ実績 2026-08-10
+
+### 会話フォロー 2026-08-09（投稿済み）
+
+返信先: https://x.com/example/status/1
+
+自リプライURL: https://x.com/sns_hannou_ma/status/{FOLLOW_ID}
+
+投稿文:「会話の続き」
+"""
+        pending = x_post_views.find_pending(sample, self.now)
+        self.assertEqual({item.status_id for item in pending}, {FOLLOW_ID})
+        self.assertEqual(pending[0].kind, "会話フォロー")
+
+    def test_follow_without_own_url_is_not_listed(self):
+        """「（送信なし）」の節は自リプライURLが無いので計測対象にしない。"""
+        sample = """## リプライ実績 2026-08-10
+
+### 会話フォロー 2026-08-09（送信なし）
+
+先方のコメント: https://x.com/example/status/1
+
+判断: 返信しない。
+"""
+        self.assertEqual(x_post_views.find_pending(sample, self.now), [])
+
     def test_apply_preserves_headers_and_existing_values(self):
         updated = x_post_views.apply_measurements(
             SAMPLE,

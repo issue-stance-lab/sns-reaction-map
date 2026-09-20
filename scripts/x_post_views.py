@@ -25,7 +25,9 @@ JST = dt.timezone(dt.timedelta(hours=9))
 X_EPOCH_MS = 1_288_834_974_657
 
 _TOP_HEADING_RE = re.compile(r"^##\s+(.+?)\s+(\d{4}-\d{2}-\d{2})(?:（.*?）)?\s*$")
-_FOLLOW_HEADING_RE = re.compile(r"^###\s+会話フォロー\s+(\d{4}-\d{2}-\d{2})\s*$")
+# 見出しは「### 会話フォロー 2026-09-20（投稿済み）」のように括弧書きが付く。
+# 上の _TOP_HEADING_RE と同じく、括弧書きがあっても日付を読み取る（課題76）。
+_FOLLOW_HEADING_RE = re.compile(r"^###\s+会話フォロー\s+(\d{4}-\d{2}-\d{2})(?:（.*?）)?\s*$")
 _STATUS_RE = re.compile(r"https://x\.com/sns_hannou_ma/status/(\d+)")
 _NUMBERED_URL_RE = re.compile(r"(\d+)\s*=\s*https://x\.com/sns_hannou_ma/status/(\d+)")
 _URL_LABEL_RE = re.compile(r"^自リプライURL(?:\s+(\d+))?:\s*(.*)$")

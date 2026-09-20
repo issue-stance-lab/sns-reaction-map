@@ -75,6 +75,7 @@
 | 課題27: bukatsu-chiiki 画像生成 | manga_img（blocked） |
 | 課題28: 旧3テーマ v3化 | classify2d → page_v3 |
 | 課題46: 運用メモの公開停止 | Claude Code | 2026-08-13 | `docs/` 直下の運用メモ10件を `content/website/internal/` へ移動。verify_top_page.py に再発防止の検査を追加 |
+| 課題76: 会話フォローが計測リストに出ない | Claude Code | 2026-09-20 | `x_post_views.py` の見出し正規表現が `（投稿済み）` 等の括弧書きで外れていた。括弧を許容し、テスト2本を追加。取りこぼしていた会話フォロー4本を計測 |
 
 ---
 
