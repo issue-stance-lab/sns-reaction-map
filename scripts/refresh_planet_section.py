@@ -339,12 +339,34 @@ def _inject_bukatsu_landing_images(block: str, data: dict) -> str:
     )
 
 
+# elderly-license-revocationの論点ごとの図解画像（consumption-tax-cutと同じ形）。画像自体は
+# 旧デザインの「このテーマを読み解く、6つの論点」（#explainer-section、投票前の固定グリッド）
+# に既にあり、山なみの論点パネルには一度も差し込まれていなかった。他テーマと違い「その他」
+# （sonota）にも専用の図解が用意されているため、6論点すべてを対象にする（他テーマで
+# 「その他は図解を持たない」としているのは画像自体が無いための除外であって、方針ではない）。
+ELDERLY_LANDING_IMAGE_BY_ISSUE_ID = {
+    "elderly-license-revocation-safety": ("gizuka", "義務化・事故防止"),
+    "elderly-license-revocation-mobility-rights": ("chiho", "地方の足・移動権"),
+    "elderly-license-revocation-assessment": ("tekisei", "適性検査強化"),
+    "elderly-license-revocation-alternative-transport": ("infra", "代替交通整備"),
+    "elderly-license-revocation-voluntary-return": ("jishu", "自主返納支援"),
+    "elderly-license-revocation-other": ("sonota", "その他"),
+}
+
+
+def _inject_elderly_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "elderly-license-revocation", ELDERLY_LANDING_IMAGE_BY_ISSUE_ID, "elc"
+    )
+
+
 TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_landing_images,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,
     "constitutional-amendment": _inject_constitutional_landing_images,
     "ai-copyright": _inject_ai_copyright_landing_images,
+    "elderly-license-revocation": _inject_elderly_landing_images,
 }
 TOPIC_METHOD_TEXT = {
     "bukatsu-chiiki": _sync_bukatsu_method_text,
