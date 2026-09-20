@@ -81,10 +81,10 @@ class ThemeHeroAssetTests(unittest.TestCase):
         )
         expected = {
             f"images/topics/ai-copyright/ai-copyright-infographic-wide-{slug}-v2.webp"
-            for slug in ("gakushu", "creator", "hoseibi", "gijutsu", "moraru", "seiseibutsu")
+            for slug in ("gakushu", "creator", "hoseibi", "gijutsu", "moraru", "seiseibutsu", "sonota")
         }
         self.assertEqual(infographic_sources, expected)
-        for slug in ("gakushu", "creator", "hoseibi", "gijutsu", "moraru", "seiseibutsu"):
+        for slug in ("gakushu", "creator", "hoseibi", "gijutsu", "moraru", "seiseibutsu", "sonota"):
             self.assertEqual(html.count(f'":"{slug}-v2"'), 1)
 
     def test_bike_page_uses_the_canonical_hero_and_keeps_protected_features(self):

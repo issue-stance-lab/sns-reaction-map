@@ -1321,7 +1321,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-ai-copyright-other" tabindex="-1">
-      <h2>🤔 その他</h2>
+      <h2>🤔 その他</h2><div class="explainer-card landing-image" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-sonota-v2.webp" data-alt="その他"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-sonota-v2.webp" alt="論点図解：その他" loading="lazy"></div>
       <p class="sub">223件（8.6%）　山の高さ：強い表現12.9%</p>
       <div class="legend"><span><i style="background:#ff5426"></i>規制・制限強化支持 33件</span><span><i style="background:#64748b"></i>中立・情報 141件</span><span><i style="background:#075ef2"></i>推進・活用支持 49件</span></div>
       <div class="bar"><span style="width:14.8%;background:#ff5426;color:#ffffff">規制・制限強化支持</span><span style="width:63.2%;background:#64748b;color:#ffffff">中立・情報</span><span style="width:22.0%;background:#075ef2;color:#ffffff">推進・活用支持</span></div>
@@ -1775,7 +1775,7 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  const aicImgSlug = {"ai-copyright-learning-data":"gakushu-v2","ai-copyright-creator-rights":"creator-v2","ai-copyright-legal-framework":"hoseibi-v2","ai-copyright-tech-promotion":"gijutsu-v2","ai-copyright-user-ethics":"moraru-v2","ai-copyright-generated-work-rights":"seiseibutsu-v2"}[it.id];
+  const aicImgSlug = {"ai-copyright-learning-data":"gakushu-v2","ai-copyright-creator-rights":"creator-v2","ai-copyright-legal-framework":"hoseibi-v2","ai-copyright-tech-promotion":"gijutsu-v2","ai-copyright-user-ethics":"moraru-v2","ai-copyright-generated-work-rights":"seiseibutsu-v2","ai-copyright-other":"sonota-v2"}[it.id];
   const aicImgPath = aicImgSlug ? ('images/topics/ai-copyright/ai-copyright-infographic-wide-'+aicImgSlug+'.webp') : '';
   const aicImgHtml = aicImgSlug ? ('<div class="explainer-card landing-image" data-img="'+aicImgPath+'" data-alt="'+it.label+'">'
     +'<img src="'+aicImgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
