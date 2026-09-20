@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import re
 import sys
@@ -70,6 +71,48 @@ BUKATSU_RESEARCH_CONDITIONS_RE = re.compile(
 )
 
 
+def _top_issue(data: dict) -> dict:
+    """「その他」を除く最大論点を返す（議論の中心は具体的な論点だけを対象にする）。"""
+    return max((i for i in data["issues"] if i["key"] != "その他"), key=lambda i: int(i["count"]))
+
+
+def _thirty_summary_html(top_item: dict, conclusion: dict) -> str:
+    """ヒーロー直下の「議論の中心」カードを組み立てる（koshitsu-tenpakaiと同じ形）。"""
+    return (
+        '<div class="thirty-summary" aria-label="議論の中心">'
+        '<header class="thirty-summary-title"><h2>議論の中心</h2></header><ul>'
+        '<li class="conclusion-focus">'
+        f'<span class="conclusion-count"><b>{int(top_item["count"])}</b>件</span>'
+        f'<strong>{html.escape(str(conclusion["headline"]))}</strong>'
+        f'<span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span>'
+        "</li></ul></div>"
+    )
+
+
+def _apply_thirty_summary(page: str, summary_html: str, theme_label: str) -> str:
+    """既存の「議論の中心」があれば差し替え、無ければヒーローのlead直後に挿入する。"""
+    if '<div class="thirty-summary"' in page:
+        new_page, n = re.subn(
+            r'<div class="thirty-summary".*?</ul></div>',
+            summary_html,
+            page,
+            count=1,
+            flags=re.S,
+        )
+        if n != 1:
+            raise SystemExit(f"議論の中心の差し替えに失敗しました（{theme_label}）")
+        return new_page
+    new_page, n = re.subn(
+        r'(<p class="question-line">[^<]*</p>\s*<p class="lead">[^<]*</p>)',
+        lambda m: m.group(1) + summary_html,
+        page,
+        count=1,
+    )
+    if n != 1:
+        raise SystemExit(f"議論の中心の挿入位置（question-line直後のlead）が見つかりません（{theme_label}）")
+    return new_page
+
+
 def _sync_bukatsu_method_text(html: str, data: dict) -> str:
     """「調査条件」内の集計方法テキスト（累計N件・意見M件）と、収集件数・取得期間を揃える。
 
@@ -116,8 +159,34 @@ def _sync_elderly_method_text(html: str, data: dict) -> str:
     return new_html
 
 
+# 自転車の論点別「議論の中心」。「その他」を除く5論点ぶん用意し、最大論点が
+# 入れ替わっても書き直しが要らないようにしてある（koshitsu-tenpakaiと同じ考え方）。
+BIKE_CONCLUSION_BY_ISSUE_ID = {
+    "bike-blue-ticket-enforcement-support": {
+        "headline": "危険運転を減らすには、取締りを強めるべきか",
+        "detail": "歩道の暴走や信号無視への実害を挙げ、取締り強化を支持する声が最も集まりました。",
+    },
+    "bike-blue-ticket-infrastructure-first": {
+        "headline": "取締りより先に、走る場所を整えるべきか",
+        "detail": "対象や導入の順番に異議を唱え、走行空間の整備を優先すべきだという意見です。",
+    },
+    "bike-blue-ticket-rule-ambiguity": {
+        "headline": "取締りの運用は、信頼できるものなのか",
+        "detail": "反則金や基準の説明が曖昧だとして、警察の運用そのものを疑う声が集まっています。",
+    },
+    "bike-blue-ticket-license-requirement": {
+        "headline": "罰則だけで、ルールは身につくのか",
+        "detail": "青切符だけでは足りないとして、講習や免許制で学ばせるべきだという意見です。",
+    },
+    "bike-blue-ticket-road-safety": {
+        "headline": "車道は、安心して走れる場所なのか",
+        "detail": "走行空間が整わないまま車道通行を求められることへの不安が中心です。",
+    },
+}
+
+
 def _sync_bike_method_text(html: str, data: dict) -> str:
-    """山なみ化後に旧ビルダが飛ばす冒頭・調査条件の母数を揃える。"""
+    """山なみ化後に旧ビルダが飛ばす冒頭・調査条件の母数を揃え、議論の中心を差し戻す。"""
     collected = data["totals"]["collected"]
     opinions = data["totals"]["opinions"]
     other = next(issue["count"] for issue in data["issues"] if issue["key"] == "その他")
@@ -136,11 +205,45 @@ def _sync_bike_method_text(html: str, data: dict) -> str:
         lambda m: f"{m[1]}{collected}{m[2]}{data['sample_period']}", html)
     if count != 1:
         raise SystemExit(f"自転車の冒頭の調査条件が想定箇所数(1)と一致しません: {count}件")
+    top_item = _top_issue(data)
+    conclusion = BIKE_CONCLUSION_BY_ISSUE_ID.get(top_item["id"])
+    if conclusion is None:
+        raise SystemExit(f"議論の中心: 最大論点「{top_item['id']}」にconclusionがありません（bike-blue-ticket）")
+    html = _apply_thirty_summary(html, _thirty_summary_html(top_item, conclusion), "bike-blue-ticket")
     return html
 
 
+# 辺野古の論点別「議論の中心」。6論点全てに用意してある。
+HENOKO_CONCLUSION_BY_ISSUE_ID = {
+    "henoko-student-accident-safety": {
+        "headline": "何が事故を防げなかったのか",
+        "detail": "船の選定や引率体制など、安全管理の責任と説明を求める声が最も集まりました。",
+    },
+    "henoko-student-accident-base-politics": {
+        "headline": "この事故は、政治利用されているのか",
+        "detail": "活動団体・政党への批判と、批判する側への反論の両方が集まっています。",
+    },
+    "henoko-student-accident-public-response": {
+        "headline": "報道と行政の対応は、十分だったのか",
+        "detail": "取り上げ方の多寡や、行政・政党の説明責任を問う意見です。",
+    },
+    "henoko-student-accident-victim-dignity": {
+        "headline": "議論より先に、追悼を優先すべきではないか",
+        "detail": "犠牲者への配慮を欠いた議論の進め方を疑問視する声です。",
+    },
+    "henoko-student-accident-neutrality": {
+        "headline": "学校教育と政治活動は、どこで線を引くのか",
+        "detail": "教育の場と政治活動を分けるべきだという、中立性をめぐる意見です。",
+    },
+    "henoko-student-accident-peace-education": {
+        "headline": "平和教育は、萎縮すべきではないのか",
+        "detail": "危険な活動の見直しを求める声と、学ぶ機会を守るべきだという声の両方があります。",
+    },
+}
+
+
 def _sync_henoko_method_text(html: str, data: dict) -> str:
-    """「SNS投稿の収集方法」段落の集計件数を揃える。
+    """「SNS投稿の収集方法」段落の集計件数を揃え、議論の中心を差し戻す。
 
     「編集・分析情報」内の静的文で、build_section()の再生成対象（山なみ区間の外）
     にも sync_issue_counts.py の LEAD_RE/NOTE_RE（探す定型文が違う）にも掛からず、
@@ -153,7 +256,55 @@ def _sync_henoko_method_text(html: str, data: dict) -> str:
     new_html, n = pattern.subn(lambda m: f"{m[1]}{collected:,}{m[2]}{opinions:,}{m[3]}", html)
     if n != 1:
         raise SystemExit(f"「収集したN件のうち意見と判定したM件」の想定箇所数(1)と一致しません（henoko-student-accident）: {n}件")
+    top_item = _top_issue(data)
+    conclusion = HENOKO_CONCLUSION_BY_ISSUE_ID.get(top_item["id"])
+    if conclusion is None:
+        raise SystemExit(f"議論の中心: 最大論点「{top_item['id']}」にconclusionがありません（henoko-student-accident）")
+    new_html = _apply_thirty_summary(new_html, _thirty_summary_html(top_item, conclusion), "henoko-student-accident")
     return new_html
+
+
+# あだ名禁止の論点別「議論の中心」。6論点全てに用意してある。
+NICKNAME_CONCLUSION_BY_ISSUE_ID = {
+    "school-nickname-ban-uniform-rule": {
+        "headline": "一律に禁止して、本当に効果があるのか",
+        "detail": "禁止への違和感や、実効性・理由の説明を求める声が最も集まりました。",
+    },
+    "school-nickname-ban-psychological-safety": {
+        "headline": "禁止は、いじめから子どもを守れるのか",
+        "detail": "嫌な呼び名を避けたい思いと、教員の対応や被害の記憶をめぐる意見です。",
+    },
+    "school-nickname-ban-school-practice": {
+        "headline": "現場では、どう運用されているのか",
+        "detail": "学校での周知・指導の実際や、昔と今の呼び方の違いをめぐる意見です。",
+    },
+    "school-nickname-ban-naming-culture": {
+        "headline": "親しさを表す呼び方まで、失っていいのか",
+        "detail": "愛称のよさを評価しつつ、嫌な呼び名への対応は必要だという意見です。",
+    },
+    "school-nickname-ban-gender-consideration": {
+        "headline": "「さん付け」への統一は、必要なのか",
+        "detail": "敬称をそろえることへの賛成と違和感、両方の意見があります。",
+    },
+    "school-nickname-ban-individual-choice": {
+        "headline": "ルールより、本人の意思を優先すべきか",
+        "detail": "悪意の有無を見極め、本人の選択に委ねるべきだという意見です。",
+    },
+}
+
+
+def _sync_nickname_method_text(html: str, data: dict) -> str:
+    """ヒーロー直下に「議論の中心」を差し戻す。
+
+    school-nickname-banは山なみ変換時に旧「固定件数の要約」を削除したまま
+    （build_planet_page_preview.pyのbuild_generic()、topic=="school-nickname-ban"の分岐）、
+    件数が動的に更新される新しい形での再設置がされていなかった（2026-09-20、課題76で発覚）。
+    """
+    top_item = _top_issue(data)
+    conclusion = NICKNAME_CONCLUSION_BY_ISSUE_ID.get(top_item["id"])
+    if conclusion is None:
+        raise SystemExit(f"議論の中心: 最大論点「{top_item['id']}」にconclusionがありません（school-nickname-ban）")
+    return _apply_thirty_summary(html, _thirty_summary_html(top_item, conclusion), "school-nickname-ban")
 
 
 # consumption-tax-cutの論点ごとの図解画像。slugはファイル名の接尾辞、labelはalt文字列用
@@ -397,6 +548,7 @@ TOPIC_METHOD_TEXT = {
     "elderly-license-revocation": _sync_elderly_method_text,
     "bike-blue-ticket": _sync_bike_method_text,
     "henoko-student-accident": _sync_henoko_method_text,
+    "school-nickname-ban": _sync_nickname_method_text,
 }
 
 
