@@ -62,6 +62,7 @@ try:
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .verify_sample_periods import expected_period, summarize
     from .x_embed import embed_html, period_label
+    from .research_conditions import apply_research_conditions, research_conditions_html
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -80,6 +81,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
     from x_embed import embed_html, period_label  # type: ignore[no-redef]
+    from research_conditions import apply_research_conditions, research_conditions_html  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
@@ -611,6 +613,10 @@ def refresh_verified_planet(page: str) -> str:
     旧2D形式の各セクション（SM_RAW・ISSUES・6つの論点とXの声 等）はbuild_planet_page_preview.py
     が既に本文から削除済みなので、このあとの旧形式向け置換はすべて対象が無く失敗する
     （他テーマの山なみ展開時と同じ、旧ビルダーへのガード追加。reference_planetpage_rollout参照）。
+
+    「調査条件」は以前ここで空へ揃えるだけだったため、他7テーマにあるボックスが無いまま
+    だった（2026-09-20、課題79 C-5で発覚。refresh_planet_section.py側にも同じ内容を
+    書き戻す処理を足してあるので、どちらの経路で更新しても同じ文面になる）。
     """
     if __package__:
         from .build_planet_page_preview import bpd, build_section, render_planet, split_prototype
@@ -625,11 +631,9 @@ def refresh_verified_planet(page: str) -> str:
     block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
     page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                         block, "山なみ全体", flags=re.S)
-    return replace_once(
-        page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->",
-        "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->",
-        "調査条件（山なみ内に表示）", flags=re.S,
-    )
+    collected = data["totals"]["collected"]
+    conditions = research_conditions_html(str(collected), data["sample_period"])
+    return apply_research_conditions(page, conditions, "fukushuto")
 
 
 def build(

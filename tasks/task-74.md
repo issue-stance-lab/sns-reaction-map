@@ -60,7 +60,7 @@ fukushuto・henoko-student-accident・school-nickname-banの6テーマも2026-09
 
 残存テーマ: ai-copyright / bike-blue-ticket / bukatsu-chiiki / constitutional-amendment /
 consumption-tax-cut / elderly-license-revocation / fukushuto / koshitsu-tenpakai /
-school-nickname-ban（henoko-student-accident以外の9テーマ。2026-09-20、課題76の監査で
+school-nickname-ban（henoko-student-accident以外の9テーマ。2026-09-20、課題79の監査で
 `consumption-tax-cut`が旧リストから漏れていたと判明・訂正）
 
 **注意**: constitutional-amendmentだけは共有雛形（`planet-prototype.template.html`）ではなく
@@ -91,7 +91,7 @@ consumption-tax-cutで確立した手順をテーマごとに繰り返す。
 A・B・C（実害があった箇所）は全て解消済み。残るのはDのみ（`henoko-student-accident`
 除く9テーマ：ai-copyright・bike-blue-ticket・bukatsu-chiiki・constitutional-amendment・
 consumption-tax-cut・elderly-license-revocation・fukushuto・koshitsu-tenpakai・
-school-nickname-ban。2026-09-20、課題76の監査で`consumption-tax-cut`が旧リストから
+school-nickname-ban。2026-09-20、課題79の監査で`consumption-tax-cut`が旧リストから
 漏れていたと判明・訂正）。
 Dは「資料にしかない話を見る」ボックスの読みにくい一文で、実害はない。優先度は低いままで
 急ぐ必要はないが、着手するときはconsumption-tax-cutのA・Bと同じ`theme_id`分岐方式でよい
