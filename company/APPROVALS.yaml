@@ -578,3 +578,22 @@ items:
     requested_at: "2026-09-20"
     decided_at: "2026-09-20"
     decision_note: "本対話の本番反映指示を承認として記録。"
+
+  - id: approval-20260920-003
+    department: engineering-data
+    action: website_publication
+    summary: "学校でのあだ名禁止テーマの2026-09-20更新回を一般公開する"
+    reason: "collect_at（9/15）から5日超過していた定期収集を実施。新規の公開投稿サンプル21件（意見13件）を追加し、ページ上の集計・論点表示・取得期間・潮目ウィジェット・分析メモを更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "意見13件と小標本のため、潮目ウィジェットの『一律禁止に反対』比率が前回（8/17回）比+35.2ポイントと大きく動いている。ページ内に『サンプル数が少ないため傾向の参考程度』と明記済み"
+      - "海面下（語られていない争点）4件のsns_baseが87件のまま固定されていたため独自性検査で停止した。新規13件を4パターンの正規表現と目視の両方で再照合し、該当なし（sns_count 0件のまま）を確認したうえでsns_baseを100件へ更新した"
+    recommendation: approve
+    evidence:
+      - "data/verification/updates/school-nickname-ban/2026-09-20/report.json"
+      - ".staging/refresh/school-nickname-ban/20260920_220746/promotion-manifest.json"
+      - "DATA_REFRESH.md"
+    status: approved
+    requested_at: "2026-09-20"
+    decided_at: "2026-09-20"
+    decision_note: "本対話のAskUserQuestionで『公開する（推奨）』を選択し承認。対象はpromotion manifest SHA256: e203df911e8443f88a2076fdca246cd0be389c96d7bf1704a6633b0cd6a185c6。"
