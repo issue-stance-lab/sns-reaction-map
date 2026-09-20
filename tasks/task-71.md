@@ -66,6 +66,14 @@
    再ヒット→本文を実際に読んで除外理由を書き直す。再現できないという理由だけで
    `sns_count`を変更しない）で対応すること。
 
+   **2026-09-20追記（発注書を作成）**: オーナー指示によりbike-blue-ticket分はオーナー判断で
+   別セッションへ切り出すことにした。constitutional-amendmentの(a)と合わせて、次に着手する
+   セッションへそのまま渡せる発注書を
+   [configs/prompts/codex/20260920_ocean-layer-stale-hits.md](../configs/prompts/codex/20260920_ocean-layer-stale-hits.md)
+   に作成した。bike-blue-ticket-sc-1の原因も特定済み: 該当tweet_id（`2086098880874311993`）は
+   正典に実在し本文も一致するが、`classification.is_opinion`が`None`のため
+   `run_match_rule()`の対象から外れている（いつ・なぜNoneになったかは未調査、発注書に記載）。
+
    **2026-09-20追記**: consumption-tax-cutも同じく`-sunk-continents.json`・
    `-veins.json`自体が存在しない「未着手」状態だった（オーナーから「他のテーマにはある
    『資料にしか無い話を見る』が無い」と指摘され着手）。大綱（内閣、令和8年9月15日閣議決定）
