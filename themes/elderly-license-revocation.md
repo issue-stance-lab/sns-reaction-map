@@ -38,3 +38,11 @@
 部活動で確立した簡易チェック方式（本文のみを渡した1回の独立読み、current/proposedが食い違う場合はproposedを比較基準にする）を適用。`editorial-adoption-current.json` のelderly-license-revocation記録のうちindependently_checked=falseだった53件を全件独立に読み、42件確認・11件保留（[判定記録](../quality/reviews/2026-09-12-elderly-missing-independent-53.json)）。current/proposedが食い違う7件のうち独立読みと一致したのは2件だけで、正典へ適用（tweet 2078335331653521707のis_opinion False→True、tweet 2093553448533045737のmain_issue「適性検査強化」→「その他」・stance「条件付き賛成」→「中立・情報」）。意見353→354件。
 
 再読共通台帳（confirmed 42・disputed_unresolved 11）、仮名化検証データ、公開JSON、「語られていない争点」4件の母数（353→354）を同期。`scripts/refresh_planet_section.py` で本番の山なみページを更新（同スクリプトにelderly-license-revocation専用のlead/データ出典/調査条件テキスト同期を追加。issue_counts.syncが未設定のため既存のapply_lead/apply_noteが素通りしていた3か所）。`build_elderly_arena.py` が今も維持している旧SM_RAW/ISSUES埋め込みデータも合わせて更新（部活動と異なりdormantではなく現行分類器で再生成可能）。データ資産棚卸し・DATA_SHEET・トップページ・採用台帳スナップショットを再生成し、単体テスト917件全件合格、標準検査すべて合格（`collect_at`期限超過6テーマの既知NGのみ残存）。原本・採用台帳・山なみページはmainへ反映済み。**GitHub Pagesへのpush（本番公開）はオーナー承認待ち。**
+
+## 2026-09-20 論点を押すと図解画像が表示されるようにし、投票前の旧解説カードと一本化
+
+オーナー指示「消費税や部活のように論点を押したときに画像が表示されるようにして」を受け、`scripts/refresh_planet_section.py` の `_inject_landing_images()`（他9テーマと同じ仕組み）に elderly-license-revocation を追加。画像自体（義務化・地方の足・適性検査・代替交通・自主返納・その他の6種）は既存資産をそのまま使用。他テーマは「その他」に図解を持たないが、このテーマだけ専用図解（sonota）が用意済みだったため、6論点すべてを対象にした。
+
+オーナー確認のうえ、投票前にあった「このテーマを読み解く、6つの論点」（`#explainer-section`）を削除し、山なみの論点パネルへ一本化（fukushuto・consumption-tax-cut等、課題69で再編済みの9テーマと同じ構成）。画像の拡大モーダルは静的forEachからイベント委譲へ変更し、山なみパネルが動的に挿入する画像でも反応するようにした。`build_elderly_arena.py` に残っていた、削除したexplainer-count spanを探しに行く件数同期ループも削除（残したままだと次回のデータ更新でエラーになる状態だった）。データ収集は伴わないため件数・期間・`THEMES.yaml`は変更していない。
+
+標準検査（`verify_theme_page.py`・`verify_number_provenance.py`・`verify_page_originality.py`・`validate_theme_seo.py`・`verify_builder_rebuildability.py`）・unittest 984件・`run_public_checks.py`いずれもNG0件。本番反映・CI（デプロイ・公開ファイルの検査）成功・公開ページでの実機確認（画像表示・拡大モーダルの開閉・モバイル幅）済み。
