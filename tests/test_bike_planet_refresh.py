@@ -15,7 +15,10 @@ class BikeMethodTextTests(unittest.TestCase):
     def test_real_page_updates_collected_and_opinions_separately(self):
         html = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text()
         data = {"totals": {"collected": 504, "opinions": 392},
-                "issues": [{"key": "その他", "count": 140}], "sample_period": "2026-06-27〜2026-09-12"}
+                "issues": [
+                    {"key": "その他", "count": 140},
+                    {"id": "bike-blue-ticket-enforcement-support", "key": "取締り強化賛成", "count": 81},
+                ], "sample_period": "2026-06-27〜2026-09-12"}
         result = _sync_bike_method_text(html, data)
         self.assertIn("収集したSNS投稿504件のうち、分析対象の意見392件", result)
         self.assertIn("主要5論点252件に分類し、残る140件", result)
