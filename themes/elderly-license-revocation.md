@@ -46,3 +46,7 @@
 オーナー確認のうえ、投票前にあった「このテーマを読み解く、6つの論点」（`#explainer-section`）を削除し、山なみの論点パネルへ一本化（fukushuto・consumption-tax-cut等、課題69で再編済みの9テーマと同じ構成）。画像の拡大モーダルは静的forEachからイベント委譲へ変更し、山なみパネルが動的に挿入する画像でも反応するようにした。`build_elderly_arena.py` に残っていた、削除したexplainer-count spanを探しに行く件数同期ループも削除（残したままだと次回のデータ更新でエラーになる状態だった）。データ収集は伴わないため件数・期間・`THEMES.yaml`は変更していない。
 
 標準検査（`verify_theme_page.py`・`verify_number_provenance.py`・`verify_page_originality.py`・`validate_theme_seo.py`・`verify_builder_rebuildability.py`）・unittest 984件・`run_public_checks.py`いずれもNG0件。本番反映・CI（デプロイ・公開ファイルの検査）成功・公開ページでの実機確認（画像表示・拡大モーダルの開閉・モバイル幅）済み。
+
+## 2026-09-20 投票セクションの見出しと導入文で同じ問いを重ねていたのを解消
+
+オーナー指摘「『あなたが一番気になる論点は？』と『最も気になる論点を選ぶ』を消費税や皇室典範のように分けて」を受け調査。`#vote-section` の見出し「あなたが一番気になる「論点」は？」の直後の段落が「あなたが最も気になる論点はどれですか？」とほぼ同じ問いを繰り返していた（ステップ1ラベルの「あなたが最も気になる論点をタップ」も含めると3回連続）。consumption-tax-cut・bukatsu-chiiki・ai-copyright等は見出しの問いを段落側で繰り返さず、背景説明だけで終える構成で統一されている（bike-blue-ticketのみ同型の重複が残存、未調査）。段落末尾の重複文だけを削除し、他テーマと同じ構成に揃えた。静的HTMLの直書きで、ビルドスクリプトはこの文面に関与していない。標準検査・unittest 984件・`run_public_checks.py`いずれもNG0件、本番反映・公開ページ確認済み。
