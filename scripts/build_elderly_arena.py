@@ -20,12 +20,12 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .issue_card_counts import IssueCountError, span_html
+    from .issue_card_counts import IssueCountError
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .x_embed import period_label
     from .x_embed import embed_html
 except ImportError:
-    from issue_card_counts import IssueCountError, span_html  # type: ignore[no-redef]
+    from issue_card_counts import IssueCountError  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from x_embed import period_label  # type: ignore[no-redef]
     from x_embed import embed_html  # type: ignore[no-redef]
@@ -329,7 +329,6 @@ def build(
 ) -> tuple[list[str], bool]:
     rows, sample_file, collected = load_opinions(input_path)
     counts = Counter(str(classification(row)["main_issue"]) for row in rows)
-    config = json.loads((ROOT / "configs" / f"{THEME}-reaction-map.json").read_text(encoding="utf-8"))
     public_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
     template = html_template or public_path
     destination = output_html or public_path
@@ -373,10 +372,6 @@ def build(
         page = replace_once(page, r'<section class="panel" id="issue-blocks-section">.*?</section>', build_issue_blocks(rows), "論点別サマリー", flags=re.S)
         page = replace_once(page, r'<section class="panel conflict-panel">.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>', build_details(rows), "詳細データ", flags=re.S)
-
-    for card in config["issue_counts"]["cards"]:
-        total = sum(counts[str(issue)] for issue in card["main_issue"])
-        page = replace_once(page, rf'<span class="explainer-count" id="issue-count-{THEME}-{card["slug"]}">\d+件</span>', span_html(THEME, str(card["slug"]), total), f'論点カード {card["slug"]}')
 
     changed = page != before
     if not check:
