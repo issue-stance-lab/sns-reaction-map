@@ -178,3 +178,5 @@
 2026-09-21追補：オーナーが高齢者免許返納「自主返納支援」の新図を了承し、最後の「その他」を指示。正典 `social-samples/elderly-license_2d_classified.json` の意見投稿から、政治家の年齢制限との比較、本人の返納体験、撮影趣味への影響、危険運転への叱責を各１件選び、`elderly-license-revocation-infographic-wide-sonota-v2.webp` を組み込み ImageGen で作成。旧図の件数・割合や代表性を示す表現は引き継がず、他テーマの「その他」と同じ横長４カードにした。投稿IDと短い文言は `quality/plans/2026-09-21-task70-elderly-sonota-infographic.md` に記録。確認候補で、公開ページ参照は未変更。
 
 2026-09-21追補：オーナーが高齢者免許返納「その他」を了承し、今作った６枚すべての差し替えを指示。`docs/elderly-license-revocation-reaction-map.html` の無JS表示と操作画面の参照先を各 `-v2.webp` に変更し、`scripts/refresh_planet_section.py` の再生成設定も同じ６枚へ更新。旧画像は履歴として保持。全68枚の点検とX投稿への図解添付停止は継続する。
+
+2026-09-21公開待ち：承認済み６図の差し替えコミットをローカル `main` に統合。`verify_theme_page.py` と `verify_number_provenance.py` はNG0件。`verify_top_page.py` は高齢者免許返納の `collect_at=2026-09-11` 期限超過、`unittest` と `run_public_checks.py` は課題55の `TASK_BOARD.md` 状態124文字（上限120）で失敗。両原因は差し替え前の `origin/main` にも存在した。`release` スキルの失敗時停止ルールに従いpushせず、公開ページの現物確認と作業ツリー片付けは未実施。
