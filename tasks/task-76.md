@@ -1,10 +1,13 @@
-# 課題76: 山なみ10テーマの構成監査 — 残るはC系（清掃）のみ
+# 課題76: 山なみ10テーマの構成監査 — 残るはC-5のみ（意図的に未着手）
 
 **登録日**: 2026-09-20
 **状態**: 進行中。A-1・A-2・B系のai-copyrightは実機検証で「対応不要」と判明、
-A-3（3テーマ）とB系のelderly-license-revocation・school-nickname-banは対応・本番反映済み。
-残るはC系（清掃）のみ
-**優先度**: 低（残るC系は読まれない空マーカー・CSSの清掃のみで実害はほぼ無い）
+A-3（3テーマ）・B系のelderly-license-revocation・school-nickname-ban・
+C系（清掃、7テーマ分）はすべて対応・本番反映済み（2026-09-20）。
+C-5（調査条件ボックスの新設、3テーマ）だけは「清掃」ではなく新規実装のため対象外とし、
+未着手のまま残した
+**優先度**: 低（新たな対応の予定なし。C-5は課題73または将来のUI改善と合流する形での
+着手を推奨。詳細はC-5参照）
 **関連**: 54（山なみ移行本体）/ 69（起承転結の再編、今回見つかった差分の多くがこの過程で発生）/
 73（死んだデータ）/ 74（AIっぽい言い回し）
 
@@ -154,31 +157,47 @@ A-1・A-2と違い、この3テーマは`build_planet_page_preview.py`の`build_
   現在の表示と一致していたため気づかれにくかった）。`configs/theme-seo.json`の
   `observations`と`docs/`を訂正した
 
-### C. 低優先度 — 清掃対象（実害は小さい）
+### C. 清掃対象（実害は小さい） — 2026-09-20 C-1〜C-4・課題74記録訂正 対応済み、C-5のみ未着手
 
-- **ai-copyright固有の死んだUI残骸**: 旧「問いの背骨」ウィジェットの跡が複数残る。
-  `document.getElementById('strongest-arguments')`等、存在しない3要素を探す末尾スクリプト
-  （空振りするだけで実害は軽微）、対応先の無いCSS約50行（`#arena-question-spine-pilot`・
-  `#theme-atlas-pilot`）。課題73で扱う411KBの外部JS（`ai-copyright-arena-data.js`）も
-  同じ旧UIの残骸で、まとめて整理できる
-- **`ARGUMENTS_START`〜`END`が4テーマで空**: `ai-copyright`・`bike-blue-ticket`・
-  `bukatsu-chiiki`・`elderly-license-revocation`に、内容が一字一句同じ「中身の無い
-  飾りCSSブロック」（`.arguments-panel`等）が残存。対応するHTML要素はどのテーマにも無い
-- **`CLAIM_AUDIT`/`PROCESS_SECTIONS`/`VERIFY_SECTION`が3テーマで空**（A-2参照、
-  2026-09-20にC系へ格下げ）: constitutional-amendment・bike-blue-ticket・
-  elderly-license-revocationに、山なみ変換で使わなくなったトップレベルの
-  資料照合マーカー＋CSSが残存。内容は山なみ本体の各論点パネルへ移設済みで実害は無いが、
-  読まれないCSS・マーカーが残っている
-- **henoko-student-accident**: `INSIGHT_STATS_START`〜`END`が完全に空（CSSすら無い）
-- **fukushuto・henoko-student-accident・koshitsu-tenpakai**: 「調査条件」の独立した
-  説明ボックス（`<aside class="research-conditions">`）が無い。データ出典・取得期間の
-  情報自体は山なみ本体内の注記（`.caution`）にあるため実害は小さいが、他7テーマより
-  目立たない位置になっている
-- **課題74の記録訂正**: `tasks/task-74.md`は「資料にしかない話を見る」ボックスの
+作業ツリー`../isa-wt-task76-c-cleanup`（ブランチ`task/task76-c-cleanup`）で対応。
+削除対象はいずれも「対応するHTML要素がどこにも無いCSS／常にnullを見て何もしない
+スクリプト」であることを、削除前に生成元スクリプト（`build_reaction_map.py`・
+`build_constitutional_process_sections.py`・`build_bike_process_sections.py`・
+`build_elderly_process_sections.py`・`build_henoko_arena.py`）を読んで確認した。
+いずれも山なみ形式（`PLANET_SECTION_START`あり）では早期returnしてこの区間へ
+触れない設計だったため、マーカーごと削除しても次回の定例更新で復活しない
+（[[reference_afterthought_block_ordering]]・[[reference_planet_regen_wipes_hand_edits]]の
+逆パターン——後付け処理が「触らない」と確約している区間なので、まるごと削除してよい）。
+
+- **【対応済み】C-1 ai-copyright固有の死んだUI残骸**: 旧「問いの背骨」ウィジェットの跡を全削除。
+  `document.getElementById('strongest-arguments')`等、存在しない3要素を探すだけで
+  何もしない末尾スクリプト、`#issue-arena-section`という実在しない祖先の子孫セレクタだけで
+  構成されたCSS約50行（`#arena-question-spine-pilot`・`#theme-atlas-pilot`、`#sm-wrap`等
+  2Dマップ本体のセレクタも含むが祖先ごと不在のため道連れで安全に削除できた）を削除した。
+  課題73で扱う411KBの外部JS（`ai-copyright-arena-data.js`）自体は今回の対象外（別課題のまま）。
+  **新たに気づいた点（今回は対応せず）**: 同ファイルの`showVote()`内に、投票後スクロール用の
+  `document.getElementById('issue-arena-section')`参照が1箇所残っており、常にnullなので
+  スクロールが黙って何もしない（実害はごく軽微）。生きている投票フローの内部なので、
+  今回のC系（死骸削除）より慎重な確認が要ると判断し、あえて手を付けなかった
+- **【対応済み】C-2 `ARGUMENTS_START`〜`END`が4テーマで空**: `ai-copyright`・`bike-blue-ticket`・
+  `bukatsu-chiiki`・`elderly-license-revocation`の「中身の無い飾りCSSブロック」
+  （`.arguments-panel`等）をマーカーごと削除した
+- **【対応済み】C-3 `CLAIM_AUDIT`/`PROCESS_SECTIONS`/`VERIFY_SECTION`が3テーマで空**（A-2参照）:
+  constitutional-amendment・bike-blue-ticket・elderly-license-revocationの
+  トップレベル資料照合マーカー＋CSSをまるごと削除した（内容は山なみ本体の
+  各論点パネルへ移設済みで実害は無かった）
+- **【対応済み】C-4 henoko-student-accident**: 完全に空だった`INSIGHT_STATS_START`〜`END`を削除
+- **【未着手・意図的に見送り】C-5 fukushuto・henoko-student-accident・koshitsu-tenpakai**:
+  「調査条件」の独立した説明ボックス（`<aside class="research-conditions">`）が無い。
+  データ出典・取得期間の情報自体は山なみ本体内の注記（`.caution`）にあるため実害は小さいが、
+  他7テーマより目立たない位置になっている。**これは「死骸の削除」ではなく「無い要素の新規追加」
+  であり、他のC系と性質が違う**（A-3の「議論の中心」追加に近い作業量）ため、今回のC系
+  清掃パスには含めず、着手するなら別枠で判断してよい
+- **【対応済み】課題74の記録訂正**: `tasks/task-74.md`は「資料にしかない話を見る」ボックスの
   説明文について「henoko-student-accidentのみ個別対応済み、残り8テーマ未対応」と
-  記録しているが、実際に10テーマを確認したところ対象は「henoko以外の9テーマ」
-  （`consumption-tax-cut`が記録から漏れていた）。実害は無い（読みにくいだけ）ので
-  優先度はそのままでよいが、`task-74.md`の対象テーマ数は訂正が必要
+  記録していたが、実際に10テーマを確認したところ対象は「henoko以外の9テーマ」
+  （`consumption-tax-cut`が記録から漏れていた）。この訂正はB系対応と同じセッションで
+  2026-09-20に`task-74.md`・`TASK_BOARD.md`側へ反映済み（本ファイルの登録時点で対応済み）
 
 ### D. 確認して問題が無かった項目（安心材料）
 
@@ -198,10 +217,10 @@ A-1・A-2と違い、この3テーマは`build_planet_page_preview.py`の`build_
 - 「ではなく」「とどまる」の多用チェック: 誤検知。すべて正当な分析文（数値・制度の説明）で、
   課題74が問題視したのは別の特定フレーズ（「資料にしかない話」の説明文）だった
 
-## 対応方針の案（次に着手するセッションへ）
+## 対応方針の案（記録として残す。すべて対応済み）
 
-優先度順に、専用の作業ツリーで1件（またはテーマ1つ）ずつ対応する。
-すべて標準検査4種・実機確認・本番反映まで行うこと。
+優先度順に、専用の作業ツリーで1件（またはテーマ1つ）ずつ対応した。
+すべて標準検査4種・実機確認・本番反映まで行った。
 
 1. ~~A-1 constitutional-amendmentのXシェアボタン~~ 対応不要（2026-09-20、実機検証で
    誤報と判明。A-1参照）
@@ -209,10 +228,13 @@ A-1・A-2と違い、この3テーマは`build_planet_page_preview.py`の`build_
 3. ~~A-3 「議論の中心」の追加~~ 対応済み（2026-09-20、3テーマとも実装・本番反映済み。A-3参照）
 4. ~~B系（数字の食い違い）~~ ai-copright分は対応不要（誤報）、elderly-license-revocation・
    school-nickname-ban分は対応済み（2026-09-20、いずれも本番反映済み。B参照）
-5. **C系（清掃）**: 課題73の残タスクと合流できるものはまとめて対応する
-   （A-2で格下げした3件の空マーカーもここに含める）。急ぎではない
+5. ~~C-1〜C-4（清掃）・課題74記録訂正~~ 対応済み（2026-09-20、7テーマ分のマーカー・CSS・
+   スクリプトを削除し本番反映済み。C参照）
+6. **C-5（調査条件ボックスの新設、3テーマ）**: 唯一の未着手項目。次に着手するとすれば、
+   専用の作業ツリーで1テーマずつ、A-3と同じ手順（`refresh_planet_section.py`の
+   `TOPIC_METHOD_TEXT`経由での挿入、標準検査4種、実機確認）で行う
 
 ## 判断待ち
 
-なし。課題76としてやるべきことはC系（清掃）のみで、優先度は低い。着手するかは
-課題73（死んだデータ削除）とまとめて対応するタイミングで判断してよい。
+なし。課題76はC-5以外すべて完了。C-5だけ「清掃」ではなく新規追加のため意図的に見送った
+（優先度は低いまま。着手するかはオーナー判断）。
