@@ -218,3 +218,26 @@ unittest 984件・run_public_checks.pyいずれもNG0件、ブラウザでタブ
 2026-09-15更新以来ページに反映されていなかった旧い値から現在値へ揃った。
 
 作業は`../isa-wt-bukatsu-tide`（ブランチ`task/bukatsu-tide-widget`）で行った。
+
+2026-09-20、オーナー指示で「論点ごとのX投稿」を山なみページに表示できるようにした
+（koshitsu-tenpakaiの同名セクションと同じ見た目・機能）。
+
+代表投稿を選ぶロジック自体（`REPRESENTATIVE_POSTS`を優先し、URLが現行データから
+消えていればconfidence順のフォールバックに戻る）はbukatsu-chiiki専用の
+`scripts/update_bukatsu_tide.py`に旧2D版の`issue_panel()`としてすでにあったが、
+`issue_panel()`ごと山なみ判定でスキップされる対象だったため、2026-09-12の山なみ移行
+以降は一度も呼ばれていなかった。ロジックはそのまま再利用し、表示形式だけ
+koshitsu-tenpakaiの現行仕様（画像なし・編集部要約なし、ラベル＋埋め込みのみ、
+2026-09-20の同テーマでの見直しに揃える）に合わせて`x_posts_panel()`として新設。
+潮目カードと同じくPLANET_SECTIONの外（BUKATSU_AUDIT直後）に置き、定期更新の
+たびに実行しても増殖しない。
+
+代表投稿の実データは、2026-09-20に「消費税と同じく節ごと削除」した旧`#issue-cards`
+（「論点ごとに、なかを見る」）と偶然一致した——`REPRESENTATIVE_POSTS`はその節の
+埋め込みと同じ投稿を指しており、フォールバックを使わず全7論点14件とも
+そのまま復元できた。
+
+標準検査4種・unittest 984件・run_public_checks.pyいずれもNG0件。ブラウザで
+7論点すべての埋め込み表示・タブ間の遷移・375pxモバイル幅を確認した。
+
+作業は`../isa-wt-bukatsu-x-posts`（ブランチ`task/bukatsu-x-posts`）で行った。

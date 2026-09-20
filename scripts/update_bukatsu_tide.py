@@ -494,6 +494,92 @@ def tweet_sample(row: dict[str, Any], detail_label: str) -> str:
     )
 
 
+# 論点ID・アイコンはconfigs/planet/bukatsu-chiiki.yamlのissues:と揃える
+# （id・並び順はURLアンカー・投票互換のため変更禁止）。件数の多い順。
+X_POSTS_ISSUE_ORDER = [
+    ("教員の働き方", "kyoin", "🏫"),
+    ("制度・移行プロセス", "seido", "📋"),
+    ("教育的意義・機会", "kyoiku", "⭐"),
+    ("受け皿・指導者", "ukezara", "👤"),
+    ("費用・家庭負担", "hiyo", "💴"),
+    ("その他", "sonota", "💬"),
+    ("地域格差", "kakusa", "🗾"),
+]
+
+X_POSTS_CSS = """<style>
+#issue-cards .ic{border-top:2px solid #0F1A3D;padding:22px 0 30px;scroll-margin-top:64px}
+#issue-cards .ic + .ic{border-top-color:#DCE3EF}
+#issue-cards .ic:target .ic-head h3{color:var(--accent)}
+#issue-cards .ic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+#issue-cards .ic-head h3{margin:0;font-size:21px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+#issue-cards .ic-head .cnt{margin-left:auto;font-weight:900;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;color:#0F1A3D}
+#issue-cards .ic-head .cnt small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+#issue-cards .ic-back{display:inline-block;margin-top:16px;font-size:13px;font-weight:700}
+</style>"""
+
+
+def x_post_sample(row: dict[str, Any], label: str) -> str:
+    """koshitsu-tenpakaiと同じ形（2026-09-20に編集部要約を外したもの）。ラベルと埋め込みのみ。"""
+    url = html.escape(str(row.get("url") or ""), quote=True)
+    handle = re.search(r"x\.com/([^/]+)/status/", str(row.get("url") or ""))
+    account = f"@{handle.group(1)}" if handle else "この投稿"
+    return (
+        '<div class="hermes-sample">'
+        f'<span class="hermes-sample-meta">{html.escape(label)}</span>'
+        '<blockquote class="twitter-tweet" data-conversation="none" data-dnt="true">'
+        f'<a href="{url}">{account} の投稿をXで見る</a></blockquote>'
+        "</div>"
+    )
+
+
+def x_posts_panel(rows: list[dict[str, Any]]) -> str:
+    """「論点ごとのX投稿」節（koshitsu-tenpakaiと同型）。PLANET_SECTIONの外に置く。
+
+    代表投稿はREPRESENTATIVE_POSTSを優先し、収集の入れ替わり等でURLが現行データから
+    消えていればconfidence順のフォールバックに戻る（issue_panel()と同じロジック。
+    山なみでは使われなくなったissue_panel()自体は呼ばず、ロジックだけをここに複製する）。
+    """
+    cards = []
+    for issue, slug, icon in X_POSTS_ISSUE_ORDER:
+        group = [row for row in rows if classification(row).get("main_issue") == issue]
+        usable = [row for row in group if classification(row).get("article_usable") and row.get("url")]
+        candidates_by_url = {str(row["url"]): row for row in usable}
+        candidates = [
+            (candidates_by_url[url], label)
+            for url, label in REPRESENTATIVE_POSTS.get(issue, [])
+            if url in candidates_by_url
+        ]
+        fallback = sorted(
+            [row for row in usable if row not in [candidate[0] for candidate in candidates]],
+            key=lambda row: float(classification(row).get("confidence", 0)),
+            reverse=True,
+        )
+        fallback_samples = [
+            (row, ISSUE_STANCE_LABEL.get(str(classification(row).get("stance")), "投稿の視点"))
+            for row in fallback
+        ]
+        candidates = (candidates + fallback_samples)[:2]
+        samples = "".join(x_post_sample(row, label) for row, label in candidates)
+        cards.append(
+            f'<article class="ic" id="issue-bukatsu-chiiki-{slug}">'
+            f'<div class="ic-head"><h3>{icon} {html.escape(issue)}</h3>'
+            f'<span class="cnt">{len(group)}<small>件</small></span></div>'
+            f'<div class="hermes-samples">{samples}</div>'
+            '<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a>'
+            "</article>"
+        )
+    return (
+        '<section class="panel" id="issue-cards">'
+        f"{X_POSTS_CSS}"
+        '<div class="panel-title"><h2>論点ごとのX投稿</h2></div>'
+        "<p>投稿の例は、それぞれの論点でよく見られる言い分を編集部がXから選びました。"
+        "地域移行全体への賛否を代表するものではありません。"
+        "うまく表示されないときは、リンク先のXで直接確認できます。</p>"
+        + "".join(cards) + "</section>"
+    )
+
+
 def summary_panel(rows: list[dict[str, Any]]) -> str:
     stance_counts = Counter(classification(row).get("stance") for row in rows)
     issue_counts = Counter(classification(row).get("main_issue") for row in rows)
@@ -600,6 +686,29 @@ def main() -> int:
     else:
         page = re.sub(r"\s*<!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END -->\s*", "\n", page, count=1, flags=re.DOTALL)
         page = replace_once(page, r'<section class="stats">.*?</section>', dashboard, "stats dashboard", flags=re.DOTALL)
+
+    if planet_mode:
+        # 「論点ごとのX投稿」（koshitsu-tenpakaiと同型）。山なみでは2026-09-20まで
+        # issue_panel()自体が丸ごとスキップされ、対応する入れ物が無かった。
+        # BUKATSU_AUDIT（一次資料照合）の直後、無ければPLANET_SECTION_END直後に置く。
+        x_posts = x_posts_panel(all_opinions)
+        if 'id="issue-cards"' in page:
+            page = replace_once(
+                page,
+                r'<section class="panel" id="issue-cards">.*?</section>',
+                x_posts,
+                "x posts panel",
+                flags=re.DOTALL,
+            )
+        else:
+            anchor = "<!-- BUKATSU_AUDIT_END -->" if "<!-- BUKATSU_AUDIT_END -->" in page else "<!-- PLANET_SECTION_END -->"
+            page = replace_once(
+                page,
+                re.escape(anchor),
+                f"{anchor}\n\n{x_posts}",
+                "x posts panel (initial insertion)",
+            )
+
     if not planet_mode:
         page = replace_once(
             page,
