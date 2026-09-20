@@ -1033,7 +1033,7 @@ def render_page(data: dict, template: str, payload: str) -> str:
         ):
             template = template.replace(old, new)
         template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
-    if data["theme_id"] in ("consumption-tax-cut", "koshitsu-tenpakai", "ai-copyright"):
+    if data["theme_id"] in ("consumption-tax-cut", "koshitsu-tenpakai", "ai-copyright", "bukatsu-chiiki"):
         template = template.replace("← 全体へ戻る（Esc）", "← 論点の一覧へ戻る（Esc）")
     if data["theme_id"] == "ai-copyright":
         template = template.replace(
