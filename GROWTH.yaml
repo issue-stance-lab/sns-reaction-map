@@ -1,5 +1,5 @@
 # GROWTH.yaml — グロース台帳（単一の真実源）
-# 最終更新: 2026-09-16
+# 最終更新: 2026-09-20
 #
 # 目的: 来訪者・回遊・投票・SNSシェアを増やす施策の台帳。
 # 制作・品質維持は THEMES.yaml / DATA_REFRESH.md の管轄（このファイルでは扱わない）。
@@ -321,6 +321,79 @@ capabilities:
     metric: ポータル直帰率、テーマページ遷移率
     notes: サイト魅力枠。portal-featured-slot の判定結果（7/19）を見てから着手
 
+  cite-and-search-structure:
+    title: 引用され、検索される構造（AI検索向けの機械可読データ＋探究学習の検索意図）
+    hypothesis: >-
+      週の利用者が数十人の段階では、来訪者がいなくても外から引っ張る仕掛けが先に効く。
+      生成AI（ChatGPT / Perplexity / Gemini）は両論を出典つきで構造化したページを引用しやすく、
+      中高生・教員は「〇〇 ディベート 反対 理由」「〇〇 メリット デメリット」で検索する。
+      どちらも既存の論点整理がそのまま答えになる（GA4には7/6に「AI Assistant」経由の来訪が1度記録されている）
+    scope: >-
+      全テーマ共通。(a) data/public/themes の機械可読JSONをサイトに置く（noindex）、llms.txt、
+      論点ごとの固定リンク、「この論点を引用」ボタン（出典・年月・サンプル件数の定型文をコピー）。
+      (b) テーマごとに「授業・ディベートで使う」節（賛成の理由3・反対の理由3・確かめる一次資料・印刷用ワークシート）。
+      公開先URLは TASK_BOARD 課題51 の設計と合わせる
+    status: idea
+    priority: 1
+    metric: >-
+      GA4 参照元（chatgpt.com / perplexity.ai / gemini.google.com / copilot）のセッション数と、
+      GSC の検索語（ディベート・探究・メリット デメリット）の表示回数・クリック
+    notes: >-
+      2026-09-20 登録（TASK_BOARD 課題77、案1＋案2）。着手（発注書・実装）はオーナーの採用判断後、
+      公開は別途CEO承認。AdSense 4回目審査中（課題15）のため機械向けファイルは noindex で始める。
+      JSONには投稿本文を含めない（公開済みの数字だけ）
+
+  press-kit-embed:
+    title: 報道・研究向け「引用パック」ページと埋め込み（iframe）
+    hypothesis: 記事やブログに論点一覧・スタンス分布が貼られると、クレジット付きで継続的に流入する
+    scope: >-
+      1ページに引用の書き方・免責文の定型・埋め込みタグ・グラフのダウンロード・データ（JSON/CSV）・
+      手法へのリンク・訂正窓口をまとめる。埋め込み用ページは noindex
+    status: idea
+    priority: 2
+    metric: GA4 イベント embed_view（貼られた先のドメイン付き）、referral 流入
+    notes: >-
+      2026-09-20 登録（TASK_BOARD 課題77、案5）。図表・データの利用条件（例: 出典明記で自由に利用可）は
+      方針変更なのでCEO承認が要る。外部提案の「埋め込みウィジェット」「手法のホワイトペーパー」はここに吸収
+
+  steelman-share:
+    title: 「相手の言い分」シェアと納得投票
+    hypothesis: >-
+      「自分の立場宣言」は喧嘩になるが、「相手の言い分を認める」投稿は珍しく引用されやすい。
+      票が集まれば「反対派が最も納得した賛成派の理由」という世論調査に無い数字ができ、報道が引用したくなる
+    scope: >-
+      全テーマ共通。投票後に「あなたと反対の立場で最も多い理由」3つを出し「一番納得できるものは？」をもう1票。
+      テーマ×立場のシェア用ページとOGP画像を事前生成（静的）。図解は使わず文字とグラフのカードにする（課題70）
+    status: idea
+    priority: 3
+    metric: vote_share と同じ経路に campaign=steelman_share を足して分離。納得投票の件数（Supabase 別トピック）
+    notes: >-
+      2026-09-20 登録（TASK_BOARD 課題77、案3）。来訪者が増えてから効く施策なので cite-and-search-structure の後。
+      母数が少ない間は割合でなく件数表示。投票は論点番号で保存されるため論点の並びは公開後に固定する
+
+  unspoken-issues-digest:
+    title: 「SNSで語られていない論点」定期便（まとめページ＋週1定型）
+    hypothesis: 「見落とされた論点」は記者が最も欲しい切り口で、怒りを煽らずにニュース性がある
+    scope: >-
+      各ページの「資料にあるのに、SNSにないこと」をテーマ横断のまとめページにし、週1本の定型（X・note）と
+      四半期の「論点レポート」（note、記者へ直接送る。有料配信の代わり）にする
+    status: idea
+    priority: 4
+    metric: 投稿ごとのUTM（utm_campaign=unspoken_*）の流入、まとめページのPV
+    notes: >-
+      2026-09-20 登録（TASK_BOARD 課題77、案4）。投稿は x-daily / note-operation の手順とCEO承認に従う
+
+  opinion-placement-demo:
+    title: 「自分の意見を置いてみる」（分類器の体験版）
+    hypothesis: 自分の1文がどの論点・どの立場の近くに置かれ、反対側は何と言っているかを返す体験は話題になりやすい
+    scope: 入力1文をサイトと同じ分類で判定して返す。文章は保存しない。1日の上限と安いモデルで費用を抑える
+    status: idea
+    priority: 5
+    metric: 利用回数（GA4イベント）と、そこからのシェア・投票
+    notes: >-
+      2026-09-20 登録（TASK_BOARD 課題77、案6）。AI呼び出し費用と悪用対策が要るため、
+      phase.until（weekly_users 100）を満たしてから。費用上限はCEO承認事項
+
 experiments:
   # 例:
   # exp-001:
@@ -502,4 +575,8 @@ activity_log:
       矛盾する誤記録と判明したためnullに訂正し、Xプロフィール画面を直接確認した実測20人を新規スナップショットとして追加。
       推移は1人(7/6)→18人(8/10)→20人(9/16)で、8月上旬以降ほぼ横ばいと判明した。プロフィール文・固定ポストは
       既に整備済み（x-profile recurring が想定していた未着手状態ではなかった）。
+    related_capability: null
+  - date: 2026-09-20
+    type: ops
+    detail: 課題77として集客の仕掛け6案を整理し、capabilities に idea 5件（cite-and-search-structure / press-kit-embed / steelman-share / unspoken-issues-digest / opinion-placement-demo）を登録。外部提案8案の現状判定は tasks/task-77.md
     related_capability: null
