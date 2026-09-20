@@ -127,6 +127,14 @@
 `update_bukatsu_tide.py`のPLANET_SECTION判定分岐に、潮目カードだけを
 PLANET_SECTIONの外（`<!-- PLANET_SECTION_END -->`直後）へ差し込む経路を追加して解消した。
 
+**「論点ごとのX投稿」（`x_posts_panel()`）も同じ理由で2026-09-20まで表示されていなかった。**
+代表投稿の選定ロジック自体（`REPRESENTATIVE_POSTS`優先・confidence順フォールバック）は
+旧2D版の`issue_panel()`にすでにあったが、`issue_panel()`ごと山なみでスキップされる
+対象だったため、山なみ移行（2026-09-12）以降は呼ばれていなかった。koshitsu-tenpakaiの
+「論点ごとのX投稿」（#issue-cards、2026-09-18の起承転結型再編で今の形になった）と
+同じ見た目で作り直し、潮目カードと同じくPLANET_SECTIONの外へ置いた
+（`<!-- BUKATSU_AUDIT_END -->`直後、無ければ`<!-- PLANET_SECTION_END -->`直後）。
+
 本文確認が済み、正典（social-samples）を更新した後は次を使う。
 
 ```sh
