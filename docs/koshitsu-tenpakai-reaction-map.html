@@ -1422,6 +1422,143 @@ try {
 </script>
 <!-- PLANET_SECTION_END -->
 
+<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
+<section class="tide-card" id="koshitsu-tenpakai-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
+  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
+    <div class="tide-widget-tabs">
+      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="true">論点の変化</button>
+    </div>
+    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
+  </div>
+  <div class="tide-widget-summary" aria-live="polite">
+    <span class="tide-widget-period">8月24日 → 9月18日</span>
+    <strong data-tide-headline>「愛子さま・皇族の地位」が5.7ポイント増加</strong>
+  </div>
+  <div class="tide-slope-wrap">
+    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="koshitsu-tenpakai-tide-widget-slope-title koshitsu-tenpakai-tide-widget-slope-desc">
+      <title id="koshitsu-tenpakai-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
+      <desc id="koshitsu-tenpakai-tide-widget-slope-desc">前回収集分274件と今回収集分281件の構成比を比較します。</desc>
+      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月24日</text>
+      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 9月18日</text>
+      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
+      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
+      <g data-tide-series></g>
+    </svg>
+  </div>
+  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
+  <p class="tide-widget-note">比較対象：8月24日収集分のうち意見投稿／9月18日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
+</section>
+<script>
+(() => {
+  const root = document.getElementById("koshitsu-tenpakai-tide-widget");
+  if (!root) return;
+  const datasets = {"stance": {"max": 40, "headline": "「中立・情報」が35.7ポイント減少", "rows": [{"label": "改正反対（男系維持）", "previous": 32.6, "current": 0.0}, {"label": "改正賛成（女系容認）", "previous": 31.7, "current": 0.0}, {"label": "中立・情報", "previous": 35.7, "current": 0.0}]}, "issue": {"max": 40, "headline": "「愛子さま・皇族の地位」が5.7ポイント増加", "rows": [{"label": "男系vs女系", "previous": 32.5, "current": 29.5}, {"label": "旧宮家養子縁組", "previous": 17.5, "current": 17.8}, {"label": "立法手続き・民主主義", "previous": 15.3, "current": 10.7}, {"label": "女性天皇・女系天皇", "previous": 19.0, "current": 20.6}, {"label": "愛子さま・皇族の地位", "previous": 15.7, "current": 21.4}]}};
+  const svgGroup = root.querySelector("[data-tide-series]");
+  const mobileRows = root.querySelector("[data-tide-mobile]");
+  const headline = root.querySelector("[data-tide-headline]");
+  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
+  const replayButton = root.querySelector("[data-tide-replay]");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let mode = "issue"; // 課題: 立場の分類方式が前回・今回で異なり比較不能のため、当面は論点モードのみ表示(2026-09-20)
+  let animationFrame = 0;
+  let hasAutoPlayed = false;
+
+  const yFor = (value, max) => 310 - (value / max) * 235;
+  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
+  const svgElement = (name, attrs, text) => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
+    if (text !== undefined) el.textContent = text;
+    return el;
+  };
+
+  function draw(progress = 1) {
+    const data = datasets[mode];
+    svgGroup.replaceChildren();
+    mobileRows.replaceChildren();
+    const resolveLabelYs = rawYs => {
+      const minGap = 34;
+      const order = rawYs.map((_, i) => i).sort((a, b) => rawYs[a] - rawYs[b]);
+      const resolved = rawYs.slice();
+      for (let k = 1; k < order.length; k++) {
+        const gap = resolved[order[k]] - resolved[order[k - 1]];
+        if (gap < minGap) resolved[order[k]] = resolved[order[k - 1]] + minGap;
+      }
+      return resolved;
+    };
+    const y1s = data.rows.map(row => yFor(row.previous, data.max));
+    const y2s = data.rows.map((row, index) => y1s[index] + (yFor(row.current, data.max) - y1s[index]) * progress);
+    const y1Labels = resolveLabelYs(y1s);
+    const y2Labels = resolveLabelYs(y2s);
+    data.rows.forEach((row, index) => {
+      const y1 = y1s[index];
+      const y2 = y2s[index];
+      const y1Label = y1Labels[index];
+      const y2Label = y2Labels[index];
+      const shown = row.previous + (row.current - row.previous) * progress;
+      const shownDelta = shown - row.previous;
+      const seriesClass = `series-${index}`;
+      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
+      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
+      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label+17, class:"tide-slope-value"}, signed(shownDelta)));
+      const mobile = document.createElement("article");
+      mobile.className = "tide-mobile-row";
+      mobile.innerHTML =
+        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
+        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
+        `<div class="tide-mobile-bars" aria-hidden="true">` +
+          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
+          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
+        `</div>`;
+      mobileRows.appendChild(mobile);
+    });
+  }
+
+  function animate() {
+    cancelAnimationFrame(animationFrame);
+    if (reducedMotion) { draw(1); return; }
+    const startedAt = performance.now();
+    const duration = 900;
+    const step = now => {
+      const raw = Math.min(1, (now - startedAt) / duration);
+      draw(1 - Math.pow(1 - raw, 3));
+      if (raw < 1) animationFrame = requestAnimationFrame(step);
+    };
+    animationFrame = requestAnimationFrame(step);
+  }
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    modeButtons.forEach(button => {
+      const selected = button.dataset.tideMode === mode;
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    headline.textContent = datasets[mode].headline;
+    animate();
+  }
+
+  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
+  replayButton.addEventListener("click", animate);
+  draw(1);
+
+  if ("IntersectionObserver" in window && !reducedMotion) {
+    const observer = new IntersectionObserver(entries => {
+      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
+        hasAutoPlayed = true;
+        animate();
+        observer.disconnect();
+      }
+    }, {threshold: 0.35});
+    observer.observe(root);
+  }
+})();
+</script>
+<!-- TIDE_CARD_END --></section>
+
 <!-- KOSHITSU_AUDIT_START -->
 <section class="panel claim-audit" id="koshitsu-audit">
 <style>
@@ -1673,143 +1810,6 @@ try {
 <a class="related-card" href="fukushuto-reaction-map.html"><img src="images/topics/fukushuto/fukushuto-hero.webp" alt="副首都法案" loading="lazy"><div><strong>副首都法案</strong><p>副首都、本当に必要？場所は大阪でいい？</p></div></a>
 </div></section>
 
-
-<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
-<section class="tide-card" id="koshitsu-tenpakai-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
-  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
-    <div class="tide-widget-tabs">
-      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="true">論点の変化</button>
-    </div>
-    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
-  </div>
-  <div class="tide-widget-summary" aria-live="polite">
-    <span class="tide-widget-period">8月24日 → 9月18日</span>
-    <strong data-tide-headline>「愛子さま・皇族の地位」が5.7ポイント増加</strong>
-  </div>
-  <div class="tide-slope-wrap">
-    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="koshitsu-tenpakai-tide-widget-slope-title koshitsu-tenpakai-tide-widget-slope-desc">
-      <title id="koshitsu-tenpakai-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="koshitsu-tenpakai-tide-widget-slope-desc">前回収集分274件と今回収集分281件の構成比を比較します。</desc>
-      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月24日</text>
-      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 9月18日</text>
-      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
-      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
-      <g data-tide-series></g>
-    </svg>
-  </div>
-  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：8月24日収集分のうち意見投稿／9月18日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
-</section>
-<script>
-(() => {
-  const root = document.getElementById("koshitsu-tenpakai-tide-widget");
-  if (!root) return;
-  const datasets = {"stance": {"max": 40, "headline": "「中立・情報」が35.7ポイント減少", "rows": [{"label": "改正反対（男系維持）", "previous": 32.6, "current": 0.0}, {"label": "改正賛成（女系容認）", "previous": 31.7, "current": 0.0}, {"label": "中立・情報", "previous": 35.7, "current": 0.0}]}, "issue": {"max": 40, "headline": "「愛子さま・皇族の地位」が5.7ポイント増加", "rows": [{"label": "男系vs女系", "previous": 32.5, "current": 29.5}, {"label": "旧宮家養子縁組", "previous": 17.5, "current": 17.8}, {"label": "立法手続き・民主主義", "previous": 15.3, "current": 10.7}, {"label": "女性天皇・女系天皇", "previous": 19.0, "current": 20.6}, {"label": "愛子さま・皇族の地位", "previous": 15.7, "current": 21.4}]}};
-  const svgGroup = root.querySelector("[data-tide-series]");
-  const mobileRows = root.querySelector("[data-tide-mobile]");
-  const headline = root.querySelector("[data-tide-headline]");
-  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
-  const replayButton = root.querySelector("[data-tide-replay]");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mode = "issue"; // 課題: 立場の分類方式が前回・今回で異なり比較不能のため、当面は論点モードのみ表示(2026-09-20)
-  let animationFrame = 0;
-  let hasAutoPlayed = false;
-
-  const yFor = (value, max) => 310 - (value / max) * 235;
-  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
-  const svgElement = (name, attrs, text) => {
-    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
-    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
-    if (text !== undefined) el.textContent = text;
-    return el;
-  };
-
-  function draw(progress = 1) {
-    const data = datasets[mode];
-    svgGroup.replaceChildren();
-    mobileRows.replaceChildren();
-    const resolveLabelYs = rawYs => {
-      const minGap = 34;
-      const order = rawYs.map((_, i) => i).sort((a, b) => rawYs[a] - rawYs[b]);
-      const resolved = rawYs.slice();
-      for (let k = 1; k < order.length; k++) {
-        const gap = resolved[order[k]] - resolved[order[k - 1]];
-        if (gap < minGap) resolved[order[k]] = resolved[order[k - 1]] + minGap;
-      }
-      return resolved;
-    };
-    const y1s = data.rows.map(row => yFor(row.previous, data.max));
-    const y2s = data.rows.map((row, index) => y1s[index] + (yFor(row.current, data.max) - y1s[index]) * progress);
-    const y1Labels = resolveLabelYs(y1s);
-    const y2Labels = resolveLabelYs(y2s);
-    data.rows.forEach((row, index) => {
-      const y1 = y1s[index];
-      const y2 = y2s[index];
-      const y1Label = y1Labels[index];
-      const y2Label = y2Labels[index];
-      const shown = row.previous + (row.current - row.previous) * progress;
-      const shownDelta = shown - row.previous;
-      const seriesClass = `series-${index}`;
-      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label+17, class:"tide-slope-value"}, signed(shownDelta)));
-      const mobile = document.createElement("article");
-      mobile.className = "tide-mobile-row";
-      mobile.innerHTML =
-        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
-        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
-        `<div class="tide-mobile-bars" aria-hidden="true">` +
-          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
-          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
-        `</div>`;
-      mobileRows.appendChild(mobile);
-    });
-  }
-
-  function animate() {
-    cancelAnimationFrame(animationFrame);
-    if (reducedMotion) { draw(1); return; }
-    const startedAt = performance.now();
-    const duration = 900;
-    const step = now => {
-      const raw = Math.min(1, (now - startedAt) / duration);
-      draw(1 - Math.pow(1 - raw, 3));
-      if (raw < 1) animationFrame = requestAnimationFrame(step);
-    };
-    animationFrame = requestAnimationFrame(step);
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-    modeButtons.forEach(button => {
-      const selected = button.dataset.tideMode === mode;
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    headline.textContent = datasets[mode].headline;
-    animate();
-  }
-
-  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
-  replayButton.addEventListener("click", animate);
-  draw(1);
-
-  if ("IntersectionObserver" in window && !reducedMotion) {
-    const observer = new IntersectionObserver(entries => {
-      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
-        hasAutoPlayed = true;
-        animate();
-        observer.disconnect();
-      }
-    }, {threshold: 0.35});
-    observer.observe(root);
-  }
-})();
-</script>
-<!-- TIDE_CARD_END --></section>
 </main>
 <footer style="background:linear-gradient(135deg, var(--grad-2), var(--grad-1));border-top:none;padding:48px 24px;text-align:center;color:#fff;font-size:12px;line-height:1.8;">
     <div>公開投稿を収集・分類して整理</div>
