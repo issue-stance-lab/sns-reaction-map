@@ -2,8 +2,9 @@
 
 **登録日**: 2026-09-20
 **状態**: 進行中（consumption-tax-cut／koshitsu-tenpakai／ai-copyright／bukatsu-chiiki
-対応済み。残り6テーマ: bike-blue-ticket・constitutional-amendment・
-elderly-license-revocation・fukushuto・henoko-student-accident・school-nickname-ban）
+対応済み、4テーマとも注記は非表示方式で統一。残り6テーマ: bike-blue-ticket・
+constitutional-amendment・elderly-license-revocation・fukushuto・
+henoko-student-accident・school-nickname-ban）
 **優先度**: 低〜中（CIは落ちていない。Cの「AI帰属の誤り」はai-copyrightで対応済み。
 残りはA・Bのみで、うちfukushutoは実際に読者へ表示されている＝優先度やや高）
 
@@ -24,14 +25,13 @@ consumption-tax-cutは、共有雛形の既定文言そのものは変更せず�
 
 ### A・B: 論点の内訳を開いたときの注記とボタン文言（`planet-prototype.template.html`由来）
 
-| 残存箇所 | 現在の文言 | 対応済みの文言（consumption-tax-cutのみ） |
+| 残存箇所 | 現在の文言 | 対応状況 |
 |---|---|---|
-| 戻るボタン | 「← 全体へ戻る（Esc）」 | 「← 論点の一覧へ戻る（Esc）」（フォールバック表示の文言と統一） |
-| 未読論点の注記 | 「AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。」 | 「この論点の中身（内訳）は、編集部が確認してから表示します。」 |
+| 戻るボタン | 「← 全体へ戻る（Esc）」 | 「← 論点の一覧へ戻る（Esc）」に統一。consumption-tax-cut・koshitsu-tenpakai・bukatsu-chiiki・ai-copyrightで対応済み |
+| 未読論点の注記 | 「AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。」 | 対応済みの4テーマとも`show_unreviewed_note: false`で注記自体を非表示にする方式に統一（ai-copyrightは当初、注記を残したまま文言だけ差し替える方式で対応したが、2026-09-20にオーナー指摘で非表示方式へ変更） |
 
-残存テーマ: ai-copyright / bike-blue-ticket / bukatsu-chiiki / constitutional-amendment /
-elderly-license-revocation / fukushuto / henoko-student-accident / koshitsu-tenpakai /
-school-nickname-ban（9テーマ全部）
+残存テーマ（戻るボタン・注記とも未対応）: bike-blue-ticket / constitutional-amendment /
+elderly-license-revocation / fukushuto / henoko-student-accident / school-nickname-ban（6テーマ）
 
 ### C: 「この論点の全件をAIが本文再読した」（`configs/planet/{テーマ}.yaml`の`coverage_note`）
 
@@ -43,8 +43,8 @@ school-nickname-ban（9テーマ全部）
 
 | テーマ | 読者への表示 |
 |---|---|
-| **ai-copyright** | 表示されている（`show_coverage_note`が既定のtrue） |
-| elderly-license-revocation | 表示されていない（`show_coverage_note: false`のため実害なし） |
+| **ai-copyright** | 対応済み（2026-09-20。文言も編集部作業として書き直した上で、最終的に`show_coverage_note: false`で非表示に） |
+| elderly-license-revocation | 表示されていない（`show_coverage_note: false`のため実害なし。文言は誤ったまま未対応） |
 
 ### D: 「資料にしかない話を見る」ボックスの説明文（課題73調査時に発見済み、今回のオーナー指摘とは別件）
 
@@ -85,18 +85,22 @@ fukushuto・henoko-student-accident・school-nickname-ban）はA・Bのみが対
 は対応済み）。このうち**fukushuto**はshow_unreviewed_noteが既定のtrueで、かつ未再読の論点が
 実在するため、「AIが自動でつけた区分をここに並べることはしません」がすでに読者へ表示されて
 いる（2026-09-20確認）。優先度はここがいちばん高い。残り5テーマは戻るボタンの文言のみで、
-実害はない。
+実害はない。対応するときは、非表示方式（`show_unreviewed_note`/`show_coverage_note: false`）
+に統一する（後述のとおりオーナー指摘を踏まえて4テーマともこの方式に揃えた）。
 
-**表記の揺れに注意**: Bの直し方が2通り混在している。consumption-tax-cut・koshitsu-tenpakai・
-bukatsu-chiikiは注記そのものを非表示（show_unreviewed_note/show_coverage_note: false）に
-した。ai-copyrightだけ、注記を残したまま文言を差し替える方式（render_page()のtheme_id分岐で
-文字列置換）を採った。残りテーマは非表示方式に揃えるのが妥当（オーナー指摘の原文
-「言い訳がましい」を踏まえると、注記自体を消すほうが元の指摘に近い）。
+**表記の揺れは解消済み**: 当初、Bの直し方がconsumption-tax-cut・koshitsu-tenpakai・
+bukatsu-chiikiの非表示方式と、ai-copyrightの文言差し替え方式の2通りに分かれていたが、
+2026-09-20にオーナーから直接「この表記を削除」と指摘があり、ai-copyrightも非表示方式へ
+統一した（オーナー指摘の原文「言い訳がましい」とも整合）。今後の残り6テーマも非表示方式で
+揃えること。
 
 ## 進捗
 
 - 2026-09-20 consumption-tax-cut対応（A・B・C全て。B・Cは注記ごと削除）
 - 2026-09-20 koshitsu-tenpakai対応（A・B、非表示方式）
-- 2026-09-20 ai-copyright対応（A・B・C、Bは文言差し替え方式）
+- 2026-09-20 ai-copyright対応（A・B・C）。当初Bは文言差し替え方式で着手したが、
+  オーナーから「この表記を削除」と指摘があり非表示方式へ変更（B・Cとも
+  `show_unreviewed_note`/`show_coverage_note: false`）。文言差し替え用に追加していた
+  `render_page()`のtheme_id分岐コードは不要になったため削除
 - 2026-09-20 bukatsu-chiiki対応（A・B、非表示方式。Bは元々3論点のみ表示状態だった）
 - 残り6テーマは未着手
