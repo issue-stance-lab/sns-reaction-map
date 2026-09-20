@@ -43,6 +43,8 @@ except ImportError:
 THEME = "school-nickname-ban"
 ARENA_DATA = Path("docs/school-nickname-ban-arena-data.js")
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
+# ヒーロー「議論の中心」の見出し文「一律に禁止して、本当に効果があるのか」が指す論点。
+CONCLUSION_ISSUE = "一律禁止の実効性"
 
 # 立場（正典のラベル）→ ページ側の色分けキー。
 STANCE_KEY = {
@@ -811,9 +813,37 @@ def refresh_verified_planet(page: str, rows: list[dict], collected: int) -> str:
                         block, "山なみ全体", flags=re.S)
 
 
+def apply_conclusion_count(page: str, rows: list[dict[str, Any]]) -> str:
+    """ヒーロー「議論の中心」の件数バッジを合わせる。
+
+    このバッジは PLANET_SECTION の外にあるため refresh_verified_planet では
+    再生成されず、山なみ形式だと sync_issue_counts.py も対象外にする
+    （sync_theme の早期return）ため、これまでどの経路からも更新されていなかった
+    （2026-09-20、定期収集で87→100件に増えた際に verify_number_provenance.py で発覚）。
+    CONCLUSION_ISSUE が最大論点でなくなったら、件数だけ書き換えず見出し文の
+    書き直しを促すために失敗する（sync_issue_counts.apply_conclusion と同じ方針）。
+    """
+    counts = issue_counts(rows)
+    target = counts.get(CONCLUSION_ISSUE, 0)
+    top_issue, top_count = max(counts.items(), key=lambda kv: kv[1])
+    if top_count > target:
+        raise IssueCountError(
+            f"「議論の中心」の論点が {CONCLUSION_ISSUE}({target}件) から "
+            f"{top_issue}({top_count}件) へ入れ替わりました。"
+            "見出し文を書き直してから CONCLUSION_ISSUE も更新してください"
+        )
+    return replace_once(
+        page,
+        r'<span class="conclusion-count"><b>[\d,]+</b>件</span>',
+        f'<span class="conclusion-count"><b>{target}</b>件</span>',
+        "議論の中心の件数",
+    )
+
+
 def apply_planet_counts(page: str, rows: list[dict], collected: int, period: str) -> str:
-    """図を再読検査付きで再生成し、調査条件・投票説明・詳細表を同期する。"""
+    """図を再読検査付きで再生成し、ヒーロー件数・調査条件・投票説明・詳細表を同期する。"""
     page = refresh_verified_planet(page, rows, collected)
+    page = apply_conclusion_count(page, rows)
     page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>',
                         build_research_conditions(collected, period), "調査条件", flags=re.S)
     page = replace_once(page, r"var issues=\[[^\n]*?\];", build_vote_issues(rows) + ";", "投票の論点")

@@ -94,3 +94,13 @@ UIでは高さ0の3論点の山本体がクリックを受け取らず、生成�
 [公開確認と保全記録](../quality/reviews/2026-09-12-nickname-release.md)。
 
 2026-09-20、オーナー指示で「資料にしかない話」（沈んだ大陸）を1件、4件の上限まで追加した（課題71の「新規作成」枠、副首都・憲法改正・辺野古・皇室典範と同時進行）。候補8個を検索し、「受け手の苦痛基準で判断（意図でなく）」「性同一性障害生徒への呼称配慮」の2個はすでに独自に同じ考え方を語る投稿が複数見つかり不採用、いじめ認知件数の統計・国会答弁の事例紹介など5個は生活影響を具体的に書けず見送った。採用したのはいじめ防止対策推進法第13条「あだ名禁止・さん付けの具体的内容は国ではなく学校の実情に応じて各校が決める」で、唯一のヒットは疑問を投げかけるだけの投稿で無関係と確認、sns_countは0（sns_base 87）。既存3件（校則見直し手続きへの意見反映・いじめ情報の組織内共有・謝罪だけで解消としない）は変更していない。`build_public_registry.py --topic school-nickname-ban`・`build_nickname_arena.py`で反映、`updated_at`を2026-09-20へ進め連鎖5点を揃えた。標準検査・`verify_ocean_layer.py`（新設1件分）・unittest 986件、いずれもNG無し。
+
+## 2026-09-20 定期収集（課題69型）・conclusion-count同期バグを修正
+
+collect_at（9/15）を5日超過していた定期収集を実施。Yahooリアルタイム検索30件取得・重複9件・新規21件・意見13件（分類エラー0件、モデルkimi-k2.6）。累積483件・意見87→100件。新規13件は「一律禁止の実効性」論点に8件（うち7件が反対）偏り、学校での経験談より禁止の効果・必要性を疑う投稿が中心。潮目ウィジェット（8/17回比）は「一律禁止に反対」が37.5%→72.7%（+35.2pt）で変動、小標本のため参考程度と明記。
+
+**語られていない争点4件の母数更新**: 独自性検査（`independence_gate`）が海面下4件（校則見直し手続き・いじめ情報共有・3か月基準・sc-4）のsns_base停滞（87件のまま）で停止。新規13件を4つのmatch_ruleパターンで再照合（regex一致0件・目視確認でも一致なし）し、`data/verification/school-nickname-ban-sunk-continents.json`のsns_baseを87→100・checked_onを2026-09-20へ更新して解消。
+
+**新規発見バグ（修正済み）**: ヒーロー「議論の中心」の件数バッジ（`conclusion-count`、見出し「一律に禁止して、本当に効果があるのか」）が山なみ移行後どの経路からも更新されておらず、「28件」に固定されたまま公開されていた（`sync_issue_counts.py`は山なみ形式を早期returnで対象外にし、`build_nickname_arena.py`のplanet系経路にも同期処理が無かった）。`verify_number_provenance.py`が今回の件数変化で「説明できない数字」として検出。`build_nickname_arena.py`に`CONCLUSION_ISSUE`定数と`apply_conclusion_count()`を追加し、`apply_planet_counts()`から呼ぶことで「一律禁止の実効性」件数（36件）へ自動追従するようにした。最大論点が入れ替わったら（見出し文の書き直しが必要なため）例外で止まる安全策も実装（`sync_issue_counts.apply_conclusion`と同型）。
+
+分析メモ（`configs/theme-seo.json`のobservations）に2026-09-20回の1文を追加。標準検査（verify_theme_page/verify_number_provenance/verify_page_originality/verify_top_page/validate_theme_seo/unittest 986件）・採用台帳・データ資産台帳、いずれもNG無し。承認は`approval-20260920-003`（オーナーがAskUserQuestionで承認）。次回収集予定2026-10-18（新規意見20件未満が2回連続のため周期28日）。
