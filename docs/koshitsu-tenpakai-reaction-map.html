@@ -1679,19 +1679,18 @@ try {
 <section class="tide-card" id="koshitsu-tenpakai-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
   <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
     <div class="tide-widget-tabs">
-      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
-      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
+      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="true">論点の変化</button>
     </div>
     <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
   </div>
   <div class="tide-widget-summary" aria-live="polite">
     <span class="tide-widget-period">8月24日 → 9月18日</span>
-    <strong data-tide-headline>「中立・情報」が35.7ポイント減少</strong>
+    <strong data-tide-headline>「愛子さま・皇族の地位」が5.7ポイント増加</strong>
   </div>
   <div class="tide-slope-wrap">
     <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="koshitsu-tenpakai-tide-widget-slope-title koshitsu-tenpakai-tide-widget-slope-desc">
       <title id="koshitsu-tenpakai-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="koshitsu-tenpakai-tide-widget-slope-desc">前回収集分322件と今回収集分0件の構成比を比較します。</desc>
+      <desc id="koshitsu-tenpakai-tide-widget-slope-desc">前回収集分274件と今回収集分281件の構成比を比較します。</desc>
       <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月24日</text>
       <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 9月18日</text>
       <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
@@ -1713,7 +1712,7 @@ try {
   const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
   const replayButton = root.querySelector("[data-tide-replay]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mode = "stance";
+  let mode = "issue"; // 課題: 立場の分類方式が前回・今回で異なり比較不能のため、当面は論点モードのみ表示(2026-09-20)
   let animationFrame = 0;
   let hasAutoPlayed = false;
 
