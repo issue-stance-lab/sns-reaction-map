@@ -604,7 +604,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-consumption-tax-cut-effect" tabindex="-1">
-      <h2>📉 減税の効果</h2><div class="explainer-card landing-image" data-img="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka.webp" data-alt="減税の効果"><img src="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka.webp" alt="論点図解：減税の効果" loading="lazy"></div>
+      <h2>📉 減税の効果</h2><div class="explainer-card landing-image" data-img="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka-v2.webp" data-alt="減税の効果"><img src="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka-v2.webp" alt="論点図解：減税の効果" loading="lazy"></div>
       <p class="sub">717件（18.4%）　山の高さ：強い表現29.7%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>減税推進 207件</span><span><i style="background:#D9A520"></i>条件付き賛成・政府案に不満 82件</span><span><i style="background:#7D5BA6"></i>減税反対・慎重 403件</span><span><i style="background:#8B9199"></i>中立・情報 25件</span></div>
       <div class="bar"><span style="width:28.9%;background:#2F8F83;color:#ffffff">減税推進</span><span style="width:11.4%;background:#D9A520;color:#0d1117"></span><span style="width:56.2%;background:#7D5BA6;color:#ffffff">減税反対・慎重</span><span style="width:3.5%;background:#8B9199;color:#0d1117"></span></div>
@@ -1083,7 +1083,7 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  const ctcImgSlug = {"consumption-tax-cut-political-trust":"kouyaku","consumption-tax-cut-scope":"taishou","consumption-tax-cut-effect":"kouka","consumption-tax-cut-finance-welfare":"zaigen","consumption-tax-cut-alternatives":"kyufu","consumption-tax-cut-business-burden":"jigyousha"}[it.id];
+  const ctcImgSlug = {"consumption-tax-cut-political-trust":"kouyaku","consumption-tax-cut-scope":"taishou","consumption-tax-cut-effect":"kouka-v2","consumption-tax-cut-finance-welfare":"zaigen","consumption-tax-cut-alternatives":"kyufu","consumption-tax-cut-business-burden":"jigyousha"}[it.id];
   const ctcImgPath = ctcImgSlug ? ('images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-'+ctcImgSlug+'.webp') : '';
   const ctcImgHtml = ctcImgSlug ? ('<div class="explainer-card landing-image" data-img="'+ctcImgPath+'" data-alt="'+it.label+'">'
     +'<img src="'+ctcImgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';

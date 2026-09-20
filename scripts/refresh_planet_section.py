@@ -312,7 +312,7 @@ def _sync_nickname_method_text(html: str, data: dict) -> str:
 CTC_LANDING_IMAGE_BY_ISSUE_ID = {
     "consumption-tax-cut-political-trust": ("kouyaku", "公約・政治不信"),
     "consumption-tax-cut-scope": ("taishou", "対象範囲"),
-    "consumption-tax-cut-effect": ("kouka", "減税の効果"),
+    "consumption-tax-cut-effect": ("kouka-v2", "減税の効果"),
     "consumption-tax-cut-finance-welfare": ("zaigen", "財源・社会保障"),
     "consumption-tax-cut-alternatives": ("kyufu", "給付との比較"),
     "consumption-tax-cut-business-burden": ("jigyousha", "事業者の負担"),
