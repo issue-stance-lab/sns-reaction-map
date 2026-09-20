@@ -100,10 +100,37 @@ class OceanLayerTest(unittest.TestCase):
         pairs = vol.find_theme_files()
         self.assertGreater(len(pairs), 0)
         for theme, (sunk_path, veins_path) in pairs.items():
-            sunk_errors, _skipped = vol.verify_sunk_continents(theme, sunk_path)
-            self.assertIsInstance(sunk_errors, list)
-            vein_errors, _skipped2 = vol.verify_veins(theme, veins_path)
-            self.assertIsInstance(vein_errors, list)
+            if sunk_path is not None:
+                sunk_errors, _skipped = vol.verify_sunk_continents(theme, sunk_path)
+                self.assertIsInstance(sunk_errors, list)
+            if veins_path is not None:
+                vein_errors, _skipped2 = vol.verify_veins(theme, veins_path)
+                self.assertIsInstance(vein_errors, list)
+
+    def test_existing_fukushuto_sunk_continents_only_passes(self) -> None:
+        """地下水脈(veins)を持たず沈んだ大陸(sunk-continents)だけのテーマも検査対象になることを確認する。
+
+        以前は find_theme_files() が veins_path.exists() を必須にしており、沈んだ大陸だけを
+        先に作ったテーマは検査から丸ごと抜け落ちていた（fukushutoで発覚、2026-09-20修正）。
+        """
+        pairs = vol.find_theme_files()
+        self.assertIn("fukushuto", pairs)
+        sunk_path, veins_path = pairs["fukushuto"]
+        self.assertIsNotNone(sunk_path)
+        self.assertIsNone(veins_path)
+        errors, _skipped = vol.verify_sunk_continents("fukushuto", sunk_path)
+        self.assertEqual(errors, [])
+
+    @unittest.skipUnless(
+        (ROOT / "social-samples/fukushuto_hermes_classified.json").is_file(),
+        "match_rule の正典再現には非公開正典（social-samples/）が要る",
+    )
+    def test_existing_fukushuto_sunk_continents_match_rule_reproduces(self) -> None:
+        pairs = vol.find_theme_files()
+        sunk_path, _veins_path = pairs["fukushuto"]
+        errors, skipped = vol.verify_sunk_continents("fukushuto", sunk_path)
+        self.assertEqual(errors, [])
+        self.assertEqual(skipped, [])
 
     def test_sunk_continents_over_four_items_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

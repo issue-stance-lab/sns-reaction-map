@@ -23,14 +23,23 @@ NON_EDITORIAL_CHECKED_BY = {"ai_assisted"}
 SUPPORTED_MATCH_RULE_TYPES = {"regex", "editorial_confirmation"}
 
 
-def find_theme_files() -> dict[str, tuple[Path, Path]]:
-    """theme_id -> (sunk_continents_path, veins_path) の組を data/verification/ から探す。"""
-    pairs: dict[str, tuple[Path, Path]] = {}
+def find_theme_files() -> dict[str, tuple[Path | None, Path | None]]:
+    """theme_id -> (sunk_continents_path, veins_path) の組を data/verification/ から探す。
+
+    どちらか一方しか無いテーマも対象にする。3.3.2の沈んだ大陸は地下水脈と独立に
+    成立し（build_ocean_layer() も両者を別々に扱う設計）、両方の存在を必須にすると
+    沈んだ大陸だけを先に作ったテーマが検査から丸ごと抜け落ちる（fukushutoで発覚、2026-09-20）。
+    """
+    pairs: dict[str, tuple[Path | None, Path | None]] = {}
     for sunk_path in sorted(VERIFICATION_DIR.glob("*-sunk-continents.json")):
         theme = sunk_path.name[: -len("-sunk-continents.json")]
         veins_path = VERIFICATION_DIR / f"{theme}-veins.json"
-        if veins_path.exists():
-            pairs[theme] = (sunk_path, veins_path)
+        pairs[theme] = (sunk_path, veins_path if veins_path.exists() else None)
+    for veins_path in sorted(VERIFICATION_DIR.glob("*-veins.json")):
+        theme = veins_path.name[: -len("-veins.json")]
+        if theme not in pairs:
+            sunk_path = VERIFICATION_DIR / f"{theme}-sunk-continents.json"
+            pairs[theme] = (sunk_path if sunk_path.exists() else None, veins_path)
     return pairs
 
 
@@ -294,17 +303,19 @@ def main() -> int:
     skipped_existence_themes: list[str] = []
     skipped_match_rule_themes: dict[str, list[str]] = {}
     for theme, (sunk_path, veins_path) in pairs.items():
-        sunk_errors, skipped_match_rule = verify_sunk_continents(theme, sunk_path)
-        errors.extend(sunk_errors)
-        if skipped_match_rule:
-            skipped_match_rule_themes[theme] = skipped_match_rule
-        vein_errors, skipped = verify_veins(theme, veins_path)
-        errors.extend(vein_errors)
-        if skipped:
-            skipped_existence_themes.append(theme)
-        errors.extend(verify_no_text_leak(theme, veins_path))
-        errors.extend(verify_checked_by_not_leaked(theme, sunk_path, "sunk-continents"))
-        errors.extend(verify_checked_by_not_leaked(theme, veins_path, "veins"))
+        if sunk_path is not None:
+            sunk_errors, skipped_match_rule = verify_sunk_continents(theme, sunk_path)
+            errors.extend(sunk_errors)
+            if skipped_match_rule:
+                skipped_match_rule_themes[theme] = skipped_match_rule
+            errors.extend(verify_checked_by_not_leaked(theme, sunk_path, "sunk-continents"))
+        if veins_path is not None:
+            vein_errors, skipped = verify_veins(theme, veins_path)
+            errors.extend(vein_errors)
+            if skipped:
+                skipped_existence_themes.append(theme)
+            errors.extend(verify_no_text_leak(theme, veins_path))
+            errors.extend(verify_checked_by_not_leaked(theme, veins_path, "veins"))
 
     for theme in pairs:
         print(f"{theme}: 沈んだ大陸・地下水脈を検査")

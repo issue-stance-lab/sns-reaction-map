@@ -48,6 +48,24 @@
    tweet_idも実在。`verify_ocean_layer.py`のai-copyright分はNG0件）。bukatsu-chiikiに
    加えて、地下水脈を1本から2〜4本へ増やす際の実例として参照できる。
 
+   **2026-09-20追記（検査スクリプトのバグを発見・修正）**: fukushutoの「資料にしかない話」
+   新設（オーナー指示）に着手した際、`scripts/verify_ocean_layer.py`の`find_theme_files()`が
+   `veins_path.exists()`を必須にしており、**地下水脈(veins)を持たず沈んだ大陸(sunk-continents)
+   だけを作ったテーマが検査から丸ごと抜け落ちる**バグを発見した（`build_ocean_layer()`
+   （`scripts/public_registry_common.py`）は元から両方を独立に扱う設計で、この非対称は
+   検査スクリプト側だけの欠陥だった）。どちらか一方だけでも対象にするよう修正し、
+   `tests/test_ocean_layer.py`に再発防止テストを追加した。
+
+   この修正により、**bike-blue-ticketの`-sunk-continents.json`も初めて検査対象になり、
+   (a)と同型の新しい不一致を検出した**: `bike-blue-ticket-sc-1`の`machine_hits`に記録された
+   2件のtweet_idのうち1件（`2086098880874311993`）が、現行の正典に対して同じ正規表現を
+   再実行しても見つからない。elderly-license-revocationの`-sunk-continents.json`は
+   同じ検査で新たにNG0件と確認できた（veins無しでも中身は正しく再現できている）。
+   `bike-blue-ticket-sc-1`の不一致は今回のセッションでは調査・修正していない。次に着手する
+   セッションは、(a)のconstitutional-amendment分と同じ手順（現行正典への同条件語での
+   再ヒット→本文を実際に読んで除外理由を書き直す。再現できないという理由だけで
+   `sns_count`を変更しない）で対応すること。
+
    **2026-09-20追記**: consumption-tax-cutも同じく`-sunk-continents.json`・
    `-veins.json`自体が存在しない「未着手」状態だった（オーナーから「他のテーマにはある
    『資料にしか無い話を見る』が無い」と指摘され着手）。大綱（内閣、令和8年9月15日閣議決定）
