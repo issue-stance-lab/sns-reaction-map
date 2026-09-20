@@ -7,6 +7,9 @@
 
 data/public/themes/*.json と data/public/catalog.json は生成専用。手編集しない。
 同じ入力からは必ず同じバイト列を出す（生成時刻を含めない）。
+
+課題77 案1: サイトが直接fetchできる写し docs/data/themes/*.json・docs/data/catalog.json も
+同じバイト列で同時に書く（手コピーすると必ずずれるため）。
 """
 from __future__ import annotations
 
@@ -16,6 +19,8 @@ import sys
 from public_registry_common import (
     ROOT,
     PUBLIC_CATALOG_PATH,
+    PUBLIC_DOCS_CATALOG_PATH,
+    PUBLIC_DOCS_THEMES_DIR,
     PUBLIC_THEMES_DIR,
     RegistryError,
     build_catalog,
@@ -44,12 +49,17 @@ def build_one(topic_id: str) -> bool:
             print(f"NG {topic_id}: {error}", file=sys.stderr)
         return False
 
+    payload = dumps_theme_json(theme_json)
     out_path = PUBLIC_THEMES_DIR / f"{topic_id}.json"
-    out_path.write_bytes(dumps_theme_json(theme_json))
+    out_path.write_bytes(payload)
+    # サイトが直接fetchできる写しも同じバイト列で置く（手コピーすると必ずずれる）。
+    docs_out_path = PUBLIC_DOCS_THEMES_DIR / f"{topic_id}.json"
+    docs_out_path.parent.mkdir(parents=True, exist_ok=True)
+    docs_out_path.write_bytes(payload)
     print(
         f"OK {topic_id}: collected={theme_json['collected_count']} "
         f"opinion={theme_json['opinion_count']} issues={len(theme_json['issues'])} "
-        f"-> {out_path.relative_to(ROOT)}"
+        f"-> {out_path.relative_to(ROOT)} / {docs_out_path.relative_to(ROOT)}"
     )
     return True
 
@@ -68,11 +78,15 @@ def rebuild_catalog() -> bool:
             print(f"NG catalog: {error}", file=sys.stderr)
         return False
 
+    payload = dumps_catalog_json(catalog)
     PUBLIC_CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    PUBLIC_CATALOG_PATH.write_bytes(dumps_catalog_json(catalog))
+    PUBLIC_CATALOG_PATH.write_bytes(payload)
+    PUBLIC_DOCS_CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    PUBLIC_DOCS_CATALOG_PATH.write_bytes(payload)
     print(
         f"OK catalog: theme_count={catalog['totals']['theme_count']} "
-        f"opinion_count={catalog['totals']['opinion_count']} -> {PUBLIC_CATALOG_PATH.relative_to(ROOT)}"
+        f"opinion_count={catalog['totals']['opinion_count']} "
+        f"-> {PUBLIC_CATALOG_PATH.relative_to(ROOT)} / {PUBLIC_DOCS_CATALOG_PATH.relative_to(ROOT)}"
     )
     return True
 

@@ -263,6 +263,49 @@ def run_share_source_report(
     return call_run_report(access_token, property_id, payload)
 
 
+# 課題77 案1（A-5）。AI検索・AIアシスタント経由の来訪をGA4で見えるようにする。
+# 生成AI側の表記ゆれ（chat.openai.com / chatgpt.com、www有無）をどちらも拾う。
+AI_REFERRER_SOURCES = (
+    "chatgpt.com",
+    "chat.openai.com",
+    "perplexity.ai",
+    "www.perplexity.ai",
+    "gemini.google.com",
+    "copilot.microsoft.com",
+    "claude.ai",
+    "bing.com",
+)
+
+
+def run_ai_referrer_report(
+    access_token: str,
+    property_id: str,
+    days: int,
+    host_name: str = DEFAULT_HOST_NAME,
+) -> dict:
+    payload = {
+        "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "yesterday"}],
+        "dimensions": [
+            {"name": "sessionSource"},
+            {"name": "sessionMedium"},
+            {"name": "landingPagePlusQueryString"},
+        ],
+        "metrics": [{"name": "sessions"}, {"name": "activeUsers"}, {"name": "screenPageViews"}],
+        "dimensionFilter": and_filter(
+            public_host_filter(host_name),
+            {
+                "filter": {
+                    "fieldName": "sessionSource",
+                    "inListFilter": {"values": list(AI_REFERRER_SOURCES)},
+                }
+            },
+        ),
+        "orderBys": [{"metric": {"metricName": "sessions"}, "desc": True}],
+        "limit": 25,
+    }
+    return call_run_report(access_token, property_id, payload)
+
+
 def summarize(report: dict) -> dict[str, str]:
     headers = [h["name"] for h in report.get("metricHeaders", [])]
     values = []
@@ -304,11 +347,13 @@ def detail_bundle(
             counts["eventCount"] = "0"
         events[name] = counts
     share_button = report_rows(run_share_source_report(access_token, property_id, days, host_name))
+    ai_referrer = report_rows(run_ai_referrer_report(access_token, property_id, days, host_name))
     return {
         "summary": summary,
         "page_paths": page_paths,
         "events": events,
         "share_button": share_button,
+        "ai_referrer": ai_referrer,
     }
 
 
@@ -344,6 +389,19 @@ def print_details(details: dict) -> None:
         print(
             f"| {row.get('sessionSource', '')} | {row.get('sessionMedium', '')} | "
             f"{row.get('sessionCampaignName', '')} | "
+            f"{row.get('sessions', '0')} | {row.get('activeUsers', '0')} | "
+            f"{row.get('screenPageViews', '0')} |"
+        )
+    print()
+    print("## AI referrer traffic (課題77 案1)")
+    print("| sessionSource | sessionMedium | landingPage | sessions | activeUsers | screenPageViews |")
+    print("|---|---|---|---:|---:|---:|")
+    if not details["ai_referrer"]:
+        print("| (0 rows) |  |  | 0 | 0 | 0 |")
+    for row in details["ai_referrer"]:
+        print(
+            f"| {row.get('sessionSource', '')} | {row.get('sessionMedium', '')} | "
+            f"{row.get('landingPagePlusQueryString', '')} | "
             f"{row.get('sessions', '0')} | {row.get('activeUsers', '0')} | "
             f"{row.get('screenPageViews', '0')} |"
         )

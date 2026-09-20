@@ -64,6 +64,182 @@
     setTimeout(bindRelatedThemeFallback, 0);
   }
 
+  /* === 論点の引用ボタン ============================================
+     課題77 案1（A-4）。次の3箇所の見出し直後へ「引用」ボタンを差し込む。
+       1. 論点の一覧（.issue-anchor、山なみの静的フォールバック。canvasが
+          描けない環境でだけ見える）
+       2. 論点カード（article.ic、画像＋X投稿がある5テーマ）
+       3. 山なみの選択パネル（#panel、canvasが描ける環境。drawPanel()が
+          land()のたびに#panelをinnerHTMLごと作り直す。quality/prototypes/
+          *.template.html はテーマごとに論点画像の差し込みで#panel生成部の
+          文字列を直接書き換えており（drawPanel()の"let h="の並び）、
+          テーマによって挿入位置が微妙に違う。テンプレート側を触らずに済むよう
+          MutationObserverで#panelの更新を検知し、ここから差し込む）
+     テーマ名・論点名・更新年月・意見件数は data/themes/{theme_id}.json を
+     fetch して取る。ページのHTMLに新しい数字は書かない
+     （verify_number_provenance.py の対象を増やさないため）。取得に失敗した
+     場合は、見出しの文字から作った数字なしの定型文にする。
+  ================================================================ */
+  function issueLabelFromHeading(heading) {
+    // 論点の一覧・選択パネル側の見出しは「アイコン 論点名」の形（例: 🏛 定義・中身）。
+    // 先頭の絵文字1つ分と空白を落とす。論点カード側の見出しは論点名のみ。
+    var text = (heading && heading.textContent || '').trim();
+    return text.replace(/^\S+\s+/, '');
+  }
+
+  function citeButtonMarkup(issueId) {
+    return '<span class="cite-copy-wrap" data-cite-issue="' + issueId + '">'
+      + '<button type="button" class="cite-copy-btn" aria-label="この論点の引用用テキストをコピーする">引用</button>'
+      + '<span class="cite-copy-toast" hidden>コピーしました</span></span>';
+  }
+
+  function citeLegacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) { /* 何もしない */ }
+    document.body.removeChild(ta);
+  }
+
+  function citeCopyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)['catch'](function () { citeLegacyCopy(text); });
+    } else {
+      citeLegacyCopy(text);
+    }
+  }
+
+  function citeBuildText(themeId, issueId, anchorUrl, fallback) {
+    return fetch('data/themes/' + themeId + '.json').then(function (res) {
+      if (!res.ok) throw new Error('cite fetch failed: ' + res.status);
+      return res.json();
+    }).then(function (data) {
+      var issue = null;
+      var issues = data.issues || [];
+      for (var i = 0; i < issues.length; i++) {
+        if (issues[i].id === issueId) { issue = issues[i]; break; }
+      }
+      var themeName = data.title || fallback.theme;
+      var issueLabel = (issue && issue.label) || fallback.issue;
+      var ymParts = typeof data.updated_on === 'string' ? data.updated_on.split('-') : [];
+      var opinionCount = typeof data.opinion_count === 'number' ? data.opinion_count : null;
+      var note;
+      if (ymParts.length === 3 && opinionCount !== null) {
+        var ym = ymParts[0] + '年' + parseInt(ymParts[1], 10) + '月';
+        note = ym + '時点、SNS公開投稿サンプル' + opinionCount + '件の整理。社会全体の世論調査ではありません';
+      } else {
+        note = 'SNS公開投稿サンプルの整理。社会全体の世論調査ではありません';
+      }
+      return 'SNS反応まっぷ「' + themeName + '」論点「' + issueLabel + '」（' + note + '）\n' + anchorUrl;
+    })['catch'](function () {
+      return 'SNS反応まっぷ「' + fallback.theme + '」論点「' + fallback.issue +
+        '」（SNS公開投稿サンプルの整理。社会全体の世論調査ではありません）\n' + anchorUrl;
+    });
+  }
+
+  function citeInsertAfter(heading, issueId) {
+    if (!heading || heading.dataset.citeBound === '1') return;
+    heading.dataset.citeBound = '1';
+    heading.insertAdjacentHTML('afterend', citeButtonMarkup(issueId));
+  }
+
+  function bindCiteButtons() {
+    var targets = document.querySelectorAll('.issue-anchor[id^="issue-"], article.ic[id^="issue-"]');
+    Array.prototype.forEach.call(targets, function (target) {
+      var issueId = target.id.replace(/^issue-/, '');
+      var heading;
+      if (target.classList.contains('issue-anchor')) {
+        var panel = target.nextElementSibling;
+        heading = panel && panel.querySelector('h2');
+      } else {
+        heading = target.querySelector('.ic-head h3');
+      }
+      citeInsertAfter(heading, issueId);
+    });
+  }
+
+  // #panel（山なみの選択パネル）はland()のたびにinnerHTMLごと作り直される。
+  // land()はdrawPanel()の直後にsyncList()も同期呼び出しするため、
+  // #panelの変化を拾うMutationObserverが発火する時点では
+  // #list 側の aria-pressed（選択中の論点）も更新済み。
+  function citeSyncPanel() {
+    var panel = document.getElementById('panel');
+    var heading = panel && panel.querySelector('h2');
+    if (!heading) return;
+    var selectedBtn = document.querySelector('#list button[aria-pressed="true"]');
+    if (!selectedBtn) return; // 概要表示（論点未選択）では引用ボタンを出さない
+    var issueId = selectedBtn.id.replace(/^btn-/, '');
+    citeInsertAfter(heading, issueId);
+  }
+
+  (function observeCitePanel() {
+    var panel = document.getElementById('panel');
+    if (!panel || typeof MutationObserver !== 'function') return;
+    new MutationObserver(citeSyncPanel).observe(panel, { childList: true });
+    citeSyncPanel();
+  })();
+
+  // イベント委譲: #panel（山なみの選択パネル）はland()のたびにinnerHTMLごと
+  // 作り直されるため、ボタンへ直接listenerを付けても選択のたびに失われる。
+  // document側で拾えば、静的フォールバック・論点カード・選択パネルのどれでも動く。
+  document.addEventListener('click', function (event) {
+    var btn = event.target.closest && event.target.closest('.cite-copy-btn');
+    if (!btn) return;
+    var wrap = btn.closest('.cite-copy-wrap');
+    var issueId = wrap && wrap.getAttribute('data-cite-issue');
+    if (!issueId) return;
+    var themeId = topicSlugFrom(location.pathname.split('/').pop());
+    if (!themeId) return;
+    var fallback = {
+      theme: (document.title || '').split('｜')[0].trim(),
+      issue: issueLabelFromHeading(wrap.previousElementSibling) || issueId
+    };
+    var anchorUrl = location.origin + location.pathname + '#issue-' + issueId;
+    var toast = wrap.querySelector('.cite-copy-toast');
+    citeBuildText(themeId, issueId, anchorUrl, fallback).then(function (text) {
+      citeCopyText(text);
+      if (toast) {
+        toast.hidden = false;
+        window.clearTimeout(toast._citeHideTimer);
+        toast._citeHideTimer = window.setTimeout(function () { toast.hidden = true; }, 2000);
+      }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'cite_copy', { theme_id: themeId, issue_id: issueId });
+      }
+    });
+  });
+
+  /* 山なみが描ける環境（.planet-live）では「論点の一覧」の静的表示（#fallback）が
+     display:none になり、issue-anchorは画面に無いのでブラウザ標準のハッシュ遷移では
+     届かない。同じ論点を選ぶ既存のボタン（#btn-{論点ID}、素のIDでbuildList()が作る）を
+     見つけて押させることで、地図側の選択・スクロールの実装（land()）をそのまま使い、
+     #panel に3番目の引用ボタンを表示させる。
+     #issue-cards（画像＋X投稿。issue-cardsを持つ5テーマ）はplanet-liveと無関係に
+     常時表示なので、ここでは何もしなくてよい（ブラウザ標準の遷移で届く）。 */
+  function citeRestoreFromHash() {
+    var match = /^#issue-(.+)$/.exec(location.hash);
+    if (!match) return;
+    var liveButton = document.getElementById('btn-' + match[1]);
+    if (liveButton) liveButton.click();
+  }
+
+  function initCiteFeature() {
+    bindCiteButtons();
+    citeRestoreFromHash();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCiteFeature);
+  } else {
+    initCiteFeature();
+  }
+
   window.drawArenaUserMarker = function (ctx, options) {
     if (!ctx || !options) return;
     var x = options.x;

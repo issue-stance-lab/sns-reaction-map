@@ -1,0 +1,978 @@
+{
+  "claim_verification": {
+    "checked_on": "2026-08-19",
+    "claims": [
+      {
+        "claim": "2年たてば、食料品の消費税は10％に戻る",
+        "finding": "戻る先は10％ではなく8％。1％との差は7ポイントで、投稿が前提にしている9ポイントではない。",
+        "id": "rate10",
+        "issue_ids": [
+          "consumption-tax-cut-scope"
+        ],
+        "matched_post_count": 3,
+        "sources": [
+          {
+            "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」",
+            "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+          },
+          {
+            "name": "財務省「消費税の使途（令和8年度予算）」（PDF）",
+            "url": "https://www.mof.go.jp/tax_policy/summary/consumption/122.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "ゼロではなく1％にしたのは、レジなどのシステム改修が理由だ",
+        "finding": "理由の説明は会見の発言と重なる。ただし投稿によく出てくる「改修に1年かかる」という年数までは、この会見録からは確認できなかった。",
+        "id": "register",
+        "issue_ids": [
+          "consumption-tax-cut-business-burden"
+        ],
+        "matched_post_count": 12,
+        "sources": [
+          {
+            "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」",
+            "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "食料品の消費税を下げると、年5兆円かかる",
+        "finding": "国会で政府が示した額は約4.3兆円。5兆円はそれより約7千億円大きい。桁は合っているが、答弁の数字ではない。",
+        "id": "cost5cho",
+        "issue_ids": [
+          "consumption-tax-cut-finance-welfare"
+        ],
+        "matched_post_count": 15,
+        "sources": [
+          {
+            "name": "国会会議録検索システム 第219回国会 衆議院予算委員会（令和8年6月22日）片山財務大臣答弁",
+            "url": "https://kokkai.ndl.go.jp/txt/122105261X01520260622/110"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "消費税は全額が社会保障に使われている／一般会計に入るのだから使われていない",
+        "finding": "「全額を社会保障へ」は、法律と予算の建て付けとしては資料どおり。ただし4経費を消費税収でまかなえてはいない。逆に「一般会計に入るのだから社会保障には使われていない」という言い方も、条文と予算総則を見るかぎり成り立たない。どちらの言い分も、そのままでは資料と合わない。",
+        "id": "welfare",
+        "issue_ids": [
+          "consumption-tax-cut-finance-welfare"
+        ],
+        "matched_post_count": 13,
+        "sources": [
+          {
+            "name": "財務省「消費税の使途に関する資料」",
+            "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm"
+          },
+          {
+            "name": "財務省「消費税率の引上げと使途の明確化」（PDF、消費税法第1条第2項の条文）",
+            "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05_1.pdf"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "輸出企業には年11.7兆円（別の投稿では7兆円）の消費税が還付されている",
+        "finding": "輸出免税で仕入れにかかった税額が控除しきれず還付が生じる仕組み自体は、国税庁が説明している。確かめられなかったのは金額のほう。7兆円は還付申告全体の額に近いが、輸出分と限った公表値ではなく、11.7兆円に至っては対応する公表値を見つけられなかった。投稿が誤りだと判定したのではなく、公表資料では確認できなかった、という結果である。",
+        "id": "refund",
+        "issue_ids": [
+          "consumption-tax-cut-finance-welfare"
+        ],
+        "matched_post_count": 17,
+        "sources": [
+          {
+            "name": "国税庁「令和6年度版 国税庁レポート 適正・公平な課税・徴収」",
+            "url": "https://www.nta.go.jp/about/introduction/torikumi/report/2024/04_3.htm"
+          },
+          {
+            "name": "国税庁 タックスアンサー No.6551 輸出取引の免税",
+            "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6551.htm"
+          }
+        ],
+        "verdict": "miss"
+      },
+      {
+        "claim": "消費税は導入されてから、一度も下げられたことがない",
+        "finding": "税率が下がった例は資料に見当たらない。ただし年数の言い方は投稿ごとに割れていて、平成元年4月からだと37年になる。「30年」「40年」はどちらも実際の期間とずれる。",
+        "id": "firstcut",
+        "issue_ids": [
+          "consumption-tax-cut-political-trust"
+        ],
+        "matched_post_count": 12,
+        "sources": [
+          {
+            "name": "財務省「日本の税の歴史を教えてください。」",
+            "url": "https://www.mof.go.jp/tax_information/qanda015.html"
+          }
+        ],
+        "verdict": "fact"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "collected_count": 4386,
+  "collection_period": {
+    "end": "2026-09-17",
+    "start": "2026-07-28",
+    "status": "known"
+  },
+  "data_version": "v1-06040e5f57d8f492",
+  "editorial_summary": {
+    "checked_on": "2026-09-14",
+    "findings": [
+      {
+        "id": "consumption-tax-cut-ed-1",
+        "kind": "shared_premise",
+        "text": "「減税の対象範囲」は減税推進が55.9%、条件付き賛成・政府案に不満が37.4%を占め、減税反対・慎重は4.9%にとどまる。対象を一律にするか食料品限定にするかで割れているだけで、減税そのものをやめるべきという意見は少数派にすぎない。"
+      },
+      {
+        "id": "consumption-tax-cut-ed-2",
+        "kind": "real_conflict",
+        "text": "「減税の対象範囲」では減税推進が55.9%で最も多い立場だが、「減税の効果」では減税反対・慎重が56.2%を占め、勢力が入れ替わる。対象の広さでは減税を求める声が優勢でも、実際の効果には強い懐疑が向けられている。同じ人が論点によって立場を変えているのか、対象範囲を語る人と効果を語る人が違うのかは、この収集からは分からない。"
+      },
+      {
+        "id": "consumption-tax-cut-ed-3",
+        "kind": "real_conflict",
+        "text": "「財源と社会保障」は減税推進43.1%、減税反対・慎重47.7%と、他の論点のように一方が大勢を占める構図になっていない。財源や社会保障への影響をどう見るかは、意見が拮抗したまま割れている。"
+      },
+      {
+        "id": "consumption-tax-cut-ed-4",
+        "kind": "still_unknown",
+        "text": "「事業者の実務負担」は112件（全体の2.9%）と、他のどの論点よりも少ない。件数が少ないことは論点として軽いという意味ではなく、この収集のなかで語られた量が少なかったという意味しかない。"
+      },
+      {
+        "id": "consumption-tax-cut-ed-5",
+        "kind": "still_unknown",
+        "text": "ここに出ているのはYahoo!リアルタイム検索で集めた3,890件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りは測っていない。"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "issue_assigned_count": 3890,
+  "issues": [
+    {
+      "count": 1356,
+      "id": "consumption-tax-cut-political-trust",
+      "intensities": [
+        {
+          "count": 79,
+          "id": "low"
+        },
+        {
+          "count": 636,
+          "id": "medium"
+        },
+        {
+          "count": 641,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "公約と政治不信",
+      "stances": [
+        {
+          "count": 797,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 19,
+              "id": "low"
+            },
+            {
+              "count": 325,
+              "id": "medium"
+            },
+            {
+              "count": 453,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 165,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 2,
+              "id": "low"
+            },
+            {
+              "count": 86,
+              "id": "medium"
+            },
+            {
+              "count": 77,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 194,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 6,
+              "id": "low"
+            },
+            {
+              "count": 93,
+              "id": "medium"
+            },
+            {
+              "count": 95,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 200,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 52,
+              "id": "low"
+            },
+            {
+              "count": 132,
+              "id": "medium"
+            },
+            {
+              "count": 16,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 717,
+      "id": "consumption-tax-cut-effect",
+      "intensities": [
+        {
+          "count": 72,
+          "id": "low"
+        },
+        {
+          "count": 438,
+          "id": "medium"
+        },
+        {
+          "count": 207,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "減税の効果",
+      "stances": [
+        {
+          "count": 207,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 17,
+              "id": "low"
+            },
+            {
+              "count": 126,
+              "id": "medium"
+            },
+            {
+              "count": 64,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 82,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 4,
+              "id": "low"
+            },
+            {
+              "count": 65,
+              "id": "medium"
+            },
+            {
+              "count": 13,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 403,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 35,
+              "id": "low"
+            },
+            {
+              "count": 238,
+              "id": "medium"
+            },
+            {
+              "count": 130,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 25,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 16,
+              "id": "low"
+            },
+            {
+              "count": 9,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 885,
+      "id": "consumption-tax-cut-scope",
+      "intensities": [
+        {
+          "count": 39,
+          "id": "low"
+        },
+        {
+          "count": 382,
+          "id": "medium"
+        },
+        {
+          "count": 464,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "減税の対象範囲",
+      "stances": [
+        {
+          "count": 495,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 20,
+              "id": "low"
+            },
+            {
+              "count": 179,
+              "id": "medium"
+            },
+            {
+              "count": 296,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 331,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 9,
+              "id": "low"
+            },
+            {
+              "count": 170,
+              "id": "medium"
+            },
+            {
+              "count": 152,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 43,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 24,
+              "id": "medium"
+            },
+            {
+              "count": 16,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 16,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 7,
+              "id": "low"
+            },
+            {
+              "count": 9,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 511,
+      "id": "consumption-tax-cut-finance-welfare",
+      "intensities": [
+        {
+          "count": 28,
+          "id": "low"
+        },
+        {
+          "count": 290,
+          "id": "medium"
+        },
+        {
+          "count": 193,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "財源と社会保障",
+      "stances": [
+        {
+          "count": 220,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 2,
+              "id": "low"
+            },
+            {
+              "count": 133,
+              "id": "medium"
+            },
+            {
+              "count": 85,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 32,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 21,
+              "id": "medium"
+            },
+            {
+              "count": 8,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 244,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 15,
+              "id": "low"
+            },
+            {
+              "count": 129,
+              "id": "medium"
+            },
+            {
+              "count": 100,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 15,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 8,
+              "id": "low"
+            },
+            {
+              "count": 7,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 251,
+      "id": "consumption-tax-cut-alternatives",
+      "intensities": [
+        {
+          "count": 34,
+          "id": "low"
+        },
+        {
+          "count": 174,
+          "id": "medium"
+        },
+        {
+          "count": 43,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "給付など他策との比較",
+      "stances": [
+        {
+          "count": 59,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 5,
+              "id": "low"
+            },
+            {
+              "count": 38,
+              "id": "medium"
+            },
+            {
+              "count": 16,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 79,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 11,
+              "id": "low"
+            },
+            {
+              "count": 60,
+              "id": "medium"
+            },
+            {
+              "count": 8,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 97,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 10,
+              "id": "low"
+            },
+            {
+              "count": 68,
+              "id": "medium"
+            },
+            {
+              "count": 19,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 16,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 8,
+              "id": "low"
+            },
+            {
+              "count": 8,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 112,
+      "id": "consumption-tax-cut-business-burden",
+      "intensities": [
+        {
+          "count": 15,
+          "id": "low"
+        },
+        {
+          "count": 64,
+          "id": "medium"
+        },
+        {
+          "count": 33,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "事業者の実務負担",
+      "stances": [
+        {
+          "count": 43,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 26,
+              "id": "medium"
+            },
+            {
+              "count": 14,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 17,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 10,
+              "id": "medium"
+            },
+            {
+              "count": 4,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 41,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 26,
+              "id": "medium"
+            },
+            {
+              "count": 15,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 11,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 9,
+              "id": "low"
+            },
+            {
+              "count": 2,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 58,
+      "id": "consumption-tax-cut-other",
+      "intensities": [
+        {
+          "count": 20,
+          "id": "low"
+        },
+        {
+          "count": 25,
+          "id": "medium"
+        },
+        {
+          "count": 13,
+          "id": "high"
+        }
+      ],
+      "kind": "other",
+      "label": "その他",
+      "stances": [
+        {
+          "count": 13,
+          "id": "consumption-tax-cut-support",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 4,
+              "id": "medium"
+            },
+            {
+              "count": 6,
+              "id": "high"
+            }
+          ],
+          "label": "減税推進"
+        },
+        {
+          "count": 1,
+          "id": "consumption-tax-cut-conditional",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 0,
+              "id": "medium"
+            },
+            {
+              "count": 1,
+              "id": "high"
+            }
+          ],
+          "label": "条件付き賛成・政府案に不満"
+        },
+        {
+          "count": 13,
+          "id": "consumption-tax-cut-cautious",
+          "intensities": [
+            {
+              "count": 4,
+              "id": "low"
+            },
+            {
+              "count": 7,
+              "id": "medium"
+            },
+            {
+              "count": 2,
+              "id": "high"
+            }
+          ],
+          "label": "減税反対・慎重"
+        },
+        {
+          "count": 31,
+          "id": "consumption-tax-cut-neutral",
+          "intensities": [
+            {
+              "count": 13,
+              "id": "low"
+            },
+            {
+              "count": 14,
+              "id": "medium"
+            },
+            {
+              "count": 4,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    }
+  ],
+  "ocean_layer": {
+    "checked_on": "2026-09-19",
+    "reviewer_type": "editorial_review",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-19",
+        "id": "consumption-tax-cut-sc-1",
+        "life_impact": "旬の食材の頒布会など、2027年1月1日より前に契約して代金を払い済みの定期便・予約販売は、4月1日から新税率1%が始まっても旧税率8%のまま申告納税される。同じ商品でも、契約・支払いの時期によって適用される税率が変わる。",
+        "nearest_issue_id": "consumption-tax-cut-business-burden",
+        "reviewer_type": "editorial_review",
+        "sns_base": 3890,
+        "sns_count": 0,
+        "sns_note": "「予約販売」「頒布会」「経過措置」「前払い」「先払い」「定期購読」「定期便」の語での一致は3件あったが、いずれもインボイス制度側の別の経過措置（非インボイス事業者との取引処理や2割特例）、または食品と新聞の最終的な税率差（1%と8%）への言及で、契約・支払い時期によって適用税率が変わるという今回の経過措置そのものへの言及は0件。",
+        "sources": [
+          {
+            "date": "令和8年9月15日決定",
+            "location": "「第二 二 飲食料品に係る消費税率の特例に関する所要の措置」、予約販売・通信販売の経過措置部分",
+            "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+            "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+          }
+        ],
+        "topic": "2027年1月1日より前に契約・代金を払い済みの予約販売・通信販売は、新税率が始まっても旧税率8%のまま"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "consumption-tax-cut-sc-2",
+        "life_impact": "「給付がある」というだけでなく、支援金を受け取るには①勤労所得が所得下限額を超える②前年の合計所得金額が扶養児童の有無・数に応じた上限額以下③純負担率（租税・社会保険料の合計から現金給付を控除した額の収入に対する割合）が基準を超える④配偶者がいる場合はその所得が上限額以下、の4条件を全て満たす必要がある。特に③の基準は、単純な年収だけでは自分が対象になるか判断できない設計になっている。",
+        "nearest_issue_id": "consumption-tax-cut-alternatives",
+        "reviewer_type": "editorial_review",
+        "sns_base": 3890,
+        "sns_count": 0,
+        "sns_note": "「就業者負担軽減支援金」「純負担率」「年収の壁」「就業促進特例」の語での一致は4件あったが、いずれも別の政策（一般的な年収の壁引上げ議論）、内閣の実績を並べた投稿、円安要因を巡る財政論争、財源に関するFP解説記事の紹介であり、支援金の対象となる4条件そのものへの具体的な言及は0件。",
+        "sources": [
+          {
+            "date": "令和8年9月15日決定",
+            "location": "「第三 就業者負担軽減支援金の支給等」、支給対象の要件部分",
+            "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+            "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+          }
+        ],
+        "topic": "就業者負担軽減支援金を受け取るには、勤労所得・所得上限・純負担率・配偶者所得の4条件を全て満たす必要がある"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "consumption-tax-cut-sc-3",
+        "life_impact": "軽減税率対象の食料品を扱う簡易課税事業者（2割特例・3割特例の適用事業者を含む）は、業種区分にかかわらず売上税額と同額を仕入税額とみなす特例が新設される。通常の簡易課税は業種ごとに決まった『みなし仕入率』で税額を計算するが、この特例により食料品分については実質的な納税負担が生じない設計になっている。",
+        "nearest_issue_id": "consumption-tax-cut-business-burden",
+        "reviewer_type": "editorial_review",
+        "sns_base": 3890,
+        "sns_count": 0,
+        "sns_note": "「簡易課税」の語での一致は10件あったが、いずれも簡易課税事業者への負担増・複雑化への懸念や、農家・小規模事業者への直接支援を求める一般論で、今回新設される『売上税額と同額を仕入税額とみなす特例』という具体的な緩和措置そのものへの言及は0件。うち1件は『簡易課税の手取りが減らないよう実質無税にすべき』と要望しており、既に近い内容の措置が決定済みであることを知らないまま同趣旨を求めている。",
+        "sources": [
+          {
+            "date": "令和8年9月15日決定",
+            "location": "「第二 二 飲食料品に係る消費税率の特例に関する所要の措置」、簡易課税制度の特例部分",
+            "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+            "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+          }
+        ],
+        "topic": "食料品を扱う簡易課税事業者は、業種にかかわらず売上税額と同額を仕入税額とみなす特例が新設され、実質的な納税負担が生じない"
+      },
+      {
+        "checked_on": "2026-09-19",
+        "id": "consumption-tax-cut-sc-4",
+        "life_impact": "2027年4月に税率が変わっても、実際の支払額と誤認されない条件のもとで、店の値札やレシートの総額表示を最大2か月間、旧税率のままにしておいても法律違反にならない（2027年2月1日〜3月31日は新税率1%、4月1日〜5月31日は旧税率8%のいずれの表示も認められる。2029年の税率復帰時も前後2か月同様）。買い物客は、値札の表示と実際に請求される金額が一時的にずれる可能性がある。",
+        "nearest_issue_id": "consumption-tax-cut-business-burden",
+        "reviewer_type": "editorial_review",
+        "sns_base": 3890,
+        "sns_count": 0,
+        "sns_note": "「総額表示」の語での一致は0件。",
+        "sources": [
+          {
+            "date": "令和8年9月15日決定",
+            "location": "「第二 二 飲食料品に係る消費税率の特例に関する所要の措置」、総額表示義務の経過措置部分",
+            "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+            "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+          }
+        ],
+        "topic": "税率変更の前後最大2か月間は、実際の支払額と誤認されない条件のもとで旧税率のままの総額表示が認められる"
+      }
+    ],
+    "veins": [
+      {
+        "checked_on": "2026-09-19",
+        "diverging_reason": "同じ『レジ改修は実際に負担になる』という認識から、減税推進側は『だから公費で補助すればよい、それを理由に減税自体を止める必要はない』と結論づけ、減税反対・慎重側は『地方や個人商店には費用・時間の負担が重く、しかも期限付きなら2年後にまた改修が必要になる』として、負担の大きさそのものを減税に慎重になる理由としている。負担を補助で解消すべき論点と見るか、減税の是非を左右する論点と見るかで分かれる。",
+        "id": "consumption-tax-cut-vein-1",
+        "issue_ids": [
+          "consumption-tax-cut-business-burden"
+        ],
+        "reviewer_type": "editorial_review",
+        "shared_concern": "レジや会計システムの改修には実際に時間・手間・費用がかかり、特に地方や個人商店には負担が大きい。",
+        "sides": [
+          {
+            "post_count": 2,
+            "stance_label": "減税推進"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "減税反対・慎重"
+          }
+        ]
+      },
+      {
+        "checked_on": "2026-09-19",
+        "diverging_reason": "税率が下がっても、それが店頭価格にそのまま反映されるかどうかで見方が分かれる。減税推進側は『市場競争が働けば価格を下げないと不利になる』『消費税増税のときは便乗値上げが実際に起きた実績がある』と、反映されると見る。一方、減税反対・慎重側は『原材料費・人件費の上昇を企業努力で吸収してきた事業者は税率が下がっても店頭価格を据え置く可能性が高い』『価格を上げてでも採算を確保する店が出る』と、反映されないと見る。同じ市場行動を根拠にしながら、正反対の予測に至っている。",
+        "id": "consumption-tax-cut-vein-2",
+        "issue_ids": [
+          "consumption-tax-cut-effect"
+        ],
+        "reviewer_type": "editorial_review",
+        "shared_concern": "税率を下げても、事業者が店頭価格を据え置けば、減税分が消費者に届かないのではないか。",
+        "sides": [
+          {
+            "post_count": 2,
+            "stance_label": "減税推進"
+          },
+          {
+            "post_count": 2,
+            "stance_label": "減税反対・慎重"
+          }
+        ]
+      }
+    ]
+  },
+  "opinion_count": 3890,
+  "page_path": "consumption-tax-cut-reaction-map.html",
+  "question": "食料品の消費税率を下げるべきか",
+  "schema_version": "1.0",
+  "source_sha256": "06040e5f57d8f492bca5ad58aa1d98d6546929945bf8a1863aa5e3e726fc9515",
+  "theme_id": "consumption-tax-cut",
+  "title": "消費税減税",
+  "updated_on": "2026-09-19"
+}

@@ -165,6 +165,27 @@ def validate_article(
     return errors
 
 
+def validate_llms_txt(docs_dir: Path, site_url: str, themes: list[dict[str, Any]]) -> list[str]:
+    """llms.txt（課題77 案1）の存在・全公開テーマの掲載・実在URLだけを確認する。"""
+    errors: list[str] = []
+    path = docs_dir / "llms.txt"
+    if not path.is_file():
+        errors.append("llms.txt: ファイルがありません")
+        return errors
+    text = path.read_text(encoding="utf-8")
+    for theme in themes:
+        if theme["url"] not in text:
+            errors.append(f"llms.txt: {theme['url']} が掲載されていません")
+    for url in re.findall(r"https?://[^\s)]+", text):
+        if not url.startswith(site_url):
+            errors.append(f"llms.txt: サイト外のURLです: {url}")
+            continue
+        relative = urlparse(url).path[len(urlparse(site_url).path):]
+        if not (docs_dir / relative).is_file():
+            errors.append(f"llms.txt: 実在しないURLです: {url}")
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default="configs/theme-seo.json")
@@ -256,6 +277,8 @@ def main() -> int:
                 f"sitemap lastmod mismatch for {page}: "
                 f"{sitemap_dates.get(page)!r} != {expected_date!r}"
             )
+
+    errors.extend(validate_llms_txt(docs_dir, config["site_url"], themes))
 
     if errors:
         print(f"FAILED: {len(errors)} validation error(s)")

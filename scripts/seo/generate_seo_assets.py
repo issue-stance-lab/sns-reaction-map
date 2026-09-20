@@ -94,6 +94,71 @@ def sitemap_xml(
     return "\n".join(lines) + "\n"
 
 
+MISSION = (
+    "SNSの公開投稿サンプルを収集・整理し、さまざまな意見、議論全体の流れ、現在の主要な論点を"
+    "難しい社会問題に詳しくない人にも分かる言葉で届けます。"
+)
+DATA_LIMIT = "SNS公開投稿サンプルの整理であり、社会全体の世論調査ではありません。"
+CITATION_TEMPLATE = (
+    "SNS反応まっぷ「{テーマ名}」論点「{論点名}」"
+    "（{更新年月}時点、SNS公開投稿サンプル{意見件数}件の整理。社会全体の世論調査ではありません）\n"
+    "{ページURL}#issue-{論点ID}"
+)
+
+
+def llms_txt(base_url: str, theme_seo: dict[str, Any], catalog: dict[str, Any]) -> str:
+    """AIアシスタント向けにサイトの要点と引用のしかたを渡す（llmstxt.org の慣例、課題77 案1）。
+
+    テーマの1行説明は configs/theme-seo.json の description をそのまま使う
+    （新しく文章を書くと AI臭検査・使い回し検査の対象が増える）。数字は
+    data/public/catalog.json（build_public_registry.py の生成物）から取り、書き足さない。
+    """
+    theme_seo_by_id = {theme["id"]: theme for theme in theme_seo.get("themes") or []}
+    lines = [
+        "# SNS反応まっぷ",
+        "",
+        f"> {MISSION}",
+        "",
+        "## データの限界",
+        "",
+        DATA_LIMIT,
+        "",
+        "## 引用のしかた",
+        "",
+        "各ページの論点には固定リンクがあります。引用するときは次の形式を使ってください。",
+        "",
+        "```",
+        CITATION_TEMPLATE,
+        "```",
+        "",
+        "## テーマ一覧",
+        "",
+    ]
+    for entry in catalog.get("themes") or []:
+        theme_id = entry["theme_id"]
+        seo = theme_seo_by_id.get(theme_id)
+        if not seo:
+            raise ValueError(f"llms.txt: configs/theme-seo.json に無いテーマID: {theme_id}")
+        page_url = urljoin(base_url, entry["page_path"])
+        json_url = urljoin(base_url, f"data/themes/{theme_id}.json")
+        lines.append(
+            f"- [{seo['headline']}]({page_url}): {seo['description']}"
+            f"（JSON: {json_url} ／更新: {entry['updated_on']} ／意見{entry['opinion_count']:,}件）"
+        )
+    lines.extend(
+        [
+            "",
+            "## 詳細",
+            "",
+            f"- [手法（データの集め方・分類方法）]({urljoin(base_url, 'about.html')})",
+            f"- [訂正窓口]({urljoin(base_url, 'about.html#corrections')})",
+            f"- [免責事項]({urljoin(base_url, 'disclaimer.html')})",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def robots_txt(base_url: str) -> str:
     sitemap_url = urljoin(base_url, "sitemap.xml")
     return "\n".join(
@@ -129,6 +194,7 @@ def main() -> int:
     parser.add_argument("--site-url", required=True, help="Published site URL, e.g. https://example.github.io/repo/")
     parser.add_argument("--config", default="configs/site-cases.json")
     parser.add_argument("--theme-seo-config", default="configs/theme-seo.json")
+    parser.add_argument("--catalog", default="data/public/catalog.json")
     parser.add_argument("--output-dir", default="docs")
     parser.add_argument(
         "--lastmod",
@@ -150,8 +216,12 @@ def main() -> int:
     )
     (output_dir / "robots.txt").write_text(robots_txt(base_url), encoding="utf-8")
 
+    catalog = read_json(args.catalog)
+    (output_dir / "llms.txt").write_text(llms_txt(base_url, theme_seo, catalog), encoding="utf-8")
+
     print(f"Generated {output_dir / 'sitemap.xml'} ({len(pages)} pages)")
     print(f"Generated {output_dir / 'robots.txt'}")
+    print(f"Generated {output_dir / 'llms.txt'} ({len(catalog.get('themes') or [])} themes)")
 
     if args.adsense_client:
         pub_id = validate_adsense_client(args.adsense_client)

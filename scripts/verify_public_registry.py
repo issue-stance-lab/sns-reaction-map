@@ -9,11 +9,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 
 from public_registry_common import (
     PUBLIC_CATALOG_PATH,
+    PUBLIC_DOCS_CATALOG_PATH,
+    PUBLIC_DOCS_THEMES_DIR,
     PUBLIC_THEMES_DIR,
     ROOT,
     RegistryError,
@@ -26,6 +29,31 @@ from public_registry_common import (
     validate_public_catalog,
     validate_public_theme,
 )
+
+
+def _sha256(path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def verify_docs_mirror(theme_ids: list[str]) -> list[str]:
+    """docs/data/ の写しが data/public/ と同一（sha256）であることを確かめる（課題77 案1）。
+
+    手コピーは必ずずれる。build_public_registry.py が同じバイト列を両方へ書くので、
+    ここでは「本当に一致しているか」だけを機械的に見る。
+    """
+    errors: list[str] = []
+    for topic_id in theme_ids:
+        source = PUBLIC_THEMES_DIR / f"{topic_id}.json"
+        mirror = PUBLIC_DOCS_THEMES_DIR / f"{topic_id}.json"
+        if not mirror.exists():
+            errors.append(f"NG: docs/data/themes/{topic_id}.json がありません")
+        elif _sha256(mirror) != _sha256(source):
+            errors.append(f"NG: docs/data/themes/{topic_id}.json が data/public/themes と一致しません")
+    if not PUBLIC_DOCS_CATALOG_PATH.exists():
+        errors.append("NG: docs/data/catalog.json がありません")
+    elif PUBLIC_CATALOG_PATH.exists() and _sha256(PUBLIC_DOCS_CATALOG_PATH) != _sha256(PUBLIC_CATALOG_PATH):
+        errors.append("NG: docs/data/catalog.json が data/public/catalog.json と一致しません")
+    return errors
 
 
 def verify_public_only() -> int:
@@ -50,8 +78,12 @@ def verify_public_only() -> int:
         print(f"NG catalog: {error}", file=sys.stderr)
         ok = False
 
+    for error in verify_docs_mirror(sorted(theme_jsons)):
+        print(error, file=sys.stderr)
+        ok = False
+
     if ok:
-        print(f"OK public-only: {len(theme_jsons)}テーマ、catalog整合")
+        print(f"OK public-only: {len(theme_jsons)}テーマ、catalog整合、docs/data写し一致")
     return 0 if ok else 1
 
 

@@ -1,0 +1,786 @@
+{
+  "claim_verification": {
+    "checked_on": "2026-08-24",
+    "claims": [
+      {
+        "claim": "大阪都構想は、住民投票で二度否決された",
+        "finding": "2回とも僅差の反対多数。とくに2020年は賛成が反対を17,167票下回るだけの差だった。",
+        "id": "referendum_twice",
+        "issue_ids": [
+          "fukushuto-osaka-restoration"
+        ],
+        "matched_post_count": 4,
+        "sources": [
+          {
+            "name": "大阪市 大阪市における特別区の設置についての投票",
+            "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000538418.html"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "副首都法は、賛成123・反対121のわずか2票差で成立した",
+        "finding": "自由民主党・無所属の会99、日本維新の会19などを合わせて123。与党の議席だけでは過半数に届かず、無所属・少数会派の賛成があって成立した。",
+        "id": "vote_123_121",
+        "issue_ids": [
+          "fukushuto-definition"
+        ],
+        "matched_post_count": 5,
+        "sources": [
+          {
+            "name": "参議院 本会議投票結果（2026年7月24日）",
+            "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v006.htm"
+          }
+        ],
+        "verdict": "fact"
+      },
+      {
+        "claim": "附帯決議は、住民投票と統一地方選の同日実施を禁止する内容だ",
+        "finding": "附帯決議が採択された事実と、同日実施を禁じる法案が否決された事実は一次資料で確認できたが、決議そのものの文言は、採択した委員会の会議録が執筆時点（2026年8月）で未公開のため一次資料で確認できなかった。禁止なのか努力目標なのかは、会議録が公開されてから確かめ直す。",
+        "id": "resolution_ban",
+        "issue_ids": [
+          "fukushuto-osaka-restoration"
+        ],
+        "matched_post_count": 4,
+        "sources": [
+          {
+            "name": "参議院 沖縄・北方問題及び地方に関する特別委員会 議案経過（附帯決議の採択を記載）",
+            "url": "https://www.sangiin.go.jp/japanese/joho1/kousei/koho/221/keika/ke2700437.htm"
+          },
+          {
+            "name": "参議院 本会議投票結果（同日実施禁止法案・2026年7月24日）",
+            "url": "https://www.sangiin.go.jp/japanese/touhyoulist/221/221-0724-v007.htm"
+          }
+        ],
+        "verdict": "miss"
+      },
+      {
+        "claim": "副首都の整備費用は4兆円〜7.5兆円かかるとされる",
+        "finding": "数字自体は実在するが、30年近く前の別の計画（首都機能の全面移転）の試算で、2026年の副首都法（大規模災害時のバックアップ機能整備）とは対象の規模も目的も別物。政府は参院審議で、今回の法律にもとづく整備費用について「今後検討する」と答えるにとどめ、現時点で試算を示していない。",
+        "id": "cost_old_estimate",
+        "issue_ids": [
+          "fukushuto-finance"
+        ],
+        "matched_post_count": 2,
+        "sources": [
+          {
+            "name": "国土交通省 国会等の移転ホームページ「移転費用の試算」",
+            "url": "https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html"
+          }
+        ],
+        "verdict": "gap"
+      },
+      {
+        "claim": "副首都の整備費用は、AIの試算で総額2兆円規模になる",
+        "finding": "出典不明の試算がそのまま数字として流通していること自体が、この論点で公式な費用試算が存在しない状態を映している。",
+        "id": "cost_ai_estimate",
+        "issue_ids": [
+          "fukushuto-finance"
+        ],
+        "matched_post_count": 1,
+        "sources": [],
+        "verdict": "miss"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "collected_count": 2024,
+  "collection_period": {
+    "end": "2026-09-16",
+    "start": "2026-07-14",
+    "status": "known"
+  },
+  "data_version": "v1-d6458f8f5fcec153",
+  "editorial_summary": {
+    "checked_on": "2026-09-13",
+    "findings": [
+      {
+        "id": "fukushuto-ed-1",
+        "kind": "shared_premise",
+        "text": "どの論点でも「法案反対」が最多という点は共通している。賛成がもっとも伸びる「防災・災害」でも賛成は29.2%にとどまり、反対（58.8%）には届かない。"
+      },
+      {
+        "id": "fukushuto-ed-2",
+        "kind": "real_conflict",
+        "text": "同じ「反対」でも、論点によって強さがまるで違う。「都構想・維新」では反対が78.3%、「優先順位」でも84.9%に達するのに対し、「候補地」では42.7%にとどまる。反対の的は副首都という発想そのものより、「なぜ今」「なぜ大阪・維新なのか」という動機と優先順位への疑いに集中している。"
+      },
+      {
+        "id": "fukushuto-ed-3",
+        "kind": "real_conflict",
+        "text": "賛成の実数がもっとも集まっているのは「候補地」の134件で、「都構想・維新」の67件を上回る。都構想・維新という切り口では賛成の足場がほとんど残らないのに対し、どこに置くかという具体的な話になると賛成の声も相対的に出やすい。"
+      },
+      {
+        "id": "fukushuto-ed-4",
+        "kind": "still_unknown",
+        "text": "「費用・財源」は81件で、全体の4.8%にあたり、他の論点と比べて最も少ない。整備費用の金額は投稿にも登場したが、事実確認では別の古い計画の試算と判明している。件数の少なさは論点の重要度が低いという意味ではなく、根拠のある数字が出回っていないことの裏返しである可能性がある。"
+      },
+      {
+        "id": "fukushuto-ed-5",
+        "kind": "still_unknown",
+        "text": "住民投票と統一地方選の同日実施を禁じる附帯決議が採択されたことは参議院の記録で確認できたが、決議本文の文言が禁止なのか努力目標なのかは、採択した委員会の会議録が執筆時点でまだ公開されておらず確認できていない。「都構想・維新」を語る投稿の一部は、この未確定な理解のまま書かれている可能性があり、会議録の公開後に確認欄とあわせて再確認が要る。"
+      },
+      {
+        "id": "fukushuto-ed-6",
+        "kind": "still_unknown",
+        "text": "ここに出ているのはYahoo!リアルタイム検索で集めた1,681件の意見の中身であって、社会全体の割合ではない。投稿する人としない人の偏りや、副首都法案の審議が集中した時期に収集期間が重なっていることの影響は測っていない。"
+      }
+    ],
+    "reviewer_type": "editorial_review",
+    "status": "complete"
+  },
+  "issue_assigned_count": 1681,
+  "issues": [
+    {
+      "count": 256,
+      "id": "fukushuto-definition",
+      "intensities": [
+        {
+          "count": 60,
+          "id": "low"
+        },
+        {
+          "count": 139,
+          "id": "medium"
+        },
+        {
+          "count": 57,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "定義・中身",
+      "stances": [
+        {
+          "count": 53,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 10,
+              "id": "low"
+            },
+            {
+              "count": 37,
+              "id": "medium"
+            },
+            {
+              "count": 6,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 143,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 15,
+              "id": "low"
+            },
+            {
+              "count": 78,
+              "id": "medium"
+            },
+            {
+              "count": 50,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 60,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 35,
+              "id": "low"
+            },
+            {
+              "count": 24,
+              "id": "medium"
+            },
+            {
+              "count": 1,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 354,
+      "id": "fukushuto-location",
+      "intensities": [
+        {
+          "count": 107,
+          "id": "low"
+        },
+        {
+          "count": 182,
+          "id": "medium"
+        },
+        {
+          "count": 65,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "候補地",
+      "stances": [
+        {
+          "count": 134,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 49,
+              "id": "low"
+            },
+            {
+              "count": 78,
+              "id": "medium"
+            },
+            {
+              "count": 7,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 151,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 11,
+              "id": "low"
+            },
+            {
+              "count": 86,
+              "id": "medium"
+            },
+            {
+              "count": 54,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 69,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 47,
+              "id": "low"
+            },
+            {
+              "count": 18,
+              "id": "medium"
+            },
+            {
+              "count": 4,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 240,
+      "id": "fukushuto-disaster-preparedness",
+      "intensities": [
+        {
+          "count": 36,
+          "id": "low"
+        },
+        {
+          "count": 132,
+          "id": "medium"
+        },
+        {
+          "count": 72,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "防災・災害",
+      "stances": [
+        {
+          "count": 70,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 18,
+              "id": "low"
+            },
+            {
+              "count": 41,
+              "id": "medium"
+            },
+            {
+              "count": 11,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 141,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 4,
+              "id": "low"
+            },
+            {
+              "count": 76,
+              "id": "medium"
+            },
+            {
+              "count": 61,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 29,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 14,
+              "id": "low"
+            },
+            {
+              "count": 15,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 474,
+      "id": "fukushuto-osaka-restoration",
+      "intensities": [
+        {
+          "count": 33,
+          "id": "low"
+        },
+        {
+          "count": 193,
+          "id": "medium"
+        },
+        {
+          "count": 248,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "都構想・維新",
+      "stances": [
+        {
+          "count": 67,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 8,
+              "id": "low"
+            },
+            {
+              "count": 44,
+              "id": "medium"
+            },
+            {
+              "count": 15,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 371,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 9,
+              "id": "low"
+            },
+            {
+              "count": 130,
+              "id": "medium"
+            },
+            {
+              "count": 232,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 36,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 16,
+              "id": "low"
+            },
+            {
+              "count": 19,
+              "id": "medium"
+            },
+            {
+              "count": 1,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 81,
+      "id": "fukushuto-finance",
+      "intensities": [
+        {
+          "count": 9,
+          "id": "low"
+        },
+        {
+          "count": 44,
+          "id": "medium"
+        },
+        {
+          "count": 28,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "費用・財源",
+      "stances": [
+        {
+          "count": 11,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 4,
+              "id": "low"
+            },
+            {
+              "count": 7,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 64,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 2,
+              "id": "low"
+            },
+            {
+              "count": 34,
+              "id": "medium"
+            },
+            {
+              "count": 28,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 6,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 3,
+              "id": "low"
+            },
+            {
+              "count": 3,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 166,
+      "id": "fukushuto-priority",
+      "intensities": [
+        {
+          "count": 11,
+          "id": "low"
+        },
+        {
+          "count": 87,
+          "id": "medium"
+        },
+        {
+          "count": 68,
+          "id": "high"
+        }
+      ],
+      "kind": "named",
+      "label": "優先順位",
+      "stances": [
+        {
+          "count": 6,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 0,
+              "id": "low"
+            },
+            {
+              "count": 6,
+              "id": "medium"
+            },
+            {
+              "count": 0,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 141,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 5,
+              "id": "low"
+            },
+            {
+              "count": 71,
+              "id": "medium"
+            },
+            {
+              "count": 65,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 19,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 6,
+              "id": "low"
+            },
+            {
+              "count": 10,
+              "id": "medium"
+            },
+            {
+              "count": 3,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    },
+    {
+      "count": 110,
+      "id": "fukushuto-other",
+      "intensities": [
+        {
+          "count": 36,
+          "id": "low"
+        },
+        {
+          "count": 40,
+          "id": "medium"
+        },
+        {
+          "count": 34,
+          "id": "high"
+        }
+      ],
+      "kind": "other",
+      "label": "その他",
+      "stances": [
+        {
+          "count": 21,
+          "id": "fukushuto-bill-support",
+          "intensities": [
+            {
+              "count": 9,
+              "id": "low"
+            },
+            {
+              "count": 7,
+              "id": "medium"
+            },
+            {
+              "count": 5,
+              "id": "high"
+            }
+          ],
+          "label": "法案賛成・推進"
+        },
+        {
+          "count": 49,
+          "id": "fukushuto-bill-oppose",
+          "intensities": [
+            {
+              "count": 4,
+              "id": "low"
+            },
+            {
+              "count": 20,
+              "id": "medium"
+            },
+            {
+              "count": 25,
+              "id": "high"
+            }
+          ],
+          "label": "法案反対"
+        },
+        {
+          "count": 40,
+          "id": "fukushuto-neutral",
+          "intensities": [
+            {
+              "count": 23,
+              "id": "low"
+            },
+            {
+              "count": 13,
+              "id": "medium"
+            },
+            {
+              "count": 4,
+              "id": "high"
+            }
+          ],
+          "label": "中立・情報"
+        }
+      ]
+    }
+  ],
+  "ocean_layer": {
+    "checked_on": "2026-09-20",
+    "reviewer_type": "editorial_review",
+    "status": "complete",
+    "sunk_continents": [
+      {
+        "checked_on": "2026-09-20",
+        "id": "fukushuto-sc-1",
+        "life_impact": "大阪市全体では2015年・2020年とも反対多数（否決）で確定しているが、24区のうち東成区は2015年に賛成20,689票・反対20,667票（22票差）で賛成が上回っていたが、2020年は賛成20,771票・反対21,102票で反対が上回る側へ転じた。区によっては、両陣営の差がごくわずかで、結果が入れ替わりうる規模だったことが分かる。",
+        "nearest_issue_id": "fukushuto-osaka-restoration",
+        "reviewer_type": "editorial_review",
+        "sns_base": 1681,
+        "sns_count": 0,
+        "sns_note": "「東成区」の語での一致は0件。",
+        "sources": [
+          {
+            "date": "2015-05-17",
+            "location": "区別の賛成・反対得票数（東成区）",
+            "name": "大阪市選挙管理委員会「平成27年5月17日執行 特別区設置住民投票の結果しらべ」開票結果",
+            "url": "https://www.city.osaka.lg.jp/contents/wdu240/sokuhoukekka/kaihyo_data_10_h27.html"
+          },
+          {
+            "date": "2020-11-01",
+            "location": "区別の賛成・反対得票数（東成区）",
+            "name": "大阪市選挙管理委員会「令和2年11月1日執行 大阪市を廃止し特別区を設置することについての投票の結果しらべ」開票結果",
+            "url": "https://www.city.osaka.lg.jp/contents/wdu240/sokuhoukekka/kaihyo_data_10_r21101.html"
+          }
+        ],
+        "topic": "大阪市特別区設置住民投票は2015年・2020年とも大阪市全体では反対多数（否決）だったが、24区のうち東成区は2015年の僅差賛成（22票差）から2020年は反対多数へ転じた"
+      },
+      {
+        "checked_on": "2026-09-20",
+        "id": "fukushuto-sc-2",
+        "life_impact": "同じ道府県が「副首都」と「首都中枢機能代替地域」の両方に指定されることはない。「首都中枢機能代替地域」に指定された地域は副首都の区域から除かれるため、副首都が担う「多極分散型経済圏の形成の中核」という機能は担わず、一部の首都機能を一定期間代替するだけの位置づけになる。",
+        "nearest_issue_id": "fukushuto-definition",
+        "reviewer_type": "editorial_review",
+        "sns_base": 1681,
+        "sns_count": 0,
+        "sns_note": "「代替地域」の語での一致は4件あったが、いずれも共同通信の同一記事見出し「7道府県が副首都検討　首都機能代替地域は4県」を引用しているだけで、副首都と代替地域が法律上別区分・排他的な指定であることには触れていない。",
+        "sources": [
+          {
+            "date": "2026-07-31",
+            "location": "第2条第3項・第4項（定義）",
+            "name": "e-Gov法令検索「国家社会機能継続性確保施策及び副首都の整備に係る施策の推進に関する法律」（令和8年法律第78号）",
+            "url": "https://laws.e-gov.go.jp/law/508AC1000000078"
+          }
+        ],
+        "topic": "国家社会機能継続性確保施策及び副首都の整備に係る施策の推進に関する法律（令和8年法律第78号）第2条は、「副首都」（第4項、首都中枢機能の全部又は大部分を代替し多極分散型経済圏形成の中核も担う道府県）と、「首都中枢機能代替地域」（第3項、首都中枢機能の一部を代替する地域で、副首都の区域を除く）を別の区分として定めている"
+      },
+      {
+        "checked_on": "2026-09-20",
+        "id": "fukushuto-sc-3",
+        "life_impact": "「副首都推進局の予算314億円」という金額だけを見ると、その大部分が「副首都整備」に使われているように見えるが、内訳を見ると大阪公立大学の運営費交付金・施設整備費など大学関連が大半を占め、副首都推進局自体の運営費（大阪府負担分）は5億2,831万1千円にとどまる。",
+        "nearest_issue_id": "fukushuto-finance",
+        "reviewer_type": "editorial_review",
+        "sns_base": 1681,
+        "sns_count": 0,
+        "sns_note": "「314億」「副首都推進局」「公立大学」の語での一致は1件あったが、副首都推進局の人員・費用を都構想の住民投票事務に使っていることへの一般的な批判で、予算の内訳（大学運営費が大半・直接予算は5.28億円）そのものへの言及ではない。",
+        "sources": [
+          {
+            "date": "2026-02-18",
+            "location": "副首都推進局 予算案の概要",
+            "name": "大阪府「令和8年度当初予算案等について（副首都推進局）」報道発表資料",
+            "url": "https://www.pref.osaka.lg.jp/documents/125628/01_r8yosanan.pdf"
+          }
+        ],
+        "topic": "大阪府「副首都推進局」の令和8年度当初予算314億6,559万2千円のうち、大阪公立大学運営費交付金（142億2,504万2千円）など大学関連が大部分を占め、「副首都化の推進」そのものに直接充てられる予算（副首都推進本部等運営費負担金）は5億2,831万1千円にとどまる"
+      },
+      {
+        "checked_on": "2026-09-20",
+        "id": "fukushuto-sc-4",
+        "life_impact": "2026年に成立した法律の10年前、2016年1月の衆院本会議代表質問で、当時のおおさか維新の会・馬場伸幸が「副首都大阪の実現をセンターピンとして」「議員立法で副首都法案を提案」と明言していた。2023年の維新単独案（衆法4号、発議者中司宏）、2026年の自民・維新共同提出法（衆法27号、発議者に馬場伸幸・中司宏も名を連ねる）まで、提出者の連続性で10年間の経緯がつながる。",
+        "nearest_issue_id": "fukushuto-osaka-restoration",
+        "reviewer_type": "editorial_review",
+        "sns_base": 1681,
+        "sns_count": 0,
+        "sns_note": "「馬場伸幸」「センターピン」「2016年」「10年」等の語での一致は5件あったが、現在の人事配置の分析、無関係な批判の常套句としての「センターピン」使用、南海トラフ地震の時期予測など別の文脈での使用で、2016年の代表質問（構想の起点）そのものへの言及は0件。",
+        "sources": [
+          {
+            "date": "2016-01-06",
+            "location": "馬場伸幸（おおさか維新の会）代表質問",
+            "name": "国立国会図書館 国会会議録検索システム「第190回国会 衆議院本会議 第2号」",
+            "url": "https://kokkai.ndl.go.jp/#/detail?minId=119005254X00220160106"
+          }
+        ],
+        "topic": "2026年に成立した副首都法の10年前、2016年1月の衆院本会議代表質問で、当時のおおさか維新の会・馬場伸幸が「副首都大阪の実現をセンターピンとして」「議員立法で副首都法案を提案」と述べたのが構想の起点"
+      }
+    ],
+    "veins": []
+  },
+  "opinion_count": 1681,
+  "page_path": "fukushuto-reaction-map.html",
+  "question": "首都機能のバックアップとなる副首都を法律で指定すべきか",
+  "schema_version": "1.0",
+  "source_sha256": "d6458f8f5fcec1532401120eded82787570cb8b3c783105c3e3a8988db71794e",
+  "theme_id": "fukushuto",
+  "title": "副首都法案・副首都構想",
+  "updated_on": "2026-09-20"
+}
