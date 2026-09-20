@@ -176,3 +176,5 @@
 2026-09-21追補：オーナーが高齢者免許返納「代替交通整備」の新図を了承し、次の「自主返納支援」を指示。`elderly-license-revocation-infographic-wide-jishu-v2.webp` を組み込み ImageGen で作成。旧図の手続きフロー・中央の支援イメージ・右４カード・濃紺帯を保ち、警察庁の自主返納と運転経歴証明書の案内、および内閣府高齢社会白書の安全運転相談の記載に沿って整理した。旧投稿の割合・件数、地域限定の割引例、支援が返納を必ず増やすという断定は載せていない。根拠と文言は `quality/plans/2026-09-21-task70-elderly-jishu-infographic.md` に記録。確認候補で、公開ページ参照は未変更。
 
 2026-09-21追補：オーナーが高齢者免許返納「自主返納支援」の新図を了承し、最後の「その他」を指示。正典 `social-samples/elderly-license_2d_classified.json` の意見投稿から、政治家の年齢制限との比較、本人の返納体験、撮影趣味への影響、危険運転への叱責を各１件選び、`elderly-license-revocation-infographic-wide-sonota-v2.webp` を組み込み ImageGen で作成。旧図の件数・割合や代表性を示す表現は引き継がず、他テーマの「その他」と同じ横長４カードにした。投稿IDと短い文言は `quality/plans/2026-09-21-task70-elderly-sonota-infographic.md` に記録。確認候補で、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが高齢者免許返納「その他」を了承し、今作った６枚すべての差し替えを指示。`docs/elderly-license-revocation-reaction-map.html` の無JS表示と操作画面の参照先を各 `-v2.webp` に変更し、`scripts/refresh_planet_section.py` の再生成設定も同じ６枚へ更新。旧画像は履歴として保持。全68枚の点検とX投稿への図解添付停止は継続する。
