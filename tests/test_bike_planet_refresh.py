@@ -47,7 +47,7 @@ class BikePlanetRefreshTests(unittest.TestCase):
         self.assertEqual(failures, [])
         self.assertEqual(old, new)
         self.assertNotIn('id="explainer-section"', new)
-        self.assertEqual(new.count('class="explainer-card landing-image"'), 5 + 1)  # 無JS用5枚＋JS側1箇所
+        self.assertEqual(new.count('class="explainer-card landing-image"'), 6 + 1)  # 無JS用6枚＋JS側1箇所
         self.assertIn("document.addEventListener('click',function(e){\n    var c=e.target.closest('.explainer-card[data-img]')", new)
 
 class BikeCollectionReviewTests(unittest.TestCase):
