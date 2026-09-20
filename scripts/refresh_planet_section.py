@@ -297,8 +297,8 @@ def _inject_constitutional_landing_images(block: str, data: dict) -> str:
 
 # ai-copyrightの論点ごとの図解画像（consumption-tax-cutと同じ形）。画像自体は既にあったが
 # （2026年初出時の制作分）、旧デザイン「判断が分かれる、6つの問い」という独立カードに
-# しか使われておらず、山なみの各論点パネルには一度も差し込まれていなかった。「その他」は
-# 図解を持たない。ラベルはARENA_LABELSと表記を揃える（既存カードのdata-altと同じ文言）。
+# しか使われておらず、山なみの各論点パネルには一度も差し込まれていなかった。
+# ラベルはARENA_LABELSと表記を揃える（既存カードのdata-altと同じ文言）。
 AI_COPYRIGHT_LANDING_IMAGE_BY_ISSUE_ID = {
     "ai-copyright-learning-data": ("gakushu-v2", "学習データ・無断利用"),
     "ai-copyright-creator-rights": ("creator-v2", "クリエイター保護・権利"),
@@ -306,6 +306,7 @@ AI_COPYRIGHT_LANDING_IMAGE_BY_ISSUE_ID = {
     "ai-copyright-tech-promotion": ("gijutsu-v2", "技術競争・AI推進"),
     "ai-copyright-user-ethics": ("moraru-v2", "利用者モラル・倫理"),
     "ai-copyright-generated-work-rights": ("seiseibutsu-v2", "AI生成物の権利・創作性"),
+    "ai-copyright-other": ("sonota-v2", "その他"),
 }
 
 

@@ -562,3 +562,19 @@ items:
     requested_at: "2026-09-20"
     decided_at: "2026-09-20"
     decision_note: "本対話の『画像の差し替え』を、承認済み6枚のページ画像差し替えと本番反映の承認として記録。"
+
+  - id: approval-20260920-002
+    department: engineering-data
+    action: website_publication
+    summary: "AIと著作権ページの『その他』図解をImageGen 2.5で作成し公開する"
+    reason: "オーナーが『AIテーマ「その他」の画像も作成して本番に反映』と指示したため"
+    risks:
+      - "課題70の全図解点検は継続中。点検完了まで図解をX投稿に添えない"
+    recommendation: approve
+    evidence:
+      - quality/plans/2026-09-20-task70-ai-sonota-infographic.md
+      - tasks/task-70.md
+    status: approved
+    requested_at: "2026-09-20"
+    decided_at: "2026-09-20"
+    decision_note: "本対話の本番反映指示を承認として記録。"
