@@ -114,11 +114,19 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
         self.assertEqual(data["modes"][1]["id"], cfg["stances"][0]["key"])
 
     def test_elderly_flat_items_filter_each_issue_without_duplication(self):
+        """2026-09-20の定期収集で両論点に新規投稿が増え、未読が発生した（それまでは0件）。
+
+        reread_count（既存の編集再読件数）は据え置きで、unread_count（今回の収集で
+        増えた「まだ読み直していない分」）だけが増える。独自性検査の上限は4割で、
+        義務化・事故防止は52/273=19.0%、地方の足・移動権は6/35=17.1%と余裕がある。
+        """
         data = bpd.build("elderly-license-revocation")
         self.assertEqual(data["reread_summary"]["connected_editorial_count"], 250)
         reviewed = [i for i in data["issues"] if i["sub"]["status"] == "reread"]
         self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [29, 221])
-        self.assertTrue(all(i["sub"]["unread_count"] == 0 for i in reviewed))
+        unread_by_count = {i["count"]: i["sub"]["unread_count"] for i in reviewed}
+        self.assertEqual(unread_by_count, {273: 52, 35: 6})
+        self.assertTrue(all(i["sub"]["skipped_count"] == 0 for i in reviewed))
 
 
 if __name__ == '__main__':

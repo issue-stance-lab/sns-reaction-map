@@ -140,6 +140,7 @@ def _sync_bukatsu_method_text(html: str, data: dict) -> str:
 
 
 ELDERLY_OPINION_COUNT_RE = re.compile(r"(意見と判定した)([\d,]+)(件)")
+ELDERLY_COLLECTED_COUNT_RE = re.compile(r"(取得した公開投稿)([\d,]+)(件)")
 
 
 def _sync_elderly_method_text(html: str, data: dict) -> str:
@@ -151,13 +152,25 @@ def _sync_elderly_method_text(html: str, data: dict) -> str:
     文言が違って一致しない。3か所とも山なみ区間の外にあり、build_section()の
     再生成対象にも入らないため、初回変換以来だれも更新していなかった
     （部活動の「調査条件」文と同じ失われ方）。elderly-license-revocation専用。
+
+    「取得した公開投稿N件」（収集件数）も lead文・データ出典の2か所にあるが、
+    2026-09-12新設時は編集再読による意見数の変化だけで収集件数は変わらず、
+    この2か所は対象に入っていなかった。2026-09-20、新規収集で収集件数も
+    変わって初めて「取得した公開投稿506件」が更新されずに残る不具合として
+    顕在化した（山なみ区画の外にあるのに件数を持つ箇所、他テーマと同型）。
     """
     opinions = data["totals"]["opinions"]
+    collected = data["totals"]["collected"]
     new_html, n = ELDERLY_OPINION_COUNT_RE.subn(
         lambda m: f"{m.group(1)}{opinions:,}{m.group(3)}", html
     )
     if n != 3:
         raise SystemExit(f"「意見と判定したN件」の想定箇所数(3)と一致しません（elderly-license-revocation）: {n}件")
+    new_html, n = ELDERLY_COLLECTED_COUNT_RE.subn(
+        lambda m: f"{m.group(1)}{collected:,}{m.group(3)}", new_html
+    )
+    if n != 2:
+        raise SystemExit(f"「取得した公開投稿N件」の想定箇所数(2)と一致しません（elderly-license-revocation）: {n}件")
     return new_html
 
 
