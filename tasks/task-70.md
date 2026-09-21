@@ -184,3 +184,5 @@
 2026-09-21公開確認：別セッションで高齢者免許返納の収集期限と課題55の管理文が修正され、`origin/main` は承認済み６図の参照変更を含む状態でGitHub Pagesへデプロイ済みだった。最新mainで `verify_theme_page.py`、`verify_number_provenance.py`、`verify_top_page.py`、`unittest discover`、`run_public_checks.py` がすべて終了コード0。GitHub Actionsの公開ファイル検査とPagesデプロイは成功。`https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html` に６画像の新パスが各２箇所あり、６アセットすべてHTTP 200とローカルと同じContent-Lengthを確認。課題70の全68枚点検は継続。
 
 2026-09-21追補：次の修正候補として憲法改正「緊急事態条項」を選び、現行図を参照した `constitutional-infographic-wide-emergency-v2.webp` を組み込み ImageGen で作成。衆議院の現行憲法第54条と衆議院法制局・憲法審査会事務局の2026年5月「緊急事態条項のイメージ（案）」に沿い、参議院の緊急集会と選挙困難時の国会機能維持案を分けて示した。旧図の広範な権限・人権制限の一般化を避け、投稿件数・割合・未確定の要件は載せていない。文言と出典は `quality/plans/2026-09-21-task70-constitutional-emergency-infographic.md` に記録。オーナー確認待ちで、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが「緊急事態条項」を了承し、次の「国民投票・広告」を `constitutional-infographic-wide-referendum-v2.webp` として組み込み ImageGen で作成。旧図の青と橙の対比、投票箱と天秤、４カードを保った。国民投票法の承認条件と最低投票率の定めを事実として、テレビCMとネット広告は問いとして示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-referendum-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
