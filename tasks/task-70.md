@@ -188,3 +188,5 @@
 2026-09-21追補：オーナーが「緊急事態条項」を了承し、次の「国民投票・広告」を `constitutional-infographic-wide-referendum-v2.webp` として組み込み ImageGen で作成。旧図の青と橙の対比、投票箱と天秤、４カードを保った。国民投票法の承認条件と最低投票率の定めを事実として、テレビCMとネット広告は問いとして示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-referendum-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
 
 2026-09-21追補：オーナーが「国民投票・広告」を了承し、次の「政党・発議手続き」を `constitutional-infographic-wide-process-v2.webp` として組み込み ImageGen で作成。旧図の横４段階、青と橙の導線、円形アイコンと下段カードを保ち、改正原案の提出、関連事項ごとの区分、両院の発議要件、国民投票を分けた。評価的な旧文言は除き、憲法96条と国会法68条の2・3にある要件だけを示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-process-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが「政党・発議手続き」を了承し、以後は文字量を増やさないよう指示。次の「情報・議論の質」を `constitutional-infographic-wide-information-v2.webp` として組み込み ImageGen で作成した。旧図の緑と橙の対比、中央の本と虫眼鏡を保ち、長い説明文を削除。国民投票法14条の公的広報に必要な改正案・要旨・新旧対照表、客観・中立、賛否の公正・平等を短く示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-information-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
