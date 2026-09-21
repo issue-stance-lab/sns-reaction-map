@@ -5,9 +5,52 @@
   新規 `scripts/seo/apply_classroom_section.py`・`configs/classroom/{theme}.json`（10件）・`tests/test_classroom_section.py`、
   共有 CSS/JS（`.classroom-*`、印刷、`hashchange`）、`refresh_topic.py`・`verify_builder_rebuildability.py` への配線、公開10ページ
 - 監査者: 発注書を書いたセッション（実装したセッションとは別）
-- 判定: **needs_revision（直す箇所は1つ）**。375px で一次資料のリンク文字が画面外に切れる。直して再確認したら ready_for_ceo にしてよい
+- 判定: **ready_for_ceo**（2026-09-21 対応済み。下記「直したこと」参照。実装したセッションが同じ作業ツリーで修正し、再検査した）
 
-## 直すこと（1件）
+## 直したこと（2026-09-21 対応）
+
+### 1. 375px で一次資料のリンクが画面外に切れる（監査の指摘・必須）
+
+`docs/topic-modern.css` の `.classroom-reasons a, .classroom-sources a` から `white-space: nowrap` を削除し、
+`overflow-wrap: anywhere` を追加した（`TOPIC_CSS_VERSION` を31に上げて10ページへ再適用）。
+
+再確認は、監査が指摘した「`documentElement.scrollWidth` だけでは切れを検出できない」という弱点を踏まえ、
+375pxの実機で `.classroom-section` 内の**全 `a` 要素の `getBoundingClientRect().right`** を1本ずつ測定する方式に切り替えた。
+10テーマ×9リンク（賛成3＋反対3＋一次資料3）＝90本すべてで `right ≤ 375` を確認し、`scrollWidth` も10テーマとも375のまま
+（横スクロールなし）。監査が名指しした副首都の64文字の法律名リンクも、折り返されて画面内に収まることをスクリーンショットで確認済み。
+再発防止として `tests/test_classroom_section.py` に `test_css_link_rule_does_not_force_nowrap` を追加し、
+該当CSSルールに `white-space: nowrap` が無く `overflow-wrap` があることを固定した。
+
+### 2. 文体の不統一（憲法改正・辺野古・あだ名が「です・ます」、他7テーマが「だ・である」）
+
+指摘時点で該当3テーマの理由文（賛成・反対各3、計18文）は全文が「です・ます」だった。事実関係・数字・内部リンク（issue_id）は
+一切変えず、語尾のみ他7テーマに合わせて「だ・である」へ書き換えた。全10テーマで「です・ます」語尾が0件であることをスクリプトで確認済み。
+
+### 再検査（作業ツリーで実行、いずれもOK）
+
+| 検査 | 結果 |
+|---|---|
+| `python3 -m unittest discover -s tests` | OK（1021件、再発防止テスト1件を含む） |
+| `python3 scripts/verify_page_originality.py -v` | OK |
+| `python3 scripts/verify_ai_tone.py -v` | 問題なし |
+| `python3 scripts/verify_number_provenance.py` | NG 0件 |
+| `python3 scripts/verify_theme_page.py`（builder rebuildability内蔵） | 11テーマ NG 0件（教室節の2回目 changed=0 を含む） |
+| `python3 scripts/seo/validate_theme_seo.py` | OK |
+| `python3 scripts/verify_top_page.py` | OK |
+| `python3 scripts/run_public_checks.py` | OK |
+| `apply_theme_trust.py` → 再実行 | changed=0 |
+| `apply_classroom_section.py` → 再実行 | changed=0 |
+| 375px 実機、90リンクの `right` 値 | 全て375以下（詳細は上記） |
+
+### この節、mainへのマージ時の注意
+
+このファイルは監査時点でmainへ直接コミットされ（`task/task77-partb-review`）、実装ブランチ
+`task/growth-cite-and-search-structure-b` は分岐後にできたためこのファイル自体を持っていなかった。
+今回、この作業ツリー内に同名ファイルとして新規作成し、上記の対応を書いた。mainへマージする際は
+「両方が新規追加」としてコンフリクト表示されるので、**この作業ツリー版（本文）を採用**すること
+（監査時点版の内容はすべて下の「直すこと（監査時点・履歴として残す）」に残してある）。
+
+## 直すこと（監査時点・履歴として残す）
 
 **375px で「確かめる一次資料」のリンクが右に切れる。** `docs/topic-modern.css` の
 `.classroom-reasons a, .classroom-sources a { white-space: nowrap }` のため、長い資料名（例: 副首都の法律名 64文字）が
@@ -20,7 +63,7 @@
 - 直したら: `TOPIC_CSS_VERSION` を 31 に上げて10ページを再適用し、375px で `.classroom-section` 内の全 `a` の right が 375 以下であることを確認する。
   `tests/test_classroom_section.py` に「CSS に `.classroom-sources a` の nowrap が無い」程度の固定を足すと再発しない
 
-## 判定の根拠
+## 判定の根拠（監査時点）
 
 ### 自動検査（作業ツリーで実行）
 
@@ -52,7 +95,7 @@
 - 問いは「〜すべきか」の形で、一方の立場を前提にしていない
 - 一次資料は法令（e-Gov）・国会会議録・官庁資料・自治体資料で、各テーマの一次資料メモの範囲内
 - 数字は条番号・年月などに限られ、割合や件数は書いていない
-- 文体がテーマによって「だ・である」と「です・ます」に分かれている（憲法改正・辺野古・あだ名は「です・ます」）。読者には各ページ内で完結するので実害は小さいが、揃えるなら「だ・である」に寄せると他の節と合う（任意）
+- 文体がテーマによって「だ・である」と「です・ます」に分かれている（憲法改正・辺野古・あだ名は「です・ます」）。読者には各ページ内で完結するので実害は小さいが、揃えるなら「だ・である」に寄せると他の節と合う（任意）→ **2026-09-21 対応済み（上記「直したこと」2.）**
 - 辺野古（高校生死亡事故）は授業題材として扱う配慮が要るテーマだが、問いは学校の安全管理の義務・国の関与の範囲・報道の表現に限られ、亡くなった生徒個人や遺族に触れていない。公開品質ゲートの「事故・遺族への配慮」は満たしている
 - 発注書との相違: 冪等検査の配線先を `verify_theme_page.py` ではなく `verify_builder_rebuildability.py` にした点は、実体がそちらだったためで妥当
 
@@ -62,11 +105,11 @@
 - B-2 中身: 理由3+3・一次資料3・問い3・使い方・印刷（PDF は作っていない）・GA4 2イベント、満たす
 - B-3 文章の決まり: AI臭検査・使い回し検査・行動原則、満たす
 - B-4 公開前: この監査。CEO承認と release スキルはこれから
-- B-5 完了条件: 375px の項目だけ未達（上記）
+- B-5 完了条件: 375px の項目だけ未達（上記）→ **2026-09-21 対応済み**
 
 ## 残るリスク
 
-- 印刷プレビューは未確認（上記）
+- 印刷プレビューは未確認（上記、対応していない。公開前にオーナーがブラウザで1テーマ確認するのが望ましい）
 - 節は10ページ全部で同じ形なので、AdSense の「定型的な繰り返し」の見方に触れる可能性がゼロではない。理由・資料・問いが全テーマ固有である点で、既存の「このページの作り方」節と同じ扱いになると考える
 
 ## 戻し方

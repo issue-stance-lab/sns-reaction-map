@@ -1,7 +1,7 @@
 # 課題77: 集客の仕掛け6案（引用され・検索される構造ほか）の登録と採用判断
 
 **登録日**: 2026-09-20
-**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。Part A（案1）は品質監査 ready_for_ceo（条件付き、`quality/reviews/2026-09-20-website-task77-parta.md`）を経て、2026-09-21にCEO承認・本番反映済み（マージ`68732e9`、CI・実機確認OK）。Part B（案2）は未着手。案3〜6は `GROWTH.yaml` に idea として登録済み
+**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。Part A（案1）は品質監査 ready_for_ceo（条件付き、`quality/reviews/2026-09-20-website-task77-parta.md`）を経て、2026-09-21にCEO承認・本番反映済み（マージ`68732e9`、CI・実機確認OK）。Part B（案2）は2026-09-21に実装完了後、品質監査で needs_revision（375pxで一次資料リンクが画面外に切れる・文体不統一）となり、同日中に実装セッションが両方を修正・再検査して ready_for_ceo に更新済み（`quality/reviews/2026-09-21-website-task77-partb.md`）。まだ未コミット（作業ツリー `isa-wt-growth-cite-search-b`）・CEO承認待ち。案3〜6は `GROWTH.yaml` に idea として登録済み
 **優先度**: 中（来訪者がいなくても効く案1・案2を先に。シェア系の案3・案4は来訪者が増えてから）
 **判断待ち**: オーナー（案5の図表・データの利用条件／案6の費用上限）
 **関連**: 51（記事の公開先設計）/ 54・15（AdSense審査中）/ 70（図解の点検中）/ 55（ドメイン移行の残作業）/
@@ -138,7 +138,33 @@
   副首都の論点画像7枚の復活は本番URLで確認（課題80）。マージ `68732e9`、push・CI（公開ファイルの検査／Deploy to GitHub Pages とも success）・
   本番URL（`llms.txt`・`data/catalog.json`・論点アンカー・引用ボタンJS・調査条件ボックス）を確認。**完了**
 - 段階3: 公開後4週間（`judge_at` 2026-10-19）、GA4参照元とGSC検索語で計測し判定する。**進行中**
-  Part B 着手前に、品質監査の推奨修正（同一ページ内 hashchange で論点が切り替わらない）を実装セッションが対応すること
+  Part B 着手前に、品質監査の推奨修正（同一ページ内 hashchange で論点が切り替わらない）を実装セッションが対応すること。
+  → 2026-09-21 対応済み（`docs/topic-modern.js` に `window.addEventListener('hashchange', citeRestoreFromHash)` を追加）
+- 段階3.5: Part B（案2）実装。作業ツリー `isa-wt-growth-cite-search-b`、ブランチ `task/growth-cite-and-search-structure-b`。
+  新規 `scripts/seo/apply_classroom_section.py`（`apply_theme_trust.py` と同じマーカー置換方式）と
+  `configs/classroom/{theme}.json`（10テーマ分、並行10セッションが一次資料・公開JSON・各ページの実データから個別作成）で
+  「授業・ディベートで使うとき」節を生成し、公開10ページ全部の `ARTICLE_TRUST_START` 直前へ適用。
+  `refresh_topic.py` の昇格列2箇所・`verify_builder_rebuildability.py` の冪等検査（新設「教室節適用」「教室節の2回目」）に配線済み
+  （発注書は冪等検査の場所を `verify_theme_page.py` としていたが、実体は `verify_builder_rebuildability.py` だったため、
+  実装はそちらに合わせた）。
+  検査: `apply_classroom_section.py` を2回実行し changed=0、`unittest discover`（1020+新規13件）・`verify_ai_tone.py`・
+  `verify_page_originality.py`（固定文言を `configs/page-originality.json` の allow へ追加して解消）・
+  `verify_number_provenance.py`・`verify_theme_page.py`（内部で builder rebuildability を含む）・`run_public_checks.py`
+  がいずれも NG 0件。ブラウザ実機で hashchange 再選択・印刷ボタン（`classroom_print`）・内部リンク（`classroom_link_click`）の
+  GA4送信・375px横スクロールなし・issue-cards型5テーマでのアンカー到達を確認。印刷プレビューでのA4 1枚収まりは自動化ツールでは
+  未検証（CSSの構文と対象セレクタの適用のみ確認）。**実装完了・未コミット。品質監査は別セッション（発注書B-4）**
+- 段階3.6: Part B の品質監査（2026-09-21、`quality/reviews/2026-09-21-website-task77-partb.md`）。判定 needs_revision（必須1件）。
+  「375pxで一次資料の長いリンクが `white-space: nowrap` のため画面外へ切れる（実装側の検証は `scrollWidth` のみを見ており未検出）」
+  「文体がテーマにより「だ・である」と「です・ます」に分かれている（憲法改正・辺野古・あだ名、任意扱い）」の2件を指摘。
+  同日中に実装セッションが両方へ対応: `.classroom-reasons a, .classroom-sources a` の `nowrap` を外し `overflow-wrap: anywhere` を追加
+  （`TOPIC_CSS_VERSION` 30→31）、該当3テーマの理由文18文を事実・数字・内部リンクは変えず語尾のみ「だ・である」へ統一。
+  再検査は375pxで `.classroom-section` 内の全リンク（10テーマ×9本=90本）の `getBoundingClientRect().right` を実測して
+  全て375以下であることを確認（`scrollWidth` だけに頼らない方式に切替）。再発防止テストを
+  `tests/test_classroom_section.py` に追加。`unittest discover`（1021件）・`verify_ai_tone.py`・`verify_page_originality.py`・
+  `verify_number_provenance.py`・`verify_theme_page.py`（builder rebuildability内蔵）・`verify_top_page.py`・
+  `run_public_checks.py`・`apply_theme_trust.py`/`apply_classroom_section.py` の再実行changed=0、いずれもOK。
+  監査記録の判定を ready_for_ceo に更新。印刷プレビューのA4 1枚収まりは今回も自動化ツールでは未検証のまま。
+  **対応完了・未コミット。次はCEO承認**
 - 段階4: 案5 → 案3 → 案4 → 案6 の順に、同じ型で1つずつ進める（measuring は同時に1つまで）
 
 - 段階3.6: Part B の品質監査（2026-09-21、`quality/reviews/2026-09-21-website-task77-partb.md`）。判定 needs_revision。

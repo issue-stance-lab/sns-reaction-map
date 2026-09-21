@@ -1192,3 +1192,157 @@ main > .article-trust {
    一般的なレスポンシブ単位の下限に合わせた控えめな値にとどめる。
    実広告での改善量は未検証（テスト環境では広告が配信されないため）。 */
 ins.adsbygoogle { min-height: 100px; }
+
+/* 「授業・ディベートで使うとき」節（課題77 案2 Part B）。
+   .article-trust と同じ枠の言語（border/radius/shadow）を再利用し、
+   賛成・反対を左右2カラムで並べて「対称に書かない」文体でも読み比べやすくする。 */
+.classroom-section {
+  margin: 14px 0 0;
+  padding: 24px;
+  border: 1px solid var(--line, #e4eaf3);
+  border-radius: 16px;
+  background: var(--panel, #fff);
+  box-shadow: 0 5px 18px rgba(18, 53, 99, .07);
+  color: var(--ink, #071a3d);
+}
+main > .classroom-section {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+}
+.classroom-heading { margin-bottom: 16px; }
+.classroom-kicker {
+  margin: 0;
+  color: var(--blue, #075ef2);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.classroom-heading h2 {
+  margin: 2px 0 8px !important;
+  font-size: 20px !important;
+  line-height: 1.35;
+}
+.classroom-tagline {
+  margin: 0;
+  color: var(--muted, #637089);
+  font-size: 13px;
+  line-height: 1.75;
+}
+.classroom-reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+.classroom-reasons {
+  min-width: 0;
+  padding: 14px 16px;
+  border-left: 4px solid var(--green, #1f9d55);
+  border-radius: 0 10px 10px 0;
+  background: var(--soft, #f5f8fc);
+}
+.classroom-reasons:last-child { border-left-color: var(--orange, #e8752c); }
+.classroom-reasons h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.classroom-reasons ul,
+.classroom-sources ul,
+.classroom-questions ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.classroom-reasons li { margin-bottom: 9px; }
+.classroom-reasons li:last-child { margin-bottom: 0; }
+.classroom-reasons p,
+.classroom-sources p,
+.classroom-questions p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.classroom-reasons a,
+.classroom-sources a {
+  color: var(--blue, #075ef2);
+  font-weight: 700;
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+.classroom-sources,
+.classroom-questions {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, #e6ebf3);
+}
+.classroom-sources h3,
+.classroom-questions h3,
+.classroom-usage h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink, #071a3d);
+}
+.classroom-sources li,
+.classroom-questions li { margin-bottom: 6px; color: var(--muted, #637089); }
+.classroom-sources li:last-child,
+.classroom-questions li:last-child { margin-bottom: 0; }
+.classroom-usage {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, #e6ebf3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.classroom-usage p {
+  margin: 0;
+  color: var(--muted, #637089);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.classroom-print-btn {
+  flex: none;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--line, #dde5f0);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy, #0F1A3D);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.classroom-print-btn:hover,
+.classroom-print-btn:focus-visible {
+  border-color: var(--blue, #075ef2);
+  color: var(--blue, #075ef2);
+  outline: none;
+}
+@media (max-width: 720px) {
+  .classroom-section { padding: 19px 16px; }
+  .classroom-reasons-grid { grid-template-columns: 1fr; }
+}
+
+/* 印刷: 節だけをA4 1枚に収める。他の要素は非表示にし、節を先頭へ絶対配置する
+   （ページ全体のDOM構造に依存しない、印刷1要素だけを出す定番の型）。 */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  body * { visibility: hidden; }
+  .classroom-section, .classroom-section * { visibility: visible; }
+  .classroom-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+  }
+  .classroom-print-btn { display: none; }
+  .classroom-reasons-grid { gap: 10px; }
+  .classroom-reasons, .classroom-sources, .classroom-questions { padding: 8px 0; }
+  .classroom-reasons p, .classroom-sources p, .classroom-questions p { font-size: 11px; line-height: 1.55; }
+}

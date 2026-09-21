@@ -54,12 +54,21 @@ def _as_module_command(builder: list[str]) -> list[str]:
 
 def _verify(root: Path, theme: str, builder: list[str]) -> tuple[bool, str]:
     module_builder = _as_module_command(builder)
+    has_classroom_config = (root / "configs" / "classroom" / f"{theme}.json").is_file()
     steps = (
         ("テーマ別ビルダー", module_builder),
         ("論点件数同期", [sys.executable, "-m", "scripts.sync_issue_counts", theme]),
         ("信頼情報適用", [sys.executable, "-m", "scripts.seo.apply_theme_trust"]),
+        *(
+            (("教室節適用", [sys.executable, "-m", "scripts.seo.apply_classroom_section"]),)
+            if has_classroom_config else ()
+        ),
         ("ビルダー再検査", [*module_builder, "--check"]),
         ("信頼情報の2回目", [sys.executable, "-m", "scripts.seo.apply_theme_trust"]),
+        *(
+            (("教室節の2回目", [sys.executable, "-m", "scripts.seo.apply_classroom_section"]),)
+            if has_classroom_config else ()
+        ),
     )
     for label, command in steps:
         result = _run(root, command)
@@ -68,6 +77,8 @@ def _verify(root: Path, theme: str, builder: list[str]) -> tuple[bool, str]:
             return False, f"{label} (exit {result.returncode})\n{output}"
         if label == "信頼情報の2回目" and "changed=0" not in output:
             return False, f"apply_theme_trust.py の2回目が changed=0 ではありません\n{output}"
+        if label == "教室節の2回目" and "changed=0" not in output:
+            return False, f"apply_classroom_section.py の2回目が changed=0 ではありません\n{output}"
     return True, "昇格順の後もビルダ差分なし / apply_theme_trust changed=0"
 
 

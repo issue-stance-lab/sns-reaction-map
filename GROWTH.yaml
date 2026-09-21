@@ -363,7 +363,44 @@ capabilities:
       外部から差し込む方式にした（テンプレート編集は論点画像差し込み処理の文字列一致を壊すため）。
       推奨修正（Part B着手前まででよい、品質監査より）: 同一ページ内でハッシュだけ変わる
       hashchangeでは論点が切り替わらない。Part Bの内部リンク実装前に
-      window.addEventListener('hashchange', citeRestoreFromHash) を足すこと
+      window.addEventListener('hashchange', citeRestoreFromHash) を足すこと。
+      2026-09-21 Part B（案2）着手（作業ツリー isa-wt-growth-cite-search-b、ブランチ
+      task/growth-cite-and-search-structure-b）。上記の推奨修正を実装済み（docs/topic-modern.js）。
+      「授業・ディベートで使うとき」節は新規スクリプト scripts/seo/apply_classroom_section.py
+      （apply_theme_trust.pyと同じマーカー置換方式）と configs/classroom/{theme}.json から生成する設計とし、
+      refresh_topic.py の昇格列2箇所・verify_builder_rebuildability.py の冪等検査に追加した。
+      冪等検査の実体は発注書が指す verify_theme_page.py ではなく verify_builder_rebuildability.py
+      （apply_theme_trust changed=0 を検査している箇所）だったため、実装はそちらに合わせた（発注書との相違）。
+      2026-09-21 Part B 実装完了（公開10テーマ全部に適用・コミット前）。configs/classroom/{theme}.json
+      10件は並行10セッションが一次資料メモ・公開JSON・各ページの実データから個別に作成（使い回しなし、
+      テストで固定）。apply_classroom_section.py を2回実行してchanged=0を確認。
+      python3 -m unittest discover -s tests（1020件+新規13件）・verify_ai_tone.py・
+      verify_page_originality.py（固定文言をconfigs/page-originality.jsonのallowへ追加して解消）・
+      verify_number_provenance.py・verify_theme_page.py（内部でverify_builder_rebuildability.py実行）・
+      run_public_checks.py がいずれもNG 0件。verify_top_page.pyのNG 1件は課題69（収集予定超過）で無関係。
+      ブラウザ実機で確認済み: hashchangeでの論点再選択・印刷ボタン(classroom_print)・
+      内部リンク(classroom_link_click)のGA4送信・375pxで横スクロールなし・issue-cards型5テーマでの
+      アンカー到達。印刷プレビューでのA4 1枚収まりは自動化ツールで直接確認できず未検証（CSSの構文と
+      対象セレクタの適用は確認済み）。品質監査は別セッションで実施予定（発注書B-4）。
+      2026-09-21 品質監査（quality/reviews/2026-09-21-website-task77-partb.md）実施。判定 needs_revision
+      （必須1件）。指摘: 375pxで一次資料の長いリンクが white-space: nowrap のため画面外へ切れる
+      （実装側の検証は documentElement.scrollWidth だけを見ており未検出。副首都の64文字の法律名リンクで
+      右端818pxまで伸びていた）。任意扱いの追加指摘: 文体がテーマにより「だ・である」と「です・ます」に
+      分かれている（憲法改正・辺野古・あだ名の3テーマが「です・ます」）。
+      同日中に実装セッションが両方へ対応。CSS修正は.classroom-reasons a, .classroom-sources aから
+      white-space: nowrapを削除しoverflow-wrap: anywhereを追加（TOPIC_CSS_VERSION 30→31）。
+      文体は該当3テーマの理由文18文を事実・数字・issue_idは変えず語尾のみ「だ・である」へ統一
+      （全10テーマで「です・ます」語尾0件をスクリプトで確認）。
+      再検証はscrollWidthだけに頼らず、375pxで.classroom-section内の全リンク（10テーマ×9本=90本）の
+      getBoundingClientRect().rightを実測し全て375以下を確認（副首都の当該リンクも折り返されて収まることを
+      スクリーンショットで確認）。再発防止テストtest_css_link_rule_does_not_force_nowrapをtests/test_classroom_section.pyへ追加。
+      unittest discover（1021件）・verify_ai_tone.py・verify_page_originality.py・verify_number_provenance.py・
+      verify_theme_page.py（builder rebuildability内蔵）・verify_top_page.py・run_public_checks.py・
+      apply_theme_trust.py/apply_classroom_section.pyの再実行changed=0、いずれもOK。
+      監査記録の判定をready_for_ceoに更新。まだ未コミット、次はCEO承認。
+      監査記録ファイル自体はmainに先行コミットされており実装ブランチには無かったため、今回の対応は
+      作業ツリー内に同名ファイルを新規作成する形で書いた（mainマージ時は両方新規追加のコンフリクトになる
+      見込みなので、作業ツリー版を採用するようファイル内に注記した）。
 
   press-kit-embed:
     title: 報道・研究向け「引用パック」ページと埋め込み（iframe）
