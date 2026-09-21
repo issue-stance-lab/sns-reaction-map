@@ -34,6 +34,9 @@ CHECKS: tuple[tuple[str, list[str]], ...] = (
     ("SEO台帳（更新日・JSON-LD・sitemap）", ["scripts/seo/validate_theme_seo.py"]),
     ("収集期間の記録", ["scripts/verify_sample_periods.py"]),
     ("ページ文の使い回し", ["scripts/verify_page_originality.py"]),
+    # 課題84。旧LOOP.mdが毎回のループで目視確認していたチャート・画像の存在確認を、
+    # 運用ループ廃止後に引き継ぐ場所が無かった。公開ファイルだけで完結する検査なのでここに置く。
+    ("ページ構造（チャートのデータ・画像/スクリプト参照）", ["scripts/verify_page_structure.py"]),
     # 課題63 段階B。回ごとの出所（モデル・基準の版・入力の指紋・取得元）が欠けたら止める。
     # 公開側の記録 data/verification/updates/ を読むので、非公開データが無くても回る。
     ("収集回ごとの出所", ["scripts/verify_update_provenance.py"]),
