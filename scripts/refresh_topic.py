@@ -1042,6 +1042,201 @@ def apply_manifest_targets(root: Path, stage: Path, targets: dict[Path, Path], b
         raise
 
 
+# ------------------------------------------------------------------
+# 課題59: 複数テーマを1つの公開候補として統合する。
+#
+# 通常の prepare_public_candidate_bundle はテーマ1件ぶんの隔離コピーを作り、
+# その中で docs/index.html・sitemap・catalog 等の「全テーマ共有ファイル」まで
+# 再生成する。同じ日に2テーマ以上が別々にこれをやると、後から適用した側の
+# 共有ファイルには先に適用した側の新しいデータが入っておらず、適用した瞬間に
+# 合計値が巻き戻る。以下は、複数テーマの正典更新を1つの隔離コピーへ先にまとめ、
+# 共有ファイルの再生成をその後に1回だけ行うことでこれを避ける。
+def prepare_public_candidate_bundle_multi(
+    root: Path,
+    entries: list[dict[str, Any]],
+    current_date: str,
+    combined_stage: Path,
+) -> dict[Path, Path]:
+    """複数テーマぶんの累積候補を1つの候補コピーへまとめ、共有ファイルを1回だけ再生成する。
+
+    entries の各要素は {"topic", "stage", "report", "adapter_targets", "adapter"} を持つ。
+    戻り値は適用対象ファイルの辞書（候補コピーは combined_stage / "public-candidate" に残る）。
+    """
+    if not entries:
+        raise ValueError("entries が空です。1件以上のテーマを指定してください")
+    candidate_root = _copy_candidate_tree(root, combined_stage)
+    themes = parse_themes_yaml(root / "THEMES.yaml")
+    per_topic_targets: dict[Path, Path] = {}
+
+    for entry in entries:
+        topic = entry["topic"]
+        stage = entry["stage"]
+        report = entry["report"]
+        adapter_targets = entry["adapter_targets"]
+        adapter = entry.get("adapter")
+        theme = themes[topic]
+
+        canonical = Path(str(theme["sample_file"]))
+        shutil.copy2(stage / "cumulative-candidate.json", candidate_root / canonical)
+        per_topic_targets[canonical] = candidate_root / canonical
+        if theme.get("verification_file"):
+            write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
+            verification = Path(str(theme["verification_file"]))
+            shutil.copy2(stage / "verification-candidate.json", candidate_root / verification)
+            per_topic_targets[verification] = candidate_root / verification
+        for target, source in adapter_targets.items():
+            destination = candidate_root / target
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+            per_topic_targets[target] = destination
+
+        next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
+        fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), "refresh_at": next_date}
+        if theme.get("sample_period_source") != "owner_confirmed":
+            fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
+        registry = candidate_root / "THEMES.yaml"
+        registry.write_text(_replace_theme_fields(registry.read_text(encoding="utf-8"), topic, fields), encoding="utf-8")
+        update_seo_date(candidate_root / "configs" / "theme-seo.json", topic, current_date)
+
+        finalize = getattr(adapter, "finalize", None)
+        if finalize is not None:
+            finalize(candidate_root, current_date)
+
+    # ここまでで全テーマぶんのTHEMES.yaml・theme-seo.json・正典が候補コピーに揃った。
+    # 以降の共有ファイル再生成は、テーマ数に関わらずここで1回だけ実行する。
+    for command in (
+        [sys.executable, "scripts/build_public_registry.py", "--all"],
+        [sys.executable, "scripts/verify_public_registry.py", "--public-only"],
+    ):
+        run(command, label="prepare public candidate (multi)", root=candidate_root)
+
+    commands = [
+        [sys.executable, "scripts/sync_issue_counts.py"],  # 引数なし = 全テーマを対象にする
+        [sys.executable, "scripts/seo/apply_theme_trust.py"],
+        [sys.executable, "scripts/seo/apply_classroom_section.py"],
+        [sys.executable, "scripts/sync_portal_stats.py"],
+        [sys.executable, "scripts/seo/generate_seo_assets.py", "--site-url", SITE_URL],
+        [sys.executable, "scripts/verify_sample_periods.py", "--generate"],
+        [sys.executable, "scripts/build_data_sheet.py"],
+    ]
+    for command in commands:
+        run(command, label="prepare public candidate (multi)", root=candidate_root)
+
+    # 課題77 案1のdocs/data・docs/llms.txtを含め、共有ファイルは全テーマ分を1回だけ固定する。
+    shared_targets = [
+        Path("THEMES.yaml"),
+        Path("configs/theme-seo.json"),
+        Path("data/verification/sample-periods.json"),
+        Path("DATA_SHEET.md"),
+        Path("data/public/catalog.json"),
+        Path("docs/data/catalog.json"),
+        Path("docs/llms.txt"),
+        Path("docs/index.html"), Path("docs/sitemap.xml"), Path("docs/robots.txt"),
+        *[Path("data/public/themes") / path.name for path in sorted((candidate_root / "data/public/themes").glob("*.json"))],
+        *[Path("docs/data/themes") / path.name for path in sorted((candidate_root / "docs/data/themes").glob("*.json"))],
+    ]
+    all_targets = dict(per_topic_targets)
+    for target in shared_targets:
+        source = candidate_root / target
+        if source.is_file():
+            all_targets[target] = source
+    return all_targets
+
+
+def prepare_multi_promotion_manifest(
+    root: Path,
+    entries: list[dict[str, Any]],
+    current_date: str,
+    stage: Path,
+    targets: dict[Path, Path],
+) -> dict[str, Any]:
+    """複数テーマぶんの承認候補を1つのmanifestへ束ねる。
+
+    単独テーマ版 (prepare_promotion_manifest) は topic/run_id を単数で持つが、
+    こちらは topics を配列で持つ。適用時にこの配列と完全一致しない適用要求は拒否する
+    （個別候補の混在適用を防ぐ。課題59やること3）。
+    """
+    files = []
+    for target, source in sorted(targets.items(), key=lambda item: str(item[0])):
+        if not source.is_file():
+            raise FileNotFoundError(f"公開候補がありません: {source}")
+        files.append(
+            {
+                "target": str(target),
+                "source": str(source.relative_to(root)),
+                "sha256": _file_sha256(source),
+                "bytes": source.stat().st_size,
+            }
+        )
+    manifest = {
+        "version": 1,
+        "status": "prepared",
+        "date": current_date,
+        "topics": [
+            {
+                "topic": entry["topic"],
+                "run_id": entry["run_id"],
+                "report": {
+                    "raw": entry["report"].get("raw"),
+                    "new": entry["report"].get("new"),
+                    "opinions": entry["report"].get("opinions"),
+                    "next_collect_at": entry["report"].get("next_collect_at"),
+                },
+            }
+            for entry in entries
+        ],
+        "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "files": files,
+    }
+    canonical = json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    manifest["manifest_sha256"] = hashlib.sha256(canonical).hexdigest()
+    path = stage / "promotion-manifest.json"
+    manifest["manifest_path"] = str(path.relative_to(root))
+    write_json(path, manifest)
+    return manifest
+
+
+def load_multi_promotion_manifest(
+    root: Path, stage: Path, expected: list[tuple[str, str]], current_date: str
+) -> tuple[dict[str, Any], dict[Path, Path]]:
+    """複数テーマ版のmanifest読み込み・検証。expected は [(topic, run_id), ...]。
+
+    manifestに束ねられたテーマ・run-idの集合が expected と完全一致しないと拒否する。
+    「3テーマぶんの承認を得たのに1テーマだけ適用する」といった混在適用はここで止まる。
+    """
+    path = stage / "promotion-manifest.json"
+    if not path.is_file():
+        raise FileNotFoundError("承認対象の promotion-manifest.json がありません。先に多テーマ版のprepareを実行してください")
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if manifest.get("date") != current_date:
+        raise ValueError("manifest の日付が今回の公開対象と一致しません")
+    actual = {(item["topic"], item["run_id"]) for item in manifest.get("topics") or []}
+    if actual != set(expected):
+        raise ValueError(
+            "manifest に束ねられたテーマ・run-idが適用要求と一致しません。"
+            f"期待: {sorted(expected)} / manifest: {sorted(actual)}。"
+            "個別候補を混在適用しようとしていないか確認してください"
+        )
+    unsigned = {key: value for key, value in manifest.items() if key not in {"manifest_sha256", "manifest_path"}}
+    canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    if manifest.get("manifest_sha256") != hashlib.sha256(canonical).hexdigest():
+        raise ValueError("promotion-manifest.json が準備後に変更されています。公開候補を作り直してください")
+    targets: dict[Path, Path] = {}
+    for item in manifest.get("files") or []:
+        target = Path(str(item["target"]))
+        source = (root / str(item["source"])).resolve()
+        try:
+            source.relative_to(root.resolve())
+        except ValueError as exc:
+            raise ValueError("manifest の候補ファイルがリポジトリ外を指しています") from exc
+        if not source.is_file() or _file_sha256(source) != item.get("sha256"):
+            raise ValueError(f"承認後に公開候補が変わりました: {target}")
+        targets[target] = source
+    if not targets:
+        raise ValueError("manifest に公開候補がありません")
+    return manifest, targets
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--topic", required=True)
