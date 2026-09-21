@@ -182,3 +182,15 @@
 2026-09-21公開待ち：承認済み６図の差し替えコミットをローカル `main` に統合。`verify_theme_page.py` と `verify_number_provenance.py` はNG0件。`verify_top_page.py` は高齢者免許返納の `collect_at=2026-09-11` 期限超過、`unittest` と `run_public_checks.py` は課題55の `TASK_BOARD.md` 状態124文字（上限120）で失敗。両原因は差し替え前の `origin/main` にも存在した。`release` スキルの失敗時停止ルールに従いpushせず、公開ページの現物確認と作業ツリー片付けは未実施。
 
 2026-09-21公開確認：別セッションで高齢者免許返納の収集期限と課題55の管理文が修正され、`origin/main` は承認済み６図の参照変更を含む状態でGitHub Pagesへデプロイ済みだった。最新mainで `verify_theme_page.py`、`verify_number_provenance.py`、`verify_top_page.py`、`unittest discover`、`run_public_checks.py` がすべて終了コード0。GitHub Actionsの公開ファイル検査とPagesデプロイは成功。`https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html` に６画像の新パスが各２箇所あり、６アセットすべてHTTP 200とローカルと同じContent-Lengthを確認。課題70の全68枚点検は継続。
+
+2026-09-21追補：次の修正候補として憲法改正「緊急事態条項」を選び、現行図を参照した `constitutional-infographic-wide-emergency-v2.webp` を組み込み ImageGen で作成。衆議院の現行憲法第54条と衆議院法制局・憲法審査会事務局の2026年5月「緊急事態条項のイメージ（案）」に沿い、参議院の緊急集会と選挙困難時の国会機能維持案を分けて示した。旧図の広範な権限・人権制限の一般化を避け、投稿件数・割合・未確定の要件は載せていない。文言と出典は `quality/plans/2026-09-21-task70-constitutional-emergency-infographic.md` に記録。オーナー確認待ちで、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが「緊急事態条項」を了承し、次の「国民投票・広告」を `constitutional-infographic-wide-referendum-v2.webp` として組み込み ImageGen で作成。旧図の青と橙の対比、投票箱と天秤、４カードを保った。国民投票法の承認条件と最低投票率の定めを事実として、テレビCMとネット広告は問いとして示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-referendum-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが「国民投票・広告」を了承し、次の「政党・発議手続き」を `constitutional-infographic-wide-process-v2.webp` として組み込み ImageGen で作成。旧図の横４段階、青と橙の導線、円形アイコンと下段カードを保ち、改正原案の提出、関連事項ごとの区分、両院の発議要件、国民投票を分けた。評価的な旧文言は除き、憲法96条と国会法68条の2・3にある要件だけを示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-process-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが「政党・発議手続き」を了承し、以後は文字量を増やさないよう指示。次の「情報・議論の質」を `constitutional-infographic-wide-information-v2.webp` として組み込み ImageGen で作成した。旧図の緑と橙の対比、中央の本と虫眼鏡を保ち、長い説明文を削除。国民投票法14条の公的広報に必要な改正案・要旨・新旧対照表、客観・中立、賛否の公正・平等を短く示した。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-information-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
+
+2026-09-21追補：オーナーが「情報・議論の質」を了承し、次の「その他」を `constitutional-infographic-wide-sonota-v2.webp` として組み込み ImageGen で作成。承認済みの他テーマ「その他」図の４カード構図を参照し、現行憲法1条・21条・22条・24条に沿って、皇室と主権、家族の制度、表現と集会、居住と移転を短く整理した。投稿件数・割合・時期は載せていない。根拠と文言は `quality/plans/2026-09-21-task70-constitutional-other-infographic.md` に記録。オーナー確認用で、公開ページ参照は未変更。
+
+2026-09-21差し替え：オーナーが「その他」を了承し、今回作成した憲法改正5図（緊急事態条項、国民投票・広告、政党・発議手続き、情報・議論の質、その他）をページへ設定。固定表示と山を押した後の動的表示を各 `-v2.webp` へ変更し、「その他」には画像枠を追加した。改憲全般と9条・自衛隊の参照は変更していない。
