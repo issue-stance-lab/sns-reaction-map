@@ -16,11 +16,14 @@ from scripts.refresh_topic import (
     archive_wave,
     classifier_schema,
     identity,
+    load_multi_promotion_manifest,
     load_pipeline_config,
     next_collection_date,
     load_promotion_manifest,
     prepare_archived_resume,
     prepare_promotion_manifest,
+    prepare_public_candidate_bundle_multi,
+    prepare_multi_promotion_manifest,
     promote,
     record_collection_schedule,
     validate_sets,
@@ -353,6 +356,202 @@ class RefreshTopicTests(unittest.TestCase):
                 takaichi.vote_fingerprint((ROOT / takaichi.PAGE).read_text(encoding="utf-8")),
             )
             self.assertIn("7月26日 → 8月6日", page)
+
+
+class MultiTopicPromotionTests(unittest.TestCase):
+    """課題59: 複数テーマの公開候補を1つへ束ねる仕組み。"""
+
+    def _write_root(self, root: Path) -> None:
+        (root / "THEMES.yaml").write_text(
+            "themes:\n"
+            "  topic-a:\n"
+            "    sample_file: social-samples/topic-a.json\n"
+            "    sample_period_source: test\n"
+            "    page_update_mode: adapter\n"
+            "    updated_at: 2026-09-01\n"
+            "    collect_delta: 0\n"
+            "    refresh_at: 2026-09-01\n"
+            "  topic-b:\n"
+            "    sample_file: social-samples/topic-b.json\n"
+            "    sample_period_source: test\n"
+            "    page_update_mode: adapter\n"
+            "    updated_at: 2026-09-01\n"
+            "    collect_delta: 0\n"
+            "    refresh_at: 2026-09-01\n",
+            encoding="utf-8",
+        )
+        (root / "configs").mkdir()
+        write_json(
+            root / "configs/theme-seo.json",
+            {"themes": [
+                {"id": "topic-a", "dateModified": "2026-09-01"},
+                {"id": "topic-b", "dateModified": "2026-09-01"},
+            ]},
+        )
+        (root / "social-samples").mkdir()
+        write_json(root / "social-samples/topic-a.json", [classified("a-old")])
+        write_json(root / "social-samples/topic-b.json", [classified("b-old")])
+
+    def _stage_for(self, root: Path, topic: str, new_id: str) -> Path:
+        stage = root / ".staging" / "refresh" / topic / "run-1"
+        write_json(stage / "cumulative-candidate.json", [classified(f"{topic}-old"), classified(new_id)])
+        (stage / "page.html").write_text(f"<html>{topic}</html>", encoding="utf-8")
+        return stage
+
+    def _entries(self, root: Path) -> list[dict]:
+        stage_a = self._stage_for(root, "topic-a", "a-new")
+        stage_b = self._stage_for(root, "topic-b", "b-new")
+        return [
+            {
+                "topic": "topic-a", "run_id": "run-1", "stage": stage_a,
+                "report": {"raw": 2, "new": 1, "opinions": 1, "next_collect_at": "2026-10-01"},
+                "adapter_targets": {Path("docs/topic-a.html"): stage_a / "page.html"}, "adapter": None,
+            },
+            {
+                "topic": "topic-b", "run_id": "run-1", "stage": stage_b,
+                "report": {"raw": 2, "new": 1, "opinions": 1, "next_collect_at": "2026-10-01"},
+                "adapter_targets": {Path("docs/topic-b.html"): stage_b / "page.html"}, "adapter": None,
+            },
+        ]
+
+    def test_multi_prepare_merges_topics_and_runs_shared_regeneration_once(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_root(root)
+            entries = self._entries(root)
+            combined_stage = root / ".staging" / "refresh" / "multi" / "run-multi-1"
+
+            with patch("scripts.refresh_topic.run") as mocked_run:
+                targets = prepare_public_candidate_bundle_multi(root, entries, "2026-09-21", combined_stage)
+
+            # 共有ファイルの再生成コマンドは、テーマ数(2件)に関わらず1セットだけ呼ばれる。
+            # 増減したら「まとめてから1回」の前提が崩れていないか、ここで気づける。
+            self.assertEqual(mocked_run.call_count, 9)
+
+            # 2テーマぶんのTHEMES.yamlの更新が、同じ1つの候補コピーへ両方とも反映されている。
+            registry = parse_themes_yaml(combined_stage / "public-candidate" / "THEMES.yaml")
+            self.assertEqual(registry["topic-a"]["updated_at"], "2026-09-21")
+            self.assertEqual(registry["topic-b"]["updated_at"], "2026-09-21")
+
+            # テーマ固有ファイル(正典・ページ)もそれぞれ束ねられている。
+            self.assertEqual(
+                json.loads(targets[Path("social-samples/topic-a.json")].read_text(encoding="utf-8")),
+                [classified("topic-a-old"), classified("a-new")],
+            )
+            self.assertEqual(
+                json.loads(targets[Path("social-samples/topic-b.json")].read_text(encoding="utf-8")),
+                [classified("topic-b-old"), classified("b-new")],
+            )
+            self.assertEqual(targets[Path("docs/topic-a.html")].read_text(encoding="utf-8"), "<html>topic-a</html>")
+            self.assertEqual(targets[Path("docs/topic-b.html")].read_text(encoding="utf-8"), "<html>topic-b</html>")
+
+    def test_multi_prepare_and_apply_round_trip(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_root(root)
+            entries = self._entries(root)
+            combined_stage = root / ".staging" / "refresh" / "multi" / "run-multi-1"
+
+            with patch("scripts.refresh_topic.run"):
+                targets = prepare_public_candidate_bundle_multi(root, entries, "2026-09-21", combined_stage)
+                manifest = prepare_multi_promotion_manifest(root, entries, "2026-09-21", combined_stage, targets)
+
+            self.assertEqual(
+                {(item["topic"], item["run_id"]) for item in manifest["topics"]},
+                {("topic-a", "run-1"), ("topic-b", "run-1")},
+            )
+
+            loaded, loaded_targets = load_multi_promotion_manifest(
+                root, combined_stage, [("topic-a", "run-1"), ("topic-b", "run-1")], "2026-09-21"
+            )
+            self.assertEqual(loaded["manifest_sha256"], manifest["manifest_sha256"])
+
+            with patch("scripts.refresh_topic.run") as mocked_apply_run, patch(
+                "scripts.refresh_topic.backup_private"
+            ) as mocked_backup:
+                apply_manifest_targets(root, combined_stage, loaded_targets, Path("/outside-backup"))
+
+            self.assertEqual(
+                json.loads((root / "social-samples/topic-a.json").read_text(encoding="utf-8")),
+                [classified("topic-a-old"), classified("a-new")],
+            )
+            self.assertEqual(
+                json.loads((root / "social-samples/topic-b.json").read_text(encoding="utf-8")),
+                [classified("topic-b-old"), classified("b-new")],
+            )
+            self.assertEqual((root / "docs/topic-a.html").read_text(encoding="utf-8"), "<html>topic-a</html>")
+            # 適用後の検査6本は単独テーマ版と共通（apply_manifest_targets自体は変更していない）。
+            self.assertEqual(mocked_apply_run.call_count, 6)
+            mocked_backup.assert_called_once_with(root, Path("/outside-backup"))
+
+    def test_multi_apply_rejects_partial_topic_set(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_root(root)
+            entries = self._entries(root)
+            combined_stage = root / ".staging" / "refresh" / "multi" / "run-multi-1"
+
+            with patch("scripts.refresh_topic.run"):
+                targets = prepare_public_candidate_bundle_multi(root, entries, "2026-09-21", combined_stage)
+                prepare_multi_promotion_manifest(root, entries, "2026-09-21", combined_stage, targets)
+
+            # 3テーマぶん承認したのに1テーマだけ適用しようとする、という混在適用を想定。
+            with self.assertRaisesRegex(ValueError, "混在適用"):
+                load_multi_promotion_manifest(root, combined_stage, [("topic-a", "run-1")], "2026-09-21")
+
+            # 存在しないテーマ・run-idを混ぜて要求しても同様に拒否する。
+            with self.assertRaisesRegex(ValueError, "混在適用"):
+                load_multi_promotion_manifest(
+                    root, combined_stage, [("topic-a", "run-1"), ("topic-c", "run-9")], "2026-09-21"
+                )
+
+    def test_multi_apply_rejects_when_file_changed_after_prepare(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_root(root)
+            entries = self._entries(root)
+            combined_stage = root / ".staging" / "refresh" / "multi" / "run-multi-1"
+
+            with patch("scripts.refresh_topic.run"):
+                targets = prepare_public_candidate_bundle_multi(root, entries, "2026-09-21", combined_stage)
+                prepare_multi_promotion_manifest(root, entries, "2026-09-21", combined_stage, targets)
+
+            targets[Path("docs/topic-a.html")].write_text("changed after approval", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "承認後に公開候補が変わりました"):
+                load_multi_promotion_manifest(
+                    root, combined_stage, [("topic-a", "run-1"), ("topic-b", "run-1")], "2026-09-21"
+                )
+
+    def test_multi_prepare_result_is_order_independent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_root(root)
+            entries = self._entries(root)
+            reversed_entries = list(reversed(entries))
+
+            with patch("scripts.refresh_topic.run"):
+                targets_forward = prepare_public_candidate_bundle_multi(
+                    root, entries, "2026-09-21", root / ".staging" / "forward"
+                )
+                manifest_forward = prepare_multi_promotion_manifest(
+                    root, entries, "2026-09-21", root / ".staging" / "forward", targets_forward
+                )
+                targets_backward = prepare_public_candidate_bundle_multi(
+                    root, reversed_entries, "2026-09-21", root / ".staging" / "backward"
+                )
+                manifest_backward = prepare_multi_promotion_manifest(
+                    root, reversed_entries, "2026-09-21", root / ".staging" / "backward", targets_backward
+                )
+
+            def normalized(manifest: dict) -> list[tuple[str, str]]:
+                return sorted((item["target"], item["sha256"]) for item in manifest["files"])
+
+            self.assertEqual(normalized(manifest_forward), normalized(manifest_backward))
+            self.assertEqual(
+                {(item["topic"], item["run_id"]) for item in manifest_forward["topics"]},
+                {(item["topic"], item["run_id"]) for item in manifest_backward["topics"]},
+            )
 
 
 if __name__ == "__main__":
