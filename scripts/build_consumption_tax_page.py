@@ -1329,13 +1329,14 @@ def build(
         flags=re.S,
     )
 
-    # --- 5. 潮目ウィジェットの位置をそろえる -------------------------------
+    # --- 5. 潮目ウィジェットをいったん外す ---------------------------------
     # 中身（前回の収集回×今回の収集回の比較）はこのスクリプトの管轄外で、
     # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに
-    # 貼り直す。ここでは中身は作り直さず、既にあれば抜き出していったん外し、
-    # bukatsu-chiikiと同じ位置（claim-audit＝一次資料クイズの直前）へ戻す
-    # （オーナー指摘 2026-09-20。以前はexplainer-section跡地＝issue-cardsの後ろに
-    # 居座っていた）。
+    # 貼り直す。ここでは中身は作り直さず、既にあれば抜き出していったん外す。
+    # 戻す先（bukatsu-chiikiと同じ位置＝claim-audit・一次資料クイズの直前。
+    # オーナー指摘 2026-09-20）は17番の後ろで差し戻す。17番がCLAIM_STARTごと
+    # PLANET_SECTION_ENDの直後へ動かし直すため、ここで先に戻すと動かした後に
+    # 取り残されて位置がずれる（症状3、2026-09-21）。
     tide_marker = "<!-- TIDE_CARD_END --></section>"
     existing_tide = ""
     if '<section class="update-dashboard"' in html and tide_marker in html:
@@ -1352,10 +1353,6 @@ def build(
         r"\n\n\1",
         html,
     )
-    if existing_tide:
-        if CLAIM_START not in html:
-            raise SystemExit("潮目ウィジェットの貼り直し先（一次資料クイズのマーカー）が見つかりません")
-        html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
     # --- 6. 拡大モーダル（論点別図解は各論点パネルへ移設済み） -----------
     # 「6つの論点」解説カードは、山なみ図の各論点パネルと内容が重複するため
     # 起承転結の再構成（課題69）で削除した。画像は refresh_planet_section.py の
@@ -1391,6 +1388,13 @@ def build(
         te = html.index(ARTICLE_TRUST_END) + len(ARTICLE_TRUST_END)
         existing_trust = html[ts:te]
         html = html[:ts] + html[te:]
+        # 外したあと・貼る前の空行を2行に揃える（5番と同じ理由。揃えないと
+        # 貼り直しのたびに空行が増え、adapterの冪等性検査が通らない。2026-09-21）。
+        html = re.sub(
+            r'\n\s*\n+(<section class="panel" id="related-topics")',
+            r"\n\n\1",
+            html,
+        )
     else:
         existing_trust = trust_block(total, relevant, opinions, published_at, modified_at)
 
@@ -1418,46 +1422,12 @@ def build(
         + html[trust_anchor:]
     )
 
-    # --- 8. アリーナ見出し・凡例 ---------------------------------------
-    html, map_heading_count = re.subn(
-        r'<span>意見[\d,]+件 \| セクター=論点 / 中心に近いほど冷静 / 色=(?:賛否|立場) \| ホバーで詳細・クリックでXへ</span>',
-        f'<span>意見{opinions}件 | セクター=論点 / 中心に近いほど冷静 / 色=立場 | ホバーで詳細・クリックでXへ</span>',
-        html,
-        count=1,
-    )
-    if map_heading_count != 1:
-        raise ValueError(f"反応マップ見出しの置換が{map_heading_count}件です")
-    html = html.replace(
-        '中心の「副首都法案」を6つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色はスタンス（緑=肯定的 / 赤=否定的 / 灰=中立）。点をクリックすると元のXポストを開きます。',
-        '中心の「消費税減税」を7つの論点セクターが囲みます。扇の大きさは投稿数、中心からの距離は感情の熱量（外側ほど激しい）、点の色は立場（緑=減税推進 / 橙=条件付き賛成 / 赤=反対・慎重 / 灰=中立）。点をクリックすると元のXポストを開きます。',
-    )
-    legend = (
-        '<span><i style="background:#059669"></i>減税推進</span>\n'
-        '    <span><i style="background:#f59e0b"></i>条件付き賛成</span>\n'
-        '    <span><i style="background:#dc2626"></i>反対・慎重</span>\n'
-        '    <span><i style="background:#64748b"></i>中立</span>\n'
-        '    <span style="color:#888">中心＝冷静 / 外周＝感情的</span>'
-    )
-    # 凡例の先頭は初版（副首都）では「肯定的」、生成後は「減税推進」。どちらからでも作り直す。
-    legend_start = next(
-        (
-            token
-            for token in (
-                '<span><i style="background:#059669"></i>肯定的</span>',
-                '<span><i style="background:#059669"></i>減税推進</span>',
-            )
-            if token in html
-        ),
-        None,
-    )
-    if legend_start is None:
-        raise SystemExit("アリーナの凡例が見つかりません")
-    html = replace_between(
-        html,
-        legend_start,
-        '<span style="color:#888">中心＝冷静 / 外周＝感情的</span>',
-        legend,
-    )
+    # --- 8. アリーナ見出し・凡例（削除済み） -----------------------------
+    # 旧アリーナ形式（放射状セクターチャート）の見出し・凡例を書き換える処理
+    # だったが、山なみ形式への切り替えでその対象UI自体（<canvas>によるチャート
+    # 描画、「セクター=論点」の見出し、色固定の凡例）がページから無くなっていた。
+    # 旧アリーナのデータ（SM_RAW）削除（課題73）と同型の消し残しで、置換先が
+    # 無いため常に例外で止まっていた（2026-09-21に発見・削除）。
 
     # --- 10. 投票UIのJSデータ ------------------------------------------
     vote_issues = ",\n    ".join(
@@ -1597,6 +1567,12 @@ def build(
     html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
+    # --- 17.4. 潮目ウィジェットを一次資料クイズの直前へ差し戻す -------------
+    # 5番で外した潮目ウィジェットを、動かし終わって確定したCLAIM_STARTの
+    # 直前へ戻す（bukatsu-chiikiと同じ位置。オーナー指摘 2026-09-20）。
+    if existing_tide:
+        html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
+
     # --- 17.5. 論点ごとのX投稿 -------------------------------------------
     # CLAIM_AUDITと同じ「後付けの補完処理」。claim_auditの直後（CLAIM_END）に置く。
     if ISSUE_CARDS_START in html and ISSUE_CARDS_END in html:
@@ -1613,6 +1589,9 @@ def build(
         start = html.index(BACKGROUND_START)
         end = html.index(BACKGROUND_END) + len(BACKGROUND_END)
         html = html[:start] + html[end:]
+        # 外したあと・貼る前の空行を2行に揃える（5番と同じ理由。揃えないと
+        # 貼り直しのたびに空行が増え、adapterの冪等性検査が通らない。2026-09-21）。
+        html = re.sub(r"\n\s*\n+(<!-- PLANET_SECTION_START -->)", r"\n\n\1", html)
     idx = html.index(BACKGROUND_ANCHOR)
     html = html[:idx] + background_context() + "\n\n" + html[idx:]
 
@@ -1914,12 +1893,24 @@ def main() -> int:
         rows = json.loads((args.input or CANONICAL).read_text(encoding="utf-8"))
         html = page.read_text(encoding="utf-8")
         audit = claim_audit(rows)
+        # このマーカーごと動かし直すため、直前にある潮目ウィジェットを先に
+        # 抜き出しておかないと置き去りになる（build()の5番・17番と同じ理由。
+        # 症状3の再発防止、2026-09-21）。
+        tide_marker = "<!-- TIDE_CARD_END --></section>"
+        existing_tide = ""
+        if '<section class="update-dashboard"' in html and tide_marker in html:
+            tide_start = html.index('<section class="update-dashboard"')
+            tide_end = html.index(tide_marker) + len(tide_marker)
+            existing_tide = html[tide_start:tide_end]
+            html = html[:tide_start] + html[tide_end:]
         if CLAIM_START in html and CLAIM_END in html:
             start = html.index(CLAIM_START)
             end = html.index(CLAIM_END) + len(CLAIM_END)
             html = html[:start] + html[end:]
         idx = html.index(CLAIM_ANCHOR) + len(CLAIM_ANCHOR)
         html = html[:idx] + "\n\n" + audit + html[idx:]
+        if existing_tide:
+            html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
         write_claim_provenance(args.verification_dest)
         page.write_text(html, encoding="utf-8")
         print(f"updated claim audit in {page}")
