@@ -679,22 +679,22 @@ def apply_koshitsu_review_note(page: str) -> str:
 
 LANDING_IMAGE_BY_ISSUE_ID = {
     "koshitsu-tenpakai-patrilineal-matrilineal": (
-        "koshitsu-infographic-wide-keisho-v4.webp",
+        "koshitsu-infographic-wide-keisho-v5.webp",
         "男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は"
         "男系の男子と定め、女性天皇と女系天皇の違いを示す図解。",
     ),
     "koshitsu-tenpakai-female-emperor": (
-        "koshitsu-infographic-wide-josei-tenno-v2.webp",
+        "koshitsu-infographic-wide-josei-tenno-v3.webp",
         "女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながる"
         "という違いと、現行の継承資格を示す図解。",
     ),
     "koshitsu-tenpakai-former-royal-adoption": (
-        "koshitsu-infographic-wide-yoshi-v2.webp",
+        "koshitsu-infographic-wide-yoshi-v3.webp",
         "旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の"
         "継承資格の違いを示す図解。",
     ),
     "koshitsu-tenpakai-princess-aiko": (
-        "koshitsu-infographic-wide-aiko-v2.webp",
+        "koshitsu-infographic-wide-aiko-v3.webp",
         "愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、"
         "変更されない皇位継承資格を示す図解。",
     ),
