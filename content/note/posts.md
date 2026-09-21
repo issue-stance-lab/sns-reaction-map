@@ -98,6 +98,17 @@ noteのビュー数はGA4では取得できないため、次回も同じ方法�
 
 ## 投稿記録
 
+### 消費税減税「賛成6割」の中身は、政策への支持ではなかった（第1回：決まるまでの経緯）
+- 公開日: 2026-09-21（13:38）
+- URL: https://note.com/sns_hanno_ma/n/n18d7619c35c5
+- マガジン: https://note.com/sns_hanno_ma/m/m1c683954a55b（新規作成、1本目として追加）
+- テーマ: consumption-tax-cut
+- UTM: utm_campaign=note_taxcut1_20260921（after_stance / after_timeline / after_conclusion / footer の4本、新ドメインsns-reaction-map.jp）
+- タグ: #消費税減税 #消費税 #政治 #データ分析 #物価高
+- 7日後GA4: （計測日: 2026-09-28）
+- 28日後GA4: （計測日: 2026-10-19）
+- メモ: 全4回シリーズの第1回。主張は「賛成6割」というSNS集計の数字は政策への支持ではなく政治不信の表れであること。2026-08-05の基本方針閣議決定、2026-09-15の「大綱」閣議決定という2段階の意思決定を軸に、SNSデータの収集期間（〜9/1）が大綱決定より前である時点のズレを明示した。見出し画像はオーナーがGPTimage2で生成した背景写真（レシート＋虫眼鏡）に、編集部がHTML/CSSで「賛成60%→政治不信」の文字を合成したもの（型は`consumption-tax-cut-header-template.md`に記録、第2〜4回も再利用予定）。本文入力はオーナー了承のうえ編集部がClaude in Chrome経由でnote下書き画面へ実施（下書き保存まで）、公開操作（タグ設定・マガジン追加・投稿）はオーナーが実施。一次資料は`quality/research/consumption-tax-cut-primary-sources.md`（資料N/O/P中心）。
+
 ### 学習指導要領から分かる、部活の地域移行
 - 公開日: 2026-09-11（23:01）
 - URL: https://note.com/sns_hanno_ma/n/n6ec8c2a71ef0
