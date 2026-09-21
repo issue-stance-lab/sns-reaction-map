@@ -28,6 +28,10 @@ description: >-
 
 `/Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator`
 
+**最初に、収集が遅れているテーマの確認を行う。** `references/collection-bridge.md` の手順で、
+今日まだ実行していなければ、最も遅れている1テーマだけを収集する（`--promote`はしない。
+1日1回まで）。収集の有無にかかわらず、そのまま次へ進む。
+
 開始時に次を読む。
 
 1. `content/x/posts.md` の直近1週間 — 投稿数、語尾、テーマ、返信先、未計測行
@@ -252,6 +256,7 @@ python3 /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/scripts/re
 - 候補選定の実測・検索時の注意: `references/selection-evidence.md`
 - 文章の具体化・冒頭・構成・推敲: `references/writing.md`
 - 記録・計測・同期手順: `references/measurement.md`
+- 開始時のテーマ収集（課題81）: `references/collection-bridge.md`
 - URL付き流入投稿: `X_POSTING_GUIDE.md`
 
 ## 制約
@@ -260,4 +265,5 @@ python3 /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/scripts/re
 - URL付き投稿は週1〜2本まで
 - 同一アカウントへの連日リプライを避ける
 - 政治的立場を表明せず、論点整理と検証可能な事実に留める
+- テーマ収集（開始時）は1日1回まで。`--promote`はしない（`references/collection-bridge.md`）
 - 投稿数、時間、画像、URLの効果をX公式の固定ルールとして断定しない
