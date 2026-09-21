@@ -384,12 +384,13 @@ def add_featured_posts(page: str, rows: list[dict], data: dict) -> str:
 # ファイル名の接尾辞とissue idの接尾辞が一致しない2件（procedure→process、
 # deliberation→information）があるため、決め打ちで対応づける。「その他」は図解を持たない。
 LANDING_IMAGE_BY_ISSUE_ID = {
-    "constitutional-amendment-general": ("general", "改憲全般"),
-    "constitutional-amendment-article9": ("article9", "9条・自衛隊"),
-    "constitutional-amendment-emergency": ("emergency", "緊急事態条項"),
-    "constitutional-amendment-referendum": ("referendum", "国民投票・広告"),
-    "constitutional-amendment-procedure": ("process", "政党・発議手続き"),
-    "constitutional-amendment-deliberation": ("information", "情報・議論の質"),
+    "constitutional-amendment-general": ("general-v2", "改憲全般"),
+    "constitutional-amendment-article9": ("article9-v2", "9条・自衛隊"),
+    "constitutional-amendment-emergency": ("emergency-v2", "緊急事態条項"),
+    "constitutional-amendment-referendum": ("referendum-v2", "国民投票・広告"),
+    "constitutional-amendment-procedure": ("process-v2", "政党・発議手続き"),
+    "constitutional-amendment-deliberation": ("information-v2", "情報・議論の質"),
+    "constitutional-amendment-other": ("sonota-v2", "その他"),
 }
 
 
@@ -425,7 +426,7 @@ def apply_landing_images(page: str) -> str:
         add_to_fallback,
         page,
     )
-    expected_panels = len(LANDING_IMAGE_BY_ISSUE_ID) + 1  # 「その他」を含む全landing-panel数
+    expected_panels = len(LANDING_IMAGE_BY_ISSUE_ID)
     if n != expected_panels:
         raise IssueCountError(
             f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件）"

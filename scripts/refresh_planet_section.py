@@ -498,12 +498,13 @@ def _inject_bike_landing_images(block: str, data: dict) -> str:
 # 山なみ図の背景チャート位置調整のついでに発見。画像自体は生きたまま公開ページに
 # 残っていたので、消えたコミットを介さず現行docs/から復元した）。
 CONSTITUTIONAL_LANDING_IMAGE_BY_ISSUE_ID = {
-    "constitutional-amendment-general": ("general", "改憲全般"),
-    "constitutional-amendment-article9": ("article9", "9条・自衛隊"),
-    "constitutional-amendment-emergency": ("emergency", "緊急事態条項"),
-    "constitutional-amendment-referendum": ("referendum", "国民投票・広告"),
-    "constitutional-amendment-procedure": ("process", "政党・発議手続き"),
-    "constitutional-amendment-deliberation": ("information", "情報・議論の質"),
+    "constitutional-amendment-general": ("general-v2", "改憲全般"),
+    "constitutional-amendment-article9": ("article9-v2", "9条・自衛隊"),
+    "constitutional-amendment-emergency": ("emergency-v2", "緊急事態条項"),
+    "constitutional-amendment-referendum": ("referendum-v2", "国民投票・広告"),
+    "constitutional-amendment-procedure": ("process-v2", "政党・発議手続き"),
+    "constitutional-amendment-deliberation": ("information-v2", "情報・議論の質"),
+    "constitutional-amendment-other": ("sonota-v2", "その他"),
 }
 
 
@@ -511,6 +512,22 @@ def _inject_constitutional_landing_images(block: str, data: dict) -> str:
     return _inject_landing_images(
         block, data, "constitutional-amendment", CONSTITUTIONAL_LANDING_IMAGE_BY_ISSUE_ID, "ca",
         filename_prefix="constitutional",
+    )
+
+
+HENOKO_LANDING_IMAGE_BY_ISSUE_ID = {
+    "henoko-student-accident-neutrality": ("churitsu-v2", "政治的中立性"),
+    "henoko-student-accident-safety": ("anzen-v2", "安全管理・事故原因"),
+    "henoko-student-accident-victim-dignity": ("tsuito-v2", "追悼・被害者の尊厳"),
+    "henoko-student-accident-peace-education": ("heiwa-v2", "平和教育の萎縮"),
+    "henoko-student-accident-base-politics": ("seiji-v2", "政治利用・基地問題"),
+    "henoko-student-accident-public-response": ("houdou-v2", "報道・行政の伝え方"),
+}
+
+
+def _inject_henoko_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "henoko-student-accident", HENOKO_LANDING_IMAGE_BY_ISSUE_ID, "hen"
     )
 
 
@@ -655,6 +672,7 @@ def _sync_ai_copyright_method_text(html: str, data: dict) -> str:
 
 
 TOPIC_ENRICH = {
+    "henoko-student-accident": _inject_henoko_landing_images,
     "bukatsu-chiiki": _inject_bukatsu_landing_images,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,

@@ -460,6 +460,11 @@ def refresh_verified_planet(
     if failures:
         raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
     block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
+    if __package__:
+        from .refresh_planet_section import _inject_henoko_landing_images
+    else:
+        from refresh_planet_section import _inject_henoko_landing_images
+    block = _inject_henoko_landing_images(block, data)
     page = replace_block(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                          block, "山なみ全体")
     return clean_henoko_layout(fix_henoko_vote_scroll(page))
