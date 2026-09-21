@@ -477,6 +477,10 @@ def _collect_recurring(growth: dict) -> list[dict]:
                 "cadence": value.get("cadence") or "",
                 "last_run": _as_date(value.get("last_run")),
                 "needs_human": value.get("needs_human") or "",
+                # 遅延アラートの閾値(日数)。cadence欄は自由記述(例: x-postingは
+                # 「daily+per-theme-publish+weekly」の複合文)で機械的に解釈できないため、
+                # アラートを出したい項目だけ GROWTH.yaml 側で明示的に設定する(課題83)。
+                "stale_after_days": value.get("stale_after_days"),
             }
         )
     items.sort(key=lambda i: (i["last_run"] is not None, i["last_run"] or dt.date.min))

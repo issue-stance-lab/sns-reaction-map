@@ -174,6 +174,82 @@ class AlertTests(unittest.TestCase):
         html = render.section_alerts(data)
         self.assertIn("X の候補確認日が記録されていません", html)
 
+
+class RecurringStallTests(unittest.TestCase):
+    """x-posting 以外の recurring 項目(課題83)。stale_after_days を設定したものだけが
+    汎用チェックの対象になり、設定していないものは(候補なし見送り可などの事情があるため)
+    何日空いても警告が出ないことを確認する。"""
+
+    @staticmethod
+    def _data(today: dt.date, recurring: list[dict]) -> dict:
+        return {
+            "today": today,
+            "themes": [],
+            "kpi": {"snapshots": [], "recurring": recurring},
+            "x_posts": [],
+            "health": [],
+            "live": None,
+        }
+
+    def test_stale_item_with_threshold_is_reported(self):
+        # 実際に起きた事例: x-profile の last_run が2026-07-09のまま74日間止まっていた。
+        data = self._data(
+            today=dt.date(2026, 9, 21),
+            recurring=[{
+                "key": "x-profile",
+                "title": "Xプロフィール・固定ポスト改善",
+                "cadence": "weekly",
+                "last_run": dt.date(2026, 7, 9),
+                "stale_after_days": 10,
+            }],
+        )
+        html = render.section_alerts(data)
+        self.assertIn("Xプロフィール・固定ポスト改善 が 74 日前で止まっています", html)
+
+    def test_fresh_item_with_threshold_is_not_reported(self):
+        data = self._data(
+            today=dt.date(2026, 9, 21),
+            recurring=[{
+                "key": "x-profile",
+                "title": "Xプロフィール・固定ポスト改善",
+                "cadence": "weekly",
+                "last_run": dt.date(2026, 9, 16),
+                "stale_after_days": 10,
+            }],
+        )
+        html = render.section_alerts(data)
+        self.assertNotIn("止まっています", html)
+
+    def test_missing_last_run_with_threshold_is_reported(self):
+        data = self._data(
+            today=dt.date(2026, 9, 21),
+            recurring=[{
+                "key": "gsc-review",
+                "title": "Search Console 確認とタイトル改善候補の抽出",
+                "cadence": "weekly",
+                "last_run": None,
+                "stale_after_days": 10,
+            }],
+        )
+        html = render.section_alerts(data)
+        self.assertIn("Search Console 確認とタイトル改善候補の抽出 の実施記録がありません", html)
+
+    def test_item_without_threshold_is_never_reported(self):
+        # note-posting は「候補なしは見送り可」で単純な日数超過が遅れと言えないため、
+        # stale_after_days を設定しない運用(課題83)。何日空いても対象外のままであること。
+        data = self._data(
+            today=dt.date(2026, 9, 21),
+            recurring=[{
+                "key": "note-posting",
+                "title": "note 記事の執筆・公開",
+                "cadence": "3日に1本を目安(候補なしは見送り可)",
+                "last_run": dt.date(2026, 7, 1),
+            }],
+        )
+        html = render.section_alerts(data)
+        self.assertNotIn("note 記事の執筆・公開", html)
+
+
 class MeasurementStallTests(unittest.TestCase):
     """定期タスクが黙って止まったことに気づけるか。
 

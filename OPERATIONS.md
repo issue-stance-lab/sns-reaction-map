@@ -80,6 +80,10 @@ python3 scripts/build_admin_dashboard.py
 - テーマごとの収集予定日（`collect_at`）・公開更新予定日（`refresh_at`）の超過
 - 週次KPIの記録が止まっている日数
 - X の候補確認日（`recurring.x-posting.last_run`）が未記録
+- `recurring.*` のうち `stale_after_days` を設定した項目（Xプロフィール見直し・Search Console
+  確認など）の `last_run` 超過。x-posting同様、項目ごとに個別実装せず汎用チェックで見る
+  （課題83。それまでは `x-posting` 以外の4項目が収集されるだけで警告が出ず、
+  `x-profile` の `last_run` が74日間止まっていても気づけなかった）
 - 数字の取得元（GA4 / Search Console / Supabase）が壊れていないか
 - 編集再読の「読了後に増えた分」が上限（4割）に近づいているテーマ・論点
   （`scripts/verify_reread_headroom.py`。定期収集のたびに増え続けるため、
@@ -136,6 +140,8 @@ python3 scripts/build_admin_dashboard.py
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
 | **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー |
 | **KPIスナップショット** | 週1（月曜） | 前回から7日 | `scripts/fetch_growth_kpi.py` → `GROWTH.yaml` |
+| **Xプロフィール・固定ポストの見直し** | 週1 | 前回から10日（ダッシュボードが検知） | `GROWTH.yaml` の `recurring.x-profile` |
+| **Search Console実績の見直し** | 週1 | 前回から10日（ダッシュボードが検知） | `GROWTH.yaml` の `recurring.gsc-review` |
 | **新テーマの追加** | 不定期 | オーナーの指示 | `.claude/skills/new-topic/SKILL.md` |
 | **本番反映** | 作業完了ごと | 作業完了時 | `.claude/skills/release/SKILL.md` |
 | **note 記事** | 3日に1本を目安（候補なしは見送り可） | 前回から3日 | `.claude/skills/note-operation/SKILL.md` |
