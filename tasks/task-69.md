@@ -372,3 +372,13 @@ background.json`を出所とする共通方式で統一されており、CTCが�
 [詳細](../quality/reviews/2026-09-20-task69-ai-copyright-details.md)。新規468件→正典4,280件・
 意見2,865件、次回9/27。分類器バグ・山なみ区間外の件数同期漏れを発見・解消。標準検査・CI確認済み。
 
+### 2026-09-20〜21 elderly-license-revocation: 定期収集・本番反映（9日超過解消）
+
+詳細は[themes/elderly-license-revocation.md](../themes/elderly-license-revocation.md)の
+2026-09-20〜21節を参照。新規96件（意見74件）→正典602件・意見428件、次回9/27。
+一次資料照合8件追記、沈んだ大陸4件の母数更新、山なみ区画外の「取得した公開投稿N件」
+未同期バグを発見・解消。標準検査5種・unittest 1007件・run_public_checks.py・
+verify_data_asset_restore.pyいずれもNG0件、オーナー承認のうえ本番反映。
+
+**残り課題**: bike-blue-ticketのみ（次回収集予定9/26、現時点で超過なし）。
+
