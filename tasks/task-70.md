@@ -182,3 +182,5 @@
 2026-09-21公開待ち：承認済み６図の差し替えコミットをローカル `main` に統合。`verify_theme_page.py` と `verify_number_provenance.py` はNG0件。`verify_top_page.py` は高齢者免許返納の `collect_at=2026-09-11` 期限超過、`unittest` と `run_public_checks.py` は課題55の `TASK_BOARD.md` 状態124文字（上限120）で失敗。両原因は差し替え前の `origin/main` にも存在した。`release` スキルの失敗時停止ルールに従いpushせず、公開ページの現物確認と作業ツリー片付けは未実施。
 
 2026-09-21公開確認：別セッションで高齢者免許返納の収集期限と課題55の管理文が修正され、`origin/main` は承認済み６図の参照変更を含む状態でGitHub Pagesへデプロイ済みだった。最新mainで `verify_theme_page.py`、`verify_number_provenance.py`、`verify_top_page.py`、`unittest discover`、`run_public_checks.py` がすべて終了コード0。GitHub Actionsの公開ファイル検査とPagesデプロイは成功。`https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html` に６画像の新パスが各２箇所あり、６アセットすべてHTTP 200とローカルと同じContent-Lengthを確認。課題70の全68枚点検は継続。
+
+2026-09-21追補：次の修正候補として憲法改正「緊急事態条項」を選び、現行図を参照した `constitutional-infographic-wide-emergency-v2.webp` を組み込み ImageGen で作成。衆議院の現行憲法第54条と衆議院法制局・憲法審査会事務局の2026年5月「緊急事態条項のイメージ（案）」に沿い、参議院の緊急集会と選挙困難時の国会機能維持案を分けて示した。旧図の広範な権限・人権制限の一般化を避け、投稿件数・割合・未確定の要件は載せていない。文言と出典は `quality/plans/2026-09-21-task70-constitutional-emergency-infographic.md` に記録。オーナー確認待ちで、公開ページ参照は未変更。
