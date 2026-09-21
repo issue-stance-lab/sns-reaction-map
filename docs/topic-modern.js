@@ -625,19 +625,21 @@
     if (modalWasCreated) {
       var closeButton = explainerModal.querySelector('.explainer-modal-close');
       var closeModal = function () { explainerModal.classList.remove('open'); };
-      Array.prototype.forEach.call(explainerCards, function (card) {
-        var open = function () {
+      var openCard = function (card) {
           explainerImg.src = card.getAttribute('data-img');
           explainerImg.alt = card.getAttribute('data-alt') || '';
           explainerModal.classList.add('open');
-        };
-        card.addEventListener('click', open);
-        card.addEventListener('keydown', function (event) {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            open();
-          }
-        });
+      };
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.explainer-card[data-img]');
+        if (card) openCard(card);
+      });
+      document.addEventListener('keydown', function (event) {
+        var card = event.target.closest('.explainer-card[data-img]');
+        if (card && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          openCard(card);
+        }
       });
       closeButton.addEventListener('click', closeModal);
       explainerModal.addEventListener('click', function (event) {

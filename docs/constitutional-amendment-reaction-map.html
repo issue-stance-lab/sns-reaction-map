@@ -1161,7 +1161,7 @@
     </nav>
     <span class="issue-anchor" id="issue-constitutional-amendment-general"></span>
     <section class="landing-panel" id="fb-constitutional-amendment-general" tabindex="-1">
-      <h2>📜 改憲全般</h2><div class="explainer-card landing-image" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-general.webp" data-alt="改憲全般"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-general.webp" alt="論点図解：改憲全般" loading="lazy"></div>
+      <h2>📜 改憲全般</h2><div class="explainer-card landing-image" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-general-v2.webp" data-alt="改憲全般"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-general-v2.webp" alt="論点図解：改憲全般" loading="lazy"></div>
       <p class="sub">602件（38.4%）　山の高さ：強い表現39.6%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 72件</span><span><i style="background:#7D5BA6"></i>慎重・反対 410件</span><span><i style="background:#D9A520"></i>手続き重視 23件</span><span><i style="background:#8B9199"></i>中立 97件</span></div>
       <div class="bar"><span style="width:12.0%;background:#2F8F83;color:#ffffff"></span><span style="width:68.1%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:3.8%;background:#D9A520;color:#0d1117"></span><span style="width:16.1%;background:#8B9199;color:#0d1117">中立</span></div>
@@ -1179,7 +1179,7 @@
     </section>
     <span class="issue-anchor" id="issue-constitutional-amendment-article9"></span>
     <section class="landing-panel" id="fb-constitutional-amendment-article9" tabindex="-1">
-      <h2>🛡️ 9条・自衛隊</h2><div class="explainer-card landing-image" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-article9.webp" data-alt="9条・自衛隊"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-article9.webp" alt="論点図解：9条・自衛隊" loading="lazy"></div>
+      <h2>🛡️ 9条・自衛隊</h2><div class="explainer-card landing-image" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-article9-v2.webp" data-alt="9条・自衛隊"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-article9-v2.webp" alt="論点図解：9条・自衛隊" loading="lazy"></div>
       <p class="sub">316件（20.2%）　山の高さ：強い表現41.0%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>改正推進 148件</span><span><i style="background:#7D5BA6"></i>慎重・反対 152件</span><span><i style="background:#D9A520"></i>手続き重視 2件</span><span><i style="background:#8B9199"></i>中立 14件</span></div>
       <div class="bar"><span style="width:46.8%;background:#2F8F83;color:#ffffff">改正推進</span><span style="width:48.1%;background:#7D5BA6;color:#ffffff">慎重・反対</span><span style="width:0.6%;background:#D9A520;color:#0d1117"></span><span style="width:4.4%;background:#8B9199;color:#0d1117"></span></div>
@@ -1692,7 +1692,7 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  const caImgSlug = {"constitutional-amendment-general":"general","constitutional-amendment-article9":"article9","constitutional-amendment-emergency":"emergency-v2","constitutional-amendment-referendum":"referendum-v2","constitutional-amendment-procedure":"process-v2","constitutional-amendment-deliberation":"information-v2","constitutional-amendment-other":"sonota-v2"}[it.id];
+  const caImgSlug = {"constitutional-amendment-general":"general-v2","constitutional-amendment-article9":"article9-v2","constitutional-amendment-emergency":"emergency-v2","constitutional-amendment-referendum":"referendum-v2","constitutional-amendment-procedure":"process-v2","constitutional-amendment-deliberation":"information-v2","constitutional-amendment-other":"sonota-v2"}[it.id];
   const caImgPath = caImgSlug ? ('images/topics/constitutional-amendment/constitutional-infographic-wide-'+caImgSlug+'.webp') : '';
   const caImgHtml = caImgSlug ? ('<div class="explainer-card landing-image" data-img="'+caImgPath+'" data-alt="'+it.label+'">'
     +'<img src="'+caImgPath+'" alt="論点図解：'+it.label+'" loading="lazy"></div>') : '';
