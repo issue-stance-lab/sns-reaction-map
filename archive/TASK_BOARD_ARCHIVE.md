@@ -50,6 +50,8 @@
 | 課題62: 読み直しの「4割まで残してよい」が読み飛ばしに使われている | Claude Code | 2026-09-06 | `independence_gate` の未読判定を「読み飛ばし」と「読了後に増えた分」に分離。読み飛ばしは0件を要求。部活動「教員の働き方」の読み飛ばし54件で不合格になることを確認。読む作業自体は別作業（`quality/designs/2026-09-06-stage9a-reread-brief.md`） | [archive/tasks/task-62.md](tasks/task-62.md) |
 | 課題63: 公開ファイル検査が非公開正典を読んで失敗する | Codex | 2026-09-06 | 課題62で非公開正典を読むようになった `test_planet_data` を GitHub Actions の公開ファイル検査から除外。非公開データ無しの370件と、手元の対象テス56件が通ることを確認 | [archive/tasks/task-63.md](tasks/task-63.md) |
 
+| 課題70: 公開中の図解を一次資料と表現ルールに照らして点検する | Codex | 2026-09-22 | 公開中70枚を全数監査。指摘した皇室典範4枚に施行予定日を追記し、学校ページの件数表示も修正して本番確認 | [archive/tasks/task-70.md](tasks/task-70.md) |
+
 ---
 
 ## グロース課題（GROWTH.yaml へ移管）
