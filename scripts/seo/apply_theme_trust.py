@@ -26,7 +26,7 @@ PROTECTED_TOKENS = (
     "supabase",
     "topic-modern.js",
 )
-TOPIC_CSS_VERSION = "29"  # 2026-09-20 課題77案1: .issue-anchor/.cite-copy-* を追加
+TOPIC_CSS_VERSION = "31"  # 2026-09-21 課題77案2 品質監査対応: 一次資料リンクのnowrap解除
 
 
 def load_json(path: Path) -> dict[str, Any]:

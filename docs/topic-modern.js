@@ -215,6 +215,28 @@
     });
   });
 
+  // ---- 「授業・ディベートで使うとき」節（課題77 案2 Part B）--------------
+  // 印刷ボタンと、節内から論点アンカーへの内部リンクのクリックだけをGA4へ送る。
+  // 遷移そのものはブラウザ標準のアンカー移動 + 上のhashchangeリスナーに任せる。
+  document.addEventListener('click', function (event) {
+    var printBtn = event.target.closest && event.target.closest('.classroom-print-btn');
+    if (printBtn) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'classroom_print', {});
+      }
+      window.print();
+      return;
+    }
+    var link = event.target.closest && event.target.closest('.classroom-section a[href^="#issue-"]');
+    if (link) {
+      var themeId = topicSlugFrom(location.pathname.split('/').pop());
+      var issueId = link.getAttribute('href').replace(/^#issue-/, '');
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'classroom_link_click', { theme_id: themeId, issue_id: issueId });
+      }
+    }
+  });
+
   /* 山なみが描ける環境（.planet-live）では「論点の一覧」の静的表示（#fallback）が
      display:none になり、issue-anchorは画面に無いのでブラウザ標準のハッシュ遷移では
      届かない。同じ論点を選ぶ既存のボタン（#btn-{論点ID}、素のIDでbuildList()が作る）を
@@ -232,6 +254,12 @@
   function initCiteFeature() {
     bindCiteButtons();
     citeRestoreFromHash();
+    // 課題77 品質監査の推奨修正: 初回読み込みだけでなく、同一ページ内で
+    // ハッシュだけが変わったとき（Part Bの節内リンク #issue-{id} など）も
+    // 論点を選び直す。land()はハッシュを#{issue.id}形式（issue-無し）に
+    // 書き換えるため、この結果で再度citeRestoreFromHashが呼ばれても
+    // 正規表現 /^#issue-(.+)$/ に一致せず無限ループにはならない。
+    window.addEventListener('hashchange', citeRestoreFromHash);
   }
 
   if (document.readyState === 'loading') {

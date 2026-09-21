@@ -796,6 +796,7 @@ def promote(
             finalize(root, current_date)
         run([sys.executable, str(root / "scripts" / "sync_issue_counts.py"), topic], label="sync issue counts", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "apply_theme_trust.py")], label="apply SEO", root=root)
+        run([sys.executable, str(root / "scripts" / "seo" / "apply_classroom_section.py")], label="apply classroom section", root=root)
         run([sys.executable, str(root / "scripts" / "sync_portal_stats.py")], label="sync portal", root=root)
         run([sys.executable, str(root / "scripts" / "seo" / "generate_seo_assets.py"), "--site-url", SITE_URL], label="generate sitemap", root=root)
         # 収集日の検証メタデータはGit管理側にあり、正典が増えると台帳のsample_periodと
@@ -892,6 +893,7 @@ def prepare_public_candidate_bundle(
     commands = [
         [sys.executable, "scripts/sync_issue_counts.py", topic],
         [sys.executable, "scripts/seo/apply_theme_trust.py"],
+        [sys.executable, "scripts/seo/apply_classroom_section.py"],
         [sys.executable, "scripts/sync_portal_stats.py"],
         [sys.executable, "scripts/seo/generate_seo_assets.py", "--site-url", SITE_URL],
         [sys.executable, "scripts/verify_sample_periods.py", "--generate"],
