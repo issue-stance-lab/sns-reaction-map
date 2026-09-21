@@ -660,6 +660,30 @@ def section_alerts(data: dict) -> str:
                     "投稿本数のノルマはありません。関連ポストを確認し、有効な候補がある場合のみ返信する運用です",
                 ))
 
+    # x-posting 以外の recurring 項目も、stale_after_days を設定したものは同じ要領で見る(課題83)。
+    # note-posting のように「候補なしは見送り可」で単純な日数超過が遅れと言えない項目は
+    # stale_after_days を設定しないことで、この汎用チェックの対象から外れる。
+    for item in data["kpi"].get("recurring", []):
+        threshold = item.get("stale_after_days")
+        if threshold is None or item["key"] == "x-posting":
+            continue
+        title = item.get("title") or item["key"]
+        last_run = item.get("last_run")
+        if last_run is None:
+            alerts.append((
+                "warn",
+                f"{title} の実施記録がありません",
+                f"GROWTH.yaml の recurring.{item['key']}.last_run を更新してください",
+            ))
+            continue
+        age = (today - last_run).days
+        if age > threshold:
+            alerts.append((
+                "warn",
+                f"{title} が {age} 日前で止まっています",
+                f"cadence: {item.get('cadence') or '未設定'}。GROWTH.yaml の recurring.{item['key']} を確認してください",
+            ))
+
     primary_research = data.get("primary_research") or {}
     for item in primary_research.get("themes") or []:
         if item.get("last_verified") is None:

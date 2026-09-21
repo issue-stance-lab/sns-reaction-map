@@ -481,6 +481,7 @@ recurring:
   gsc-review:
     title: Search Console 確認とタイトル改善候補の抽出
     cadence: weekly
+    stale_after_days: 10
     last_run: 2026-07-26
     procedure: 表示回数が多くCTRが低いページを抽出し、タイトル/description改善を experiments に起票
     needs_human: 自動取得が失敗した場合のみ、GSC管理画面の確認
@@ -498,6 +499,7 @@ recurring:
     title: Xプロフィール・固定ポスト改善
     cadence: weekly
     priority: critical
+    stale_after_days: 10
     last_run: 2026-09-21
     procedure: プロフィール文・固定ポスト・ヘッダー画像を確認し「何のアカウントか3秒で分かるか」を評価。改善案を人間に提案する
     needs_human: 実際のプロフィール変更操作のみ。閲覧は組み込みブラウザがXにログイン済みなら直接確認できる（ログイン状態は毎回要確認）
