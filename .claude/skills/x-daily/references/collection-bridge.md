@@ -60,8 +60,16 @@ python3 scripts/refresh_topic.py \
 
 ```bash
 cd /Volumes/M2-WorkSpace/Projects/副業/isa-wt-collect-<テーマ>
-git add THEMES.yaml themes/<テーマ>.md data/verification/updates/
+# 新しい更新回を採用台帳と保全台帳へ載せる（載せないと公開ファイルの検査が
+# 「new verification wave is outside snapshot」で落ちる。2026-09-22の初回運用で発覚）
+python3 scripts/build_adoption_registry.py
+python3 scripts/build_adoption_registry.py --check
+python3 scripts/data_asset_inventory.py
+
+git add THEMES.yaml themes/<テーマ>.md data/verification/updates/ \
+  data/verification/adoption/registry.json company/data-assets.json company/data-backup-status.json
 git commit -m "収集: <テーマ> <日付>"
+python3 scripts/run_public_checks.py   # 終了コード0を確かめてからマージへ進む
 
 cd /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator
 git merge --no-ff task/collect-<テーマ> -m "Merge branch 'task/collect-<テーマ>'"
@@ -72,6 +80,11 @@ git push
 
 成功の形: `git merge` が `Merge made by the 'ort' strategy.`、2つの `verify_*.py` が
 ともに終了コード0、`git push` が `main -> main` の行を出す。
+
+**共有ツリーに別セッションの未コミット変更があってマージできないとき**（`company/data-backup-status.json`
+などの台帳は、別セッションのバックアップでよく書き換わっている）は、共有ツリーのファイルに触れない。
+収集worktreeの中で `git merge origin/main -m "..."` → 上の検査を再実行 → `git push origin HEAD:main` で送る
+（2026-09-22の初回運用で実施）。
 
 - **ページ整合性検査一式（`verify_theme_page.py` / `verify_number_provenance.py` /
   `unittest discover` / `run_public_checks.py`）は実行しない。** ページを変えていないため
