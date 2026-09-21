@@ -27,9 +27,9 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 ## 残っている作業
 
 - [x] 図1（内訳グラフ）作成済み: `content/note/drafts/images/consumption-tax-cut1_fig1-stance.png`
-- [ ] 見出し画像（1920×1006目安）の作成。図1のみでも公開可だが、シリーズ物として見出し画像は用意したい
-      （AI生成の人物写真を使う場合、記事末に「※記事中の写真はAIで生成した架空の人物・情景です。」を追記すること。
-      特定の政党・政治家を想起させる意匠は避け、レシート・硬貨・グラフ等の抽象的なモチーフを推奨）
+- [x] 見出し画像 作成済み: `content/note/drafts/images/consumption-tax-cut1_note-header.png`（1920×1006、
+      背景写真はオーナーがGPTimage2で生成、文字合成はHTML/CSSで実装。型は
+      `content/note/drafts/consumption-tax-cut-header-template.md` に記録済み。第2〜4回もこの型を使う）
 - [ ] タグ5個の選定（編集部案: #消費税減税 #消費税 #政治 #データ分析 #物価高。note編集画面の候補表示を見て確定してよい）
 - [ ] マガジン新規作成（「消費税減税を読む」想定）
 - [x] UTMの公開予定日を確定 → 2026-09-21に暫定更新（2026-09-21のセッションで、下書き作成時の20260917から更新）。
