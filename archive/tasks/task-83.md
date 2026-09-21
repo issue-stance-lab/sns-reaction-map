@@ -1,6 +1,6 @@
 # 課題83: GROWTH.yamlの継続作業(recurring)がOPERATIONS.mdの定例作業表にもダッシュボードの検知にも入っていない
 
-**状態**: 進行中。汎用の遅延アラートを実装・OPERATIONS.mdへ反映済み(2026-09-21)。gsc-reviewが実際に停滞していないかの確認のみ残る
+**状態**: 完了。汎用の遅延アラートを実装・OPERATIONS.mdへ反映し、gsc-reviewの実データ確認まで完了(2026-09-21)
 
 ## 経緯
 
@@ -62,9 +62,21 @@ GROWTH.yaml側で明示的に持たせる**方式にした。この値を持つ�
 - `tests/test_admin_dashboard.py` に `RecurringStallTests` を追加（4件）
 - `OPERATIONS.md` の「遅れの見つけ方」の一覧と「定例作業の一覧」表を更新
 
+## gsc-reviewの実データ確認(2026-09-21)
+
+`python3 scripts/fetch_gsc_metrics.py --days 90 --dimension page --json` で直近90日を確認。
+
+- サイト全体で表示回数**2件のみ**(bike-blue-ticket・constitutional-amendmentに各1件、クリック0)
+- 「表示回数が多くCTRが低いページ」を抽出できる母数ではなく、今回のタイトル改善候補は無し
+- 放置していたのではなく、2026-08-31の独自ドメイン移行(課題55)でSearch Consoleの物件
+  (`sc-domain:sns-reaction-map.jp`)が作り直しになり、蓄積データがまだほぼ無いことが原因
+  (課題55は9/21時点で登録済み5/18件、9/28に4週目確認予定)
+- `GROWTH.yaml` の `recurring.gsc-review` に確認結果を記録し、`last_run` を更新した
+- 次回のgsc-reviewは、課題55の登録件数が回復してから(9/28以降を目安に)行うのが妥当
+
 ## 次にすること
 
-1. `gsc-review` の `last_run`(2026-07-26)以降、Search Consoleの表示回数・CTRを実際に見直したか確認する。していなければ実施する
+なし。次のweeklyタイミングで、ダッシュボードのアラート(課題55の回復状況を見ながら)に従って自然に再開する。
 
 ## 影響範囲
 
