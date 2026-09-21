@@ -565,10 +565,11 @@ function orbit(){
 
 /* ---------- パネル ---------- */
 function stanceBar(counts, total){
+  const countFree = D.theme_id === "school-nickname-ban";
   return '<div class="bar">' + D.stances.map(s=>{
     const n = counts[s.key]||0; if(!n) return "";
     const w = 100*n/total;
-    return '<span style="width:'+w+'%;background:'+s.color+'">'+(w>13?s.label+" "+n:(w>6?n:""))+'</span>';
+    return '<span style="width:'+w+'%;background:'+s.color+'">'+(countFree ? (w>13?s.label:"") : (w>13?s.label+" "+n:(w>6?n:"")))+'</span>';
   }).join("") + '</div>';
 }
 function legend(){
@@ -633,6 +634,7 @@ function dotDir(el, from, to, isAll){
 }
 
 function syncDots(){
+  if (D.theme_id === "school-nickname-ban"){ dotBox.hidden = true; return; }
   const k = st.landed;
   if (k === null){ dotBox.hidden = true; return; }
   if (!cells) buildCells();
@@ -691,14 +693,15 @@ function syncDots(){
 function drawPanel(){
   const p = document.getElementById("panel");
   const m = modeById[st.mode];
+  const countFree = D.theme_id === "school-nickname-ban";
   if (st.landed === null){
     p.innerHTML = '<h2>'+D.title+'</h2>'
-      + '<p class="sub">'+m.label+'：'+m.total+'件'
-      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>'
+      + (countFree ? '<p class="sub">'+m.label+'の見方</p>' : '<p class="sub">'+m.label+'：'+m.total+'件'
+      + (st.mode==="all" ? '' : '（意見'+D.totals.opinions+'件のうち）')+'</p>')
       + legend()
       + '<p class="cross">'+crossTalk(st.mode)+'</p>'
       + '<p class="sub" style="margin:6px 0 0">山を押すと、その論点の中身が開きます。</p>'
-      + (st.mode!=="all"
+      + (st.mode!=="all" && !countFree
         ? '<div class="note">いま「'+m.label+'」の'+m.total+'件だけで山なみを作り直しています。'
           + '幅も高さも、この'+m.total+'件の中で数えた値です。'
           + (issues.filter(it=>m.counts[it.id]===0).length
@@ -718,11 +721,11 @@ function drawPanel(){
   const n = m.counts[it.id];
   let h = '<h2>'+it.icon+' '+it.label+'</h2>'
     + issueTabs(m)
-    + '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
-    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>'
+    + (countFree ? '' : '<p class="sub">'+n+'件 / '+m.label+m.total+'件中 '+(100*n/m.total).toFixed(1)+'%'
+    + '　高さ：強い表現'+m.high_pct[it.id]+'%</p>')
     + '<div id="dot-slot"></div>'
     + legend() + stanceBar(it.stances, it.count)
-    + '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>';
+    + (countFree ? '' : '<p class="sub" style="margin:2px 0 0">立場の内訳は全'+it.count+'件で数えています</p>');
   const s = it.sub;
   if (s.status === "reread"){
     h += '<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
@@ -730,8 +733,8 @@ function drawPanel(){
           '<li class="'+(x.unread?"unread":"")+'">'
           + '<span class="num">'+(j+1)+'</span>'
           + '<span class="sw" style="background:'+(x.unread ? "#747c86" : stanceColor(it.top_stance))+'"></span>'
-          + x.label + '<span class="n">'+x.count+'件</span></li>').join("") + '</ul>'
-      + (s.show_coverage_note === false ? ''
+          + x.label + (countFree ? '' : '<span class="n">'+x.count+'件</span>') + '</li>').join("") + '</ul>'
+      + (countFree || s.show_coverage_note === false ? ''
         : '<div class="note">'+s.coverage_note+'。'
           + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
           + '</div>');
@@ -752,7 +755,7 @@ function drawPanel(){
     b.addEventListener("click", ()=>land(+b.dataset.i));
   });
   // 升目を差し込み口へ移す。作り直すと色の変化が見えなくなる
-  document.getElementById("dot-slot").appendChild(dotBox);
+  if (!countFree) document.getElementById("dot-slot").appendChild(dotBox);
   syncDots();
 }
 
@@ -768,9 +771,10 @@ function syncList(){
     b.style.opacity = n ? 1 : .45;
     // 順位も出す。惑星が見えない読み方（キーボード操作）でも、立場を切り替えたときの
     // 並びの変化を追えるようにするため。
-    b.querySelector(".m").textContent =
-      (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
-      + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
+    b.querySelector(".m").textContent = D.theme_id === "school-nickname-ban"
+      ? (n ? "論点を見る" : "この立場では表示なし")
+      : (n ? rank[i]+"位・"+n+"件・"+(100*n/m.total).toFixed(1)+"%" : "この立場では0件")
+        + "／" + (it.sub.status==="reread" ? "島"+it.sub.items.length : "未再読");
   });
 }
 function buildList(){

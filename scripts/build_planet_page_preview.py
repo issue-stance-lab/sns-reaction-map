@@ -575,7 +575,11 @@ def merge_issue_cards(html: str, data: dict) -> tuple[str, str]:
 
 
 def render_planet(data: dict) -> str:
-    template_name = "constitutional-planet.template.html" if data["theme_id"] == "constitutional-amendment" else "planet-prototype.template.html"
+    template_name = (
+        "constitutional-planet.template.html" if data["theme_id"] == "constitutional-amendment"
+        else "planet-prototype-school-nickname.template.html" if data["theme_id"] == "school-nickname-ban"
+        else "planet-prototype.template.html"
+    )
     tpl = (ROOT / "quality/prototypes" / template_name).read_text(encoding="utf-8")
     payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
     return bpd.render_page(data, tpl, payload)
