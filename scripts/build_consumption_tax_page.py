@@ -1172,7 +1172,7 @@ def stance_glance(opinions: int, stance_counts: dict, stance_share: dict) -> str
 {STANCE_GLANCE_CSS}
 <aside id="stance-glance" aria-labelledby="stance-glance-title">
 <div class="panel-title"><h2 id="stance-glance-title">消費税減税、意見はなぜ分かれているのか</h2><span>読む前に、内訳だけ</span></div>
-<p class="sg-lead">ここでは、集めた投稿を4つの立場に分けて整理しています。論点を読み進める前に、内訳だけ確認できます。</p>
+<p class="sg-lead">「なぜ」の答えは一言では出ません。投稿は推進・条件付き・反対・中立の4つに分かれ、それぞれ別の理由を持っています。</p>
 <div class="sg-headline"><b>{opinions}</b>件の意見を分類した内訳です</div>
 {bar}
 <div class="sg-pick"><p class="sg-pick-label">近い感覚のボタンを押すと</p>
