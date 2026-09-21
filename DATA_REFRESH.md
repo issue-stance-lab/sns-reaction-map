@@ -293,6 +293,58 @@ python3 scripts/refresh_topic.py \
 
 適用時はmanifestと実物のハッシュが一致しなければ停止する。全検査合格時だけ累積正典・ページ・台帳・SEO・トップ・sitemapを一括昇格し、昇格後に再度バックアップする。
 
+### 同じ日に2テーマ以上を公開する（課題59、2026-09-21〜）
+
+**同じ日に2テーマ以上を、上記の単独テーマ版`--prepare-promotion`→`--apply-promotion`で別々に公開しない。**
+`docs/index.html`・公開データcatalog・sitemap等は全テーマ共有のファイルで、`--prepare-promotion`は
+その時点のTHEMES.yaml全体を読み直して作り直す。2テーマを個別に候補化すると、後から適用した側の
+共有ファイルには先に適用した側の新しいデータが入っておらず、**適用した瞬間に先に公開した分の
+合計数が古い値へ巻き戻る。**
+
+同じ日に2テーマ以上を公開するときは、各テーマを`--resume`まで進めてから
+（**単独テーマ版の`--prepare-promotion`は実行しない**。実行すると単独テーマ版のmanifestが
+できてしまい、下記の統合の対象にならない）、`scripts/promote_multi_topics.py`で1つの
+公開候補へまとめる。
+
+```sh
+# 各テーマを --resume まで進める（--prepare-promotion は使わない）
+python3 scripts/refresh_topic.py --topic bike-blue-ticket --date 2026-09-21 \
+  --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups --resume
+python3 scripts/refresh_topic.py --topic consumption-tax-cut --date 2026-09-21 \
+  --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups --resume
+
+# 2テーマぶんの候補を1つのmanifestへまとめる（正典・公開ページはまだ変更しない）
+python3 scripts/promote_multi_topics.py --date 2026-09-21 \
+  --entry bike-blue-ticket:.staging/refresh/bike-blue-ticket/<run-id> \
+  --entry consumption-tax-cut:.staging/refresh/consumption-tax-cut/<run-id> \
+  --combined-stage .staging/refresh/multi/<run-id> \
+  --prepare
+```
+
+品質監査・CEO承認は単独テーマ版と同じ扱い（できた`promotion-manifest.json`を確認する）。
+承認後、`--prepare`のときと同じ`--entry`・`--combined-stage`・`--date`を指定して`--apply`する。
+
+```sh
+python3 scripts/promote_multi_topics.py --date 2026-09-21 \
+  --entry bike-blue-ticket:.staging/refresh/bike-blue-ticket/<run-id> \
+  --entry consumption-tax-cut:.staging/refresh/consumption-tax-cut/<run-id> \
+  --combined-stage .staging/refresh/multi/<run-id> \
+  --apply --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups
+```
+
+`--prepare`で束ねた全テーマ・run-idが、`--apply`側の指定と完全に一致しないと拒否される
+（一部だけ適用する、束ねていないテーマを混ぜる等の混在適用を防ぐ）。
+
+**1テーマだけを同日に公開するなら、従来どおり単独テーマ版の`--prepare-promotion`/`--apply-promotion`でよい。**
+このコマンドが要るのは「同じ日に2テーマ以上」の場合だけ。
+
+実装の経緯・残作業は[課題59](tasks/task-59.md)、コードは`scripts/refresh_topic.py`の
+`prepare_public_candidate_bundle_multi`等・`scripts/promote_multi_topics.py`。
+テストは`tests/test_refresh_topic.py`の`MultiTopicPromotionTests`（合成データ）。
+**実データでまだ使ったことはない**ため、初めて使うときは`--prepare`後の
+`promotion-manifest.json`の中身（テーマ・run-id・ファイル件数）を目視確認してから
+品質監査へ進めること。
+
 ### 学校あだ名は公開承認以外を自動化（人が読む工程なし）
 
 `school-nickname-ban` の adapter は正典だけを読んで、件数を出している場所を毎回
