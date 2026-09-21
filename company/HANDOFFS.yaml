@@ -129,12 +129,12 @@ items:
 
   - id: note-taxcut-series-planning
     department: editorial
-    status: scheduled
-    current_state: "部活動の地域移行シリーズ（全5回、2026-08-23〜09-11公開）はビューが102→33→11→11と回を追うごとに下がり、7日流入157PVに対しサイト流入2セッション（約1.3%）にとどまったため、2026-09-16にオーナーと合意のうえ一区切りとした。次テーマは消費税減税（直近収集2026-09-01時点で新規568件、公開10テーマ中最大）に決定。全4回構成（経緯／論点／Xの賛否／今後の最適解）の着手ブリーフを作成した。2026-09-17、一次資料メモに2026-09-15閣議決定の「大綱」（税率1%の実日付・就業者負担軽減支援金の正式名称と4条件・事業者向け経過措置）が別セッションで反映されたため、ブリーフの5〜7節（一次資料の要点・各回のたたき台・政治的注意）を追記更新した。SNSデータ（4節）の収集期間は9/15より前のため、大綱そのものへのSNS反応はまだ含まれていない点を明記した。"
-    next_action: "content/note/drafts/consumption-tax-cut-note-SERIES-BRIEF.md に従い、別セッションで専用worktreeを作ってから第1回に着手する。"
+    status: in_progress
+    current_state: "部活動の地域移行シリーズ（全5回、2026-08-23〜09-11公開）はビューが102→33→11→11と回を追うごとに下がり、7日流入157PVに対しサイト流入2セッション（約1.3%）にとどまったため、2026-09-16にオーナーと合意のうえ一区切りとした。次テーマは消費税減税（直近収集2026-09-01時点で新規568件、公開10テーマ中最大）に決定。全4回構成（経緯／論点／Xの賛否／今後の最適解）の着手ブリーフを作成した。2026-09-17、一次資料メモに2026-09-15閣議決定の「大綱」（税率1%の実日付・就業者負担軽減支援金の正式名称と4条件・事業者向け経過措置）が別セッションで反映されたため、ブリーフの5〜7節（一次資料の要点・各回のたたき台・政治的注意）を追記更新した。同日、第1回（経緯編）の貼り付け用本文（note1-FINAL.md）と図1（内訳グラフ）を作成・コミット済み。2026-09-21、専用worktreeで本文をQA: verify_ai_tone.py合格・本文中のX投稿リンク3本は生存確認済み・完了条件（UTM3〜4本／投票型CTA2本以上／記事末注記等）を充足済みと確認。UTMのプレースホルダー日付を20260917→20260921へ更新し、オーナー確認用のHTMLプレビュー（note1-preview.html）を自己完結の状態でArtifact公開・目視確認した。残る作業（見出し画像の作成＝GPTimage2でオーナー、タグ5個の最終確定、マガジン新規作成、note下書き画面への反映）は本文内『残っている作業』チェックリストに整理済み。第2〜4回は未着手。"
+    next_action: "オーナーがArtifact（下書きプレビュー）を確認し、①見出し画像をGPTimage2で作成するか図1のみで進めるか判断②タグ案（#消費税減税 #消費税 #政治 #データ分析 #物価高）を確認③note下書き画面へ本文（note1-FINAL.md）を貼り付けて公開。公開後はcontent/note/posts.mdへの記録とcompany/APPROVALS.yamlへの承認記録が必要。"
     due_at: null
-    canonical_sources: ["content/note/drafts/consumption-tax-cut-note-SERIES-BRIEF.md", "quality/research/consumption-tax-cut-primary-sources.md", "content/note/posts.md", ".claude/skills/note-operation/SKILL.md"]
-    ceo_approval: "テーマ切り替えと全4回構成の方針はオーナー承認済み（2026-09-16、チャット上）。各回の公開は別途 company/APPROVALS.yaml への記録が必要"
+    canonical_sources: ["content/note/drafts/consumption-tax-cut-note-SERIES-BRIEF.md", "content/note/drafts/consumption-tax-cut-note1-FINAL.md", "content/note/drafts/consumption-tax-cut-note1-preview.html", "quality/research/consumption-tax-cut-primary-sources.md", "content/note/posts.md", ".claude/skills/note-operation/SKILL.md"]
+    ceo_approval: "テーマ切り替えと全4回構成の方針はオーナー承認済み（2026-09-16、チャット上）。第1回本文はまだCEO/オーナー未確認（Artifact提示済み）。各回の公開は別途 company/APPROVALS.yaml への記録が必要"
     completion_evidence: ["content/note/posts.md", "company/APPROVALS.yaml", "content/note/drafts/"]
 
   - id: adsense-third-review
