@@ -141,6 +141,10 @@
   Part B 着手前に、品質監査の推奨修正（同一ページ内 hashchange で論点が切り替わらない）を実装セッションが対応すること
 - 段階4: 案5 → 案3 → 案4 → 案6 の順に、同じ型で1つずつ進める（measuring は同時に1つまで）
 
+- 段階3.6: Part B の品質監査（2026-09-21、`quality/reviews/2026-09-21-website-task77-partb.md`）。判定 needs_revision。
+  直すのは1件: `docs/topic-modern.css` の `.classroom-sources a` 等の `white-space: nowrap` で、375px で一次資料のリンク文字が画面外に切れる
+  （横スクロールは起きないが文字が見えない）。中身・配線・検査・GA4・hashchange はすべて合格。直して再確認したら ready_for_ceo → CEO承認 → release
+
 ## 確認していないこと
 
 - PR TIMESの料金と無料枠
