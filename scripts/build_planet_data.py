@@ -773,6 +773,7 @@ def static_fallback(d: dict) -> str:
     テーマ固有の言葉・色も data から採るので、他テーマでもそのまま使える。
     """
     stance = {x["key"]: x for x in d["stances"]}
+    count_free = d["theme_id"] == "school-nickname-ban"
     nav, panels = [], []
     for it in d["issues"]:
         anchor_id = "fb-" + it["id"]
@@ -781,10 +782,12 @@ def static_fallback(d: dict) -> str:
             f'      <a class="continent" href="#{e(anchor_id)}"'
             f' style="background:{e(color)};border-color:{e(color)};color:{text_on(color)}">'
             f'<span class="label">{e(it["icon"])} {e(it["label"])}</span>'
-            f'<span class="count">{it["count"]}件・{it["share_pct"]}%</span></a>')
+            + ('' if count_free else f'<span class="count">{it["count"]}件・{it["share_pct"]}%</span>')
+            + '</a>')
 
         legend = "".join(
-            f'<span><i style="background:{e(stance[k]["color"])}"></i>{e(stance[k]["label"])} {n}件</span>'
+            f'<span><i style="background:{e(stance[k]["color"])}"></i>{e(stance[k]["label"])}'
+            + ('' if count_free else f' {n}件') + '</span>'
             for k, n in it["stances"].items() if n)
         bar = "".join(
             f'<span style="width:{100 * n / it["count"]:.1f}%;background:{e(stance[k]["color"])};'
@@ -799,11 +802,11 @@ def static_fallback(d: dict) -> str:
         body += [
             f'    <section class="landing-panel" id="{e(anchor_id)}" tabindex="-1">',
             f'      <h2>{e(it["icon"])} {e(it["label"])}</h2>',
-            f'      <p class="sub">{it["count"]}件（{it["share_pct"]}%）'
-            f'　山の高さ：強い表現{it["high_adjusted_pct"]}%</p>',
+            *([] if count_free else [f'      <p class="sub">{it["count"]}件（{it["share_pct"]}%）'
+            f'　山の高さ：強い表現{it["high_adjusted_pct"]}%</p>']),
             f'      <div class="legend">{legend}</div>',
             f'      <div class="bar">{bar}</div>',
-            '      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>',
+            *([] if count_free else ['      <p class="sub" style="margin:2px 0 0">立場の内訳は、この論点の全件で数えています</p>']),
         ]
 
         # 立場ごとの「その立場の中での割合」。JSが動く画面では点の装置が動きで見せるところ。
@@ -813,27 +816,28 @@ def static_fallback(d: dict) -> str:
             f'<span class="n">{m["counts"][it["id"]]}件 / '
             f'{100 * m["counts"][it["id"]] / m["total"]:.1f}%</span></li>'
             for m in d["modes"] if m["total"])
-        body += [
+        if not count_free:
+            body += [
             '      <p class="sub" style="margin:12px 0 2px">'
             '<b>立場ごとに、その立場の中でこの論点が占める割合</b></p>',
             f'      <ul class="sides">{rows}</ul>',
             '      <div class="note">件数と割合は逆に動くことがあります。'
             '立場を絞ると数える相手そのものが少なくなるので、'
             '<b>件数が減っても、その中での割合は増えることがあります。</b></div>',
-        ]
+            ]
 
         sub = it["sub"]
         if sub["status"] == "reread":
             items = "".join(
                 f'<li{" class=\"unread\"" if x.get("unread") else ""}>'
                 f'<span class="num">{j + 1}</span>{e(x["label"])}'
-                f'<span class="n">{x["count"]}件</span></li>'
+                + ('' if count_free else f'<span class="n">{x["count"]}件</span>') + '</li>'
                 for j, x in enumerate(sub["items"]))
             body += [
                 '      <p class="sub" style="margin-top:12px">'
                 '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
                 f'      <ul class="islands">{items}</ul>',
-                *(([f'      <div class="note">本文確認後に追加された投稿{sub["unread_count"]}件は、本文確認の対象外です。</div>']
+                *(([] if count_free else [f'      <div class="note">本文確認後に追加された投稿{sub["unread_count"]}件は、本文確認の対象外です。</div>']
                    if sub.get("unread_count") else
                    [f'      <div class="note">{e(sub["coverage_note"].rstrip("。") if d["theme_id"] == "henoko-student-accident" else sub["coverage_note"])}。</div>']
                    if sub.get("show_coverage_note", True) else [])),

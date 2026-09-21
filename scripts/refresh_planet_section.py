@@ -329,7 +329,9 @@ def _sync_nickname_method_text(html: str, data: dict) -> str:
     conclusion = NICKNAME_CONCLUSION_BY_ISSUE_ID.get(top_item["id"])
     if conclusion is None:
         raise SystemExit(f"議論の中心: 最大論点「{top_item['id']}」にconclusionがありません（school-nickname-ban）")
-    return _apply_thirty_summary(html, _thirty_summary_html(top_item, conclusion), "school-nickname-ban")
+    summary = _thirty_summary_html(top_item, conclusion)
+    summary = re.sub(r'<span class="conclusion-count"><b>\d+</b>件</span>', '', summary)
+    return _apply_thirty_summary(html, summary, "school-nickname-ban")
 
 
 def _sync_fukushuto_method_text(html: str, data: dict) -> str:
