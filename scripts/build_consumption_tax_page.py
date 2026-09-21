@@ -1602,6 +1602,9 @@ def build(
         start = html.index(STANCE_GLANCE_START)
         end = html.index(STANCE_GLANCE_END) + len(STANCE_GLANCE_END)
         html = html[:start] + html[end:]
+        # 外したあと・貼る前の空行を2行に揃える（BACKGROUND等と同じ理由。揃えないと
+        # 貼り直しのたびに空行が増え、adapterの冪等性検査が通らない。2026-09-21）。
+        html = re.sub(r"\n\s*\n+(<!-- RESEARCH_CONDITIONS_START -->)", r"\n\n\1", html)
     idx = html.index(STANCE_GLANCE_ANCHOR)
     html = html[:idx] + stance_glance(opinions, stance_counts, stance_share) + "\n\n" + html[idx:]
 
