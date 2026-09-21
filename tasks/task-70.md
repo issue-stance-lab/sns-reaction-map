@@ -180,3 +180,5 @@
 2026-09-21追補：オーナーが高齢者免許返納「その他」を了承し、今作った６枚すべての差し替えを指示。`docs/elderly-license-revocation-reaction-map.html` の無JS表示と操作画面の参照先を各 `-v2.webp` に変更し、`scripts/refresh_planet_section.py` の再生成設定も同じ６枚へ更新。旧画像は履歴として保持。全68枚の点検とX投稿への図解添付停止は継続する。
 
 2026-09-21公開待ち：承認済み６図の差し替えコミットをローカル `main` に統合。`verify_theme_page.py` と `verify_number_provenance.py` はNG0件。`verify_top_page.py` は高齢者免許返納の `collect_at=2026-09-11` 期限超過、`unittest` と `run_public_checks.py` は課題55の `TASK_BOARD.md` 状態124文字（上限120）で失敗。両原因は差し替え前の `origin/main` にも存在した。`release` スキルの失敗時停止ルールに従いpushせず、公開ページの現物確認と作業ツリー片付けは未実施。
+
+2026-09-21公開確認：別セッションで高齢者免許返納の収集期限と課題55の管理文が修正され、`origin/main` は承認済み６図の参照変更を含む状態でGitHub Pagesへデプロイ済みだった。最新mainで `verify_theme_page.py`、`verify_number_provenance.py`、`verify_top_page.py`、`unittest discover`、`run_public_checks.py` がすべて終了コード0。GitHub Actionsの公開ファイル検査とPagesデプロイは成功。`https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html` に６画像の新パスが各２箇所あり、６アセットすべてHTTP 200とローカルと同じContent-Lengthを確認。課題70の全68枚点検は継続。
