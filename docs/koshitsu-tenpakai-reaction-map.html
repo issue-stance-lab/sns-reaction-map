@@ -269,7 +269,109 @@
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">皇室・憲法</span><h1>皇室典範改正で何が変わる？女性皇族・旧宮家養子の論点</h1><p class="question-line">皇族の人数と、皇位を継ぐ資格。二つを分けて読む。</p><p class="lead">世論調査ではありません。収集した1,950件から、意見を含む1,525件を整理しました。今回の改正への評価と、女性天皇・女系天皇への考えを分けてたどります。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>425</b>件</span><strong>継承資格の線引きが議論の中心</strong><span class="conclusion-detail">皇位を継げる範囲を父系男子に限るか、女性・女系にも広げるかをめぐる意見が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
 
-
+<!-- STANCE_GLANCE_START -->
+<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:12.5px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">皇室典範改正、なぜ賛否を示さない投稿が多いのか</h2><span>投票する前に、まず内訳</span></div>
+<p class="sg-lead">改正のどこに賛成し、どこに反対かという声は多くても、法案全体への賛否まで言い切った投稿は少数です。残りの大半は、特定の論点に触れるだけで終わっています。</p>
+<div class="sg-headline"><b>1,525</b>件の意見を、5つの立場に整理しました</div>
+<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label"><span>意見1,525件の内訳（今回案全体への評価）</span><span>意見に占める割合</span></div><div class="temp-bar"><div class="temp-seg" data-i="0" style="width:1.6%;background:#2F8F83"></div><div class="temp-seg" data-i="1" style="width:17.5%;background:#7D5BA6">18%</div><div class="temp-seg" data-i="2" style="width:1.0%;background:#D9A520"></div><div class="temp-seg" data-i="3" style="width:78.4%;background:#8B9199">78%</div><div class="temp-seg" data-i="4" style="width:1.4%;background:#B8ACA2"></div></div><div class="temp-bar-legend"><span data-i="0"><i style="background:#2F8F83"></i>支持<b>24件</b></span><span data-i="1"><i style="background:#7D5BA6"></i>反対<b>267件</b></span><span data-i="2"><i style="background:#D9A520"></i>条件付き<b>16件</b></span><span data-i="3"><i style="background:#8B9199"></i>未表明<b>1196件</b></span><span data-i="4"><i style="background:#B8ACA2"></i>読み取れない<b>22件</b></span></div></div>
+<div class="sg-pick"><p class="sg-pick-label">近い立場のボタンを押すと</p>
+<p class="sg-pick-hint">分類された投稿の特徴を表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+<button type="button" class="sg-pick-btn" data-i="0" aria-pressed="false" style="--sg-color:#2F8F83;--sg-bg:#EAF5F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">✓</span><span class="sg-pick-name">支持</span></button><button type="button" class="sg-pick-btn" data-i="1" aria-pressed="false" style="--sg-color:#7D5BA6;--sg-bg:#F2EEF7"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">✕</span><span class="sg-pick-name">反対</span></button><button type="button" class="sg-pick-btn" data-i="2" aria-pressed="false" style="--sg-color:#D9A520;--sg-bg:#FBF3DF"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">△</span><span class="sg-pick-name">条件付き</span></button><button type="button" class="sg-pick-btn" data-i="3" aria-pressed="false" style="--sg-color:#8B9199;--sg-bg:#F1F2F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">ー</span><span class="sg-pick-name">未表明</span></button><button type="button" class="sg-pick-btn" data-i="4" aria-pressed="false" style="--sg-color:#B8ACA2;--sg-bg:#F7F3F1"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">?</span><span class="sg-pick-name">読み取れない</span></button>
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ ここで選んでも投票にはなりません。実際の投票は、このページ下部の投票欄から参加できます。</p>
+</div>
+</aside>
+<script>
+(function(){
+  var DATA=[{short:"支持",pct:1.5737704918032787,desc:"この改正の内容で十分だとする投稿"},{short:"反対",pct:17.508196721311474,desc:"この改正の内容や進め方に問題があるとする投稿"},{short:"条件付き",pct:1.0491803278688525,desc:"方向性は理解できるが、今のままでは足りないとする投稿"},{short:"未表明",pct:78.42622950819673,desc:"賛否を示さず、内容の紹介や感想にとどまる投稿"},{short:"読み取れない",pct:1.4426229508196722,desc:"投稿の内容だけでは、賛否の方向を判断できないもの"}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){
+    root.querySelectorAll('.sg-pulse').forEach(function(el){el.classList.remove('sg-pulse');});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    });
+  }
+  buttons.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      buttons.forEach(function(b){b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」: '+d.desc+'（'+d.pct.toFixed(1)+'%）';
+      result.style.display='block';
+      pulse(i);
+    });
+  });
+})();
+</script>
+<!-- STANCE_GLANCE_END -->
 
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
@@ -591,7 +693,7 @@
       <a class="continent" href="#fb-koshitsu-tenpakai-female-emperor" style="background:#8B9199;border-color:#8B9199;color:#0d1117"><span class="label">🌿 女性天皇・女系天皇</span><span class="count">188件・12.3%</span></a>
     </nav>
     <section class="landing-panel" id="fb-koshitsu-tenpakai-patrilineal-matrilineal" tabindex="-1">
-      <h2>⚖️ 男系vs女系</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho-v4.webp" data-alt="男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は男系の男子と定め、女性天皇と女系天皇の違いを示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho-v4.webp" alt="男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は男系の男子と定め、女性天皇と女系天皇の違いを示す図解。" loading="lazy"></div>
+      <h2>⚖️ 男系vs女系</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho-v5.webp" data-alt="男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は男系の男子と定め、女性天皇と女系天皇の違いを示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho-v5.webp" alt="男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は男系の男子と定め、女性天皇と女系天皇の違いを示す図解。" loading="lazy"></div>
       <p class="sub">425件（27.9%）　山の高さ：強い表現39.1%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 6件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 50件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 366件</span><span><i style="background:#B8ACA2"></i>全体評価を読み取れない 3件</span></div>
       <div class="bar"><span style="width:1.4%;background:#2F8F83;color:#ffffff"></span><span style="width:11.8%;background:#7D5BA6;color:#ffffff"></span><span style="width:86.1%;background:#8B9199;color:#0d1117">今回案全体は未表明</span><span style="width:0.7%;background:#B8ACA2;color:#0d1117"></span></div>
@@ -612,7 +714,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-koshitsu-tenpakai-former-royal-adoption" tabindex="-1">
-      <h2>🏛️ 旧宮家養子縁組</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi-v2.webp" data-alt="旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の継承資格の違いを示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi-v2.webp" alt="旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の継承資格の違いを示す図解。" loading="lazy"></div>
+      <h2>🏛️ 旧宮家養子縁組</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi-v3.webp" data-alt="旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の継承資格の違いを示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi-v3.webp" alt="旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の継承資格の違いを示す図解。" loading="lazy"></div>
       <p class="sub">269件（17.6%）　山の高さ：強い表現46.0%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 3件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 43件</span><span><i style="background:#D9A520"></i>全体評価は条件付き 2件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 221件</span></div>
       <div class="bar"><span style="width:1.1%;background:#2F8F83;color:#ffffff"></span><span style="width:16.0%;background:#7D5BA6;color:#ffffff">今回案全体に反対</span><span style="width:0.7%;background:#D9A520;color:#0d1117"></span><span style="width:82.2%;background:#8B9199;color:#0d1117">今回案全体は未表明</span></div>
@@ -664,7 +766,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-koshitsu-tenpakai-princess-aiko" tabindex="-1">
-      <h2>👑 愛子さま・皇族の地位</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko-v2.webp" data-alt="愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、変更されない皇位継承資格を示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko-v2.webp" alt="愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、変更されない皇位継承資格を示す図解。" loading="lazy"></div>
+      <h2>👑 愛子さま・皇族の地位</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko-v3.webp" data-alt="愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、変更されない皇位継承資格を示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko-v3.webp" alt="愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、変更されない皇位継承資格を示す図解。" loading="lazy"></div>
       <p class="sub">199件（13.0%）　山の高さ：強い表現46.8%</p>
       <div class="legend"><span><i style="background:#2F8F83"></i>今回案全体を支持 3件</span><span><i style="background:#7D5BA6"></i>今回案全体に反対 39件</span><span><i style="background:#D9A520"></i>全体評価は条件付き 1件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 154件</span><span><i style="background:#B8ACA2"></i>全体評価を読み取れない 2件</span></div>
       <div class="bar"><span style="width:1.5%;background:#2F8F83;color:#ffffff"></span><span style="width:19.6%;background:#7D5BA6;color:#ffffff">今回案全体に反対</span><span style="width:0.5%;background:#D9A520;color:#0d1117"></span><span style="width:77.4%;background:#8B9199;color:#0d1117">今回案全体は未表明</span><span style="width:1.0%;background:#B8ACA2;color:#0d1117"></span></div>
@@ -678,7 +780,7 @@
       <a class="backlink" href="#fallback-nav">← 論点の一覧へ戻る</a>
     </section>
     <section class="landing-panel" id="fb-koshitsu-tenpakai-female-emperor" tabindex="-1">
-      <h2>🌿 女性天皇・女系天皇</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno-v2.webp" data-alt="女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながるという違いと、現行の継承資格を示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno-v2.webp" alt="女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながるという違いと、現行の継承資格を示す図解。" loading="lazy"></div>
+      <h2>🌿 女性天皇・女系天皇</h2><div class="explainer-card landing-image" data-img="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno-v3.webp" data-alt="女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながるという違いと、現行の継承資格を示す図解。"><img src="images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno-v3.webp" alt="女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながるという違いと、現行の継承資格を示す図解。" loading="lazy"></div>
       <p class="sub">188件（12.3%）　山の高さ：強い表現50.3%</p>
       <div class="legend"><span><i style="background:#7D5BA6"></i>今回案全体に反対 23件</span><span><i style="background:#D9A520"></i>全体評価は条件付き 11件</span><span><i style="background:#8B9199"></i>今回案全体は未表明 154件</span></div>
       <div class="bar"><span style="width:12.2%;background:#7D5BA6;color:#ffffff">今回案全体に反対</span><span style="width:5.9%;background:#D9A520;color:#0d1117"></span><span style="width:81.9%;background:#8B9199;color:#0d1117">今回案全体は未表明</span></div>
@@ -1096,7 +1198,7 @@ function drawPanel(){
   }
   const it = issues[st.landed];
   const n = m.counts[it.id];
-  const koshitsuImgPath = {"koshitsu-tenpakai-patrilineal-matrilineal":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho-v4.webp","koshitsu-tenpakai-female-emperor":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno-v2.webp","koshitsu-tenpakai-former-royal-adoption":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi-v2.webp","koshitsu-tenpakai-princess-aiko":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko-v2.webp","koshitsu-tenpakai-legislative-process":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-shingi-v2.webp","koshitsu-tenpakai-other":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-sonota-v2.webp"}[it.id];
+  const koshitsuImgPath = {"koshitsu-tenpakai-patrilineal-matrilineal":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-keisho-v5.webp","koshitsu-tenpakai-female-emperor":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-josei-tenno-v3.webp","koshitsu-tenpakai-former-royal-adoption":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-yoshi-v3.webp","koshitsu-tenpakai-princess-aiko":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-aiko-v3.webp","koshitsu-tenpakai-legislative-process":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-shingi-v2.webp","koshitsu-tenpakai-other":"images/topics/koshitsu-tenpakai/koshitsu-infographic-wide-sonota-v2.webp"}[it.id];
   const koshitsuImgAlt = {"koshitsu-tenpakai-patrilineal-matrilineal":"男系を維持する考えと女系も認める考えを比較。改正後も皇室典範第一条は男系の男子と定め、女性天皇と女系天皇の違いを示す図解。","koshitsu-tenpakai-female-emperor":"女性天皇は天皇本人が女性、女系天皇は母方を通じてのみ皇統につながるという違いと、現行の継承資格を示す図解。","koshitsu-tenpakai-former-royal-adoption":"旧宮家につながる男子を養子に迎える流れと条件、養子本人と子孫の継承資格の違いを示す図解。","koshitsu-tenpakai-princess-aiko":"愛子さまの現在の身分と女性皇族の婚姻後の身分、配偶者と子の扱い、変更されない皇位継承資格を示す図解。","koshitsu-tenpakai-legislative-process":"立法府の取りまとめ、政府の法案提出、衆参両院の可決と公布までの流れを示す図解。","koshitsu-tenpakai-other":"「その他」に入った公開投稿の意見例。報道の論調、記事の受け止め、調査の設問、政党の評価についての四つの視点を示す図解。"}[it.id] || '';
   const koshitsuImgHtml = koshitsuImgPath ? ('<div class="explainer-card landing-image" data-img="'+koshitsuImgPath+'" data-alt="'+koshitsuImgAlt+'">'
     +'<img src="'+koshitsuImgPath+'" alt="'+koshitsuImgAlt+'" loading="lazy"></div>') : '';
