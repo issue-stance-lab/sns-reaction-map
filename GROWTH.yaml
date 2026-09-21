@@ -482,10 +482,17 @@ recurring:
     title: Search Console 確認とタイトル改善候補の抽出
     cadence: weekly
     stale_after_days: 10
-    last_run: 2026-07-26
+    last_run: 2026-09-21
     procedure: 表示回数が多くCTRが低いページを抽出し、タイトル/description改善を experiments に起票
     needs_human: 自動取得が失敗した場合のみ、GSC管理画面の確認
-    notes: 2026-07-26にOAuth再認証・自動取得確認。28日間で表示45・クリック2・CTR4.44%・平均掲載順位11.51。クリックは部活1（9表示・11.1%）と高齢者免許1（11表示・9.1%）。AI著作権は10表示・平均6.7位だがクリック0のためタイトル改善候補
+    notes: >-
+      2026-07-26にOAuth再認証・自動取得確認。28日間で表示45・クリック2・CTR4.44%・平均掲載順位11.51。クリックは部活1（9表示・11.1%）と高齢者免許1（11表示・9.1%）。AI著作権は10表示・平均6.7位だがクリック0のためタイトル改善候補。
+      【2026-09-21追記】課題83で発覚したlast_run 57日停滞を受けて`python3 scripts/fetch_gsc_metrics.py --days 90 --dimension page --json`で実データを確認。
+      直近90日間で表示回数はサイト全体で2件のみ(bike-blue-ticket・constitutional-amendmentに各1件、クリック0)。
+      「表示回数が多くCTRが低いページ」を抽出できる母数ではなく、タイトル改善候補は今回無し。
+      原因は放置ではなく、2026-08-31の独自ドメイン移行（課題55）でSearch Consoleの物件(`sc-domain:sns-reaction-map.jp`)が
+      作り直しになり、まだ蓄積データがほとんど無いため（課題55は9/21時点で登録済み5/18件、9/28に4週目確認予定）。
+      次回のgsc-reviewは、課題55の登録件数が回復してから再確認するのが妥当。
 
   kpi-snapshot:
     title: KPI週次スナップショット更新
