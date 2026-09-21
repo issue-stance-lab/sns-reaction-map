@@ -401,6 +401,17 @@ capabilities:
       監査記録ファイル自体はmainに先行コミットされており実装ブランチには無かったため、今回の対応は
       作業ツリー内に同名ファイルを新規作成する形で書いた（mainマージ時は両方新規追加のコンフリクトになる
       見込みなので、作業ツリー版を採用するようファイル内に注記した）。
+      2026-09-21 オーナーが「本番反映」でCEO承認。releaseスキルの手順で本番反映。
+      マージ時、TASK_BOARD.mdとquality/reviews/2026-09-21-website-task77-partb.mdでコンフリクト
+      (想定どおり。mainには監査時点のneeds_revision版が先行コミットされていたため)。
+      コミット履歴で他セッションが同じ箇所を別内容で触っていないことを確認したうえで、
+      実装ブランチ側(対応後の内容)を採用して解消。マージ後のmainで検査再実行
+      (verify_theme_page.py・verify_number_provenance.py・verify_top_page.py・unittest discover 1021件・
+      run_public_checks.py、いずれもOK)、push後CIも「公開ファイルの検査」「Deploy to GitHub Pages」とも
+      success。公開URLでtopic-modern.css?v=31・overflow-wrap: anywhere(nowrap無し)・辺野古の
+      「だ・である」調配信を確認。マージ1ff4d48b。作業ツリーは非公開データのバックアップ
+      (復元確認: OK)を取ってからgit worktree removeで片付け済み。**Part A・Part Bとも公開完了**。
+      judge_at(2026-10-19)まで計測を継続。
 
   press-kit-embed:
     title: 報道・研究向け「引用パック」ページと埋め込み（iframe）

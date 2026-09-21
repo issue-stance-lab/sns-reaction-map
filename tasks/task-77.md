@@ -1,7 +1,7 @@
 # 課題77: 集客の仕掛け6案（引用され・検索される構造ほか）の登録と採用判断
 
 **登録日**: 2026-09-20
-**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。Part A（案1）は品質監査 ready_for_ceo（条件付き、`quality/reviews/2026-09-20-website-task77-parta.md`）を経て、2026-09-21にCEO承認・本番反映済み（マージ`68732e9`、CI・実機確認OK）。Part B（案2）は2026-09-21に実装完了後、品質監査で needs_revision（375pxで一次資料リンクが画面外に切れる・文体不統一）となり、同日中に実装セッションが両方を修正・再検査して ready_for_ceo に更新済み（`quality/reviews/2026-09-21-website-task77-partb.md`）。まだ未コミット（作業ツリー `isa-wt-growth-cite-search-b`）・CEO承認待ち。案3〜6は `GROWTH.yaml` に idea として登録済み
+**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。Part A（案1）は品質監査 ready_for_ceo（条件付き、`quality/reviews/2026-09-20-website-task77-parta.md`）を経て、2026-09-21にCEO承認・本番反映済み（マージ`68732e9`、CI・実機確認OK）。Part B（案2）は2026-09-21に実装完了後、品質監査で needs_revision（375pxで一次資料リンクが画面外に切れる・文体不統一）となり、同日中に実装セッションが両方を修正・再検査して ready_for_ceo に更新（`quality/reviews/2026-09-21-website-task77-partb.md`）、CEO承認のうえ本番反映済み（マージ`1ff4d48b`、CI・実機確認OK）。案1+2とも公開完了。案3〜6は `GROWTH.yaml` に idea として登録済み
 **優先度**: 中（来訪者がいなくても効く案1・案2を先に。シェア系の案3・案4は来訪者が増えてから）
 **判断待ち**: オーナー（案5の図表・データの利用条件／案6の費用上限）
 **関連**: 51（記事の公開先設計）/ 54・15（AdSense審査中）/ 70（図解の点検中）/ 55（ドメイン移行の残作業）/
@@ -165,6 +165,17 @@
   `run_public_checks.py`・`apply_theme_trust.py`/`apply_classroom_section.py` の再実行changed=0、いずれもOK。
   監査記録の判定を ready_for_ceo に更新。印刷プレビューのA4 1枚収まりは今回も自動化ツールでは未検証のまま。
   **対応完了・未コミット。次はCEO承認**
+- 段階3.7: オーナーがCEO承認（2026-09-21、「本番反映」の指示）。releaseスキルの手順どおり実行。
+  マージ時、TASK_BOARD.mdの最終更新行・課題77詳細ブロックと`quality/reviews/2026-09-21-website-task77-partb.md`で
+  コンフリクト（main側は監査時点のneeds_revision版、実装ブランチ側はready_for_ceoへの対応後版。分岐後にmain側へ
+  監査記録だけ直接コミットされていたための構造的な衝突で、両者を見比べたうえで実装ブランチ側の内容を採用。
+  他セッションが同じ場所を別内容で触っていたわけではないことをコミット履歴で確認済み）。
+  マージ後のmainで検査再実行（verify_theme_page.py・verify_number_provenance.py・verify_top_page.py・
+  unittest discover 1021件・run_public_checks.py、いずれもOK）。push後CI確認（`公開ファイルの検査`・
+  `Deploy to GitHub Pages`とも success、実行35553085195/35553085274）。公開URLで確認: `topic-modern.css?v=31`と
+  `overflow-wrap: anywhere`（nowrap無し）、辺野古ページの理由文が「だ・である」調で配信されていることを確認。
+  トップページも200・表示崩れなし。マージ`1ff4d48b`。作業ツリー`isa-wt-growth-cite-search-b`は非公開データを
+  バックアップ（`復元確認: OK`）してから`git worktree remove`で片付け済み。**完了**
 - 段階4: 案5 → 案3 → 案4 → 案6 の順に、同じ型で1つずつ進める（measuring は同時に1つまで）
 
 - 段階3.6: Part B の品質監査（2026-09-21、`quality/reviews/2026-09-21-website-task77-partb.md`）。判定 needs_revision。
