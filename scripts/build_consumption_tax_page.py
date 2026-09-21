@@ -1016,6 +1016,178 @@ def background_context() -> str:
 {BACKGROUND_END}"""
 
 
+# ---------------------------------------------------------------------------
+# ヒーロー直後「内訳を先に見る」＋「まず、あなたは？」
+#
+# トップ・テーマページが「文字ばかりで最初の数秒で離脱されやすい」という課題認識への
+# 対策。ヒーローの直後（RESEARCH_CONDITIONSより前）に、(a) stance_counts/stance_share
+# をそのまま使った4色の内訳バー、(b) 4択の自己申告ボタン→クリックした瞬間にJSだけで
+# 「同じ立場はSNS投稿全体の何%か」を表示、を置く。投票データへの書き込みはしない
+# （実際の投票は#vote-sectionで行う。この節はプレビューであることをUI上にも明記する）。
+#
+# CLAIM_AUDIT/BACKGROUNDと同じ「後付けの補完処理」。RESEARCH_CONDITIONS_STARTの
+# 直前（ヒーローの次）に毎回そろえる。
+#
+# <section>ではなく<aside>にしているのは意図的: .panel:nth-of-type(even)系のCSSは
+# 「同じ親の下のsection要素の並び順」で交互背景色を決めるため、ここにsectionを1つ
+# 足すと後続のbukatsu-background以降が全部偶奇反転し、#planet-blockの外枠の見た目まで
+# 変わってしまう（実機のgetComputedStyleで確認済み）。asideならこの並びに影響しない。
+# 見た目は.panelクラスを流用せず、この節専用のCSSで.panelと同じ値を明示指定する
+# （.panelクラスをasideに付けた前例がこのファイルに無いため、確実性を優先した）。
+# ---------------------------------------------------------------------------
+STANCE_GLANCE_START = "<!-- STANCE_GLANCE_START -->"
+STANCE_GLANCE_END = "<!-- STANCE_GLANCE_END -->"
+STANCE_GLANCE_ANCHOR = "<!-- RESEARCH_CONDITIONS_START -->"
+
+STANCE_GLANCE_CSS = """<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:13px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>"""
+
+
+def stance_glance(opinions: int, stance_counts: dict, stance_share: dict) -> str:
+    """ヒーロー直後、内訳バー＋「まず、あなたは？」を組み立てる。
+
+    stance_counts/stance_share は build_consumption_tax_arena.py が
+    Counter(r["classification"]["stance"] for r in opinions) から作った既存の
+    集計をそのまま使う（ここで新たに集計しない）。投票データへの書き込みは行わない。
+    """
+    segs, legend, buttons, js_rows = [], [], [], []
+    for i, s in enumerate(STANCE_ORDER):
+        meta = STANCE_META[s]
+        count = stance_counts.get(s, 0)
+        share = stance_share.get(s, 0.0)
+        seg_label = f"{share:.0f}%" if share >= 5 else ""
+        segs.append(
+            f'<div class="temp-seg" data-i="{i}" style="width:{share:.1f}%;background:{meta["color"]}">{seg_label}</div>'
+        )
+        legend.append(
+            f'<span data-i="{i}"><i style="background:{meta["color"]}"></i>{esc(meta["label"])}<b>{count}件</b></span>'
+        )
+        buttons.append(
+            f'<button type="button" class="sg-pick-btn" data-i="{i}" aria-pressed="false" '
+            f'style="--sg-color:{meta["color"]};--sg-bg:{meta["bg"]}">'
+            f'<span class="sg-pick-check" aria-hidden="true">✓</span>'
+            f'<span class="sg-pick-icon" aria-hidden="true">{esc(meta["icon"])}</span>'
+            f'<span class="sg-pick-name">{esc(meta["label"])}</span></button>'
+        )
+        js_rows.append(
+            "{short:%s,pct:%s,desc:%s}"
+            % (
+                json.dumps(meta["label"], ensure_ascii=False),
+                share,
+                json.dumps(meta["desc"], ensure_ascii=False),
+            )
+        )
+    bar = (
+        '<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label">'
+        f'<span>意見{opinions}件の立場別内訳</span><span>意見に占める割合</span></div>'
+        f'<div class="temp-bar">{"".join(segs)}</div>'
+        f'<div class="temp-bar-legend">{"".join(legend)}</div></div>'
+    )
+    script = f"""<script>
+(function(){{
+  var DATA=[{",".join(js_rows)}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){{
+    root.querySelectorAll('.sg-pulse').forEach(function(el){{el.classList.remove('sg-pulse');}});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){{
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    }});
+  }}
+  buttons.forEach(function(btn){{
+    btn.addEventListener('click',function(){{
+      buttons.forEach(function(b){{b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');}});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」の立場: '+d.desc+'。この立場に近い意見は、分析対象のうち'+d.pct.toFixed(1)+'%でした。';
+      result.style.display='block';
+      pulse(i);
+    }});
+  }});
+}})();
+</script>"""
+    return f"""{STANCE_GLANCE_START}
+{STANCE_GLANCE_CSS}
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">消費税減税、SNSの立場を先に見る</h2><span>読む前に、内訳だけ</span></div>
+<p class="sg-lead">このページは、集めた投稿を4つの立場に分けて整理しています。論点を読み進める前に、内訳だけ確認できます。</p>
+<div class="sg-headline"><b>{opinions}</b>件の意見を分類した内訳です</div>
+{bar}
+<div class="sg-pick"><p class="sg-pick-label">近い感覚のボタンを押すと</p>
+<p class="sg-pick-hint">同じ立場の投稿が、意見のうち何%だったかを表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+{"".join(buttons)}
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ ここでの選択はこの画面だけの表示で、投票として集計されません。集計に加わる投票は後半の投票欄から参加できます。</p>
+</div>
+</aside>
+{script}
+{STANCE_GLANCE_END}"""
+
+
 def build(
     *,
     classified: Path | None = None,
@@ -1444,6 +1616,16 @@ def build(
     idx = html.index(BACKGROUND_ANCHOR)
     html = html[:idx] + background_context() + "\n\n" + html[idx:]
 
+    # --- 19. ヒーロー直後の内訳＋「まず、あなたは？」 -----------------------
+    # BACKGROUNDと同じ「後付けの補完処理」。RESEARCH_CONDITIONS_STARTの直前
+    # （ヒーローの次）に毎回そろえる。
+    if STANCE_GLANCE_START in html and STANCE_GLANCE_END in html:
+        start = html.index(STANCE_GLANCE_START)
+        end = html.index(STANCE_GLANCE_END) + len(STANCE_GLANCE_END)
+        html = html[:start] + html[end:]
+    idx = html.index(STANCE_GLANCE_ANCHOR)
+    html = html[:idx] + stance_glance(opinions, stance_counts, stance_share) + "\n\n" + html[idx:]
+
     verify(html, opinions)
     output.write_text(html, encoding="utf-8")
     print(f"wrote {output} ({len(html.splitlines())} lines)")
@@ -1599,6 +1781,32 @@ def verify(html: str, opinions: int) -> None:
         and html.index(BACKGROUND_START) > html.index(BACKGROUND_ANCHOR)
     ):
         problems.append("背景セクションが山なみ図より後ろにある（地図より前に置くこと）")
+
+    # ヒーロー直後の内訳＋「まず、あなたは？」。マーカー1組・見出し・4色区画・
+    # ボタン4つが揃っているか、ヒーロー直後（調査条件より前）にあるか。
+    if html.count(STANCE_GLANCE_START) != 1 or html.count(STANCE_GLANCE_END) != 1:
+        problems.append("内訳セクションのマーカーが1組でない")
+    if '<h2 id="stance-glance-title">' not in html:
+        problems.append("内訳セクションの見出しがページにない")
+    if STANCE_GLANCE_START in html and STANCE_GLANCE_END in html:
+        block = html[html.index(STANCE_GLANCE_START):html.index(STANCE_GLANCE_END)]
+        seg_count = block.count('<div class="temp-seg"')
+        btn_count = block.count('class="sg-pick-btn"')
+        if seg_count != len(STANCE_ORDER):
+            problems.append(f"内訳バーの区画が{len(STANCE_ORDER)}個でない: {seg_count}個")
+        if btn_count != len(STANCE_ORDER):
+            problems.append(f"「あなたは？」ボタンが{len(STANCE_ORDER)}個でない: {btn_count}個")
+    if (
+        STANCE_GLANCE_START in html
+        and STANCE_GLANCE_ANCHOR in html
+        and html.index(STANCE_GLANCE_START) > html.index(STANCE_GLANCE_ANCHOR)
+    ):
+        problems.append("内訳セクションが調査条件より後ろにある（ヒーロー直後に置くこと）")
+    if '<aside id="stance-glance"' not in html:
+        problems.append(
+            "内訳セクションがasideでなくなっている"
+            "（sectionにするとpanel:nth-of-type(even)の縞模様が後続セクション全部でずれる）"
+        )
 
     if problems:
         raise SystemExit("ビルド検証に失敗しました:\n  - " + "\n  - ".join(problems))
