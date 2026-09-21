@@ -83,6 +83,29 @@ class XPostViewsTests(unittest.TestCase):
         self.assertEqual({item.status_id for item in pending}, {FOLLOW_ID})
         self.assertEqual(pending[0].kind, "会話フォロー")
 
+    def test_follow_block_url_is_not_taken_as_a_table_row(self):
+        """節の中の「### 会話フォロー」の自リプライURLを、上の表の行として数えない（課題76の続き）。
+
+        数えると、計測済みの会話フォローが「返信先の表の行が未計測」として一覧に出て、
+        apply で会話フォローの表示回数が返信先の表へ書き込まれる（2026-09-22に発覚）。
+        """
+        sample = f"""## リプライ実績 2026-08-10
+
+| # | リプライ先 | テーマ | タイプ | 元投稿views | 自リプライ表示 | 元投稿の返信数 | 元投稿からの経過 |
+|---|---|---|---|---|---|---|---|
+| 1 | @parent（元の返信先） | A | URLなし | 100 | 未計測（投稿直後） | 1 | 1時間 |
+
+### 会話フォロー 2026-08-10（投稿済み）
+
+自リプライURL: https://x.com/sns_hannou_ma/status/{FOLLOW_ID}
+
+表示回数: **19**（計測済み）
+"""
+        self.assertEqual(x_post_views.find_pending(sample, self.now), [])
+        # 計測済みの会話フォローへの上書きは拒否され、表の行にも書き込まれない
+        with self.assertRaises(ValueError):
+            x_post_views.apply_measurements(sample, {FOLLOW_ID: 21}, self.now)
+
     def test_follow_without_own_url_is_not_listed(self):
         """「（送信なし）」の節は自リプライURLが無いので計測対象にしない。"""
         sample = """## リプライ実績 2026-08-10

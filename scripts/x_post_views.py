@@ -117,8 +117,14 @@ def find_pending(text: str, now: dt.datetime) -> list[PendingPost]:
                         continue
                     rows[cells[number_col]] = (i, cells[own_col], cells[1])
 
+                # 節の中に「### 会話フォロー」が続く場合、その自リプライURLは表の行ではない。
+                # 表の行に数えると、会話フォローの表示回数が返信先の表へ書き込まれる（課題76の続き）。
+                reply_end = next(
+                    (i for i in range(header_index + 1, end) if lines[i].startswith("### ")),
+                    end,
+                )
                 url_lines = [
-                    (i, m) for i in range(header_index + 1, end)
+                    (i, m) for i in range(header_index + 1, reply_end)
                     if (m := _URL_LABEL_RE.match(lines[i]))
                 ]
                 for _i, label_match in url_lines:
