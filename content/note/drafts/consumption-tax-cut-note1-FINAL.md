@@ -28,10 +28,12 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 
 - [x] 図1（内訳グラフ）作成済み: `content/note/drafts/images/consumption-tax-cut1_fig1-stance.png`
 - [ ] 見出し画像（1920×1006目安）の作成。図1のみでも公開可だが、シリーズ物として見出し画像は用意したい
-      （AI生成の人物写真を使う場合、記事末に「※記事中の写真はAIで生成した架空の人物・情景です。」を追記すること）
-- [ ] タグ5個の選定（お題ページを見て確定）
+      （AI生成の人物写真を使う場合、記事末に「※記事中の写真はAIで生成した架空の人物・情景です。」を追記すること。
+      特定の政党・政治家を想起させる意匠は避け、レシート・硬貨・グラフ等の抽象的なモチーフを推奨）
+- [ ] タグ5個の選定（編集部案: #消費税減税 #消費税 #政治 #データ分析 #物価高。note編集画面の候補表示を見て確定してよい）
 - [ ] マガジン新規作成（「消費税減税を読む」想定）
-- [ ] UTMの公開予定日を確定（下書きでは 20260917 を仮置き）
+- [x] UTMの公開予定日を確定 → 2026-09-21に暫定更新（2026-09-21のセッションで、下書き作成時の20260917から更新）。
+      実際にnoteへ投稿する日がこれと違う場合、投稿前にこの日付を直してから貼り付けること（公開後の変更はGA4計測が分断される）
 - [ ] オーナー確認後、note下書き画面へ反映
 
 ---
@@ -68,7 +70,7 @@ https://x.com/bilio07860252/status/2086155269508395350
 https://x.com/loto2022222/status/2093983198325981358
 
 👉 論点別の内訳と実際の投稿をSNS反応まっぷで見る
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260917&utm_content=after_stance
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=after_stance
 
 ## 「裏切られた」と書く人がいちばん多かったのは、条件付き賛成の側
 
@@ -93,7 +95,7 @@ https://x.com/gamisan02/status/2088430549967020251
 この動きの速さを後押ししたのが、政治そのものへの不信だと考えられます。内閣府の世論調査では、国の政策に自分の意見が反映されていないと感じる人が71.3%にのぼります。物価が悪い方向に向かっていると答えた人はさらに多く、7割を超えました。「早く決めてほしい」という圧力は、税率の妥当性からではなく、この不信の大きさから生まれていた可能性があります。
 
 👉 政治不信・公約の論点で語られた投稿をSNS反応まっぷで見る
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260917&utm_content=after_timeline
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=after_timeline
 
 ## 中身の検証は、まだこれから
 
@@ -104,7 +106,7 @@ https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=not
 次回からは、その中身を一つずつ見ていきます。対象範囲は本当に広がらないのか、財源の話は何が決まっていて何が決まっていないのか。
 
 👉 あなたの実感に近い論点に投票して、分布を見る
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260917&utm_content=after_conclusion
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=after_conclusion
 
 ## このシリーズについて
 
@@ -115,6 +117,6 @@ https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=not
 この記事で紹介した数字は、「SNS反応まっぷ｜消費税減税」の公開投稿サンプルを、立場と論点で整理したものです。投稿の分布や実際の声は、次のページで確認できます。
 
 👉 投票して、自分の立場も見てみる
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260917&utm_content=footer
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=footer
 
 データについて：Yahoo!リアルタイム検索で取得した消費税減税についての公開投稿のうち、意見と判定した3,358件を集計。「公約と政治不信」論点に分類された1,198件の内訳は、減税推進722件（60.3%）・中立171件（14.3%）・慎重162件（13.5%）・条件付き賛成143件（11.9%）。「高市」という語を含む投稿は325件（27.1%）で、AIによる分類結果の要約・理由欄のテキストから機械的に集計したものです（原文そのものの集計ではありません）。世論調査の数値は内閣府「社会意識に関する世論調査」（令和7年10月調査）によります。制度の内容は内閣官房「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日決定）によります。分類はAIによるもので、代表投稿は編集部が選定しています。SNS投稿の集計であり、社会全体の意見分布を示す世論調査ではありません。記事中の評価と主張は編集部のものです。

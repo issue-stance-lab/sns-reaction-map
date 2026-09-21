@@ -1,0 +1,402 @@
+<title>消費税減税 第1回下書き</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf7f1;
+    --ink:#211d17;
+    --muted:#7a7263;
+    --muted-2:#948c7c;
+    --line:#e6dfd0;
+    --card:#ffffff;
+    --accent:#2d6a5a;
+    --accent-ink:#f4faf7;
+    --accent-soft:#e4efe9;
+    --draft:#b3552f;
+    --draft-soft:#f7e9e0;
+    --c-support:#3f7f6f;
+    --c-conditional:#8b7fc7;
+    --c-neutral:#9aa0a8;
+    --c-oppose:#c77f5a;
+    --shadow: 0 1px 2px rgba(33,29,23,.06), 0 8px 24px -12px rgba(33,29,23,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#18160f;
+      --ink:#ece6d8;
+      --muted:#a49b88;
+      --muted-2:#8a8271;
+      --line:#332e22;
+      --card:#211e16;
+      --accent:#6fbfa4;
+      --accent-ink:#0f1a15;
+      --accent-soft:#1f2b23;
+      --draft:#e08a5f;
+      --draft-soft:#2e2018;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#18160f;
+    --ink:#ece6d8;
+    --muted:#a49b88;
+    --muted-2:#8a8271;
+    --line:#332e22;
+    --card:#211e16;
+    --accent:#6fbfa4;
+    --accent-ink:#0f1a15;
+    --accent-soft:#1f2b23;
+    --draft:#e08a5f;
+    --draft-soft:#2e2018;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+    line-height:1.85;
+    margin:0;
+    padding-inline:20px;
+    padding-block:36px 64px;
+  }
+  .wrap{max-width:640px;margin:0 auto;}
+
+  .status-bar{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+    background:var(--draft-soft); color:var(--draft);
+    border:1px solid color-mix(in srgb, var(--draft) 35%, transparent);
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.02em;
+    margin-bottom:28px;
+  }
+  .status-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--draft);flex:none;}
+  .status-bar .sep{color:var(--muted-2); font-weight:400;}
+
+  .series-eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-size:12.5px; letter-spacing:.14em; font-weight:700;
+    color:var(--accent); text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .series-eyebrow .n{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px;height:20px;border-radius:50%;
+    background:var(--accent); color:var(--accent-ink);
+    font-size:11px;
+  }
+
+  h1{
+    font-family:'Noto Serif JP', serif;
+    font-weight:700;
+    font-size:clamp(24px, 5.6vw, 32px);
+    line-height:1.42;
+    letter-spacing:.01em;
+    text-wrap:balance;
+    margin:0 0 22px;
+  }
+
+  .hook{
+    font-size:17px;
+    font-weight:700;
+    line-height:1.8;
+    margin:0 0 20px;
+  }
+
+  .lede{
+    font-size:15.5px;
+    color:var(--ink);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px 18px;
+    margin:0 0 26px;
+    box-shadow:var(--shadow);
+  }
+
+  .takeaways{
+    list-style:none; margin:0 0 22px; padding:0;
+    display:flex; flex-direction:column; gap:9px;
+  }
+  .takeaways li{
+    display:flex; gap:10px;
+    font-size:14.5px;
+    color:var(--muted);
+  }
+  .takeaways li::before{
+    content:"";
+    flex:none;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    margin-top:9px;
+  }
+
+  .sample-note{
+    font-size:12.5px; color:var(--muted-2);
+    border-left:2px solid var(--line);
+    padding-left:12px;
+    margin:0 0 40px;
+  }
+
+  h2{
+    font-family:'Noto Serif JP', serif;
+    font-size:clamp(19px, 4.6vw, 22px);
+    line-height:1.5;
+    font-weight:700;
+    text-wrap:balance;
+    margin:48px 0 18px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .wrap > h2:first-of-type{margin-top:0;}
+
+  p{margin:0 0 18px; font-size:15.5px;}
+  p.tight{margin-bottom:10px;}
+
+  figure{margin:24px 0; padding:0;}
+  figure img{
+    display:block; width:100%; height:auto;
+    border-radius:12px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  figcaption{
+    font-size:12.5px; color:var(--muted-2);
+    margin-top:8px; text-align:center;
+  }
+
+  .post-ref{
+    display:flex; gap:12px; align-items:flex-start;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    margin:0 0 22px;
+    text-decoration:none;
+    color:inherit;
+    box-shadow:var(--shadow);
+  }
+  .post-ref:hover{border-color:var(--accent);}
+  .post-ref .bird{
+    flex:none; width:30px; height:30px; border-radius:50%;
+    background:var(--accent-soft); color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+  }
+  .post-ref .meta{min-width:0;}
+  .post-ref .meta .label{
+    font-size:11.5px; color:var(--muted-2); margin-bottom:2px;
+  }
+  .post-ref .meta .handle{
+    font-size:13.5px; font-weight:700; color:var(--ink);
+    word-break:break-all;
+  }
+  .post-ref .meta .go{
+    font-size:12px; color:var(--accent); margin-top:3px;
+  }
+
+  .stat-inline{
+    font-variant-numeric: tabular-nums;
+    font-weight:700;
+    color:var(--accent);
+  }
+
+  .cta{
+    display:block;
+    text-decoration:none;
+    background:var(--accent);
+    color:var(--accent-ink);
+    border-radius:12px;
+    padding:15px 18px;
+    margin:8px 0 34px;
+    font-size:14.5px;
+    font-weight:700;
+    line-height:1.5;
+    box-shadow:var(--shadow);
+  }
+  .cta .arrow{opacity:.75; margin-right:6px;}
+  .cta.ghost{
+    background:transparent;
+    color:var(--accent);
+    border:1.5px solid var(--accent);
+  }
+
+  .series-box{
+    background:var(--accent-soft);
+    border-radius:12px;
+    padding:18px 20px;
+    margin:40px 0 26px;
+  }
+  .series-box .title{
+    font-size:12.5px; font-weight:700; letter-spacing:.08em;
+    color:var(--accent); text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .series-box ol{margin:0; padding-left:20px; font-size:14px; color:var(--ink);}
+  .series-box li{margin-bottom:6px;}
+  .series-box li.current{font-weight:700;}
+
+  footer.datanote{
+    font-size:12px;
+    color:var(--muted-2);
+    line-height:1.9;
+    border-top:1px solid var(--line);
+    padding-top:18px;
+    margin-top:36px;
+  }
+  footer.datanote p{font-size:12px; margin-bottom:10px;}
+
+  details.production{
+    margin-top:44px;
+    border:1px dashed color-mix(in srgb, var(--draft) 45%, transparent);
+    border-radius:12px;
+    background:var(--draft-soft);
+    padding:4px 16px;
+  }
+  details.production summary{
+    cursor:pointer;
+    padding:12px 0;
+    font-size:13px;
+    font-weight:700;
+    color:var(--draft);
+    list-style:none;
+  }
+  details.production summary::-webkit-details-marker{display:none;}
+  details.production summary::before{content:"▸ "; }
+  details.production[open] summary::before{content:"▾ "; }
+  details.production ul{margin:0 0 14px; padding-left:20px; font-size:13px; color:var(--ink);}
+  details.production li{margin-bottom:6px;}
+  details.production li.done{color:var(--muted-2); text-decoration:line-through;}
+</style>
+
+<div class="wrap">
+
+  <div class="status-bar"><span class="dot"></span>下書き・社内レビュー用<span class="sep">｜</span>note未投稿・CEO承認前</div>
+
+  <div class="series-eyebrow"><span class="n">1</span>消費税減税シリーズ　全4回</div>
+
+  <h1>消費税減税「賛成6割」の中身は、政策への支持ではなかった</h1>
+
+  <p class="hook">食料品の税率を1%に下げ、財源は特例公債に頼らず、実施は2027年4月から2年間。消費税減税は、もうそこまで決まっています。それなのに、SNSで交わされている言葉の多くは、税率でも財源でもありませんでした。</p>
+
+  <div class="lede">SNS反応まっぷ編集部は、消費税減税についての公開投稿を立場と論点で分類しています。「公約と政治不信」に分類された1,198件を読むと、賛成する人も反対する人も、政策の中身より特定の政治家や省庁への不信を語っている投稿が目立ちました。</div>
+
+  <ul class="takeaways">
+    <li>「賛成6割」という数字の中身が、政策への評価ではないことがある理由</li>
+    <li>政府がこの4カ月で、公約から実施の詳細まで一気に進めた経緯</li>
+    <li>次回以降、このシリーズが中身そのものを見ていく理由</li>
+  </ul>
+
+  <p class="sample-note">※無作為抽出の世論調査ではなく、SNS公開投稿のサンプル分析です（詳細は記事末）。</p>
+
+  <h2>「賛成6割」を、政策への賛成だと思っていませんか</h2>
+
+  <p>1,198件のうち、消費税減税を推す側に分類された投稿は<span class="stat-inline">60.3%</span>でした。数字だけを見れば、公約に対する評価はおおむね前向き、という話になります。</p>
+
+  <p class="tight">中身を読むと、様子が違います。</p>
+
+  <figure>
+    <img src="images/consumption-tax-cut1_fig1-stance.png" alt="「公約と政治不信」論点1,198件の内訳。減税推進60.3%、条件付き賛成・政府案に不満11.9%、中立・情報14.3%、減税反対・慎重13.5%">
+    <figcaption>図1｜「公約と政治不信」論点 1,198件の内訳（SNS反応まっぷ公開投稿サンプル）</figcaption>
+  </figure>
+
+  <p>減税を推す投稿の多くが理由に挙げていたのは、税率の下げ幅でも、対象品目の広さでもありませんでした。財務省が減税を渋っているという不信や、他の法案を優先する政権への不満を挙げる声が目立ちます。</p>
+
+  <a class="post-ref" href="https://x.com/bilio07860252/status/2086155269508395350" target="_blank" rel="noopener">
+    <span class="bird">𝕏</span>
+    <span class="meta">
+      <span class="label">記事で紹介する投稿・推進側</span>
+      <span class="handle">@bilio07860252</span>
+      <span class="go">元投稿を見る ↗</span>
+    </span>
+  </a>
+
+  <p>減税に慎重な側も、形は同じでした。政策の効果より、決断そのものを「人気取り」と見るか、公約を煽った野党の責任と見るか。評価の軸は、税率の妥当性ではなく、誰の判断を信じるかに置かれていました。</p>
+
+  <a class="post-ref" href="https://x.com/loto2022222/status/2093983198325981358" target="_blank" rel="noopener">
+    <span class="bird">𝕏</span>
+    <span class="meta">
+      <span class="label">記事で紹介する投稿・慎重側</span>
+      <span class="handle">@loto2022222</span>
+      <span class="go">元投稿を見る ↗</span>
+    </span>
+  </a>
+
+  <a class="cta ghost" href="https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=after_stance" target="_blank" rel="noopener"><span class="arrow">→</span>論点別の内訳と実際の投稿をSNS反応まっぷで見る</a>
+
+  <h2>「裏切られた」と書く人がいちばん多かったのは、条件付き賛成の側</h2>
+
+  <p>もっとも読み応えがあったのは、「条件付き賛成・政府案に不満」に分類された143件でした。減税そのものには賛成しながら、決まった中身への不満を書いている一群です。</p>
+
+  <p>公約を理由に投票したのに、実際に決まったのは食料品だけの1%だった。当初語られていた税率から後退した。他党の案に近いものになった——理由はさまざまですが、共通していたのは「約束と違う」という失望でした。</p>
+
+  <a class="post-ref" href="https://x.com/gamisan02/status/2088430549967020251" target="_blank" rel="noopener">
+    <span class="bird">𝕏</span>
+    <span class="meta">
+      <span class="label">記事で紹介する投稿・条件付き賛成側</span>
+      <span class="handle">@gamisan02</span>
+      <span class="go">元投稿を見る ↗</span>
+    </span>
+  </a>
+
+  <p>政策の設計を評価しているのではなく、約束が守られたかどうかを採点している。賛成・反対という分類の内側で、実際に測られていたのは別のものでした。</p>
+
+  <p>1,198件のうち、高市首相の名前が挙がった投稿を数えると、<span class="stat-inline">4件に1件</span>を超えていました。税率の数字より、首相の名前のほうが先に出てくる会話だったということです。</p>
+
+  <h2>政府はこの4カ月、公約を実施の詳細まで進めた</h2>
+
+  <p>2025年5月、当時の野党の一つが食料品の税負担軽減を提言しました。2026年8月5日、政府は2年間・税率1%・給付の組み合わせという基本方針を閣議決定します。そして2026年9月15日、政府はさらに具体的な「大綱」を閣議決定しました。</p>
+
+  <p>期間は2027年4月1日から2029年3月31日。税率は国税0.78%と地方消費税0.22%を合わせた1%。対象は現行の軽減税率品目のままで、広げてはいません。あわせて、中低所得の現役勤労者向けに「就業者負担軽減支援金」という現金給付の制度設計まで固まりました。</p>
+
+  <p class="tight">公約から実施の詳細まで、4カ月足らずでここまで進んだ政策は、そう多くありません。</p>
+
+  <p>この動きの速さを後押ししたのが、政治そのものへの不信だと考えられます。内閣府の世論調査では、国の政策に自分の意見が反映されていないと感じる人が<span class="stat-inline">71.3%</span>にのぼります。物価が悪い方向に向かっていると答えた人はさらに多く、7割を超えました。「早く決めてほしい」という圧力は、税率の妥当性からではなく、この不信の大きさから生まれていた可能性があります。</p>
+
+  <a class="cta ghost" href="https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=after_timeline" target="_blank" rel="noopener"><span class="arrow">→</span>政治不信・公約の論点で語られた投稿をSNS反応まっぷで見る</a>
+
+  <h2>中身の検証は、まだこれから</h2>
+
+  <p>政府が制度の詳細まで決めたのに対して、SNSの会話は「誰を信じるか」の段階にとどまっていました。対象範囲は広がったのか、税率1%に効果はあるのか、支援金は誰が受け取れるのか——そうした中身への言及は、集めた投稿の中では少数でした。</p>
+
+  <p>ここには時期のずれもあります。今回集計した投稿は、大綱が決まった9月15日より前のものが中心です。就業者負担軽減支援金という名前も、税率1%という具体的な数字も、投稿された時点ではまだ固まっていませんでした。中身への反応は、これから増えていくはずです。</p>
+
+  <p class="tight">次回からは、その中身を一つずつ見ていきます。対象範囲は本当に広がらないのか、財源の話は何が決まっていて何が決まっていないのか。</p>
+
+  <a class="cta" href="https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=after_conclusion" target="_blank" rel="noopener"><span class="arrow">→</span>あなたの実感に近い論点に投票して、分布を見る</a>
+
+  <div class="series-box">
+    <div class="title">このシリーズについて・全4回</div>
+    <ol>
+      <li class="current">第1回　決まるまでの経緯（この記事）</li>
+      <li>第2回　対象範囲と財源</li>
+      <li>第3回　SNSの賛否そのもの</li>
+      <li>第4回　現金給付の設計</li>
+    </ol>
+  </div>
+
+  <a class="cta ghost" href="https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut1_20260921&utm_content=footer" target="_blank" rel="noopener"><span class="arrow">→</span>投票して、自分の立場も見てみる</a>
+
+  <footer class="datanote">
+    <p><strong>データについて</strong>：Yahoo!リアルタイム検索で取得した消費税減税についての公開投稿のうち、意見と判定した3,358件を集計。「公約と政治不信」論点に分類された1,198件の内訳は、減税推進722件（60.3%）・中立171件（14.3%）・慎重162件（13.5%）・条件付き賛成143件（11.9%）。「高市」という語を含む投稿は325件（27.1%）で、AIによる分類結果の要約・理由欄のテキストから機械的に集計したものです（原文そのものの集計ではありません）。世論調査の数値は内閣府「社会意識に関する世論調査」（令和7年10月調査）によります。制度の内容は内閣官房「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日決定）によります。分類はAIによるもので、代表投稿は編集部が選定しています。SNS投稿の集計であり、社会全体の意見分布を示す世論調査ではありません。</p>
+    <p>記事中の評価と主張は編集部のものです。</p>
+  </footer>
+
+  <details class="production">
+    <summary>制作メモ（読者には表示されません）</summary>
+    <ul>
+      <li class="done">図1（内訳グラフ）作成済み</li>
+      <li>見出し画像（1920×1006目安）の作成。図1のみでも公開可。作るなら政党・政治家を想起させない抽象モチーフ推奨（レシート・硬貨・グラフ等）。AI生成の人物写真を使う場合は記事末に生成物である旨の注記が必要</li>
+      <li>タグ5個の選定：編集部案 #消費税減税 #消費税 #政治 #データ分析 #物価高（note編集画面の候補を見て確定してよい）</li>
+      <li>マガジン新規作成（「消費税減税を読む」想定）</li>
+      <li class="done">UTMの公開予定日：2026-09-21に暫定更新済み（実際に投稿する日と違う場合は貼り付け前に直す。公開後の変更はGA4計測が分断される）</li>
+      <li>オーナー確認後、note下書き画面へ反映</li>
+    </ul>
+  </details>
+
+</div>
