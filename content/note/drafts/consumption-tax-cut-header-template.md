@@ -158,3 +158,11 @@ noteの公式推奨サイズ1280×670px・比率1.91:1と一致する。
 
 - 背景写真: `content/note/drafts/photos/consumption-tax-cut1-receipt-magnifier.png`
 - 合成後の見出し画像: `content/note/drafts/images/consumption-tax-cut1_note-header.png`
+
+## 確定版ファイル（第2回）
+
+- 背景写真: `content/note/drafts/photos/consumption-tax-cut2-shelf-frame.png`（モチーフ: 食品棚の一部を枠で囲む）
+- 合成後の見出し画像: `content/note/drafts/images/consumption-tax-cut2_note-header.png`
+- 数字→転換ワード: 「拡大37%」（ティール）→「変えない」（テラコッタ）
+- 写真がすでに1920×1006ぴったりだったため、`object-position`の調整（62% 50%等のシフト）は不要だった。
+  `object-position: 50% 50%`のままで十分。写真自体に左40%の余白が作り込まれている場合は毎回この点を確認すること
