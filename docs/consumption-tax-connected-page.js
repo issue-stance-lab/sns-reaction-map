@@ -81,6 +81,10 @@
   let selectingForQuiz=false;
   const claimIssue=claim=>data.issues.find(i=>i.claims.some(c=>c.id===claim.id)).id;
   const verdictLabel=value=>data.claims.find(c=>c.verdict===value)?.verdict_label||({fact:'資料どおり',gap:'少しずれる',miss:'裏が取れない'}[value]);
+  function returnToReading() {
+    quiz.active=false;mount();
+    panel.querySelector('[data-tax-read]')?.focus({preventScroll:true});
+  }
   function mount() {
     const aside=panel.querySelector('.tax-evidence');
     if(!aside){quiz.active=false;quizRoot.remove();return;}
@@ -91,7 +95,7 @@
       reading.append(...aside.childNodes);
       const controls=document.createElement('div');controls.className='tax-evidence-controls';controls.setAttribute('aria-label','資料の読み方');
       controls.innerHTML='<button type="button" data-tax-read>資料を読む</button><button type="button" data-tax-quiz>一次資料クイズ · '+data.claims.length+'問</button>';
-      controls.querySelector('[data-tax-read]').onclick=()=>{quiz.active=false;mount();};
+      controls.querySelector('[data-tax-read]').onclick=returnToReading;
       controls.querySelector('[data-tax-quiz]').onclick=()=>{quiz.active=true;showQuestion(quiz.position);};
       aside.append(controls,reading);
     }
@@ -110,7 +114,7 @@
       const score=data.claims.filter(c=>quiz.answers.get(c.id)===c.verdict).length;
       quizRoot.innerHTML='<h3>資料クイズの結果</h3><p class="tax-quiz-score">'+score+' / '+data.claims.length+'問正解</p><p>回答済み '+quiz.answers.size+'問。本文の資料と同じ内容で照合しています。</p><button type="button" data-tax-restart>最初の問題へ</button><button type="button" data-tax-finish>資料に戻る</button>';
       quizRoot.querySelector('[data-tax-restart]').onclick=()=>showQuestion(0);
-      quizRoot.querySelector('[data-tax-finish]').onclick=()=>{quiz.active=false;mount();};return;
+      quizRoot.querySelector('[data-tax-finish]').onclick=returnToReading;return;
     }
     const answer=quiz.answers.get(claim.id);
     quizRoot.innerHTML='<div class="qh" tabindex="-1"><span>問 '+(quiz.position+1)+' / '+data.claims.length+'</span><span>資料照合 '+esc(data.ocean.checked_on)+'</span></div>'
@@ -130,6 +134,7 @@
     const claim=data.claims[position];if(claim)map.selectIssue(claimIssue(claim));
     selectingForQuiz=false;renderQuiz();mount();
     const head=quizRoot.querySelector('.qh,h3');
+    head.tabIndex=-1;
     const bounds=head.getBoundingClientRect();if(bounds.top<110 || bounds.bottom>innerHeight)moveTo(head);else head.focus({preventScroll:true});
   }
   document.addEventListener('tax-map:render',mount);

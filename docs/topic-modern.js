@@ -393,9 +393,9 @@
     if (!participantSummary) {
       participantSummary = document.createElement('p');
       participantSummary.className = 'participant-vote-summary';
+      participantSummary.textContent = 'このサイトの参加者投票 n=集計中（訪問者の任意回答です）';
       result.insertBefore(participantSummary, card);
     }
-    participantSummary.textContent = 'このサイトの参加者投票 n=集計中（訪問者の任意回答です）';
 
     var voteSection = document.getElementById('vote-section');
     var voteTopic = voteSection && voteSection.dataset.voteTopic;

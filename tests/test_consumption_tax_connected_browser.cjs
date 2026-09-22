@@ -1,5 +1,5 @@
 /* 実データのローカル候補だけを操作する。投票・計測等の外部通信は遮断する。 */
-const {chromium} = require('playwright');
+const {chromium,webkit} = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -46,7 +46,10 @@ async function checkIssue(page, issue, mode, connection) {
   assert.doesNotMatch(await page.locator('#panel').innerText(), /NaN|Infinity/);
 }
 (async()=>{
-  const browser=await chromium.launch({headless:true});
+  const engine=process.env.TAX_BROWSER||'chromium';
+  assert.ok(['chromium','webkit'].includes(engine));
+  const browser=await ({chromium,webkit})[engine].launch({headless:true});
+  results.push({engine});
   try {
     for (const width of [1280,375,320]) {
       const {context,page,errors}=await contextFor(browser,{viewport:{width,height:900}});

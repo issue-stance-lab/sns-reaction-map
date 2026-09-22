@@ -98,13 +98,23 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
-    from consumption_tax_connected_content import correct_editorial, corrected_observations, render_templates, START as CONTENT_START, END as CONTENT_END
+    # 公開時に参加者数の修正版を取得する。将来の版番号は巻き戻さない。
+    source = source.replace('src="topic-modern.js?v=13"', 'src="topic-modern.js?v=14"')
+    from consumption_tax_connected_content import correct_editorial, corrected_observations, corrected_focus, render_templates, START as CONTENT_START, END as CONTENT_END
     from build_planet_data import static_editorial
     from html import escape
     data = planet_data(source)
     correct_editorial(data)
     encoded = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
     source = DATA_PATTERN.sub(lambda m: m[1] + encoded + m[3], source)
+    focus = corrected_focus(data)
+    source, n = re.subn(
+        r'(<div class="thirty-summary".*?<span class="conclusion-count"><b>)[\d,]+(</b>件</span>\s*<strong>).*?(</strong>\s*<span class="conclusion-detail">).*?(</span>)',
+        lambda m: m[1] + str(focus['count']) + m[2] + escape(focus['headline']) + m[3] + escape(focus['detail']) + m[4],
+        source, flags=re.S,
+    )
+    if n != 1:
+        raise ValueError('連動表示: 議論の中心の見出しが1か所ではありません')
     source, n = re.subn(r'<section id="editorial"[^>]*>.*?</section>',
                        lambda _: static_editorial(data).lstrip(), source, flags=re.S)
     if n != 1:
@@ -233,6 +243,16 @@ def validate(source: str) -> list[str]:
                 card = reading.select_one('[data-tax-policy="' + item["id"] + '"]')
                 if card and not {u for u, _ in item["links"]}.issubset({a.get("href") for a in card.select('a[href]')}):
                     problems.append(f"読書面の制度説明の出典が欠落しています: {iid}")
+            for key, attr, items in (
+                ("年表", "data-tax-timeline", [{"id": x["id"], "urls": {u for u, _ in x["links"]}}
+                                           for x in BACKGROUND_DATA["timeline"]]),
+                ("資料側", "data-tax-source-only", [{"id": x["id"], "urls": {s["url"] for s in x["sources"]}}
+                                                  for x in data["ocean"]["sunk_continents"]]),
+            ):
+                for item in items:
+                    card = reading.select_one(f'[{attr}="{item["id"]}"]')
+                    if card and not item["urls"].issubset({a.get("href") for a in card.select('a[href]')}):
+                        problems.append(f"読書面の{key}の出典が欠落しています: {iid} {item['id']}")
         if static and not static.get_text(strip=True):
             problems.append(f"静的本文が空です: {iid}")
         if posts:

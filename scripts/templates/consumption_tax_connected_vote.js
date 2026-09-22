@@ -11,17 +11,18 @@
   var selectedIssue=null;
   var step1=document.getElementById('vote-step1'),step2=document.getElementById('vote-step2'),result=document.getElementById('vote-result');
   var issueBtns=document.getElementById('vote-issue-btns'),stanceBtns=document.getElementById('vote-stance-btns');
-  function showVote(issue,stance){
+  function showVote(issue,stance,focus){
     selectedIssue=issue.id;step1.style.display='none';step2.style.display='none';result.style.display='block';
     document.getElementById('vote-position-label').textContent='論点：'+issue.k+'　賛否：'+stance.k;
     document.getElementById('vote-position-text').textContent=issue.desc;
     var text='消費税減税、私が最も気になる論点は「'+issue.k+'」。'+stance.k+'の立場です。';
     document.getElementById('share-x').href='https://x.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html');
+    if(focus){var heading=document.getElementById('vote-position-label');heading.tabIndex=-1;heading.focus();}
   }
   VOTE_ISSUES.forEach(function(issue){
     var button=document.createElement('button');button.type='button';button.className='vote-issue-btn';button.dataset.voteIssue=issue.id;
     button.innerHTML='<span class="vote-issue-icon">'+issue.icon+'</span><span class="vote-issue-title">'+issue.k+'</span>';
-    button.onclick=function(){selectedIssue=issue.id;step1.style.display='none';step2.style.display='block';};issueBtns.appendChild(button);
+    button.onclick=function(){selectedIssue=issue.id;step1.style.display='none';step2.style.display='block';stanceBtns.querySelector('button').focus();};issueBtns.appendChild(button);
   });
   STANCES.forEach(function(stance){
     var button=document.createElement('button');button.type='button';button.className='vote-stance-btn';button.dataset.voteStance=stance.id;
@@ -33,13 +34,14 @@
       try{
         var response=await VoteStore.cast({topicId:TOPIC,choiceIdx:CHOICES[issue.id][stance.id],storageKey:STORAGE_KEY,localValue:{issueIdx:issue.slot,stanceIdx:stance.slot}});
         if(response.duplicate)alert('24時間以内にすでに投票されています。前回の投票が集計されています。');
-        showVote(issue,stance);
+        showVote(issue,stance,true);
       }catch(error){console.error('Vote request failed:',error);alert(VoteStore.friendlyError(error));}
-      finally{buttons.forEach(function(b){b.disabled=false;});}
+      finally{buttons.forEach(function(b){b.disabled=false;});if(step2.style.display!=='none')button.focus({preventScroll:true});}
     };stanceBtns.appendChild(button);
   });
   document.getElementById('vote-redo-btn').onclick=function(){
     VoteStore.clear(STORAGE_KEY);selectedIssue=null;step1.style.display='block';step2.style.display='none';result.style.display='none';
+    issueBtns.querySelector('button').focus();
   };
   if(VoteStore.isRemote())document.getElementById('vote-redo-btn').style.display='none';
   try{

@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -105,6 +106,60 @@ class ConnectedRefreshTests(unittest.TestCase):
         self.assertIn('前回収集分11件と今回収集分23件', tide.get_text())
         self.assertNotIn('8月24日', tide.get_text())
         self.assertIn('consumption-tax-connected-page.js?v=4', page.read_text())
+
+    def test_sequential_refresh_finishing_and_number_sync_are_idempotent(self):
+        from build_consumption_tax_page import apply_public_counts
+        config = json.loads((ROOT / 'configs/theme-seo.json').read_text())
+        theme = next(t for t in config['themes'] if t['id'] == connected.TOPIC)
+        lesson = json.loads((ROOT / 'configs/classroom/consumption-tax-cut.json').read_text())
+        public = json.loads((ROOT / 'data/public/themes/consumption-tax-cut.json').read_text())
+        path = self.stage / 'sequential.html'
+        wave = sorted((ROOT / 'social-samples/updates/consumption-tax-cut').glob('*/classified.json'))[-1]
+        def pipeline(source):
+            _, source, failures = refresh(connected.TOPIC, source=source)
+            self.assertEqual(failures, [])
+            path.write_text(source)
+            adapter._apply_tide(ROOT, path, wave, wave.parent.name)
+            source = trust.apply_theme(path.read_text(), theme, config)
+            source = classroom.apply_theme(source, connected.TOPIC, lesson, public)
+            source = trust.apply_observations_only(source, theme)
+            return connected.apply(apply_public_counts(source))
+        first = pipeline(self.source)
+        self.assertEqual(pipeline(first), first)
+        self.assertEqual(connected.validate(first), [])
+        self.assertEqual(adapter.vote_fingerprint(first), adapter.vote_fingerprint(self.source))
+
+    def test_changed_aggregate_rank_refreshes_counts_focus_and_keeps_relationships(self):
+        from bs4 import BeautifulSoup
+        data = connected.planet_data(self.source)
+        finance = next(i for i in data['issues'] if i['id'].endswith('-finance-welfare'))
+        iid = finance['id']; stance = next(s for s in data['stances'] if s['id'].endswith('-support'))
+        # 本文を変えず、集計後の検証入力に財源・推進1000件を加える。正典ファイルには書かない。
+        finance['count'] += 1000; finance['stances'][stance['key']] += 1000; finance['intensity']['low'] += 1000
+        finance['top_stance'] = stance['key']; stance['count'] += 1000
+        data['totals']['collected'] += 1000; data['totals']['opinions'] += 1000
+        for mode in data['modes']:
+            if mode['id'] in ('all', stance['key']):
+                mode['counts'][iid] += 1000; mode['total'] += 1000
+            for key, count in mode['counts'].items():
+                mode['width_pct'][key] = count / mode['total'] * 100
+                mode['high_pct'][key] = mode['high_counts'][key] / count * 100 if count else 0
+        for issue in data['issues']:
+            issue['share_pct'] = issue['count'] / data['totals']['opinions'] * 100
+        data['issues'].sort(key=lambda i: -i['count'])
+        before = connected.content_index(connected.planet_data(self.source))
+        with patch('refresh_planet_section.bpd.build', return_value=data):
+            _, page, failures = refresh(connected.TOPIC, source=self.source)
+        # 表示は追従しても、未再読の論点が増えすぎた候補は既存の公開ゲートで止める。
+        self.assertEqual(failures, ['編集部が読み直した論点が意見の40%しかない（50%以上必要）'])
+        soup = BeautifulSoup(page, 'html.parser')
+        self.assertIn('1511', soup.select_one('#fb-' + iid).get_text())
+        self.assertIn('4890', soup.select_one('#stance-glance').get_text())
+        self.assertIn('1511', soup.select_one('.thirty-summary').get_text())
+        self.assertIn('減った分は誰が払うのか', soup.select_one('.thirty-summary').get_text())
+        self.assertEqual(connected.content_index(connected.planet_data(page)), before)
+        self.assertEqual(adapter.vote_fingerprint(page), adapter.vote_fingerprint(self.source))
+        self.assertEqual(connected.validate(page), [])
 
 
 if __name__ == "__main__":

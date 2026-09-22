@@ -27,7 +27,9 @@ class ConnectedContentTests(unittest.TestCase):
         cls.page = connected.apply(source, activate=True)
 
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):
-        self.assertEqual(connected.apply(self.original), self.original)
+        # 公開HTML自体が新表示になっても、未有効化の経路を独立して検査する。
+        inactive = self.page.replace(connected.START, '<!-- TAX_CONNECTED_DISABLED -->')
+        self.assertEqual(connected.apply(inactive), inactive)
         for path in (ROOT / "docs").glob("*-reaction-map.html"):
             if path.name.startswith("consumption-tax-cut-"):
                 continue
@@ -121,6 +123,19 @@ class ConnectedContentTests(unittest.TestCase):
         broken = self.page.replace('data-tax-reason="A"', 'data-missing-reason="A"')
         self.assertTrue(any('理由分類' in p for p in connected.validate(broken)))
 
+    def test_reading_timeline_and_source_only_need_their_own_sources(self):
+        for selector, label in [
+            ('#tax-reading-consumption-tax-cut-political-trust [data-tax-timeline]', '年表'),
+            ('#tax-reading-consumption-tax-cut-business-burden [data-tax-source-only]', '資料側'),
+        ]:
+            with self.subTest(label=label):
+                soup = BeautifulSoup(self.page, 'html.parser')
+                sources = soup.select_one(selector + ' .tax-sources')
+                url = sources.select_one('a')['href']
+                sources.decompose()
+                self.assertIsNotNone(soup.find('a', href=url), '同じ出典が他の欄に残っていても拒否する')
+                self.assertTrue(any('読書面の' + label + 'の出典' in p for p in connected.validate(str(soup))))
+
     def test_corrections_follow_changed_counts_and_keep_confirmation_dates(self):
         data = connected.planet_data(self.page)
         original_dates = (data['editorial']['checked_on'], data['ocean']['checked_on'])
@@ -139,6 +154,20 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertEqual((data['editorial']['checked_on'], data['ocean']['checked_on']), original_dates)
         self.assertEqual(content.pct(0, 0), '算出できません')
 
+    def test_focus_follows_counts_by_id_without_changing_vote_order(self):
+        data = connected.planet_data(self.page)
+        finance = next(i for i in data['issues'] if i['id'].endswith('-finance-welfare'))
+        finance.update(count=2000, label='表示名を変えても同じID')
+        next(i for i in data['issues'] if i['id'].endswith('-other'))['count'] = 3000
+        data['issues'].reverse()
+        source = connected.DATA_PATTERN.sub(lambda m: m[1] + json.dumps(data, ensure_ascii=False) + m[3], self.page)
+        page = connected.apply(source)
+        focus = BeautifulSoup(page, 'html.parser').select_one('.thirty-summary')
+        self.assertEqual(focus.select_one('b').get_text(), '2000')
+        self.assertEqual(focus.select_one('strong').get_text(), builder.ISSUE_META['財源と社会保障']['headline'])
+        from refresh_adapters.consumption_tax import vote_fingerprint
+        self.assertEqual(vote_fingerprint(page), vote_fingerprint(self.page))
+
     def test_source_only_items_keep_their_checked_population(self):
         data = connected.planet_data(self.page)
         item = data['ocean']['sunk_continents'][0]
@@ -155,7 +184,8 @@ class ConnectedContentTests(unittest.TestCase):
 
     def test_reading_counts_have_original_record_provenance(self):
         self.assertEqual(len(verified_selectors(self.page, ROOT)), 25 + 2 + 4)
-        self.assertEqual(verified_selectors(self.original, ROOT), {})
+        inactive = self.page.replace(connected.START, '<!-- TAX_CONNECTED_DISABLED -->')
+        self.assertEqual(verified_selectors(inactive, ROOT), {})
 
     def test_wrong_reason_count_fails_even_when_another_bucket_has_that_number(self):
         broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">455',

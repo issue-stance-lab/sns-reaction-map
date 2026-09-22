@@ -3,19 +3,22 @@
   'use strict';
   var node = document.getElementById('tax-connected-data');
   var map = window.ConsumptionTaxMap;
-  if (!node || !map || !document.documentElement.classList.contains('planet-live')) return;
+  if (!node) return;
+  // 山の初期化より前に例外が起きても、先に隠した静的本文を読める状態へ戻す。
+  function fallback() { document.documentElement.classList.remove('planet-live'); }
+  if (!map || !document.documentElement.classList.contains('planet-live')) return fallback();
   var index;
-  try { index = JSON.parse(node.textContent); } catch (_) { return; }
+  try { index = JSON.parse(node.textContent); } catch (_) { return fallback(); }
   var data = window.PLANET_DATA;
   var bar = document.getElementById('stance-glance');
   var panel = document.getElementById('panel');
-  if (!data || data.theme_id !== 'consumption-tax-cut' || !bar || !panel) return;
+  if (!data || data.theme_id !== 'consumption-tax-cut' || !bar || !panel) return fallback();
   var buttons = bar.querySelectorAll('.sg-pick-btn');
   var stanceIds = index.stances.map(function (s) { return s.id; });
   var buttonIds = Array.from(buttons, function (b) { return b.dataset.stanceId; });
   if (buttons.length !== stanceIds.length || new Set(buttonIds).size !== stanceIds.length ||
-      buttonIds.some(function (id) { return !stanceIds.includes(id); })) return;
-  if (data.issues.some(function (it) { return !document.getElementById('tax-reading-' + it.id); })) return;
+      buttonIds.some(function (id) { return !stanceIds.includes(id); })) return fallback();
+  if (data.issues.some(function (it) { return !document.getElementById('tax-reading-' + it.id); })) return fallback();
 
   var views = new Map(); // 展開した詳細・埋め込みのDOMを再利用する。閲覧状態のコピーではない。
   var fmt = function (n) { return n.toLocaleString('ja-JP'); };

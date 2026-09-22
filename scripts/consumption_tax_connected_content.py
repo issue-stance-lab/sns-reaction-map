@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from html import escape
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 
@@ -15,6 +16,17 @@ def e(value) -> str:
 
 def pct(n: int, total: int) -> str:
     return f"{100 * n / total:.1f}%" if total else "算出できません"
+
+
+def corrected_focus(data: dict) -> dict:
+    """投票の固定順と分け、最大論点のIDから既存の見出し原稿を選ぶ。"""
+    import yaml
+    from build_consumption_tax_page import ISSUE_META
+    config = yaml.safe_load((Path(__file__).resolve().parents[1] / 'configs/planet/consumption-tax-cut.yaml').read_text())
+    issue = max((i for i in data['issues'] if i['id'] != 'consumption-tax-cut-other'), key=lambda i: i['count'])
+    key = next(i['key'] for i in config['issues'] if i['id'] == issue['id'])
+    meta = ISSUE_META[key]
+    return {'id': issue['id'], 'count': issue['count'], 'headline': meta['headline'], 'detail': meta['focus']}
 
 
 def corrected_observations(data: dict) -> list[str]:
