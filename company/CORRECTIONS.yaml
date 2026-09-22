@@ -1,9 +1,35 @@
 version: 1
-updated_at: "2026-09-06"
+updated_at: "2026-09-22"
 
 # 訂正、一時非公開、引用削除依頼の受付と対応を記録する。
 # 個人情報や連絡先そのものはここに保存しない。
 items:
+  - id: correction-20260922-001
+    received_at: "2026-09-22"
+    department: growth-marketing
+    summary: "課題77の消費税ページ再配置に伴う予想の答え・古い集計文・順位表現の訂正"
+    status: in_progress
+    verification_status: verified
+    approval_id: approval-20260922-001
+    affected_themes:
+      - consumption-tax-cut
+    reason: >-
+      内容の対応確認で、予想Q1の「差はわずか」、Q2の件数と強い表現の割合の混同、
+      古い集計値が残る観察記録、事業者の実務負担が全論点で最少という記述を検出した。
+    correction_plan: >-
+      Q1は推進1834件・慎重1035件の差799件、Q2は対象範囲885件中464件・52.4%という割合を示す。
+      観察記録は現在の公開集計へ同期し、事業者の実務負担は112件・2.9%という量として記述する。
+      値は元データから生成し、投票番号・収集数・制度や資料の確認日は維持する。
+    evidence:
+      - "quality/designs/2026-09-22-task77-consumption-tax-content-contract.md"
+      - "quality/reviews/2026-09-22-task77-tax-selection-motion.md"
+      - "quality/reviews/2026-09-22-task77-tax-publication.md"
+    next_action: "承認候補を公開し、配信と表示を確認する"
+    published_urls:
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+    published_at: null
+    resolved_at: null
+
   - id: correction-20260906-001
     received_at: "2026-09-06"
     department: engineering-data
