@@ -34,10 +34,6 @@ REMAINING_HEROES = {
         "path": ("henoko-student-accident", "henoko-hero.webp"), "size": (1726, 911),
         "ogp": "ogp/henoko-student-accident.png",
     },
-    "takaichi": {
-        "page": "takaichi-reaction-map-standard.html", "asset": "takaichi-hero.webp",
-        "path": ("takaichi", "takaichi-hero.webp"), "size": (1718, 916), "ogp": "ogp/takaichi.png",
-    },
     "fukushuto": {
         "page": "fukushuto-reaction-map.html", "asset": "fukushuto-hero.webp",
         "path": ("fukushuto", "fukushuto-hero.webp"), "size": (1727, 910),

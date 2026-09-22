@@ -6,7 +6,6 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.refresh_adapters import takaichi
 ROOT = Path(__file__).resolve().parents[1]
 
 from scripts.refresh_topic import (
@@ -377,28 +376,6 @@ class RefreshTopicTests(unittest.TestCase):
             history = root / "social-samples/updates/topic/2026-08-04"
             self.assertFalse(history.exists())
 
-    @unittest.skipUnless(
-        (ROOT / "social-samples/takaichi_hermes_arena_classified.json").exists(),
-        "高市文春問題の非公開正典（2026-09-20にGit追跡から除外）が無い環境では回せない",
-    )
-    def test_takaichi_adapter_preserves_vote_and_is_idempotent(self):
-        source = json.loads(
-            (ROOT / "social-samples/takaichi_hermes_arena_classified.json").read_text(encoding="utf-8")
-        )
-        added = classified("refresh-topic-adapter-test")
-        with tempfile.TemporaryDirectory() as directory:
-            stage = Path(directory)
-            write_json(stage / "cumulative-candidate.json", source + [added])
-            write_json(stage / "classified-wave.json", [added])
-            targets = takaichi.build(ROOT, stage, "2026-08-06")
-            page = targets[takaichi.PAGE].read_text(encoding="utf-8")
-            self.assertEqual(
-                takaichi.vote_fingerprint(page),
-                takaichi.vote_fingerprint((ROOT / takaichi.PAGE).read_text(encoding="utf-8")),
-            )
-            self.assertIn("7月26日 → 8月6日", page)
-
-
 class MultiTopicPromotionTests(unittest.TestCase):
     """課題59: 複数テーマの公開候補を1つへ束ねる仕組み。"""
 
@@ -604,7 +581,7 @@ class AdapterImportTest(unittest.TestCase):
     テーマ別adapterを読み込めること。2026-08-07 の takaichi 公開はここで落ちた。"""
 
     def test_adapter_loads_when_only_scripts_dir_is_on_path(self):
-        for name in ("takaichi", "bukatsu", "koshitsu"):
+        for name in ("bukatsu", "koshitsu"):
             with self.subTest(adapter=name):
                 result = subprocess.run(
                     [

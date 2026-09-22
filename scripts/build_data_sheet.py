@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""11テーマのデータの中身を1枚にまとめた `DATA_SHEET.md` を生成する。
+"""公開テーマのデータの中身を1枚にまとめた `DATA_SHEET.md` を生成する。
 
 手で書くと必ず古くなるので、正典データ（THEMES.yaml の sample_file）と
 公開ページから毎回作り直す。数字はこのスクリプトの出力だけを信じる。
@@ -78,7 +78,7 @@ def theme_rows() -> list[dict]:
 
 def render(rows: list[dict]) -> str:
     out = [
-        "# DATA_SHEET — 11テーマのデータの中身",
+        f"# DATA_SHEET — {len(rows)}テーマのデータの中身",
         "",
         "`scripts/build_data_sheet.py` が生成する。**手で書き換えない。**",
         "数字の出所は THEMES.yaml の `sample_file`（正典データ）と公開ページ。",

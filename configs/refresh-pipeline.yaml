@@ -28,9 +28,6 @@ topics:
     # 10件ずつ投げると応答が空で返るため、このモデルでは5件ずつに割る。
     classifier_args: ["--keep-duplicates", "--model", "kimi-k2.7-code", "--batch-size", "5"]
     adapter: henoko
-  takaichi:
-    classifier: scripts/classify_takaichi_arena_hermes.py
-    adapter: takaichi
   fukushuto:
     classifier: scripts/classify_fukushuto_arena_hermes.py
     adapter: fukushuto

@@ -70,7 +70,7 @@ def match_completion(report, queues, work):
 
 def recompute(root, private, shared, *, expected_themes_sha256=None,
               expected_initial=10620, expected_public_themes=10,
-              expected_canonical_files=11):
+              expected_canonical_files=10):
     root, private, shared = (Path(p).resolve() for p in (root, private, shared))
     if expected_themes_sha256 is None:
         baseline_bytes = subprocess.check_output(
