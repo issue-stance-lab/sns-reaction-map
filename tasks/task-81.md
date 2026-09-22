@@ -193,3 +193,25 @@ git push
    （それぞれ古いTHEMES.yamlを見て計算するため）まれに再発しうる。課題81は現状
    「1日1テーマまで」なので発生確率は低いが、実際に再発したら
    `verify_themes_yaml.py`が検出するので、その時点で対策要否を判断する
+
+## 2026-09-22: 初回の実運用（部活動の地域移行）
+
+X日次（朝枠）の開始時に `collection-bridge.md` の手順で実施。
+
+- **対象の選び方**: 期限超過は takaichi（26日超過）だけだったが、非掲載テーマで、課題78で本文付きデータを
+  公開リポジトリから外す方針だったため**AIの判断で除外**し、当日が予定日の bukatsu-chiiki を集めた。
+  手順書にはこの除外の規定がない。オーナー判断で、takaichi の扱いは別セッションで対応する
+- **結果**: Yahooリアルタイム検索10クエリで301件、新規108件（意見82件）。分類モデルは kimi-k2.6
+  （`config.yaml:model.default`）。外付けディスクへのバックアップと復元確認はOK。次回予定 2026-09-29
+- **所要時間**: 約30分（08:20開始、08:51にバックアップ完了）。この間にX側の計測・候補探しを並行できた
+- **hermes費用**: 未確認（ログに費用の出力がない）
+- **worktree**: `../isa-wt-collect-bukatsu-chiiki` を新規作成。手順どおり削除せず残した
+- **手順の穴（2件、同日に直した）**
+  1. 新しい更新回を `data/verification/updates/` に追加すると、公開ファイルの検査
+     （`verify_adoption_registry.py`）が「new verification wave is outside snapshot」で落ちる。
+     `build_adoption_registry.py` で採用台帳を作り直す工程が手順書に無かった（9/20の他テーマ収集時の前例
+     `6ba02143` あり）。あわせて `data_asset_inventory.py` と `run_public_checks.py` も手順へ追加した
+  2. 共有ツリーに別セッションの未コミット変更（`company/data-backup-status.json`）があり、
+     手順どおりの `git merge` が止まった。共有ツリーには触れず、収集worktreeで `origin/main` を取り込み、
+     検査を通してから `git push origin HEAD:main` で送った。この迂回路も手順へ追記した
+- **main反映**: `d9db55ae`。CI「公開ファイルの検査」「Deploy to GitHub Pages」とも成功

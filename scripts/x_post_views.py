@@ -33,6 +33,18 @@ _NUMBERED_URL_RE = re.compile(r"(\d+)\s*=\s*https://x\.com/sns_hannou_ma/status/
 _URL_LABEL_RE = re.compile(r"^自リプライURL(?:\s+(\d+))?:\s*(.*)$")
 _MEASURED_RE = re.compile(r"^\*{0,2}\s*[0-9][0-9,]*(?:\.[0-9]+)?\s*(?:万|[KkMm])?")
 
+# 「投稿URL:」と「表示回数:」の2行で記録する節（課題67）。
+# 論点ポスト以外は、表示回数: 行を持たない旧形式（「計測:」行・投稿URL無し）が残っており、
+# それらはすでに測り終えているので、表示回数: 行がある節だけを計測待ちにする。
+_POST_SECTION_KINDS = {
+    "論点ポスト実績": "論点ポスト",
+    "通常ポスト実績": "通常ポスト",
+    "流入投稿実績": "流入投稿",
+    "引用RT実績": "引用RT",
+    "引用リポスト実績": "引用RT",
+}
+_VIEW_LINE_REQUIRED = {"通常ポスト実績", "流入投稿実績", "引用RT実績", "引用リポスト実績"}
+
 
 @dataclass(frozen=True)
 class PendingPost:
@@ -89,7 +101,7 @@ def _sections(lines: list[str]) -> list[tuple[int, int, str, str]]:
 
 
 def find_pending(text: str, now: dt.datetime) -> list[PendingPost]:
-    """未計測のリプライ・論点ポスト・会話フォローを返す。"""
+    """未計測のリプライ・論点ポスト・通常ポスト・流入投稿・引用RT・会話フォローを返す。"""
     if now.tzinfo is None:
         raise ValueError("now にはタイムゾーンが必要です")
     lines = text.splitlines()
@@ -117,8 +129,14 @@ def find_pending(text: str, now: dt.datetime) -> list[PendingPost]:
                         continue
                     rows[cells[number_col]] = (i, cells[own_col], cells[1])
 
+                # 節の中に「### 会話フォロー」が続く場合、その自リプライURLは表の行ではない。
+                # 表の行に数えると、会話フォローの表示回数が返信先の表へ書き込まれる（課題76の続き）。
+                reply_end = next(
+                    (i for i in range(header_index + 1, end) if lines[i].startswith("### ")),
+                    end,
+                )
                 url_lines = [
-                    (i, m) for i in range(header_index + 1, end)
+                    (i, m) for i in range(header_index + 1, reply_end)
                     if (m := _URL_LABEL_RE.match(lines[i]))
                 ]
                 for _i, label_match in url_lines:
@@ -147,12 +165,14 @@ def find_pending(text: str, now: dt.datetime) -> list[PendingPost]:
                             row_number=row_number,
                         ))
 
-        if kind == "論点ポスト実績":
+        if kind in _POST_SECTION_KINDS:
             url_index = next((i for i in body_indexes if lines[i].startswith("投稿URL:")), None)
             if url_index is not None:
                 match = _STATUS_RE.search(lines[url_index])
                 view_index = next((i for i in range(url_index + 1, end) if lines[i].startswith("表示回数:")), None)
                 view_value = lines[view_index].split(":", 1)[1] if view_index is not None else ""
+                if view_index is None and kind in _VIEW_LINE_REQUIRED:
+                    match = None
                 if match and _is_missing(view_value):
                     status_id = match.group(1)
                     posted_at = post_datetime(status_id)
@@ -160,7 +180,7 @@ def find_pending(text: str, now: dt.datetime) -> list[PendingPost]:
                     pending.append(PendingPost(
                         status_id=status_id,
                         url=match.group(0),
-                        kind="論点ポスト",
+                        kind=_POST_SECTION_KINDS[kind],
                         posted_at=posted_at,
                         age_hours=age,
                         timing=_age_label(age),
@@ -234,6 +254,25 @@ def _measurement_text(
     if reposts is not None:
         extra += f"・リポスト{reposts:,}"
     return f"**{views:,}**（{measured_at:%Y-%m-%d %H:%M}計測・投稿から約{hours}時間後{extra}）"
+
+
+def unrecognized_sections(text: str) -> list[str]:
+    """計測待ちを出す対象になっていない「○○実績」節のうち、未計測の自投稿を含むものを返す。
+
+    新しい種類の見出しを作ったとき、計測待ちに黙って出てこない状態を防ぐ（課題67）。
+    """
+    known = {"リプライ実績", *_POST_SECTION_KINDS}
+    lines = text.splitlines()
+    found: list[str] = []
+    for start, end, kind, _date in _sections(lines):
+        if kind in known or not kind.endswith("実績"):
+            continue
+        body = lines[start + 1:end]
+        has_own_url = any(line.startswith("投稿URL:") and _STATUS_RE.search(line) for line in body)
+        view_lines = [line for line in body if line.startswith("表示回数:")]
+        if has_own_url and view_lines and any(_is_missing(v.split(":", 1)[1]) for v in view_lines):
+            found.append(lines[start])
+    return found
 
 
 def apply_measurements(text: str, measurements: dict[str, int], measured_at: dt.datetime) -> str:
@@ -386,6 +425,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "pending":
         now = _parse_measured_at(args.now)
         items = find_pending(text, now)
+        for heading in unrecognized_sections(text):
+            print(f"警告: 計測待ちの対象外の見出しに未計測の投稿があります（x_post_views.py の _POST_SECTION_KINDS に追加すること）: {heading}", file=sys.stderr)
         if not args.all:
             items = [item for item in items if item.timing != "waiting"]
         if args.json:

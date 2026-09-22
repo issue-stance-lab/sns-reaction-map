@@ -83,6 +83,76 @@ class XPostViewsTests(unittest.TestCase):
         self.assertEqual({item.status_id for item in pending}, {FOLLOW_ID})
         self.assertEqual(pending[0].kind, "会話フォロー")
 
+    def test_follow_block_url_is_not_taken_as_a_table_row(self):
+        """節の中の「### 会話フォロー」の自リプライURLを、上の表の行として数えない（課題76の続き）。
+
+        数えると、計測済みの会話フォローが「返信先の表の行が未計測」として一覧に出て、
+        apply で会話フォローの表示回数が返信先の表へ書き込まれる（2026-09-22に発覚）。
+        """
+        sample = f"""## リプライ実績 2026-08-10
+
+| # | リプライ先 | テーマ | タイプ | 元投稿views | 自リプライ表示 | 元投稿の返信数 | 元投稿からの経過 |
+|---|---|---|---|---|---|---|---|
+| 1 | @parent（元の返信先） | A | URLなし | 100 | 未計測（投稿直後） | 1 | 1時間 |
+
+### 会話フォロー 2026-08-10（投稿済み）
+
+自リプライURL: https://x.com/sns_hannou_ma/status/{FOLLOW_ID}
+
+表示回数: **19**（計測済み）
+"""
+        self.assertEqual(x_post_views.find_pending(sample, self.now), [])
+        # 計測済みの会話フォローへの上書きは拒否され、表の行にも書き込まれない
+        with self.assertRaises(ValueError):
+            x_post_views.apply_measurements(sample, {FOLLOW_ID: 21}, self.now)
+
+    def test_url_post_and_quote_rt_sections_are_listed(self):
+        """URL付きの通常ポスト・流入投稿・引用RTも計測待ちに出る（課題67）。"""
+        sample = f"""## 通常ポスト実績 2026-08-10（URL付き流入投稿・今週1本目）
+
+投稿URL: https://x.com/sns_hannou_ma/status/{TABLE_ID}（投稿）
+
+リンク先: https://sns-reaction-map.jp/example.html?utm_source=x
+
+表示回数: 未計測（投稿直後）
+
+## 引用RT実績 2026-08-09（昼枠）
+
+投稿URL: https://x.com/sns_hannou_ma/status/{FOLLOW_ID}（投稿）
+
+引用元: https://x.com/example/status/1
+
+表示回数: 未計測（投稿直後）
+"""
+        pending = {item.status_id: item.kind for item in x_post_views.find_pending(sample, self.now)}
+        self.assertEqual(pending, {TABLE_ID: "通常ポスト", FOLLOW_ID: "引用RT"})
+        updated = x_post_views.apply_measurements(sample, {TABLE_ID: 31, FOLLOW_ID: 44}, self.now)
+        self.assertIn("表示回数: **31**", updated)
+        self.assertIn("表示回数: **44**", updated)
+        self.assertEqual(x_post_views.find_pending(updated, self.now), [])
+
+    def test_old_url_post_without_view_line_is_not_listed(self):
+        """「表示回数:」行の無い旧形式の通常ポストは測り終えているので出さない（課題67）。"""
+        sample = f"""## 通常ポスト実績 2026-08-10
+
+投稿URL: https://x.com/sns_hannou_ma/status/{TABLE_ID}
+
+計測: 185表示（2026-08-11）
+"""
+        self.assertEqual(x_post_views.find_pending(sample, self.now), [])
+
+    def test_unknown_result_heading_with_unmeasured_post_is_reported(self):
+        """知らない種類の「○○実績」見出しに未計測の投稿があれば、黙って落とさず報告する（課題67）。"""
+        sample = f"""## 新しい形式実績 2026-08-10
+
+投稿URL: https://x.com/sns_hannou_ma/status/{TABLE_ID}
+
+表示回数: 未計測（投稿直後）
+"""
+        self.assertEqual(x_post_views.find_pending(sample, self.now), [])
+        self.assertEqual(x_post_views.unrecognized_sections(sample), ["## 新しい形式実績 2026-08-10"])
+        self.assertEqual(x_post_views.unrecognized_sections(SAMPLE), [])
+
     def test_follow_without_own_url_is_not_listed(self):
         """「（送信なし）」の節は自リプライURLが無いので計測対象にしない。"""
         sample = """## リプライ実績 2026-08-10
