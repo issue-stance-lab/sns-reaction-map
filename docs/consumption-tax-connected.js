@@ -99,16 +99,16 @@
   map.activate();
   var hash = location.hash.slice(1).replace(/^(issue-|fb-)/, '');
   var initial = index.issues[hash] ? hash : (map.getState().issueId || index.default_issue_id);
-  map.selectIssue(initial);
+  map.selectIssue(initial, {history:'replace', preserveHash:!!location.hash && !index.issues[hash]});
 
   // 必要な投稿だけ公式埋め込みを読み込む。元の投稿リンクは常に残す。
   panel.addEventListener('toggle', function (event) {
     var details = event.target;
-    if (!details.open) return;
+    if (!details.open || !details.getClientRects().length || document.body.classList.contains('tax-printing')) return;
     if (details.matches('.tax-embed') && window.twttr && window.twttr.widgets) window.twttr.widgets.load(details);
     var visit = details.dataset.taxClaim ? 'c:' + details.dataset.taxClaim
       : details.dataset.taxConcern ? 'v:' + details.dataset.taxConcern
-      : details.dataset.taxSourceOnly ? 'o:' + details.dataset.taxSourceOnly : null;
+      : details.dataset.taxSourceOnly ? 's:' + details.dataset.taxSourceOnly : null;
     if (visit) map.visit(visit);
   }, true);
 

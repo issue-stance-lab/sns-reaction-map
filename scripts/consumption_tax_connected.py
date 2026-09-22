@@ -139,6 +139,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         if n != 1:
             raise ValueError(f"連動表示: {name} の本文が1組ではありません")
     source = _bridge(source)
+    from consumption_tax_connected_vote import apply as connect_vote
+    source = connect_vote(source, data)
     content = render_templates(data, source, index)
     if CONTENT_START in source:
         source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), lambda _: content, source, flags=re.S)
@@ -146,9 +148,10 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = source.replace('</body>', content + '\n</body>', 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
-        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=2">\n'
+        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=4">\n'
         '<script id="tax-connected-data" type="application/json">' + payload + '</script>\n'
-        '<script src="consumption-tax-connected.js?v=2" defer></script>\n' + END
+        '<script src="consumption-tax-connected.js?v=4" defer></script>\n'
+        '<script src="consumption-tax-connected-page.js?v=4" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -193,8 +196,9 @@ def validate(source: str) -> list[str]:
 
     for selector in ("#stance-glance", "#planet-block", "#panel", "#list", "#vote-section",
                      "#bg-title", "#ck-title", "#claim-audit", "#issue-cards", "#guesses", "#quiz", "#ocean",
-                     'link[href="consumption-tax-connected.css?v=2"]',
-                     'script[src="consumption-tax-connected.js?v=2"][defer]'):
+                     'link[href="consumption-tax-connected.css?v=4"]',
+                     'script[src="consumption-tax-connected.js?v=4"][defer]',
+                     'script[src="consumption-tax-connected-page.js?v=4"][defer]'):
         one(selector)
     if source.count(BRIDGE_START) != 1 or source.count(BRIDGE_END) != 1:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")

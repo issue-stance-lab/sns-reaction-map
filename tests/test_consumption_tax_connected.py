@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import build_consumption_tax_page as builder
 import consumption_tax_connected as connected
 import consumption_tax_connected_content as content
+import consumption_tax_connected_vote as vote
 from consumption_tax_count_provenance import verified_selectors
 
 
@@ -96,7 +97,8 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertTrue(any("接続表" in p for p in connected.validate(source)))
 
     def test_missing_runtime_or_source_only_content_is_rejected(self):
-        for before, after in [('consumption-tax-connected.js?v=2', 'missing.js'),
+        for before, after in [('consumption-tax-connected.js?v=4', 'missing.js'),
+                              ('consumption-tax-connected-page.js?v=4', 'missing.js'),
                               ('class="sunk"', 'class="missing-source"'),
                               (connected.BRIDGE_START, '/* missing bridge */')]:
             with self.subTest(before=before):
@@ -172,6 +174,24 @@ class ConnectedContentTests(unittest.TestCase):
             node.string = node.get_text(types=None).replace(before, after)
             with self.subTest(element_id=element_id), self.assertRaisesRegex(ValueError, '数字が元記録'):
                 verified_selectors(str(soup), ROOT)
+
+    def test_vote_ids_preserve_all_published_storage_numbers(self):
+        contract = json.loads((ROOT / 'quality/designs/2026-09-22-task77-consumption-tax-content-contract.json').read_text())['vote']
+        choices = json.loads(re.search(r'var CHOICES=(.*?);', self.page)[1])
+        self.assertEqual(sum(len(v) for v in choices.values()), 28)
+        for row in contract['choices']:
+            self.assertEqual(choices[row['issue_id']][row['stance_id']], row['choice_idx'])
+
+    def test_unregistered_vote_issue_is_rejected(self):
+        data = connected.planet_data(self.page)
+        data['issues'][0]['id'] = 'unregistered'
+        with self.assertRaisesRegex(ValueError, '投票の固定ID'):
+            vote.registry(data)
+
+    def test_changed_vote_meaning_is_rejected(self):
+        broken = self.page.replace("k:'公約・政治不信'", "k:'別の論点'")
+        with self.assertRaisesRegex(ValueError, '投票の並び・意味'):
+            vote.apply(broken, connected.planet_data(broken))
 
 
 if __name__ == "__main__":

@@ -86,6 +86,26 @@ class ConnectedRefreshTests(unittest.TestCase):
         self.assertEqual(connected.validate(first), [])
         self.assertIn('id="classroom-title"', first)
 
+    def test_tide_uses_supplied_waves_instead_of_prototype_dates_and_counts(self):
+        # 本文を再分類せず、隔離した更新回を渡して表示データの追従だけを確認する。
+        root = self.stage / 'changed-waves'
+        rows = json.loads(CANONICAL.read_text())
+        opinions = [r for r in rows if r.get('classification', {}).get('is_opinion')
+                    and r['classification'].get('is_relevant')]
+        previous = root / 'social-samples/updates/consumption-tax-cut/2026-09-20/classified.json'
+        current = root / 'social-samples/updates/consumption-tax-cut/2026-09-21/classified.json'
+        for path, count in ((previous, 11), (current, 23)):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(opinions[:count], ensure_ascii=False))
+        page = root / 'candidate.html'; page.write_text(self.source)
+        adapter._apply_tide(root, page, current, '2026-09-21')
+        from bs4 import BeautifulSoup
+        tide = BeautifulSoup(page.read_text(), 'html.parser').select_one('#consumption-tax-cut-tide-widget')
+        self.assertIn('9月20日 → 9月21日', tide.get_text())
+        self.assertIn('前回収集分11件と今回収集分23件', tide.get_text())
+        self.assertNotIn('8月24日', tide.get_text())
+        self.assertIn('consumption-tax-connected-page.js?v=4', page.read_text())
+
 
 if __name__ == "__main__":
     unittest.main()

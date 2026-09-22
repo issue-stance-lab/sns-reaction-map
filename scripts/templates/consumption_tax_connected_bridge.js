@@ -1,5 +1,16 @@
 // 閲覧状態は既存の st だけに持つ。投票・資料クイズ・潮目の状態は独立。
 let taxConnectedReady = false;
+// 工程3の o: は既存の s: と同じ地点。古い記録を統合し、未知の地点を数えない。
+const taxSpots = new Set(['g1','g2', ...issues.map(i=>'i:'+i.id), ...D.claims.map(c=>'c:'+c.id),
+  ...D.ocean.sunk_continents.map(s=>'s:'+s.id), ...D.ocean.veins.map(v=>'v:'+v.id)]);
+const taxSaved = [...seen];
+seen.clear();
+taxSaved.forEach(id=>{const key=String(id).replace(/^o:/,'s:');if(taxSpots.has(key))seen.add(key);});
+if (JSON.stringify(taxSaved)!==JSON.stringify([...seen])) {
+  try {localStorage.setItem('isa-seen-'+D.theme_id,JSON.stringify([...seen]));} catch(_){}
+}
+const taxLegacyVisit = visit;
+visit = function(id){const key=String(id).replace(/^o:/,'s:');if(taxSpots.has(key))taxLegacyVisit(key);};
 function taxState(){
   const stance = D.stances.find(s => s.key === st.mode);
   return Object.freeze({stanceId: stance ? stance.id : "all", issueId: st.landed === null ? null : issues[st.landed].id});
@@ -55,30 +66,52 @@ function taxAnimate(from, to){
   }
   taxAnimation=requestAnimationFrame(frame);
 }
-land = function(i){
+function taxHistory(options={}) {
+  if(options.history==='none')return;
+  const state=taxState(), url=new URL(location.href);
+  if(!options.preserveHash)url.hash=state.issueId||'';
+  const previous=history.state && history.state.taxMap;
+  const next={...history.state,taxMap:state};
+  const replace=!taxConnectedReady || options.history==='replace' ||
+    (previous && previous.issueId===state.issueId && previous.stanceId===state.stanceId && url.href===location.href);
+  history[replace?'replaceState':'pushState'](next,'',url);
+}
+land = function(i, options={}){
   if (!Number.isInteger(i) || !issues[i]) return;
   st.landed=i;
   visit('i:'+issues[i].id);
-  const url=new URL(location.href); url.hash=issues[i].id;
-  history.replaceState(null, '', url);
+  taxHistory(options);
   evacuateChart(); syncList(); drawPanel(); render(); placeChart(); taxPublish();
 };
 const taxLegacyMorph = morphTo;
-morphTo = function(mode){
+morphTo = function(mode, options={}){
   if (!modeById[mode]) return;
   if (!taxConnectedReady) { taxLegacyMorph(mode); taxPublish(); return; }
   if (mode===st.mode) return;
   const from=taxVisual || taxLayout(st.mode);
   st.prevRank=ranksOf(st.mode); st.mode=mode;
+  taxHistory(options);
   // 選択中の論点が0件でも、理由・資料への入口を残す。
   syncList(); drawPanel(); taxPublish(); taxAnimate(from, taxLayout(mode));
 };
-orbit = function(){
+orbit = function(options={}){
   if (document.querySelector('#explainer-modal.open')) return;
   st.landed=null;
-  const url=new URL(location.href); url.hash=''; history.replaceState(null, '', url);
+  taxHistory(options);
   evacuateChart(); syncList(); drawPanel(); render(); taxPublish();
 };
+function taxRestore(){
+  if(!taxConnectedReady)return;
+  const hash=location.hash.slice(1).replace(/^(issue-|fb-)/,''), saved=history.state && history.state.taxMap;
+  const issueId=Object.prototype.hasOwnProperty.call(idIndex,hash)?hash:saved?.issueId;
+  if(saved){const stance=D.stances.find(s=>s.id===saved.stanceId);morphTo(stance?stance.key:'all',{history:'none'});}
+  if(issueId && Object.prototype.hasOwnProperty.call(idIndex,issueId))land(idIndex[issueId],{history:'none'});
+  else if(issueId===null)orbit({history:'none'});
+  // 共通の旧hashchange処理が同じ論点をもう一度クリックしないよう正規化する。
+  taxHistory({history:'replace',preserveHash:!Object.prototype.hasOwnProperty.call(idIndex,hash)});
+}
+addEventListener('popstate',taxRestore);
+addEventListener('hashchange',taxRestore);
 
 // 既存の予想2問。全意見の実数で判定し、丸め前の同率も正解として扱う。
 buildGuesses = function(){
@@ -125,10 +158,10 @@ buildGuesses = function(){
 window.ConsumptionTaxMap = Object.freeze({
   getState:taxState,
   activate:function(){ taxConnectedReady=true; evacuateChart(); dotBox.hidden=true; taxPublish(); },
-  selectIssue:function(id){
-    if(id===null){orbit();return true;}
+  selectIssue:function(id,options){
+    if(id===null){orbit(options);return true;}
     if(!Object.prototype.hasOwnProperty.call(idIndex,id))return false;
-    land(idIndex[id]);return true;
+    land(idIndex[id],options);return true;
   },
   selectStance:function(id){
     const stance=D.stances.find(s=>s.id===id);

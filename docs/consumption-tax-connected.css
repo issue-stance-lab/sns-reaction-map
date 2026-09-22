@@ -99,3 +99,74 @@
 .tax-connected #guesses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
 .tax-connected #guesses .guess { margin:0; }
 @media(max-width:760px) { .tax-connected #guesses { grid-template-columns:1fr; } }
+
+/* 工程4: 山のまわりは静かに。日付と資料の読み方だけを選べるようにする。 */
+.tax-connected .tax-status { margin:20px 0; padding:18px 22px; border-left:3px solid var(--tax-link); background:#fff; border-radius:0 10px 10px 0; }
+.tax-connected .tax-status p { margin:5px 0; font-size:13px; line-height:1.85; }
+.tax-connected .tax-status .tax-eyebrow { font-size:11px; color:#637089; }
+.tax-connected .tax-status a { display:inline-block; margin-top:8px; font-size:12px; }
+.tax-connected #bg-title, .tax-connected #panel h2, .tax-connected .tax-evidence, .tax-connected #quiz .qh, .tax-connected #quiz h3 { scroll-margin-top:120px; }
+.tax-connected .tax-timeline-nav { display:flex; gap:8px; margin:22px 0 14px; }
+.tax-connected .tax-timeline-nav button { flex:1; padding:12px 8px; border:1px solid var(--tax-rule); border-radius:7px; background:#fff; color:var(--tax-ink); font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.tax-connected .tax-timeline-nav [aria-selected="true"] { border-color:var(--tax-link); color:var(--tax-link); box-shadow:inset 0 -3px var(--tax-link); }
+.tax-connected #bukatsu-background .bg-tl { margin:0; padding:0; list-style:none; }
+.tax-connected #bukatsu-background .bg-tl li { display:block; padding:18px; border:1px solid var(--tax-rule); border-radius:8px; background:var(--tax-paper); }
+.tax-connected [data-timeline-id][hidden] { display:none !important; }
+.tax-connected #bukatsu-background .bg-tl .when { padding:0; margin-bottom:14px; }
+.tax-connected #bukatsu-background .bg-tl .when em { display:block; margin-top:8px; font-size:17px; }
+.tax-connected #bukatsu-background a { white-space:normal; overflow-wrap:anywhere; }
+.tax-connected .tax-background-intro, .tax-connected .tax-fold { margin:18px 0; border-top:1px solid var(--tax-rule); padding:14px 0; }
+.tax-connected .tax-background-intro > summary, .tax-connected .tax-fold > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.tax-connected #planet-block .tax-fold #editorial { margin-bottom:0; }
+.tax-connected .tax-comparison-note { font-size:12px; line-height:1.8; color:#637089; }
+.tax-connected .tax-evidence-controls { display:flex; gap:6px; margin:0 0 20px; }
+.tax-connected .tax-evidence-controls button, .tax-connected #quiz button { border:1px solid var(--tax-rule); border-radius:6px; background:#fff; color:var(--tax-ink); font:inherit; font-size:12px; padding:9px 12px; cursor:pointer; }
+.tax-connected .tax-evidence-controls [aria-pressed="true"] { color:var(--tax-link); border-color:var(--tax-link); background:#f0f5ff; font-weight:700; }
+.tax-connected #planet-block #quiz { margin:0; padding:0; border:0; border-radius:0; background:transparent; }
+.tax-connected #planet-block #quiz[hidden], .tax-connected #planet-block .tax-reading-sources[hidden] { display:none !important; }
+.tax-connected #planet-block #quiz .qh { display:flex; flex-wrap:wrap; gap:8px; font-size:11px; }
+.tax-connected #planet-block #quiz .qclaim { font-size:18px; font-weight:700; }
+.tax-connected #planet-block #quiz .tax-quiz-note { font-size:11px; color:#637089; }
+.tax-connected #planet-block #quiz .gopts { display:flex; flex-wrap:wrap; gap:8px; }
+.tax-connected #planet-block #quiz .hit { border-color:#2f8f83; background:#e8f5f1; }
+.tax-connected #planet-block #quiz .miss { border-color:#7d5ba6; background:#f3eef9; }
+.tax-connected #planet-block #quiz .qnext { color:var(--tax-link); font-weight:700; margin-top:12px; }
+.tax-connected #planet-block #quiz .tax-quiz-sources p { font-size:12px; }
+.tax-connected #planet-block #panel .tax-evidence-jump { display:none; }
+.tax-connected :is(.tax-timeline-nav,.tax-evidence-controls,#quiz) button:focus-visible { outline:3px solid #075ef2; outline-offset:3px; }
+.tax-connected .tax-print-reasons { display:none; }
+@media(max-width:760px) {
+  .tax-connected .tax-timeline-nav { gap:5px; }
+  .tax-connected .tax-timeline-nav button { font-size:11px; padding:12px 5px; }
+  .tax-connected #planet-block #panel .tax-evidence-jump { display:block; margin:-12px 0 22px; padding:5px 0; border:0; background:transparent; color:var(--tax-link); font:inherit; font-size:12px; cursor:pointer; }
+}
+@media print {
+  body.tax-connected * { visibility:visible; }
+  body.tax-connected { background:#fff !important; font-size:11px; }
+  body.tax-connected main { max-width:none; margin:0; padding:0; }
+  body.tax-connected :is(.modern-site-header,.hero .top-nav,#progress,.share-x-fab,.tax-status,.tax-timeline-nav,.tax-guesses,#modes,#list,.stage,#dotbox,#quiz,#vote-section,.tax-evidence-controls,.tax-evidence-jump,.classroom-print-btn,.cite-copy-wrap,.bg-jump,.tide-widget-controls,.explainer-modal,footer,#fallback-nav,#fallback > .sub,#fallback .backlink,.tap-hint,.sec-live) { display:none !important; }
+  body.tax-connected .hero { width:auto; min-height:0; margin:0 0 20px; border:0; box-shadow:none; }
+  body.tax-connected .hero::before, body.tax-connected .hero::after { display:none; }
+  body.tax-connected .hero-inner { min-height:0; padding:0 !important; }
+  body.tax-connected .hero-inner > * { max-width:none; }
+  body.tax-connected .hero h1 { font-size:24px; }
+  body.tax-connected #fallback { display:block !important; }
+  body.tax-connected #fallback .landing-image { break-inside:avoid; }
+  body.tax-connected #fallback img { display:block; width:100%; height:auto; }
+  body.tax-connected #fallback .bar span { font-size:0; } /* 各立場の名前・件数は直前の凡例に示す。 */
+  body.tax-connected .tax-print-reasons { display:block; margin:18px 0; }
+  body.tax-connected .tax-print-reasons h3 { font-size:16px; }
+  body.tax-connected .tax-print-reasons ul { padding:0; list-style:none; }
+  body.tax-connected .tax-print-reasons li { padding:7px 0; border-bottom:1px solid #dce5f0; break-inside:avoid; }
+  body.tax-connected .tax-print-reasons li > div { display:flex; justify-content:space-between; gap:12px; }
+  body.tax-connected .tax-print-reasons b { white-space:nowrap; }
+  body.tax-connected .tax-print-reasons :is(.tax-more-reasons > summary,.tax-reason-track) { display:none; }
+  body.tax-connected:not(.tax-print-classroom) :is(#ocean,#claim-audit,#issue-cards,#bukatsu-check) { display:block !important; }
+  body.tax-connected [data-timeline-id][hidden] { display:block !important; }
+  body.tax-connected .classroom-section { position:static; width:auto; margin:0; padding:0; box-shadow:none; border:0; }
+  body.tax-connected :is(.classroom-reasons,.classroom-sources,.classroom-questions) { break-inside:avoid; }
+  body.tax-connected :is(.panel,.planet-panel,#fallback) { overflow:visible; box-shadow:none; }
+  body.tax-connected.tax-print-classroom main > :not(.classroom-section) { display:none !important; }
+  body.tax-connected.tax-print-classroom > :not(main) { display:none !important; }
+  body.tax-connected.tax-print-classroom .classroom-section { display:block !important; color:#071a3d; }
+}
