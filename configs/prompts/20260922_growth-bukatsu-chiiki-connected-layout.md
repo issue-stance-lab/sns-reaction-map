@@ -1,7 +1,7 @@
 # 課題77 — bukatsu-chiiki（部活動の地域移行）の連動表示を実装する工程表
 
 作成: 2026-09-22
-状態: 工程1のみ完了。工程2〜6は未着手。
+状態: 工程1・2完了。工程3〜6は未着手。
 対象: `bukatsu-chiiki`。公開URL・論点ID・投票の保存先と選択肢の意味を維持する。
 入口: [別テーマへの適用手順](../../quality/designs/2026-09-22-task77-connected-layout-rollout-guide.md)、
 [スキーマリファレンス](../../quality/designs/2026-09-22-task77-consumption-tax-schema-reference.md)。
@@ -45,13 +45,18 @@ tax版の同じ位置づけの文書: [タックスの工程表](20260920_growth
    （2026-09-02時点で「書き込まない特殊形」という記録が`themes/bukatsu-chiiki.md`にあったが、
    2026-09-20の「その言い分、原典に当たるとどうなるか」節新設以降は書き込む形に変わっている。
    現在の公開ページで実際に表示されていることを確認済み）
-5. `scripts/build_bukatsu_arena.py`（1048行）が全体生成の中心とみられるが、STANCE_GLANCE・予想2問・
-   bukatsu-background・bukatsu-checkパネルをどの関数が組み立てているかは**未確認**。工程2着手時に読むこと
-6. `page_update_mode: adapter`（THEMES.yaml）のため`scripts/refresh_adapters/`に専用アダプタがある
-   はずだが、ファイル名・処理内容は**未確認**
-7. `verify_builder_rebuildability.py`のbukatsu-chiiki対象が何を指すかは**未確認**（taxは
-   `build_consumption_tax_arena.py`が対象で「新しい画面全体の再生成は別途検査を足す必要がある」
-   という教訓があった。同じ穴が無いか確認要）
+5. **【確認済み・訂正】** `scripts/build_bukatsu_arena.py`が組み立てるのはSTANCE_GLANCEだけ
+   （`stance_glance()`/`apply_bukatsu_stance_glance()`）。予想2問・bukatsu-background・bukatsu-checkは
+   別スクリプト`build_planet_page_preview.py`が一度だけ変換した静的内容で、この生成器は触らない。
+   `bukatsu-background`/`bukatsu-check`という要素名はconsumption-tax-cutページにも同じ文字列で存在する
+   共通の部品名（テーマ専用ではない）
+6. **【確認済み】** アダプタは`scripts/refresh_adapters/bukatsu.py`。`build()`が`update_bukatsu_tide.py`を
+   2回実行して冪等性を検査、`finalize()`が`build_bukatsu_arena.py`を昇格後に実行する。
+   **`refresh_planet_section.py`はどちらからも呼ばれていない**（山なみ本体は通常更新で自動再生成されない）。
+   連動表示は`build()`側へ登録済み（tax版の`_apply_tide()`と同じ位置づけ）
+7. **【確認済み】** bukatsu-chiikiの対象は`build_bukatsu_arena.py`で、PLANET_SECTIONは検査範囲外。
+   公開済みのtax版連動表示も同じ理由でこの検査の対象外（教室節のときのような専用検査の追加は
+   tax版でも行われていない）。同じ扱いに揃え、この検査への追加は工程2でも行わなかった
 8. **【確認済み・訂正】投票は7論点×4立場=28通りではなく、7論点×投票専用3立場=21通り。**
    表示用の4立場（移行支持/慎重・反対/条件付き・改善要求/中立・情報）とは別に、投票フォームだけの
    3立場（反対・慎重/どちらでもない/賛成・推進）があり、「条件付き・改善要求」に対応する投票選択肢は
@@ -83,7 +88,14 @@ tax版の同じ位置づけの文書: [タックスの工程表](20260920_growth
 
 完了条件: どの論点にも出所と表示先があり、確認されていない内容を補っていない。残す機能の一覧がそろう。→ 済み
 
-## 工程2 — 通常のデータ更新で維持できる土台を作る【未着手】
+## 工程2 — 通常のデータ更新で維持できる土台を作る【完了】
+
+**完了記録**: [実装内容・検証結果・次工程への引き継ぎ](../../quality/reviews/2026-09-23-task77-bukatsu-chiiki-foundation.md)。
+未確認事項5〜7を確認（山なみ本体は通常更新で自動再生成されない、`bukatsu-background`/`bukatsu-check`は
+両テーマ共通の部品名、tax版の連動表示もverify_builder_rebuildability.pyの対象外で同じ扱いに揃えた）。
+`bukatsu_connected.py`・橋渡しJS・最小限のCSSを実装し`refresh_adapters/bukatsu.py`へ登録（無効化のまま）。
+語られていない争点3件は未タグのまま維持（編集部推定を行わない判断）。実機確認でバー↔山の双方向連動を
+確認し、挿し込み位置に起因する空振りバグを1件発見・修正した。工程3以降は未着手、公開への変更なし。
 
 すること:
 - 専用の作業ツリーで、非公開正典・ペルソナを復元し、現行ページの再生成と既存検査を先に通す。
@@ -187,6 +199,6 @@ tax版の同じ位置づけの文書: [タックスの工程表](20260920_growth
 
 ## 最初に着手する単位と完了時の記録
 
-工程1は完了。工程2〜6は未着手。次の着手単位は工程2（「確認済みの実装上の事情」5〜7の確認から開始）。
+工程1・2は完了。工程3〜6は未着手。次の着手単位は工程3（最初の3論点: kyoin・ukezara・sonota）。
 各工程の結果を`tasks/task-77.md`に追記し、テーマ側の実装・更新履歴は`themes/bukatsu-chiiki.md`、
 公開・計測は`GROWTH.yaml`に残す。
