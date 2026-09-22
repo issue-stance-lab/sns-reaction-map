@@ -34,7 +34,7 @@ def expand_background(text):
     text=text.replace('#8B9199','#69869C')
     text=text.replace('#planet-block .chart-box svg rect:first-of-type{fill:#DCE9F7}', '#planet-block .chart-box svg > rect:first-of-type{fill:#E4EEF2}')
     style='''<style>
-#planet-block .chart-box,#planet-block .dotbox{background:#F7F9FA;border-color:#DCE5E8}
+#planet-block .chart-box{background:#F7F9FA;border-color:#DCE5E8}
 #planet-block .chart-box svg #seacover{fill:#F7F9FA}
 #planet-block .chart-box svg .hill-hit{fill:transparent}
 #planet-block .chart-box svg line[stroke="#2b3440"]{stroke:#E1E8EC}
