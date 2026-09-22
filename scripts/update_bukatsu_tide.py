@@ -184,7 +184,7 @@ TIDE_WIDGET_JS = r"""
     mobileRows.replaceChildren();
 
     const resolveLabelYs = rawYs => {
-      const minGap = 34;
+      const minGap = 44;  // ラベル(上)と割合(下)の2行ぶん。34だと隣の行と重なる（2026-09-22）
       const order = rawYs.map((_, i) => i).sort((a, b) => rawYs[a] - rawYs[b]);
       const resolved = rawYs.slice();
       for (let k = 1; k < order.length; k++) {

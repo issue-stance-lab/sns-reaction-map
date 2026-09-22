@@ -683,3 +683,20 @@ items:
       https://note.com/sns_hanno_ma/m/m1c683954a55b）に1本目として追加済み。
       UTM: utm_campaign=note_taxcut1_20260921（after_stance/after_timeline/
       after_conclusion/footerの4本）。
+
+  - id: approval-20260922-002
+    department: data
+    action: website_publish
+    summary: "部活動の地域移行（bukatsu-chiiki）の2026-09-22定期収集分（新規108件・意見82件）を正典へ統合し本番反映する"
+    reason: "refresh_at（2026-09-22）当日。update-work-checkの報告を受けオーナーが当日着手を指示"
+    risks:
+      - "追い読みは行っていない（未読率は最大19.5%で独自性検査の上限40%内）"
+      - "潮目ラベルの重なり修正（minGap 34→44）は部活動ページのみ。同じ処理を持つ他テーマは未対応"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/bukatsu-chiiki/20260922_082051/promotion-manifest.json（非公開・作業ツリー内）"
+      - "themes/bukatsu-chiiki.md 2026-09-22節"
+    status: approved
+    requested_at: "2026-09-22"
+    decided_at: "2026-09-22"
+    decision_note: "オーナーがチャットで、作業ツリー内での候補反映（A）と本番反映（A）をそれぞれ承認。unittest 1082件・run_public_checks・標準検査すべてOK、作業ツリーのページを画面で確認済み"

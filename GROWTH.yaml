@@ -616,10 +616,10 @@ recurring:
       収集は機械的な処理なので自動化できるが、本文確認は人が読んで判定する工程のため
       自動化しない（消費税減税の要約使い回し事故の教訓、DATA_REFRESH.md参照）。
 
-featured: ai-copyright   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
+featured: bukatsu-chiiki   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
-  updated_at: 2026-09-21
+  updated_at: 2026-09-22
   criteria: |
     - 公開テーマのうち意見300件以上を対象にする
     - THEMES.yaml の updated_at が新しい順に5件選び、1件目を「今週の注目テーマ」、
@@ -627,14 +627,14 @@ featured_questions:
     - 選定は scripts/refresh_featured_slots.py が自動で行い、
       実行のたびにこのファイルとページを同期する
   items:
+    - theme: ai-copyright
+      question: 創作の権利を守るため、生成AIにはどこまでルールが必要か？
     - theme: constitutional-amendment
       question: 現実の安全保障に合わせて改正するのか、平和主義と権力制限を守るのか？
+    - theme: elderly-license-revocation
+      question: 事故を防ぐための年齢線引きか、暮らしの足を奪わない制度設計か？
     - theme: fukushuto
       question: 副首都、本当に必要？ 場所は大阪でいい？
-    - theme: henoko-student-accident
-      question: 事故の検証と教育の評価、どの論点を重く見る？
-    - theme: koshitsu-tenpakai
-      question: 皇族の人数と、皇位を継ぐ資格。二つを分けて読む。
 
 activity_log:
   # 計測中施策と並行して行った変更を記録する
