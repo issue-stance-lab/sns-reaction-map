@@ -78,31 +78,55 @@
   if(quizRoot.previousElementSibling?.matches('h3'))quizRoot.previousElementSibling.hidden=true;
   quizRoot.remove();
   const quiz={active:false,position:0,answers:new Map()}, verdicts=['fact','gap','miss'];
+  let discoveryActive=false;
+  // 論点内の資料欄を残したまま、同じ項目をどの論点からも読める入口にする。
+  const sourceItems=new Map();
+  for(const issue of data.issues){
+    document.getElementById('tax-reading-'+issue.id).content.querySelectorAll('[data-tax-source-only]').forEach(item=>sourceItems.set(item.dataset.taxSourceOnly,item));
+  }
+  const discoveryRoot=document.createElement('div');discoveryRoot.className='tax-source-stories';discoveryRoot.hidden=true;
+  discoveryRoot.innerHTML='<h3>x投稿で語られない話</h3><p class="tax-note">消費税テーマ全体の'+data.ocean.sunk_continents.length+'項目です。一次資料に記載があり、今回収集した投稿では言及が見つからなかった内容をまとめています。</p>';
+  for(const item of data.ocean.sunk_continents){
+    const entry=sourceItems.get(item.id).cloneNode(true);
+    entry.dataset.taxDiscovery=item.id;delete entry.dataset.taxSourceOnly;
+    entry.querySelectorAll('[id]').forEach(node=>node.id='tax-discovery-'+node.id);
+    discoveryRoot.appendChild(entry);
+  }
+  discoveryRoot.addEventListener('toggle',event=>{
+    const details=event.target;
+    if(details.dataset.taxDiscovery && details.open && details.getClientRects().length && !document.body.classList.contains('tax-printing'))map.visit('s:'+details.dataset.taxDiscovery);
+  },true);
   let selectingForQuiz=false;
   const claimIssue=claim=>data.issues.find(i=>i.claims.some(c=>c.id===claim.id)).id;
   const verdictLabel=value=>data.claims.find(c=>c.verdict===value)?.verdict_label||({fact:'資料どおり',gap:'少しずれる',miss:'裏が取れない'}[value]);
   function returnToReading() {
-    quiz.active=false;mount();
+    quiz.active=false;discoveryActive=false;mount();
     panel.querySelector('[data-tax-read]')?.focus({preventScroll:true});
   }
   function mount() {
     const aside=panel.querySelector('.tax-evidence');
-    if(!aside){quiz.active=false;quizRoot.remove();return;}
+    if(!aside){quiz.active=false;discoveryActive=false;quizRoot.remove();discoveryRoot.remove();return;}
     const claim=data.claims[quiz.position];
     if(quiz.active && claim && !selectingForQuiz && map.getState().issueId!==claimIssue(claim))quiz.active=false;
     if(!aside.querySelector('.tax-evidence-controls')){
       const reading=document.createElement('div');reading.className='tax-reading-sources';
       reading.append(...aside.childNodes);
       const controls=document.createElement('div');controls.className='tax-evidence-controls';controls.setAttribute('aria-label','資料の読み方');
-      controls.innerHTML='<button type="button" data-tax-read>資料を読む</button><button type="button" data-tax-quiz>一次資料クイズ · '+data.claims.length+'問</button>';
+      controls.innerHTML='<button type="button" data-tax-read>資料を読む</button><button type="button" data-tax-discover>x投稿で語られない話</button><button type="button" data-tax-quiz>一次資料クイズ · '+data.claims.length+'問</button>';
       controls.querySelector('[data-tax-read]').onclick=returnToReading;
+      controls.querySelector('[data-tax-discover]').onclick=event=>{
+        const opening=!discoveryActive;
+        quiz.active=false;discoveryActive=true;mount();
+        if(opening && event.isTrusted && typeof window.gtag==='function')window.gtag('event','source_only_tab_open',{topic_id:data.theme_id});
+      };
       controls.querySelector('[data-tax-quiz]').onclick=()=>{quiz.active=true;showQuestion(quiz.position);};
       aside.append(controls,reading);
     }
-    aside.querySelector('.tax-reading-sources').hidden=quiz.active;
-    aside.querySelector('[data-tax-read]').setAttribute('aria-pressed',String(!quiz.active));
+    aside.querySelector('.tax-reading-sources').hidden=quiz.active||discoveryActive;
+    aside.querySelector('[data-tax-read]').setAttribute('aria-pressed',String(!quiz.active&&!discoveryActive));
+    aside.querySelector('[data-tax-discover]').setAttribute('aria-pressed',String(discoveryActive));
     aside.querySelector('[data-tax-quiz]').setAttribute('aria-pressed',String(quiz.active));
-    quizRoot.hidden=!quiz.active;aside.appendChild(quizRoot);
+    discoveryRoot.hidden=!discoveryActive;quizRoot.hidden=!quiz.active;aside.append(discoveryRoot,quizRoot);
     if(!panel.querySelector('.tax-evidence-jump')){
       const jump=document.createElement('button');jump.type='button';jump.className='tax-evidence-jump';jump.textContent='この論点の制度・資料へ ↓';
       jump.onclick=()=>moveTo(aside);panel.querySelector('.tax-scope-note').after(jump);
@@ -130,7 +154,7 @@
     quizRoot.querySelector('.qnext').onclick=()=>showQuestion(quiz.position+1);
   }
   function showQuestion(position) {
-    quiz.position=position;quiz.active=true;selectingForQuiz=true;
+    quiz.position=position;quiz.active=true;discoveryActive=false;selectingForQuiz=true;
     const claim=data.claims[position];if(claim)map.selectIssue(claimIssue(claim));
     selectingForQuiz=false;renderQuiz();mount();
     const head=quizRoot.querySelector('.qh,h3');

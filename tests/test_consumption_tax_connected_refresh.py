@@ -105,7 +105,7 @@ class ConnectedRefreshTests(unittest.TestCase):
         self.assertIn('9月20日 → 9月21日', tide.get_text())
         self.assertIn('前回収集分11件と今回収集分23件', tide.get_text())
         self.assertNotIn('8月24日', tide.get_text())
-        self.assertIn('consumption-tax-connected-page.js?v=5', page.read_text())
+        self.assertIn('consumption-tax-connected-page.js?v=6', page.read_text())
 
     def test_sequential_refresh_finishing_and_number_sync_are_idempotent(self):
         from build_consumption_tax_page import apply_public_counts

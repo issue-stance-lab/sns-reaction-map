@@ -101,8 +101,8 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertTrue(any("接続表" in p for p in connected.validate(source)))
 
     def test_missing_runtime_or_source_only_content_is_rejected(self):
-        for before, after in [('consumption-tax-connected.js?v=5', 'missing.js'),
-                              ('consumption-tax-connected-page.js?v=5', 'missing.js'),
+        for before, after in [('consumption-tax-connected.js?v=6', 'missing.js'),
+                              ('consumption-tax-connected-page.js?v=6', 'missing.js'),
                               ('class="sunk"', 'class="missing-source"'),
                               (connected.BRIDGE_START, '/* missing bridge */')]:
             with self.subTest(before=before):

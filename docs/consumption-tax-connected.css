@@ -141,9 +141,10 @@
 .tax-connected .tax-comparison-note { font-size:12px; line-height:1.8; color:#637089; }
 .tax-connected .tax-evidence-controls { display:flex; gap:6px; margin:0 0 20px; }
 .tax-connected .tax-evidence-controls button, .tax-connected #quiz button { border:1px solid var(--tax-rule); border-radius:6px; background:#fff; color:var(--tax-ink); font:inherit; font-size:12px; padding:9px 12px; cursor:pointer; }
+.tax-connected .tax-evidence-controls button { flex:1; min-width:0; padding:9px 7px; line-height:1.65; }
 .tax-connected .tax-evidence-controls [aria-pressed="true"] { color:var(--tax-link); border-color:var(--tax-link); background:#f0f5ff; font-weight:700; }
 .tax-connected #planet-block #quiz { margin:0; padding:0; border:0; border-radius:0; background:transparent; }
-.tax-connected #planet-block #quiz[hidden], .tax-connected #planet-block .tax-reading-sources[hidden] { display:none !important; }
+.tax-connected #planet-block #quiz[hidden], .tax-connected #planet-block .tax-reading-sources[hidden], .tax-connected #planet-block .tax-source-stories[hidden] { display:none !important; }
 .tax-connected #planet-block #quiz .qh { display:flex; flex-wrap:wrap; gap:8px; font-size:11px; }
 .tax-connected #planet-block #quiz .qclaim { font-size:18px; font-weight:700; }
 .tax-connected #planet-block #quiz .tax-quiz-note { font-size:11px; color:#637089; }
