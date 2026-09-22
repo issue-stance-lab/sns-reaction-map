@@ -282,20 +282,37 @@ def _command_block(block: dict, *, ready: bool, index: int) -> str:
 </div>"""
 
 
-def _anomalies(found: list[dict]) -> str:
-    """いつもと違うところ。良い変化（伸びた投稿）も同じ場所に出す。"""
-    if not found:
-        return ""
-    items = "".join(
+ANOMALY_HEAD_COUNT = 5
+
+
+def _anomaly_items(items: list[dict]) -> str:
+    return "".join(
         f'<li class="{esc(item["tone"])}"><strong>{esc(item["title"])}</strong>'
         f'<span>{esc(item["detail"])}</span></li>'
-        for item in found
+        for item in items
+    )
+
+
+def _anomalies(found: list[dict]) -> str:
+    """いつもと違うところ。良い変化（伸びた投稿）も同じ場所に出す。
+
+    件数が多いテーマ（Xの表示回数が普段よりN倍、等）は末尾にまとまりやすいので、
+    上位 ANOMALY_HEAD_COUNT 件だけ常に見せ、残りは折りたたむ（読まれなくなるため）。
+    """
+    if not found:
+        return ""
+    head, rest = found[:ANOMALY_HEAD_COUNT], found[ANOMALY_HEAD_COUNT:]
+    rest_html = (
+        f'<details class="rest"><summary>他 {len(rest)} 件を見る</summary>'
+        f'<ul class="alerts">{_anomaly_items(rest)}</ul></details>'
+        if rest else ""
     )
     return (
         f'<h3>気になる変化 {len(found)} 件</h3>'
         '<p class="muted small">履歴を見に行かなくても気づけるよう、いつもと違うところだけを拾っています。'
         "期限切れはここには出しません（上の「次の一手」と重なるため）。</p>"
-        f'<ul class="alerts">{items}</ul>'
+        f'<ul class="alerts">{_anomaly_items(head)}</ul>'
+        f'{rest_html}'
     )
 
 
@@ -526,6 +543,11 @@ def section_next(data: dict) -> str:
         )
 
     blocks = "".join(_command_block(block, ready=ready, index=i) for i, block in enumerate(action["blocks"]))
+    exec_details = (
+        '<details class="rest"><summary>実行手順を見る（Claudeに渡す内容。読まなくても大丈夫です）</summary>'
+        f'{ready_head}{signals}{blocks}</details>'
+        if (checks or blocks) else ""
+    )
 
     minutes = f'<span class="meta">目安 約{action["minutes"]}分</span>' if action["minutes"] else ""
     last = action.get("last")
@@ -576,8 +598,7 @@ def section_next(data: dict) -> str:
 <div class="next-why">{esc(action["why"])}{minutes}</div>
 </div>
 {last_html}
-{ready_head}{signals}
-{blocks}
+{exec_details}
 {pending_html}
 {rest_html}
 {_anomalies(data.get("anomalies") or [])}
@@ -1336,6 +1357,7 @@ border:1px solid color-mix(in srgb,var(--soon) 35%,transparent);font-size:13px}
 nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);
 backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-bottom:24px}
 nav.toc ul{display:flex;gap:4px;list-style:none;margin:0;padding:8px 0;overflow-x:auto}
+@media (max-width:860px){nav.toc ul{flex-wrap:wrap;overflow-x:visible}}
 nav.toc a{display:block;white-space:nowrap;padding:5px 11px;border-radius:999px;text-decoration:none;
 color:var(--muted);font-size:13px}
 nav.toc a:hover{background:var(--panel);color:var(--fg)}
