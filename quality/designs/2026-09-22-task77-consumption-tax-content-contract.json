@@ -1,0 +1,1602 @@
+{
+  "schema_version": 1,
+  "theme_id": "consumption-tax-cut",
+  "reviewed_on": "2026-09-22",
+  "status": "stage_1_complete",
+  "purpose": "工程1の対応表と変更前の比較基準。実行時の件数・本文・確認日の正典にはしない。工程2以降はsourcesに示す現行データからIDで再構築する。",
+  "sources": [
+    {
+      "id": "public",
+      "path": "data/public/themes/consumption-tax-cut.json",
+      "fields_or_symbols": "issues / opinion_count / collected_count / collection_period / updated_on",
+      "role": "公開用集計。docs/data/themes の同名ファイルは配信用の同一コピー。"
+    },
+    {
+      "id": "planet_config",
+      "path": "configs/planet/consumption-tax-cut.yaml",
+      "fields_or_symbols": "issues / stances / sub_issues / vote_issue_order",
+      "role": "表示名とIDの対応、理由分類の参照先、固定投票順。"
+    },
+    {
+      "id": "reread",
+      "path": "data/consumption-tax-cut_4issues-reread.json",
+      "fields_or_symbols": "read_at / hani / kouka / kyufu / jigyosha",
+      "role": "投稿本文の再読記録。表示用には build_planet_data.build で正典との一致を検査する。"
+    },
+    {
+      "id": "canonical_private",
+      "path": "social-samples/consumption-tax-cut_hermes_arena_classified.json",
+      "fields_or_symbols": "tweet_id / url / fetched_at / classification",
+      "role": "THEMES.yaml の sample_file。本文をこの資料や公開用データへ複製しない。14投稿の投稿日は記録されていない。"
+    },
+    {
+      "id": "post_selection",
+      "path": "scripts/build_consumption_tax_page.py",
+      "fields_or_symbols": "ISSUE_CARDS_POSTS[issue_id]",
+      "role": "既存の14投稿のURLと見出し。選定日は2026-09-20。投稿日ではない。"
+    },
+    {
+      "id": "claim_editorial",
+      "path": "scripts/build_consumption_tax_page.py",
+      "fields_or_symbols": "CLAIM_AUDIT / CHECKED_ON",
+      "role": "主張・原典の記述・照合結果・出典・確認日。公開表示は public.claim_verification を経由。"
+    },
+    {
+      "id": "claim_membership",
+      "path": "data/consumption-tax-cut_claim_posts.json",
+      "fields_or_symbols": "claims[claim_id]",
+      "role": "主張ごとの照合対象ID。件数を毎回数える。data/verification/*-claims.json は投稿単位の検査用コピー。"
+    },
+    {
+      "id": "source_only",
+      "path": "data/verification/consumption-tax-cut-sunk-continents.json",
+      "fields_or_symbols": "items",
+      "role": "資料側の4項目。public.ocean_layer.sunk_continents を経由し nearest_issue_id でつなぐ。"
+    },
+    {
+      "id": "shared_concerns",
+      "path": "data/verification/consumption-tax-cut-veins.json",
+      "fields_or_symbols": "items",
+      "role": "共通する心配2件。public.ocean_layer.veins を経由し issue_ids でつなぐ。"
+    },
+    {
+      "id": "background",
+      "path": "scripts/build_consumption_tax_page.py",
+      "fields_or_symbols": "BACKGROUND_TIMELINE / BACKGROUND_CHECKS / background_context",
+      "role": "経緯3段階・政府方針4項目・9/19の確認注記。一次資料メモは quality/research/consumption-tax-cut-primary-sources.md。"
+    },
+    {
+      "id": "images",
+      "path": "scripts/refresh_planet_section.py",
+      "fields_or_symbols": "CTC_LANDING_IMAGE_BY_ISSUE_ID / _landing_image_html",
+      "role": "7論点の図解対応。原画像はdocs/images/topics/consumption-tax-cut。"
+    },
+    {
+      "id": "editorial",
+      "path": "data/verification/consumption-tax-cut-editorial.json",
+      "fields_or_symbols": "curated_at / findings",
+      "role": "編集部の整理5件。数値の差し込みは公開集計から行う。"
+    },
+    {
+      "id": "classroom",
+      "path": "configs/classroom/consumption-tax-cut.json",
+      "fields_or_symbols": "reasons_pro / reasons_con / primary_sources / questions",
+      "role": "推進3・慎重3の理由、資料3、既存の問い3。"
+    },
+    {
+      "id": "trust",
+      "path": "configs/theme-seo.json",
+      "fields_or_symbols": "themes[id=consumption-tax-cut].collection / observations",
+      "role": "末尾の調査・編集情報の原稿。修正文は同梱の確定書を参照。"
+    },
+    {
+      "id": "tide",
+      "path": "scripts/refresh_adapters/consumption_tax.py",
+      "fields_or_symbols": "_latest_previous_wave / _apply_tide",
+      "role": "social-samples/updates/consumption-tax-cut/{date}/classified.json の実在する直近2回。日付と件数を試作から転記しない。"
+    },
+    {
+      "id": "theme_dates",
+      "path": "THEMES.yaml",
+      "fields_or_symbols": "themes.consumption-tax-cut",
+      "role": "収集期間・更新日・非公開正典の場所。事実確認日とは別。"
+    }
+  ],
+  "display_contract": {
+    "initial_issue_id": "consumption-tax-cut-scope",
+    "initial_stance_id": "all",
+    "mode_dependent": [
+      "bar.selected_segment",
+      "selected_stance_count",
+      "mountain.count",
+      "mountain.width",
+      "mountain.high_expression_share"
+    ],
+    "issue_dependent_all_stances": [
+      "reasons",
+      "posts",
+      "claims",
+      "policy",
+      "source_only",
+      "shared_concerns",
+      "image"
+    ],
+    "independent_states": [
+      "vote",
+      "quiz_answers",
+      "tide_view",
+      "timeline_date"
+    ],
+    "question_scope": "予想2問は収集した意見全体に基づく。閲覧中の立場で正解を変えない。",
+    "reread_empty": "この論点では、投稿を理由別に分ける再読をまだ行っていません。",
+    "claims_empty": "この論点に対応する資料照合は、まだ登録されていません。",
+    "content_scope_notice": "理由の分類・投稿例・資料は、この論点全体の内容です。",
+    "post_notice": "編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。",
+    "claims_notice": "収集した投稿から選んだ主張を資料と照合しています。ここに並べた投稿例2件への判定を示すものではありません。",
+    "post_date_policy": "14件とも保存済み正典には投稿日がない。独自の日付は表示せず、X公式埋め込みの表示と元投稿に委ねる。fetched_atを投稿日に使わない。",
+    "reason_join": [
+      "issue_id",
+      "bucket_id"
+    ],
+    "claim_join": "public.claim_verification.claims[].issue_ids includes issue_id",
+    "source_only_join": "public.ocean_layer.sunk_continents[].nearest_issue_id == issue_id",
+    "shared_concern_join": "public.ocean_layer.veins[].issue_ids includes issue_id",
+    "editorial_scope": "編集部の整理5件は論点横断のまとめとして1か所に残す。"
+  },
+  "dates_at_baseline": {
+    "public_updated_on": "2026-09-19",
+    "collection_period": {
+      "end": "2026-09-17",
+      "start": "2026-07-28",
+      "status": "known"
+    },
+    "reread_read_at": "2026-09-17",
+    "claim_checked_on": "2026-08-19",
+    "background_checked_on": "2026-09-19",
+    "ocean_checked_on": "2026-09-19",
+    "editorial_checked_on": "2026-09-14",
+    "post_selection_on": "2026-09-20",
+    "note": "9/22は対応関係を確認した日。一次資料の再確認日へ置き換えない。"
+  },
+  "totals_at_baseline": {
+    "collected": 4386,
+    "opinions": 3890,
+    "stances": [
+      {
+        "id": "consumption-tax-cut-support",
+        "label": "減税推進",
+        "count": 1834
+      },
+      {
+        "id": "consumption-tax-cut-conditional",
+        "label": "条件付き賛成・政府案に不満",
+        "count": 707
+      },
+      {
+        "id": "consumption-tax-cut-cautious",
+        "label": "減税反対・慎重",
+        "count": 1035
+      },
+      {
+        "id": "consumption-tax-cut-neutral",
+        "label": "中立・情報",
+        "count": 314
+      }
+    ],
+    "reread": {
+      "connected_editorial_count": 1965,
+      "connected_issue_population": 1965,
+      "not_connected_opinion_count": 1925
+    }
+  },
+  "issues": [
+    {
+      "id": "consumption-tax-cut-political-trust",
+      "label": "公約と政治不信",
+      "count_at_baseline": 1356,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-political-trust",
+        "#consumption-tax-cut-political-trust",
+        "#fb-consumption-tax-cut-political-trust"
+      ],
+      "reread": {
+        "status": "not_reviewed",
+        "source_path": null,
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": null,
+        "items_at_baseline": []
+      },
+      "post_source_key": "consumption-tax-cut-political-trust",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2082021002566095151",
+          "url": "https://x.com/shigani_kisyain/status/2082021002566095151",
+          "label": "公約から実現までの遅さへの不満",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2084235686341992560",
+          "url": "https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560",
+          "label": "党内議論の報道のされ方に疑問",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [
+        "firstcut"
+      ],
+      "source_only_ids": [],
+      "shared_concern_ids": [],
+      "policy_ids": [],
+      "timeline_ids": [
+        "timeline-2026-07-30",
+        "timeline-2026-08-05",
+        "timeline-2026-09-15"
+      ],
+      "method_link": null,
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouyaku-v2.webp",
+        "alt": "論点図解：公約・政治不信"
+      }
+    },
+    {
+      "id": "consumption-tax-cut-scope",
+      "label": "減税の対象範囲",
+      "count_at_baseline": 885,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-scope",
+        "#consumption-tax-cut-scope",
+        "#fb-consumption-tax-cut-scope"
+      ],
+      "reread": {
+        "status": "reread",
+        "source_path": [
+          "hani",
+          "buckets"
+        ],
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": "2026-09-17",
+        "items_at_baseline": [
+          {
+            "id": "A",
+            "label": "一律減税または廃止を主張（食料品だけでは不十分）",
+            "count": 455,
+            "pct_in_issue": 51.4
+          },
+          {
+            "id": "B",
+            "label": "時限・1%残しに不満・恒久化を求める",
+            "count": 125,
+            "pct_in_issue": 14.1
+          },
+          {
+            "id": "F",
+            "label": "食料品減税を支持（前例作り・まず実現を）",
+            "count": 94,
+            "pct_in_issue": 10.6
+          },
+          {
+            "id": "C",
+            "label": "インボイス・複数税率・システム面の問題",
+            "count": 70,
+            "pct_in_issue": 7.9
+          },
+          {
+            "id": "G",
+            "label": "単純な減税支持（具体的な範囲言及なし）",
+            "count": 56,
+            "pct_in_issue": 6.3
+          },
+          {
+            "id": "D",
+            "label": "財源・社会保障削減への懸念・財政面",
+            "count": 54,
+            "pct_in_issue": 6.1
+          },
+          {
+            "id": "E",
+            "label": "飲食店・農家・産業への配慮を求める",
+            "count": 31,
+            "pct_in_issue": 3.5
+          }
+        ]
+      },
+      "post_source_key": "consumption-tax-cut-scope",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2084241343036219545",
+          "url": "https://x.com/siki2364/status/2084241343036219545",
+          "label": "一律減税でなければ意味がない",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2086203743704637530",
+          "url": "https://x.com/148pv9yuZKv7Hox/status/2086203743704637530",
+          "label": "一律は非現実的、まず食料品から実現を",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [
+        "rate10"
+      ],
+      "source_only_ids": [],
+      "shared_concern_ids": [],
+      "policy_ids": [
+        "policy-scope",
+        "policy-rate-period"
+      ],
+      "timeline_ids": [],
+      "method_link": null,
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-taishou-v2.webp",
+        "alt": "論点図解：対象範囲"
+      }
+    },
+    {
+      "id": "consumption-tax-cut-effect",
+      "label": "減税の効果",
+      "count_at_baseline": 717,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-effect",
+        "#consumption-tax-cut-effect",
+        "#fb-consumption-tax-cut-effect"
+      ],
+      "reread": {
+        "status": "reread",
+        "source_path": [
+          "kouka",
+          "buckets"
+        ],
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": "2026-09-17",
+        "items_at_baseline": [
+          {
+            "id": "B",
+            "label": "効果なし・逆効果や財源懸念",
+            "count": 295,
+            "pct_in_issue": 41.1
+          },
+          {
+            "id": "A",
+            "label": "効果あり・生活支援につながる",
+            "count": 165,
+            "pct_in_issue": 23.0
+          },
+          {
+            "id": "C",
+            "label": "限定的・他政策や広範囲減税が有効",
+            "count": 137,
+            "pct_in_issue": 19.1
+          },
+          {
+            "id": "D",
+            "label": "財源・制度の懸念が先立つ",
+            "count": 69,
+            "pct_in_issue": 9.6
+          },
+          {
+            "id": "E",
+            "label": "中立・論点整理や情報提供",
+            "count": 51,
+            "pct_in_issue": 7.1
+          }
+        ]
+      },
+      "post_source_key": "consumption-tax-cut-effect",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2091198301052055950",
+          "url": "https://x.com/mina_713713/status/2091198301052055950",
+          "label": "対応が遅く物価高に追いつかない",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2093939866065371202",
+          "url": "https://x.com/longtallsagi/status/2093939866065371202",
+          "label": "減税がなければ値上がりしていた分、恩恵はある",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [],
+      "source_only_ids": [],
+      "shared_concern_ids": [
+        "consumption-tax-cut-vein-2"
+      ],
+      "policy_ids": [],
+      "timeline_ids": [],
+      "method_link": null,
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka-v2.webp",
+        "alt": "論点図解：減税の効果"
+      }
+    },
+    {
+      "id": "consumption-tax-cut-finance-welfare",
+      "label": "財源と社会保障",
+      "count_at_baseline": 511,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-finance-welfare",
+        "#consumption-tax-cut-finance-welfare",
+        "#fb-consumption-tax-cut-finance-welfare"
+      ],
+      "reread": {
+        "status": "not_reviewed",
+        "source_path": null,
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": null,
+        "items_at_baseline": []
+      },
+      "post_source_key": "consumption-tax-cut-finance-welfare",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2085897628005650517",
+          "url": "https://x.com/Culena0/status/2085897628005650517",
+          "label": "社会保障の削減が先ではないか",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2086480295843504503",
+          "url": "https://x.com/Yan0321Asa/status/2086480295843504503",
+          "label": "財源論より歳出の使い道を議論すべき",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [
+        "cost5cho",
+        "welfare",
+        "refund"
+      ],
+      "source_only_ids": [],
+      "shared_concern_ids": [],
+      "policy_ids": [
+        "policy-finance"
+      ],
+      "timeline_ids": [],
+      "method_link": null,
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-zaigen-v2.webp",
+        "alt": "論点図解：財源・社会保障"
+      }
+    },
+    {
+      "id": "consumption-tax-cut-alternatives",
+      "label": "給付など他策との比較",
+      "count_at_baseline": 251,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-alternatives",
+        "#consumption-tax-cut-alternatives",
+        "#fb-consumption-tax-cut-alternatives"
+      ],
+      "reread": {
+        "status": "reread",
+        "source_path": [
+          "kyufu",
+          "buckets"
+        ],
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": "2026-09-17",
+        "items_at_baseline": [
+          {
+            "id": "A",
+            "label": "給付・所得連動給付の方が即効性・効果がある",
+            "count": 69,
+            "pct_in_issue": 27.5
+          },
+          {
+            "id": "D",
+            "label": "政府案（1%・食料品のみ・2年間）に不満・恒久化や一律減税を求める",
+            "count": 52,
+            "pct_in_issue": 20.7
+          },
+          {
+            "id": "B",
+            "label": "減税の方がシンプルで経済効果が高い",
+            "count": 43,
+            "pct_in_issue": 17.1
+          },
+          {
+            "id": "E",
+            "label": "減税反対・他の優先課題（財源・インフラ・社保など）",
+            "count": 43,
+            "pct_in_issue": 17.1
+          },
+          {
+            "id": "C",
+            "label": "つなぎ減税から給付付き税額控除へという流れを評価",
+            "count": 29,
+            "pct_in_issue": 11.6
+          },
+          {
+            "id": "F",
+            "label": "中立・制度設計や比較分析の情報提供",
+            "count": 15,
+            "pct_in_issue": 6.0
+          }
+        ]
+      },
+      "post_source_key": "consumption-tax-cut-alternatives",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2083093838630142393",
+          "url": "https://x.com/fukmaru2020/status/2083093838630142393",
+          "label": "非課税の事業者には届かず給付の方が確実",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2094004743136063806",
+          "url": "https://x.com/gasnukiaccount/status/2094004743136063806",
+          "label": "給付は一時的、減税は恒久的な効果",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [],
+      "source_only_ids": [
+        "consumption-tax-cut-sc-2"
+      ],
+      "shared_concern_ids": [],
+      "policy_ids": [
+        "policy-benefit"
+      ],
+      "timeline_ids": [],
+      "method_link": null,
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kyufu-v3.webp",
+        "alt": "論点図解：給付との比較"
+      }
+    },
+    {
+      "id": "consumption-tax-cut-business-burden",
+      "label": "事業者の実務負担",
+      "count_at_baseline": 112,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-business-burden",
+        "#consumption-tax-cut-business-burden",
+        "#fb-consumption-tax-cut-business-burden"
+      ],
+      "reread": {
+        "status": "reread",
+        "source_path": [
+          "jigyosha",
+          "buckets"
+        ],
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": "2026-09-17",
+        "items_at_baseline": [
+          {
+            "id": "B",
+            "label": "レジ改修はすぐできる・財務省の方便・減税を邪魔する言い訳（推進派反論）",
+            "count": 38,
+            "pct_in_issue": 33.9
+          },
+          {
+            "id": "D",
+            "label": "食品限定減税による事業者負担・仕入税額控除減・増税懸念",
+            "count": 24,
+            "pct_in_issue": 21.4
+          },
+          {
+            "id": "C",
+            "label": "免税事業者制度・インボイス制度そのものへの批判・廃止主張",
+            "count": 18,
+            "pct_in_issue": 16.1
+          },
+          {
+            "id": "A",
+            "label": "レジ改修・システム対応の現場負担が大きい（減税反対・慎重派）",
+            "count": 12,
+            "pct_in_issue": 10.7
+          },
+          {
+            "id": "G",
+            "label": "中立・情報発信・素朴な疑問・事実確認",
+            "count": 10,
+            "pct_in_issue": 8.9
+          },
+          {
+            "id": "E",
+            "label": "減税自体に賛成だが政府案（1%・2年限・食品限定）の手法に不満",
+            "count": 8,
+            "pct_in_issue": 7.1
+          },
+          {
+            "id": "F",
+            "label": "一律減税・恒久減税・消費税廃止を主張",
+            "count": 2,
+            "pct_in_issue": 1.8
+          }
+        ]
+      },
+      "post_source_key": "consumption-tax-cut-business-burden",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2083849357380694468",
+          "url": "https://x.com/NobodyR01/status/2083849357380694468",
+          "label": "改修費の支援策がまだ議論されていない",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2081981547775995905",
+          "url": "https://x.com/koto_cat_/status/2081981547775995905",
+          "label": "増税の時は問題にならなかった話",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [
+        "register"
+      ],
+      "source_only_ids": [
+        "consumption-tax-cut-sc-1",
+        "consumption-tax-cut-sc-3",
+        "consumption-tax-cut-sc-4"
+      ],
+      "shared_concern_ids": [
+        "consumption-tax-cut-vein-1"
+      ],
+      "policy_ids": [],
+      "timeline_ids": [],
+      "method_link": null,
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-jigyousha-v2.webp",
+        "alt": "論点図解：事業者の負担"
+      }
+    },
+    {
+      "id": "consumption-tax-cut-other",
+      "label": "その他",
+      "count_at_baseline": 58,
+      "destinations": {
+        "opinion": "selected-issue.reasons-and-posts",
+        "evidence": "selected-issue.policy-and-sources",
+        "image": "selected-issue.image-modal"
+      },
+      "existing_links": [
+        "#issue-consumption-tax-cut-other",
+        "#consumption-tax-cut-other",
+        "#fb-consumption-tax-cut-other"
+      ],
+      "reread": {
+        "status": "not_reviewed",
+        "source_path": null,
+        "reason_key": [
+          "issue_id",
+          "bucket_id"
+        ],
+        "read_at": null,
+        "items_at_baseline": []
+      },
+      "post_source_key": "consumption-tax-cut-other",
+      "posts_at_baseline": [
+        {
+          "tweet_id": "2091675832569979076",
+          "url": "https://x.com/kawanashigaikot/status/2091675832569979076",
+          "label": "世論調査の聞き方が公平でないと指摘",
+          "published_at": null
+        },
+        {
+          "tweet_id": "2084228125450482119",
+          "url": "https://x.com/KayoRabbit/status/2084228125450482119",
+          "label": "制度の説明が分かりにくいと指摘",
+          "published_at": null
+        }
+      ],
+      "claim_ids": [],
+      "source_only_ids": [],
+      "shared_concern_ids": [],
+      "policy_ids": [],
+      "timeline_ids": [],
+      "method_link": "about.html#method",
+      "image": {
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-sonota-v2.webp",
+        "alt": "論点図解：その他に見られた意見例"
+      }
+    }
+  ],
+  "claims_at_baseline": [
+    {
+      "id": "rate10",
+      "issue_ids": [
+        "consumption-tax-cut-scope"
+      ],
+      "claim": "2年たてば、食料品の消費税は10％に戻る",
+      "verdict": "gap",
+      "matched_post_count": 3,
+      "sources": [
+        {
+          "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」",
+          "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+        },
+        {
+          "name": "財務省「消費税の使途（令和8年度予算）」（PDF）",
+          "url": "https://www.mof.go.jp/tax_policy/summary/consumption/122.pdf"
+        }
+      ]
+    },
+    {
+      "id": "register",
+      "issue_ids": [
+        "consumption-tax-cut-business-burden"
+      ],
+      "claim": "ゼロではなく1％にしたのは、レジなどのシステム改修が理由だ",
+      "verdict": "fact",
+      "matched_post_count": 12,
+      "sources": [
+        {
+          "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」",
+          "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+        }
+      ]
+    },
+    {
+      "id": "cost5cho",
+      "issue_ids": [
+        "consumption-tax-cut-finance-welfare"
+      ],
+      "claim": "食料品の消費税を下げると、年5兆円かかる",
+      "verdict": "gap",
+      "matched_post_count": 15,
+      "sources": [
+        {
+          "name": "国会会議録検索システム 第219回国会 衆議院予算委員会（令和8年6月22日）片山財務大臣答弁",
+          "url": "https://kokkai.ndl.go.jp/txt/122105261X01520260622/110"
+        }
+      ]
+    },
+    {
+      "id": "welfare",
+      "issue_ids": [
+        "consumption-tax-cut-finance-welfare"
+      ],
+      "claim": "消費税は全額が社会保障に使われている／一般会計に入るのだから使われていない",
+      "verdict": "gap",
+      "matched_post_count": 13,
+      "sources": [
+        {
+          "name": "財務省「消費税の使途に関する資料」",
+          "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm"
+        },
+        {
+          "name": "財務省「消費税率の引上げと使途の明確化」（PDF、消費税法第1条第2項の条文）",
+          "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05_1.pdf"
+        }
+      ]
+    },
+    {
+      "id": "refund",
+      "issue_ids": [
+        "consumption-tax-cut-finance-welfare"
+      ],
+      "claim": "輸出企業には年11.7兆円（別の投稿では7兆円）の消費税が還付されている",
+      "verdict": "miss",
+      "matched_post_count": 17,
+      "sources": [
+        {
+          "name": "国税庁「令和6年度版 国税庁レポート 適正・公平な課税・徴収」",
+          "url": "https://www.nta.go.jp/about/introduction/torikumi/report/2024/04_3.htm"
+        },
+        {
+          "name": "国税庁 タックスアンサー No.6551 輸出取引の免税",
+          "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6551.htm"
+        }
+      ]
+    },
+    {
+      "id": "firstcut",
+      "issue_ids": [
+        "consumption-tax-cut-political-trust"
+      ],
+      "claim": "消費税は導入されてから、一度も下げられたことがない",
+      "verdict": "fact",
+      "matched_post_count": 12,
+      "sources": [
+        {
+          "name": "財務省「日本の税の歴史を教えてください。」",
+          "url": "https://www.mof.go.jp/tax_information/qanda015.html"
+        }
+      ]
+    }
+  ],
+  "source_only_at_baseline": [
+    {
+      "id": "consumption-tax-cut-sc-1",
+      "topic": "2027年1月1日より前に契約・代金を払い済みの予約販売・通信販売は、新税率が始まっても旧税率8%のまま",
+      "nearest_issue_id": "consumption-tax-cut-business-burden",
+      "sns_count": 0,
+      "sns_base": 3890,
+      "checked_on": "2026-09-19",
+      "sources": [
+        {
+          "date": "令和8年9月15日決定",
+          "location": "「第二 二 飲食料品に係る消費税率の特例に関する所要の措置」、予約販売・通信販売の経過措置部分",
+          "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+        }
+      ]
+    },
+    {
+      "id": "consumption-tax-cut-sc-2",
+      "topic": "就業者負担軽減支援金を受け取るには、勤労所得・所得上限・純負担率・配偶者所得の4条件を全て満たす必要がある",
+      "nearest_issue_id": "consumption-tax-cut-alternatives",
+      "sns_count": 0,
+      "sns_base": 3890,
+      "checked_on": "2026-09-19",
+      "sources": [
+        {
+          "date": "令和8年9月15日決定",
+          "location": "「第三 就業者負担軽減支援金の支給等」、支給対象の要件部分",
+          "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+        }
+      ]
+    },
+    {
+      "id": "consumption-tax-cut-sc-3",
+      "topic": "食料品を扱う簡易課税事業者は、業種にかかわらず売上税額と同額を仕入税額とみなす特例が新設され、実質的な納税負担が生じない",
+      "nearest_issue_id": "consumption-tax-cut-business-burden",
+      "sns_count": 0,
+      "sns_base": 3890,
+      "checked_on": "2026-09-19",
+      "sources": [
+        {
+          "date": "令和8年9月15日決定",
+          "location": "「第二 二 飲食料品に係る消費税率の特例に関する所要の措置」、簡易課税制度の特例部分",
+          "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+        }
+      ]
+    },
+    {
+      "id": "consumption-tax-cut-sc-4",
+      "topic": "税率変更の前後最大2か月間は、実際の支払額と誤認されない条件のもとで旧税率のままの総額表示が認められる",
+      "nearest_issue_id": "consumption-tax-cut-business-burden",
+      "sns_count": 0,
+      "sns_base": 3890,
+      "checked_on": "2026-09-19",
+      "sources": [
+        {
+          "date": "令和8年9月15日決定",
+          "location": "「第二 二 飲食料品に係る消費税率の特例に関する所要の措置」、総額表示義務の経過措置部分",
+          "name": "内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+        }
+      ]
+    }
+  ],
+  "shared_concerns_at_baseline": [
+    {
+      "id": "consumption-tax-cut-vein-1",
+      "issue_ids": [
+        "consumption-tax-cut-business-burden"
+      ],
+      "shared_concern": "レジや会計システムの改修には実際に時間・手間・費用がかかり、特に地方や個人商店には負担が大きい。",
+      "checked_on": "2026-09-19"
+    },
+    {
+      "id": "consumption-tax-cut-vein-2",
+      "issue_ids": [
+        "consumption-tax-cut-effect"
+      ],
+      "shared_concern": "税率を下げても、事業者が店頭価格を据え置けば、減税分が消費者に届かないのではないか。",
+      "checked_on": "2026-09-19"
+    }
+  ],
+  "policy_aliases": [
+    {
+      "id": "policy-scope",
+      "source_symbol": "BACKGROUND_CHECKS",
+      "source_key": "対象範囲",
+      "title": "食料品だけか、広がるのか",
+      "existing_text": "決まっています。現行の軽減税率が適用される飲食料品（酒類・外食を除く）のままで、対象を広げる決定はしていません。",
+      "sources": [
+        {
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+          "name": "内閣「大綱」（令和8年9月15日閣議決定）第二"
+        }
+      ]
+    },
+    {
+      "id": "policy-rate-period",
+      "source_symbol": "BACKGROUND_CHECKS",
+      "source_key": "税率と期間",
+      "title": "いつから、何%、いつまでか",
+      "existing_text": "決まっています。2027年4月1日から2029年3月31日までの2年間、税率を1%（軽減税率8%から引下げ）とします。",
+      "sources": [
+        {
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+          "name": "同大綱"
+        }
+      ]
+    },
+    {
+      "id": "policy-benefit",
+      "source_symbol": "BACKGROUND_CHECKS",
+      "source_key": "給付との関係",
+      "title": "減税と給付、どちらか一方か",
+      "existing_text": "決まっています。両方を組み合わせる設計です。2027年4月から「就業者負担軽減支援金」を導入し、2029年度には「給付付き税額控除」として本格化させます。",
+      "sources": [
+        {
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+          "name": "同大綱（就業者負担軽減支援金の制度設計）"
+        }
+      ]
+    },
+    {
+      "id": "policy-finance",
+      "source_symbol": "BACKGROUND_CHECKS",
+      "source_key": "財源",
+      "title": "いくらかかり、どう賄うか",
+      "existing_text": "方針だけ決まっています。「赤字国債に頼らない」という原則は閣議決定されましたが、具体的な金額の内訳は令和9年度の予算編成まで示されていません。",
+      "sources": [
+        {
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+          "name": "同大綱"
+        }
+      ]
+    }
+  ],
+  "timeline_aliases": [
+    {
+      "id": "timeline-2026-07-30",
+      "source_symbol": "BACKGROUND_TIMELINE",
+      "source_key": "2026年7月30日",
+      "title": "税率引下げと給付付き税額控除の検討を表明",
+      "existing_text": "首相官邸の会見で、軽減税率対象の飲食料品について、税率引下げと給付付き税額控除の両方をあわせて検討していると説明されました。",
+      "sources": [
+        {
+          "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html",
+          "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）"
+        }
+      ]
+    },
+    {
+      "id": "timeline-2026-08-05",
+      "source_symbol": "BACKGROUND_TIMELINE",
+      "source_key": "2026年8月5日",
+      "title": "「1%・2年間」の方針を初めて閣議決定",
+      "existing_text": "政府として、令和9年4月から2年間、軽減税率対象の飲食料品の消費税率を1%とする方針を正式に決定しました。財源は歳出・歳入の見直しで確保し、赤字国債には頼らないとしています。",
+      "sources": [
+        {
+          "url": "https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html",
+          "name": "首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）"
+        }
+      ]
+    },
+    {
+      "id": "timeline-2026-09-15",
+      "source_symbol": "BACKGROUND_TIMELINE",
+      "source_key": "2026年9月15日",
+      "title": "大綱を閣議決定、制度設計が確定",
+      "existing_text": "税率引下げの期間（2027年4月〜2029年3月）、就業者負担軽減支援金の対象・支給額、事業者向けの経過措置など、法案のもとになる制度設計が固まりました。本ページ確認時点で、これが到達している最新の段階です。",
+      "sources": [
+        {
+          "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+          "name": "内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日閣議決定）"
+        }
+      ]
+    }
+  ],
+  "vote": {
+    "topic_id": "consumption-tax-cut-issue-stance-v1",
+    "storage_key": "sns_vote_consumption-tax-cut-issue-stance-v1_my",
+    "choice_count": 28,
+    "existing_issue_labels": [
+      "公約・政治不信",
+      "減税の効果",
+      "対象範囲",
+      "財源・社会保障",
+      "給付との比較",
+      "事業者の負担",
+      "その他"
+    ],
+    "existing_stance_labels": [
+      "推進",
+      "条件付き",
+      "反対・慎重",
+      "中立"
+    ],
+    "fixed_issue_ids": [
+      "consumption-tax-cut-political-trust",
+      "consumption-tax-cut-effect",
+      "consumption-tax-cut-scope",
+      "consumption-tax-cut-finance-welfare",
+      "consumption-tax-cut-alternatives",
+      "consumption-tax-cut-business-burden",
+      "consumption-tax-cut-other"
+    ],
+    "choices": [
+      {
+        "choice_idx": 0,
+        "issue_id": "consumption-tax-cut-political-trust",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 1,
+        "issue_id": "consumption-tax-cut-political-trust",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 2,
+        "issue_id": "consumption-tax-cut-political-trust",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 3,
+        "issue_id": "consumption-tax-cut-political-trust",
+        "stance_id": "consumption-tax-cut-neutral"
+      },
+      {
+        "choice_idx": 4,
+        "issue_id": "consumption-tax-cut-effect",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 5,
+        "issue_id": "consumption-tax-cut-effect",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 6,
+        "issue_id": "consumption-tax-cut-effect",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 7,
+        "issue_id": "consumption-tax-cut-effect",
+        "stance_id": "consumption-tax-cut-neutral"
+      },
+      {
+        "choice_idx": 8,
+        "issue_id": "consumption-tax-cut-scope",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 9,
+        "issue_id": "consumption-tax-cut-scope",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 10,
+        "issue_id": "consumption-tax-cut-scope",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 11,
+        "issue_id": "consumption-tax-cut-scope",
+        "stance_id": "consumption-tax-cut-neutral"
+      },
+      {
+        "choice_idx": 12,
+        "issue_id": "consumption-tax-cut-finance-welfare",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 13,
+        "issue_id": "consumption-tax-cut-finance-welfare",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 14,
+        "issue_id": "consumption-tax-cut-finance-welfare",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 15,
+        "issue_id": "consumption-tax-cut-finance-welfare",
+        "stance_id": "consumption-tax-cut-neutral"
+      },
+      {
+        "choice_idx": 16,
+        "issue_id": "consumption-tax-cut-alternatives",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 17,
+        "issue_id": "consumption-tax-cut-alternatives",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 18,
+        "issue_id": "consumption-tax-cut-alternatives",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 19,
+        "issue_id": "consumption-tax-cut-alternatives",
+        "stance_id": "consumption-tax-cut-neutral"
+      },
+      {
+        "choice_idx": 20,
+        "issue_id": "consumption-tax-cut-business-burden",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 21,
+        "issue_id": "consumption-tax-cut-business-burden",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 22,
+        "issue_id": "consumption-tax-cut-business-burden",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 23,
+        "issue_id": "consumption-tax-cut-business-burden",
+        "stance_id": "consumption-tax-cut-neutral"
+      },
+      {
+        "choice_idx": 24,
+        "issue_id": "consumption-tax-cut-other",
+        "stance_id": "consumption-tax-cut-support"
+      },
+      {
+        "choice_idx": 25,
+        "issue_id": "consumption-tax-cut-other",
+        "stance_id": "consumption-tax-cut-conditional"
+      },
+      {
+        "choice_idx": 26,
+        "issue_id": "consumption-tax-cut-other",
+        "stance_id": "consumption-tax-cut-cautious"
+      },
+      {
+        "choice_idx": 27,
+        "issue_id": "consumption-tax-cut-other",
+        "stance_id": "consumption-tax-cut-neutral"
+      }
+    ],
+    "note": "配列の順序は既存投票とconfig双方で確認。山の件数順から再計算しない。サーバーへのテスト送信は行っていない。"
+  },
+  "classroom": {
+    "theme_id": "consumption-tax-cut",
+    "pro_label": "減税推進",
+    "con_label": "減税反対・慎重",
+    "reasons_pro": [
+      {
+        "issue_id": "consumption-tax-cut-political-trust",
+        "text": "増税の決定はすぐに実行されたのに、食料品の減税は国会で長く議論されてからようやく動いた。この順番の違いを軽く見るべきではないと感じている。"
+      },
+      {
+        "issue_id": "consumption-tax-cut-alternatives",
+        "text": "所得や世帯の条件を満たして初めて受け取れる給付よりも、買い物のたびにその場で軽くなる税の方が分かりやすいと考える。"
+      },
+      {
+        "issue_id": "consumption-tax-cut-scope",
+        "text": "対象を食料品だけに絞ってでも、まず実施に踏み切ることが次の対象拡大への足がかりになるという読みがある。"
+      }
+    ],
+    "reasons_con": [
+      {
+        "issue_id": "consumption-tax-cut-finance-welfare",
+        "text": "医療や介護を支える財源は、消費税だけでは既にまかないきれていない。そこから税収を減らせば、埋め合わせがどこかにしわ寄せされる不安が拭えない。"
+      },
+      {
+        "issue_id": "consumption-tax-cut-business-burden",
+        "text": "期限つきの引き下げは、税率が戻るときにレジや値札の設定をやり直す手間を店に強いる。負担は人手の少ない個人商店ほど重い。"
+      },
+      {
+        "issue_id": "consumption-tax-cut-effect",
+        "text": "値札を据え置く店が出れば、下がったはずの税がそのまま買い物客の支払いに反映されるとは限らないと見る。"
+      }
+    ],
+    "primary_sources": [
+      {
+        "title": "内閣(閣議決定)「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」",
+        "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+        "note": "税率引き下げの実施期間や対象範囲、事業者向けの経過措置など、決定済みの制度設計を確認できる。"
+      },
+      {
+        "title": "財務省「消費税の使途に関する資料」",
+        "url": "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm",
+        "note": "消費税が社会保障の財源に充てられる法的根拠と、税収だけでは社会保障の経費を賄いきれていない実情を確認できる。"
+      },
+      {
+        "title": "内閣府「消費税減税について」(社会保障国民会議実務者会議 提出資料)",
+        "url": "https://www.cas.go.jp/jp/seisaku/kokuminkaigi/contents/20260424/02_siryou2.pdf",
+        "note": "税率を下げた場合の物価や経済への影響に関する試算モデルと、想定される反論への回答を確認できる。"
+      }
+    ],
+    "questions": [
+      "消費税を下げる対象は、食料品に限るべきか、全ての品目に広げるべきか。",
+      "消費税を下げる政策と、給付で家計を支える政策は、どちらを優先すべきか。",
+      "事業者の準備期間を延ばすことと、消費税を早く下げることは、両立できるか。"
+    ]
+  },
+  "baseline": {
+    "commit": "e8ffdc7631c26fe3bd34fcf9ab34a1ab2d63b52d",
+    "page": {
+      "path": "docs/consumption-tax-cut-reaction-map.html",
+      "git_blob": "c2ebf4b7ec372552c83bb5a586a207c10fa7d560",
+      "sha256": "f3cf1d07566b83781bc311842da831b95d734c7ade19f989152ef1c32fa02ca7",
+      "bytes": 245956
+    },
+    "live": {
+      "url": "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html",
+      "final_url": "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html",
+      "status": 200,
+      "captured_at": "2026-09-22T08:17:05.113141+00:00",
+      "sha256": "f3cf1d07566b83781bc311842da831b95d734c7ade19f989152ef1c32fa02ca7",
+      "bytes": 245956,
+      "matches_repository": true,
+      "headers": {
+        "etag": "\"6ab22ad9-3c0c4\"",
+        "last-modified": "Tue, 22 Sep 2026 07:14:33 GMT",
+        "content-type": "text/html; charset=utf-8"
+      }
+    },
+    "assets": [
+      {
+        "reference": "images/topics/constitutional-amendment/constitutional-hero.webp",
+        "path": "docs/images/topics/constitutional-amendment/constitutional-hero.webp",
+        "git_blob": "7108ac17d4196beb0c6e5a9aa712967f59613cb5",
+        "sha256": "adb8f49974e4c674dae16d83a22f76fe5c3276e106268175a5401671b788841f",
+        "bytes": 138352
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp",
+        "git_blob": "eb2ce729b271ca63f2f85353d645dab5fbe522ab",
+        "sha256": "78c6af97430eb7fceba5a484f5e0cbc7dc575f7c58c716c0c5a4fcabc9277c87",
+        "bytes": 107034
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-jigyousha-v2.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-jigyousha-v2.webp",
+        "git_blob": "6d65fb7e69a7979659601e0af0013029fac77917",
+        "sha256": "9d002013f163b8a1670e9056b8b080a834f2e1dd8dcfa58270775d6e798c1bb6",
+        "bytes": 174614
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka-v2.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouka-v2.webp",
+        "git_blob": "354b0522c78a82cfd5e70c971c51232c8f66aff0",
+        "sha256": "bd1ea89e130d15cd4e72a6d09d352e0d4b89a428a3cd9ca73883be18cb557109",
+        "bytes": 207810
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouyaku-v2.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouyaku-v2.webp",
+        "git_blob": "e6e46c8af099ed5a78269be70ceac9675aa9c98c",
+        "sha256": "a482b1daf072d27e26bdba9e2e59bd8fc3d2c6cf4f2419d5508bdddeae06baa2",
+        "bytes": 164464
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kyufu-v3.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kyufu-v3.webp",
+        "git_blob": "b7a4a6be76a9424e5896f8f744a2227964803ed7",
+        "sha256": "d6e7d651f738252440f80078ecbfa021e9d8bcf8bbb5b89935715a29dd72cfdd",
+        "bytes": 179562
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-sonota-v2.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-sonota-v2.webp",
+        "git_blob": "3e174fe1aecb80db4b3ea3be5688b0076eae9050",
+        "sha256": "3a9a495fea309c5283f367bd0527979cf49d82c6e18b01564384a789cf345a4f",
+        "bytes": 149268
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-taishou-v2.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-taishou-v2.webp",
+        "git_blob": "61a2a7e916a54754dc019a2d3588c522a6426848",
+        "sha256": "ec544fc10e6b4346355b76f4616ba88a269d334d756a9755f4c78a3ed572e475",
+        "bytes": 188398
+      },
+      {
+        "reference": "images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-zaigen-v2.webp",
+        "path": "docs/images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-zaigen-v2.webp",
+        "git_blob": "1904a509b729ce3fb91bc21e8d0a7e6a89cacb46",
+        "sha256": "8cec134e0b1d624ba200719dfb38659de396dd2377378f10d00e701d70b73292",
+        "bytes": 189416
+      },
+      {
+        "reference": "images/topics/fukushuto/fukushuto-hero.webp",
+        "path": "docs/images/topics/fukushuto/fukushuto-hero.webp",
+        "git_blob": "247b80edf880c68f6041beab555fc1f15ad73b6d",
+        "sha256": "c06b8eeda49642af8b3f3d8595a2b870804560a7e2a5cc495ddbd69b17b56ce0",
+        "bytes": 101670
+      },
+      {
+        "reference": "images/topics/koshitsu-tenpakai/koshitsu-hero.webp",
+        "path": "docs/images/topics/koshitsu-tenpakai/koshitsu-hero.webp",
+        "git_blob": "27dd6c569746ef41feacf5a6b0a329db25522b66",
+        "sha256": "7a5b1418cf4319309763e903f567f9c5ab612bb65d7101075fbe7b443c80d5c4",
+        "bytes": 101274
+      },
+      {
+        "reference": "share-x-btn.js",
+        "path": "docs/share-x-btn.js",
+        "git_blob": "f36bdeaced4778e1e0ac3471a5f446c23504cef6",
+        "sha256": "c0da1b738308c8dfa7aa5c2f6f2303eb9e7994b04ed0958d9386aa171d8e8311",
+        "bytes": 2469
+      },
+      {
+        "reference": "site-tokens.css?v=2",
+        "path": "docs/site-tokens.css",
+        "git_blob": "60bbe884e7b937aea6af43cca61b3ab67a8dd128",
+        "sha256": "3dcbd6cef22395f7ac5a51432a50a2874b5f68b81bea548a37dcbd4450960d79",
+        "bytes": 6335
+      },
+      {
+        "reference": "topic-modern.css?v=31",
+        "path": "docs/topic-modern.css",
+        "git_blob": "cf6b028849e3339455778c1dacdeb3742847f2b9",
+        "sha256": "1fb3f1780aa751a87c5dbae88b7ca42e0ae06a008b63e2c0ce155ba154600ba9",
+        "bytes": 40808
+      },
+      {
+        "reference": "topic-modern.js?v=13",
+        "path": "docs/topic-modern.js",
+        "git_blob": "77bad08e24d17af31405fafa09258c89494a397d",
+        "sha256": "1a34c66fd1ccaf8304247881d15fa04cb45c636ca8815b37087eb5afa6074771",
+        "bytes": 34712
+      },
+      {
+        "reference": "vote-config.js?v=1",
+        "path": "docs/vote-config.js",
+        "git_blob": "30248a59255d50202b4d178b131620ff7f3ae37c",
+        "sha256": "71baf51f5b395dffba77d53e21f3767321f6b94224ea085d7143771f9d00e014",
+        "bytes": 423
+      },
+      {
+        "reference": "vote-store.js?v=1",
+        "path": "docs/vote-store.js",
+        "git_blob": "c955c59e0b995343099a9f04f9584a31dea916ce",
+        "sha256": "3417c6903498787189cf56936a437fe1ebfce23fd216716a0b36f8407e6fa921",
+        "bytes": 4714
+      }
+    ],
+    "source_versions": [
+      {
+        "path": "THEMES.yaml",
+        "git_blob": "b7a4bd9ca08a60373eac7c69954f44e2fa29db2d",
+        "sha256": "65572cb0c3c0aaea7cc69880a639450647b1805ade9d916091dd0f9a43ed472d",
+        "bytes": 8532
+      },
+      {
+        "path": "configs/classroom/consumption-tax-cut.json",
+        "git_blob": "ad921701e16762c540cd83768d4200eef77f45ca",
+        "sha256": "700db7bef331b802288fdcdf4ca70392b3960a7254eb309e8c9623d73e8430d4",
+        "bytes": 3244
+      },
+      {
+        "path": "configs/planet/consumption-tax-cut.yaml",
+        "git_blob": "b97006f1b754387da261991d485176e7f32b7079",
+        "sha256": "e89d53848342cdaf63a986655e2358e882da8f9575051ebab237cc1d8cdd2f01",
+        "bytes": 2928
+      },
+      {
+        "path": "configs/theme-seo.json",
+        "git_blob": "733582058ada9c530dd229fbb1a4c77b133293ad",
+        "sha256": "ae304a3f49485a72cd5b18562f53c1c782147a4536136dbe63a582c41ac45a6c",
+        "bytes": 18912
+      },
+      {
+        "path": "data/consumption-tax-cut_4issues-reread.json",
+        "git_blob": "742f88e4d9aee881d1aa85ad29d659a9593d8c28",
+        "sha256": "4a7cef669b0f000068d0af0822dd4a0cd99494abdcd0602de2719035cab1749c",
+        "bytes": 956690
+      },
+      {
+        "path": "data/consumption-tax-cut_claim_posts.json",
+        "git_blob": "adc631fcc1478469bc6e1a3c98669a1f4c0fc940",
+        "sha256": "f21f09fcbe7ee23e0c894598d9327d1b8f4291177c80cc46469699cc35974428",
+        "bytes": 2605
+      },
+      {
+        "path": "data/public/themes/consumption-tax-cut.json",
+        "git_blob": "b9d40ad705ef255f9f552f413e561b2b6a07db7e",
+        "sha256": "0d1c16c348b6d060d8074e861e2322dfec5f2b5552a74b89f86026bd819c8fde",
+        "bytes": 33370
+      },
+      {
+        "path": "data/verification/consumption-tax-cut-claims.json",
+        "git_blob": "b57d9abc76f7b5c9bc3731cfaafd4269c1e8c5d5",
+        "sha256": "b938770629a518a5f6bd23da30b4dc348e7a70276d612bdccdb3c32b10ecc7c7",
+        "bytes": 5134
+      },
+      {
+        "path": "data/verification/consumption-tax-cut-editorial.json",
+        "git_blob": "6c0b0fcca432dabe3a055dff46db7c560fe4a2db",
+        "sha256": "8f4f578eb2deb1b6197786332175472e92fc682edc3c1495a95434bdf79c4b52",
+        "bytes": 3408
+      },
+      {
+        "path": "data/verification/consumption-tax-cut-sunk-continents.json",
+        "git_blob": "28f8c80076b497b0dfcac27a8c84942e04922d77",
+        "sha256": "614e8f63443bc64cc308012145d665a185fb59bdab1ae3681541e71631fdf89d",
+        "bytes": 12969
+      },
+      {
+        "path": "data/verification/consumption-tax-cut-veins.json",
+        "git_blob": "3698cf7703eca2b45f1bd4d5c882708861da8809",
+        "sha256": "e27b00d7bb0923bc785e2a0991e93117e19f2a213ee7e1a9e5c06802216a4731",
+        "bytes": 4315
+      },
+      {
+        "path": "docs/data/themes/consumption-tax-cut.json",
+        "git_blob": "b9d40ad705ef255f9f552f413e561b2b6a07db7e",
+        "sha256": "0d1c16c348b6d060d8074e861e2322dfec5f2b5552a74b89f86026bd819c8fde",
+        "bytes": 33370
+      },
+      {
+        "path": "quality/prototypes/planet-prototype.template.html",
+        "git_blob": "49ce9a61bc66a6df1be42b2db5415bd6c959ff8e",
+        "sha256": "8cae11be1ce9fce07cf6b494c8278df671295097c27f48d375087b70302015a0",
+        "bytes": 60865
+      },
+      {
+        "path": "quality/research/consumption-tax-cut-primary-sources.md",
+        "git_blob": "d2edfc9653df7e7edbc4a173e067321b474f6c42",
+        "sha256": "9f07bd11e67ac02b08a9928fc2e6e30c6107945f69eb25a449e725e55c6f00e7",
+        "bytes": 44174
+      },
+      {
+        "path": "scripts/build_consumption_tax_page.py",
+        "git_blob": "3baece3de2cad939fb7337f8054c5bbad4e2105c",
+        "sha256": "c8d6de49c1ba29b411522bd89144f50b8f402fe0218911ab7dea81f20613408b",
+        "bytes": 115753
+      },
+      {
+        "path": "scripts/build_planet_data.py",
+        "git_blob": "0bb7d9c89ba397a8429b28b86560e66b17ba044e",
+        "sha256": "19d77a4ce5fd8bc475d4d8960e91ca9a19921d2f2a774ddcc0cfc8405a33fe50",
+        "bytes": 60475
+      },
+      {
+        "path": "scripts/refresh_adapters/consumption_tax.py",
+        "git_blob": "3f07d28e2448b112ea8c71ba46916b2a38bf27fc",
+        "sha256": "b48b2b847356998f1fc6b3f0814e0fac80544876e23ea7d02be31d085180a218",
+        "bytes": 7543
+      },
+      {
+        "path": "scripts/refresh_planet_section.py",
+        "git_blob": "fb978e861ec48a89745d0472f290bca23925dd92",
+        "sha256": "3c791c06ed17fb9f92c0fa5b1aaa75d7167d3f78bb6b3ab43e423729fe537e30",
+        "bytes": 42523
+      },
+      {
+        "path": "scripts/seo/apply_classroom_section.py",
+        "git_blob": "bc2104c34b32d0a93b376c70b654d6c785632c96",
+        "sha256": "69887c9877fa1a7841f6c40162e6fb1188882f330c126c6167ce35cf99b16d75",
+        "bytes": 10030
+      },
+      {
+        "path": "scripts/seo/apply_theme_trust.py",
+        "git_blob": "f2447555c452d73ac8256e92b4eb6a08d7726b24",
+        "sha256": "e99f66b525529b3af1beb0faec650a31d7291a23a5c8a95f1421d9d6c214cdb4",
+        "bytes": 16368
+      }
+    ],
+    "links": [
+      "#",
+      "#fallback-nav",
+      "#fb-consumption-tax-cut-alternatives",
+      "#fb-consumption-tax-cut-business-burden",
+      "#fb-consumption-tax-cut-effect",
+      "#fb-consumption-tax-cut-finance-welfare",
+      "#fb-consumption-tax-cut-other",
+      "#fb-consumption-tax-cut-political-trust",
+      "#fb-consumption-tax-cut-scope",
+      "#issue-consumption-tax-cut-alternatives",
+      "#issue-consumption-tax-cut-business-burden",
+      "#issue-consumption-tax-cut-effect",
+      "#issue-consumption-tax-cut-finance-welfare",
+      "#issue-consumption-tax-cut-political-trust",
+      "#issue-consumption-tax-cut-scope",
+      "#ocean",
+      "#planet-block",
+      "about.html",
+      "about.html#corrections",
+      "about.html#method",
+      "about.html#operator",
+      "constitutional-amendment-reaction-map.html",
+      "disclaimer.html",
+      "fukushuto-reaction-map.html",
+      "https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform",
+      "https://kokkai.ndl.go.jp/txt/122105261X01520260622/110",
+      "https://www.buymeacoffee.com/issue.stance.lab",
+      "https://www.cas.go.jp/jp/seisaku/kokuminkaigi/contents/20260424/02_siryou2.pdf",
+      "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
+      "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html",
+      "https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html",
+      "https://www.mof.go.jp/tax_information/qanda015.html",
+      "https://www.mof.go.jp/tax_policy/summary/consumption/122.pdf",
+      "https://www.mof.go.jp/tax_policy/summary/consumption/d05.htm",
+      "https://www.mof.go.jp/tax_policy/summary/consumption/d05_1.pdf",
+      "https://www.nta.go.jp/about/introduction/torikumi/report/2024/04_3.htm",
+      "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6551.htm",
+      "https://x.com/148pv9yuZKv7Hox/status/2086203743704637530",
+      "https://x.com/Culena0/status/2085897628005650517",
+      "https://x.com/KayoRabbit/status/2084228125450482119",
+      "https://x.com/NobodyR01/status/2083849357380694468",
+      "https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560",
+      "https://x.com/Yan0321Asa/status/2086480295843504503",
+      "https://x.com/fukmaru2020/status/2083093838630142393",
+      "https://x.com/gasnukiaccount/status/2094004743136063806",
+      "https://x.com/kawanashigaikot/status/2091675832569979076",
+      "https://x.com/koto_cat_/status/2081981547775995905",
+      "https://x.com/longtallsagi/status/2093939866065371202",
+      "https://x.com/mina_713713/status/2091198301052055950",
+      "https://x.com/shigani_kisyain/status/2082021002566095151",
+      "https://x.com/siki2364/status/2084241343036219545",
+      "image-policy.html",
+      "index.html",
+      "koshitsu-tenpakai-reaction-map.html",
+      "privacy.html"
+    ],
+    "scripts": [
+      "topic-modern.js?v=13",
+      "vote-config.js?v=1",
+      "vote-store.js?v=1",
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864",
+      "https://platform.twitter.com/widgets.js",
+      "share-x-btn.js"
+    ],
+    "protected_token_counts": {
+      "G-K10S4YCZFH": 2,
+      "ca-pub-2542211932832864": 2,
+      "vote-store.js": 1,
+      "<link rel=\"canonical\"": 1,
+      "property=\"og:image\"": 1
+    },
+    "restore_note": "baseline.commit と page.path / assets[].path のgit履歴が完全な変更前コピー。公開HTMLはHTTP 200で取得し、保存版とバイト一致を確認した。"
+  },
+  "checks": {
+    "canonical_matches_public": true,
+    "public_mirror_identical": true,
+    "all_14_posts_exist_in_correct_issue": true,
+    "claims_72_memberships_match_provenance": true,
+    "all_7_images_exist_and_in_html": true,
+    "reread_4_issue_totals_match": true,
+    "all_source_only_bases_current": true,
+    "all_28_vote_indices_unique": true,
+    "runtime_changes_tested": false,
+    "primary_sources_reverified": false
+  }
+}
