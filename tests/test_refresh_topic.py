@@ -192,6 +192,47 @@ class RefreshTopicTests(unittest.TestCase):
                 next_collection_date(root, "topic", "2026-08-10", {"new": 0, "opinions": 0})
             )
 
+    def test_cadence_pushes_later_to_avoid_another_themes_collect_at(self):
+        # 前回報告なし(latest=None)なので、既定の14日サイクル(2026-08-10 + 14日 = 2026-08-24)が基準になる。
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "THEMES.yaml").write_text(
+                "themes:\n  other:\n    collect_at: 2026-08-24\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                next_collection_date(root, "topic", "2026-08-10", {"new": 4, "opinions": 4}),
+                "2026-08-25",
+            )
+
+    def test_cadence_collision_avoidance_chains_past_consecutive_days_without_moving_earlier(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "THEMES.yaml").write_text(
+                "themes:\n"
+                "  a:\n"
+                "    collect_at: 2026-08-24\n"
+                "  b:\n"
+                "    collect_at: 2026-08-25\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                next_collection_date(root, "topic", "2026-08-10", {"new": 4, "opinions": 4}),
+                "2026-08-26",
+            )
+
+    def test_cadence_collision_avoidance_ignores_the_topics_own_existing_entry(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "THEMES.yaml").write_text(
+                "themes:\n  topic:\n    collect_at: 2026-08-24\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                next_collection_date(root, "topic", "2026-08-10", {"new": 4, "opinions": 4}),
+                "2026-08-24",
+            )
+
     def test_cadence_uses_new_count_when_classifier_has_no_opinion_flag(self):
         """憲法改正のように is_opinion を出さないテーマでも件数ルールが効くこと。"""
         with tempfile.TemporaryDirectory() as directory:
