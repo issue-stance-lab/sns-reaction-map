@@ -1057,7 +1057,8 @@ STANCE_GLANCE_CSS = """<style>
 
 
 def stance_glance(opinions: int, stance_counts: dict, stance_share: dict, *,
-                  stance_ids: dict[str, str] | None = None) -> str:
+                  stance_ids: dict[str, str] | None = None,
+                  stance_colors: dict[str, str] | None = None) -> str:
     """ヒーロー直後、内訳バー＋「まず、あなたは？」を組み立てる。
 
     stance_counts/stance_share は build_consumption_tax_arena.py が
@@ -1066,16 +1067,18 @@ def stance_glance(opinions: int, stance_counts: dict, stance_share: dict, *,
     """
     segs, legend, buttons, js_rows = [], [], [], []
     for i, s in enumerate(STANCE_ORDER):
-        meta = STANCE_META[s]
+        meta = dict(STANCE_META[s])
+        if stance_colors is not None:
+            meta.update(color=stance_colors[s], bg=stance_colors[s] + "12")
         stance_attr = f' data-stance-id="{esc(stance_ids[s])}"' if stance_ids is not None else ""
         count = stance_counts.get(s, 0)
         share = stance_share.get(s, 0.0)
         seg_label = f"{share:.0f}%" if share >= 5 else ""
         segs.append(
-            f'<div class="temp-seg" data-i="{i}" style="width:{share:.1f}%;background:{meta["color"]}">{seg_label}</div>'
+            f'<div class="temp-seg" data-i="{i}"{stance_attr} style="width:{share:.1f}%;background:{meta["color"]}">{seg_label}</div>'
         )
         legend.append(
-            f'<span data-i="{i}"><i style="background:{meta["color"]}"></i>{esc(meta["label"])}<b>{count}件</b></span>'
+            f'<span data-i="{i}"{stance_attr}><i style="background:{meta["color"]}"></i>{esc(meta["label"])}<b>{count}件</b></span>'
         )
         buttons.append(
             f'<button type="button" class="sg-pick-btn" data-i="{i}"{stance_attr} aria-pressed="false" '

@@ -1,15 +1,101 @@
-/* 消費税専用。静的本文の表示・印刷は既存CSSを引き継ぐ。 */
-.tax-connected #tax-content-scope {
-  margin: 8px 0 14px;
-  padding: 10px 12px;
-  border-left: 3px solid #2f8f83;
-  background: #f1f7f5;
-  color: #24334a;
-  font-size: 13px;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
+/* 消費税の連動読書面。既存の色・日本語書体を継承し、山だけを大きく動かす。 */
+.tax-connected { --tax-paper:#f6f9fe; --tax-ink:#071a3d; --tax-link:#075ef2; --tax-rule:#dce5f0; }
+.tax-connected #planet-block { color:var(--tax-ink); }
+.tax-connected #planet-block .stage { display:flex; flex-direction:column; gap:0; }
+.tax-connected #planet-block .chart-box { order:0; position:relative; width:100%; margin:12px 0 0; padding:12px 18px 14px; border:1px solid var(--tax-rule); border-radius:18px 18px 0 0; box-sizing:border-box; background:#f0f5fc; }
+.tax-connected #planet-block .chart-box #section { width:100%; height:auto; max-height:340px; margin-bottom:0; display:block; }
+.tax-connected #planet-block #section .hill { outline:none; }
+.tax-connected #planet-block #section .hill:focus-visible { filter:drop-shadow(0 0 3px #075ef2); }
+.tax-connected #planet-block .chart-box .dive,
+.tax-connected #planet-block .chart-box #seafloor,
+.tax-connected #planet-block .chart-box #seacover { display:none; }
+.tax-connected #planet-block .chart-box .hint { margin:10px 0 0; font-size:12px; color:#53647d; }
+.tax-connected #planet-block .floor-note { margin:5px 0 0; font-size:11px; color:#637089; }
+.tax-connected #planet-block .tap-hint { margin:20px 0 8px; }
+.tax-connected #planet-block #modes { margin:20px 0 10px; gap:6px; scroll-margin-top:88px; }
+.tax-connected #planet-block #modes button { font-size:12px; min-height:38px; border-radius:7px; }
+.tax-connected #planet-block #list { order:1; width:100%; max-width:none; box-sizing:border-box; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; margin:0; padding:12px 16px; list-style:none; border:1px solid var(--tax-rule); border-top:0; background:var(--tax-paper); }
+.tax-connected #planet-block #list li { min-width:0; margin:0; }
+.tax-connected #planet-block #list button { width:100%; height:100%; box-sizing:border-box; padding:9px 10px; font:inherit; font-size:12px; font-weight:700; text-align:left; line-height:1.5; border:1px solid transparent; border-radius:6px; color:var(--tax-ink); background:transparent; box-shadow:none; }
+.tax-connected #planet-block #list button[aria-pressed="true"] { background:#fff; border-color:var(--tax-link); box-shadow:inset 0 -2px var(--tax-link); }
+.tax-connected #planet-block #list .dot { display:none; }
+.tax-connected #planet-block #list .m { display:block; margin:2px 0 0; font-size:10px; font-weight:400; color:#637089; }
+.tax-connected #planet-block #panel { order:2; width:100%; box-sizing:border-box; padding:28px; margin:0; border:1px solid var(--tax-rule); border-top:0; border-radius:0 0 18px 18px; background:#fff; box-shadow:0 8px 24px rgba(18,53,99,.05); }
+.tax-connected #planet-block #panel .tax-selected-head { display:flex; align-items:center; justify-content:space-between; gap:18px; }
+.tax-connected #planet-block #panel h2 { margin:3px 0 0; font-size:26px; line-height:1.45; letter-spacing:.015em; }
+.tax-connected #planet-block #panel .tax-eyebrow { margin:0 0 4px; font-size:11px; font-weight:700; color:#637089; letter-spacing:.06em; }
+.tax-connected #planet-block #panel .tax-image-action { flex:0 0 auto; display:flex; flex-direction:column; gap:4px; align-items:center; padding:6px; margin:0; max-width:140px; border:1px solid var(--tax-rule); border-radius:8px; background:#fff; cursor:pointer; box-shadow:none; font:inherit; font-size:11px; font-weight:700; color:var(--tax-link); }
+.tax-connected #planet-block #panel .tax-image-action img { width:112px; height:48px; object-fit:contain; margin:0; border-radius:3px; }
+.tax-connected #planet-block #panel .tax-metrics { margin:14px 0; font-size:13px; color:#53647d; }
+.tax-connected #planet-block #panel .tax-metrics p { margin:4px 0; line-height:1.7; }
+.tax-connected #planet-block #panel [data-tax-count] { font-size:26px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--tax-ink); }
+.tax-connected #planet-block #panel .tax-scope-note { margin:0 0 26px; padding:10px 12px; border-left:3px solid var(--tax-issue-color); background:var(--tax-paper); font-size:12px; line-height:1.7; color:#53647d; }
+.tax-connected #planet-block #panel .tax-columns { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:30px; }
+.tax-connected #planet-block #panel .tax-columns > * { min-width:0; }
+.tax-connected #planet-block #panel .tax-evidence { padding-left:30px; border-left:1px solid var(--tax-rule); }
+.tax-connected #planet-block #panel h3 { margin:0 0 12px; padding:0; border:0; font-size:18px; line-height:1.5; color:var(--tax-ink); }
+.tax-connected #planet-block #panel .tax-evidence h3:not(:first-child) { margin-top:24px; }
+.tax-connected #planet-block #panel .tax-evidence .tax-eyebrow + h3 { margin-top:0; }
+.tax-connected #planet-block #panel p { font-size:14px; line-height:1.85; }
+.tax-connected #planet-block #panel .tax-note { margin:8px 0 12px; font-size:11.5px; line-height:1.8; color:#637089; }
+.tax-connected #planet-block #panel .tax-empty { margin:10px 0 20px; padding:12px 0; font-size:13px; color:#53647d; }
+.tax-connected #planet-block #panel .tax-reasons { padding:0; margin:0; list-style:none; }
+.tax-connected #planet-block #panel .tax-reasons li { margin:0 0 16px; padding:0; border:0; }
+.tax-connected #planet-block #panel .tax-reasons li > div { display:flex; align-items:baseline; justify-content:space-between; gap:16px; font-size:13px; line-height:1.65; }
+.tax-connected #planet-block #panel .tax-reasons b { flex:none; font-variant-numeric:tabular-nums; font-size:17px; }
+.tax-connected #planet-block #panel .tax-reasons small { margin-left:3px; font-size:10px; font-weight:400; }
+.tax-connected #planet-block #panel .tax-reason-track { display:block; margin-top:6px; height:4px; background:#edf1f7; border-radius:2px; overflow:hidden; }
+.tax-connected #planet-block #panel .tax-reason-track i { display:block; height:100%; background:var(--tax-issue-color); border-radius:2px; opacity:.8; }
+.tax-connected #planet-block #panel details { margin:10px 0; border-top:1px solid var(--tax-rule); padding:10px 0 0; font-size:13px; }
+.tax-connected #planet-block #panel summary { cursor:pointer; padding:3px 0; font-weight:700; line-height:1.7; }
+.tax-connected #planet-block #panel details > p { margin:10px 0; }
+.tax-connected #planet-block #panel .tax-sources { border:0; padding:0; margin:12px 0 8px; }
+.tax-connected #planet-block #panel .tax-sources summary { color:var(--tax-link); font-size:12px; }
+.tax-connected #planet-block #panel .tax-sources ul { margin:8px 0; padding-left:18px; }
+.tax-connected #planet-block #panel .tax-sources li { margin:8px 0; font-size:12px; line-height:1.8; }
+.tax-connected #planet-block #panel a { color:var(--tax-link); white-space:normal; overflow-wrap:anywhere; }
+.tax-connected #planet-block #panel .tax-verdict { display:inline-block; margin-top:12px; padding:3px 8px; border:1px solid var(--tax-rule); border-radius:4px; font-size:11px; font-weight:700; }
+.tax-connected #planet-block #panel .tax-posts { margin-top:32px; }
+.tax-connected #planet-block #panel .tax-post { padding:15px 0; border-top:1px solid var(--tax-rule); }
+.tax-connected #planet-block #panel .tax-post > p { margin:0 0 6px; font-weight:700; font-size:14px; }
+.tax-connected #planet-block #panel .tax-post > a { font-size:12px; font-weight:700; }
+.tax-connected #planet-block #panel .tax-embed { border:0; padding:0; margin-top:8px; }
+.tax-connected #planet-block #panel .tax-embed summary { color:#637089; font-size:11px; font-weight:400; }
+.tax-connected #planet-block #panel .tax-embed iframe { max-width:100% !important; }
+.tax-connected #planet-block #panel .twitter-tweet { max-width:100%; margin:10px 0; }
+.tax-connected #planet-block #panel .cite-copy-wrap { display:inline-flex; margin:6px 0 0; }
+.tax-connected .tax-map-jump { display:inline-block; margin-top:8px; font-size:12px; }
+.tax-connected #stance-glance .temp-seg, .tax-connected #stance-glance .temp-bar-legend > span { transition:opacity .3s,filter .3s; }
+.tax-connected #stance-glance .tax-other-stance { opacity:.3; }
+.tax-connected #stance-glance .tax-selected-stance { filter:saturate(1.2); }
+.tax-connected #stance-glance-result-text { overflow-wrap:anywhere; }
+.tax-connected .tax-answer-link { margin-top:8px; border:0; background:transparent; color:var(--tax-link); font:inherit; font-size:12px; cursor:pointer; text-decoration:underline; }
+.tax-connected #planet-block #panel :focus-visible, .tax-connected #list button:focus-visible { outline:3px solid #075ef2; outline-offset:3px; }
+@media screen {
+  .tax-connected #claim-audit, .tax-connected #issue-cards, .tax-connected #ocean, .tax-connected #bukatsu-check { display:none; }
 }
-.tax-connected #stance-glance-result-text { overflow-wrap: anywhere; }
-@media (prefers-reduced-motion: reduce) {
-  .tax-connected #stance-glance .sg-pulse { animation: none; }
+@media (max-width:760px) {
+  .tax-connected #planet-block #panel { padding:20px 16px; }
+  .tax-connected #planet-block #panel .tax-columns { grid-template-columns:1fr; gap:26px; }
+  .tax-connected #planet-block #panel .tax-evidence { padding:24px 0 0; border-left:0; border-top:2px solid var(--tax-rule); }
+  .tax-connected #planet-block #list { grid-template-columns:repeat(2,minmax(0,1fr)); padding:10px; }
+  .tax-connected #planet-block .chart-box { padding:10px 6px; }
+  .tax-connected #planet-block #panel h2 { font-size:20px; }
+  .tax-connected #planet-block #panel .tax-image-action { max-width:none; font-size:11px; flex-direction:row; margin-top:10px; }
+  .tax-connected #planet-block #panel .tax-image-action img { width:48px; height:22px; }
+  .tax-connected #planet-block #panel .tax-selected-head { display:block; }
 }
+@media (prefers-reduced-motion:reduce) {
+  .tax-connected #stance-glance .sg-pulse { animation:none; }
+  .tax-connected #stance-glance .temp-seg, .tax-connected #stance-glance .temp-bar-legend > span { transition:none; }
+}
+@media print {
+  .tax-connected #planet-block #panel, .tax-connected #list, .tax-connected #modes { display:none !important; }
+  .tax-connected #fallback { display:block !important; }
+}
+
+.tax-connected .tax-guesses { margin:16px 0; padding:12px 16px; background:#f6f9fe; border:1px solid #dce5f0; border-radius:10px; }
+.tax-connected .tax-guesses > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.tax-connected #guesses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.tax-connected #guesses .guess { margin:0; }
+@media(max-width:760px) { .tax-connected #guesses { grid-template-columns:1fr; } }

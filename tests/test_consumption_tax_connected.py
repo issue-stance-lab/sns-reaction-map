@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import build_consumption_tax_page as builder
 import consumption_tax_connected as connected
+import consumption_tax_connected_content as content
+from consumption_tax_count_provenance import verified_selectors
 
 
 class ConnectedContentTests(unittest.TestCase):
@@ -94,11 +96,82 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertTrue(any("接続表" in p for p in connected.validate(source)))
 
     def test_missing_runtime_or_source_only_content_is_rejected(self):
-        for before, after in [('consumption-tax-connected.js?v=1', 'missing.js'),
+        for before, after in [('consumption-tax-connected.js?v=2', 'missing.js'),
                               ('class="sunk"', 'class="missing-source"'),
                               (connected.BRIDGE_START, '/* missing bridge */')]:
             with self.subTest(before=before):
                 self.assertTrue(connected.validate(self.page.replace(before, after)))
+
+    def test_reading_templates_have_local_sources_and_distinct_empty_states(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(len(soup.select('template[id^="tax-reading-"]')), 7)
+        finance = soup.select_one('#tax-reading-consumption-tax-cut-finance-welfare')
+        self.assertEqual(len(finance.select('[data-tax-claim]')), 3)
+        self.assertIn('理由別に分ける再読をまだ行っていません', str(finance))
+        effect = soup.select_one('#tax-reading-consumption-tax-cut-effect')
+        self.assertIn('資料照合は、まだ登録されていません', str(effect))
+        self.assertEqual(len(effect.select('[data-tax-reason]')), 5)
+        source = finance.select_one('[data-tax-claim="refund"] a')
+        source['href'] = 'https://example.invalid/missing'
+        self.assertTrue(any('読書面の資料照合' in p for p in connected.validate(str(soup))))
+
+    def test_reading_reason_loss_is_rejected(self):
+        broken = self.page.replace('data-tax-reason="A"', 'data-missing-reason="A"')
+        self.assertTrue(any('理由分類' in p for p in connected.validate(broken)))
+
+    def test_corrections_follow_changed_counts_and_keep_confirmation_dates(self):
+        data = connected.planet_data(self.page)
+        original_dates = (data['editorial']['checked_on'], data['ocean']['checked_on'])
+        data['totals'].update(collected=5000, opinions=4000)
+        next(s for s in data['stances'] if s['id'].endswith('-conditional'))['count'] = 800
+        by_id = {i['id']: i for i in data['issues']}
+        for suffix, count in [('political-trust', 1200), ('other', 80), ('business-burden', 160)]:
+            by_id['consumption-tax-cut-' + suffix]['count'] = count
+        texts = content.corrected_observations(data)
+        for part, actual in zip(['80.0%', '800件（20.0%）', '1,200件', '80件（2.0%）'], texts):
+            self.assertIn(part, actual)
+        content.correct_editorial(data)
+        finding = next(f for f in data['editorial']['findings'] if f['id'].endswith('-ed-4'))['text']
+        self.assertIn('160件（全体の4.0%）', finding)
+        self.assertNotIn('どの論点よりも少ない', finding)
+        self.assertEqual((data['editorial']['checked_on'], data['ocean']['checked_on']), original_dates)
+        self.assertEqual(content.pct(0, 0), '算出できません')
+
+    def test_source_only_items_keep_their_checked_population(self):
+        data = connected.planet_data(self.page)
+        item = data['ocean']['sunk_continents'][0]
+        item.update(base_stale=True, sns_base=2000)
+        html = content.render_templates(data, self.page, connected.content_index(data))
+        self.assertIn('確認時の意見2,000件では', html)
+        self.assertIn(item['checked_on'], html)
+
+    def test_bar_colors_match_the_mountains(self):
+        soup = BeautifulSoup(self.page, 'html.parser')
+        for stance in connected.planet_data(self.page)['stances']:
+            selector = '#stance-glance .temp-seg[data-stance-id="' + stance['id'] + '"]'
+            self.assertIn('background:' + stance['color'], soup.select_one(selector)['style'])
+
+    def test_reading_counts_have_original_record_provenance(self):
+        self.assertEqual(len(verified_selectors(self.page, ROOT)), 25 + 2 + 4)
+        self.assertEqual(verified_selectors(self.original, ROOT), {})
+
+    def test_wrong_reason_count_fails_even_when_another_bucket_has_that_number(self):
+        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">455',
+                                   'tax-reason-count-consumption-tax-cut-scope-A">125')
+        with self.assertRaisesRegex(ValueError, '数字が元記録'):
+            verified_selectors(broken, ROOT)
+
+    def test_selected_post_and_search_counts_cannot_drift(self):
+        for element_id, before, after in [
+            ('tax-concern-count-consumption-tax-cut-vein-1', '推進 2件', '推進 3件'),
+            ('tax-source-note-consumption-tax-cut-sc-3', '10件', '11件'),
+        ]:
+            soup = BeautifulSoup(self.page, 'html.parser')
+            node = soup.select_one('#' + element_id)
+            self.assertIn(before, node.get_text(types=None))
+            node.string = node.get_text(types=None).replace(before, after)
+            with self.subTest(element_id=element_id), self.assertRaisesRegex(ValueError, '数字が元記録'):
+                verified_selectors(str(soup), ROOT)
 
 
 if __name__ == "__main__":

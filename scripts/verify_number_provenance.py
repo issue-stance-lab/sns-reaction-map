@@ -607,6 +607,19 @@ def check_theme(theme: str, theme_data: dict[str, Any], *, verbose: bool = False
     problems: list[str] = []
     notes: list[str] = []
     for doc_name, text in _documents(html_path):
+        # 再読分類・選定例・検索記録は一般の論点集計と母集団が違う。
+        # 元記録にラベル・件数を照合した要素だけで、その根拠を使う。
+        verified_regions = []
+        if theme == "consumption-tax-cut" and doc_name == str(html_path.relative_to(ROOT)):
+            try:
+                from .consumption_tax_count_provenance import verified_selectors
+            except ImportError:
+                from consumption_tax_count_provenance import verified_selectors
+            try:
+                verified_regions = [(selector_regions(text, [selector]), reason)
+                                    for selector, reason in verified_selectors(text, ROOT).items()]
+            except (ValueError, KeyError, OSError) as exc:
+                raise ProvenanceError(str(exc)) from exc
         numbers = extract_numbers(text, doc_name)
         if not numbers:
             continue
@@ -629,9 +642,11 @@ def check_theme(theme: str, theme_data: dict[str, Any], *, verbose: bool = False
             levels = ["base"] + [
                 level for level in LEVELS[1:] if in_regions(item.start, level_regions[level])
             ]
-            why = None
+            why = next((reason for regions, reason in verified_regions if in_regions(item.start, regions)), None)
             label = None
             for source, regions in source_regions:
+                if why:
+                    break
                 if regions is not None and not in_regions(item.start, regions):
                     continue
                 label = nearest_label(text, item.start, source.labels)

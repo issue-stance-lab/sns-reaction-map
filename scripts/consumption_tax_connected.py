@@ -1,6 +1,6 @@
 """消費税の連動表示の共通仕上げ。候補の目印があるページだけに適用する。
 
-工程2: 既存の静的本文を維持し、IDの接続表・共有の閲覧状態・専用JS/CSSを登録する。
+既存の静的本文を維持し、IDの接続表・共有の閲覧状態・論点ごとの読書面を登録する。
 件数や原稿の別コピーを正典にせず、ページ内のPLANET_DATAと既存の生成元を読む。
 """
 from __future__ import annotations
@@ -37,7 +37,7 @@ def planet_data(source: str) -> dict:
 def content_index(data: dict) -> dict:
     """画面内の要素をIDで結ぶ。件数・原稿・確認日はPLANET_DATAに一元化する。"""
     # import時にページを生成しない。通常ビルドから呼ぶ場合も原稿定義だけを読む。
-    from build_consumption_tax_page import BACKGROUND_DATA, ISSUE_CARDS_POSTS
+    from build_consumption_tax_page import BACKGROUND_DATA, ISSUE_CARDS_POSTS, STANCE_META
 
     issues = data["issues"]
     issue_ids = {i["id"] for i in issues}
@@ -53,7 +53,7 @@ def content_index(data: dict) -> dict:
     if len(claim_ids) != len(data["claims"]):
         raise ValueError("連動表示: 資料照合IDが重複しています")
     modes = {m["id"] for m in data["modes"]}
-    stances = [{"id": s["id"], "mode_id": s["key"]} for s in data["stances"]]
+    stances = [{"id": s["id"], "mode_id": s["key"], "short_label": STANCE_META[s["key"]]["label"]} for s in data["stances"]]
     if {s["mode_id"] for s in stances} | {"all"} != modes:
         raise ValueError("連動表示: 立場と山の表示モードが一致しません")
     result = {}
@@ -98,7 +98,23 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
+    from consumption_tax_connected_content import correct_editorial, corrected_observations, render_templates, START as CONTENT_START, END as CONTENT_END
+    from build_planet_data import static_editorial
+    from html import escape
     data = planet_data(source)
+    correct_editorial(data)
+    encoded = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
+    source = DATA_PATTERN.sub(lambda m: m[1] + encoded + m[3], source)
+    source, n = re.subn(r'<section id="editorial"[^>]*>.*?</section>',
+                       lambda _: static_editorial(data).lstrip(), source, flags=re.S)
+    if n != 1:
+        raise ValueError("連動表示: 編集部整理が1か所ではありません")
+    observations = '<ul class="article-trust-observations">\n' + ''.join(
+        '      <li>' + escape(text) + '</li>\n' for text in corrected_observations(data)
+    ) + '    </ul>'
+    source, n = re.subn(r'<ul class="article-trust-observations">.*?</ul>', lambda _: observations, source, flags=re.S)
+    if n != 1:
+        raise ValueError("連動表示: 編集情報の観察記録が1か所ではありません")
     index = content_index(data)
     # 山だけを再生成する経路でも、ページ全体の数値同期が使う見出しを維持する。
     source, headings = re.subn(
@@ -114,7 +130,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     opinions = data["totals"]["opinions"]
     shares = {key: 100 * n / opinions if opinions else 0 for key, n in counts.items()}
     stance_ids = {s["key"]: s["id"] for s in data["stances"]}
-    for name, body in (("STANCE_GLANCE", stance_glance(opinions, counts, shares, stance_ids=stance_ids)),
+    stance_colors = {s["key"]: s["color"] for s in data["stances"]}
+    for name, body in (("STANCE_GLANCE", stance_glance(opinions, counts, shares, stance_ids=stance_ids, stance_colors=stance_colors)),
                        ("ISSUE_CARDS", issue_cards(data=data)),
                        ("BACKGROUND_CONTEXT", background_context())):
         pattern = r"<!-- " + name + r"_START -->.*?<!-- " + name + r"_END -->"
@@ -122,11 +139,16 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         if n != 1:
             raise ValueError(f"連動表示: {name} の本文が1組ではありません")
     source = _bridge(source)
+    content = render_templates(data, source, index)
+    if CONTENT_START in source:
+        source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), lambda _: content, source, flags=re.S)
+    else:
+        source = source.replace('</body>', content + '\n</body>', 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
-        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=1">\n'
+        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=2">\n'
         '<script id="tax-connected-data" type="application/json">' + payload + '</script>\n'
-        '<script src="consumption-tax-connected.js?v=1" defer></script>\n' + END
+        '<script src="consumption-tax-connected.js?v=2" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -171,8 +193,8 @@ def validate(source: str) -> list[str]:
 
     for selector in ("#stance-glance", "#planet-block", "#panel", "#list", "#vote-section",
                      "#bg-title", "#ck-title", "#claim-audit", "#issue-cards", "#guesses", "#quiz", "#ocean",
-                     'link[href="consumption-tax-connected.css?v=1"]',
-                     'script[src="consumption-tax-connected.js?v=1"][defer]'):
+                     'link[href="consumption-tax-connected.css?v=2"]',
+                     'script[src="consumption-tax-connected.js?v=2"][defer]'):
         one(selector)
     if source.count(BRIDGE_START) != 1 or source.count(BRIDGE_END) != 1:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
@@ -187,6 +209,26 @@ def validate(source: str) -> list[str]:
         iid = issue["id"]
         static = one("#fb-" + iid)
         posts = one("#issue-" + iid)
+        reading = one("#tax-reading-" + iid)
+        if reading:
+            connections = expected["issues"][iid]
+            for key, attr in (("claim_ids", "data-tax-claim"), ("policy_ids", "data-tax-policy"),
+                              ("timeline_ids", "data-tax-timeline"), ("source_only_ids", "data-tax-source-only"),
+                              ("shared_concern_ids", "data-tax-concern")):
+                if [el.get(attr) for el in reading.select('[' + attr + ']')] != connections[key]:
+                    problems.append(f"読書面の接続が一致しません: {iid} {key}")
+            if {el.get("data-tax-post-url") for el in reading.select('[data-tax-post-url]')} != set(connections["post_urls"]):
+                problems.append(f"読書面の投稿例が一致しません: {iid}")
+            if {el.get("data-tax-reason") for el in reading.select('[data-tax-reason]')} != {x["id"] for x in issue["sub"].get("items", [])}:
+                problems.append(f"読書面の理由分類が一致しません: {iid}")
+            for claim in issue["claims"]:
+                card = reading.select_one('[data-tax-claim="' + claim["id"] + '"]')
+                if card and not {x["url"] for x in claim["sources"]}.issubset({a.get("href") for a in card.select('a[href]')}):
+                    problems.append(f"読書面の資料照合の出典が欠落しています: {iid} {claim['id']}")
+            for item in BACKGROUND_DATA["policies"]:
+                card = reading.select_one('[data-tax-policy="' + item["id"] + '"]')
+                if card and not {u for u, _ in item["links"]}.issubset({a.get("href") for a in card.select('a[href]')}):
+                    problems.append(f"読書面の制度説明の出典が欠落しています: {iid}")
         if static and not static.get_text(strip=True):
             problems.append(f"静的本文が空です: {iid}")
         if posts:
