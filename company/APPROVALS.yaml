@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-21"
+updated_at: "2026-09-22"
 
 rules:
   required_for:
@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260922-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題77の消費税減税ページを、理由・X投稿・制度・資料が連動する完成版へ切り替えて公開する"
+    reason: "工程1〜5と追加機能の実装・独立監査を終え、工程6の公開前確認で全体1082件・公開用914件の検査が合格したため"
+    risks:
+      - "実スマホ端末・製品版Safariは未確認。PCとスマホ幅はChromium・WebKitで確認した"
+      - "X埋め込みは外部配信に依存する。読めない時も要旨と元投稿リンクを残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-22-task77-tax-release-ready.md"
+      - "quality/reviews/2026-09-22-task77-tax-reason-posts.md"
+      - "quality/reviews/2026-09-22-task77-tax-source-tab.md"
+    status: pending
+    requested_at: "2026-09-22"
+    decided_at: null
+    decision_note: null
+
   - id: approval-20260912-001
     department: editorial
     action: website_publication

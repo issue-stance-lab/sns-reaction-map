@@ -142,7 +142,7 @@
     }
     const answer=quiz.answers.get(claim.id);
     quizRoot.innerHTML='<div class="qh" tabindex="-1"><span>問 '+(quiz.position+1)+' / '+data.claims.length+'</span><span>資料照合 '+esc(data.ocean.checked_on)+'</span></div>'
-      +'<p class="tax-quiz-note">収集した投稿から選んだ主張です。掲載した投稿例2件への判定ではありません。</p>'
+      +'<p class="tax-quiz-note">収集した投稿から選んだ主張です。掲載した投稿例そのものへの判定ではありません。</p>'
       +'<p class="qclaim">「'+esc(claim.claim)+'」</p><div class="gopts">'+verdicts.map(v=>'<button type="button" data-verdict="'+v+'" '+(answer?'disabled':'')+' class="'+(answer?(v===claim.verdict?'hit':v===answer?'miss':''):'')+'">'+esc(verdictLabel(v))+'</button>').join('')+'</div>'
       +'<div class="qans" '+(answer?'':'hidden')+'><p class="tax-verdict">'+esc(claim.verdict_label)+'</p><p>'+esc(claim.finding)+'</p><div class="tax-quiz-sources">'+claim.sources.map(s=>'<p><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.name)+'</a></p>').join('')+'</div><button type="button" class="qnext">'+(quiz.position===data.claims.length-1?'結果を見る':'次の問題 →')+'</button></div>';
     quizRoot.dataset.claimId=claim.id;
