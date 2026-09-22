@@ -255,17 +255,22 @@ class PlanetDataTest(unittest.TestCase):
         費用・家庭負担/受け皿・指導者のskipped_countは、2026-09-12の部活動38件
         独立確認で既にconfirmed済みだが、cost_side/receiver_side固有の区分
         （P1-P6/R1-R6）をまだ持たない10件分（課題69で発見、対応は持ち越し）。
+
+        2026-09-22、課題69の定期収集（新規108件・意見82件）でさらに母数が増えた。
+        読了記録は据え置きのため、未読は教員の働き方78/401=19.5%・制度・移行
+        プロセス57/314=18.2%・教育的意義・機会41/256=16.0%（いずれも4割上限内で
+        追い読み不要）。費用・家庭負担/受け皿・指導者の読み飛ばし10件は変わらない。
         """
         data = bpd.build(TOPIC)
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         by_label = {i["label"]: i["sub"] for i in data["issues"]}
-        for label, count, unread in [("教員の働き方", 323, 52), ("制度・移行プロセス", 257, 42),
-                                     ("教育的意義・機会", 215, 23)]:
+        for label, count, unread in [("教員の働き方", 323, 78), ("制度・移行プロセス", 257, 57),
+                                     ("教育的意義・機会", 215, 41)]:
             self.assertEqual(by_label[label]["reread_count"], count)
             self.assertEqual(by_label[label]["unread_count"], unread)
         self.assertEqual(data["reread_summary"]["connected_editorial_count"], 1123)
-        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 196)
-        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1250)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 278)
+        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1328)
         self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 4)
         self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 6)
         self.assertEqual(bpd.independence_gate(data, cfg), [])
