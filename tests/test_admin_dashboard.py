@@ -826,6 +826,56 @@ class AnomalyTests(unittest.TestCase):
         self.assertTrue(any("変わっていません" in item["title"] for item in found))
 
 
+class AnomalyRenderTests(unittest.TestCase):
+    """気になる変化の表示。件数が多いと読まれなくなるので、上位だけ見せて残りは折りたたむ。"""
+
+    @staticmethod
+    def _item(i):
+        return {"tone": "warn", "title": f"item {i}", "detail": f"detail {i}"}
+
+    def test_empty_list_renders_nothing(self):
+        self.assertEqual(render._anomalies([]), "")
+
+    def test_short_list_has_no_collapse(self):
+        html = render._anomalies([self._item(i) for i in range(3)])
+        self.assertNotIn("<details", html)
+        self.assertEqual(html.count("<li"), 3)
+
+    def test_long_list_shows_top_five_and_collapses_rest(self):
+        html = render._anomalies([self._item(i) for i in range(8)])
+        before_details = html.split("<details", 1)[0]
+        self.assertEqual(before_details.count("<li"), render.ANOMALY_HEAD_COUNT)
+        self.assertIn("他 3 件を見る", html)
+
+
+class NextSectionRenderTests(unittest.TestCase):
+    """次の一手の表示。生コマンドは折りたたみの中に入れ、オーナー向けの要約と分離する。"""
+
+    def test_commands_are_collapsed_by_default(self):
+        # next_action() の選び方（期限順）は日によって変わるため、コマンドを持つ
+        # "refresh" 種別を直接組み立てて、折りたたみの中身だけを固定して検査する。
+        theme = next(t for t in collect.collect_themes(TODAY) if t["update_mode"] == "adapter")
+        action = {
+            "kind": "refresh",
+            "title": f"{theme['title']} のテスト更新",
+            "why": "テスト用の次の一手です",
+            "tone": "warn",
+            "minutes": 30,
+            "last": None,
+            "readiness": actions.readiness(theme, sample_files=[]),
+            "blocks": [actions.command_block(theme, TODAY, promote=False)],
+            "rest": [],
+        }
+        data = build_data()
+        data["next"] = action
+        html = render.section_next(data)
+        self.assertIn('<details class="rest">', html)
+        before_details = html.split('<details class="rest">', 1)[0]
+        self.assertNotIn("scripts/refresh_topic.py", before_details)
+        self.assertIn("実行手順を見る", html)
+        self.assertIn("scripts/refresh_topic.py", html)
+
+
 class TaskFieldTests(unittest.TestCase):
     """TASK_BOARD.md の任意欄。未記入でも従来どおり動くこと。"""
 
