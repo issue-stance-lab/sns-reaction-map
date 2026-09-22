@@ -435,6 +435,226 @@ def _public_counts(
     return collected, opinions, stats, by_stance, by_intensity, by_cross
 
 
+STANCE_GLANCE_START = "<!-- STANCE_GLANCE_START -->"
+STANCE_GLANCE_END = "<!-- STANCE_GLANCE_END -->"
+STANCE_GLANCE_ANCHOR = "<!-- RESEARCH_CONDITIONS_START -->"
+
+# configs/planet/henoko-student-accident.yaml の stances[].key と対応させる。
+# 集計(count/color)は正典から取得済みの値をそのまま使い、ここでは新たに数えない。
+STANCE_GLANCE_META = {
+    SUPPORT: {
+        "short": "支持", "icon": "✓", "bg": "#EAF5F3", "shadow": "rgba(47,143,131,.22)",
+        "desc": "文部科学省の対応・判断を妥当だとする投稿",
+    },
+    OPPOSE: {
+        "short": "反発", "icon": "!", "bg": "#F2EEF7", "shadow": "rgba(125,91,166,.22)",
+        "desc": "文部科学省の対応・判断に疑問や反発を示す投稿",
+    },
+    SPLIT: {
+        "short": "切り分ける", "icon": "△", "bg": "#FBF3DF", "shadow": "rgba(217,165,32,.22)",
+        "desc": "安全管理・教育・政治利用など、論点を分けて考えるべきだとする投稿",
+    },
+    NEUTRAL: {
+        "short": "中立・情報", "icon": "?", "bg": "#F1F2F3", "shadow": "rgba(139,145,153,.22)",
+        "desc": "賛否を示さず、事実関係の共有にとどまる投稿",
+    },
+}
+
+STANCE_GLANCE_CSS = """<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:12.5px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>"""
+
+
+def stance_glance(stances: list[dict], opinions: int) -> str:
+    """ヒーロー直後、立場の内訳＋「まず、あなたは？」を組み立てる。
+
+    stances は bpd.build("henoko-student-accident")["stances"]（configs/planet/
+    henoko-student-accident.yaml の4区分に正典の件数を足したもの）をそのまま使う。
+    ここで新たに集計しない。投票データへの書き込みは行わない。
+    """
+    support_count = next((int(s["count"]) for s in stances if s["key"] == SUPPORT), 0)
+    oppose_count = next((int(s["count"]) for s in stances if s["key"] == OPPOSE), 0)
+    split_count = next((int(s["count"]) for s in stances if s["key"] == SPLIT), 0)
+    split_pct = 100 * split_count / opinions if opinions else 0.0
+    segs, legend, buttons, js_rows = [], [], [], []
+    for i, s in enumerate(stances):
+        meta = STANCE_GLANCE_META[s["key"]]
+        count = int(s["count"])
+        share = 100 * count / opinions if opinions else 0.0
+        seg_label = f"{share:.0f}%" if share >= 5 else ""
+        segs.append(
+            f'<div class="temp-seg" data-i="{i}" style="width:{share:.1f}%;background:{s["color"]}">{seg_label}</div>'
+        )
+        legend.append(
+            f'<span data-i="{i}"><i style="background:{s["color"]}"></i>{html.escape(meta["short"])}<b>{count}件</b></span>'
+        )
+        buttons.append(
+            f'<button type="button" class="sg-pick-btn" data-i="{i}" aria-pressed="false" '
+            f'style="--sg-color:{s["color"]};--sg-bg:{meta["bg"]}">'
+            f'<span class="sg-pick-check" aria-hidden="true">✓</span>'
+            f'<span class="sg-pick-icon" aria-hidden="true">{html.escape(meta["icon"])}</span>'
+            f'<span class="sg-pick-name">{html.escape(meta["short"])}</span></button>'
+        )
+        js_rows.append(
+            "{short:%s,pct:%s,desc:%s}"
+            % (
+                json.dumps(meta["short"], ensure_ascii=False),
+                share,
+                json.dumps(meta["desc"], ensure_ascii=False),
+            )
+        )
+    bar = (
+        '<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label">'
+        f'<span>意見{opinions:,}件の立場別内訳</span><span>意見に占める割合</span></div>'
+        f'<div class="temp-bar">{"".join(segs)}</div>'
+        f'<div class="temp-bar-legend">{"".join(legend)}</div></div>'
+    )
+    script = f"""<script>
+(function(){{
+  var DATA=[{",".join(js_rows)}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){{
+    root.querySelectorAll('.sg-pulse').forEach(function(el){{el.classList.remove('sg-pulse');}});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){{
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    }});
+  }}
+  buttons.forEach(function(btn){{
+    btn.addEventListener('click',function(){{
+      buttons.forEach(function(b){{b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');}});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」: '+d.desc+'（'+d.pct.toFixed(1)+'%）';
+      result.style.display='block';
+      pulse(i);
+    }});
+  }});
+}})();
+</script>"""
+    return f"""{STANCE_GLANCE_START}
+{STANCE_GLANCE_CSS}
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">辺野古高校生死亡事故、「論点を切り分ける」が意見の{split_pct:.0f}%を占める</h2><span>結論を急ぐ前に</span></div>
+<p class="sg-lead">文科省の判断を支持する投稿は{support_count:,}件、反発する投稿は{oppose_count:,}件にとどまり、大半は安全管理と政治利用を切り分けて考えるべきだという立場です。</p>
+<div class="sg-headline"><b>{opinions:,}</b>件の意見を、4つの立場で見た内訳です</div>
+{bar}
+<div class="sg-pick"><p class="sg-pick-label">気になる立場を選ぶと</p>
+<p class="sg-pick-hint">どんな投稿が含まれるかを表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+{"".join(buttons)}
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ ここでの操作は下調べのためのもので、票としては記録されません。投票欄はページの後半にあります。</p>
+</div>
+</aside>
+{script}
+{STANCE_GLANCE_END}"""
+
+
+def apply_henoko_stance_glance(page: str, stances: list[dict], opinions: int) -> str:
+    """ヒーロー直後に、立場の内訳＋「まず、あなたは？」を貼り直す。
+
+    clean_henoko_layout()がRESEARCH_CONDITIONS_START/ENDの中身を毎回強制的に
+    空へ戻す(henoko固有、オーナーの明示決定)ため、この関数はclean_henoko_layout()
+    の後で呼ぶこと。挿入位置はSTART/ENDマーカーの内側ではなく、START直前(外側)
+    なのでclean_henoko_layout()の対象外であり、その後で呼んでも問題ない。
+    """
+    if STANCE_GLANCE_START in page and STANCE_GLANCE_END in page:
+        start = page.index(STANCE_GLANCE_START)
+        end = page.index(STANCE_GLANCE_END) + len(STANCE_GLANCE_END)
+        page = page[:start] + page[end:]
+    # 外したあと・貼る前の空行を2行に揃える。初回挿入時も元テンプレ側の空行数が
+    # ページごとに違いうるため、除去の有無にかかわらず毎回正規化する
+    # (school-nickname-banは空行2行、fukushuto/henokoは空行3行と、テーマごとに
+    # 元の空行数が違うため、毎回正規化するよう統一した)。
+    page = re.sub(r"\n\s*\n+(<!-- RESEARCH_CONDITIONS_START -->)", r"\n\n\1", page)
+    block = stance_glance(stances, opinions)
+    idx = page.index(STANCE_GLANCE_ANCHOR)
+    page = page[:idx] + block + "\n\n" + page[idx:]
+
+    if page.count(STANCE_GLANCE_START) != 1 or page.count(STANCE_GLANCE_END) != 1:
+        raise IssueCountError("内訳セクションのマーカーが1組でない")
+    if '<h2 id="stance-glance-title">' not in page:
+        raise IssueCountError("内訳セクションの見出しがページにない")
+    check_block = page[page.index(STANCE_GLANCE_START):page.index(STANCE_GLANCE_END)]
+    seg_count = check_block.count('<div class="temp-seg"')
+    btn_count = check_block.count('class="sg-pick-btn"')
+    if seg_count != len(stances):
+        raise IssueCountError(f"内訳バーの区画が{len(stances)}個でない: {seg_count}個")
+    if btn_count != len(stances):
+        raise IssueCountError(f"「あなたは？」ボタンが{len(stances)}個でない: {btn_count}個")
+    if page.index(STANCE_GLANCE_START) > page.index(STANCE_GLANCE_ANCHOR):
+        raise IssueCountError("内訳セクションが調査条件より後ろにある(ヒーロー直後に置くこと)")
+    if '<aside id="stance-glance"' not in page:
+        raise IssueCountError(
+            "内訳セクションがasideでなくなっている"
+            "(sectionにするとpanel:nth-of-type(even)の縞模様が後続セクション全部でずれる)"
+        )
+    return page
+
+
 def refresh_verified_planet(
     page: str, records: list[dict[str, Any]], opinions: list[dict[str, Any]],
     public_theme: Path | None = None,
@@ -467,7 +687,8 @@ def refresh_verified_planet(
     block = _inject_henoko_landing_images(block, data)
     page = replace_block(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                          block, "山なみ全体")
-    return clean_henoko_layout(fix_henoko_vote_scroll(page))
+    page = clean_henoko_layout(fix_henoko_vote_scroll(page))
+    return apply_henoko_stance_glance(page, data["stances"], int(data["totals"]["opinions"]))
 
 
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:

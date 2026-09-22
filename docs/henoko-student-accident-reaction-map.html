@@ -214,7 +214,109 @@
 <section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav><span class="badge">教育・事故・基地問題</span><h1>辺野古高校生死亡事故をめぐる論点―安全管理・教育・報道</h1><p class="question-line">事故の検証と教育の評価、どの論点を重く見る？</p><p class="lead">Yahooリアルタイム検索で取得した公開投稿552件のうち、意見と判定した430件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p><div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header><ul><li class="conclusion-focus"><span class="conclusion-count"><b>111</b>件</span><strong>何が事故を防げなかったのか</strong><span class="conclusion-detail">船の選定や引率体制など、安全管理の責任と説明を求める声が最も集まりました。</span></li></ul></div></div></section><svg class="wave-divider" viewBox="0 0 1440 50" preserveAspectRatio="none" fill="var(--bg)"><path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/></svg>
 <main>
 
-
+<!-- STANCE_GLANCE_START -->
+<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:12.5px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">辺野古高校生死亡事故、「論点を切り分ける」が意見の88%を占める</h2><span>結論を急ぐ前に</span></div>
+<p class="sg-lead">文科省の判断を支持する投稿は28件、反発する投稿は19件にとどまり、大半は安全管理と政治利用を切り分けて考えるべきだという立場です。</p>
+<div class="sg-headline"><b>430</b>件の意見を、4つの立場で見た内訳です</div>
+<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label"><span>意見430件の立場別内訳</span><span>意見に占める割合</span></div><div class="temp-bar"><div class="temp-seg" data-i="0" style="width:6.5%;background:#2F8F83">7%</div><div class="temp-seg" data-i="1" style="width:4.4%;background:#7D5BA6"></div><div class="temp-seg" data-i="2" style="width:88.4%;background:#D9A520">88%</div><div class="temp-seg" data-i="3" style="width:0.7%;background:#8B9199"></div></div><div class="temp-bar-legend"><span data-i="0"><i style="background:#2F8F83"></i>支持<b>28件</b></span><span data-i="1"><i style="background:#7D5BA6"></i>反発<b>19件</b></span><span data-i="2"><i style="background:#D9A520"></i>切り分ける<b>380件</b></span><span data-i="3"><i style="background:#8B9199"></i>中立・情報<b>3件</b></span></div></div>
+<div class="sg-pick"><p class="sg-pick-label">気になる立場を選ぶと</p>
+<p class="sg-pick-hint">どんな投稿が含まれるかを表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+<button type="button" class="sg-pick-btn" data-i="0" aria-pressed="false" style="--sg-color:#2F8F83;--sg-bg:#EAF5F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">✓</span><span class="sg-pick-name">支持</span></button><button type="button" class="sg-pick-btn" data-i="1" aria-pressed="false" style="--sg-color:#7D5BA6;--sg-bg:#F2EEF7"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">!</span><span class="sg-pick-name">反発</span></button><button type="button" class="sg-pick-btn" data-i="2" aria-pressed="false" style="--sg-color:#D9A520;--sg-bg:#FBF3DF"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">△</span><span class="sg-pick-name">切り分ける</span></button><button type="button" class="sg-pick-btn" data-i="3" aria-pressed="false" style="--sg-color:#8B9199;--sg-bg:#F1F2F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">?</span><span class="sg-pick-name">中立・情報</span></button>
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ ここでの操作は下調べのためのもので、票としては記録されません。投票欄はページの後半にあります。</p>
+</div>
+</aside>
+<script>
+(function(){
+  var DATA=[{short:"支持",pct:6.511627906976744,desc:"文部科学省の対応・判断を妥当だとする投稿"},{short:"反発",pct:4.4186046511627906,desc:"文部科学省の対応・判断に疑問や反発を示す投稿"},{short:"切り分ける",pct:88.37209302325581,desc:"安全管理・教育・政治利用など、論点を分けて考えるべきだとする投稿"},{short:"中立・情報",pct:0.6976744186046512,desc:"賛否を示さず、事実関係の共有にとどまる投稿"}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){
+    root.querySelectorAll('.sg-pulse').forEach(function(el){el.classList.remove('sg-pulse');});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    });
+  }
+  buttons.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      buttons.forEach(function(b){b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」: '+d.desc+'（'+d.pct.toFixed(1)+'%）';
+      result.style.display='block';
+      pulse(i);
+    });
+  });
+})();
+</script>
+<!-- STANCE_GLANCE_END -->
 
 <!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->
 <style>
