@@ -1,11 +1,14 @@
-"""部活動の連動表示・工程2（土台）の接続・冪等性検査。"""
+"""部活動の連動表示（工程2: 土台／工程3: 読書面）の接続・冪等性検査。"""
 import copy
 import json
 import re
 import unittest
 from pathlib import Path
 
+from bs4 import BeautifulSoup
+
 from scripts import bukatsu_connected as connected
+from scripts import bukatsu_connected_content as content
 from scripts import bukatsu_taxonomy
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,6 +96,64 @@ class BukatsuConnectedTests(unittest.TestCase):
         )
         problems = connected.validate(broken)
         self.assertTrue(any("接続表" in p for p in problems))
+
+    def test_reading_templates_cover_all_seven_issues_with_matching_reason_and_post_counts(self):
+        data = connected.planet_data(self.page)
+        soup = BeautifulSoup(self.page, "html.parser")
+        by_id = {i["id"]: i for i in data["issues"]}
+        expected_pilots = {
+            "bukatsu-chiiki-kyoin": {"reasons": 16, "posts": 2, "claims": 1, "veins": 1},
+            "bukatsu-chiiki-ukezara": {"reasons": 7, "posts": 2, "claims": 2, "veins": 2},
+            "bukatsu-chiiki-sonota": {"reasons": 0, "posts": 2, "claims": 0, "veins": 0},
+        }
+        for issue in data["issues"]:
+            iid = issue["id"]
+            tpl = soup.select_one("#bukatsu-reading-" + iid)
+            self.assertIsNotNone(tpl, iid)
+            reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+            self.assertEqual(len(reading.select("[data-bkt-post-url]")), 2, iid)
+            if iid in expected_pilots:
+                exp = expected_pilots[iid]
+                self.assertEqual(len(reading.select("[data-bkt-reason]")), exp["reasons"], iid)
+                self.assertEqual(len(reading.select("[data-bkt-claim]")), exp["claims"], iid)
+                self.assertEqual(len(reading.select("[data-bkt-concern]")), exp["veins"], iid)
+
+    def test_coverage_note_is_suppressed_when_show_coverage_note_is_false(self):
+        data = connected.planet_data(self.page)
+        reread = next(i for i in data["issues"] if i["sub"]["status"] == "reread")
+        self.assertIs(reread["sub"].get("show_coverage_note"), False, "この検査は現行データがshow_coverage_note=falseである前提です")
+        html = content.reasons(reread, True)
+        self.assertNotIn(reread["sub"]["coverage_note"], html)
+        forced_on = copy.deepcopy(reread)
+        forced_on["sub"]["show_coverage_note"] = True
+        self.assertIn(forced_on["sub"]["coverage_note"], content.reasons(forced_on, True))
+
+    def test_unreviewed_note_respects_the_theme_wide_flag(self):
+        data = connected.planet_data(self.page)
+        unreviewed = next(i for i in data["issues"] if i["sub"]["status"] == "not_reviewed")
+        self.assertIs(data.get("show_unreviewed_note"), False, "この検査は現行データがshow_unreviewed_note=falseである前提です")
+        suppressed = content.reasons(unreviewed, False)
+        self.assertNotIn("AIが自動でつけた区分", suppressed)
+        shown = content.reasons(unreviewed, True)
+        self.assertIn("AIが自動でつけた区分", shown)
+
+    def test_metrics_placeholders_exist_for_runtime_fill_including_the_zero_state(self):
+        # 件数・割合は実行時にJS（fillMetrics）が埋める。0件（立場を絞ると0になる論点が
+        # 実データに存在する。例: kakusaは「移行支持」で0件）でも不正な割合を出さないための
+        # data-bkt-zero placeholderが、静的な読書面テンプレート側に用意されていることを確認する。
+        data = connected.planet_data(self.page)
+        has_zero_case = any(
+            s["counts"].get(i["id"]) == 0
+            for s in data["modes"] if s["id"] != "all"
+            for i in data["issues"]
+        )
+        self.assertTrue(has_zero_case, "この検査は0件になる組合せが実データに存在する前提です")
+        soup = BeautifulSoup(self.page, "html.parser")
+        tpl = soup.select_one("#bukatsu-reading-bukatsu-chiiki-kakusa")
+        reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+        self.assertIsNotNone(reading.select_one("[data-bkt-count]"))
+        self.assertIsNotNone(reading.select_one("[data-bkt-ratio]"))
+        self.assertIsNotNone(reading.select_one("[data-bkt-zero]"))
 
     def test_vote_registry_is_unaffected_by_the_connected_layout(self):
         # 投票は今回の工程では独立のまま。連動表示の適用前後でVOTE_ISSUES/STANCESの

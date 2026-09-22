@@ -52,6 +52,51 @@
   syncGlance(st.mode);
   syncModes(st.mode);
 
+  // ---------- 工程3: 論点を選んだときの読書面（理由・投稿・資料）への差し替え ----------
+  // drawPanel()だけを差し替える。land()/orbit()/morphTo()は全てdrawPanel()を呼ぶため、
+  // ここ1箇所で全ての入口をまとめて拾える。読書面が無い論点（テンプレート未生成）や
+  // 「すべての論点」表示（st.landed===null）では、既存の描画をそのまま使う。
+  var legacyDrawPanel = drawPanel;
+  function readingTemplateFor(id){
+    return document.getElementById('bukatsu-reading-' + id);
+  }
+  function fillMetrics(root, issue){
+    var m = modeById[st.mode], n = m.counts[issue.id] || 0;
+    var count = root.querySelector('[data-bkt-count]');
+    var mode = root.querySelector('[data-bkt-mode]');
+    var ratio = root.querySelector('[data-bkt-ratio]');
+    var zero = root.querySelector('[data-bkt-zero]');
+    if (count) count.textContent = n.toLocaleString('ja-JP');
+    if (mode) mode.textContent = '件 / ' + m.label + m.total.toLocaleString('ja-JP') + '件中';
+    if (n && m.total){
+      if (ratio){ ratio.textContent = (100*n/m.total).toFixed(1) + '%　高さ：強い表現 ' + (m.high_pct[issue.id]||0) + '%'; ratio.hidden = false; }
+      if (zero) zero.hidden = true;
+    } else {
+      if (ratio) ratio.hidden = true;
+      if (zero){ zero.textContent = 'この立場では0件です。'; zero.hidden = false; }
+    }
+  }
+  function renderReading(id){
+    var tpl = readingTemplateFor(id);
+    var panel = document.getElementById('panel');
+    panel.innerHTML = '';
+    panel.appendChild(tpl.content.cloneNode(true));
+    fillMetrics(panel, issues[idIndex[id]]);
+    var back = document.createElement('button');
+    back.type = 'button'; back.className = 'back'; back.id = 'back';
+    back.textContent = '← 論点の一覧へ戻る（Esc）';
+    back.addEventListener('click', orbit);
+    panel.appendChild(back);
+    // 図解の拡大は、既存のdocument委譲ハンドラ（.explainer-card[data-img]監視）が
+    // そのまま拾う。ここで別のlistenerを足す必要はない。
+  }
+  drawPanel = function(){
+    if (st.landed === null) { legacyDrawPanel(); return; }
+    var id = issues[st.landed].id;
+    if (!readingTemplateFor(id)) { legacyDrawPanel(); return; }
+    renderReading(id);
+  };
+
   window.BukatsuConnectedMap = Object.freeze({
     getState: function(){
       var stance = D.stances.find(function(s){ return s.key === st.mode; });

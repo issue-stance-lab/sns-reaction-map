@@ -1,8 +1,9 @@
-"""部活動の地域移行の連動表示・工程2（土台）。候補の目印があるページだけに適用する。
+"""部活動の地域移行の連動表示（工程2: 土台／工程3: 読書面）。候補の目印があるページだけに適用する。
 
 既存の静的本文（STANCE_GLANCE・bukatsu-background・bukatsu-check・PLANET_SECTION）を
-書き換えず、IDの接続表とバー↔山の状態共有だけを足す。件数や原稿の別コピーを正典にせず、
-ページ内のPLANET_DATAを読む。論点の理由・投稿例・資料の読書面（工程3以降）はまだ作らない。
+書き換えず、IDの接続表・バー↔山の状態共有・論点を選んだときの読書面（理由・投稿例・資料）を足す。
+件数や原稿の別コピーを正典にせず、ページ内のPLANET_DATA・#issue-cards・#fallbackを読む。
+年表・制度チェックの接続（工程4）と3論点から7論点への実機検証は、まだこのファイルの範囲外。
 """
 from __future__ import annotations
 
@@ -59,6 +60,7 @@ def content_index(data: dict) -> dict:
         if set(related) - claim_ids:
             raise ValueError(f"連動表示: {iid} に未登録の資料照合があります")
         result[iid] = {
+            "posts_id": "issue-" + iid,
             "claim_ids": related,
             "source_only_ids": [x["id"] for x in data["ocean"]["sunk_continents"]
                                 if x.get("nearest_issue_id") == iid],
@@ -86,9 +88,15 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
+    from scripts.bukatsu_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
+    content = render_templates(data, source, index)
+    if CONTENT_START in source:
+        source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), lambda _: content, source, flags=re.S)
+    else:
+        source = source.replace("</body>", content + "\n</body>", 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
         START + '\n<link rel="stylesheet" href="bukatsu-connected.css?v=1">\n'
@@ -110,12 +118,11 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
 
 
 def validate(source: str) -> list[str]:
-    """工程2の範囲: 接続表の一致・目印の対応・共有状態の配線だけを見る。
-
-    読書面（理由・投稿例・制度・資料の中身）はまだ無いため、工程3以降で検査を足す。
-    """
+    """接続表の一致・目印の対応・共有状態の配線と、論点ごとの読書面の接続を見る。"""
     if not enabled(source):
         return []
+    from scripts.bukatsu_connected_content import START as CONTENT_START, END as CONTENT_END
+
     problems = []
     soup = BeautifulSoup(source, "html.parser")
     try:
@@ -128,6 +135,8 @@ def validate(source: str) -> list[str]:
         problems.append("論点の接続表が現在の表示データと一致しません")
     if source.count(BRIDGE_START) != 1 or source.count(BRIDGE_END) != 1:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
+    if source.count(CONTENT_START) != 1 or source.count(CONTENT_END) != 1:
+        problems.append("読書面の目印が1組ではありません")
     if len(soup.select('link[href="bukatsu-connected.css?v=1"]')) != 1:
         problems.append("連動表示のCSSが1つではありません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
@@ -137,4 +146,30 @@ def validate(source: str) -> list[str]:
     stance_keys = {s["key"] for s in data["stances"]}
     if mode_ids != stance_keys:
         problems.append("立場フィルター（#modes）と立場データが一致しません")
+
+    def one(selector: str, label: str):
+        nodes = soup.select(selector)
+        if len(nodes) != 1:
+            problems.append(f"読書面の入口が1つではありません: {label} ({len(nodes)})")
+        return nodes[0] if len(nodes) == 1 else None
+
+    for issue in data["issues"]:
+        iid = issue["id"]
+        connection = expected["issues"][iid]
+        tpl = one("#bukatsu-reading-" + iid, iid)
+        if tpl is None:
+            continue
+        reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+        for key, attr in (("claim_ids", "data-bkt-claim"), ("source_only_ids", "data-bkt-source-only"),
+                          ("shared_concern_ids", "data-bkt-concern")):
+            found = [el.get(attr) for el in reading.select("[" + attr + "]")]
+            if found != connection[key]:
+                problems.append(f"読書面の接続が一致しません: {iid} {key}")
+        posts = reading.select("[data-bkt-post-url]")
+        if issue["sub"]["status"] == "reread":
+            for x in reading.select("[data-bkt-reason]"):
+                if x.get("data-bkt-reason") not in {i["id"] for i in issue["sub"]["items"]}:
+                    problems.append(f"読書面の理由分類が一致しません: {iid}")
+        if not posts:
+            problems.append(f"読書面に投稿例がありません: {iid}")
     return problems

@@ -1,4 +1,54 @@
-/* 部活動の連動表示・工程2（土台）。
-   STANCE_GLANCEと#modesの押下状態（aria-pressed）は既存CSSがすでに見た目を持つため、
-   ここでは何も上書きしない。論点の理由・投稿例・資料の読書面（工程3以降）の見た目は
-   この後の工程で追加する。現時点では空で、リンク先の存在だけを保証する。 */
+/* 部活動の連動表示。STANCE_GLANCEと#modesの押下状態は既存CSSがすでに見た目を持つため
+   上書きしない（工程2）。ここからは論点を選んだときの読書面（工程3）の見た目。
+   #panel は共通テーマの.panelスタイルを!importantで持つため、この読書面だけを優先させる。 */
+:root{ --bkt-paper:#f4f7fc; --bkt-rule:#dce5f0; }
+#panel .bkt-selected-head{ display:flex; align-items:center; justify-content:space-between; gap:18px; padding:24px 0 0 !important; margin:0 !important; border:0 !important; box-shadow:none !important; }
+#panel .bkt-selected-head h2{ margin:3px 0 0; font-size:24px; line-height:1.45; }
+#panel .bkt-eyebrow{ margin:0 0 4px; font-size:11px; font-weight:700; color:#637089; letter-spacing:.06em; }
+#panel .bkt-image-action{ flex:0 0 auto; display:flex; flex-direction:column; gap:4px; align-items:center; padding:6px; margin:0; max-width:140px; border:1px solid var(--bkt-rule); border-radius:8px; background:#fff; cursor:pointer; font:inherit; font-size:11px; font-weight:700; color:var(--accent,#075ef2); }
+#panel .bkt-image-action img{ width:112px; height:48px; object-fit:contain; margin:0; border-radius:3px; }
+#panel .bkt-metrics{ margin:14px 0; font-size:13px; color:#53647d; }
+#panel .bkt-metrics p{ margin:4px 0; line-height:1.7; }
+#panel .bkt-metrics [data-bkt-count]{ font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; color:#0f1a3d; }
+#panel .bkt-scope-note{ margin:0 0 22px; padding:10px 12px; border-left:3px solid var(--bkt-rule); background:var(--bkt-paper); font-size:12px; line-height:1.7; color:#53647d; }
+#panel .bkt-columns{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; }
+#panel .bkt-columns > *{ min-width:0; }
+#panel .bkt-evidence{ padding-left:28px; border-left:1px solid var(--bkt-rule); }
+#panel .bkt-columns h3{ margin:0 0 10px; padding:0; border:0; font-size:17px; line-height:1.5; color:#0f1a3d; }
+#panel .bkt-evidence h3:not(:first-child){ margin-top:22px; }
+#panel .bkt-columns p{ font-size:13.5px; line-height:1.85; }
+#panel .bkt-note{ margin:6px 0 10px; font-size:11.5px; line-height:1.8; color:#637089; }
+#panel .bkt-empty{ margin:8px 0 16px; padding:10px 0; font-size:13px; color:#53647d; }
+#panel .bkt-reasons{ padding:0; margin:0; list-style:none; }
+#panel .bkt-reasons li{ margin:0 0 12px; padding:0; border:0; }
+#panel .bkt-reason-row{ display:flex; align-items:baseline; gap:10px; font-size:12.5px; line-height:1.6; }
+#panel .bkt-reason-row > span:first-child{ flex:1; min-width:0; }
+#panel .bkt-reasons b{ flex:none; font-variant-numeric:tabular-nums; font-size:15px; }
+#panel .bkt-reason-track{ display:block; margin-top:5px; height:4px; background:#edf1f7; border-radius:2px; overflow:hidden; }
+#panel .bkt-reason-track i{ display:block; height:100%; background:var(--accent,#075ef2); border-radius:2px; opacity:.8; }
+#panel .bkt-posts{ margin-top:26px; }
+#panel .bkt-post{ padding:14px 0; border-top:1px solid var(--bkt-rule); }
+#panel .bkt-post > p{ margin:0 0 6px; font-weight:700; font-size:13px; }
+#panel .bkt-post > a{ font-size:11.5px; font-weight:700; }
+#panel .bkt-embed{ border:0; padding:0; margin-top:8px; }
+#panel .bkt-embed summary{ color:#637089; font-size:11px; font-weight:400; cursor:pointer; }
+#panel .bkt-embed iframe{ max-width:100% !important; }
+#panel .twitter-tweet{ max-width:100%; margin:10px 0; }
+#panel details.bkt-claim, #panel details.bkt-concern, #panel details.bkt-source-only{ margin:9px 0; border-top:1px solid var(--bkt-rule); padding:9px 0 0; font-size:12.5px; }
+#panel details.bkt-claim summary, #panel details.bkt-concern summary, #panel details.bkt-source-only summary{ cursor:pointer; padding:3px 0; font-weight:700; line-height:1.65; }
+#panel .bkt-verdict{ display:inline-block; margin-top:10px; padding:3px 8px; border:1px solid var(--bkt-rule); border-radius:4px; font-size:10.5px; font-weight:700; }
+#panel .bkt-sources{ border:0; padding:0; margin:10px 0 6px; }
+#panel .bkt-sources summary{ color:var(--accent,#075ef2); font-size:11px; cursor:pointer; }
+#panel .bkt-sources ul{ margin:8px 0; padding-left:16px; }
+#panel .bkt-sources li{ margin:8px 0; font-size:11.5px; line-height:1.75; }
+#panel a{ overflow-wrap:anywhere; }
+@media (max-width:760px){
+  #panel .bkt-columns{ grid-template-columns:1fr; gap:22px; }
+  #panel .bkt-evidence{ padding:20px 0 0; border-left:0; border-top:2px solid var(--bkt-rule); }
+  #panel .bkt-selected-head{ display:block; }
+  #panel .bkt-image-action{ max-width:none; flex-direction:row; margin-top:10px; }
+  #panel .bkt-image-action img{ width:48px; height:22px; }
+}
+@media (prefers-reduced-motion:reduce){
+  #panel .bkt-reason-track i{ transition:none; }
+}
