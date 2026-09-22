@@ -149,14 +149,6 @@
   // 授業ボタンは節のみ、ブラウザからの印刷は全本文。閉じた詳細も印刷中だけ展開する。
   // 非表示の一覧にある図解も先に読み込み、通常の印刷で選択外の画像が欠けるのを防ぐ。
   document.querySelectorAll('#fallback img').forEach(img=>{img.loading='eager';});
-  // 旧一覧にない再読理由も同じ本文テンプレートから補う。印刷だけの別原稿は持たない。
-  data.issues.forEach(issue=>{
-    const reasons=document.getElementById('tax-reading-'+issue.id).content.querySelector('.tax-opinions').cloneNode(true);
-    reasons.className='tax-print-reasons';reasons.setAttribute('aria-label','意見の理由');
-    reasons.querySelector('.tax-posts').remove();
-    reasons.querySelectorAll('[id]').forEach(element=>element.removeAttribute('id'));
-    document.querySelector('#fb-'+issue.id+' .note').after(reasons);
-  });
   const fallbackHeading=document.querySelector('#fallback > h3');
   const fallbackLabel=fallbackHeading.textContent;
   let printDetails=[];

@@ -134,7 +134,6 @@
 .tax-connected #planet-block #quiz .tax-quiz-sources p { font-size:12px; }
 .tax-connected #planet-block #panel .tax-evidence-jump { display:none; }
 .tax-connected :is(.tax-timeline-nav,.tax-evidence-controls,#quiz) button:focus-visible { outline:3px solid #075ef2; outline-offset:3px; }
-.tax-connected .tax-print-reasons { display:none; }
 @media(max-width:760px) {
   .tax-connected .tax-timeline-nav { gap:5px; }
   .tax-connected .tax-timeline-nav button { font-size:11px; padding:12px 5px; }
@@ -154,13 +153,6 @@
   body.tax-connected #fallback .landing-image { break-inside:avoid; }
   body.tax-connected #fallback img { display:block; width:100%; height:auto; }
   body.tax-connected #fallback .bar span { font-size:0; } /* 各立場の名前・件数は直前の凡例に示す。 */
-  body.tax-connected .tax-print-reasons { display:block; margin:18px 0; }
-  body.tax-connected .tax-print-reasons h3 { font-size:16px; }
-  body.tax-connected .tax-print-reasons ul { padding:0; list-style:none; }
-  body.tax-connected .tax-print-reasons li { padding:7px 0; border-bottom:1px solid #dce5f0; break-inside:avoid; }
-  body.tax-connected .tax-print-reasons li > div { display:flex; justify-content:space-between; gap:12px; }
-  body.tax-connected .tax-print-reasons b { white-space:nowrap; }
-  body.tax-connected .tax-print-reasons :is(.tax-more-reasons > summary,.tax-reason-track) { display:none; }
   body.tax-connected:not(.tax-print-classroom) :is(#ocean,#claim-audit,#issue-cards,#bukatsu-check) { display:block !important; }
   body.tax-connected [data-timeline-id][hidden] { display:block !important; }
   body.tax-connected .classroom-section { position:static; width:auto; margin:0; padding:0; box-shadow:none; border:0; }
