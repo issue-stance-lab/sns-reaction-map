@@ -634,19 +634,10 @@ def build_vote_issues(rows: list[dict[str, Any]]) -> str:
 
 
 def build_details(rows: list[dict[str, Any]], collected: int) -> str:
-    counts = issue_counts(rows)
-    body = "".join(
-        f'<tr><th>{html.escape(str(issue["title"]))}</th><td>{counts[issue["main_issue"]]}</td></tr>'
-        for issue in ISSUE_DEFS
-    )
     return (
-        '<section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>詳細データ</h2>'
-        "<span>折りたたみ</span></div>"
-        f"<details open><summary>論点別件数（関連する意見{len(rows)}件）</summary>"
-        f'<div class="table-wrap"><table><tbody>{body}</tbody></table></div></details>'
-        "<details><summary>分類対象と注意</summary><ul>"
-        f"<li>Yahooリアルタイム検索で取得した{collected}件をAI分類後に本文と照合し、"
-        f"関連性と意見性がともに認められた{len(rows)}件を表示しています。</li>"
+        '<section class="panel details-panel" id="detail-data"><div class="panel-title"><h2>調査上の注意</h2>'
+        "<span>折りたたみ</span></div><details open><summary>読み方</summary><ul>"
+        "<li>公開投稿を分類した結果を、論点を考えるための手がかりとして示しています。</li>"
         "<li>これは世論調査ではなく、検索語・取得時点・検索サービスの表示仕様による偏りがあります。</li>"
         "<li>論点・立場は本文との照合を反映しています。表現の強さと要約はAI分類に基づき、誤りを含む可能性があります。</li>"
         "</ul></details></section>"
@@ -832,12 +823,7 @@ def apply_conclusion_count(page: str, rows: list[dict[str, Any]]) -> str:
             f"{top_issue}({top_count}件) へ入れ替わりました。"
             "見出し文を書き直してから CONCLUSION_ISSUE も更新してください"
         )
-    return replace_once(
-        page,
-        r'<span class="conclusion-count"><b>[\d,]+</b>件</span>',
-        f'<span class="conclusion-count"><b>{target}</b>件</span>',
-        "議論の中心の件数",
-    )
+    return re.sub(r'<span class="conclusion-count"><b>[\d,]+</b>件</span>', '', page)
 
 
 def apply_planet_counts(page: str, rows: list[dict], collected: int, period: str) -> str:

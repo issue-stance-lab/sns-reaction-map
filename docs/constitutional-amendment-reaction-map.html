@@ -823,6 +823,109 @@
   </svg>
   <main>
 
+<!-- STANCE_GLANCE_START -->
+<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:12.5px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">憲法改正論議、慎重・反対が7割近くを占める</h2><span>詳しい論点より先に</span></div>
+<p class="sg-lead">改正推進は252件（16.1%）にとどまり、慎重・反対が1,055件（67.3%）で3分の2を超えています。手続き重視・中立を合わせても、この差は埋まりません。</p>
+<div class="sg-headline">この<b>1,568</b>件が、どの立場に分かれているかです</div>
+<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label"><span>意見1,568件の立場別内訳</span><span>意見に占める割合</span></div><div class="temp-bar"><div class="temp-seg" data-i="0" style="width:16.1%;background:#2F8F83">16%</div><div class="temp-seg" data-i="1" style="width:67.3%;background:#7D5BA6">67%</div><div class="temp-seg" data-i="2" style="width:3.9%;background:#D9A520"></div><div class="temp-seg" data-i="3" style="width:12.8%;background:#8B9199">13%</div></div><div class="temp-bar-legend"><span data-i="0"><i style="background:#2F8F83"></i>推進<b>252件</b></span><span data-i="1"><i style="background:#7D5BA6"></i>慎重・反対<b>1055件</b></span><span data-i="2"><i style="background:#D9A520"></i>手続き重視<b>61件</b></span><span data-i="3"><i style="background:#8B9199"></i>中立<b>200件</b></span></div></div>
+<div class="sg-pick"><p class="sg-pick-label">気になるボタンを押すと</p>
+<p class="sg-pick-hint">その立場に近い投稿の特徴を表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+<button type="button" class="sg-pick-btn" data-i="0" aria-pressed="false" style="--sg-color:#2F8F83;--sg-bg:#EAF5F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">✓</span><span class="sg-pick-name">推進</span></button><button type="button" class="sg-pick-btn" data-i="1" aria-pressed="false" style="--sg-color:#7D5BA6;--sg-bg:#F2EEF7"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">!</span><span class="sg-pick-name">慎重・反対</span></button><button type="button" class="sg-pick-btn" data-i="2" aria-pressed="false" style="--sg-color:#D9A520;--sg-bg:#FBF3DF"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">◆</span><span class="sg-pick-name">手続き重視</span></button><button type="button" class="sg-pick-btn" data-i="3" aria-pressed="false" style="--sg-color:#8B9199;--sg-bg:#F1F2F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">?</span><span class="sg-pick-name">中立</span></button>
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ ボタンは内容確認のためのもので、投票にはなりません。投票はこのページ下部から参加できます。</p>
+</div>
+</aside>
+<script>
+(function(){
+  var DATA=[{short:"推進",pct:16.071428571428573,desc:"憲法改正を進めるべきだとする投稿"},{short:"慎重・反対",pct:67.28316326530613,desc:"改正には慎重であるべきだ、または反対だとする投稿"},{short:"手続き重視",pct:3.8903061224489797,desc:"改正の中身より、決め方や手続きの妥当性を重視する投稿"},{short:"中立",pct:12.755102040816327,desc:"賛否を示さず、情報の共有や解説にとどまる投稿"}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){
+    root.querySelectorAll('.sg-pulse').forEach(function(el){el.classList.remove('sg-pulse');});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    });
+  }
+  buttons.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      buttons.forEach(function(b){b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」: '+d.desc+'（'+d.pct.toFixed(1)+'%）';
+      result.style.display='block';
+      pulse(i);
+    });
+  });
+})();
+</script>
+<!-- STANCE_GLANCE_END -->
 
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">

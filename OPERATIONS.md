@@ -101,8 +101,9 @@ python3 scripts/build_admin_dashboard.py
 |---|---|---|
 | `x-daily-measure` | 毎日 20:05頃 | 24時間経過した未計測投稿の表示回数を読み、`content/x/posts.md` に記録する |
 | `x-weekly-review` | 日曜 20:32頃 | 直近7日のX運用を振り返り、`content/x/weekly-reviews.md` に記録する |
+| `update-work-check` | 毎日 22:00頃 | `refresh_at` が一番遅れているテーマを1つ報告する（`GROWTH.yaml` の `recurring.update-work-queue` に記録するだけ。本文は読まない・公開しない） |
 
-どちらも**投稿はしない**（計測と記録だけ）。返信案は出すが送信はしない。
+どれも**投稿・公開はしない**（計測・記録・報告だけ）。返信案は出すが送信はしない。
 
 **このアプリが開いていないと動かない。** 実行時刻にアプリが閉じていれば、次に開いたときに
 遅れて実行される。廃止した `daily-growth-loop` が45日間気づかれなかった原因もこれである。
@@ -117,6 +118,10 @@ python3 scripts/build_admin_dashboard.py
 
 この2つは `tests/test_admin_dashboard.py` の `MeasurementStallTests` で守っている。
 警告の文言や条件を変えるときは、テストも同時に直すこと。
+
+`update-work-check` は専用のテストを持たず、`recurring.*` 共通の汎用チェック（課題83、
+`GROWTH.yaml` の `stale_after_days`）で見る。`recurring.update-work-queue.last_run` が
+`stale_after_days`（4日）を超えて更新されていなければ、ダッシュボードが自動で警告する。
 
 ---
 
@@ -135,7 +140,8 @@ python3 scripts/build_admin_dashboard.py
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 |
 |---|---|---|---|
-| **データ更新**（収集・分類・公開） | テーマごと | `THEMES.yaml` の `collect_at` / `refresh_at` | `DATA_REFRESH.md` |
+| **データ収集**（収集・自動分類・非公開保存） | 夜枠（20時以降）・X日次経由・1日1テーマまで | `THEMES.yaml` の `collect_at` | `DATA_REFRESH.md` / 課題81 |
+| **更新作業**（本文確認→正典反映→公開） | テーマごと（`refresh_at`超過順）。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `refresh_at` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md` / 課題86 |
 | **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` |
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
 | **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー |

@@ -227,6 +227,16 @@ def subprocess_run(argv: list[str], cwd: Path):
     return subprocess.run(argv, cwd=cwd, text=True, capture_output=True, timeout=30)
 
 
+def _copy_to_clipboard(text: str) -> bool:
+    import subprocess
+
+    try:
+        subprocess.run(["pbcopy"], input=text.encode("utf-8"), check=True, timeout=5)
+        return True
+    except Exception:
+        return False
+
+
 def idle_monitor(server: DashboardHTTPServer) -> None:
     while True:
         time.sleep(15)
@@ -253,6 +263,8 @@ def serve(*, port: int = 8765, open_browser: bool = True) -> int:
             return 1
         if open_browser:
             webbrowser.open(existing_url)
+            if _copy_to_clipboard(existing_url):
+                print("URLをコピーしました。ブラウザが表示されない場合は新しいタブに Cmd+V で貼り付けてください。")
         return 0
     token = secrets.token_urlsafe(32)
     manager = JobManager(root=ROOT)
@@ -277,6 +289,8 @@ def serve(*, port: int = 8765, open_browser: bool = True) -> int:
         print(url)
     if open_browser:
         threading.Timer(0.25, webbrowser.open, args=(url,)).start()
+        if _copy_to_clipboard(url):
+            print("URLをコピーしました。ブラウザが表示されない場合は新しいタブに Cmd+V で貼り付けてください。")
     try:
         server.serve_forever(poll_interval=0.25)
     except KeyboardInterrupt:

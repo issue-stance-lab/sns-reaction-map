@@ -283,6 +283,7 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     """
     lines: list[str] = []
     failures = 0
+    count_free = theme == "school-nickname-ban"
     for issue in data.get("issues", []):
         issue_id = issue.get("id")
         total = issue.get("count")
@@ -300,7 +301,7 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
             mismatched = [
                 item["label"] for item in items
                 if f'{item["count"]}件</span>' not in page
-            ]
+            ] if not count_free else []
             if mismatched:
                 lines.append(
                     f"NG  {issue_id}: 島の件数がJSONと表示で食い違う可能性: {', '.join(mismatched[:5])}"
@@ -324,7 +325,13 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
         share = issue.get("share_pct")
         if share is not None and f'href="#fb-{issue_id}"' in page:
             expected = f"{total}件・{share}%"
-            if f'<span class="count">{expected}</span>' in page:
+            if count_free:
+                if f'<span class="count">{expected}</span>' in page:
+                    lines.append(f"NG  {issue_id}: 非表示にした論点一覧に件数が残っている")
+                    failures += 1
+                else:
+                    lines.append(f"OK  {issue_id}: 論点一覧に件数を表示していない")
+            elif f'<span class="count">{expected}</span>' in page:
                 lines.append(f"OK  {issue_id}: 論点一覧の凡例（{expected}）が論点の合計と一致する")
             else:
                 lines.append(f"NG  {issue_id}: 論点一覧の凡例が論点の合計と食い違う可能性（期待: {expected}）")

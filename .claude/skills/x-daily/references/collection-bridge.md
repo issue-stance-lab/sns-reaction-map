@@ -1,9 +1,22 @@
 # テーマ収集の橋渡し（課題81）
 
-X日次の開始時、候補作成に入る前に読む。収集が遅れているテーマを最大1本だけ収集する。
-本文確認・正典反映・公開はしない（`DATA_REFRESH.md`の16ステップ中、収集・自動分類・
-非公開保存の1ステップだけ）。X日次は1日に複数回（朝・昼・夕・夜など）呼ばれる運用が
-通常なので、収集は1日1回までに絞る。
+X日次の**候補提示が終わったあと、20時以降（夜枠）のときだけ**読む。収集が遅れているテーマを
+最大1本だけ収集する。本文確認・正典反映・公開はしない（`DATA_REFRESH.md`の16ステップ中、
+収集・自動分類・非公開保存の1ステップだけ）。X日次は1日に複数回（朝・昼・夕・夜など）呼ばれる
+運用が通常だが、収集は夜枠だけに絞る（朝・昼・夕は候補作成だけの軽い作業のままにする）。
+
+**2026-09-22、初回実運用で朝の候補作成と収集がほぼ同じ時間帯に重なり負担が大きくなったため、
+「開始時・最大1テーマ」から「候補提示後・夜枠のみ・最大1テーマ」へ変更した。** 1日1回までに
+絞る理由（X日次は朝・昼・夕・夜と1日に複数回呼ばれる）は変わらない。夜枠が無い日は、その日の
+収集チェックは行わない（翌日以降の夜枠、または課題69の個別収集セッションで追いつく）。
+
+## -1. 時刻を確認する（夜枠かどうか）
+
+```bash
+date +%H:%M
+```
+
+20:00より前なら収集チェックはせず、候補作成へ戻る。20:00以降のときだけ次へ進む。
 
 ## 0. 今日すでに収集済みか確認する
 
@@ -60,8 +73,16 @@ python3 scripts/refresh_topic.py \
 
 ```bash
 cd /Volumes/M2-WorkSpace/Projects/副業/isa-wt-collect-<テーマ>
-git add THEMES.yaml themes/<テーマ>.md data/verification/updates/
+# 新しい更新回を採用台帳と保全台帳へ載せる（載せないと公開ファイルの検査が
+# 「new verification wave is outside snapshot」で落ちる。2026-09-22の初回運用で発覚）
+python3 scripts/build_adoption_registry.py
+python3 scripts/build_adoption_registry.py --check
+python3 scripts/data_asset_inventory.py
+
+git add THEMES.yaml themes/<テーマ>.md data/verification/updates/ \
+  data/verification/adoption/registry.json company/data-assets.json company/data-backup-status.json
 git commit -m "収集: <テーマ> <日付>"
+python3 scripts/run_public_checks.py   # 終了コード0を確かめてからマージへ進む
 
 cd /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator
 git merge --no-ff task/collect-<テーマ> -m "Merge branch 'task/collect-<テーマ>'"
@@ -72,6 +93,11 @@ git push
 
 成功の形: `git merge` が `Merge made by the 'ort' strategy.`、2つの `verify_*.py` が
 ともに終了コード0、`git push` が `main -> main` の行を出す。
+
+**共有ツリーに別セッションの未コミット変更があってマージできないとき**（`company/data-backup-status.json`
+などの台帳は、別セッションのバックアップでよく書き換わっている）は、共有ツリーのファイルに触れない。
+収集worktreeの中で `git merge origin/main -m "..."` → 上の検査を再実行 → `git push origin HEAD:main` で送る
+（2026-09-22の初回運用で実施）。
 
 - **ページ整合性検査一式（`verify_theme_page.py` / `verify_number_provenance.py` /
   `unittest discover` / `run_public_checks.py`）は実行しない。** ページを変えていないため
