@@ -45,6 +45,20 @@ def main() -> int:
 
     themes = yaml.safe_load(REGISTRY.read_text(encoding="utf-8"))["themes"]
 
+    collect_at_owners: dict[object, list[str]] = {}
+    for name, value in themes.items():
+        collect_at = value.get("collect_at")
+        if collect_at:
+            collect_at_owners.setdefault(collect_at, []).append(name)
+    for collect_at, names in collect_at_owners.items():
+        if len(names) > 1:
+            problems.append(
+                f"collect_at {collect_at} が {len(names)} テーマで重複している: "
+                f"{', '.join(sorted(names))}。同じ日に収集が集中するので、"
+                "scripts/refresh_topic.py の next_collection_date() 側で解消されるはずが、"
+                "手動編集などで再発している"
+            )
+
     for name, value in themes.items():
         tag = f"THEMES.yaml「{name}」"
         for key, field in value.items():

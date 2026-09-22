@@ -645,7 +645,32 @@ def next_collection_date(root: Path, topic: str, current_date: str, report: dict
         days = 7
     else:
         days = 14
-    return (date.fromisoformat(current_date) + timedelta(days=days)).isoformat()
+    candidate = date.fromisoformat(current_date) + timedelta(days=days)
+    return _avoid_collect_at_collision(root, topic, candidate).isoformat()
+
+
+def _avoid_collect_at_collision(root: Path, topic: str, candidate: date) -> date:
+    """他テーマと同じcollect_atにならないよう、必要なら1日ずつ後ろへずらす（前倒しはしない）。
+
+    複数テーマの収集期限が同じ日に集中すると、その日の収集作業が重くなる
+    （2026-09-22、1週間で8テーマが集中しうち3日が同日2テーマ重複だった）。
+    """
+    registry = root / "THEMES.yaml"
+    if not registry.exists():
+        return candidate
+    themes = yaml.safe_load(registry.read_text(encoding="utf-8")).get("themes") or {}
+    occupied: set[date] = set()
+    for name, value in themes.items():
+        if name == topic:
+            continue
+        other = value.get("collect_at")
+        if isinstance(other, date):
+            occupied.add(other)
+        elif isinstance(other, str) and other:
+            occupied.add(date.fromisoformat(other))
+    while candidate in occupied:
+        candidate += timedelta(days=1)
+    return candidate
 
 
 def _replace_theme_fields(text: str, topic: str, fields: dict[str, str | None]) -> str:
