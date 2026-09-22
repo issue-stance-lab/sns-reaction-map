@@ -1,6 +1,6 @@
-// バー↔山の立場共有。既存のrender/layout/land/morphToは上書きせず、
-// STANCE_GLANCE・#modesの両方へ「もう一方も揃える」監視を追加するだけに留める
-// （工程2の範囲。論点の理由・投稿例・資料の読書面は工程3以降）。
+// バー↔山の立場共有（工程2）、論点を選んだときの読書面（工程3）、
+// 立場を切り替えたときの山の滑らかな変化（工程3後追い、tax版の考え方を移植）。
+// land/orbitは変えず、drawPanel・layout・render・morphToだけを差し替える。
 (function(){
   // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
   // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
@@ -95,6 +95,74 @@
     var id = issues[st.landed].id;
     if (!readingTemplateFor(id)) { legacyDrawPanel(); return; }
     renderReading(id);
+  };
+
+  // ---------- 立場を切り替えたときの山の変化を滑らかにする ----------
+  // consumption-tax-cutのtaxAnimate/taxLayoutと同じ考え方（tax版
+  // scripts/templates/consumption_tax_connected_bridge.jsを参照して移植）。
+  // bukatsu-chiikiのlayout()/render()はtax版と違い画面幅に応じた再計算を持たず
+  // 固定900幅のviewBoxのため、render()自体は書き換えずに済む。layout()だけを
+  // 差し替え、render()が内部で呼ぶlayout(st.mode)が補間後の形を返すようにする。
+  var bktVisual = null, bktAnimation = 0;
+  var legacyLayout = layout;
+  layout = function(modeId){ return bktVisual && modeId === st.mode ? bktVisual : legacyLayout(modeId); };
+
+  // アニメーション中は毎フレームsvg.innerHTMLを作り直す（render()自体の仕様）ため、
+  // キーボード操作中の山（.hill）へのフォーカスが毎回外れる。呼び出し前後で復元する。
+  var legacyRender = render;
+  render = function(){
+    var focused = document.activeElement;
+    var focusId = focused && focused.classList && focused.classList.contains('hill') ? focused.dataset.i : null;
+    legacyRender();
+    if (focusId !== null){
+      var el = svg.querySelector('.hill[data-i="' + focusId + '"]');
+      if (el) el.focus({preventScroll: true});
+    }
+  };
+
+  function bktAnimate(from, to){
+    cancelAnimationFrame(bktAnimation);
+    if (reduce){ bktVisual = null; render(); return; }
+    var start = performance.now();
+    var byId = function(list){ var m = new Map(); list.forEach(function(v){ m.set(v.it.id, v); }); return m; };
+    var a = byId(from.live), b = byId(to.live);
+    var keys = issues.map(function(it){ return it.id; }).filter(function(id){ return a.has(id) || b.has(id); });
+    function zero(v){ return Object.assign({}, v, {x0: v.cx, x1: v.cx, w: 0, top: SEA, n: 0, hi: 0, rate: 0, share: 0}); }
+    function frame(now){
+      var t = Math.min(1, (now - start) / 480), f = 1 - Math.pow(1 - t, 3);
+      bktVisual = Object.assign({}, to, {live: keys.map(function(id){
+        var end = b.get(id), begin = a.get(id);
+        var left = begin || zero(end), right = end || zero(begin), value = Object.assign({}, right);
+        ['x0', 'x1', 'cx', 'w', 'top', 'n', 'hi', 'rate', 'share'].forEach(function(key){
+          value[key] = left[key] + (right[key] - left[key]) * f;
+        });
+        value.n = Math.round(value.n); value.hi = Math.round(value.hi);
+        value.clipped = value.rate > Y_MAX;
+        return value;
+      })});
+      render();
+      if (t < 1) bktAnimation = requestAnimationFrame(frame);
+      else { bktVisual = null; bktAnimation = 0; render(); }
+    }
+    bktAnimation = requestAnimationFrame(frame);
+  }
+
+  // 連打時、前のアニメーションの最新の形（bktVisual）から次の目的地へつなぐため、
+  // 常に最後に押した立場へ収束する（前のアニメーションへ戻らない）。
+  var legacyMorph = morphTo;
+  morphTo = function(toMode){
+    if (!modeById[toMode] || toMode === st.mode) return;
+    var from = bktVisual || legacyLayout(st.mode);
+    st.prevRank = ranksOf(st.mode);
+    st.mode = toMode;
+    if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+      st.landed = null;
+      if (location.hash) history.replaceState(null, "", location.pathname);
+    }
+    evacuateChart();
+    drawPanel(); syncList(); placeChart();
+    bktAnimate(from, legacyLayout(toMode));
+    if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
   };
 
   window.BukatsuConnectedMap = Object.freeze({
