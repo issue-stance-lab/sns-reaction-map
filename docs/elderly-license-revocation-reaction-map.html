@@ -718,6 +718,110 @@
   </svg>
   <main>
 
+<!-- STANCE_GLANCE_START -->
+<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:12.5px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">高齢者の免許返納義務化、賛成は反対の4.9倍</h2><span>義務化の是非を考える前に</span></div>
+<p class="sg-lead">条件付き賛成を合わせると、義務化に肯定的な投稿は意見全体の75%を占めます。年齢だけでの一律義務化に反対する投稿は少数派です。</p>
+<div class="sg-headline"><b>428</b>件の意見を、4つの立場で見た内訳です</div>
+<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label"><span>意見428件の立場別内訳</span><span>意見に占める割合</span></div><div class="temp-bar"><div class="temp-seg" data-i="0" style="width:54.2%;background:#2F8F83">54%</div><div class="temp-seg" data-i="1" style="width:20.6%;background:#D9A520">21%</div><div class="temp-seg" data-i="2" style="width:11.0%;background:#7D5BA6">11%</div><div class="temp-seg" data-i="3" style="width:14.3%;background:#8B9199">14%</div></div><div class="temp-bar-legend"><span data-i="0"><i style="background:#2F8F83"></i>義務化賛成<b>232件</b></span><span data-i="1"><i style="background:#D9A520"></i>条件付き賛成<b>88件</b></span><span data-i="2"><i style="background:#7D5BA6"></i>義務化反対<b>47件</b></span><span data-i="3"><i style="background:#8B9199"></i>中立・情報<b>61件</b></span></div></div>
+<div class="sg-pick"><p class="sg-pick-label">気になる立場を選ぶと</p>
+<p class="sg-pick-hint">どんな投稿が含まれるかを表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+<button type="button" class="sg-pick-btn" data-i="0" aria-pressed="false" style="--sg-color:#2F8F83;--sg-bg:#EAF5F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">✓</span><span class="sg-pick-name">義務化賛成</span></button><button type="button" class="sg-pick-btn" data-i="1" aria-pressed="false" style="--sg-color:#D9A520;--sg-bg:#FBF3DF"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">△</span><span class="sg-pick-name">条件付き賛成</span></button><button type="button" class="sg-pick-btn" data-i="2" aria-pressed="false" style="--sg-color:#7D5BA6;--sg-bg:#F2EEF7"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">!</span><span class="sg-pick-name">義務化反対</span></button><button type="button" class="sg-pick-btn" data-i="3" aria-pressed="false" style="--sg-color:#8B9199;--sg-bg:#F1F2F3"><span class="sg-pick-check" aria-hidden="true">✓</span><span class="sg-pick-icon" aria-hidden="true">?</span><span class="sg-pick-name">中立・情報</span></button>
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ この選択はあくまで確認用で、投票データには残りません。投票への参加はページ下部からどうぞ。</p>
+</div>
+</aside>
+<script>
+(function(){
+  var DATA=[{short:"義務化賛成",pct:54.205607476635514,desc:"年齢で一律に運転免許を返納させるべきだとする投稿"},{short:"条件付き賛成",pct:20.560747663551403,desc:"一律の義務化ではなく、適性検査など条件を付けるべきだとする投稿"},{short:"義務化反対",pct:10.981308411214954,desc:"年齢だけで一律に返納させることに反対する投稿"},{short:"中立・情報",pct:14.25233644859813,desc:"賛否を示さず、制度の説明や情報共有にとどまる投稿"}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){
+    root.querySelectorAll('.sg-pulse').forEach(function(el){el.classList.remove('sg-pulse');});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    });
+  }
+  buttons.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      buttons.forEach(function(b){b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」: '+d.desc+'（'+d.pct.toFixed(1)+'%）';
+      result.style.display='block';
+      pulse(i);
+    });
+  });
+})();
+</script>
+<!-- STANCE_GLANCE_END -->
+
 <!-- RESEARCH_CONDITIONS_START -->
 <aside class="research-conditions" aria-label="SNSデータの調査条件" style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);font-size:13px;line-height:1.8;color:var(--muted);">
   <p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿602件のうち、意見と判定した428件を分析対象としています。<br>
