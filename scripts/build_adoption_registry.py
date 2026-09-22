@@ -136,6 +136,7 @@ def build(root=ROOT,evidence_root=EVIDENCE,snapshot_at=None):
     for name,topics in seed.get('cohorts',{}).items():
         detail={}
         for topic,keys in topics.items():
+            if topic not in result['topics']:continue  # テーマ廃止（THEMES.yamlから削除済み）で追跡対象外。decision-evidence.json自体は書き換えない
             byid={r['record_id_hash']:r for r in result['topics'][topic]['records']}
             if len(keys)!=len(set(keys)) or any(k not in byid for k in keys):raise ValueError(f'追跡集合が保存回にありません: {name}/{topic}')
             detail[topic]={'total':len(keys),'in_canonical':sum(byid[k]['canonical_presence'] for k in keys),

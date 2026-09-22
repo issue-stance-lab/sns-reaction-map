@@ -22,7 +22,6 @@ BUILDERS: tuple[tuple[str, list[str]], ...] = (
     ("consumption-tax-cut", [sys.executable, "scripts/build_consumption_tax_arena.py"]),
     ("bike-blue-ticket", [sys.executable, "scripts/build_bike_arena.py"]),
     ("school-nickname-ban", [sys.executable, "scripts/build_nickname_arena.py"]),
-    ("takaichi", ["node", "scripts/upgrade_takaichi_arena.js"]),
 )
 
 

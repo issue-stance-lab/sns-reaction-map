@@ -69,7 +69,6 @@ PRIVATE_DATA_TESTS: dict[str, str] = {
     "test_planet_data": "読み飛ばし判定のため部活の正典レコード（非公開）を読む",
     "test_portal_stats": "トップページの件数を正典から数え直す",
     "test_taxonomy_continuity": "全テーマの正典ラベルが定義の内側かを見る",
-    "test_takaichi_adapter": "高市文春問題の非公開正典（2026-09-20にGit追跡から除外）から候補生成・再生成を検査する",
 }
 
 

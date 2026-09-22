@@ -89,8 +89,6 @@ def theme_configs() -> dict[str, Path]:
             continue
         stem = Path(html_match.group(1)).stem
         config = PROJECT_ROOT / "configs" / f"{stem}.json"
-        if not config.exists() and match.group(1) == "takaichi":
-            config = PROJECT_ROOT / "configs/takaichi-reaction-map.json"
         out[match.group(1)] = config
     return out
 

@@ -15,19 +15,6 @@ SS = ROOT / "social-samples"
 # --- テーマ設定 ---
 THEMES = [
     {
-        "slug": "takaichi",
-        "html": "docs/takaichi-reaction-map-standard.html",
-        "widget_id": "takaichi-tide-widget",
-        "prev_file": "takaichi_hermes_prev_20260712.json",
-        "cur_file": "takaichi_hermes_cur_20260726.json",
-        "prev_label": "7月12日",
-        "cur_label": "7月26日",
-        "use_relevance_filter": True,
-        "stance_labels": ["批判・追及", "擁護・懐疑", "慎重・保留"],
-        "issue_labels": ["中傷動画・説明責任", "文春報道の真偽", "サナエトークン疑惑", "比較・政治倫理", "松井健氏・工作の実態"],
-        "note": "比較対象：7月12日収集分のうち意見投稿／7月26日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで再分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。",
-    },
-    {
         # adapter（scripts/refresh_adapters/nickname.py）が更新回どうしの比較で作り直すので、
         # prev_file / cur_file は持たない。固定ファイル名を書いておくと、このスクリプトを
         # 単体で流したときに、あとから増えた更新回を無視して古いデータへ巻き戻る（課題38）。
