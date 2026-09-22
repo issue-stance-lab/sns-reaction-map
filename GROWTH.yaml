@@ -585,6 +585,22 @@ recurring:
       一次資料未確認のため今回は見送り、Xコミュニティ機能は2026年に廃止案内が出ているため提案から除外した。
       詳細は `.claude/skills/x-daily/SKILL.md` §1・§4、`X_POSTING_GUIDE.md` §6。
 
+  update-work-queue:
+    title: 更新作業（本文確認→正典反映→公開）の遅れ確認
+    cadence: 毎日22時（自動実行、課題86。cronの日跨ぎ制約のため「2日に1回」から変更）
+    stale_after_days: 3
+    last_run:
+    procedure: >-
+      THEMES.yamlのrefresh_atが一番遅れているテーマを1つ報告する（読む・確定はしない。
+      scripts/manage_reread_registry.py prepareは呼ばない——読む対象を固定する操作で、
+      1日1回程度の自動再実行を想定した作りではないため）。実際の本文確認・公開は
+      別の人間参加セッションで行う（頻度目安は週2〜3回、課題81・課題86参照）。
+    needs_human: 報告を受けて、実際に本文確認・公開のセッションをいつ行うかを決めるのは人間の判断
+    notes: >-
+      2026-09-22新設。夜枠のテーマ収集（課題81、collection-bridge.md）とは別工程。
+      収集は機械的な処理なので自動化できるが、本文確認は人が読んで判定する工程のため
+      自動化しない（消費税減税の要約使い回し事故の教訓、DATA_REFRESH.md参照）。
+
 featured: ai-copyright   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
