@@ -711,7 +711,7 @@ def claim_audit(rows: list[dict]) -> str:
             for url, label in entry["links"]
         )
         items.append(
-            f'  <article class="ca-item" data-verdict="{entry["verdict"]}">\n'
+            f'  <article class="ca-item" data-verdict="{entry["verdict"]}" data-claim-id="{entry["key"]}">\n'
             f'    <p class="ca-say">「{esc(entry["say"])}」'
             f'<span class="ca-n">該当した投稿 {len(ids)}件</span></p>\n'
             f'    <dl class="ca-detail">\n'
@@ -820,9 +820,10 @@ ISSUE_CARDS_CSS = """<style>
 </style>"""
 
 
-def issue_cards(public_theme: Path = PUBLIC_THEME) -> str:
+def issue_cards(public_theme: Path = PUBLIC_THEME, *, data: dict | None = None) -> str:
     """「論点ごとのX投稿」セクションを組み立てる（皇室典範と同じ位置・同じ形）。"""
-    data = json.loads(public_theme.read_text(encoding="utf-8"))
+    if data is None:
+        data = json.loads(public_theme.read_text(encoding="utf-8"))
     if data.get("theme_id") != "consumption-tax-cut":
         raise ValueError(f"消費税減税の公開JSONではありません: {public_theme}")
     by_id = {issue["id"]: issue for issue in data["issues"]}
@@ -917,55 +918,13 @@ BACKGROUND_CSS = """<style>
 # 一次情報は quality/research/consumption-tax-cut-primary-sources.md で
 # 確認済みの資料（H-2・N・O・P、確認日2026-09-17）から選んだ。新しい数字を
 # ここで足さないこと（足す場合は先に一次資料メモへ確認日つきで記録する）。
+BACKGROUND_DATA = json.loads((ROOT / "configs/consumption-tax-background.json").read_text(encoding="utf-8"))
 BACKGROUND_TIMELINE = [
-    (
-        "2026年7月30日",
-        "税率引下げと給付付き税額控除の検討を表明",
-        "首相官邸の会見で、軽減税率対象の飲食料品について、税率引下げと給付付き税額控除の両方をあわせて検討していると説明されました。",
-        [("https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html",
-          "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）")],
-    ),
-    (
-        "2026年8月5日",
-        "「1%・2年間」の方針を初めて閣議決定",
-        "政府として、令和9年4月から2年間、軽減税率対象の飲食料品の消費税率を1%とする方針を正式に決定しました。財源は歳出・歳入の見直しで確保し、赤字国債には頼らないとしています。",
-        [("https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html",
-          "首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）")],
-    ),
-    (
-        "2026年9月15日",
-        "大綱を閣議決定、制度設計が確定",
-        "税率引下げの期間（2027年4月〜2029年3月）、就業者負担軽減支援金の対象・支給額、事業者向けの経過措置など、法案のもとになる制度設計が固まりました。本ページ確認時点で、これが到達している最新の段階です。",
-        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf",
-          "内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日閣議決定）")],
-    ),
+    (x["date"], x["title"], x["body"], x["links"]) for x in BACKGROUND_DATA["timeline"]
 ]
 
 BACKGROUND_CHECKS = [
-    (
-        "対象範囲",
-        "食料品だけか、広がるのか",
-        "決まっています。現行の軽減税率が適用される飲食料品（酒類・外食を除く）のままで、対象を広げる決定はしていません。",
-        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "内閣「大綱」（令和8年9月15日閣議決定）第二")],
-    ),
-    (
-        "税率と期間",
-        "いつから、何%、いつまでか",
-        "決まっています。2027年4月1日から2029年3月31日までの2年間、税率を1%（軽減税率8%から引下げ）とします。",
-        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "同大綱")],
-    ),
-    (
-        "給付との関係",
-        "減税と給付、どちらか一方か",
-        "決まっています。両方を組み合わせる設計です。2027年4月から「就業者負担軽減支援金」を導入し、2029年度には「給付付き税額控除」として本格化させます。",
-        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "同大綱（就業者負担軽減支援金の制度設計）")],
-    ),
-    (
-        "財源",
-        "いくらかかり、どう賄うか",
-        "方針だけ決まっています。「赤字国債に頼らない」という原則は閣議決定されましたが、具体的な金額の内訳は令和9年度の予算編成まで示されていません。",
-        [("https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf", "同大綱")],
-    ),
+    (x["key"], x["question"], x["body"], x["links"]) for x in BACKGROUND_DATA["policies"]
 ]
 
 
@@ -982,15 +941,15 @@ def background_context() -> str:
     （静的な編集部原稿）。
     """
     timeline = "\n".join(
-        f'<li><div class="when">{esc(when)}<em>{esc(title)}</em></div>'
+        f'<li data-timeline-id="{esc(item["id"])}"><div class="when">{esc(when)}<em>{esc(title)}</em></div>'
         f'<div><p class="what">{esc(body)}</p>'
         f'<span class="src">出典: {_bg_sources(links)}</span></div></li>'
-        for when, title, body, links in BACKGROUND_TIMELINE
+        for item, (when, title, body, links) in zip(BACKGROUND_DATA["timeline"], BACKGROUND_TIMELINE)
     )
     checks = "\n".join(
-        f'<div class="ck"><div class="k"><b>{esc(key)}</b><span>{esc(question)}</span></div>'
+        f'<div class="ck" data-policy-id="{esc(item["id"])}"><div class="k"><b>{esc(key)}</b><span>{esc(question)}</span></div>'
         f'<div class="v">{esc(body)}<span class="src">出典: {_bg_sources(links)}</span></div></div>'
-        for key, question, body, links in BACKGROUND_CHECKS
+        for item, (key, question, body, links) in zip(BACKGROUND_DATA["policies"], BACKGROUND_CHECKS)
     )
     return f"""{BACKGROUND_START}
 {BACKGROUND_CSS}
@@ -1011,7 +970,7 @@ def background_context() -> str:
 <div class="panel-title"><h2 id="ck-title">「決まった」と「まだ」を分けて確かめる</h2><span>大綱と、これからの法案審議を見分ける</span></div>
 <p>「消費税が下がる」と一言で言っても、対象・税率・期間・財源のうち、政府がすでに決めた部分と、これから決める部分があります。混同すると、賛否の理由がかみ合わなくなります。</p>
 {checks}
-<p class="ck-note"><b>このページで未確認のこと</b><br>決まっているのは政府の方針（大綱）までで、法律はまだ成立していません。臨時国会への法案提出時期や審議の見通しは報道に基づくもので、政府の公式発表として確認できた日程はありません（本ページ確認: 2026年9月19日）。</p>
+<p class="ck-note"><b>このページで未確認のこと</b><br>決まっているのは政府の方針（大綱）までで、法律はまだ成立していません。臨時国会への法案提出時期や審議の見通しは報道に基づくもので、政府の公式発表として確認できた日程はありません（本ページ確認: {japanese_date(BACKGROUND_DATA["checked_on"])}）。</p>
 </section>
 {BACKGROUND_END}"""
 
@@ -1097,7 +1056,8 @@ STANCE_GLANCE_CSS = """<style>
 </style>"""
 
 
-def stance_glance(opinions: int, stance_counts: dict, stance_share: dict) -> str:
+def stance_glance(opinions: int, stance_counts: dict, stance_share: dict, *,
+                  stance_ids: dict[str, str] | None = None) -> str:
     """ヒーロー直後、内訳バー＋「まず、あなたは？」を組み立てる。
 
     stance_counts/stance_share は build_consumption_tax_arena.py が
@@ -1107,6 +1067,7 @@ def stance_glance(opinions: int, stance_counts: dict, stance_share: dict) -> str
     segs, legend, buttons, js_rows = [], [], [], []
     for i, s in enumerate(STANCE_ORDER):
         meta = STANCE_META[s]
+        stance_attr = f' data-stance-id="{esc(stance_ids[s])}"' if stance_ids is not None else ""
         count = stance_counts.get(s, 0)
         share = stance_share.get(s, 0.0)
         seg_label = f"{share:.0f}%" if share >= 5 else ""
@@ -1117,7 +1078,7 @@ def stance_glance(opinions: int, stance_counts: dict, stance_share: dict) -> str
             f'<span data-i="{i}"><i style="background:{meta["color"]}"></i>{esc(meta["label"])}<b>{count}件</b></span>'
         )
         buttons.append(
-            f'<button type="button" class="sg-pick-btn" data-i="{i}" aria-pressed="false" '
+            f'<button type="button" class="sg-pick-btn" data-i="{i}"{stance_attr} aria-pressed="false" '
             f'style="--sg-color:{meta["color"]};--sg-bg:{meta["bg"]}">'
             f'<span class="sg-pick-check" aria-hidden="true">✓</span>'
             f'<span class="sg-pick-icon" aria-hidden="true">{esc(meta["icon"])}</span>'
@@ -1194,6 +1155,7 @@ def build(
     template: Path = TEMPLATE,
     output: Path = OUTPUT,
     verification_dest: Path | None = None,
+    connected_layout: bool = False,
 ) -> None:
     data, rows = arena_data(classified)
     period = collection_period(rows)
@@ -1608,6 +1570,13 @@ def build(
     idx = html.index(STANCE_GLANCE_ANCHOR)
     html = html[:idx] + stance_glance(opinions, stance_counts, stance_share) + "\n\n" + html[idx:]
 
+    from consumption_tax_connected import apply as connect_page, enabled as is_connected
+    if connected_layout or is_connected(html):
+        from refresh_planet_section import refresh
+        _, html, failures = refresh("consumption-tax-cut", source=html)
+        if failures:
+            raise ValueError("連動表示の再生成検査: " + "; ".join(failures))
+    html = connect_page(html, activate=connected_layout)
     verify(html, opinions)
     output.write_text(html, encoding="utf-8")
     print(f"wrote {output} ({len(html.splitlines())} lines)")
@@ -1622,6 +1591,10 @@ def verify(html: str, opinions: int) -> None:
     """
     head = html[: html.index("</head>")]
     problems: list[str] = []
+    from consumption_tax_connected import enabled as is_connected, validate as validate_connected
+    connected = is_connected(html)
+    if connected:
+        problems.extend(validate_connected(html))
 
     for label, text in (("title", re.search(r"<title>(.*?)</title>", html, re.S).group(1)),
                         ("h1", re.search(r"<h1[^>]*>(.*?)</h1>", html, re.S).group(1))):
@@ -1676,7 +1649,7 @@ def verify(html: str, opinions: int) -> None:
                 "（皇室典範と同じく、投票セクションの外に分けること）"
             )
     # 潮目ウィジェットがあるなら、bukatsu-chiikiと同じ位置（一次資料クイズの直前）か。
-    if '<section class="update-dashboard"' in html and CLAIM_START in html:
+    if not connected and '<section class="update-dashboard"' in html and CLAIM_START in html:
         if html.index('<section class="update-dashboard"') > html.index(CLAIM_START):
             problems.append(
                 "潮目ウィジェットが一次資料クイズより後ろにある"
@@ -1726,7 +1699,8 @@ def verify(html: str, opinions: int) -> None:
             if f'href="{url}"' not in html:
                 problems.append(f"論点ごとのX投稿: リンクが見つからない: {url}")
     if (
-        ISSUE_CARDS_START in html
+        not connected
+        and ISSUE_CARDS_START in html
         and CLAIM_END in html
         and html.index(ISSUE_CARDS_START) < html.index(CLAIM_END)
     ):
@@ -1744,7 +1718,7 @@ def verify(html: str, opinions: int) -> None:
     timeline_items = len(re.findall(r'<ol class="bg-tl">(.*?)</ol>', html, re.S))
     if timeline_items != 1:
         problems.append("これまでの経緯のタイムラインが1つでない")
-    if html.count('<div class="ck">') != len(BACKGROUND_CHECKS):
+    if len(re.findall(r'<div class="ck"(?: [^>]*)?>', html)) != len(BACKGROUND_CHECKS):
         problems.append(f"確かめる観点が{len(BACKGROUND_CHECKS)}件でない")
     for _when, _title, _body, links in BACKGROUND_TIMELINE:
         for url, _label in links:
@@ -1758,7 +1732,8 @@ def verify(html: str, opinions: int) -> None:
     # 地図・クイズ・照合コーナーを全部読み終えるまで経緯に出会えない
     # （2026-09-19にオーナー報告で発覚した位置の問題の再発防止）。
     if (
-        BACKGROUND_START in html
+        not connected
+        and BACKGROUND_START in html
         and BACKGROUND_ANCHOR in html
         and html.index(BACKGROUND_START) > html.index(BACKGROUND_ANCHOR)
     ):
@@ -1779,7 +1754,8 @@ def verify(html: str, opinions: int) -> None:
         if btn_count != len(STANCE_ORDER):
             problems.append(f"「あなたは？」ボタンが{len(STANCE_ORDER)}個でない: {btn_count}個")
     if (
-        STANCE_GLANCE_START in html
+        not connected
+        and STANCE_GLANCE_START in html
         and STANCE_GLANCE_ANCHOR in html
         and html.index(STANCE_GLANCE_START) > html.index(STANCE_GLANCE_ANCHOR)
     ):
@@ -1853,6 +1829,8 @@ def main() -> int:
     parser.add_argument("--input", type=Path, default=None, help="分類済みJSON（既定: 累積正典）")
     parser.add_argument("--html-template", type=Path, default=TEMPLATE, help="作り直しの土台にするHTML")
     parser.add_argument("--output-html", type=Path, default=OUTPUT)
+    parser.add_argument("--connected-layout", action="store_true",
+                        help="消費税の連動表示を有効にした候補を作る（以後の部分更新も維持）")
     parser.add_argument(
         "--verification-dest",
         type=Path,
@@ -1890,6 +1868,16 @@ def main() -> int:
         help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
     )
     args = parser.parse_args()
+    from consumption_tax_connected import apply as connect_page, enabled as is_connected
+
+    def finish(html: str, *, refresh_map: bool = False) -> str:
+        if refresh_map and (args.connected_layout or is_connected(html)):
+            # 昇格後は公開JSONと再読記録が更新済み。古い山のデータを残さない。
+            from refresh_planet_section import refresh
+            _, html, failures = refresh("consumption-tax-cut", source=html)
+            if failures:
+                raise ValueError("連動表示の再生成検査: " + "; ".join(failures))
+        return connect_page(html, activate=args.connected_layout)
 
     if args.claim_audit_only:
         page = args.output_html
@@ -1915,7 +1903,7 @@ def main() -> int:
         if existing_tide:
             html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
         write_claim_provenance(args.verification_dest)
-        page.write_text(html, encoding="utf-8")
+        page.write_text(finish(html), encoding="utf-8")
         print(f"updated claim audit in {page}")
         return 0
 
@@ -1930,7 +1918,7 @@ def main() -> int:
             html = html[:start] + html[end:]
         idx = html.index(BACKGROUND_ANCHOR)
         html = html[:idx] + background_context() + "\n\n" + html[idx:]
-        page.write_text(html, encoding="utf-8")
+        page.write_text(finish(html), encoding="utf-8")
         print(f"updated background context in {page}")
         return 0
 
@@ -1943,19 +1931,19 @@ def main() -> int:
             html = html[:start] + html[end:]
         idx = html.index(ISSUE_CARDS_ANCHOR) + len(ISSUE_CARDS_ANCHOR)
         html = html[:idx] + "\n\n" + issue_cards() + html[idx:]
-        page.write_text(html, encoding="utf-8")
+        page.write_text(finish(html), encoding="utf-8")
         print(f"updated issue cards in {page}")
         return 0
 
     if args.conditions_only:
         page = args.output_html
-        page.write_text(research_conditions(page.read_text(encoding="utf-8")), encoding="utf-8")
+        page.write_text(finish(research_conditions(page.read_text(encoding="utf-8"))), encoding="utf-8")
         print(f"updated research conditions in {page}")
         return 0
 
     if args.public_counts_only:
         page = args.output_html
-        page.write_text(apply_public_counts(page.read_text(encoding="utf-8")), encoding="utf-8")
+        page.write_text(finish(apply_public_counts(page.read_text(encoding="utf-8")), refresh_map=True), encoding="utf-8")
         print(f"updated public JSON counts in {page}")
         return 0
 
@@ -1964,6 +1952,7 @@ def main() -> int:
         template=args.html_template,
         output=args.output_html,
         verification_dest=args.verification_dest,
+        connected_layout=args.connected_layout,
     )
     if not args.skip_issue_counts:
         _sync_issue_counts()

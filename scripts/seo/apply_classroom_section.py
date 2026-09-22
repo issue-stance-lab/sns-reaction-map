@@ -18,11 +18,14 @@ import argparse
 import html
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from consumption_tax_connected import apply as connect_page
 CLASSROOM_START = "<!-- CLASSROOM_START -->"
 CLASSROOM_END = "<!-- CLASSROOM_END -->"
 TRUST_START = "<!-- ARTICLE_TRUST_START -->"
@@ -194,7 +197,7 @@ def apply_theme(source: str, theme_id: str, config: dict[str, Any], theme_data: 
     for token in PROTECTED_TOKENS:
         if before_counts[token] and after_counts[token] < before_counts[token]:
             raise ValueError(f"{theme_id}: protected token removed: {token}")
-    return updated
+    return connect_page(updated, topic=theme_id)
 
 
 def main() -> int:

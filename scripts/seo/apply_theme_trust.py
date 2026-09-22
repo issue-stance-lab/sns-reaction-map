@@ -7,6 +7,7 @@ import argparse
 import html
 import json
 import re
+import sys
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -14,6 +15,8 @@ from urllib.parse import urljoin
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from consumption_tax_connected import apply as connect_page
 SEO_START = "<!-- SEO_META_START -->"
 SEO_END = "<!-- SEO_META_END -->"
 JSONLD_START = "<!-- ARTICLE_JSON_LD_START -->"
@@ -293,7 +296,7 @@ def apply_theme(source: str, theme: dict[str, Any], config: dict[str, Any]) -> s
     for token in PROTECTED_TOKENS:
         if before_counts[token] and after_counts[token] < before_counts[token]:
             raise ValueError(f'{theme["id"]}: protected token removed: {token}')
-    return updated
+    return connect_page(updated, topic=theme["id"])
 
 
 # 「収集・分類で分かったこと」だけを差し替えるための目印。
@@ -312,13 +315,13 @@ def apply_observations_only(source: str, theme: dict[str, Any]) -> str:
     """
     block = observations_html(theme)
     if OBSERVATIONS_PATTERN.search(source):
-        return OBSERVATIONS_PATTERN.sub(lambda _: block, source, count=1)
+        return connect_page(OBSERVATIONS_PATTERN.sub(lambda _: block, source, count=1), topic=theme["id"])
     if not block:
         return source
     anchor = "  </div>\n  <p class=\"article-trust-caution\">"
     if anchor not in source:
         raise ValueError(f'{theme["id"]}: 分析メモの差し込み位置が見つかりません')
-    return source.replace(anchor, block + anchor, 1)
+    return connect_page(source.replace(anchor, block + anchor, 1), topic=theme["id"])
 
 
 def main() -> int:

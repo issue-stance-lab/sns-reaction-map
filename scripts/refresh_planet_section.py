@@ -695,9 +695,9 @@ TOPIC_METHOD_TEXT = {
 }
 
 
-def refresh(topic: str) -> tuple[str, str, list[str]]:
+def refresh(topic: str, *, source: str | None = None) -> tuple[str, str, list[str]]:
     page = ROOT / "docs" / f"{topic}-reaction-map.html"
-    html = page.read_text(encoding="utf-8")
+    html = source if source is not None else page.read_text(encoding="utf-8")
     if START not in html or END not in html:
         raise SystemExit(
             f"「{topic}」はまだ山なみ形式ではありません。"
@@ -724,6 +724,8 @@ def refresh(topic: str) -> tuple[str, str, list[str]]:
     method_text = TOPIC_METHOD_TEXT.get(topic)
     if method_text:
         new_html = method_text(new_html, data)
+    from consumption_tax_connected import apply as connect_page
+    new_html = connect_page(new_html, topic=topic)
     return html, new_html, failures
 
 

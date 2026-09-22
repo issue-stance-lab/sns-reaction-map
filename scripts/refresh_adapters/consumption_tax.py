@@ -102,7 +102,8 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
         base.get("exclude_issues"),
     )
     tide = generate_tide_section(base, previous, current)
-    page.write_text(inject_into_html(page, tide, _load_tide_css()), encoding="utf-8")
+    from consumption_tax_connected import apply as connect_page
+    page.write_text(connect_page(inject_into_html(page, tide, _load_tide_css())), encoding="utf-8")
 
 
 def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> None:

@@ -1,0 +1,15 @@
+/* 消費税専用。静的本文の表示・印刷は既存CSSを引き継ぐ。 */
+.tax-connected #tax-content-scope {
+  margin: 8px 0 14px;
+  padding: 10px 12px;
+  border-left: 3px solid #2f8f83;
+  background: #f1f7f5;
+  color: #24334a;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.tax-connected #stance-glance-result-text { overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) {
+  .tax-connected #stance-glance .sg-pulse { animation: none; }
+}

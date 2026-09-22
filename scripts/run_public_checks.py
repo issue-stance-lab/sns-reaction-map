@@ -53,6 +53,7 @@ CHECKS: tuple[tuple[str, list[str]], ...] = (
 
 # 非公開正典を読むテスト。除外する理由を1件ずつ書く（理由の書けない除外を増やさないため）。
 PRIVATE_DATA_TESTS: dict[str, str] = {
+    "test_consumption_tax_connected_refresh": "消費税の非公開正典と更新回で連動表示の実生成・部分更新・潮目の再生成を検査する",
     "test_constitutional_planet_refresh": "憲法改正の非公開正典を読み、再生成・原文改変拒否を検査する",
     "test_constitutional_public_counts": "憲法改正の再生成で公開JSONと非公開正典の一致を確認する",
     "test_bike_adapter": "自転車の非公開正典から旧反対再読と再生成を検査する",
