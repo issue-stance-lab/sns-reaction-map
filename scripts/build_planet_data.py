@@ -733,7 +733,7 @@ def e(x) -> str:
 # （同一ページで id が重複すると #issue-{id} の行き先が不定になる）。
 ISSUE_CARDS_OWNS_ANCHOR_ID = {
     "ai-copyright", "bike-blue-ticket", "bukatsu-chiiki",
-    "consumption-tax-cut", "koshitsu-tenpakai", "school-nickname-ban",
+    "consumption-tax-cut", "koshitsu-tenpakai", "school-nickname-ban", "fukushuto",
 }
 
 
