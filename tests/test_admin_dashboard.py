@@ -87,7 +87,9 @@ class CompanyLedgerTests(unittest.TestCase):
         company = collect.collect_company(dt.date(2026, 8, 27))
         summaries = [item["summary"] for item in company["pending_approvals"]]
         self.assertNotIn("note『部活動の地域移行』第2回を公開する", summaries)
-        self.assertFalse(any(item["kind"] == "approval" for item in company["alerts"]))
+        # 別案件（例: 消費税の表示変更）の承認待ちまで禁止しない。
+        self.assertNotIn("CEO承認待ち: note『部活動の地域移行』第2回を公開する",
+                         [item["title"] for item in company["alerts"] if item["kind"] == "approval"])
 
     def test_completed_handoffs_are_not_shown_as_active_work(self):
         html = render.render(build_data(dt.date(2026, 9, 1)))

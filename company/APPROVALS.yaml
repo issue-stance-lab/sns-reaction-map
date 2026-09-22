@@ -36,19 +36,20 @@ items:
     department: growth-marketing
     action: website_publication
     summary: "課題77の消費税減税ページを、理由・X投稿・制度・資料が連動する完成版へ切り替えて公開する"
-    reason: "工程1〜5と追加機能の実装・独立監査を終え、工程6の公開前確認で全体1082件・公開用914件の検査が合格したため"
+    reason: "工程6の公開前確認後、オーナー依頼で初期見本に合わせた選択動作へ修正。最新候補と検証結果は選択動作の修正記録を参照"
     risks:
       - "実スマホ端末・製品版Safariは未確認。PCとスマホ幅はChromium・WebKitで確認した"
       - "X埋め込みは外部配信に依存する。読めない時も要旨と元投稿リンクを残す"
     recommendation: approve
     evidence:
+      - "quality/reviews/2026-09-22-task77-tax-selection-motion.md"
       - "quality/reviews/2026-09-22-task77-tax-release-ready.md"
       - "quality/reviews/2026-09-22-task77-tax-reason-posts.md"
       - "quality/reviews/2026-09-22-task77-tax-source-tab.md"
-    status: pending
+    status: approved
     requested_at: "2026-09-22"
-    decided_at: null
-    decision_note: null
+    decided_at: "2026-09-22"
+    decision_note: "CEOが修正版の確認後、本対話で「公開して」と明示的に承認。対象候補HTMLのSHA-256は27b2632daaadbb4c5c173f14626a7c27fe82c224b03ed4f2dfcf23ffd461d530、表示ファイルはv8。"
 
   - id: approval-20260912-001
     department: editorial
