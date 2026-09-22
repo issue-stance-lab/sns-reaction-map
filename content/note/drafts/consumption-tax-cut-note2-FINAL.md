@@ -30,7 +30,7 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 - [x] 見出し画像 作成済み（2026-09-22）: `content/note/drafts/images/consumption-tax-cut2_note-header.png`（背景写真はオーナーがGPTimage2で生成、`consumption-tax-cut2-shelf-frame.png`、文字合成はHTML/CSS＋Playwrightで実装）
 - [ ] タグ5個の選定（editorial案: #消費税減税 #消費税 #財源 #政治 #データ分析。note編集画面の候補表示を見て確定してよい）
 - [ ] マガジン「消費税減税を読む」へ追加（作成済み: https://note.com/sns_hanno_ma/m/m1c683954a55b ）
-- [ ] UTMの公開予定日を確定 → 現在は暫定で20260921。実際に投稿する日がこれと違う場合、
+- [ ] UTMの公開予定日を確定 → 現在は暫定で20260922。実際に投稿する日がこれと違う場合、
       投稿前にこの日付を直してから貼り付けること（公開後の変更はGA4計測が分断される）
 - [ ] オーナーに①〜④の骨子（本ファイル冒頭のコメント）を確認してもらってから、note下書き画面へ反映する
 - [ ] オーナー確認後、下書き画面へ反映 → タグ・マガジンを設定して公開
@@ -106,7 +106,7 @@ https://x.com/teramoto_kenta/status/2100204229537517803
 対象範囲では、賛成が多数派を占めています。財源になると、その差はほぼ消えます。同じ大綱でも、論点によって決着のつき方が違うことが、この2つのグラフに表れています。
 
 👉 対象範囲の論点で、実際の投稿を見る
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260921&utm_content=after_scope
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260922&utm_content=after_scope
 
 ## 財源に慎重な人たちが、まだ読めていない答え
 
@@ -123,7 +123,7 @@ https://x.com/fujipony1/status/2100434551227179070
 この不安には、下敷きになる数字があります。消費税収は34.0兆円ですが、年金・医療・介護・子育て支援にあたる社会保障4経費は48.9兆円。消費税収だけでは、もともとまかない切れていません。不足分は、消費税以外の財源で埋められています。減税でこの差がどう変わるのか、大綱はまだ触れていません。
 
 👉 財源の論点で、実際の投稿を見る
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260921&utm_content=after_funding
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260922&utm_content=after_funding
 
 ## 次に答えが出るとすれば、来年の予算編成
 
@@ -134,7 +134,7 @@ https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=not
 次回は、SNSでの賛否そのものを見ていきます。同じ投稿を「効果」という論点で切ると、賛成と反対の比率がどう変わるか。
 
 👉 対象範囲と財源、あなたの実感に近い論点に投票する
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260921&utm_content=after_conclusion
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260922&utm_content=after_conclusion
 
 ## このシリーズについて
 
@@ -145,6 +145,6 @@ https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=not
 この記事で紹介した数字は、「SNS反応まっぷ｜消費税減税」の公開投稿サンプルを、立場と論点で整理したものです。投稿の分布や実際の声は、次のページで確認できます。
 
 👉 投票して、自分の立場も見てみる
-https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260921&utm_content=footer
+https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html?utm_source=note&utm_medium=referral&utm_campaign=note_taxcut2_20260922&utm_content=footer
 
 データについて：Yahoo!リアルタイム検索で取得した消費税減税についての公開投稿のうち、意見と判定した3,890件を集計。「減税の対象範囲」に分類された885件の内訳は、減税推進495件（55.9%）・条件付き賛成331件（37.4%）・減税反対43件（4.9%）・中立16件（1.8%）。「財源と社会保障」に分類された511件の内訳は、減税反対244件（47.7%）・減税推進220件（43.1%）・条件付き賛成32件（6.3%）・中立15件（2.9%）。AIによる分類結果の要約・理由欄のテキストから機械的に集計したものです（原文そのものの集計ではありません）。分類はAIによるもので、代表投稿は編集部が選定しています。制度の内容は内閣官房「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日決定）によります。消費税収・社会保障4経費の数字は財務省「消費税の使途」（令和8年度予算）によります。SNS投稿の集計であり、社会全体の意見分布を示す世論調査ではありません。記事中の評価と主張は編集部のものです。
