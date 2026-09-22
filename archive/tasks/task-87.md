@@ -1,6 +1,6 @@
 # 課題87: takaichi投稿2件の断定的主張を一次資料と照合（誇張・不正確を検出）
 
-**状態**: 未着手（判断待ち）
+**状態**: 完了（2026-09-22、オーナー承認。判断2を採用）
 **優先度**: 中（読者への実害は無い＝ページ本文はまだこの2件を使っていない。ただし
 article_usable判定・今後の代表投稿選定に影響し得るため、次にtakaichiを本文確認する
 タイミングまでに判断しておきたい）
@@ -72,3 +72,18 @@ article_usable判定・今後の代表投稿選定に影響し得るため、次
 
 上記1〜3のいずれかがオーナーの判断として記録され、該当する対応（editorial_override記録・
 またはstatus.yaml追加・またはこのまま運用の明記）が完了している。
+
+## 2026-09-22: 対応完了
+
+オーナーが判断2（article_usable=false）を承認。投稿Aのみ変更が必要だった
+（投稿Bは元々article_usable=falseだったため対象外）。
+
+- `social-samples/updates/takaichi/2026-09-22/classified.json`の投稿A（tweet_id:
+  2063426034763276399）を`article_usable: true → false`に変更し、editorial_overrideを記録
+- `social-samples/updates/takaichi/2026-09-22/report.json`（非公開）と
+  `data/verification/updates/takaichi/2026-09-22/report.json`（公開）の
+  `provenance.output.classified_sha256`を新しいファイル内容のハッシュへ同期
+- 検査一式（`run_public_checks.py`含む）を通してmainへ反映、CI緑を確認
+
+判断3（主張検証セクションの導入）は見送り。takaichiが`published: unlisted`のままである限り
+再検討しない。
