@@ -734,6 +734,7 @@ def e(x) -> str:
 ISSUE_CARDS_OWNS_ANCHOR_ID = {
     "ai-copyright", "bike-blue-ticket", "bukatsu-chiiki",
     "consumption-tax-cut", "koshitsu-tenpakai", "school-nickname-ban", "fukushuto",
+    "elderly-license-revocation",
 }
 
 
