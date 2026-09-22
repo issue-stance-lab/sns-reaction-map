@@ -135,7 +135,7 @@ async function waitState(page,issue,stance='all'){
       }
       for(const q of classroom.questions)assert.ok(classroomText.includes(q.replace(/\s/g,'')),q);
       const pdfInfo=execFileSync('pdfinfo',[path.join(out,'classroom.pdf')],{encoding:'utf8'});assert.match(pdfInfo,/Pages:\s+1\b/);
-      const full=execFileSync('pdftotext',[path.join(out,'full-page.pdf'),'-'],{encoding:'utf8'}).replace(/\s/g,'');
+      const full=execFileSync('pdftotext',['-layout',path.join(out,'full-page.pdf'),'-'],{encoding:'utf8'}).replace(/\s/g,'');
       const data=await page.evaluate(()=>window.PLANET_DATA);
       for(const issue of data.issues)assert.ok(full.includes(issue.label),issue.id);
       for(const issue of data.issues)for(const reason of issue.sub.items||[]){
