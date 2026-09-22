@@ -3,8 +3,8 @@
 公開JSONの issues[].id（kind=named）と、公開ページの id="issue-{id}" が
 全テーマ・全論点で一致し、かつページ内で重複しないことを確かめる。
 
-5テーマ（ai-copyright / bike-blue-ticket / bukatsu-chiiki / consumption-tax-cut /
-koshitsu-tenpakai）は #issue-cards（画像＋X投稿、*_issue_media.py 等が生成）が
+6テーマ（ai-copyright / bike-blue-ticket / bukatsu-chiiki / consumption-tax-cut /
+koshitsu-tenpakai / fukushuto）は #issue-cards（画像＋X投稿、*_issue_media.py 等が生成）が
 既にこの id を使っているため、scripts/build_planet_data.py の「論点の一覧」
 （static_fallback）側では新規に付けない（付けると同一ページでの id 重複になる）。
 """
@@ -60,7 +60,7 @@ class IssueAnchorTests(unittest.TestCase):
                 self.assertEqual(dupes, [], f"{theme_id}: id が重複しています: {dupes}")
 
     def test_issue_cards_themes_reuse_the_existing_anchor_not_a_new_one(self) -> None:
-        """issue-cardsを持つ5テーマでは、論点の一覧側が新規にidを付けていないこと。
+        """issue-cardsを持つ6テーマでは、論点の一覧側が新規にidを付けていないこと。
 
         静的フォールバックの生成器 static_fallback() 自体は非公開正典が要るため
         ここでは呼ばない。既に生成済みの公開ページから、issue-anchor要素が
