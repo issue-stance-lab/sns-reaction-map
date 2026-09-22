@@ -44,6 +44,21 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-09-22
+      weekly_users: 18           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
+      pageviews: 325             # GA4: 過去7日（公開ホスト限定）
+      pages_per_session: 3.916   # GA4: 325 PV / 83 sessions
+      votes_total: 24            # Supabase（cast-vote Edge Function 経由。テストトピックは元から含まれない）
+      votes_week: null           # Supabase: 未取得
+      gsc_impressions: 3         # Search Console: 28日間
+      gsc_clicks: 0              # Search Console: 28日間
+      x_followers: 24            # Xプロフィール画面（x.com/sns_hannou_ma）を直接開いて確認した実測値
+      notes: >-
+        前回9/16行はx_followersのみ確認で他項目はnullだったため、実測値がある8/22比で比較する。
+        weekly_users 11→18、PV 170→325、pages/session 4.146→3.916、votes_total 16→24と増加。
+        GSCは28日間でimpressions 3→3・clicks 0→0のまま横ばい（検索経由の流入はまだごく少数）。
+        x_followersは9/16実測20人から24人（Xプロフィール画面で直接確認）。GA4・Supabase・GSC・
+        X follower確認のすべてが今回そろって取得できた。
     - date: 2026-09-16
       weekly_users: null         # 未取得（今回はx_followersのみ確認。次回の週次スナップショットで取得）
       pageviews: null            # 未取得
