@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """部活動の地域移行 HTMLにSNS反応マップを追加する変換スクリプト"""
 import argparse
+import html as html_lib  # "html"は__main__ブロックがページ内容の変数名として使っているため別名にする
 import json
 import re
 from pathlib import Path
@@ -9,7 +10,7 @@ try:
     from .build_reaction_map import arguments_html, load_research_conditions, update_existing_html
     from .bukatsu_taxonomy import ISSUE_INDEX, ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES
     from .sync_portal_stats import parse_themes_yaml
-    from .issue_card_counts import card_counts
+    from .issue_card_counts import IssueCountError, card_counts
     from .sync_issue_counts import apply_counts
     from .update_bukatsu_tide import issue_panel as hermes_issue_panel
 except ImportError:  # python3 scripts/build_bukatsu_arena.py
@@ -20,7 +21,7 @@ except ImportError:  # python3 scripts/build_bukatsu_arena.py
     )
     from bukatsu_taxonomy import ISSUE_INDEX, ISSUES, STANCES, TOPIC_ID, VOTE_ISSUES, VOTE_STANCES  # type: ignore[no-redef]
     from sync_portal_stats import parse_themes_yaml  # type: ignore[no-redef]
-    from issue_card_counts import card_counts  # type: ignore[no-redef]
+    from issue_card_counts import IssueCountError, card_counts  # type: ignore[no-redef]
     from sync_issue_counts import apply_counts  # type: ignore[no-redef]
     from update_bukatsu_tide import issue_panel as hermes_issue_panel  # type: ignore[no-redef]
 
@@ -719,6 +720,231 @@ ARENA_JS = """<script>
 </script>
 """
 
+STANCE_GLANCE_START = "<!-- STANCE_GLANCE_START -->"
+STANCE_GLANCE_END = "<!-- STANCE_GLANCE_END -->"
+STANCE_GLANCE_ANCHOR = "<!-- RESEARCH_CONDITIONS_START -->"
+
+# configs/planet/bukatsu-chiiki.yaml の stances[].key と対応させる。
+# 集計(count/color)は正典から取得済みの値をそのまま使い、ここでは新たに数えない。
+STANCE_GLANCE_META = {
+    "移行支持": {
+        "short": "支持", "icon": "✓", "bg": "#EAF5F3", "shadow": "rgba(47,143,131,.22)",
+        "desc": "地域移行を進めるべきだとする投稿",
+    },
+    "慎重・反対": {
+        "short": "慎重・反対", "icon": "!", "bg": "#F2EEF7", "shadow": "rgba(125,91,166,.22)",
+        "desc": "地域移行には慎重であるべきだ、または反対だとする投稿",
+    },
+    "条件付き・改善要求": {
+        "short": "条件付き", "icon": "△", "bg": "#FBF3DF", "shadow": "rgba(217,165,32,.22)",
+        "desc": "移行の方向性は理解できるが、このままでは不十分だとする投稿",
+    },
+    "中立・情報": {
+        "short": "中立・情報", "icon": "?", "bg": "#F1F2F3", "shadow": "rgba(139,145,153,.22)",
+        "desc": "賛否を示さず、制度の説明や情報共有にとどまる投稿",
+    },
+}
+
+STANCE_GLANCE_CSS = """<style>
+#stance-glance {
+  width: min(1180px, 100%);
+  margin: 14px auto 0;
+  padding: 30px 34px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--topic-shadow-sm);
+  box-sizing: border-box;
+}
+#stance-glance .sg-lead{font-size:14.5px;line-height:1.9;margin:0 0 18px;color:var(--navy)}
+#stance-glance .sg-headline{font-size:15px;font-weight:800;margin:0 0 10px;color:var(--navy)}
+#stance-glance .sg-headline b{font-size:30px;font-weight:900;color:var(--blue);margin-right:2px}
+#stance-glance .sg-bar-wrap{margin:0 0 24px}
+@keyframes sgSegPulse{
+  0%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+  35%{filter:brightness(1.4);box-shadow:inset 0 0 0 3px rgba(255,255,255,.9)}
+  100%{filter:brightness(1);box-shadow:inset 0 0 0 0 rgba(255,255,255,0)}
+}
+#stance-glance .temp-seg.sg-pulse{animation:sgSegPulse .7s ease}
+@keyframes sgLegendPulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+#stance-glance .temp-bar-legend span{display:inline-flex;align-items:center;border-radius:6px;
+  padding:2px 4px;margin:-2px -4px;transition:background .2s ease}
+#stance-glance .temp-bar-legend span.sg-pulse{animation:sgLegendPulse .5s ease;background:#F2F6FD}
+#stance-glance .sg-pick-label{font-size:16px;font-weight:900;margin:0 0 4px;color:var(--navy)}
+#stance-glance .sg-pick-hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+#stance-glance .sg-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#stance-glance .sg-pick-btn{position:relative;display:flex;flex-direction:column;align-items:center;
+  gap:8px;border:2px solid var(--line);border-radius:14px;padding:20px 10px 16px;background:#fff;
+  cursor:pointer;font-family:inherit;color:var(--navy);
+  transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease}
+#stance-glance .sg-pick-btn:hover{transform:translateY(-3px);border-color:var(--sg-color);
+  box-shadow:0 10px 22px -10px rgba(16,24,40,.25)}
+#stance-glance .sg-pick-btn:focus-visible{outline:2px solid var(--sg-color);outline-offset:2px}
+#stance-glance .sg-pick-icon{font-size:25px;line-height:1;color:var(--sg-color)}
+#stance-glance .sg-pick-name{font-size:12.5px;font-weight:800;letter-spacing:.01em}
+#stance-glance .sg-pick-btn[aria-pressed="true"]{border-color:var(--sg-color);background:var(--sg-bg)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-name{color:var(--sg-color)}
+#stance-glance .sg-pick-check{position:absolute;top:-8px;right:-8px;width:20px;height:20px;
+  border-radius:50%;background:var(--sg-color);color:#fff;display:none;align-items:center;
+  justify-content:center;font-size:11px;font-weight:900;box-shadow:0 2px 6px rgba(16,24,40,.3)}
+#stance-glance .sg-pick-btn[aria-pressed="true"] .sg-pick-check{display:flex}
+#stance-glance .sg-result{margin-top:14px;padding:14px 16px;border-radius:10px;background:#F2F6FD;
+  display:none}
+#stance-glance .sg-result p{margin:0;font-size:14px;line-height:1.8;font-weight:700;color:var(--navy)}
+#stance-glance .sg-note{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.7}
+@media (max-width:720px){
+  #stance-glance{padding:22px 18px}
+  #stance-glance .sg-pick-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>"""
+
+
+def stance_glance(stances: list[dict], opinions: int) -> str:
+    """ヒーロー直後、立場の内訳＋「まず、あなたは？」を組み立てる。
+
+    stances は bpd.build("bukatsu-chiiki")["stances"]（configs/planet/
+    bukatsu-chiiki.yaml の4区分に正典の件数を足したもの）をそのまま使う。
+    ここで新たに集計しない。投票データへの書き込みは行わない。
+    """
+    support_count = next((int(s["count"]) for s in stances if s["key"] == "移行支持"), 0)
+    segs, legend, buttons, js_rows = [], [], [], []
+    for i, s in enumerate(stances):
+        meta = STANCE_GLANCE_META[s["key"]]
+        count = int(s["count"])
+        share = 100 * count / opinions if opinions else 0.0
+        seg_label = f"{share:.0f}%" if share >= 5 else ""
+        segs.append(
+            f'<div class="temp-seg" data-i="{i}" style="width:{share:.1f}%;background:{s["color"]}">{seg_label}</div>'
+        )
+        legend.append(
+            f'<span data-i="{i}"><i style="background:{s["color"]}"></i>{html_lib.escape(meta["short"])}<b>{count}件</b></span>'
+        )
+        buttons.append(
+            f'<button type="button" class="sg-pick-btn" data-i="{i}" aria-pressed="false" '
+            f'style="--sg-color:{s["color"]};--sg-bg:{meta["bg"]}">'
+            f'<span class="sg-pick-check" aria-hidden="true">✓</span>'
+            f'<span class="sg-pick-icon" aria-hidden="true">{html_lib.escape(meta["icon"])}</span>'
+            f'<span class="sg-pick-name">{html_lib.escape(meta["short"])}</span></button>'
+        )
+        js_rows.append(
+            "{short:%s,pct:%s,desc:%s}"
+            % (
+                json.dumps(meta["short"], ensure_ascii=False),
+                share,
+                json.dumps(meta["desc"], ensure_ascii=False),
+            )
+        )
+    bar = (
+        '<div class="temp-bar-wrap sg-bar-wrap"><div class="temp-bar-label">'
+        f'<span>意見{opinions:,}件の立場別内訳</span><span>意見に占める割合</span></div>'
+        f'<div class="temp-bar">{"".join(segs)}</div>'
+        f'<div class="temp-bar-legend">{"".join(legend)}</div></div>'
+    )
+    script = f"""<script>
+(function(){{
+  var DATA=[{",".join(js_rows)}];
+  var root=document.getElementById('stance-glance');
+  var box=document.getElementById('stance-glance-buttons');
+  if(!root||!box)return;
+  var buttons=box.querySelectorAll('.sg-pick-btn');
+  var result=document.getElementById('stance-glance-result');
+  var text=document.getElementById('stance-glance-result-text');
+  function pulse(i){{
+    root.querySelectorAll('.sg-pulse').forEach(function(el){{el.classList.remove('sg-pulse');}});
+    var seg=root.querySelector('.temp-seg[data-i="'+i+'"]');
+    var leg=root.querySelector('.temp-bar-legend span[data-i="'+i+'"]');
+    [seg,leg].forEach(function(el){{
+      if(!el)return;
+      void el.offsetWidth;
+      el.classList.add('sg-pulse');
+    }});
+  }}
+  buttons.forEach(function(btn){{
+    btn.addEventListener('click',function(){{
+      buttons.forEach(function(b){{b.setAttribute('aria-pressed', b===btn ? 'true' : 'false');}});
+      var i=parseInt(btn.dataset.i,10);
+      var d=DATA[i];
+      text.textContent='「'+d.short+'」: '+d.desc+'（'+d.pct.toFixed(1)+'%）';
+      result.style.display='block';
+      pulse(i);
+    }});
+  }});
+}})();
+</script>"""
+    return f"""{STANCE_GLANCE_START}
+{STANCE_GLANCE_CSS}
+<aside id="stance-glance" aria-labelledby="stance-glance-title">
+<div class="panel-title"><h2 id="stance-glance-title">部活動の地域移行、支持は最多でも過半数ではない</h2><span>先に、全体の内訳から</span></div>
+<p class="sg-lead">移行支持が{support_count:,}件で最も多いものの、全体の4割には届きません。慎重・反対と条件付きを合わせると、支持の件数を上回ります。</p>
+<div class="sg-headline"><b>{opinions:,}</b>件の意見を、4つの立場で見た内訳です</div>
+{bar}
+<div class="sg-pick"><p class="sg-pick-label">気になる立場を選ぶと</p>
+<p class="sg-pick-hint">どんな投稿が含まれるかを表示します</p>
+<div class="sg-pick-grid" id="stance-glance-buttons">
+{"".join(buttons)}
+</div>
+<div class="sg-result" id="stance-glance-result" aria-live="polite"><p id="stance-glance-result-text"></p></div>
+<p class="sg-note">※ ボタンでの選択は表示だけで、投票としては数えません。実際の投票はこのページ下部から参加できます。</p>
+</div>
+</aside>
+{script}
+{STANCE_GLANCE_END}"""
+
+
+def apply_bukatsu_stance_glance(page: str) -> str:
+    """ヒーロー直後に、立場の内訳＋「まず、あなたは？」を貼り直す。
+
+    bukatsuの定例更新経路(update_existing_html→apply_bukatsu_entry)は
+    RESEARCH_CONDITIONS_START直前の領域を素通りする(build_reaction_map.py側で
+    planet_mode時は明示的にスキップされる)ため、放っておくと件数が更新されず
+    古いまま残る。他テーマの後付け補完処理と同じ「除去してから再挿入」の型で
+    毎回貼り直す。
+    """
+    if __package__:
+        from .build_planet_page_preview import bpd
+    else:  # python3 scripts/build_bukatsu_arena.py
+        from build_planet_page_preview import bpd  # type: ignore[no-redef]
+
+    data = bpd.build("bukatsu-chiiki")
+    opinions = int(data["totals"]["opinions"])
+    stances = data["stances"]
+
+    if STANCE_GLANCE_START in page and STANCE_GLANCE_END in page:
+        start = page.index(STANCE_GLANCE_START)
+        end = page.index(STANCE_GLANCE_END) + len(STANCE_GLANCE_END)
+        page = page[:start] + page[end:]
+        # 外したあと・貼る前の空行を2行に揃える(揃えないと貼り直しのたびに
+        # 空行が増え、adapterの冪等性検査が通らない)。
+        page = re.sub(r"\n\s*\n+(<!-- RESEARCH_CONDITIONS_START -->)", r"\n\n\1", page)
+    block = stance_glance(stances, opinions)
+    idx = page.index(STANCE_GLANCE_ANCHOR)
+    page = page[:idx] + block + "\n\n" + page[idx:]
+
+    if page.count(STANCE_GLANCE_START) != 1 or page.count(STANCE_GLANCE_END) != 1:
+        raise IssueCountError("内訳セクションのマーカーが1組でない")
+    if '<h2 id="stance-glance-title">' not in page:
+        raise IssueCountError("内訳セクションの見出しがページにない")
+    check_block = page[page.index(STANCE_GLANCE_START):page.index(STANCE_GLANCE_END)]
+    seg_count = check_block.count('<div class="temp-seg"')
+    btn_count = check_block.count('class="sg-pick-btn"')
+    if seg_count != len(stances):
+        raise IssueCountError(f"内訳バーの区画が{len(stances)}個でない: {seg_count}個")
+    if btn_count != len(stances):
+        raise IssueCountError(f"「あなたは？」ボタンが{len(stances)}個でない: {btn_count}個")
+    if page.index(STANCE_GLANCE_START) > page.index(STANCE_GLANCE_ANCHOR):
+        raise IssueCountError("内訳セクションが調査条件より後ろにある(ヒーロー直後に置くこと)")
+    if '<aside id="stance-glance"' not in page:
+        raise IssueCountError(
+            "内訳セクションがasideでなくなっている"
+            "(sectionにするとpanel:nth-of-type(even)の縞模様が後続セクション全部でずれる)"
+        )
+    return page
+
+
 def transform(html: str) -> str:
     # The published page now uses the 467-record Hermes dataset.  Keep the
     # dedicated legacy entry point safe by routing modern pages through the
@@ -727,7 +953,7 @@ def transform(html: str) -> str:
         config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
         config["research_conditions"] = load_research_conditions(CURRENT_JSON_PATH)
         rows = json.loads(CURRENT_JSON_PATH.read_text(encoding="utf-8"))
-        return apply_bukatsu_entry(update_existing_html(html, rows, config), rows)
+        return apply_bukatsu_stance_glance(apply_bukatsu_entry(update_existing_html(html, rows, config), rows))
 
     # 1. Add CSS before </style>
     if "/* === SNS反応マップ === */" not in html:
