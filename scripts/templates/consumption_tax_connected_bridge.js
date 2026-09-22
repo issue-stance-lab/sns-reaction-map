@@ -32,16 +32,67 @@ const taxLegacyPlace = placeChart;
 placeChart = function(){ if (!taxConnectedReady) taxLegacyPlace(); else evacuateChart(); };
 
 // 最後に描いた形から補間する。連打で前のアニメーションに戻らない。
-const taxLayout = layout;
+const taxLegacyLayout = layout;
+function taxLayout(mode){
+  if (!taxConnectedReady) return taxLegacyLayout(mode);
+  const width=svg.clientWidth || 900, height=width<450?180:210, sea=height-26, top=26;
+  const left=34, right=width-6, gap=width<450?3:6, minimum=width<450?13:25;
+  const m=modeById[mode], live=[], floored=[];
+  issues.forEach((it,i)=>{if(m.counts[it.id])live.push({i,it,n:m.counts[it.id],hi:m.high_counts[it.id],rate:m.high_pct[it.id],share:m.width_pct[it.id]});});
+  const usable=right-left-gap*Math.max(0,live.length-1), sum=live.reduce((n,v)=>n+v.n,0);
+  live.forEach(v=>{v.w=usable*v.n/sum;if(v.w<minimum){v.w=minimum;floored.push(v.it.label);}});
+  const excess=live.reduce((n,v)=>n+v.w,0)-usable;
+  const spare=live.reduce((n,v)=>n+Math.max(0,v.w-minimum),0);
+  if(excess>0&&spare>0)live.forEach(v=>{v.w-=excess*Math.max(0,v.w-minimum)/spare;});
+  let x=left;
+  live.forEach(v=>{v.x0=x;v.x1=x+v.w;v.cx=x+v.w/2;v.top=sea-(sea-top)*v.rate/100;x=v.x1+gap;});
+  return {live,total:m.total,floored,width,height,sea,top,left,right};
+}
 let taxVisual = null, taxAnimation = 0;
 layout = function(mode){ return taxVisual && mode === st.mode ? taxVisual : taxLayout(mode); };
 const taxLegacyRender = render;
 render = function(){
+  if(!taxConnectedReady){taxLegacyRender();return;}
   const focused = document.activeElement;
   const focusId = focused && focused.matches('#section .hill') ? focused.dataset.i : null;
-  taxLegacyRender();
-  svg.querySelectorAll('.hill').forEach(g => g.setAttribute('aria-pressed', String(+g.dataset.i === st.landed)));
+  const L=layout(st.mode), selected=L.live.find(v=>v.i===st.landed);
+  const color=D.stances.find(s=>s.key===st.mode)?.color || '#075ef2';
+  const p=[], shortNames={'political-trust':'公約','scope':'範囲','effect':'効果','finance-welfare':'財源','alternatives':'給付','business-burden':'実務','other':'他'};
+  svg.setAttribute('viewBox','0 0 '+L.width+' '+L.height);
+  svg.style.height=L.height+'px';
+  [0,50,100].forEach(value=>{
+    const y=L.sea-(L.sea-L.top)*value/100;
+    p.push('<line x1="'+L.left+'" x2="'+L.right+'" y1="'+y+'" y2="'+y+'" stroke="#dce5f0"/><text x="'+(L.left-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="#53647d">'+value+'%</text>');
+  });
+  L.live.forEach(v=>{
+    const active=v.i===st.landed, k=v.w*.32, hitTop=Math.min(v.top,L.sea-44);
+    const d='M'+v.x0+','+L.sea+' C'+(v.x0+k)+','+L.sea+' '+(v.x0+k*.9)+','+v.top+' '+v.cx+','+v.top+' C'+(v.x1-k*.9)+','+v.top+' '+(v.x1-k)+','+L.sea+' '+v.x1+','+L.sea+' Z';
+    p.push('<g class="hill" tabindex="0" role="button" data-i="'+v.i+'" aria-pressed="'+active+'" aria-label="'+esc(v.it.label)+' '+v.n+'件 強い表現'+v.rate.toFixed(1)+'%">'
+      +'<rect class="hill-hit" x="'+v.x0+'" y="'+hitTop+'" width="'+v.w+'" height="'+(L.sea-hitTop+4)+'" fill="transparent" pointer-events="all"/>'
+      +'<path d="'+d+'" fill="'+color+'" opacity="'+(st.landed === null ? 0.6 : active ? 0.9 : 0.23)+'"/>'
+      +(v.rate===0?'<circle class="zero-mark" cx="'+v.cx+'" cy="'+L.sea+'" r="3" fill="'+color+'"/>':'')
+      +(L.width>560?'<text x="'+v.cx+'" y="'+(L.sea+17)+'" text-anchor="middle" font-size="10" fill="#53647d">'+esc(shortNames[v.it.id.replace(/^consumption-tax-cut-/,'')]||v.it.label)+'</text>':'')+'</g>');
+  });
+  if(selected)p.push('<text class="tax-selected-label" x="'+Math.max(L.left+58,Math.min(L.right-58,selected.cx))+'" y="'+Math.max(14,selected.top-10)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#071a3d" pointer-events="none">'+selected.n.toLocaleString('ja-JP')+'件 · '+selected.rate.toFixed(1)+'%</text>');
+  svg.innerHTML=p.join('');
+  svg.querySelectorAll('.hill').forEach(g=>{
+    g.onclick=()=>land(+g.dataset.i);
+    g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();land(+g.dataset.i);}};
+  });
+  document.getElementById('chartdesc').textContent='論点別の山なみ。'+modeById[st.mode].label+'。'+L.live.map(v=>v.it.label+' '+v.n+'件、強い表現'+v.rate.toFixed(1)+'%').join('。');
+  document.getElementById('floor-note').textContent=(L.floored.length?'小さい山は選びやすい幅に補正しています。正確な件数は下のボタンで確認できます。':'')
+    +(L.live.some(v=>v.rate===0)?' 強い表現が0%の論点は、基準線上の点を押せます。':'');
   if (focusId !== null) svg.querySelector('.hill[data-i="'+focusId+'"]')?.focus({preventScroll:true});
+};
+const taxLegacySyncList=syncList;
+syncList=function(){
+  if(!taxConnectedReady){taxLegacySyncList();return;}
+  issues.forEach((it,i)=>{
+    const button=document.getElementById('btn-'+it.id), n=modeById[st.mode].counts[it.id];
+    button.innerHTML='<span>'+esc(it.label)+'</span><span class="m">'+n.toLocaleString('ja-JP')+'件</span>';
+    button.style.opacity=1;
+    button.setAttribute('aria-pressed',String(i===st.landed));
+  });
 };
 function taxAnimate(from, to){
   cancelAnimationFrame(taxAnimation);
@@ -51,10 +102,10 @@ function taxAnimate(from, to){
   const a = byId(from.live), b = byId(to.live);
   const keys = issues.map(it=>it.id).filter(id=>a.has(id)||b.has(id));
   function frame(now){
-    const t = Math.min(1, (now-start)/500), f = ease(t);
-    taxVisual = {total:to.total, floored:to.floored, live:keys.map(id=>{
+    const t = Math.min(1, (now-start)/480), f = 1-Math.pow(1-t,3);
+    taxVisual = {...to, live:keys.map(id=>{
       const end = b.get(id), begin = a.get(id);
-      const zero = v => ({...v, x0:v.cx, x1:v.cx, w:0, top:SEA, n:0, hi:0, rate:0, share:0});
+      const zero = v => ({...v, x0:v.cx, x1:v.cx, w:0, top:to.sea, n:0, hi:0, rate:0, share:0});
       const left = begin || zero(end), right = end || zero(begin), value = {...right};
       for (const key of ['x0','x1','cx','w','top','n','hi','rate','share']) value[key]=left[key]+(right[key]-left[key])*f;
       value.n=Math.round(value.n); value.hi=Math.round(value.hi);
@@ -157,7 +208,16 @@ buildGuesses = function(){
 };
 window.ConsumptionTaxMap = Object.freeze({
   getState:taxState,
-  activate:function(){ taxConnectedReady=true; evacuateChart(); dotBox.hidden=true; taxPublish(); },
+  activate:function(){
+    taxConnectedReady=true; evacuateChart(); dotBox.hidden=true; taxPublish();
+    let width=svg.clientWidth, resizeFrame=0;
+    new ResizeObserver(()=>{
+      if(width===svg.clientWidth)return;
+      width=svg.clientWidth;cancelAnimationFrame(taxAnimation);taxAnimation=0;taxVisual=null;
+      // 監視callback内で高さを変更するとWebKitが循環通知と扱う。次の描画へ送る。
+      cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>render());
+    }).observe(svg);
+  },
   selectIssue:function(id,options){
     if(id===null){orbit(options);return true;}
     if(!Object.prototype.hasOwnProperty.call(idIndex,id))return false;
