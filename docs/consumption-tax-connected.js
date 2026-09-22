@@ -104,10 +104,68 @@
   var initial = index.issues[hash] ? hash : (map.getState().issueId || index.default_issue_id);
   map.selectIssue(initial, {history:'replace', preserveHash:!!location.hash && !index.issues[hash]});
 
+  // 理由を開くまでは投稿カードをDOMへ出さず、外部の読み込みを始めない。
+  var reasonEmbedSources = new WeakMap();
+  function loadReasonEmbeds() {
+    if (!window.twttr || !window.twttr.widgets || document.body.classList.contains('tax-printing')) return;
+    panel.querySelectorAll('.tax-reason-detail[open] .tax-reason-embed').forEach(function (holder) {
+      if (!holder.getClientRects().length) return;
+      function resetFailedEmbed() {
+        // Xが失敗した要素に付ける処理済み属性も除き、次回は未処理の入口から始める。
+        var source = reasonEmbedSources.get(holder);
+        if (source) holder.replaceChildren(source.cloneNode(true));
+        delete holder.dataset.taxWidgetRequested;
+      }
+      if (holder.dataset.taxWidgetRequested) {
+        // 自動走査が後から失敗した場合も、開き直した時に再試行する。
+        if (!holder.querySelector('blockquote.twitter-tweet-error')) return;
+        resetFailedEmbed();
+      }
+      // APIが到着するまではtemplateのまま保つ。
+      var template = holder.querySelector('template.tax-reason-embed-template');
+      if (template) {
+        reasonEmbedSources.set(holder, template.content.cloneNode(true));
+        template.replaceWith(template.content.cloneNode(true));
+      }
+      if (!holder.querySelector('blockquote.twitter-tweet')) return;
+      holder.dataset.taxWidgetRequested = 'true';
+      try {
+        Promise.resolve(window.twttr.widgets.load(holder)).then(function () {
+          // 自動走査が先に取得すると手動loadは対象0件で完了する。
+          // 元要素が残るだけでは失敗ではないため、描画中のDOMを保持する。
+          if (holder.querySelector('blockquote.twitter-tweet-error')) resetFailedEmbed();
+        }).catch(resetFailedEmbed);
+      } catch (_) { resetFailedEmbed(); }
+    });
+  }
+  function twitterReady() {
+    loadReasonEmbeds();
+    if (window.twttr && window.twttr.ready) window.twttr.ready(loadReasonEmbeds);
+  }
+  document.querySelectorAll('script[src="https://platform.twitter.com/widgets.js"]').forEach(function (script) {
+    script.addEventListener('load', twitterReady);
+  });
+  twitterReady();
+  document.addEventListener('tax-map:render', loadReasonEmbeds);
+  var openedReasons = new WeakSet();
+  panel.addEventListener('click', function (event) {
+    var summary = event.target.closest('.tax-reason-detail > summary');
+    if (!summary || !event.isTrusted) return;
+    var details = summary.parentElement;
+    if (!details.open && !openedReasons.has(details)) {
+      openedReasons.add(details);
+      // 閲覧した理由・立場・投稿URLは分析イベントへ渡さない。
+      if (typeof window.gtag === 'function') window.gtag('event', 'reason_post_open', {topic_id:data.theme_id});
+    }
+  });
+
   // 必要な投稿だけ公式埋め込みを読み込む。元の投稿リンクは常に残す。
   panel.addEventListener('toggle', function (event) {
     var details = event.target;
     if (!details.open || !details.getClientRects().length || document.body.classList.contains('tax-printing')) return;
+    if (details.matches('.tax-reason-detail')) {
+      loadReasonEmbeds();
+    }
     if (details.matches('.tax-embed') && window.twttr && window.twttr.widgets) window.twttr.widgets.load(details);
     var visit = details.dataset.taxClaim ? 'c:' + details.dataset.taxClaim
       : details.dataset.taxConcern ? 'v:' + details.dataset.taxConcern

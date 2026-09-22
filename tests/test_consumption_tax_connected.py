@@ -3,6 +3,8 @@ import copy
 import json
 import re
 import sys
+import shutil
+import tempfile
 import unittest
 from pathlib import Path
 from bs4 import BeautifulSoup
@@ -99,8 +101,8 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertTrue(any("接続表" in p for p in connected.validate(source)))
 
     def test_missing_runtime_or_source_only_content_is_rejected(self):
-        for before, after in [('consumption-tax-connected.js?v=4', 'missing.js'),
-                              ('consumption-tax-connected-page.js?v=4', 'missing.js'),
+        for before, after in [('consumption-tax-connected.js?v=5', 'missing.js'),
+                              ('consumption-tax-connected-page.js?v=5', 'missing.js'),
                               ('class="sunk"', 'class="missing-source"'),
                               (connected.BRIDGE_START, '/* missing bridge */')]:
             with self.subTest(before=before):
@@ -122,6 +124,51 @@ class ConnectedContentTests(unittest.TestCase):
     def test_reading_reason_loss_is_rejected(self):
         broken = self.page.replace('data-tax-reason="A"', 'data-missing-reason="A"')
         self.assertTrue(any('理由分類' in p for p in connected.validate(broken)))
+
+    def test_all_reviewed_reasons_have_a_matching_post_and_lazy_embed(self):
+        from consumption_tax_reason_posts import load
+        examples = load(connected.planet_data(self.page))
+        soup = BeautifulSoup(self.page, 'html.parser')
+        self.assertEqual(sum(len(reasons) for reasons in examples.values()), 25)
+        for iid, reasons in examples.items():
+            for bid, posts in reasons.items():
+                reason = soup.select_one(f'#tax-reading-{iid} [data-tax-reason="{bid}"]')
+                self.assertEqual(reason.select_one('a')['href'], posts[0]['url'])
+                self.assertEqual(reason.select_one('.tax-reason-post-summary').get_text(types=None), posts[0]['summary'])
+                self.assertFalse(reason.select_one('details').has_attr('open'))
+                self.assertIsNotNone(reason.select_one('template .twitter-tweet'))
+        self.assertFalse(soup.select_one('#tax-reading-consumption-tax-cut-finance-welfare').select('[data-tax-reason-posts]'))
+
+    def test_reason_post_swaps_summary_edits_and_missing_links_are_rejected(self):
+        for mutation in ('reason', 'summary', 'link'):
+            with self.subTest(mutation=mutation):
+                soup = BeautifulSoup(self.page, 'html.parser')
+                reading = soup.select_one('#tax-reading-consumption-tax-cut-effect')
+                a = reading.select_one('[data-tax-reason="A"] > details')
+                if mutation == 'reason':
+                    b = reading.select_one('[data-tax-reason="B"] > details')
+                    a.replace_with(b.extract())
+                elif mutation == 'summary':
+                    a.select_one('.tax-reason-post-summary').string = '異なる要旨'
+                else:
+                    a.select_one('a')['href'] = 'https://example.invalid/'
+                self.assertTrue(any('理由の投稿例' in p for p in connected.validate(str(soup))))
+
+    def test_selected_post_must_belong_to_its_reason(self):
+        from consumption_tax_reason_posts import load
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ('configs/consumption-tax-reason-posts.json', 'configs/planet/consumption-tax-cut.yaml',
+                         'data/consumption-tax-cut_4issues-reread.json'):
+                (root / name).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / name, root / name)
+            path = root / 'configs/consumption-tax-reason-posts.json'
+            selection = json.loads(path.read_text())
+            reasons = selection['issues']['consumption-tax-cut-effect']
+            reasons['A'] = reasons['B']
+            path.write_text(json.dumps(selection, ensure_ascii=False))
+            with self.assertRaisesRegex(ValueError, '投稿が選んだ理由に属しません'):
+                load(connected.planet_data(self.page), root)
 
     def test_reading_timeline_and_source_only_need_their_own_sources(self):
         for selector, label in [

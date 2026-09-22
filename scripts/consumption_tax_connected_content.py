@@ -61,22 +61,39 @@ def sources(items: list[dict]) -> str:
     ) + '</ul></details>'
 
 
-def reasons(issue: dict) -> str:
+def reasons(issue: dict, examples: dict) -> str:
+    from x_embed import embed_html
     sub = issue["sub"]
     if sub["status"] != "reread":
         return '<p class="tax-empty">この論点では、投稿を理由別に分ける再読をまだ行っていません。</p>'
 
     def rows(items):
-        return '<ul class="tax-reasons">' + ''.join(
-            f'<li data-tax-reason="{e(x["id"])}"><div><span>{e(x["label"])}</span><b id="tax-reason-count-{e(issue["id"])}-{e(x["id"])}">{x["count"]:,}<small>件</small></b></div>'
-            f'<span class="tax-reason-track" aria-hidden="true"><i style="width:{100*x["count"]/issue["count"] if issue["count"] else 0:.3f}%"></i></span></li>'
-            for x in items
-        ) + '</ul>'
+        out = ['<ul class="tax-reasons">']
+        for x in items:
+            posts = examples.get(x['id'], [])
+            heading = f'<span class="tax-reason-row"><span>{e(x["label"])}</span><b id="tax-reason-count-{e(issue["id"])}-{e(x["id"])}">{x["count"]:,}<small>件</small></b>'
+            if posts:
+                heading += '<span class="tax-reason-chevron" aria-hidden="true">⌄</span>'
+            heading += '</span>' + f'<span class="tax-reason-track" aria-hidden="true"><i style="width:{100*x["count"]/issue["count"] if issue["count"] else 0:.3f}%"></i></span>'
+            out.append(f'<li data-tax-reason="{e(x["id"])}">')
+            if posts:
+                out.append(f'<details class="tax-reason-detail" data-tax-reason-posts="{e(x["id"])}"><summary>{heading}</summary><div class="tax-reason-posts">')
+                out.append('<p class="tax-note">この理由に分類した投稿例です。要旨は編集部によるもので、投稿内の主張を事実と確認したものではありません。</p>')
+                for post in posts:
+                    out.append(f'<article data-tax-reason-post-url="{e(post["url"])}"><p class="tax-reason-post-summary">{e(post["summary"])}</p>'
+                               f'<a href="{e(post["url"])}" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a>'
+                               f'<div class="tax-reason-embed"><template class="tax-reason-embed-template">{embed_html(post["url"])}</template></div></article>')
+                out.append('</div></details>')
+            else:
+                out.append('<div class="tax-reason-unread">' + heading + '</div>')
+            out.append('</li>')
+        return ''.join(out + ['</ul>'])
 
     items = sub["items"]
     note = f'<p class="tax-note">論点全体{issue["count"]:,}件のうち、{sub["reread_count"]:,}件を理由別に再読しました。</p>'
     if sub.get("unread_count"):
         note += f'<p class="tax-note">その後に増えた{sub["unread_count"]:,}件は、まだ理由別に再読していません。</p>'
+    note += '<p class="tax-note tax-reasons-hint">理由を押すと、その理由の投稿例が開きます。</p>'
     return note + rows(items[:3]) + (
         f'<details class="tax-more-reasons"><summary>残りの理由を見る · {len(items)-3}項目</summary>{rows(items[3:])}</details>'
         if len(items) > 3 else ''
@@ -86,8 +103,10 @@ def reasons(issue: dict) -> str:
 def render_templates(data: dict, source: str, index: dict) -> str:
     from build_consumption_tax_page import BACKGROUND_DATA, ISSUE_CARDS_POSTS
     from x_embed import embed_html
+    from consumption_tax_reason_posts import load
 
     soup = BeautifulSoup(source, "html.parser")
+    examples = load(data)
     claims = {c["id"]: c for c in data["claims"]}
     policies = {p["id"]: p for p in BACKGROUND_DATA["policies"]}
     timelines = {p["id"]: p for p in BACKGROUND_DATA["timeline"]}
@@ -109,7 +128,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
                    '<p data-tax-ratio></p><p data-tax-zero hidden></p></div>'
                    f'<p class="tax-scope-note">{e(index["scope_note"])}</p>')
         out.append('<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿">'
-                   '<h3>どんな理由で語られている？</h3>' + reasons(issue))
+                   '<h3>どんな理由で語られている？</h3>' + reasons(issue, examples.get(iid, {})))
         out.append('<div class="tax-posts"><h3>実際の投稿を読む</h3>'
                    '<p class="tax-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p>')
         for url, label in ISSUE_CARDS_POSTS[iid]:
@@ -131,7 +150,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             out.append(f'<p class="tax-note">{e(BACKGROUND_DATA["checked_on"])}時点では政府方針の段階で、法律はまだ成立していません。</p>')
         out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
-            out.append(f'<p class="tax-note">照合確認日 {e(data["ocean"]["checked_on"])}。収集した投稿から選んだ主張を資料と照合しています。ここに並べた投稿例2件への判定を示すものではありません。</p>')
+            out.append(f'<p class="tax-note">照合確認日 {e(data["ocean"]["checked_on"])}。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>')
         else:
             out.append('<p class="tax-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
         for j, cid in enumerate(connection["claim_ids"]):

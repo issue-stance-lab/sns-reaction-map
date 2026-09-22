@@ -41,7 +41,8 @@
 .tax-connected #planet-block #panel .tax-empty { margin:10px 0 20px; padding:12px 0; font-size:13px; color:#53647d; }
 .tax-connected #planet-block #panel .tax-reasons { padding:0; margin:0; list-style:none; }
 .tax-connected #planet-block #panel .tax-reasons li { margin:0 0 16px; padding:0; border:0; }
-.tax-connected #planet-block #panel .tax-reasons li > div { display:flex; align-items:baseline; justify-content:space-between; gap:16px; font-size:13px; line-height:1.65; }
+.tax-connected #planet-block #panel .tax-reason-row { display:flex; align-items:baseline; gap:12px; font-size:13px; line-height:1.65; }
+.tax-connected #planet-block #panel .tax-reason-row > span:first-child { flex:1; min-width:0; }
 .tax-connected #planet-block #panel .tax-reasons b { flex:none; font-variant-numeric:tabular-nums; font-size:17px; }
 .tax-connected #planet-block #panel .tax-reasons small { margin-left:3px; font-size:10px; font-weight:400; }
 .tax-connected #planet-block #panel .tax-reason-track { display:block; margin-top:6px; height:4px; background:#edf1f7; border-radius:2px; overflow:hidden; }
@@ -49,6 +50,19 @@
 .tax-connected #planet-block #panel details { margin:10px 0; border-top:1px solid var(--tax-rule); padding:10px 0 0; font-size:13px; }
 .tax-connected #planet-block #panel summary { cursor:pointer; padding:3px 0; font-weight:700; line-height:1.7; }
 .tax-connected #planet-block #panel details > p { margin:10px 0; }
+.tax-connected #planet-block #panel .tax-reason-detail { margin:0; border:0; padding:0; }
+.tax-connected #planet-block #panel .tax-reason-detail > summary { display:block; padding:9px 0; font-weight:500; list-style:none; }
+.tax-connected #planet-block #panel .tax-reason-detail > summary::-webkit-details-marker { display:none; }
+.tax-connected #planet-block #panel .tax-reason-detail > summary:hover { color:var(--tax-link); }
+.tax-connected #planet-block #panel .tax-reason-chevron { flex:none; color:var(--tax-link); font-size:18px; line-height:1; transition:transform .18s; }
+.tax-connected #planet-block #panel .tax-reason-detail[open] .tax-reason-chevron { transform:rotate(180deg); }
+.tax-connected #planet-block #panel .tax-reason-posts { padding:4px 14px 16px; margin:2px 0 8px; background:var(--tax-paper); border-left:2px solid var(--tax-issue-color); }
+.tax-connected #planet-block #panel .tax-reason-post-summary { margin:10px 0; font-size:13px; }
+.tax-connected #planet-block #panel .tax-reason-posts a { font-size:12px; }
+.tax-connected #planet-block #panel .tax-reason-posts article + article { border-top:1px solid var(--tax-rule); margin-top:16px; padding-top:8px; }
+.tax-connected #planet-block #panel .tax-reason-embed { min-width:0; overflow:hidden; }
+.tax-connected #planet-block #panel .tax-reason-embed iframe { max-width:100% !important; }
+.tax-connected #planet-block #panel .tax-reasons-hint { color:var(--tax-link); }
 .tax-connected #planet-block #panel .tax-sources { border:0; padding:0; margin:12px 0 8px; }
 .tax-connected #planet-block #panel .tax-sources summary { color:var(--tax-link); font-size:12px; }
 .tax-connected #planet-block #panel .tax-sources ul { margin:8px 0; padding-left:18px; }
@@ -85,9 +99,15 @@
   .tax-connected #planet-block #panel .tax-image-action img { width:48px; height:22px; }
   .tax-connected #planet-block #panel .tax-selected-head { display:block; }
 }
+@media (max-width:400px) {
+  /* Xの投稿カードは最小250px。狭い画面では本文の左右余白を使って確保する。 */
+  .tax-connected #planet-block #panel .tax-reason-posts { padding:4px 0 14px; border-left:0; background:transparent; }
+  .tax-connected #planet-block #panel .tax-reason-embed { margin:0 -16px; }
+}
 @media (prefers-reduced-motion:reduce) {
   .tax-connected #stance-glance .sg-pulse { animation:none; }
   .tax-connected #stance-glance .temp-seg, .tax-connected #stance-glance .temp-bar-legend > span { transition:none; }
+  .tax-connected #planet-block #panel .tax-reason-chevron { transition:none; }
 }
 @media print {
   .tax-connected #planet-block #panel, .tax-connected #list, .tax-connected #modes { display:none !important; }

@@ -158,10 +158,10 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = source.replace('</body>', content + '\n</body>', 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
-        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=4">\n'
+        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=5">\n'
         '<script id="tax-connected-data" type="application/json">' + payload + '</script>\n'
-        '<script src="consumption-tax-connected.js?v=4" defer></script>\n'
-        '<script src="consumption-tax-connected-page.js?v=4" defer></script>\n' + END
+        '<script src="consumption-tax-connected.js?v=5" defer></script>\n'
+        '<script src="consumption-tax-connected-page.js?v=5" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -192,6 +192,8 @@ def validate(source: str) -> list[str]:
     try:
         data = planet_data(source)
         expected = content_index(data)
+        from consumption_tax_reason_posts import load as load_reason_posts, validate_reading
+        reason_posts = load_reason_posts(data)
         blocks = soup.select("#tax-connected-data")
         if len(blocks) != 1 or json.loads(blocks[0].string or "null") != expected:
             problems.append("論点の接続表が現在の表示データと一致しません")
@@ -206,9 +208,9 @@ def validate(source: str) -> list[str]:
 
     for selector in ("#stance-glance", "#planet-block", "#panel", "#list", "#vote-section",
                      "#bg-title", "#ck-title", "#claim-audit", "#issue-cards", "#guesses", "#quiz", "#ocean",
-                     'link[href="consumption-tax-connected.css?v=4"]',
-                     'script[src="consumption-tax-connected.js?v=4"][defer]',
-                     'script[src="consumption-tax-connected-page.js?v=4"][defer]'):
+                     'link[href="consumption-tax-connected.css?v=5"]',
+                     'script[src="consumption-tax-connected.js?v=5"][defer]',
+                     'script[src="consumption-tax-connected-page.js?v=5"][defer]'):
         one(selector)
     if source.count(BRIDGE_START) != 1 or source.count(BRIDGE_END) != 1:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
@@ -225,6 +227,7 @@ def validate(source: str) -> list[str]:
         posts = one("#issue-" + iid)
         reading = one("#tax-reading-" + iid)
         if reading:
+            problems.extend(validate_reading(reading, iid, reason_posts))
             connections = expected["issues"][iid]
             for key, attr in (("claim_ids", "data-tax-claim"), ("policy_ids", "data-tax-policy"),
                               ("timeline_ids", "data-tax-timeline"), ("source_only_ids", "data-tax-source-only"),
