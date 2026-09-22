@@ -158,10 +158,10 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = source.replace('</body>', content + '\n</body>', 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
-        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=6">\n'
+        START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=7">\n'
         '<script id="tax-connected-data" type="application/json">' + payload + '</script>\n'
-        '<script src="consumption-tax-connected.js?v=6" defer></script>\n'
-        '<script src="consumption-tax-connected-page.js?v=6" defer></script>\n' + END
+        '<script src="consumption-tax-connected.js?v=7" defer></script>\n'
+        '<script src="consumption-tax-connected-page.js?v=7" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -208,9 +208,9 @@ def validate(source: str) -> list[str]:
 
     for selector in ("#stance-glance", "#planet-block", "#panel", "#list", "#vote-section",
                      "#bg-title", "#ck-title", "#claim-audit", "#issue-cards", "#guesses", "#quiz", "#ocean",
-                     'link[href="consumption-tax-connected.css?v=6"]',
-                     'script[src="consumption-tax-connected.js?v=6"][defer]',
-                     'script[src="consumption-tax-connected-page.js?v=6"][defer]'):
+                     'link[href="consumption-tax-connected.css?v=7"]',
+                     'script[src="consumption-tax-connected.js?v=7"][defer]',
+                     'script[src="consumption-tax-connected-page.js?v=7"][defer]'):
         one(selector)
     if source.count(BRIDGE_START) != 1 or source.count(BRIDGE_END) != 1:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
