@@ -27,7 +27,7 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 
 - [x] 数字をJSONから数え直し済み（2026-09-21時点、意見3,890件。対象範囲885件・財源511件）
 - [x] 図1（対象範囲×財源の内訳比較グラフ）作成済み: `content/note/drafts/images/consumption-tax-cut2_fig1-scope-funding.png`
-- [ ] 見出し画像: 背景写真が未着手。下記「見出し画像の依頼」を参照（オーナーがGPTimage2で生成 → Claude が合成）
+- [x] 見出し画像 作成済み（2026-09-22）: `content/note/drafts/images/consumption-tax-cut2_note-header.png`（背景写真はオーナーがGPTimage2で生成、`consumption-tax-cut2-shelf-frame.png`、文字合成はHTML/CSS＋Playwrightで実装）
 - [ ] タグ5個の選定（editorial案: #消費税減税 #消費税 #財源 #政治 #データ分析。note編集画面の候補表示を見て確定してよい）
 - [ ] マガジン「消費税減税を読む」へ追加（作成済み: https://note.com/sns_hanno_ma/m/m1c683954a55b ）
 - [ ] UTMの公開予定日を確定 → 現在は暫定で20260921。実際に投稿する日がこれと違う場合、
@@ -35,12 +35,13 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 - [ ] オーナーに①〜④の骨子（本ファイル冒頭のコメント）を確認してもらってから、note下書き画面へ反映する
 - [ ] オーナー確認後、下書き画面へ反映 → タグ・マガジンを設定して公開
 
-### 見出し画像の依頼（`consumption-tax-cut-header-template.md` の型を継続）
+### 見出し画像の依頼（完了・`consumption-tax-cut-header-template.md` の型を継続）
 
-**数字→転換ワード**: 「拡大37%」（テラコッタ）→「変えない」（ティール）
-（対象拡大を望んだ条件付き賛成37.4%に対し、大綱の答えは「対象を広げない」だったという、本文の核）
+**数字→転換ワード**: 「拡大37%」（ティール、前提の数字）→「変えない」（テラコッタ、転換後のキーワード）
+（対象拡大を望んだ条件付き賛成37.4%に対し、大綱の答えは「対象を広げない」だったという、本文の核。
+色の割り当てはテンプレートの規則どおり——下書き作成時に一度ここを逆に書いていたが、合成時に訂正した）
 
-オーナーへ依頼するGPTimage2プロンプト（テンプレートのモチーフ案「食品棚」を採用）:
+使用したGPTimage2プロンプト（テンプレートのモチーフ案「食品棚」を採用、参考用に残す）:
 
 ```
 消費税減税をテーマにしたSNS意見分析記事の見出し画像用の背景写真を作成してください。
@@ -65,7 +66,7 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 保存先フォルダ: /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/content/note/drafts/photos/
 ```
 
-写真ができたら、この worktree（`isa-wt-note-taxcut-2`）または共有ツリーの上記フォルダに置くとClaudeが合成する。
+（写真は2026-09-22にオーナーが生成、`content/note/drafts/photos/consumption-tax-cut2-shelf-frame.png` に保存済み。合成も完了）
 
 ---
 
