@@ -728,12 +728,12 @@ def e(x) -> str:
 
 
 # 課題77 案1: 「この論点を引用」ボタン・外部からの固定リンクは id="issue-{id}" を指す。
-# この5テーマは #issue-cards（画像＋X投稿カード、*_issue_media.py 等が生成）が既に
+# このテーマ群は #issue-cards（画像＋X投稿カード、*_issue_media.py 等が生成）が既に
 # 同じ id="issue-{iid}" を使っているため、論点の一覧側では付けない
 # （同一ページで id が重複すると #issue-{id} の行き先が不定になる）。
 ISSUE_CARDS_OWNS_ANCHOR_ID = {
     "ai-copyright", "bike-blue-ticket", "bukatsu-chiiki",
-    "consumption-tax-cut", "koshitsu-tenpakai",
+    "consumption-tax-cut", "koshitsu-tenpakai", "school-nickname-ban",
 }
 
 
