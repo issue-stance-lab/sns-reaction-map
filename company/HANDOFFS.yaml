@@ -59,13 +59,13 @@ items:
 
   - id: theme-refresh-20260827
     department: engineering-data
-    status: in_progress
-    current_state: "全11テーマの収集予定がTHEMES.yamlに登録済み。高市文春問題は本日が収集予定日。"
-    next_action: "高市文春問題を収集候補として作成し、品質監査とCEO承認後にだけ公開へ昇格する。"
-    due_at: "2026-08-27"
-    canonical_sources: ["THEMES.yaml", "DATA_REFRESH.md"]
-    ceo_approval: "公開昇格のみ必要"
-    completion_evidence: ["data/verification/updates/", "scripts/verify_theme_page.py"]
+    status: complete
+    current_state: "2026-09-22、8/20から1ヶ月超過していた定期収集を実施（147件新規・118件意見）。本文確認で実名侮辱1件・一次資料と食い違う断定2件が見つかり、editorial_overrideで代表投稿候補から除外した（課題87）。公開候補化（--prepare-promotion）は、2026-08-21のunlisted化でTHEMES.yamlのrefresh_at欄が削除済みだったためスクリプトエラーで停止した（正典・公開ページへの影響なし）。unlistedの理由（存命個人実名の疑惑・コンテンツ薄でAdSense上不利）は今回の本文確認でむしろ裏付けられ、解消していないため、公開候補化は見送った。"
+    next_action: "collect_modeをevent-drivenへ切り替え、collect_atを空欄化したため定期収集の催促（このtheme-refresh項目のような期限超過）は今後発生しない。大きな動きがあれば手動でrefresh_topic.py --topic takaichiを実行して収集を再開する。公開候補化を再検討する場合は、unlisted化の理由（AdSense上の懸念）の解消状況とrefresh_at欄の扱いを合わせて判断する。"
+    due_at: null
+    canonical_sources: ["THEMES.yaml", "DATA_REFRESH.md", "themes/takaichi.md", "archive/tasks/task-87.md"]
+    ceo_approval: "定期収集の実施・editorial_override 2件・公開候補化の見送り・collect_mode event-driven化は本文確認の過程でオーナーと相談のうえ決定"
+    completion_evidence: ["data/verification/updates/takaichi/2026-09-22/", "themes/takaichi.md", "archive/tasks/task-87.md", "THEMES.yaml"]
 
   - id: theme-refresh-next-batch
     department: engineering-data
