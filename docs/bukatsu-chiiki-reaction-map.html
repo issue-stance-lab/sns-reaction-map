@@ -807,6 +807,10 @@
 <style>/* issue-count: scripts/sync_issue_counts.py */
 .explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
+<!-- BUKATSU_CONNECTED_START -->
+<link rel="stylesheet" href="bukatsu-connected.css?v=1">
+<script id="bukatsu-connected-data" type="application/json">{"schema":1,"theme_id":"bukatsu-chiiki","stances":[{"id":"bukatsu-chiiki-transition-support","mode_id":"移行支持","short_label":"移行支持"},{"id":"bukatsu-chiiki-cautious","mode_id":"慎重・反対","short_label":"慎重・反対"},{"id":"bukatsu-chiiki-conditional","mode_id":"条件付き・改善要求","short_label":"条件付き・改善要求"},{"id":"bukatsu-chiiki-neutral","mode_id":"中立・情報","short_label":"中立・情報"}],"issues":{"bukatsu-chiiki-kyoin":{"posts_id":"issue-bukatsu-chiiki-kyoin","claim_ids":["kyushokuchoseigaku"],"source_only_ids":[],"shared_concern_ids":["bukatsu-chiiki-vein-2"],"timeline_ids":["shidouin","budget2026"]},"bukatsu-chiiki-seido":{"posts_id":"issue-bukatsu-chiiki-seido","claim_ids":["original-deadline","national-funding"],"source_only_ids":[],"shared_concern_ids":["bukatsu-chiiki-vein-2"],"timeline_ids":["guideline2022","period","chutairen","guideline2025"]},"bukatsu-chiiki-kyoiku":{"posts_id":"issue-bukatsu-chiiki-kyoiku","claim_ids":["chutairen-entry"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":["chutairen"]},"bukatsu-chiiki-ukezara":{"posts_id":"issue-bukatsu-chiiki-ukezara","claim_ids":["coach-pay","shidoin-role"],"source_only_ids":[],"shared_concern_ids":["bukatsu-chiiki-vein-1","bukatsu-chiiki-vein-2"],"timeline_ids":["shidouin"]},"bukatsu-chiiki-hiyo":{"posts_id":"issue-bukatsu-chiiki-hiyo","claim_ids":["national-funding","club-cost-survey"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":["budget2026"]},"bukatsu-chiiki-sonota":{"posts_id":"issue-bukatsu-chiiki-sonota","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[]},"bukatsu-chiiki-kakusa":{"posts_id":"issue-bukatsu-chiiki-kakusa","claim_ids":[],"source_only_ids":["bukatsu-chiiki-sc-1"],"shared_concern_ids":["bukatsu-chiiki-vein-2"],"timeline_ids":[]}},"scope_note":"理由の分類・投稿例・資料は、この論点全体の内容です。","background_checked_on":"2026-09-05"}</script>
+<!-- BUKATSU_CONNECTED_END -->
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/bukatsu-chiiki/bukatsu-hero.webp')">
 <div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
@@ -2121,6 +2125,335 @@ function buildQuiz(){
   }));
 }
 
+/* BUKATSU_CONNECTED_BRIDGE_START */
+// バー↔山の立場共有（工程2）、論点を選んだときの読書面（工程3）、
+// 立場を切り替えたときの山の滑らかな変化・初期表示の自動選択・予想2問②からの論点移動
+// （工程3後追い、tax版の考え方を移植）、深いリンクの統一・クイズからの論点移動・
+// 論点表示と出典操作の計測（工程4）。潮目カードへのリンクは消費税版・計画書のどちらにも
+// 前例が無い独自追加と判明したため一度追加して削除した（オーナー指摘、2026-09-23）。
+// land/orbit/buildGuesses/buildQuiz自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
+(function(){
+  // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
+  // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
+  // 何も登録されない。#modes 自体（常に存在する入れ物）への委譲で、後から生まれる
+  // ボタンにも効くようにする。STANCE_GLANCE側は静的HTMLで最初から存在するため、
+  // 個別付与のままでよい。
+  var glanceButtons = document.querySelectorAll('#stance-glance-buttons .sg-pick-btn');
+  var modesBox = document.getElementById('modes');
+
+  function stanceAt(i){ return D.stances[i] || null; }
+
+  function syncGlance(modeId){
+    glanceButtons.forEach(function(btn, i){
+      var s = stanceAt(i);
+      btn.setAttribute('aria-pressed', String(!!s && s.key === modeId));
+    });
+  }
+  function syncModes(modeId){
+    if (!modesBox) return;
+    modesBox.querySelectorAll('[data-m]').forEach(function(btn){
+      btn.setAttribute('aria-pressed', String(btn.dataset.m === modeId));
+    });
+  }
+
+  // STANCE_GLANCEは表示だけの装置として作られている（自分の中だけで完結する）。
+  // 山を動かす呼び出しをここで追加する。既存のonclickは残したまま、別のlistenerを足す。
+  glanceButtons.forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var s = stanceAt(i);
+      if (!s || !modeById[s.key]) return;
+      morphTo(s.key);
+      syncModes(s.key);
+    });
+  });
+  // #modesは既存のonclickでmorphTo()を直接呼ぶ。STANCE_GLANCE側の見た目をここで揃える。
+  // 「議論の中身」の文言はSTANCE_GLANCE自身のscript内に閉じている（DATA配列がここから
+  // 見えない）ため、ここで作り直さず、対応するSTANCE_GLANCEボタン自体をクリックさせて
+  // 既存の表示処理をそのまま使う（同じ文言が2通りに分かれるのを避ける）。
+  // 「すべて」はSTANCE_GLANCE側に対応ボタンが無いため、押下状態だけを揃える。
+  if (modesBox){
+    modesBox.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-m]');
+      if (!btn) return;
+      var i = D.stances.findIndex(function(s){ return s.key === btn.dataset.m; });
+      if (i >= 0 && glanceButtons[i]) glanceButtons[i].click();
+      else syncGlance(btn.dataset.m);
+    });
+  }
+  syncGlance(st.mode);
+  syncModes(st.mode);
+
+  // ---------- 工程3: 論点を選んだときの読書面（理由・投稿・資料）への差し替え ----------
+  // drawPanel()だけを差し替える。land()/orbit()/morphTo()は全てdrawPanel()を呼ぶため、
+  // ここ1箇所で全ての入口をまとめて拾える。読書面が無い論点（テンプレート未生成）や
+  // 「すべての論点」表示（st.landed===null）では、既存の描画をそのまま使う。
+  var legacyDrawPanel = drawPanel;
+  function readingTemplateFor(id){
+    return document.getElementById('bukatsu-reading-' + id);
+  }
+  function fillMetrics(root, issue){
+    var m = modeById[st.mode], n = m.counts[issue.id] || 0;
+    var count = root.querySelector('[data-bkt-count]');
+    var mode = root.querySelector('[data-bkt-mode]');
+    var ratio = root.querySelector('[data-bkt-ratio]');
+    var zero = root.querySelector('[data-bkt-zero]');
+    if (count) count.textContent = n.toLocaleString('ja-JP');
+    if (mode) mode.textContent = '件 / ' + m.label + m.total.toLocaleString('ja-JP') + '件中';
+    if (n && m.total){
+      if (ratio){ ratio.textContent = (100*n/m.total).toFixed(1) + '%　高さ：強い表現 ' + (m.high_pct[issue.id]||0) + '%'; ratio.hidden = false; }
+      if (zero) zero.hidden = true;
+    } else {
+      if (ratio) ratio.hidden = true;
+      if (zero){ zero.textContent = 'この立場では0件です。'; zero.hidden = false; }
+    }
+  }
+  function renderReading(id){
+    var tpl = readingTemplateFor(id);
+    var panel = document.getElementById('panel');
+    panel.innerHTML = '';
+    panel.appendChild(tpl.content.cloneNode(true));
+    fillMetrics(panel, issues[idIndex[id]]);
+    var back = document.createElement('button');
+    back.type = 'button'; back.className = 'back'; back.id = 'back';
+    back.textContent = '← 論点の一覧へ戻る（Esc）';
+    back.addEventListener('click', orbit);
+    panel.appendChild(back);
+    // 図解の拡大は、既存のdocument委譲ハンドラ（.explainer-card[data-img]監視）が
+    // そのまま拾う。ここで別のlistenerを足す必要はない。
+  }
+  // ---------- 工程4: 論点表示・出典操作の計測 ----------
+  // GA4本体（gtag）はGA_TAG_START〜ENDのshimが本番ホストでだけ動く前提のため、無い環境
+  // （ローカル確認等）では何もしない。再描画のたびに送らないよう、直前に送った論点idと
+  // 比較する（立場切替でdrawPanelが同じ論点を再描画しても送り直さない）。閲覧者が選んだ
+  // 立場・自由記述は送らない。送るのはissue_idと、押した出典リンクの行き先URLだけ。
+  var lastTrackedIssue = null;
+  function trackIssueView(id){
+    if (typeof window.gtag !== 'function' || id === lastTrackedIssue) return;
+    lastTrackedIssue = id;
+    window.gtag('event', 'issue_view', {issue_id: id});
+  }
+  var panelEl = document.getElementById('panel');
+  if (panelEl){
+    panelEl.addEventListener('click', function(e){
+      var a = e.target.closest('a[target="_blank"]');
+      if (!a || typeof window.gtag !== 'function') return;
+      window.gtag('event', 'citation_click', {
+        issue_id: st.landed === null ? null : issues[st.landed].id,
+        outbound_url: a.href
+      });
+    });
+  }
+  drawPanel = function(){
+    if (st.landed === null) { legacyDrawPanel(); return; }
+    var id = issues[st.landed].id;
+    trackIssueView(id);
+    if (!readingTemplateFor(id)) { legacyDrawPanel(); return; }
+    renderReading(id);
+  };
+
+  // ---------- 立場を切り替えたときの山の変化を滑らかにする ----------
+  // consumption-tax-cutのtaxAnimate/taxLayoutと同じ考え方（tax版
+  // scripts/templates/consumption_tax_connected_bridge.jsを参照して移植）。
+  // bukatsu-chiikiのlayout()/render()はtax版と違い画面幅に応じた再計算を持たず
+  // 固定900幅のviewBoxのため、render()自体は書き換えずに済む。layout()だけを
+  // 差し替え、render()が内部で呼ぶlayout(st.mode)が補間後の形を返すようにする。
+  var bktVisual = null, bktAnimation = 0;
+  var legacyLayout = layout;
+  layout = function(modeId){ return bktVisual && modeId === st.mode ? bktVisual : legacyLayout(modeId); };
+
+  // アニメーション中は毎フレームsvg.innerHTMLを作り直す（render()自体の仕様）ため、
+  // キーボード操作中の山（.hill）へのフォーカスが毎回外れる。呼び出し前後で復元する。
+  var legacyRender = render;
+  render = function(){
+    var focused = document.activeElement;
+    var focusId = focused && focused.classList && focused.classList.contains('hill') ? focused.dataset.i : null;
+    legacyRender();
+    if (focusId !== null){
+      var el = svg.querySelector('.hill[data-i="' + focusId + '"]');
+      if (el) el.focus({preventScroll: true});
+    }
+  };
+
+  function bktAnimate(from, to){
+    cancelAnimationFrame(bktAnimation);
+    if (reduce){ bktVisual = null; render(); return; }
+    var start = performance.now();
+    var byId = function(list){ var m = new Map(); list.forEach(function(v){ m.set(v.it.id, v); }); return m; };
+    var a = byId(from.live), b = byId(to.live);
+    var keys = issues.map(function(it){ return it.id; }).filter(function(id){ return a.has(id) || b.has(id); });
+    function zero(v){ return Object.assign({}, v, {x0: v.cx, x1: v.cx, w: 0, top: SEA, n: 0, hi: 0, rate: 0, share: 0}); }
+    function frame(now){
+      var t = Math.min(1, (now - start) / 480), f = 1 - Math.pow(1 - t, 3);
+      bktVisual = Object.assign({}, to, {live: keys.map(function(id){
+        var end = b.get(id), begin = a.get(id);
+        var left = begin || zero(end), right = end || zero(begin), value = Object.assign({}, right);
+        ['x0', 'x1', 'cx', 'w', 'top', 'n', 'hi', 'rate', 'share'].forEach(function(key){
+          value[key] = left[key] + (right[key] - left[key]) * f;
+        });
+        value.n = Math.round(value.n); value.hi = Math.round(value.hi);
+        value.clipped = value.rate > Y_MAX;
+        return value;
+      })});
+      render();
+      if (t < 1) bktAnimation = requestAnimationFrame(frame);
+      else { bktVisual = null; bktAnimation = 0; render(); }
+    }
+    bktAnimation = requestAnimationFrame(frame);
+  }
+
+  // 連打時、前のアニメーションの最新の形（bktVisual）から次の目的地へつなぐため、
+  // 常に最後に押した立場へ収束する（前のアニメーションへ戻らない）。
+  var legacyMorph = morphTo;
+  morphTo = function(toMode){
+    if (!modeById[toMode] || toMode === st.mode) return;
+    var from = bktVisual || legacyLayout(st.mode);
+    st.prevRank = ranksOf(st.mode);
+    st.mode = toMode;
+    if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+      st.landed = null;
+      if (location.hash) history.replaceState(null, "", location.pathname);
+    }
+    evacuateChart();
+    drawPanel(); syncList(); placeChart();
+    bktAnimate(from, legacyLayout(toMode));
+    if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
+  };
+
+  // ---------- 初期表示・深いリンクの統一（工程4） ----------
+  // land()自体（クリック時に該当箇所へ画面を運ぶ、オーナー指摘2026-09-10/09-19で追加した
+  // 動き）は変えない。画面を動かさず状態だけ変えたい場面（初期表示・issue-cardsや授業節の
+  // 既存アンカー・ブラウザの戻る/進む）では、bringIntoView()を一時的に何もしない関数へ
+  // 差し替えてland()を呼び、直後に戻す（land()の中身は複製しない）。
+  function landSilently(i){
+    var real = bringIntoView;
+    bringIntoView = function(){};
+    land(i);
+    bringIntoView = real;
+  }
+  // land()が書くhashは論点の生id（例: #bukatsu-chiiki-kyoin）だが、issue-cards・授業節の
+  // 既存リンクは別の名前空間（例: #issue-bukatsu-chiiki-kyoin、Xの投稿カード側のid）を
+  // 使っている。両方を同じ論点選択へ正規化する。
+  function issueIdFromHash(){
+    var h = location.hash.slice(1);
+    if (!h) return null;
+    if (idIndex[h] !== undefined) return h;
+    if (h.indexOf('issue-') === 0 && idIndex[h.slice(6)] !== undefined) return h.slice(6);
+    return null;
+  }
+  // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
+  // setTimeout(0)は大きなページだとパース完了より先に発火することがあるため使わず、
+  // DOMContentLoaded（このscript自体は常にその前に実行されるため、必ず後で発火する）を待つ。
+  function initialLand(){
+    if (st.landed !== null) return;  // 素のhashは既存initが既に処理済み
+    var id = issueIdFromHash();
+    if (id !== null){ landSilently(idIndex[id]); return; }
+    if (!location.hash){
+      var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
+      landSilently(idIndex[top.id]);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialLand, {once: true});
+  } else {
+    initialLand();
+  }
+  // issue-cardsの戻りリンク・授業節の論点リンクも、ブラウザの戻る/進むも、最終的には
+  // hashの変化として届く。1箇所で拾い、同じ論点選択へつなぐ。論点に無関係なhash
+  // （#planet-block・#vote-section等）は無視して今の選択状態を保つ（issue-cardsの
+  // 「↑ 地図へ戻る」を押しても、読んでいた論点の読書面が消えないように）。
+  window.addEventListener('hashchange', function(){
+    var h = location.hash.slice(1);
+    if (!h){ if (st.landed !== null) orbit(); return; }
+    var id = issueIdFromHash();
+    if (id !== null && (st.landed === null || issues[st.landed].id !== id)) landSilently(idIndex[id]);
+  });
+
+  // ---------- 予想2問（②強い表現がいちばん多い論点）の答えから、該当の山へ移動 ----------
+  // buildGuesses()自体は上書きしない（①②の文言・正誤判定は既存のまま）。#guesses
+  // （buildModes()と同様、buildGuesses()実行前は空の入れ物）への委譲で、答えが開いた
+  // 直後（＝buildGuesses()自身のclick listenerが先に走った後、bubbling で#guessesへ届く
+  // 時点）にだけ動く。②の答えの論点名は「peak[0].it.label」だがbuildGuesses()の
+  // クロージャ内にしか無いため、再計算せず、既に表示された答え文の「「論点名」」を
+  // そのまま読み取る（tax版のx.issueIdと同じ対象、ボタン文言「この論点の山を見る ↓」も
+  // tax版に合わせた）。
+  var guessesBox = document.getElementById('guesses');
+  if (guessesBox){
+    guessesBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var card = e.target.closest('.guess');
+      if (!card || card.dataset.k !== 'g2') return;
+      var answerBox = card.querySelector('.gans');
+      if (!answerBox || answerBox.querySelector('.bkt-guess-link')) return;
+      var match = answerBox.innerHTML.match(/<b>「([^」]+)」/);
+      var target = match && issues.find(function(it){ return it.label === match[1]; });
+      if (!target) return;
+      var link = document.createElement('button');
+      link.type = 'button';
+      link.className = 'bkt-guess-link';
+      link.textContent = 'この論点の山を見る ↓';
+      link.addEventListener('click', function(){ land(idIndex[target.id]); });
+      answerBox.appendChild(link);
+    });
+  }
+
+  // ---------- 予想クイズ・一次資料クイズの答えから、関係する論点の山へ移動 ----------
+  // buildQuiz()自体は上書きしない。#quiz（buildQuiz()実行前は空の入れ物）への委譲で、
+  // 答えが開いた直後（buildQuiz()自身のclick listenerが先に走った後、bubblingで#quizへ
+  // 届く時点）にだけ動く。どの問題かはqi（buildQuiz()のクロージャ内）を再計算せず、
+  // 既に表示された問題文「「主張」」をD.claims[].claimと照合してclaim idを求め、
+  // issues[].claims[]にそのidを含む論点（0〜2件。例: national-fundingは制度・費用の2論点）
+  // へリンクを作る。答え文自体には論点名が出ないため（予想クイズと違い）、リンクの文言に
+  // 論点名を明示する。
+  var quizBox = document.getElementById('quiz');
+  if (quizBox){
+    quizBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var qclaim = quizBox.querySelector('.qclaim');
+      var qans = quizBox.querySelector('.qans');
+      if (!qclaim || !qans || qans.querySelector('.bkt-quiz-link')) return;
+      var m = qclaim.textContent.match(/「([\s\S]+)」/);
+      var claim = m && D.claims.find(function(c){ return c.claim === m[1]; });
+      if (!claim) return;
+      issues.filter(function(it){
+        return (it.claims || []).some(function(c){ return c.id === claim.id; });
+      }).forEach(function(target){
+        var link = document.createElement('button');
+        link.type = 'button';
+        link.className = 'bkt-guess-link bkt-quiz-link';
+        link.textContent = 'この論点の山を見る：' + target.label + ' ↓';
+        link.addEventListener('click', function(){ land(idIndex[target.id]); });
+        qans.appendChild(link);
+      });
+    });
+  }
+
+  window.BukatsuConnectedMap = Object.freeze({
+    getState: function(){
+      var stance = D.stances.find(function(s){ return s.key === st.mode; });
+      return Object.freeze({
+        stanceId: stance ? stance.id : 'all',
+        issueId: st.landed === null ? null : issues[st.landed].id
+      });
+    },
+    selectIssue: function(id){
+      if (id === null){ orbit(); return true; }
+      if (!Object.prototype.hasOwnProperty.call(idIndex, id)) return false;
+      land(idIndex[id]);
+      return true;
+    },
+    selectStance: function(id){
+      if (id === 'all'){ morphTo('all'); syncGlance('all'); syncModes('all'); return true; }
+      var stance = D.stances.find(function(s){ return s.id === id; });
+      if (!stance) return false;
+      morphTo(stance.key);
+      syncGlance(stance.key);
+      syncModes(stance.key);
+      return true;
+    }
+  });
+})();
+
+/* BUKATSU_CONNECTED_BRIDGE_END */
 /* ---------- 初期化 ----------
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
@@ -3888,5 +4221,103 @@ const SM_RAW = [
 })();
 </script>
 <script src="share-x-btn.js"></script>
+<!-- BUKATSU_CONNECTED_CONTENT_START -->
+<template id="bukatsu-reading-bukatsu-chiiki-kyoin">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>🏫 教員の働き方</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin-v2.webp" data-alt="教員の働き方"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoin-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="bkt-reasons"><li data-bkt-reason="B"><span class="bkt-reason-row"><span>直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-B">51<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:12.700%"></i></span></li><li data-bkt-reason="G"><span class="bkt-reason-row"><span>外部委託・専門指導者への期待（指導の質向上を含む）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-G">39<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:9.700%"></i></span></li><li data-bkt-reason="F"><span class="bkt-reason-row"><span>その他（実態の訴え・分類が難しいもの）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-F">34<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:8.500%"></i></span></li><li data-bkt-reason="L"><span class="bkt-reason-row"><span>地域移行にとどまらない部活動そのものの完全廃止を求める声</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-L">33<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:8.200%"></i></span></li><li data-bkt-reason="J"><span class="bkt-reason-row"><span>無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-J">31<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:7.700%"></i></span></li><li data-bkt-reason="H"><span class="bkt-reason-row"><span>教員の負担軽減・本来業務や私生活の時間の回復への期待</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-H">23<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:5.700%"></i></span></li><li data-bkt-reason="A"><span class="bkt-reason-row"><span>移しても教員の負担は減らない・むしろ増える</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-A">21<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:5.200%"></i></span></li><li data-bkt-reason="K"><span class="bkt-reason-row"><span>移行に反対する教員への批判（既得権益・自己満足という指摘）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-K">21<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:5.200%"></i></span></li><li data-bkt-reason="E"><span class="bkt-reason-row"><span>移行や廃止で失われるものへの不安</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-E">15<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:3.700%"></i></span></li><li data-bkt-reason="I"><span class="bkt-reason-row"><span>少子化・人手不足による構造的必然性（このままでは持続不可能という認識）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-I">15<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:3.700%"></i></span></li><li data-bkt-reason="C"><span class="bkt-reason-row"><span>やりたい先生だけが担えばよい（移行ではなく任意化）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-C">13<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:3.200%"></i></span></li><li data-bkt-reason="P"><span class="bkt-reason-row"><span>顧問拒否の実践を発信するシリーズ投稿（啓発目的の定型文）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-P">10<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:2.500%"></i></span></li><li data-bkt-reason="D"><span class="bkt-reason-row"><span>移行ではなく部活そのものを廃止すべき</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-D">7<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:1.700%"></i></span></li><li data-bkt-reason="M"><span class="bkt-reason-row"><span>実際に移行・外部委託が進んだ現場からの肯定的な体験談・報告</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-M">7<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:1.700%"></i></span></li><li data-bkt-reason="N"><span class="bkt-reason-row"><span>その他（分類困難・皮肉・断片的な投稿）</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-N">3<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:0.700%"></i></span></li><li data-bkt-reason="__unread__"><span class="bkt-reason-row"><span>まだ読み直していない分</span><b id="bkt-reason-count-bukatsu-chiiki-kyoin-__unread__">78<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:19.500%"></i></span></li></ul>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/AtelierClutch/status/2082217044611834122"><p>授業に専念できる環境を求める</p><a href="https://x.com/AtelierClutch/status/2082217044611834122" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/AtelierClutch/status/2082217044611834122">@AtelierClutch の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/Namenotblanko/status/2082969614196093400"><p>善意に頼らない仕組みを求める</p><a href="https://x.com/Namenotblanko/status/2082969614196093400" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Namenotblanko/status/2082969614196093400">@Namenotblanko の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<p class="bkt-eyebrow">年表の確認 2026-09-05</p><h3>年表のどこが関係する？</h3>
+<div class="bkt-timeline-item" data-bkt-timeline="shidouin"><p class="bkt-timeline-when">2017年4月<em>平成29年度</em></p><p>「部活動指導員」が制度としてできました。それまでの外部指導者は技術指導しかできず、活動中の事故の責任の所在がはっきりしないため、大会に生徒を連れて行くことができませんでした。この制度で、大会の引率が仕事の内容に入りました。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/322M40000080011" target="_blank" rel="noopener noreferrer">e-Gov法令検索 学校教育法施行規則 第七十八条の二</a></li><li><a href="https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動指導員の概要（PDF）</a></li></ul></details></div>
+<div class="bkt-timeline-item" data-bkt-timeline="budget2026"><p class="bkt-timeline-when">2026年度<em>令和8年度・いま</em></p><p>「部活動の地域展開等の全国的な実施」に国の予算が付いています。ただし補助の対象は運営にかかる経費で、家庭が払う会費そのものを国が肩代わりする仕組みではありません。教員の給与に上乗せされる教職調整額は、4%から5%へ上がりました。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a></li><li><a href="https://laws.e-gov.go.jp/law/346AC0000000077" target="_blank" rel="noopener noreferrer">e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条</a></li></ul></details></div>
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-note">照合確認日 2026-09-02。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="bkt-claim" data-bkt-claim="kyushokuchoseigaku" open><summary>「給特法は改正されたが、教職調整額は4%のままだ」</summary><span class="bkt-verdict">少しずれる</span><p>この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/346AC0000000077" target="_blank" rel="noopener noreferrer">e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条・附則</a></li></ul></details></details>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="bkt-concern" data-bkt-concern="bukatsu-chiiki-vein-2"><summary>外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。</summary><p>『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。</p><p class="bkt-note" id="bkt-concern-count-bukatsu-chiiki-vein-2">確認した投稿例: 慎重・反対 3件 ／ 条件付き・改善要求 2件。確認日 2026-09-02</p></details>
+</aside></div></template>
+<template id="bukatsu-reading-bukatsu-chiiki-seido">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>📋 制度・移行プロセス</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido-v3.webp" data-alt="制度・移行プロセス"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-seido-v3.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="bkt-reasons"><li data-bkt-reason="plan-undecided"><span class="bkt-reason-row"><span>決まっていないことを指摘する</span><b id="bkt-reason-count-bukatsu-chiiki-seido-plan-undecided">80<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:25.500%"></i></span></li><li data-bkt-reason="plan-blame"><span class="bkt-reason-row"><span>進まない理由を誰かの責任に帰す</span><b id="bkt-reason-count-bukatsu-chiiki-seido-plan-blame">74<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:23.600%"></i></span></li><li data-bkt-reason="other"><span class="bkt-reason-row"><span>上のどれにも当てはまらない</span><b id="bkt-reason-count-bukatsu-chiiki-seido-other">47<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:15.000%"></i></span></li><li data-bkt-reason="plan-local"><span class="bkt-reason-row"><span>具体の自治体・計画・日程に触れる</span><b id="bkt-reason-count-bukatsu-chiiki-seido-plan-local">39<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:12.400%"></i></span></li><li data-bkt-reason="child-value-doubt"><span class="bkt-reason-row"><span>部活の教育的意義そのものを疑う</span><b id="bkt-reason-count-bukatsu-chiiki-seido-child-value-doubt">8<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:2.500%"></i></span></li><li data-bkt-reason="child-timing"><span class="bkt-reason-row"><span>いまの学年・時期の当事者として書く</span><b id="bkt-reason-count-bukatsu-chiiki-seido-child-timing">5<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:1.600%"></i></span></li><li data-bkt-reason="child-loss"><span class="bkt-reason-row"><span>子どもの入り口・居場所が失われる懸念</span><b id="bkt-reason-count-bukatsu-chiiki-seido-child-loss">2<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:0.600%"></i></span></li><li data-bkt-reason="child-gain"><span class="bkt-reason-row"><span>子どもの選択肢が増えることへの期待</span><b id="bkt-reason-count-bukatsu-chiiki-seido-child-gain">2<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:0.600%"></i></span></li><li data-bkt-reason="__unread__"><span class="bkt-reason-row"><span>まだ読み直していない分</span><b id="bkt-reason-count-bukatsu-chiiki-seido-__unread__">57<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:18.200%"></i></span></li></ul>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355"><p>公費と負担金の仕組みが必要</p><a href="https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355">@4ZYVNjQOkWBSoU8 の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/Goshiki2023/status/2078663825013031272"><p>費用・場所・責任の設計が未解決</p><a href="https://x.com/Goshiki2023/status/2078663825013031272" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Goshiki2023/status/2078663825013031272">@Goshiki2023 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<p class="bkt-eyebrow">年表の確認 2026-09-05</p><h3>年表のどこが関係する？</h3>
+<div class="bkt-timeline-item" data-bkt-timeline="guideline2022"><p class="bkt-timeline-when">2022年12月<em>令和4年度</em></p><p>国が、学校の部活動と、新しくつくる「地域クラブ活動」のあり方をガイドラインにまとめました。学校の中の個人（指導員）にたのむ段階から、学校の外の組織（地域クラブ）へ移す段階に進みます。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）</a></li></ul></details></div>
+<div class="bkt-timeline-item" data-bkt-timeline="period"><p class="bkt-timeline-when">2023〜2025年度<em>令和5〜7年度</em></p><p>このガイドラインは、この3年間を「重点的に支援する期間」と書いています。全国の移行を終える期限としては書かれていません。「3年で終わるはずだった」という受け取り方は、ここから生まれています。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" target="_blank" rel="noopener noreferrer">同ガイドライン（令和4年12月・PDF）</a></li></ul></details></div>
+<div class="bkt-timeline-item" data-bkt-timeline="chutairen"><p class="bkt-timeline-when">2025年度<em>令和7年度</em></p><p>中学校体育連盟が、地域クラブのチームも全国中学校体育大会に出られる特例を設けました。ただし細則では、学校の部活動と地域クラブの掛け持ちでの出場は認められておらず、生徒はどちらか一方を選ぶことになります。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.fukui-jpa.com/data/saisoku061011.pdf" target="_blank" rel="noopener noreferrer">日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（PDF）</a></li></ul></details></div>
+<div class="bkt-timeline-item" data-bkt-timeline="guideline2025"><p class="bkt-timeline-when">2025年12月<em>令和7年度</em></p><p>新しいガイドラインが出ました。名前も「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」に変わっています。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener noreferrer">文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）</a></li></ul></details></div>
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-note">照合確認日 2026-09-02。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="bkt-claim" data-bkt-claim="original-deadline" open><summary>「部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった」</summary><span class="bkt-verdict">少しずれる</span><p>3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）</a></li><li><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener noreferrer">文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）</a></li></ul></details></details>
+<details class="bkt-claim" data-bkt-claim="national-funding"><summary>「地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ」</summary><span class="bkt-verdict">少しずれる</span><p>国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a></li><li><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" target="_blank" rel="noopener noreferrer">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></li></ul></details></details>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="bkt-concern" data-bkt-concern="bukatsu-chiiki-vein-2"><summary>外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。</summary><p>『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。</p><p class="bkt-note" id="bkt-concern-count-bukatsu-chiiki-vein-2">確認した投稿例: 慎重・反対 3件 ／ 条件付き・改善要求 2件。確認日 2026-09-02</p></details>
+</aside></div></template>
+<template id="bukatsu-reading-bukatsu-chiiki-kyoiku">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>⭐ 教育的意義・機会</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku-v2.webp" data-alt="教育的意義・機会"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kyoiku-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="bkt-reasons"><li data-bkt-reason="child-loss"><span class="bkt-reason-row"><span>子どもの入り口・居場所が失われる懸念</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-child-loss">58<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:22.700%"></i></span></li><li data-bkt-reason="child-value-doubt"><span class="bkt-reason-row"><span>部活の教育的意義そのものを疑う</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-child-value-doubt">46<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:18.000%"></i></span></li><li data-bkt-reason="other"><span class="bkt-reason-row"><span>上のどれにも当てはまらない</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-other">42<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:16.400%"></i></span></li><li data-bkt-reason="child-timing"><span class="bkt-reason-row"><span>いまの学年・時期の当事者として書く</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-child-timing">25<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:9.800%"></i></span></li><li data-bkt-reason="child-gain"><span class="bkt-reason-row"><span>子どもの選択肢が増えることへの期待</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-child-gain">23<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:9.000%"></i></span></li><li data-bkt-reason="plan-local"><span class="bkt-reason-row"><span>具体の自治体・計画・日程に触れる</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-plan-local">11<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:4.300%"></i></span></li><li data-bkt-reason="plan-blame"><span class="bkt-reason-row"><span>進まない理由を誰かの責任に帰す</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-plan-blame">5<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:2.000%"></i></span></li><li data-bkt-reason="plan-undecided"><span class="bkt-reason-row"><span>決まっていないことを指摘する</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-plan-undecided">5<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:2.000%"></i></span></li><li data-bkt-reason="__unread__"><span class="bkt-reason-row"><span>まだ読み直していない分</span><b id="bkt-reason-count-bukatsu-chiiki-kyoiku-__unread__">41<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:16.000%"></i></span></li></ul>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/ikuji_takuto/status/2083492685223215132"><p>学校教育としての部活を残したい</p><a href="https://x.com/ikuji_takuto/status/2083492685223215132" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/ikuji_takuto/status/2083492685223215132">@ikuji_takuto の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/39Md8/status/2082487864135393452"><p>生涯スポーツ・音楽につながる場にしたい</p><a href="https://x.com/39Md8/status/2082487864135393452" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/39Md8/status/2082487864135393452">@39Md8 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<p class="bkt-eyebrow">年表の確認 2026-09-05</p><h3>年表のどこが関係する？</h3>
+<div class="bkt-timeline-item" data-bkt-timeline="chutairen"><p class="bkt-timeline-when">2025年度<em>令和7年度</em></p><p>中学校体育連盟が、地域クラブのチームも全国中学校体育大会に出られる特例を設けました。ただし細則では、学校の部活動と地域クラブの掛け持ちでの出場は認められておらず、生徒はどちらか一方を選ぶことになります。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.fukui-jpa.com/data/saisoku061011.pdf" target="_blank" rel="noopener noreferrer">日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（PDF）</a></li></ul></details></div>
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-note">照合確認日 2026-09-02。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="bkt-claim" data-bkt-claim="chutairen-entry" open><summary>「中体連の大会に地域クラブのチームが出られるようになっている」</summary><span class="bkt-verdict">資料どおり</span><p>参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.fukui-jpa.com/data/saisoku061011.pdf" target="_blank" rel="noopener noreferrer">日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）</a></li></ul></details></details>
+</aside></div></template>
+<template id="bukatsu-reading-bukatsu-chiiki-ukezara">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>👤 受け皿・指導者</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara-v2.webp" data-alt="受け皿・指導者"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-ukesara-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="bkt-reasons"><li data-bkt-reason="R2"><span class="bkt-reason-row"><span>地域が引き受ける理由がない・引き受け手がいない</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-R2">52<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:25.000%"></i></span></li><li data-bkt-reason="R3"><span class="bkt-reason-row"><span>責任・安全・指導者の質への不安</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-R3">40<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:19.200%"></i></span></li><li data-bkt-reason="R6"><span class="bkt-reason-row"><span>その他</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-R6">38<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:18.300%"></i></span></li><li data-bkt-reason="R1"><span class="bkt-reason-row"><span>報酬が安すぎて指導者が集まらない</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-R1">37<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:17.800%"></i></span></li><li data-bkt-reason="R4"><span class="bkt-reason-row"><span>受け皿はできている・うまくいっている</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-R4">22<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:10.600%"></i></span></li><li data-bkt-reason="R5"><span class="bkt-reason-row"><span>送迎・移動の課題</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-R5">3<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:1.400%"></i></span></li><li data-bkt-reason="__unread__"><span class="bkt-reason-row"><span>まだ読み直していない分</span><b id="bkt-reason-count-bukatsu-chiiki-ukezara-__unread__">16<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:7.700%"></i></span></li></ul>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/maru_moneyy/status/2084392638506274876"><p>受け皿の人手・送迎が足りない</p><a href="https://x.com/maru_moneyy/status/2084392638506274876" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/maru_moneyy/status/2084392638506274876">@maru_moneyy の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/kohei_okada_pt/status/2084608274377437341"><p>地域資源に合わせた再構築を求める</p><a href="https://x.com/kohei_okada_pt/status/2084608274377437341" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kohei_okada_pt/status/2084608274377437341">@kohei_okada_pt の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<p class="bkt-eyebrow">年表の確認 2026-09-05</p><h3>年表のどこが関係する？</h3>
+<div class="bkt-timeline-item" data-bkt-timeline="shidouin"><p class="bkt-timeline-when">2017年4月<em>平成29年度</em></p><p>「部活動指導員」が制度としてできました。それまでの外部指導者は技術指導しかできず、活動中の事故の責任の所在がはっきりしないため、大会に生徒を連れて行くことができませんでした。この制度で、大会の引率が仕事の内容に入りました。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/322M40000080011" target="_blank" rel="noopener noreferrer">e-Gov法令検索 学校教育法施行規則 第七十八条の二</a></li><li><a href="https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動指導員の概要（PDF）</a></li></ul></details></div>
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-note">照合確認日 2026-09-02。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="bkt-claim" data-bkt-claim="coach-pay" open><summary>「地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない」</summary><span class="bkt-verdict">少しずれる</span><p>最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf" target="_blank" rel="noopener noreferrer">熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）</a></li><li><a href="https://www.mhlw.go.jp/content/11200000/001571192.pdf" target="_blank" rel="noopener noreferrer">厚生労働省 令和7年度 地域別最低賃金 全国一覧（PDF）</a></li><li><a href="https://www.city.kumamoto.jp/kiji00370419/index.html" target="_blank" rel="noopener noreferrer">熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集</a></li></ul></details></details>
+<details class="bkt-claim" data-bkt-claim="shidoin-role"><summary>「部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない」</summary><span class="bkt-verdict">資料どおり</span><p>顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動指導員の概要（PDF）</a></li><li><a href="https://laws.e-gov.go.jp/law/322M40000080011" target="_blank" rel="noopener noreferrer">e-Gov法令検索 学校教育法施行規則 第七十八条の二</a></li></ul></details></details>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="bkt-concern" data-bkt-concern="bukatsu-chiiki-vein-1"><summary>地域移行後にクラブを引き受ける指導者の謝礼・時給が低すぎて、生活が成り立たない、あるいは希望する人が集まらない。</summary><p>同じ『低待遇では続かない』という懸念から、慎重・反対側は『待遇が上がらない前提なら地域移行自体を進めるべきではない』と結論づけ、条件付き・改善要求側は『予算を増やして待遇を改善すれば移行は続けられる』と結論づける。中止か、改善して継続かで分かれる。</p><p class="bkt-note" id="bkt-concern-count-bukatsu-chiiki-vein-1">確認した投稿例: 慎重・反対 3件 ／ 条件付き・改善要求 3件。確認日 2026-09-02</p></details>
+<details class="bkt-concern" data-bkt-concern="bukatsu-chiiki-vein-2"><summary>外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。</summary><p>『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。</p><p class="bkt-note" id="bkt-concern-count-bukatsu-chiiki-vein-2">確認した投稿例: 慎重・反対 3件 ／ 条件付き・改善要求 2件。確認日 2026-09-02</p></details>
+</aside></div></template>
+<template id="bukatsu-reading-bukatsu-chiiki-hiyo">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>💴 費用・家庭負担</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou-v3.webp" data-alt="費用・家庭負担"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-hiyou-v3.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="bkt-reasons"><li data-bkt-reason="P4"><span class="bkt-reason-row"><span>誰が、いくら払うのかを決めろ（財源設計）</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-P4">43<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:28.900%"></i></span></li><li data-bkt-reason="P2"><span class="bkt-reason-row"><span>家庭が払えない・負担が増える</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-P2">27<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:18.100%"></i></span></li><li data-bkt-reason="P3"><span class="bkt-reason-row"><span>お金が理由で参加できない子が出る（格差）</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-P3">27<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:18.100%"></i></span></li><li data-bkt-reason="P1"><span class="bkt-reason-row"><span>いまの部活が安いのは、誰かの無償労働で成り立っているから</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-P1">17<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:11.400%"></i></span></li><li data-bkt-reason="P5"><span class="bkt-reason-row"><span>送迎・移動の負担</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-P5">14<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:9.400%"></i></span></li><li data-bkt-reason="P6"><span class="bkt-reason-row"><span>その他</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-P6">8<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:5.400%"></i></span></li><li data-bkt-reason="__unread__"><span class="bkt-reason-row"><span>まだ読み直していない分</span><b id="bkt-reason-count-bukatsu-chiiki-hiyo-__unread__">13<small>件</small></b></span><span class="bkt-reason-track" aria-hidden="true"><i style="width:8.700%"></i></span></li></ul>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/TheMirageof0/status/2070621781757726855"><p>家計にのしかかる会費</p><a href="https://x.com/TheMirageof0/status/2070621781757726855" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/TheMirageof0/status/2070621781757726855">@TheMirageof0 の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/774nyannyan/status/2086731858579263880"><p>公費が足りないと縮小・負担増</p><a href="https://x.com/774nyannyan/status/2086731858579263880" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/774nyannyan/status/2086731858579263880">@774nyannyan の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<p class="bkt-eyebrow">年表の確認 2026-09-05</p><h3>年表のどこが関係する？</h3>
+<div class="bkt-timeline-item" data-bkt-timeline="budget2026"><p class="bkt-timeline-when">2026年度<em>令和8年度・いま</em></p><p>「部活動の地域展開等の全国的な実施」に国の予算が付いています。ただし補助の対象は運営にかかる経費で、家庭が払う会費そのものを国が肩代わりする仕組みではありません。教員の給与に上乗せされる教職調整額は、4%から5%へ上がりました。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a></li><li><a href="https://laws.e-gov.go.jp/law/346AC0000000077" target="_blank" rel="noopener noreferrer">e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条</a></li></ul></details></div>
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-note">照合確認日 2026-09-02。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="bkt-claim" data-bkt-claim="national-funding" open><summary>「地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ」</summary><span class="bkt-verdict">少しずれる</span><p>国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener noreferrer">スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）</a></li><li><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" target="_blank" rel="noopener noreferrer">スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録</a></li></ul></details></details>
+<details class="bkt-claim" data-bkt-claim="club-cost-survey"><summary>「運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている」</summary><span class="bkt-verdict">裏が取れない</span><p>投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。</p><details class="bkt-sources"><summary>出典をひらく</summary><ul></ul></details></details>
+</aside></div></template>
+<template id="bukatsu-reading-bukatsu-chiiki-sonota">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>💬 その他</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-sonota-v2.webp" data-alt="その他"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-sonota-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="bkt-empty">この論点は、まだ編集部が投稿を1件ずつ読み直していません。</p>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/m727243023/status/2085525452777795616"><p>吹奏楽は移行しにくいという経験</p><a href="https://x.com/m727243023/status/2085525452777795616" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/m727243023/status/2085525452777795616">@m727243023 の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/mamimami_koro/status/2087383840331608316"><p>マネージャーの役割にある性別規範を問う</p><a href="https://x.com/mamimami_koro/status/2087383840331608316" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamimami_koro/status/2087383840331608316">@mamimami_koro の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+</aside></div></template>
+<template id="bukatsu-reading-bukatsu-chiiki-kakusa">
+<header class="bkt-selected-head"><div><p class="bkt-eyebrow">選んだ論点</p><h2>🗾 地域格差</h2></div><button type="button" class="explainer-card bkt-image-action" data-img="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa-v2.webp" data-alt="地域格差"><img src="images/topics/bukatsu-chiiki/bukatsu-chiiki-infographic-wide-kousa-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="bkt-metrics" aria-live="polite" aria-atomic="true"><p><strong data-bkt-count></strong><span data-bkt-mode></span></p><p data-bkt-ratio></p><p data-bkt-zero hidden></p></div><p class="bkt-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="bkt-empty">この論点は、まだ編集部が投稿を1件ずつ読み直していません。</p>
+<div class="bkt-posts"><h3>実際の投稿を読む</h3><p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="bkt-post" data-bkt-post-url="https://x.com/Davestaragues/status/2085511206278939102"><p>地方で施設が取れない</p><a href="https://x.com/Davestaragues/status/2085511206278939102" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Davestaragues/status/2085511206278939102">@Davestaragues の投稿をXで見る</a></blockquote></details></article><article class="bkt-post" data-bkt-post-url="https://x.com/mamamam4949/status/2069589990011818183"><p>都市部への環境偏在を懸念</p><a href="https://x.com/mamamam4949/status/2069589990011818183" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="bkt-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamamam4949/status/2069589990011818183">@mamamam4949 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="bkt-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="bkt-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="bkt-concern" data-bkt-concern="bukatsu-chiiki-vein-2"><summary>外部指導者へ委託するだけでは、引率・事故対応・保護者対応などの実質的な責任や事務が学校・教員に残り、負担は思うほど減らない。</summary><p>『外部委託しても学校の運営体制そのものは変わらず、引率・事故対応・保護者対応などの負担は教員に残る』という同じ懸念から、慎重・反対側は『負担の本質が変わらないなら移行そのものに懐疑的』という結論に至り、条件付き・改善要求側は『立会い義務や応急対応の分担など、欠けている部分を制度で埋めれば移行は進められる』という結論に至る。移行への懐疑と、制度を作り込んで移行を進める論に分かれる。</p><p class="bkt-note" id="bkt-concern-count-bukatsu-chiiki-vein-2">確認した投稿例: 慎重・反対 3件 ／ 条件付き・改善要求 2件。確認日 2026-09-02</p></details>
+<h3>資料にあり、収集投稿で見つからなかったこと</h3>
+<details class="bkt-source-only" data-bkt-source-only="bukatsu-chiiki-sc-1"><summary>支援水準の自治体差（国は統一の下限を設定していない）</summary><p>住んでいる自治体によって、大会参加費（1人あたり数万円規模）が全額補助される場合と、家庭が全額負担する場合に分かれる。国は補助の存在は認めているが、全国一律の下限保障は設けておらず、進み方は自治体の財政・方針に委ねられている。</p><p class="bkt-note">今回収集した意見1,401件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-22</p><details><summary>調べた範囲を見る</summary><p id="bkt-source-note-bukatsu-chiiki-sc-1">争点そのもの（次長発言や阿賀野市のような自治体間の補助額差の具体例）に触れた意見投稿は0件。「地域格差」論点の意見投稿は12件（1.05%）あるが、都市と地方で環境が違うという抽象的な懸念にとどまる。なお徳島県・高松市など個別自治体の制度を伝える投稿が3件あるが、いずれも意見表明ではなく事実の共有のため意見1139件の母数には含まれない（2026-09-12再確認：独立確認で新たに意見と判定された1件を照合、該当なし）（2026-09-15再確認：課題69の定期収集で増えた新規179件を「阿賀野|次長|自治体.*差|補助額」で再検索したが該当なし）（2026-09-22再確認：課題69の定期収集で増えた投稿のうち意見と判定された82件を「阿賀野|次長|自治体.*差|補助額」で再検索したが該当なし）</p></details><details class="bkt-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html" target="_blank" rel="noopener noreferrer">学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録・浅野スポーツ庁次長発言</a><p>次長挨拶部分。「地域の格差というのはご指摘いただいたようにかなり大きく開いてきております」「地域の実情に応じた進度で」（統一の数値目標は設定しない方針の説明）</p></li><li><a href="https://www.mext.go.jp/sports/content/20260325-spt_oripara-000048484_001.pdf" target="_blank" rel="noopener noreferrer">地域クラブ活動における創設・運営ガイドブック（新潟県阿賀野市の事例）</a><p>p.77。中体連主催・共催大会の参加費（交通費・宿泊費）を全額補助する仕組み。令和6年度実績で下越大会18,649円/人・県大会40,128円/人</p></li></ul></details></details>
+</aside></div></template>
+<!-- BUKATSU_CONNECTED_CONTENT_END -->
 </body>
 </html>
