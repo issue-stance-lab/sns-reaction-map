@@ -29,27 +29,12 @@
 
 ## bukatsu-chiikiへの移植・工程5完了（2026-09-23）
 
-**重大な発見・修正**: 山なみ全10テーマ共通の`scripts/refresh_planet_section.py`の仕上げ処理が、
-連動表示の再適用を消費税テーマだけに決め打ちしており（`from consumption_tax_connected import apply`
-を無条件呼び出し）、bukatsu-chiikiではエラーにならないまま素通りされていた。`bukatsu_connected.apply()`
-を呼べる唯一の経路（`refresh_adapters/bukatsu.py`の`_build_once()`）は`docs/`へ書き込まれる実経路
-（`DATA_REFRESH.md`のbukatsu-chiiki定期更新手順）に含まれておらず、**公開後の次回定期更新で
-連動表示が更新されなくなる**という欠落だった。オーナー承認のうえ、既存の`TOPIC_ENRICH`と同じ
-テーマ別対応表の考え方で`_apply_connected_display()`を新設し修正（`scripts/bukatsu_connected_content.py`
-の絶対importにはリポジトリ直下もsys.pathに要ることが原因と判明、`from bukatsu_connected import apply`
-という単純なbare importでは同じ`ModuleNotFoundError`を再現するのみで解決しないことを実機で確認して
-から実装）。消費税・bike-blue-ticketの既存回帰検査と山なみ全10テーマの`verify_theme_page.py`を
-再実行し、他テーマへの影響が無いことを確認。
-
-その他: 投票7×3=21通りを実クリックし送信データ・保存内容が正しいことを確認（本番送信0件）、
-320/375/PC幅×7論点×5表示=105通りの実機確認（横はみ出し・コンソールエラーとも0件）、動きを
-減らす設定でアニメーションが即時反映されることを実測、入力（件数・順位）が変わっても表示は
-追従し投票の保存式は変わらないことを検査化。計画書の検証表11項目すべて合格。
-新規テスト: Python6件（計17件）、Playwright2ファイル（投票21通り・表示品質）。全体テスト
-1103件でOK、山なみ全10テーマ`verify_theme_page.py`・`run_public_checks.py`ともOK。
-**記録**: [実装内容・検証結果・次工程への引き継ぎ](../quality/reviews/2026-09-23-task77-bukatsu-chiiki-quality.md)。
-**範囲**: `scripts/refresh_planet_section.py`（山なみ共通、テーマ別分岐の追加のみ）を含む。
-公開ページ・公開データ・投票への変更なし。工程6は未着手。
+**重大な発見・修正**: 山なみ全10テーマ共通の`refresh_planet_section.py`が連動表示の再適用を
+消費税専用に決め打ちしており、公開後の次回定期更新で連動表示が更新されなくなる欠落だった。
+`_apply_connected_display()`を新設し修正。投票21通り・320/375/PC幅×105通りの実機確認・
+検証表11項目すべて合格。全文は[工程1〜5の完了記録](../quality/reviews/2026-09-23-task77-bukatsu-chiiki-full-log.md)
+（400行上限のため退避、内容は無変更）。**範囲**: `refresh_planet_section.py`を含むがテーマ別分岐の追加のみ。
+公開ページ・公開データ・投票への変更なし。
 
 ## bukatsu-chiikiへの移植・工程6完了・公開（2026-09-23）
 
@@ -109,6 +94,21 @@ getBBox()でviewBoxを切り直し解消（V03、消費税本体はこの問題�
 `verify_number_provenance.py`・`verify_page_originality.py`いずれもOK。マージ`e8e40dfb`、
 push・CI2件success・本番URL実機確認（PC、山の実寸・立場切替とも反映確認）まで完了。
 次は公開後の観察と、前回から持ち越しの2点（bukatsu-checkのタグ付け・山の配色）のオーナー確認。
+
+## bukatsu-chiiki hash付きURL再訪問時の旧描画固定を修正・公開（2026-09-23）
+
+オーナー報告「最初、消費税では消えた過去の配置（升目100個の待避図）が見える。論点を押すと直る」。
+原因: 読書面のtemplateはbody末尾でPLANET_SECTIONのscriptより後にパースされる。前回訪問した
+論点をブラウザが覚えているhash付きURLで開くと、既存initの同期land()がtemplateパース前に走り、
+drawPanel()が「読書面が無い」と誤判定して旧描画（升目100個等）へ後退したまま固定される
+（st.landedが決まるため、bridge.js側のinitialLand()が早期returnし補正されない）。
+`initialLand()`に読書面が実際に描けているか確認し、旧描画のままなら同じ論点へもう一度静かに
+着地し直す処理を追加。`document.getElementById`差し替えでtemplate未パースの競合を確実に再現する
+検査（新規`tests/test_bukatsu_connected_initial_hash_browser.cjs`）を追加し、本番（修正前）で
+実際にこの不具合が再現すること、修正版で解消することの両方を直接確認済み。unittest 1103件・
+`verify_theme_page.py`ともOK。マージ`b7c1cb62`、push・CI2件success・本番URL（同じ再現手法で
+`.bkt-selected-head`が描け旧#dotboxが消えることを実機確認）まで完了。
+**範囲**: `scripts/templates/bukatsu_connected_bridge.js`のみ。公開データ・投票への変更なし。
 
 ## 内容レビュー（2026-09-22、提案・採用前）
 

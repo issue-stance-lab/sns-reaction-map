@@ -1,4 +1,4 @@
-# 課題77 — bukatsu-chiiki連動表示・工程1〜4の完了記録（全文）
+# 課題77 — bukatsu-chiiki連動表示・工程1〜5の完了記録（全文）
 
 `tasks/task-77.md`の400行上限のため退避。内容は`tasks/task-77.md`に元あった記述から無変更。
 
@@ -62,3 +62,27 @@ bringIntoView()を無効化。ページ末尾のtemplateがまだパースされ
 （実機で確認、対応不要）。潮目カードへの片道リンクは消費税版にも計画書本体にも前例が無い独自追加と
 判明し、オーナー指摘で削除済み（`renderReading()`から該当ブロックを削除、テスト15件・実機とも
 再確認OK）。
+
+## bukatsu-chiikiへの移植・工程5完了（2026-09-23）
+
+**重大な発見・修正**: 山なみ全10テーマ共通の`scripts/refresh_planet_section.py`の仕上げ処理が、
+連動表示の再適用を消費税テーマだけに決め打ちしており（`from consumption_tax_connected import apply`
+を無条件呼び出し）、bukatsu-chiikiではエラーにならないまま素通りされていた。`bukatsu_connected.apply()`
+を呼べる唯一の経路（`refresh_adapters/bukatsu.py`の`_build_once()`）は`docs/`へ書き込まれる実経路
+（`DATA_REFRESH.md`のbukatsu-chiiki定期更新手順）に含まれておらず、**公開後の次回定期更新で
+連動表示が更新されなくなる**という欠落だった。オーナー承認のうえ、既存の`TOPIC_ENRICH`と同じ
+テーマ別対応表の考え方で`_apply_connected_display()`を新設し修正（`scripts/bukatsu_connected_content.py`
+の絶対importにはリポジトリ直下もsys.pathに要ることが原因と判明、`from bukatsu_connected import apply`
+という単純なbare importでは同じ`ModuleNotFoundError`を再現するのみで解決しないことを実機で確認して
+から実装）。消費税・bike-blue-ticketの既存回帰検査と山なみ全10テーマの`verify_theme_page.py`を
+再実行し、他テーマへの影響が無いことを確認。
+
+その他: 投票7×3=21通りを実クリックし送信データ・保存内容が正しいことを確認（本番送信0件）、
+320/375/PC幅×7論点×5表示=105通りの実機確認（横はみ出し・コンソールエラーとも0件）、動きを
+減らす設定でアニメーションが即時反映されることを実測、入力（件数・順位）が変わっても表示は
+追従し投票の保存式は変わらないことを検査化。計画書の検証表11項目すべて合格。
+新規テスト: Python6件（計17件）、Playwright2ファイル（投票21通り・表示品質）。全体テスト
+1103件でOK、山なみ全10テーマ`verify_theme_page.py`・`run_public_checks.py`ともOK。
+**記録**: [実装内容・検証結果・次工程への引き継ぎ](2026-09-23-task77-bukatsu-chiiki-quality.md)。
+**範囲**: `scripts/refresh_planet_section.py`（山なみ共通、テーマ別分岐の追加のみ）を含む。
+公開ページ・公開データ・投票への変更なし。工程6は未着手。
