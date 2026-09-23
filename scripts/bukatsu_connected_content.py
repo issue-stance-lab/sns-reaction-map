@@ -4,9 +4,16 @@
 理由の内訳・投稿例2件・資料照合・語られていない争点・共通の心配・関係する年表を1論点1枚にする。
 年表はdata/verification/bukatsu-chiiki-background.jsonのissue_ids（工程4でオーナー確認済み）で
 論点に結び、関係する年表が無い論点（地域格差・その他）には何も出さない。
+
+理由の内訳は、生データに立場（stance）が付いている論点（教員の働き方・受け皿・指導者・
+費用・家庭負担）だけ、立場ごとの件数・割合もdata-bkt-counts/data-bkt-pctsへ埋め込む
+（build_planet_data.pyのitem["by_stance"]をそのまま使う。別集計は作らない）。
+制度・移行プロセス・教育的意義・機会は再読データに立場が無いため「すべて」の内訳のみ。
+表示の切替はbukatsu-connected.js側（立場フィルターに合わせてbから読み替える）が担当する。
 """
 from __future__ import annotations
 
+import json
 from html import escape
 from bs4 import BeautifulSoup
 
@@ -32,7 +39,10 @@ def reasons(issue: dict, show_unreviewed_note: bool) -> str:
         return f'<p class="bkt-empty">{e(sub["note"])}。' + (f'<br>{suffix}' if suffix else '') + '</p>'
     items = sub["items"]
     rows = ''.join(
-        f'<li data-bkt-reason="{e(x["id"])}"><span class="bkt-reason-row"><span>{e(x["label"])}</span>'
+        f'<li data-bkt-reason="{e(x["id"])}" '
+        f'data-bkt-counts="{e(json.dumps({"all": x["count"], **x.get("by_stance", {})}, ensure_ascii=False))}" '
+        f'data-bkt-pcts="{e(json.dumps({"all": x["pct_in_issue"], **x.get("pct_in_issue_by_stance", {})}, ensure_ascii=False))}">'
+        f'<span class="bkt-reason-row"><span>{e(x["label"])}</span>'
         f'<b id="bkt-reason-count-{e(issue["id"])}-{e(x["id"])}">{x["count"]:,}<small>件</small></b></span>'
         f'<span class="bkt-reason-track" aria-hidden="true"><i style="width:{x["pct_in_issue"]:.3f}%"></i></span></li>'
         for x in items

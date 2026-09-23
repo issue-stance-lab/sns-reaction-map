@@ -477,6 +477,8 @@ def build(topic: str) -> dict:
     canonical_posts = None  # 読み飛ばし判定にだけ使う。陸地の集計（counts）はここへ戻さない
     fetch_recovery: dict[str, dict] = {}
     reread_registry = None
+    # 理由の立場別内訳（山と同じ入力＝このmodesから取る。別集計を正典にしない）
+    mode_counts_by_stance_id = {m["id"]: m["counts"] for m in modes}
     issues = []
     for i, k in enumerate(keys):
         ic = issues_cfg[k]
@@ -503,6 +505,16 @@ def build(topic: str) -> dict:
             read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}
                      for bid, b in raw.items()]
+            # 生データに立場（stance）が付いている論点だけ、理由の立場別内訳も持たせる
+            # （制度・移行プロセス／教育的意義・機会の再読データには立場が無く対象外）。
+            stance_keys = [s["key"] for s in cfg["stances"]]
+            has_stance = bool(records) and all("stance" in r for r in records)
+            if has_stance:
+                for x in items:
+                    x["by_stance"] = {
+                        sk: sum(1 for r in records if r["bucket"] == x["id"] and r["stance"] == sk)
+                        for sk in stance_keys
+                    }
             items.sort(key=lambda x: -x["count"])
             reread = len(read_ids)
             gap = counts[k] - reread
@@ -518,11 +530,33 @@ def build(topic: str) -> dict:
                 )
 
             if gap > 0:
-                items.append({"id": "__unread__", "label": "まだ読み直していない分",
-                              "count": gap, "unread": True})
+                unread_item = {"id": "__unread__", "label": "まだ読み直していない分",
+                               "count": gap, "unread": True}
+                if has_stance:
+                    read_by_stance = {sk: sum(1 for r in records if r["stance"] == sk) for sk in stance_keys}
+                    unread_item["by_stance"] = {
+                        sk: mode_counts_by_stance_id[sk][ic["id"]] - read_by_stance[sk]
+                        for sk in stance_keys
+                    }
+                    if sum(unread_item["by_stance"].values()) != gap:
+                        raise SystemExit(
+                            f"「{k}」の未読の立場別内訳の合計が未読合計{gap}件と一致しません。"
+                        )
+                items.append(unread_item)
             total_sub = sum(x["count"] for x in items)
             for x in items:
                 x["pct_in_issue"] = round(100 * x["count"] / total_sub, 1) if total_sub else 0.0
+            if has_stance:
+                stance_totals = {sk: sum(x["by_stance"][sk] for x in items) for sk in stance_keys}
+                for x in items:
+                    x["pct_in_issue_by_stance"] = {
+                        sk: (round(100 * x["by_stance"][sk] / stance_totals[sk], 1) if stance_totals[sk] else 0.0)
+                        for sk in stance_keys
+                    }
+                    if x["by_stance"].keys() and sum(x["by_stance"].values()) != x["count"]:
+                        raise SystemExit(
+                            f"「{k}」の理由「{x['label']}」の立場別内訳の合計が全体件数と一致しません。"
+                        )
             sub = {
                 "status": "reread",
                 "coverage": sc["coverage"],
