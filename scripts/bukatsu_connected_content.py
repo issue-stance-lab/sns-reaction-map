@@ -1,7 +1,9 @@
-"""連動候補の読書面を、既存の原稿とPLANET_DATA・#issue-cards・#fallbackから生成する。
+"""連動候補の読書面を、既存の原稿とPLANET_DATA・#issue-cards・#fallback・年表から生成する。
 
 理由(reason)からX投稿を開く機能は工程3の必須範囲に含めない（計画書のとおり）。
-理由の内訳・投稿例2件・資料照合・語られていない争点・共通の心配だけを1論点1枚にする。
+理由の内訳・投稿例2件・資料照合・語られていない争点・共通の心配・関係する年表を1論点1枚にする。
+年表はdata/verification/bukatsu-chiiki-background.jsonのissue_ids（工程4でオーナー確認済み）で
+論点に結び、関係する年表が無い論点（地域格差・その他）には何も出さない。
 """
 from __future__ import annotations
 
@@ -77,6 +79,8 @@ def landing_image(fallback_html: str, icon: str, label: str) -> dict:
 
 
 def render_templates(data: dict, source: str, index: dict) -> str:
+    from scripts.bukatsu_connected import background_data
+
     soup = BeautifulSoup(source, "html.parser")
     issue_cards = soup.select_one("#issue-cards")
     fallback = soup.select_one("#fallback")
@@ -87,6 +91,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
     claims = {c["id"]: c for c in data["claims"]}
     sunk = {p["id"]: p for p in data["ocean"]["sunk_continents"]}
     veins = {p["id"]: p for p in data["ocean"]["veins"]}
+    timelines = {t["id"]: t for t in background_data()["timeline"]}
     out = [START]
     for issue in data["issues"]:
         iid = issue["id"]
@@ -114,6 +119,15 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             + post_examples(issue_cards_html, iid) + '</div></section>'
         )
         out.append('<aside class="bkt-evidence" aria-label="資料">')
+        if connection["timeline_ids"]:
+            out.append(f'<p class="bkt-eyebrow">年表の確認 {e(index["background_checked_on"])}</p><h3>年表のどこが関係する？</h3>')
+        for tid in connection["timeline_ids"]:
+            t = timelines[tid]
+            out.append(
+                f'<div class="bkt-timeline-item" data-bkt-timeline="{e(tid)}">'
+                f'<p class="bkt-timeline-when">{e(t["when"])}<em>{e(t["era"])}</em></p>'
+                f'<p>{e(t["text"])}</p>' + sources(t["sources"]) + '</div>'
+            )
         out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
             out.append(f'<p class="bkt-note">照合確認日 {e(data["ocean"]["checked_on"])}。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>')

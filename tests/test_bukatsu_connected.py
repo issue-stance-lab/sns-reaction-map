@@ -3,6 +3,7 @@ import copy
 import json
 import re
 import unittest
+import unittest.mock
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -72,6 +73,33 @@ class BukatsuConnectedTests(unittest.TestCase):
         for sc in untagged:
             self.assertNotIn(sc["id"], all_linked)
 
+    def test_timeline_ids_match_the_owner_confirmed_tagging_and_untagged_issues_stay_empty(self):
+        # 工程4でオーナーに確認した年表6件のタグ付け（configs/prompts...計画書の対話で決定）を、
+        # data/verification/bukatsu-chiiki-background.jsonへ反映した結果がそのまま出ているかを見る。
+        # 地域格差・その他は年表6件のどれにも該当しない前提（無理に割り当てていないことの確認）。
+        data = connected.planet_data(self.page)
+        index = connected.content_index(data)
+        expected = {
+            "bukatsu-chiiki-kyoin": ["shidouin", "budget2026"],
+            "bukatsu-chiiki-seido": ["guideline2022", "period", "chutairen", "guideline2025"],
+            "bukatsu-chiiki-kyoiku": ["chutairen"],
+            "bukatsu-chiiki-ukezara": ["shidouin"],
+            "bukatsu-chiiki-hiyo": ["budget2026"],
+            "bukatsu-chiiki-sonota": [],
+            "bukatsu-chiiki-kakusa": [],
+        }
+        self.assertEqual({iid: v["timeline_ids"] for iid, v in index["issues"].items()}, expected)
+
+    def test_timeline_entry_without_issue_ids_is_rejected(self):
+        data = connected.planet_data(self.page)
+        broken = {
+            "checked_on": "2026-09-05",
+            "timeline": [{"id": "shidouin", "issue_ids": [], "when": "x", "era": "x", "text": "x", "sources": []}],
+        }
+        with unittest.mock.patch.object(connected, "background_data", return_value=broken):
+            with self.assertRaises(ValueError):
+                connected.content_index(data)
+
     def test_relationships_do_not_depend_on_rank_or_display_labels(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)
@@ -102,9 +130,9 @@ class BukatsuConnectedTests(unittest.TestCase):
         soup = BeautifulSoup(self.page, "html.parser")
         by_id = {i["id"]: i for i in data["issues"]}
         expected_pilots = {
-            "bukatsu-chiiki-kyoin": {"reasons": 16, "posts": 2, "claims": 1, "veins": 1},
-            "bukatsu-chiiki-ukezara": {"reasons": 7, "posts": 2, "claims": 2, "veins": 2},
-            "bukatsu-chiiki-sonota": {"reasons": 0, "posts": 2, "claims": 0, "veins": 0},
+            "bukatsu-chiiki-kyoin": {"reasons": 16, "posts": 2, "claims": 1, "veins": 1, "timeline": 2},
+            "bukatsu-chiiki-ukezara": {"reasons": 7, "posts": 2, "claims": 2, "veins": 2, "timeline": 1},
+            "bukatsu-chiiki-sonota": {"reasons": 0, "posts": 2, "claims": 0, "veins": 0, "timeline": 0},
         }
         for issue in data["issues"]:
             iid = issue["id"]
@@ -117,6 +145,8 @@ class BukatsuConnectedTests(unittest.TestCase):
                 self.assertEqual(len(reading.select("[data-bkt-reason]")), exp["reasons"], iid)
                 self.assertEqual(len(reading.select("[data-bkt-claim]")), exp["claims"], iid)
                 self.assertEqual(len(reading.select("[data-bkt-concern]")), exp["veins"], iid)
+                self.assertEqual(len(reading.select("[data-bkt-timeline]")), exp["timeline"], iid)
+                self.assertEqual("年表のどこが関係する？" in str(reading), exp["timeline"] > 0, iid)
 
     def test_coverage_note_is_suppressed_when_show_coverage_note_is_false(self):
         data = connected.planet_data(self.page)

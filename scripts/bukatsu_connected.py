@@ -1,9 +1,12 @@
-"""部活動の地域移行の連動表示（工程2: 土台／工程3: 読書面）。候補の目印があるページだけに適用する。
+"""部活動の地域移行の連動表示（工程2: 土台／工程3: 読書面／工程4: 年表接続・深いリンク統一）。
+候補の目印があるページだけに適用する。
 
 既存の静的本文（STANCE_GLANCE・bukatsu-background・bukatsu-check・PLANET_SECTION）を
-書き換えず、IDの接続表・バー↔山の状態共有・論点を選んだときの読書面（理由・投稿例・資料）を足す。
-件数や原稿の別コピーを正典にせず、ページ内のPLANET_DATA・#issue-cards・#fallbackを読む。
-年表・制度チェックの接続（工程4）と3論点から7論点への実機検証は、まだこのファイルの範囲外。
+書き換えず、IDの接続表・バー↔山の状態共有・論点を選んだときの読書面（理由・投稿例・資料・
+関係する年表）を足す。件数や原稿の別コピーを正典にせず、ページ内のPLANET_DATA・#issue-cards・
+#fallbackと、`data/verification/bukatsu-chiiki-background.json`のtimelineを読む。
+bukatsu-check(制度4項目)は今もissue_idsが無く接続対象外（オーナー確認は年表のみで完了、
+工程1の内容確定書の開いたままの課題）。
 """
 from __future__ import annotations
 
@@ -36,13 +39,23 @@ def planet_data(source: str) -> dict:
     return data
 
 
+def background_data() -> dict:
+    """`data/verification/bukatsu-chiiki-background.json`をそのまま返す。
+
+    工程4でオーナー確認のうえtimelineの6件全てにissue_idsを追加した（1件以上）。
+    別コピーを持たず、この1ファイルだけを正典とする。
+    """
+    path = ROOT / "data/verification/bukatsu-chiiki-background.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def content_index(data: dict) -> dict:
     """画面内の要素をIDで結ぶ。件数・原稿・確認日はPLANET_DATAに一元化する。
 
-    工程2の時点では年表・制度チェック（bukatsu-background/bukatsu-check）に
-    issue_ids が無いため接続しない（構造差分。工程4で連動させるか判断する）。
-    語られていない争点3件（sc-2/3/4）はnearest_issue_id未確定のまま。
-    テーマ全体の一覧（既存の#ocean）に残し、特定の論点へは推測で割り当てない。
+    bukatsu-check（制度4項目）は今もissue_idsが無く接続しない（工程1の内容確定書の
+    開いたままの課題、年表とは別扱い）。語られていない争点3件（sc-2/3/4）は
+    nearest_issue_id未確定のまま。テーマ全体の一覧（既存の#ocean）に残し、
+    特定の論点へは推測で割り当てない。
     """
     issues = data["issues"]
     issue_ids = {i["id"] for i in issues}
@@ -53,6 +66,11 @@ def content_index(data: dict) -> dict:
     stances = [{"id": s["id"], "mode_id": s["key"], "short_label": s["label"]} for s in data["stances"]]
     if {s["mode_id"] for s in stances} | {"all"} != modes:
         raise ValueError("連動表示: 立場と山の表示モードが一致しません")
+    background = background_data()
+    timeline = background["timeline"]
+    for item in timeline:
+        if not item.get("issue_ids") or set(item["issue_ids"]) - issue_ids:
+            raise ValueError(f"連動表示: 年表の接続先の論点が不明です: {item['id']}")
     result = {}
     for issue in issues:
         iid = issue["id"]
@@ -65,11 +83,13 @@ def content_index(data: dict) -> dict:
             "source_only_ids": [x["id"] for x in data["ocean"]["sunk_continents"]
                                 if x.get("nearest_issue_id") == iid],
             "shared_concern_ids": list(issue.get("veins", [])),
+            "timeline_ids": [t["id"] for t in timeline if iid in t["issue_ids"]],
         }
     return {
         "schema": 1, "theme_id": TOPIC,
         "stances": stances, "issues": result,
         "scope_note": "理由の分類・投稿例・資料は、この論点全体の内容です。",
+        "background_checked_on": background["checked_on"],
     }
 
 
@@ -161,7 +181,7 @@ def validate(source: str) -> list[str]:
             continue
         reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
         for key, attr in (("claim_ids", "data-bkt-claim"), ("source_only_ids", "data-bkt-source-only"),
-                          ("shared_concern_ids", "data-bkt-concern")):
+                          ("shared_concern_ids", "data-bkt-concern"), ("timeline_ids", "data-bkt-timeline")):
             found = [el.get(attr) for el in reading.select("[" + attr + "]")]
             if found != connection[key]:
                 problems.append(f"読書面の接続が一致しません: {iid} {key}")
