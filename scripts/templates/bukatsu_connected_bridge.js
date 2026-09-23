@@ -1,7 +1,8 @@
 // バー↔山の立場共有（工程2）、論点を選んだときの読書面（工程3）、
 // 立場を切り替えたときの山の滑らかな変化・初期表示の自動選択・予想2問②からの論点移動
-// （工程3後追い、tax版の考え方を移植）。
-// land/orbit/buildGuesses自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
+// （工程3後追い、tax版の考え方を移植）、深いリンクの統一・クイズからの論点移動・
+// 潮目カードへの軽い導線・論点表示と出典操作の計測（工程4）。
+// land/orbit/buildGuesses/buildQuiz自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
 (function(){
   // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
   // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
@@ -83,6 +84,22 @@
     panel.innerHTML = '';
     panel.appendChild(tpl.content.cloneNode(true));
     fillMetrics(panel, issues[idIndex[id]]);
+    // 潮目カードは山なみの外（PLANET_SECTIONの外）に独立して存在し、update_bukatsu_tide.py が
+    // 更新のたびに実データで作り直す（固定値ではない）。中身を複製せず、既存の「論点の変化」
+    // タブを開かせて現物へ導くだけにする。
+    var tideWidget = document.getElementById('bukatsu-tide-widget');
+    if (tideWidget){
+      var tideLink = document.createElement('button');
+      tideLink.type = 'button';
+      tideLink.className = 'bkt-guess-link bkt-tide-link';
+      tideLink.textContent = '潮目カードで論点の変化を見る ↓';
+      tideLink.addEventListener('click', function(){
+        var tab = tideWidget.querySelector('[data-tide-mode="issue"]');
+        if (tab) tab.click();
+        tideWidget.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'});
+      });
+      panel.appendChild(tideLink);
+    }
     var back = document.createElement('button');
     back.type = 'button'; back.className = 'back'; back.id = 'back';
     back.textContent = '← 論点の一覧へ戻る（Esc）';
@@ -91,9 +108,32 @@
     // 図解の拡大は、既存のdocument委譲ハンドラ（.explainer-card[data-img]監視）が
     // そのまま拾う。ここで別のlistenerを足す必要はない。
   }
+  // ---------- 工程4: 論点表示・出典操作の計測 ----------
+  // GA4本体（gtag）はGA_TAG_START〜ENDのshimが本番ホストでだけ動く前提のため、無い環境
+  // （ローカル確認等）では何もしない。再描画のたびに送らないよう、直前に送った論点idと
+  // 比較する（立場切替でdrawPanelが同じ論点を再描画しても送り直さない）。閲覧者が選んだ
+  // 立場・自由記述は送らない。送るのはissue_idと、押した出典リンクの行き先URLだけ。
+  var lastTrackedIssue = null;
+  function trackIssueView(id){
+    if (typeof window.gtag !== 'function' || id === lastTrackedIssue) return;
+    lastTrackedIssue = id;
+    window.gtag('event', 'issue_view', {issue_id: id});
+  }
+  var panelEl = document.getElementById('panel');
+  if (panelEl){
+    panelEl.addEventListener('click', function(e){
+      var a = e.target.closest('a[target="_blank"]');
+      if (!a || typeof window.gtag !== 'function') return;
+      window.gtag('event', 'citation_click', {
+        issue_id: st.landed === null ? null : issues[st.landed].id,
+        outbound_url: a.href
+      });
+    });
+  }
   drawPanel = function(){
     if (st.landed === null) { legacyDrawPanel(); return; }
     var id = issues[st.landed].id;
+    trackIssueView(id);
     if (!readingTemplateFor(id)) { legacyDrawPanel(); return; }
     renderReading(id);
   };
@@ -166,29 +206,54 @@
     if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
   };
 
-  // ---------- 初期表示: 件数最多の論点を、画面を動かさずに選んだ状態で開始する ----------
+  // ---------- 初期表示・深いリンクの統一（工程4） ----------
   // land()自体（クリック時に該当箇所へ画面を運ぶ、オーナー指摘2026-09-10/09-19で追加した
-  // 動き）は変えない。ページを開いた直後はまだどこも見ていないため運ぶ先が無く、
-  // bringIntoView()を今回の1回だけ何もしない関数に差し替えて元に戻す（land()の
-  // 中身を複製しない）。URLのhashで論点が指定されている場合は既存initが処理するため触らない。
+  // 動き）は変えない。画面を動かさず状態だけ変えたい場面（初期表示・issue-cardsや授業節の
+  // 既存アンカー・ブラウザの戻る/進む）では、bringIntoView()を一時的に何もしない関数へ
+  // 差し替えてland()を呼び、直後に戻す（land()の中身は複製しない）。
+  function landSilently(i){
+    var real = bringIntoView;
+    bringIntoView = function(){};
+    land(i);
+    bringIntoView = real;
+  }
+  // land()が書くhashは論点の生id（例: #bukatsu-chiiki-kyoin）だが、issue-cards・授業節の
+  // 既存リンクは別の名前空間（例: #issue-bukatsu-chiiki-kyoin、Xの投稿カード側のid）を
+  // 使っている。両方を同じ論点選択へ正規化する。
+  function issueIdFromHash(){
+    var h = location.hash.slice(1);
+    if (!h) return null;
+    if (idIndex[h] !== undefined) return h;
+    if (h.indexOf('issue-') === 0 && idIndex[h.slice(6)] !== undefined) return h.slice(6);
+    return null;
+  }
   // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
   // setTimeout(0)は大きなページだとパース完了より先に発火することがあるため使わず、
   // DOMContentLoaded（このscript自体は常にその前に実行されるため、必ず後で発火する）を待つ。
-  function autoLandOnTopIssue(){
-    if (st.landed !== null || location.hash) return;
-    var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
-    var realBringIntoView = bringIntoView;
-    bringIntoView = function(){};
-    land(idIndex[top.id]);
-    bringIntoView = realBringIntoView;
-  }
-  if (!location.hash){
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', autoLandOnTopIssue, {once: true});
-    } else {
-      autoLandOnTopIssue();
+  function initialLand(){
+    if (st.landed !== null) return;  // 素のhashは既存initが既に処理済み
+    var id = issueIdFromHash();
+    if (id !== null){ landSilently(idIndex[id]); return; }
+    if (!location.hash){
+      var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
+      landSilently(idIndex[top.id]);
     }
   }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialLand, {once: true});
+  } else {
+    initialLand();
+  }
+  // issue-cardsの戻りリンク・授業節の論点リンクも、ブラウザの戻る/進むも、最終的には
+  // hashの変化として届く。1箇所で拾い、同じ論点選択へつなぐ。論点に無関係なhash
+  // （#planet-block・#vote-section等）は無視して今の選択状態を保つ（issue-cardsの
+  // 「↑ 地図へ戻る」を押しても、読んでいた論点の読書面が消えないように）。
+  window.addEventListener('hashchange', function(){
+    var h = location.hash.slice(1);
+    if (!h){ if (st.landed !== null) orbit(); return; }
+    var id = issueIdFromHash();
+    if (id !== null && (st.landed === null || issues[st.landed].id !== id)) landSilently(idIndex[id]);
+  });
 
   // ---------- 予想2問（②強い表現がいちばん多い論点）の答えから、該当の山へ移動 ----------
   // buildGuesses()自体は上書きしない（①②の文言・正誤判定は既存のまま）。#guesses
@@ -215,6 +280,37 @@
       link.textContent = 'この論点の山を見る ↓';
       link.addEventListener('click', function(){ land(idIndex[target.id]); });
       answerBox.appendChild(link);
+    });
+  }
+
+  // ---------- 予想クイズ・一次資料クイズの答えから、関係する論点の山へ移動 ----------
+  // buildQuiz()自体は上書きしない。#quiz（buildQuiz()実行前は空の入れ物）への委譲で、
+  // 答えが開いた直後（buildQuiz()自身のclick listenerが先に走った後、bubblingで#quizへ
+  // 届く時点）にだけ動く。どの問題かはqi（buildQuiz()のクロージャ内）を再計算せず、
+  // 既に表示された問題文「「主張」」をD.claims[].claimと照合してclaim idを求め、
+  // issues[].claims[]にそのidを含む論点（0〜2件。例: national-fundingは制度・費用の2論点）
+  // へリンクを作る。答え文自体には論点名が出ないため（予想クイズと違い）、リンクの文言に
+  // 論点名を明示する。
+  var quizBox = document.getElementById('quiz');
+  if (quizBox){
+    quizBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var qclaim = quizBox.querySelector('.qclaim');
+      var qans = quizBox.querySelector('.qans');
+      if (!qclaim || !qans || qans.querySelector('.bkt-quiz-link')) return;
+      var m = qclaim.textContent.match(/「([\s\S]+)」/);
+      var claim = m && D.claims.find(function(c){ return c.claim === m[1]; });
+      if (!claim) return;
+      issues.filter(function(it){
+        return (it.claims || []).some(function(c){ return c.id === claim.id; });
+      }).forEach(function(target){
+        var link = document.createElement('button');
+        link.type = 'button';
+        link.className = 'bkt-guess-link bkt-quiz-link';
+        link.textContent = 'この論点の山を見る：' + target.label + ' ↓';
+        link.addEventListener('click', function(){ land(idIndex[target.id]); });
+        qans.appendChild(link);
+      });
     });
   }
 
