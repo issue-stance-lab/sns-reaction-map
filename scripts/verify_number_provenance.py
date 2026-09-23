@@ -79,6 +79,7 @@ except ImportError:  # python3 scripts/verify_number_provenance.py
 COUNT_PROVENANCE_MODULES = {
     "consumption-tax-cut": "consumption_tax_count_provenance",
     "bukatsu-chiiki": "scripts.bukatsu_count_provenance",
+    "ai-copyright": "ai_copyright_count_provenance",
 }
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
