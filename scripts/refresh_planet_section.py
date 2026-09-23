@@ -714,6 +714,11 @@ def _apply_connected_display(topic: str, html: str) -> str:
             sys.path.insert(0, str(ROOT))
         from scripts.bukatsu_connected import apply as connect_page
         return connect_page(html, topic=topic)
+    if topic == "ai-copyright":
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.ai_copyright_connected import apply as connect_page
+        return connect_page(html, topic=topic)
     return html
 
 

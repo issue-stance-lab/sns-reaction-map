@@ -45,6 +45,9 @@ def _run_builder(root: Path, candidate: Path, template: Path, page: Path, data: 
         cwd=root,
         check=True,
     )
+    from scripts.ai_copyright_connected import TOPIC as CONNECTED_TOPIC, apply as connect_page
+    text = connect_page(page.read_text(encoding="utf-8"), topic=CONNECTED_TOPIC)
+    page.write_text(text, encoding="utf-8")
 
 
 def finalize(root: Path, current_date: str) -> None:
