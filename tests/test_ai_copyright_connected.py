@@ -1,9 +1,8 @@
-"""生成AIと著作権の連動表示（工程2: 土台）の接続・冪等性検査。
+"""生成AIと著作権の連動表示（工程2: 土台／工程3: 読書面）の接続・冪等性検査。
 
-読書面（`<template>`生成・#panel差し替え）は工程3で追加するため、ここでは
 data/verification/ai-copyright-background.jsonとの接続表・バー↔山の状態共有・
-冪等性だけを見る。bukatsu-chiikiのtest_bukatsu_connected.pyと同じ観点だが、
-論点を選んだときの読書面に関する検査は含まない（content.pyがまだ無い）。
+論点を選んだときの読書面（`<template>`生成・接続の一致）・冪等性を見る。
+bukatsu-chiikiのtest_bukatsu_connected.pyと同じ観点。
 """
 import copy
 import json
@@ -37,12 +36,17 @@ class AiCopyrightConnectedTests(unittest.TestCase):
             self.assertEqual(connected.apply(text, activate=True, topic=path.stem), text)
 
     def test_same_input_does_not_accumulate_assets_or_bridges(self):
+        from scripts.ai_copyright_connected_content import START as CONTENT_START, END as CONTENT_END
+
         self.assertEqual(connected.apply(self.page), self.page)
         self.assertEqual(self.page.count(connected.START), 1)
         self.assertEqual(self.page.count(connected.END), 1)
         self.assertEqual(self.page.count(connected.BRIDGE_START), 1)
         self.assertEqual(self.page.count(connected.BRIDGE_END), 1)
         self.assertEqual(self.page.count(connected.CSS_HREF), 1)
+        self.assertEqual(self.page.count(connected.JS_SRC), 1)
+        self.assertEqual(self.page.count(CONTENT_START), 1)
+        self.assertEqual(self.page.count(CONTENT_END), 1)
         self.assertEqual(connected.validate(self.page), [])
 
     def test_reapplying_to_an_already_enabled_page_replaces_the_block_in_place(self):
@@ -198,6 +202,107 @@ class AiCopyrightConnectedTests(unittest.TestCase):
             self.assertEqual(len(published_stances), 3, label)
             self.assertEqual(len(published_issues) * len(published_stances), VOTE_CHOICES, label)
             self.assertIn("choiceIdx:selIssue*STANCES.length+stanceIdx", html.replace(" ", ""), label)
+
+    def test_reading_template_exists_for_every_issue(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        data = connected.planet_data(self.page)
+        for issue in data["issues"]:
+            tpl = soup.select_one("#ai-copyright-reading-" + issue["id"])
+            self.assertIsNotNone(tpl, issue["id"])
+            self.assertEqual(tpl.name, "template", issue["id"])
+
+    def test_unreviewed_issue_shows_empty_reasons_note_not_fabricated_categories(self):
+        # 工程1確認のとおり、利用者モラル・倫理と法制度・規制整備は未再読。
+        # 理由の内訳を作らず、既存のnoteだけを表示することを確認する。
+        soup = BeautifulSoup(self.page, "html.parser")
+        data = connected.planet_data(self.page)
+        by_id = {i["id"]: i for i in data["issues"]}
+        for iid in ("ai-copyright-user-ethics", "ai-copyright-legal-framework"):
+            self.assertEqual(by_id[iid]["sub"]["status"], "not_reviewed", iid)
+            tpl = soup.select_one("#ai-copyright-reading-" + iid)
+            reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+            self.assertIsNone(reading.select_one(".aic-reasons"), iid)
+            empty = reading.select_one(".aic-empty")
+            self.assertIsNotNone(empty, iid)
+            self.assertIn(by_id[iid]["sub"]["note"], empty.get_text(), iid)
+
+    def test_reviewed_issue_shows_reason_breakdown_matching_source_data(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        data = connected.planet_data(self.page)
+        by_id = {i["id"]: i for i in data["issues"]}
+        issue = by_id["ai-copyright-learning-data"]
+        self.assertEqual(issue["sub"]["status"], "reread")
+        tpl = soup.select_one("#ai-copyright-reading-ai-copyright-learning-data")
+        reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+        rows = reading.select(".aic-reasons li")
+        self.assertEqual(len(rows), len(issue["sub"]["items"]))
+        top_item = issue["sub"]["items"][0]
+        self.assertIn(top_item["label"], rows[0].get_text())
+        self.assertIn(f'{top_item["count"]:,}', rows[0].get_text())
+
+    def test_post_examples_extracted_from_issue_cards_for_every_issue(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        data = connected.planet_data(self.page)
+        issue_cards = soup.select_one("#issue-cards")
+        for issue in data["issues"]:
+            iid = issue["id"]
+            tpl = soup.select_one("#ai-copyright-reading-" + iid)
+            reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+            posts = reading.select("[data-aic-post-url]")
+            article = issue_cards.select_one("#issue-" + iid)
+            expected_urls = [a["href"] for a in article.select(".hermes-sample blockquote a[href]")]
+            self.assertEqual([p["data-aic-post-url"] for p in posts], expected_urls, iid)
+
+    def test_check_items_render_with_label_ask_and_finding(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        background = connected.background_data()
+        checklist = {c["id"]: c for c in background["checklist"]["items"]}
+        tpl = soup.select_one("#ai-copyright-reading-ai-copyright-learning-data")
+        reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+        checks = reading.select("[data-aic-check]")
+        self.assertEqual({c["data-aic-check"] for c in checks}, {"gakushu", "kaiji"})
+        for node in checks:
+            c = checklist[node["data-aic-check"]]
+            text = node.get_text()
+            self.assertIn(c["label"], text)
+            self.assertIn(c["ask"], text)
+            self.assertIn(c["found"], text)
+
+    def test_claim_items_render_with_verdict_and_finding(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        data = connected.planet_data(self.page)
+        claims = {c["id"]: c for c in data["claims"]}
+        tpl = soup.select_one("#ai-copyright-reading-ai-copyright-learning-data")
+        reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+        nodes = reading.select("[data-aic-claim]")
+        self.assertTrue(nodes)
+        for node in nodes:
+            c = claims[node["data-aic-claim"]]
+            text = node.get_text()
+            self.assertIn(c["claim"], text)
+            self.assertIn(c["verdict_label"], text)
+            self.assertIn(c["finding"], text)
+        # 1件目はopen属性つき（最初から開いている）。
+        self.assertIsNotNone(nodes[0].get("open"))
+
+    def test_landing_image_resolved_for_every_issue(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        data = connected.planet_data(self.page)
+        for issue in data["issues"]:
+            tpl = soup.select_one("#ai-copyright-reading-" + issue["id"])
+            reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
+            action = reading.select_one(".aic-image-action")
+            self.assertIsNotNone(action, issue["id"])
+            self.assertTrue(action["data-img"].startswith("images/topics/ai-copyright/"), issue["id"])
+
+    def test_missing_issue_cards_article_raises(self):
+        from scripts.ai_copyright_connected_content import render_templates
+
+        data = connected.planet_data(self.page)
+        index = connected.content_index(data)
+        broken = self.original.replace('id="issue-ai-copyright-learning-data"', 'id="moved"')
+        with self.assertRaises(ValueError):
+            render_templates(data, broken, index)
 
 
 if __name__ == "__main__":
