@@ -66,6 +66,52 @@
 
   document.body.classList.add('bukatsu-connected');
 
+  // 山のSVGは固定900×500のviewBoxのまま（海面下の演出をCSSで隠すだけ）なので、
+  // CSSでheightだけ縮めると、山の描画（TOP〜SEA）は空いた下半分ごと一律に縮み、
+  // 消費税より小さく見える。実際に描かれた範囲（getBBox）に合わせてviewBoxを切り直し、
+  // 縦横比をCSSの表示枠に合わせて引き伸ばす（内部の描画処理そのものは変更しない）。
+  // render()はsvg.innerHTMLだけを毎回作り直し、viewBox属性自体には触れない
+  // （縦の描画範囲はTOP/SEAの定数で固定、立場・論点を変えても動かない）ため、
+  // 最初の描画後に一度だけ切り直せば、以降のすべての再描画でも有効なまま残る。
+  var section = document.getElementById('section');
+  if (section) {
+    var box;
+    try { box = section.getBBox(); } catch (_) { box = null; }
+    if (box && box.height) {
+      var padTop = 6, padBottom = 6;
+      section.setAttribute('viewBox', '0 ' + Math.max(0, box.y - padTop) + ' 900 ' + (box.height + padTop + padBottom));
+      section.setAttribute('preserveAspectRatio', 'none');
+    }
+  }
+
+  // ---------- 理由の立場別内訳（工程3後追い、2026-09-23、オーナー依頼） ----------
+  // data-bkt-counts/pctsは論点ごとの読書面テンプレートに埋め込み済み（"all"は必ずある。
+  // 立場idは生データにstanceが無い論点では省かれる＝その論点は「すべて」のまま変わらない）。
+  function applyStanceToReasons() {
+    var state = map.getState();
+    var stance = data.stances.find(function (s) { return s.id === state.stanceId; });
+    var modeKey = stance ? stance.key : 'all';
+    panel.querySelectorAll('[data-bkt-counts]').forEach(function (li) {
+      var counts, pcts;
+      try {
+        counts = JSON.parse(li.dataset.bktCounts);
+        pcts = JSON.parse(li.dataset.bktPcts);
+      } catch (_) { return; }
+      var n = Object.prototype.hasOwnProperty.call(counts, modeKey) ? counts[modeKey] : counts.all;
+      var pct = Object.prototype.hasOwnProperty.call(pcts, modeKey) ? pcts[modeKey] : pcts.all;
+      var b = li.querySelector('.bkt-reason-row b');
+      if (b) {
+        b.textContent = fmt(n);
+        var small = document.createElement('small'); small.textContent = '件';
+        b.appendChild(small);
+      }
+      var track = li.querySelector('.bkt-reason-track i');
+      if (track) track.style.width = pct + '%';
+    });
+  }
+  new MutationObserver(applyStanceToReasons).observe(panel, { childList: true });
+  applyStanceToReasons();
+
   // 開いた理由・投稿カードのXカードだけ読み込む。元の投稿リンクは常に残す。
   var embedSources = new WeakMap();
   function loadEmbeds() {

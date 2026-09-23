@@ -57,12 +57,31 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
             raise ValueError('再読記録が論点の母数を超えています: ' + issue['id'])
         if gap:
             items['__unread__'] = {'label': 'まだ読み直していない分', 'count': gap}
+        # 立場別の内訳（data-bkt-counts）は、生データにstanceが付いている論点の通常の理由行だけ
+        # 照合する（制度・移行プロセス・教育的意義・機会は立場が無く対象外。__unread__の立場別内訳は
+        # 論点の立場別母数の再算出が要り、ここでの独立再計算はbuild_planet_data.py側の内部一致検査に譲る）。
+        has_stance = bool(records) and all('stance' in r for r in records)
+        stance_keys = [s['key'] for s in cfg['stances']] if has_stance else []
         for bid, item in items.items():
             element_id = f'bkt-reason-count-{issue["id"]}-{bid}'
             node = verify(element_id, f'{item["count"]:,}件', sc['file'] + ' / ' + '/'.join(sc['path']) + ' / ' + bid)
             label = node.find_previous_sibling('span')
             if label is None or label.get_text(types=None) != item['label']:
                 raise ValueError('再読分類のラベルが元記録と一致しません: ' + element_id)
+            if not has_stance or bid == '__unread__':
+                continue
+            # data-bkt-countsはnode（<b>、idで論点まで一意）の祖先<li>にある。
+            # data-bkt-reason属性値（バケット文字）は論点をまたいで使い回されるため単独では検索しない。
+            expected = {'all': item['count'], **{
+                sk: sum(1 for r in records if r['bucket'] == bid and r['stance'] == sk) for sk in stance_keys
+            }}
+            li = node.find_parent('li')
+            try:
+                actual_counts = json.loads(li['data-bkt-counts']) if li else None
+            except (KeyError, TypeError, ValueError):
+                actual_counts = None
+            if actual_counts != expected:
+                raise ValueError(f'連動表示の理由の立場別内訳が元記録と一致しません: {element_id}')
 
     path = 'data/verification/bukatsu-chiiki-veins.json'
     for item in read(path)['items']:
