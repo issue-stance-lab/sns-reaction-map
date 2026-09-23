@@ -32,9 +32,17 @@
   list.setAttribute('aria-label', '論点を切り替える');
   panel.before(list);
 
+  // bar.before(mountain)だけでは、barは元の位置（山より後ろ、テーマによっては遠く離れた
+  // 場所）に取り残される。参照実装（docs/consumption-tax-connected.js）と同じく、barを
+  // 山の中（#modesの直前）へ移し、内訳の棒グラフ→立場ボタン→山を隙間なく一続きにする
+  // （V02。工程5の比較で発見・修正）。
+  var modes = document.getElementById('modes');
+  modes.before(bar);
+  var sgHeadline = bar.querySelector('.sg-headline');
+  if (sgHeadline) sgHeadline.hidden = true; // 内訳の件数は下の棒グラフ自体が示すため重複を隠す
+
   // #modesの中身を、立場名・件数・割合が見える形へ作り直す（buildModes()自体は上書きしない。
   // #modesはbuildModes()実行後に呼ばれるこのIIFEより先に中身が入っている）。
-  var modes = document.getElementById('modes');
   modes.querySelectorAll('button').forEach(function (button) {
     var mode = data.modes.find(function (m) { return m.id === button.dataset.m; });
     if (!mode) return;
