@@ -1,7 +1,8 @@
 // バー↔山の立場共有（工程2）、論点を選んだときの読書面（工程3）、
 // 立場を切り替えたときの山の滑らかな変化・初期表示の自動選択・予想2問②からの論点移動
 // （工程3後追い、tax版の考え方を移植）、深いリンクの統一・クイズからの論点移動・
-// 潮目カードへの軽い導線・論点表示と出典操作の計測（工程4）。
+// 論点表示と出典操作の計測（工程4）。潮目カードへのリンクは消費税版・計画書のどちらにも
+// 前例が無い独自追加と判明したため一度追加して削除した（オーナー指摘、2026-09-23）。
 // land/orbit/buildGuesses/buildQuiz自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
 (function(){
   // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
@@ -84,22 +85,6 @@
     panel.innerHTML = '';
     panel.appendChild(tpl.content.cloneNode(true));
     fillMetrics(panel, issues[idIndex[id]]);
-    // 潮目カードは山なみの外（PLANET_SECTIONの外）に独立して存在し、update_bukatsu_tide.py が
-    // 更新のたびに実データで作り直す（固定値ではない）。中身を複製せず、既存の「論点の変化」
-    // タブを開かせて現物へ導くだけにする。
-    var tideWidget = document.getElementById('bukatsu-tide-widget');
-    if (tideWidget){
-      var tideLink = document.createElement('button');
-      tideLink.type = 'button';
-      tideLink.className = 'bkt-guess-link bkt-tide-link';
-      tideLink.textContent = '潮目カードで論点の変化を見る ↓';
-      tideLink.addEventListener('click', function(){
-        var tab = tideWidget.querySelector('[data-tide-mode="issue"]');
-        if (tab) tab.click();
-        tideWidget.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'});
-      });
-      panel.appendChild(tideLink);
-    }
     var back = document.createElement('button');
     back.type = 'button'; back.className = 'back'; back.id = 'back';
     back.textContent = '← 論点の一覧へ戻る（Esc）';
