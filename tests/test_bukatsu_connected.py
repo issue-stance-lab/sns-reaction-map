@@ -38,7 +38,9 @@ class BukatsuConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.END), 1)
         self.assertEqual(self.page.count(connected.BRIDGE_START), 1)
         self.assertEqual(self.page.count(connected.BRIDGE_END), 1)
-        self.assertEqual(self.page.count('bukatsu-connected.css?v=1'), 1)
+        self.assertEqual(self.page.count('bukatsu-connected.css?v=2'), 1)
+        self.assertEqual(self.page.count('bukatsu-connected.js?v=1'), 1)
+        self.assertEqual(self.page.count('bukatsu-connected-page.js?v=1'), 1)
         self.assertEqual(connected.validate(self.page), [])
 
     def test_reapplying_to_an_already_enabled_page_replaces_the_block_in_place(self):

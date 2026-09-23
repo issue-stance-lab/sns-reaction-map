@@ -56,3 +56,125 @@
 @media (prefers-reduced-motion:reduce){
   #panel .bkt-reason-track i{ transition:none; }
 }
+
+/* ここから工程3・4後追い（2026-09-23）。消費税のconsumption-tax-connected.cssに合わせた
+   ページ全体の配置・縮小・旧セクション非表示。.bukatsu-connectedはbukatsu-connected.jsが
+   付与する。山の配色・海面下（dive/seafloor/seacover）の仕組みはbukatsu独自の表現として
+   維持し、tax版の単色化には寄せない（工程3で決めた配色2系統のうち、部活は論点ごとの
+   立場色を採用済みと判断）。 */
+.bukatsu-connected #planet-block { color:#172033; }
+.bukatsu-connected #planet-block .stage { display:flex; flex-direction:column; gap:0; }
+.bukatsu-connected #planet-block .chart-box { order:0; position:relative; width:100%; margin:0; padding:0; border:0; border-radius:0; box-sizing:border-box; background:#fff; }
+.bukatsu-connected #planet-block .chart-box #section { width:100%; height:210px; max-height:none; margin-bottom:0; display:block; }
+.bukatsu-connected #planet-block .chart-box .dive,
+.bukatsu-connected #planet-block .chart-box #seafloor,
+.bukatsu-connected #planet-block .chart-box #seacover { display:none; }
+.bukatsu-connected #planet-block .chart-box .hint { margin:10px 0 0; font-size:12px; color:#53647d; }
+.bukatsu-connected #planet-block .floor-note { margin:5px 0 0; font-size:11px; color:#637089; }
+.bukatsu-connected #planet-block .tap-hint { display:none; }
+.bukatsu-connected #planet-block #modes { display:grid; align-items:stretch; grid-template-columns:repeat(5,minmax(0,1fr)); margin:10px 0 0; gap:7px; scroll-margin-top:125px; }
+.bukatsu-connected #planet-block #modes button { display:block; width:100%; font:inherit; font-size:12px; text-align:left; padding:10px; min-height:64px; border:1px solid var(--bkt-rule); border-radius:8px; background:#fff; color:#172033; box-shadow:none; margin:0; transform:none; transition:none; }
+.bukatsu-connected #planet-block #modes .bkt-mode-name { display:block; margin-bottom:3px; }
+.bukatsu-connected #planet-block #modes .sg-pick-btn .bkt-mode-name::before { content:''; display:inline-block; width:7px; height:7px; margin-right:6px; border-radius:50%; background:var(--bkt-stance-color); }
+.bukatsu-connected #planet-block #modes strong { font-size:17px; font-variant-numeric:tabular-nums; }
+.bukatsu-connected #planet-block #modes small { font-size:11px; font-weight:400; opacity:.85; }
+.bukatsu-connected #planet-block #modes button[aria-pressed="true"],
+.bukatsu-connected #planet-block #list button[aria-pressed="true"] { color:#fff; background:#172033; border-color:#172033; box-shadow:none; }
+.bukatsu-connected #planet-block #list { order:1; width:100%; max-width:none; box-sizing:border-box; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin:14px 0 22px; padding:0; list-style:none; border:0; background:transparent; }
+.bukatsu-connected #planet-block #list li { min-width:0; margin:0; }
+.bukatsu-connected #planet-block #list button { width:100%; height:100%; box-sizing:border-box; padding:9px 10px; font:inherit; font-size:12px; font-weight:400; text-align:left; line-height:1.5; border:1px solid var(--bkt-rule); border-radius:7px; color:#172033; background:#fff; box-shadow:none; transition:none; }
+.bukatsu-connected #planet-block #list .m { display:block; margin:2px 0 0; font-size:11px; color:#667085; }
+.bukatsu-connected #planet-block #panel { order:2; width:100%; box-sizing:border-box; padding:24px 0 0 !important; margin:0 !important; border:0 !important; border-top:3px solid var(--accent,#075ef2) !important; border-radius:0 !important; background:#fff; box-shadow:none !important; }
+.bukatsu-connected #planet-block > .panel-title h2 { font-size:23px; }
+.bukatsu-connected #planet-block #caution { margin:12px 0; font-size:11px; line-height:1.75; }
+.bukatsu-connected #modes button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+.bukatsu-connected #planet-block #panel :focus-visible, .bukatsu-connected #list button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+@media screen {
+  /* bukatsu-checkは論点idのタグ付けが無く（工程1の内容確定書の未解決事項）論点側に
+     統合先が無いため、ここでは隠さず通常表示のまま残す（claim-audit/issue-cards/oceanは
+     論点の読書面へ統合済みなので隠す）。 */
+  .bukatsu-connected #bukatsu-chiiki-audit, .bukatsu-connected #issue-cards,
+  .bukatsu-connected #ocean { display:none; }
+}
+@media (max-width:760px) {
+  .bukatsu-connected #planet-block #panel { padding:20px 0 0 !important; }
+  .bukatsu-connected #planet-block #list { grid-template-columns:repeat(2,minmax(0,1fr)); padding:0; }
+  .bukatsu-connected #planet-block #modes { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bukatsu-connected #planet-block #modes small { display:block; margin-top:2px; line-height:1.3; }
+  .bukatsu-connected #planet-block #modes [data-m="all"] { grid-column:1 / -1; min-height:44px; display:flex; align-items:center; justify-content:space-between; }
+  .bukatsu-connected #planet-block .chart-box { padding:0; }
+  .bukatsu-connected #planet-block > .panel-title h2 { font-size:20px; }
+  .bukatsu-connected #planet-block #panel h2 { font-size:20px; }
+}
+@media (max-width:450px) {
+  .bukatsu-connected #planet-block .chart-box #section { height:180px; }
+}
+@media print {
+  .bukatsu-connected #planet-block #panel, .bukatsu-connected #list, .bukatsu-connected #modes { display:none !important; }
+  .bukatsu-connected #fallback { display:block !important; }
+}
+
+/* STANCE_GLANCEは#modesとの重複を解消したあとも山の直前に残す。凡例・見出しは#modes側と
+   二重になるため隠し、押下色の変化と結果文だけを見せる。 */
+/* #stance-glance .sg-pick-grid{display:grid}（同ページ内蔵CSS）と詳細度が同じため、
+   後勝ちに依存せずimportantで確実に隠す。 */
+.bukatsu-connected #stance-glance-buttons { display:none !important; }
+.bukatsu-connected #stance-glance .panel-title,
+.bukatsu-connected #stance-glance .sg-lead { display:none; }
+.bukatsu-connected #stance-glance-result-text { overflow-wrap:anywhere; }
+
+/* 工程4後追い: 予想2問の折りたたみ、年表タブ、制度確認の要約、資料3タブ。 */
+.bukatsu-connected .bkt-guesses { margin:16px 0; padding:12px 16px; background:var(--bkt-paper); border:1px solid var(--bkt-rule); border-radius:10px; }
+.bukatsu-connected .bkt-guesses > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.bukatsu-connected #guesses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.bukatsu-connected #guesses .guess { margin:0; }
+@media (max-width:760px) { .bukatsu-connected #guesses { grid-template-columns:1fr; } }
+
+.bukatsu-connected .bkt-status { margin:20px 0; padding:18px 22px; border-left:3px solid var(--accent,#075ef2); background:#fff; border-radius:0 10px 10px 0; }
+.bukatsu-connected .bkt-status p { margin:5px 0; font-size:13px; line-height:1.85; }
+.bukatsu-connected .bkt-status .bkt-eyebrow { font-size:11px; color:#637089; }
+.bukatsu-connected .bkt-status a { display:inline-block; margin-top:8px; font-size:12px; }
+.bukatsu-connected #bg-title, .bukatsu-connected #panel h2 { scroll-margin-top:120px; }
+.bukatsu-connected .bkt-timeline-nav { display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 14px; }
+.bukatsu-connected .bkt-timeline-nav button { flex:1; min-width:110px; padding:12px 8px; border:1px solid var(--bkt-rule); border-radius:7px; background:#fff; color:#172033; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.bukatsu-connected .bkt-timeline-nav [aria-selected="true"] { border-color:var(--accent,#075ef2); color:var(--accent,#075ef2); box-shadow:inset 0 -3px var(--accent,#075ef2); }
+.bukatsu-connected #bukatsu-background .bg-tl[hidden] { display:none !important; }
+.bukatsu-connected #bukatsu-background li[data-bkt-timeline-i][hidden] { display:none !important; }
+.bukatsu-connected .bkt-background-intro, .bukatsu-connected .bkt-fold { margin:18px 0; border-top:1px solid var(--bkt-rule); padding:14px 0; }
+.bukatsu-connected .bkt-background-intro > summary, .bukatsu-connected .bkt-fold > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.bukatsu-connected .bkt-comparison-note { font-size:12px; line-height:1.8; color:#637089; }
+.bukatsu-connected .bkt-evidence-controls { display:flex; gap:6px; margin:0 0 20px; }
+.bukatsu-connected .bkt-evidence-controls button, .bukatsu-connected #quiz button { border:1px solid var(--bkt-rule); border-radius:6px; background:#fff; color:#172033; font:inherit; font-size:12px; padding:9px 12px; cursor:pointer; }
+.bukatsu-connected .bkt-evidence-controls button { flex:1; min-width:0; padding:9px 7px; line-height:1.65; }
+.bukatsu-connected .bkt-evidence-controls [aria-pressed="true"] { color:var(--accent,#075ef2); border-color:var(--accent,#075ef2); background:var(--bkt-paper); font-weight:700; }
+.bukatsu-connected #planet-block #quiz { margin:0; padding:0; border:0; border-radius:0; background:transparent; }
+.bukatsu-connected #planet-block #quiz[hidden], .bukatsu-connected #planet-block .bkt-source-stories[hidden] { display:none !important; }
+.bukatsu-connected #planet-block #quiz .qh { display:flex; flex-wrap:wrap; gap:8px; font-size:11px; }
+.bukatsu-connected #planet-block #quiz .qclaim { font-size:18px; font-weight:700; }
+.bukatsu-connected #planet-block #quiz .bkt-quiz-note { font-size:11px; color:#637089; }
+.bukatsu-connected #planet-block #quiz .bkt-qopts { display:flex; flex-wrap:wrap; gap:8px; }
+.bukatsu-connected #planet-block #quiz .hit { border-color:#2f8f83; background:#e8f5f1; }
+.bukatsu-connected #planet-block #quiz .miss { border-color:#7d5ba6; background:#f3eef9; }
+.bukatsu-connected #planet-block #quiz .qnext { color:var(--accent,#075ef2); font-weight:700; margin-top:12px; }
+.bukatsu-connected #planet-block #panel .bkt-evidence-jump { display:none; }
+.bukatsu-connected :is(.bkt-timeline-nav,.bkt-evidence-controls,#quiz) button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+@media (max-width:760px) {
+  .bukatsu-connected .bkt-timeline-nav { gap:5px; }
+  .bukatsu-connected .bkt-timeline-nav button { font-size:11px; padding:12px 5px; min-width:80px; }
+  .bukatsu-connected #planet-block #panel .bkt-evidence-jump { display:block; margin:-12px 0 22px; padding:5px 0; border:0; background:transparent; color:var(--accent,#075ef2); font:inherit; font-size:12px; cursor:pointer; }
+}
+@media print {
+  body.bukatsu-connected * { visibility:visible; }
+  body.bukatsu-connected { background:#fff !important; font-size:11px; }
+  body.bukatsu-connected main { max-width:none; margin:0; padding:0; }
+  body.bukatsu-connected :is(.modern-site-header,.hero .top-nav,#progress,.share-x-fab,.bkt-status,.bkt-timeline-nav,.bkt-guesses,#modes,#list,.stage,#dotbox,#quiz,#vote-section,.bkt-evidence-controls,.bkt-evidence-jump,.classroom-print-btn,.cite-copy-wrap,.tide-widget-controls,.explainer-modal,footer,#fallback-nav,#fallback > .sub,.tap-hint) { display:none !important; }
+  body.bukatsu-connected #fallback { display:block !important; }
+  body.bukatsu-connected #fallback img { display:block; width:100%; height:auto; }
+  body.bukatsu-connected:not(.bkt-print-classroom) :is(#ocean,#bukatsu-chiiki-audit,#issue-cards) { display:block !important; }
+  body.bukatsu-connected li[data-bkt-timeline-i][hidden] { display:block !important; }
+  body.bukatsu-connected .classroom-section { position:static; width:auto; margin:0; padding:0; box-shadow:none; border:0; }
+  body.bukatsu-connected :is(.panel,.planet-panel,#fallback) { overflow:visible; box-shadow:none; }
+  body.bukatsu-connected.bkt-print-classroom main > :not(.classroom-section) { display:none !important; }
+  body.bukatsu-connected.bkt-print-classroom > :not(main) { display:none !important; }
+  body.bukatsu-connected.bkt-print-classroom .classroom-section { display:block !important; color:#172033; }
+}

@@ -119,8 +119,10 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = source.replace("</body>", content + "\n</body>", 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
-        START + '\n<link rel="stylesheet" href="bukatsu-connected.css?v=1">\n'
-        '<script id="bukatsu-connected-data" type="application/json">' + payload + '</script>\n' + END
+        START + '\n<link rel="stylesheet" href="bukatsu-connected.css?v=2">\n'
+        '<script id="bukatsu-connected-data" type="application/json">' + payload + '</script>\n'
+        '<script src="bukatsu-connected.js?v=1" defer></script>\n'
+        '<script src="bukatsu-connected-page.js?v=1" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -157,8 +159,14 @@ def validate(source: str) -> list[str]:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
     if source.count(CONTENT_START) != 1 or source.count(CONTENT_END) != 1:
         problems.append("読書面の目印が1組ではありません")
-    if len(soup.select('link[href="bukatsu-connected.css?v=1"]')) != 1:
+    if len(soup.select('link[href="bukatsu-connected.css?v=2"]')) != 1:
         problems.append("連動表示のCSSが1つではありません")
+    for selector, label in (
+        ('script[src="bukatsu-connected.js?v=1"][defer]', "ページ配置のJS"),
+        ('script[src="bukatsu-connected-page.js?v=1"][defer]', "資料タブ・年表のJS"),
+    ):
+        if len(soup.select(selector)) != 1:
+            problems.append(f"{label}が1つではありません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタン（STANCE_GLANCE）の並びが立場データと一致しません")
