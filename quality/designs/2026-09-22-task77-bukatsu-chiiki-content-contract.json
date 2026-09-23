@@ -1,0 +1,374 @@
+{
+  "theme_id": "bukatsu-chiiki",
+  "based_on_guide": "quality/designs/2026-09-22-task77-connected-layout-rollout-guide.md",
+  "recorded_on": "2026-09-22",
+  "recorded_by": "claude (工程1: 内容と配置)",
+  "before_state_baseline": {
+    "git_commit": "6b2de21a66e2b46dff554ed93b8aa8e0b97b122f",
+    "html_file": "docs/bukatsu-chiiki-reaction-map.html",
+    "html_sha256": "d36c533f52e6fe87ce8e1254aee87ead871e6cecace6d46c08e16319e310eaa5",
+    "html_bytes": 474003,
+    "sample_total": 1726,
+    "opinion_total": 1401,
+    "sample_period": "2026-06-27〜2026-09-21",
+    "updated_at": "2026-09-22",
+    "landing_images_dir": "docs/images/topics/bukatsu-chiiki/",
+    "landing_images": [
+      "bukatsu-chiiki-infographic-wide-kyoin-v2.webp",
+      "bukatsu-chiiki-infographic-wide-seido-v3.webp",
+      "bukatsu-chiiki-infographic-wide-kyoiku-v2.webp",
+      "bukatsu-chiiki-infographic-wide-ukesara-v2.webp",
+      "bukatsu-chiiki-infographic-wide-hiyou-v3.webp",
+      "bukatsu-chiiki-infographic-wide-kousa-v2.webp",
+      "bukatsu-chiiki-infographic-wide-sonota-v2.webp",
+      "bukatsu-hero.webp"
+    ],
+    "note": "kyoin/seido/kyoiku/ukesara/hiyou/kousa/sonotaの無印(-v2/-v3無し)ファイルも残存するが現行BUKATSU_LANDING_IMAGE_BY_ISSUE_IDはvN付きのみ参照。旧版とみられ、削除要否は本作業の対象外。"
+  },
+  "stances": {
+    "source_config": "configs/planet/bukatsu-chiiki.yaml",
+    "items": [
+      {"id": "bukatsu-chiiki-transition-support", "label": "移行支持", "color": "#2F8F83", "count": 541, "share_pct": 39},
+      {"id": "bukatsu-chiiki-cautious", "label": "慎重・反対", "color": "#7D5BA6", "count": 442, "share_pct": 32},
+      {"id": "bukatsu-chiiki-conditional", "label": "条件付き・改善要求", "color": "#D9A520", "count": 277, "share_pct": 20},
+      {"id": "bukatsu-chiiki-neutral", "label": "中立・情報", "color": "#8B9199", "count": 141, "share_pct": 10}
+    ],
+    "color_palette_warning": "2系統の配色が混在している。山・立場バー・升目・論点パネルはteal/purple/gold/gray（上記color列、configs/planet/bukatsu-chiiki.yaml）。投票ボタン・潮目カード・旧散布図はgreen/orange/red/gray（#059669系、configs/bukatsu-chiiki-reaction-map.jsonのarena_taxonomy.stances）。連動表示でどちらに寄せるか工程3で決める。tax同様、見本の色へサイト全体を変えないこと"
+  },
+  "vote": {
+    "data_vote_topic": "bukatsu-chiiki-issue-stance-v1",
+    "vote_section_id": "vote-section",
+    "flow": "2段階（1: 論点7択→2: 立場3択）。【訂正・確認済み】投票専用の立場は表示用4立場とは別物で3つ（反対・慎重／どちらでもない／賛成・推進）。taxの7×4=28通りと違い、bukatsu-chiikiは7×3=21通り",
+    "vote_issue_order_fixed": [
+      "費用・家庭負担", "受け皿・指導者", "教員の働き方", "教育的意義・機会",
+      "地域格差", "制度・移行プロセス", "その他"
+    ],
+    "vote_only_stances": [
+      {"key": "oppose", "label": "反対・慎重", "stance_idx": 0},
+      {"key": "neutral", "label": "どちらでもない", "stance_idx": 1},
+      {"key": "support", "label": "賛成・推進", "stance_idx": 2}
+    ],
+    "formula_confirmed": "choiceIdx = issueIdx * 3 + stanceIdx（0〜20）。issueIdxはVOTE_ISSUES＝vote_issue_orderの添字。HTML 3605-3656行で確認済み（工程1調査で確認、当初『未確認』としていたのを訂正）",
+    "storage_key": "sns_vote_bukatsu-chiiki-issue-stance-v1_my（localStorage、24時間重複防止）",
+    "dead_hook_note": "showVote()はwindow.setStanceMapVoteMarker(arenaIdx,color)を呼ぶが、この関数・#stance-map-section要素とも現ページに存在しない（旧2D散布図時代の投票→図連動フックの残骸、CSSのみ564-567行に残存）。新しい連動表示を作るなら、ここが元々の連動ポイントだったことが参考になる"
+  },
+  "issues": [
+    {
+      "id": "bukatsu-chiiki-kyoin",
+      "label": "教員の働き方",
+      "icon": "🏫",
+      "rank": 1,
+      "count": 401,
+      "share_pct": 28.6,
+      "landing_image": "kyoin-v2",
+      "reread": {
+        "coverage": "full",
+        "source_file": "data/bukatsu-chiiki_teacher-reread.json",
+        "read_at": "2026-08-24 / 2026-09-06（追記）",
+        "covered_items": 323,
+        "reason_buckets": [
+          {"id": "A", "label": "移しても教員の負担は減らない・むしろ増える", "count": 21},
+          {"id": "B", "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）", "count": 51},
+          {"id": "C", "label": "やりたい先生だけが担えばよい（移行ではなく任意化）", "count": 13},
+          {"id": "D", "label": "移行ではなく部活そのものを廃止すべき", "count": 7},
+          {"id": "E", "label": "移行や廃止で失われるものへの不安", "count": 15},
+          {"id": "F", "label": "その他（実態の訴え・分類が難しいもの）", "count": 34},
+          {"id": "G", "label": "外部委託・専門指導者への期待（指導の質向上を含む）", "count": 39},
+          {"id": "H", "label": "教員の負担軽減・本来業務や私生活の時間の回復への期待", "count": 23},
+          {"id": "I", "label": "少子化・人手不足による構造的必然性", "count": 15},
+          {"id": "J", "label": "無償労働・給特法・違法性の問題視", "count": 31},
+          {"id": "K", "label": "移行に反対する教員への批判（既得権益・自己満足という指摘）", "count": 21},
+          {"id": "L", "label": "地域移行にとどまらない部活動そのものの完全廃止を求める声", "count": 33},
+          {"id": "M", "label": "実際に移行・外部委託が進んだ現場からの肯定的な体験談・報告", "count": 7},
+          {"id": "N", "label": "その他（分類困難・皮肉・断片的な投稿）", "count": 3},
+          {"id": "P", "label": "顧問拒否の実践を発信するシリーズ投稿（啓発目的の定型文）", "count": 10}
+        ]
+      },
+      "existing_posts": [
+        {"summary": "授業に専念できる環境を求める", "handle": "@AtelierClutch", "url": "https://x.com/AtelierClutch/status/2082217044611834122"},
+        {"summary": "善意に頼らない仕組みを求める", "handle": "@Namenotblanko", "url": "https://x.com/Namenotblanko/status/2082969614196093400"}
+      ],
+      "claim_audit_ids_confirmed": ["kyushokuchoseigaku"],
+      "claim_audit_source": "data/public/themes/bukatsu-chiiki.jsonのclaim_verification.claims[].issue_idsで確認済み（当初『編集部推定』としていたが実際は機械可読タグが既にある。工程1調査中に訂正）",
+      "sunk_continent_ids": [],
+      "vein_ids": ["bukatsu-chiiki-vein-2"],
+      "institutional_check_items_inferred": [],
+      "timeline_ids": ["2026年度・令和8年度・いま（教職調整額4%→5%）"],
+      "timeline_note": "timelineは現状issue_idsで論点タグ付けされていない。この行は本文の話題から見た対応の目安であり機械可読な紐付けではない"
+    },
+    {
+      "id": "bukatsu-chiiki-seido",
+      "label": "制度・移行プロセス",
+      "icon": "📋",
+      "rank": 2,
+      "count": 314,
+      "share_pct": 22.4,
+      "landing_image": "seido-v3",
+      "reread": {
+        "coverage": "full",
+        "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
+        "path": ["plan_side", "buckets"],
+        "read_at": "2026-09-03（既存note制作時再読の変換、新規再読なし）",
+        "covered_items": 257,
+        "reason_buckets_note": "plan_sideとchild_sideは同一8分類の枠組みを共有し、件数だけが違う。理由IDは論点をまたいで再利用されるため『理由ID単体』ではなく『issue_id + bucket_id』で一意にすること",
+        "reason_buckets": [
+          {"id": "plan-blame", "label": "進まない理由を誰かの責任に帰す", "count": 74},
+          {"id": "plan-local", "label": "具体の自治体・計画・日程に触れる", "count": 39},
+          {"id": "plan-undecided", "label": "決まっていないことを指摘する", "count": 80},
+          {"id": "child-timing", "label": "いまの学年・時期の当事者として書く", "count": 5},
+          {"id": "child-loss", "label": "子どもの入り口・居場所が失われる懸念", "count": 2},
+          {"id": "child-value-doubt", "label": "部活の教育的意義そのものを疑う", "count": 8},
+          {"id": "child-gain", "label": "子どもの選択肢が増えることへの期待", "count": 2},
+          {"id": "other", "label": "上のどれにも当てはまらない", "count": 47}
+        ]
+      },
+      "existing_posts": [
+        {"summary": "公費と負担金の仕組みが必要", "handle": "@4ZYVNjQOkWBSoU8", "url": "https://x.com/4ZYVNjQOkWBSoU8/status/2085954870243426355"},
+        {"summary": "費用・場所・責任の設計が未解決", "handle": "@Goshiki2023", "url": "https://x.com/Goshiki2023/status/2078663825013031272"}
+      ],
+      "claim_audit_ids_confirmed": ["original-deadline", "national-funding"],
+      "claim_audit_source": "公開JSONで確認済み。national-fundingはhiyoと共有（issue_ids: [seido, hiyo]）。chutairen-entryはkyoiku側に確定しておりseidoではない（当初の推定を訂正）",
+      "sunk_continent_ids": [],
+      "vein_ids": ["bukatsu-chiiki-vein-2"],
+      "institutional_check_items_inferred": ["運営の責任（方針を決め、相談を受けるのは誰か）"],
+      "timeline_ids": ["2022年12月ガイドライン", "2025年12月新ガイドライン"],
+      "timeline_note": "同上（機械可読な紐付けなし、目安）"
+    },
+    {
+      "id": "bukatsu-chiiki-kyoiku",
+      "label": "教育的意義・機会",
+      "icon": "⭐",
+      "rank": 3,
+      "count": 256,
+      "share_pct": 18.3,
+      "landing_image": "kyoiku-v2",
+      "reread": {
+        "coverage": "full",
+        "source_file": "data/verification/bukatsu-chiiki-plan-child-subissues.json",
+        "path": ["child_side", "buckets"],
+        "read_at": "2026-09-03（既存note制作時再読の変換、新規再読なし）",
+        "covered_items": 215,
+        "reason_buckets_note": "seidoと同一8分類枠組みを共有。件数のみ異なる",
+        "reason_buckets": [
+          {"id": "plan-blame", "label": "進まない理由を誰かの責任に帰す", "count": 5},
+          {"id": "plan-local", "label": "具体の自治体・計画・日程に触れる", "count": 11},
+          {"id": "plan-undecided", "label": "決まっていないことを指摘する", "count": 5},
+          {"id": "child-timing", "label": "いまの学年・時期の当事者として書く", "count": 25},
+          {"id": "child-loss", "label": "子どもの入り口・居場所が失われる懸念", "count": 58},
+          {"id": "child-value-doubt", "label": "部活の教育的意義そのものを疑う", "count": 46},
+          {"id": "child-gain", "label": "子どもの選択肢が増えることへの期待", "count": 23},
+          {"id": "other", "label": "上のどれにも当てはまらない", "count": 42}
+        ]
+      },
+      "existing_posts": [
+        {"summary": "学校教育としての部活を残したい", "handle": "@ikuji_takuto", "url": "https://x.com/ikuji_takuto/status/2083492685223215132"},
+        {"summary": "生涯スポーツ・音楽につながる場にしたい", "handle": "@39Md8", "url": "https://x.com/39Md8/status/2082487864135393452"}
+      ],
+      "claim_audit_ids_confirmed": ["chutairen-entry"],
+      "claim_audit_source": "公開JSONで確認済み。当初seido側と推定していたが実際はkyoiku単独（訂正）",
+      "sunk_continent_ids": [],
+      "vein_ids": [],
+      "institutional_check_items_inferred": [],
+      "timeline_ids": [],
+      "timeline_note": "対応する年表項目なし（ギャップとして記録）"
+    },
+    {
+      "id": "bukatsu-chiiki-ukezara",
+      "label": "受け皿・指導者",
+      "icon": "👤",
+      "rank": 4,
+      "count": 208,
+      "share_pct": 14.8,
+      "landing_image": "ukesara-v2",
+      "reread": {
+        "coverage": "partial",
+        "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json",
+        "path": ["receiver_side", "buckets"],
+        "read_at": "2026-09-15（2026-08-25時点172件→定期収集で増えた98件を追い読みし338件へ更新）",
+        "covered_items": 192,
+        "reason_buckets": [
+          {"id": "R1", "label": "報酬が安すぎて指導者が集まらない", "count": 37},
+          {"id": "R2", "label": "地域が引き受ける理由がない・引き受け手がいない", "count": 52},
+          {"id": "R3", "label": "責任・安全・指導者の質への不安", "count": 40},
+          {"id": "R4", "label": "受け皿はできている・うまくいっている", "count": 22},
+          {"id": "R5", "label": "送迎・移動の課題", "count": 3},
+          {"id": "R6", "label": "その他", "count": 38}
+        ]
+      },
+      "existing_posts": [
+        {"summary": "受け皿の人手・送迎が足りない", "handle": "@maru_moneyy", "url": "https://x.com/maru_moneyy/status/2084392638506274876"},
+        {"summary": "地域資源に合わせた再構築を求める", "handle": "@kohei_okada_pt", "url": "https://x.com/kohei_okada_pt/status/2084608274377437341"}
+      ],
+      "claim_audit_ids_confirmed": ["coach-pay", "shidoin-role"],
+      "claim_audit_source": "公開JSONで確認済み",
+      "sunk_continent_ids": ["bukatsu-chiiki-sc-3", "bukatsu-chiiki-sc-4"],
+      "vein_ids": ["bukatsu-chiiki-vein-1", "bukatsu-chiiki-vein-2"],
+      "institutional_check_items_inferred": ["参加できる条件（指導者・活動場所・移動手段）", "安全と事故（事故対応・補償の主体）"],
+      "timeline_ids": ["2017年4月部活動指導員制度"],
+      "timeline_note": "同上（目安）"
+    },
+    {
+      "id": "bukatsu-chiiki-hiyo",
+      "label": "費用・家庭負担",
+      "icon": "💴",
+      "rank": 5,
+      "count": 149,
+      "share_pct": 10.6,
+      "landing_image": "hiyou-v3",
+      "reread": {
+        "coverage": "partial",
+        "source_file": "data/bukatsu-chiiki_cost-receiver-reread.json",
+        "path": ["cost_side", "buckets"],
+        "read_at": "2026-09-15（同上、67件追い読みし累計へ反映）",
+        "covered_items": 136,
+        "reason_buckets": [
+          {"id": "P1", "label": "いまの部活が安いのは、誰かの無償労働で成り立っているから", "count": 17},
+          {"id": "P2", "label": "家庭が払えない・負担が増える", "count": 27},
+          {"id": "P3", "label": "お金が理由で参加できない子が出る（格差）", "count": 27},
+          {"id": "P4", "label": "誰が、いくら払うのかを決めろ（財源設計）", "count": 43},
+          {"id": "P5", "label": "送迎・移動の負担", "count": 14},
+          {"id": "P6", "label": "その他", "count": 8}
+        ]
+      },
+      "existing_posts": [
+        {"summary": "家計にのしかかる会費", "handle": "@TheMirageof0", "url": "https://x.com/TheMirageof0/status/2070621781757726855"},
+        {"summary": "公費が足りないと縮小・負担増", "handle": "@774nyannyan", "url": "https://x.com/774nyannyan/status/2086731858579263880"}
+      ],
+      "claim_audit_ids_confirmed": ["national-funding", "club-cost-survey"],
+      "claim_audit_source": "公開JSONで確認済み。national-fundingはseidoと共有（issue_ids: [seido, hiyo]）",
+      "sunk_continent_ids": ["bukatsu-chiiki-sc-2"],
+      "vein_ids": [],
+      "institutional_check_items_inferred": ["費用（会費と公的負担の割合）"],
+      "timeline_ids": ["2026年度・令和8年度予算（補助率等）"],
+      "timeline_note": "同上（目安）"
+    },
+    {
+      "id": "bukatsu-chiiki-sonota",
+      "label": "その他",
+      "icon": "💬",
+      "rank": 6,
+      "count": 56,
+      "share_pct": 4.0,
+      "landing_image": "sonota-v2",
+      "reread": {
+        "coverage": "none",
+        "note": "未再読論点。sub_issuesにエントリなし。理由ID・buckets無し"
+      },
+      "existing_posts": [
+        {"summary": "吹奏楽は移行しにくいという経験", "handle": "@m727243023", "url": "https://x.com/m727243023/status/2085525452777795616"},
+        {"summary": "マネージャーの役割にある性別規範を問う", "handle": "@mamimami_koro", "url": "https://x.com/mamimami_koro/status/2087383840331608316"}
+      ],
+      "claim_audit_ids_confirmed": [],
+      "sunk_continent_ids": [],
+      "vein_ids": [],
+      "institutional_check_items_inferred": [],
+      "timeline_ids": [],
+      "timeline_note": "対応なし"
+    },
+    {
+      "id": "bukatsu-chiiki-kakusa",
+      "label": "地域格差",
+      "icon": "🗾",
+      "rank": 7,
+      "count": 17,
+      "share_pct": 1.2,
+      "landing_image": "kousa-v2",
+      "reread": {
+        "coverage": "none",
+        "note": "未再読論点。sub_issuesにエントリなし。理由ID・buckets無し"
+      },
+      "existing_posts": [
+        {"summary": "地方で施設が取れない", "handle": "@Davestaragues", "url": "https://x.com/Davestaragues/status/2085511206278939102"},
+        {"summary": "都市部への環境偏在を懸念", "handle": "@mamamam4949", "url": "https://x.com/mamamam4949/status/2069589990011818183"}
+      ],
+      "claim_audit_ids_confirmed": [],
+      "sunk_continent_ids": ["bukatsu-chiiki-sc-1"],
+      "vein_ids": ["bukatsu-chiiki-vein-2"],
+      "institutional_check_items_inferred": [],
+      "timeline_ids": [],
+      "timeline_note": "対応なし"
+    }
+  ],
+  "theme_wide_content": {
+    "claim_audit": {
+      "pipeline_confirmed": "scripts/build_bukatsu_process_sections.py(FACT_CHECKS、Pythonリテラル) → data/verification/bukatsu-chiiki-claims.json(tweet_id→claim idのみ、issue_idタグ無し、件数照合用) → scripts/public_registry_common.py::build_claim_verification() が①を ast.literal_eval で読み②の件数と突合 → data/public/themes/bukatsu-chiiki.json の claim_verification.claims[]（ここでフィールド名が変わり issue_ids が付与される） → scripts/build_planet_data.py::build() が論点ごとのissue['claims']とページ全体用のクイズ入力window.PLANET_DATA.claimsを作る。一次資料クイズ7問とBUKATSU_AUDIT欄は同じこの7件を入口だけ変えて2回使っている（別データではない）",
+      "checked_on": "2026-09-02",
+      "target_posts_total": 32,
+      "claims": [
+        {"id": "original-deadline", "matched_posts": 4, "verdict": "ズレ（重点支援期間であって完了期限ではない）", "issue_ids_confirmed": ["bukatsu-chiiki-seido"]},
+        {"id": "national-funding", "matched_posts": 6, "verdict": "ズレ（国費は付くが会費肩代わりではない）", "issue_ids_confirmed": ["bukatsu-chiiki-seido", "bukatsu-chiiki-hiyo"]},
+        {"id": "coach-pay", "matched_posts": 10, "verdict": "ズレ（最低賃金割れの例はあるが全国一律ではない）", "issue_ids_confirmed": ["bukatsu-chiiki-ukezara"]},
+        {"id": "shidoin-role", "matched_posts": 4, "verdict": "どおり（身分表現のみ資料に無い）", "issue_ids_confirmed": ["bukatsu-chiiki-ukezara"]},
+        {"id": "chutairen-entry", "matched_posts": 4, "verdict": "どおり（ただし掛け持ち不可の制限あり）", "issue_ids_confirmed": ["bukatsu-chiiki-kyoiku"]},
+        {"id": "club-cost-survey", "matched_posts": 3, "verdict": "裏が取れない（民間調査が出所）", "issue_ids_confirmed": ["bukatsu-chiiki-hiyo"]},
+        {"id": "kyushokuchoseigaku", "matched_posts": 1, "verdict": "ズレ（投稿時点で既に5%へ改定済み）", "issue_ids_confirmed": ["bukatsu-chiiki-kyoin"]}
+      ],
+      "note": "issue_ids_confirmedはdata/public/themes/bukatsu-chiiki.jsonから直接読んで確認した値。当初data/verification/bukatsu-chiiki-claims.json（無タグ）だけを見て『編集部推定』としていたのを訂正した"
+    },
+    "sunk_continents": {
+      "source_file": "data/verification/bukatsu-chiiki-sunk-continents.json",
+      "checked_on": "2026-09-22",
+      "sns_base": 1401,
+      "items": [
+        {"id": "bukatsu-chiiki-sc-1", "topic": "支援水準の自治体差（国は統一の下限を設定していない）", "sns_count": 0, "issue_bucket": "bukatsu-chiiki-kakusa"},
+        {"id": "bukatsu-chiiki-sc-2", "topic": "国庫補助の対象外費目（施設整備費は補助されない）", "sns_count": 0, "issue_bucket": null},
+        {"id": "bukatsu-chiiki-sc-3", "topic": "部活動指導員の任期は1年更新・再任用は上限4回（東京都の例）", "sns_count": 0, "issue_bucket": null},
+        {"id": "bukatsu-chiiki-sc-4", "topic": "東京都の部活動指導員に求められる実務・指導経験6年以上という数値条件", "sns_count": 5, "issue_bucket": null}
+      ],
+      "note": "表示は『立場で絞っても変わらない』テーマ全体の項目。data/public/themes/bukatsu-chiiki.jsonのocean_layer.sunk_continents[].nearest_issue_idで確認: sc-1→bukatsu-chiiki-kakusa（issue_bucketと一致）、sc-2/sc-3/sc-4はnearest_issue_id=null（公開JSON上でも本当に無タグ。編集部推定が必要な真のギャップ）"
+    },
+    "veins": {
+      "source_file": "data/verification/bukatsu-chiiki-veins.json",
+      "checked_on": "2026-09-02",
+      "items": [
+        {"id": "bukatsu-chiiki-vein-1", "shared_concern": "地域移行後にクラブを引き受ける指導者の謝礼・時給が低すぎて生活が成り立たない・引き受け手が集まらない", "issue_ids": ["bukatsu-chiiki-ukezara"]},
+        {"id": "bukatsu-chiiki-vein-2", "shared_concern": "外部指導者へ委託しても引率・事故対応・保護者対応の責任は学校・教員に残り負担は減らない", "issue_ids": ["bukatsu-chiiki-seido", "bukatsu-chiiki-ukezara", "bukatsu-chiiki-kyoin", "bukatsu-chiiki-kakusa"]}
+      ]
+    },
+    "institutional_check_panel": {
+      "html_section_id": "bukatsu-check",
+      "note": "『判断の前に確かめること』4項目。issue_idタグ無し、本文の主題から編集部推定でissuesブロックへ割当済み（上記institutional_check_items_inferred参照）",
+      "items": ["運営の責任", "費用", "参加できる条件", "安全と事故"]
+    },
+    "timeline": {
+      "html_section": "bukatsu-background内『これまでの経緯』",
+      "count": 6,
+      "note": "issue_idタグ無し。taxのtimeline(3件、issue_ids付き)と違い現状は論点非連動の時系列表示。連動させるかは工程3以降の判断事項",
+      "entries_summary": [
+        "2017年4月 部活動指導員制度の創設",
+        "2022年12月 国のガイドライン策定",
+        "2023〜2025年度 重点支援期間（『3年で終わる』誤解の起点）",
+        "2025年度 中体連が地域クラブの大会参加特例",
+        "2025年12月 新ガイドライン（改革実行期間）",
+        "2026年度 予算措置・教職調整額5%へ"
+      ]
+    },
+    "editorial_cross_summary": {
+      "html_note": "『編集部の横断整理』4項目、日付2026-09-04表記。共通テンプレート機能（taxにも同名概念があるとみられるが本ファイルでは未照合）",
+      "items": ["共通する前提", "本当の対立", "お金の話になると", "まだ分からないこと"]
+    },
+    "quiz": {
+      "count": 7,
+      "html_id": "quiz",
+      "note": "【確認済み】claim_auditと同一のFACT_CHECKS7件がwindow.PLANET_DATA.claims経由でJSに渡り、buildQuiz()がcs.lengthを分母に描画する。claim_auditとクイズは別データではなく同じ7件の2つの見せ方"
+    },
+    "classroom_section": {
+      "already_implemented": true,
+      "note": "課題77 Part B（apply_classroom_section.py）で全10テーマ済み。連動表示の工程4で『既存機能として接続』の対象"
+    },
+    "legacy_excluded": {
+      "SM_RAW": "旧2Dスタンスマップの死んだデータ。課題73で削除対象として既に追跡中。連動表示の実装では一切参照しないこと"
+    }
+  },
+  "open_gaps": [
+    "institutional_check_panel(制度4項目)・timeline(年表6件)のissue_id対応は今も編集部推定（claim_auditと沈んだ大陸sc-1は公開JSONで機械可読タグを確認できたが、この2つは元が手書き静的HTMLで生成器が見当たらず、機械可読タグ自体が存在しない）。工程2着手前にオーナー確認が要るか、実装セッションの判断に委ねるかを決める",
+    "表示用の立場は4つ(移行支持/慎重・反対/条件付き・改善要求/中立・情報)だが、投票フォームの立場は別物で3つ(反対・慎重/どちらでもない/賛成・推進、vote_only_stances参照)。『条件付き・改善要求』に対応する投票選択肢が無い。連動表示の『選択中の立場』(4種、閲覧用)と『投票』(3種、独立)を絶対に混同しないこと。この区別はtaxには無いbukatsu-chiiki固有の注意点",
+    "配色が2系統（表示用teal/purple/gold/gray、投票・潮目・旧散布図用green/orange/red/gray）。連動表示でどちらに寄せるか工程3で決める（stances.color_palette_warning参照）",
+    "showVote()が呼ぶwindow.setStanceMapVoteMarker()は現ページに存在しない死んだフック（旧2D散布図時代の投票→図連動の名残）。新しい連動表示の実装対象にはならないが、実装時に削除するか放置するかは判断が要る",
+    "drawPanel()は#extras-{issue_id}の静的生成コンテンツ（クイズ照合・海面下導線）をJSで再構築せずそのままコピーする設計になっている（『ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる』というコメントが既存コードにある）。連動表示の新設部分もこの原則（Pythonが生成した文言をJSで作り直さない）を踏襲すること",
+    "編集部の横断整理の日付(2026-09-04)は表示改修日ではなく内容確定日。連動表示化で表示位置が変わっても日付は動かさないこと",
+    "理由(reason)からX投稿を開く機能（tax追加機能、25件）に相当する部活動版は未着手。対象は最大43理由（5論点×6〜15）で件数はtaxより多い。6工程の必須要件ではなく、着手する場合は独立工程として計画すること",
+    "予想問題②『強い表現がいちばん多い論点』の正解データ照合（taxのQ1/Q2で見つかったような数値誤りが無いか）は本パスでは未実施",
+    "`configs/topics/bukatsu-chiiki-v2.yaml`は別物（Ollama初期分類器用の12論点・6立場体系）。現行の7論点・4立場Hermes体系と混同して接続表に混ぜないこと"
+  ]
+}

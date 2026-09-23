@@ -225,6 +225,11 @@ _HISTORICAL = re.compile(r"\d+年\d+月\d+日|当時|以前は|から作り直�
 
 def _visible_text(page: str) -> str:
     text = re.sub(r"<script.*?</script>|<style.*?</style>", " ", page, flags=re.DOTALL)
+    # <template>の中身はブラウザが素のままでは描画しない（JSが選んだ論点だけをcloneして
+    # #panelへ挿す、連動表示の読書面）。ページ本文の他の場所に既にある原稿の写しであり、
+    # 二重に数えると「同じ数字は1回だけ」が誤検知する（2026-09-23、bukatsu-chiikiの
+    # 沈んだ大陸の注記が#ocean側とテンプレート側の両方に出て発覚）。
+    text = re.sub(r"<template\b.*?</template>", " ", text, flags=re.DOTALL)
     # 「関連テーマ」の紹介文は他テーマの論点数を書く（「憲法改正…をめぐる6論点」）。
     # このページの数字ではないので外す。
     text = re.sub(r'<section[^>]*id="related-section".*?</section>', " ", text, flags=re.DOTALL)

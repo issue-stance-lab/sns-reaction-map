@@ -52,10 +52,10 @@ def _build_once(
         check=True,
     )
     rows = read_rows(stage / "cumulative-candidate.json")
-    output.write_text(
-        sync_candidate_issue_counts(output.read_text(encoding="utf-8"), rows),
-        encoding="utf-8",
-    )
+    text = sync_candidate_issue_counts(output.read_text(encoding="utf-8"), rows)
+    from scripts.bukatsu_connected import TOPIC as CONNECTED_TOPIC, apply as connect_page
+    text = connect_page(text, topic=CONNECTED_TOPIC)
+    output.write_text(text, encoding="utf-8")
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
