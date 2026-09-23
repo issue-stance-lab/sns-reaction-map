@@ -55,8 +55,10 @@ tar xzf "$(ls -t /Volumes/HD-LE-B/issue-stance-private-backups/private-data-*.ta
   -C . --exclude=manifest.json
 cp -R /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/node_modules .
 
+RUN_DATE=<今日の日付>
+RUN_ID=$(date +%Y%m%d_%H%M%S)
 python3 scripts/refresh_topic.py \
-  --topic <テーマ> --date <今日の日付> \
+  --topic <テーマ> --date "$RUN_DATE" --run-id "$RUN_ID" \
   --backup-dest /Volumes/HD-LE-B/issue-stance-private-backups
 ```
 
@@ -64,6 +66,26 @@ python3 scripts/refresh_topic.py \
 固定する（`isa-wt-collect-<テーマ>` / `task/collect-<テーマ>`）。日付や実行のたびの連番を
 名前に入れない。後から「このテーマの収集worktreeがどれか」を探すため、かつ次回このテーマの
 収集で使い回すために、固定名であることが要る。
+
+## 3.5 収集直後にJevをシャドー観測する（課題91）
+
+収集・Hermes分類が成功した場合だけ、今回の新規分をJevへ送る。これは品質測定用であり、
+正典・公開ページ・X投稿・世論の潮目を変更しない。
+
+```bash
+python3 scripts/run_jev_shadow.py \
+  --topic <テーマ> --date "$RUN_DATE" \
+  --input ".staging/refresh/<テーマ>/$RUN_ID/new-only.json" \
+  --output "social-samples/updates/<テーマ>/$RUN_DATE/jev-shadow.json" \
+  --verification-output "data/verification/updates/<テーマ>/$RUN_DATE/jev-shadow.json" \
+  --env-file /Volumes/M2-WorkSpace/Projects/副業/issue-stance-aggregator/.env \
+  || echo "WARN: Jev shadow failed; continue the normal collection handoff"
+```
+
+`new-only.json`だけを入力にする。`TYPESAFE_API_KEY`が無ければスクリプトが
+`skipped_no_key`を記録して終了する。APIエラー時も再試行を重ねず、失敗を短く記録して
+手順4へ進む。Jevのレポートには入力本文をコピーせず、非公開側にはハッシュ化したレコード識別子と
+構造化された回答だけを保存する。公開側サマリにも本文・URL・投稿IDを入れない。
 
 **失敗したら**（外付けバックアップディスク未接続・hermes障害・`node_modules`不足など、
 `DATA_REFRESH.md`に前例あり）、その日の収集は見送ったものとして手順3へ進む。

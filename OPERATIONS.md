@@ -140,7 +140,7 @@ python3 scripts/build_admin_dashboard.py
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 |
 |---|---|---|---|
-| **データ収集**（収集・自動分類・非公開保存） | 夜枠（20時以降）・X日次経由・1日1テーマまで | `THEMES.yaml` の `collect_at` | `DATA_REFRESH.md` / 課題81 |
+| **データ収集**（収集・自動分類・非公開保存） | 夜枠（20時以降）・X日次経由・1日1テーマまで。成功後に課題91のJevシャドー観測 | `THEMES.yaml` の `collect_at` | `DATA_REFRESH.md` / 課題81・91 |
 | **更新作業**（本文確認→正典反映→公開） | テーマごと（`refresh_at`超過順）。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `refresh_at` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md` / 課題86 |
 | **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` |
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
