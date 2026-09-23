@@ -109,6 +109,43 @@ class BukatsuConnectedTests(unittest.TestCase):
             issue["label"] = "表示名を変更"
         self.assertEqual(connected.content_index(changed), expected)
 
+    def test_display_adapts_to_changed_counts_while_vote_payload_stays_fixed(self):
+        # 工程5「入力が変わる場合」: 隔離した検証データで件数・順位を変えても表示は追従し、
+        # 投票番号と関連資料は変わらないことを確認する。次回の実データ更新で件数分布が
+        # 変わっても、山なみ側の並び替えが投票の保存先へ波及しないことを保証する検査。
+        data = connected.planet_data(self.original)
+        mutated = copy.deepcopy(data)
+        # 現在最多(教員の働き方)と最少(地域格差)の件数を入れ替え、山の並び順が変わる状況を再現する。
+        by_id = {i["id"]: i for i in mutated["issues"]}
+        top, bottom = "bukatsu-chiiki-kyoin", "bukatsu-chiiki-kakusa"
+        by_id[top]["count"], by_id[bottom]["count"] = by_id[bottom]["count"], by_id[top]["count"]
+        for mode in mutated["modes"]:
+            mode["counts"][top], mode["counts"][bottom] = mode["counts"].get(bottom, 0), mode["counts"].get(top, 0)
+
+        source = self.original
+        mutated_json = json.dumps(mutated, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+        mutated_source = connected.DATA_PATTERN.sub(lambda m: m[1] + mutated_json + m[3], source, count=1)
+        mutated_page = connected.apply(mutated_source, activate=True)
+        self.assertEqual(connected.validate(mutated_page), [])
+
+        # 表示側（読書面）は7論点分そろったまま追従する。
+        mutated_index = connected.content_index(mutated)
+        self.assertEqual(set(mutated_index["issues"]), set(by_id))
+
+        # 投票（VOTE_ISSUES/STANCES/choiceIdx式）はPLANET_DATAを一切参照しないため、
+        # 件数・順位が変わっても出力バイト列が変わらないことを直接比較する。
+        # var VOTE_ISSUES= を含む<script>...</script>だけを切り出す（vote-section内には
+        # window.voteMsg等の別のscriptも先にあるため、VOTE_ISSUESの位置から前後へ辿る）。
+        def vote_script(html):
+            anchor = html.index("var VOTE_ISSUES=")
+            start = html.rindex("<script>", 0, anchor)
+            end = html.index("</script>", anchor) + len("</script>")
+            script = html[start:end]
+            self.assertIn("choiceIdx", script)
+            return script
+
+        self.assertEqual(vote_script(mutated_page), vote_script(self.page))
+
     def test_stance_mode_mismatch_is_rejected(self):
         data = connected.planet_data(self.page)
         broken = copy.deepcopy(data)
