@@ -133,6 +133,36 @@
   var legacyLayout = layout;
   layout = function(modeId){ return bktVisual && modeId === st.mode ? bktVisual : legacyLayout(modeId); };
 
+  // ---------- 山の色を消費税と同じ方式にそろえる（オーナー指示、2026-09-23） ----------
+  // 元の配色は論点ごとに最多の立場の色を塗り分ける方式（多色）。tax版は逆に、
+  // 選んだ立場の色1色へ全ての山をそろえ、選択中は濃く・他は薄くする（レイアウトの
+  // 計算そのものは元のlegacyRenderのまま、描画後にfill/opacityだけ塗り直す）。
+  // 色の値自体は部活動の立場配色（configs/planet/bukatsu-chiiki.yaml）をそのまま使い、
+  // taxの色を持ち込まない（「方式をそろえる」であって「色を持ち込む」ではない）。
+  function recolorHills(){
+    var stance = D.stances.find(function(s){ return s.key === st.mode; });
+    var color = stance ? stance.color : '#075ef2';
+    svg.querySelectorAll('.hill').forEach(function(g){
+      var path = g.querySelector('path');
+      if (!path) return;
+      var landed = st.landed !== null && Number(g.dataset.i) === st.landed;
+      path.setAttribute('fill', color);
+      path.setAttribute('opacity', String(st.landed === null ? 0.6 : (landed ? 0.9 : 0.23)));
+      if (landed) {
+        path.setAttribute('stroke', '#f2f6fa');
+        path.setAttribute('stroke-width', '1.8');
+        path.removeAttribute('stroke-dasharray');
+      } else if (path.getAttribute('stroke-dasharray')) {
+        // 細すぎる山（元の描画でstroke-dasharrayが付く）の枠線も、その山自体の色に合わせる。
+        path.setAttribute('stroke', color);
+      } else {
+        path.removeAttribute('stroke');
+      }
+      var zeroMark = g.querySelector('.zero-mark');
+      if (zeroMark) zeroMark.setAttribute('fill', color);
+    });
+  }
+
   // アニメーション中は毎フレームsvg.innerHTMLを作り直す（render()自体の仕様）ため、
   // キーボード操作中の山（.hill）へのフォーカスが毎回外れる。呼び出し前後で復元する。
   var legacyRender = render;
@@ -140,6 +170,7 @@
     var focused = document.activeElement;
     var focusId = focused && focused.classList && focused.classList.contains('hill') ? focused.dataset.i : null;
     legacyRender();
+    recolorHills();
     if (focusId !== null){
       var el = svg.querySelector('.hill[data-i="' + focusId + '"]');
       if (el) el.focus({preventScroll: true});
