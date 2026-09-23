@@ -48,6 +48,21 @@ class HermesClassifierSplitRetryTest(unittest.TestCase):
                     with self.assertRaisesRegex(RuntimeError, "upstream error"):
                         module.classify([{"text": "a"}])
 
+    def test_refused_post_is_kept_with_error_label(self):
+        for name in MODULES:
+            with self.subTest(name):
+                module = importlib.import_module(name)
+
+                def fake(rows, **_):
+                    if len(rows) > 1 or rows[0]["text"] == "b":
+                        raise RuntimeError("Hermes upstream error: HTTP 400 high risk")
+                    return [{"label": "a"}]
+
+                with patch.object(module, "classify", side_effect=fake):
+                    labels = module.classify_or_split([{"text": "a"}, {"text": "b"}])
+                self.assertEqual(labels[0], {"label": "a"})
+                self.assertTrue(labels[1]["error"].startswith("upstream_refused"))
+
 
 if __name__ == "__main__":
     unittest.main()

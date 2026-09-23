@@ -198,7 +198,19 @@ def classify_or_split(batch: list[dict[str, Any]], **kwargs: Any) -> list[dict[s
         if len(batch) == 1:
             raise
         print(f"batch of {len(batch)} failed; retrying one by one", flush=True)
-        return [label for row in batch for label in classify([row], **kwargs)]
+        labels: list[dict[str, Any]] = []
+        for row in batch:
+            try:
+                labels.extend(classify([row], **kwargs))
+            except RuntimeError as exc:
+                # The provider refuses some posts outright ("considered high risk").
+                # Keep the post with an error label instead of dropping it; refresh_topic
+                # tolerates up to 10% error rows and a human reviews them before publishing.
+                if "upstream error" not in str(exc):
+                    raise
+                print(f"upstream refused one post: {exc}", flush=True)
+                labels.append({"error": f"upstream_refused: {exc}"})
+        return labels
 
 
 def main() -> int:
