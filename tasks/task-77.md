@@ -2,7 +2,7 @@
 
 **登録日**: 2026-09-20
 **消費税の連動表示**: 見本に合わせた修正版を2026-09-22にCEO承認・公開。公開URLのPC・スマホ幅で選択動作・X投稿・資料タブを確認。詳細は[公開記録](../quality/reviews/2026-09-22-task77-tax-publication.md)。
-**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。Part A（案1）は品質監査 ready_for_ceo（条件付き、`quality/reviews/2026-09-20-website-task77-parta.md`）を経て、2026-09-21にCEO承認・本番反映済み（マージ`68732e9`、CI・実機確認OK）。Part B（案2）は2026-09-21に実装完了後、品質監査で needs_revision（375pxで一次資料リンクが画面外に切れる・文体不統一）となり、同日中に実装セッションが両方を修正・再検査して ready_for_ceo に更新（`quality/reviews/2026-09-21-website-task77-partb.md`）、CEO承認のうえ本番反映済み（マージ`1ff4d48b`、CI・実機確認OK）。案1+2とも公開完了。案3〜6は `GROWTH.yaml` に idea として登録済み。消費税の連動表示は2026-09-22に見本合わせの修正版を含め公開完了。bukatsu-chiikiへの連動表示移植は工程1〜5完了・工程6準備完了（2026-09-23時点、詳細はtasks/task-77.md）、マージ・push未実施でオーナーの公開判断待ち
+**状態**: 進行中。案1+2はオーナー採用（2026-09-20）。Part A（案1）は品質監査 ready_for_ceo（条件付き、`quality/reviews/2026-09-20-website-task77-parta.md`）を経て、2026-09-21にCEO承認・本番反映済み（マージ`68732e9`、CI・実機確認OK）。Part B（案2）は2026-09-21に実装完了後、品質監査で needs_revision（375pxで一次資料リンクが画面外に切れる・文体不統一）となり、同日中に実装セッションが両方を修正・再検査して ready_for_ceo に更新（`quality/reviews/2026-09-21-website-task77-partb.md`）、CEO承認のうえ本番反映済み（マージ`1ff4d48b`、CI・実機確認OK）。案1+2とも公開完了。案3〜6は `GROWTH.yaml` に idea として登録済み。消費税の連動表示は2026-09-22に見本合わせの修正版を含め公開完了。bukatsu-chiikiへの連動表示移植は2026-09-23に工程6（公開）まで完了。オーナー承認のうえマージ`cf43adef`・push・CI（配信・検査とも成功）・本番URL実機確認（PC/スマホ）まで完了、観察期間へ
 **優先度**: 中（来訪者がいなくても効く案1・案2を先に。シェア系の案3・案4は来訪者が増えてから）
 **判断待ち**: オーナー（案5の図表・データの利用条件／案6の費用上限）
 **関連**: 51（記事の公開先設計）/ 54・15（AdSense審査中）/ 70（図解の点検中）/ 55（ドメイン移行の残作業）/
@@ -101,15 +101,18 @@ bringIntoView()を無効化。ページ末尾のtemplateがまだパースされ
 **範囲**: `scripts/refresh_planet_section.py`（山なみ共通、テーマ別分岐の追加のみ）を含む。
 公開ページ・公開データ・投票への変更なし。工程6は未着手。
 
-## bukatsu-chiikiへの移植・工程6準備（2026-09-23）
+## bukatsu-chiikiへの移植・工程6完了・公開（2026-09-23）
 
-`docs/bukatsu-chiiki-reaction-map.html`を実際に有効化したところ、検査3件が
-「消費税だけ決め打ち、bukatsu-chiiki未対応」という同型の欠落で通らず、3件とも修正
-（`verify_theme_page.py`の`<template>`二重カウント、`verify_number_provenance.py`用の
-`scripts/bukatsu_count_provenance.py`新設、`configs/page-originality.json`へ画面文言7件を
-allow登録）。山なみ全10テーマ再検査・全体テスト1103件・`run_public_checks.py`ともOK、実機でも
-有効化済みページを確認。**記録**: [実装内容](../quality/reviews/2026-09-23-task77-bukatsu-chiiki-activation.md)。
-マージ・push未実施、オーナーの公開判断待ち。
+実有効化で検査3件が「消費税だけ決め打ち、bukatsu-chiiki未対応」という同型の欠落で通らず、
+3件とも修正（`verify_theme_page.py`の`<template>`二重カウント、`verify_number_provenance.py`用の
+`scripts/bukatsu_count_provenance.py`新設、`configs/page-originality.json`へ画面文言7件をallow登録）。
+山なみ全10テーマ再検査・全体テスト1103件・`run_public_checks.py`ともOK。**記録**:
+[実装内容](../quality/reviews/2026-09-23-task77-bukatsu-chiiki-activation.md)。
+オーナー承認（「公開して」）を受けreleaseスキルの手順で公開: マージ`cf43adef`（コンフリクトなし）、
+マージ後mainで全検査再実行しOK、push（`520728dd..cf43adef`）、CI2件（配信・公開ファイルの検査）
+とも success、本番URL（PC/375px）で連動表示・コンソールエラーなしを実機確認、非公開データを
+バックアップ（280ファイル・復元確認OK）して作業ツリーを片付け。`THEMES.yaml`の`updated_at`等は
+消費税の前例どおり変更なし（表示変更でデータ更新ではないため）。次は公開後1〜2週間の観察。
 
 ## 内容レビュー（2026-09-22、提案・採用前）
 
