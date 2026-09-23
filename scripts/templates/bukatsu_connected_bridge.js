@@ -215,14 +215,28 @@
   // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
   // setTimeout(0)は大きなページだとパース完了より先に発火することがあるため使わず、
   // DOMContentLoaded（このscript自体は常にその前に実行されるため、必ず後で発火する）を待つ。
+  //
+  // 素のhash付きURL（例: 前回訪問した論点をブラウザが覚えている再訪問）では、この関数を
+  // 待たずに既存init（PLANET_SECTION末尾の同期処理）がすぐland()を呼ぶ。その時点ではまだ
+  // templateが未パースのため、drawPanel()は「読書面が無い論点」と判定して旧描画（升目100個
+  // 等）へ後退する。st.landedはその時点で決まってしまうため、以前はここで単純に
+  // 「もう決まっているなら何もしない」としていたが、それでは旧描画のまま固定されて残る
+  // （オーナー報告2026-09-23: 論点を押すまでマス目が消えない）。テンプレートが必ず揃っている
+  // このタイミングで、読書面が実際に描けているかを確かめ、旧描画のままなら同じ論点へもう一度
+  // 静かに着地し直す（land()の中身は複製せず、同じ論点idへの再呼び出しで済ませる）。
+  function readingRenderedFor(i){
+    return i !== null && !!document.getElementById('panel').querySelector('.bkt-selected-head');
+  }
   function initialLand(){
-    if (st.landed !== null) return;  // 素のhashは既存initが既に処理済み
-    var id = issueIdFromHash();
-    if (id !== null){ landSilently(idIndex[id]); return; }
-    if (!location.hash){
-      var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
-      landSilently(idIndex[top.id]);
+    if (st.landed === null) {
+      var id = issueIdFromHash();
+      if (id !== null){ landSilently(idIndex[id]); }
+      else if (!location.hash){
+        var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
+        landSilently(idIndex[top.id]);
+      }
     }
+    if (st.landed !== null && !readingRenderedFor(st.landed)) landSilently(st.landed);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialLand, {once: true});
