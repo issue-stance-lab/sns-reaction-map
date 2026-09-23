@@ -34,8 +34,8 @@
 #panel .bkt-embed summary{ color:#637089; font-size:11px; font-weight:400; cursor:pointer; }
 #panel .bkt-embed iframe{ max-width:100% !important; }
 #panel .twitter-tweet{ max-width:100%; margin:10px 0; }
-#panel details.bkt-claim, #panel details.bkt-concern, #panel details.bkt-source-only{ margin:9px 0; border-top:1px solid var(--bkt-rule); padding:9px 0 0; font-size:12.5px; }
-#panel details.bkt-claim summary, #panel details.bkt-concern summary, #panel details.bkt-source-only summary{ cursor:pointer; padding:3px 0; font-weight:700; line-height:1.65; }
+#panel details.bkt-claim, #panel details.bkt-concern, #panel details.bkt-source-only, #panel details.bkt-check{ margin:9px 0; border-top:1px solid var(--bkt-rule); padding:9px 0 0; font-size:12.5px; }
+#panel details.bkt-claim summary, #panel details.bkt-concern summary, #panel details.bkt-source-only summary, #panel details.bkt-check summary{ cursor:pointer; padding:3px 0; font-weight:700; line-height:1.65; }
 #panel .bkt-verdict{ display:inline-block; margin-top:10px; padding:3px 8px; border:1px solid var(--bkt-rule); border-radius:4px; font-size:10.5px; font-weight:700; }
 #panel .bkt-timeline-item{ margin:9px 0; border-top:1px solid var(--bkt-rule); padding:9px 0 0; font-size:12.5px; }
 #panel .bkt-timeline-when{ margin:0 0 4px; font-weight:700; line-height:1.5; color:#0f1a3d; }
@@ -95,11 +95,11 @@
 .bukatsu-connected #modes button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
 .bukatsu-connected #planet-block #panel :focus-visible, .bukatsu-connected #list button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
 @media screen {
-  /* bukatsu-checkは論点idのタグ付けが無く（工程1の内容確定書の未解決事項）論点側に
-     統合先が無いため、ここでは隠さず通常表示のまま残す（claim-audit/issue-cards/oceanは
-     論点の読書面へ統合済みなので隠す）。 */
+  /* claim-audit/issue-cards/ocean/bukatsu-checkは論点の読書面へ統合済みのため、
+     通常画面では旧位置の一覧を隠す（bukatsu-checkは2026-09-23、論点idのタグ付け
+     を追加して統合。工程1の内容確定書の未解決事項を解消）。 */
   .bukatsu-connected #bukatsu-chiiki-audit, .bukatsu-connected #issue-cards,
-  .bukatsu-connected #ocean { display:none; }
+  .bukatsu-connected #ocean, .bukatsu-connected #bukatsu-check { display:none; }
 }
 @media (max-width:760px) {
   .bukatsu-connected #planet-block #panel { padding:20px 0 0 !important; }
@@ -175,7 +175,7 @@
   body.bukatsu-connected :is(.modern-site-header,.hero .top-nav,#progress,.share-x-fab,.bkt-status,.bkt-timeline-nav,.bkt-guesses,#modes,#list,.stage,#dotbox,#quiz,#vote-section,.bkt-evidence-controls,.bkt-evidence-jump,.classroom-print-btn,.cite-copy-wrap,.tide-widget-controls,.explainer-modal,footer,#fallback-nav,#fallback > .sub,.tap-hint) { display:none !important; }
   body.bukatsu-connected #fallback { display:block !important; }
   body.bukatsu-connected #fallback img { display:block; width:100%; height:auto; }
-  body.bukatsu-connected:not(.bkt-print-classroom) :is(#ocean,#bukatsu-chiiki-audit,#issue-cards) { display:block !important; }
+  body.bukatsu-connected:not(.bkt-print-classroom) :is(#ocean,#bukatsu-chiiki-audit,#issue-cards,#bukatsu-check) { display:block !important; }
   body.bukatsu-connected li[data-bkt-timeline-i][hidden] { display:block !important; }
   body.bukatsu-connected .classroom-section { position:static; width:auto; margin:0; padding:0; box-shadow:none; border:0; }
   body.bukatsu-connected :is(.panel,.planet-panel,#fallback) { overflow:visible; box-shadow:none; }

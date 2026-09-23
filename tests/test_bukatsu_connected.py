@@ -102,6 +102,34 @@ class BukatsuConnectedTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 connected.content_index(data)
 
+    def test_check_ids_match_the_owner_confirmed_tagging_and_untagged_issues_stay_empty(self):
+        # 2026-09-23、オーナーに確認した制度確認4項目のタグ付けを、
+        # data/verification/bukatsu-chiiki-background.jsonのchecklistへ反映した結果を見る。
+        # 「安全と事故」だけ2論点にまたがる（オーナー提案どおり）。地域格差・その他は該当なし。
+        data = connected.planet_data(self.page)
+        index = connected.content_index(data)
+        expected = {
+            "bukatsu-chiiki-kyoin": [],
+            "bukatsu-chiiki-seido": ["unei", "anzen"],
+            "bukatsu-chiiki-kyoiku": [],
+            "bukatsu-chiiki-ukezara": ["joken", "anzen"],
+            "bukatsu-chiiki-hiyo": ["hiyou"],
+            "bukatsu-chiiki-sonota": [],
+            "bukatsu-chiiki-kakusa": [],
+        }
+        self.assertEqual({iid: v["check_ids"] for iid, v in index["issues"].items()}, expected)
+
+    def test_check_entry_without_issue_ids_is_rejected(self):
+        data = connected.planet_data(self.page)
+        broken = {
+            "checked_on": "2026-09-05",
+            "timeline": [],
+            "checklist": {"items": [{"id": "unei", "issue_ids": [], "label": "x", "ask": "x", "found": "x", "sources": []}]},
+        }
+        with unittest.mock.patch.object(connected, "background_data", return_value=broken):
+            with self.assertRaises(ValueError):
+                connected.content_index(data)
+
     def test_relationships_do_not_depend_on_rank_or_display_labels(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)

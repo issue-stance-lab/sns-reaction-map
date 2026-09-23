@@ -3,10 +3,11 @@
 
 既存の静的本文（STANCE_GLANCE・bukatsu-background・bukatsu-check・PLANET_SECTION）を
 書き換えず、IDの接続表・バー↔山の状態共有・論点を選んだときの読書面（理由・投稿例・資料・
-関係する年表）を足す。件数や原稿の別コピーを正典にせず、ページ内のPLANET_DATA・#issue-cards・
-#fallbackと、`data/verification/bukatsu-chiiki-background.json`のtimelineを読む。
-bukatsu-check(制度4項目)は今もissue_idsが無く接続対象外（オーナー確認は年表のみで完了、
-工程1の内容確定書の開いたままの課題）。
+関係する年表・制度確認4項目）を足す。件数や原稿の別コピーを正典にせず、ページ内の
+PLANET_DATA・#issue-cards・#fallbackと、`data/verification/bukatsu-chiiki-background.json`の
+timeline・checklistを読む。bukatsu-check（制度4項目）は2026-09-23、オーナー確認のうえ
+checklist.items[].issue_idsを追加し接続した（年表と同じ形。工程1の内容確定書の開いたままの
+課題を解消）。
 """
 from __future__ import annotations
 
@@ -52,10 +53,8 @@ def background_data() -> dict:
 def content_index(data: dict) -> dict:
     """画面内の要素をIDで結ぶ。件数・原稿・確認日はPLANET_DATAに一元化する。
 
-    bukatsu-check（制度4項目）は今もissue_idsが無く接続しない（工程1の内容確定書の
-    開いたままの課題、年表とは別扱い）。語られていない争点3件（sc-2/3/4）は
-    nearest_issue_id未確定のまま。テーマ全体の一覧（既存の#ocean）に残し、
-    特定の論点へは推測で割り当てない。
+    語られていない争点3件（sc-2/3/4）はnearest_issue_id未確定のまま。テーマ全体の
+    一覧（既存の#ocean）に残し、特定の論点へは推測で割り当てない。
     """
     issues = data["issues"]
     issue_ids = {i["id"] for i in issues}
@@ -71,6 +70,10 @@ def content_index(data: dict) -> dict:
     for item in timeline:
         if not item.get("issue_ids") or set(item["issue_ids"]) - issue_ids:
             raise ValueError(f"連動表示: 年表の接続先の論点が不明です: {item['id']}")
+    checklist = background["checklist"]["items"]
+    for item in checklist:
+        if not item.get("issue_ids") or set(item["issue_ids"]) - issue_ids:
+            raise ValueError(f"連動表示: 制度確認の接続先の論点が不明です: {item['id']}")
     result = {}
     for issue in issues:
         iid = issue["id"]
@@ -84,6 +87,7 @@ def content_index(data: dict) -> dict:
                                 if x.get("nearest_issue_id") == iid],
             "shared_concern_ids": list(issue.get("veins", [])),
             "timeline_ids": [t["id"] for t in timeline if iid in t["issue_ids"]],
+            "check_ids": [c["id"] for c in checklist if iid in c["issue_ids"]],
         }
     return {
         "schema": 1, "theme_id": TOPIC,
@@ -189,7 +193,8 @@ def validate(source: str) -> list[str]:
             continue
         reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
         for key, attr in (("claim_ids", "data-bkt-claim"), ("source_only_ids", "data-bkt-source-only"),
-                          ("shared_concern_ids", "data-bkt-concern"), ("timeline_ids", "data-bkt-timeline")):
+                          ("shared_concern_ids", "data-bkt-concern"), ("timeline_ids", "data-bkt-timeline"),
+                          ("check_ids", "data-bkt-check")):
             found = [el.get(attr) for el in reading.select("[" + attr + "]")]
             if found != connection[key]:
                 problems.append(f"読書面の接続が一致しません: {iid} {key}")

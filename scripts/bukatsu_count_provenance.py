@@ -83,6 +83,11 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
             if actual_counts != expected:
                 raise ValueError(f'連動表示の理由の立場別内訳が元記録と一致しません: {element_id}')
 
+    path = 'data/verification/bukatsu-chiiki-background.json'
+    for item in read(path)['checklist']['items']:
+        # 制度確認4項目は2026-09-23、論点idのタグ付けを追加して読書面へ統合した（年表と同じ形）。
+        verify('bkt-check-note-' + item['id'], item['found'], path + ' / checklist / ' + item['id'])
+
     path = 'data/verification/bukatsu-chiiki-veins.json'
     for item in read(path)['items']:
         sides = ' ／ '.join(s['stance_label'] + ' ' + str(len(s['representative_posts'])) + '件' for s in item['sides'])
