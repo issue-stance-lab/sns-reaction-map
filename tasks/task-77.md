@@ -38,16 +38,10 @@
 
 ## bukatsu-chiikiへの移植・工程6完了・公開（2026-09-23）
 
-実有効化で検査3件が「消費税だけ決め打ち、bukatsu-chiiki未対応」という同型の欠落で通らず、
-3件とも修正（`verify_theme_page.py`の`<template>`二重カウント、`verify_number_provenance.py`用の
-`scripts/bukatsu_count_provenance.py`新設、`configs/page-originality.json`へ画面文言7件をallow登録）。
-山なみ全10テーマ再検査・全体テスト1103件・`run_public_checks.py`ともOK。**記録**:
-[実装内容](../quality/reviews/2026-09-23-task77-bukatsu-chiiki-activation.md)。
-オーナー承認（「公開して」）を受けreleaseスキルの手順で公開: マージ`cf43adef`（コンフリクトなし）、
-マージ後mainで全検査再実行しOK、push（`520728dd..cf43adef`）、CI2件（配信・公開ファイルの検査）
-とも success、本番URL（PC/375px）で連動表示・コンソールエラーなしを実機確認、非公開データを
-バックアップ（280ファイル・復元確認OK）して作業ツリーを片付け。`THEMES.yaml`の`updated_at`等は
-消費税の前例どおり変更なし（表示変更でデータ更新ではないため）。
+実有効化で検査3件が消費税専用の決め打ちで通らず修正（`bukatsu_count_provenance.py`新設等）。
+オーナー承認（「公開して」）を受け公開: マージ`cf43adef`、CI2件success、本番URL実機確認まで完了。
+全文は[工程1〜6の完了記録](../quality/reviews/2026-09-23-task77-bukatsu-chiiki-full-log.md)
+（400行上限のため退避、内容は無変更）。
 
 ## bukatsu-chiikiの画面構成をtaxへ合わせる修正・公開（2026-09-23）
 
@@ -109,6 +103,16 @@ drawPanel()が「読書面が無い」と誤判定して旧描画（升目100個
 `verify_theme_page.py`ともOK。マージ`b7c1cb62`、push・CI2件success・本番URL（同じ再現手法で
 `.bkt-selected-head`が描け旧#dotboxが消えることを実機確認）まで完了。
 **範囲**: `scripts/templates/bukatsu_connected_bridge.js`のみ。公開データ・投票への変更なし。
+
+## bukatsu-check（制度確認4項目）を論点idでタグ付け・読書面へ統合・公開（2026-09-23）
+
+オーナー指摘「これも消費税テーマにはありません」を受け、年表と同じ手順（内容提示→タグ付け案
+確認）で対応。オーナー承認（「2で作成」）のうえ実装: 運営の責任→制度・移行プロセス、費用→
+費用・家庭負担、参加できる条件→受け皿・指導者、安全と事故→両方（教員の働き方等3論点は該当なし、
+年表と同じ判断）。`bukatsu-chiiki-background.json`のchecklist.items[]へissue_ids追加、読書面へ
+「この論点に関わる制度は？」として統合、旧`#bukatsu-check`は通常画面で非表示に変更。
+独立照合・固定回帰テスト2件を追加。unittest 1105件・検査3種いずれもOK。マージ`58a41074`、
+push・CI2件success・本番URL実機確認まで完了。前回持ち越し2点のうち1点解消、残るは山の配色のみ。
 
 ## 内容レビュー（2026-09-22、提案・採用前）
 
