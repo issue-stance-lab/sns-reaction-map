@@ -1,6 +1,6 @@
 // バー↔山の立場共有（工程2）、論点を選んだときの読書面（工程3）、
-// 立場を切り替えたときの山の滑らかな変化（工程3後追い、tax版の考え方を移植）。
-// land/orbitは変えず、drawPanel・layout・render・morphToだけを差し替える。
+// 立場を切り替えたときの山の滑らかな変化・初期表示の自動選択（工程3後追い、tax版の考え方を移植）。
+// land/orbit自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
 (function(){
   // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
   // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
@@ -164,6 +164,30 @@
     bktAnimate(from, legacyLayout(toMode));
     if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
   };
+
+  // ---------- 初期表示: 件数最多の論点を、画面を動かさずに選んだ状態で開始する ----------
+  // land()自体（クリック時に該当箇所へ画面を運ぶ、オーナー指摘2026-09-10/09-19で追加した
+  // 動き）は変えない。ページを開いた直後はまだどこも見ていないため運ぶ先が無く、
+  // bringIntoView()を今回の1回だけ何もしない関数に差し替えて元に戻す（land()の
+  // 中身を複製しない）。URLのhashで論点が指定されている場合は既存initが処理するため触らない。
+  // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
+  // setTimeout(0)は大きなページだとパース完了より先に発火することがあるため使わず、
+  // DOMContentLoaded（このscript自体は常にその前に実行されるため、必ず後で発火する）を待つ。
+  function autoLandOnTopIssue(){
+    if (st.landed !== null || location.hash) return;
+    var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
+    var realBringIntoView = bringIntoView;
+    bringIntoView = function(){};
+    land(idIndex[top.id]);
+    bringIntoView = realBringIntoView;
+  }
+  if (!location.hash){
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', autoLandOnTopIssue, {once: true});
+    } else {
+      autoLandOnTopIssue();
+    }
+  }
 
   window.BukatsuConnectedMap = Object.freeze({
     getState: function(){
