@@ -186,6 +186,16 @@ def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
     path.write_text("\n".join(lines) + "\n")
 
 
+def write_report(rows: list[dict[str, Any]], path: Path) -> None:
+    """Markdown summary of classified rows, noting posts the provider refused."""
+    classified = [row for row in rows if not row["classification"].get("error")]
+    write_markdown(classified, path)
+    refused = len(rows) - len(classified)
+    if refused:
+        with path.open("a") as handle:
+            handle.write(f"\n- 提供元に拒否され未分類: {refused}件（本文確認で扱いを決める）\n")
+
+
 def classify_or_split(batch: list[dict[str, Any]], **kwargs: Any) -> list[dict[str, Any]]:
     """Retry a failed batch one post at a time (same model, same prompt).
 
@@ -194,8 +204,8 @@ def classify_or_split(batch: list[dict[str, Any]], **kwargs: Any) -> list[dict[s
     """
     try:
         return classify(batch, **kwargs)
-    except RuntimeError:
-        if len(batch) == 1:
+    except RuntimeError as exc:
+        if len(batch) == 1 and "upstream error" not in str(exc):
             raise
         print(f"batch of {len(batch)} failed; retrying one by one", flush=True)
         labels: list[dict[str, Any]] = []
@@ -246,7 +256,7 @@ def main() -> int:
         args.output.write_text(json.dumps(completed, ensure_ascii=False, indent=2) + "\n")
         print(f"classified {len(completed)}/{len(source)}", flush=True)
 
-    write_markdown(completed, args.markdown)
+    write_report(completed, args.markdown)
     return 0
 
 
