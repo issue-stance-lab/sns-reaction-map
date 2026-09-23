@@ -40,7 +40,7 @@ def reasons(issue: dict) -> str:
     items = sub["items"]
     rows = ''.join(
         f'<li><span class="aic-reason-row"><span>{e(x["label"])}</span>'
-        f'<b>{x["count"]:,}<small>件</small></b></span>'
+        f'<b id="aic-reason-count-{e(issue["id"])}-{e(x["id"])}">{x["count"]:,}<small>件</small></b></span>'
         f'<span class="aic-reason-track" aria-hidden="true"><i style="width:{x["pct_in_issue"]:.3f}%"></i></span></li>'
         for x in items
     )
@@ -136,9 +136,11 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             out.append(f'<p class="aic-eyebrow">制度の確認 {e(index["background_checked_on"])}</p><h3>この論点に関わる制度は？</h3>')
         for cid in connection["check_ids"]:
             c = checklist[cid]
+            # 制度確認項目も複数論点にまたがりうる（例: kaijiは学習データ・無断利用と法制度・
+            # 規制整備の両方）ため、idを論点で分ける（shared_concernと同じ理由、工程6で発覚）。
             out.append(
                 f'<details class="aic-check" data-aic-check="{e(cid)}"><summary>{e(c["label"])}：{e(c["ask"])}</summary>'
-                f'<p id="aic-check-note-{e(cid)}">{e(c["found"])}</p>' + sources(c["sources"]) + '</details>'
+                f'<p id="aic-check-note-{e(iid)}-{e(cid)}">{e(c["found"])}</p>' + sources(c["sources"]) + '</details>'
             )
         out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
@@ -156,9 +158,11 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         for vid in connection["shared_concern_ids"]:
             v = veins[vid]
             sides = " ／ ".join(s["stance_label"] + " " + str(s["post_count"]) + "件" for s in v["sides"])
+            # shared_concern（vein）は複数論点にまたがりうるため、idを論点で分ける
+            # （同じidが2つのtemplateへ重複するとHTMLとして不正になる。工程6の有効化で発覚）。
             out.append(
                 f'<details class="aic-concern" data-aic-concern="{e(vid)}"><summary>{e(v["shared_concern"])}</summary><p>{e(v["diverging_reason"])}</p>'
-                f'<p class="aic-note" id="aic-concern-count-{e(vid)}">確認した投稿例: {e(sides)}。確認日 {e(v["checked_on"])}</p></details>'
+                f'<p class="aic-note" id="aic-concern-count-{e(iid)}-{e(vid)}">確認した投稿例: {e(sides)}。確認日 {e(v["checked_on"])}</p></details>'
             )
         if connection["source_only_ids"]:
             out.append('<h3>資料にあり、収集投稿で見つからなかったこと</h3>')

@@ -808,6 +808,12 @@
 <style>/* issue-count: scripts/sync_issue_counts.py */
 .explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
+<!-- AI_COPYRIGHT_CONNECTED_START -->
+<link rel="stylesheet" href="ai-copyright-connected.css?v=3">
+<script id="ai-copyright-connected-data" type="application/json">{"schema":1,"theme_id":"ai-copyright","stances":[{"id":"ai-copyright-regulation-support","mode_id":"規制・制限強化支持","short_label":"規制・制限強化支持"},{"id":"ai-copyright-neutral","mode_id":"中立・情報","short_label":"中立・情報"},{"id":"ai-copyright-promotion-support","mode_id":"推進・活用支持","short_label":"推進・活用支持"}],"issues":{"ai-copyright-learning-data":{"posts_id":"issue-ai-copyright-learning-data","claim_ids":["unauthorized_learning_infringement","data_disclosure_needed"],"source_only_ids":["ai-copyright-sc-1","ai-copyright-sc-4"],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["gakushu","kaiji"]},"ai-copyright-user-ethics":{"posts_id":"issue-ai-copyright-user-ethics","claim_ids":[],"source_only_ids":[],"shared_concern_ids":["ai-copyright-vein-2"],"timeline_ids":[],"check_ids":[]},"ai-copyright-legal-framework":{"posts_id":"issue-ai-copyright-legal-framework","claim_ids":["data_disclosure_needed","tech_innovation_over_regulation"],"source_only_ids":["ai-copyright-sc-3"],"shared_concern_ids":["ai-copyright-vein-1","ai-copyright-vein-2"],"timeline_ids":[],"check_ids":["kaiji","hokaisei"]},"ai-copyright-creator-rights":{"posts_id":"issue-ai-copyright-creator-rights","claim_ids":["compensation_required","creator_protection_insufficient"],"source_only_ids":["ai-copyright-sc-2"],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["sakufu"]},"ai-copyright-other":{"posts_id":"issue-ai-copyright-other","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[]},"ai-copyright-generated-work-rights":{"posts_id":"issue-ai-copyright-generated-work-rights","claim_ids":["ai_output_has_copyright"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[]},"ai-copyright-tech-promotion":{"posts_id":"issue-ai-copyright-tech-promotion","claim_ids":["tech_innovation_over_regulation"],"source_only_ids":[],"shared_concern_ids":["ai-copyright-vein-1"],"timeline_ids":[],"check_ids":[]}},"scope_note":"理由の分類・投稿例・資料は、この論点全体の内容です。","background_checked_on":"2026-09-19"}</script>
+<script src="ai-copyright-connected.js?v=1" defer></script>
+<script src="ai-copyright-connected-page.js?v=1" defer></script>
+<!-- AI_COPYRIGHT_CONNECTED_END -->
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/ai-copyright/ai-copyright-hero.webp')">
 <div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
@@ -2137,6 +2143,340 @@ function buildQuiz(){
   }));
 }
 
+/* AI_COPYRIGHT_CONNECTED_BRIDGE_START */
+// バー↔山の立場共有（工程2）、論点を選んだときの読書面・山の選択色・480msの滑らかな変化・
+// 初期表示の自動着地（工程3）、深いリンクの名前空間統一・予想②からの論点移動・出典操作の計測
+// （工程4、bukatsu-chiikiの工程4相当の考え方を移植）。land/orbit/buildGuesses/buildQuiz自体の
+// 中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
+//
+// 一次資料クイズからの論点移動は、bukatsu-chiikiのbridge.js側の実装（#quizへの委譲listener）
+// を検証した結果、docs/ai-copyright-connected-page.js側が独自クイズ描画へ差し替える際に
+// #quizを一度detachして中身を作り直すため、bridge.js側の委譲は実質到達しない設計だったと
+// 判明した（同ページ.js側のshowQuestion()が自前でmap.selectIssue()を呼ぶため機能的には
+// 重複でもある）。ai-copyrightではpage.js側のshowQuestion()に一本化し、ここでは実装しない。
+(function(){
+  // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
+  // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
+  // 何も登録されない。#modes 自体（常に存在する入れ物）への委譲で、後から生まれる
+  // ボタンにも効くようにする。STANCE_GLANCE側は静的HTMLで最初から存在するため、
+  // 個別付与のままでよい。
+  var glanceButtons = document.querySelectorAll('#stance-glance-buttons .sg-pick-btn');
+  var modesBox = document.getElementById('modes');
+
+  function stanceAt(i){ return D.stances[i] || null; }
+
+  function syncGlance(modeId){
+    glanceButtons.forEach(function(btn, i){
+      var s = stanceAt(i);
+      btn.setAttribute('aria-pressed', String(!!s && s.key === modeId));
+    });
+  }
+  function syncModes(modeId){
+    if (!modesBox) return;
+    modesBox.querySelectorAll('[data-m]').forEach(function(btn){
+      btn.setAttribute('aria-pressed', String(btn.dataset.m === modeId));
+    });
+  }
+
+  // STANCE_GLANCEは表示だけの装置として作られている（自分の中だけで完結する）。
+  // 山を動かす呼び出しをここで追加する。既存のonclickは残したまま、別のlistenerを足す。
+  glanceButtons.forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var s = stanceAt(i);
+      if (!s || !modeById[s.key]) return;
+      morphTo(s.key);
+      syncModes(s.key);
+    });
+  });
+  // #modesは既存のonclickでmorphTo()を直接呼ぶ。STANCE_GLANCE側の見た目をここで揃える。
+  // 「すべて」はSTANCE_GLANCE側に対応ボタンが無いため、押下状態だけを揃える。
+  if (modesBox){
+    modesBox.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-m]');
+      if (!btn) return;
+      var i = D.stances.findIndex(function(s){ return s.key === btn.dataset.m; });
+      if (i >= 0 && glanceButtons[i]) glanceButtons[i].click();
+      else syncGlance(btn.dataset.m);
+    });
+  }
+  syncGlance(st.mode);
+  syncModes(st.mode);
+
+  // ---------- 工程3: 論点を選んだときの読書面（理由・投稿・資料）への差し替え ----------
+  // drawPanel()だけを差し替える。land()/orbit()/morphTo()は全てdrawPanel()を呼ぶため、
+  // ここ1箇所で全ての入口をまとめて拾える。読書面が無い論点（テンプレート未生成）や
+  // 「すべての論点」表示（st.landed===null）では、既存の描画をそのまま使う。
+  var legacyDrawPanel = drawPanel;
+  function readingTemplateFor(id){
+    return document.getElementById('ai-copyright-reading-' + id);
+  }
+  function fillMetrics(root, issue){
+    var m = modeById[st.mode], n = m.counts[issue.id] || 0;
+    var count = root.querySelector('[data-aic-count]');
+    var mode = root.querySelector('[data-aic-mode]');
+    var ratio = root.querySelector('[data-aic-ratio]');
+    var zero = root.querySelector('[data-aic-zero]');
+    if (count) count.textContent = n.toLocaleString('ja-JP');
+    if (mode) mode.textContent = '件 / ' + m.label + m.total.toLocaleString('ja-JP') + '件中';
+    if (n && m.total){
+      if (ratio){ ratio.textContent = (100*n/m.total).toFixed(1) + '%　高さ：強い表現 ' + (m.high_pct[issue.id]||0) + '%'; ratio.hidden = false; }
+      if (zero) zero.hidden = true;
+    } else {
+      if (ratio) ratio.hidden = true;
+      if (zero){ zero.textContent = 'この立場では0件です。'; zero.hidden = false; }
+    }
+  }
+  function renderReading(id){
+    var tpl = readingTemplateFor(id);
+    var panel = document.getElementById('panel');
+    panel.innerHTML = '';
+    panel.appendChild(tpl.content.cloneNode(true));
+    fillMetrics(panel, issues[idIndex[id]]);
+    var back = document.createElement('button');
+    back.type = 'button'; back.className = 'back'; back.id = 'back';
+    back.textContent = '← 論点の一覧へ戻る（Esc）';
+    back.addEventListener('click', orbit);
+    panel.appendChild(back);
+    // 図解の拡大は、既存のdocument委譲ハンドラ（.explainer-card[data-img]監視）が
+    // そのまま拾う。ここで別のlistenerを足す必要はない。
+  }
+  drawPanel = function(){
+    if (st.landed === null) { legacyDrawPanel(); return; }
+    var id = issues[st.landed].id;
+    if (!readingTemplateFor(id)) { legacyDrawPanel(); return; }
+    renderReading(id);
+  };
+
+  // ---------- 立場を切り替えたときの山の変化を滑らかにする（V11） ----------
+  // bukatsu-chiikiのbukatsu_connected_bridge.jsと同じ考え方（layout()だけを差し替え、
+  // render()が内部で呼ぶlayout(st.mode)が補間後の形を返すようにする。render()自体は
+  // 書き換えない）。
+  var aicVisual = null, aicAnimation = 0;
+  var legacyLayout = layout;
+  layout = function(modeId){ return aicVisual && modeId === st.mode ? aicVisual : legacyLayout(modeId); };
+
+  // ---------- 山の色を選んだ立場1色にそろえる（V05） ----------
+  // 元の配色は論点ごとに最多の立場の色を塗り分ける方式（多色）。選んだ立場の色1色へ
+  // 全ての山をそろえ、選択中は濃く・他は薄くする（レイアウトの計算そのものは元の
+  // legacyRenderのまま、描画後にfill/opacityだけ塗り直す）。色の値自体は
+  // configs/planet/ai-copyright.yamlの立場配色をそのまま使う。
+  function recolorHills(){
+    var stance = D.stances.find(function(s){ return s.key === st.mode; });
+    var color = stance ? stance.color : '#075ef2';
+    svg.querySelectorAll('.hill').forEach(function(g){
+      var path = g.querySelector('path');
+      if (!path) return;
+      var landed = st.landed !== null && Number(g.dataset.i) === st.landed;
+      path.setAttribute('fill', color);
+      path.setAttribute('opacity', String(st.landed === null ? 0.6 : (landed ? 0.9 : 0.23)));
+      if (landed) {
+        path.setAttribute('stroke', '#f2f6fa');
+        path.setAttribute('stroke-width', '1.8');
+        path.removeAttribute('stroke-dasharray');
+      } else if (path.getAttribute('stroke-dasharray')) {
+        path.setAttribute('stroke', color);
+      } else {
+        path.removeAttribute('stroke');
+      }
+      var zeroMark = g.querySelector('.zero-mark');
+      if (zeroMark) zeroMark.setAttribute('fill', color);
+    });
+  }
+
+  // アニメーション中は毎フレームsvg.innerHTMLを作り直す（render()自体の仕様）ため、
+  // キーボード操作中の山（.hill）へのフォーカスが毎回外れる。呼び出し前後で復元する。
+  var legacyRender = render;
+  render = function(){
+    var focused = document.activeElement;
+    var focusId = focused && focused.classList && focused.classList.contains('hill') ? focused.dataset.i : null;
+    legacyRender();
+    recolorHills();
+    if (focusId !== null){
+      var el = svg.querySelector('.hill[data-i="' + focusId + '"]');
+      if (el) el.focus({preventScroll: true});
+    }
+  };
+
+  function aicAnimate(from, to){
+    cancelAnimationFrame(aicAnimation);
+    if (reduce){ aicVisual = null; render(); return; }
+    var start = performance.now();
+    var byId = function(list){ var m = new Map(); list.forEach(function(v){ m.set(v.it.id, v); }); return m; };
+    var a = byId(from.live), b = byId(to.live);
+    var keys = issues.map(function(it){ return it.id; }).filter(function(id){ return a.has(id) || b.has(id); });
+    function zero(v){ return Object.assign({}, v, {x0: v.cx, x1: v.cx, w: 0, top: SEA, n: 0, hi: 0, rate: 0, share: 0}); }
+    function frame(now){
+      var t = Math.min(1, (now - start) / 480), f = 1 - Math.pow(1 - t, 3);
+      aicVisual = Object.assign({}, to, {live: keys.map(function(id){
+        var end = b.get(id), begin = a.get(id);
+        var left = begin || zero(end), right = end || zero(begin), value = Object.assign({}, right);
+        ['x0', 'x1', 'cx', 'w', 'top', 'n', 'hi', 'rate', 'share'].forEach(function(key){
+          value[key] = left[key] + (right[key] - left[key]) * f;
+        });
+        value.n = Math.round(value.n); value.hi = Math.round(value.hi);
+        value.clipped = value.rate > Y_MAX;
+        return value;
+      })});
+      render();
+      if (t < 1) aicAnimation = requestAnimationFrame(frame);
+      else { aicVisual = null; aicAnimation = 0; render(); }
+    }
+    aicAnimation = requestAnimationFrame(frame);
+  }
+
+  // 連打時、前のアニメーションの最新の形（aicVisual）から次の目的地へつなぐため、
+  // 常に最後に押した立場へ収束する（前のアニメーションへ戻らない）。
+  morphTo = function(toMode){
+    if (!modeById[toMode] || toMode === st.mode) return;
+    var from = aicVisual || legacyLayout(st.mode);
+    st.prevRank = ranksOf(st.mode);
+    st.mode = toMode;
+    if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+      st.landed = null;
+      if (location.hash) history.replaceState(null, "", location.pathname);
+    }
+    evacuateChart();
+    drawPanel(); syncList(); placeChart();
+    aicAnimate(from, legacyLayout(toMode));
+    if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
+  };
+
+  // ---------- 初期表示の自動着地 ----------
+  // land()自体は変えない。画面を動かさず状態だけ変えたい初期表示では、bringIntoView()を
+  // 一時的に何もしない関数へ差し替えてland()を呼び、直後に戻す（land()の中身は複製しない）。
+  function landSilently(i){
+    var real = bringIntoView;
+    bringIntoView = function(){};
+    land(i);
+    bringIntoView = real;
+  }
+  // land()が書くhashは論点の生id（例: #ai-copyright-learning-data）だが、issue-cards・授業節の
+  // 既存リンクは別の名前空間（例: #issue-ai-copyright-learning-data）を使っている。
+  // 工程4でissue-cardsを通常画面から隠すため、実際に残る消費先は授業節の論点リンクのみだが、
+  // 両方を同じ論点選択へ正規化しておく（bukatsu-chiikiと同じ設計）。
+  function issueIdFromHash(){
+    var h = location.hash.slice(1);
+    if (!h) return null;
+    if (Object.prototype.hasOwnProperty.call(idIndex, h)) return h;
+    if (h.indexOf('issue-') === 0 && Object.prototype.hasOwnProperty.call(idIndex, h.slice(6))) return h.slice(6);
+    return null;
+  }
+  // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
+  // 素のhash付きURL（前回訪問した論点をブラウザが覚えている再訪問）では、この関数を待たずに
+  // 既存init（PLANET_SECTION末尾の同期処理）がすぐland()を呼ぶ。その時点ではまだtemplateが
+  // 未パースのため、drawPanel()は「読書面が無い論点」と判定して旧描画へ後退する。
+  // テンプレートが必ず揃っているこのタイミングで、読書面が実際に描けているかを確かめ、
+  // 旧描画のままなら同じ論点へもう一度静かに着地し直す。
+  function readingRenderedFor(i){
+    return i !== null && !!document.getElementById('panel').querySelector('.aic-selected-head');
+  }
+  function initialLand(){
+    if (st.landed === null) {
+      var id = issueIdFromHash();
+      if (id !== null){ landSilently(idIndex[id]); }
+      else if (!location.hash){
+        var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
+        landSilently(idIndex[top.id]);
+      }
+    }
+    if (st.landed !== null && !readingRenderedFor(st.landed)) landSilently(st.landed);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialLand, {once: true});
+  } else {
+    initialLand();
+  }
+  // 授業節の論点リンクも、ブラウザの戻る/進むも、最終的にはhashの変化として届く。1箇所で
+  // 拾い、同じ論点選択へつなぐ。論点に無関係なhash（#planet-block・#vote-section等）は
+  // 無視して今の選択状態を保つ。
+  window.addEventListener('hashchange', function(){
+    var h = location.hash.slice(1);
+    if (!h){ if (st.landed !== null) orbit(); return; }
+    var id = issueIdFromHash();
+    if (id !== null && (st.landed === null || issues[st.landed].id !== id)) landSilently(idIndex[id]);
+  });
+
+  // ---------- 論点表示・出典操作の計測 ----------
+  // GA4本体（gtag）はGA_TAG_START〜ENDのshimが本番ホストでだけ動く前提のため、無い環境
+  // （ローカル確認等）では何もしない。再描画のたびに送らないよう、直前に送った論点idと
+  // 比較する（立場切替でdrawPanelが同じ論点を再描画しても送り直さない）。閲覧者が選んだ
+  // 立場・自由記述は送らない。送るのはissue_idと、押した出典リンクの行き先URLだけ。
+  var lastTrackedIssue = null;
+  function trackIssueView(id){
+    if (typeof window.gtag !== 'function' || id === lastTrackedIssue) return;
+    lastTrackedIssue = id;
+    window.gtag('event', 'issue_view', {issue_id: id});
+  }
+  var panelForTracking = document.getElementById('panel');
+  if (panelForTracking){
+    panelForTracking.addEventListener('click', function(e){
+      var a = e.target.closest('a[target="_blank"]');
+      if (!a || typeof window.gtag !== 'function') return;
+      window.gtag('event', 'citation_click', {
+        issue_id: st.landed === null ? null : issues[st.landed].id,
+        outbound_url: a.href
+      });
+    });
+  }
+  var legacyDrawPanelForTracking = drawPanel;
+  drawPanel = function(){
+    legacyDrawPanelForTracking();
+    if (st.landed !== null) trackIssueView(issues[st.landed].id);
+  };
+
+  // ---------- 予想2問②（強い表現が一番多い論点は？）の答えから、該当の山へ移動 ----------
+  // buildGuesses()自体は上書きしない（①②の文言・正誤判定は既存のまま）。#guesses
+  // （buildModes()と同様、buildGuesses()実行前は空の入れ物）への委譲で、答えが開いた
+  // 直後（＝buildGuesses()自身のclick listenerが先に走った後、bubblingで#guessesへ届く
+  // 時点）にだけ動く。答えの論点名は表示済みの答え文「「論点名」」をそのまま読み取り、
+  // buildGuesses()のクロージャ内の値を再計算しない。
+  var guessesBox = document.getElementById('guesses');
+  if (guessesBox){
+    guessesBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var card = e.target.closest('.guess');
+      if (!card || card.dataset.k !== 'g2') return;
+      var answerBox = card.querySelector('.gans');
+      if (!answerBox || answerBox.querySelector('.aic-guess-link')) return;
+      var match = answerBox.innerHTML.match(/<b>「([^」]+)」/);
+      var target = match && issues.find(function(it){ return it.label === match[1]; });
+      if (!target) return;
+      var link = document.createElement('button');
+      link.type = 'button';
+      link.className = 'aic-guess-link';
+      link.textContent = 'この論点の山を見る ↓';
+      link.addEventListener('click', function(){ land(idIndex[target.id]); });
+      answerBox.appendChild(link);
+    });
+  }
+
+  window.AiCopyrightConnectedMap = Object.freeze({
+    getState: function(){
+      var stance = D.stances.find(function(s){ return s.key === st.mode; });
+      return Object.freeze({
+        stanceId: stance ? stance.id : 'all',
+        issueId: st.landed === null ? null : issues[st.landed].id
+      });
+    },
+    selectIssue: function(id){
+      if (id === null){ orbit(); return true; }
+      if (!Object.prototype.hasOwnProperty.call(idIndex, id)) return false;
+      land(idIndex[id]);
+      return true;
+    },
+    selectStance: function(id){
+      if (id === 'all'){ morphTo('all'); syncGlance('all'); syncModes('all'); return true; }
+      var stance = D.stances.find(function(s){ return s.id === id; });
+      if (!stance) return false;
+      morphTo(stance.key);
+      syncGlance(stance.key);
+      syncModes(stance.key);
+      return true;
+    }
+  });
+})();
+
+/* AI_COPYRIGHT_CONNECTED_BRIDGE_END */
 /* ---------- 初期化 ----------
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
@@ -2923,5 +3263,100 @@ try {
 })();
 </script>
 <script src="share-x-btn.js"></script>
+<!-- AI_COPYRIGHT_CONNECTED_CONTENT_START -->
+<template id="ai-copyright-reading-ai-copyright-learning-data">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>📚 学習データ・無断利用</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-gakushu-v2.webp" data-alt="学習データ・無断利用"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-gakushu-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="aic-reasons"><li><span class="aic-reason-row"><span>無断学習は著作権侵害（一般）</span><b id="aic-reason-count-ai-copyright-learning-data-A1">369<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:50.500%"></i></span></li><li><span class="aic-reason-row"><span>個人の作品保護・肖像権</span><b id="aic-reason-count-ai-copyright-learning-data-A4">104<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:14.200%"></i></span></li><li><span class="aic-reason-row"><span>経済的搾取・対価不払い</span><b id="aic-reason-count-ai-copyright-learning-data-A2">38<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:5.200%"></i></span></li><li><span class="aic-reason-row"><span>学習は合法、出力が問題</span><b id="aic-reason-count-ai-copyright-learning-data-B">31<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:4.200%"></i></span></li><li><span class="aic-reason-row"><span>規制・法整備の必要性</span><b id="aic-reason-count-ai-copyright-learning-data-G">26<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:3.600%"></i></span></li><li><span class="aic-reason-row"><span>二次創作との二重基準批判</span><b id="aic-reason-count-ai-copyright-learning-data-F">22<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:3.000%"></i></span></li><li><span class="aic-reason-row"><span>その他</span><b id="aic-reason-count-ai-copyright-learning-data-J">21<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.900%"></i></span></li><li><span class="aic-reason-row"><span>創作環境・文化への悪影響</span><b id="aic-reason-count-ai-copyright-learning-data-A3">20<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.700%"></i></span></li><li><span class="aic-reason-row"><span>学習元の透明性・開示</span><b id="aic-reason-count-ai-copyright-learning-data-D">12<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.600%"></i></span></li><li><span class="aic-reason-row"><span>補償・opt-out権の創設</span><b id="aic-reason-count-ai-copyright-learning-data-C">8<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.100%"></i></span></li><li><span class="aic-reason-row"><span>AI学習と人間の模傭は同等</span><b id="aic-reason-count-ai-copyright-learning-data-E">3<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:0.400%"></i></span></li><li><span class="aic-reason-row"><span>技術的対策（出力フィルタ等）</span><b id="aic-reason-count-ai-copyright-learning-data-I">3<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:0.400%"></i></span></li><li><span class="aic-reason-row"><span>まだ読み直していない分</span><b id="aic-reason-count-ai-copyright-learning-data-__unread__">73<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:10.000%"></i></span></li></ul>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/hello_jinsei_11/status/2096054163344130472"><p>AI出力は盗用の集合体と批判</p><a href="https://x.com/hello_jinsei_11/status/2096054163344130472" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hello_jinsei_11/status/2096054163344130472">@hello_jinsei_11 の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/Ailnlv2/status/2096043249177927793"><p>AIだけを特別視する理由に疑問</p><a href="https://x.com/Ailnlv2/status/2096043249177927793" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Ailnlv2/status/2096043249177927793">@Ailnlv2 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<p class="aic-eyebrow">制度の確認 2026-09-19</p><h3>この論点に関わる制度は？</h3>
+<details class="aic-check" data-aic-check="gakushu"><summary>AI学習と著作権侵害：「無断学習」は一律に違法なのか</summary><p id="aic-check-note-ai-copyright-learning-data-gakushu">一律には決まっていません。著作権法第30条の4により学習のための利用は原則として権利者の許諾が不要ですが、学習データの創作的表現をそのまま出力させる目的が併存する場合などは対象外になりうるという考え方が文化庁から示されています。個別の裁判例の蓄積はまだありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化庁「AIと著作権に関する考え方について」（令和6年3月15日）</a></li><li><a href="https://laws.e-gov.go.jp/law/345AC0000000048" target="_blank" rel="noopener noreferrer">e-Gov 著作権法 第30条の4</a></li></ul></details></details>
+<details class="aic-check" data-aic-check="kaiji"><summary>学習データの情報開示：AI事業者は出所を明かす義務があるのか</summary><p id="aic-check-note-ai-copyright-learning-data-kaiji">義務ではありません。政府が示した「プリンシプル・コード」は、開示するか、開示しない場合はその理由を説明する「コンプライ・オア・エクスプレイン」方式の任意ルールで、法律による強制ではありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf" target="_blank" rel="noopener noreferrer">内閣府「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-note">照合確認日 2026-09-19。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="aic-claim" data-aic-claim="unauthorized_learning_infringement" open><summary>「AIによる無断学習は、著作権法上、常に著作権侵害にあたる」</summary><span class="aic-verdict">少しずれる</span><p>無断で著作物が使われていること自体は事実で、懸念には根拠がある。ただし著作権法は学習のための利用を原則として権利者の許諾が不要な行為と位置づけており、常に著作権侵害にあたるとまでは言えない。享受目的が併存する場合など例外的に問題になりうる、という整理がより正確。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）</a></li><li><a href="https://laws.e-gov.go.jp/law/345AC0000000048" target="_blank" rel="noopener noreferrer">e-Gov法令検索 著作権法 第30条の4</a></li></ul></details></details>
+<details class="aic-claim" data-aic-claim="data_disclosure_needed"><summary>「学習データの出所開示をAI事業者に法律で義務づける制度は、日本にはまだ無い」</summary><span class="aic-verdict">資料どおり</span><p>そのとおりです。政府（内閣府）が用意しているのは、開示するか、しない場合は理由を説明すればよい任意の枠組み（プリンシプル・コード）で、開示を法律で義務づけるものではありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf" target="_blank" rel="noopener noreferrer">内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」</a></li></ul></details></details>
+<h3>資料にあり、収集投稿で見つからなかったこと</h3>
+<details class="aic-source-only" data-aic-source-only="ai-copyright-sc-1"><summary>無断学習された側は、現行法の解釈でも生成物の廃棄請求や学習用データセットからの除去請求を行える場合がある</summary><p>無断で自分の作品をAIに学習されたと考える権利者は、著作権侵害が認められれば、AI生成物の廃棄請求や、一定の場合には学習用データセットからの除去請求を行える可能性がある。「無断で使われたら泣き寝入りするしかない」という認識でいる人にとっては、実際に取れる手段が想定より残っている。</p><p class="aic-note">今回収集した意見2,865件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-20</p><details><summary>調べた範囲を見る</summary><p id="aic-source-note-ai-copyright-sc-1">「廃棄」「除去請求」の語での一致は1件あるが、米カリフォルニア州でのアンソロピック社に対する別訴訟の報道で、日本の著作権法の解釈に基づく権利者の救済手段への言及ではないため除外。「差止め」まで広げると1件（AI生成物利用者側の炎上リスクとしての言及）が加わるが、権利者が行使できる救済手段としての言及ではなく除外。廃棄請求・データセットからの除去請求という具体的な手段そのものへの言及は0件。2026-09-20: 新規272件（意見）を同じ条件語で再検索。関連投稿で「廃棄」に1件ヒットしたが意見ではなく（ニュース共有）、内容も書籍が物理的に廃棄されたという別文脈のため対象外。意見側の新規一致なし、母数のみ更新。</p></details><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）</a><p>5.（2）生成・利用段階、権利者の救済手段の整理箇所。新たな侵害物の生成の差止め、生成物の廃棄請求のほか、一定の場合には学習用データセットからの除去請求や侵害予防に必要な措置の請求が可能と整理</p></li></ul></details></details>
+<details class="aic-source-only" data-aic-source-only="ai-copyright-sc-4"><summary>robots.txtや利用規約でのAI学習拒否の明示は、それを尊重しないクローラーや転載経由の収集を防げない</summary><p>自作品をAI学習から守りたい権利者が、robots.txtへの記載や利用規約への明示でオプトアウトを表明しても、それを尊重しないクローラーには効かず、別サイトへ転載された作品がそこから収集されることも防げない。「オプトアウトを表明すれば守られる」という認識では、実際の防御力を過大評価する可能性がある。</p><p class="aic-note">今回収集した意見2,865件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-20</p><details><summary>調べた範囲を見る</summary><p id="aic-source-note-ai-copyright-sc-4">「robots.txt」「クローラ」「オプトアウト」の語での一致は4件あるが、企業版サービスの契約上のオプトアウトやEU方式の集中管理オプトアウトへの言及、robots.txt等の存在を紹介するにとどまる投稿、オプトアウトが機能していないという抽象的な不満にとどまり、クローラーが記載を無視する具体的な仕組みや転載経由での回避不可能性への言及は0件。2026-09-20: 新規272件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。</p></details><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf" target="_blank" rel="noopener noreferrer">内閣府知的財産戦略推進事務局「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」</a><p>3.権利者に期待される取組事項例（p.8〜）、オプトアウトの方法（p.19以降）。「robots.txtの記載による収集制限を尊重しないクローラも存在している」「人力でrobots.txtの記載のあるサイトから作品をダウンロードされ、記載のない別サイトに転載されてしまった場合、そこから収集されることは防げない」との記載</p></li></ul></details></details>
+</aside></div></template>
+<template id="ai-copyright-reading-ai-copyright-user-ethics">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>💬 利用者モラル・倫理</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-moraru-v2.webp" data-alt="利用者モラル・倫理"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-moraru-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="aic-empty">この論点は、まだ編集部が投稿を1件ずつ読み直していません。AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</p>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/7u7t7u/status/2096030978267664520"><p>運営サイトに方針の明確化を求める</p><a href="https://x.com/7u7t7u/status/2096030978267664520" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/7u7t7u/status/2096030978267664520">@7u7t7u の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/1KGXAHrWKH25965/status/2096066224707019044"><p>AI活用にも発想力が要ると反論</p><a href="https://x.com/1KGXAHrWKH25965/status/2096066224707019044" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/1KGXAHrWKH25965/status/2096066224707019044">@1KGXAHrWKH25965 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="aic-concern" data-aic-concern="ai-copyright-vein-2"><summary>自分の実際の主張が、単純化されたレッテル（「反AI」「盗人」等）に置き換えられて誤解され、まともに取り合ってもらえていない。</summary><p>同じ『レッテルで誤解されている』という不満から、規制・制限強化支持側は『反AIという語をやめ、無断学習の一部データセットの違法性のみに反対しているという実際の主張（規制派・生成規制論）で呼んでほしい』と求め、推進・活用支持側は『AI利用者を一律に盗人・非人道的と決めつけず、適法な利用として尊重してほしい』と求める。誤解の中身と、求める再定義の内容が逆向きになる。</p><p class="aic-note" id="aic-concern-count-ai-copyright-user-ethics-ai-copyright-vein-2">確認した投稿例: 規制・制限強化支持 3件 ／ 推進・活用支持 2件。確認日 2026-09-19</p></details>
+</aside></div></template>
+<template id="ai-copyright-reading-ai-copyright-legal-framework">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>⚖️ 法制度・規制整備</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-hoseibi-v2.webp" data-alt="法制度・規制整備"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-hoseibi-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="aic-empty">この論点は、まだ編集部が投稿を1件ずつ読み直していません。AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</p>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/hito4622/status/2096043110921130139"><p>意図的な模倣への法規制を提案</p><a href="https://x.com/hito4622/status/2096043110921130139" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/hito4622/status/2096043110921130139">@hito4622 の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/shiroshiromagic/status/2096040620083253473"><p>著作権法30条の4を根拠に反論</p><a href="https://x.com/shiroshiromagic/status/2096040620083253473" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shiroshiromagic/status/2096040620083253473">@shiroshiromagic の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<p class="aic-eyebrow">制度の確認 2026-09-19</p><h3>この論点に関わる制度は？</h3>
+<details class="aic-check" data-aic-check="kaiji"><summary>学習データの情報開示：AI事業者は出所を明かす義務があるのか</summary><p id="aic-check-note-ai-copyright-legal-framework-kaiji">義務ではありません。政府が示した「プリンシプル・コード」は、開示するか、開示しない場合はその理由を説明する「コンプライ・オア・エクスプレイン」方式の任意ルールで、法律による強制ではありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf" target="_blank" rel="noopener noreferrer">内閣府「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」</a></li></ul></details></details>
+<details class="aic-check" data-aic-check="hokaisei"><summary>2026年の著作権法改正：SNSで話題の「著作権法改正」とAI学習の関係</summary><p id="aic-check-note-ai-copyright-legal-framework-hokaisei">無関係です。令和8年の著作権法改正は実演家の二次使用料に関するもので、AI学習の適法性に関わる第30条の4・第47条の5は改正されていません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.bunka.go.jp/seisaku/chosakuken/hokaisei/r08_hokaisei/" target="_blank" rel="noopener noreferrer">文化庁「著作権法の一部を改正する法律」（令和8年法律第48号）改正ページ</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-note">照合確認日 2026-09-19。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="aic-claim" data-aic-claim="data_disclosure_needed" open><summary>「学習データの出所開示をAI事業者に法律で義務づける制度は、日本にはまだ無い」</summary><span class="aic-verdict">資料どおり</span><p>そのとおりです。政府（内閣府）が用意しているのは、開示するか、しない場合は理由を説明すればよい任意の枠組み（プリンシプル・コード）で、開示を法律で義務づけるものではありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf" target="_blank" rel="noopener noreferrer">内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」</a></li></ul></details></details>
+<details class="aic-claim" data-aic-claim="tech_innovation_over_regulation"><summary>「生成AIへの法規制はほとんど進んでおらず、野放し状態にある」</summary><span class="aic-verdict">少しずれる</span><p>著作権法上のAI学習に関する条文が改正されていないのは事実だが、AI法の制定やプリンシプル・コードの整備は進んでおり、法制度の対応が「ほとんど進んでいない」「野放し」とまでは言えない。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/507AC0000000053" target="_blank" rel="noopener noreferrer">e-Gov法令検索「人工知能関連技術の研究開発及び活用の推進に関する法律」（令和七年法律第五十三号、2025年6月4日公布）</a></li></ul></details></details>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="aic-concern" data-aic-concern="ai-copyright-vein-1"><summary>生成AIの進化・普及のスピードに対して、日本の政策対応（法整備・規制の議論）が遅れている、追いついていない。</summary><p>同じ『政策対応が遅い』という不満から、規制・制限強化支持側は『だからこそ韓国のように迅速で厳格な法規制を急ぐべきだ』と結論づけ、推進・活用支持側は『だからこそインドのように迅速な規制緩和・活用推進を急ぐべきだ』と結論づける。急ぐべき方向が正反対に分かれる。</p><p class="aic-note" id="aic-concern-count-ai-copyright-legal-framework-ai-copyright-vein-1">確認した投稿例: 規制・制限強化支持 3件 ／ 推進・活用支持 2件。確認日 2026-09-19</p></details>
+<details class="aic-concern" data-aic-concern="ai-copyright-vein-2"><summary>自分の実際の主張が、単純化されたレッテル（「反AI」「盗人」等）に置き換えられて誤解され、まともに取り合ってもらえていない。</summary><p>同じ『レッテルで誤解されている』という不満から、規制・制限強化支持側は『反AIという語をやめ、無断学習の一部データセットの違法性のみに反対しているという実際の主張（規制派・生成規制論）で呼んでほしい』と求め、推進・活用支持側は『AI利用者を一律に盗人・非人道的と決めつけず、適法な利用として尊重してほしい』と求める。誤解の中身と、求める再定義の内容が逆向きになる。</p><p class="aic-note" id="aic-concern-count-ai-copyright-legal-framework-ai-copyright-vein-2">確認した投稿例: 規制・制限強化支持 3件 ／ 推進・活用支持 2件。確認日 2026-09-19</p></details>
+<h3>資料にあり、収集投稿で見つからなかったこと</h3>
+<details class="aic-source-only" data-aic-source-only="ai-copyright-sc-3"><summary>プリンシプル・コードは、AI事業者に電子透かしやC2PA等による学習データの出所・生成物の来歴の開示を求めている（義務ではなく任意）</summary><p>プリンシプル・コードを受け入れたAI事業者は、電子透かしやC2PA等の技術で学習データの出所や生成物の来歴を示す措置を検討することが期待される。ただし義務ではなく、実施しない場合は理由を説明すればよい「コンプライ・オア・エクスプレイン」の任意の枠組みにとどまる。</p><p class="aic-note">今回収集した意見2,865件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-20</p><details><summary>調べた範囲を見る</summary><p id="aic-source-note-ai-copyright-sc-3">「電子透かし」「C2PA」「来歴」の語での一致は8件あるが、すべて音楽生成AI「Suno」が自社製品に電子透かしを導入したという個別企業のニュースへの反応で、プリンシプル・コードが求める透明性確保の技術的措置という政府の政策枠組みへの言及ではないため除外。2026-09-20: 新規272件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。</p></details><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf" target="_blank" rel="noopener noreferrer">内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」</a><p>2.この文書が示す原則及び例外、【原則1】(1)透明性確保のための措置。電子透かし、C2PAその他のコンテンツの出所や来歴を証明する技術の導入等をAI事業者に求める記載</p></li></ul></details></details>
+</aside></div></template>
+<template id="ai-copyright-reading-ai-copyright-creator-rights">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>🎨 クリエイター保護・権利</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-creator-v2.webp" data-alt="クリエイター保護・権利"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-creator-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="aic-reasons"><li><span class="aic-reason-row"><span>クリエイターの権利侵害・搾取（一般）</span><b id="aic-reason-count-ai-copyright-creator-rights-D1">156<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:46.700%"></i></span></li><li><span class="aic-reason-row"><span>オプトアウト・自分の作品保護</span><b id="aic-reason-count-ai-copyright-creator-rights-C">50<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:15.000%"></i></span></li><li><span class="aic-reason-row"><span>画風・表現の模倣・盗用</span><b id="aic-reason-count-ai-copyright-creator-rights-A">45<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:13.500%"></i></span></li><li><span class="aic-reason-row"><span>生成AI品質の低さ・敬意欠如</span><b id="aic-reason-count-ai-copyright-creator-rights-E">10<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:3.000%"></i></span></li><li><span class="aic-reason-row"><span>その他</span><b id="aic-reason-count-ai-copyright-creator-rights-J">10<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:3.000%"></i></span></li><li><span class="aic-reason-row"><span>規制・法整備の必要性</span><b id="aic-reason-count-ai-copyright-creator-rights-G">8<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.400%"></i></span></li><li><span class="aic-reason-row"><span>公正取引・行政への批判</span><b id="aic-reason-count-ai-copyright-creator-rights-D2">7<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.100%"></i></span></li><li><span class="aic-reason-row"><span>クリエイターの生存権・雇用・収入</span><b id="aic-reason-count-ai-copyright-creator-rights-B">6<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.800%"></i></span></li><li><span class="aic-reason-row"><span>企業・事務所のAI利用批判</span><b id="aic-reason-count-ai-copyright-creator-rights-D3">6<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.800%"></i></span></li><li><span class="aic-reason-row"><span>二次創作・同人との関係</span><b id="aic-reason-count-ai-copyright-creator-rights-F">5<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.500%"></i></span></li><li><span class="aic-reason-row"><span>まだ読み直していない分</span><b id="aic-reason-count-ai-copyright-creator-rights-__unread__">31<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:9.300%"></i></span></li></ul>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/abura_dev/status/2096003143779926115"><p>AI使用で評価は上がらないと断定</p><a href="https://x.com/abura_dev/status/2096003143779926115" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/abura_dev/status/2096003143779926115">@abura_dev の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/SakuraVfairy/status/2095875011253071879"><p>技術は肯定しつつ自身の変化を語る</p><a href="https://x.com/SakuraVfairy/status/2095875011253071879" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/SakuraVfairy/status/2095875011253071879">@SakuraVfairy の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<p class="aic-eyebrow">制度の確認 2026-09-19</p><h3>この論点に関わる制度は？</h3>
+<details class="aic-check" data-aic-check="sakufu"><summary>声・作風の保護：似せて作られた声や画風への対応</summary><p id="aic-check-note-ai-copyright-creator-rights-sakufu">方針だけが示されています。声の模倣についてはパブリシティ権や不正競争防止法での対応を「引き続き議論」するとされていますが、著作権法によって声や作風そのものを保護する規定はまだありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/260612/keikaku_all.pdf" target="_blank" rel="noopener noreferrer">内閣府「知的財産推進計画2026」（2026年6月決定）</a></li><li><a href="https://kokkai.ndl.go.jp/#/detail?minId=122115104X01120260616&amp;current=1" target="_blank" rel="noopener noreferrer">第221回国会 参議院 文教科学委員会 第11号（令和8年6月16日、谷合正明君発言）</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-note">照合確認日 2026-09-19。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="aic-claim" data-aic-claim="compensation_required" open><summary>「AI事業者に、学習データの利用について対価の支払いを義務づける法律は無い」</summary><span class="aic-verdict">資料どおり</span><p>そのとおりです。著作権法第30条の4は、非享受目的の利用であれば権利者の許諾も対価の支払いも法律上の要件としていません。契約に基づき自主的に対価を還元する事業者の取組事例は資料にありますが、法律上の義務ではありません。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf" target="_blank" rel="noopener noreferrer">内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）</a></li></ul></details></details>
+<details class="aic-claim" data-aic-claim="creator_protection_insufficient"><summary>「無断でAIに学習された作品の作者は、対抗する手段を持たない」</summary><span class="aic-verdict">少しずれる</span><p>オプトアウトの手段が不完全であることは資料にも明記されており、無力感には根拠がある。ただし著作権侵害が認められた場合の救済手段（廃棄請求・除去請求等）は制度として存在しており、対抗手段が皆無というわけではない。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf" target="_blank" rel="noopener noreferrer">内閣府「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」（2024年11月）</a></li><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化庁「AIと著作権に関する考え方について」（救済手段の整理箇所）</a></li></ul></details></details>
+<h3>資料にあり、収集投稿で見つからなかったこと</h3>
+<details class="aic-source-only" data-aic-source-only="ai-copyright-sc-2"><summary>パブリシティ権には著名性の要件があり、若手・中堅の実演家ほど無断でのAI声真似に対抗しにくい</summary><p>無断でAIに声を模倣された実演家は、著名性の要件を満たせばパブリシティ権で対抗できる可能性があるが、要件のハードルが高く、若手・中堅の実演家ほど法的な対抗手段を持ちにくい。著作権法には声そのものを直接保護する規定がないため、この空白は著作権法の改正では埋まらない。</p><p class="aic-note">今回収集した意見2,865件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-20</p><details><summary>調べた範囲を見る</summary><p id="aic-source-note-ai-copyright-sc-2">「パブリシティ」の語での一致は4件あるが、いずれもパブリシティ権と著作権の混同への指摘や特定の報道・判決の内容整理であり、著名性の要件が若手・中堅実演家を保護から実質的に排除しているという論点への言及は0件。2026-09-20: 新規272件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。</p></details><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://kokkai.ndl.go.jp/#/detail?minId=122115104X01120260616&amp;current=1" target="_blank" rel="noopener noreferrer">第221回国会 参議院 文教科学委員会 第11号</a><p>発言番号073（谷合正明君）。「現行の著作権法には、声そのものを直接保護する規定はありません」「著名人の顧客吸引力を保護するパブリシティー権は存在するが、著名人の要件などハードルが高くて、若手や中堅のクリエーターは極めて不安定な状態に置かれている」との質疑</p></li></ul></details></details>
+</aside></div></template>
+<template id="ai-copyright-reading-ai-copyright-other">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>🤔 その他</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-sonota-v2.webp" data-alt="その他"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-sonota-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="aic-reasons"><li><span class="aic-reason-row"><span>派閥対立・意見の差異</span><b id="aic-reason-count-ai-copyright-other-F">60<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:25.200%"></i></span></li><li><span class="aic-reason-row"><span>その他</span><b id="aic-reason-count-ai-copyright-other-J">55<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:23.100%"></i></span></li><li><span class="aic-reason-row"><span>技術的評価・品質・便利性</span><b id="aic-reason-count-ai-copyright-other-D">38<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:16.000%"></i></span></li><li><span class="aic-reason-row"><span>生成AI全般に支持（実用的）</span><b id="aic-reason-count-ai-copyright-other-B">33<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:13.900%"></i></span></li><li><span class="aic-reason-row"><span>生成AI全般に反対（感情的）</span><b id="aic-reason-count-ai-copyright-other-A">28<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:11.800%"></i></span></li><li><span class="aic-reason-row"><span>個人情報保護との関連</span><b id="aic-reason-count-ai-copyright-other-C">6<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.500%"></i></span></li><li><span class="aic-reason-row"><span>法的議論（非特定）</span><b id="aic-reason-count-ai-copyright-other-E">3<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.300%"></i></span></li><li><span class="aic-reason-row"><span>まだ読み直していない分</span><b id="aic-reason-count-ai-copyright-other-__unread__">15<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:6.300%"></i></span></li></ul>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/calamele_rockey/status/2096026110173864395"><p>両陣営の過激さに疲れたと吐露</p><a href="https://x.com/calamele_rockey/status/2096026110173864395" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/calamele_rockey/status/2096026110173864395">@calamele_rockey の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/odanngo_chan/status/2094079715388878972"><p>反対の立場でも実用面は試す</p><a href="https://x.com/odanngo_chan/status/2094079715388878972" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/odanngo_chan/status/2094079715388878972">@odanngo_chan の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+</aside></div></template>
+<template id="ai-copyright-reading-ai-copyright-generated-work-rights">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>✨ AI生成物の権利・創作性</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-seiseibutsu-v2.webp" data-alt="AI生成物の権利・創作性"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-seiseibutsu-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="aic-reasons"><li><span class="aic-reason-row"><span>AI生成物に著作権認めない</span><b id="aic-reason-count-ai-copyright-generated-work-rights-B">50<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:26.900%"></i></span></li><li><span class="aic-reason-row"><span>AI生成物に著作権認めるべき</span><b id="aic-reason-count-ai-copyright-generated-work-rights-A">45<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:24.200%"></i></span></li><li><span class="aic-reason-row"><span>その他</span><b id="aic-reason-count-ai-copyright-generated-work-rights-J">32<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:17.200%"></i></span></li><li><span class="aic-reason-row"><span>人間の創作的寄与が必要</span><b id="aic-reason-count-ai-copyright-generated-work-rights-C">16<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:8.600%"></i></span></li><li><span class="aic-reason-row"><span>創作vsコピーの境界</span><b id="aic-reason-count-ai-copyright-generated-work-rights-F">16<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:8.600%"></i></span></li><li><span class="aic-reason-row"><span>依拘性・類似性で判断</span><b id="aic-reason-count-ai-copyright-generated-work-rights-E">4<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.200%"></i></span></li><li><span class="aic-reason-row"><span>一次創作はOK、二次創作は問題</span><b id="aic-reason-count-ai-copyright-generated-work-rights-D">2<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:1.100%"></i></span></li><li><span class="aic-reason-row"><span>まだ読み直していない分</span><b id="aic-reason-count-ai-copyright-generated-work-rights-__unread__">21<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:11.300%"></i></span></li></ul>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/otaku_yaruze/status/2095883804791751159"><p>言語による創作と組み替えは別と主張</p><a href="https://x.com/otaku_yaruze/status/2095883804791751159" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/otaku_yaruze/status/2095883804791751159">@otaku_yaruze の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/lady_bebe_rose/status/2094392287610696187"><p>プロンプト作成者に著作権があると主張</p><a href="https://x.com/lady_bebe_rose/status/2094392287610696187" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/lady_bebe_rose/status/2094392287610696187">@lady_bebe_rose の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-note">照合確認日 2026-09-19。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="aic-claim" data-aic-claim="ai_output_has_copyright" open><summary>「AIが生成した作品にも、通常の著作物と同じように著作権が認められる」</summary><span class="aic-verdict">少しずれる</span><p>AI生成物が一律に著作物として保護される、あるいは一律に保護されないという単純な結論は資料には無い。人の創作的寄与の有無によってケースごとに判断される論点として扱われており、これを直接確定させた判例もまだ確認できていない。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener noreferrer">文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（生成物の著作物性の議論）</a></li></ul></details></details>
+</aside></div></template>
+<template id="ai-copyright-reading-ai-copyright-tech-promotion">
+<header class="aic-selected-head"><div><p class="aic-eyebrow">選んだ論点</p><h2>🚀 技術競争・推進</h2></div><button type="button" class="explainer-card aic-image-action" data-img="images/topics/ai-copyright/ai-copyright-infographic-wide-gijutsu-v2.webp" data-alt="技術競争・推進"><img src="images/topics/ai-copyright/ai-copyright-infographic-wide-gijutsu-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="aic-metrics" aria-live="polite" aria-atomic="true"><p><strong data-aic-count></strong><span data-aic-mode></span></p><p data-aic-ratio></p><p data-aic-zero hidden></p></div><p class="aic-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="aic-reasons"><li><span class="aic-reason-row"><span>技術革新・産業競争力の向上</span><b id="aic-reason-count-ai-copyright-tech-promotion-A">71<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:53.800%"></i></span></li><li><span class="aic-reason-row"><span>その他</span><b id="aic-reason-count-ai-copyright-tech-promotion-J">18<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:13.600%"></i></span></li><li><span class="aic-reason-row"><span>実用性・便利性の評価</span><b id="aic-reason-count-ai-copyright-tech-promotion-B">14<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:10.600%"></i></span></li><li><span class="aic-reason-row"><span>クリエイターとの共存・共生</span><b id="aic-reason-count-ai-copyright-tech-promotion-C">10<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:7.600%"></i></span></li><li><span class="aic-reason-row"><span>規制より適応・差別化を</span><b id="aic-reason-count-ai-copyright-tech-promotion-D">3<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:2.300%"></i></span></li><li><span class="aic-reason-row"><span>クリーンAI・国産AIの推進</span><b id="aic-reason-count-ai-copyright-tech-promotion-E">1<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:0.800%"></i></span></li><li><span class="aic-reason-row"><span>まだ読み直していない分</span><b id="aic-reason-count-ai-copyright-tech-promotion-__unread__">15<small>件</small></b></span><span class="aic-reason-track" aria-hidden="true"><i style="width:11.400%"></i></span></li></ul>
+<div class="aic-posts"><h3>実際の投稿を読む</h3><p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="aic-post" data-aic-post-url="https://x.com/emutyworks/status/2096046437583008140"><p>仕事では既に不可欠と指摘</p><a href="https://x.com/emutyworks/status/2096046437583008140" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/emutyworks/status/2096046437583008140">@emutyworks の投稿をXで見る</a></blockquote></details></article><article class="aic-post" data-aic-post-url="https://x.com/Tnohito/status/2086213627430990277"><p>実用性のあるAIへ資源を回すべき</p><a href="https://x.com/Tnohito/status/2086213627430990277" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="aic-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Tnohito/status/2086213627430990277">@Tnohito の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="aic-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="aic-note">照合確認日 2026-09-19。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="aic-claim" data-aic-claim="tech_innovation_over_regulation" open><summary>「生成AIへの法規制はほとんど進んでおらず、野放し状態にある」</summary><span class="aic-verdict">少しずれる</span><p>著作権法上のAI学習に関する条文が改正されていないのは事実だが、AI法の制定やプリンシプル・コードの整備は進んでおり、法制度の対応が「ほとんど進んでいない」「野放し」とまでは言えない。</p><details class="aic-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/507AC0000000053" target="_blank" rel="noopener noreferrer">e-Gov法令検索「人工知能関連技術の研究開発及び活用の推進に関する法律」（令和七年法律第五十三号、2025年6月4日公布）</a></li></ul></details></details>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="aic-concern" data-aic-concern="ai-copyright-vein-1"><summary>生成AIの進化・普及のスピードに対して、日本の政策対応（法整備・規制の議論）が遅れている、追いついていない。</summary><p>同じ『政策対応が遅い』という不満から、規制・制限強化支持側は『だからこそ韓国のように迅速で厳格な法規制を急ぐべきだ』と結論づけ、推進・活用支持側は『だからこそインドのように迅速な規制緩和・活用推進を急ぐべきだ』と結論づける。急ぐべき方向が正反対に分かれる。</p><p class="aic-note" id="aic-concern-count-ai-copyright-tech-promotion-ai-copyright-vein-1">確認した投稿例: 規制・制限強化支持 3件 ／ 推進・活用支持 2件。確認日 2026-09-19</p></details>
+</aside></div></template>
+<!-- AI_COPYRIGHT_CONNECTED_CONTENT_END -->
 </body>
 </html>
