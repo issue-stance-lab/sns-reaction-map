@@ -182,6 +182,21 @@ def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
     path.write_text("\n".join(lines) + "\n")
 
 
+def classify_or_split(batch: list[dict[str, Any]], **kwargs: Any) -> list[dict[str, Any]]:
+    """Retry a failed batch one post at a time (same model, same prompt).
+
+    Hermes occasionally returns fewer items than asked for a particular batch,
+    and asking again with the same batch reproduces it (henoko 2026-09-23).
+    """
+    try:
+        return classify(batch, **kwargs)
+    except RuntimeError:
+        if len(batch) == 1:
+            raise
+        print(f"batch of {len(batch)} failed; retrying one by one", flush=True)
+        return [label for row in batch for label in classify([row], **kwargs)]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path, required=True)
@@ -206,7 +221,7 @@ def main() -> int:
 
     for offset in range(start, len(source), args.batch_size):
         batch = source[offset : offset + args.batch_size]
-        labels = classify(batch)
+        labels = classify_or_split(batch)
         for original, label in zip(batch, labels):
             row = dict(original)
             row["classification"] = label
