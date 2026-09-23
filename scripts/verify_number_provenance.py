@@ -61,6 +61,7 @@ import re
 import sys
 from collections import Counter, defaultdict
 from html.parser import HTMLParser
+from importlib import import_module
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -70,6 +71,17 @@ try:
 except ImportError:  # python3 scripts/verify_number_provenance.py
     from issue_card_counts import IssueCountError, card_counts  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
+
+# テーマごとの連動表示専用の数字照合モジュール（scripts/{module}.py、verified_selectors(source, root)を持つ）。
+# consumption_tax_count_provenanceはbare importで足りるが、bukatsu_count_provenanceは内部で
+# `from scripts.bukatsu_connected import ...`という絶対importを使うため、リポジトリ直下も
+# sys.pathに要る（scripts/自体は下のsys.path.insertか、直接実行時のsys.path[0]で足りている前提）。
+COUNT_PROVENANCE_MODULES = {
+    "consumption-tax-cut": "consumption_tax_count_provenance",
+    "bukatsu-chiiki": "scripts.bukatsu_count_provenance",
+}
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 class ProvenanceError(ValueError):
@@ -609,12 +621,13 @@ def check_theme(theme: str, theme_data: dict[str, Any], *, verbose: bool = False
     for doc_name, text in _documents(html_path):
         # 再読分類・選定例・検索記録は一般の論点集計と母集団が違う。
         # 元記録にラベル・件数を照合した要素だけで、その根拠を使う。
+        # 連動表示を持つテーマだけ、専用の照合モジュールを引く（COUNT_PROVENANCE_MODULES）。
+        # 以前はconsumption-tax-cutだけ決め打ちで呼んでおり、bukatsu-chiiki等の連動表示は
+        # ここでの照合対象に一度も入らないまま素通りしていた（2026-09-23発覚）。
         verified_regions = []
-        if theme == "consumption-tax-cut" and doc_name == str(html_path.relative_to(ROOT)):
-            try:
-                from .consumption_tax_count_provenance import verified_selectors
-            except ImportError:
-                from consumption_tax_count_provenance import verified_selectors
+        module_name = COUNT_PROVENANCE_MODULES.get(theme)
+        if module_name and doc_name == str(html_path.relative_to(ROOT)):
+            verified_selectors = import_module(module_name).verified_selectors
             try:
                 verified_regions = [(selector_regions(text, [selector]), reason)
                                     for selector, reason in verified_selectors(text, ROOT).items()]
