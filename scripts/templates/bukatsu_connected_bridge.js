@@ -1,6 +1,7 @@
 // バー↔山の立場共有（工程2）、論点を選んだときの読書面（工程3）、
-// 立場を切り替えたときの山の滑らかな変化・初期表示の自動選択（工程3後追い、tax版の考え方を移植）。
-// land/orbit自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
+// 立場を切り替えたときの山の滑らかな変化・初期表示の自動選択・予想2問②からの論点移動
+// （工程3後追い、tax版の考え方を移植）。
+// land/orbit/buildGuesses自体の中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
 (function(){
   // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
   // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
@@ -187,6 +188,34 @@
     } else {
       autoLandOnTopIssue();
     }
+  }
+
+  // ---------- 予想2問（②強い表現がいちばん多い論点）の答えから、該当の山へ移動 ----------
+  // buildGuesses()自体は上書きしない（①②の文言・正誤判定は既存のまま）。#guesses
+  // （buildModes()と同様、buildGuesses()実行前は空の入れ物）への委譲で、答えが開いた
+  // 直後（＝buildGuesses()自身のclick listenerが先に走った後、bubbling で#guessesへ届く
+  // 時点）にだけ動く。②の答えの論点名は「peak[0].it.label」だがbuildGuesses()の
+  // クロージャ内にしか無いため、再計算せず、既に表示された答え文の「「論点名」」を
+  // そのまま読み取る（tax版のx.issueIdと同じ対象、ボタン文言「この論点の山を見る ↓」も
+  // tax版に合わせた）。
+  var guessesBox = document.getElementById('guesses');
+  if (guessesBox){
+    guessesBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var card = e.target.closest('.guess');
+      if (!card || card.dataset.k !== 'g2') return;
+      var answerBox = card.querySelector('.gans');
+      if (!answerBox || answerBox.querySelector('.bkt-guess-link')) return;
+      var match = answerBox.innerHTML.match(/<b>「([^」]+)」/);
+      var target = match && issues.find(function(it){ return it.label === match[1]; });
+      if (!target) return;
+      var link = document.createElement('button');
+      link.type = 'button';
+      link.className = 'bkt-guess-link';
+      link.textContent = 'この論点の山を見る ↓';
+      link.addEventListener('click', function(){ land(idIndex[target.id]); });
+      answerBox.appendChild(link);
+    });
   }
 
   window.BukatsuConnectedMap = Object.freeze({
