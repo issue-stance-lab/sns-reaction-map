@@ -1,4 +1,4 @@
-"""生成AIと著作権の連動表示（工程2: 土台／工程3: 読書面・選択体験）。
+"""生成AIと著作権の連動表示（工程2: 土台／工程3: 読書面・選択体験／工程4: ページ全体の再配置）。
 候補の目印があるページだけに適用する。
 
 既存の静的本文（STANCE_GLANCE・bukatsu-background・bukatsu-check・PLANET_SECTION）を
@@ -15,11 +15,13 @@ content_index()が自動で拾う。本工程の読書面は空のまま生成�
 
 読書面（`<template id="ai-copyright-reading-{id}">`）の生成は
 `scripts/ai_copyright_connected_content.py`が担当し、実際にdrawPanel()を差し替えて
-表示する処理・山の選択色（V05）・480msの滑らかな変化（V11）・初期表示の自動着地は
-`scripts/templates/ai_copyright_connected_bridge.js`（生成HTMLへ挿入）と
-`docs/ai-copyright-connected.js`（バー・山・論点ボタンの配置、V02〜V04）が担当する。
-理由別X投稿・資料3タブ・年表統合・旧セクションの隠蔽（V07〜V10）はページ全体の再配置を
-扱う工程4で追加する。
+表示する処理・山の選択色（V05）・480msの滑らかな変化（V11）・初期表示の自動着地・
+深いリンクの名前空間統一・出典操作の計測は`scripts/templates/ai_copyright_connected_bridge.js`
+（生成HTMLへ挿入）が担当する。`docs/ai-copyright-connected.js`がバー・山・論点ボタンの
+配置（V02〜V04）、`docs/ai-copyright-connected-page.js`が年表の日付タブ化・資料3タブ化・
+旧セクション（claim-audit・issue-cards・ocean・bukatsu-check）の非表示・判断の入口の
+折りたたみ（V07〜V10、理由別X投稿=V07はai-copyrightに理由別の投稿データが無いため
+対象外・工程1内容確定書の方針）を担当する。
 """
 from __future__ import annotations
 
@@ -35,8 +37,9 @@ START = "<!-- AI_COPYRIGHT_CONNECTED_START -->"
 END = "<!-- AI_COPYRIGHT_CONNECTED_END -->"
 BRIDGE_START = "/* AI_COPYRIGHT_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* AI_COPYRIGHT_CONNECTED_BRIDGE_END */"
-CSS_HREF = "ai-copyright-connected.css?v=2"
+CSS_HREF = "ai-copyright-connected.css?v=3"
 JS_SRC = "ai-copyright-connected.js?v=1"
+PAGE_JS_SRC = "ai-copyright-connected-page.js?v=1"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
 
 
@@ -134,7 +137,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     block = (
         START + f'\n<link rel="stylesheet" href="{CSS_HREF}">\n'
         '<script id="ai-copyright-connected-data" type="application/json">' + payload + '</script>\n'
-        f'<script src="{JS_SRC}" defer></script>\n' + END
+        f'<script src="{JS_SRC}" defer></script>\n'
+        f'<script src="{PAGE_JS_SRC}" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -175,6 +179,8 @@ def validate(source: str) -> list[str]:
         problems.append("連動表示のCSSが1つではありません")
     if len(soup.select(f'script[src="{JS_SRC}"][defer]')) != 1:
         problems.append("ページ配置のJSが1つではありません")
+    if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
+        problems.append("資料タブ・年表のJSが1つではありません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタン（STANCE_GLANCE）の並びが立場データと一致しません")

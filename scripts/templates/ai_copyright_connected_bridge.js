@@ -1,8 +1,13 @@
 // バー↔山の立場共有（工程2）、論点を選んだときの読書面・山の選択色・480msの滑らかな変化・
-// 初期表示の自動着地（工程3、bukatsu-chiikiの工程3相当の考え方を移植。扱う立場が3つな点だけ
-// が違う）。land/orbit/buildGuesses/buildQuiz自体の中身は変えず、drawPanel・layout・render・
-// morphToだけを差し替える。深いリンクの名前空間統一・クイズ/予想からの論点移動・出典操作の
-// 計測は、ページ全体の再配置を扱う工程4で追加する（bukatsu-chiikiも同じ区切り）。
+// 初期表示の自動着地（工程3）、深いリンクの名前空間統一・予想②からの論点移動・出典操作の計測
+// （工程4、bukatsu-chiikiの工程4相当の考え方を移植）。land/orbit/buildGuesses/buildQuiz自体の
+// 中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
+//
+// 一次資料クイズからの論点移動は、bukatsu-chiikiのbridge.js側の実装（#quizへの委譲listener）
+// を検証した結果、docs/ai-copyright-connected-page.js側が独自クイズ描画へ差し替える際に
+// #quizを一度detachして中身を作り直すため、bridge.js側の委譲は実質到達しない設計だったと
+// 判明した（同ページ.js側のshowQuestion()が自前でmap.selectIssue()を呼ぶため機能的には
+// 重複でもある）。ai-copyrightではpage.js側のshowQuestion()に一本化し、ここでは実装しない。
 (function(){
   // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
   // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
@@ -199,9 +204,16 @@
     land(i);
     bringIntoView = real;
   }
+  // land()が書くhashは論点の生id（例: #ai-copyright-learning-data）だが、issue-cards・授業節の
+  // 既存リンクは別の名前空間（例: #issue-ai-copyright-learning-data）を使っている。
+  // 工程4でissue-cardsを通常画面から隠すため、実際に残る消費先は授業節の論点リンクのみだが、
+  // 両方を同じ論点選択へ正規化しておく（bukatsu-chiikiと同じ設計）。
   function issueIdFromHash(){
     var h = location.hash.slice(1);
-    return (h && Object.prototype.hasOwnProperty.call(idIndex, h)) ? h : null;
+    if (!h) return null;
+    if (Object.prototype.hasOwnProperty.call(idIndex, h)) return h;
+    if (h.indexOf('issue-') === 0 && Object.prototype.hasOwnProperty.call(idIndex, h.slice(6))) return h.slice(6);
+    return null;
   }
   // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
   // 素のhash付きURL（前回訪問した論点をブラウザが覚えている再訪問）では、この関数を待たずに
@@ -227,6 +239,69 @@
     document.addEventListener('DOMContentLoaded', initialLand, {once: true});
   } else {
     initialLand();
+  }
+  // 授業節の論点リンクも、ブラウザの戻る/進むも、最終的にはhashの変化として届く。1箇所で
+  // 拾い、同じ論点選択へつなぐ。論点に無関係なhash（#planet-block・#vote-section等）は
+  // 無視して今の選択状態を保つ。
+  window.addEventListener('hashchange', function(){
+    var h = location.hash.slice(1);
+    if (!h){ if (st.landed !== null) orbit(); return; }
+    var id = issueIdFromHash();
+    if (id !== null && (st.landed === null || issues[st.landed].id !== id)) landSilently(idIndex[id]);
+  });
+
+  // ---------- 論点表示・出典操作の計測 ----------
+  // GA4本体（gtag）はGA_TAG_START〜ENDのshimが本番ホストでだけ動く前提のため、無い環境
+  // （ローカル確認等）では何もしない。再描画のたびに送らないよう、直前に送った論点idと
+  // 比較する（立場切替でdrawPanelが同じ論点を再描画しても送り直さない）。閲覧者が選んだ
+  // 立場・自由記述は送らない。送るのはissue_idと、押した出典リンクの行き先URLだけ。
+  var lastTrackedIssue = null;
+  function trackIssueView(id){
+    if (typeof window.gtag !== 'function' || id === lastTrackedIssue) return;
+    lastTrackedIssue = id;
+    window.gtag('event', 'issue_view', {issue_id: id});
+  }
+  var panelForTracking = document.getElementById('panel');
+  if (panelForTracking){
+    panelForTracking.addEventListener('click', function(e){
+      var a = e.target.closest('a[target="_blank"]');
+      if (!a || typeof window.gtag !== 'function') return;
+      window.gtag('event', 'citation_click', {
+        issue_id: st.landed === null ? null : issues[st.landed].id,
+        outbound_url: a.href
+      });
+    });
+  }
+  var legacyDrawPanelForTracking = drawPanel;
+  drawPanel = function(){
+    legacyDrawPanelForTracking();
+    if (st.landed !== null) trackIssueView(issues[st.landed].id);
+  };
+
+  // ---------- 予想2問②（強い表現が一番多い論点は？）の答えから、該当の山へ移動 ----------
+  // buildGuesses()自体は上書きしない（①②の文言・正誤判定は既存のまま）。#guesses
+  // （buildModes()と同様、buildGuesses()実行前は空の入れ物）への委譲で、答えが開いた
+  // 直後（＝buildGuesses()自身のclick listenerが先に走った後、bubblingで#guessesへ届く
+  // 時点）にだけ動く。答えの論点名は表示済みの答え文「「論点名」」をそのまま読み取り、
+  // buildGuesses()のクロージャ内の値を再計算しない。
+  var guessesBox = document.getElementById('guesses');
+  if (guessesBox){
+    guessesBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var card = e.target.closest('.guess');
+      if (!card || card.dataset.k !== 'g2') return;
+      var answerBox = card.querySelector('.gans');
+      if (!answerBox || answerBox.querySelector('.aic-guess-link')) return;
+      var match = answerBox.innerHTML.match(/<b>「([^」]+)」/);
+      var target = match && issues.find(function(it){ return it.label === match[1]; });
+      if (!target) return;
+      var link = document.createElement('button');
+      link.type = 'button';
+      link.className = 'aic-guess-link';
+      link.textContent = 'この論点の山を見る ↓';
+      link.addEventListener('click', function(){ land(idIndex[target.id]); });
+      answerBox.appendChild(link);
+    });
   }
 
   window.AiCopyrightConnectedMap = Object.freeze({

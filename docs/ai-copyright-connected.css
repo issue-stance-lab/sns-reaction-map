@@ -106,10 +106,7 @@
 @media (max-width:450px) {
   .ai-copyright-connected #planet-block .chart-box #section { height:180px; }
 }
-@media print {
-  .ai-copyright-connected #planet-block #panel, .ai-copyright-connected #list, .ai-copyright-connected #modes { display:none !important; }
-  .ai-copyright-connected #fallback { display:block !important; }
-}
+/* 印刷時の扱いは工程4のprintブロック（本ファイル末尾）に統合済み。 */
 
 /* STANCE_GLANCEは#modesとの重複を解消したあとも山の直前に残す。凡例・見出しは#modes側と
    二重になるため隠し、押下色の変化と結果文だけを見せる（V02、立場操作は1組）。 */
@@ -123,3 +120,62 @@
 .ai-copyright-connected #guesses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
 .ai-copyright-connected #guesses .guess { margin:0; }
 @media (max-width:760px) { .ai-copyright-connected #guesses { grid-template-columns:1fr; } }
+
+/* ここからページ全体の再配置・統合（工程4、2026-09-23）。年表タブ・制度確認の要約・
+   資料3タブ・判断の入口の折りたたみ・旧セクションの非表示。docs/ai-copyright-connected-page.js
+   が付与するDOM構造に対応する。 */
+@media screen {
+  /* claim-audit/issue-cards/ocean/bukatsu-checkは論点の読書面へ統合済みのため、
+     通常画面では旧位置の一覧を隠す。 */
+  .ai-copyright-connected #ai-copyright-audit, .ai-copyright-connected #issue-cards,
+  .ai-copyright-connected #ocean, .ai-copyright-connected #bukatsu-check { display:none; }
+}
+
+.ai-copyright-connected .aic-status { margin:20px 0; padding:18px 22px; border-left:3px solid var(--accent,#075ef2); background:#fff; border-radius:0 10px 10px 0; }
+.ai-copyright-connected .aic-status p { margin:5px 0; font-size:13px; line-height:1.85; }
+.ai-copyright-connected .aic-status .aic-eyebrow { font-size:11px; color:#637089; }
+.ai-copyright-connected .aic-status a { display:inline-block; margin-top:8px; font-size:12px; }
+.ai-copyright-connected #bg-title, .ai-copyright-connected #panel h2 { scroll-margin-top:120px; }
+.ai-copyright-connected .aic-timeline-nav { display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 14px; }
+.ai-copyright-connected .aic-timeline-nav button { flex:1; min-width:110px; padding:12px 8px; border:1px solid var(--aic-rule); border-radius:7px; background:#fff; color:#172033; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.ai-copyright-connected .aic-timeline-nav [aria-selected="true"] { border-color:var(--accent,#075ef2); color:var(--accent,#075ef2); box-shadow:inset 0 -3px var(--accent,#075ef2); }
+.ai-copyright-connected #bukatsu-background .bg-tl[hidden] { display:none !important; }
+.ai-copyright-connected #bukatsu-background li[data-aic-timeline-i][hidden] { display:none !important; }
+.ai-copyright-connected .aic-background-intro, .ai-copyright-connected .aic-fold { margin:18px 0; border-top:1px solid var(--aic-rule); padding:14px 0; }
+.ai-copyright-connected .aic-background-intro > summary, .ai-copyright-connected .aic-fold > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.ai-copyright-connected .aic-comparison-note { font-size:12px; line-height:1.8; color:#637089; }
+.ai-copyright-connected .aic-evidence-controls { display:flex; gap:6px; margin:0 0 20px; }
+.ai-copyright-connected .aic-evidence-controls button, .ai-copyright-connected #quiz button { border:1px solid var(--aic-rule); border-radius:6px; background:#fff; color:#172033; font:inherit; font-size:12px; padding:9px 12px; cursor:pointer; }
+.ai-copyright-connected .aic-evidence-controls button { flex:1; min-width:0; padding:9px 7px; line-height:1.65; }
+.ai-copyright-connected .aic-evidence-controls [aria-pressed="true"] { color:var(--accent,#075ef2); border-color:var(--accent,#075ef2); background:var(--aic-paper); font-weight:700; }
+.ai-copyright-connected #planet-block #quiz { margin:0; padding:0; border:0; border-radius:0; background:transparent; }
+.ai-copyright-connected #planet-block #quiz[hidden], .ai-copyright-connected #planet-block .aic-source-stories[hidden] { display:none !important; }
+.ai-copyright-connected #planet-block #quiz .qh { display:flex; flex-wrap:wrap; gap:8px; font-size:11px; }
+.ai-copyright-connected #planet-block #quiz .qclaim { font-size:18px; font-weight:700; }
+.ai-copyright-connected #planet-block #quiz .aic-quiz-note { font-size:11px; color:#637089; }
+.ai-copyright-connected #planet-block #quiz .aic-qopts { display:flex; flex-wrap:wrap; gap:8px; }
+.ai-copyright-connected #planet-block #quiz .hit { border-color:#2f8f83; background:#e8f5f1; }
+.ai-copyright-connected #planet-block #quiz .miss { border-color:#7d5ba6; background:#f3eef9; }
+.ai-copyright-connected #planet-block #quiz .qnext { color:var(--accent,#075ef2); font-weight:700; margin-top:12px; }
+.ai-copyright-connected #planet-block #panel .aic-evidence-jump { display:none; }
+.ai-copyright-connected :is(.aic-timeline-nav,.aic-evidence-controls,#quiz) button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+@media (max-width:760px) {
+  .ai-copyright-connected .aic-timeline-nav { gap:5px; }
+  .ai-copyright-connected .aic-timeline-nav button { font-size:11px; padding:12px 5px; min-width:80px; }
+  .ai-copyright-connected #planet-block #panel .aic-evidence-jump { display:block; margin:-12px 0 22px; padding:5px 0; border:0; background:transparent; color:var(--accent,#075ef2); font:inherit; font-size:12px; cursor:pointer; }
+}
+@media print {
+  body.ai-copyright-connected * { visibility:visible; }
+  body.ai-copyright-connected { background:#fff !important; font-size:11px; }
+  body.ai-copyright-connected main { max-width:none; margin:0; padding:0; }
+  body.ai-copyright-connected :is(.modern-site-header,.hero .top-nav,#progress,.share-x-fab,.aic-status,.aic-timeline-nav,.aic-guesses,#modes,#list,.stage,#dotbox,#quiz,#vote-section,.aic-evidence-controls,.aic-evidence-jump,.classroom-print-btn,.cite-copy-wrap,.tide-widget-controls,.explainer-modal,footer,#fallback-nav,#fallback > .sub,.tap-hint) { display:none !important; }
+  body.ai-copyright-connected #fallback { display:block !important; }
+  body.ai-copyright-connected #fallback img { display:block; width:100%; height:auto; }
+  body.ai-copyright-connected:not(.aic-print-classroom) :is(#ocean,#ai-copyright-audit,#issue-cards,#bukatsu-check) { display:block !important; }
+  body.ai-copyright-connected li[data-aic-timeline-i][hidden] { display:block !important; }
+  body.ai-copyright-connected .classroom-section { position:static; width:auto; margin:0; padding:0; box-shadow:none; border:0; }
+  body.ai-copyright-connected :is(.panel,.planet-panel,#fallback) { overflow:visible; box-shadow:none; }
+  body.ai-copyright-connected.aic-print-classroom main > :not(.classroom-section) { display:none !important; }
+  body.ai-copyright-connected.aic-print-classroom > :not(main) { display:none !important; }
+  body.ai-copyright-connected.aic-print-classroom .classroom-section { display:block !important; color:#172033; }
+}

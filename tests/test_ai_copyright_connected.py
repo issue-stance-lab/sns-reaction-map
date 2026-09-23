@@ -45,6 +45,7 @@ class AiCopyrightConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.BRIDGE_END), 1)
         self.assertEqual(self.page.count(connected.CSS_HREF), 1)
         self.assertEqual(self.page.count(connected.JS_SRC), 1)
+        self.assertEqual(self.page.count(connected.PAGE_JS_SRC), 1)
         self.assertEqual(self.page.count(CONTENT_START), 1)
         self.assertEqual(self.page.count(CONTENT_END), 1)
         self.assertEqual(connected.validate(self.page), [])
