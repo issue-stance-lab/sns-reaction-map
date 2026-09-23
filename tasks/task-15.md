@@ -155,8 +155,9 @@ python3 scripts/verify_top_page.py                      # docs/ の衛生・404�
 ①**Search Console で再クロールを依頼する**（オーナー操作。URL検査 → インデックス登録をリクエスト、
   およびサイトマップに `sitemap.xml` を登録）。ルートに robots.txt が無かったため、
   そこで宣言していた sitemap は今まで一度も発見されていない
-②Buy Me a Coffee のURLが2種類ある。`issue.stance.lab` が7ページ、`sns_hannou_map` が
-  ai-copyright の1ページ。どちらが正しいかオーナーの確認が要る
+②**2026-09-23 解決**: ai-copyright のBuy Me a Coffeeリンクが存在しない
+  `sns_hannou_map`（HTTP 404）を指していたため、正常な `issue.stance.lab` に統一。
+  公開HTML 11ページのリンク先を確認し、全件HTTP 200
 ③背景解説の本文増補（現状は一次資料の追加のみ。時系列・未決着の問いの明記は未着手）
 ④編集情報をページ冒頭へ移す（現状は可視テキストの23〜66%の位置）
 ⑤独自ドメイン移行は2026-08-31に実施へ変更。DNS・HTTPS設定は完了し、公開HTMLと検索エンジンの残作業は課題55で管理する

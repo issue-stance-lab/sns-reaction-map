@@ -695,6 +695,33 @@ TOPIC_METHOD_TEXT = {
 }
 
 
+def _apply_connected_display(topic: str, html: str) -> str:
+    """テーマごとの連動表示（工程2〜6の橋渡しJS・読書面）を、山なみ更新のたびに再適用する。
+
+    以前はconsumption_tax_connectedだけを無条件に呼んでおり、他テーマではそのapply()自身の
+    topicガードで無変更に留まっていた（エラーにはならないが、bukatsu-chiiki等の連動表示は
+    通常のデータ更新の経路のどこからも再適用されないまま取り残されていた。課題77工程5で発覚）。
+    bukatsu_connected.apply()は内部でscripts.bukatsu_connected_contentを絶対import
+    （`from scripts.xxx import ...`）するため、リポジトリ直下もsys.pathに無いと
+    ModuleNotFoundError: No module named 'scripts' になる（scripts/自体は25行目で既に
+    追加済みだが、その親ディレクトリは別）。tax側のbare importは変更しない。
+    """
+    if topic == "consumption-tax-cut":
+        from consumption_tax_connected import apply as connect_page
+        return connect_page(html, topic=topic)
+    if topic == "bukatsu-chiiki":
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.bukatsu_connected import apply as connect_page
+        return connect_page(html, topic=topic)
+    if topic == "ai-copyright":
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.ai_copyright_connected import apply as connect_page
+        return connect_page(html, topic=topic)
+    return html
+
+
 def refresh(topic: str, *, source: str | None = None) -> tuple[str, str, list[str]]:
     page = ROOT / "docs" / f"{topic}-reaction-map.html"
     html = source if source is not None else page.read_text(encoding="utf-8")
@@ -724,8 +751,7 @@ def refresh(topic: str, *, source: str | None = None) -> tuple[str, str, list[st
     method_text = TOPIC_METHOD_TEXT.get(topic)
     if method_text:
         new_html = method_text(new_html, data)
-    from consumption_tax_connected import apply as connect_page
-    new_html = connect_page(new_html, topic=topic)
+    new_html = _apply_connected_display(topic, new_html)
     return html, new_html, failures
 
 

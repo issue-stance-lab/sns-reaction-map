@@ -120,6 +120,10 @@ def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
             last_error = RuntimeError(result.stderr.strip() or f"Hermes exited {result.returncode}")
             continue
         try:
+            if result.stdout.lstrip().startswith("HTTP "):
+                # Upstream refusal (e.g. "[400] ... considered high risk") is printed
+                # with exit 0; its "[400]" would otherwise be parsed as a JSON array.
+                raise RuntimeError(f"Hermes upstream error: {result.stdout.strip()[:200]}")
             return parse_response(result.stdout, len(batch))
         except (ValueError, json.JSONDecodeError) as exc:
             last_error = exc
@@ -164,6 +168,43 @@ def write_markdown(rows: list[dict[str, Any]], path: Path) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_report(rows: list[dict[str, Any]], path: Path) -> None:
+    """Markdown summary of classified rows, noting posts the provider refused."""
+    classified = [row for row in rows if not row["classification"].get("error")]
+    write_markdown(classified, path)
+    refused = len(rows) - len(classified)
+    if refused:
+        with path.open("a") as handle:
+            handle.write(f"\n- 提供元に拒否され未分類: {refused}件（本文確認で扱いを決める）\n")
+
+
+def classify_or_split(batch: list[dict[str, Any]], **kwargs: Any) -> list[dict[str, Any]]:
+    """Retry a failed batch one post at a time (same model, same prompt).
+
+    Hermes occasionally returns fewer items than asked for a particular batch,
+    and asking again with the same batch reproduces it (henoko 2026-09-23).
+    """
+    try:
+        return classify(batch, **kwargs)
+    except RuntimeError as exc:
+        if len(batch) == 1 and "upstream error" not in str(exc):
+            raise
+        print(f"batch of {len(batch)} failed; retrying one by one", flush=True)
+        labels: list[dict[str, Any]] = []
+        for row in batch:
+            try:
+                labels.extend(classify([row], **kwargs))
+            except RuntimeError as exc:
+                # The provider refuses some posts outright ("considered high risk").
+                # Keep the post with an error label instead of dropping it; refresh_topic
+                # tolerates up to 10% error rows and a human reviews them before publishing.
+                if "upstream error" not in str(exc):
+                    raise
+                print(f"upstream refused one post: {exc}", flush=True)
+                labels.append({"error": f"upstream_refused: {exc}"})
+        return labels
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path, required=True)
@@ -186,7 +227,7 @@ def main() -> int:
 
     for offset in range(start, len(source), args.batch_size):
         batch = source[offset: offset + args.batch_size]
-        labels = classify(batch)
+        labels = classify_or_split(batch)
         for original, label in zip(batch, labels):
             row = dict(original)
             row["classification"] = label
@@ -195,7 +236,7 @@ def main() -> int:
         args.output.write_text(json.dumps(completed, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"classified {len(completed)}/{len(source)}", flush=True)
 
-    write_markdown(completed, args.markdown)
+    write_report(completed, args.markdown)
     return 0
 
 

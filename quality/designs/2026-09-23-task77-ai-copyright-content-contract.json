@@ -1,0 +1,203 @@
+{
+  "schema_note": "課題77 ai-copyright移植 工程1の機械可読版。構造の一般定義は2026-09-22-task77-consumption-tax-schema-reference.mdを参照。ここはai-copyright固有の実測値のみ。",
+  "theme_id": "ai-copyright",
+  "created_at": "2026-09-23",
+  "before_state_baseline": {
+    "git_commit": "258643bde8f7e90764c70fcfacd06a3a2a0360aa",
+    "html_path": "docs/ai-copyright-reaction-map.html",
+    "html_sha256": "246fd91dbe1468ffb63361b43ba6324fd5b4d9981d0e6012146465e72532c7f9",
+    "html_bytes": 315984,
+    "collected_count": 4280,
+    "opinion_count": 2865,
+    "collection_period": "2026-06-22〜2026-09-20",
+    "updated_on": "2026-09-20",
+    "image_count_total": 30,
+    "image_count_unused_vote_webp": 4
+  },
+  "stances_display": [
+    {"id": "ai-copyright-regulation-support", "key": "規制・制限強化支持", "color": "#ff5426", "count": 1569, "pct": 55},
+    {"id": "ai-copyright-neutral", "key": "中立・情報", "color": "#64748b", "count": 634, "pct": 22},
+    {"id": "ai-copyright-promotion-support", "key": "推進・活用支持", "color": "#075ef2", "count": 662, "pct": 23}
+  ],
+  "stances_vote_ui": {
+    "note": "表示フィルターと同じ3立場だが文言が違う。storage順=[規制,中立,推進]でstances_displayと同順",
+    "labels": ["規制賛成・著作権保護", "どちらでもない", "AI活用推進・規制反対"]
+  },
+  "issues": [
+    {
+      "id": "ai-copyright-learning-data", "key": "学習データ・無断利用", "icon": "📚",
+      "count": 730, "rank": 1, "pct": 25.5,
+      "reread_status": "full", "reread_items": 657, "reread_buckets_excl_unread": 12,
+      "issue_list_island_count_observed": 13,
+      "claim_ids": ["unauthorized_learning_infringement", "data_disclosure_needed"],
+      "sunk_continent_ids": ["ai-copyright-sc-1", "ai-copyright-sc-4"],
+      "vein_ids": [],
+      "has_landing_image": true, "has_issue_cards": true
+    },
+    {
+      "id": "ai-copyright-user-ethics", "key": "利用者モラル・倫理", "icon": "💬",
+      "count": 723, "rank": 2, "pct": 25.2,
+      "reread_status": "not_reviewed", "reread_items": null, "reread_buckets_excl_unread": 0,
+      "issue_list_island_count_observed": null,
+      "claim_ids": [],
+      "sunk_continent_ids": [],
+      "vein_ids": ["ai-copyright-vein-2"],
+      "has_landing_image": true, "has_issue_cards": true
+    },
+    {
+      "id": "ai-copyright-legal-framework", "key": "法制度・規制整備", "icon": "⚖️",
+      "count": 522, "rank": 3, "pct": 18.2,
+      "reread_status": "not_reviewed", "reread_items": null, "reread_buckets_excl_unread": 0,
+      "issue_list_island_count_observed": null,
+      "claim_ids": ["data_disclosure_needed", "tech_innovation_over_regulation"],
+      "sunk_continent_ids": ["ai-copyright-sc-3"],
+      "vein_ids": ["ai-copyright-vein-1", "ai-copyright-vein-2"],
+      "has_landing_image": true, "has_issue_cards": true
+    },
+    {
+      "id": "ai-copyright-creator-rights", "key": "クリエイター保護・権利", "icon": "🎨",
+      "count": 334, "rank": 4, "pct": 11.7,
+      "reread_status": "full", "reread_items": 303, "reread_buckets_excl_unread": 10,
+      "issue_list_island_count_observed": 11,
+      "claim_ids": ["compensation_required", "creator_protection_insufficient"],
+      "sunk_continent_ids": ["ai-copyright-sc-2"],
+      "vein_ids": [],
+      "has_landing_image": true, "has_issue_cards": true
+    },
+    {
+      "id": "ai-copyright-other", "key": "その他", "icon": "🤔",
+      "count": 238, "rank": 5, "pct": 8.3,
+      "reread_status": "full", "reread_items": 223, "reread_buckets_excl_unread": 7,
+      "issue_list_island_count_observed": 8,
+      "claim_ids": [],
+      "sunk_continent_ids": [],
+      "vein_ids": [],
+      "has_landing_image": true, "has_issue_cards": true
+    },
+    {
+      "id": "ai-copyright-generated-work-rights", "key": "AI生成物の権利・創作性", "icon": "✨",
+      "count": 186, "rank": 6, "pct": 6.5,
+      "reread_status": "full", "reread_items": 165, "reread_buckets_excl_unread": 7,
+      "issue_list_island_count_observed": 8,
+      "claim_ids": ["ai_output_has_copyright"],
+      "sunk_continent_ids": [],
+      "vein_ids": [],
+      "has_landing_image": true, "has_issue_cards": true
+    },
+    {
+      "id": "ai-copyright-tech-promotion", "key": "技術競争・推進", "icon": "🚀",
+      "count": 132, "rank": 7, "pct": 4.6,
+      "reread_status": "full", "reread_items": 117, "reread_buckets_excl_unread": 6,
+      "issue_list_island_count_observed": 7,
+      "claim_ids": ["tech_innovation_over_regulation"],
+      "sunk_continent_ids": [],
+      "vein_ids": ["ai-copyright-vein-1"],
+      "has_landing_image": true, "has_issue_cards": true
+    }
+  ],
+  "reread_source": {
+    "file": "data/ai-copyright_issues-reread.json",
+    "read_at": "2026-09-13",
+    "population_at_read": 2593,
+    "population_now": 2865,
+    "note": "9/20収集分の新規272件はこの5論点の理由再読に未反映。__unread__バケットは5論点いずれにも無い（bukatsu-chiikiと違う）。island表示数=bucket数+1が5/5で一致（未読分を表す合成islandと推測、未確認）"
+  },
+  "claims": [
+    {"id": "unauthorized_learning_infringement", "issue_ids": ["ai-copyright-learning-data"], "verdict": "gap"},
+    {"id": "data_disclosure_needed", "issue_ids": ["ai-copyright-learning-data", "ai-copyright-legal-framework"], "verdict": "fact"},
+    {"id": "compensation_required", "issue_ids": ["ai-copyright-creator-rights"], "verdict": "fact"},
+    {"id": "creator_protection_insufficient", "issue_ids": ["ai-copyright-creator-rights"], "verdict": "gap"},
+    {"id": "ai_output_has_copyright", "issue_ids": ["ai-copyright-generated-work-rights"], "verdict": "gap"},
+    {"id": "tech_innovation_over_regulation", "issue_ids": ["ai-copyright-legal-framework", "ai-copyright-tech-promotion"], "verdict": "gap"}
+  ],
+  "claim_audit_checked_on": "2026-09-19",
+  "claim_audit_audited_posts": 12,
+  "sunk_continents": [
+    {"id": "ai-copyright-sc-1", "nearest_issue_id": "ai-copyright-learning-data", "sns_count": 0, "sns_base": 2865},
+    {"id": "ai-copyright-sc-2", "nearest_issue_id": "ai-copyright-creator-rights", "sns_count": 0, "sns_base": 2865},
+    {"id": "ai-copyright-sc-3", "nearest_issue_id": "ai-copyright-legal-framework", "sns_count": 0, "sns_base": 2865},
+    {"id": "ai-copyright-sc-4", "nearest_issue_id": "ai-copyright-learning-data", "sns_count": 0, "sns_base": 2865}
+  ],
+  "veins": [
+    {"id": "ai-copyright-vein-1", "issue_ids": ["ai-copyright-legal-framework", "ai-copyright-tech-promotion"]},
+    {"id": "ai-copyright-vein-2", "issue_ids": ["ai-copyright-legal-framework", "ai-copyright-user-ethics"]}
+  ],
+  "editorial_summary": {
+    "checked_on": "2026-09-14",
+    "findings": [
+      {"id": "ai-copyright-ed-1", "kind": "shared_premise"},
+      {"id": "ai-copyright-ed-2", "kind": "real_conflict"},
+      {"id": "ai-copyright-ed-3", "kind": "real_conflict"},
+      {"id": "ai-copyright-ed-4", "kind": "still_unknown"},
+      {"id": "ai-copyright-ed-5", "kind": "still_unknown"}
+    ]
+  },
+  "background_checklist_ai_copyright_check": {
+    "source_file": "data/verification/ai-copyright-background.json",
+    "field": "checklist",
+    "checked_on": "2026-09-19",
+    "title": "「法律」と「任意のルール」を分けて確かめる",
+    "items_have_issue_ids": false,
+    "items": [
+      {"label": "AI学習と著作権侵害", "draft_issue_id_proposal": "ai-copyright-learning-data"},
+      {"label": "学習データの情報開示", "draft_issue_id_proposal": "ai-copyright-legal-framework"},
+      {"label": "2026年の著作権法改正", "draft_issue_id_proposal": "ai-copyright-legal-framework"},
+      {"label": "声・作風の保護", "draft_issue_id_proposal": "ai-copyright-creator-rights"}
+    ],
+    "note": "ドラフト提案。bukatsu-chiikiの前例（内容提示→タグ付け案確認→オーナー承認）に倣い、工程2/3着手時に確定させること"
+  },
+  "background_timeline": {
+    "source_file": "data/verification/ai-copyright-background.json",
+    "field": "timeline",
+    "checked_on": "2026-09-19",
+    "item_count": 6,
+    "item_ids": ["bunka-kangaekata-2024", "naikakufu-chukan-2024", "ai-act-2025", "principle-code-draft-2025", "public-comment-hearing-2026", "chizai-plan-2026"],
+    "has_issue_ids": false,
+    "note": "消費税・bukatsu-chiiki当初と同じく無タグ。連動は必須要件ではない（V01は日付切替のみ要求）"
+  },
+  "copyright_entry_section": {
+    "html_id": "copyright-entry",
+    "unique_to_theme": true,
+    "stages": ["学習データの収集・学習", "生成", "公開・販売"],
+    "proposed_treatment": "論点への統合は該当なし（横断的内容のため）。独立した折りたたみブロックとして維持。配置は編集部横断整理の近く・投票直前を候補とし工程3/4で視覚確認する"
+  },
+  "vote": {
+    "topic_id": "ai-copyright-issue-stance-v1",
+    "storage_key": "sns_vote_ai_copyright_2step",
+    "storage_formula": "issueIdx * 3 + stanceIdx",
+    "combinations": 21,
+    "vote_issue_order_ids": [
+      "ai-copyright-learning-data", "ai-copyright-legal-framework", "ai-copyright-user-ethics",
+      "ai-copyright-creator-rights", "ai-copyright-tech-promotion", "ai-copyright-generated-work-rights",
+      "ai-copyright-other"
+    ],
+    "dead_hooks": {
+      "setArenaVoteMarker": "window.setArenaVoteMarker、定義元なし（grep 0件）。if guardで安全にno-op",
+      "issue-arena-section": "投票後のスクロール先id、定義元なし（grep 0件）"
+    }
+  },
+  "classroom_section": {
+    "already_implemented": true,
+    "source": "configs/classroom/ai-copyright.json",
+    "task": "課題77 Part B（全10テーマ実装済み）"
+  },
+  "tide_widget": {
+    "html_id": "ai-copyright-tide-widget",
+    "status": "stale_not_auto_synced",
+    "observed_comparison": "8月31日→9月5日",
+    "page_updated_on": "2026-09-20",
+    "root_cause": "build_ai_copyright_arena.pyのapply_tide()が山なみ形式ガード分岐の外側（旧2D向け分岐）でしか呼ばれない",
+    "registered_as": "課題90",
+    "task77_treatment": "現状のまま位置・機能を維持する。鮮度回復は課題90の範囲"
+  },
+  "open_gaps": [
+    "予想2問（guesses）に相当するUIがai-copyrightに存在するか本工程では未確認",
+    "land()/drawPanel()相当のJS関数群、refresh_adapters/ai_copyright.pyのadapter_name実値、verify_builder_rebuildability.pyの対象は未確認",
+    "build_ai_copyright_process_sections.py(288行)が#ai-copyright-auditのHTML文字列を実際に生成しているか未確認",
+    "configs/ai-copyright-reaction-map.json（旧2D設計config）への現行依存の全容が未確認",
+    "一次資料クイズ6問がclaim-auditの6件をそのまま再利用しているか未確認",
+    "issue-cardsの投稿2件×7論点の選定方法（編集部選定か機械選定か）が未確認",
+    "island表示=bucket数+1が本当に未読を表す合成islandかbuild_planet_data.pyのソースでは未確認",
+    "ai-copyright-vote-*.webp 4枚・ai-copyright-arena-data.jsの削除要否は本工程では判断しない（課題73の対象範囲か要確認）"
+  ]
+}

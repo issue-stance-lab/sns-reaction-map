@@ -1,0 +1,182 @@
+/* 生成AIと著作権 連動表示（課題77）。工程2はバー↔山の状態共有のみ。
+   ここからは論点を選んだときの読書面（工程3）の見た目。
+   #panel は共通テーマの.panelスタイルを!importantで持つため、この読書面だけを優先させる。 */
+:root{ --aic-paper:#f4f7fc; --aic-rule:#dce5f0; }
+#panel .aic-selected-head{ display:flex; align-items:center; justify-content:space-between; gap:18px; padding:24px 0 0 !important; margin:0 !important; border:0 !important; box-shadow:none !important; }
+#panel .aic-selected-head h2{ margin:3px 0 0; font-size:24px; line-height:1.45; }
+#panel .aic-eyebrow{ margin:0 0 4px; font-size:11px; font-weight:700; color:#637089; letter-spacing:.06em; }
+#panel .aic-image-action{ flex:0 0 auto; display:flex; flex-direction:column; gap:4px; align-items:center; padding:6px; margin:0; max-width:140px; border:1px solid var(--aic-rule); border-radius:8px; background:#fff; cursor:pointer; font:inherit; font-size:11px; font-weight:700; color:var(--accent,#075ef2); }
+#panel .aic-image-action img{ width:112px; height:48px; object-fit:contain; margin:0; border-radius:3px; }
+#panel .aic-metrics{ margin:14px 0; font-size:13px; color:#53647d; }
+#panel .aic-metrics p{ margin:4px 0; line-height:1.7; }
+#panel .aic-metrics [data-aic-count]{ font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; color:#0f1a3d; }
+#panel .aic-scope-note{ margin:0 0 22px; padding:10px 12px; border-left:3px solid var(--aic-rule); background:var(--aic-paper); font-size:12px; line-height:1.7; color:#53647d; }
+#panel .aic-columns{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; }
+#panel .aic-columns > *{ min-width:0; }
+#panel .aic-evidence{ padding-left:28px; border-left:1px solid var(--aic-rule); }
+#panel .aic-columns h3{ margin:0 0 10px; padding:0; border:0; font-size:17px; line-height:1.5; color:#0f1a3d; }
+#panel .aic-evidence h3:not(:first-child){ margin-top:22px; }
+#panel .aic-columns p{ font-size:13.5px; line-height:1.85; }
+#panel .aic-note{ margin:6px 0 10px; font-size:11.5px; line-height:1.8; color:#637089; }
+#panel .aic-empty{ margin:8px 0 16px; padding:10px 0; font-size:13px; color:#53647d; }
+#panel .aic-reasons{ padding:0; margin:0; list-style:none; }
+#panel .aic-reasons li{ margin:0 0 12px; padding:0; border:0; }
+#panel .aic-reason-row{ display:flex; align-items:baseline; gap:10px; font-size:12.5px; line-height:1.6; }
+#panel .aic-reason-row > span:first-child{ flex:1; min-width:0; }
+#panel .aic-reasons b{ flex:none; font-variant-numeric:tabular-nums; font-size:15px; }
+#panel .aic-reason-track{ display:block; margin-top:5px; height:4px; background:#edf1f7; border-radius:2px; overflow:hidden; }
+#panel .aic-reason-track i{ display:block; height:100%; background:var(--accent,#075ef2); border-radius:2px; opacity:.8; }
+#panel .aic-posts{ margin-top:26px; }
+#panel .aic-post{ padding:14px 0; border-top:1px solid var(--aic-rule); }
+#panel .aic-post > p{ margin:0 0 6px; font-weight:700; font-size:13px; }
+#panel .aic-post > a{ font-size:11.5px; font-weight:700; }
+#panel .aic-embed{ border:0; padding:0; margin-top:8px; }
+#panel .aic-embed summary{ color:#637089; font-size:11px; font-weight:400; cursor:pointer; }
+#panel .aic-embed iframe{ max-width:100% !important; }
+#panel .twitter-tweet{ max-width:100%; margin:10px 0; }
+#panel details.aic-claim, #panel details.aic-concern, #panel details.aic-source-only, #panel details.aic-check{ margin:9px 0; border-top:1px solid var(--aic-rule); padding:9px 0 0; font-size:12.5px; }
+#panel details.aic-claim summary, #panel details.aic-concern summary, #panel details.aic-source-only summary, #panel details.aic-check summary{ cursor:pointer; padding:3px 0; font-weight:700; line-height:1.65; }
+#panel .aic-verdict{ display:inline-block; margin-top:10px; padding:3px 8px; border:1px solid var(--aic-rule); border-radius:4px; font-size:10.5px; font-weight:700; }
+#panel .aic-timeline-item{ margin:9px 0; border-top:1px solid var(--aic-rule); padding:9px 0 0; font-size:12.5px; }
+#panel .aic-timeline-when{ margin:0 0 4px; font-weight:700; line-height:1.5; color:#0f1a3d; }
+#panel .aic-timeline-when em{ margin-left:6px; font-style:normal; font-weight:400; color:#637089; font-size:11px; }
+#panel .aic-sources{ border:0; padding:0; margin:10px 0 6px; }
+#panel .aic-sources summary{ color:var(--accent,#075ef2); font-size:11px; cursor:pointer; }
+#panel .aic-sources ul{ margin:8px 0; padding-left:16px; }
+#panel .aic-sources li{ margin:8px 0; font-size:11.5px; line-height:1.75; }
+#panel a{ overflow-wrap:anywhere; }
+@media (max-width:760px){
+  #panel .aic-columns{ grid-template-columns:1fr; gap:22px; }
+  #panel .aic-evidence{ padding:20px 0 0; border-left:0; border-top:2px solid var(--aic-rule); }
+  #panel .aic-selected-head{ display:block; }
+  #panel .aic-image-action{ max-width:none; flex-direction:row; margin-top:10px; }
+  #panel .aic-image-action img{ width:48px; height:22px; }
+}
+@media (prefers-reduced-motion:reduce){
+  #panel .aic-reason-track i{ transition:none; }
+}
+
+/* ここから中心部分のページ配置（工程3、2026-09-23）。バー・立場ボタン・山・論点ボタンを
+   一続きにし、山の実寸・グリッド列数・選択色をそろえる（V02〜V05）。理由別X投稿・資料3タブ・
+   年表統合・旧セクションの隠蔽（V07〜V10）はページ全体の再配置を扱う工程4で追加する。
+   .ai-copyright-connectedはdocs/ai-copyright-connected.jsが付与する。 */
+.ai-copyright-connected #planet-block { color:#172033; }
+.ai-copyright-connected #planet-block .stage { display:flex; flex-direction:column; gap:0; }
+.ai-copyright-connected #planet-block .chart-box { order:0; position:relative; width:100%; margin:0; padding:0; border:0; border-radius:0; box-sizing:border-box; background:#fff; }
+.ai-copyright-connected #planet-block .chart-box #section { width:100%; height:210px; max-height:none; margin-bottom:0; display:block; }
+.ai-copyright-connected #planet-block .chart-box .dive,
+.ai-copyright-connected #planet-block .chart-box #seafloor,
+.ai-copyright-connected #planet-block .chart-box #seacover,
+/* 海面下の演出は#seafloor/#seacoverだけでなく、その手前に無名・無クラスの背景矩形と
+   薄い目盛り線（id/classを持たない、render()の直接出力）が描かれている。海面のライン
+   （stroke-width 1.6）とは太さで区別し、色（fill/stroke）で個別に隠す。隠さないまま
+   getBBox()で実描画範囲を測ると、この非表示予定の領域まで「山の一部」として含まれ、
+   V03の実寸縮小が見かけ倒しになる（ガイドが明記する失敗パターン）。 */
+.ai-copyright-connected #planet-block .chart-box #section > rect[fill="#12314f"],
+.ai-copyright-connected #planet-block .chart-box #section > line[opacity="0.13"] { display:none; }
+.ai-copyright-connected #planet-block .chart-box .hint { margin:10px 0 0; font-size:12px; color:#53647d; }
+.ai-copyright-connected #planet-block .floor-note { margin:5px 0 0; font-size:11px; color:#637089; }
+.ai-copyright-connected #planet-block .tap-hint { display:none; }
+.ai-copyright-connected #planet-block #modes { display:grid; align-items:stretch; grid-template-columns:repeat(4,minmax(0,1fr)); margin:10px 0 0; gap:7px; scroll-margin-top:125px; }
+.ai-copyright-connected #planet-block #modes button { display:block; width:100%; font:inherit; font-size:12px; text-align:left; padding:10px; min-height:64px; border:1px solid var(--aic-rule); border-radius:8px; background:#fff; color:#172033; box-shadow:none; margin:0; transform:none; transition:none; }
+.ai-copyright-connected #planet-block #modes .aic-mode-name { display:block; margin-bottom:3px; }
+.ai-copyright-connected #planet-block #modes .sg-pick-btn .aic-mode-name::before { content:''; display:inline-block; width:7px; height:7px; margin-right:6px; border-radius:50%; background:var(--aic-stance-color); }
+.ai-copyright-connected #planet-block #modes strong { font-size:17px; font-variant-numeric:tabular-nums; }
+.ai-copyright-connected #planet-block #modes small { font-size:11px; font-weight:400; opacity:.85; }
+.ai-copyright-connected #planet-block #modes button[aria-pressed="true"],
+.ai-copyright-connected #planet-block #list button[aria-pressed="true"] { color:#fff; background:#172033; border-color:#172033; box-shadow:none; }
+.ai-copyright-connected #planet-block #list { order:1; width:100%; max-width:none; box-sizing:border-box; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin:14px 0 22px; padding:0; list-style:none; border:0; background:transparent; }
+.ai-copyright-connected #planet-block #list li { min-width:0; margin:0; }
+.ai-copyright-connected #planet-block #list button { width:100%; height:100%; box-sizing:border-box; padding:9px 10px; font:inherit; font-size:12px; font-weight:400; text-align:left; line-height:1.5; border:1px solid var(--aic-rule); border-radius:7px; color:#172033; background:#fff; box-shadow:none; transition:none; }
+.ai-copyright-connected #planet-block #list .m { display:block; margin:2px 0 0; font-size:11px; color:#667085; }
+.ai-copyright-connected #planet-block #panel { order:2; width:100%; box-sizing:border-box; padding:24px 0 0 !important; margin:0 !important; border:0 !important; border-top:3px solid var(--accent,#075ef2) !important; border-radius:0 !important; background:#fff; box-shadow:none !important; }
+.ai-copyright-connected #planet-block > .panel-title h2 { font-size:23px; }
+.ai-copyright-connected #planet-block #caution { margin:12px 0; font-size:11px; line-height:1.75; }
+.ai-copyright-connected #modes button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+.ai-copyright-connected #planet-block #panel :focus-visible, .ai-copyright-connected #list button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+@media (max-width:760px) {
+  .ai-copyright-connected #planet-block #panel { padding:20px 0 0 !important; }
+  .ai-copyright-connected #planet-block #list { grid-template-columns:repeat(2,minmax(0,1fr)); padding:0; }
+  .ai-copyright-connected #planet-block #modes { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ai-copyright-connected #planet-block #modes [data-m="all"] { grid-column:1 / -1; min-height:44px; display:flex; align-items:center; justify-content:space-between; }
+  .ai-copyright-connected #planet-block #modes small { display:block; margin-top:2px; line-height:1.3; }
+  .ai-copyright-connected #planet-block .chart-box { padding:0; }
+  .ai-copyright-connected #planet-block > .panel-title h2 { font-size:20px; }
+  .ai-copyright-connected #planet-block #panel h2 { font-size:20px; }
+}
+@media (max-width:450px) {
+  .ai-copyright-connected #planet-block .chart-box #section { height:180px; }
+}
+/* 印刷時の扱いは工程4のprintブロック（本ファイル末尾）に統合済み。 */
+
+/* STANCE_GLANCEは#modesとの重複を解消したあとも山の直前に残す。凡例・見出しは#modes側と
+   二重になるため隠し、押下色の変化と結果文だけを見せる（V02、立場操作は1組）。 */
+.ai-copyright-connected #stance-glance-buttons { display:none !important; }
+.ai-copyright-connected #stance-glance .panel-title,
+.ai-copyright-connected #stance-glance .sg-lead { display:none; }
+.ai-copyright-connected #stance-glance-result-text { overflow-wrap:anywhere; }
+
+.ai-copyright-connected .aic-guesses { margin:16px 0; padding:12px 16px; background:var(--aic-paper); border:1px solid var(--aic-rule); border-radius:10px; }
+.ai-copyright-connected .aic-guesses > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.ai-copyright-connected #guesses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.ai-copyright-connected #guesses .guess { margin:0; }
+@media (max-width:760px) { .ai-copyright-connected #guesses { grid-template-columns:1fr; } }
+
+/* ここからページ全体の再配置・統合（工程4、2026-09-23）。年表タブ・制度確認の要約・
+   資料3タブ・判断の入口の折りたたみ・旧セクションの非表示。docs/ai-copyright-connected-page.js
+   が付与するDOM構造に対応する。 */
+@media screen {
+  /* claim-audit/issue-cards/ocean/bukatsu-checkは論点の読書面へ統合済みのため、
+     通常画面では旧位置の一覧を隠す。 */
+  .ai-copyright-connected #ai-copyright-audit, .ai-copyright-connected #issue-cards,
+  .ai-copyright-connected #ocean, .ai-copyright-connected #bukatsu-check { display:none; }
+}
+
+.ai-copyright-connected .aic-status { margin:20px 0; padding:18px 22px; border-left:3px solid var(--accent,#075ef2); background:#fff; border-radius:0 10px 10px 0; }
+.ai-copyright-connected .aic-status p { margin:5px 0; font-size:13px; line-height:1.85; }
+.ai-copyright-connected .aic-status .aic-eyebrow { font-size:11px; color:#637089; }
+.ai-copyright-connected .aic-status a { display:inline-block; margin-top:8px; font-size:12px; }
+.ai-copyright-connected #bg-title, .ai-copyright-connected #panel h2 { scroll-margin-top:120px; }
+.ai-copyright-connected .aic-timeline-nav { display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 14px; }
+.ai-copyright-connected .aic-timeline-nav button { flex:1; min-width:110px; padding:12px 8px; border:1px solid var(--aic-rule); border-radius:7px; background:#fff; color:#172033; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.ai-copyright-connected .aic-timeline-nav [aria-selected="true"] { border-color:var(--accent,#075ef2); color:var(--accent,#075ef2); box-shadow:inset 0 -3px var(--accent,#075ef2); }
+.ai-copyright-connected #bukatsu-background .bg-tl[hidden] { display:none !important; }
+.ai-copyright-connected #bukatsu-background li[data-aic-timeline-i][hidden] { display:none !important; }
+.ai-copyright-connected .aic-background-intro, .ai-copyright-connected .aic-fold { margin:18px 0; border-top:1px solid var(--aic-rule); padding:14px 0; }
+.ai-copyright-connected .aic-background-intro > summary, .ai-copyright-connected .aic-fold > summary { cursor:pointer; font-size:13px; font-weight:700; }
+.ai-copyright-connected .aic-comparison-note { font-size:12px; line-height:1.8; color:#637089; }
+.ai-copyright-connected .aic-evidence-controls { display:flex; gap:6px; margin:0 0 20px; }
+.ai-copyright-connected .aic-evidence-controls button, .ai-copyright-connected #quiz button { border:1px solid var(--aic-rule); border-radius:6px; background:#fff; color:#172033; font:inherit; font-size:12px; padding:9px 12px; cursor:pointer; }
+.ai-copyright-connected .aic-evidence-controls button { flex:1; min-width:0; padding:9px 7px; line-height:1.65; }
+.ai-copyright-connected .aic-evidence-controls [aria-pressed="true"] { color:var(--accent,#075ef2); border-color:var(--accent,#075ef2); background:var(--aic-paper); font-weight:700; }
+.ai-copyright-connected #planet-block #quiz { margin:0; padding:0; border:0; border-radius:0; background:transparent; }
+.ai-copyright-connected #planet-block #quiz[hidden], .ai-copyright-connected #planet-block .aic-source-stories[hidden] { display:none !important; }
+.ai-copyright-connected #planet-block #quiz .qh { display:flex; flex-wrap:wrap; gap:8px; font-size:11px; }
+.ai-copyright-connected #planet-block #quiz .qclaim { font-size:18px; font-weight:700; }
+.ai-copyright-connected #planet-block #quiz .aic-quiz-note { font-size:11px; color:#637089; }
+.ai-copyright-connected #planet-block #quiz .aic-qopts { display:flex; flex-wrap:wrap; gap:8px; }
+.ai-copyright-connected #planet-block #quiz .hit { border-color:#2f8f83; background:#e8f5f1; }
+.ai-copyright-connected #planet-block #quiz .miss { border-color:#7d5ba6; background:#f3eef9; }
+.ai-copyright-connected #planet-block #quiz .qnext { color:var(--accent,#075ef2); font-weight:700; margin-top:12px; }
+.ai-copyright-connected #planet-block #panel .aic-evidence-jump { display:none; }
+.ai-copyright-connected :is(.aic-timeline-nav,.aic-evidence-controls,#quiz) button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
+@media (max-width:760px) {
+  .ai-copyright-connected .aic-timeline-nav { gap:5px; }
+  .ai-copyright-connected .aic-timeline-nav button { font-size:11px; padding:12px 5px; min-width:80px; }
+  .ai-copyright-connected #planet-block #panel .aic-evidence-jump { display:block; margin:-12px 0 22px; padding:5px 0; border:0; background:transparent; color:var(--accent,#075ef2); font:inherit; font-size:12px; cursor:pointer; }
+}
+@media print {
+  body.ai-copyright-connected * { visibility:visible; }
+  body.ai-copyright-connected { background:#fff !important; font-size:11px; }
+  body.ai-copyright-connected main { max-width:none; margin:0; padding:0; }
+  body.ai-copyright-connected :is(.modern-site-header,.hero .top-nav,#progress,.share-x-fab,.aic-status,.aic-timeline-nav,.aic-guesses,#modes,#list,.stage,#dotbox,#quiz,#vote-section,.aic-evidence-controls,.aic-evidence-jump,.classroom-print-btn,.cite-copy-wrap,.tide-widget-controls,.explainer-modal,footer,#fallback-nav,#fallback > .sub,.tap-hint) { display:none !important; }
+  body.ai-copyright-connected #fallback { display:block !important; }
+  body.ai-copyright-connected #fallback img { display:block; width:100%; height:auto; }
+  body.ai-copyright-connected:not(.aic-print-classroom) :is(#ocean,#ai-copyright-audit,#issue-cards,#bukatsu-check) { display:block !important; }
+  body.ai-copyright-connected li[data-aic-timeline-i][hidden] { display:block !important; }
+  body.ai-copyright-connected .classroom-section { position:static; width:auto; margin:0; padding:0; box-shadow:none; border:0; }
+  body.ai-copyright-connected :is(.panel,.planet-panel,#fallback) { overflow:visible; box-shadow:none; }
+  body.ai-copyright-connected.aic-print-classroom main > :not(.classroom-section) { display:none !important; }
+  body.ai-copyright-connected.aic-print-classroom > :not(main) { display:none !important; }
+  body.ai-copyright-connected.aic-print-classroom .classroom-section { display:block !important; color:#172033; }
+}
