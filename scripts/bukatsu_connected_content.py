@@ -1,9 +1,10 @@
-"""連動候補の読書面を、既存の原稿とPLANET_DATA・#issue-cards・#fallback・年表から生成する。
+"""連動候補の読書面を、既存の原稿とPLANET_DATA・#issue-cards・#fallback・年表・制度確認から生成する。
 
 理由(reason)からX投稿を開く機能は工程3の必須範囲に含めない（計画書のとおり）。
-理由の内訳・投稿例2件・資料照合・語られていない争点・共通の心配・関係する年表を1論点1枚にする。
-年表はdata/verification/bukatsu-chiiki-background.jsonのissue_ids（工程4でオーナー確認済み）で
-論点に結び、関係する年表が無い論点（地域格差・その他）には何も出さない。
+理由の内訳・投稿例2件・資料照合・語られていない争点・共通の心配・関係する年表・制度確認4項目を
+1論点1枚にする。年表・制度確認（bukatsu-check）はdata/verification/bukatsu-chiiki-background.json
+のissue_ids（年表は工程4、制度確認は2026-09-23、いずれもオーナー確認済み）で論点に結び、
+関係する項目が無い論点（地域格差・その他）には何も出さない。
 
 理由の内訳は、生データに立場（stance）が付いている論点（教員の働き方・受け皿・指導者・
 費用・家庭負担）だけ、立場ごとの件数・割合もdata-bkt-counts/data-bkt-pctsへ埋め込む
@@ -101,7 +102,9 @@ def render_templates(data: dict, source: str, index: dict) -> str:
     claims = {c["id"]: c for c in data["claims"]}
     sunk = {p["id"]: p for p in data["ocean"]["sunk_continents"]}
     veins = {p["id"]: p for p in data["ocean"]["veins"]}
-    timelines = {t["id"]: t for t in background_data()["timeline"]}
+    background = background_data()
+    timelines = {t["id"]: t for t in background["timeline"]}
+    checklist = {c["id"]: c for c in background["checklist"]["items"]}
     out = [START]
     for issue in data["issues"]:
         iid = issue["id"]
@@ -137,6 +140,14 @@ def render_templates(data: dict, source: str, index: dict) -> str:
                 f'<div class="bkt-timeline-item" data-bkt-timeline="{e(tid)}">'
                 f'<p class="bkt-timeline-when">{e(t["when"])}<em>{e(t["era"])}</em></p>'
                 f'<p>{e(t["text"])}</p>' + sources(t["sources"]) + '</div>'
+            )
+        if connection["check_ids"]:
+            out.append(f'<p class="bkt-eyebrow">制度の確認 {e(index["background_checked_on"])}</p><h3>この論点に関わる制度は？</h3>')
+        for cid in connection["check_ids"]:
+            c = checklist[cid]
+            out.append(
+                f'<details class="bkt-check" data-bkt-check="{e(cid)}"><summary>{e(c["label"])}：{e(c["ask"])}</summary>'
+                f'<p id="bkt-check-note-{e(cid)}">{e(c["found"])}</p>' + sources(c["sources"]) + '</details>'
             )
         out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
