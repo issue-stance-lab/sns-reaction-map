@@ -1,5 +1,6 @@
 import glob
 import importlib
+import subprocess
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -36,6 +37,16 @@ class HermesClassifierSplitRetryTest(unittest.TestCase):
                 with patch.object(module, "classify", side_effect=RuntimeError("Hermes batch failed")):
                     with self.assertRaises(RuntimeError):
                         module.classify_or_split([{"text": "a"}])
+
+    def test_upstream_refusal_is_reported_not_parsed(self):
+        refusal = "HTTP 400: Upstream request failed: [400] The request was rejected because it was considered high risk\n"
+        for name in MODULES:
+            with self.subTest(name):
+                module = importlib.import_module(name)
+                done = subprocess.CompletedProcess(["hermes"], 0, stdout=refusal, stderr="")
+                with patch.object(module.subprocess, "run", return_value=done):
+                    with self.assertRaisesRegex(RuntimeError, "upstream error"):
+                        module.classify([{"text": "a"}])
 
 
 if __name__ == "__main__":

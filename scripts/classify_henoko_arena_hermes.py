@@ -157,6 +157,10 @@ def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
             )
             continue
         try:
+            if result.stdout.lstrip().startswith("HTTP "):
+                # Upstream refusal (e.g. "[400] ... considered high risk") is printed
+                # with exit 0; its "[400]" would otherwise be parsed as a JSON array.
+                raise RuntimeError(f"Hermes upstream error: {result.stdout.strip()[:200]}")
             return parse_response(result.stdout, len(batch))
         except (ValueError, json.JSONDecodeError) as exc:
             last_error = exc
