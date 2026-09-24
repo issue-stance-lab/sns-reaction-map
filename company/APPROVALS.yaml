@@ -733,3 +733,33 @@ items:
       （公開ファイルの検査／Deploy to GitHub Pages とも success）、本番サイト
       （sns-reaction-map.jp、collected_count=594・opinion_count=461・
       updated_on=2026-09-24）を確認済み。
+
+  - id: approval-20260925-001
+    department: data
+    action: website_publication
+    summary: "副首都法案・副首都構想（fukushuto）の2026-09-24定期収集分（新規271件・意見231件）を正典へ統合し本番反映する"
+    reason: "refresh_at（2026-09-24）到来。オーナーの「副首都の更新作業を進めて」という指示を受けて着手"
+    risks:
+      - "分類拒否1件（提供元AIが台湾・習近平への言及を含む投稿を拒否）を本文確認のうえ、人手でis_relevant=true・is_opinion=true・都構想維新／法案反対と判定して反映した。同種の拒否ハンドリングは前日9/23に全10テーマの分類器へ追加されたばかりで、横展開（build_*_arena.py側の対応）は未着手"
+      - "「語られていない争点」（沈んだ大陸）4件の母数更新（1681→1912）は、承認時点では--apply-promotion前の旧正典に対する再照合で「新規ヒット無し」としていたが、これは誤りと判明（旧正典のまま確認していたため）。apply-promotion後にverify_ocean_layer.pyを実走し、sc-3・sc-4に新規ヒット計3件を検出。本文確認のうえ全件を既存と同型の理由（争点そのものへの直接言及ではない）で除外リストへ追加した"
+      - "旧アリーナ形式の死んだデータ（課題73）由来の「マップの点」ずれ（意見1912に対し1452）は今回の作業前から既知・対応対象外"
+    recommendation: approve
+    evidence:
+      - "themes/fukushuto.md 2026-09-25節"
+      - "data/verification/fukushuto-sunk-continents.json（母数1681→1912更新、sc-3/sc-4に新規ヒット3件を除外理由付きで追加）"
+      - ".staging/refresh/fukushuto/20260924_235346/promotion-manifest.json（非公開・作業ツリー内）"
+    status: approved
+    requested_at: "2026-09-25"
+    decided_at: "2026-09-25"
+    decision_note: "オーナーがチャットで、AskUserQuestionの選択肢「公開する（推奨）」を選び本番反映を承認"
+    completed_at: "2026-09-25"
+    result_note: >-
+      標準検査（verify_theme_page／verify_number_provenance／verify_themes_yaml／
+      verify_update_provenance／verify_page_originality／verify_ocean_layer）・
+      unittest 1135件（skipped 4）、いずれもNG無し。反映途中で2件のバグを発見・
+      修正した（build_fukushuto_arena.pyが「論点ごとのX投稿」件数バッジを
+      再生成対象に含めていなかった＝課題80と同型／number_provenance.exclude_selectors
+      に"note"が無かった＝他6テーマとの設定漏れ）。ローカルサーバーでデスクトップ・
+      375px幅とも実機確認（コンソールエラー0件、横スクロールなし、論点別バッジ
+      ・沈んだ大陸セクションとも正しい値）。push後のCI確認は release スキル側で
+      別途実施。
