@@ -9,7 +9,10 @@
 - **最有力の原因: 申請時点で、Googleが新ドメインのページの大半をまだ読んでいなかった。**
   - 申請時（9/15）のインデックス登録は16ページ中1件（`company/APPROVALS.yaml` `approval-20260915-002` の risks）
   - 9/21のURL検査（課題55）でも登録済みは18件中5件。テーマ10件のうち8件が未登録
-    （4件は発見済み・未クロール、ai-copyright・elderly-license-revocation・fukushuto・henoko-student-accident の4件と about は未認識）
+  - Search Console「ページのインデックス登録」レポート（最終更新9/21、オーナーの画面で9/24確認）では、
+    12ページが「検出 - インデックス未登録」（初検出9/05）。例示の about・ai-copyright・bukatsu-chiiki・consumption-tax-cut は
+    「前回のクロール: 該当なし」。**Googleはページの存在を知っているが、まだ一度も読みに来ていない状態**で、
+    「クロール済み - インデックス未登録」（読んだうえで載せなかった＝内容の評価で落ちた）ではない
   - Search Consoleの28日間の表示回数は3回・クリック0（`GROWTH.yaml` 2026-09-22）
   - 3回目不承認後に決めた再申請条件15-C「Search Consoleでルート、本体トップ、主力記事の最終取得内容を確認する」
     （`quality/reviews/adsense-third-rejection-2026-08-29.md`）を満たさないまま申請していた（上の表の15-C行にも「未達」とある）
