@@ -8,11 +8,11 @@
   "raw": 308,
   "duplicates": 37,
   "new": 271,
-  "relevant": 270,
-  "opinions": 230,
+  "relevant": 271,
+  "opinions": 231,
   "opinion_flag_available": true,
   "candidate": 2295,
-  "classification_errors": 1,
+  "classification_errors": 0,
   "status": "validated",
   "topic": "fukushuto",
   "date": "2026-09-24",
@@ -49,7 +49,15 @@
       "config_source": "config.yaml:model.default"
     },
     "output": {
-      "classified_sha256": "86be837ff1400c217dd65bc9550b6fc2379fd4a63fb9977bb01cac8e506ca5e5"
+      "classified_sha256": "8443b77e71422d9805d98d3184457e9104a0b1c5722294414ebb1945281ec843"
+    },
+    "manual_review": {
+      "count": 1,
+      "record_id_hash": "sha256:125138d8313855fc8280975072fe42b7cf083f76fb29a653adb5d526b7713f9a",
+      "original_error": "upstream_refused: Hermes upstream error: HTTP 400: Upstream request failed: [400] Provider returned error",
+      "reviewed_by": "Claude Sonnet 5 (Claude Code)",
+      "reviewed_at": "2026-09-25",
+      "reason_for_refusal_guess": "台湾・習近平への言及が提供元フィルターに抵触したとみられる（内容自体は分類可能）"
     }
   },
   "next_collect_at": "2026-10-03"
