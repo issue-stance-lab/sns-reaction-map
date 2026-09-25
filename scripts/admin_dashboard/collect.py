@@ -97,6 +97,7 @@ def collect_themes(today: dt.date) -> list[dict]:
                 "collect_in": (collect_at - today).days if collect_at else None,
                 "refresh_in": (refresh_at - today).days if refresh_at else None,
                 "collect_mode": value.get("collect_mode") or "scheduled",
+                "pending_wave": _as_date(value.get("pending_wave")),
                 "updated_at": _as_date(value.get("updated_at")),
                 "published_at": _as_date(value.get("published_at")),
                 "x_posted_at": _as_date(value.get("x_posted_at")),

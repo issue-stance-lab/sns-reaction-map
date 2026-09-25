@@ -2,6 +2,24 @@
 
 ## 基本方針
 
+### 収集と公開は同じセッションで（2026-09-25〜、オーナー決定）
+
+- **収集したら、同じセッションで本文確認・正典反映・公開まで終える。** 収集だけで終わる回を作らない。
+  X日次のついでの収集（旧 `collection-bridge.md`）は廃止した。
+- 公開の直前に、チャットでオーナーの承認をもらう（Website公開は毎回承認。`company/APPROVALS.yaml` に記録）。
+  承認を待つ間もセッションは閉じず、承認後に同じセッションで公開まで進める。
+- 予定日は1本。`collect_at` と `refresh_at` は**公開を終えた時点で**同じ日にそろえて進める
+  （`refresh_topic.py` の `publication_schedule_fields()`）。そろっていないと
+  `tests/test_refresh_topic.py` の `test_registry_keeps_collect_and_refresh_on_the_same_date` が落ちる。
+- その日のうちに公開できなかった（検査NG・承認が得られない等）ときは、集めた回を保存したまま
+  `THEMES.yaml` に `pending_wave: <収集日>` が残り、予定日は進まない（期限超過として見え続ける）。
+  次のセッションは新しく集めず、その回を `--resume --run-id <前回のrun-id>` で公開まで仕上げる。
+  `pending_wave` があるテーマで `--resume` なしの収集を始めると `refresh_topic.py` が止める。
+- 例外: 新規0件の回と、`--allow-taxonomy-mismatch`（保管だけ）の回は公開するものが無いので、
+  収集の時点で予定日を進める。
+- 経緯: 収集日と公開日が別々に進んでいたため、公開日が収集日より先に来て
+  「公開するものが無い更新作業」が起きた（皇室典範・憲法改正、2026-09-25）。
+
 - `collect_at` は収集・分類・更新回保存の内部期限。ページを公開できないテーマも予定どおり実行する。
 - `refresh_at` は公開まで昇格できるテーマだけに設定する。
 - 収集・分類は全テーマで `scripts/refresh_topic.py --topic ...` を使う。
@@ -124,8 +142,8 @@ JevはHermesの代替分類器ではなく、収集回を別の目で点検す�
 
 **課題54の全体完了を待たず、テーマごとに収集から確認・非公開候補作成まで進める。**
 確認や公開が途中で止まる場合は、更新回を保全し、テーマの経緯ファイルに
-保存場所・確認済み範囲・保留理由・次の作業を残す。収集成功時だけ次回 `collect_at` を進め、
-未公開のまま `updated_at` や `refresh_at` を公開済みの値へ進めない。
+保存場所・確認済み範囲・保留理由・次の作業を残す。`collect_at` と `refresh_at` は公開を終えた時点で
+そろえて進め、未公開のまま `updated_at`・`collect_at`・`refresh_at` を進めない（上の「収集と公開は同じセッションで」）。
 
 この節は山なみ向けの更新手順。下記の既存ページ用adapterの個別手順で
 「手動再読不要」とある場合も、それを山なみの本文確認を省く根拠にはしない。
@@ -281,9 +299,9 @@ python3 scripts/refresh_topic.py \
 6. `social-samples/updates/<topic>/<date>/` に非公開更新回を保存
 7. 保存直後に非公開データをバックアップし、復元検査
 8. 仮名化した更新回サマリを `data/verification/updates/` に保存
-9. 成功時だけ `last_refresh_attempt_at` と次回 `collect_at` を更新
+9. 成功時は `last_refresh_attempt_at` と `pending_wave` を記録する（`collect_at` は公開時に進む）
 
-バックアップが失敗した場合は更新回を確定せず、`collect_at` も進めない。新規0件でも収集成功回として履歴を残すが、公開更新にはしない。
+バックアップが失敗した場合は更新回を確定せず、`collect_at` も進めない。新規0件でも収集成功回として履歴を残すが、公開更新にはしない（この場合だけ収集の時点で `collect_at` と次回予定を進める）。
 
 ## 公開まで行う更新
 
@@ -514,8 +532,8 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 
 - [ ] `updated_at` → 今日の日付
 - [ ] `collect_delta` → 今回追加件数（重複除外後）
-- [ ] `collect_at` → 次回の収集・staging作成予定日
-- [ ] `refresh_at` → 次回の公開更新予定日（公開まで昇格できるテーマのみ。既定14日、今回の新規意見が50件以上なら次回だけ7日）
+- [ ] `collect_at` と `refresh_at` → 次回の収集・公開予定日（同じ日にそろえる。既定14日、今回の新規意見が50件以上なら次回だけ7日）
+- [ ] `pending_wave` → 公開を終えたら行ごと消す
 
 **経緯は `THEMES.yaml` に書かない。** ここは毎セッション読まれる登録簿で、
 書き足した分だけ実際の作業に使える余力が減る（課題60）。
@@ -664,7 +682,7 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
 `scripts/refresh_planet_section.py --topic <topic> --for-docs`（または初回変換の
 `build_planet_page_preview.py --for-docs`）を実行した瞬間だけである。
 
-**収集（`--promote`まで含む正典保存）**: `collect_at`/`refresh_at`の超過日数順（超過が
+**収集（`--promote`まで含む正典保存）**: `collect_at`（=`refresh_at`）の超過日数順（超過が
 大きいテーマから）で進めてよい。独自性検査の逼迫度は収集そのものには影響しない。
 
 **山なみ区画の表示更新**: 実行前に必ず`python3 scripts/verify_reread_headroom.py`で

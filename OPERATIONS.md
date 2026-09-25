@@ -101,7 +101,7 @@ python3 scripts/build_admin_dashboard.py
 |---|---|---|
 | `x-daily-measure` | 毎日 20:05頃 | 24時間経過した未計測投稿の表示回数を読み、`content/x/posts.md` に記録する |
 | `x-weekly-review` | 日曜 20:32頃 | 直近7日のX運用を振り返り、`content/x/weekly-reviews.md` に記録する |
-| `update-work-check` | 毎日 22:00頃 | `refresh_at` が一番遅れているテーマを1つ報告する（`GROWTH.yaml` の `recurring.update-work-queue` に記録するだけ。本文は読まない・公開しない） |
+| `update-work-check` | 毎日 22:00頃 | 収集済み・未公開の回（`pending_wave`）と、予定日（`collect_at`）が一番遅れているテーマを報告する（`GROWTH.yaml` の `recurring.update-work-queue` に記録するだけ。収集・本文確認・公開はしない） |
 
 どれも**投稿・公開はしない**（計測・記録・報告だけ）。返信案は出すが送信はしない。
 
@@ -140,8 +140,7 @@ python3 scripts/build_admin_dashboard.py
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 |
 |---|---|---|---|
-| **データ収集**（収集・自動分類・非公開保存） | 夜枠（20時以降）・X日次経由・1日1テーマまで。成功後に課題91のJevシャドー観測 | `THEMES.yaml` の `collect_at` | `DATA_REFRESH.md` / 課題81・91 |
-| **更新作業**（本文確認→正典反映→公開） | テーマごと（`refresh_at`超過順）。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `refresh_at` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md` / 課題86 |
+| **データ更新**（収集→自動分類→本文確認→正典反映→公開を**1セッションで**） | テーマごと（`collect_at`超過順）・1日1テーマまで。公開直前にオーナー承認。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `collect_at`（=`refresh_at`）と `pending_wave` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md`「収集と公開は同じセッションで」 / 課題86 |
 | **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` |
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
 | **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー |
