@@ -733,3 +733,25 @@ items:
       （公開ファイルの検査／Deploy to GitHub Pages とも success）、本番サイト
       （sns-reaction-map.jp、collected_count=594・opinion_count=461・
       updated_on=2026-09-24）を確認済み。
+
+  - id: approval-20260925-003
+    department: data
+    action: website_publish
+    summary: "辺野古高校生死亡事故（henoko-student-accident）「政治利用・基地問題」論点の編集再読、未読39件の追い読み結果を本番反映する"
+    reason: "同論点の未読合計が34%（上限40%）まで進んでいたため、オーナーの依頼で追い読みに着手。39件（読み飛ばし0＋読了後増分39）を本文確認し、未読率を0%へ"
+    risks:
+      - "既存分類（is_opinion・main_issue・stance）との不一致は0件（修正なし）。内訳区分（politics-election等4種）の追加・件数変更のみで、意見総数461件・論点別件数は変わらない"
+      - "副産物としてscripts/manage_reread_registry.pyの既存バグ2件を修正した（post_key形式の継承元でKeyError、複数論点が同じ継承元ファイルを共有する場合の論点フィルタ漏れ）。同じ形式を使う他3テーマ（constitutional-amendment・koshitsu-tenpakai・school-nickname-ban）への横展開・実データでの動作確認は未実施"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-24-henoko-base-politics-reread.md"
+      - "quality/reviews/2026-09-24-henoko-base-politics-reread.json"
+      - "themes/henoko-student-accident.md 2026-09-24節（追い読み）"
+      - "tests/test_manage_reread_registry.py（バグ修正の回帰確認4件）"
+    status: approved
+    requested_at: "2026-09-25"
+    decided_at: "2026-09-25"
+    decision_note: >-
+      本対話でオーナーへ結果（未読34%→0%、修正0件、副産物のバグ修正2件と他テーマ未検証の旨）を
+      提示し、反映してよいか確認。オーナーが「ほんばんはんえい」と明示的に承認（今回は
+      反映前に確認を得てから記録した）。
