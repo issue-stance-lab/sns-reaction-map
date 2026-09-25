@@ -80,6 +80,7 @@ COUNT_PROVENANCE_MODULES = {
     "consumption-tax-cut": "consumption_tax_count_provenance",
     "bukatsu-chiiki": "scripts.bukatsu_count_provenance",
     "ai-copyright": "ai_copyright_count_provenance",
+    "bike-blue-ticket": "scripts.bike_blue_ticket_count_provenance",
 }
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
