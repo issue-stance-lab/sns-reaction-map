@@ -73,6 +73,9 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
         self.assertEqual(connected.content_index(changed), expected)
 
     def test_refresh_planet_section_reapplies_the_candidate(self):
+        private_sample = ROOT / "social-samples/bike-blue-ticket_2d_classified.json"
+        if not private_sample.is_file():
+            self.skipTest("自転車の非公開正典がない環境では再生成検査を省略")
         from scripts.refresh_planet_section import refresh
 
         _old, rebuilt, _failures = refresh("bike-blue-ticket", source=self.page)
