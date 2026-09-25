@@ -673,6 +673,10 @@ def _avoid_collect_at_collision(root: Path, topic: str, candidate: date) -> date
     return candidate
 
 
+# 値が None のときは空欄にせず行ごと消す項目（ある間だけ意味を持つ印）
+REMOVABLE_THEME_FIELDS = {"pending_wave"}
+
+
 def _replace_theme_fields(text: str, topic: str, fields: dict[str, str | None]) -> str:
     pattern = rf"(^  {re.escape(topic)}:\n)(.*?)(?=^  [\w-]+:\n|\Z)"
     match = re.search(pattern, text, flags=re.MULTILINE | re.DOTALL)
@@ -680,6 +684,9 @@ def _replace_theme_fields(text: str, topic: str, fields: dict[str, str | None]) 
         raise ValueError(f"THEMES.yamlにテーマがありません: {topic}")
     block = match.group(2)
     for key, value in fields.items():
+        if value is None and key in REMOVABLE_THEME_FIELDS:
+            block = re.sub(rf"^    {re.escape(key)}:.*\n", "", block, flags=re.MULTILINE)
+            continue
         rendered = "" if value is None else value
         field_pattern = rf"(^    {re.escape(key)}:)[ \t]*[^#\n]*(.*$)"
 
@@ -692,7 +699,7 @@ def _replace_theme_fields(text: str, topic: str, fields: dict[str, str | None]) 
             field_pattern, replace_field, block, count=1, flags=re.MULTILINE
         )
         if count == 0:
-            anchor = re.search(r"^    refresh_at:.*$", block, flags=re.MULTILINE)
+            anchor =re.search(r"^    refresh_at:.*$", block, flags=re.MULTILINE)
             if not anchor:
                 raise ValueError(f"THEMES.yamlの挿入位置がありません: {topic}.{key}")
             block = block[:anchor.end()] + f"\n    {key}: {rendered}" + block[anchor.end():]
@@ -711,6 +718,48 @@ def record_collection_schedule(root: Path, topic: str, current_date: str, next_d
         },
     )
     path.write_text(text, encoding="utf-8")
+
+
+def publication_schedule_fields(next_date: str | None) -> dict[str, str | None]:
+    """公開を終えた時点で進める予定日。収集と公開は同じセッションで行う（2026-09-25〜）。
+
+    collect_at と refresh_at は同じ日にそろえ、未公開の更新回（pending_wave）を消す。
+    収集だけで予定日を進めると、公開更新の予定日が収集より先に来て空振りの
+    更新作業が生まれていた（皇室典範・憲法改正、2026-09-25）。
+    """
+    return {
+        "collect_at": next_date,
+        "refresh_at": next_date,
+        "collect_mode": "event-driven" if next_date is None else "scheduled",
+        "pending_wave": None,
+    }
+
+
+def record_pending_wave(root: Path, topic: str, current_date: str) -> None:
+    """新規のある更新回を保存したが、まだ公開していないことを台帳に残す。
+
+    collect_at は進めない。公開を終えるまで期限超過のまま見え続け、
+    次のセッションは新しく集めずにこの回を公開まで仕上げる。
+    """
+    path = root / "THEMES.yaml"
+    path.write_text(
+        _replace_theme_fields(
+            path.read_text(encoding="utf-8"),
+            topic,
+            {"pending_wave": current_date, "last_refresh_attempt_at": current_date},
+        ),
+        encoding="utf-8",
+    )
+
+
+def ensure_no_pending_wave(theme: dict[str, Any], topic: str, resume: bool) -> None:
+    """未公開の更新回が残っているテーマでは、新しい収集を始めない。"""
+    pending = theme.get("pending_wave")
+    if pending and not resume:
+        raise ValueError(
+            f"{topic}: 未公開の更新回 {pending} があります。新しく集めずに、"
+            f"その回を --resume で公開まで仕上げてください（DATA_REFRESH.md「収集と公開は同じセッションで」）"
+        )
 
 
 def record_refresh_attempt(root: Path, topic: str, current_date: str) -> None:
@@ -801,7 +850,7 @@ def promote(
         fields = {
             "updated_at": current_date,
             "collect_delta": str(int(report["new"])),
-            "refresh_at": next_date,
+            **publication_schedule_fields(next_date),
         }
         if theme.get("sample_period_source") != "owner_confirmed":
             fields["sample_period"] = sample_period(candidate)
@@ -897,7 +946,7 @@ def prepare_public_candidate_bundle(
         shutil.copy2(source, destination)
 
     next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
-    fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), "refresh_at": next_date}
+    fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), **publication_schedule_fields(next_date)}
     if theme.get("sample_period_source") != "owner_confirmed":
         fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
     registry = candidate_root / "THEMES.yaml"
@@ -1116,7 +1165,7 @@ def prepare_public_candidate_bundle_multi(
             per_topic_targets[target] = destination
 
         next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
-        fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), "refresh_at": next_date}
+        fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), **publication_schedule_fields(next_date)}
         if theme.get("sample_period_source") != "owner_confirmed":
             fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
         registry = candidate_root / "THEMES.yaml"
@@ -1312,6 +1361,7 @@ def main() -> int:
         raise ValueError("--include-wave は保存済み更新回を畳み込む指定なので --resume と併用してください")
     if args.date in args.include_wave:
         raise ValueError("--include-wave に --date と同じ日付は指定できません")
+    ensure_no_pending_wave(theme, args.topic, args.resume)
     promotion_preflight_error: ValueError | None = None
     if args.promote or args.apply_promotion:
         try:
@@ -1457,7 +1507,12 @@ def main() -> int:
     else:
         report["next_collect_at"] = next_collection_date(ROOT, args.topic, args.date, report)
         archive_wave(ROOT, args.topic, args.date, stage, report, args.backup_dest)
-        record_collection_schedule(ROOT, args.topic, args.date, report["next_collect_at"])
+        if int(report.get("new", 0) or 0) == 0 or args.allow_taxonomy_mismatch:
+            # 公開するものが無い回（新規0件）と、公開できない回（taxonomy不一致の保管だけ）は
+            # ここで完結するので予定日を進める。
+            record_collection_schedule(ROOT, args.topic, args.date, report["next_collect_at"])
+        else:
+            record_pending_wave(ROOT, args.topic, args.date)
     report["status"] = "archived"
     write_json(stage / "report.json", report)
 
