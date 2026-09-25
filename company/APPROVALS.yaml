@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-25"
+updated_at: "2026-09-26"
 
 rules:
   required_for:
@@ -816,3 +816,24 @@ items:
       本対話でオーナーへ結果（未読34%→0%、修正0件、副産物のバグ修正2件と他テーマ未検証の旨）を
       提示し、反映してよいか確認。オーナーが「ほんばんはんえい」と明示的に承認（今回は
       反映前に確認を得てから記録した）。
+
+  - id: approval-20260926-001
+    department: data
+    action: website_publish
+    summary: "収集と公開を同じセッションで行う運用へ変更し、トップページの次回更新表示を 9/25 → 9/26 へ再生成して本番反映する"
+    reason: "収集日（collect_at）と公開日（refresh_at）が別々に進み、公開するもののない更新作業が発生した（皇室典範・憲法改正、2026-09-25）。オーナーが『収集と公開はかならず同セッションで』と決定"
+    risks:
+      - "サイトに見える変更はトップページの次回更新日1か所のみ（sync_portal_stats.py の再生成）"
+      - "新しい pending_wave の動きはテストのみで確認。実収集での初回確認は次回の憲法改正更新"
+      - "作り直した22時の自動報告は未実行（初回は2026-09-26夜）"
+    recommendation: approve
+    evidence:
+      - "tasks/task-86.md 2026-09-25節"
+      - "DATA_REFRESH.md「収集と公開は同じセッションで」"
+      - "tests/test_refresh_topic.py・tests/test_admin_dashboard.py（unittest 1,151件OK）"
+    status: approved
+    requested_at: "2026-09-26"
+    decided_at: "2026-09-26"
+    decision_note: >-
+      本対話で変更内容・サイトに見える変更（次回更新日1か所）・未確認事項を提示し、
+      オーナーが「公開OK」と明示的に承認。反映前に承認を得てから記録した。
