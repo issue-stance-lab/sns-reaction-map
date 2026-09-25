@@ -1,0 +1,42 @@
+{
+  "schema_note": "課題77 constitutional-amendment移植 工程1の機械可読版",
+  "theme_id": "constitutional-amendment",
+  "created_at": "2026-09-26",
+  "before_state_baseline": {
+    "git_commit": "7214dc20",
+    "html_path": "docs/constitutional-amendment-reaction-map.html",
+    "html_sha256": "9589c5d1d2e8f9ea78b21a3d96413546581827d31b28e272f1a296113bf786ec",
+    "html_bytes": 309686,
+    "collected_count": 1779,
+    "opinion_count": 1568,
+    "collection_period": "2026-06-20〜2026-09-18",
+    "updated_on": "2026-09-20"
+  },
+  "stances": [
+    {"id": "constitutional-amendment-support", "key": "改正推進", "color": "#2F8F83"},
+    {"id": "constitutional-amendment-cautious", "key": "慎重・反対", "color": "#7D5BA6"},
+    {"id": "constitutional-amendment-procedure-focus", "key": "手続き重視", "color": "#D9A520"},
+    {"id": "constitutional-amendment-neutral", "key": "中立", "color": "#8B9199"}
+  ],
+  "issues": [
+    {"id": "constitutional-amendment-general", "label": "改憲全般", "count": 602, "reread": 511, "unread": 91, "reason_items": 11, "post_examples": 2, "claim_ids": [], "source_only_ids": [], "vein_ids": ["constitutional-amendment-avoid-war"]},
+    {"id": "constitutional-amendment-article9", "label": "9条・自衛隊", "count": 316, "reread": 284, "unread": 32, "reason_items": 12, "post_examples": 2, "claim_ids": ["article18_conscription", "jieitai_iken_gaku"], "source_only_ids": [], "vein_ids": []},
+    {"id": "constitutional-amendment-emergency", "label": "緊急事態条項", "count": 237, "reread": 199, "unread": 38, "reason_items": 12, "post_examples": 2, "claim_ids": ["emergency_law_making"], "source_only_ids": [], "vein_ids": []},
+    {"id": "constitutional-amendment-referendum", "label": "国民投票・広告", "count": 216, "reread": 196, "unread": 20, "reason_items": 12, "post_examples": 2, "claim_ids": ["minimum_vote_rate", "period_60days"], "source_only_ids": ["constitutional-amendment-sc-4"], "vein_ids": []},
+    {"id": "constitutional-amendment-procedure", "label": "政党・発議手続き", "count": 132, "reread": 118, "unread": 14, "reason_items": 7, "post_examples": 2, "claim_ids": ["two_thirds"], "source_only_ids": ["constitutional-amendment-sc-3"], "vein_ids": []},
+    {"id": "constitutional-amendment-deliberation", "label": "情報・議論の質", "count": 54, "reread": 51, "unread": 3, "reason_items": 8, "post_examples": 2, "claim_ids": [], "source_only_ids": [], "vein_ids": []},
+    {"id": "constitutional-amendment-other", "label": "その他", "count": 11, "reread": 10, "unread": 1, "reason_items": 5, "post_examples": 0, "post_status": "not_registered_explicitly", "claim_ids": [], "source_only_ids": [], "vein_ids": []}
+  ],
+  "global_source_only_ids": ["constitutional-amendment-challenge", "constitutional-amendment-emergency-review", "constitutional-amendment-sc-3", "constitutional-amendment-sc-4"],
+  "background": {
+    "source_file": "data/verification/constitutional-amendment-background.json",
+    "timeline_count": 11,
+    "timeline_has_issue_ids": false,
+    "checklist_count": 4,
+    "checklist_issue_ids_added": true,
+    "checked_on": "2026-09-13"
+  },
+  "reason_to_post_mapping": {"available": false, "treatment": "論点全体の既存代表投稿を表示し、理由別投稿は作らない"},
+  "vote": {"topic_id": "constitutional-amendment-issue-stance-v1", "combinations": 24, "preserve": true},
+  "v01_v12": {"v01": "implemented", "v02": "implemented", "v03": "implemented", "v04": "implemented", "v05": "implemented", "v06": "implemented", "v07": "explicit_not_available", "v08": "implemented", "v09": "implemented", "v10": "implemented", "v11": "implemented", "v12": "implemented"}
+}
