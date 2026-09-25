@@ -104,9 +104,9 @@
 **詳細**: [tasks/task-80.md](tasks/task-80.md)
 
 ### 課題93: 山なみテーマの「後付け処理」スクリプトが再生成パイプラインから漏れていないか、他5テーマも確認する
-**状態**: 未着手（2026-09-25、fukushuto定期更新中に発見。課題80と同根）
+**状態**: 進行中（2026-09-25登録。同日koshitsu-tenpakaiを確認しずれなし。他4テーマ未確認）
 **優先度**: 中（fukushutoは対応済み。他テーマで実害が出ているかは未確認）
-**次にすること**: ai-copyright/bike/elderly/koshitsu/nicknameの`#issue-cards`件数バッジが公開JSONとずれていないか確認する
+**次にすること**: 残るai-copyright/bike/elderly/nicknameの`#issue-cards`件数バッジが公開JSONとずれていないか確認する
 **関連テーマ**: ai-copyright / bike-blue-ticket / elderly-license-revocation / koshitsu-tenpakai / school-nickname-ban
 **詳細**: [tasks/task-93.md](tasks/task-93.md)
 
