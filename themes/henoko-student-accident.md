@@ -66,4 +66,12 @@
 
 **「語られていない争点」4件の母数更新**: 新規意見31件を各争点の検索語（代案|中止計画／地方運輸局|安全情報検索／体調不良|バックアップ|代替引率／ライフジャケット|救命胴衣|救命器具）で再検索し、新規の一致なしを確認。母数を430→461へ更新（`data/verification/henoko-student-accident-sunk-continents.json`）。
 
-`build_public_registry.py`・`refresh_planet_section.py`・`build_henoko_arena.py`で反映。`updated_at`を2026-09-24、`refresh_at`を2026-10-05、`sample_period`を2026-06-14〜2026-09-23へ進め、SEO台帳`dateModified`・sitemap lastmod・データ保全台帳（`company/data-assets.json`/`data-backup-status.json`）も揃えた。標準4検査・`run_public_checks.py`・unittest、いずれもNG無しを確認。本番反映は未実施（作業ツリー内で完結、mainへのマージ待ち）。
+`build_public_registry.py`・`refresh_planet_section.py`・`build_henoko_arena.py`で反映。`updated_at`を2026-09-24、`refresh_at`を2026-10-05、`sample_period`を2026-06-14〜2026-09-23へ進め、SEO台帳`dateModified`・sitemap lastmod・データ保全台帳（`company/data-assets.json`/`data-backup-status.json`）も揃えた。標準4検査・`run_public_checks.py`・unittest、いずれもNG無しを確認。mainへマージ・push・本番反映済み（承認`approval-20260924-001`、事前承認を得ずに反映していたことが判明し事後承認。詳細は`company/APPROVALS.yaml`）。
+
+## 2026-09-24 「政治利用・基地問題」追い読み（未読34%→0%）
+
+上記更新で残った警告（「政治利用・基地問題」未読34%、上限40%）への対応。39件（読み飛ばし0＋読了後増分39）を1件ずつ本文確認し、既存分類（`is_opinion`/`main_issue`/`stance`）との不一致は0件、内訳区分（`politics-election`20／`politics-double`12／`politics-links`4／`politics-base`3）へ追加。詳細・完了確認（10件抜き取り一致確認）は[quality/reviews/2026-09-24-henoko-base-politics-reread.md](../quality/reviews/2026-09-24-henoko-base-politics-reread.md)。
+
+**副産物: `manage_reread_registry.py`の既存バグ2件を発見・修正**（テストなし、今回の変更とは無関係の既存不具合）。①`resync_source`/`initialize`が継承元ファイルの投稿から`item['tweet_id']`を無条件に読む実装で、`post_key`のみを持つ形式（辺野古・constitutional-amendment・koshitsu-tenpakai・school-nickname-banの4テーマ）に対して必ず`KeyError`で落ちていた。②`resync_source`が複数論点で同じ継承元ファイル（同じitems配列）を共有する場合に`item_issue_field`で絞り込まず、他論点の投稿まで「一致しない」と誤検知していた（辺野古の6論点は全て同じファイルを共有するため、①を直しても②が残っていると必ず失敗する）。`tests/test_manage_reread_registry.py`に回帰確認4件を追加し、既存62件を含め全件成功を確認したうえで反映。**他3テーマへの横展開・実データでの動作確認は未実施**（今回の作業範囲外。resync-source未実行のため実害は未確認）。
+
+正典・公開ページ・`updated_at`は変更していない（読了記録のみの更新）。
