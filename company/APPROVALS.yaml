@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-24"
+updated_at: "2026-09-25"
 
 rules:
   required_for:
@@ -733,3 +733,22 @@ items:
       （公開ファイルの検査／Deploy to GitHub Pages とも success）、本番サイト
       （sns-reaction-map.jp、collected_count=594・opinion_count=461・
       updated_on=2026-09-24）を確認済み。
+
+  - id: approval-20260925-001
+    department: data
+    action: website_publish
+    summary: "消費税減税（consumption-tax-cut）の2026-09-24定期収集分（新規511件・意見450件）を正典へ統合し本番反映する"
+    reason: "refresh_at（2026-09-24）到達。オーナーの「消費税減税の更新作業進めて」という指示を受けて着手"
+    risks:
+      - "独自性検査が要求する4論点（対象範囲・効果・給付比較・事業者負担）の新規233件は編集部が本文を1件ずつ読んで理由分類した。このテーマは過去に要約使い回し事故があるため、summaryユニーク率233/233・論点ごとの抜き取り照合で本文との対応を確認済み"
+      - "作業ツリーの辺野古（henoko-student-accident）非公開データがmainマージ後の594件へ未反映だったため、最新バックアップから該当ファイルのみ復元して同期した（辺野古自体の内容は変更していない）"
+      - "既存テスト2件（対象範囲bucket A件数、財源+1000件シナリオの想定%・件数）のハードコード値が実データの変化で陳腐化していたため、実測値に更新した"
+    recommendation: approve
+    evidence:
+      - "themes/consumption-tax-cut.md 2026-09-24節"
+      - "data/verification/consumption-tax-cut-sunk-continents.json（母数3890→4340更新、新規ヒット7件を1件ずつ再確認しいずれも対象外）"
+      - ".staging/refresh/consumption-tax-cut/20260924_201859/promotion-manifest.json（非公開・作業ツリー内）"
+    status: approved
+    requested_at: "2026-09-25"
+    decided_at: "2026-09-25"
+    decision_note: "オーナーがチャットで「公開して」と明示的に承認。apply-promotion・マージ・push前に承認を記録。"
