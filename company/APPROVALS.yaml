@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260926-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題77の憲法改正テーマを連動表示の完成版へ切り替えて公開する"
+    reason: "7論点の読書面、立場切替、資料3表示、更新時の再適用を実装し、候補検証を完了したため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "X埋め込みは外部配信に依存する。読めない時も要旨と元投稿リンクを残す"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-09-26-task77-constitutional-amendment-content-contract.md"
+      - "quality/reviews/2026-09-26-task77-constitutional-amendment-quality.md"
+      - "docs/constitutional-amendment-reaction-map.html"
+    status: approved
+    requested_at: "2026-09-26"
+    decided_at: "2026-09-26"
+    decision_note: "オーナーが本対話で『公開して』と明示的に承認。公開候補HTML SHA-256: d1e16cefe6bee487ae7a0322330a8973aa5bb65e455ffb4736f986aa69f6f。"
+
   - id: approval-20260922-001
     department: growth-marketing
     action: website_publication

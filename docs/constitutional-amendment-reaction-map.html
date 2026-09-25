@@ -784,6 +784,12 @@
 <style>/* issue-count: scripts/sync_issue_counts.py */
 .explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
+<!-- CONSTITUTIONAL_CONNECTED_START -->
+<link rel="stylesheet" href="constitutional-connected.css?v=3">
+<script id="constitutional-connected-data" type="application/json">{"schema":1,"theme_id":"constitutional-amendment","stances":[{"id":"constitutional-amendment-support","mode_id":"改正推進","short_label":"改正推進"},{"id":"constitutional-amendment-cautious","mode_id":"慎重・反対","short_label":"慎重・反対"},{"id":"constitutional-amendment-procedure-focus","mode_id":"手続き重視","short_label":"手続き重視"},{"id":"constitutional-amendment-neutral","mode_id":"中立","short_label":"中立"}],"issues":{"constitutional-amendment-general":{"posts_id":"issue-constitutional-amendment-general","claim_ids":[],"source_only_ids":[],"shared_concern_ids":["constitutional-amendment-avoid-war"],"timeline_ids":[],"check_ids":["document","rights"]},"constitutional-amendment-article9":{"posts_id":"issue-constitutional-amendment-article9","claim_ids":["article18_conscription","jieitai_iken_gaku"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["document","rights"]},"constitutional-amendment-emergency":{"posts_id":"issue-constitutional-amendment-emergency","claim_ids":["emergency_law_making"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["document","emergency","rights"]},"constitutional-amendment-referendum":{"posts_id":"issue-constitutional-amendment-referendum","claim_ids":["minimum_vote_rate","period_60days"],"source_only_ids":["constitutional-amendment-sc-4"],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["document","decision"]},"constitutional-amendment-procedure":{"posts_id":"issue-constitutional-amendment-procedure","claim_ids":["two_thirds"],"source_only_ids":["constitutional-amendment-sc-3"],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["document","decision"]},"constitutional-amendment-deliberation":{"posts_id":"issue-constitutional-amendment-deliberation","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[]},"constitutional-amendment-other":{"posts_id":"issue-constitutional-amendment-other","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[]}},"scope_note":"理由の分類・投稿例・資料は、この論点全体の内容です。","background_checked_on":"2026-09-13"}</script>
+<script src="constitutional-connected.js?v=1" defer></script>
+<script src="constitutional-connected-page.js?v=1" defer></script>
+<!-- CONSTITUTIONAL_CONNECTED_END -->
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/constitutional-amendment/constitutional-hero.webp')">
 <div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
@@ -2118,6 +2124,341 @@ function buildQuiz(){
   }));
 }
 
+/* CONSTITUTIONAL_CONNECTED_BRIDGE_START */
+// バー↔山の立場共有（工程2）、論点を選んだときの読書面・山の選択色・480msの滑らかな変化・
+// 初期表示の自動着地（工程3）、深いリンクの名前空間統一・予想②からの論点移動・出典操作の計測
+// （工程4、bukatsu-chiikiの工程4相当の考え方を移植）。land/orbit/buildGuesses/buildQuiz自体の
+// 中身は変えず、drawPanel・layout・render・morphToだけを差し替える。
+//
+// 一次資料クイズからの論点移動は、bukatsu-chiikiのbridge.js側の実装（#quizへの委譲listener）
+// を検証した結果、docs/constitutional-connected-page.js側が独自クイズ描画へ差し替える際に
+// #quizを一度detachして中身を作り直すため、bridge.js側の委譲は実質到達しない設計だったと
+// 判明した（同ページ.js側のshowQuestion()が自前でmap.selectIssue()を呼ぶため機能的には
+// 重複でもある）。constitutional-amendmentではpage.js側のshowQuestion()に一本化し、ここでは実装しない。
+(function(){
+  // この橋渡しは buildModes() より前（/* ---------- 初期化 ---------- */の直前）に
+  // 挿し込まれる。#modes の中身はまだ空なので、個々のボタンへ直接listenerを付けると
+  // 何も登録されない。#modes 自体（常に存在する入れ物）への委譲で、後から生まれる
+  // ボタンにも効くようにする。STANCE_GLANCE側は静的HTMLで最初から存在するため、
+  // 個別付与のままでよい。
+  var glanceButtons = document.querySelectorAll('#stance-glance-buttons .sg-pick-btn');
+  var modesBox = document.getElementById('modes');
+
+  function stanceAt(i){ return D.stances[i] || null; }
+
+  function syncGlance(modeId){
+    glanceButtons.forEach(function(btn, i){
+      var s = stanceAt(i);
+      btn.setAttribute('aria-pressed', String(!!s && s.key === modeId));
+    });
+  }
+  function syncModes(modeId){
+    if (!modesBox) return;
+    modesBox.querySelectorAll('[data-m]').forEach(function(btn){
+      btn.setAttribute('aria-pressed', String(btn.dataset.m === modeId));
+    });
+  }
+
+  // STANCE_GLANCEは表示だけの装置として作られている（自分の中だけで完結する）。
+  // 山を動かす呼び出しをここで追加する。既存のonclickは残したまま、別のlistenerを足す。
+  glanceButtons.forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var s = stanceAt(i);
+      if (!s || !modeById[s.key]) return;
+      morphTo(s.key);
+      syncModes(s.key);
+    });
+  });
+  // #modesは既存のonclickでmorphTo()を直接呼ぶ。STANCE_GLANCE側の見た目をここで揃える。
+  // 「すべて」はSTANCE_GLANCE側に対応ボタンが無いため、押下状態だけを揃える。
+  if (modesBox){
+    modesBox.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-m]');
+      if (!btn) return;
+      var i = D.stances.findIndex(function(s){ return s.key === btn.dataset.m; });
+      if (i >= 0 && glanceButtons[i]) glanceButtons[i].click();
+      else syncGlance(btn.dataset.m);
+    });
+  }
+  syncGlance(st.mode);
+  syncModes(st.mode);
+
+  // ---------- 工程3: 論点を選んだときの読書面（理由・投稿・資料）への差し替え ----------
+  // drawPanel()だけを差し替える。land()/orbit()/morphTo()は全てdrawPanel()を呼ぶため、
+  // ここ1箇所で全ての入口をまとめて拾える。読書面が無い論点（テンプレート未生成）や
+  // 「すべての論点」表示（st.landed===null）では、既存の描画をそのまま使う。
+  var legacyDrawPanel = drawPanel;
+  function readingTemplateFor(id){
+    return document.getElementById('constitutional-amendment-reading-' + id);
+  }
+  function fillMetrics(root, issue){
+    var m = modeById[st.mode], n = m.counts[issue.id] || 0;
+    var count = root.querySelector('[data-ca-count]');
+    var mode = root.querySelector('[data-ca-mode]');
+    var ratio = root.querySelector('[data-ca-ratio]');
+    var zero = root.querySelector('[data-ca-zero]');
+    if (count) count.textContent = n.toLocaleString('ja-JP');
+    if (mode) mode.textContent = '件 / ' + m.label + m.total.toLocaleString('ja-JP') + '件中';
+    if (n && m.total){
+      if (ratio){ ratio.textContent = (100*n/m.total).toFixed(1) + '%　高さ：強い表現 ' + (m.high_pct[issue.id]||0) + '%'; ratio.hidden = false; }
+      if (zero) zero.hidden = true;
+    } else {
+      if (ratio) ratio.hidden = true;
+      if (zero){ zero.textContent = 'この立場では0件です。'; zero.hidden = false; }
+    }
+  }
+  function renderReading(id){
+    var tpl = readingTemplateFor(id);
+    var panel = document.getElementById('panel');
+    panel.setAttribute('data-ca-issue-id', id);
+    panel.innerHTML = '';
+    panel.appendChild(tpl.content.cloneNode(true));
+    fillMetrics(panel, issues[idIndex[id]]);
+    var back = document.createElement('button');
+    back.type = 'button'; back.className = 'back'; back.id = 'back';
+    back.textContent = '← 論点の一覧へ戻る（Esc）';
+    back.addEventListener('click', orbit);
+    panel.appendChild(back);
+    // 図解の拡大は、既存のdocument委譲ハンドラ（.explainer-card[data-img]監視）が
+    // そのまま拾う。ここで別のlistenerを足す必要はない。
+  }
+  drawPanel = function(){
+    if (st.landed === null) { document.getElementById('panel').removeAttribute('data-ca-issue-id'); legacyDrawPanel(); return; }
+    var id = issues[st.landed].id;
+    if (!readingTemplateFor(id)) { legacyDrawPanel(); return; }
+    renderReading(id);
+  };
+
+  // ---------- 立場を切り替えたときの山の変化を滑らかにする（V11） ----------
+  // bukatsu-chiikiのbukatsu_connected_bridge.jsと同じ考え方（layout()だけを差し替え、
+  // render()が内部で呼ぶlayout(st.mode)が補間後の形を返すようにする。render()自体は
+  // 書き換えない）。
+  var caVisual = null, caAnimation = 0;
+  var legacyLayout = layout;
+  layout = function(modeId){ return caVisual && modeId === st.mode ? caVisual : legacyLayout(modeId); };
+
+  // ---------- 山の色を選んだ立場1色にそろえる（V05） ----------
+  // 元の配色は論点ごとに最多の立場の色を塗り分ける方式（多色）。選んだ立場の色1色へ
+  // 全ての山をそろえ、選択中は濃く・他は薄くする（レイアウトの計算そのものは元の
+  // legacyRenderのまま、描画後にfill/opacityだけ塗り直す）。色の値自体は
+  // configs/planet/constitutional-amendment.yamlの立場配色をそのまま使う。
+  function recolorHills(){
+    var stance = D.stances.find(function(s){ return s.key === st.mode; });
+    var color = stance ? stance.color : '#075ef2';
+    svg.querySelectorAll('.hill').forEach(function(g){
+      var path = g.querySelector('path');
+      if (!path) return;
+      var landed = st.landed !== null && Number(g.dataset.i) === st.landed;
+      path.setAttribute('fill', color);
+      path.setAttribute('opacity', String(st.landed === null ? 0.6 : (landed ? 0.9 : 0.23)));
+      if (landed) {
+        path.setAttribute('stroke', '#f2f6fa');
+        path.setAttribute('stroke-width', '1.8');
+        path.removeAttribute('stroke-dasharray');
+      } else if (path.getAttribute('stroke-dasharray')) {
+        path.setAttribute('stroke', color);
+      } else {
+        path.removeAttribute('stroke');
+      }
+      var zeroMark = g.querySelector('.zero-mark');
+      if (zeroMark) zeroMark.setAttribute('fill', color);
+    });
+  }
+
+  // アニメーション中は毎フレームsvg.innerHTMLを作り直す（render()自体の仕様）ため、
+  // キーボード操作中の山（.hill）へのフォーカスが毎回外れる。呼び出し前後で復元する。
+  var legacyRender = render;
+  render = function(){
+    var focused = document.activeElement;
+    var focusId = focused && focused.classList && focused.classList.contains('hill') ? focused.dataset.i : null;
+    legacyRender();
+    recolorHills();
+    if (focusId !== null){
+      var el = svg.querySelector('.hill[data-i="' + focusId + '"]');
+      if (el) el.focus({preventScroll: true});
+    }
+  };
+
+  function caAnimate(from, to){
+    cancelAnimationFrame(caAnimation);
+    if (reduce){ caVisual = null; render(); return; }
+    var start = performance.now();
+    var byId = function(list){ var m = new Map(); list.forEach(function(v){ m.set(v.it.id, v); }); return m; };
+    var a = byId(from.live), b = byId(to.live);
+    var keys = issues.map(function(it){ return it.id; }).filter(function(id){ return a.has(id) || b.has(id); });
+    function zero(v){ return Object.assign({}, v, {x0: v.cx, x1: v.cx, w: 0, top: SEA, n: 0, hi: 0, rate: 0, share: 0}); }
+    function frame(now){
+      var t = Math.min(1, (now - start) / 480), f = 1 - Math.pow(1 - t, 3);
+      caVisual = Object.assign({}, to, {live: keys.map(function(id){
+        var end = b.get(id), begin = a.get(id);
+        var left = begin || zero(end), right = end || zero(begin), value = Object.assign({}, right);
+        ['x0', 'x1', 'cx', 'w', 'top', 'n', 'hi', 'rate', 'share'].forEach(function(key){
+          value[key] = left[key] + (right[key] - left[key]) * f;
+        });
+        value.n = Math.round(value.n); value.hi = Math.round(value.hi);
+        value.clipped = value.rate > Y_MAX;
+        return value;
+      })});
+      render();
+      if (t < 1) caAnimation = requestAnimationFrame(frame);
+      else { caVisual = null; caAnimation = 0; render(); }
+    }
+    caAnimation = requestAnimationFrame(frame);
+  }
+
+  // 連打時、前のアニメーションの最新の形（caVisual）から次の目的地へつなぐため、
+  // 常に最後に押した立場へ収束する（前のアニメーションへ戻らない）。
+  morphTo = function(toMode){
+    if (!modeById[toMode] || toMode === st.mode) return;
+    var from = caVisual || legacyLayout(st.mode);
+    st.prevRank = ranksOf(st.mode);
+    st.mode = toMode;
+    if (st.landed !== null && modeById[toMode].counts[issues[st.landed].id] === 0){
+      st.landed = null;
+      if (location.hash) history.replaceState(null, "", location.pathname);
+    }
+    evacuateChart();
+    drawPanel(); syncList(); placeChart();
+    caAnimate(from, legacyLayout(toMode));
+    if (window.innerWidth < 820) bringIntoView(document.querySelector("#panel h2") || document.getElementById("panel"));
+  };
+
+  // ---------- 初期表示の自動着地 ----------
+  // land()自体は変えない。画面を動かさず状態だけ変えたい初期表示では、bringIntoView()を
+  // 一時的に何もしない関数へ差し替えてland()を呼び、直後に戻す（land()の中身は複製しない）。
+  function landSilently(i){
+    var real = bringIntoView;
+    bringIntoView = function(){};
+    land(i);
+    bringIntoView = real;
+  }
+  // land()が書くhashは論点の生id（例: #constitutional-amendment-general）だが、旧代表投稿・授業節の
+  // 既存リンクは別の名前空間（例: #issue-constitutional-amendment-learning-data）を使っている。
+  // 工程4で旧代表投稿を通常画面から隠すため、実際に残る消費先は授業節の論点リンクのみだが、
+  // 両方を同じ論点選択へ正規化しておく（bukatsu-chiikiと同じ設計）。
+  function issueIdFromHash(){
+    var h = location.hash.slice(1);
+    if (!h) return null;
+    if (Object.prototype.hasOwnProperty.call(idIndex, h)) return h;
+    if (h.indexOf('issue-') === 0 && Object.prototype.hasOwnProperty.call(idIndex, h.slice(6))) return h.slice(6);
+    return null;
+  }
+  // 読書面のtemplateはbody末尾にあり、このscript（PLANET_SECTION内）より後ろでパースされる。
+  // 素のhash付きURL（前回訪問した論点をブラウザが覚えている再訪問）では、この関数を待たずに
+  // 既存init（PLANET_SECTION末尾の同期処理）がすぐland()を呼ぶ。その時点ではまだtemplateが
+  // 未パースのため、drawPanel()は「読書面が無い論点」と判定して旧描画へ後退する。
+  // テンプレートが必ず揃っているこのタイミングで、読書面が実際に描けているかを確かめ、
+  // 旧描画のままなら同じ論点へもう一度静かに着地し直す。
+  function readingRenderedFor(i){
+    return i !== null && !!document.getElementById('panel').querySelector('.ca-selected-head');
+  }
+  function initialLand(){
+    if (st.landed === null) {
+      var id = issueIdFromHash();
+      if (id !== null){ landSilently(idIndex[id]); }
+      else if (!location.hash){
+        var top = issues.reduce(function(a, b){ return b.count > a.count ? b : a; });
+        landSilently(idIndex[top.id]);
+      }
+    }
+    if (st.landed !== null && !readingRenderedFor(st.landed)) landSilently(st.landed);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialLand, {once: true});
+  } else {
+    initialLand();
+  }
+  // 授業節の論点リンクも、ブラウザの戻る/進むも、最終的にはhashの変化として届く。1箇所で
+  // 拾い、同じ論点選択へつなぐ。論点に無関係なhash（#planet-block・#vote-section等）は
+  // 無視して今の選択状態を保つ。
+  window.addEventListener('hashchange', function(){
+    var h = location.hash.slice(1);
+    if (!h){ if (st.landed !== null) orbit(); return; }
+    var id = issueIdFromHash();
+    if (id !== null && (st.landed === null || issues[st.landed].id !== id)) landSilently(idIndex[id]);
+  });
+
+  // ---------- 論点表示・出典操作の計測 ----------
+  // GA4本体（gtag）はGA_TAG_START〜ENDのshimが本番ホストでだけ動く前提のため、無い環境
+  // （ローカル確認等）では何もしない。再描画のたびに送らないよう、直前に送った論点idと
+  // 比較する（立場切替でdrawPanelが同じ論点を再描画しても送り直さない）。閲覧者が選んだ
+  // 立場・自由記述は送らない。送るのはissue_idと、押した出典リンクの行き先URLだけ。
+  var lastTrackedIssue = null;
+  function trackIssueView(id){
+    if (typeof window.gtag !== 'function' || id === lastTrackedIssue) return;
+    lastTrackedIssue = id;
+    window.gtag('event', 'issue_view', {issue_id: id});
+  }
+  var panelForTracking = document.getElementById('panel');
+  if (panelForTracking){
+    panelForTracking.addEventListener('click', function(e){
+      var a = e.target.closest('a[target="_blank"]');
+      if (!a || typeof window.gtag !== 'function') return;
+      window.gtag('event', 'citation_click', {
+        issue_id: st.landed === null ? null : issues[st.landed].id,
+        outbound_url: a.href
+      });
+    });
+  }
+  var legacyDrawPanelForTracking = drawPanel;
+  drawPanel = function(){
+    legacyDrawPanelForTracking();
+    if (st.landed !== null) trackIssueView(issues[st.landed].id);
+  };
+
+  // ---------- 予想2問②（強い表現が一番多い論点は？）の答えから、該当の山へ移動 ----------
+  // buildGuesses()自体は上書きしない（①②の文言・正誤判定は既存のまま）。#guesses
+  // （buildModes()と同様、buildGuesses()実行前は空の入れ物）への委譲で、答えが開いた
+  // 直後（＝buildGuesses()自身のclick listenerが先に走った後、bubblingで#guessesへ届く
+  // 時点）にだけ動く。答えの論点名は表示済みの答え文「「論点名」」をそのまま読み取り、
+  // buildGuesses()のクロージャ内の値を再計算しない。
+  var guessesBox = document.getElementById('guesses');
+  if (guessesBox){
+    guessesBox.addEventListener('click', function(e){
+      if (!e.target.closest('.gopts button')) return;
+      var card = e.target.closest('.guess');
+      if (!card || card.dataset.k !== 'g2') return;
+      var answerBox = card.querySelector('.gans');
+      if (!answerBox || answerBox.querySelector('.ca-guess-link')) return;
+      var match = answerBox.innerHTML.match(/<b>「([^」]+)」/);
+      var target = match && issues.find(function(it){ return it.label === match[1]; });
+      if (!target) return;
+      var link = document.createElement('button');
+      link.type = 'button';
+      link.className = 'ca-guess-link';
+      link.textContent = 'この論点の山を見る ↓';
+      link.addEventListener('click', function(){ land(idIndex[target.id]); });
+      answerBox.appendChild(link);
+    });
+  }
+
+  window.ConstitutionalConnectedMap = Object.freeze({
+    getState: function(){
+      var stance = D.stances.find(function(s){ return s.key === st.mode; });
+      return Object.freeze({
+        stanceId: stance ? stance.id : 'all',
+        issueId: st.landed === null ? null : issues[st.landed].id
+      });
+    },
+    selectIssue: function(id){
+      if (id === null){ orbit(); return true; }
+      if (!Object.prototype.hasOwnProperty.call(idIndex, id)) return false;
+      land(idIndex[id]);
+      return true;
+    },
+    selectStance: function(id){
+      if (id === 'all'){ morphTo('all'); syncGlance('all'); syncModes('all'); return true; }
+      var stance = D.stances.find(function(s){ return s.id === id; });
+      if (!stance) return false;
+      morphTo(stance.key);
+      syncGlance(stance.key);
+      syncModes(stance.key);
+      return true;
+    }
+  });
+})();
+
+/* CONSTITUTIONAL_CONNECTED_BRIDGE_END */
 /* ---------- 初期化 ----------
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
@@ -2863,5 +3204,98 @@ try {
 })();
 </script>
 <script src="share-x-btn.js"></script>
+<!-- CONSTITUTIONAL_CONNECTED_CONTENT_START -->
+<template id="constitutional-amendment-reading-constitutional-amendment-general">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>📜 改憲全般</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-general-v2.webp" data-alt="改憲全般"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-general-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>賛否の表明・運動と議論の仕方</span><b id="ca-reason-count-constitutional-amendment-general-debate-conditions">158<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:26.200%"></i></span></li><li><span class="ca-reason-row"><span>戦争を避ける方法と防衛</span><b id="ca-reason-count-constitutional-amendment-general-peace-security">127<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:21.100%"></i></span></li><li><span class="ca-reason-row"><span>改正を担う政権・政党への評価</span><b id="ca-reason-count-constitutional-amendment-general-political-trust">83<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:13.800%"></i></span></li><li><span class="ca-reason-row"><span>変更する条項と暮らし・権利</span><b id="ca-reason-count-constitutional-amendment-general-rights-scope">71<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:11.800%"></i></span></li><li><span class="ca-reason-row"><span>国民投票で決めることへの評価</span><b id="ca-reason-count-constitutional-amendment-general-referendum">66<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:11.000%"></i></span></li><li><span class="ca-reason-row"><span>政治への不信と関連政策</span><b id="ca-reason-count-constitutional-amendment-general-em-political">2<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.300%"></i></span></li><li><span class="ca-reason-row"><span>戦争・動員との結びつきへの懸念</span><b id="ca-reason-count-constitutional-amendment-general-em-war">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.200%"></i></span></li><li><span class="ca-reason-row"><span>権限集中と自由への制約</span><b id="ca-reason-count-constitutional-amendment-general-em-control">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.200%"></i></span></li><li><span class="ca-reason-row"><span>既存制度と条項の必要性</span><b id="ca-reason-count-constitutional-amendment-general-em-necessity">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.200%"></i></span></li><li><span class="ca-reason-row"><span>任期延長と選挙の機会</span><b id="ca-reason-count-constitutional-amendment-general-em-election">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.200%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-general-__unread__">91<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:15.100%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="ca-post" data-ca-post-url="https://x.com/mamemiso2930/status/2070756721463881871"><p><strong>社会の変化に合わせたい</strong>：技術や安全保障の変化を理由に、改憲に消極的に賛成している。</p><a href="https://x.com/mamemiso2930/status/2070756721463881871" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/mamemiso2930/status/2070756721463881871">@mamemiso2930 の投稿をXで見る</a></blockquote></details></article><article class="ca-post" data-ca-post-url="https://x.com/frnXuWz00WuFE8R/status/2067876294105383303"><p><strong>改正案の内容で判断したい</strong>：改憲自体には賛成だが、不要な変更があるとして自民党・参政党の草案には反対している。</p><a href="https://x.com/frnXuWz00WuFE8R/status/2067876294105383303" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/frnXuWz00WuFE8R/status/2067876294105383303">@frnXuWz00WuFE8R の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<p class="ca-eyebrow">制度の確認 2026-09-13</p><h3>この論点に関わる制度は？</h3>
+<details class="ca-check" data-ca-check="document"><summary>どの提案の話か：いつ、誰が出した案なのか</summary><p id="ca-check-note-constitutional-amendment-general-document">たとえば、自民党の2012年の改正草案と、2018年に示した四項目の案は別の文書です。2026年の解説資料は、四項目の案を今後の議論に向けた提案として説明しています。古い案への批判が、今話題になっている案にも当てはまるかは、内容を見比べる必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li><li><a href="https://www.jimin.jp/news/policy/130250.html" target="_blank" rel="noopener noreferrer">自民党：2012年の日本国憲法改正草案</a></li></ul></details></details>
+<details class="ca-check" data-ca-check="rights"><summary>暮らしや権利に何が起きるか：誰の権限が増え、何が制限されるのか</summary><p id="ca-check-note-constitutional-amendment-general-rights">提案の条文を読み、政府にどのような権限を認めるのか、国民の自由や権利をどう守るのかを確認します。SNSで語られる「こうなるのでは」という懸念についても、提案のどの部分を根拠にしているのかを確かめます。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov：日本国憲法</a></li><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+<h3>同じ心配から、違う結論へ</h3>
+<details class="ca-concern" data-ca-concern="constitutional-amendment-avoid-war"><summary>戦争を避けたい。</summary><p>推進側は防衛力や抑止のための改正が戦争を防ぐと考え、反対側は憲法を変えることで戦争に関わる危険が増すと考えています。守りたい平和が共通でも、頼りにする方法が異なります。</p><p class="ca-note" id="ca-concern-count-constitutional-amendment-general-constitutional-amendment-avoid-war">確認した投稿例: 改正推進 2件 ／ 慎重・反対 2件。確認日 2026-09-12</p></details>
+</aside></div></template>
+<template id="constitutional-amendment-reading-constitutional-amendment-article9">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>🛡️ 9条・自衛隊</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-article9-v2.webp" data-alt="9条・自衛隊"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-article9-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>抑止力・防衛力と国を守る方法</span><b id="ca-reason-count-constitutional-amendment-article9-a9-defense">47<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:14.900%"></i></span></li><li><span class="ca-reason-row"><span>戦争・徴兵・権利制限への懸念</span><b id="ca-reason-count-constitutional-amendment-article9-a9-war">46<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:14.600%"></i></span></li><li><span class="ca-reason-row"><span>自衛隊の位置づけと憲法解釈</span><b id="ca-reason-count-constitutional-amendment-article9-a9-legal">45<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:14.200%"></i></span></li><li><span class="ca-reason-row"><span>政党・政権と他の政策への評価</span><b id="ca-reason-count-constitutional-amendment-article9-a9-politics">36<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:11.400%"></i></span></li><li><span class="ca-reason-row"><span>米国との関係・海外派遣への評価</span><b id="ca-reason-count-constitutional-amendment-article9-a9-us">32<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:10.100%"></i></span></li><li><span class="ca-reason-row"><span>発言・報道・運動への応対</span><b id="ca-reason-count-constitutional-amendment-article9-a9-discussion">30<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.500%"></i></span></li><li><span class="ca-reason-row"><span>改正案の内容・範囲と進め方</span><b id="ca-reason-count-constitutional-amendment-article9-a9-draft">18<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.700%"></i></span></li><li><span class="ca-reason-row"><span>国防軍・軍事法廷と自衛官の扱い</span><b id="ca-reason-count-constitutional-amendment-article9-a9-military">16<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.100%"></i></span></li><li><span class="ca-reason-row"><span>賛否の表明・改正を求める声</span><b id="ca-reason-count-constitutional-amendment-article9-a9-position">10<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:3.200%"></i></span></li><li><span class="ca-reason-row"><span>憲法の9条ではなく皇室典範の話題</span><b id="ca-reason-count-constitutional-amendment-article9-a9-other-law">3<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.900%"></i></span></li><li><span class="ca-reason-row"><span>本文だけでは理由を特定できない</span><b id="ca-reason-count-constitutional-amendment-article9-a9-context">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.300%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-article9-__unread__">32<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:10.100%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="ca-post" data-ca-post-url="https://x.com/tokumusocho/status/2067445721801146677"><p><strong>自衛隊の位置づけを明確にしたい</strong>：解釈によって運用が変わることを懸念し、9条の条文を明確にする改正を求めている。</p><a href="https://x.com/tokumusocho/status/2067445721801146677" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/tokumusocho/status/2067445721801146677">@tokumusocho の投稿をXで見る</a></blockquote></details></article><article class="ca-post" data-ca-post-url="https://x.com/Papatweetimg/status/2091305629835317354"><p><strong>自衛と先制攻撃を分けたい</strong>：自衛隊の強化は認めつつ、先制攻撃の力が戦争の危険を高めるとして9条改正に反対している。</p><a href="https://x.com/Papatweetimg/status/2091305629835317354" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Papatweetimg/status/2091305629835317354">@Papatweetimg の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<p class="ca-eyebrow">制度の確認 2026-09-13</p><h3>この論点に関わる制度は？</h3>
+<details class="ca-check" data-ca-check="document"><summary>どの提案の話か：いつ、誰が出した案なのか</summary><p id="ca-check-note-constitutional-amendment-article9-document">たとえば、自民党の2012年の改正草案と、2018年に示した四項目の案は別の文書です。2026年の解説資料は、四項目の案を今後の議論に向けた提案として説明しています。古い案への批判が、今話題になっている案にも当てはまるかは、内容を見比べる必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li><li><a href="https://www.jimin.jp/news/policy/130250.html" target="_blank" rel="noopener noreferrer">自民党：2012年の日本国憲法改正草案</a></li></ul></details></details>
+<details class="ca-check" data-ca-check="rights"><summary>暮らしや権利に何が起きるか：誰の権限が増え、何が制限されるのか</summary><p id="ca-check-note-constitutional-amendment-article9-rights">提案の条文を読み、政府にどのような権限を認めるのか、国民の自由や権利をどう守るのかを確認します。SNSで語られる「こうなるのでは」という懸念についても、提案のどの部分を根拠にしているのかを確かめます。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov：日本国憲法</a></li><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-note">照合確認日 2026-09-13。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="ca-claim" data-ca-claim="article18_conscription" open><summary>「徴兵制は憲法18条の苦役禁止に当たる」</summary><span class="ca-verdict">資料どおり</span><p>2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://kokkai.ndl.go.jp/txt/119215261X00320161011/151" target="_blank" rel="noopener noreferrer">国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁</a></li></ul></details></details>
+<details class="ca-claim" data-ca-claim="jieitai_iken_gaku"><summary>「自衛隊を違憲とする解釈がある」</summary><span class="ca-verdict">資料どおり</span><p>当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://kokkai.ndl.go.jp/txt/119315261X01820170509/43" target="_blank" rel="noopener noreferrer">国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁</a></li></ul></details></details>
+</aside></div></template>
+<template id="constitutional-amendment-reading-constitutional-amendment-emergency">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>⚖️ 緊急事態条項</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-emergency-v2.webp" data-alt="緊急事態条項"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-emergency-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>権限集中と自由への制約</span><b id="ca-reason-count-constitutional-amendment-emergency-em-control">49<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:20.700%"></i></span></li><li><span class="ca-reason-row"><span>政治への不信と関連政策</span><b id="ca-reason-count-constitutional-amendment-emergency-em-political">36<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:15.200%"></i></span></li><li><span class="ca-reason-row"><span>戦争・動員との結びつきへの懸念</span><b id="ca-reason-count-constitutional-amendment-emergency-em-war">23<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.700%"></i></span></li><li><span class="ca-reason-row"><span>既存制度と条項の必要性</span><b id="ca-reason-count-constitutional-amendment-emergency-em-necessity">22<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.300%"></i></span></li><li><span class="ca-reason-row"><span>賛否の表明・運動と議論の仕方</span><b id="ca-reason-count-constitutional-amendment-emergency-debate-conditions">19<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:8.000%"></i></span></li><li><span class="ca-reason-row"><span>任期延長と選挙の機会</span><b id="ca-reason-count-constitutional-amendment-emergency-em-election">15<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:6.300%"></i></span></li><li><span class="ca-reason-row"><span>他者の説明・立場への批評</span><b id="ca-reason-count-constitutional-amendment-emergency-em-commentator">13<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.500%"></i></span></li><li><span class="ca-reason-row"><span>発動・延長・検証の条件</span><b id="ca-reason-count-constitutional-amendment-emergency-em-conditions">9<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:3.800%"></i></span></li><li><span class="ca-reason-row"><span>変更する条項と暮らし・権利</span><b id="ca-reason-count-constitutional-amendment-emergency-rights-scope">5<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:2.100%"></i></span></li><li><span class="ca-reason-row"><span>改正を担う政権・政党への評価</span><b id="ca-reason-count-constitutional-amendment-emergency-political-trust">4<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:1.700%"></i></span></li><li><span class="ca-reason-row"><span>戦争を避ける方法と防衛</span><b id="ca-reason-count-constitutional-amendment-emergency-peace-security">4<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:1.700%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-emergency-__unread__">38<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:16.000%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="ca-post" data-ca-post-url="https://x.com/64CIVIC_law_med/status/2070784985833857080"><p><strong>憲法の原則の範囲で考えたい</strong>：憲法改正にも限界があるという考え方を踏まえ、緊急事態条項の内容を検討してはどうかと提案している。</p><a href="https://x.com/64CIVIC_law_med/status/2070784985833857080" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/64CIVIC_law_med/status/2070784985833857080">@64CIVIC_law_med の投稿をXで見る</a></blockquote></details></article><article class="ca-post" data-ca-post-url="https://x.com/BANGs_1019/status/2070733002280513898"><p><strong>権利と権力への歯止めを確かめたい</strong>：他国での採用数より、自由・平等への影響や権力を抑える仕組み、利点と欠点を重視している。</p><a href="https://x.com/BANGs_1019/status/2070733002280513898" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/BANGs_1019/status/2070733002280513898">@BANGs_1019 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<p class="ca-eyebrow">制度の確認 2026-09-13</p><h3>この論点に関わる制度は？</h3>
+<details class="ca-check" data-ca-check="document"><summary>どの提案の話か：いつ、誰が出した案なのか</summary><p id="ca-check-note-constitutional-amendment-emergency-document">たとえば、自民党の2012年の改正草案と、2018年に示した四項目の案は別の文書です。2026年の解説資料は、四項目の案を今後の議論に向けた提案として説明しています。古い案への批判が、今話題になっている案にも当てはまるかは、内容を見比べる必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li><li><a href="https://www.jimin.jp/news/policy/130250.html" target="_blank" rel="noopener noreferrer">自民党：2012年の日本国憲法改正草案</a></li></ul></details></details>
+<details class="ca-check" data-ca-check="emergency"><summary>今の仕組みで対応できるか：新しい規定で、何を補うのか</summary><p id="ca-check-note-constitutional-amendment-emergency-emergency">今の憲法にも、衆議院が解散している間、緊急の必要があれば内閣が参議院の緊急集会を求める仕組みがあります。緊急事態条項の議論では、この仕組みで対応できる範囲と、新たな規定が必要だとされる場面を見比べます。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov：日本国憲法</a></li></ul></details></details>
+<details class="ca-check" data-ca-check="rights"><summary>暮らしや権利に何が起きるか：誰の権限が増え、何が制限されるのか</summary><p id="ca-check-note-constitutional-amendment-emergency-rights">提案の条文を読み、政府にどのような権限を認めるのか、国民の自由や権利をどう守るのかを確認します。SNSで語られる「こうなるのでは」という懸念についても、提案のどの部分を根拠にしているのかを確かめます。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov：日本国憲法</a></li><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-note">照合確認日 2026-09-13。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="ca-claim" data-ca-claim="emergency_law_making" open><summary>「緊急事態条項案では内閣が国会を経ずに法律を作れる」</summary><span class="ca-verdict">裏が取れない</span><p>この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" target="_blank" rel="noopener noreferrer">自民党 条文イメージ・たたき台素案（2018年3月）PDF</a></li><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党 2026年解説版 p.7</a></li></ul></details></details>
+</aside></div></template>
+<template id="constitutional-amendment-reading-constitutional-amendment-referendum">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>🗳️ 国民投票・広告</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-referendum-v2.webp" data-alt="国民投票・広告"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-referendum-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>投票・開票への不信と監視の要望</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-integrity">40<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:18.500%"></i></span></li><li><span class="ca-reason-row"><span>広告・資金力と情報の公平さ</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-advertising">39<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:18.100%"></i></span></li><li><span class="ca-reason-row"><span>報道・周知を求める声</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-reporting">27<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:12.500%"></i></span></li><li><span class="ca-reason-row"><span>国民投票への参加と意思表示</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-participation">23<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:10.600%"></i></span></li><li><span class="ca-reason-row"><span>最低投票率と承認に必要な票数</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-threshold">19<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:8.800%"></i></span></li><li><span class="ca-reason-row"><span>法改正を進める順序と議論の時間</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-sequence">15<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:6.900%"></i></span></li><li><span class="ca-reason-row"><span>政党・政治家と関連政策への評価</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-political">15<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:6.900%"></i></span></li><li><span class="ca-reason-row"><span>改正案の内容と権利・戦争への懸念</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-proposal">11<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.100%"></i></span></li><li><span class="ca-reason-row"><span>投票のルール整備への評価</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-rules">3<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:1.400%"></i></span></li><li><span class="ca-reason-row"><span>他者の説明への問い・批評</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-discussion">2<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.900%"></i></span></li><li><span class="ca-reason-row"><span>本文だけでは具体的な理由を特定できない</span><b id="ca-reason-count-constitutional-amendment-referendum-ref-context">2<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:0.900%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-referendum-__unread__">20<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.300%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="ca-post" data-ca-post-url="https://x.com/bloodyMommy8412/status/2067775015152714162"><p><strong>広告による印象操作が心配</strong>：テレビやネットの有料広告で判断が左右されることを恐れ、広告規制を求めている。</p><a href="https://x.com/bloodyMommy8412/status/2067775015152714162" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/bloodyMommy8412/status/2067775015152714162">@bloodyMommy8412 の投稿をXで見る</a></blockquote></details></article><article class="ca-post" data-ca-post-url="https://x.com/09Ma77NyZdOVJRw/status/2070383130775880009"><p><strong>最低投票率は必要ないと考える</strong>：国政選挙との比較を挙げ、国民投票に最低投票率がないことを問題とは考えていない。</p><a href="https://x.com/09Ma77NyZdOVJRw/status/2070383130775880009" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/09Ma77NyZdOVJRw/status/2070383130775880009">@09Ma77NyZdOVJRw の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<p class="ca-eyebrow">制度の確認 2026-09-13</p><h3>この論点に関わる制度は？</h3>
+<details class="ca-check" data-ca-check="document"><summary>どの提案の話か：いつ、誰が出した案なのか</summary><p id="ca-check-note-constitutional-amendment-referendum-document">たとえば、自民党の2012年の改正草案と、2018年に示した四項目の案は別の文書です。2026年の解説資料は、四項目の案を今後の議論に向けた提案として説明しています。古い案への批判が、今話題になっている案にも当てはまるかは、内容を見比べる必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li><li><a href="https://www.jimin.jp/news/policy/130250.html" target="_blank" rel="noopener noreferrer">自民党：2012年の日本国憲法改正草案</a></li></ul></details></details>
+<details class="ca-check" data-ca-check="decision"><summary>どうすれば改正されるか：政党の提案だけで決まるのか</summary><p id="ca-check-note-constitutional-amendment-referendum-decision">政党が案を出しただけでは、憲法は変わりません。国会が改正案を国民に提案する「発議」を行い、その案について国民の承認を得る必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov：日本国憲法</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-note">照合確認日 2026-09-13。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="ca-claim" data-ca-claim="minimum_vote_rate" open><summary>「国民投票には最低投票率の規定がない」</summary><span class="ca-verdict">資料どおり</span><p>国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/419AC1000000051" target="_blank" rel="noopener noreferrer">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></li></ul></details></details>
+<details class="ca-claim" data-ca-claim="period_60days"><summary>「国会の発議から国民投票まで最短60日だ」</summary><span class="ca-verdict">資料どおり</span><p>60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/419AC1000000051" target="_blank" rel="noopener noreferrer">e-Gov 国民投票法（日本国憲法の改正手続に関する法律）</a></li></ul></details></details>
+<h3>資料にあり、収集投稿で見つからなかったこと</h3>
+<details class="ca-source-only" data-ca-source-only="constitutional-amendment-sc-4"><summary>2026年7月23日の参議院委員会審議で、足立康史議員は、2007年の国民投票法制定時に「制度を選ぶ憲法改正国民投票と人物を選ぶ国政選挙を一緒にするのは適当ではない」という立法意思を提出者が明確に答弁しており、両者を同日に実施しないことは既に確定していると述べた。</summary><p>この答弁のとおり運用されれば、将来、憲法改正の国民投票が実施される場合も、衆議院議員選挙・参議院議員選挙とは別の投票日になる。有権者は、代表者を選ぶ国政選挙と、制度の可否を決める国民投票を、別の機会に投票することになる。</p><p class="ca-note">今回収集した意見1,568件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-20</p><details><summary>調べた範囲を見る</summary><p id="ca-source-note-constitutional-amendment-sc-4">「同日実施」「ダブル選」等の語での一致は2件あったが、いずれも衆議院の解散と参議院選挙を同じ日に行う「衆参ダブル選挙」という別の政治的タイミングの話であり、憲法改正国民投票を国政選挙と同日にしないという2007年の立法意思そのものへの言及ではない。</p></details><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://kokkai.ndl.go.jp/txt/122115382X00820260723/28" target="_blank" rel="noopener noreferrer">国立国会図書館「国会会議録検索システム」参議院沖縄・北方問題及び地方に関する特別委員会議事録 第8号（足立康史発言）</a><p>speechOrder 28</p></li><li><a href="https://kokkai.ndl.go.jp/txt/122115391X00120260723/63" target="_blank" rel="noopener noreferrer">国立国会図書館「国会会議録検索システム」参議院沖縄・北方問題及び地方に関する特別委員会・総務委員会連合審査会議事録 第1号（足立康史発言）</a><p>speechOrder 59, 63</p></li></ul></details></details>
+</aside></div></template>
+<template id="constitutional-amendment-reading-constitutional-amendment-procedure">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>🏛️ 政党・発議手続き</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-process-v2.webp" data-alt="政党・発議手続き"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-process-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>政党・政治家の政策と支持の判断</span><b id="ca-reason-count-constitutional-amendment-procedure-party-policy">39<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:29.500%"></i></span></li><li><span class="ca-reason-row"><span>政党の発言と採決の食い違いへの指摘</span><b id="ca-reason-count-constitutional-amendment-procedure-party-consistency">29<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:22.000%"></i></span></li><li><span class="ca-reason-row"><span>政党間の協力・連立と違い</span><b id="ca-reason-count-constitutional-amendment-procedure-party-cooperate">16<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:12.100%"></i></span></li><li><span class="ca-reason-row"><span>発議に必要な議席と成立の見通し</span><b id="ca-reason-count-constitutional-amendment-procedure-party-seats">16<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:12.100%"></i></span></li><li><span class="ca-reason-row"><span>審査会・発議を止めるよう求める声</span><b id="ca-reason-count-constitutional-amendment-procedure-party-stop">11<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:8.300%"></i></span></li><li><span class="ca-reason-row"><span>議論・国民投票と手続きへの評価</span><b id="ca-reason-count-constitutional-amendment-procedure-party-procedure">7<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.300%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-procedure-__unread__">14<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:10.600%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="ca-post" data-ca-post-url="https://x.com/NU1o1wku9oVUnsP/status/2070624614947098821"><p><strong>賛成した理由を説明してほしい</strong>：支持している公明党・中道改革連合に、法案へ賛同した理由を国民に伝えてほしいと求めている。</p><a href="https://x.com/NU1o1wku9oVUnsP/status/2070624614947098821" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/NU1o1wku9oVUnsP/status/2070624614947098821">@NU1o1wku9oVUnsP の投稿をXで見る</a></blockquote></details></article><article class="ca-post" data-ca-post-url="https://x.com/kagari0505/status/2095841266248651241"><p><strong>発議には両院の賛成が必要</strong>：衆参両院それぞれで3分の2の賛成が必要なことを挙げ、改憲は簡単には進まないと見ている。</p><a href="https://x.com/kagari0505/status/2095841266248651241" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kagari0505/status/2095841266248651241">@kagari0505 の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<p class="ca-eyebrow">制度の確認 2026-09-13</p><h3>この論点に関わる制度は？</h3>
+<details class="ca-check" data-ca-check="document"><summary>どの提案の話か：いつ、誰が出した案なのか</summary><p id="ca-check-note-constitutional-amendment-procedure-document">たとえば、自民党の2012年の改正草案と、2018年に示した四項目の案は別の文書です。2026年の解説資料は、四項目の案を今後の議論に向けた提案として説明しています。古い案への批判が、今話題になっている案にも当てはまるかは、内容を見比べる必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf" target="_blank" rel="noopener noreferrer">自民党：日本国憲法の改正実現に向けて（2026年解説版）</a></li><li><a href="https://www.jimin.jp/news/policy/130250.html" target="_blank" rel="noopener noreferrer">自民党：2012年の日本国憲法改正草案</a></li></ul></details></details>
+<details class="ca-check" data-ca-check="decision"><summary>どうすれば改正されるか：政党の提案だけで決まるのか</summary><p id="ca-check-note-constitutional-amendment-procedure-decision">政党が案を出しただけでは、憲法は変わりません。国会が改正案を国民に提案する「発議」を行い、その案について国民の承認を得る必要があります。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov：日本国憲法</a></li></ul></details></details>
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-note">照合確認日 2026-09-13。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>
+<details class="ca-claim" data-ca-claim="two_thirds" open><summary>「憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ」</summary><span class="ca-verdict">資料どおり</span><p>3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。</p><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/321CONSTITUTION" target="_blank" rel="noopener noreferrer">e-Gov法令検索 日本国憲法 第96条</a></li></ul></details></details>
+<h3>資料にあり、収集投稿で見つからなかったこと</h3>
+<details class="ca-source-only" data-ca-source-only="constitutional-amendment-sc-3"><summary>国会法第68条の3は、憲法改正原案を発議する際に「内容において関連する事項ごとに区分して行う」ことを定めており、内容が関連しない複数の改正項目を一つにまとめて単一の賛否だけを問う発議はできない。</summary><p>自民党が掲げる複数の改正項目（9条・緊急事態条項など）が同時に国会発議されても、有権者は項目ごとに個別の賛成・反対を投票する。ある項目には賛成し別の項目には反対する、という投票ができ、複数項目をまとめて一つの賛否しか選べない投票にはならない。</p><p class="ca-note">今回収集した意見1,568件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-20</p><details><summary>調べた範囲を見る</summary><p id="ca-source-note-constitutional-amendment-sc-3">「4項目」「一括発議」「パッケージ」等の語での一致は5件あったが、いずれも改正4項目の中身の是非やその紹介の仕方を論じているだけで、発議・投票が項目ごとに区分される手続きそのものへの言及ではない。</p></details><details class="ca-sources"><summary>出典をひらく</summary><ul><li><a href="https://laws.e-gov.go.jp/law/322AC1000000079" target="_blank" rel="noopener noreferrer">e-Gov法令検索：国会法（昭和22年法律第79号）</a><p>第68条の3（平成19年法律第51号附則により新設。同時に新設された第68条の2は発議に必要な賛成者数〈衆院100人以上・参院50人以上〉を規定）</p></li></ul></details></details>
+</aside></div></template>
+<template id="constitutional-amendment-reading-constitutional-amendment-deliberation">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>💬 情報・議論の質</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-information-v2.webp" data-alt="情報・議論の質"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-information-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>数字・条文・説明の根拠を確かめる声</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-evidence">12<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:22.200%"></i></span></li><li><span class="ca-reason-row"><span>発信者の立場や主張への批評</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-speakers">12<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:22.200%"></i></span></li><li><span class="ca-reason-row"><span>決めつけ・中傷と対話の仕方</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-dialogue">10<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:18.500%"></i></span></li><li><span class="ca-reason-row"><span>報道の不足や偏りへの指摘</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-media">6<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:11.100%"></i></span></li><li><span class="ca-reason-row"><span>宣伝・情報操作への懸念</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-campaign">6<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:11.100%"></i></span></li><li><span class="ca-reason-row"><span>声の上げ方や運動の伝え方</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-action">3<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.600%"></i></span></li><li><span class="ca-reason-row"><span>民主主義と考える力への評価</span><b id="ca-reason-count-constitutional-amendment-deliberation-info-democracy">2<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:3.700%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-deliberation-__unread__">3<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:5.600%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><article class="ca-post" data-ca-post-url="https://x.com/kikumaco/status/2070723414214812092"><p><strong>まず条文を読んで議論したい</strong>：賛成・反対のどちらも、自分が好まない条文を含め憲法を読むべきだと述べている。</p><a href="https://x.com/kikumaco/status/2070723414214812092" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kikumaco/status/2070723414214812092">@kikumaco の投稿をXで見る</a></blockquote></details></article><article class="ca-post" data-ca-post-url="https://x.com/a0ft2v/status/2088833359866999123"><p><strong>中傷ではなく対話をしたい</strong>：理由を示す異論を歓迎する一方、レッテル貼りや返答のない応対に戸惑っている。</p><a href="https://x.com/a0ft2v/status/2088833359866999123" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="ca-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/a0ft2v/status/2088833359866999123">@a0ft2v の投稿をXで見る</a></blockquote></details></article></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+</aside></div></template>
+<template id="constitutional-amendment-reading-constitutional-amendment-other">
+<header class="ca-selected-head"><div><p class="ca-eyebrow">選んだ論点</p><h2>◯ その他</h2></div><button type="button" class="explainer-card ca-image-action" data-img="images/topics/constitutional-amendment/constitutional-infographic-wide-sonota-v2.webp" data-alt="その他"><img src="images/topics/constitutional-amendment/constitutional-infographic-wide-sonota-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
+<div class="ca-metrics" aria-live="polite" aria-atomic="true"><p><strong data-ca-count></strong><span data-ca-mode></span></p><p data-ca-ratio></p><p data-ca-zero hidden></p></div><p class="ca-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
+<div class="ca-columns"><section class="ca-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><ul class="ca-reasons"><li><span class="ca-reason-row"><span>家族・皇室・代表者選びの制度</span><b id="ca-reason-count-constitutional-amendment-other-other-policy">4<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:36.400%"></i></span></li><li><span class="ca-reason-row"><span>デモと異なる立場への応対</span><b id="ca-reason-count-constitutional-amendment-other-other-protest">4<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:36.400%"></i></span></li><li><span class="ca-reason-row"><span>憲法への向き合い方</span><b id="ca-reason-count-constitutional-amendment-other-other-constitution">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.100%"></i></span></li><li><span class="ca-reason-row"><span>人口集中と居住の自由</span><b id="ca-reason-count-constitutional-amendment-other-other-city">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.100%"></i></span></li><li><span class="ca-reason-row"><span>まだ読み直していない分</span><b id="ca-reason-count-constitutional-amendment-other-__unread__">1<small>件</small></b></span><span class="ca-reason-track" aria-hidden="true"><i style="width:9.100%"></i></span></li></ul>
+<div class="ca-posts"><h3>実際の投稿を読む</h3><p class="ca-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p><p class="ca-empty">この論点には、既存の代表投稿が登録されていません。理由別の投稿データも未登録です。</p></div></section>
+<aside class="ca-evidence" aria-label="資料">
+<h3>投稿の主張と一次資料</h3>
+<p class="ca-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
+</aside></div></template>
+<!-- CONSTITUTIONAL_CONNECTED_CONTENT_END -->
 </body>
 </html>
