@@ -86,6 +86,10 @@ class ConstitutionalConnectedTests(unittest.TestCase):
         self.assertEqual(refreshed, self.page)
         self.assertEqual(connected.validate(refreshed), [])
 
+    @unittest.skipUnless(
+        (ROOT / 'social-samples/constitutional_amendment_hermes_arena_classified.json').is_file(),
+        'private constitutional source is not available; checked locally before publication',
+    )
     def test_public_count_refresh_keeps_connection_and_is_idempotent(self):
         updated = apply_public_counts(self.page)
         self.assertEqual(connected.validate(updated), [])

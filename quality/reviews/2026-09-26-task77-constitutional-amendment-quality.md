@@ -1,6 +1,6 @@
 # 課題77 constitutional-amendment 連動表示 品質確認
 
-確認日: 2026-09-26。候補検証後、公開HTMLへ有効化した公開候補。状態: `published_pending_ci`。
+確認日: 2026-09-26。候補検証後、公開HTMLへ有効化した公開候補。状態: `published`。
 
 ## 実装範囲
 
