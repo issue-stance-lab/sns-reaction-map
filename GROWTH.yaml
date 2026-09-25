@@ -606,7 +606,7 @@ recurring:
     title: 更新作業（本文確認→正典反映→公開）の遅れ確認
     cadence: 毎日22時（自動実行、課題86。cronの日跨ぎ制約のため「2日に1回」から変更）
     stale_after_days: 3
-    last_run: 2026-09-24   # henoko-student-accidentが1日超過
+    last_run: 2026-09-25   # koshitsu-tenpakaiが0日超過（本日期限、constitutional-amendmentも同日）
     procedure: >-
       THEMES.yamlのrefresh_atが一番遅れているテーマを1つ報告する（読む・確定はしない。
       scripts/manage_reread_registry.py prepareは呼ばない——読む対象を固定する操作で、
