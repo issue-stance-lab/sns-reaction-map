@@ -783,3 +783,14 @@ items:
     requested_at: "2026-09-25"
     decided_at: "2026-09-25"
     decision_note: "オーナーがチャットで「公開して」と明示的に承認。apply-promotion・マージ・push前に承認を記録。"
+    completed_at: "2026-09-25"
+    result_note: >-
+      標準検査（verify_theme_page／verify_number_provenance／verify_top_page）・
+      unittest 1135件（skipped 4）・run_public_checks.py（採用台帳・データ保全含む）、
+      マージ後のmain・push後のCIともNG無し（公開ファイルの検査／Deploy to GitHub Pages
+      とも success、run 36119883649・36119883478）。本番サイト（sns-reaction-map.jp）で
+      意見4340件・収集4897件・最終更新日2026年9月24日を確認。トップページの更新バッジで
+      THEMES.yamlのcollect_deltaが0のまま（apply-promotionが--resumeでreport.new=0を
+      拾ったため）公開されていたのを実機確認で発見し、511へ修正・再push・再確認済み
+      （commit 0764217b）。ローカルサーバーでデスクトップ・375px幅とも実機確認
+      （コンソールエラー0件）。
