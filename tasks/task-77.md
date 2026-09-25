@@ -130,7 +130,7 @@ push・CI2件success・本番URL実機確認まで完了。前回持ち越し2�
 success）・本番URL実機確認まで完了。**全文**: [工程1〜4の完了記録](../quality/reviews/2026-09-23-task77-ai-copyright-full-log.md)・
 [工程5の検証記録](../quality/reviews/2026-09-23-task77-ai-copyright-quality.md)・
 [工程6の公開記録](../quality/reviews/2026-09-23-task77-ai-copyright-publication.md)（400行上限のため退避）。
-次は課題90（潮目ウィジェットの鮮度回復、別課題）と公開後の観察。
+次は課題90（潮目ウィジェットの鮮度回復、別課題）と公開後の観察。constitutional-amendmentは候補検証を完了し、内容確定書・品質確認（`quality/designs/2026-09-26-task77-constitutional-amendment-content-contract.md`、`quality/reviews/2026-09-26-task77-constitutional-amendment-quality.md`）を作成、公開承認待ち。
 
 ## 内容レビュー（2026-09-22、提案・採用前）
 
