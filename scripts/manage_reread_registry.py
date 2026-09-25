@@ -77,7 +77,9 @@ def initialize(root, topic, snapshot_at):
         if set(actual) - set(buckets) or any(actual.get(k, 0) != v['count'] for k, v in buckets.items()):
             raise ValueError('再読区分の件数と投稿IDの実数が一致しません')
         for item in items:
-            pk = key(item['tweet_id'])
+            # resync_source と同じ理由（post_key のみを持つ継承元がある）で、
+            # post_key があればそれを優先する。
+            pk = item['post_key'] if 'post_key' in item else key(item['tweet_id'])
             if pk in seen:
                 raise ValueError('再読の投稿IDが重複しています')
             seen.add(pk)
@@ -158,16 +160,26 @@ def resync_source(root, topic, manifest, source_rel):
         if spec['file'] != source_rel:
             continue
         items = dig(data, spec.get('items_path', spec['path'][:-1] + ['items']))
+        if spec.get('item_issue_field'):
+            # 複数の論点が同じ継承元ファイル（同じ items 配列）を共有することがある
+            # （henoko等）。initialize() と同じく、この論点の投稿だけに絞ってから
+            # 台帳と照合する。絞らないと他の論点の投稿まで「一致しない」と誤検知する。
+            items = [item for item in items if item.get(spec['item_issue_field']) == issue]
         buckets = dig(data, spec['path'])
         for item in items:
-            pk = key(item['tweet_id'])
+            # 継承元ファイルは2種類の形式がある。post_key を直接持つ形式（henoko等）と、
+            # tweet_id しか持たない形式（bukatsu-chiiki等）。前者から tweet_id を
+            # 導出する手段は無い（post_key は一方向ハッシュ）ため、post_key があれば
+            # それをそのまま使う。
+            pk = item['post_key'] if 'post_key' in item else key(item['tweet_id'])
             row = by_key.get(pk)
             review = (row or {}).get('review') or {}
             if (row is None or row.get('main_issue') != issue or row.get('is_opinion') is not True
                     or review.get('kind') != 'editorial_body_reread'
                     or review.get('bucket') != item.get('bucket')):
+                identifier = item.get('tweet_id', pk)
                 raise ValueError(
-                    f'継承元の投稿が共通台帳の読了記録と一致しません（論点「{issue}」tweet_id={item["tweet_id"]}）。'
+                    f'継承元の投稿が共通台帳の読了記録と一致しません（論点「{issue}」tweet_id/post_key={identifier}）。'
                     'record で先に登録してから resync-source を実行してください')
             checked += 1
         actual = Counter(item.get('bucket') for item in items)

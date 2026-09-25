@@ -17,6 +17,7 @@
 - スタンス集計（axis-card）
 - 詳細データの表
 - 論点カードの件数（explainer-count）
+- 「論点ごとのX投稿」（#issue-cards）の件数バッジ（山なみ版のみ。中身の代表投稿はfukushuto_issue_media.pyのMEDIA定数が正）
 
 **セクターの並びは `fukushuto_taxonomy.ISSUE_ORDER` で固定する。**
 件数の降順に並べ替えると投票の `choiceIdx`（論点×立場の21通り）の意味がずれ、
@@ -63,6 +64,9 @@ try:
     from .verify_sample_periods import expected_period, summarize
     from .x_embed import embed_html, period_label
     from .research_conditions import apply_research_conditions, research_conditions_html
+    from .fukushuto_issue_media import START as ISSUE_MEDIA_START
+    from .fukushuto_issue_media import build_section as issue_media_section
+    from .fukushuto_issue_media import inject as issue_media_inject
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -82,6 +86,9 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from verify_sample_periods import expected_period, summarize  # type: ignore[no-redef]
     from x_embed import embed_html, period_label  # type: ignore[no-redef]
     from research_conditions import apply_research_conditions, research_conditions_html  # type: ignore[no-redef]
+    from fukushuto_issue_media import START as ISSUE_MEDIA_START  # type: ignore[no-redef]
+    from fukushuto_issue_media import build_section as issue_media_section  # type: ignore[no-redef]
+    from fukushuto_issue_media import inject as issue_media_inject  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
@@ -486,6 +493,12 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
             f"公開投稿{collected}件のうち、意見と判定した{total}件をAI",
             "リード文",
         )
+        # 「論点ごとのX投稿」（#issue-cards）はこの関数が作らない後付け区間のため、
+        # ここで同期しないと件数バッジ（.cnt）だけ再生成のたびに古いまま残る
+        # （課題80の画像脱落と同型。2026-09-25、定期更新で発覚）。
+        if ISSUE_MEDIA_START in page:
+            public_raw = json.loads(public_theme.read_text(encoding="utf-8"))
+            page = issue_media_inject(page, issue_media_section(public_raw))
     else:
         page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
         page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)

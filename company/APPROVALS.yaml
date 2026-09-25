@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-24"
+updated_at: "2026-09-25"
 
 rules:
   required_for:
@@ -733,3 +733,86 @@ items:
       （公開ファイルの検査／Deploy to GitHub Pages とも success）、本番サイト
       （sns-reaction-map.jp、collected_count=594・opinion_count=461・
       updated_on=2026-09-24）を確認済み。
+
+  - id: approval-20260925-001
+    department: data
+    action: website_publication
+    summary: "副首都法案・副首都構想（fukushuto）の2026-09-24定期収集分（新規271件・意見231件）を正典へ統合し本番反映する"
+    reason: "refresh_at（2026-09-24）到来。オーナーの「副首都の更新作業を進めて」という指示を受けて着手"
+    risks:
+      - "分類拒否1件（提供元AIが台湾・習近平への言及を含む投稿を拒否）を本文確認のうえ、人手でis_relevant=true・is_opinion=true・都構想維新／法案反対と判定して反映した。同種の拒否ハンドリングは前日9/23に全10テーマの分類器へ追加されたばかりで、横展開（build_*_arena.py側の対応）は未着手"
+      - "「語られていない争点」（沈んだ大陸）4件の母数更新（1681→1912）は、承認時点では--apply-promotion前の旧正典に対する再照合で「新規ヒット無し」としていたが、これは誤りと判明（旧正典のまま確認していたため）。apply-promotion後にverify_ocean_layer.pyを実走し、sc-3・sc-4に新規ヒット計3件を検出。本文確認のうえ全件を既存と同型の理由（争点そのものへの直接言及ではない）で除外リストへ追加した"
+      - "旧アリーナ形式の死んだデータ（課題73）由来の「マップの点」ずれ（意見1912に対し1452）は今回の作業前から既知・対応対象外"
+    recommendation: approve
+    evidence:
+      - "themes/fukushuto.md 2026-09-25節"
+      - "data/verification/fukushuto-sunk-continents.json（母数1681→1912更新、sc-3/sc-4に新規ヒット3件を除外理由付きで追加）"
+      - ".staging/refresh/fukushuto/20260924_235346/promotion-manifest.json（非公開・作業ツリー内）"
+    status: approved
+    requested_at: "2026-09-25"
+    decided_at: "2026-09-25"
+    decision_note: "オーナーがチャットで、AskUserQuestionの選択肢「公開する（推奨）」を選び本番反映を承認"
+    completed_at: "2026-09-25"
+    result_note: >-
+      標準検査（verify_theme_page／verify_number_provenance／verify_themes_yaml／
+      verify_update_provenance／verify_page_originality／verify_ocean_layer）・
+      unittest 1135件（skipped 4）、いずれもNG無し。反映途中で2件のバグを発見・
+      修正した（build_fukushuto_arena.pyが「論点ごとのX投稿」件数バッジを
+      再生成対象に含めていなかった＝課題80と同型／number_provenance.exclude_selectors
+      に"note"が無かった＝他6テーマとの設定漏れ）。ローカルサーバーでデスクトップ・
+      375px幅とも実機確認（コンソールエラー0件、横スクロールなし、論点別バッジ
+      ・沈んだ大陸セクションとも正しい値）。push後のCI確認は release スキル側で
+      別途実施。
+
+  - id: approval-20260925-002
+    department: data
+    action: website_publish
+    summary: "消費税減税（consumption-tax-cut）の2026-09-24定期収集分（新規511件・意見450件）を正典へ統合し本番反映する"
+    reason: "refresh_at（2026-09-24）到達。オーナーの「消費税減税の更新作業進めて」という指示を受けて着手"
+    risks:
+      - "独自性検査が要求する4論点（対象範囲・効果・給付比較・事業者負担）の新規233件は編集部が本文を1件ずつ読んで理由分類した。このテーマは過去に要約使い回し事故があるため、summaryユニーク率233/233・論点ごとの抜き取り照合で本文との対応を確認済み"
+      - "作業ツリーの辺野古（henoko-student-accident）非公開データがmainマージ後の594件へ未反映だったため、最新バックアップから該当ファイルのみ復元して同期した（辺野古自体の内容は変更していない）"
+      - "既存テスト2件（対象範囲bucket A件数、財源+1000件シナリオの想定%・件数）のハードコード値が実データの変化で陳腐化していたため、実測値に更新した"
+      - "同日に副首都（fukushuto）の更新作業（approval-20260925-001）と並行して進んでおり、company/APPROVALS.yaml・data-backup-status.json・data/public/catalog.json・docs/index.htmlでマージ衝突が発生。自動生成ファイル3件はマージ後に再生成、承認台帳はID重複（当初どちらも20260925-001を採番）を本エントリの番号変更で解消した"
+    recommendation: approve
+    evidence:
+      - "themes/consumption-tax-cut.md 2026-09-24節"
+      - "data/verification/consumption-tax-cut-sunk-continents.json（母数3890→4340更新、新規ヒット7件を1件ずつ再確認しいずれも対象外）"
+      - ".staging/refresh/consumption-tax-cut/20260924_201859/promotion-manifest.json（非公開・作業ツリー内）"
+    status: approved
+    requested_at: "2026-09-25"
+    decided_at: "2026-09-25"
+    decision_note: "オーナーがチャットで「公開して」と明示的に承認。apply-promotion・マージ・push前に承認を記録。"
+    completed_at: "2026-09-25"
+    result_note: >-
+      標準検査（verify_theme_page／verify_number_provenance／verify_top_page）・
+      unittest 1135件（skipped 4）・run_public_checks.py（採用台帳・データ保全含む）、
+      マージ後のmain・push後のCIともNG無し（公開ファイルの検査／Deploy to GitHub Pages
+      とも success、run 36119883649・36119883478）。本番サイト（sns-reaction-map.jp）で
+      意見4340件・収集4897件・最終更新日2026年9月24日を確認。トップページの更新バッジで
+      THEMES.yamlのcollect_deltaが0のまま（apply-promotionが--resumeでreport.new=0を
+      拾ったため）公開されていたのを実機確認で発見し、511へ修正・再push・再確認済み
+      （commit 0764217b）。ローカルサーバーでデスクトップ・375px幅とも実機確認
+      （コンソールエラー0件）。
+
+  - id: approval-20260925-003
+    department: data
+    action: website_publish
+    summary: "辺野古高校生死亡事故（henoko-student-accident）「政治利用・基地問題」論点の編集再読、未読39件の追い読み結果を本番反映する"
+    reason: "同論点の未読合計が34%（上限40%）まで進んでいたため、オーナーの依頼で追い読みに着手。39件（読み飛ばし0＋読了後増分39）を本文確認し、未読率を0%へ"
+    risks:
+      - "既存分類（is_opinion・main_issue・stance）との不一致は0件（修正なし）。内訳区分（politics-election等4種）の追加・件数変更のみで、意見総数461件・論点別件数は変わらない"
+      - "副産物としてscripts/manage_reread_registry.pyの既存バグ2件を修正した（post_key形式の継承元でKeyError、複数論点が同じ継承元ファイルを共有する場合の論点フィルタ漏れ）。同じ形式を使う他3テーマ（constitutional-amendment・koshitsu-tenpakai・school-nickname-ban）への横展開・実データでの動作確認は未実施"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-24-henoko-base-politics-reread.md"
+      - "quality/reviews/2026-09-24-henoko-base-politics-reread.json"
+      - "themes/henoko-student-accident.md 2026-09-24節（追い読み）"
+      - "tests/test_manage_reread_registry.py（バグ修正の回帰確認4件）"
+    status: approved
+    requested_at: "2026-09-25"
+    decided_at: "2026-09-25"
+    decision_note: >-
+      本対話でオーナーへ結果（未読34%→0%、修正0件、副産物のバグ修正2件と他テーマ未検証の旨）を
+      提示し、反映してよいか確認。オーナーが「ほんばんはんえい」と明示的に承認（今回は
+      反映前に確認を得てから記録した）。

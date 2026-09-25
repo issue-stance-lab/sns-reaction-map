@@ -1,0 +1,64 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 308,
+  "duplicates": 37,
+  "new": 271,
+  "relevant": 271,
+  "opinions": 231,
+  "opinion_flag_available": true,
+  "candidate": 2295,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "fukushuto",
+  "date": "2026-09-24",
+  "run_id": "20260924_235346",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.7,
+    "fetch_seconds": 50.09,
+    "classify_seconds": 2873.68
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_fukushuto_arena_hermes.py",
+      "script_sha256": "ecd6ea1048da697dddd2669e02fc127742ca43f81b58a7a3d432164311267331",
+      "taxonomy_sha256": "e72a9feb07e543c41c8278b1775fd59d97ec82af9b4400b51b4d12f9e1062fc0"
+    },
+    "input": {
+      "raw_sha256": "9d09a34a68ca12c8a9cae1816619e753ece70ce38343c808fbfdd631e02485d1",
+      "raw_records": 308,
+      "new_sha256": "3ebe582fad8df07306cc0ea5053e96619aea4b1c39289ee9a381947a18ac29d5"
+    },
+    "sources": {
+      "yahoo_realtime": 308
+    },
+    "model": {
+      "name": "kimi-k2.6",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "8443b77e71422d9805d98d3184457e9104a0b1c5722294414ebb1945281ec843"
+    },
+    "manual_review": {
+      "count": 1,
+      "record_id_hash": "sha256:125138d8313855fc8280975072fe42b7cf083f76fb29a653adb5d526b7713f9a",
+      "original_error": "upstream_refused: Hermes upstream error: HTTP 400: Upstream request failed: [400] Provider returned error",
+      "reviewed_by": "Claude Sonnet 5 (Claude Code)",
+      "reviewed_at": "2026-09-25",
+      "reason_for_refusal_guess": "台湾・習近平への言及が提供元フィルターに抵触したとみられる（内容自体は分類可能）"
+    }
+  },
+  "next_collect_at": "2026-10-03"
+}
