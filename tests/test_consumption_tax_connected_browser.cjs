@@ -56,6 +56,10 @@ async function checkIssue(page, issue, mode, connection) {
       await load(page);
       const data=await page.evaluate(()=>window.PLANET_DATA);
       const index=await page.locator('#tax-connected-data').evaluate(el=>JSON.parse(el.textContent));
+      const statusBox=await page.locator('.tax-status').boundingBox();
+      const planetBox=await page.locator('.planet-panel').boundingBox();
+      assert.ok(statusBox && planetBox,'制度確認帯またはSNS反応マップが見つかりません');
+      assert.ok(Math.abs(statusBox.x-planetBox.x)<1 && Math.abs(statusBox.width-planetBox.width)<1,`制度確認帯の幅がSNS反応マップと揃っていません（${width}px）`);
       assert.deepEqual(await page.evaluate(()=>window.ConsumptionTaxMap.getState()),{stanceId:'all',issueId:id('scope')});
       // 最初に内容が異なる3論点を確認してから、全7論点へ広げる。
       for (const suffix of ['scope','finance-welfare','business-burden']) {
@@ -69,7 +73,8 @@ async function checkIssue(page, issue, mode, connection) {
       await page.locator('#stance-glance .sg-pick-btn[data-stance-id="'+id('conditional')+'"]').click();
       assert.equal(await page.locator('#modes [aria-pressed="true"]').getAttribute('data-m'),data.stances.find(x=>x.id===id('conditional')).key);
       await page.locator('#btn-'+id('scope')).click();
-      assert.equal(await page.locator('[data-tax-count]').innerText(),'331件');
+      const conditionalMode=data.modes.find(mode=>mode.id===data.stances.find(x=>x.id===id('conditional')).key);
+      assert.equal(await page.locator('[data-tax-count]').innerText(),conditionalMode.counts[id('scope')].toLocaleString('ja-JP')+'件');
       assert.equal(await page.locator('#stance-glance .temp-seg.tax-selected-stance').count(),1);
       await page.locator('#modes [data-m="減税反対・慎重"]').click();
       assert.equal(await page.locator('#stance-glance .sg-pick-btn[aria-pressed="true"]').getAttribute('data-stance-id'),id('cautious'));
@@ -117,6 +122,7 @@ async function checkIssue(page, issue, mode, connection) {
     {
       const {context,page,errors}=await contextFor(browser,{reducedMotion:'no-preference'});
       await load(page);
+      const data=await page.evaluate(()=>window.PLANET_DATA);
       const hill=()=>page.locator('#section .hill[data-i="1"] > path').getAttribute('d');
       const start=await hill();
       await page.evaluate(()=>window.ConsumptionTaxMap.selectStance('consumption-tax-cut-conditional'));
@@ -132,9 +138,12 @@ async function checkIssue(page, issue, mode, connection) {
       // 予想は全体の数字を使い、山への移動は明示操作にする。
       await page.locator('.tax-guesses > summary').click();
       await page.locator('[data-k="g1"] [data-i="0"]').click();
-      assert.match(await page.locator('[data-k="g1"] .gans').innerText(),/799件/);
+      const orderedStances=data.stances.slice().sort((a,b)=>b.count-a.count);
+      assert.match(await page.locator('[data-k="g1"] .gans').innerText(),new RegExp(orderedStances[0].count.toLocaleString('ja-JP')+'件'));
       await page.locator('[data-k="g2"] [data-i="2"]').click();
-      assert.match(await page.locator('[data-k="g2"] .gans').innerText(),/885件中464件、52.4%/);
+      const peak=data.issues.filter(issue=>issue.count>0).sort((a,b)=>b.intensity.high/b.count-a.intensity.high/a.count)[0];
+      const peakRate=(100*peak.intensity.high/peak.count).toFixed(1);
+      assert.match(await page.locator('[data-k="g2"] .gans').innerText(),new RegExp(peak.count.toLocaleString('ja-JP')+'件中'+peak.intensity.high.toLocaleString('ja-JP')+'件、'+peakRate+'%'));
       await page.locator('[data-k="g2"] .tax-answer-link').click();
       assert.deepEqual(await page.evaluate(()=>window.ConsumptionTaxMap.getState()),{stanceId:'all',issueId:id('scope')});
       assert.deepEqual(errors,[]); await context.close();
