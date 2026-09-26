@@ -499,6 +499,11 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         if ISSUE_MEDIA_START in page:
             public_raw = json.loads(public_theme.read_text(encoding="utf-8"))
             page = issue_media_inject(page, issue_media_section(public_raw))
+        if "<!-- FUKUSHUTO_CONNECTED_START -->" in page:
+            if str(ROOT) not in sys.path:
+                sys.path.insert(0, str(ROOT))
+            from scripts.fukushuto_connected import apply as connect_page
+            page = connect_page(page, topic=THEME)
     else:
         page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
         page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
@@ -864,7 +869,8 @@ def refresh_verified_planet(page: str) -> str:
     collected = data["totals"]["collected"]
     conditions = research_conditions_html(str(collected), data["sample_period"])
     page = apply_research_conditions(page, conditions, "fukushuto")
-    return apply_fukushuto_stance_glance(page, data["stances"], int(data["totals"]["opinions"]))
+    page = apply_fukushuto_stance_glance(page, data["stances"], int(data["totals"]["opinions"]))
+    return page
 
 
 def build(
@@ -907,6 +913,11 @@ def build(
     if "<!-- PLANET_SECTION_START -->" in page:
         page = refresh_verified_planet(page)
         page = apply_landing_images(page)
+        if "<!-- FUKUSHUTO_CONNECTED_START -->" in page:
+            if str(ROOT) not in sys.path:
+                sys.path.insert(0, str(ROOT))
+            from scripts.fukushuto_connected import apply as connect_page
+            page = connect_page(page, topic=THEME)
         if not check and (page != before or output is not None):
             target = Path(output) if output else html_path
             target.parent.mkdir(parents=True, exist_ok=True)

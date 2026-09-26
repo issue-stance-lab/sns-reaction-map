@@ -341,11 +341,9 @@ def _sync_fukushuto_method_text(html: str, data: dict) -> str:
     空へ揃えるだけで、中身の再設置は行っていない（他7テーマにある形が無かった。
     2026-09-20、課題79 C-5で発覚）。fukushutoのヒーロー等は無カンマ表記のため合わせる。
 
-    apply_landing_images()（論点図解7枚の差し戻し）はここでは呼ばない。build()の
-    planet_mode分岐はこれも呼ぶが、肝心の画像ファイル（images/topics/fukushuto/配下）
-    が実在しない（課題70待ちで画像自体が未整備。build_fukushuto_arena.py --checkは
-    今も「一致しません」を返す、この空リンク問題は本課題より前からの別件）。ここで
-    呼ぶと存在しない画像への<img>を7個差し込んでしまうため、あえて省いた。
+    論点図解7枚の差し戻しは、refresh()本体のテーマ別enrich
+    （_inject_fukushuto_landing_images）で行う。調査条件の件数同期と画像差し戻しを
+    ここへ混ぜると、再生成の責務と検証範囲が分かりにくくなるためである。
     """
     collected = data["totals"]["collected"]
     return apply_research_conditions(
@@ -492,6 +490,24 @@ def _inject_ctc_landing_images(block: str, data: dict) -> str:
 def _inject_bike_landing_images(block: str, data: dict) -> str:
     return _inject_landing_images(
         block, data, "bike-blue-ticket", BIKE_LANDING_IMAGE_BY_ISSUE_ID, "bike"
+    )
+
+
+# 副首都の論点図解。副首都専用ビルダーと同じ静的画像を、山なみ更新時にも差し戻す。
+FUKUSHUTO_LANDING_IMAGE_BY_ISSUE_ID = {
+    "fukushuto-osaka-restoration": ("tokoso-v2", "都構想・維新"),
+    "fukushuto-location": ("kouhochi-v4", "候補地"),
+    "fukushuto-definition": ("teigi-v2", "定義・中身"),
+    "fukushuto-disaster-preparedness": ("bousai-v2", "防災・災害"),
+    "fukushuto-priority": ("yusen-v2", "優先順位"),
+    "fukushuto-finance": ("hiyou-v2", "費用・財源"),
+    "fukushuto-other": ("sonota-v2", "その他"),
+}
+
+
+def _inject_fukushuto_landing_images(block: str, data: dict) -> str:
+    return _inject_landing_images(
+        block, data, "fukushuto", FUKUSHUTO_LANDING_IMAGE_BY_ISSUE_ID, "fukushuto"
     )
 
 
@@ -678,6 +694,7 @@ TOPIC_ENRICH = {
     "bukatsu-chiiki": _inject_bukatsu_landing_images,
     "consumption-tax-cut": _inject_ctc_landing_images,
     "bike-blue-ticket": _inject_bike_landing_images,
+    "fukushuto": _inject_fukushuto_landing_images,
     "constitutional-amendment": _inject_constitutional_landing_images,
     "ai-copyright": _inject_ai_copyright_landing_images,
     "school-nickname-ban": _inject_nickname_landing_images,
@@ -733,6 +750,11 @@ def _apply_connected_display(topic: str, html: str) -> str:
         if str(ROOT) not in sys.path:
             sys.path.insert(0, str(ROOT))
         from scripts.elderly_connected import apply as connect_page
+        return connect_page(html, topic=topic)
+    if topic == "fukushuto":
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.fukushuto_connected import apply as connect_page
         return connect_page(html, topic=topic)
     return html
 
