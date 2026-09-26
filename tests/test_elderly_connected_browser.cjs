@@ -51,6 +51,8 @@ async function attrValues(page, selector, attr) {
       const top = data.issues.reduce((a, b) => b.count > a.count ? b : a);
       await waitState(page, top.id);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, `横スクロール ${width}px`);
+      const hillWidths = await page.locator('#section .hill path').evaluateAll(paths => paths.map(path => path.getBBox().width));
+      assert.ok(Math.min(...hillWidths) >= 55.9, `小さい山の幅が不足しています（${width}px）`);
 
       for (const issue of data.issues) {
         await page.locator('#btn-' + issue.id).click();
