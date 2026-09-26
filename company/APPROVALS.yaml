@@ -837,3 +837,25 @@ items:
     decision_note: >-
       本対話で変更内容・サイトに見える変更（次回更新日1か所）・未確認事項を提示し、
       オーナーが「公開OK」と明示的に承認。反映前に承認を得てから記録した。
+
+  - id: approval-20260927-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題77の学校でのあだ名禁止ページを、論点・理由別X投稿・制度資料・クイズが連動する完成版へ移植して公開する"
+    reason: "候補ページの内容接続と画面を確認し、あだ名テーマにも消費税ページと同じ読み順を適用するため"
+    risks:
+      - "公開データは収集483件・意見100件。再読未完了の理由は未再読として表示し、既存の件数・立場を変更しない"
+      - "代表投稿は要旨と元投稿へのリンクを表示し、個別投稿の正誤判定ではないことを明記する"
+      - "憲法改正テーマの公開データ指紋不一致は今回の候補外にある既存状態で、この移植では変更しない"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-09-27-task77-school-nickname-connected-layout.md"
+      - "tests/test_school_nickname_connected.py"
+      - "tests/test_school_nickname_connected_browser.cjs"
+      - "scripts/build_nickname_arena.py --connected-layout"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話で候補の内容確認と公開条件を提示し、オーナーが「内容確認してよければ公開」と指示。
+      独自性検査の定型文重複を修正し、候補固有の検査を再実行したうえで公開する条件付き承認。

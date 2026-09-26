@@ -169,7 +169,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             '<h3>どんな理由で語られている？</h3>' + reasons(issue, grouped_reason_posts) +
             f'<p class="school-nickname-note">{e(index["reason_post_note"])}</p>'
             '<div class="school-nickname-posts"><h3>実際の投稿を読む</h3>'
-            '<p class="school-nickname-note">編集部がこの論点全体から選んだ代表例です。賛否の割合を表すものではありません。</p>'
+            '<p class="school-nickname-note">この論点を具体的に読むため、編集部が投稿内容を確認して2件を抜き出しています。分布の代表値ではありません。</p>'
             + post_examples(issue_cards_html, iid) + '</div></section>'
         )
         out.append('<aside class="school-nickname-evidence" aria-label="資料">')
@@ -202,7 +202,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         if connection["claim_ids"]:
             out.append(
                 f'<p class="school-nickname-note">照合確認日 {e(data["ocean"]["checked_on"])}。'
-                '収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定ではありません。</p>'
+                '投稿の中から整理した主張を、公的な資料と照らし合わせた結果です。個別の投稿を採点する欄ではありません。</p>'
             )
         else:
             out.append('<p class="school-nickname-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
