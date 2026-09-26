@@ -648,6 +648,18 @@ class NextActionTests(unittest.TestCase):
             self.assertNotIn(key, seen, f"{item['theme']['key']} の {item['date']} が2行に割れている")
             seen.add(key)
 
+    def test_pending_wave_is_shown_as_finish_publication_not_new_collection(self):
+        """収集済み・未公開の回があるテーマは「新しく集めず公開まで」と出す（2026-09-25〜）。"""
+        day = TODAY - dt.timedelta(days=1)
+        theme = {
+            "key": "topic", "title": "Topic", "collect_at": day, "refresh_at": day,
+            "collect_in": -1, "refresh_in": -1, "pending_wave": day,
+        }
+        items = actions.due_items([theme], TODAY)
+        self.assertEqual(len(items), 1)
+        self.assertTrue(items[0]["promote"])
+        self.assertIn("新しく集めない", items[0]["kind"])
+
     def test_pending_measurements_skip_today_and_old_posts(self):
         """当日は測る時期ではなく、8日以上前は追いかけない。"""
         posts = [

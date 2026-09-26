@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 224,
+  "duplicates": 0,
+  "new": 224,
+  "relevant": 224,
+  "opinions": 188,
+  "opinion_flag_available": true,
+  "candidate": 2003,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "constitutional-amendment",
+  "date": "2026-09-26",
+  "run_id": "20260926_220211",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 11.15,
+    "fetch_seconds": 45.44,
+    "classify_seconds": 1933.65
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_constitutional_arena_hermes.py",
+      "script_sha256": "957559ca89a2a7b7955cd8f08521cb3e1fd223bdfaa0cd61c7f2e661a76d6409",
+      "taxonomy_sha256": "bb530487230e5211e478042d11645a1c1cf46abdb6bbf35b61fb412ec29f723e"
+    },
+    "input": {
+      "raw_sha256": "cc7988d6a003d67612ae54ede2f2c7c011d36b793abdc45459b793175fb9f7c4",
+      "raw_records": 224,
+      "new_sha256": "cc7988d6a003d67612ae54ede2f2c7c011d36b793abdc45459b793175fb9f7c4"
+    },
+    "sources": {
+      "yahoo_realtime": 224
+    },
+    "model": {
+      "name": "kimi-k2.6",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "7c0030ce0d21e5ba55cfea2b52e692903e9276bf0fd40e18b3881fe527529693"
+    }
+  },
+  "next_collect_at": "2026-10-04"
+}

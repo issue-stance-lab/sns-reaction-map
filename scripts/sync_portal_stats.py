@@ -63,6 +63,7 @@ def parse_themes_yaml(path: Path = THEMES_YAML) -> dict[str, dict[str, Any]]:
             "published_at": _scalar(block, "published_at"),
             "updated_at": _scalar(block, "updated_at"),
             "refresh_at": _scalar(block, "refresh_at"),
+            "pending_wave": _scalar(block, "pending_wave"),
             "collect_delta": _scalar(block, "collect_delta"),
             "x_posted_at": _scalar(block, "x_posted_at"),
         }

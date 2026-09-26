@@ -50,3 +50,14 @@ fukushutoで発覚したのは、たまたま今回`verify_number_provenance.py`
 3. ずれていなくても、次回定期更新で同じ理由で古くなる可能性があるため、各テーマの
    builder修正は先回りして行ってよい（実害の有無に関わらず、放置すると課題80と同じ
    「気づかれるまで公開版が古いまま」を繰り返す）
+
+## 確認状況
+
+- **koshitsu-tenpakai**: 2026-09-25確認。`docs/koshitsu-tenpakai-reaction-map.html`の
+  `#issue-cards`バッジ6件と`data/public/themes/koshitsu-tenpakai.json`の`issues[].count`は
+  全て一致（ずれなし）。`scripts/koshitsu_issue_media.py`は`build_koshitsu_arena.py`から
+  呼ばれておらず`build_koshitsu_page_candidate.py`（別経路）からのみ参照される点はfukushuto
+  と同型で潜在リスクは残るが、2026-09-18の定期更新反映後の実害は今のところ出ていない。
+  builder修正（上記2）は未着手のまま
+- 残り4テーマ（ai-copyright / bike-blue-ticket / elderly-license-revocation /
+  school-nickname-ban）は未確認

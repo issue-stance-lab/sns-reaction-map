@@ -228,6 +228,7 @@ def due_items(themes: list[dict], today: dt.date, *, within: int = 7) -> list[di
         # 同じ日に収集と公開更新が並んでいたら1件にまとめる。--promote は収集も行うので、
         # 2行に分けると「同じ日に2回やる作業」に見えてしまう
         merged = collect_in is not None and collect_in == refresh_in
+        pending = theme.get("pending_wave")
         for kind, field, promote in (("収集", "collect_in", False), ("公開更新", "refresh_in", True)):
             days = theme[field]
             if days is None or days > within:
@@ -236,7 +237,11 @@ def due_items(themes: list[dict], today: dt.date, *, within: int = 7) -> list[di
                 continue
             items.append(
                 {
-                    "kind": "公開更新（収集も行う）" if merged else kind,
+                    "kind": (
+                        f"公開更新（{pending.month}/{pending.day} 収集済みの回を公開まで。新しく集めない）"
+                        if pending and promote
+                        else "公開更新（収集も行う）" if merged else kind
+                    ),
                     "theme": theme,
                     "promote": promote,
                     "days": days,

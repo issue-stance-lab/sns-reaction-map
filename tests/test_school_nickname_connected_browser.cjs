@@ -1,0 +1,72 @@
+/* 学校あだ名禁止の課題77候補をChromium/WebKit・3幅で確認する。 */
+const {chromium, webkit} = require('playwright');
+const assert = require('node:assert/strict');
+
+const url = process.env.SCHOOL_NICKNAME_CONNECTED_URL;
+if (!url || !['127.0.0.1', 'localhost'].includes(new URL(url).hostname)) {
+  throw new Error('SCHOOL_NICKNAME_CONNECTED_URL にローカル候補を指定してください');
+}
+
+async function contextFor(browser, options = {}) {
+  const context = await browser.newContext({viewport: {width: 1280, height: 900}, reducedMotion: 'reduce', ...options});
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.route('**/*', route => {
+    if (new URL(route.request().url()).origin !== new URL(url).origin) return route.abort();
+    return route.continue();
+  });
+  return {context, page, errors};
+}
+
+(async () => {
+  const engineName = process.env.SCHOOL_NICKNAME_BROWSER || 'chromium';
+  assert.ok(['chromium', 'webkit'].includes(engineName));
+  const browser = await ({chromium, webkit})[engineName].launch({headless: true});
+  try {
+    for (const width of [1280, 375, 320]) {
+      const {context, page, errors} = await contextFor(browser, {viewport: {width, height: 900}});
+      await page.goto(url, {waitUntil: 'domcontentloaded'});
+      await page.waitForTimeout(350);
+      assert.equal(await page.locator('body.school-nickname-ban-connected').count(), 1);
+      assert.deepEqual(await page.evaluate(() => window.SchoolNicknameBanConnectedMap.getState()), {
+        stanceId: 'all', issueId: 'school-nickname-ban-uniform-rule',
+      });
+      const data = await page.evaluate(() => window.PLANET_DATA);
+      const index = await page.locator('#school-nickname-connected-data').evaluate(element => JSON.parse(element.textContent));
+      for (const issue of data.issues) {
+        await page.locator('#btn-' + issue.id).click();
+        assert.equal(await page.locator('#panel').getAttribute('data-school-nickname-issue-id'), issue.id);
+        assert.equal(await page.locator('#panel [data-school-nickname-post-url]').count(), 2, issue.id);
+        assert.doesNotMatch(await page.locator('#panel').innerText(), /NaN|Infinity/);
+      }
+      await page.locator('#btn-school-nickname-ban-uniform-rule').click();
+      await page.locator('[data-school-nickname-reason="group-5"] > summary').click();
+      assert.equal(await page.locator('[data-school-nickname-reason="group-5"] [data-school-nickname-reason-post-url]').count(), 2);
+      for (const mode of data.modes) {
+        await page.locator('#modes button[data-m="' + mode.id + '"]').click();
+        assert.equal(await page.locator('#modes button[aria-pressed="true"]').getAttribute('data-m'), mode.id);
+      }
+      await page.evaluate(() => window.SchoolNicknameBanConnectedMap.selectIssue('school-nickname-ban-uniform-rule'));
+      await page.waitForTimeout(60);
+      await page.locator('[data-school-nickname-discover]').click();
+      assert.equal(await page.locator('.school-nickname-source-stories [data-school-nickname-discovery]').count(), 4);
+      await page.locator('[data-school-nickname-quiz]').click();
+      assert.equal(await page.locator('#quiz [data-verdict]').count(), 3);
+      assert.equal(await page.locator('#quiz').innerText().then(text => text.includes('問 1 / 4')), true);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      const mobileMountain = await page.evaluate(() => document.querySelector('#section').getBoundingClientRect().height);
+      assert.equal(mobileMountain, width <= 760 ? 180 : 210);
+      assert.deepEqual(errors, []);
+      await context.close();
+    }
+    const {context, page} = await contextFor(browser, {viewport: {width: 375, height: 900}, javaScriptEnabled: false});
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
+    assert.equal(await page.locator('#fallback').isVisible(), true);
+    assert.equal(await page.locator('#issue-cards').isVisible(), true);
+    await context.close();
+    console.log(JSON.stringify({engine: engineName, widths: [1280, 375, 320], javascriptDisabled: true}));
+  } finally {
+    await browser.close();
+  }
+})().catch(error => { console.error(error); process.exit(1); });

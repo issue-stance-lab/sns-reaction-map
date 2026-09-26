@@ -193,6 +193,20 @@ def _run_builders(
     )
 
 
+def _apply_connected_display(root: Path, page: Path) -> None:
+    """自転車の候補ページへ、読書面と連動表示を再適用する。
+
+    arena/process のビルダーは既存の山なみページを入力に取るため、連動表示の
+    マーカー自体は維持できる。ただし将来のビルダー変更で本文側が置換されても、
+    候補生成の最後に同じ処理を通しておけば、公開後の定期更新でも表示が後戻りしない。
+    """
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.bike_blue_ticket_connected import apply as connect_page
+
+    page.write_text(connect_page(page.read_text(encoding="utf-8"), topic=TOPIC), encoding="utf-8")
+
+
 def _write_config(root: Path, stage: Path, previous_date: str, current_date: str) -> Path:
     """潮目の出所（前回・今回の更新回）をconfigへ書き戻した候補を作る。
 
@@ -247,8 +261,10 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
 
     _run_builders(root, candidate, current_page, first / "page-candidate.html", first)
     _apply_tide(root, first / "page-candidate.html", current_wave, current_date)
+    _apply_connected_display(root, first / "page-candidate.html")
     _run_builders(root, candidate, first / "page-candidate.html", second / "page-candidate.html", second)
     _apply_tide(root, second / "page-candidate.html", current_wave, current_date)
+    _apply_connected_display(root, second / "page-candidate.html")
 
     for name in ("page-candidate.html", REREAD_RECORDS.name, CLAIM_RECORDS.name):
         if _digest(first / name) != _digest(second / name):

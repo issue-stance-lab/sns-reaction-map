@@ -24,7 +24,10 @@ from scripts.refresh_topic import (
     prepare_public_candidate_bundle_multi,
     prepare_multi_promotion_manifest,
     promote,
+    ensure_no_pending_wave,
+    publication_schedule_fields,
     record_collection_schedule,
+    record_pending_wave,
     validate_sets,
     write_json,
 )
@@ -309,6 +312,54 @@ class RefreshTopicTests(unittest.TestCase):
             text = (root / "THEMES.yaml").read_text(encoding="utf-8")
             self.assertIn("collect_at: \n", text)
             self.assertIn("collect_mode: event-driven", text)
+
+    def test_collection_with_new_rows_keeps_collect_at_and_marks_pending_wave(self):
+        # 収集と公開は同じセッションで行う。集めただけでは予定日を進めない（2026-09-25〜）
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "THEMES.yaml").write_text(
+                "themes:\n  topic:\n    collect_at: 2026-09-26\n    refresh_at: 2026-09-26\n"
+                "    last_refresh_attempt_at: 2026-09-18\n",
+                encoding="utf-8",
+            )
+            record_pending_wave(root, "topic", "2026-09-26")
+            themes = parse_themes_yaml(root / "THEMES.yaml")
+            self.assertEqual(themes["topic"]["collect_at"], "2026-09-26")
+            self.assertEqual(themes["topic"]["pending_wave"], "2026-09-26")
+            with self.assertRaisesRegex(ValueError, "未公開の更新回 2026-09-26"):
+                ensure_no_pending_wave(themes["topic"], "topic", resume=False)
+            ensure_no_pending_wave(themes["topic"], "topic", resume=True)
+
+    def test_publication_sets_one_schedule_date_and_clears_pending_wave(self):
+        text = (
+            "themes:\n  topic:\n    collect_at: 2026-09-26\n    refresh_at: 2026-09-25\n"
+            "    pending_wave: 2026-09-26\n    collect_mode: scheduled\n"
+        )
+        changed = _replace_theme_fields(text, "topic", publication_schedule_fields("2026-10-03"))
+        self.assertIn("collect_at: 2026-10-03", changed)
+        self.assertIn("refresh_at: 2026-10-03", changed)
+        self.assertNotIn("pending_wave", changed)
+        again = _replace_theme_fields(changed, "topic", publication_schedule_fields("2026-10-10"))
+        self.assertNotIn("pending_wave", again)
+
+    def test_publication_to_event_driven_blanks_both_dates(self):
+        text = "themes:\n  topic:\n    collect_at: 2026-09-26\n    refresh_at: 2026-09-26\n    collect_mode: scheduled\n"
+        changed = _replace_theme_fields(text, "topic", publication_schedule_fields(None))
+        self.assertIn("collect_at: \n", changed)
+        self.assertIn("refresh_at: \n", changed)
+        self.assertIn("collect_mode: event-driven", changed)
+
+    def test_registry_keeps_collect_and_refresh_on_the_same_date(self):
+        # 公開更新の予定日が収集より先に来ると、公開するものが無い空振りの更新作業が生まれる
+        themes = parse_themes_yaml(ROOT / "THEMES.yaml")
+        mismatched = {
+            name: (theme["collect_at"], theme["refresh_at"])
+            for name, theme in themes.items()
+            if theme["collect_mode"] == "scheduled"
+            and not theme.get("pending_wave")
+            and (theme["collect_at"] or None) != (theme["refresh_at"] or None)
+        }
+        self.assertEqual(mismatched, {}, "collect_at と refresh_at は同じ日にそろえる（DATA_REFRESH.md 基本方針）")
 
     def test_promotion_backup_failure_restores_public_targets(self):
         with tempfile.TemporaryDirectory() as directory:
