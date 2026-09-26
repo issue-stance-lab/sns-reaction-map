@@ -59,6 +59,7 @@ async function attrValues(page, selector, attr) {
       const barBox = await page.locator('#stance-glance .temp-bar').boundingBox();
       assert.ok(glanceBox && barBox, `立場割合バーが見つかりません（${width}px）`);
       assert.ok(Math.abs(barBox.x - (glanceBox.x + 1)) < 1 && Math.abs(barBox.width - (glanceBox.width - 2)) < 1, `立場割合バーがカード幅いっぱいに揃っていません（${width}px）`);
+      assert.ok(Math.abs(barBox.height - 28) < 1, `立場割合バーの高さが不足しています（${width}px）`);
       const hillWidths = await page.locator('#section .hill path').evaluateAll(paths => paths.map(path => path.getBBox().width));
       assert.ok(Math.min(...hillWidths) >= 55.9, `小さい山の幅が不足しています（${width}px）`);
 
