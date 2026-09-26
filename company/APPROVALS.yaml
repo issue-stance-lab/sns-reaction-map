@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260926-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題77の憲法改正テーマを連動表示の完成版へ切り替えて公開する"
+    reason: "7論点の読書面、立場切替、資料3表示、更新時の再適用を実装し、候補検証を完了したため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "X埋め込みは外部配信に依存する。読めない時も要旨と元投稿リンクを残す"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-09-26-task77-constitutional-amendment-content-contract.md"
+      - "quality/reviews/2026-09-26-task77-constitutional-amendment-quality.md"
+      - "docs/constitutional-amendment-reaction-map.html"
+    status: approved
+    requested_at: "2026-09-26"
+    decided_at: "2026-09-26"
+    decision_note: "オーナーが本対話で『公開して』と明示的に承認。公開候補HTML SHA-256: d1e16cefe6bee487ae7a0322330a8973aa5bb65e455ffb4736f986aa69f6f。"
+
   - id: approval-20260922-001
     department: growth-marketing
     action: website_publication
@@ -838,6 +856,25 @@ items:
       本対話で変更内容・サイトに見える変更（次回更新日1か所）・未確認事項を提示し、
       オーナーが「公開OK」と明示的に承認。反映前に承認を得てから記録した。
 
+  - id: approval-20260927-001
+    department: data
+    action: website_publish
+    summary: "憲法改正論議の2026-09-26収集回（新規224件・意見188件）を公開する（収集1,779→2,003件、意見1,568→1,756件）"
+    reason: "9/26に収集した回が pending_wave のまま未公開だったため、同じ回を --resume で公開まで仕上げる"
+    risks:
+      - "新規188意見はAI分類のみで本文の読み直しはしていない（ページに「本文確認の対象外」と論点ごとに表示。9/18回と同じ扱い）"
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/constitutional-amendment/20260926_220211/promotion-manifest.json（sha256 7fedff21…）"
+      - "data/verification/constitutional-amendment-sunk-continents.json（語られていない争点4件を新規188意見で再照合、一致なし）"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話で件数・割合の変化、事前の再照合結果、新規分が本文未確認である点を提示し、
+      選択肢A（このまま公開）を推奨。オーナーが「Aで公開」と明示的に承認。反映前に承認を得てから記録した。
+
   - id: approval-20260927-002
     department: growth-marketing
     action: website_publication
@@ -846,7 +883,6 @@ items:
     risks:
       - "公開データは収集483件・意見100件。再読未完了の理由は未再読として表示し、既存の件数・立場を変更しない"
       - "代表投稿は要旨と元投稿へのリンクを表示し、個別投稿の正誤判定ではないことを明記する"
-      - "憲法改正テーマの公開データ指紋不一致は今回の候補外にある既存状態で、この移植では変更しない"
     recommendation: approve
     evidence:
       - "quality/designs/2026-09-27-task77-school-nickname-connected-layout.md"

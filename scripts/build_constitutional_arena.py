@@ -737,7 +737,13 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
     page = add_featured_posts(page, rows, data)
     page = apply_landing_images(page)
     page = page.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
-    return apply_constitutional_stance_glance(page)
+    page = apply_constitutional_stance_glance(page)
+    if "<!-- CONSTITUTIONAL_CONNECTED_START -->" in page:
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.constitutional_connected import apply as connect_page
+        page = connect_page(page, topic=THEME)
+    return page
 
 
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:

@@ -26,6 +26,15 @@ async function open(browser,opts={}){
     // 320/375/PC幅で、全論点×全立場（7×5=35通り）を一巡し横はみ出しが無いことを確認。
     for(const width of [320,375,1280]){
       const {context,page,errors}=await open(browser,{viewport:{width,height:800}});
+      const bandAlignment=await page.evaluate(()=>{
+        const status=document.querySelector('.bkt-status')?.getBoundingClientRect();
+        const panel=document.querySelector('.planet-panel')?.getBoundingClientRect();
+        if(!status||!panel)return null;
+        return {statusX:status.x,statusWidth:status.width,panelX:panel.x,panelWidth:panel.width};
+      });
+      assert.ok(bandAlignment,'制度の確認時点帯またはSNS反応マップが見つからない');
+      assert.ok(Math.abs(bandAlignment.statusX-bandAlignment.panelX)<0.5,`width=${width}: 制度の確認時点帯の左端がSNS反応マップとずれている`);
+      assert.ok(Math.abs(bandAlignment.statusWidth-bandAlignment.panelWidth)<0.5,`width=${width}: 制度の確認時点帯の幅がSNS反応マップとずれている`);
       const issueIds=await page.evaluate(()=>window.PLANET_DATA.issues.map(i=>i.id));
       const stanceIds=await page.evaluate(()=>window.PLANET_DATA.stances.map(s=>s.id).concat(['all']));
       const overflow=[];
@@ -40,7 +49,7 @@ async function open(browser,opts={}){
       }
       assert.deepEqual(overflow,[],`width=${width}: 横はみ出しが発生`);
       assert.deepEqual(errors,[],`width=${width}: コンソールエラー`);
-      summary.push({width,combinationsChecked:issueIds.length*stanceIds.length,overflow:0});
+      summary.push({width,combinationsChecked:issueIds.length*stanceIds.length,overflow:0,bandAlignment:true});
       await context.close();
     }
     // 動きを減らす設定: 立場切替が即時反映され、アニメーション用の中間フレームを経由しない。

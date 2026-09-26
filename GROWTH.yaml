@@ -602,7 +602,7 @@ recurring:
     title: データ更新（収集→本文確認→公開を1セッションで）の遅れ確認
     cadence: 毎日22時（自動実行、課題86。cronの日跨ぎ制約のため「2日に1回」から変更）
     stale_after_days: 3
-    last_run: 2026-09-25   # koshitsu-tenpakaiが0日超過（本日期限、constitutional-amendmentも同日）
+    last_run: 2026-09-26   # constitutional-amendment: 今日
     procedure: >-
       THEMES.yamlのpending_wave（収集済み・未公開の回）があれば最優先で報告し、次にcollect_at
       （=refresh_at。2026-09-25から予定日は1本）が一番遅れているテーマを1つ報告する（読む・確定はしない。
@@ -615,10 +615,10 @@ recurring:
       収集は機械的な処理なので自動化できるが、本文確認は人が読んで判定する工程のため
       自動化しない（消費税減税の要約使い回し事故の教訓、DATA_REFRESH.md参照）。
 
-featured: bukatsu-chiiki   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
+featured: constitutional-amendment   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
-  updated_at: 2026-09-22
+  updated_at: 2026-09-27
   criteria: |
     - 公開テーマのうち意見300件以上を対象にする
     - THEMES.yaml の updated_at が新しい順に5件選び、1件目を「今週の注目テーマ」、
@@ -626,14 +626,14 @@ featured_questions:
     - 選定は scripts/refresh_featured_slots.py が自動で行い、
       実行のたびにこのファイルとページを同期する
   items:
-    - theme: ai-copyright
-      question: 創作の権利を守るため、生成AIにはどこまでルールが必要か？
-    - theme: constitutional-amendment
-      question: 現実の安全保障に合わせて改正するのか、平和主義と権力制限を守るのか？
-    - theme: elderly-license-revocation
-      question: 事故を防ぐための年齢線引きか、暮らしの足を奪わない制度設計か？
+    - theme: consumption-tax-cut
+      question: 食料品だけの減税で足りる？ 財源はどうする？
     - theme: fukushuto
       question: 副首都、本当に必要？ 場所は大阪でいい？
+    - theme: henoko-student-accident
+      question: 事故の検証と教育の評価、どの論点を重く見る？
+    - theme: bukatsu-chiiki
+      question: 教員の限界を地域で支える改革か、家庭負担と地域格差を広げる移行か？
 
 activity_log:
   # 計測中施策と並行して行った変更を記録する

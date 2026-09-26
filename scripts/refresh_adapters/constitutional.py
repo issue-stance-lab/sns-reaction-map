@@ -112,6 +112,17 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
     page.write_text(inject_into_html(page, tide, _load_tide_css()), encoding="utf-8")
 
 
+def _apply_connected_display(root: Path, page: Path) -> None:
+    """候補ページを作り直した後も、課題77の読書面を最後に再接続する。"""
+    html = page.read_text(encoding="utf-8")
+    if "<!-- CONSTITUTIONAL_CONNECTED_START -->" not in html:
+        return
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.constitutional_connected import apply as connect_page
+    page.write_text(connect_page(html, topic=TOPIC), encoding="utf-8")
+
+
 def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> None:
     if "<!-- PLANET_SECTION_START -->" in template.read_text(encoding="utf-8"):
         # 候補の正典・公開集計・再読台帳が揃う finalize で図全体を生成する。
@@ -161,6 +172,7 @@ def finalize(root: Path, current_date: str) -> None:
         cwd=root,
         check=True,
     )
+    _apply_connected_display(root, root / PAGE)
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
@@ -177,8 +189,10 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page)
     _apply_tide(root, first_page, current_wave, current_date)
+    _apply_connected_display(root, first_page)
     _run_builder(root, candidate, first_page, second_page)
     _apply_tide(root, second_page, current_wave, current_date)
+    _apply_connected_display(root, second_page)
 
     if _digest(first_page) != _digest(second_page):
         raise ValueError("憲法改正adapterは同じ候補の2回目実行で差分が出ました")
