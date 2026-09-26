@@ -66,6 +66,8 @@ class FukushutoConnectedTests(unittest.TestCase):
         self.assertEqual(connected.content_index(changed), expected)
 
     def test_refresh_planet_section_reapplies_the_candidate(self):
+        if not (ROOT / "social-samples/fukushuto_hermes_classified.json").is_file():
+            self.skipTest("非公開の副首都正典がないCI環境では再生成経路を省略")
         from scripts.refresh_planet_section import refresh
 
         _old, rebuilt, _failures = refresh("fukushuto", source=self.page)
