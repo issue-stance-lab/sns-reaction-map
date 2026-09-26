@@ -729,6 +729,11 @@ def _apply_connected_display(topic: str, html: str) -> str:
             sys.path.insert(0, str(ROOT))
         from scripts.constitutional_connected import apply as connect_page
         return connect_page(html, topic=topic)
+    if topic == "elderly-license-revocation":
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.elderly_connected import apply as connect_page
+        return connect_page(html, topic=topic)
     return html
 
 
