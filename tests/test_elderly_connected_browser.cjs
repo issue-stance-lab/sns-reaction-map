@@ -51,6 +51,12 @@ async function attrValues(page, selector, attr) {
       const top = data.issues.reduce((a, b) => b.count > a.count ? b : a);
       await waitState(page, top.id);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, `横スクロール ${width}px`);
+      const statusBox = await page.locator('.elc-status').boundingBox();
+      const planetBox = await page.locator('.planet-panel').boundingBox();
+      assert.ok(statusBox && planetBox, `制度確認帯またはSNS反応マップが見つかりません（${width}px）`);
+      assert.ok(Math.abs(statusBox.x - planetBox.x) < 1 && Math.abs(statusBox.width - planetBox.width) < 1, `制度確認帯の幅がSNS反応マップと揃っていません（${width}px）`);
+      const hillWidths = await page.locator('#section .hill path').evaluateAll(paths => paths.map(path => path.getBBox().width));
+      assert.ok(Math.min(...hillWidths) >= 55.9, `小さい山の幅が不足しています（${width}px）`);
 
       for (const issue of data.issues) {
         await page.locator('#btn-' + issue.id).click();

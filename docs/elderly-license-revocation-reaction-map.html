@@ -1289,7 +1289,7 @@ function topIssueOf(modeId){ return ranksOf(modeId).indexOf(1); }
 const SVG_W=900, SEA=296, TOP=52, BOT=488, LEFT=52, RIGHT=SVG_W-16;
 const Y_MAX=60;      // 縦軸の上限（％）。超える山は頂上を切って実測値を出す
 const SMALL=30;      // これ未満は母数が小さいので破線＋注記
-const MIN_W=34;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
+const MIN_W=56;      // 細すぎて押せない山を広げる最小幅（広げたら画面に書く）
 const svg = document.getElementById("section");
 const chartBox = document.querySelector(".chart-box");
 const stageEl = document.querySelector(".stage");
