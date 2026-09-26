@@ -1,0 +1,88 @@
+/* 課題77・あだ名テーマ。既存の白い紙面に、制度を読む青灰色の区切りを重ねる。 */
+:root{--school-nickname-paper:#f4f7fc;--school-nickname-rule:#dce5f0;--school-nickname-ink:#172033;--school-nickname-muted:#637089}
+#panel .school-nickname-selected-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:24px 0 0!important;margin:0!important;border:0!important;box-shadow:none!important}
+#panel .school-nickname-selected-head h2{margin:3px 0 0;font-size:24px;line-height:1.45}
+#panel .school-nickname-eyebrow{margin:0 0 4px;font-size:11px;font-weight:700;color:var(--school-nickname-muted);letter-spacing:.06em}
+#panel .school-nickname-image-action{flex:0 0 auto;display:flex;flex-direction:column;gap:4px;align-items:center;padding:6px;margin:0;max-width:140px;border:1px solid var(--school-nickname-rule);border-radius:8px;background:#fff;cursor:pointer;font:inherit;font-size:11px;font-weight:700;color:#075ef2}
+#panel .school-nickname-image-action img{width:112px;height:48px;object-fit:contain;margin:0;border-radius:3px}
+#panel .school-nickname-metrics{margin:14px 0;font-size:13px;color:#53647d}
+#panel .school-nickname-metrics p{margin:4px 0;line-height:1.7}
+#panel .school-nickname-metrics [data-school-nickname-count]{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--school-nickname-ink)}
+#panel .school-nickname-scope-note{margin:0 0 22px;padding:10px 12px;border-left:3px solid var(--school-nickname-rule);background:var(--school-nickname-paper);font-size:12px;line-height:1.7;color:#53647d}
+#panel .school-nickname-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+#panel .school-nickname-columns>*{min-width:0}
+#panel .school-nickname-evidence{padding-left:28px;border-left:1px solid var(--school-nickname-rule)}
+#panel .school-nickname-columns h3{margin:0 0 10px;padding:0;border:0;font-size:17px;line-height:1.5;color:var(--school-nickname-ink)}
+#panel .school-nickname-evidence h3:not(:first-child){margin-top:22px}
+#panel .school-nickname-columns p{font-size:13.5px;line-height:1.85}
+#panel .school-nickname-note{margin:6px 0 10px;font-size:11.5px;line-height:1.8;color:var(--school-nickname-muted)}
+#panel .school-nickname-empty{margin:8px 0 16px;padding:10px 0;font-size:13px;color:#53647d}
+#panel .school-nickname-reasons{padding:0;margin:0;list-style:none}
+#panel .school-nickname-reasons li{margin:0 0 12px;padding:0;border:0}
+#panel .school-nickname-reason-row{display:flex;align-items:baseline;gap:10px;font-size:12.5px;line-height:1.6}
+#panel .school-nickname-reason-row>span:first-child{flex:1;min-width:0}
+#panel .school-nickname-reasons b{flex:none;font-variant-numeric:tabular-nums;font-size:15px}
+#panel .school-nickname-reasons small{font-size:10px;margin-left:2px;color:var(--school-nickname-muted)}
+#panel .school-nickname-reason-track{display:block;margin-top:5px;height:4px;background:#edf1f7;border-radius:2px;overflow:hidden}
+#panel .school-nickname-reason-track i{display:block;height:100%;background:#075ef2;border-radius:2px;opacity:.8}
+#panel .school-nickname-posts{margin-top:26px}
+#panel .school-nickname-post{padding:14px 0;border-top:1px solid var(--school-nickname-rule)}
+#panel .school-nickname-post>p{margin:0 0 6px;font-weight:700;font-size:13px}
+#panel .school-nickname-post>a{font-size:11.5px;font-weight:700}
+#panel .school-nickname-embed{border:0;padding:0;margin-top:8px}
+#panel .school-nickname-embed summary{color:var(--school-nickname-muted);font-size:11px;cursor:pointer}
+#panel .twitter-tweet{max-width:100%;margin:10px 0}
+#panel details.school-nickname-claim,#panel details.school-nickname-source-only,#panel details.school-nickname-check{margin:9px 0;border-top:1px solid var(--school-nickname-rule);padding:9px 0 0;font-size:12.5px}
+#panel details.school-nickname-claim summary,#panel details.school-nickname-source-only summary,#panel details.school-nickname-check summary{cursor:pointer;padding:3px 0;font-weight:700;line-height:1.65}
+#panel .school-nickname-verdict{display:inline-block;margin-top:10px;padding:3px 8px;border:1px solid var(--school-nickname-rule);border-radius:4px;font-size:10.5px;font-weight:700}
+#panel .school-nickname-sources{border:0;padding:0;margin:10px 0 6px}
+#panel .school-nickname-sources summary{color:#075ef2;font-size:11px;cursor:pointer}
+#panel .school-nickname-sources ul{margin:8px 0;padding-left:16px}
+#panel .school-nickname-sources li{margin:8px 0;font-size:11.5px;line-height:1.75}
+#panel a{overflow-wrap:anywhere}
+.school-nickname-ban-connected #planet-block{color:var(--school-nickname-ink)}
+.school-nickname-ban-connected #planet-block .stage{display:flex;flex-direction:column;gap:0}
+.school-nickname-ban-connected #planet-block .chart-box{order:0;position:relative;width:100%;margin:0;padding:0;border:0;border-radius:0;box-sizing:border-box;background:#fff}
+.school-nickname-ban-connected #planet-block .chart-box #section{width:100%;height:210px;max-height:none;margin-bottom:0;display:block}
+.school-nickname-ban-connected #planet-block .chart-box .dive,.school-nickname-ban-connected #planet-block .chart-box #seafloor,.school-nickname-ban-connected #planet-block .chart-box #seacover{display:none}
+.school-nickname-ban-connected #planet-block .chart-box #section>rect[fill="#12314f"],.school-nickname-ban-connected #planet-block .chart-box #section>line[opacity="0.13"]{display:none}
+.school-nickname-ban-connected #planet-block .chart-box .hint{margin:10px 0 0;font-size:12px;color:#53647d}
+.school-nickname-ban-connected #planet-block .floor-note{margin:5px 0 0;font-size:11px;color:var(--school-nickname-muted)}
+.school-nickname-ban-connected #planet-block .tap-hint{display:none}
+.school-nickname-ban-connected #planet-block #modes{display:grid;align-items:stretch;grid-template-columns:repeat(4,minmax(0,1fr));margin:10px 0 0;gap:7px;scroll-margin-top:125px}
+.school-nickname-ban-connected #planet-block #modes button{display:block;width:100%;font:inherit;font-size:12px;text-align:left;padding:10px;min-height:64px;border:1px solid var(--school-nickname-rule);border-radius:8px;background:#fff;color:var(--school-nickname-ink);box-shadow:none;margin:0;transform:none;transition:none}
+.school-nickname-ban-connected #planet-block #modes button:hover,.school-nickname-ban-connected #planet-block #list button:hover{border-color:#075ef2}
+.school-nickname-ban-connected #planet-block #modes .school-nickname-mode-name{display:block;margin-bottom:3px}
+.school-nickname-ban-connected #planet-block #modes .sg-pick-btn .school-nickname-mode-name:before{content:'';display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--school-nickname-stance-color)}
+.school-nickname-ban-connected #planet-block #modes strong{font-size:17px;font-variant-numeric:tabular-nums}
+.school-nickname-ban-connected #planet-block #modes small{font-size:11px;font-weight:400;opacity:.85}
+.school-nickname-ban-connected #planet-block #modes button[aria-pressed=true],.school-nickname-ban-connected #planet-block #list button[aria-pressed=true]{color:#fff;background:#172033;border-color:#172033;box-shadow:none}
+.school-nickname-ban-connected #planet-block #list{order:1;width:100%;max-width:none;box-sizing:border-box;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0 22px;padding:0;list-style:none;border:0;background:transparent}
+.school-nickname-ban-connected #planet-block #list li{min-width:0;margin:0}
+.school-nickname-ban-connected #planet-block #list button{width:100%;height:100%;box-sizing:border-box;padding:9px 10px;font:inherit;font-size:12px;font-weight:400;text-align:left;line-height:1.5;border:1px solid var(--school-nickname-rule);border-radius:7px;color:var(--school-nickname-ink);background:#fff;box-shadow:none;transition:none}
+.school-nickname-ban-connected #planet-block #list .m{display:block;margin:2px 0 0;font-size:11px;color:#667085}
+.school-nickname-ban-connected #planet-block #panel{order:2;width:100%;box-sizing:border-box;padding:24px 0 0!important;margin:0!important;border:0!important;border-top:3px solid #075ef2!important;border-radius:0!important;background:#fff;box-shadow:none!important}
+.school-nickname-ban-connected #planet-block>.panel-title h2{font-size:23px}
+.school-nickname-ban-connected #stance-glance-buttons{display:none!important}
+.school-nickname-ban-connected #stance-glance .panel-title,.school-nickname-ban-connected #stance-glance .sg-lead{display:none}
+.school-nickname-ban-connected #stance-glance-result-text{overflow-wrap:anywhere}
+.school-nickname-ban-connected .school-nickname-guesses{margin:16px 0;padding:12px 16px;background:var(--school-nickname-paper);border:1px solid var(--school-nickname-rule);border-radius:10px}
+.school-nickname-ban-connected .school-nickname-guesses>summary{cursor:pointer;font-size:13px;font-weight:700}
+.school-nickname-ban-connected #guesses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.school-nickname-ban-connected #guesses .guess{margin:0}
+.school-nickname-ban-connected .school-nickname-guess-link{display:block;margin-top:8px;border:0;background:transparent;color:#075ef2;font:inherit;font-weight:700;cursor:pointer}
+.school-nickname-ban-connected #stance-glance .sg-headline{display:none}
+@media screen{.school-nickname-ban-connected #issue-cards,.school-nickname-ban-connected #ocean,.school-nickname-ban-connected #bukatsu-check{display:none}}
+.school-nickname-ban-connected .school-nickname-status{margin:20px 0;padding:18px 22px;border-left:3px solid #075ef2;background:#fff;border-radius:0 10px 10px 0}
+.school-nickname-ban-connected .school-nickname-status p{margin:5px 0;font-size:13px;line-height:1.85}.school-nickname-ban-connected .school-nickname-status a{display:inline-block;margin-top:8px;font-size:12px}
+.school-nickname-ban-connected #bg-title,.school-nickname-ban-connected #panel h2{scroll-margin-top:120px}
+.school-nickname-ban-connected .school-nickname-timeline-nav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 14px}.school-nickname-ban-connected .school-nickname-timeline-nav button{flex:1;min-width:110px;padding:12px 8px;border:1px solid var(--school-nickname-rule);border-radius:7px;background:#fff;color:var(--school-nickname-ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer}.school-nickname-ban-connected .school-nickname-timeline-nav [aria-selected=true]{border-color:#075ef2;color:#075ef2;box-shadow:inset 0 -3px #075ef2}
+.school-nickname-ban-connected #bukatsu-background .bg-tl[hidden],.school-nickname-ban-connected #bukatsu-background li[data-school-nickname-timeline][hidden]{display:none!important}
+.school-nickname-ban-connected .school-nickname-background-intro,.school-nickname-ban-connected .school-nickname-fold{margin:18px 0;border-top:1px solid var(--school-nickname-rule);padding:14px 0}.school-nickname-ban-connected .school-nickname-background-intro>summary,.school-nickname-ban-connected .school-nickname-fold>summary{cursor:pointer;font-size:13px;font-weight:700}
+.school-nickname-ban-connected .school-nickname-comparison-note{font-size:12px;line-height:1.8;color:var(--school-nickname-muted)}
+.school-nickname-ban-connected .school-nickname-evidence-controls{display:flex;gap:6px;margin:0 0 20px}.school-nickname-ban-connected .school-nickname-evidence-controls button,.school-nickname-ban-connected #quiz button{border:1px solid var(--school-nickname-rule);border-radius:6px;background:#fff;color:var(--school-nickname-ink);font:inherit;font-size:12px;padding:9px 12px;cursor:pointer}.school-nickname-ban-connected .school-nickname-evidence-controls button{flex:1;min-width:0;padding:9px 7px;line-height:1.65}.school-nickname-ban-connected .school-nickname-evidence-controls [aria-pressed=true]{color:#075ef2;border-color:#075ef2;background:var(--school-nickname-paper);font-weight:700}
+.school-nickname-ban-connected #planet-block #quiz{margin:0;padding:0;border:0;border-radius:0;background:transparent}.school-nickname-ban-connected #planet-block #quiz[hidden],.school-nickname-ban-connected #planet-block .school-nickname-source-stories[hidden]{display:none!important}.school-nickname-ban-connected #planet-block #quiz .qh{display:flex;flex-wrap:wrap;gap:8px;font-size:11px}.school-nickname-ban-connected #planet-block #quiz .qclaim{font-size:18px;font-weight:700}.school-nickname-ban-connected #planet-block #quiz .school-nickname-quiz-note{font-size:11px;color:var(--school-nickname-muted)}.school-nickname-ban-connected #planet-block #quiz .school-nickname-qopts{display:flex;flex-wrap:wrap;gap:8px}.school-nickname-ban-connected #planet-block #quiz .hit{border-color:#2f8f83;background:#e8f5f1}.school-nickname-ban-connected #planet-block #quiz .miss{border-color:#7d5ba6;background:#f3eef9}.school-nickname-ban-connected #planet-block #quiz .qnext{color:#075ef2;font-weight:700;margin-top:12px}
+@media(max-width:760px){.school-nickname-ban-connected #planet-block #panel{padding:20px 0!important}.school-nickname-ban-connected #planet-block #list{grid-template-columns:repeat(2,minmax(0,1fr))}.school-nickname-ban-connected #planet-block #modes{grid-template-columns:repeat(2,minmax(0,1fr))}.school-nickname-ban-connected #planet-block #modes [data-m=all]{grid-column:1/-1;min-height:44px;display:flex;align-items:center;justify-content:space-between}.school-nickname-ban-connected #planet-block #modes small{display:block;margin-top:2px;line-height:1.3}.school-nickname-ban-connected #planet-block>.panel-title h2{font-size:20px}.school-nickname-ban-connected #planet-block #panel h2{font-size:20px}.school-nickname-ban-connected #panel .school-nickname-columns{grid-template-columns:1fr;gap:22px}.school-nickname-ban-connected #panel .school-nickname-evidence{padding:20px 0 0;border-left:0;border-top:2px solid var(--school-nickname-rule)}.school-nickname-ban-connected #panel .school-nickname-selected-head{display:block}.school-nickname-ban-connected #panel .school-nickname-image-action{max-width:none;flex-direction:row;margin-top:10px}.school-nickname-ban-connected #panel .school-nickname-image-action img{width:48px;height:22px}.school-nickname-ban-connected .school-nickname-timeline-nav{gap:5px}.school-nickname-ban-connected .school-nickname-timeline-nav button{font-size:11px;padding:12px 5px;min-width:80px}.school-nickname-ban-connected .school-nickname-evidence-controls{gap:4px}}
+@media(max-width:450px){.school-nickname-ban-connected #planet-block .chart-box #section{height:180px}}
+@media(prefers-reduced-motion:reduce){.school-nickname-ban-connected #planet-block .chart-box #section{transition:none}}
+@media print{body.school-nickname-ban-connected *{visibility:visible}body.school-nickname-ban-connected{background:#fff!important;font-size:11px}body.school-nickname-ban-connected main{max-width:none;margin:0;padding:0}body.school-nickname-ban-connected :is(#progress,.school-nickname-status,.school-nickname-timeline-nav,.school-nickname-guesses,#modes,#list,.stage,#dotbox,#quiz,#vote-section,.school-nickname-evidence-controls,.classroom-print-btn,.tide-widget-controls,.explainer-modal,footer,#fallback-nav,#fallback>.sub,.tap-hint){display:none!important}body.school-nickname-ban-connected #fallback{display:block!important}body.school-nickname-ban-connected #fallback img{display:block;width:100%;height:auto}body.school-nickname-ban-connected #ocean,body.school-nickname-ban-connected #issue-cards,body.school-nickname-ban-connected #bukatsu-check{display:block!important}body.school-nickname-ban-connected li[data-school-nickname-timeline][hidden]{display:block!important}body.school-nickname-ban-connected :is(.panel,.planet-panel,#fallback){overflow:visible;box-shadow:none}body.school-nickname-ban-connected.school-nickname-print-classroom main>:not(.classroom-section){display:none!important}body.school-nickname-ban-connected.school-nickname-print-classroom>:not(main){display:none!important}.school-nickname-ban-connected.school-nickname-print-classroom .classroom-section{display:block!important;color:#172033}}

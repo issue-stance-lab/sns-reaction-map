@@ -397,3 +397,14 @@ SNS投稿の2D可視化を扱う学術研究、SNSまとめ系）から並行し
 
 - `TASK_BOARD.md` の課題55の「状態」「次にすること」が8/31以前の内容（投票・GA4停止、段階0）のままだったので、
   `tasks/task-55.md` の記録（8/31本番公開、投票8/31・GA4 9/15・GSC 9/20の復旧確認）に合わせて訂正した
+
+## school-nicknameへの移植候補（2026-09-27）
+
+あだ名テーマを対象に、工程1〜5相当を実装・検査した。内容と画面の契約は
+[移植契約](../quality/designs/2026-09-27-task77-school-nickname-connected-layout.md)に記録。
+
+- `scripts/school_nickname_connected.py` で、6論点・4立場・制度確認4項目・制度年表3件・一次資料のみ4件をID接続。
+- `scripts/school_nickname_connected_content.py` で、再読理由と正典投稿ハッシュを結び、理由ごとの代表投稿、主張照合、共通の心配、資料3タブ、クイズ4問を生成。
+- `scripts/build_nickname_arena.py --connected-layout` を初回有効化の入口にし、PLANET_SECTION再生成後にも同じ接続を再適用する。
+- `tests/test_school_nickname_connected.py`、Chromium/WebKitの3幅（1280/375/320）ブラウザー検査、JavaScript無効検査を実施。`unittest` 22件、Chromium/WebKitともOK。横はみ出し0px、山の実寸はPC210px・狭幅180px。
+- 状態: **ready_for_ceo**。公開は未実施。次はオーナーが候補画面と内容接続を確認し、「公開して」の承認後にrelease手順へ進む。
