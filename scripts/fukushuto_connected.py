@@ -77,7 +77,7 @@ def content_index(data: dict) -> dict:
         "issues": result,
         "background_checked_on": background_data()["checked_on"],
         "scope_note": "理由の分類・投稿例・資料は、この論点全体の内容です。",
-        "reason_post_note": "理由の区分と個別投稿IDを結ぶ公開台帳はないため、投稿は論点全体の代表例として表示しています。",
+        "reason_post_note": "副首都をめぐる投稿を、論点のまとまりごとに読み直した結果です。表示件数はこの論点全体の内訳です。",
     }
 
 

@@ -101,7 +101,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             + '<h3>どんな理由で語られている？</h3>' + reasons(issue)
             + f'<p class="fuk-note">{e(index["reason_post_note"])}</p>'
             + '<div class="fuk-posts"><h3>実際の投稿を読む</h3>'
-            + '<p class="fuk-note">編集部がこの論点全体から選んだ代表例です。賛否の割合を表すものではありません。</p>'
+            + '<p class="fuk-note">副首都をめぐる投稿から、論点を読み進める手がかりとして2件を選んでいます。賛否の割合ではありません。</p>'
             + post_examples(cards_html, iid) + '</div></section>'
         )
         out.append('<aside class="fuk-evidence" aria-label="資料">')
@@ -115,7 +115,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             )
         out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
-            out.append(f'<p class="fuk-note">照合確認日 {e(data["ocean"]["checked_on"])}。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定ではありません。</p>')
+            out.append(f'<p class="fuk-note">主張と資料の照合は{e(data["ocean"]["checked_on"])}時点です。投稿の正誤ではなく、投稿内の主張と一次資料の関係を示します。</p>')
         else:
             out.append('<p class="fuk-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
         for position, claim_id in enumerate(connection["claim_ids"]):
