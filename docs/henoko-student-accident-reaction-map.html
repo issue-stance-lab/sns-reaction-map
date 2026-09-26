@@ -187,6 +187,12 @@
 <style>/* issue-count: scripts/sync_issue_counts.py */
 .explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
+<!-- HENOKO_CONNECTED_START -->
+<link rel="stylesheet" href="henoko-connected.css?v=1">
+<script id="henoko-connected-data" type="application/json">{"schema":1,"theme_id":"henoko-student-accident","default_issue_id":"henoko-student-accident-safety","stances":[{"id":"henoko-student-accident-ministry-support","mode_id":"文科省判断を支持","short_label":"文科省判断を支持"},{"id":"henoko-student-accident-ministry-oppose","mode_id":"文科省判断に反発","short_label":"文科省判断に反発"},{"id":"henoko-student-accident-distinguish-issues","mode_id":"論点を切り分ける","short_label":"論点を切り分ける"},{"id":"henoko-student-accident-neutral","mode_id":"中立・情報共有","short_label":"中立・情報共有"}],"issues":{"henoko-student-accident-safety":{"static_id":"fb-henoko-student-accident-safety","claim_ids":["school-escort","weather-advisory","unregistered-service"],"source_only_ids":["henoko-student-accident-alternative","henoko-student-accident-check-registration","henoko-student-accident-backup","henoko-student-accident-lifejacket-training"],"shared_concern_ids":["henoko-student-accident-vein-safety"],"timeline_ids":["accident","notice","findings","governor","follow-up","diet-scope","diet-followup","diet-nhk","prefecture-inquiry"],"check_ids":["operator","alternative","briefing"],"editorial_ids":["henoko-student-accident-ed-1","henoko-student-accident-ed-2","henoko-student-accident-ed-3","henoko-student-accident-ed-4","henoko-student-accident-ed-5"],"post_status":"unavailable"},"henoko-student-accident-base-politics":{"static_id":"fb-henoko-student-accident-base-politics","claim_ids":["weather-advisory"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[],"editorial_ids":[],"post_status":"unavailable"},"henoko-student-accident-public-response":{"static_id":"fb-henoko-student-accident-public-response","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":["findings","diet-nhk","prefecture-inquiry"],"check_ids":[],"editorial_ids":[],"post_status":"unavailable"},"henoko-student-accident-victim-dignity":{"static_id":"fb-henoko-student-accident-victim-dignity","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[],"editorial_ids":[],"post_status":"unavailable"},"henoko-student-accident-neutrality":{"static_id":"fb-henoko-student-accident-neutrality","claim_ids":["education-finding","political-learning"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":["governor","diet-scope","diet-followup"],"check_ids":["views"],"editorial_ids":[],"post_status":"unavailable"},"henoko-student-accident-peace-education":{"static_id":"fb-henoko-student-accident-peace-education","claim_ids":["not-safety-only"],"source_only_ids":[],"shared_concern_ids":["henoko-student-accident-vein-safety"],"timeline_ids":["notice","governor","diet-scope"],"check_ids":["briefing","views"],"editorial_ids":[],"post_status":"unavailable"}},"background_checked_on":"2026-09-13","scope_note":"理由・資料照合・年表は、この論点を読むための補助線です。件数は選んだ立場の分類結果です。","post_note":"このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。"}</script>
+<script src="henoko-connected.js?v=1" defer></script>
+<script src="henoko-connected-page.js?v=1" defer></script>
+<!-- HENOKO_CONNECTED_END -->
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/henoko-student-accident/henoko-hero.webp')">
 <div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
@@ -1470,6 +1476,175 @@ function buildQuiz(){
   }));
 }
 
+/* HENOKO_CONNECTED_BRIDGE_START */
+// 山の立場フィルター、論点パネル、選択色、480msの変形、固定リンクを一つの状態へ結ぶ。
+(function(){
+  var glanceButtons = document.querySelectorAll('#stance-glance-buttons .sg-pick-btn');
+  var modesBox = document.getElementById('modes');
+  function stanceAt(i){ return D.stances[i] || null; }
+  function syncGlance(modeId){
+    glanceButtons.forEach(function(btn, i){
+      var stance = stanceAt(i);
+      btn.setAttribute('aria-pressed', String(!!stance && stance.key === modeId));
+    });
+  }
+  function syncModes(modeId){
+    if (!modesBox) return;
+    modesBox.querySelectorAll('[data-m]').forEach(function(btn){
+      btn.setAttribute('aria-pressed', String(btn.dataset.m === modeId));
+    });
+  }
+  glanceButtons.forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var stance = stanceAt(i);
+      if (!stance || !modeById[stance.key]) return;
+      morphTo(stance.key); syncModes(stance.key);
+    });
+  });
+  if (modesBox) modesBox.addEventListener('click', function(event){
+    var btn = event.target.closest('[data-m]');
+    if (!btn) return;
+    var i = D.stances.findIndex(function(s){ return s.key === btn.dataset.m; });
+    if (i >= 0 && glanceButtons[i]) glanceButtons[i].click();
+    else if (btn.dataset.m === 'all') morphTo('all');
+  });
+
+  var legacyDrawPanel = drawPanel;
+  function readingTemplateFor(id){ return document.getElementById('henoko-student-accident-reading-' + id); }
+  function fillMetrics(root, issue){
+    var mode = modeById[st.mode], n = mode.counts[issue.id] || 0;
+    var count = root.querySelector('[data-henoko-count]');
+    var label = root.querySelector('[data-henoko-mode]');
+    var ratio = root.querySelector('[data-henoko-ratio]');
+    var zero = root.querySelector('[data-henoko-zero]');
+    if (count) count.textContent = n.toLocaleString('ja-JP');
+    if (label) label.textContent = '件 / ' + mode.label + mode.total.toLocaleString('ja-JP') + '件中';
+    if (n && mode.total){
+      if (ratio){ ratio.textContent = (100*n/mode.total).toFixed(1) + '%　高さ：強い表現 ' + (mode.high_pct[issue.id] || 0) + '%'; ratio.hidden = false; }
+      if (zero) zero.hidden = true;
+    } else {
+      if (ratio) ratio.hidden = true;
+      if (zero){ zero.textContent = 'この立場では0件です。'; zero.hidden = false; }
+    }
+  }
+  function renderReading(id){
+    var tpl = readingTemplateFor(id), panel = document.getElementById('panel');
+    if (!tpl || !panel) return;
+    panel.setAttribute('data-henoko-issue-id', id);
+    panel.innerHTML = '';
+    panel.appendChild(tpl.content.cloneNode(true));
+    fillMetrics(panel, issues[idIndex[id]]);
+    var back = document.createElement('button');
+    back.type = 'button'; back.className = 'back'; back.id = 'back';
+    back.textContent = '← 論点の一覧へ戻る（Esc）';
+    back.addEventListener('click', orbit); panel.appendChild(back);
+  }
+  drawPanel = function(){
+    if (st.landed === null){
+      document.getElementById('panel').removeAttribute('data-henoko-issue-id');
+      legacyDrawPanel(); return;
+    }
+    var id = issues[st.landed].id;
+    if (!readingTemplateFor(id)){ legacyDrawPanel(); return; }
+    renderReading(id);
+  };
+
+  var henokoVisual = null, henokoAnimation = 0, legacyLayout = layout;
+  layout = function(modeId){ return henokoVisual && modeId === st.mode ? henokoVisual : legacyLayout(modeId); };
+  function recolorHills(){
+    var stance = D.stances.find(function(s){ return s.key === st.mode; });
+    var color = stance ? stance.color : '#075ef2';
+    svg.querySelectorAll('.hill').forEach(function(group){
+      var path = group.querySelector('path'); if (!path) return;
+      var landed = st.landed !== null && Number(group.dataset.i) === st.landed;
+      path.setAttribute('fill', color);
+      path.setAttribute('opacity', String(st.landed === null ? 0.6 : (landed ? 0.9 : 0.23)));
+      if (landed){ path.setAttribute('stroke', '#f2f6fa'); path.setAttribute('stroke-width', '1.8'); path.removeAttribute('stroke-dasharray'); }
+      else if (path.getAttribute('stroke-dasharray')) path.setAttribute('stroke', color);
+      else path.removeAttribute('stroke');
+      var zero = group.querySelector('.zero-mark'); if (zero) zero.setAttribute('fill', color);
+    });
+  }
+  var legacyRender = render;
+  render = function(){
+    var focused = document.activeElement, focusId = focused && focused.classList && focused.classList.contains('hill') ? focused.dataset.i : null;
+    legacyRender(); recolorHills();
+    if (focusId !== null){
+      var next = svg.querySelector('.hill[data-i="' + focusId + '"]');
+      if (next) next.focus({preventScroll:true});
+    }
+  };
+  function animate(from, to){
+    cancelAnimationFrame(henokoAnimation);
+    if (reduce){ henokoVisual = null; render(); return; }
+    var start = performance.now();
+    var byId = function(list){ var map = new Map(); list.forEach(function(value){ map.set(value.it.id, value); }); return map; };
+    var a = byId(from.live), b = byId(to.live);
+    var keys = issues.map(function(issue){ return issue.id; }).filter(function(id){ return a.has(id) || b.has(id); });
+    function zero(value){ return Object.assign({}, value, {x0:value.cx,x1:value.cx,w:0,top:SEA,n:0,hi:0,rate:0,share:0}); }
+    function frame(now){
+      var t = Math.min(1, (now-start)/480), f = 1-Math.pow(1-t,3);
+      henokoVisual = Object.assign({}, to, {live:keys.map(function(id){
+        var end=b.get(id), begin=a.get(id), left=begin||zero(end), right=end||zero(begin), value=Object.assign({},right);
+        ['x0','x1','cx','w','top','n','hi','rate','share'].forEach(function(key){ value[key]=left[key]+(right[key]-left[key])*f; });
+        value.n=Math.round(value.n); value.hi=Math.round(value.hi); value.clipped=value.rate>Y_MAX; return value;
+      })});
+      render();
+      if (t<1) henokoAnimation=requestAnimationFrame(frame); else { henokoVisual=null; henokoAnimation=0; render(); }
+    }
+    henokoAnimation=requestAnimationFrame(frame);
+  }
+  morphTo = function(toMode){
+    if (!modeById[toMode] || toMode === st.mode) return;
+    var from=henokoVisual||legacyLayout(st.mode);
+    st.prevRank=ranksOf(st.mode); st.mode=toMode;
+    if (st.landed!==null && modeById[toMode].counts[issues[st.landed].id]===0){
+      st.landed=null; if (location.hash) history.replaceState(null,'',location.pathname);
+    }
+    evacuateChart(); drawPanel(); syncList(); placeChart(); animate(from,legacyLayout(toMode));
+    syncGlance(toMode); syncModes(toMode);
+    if (window.innerWidth<820) bringIntoView(document.querySelector('#panel h2')||document.getElementById('panel'));
+  };
+  function landSilently(i){ var real=bringIntoView; bringIntoView=function(){}; land(i); bringIntoView=real; }
+  function issueIdFromHash(){
+    var hash=location.hash.slice(1);
+    if (Object.prototype.hasOwnProperty.call(idIndex,hash)) return hash;
+    for (var prefix of ['issue-','fb-']) if (hash.indexOf(prefix)===0 && Object.prototype.hasOwnProperty.call(idIndex,hash.slice(prefix.length))) return hash.slice(prefix.length);
+    return null;
+  }
+  function initialLand(){
+    var id=issueIdFromHash();
+    if (id!==null) landSilently(idIndex[id]);
+    else if (!location.hash && st.landed===null){
+      var top=issues.reduce(function(a,b){ return b.count>a.count?b:a; }); landSilently(idIndex[top.id]);
+    }
+    if (st.landed!==null && !document.getElementById('panel').querySelector('.henoko-selected-head')) landSilently(st.landed);
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',initialLand,{once:true}); else initialLand();
+  window.addEventListener('hashchange',function(){
+    var id=issueIdFromHash();
+    if (id!==null && (st.landed===null || issues[st.landed].id!==id)) landSilently(idIndex[id]);
+    else if (!location.hash && st.landed!==null) orbit();
+  });
+  var lastTrackedIssue=null;
+  function trackIssueView(id){ if(typeof window.gtag!=='function'||id===lastTrackedIssue)return; lastTrackedIssue=id; window.gtag('event','issue_view',{issue_id:id}); }
+  var trackedDraw=drawPanel;
+  drawPanel=function(){ trackedDraw(); if(st.landed!==null) trackIssueView(issues[st.landed].id); };
+  var panelForTracking=document.getElementById('panel');
+  if(panelForTracking) panelForTracking.addEventListener('click',function(event){
+    var link=event.target.closest('a[target="_blank"]');
+    if(!link||typeof window.gtag!=='function')return;
+    window.gtag('event','citation_click',{issue_id:st.landed===null?null:issues[st.landed].id,outbound_url:link.href});
+  });
+  window.HenokoConnectedMap=Object.freeze({
+    getState:function(){ var stance=D.stances.find(function(s){return s.key===st.mode;}); return {stanceId:stance?stance.id:'all',issueId:st.landed===null?null:issues[st.landed].id}; },
+    selectIssue:function(id){ if(id===null){orbit();return true;} if(!Object.prototype.hasOwnProperty.call(idIndex,id))return false; land(idIndex[id]);return true; },
+    selectStance:function(id){ if(id==='all'){morphTo('all');return true;} var stance=D.stances.find(function(s){return s.id===id;}); if(!stance)return false; morphTo(stance.key);return true; }
+  });
+  syncGlance(st.mode); syncModes(st.mode);
+})();
+
+/* HENOKO_CONNECTED_BRIDGE_END */
 /* ---------- 初期化 ----------
    中心の問い・注意書き・見かたは生成器が静的HTMLとして書き込む。
    JSが動かなくても読めるようにするためで、ここで書き直すと出所が2つになる。 */
@@ -1855,4 +2030,150 @@ MangaViewer.init({
 })();
 </script>
 <script src="share-x-btn.js"></script>
+<!-- HENOKO_CONNECTED_CONTENT_START -->
+<template id="henoko-student-accident-reading-henoko-student-accident-safety">
+  <article class="henoko-reading" data-henoko-reading="henoko-student-accident-safety">
+    <header class="henoko-selected-head">
+      <div class="henoko-selected-copy"><p class="henoko-kicker">選んだ論点</p><h2>🛟 安全管理・事故原因</h2>
+        <p class="henoko-selected-summary">安全管理・事故原因を、投稿の理由と資料の両方から読みます。</p></div><button type="button" class="henoko-image-action" data-henoko-image><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-anzen-v2.webp" alt="論点図解：安全管理・事故原因" loading="lazy"><span>図解を拡大</span></button>
+      <div class="henoko-metrics" aria-live="polite"><strong data-henoko-count>0</strong><span data-henoko-mode>件</span><span data-henoko-ratio></span><span data-henoko-zero hidden></span></div>
+    </header>
+    <p class="henoko-scope">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</p>
+    <div class="henoko-columns">
+      <section class="henoko-opinions" aria-labelledby="henoko-reasons-henoko-student-accident-safety"><h3 id="henoko-reasons-henoko-student-accident-safety">この論点を語る理由</h3><ul class="henoko-reasons"><li class="henoko-reason" data-henoko-reason="safety-accountability"><span class="henoko-reason-label">責任の所在・調査と説明を求める</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-safety-safety-accountability">42件</span><span class="henoko-reason-bar"><i style="width:35.9%"></i></span></li><li class="henoko-reason" data-henoko-reason="safety-school"><span class="henoko-reason-label">学校の計画・引率・生徒への説明</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-safety-safety-school">23件</span><span class="henoko-reason-bar"><i style="width:19.7%"></i></span></li><li class="henoko-reason" data-henoko-reason="safety-transport"><span class="henoko-reason-label">船の選定・運航判断・契約</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-safety-safety-transport">15件</span><span class="henoko-reason-bar"><i style="width:12.8%"></i></span></li><li class="henoko-reason" data-henoko-reason="safety-prevention"><span class="henoko-reason-label">再発防止と安全確認を優先する</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-safety-safety-prevention">14件</span><span class="henoko-reason-bar"><i style="width:12.0%"></i></span></li><li class="henoko-reason" data-henoko-reason="safety-ideology"><span class="henoko-reason-label">活動の目的より安全を優先してほしい</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-safety-safety-ideology">11件</span><span class="henoko-reason-bar"><i style="width:9.4%"></i></span></li><li class="henoko-reason unread" data-henoko-reason="__unread__"><span class="henoko-reason-label">まだ読み直していない分</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-safety-__unread__">12件</span><span class="henoko-reason-bar"><i style="width:10.3%"></i></span></li></ul><p class="henoko-note" id="henoko-reason-coverage-henoko-student-accident-safety">本文を読み直した分類は105件。未読分12件は別枠で表示しています。</p>
+        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。</p></section>
+      <section class="henoko-evidence" aria-labelledby="henoko-evidence-henoko-student-accident-safety"><h3 id="henoko-evidence-henoko-student-accident-safety">資料と照合する</h3>
+        <div class="henoko-reading-sources">
+          <div class="henoko-checks"><h4>学校の説明で確かめる</h4><article class="henoko-check" data-henoko-check="operator"><h5>運送の手配</h5><p><b>確かめる問い：</b>事業登録と保険を、誰がどう確かめたか</p><p id="henoko-check-note-operator">事業者への質問に加え、地方運輸局や安全情報の検索サイトを使えます。親しい相手というだけでは確認になりません。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm" target="_blank" rel="noopener nofollow">文部科学省：登録・保険の確認方法</a></li></ul></div></article><article class="henoko-check" data-henoko-check="alternative"><h5>中止できる準備</h5><p><b>確かめる問い：</b>天候が悪いとき、別の活動へ変更できるか</p><p id="henoko-check-note-alternative">4月通知は、悪天候を想定した代案を先に決めることを挙げています。中止の判断と、その後の行き先を一緒に確かめます。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知（3頁）</a></li></ul></div></article><article class="henoko-check" data-henoko-check="briefing"><h5>生徒と保護者への説明</h5><p><b>確かめる問い：</b>活動の目的と具体的な行程が伝わっているか</p><p id="henoko-check-note-briefing">旅行のねらいだけでなく、内容と行程を事前に説明するよう求められています。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知（4頁）</a></li></ul></div></article></div>
+          <div class="henoko-timeline"><h4>照合した経緯</h4><article class="henoko-timeline-item" data-henoko-timeline="accident"><p class="henoko-timeline-when">2026年3月16日 <b>研修旅行中に事故</b></p><p>同志社国際高校の研修旅行中、辺野古沖で船舶事故が発生。文科省は京都府を通じて確認し、後に合同の現地調査を行いました。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1302902_00005.htm" target="_blank" rel="noopener nofollow">文部科学省：事案と調査の経緯</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="notice"><p class="henoko-timeline-when">2026年4月7日 <b>学校へ通知</b></p><p>文科省が校外活動の安全確保と教育活動の留意点を周知。学校が活動の内容を点検し、必要に応じて見直すことを求めました。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：校外活動の通知</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="findings"><p class="henoko-timeline-when">2026年5月22日 <b>行政の判断を公表</b></p><p>文科省が学校の改善指導を公表。同日、国交省は不屈の船長の無登録運送について違反と判断し、告発すると発表しました。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1302902_00005.htm" target="_blank" rel="noopener nofollow">文部科学省：改善指導の公表</a></li><li><a href="https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html" target="_blank" rel="noopener nofollow">国土交通省：事業登録に関する判断</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="governor"><p class="henoko-timeline-when">2026年5月29日 <b>教育への介入を疑問視</b></p><p>玉城知事は定例会見で、事故への厳正な対応と平和教育を分ける考えを示し、事故を契機に国が教育内容を点検することに異議を唱えました。</p><div class="henoko-sources"><ul><li><a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/477/260529_kaiken.pdf" target="_blank" rel="noopener nofollow">沖縄県：定例記者会見録（7頁）</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="follow-up"><p class="henoko-timeline-when">2026年6月30日 <b>船の利用前の確認を周知</b></p><p>文科省が事業者の登録や保険加入を確認する手段を学校へ再周知しました。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm" target="_blank" rel="noopener nofollow">文部科学省：船舶運送利用時の安全確保</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-scope"><p class="henoko-timeline-when">2026年7月14日 <b>文科省が判断の範囲を説明</b></p><p>参議院総務委員会で文科省は、辺野古への移設工事を学習で扱うこと自体を問題にしたのではなく、抗議船の利用などを総合して判断したと説明しました。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/115" target="_blank" rel="noopener nofollow">国会会議録：文科省の答弁</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-followup"><p class="henoko-timeline-when">2026年7月14日 <b>学校の取組調査について答弁</b></p><p>文科相は、4月通知を受けた安全確保や教育活動の取組状況を調べていると答弁。回答期限を7月末とし、取りまとめ後に結果を公表する予定を示しました。これは当日の予定説明であり、調査結果の公表ではありません。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122115104X01220260714/51" target="_blank" rel="noopener nofollow">国会会議録：文科相の答弁</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-nhk"><p class="henoko-timeline-when">2026年7月14日 <b>NHKが報道の内容を説明</b></p><p>参議院総務委員会で報道表現が問われ、NHK副会長は、文科省の見解と会見を基に報じ、教育の自由への懸念や見学先を変更する動きも伝えていると説明しました。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/119" target="_blank" rel="noopener nofollow">国会会議録：NHK副会長の答弁</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="prefecture-inquiry"><p class="henoko-timeline-when">2026年8月19日 <b>県議会の調査日程</b></p><p>沖縄県議会の調査特別委員会の審査日程には、「視察・調査」と「委員会の進め方」が記載されています。この日程資料から審査の結論までは分かりません。</p><div class="henoko-sources"><ul><li><a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/367/r80819henokonittei.pdf" target="_blank" rel="noopener nofollow">沖縄県議会：調査特別委員会の審査日程</a></li></ul></div></article></div>
+          <div class="henoko-claims"><h4>投稿にあった主張と一次資料</h4><article class="henoko-claim verdict-fact" data-henoko-claim="school-escort"><div class="henoko-claim-title"><span class="verdict v-fact">資料どおり</span><h5>転覆時、生徒が乗る船に引率教員は同行していなかった</h5></div><p>文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：研修旅行の検証見解（2頁）</a></li></ul></div></article><article class="henoko-claim verdict-gap" data-henoko-claim="weather-advisory"><div class="henoko-claim-title"><span class="verdict v-gap">少しずれる</span><h5>当日は波浪警報が出ていた</h5></div><p>文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：安全管理の確認事項（3〜4頁）</a></li></ul></div></article><article class="henoko-claim verdict-fact" data-henoko-claim="unregistered-service"><div class="henoko-claim-title"><span class="verdict v-fact">資料どおり</span><h5>事故の船は、海上運送法の事業登録を受けずに運送していた</h5></div><p>国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。</p><div class="henoko-sources"><ul><li><a href="https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html" target="_blank" rel="noopener nofollow">国土交通省：海上運送法違反について（5月22日）</a></li></ul></div></article></div>
+          <div class="henoko-source-only-list"><h4>資料にあり、今回の投稿に見当たらなかったこと</h4><article class="henoko-source-only" data-henoko-source-only="henoko-student-accident-alternative"><h5 id="henoko-source-topic-henoko-student-accident-alternative">悪天候の代案を、出発前に決めておく</h5><p class="henoko-source-impact" id="henoko-source-life-henoko-student-accident-alternative">中止をためらわないためには、その後の行程も必要です。4月通知は悪天候で変更・中止する場合の代案を先に決めるよう挙げています。</p><p class="henoko-source-count">集めた投稿での件数：<b>0件</b>（意見461件のうち）</p><p class="henoko-note" id="henoko-source-note-henoko-student-accident-alternative">今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。 確認日 2026-09-16</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知</a></li></ul></div></article><article class="henoko-source-only" data-henoko-source-only="henoko-student-accident-check-registration"><h5 id="henoko-source-topic-henoko-student-accident-check-registration">登録や安全情報を、学校から外部へ確認できる</h5><p class="henoko-source-impact" id="henoko-source-life-henoko-student-accident-check-registration">6月通知は事業者や地方運輸局への確認、安全情報の検索サイトを案内しています。無登録を非難することと、予約前の確認先を知ることは別です。</p><p class="henoko-source-count">集めた投稿での件数：<b>0件</b>（意見461件のうち）</p><p class="henoko-note" id="henoko-source-note-henoko-student-accident-check-registration">今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。 確認日 2026-09-16</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm" target="_blank" rel="noopener nofollow">文部科学省：船舶運送利用時の安全確保</a></li></ul></div></article><article class="henoko-source-only" data-henoko-source-only="henoko-student-accident-backup"><h5 id="henoko-source-topic-henoko-student-accident-backup">引率する人が乗れない場合の体制も決めておく</h5><p class="henoko-source-impact" id="henoko-source-life-henoko-student-accident-backup">文科省見解は、当日の教員の体調不良に対応する体制も問題にしています。予定した人を置くだけでなく、代わりの人員や中止の判断を確かめられます。</p><p class="henoko-source-count">集めた投稿での件数：<b>0件</b>（意見461件のうち）</p><p class="henoko-note" id="henoko-source-note-henoko-student-accident-backup">今回の意見サンプルを本文で確認した範囲では、この具体的な備え・確認方法への言及はありませんでした。安全への関心がないという意味ではありません。 確認日 2026-09-16</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：研修旅行の検証見解</a></li></ul></div></article><article class="henoko-source-only" data-henoko-source-only="henoko-student-accident-lifejacket-training"><h5 id="henoko-source-topic-henoko-student-accident-lifejacket-training">ライフジャケットの着用方法を、乗る前に教わっておく</h5><p class="henoko-source-impact" id="henoko-source-life-henoko-student-accident-lifejacket-training">文科省見解は、ライフジャケットの着用方法等について事前の安全指導・教育がなされていなかったことも問題として挙げています。用具を積んでおくだけでなく、使い方を乗る前に教わる機会があるかどうかを確かめられます。</p><p class="henoko-source-count">集めた投稿での件数：<b>0件</b>（意見461件のうち）</p><p class="henoko-note" id="henoko-source-note-henoko-student-accident-lifejacket-training">「ライフジャケット」「救命胴衣」の語での一致はありませんでした。近い語「救命器具」では1件ヒットしましたが、本文を読むと『救命器具が一切無かった』という装備の有無そのものを主張する投稿で、資料が指摘する『事前の着用指導が無かった』という指導・教育面の話とは別の(一次資料には無い)主張でした。 確認日 2026-09-20</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：研修旅行の検証見解</a></li></ul></div></article></div>
+          <div class="henoko-concerns"><h4>立場をこえて同じ心配</h4><article class="henoko-concern" data-henoko-concern="henoko-student-accident-vein-safety"><h5>学校行事で子供の安全を軽く扱ってはならない。</h5><p>文科省判断を支持する投稿は、危険な政治活動との接続を含めた見直しを求めています。反発する投稿も安全管理の不備を批判しますが、国が教育内容に踏み込むことには反対します。安全への懸念が共通でも、国がどこまで是正するかで分かれます。</p><p class="henoko-note">関わる論点：henoko-student-accident-safety・henoko-student-accident-peace-education</p></article></div>
+          <div class="henoko-editorials"><h4>編集部の横断整理</h4><article class="henoko-editorial" data-henoko-editorial="henoko-student-accident-ed-1"><span class="henoko-editorial-kind">共通する前提</span><p>安全管理の不備は許されないという声は、文科省判断を支持する側にも、教育への介入に反発する側にもありました。事故を軽く見ているかどうかだけでは、対立の理由を説明できません。</p></article><article class="henoko-editorial" data-henoko-editorial="henoko-student-accident-ed-2"><span class="henoko-editorial-kind">本当の対立</span><p>分かれるのは検証の範囲です。政治活動との接続まで学校の責任として見直すか、安全の是正と教育内容への国の介入を分けるか。安全と教育は関連しますが、同じ問いではありません。</p></article><article class="henoko-editorial" data-henoko-editorial="henoko-student-accident-ed-3"><span class="henoko-editorial-kind">本当の対立</span><p>安全管理・事故原因の意見（117件）にも、船の選定、学校の引率、事故後の説明という違いがあります。責任を求める声の多さは、特定の人の過失が証明された数ではありません。</p></article><article class="henoko-editorial" data-henoko-editorial="henoko-student-accident-ed-4"><span class="henoko-editorial-kind">まだ分からないこと</span><p>「論点を切り分ける」は、投稿者が明示的に切り分けを主張した場合だけでなく、文科省判断への賛否を示さず事故や報道を語った場合も含む分類名です。全員が同じ解決策を支持しているわけではありません。</p></article><article class="henoko-editorial" data-henoko-editorial="henoko-student-accident-ed-5"><span class="henoko-editorial-kind">まだ分からないこと</span><p>同じ趣旨の繰り返し投稿もあります。検索で集めた投稿数を数えており、人数や世論全体の支持率を示してはいません。報道が少ないとの意見についても、放送時間や記事総数を実測した結果ではありません。</p></article></div>
+        </div>
+      </section>
+    </div>
+  </article>
+</template>
+<template id="henoko-student-accident-reading-henoko-student-accident-base-politics">
+  <article class="henoko-reading" data-henoko-reading="henoko-student-accident-base-politics">
+    <header class="henoko-selected-head">
+      <div class="henoko-selected-copy"><p class="henoko-kicker">選んだ論点</p><h2>🏛️ 政治利用・基地問題</h2>
+        <p class="henoko-selected-summary">政治利用・基地問題を、投稿の理由と資料の両方から読みます。</p></div><button type="button" class="henoko-image-action" data-henoko-image><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-seiji-v2.webp" alt="論点図解：政治利用・基地問題" loading="lazy"><span>図解を拡大</span></button>
+      <div class="henoko-metrics" aria-live="polite"><strong data-henoko-count>0</strong><span data-henoko-mode>件</span><span data-henoko-ratio></span><span data-henoko-zero hidden></span></div>
+    </header>
+    <p class="henoko-scope">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</p>
+    <div class="henoko-columns">
+      <section class="henoko-opinions" aria-labelledby="henoko-reasons-henoko-student-accident-base-politics"><h3 id="henoko-reasons-henoko-student-accident-base-politics">この論点を語る理由</h3><ul class="henoko-reasons"><li class="henoko-reason" data-henoko-reason="politics-double"><span class="henoko-reason-label">批判する側にも説明と反省を求める</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-base-politics-politics-double">39件</span><span class="henoko-reason-bar"><i style="width:33.9%"></i></span></li><li class="henoko-reason" data-henoko-reason="politics-election"><span class="henoko-reason-label">事故対応を選挙や政治家の評価につなげる</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-base-politics-politics-election">37件</span><span class="henoko-reason-bar"><i style="width:32.2%"></i></span></li><li class="henoko-reason" data-henoko-reason="politics-links"><span class="henoko-reason-label">活動団体・政党・教育機関への批判と関係</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-base-politics-politics-links">33件</span><span class="henoko-reason-bar"><i style="width:28.7%"></i></span></li><li class="henoko-reason" data-henoko-reason="politics-base"><span class="henoko-reason-label">基地政策・反対運動の是非</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-base-politics-politics-base">6件</span><span class="henoko-reason-bar"><i style="width:5.2%"></i></span></li></ul>
+        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。</p></section>
+      <section class="henoko-evidence" aria-labelledby="henoko-evidence-henoko-student-accident-base-politics"><h3 id="henoko-evidence-henoko-student-accident-base-politics">資料と照合する</h3>
+        <div class="henoko-reading-sources">
+
+
+          <div class="henoko-claims"><h4>投稿にあった主張と一次資料</h4><article class="henoko-claim verdict-gap" data-henoko-claim="weather-advisory"><div class="henoko-claim-title"><span class="verdict v-gap">少しずれる</span><h5>当日は波浪警報が出ていた</h5></div><p>文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：安全管理の確認事項（3〜4頁）</a></li></ul></div></article></div>
+
+
+
+        </div>
+      </section>
+    </div>
+  </article>
+</template>
+<template id="henoko-student-accident-reading-henoko-student-accident-public-response">
+  <article class="henoko-reading" data-henoko-reading="henoko-student-accident-public-response">
+    <header class="henoko-selected-head">
+      <div class="henoko-selected-copy"><p class="henoko-kicker">選んだ論点</p><h2>📰 報道・行政対応</h2>
+        <p class="henoko-selected-summary">報道・行政対応を、投稿の理由と資料の両方から読みます。</p></div><button type="button" class="henoko-image-action" data-henoko-image><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-houdou-v2.webp" alt="論点図解：報道・行政の伝え方" loading="lazy"><span>図解を拡大</span></button>
+      <div class="henoko-metrics" aria-live="polite"><strong data-henoko-count>0</strong><span data-henoko-mode>件</span><span data-henoko-ratio></span><span data-henoko-zero hidden></span></div>
+    </header>
+    <p class="henoko-scope">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</p>
+    <div class="henoko-columns">
+      <section class="henoko-opinions" aria-labelledby="henoko-reasons-henoko-student-accident-public-response"><h3 id="henoko-reasons-henoko-student-accident-public-response">この論点を語る理由</h3><ul class="henoko-reasons"><li class="henoko-reason" data-henoko-reason="media-bias"><span class="henoko-reason-label">報道の量・取り上げ方への疑問</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-public-response-media-bias">43件</span><span class="henoko-reason-bar"><i style="width:46.7%"></i></span></li><li class="henoko-reason" data-henoko-reason="media-authority"><span class="henoko-reason-label">行政・政党の説明と調査</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-public-response-media-authority">21件</span><span class="henoko-reason-bar"><i style="width:22.8%"></i></span></li><li class="henoko-reason" data-henoko-reason="media-response"><span class="henoko-reason-label">会見や遺族の記録への受け止め</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-public-response-media-response">4件</span><span class="henoko-reason-bar"><i style="width:4.3%"></i></span></li><li class="henoko-reason unread" data-henoko-reason="__unread__"><span class="henoko-reason-label">まだ読み直していない分</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-public-response-__unread__">24件</span><span class="henoko-reason-bar"><i style="width:26.1%"></i></span></li></ul><p class="henoko-note" id="henoko-reason-coverage-henoko-student-accident-public-response">本文を読み直した分類は68件。未読分24件は別枠で表示しています。</p>
+        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。</p></section>
+      <section class="henoko-evidence" aria-labelledby="henoko-evidence-henoko-student-accident-public-response"><h3 id="henoko-evidence-henoko-student-accident-public-response">資料と照合する</h3>
+        <div class="henoko-reading-sources">
+
+          <div class="henoko-timeline"><h4>照合した経緯</h4><article class="henoko-timeline-item" data-henoko-timeline="findings"><p class="henoko-timeline-when">2026年5月22日 <b>行政の判断を公表</b></p><p>文科省が学校の改善指導を公表。同日、国交省は不屈の船長の無登録運送について違反と判断し、告発すると発表しました。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/a_menu/shotou/seitoshidou/1302902_00005.htm" target="_blank" rel="noopener nofollow">文部科学省：改善指導の公表</a></li><li><a href="https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html" target="_blank" rel="noopener nofollow">国土交通省：事業登録に関する判断</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-nhk"><p class="henoko-timeline-when">2026年7月14日 <b>NHKが報道の内容を説明</b></p><p>参議院総務委員会で報道表現が問われ、NHK副会長は、文科省の見解と会見を基に報じ、教育の自由への懸念や見学先を変更する動きも伝えていると説明しました。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/119" target="_blank" rel="noopener nofollow">国会会議録：NHK副会長の答弁</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="prefecture-inquiry"><p class="henoko-timeline-when">2026年8月19日 <b>県議会の調査日程</b></p><p>沖縄県議会の調査特別委員会の審査日程には、「視察・調査」と「委員会の進め方」が記載されています。この日程資料から審査の結論までは分かりません。</p><div class="henoko-sources"><ul><li><a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/367/r80819henokonittei.pdf" target="_blank" rel="noopener nofollow">沖縄県議会：調査特別委員会の審査日程</a></li></ul></div></article></div>
+
+
+
+
+        </div>
+      </section>
+    </div>
+  </article>
+</template>
+<template id="henoko-student-accident-reading-henoko-student-accident-victim-dignity">
+  <article class="henoko-reading" data-henoko-reading="henoko-student-accident-victim-dignity">
+    <header class="henoko-selected-head">
+      <div class="henoko-selected-copy"><p class="henoko-kicker">選んだ論点</p><h2>🕊️ 追悼・被害者の尊厳</h2>
+        <p class="henoko-selected-summary">追悼・被害者の尊厳を、投稿の理由と資料の両方から読みます。</p></div><button type="button" class="henoko-image-action" data-henoko-image><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-tsuito-v2.webp" alt="論点図解：追悼・被害者の尊厳" loading="lazy"><span>図解を拡大</span></button>
+      <div class="henoko-metrics" aria-live="polite"><strong data-henoko-count>0</strong><span data-henoko-mode>件</span><span data-henoko-ratio></span><span data-henoko-zero hidden></span></div>
+    </header>
+    <p class="henoko-scope">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</p>
+    <div class="henoko-columns">
+      <section class="henoko-opinions" aria-labelledby="henoko-reasons-henoko-student-accident-victim-dignity"><h3 id="henoko-reasons-henoko-student-accident-victim-dignity">この論点を語る理由</h3><ul class="henoko-reasons"><li class="henoko-reason" data-henoko-reason="dignity-priority"><span class="henoko-reason-label">犠牲者への配慮を先にしてほしい</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-victim-dignity-dignity-priority">23件</span><span class="henoko-reason-bar"><i style="width:35.4%"></i></span></li><li class="henoko-reason" data-henoko-reason="dignity-school"><span class="henoko-reason-label">追悼や謝罪の時期・場所・対応</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-victim-dignity-dignity-school">11件</span><span class="henoko-reason-bar"><i style="width:16.9%"></i></span></li><li class="henoko-reason" data-henoko-reason="dignity-ceremony"><span class="henoko-reason-label">慰霊の場と政治的抗議を分ける</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-victim-dignity-dignity-ceremony">11件</span><span class="henoko-reason-bar"><i style="width:16.9%"></i></span></li><li class="henoko-reason" data-henoko-reason="dignity-mourning"><span class="henoko-reason-label">命を悼み、遺族や生徒の立場を考える</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-victim-dignity-dignity-mourning">6件</span><span class="henoko-reason-bar"><i style="width:9.2%"></i></span></li><li class="henoko-reason unread" data-henoko-reason="__unread__"><span class="henoko-reason-label">まだ読み直していない分</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-victim-dignity-__unread__">14件</span><span class="henoko-reason-bar"><i style="width:21.5%"></i></span></li></ul><p class="henoko-note" id="henoko-reason-coverage-henoko-student-accident-victim-dignity">本文を読み直した分類は51件。未読分14件は別枠で表示しています。</p>
+        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。</p></section>
+      <section class="henoko-evidence" aria-labelledby="henoko-evidence-henoko-student-accident-victim-dignity"><h3 id="henoko-evidence-henoko-student-accident-victim-dignity">資料と照合する</h3>
+        <div class="henoko-reading-sources">
+
+
+
+
+
+
+        </div>
+      </section>
+    </div>
+  </article>
+</template>
+<template id="henoko-student-accident-reading-henoko-student-accident-neutrality">
+  <article class="henoko-reading" data-henoko-reading="henoko-student-accident-neutrality">
+    <header class="henoko-selected-head">
+      <div class="henoko-selected-copy"><p class="henoko-kicker">選んだ論点</p><h2>⚖️ 政治的中立性</h2>
+        <p class="henoko-selected-summary">政治的中立性を、投稿の理由と資料の両方から読みます。</p></div><button type="button" class="henoko-image-action" data-henoko-image><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-churitsu-v2.webp" alt="論点図解：政治的中立性" loading="lazy"><span>図解を拡大</span></button>
+      <div class="henoko-metrics" aria-live="polite"><strong data-henoko-count>0</strong><span data-henoko-mode>件</span><span data-henoko-ratio></span><span data-henoko-zero hidden></span></div>
+    </header>
+    <p class="henoko-scope">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</p>
+    <div class="henoko-columns">
+      <section class="henoko-opinions" aria-labelledby="henoko-reasons-henoko-student-accident-neutrality"><h3 id="henoko-reasons-henoko-student-accident-neutrality">この論点を語る理由</h3><ul class="henoko-reasons"><li class="henoko-reason" data-henoko-reason="neutral-political"><span class="henoko-reason-label">政治活動と学校教育の境界</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-neutrality-neutral-political">20件</span><span class="henoko-reason-bar"><i style="width:42.6%"></i></span></li><li class="henoko-reason" data-henoko-reason="neutral-consistency"><span class="henoko-reason-label">比較する場面でも同じ基準を求める</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-neutrality-neutral-consistency">8件</span><span class="henoko-reason-bar"><i style="width:17.0%"></i></span></li><li class="henoko-reason" data-henoko-reason="neutral-responsibility"><span class="henoko-reason-label">教育論の前に学校と運動の責任を問う</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-neutrality-neutral-responsibility">7件</span><span class="henoko-reason-bar"><i style="width:14.9%"></i></span></li><li class="henoko-reason" data-henoko-reason="neutral-links"><span class="henoko-reason-label">教組・宗教団体と教育の関係</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-neutrality-neutral-links">6件</span><span class="henoko-reason-bar"><i style="width:12.8%"></i></span></li><li class="henoko-reason" data-henoko-reason="neutral-government"><span class="henoko-reason-label">国の教育内容への介入を疑問視する</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-neutrality-neutral-government">3件</span><span class="henoko-reason-bar"><i style="width:6.4%"></i></span></li><li class="henoko-reason unread" data-henoko-reason="__unread__"><span class="henoko-reason-label">まだ読み直していない分</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-neutrality-__unread__">3件</span><span class="henoko-reason-bar"><i style="width:6.4%"></i></span></li></ul><p class="henoko-note" id="henoko-reason-coverage-henoko-student-accident-neutrality">本文を読み直した分類は44件。未読分3件は別枠で表示しています。</p>
+        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。</p></section>
+      <section class="henoko-evidence" aria-labelledby="henoko-evidence-henoko-student-accident-neutrality"><h3 id="henoko-evidence-henoko-student-accident-neutrality">資料と照合する</h3>
+        <div class="henoko-reading-sources">
+          <div class="henoko-checks"><h4>学校の説明で確かめる</h4><article class="henoko-check" data-henoko-check="views"><h5>教育の内容</h5><p><b>確かめる問い：</b>異なる見解を知り、自分で考える機会があるか</p><p id="henoko-check-note-views">通知の別添は、結論を押しつけず、異なる意見を理解して自分の考えも検討する過程を重視しています。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知の別添（7〜8頁）</a></li></ul></div></article></div>
+          <div class="henoko-timeline"><h4>照合した経緯</h4><article class="henoko-timeline-item" data-henoko-timeline="governor"><p class="henoko-timeline-when">2026年5月29日 <b>教育への介入を疑問視</b></p><p>玉城知事は定例会見で、事故への厳正な対応と平和教育を分ける考えを示し、事故を契機に国が教育内容を点検することに異議を唱えました。</p><div class="henoko-sources"><ul><li><a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/477/260529_kaiken.pdf" target="_blank" rel="noopener nofollow">沖縄県：定例記者会見録（7頁）</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-scope"><p class="henoko-timeline-when">2026年7月14日 <b>文科省が判断の範囲を説明</b></p><p>参議院総務委員会で文科省は、辺野古への移設工事を学習で扱うこと自体を問題にしたのではなく、抗議船の利用などを総合して判断したと説明しました。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/115" target="_blank" rel="noopener nofollow">国会会議録：文科省の答弁</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-followup"><p class="henoko-timeline-when">2026年7月14日 <b>学校の取組調査について答弁</b></p><p>文科相は、4月通知を受けた安全確保や教育活動の取組状況を調べていると答弁。回答期限を7月末とし、取りまとめ後に結果を公表する予定を示しました。これは当日の予定説明であり、調査結果の公表ではありません。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122115104X01220260714/51" target="_blank" rel="noopener nofollow">国会会議録：文科相の答弁</a></li></ul></div></article></div>
+          <div class="henoko-claims"><h4>投稿にあった主張と一次資料</h4><article class="henoko-claim verdict-fact" data-henoko-claim="education-finding"><div class="henoko-claim-title"><span class="verdict v-fact">資料どおり</span><h5>文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した</h5></div><p>文科省は当時把握した情報に基づき、様々な見解の提示、抗議船の利用、しおり等を総合して、辺野古への移設工事に関する学習が同法第14条第2項に反すると判断しています。その判断への賛否と、判断が公表された事実は別です。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：教育活動についての見解（7頁）</a></li></ul></div></article><article class="henoko-claim verdict-fact" data-henoko-claim="political-learning"><div class="henoko-claim-title"><span class="verdict v-fact">資料どおり</span><h5>教育基本法は、政治的教養を学ぶこと自体を否定していない</h5></div><p>4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知の別添（7〜8頁）</a></li></ul></div></article></div>
+
+
+
+        </div>
+      </section>
+    </div>
+  </article>
+</template>
+<template id="henoko-student-accident-reading-henoko-student-accident-peace-education">
+  <article class="henoko-reading" data-henoko-reading="henoko-student-accident-peace-education">
+    <header class="henoko-selected-head">
+      <div class="henoko-selected-copy"><p class="henoko-kicker">選んだ論点</p><h2>📚 平和教育の萎縮</h2>
+        <p class="henoko-selected-summary">平和教育の萎縮を、投稿の理由と資料の両方から読みます。</p></div><button type="button" class="henoko-image-action" data-henoko-image><img src="images/topics/henoko-student-accident/henoko-student-accident-infographic-wide-heiwa-v2.webp" alt="論点図解：平和教育の萎縮" loading="lazy"><span>図解を拡大</span></button>
+      <div class="henoko-metrics" aria-live="polite"><strong data-henoko-count>0</strong><span data-henoko-mode>件</span><span data-henoko-ratio></span><span data-henoko-zero hidden></span></div>
+    </header>
+    <p class="henoko-scope">投稿本文を読み、何を問題にし、何を求めているかで分けました。「論点を切り分ける」は文科省判断への賛否を明示せず別の問題を語る意見も含みます。</p>
+    <div class="henoko-columns">
+      <section class="henoko-opinions" aria-labelledby="henoko-reasons-henoko-student-accident-peace-education"><h3 id="henoko-reasons-henoko-student-accident-peace-education">この論点を語る理由</h3><ul class="henoko-reasons"><li class="henoko-reason" data-henoko-reason="peace-restrict"><span class="henoko-reason-label">危険な活動・一面的な教育を見直す</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-peace-education-peace-restrict">11件</span><span class="henoko-reason-bar"><i style="width:44.0%"></i></span></li><li class="henoko-reason" data-henoko-reason="peace-opportunity"><span class="henoko-reason-label">学ぶ機会・権利と生徒の自主性</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-peace-education-peace-opportunity">7件</span><span class="henoko-reason-bar"><i style="width:28.0%"></i></span></li><li class="henoko-reason" data-henoko-reason="peace-autonomy"><span class="henoko-reason-label">教育の自由と国家の介入を考える</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-peace-education-peace-autonomy">6件</span><span class="henoko-reason-bar"><i style="width:24.0%"></i></span></li><li class="henoko-reason" data-henoko-reason="peace-question"><span class="henoko-reason-label">政治家に教育のあり方を問う</span><span class="henoko-reason-count" id="henoko-reason-count-henoko-student-accident-peace-education-peace-question">1件</span><span class="henoko-reason-bar"><i style="width:4.0%"></i></span></li></ul>
+        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>このテーマには理由別の公開投稿台帳がないため、投稿を論点や理由へ推測で結びつけていません。</p></section>
+      <section class="henoko-evidence" aria-labelledby="henoko-evidence-henoko-student-accident-peace-education"><h3 id="henoko-evidence-henoko-student-accident-peace-education">資料と照合する</h3>
+        <div class="henoko-reading-sources">
+          <div class="henoko-checks"><h4>学校の説明で確かめる</h4><article class="henoko-check" data-henoko-check="briefing"><h5>生徒と保護者への説明</h5><p><b>確かめる問い：</b>活動の目的と具体的な行程が伝わっているか</p><p id="henoko-check-note-briefing">旅行のねらいだけでなく、内容と行程を事前に説明するよう求められています。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知（4頁）</a></li></ul></div></article><article class="henoko-check" data-henoko-check="views"><h5>教育の内容</h5><p><b>確かめる問い：</b>異なる見解を知り、自分で考える機会があるか</p><p id="henoko-check-note-views">通知の別添は、結論を押しつけず、異なる意見を理解して自分の考えも検討する過程を重視しています。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：4月7日通知の別添（7〜8頁）</a></li></ul></div></article></div>
+          <div class="henoko-timeline"><h4>照合した経緯</h4><article class="henoko-timeline-item" data-henoko-timeline="notice"><p class="henoko-timeline-when">2026年4月7日 <b>学校へ通知</b></p><p>文科省が校外活動の安全確保と教育活動の留意点を周知。学校が活動の内容を点検し、必要に応じて見直すことを求めました。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf" target="_blank" rel="noopener nofollow">文部科学省：校外活動の通知</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="governor"><p class="henoko-timeline-when">2026年5月29日 <b>教育への介入を疑問視</b></p><p>玉城知事は定例会見で、事故への厳正な対応と平和教育を分ける考えを示し、事故を契機に国が教育内容を点検することに異議を唱えました。</p><div class="henoko-sources"><ul><li><a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/477/260529_kaiken.pdf" target="_blank" rel="noopener nofollow">沖縄県：定例記者会見録（7頁）</a></li></ul></div></article><article class="henoko-timeline-item" data-henoko-timeline="diet-scope"><p class="henoko-timeline-when">2026年7月14日 <b>文科省が判断の範囲を説明</b></p><p>参議院総務委員会で文科省は、辺野古への移設工事を学習で扱うこと自体を問題にしたのではなく、抗議船の利用などを総合して判断したと説明しました。</p><div class="henoko-sources"><ul><li><a href="https://kokkai.ndl.go.jp/txt/122114601X01320260714/115" target="_blank" rel="noopener nofollow">国会会議録：文科省の答弁</a></li></ul></div></article></div>
+          <div class="henoko-claims"><h4>投稿にあった主張と一次資料</h4><article class="henoko-claim verdict-gap" data-henoko-claim="not-safety-only"><div class="henoko-claim-title"><span class="verdict v-gap">少しずれる</span><h5>文科省が指摘したのは、危険な乗船をやめることだけだ</h5></div><p>見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。</p><div class="henoko-sources"><ul><li><a href="https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf" target="_blank" rel="noopener nofollow">文部科学省：安全管理・教育活動の見解（3〜8頁）</a></li></ul></div></article></div>
+
+          <div class="henoko-concerns"><h4>立場をこえて同じ心配</h4><article class="henoko-concern" data-henoko-concern="henoko-student-accident-vein-safety"><h5>学校行事で子供の安全を軽く扱ってはならない。</h5><p>文科省判断を支持する投稿は、危険な政治活動との接続を含めた見直しを求めています。反発する投稿も安全管理の不備を批判しますが、国が教育内容に踏み込むことには反対します。安全への懸念が共通でも、国がどこまで是正するかで分かれます。</p><p class="henoko-note">関わる論点：henoko-student-accident-safety・henoko-student-accident-peace-education</p></article></div>
+
+        </div>
+      </section>
+    </div>
+  </article>
+</template>
+<!-- HENOKO_CONNECTED_CONTENT_END -->
 </body></html>
