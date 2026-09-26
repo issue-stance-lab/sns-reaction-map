@@ -29,6 +29,14 @@ async function contextFor(browser, options = {}) {
       await page.goto(url, {waitUntil: 'domcontentloaded'});
       await page.waitForTimeout(350);
       assert.equal(await page.locator('body.bike-blue-ticket-connected').count(), 1);
+      const bandAlignment = await page.evaluate(() => {
+        const status = document.querySelector('.bike-status')?.getBoundingClientRect();
+        const panel = document.querySelector('.planet-panel')?.getBoundingClientRect();
+        return status && panel ? {statusX: status.x, statusWidth: status.width, panelX: panel.x, panelWidth: panel.width} : null;
+      });
+      assert.ok(bandAlignment, '制度の確認時点帯またはSNS反応マップが見つからない');
+      assert.ok(Math.abs(bandAlignment.statusX - bandAlignment.panelX) < 0.5, `width=${width}: 制度の確認時点帯の左端がSNS反応マップとずれている`);
+      assert.ok(Math.abs(bandAlignment.statusWidth - bandAlignment.panelWidth) < 0.5, `width=${width}: 制度の確認時点帯の幅がSNS反応マップとずれている`);
       assert.deepEqual(await page.evaluate(() => window.BikeBlueTicketConnectedMap.getState()), {
         stanceId: 'all', issueId: 'bike-blue-ticket-other',
       });
