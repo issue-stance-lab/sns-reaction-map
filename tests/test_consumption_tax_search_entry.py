@@ -55,13 +55,15 @@ class ConsumptionTaxSearchEntryTest(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_styles_behavior_and_generator_are_idempotent(self) -> None:
-        self.assertEqual(len(self.soup.select('link[href="consumption-tax-search-entry.css?v=1"]')), 1)
+        self.assertEqual(len(self.soup.select('link[href="consumption-tax-search-entry.css?v=2"]')), 1)
         self.assertEqual(len(self.soup.select('script[src="consumption-tax-search-entry.js?v=1"][defer]')), 1)
-        self.assertTrue((ROOT / "docs" / "consumption-tax-search-entry.css").is_file())
+        css = (ROOT / "docs" / "consumption-tax-search-entry.css").read_text(encoding="utf-8")
+        self.assertIn("max-width: 1180px", css)
+        self.assertIn("width: calc(100% - 48px)", css)
         self.assertTrue((ROOT / "docs" / "consumption-tax-search-entry.js").is_file())
         rebuilt = apply_search_entry(apply_search_entry(self.source, 4340), 4340)
         self.assertEqual(rebuilt.count("<!-- TAX_SEARCH_ENTRY_START -->"), 1)
-        self.assertEqual(rebuilt.count("consumption-tax-search-entry.css?v=1"), 1)
+        self.assertEqual(rebuilt.count("consumption-tax-search-entry.css?v=2"), 1)
 
     def test_article_metadata_matches_visible_heading(self) -> None:
         article = json.loads(self.soup.select_one('script[type="application/ld+json"]').string)

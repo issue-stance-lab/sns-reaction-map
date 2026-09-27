@@ -981,3 +981,20 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36308898702"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36308898707"
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20260927-006
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページの検索入口UIで、青背景の幅を他セクションと揃えて公開する"
+    reason: "公開後の実画面で青背景だけが全幅となり、最大1180pxの他セクションと横幅が揃っていなかったため"
+    risks:
+      - "横幅変更でレシートUIが狭くなりすぎないよう、PCは最大1180px、スマホは左右10pxの余白を確保する"
+    recommendation: approve
+    evidence:
+      - "ユーザー提供のスクリーンショット 2026-09-27 20.12.26.png"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "scripts/run_public_checks.py（公開ファイル1043件成功）"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "公開画面のスクリーンショットを示し、『青背景だけ幅が広くて他と合ってないです。修正して』と明示的に依頼。"

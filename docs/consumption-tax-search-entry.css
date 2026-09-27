@@ -8,7 +8,11 @@
   --tax-line: #d1d4dc;
   position: relative;
   isolation: isolate;
-  padding: clamp(32px, 6vw, 72px) min(6vw, 72px) clamp(44px, 7vw, 84px);
+  width: calc(100% - 48px);
+  max-width: 1180px;
+  margin: 24px auto;
+  padding: clamp(32px, 4vw, 52px) clamp(24px, 4vw, 48px) clamp(44px, 5vw, 64px);
+  border-radius: 18px;
   overflow: hidden;
   background:
     radial-gradient(circle at 92% 2%, rgba(111, 119, 255, .28), transparent 30%),
@@ -99,7 +103,7 @@
   .tax-receipt { grid-column: 1 / -1; }
 }
 @media (max-width: 600px) {
-  .tax-brief { padding-right: 14px; padding-left: 14px; }
+  .tax-brief { width: calc(100% - 20px); margin: 10px auto; padding-right: 14px; padding-left: 14px; border-radius: 14px; }
   .tax-routes { font-size: 13px; }
   .tax-stage { padding: 14px 4px; }
   .tax-stage__step span { display: none; }
