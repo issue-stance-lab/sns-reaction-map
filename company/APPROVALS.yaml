@@ -1004,3 +1004,24 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315239625"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315239639"
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20260927-007
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページの4つの対象別タブへ、ImageGenで作成した識別用の背景画像を追加して公開する"
+    reason: "スーパーの食品・持ち帰り・店内飲食・酒類を文字だけでなく視覚でも素早く判別できるようにするため"
+    risks:
+      - "文字の可読性を損なわないよう濃紺のオーバーレイを重ね、4枚合計約61KBのWebPに圧縮する"
+      - "酒類の画像は販促表現を避け、制度説明用の落ち着いた静物写真とする"
+    recommendation: approve
+    evidence:
+      - "docs/images/topics/consumption-tax-cut/tabs/supermarket.webp"
+      - "docs/images/topics/consumption-tax-cut/tabs/takeout.webp"
+      - "docs/images/topics/consumption-tax-cut/tabs/dine-in.webp"
+      - "docs/images/topics/consumption-tax-cut/tabs/alcohol.webp"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "scripts/run_public_checks.py（公開ファイル1043件成功）"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "本対話で『image2.5で作成した画像を背景として埋め込みたい』と明示的に依頼。"
