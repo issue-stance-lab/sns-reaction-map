@@ -1031,3 +1031,25 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315931560"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315931554"
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20260927-008
+    department: growth-marketing
+    action: website_publication
+    summary: "部活動の地域展開ページへ、制度回答・4視点・地域質問ツール・画像背景を統合した検索入口を公開する"
+    reason: "検索ニーズ調査とローカル画面の段階的な確認を終え、オーナーが本番反映を指示したため"
+    risks:
+      - "検索入口の追加による本文量と初期表示画像が増える。4枚の画像はWebP化し、各39〜52KBに抑えた"
+      - "地域確認の確認状態は端末へ保存せず、質問文コピーと匿名の操作イベントのみを扱う"
+      - "既存のSNS反応1,401件、7論点、山なみマップのデータと操作処理は変更しない"
+    recommendation: approve
+    evidence:
+      - "tasks/task-98.md"
+      - "tests/test_bukatsu_search_entry.py"
+      - "data/verification/bukatsu-chiiki-background.json"
+      - "docs/bukatsu-chiiki-reaction-map.html"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話で4視点の画像背景、地域確認の質問文コピー、PC・スマホ表示と検査結果を提示し、
+      オーナーが「本番反映」と明示的に承認。反映前に承認を記録した。
