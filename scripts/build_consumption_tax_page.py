@@ -58,7 +58,7 @@ DESCRIPTION = (
 OGP_IMAGE = "https://sns-reaction-map.jp/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp"
 SEARCH_ENTRY_START = "<!-- TAX_SEARCH_ENTRY_START -->"
 SEARCH_ENTRY_END = "<!-- TAX_SEARCH_ENTRY_END -->"
-SEARCH_ENTRY_CSS = '<link rel="stylesheet" href="consumption-tax-search-entry.css?v=1">'
+SEARCH_ENTRY_CSS = '<link rel="stylesheet" href="consumption-tax-search-entry.css?v=3">'
 SEARCH_ENTRY_JS = '<script src="consumption-tax-search-entry.js?v=1" defer></script>'
 PUBLISHED_AT = "2026-07-28"
 MODIFIED_AT = "2026-09-27"
