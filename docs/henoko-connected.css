@@ -1,7 +1,9 @@
 /* 課題77・辺野古の連動読書面 */
 body.henoko-connected{--henoko-ink:#12233f;--henoko-muted:#5f6f89;--henoko-line:#dbe4f0;--henoko-blue:#075ef2;--henoko-tint:#f3f7fc}
 body.henoko-connected #planet-block .wrap{max-width:1120px}
-body.henoko-connected #planet-block .stage{display:flex;flex-direction:column;gap:14px}
+/* 元の山なみCSSが持つ align-items:start を上書きしないと、Mac Chromeの
+   flex縦並びでchart-boxだけ内容幅まで縮み、広い画面でも小さく見える。 */
+body.henoko-connected #planet-block .stage{display:flex;flex-direction:column;align-items:stretch;gap:14px}
 body.henoko-connected #planet-block .chart-box{order:1;padding:6px 8px 3px;max-height:270px}
 body.henoko-connected #planet-block .chart-box svg{height:225px}
 body.henoko-connected #planet-block .chart-box .hint{font-size:12px}

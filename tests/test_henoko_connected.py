@@ -37,6 +37,13 @@ class HenokoConnectedTest(unittest.TestCase):
         self.assertEqual(1, self.candidate.count("henoko-connected.css?v=1"))
         self.assertEqual(1, self.candidate.count(connected.BRIDGE_START))
 
+    def test_mountain_chart_stretches_to_stage_width(self):
+        css = (ROOT / "docs/henoko-connected.css").read_text(encoding="utf-8")
+        self.assertRegex(
+            css,
+            r"body\.henoko-connected #planet-block \.stage\{[^}]*align-items:stretch",
+        )
+
     def test_every_issue_has_one_reader_entry_and_no_guessed_posts(self):
         for issue in self.data["issues"]:
             iid = issue["id"]
