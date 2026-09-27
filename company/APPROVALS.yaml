@@ -951,3 +951,24 @@ items:
       標準検査（テーマページ／数字出典／トップページ／全テスト1173件／公開ファイル）と
       Chromium・WebKitの1280/375/320px・JavaScript無効検査が成功。CIの公開ファイル検査と
       Deploy to GitHub Pagesも成功し、本番URL（テーマページ・トップページとも200）で固有文言と反映を確認した。
+
+  - id: approval-20260927-003
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページへ、検索意図に答える進捗・対象別税率・レシート例・FAQのUIを追加して公開する"
+    reason: "検索需要調査で『いつから』『食料品1％』『財源』『給付付き税額控除』の需要を確認し、既存ページの答えが中盤に埋もれていたため"
+    risks:
+      - "政府大綱は閣議決定済みだが法律は未成立。両者を混同しない状態表示と注意書きを同じ画面に置く"
+      - "税込例は税率だけを機械的に当てた例であり、実際の販売価格を保証しない"
+      - "検索タイトルとページ上部を変更するため、公開後にSearch Consoleの表示・CTRを30日間計測する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-96.md"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-09-27_消費税減税UI/"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話でスマホ実装画面、検索意図との対応、動的UI、検証結果、未公開であることを提示し、
+      オーナーが「良いです、公開作業開始」と明示的に承認。反映前に承認を得てから記録した。
