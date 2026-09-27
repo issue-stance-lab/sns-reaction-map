@@ -1988,8 +1988,8 @@ def apply_public_counts(html: str, public_theme: Path = PUBLIC_THEME) -> str:
 
     replacements = (
         (
-            r'<p class="lead">収集したSNS投稿[\d,]+件のうち、分析対象となった意見[\d,]+件をAIが6つの論点に整理しました。',
-            f'<p class="lead">収集したSNS投稿{collected}件のうち、分析対象となった意見{opinions}件をAIが6つの論点に整理しました。',
+            r'(<p class="lead">[^<]*SNS投稿)[\d,]+(件[^<]*意見)[\d,]+(件[^<]*</p>)',
+            rf'\g<1>{collected}\g<2>{opinions}\g<3>',
             "ヒーローの収集数・意見数",
         ),
         (
