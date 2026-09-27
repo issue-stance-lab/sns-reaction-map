@@ -44,6 +44,10 @@ THEME = "constitutional-amendment"
 PAGE = ROOT / "docs" / "constitutional-amendment-reaction-map.html"
 CONFIG = ROOT / "configs" / "constitutional-amendment-reaction-map.json"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
+SEARCH_ENTRY_START = "<!-- SEARCH_ENTRY_START -->"
+SEARCH_ENTRY_END = "<!-- SEARCH_ENTRY_END -->"
+SEARCH_OPINIONS_START = "<!-- SEARCH_OPINIONS -->"
+SEARCH_OPINIONS_END = "<!-- SEARCH_OPINIONS_END -->"
 
 # 先頭6件は投票 choiceIdx と論点カードの順序なので固定する。「その他」は投票対象に
 # 加えないが、正典の main_issue を改変せずマップと詳細集計へ含める。
@@ -694,6 +698,30 @@ def apply_constitutional_stance_glance(page: str) -> str:
     return page
 
 
+def apply_search_entry_counts(page: str, opinions: int) -> str:
+    """検索入口UIの母数を正典と同じ意見件数へ更新する。
+
+    UI未導入の古いテンプレートは変更しない。導入済みページでは、目印の欠落や増減を
+    見逃すと一部だけ古い数字が残るため、入口UI内に2組あることを必須にする。
+    """
+    has_start = SEARCH_ENTRY_START in page
+    has_end = SEARCH_ENTRY_END in page
+    if not has_start and not has_end:
+        return page
+    if not has_start or not has_end or page.count(SEARCH_ENTRY_START) != 1 or page.count(SEARCH_ENTRY_END) != 1:
+        raise IssueCountError("検索入口UIのマーカーが1組ではありません")
+
+    start = page.index(SEARCH_ENTRY_START)
+    end = page.index(SEARCH_ENTRY_END, start) + len(SEARCH_ENTRY_END)
+    block = page[start:end]
+    pattern = re.escape(SEARCH_OPINIONS_START) + r"[\d,]+" + re.escape(SEARCH_OPINIONS_END)
+    replacement = f"{SEARCH_OPINIONS_START}{opinions:,}{SEARCH_OPINIONS_END}"
+    updated, count = re.subn(pattern, replacement, block)
+    if count != 2:
+        raise IssueCountError(f"検索入口UIの意見件数が2箇所ではありません（{count}箇所）")
+    return page[:start] + updated + page[end:]
+
+
 def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
                         stances: Counter, intensities: Counter) -> str:
     """正典との集計一致と再読ゲートを確認し、山なみと残す集計を同時に更新する。"""
@@ -738,6 +766,7 @@ def apply_planet_counts(page: str, collected: int, total: int, issues: Counter,
     page = apply_landing_images(page)
     page = page.replace("<span>SNSの声を見る前に</span>", "<span>ここまで読んだうえで</span>")
     page = apply_constitutional_stance_glance(page)
+    page = apply_search_entry_counts(page, total)
     if "<!-- CONSTITUTIONAL_CONNECTED_START -->" in page:
         if str(ROOT) not in sys.path:
             sys.path.insert(0, str(ROOT))
@@ -793,7 +822,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         f'主要6論点のほか「その他」{issues["その他"]}件も、マップと詳細集計には含めています。',
         "その他の件数", flags=re.S,
     )
-    return page
+    return apply_search_entry_counts(page, total)
 
 
 def replace_once(source: str, pattern: str, replacement: str, label: str, *, flags: int = 0) -> str:
@@ -846,7 +875,7 @@ def build(
     )
     research = (
         '<!-- RESEARCH_CONDITIONS_START -->\n'
-        '<aside class="research-conditions" aria-label="SNSデータの調査条件" '
+        '<aside id="research-conditions" class="research-conditions" aria-label="SNSデータの調査条件" '
         'style="padding:16px min(6vw,72px);background:#fff;border-bottom:1px solid var(--line);'
         'font-size:13px;line-height:1.8;color:var(--muted);">\n'
         '<p style="max-width:1000px;margin:0 auto;"><strong style="color:var(--ink);">'

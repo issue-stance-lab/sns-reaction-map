@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-26"
+updated_at: "2026-09-27"
 
 rules:
   required_for:
@@ -32,6 +32,25 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260927-003
+    department: growth-marketing
+    action: website_publication
+    summary: "課題94の憲法改正ページを、検索意図に合わせた操作型の入口UIへ更新して公開する"
+    reason: "『何が変わる』『9条』『緊急事態条項』『国民投票』『賛否の理由』へ最初の画面から進めるようにし、検索表示8・クリック0の改善を30日間検証するため"
+    risks:
+      - "タイトル変更後の検索表示・順位・クリック率は、Search Consoleで30日間観察する必要がある"
+      - "制度内容が変わった場合はFAQと状態ラベルを人が一次資料で再確認する"
+      - "SNS意見件数は正典から自動更新するが、社会全体の世論調査ではない"
+    recommendation: approve
+    evidence:
+      - "tasks/task-94.md"
+      - "docs/constitutional-amendment-reaction-map.html（sha256 200bf509870617c9eea3b52edac4a11f60d865c6514af94cf639006f82349722）"
+      - "tests/test_constitutional_search_entry.py"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "オーナーがローカルプレビューと更新安全性の説明を確認後、本対話で『公開して』と明示的に承認。"
+
   - id: approval-20260926-001
     department: growth-marketing
     action: website_publication
