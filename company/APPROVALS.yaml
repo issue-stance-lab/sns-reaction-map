@@ -951,3 +951,24 @@ items:
       標準検査（テーマページ／数字出典／トップページ／全テスト1173件／公開ファイル）と
       Chromium・WebKitの1280/375/320px・JavaScript無効検査が成功。CIの公開ファイル検査と
       Deploy to GitHub Pagesも成功し、本番URL（テーマページ・トップページとも200）で固有文言と反映を確認した。
+
+  - id: approval-20260927-005
+    department: growth-marketing
+    action: website_publication
+    summary: "課題97の自転車青切符ページに、検索意図に沿った年齢チェック・反則金検索・短答FAQを題名直下へ追加し、本番公開する"
+    reason: "制度開始時の検索需要が落ちた後も、対象年齢・反則金・歩道・手信号・支払いなどの継続する疑問から既存の山なみマップへ案内するため"
+    risks:
+      - "反則金は主な例10件であり、全件一覧や個別事案の取締り結果を示すものではないとページ内に明記"
+      - "青切符制度の案内は一般情報で、個別事案への法的助言ではない。警察庁・東京都・e-Govの一次資料へのリンクを併記"
+      - "ページの集計件数・SNS分類・正典データは変更しない。進捗表示は閲覧量ではなく操作数を示すため『探ったところ』とする"
+    recommendation: approve
+    evidence:
+      - "tasks/task-97.md 2026-09-27『題名直下へ検索入口をローカル統合』"
+      - "docs/bike-blue-ticket-reaction-map.html の検索入口・進捗表示"
+      - "scripts/bike_blue_ticket_connected.py の再生成処理・表示検査"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      オーナーがチャットで「本番反映して」と明示的に指示。今回の公開対象は自転車青切符ページの
+      検索入口UIと進捗ラベル修正。承認後、標準検査と本番URLで反映を確認する。
