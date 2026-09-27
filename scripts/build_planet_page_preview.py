@@ -343,6 +343,16 @@ BG_CSS = """
 #bukatsu-check .ck .v .src a{color:var(--muted)}
 #bukatsu-check .ck-note{margin:14px 0 0;padding:12px 15px;border-radius:10px;
   background:#FBF8EC;border-left:3px solid #C9971A;font-size:13.5px;line-height:1.85}
+@media (max-width:560px){
+  #bukatsu-check .ck{grid-template-columns:1fr}
+  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
+}
+"""
+
+LOCAL_CHECK_CSS = """<style>
 #bukatsu-check .local-check-tool{margin:18px 0 26px;border:1px solid var(--line);border-radius:14px;
   overflow:hidden;background:#fff;box-shadow:0 10px 26px rgba(15,26,61,.07)}
 #bukatsu-check .local-check-grid{display:grid;grid-template-columns:repeat(3,1fr);background:#fff}
@@ -382,8 +392,6 @@ BG_CSS = """
 #bukatsu-check .local-check-feedback{min-height:1.7em;margin:10px 0 0!important;color:var(--muted);font-size:11px!important;line-height:1.7!important}
 #bukatsu-check .local-check-evidence-title{margin:26px 0 10px;font-size:15px;font-weight:900}
 @media (max-width:560px){
-  #bukatsu-check .ck{grid-template-columns:1fr}
-  #bukatsu-check .ck .k{border-right:none;border-bottom:1px solid var(--line)}
   #bukatsu-check .local-check-grid{grid-template-columns:1fr}
   #bukatsu-check .local-check-choice,#bukatsu-check .local-check-choice:nth-child(3n),#bukatsu-check .local-check-choice:nth-child(n+4){border-right:0;border-bottom:1px solid var(--line)}
   #bukatsu-check .local-check-choice:last-child{border-bottom:0}
@@ -392,10 +400,7 @@ BG_CSS = """
   #bukatsu-check .local-check-question{padding:19px 16px}
 }
 @media (prefers-reduced-motion:reduce){#bukatsu-check .local-check-progress-track i{transition:none}}
-@media (max-width:560px){
-  #bukatsu-background ol.bg-tl li{grid-template-columns:1fr;gap:4px}
-}
-"""
+</style>"""
 
 
 VOTE_MSG_CSS = """
@@ -525,6 +530,7 @@ def build_background(topic: str) -> str:
         if questions:
             first = questions[0]
             out += [
+                LOCAL_CHECK_CSS,
                 '<div class="local-check-tool" aria-labelledby="local-check-tool-title">',
                 '<div class="local-check-grid" role="group" aria-label="地域で確認する項目">',
             ]
