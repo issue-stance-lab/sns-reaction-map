@@ -761,6 +761,11 @@ def _apply_connected_display(topic: str, html: str) -> str:
             sys.path.insert(0, str(ROOT))
         from scripts.fukushuto_connected import apply as connect_page
         return connect_page(html, topic=topic)
+    if topic == "henoko-student-accident":
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.henoko_connected import apply as connect_page
+        return connect_page(html, topic=topic)
     return html
 
 

@@ -1,0 +1,70 @@
+/* 課題77・辺野古の連動読書面 */
+body.henoko-connected{--henoko-ink:#12233f;--henoko-muted:#5f6f89;--henoko-line:#dbe4f0;--henoko-blue:#075ef2;--henoko-tint:#f3f7fc}
+body.henoko-connected #planet-block .wrap{max-width:1120px}
+body.henoko-connected #planet-block .stage{display:flex;flex-direction:column;gap:14px}
+body.henoko-connected #planet-block .chart-box{order:1;padding:6px 8px 3px;max-height:270px}
+body.henoko-connected #planet-block .chart-box svg{height:225px}
+body.henoko-connected #planet-block .chart-box .hint{font-size:12px}
+body.henoko-connected #planet-block .chart-box .dive{display:none}
+body.henoko-connected #planet-block .panel{order:2;width:100%;background:#fff;border:1px solid var(--henoko-line);color:var(--henoko-ink);padding:0;overflow:hidden}
+body.henoko-connected #planet-block .panel:empty{display:none}
+body.henoko-connected #planet-block .modes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:14px 0 10px}
+body.henoko-connected #planet-block .modes button{transform:none;border:1px solid var(--henoko-line);border-radius:10px!important;background:#fff;color:var(--henoko-muted);padding:10px 9px;min-height:62px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+body.henoko-connected #planet-block .modes button[aria-pressed=true]{background:var(--henoko-tint);border-color:var(--henoko-blue);color:var(--henoko-ink);box-shadow:0 3px 10px rgba(7,94,242,.1)}
+body.henoko-connected #planet-block .modes button[data-m=all]{margin-right:0}
+body.henoko-connected #planet-block .modes button[data-m=all]::after{display:none}
+body.henoko-connected .henoko-mode-name{font-size:12.5px;font-weight:800;line-height:1.45}
+body.henoko-connected #planet-block .modes strong{font-size:11px;color:var(--henoko-muted);font-variant-numeric:tabular-nums}
+body.henoko-connected #planet-block .modes button[aria-pressed=true] strong{color:var(--henoko-blue)}
+body.henoko-connected #planet-block .issue-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 14px}
+body.henoko-connected #planet-block .issue-list li{margin:0}
+body.henoko-connected #planet-block .issue-list button{width:100%;min-height:48px;text-align:left;border:1px solid var(--henoko-line);background:#fff;color:var(--henoko-ink);border-radius:9px;padding:9px 11px;font:inherit;font-size:13px;line-height:1.45}
+body.henoko-connected #planet-block .issue-list button[aria-pressed=true]{border-color:var(--henoko-blue);background:var(--henoko-tint);font-weight:800}
+body.henoko-connected #planet-block .dotbox,body.henoko-connected #planet-block .floor-note{display:none!important}
+body.henoko-connected #planet-block #fallback,body.henoko-connected #planet-block #ocean,body.henoko-connected #planet-block #editorial,body.henoko-connected #planet-block #quiz{display:none}
+body.henoko-connected .henoko-guesses{margin:0 0 14px;border:1px solid var(--henoko-line);border-radius:10px;padding:9px 12px;background:#fff}
+body.henoko-connected .henoko-guesses summary{cursor:pointer;font-weight:800;color:var(--henoko-ink)}
+body.henoko-connected .henoko-selected-head{display:grid;grid-template-columns:1fr 180px;gap:16px;align-items:center;padding:20px 20px 14px;border-bottom:1px solid var(--henoko-line);background:linear-gradient(135deg,#f8fbff,#eef5ff)}
+body.henoko-connected .henoko-kicker{margin:0 0 3px;color:var(--henoko-blue);font-size:11px;font-weight:900;letter-spacing:.08em}
+body.henoko-connected .henoko-selected-head h2{margin:0;font-size:22px;line-height:1.35;color:var(--henoko-ink)}
+body.henoko-connected .henoko-selected-summary{margin:7px 0 0;color:var(--henoko-muted);font-size:13px}
+body.henoko-connected .henoko-image-action{border:0;background:transparent;padding:0;text-align:left;cursor:zoom-in}
+body.henoko-connected .henoko-image-action img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:9px;border:1px solid var(--henoko-line)}
+body.henoko-connected .henoko-image-action span{display:block;color:var(--henoko-blue);font-size:11px;margin-top:4px;text-align:right}
+body.henoko-connected .henoko-metrics{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;color:var(--henoko-muted);font-size:12px}
+body.henoko-connected .henoko-metrics strong{color:var(--henoko-blue);font-size:28px;font-variant-numeric:tabular-nums}
+body.henoko-connected .henoko-metrics [data-henoko-ratio]{margin-left:auto}
+body.henoko-connected .henoko-scope{margin:0;padding:9px 20px;border-bottom:1px solid var(--henoko-line);color:var(--henoko-muted);font-size:12px;line-height:1.7}
+body.henoko-connected .henoko-columns{display:grid;grid-template-columns:minmax(230px,.78fr) minmax(0,1.5fr);gap:0}
+body.henoko-connected .henoko-opinions{padding:18px 20px;border-right:1px solid var(--henoko-line);background:#fbfcfe}
+body.henoko-connected .henoko-evidence{padding:18px 20px}
+body.henoko-connected .henoko-opinions h3,body.henoko-connected .henoko-evidence h3{font-size:15px;margin:0 0 10px;color:var(--henoko-ink)}
+body.henoko-connected .henoko-evidence h4{font-size:13px;margin:20px 0 8px;padding-left:9px;border-left:3px solid var(--henoko-blue);color:var(--henoko-ink)}
+body.henoko-connected .henoko-evidence h4:first-child{margin-top:0}
+body.henoko-connected .henoko-reasons{list-style:none;padding:0;margin:0}
+body.henoko-connected .henoko-reason{position:relative;margin:0 0 11px;padding:0 0 8px;border-bottom:1px solid var(--henoko-line)}
+body.henoko-connected .henoko-reason-label{display:block;font-size:13px;font-weight:700;line-height:1.55}
+body.henoko-connected .henoko-reason-count{float:right;color:var(--henoko-muted);font-size:12px;font-variant-numeric:tabular-nums}
+body.henoko-connected .henoko-reason-bar{display:block;height:5px;margin-top:6px;border-radius:99px;background:#e8eef6;overflow:hidden}
+body.henoko-connected .henoko-reason-bar i{display:block;height:100%;background:var(--henoko-blue);border-radius:inherit}
+body.henoko-connected .henoko-reason.unread .henoko-reason-bar i{background:#9aabc2}
+body.henoko-connected .henoko-note{font-size:12px;line-height:1.75;color:var(--henoko-muted)}
+body.henoko-connected .henoko-post-note{margin:16px 0 0;padding:10px 11px;border-left:3px solid #d9a520;background:#fffaf0}
+body.henoko-connected .henoko-evidence-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:0 0 12px}
+body.henoko-connected .henoko-evidence-tabs button{border:1px solid var(--henoko-line);background:#fff;border-radius:8px;padding:9px 6px;color:var(--henoko-muted);font:inherit;font-size:12px;font-weight:800;line-height:1.35}
+body.henoko-connected .henoko-evidence-tabs button[aria-selected=true]{background:var(--henoko-ink);border-color:var(--henoko-ink);color:#fff}
+body.henoko-connected .henoko-reading-sources[hidden],body.henoko-connected .henoko-quiz-panel[hidden]{display:none}
+body.henoko-connected .henoko-reading-sources.henoko-discover-mode>*:not(.henoko-source-only-list){display:none}
+body.henoko-connected .henoko-check,body.henoko-connected .henoko-timeline-item,body.henoko-connected .henoko-claim,body.henoko-connected .henoko-source-only,body.henoko-connected .henoko-concern,body.henoko-connected .henoko-editorial{padding:11px 12px;margin:0 0 8px;border:1px solid var(--henoko-line);border-radius:9px;background:#fff}
+body.henoko-connected .henoko-check h5,body.henoko-connected .henoko-timeline-item h5,body.henoko-connected .henoko-claim h5,body.henoko-connected .henoko-source-only h5,body.henoko-connected .henoko-concern h5{margin:0 0 5px;font-size:13px;line-height:1.55;color:var(--henoko-ink)}
+body.henoko-connected .henoko-check p,body.henoko-connected .henoko-timeline-item p,body.henoko-connected .henoko-claim p,body.henoko-connected .henoko-source-only p,body.henoko-connected .henoko-concern p,body.henoko-connected .henoko-editorial p{margin:4px 0;font-size:12.5px;line-height:1.75;color:#34435c}
+body.henoko-connected .henoko-timeline-when{color:var(--henoko-blue)!important;font-weight:900}.henoko-timeline-when b{color:var(--henoko-ink);margin-left:6px}
+body.henoko-connected .henoko-sources{font-size:11.5px;line-height:1.6}.henoko-sources ul{list-style:none;margin:5px 0 0;padding:0}.henoko-sources li{margin:2px 0}.henoko-sources a{color:var(--henoko-blue);overflow-wrap:anywhere}
+body.henoko-connected .henoko-claim-title{display:flex;gap:7px;align-items:flex-start}.henoko-claim-title h5{flex:1}
+body.henoko-connected .verdict{display:inline-block;flex:none;border-radius:99px;padding:2px 7px;font-size:10px;font-weight:900}.henoko-claim.verdict-fact .verdict{background:#e8f5ee;color:#16714a}.henoko-claim.verdict-gap .verdict{background:#fff4db;color:#8a5b00}.henoko-claim.verdict-miss .verdict{background:#fbe9e8;color:#9d2d27}
+body.henoko-connected .henoko-editorial-kind{font-size:10px;color:var(--henoko-blue);font-weight:900}.henoko-quiz-progress{font-size:12px;color:var(--henoko-muted)}.henoko-quiz-claim{font-size:15px;font-weight:800;line-height:1.65;color:var(--henoko-ink)}.henoko-quiz-options{display:grid;gap:7px}.henoko-quiz-options button,.henoko-quiz-next{border:1px solid var(--henoko-line);background:#fff;border-radius:8px;padding:9px 11px;text-align:left;font:inherit;font-size:12.5px}.henoko-quiz-options button.is-right{border-color:#168258;background:#e8f5ee}.henoko-quiz-options button.is-wrong{border-color:#c33e34;background:#fbe9e8}.henoko-quiz-answer{margin-top:10px;padding:11px;background:var(--henoko-tint);border-radius:8px;font-size:12.5px;line-height:1.75}.henoko-quiz-next{display:block;margin-top:9px;background:var(--henoko-blue);color:#fff;border-color:var(--henoko-blue);font-weight:800}.henoko-quiz-score{font-size:22px;font-weight:900;color:var(--henoko-blue)}
+body.henoko-connected .henoko-image-dialog{max-width:min(92vw,900px);padding:12px;border:0;border-radius:12px}.henoko-image-dialog::backdrop{background:rgba(9,23,45,.72)}.henoko-image-dialog img{display:block;max-width:88vw;max-height:82vh}.henoko-dialog-close{position:absolute;right:7px;top:3px;border:0;background:#fff;border-radius:99px;font-size:24px;line-height:1;cursor:pointer}
+body.henoko-connected .henoko-status{margin:0 0 15px;padding:9px 11px;background:#f3f7fc;border-radius:8px;color:var(--henoko-muted);font-size:12px;line-height:1.7}
+@media (max-width:720px){body.henoko-connected #planet-block .modes{grid-template-columns:repeat(2,minmax(0,1fr))}body.henoko-connected #planet-block .modes button[data-m=all]{grid-column:1/-1}body.henoko-connected #planet-block .issue-list{grid-template-columns:repeat(2,minmax(0,1fr))}body.henoko-connected .henoko-selected-head{grid-template-columns:1fr 120px;padding:15px 14px 11px}body.henoko-connected .henoko-selected-head h2{font-size:18px}body.henoko-connected .henoko-columns{grid-template-columns:1fr}body.henoko-connected .henoko-opinions{border-right:0;border-bottom:1px solid var(--henoko-line);padding:14px}body.henoko-connected .henoko-evidence{padding:14px}body.henoko-connected .henoko-scope{padding:8px 14px}}
+@media (max-width:380px){body.henoko-connected #planet-block .chart-box{max-height:240px}body.henoko-connected #planet-block .chart-box svg{height:195px}body.henoko-connected .henoko-evidence-tabs button{font-size:11px;padding-inline:3px}body.henoko-connected .henoko-selected-head{grid-template-columns:1fr}body.henoko-connected .henoko-image-action{max-width:190px}body.henoko-connected .henoko-metrics [data-henoko-ratio]{margin-left:0;display:block;width:100%}}
+@media print{body.henoko-connected #planet-block .chart-box,body.henoko-connected #planet-block .modes,body.henoko-connected #planet-block #list,body.henoko-connected #planet-block #panel,body.henoko-connected #planet-block .henoko-guesses{display:none!important}body.henoko-connected #planet-block #fallback,body.henoko-connected #planet-block #ocean,body.henoko-connected #planet-block #editorial,body.henoko-connected #planet-block #quiz{display:block!important}body.henoko-connected .henoko-status{border:1px solid #ccc;background:#fff}}

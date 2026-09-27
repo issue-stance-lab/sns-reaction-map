@@ -702,7 +702,8 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     by_issue = Counter({ISSUE_INDEX[name]: values.total for name, values in stats.items()})
     page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total), "詳細データ表")
     if "<!-- PLANET_SECTION_START -->" in page:
-        return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
+        page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
+        return _apply_connected_display(page)
     page = replace_block(page, r"<!-- INSIGHT_STATS_START -->.*?<!-- INSIGHT_STATS_END -->", insight_stats_from_counts(total, sum(values.split for values in stats.values()), stats), "注目ポイント")
     page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [collected, total], "リード文")
     page = replace_number(page, r"<span>(\d+)件 \| Hermes再分類", [total], "SNS反応マップの見出し")
@@ -832,7 +833,8 @@ def build_page(
         page = refresh_verified_planet(page, records, opinions)
         page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables(rows), "詳細データ表")
         page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->", "調査条件（山なみ内に表示）")
-        return replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
+        page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
+        return _apply_connected_display(page)
 
     page = replace_block(
         page,
@@ -871,7 +873,17 @@ def build_page(
     page = political_split_summary(page, stats["政治利用・基地問題"])
     for pattern, values, label in issue_rewrites(stats):
         page = replace_number(page, pattern, values, label)
-    return page
+    return _apply_connected_display(page)
+
+
+def _apply_connected_display(page: str) -> str:
+    """山なみを再生成した後も、移植済みの読書面と連動処理を戻す。"""
+    if "<!-- HENOKO_CONNECTED_START -->" not in page:
+        return page
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from scripts.henoko_connected import apply as connect_page
+    return connect_page(page, topic=THEME)
 
 
 def main() -> int:
