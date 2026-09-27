@@ -51,18 +51,20 @@
 ### フォントファミリー
 
 ```
-"Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif
+見出し: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif
+本文・操作: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif
 ```
 
-Google Fonts から `wght@400;500;600;700;800;900` をロード。
+Google FontsからNoto Serif JPの700・900と、Noto Sans JPの400・700・900をロード。
+明朝体はヒーローH1、主要なH2、大きな分析対象件数に限定し、本文・タブ・ボタンは可読性の高いゴシック体を維持する。
 
 ### タイプスケール
 
 | 要素 | サイズ | Weight | Letter-spacing | 備考 |
 |------|--------|--------|---------------|------|
-| H1（ヒーロー） | `clamp(34px, 4.1vw, 50px)` | 900 | `-0.05em` | `.gradient-text` でブルーグラデーション可 |
+| H1（ヒーロー） | `clamp(34px, 4.1vw, 50px)` | 900 | `-0.05em` | Noto Serif JP。`.gradient-text` でブルーグラデーション可 |
 | H1（テーマ）| `clamp(28px, 5vw, 48px)` | 900 | `-0.05em` | |
-| H2（セクション） | `23px` | 800 | `-0.035em` | 左に `4px × 24px` のブルーバー装飾 |
+| H2（セクション） | `23px` | 900 | `-0.035em` | Noto Serif JP。左に `4px × 24px` のブルーバー装飾 |
 | H3 | `15px–20px` | 900 | `-0.03em` | |
 | Body | `15px` | 400 | normal | `line-height: 1.65` |
 | Small/Meta | `10px–12px` | 700–800 | `0.06em`（uppercase時） | |
@@ -142,7 +144,7 @@ Google Fonts から `wght@400;500;600;700;800;900` をロード。
   - デスクトップ: 555px（inner 553px）
   - 720px以下: 834px（inner 832px）
 - テーマごとの文章量でヒーロー高を変えない。短い場合は画像側の余白として処理する
-- 必須参照: `site-tokens.css?v=2`、`topic-modern.css?v=23`、`topic-modern.js?v=8`
+- 必須参照: `site-tokens.css?v=3`、`topic-modern.css?v=32`、`topic-modern.js?v=8`
 
 ### 論点インフォグラフィック
 

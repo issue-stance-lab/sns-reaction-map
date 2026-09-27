@@ -51,6 +51,7 @@
 | 課題63: 公開ファイル検査が非公開正典を読んで失敗する | Codex | 2026-09-06 | 課題62で非公開正典を読むようになった `test_planet_data` を GitHub Actions の公開ファイル検査から除外。非公開データ無しの370件と、手元の対象テス56件が通ることを確認 | [archive/tasks/task-63.md](tasks/task-63.md) |
 
 | 課題70: 公開中の図解を一次資料と表現ルールに照らして点検する | Codex | 2026-09-22 | 公開中70枚を全数監査。指摘した皇室典範4枚に施行予定日を追記し、学校ページの件数表示も修正して本番確認 | [archive/tasks/task-70.md](tasks/task-70.md) |
+| 課題95: 全テーマページの字体を共通化する | Codex | 2026-09-27 | 見出しをNoto Serif JP、本文・操作をNoto Sans JPへ統一。全10テーマと生成元へ反映し、本番確認 | [archive/tasks/task-95.md](tasks/task-95.md) |
 
 ---
 

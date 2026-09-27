@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-26"
+updated_at: "2026-09-27"
 
 rules:
   required_for:
@@ -32,6 +32,75 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260927-004
+    department: growth-marketing
+    action: website_publication
+    summary: "課題95の共通字体を全10テーマページへ反映して公開する"
+    reason: "憲法改正ページで評価された見出しの明朝体と本文・操作のゴシック体をサイト全体で統一し、読みやすさを保ちながら見た目の一貫性を高めるため"
+    risks:
+      - "全10テーマの見出し幅が変わるため、PCとスマートフォンで代表的な長い題名を確認済み"
+      - "Google Fontsを取得できない場合は、端末内の日本語明朝・ゴシック体へ自動で切り替わる"
+      - "本文・タブ・ボタンは明朝体にせず、操作時の読みやすさを維持する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-95.md"
+      - "docs/site-tokens.css"
+      - "docs/topic-modern.css"
+      - "tests/test_theme_typography.py"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "オーナーが全テーマへの字体反映と、今後の『30秒で掴む』更新でも字体を維持する方針を確認後、本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-27"
+    result_note: "main 85fef854で公開。GitHub Pages配信と公開検査が成功し、本番10テーマのフォント読込・共通CSS版と、実ブラウザでの見出し／操作字体・横崩れなしを確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36305487646"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36305487653"
+      - "https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html"
+
+  - id: approval-20260927-003
+    department: growth-marketing
+    action: website_publication
+    summary: "課題94の憲法改正ページを、検索意図に合わせた操作型の入口UIへ更新して公開する"
+    reason: "『何が変わる』『9条』『緊急事態条項』『国民投票』『賛否の理由』へ最初の画面から進めるようにし、検索表示8・クリック0の改善を30日間検証するため"
+    risks:
+      - "タイトル変更後の検索表示・順位・クリック率は、Search Consoleで30日間観察する必要がある"
+      - "制度内容が変わった場合はFAQと状態ラベルを人が一次資料で再確認する"
+      - "SNS意見件数は正典から自動更新するが、社会全体の世論調査ではない"
+    recommendation: approve
+    evidence:
+      - "tasks/task-94.md"
+      - "docs/constitutional-amendment-reaction-map.html（sha256 200bf509870617c9eea3b52edac4a11f60d865c6514af94cf639006f82349722）"
+      - "tests/test_constitutional_search_entry.py"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "オーナーがローカルプレビューと更新安全性の説明を確認後、本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-27"
+    result_note: "main 2db55cfeで公開。GitHub Pages配信と公開検査が成功し、本番ページ・CSS・JavaScriptのHTTP 200、新title、入口UI、意見件数マーカーを確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36302353735"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36302353767"
+      - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
+
+  - id: approval-20260926-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題77の憲法改正テーマを連動表示の完成版へ切り替えて公開する"
+    reason: "7論点の読書面、立場切替、資料3表示、更新時の再適用を実装し、候補検証を完了したため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "X埋め込みは外部配信に依存する。読めない時も要旨と元投稿リンクを残す"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-09-26-task77-constitutional-amendment-content-contract.md"
+      - "quality/reviews/2026-09-26-task77-constitutional-amendment-quality.md"
+      - "docs/constitutional-amendment-reaction-map.html"
+    status: approved
+    requested_at: "2026-09-26"
+    decided_at: "2026-09-26"
+    decision_note: "オーナーが本対話で『公開して』と明示的に承認。公開候補HTML SHA-256: d1e16cefe6bee487ae7a0322330a8973aa5bb65e455ffb4736f986aa69f6f。"
+
   - id: approval-20260922-001
     department: growth-marketing
     action: website_publication
@@ -837,3 +906,78 @@ items:
     decision_note: >-
       本対話で変更内容・サイトに見える変更（次回更新日1か所）・未確認事項を提示し、
       オーナーが「公開OK」と明示的に承認。反映前に承認を得てから記録した。
+
+  - id: approval-20260927-001
+    department: data
+    action: website_publish
+    summary: "憲法改正論議の2026-09-26収集回（新規224件・意見188件）を公開する（収集1,779→2,003件、意見1,568→1,756件）"
+    reason: "9/26に収集した回が pending_wave のまま未公開だったため、同じ回を --resume で公開まで仕上げる"
+    risks:
+      - "新規188意見はAI分類のみで本文の読み直しはしていない（ページに「本文確認の対象外」と論点ごとに表示。9/18回と同じ扱い）"
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/constitutional-amendment/20260926_220211/promotion-manifest.json（sha256 7fedff21…）"
+      - "data/verification/constitutional-amendment-sunk-continents.json（語られていない争点4件を新規188意見で再照合、一致なし）"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話で件数・割合の変化、事前の再照合結果、新規分が本文未確認である点を提示し、
+      選択肢A（このまま公開）を推奨。オーナーが「Aで公開」と明示的に承認。反映前に承認を得てから記録した。
+
+  - id: approval-20260927-002
+    department: growth-marketing
+    action: website_publication
+    summary: "課題77の学校でのあだ名禁止ページを、論点・理由別X投稿・制度資料・クイズが連動する完成版へ移植して公開する"
+    reason: "候補ページの内容接続と画面を確認し、あだ名テーマにも消費税ページと同じ読み順を適用するため"
+    risks:
+      - "公開データは収集483件・意見100件。再読未完了の理由は未再読として表示し、既存の件数・立場を変更しない"
+      - "代表投稿は要旨と元投稿へのリンクを表示し、個別投稿の正誤判定ではないことを明記する"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-09-27-task77-school-nickname-connected-layout.md"
+      - "tests/test_school_nickname_connected.py"
+      - "tests/test_school_nickname_connected_browser.cjs"
+      - "scripts/build_nickname_arena.py --connected-layout"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話で候補の内容確認と公開条件を提示し、オーナーが「内容確認してよければ公開」と指示。
+      独自性検査の定型文重複を修正し、候補固有の検査を再実行したうえで公開する条件付き承認。
+    completed_at: "2026-09-27"
+    result_note: >-
+      標準検査（テーマページ／数字出典／トップページ／全テスト1173件／公開ファイル）と
+      Chromium・WebKitの1280/375/320px・JavaScript無効検査が成功。CIの公開ファイル検査と
+      Deploy to GitHub Pagesも成功し、本番URL（テーマページ・トップページとも200）で固有文言と反映を確認した。
+
+  - id: approval-20260927-005
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページへ、検索意図に答える進捗・対象別税率・レシート例・FAQのUIを追加して公開する"
+    reason: "検索需要調査で『いつから』『食料品1％』『財源』『給付付き税額控除』の需要を確認し、既存ページの答えが中盤に埋もれていたため"
+    risks:
+      - "政府大綱は閣議決定済みだが法律は未成立。両者を混同しない状態表示と注意書きを同じ画面に置く"
+      - "税込例は税率だけを機械的に当てた例であり、実際の販売価格を保証しない"
+      - "検索タイトルとページ上部を変更するため、公開後にSearch Consoleの表示・CTRを30日間計測する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-96.md"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-09-27_消費税減税UI/"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話でスマホ実装画面、検索意図との対応、動的UI、検証結果、未公開であることを提示し、
+      オーナーが「良いです、公開作業開始」と明示的に承認。反映前に承認を得てから記録した。
+    completed_at: "2026-09-27"
+    result_note: >-
+      main c57f0cbbまでを公開。専用UIテスト、テーマ検査、公開ファイル1043件のローカル検査と
+      CIの公開ファイル検査、Deploy to GitHub Pagesが成功。本番ページと新CSS・JavaScriptの
+      HTTP 200、新タイトル、入口UI、法律未成立の注意書きを確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36308898702"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36308898707"
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"

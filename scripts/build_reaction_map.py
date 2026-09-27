@@ -1019,7 +1019,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
   <title>{html.escape(title)}</title>
 {ogp_meta_html}{vote_scripts}  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
   <style>
     :root {{
       color-scheme: light;

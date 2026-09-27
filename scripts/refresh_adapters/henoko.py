@@ -104,6 +104,17 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
     page.write_text(inject_into_html(page, tide, _load_tide_css()), encoding="utf-8")
 
 
+def _apply_connected_display(root: Path, page: Path) -> None:
+    """辺野古の山なみを作り直した後も、課題77の読書面を再接続する。"""
+    html = page.read_text(encoding="utf-8")
+    if "<!-- HENOKO_CONNECTED_START -->" not in html:
+        return
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.henoko_connected import apply as connect_page
+    page.write_text(connect_page(html, topic=TOPIC), encoding="utf-8")
+
+
 def _run_builder(root: Path, candidate: Path, template: Path, page: Path, data: Path) -> None:
     subprocess.run(
         [
@@ -132,6 +143,7 @@ def finalize(root: Path, current_date: str) -> None:
         cwd=root,
         check=True,
     )
+    _apply_connected_display(root, root / PAGE)
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
@@ -147,8 +159,10 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page, first_data)
     _apply_tide(root, first_page, stage / "classified-wave.json", current_date)
+    _apply_connected_display(root, first_page)
     _run_builder(root, candidate, first_page, second_page, second_data)
     _apply_tide(root, second_page, stage / "classified-wave.json", current_date)
+    _apply_connected_display(root, second_page)
 
     if (_digest(first_page), _digest(first_data)) != (_digest(second_page), _digest(second_data)):
         raise ValueError("辺野古adapterは同じ候補の2回目実行で差分が出ました")

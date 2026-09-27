@@ -22,7 +22,25 @@ html {
   overflow-x: clip !important;
 }
 body { overflow-x: clip !important; }
-body { background: var(--bg) !important; color: var(--navy) !important; }
+body {
+  background: var(--bg) !important;
+  color: var(--navy) !important;
+  font-family: var(--font-body, var(--font)) !important;
+}
+
+/*
+ * Editorial type hierarchy shared by every reaction-map page.
+ * The serif face gives questions and section titles the same considered tone as
+ * the constitutional search entry; controls and long-form copy remain sans-serif.
+ */
+.hero h1,
+.panel-title h2,
+.article-trust-heading h2,
+.classroom-heading h2,
+.stat:first-child strong {
+  font-family: var(--font-display, "Noto Serif JP", serif);
+  font-weight: 900;
+}
 
 .modern-site-header {
   position: sticky;

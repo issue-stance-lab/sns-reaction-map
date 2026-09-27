@@ -62,6 +62,15 @@ THEME = "koshitsu-tenpakai"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
 OTHER = "その他"
 
+
+def apply_koshitsu_connected(page: str) -> str:
+    """皇室典範の山なみ再生成の最後に、課題77の接続表示を適用する。"""
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from scripts.koshitsu_connected import apply as connect_page
+
+    return connect_page(page, topic=THEME, activate=True)
+
 # stance → アリーナのx値（改正への賛否軸）
 STANCE_X = {
     "改正賛成（女系容認）": 2.0,
@@ -1057,7 +1066,9 @@ def build(
     page_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
     before = page_path.read_text(encoding="utf-8")
     if '<!-- PLANET_SECTION_START -->' in before:
-        page = apply_koshitsu_stance_glance(apply_koshitsu_extras(refresh_verified_planet(before)))
+        page = apply_koshitsu_connected(
+            apply_koshitsu_stance_glance(apply_koshitsu_extras(refresh_verified_planet(before)))
+        )
         if not check and (page != before or output is not None):
             target = Path(output) if output else page_path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -1253,7 +1264,9 @@ def main() -> int:
     target=args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
     if args.public_counts_only and '<!-- PLANET_SECTION_START -->' in target.read_text():
         before = target.read_text(encoding="utf-8")
-        page = apply_koshitsu_stance_glance(apply_koshitsu_extras(refresh_verified_planet(before)))
+        page = apply_koshitsu_connected(
+            apply_koshitsu_stance_glance(apply_koshitsu_extras(refresh_verified_planet(before)))
+        )
         target.write_text(page, encoding="utf-8")
         print("OK: 山なみ全体を正典から再生成しました")
         return 0

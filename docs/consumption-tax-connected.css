@@ -146,7 +146,7 @@
 @media(max-width:760px) { .tax-connected #guesses { grid-template-columns:1fr; } }
 
 /* 工程4: 山のまわりは静かに。日付と資料の読み方だけを選べるようにする。 */
-.tax-connected .tax-status { margin:20px 0; padding:18px 22px; border-left:3px solid var(--tax-link); background:#fff; border-radius:0 10px 10px 0; }
+.tax-connected .tax-status { width:min(1180px,100%); box-sizing:border-box; margin:20px auto 0; padding:18px 22px; border:1px solid var(--tax-rule); border-left:3px solid var(--tax-link); background:#fff; border-radius:0 10px 10px 0; box-shadow:var(--topic-shadow-sm,0 5px 18px rgba(18,53,99,.07)); }
 .tax-connected .tax-status p { margin:5px 0; font-size:13px; line-height:1.85; }
 .tax-connected .tax-status .tax-eyebrow { font-size:11px; color:#637089; }
 .tax-connected .tax-status a { display:inline-block; margin-top:8px; font-size:12px; }

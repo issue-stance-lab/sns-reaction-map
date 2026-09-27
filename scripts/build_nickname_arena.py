@@ -756,7 +756,6 @@ def apply_landing_images(block: str, expected_panels: int) -> str:
         raise IssueCountError(
             f"論点画像(フォールバック側): landing-panelが{expected_panels}件必要です（{n}件）"
         )
-
     slug_map_js = ",".join(f'"{k}":"{v[0]}"' for k, v in LANDING_IMAGE_BY_ISSUE_ID.items())
     old_draw_panel_head = (
         "  const it = issues[st.landed];\n"
@@ -1067,7 +1066,16 @@ def apply_planet_counts(page: str, rows: list[dict], collected: int, period: str
     page = replace_once(page, r"var issues=\[[^\n]*?\];", build_vote_issues(rows) + ";", "投票の論点")
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>',
                         build_details(rows, collected), "詳細データ", flags=re.S)
-    return apply_nickname_stance_glance(page)
+    page = apply_nickname_stance_glance(page)
+    # PLANET_SECTIONの再生成で山の初期化部分が置き換わるため、課題77の連動表示を
+    # 付けたページでは同じ入力の中で橋渡しJSと読書テンプレートを再適用する。
+    try:
+        from scripts.school_nickname_connected import apply as apply_connected_layout
+        from scripts.school_nickname_connected import enabled as connected_layout_enabled
+    except ModuleNotFoundError:  # python3 scripts/build_nickname_arena.py の実行時
+        from school_nickname_connected import apply as apply_connected_layout  # type: ignore[no-redef]
+        from school_nickname_connected import enabled as connected_layout_enabled  # type: ignore[no-redef]
+    return apply_connected_layout(page) if connected_layout_enabled(page) else page
 
 
 def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
@@ -1153,6 +1161,7 @@ def build(
     input_path: Path | None = None,
     html_template: Path | None = None,
     output_html: Path | None = None,
+    connected_layout: bool = False,
 ) -> tuple[list[str], bool]:
     rows, sample_file, records = load_opinions(input_path)
     collected = len(records)
@@ -1179,6 +1188,7 @@ def build(
             "調査条件",
             flags=re.S,
         )
+
         page = replace_once(
             page,
             r'<section class="stats insight-stats".*?</section>',
@@ -1228,6 +1238,18 @@ def build(
             flags=re.S,
         )
 
+    # 課題77の接続レイアウトは、初回だけ明示的に有効化し、以後はページ内の
+    # 目印を見て定期更新時にも同じ読書面・山・資料タブを再生成する。
+    try:
+        from scripts.school_nickname_connected import apply as apply_connected_layout
+        from scripts.school_nickname_connected import enabled as connected_layout_enabled
+    except ModuleNotFoundError:  # python3 scripts/build_nickname_arena.py の実行時
+        from school_nickname_connected import apply as apply_connected_layout  # type: ignore[no-redef]
+        from school_nickname_connected import enabled as connected_layout_enabled  # type: ignore[no-redef]
+
+    if connected_layout or connected_layout_enabled(page):
+        page = apply_connected_layout(page, activate=connected_layout)
+
     arena_before = arena_destination.read_text(encoding="utf-8") if arena_destination.is_file() else ""
     arena_after = build_arena_data(rows)
     changed = page != before or arena_after != arena_before
@@ -1255,6 +1277,11 @@ def main() -> int:
     parser.add_argument("--html-template", type=Path)
     parser.add_argument("--output-html", type=Path)
     parser.add_argument(
+        "--connected-layout",
+        action="store_true",
+        help="課題77の論点別読書面・資料タブ・山の接続レイアウトを有効化する",
+    )
+    parser.add_argument(
         "--public-counts-only",
         action="store_true",
         help="候補公開JSON（data/public/themes/）から集計表示だけを貼り直す",
@@ -1281,6 +1308,7 @@ def main() -> int:
             input_path=args.input,
             html_template=args.html_template,
             output_html=args.output_html,
+            connected_layout=args.connected_layout,
         )
         print("\n".join(lines))
         if args.check and changed:

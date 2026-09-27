@@ -80,7 +80,12 @@ COUNT_PROVENANCE_MODULES = {
     "consumption-tax-cut": "consumption_tax_count_provenance",
     "bukatsu-chiiki": "scripts.bukatsu_count_provenance",
     "ai-copyright": "ai_copyright_count_provenance",
+    "koshitsu-tenpakai": "scripts.koshitsu_count_provenance",
     "bike-blue-ticket": "scripts.bike_blue_ticket_count_provenance",
+    "constitutional-amendment": "scripts.constitutional_count_provenance",
+    "elderly-license-revocation": "scripts.elderly_license_count_provenance",
+    "fukushuto": "scripts.fukushuto_count_provenance",
+    "henoko-student-accident": "scripts.henoko_count_provenance",
 }
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
