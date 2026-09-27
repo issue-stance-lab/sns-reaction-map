@@ -44,6 +44,13 @@ class HenokoConnectedTest(unittest.TestCase):
             r"body\.henoko-connected #planet-block \.stage\{[^}]*align-items:stretch",
         )
 
+    def test_mountain_chart_keeps_full_height_when_stretched(self):
+        css = (ROOT / "docs/henoko-connected.css").read_text(encoding="utf-8")
+        self.assertRegex(
+            css,
+            r"body\.henoko-connected #planet-block \.chart-box svg\{[^}]*height:225px;[^}]*margin-bottom:0",
+        )
+
     def test_every_issue_has_one_reader_entry_and_no_guessed_posts(self):
         for issue in self.data["issues"]:
             iid = issue["id"]
