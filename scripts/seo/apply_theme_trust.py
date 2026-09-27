@@ -29,7 +29,7 @@ PROTECTED_TOKENS = (
     "supabase",
     "topic-modern.js",
 )
-TOPIC_CSS_VERSION = "31"  # 2026-09-21 課題77案2 品質監査対応: 一次資料リンクのnowrap解除
+TOPIC_CSS_VERSION = "32"  # 2026-09-27 課題95: 全テーマの見出し字体を共通化
 
 
 def load_json(path: Path) -> dict[str, Any]:

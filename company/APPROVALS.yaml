@@ -32,6 +32,26 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260927-004
+    department: growth-marketing
+    action: website_publication
+    summary: "課題95の共通字体を全10テーマページへ反映して公開する"
+    reason: "憲法改正ページで評価された見出しの明朝体と本文・操作のゴシック体をサイト全体で統一し、読みやすさを保ちながら見た目の一貫性を高めるため"
+    risks:
+      - "全10テーマの見出し幅が変わるため、PCとスマートフォンで代表的な長い題名を確認済み"
+      - "Google Fontsを取得できない場合は、端末内の日本語明朝・ゴシック体へ自動で切り替わる"
+      - "本文・タブ・ボタンは明朝体にせず、操作時の読みやすさを維持する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-95.md"
+      - "docs/site-tokens.css"
+      - "docs/topic-modern.css"
+      - "tests/test_theme_typography.py"
+    status: pending
+    requested_at: "2026-09-27"
+    decided_at: null
+    decision_note: null
+
   - id: approval-20260927-003
     department: growth-marketing
     action: website_publication
