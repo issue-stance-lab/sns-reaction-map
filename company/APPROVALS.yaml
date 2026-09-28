@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-27"
+updated_at: "2026-09-28"
 
 rules:
   required_for:
@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260928-001
+    department: growth-marketing
+    action: website_publication
+    summary: "憲法改正ページの検索入口背景と制度確認帯をSNS反応マップと同じ横幅へ修正して公開する"
+    reason: "公開画面で2か所だけが他のセクションより横へ広がっていたため、ページ全体の中央カラムをそろえる"
+    risks:
+      - "狭い画面で余白が二重にならないよう、親カラム幅をそのまま使う"
+      - "375・820・1280・1600pxで左端と幅の一致、横スクロールなしを確認済み"
+    recommendation: approve
+    evidence:
+      - "ユーザー提供のスクリーンショット 2026-09-28 7.20.01.png"
+      - "tasks/task-94.md"
+      - "tests/test_constitutional_layout_width_browser.cjs"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: "修正内容と4画面幅の検査結果を提示後、オーナーが本対話で『公開して』と明示的に承認。"
+
   - id: approval-20260927-004
     department: growth-marketing
     action: website_publication
