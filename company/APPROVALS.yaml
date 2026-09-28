@@ -1110,3 +1110,24 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36321915820"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36321915838"
       - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
+
+  - id: approval-20260928-001
+    department: data
+    action: website_publish
+    summary: "皇室典範テーマの2026-09-27収集回を公開する（収集1,950→2,271件、意見1,525→1,776件）"
+    reason: "9/27に収集したpending_waveを本文確認・資料再照合・表示検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "分類提供元が拒否した5件は本文を1件ずつ確認し、人手確認の根拠を記録した"
+      - "主張の事実確認は公開データの期間末より14日前だが、30日未満のため運用ルール上は経過観察"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/koshitsu-tenpakai/20260927_221425/promotion-manifest.json（sha256 8fe42778…）"
+      - "quality/reviews/2026-09-28-koshitsu-refresh-review.md"
+      - "data/verification/koshitsu-tenpakai-sunk-continents.json"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: >-
+      本対話で収集・意見件数、分類エラー5件の本文確認、資料再照合、
+      PC・スマホ・JavaScript無効・印刷の検査結果を提示し、オーナーが「本番反映」と明示的に承認。
