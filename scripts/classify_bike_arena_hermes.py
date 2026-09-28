@@ -96,6 +96,34 @@ def parse_response(text: str, expected: int) -> list[dict[str, Any]]:
     return rows
 
 
+def apply_signature_petition_rule(text: str, classification: dict[str, Any]) -> dict[str, Any]:
+    """Keep reason-free Change.org signature shares out of the infrastructure bucket."""
+    normalized = re.sub(r"\s+", "", str(text or "")).casefold()
+    campaign_source = "change.org" in normalized or "@change_jp" in normalized
+    if not campaign_source or "オンライン署名に賛同" not in normalized:
+        return classification
+    petition = re.search(r"(?:この)?オンライン署名に賛同をお願いします!?！?[「『].*?[」』]", normalized)
+    if petition is None:
+        return classification
+    outside = normalized[:petition.start()] + normalized[petition.end():]
+    outside = re.sub(r"https?://[a-z0-9./_-]+", "", outside)
+    outside = re.sub(r"[#＃][\w]+|@change_jp|via|より|から", "", outside)
+    outside = re.sub(r"[^a-z0-9ぁ-んァ-ヶ一-龠]", "", outside)
+    if outside:
+        return classification
+    result = dict(classification)
+    result.update({
+        "main_issue": "その他",
+        "stance": "反対（インフラ・制度優先）",
+        "intensity": "high",
+        "summary": "青切符制度への反対署名を共有",
+        "reason": "オンライン署名への賛同を呼びかける定型文で、反対理由は示されていない。",
+        "confidence": 0.98,
+        "article_usable": False,
+    })
+    return result
+
+
 def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
     prompt = prompt_for(batch)
     last_error: Exception | None = None
@@ -115,7 +143,11 @@ def classify(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 # Upstream refusal (e.g. "[400] ... considered high risk") is printed
                 # with exit 0; its "[400]" would otherwise be parsed as a JSON array.
                 raise RuntimeError(f"Hermes upstream error: {result.stdout.strip()[:200]}")
-            return parse_response(result.stdout, len(batch))
+            labels = parse_response(result.stdout, len(batch))
+            return [
+                apply_signature_petition_rule(post.get("text"), label)
+                for post, label in zip(batch, labels)
+            ]
         except (ValueError, json.JSONDecodeError) as exc:
             last_error = exc
             prompt += f"\n前回の出力エラー: {exc}。説明を付けず、正しいJSON配列だけを再出力してください。"

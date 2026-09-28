@@ -40,7 +40,7 @@ BUCKET_META = [
     ("abolish", "制度そのものに反対", "撤回・廃止すべきという立場。うち{sig}件は同一の署名定型文。", "#1e3a6b"),
 ]
 
-CHECKED_AT = "2026年8月16日"
+CHECKED_AT = "2026年9月29日"
 
 # change.org の署名文。同じ文面の貼り付けが「制度そのものに反対」を押し上げるため、
 # 何件がこれなのかを本文に出す。件数は数え直すので直書きしない。
@@ -85,8 +85,8 @@ FACT_CHECKS = [
         "verdict": "fact",
         "verdict_label": "正しい",
         "note": "年齢の理解に食い違いは見当たらなかった。",
-        "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html",
-        "url_label": "警察庁 自転車の新しい制度",
+        "url": "https://www.npa.go.jp/bureau/traffic/bicycle/info.html",
+        "url_label": "警察庁 自転車は車のなかま",
     },
     {
         "key": "sidewalk",
@@ -184,7 +184,9 @@ def esc(text: str) -> str:
     return html.escape(text, quote=True)
 
 
-def load(input_path: Path | None = None) -> tuple[list[dict], dict, dict]:
+def load(
+    input_path: Path | None = None, opposition_path: Path | None = None
+) -> tuple[list[dict], dict, dict]:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
     theme = themes[THEME]
     period = str(theme.get("sample_period") or "").strip()
@@ -192,7 +194,8 @@ def load(input_path: Path | None = None) -> tuple[list[dict], dict, dict]:
         raise SystemExit("THEMES.yaml の bike-blue-ticket に sample_period がありません")
     samples = json.loads((input_path or ROOT / theme["sample_file"]).read_text(encoding="utf-8"))
     config = yaml.safe_load((ROOT / theme["refresh_config"]).read_text(encoding="utf-8"))
-    reread = json.loads((ROOT / "data" / f"{THEME}_opposition_reread.json").read_text(encoding="utf-8"))
+    reread_source = opposition_path or (ROOT / "data" / f"{THEME}_opposition_reread.json")
+    reread = json.loads(reread_source.read_text(encoding="utf-8"))
     claim_posts = json.loads((ROOT / "data" / f"{THEME}_claim_posts.json").read_text(encoding="utf-8"))
     return samples, config, reread, claim_posts, period
 
@@ -649,12 +652,15 @@ def main() -> int:
     parser.add_argument("--html-template", type=Path, help="差し替え元のHTML（省略時は公開ページ）")
     parser.add_argument("--output-html", type=Path, help="書き出し先のHTML（省略時は公開ページ）")
     parser.add_argument("--verification-dest", type=Path, help="出所ファイルの書き出し先（省略時は data/verification）")
+    parser.add_argument("--opposition-reread", type=Path, help="本文確認済みの反対5区分候補")
     args = parser.parse_args()
     candidate_args = (args.input, args.html_template, args.output_html, args.verification_dest)
     if any(candidate_args) and not all(candidate_args):
         parser.error("候補生成では--input/--html-template/--output-html/--verification-destをすべて指定してください")
+    if args.opposition_reread and not args.input:
+        parser.error("--opposition-rereadは候補生成時のみ指定できます")
 
-    samples, config, reread, claim_posts, period = load(args.input)
+    samples, config, reread, claim_posts, period = load(args.input, args.opposition_reread)
     counts = build_counts(samples, reread)
 
     public_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
