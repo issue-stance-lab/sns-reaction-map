@@ -73,9 +73,12 @@ items:
     requested_at: "2026-09-28"
     decided_at: "2026-09-28"
     decision_note: "修正内容と4画面幅の検査結果を提示後、オーナーが本対話で『公開して』と明示的に承認。"
-    completed_at: null
-    result_note: null
-    result_evidence: []
+    completed_at: "2026-09-28"
+    result_note: "main 5e55e98cで公開。全テスト1,228件、公開検査1,055件、CI、Pages配信が成功し、本番375px・1280pxで4タブを切り替えても画面位置が変わらないことを確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36418189205"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36418189287"
+      - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
 
   - id: approval-20260927-004
     department: growth-marketing
