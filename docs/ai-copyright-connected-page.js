@@ -230,7 +230,7 @@
   mount();
   if (location.hash === '#quiz') showQuestion(0);
 
-  // ---------- 表紙直下の検索入口（課題96） ----------
+  // ---------- 表紙直下の検索入口（課題100） ----------
   // 検索疑問は一次資料の要点へ、最後のリンクは実データの論点選択へ接続する。
   var searchEntry = document.getElementById('aic-search-entry');
   if (searchEntry) {
