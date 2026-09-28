@@ -36,9 +36,20 @@ if(!url || !['127.0.0.1','localhost'].includes(new URL(url).hostname)){
       }
       assert.ok(result.scrollWidth<=result.viewport+1,`${width}px: 横スクロールが発生しています`);
       assert.deepEqual(errors,[],`${width}px: JavaScriptエラー`);
+
+      await page.locator('#change-lens-tabs').scrollIntoViewIfNeeded();
+      for(const tab of ['article9','emergency','referendum','reasons']){
+        await page.locator(`[data-lens-tab="${tab}"]`).scrollIntoViewIfNeeded();
+        const before=await page.evaluate(()=>({x:scrollX,y:scrollY}));
+        await page.locator(`[data-lens-tab="${tab}"]`).click();
+        await page.waitForTimeout(450);
+        const after=await page.evaluate(()=>({x:scrollX,y:scrollY}));
+        assert.deepEqual(after,before,`${width}px: ${tab}タブで画面位置が動きました`);
+        await page.locator(`[data-lens-panel="${tab}"]`).waitFor({state:'visible'});
+      }
       await context.close();
     }
-    console.log('OK: 375/820/1280/1600pxで入口・確認帯・SNS反応マップの幅が一致');
+    console.log('OK: 375/820/1280/1600pxで幅が一致し、4タブの切替で画面位置が動かない');
   } finally {
     await browser.close();
   }

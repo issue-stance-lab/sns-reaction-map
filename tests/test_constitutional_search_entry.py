@@ -41,9 +41,14 @@ class ConstitutionalSearchEntryTest(unittest.TestCase):
 
     def test_styles_and_behavior_are_loaded_once(self) -> None:
         self.assertEqual(len(self.soup.select('link[href="constitutional-search-entry.css?v=2"]')), 1)
-        self.assertEqual(len(self.soup.select('script[src="constitutional-search-entry.js?v=1"][defer]')), 1)
+        self.assertEqual(len(self.soup.select('script[src="constitutional-search-entry.js?v=2"][defer]')), 1)
         self.assertTrue((ROOT / "docs" / "constitutional-search-entry.css").is_file())
         self.assertTrue((ROOT / "docs" / "constitutional-search-entry.js").is_file())
+
+    def test_tab_switch_does_not_request_automatic_scrolling(self) -> None:
+        script = (ROOT / "docs" / "constitutional-search-entry.js").read_text(encoding="utf-8")
+        self.assertNotIn("scrollIntoView", script)
+        self.assertIn("focus({ preventScroll: true })", script)
 
     def test_entry_background_uses_the_same_centered_page_width(self) -> None:
         css = (ROOT / "docs" / "constitutional-search-entry.css").read_text(encoding="utf-8")
