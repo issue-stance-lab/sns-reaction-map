@@ -1,0 +1,96 @@
+<section id="bike-search-entry" aria-labelledby="bike-search-entry-title">
+  <div class="bike-search-entry-inner">
+    <header class="bike-search-entry-head">
+      <div>
+        <p class="bike-search-eyebrow">検索で多い疑問から</p>
+        <h2 id="bike-search-entry-title">まず、対象年齢と反則金を確認</h2>
+        <p class="bike-search-intro">年齢や違反名から制度を確かめたあと、SNSでは何が議論されているのかを山なみで見られます。</p>
+      </div>
+      <a class="bike-map-shortcut" href="#section">
+        <span class="bike-map-shortcut-mark" aria-hidden="true">↘</span>
+        <span><small>制度を確認したら</small><strong>意見の山なみへ</strong></span>
+      </a>
+    </header>
+
+    <ol class="bike-search-route" aria-label="ページの読み進め方">
+      <li aria-current="step">制度を知る</li><li>疑問を確かめる</li><li>意見の山なみを見る</li>
+    </ol>
+
+    <div class="bike-search-tools">
+      <section class="bike-search-card bike-age-card" aria-labelledby="bike-age-title">
+        <div class="bike-search-card-head">
+          <span class="bike-search-label">対象年齢</span>
+          <h3 id="bike-age-title">青切符の対象か、年齢を選ぶ</h3>
+        </div>
+        <p class="bike-search-hint">対象年齢と、歩道を通れる年齢は別のルールです。</p>
+        <div class="bike-age-options" role="group" aria-label="年齢を選択">
+          <button type="button" data-bse-age="under13" aria-pressed="false">13歳未満</button>
+          <button type="button" data-bse-age="13to15" aria-pressed="false">13〜15歳</button>
+          <button type="button" data-bse-age="16plus" aria-pressed="true">16歳以上</button>
+        </div>
+        <div class="bike-age-answer" aria-live="polite" aria-atomic="true">
+          <strong id="bike-age-answer-title">16歳以上は制度の対象です</strong>
+          <p id="bike-age-answer-body">一定の反則行為で検挙された場合に手続きの対象となります。通常は指導警告が基本です。免許の有無は対象年齢に関係しません。</p>
+        </div>
+        <p class="bike-search-source"><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html" target="_blank" rel="noopener noreferrer">警察庁｜自転車の新しい制度 ↗</a></p>
+      </section>
+
+      <section class="bike-search-card bike-fine-card" aria-labelledby="bike-fine-title">
+        <div class="bike-search-card-head">
+          <span class="bike-search-label">主な反則金</span>
+          <h3 id="bike-fine-title">違反名・金額から探す</h3>
+        </div>
+        <label class="bike-fine-search-label" for="bike-fine-search">違反名または金額</label>
+        <input id="bike-fine-search" type="search" placeholder="例：スマホ、一時停止、6,000円" autocomplete="off">
+        <div class="bike-fee-filters" role="group" aria-label="反則金で絞り込む">
+          <button type="button" data-bse-fee="all" aria-pressed="true">すべて</button>
+          <button type="button" data-bse-fee="3000" aria-pressed="false">3,000円</button>
+          <button type="button" data-bse-fee="5000" aria-pressed="false">5,000円</button>
+          <button type="button" data-bse-fee="6000" aria-pressed="false">6,000円</button>
+          <button type="button" data-bse-fee="7000" aria-pressed="false">7,000円</button>
+          <button type="button" data-bse-fee="12000" aria-pressed="false">12,000円</button>
+        </div>
+        <p class="bike-fine-count" id="bike-fine-count" aria-live="polite" aria-atomic="true">主な例 10件</p>
+        <div class="bike-fine-list" id="bike-fine-list">
+          <article class="bike-fine-item" data-bse-amount="12000" data-bse-search="スマートフォン 携帯電話 ながらスマホ 通話 注視 12000"><h4>携帯電話使用等（保持）</h4><strong>12,000円</strong><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html" target="_blank" rel="noopener noreferrer">警察庁の例 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="7000" data-bse-search="遮断踏切 しゃ断機 踏切 7000"><h4>遮断踏切立入り</h4><strong>7,000円</strong><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html" target="_blank" rel="noopener noreferrer">警察庁の例 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="6000" data-bse-search="信号無視 赤信号 6000"><h4>信号無視（赤色等）</h4><strong>6,000円</strong><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html" target="_blank" rel="noopener noreferrer">警察庁の例 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="6000" data-bse-search="横断歩行者 妨害 横断歩道 6000"><h4>横断歩行者等妨害</h4><strong>6,000円</strong><a href="https://www.tomin-anzen.metro.tokyo.lg.jp/kotsu/topics-k/blue_ticket_system" target="_blank" rel="noopener noreferrer">東京都の例 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="5000" data-bse-search="一時停止 とまれ 指定場所 5000"><h4>指定場所一時不停止</h4><strong>5,000円</strong><a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html" target="_blank" rel="noopener noreferrer">警察庁の例 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="5000" data-bse-search="無灯火 ライト 夜 5000"><h4>無灯火</h4><strong>5,000円</strong><a href="https://www.tomin-anzen.metro.tokyo.lg.jp/kotsu/topics-k/blue_ticket_system" target="_blank" rel="noopener noreferrer">東京都の例 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="5000" data-bse-search="合図不履行 手信号 ハンドサイン 5000"><h4>合図不履行（手信号など）</h4><strong>5,000円</strong><a href="https://laws.e-gov.go.jp/law/335CO0000000270" target="_blank" rel="noopener noreferrer">e-Gov法令検索 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="5000" data-bse-search="ブレーキ 制動装置 不良 5000"><h4>自転車制動装置不良</h4><strong>5,000円</strong><a href="https://laws.e-gov.go.jp/law/335CO0000000270" target="_blank" rel="noopener noreferrer">e-Gov法令検索 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="3000" data-bse-search="歩道 徐行 義務 徐行しない 3000"><h4>歩道徐行等義務違反</h4><strong>3,000円</strong><a href="https://laws.e-gov.go.jp/law/335CO0000000270" target="_blank" rel="noopener noreferrer">e-Gov法令検索 ↗</a></article>
+          <article class="bike-fine-item" data-bse-amount="3000" data-bse-search="二人乗り 2人乗り 並進 横並び 3000"><h4>並進禁止・乗車積載方法違反</h4><strong>3,000円</strong><a href="https://www.tomin-anzen.metro.tokyo.lg.jp/kotsu/topics-k/blue_ticket_system" target="_blank" rel="noopener noreferrer">東京都の例 ↗</a></article>
+        </div>
+        <p class="bike-fine-empty" id="bike-fine-empty" hidden><strong>近い違反例が見つかりません。</strong>別の呼び方を試すか、「すべて」に戻してください。</p>
+        <p class="bike-search-caveat">金額は主な例です。反則行為の全件一覧ではなく、違反があれば必ず即交付されるという意味でもありません。</p>
+      </section>
+    </div>
+
+    <section class="bike-search-faq" aria-labelledby="bike-faq-title">
+      <div class="bike-faq-heading">
+        <div><span class="bike-search-label">よく検索される疑問</span><h3 id="bike-faq-title">歩道・手信号・支払いの短答</h3></div>
+        <p>近い疑問を選ぶと、答えが開きます。</p>
+      </div>
+      <div class="bike-faq-topics" aria-label="疑問のトピック">
+        <button type="button" data-bse-open="bike-faq-sidewalk">歩道の例外</button>
+        <button type="button" data-bse-open="bike-faq-signal">手信号</button>
+        <button type="button" data-bse-open="bike-faq-payment">支払い方法</button>
+        <button type="button" data-bse-open="bike-faq-fraud">詐欺の見分け</button>
+      </div>
+      <div class="bike-faq-grid">
+        <details class="bike-faq" id="bike-faq-sidewalk"><summary>大人は歩道を走れる？</summary><p>歩道通行は原則できませんが、標識がある場合や、車道通行が危険な具体的状況などの例外があります。歩道では歩行者を優先し、徐行します。単に歩道を通行しただけなら、基本は指導警告です。 <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" target="_blank" rel="noopener noreferrer">警察庁の説明 ↗</a></p></details>
+        <details class="bike-faq" id="bike-faq-signal"><summary>手信号は2026年からの新ルール？</summary><p>合図をする決まり自体は以前からあり、2026年4月に始まったのは青切符制度の適用です。具体的な取締り運用は警察庁の案内で確認できます。 <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html" target="_blank" rel="noopener noreferrer">取締りの基本 ↗</a></p></details>
+        <details class="bike-faq" id="bike-faq-payment"><summary>反則金はどこで支払う？</summary><p>交付される納付書で、銀行や郵便局などの金融機関で支払います。警察官が取締りの現場で現金を受け取ることはありません。 <a href="https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html" target="_blank" rel="noopener noreferrer">警察庁の説明 ↗</a></p></details>
+        <details class="bike-faq" id="bike-faq-fraud"><summary>現場で現金を求められたら？</summary><p>その場では支払わず、警察へ通報してください。青切符制度を悪用した詐欺への注意喚起が出ています。 <a href="https://www.npa.go.jp/bureau/traffic/shidou/fraud-alert.html" target="_blank" rel="noopener noreferrer">警察庁の注意喚起 ↗</a></p></details>
+      </div>
+    </section>
+
+    <div class="bike-search-to-map">
+      <span class="bike-search-road" aria-hidden="true"></span>
+      <p>制度の確認から、意見の分かれ方へ</p>
+      <a href="#section">山なみマップでSNS反応を見る <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+</section>

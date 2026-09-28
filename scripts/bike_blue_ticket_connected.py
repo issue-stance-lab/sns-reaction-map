@@ -21,6 +21,11 @@ BRIDGE_END = "/* BIKE_CONNECTED_BRIDGE_END */"
 CSS_HREF = "bike-blue-ticket-connected.css?v=1"
 JS_SRC = "bike-blue-ticket-connected.js?v=1"
 PAGE_JS_SRC = "bike-blue-ticket-connected-page.js?v=1"
+SEARCH_ENTRY_START = "<!-- BIKE_SEARCH_ENTRY_START -->"
+SEARCH_ENTRY_END = "<!-- BIKE_SEARCH_ENTRY_END -->"
+SEARCH_ENTRY_CSS = "bike-blue-ticket-search-entry.css?v=2"
+SEARCH_ENTRY_JS = "bike-blue-ticket-search-entry.js?v=1"
+PROGRESS_LABEL = "探ったところ"
 DATA_PATTERN = re.compile(r'<script id="planet-data">window\.PLANET_DATA=(.*?);</script>', re.S)
 
 
@@ -113,6 +118,32 @@ def _bridge(source: str) -> str:
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
 
 
+def _search_entry(source: str) -> str:
+    """題名直下の検索入口を、山なみ更新時にも同じ位置へ保つ。"""
+    template = (ROOT / "scripts/templates/bike_blue_ticket_search_entry.html").read_text(encoding="utf-8").strip()
+    block = SEARCH_ENTRY_START + "\n" + template + "\n" + SEARCH_ENTRY_END
+    if SEARCH_ENTRY_START in source or SEARCH_ENTRY_END in source:
+        if source.count(SEARCH_ENTRY_START) != 1 or source.count(SEARCH_ENTRY_END) != 1:
+            raise ValueError("検索入口: 目印が1組ではありません")
+        source = re.sub(re.escape(SEARCH_ENTRY_START) + r".*?" + re.escape(SEARCH_ENTRY_END), "", source, flags=re.S)
+    anchor = "  <main>\n"
+    if source.count(anchor) != 1:
+        raise ValueError("検索入口: ヒーロー直後のmain開始位置を一意に見つけられません")
+    source = re.sub(r"(  </svg>\n)[ \t]*\n(?=  <main>)", r"\1", source, count=1)
+    source = re.sub(re.escape(anchor) + r"[ \t]*\n", anchor, source, count=1)
+    source = source.replace(anchor, anchor + block + "\n", 1)
+    return source
+
+
+def _progress_label(source: str) -> str:
+    """操作への参加状況を表す進捗ラベルを、再生成後も維持する。"""
+    pattern = re.compile(r'(<div id="progress">\s*<span>)[^<]*(</span>)')
+    source, count = pattern.subn(r"\1" + PROGRESS_LABEL + r"\2", source, count=1)
+    if count != 1:
+        raise ValueError("進捗表示: ラベル位置を一意に見つけられません")
+    return source
+
+
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """初回はactivate=True、以後は候補の目印があるときだけ同じHTMLを再生成する。"""
     if topic != TOPIC or not (activate or enabled(source)):
@@ -124,6 +155,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
+    source = _search_entry(source)
+    source = _progress_label(source)
     content = render_templates(data, source, index)
     if CONTENT_START in source:
         source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), content, source, flags=re.S)
@@ -137,6 +170,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         '<script id="bike-connected-data" type="application/json">' + payload + "</script>\n"
         f'<script src="{JS_SRC}" defer></script>\n'
         f'<script src="{PAGE_JS_SRC}" defer></script>\n'
+        f'<link rel="stylesheet" href="{SEARCH_ENTRY_CSS}">\n'
+        f'<script src="{SEARCH_ENTRY_JS}" defer></script>\n'
         + END
     )
     if START in source:
@@ -177,6 +212,18 @@ def validate(source: str) -> list[str]:
         problems.append("中心部分のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("ページ配置のJSが1つではありません")
+    if len(soup.select(f'link[href="{SEARCH_ENTRY_CSS}"]')) != 1:
+        problems.append("検索入口のCSSが1つではありません")
+    if len(soup.select(f'script[src="{SEARCH_ENTRY_JS}"][defer]')) != 1:
+        problems.append("検索入口のJSが1つではありません")
+    entry = soup.select("#bike-search-entry")
+    if len(entry) != 1 or entry[0].find_parent("main") is None:
+        problems.append("検索入口がmainの先頭に1つありません")
+    if len(soup.select("#section")) != 1 or not soup.select_one("#bike-search-entry a[href='#section']"):
+        problems.append("検索入口から山なみへの移動先がありません")
+    progress_label = soup.select_one("#progress > span")
+    if progress_label is None or progress_label.get_text(strip=True) != PROGRESS_LABEL:
+        problems.append(f"進捗ラベルが『{PROGRESS_LABEL}』ではありません")
     stance_buttons = {button.get("data-i") for button in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if stance_buttons != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")
