@@ -25,6 +25,7 @@ from .collect import ROOT, backup_root
 import sys as _sys
 _sys.path.insert(0, str(ROOT / "scripts"))
 from verify_reread_headroom import headroom_findings  # noqa: E402
+from verify_claim_verdicts import coverage_findings  # noqa: E402
 
 # 収集した非公開データの保管先。DATA_REFRESH.md と同じ場所を指す
 BACKUP_DEST = "/Volumes/HD-LE-B/issue-stance-private-backups"
@@ -622,6 +623,15 @@ def anomalies(data: dict) -> list[dict]:
         found.extend(headroom_findings())
     except Exception as exc:  # 早期警告の機能自体で管理画面全体を止めない
         found.append({"tone": "warn", "title": "編集再読の残量チェックが実行できませんでした",
+                     "detail": str(exc)})
+
+    # クレーム監査（主張の事実確認）の照合確認日が、公開データの期間末から
+    # 30日以上遅れているテーマ（課題99、オーナー決定2026-09-28）。
+    # 30日未満は verify_claim_verdicts.py の警告のみで経過観察とし、ここには出さない。
+    try:
+        found.extend(coverage_findings())
+    except Exception as exc:  # 早期警告の機能自体で管理画面全体を止めない
+        found.append({"tone": "warn", "title": "クレーム監査の遅れチェックが実行できませんでした",
                      "detail": str(exc)})
 
     order = {"danger": 0, "warn": 1, "ok": 2}
