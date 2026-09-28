@@ -230,6 +230,105 @@
   mount();
   if (location.hash === '#quiz') showQuestion(0);
 
+  // ---------- 表紙直下の検索入口（課題96） ----------
+  // 検索疑問は一次資料の要点へ、最後のリンクは実データの論点選択へ接続する。
+  var searchEntry = document.getElementById('aic-search-entry');
+  if (searchEntry) {
+    var searchTopics = {
+      learning: {
+        mapIssue: 'ai-copyright-learning-data',
+        title: '📚 学習データ・無断利用', kicker: '詳しい論点 01 / 学習・データ',
+        questions: [
+          {id:'illegal', text:'無断学習は違法？', kind:'fact', label:'資料で確認できること', title:'「無断」だけで、違法かどうかは決まりません。', body:'著作権法30条の4の条件に当てはまるか、利用の目的や方法などを分けて確認します。文化庁は2024年3月公表の考え方で、その時点では関連する判例・裁判例の蓄積がないとして整理しています。', source:'https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html', sourceText:'文化庁の資料を確認 ↗'},
+          {id:'article30', text:'30条の4とは？', kind:'fact', label:'制度の説明', title:'「享受を目的としない利用」などの権利制限規定です。', body:'情報解析など一定の目的では、必要な範囲で権利者の許諾なく利用できる場合があります。AI学習を一律に許可する規定ではなく、目的・方法・ただし書などの確認が必要です。', source:'https://laws.e-gov.go.jp/law/345AC0000000048', sourceText:'e-Govで条文を確認 ↗'},
+          {id:'disclosure', text:'学習データは開示される？', kind:'case', label:'制度の最新状況', title:'内閣府が2026年8月に非拘束のコードを公表しました。', body:'コードを受け入れた事業者が対象で、学習データ等の概要開示や、条件を満たす照会への回答を求める枠組みです。受入れ事業者の届出は2026年10月26日開始予定です。このコード自体が、法律による全データの一律公開義務を定めるものではありません。', source:'https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html', sourceText:'内閣府のコードを確認 ↗'}
+        ]
+      },
+      generation: {
+        mapIssue: 'ai-copyright-generated-work-rights',
+        title: '✨ AI生成物の権利・創作性', kicker: '詳しい論点 02 / 生成物・権利',
+        questions: [
+          {id:'has-rights', text:'AI生成物に著作権はある？', kind:'case', label:'個別判断が残る点', title:'AIを使った事実だけでは、一律に決まりません。', body:'人の創作意図や、表現への創作的な関わり方などが論点です。文化庁の資料も、生成AIと著作権に関する考え方を示しながら、具体的な作品ごとの判断が必要であることを前提としています。', source:'https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html', sourceText:'文化庁の考え方を確認 ↗'},
+          {id:'commercial', text:'AI画像を商用利用できる？', kind:'case', label:'確認すること', title:'著作権だけでなく、複数の条件を確認します。', body:'既存作品との類似性・依拠性のほか、使ったサービスの利用規約や、商標・肖像など他の権利も確認対象です。サービスや生成物ごとの条件を確認してください。', source:'https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html', sourceText:'文化庁の資料を確認 ↗'}
+        ]
+      },
+      creator: {
+        mapIssue: 'ai-copyright-creator-rights',
+        title: '🎨 クリエイター保護・権利', kicker: '詳しい論点 03 / 作者・権利',
+        questions: [
+          {id:'style', text:'作風が似ると著作権侵害？', kind:'case', label:'個別判断が残る点', title:'作風そのものと、作品の具体的な表現は分けて考えます。', body:'文化庁の考え方では、作風が共通するだけでは直ちに侵害とはならず、生成物に元作品の創作的表現が感じ取れるかなどを個別に検討します。', source:'https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/hoseido/r05_07/pdf/94021801_03.pdf', sourceText:'文化庁の資料を確認 ↗'},
+          {id:'opt-out', text:'自分の作品を学習から守れる？', kind:'case', label:'確認できる対策と限界', title:'拒否の表示だけで、すべての収集を止められるとは限りません。', body:'利用規約への明示、技術的な設定、作品の転載経路などを分けて確認します。使える手段や限界は、サービスと収集方法によって異なります。', source:'https://www.bunka.go.jp/seisaku/chosakuken/pdf/94097701_01.pdf', sourceText:'文化庁のチェックリストを確認 ↗'}
+        ]
+      }
+    };
+    var searchTabs = Array.prototype.slice.call(searchEntry.querySelectorAll('[data-aic-search-topic]'));
+    var searchQuestionList = searchEntry.querySelector('#aic-search-question-list');
+    var searchAnswer = searchEntry.querySelector('#aic-search-answer');
+    var activeSearchTopic = null;
+    function showSearchQuestion(question) {
+      searchQuestionList.querySelectorAll('[data-aic-search-question]').forEach(function (button) {
+        button.setAttribute('aria-pressed', String(button.dataset.aicSearchQuestion === question.id));
+      });
+      searchAnswer.dataset.kind = question.kind;
+      searchEntry.querySelector('#aic-search-answer-label').textContent = question.label;
+      searchEntry.querySelector('#aic-search-answer-title').textContent = question.title;
+      searchEntry.querySelector('#aic-search-answer-text').textContent = question.body;
+      var sourceLink = searchEntry.querySelector('#aic-search-source');
+      sourceLink.href = question.source;
+      sourceLink.textContent = question.sourceText;
+    }
+    function selectSearchTopic(key, focus) {
+      var topic = searchTopics[key];
+      if (!topic) return;
+      activeSearchTopic = key;
+      searchTabs.forEach(function (tab, index) {
+        var selected = tab.dataset.aicSearchTopic === key;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        if (selected) searchEntry.querySelector('#aic-search-panel').setAttribute('aria-labelledby', tab.id);
+      });
+      searchEntry.querySelector('#aic-search-kicker').textContent = topic.kicker;
+      searchEntry.querySelector('#aic-search-issue-title').textContent = topic.title;
+      searchQuestionList.replaceChildren.apply(searchQuestionList, topic.questions.map(function (question, index) {
+        var button = document.createElement('button');
+        button.type = 'button'; button.dataset.aicSearchQuestion = question.id;
+        button.setAttribute('aria-pressed', String(index === 0)); button.textContent = question.text;
+        button.addEventListener('click', function () { showSearchQuestion(question); });
+        return button;
+      }));
+      showSearchQuestion(topic.questions[0]);
+      if (focus) searchTabs.filter(function (tab) { return tab.dataset.aicSearchTopic === key; })[0].focus();
+    }
+    searchTabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function () { selectSearchTopic(tab.dataset.aicSearchTopic, false); });
+      tab.addEventListener('keydown', function (event) {
+        var next = index;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % searchTabs.length;
+        else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index + searchTabs.length - 1) % searchTabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = searchTabs.length - 1;
+        else return;
+        event.preventDefault();
+        selectSearchTopic(searchTabs[next].dataset.aicSearchTopic, true);
+      });
+    });
+    searchEntry.querySelectorAll('[data-aic-search-question]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var topic = searchTopics[activeSearchTopic || 'learning'];
+        var question = topic.questions.find(function (item) { return item.id === button.dataset.aicSearchQuestion; });
+        if (question) showSearchQuestion(question);
+      });
+    });
+    searchEntry.querySelector('[data-aic-search-map]').addEventListener('click', function (event) {
+      event.preventDefault();
+      var topic = searchTopics[activeSearchTopic || 'learning'];
+      if (map && topic) map.selectIssue(topic.mapIssue);
+      var target = document.getElementById('planet-block');
+      if (target) target.scrollIntoView({ block:'start', behavior:reduce() ? 'auto' : 'smooth' });
+    });
+    selectSearchTopic('learning', false);
+  }
+
   // ---------- 授業印刷は節のみ、通常印刷は全本文。閉じた詳細も印刷中だけ展開する。 ----------
   document.querySelectorAll('#fallback img').forEach(function (img) { img.loading = 'eager'; });
   var fallbackHeading = document.querySelector('#fallback > h3');
