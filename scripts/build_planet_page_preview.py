@@ -352,6 +352,56 @@ BG_CSS = """
 }
 """
 
+LOCAL_CHECK_CSS = """<style>
+#bukatsu-check .local-check-tool{margin:18px 0 26px;border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;background:#fff;box-shadow:0 10px 26px rgba(15,26,61,.07)}
+#bukatsu-check .local-check-grid{display:grid;grid-template-columns:repeat(3,1fr);background:#fff}
+#bukatsu-check .local-check-choice{min-height:72px;padding:13px 15px;border:0;border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:900;
+  text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px}
+#bukatsu-check .local-check-choice:nth-child(3n){border-right:0}
+#bukatsu-check .local-check-choice:nth-child(n+4){border-bottom:0}
+#bukatsu-check .local-check-choice::before{content:"?";display:grid;place-items:center;flex:0 0 26px;height:26px;
+  border:2px solid #9AA9BC;border-radius:50%;color:#667085;font-size:13px}
+#bukatsu-check .local-check-choice:hover{background:#F7FAFD}
+#bukatsu-check .local-check-choice:focus-visible{position:relative;z-index:2;outline:3px solid #C9971A;outline-offset:-3px}
+#bukatsu-check .local-check-choice[aria-pressed=true]{background:#FFF8E5;color:#0F1A3D}
+#bukatsu-check .local-check-choice[aria-pressed=true]::before{border-color:#C9971A;color:#8A6512}
+#bukatsu-check .local-check-choice.is-done{background:#E9F7F1}
+#bukatsu-check .local-check-choice.is-done::before{content:"✓";border-color:#18835B;background:#18835B;color:#fff}
+#bukatsu-check .local-check-choice.is-pending::before{content:"!";border-color:#C9971A;background:#FFF3CC;color:#7A5710}
+#bukatsu-check .local-check-work{display:grid;grid-template-columns:190px minmax(0,1fr);border-top:1px solid var(--line)}
+#bukatsu-check .local-check-progress{padding:22px;background:#0F1A3D;color:#fff}
+#bukatsu-check .local-check-progress b{display:block;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+#bukatsu-check .local-check-progress span{display:block;margin-top:8px;color:#C9D5E8;font-size:11px;line-height:1.6}
+#bukatsu-check .local-check-progress-track{height:6px;margin-top:16px;border-radius:99px;overflow:hidden;background:#394A68}
+#bukatsu-check .local-check-progress-track i{display:block;width:0;height:100%;background:#FFD86C;transition:width .25s ease}
+#bukatsu-check .local-check-question{padding:21px 24px}
+#bukatsu-check .local-check-question>small{color:var(--accent);font-size:10.5px;font-weight:900;letter-spacing:.08em}
+#bukatsu-check .local-check-question h3{margin:4px 0 6px;padding:0;border:0;font-size:19px;line-height:1.55}
+#bukatsu-check .local-check-help{margin:0!important;color:var(--muted);font-size:12px!important;line-height:1.75!important}
+#bukatsu-check .local-check-question-text{margin:14px 0!important;padding:12px 14px;border-left:4px solid var(--accent);
+  background:#F2F6FD;color:#172033;font-size:13px!important;font-weight:700;line-height:1.75!important}
+#bukatsu-check .local-check-actions{display:flex;flex-wrap:wrap;gap:8px}
+#bukatsu-check .local-check-actions button{min-height:44px;padding:8px 13px;border:1px solid var(--line);border-radius:8px;
+  background:#fff;color:#172033;font:inherit;font-size:12px;font-weight:900;cursor:pointer}
+#bukatsu-check .local-check-actions button:hover{border-color:var(--accent)}
+#bukatsu-check .local-check-actions button:focus-visible{outline:3px solid #C9971A;outline-offset:2px}
+#bukatsu-check .local-check-actions .is-primary{border-color:#0F1A3D;background:#0F1A3D;color:#fff}
+#bukatsu-check .local-check-actions .is-done{border-color:#18835B;background:#18835B;color:#fff}
+#bukatsu-check .local-check-feedback{min-height:1.7em;margin:10px 0 0!important;color:var(--muted);font-size:11px!important;line-height:1.7!important}
+#bukatsu-check .local-check-evidence-title{margin:26px 0 10px;font-size:15px;font-weight:900}
+@media (max-width:560px){
+  #bukatsu-check .local-check-grid{grid-template-columns:1fr}
+  #bukatsu-check .local-check-choice,#bukatsu-check .local-check-choice:nth-child(3n),#bukatsu-check .local-check-choice:nth-child(n+4){border-right:0;border-bottom:1px solid var(--line)}
+  #bukatsu-check .local-check-choice:last-child{border-bottom:0}
+  #bukatsu-check .local-check-work{grid-template-columns:1fr}
+  #bukatsu-check .local-check-progress{padding:18px}
+  #bukatsu-check .local-check-question{padding:19px 16px}
+}
+@media (prefers-reduced-motion:reduce){#bukatsu-check .local-check-progress-track i{transition:none}}
+</style>"""
+
 
 VOTE_MSG_CSS = """
 #vote-msg{margin:14px 0 0;padding:12px 15px;border-radius:10px;font-size:14px;line-height:1.8;
@@ -476,6 +526,35 @@ def build_background(topic: str) -> str:
                 f'<div class="panel-title"><h2 id="ck-title">{esc(ck["title"])}</h2>'
                 f'<span>{esc(ck["subtitle"])}</span></div>',
                 f'<p>{esc(ck["lead"])}</p>']
+        questions = ck.get("question_items", [])
+        if questions:
+            first = questions[0]
+            out += [
+                LOCAL_CHECK_CSS,
+                '<div class="local-check-tool" aria-labelledby="local-check-tool-title">',
+                '<div class="local-check-grid" role="group" aria-label="地域で確認する項目">',
+            ]
+            for index, question in enumerate(questions):
+                out.append(
+                    f'<button type="button" class="local-check-choice" data-local-check="{esc(question["id"])}" '
+                    f'aria-pressed="{str(index == 0).lower()}">{esc(question["label"])}</button>'
+                )
+            out += [
+                '</div><div class="local-check-work" aria-live="polite">',
+                '<div class="local-check-progress"><b><span data-local-done>0</span> / '
+                f'{len(questions)}</b><span>地域で確認できた項目</span>'
+                '<div class="local-check-progress-track" aria-hidden="true"><i data-local-progress></i></div></div>',
+                '<div class="local-check-question"><small id="local-check-tool-title">選んだ項目を、そのまま質問に</small>',
+                f'<h3 data-local-title>{esc(first["title"])}</h3>',
+                f'<p class="local-check-help" data-local-help>{esc(first["help"])}</p>',
+                f'<p class="local-check-question-text" data-local-question>{esc(first["question"])}</p>',
+                '<div class="local-check-actions"><button type="button" class="is-done" data-local-mark="done">確認できた</button>'
+                '<button type="button" data-local-mark="pending">まだ分からない</button>'
+                '<button type="button" class="is-primary" data-local-copy>質問文をコピー</button></div>',
+                '<p class="local-check-feedback" data-local-feedback>学校や自治体のお知らせを見ながら、確認状況を整理できます。内容は端末に保存しません。</p>',
+                '</div></div></div>',
+                '<h3 class="local-check-evidence-title">一次資料で確認できる全国共通の前提</h3>',
+            ]
         for x in ck["items"]:
             links = "／".join(
                 f'<a href="{esc(t["url"])}" target="_blank" rel="noopener">{esc(t["name"])}</a>'
@@ -485,8 +564,63 @@ def build_background(topic: str) -> str:
                 f'<span>{esc(x["ask"])}</span></div>'
                 f'<div class="v">{esc(x["found"])}'
                 f'<span class="src">出典: {links}</span></div></div>')
+        caveat = f'<br>{esc(ck["caveat"])}</p>' if ck.get("caveat") else "</p>"
         out.append(f'<p class="ck-note"><b>このページで未確認のこと</b><br>{esc(ck["unknown"])}'
-                   f'<br>{esc(ck["caveat"])}</p>')
+                   + caveat)
+        if questions:
+            question_json = json.dumps(questions, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+            check_script = """<script>
+(()=>{
+  const root=document.getElementById('bukatsu-check');
+  if(!root)return;
+  const questions=__QUESTION_DATA__;
+  const byId=Object.fromEntries(questions.map(item=>[item.id,item]));
+  const buttons=[...root.querySelectorAll('[data-local-check]')];
+  const title=root.querySelector('[data-local-title]');
+  const help=root.querySelector('[data-local-help]');
+  const question=root.querySelector('[data-local-question]');
+  const feedback=root.querySelector('[data-local-feedback]');
+  const doneCount=root.querySelector('[data-local-done]');
+  const progress=root.querySelector('[data-local-progress]');
+  let active=questions[0].id;
+  const measure=(name,params)=>{if(typeof window.gtag==='function')window.gtag('event',name,params);};
+  const show=id=>{
+    active=id;
+    const item=byId[id];
+    title.textContent=item.title;help.textContent=item.help;question.textContent=item.question;
+    buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.localCheck===id)));
+    measure('bukatsu_local_check_select',{item:id});
+  };
+  const updateProgress=()=>{
+    const count=buttons.filter(button=>button.classList.contains('is-done')).length;
+    doneCount.textContent=String(count);progress.style.width=`${count/questions.length*100}%`;
+  };
+  const setState=state=>{
+    const button=buttons.find(candidate=>candidate.dataset.localCheck===active);
+    button.classList.toggle('is-done',state==='done');
+    button.classList.toggle('is-pending',state==='pending');
+    updateProgress();
+    feedback.textContent=state==='done'
+      ? `「${button.textContent.trim()}」を確認済みにしました。次の項目も選べます。`
+      : '未確認として印を付けました。質問文をコピーして、学校や自治体へ確認できます。';
+    measure('bukatsu_local_check_status',{item:active,status:state});
+  };
+  const copyText=async text=>{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return;}
+    const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');
+    area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();
+    const copied=document.execCommand('copy');area.remove();if(!copied)throw new Error('copy failed');
+  };
+  buttons.forEach(button=>button.addEventListener('click',()=>show(button.dataset.localCheck)));
+  root.querySelectorAll('[data-local-mark]').forEach(button=>button.addEventListener('click',()=>setState(button.dataset.localMark)));
+  root.querySelector('[data-local-copy]').addEventListener('click',async()=>{
+    try{await copyText(question.textContent);feedback.textContent='質問文をコピーしました。メールや問い合わせフォームへ貼り付けられます。';measure('bukatsu_question_copy',{item:active});}
+    catch(error){feedback.textContent='コピーできませんでした。質問文を選択してコピーしてください。';}
+  });
+  updateProgress();
+})();
+</script>""".replace("__QUESTION_DATA__", question_json)
+            out.append(check_script)
         out.append("</section>")
     return "\n".join(out)
 
