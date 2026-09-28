@@ -56,6 +56,27 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36404234201"
       - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
 
+  - id: approval-20260928-002
+    department: growth-marketing
+    action: website_publication
+    summary: "憲法改正ページの4つの論点タブを、画面位置を動かさずに切り替えられるよう修正して公開する"
+    reason: "タブ選択のたびにページが自動スクロールし、読んでいる位置が変わっていたため"
+    risks:
+      - "表示内容の切替とキーボード操作は維持し、自動スクロールだけを停止する"
+      - "375・820・1280・1600pxで4タブの切替後もスクロール位置が変わらないことを確認済み"
+    recommendation: approve
+    evidence:
+      - "tasks/task-94.md"
+      - "tests/test_constitutional_layout_width_browser.cjs"
+      - "tests/test_constitutional_search_entry.py"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: "修正内容と4画面幅の検査結果を提示後、オーナーが本対話で『公開して』と明示的に承認。"
+    completed_at: null
+    result_note: null
+    result_evidence: []
+
   - id: approval-20260927-004
     department: growth-marketing
     action: website_publication
