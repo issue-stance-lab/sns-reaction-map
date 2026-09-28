@@ -180,3 +180,67 @@
   body.ai-copyright-connected.aic-print-classroom > :not(main) { display:none !important; }
   body.ai-copyright-connected.aic-print-classroom .classroom-section { display:block !important; color:#172033; }
 }
+
+/* 検索の入口（課題100）。元の表紙の直下に置き、検索疑問→一次資料→既存マップを一続きにする。 */
+.ai-copyright-connected #aic-search-entry { width:min(1180px,100%); box-sizing:border-box; margin:16px auto 28px; padding:20px 24px 14px; border:1px solid var(--aic-rule); border-radius:12px; background:#fff; box-shadow:var(--topic-shadow-sm,0 5px 18px rgba(18,53,99,.07)); color:#172033; }
+.ai-copyright-connected .aic-search-intro { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; padding:0 0 14px; }
+.ai-copyright-connected .aic-search-eyebrow { margin:0 0 3px; color:#08786f; font:800 10px/1.4 ui-monospace,"SFMono-Regular",Menlo,monospace; letter-spacing:.08em; }
+.ai-copyright-connected .aic-search-intro h2 { margin:0; color:#13283d; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:clamp(20px,2.3vw,25px); line-height:1.35; }
+.ai-copyright-connected .aic-search-intro > p { margin:0; color:#53647d; font-size:12px; line-height:1.75; }
+.ai-copyright-connected .aic-search-card { border:1px solid #d3dee5; background:#fff; }
+.ai-copyright-connected .aic-search-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; padding:10px 12px; border-bottom:1px solid var(--aic-rule); background:#f5f8fa; }
+.ai-copyright-connected .aic-search-tabs button { min-width:0; min-height:42px; display:flex; align-items:center; gap:8px; padding:7px 11px; border:1px solid #cad6df; border-radius:7px; color:#334b5d; background:#fff; text-align:left; cursor:pointer; font:inherit; font-size:12px; line-height:1.45; transition:background .16s,border-color .16s,transform .16s; }
+.ai-copyright-connected .aic-search-tabs button:hover { transform:translateY(-1px); border-color:#08786f; }
+.ai-copyright-connected .aic-search-tabs button[aria-selected="true"] { border-color:#08786f; color:#13283d; background:#e9f4f1; box-shadow:inset 0 -3px #08786f; }
+.ai-copyright-connected .aic-search-tabs button > span { flex:none; font-size:17px; }
+.ai-copyright-connected .aic-search-tabs button:focus-visible,
+.ai-copyright-connected .aic-search-question-list button:focus-visible,
+.ai-copyright-connected .aic-search-answer-links a:focus-visible { outline:3px solid #ef9d22; outline-offset:2px; }
+.ai-copyright-connected #aic-search-panel:focus-visible { outline:3px solid #ef9d22; outline-offset:3px; }
+.ai-copyright-connected .aic-search-issue { padding:12px 18px 10px; border-bottom:1px solid var(--aic-rule); background:linear-gradient(105deg,#fbfcfd,#f1f6f5); }
+.ai-copyright-connected .aic-search-issue p { margin:0 0 2px; color:#08786f; font:800 9px/1.5 ui-monospace,"SFMono-Regular",Menlo,monospace; letter-spacing:.06em; }
+.ai-copyright-connected .aic-search-issue h3 { margin:0; color:#13283d; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:clamp(19px,2.2vw,24px); line-height:1.35; }
+.ai-copyright-connected .aic-search-questions { padding:12px 18px 14px; }
+.ai-copyright-connected .aic-search-question-head { display:flex; align-items:baseline; justify-content:space-between; gap:14px; margin-bottom:8px; }
+.ai-copyright-connected .aic-search-question-head h4 { margin:0; color:#13283d; font-size:13px; font-weight:800; }
+.ai-copyright-connected .aic-search-question-head p { margin:0; color:#667085; font-size:10px; }
+.ai-copyright-connected .aic-search-question-list { display:flex; flex-wrap:wrap; gap:6px; }
+.ai-copyright-connected .aic-search-question-list button { min-height:38px; padding:7px 11px; border:1px solid #cad6df; border-radius:5px; color:#334b5d; background:#f8fafb; text-align:left; cursor:pointer; font:inherit; font-size:11.5px; font-weight:700; line-height:1.45; }
+.ai-copyright-connected .aic-search-question-list button:hover { border-color:#2258de; }
+.ai-copyright-connected .aic-search-question-list button[aria-pressed="true"] { border-color:#2258de; color:#2258de; background:#eaf0ff; box-shadow:inset 0 0 0 1px #2258de; }
+.ai-copyright-connected .aic-search-answer { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.45fr); gap:18px; margin-top:10px; padding:12px 14px; border-left:4px solid #2258de; background:#f4f7ff; }
+.ai-copyright-connected .aic-search-answer[data-kind="case"] { border-color:#a66a00; background:#fcf8ee; }
+.ai-copyright-connected .aic-search-answer-main > p:first-child { margin:0 0 3px; color:#2258de; font-size:9px; font-weight:800; letter-spacing:.04em; }
+.ai-copyright-connected .aic-search-answer[data-kind="case"] .aic-search-answer-main > p:first-child { color:#8c5b00; }
+.ai-copyright-connected .aic-search-answer-main h4 { margin:0 0 3px; color:#13283d; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:16px; line-height:1.4; }
+.ai-copyright-connected .aic-search-answer-main > p:last-child { margin:0; color:#334b5d; font-size:11.5px; line-height:1.7; }
+.ai-copyright-connected .aic-search-answer-links { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:5px; padding-left:14px; border-left:1px dashed #b9c9ce; }
+.ai-copyright-connected .aic-search-answer-links a { font-size:11px; font-weight:800; line-height:1.5; }
+.ai-copyright-connected .aic-search-answer-links p { margin:1px 0 0; color:#667085; font-size:9.5px; line-height:1.6; }
+.ai-copyright-connected .aic-search-foot { margin:8px 0 0; color:#667085; font-size:10px; line-height:1.6; text-align:right; }
+@media (max-width:760px) {
+  .ai-copyright-connected #aic-search-entry { margin:12px auto 22px; padding:15px 14px 11px; border-radius:9px; }
+  .ai-copyright-connected .aic-search-intro { display:block; padding-bottom:10px; }
+  .ai-copyright-connected .aic-search-intro > p { margin-top:5px; font-size:11px; }
+  .ai-copyright-connected .aic-search-tabs { grid-template-columns:1fr; gap:5px; padding:8px; }
+  .ai-copyright-connected .aic-search-tabs button { min-height:38px; padding:6px 9px; font-size:11px; }
+  .ai-copyright-connected .aic-search-tabs button > span { font-size:15px; }
+  .ai-copyright-connected .aic-search-issue { padding:10px 12px 8px; }
+  .ai-copyright-connected .aic-search-questions { padding:10px 12px 12px; }
+  .ai-copyright-connected .aic-search-question-head { display:block; margin-bottom:7px; }
+  .ai-copyright-connected .aic-search-question-head p { margin-top:2px; }
+  .ai-copyright-connected .aic-search-question-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
+  .ai-copyright-connected .aic-search-question-list button { min-height:42px; padding:6px 8px; font-size:10.5px; }
+  .ai-copyright-connected .aic-search-answer { grid-template-columns:1fr; gap:8px; padding:10px 11px; }
+  .ai-copyright-connected .aic-search-answer-main h4 { font-size:15px; }
+  .ai-copyright-connected .aic-search-answer-links { flex-direction:row; flex-wrap:wrap; gap:5px 12px; padding:8px 0 0; border-top:1px dashed #b9c9ce; border-left:0; }
+  .ai-copyright-connected .aic-search-answer-links p { flex:1 0 100%; }
+  .ai-copyright-connected .aic-search-foot { text-align:left; font-size:9px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .ai-copyright-connected .aic-search-tabs button { transition:none; }
+}
+@media print {
+  .ai-copyright-connected #aic-search-entry { box-shadow:none; break-inside:avoid; }
+  .ai-copyright-connected .aic-search-tabs button:not([aria-selected="true"]) { display:none; }
+}

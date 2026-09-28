@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-28"
+updated_at: "2026-09-29"
 
 rules:
   required_for:
@@ -79,7 +79,6 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36418189205"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36418189287"
       - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
-
   - id: approval-20260927-004
     department: growth-marketing
     action: website_publication
@@ -1139,6 +1138,27 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36423206158"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36423206134"
       - "https://sns-reaction-map.jp/koshitsu-tenpakai-reaction-map.html"
+
+  - id: approval-20260928-004
+    department: growth-marketing
+    action: website_publication
+    summary: "課題100の生成AIと著作権ページに検索入口と、操作数に合った進捗表示を反映して公開する"
+    reason: "検索意図に沿う疑問選択から一次資料・既存反応マップへ同一ページ内で案内し、誤解を招く閲覧進捗表現を修正するため"
+    risks:
+      - "進捗はスクロールや閲覧時間ではなく、初回操作済み地点を数える。保存は対象テーマのlocalStorage内で、サーバー送信しない"
+      - "内閣府のプリンシプル・コードは非拘束で、受入れ事業者向けであり、法律上の一律開示義務とは区別する"
+      - "375px表示・キーボード・外部リンクの実ブラウザー確認は本番反映後に実施し、結果を品質記録へ追記する"
+      - "検索流入の効果判定には公開後30日間のSearch Console観察が必要"
+    recommendation: approve
+    evidence:
+      - "tasks/task-100.md"
+      - "quality/reviews/2026-09-28-website-task100-ai-copyright.md"
+      - "docs/ai-copyright-reaction-map.html（sha256 1d617ae6b819f9922b270291d8fae290be8816eaf6fdcb29c705a92e934306bf）"
+      - "docs/ai-copyright-connected-page.js（sha256 e7d4e045a6fe7435942dcd823729d39c1ded9c97cba150838de480f46c144981）"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: "オーナーが本対話で『公開して』と明示的に承認。独立監査の実ブラウザー確認は本番反映後に行い、品質記録を更新する。"
 
   - id: approval-20260927-009
     department: growth-marketing
