@@ -1,10 +1,13 @@
 # 課題99: 「クレーム監査（主張の事実確認）」の照合遅れ警告を運用に組み込む
 
-**状態**: 未着手（2026-09-26発見・オーナー指示で登録）
+**状態**: 進行中。2026-09-28、オーナーが「30日以上遅れたら読み直す」基準を決定。
+運用ルール化・ダッシュボード自動検知は実装済み。実際の読み直し（3テーマ）は未着手
 **優先度**: 中（検査は失敗していないため急ぎではないが、放置すると際限なく遅れが広がる構造）
-**次にすること**: 「どのくらい遅れたら読み直すか」の基準をオーナーに決めてもらう
-**判断待ち**: オーナー（読み直しの頻度・範囲の基準）
-**関連テーマ**: 全9テーマ（fukushuto・elderly-license-revocation・consumption-tax-cutが30日超で最優先候補）
+**次にすること**: fukushuto・elderly-license-revocation・consumption-tax-cutの3テーマ、
+それぞれの次回定期更新（`THEMES.yaml`の`collect_at`）に合わせて主張の該当件数を読み直す
+**判断待ち**: なし（基準は決定済み）
+**関連テーマ**: 全9テーマ（fukushuto・elderly-license-revocation・consumption-tax-cutが
+2026-09-28時点で30日超）
 
 ---
 
@@ -75,12 +78,29 @@ SNS投稿を人が1件ずつ確定する作業（`data/{theme}_claim_posts.json`
 `last_verified`、90日ごと）とは別物。あちらは「一次資料そのものが変わっていないか」の
 確認で、これは「新しく増えた投稿が既存の主張に該当するかどうか」の確認。
 
-## AI推奨（未実施・オーナー判断待ち）
+## 2026-09-28：30日基準の運用ルール化・自動検知を実装
 
-1. 「30日以上遅れたテーマは、そのテーマの次回定期更新（`DATA_REFRESH.md`）に合わせて
-   主張の該当件数も読み直す」を運用ルールとして`OPERATIONS.md`に追記する
-2. 基準が決まり次第、`scripts/admin_dashboard/render.py`の検知一覧に
-   `coverage_warnings()`の結果を追加し、`build_admin_dashboard.py`で毎回自動検知させる
-3. `verify_claim_verdicts.py`内の古いTASK_BOARD参照コメントを本課題番号へ差し替える
+オーナーが「30日以上遅れた基準で進めて」と決定したため、以下を実装した。
 
-いずれも未実施。実行するかどうか・基準の数値はオーナー判断待ち。
+1. `scripts/verify_claim_verdicts.py`に`COVERAGE_WARN_DAYS = 30`定数と
+   `coverage_findings()`関数を新設。既存の`coverage_warnings()`（全テーマ・遅れ日数の
+   大小を問わず出す、`run_public_checks.py`向け）はそのまま維持しつつ、内部の日数計算を
+   `_coverage_gaps()`へ共通化し、`coverage_warnings()`の文言にも遅れ日数を追加した。
+   `coverage_findings()`は30日以上のテーマだけを`{tone: "warn", title, detail}`形式で返す
+   （`verify_reread_headroom.py`の`headroom_findings()`と同じ形）
+2. `scripts/admin_dashboard/actions.py`の`anomalies()`に`coverage_findings()`を
+   `headroom_findings()`と同じtry/exceptパターンで接続。管理ダッシュボード
+   （`build_admin_dashboard.py`）の「気になる変化」に自動で出るようになった
+3. `OPERATIONS.md`「遅れの見つけ方」の検知一覧に1行追加
+4. `verify_claim_verdicts.py`内の古いTASK_BOARD参照コメント（課題54を指していた）を
+   課題99へ更新
+5. `tests/test_claim_verdicts.py`に`test_coverage_findings_only_include_themes_over_threshold`
+   を追加（29日は出ない・30日ちょうどは出る・45日は出る、をmockデータで確認）
+
+**確認済み**: `python3 scripts/verify_claim_verdicts.py`（exit 0、30日以上3件を明示）、
+`python3 scripts/build_admin_dashboard.py`で実際に3件が「気になる変化」へ出力されることを
+HTML出力で確認、`tests/test_claim_verdicts.py`全6件・`tests/test_admin_dashboard.py`全87件OK。
+
+**未実施**: fukushuto・elderly-license-revocation・consumption-tax-cutの3テーマ、
+実際の主張の該当件数の読み直し自体。対象件数の見積もりもまだ。次回のそれぞれの定期更新
+（課題69の型）に合わせて着手する。
