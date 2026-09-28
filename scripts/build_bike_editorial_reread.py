@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from collections import Counter
@@ -146,6 +147,15 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
         if (update.get("review_kind") != "editorial_body_reread" or
                 not update.get("finalized_by") or not update.get("read_at")):
             raise ValueError("定期更新には本文確認・最終確認者・読了日時が必要です")
+        pending_ids = [str(item["tweet_id"]) for item in update["items"]
+                       if item.get("decision") != "hold"]
+        present_ids = [tid for tid in pending_ids if tid in by_id]
+        if pending_ids and not present_ids:
+            # A review record is staged before publication. Do not let a pending wave
+            # break regeneration from the still-current canonical sample.
+            continue
+        if len(present_ids) != len(pending_ids):
+            raise ValueError("定期更新の採用・除外投稿が正典へ一部だけ反映されています")
         excluded = []
         held = []
         for item in update["items"]:
@@ -205,16 +215,34 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
 
 
 def main() -> None:
-    inputs = {p: (ROOT / p).read_bytes() for p in (CANONICAL, OPPOSITION, SUPPLEMENT, ADDITIONAL)}
-    data = build(*(json.loads(inputs[p]) for p in (CANONICAL, OPPOSITION, SUPPLEMENT, ADDITIONAL)))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, help="候補の累積正典（省略時は THEMES.yaml の正典）")
+    parser.add_argument("--output", type=Path, help="書き出し先（省略時は data/bike-blue-ticket_issues-reread.json）")
+    args = parser.parse_args()
+    source = args.input or ROOT / CANONICAL
+    output = args.output or ROOT / OUTPUT
+    if not source.is_absolute():
+        source = ROOT / source
+    if not output.is_absolute():
+        output = ROOT / output
+    source_label = source.relative_to(ROOT).as_posix()
+    inputs = {p: (ROOT / p).read_bytes() for p in (OPPOSITION, SUPPLEMENT, ADDITIONAL)}
+    inputs[source_label] = source.read_bytes()
+    samples, opposition, supplement, additional = (
+        json.loads(inputs[source_label]), json.loads(inputs[OPPOSITION]),
+        json.loads(inputs[SUPPLEMENT]), json.loads(inputs[ADDITIONAL]),
+    )
+    data = build(samples, opposition, supplement, additional)
     updates = {path.relative_to(ROOT).as_posix(): path.read_bytes()
                for path in sorted((ROOT / UPDATES).glob("*.json"))}
     if updates:
-        data = apply_review_updates(data, json.loads(inputs[CANONICAL]),
+        data = apply_review_updates(data, samples,
                                     {path: json.loads(raw) for path, raw in updates.items()})
-        inputs.update(updates)
+        applied_updates = set(data.get("update_dispositions", {}))
+        inputs.update({path: raw for path, raw in updates.items() if path in applied_updates})
     data["input_sha256"] = {p: hashlib.sha256(raw).hexdigest() for p, raw in inputs.items()}
-    (ROOT / OUTPUT).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"本文再読の根拠 {sum(data['population'].values())} 件を接続しました")
 
 

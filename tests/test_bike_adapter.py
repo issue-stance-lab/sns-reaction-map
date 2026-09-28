@@ -170,6 +170,23 @@ class BikeRereadGateTests(unittest.TestCase):
 
 
 class BikeAdapterTests(unittest.TestCase):
+    def test_finalize_rebuilds_issue_cards_from_candidate_public_json(self):
+        from unittest.mock import patch
+
+        from scripts.refresh_adapters.bike import finalize
+
+        calls = []
+        with patch("scripts.refresh_adapters.bike._run", side_effect=lambda root, *args: calls.append(args)):
+            finalize(ROOT, "2026-09-28")
+
+        media_call = next(args for args in calls if args[0] == "bike_issue_media.py")
+        self.assertIn("--write-html", media_call)
+        self.assertEqual(media_call[media_call.index("--page") + 1], str(ROOT / PAGE))
+        self.assertEqual(
+            media_call[media_call.index("--public-theme") + 1],
+            str(ROOT / "data/public/themes/bike-blue-ticket.json"),
+        )
+
     def test_public_json_drives_page_level_counts(self):
         # 山なみ形式（PLANET_SECTION_START）では、ヒーロー文・アリーナ見出しは
         # 山なみ本体が引き継ぐため対象外（2026-09-11、段階1）。ここでは安全な

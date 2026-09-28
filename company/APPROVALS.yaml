@@ -32,6 +32,25 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260929-001
+    department: engineering-data
+    action: website_publication
+    summary: "自転車青切符テーマの2026-09-28収集回を、収集585件・意見415件の更新内容で公開する"
+    reason: "定期収集分を本文確認・分類検証し、公開候補の独立品質監査がready_for_ceoとなったため"
+    risks:
+      - "公開投稿の検索サンプルであり、社会全体の世論・比率を表すものではない"
+      - "『113種類』の主張は確認できないものとしてページ上で断定を避けている"
+      - "585件中116件は取得時刻の履歴が欠けるため、確認できる期間を明記する"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-29-website-bike-blue-ticket-refresh.md"
+      - ".staging/refresh/bike-blue-ticket/20260928_225606_k27/promotion-manifest.json"
+      - "data/verification/updates/bike-blue-ticket/2026-09-28/report.json"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "独立監査のready_for_ceo判定を確認後、本対話のオーナー指示『公開して』を本番反映の明示承認として記録。"
+
   - id: approval-20260928-001
     department: growth-marketing
     action: website_publication
