@@ -1154,9 +1154,18 @@ items:
       - "tasks/task-97.md 2026-09-27『題名直下へ検索入口をローカル統合』"
       - "docs/bike-blue-ticket-reaction-map.html の検索入口・進捗表示"
       - "scripts/bike_blue_ticket_connected.py の再生成処理・表示検査"
-    status: approved
+    status: completed
     requested_at: "2026-09-27"
     decided_at: "2026-09-27"
     decision_note: >-
       オーナーがチャットで「本番反映して」と明示的に指示。今回の公開対象は自転車青切符ページの
       検索入口UIと進捗ラベル修正。承認後、標準検査と本番URLで反映を確認する。
+    completed_at: "2026-09-28"
+    result_note: >-
+      main 2f8e2989で公開。テーマ別検査・数字出典・トップページ検査、全1228テスト、公開検査1055件、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番テーマページの固有表示とトップページの
+      青切符導線を確認。課題97は2026-10-28までSearch Consoleで計測する。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36424995209"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36424994996"
+      - "https://sns-reaction-map.jp/bike-blue-ticket-reaction-map.html"
