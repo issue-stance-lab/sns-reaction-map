@@ -88,7 +88,7 @@ Googleサジェスト、Google Trends、Google広告キーワードプランナ�
 - 進捗はスクロール量ではなく質問・論点選択などの操作数を示すため、表示を「読んだところ」から「探ったところ」へ修正。自転車テーマ専用の接続処理と検査に含め、再生成時も維持する
 
 変更箇所: `docs/bike-blue-ticket-reaction-map.html`、検索入口CSS/JS、`scripts/templates/bike_blue_ticket_search_entry.html`。
-2026-09-27、本番公開の明示承認後に `approval-20260927-005` を記録して反映した。GitHub Pagesと本番URLでの配信確認結果は、公開完了後に下記へ追記する。
+2026-09-27、本番公開の明示承認後に `approval-20260927-009` を記録して反映した。GitHub Pagesと本番URLでの配信確認結果は、公開完了後に下記へ追記する。
 
 全体再生成コマンドはこの作業ツリーに `social-samples/bike-blue-ticket_2d_classified.json` がなく実行できなかった。既存ページへの反映と接続生成器の検査は成功しているが、完全な正本データを使った再生成は未確認。
 
