@@ -32,6 +32,27 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260929-003
+    department: growth-marketing
+    action: website_publication
+    summary: "課題102の学校あだ名禁止ページへ検索入口・FAQを融合し、進捗表示を操作数に合う表現へ直して公開する"
+    reason: "流入がほとんどない対象ページで、全国ルール・文科省・いじめ・さん付けの検索意図へ30秒で答え、既存のSNS100意見・6論点へ接続するため"
+    risks:
+      - "検索表示・順位・クリック率は公開後30日間のSearch Console実測で確認する必要がある"
+      - "個別校の方針や導入校割合は示さず、確認した国の資料の範囲を明記する"
+      - "進捗は読了率ではなく端末内の操作済み地点数で、既存の17地点計測を維持する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-102.md"
+      - "quality/reviews/2026-09-29-school-nickname-search-entry.md"
+      - "docs/school-nickname-ban-reaction-map.html（sha256 b60b4cc031173c3cd1268207508fb986eb9967871ee637e524c08657880e9d82）"
+      - "tests/test_school_nickname_connected.py"
+      - "tests/test_school_nickname_connected_browser.cjs"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "オーナーがローカルページで入口UIと進捗表示を確認後、本対話で『公開して』と明示的に承認。"
+
   - id: approval-20260929-002
     department: growth-marketing
     action: website_publication
