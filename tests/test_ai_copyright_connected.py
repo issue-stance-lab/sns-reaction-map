@@ -27,8 +27,10 @@ class AiCopyrightConnectedTests(unittest.TestCase):
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):
         inactive = self.page.replace(connected.START, "<!-- AI_COPYRIGHT_CONNECTED_DISABLED -->")
         self.assertEqual(connected.apply(inactive), inactive)
-        # 現行の公開HTMLは、まだこの工程では有効化しない（マーカー未挿入）。
-        self.assertEqual(connected.apply(self.original), self.original)
+        # 現行ページを接続処理へ通すと、ai-copyright専用の表示文言が更新される。
+        regenerated = connected.apply(self.original)
+        self.assertIn("<span>探ったところ</span>", regenerated)
+        self.assertEqual(connected.apply(regenerated), regenerated)
         for path in (ROOT / "docs").glob("*-reaction-map.html"):
             if path.stem == "ai-copyright-reaction-map":
                 continue
@@ -37,6 +39,7 @@ class AiCopyrightConnectedTests(unittest.TestCase):
 
     def test_same_input_does_not_accumulate_assets_or_bridges(self):
         from scripts.ai_copyright_connected_content import START as CONTENT_START, END as CONTENT_END
+        from scripts.ai_copyright_search_entry import START as SEARCH_START, END as SEARCH_END
 
         self.assertEqual(connected.apply(self.page), self.page)
         self.assertEqual(self.page.count(connected.START), 1)
@@ -48,11 +51,80 @@ class AiCopyrightConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.PAGE_JS_SRC), 1)
         self.assertEqual(self.page.count(CONTENT_START), 1)
         self.assertEqual(self.page.count(CONTENT_END), 1)
+        self.assertEqual(self.page.count(SEARCH_START), 1)
+        self.assertEqual(self.page.count(SEARCH_END), 1)
         self.assertEqual(connected.validate(self.page), [])
+
+    def test_search_entry_is_under_the_original_cover_and_before_original_map(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        main = soup.select_one("main")
+        entry = soup.select_one("#aic-search-entry")
+        self.assertIsNotNone(entry)
+        self.assertIs(next(child for child in main.children if getattr(child, "name", None)), entry)
+        self.assertLess(self.page.index('class="hero"'), self.page.index('id="aic-search-entry"'))
+        self.assertLess(self.page.index('id="aic-search-entry"'), self.page.index('id="planet-block"'))
+        self.assertEqual(len(soup.select("#aic-search-entry [role=tab]")), 3)
+        self.assertEqual(len(soup.select("#aic-search-entry [data-aic-search-question]")), 3)
+        self.assertIsNotNone(soup.select_one('#aic-search-entry a[data-aic-search-map][href="#planet-block"]'))
+        page_js = (ROOT / "docs/ai-copyright-connected-page.js").read_text(encoding="utf-8")
+        self.assertIn("2026年8月", page_js)
+        self.assertIn("2026年10月26日", page_js)
+        self.assertIn("コードを受け入れた事業者が対象", page_js)
+        self.assertIn("このコード自体が、法律による全データの一律公開義務を定めるものではありません", page_js)
+        self.assertIn("その時点では関連する判例・裁判例の蓄積がない", page_js)
+        styles = (ROOT / "docs/ai-copyright-connected.css").read_text(encoding="utf-8")
+        self.assertIn("#aic-search-panel:focus-visible { outline:3px solid #ef9d22", styles)
+
+    def test_search_entry_markers_must_be_balanced_and_unique(self):
+        from scripts.ai_copyright_search_entry import START as SEARCH_START
+
+        broken = self.page.replace(SEARCH_START, SEARCH_START + SEARCH_START, 1)
+        self.assertTrue(any("検索入口UI" in message for message in connected.validate(broken)))
 
     def test_reapplying_to_an_already_enabled_page_replaces_the_block_in_place(self):
         twice = connected.apply(self.page, activate=True)
         self.assertEqual(twice, self.page)
+
+    def test_progress_copy_names_interactions_and_survives_theme_regeneration(self):
+        # 進捗はスクロール量ではなく、地点を初めて操作した数。ai-copyrightの
+        # テーマ接続処理が生成後に表示語だけを直し、計測・保存ロジックは維持する。
+        from scripts.refresh_planet_section import _apply_connected_display
+
+        # 共通生成器が旧ラベルを出し直すケースを再現し、テーマ接続で補正されるか確かめる。
+        generator_output = self.original.replace(
+            "<span>探ったところ</span>", "<span>読んだところ</span>", 1
+        ).replace(connected.PROGRESS_HELP, "質問に答える・山を押す・クイズに答えると増えます", 1)
+        generated = _apply_connected_display("ai-copyright", generator_output)
+        soup = BeautifulSoup(generated, "html.parser")
+        progress = soup.select_one("#progress")
+        labels = progress.find_all("span", recursive=False)
+        self.assertEqual(labels[0].get_text(strip=True), connected.PROGRESS_LABEL)
+        self.assertEqual(progress.select_one(".how").get_text(strip=True), connected.PROGRESS_HELP)
+        self.assertFalse(any("読んだところ" in label.get_text() for label in labels))
+        self.assertEqual(connected.validate(generated), [])
+
+        start = "/* ---------- 探査記録 ----------"
+        end = "/* ---------- 予想（見る前に当てる）"
+        original_meter = self.original[self.original.index(start):self.original.index(end)]
+        regenerated_meter = generated[generated.index(start):generated.index(end)]
+        self.assertEqual(regenerated_meter, original_meter, "表示名以外の計測方法や保存範囲は変更しない")
+        self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', regenerated_meter)
+        self.assertNotRegex(regenerated_meter, r"scrollY|IntersectionObserver")
+
+        def visit_calls(html):
+            return [line.strip() for line in html.splitlines() if "visit(" in line]
+
+        self.assertEqual(visit_calls(generated), visit_calls(self.original), "加算される操作を変えない")
+        data = connected.planet_data(generated)
+        self.assertEqual(
+            2 + len(data["issues"]) + len(data["ocean"].get("sunk_continents", []))
+            + len(data.get("claims", [])) + len(data["ocean"].get("veins", [])),
+            21,
+        )
+
+    def test_progress_copy_is_required_by_theme_validation(self):
+        broken = self.page.replace("<span>探ったところ</span>", "<span>読んだところ</span>", 1)
+        self.assertTrue(any("進捗表示" in message for message in connected.validate(broken)))
 
     def test_claim_ids_match_each_issues_own_claims_and_are_self_consistent(self):
         # data["claims"]（クイズ用の一覧）にはissue_idsを持つが、ここでは論点へ

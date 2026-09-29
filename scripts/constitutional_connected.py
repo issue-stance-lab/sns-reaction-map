@@ -37,7 +37,7 @@ START = "<!-- CONSTITUTIONAL_CONNECTED_START -->"
 END = "<!-- CONSTITUTIONAL_CONNECTED_END -->"
 BRIDGE_START = "/* CONSTITUTIONAL_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* CONSTITUTIONAL_CONNECTED_BRIDGE_END */"
-CSS_HREF = "constitutional-connected.css?v=3"
+CSS_HREF = "constitutional-connected.css?v=4"
 JS_SRC = "constitutional-connected.js?v=1"
 PAGE_JS_SRC = "constitutional-connected-page.js?v=1"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)

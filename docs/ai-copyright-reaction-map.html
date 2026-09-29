@@ -809,14 +809,14 @@
 .explainer-count{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:var(--accent-soft,#eef2ff);color:var(--accent,#1e1b4b);font-size:11px;font-weight:800;vertical-align:middle;white-space:nowrap;letter-spacing:0}
 </style>
 <!-- AI_COPYRIGHT_CONNECTED_START -->
-<link rel="stylesheet" href="ai-copyright-connected.css?v=3">
+<link rel="stylesheet" href="ai-copyright-connected.css?v=4">
 <script id="ai-copyright-connected-data" type="application/json">{"schema":1,"theme_id":"ai-copyright","stances":[{"id":"ai-copyright-regulation-support","mode_id":"規制・制限強化支持","short_label":"規制・制限強化支持"},{"id":"ai-copyright-neutral","mode_id":"中立・情報","short_label":"中立・情報"},{"id":"ai-copyright-promotion-support","mode_id":"推進・活用支持","short_label":"推進・活用支持"}],"issues":{"ai-copyright-learning-data":{"posts_id":"issue-ai-copyright-learning-data","claim_ids":["unauthorized_learning_infringement","data_disclosure_needed"],"source_only_ids":["ai-copyright-sc-1","ai-copyright-sc-4"],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["gakushu","kaiji"]},"ai-copyright-user-ethics":{"posts_id":"issue-ai-copyright-user-ethics","claim_ids":[],"source_only_ids":[],"shared_concern_ids":["ai-copyright-vein-2"],"timeline_ids":[],"check_ids":[]},"ai-copyright-legal-framework":{"posts_id":"issue-ai-copyright-legal-framework","claim_ids":["data_disclosure_needed","tech_innovation_over_regulation"],"source_only_ids":["ai-copyright-sc-3"],"shared_concern_ids":["ai-copyright-vein-1","ai-copyright-vein-2"],"timeline_ids":[],"check_ids":["kaiji","hokaisei"]},"ai-copyright-creator-rights":{"posts_id":"issue-ai-copyright-creator-rights","claim_ids":["compensation_required","creator_protection_insufficient"],"source_only_ids":["ai-copyright-sc-2"],"shared_concern_ids":[],"timeline_ids":[],"check_ids":["sakufu"]},"ai-copyright-other":{"posts_id":"issue-ai-copyright-other","claim_ids":[],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[]},"ai-copyright-generated-work-rights":{"posts_id":"issue-ai-copyright-generated-work-rights","claim_ids":["ai_output_has_copyright"],"source_only_ids":[],"shared_concern_ids":[],"timeline_ids":[],"check_ids":[]},"ai-copyright-tech-promotion":{"posts_id":"issue-ai-copyright-tech-promotion","claim_ids":["tech_innovation_over_regulation"],"source_only_ids":[],"shared_concern_ids":["ai-copyright-vein-1"],"timeline_ids":[],"check_ids":[]}},"scope_note":"理由の分類・投稿例・資料は、この論点全体の内容です。","background_checked_on":"2026-09-19"}</script>
 <script src="ai-copyright-connected.js?v=1" defer></script>
-<script src="ai-copyright-connected-page.js?v=1" defer></script>
+<script src="ai-copyright-connected-page.js?v=2" defer></script>
 <!-- AI_COPYRIGHT_CONNECTED_END -->
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/ai-copyright/ai-copyright-hero.webp')">
-<div id="progress"><span>読んだところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
+<div id="progress"><span>探ったところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">予想に答える・論点を選ぶ・資料クイズや「資料にしかない話」を開くと増えます</span></div><script>
 (function(){
   /* 進み具合の帯を、貼り付いたヘッダーのすぐ下で止める。
      ヘッダーの高さは画面幅で変わる（スマホ63px・パソコン73px）ため実測する。
@@ -868,6 +868,57 @@
     <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z"/>
   </svg>
   <main>
+
+<!-- AI_COPYRIGHT_SEARCH_ENTRY_START -->
+<section id="aic-search-entry" aria-labelledby="aic-search-heading">
+  <div class="aic-search-intro">
+    <div>
+      <p class="aic-search-eyebrow">SEARCH GUIDE</p>
+      <h2 id="aic-search-heading">詳しい論点から、知りたいことを探す</h2>
+    </div>
+    <p>検索の多い疑問を選ぶと、資料で確認できる要点がここに表示されます。<br>元の反応マップや本文も、このページ内で続けて読めます。</p>
+  </div>
+
+  <div class="aic-search-card">
+    <div class="aic-search-tabs" role="tablist" aria-label="詳しい論点">
+      <button id="aic-search-tab-learning" type="button" role="tab" aria-selected="true" aria-controls="aic-search-panel" tabindex="0" data-aic-search-topic="learning"><span aria-hidden="true">📚</span><strong>学習データ・無断利用</strong></button>
+      <button id="aic-search-tab-generation" type="button" role="tab" aria-selected="false" aria-controls="aic-search-panel" tabindex="-1" data-aic-search-topic="generation"><span aria-hidden="true">✨</span><strong>AI生成物の権利・創作性</strong></button>
+      <button id="aic-search-tab-creator" type="button" role="tab" aria-selected="false" aria-controls="aic-search-panel" tabindex="-1" data-aic-search-topic="creator"><span aria-hidden="true">🎨</span><strong>クリエイター保護・権利</strong></button>
+    </div>
+
+    <article id="aic-search-panel" role="tabpanel" aria-labelledby="aic-search-tab-learning" tabindex="0">
+      <header class="aic-search-issue">
+        <p id="aic-search-kicker">詳しい論点 01 / 学習・データ</p>
+        <h3 id="aic-search-issue-title">📚 学習データ・無断利用</h3>
+      </header>
+      <div class="aic-search-questions">
+        <div class="aic-search-question-head">
+          <h4 id="aic-search-question-heading">この論点について、何を知りたいですか？</h4>
+          <p>疑問を押すと、要点と一次資料が切り替わります。</p>
+        </div>
+        <div id="aic-search-question-list" class="aic-search-question-list" aria-label="よくある検索の疑問">
+          <button type="button" data-aic-search-question="illegal" aria-pressed="true">無断学習は違法？</button>
+          <button type="button" data-aic-search-question="article30" aria-pressed="false">30条の4とは？</button>
+          <button type="button" data-aic-search-question="disclosure" aria-pressed="false">学習データは開示される？</button>
+        </div>
+        <div id="aic-search-answer" class="aic-search-answer" data-kind="fact" aria-live="polite" aria-atomic="true">
+          <div class="aic-search-answer-main">
+            <p id="aic-search-answer-label">資料で確認できること</p>
+            <h4 id="aic-search-answer-title">「無断」だけで、違法かどうかは決まりません。</h4>
+            <p id="aic-search-answer-text">著作権法30条の4の条件に当てはまるか、利用の目的や方法などを分けて確認します。文化庁は2024年3月公表の考え方で、その時点では関連する判例・裁判例の蓄積がないとして整理しています。</p>
+          </div>
+          <aside class="aic-search-answer-links" aria-label="詳しく確認する">
+            <a id="aic-search-source" data-aic-search-source href="https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html" target="_blank" rel="noopener noreferrer">文化庁の資料を確認 ↗</a>
+            <a id="aic-search-map-link" data-aic-search-map href="#planet-block">この論点の反応マップを読む ↓</a>
+            <p>公表資料の説明と、個別の法律判断・SNS上の意見は分けて表示しています。</p>
+          </aside>
+        </div>
+      </div>
+    </article>
+  </div>
+  <p class="aic-search-foot">公式資料確認：2026年9月28日　／　法律相談ではなく、公開資料とSNS反応の整理です。</p>
+</section>
+<!-- AI_COPYRIGHT_SEARCH_ENTRY_END -->
 
 <!-- STANCE_GLANCE_START -->
 <style>

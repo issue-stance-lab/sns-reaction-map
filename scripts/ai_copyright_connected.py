@@ -13,8 +13,10 @@
 必須ではない。bukatsu-chikiのように後日タグ付けする場合はtimeline側へissue_idsを足せば
 content_index()が自動で拾う。本工程の読書面は空のまま生成される）。
 
-読書面（`<template id="ai-copyright-reading-{id}">`）の生成は
-`scripts/ai_copyright_connected_content.py`が担当し、実際にdrawPanel()を差し替えて
+表紙直下の検索入口は`scripts/ai_copyright_search_entry.py`が挿入し、検索意図に合わせた
+切替・資料表示は`docs/ai-copyright-connected-page.js`が担当する。論点ごとの読書面
+（`<template id="ai-copyright-reading-{id}">`）は`scripts/ai_copyright_connected_content.py`が生成し、
+実際にdrawPanel()を差し替えて
 表示する処理・山の選択色（V05）・480msの滑らかな変化（V11）・初期表示の自動着地・
 深いリンクの名前空間統一・出典操作の計測は`scripts/templates/ai_copyright_connected_bridge.js`
 （生成HTMLへ挿入）が担当する。`docs/ai-copyright-connected.js`がバー・山・論点ボタンの
@@ -25,6 +27,7 @@ content_index()が自動で拾う。本工程の読書面は空のまま生成�
 """
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from pathlib import Path
@@ -37,10 +40,12 @@ START = "<!-- AI_COPYRIGHT_CONNECTED_START -->"
 END = "<!-- AI_COPYRIGHT_CONNECTED_END -->"
 BRIDGE_START = "/* AI_COPYRIGHT_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* AI_COPYRIGHT_CONNECTED_BRIDGE_END */"
-CSS_HREF = "ai-copyright-connected.css?v=3"
+CSS_HREF = "ai-copyright-connected.css?v=4"
 JS_SRC = "ai-copyright-connected.js?v=1"
-PAGE_JS_SRC = "ai-copyright-connected-page.js?v=1"
+PAGE_JS_SRC = "ai-copyright-connected-page.js?v=2"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
+PROGRESS_LABEL = "探ったところ"
+PROGRESS_HELP = "予想に答える・論点を選ぶ・資料クイズや「資料にしかない話」を開くと増えます"
 
 
 def enabled(source: str) -> bool:
@@ -120,11 +125,28 @@ def _bridge(source: str) -> str:
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
 
 
+def _apply_progress_copy(source: str) -> str:
+    """操作数を示すai-copyright専用の進捗表示を、生成後に正しい文言へ整える。"""
+    label_pattern = re.compile(r'(<div id="progress">\s*<span>)([^<]*)(</span>)')
+    labels = list(label_pattern.finditer(source))
+    if len(labels) != 1 or labels[0][2] not in ("読んだところ", PROGRESS_LABEL):
+        raise ValueError("進捗表示: ai-copyrightの操作数ラベルを一意に確認できません")
+    source = label_pattern.sub(lambda match: match[1] + PROGRESS_LABEL + match[3], source, count=1)
+
+    old_help = "質問に答える・山を押す・クイズに答えると増えます"
+    help_pattern = re.compile(r'(<div id="progress">.*?<span class="how">)([^<]*)(</span>)', re.S)
+    help_matches = list(help_pattern.finditer(source))
+    if len(help_matches) != 1 or help_matches[0][2] not in (old_help, PROGRESS_HELP):
+        raise ValueError("進捗表示: ai-copyrightの操作説明を確認できません")
+    return help_pattern.sub(lambda m: m[1] + PROGRESS_HELP + m[3], source, count=1)
+
+
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
     from scripts.ai_copyright_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    from scripts.ai_copyright_search_entry import apply as apply_search_entry
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
@@ -133,6 +155,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), lambda _: content, source, flags=re.S)
     else:
         source = source.replace("</body>", content + "\n</body>", 1)
+    source = apply_search_entry(source)
+    source = _apply_progress_copy(source)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
         START + f'\n<link rel="stylesheet" href="{CSS_HREF}">\n'
@@ -160,6 +184,7 @@ def validate(source: str) -> list[str]:
     if not enabled(source):
         return []
     from scripts.ai_copyright_connected_content import START as CONTENT_START, END as CONTENT_END
+    from scripts.ai_copyright_search_entry import validate as validate_search_entry
 
     problems = []
     soup = BeautifulSoup(source, "html.parser")
@@ -181,6 +206,17 @@ def validate(source: str) -> list[str]:
         problems.append("ページ配置のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("資料タブ・年表のJSが1つではありません")
+    problems.extend(validate_search_entry(source))
+    progress = soup.select("#progress")
+    if len(progress) != 1:
+        problems.append("進捗表示が1つではありません")
+    else:
+        labels = progress[0].find_all("span", recursive=False)
+        if not labels or labels[0].get_text(strip=True) != PROGRESS_LABEL:
+            problems.append("進捗表示が操作数に合った『探ったところ』ではありません")
+        help_text = progress[0].select_one(".how")
+        if not help_text or help_text.get_text(strip=True) != PROGRESS_HELP:
+            problems.append("進捗表示の説明が数える操作と一致しません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタン（STANCE_GLANCE）の並びが立場データと一致しません")
@@ -212,3 +248,32 @@ def validate(source: str) -> list[str]:
         if not posts:
             problems.append(f"読書面に投稿例がありません: {iid}")
     return problems
+
+
+def main() -> int:
+    """既存ページのテーマ固有UIを、現在のテンプレート・CSS/JS版で貼り直す。"""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--write-existing-page", action="store_true",
+        help="現在のdocsページへ検索入口・進捗表示・連動表示資産を反映する",
+    )
+    args = parser.parse_args()
+    if not args.write_existing_page:
+        parser.error("--write-existing-page を指定してください")
+
+    page = ROOT / "docs/ai-copyright-reaction-map.html"
+    before = page.read_text(encoding="utf-8")
+    if not enabled(before):
+        raise SystemExit("連動表示が有効な既存ページではありません。通常のテーマ更新手順を使ってください")
+    after = apply(before)
+    problems = validate(after)
+    if problems:
+        raise SystemExit("更新後ページの検査に失敗しました:\n  - " + "\n  - ".join(problems))
+    if after != before:
+        page.write_text(after, encoding="utf-8")
+    print(("UPDATE" if after != before else "OK") + f": {page.relative_to(ROOT)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

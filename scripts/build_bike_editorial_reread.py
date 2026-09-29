@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from collections import Counter
@@ -142,12 +143,29 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
     by_id = {str(row["tweet_id"]): row for row in samples}
     seen = {str(item["tweet_id"]) for issue in data["population"] for item in data[issue]["items"]}
     seen.update(str(item["tweet_id"]) for item in data.get("excluded_from_opinions", {}).get("items", []))
+    existing_items = {
+        str(item["tweet_id"]): (issue, item)
+        for issue in data["population"]
+        for item in data[issue]["items"]
+    }
+    updated_ids: set[str] = set()
     for source, update in sorted(updates.items()):
         if (update.get("review_kind") != "editorial_body_reread" or
                 not update.get("finalized_by") or not update.get("read_at")):
             raise ValueError("定期更新には本文確認・最終確認者・読了日時が必要です")
+        pending_ids = [str(item["tweet_id"]) for item in update["items"]
+                       if item.get("decision") != "hold"]
+        present_ids = [tid for tid in pending_ids if tid in by_id]
+        if pending_ids and not present_ids:
+            # A review record is staged before publication. Do not let a pending wave
+            # break regeneration from the still-current canonical sample.
+            continue
+        if len(present_ids) != len(pending_ids):
+            raise ValueError("定期更新の採用・除外投稿が正典へ一部だけ反映されています")
         excluded = []
         held = []
+        overlap_ids = []
+        bucket_reassignments = []
         for item in update["items"]:
             if (item.get("body_reviewed") is not True or
                     item.get("review_kind") != "editorial_body_reread" or
@@ -157,10 +175,10 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
                     item.get("reason_sha256") != hashlib.sha256(item["reason"].encode()).hexdigest()):
                 raise ValueError("定期更新の各投稿に本文確認・独立確認・個別根拠の記録が必要です")
             tid = str(item["tweet_id"])
-            if tid in seen:
-                raise ValueError("定期更新の本文確認IDが既存記録または更新回と重複しています")
-            seen.add(tid)
             if item["decision"] == "hold":
+                if tid in seen:
+                    raise ValueError("保留投稿のIDが既存記録または更新回と重複しています")
+                seen.add(tid)
                 if tid in by_id:
                     raise ValueError("保留投稿を正式候補へ混ぜることはできません")
                 held.append(tid)
@@ -173,7 +191,11 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
             if item["decision"] == "exclude":
                 if is_opinion_record(row) or not row.get("opinion_exclusion_reason"):
                     raise ValueError("除外記録と候補の意見判定・理由が一致しません")
+                if tid in seen:
+                    raise ValueError("定期更新の本文確認IDが既存記録または更新回と重複しています")
                 excluded.append(tid)
+                seen.add(tid)
+                updated_ids.add(tid)
                 continue
             if item["decision"] != "adopt" or not is_opinion_record(row):
                 raise ValueError("定期更新の採用状態が不正です")
@@ -184,6 +206,26 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
             bucket = item["bucket"]
             if bucket not in group["buckets"]:
                 raise ValueError("定期更新の区分が既存の論点内区分にありません")
+            if tid in seen:
+                prior = existing_items.get(tid)
+                if (tid in updated_ids or prior is None or prior[1].get("source_id") != "opposition"
+                        or prior[0] != item["main_issue"]):
+                    raise ValueError("定期更新の本文確認IDが既存記録または更新回と重複しています")
+                previous_bucket = prior[1]["bucket"]
+                prior[1].update({
+                    "bucket": bucket,
+                    "bucket_label": group["buckets"][bucket]["label"],
+                    "source_id": source,
+                    "text_sha256": item["text_sha256"],
+                    "classification_concern": item.get("classification_concern", "none"),
+                })
+                overlap_ids.append(tid)
+                if previous_bucket != bucket:
+                    bucket_reassignments.append({"tweet_id": tid, "from": previous_bucket, "to": bucket})
+                updated_ids.add(tid)
+                continue
+            seen.add(tid)
+            updated_ids.add(tid)
             group["items"].append({"tweet_id": tid, "bucket": bucket,
                 "bucket_label": group["buckets"][bucket]["label"],
                 "review_kind": "editorial_body_reread", "body_reviewed": True,
@@ -193,6 +235,7 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
                                    "reviewer_type": "editorial_ai"}
         data.setdefault("update_dispositions", {})[source] = {
             "excluded_ids": excluded, "held_ids": held,
+            "overlap_ids": overlap_ids, "bucket_reassignments": bucket_reassignments,
             "note": "過去の除外承認とは別の今回の本文確認。保留は原本候補の外に保持。"}
     for issue in data["population"]:
         group = data[issue]
@@ -205,16 +248,34 @@ def apply_review_updates(data: dict, samples: list[dict], updates: dict[str, dic
 
 
 def main() -> None:
-    inputs = {p: (ROOT / p).read_bytes() for p in (CANONICAL, OPPOSITION, SUPPLEMENT, ADDITIONAL)}
-    data = build(*(json.loads(inputs[p]) for p in (CANONICAL, OPPOSITION, SUPPLEMENT, ADDITIONAL)))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, help="候補の累積正典（省略時は THEMES.yaml の正典）")
+    parser.add_argument("--output", type=Path, help="書き出し先（省略時は data/bike-blue-ticket_issues-reread.json）")
+    args = parser.parse_args()
+    source = args.input or ROOT / CANONICAL
+    output = args.output or ROOT / OUTPUT
+    if not source.is_absolute():
+        source = ROOT / source
+    if not output.is_absolute():
+        output = ROOT / output
+    source_label = source.relative_to(ROOT).as_posix()
+    inputs = {p: (ROOT / p).read_bytes() for p in (OPPOSITION, SUPPLEMENT, ADDITIONAL)}
+    inputs[source_label] = source.read_bytes()
+    samples, opposition, supplement, additional = (
+        json.loads(inputs[source_label]), json.loads(inputs[OPPOSITION]),
+        json.loads(inputs[SUPPLEMENT]), json.loads(inputs[ADDITIONAL]),
+    )
+    data = build(samples, opposition, supplement, additional)
     updates = {path.relative_to(ROOT).as_posix(): path.read_bytes()
                for path in sorted((ROOT / UPDATES).glob("*.json"))}
     if updates:
-        data = apply_review_updates(data, json.loads(inputs[CANONICAL]),
+        data = apply_review_updates(data, samples,
                                     {path: json.loads(raw) for path, raw in updates.items()})
-        inputs.update(updates)
+        applied_updates = set(data.get("update_dispositions", {}))
+        inputs.update({path: raw for path, raw in updates.items() if path in applied_updates})
     data["input_sha256"] = {p: hashlib.sha256(raw).hexdigest() for p, raw in inputs.items()}
-    (ROOT / OUTPUT).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"本文再読の根拠 {sum(data['population'].values())} 件を接続しました")
 
 

@@ -26,7 +26,11 @@ class ConstitutionalConnectedTests(unittest.TestCase):
         self.assertEqual(connected.apply(self.page), self.page)
         self.assertEqual(self.page.count(connected.START), 1)
         self.assertEqual(self.page.count(connected.BRIDGE_START), 1)
-        self.assertEqual(self.page.count('constitutional-connected.css?v=3'), 1)
+        self.assertEqual(self.page.count('constitutional-connected.css?v=4'), 1)
+
+    def test_status_band_css_matches_planet_panel_width(self):
+        css = (ROOT / 'docs/constitutional-connected.css').read_text(encoding='utf-8')
+        self.assertIn('.constitutional-connected .ca-status { box-sizing:border-box; width:100%; max-width:1180px; margin:20px auto;', css)
 
     def test_other_theme_and_unactivated_page_are_unchanged(self):
         self.assertEqual(connected.apply(self.original), self.original)
