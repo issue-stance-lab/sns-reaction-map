@@ -138,6 +138,11 @@ class BikeRereadGateTests(unittest.TestCase):
         # 旧反対再読の対応範囲。新規回は editorial-updates の別ゲートで検査する。
         source = [row for row in canonical() if not row.get("editorial_review")]
         reread = json.loads(REREAD.read_text(encoding="utf-8"))
+        legacy_ids = {row["tweet_id"] for row in source}
+        reread["buckets"] = {
+            bucket: [tid for tid in ids if tid in legacy_ids]
+            for bucket, ids in reread["buckets"].items()
+        }
 
         # そのままなら通る
         check_reread_coverage(source, reread)
@@ -161,6 +166,11 @@ class BikeRereadGateTests(unittest.TestCase):
         # 旧反対再読の対応範囲。新規回は editorial-updates の別ゲートで検査する。
         source = [row for row in canonical() if not row.get("editorial_review")]
         reread = json.loads(json.dumps(json.loads(REREAD.read_text(encoding="utf-8"))))
+        legacy_ids = {row["tweet_id"] for row in source}
+        reread["buckets"] = {
+            bucket: [tid for tid in ids if tid in legacy_ids]
+            for bucket, ids in reread["buckets"].items()
+        }
         reread["buckets"]["abolish"][0] = "stale-assignment"
         with self.assertRaises(RereadGapError) as raised:
             check_reread_coverage(source, reread)
