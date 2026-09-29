@@ -1168,7 +1168,7 @@ items:
     risks:
       - "進捗はスクロールや閲覧時間ではなく、初回操作済み地点を数える。保存は対象テーマのlocalStorage内で、サーバー送信しない"
       - "内閣府のプリンシプル・コードは非拘束で、受入れ事業者向けであり、法律上の一律開示義務とは区別する"
-      - "375px表示・キーボード・外部リンクの実ブラウザー確認は本番反映後に実施し、結果を品質記録へ追記する"
+      - "本番実ブラウザーでのキーボード切替・フォーカス表示・文化庁リンク遷移は確認済み。375px表示確認は残件"
       - "検索流入の効果判定には公開後30日間のSearch Console観察が必要"
     recommendation: approve
     evidence:
@@ -1176,10 +1176,22 @@ items:
       - "quality/reviews/2026-09-28-website-task100-ai-copyright.md"
       - "docs/ai-copyright-reaction-map.html（sha256 1d617ae6b819f9922b270291d8fae290be8816eaf6fdcb29c705a92e934306bf）"
       - "docs/ai-copyright-connected-page.js（sha256 e7d4e045a6fe7435942dcd823729d39c1ded9c97cba150838de480f46c144981）"
-    status: approved
+    status: completed
     requested_at: "2026-09-28"
     decided_at: "2026-09-28"
     decision_note: "オーナーが本対話で『公開して』と明示的に承認。独立監査の実ブラウザー確認は本番反映後に行い、品質記録を更新する。"
+    completed_at: "2026-09-29"
+    result_note: >-
+      main 2152aa09の公開後にGitHub Actionsの公開ファイル検査 #684 と Pages配信 #956 が成功。
+      全1241テスト（4件skip）、公開検査1065件（4件skip）、テーマ再生成10件・数値出典10件・
+      トップページ検査が通過。本番ページで検索疑問のEnter切替、論点タブの矢印切替、
+      フォーカス表示、文化庁リンク遷移を確認。進捗表示は「探ったところ」で、操作後も2/21。
+      375px実表示は未確認のため品質記録の残件とし、検索流入は2026-10-29にSearch Consoleで判定する。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36561793544"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36561793525"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+      - "quality/reviews/2026-09-28-website-task100-ai-copyright.md"
 
   - id: approval-20260927-009
     department: growth-marketing
