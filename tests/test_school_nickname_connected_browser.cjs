@@ -22,13 +22,34 @@ async function contextFor(browser, options = {}) {
 (async () => {
   const engineName = process.env.SCHOOL_NICKNAME_BROWSER || 'chromium';
   assert.ok(['chromium', 'webkit'].includes(engineName));
-  const browser = await ({chromium, webkit})[engineName].launch({headless: true});
+  const launchOptions = {headless: true};
+  if (process.env.SCHOOL_NICKNAME_EXECUTABLE && engineName === 'chromium') launchOptions.executablePath = process.env.SCHOOL_NICKNAME_EXECUTABLE;
+  const browser = await ({chromium, webkit})[engineName].launch(launchOptions);
   try {
     for (const width of [1280, 375, 320]) {
       const {context, page, errors} = await contextFor(browser, {viewport: {width, height: 900}});
       await page.goto(url, {waitUntil: 'domcontentloaded'});
+      await page.evaluate(() => localStorage.removeItem('isa-seen-school-nickname-ban'));
+      await page.reload({waitUntil: 'domcontentloaded'});
       await page.waitForTimeout(350);
       assert.equal(await page.locator('body.school-nickname-ban-connected').count(), 1);
+      assert.equal(await page.locator('#progress > span').first().innerText(), '探ったところ');
+      assert.equal(await page.locator('#pnum').innerText(), '1 / 17');
+      await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+      await page.waitForTimeout(80);
+      assert.equal(await page.locator('#pnum').innerText(), '1 / 17');
+      await page.locator('#btn-school-nickname-ban-psychological-safety').click();
+      assert.equal(await page.locator('#pnum').innerText(), '2 / 17');
+      await page.reload({waitUntil: 'domcontentloaded'});
+      await page.waitForTimeout(120);
+      assert.equal(await page.locator('#pnum').innerText(), '2 / 17');
+      await page.goto(url, {waitUntil: 'domcontentloaded'});
+      await page.waitForTimeout(120);
+      assert.equal(await page.locator('#pnum').innerText(), '2 / 17');
+      assert.equal(await page.locator('#school-nickname-guide .school-nickname-answer-grid article').count(), 3);
+      assert.equal(await page.locator('#school-nickname-faq details').count(), 10);
+      await page.locator('#school-nickname-faq details').first().locator('summary').click();
+      assert.equal(await page.locator('#school-nickname-faq details').first().getAttribute('open'), '');
       assert.deepEqual(await page.evaluate(() => window.SchoolNicknameBanConnectedMap.getState()), {
         stanceId: 'all', issueId: 'school-nickname-ban-uniform-rule',
       });

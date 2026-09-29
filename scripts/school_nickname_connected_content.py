@@ -11,6 +11,112 @@ from bs4 import BeautifulSoup
 ROOT = Path(__file__).resolve().parents[1]
 START = "<!-- SCHOOL_NICKNAME_CONNECTED_CONTENT_START -->"
 END = "<!-- SCHOOL_NICKNAME_CONNECTED_CONTENT_END -->"
+SEARCH_START = "<!-- SCHOOL_NICKNAME_SEARCH_ENTRY_START -->"
+SEARCH_END = "<!-- SCHOOL_NICKNAME_SEARCH_ENTRY_END -->"
+FAQ_START = "<!-- SCHOOL_NICKNAME_FAQ_START -->"
+FAQ_END = "<!-- SCHOOL_NICKNAME_FAQ_END -->"
+FAQ_JSONLD_START = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_START -->"
+FAQ_JSONLD_END = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_END -->"
+
+
+FAQS = [
+    (
+        "学校のあだ名禁止は法律で決まっていますか？",
+        "今回確認した、いじめ防止対策推進法、文部科学省の基本方針、生徒指導提要には、あだ名禁止を全国一律に求める記述は見当たりません。学校ごとの方針と、国の法律・通知は分けて確認する必要があります。",
+    ),
+    (
+        "文部科学省は、あだ名禁止や全員のさん付けを求めていますか？",
+        "今回確認した文部科学省資料には、あだ名禁止や全員のさん付けを全国一律に求める記述は見当たりません。生徒指導提要は、校則の理由を説明し、児童生徒や保護者の意見を聞きながら見直すことが望ましいとしています。",
+    ),
+    (
+        "なぜ小学校であだ名禁止が行われるのですか？",
+        "嫌な呼び方やからかいを未然に防ぐこと、性別で敬称を分けないことなどが理由として挙げられます。ただし目的や適用範囲は学校によって異なるため、その学校の説明を確認する必要があります。",
+    ),
+    (
+        "嫌なあだ名は、いじめに当たりますか？",
+        "あだ名という形式だけでは決まりません。法律は、一定の関係にある相手から影響を受け、本人が心身の苦痛を感じている行為をいじめと定義しています。冗談やふざけ合いに見えても、受け手の被害性を確認する必要があります。",
+    ),
+    (
+        "あだ名禁止と、全員をさん付けで呼ぶことは同じですか？",
+        "同じではありません。悪意ある呼び方を止める、あだ名を一律に使わない、呼び捨てを避ける、敬称をさんに統一する、という選択はそれぞれ範囲と目的が違います。",
+    ),
+    (
+        "あだ名禁止のメリットとして挙げられることは何ですか？",
+        "SNSでは、嫌な呼び方を早い段階で止めやすいことや、呼ばれる側が断りにくい状況を減らせることが期待として語られています。これは制度の効果を証明したものではなく、収集した投稿に見られた意見です。",
+    ),
+    (
+        "あだ名禁止のデメリット・懸念は何ですか？",
+        "SNSでは、親しい愛称まで失われること、表面的な禁止だけでは悪意や関係性が変わらないこと、本人の希望が置き去りになることが懸念として語られています。これも収集した投稿に見られた意見です。",
+    ),
+    (
+        "本人が希望するあだ名も禁止すべきですか？",
+        "国の資料だけから一律の答えは出せません。本人の希望を認めるか、どの場面までルールを適用するかは学校ごとの選択です。本人が嫌だと言えることと、希望する呼び方を伝えられることの両方を確認する必要があります。",
+    ),
+    (
+        "学校独自の呼び方のルールは見直せますか？",
+        "生徒指導提要は、校則を絶えず見直し、児童生徒や保護者の意見を聞く機会を設けることが望ましいとしています。まず学校の方針、対象となる場面、理由、見直しの手続きを確認します。",
+    ),
+    (
+        "このページのSNS比率は、世論調査ですか？",
+        "いいえ。特定の検索語、期間、検索サービスで収集できた公開投稿のサンプルです。全国の賛否の割合や、あだ名禁止を導入している学校の割合を表すものではありません。",
+    ),
+]
+
+
+def render_search_entry(data: dict, background: dict) -> str:
+    checked_on = background["checked_on"]
+    opinions = int(data["totals"]["opinions"])
+    return f'''{SEARCH_START}
+<section class="panel school-nickname-search-entry" id="school-nickname-guide" aria-labelledby="school-nickname-guide-title">
+  <div class="school-nickname-guide-head">
+    <p class="school-nickname-guide-kicker">最初に知りたいこと</p>
+    <h2 id="school-nickname-guide-title">学校のあだ名禁止はなぜ？ 先に3点</h2>
+    <p>国の資料で確認できること、学校ごとに決めること、SNSで分かれている意見を混ぜずに読みます。</p>
+  </div>
+  <div class="school-nickname-answer-grid">
+    <article><span>国の資料</span><b>全国一律の禁止ではない</b><p>確認した法令・文科省資料には、あだ名禁止や全員のさん付けを全国一律に求める記述は見当たりません。</p></article>
+    <article><span>いじめの判断</span><b>嫌な呼び名は、いじめになりうる</b><p>冗談かどうかだけでなく、呼ばれた本人が心身の苦痛を感じているかを個別に確認します。</p></article>
+    <article><span>学校ごとの選択</span><b>3つのルールは別</b><p>悪意ある呼び方を止めること、あだ名を一律禁止すること、全員をさん付けにすることは別の選択です。</p></article>
+  </div>
+  <div class="school-nickname-opinion-bridge" aria-label="SNSで見られた期待と懸念">
+    <p class="school-nickname-opinion-label">ここからはSNS上の意見</p>
+    <div><article><span>期待</span><b>嫌な呼び方を先に止め、傷つく子を減らしたい</b></article><article><span>懸念</span><b>一律禁止だけでは悪意や関係性まで変わらない</b></article></div>
+    <p>どちらも「子どもを傷つけたくない」という心配から、ルールの範囲について違う結論に進んでいます。</p>
+  </div>
+  <nav class="school-nickname-guide-links" aria-label="このページの読み方">
+    <a href="#planet-block">SNS {opinions:,}意見を6論点で比べる</a>
+    <a href="#school-nickname-faq">よくある質問を先に読む</a>
+  </nav>
+  <p class="school-nickname-guide-date">国の資料の確認日 {e(checked_on)}。個別校のルールの有無や導入校の割合を示すものではありません。</p>
+</section>
+{SEARCH_END}'''
+
+
+def render_faq() -> str:
+    rows = []
+    for question, answer in FAQS:
+        rows.append(f'<details><summary>{e(question)}</summary><p>{e(answer)}</p></details>')
+    return f'''{FAQ_START}
+<section class="panel school-nickname-faq" id="school-nickname-faq" aria-labelledby="school-nickname-faq-title">
+  <div class="panel-title"><h2 id="school-nickname-faq-title">よくある質問</h2><span>法律・文科省・さん付け・いじめ</span></div>
+  <p class="school-nickname-faq-lead">全国の決まりと学校ごとの運用、確認できた事実とSNS上の意見を分けて答えます。</p>
+  <div class="school-nickname-faq-list">{"".join(rows)}</div>
+  <aside class="school-nickname-safety-note"><b>今、嫌な呼び方でつらい場合</b><p>ルールへの賛否を決めるより先に、嫌だと感じていることを、保護者・先生・養護教諭など信頼できる大人へ伝えてください。このページは個別の相談窓口の代わりではありません。</p></aside>
+</section>
+{FAQ_END}'''
+
+
+def render_faq_jsonld() -> str:
+    payload = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": question, "acceptedAnswer": {"@type": "Answer", "text": answer}}
+            for question, answer in FAQS
+        ],
+    }
+    encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    return f'{FAQ_JSONLD_START}\n<script type="application/ld+json">{encoded}</script>\n{FAQ_JSONLD_END}'
 
 
 def e(value) -> str:
