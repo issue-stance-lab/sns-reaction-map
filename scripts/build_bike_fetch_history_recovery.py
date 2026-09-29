@@ -59,7 +59,12 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
     return value
 
 
-def build(canonical_path: Path = CANONICAL) -> dict[str, Any]:
+def build(
+    canonical_path: Path = CANONICAL,
+    *,
+    root: Path = ROOT,
+    canonical_relative_path: str | None = None,
+) -> dict[str, Any]:
     canonical_bytes = canonical_path.read_bytes()
     canonical = read_rows(canonical_path)
     missing = [row for row in canonical if not row.get("fetched_at")]
@@ -70,7 +75,7 @@ def build(canonical_path: Path = CANONICAL) -> dict[str, Any]:
     source_sha256: dict[str, str] = {}
     evidence: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for relative in HISTORY_FILES:
-        path = ROOT / relative
+        path = root / relative
         if not path.is_file():
             raise SystemExit(f"照合元の旧保存回がありません: {relative}")
         source_sha256[relative] = sha256_bytes(path.read_bytes())
@@ -117,7 +122,7 @@ def build(canonical_path: Path = CANONICAL) -> dict[str, Any]:
         "topic": "bike-blue-ticket",
         "purpose": "欠損したfetched_atの証拠付き復元候補。正典の値を推測で更新しない。",
         "canonical": {
-            "path": str(canonical_path.relative_to(ROOT)),
+            "path": canonical_relative_path or str(canonical_path.relative_to(root)),
             "sha256": sha256_bytes(canonical_bytes),
             "records": len(canonical),
             "missing_fetched_at": len(missing),
@@ -138,9 +143,15 @@ def build(canonical_path: Path = CANONICAL) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="既存の検証サマリとの差だけを確認する")
+    parser.add_argument("--canonical", type=Path, default=CANONICAL)
+    parser.add_argument("--canonical-relative-path")
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
-    rendered = json.dumps(build(), ensure_ascii=False, indent=2) + "\n"
+    rendered = json.dumps(
+        build(args.canonical, canonical_relative_path=args.canonical_relative_path),
+        ensure_ascii=False,
+        indent=2,
+    ) + "\n"
     if args.check:
         if not args.output.is_file() or args.output.read_text(encoding="utf-8") != rendered:
             raise SystemExit(f"取得履歴の検証サマリが最新ではありません: {args.output}")

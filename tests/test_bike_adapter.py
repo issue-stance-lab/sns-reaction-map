@@ -138,6 +138,11 @@ class BikeRereadGateTests(unittest.TestCase):
         # 旧反対再読の対応範囲。新規回は editorial-updates の別ゲートで検査する。
         source = [row for row in canonical() if not row.get("editorial_review")]
         reread = json.loads(REREAD.read_text(encoding="utf-8"))
+        legacy_ids = {row["tweet_id"] for row in source}
+        reread["buckets"] = {
+            bucket: [tid for tid in ids if tid in legacy_ids]
+            for bucket, ids in reread["buckets"].items()
+        }
 
         # そのままなら通る
         check_reread_coverage(source, reread)
@@ -161,6 +166,11 @@ class BikeRereadGateTests(unittest.TestCase):
         # 旧反対再読の対応範囲。新規回は editorial-updates の別ゲートで検査する。
         source = [row for row in canonical() if not row.get("editorial_review")]
         reread = json.loads(json.dumps(json.loads(REREAD.read_text(encoding="utf-8"))))
+        legacy_ids = {row["tweet_id"] for row in source}
+        reread["buckets"] = {
+            bucket: [tid for tid in ids if tid in legacy_ids]
+            for bucket, ids in reread["buckets"].items()
+        }
         reread["buckets"]["abolish"][0] = "stale-assignment"
         with self.assertRaises(RereadGapError) as raised:
             check_reread_coverage(source, reread)
@@ -170,6 +180,23 @@ class BikeRereadGateTests(unittest.TestCase):
 
 
 class BikeAdapterTests(unittest.TestCase):
+    def test_finalize_rebuilds_issue_cards_from_candidate_public_json(self):
+        from unittest.mock import patch
+
+        from scripts.refresh_adapters.bike import finalize
+
+        calls = []
+        with patch("scripts.refresh_adapters.bike._run", side_effect=lambda root, *args: calls.append(args)):
+            finalize(ROOT, "2026-09-28")
+
+        media_call = next(args for args in calls if args[0] == "bike_issue_media.py")
+        self.assertIn("--write-html", media_call)
+        self.assertEqual(media_call[media_call.index("--page") + 1], str(ROOT / PAGE))
+        self.assertEqual(
+            media_call[media_call.index("--public-theme") + 1],
+            str(ROOT / "data/public/themes/bike-blue-ticket.json"),
+        )
+
     def test_public_json_drives_page_level_counts(self):
         # 山なみ形式（PLANET_SECTION_START）では、ヒーロー文・アリーナ見出しは
         # 山なみ本体が引き継ぐため対象外（2026-09-11、段階1）。ここでは安全な

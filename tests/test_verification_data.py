@@ -40,6 +40,22 @@ class VerificationDataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate"):
             make_verification_records([{"tweet_id": "123"}, {"tweet_id": "123"}])
 
+    def test_top_level_editorial_flags_are_preserved_with_nested_classifier(self) -> None:
+        result = make_verification_records([
+            {
+                "tweet_id": "456",
+                "is_opinion": True,
+                "classification": {
+                    "main_issue": "その他",
+                    "stance": "反対",
+                    "is_opinion": None,
+                },
+            }
+        ])
+        self.assertEqual(result[0]["classification"]["main_issue"], "その他")
+        self.assertEqual(result[0]["classification"]["stance"], "反対")
+        self.assertTrue(result[0]["classification"]["is_opinion"])
+
 
 if __name__ == "__main__":
     unittest.main()
