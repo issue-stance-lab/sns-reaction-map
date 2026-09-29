@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-27"
+updated_at: "2026-09-29"
 
 rules:
   required_for:
@@ -32,6 +32,26 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260929-002
+    department: growth-marketing
+    action: website_publication
+    summary: "課題101の高齢者免許返納ページを、検索意図に合わせた入口・FAQと正確な進捗表示へ更新して公開する"
+    reason: "『免許返納は何歳から』『70歳・75歳の制度』『メリット・デメリット』『家族の話し方』へ最初の画面から答え、操作数を閲覧量と誤解させない表示にして30日間検証するため"
+    risks:
+      - "タイトル変更後の検索表示・順位・クリック率は、Search Consoleで30日間観察する必要がある"
+      - "制度内容や地域ごとの返納支援が変わった場合は、一次資料を再確認する"
+      - "進捗は閲覧量ではなく端末内に保存する操作地点数であり、表示だけを『探ったところ』へ修正した"
+    recommendation: approve
+    evidence:
+      - "tasks/task-101.md"
+      - "docs/elderly-license-revocation-reaction-map.html（sha256 4d4ee8bfc3847983132b711db9d5c4ded6968a7680ba1c0fa18b5385afcaf428）"
+      - "tests/test_elderly_search_entry.py"
+      - "tests/test_elderly_connected.py"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "オーナーがローカルプレビューと進捗計測の説明を確認後、本対話で『公開して』と明示的に承認。"
+
   - id: approval-20260927-004
     department: growth-marketing
     action: website_publication

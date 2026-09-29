@@ -16,12 +16,22 @@ BRIDGE_END = "/* ELDERLY_CONNECTED_BRIDGE_END */"
 CSS_HREF = "elderly-connected.css?v=1"
 JS_SRC = "elderly-connected.js?v=1"
 PAGE_JS_SRC = "elderly-connected-page.js?v=1"
+PROGRESS_LABEL = "探ったところ"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
 REASON_POSTS = ROOT / "configs" / "elderly-license-reason-posts.json"
 
 
 def enabled(source: str) -> bool:
     return START in source
+
+
+def apply_progress_wording(source: str) -> str:
+    """操作地点の件数を、閲覧量と誤解させない表示にそろえる。"""
+    pattern = re.compile(r'(<div id="progress"><span>)[^<]*(</span>)')
+    source, count = pattern.subn(r"\g<1>" + PROGRESS_LABEL + r"\g<2>", source, count=1)
+    if count != 1:
+        raise ValueError("連動表示: 進捗表示を一意に見つけられません")
+    return source
 
 
 def planet_data(source: str) -> dict:
@@ -128,6 +138,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         if source.count("</head>") != 1:
             raise ValueError("連動表示: head の終端が1つではありません")
         source = source.replace("</head>", block + "\n</head>", 1)
+    source = apply_progress_wording(source)
     problems = validate(source)
     if problems:
         raise ValueError("連動表示の検査に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -160,6 +171,9 @@ def validate(source: str) -> list[str]:
         problems.append("ページ配置のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("資料タブ・年表のJSが1つではありません")
+    progress_label = soup.select_one("#progress > span")
+    if progress_label is None or progress_label.get_text(strip=True) != PROGRESS_LABEL:
+        problems.append("操作地点の表示が『探ったところ』になっていません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")
