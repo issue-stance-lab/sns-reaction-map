@@ -59,6 +59,11 @@ class ElderlyConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.PAGE_JS_SRC), 1)
         self.assertEqual(connected.validate(self.page), [])
 
+    def test_progress_label_describes_actions_not_reading(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(soup.select_one("#progress > span").get_text(strip=True), "探ったところ")
+        self.assertNotIn('<div id="progress"><span>読んだところ</span>', self.page)
+
     def test_generated_ids_are_unique_even_for_shared_claims(self):
         soup = BeautifulSoup(self.page, "html.parser")
         ids = [node.get("id") for node in soup.select("[id]")]
@@ -140,6 +145,17 @@ class ElderlyConnectedTests(unittest.TestCase):
             _, twice, failures = refresh("elderly-license-revocation", source=rebuilt)
         self.assertEqual(failures, [])
         self.assertEqual(rebuilt, twice)
+
+        regressed = self.page.replace(
+            '<div id="progress"><span>探ったところ</span>',
+            '<div id="progress"><span>読んだところ</span>',
+            1,
+        )
+        with patch("scripts.refresh_planet_section.bpd.build", return_value=data):
+            _, repaired, failures = refresh("elderly-license-revocation", source=regressed)
+        self.assertEqual(failures, [])
+        self.assertIn('<div id="progress"><span>探ったところ</span>', repaired)
+        self.assertNotIn('<div id="progress"><span>読んだところ</span>', repaired)
 
 
 if __name__ == "__main__":

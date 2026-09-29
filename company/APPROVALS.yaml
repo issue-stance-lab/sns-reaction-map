@@ -32,6 +32,53 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20260929-003
+    department: growth-marketing
+    action: website_publication
+    summary: "課題102の学校あだ名禁止ページへ検索入口・FAQを融合し、進捗表示を操作数に合う表現へ直して公開する"
+    reason: "流入がほとんどない対象ページで、全国ルール・文科省・いじめ・さん付けの検索意図へ30秒で答え、既存のSNS100意見・6論点へ接続するため"
+    risks:
+      - "検索表示・順位・クリック率は公開後30日間のSearch Console実測で確認する必要がある"
+      - "個別校の方針や導入校割合は示さず、確認した国の資料の範囲を明記する"
+      - "進捗は読了率ではなく端末内の操作済み地点数で、既存の17地点計測を維持する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-102.md"
+      - "quality/reviews/2026-09-29-school-nickname-search-entry.md"
+      - "docs/school-nickname-ban-reaction-map.html（sha256 b60b4cc031173c3cd1268207508fb986eb9967871ee637e524c08657880e9d82）"
+      - "tests/test_school_nickname_connected.py"
+      - "tests/test_school_nickname_connected_browser.cjs"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "オーナーがローカルページで入口UIと進捗表示を確認後、本対話で『公開して』と明示的に承認。"
+
+  - id: approval-20260929-002
+    department: growth-marketing
+    action: website_publication
+    summary: "課題101の高齢者免許返納ページを、検索意図に合わせた入口・FAQと正確な進捗表示へ更新して公開する"
+    reason: "『免許返納は何歳から』『70歳・75歳の制度』『メリット・デメリット』『家族の話し方』へ最初の画面から答え、操作数を閲覧量と誤解させない表示にして30日間検証するため"
+    risks:
+      - "タイトル変更後の検索表示・順位・クリック率は、Search Consoleで30日間観察する必要がある"
+      - "制度内容や地域ごとの返納支援が変わった場合は、一次資料を再確認する"
+      - "進捗は閲覧量ではなく端末内に保存する操作地点数であり、表示だけを『探ったところ』へ修正した"
+    recommendation: approve
+    evidence:
+      - "tasks/task-101.md"
+      - "docs/elderly-license-revocation-reaction-map.html（sha256 4d4ee8bfc3847983132b711db9d5c4ded6968a7680ba1c0fa18b5385afcaf428）"
+      - "tests/test_elderly_search_entry.py"
+      - "tests/test_elderly_connected.py"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "オーナーがローカルプレビューと進捗計測の説明を確認後、本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-29"
+    result_note: "main b11b7f27で公開。公開検査・Pages配信が成功し、本番で新タイトル、検索入口、FAQ、『探ったところ』、専用CSSの配信を確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36580252856"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36580252904"
+      - "https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html"
+
   - id: approval-20260929-001
     department: engineering-data
     action: website_publication
