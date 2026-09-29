@@ -28,20 +28,24 @@
 - 収集・分類・検査・公開候補の作成までは AI が自律的に行う。
 - **`--apply-promotion` は、候補manifestの品質監査が `ready_for_ceo` になり、CEO承認を `company/APPROVALS.yaml` に記録した後だけ実行する。**
 - `--promote` は従来手順との互換用に残す。管理画面からは使わない。
-- **分類モデルは `kimi-k2.6`（Hermes / OpenCode Go）。** `~/.hermes/config.yaml` の
-  `model.default` が全テーマ・全セッションに効き、スクリプト側にモデル指定は無い。
-  2026-08-18 に OpenCode Go 側の障害（503）で一時 `minimax-m2.7` へ切り替えたが、
-  同日中に復旧を確認して戻した。**この間に本番のデータは作っていないので、
-  累積正典はすべて `kimi-k2.6` 分類のまま。**
-- 障害でモデルを変えるときは、①分類が走っている他セッションが無いか確認する
-  （`pgrep -fl "classify_.*hermes|refresh_topic"`）②復旧したら戻す
-  ③この文書の記述を実際の設定に合わせ直す。設定を変えた瞬間に他セッションも切り替わるため、
-  分類の途中だと1回の更新の中でモデルが混ざる。
-- **戻すときは `model.default` だけでなく `provider` / `base_url` / `api_mode` も戻す。**
-  `kimi-k2.6` は `provider: opencode-go` / `base_url: https://opencode.ai/zen/go/v1` /
-  `api_mode: chat_completions` とセット。`default` だけ書き換えると別の提供元へ繋がる。
+- **分類モデルは `kimi-k2.7-code`（Hermes / OpenCode Go）。** `~/.hermes/config.yaml` の
+  `model.default` が全テーマ・全セッションに効く。2026-09-28、従来の `kimi-k2.6` が
+  OpenCode GoからHTTP 410（廃止）を返したため、提供元の案内とオーナー承認に従って
+  `kimi-k2.7-code` へ切り替えた。変更したのは `model.default` だけで、
+  `provider: opencode-go` / `base_url: https://opencode.ai/zen/go/v1` /
+  `api_mode: chat_completions` は維持している。直近の同一30件比較では、K2.7 Codeは
+  K2.6と論点77%・賛否73%が一致し、関係有無は両方100%だった。更新回ごとの実モデルは
+  必ず `report.json` の出所記録で確かめる。
+- **共有モデル設定を変える前は、分類中の他セッションが無いことを確認する**
+  （`pgrep -fl "classify_.*hermes|refresh_topic"`）。設定を変えた瞬間に他セッションも
+  切り替わるため、分類の途中だと1回の更新の中でモデルが混ざる。利用可能な代替へ
+  切り替えたときは、10件の試験分類と結果確認を済ませてから全件へ進み、この文書の
+  現行モデル・設定を実態に合わせる。
+- **providerを切り替えるときは `model.default` だけでなく `provider` / `base_url` /
+  `api_mode` も揃える。** K2.7 Codeも現在のOpenCode Go経路で使う。`default` だけを
+  別provider向けのモデルへ書き換えると、意図と違う提供元へ繋がることがある。
 - **2026-09-06、`model.default` が `upstage/solar-pro4:free`（同日 08:18 更新）に
-  なっているのを発見し、`kimi-k2.6` へ戻した。**誰がいつ替えたかの記録は無い。
+  なっているのを発見し、当時の基準だった `kimi-k2.6` へ戻した。**誰がいつ替えたかの記録は無い。
   この間に本番のデータは作っていない（直近の収集回は 2026-09-05 まで）。
   正確な識別子は `~/.hermes/config.yaml.bak.20260818_184335` から確認した。
   **モデルが黙って替わってもデータからは分からない、というのがこの一件の要点。**
