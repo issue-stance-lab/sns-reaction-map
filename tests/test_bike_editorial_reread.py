@@ -111,6 +111,37 @@ class BikeEditorialRereadTests(unittest.TestCase):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 build(self.samples, self.opposition, self.supplement, additional)
 
+    def test_refresh_review_reaffirms_an_existing_post_without_double_counting(self):
+        samples = copy.deepcopy(self.samples)
+        samples[0]["classification"]["intensity"] = "low"
+        additional = {"review_kind": "editorial_body_reread", "read_at": "2026-09-06",
+                      "reviewer_type": "test_editor", "target_sha256": "fixture",
+                      "bucket_definitions": {"n_burden": "利用時の負担"}, "items": []}
+        data = build(samples, self.opposition, self.supplement, additional)
+        data["その他"]["buckets"]["n_burden"] = {"label": "利用時の負担", "count": 0}
+        reason = "本文を再確認し、利用時の負担として区分する。"
+        update = {"review_kind": "editorial_body_reread", "read_at": "2026-09-28",
+                  "finalized_by": "test_editor", "items": [{
+                      "tweet_id": "opposition", "decision": "adopt", "main_issue": "その他",
+                      "stance": "反対（インフラ・制度優先）", "bucket": "n_burden", "intensity": "low",
+                      "body_reviewed": True, "review_kind": "editorial_body_reread",
+                      "independently_checked": True, "reviewer": "test_editor",
+                      "read_at": "2026-09-28", "reason": reason,
+                      "reason_sha256": hashlib.sha256(reason.encode()).hexdigest(),
+                      "text_sha256": hashlib.sha256(b"fixture").hexdigest(),
+                      "classification_concern": "none"}]}
+
+        result = apply_review_updates(data, samples, {"refresh.json": update})
+
+        self.assertEqual(result["population"]["その他"], 1)
+        self.assertEqual(len(result["その他"]["items"]), 1)
+        self.assertEqual(result["その他"]["items"][0]["bucket"], "n_burden")
+        self.assertEqual(result["その他"]["items"][0]["source_id"], "refresh.json")
+        disposition = result["update_dispositions"]["refresh.json"]
+        self.assertEqual(disposition["overlap_ids"], ["opposition"])
+        self.assertEqual(disposition["bucket_reassignments"], [
+            {"tweet_id": "opposition", "from": "place", "to": "n_burden"}])
+
     def test_checked_in_ledger_is_reproducible_from_editorial_sources(self):
         load = lambda p: json.loads((ROOT / p).read_text())
         data = build(load("social-samples/bike-blue-ticket_2d_classified.json"),
