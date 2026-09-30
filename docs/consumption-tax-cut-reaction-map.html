@@ -1281,10 +1281,6 @@ function drawPanel(){
           + (s.unread_count ? '残り'+s.unread_count+'件は、その後に増えた分でまだ読めていません。' : '')
           + '</div>');
   } else {
-    if (D.show_unreviewed_note !== false){
-      h += '<div class="note">'+s.note+'。<br>'
-         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
-    }
   }
   // 資料との照合と海面下への導線は、生成器が作った静的HTMLを読んで使う。
   // ここでもう一度組み立てると、同じ数字と文言が2通りに分かれる。
@@ -2336,7 +2332,7 @@ try {
 <template id="tax-reading-consumption-tax-cut-political-trust">
 <header class="tax-selected-head"><div><p class="tax-eyebrow">選んだ論点</p><h2>🗳️ 公約と政治不信</h2></div><button type="button" class="explainer-card tax-image-action" data-img="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouyaku-v2.webp" data-alt="公約と政治不信の図解"><img src="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-kouyaku-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
 <div class="tax-metrics" aria-live="polite" aria-atomic="true"><p><strong data-tax-count></strong><span data-tax-mode></span></p><p data-tax-ratio></p><p data-tax-zero hidden></p></div><p class="tax-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
-<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="tax-empty">この論点では、投稿を理由別に分ける再読をまだ行っていません。</p>
+<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3>
 <div class="tax-posts"><h3>実際の投稿を読む</h3><p class="tax-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p>
 <article class="tax-post" data-tax-post-url="https://x.com/shigani_kisyain/status/2082021002566095151"><p>公約から実現までの遅さへの不満</p><a href="https://x.com/shigani_kisyain/status/2082021002566095151" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/shigani_kisyain/status/2082021002566095151">@shigani_kisyain の投稿をXで見る</a></blockquote></details></article>
 <article class="tax-post" data-tax-post-url="https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560"><p>党内議論の報道のされ方に疑問</p><a href="https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/QVb7cvZhCKCLMqK/status/2084235686341992560">@QVb7cvZhCKCLMqK の投稿をXで見る</a></blockquote></details></article>
@@ -2375,14 +2371,13 @@ try {
 <article class="tax-post" data-tax-post-url="https://x.com/longtallsagi/status/2093939866065371202"><p>減税がなければ値上がりしていた分、恩恵はある</p><a href="https://x.com/longtallsagi/status/2093939866065371202" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/longtallsagi/status/2093939866065371202">@longtallsagi の投稿をXで見る</a></blockquote></details></article>
 </div></section><aside class="tax-evidence" aria-label="制度と資料">
 <h3>投稿の主張と一次資料</h3>
-<p class="tax-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
 <h3>同じ心配から、違う結論へ</h3>
 <details class="tax-concern" data-tax-concern="consumption-tax-cut-vein-2"><summary>税率を下げても、事業者が店頭価格を据え置けば、減税分が消費者に届かないのではないか。</summary><p>税率が下がっても、それが店頭価格にそのまま反映されるかどうかで見方が分かれる。減税推進側は『市場競争が働けば価格を下げないと不利になる』『消費税増税のときは便乗値上げが実際に起きた実績がある』と、反映されると見る。一方、減税反対・慎重側は『原材料費・人件費の上昇を企業努力で吸収してきた事業者は税率が下がっても店頭価格を据え置く可能性が高い』『価格を上げてでも採算を確保する店が出る』と、反映されないと見る。同じ市場行動を根拠にしながら、正反対の予測に至っている。</p><p class="tax-note" id="tax-concern-count-consumption-tax-cut-vein-2">確認した投稿例: 減税推進 2件 ／ 減税反対・慎重 2件。確認日 2026-09-19</p></details>
 </aside></div></template>
 <template id="tax-reading-consumption-tax-cut-finance-welfare">
 <header class="tax-selected-head"><div><p class="tax-eyebrow">選んだ論点</p><h2>🏛️ 財源と社会保障</h2></div><button type="button" class="explainer-card tax-image-action" data-img="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-zaigen-v2.webp" data-alt="財源と社会保障の図解"><img src="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-zaigen-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
 <div class="tax-metrics" aria-live="polite" aria-atomic="true"><p><strong data-tax-count></strong><span data-tax-mode></span></p><p data-tax-ratio></p><p data-tax-zero hidden></p></div><p class="tax-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
-<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="tax-empty">この論点では、投稿を理由別に分ける再読をまだ行っていません。</p>
+<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3>
 <div class="tax-posts"><h3>実際の投稿を読む</h3><p class="tax-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p>
 <article class="tax-post" data-tax-post-url="https://x.com/Culena0/status/2085897628005650517"><p>社会保障の削減が先ではないか</p><a href="https://x.com/Culena0/status/2085897628005650517" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Culena0/status/2085897628005650517">@Culena0 の投稿をXで見る</a></blockquote></details></article>
 <article class="tax-post" data-tax-post-url="https://x.com/Yan0321Asa/status/2086480295843504503"><p>財源論より歳出の使い道を議論すべき</p><a href="https://x.com/Yan0321Asa/status/2086480295843504503" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/Yan0321Asa/status/2086480295843504503">@Yan0321Asa の投稿をXで見る</a></blockquote></details></article>
@@ -2408,7 +2403,6 @@ try {
 <details class="tax-policy" data-tax-policy="policy-benefit" open><summary>減税と給付、どちらか一方か</summary><p>政府大綱では両方を組み合わせ、2027年4月から「就業者負担軽減支援金」を導入し、2029年度に「給付付き税額控除」を本格導入する方針です。法律はまだ成立していません。</p><details class="tax-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf" target="_blank" rel="noopener noreferrer">同大綱（就業者負担軽減支援金の制度設計）</a></li></ul></details></details>
 <p class="tax-note">2026-09-27時点では政府方針の段階で、法律はまだ成立していません。</p>
 <h3>投稿の主張と一次資料</h3>
-<p class="tax-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
 <h3>資料にあり、収集投稿で見つからなかったこと</h3>
 <details class="tax-source-only" data-tax-source-only="consumption-tax-cut-sc-2"><summary>就業者負担軽減支援金を受け取るには、勤労所得・所得上限・純負担率・配偶者所得の4条件を全て満たす必要がある</summary><p>「給付がある」というだけでなく、支援金を受け取るには①勤労所得が所得下限額を超える②前年の合計所得金額が扶養児童の有無・数に応じた上限額以下③純負担率（租税・社会保険料の合計から現金給付を控除した額の収入に対する割合）が基準を超える④配偶者がいる場合はその所得が上限額以下、の4条件を全て満たす必要がある。特に③の基準は、単純な年収だけでは自分が対象になるか判断できない設計になっている。</p><p class="tax-note">今回収集した意見4,340件では、この記述に触れた投稿は見つかりませんでした。 確認日 2026-09-24</p><details><summary>調べた範囲を見る</summary><p id="tax-source-note-consumption-tax-cut-sc-2">「就業者負担軽減支援金」「純負担率」「年収の壁」「就業促進特例」の語での一致は4件あったが、いずれも別の政策（一般的な年収の壁引上げ議論）、内閣の実績を並べた投稿、円安要因を巡る財政論争、財源に関するFP解説記事の紹介であり、支援金の対象となる4条件そのものへの具体的な言及は0件。 追加収集分（2026-09-24）でも新規2件がヒットしたが、支援金制度の複雑さへの感想と、別政策『年収の壁』を巡る論争であり、対象となる4条件そのものへの具体的な言及は引き続き0件。</p></details><details class="tax-sources"><summary>出典をひらく</summary><ul><li><a href="https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf" target="_blank" rel="noopener noreferrer">内閣（閣議決定）「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」</a><p>「第三 就業者負担軽減支援金の支給等」、支給対象の要件部分</p></li></ul></details></details>
 </aside></div></template>
@@ -2433,13 +2427,12 @@ try {
 <template id="tax-reading-consumption-tax-cut-other">
 <header class="tax-selected-head"><div><p class="tax-eyebrow">選んだ論点</p><h2>💬 その他</h2></div><button type="button" class="explainer-card tax-image-action" data-img="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-sonota-v2.webp" data-alt="その他の図解"><img src="images/topics/consumption-tax-cut/consumption-tax-cut-infographic-wide-sonota-v2.webp" alt="" loading="lazy"><span>図解をひらく ↗</span></button></header>
 <div class="tax-metrics" aria-live="polite" aria-atomic="true"><p><strong data-tax-count></strong><span data-tax-mode></span></p><p data-tax-ratio></p><p data-tax-zero hidden></p></div><p class="tax-scope-note">理由の分類・投稿例・資料は、この論点全体の内容です。</p>
-<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3><p class="tax-empty">この論点では、投稿を理由別に分ける再読をまだ行っていません。</p>
+<div class="tax-columns"><section class="tax-opinions" aria-label="意見の理由と投稿"><h3>どんな理由で語られている？</h3>
 <div class="tax-posts"><h3>実際の投稿を読む</h3><p class="tax-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p>
 <article class="tax-post" data-tax-post-url="https://x.com/kawanashigaikot/status/2091675832569979076"><p>世論調査の聞き方が公平でないと指摘</p><a href="https://x.com/kawanashigaikot/status/2091675832569979076" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/kawanashigaikot/status/2091675832569979076">@kawanashigaikot の投稿をXで見る</a></blockquote></details></article>
 <article class="tax-post" data-tax-post-url="https://x.com/KayoRabbit/status/2084228125450482119"><p>制度の説明が分かりにくいと指摘</p><a href="https://x.com/KayoRabbit/status/2084228125450482119" target="_blank" rel="noopener noreferrer">元の投稿をXで読む ↗</a><details class="tax-embed"><summary>ここで投稿を表示</summary><blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><a href="https://x.com/KayoRabbit/status/2084228125450482119">@KayoRabbit の投稿をXで見る</a></blockquote></details></article>
 </div></section><aside class="tax-evidence" aria-label="制度と資料">
 <h3>投稿の主張と一次資料</h3>
-<p class="tax-empty">この論点に対応する資料照合は、まだ登録されていません。</p>
 <p><a href="about.html#method">投稿の集め方と分類方法を確認する →</a></p>
 </aside></div></template>
 <!-- TAX_CONNECTED_CONTENT_END -->

@@ -98,6 +98,18 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
+    # 旧表示の生成コードに残る制作工程の説明は、このテーマの連動表示では使わない。
+    # PLANET_DATA内の再読状態は維持し、利用者向けの空状態段落だけを生成物から外す。
+    legacy_phrase = "AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。"
+    if legacy_phrase in source:
+        source, legacy_notes = re.subn(
+            r'  \} else \{\n    if \(D\.show_unreviewed_note !== false\)\{\n'
+            r'      h \+= .*?\n         \+ \'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>\';\n'
+            r'    \}\n  \}\n(?=  // 資料との照合)',
+            '  } else {\n  }\n', source, count=1, flags=re.S,
+        )
+        if legacy_notes != 1:
+            raise ValueError("連動表示: 旧表示の制作工程説明を1か所に特定できません")
     # 公開時に参加者数の修正版を取得する。将来の版番号は巻き戻さない。
     source = source.replace('src="topic-modern.js?v=13"', 'src="topic-modern.js?v=14"')
     from consumption_tax_connected_content import correct_editorial, corrected_observations, corrected_focus, render_templates, START as CONTENT_START, END as CONTENT_END
@@ -188,6 +200,14 @@ def validate(source: str) -> list[str]:
     from build_consumption_tax_page import BACKGROUND_CHECKS, BACKGROUND_DATA, BACKGROUND_TIMELINE, CLAIM_AUDIT, CHECKED_ON, ISSUE_CARDS_POSTS
 
     problems = []
+    for phrase in (
+        "AIが自動でつけた区分",
+        "人が読んだ結果だけをまとめにします",
+        "理由別に分ける再読をまだ行っていません",
+        "資料照合は、まだ登録されていません",
+    ):
+        if phrase in source:
+            problems.append(f"利用者に不要な制作工程・未対応説明が残っています: {phrase}")
     soup = BeautifulSoup(source, "html.parser")
     try:
         data = planet_data(source)
