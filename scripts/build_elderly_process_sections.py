@@ -29,7 +29,7 @@ THEME = "elderly-license-revocation"
 START = "<!-- VERIFY_SECTION_START -->"
 END = "<!-- VERIFY_SECTION_END -->"
 
-CHECKED_AT = "2026年8月18日"
+CHECKED_AT = "2026年9月30日"
 
 # 判定は fact / gap / miss の3種だけ。
 # miss（確認できなかった）の行は消さない。空振りが残っていることが、人が調べた証拠になる。
