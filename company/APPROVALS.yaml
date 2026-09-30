@@ -1304,3 +1304,24 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36424995209"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36424994996"
       - "https://sns-reaction-map.jp/bike-blue-ticket-reaction-map.html"
+
+  - id: approval-20260930-001
+    department: data
+    action: website_publish
+    summary: "高齢者免許返納テーマの2026-09-30定期更新を公開する（収集602→662件、意見428→455件）"
+    reason: "新規意見候補の本文確認、主張・資料項目の再照合、数値・表示・操作検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "一般的な運転マナー批判7件は高齢者政策との直接関係がないため対象外とした"
+      - "公開候補コピー内の全体検査3項目は.gitと非公開資産を含まない環境由来NGで、適用後に実作業ツリーで再検査する"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/elderly-license-revocation/20260930_222048/promotion-manifest.json（sha256 b08f0804…）"
+      - "quality/reviews/2026-09-30-elderly-license-refresh-review.md"
+      - "data/verification/updates/elderly-license-revocation/2026-09-30/"
+    status: approved
+    requested_at: "2026-09-30"
+    decided_at: "2026-09-30"
+    decision_note: >-
+      本対話で新規60件・採用意見27件、本文確認と主張再照合、PC・スマホの検査結果を提示し、
+      オーナーが「本番反映」と明示的に承認。

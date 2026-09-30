@@ -17,7 +17,9 @@ CSS_HREF = "elderly-connected.css?v=1"
 JS_SRC = "elderly-connected.js?v=1"
 PAGE_JS_SRC = "elderly-connected-page.js?v=1"
 PROGRESS_LABEL = "探ったところ"
+MIN_HILL_WIDTH = 56
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
+MIN_HILL_WIDTH_PATTERN = re.compile(r"(const MIN_W=)\d+(;\s*// 細すぎて押せない山を広げる最小幅)")
 REASON_POSTS = ROOT / "configs" / "elderly-license-reason-posts.json"
 
 
@@ -31,6 +33,16 @@ def apply_progress_wording(source: str) -> str:
     source, count = pattern.subn(r"\g<1>" + PROGRESS_LABEL + r"\g<2>", source, count=1)
     if count != 1:
         raise ValueError("連動表示: 進捗表示を一意に見つけられません")
+    return source
+
+
+def apply_min_hill_width(source: str) -> str:
+    """部分再生成後も、公開済みの押しやすい山幅を維持する。"""
+    source, count = MIN_HILL_WIDTH_PATTERN.subn(
+        rf"\g<1>{MIN_HILL_WIDTH}\g<2>", source, count=1
+    )
+    if count != 1:
+        raise ValueError("連動表示: 山の最小幅を一意に見つけられません")
     return source
 
 
@@ -139,6 +151,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
             raise ValueError("連動表示: head の終端が1つではありません")
         source = source.replace("</head>", block + "\n</head>", 1)
     source = apply_progress_wording(source)
+    source = apply_min_hill_width(source)
     problems = validate(source)
     if problems:
         raise ValueError("連動表示の検査に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -174,6 +187,8 @@ def validate(source: str) -> list[str]:
     progress_label = soup.select_one("#progress > span")
     if progress_label is None or progress_label.get_text(strip=True) != PROGRESS_LABEL:
         problems.append("操作地点の表示が『探ったところ』になっていません")
+    if f"const MIN_W={MIN_HILL_WIDTH};" not in source:
+        problems.append(f"小さい山の最小幅が{MIN_HILL_WIDTH}ではありません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")

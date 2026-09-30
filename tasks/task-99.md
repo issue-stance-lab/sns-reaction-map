@@ -1,13 +1,10 @@
 # 課題99: 「クレーム監査（主張の事実確認）」の照合遅れ警告を運用に組み込む
 
-**状態**: 進行中。2026-09-28、オーナーが「30日以上遅れたら読み直す」基準を決定。
-運用ルール化・ダッシュボード自動検知は実装済み。実際の読み直し（3テーマ）は未着手
+**状態**: 進行中。運用ルール化・自動検知は実装済み。2026-09-30に高齢者免許返納を読み直し済み
 **優先度**: 中（検査は失敗していないため急ぎではないが、放置すると際限なく遅れが広がる構造）
-**次にすること**: fukushuto・elderly-license-revocation・consumption-tax-cutの3テーマ、
-それぞれの次回定期更新（`THEMES.yaml`の`collect_at`）に合わせて主張の該当件数を読み直す
+**次にすること**: fukushuto・consumption-tax-cutの次回定期更新に合わせて主張の該当件数を読み直す
 **判断待ち**: なし（基準は決定済み）
-**関連テーマ**: 全9テーマ（fukushuto・elderly-license-revocation・consumption-tax-cutが
-2026-09-28時点で30日超）
+**関連テーマ**: 全9テーマ（30日超の未対応はfukushuto・consumption-tax-cut）
 
 ---
 
@@ -104,3 +101,11 @@ HTML出力で確認、`tests/test_claim_verdicts.py`全6件・`tests/test_admin_
 **未実施**: fukushuto・elderly-license-revocation・consumption-tax-cutの3テーマ、
 実際の主張の該当件数の読み直し自体。対象件数の見積もりもまだ。次回のそれぞれの定期更新
 （課題69の型）に合わせて着手する。
+
+## 2026-09-30：高齢者免許返納の遅れを解消
+
+定期更新で採用した新規意見27件を既存7主張と全件照合した。「地方はバスで生活できない」に
+当たる3件を追加し、主張該当投稿は46→49件になった。ほか6主張への新規追加はなかった。
+`data/elderly-license-revocation_claim_posts.json`、公開検証データ、ページ生成スクリプトの確認日を
+2026-09-30へ更新し、公開データの期間末へ追いついた。残る30日超の対応対象は
+fukushuto・consumption-tax-cutの2テーマ。
