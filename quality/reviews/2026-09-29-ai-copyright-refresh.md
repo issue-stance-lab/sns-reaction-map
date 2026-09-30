@@ -5,7 +5,7 @@
 - 対象run: `20260929_222720`
 - 候補: `.staging/refresh/ai-copyright/20260929_222720`
 - 判定: `ready_for_ceo`
-- promotion manifest内部SHA-256: `202879601e8ade28e2b2f280d6003163e67cc4be71516f3cdb636f94e9c7e864`
+- promotion manifest内部SHA-256: `08feb2092a62a29982306615719b852e7be7506427d64bf9d3ab29a13daa9f92`
 
 ## 確認結果
 
