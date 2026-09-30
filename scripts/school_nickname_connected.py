@@ -24,7 +24,7 @@ FAQ_JSONLD_START = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_START -->"
 FAQ_JSONLD_END = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_END -->"
 BRIDGE_START = "/* SCHOOL_NICKNAME_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* SCHOOL_NICKNAME_CONNECTED_BRIDGE_END */"
-CSS_HREF = "school-nickname-connected.css?v=2"
+CSS_HREF = "school-nickname-connected.css?v=3"
 JS_SRC = "school-nickname-connected.js?v=1"
 PAGE_JS_SRC = "school-nickname-connected-page.js?v=1"
 DATA_PATTERN = re.compile(r'<script id="planet-data">window\.PLANET_DATA=(.*?);</script>', re.S)

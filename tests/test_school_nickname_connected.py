@@ -73,6 +73,8 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
 
     def test_search_entry_and_visible_faq_are_generated_once(self):
         soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(len(soup.select('link[href="school-nickname-connected.css?v=3"]')), 1)
+        self.assertNotIn("school-nickname-connected.css?v=2", self.page)
         self.assertEqual(len(soup.select("#school-nickname-guide")), 1)
         self.assertEqual(len(soup.select("#school-nickname-guide .school-nickname-answer-grid article")), 3)
         self.assertEqual(len(soup.select("#school-nickname-faq details")), 10)

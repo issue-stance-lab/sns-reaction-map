@@ -47,6 +47,14 @@ async function contextFor(browser, options = {}) {
       await page.waitForTimeout(120);
       assert.equal(await page.locator('#pnum').innerText(), '2 / 17');
       assert.equal(await page.locator('#school-nickname-guide .school-nickname-answer-grid article').count(), 3);
+      const guideMarker = await page.locator('.school-nickname-guide-head').evaluate(element => {
+        const head = element.getBoundingClientRect();
+        const kicker = element.querySelector('.school-nickname-guide-kicker').getBoundingClientRect();
+        const marker = getComputedStyle(element, '::before');
+        const markerRight = head.left + parseFloat(marker.left) + parseFloat(marker.width);
+        return {markerRight, kickerLeft: kicker.left};
+      });
+      assert.ok(guideMarker.markerRight + 8 <= guideMarker.kickerLeft, JSON.stringify(guideMarker));
       assert.equal(await page.locator('#school-nickname-faq details').count(), 10);
       await page.locator('#school-nickname-faq details').first().locator('summary').click();
       assert.equal(await page.locator('#school-nickname-faq details').first().getAttribute('open'), '');
