@@ -34,8 +34,7 @@ def reason_posts() -> dict:
 def reasons(issue: dict) -> str:
     sub = issue.get("sub") or {}
     if sub.get("status") != "reread":
-        note = sub.get("note", "この論点は、まだ編集部が投稿を1件ずつ読み直していません")
-        return f'<p class="elc-empty">{e(note)}。AIが自動でつけた区分を理由として表示することはしません。</p>'
+        return ""
     configured = reason_posts().get(issue["id"], {})
     rows = []
     for item in sub.get("items", []):
