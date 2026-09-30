@@ -46,7 +46,33 @@ async function contextFor(browser, options = {}) {
       await page.goto(url, {waitUntil: 'domcontentloaded'});
       await page.waitForTimeout(120);
       assert.equal(await page.locator('#pnum').innerText(), '2 / 17');
-      assert.equal(await page.locator('#school-nickname-guide .school-nickname-answer-grid article').count(), 3);
+      const guideTabs = page.locator('#school-nickname-guide [data-school-nickname-guide-tab]');
+      const guidePanels = page.locator('#school-nickname-guide [data-school-nickname-guide-panel]');
+      assert.equal(await guideTabs.count(), 3);
+      assert.equal(await guidePanels.count(), 3);
+      assert.equal(await guideTabs.first().getAttribute('aria-selected'), 'true');
+      assert.equal(await page.locator('#school-nickname-guide [data-school-nickname-guide-panel]:visible').count(), 1);
+      await guideTabs.first().press('ArrowRight');
+      assert.equal(await guideTabs.nth(1).getAttribute('aria-selected'), 'true');
+      assert.equal(await guidePanels.nth(1).isVisible(), true);
+      assert.equal(await page.locator('#pnum').innerText(), '2 / 17');
+      await guideTabs.first().click();
+      await guidePanels.first().locator('[data-school-nickname-map-link]').click();
+      await page.waitForTimeout(80);
+      assert.equal(await page.locator('#pnum').innerText(), '3 / 17');
+      assert.deepEqual(await page.evaluate(() => window.SchoolNicknameBanConnectedMap.getState()), {
+        stanceId: 'all', issueId: 'school-nickname-ban-school-practice',
+      });
+      assert.ok(await page.evaluate(() => document.querySelector('#planet-block').getBoundingClientRect().top < innerHeight));
+      await page.evaluate(() => window.SchoolNicknameBanConnectedMap.selectIssue('school-nickname-ban-uniform-rule'));
+      const guideMarker = await page.locator('.school-nickname-guide-head').evaluate(element => {
+        const head = element.getBoundingClientRect();
+        const kicker = element.querySelector('.school-nickname-guide-kicker').getBoundingClientRect();
+        const marker = getComputedStyle(element, '::before');
+        const markerRight = head.left + parseFloat(marker.left) + parseFloat(marker.width);
+        return {markerRight, kickerLeft: kicker.left};
+      });
+      assert.ok(guideMarker.markerRight + 8 <= guideMarker.kickerLeft, JSON.stringify(guideMarker));
       assert.equal(await page.locator('#school-nickname-faq details').count(), 10);
       await page.locator('#school-nickname-faq details').first().locator('summary').click();
       assert.equal(await page.locator('#school-nickname-faq details').first().getAttribute('open'), '');
@@ -85,6 +111,8 @@ async function contextFor(browser, options = {}) {
     await page.goto(url, {waitUntil: 'domcontentloaded'});
     assert.equal(await page.locator('#fallback').isVisible(), true);
     assert.equal(await page.locator('#issue-cards').isVisible(), true);
+    assert.equal(await page.locator('#school-nickname-guide [data-school-nickname-guide-panel]').count(), 3);
+    assert.equal(await page.locator('#school-nickname-guide [data-school-nickname-guide-panel]:visible').count(), 3);
     await context.close();
     console.log(JSON.stringify({engine: engineName, widths: [1280, 375, 320], javascriptDisabled: true}));
   } finally {

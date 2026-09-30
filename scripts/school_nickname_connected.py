@@ -24,9 +24,9 @@ FAQ_JSONLD_START = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_START -->"
 FAQ_JSONLD_END = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_END -->"
 BRIDGE_START = "/* SCHOOL_NICKNAME_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* SCHOOL_NICKNAME_CONNECTED_BRIDGE_END */"
-CSS_HREF = "school-nickname-connected.css?v=2"
+CSS_HREF = "school-nickname-connected.css?v=4"
 JS_SRC = "school-nickname-connected.js?v=1"
-PAGE_JS_SRC = "school-nickname-connected-page.js?v=1"
+PAGE_JS_SRC = "school-nickname-connected-page.js?v=2"
 DATA_PATTERN = re.compile(r'<script id="planet-data">window\.PLANET_DATA=(.*?);</script>', re.S)
 
 CHECK_ISSUES = {
@@ -253,6 +253,20 @@ def validate(source: str) -> list[str]:
             problems.append(f"{label}の目印が1組ではありません")
     if len(soup.select("#school-nickname-guide")) != 1 or len(soup.select("#school-nickname-faq")) != 1:
         problems.append("検索入口またはFAQが1つではありません")
+    guide_tabs = soup.select("#school-nickname-guide [data-school-nickname-guide-tab]")
+    guide_panels = soup.select("#school-nickname-guide [data-school-nickname-guide-panel]")
+    if len(guide_tabs) != 3 or len(guide_panels) != 3:
+        problems.append("検索入口の論点タブと表示面が3組ではありません")
+    elif any(tab.get("aria-controls") != panel.get("id") for tab, panel in zip(guide_tabs, guide_panels)):
+        problems.append("検索入口の論点タブと表示面の接続が一致しません")
+    guide_issue_ids = {panel.get("data-school-nickname-issue-id") for panel in guide_panels}
+    known_issue_ids = {issue["id"] for issue in data["issues"]}
+    if guide_issue_ids != {
+        "school-nickname-ban-school-practice",
+        "school-nickname-ban-psychological-safety",
+        "school-nickname-ban-uniform-rule",
+    } or not guide_issue_ids <= known_issue_ids:
+        problems.append("検索入口から山並みマップへの論点接続が一致しません")
     if len(soup.select("#school-nickname-faq details")) != 10:
         problems.append("FAQが10問ではありません")
     progress = soup.select_one("#progress")

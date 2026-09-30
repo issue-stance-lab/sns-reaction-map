@@ -73,8 +73,24 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
 
     def test_search_entry_and_visible_faq_are_generated_once(self):
         soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(len(soup.select('link[href="school-nickname-connected.css?v=4"]')), 1)
+        self.assertNotIn("school-nickname-connected.css?v=3", self.page)
+        self.assertEqual(len(soup.select('script[src="school-nickname-connected-page.js?v=2"][defer]')), 1)
         self.assertEqual(len(soup.select("#school-nickname-guide")), 1)
-        self.assertEqual(len(soup.select("#school-nickname-guide .school-nickname-answer-grid article")), 3)
+        tabs = soup.select("#school-nickname-guide [data-school-nickname-guide-tab]")
+        panels = soup.select("#school-nickname-guide [data-school-nickname-guide-panel]")
+        self.assertEqual(len(tabs), 3)
+        self.assertEqual(len(panels), 3)
+        self.assertEqual([tab.get("aria-controls") for tab in tabs], [panel.get("id") for panel in panels])
+        self.assertEqual(
+            {panel.get("data-school-nickname-issue-id") for panel in panels},
+            {
+                "school-nickname-ban-school-practice",
+                "school-nickname-ban-psychological-safety",
+                "school-nickname-ban-uniform-rule",
+            },
+        )
+        self.assertEqual(len(soup.select("#school-nickname-guide [data-school-nickname-map-link]")), 3)
         self.assertEqual(len(soup.select("#school-nickname-faq details")), 10)
         self.assertLess(self.page.index("SCHOOL_NICKNAME_SEARCH_ENTRY_START"), self.page.index("STANCE_GLANCE_START"))
         self.assertLess(self.page.index("SCHOOL_NICKNAME_FAQ_START"), self.page.index('id="related-topics"'))
