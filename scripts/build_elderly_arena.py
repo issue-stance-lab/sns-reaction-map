@@ -20,11 +20,13 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from .elderly_connected import apply_progress_wording
     from .issue_card_counts import IssueCountError
     from .sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml
     from .x_embed import period_label
     from .x_embed import embed_html
 except ImportError:
+    from elderly_connected import apply_progress_wording  # type: ignore[no-redef]
     from issue_card_counts import IssueCountError  # type: ignore[no-redef]
     from sync_portal_stats import ROOT, THEMES_YAML, parse_themes_yaml  # type: ignore[no-redef]
     from x_embed import period_label  # type: ignore[no-redef]
@@ -287,6 +289,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]+</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細</span></div>', "マップ見出し")
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>', build_details_from_counts(issues, stances, intensities, total), "詳細データ", flags=re.S)
     page = apply_elderly_stance_glance(page)
+    page = apply_progress_wording(page)
     return page
 
 
@@ -606,6 +609,7 @@ def build(
         page = replace_once(page, r'<section class="panel conflict-panel">.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>', build_details(rows), "詳細データ", flags=re.S)
     page = apply_elderly_stance_glance(page)
+    page = apply_progress_wording(page)
 
     changed = page != before
     if not check:
