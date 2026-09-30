@@ -203,6 +203,10 @@ def validate(source: str) -> list[str]:
             problems.append(f"読書面の入口が1つではありません: {iid} ({len(nodes)})")
             continue
         reading = BeautifulSoup(nodes[0].decode_contents(), "html.parser")
+        if data.get("show_unreviewed_note") is False:
+            visible_text = reading.get_text(" ", strip=True)
+            if "まだ編集部が投稿を1件ずつ読み直していません" in visible_text or "AIが自動でつけた区分" in visible_text:
+                problems.append(f"非表示設定の未再読注記が読書面へ戻っています: {iid}")
         attrs = (("claim_ids", "data-elc-claim"), ("source_only_ids", "data-elc-source-only"),
                  ("shared_concern_ids", "data-elc-concern"), ("timeline_ids", "data-elc-timeline"),
                  ("check_ids", "data-elc-check"), ("reason_ids", "data-elc-reason-posts"))
