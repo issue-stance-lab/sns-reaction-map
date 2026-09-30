@@ -62,7 +62,7 @@ class ElderlySearchEntryTest(unittest.TestCase):
     def test_article_metadata_matches_visible_heading(self) -> None:
         article = json.loads(self.soup.select_one('script[type="application/ld+json"]').string)
         self.assertEqual(article["headline"], self.soup.select_one("h1").get_text(strip=True))
-        self.assertEqual(article["dateModified"], "2026-09-20")
+        self.assertEqual(article["dateModified"], "2026-09-30")
 
 
 if __name__ == "__main__":
