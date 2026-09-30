@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import call, patch
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "docs" / "ai-copyright-reaction-map.html"
@@ -15,6 +16,47 @@ def digest(path: Path) -> str:
 
 
 class AiCopyrightAdapterTests(unittest.TestCase):
+    def test_finalize_refreshes_public_counts_and_planet_section(self):
+        from scripts.refresh_adapters.ai_copyright import finalize
+
+        with patch("scripts.refresh_adapters.ai_copyright.subprocess.run") as run:
+            finalize(ROOT, "2026-09-29")
+
+        self.assertEqual(
+            run.call_args_list,
+            [
+                call(
+                    [
+                        sys.executable,
+                        str(ROOT / "scripts/build_ai_copyright_arena.py"),
+                        "--public-counts-only",
+                        "--output-html", str(ROOT / "docs/ai-copyright-reaction-map.html"),
+                    ],
+                    cwd=ROOT,
+                    check=True,
+                ),
+                call(
+                    [
+                        sys.executable,
+                        str(ROOT / "scripts/refresh_planet_section.py"),
+                        "--topic", "ai-copyright",
+                        "--for-docs",
+                    ],
+                    cwd=ROOT,
+                    check=True,
+                ),
+                call(
+                    [
+                        sys.executable,
+                        str(ROOT / "scripts/build_ai_copyright_arena.py"),
+                        "--skip-issue-counts",
+                    ],
+                    cwd=ROOT,
+                    check=True,
+                ),
+            ],
+        )
+
     def test_public_json_drives_page_level_counts(self):
         # 課題54段階2-3で本番は山なみ形式へ差し替え済み。旧アリーナの母数属性・
         # 見出し・注目ポイントは対象セクションごと撤去されており、この関数は
