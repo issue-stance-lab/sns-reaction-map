@@ -1319,9 +1319,20 @@ items:
       - ".staging/refresh/elderly-license-revocation/20260930_222048/promotion-manifest.json（sha256 b08f0804…）"
       - "quality/reviews/2026-09-30-elderly-license-refresh-review.md"
       - "data/verification/updates/elderly-license-revocation/2026-09-30/"
-    status: approved
+    status: completed
     requested_at: "2026-09-30"
     decided_at: "2026-09-30"
     decision_note: >-
       本対話で新規60件・採用意見27件、本文確認と主張再照合、PC・スマホの検査結果を提示し、
       オーナーが「本番反映」と明示的に承認。
+    completed_at: "2026-09-30"
+    result_note: >-
+      main 159260dcで公開。全1253テスト（4件skip）、公開検査1076件（4件skip）、
+      データ復元検査、GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番テーマページで収集662件・意見455件・更新日9月30日、小さい山の最小幅56を確認し、
+      トップページで60件追加・全体20,250件・意見15,762件を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36732111941"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36732111991"
+      - "https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
