@@ -735,6 +735,11 @@ def publication_schedule_fields(next_date: str | None) -> dict[str, str | None]:
     }
 
 
+def publication_new_count(report: dict[str, Any]) -> int:
+    """再開した保存回では、再取得結果0件ではなく保存済みの新規件数を公開表示へ使う。"""
+    return int(report.get("saved_wave_new", report.get("new", 0)) or 0)
+
+
 def record_pending_wave(root: Path, topic: str, current_date: str) -> None:
     """新規のある更新回を保存したが、まだ公開していないことを台帳に残す。
 
@@ -861,7 +866,7 @@ def promote(
         # verify_sample_periods.py の owner_confirmed 検査（日付形式であること）で必ず落ちる。
         fields = {
             "updated_at": current_date,
-            "collect_delta": str(int(report["new"])),
+            "collect_delta": str(publication_new_count(report)),
             **publication_schedule_fields(next_date),
         }
         if theme.get("sample_period_source") != "owner_confirmed":
@@ -960,7 +965,7 @@ def prepare_public_candidate_bundle(
         shutil.copy2(source, destination)
 
     next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
-    fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), **publication_schedule_fields(next_date)}
+    fields = {"updated_at": current_date, "collect_delta": str(publication_new_count(report)), **publication_schedule_fields(next_date)}
     if theme.get("sample_period_source") != "owner_confirmed":
         fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
     elif topic == "bike-blue-ticket":
@@ -1181,7 +1186,7 @@ def prepare_public_candidate_bundle_multi(
             per_topic_targets[target] = destination
 
         next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
-        fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), **publication_schedule_fields(next_date)}
+        fields = {"updated_at": current_date, "collect_delta": str(publication_new_count(report)), **publication_schedule_fields(next_date)}
         if theme.get("sample_period_source") != "owner_confirmed":
             fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
         elif topic == "bike-blue-ticket":

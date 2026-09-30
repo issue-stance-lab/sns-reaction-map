@@ -27,6 +27,7 @@ from scripts.refresh_topic import (
     promote,
     ensure_no_pending_wave,
     publication_schedule_fields,
+    publication_new_count,
     record_collection_schedule,
     record_pending_wave,
     validate_sets,
@@ -57,6 +58,10 @@ def classified(tweet_id: str, issue: str = "中傷動画・説明責任") -> dic
 
 
 class RefreshTopicTests(unittest.TestCase):
+    def test_publication_uses_saved_wave_count_when_resuming(self):
+        self.assertEqual(publication_new_count({"new": 0, "saved_wave_new": 60}), 60)
+        self.assertEqual(publication_new_count({"new": 12}), 12)
+
     def test_owner_confirmed_bike_period_keeps_start_and_extends_end(self):
         theme = {
             "sample_period": "2026-06-27〜2026-09-12",
