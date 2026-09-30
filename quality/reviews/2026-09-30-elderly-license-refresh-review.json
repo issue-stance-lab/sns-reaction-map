@@ -2,6 +2,8 @@
   "topic": "elderly-license-revocation",
   "run_id": "20260930_222048",
   "reviewed_at": "2026-09-30",
+  "quality_status": "ready_for_ceo",
+  "promotion_manifest_sha256": "b08f0804c3575a450df7dcce08df2e4920e2bbe905d755d24711167b22f3a21c",
   "method": "新規意見候補34件の本文を1件ずつ読み、年齢・高齢者政策への関連、意見性、主論点、立場を確認。同時に7つの事実主張と4つの「資料にしかない話」を再照合した。",
   "counts": {
     "candidate_opinions": 34,
@@ -76,5 +78,13 @@
   "classification_model": {
     "name": "kimi-k2.7-code",
     "provider": "opencode-go"
+  },
+  "checks": {
+    "data_consistency": "passed",
+    "seo": "passed",
+    "focused_unittests": "25 passed",
+    "browser": "Chromium/WebKit 1280・375・320px、操作・JS無効時までpassed",
+    "visual_review": "PC・375pxを目視確認、崩れなし",
+    "candidate_full_checks": "候補コピーに.gitと管理対象外の非公開資産がないため3項目のみ環境由来NG。実作業ツリーで公開適用後に再実行する"
   }
 }
