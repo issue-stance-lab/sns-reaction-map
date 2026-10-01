@@ -63,6 +63,8 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
         config = json.loads((ROOT / "configs/theme-seo.json").read_text(encoding="utf-8"))
         theme = next(item for item in config["themes"] if item["id"] == "koshitsu-tenpakai")
         self.assertEqual(connected.apply(self.html), self.html)
+        if not trust.sample_file_for(theme["id"]).is_file():
+            self.skipTest("非公開正典がない環境ではSEO全体の再生成を行わない")
         self.assertEqual(trust.apply_theme(self.html, theme, config), self.html)
 
     def test_counts_review_state_posts_sources_and_storage_notice_remain(self):
