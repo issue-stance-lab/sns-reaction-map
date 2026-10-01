@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from scripts.seo.apply_theme_trust import is_opinion, trust_block
+from scripts.seo.apply_review_note import should_show_review_note, suppress_review_note
 
 
 class IsOpinionTests(unittest.TestCase):
@@ -51,6 +52,18 @@ class ThemeTrustCopyTests(unittest.TestCase):
         self.assertNotIn("AIを使用した工程", bike)
         self.assertIn("AIを使用した工程", other)
         self.assertIn("世論調査ではなく", bike)
+
+    def test_review_note_visibility_follows_ai_process_theme_setting(self):
+        root = Path(__file__).resolve().parents[1]
+        config = json.loads((root / "configs/theme-seo.json").read_text(encoding="utf-8"))
+        themes = {theme["id"]: theme for theme in config["themes"]}
+        self.assertFalse(should_show_review_note(themes["bike-blue-ticket"]))
+        self.assertTrue(should_show_review_note(themes["ai-copyright"]))
+        self.assertTrue(should_show_review_note({}))
+
+    def test_review_note_suppression_removes_only_the_display_annotation(self):
+        source = '条件／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）'
+        self.assertEqual(suppress_review_note(source), "条件）")
 
 
 if __name__ == "__main__":

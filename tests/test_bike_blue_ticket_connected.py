@@ -92,6 +92,13 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
             self.assertTrue(item.get("issue_ids"), item["id"])
             self.assertTrue(set(item["issue_ids"]) <= issue_ids, item["id"])
 
+    def test_number_provenance_accepts_display_cleaned_source_notes(self):
+        from scripts.bike_blue_ticket_count_provenance import verified_selectors
+
+        page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        verified = verified_selectors(page, ROOT)
+        self.assertIn("#bike-source-note-bike-blue-ticket-sc-1", verified)
+
     def test_relationships_do_not_depend_on_issue_order_or_labels(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)
