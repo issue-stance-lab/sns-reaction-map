@@ -247,8 +247,8 @@ def _sync_bike_method_text(html: str, data: dict) -> str:
     opinions = data["totals"]["opinions"]
     other = next(issue["count"] for issue in data["issues"] if issue["key"] == "その他")
     patterns = [
-        (r'(<p class="lead">収集したSNS投稿)[\d,]+(件のうち、分析対象の意見)[\d,]+(件をAIで整理し、主要5論点)[\d,]+(件に分類し、残る)[\d,]+',
-         lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}{opinions - other}{m[4]}{other}"),
+        (r'(<p class="lead">収集したSNS投稿)[\d,]+(件のうち、分析対象の意見)[\d,]+(件)(?:をAIで整理し、|を)(主要5論点)[\d,]+(件に分類し、残る)[\d,]+',
+         lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}を{m[4]}{opinions - other}{m[5]}{other}"),
         (r'(収集した)[\d,]+(件のうち意見と判定した)[\d,]+(件を論点分析の対象にしています)',
          lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}"),
     ]
@@ -257,7 +257,7 @@ def _sync_bike_method_text(html: str, data: dict) -> str:
         if count != 1:
             raise SystemExit(f"自転車の母数説明が想定箇所数(1)と一致しません: {count}件")
     html, count = re.subn(
-        r'(このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 )[\d,]+(件<br>\s*（取得期間: )[^／<]+',
+        r'(このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 )[\d,]+(件<br>\s*（取得期間: )[^／<）]+',
         lambda m: f"{m[1]}{collected}{m[2]}{data['sample_period']}", html)
     if count != 1:
         raise SystemExit(f"自転車の冒頭の調査条件が想定箇所数(1)と一致しません: {count}件")
