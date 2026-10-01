@@ -1395,3 +1395,24 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36812315774"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36812315588"
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20261002-001
+    department: data
+    action: website_publish
+    summary: "部活動の地域展開テーマの2026-10-01定期更新を公開する（収集1,726→1,865件、意見1,401→1,494件）"
+    reason: "新規139件の本文確認、資料争点の再照合、数値・表示・操作検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "分類モデルがkimi-k2.6からkimi-k2.7-codeに変わったため、今回の分類差は『世論の潮目』に表示せず前回表示を維持する"
+      - "全テーマ横断の海洋層検査は他テーマの既存未整備項目でNGだが、部活テーマに新規指摘はない"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/bukatsu-chiiki/20261001_230045/promotion-manifest.json（sha256 d0650bd5…）"
+      - "quality/reviews/2026-10-01-bukatsu-refresh-review.md"
+      - "data/verification/updates/bukatsu-chiiki/2026-10-01/"
+    status: approved
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-02"
+    decision_note: >-
+      本対話で新規139件・採用意見93件、本文確認と数値・PC・スマホの検査結果を提示し、
+      オーナーが「公開して」と明示的に承認。
