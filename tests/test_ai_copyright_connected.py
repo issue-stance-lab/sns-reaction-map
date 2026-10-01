@@ -126,6 +126,56 @@ class AiCopyrightConnectedTests(unittest.TestCase):
         broken = self.page.replace("<span>探ったところ</span>", "<span>読んだところ</span>", 1)
         self.assertTrue(any("進捗表示" in message for message in connected.validate(broken)))
 
+    def test_public_process_copy_is_removed_on_regeneration_without_changing_data(self):
+        from scripts.refresh_planet_section import _apply_connected_display
+
+        generated = _apply_connected_display("ai-copyright", self.original)
+        self.assertEqual(_apply_connected_display("ai-copyright", generated), generated)
+        self.assertEqual(connected.planet_data(generated), connected.planet_data(self.original))
+        self.assertEqual(connected.validate(generated), [])
+
+        visible = BeautifulSoup(generated, "html.parser")
+        for node in visible.find_all("script"):
+            if node.get("id") != "planet-data" and node.get("type") != "application/json":
+                node.decompose()
+        visible_text = visible.get_text(" ", strip=True)
+        for phrase in (
+            "まだ編集部が投稿を1件ずつ読み直していません",
+            "AIが自動でつけた区分をここに並べることはしません",
+            "人が読んだ結果だけをまとめにします",
+            "この論点の中身（編集部が本文を読んで分けたもの）",
+            "本文確認後に追加された投稿",
+            "図が使えないときの表示",
+            "AI分類。代表投稿は編集部が選定",
+            "AIを使用した工程",
+            "AIが6つの論点に整理しました",
+            "Powered by Yahooリアルタイム検索 + AI分類",
+        ):
+            self.assertNotIn(phrase, visible_text)
+
+        data = connected.planet_data(generated)
+        original_data = connected.planet_data(self.original)
+        self.assertEqual(
+            [(x["id"], x["count"], x["sub"]["status"], x["sub"].get("unread_count")) for x in data["issues"]],
+            [(x["id"], x["count"], x["sub"]["status"], x["sub"].get("unread_count")) for x in original_data["issues"]],
+        )
+
+        before_cards = BeautifulSoup(self.original, "html.parser").select_one("#issue-cards")
+        after_cards = BeautifulSoup(generated, "html.parser").select_one("#issue-cards")
+        self.assertEqual(
+            [a["href"] for a in before_cards.select(".hermes-sample blockquote a[href]")],
+            [a["href"] for a in after_cards.select(".hermes-sample blockquote a[href]")],
+        )
+
+    def test_public_process_copy_regression_scans_templates_and_runtime_scripts(self):
+        clean = connected.apply(self.original)
+        phrase = "まだ編集部が投稿を1件ずつ読み直していません"
+        template_copy = clean.replace("</template>", f"<p>{phrase}</p></template>", 1)
+        script_copy = clean.replace("</body>", f"<script>const message = '{phrase}';</script></body>", 1)
+
+        self.assertTrue(any("template内" in problem for problem in connected._public_process_copy_problems(template_copy)))
+        self.assertTrue(any("実行時表示" in problem for problem in connected._public_process_copy_problems(script_copy)))
+
     def test_claim_ids_match_each_issues_own_claims_and_are_self_consistent(self):
         # data["claims"]（クイズ用の一覧）にはissue_idsを持つが、ここでは論点へ
         # 埋め込まれたissue["claims"]をそのまま転記しているか（直接の正しさ）と、
@@ -285,8 +335,8 @@ class AiCopyrightConnectedTests(unittest.TestCase):
             self.assertEqual(tpl.name, "template", issue["id"])
 
     def test_unreviewed_issue_shows_empty_reasons_note_not_fabricated_categories(self):
-        # 工程1確認のとおり、利用者モラル・倫理と法制度・規制整備は未再読。
-        # 理由の内訳を作らず、既存のnoteだけを表示することを確認する。
+        # 利用者モラル・倫理と法制度・規制整備は未再読のまま。
+        # 空の説明段落やAI処理の断りは表示せず、投稿例と資料情報は維持する。
         soup = BeautifulSoup(self.page, "html.parser")
         data = connected.planet_data(self.page)
         by_id = {i["id"]: i for i in data["issues"]}
@@ -295,9 +345,16 @@ class AiCopyrightConnectedTests(unittest.TestCase):
             tpl = soup.select_one("#ai-copyright-reading-" + iid)
             reading = BeautifulSoup(tpl.decode_contents(), "html.parser")
             self.assertIsNone(reading.select_one(".aic-reasons"), iid)
-            empty = reading.select_one(".aic-empty")
-            self.assertIsNotNone(empty, iid)
-            self.assertIn(by_id[iid]["sub"]["note"], empty.get_text(), iid)
+            opinions = reading.select_one(".aic-opinions")
+            self.assertIsNotNone(opinions, iid)
+            self.assertIsNone(opinions.select_one(".aic-empty"), iid)
+            self.assertNotIn(
+                "どんな理由で語られている？",
+                [h.get_text(strip=True) for h in reading.select(".aic-opinions h3")],
+                iid,
+            )
+            self.assertEqual(by_id[iid]["sub"]["note"], "この論点は、まだ編集部が投稿を1件ずつ読み直していません")
+            self.assertTrue(reading.select(".aic-posts [data-aic-post-url]"), iid)
 
     def test_reviewed_issue_shows_reason_breakdown_matching_source_data(self):
         soup = BeautifulSoup(self.page, "html.parser")

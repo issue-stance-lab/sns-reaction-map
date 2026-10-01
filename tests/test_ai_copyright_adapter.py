@@ -33,6 +33,21 @@ class AiCopyrightAdapterTests(unittest.TestCase):
         self.assertIn(f'で取得した公開投稿 {public["collected_count"]}件', page)
         self.assertNotIn("data-arena-total", page)
 
+    def test_public_count_regeneration_keeps_removed_process_copy_absent(self):
+        from scripts.ai_copyright_connected import apply as connect_page, planet_data
+        from scripts.build_ai_copyright_arena import apply_public_counts
+
+        source = PAGE.read_text(encoding="utf-8")
+        public_path = ROOT / "data/public/themes/ai-copyright.json"
+        before = planet_data(source)
+        first = connect_page(apply_public_counts(source, public_path))
+        second = connect_page(apply_public_counts(first, public_path))
+
+        self.assertEqual(second, first, "2回目の生成で対象ページが変わった")
+        self.assertEqual(planet_data(second), before, "公開JSONの数値・再読状態を変更した")
+        self.assertNotIn("AIが6つの論点に整理しました", second)
+        self.assertNotIn("AI分類。代表投稿は編集部が選定", second)
+
     def _canonical(self):
         import yaml
         themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]

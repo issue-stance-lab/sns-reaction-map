@@ -32,6 +32,25 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261001-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題100の生成AIと著作権ページから利用者向けの制作工程説明を除き、再生成経路と検査を更新して公開する"
+    reason: "内容のないAI処理・編集工程の説明を削除し、検索入口と論点・投稿・資料に読者の注意を戻すため"
+    risks:
+      - "論点・分類・件数・再読状態・保存データ・代表投稿・資料・計測方法は変更しない"
+      - "全文再生成用の私有正典は利用可能な公開件数と不一致のため使わず、公開JSONに基づく件数不変の生成を行う"
+      - "テーマ別37テストは成功、正典依存2件をスキップ。全体テストは私有正典欠落等による失敗があり、実ブラウザー確認は公開後に別途必要"
+    recommendation: approve
+    evidence:
+      - "tasks/task-100.md"
+      - "themes/ai-copyright.md（2026-10-01の削除・再生成・検査記録）"
+      - "docs/ai-copyright-reaction-map.html（sha256 982b324112af5240bb4f5b5b4c8b802c70ec861f241d30c2143060b063286246）"
+    status: approved
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-01"
+    decision_note: "オーナーが本対話で今回の対象について『公開して』と明示的に指示。"
+
   - id: approval-20260928-001
     department: growth-marketing
     action: website_publication

@@ -354,12 +354,16 @@ def apply_public_counts(html_text: str, public_theme: Path = PUBLIC_THEME) -> st
         f"取得期間: {period}",
         "調査条件の取得期間",
     )
-    page = replace_once(
-        page,
-        r"分析対象となった意見[\d,]+件をAIが\d+つの論点に整理しました",
-        f"分析対象となった意見{opinion_total}件をAIが{len(ISSUE_ORDER) - 1}つの論点に整理しました",
-        "lead文の件数",
-    )
+    lead_pattern = r"分析対象となった意見[\d,]+件をAIが\d+つの論点に整理しました"
+    if re.search(lead_pattern, page):
+        page = replace_once(
+            page,
+            lead_pattern,
+            f"分析対象となった意見{opinion_total}件をAIが{len(ISSUE_ORDER) - 1}つの論点に整理しました",
+            "lead文の件数",
+        )
+    elif "<!-- PLANET_SECTION_START -->" not in page:
+        raise BuildError("lead文がありません（山なみ形式以外で件数を安全に更新できません）")
     # 山なみ形式（課題54）へ差し替え後は、この下のアリーナ専用の書き換え
     # （母数属性・見出し・代替テキスト・注目ポイント・論点アトラス）を行わない。
     # 対象セクションごと撤去済みで、置換先が無く即エラーになる（0箇所マッチ）。
