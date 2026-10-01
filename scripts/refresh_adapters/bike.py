@@ -112,6 +112,20 @@ def _signature_count(path: Path) -> int:
     )
 
 
+def _tide_note(base: dict, signature_count: int) -> str:
+    note = (
+        f"比較対象：{base['prev_label']}収集分のうち賛否を含む意見投稿／"
+        f"{base['cur_label']}収集分のうち賛否を含む意見投稿。"
+        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
+    )
+    if signature_count:
+        note += (
+            f"{base['cur_label']}収集分には、同一文面のオンライン署名の貼り付けが"
+            "多数含まれており、反対側の比率を押し上げています。"
+        )
+    return note
+
+
 def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -> None:
     sys.path.insert(0, str(root / "scripts"))
     from inject_tide_widget import (  # type: ignore[import-not-found]
@@ -130,25 +144,8 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
         raise FileNotFoundError(f"今回更新回がありません: {current_wave}")
     base["prev_label"] = _label(previous_date)
     base["cur_label"] = _label(current_date)
-    note = (
-        f"比較対象：{base['prev_label']}収集分のうち賛否を含む意見投稿／"
-        f"{base['cur_label']}収集分のうち賛否を含む意見投稿。"
-        "同じ検索語セットで取得した投稿をAIで分類しています。"
-        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
-    )
     signatures = _signature_count(current_wave)
-    if signatures:
-        # 2026-08-17 に反対が77→142件へ増えた分の約半分がこれだった。
-        # 断らずに比率だけ出すと、世論が動いたように読める。
-        #
-        # ここに件数を書かないのは、更新回の本文を文字列照合して数えた値で、
-        # 数字の出所検査（分類結果の集計）から導けないため。正確な件数は STEP3 が
-        # data/verification/bike-blue-ticket-reread.json から出している。
-        note += (
-            f"{base['cur_label']}収集分には、同一文面のオンライン署名の貼り付けが"
-            "多数含まれており、反対側の比率を押し上げています。"
-        )
-    base["note"] = note
+    base["note"] = _tide_note(base, signatures)
     previous = load_classified(
         previous_path,
         base["use_relevance_filter"],

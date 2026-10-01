@@ -141,6 +141,111 @@ def _apply_progress_copy(source: str) -> str:
     return help_pattern.sub(lambda m: m[1] + PROGRESS_HELP + m[3], source, count=1)
 
 
+def _remove_public_process_copy(source: str) -> str:
+    """生成後に残る、利用者向けでない制作・再読状況の説明をai-copyrightだけから外す。
+
+    件数・未再読ラベル・分類データはPLANET_DATAに残す。ここでは本文、静的フォールバック、
+    論点選択時に実行されるJavaScriptの表示片を対象にし、他テーマには適用しない。
+    """
+    # 論点を選んだ時に使われるJavaScript内の見出し文。後続のリストは残す。
+    source = re.sub(
+        r"(?m)^\s*h \+= '<p class=\"sub\" style=\"margin-top:12px\">"
+        r"<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\s*\n\s*\+\s*",
+        "        h += ",
+        source,
+        count=1,
+    )
+
+    # 未再読時のJS説明と、再読済み分布の追加事情テキストは、状態・件数データとは別に非表示。
+    source = re.sub(
+        r"(?s)\n  \} else \{\n    if \(D\.show_unreviewed_note !== false\)\{\n"
+        r"      h \+= '<div class=\"note\">'\+s\.note\+'。<br>'\n"
+        r"         \+ 'AIが自動でつけた区分をここに並べることはしません。"
+        r"人が読んだ結果だけをまとめにします。</div>';\n"
+        r"    \}\n  \}",
+        "\n  }",
+        source,
+        count=1,
+    )
+    ai_coverage_guard = "D.theme_id === \"ai-copyright\" || s.show_coverage_note === false ? ''"
+    if ai_coverage_guard not in source:
+        source = source.replace("s.show_coverage_note === false ? ''", ai_coverage_guard, 1)
+
+    # 生成HTML側の同じ説明。島の内訳、未読行と件数そのものは削らない。
+    patterns = (
+        r'\s*<p class="lead">収集したSNS投稿のうち、分析対象となった意見[\d,]+'
+        r'件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>',
+        r'／<span class="review-note">AI分類。代表投稿は編集部が選定</span>',
+        r'<span class="review-note">AI分類。代表投稿は編集部が選定</span>',
+        r'\s*<h3 class="sec">論点の一覧（図が使えないときの表示）</h3>\s*'
+        r'<p class="sub"[^>]*>このページは、お使いの環境で図を描けなかったため、'
+        r'同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。'
+        r'円の色はいちばん多い立場です。</p>',
+        r'\s*<p class="sub" style="margin-top:12px"><b>'
+        r'この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
+        r'\s*<div class="note">本文確認後に追加された投稿\d+件は、本文確認の対象外です。</div>',
+        r'\s*<div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。'
+        r'<br>AIが自動でつけた区分をここに並べることはしません。'
+        r'人が読んだ結果だけをまとめにします。</div>',
+        r'\s*<p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで'
+        r'確かめたことだけを置いています。（確認日 \d{4}-\d{2}-\d{2}／'
+        r'編集部が本文を読んで確認）</p>',
+        r'\s*<h3>AIを使用した工程</h3>\s*<p>[^<]*</p>',
+        r'\s*<p class="sub">論点をまたいで言えることを、編集部がまとめています。'
+        r'（2026-09-14時点）</p>',
+        r'\s*<div>Powered by Yahooリアルタイム検索 \+ AI分類</div>',
+    )
+    for pattern in patterns:
+        source = re.sub(pattern, "", source, flags=re.S)
+    return source
+
+
+def _public_process_copy_problems(source: str) -> list[str]:
+    """通常表示・template・実行時JSに禁止した説明が戻っていないか検査する。"""
+    phrases = (
+        "まだ編集部が投稿を1件ずつ読み直していません",
+        "AIが自動でつけた区分をここに並べることはしません",
+        "人が読んだ結果だけをまとめにします",
+        "この論点の中身（編集部が本文を読んで分けたもの）",
+        "本文確認後に追加された投稿",
+        "図が使えないときの表示",
+        "このページは、お使いの環境で図を描けなかったため",
+        "AI分類。代表投稿は編集部が選定",
+        "AIを使用した工程",
+        "AIが6つの論点に整理しました",
+        "Powered by Yahooリアルタイム検索 + AI分類",
+        "論点をまたいで言えることを、編集部がまとめています。",
+        "AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。",
+        "残り" + "${s.unread_count}件は、その後に増えた分でまだ読めていません。",
+    )
+    soup = BeautifulSoup(source, "html.parser")
+    visible = BeautifulSoup(source, "html.parser")
+    for node in visible.find_all("script"):
+        if node.get("id") != "planet-data" and node.get("type") != "application/json":
+            node.decompose()
+    rendered_text = visible.get_text(" ", strip=True)
+    problems = [f"利用者向け表示に不要な説明が残っています: {phrase}" for phrase in phrases if phrase in rendered_text]
+
+    template_markup = "\n".join(str(template) for template in soup.find_all("template"))
+    for phrase in phrases:
+        if phrase in template_markup:
+            problems.append(f"template内の表示に不要な説明が残っています: {phrase}")
+
+    executable = "\n".join(
+        script.get_text()
+        for script in soup.find_all("script")
+        if script.get("id") != "planet-data" and script.get("type") != "application/json"
+    )
+    for phrase in phrases:
+        if phrase in executable:
+            problems.append(f"実行時表示に不要な説明が残っています: {phrase}")
+    if 'D.show_unreviewed_note !== false' in executable or "s.note+'。<br>'" in executable:
+        problems.append("未再読の長い説明を実行時に組み立てる処理が残っています")
+    if "残り\"+s.unread_count+\"件は、その後に増えた分でまだ読めていません。" in executable:
+        problems.append("追加分の再読状況を説明する表示処理が残っています")
+    return problems
+
+
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
@@ -157,6 +262,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = source.replace("</body>", content + "\n</body>", 1)
     source = apply_search_entry(source)
     source = _apply_progress_copy(source)
+    source = _remove_public_process_copy(source)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
         START + f'\n<link rel="stylesheet" href="{CSS_HREF}">\n'
@@ -207,6 +313,7 @@ def validate(source: str) -> list[str]:
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("資料タブ・年表のJSが1つではありません")
     problems.extend(validate_search_entry(source))
+    problems.extend(_public_process_copy_problems(source))
     progress = soup.select("#progress")
     if len(progress) != 1:
         problems.append("進捗表示が1つではありません")

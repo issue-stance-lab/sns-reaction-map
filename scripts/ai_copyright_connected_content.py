@@ -33,10 +33,7 @@ def sources(items: list[dict]) -> str:
 def reasons(issue: dict) -> str:
     sub = issue["sub"]
     if sub["status"] != "reread":
-        return (
-            f'<p class="aic-empty">{e(sub["note"])}。'
-            'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</p>'
-        )
+        return ""
     items = sub["items"]
     rows = ''.join(
         f'<li><span class="aic-reason-row"><span>{e(x["label"])}</span>'
@@ -113,10 +110,16 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             '<p data-aic-ratio></p><p data-aic-zero hidden></p></div>'
             f'<p class="aic-scope-note">{e(index["scope_note"])}</p>'
         )
-        out.append(
-            '<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿">'
-            '<h3>どんな理由で語られている？</h3>' + reasons(issue)
-        )
+        if issue["sub"]["status"] == "reread":
+            out.append(
+                '<div class="aic-columns"><section class="aic-opinions" aria-label="意見の理由と投稿">'
+                '<h3>どんな理由で語られている？</h3>' + reasons(issue)
+            )
+        else:
+            out.append(
+                '<div class="aic-columns"><section class="aic-opinions aic-opinions-posts-only" '
+                'aria-label="意見の投稿">'
+            )
         out.append(
             '<div class="aic-posts"><h3>実際の投稿を読む</h3>'
             '<p class="aic-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p>'

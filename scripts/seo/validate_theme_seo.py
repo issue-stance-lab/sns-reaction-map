@@ -144,8 +144,10 @@ def validate_article(
         "世論調査ではなく",
         'href="about.html#corrections"',
     ]
-    if not theme.get("hide_internal_process_copy"):
+    if theme.get("show_ai_process") is not False:
         required_trust.append("AIを使用した工程")
+    elif "AIを使用した工程" in source:
+        errors.append(f"{path.name}: hidden AI process detail remains")
     for required in required_trust:
         if required not in source:
             errors.append(f"{path.name}: visible trust detail missing: {required}")

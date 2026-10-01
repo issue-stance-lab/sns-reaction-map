@@ -32,6 +32,38 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261001-002
+    department: growth-marketing
+    action: website_publication
+    summary: "課題100の生成AIと著作権ページから利用者向けの制作工程説明を削除し、再生成処理と検査を更新して公開する"
+    reason: "内容のないAI処理・編集工程の説明を除き、検索入口と論点・投稿・資料に読者の注意を戻すため"
+    risks:
+      - "論点・分類・件数4,734件／意見3,146件・再読状態・保存データ・代表投稿・資料・計測方法は変更しない"
+      - "最新mainのページを基準にし、公開JSON件数だけで再生成する"
+      - "テーマ固有・全体検査とCIを確認してから反映する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-100.md"
+      - "themes/ai-copyright.md（2026-10-01の削除・再生成・検査記録）"
+      - "configs/theme-seo.json（ai-copyright のAI工程表示を無効化）"
+      - "docs/ai-copyright-reaction-map.html（sha256 4545f0846b8c8e5ac644c993218a486ba76d63ac984d25aa3f6c4595b2c85510）"
+    status: completed
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-01"
+    decision_note: "オーナーが本対話で、最新mainを優先した3ファイルの競合解消と検査後の公開を明示的に指示。"
+    completed_at: "2026-10-01"
+    result_note: >-
+      main 5434b943で公開。全1,271テスト（4件skip）、公開ファイル検査1,092件（4件skip）、
+      テーマ別・全テーマ・数値出典・トップページ・SEO・更新履歴の検査が成功。
+      CI「公開ファイルの検査」36851742717とPages配信36851742568が成功。
+      本番の収集4,734件・意見3,146件、トップ20,250件・意見15,762件を確認。
+      不要な説明文は表示・template・実行時スクリプトで0件。再読状態はデータに維持。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36851742717"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36851742568"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
+
   - id: approval-20260930-001
     department: engineering-data
     action: website_publication

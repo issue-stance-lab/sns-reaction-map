@@ -240,6 +240,17 @@ class BikeAdapterTests(unittest.TestCase):
         self.assertIsNone(entry["prev_file"])
         self.assertIsNone(entry["cur_file"])
 
+    def test_bike_tide_note_keeps_sample_warning_without_ai_process_copy(self):
+        sys.path.insert(0, str(ROOT))
+        from scripts.refresh_adapters.bike import _tide_note
+
+        base = {"prev_label": "7月26日", "cur_label": "8月17日"}
+        note = _tide_note(base, 12)
+        self.assertIn("7月26日収集分", note)
+        self.assertIn("同じ人の意見が移動したことや世論全体の変化を示すものではありません", note)
+        self.assertIn("同一文面のオンライン署名", note)
+        self.assertNotIn("AI", note)
+
     def test_registered_as_an_adapter_theme(self):
         import yaml
 

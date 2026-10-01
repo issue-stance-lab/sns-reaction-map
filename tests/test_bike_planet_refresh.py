@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from refresh_planet_section import _sync_bike_method_text
 from build_bike_editorial_reread import apply_review_updates
+from build_planet_data import render_page, static_caution, static_editorial, static_fallback, static_ocean
+from scripts.bike_blue_ticket_connected import planet_data
 
 
 class BikeMethodTextTests(unittest.TestCase):
@@ -22,10 +24,49 @@ class BikeMethodTextTests(unittest.TestCase):
         result = _sync_bike_method_text(html, data)
         self.assertIn("収集したSNS投稿504件のうち、分析対象の意見392件", result)
         self.assertIn("主要5論点252件に分類し、残る140件", result)
+        self.assertNotIn("AIで整理", result)
         self.assertIn("収集した504件のうち意見と判定した392件", result)
+        self.assertRegex(result, r"取得期間: 2026-06-27〜2026-09-12(?:／)?）")
         self.assertEqual(result, _sync_bike_method_text(result, data))
         for marker in ("G-K10S4YCZFH", "ca-pub-2542211932832864", "supabase", "og:"):
             self.assertEqual(html.count(marker), result.count(marker))
+
+    def test_bike_planet_builders_do_not_restore_process_only_copy(self):
+        page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        data = planet_data(page)
+        self.assertNotIn("AI分類", static_caution(data))
+        fallback = static_fallback(data)
+        self.assertNotIn("編集部が本文を読んで分けたもの", fallback)
+        self.assertNotIn("人が読んだ結果だけをまとめにします", fallback)
+        ocean = static_ocean(data)
+        self.assertNotIn("AIの下読みを含む", ocean)
+        self.assertNotIn("今回新たに採用した", ocean)
+        self.assertNotIn("論点をまたいで言えることを、編集部がまとめています", static_editorial(data))
+        unfinished = copy.deepcopy(data)
+        unfinished["ocean"].update(ocean_status="not_started", sunk_continents=[], veins=[])
+        unfinished["editorial"].update(status="not_started", findings=[])
+        self.assertNotIn("まだ編集部が一次資料を読んで", static_ocean(unfinished))
+        self.assertNotIn("整理がまだです", static_editorial(unfinished))
+        # 将来一時的に未再読が生じても、保存した状態はそのまま、未対応だけの説明は出さない。
+        changed = dict(data)
+        changed["show_unreviewed_note"] = True
+        changed["issues"] = [dict(issue) for issue in data["issues"]]
+        changed["issues"][0] = dict(changed["issues"][0])
+        changed["issues"][0]["sub"] = dict(changed["issues"][0]["sub"])
+        changed["issues"][0]["sub"].update(status="unread", note="未再読です")
+        unread_fallback = static_fallback(changed)
+        self.assertNotIn("未再読です", unread_fallback)
+        self.assertNotIn("AIが自動でつけた区分", unread_fallback)
+
+    def test_bike_full_page_js_does_not_restore_unread_explanation(self):
+        import json
+
+        data = planet_data((ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8"))
+        template = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text(encoding="utf-8")
+        result = render_page(data, template, json.dumps(data, ensure_ascii=False))
+        self.assertNotIn("AIが自動でつけた区分", result)
+        self.assertNotIn("人が読んだ結果だけをまとめにします", result)
+        self.assertNotIn("編集部が本文を読んで分けたもの", result)
 
     def test_missing_method_text_stops_instead_of_silent_stale_counts(self):
         with self.assertRaises(SystemExit):
@@ -38,8 +79,8 @@ class BikeMethodTextTests(unittest.TestCase):
 @unittest.skipUnless((ROOT / "social-samples/bike-blue-ticket_2d_classified.json").is_file(),
                      "非公開の正典が無い環境（CI）では回さない")
 class BikePlanetRefreshTests(unittest.TestCase):
-    def test_refresh_runs_on_published_page_without_changes(self):
-        """次回の定期更新が、起承転結の再構成後のページで止まらず差分も出ないこと。
+    def test_refresh_published_page_is_clean_and_idempotent(self):
+        """公開ページに不要な工程説明がなく、次回更新以降も差分が出ないこと。
 
         論点カード（explainer-card）を削除したあとも、refresh() が旧カードの件数同期を
         呼んで止まっていた（課題69、2026-09-19）。unittestでは refresh() 自体が
@@ -48,10 +89,14 @@ class BikePlanetRefreshTests(unittest.TestCase):
         from refresh_planet_section import refresh
         old, new, failures = refresh("bike-blue-ticket")
         self.assertEqual(failures, [])
-        self.assertEqual(old, new)
+        self.assertNotIn("資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの", new)
+        self.assertNotIn("一次資料に当たった人にしか作れない問題", new)
         self.assertNotIn('id="explainer-section"', new)
         self.assertEqual(new.count('class="explainer-card landing-image"'), 6 + 1)  # 無JS用6枚＋JS側1箇所
         self.assertIn("document.addEventListener('click',function(e){\n    var c=e.target.closest('.explainer-card[data-img]')", new)
+        _old_again, rebuilt, failures_again = refresh("bike-blue-ticket", source=new)
+        self.assertEqual(failures_again, [])
+        self.assertEqual(new, rebuilt)
 
 class BikeCollectionReviewTests(unittest.TestCase):
     def setUp(self):

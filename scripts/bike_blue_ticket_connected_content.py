@@ -5,6 +5,8 @@ from html import escape
 
 from bs4 import BeautifulSoup
 
+from scripts.bike_blue_ticket_connected import display_source_note
+
 START = "<!-- BIKE_CONNECTED_CONTENT_START -->"
 END = "<!-- BIKE_CONNECTED_CONTENT_END -->"
 
@@ -23,10 +25,7 @@ def sources(items: list[dict]) -> str:
 def reasons(issue: dict) -> str:
     sub = issue["sub"]
     if sub["status"] != "reread":
-        return (
-            f'<p class="bike-empty">{e(sub.get("note", "理由の再読結果は未登録です"))}。'
-            "AIが自動でつけた区分はここへ表示しません。</p>"
-        )
+        return ""
     rows = "".join(
         f'<li><span class="bike-reason-row"><span>{e(item["label"])}</span>'
         f'<b id="bike-reason-count-{e(issue["id"])}-{e(item["id"])}">{item["count"]:,}<small>件</small></b></span>'
@@ -102,9 +101,8 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         out.append(
             '<div class="bike-columns"><section class="bike-opinions" aria-label="意見の理由と投稿">' +
             '<h3>どんな理由で語られている？</h3>' + reasons(issue) +
-            f'<p class="bike-note">{e(index["reason_post_note"])}</p>'
             '<div class="bike-posts"><h3>実際の投稿を読む</h3>'
-            '<p class="bike-note">編集部がこの論点全体から選んだ代表例です。賛否の割合を表すものではありません。</p>'
+            '<p class="bike-note">賛否の割合を表すものではありません。</p>'
             + post_examples(issue_cards_html, iid) + '</div></section>'
         )
         out.append('<aside class="bike-evidence" aria-label="資料">')
@@ -123,7 +121,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
                 '収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定ではありません。</p>'
             )
         else:
-            out.append('<p class="bike-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
+            pass
         for position, claim_id in enumerate(connection["claim_ids"]):
             claim = claims[claim_id]
             out.append(
@@ -139,8 +137,8 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             out.append(
                 f'<details class="bike-source-only" data-bike-source-only="{e(source_id)}"><summary id="bike-source-topic-{e(source_id)}">{e(item["topic"])}</summary>'
                 f'<p id="bike-source-life-{e(source_id)}">{e(item["life_impact"])}</p>'
-                f'<p id="bike-source-note-{e(source_id)}" class="bike-note">{e(item["sns_note"])} 確認日 {e(item["checked_on"])}</p>'
-                f'<details><summary>調べた範囲を見る</summary><p id="bike-source-note-copy-{e(source_id)}">{e(item["sns_note"])}</p></details>'
+                f'<p id="bike-source-note-{e(source_id)}" class="bike-note">{e(display_source_note(item["sns_note"]))} 確認日 {e(item["checked_on"])}</p>'
+                f'<details><summary>調べた範囲を見る</summary><p id="bike-source-note-copy-{e(source_id)}">{e(display_source_note(item["sns_note"]))}</p></details>'
                 f'{sources(item["sources"])}</details>'
             )
         if iid == index["default_issue_id"] and index["global_source_only_ids"]:
@@ -150,7 +148,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
                 out.append(
                     f'<details class="bike-source-only" data-bike-global-source-only="{e(source_id)}"><summary id="bike-source-topic-{e(source_id)}">{e(item["topic"])}</summary>'
                     f'<p id="bike-source-life-{e(source_id)}">{e(item["life_impact"])}</p>'
-                    f'<p id="bike-source-note-{e(source_id)}" class="bike-note">{e(item["sns_note"])} 確認日 {e(item["checked_on"])}</p>'
+                    f'<p id="bike-source-note-{e(source_id)}" class="bike-note">{e(display_source_note(item["sns_note"]))} 確認日 {e(item["checked_on"])}</p>'
                     f'{sources(item["sources"])}</details>'
                 )
         out.append('</aside></div></template>')

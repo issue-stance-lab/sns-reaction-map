@@ -16,7 +16,8 @@ from urllib.parse import urljoin
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
-from consumption_tax_connected import apply as connect_page
+from consumption_tax_connected import apply as connect_consumption_tax_page
+from koshitsu_connected import apply as connect_koshitsu_page
 SEO_START = "<!-- SEO_META_START -->"
 SEO_END = "<!-- SEO_META_END -->"
 JSONLD_START = "<!-- ARTICLE_JSON_LD_START -->"
@@ -30,6 +31,12 @@ PROTECTED_TOKENS = (
     "topic-modern.js",
 )
 TOPIC_CSS_VERSION = "32"  # 2026-09-27 課題95: 全テーマの見出し字体を共通化
+
+
+def connect_page(source: str, *, topic: str) -> str:
+    """SEO再生成後も、テーマ固有の接続仕上げを最後に戻す。"""
+    source = connect_consumption_tax_page(source, topic=topic)
+    return connect_koshitsu_page(source, topic=topic)
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -198,12 +205,11 @@ def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
     modified = theme["dateModified"]
     collection = html.escape(resolve_counts(theme["collection"], theme["id"]))
     organization_name = html.escape(organization["name"])
-    hide_internal_process_copy = bool(theme.get("hide_internal_process_copy"))
-    process = "" if hide_internal_process_copy else (
-        "    <h3>AIを使用した工程</h3>\n"
-        "    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>\n"
-    )
-    observations = "" if hide_internal_process_copy else observations_html(theme)
+    observations = observations_html(theme)
+    ai_process = "" if theme.get("show_ai_process") is False else """\
+    <h3>AIを使用した工程</h3>
+    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+"""
     return f"""\
 {TRUST_START}
 <aside class="article-trust" aria-labelledby="article-trust-title">
@@ -219,7 +225,8 @@ def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
   <div class="article-trust-method">
     <h3>SNS投稿の収集方法</h3>
     <p>{collection}</p>
-{process}{observations}  </div>
+{ai_process}
+{observations}  </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
@@ -332,7 +339,7 @@ def main() -> int:
     parser.add_argument("--config", default="configs/theme-seo.json")
     parser.add_argument("--site-cases", default="configs/site-cases.json")
     parser.add_argument("--docs-dir", default="docs")
-    parser.add_argument("--theme", help="指定したテーマIDだけを更新する")
+    parser.add_argument("--theme", help="指定したテーマだけを更新する")
     parser.add_argument("--check", action="store_true", help="validate and report without writing")
     parser.add_argument(
         "--observations-only",
@@ -346,14 +353,14 @@ def main() -> int:
     validate_config(config, site_cases)
     docs_dir = PROJECT_ROOT / args.docs_dir
 
-    selected_themes = [
-        theme for theme in config["themes"] if args.theme is None or theme["id"] == args.theme
-    ]
-    if args.theme and not selected_themes:
-        raise ValueError(f"unknown theme: {args.theme}")
+    themes = config["themes"]
+    if args.theme:
+        themes = [theme for theme in themes if theme["id"] == args.theme]
+        if not themes:
+            raise ValueError(f"unknown theme: {args.theme}")
 
     changed = 0
-    for theme in selected_themes:
+    for theme in themes:
         path = docs_dir / theme["url"]
         if not path.is_file():
             raise FileNotFoundError(path)
@@ -371,7 +378,7 @@ def main() -> int:
             status = "would update" if args.check else "updated"
         print(f"{status} {path.relative_to(PROJECT_ROOT)}")
 
-    print(f"Validated {len(selected_themes)} theme pages; changed={changed}")
+    print(f'Validated {len(themes)} theme pages; changed={changed}')
     return 0
 
 

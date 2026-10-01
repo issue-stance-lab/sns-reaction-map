@@ -34,6 +34,50 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.BRIDGE_START), 1)
         self.assertEqual(self.page.count(connected.BRIDGE_END), 1)
 
+    def test_process_copy_is_absent_from_rendered_fallbacks_and_templates_data_is_preserved(self):
+        data = connected.planet_data(self.page)
+        soup = BeautifulSoup(self.page, "html.parser")
+        for node in soup.select("script, style"):
+            node.decompose()
+        rendered = soup.get_text(" ", strip=True)
+        rendered += " " + " ".join(
+            BeautifulSoup(node.decode_contents(), "html.parser").get_text(" ", strip=True)
+            for node in BeautifulSoup(self.page, "html.parser").select("template")
+        )
+        for phrase in (
+            "AIを使用した工程",
+            "AIで整理し",
+            "AI分類。代表投稿は編集部が選定",
+            "Powered by Yahooリアルタイム検索 + AI分類",
+            "理由の区分と個別投稿IDを結ぶ公開台帳はない",
+            "この論点に対応する資料照合は、まだ登録されていません。",
+            "AIが自動でつけた区分",
+            "人が読んだ結果だけをまとめにします",
+            "AIの下読みを含む",
+            "編集部が本文を読んで分けたもの",
+            "今回新たに採用した",
+        ):
+            self.assertNotIn(phrase, rendered)
+        for phrase in (
+            "資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの",
+            "一次資料に当たった人にしか作れない問題",
+        ):
+            self.assertNotIn(phrase, self.page)
+        # 表示上の工程文を除いても、再読・調査ログを含む保存データは保持する。
+        self.assertEqual(len(data["ocean"]["sunk_continents"]), 4)
+        self.assertTrue(all("今回新たに採用した" in row["sns_note"] for row in data["ocean"]["sunk_continents"]))
+        self.assertEqual([issue["sub"]["status"] for issue in data["issues"]], ["reread"] * 6)
+
+    def test_connection_removes_legacy_dynamic_process_copy(self):
+        legacy = (
+            "  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */\n"
+            "  p.push('<text x=\"'+LEFT+'\">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');\n"
+            "      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';\n"
+        )
+        cleaned = connected._remove_process_copy(legacy, {})
+        self.assertNotIn("人が一次資料を読んで見つけたもの", cleaned)
+        self.assertNotIn("一次資料に当たった人にしか作れない問題", cleaned)
+
     def test_all_issue_relationships_have_two_representative_posts(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)
@@ -63,6 +107,13 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
             self.assertTrue(item.get("issue_ids"), item["id"])
             self.assertTrue(set(item["issue_ids"]) <= issue_ids, item["id"])
 
+    def test_number_provenance_accepts_display_cleaned_source_notes(self):
+        from scripts.bike_blue_ticket_count_provenance import verified_selectors
+
+        page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        verified = verified_selectors(page, ROOT)
+        self.assertIn("#bike-source-note-bike-blue-ticket-sc-1", verified)
+
     def test_relationships_do_not_depend_on_issue_order_or_labels(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)
@@ -73,12 +124,23 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
         self.assertEqual(connected.content_index(changed), expected)
 
     def test_refresh_planet_section_reapplies_the_candidate(self):
-        private_sample = ROOT / "social-samples/bike-blue-ticket_2d_classified.json"
-        if not private_sample.is_file():
-            self.skipTest("自転車の非公開正典がない環境では再生成検査を省略")
+        import copy
+        from unittest.mock import patch
+
+        from scripts import refresh_planet_section
         from scripts.refresh_planet_section import refresh
 
-        _old, rebuilt, _failures = refresh("bike-blue-ticket", source=self.page)
+        snapshot = connected.planet_data(self.page)
+        with patch.object(
+            refresh_planet_section.bpd,
+            "build",
+            side_effect=lambda topic: copy.deepcopy(snapshot) if topic == "bike-blue-ticket" else None,
+        ):
+            _old, rebuilt, failures = refresh("bike-blue-ticket", source=self.page)
+            _old_again, rebuilt_again, failures_again = refresh("bike-blue-ticket", source=rebuilt)
+        self.assertEqual(failures, [])
+        self.assertEqual(failures_again, [])
+        self.assertEqual(rebuilt, rebuilt_again)
         self.assertEqual(connected.validate(rebuilt), [])
         self.assertIn(connected.CSS_HREF, rebuilt)
 

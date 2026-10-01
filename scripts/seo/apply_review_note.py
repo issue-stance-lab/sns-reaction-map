@@ -71,6 +71,19 @@ def note_for(entry: dict) -> str:
     return SELECTED_NOTE
 
 
+def should_show_review_note(theme: dict) -> bool:
+    """AI工程の説明を無効にしたテーマでは、分類・選定の注記も表示しない。"""
+    return theme.get("show_ai_process") is not False
+
+
+def suppress_review_note(content: str) -> str:
+    """review-noteと、注記のためだけに残る区切りを表示HTMLから除く。"""
+    content = re.sub(
+        r'<span class="review-note">.*?</span>', "", content, flags=re.DOTALL
+    )
+    return content.replace("／）", "）")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true")
@@ -82,13 +95,34 @@ def main() -> int:
     args = parser.parse_args()
 
     ledger = load_ledger()
+    seo_config = json.loads((PROJECT_ROOT / "configs/theme-seo.json").read_text(encoding="utf-8"))
+    theme_options = {item["id"]: item for item in seo_config.get("themes", [])}
     failures = 0
     changed = 0
 
     for theme_id, page_path in sorted(theme_pages().items()):
+        theme = theme_options.get(theme_id, {})
+        content = page_path.read_text(encoding="utf-8")
+        if not should_show_review_note(theme):
+            updated = suppress_review_note(content)
+            if args.check:
+                if updated == content:
+                    print(f"OK  {theme_id}: 確認表示なし（設定どおり）")
+                else:
+                    print(f"NG  {theme_id}: 非表示設定の確認表示が残っています")
+                    failures += 1
+                continue
+            if updated != content:
+                changed += 1
+                print(f"{'変更予定' if args.dry_run else '変更'}  {theme_id}\n      確認表示を削除")
+                if not args.dry_run:
+                    page_path.write_text(updated, encoding="utf-8")
+            else:
+                print(f"OK  {theme_id}: 確認表示なし（設定どおり）")
+            continue
+
         entry = ledger.get(theme_id) or {}
         expected = note_for(entry)
-        content = page_path.read_text(encoding="utf-8")
         match = CONDITION_PATTERN.search(content)
         if not match:
             print(f"NG  {theme_id}: 調査条件の括弧が見つかりません")

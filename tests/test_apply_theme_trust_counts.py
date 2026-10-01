@@ -1,6 +1,9 @@
 import unittest
+import json
+from pathlib import Path
 
-from scripts.seo.apply_theme_trust import is_opinion
+from scripts.seo.apply_theme_trust import is_opinion, trust_block
+from scripts.seo.apply_review_note import should_show_review_note, suppress_review_note
 
 
 class IsOpinionTests(unittest.TestCase):
@@ -32,6 +35,39 @@ class IsOpinionTests(unittest.TestCase):
     def test_どちらにも無ければ意見ではない(self) -> None:
         self.assertFalse(is_opinion({"text": "本文だけ"}))
         self.assertFalse(is_opinion({"classification": {}}))
+
+
+class ThemeTrustCopyTests(unittest.TestCase):
+    def test_ai_process_section_is_disabled_only_for_themes_that_opt_out(self):
+        root = Path(__file__).resolve().parents[1]
+        config = json.loads((root / "configs/theme-seo.json").read_text(encoding="utf-8"))
+        themes = {theme["id"]: theme for theme in config["themes"]}
+        organization = config["organization"]
+        bike_theme = dict(themes["bike-blue-ticket"])
+        bike_theme["collection"] = bike_theme["collection"].replace("{total}", "585").replace("{opinions}", "415")
+        ai_theme = dict(themes["ai-copyright"])
+        ai_theme["collection"] = ai_theme["collection"].replace("{total}", "4734").replace("{opinions}", "3146")
+        other_theme = dict(themes["consumption-tax-cut"])
+        other_theme["collection"] = other_theme["collection"].replace("{total}", "4897").replace("{opinions}", "4340")
+        bike = trust_block(bike_theme, organization)
+        ai_copyright = trust_block(ai_theme, organization)
+        other = trust_block(other_theme, organization)
+        self.assertNotIn("AIを使用した工程", bike)
+        self.assertNotIn("AIを使用した工程", ai_copyright)
+        self.assertIn("AIを使用した工程", other)
+        self.assertIn("世論調査ではなく", bike)
+
+    def test_review_note_visibility_follows_ai_process_theme_setting(self):
+        root = Path(__file__).resolve().parents[1]
+        config = json.loads((root / "configs/theme-seo.json").read_text(encoding="utf-8"))
+        themes = {theme["id"]: theme for theme in config["themes"]}
+        self.assertFalse(should_show_review_note(themes["bike-blue-ticket"]))
+        self.assertFalse(should_show_review_note(themes["ai-copyright"]))
+        self.assertTrue(should_show_review_note({}))
+
+    def test_review_note_suppression_removes_only_the_display_annotation(self):
+        source = '条件／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）'
+        self.assertEqual(suppress_review_note(source), "条件）")
 
 
 if __name__ == "__main__":
