@@ -58,6 +58,11 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
             "今回新たに採用した",
         ):
             self.assertNotIn(phrase, rendered)
+        for phrase in (
+            "資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの",
+            "一次資料に当たった人にしか作れない問題",
+        ):
+            self.assertNotIn(phrase, self.page)
         # 表示上の工程文を除いても、再読・調査ログを含む保存データは保持する。
         self.assertEqual(len(data["ocean"]["sunk_continents"]), 4)
         self.assertTrue(all("今回新たに採用した" in row["sns_note"] for row in data["ocean"]["sunk_continents"]))

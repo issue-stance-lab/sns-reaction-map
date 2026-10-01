@@ -155,6 +155,17 @@ def _remove_process_copy(source: str, data: dict) -> str:
     source = source.replace(
         "論点をまたいで言えることを、編集部がまとめています。", ""
     )
+    source = source.replace(
+        "  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */\n",
+        "",
+    )
+    source = source.replace(
+        '  p.push(\'<text x="\'+LEFT+\'" y="\'+(SEA+76)+\'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>\');\n',
+        "",
+    )
+    source = source.replace(
+        "。<b>一次資料に当たった人にしか作れない問題</b>です。", ""
+    )
     source = re.sub(
         r'    if \(D\.show_unreviewed_note !== false\)\{\n.*?\n    \}\n',
         "",
@@ -343,6 +354,12 @@ def validate(source: str) -> list[str]:
     for phrase in forbidden:
         if phrase in display_text:
             problems.append("公開表示に不要な工程説明が残っています: " + phrase)
+    for phrase in (
+        "資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの",
+        "一次資料に当たった人にしか作れない問題",
+    ):
+        if phrase in source:
+            problems.append("JavaScriptの公開表示に不要な工程説明が残っています: " + phrase)
 
     for issue in data["issues"]:
         iid = issue["id"]
