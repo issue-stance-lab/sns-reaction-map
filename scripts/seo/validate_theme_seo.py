@@ -257,6 +257,7 @@ def main() -> int:
         loc_node = url_node.find("sm:loc", namespace)
         lastmod_node = url_node.find("sm:lastmod", namespace)
         page = Path(urlparse(loc_node.text or "").path).name if loc_node is not None else ""
+        page = page or "index.html"  # トップは正規URL（/）で載せている
         sitemap_dates[page] = lastmod_node.text if lastmod_node is not None else None
     sitemap_paths = set(sitemap_dates)
     fixed_pages = {

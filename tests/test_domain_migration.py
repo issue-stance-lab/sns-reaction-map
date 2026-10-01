@@ -27,10 +27,10 @@ class DomainMigrationTests(unittest.TestCase):
 
     def test_every_sitemap_page_has_new_canonical_and_og_url(self):
         for url in _sitemap_urls():
-            relative = url.removeprefix(f"{NEW_ORIGIN}/")
+            relative = url.removeprefix(f"{NEW_ORIGIN}/") or "index.html"
             page = DOCS / relative
             html = page.read_text(encoding="utf-8")
-            expected = NEW_ORIGIN + "/" if relative == "index.html" else url
+            expected = NEW_ORIGIN + "/" if relative == "index.html" else url  # トップはsitemapも / で載せる
             with self.subTest(page=relative):
                 self.assertRegex(
                     html,
