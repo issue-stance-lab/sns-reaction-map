@@ -246,10 +246,7 @@ def reason_post_cards(rows: list[dict]) -> str:
 def reasons(issue: dict, grouped: dict[tuple[str, str], list[dict]]) -> str:
     sub = issue["sub"]
     if sub["status"] != "reread":
-        return (
-            f'<p class="school-nickname-empty">{e(sub.get("note", "理由の再読結果は未登録です"))}。'
-            "AIが自動でつけた区分はここへ表示しません。</p>"
-        )
+        return f'<p class="school-nickname-empty">{e(sub.get("note", "理由の再読結果は未登録です"))}。</p>'
     rows = []
     for item in sub["items"]:
         cards = reason_post_cards(grouped.get((issue["label"], item["id"]), []))
@@ -338,9 +335,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         out.append(
             '<div class="school-nickname-columns"><section class="school-nickname-opinions" aria-label="意見の理由と投稿">' +
             '<h3>どんな理由で語られている？</h3>' + reasons(issue, grouped_reason_posts) +
-            f'<p class="school-nickname-note">{e(index["reason_post_note"])}</p>'
             '<div class="school-nickname-posts"><h3>実際の投稿を読む</h3>'
-            '<p class="school-nickname-note">この論点を具体的に読むため、編集部が投稿内容を確認して2件を抜き出しています。分布の代表値ではありません。</p>'
             + post_examples(issue_cards_html, iid) + '</div></section>'
         )
         out.append('<aside class="school-nickname-evidence" aria-label="資料">')

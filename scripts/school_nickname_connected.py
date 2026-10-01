@@ -36,6 +36,25 @@ CHECK_ISSUES = {
     "revision": ["school-nickname-ban-school-practice", "school-nickname-ban-uniform-rule"],
 }
 
+UNWANTED_PROCESS_COPY = (
+    "AI分類。代表投稿は編集部が選定",
+    "AIが自動でつけた区分をここに並べることはしません",
+    "AIが自動でつけた区分はここへ表示しません",
+    "人が読んだ結果だけをまとめにします",
+    "この論点の中身（編集部が本文を読んで分けたもの）",
+    "ここから下は集計ではありません",
+    "このテーマは、まだ編集部が一次資料を読んで",
+    "論点をまたいで言えることを、編集部がまとめています",
+    "このテーマは、論点をまたいで言えることの整理がまだです",
+    "論点ごとに、実際の投稿を編集部が2件ずつ選びました",
+    "理由は編集部が読み直した投稿をまとめたものです",
+    "この論点を具体的に読むため、編集部が投稿内容を確認して2件を抜き出しています",
+    "AIを使用した工程",
+    "収集・分類で分かったこと",
+    "論点・立場は本文との照合を反映しています",
+    "Powered by Yahooリアルタイム検索 + Hermes分類",
+)
+
 
 def enabled(source: str) -> bool:
     return START in source
@@ -111,7 +130,6 @@ def content_index(data: dict) -> dict:
         "issues": result,
         "background_checked_on": background["checked_on"],
         "scope_note": "件数は収集投稿の分類結果です。理由・投稿例・資料は、この論点を読むための補助線です。",
-        "reason_post_note": "理由は編集部が読み直した投稿をまとめたものです。下の投稿は各理由から選んだ代表例で、賛否の割合を表しません。",
     }
 
 
@@ -123,6 +141,51 @@ def _bridge(source: str) -> str:
         raise ValueError("連動表示: 山の初期化位置を一意に見つけられません")
     bridge = (ROOT / "scripts/templates/school_nickname_connected_bridge.js").read_text(encoding="utf-8")
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
+
+
+def _strip_internal_process_copy(source: str) -> str:
+    """既存HTMLに残る、このテーマだけの制作工程説明を再接続時にも除く。"""
+    source = source.replace('／<span class="review-note">AI分類。代表投稿は編集部が選定</span>', "")
+    source = source.replace('<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>', "")
+    source = re.sub(
+        r'<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>\s*',
+        "",
+        source,
+    )
+    source = re.sub(r'<p class="sub">ここから下は集計ではありません。.*?</p>\s*', "", source)
+    source = re.sub(r'<p class="sub">論点をまたいで言えることを、編集部がまとめています。.*?</p>\s*', "", source)
+    source = re.sub(
+        r"\s*h \+= '<p class=\"sub\" style=\"margin-top:12px\"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\s*\n",
+        "\n",
+        source,
+    )
+    source = source.replace(
+        "         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';",
+        "         + '</div>';",
+    )
+    source = re.sub(
+        r'<p>論点ごとに、実際の投稿を編集部が2件ずつ選びました。.*?リンクからXで投稿を確認してください。</p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'\s*<h3>AIを使用した工程</h3>\s*<p>収集後の投稿について、AIを関連性・意見性の判定、.*?</p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'\s*<h3>収集・分類で分かったこと</h3>\s*<ul class="article-trust-observations">.*?</ul>',
+        "",
+        source,
+        flags=re.S,
+    )
+    source = re.sub(
+        r'<li>論点・立場は本文との照合を反映しています。表現の強さと要約はAI分類に基づき、誤りを含む可能性があります。</li>',
+        "",
+        source,
+    )
+    source = source.replace('<div>Powered by Yahooリアルタイム検索 + Hermes分類</div>', "")
+    return source
 
 
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
@@ -145,6 +208,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     data = planet_data(source)
     index = content_index(data)
     background = background_data()
+    source = _strip_internal_process_copy(source)
     source = source.replace(
         '<div id="progress"><span>読んだところ</span>',
         '<div id="progress"><span>探ったところ</span>',
@@ -280,6 +344,9 @@ def validate(source: str) -> list[str]:
         problems.append("中心部分のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("ページ配置のJSが1つではありません")
+    for phrase in UNWANTED_PROCESS_COPY:
+        if phrase in source:
+            problems.append("制作工程の説明が残っています: " + phrase)
     stance_buttons = {button.get("data-i") for button in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if stance_buttons != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")

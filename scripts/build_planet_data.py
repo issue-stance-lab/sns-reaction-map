@@ -779,8 +779,11 @@ def static_question(d: dict) -> str:
 
 
 def process_copy_hidden(d: dict) -> bool:
-    """制作工程の説明を表示しないテーマか。自転車の既存方針も維持する。"""
-    return bool(d.get("hide_process_copy")) or d["theme_id"] == "bike-blue-ticket"
+    """制作工程の説明を表示しないテーマか。既存テーマ固有の方針も維持する。"""
+    return bool(d.get("hide_process_copy")) or d["theme_id"] in {
+        "bike-blue-ticket",
+        "school-nickname-ban",
+    }
 
 
 def static_caution(d: dict) -> str:
@@ -877,7 +880,7 @@ def static_fallback(d: dict) -> str:
                 + ('' if count_free else f'<span class="n">{x["count"]}件</span>') + '</li>'
                 for j, x in enumerate(sub["items"]))
             process_heading = []
-            if not d.get("hide_process_copy"):
+            if not d.get("hide_process_copy") and not count_free:
                 process_heading = [
                     '      <p class="sub" style="margin-top:12px">'
                     + ('<b>この論点の中身</b>' if d["theme_id"] == "bike-blue-ticket"

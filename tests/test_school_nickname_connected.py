@@ -114,6 +114,23 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
         self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', self.page)
         self.assertIn("const SPOTS = 2 + issues.length", self.page)
 
+    def test_internal_process_copy_is_removed_without_changing_public_data(self):
+        before = connected.planet_data(self.original)
+        after = connected.planet_data(self.page)
+        self.assertEqual(after, before)
+        for phrase in connected.UNWANTED_PROCESS_COPY:
+            self.assertNotIn(phrase, self.page)
+
+        soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(len(soup.select("[data-school-nickname-post-url]")), 12)
+        self.assertEqual(len(soup.select("[data-school-nickname-reason-post-url]")), 26)
+        self.assertEqual(len(after["issues"]), 6)
+        self.assertEqual(sum(issue["count"] for issue in after["issues"]), after["totals"]["opinions"])
+        self.assertIn("まだ読み直していない分", self.page)
+        self.assertIn("SNS投稿の収集方法", self.page)
+        self.assertIn("データの読み方:", self.page)
+        self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', self.page)
+
     def test_relationships_do_not_depend_on_issue_order_or_labels(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)
