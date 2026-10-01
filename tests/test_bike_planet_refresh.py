@@ -79,8 +79,8 @@ class BikeMethodTextTests(unittest.TestCase):
 @unittest.skipUnless((ROOT / "social-samples/bike-blue-ticket_2d_classified.json").is_file(),
                      "非公開の正典が無い環境（CI）では回さない")
 class BikePlanetRefreshTests(unittest.TestCase):
-    def test_refresh_runs_on_published_page_without_changes(self):
-        """次回の定期更新が、起承転結の再構成後のページで止まらず差分も出ないこと。
+    def test_refresh_removes_dynamic_process_copy_then_is_idempotent(self):
+        """動的な工程説明を除き、次回更新以降は差分が出ないこと。
 
         論点カード（explainer-card）を削除したあとも、refresh() が旧カードの件数同期を
         呼んで止まっていた（課題69、2026-09-19）。unittestでは refresh() 自体が
@@ -89,10 +89,15 @@ class BikePlanetRefreshTests(unittest.TestCase):
         from refresh_planet_section import refresh
         old, new, failures = refresh("bike-blue-ticket")
         self.assertEqual(failures, [])
-        self.assertEqual(old, new)
+        self.assertNotEqual(old, new)
+        self.assertNotIn("資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの", new)
+        self.assertNotIn("一次資料に当たった人にしか作れない問題", new)
         self.assertNotIn('id="explainer-section"', new)
         self.assertEqual(new.count('class="explainer-card landing-image"'), 6 + 1)  # 無JS用6枚＋JS側1箇所
         self.assertIn("document.addEventListener('click',function(e){\n    var c=e.target.closest('.explainer-card[data-img]')", new)
+        _old_again, rebuilt, failures_again = refresh("bike-blue-ticket", source=new)
+        self.assertEqual(failures_again, [])
+        self.assertEqual(new, rebuilt)
 
 class BikeCollectionReviewTests(unittest.TestCase):
     def setUp(self):
