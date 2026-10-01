@@ -1564,7 +1564,6 @@ function render(){
   }
   p.push('<text x="'+LEFT+'" y="'+(TOP-18)+'" font-size="11.5" font-weight="700" fill="#8b949e">↑ 高さ＝強い表現の割合</text>');
 
-  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */
   const ocean=D.ocean||{}, sunk=ocean.sunk_continents||[], veins=ocean.veins||[];
   p.push('<g id="seafloor">');
   if (sunk.length){
@@ -1582,7 +1581,6 @@ function render(){
       +' C610,'+(SEA+28)+' 700,'+(SEA+64)+' '+RIGHT+','+(SEA+44)+'" fill="none" stroke="#e0663a" stroke-width="2.2" stroke-linecap="round"/>');
     p.push('<text x="'+RIGHT+'" y="'+(SEA+40)+'" text-anchor="end" font-size="10.5" font-weight="700" fill="#e0663a">立場をこえて同じ心配：立場が違っても同じ心配（'+veins.length+'本）</text>');
   }
-  p.push('<text x="'+LEFT+'" y="'+(SEA+76)+'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');
   p.push('</g>');
   // 海の覆い。潜水で薄くなり、下が見えるようになる
   p.push('<rect id="seacover" x="0" y="'+SEA+'" width="'+SVG_W+'" height="'+(BOT-SEA)+'" fill="#0d1117" opacity="0.92"/>');
@@ -2104,7 +2102,7 @@ function buildQuiz(){
       + '<p class="qscore" style="color:var(--muted);font-size:12.5px">'
       + V_ORDER.map(v=>{const n=cs.filter(c=>c.verdict===v).length;
           return n? cs.find(c=>c.verdict===v).verdict_label+n+'件':""; }).filter(Boolean).join(" / ")
-      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';
+      + '</p>';
     return;
   }
   const c=cs[qi], right=V_ORDER.indexOf(c.verdict);
