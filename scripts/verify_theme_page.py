@@ -853,6 +853,14 @@ def verify_theme_page(
     elif expected_note is None:
         lines.append("NG  代表投稿の確認表示: data/review-ledger.json に記録がない")
         failures += 1
+    elif theme == "ai-copyright" and expected_note not in page and not re.search(
+        r'<span class=["\']review-note["\']>', page
+    ):
+        if 'id="issue-cards"' in page:
+            lines.append("OK  代表投稿の確認記録は台帳に保持し、ページ上の制作説明文は省略")
+        else:
+            lines.append("NG  代表投稿の確認記録は台帳にあるが、投稿例がページにない")
+            failures += 1
     # 確認表示は <span class="review-note"> で囲む。この件数は台帳由来で正典からは
     # 導けないため、verify_number_provenance.py が「ここだけ」除外できるようにしている。
     elif f'<span class="review-note">{expected_note}</span>' in page:

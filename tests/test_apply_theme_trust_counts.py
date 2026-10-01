@@ -38,18 +38,22 @@ class IsOpinionTests(unittest.TestCase):
 
 
 class ThemeTrustCopyTests(unittest.TestCase):
-    def test_ai_process_section_is_disabled_only_for_bike(self):
+    def test_ai_process_section_is_disabled_only_for_themes_that_opt_out(self):
         root = Path(__file__).resolve().parents[1]
         config = json.loads((root / "configs/theme-seo.json").read_text(encoding="utf-8"))
         themes = {theme["id"]: theme for theme in config["themes"]}
         organization = config["organization"]
         bike_theme = dict(themes["bike-blue-ticket"])
         bike_theme["collection"] = bike_theme["collection"].replace("{total}", "585").replace("{opinions}", "415")
-        other_theme = dict(themes["ai-copyright"])
-        other_theme["collection"] = other_theme["collection"].replace("{total}", "1").replace("{opinions}", "1")
+        ai_theme = dict(themes["ai-copyright"])
+        ai_theme["collection"] = ai_theme["collection"].replace("{total}", "4734").replace("{opinions}", "3146")
+        other_theme = dict(themes["consumption-tax-cut"])
+        other_theme["collection"] = other_theme["collection"].replace("{total}", "4897").replace("{opinions}", "4340")
         bike = trust_block(bike_theme, organization)
+        ai_copyright = trust_block(ai_theme, organization)
         other = trust_block(other_theme, organization)
         self.assertNotIn("AIを使用した工程", bike)
+        self.assertNotIn("AIを使用した工程", ai_copyright)
         self.assertIn("AIを使用した工程", other)
         self.assertIn("世論調査ではなく", bike)
 
@@ -58,7 +62,7 @@ class ThemeTrustCopyTests(unittest.TestCase):
         config = json.loads((root / "configs/theme-seo.json").read_text(encoding="utf-8"))
         themes = {theme["id"]: theme for theme in config["themes"]}
         self.assertFalse(should_show_review_note(themes["bike-blue-ticket"]))
-        self.assertTrue(should_show_review_note(themes["ai-copyright"]))
+        self.assertFalse(should_show_review_note(themes["ai-copyright"]))
         self.assertTrue(should_show_review_note({}))
 
     def test_review_note_suppression_removes_only_the_display_annotation(self):
