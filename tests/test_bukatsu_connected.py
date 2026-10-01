@@ -24,8 +24,8 @@ class BukatsuConnectedTests(unittest.TestCase):
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):
         inactive = self.page.replace(connected.START, "<!-- BUKATSU_CONNECTED_DISABLED -->")
         self.assertEqual(connected.apply(inactive), inactive)
-        # 現行の公開HTMLは、まだこの工程では有効化しない（マーカー未挿入）。
-        self.assertEqual(connected.apply(self.original), self.original)
+        # 有効化済みの部活動ページは、接続処理の再実行で不要文も含めて正規形へ揃う。
+        self.assertEqual(connected.apply(self.original), self.page)
         for path in (ROOT / "docs").glob("*-reaction-map.html"):
             if path.stem == "bukatsu-chiiki-reaction-map":
                 continue
@@ -225,14 +225,32 @@ class BukatsuConnectedTests(unittest.TestCase):
         forced_on["sub"]["show_coverage_note"] = True
         self.assertIn(forced_on["sub"]["coverage_note"], content.reasons(forced_on, True))
 
-    def test_unreviewed_note_respects_the_theme_wide_flag(self):
+    def test_unreviewed_state_does_not_render_process_explanations(self):
         data = connected.planet_data(self.page)
         unreviewed = next(i for i in data["issues"] if i["sub"]["status"] == "not_reviewed")
         self.assertIs(data.get("show_unreviewed_note"), False, "この検査は現行データがshow_unreviewed_note=falseである前提です")
-        suppressed = content.reasons(unreviewed, False)
-        self.assertNotIn("AIが自動でつけた区分", suppressed)
-        shown = content.reasons(unreviewed, True)
-        self.assertIn("AIが自動でつけた区分", shown)
+        self.assertEqual(content.reasons(unreviewed, False), "")
+        self.assertEqual(content.reasons(unreviewed, True), "")
+
+    def test_mechanical_empty_copy_is_removed_but_data_and_posts_remain(self):
+        self.assertNotIn("AIが自動でつけた区分", self.page)
+        self.assertNotIn("人が読んだ結果だけをまとめにします", self.page)
+        self.assertNotIn("本文確認後に追加された投稿", self.page)
+        self.assertNotIn("この論点に対応する資料照合は、まだ登録されていません", self.page)
+        data = connected.planet_data(self.page)
+        soup = BeautifulSoup(self.page, "html.parser")
+        for iid in ("bukatsu-chiiki-sonota", "bukatsu-chiiki-kakusa"):
+            issue = next(item for item in data["issues"] if item["id"] == iid)
+            self.assertEqual(issue["sub"]["status"], "not_reviewed")
+            reading = BeautifulSoup(soup.select_one("#bukatsu-reading-" + iid).decode_contents(), "html.parser")
+            self.assertIsNone(reading.select_one(".bkt-empty"))
+            self.assertNotIn("どんな理由で語られている？", reading.get_text(" ", strip=True))
+            self.assertNotIn("投稿の主張と一次資料", reading.get_text(" ", strip=True))
+            self.assertEqual(len(reading.select("[data-bkt-post-url]")), 2)
+
+    def test_legacy_vote_generator_no_longer_contains_ai_process_paragraph(self):
+        source = (ROOT / "scripts/build_bukatsu_arena.py").read_text(encoding="utf-8")
+        self.assertNotIn("AIが自動分類しました", source)
 
     def test_metrics_placeholders_exist_for_runtime_fill_including_the_zero_state(self):
         # 件数・割合は実行時にJS（fillMetrics）が埋める。0件（立場を絞ると0になる論点が

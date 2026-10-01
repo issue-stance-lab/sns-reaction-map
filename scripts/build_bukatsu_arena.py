@@ -85,6 +85,10 @@ SEARCH_CSS_END = "/* BUKATSU_SEARCH_ENTRY_CSS_END */"
 SEARCH_FAQ_START = "<!-- BUKATSU_SEARCH_FAQ_JSONLD_START -->"
 SEARCH_FAQ_END = "<!-- BUKATSU_SEARCH_FAQ_JSONLD_END -->"
 
+PROGRESS_LABEL_PATTERN = re.compile(
+    r'(<div id="progress"><span>)(?:読んだところ|探ったところ)(</span>)'
+)
+
 SEARCH_ENTRY_CSS = f"""<style>
 {SEARCH_CSS_START}
 .bukatsu-search-entry{{width:min(1180px,calc(100% - 32px));margin:14px auto 22px;color:var(--navy)}}
@@ -358,6 +362,16 @@ def apply_bukatsu_search_entry(source: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", source)
 
 
+def apply_bukatsu_progress_label(source: str) -> str:
+    """操作地点の進捗を、閲覧量と誤認しないテーマ固有表現に揃える。"""
+    updated, count = PROGRESS_LABEL_PATTERN.subn(
+        r"\1探ったところ\2", source, count=1
+    )
+    if count != 1:
+        raise ValueError("部活動ページ上部の進捗表示を一意に確認できません")
+    return updated
+
+
 def _section_end(html: str, start: int) -> int:
     """Return the end offset of a section, allowing nested sections."""
     depth = 0
@@ -547,7 +561,7 @@ def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     html = embed_hermes_samples(html)
     html = re.sub(r"\n[ \t]+\n", "\n\n", html)
     html = apply_bukatsu_background(re.sub(r"\n{3,}", "\n\n", html))
-    return apply_bukatsu_search_entry(html)
+    return apply_bukatsu_progress_label(apply_bukatsu_search_entry(html))
 
 # === SM_RAW 生成 ===
 def gen_sm_raw():
@@ -677,7 +691,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
 VOTE_SECTION = """<section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
 <p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>

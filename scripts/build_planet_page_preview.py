@@ -1017,6 +1017,21 @@ def build_generic(topic: str, html: str, data: dict) -> tuple[str, list[tuple[st
     return html, removed
 
 
+def top_progress(topic: str) -> str:
+    """Return the shared progress UI with topic-specific, truthful copy."""
+    # この数値はスクロール量ではなく、予想・論点・資料クイズ等を開いた
+    # ユニーク地点数。部活動ページでは「読んだ」と誤認させないテーマ固有の
+    # 表現を使う。他テーマの文言は既存表示を維持する。
+    progress_label = "探ったところ" if topic == "bukatsu-chiiki" else "読んだところ"
+    return (
+        f'<div id="progress"><span>{progress_label}</span>'
+        '<span class="track"><i id="pbar"></i></span>'
+        '<span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b>'
+        '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>'
+        f"<script>{PROGRESS_STICK_JS}</script>"
+    )
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--topic", default="bukatsu-chiiki")
@@ -1067,11 +1082,7 @@ def main() -> None:
     # #progress/#pbar/#pnum を前提にしており、無いとJSエラーで山なみごと止まる
     # （テーマを問わず必須。数字はJSが実測して上書きするのでここでは仮置きでよい）。
     # #pseg は区画（1地点＝1区画）の入れ物。中身はテンプレート側の paintProgress() が作る。
-    bar = ('<div id="progress"><span>読んだところ</span>'
-           '<span class="track"><i id="pbar"></i></span>'
-           '<span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b>'
-           '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div>')
-    bar += f"<script>{PROGRESS_STICK_JS}</script>"
+    bar = top_progress(a.topic)
     html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + bar, html, count=1)
 
     # 見本を開いても実サイトのアクセス数に混ざらないよう、計測タグだけ外す。

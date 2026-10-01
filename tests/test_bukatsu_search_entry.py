@@ -7,6 +7,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 from scripts import build_bukatsu_arena as arena
+from scripts import build_planet_page_preview as preview
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -85,6 +86,24 @@ class BukatsuSearchEntryTests(unittest.TestCase):
         self.assertEqual(len(soup.select("#bukatsu-check [data-local-mark]")), 2)
         self.assertIn("質問文をコピーしました", updated)
         self.assertIn("bukatsu_question_copy", updated)
+
+    def test_top_progress_describes_interactions_not_reading(self):
+        updated = arena.apply_bukatsu_progress_label(self.original)
+        soup = BeautifulSoup(updated, "html.parser")
+        progress = soup.select_one("#progress")
+        self.assertIsNotNone(progress)
+        self.assertEqual(progress.find("span").get_text(strip=True), "探ったところ")
+        self.assertNotIn("読んだところ", progress.get_text(" ", strip=True))
+        # 文言だけの修正で、計測・保存契約は変えない。
+        self.assertIn('const SPOTS = 2 + issues.length', updated)
+        self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', updated)
+        self.assertEqual(arena.apply_bukatsu_progress_label(updated), updated)
+
+    def test_shared_generator_keeps_other_theme_progress_copy(self):
+        self.assertIn("探ったところ", preview.top_progress("bukatsu-chiiki"))
+        self.assertNotIn("読んだところ", preview.top_progress("bukatsu-chiiki"))
+        self.assertIn("読んだところ", preview.top_progress("constitutional-amendment"))
+        self.assertNotIn("探ったところ", preview.top_progress("constitutional-amendment"))
 
 
 if __name__ == "__main__":
