@@ -25,6 +25,24 @@ BRIDGE_START = "/* BUKATSU_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* BUKATSU_CONNECTED_BRIDGE_END */"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
 
+LEGACY_UNREVIEWED_BRANCH = """  } else {
+    if (D.show_unreviewed_note !== false){
+      h += '<div class="note">'+s.note+'。<br>'
+         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    }
+  }"""
+
+
+def strip_mechanical_explanations(source: str) -> str:
+    """部活動ページの表示から、未対応工程だけを説明する段落を外す。"""
+    source = source.replace(LEGACY_UNREVIEWED_BRANCH, "  }")
+    source = re.sub(
+        r'\s*<div class="note">本文確認後に追加された投稿[\d,]+件は、本文確認の対象外です。</div>',
+        "",
+        source,
+    )
+    return source
+
 
 def enabled(source: str) -> bool:
     return START in source
@@ -113,6 +131,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     if topic != TOPIC or not (activate or enabled(source)):
         return source
     from scripts.bukatsu_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    source = strip_mechanical_explanations(source)
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
