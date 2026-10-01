@@ -1,0 +1,64 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 158,
+  "duplicates": 98,
+  "new": 60,
+  "relevant": 42,
+  "opinions": 27,
+  "opinion_flag_available": true,
+  "candidate": 662,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "elderly-license-revocation",
+  "date": "2026-09-30",
+  "run_id": "20260930_222048",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.11,
+    "fetch_seconds": 54.93,
+    "classify_seconds": 568.94
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_elderly_arena_hermes.py",
+      "script_sha256": "bf5db64a646993cd0ba78c220daf1a447c0cab7fa24a6db503668b30f3952716",
+      "taxonomy_sha256": "d2b7ed9e90382eee42631f5b122715407f448e70d5b8fe8e1fef3895cce0f286"
+    },
+    "input": {
+      "raw_sha256": "2b5edcd39378b0ad778cc13c9860b77a98aa7be677ad5bdb72fe7ccea24d5025",
+      "raw_records": 158,
+      "new_sha256": "65adde3f9c6436684398cd2209490998fedb5180e2032baa41a094eb1d2ce16e"
+    },
+    "sources": {
+      "yahoo_realtime": 158
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "de734a338216d5c91289406b6d71effba9efd2198ec23d9c3229cf801d6386ee"
+    }
+  },
+  "next_collect_at": "2026-10-14",
+  "editorial_review": {
+    "reviewed_at": "2026-09-30",
+    "reviewed_opinion_candidates": 34,
+    "adopted_opinions": 27,
+    "excluded_as_off_topic": 7,
+    "issue_corrections": 1,
+    "evidence": "quality/reviews/2026-09-30-elderly-license-refresh-review.json"
+  }
+}

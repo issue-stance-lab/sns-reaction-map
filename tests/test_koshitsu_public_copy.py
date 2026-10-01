@@ -66,17 +66,17 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
         self.assertEqual(trust.apply_theme(self.html, theme, config), self.html)
 
     def test_counts_review_state_posts_sources_and_storage_notice_remain(self):
-        self.assertEqual(self.data["totals"], {"collected": 1950, "opinions": 1525})
-        self.assertIn("収集した1,950件のうち意見と判定した1,525件", self.html)
+        self.assertEqual(self.data["totals"], {"collected": 2271, "opinions": 1776})
+        self.assertIn("収集した2,271件のうち意見と判定した1,776件", self.html)
         self.assertEqual(
             {item["label"]: item["count"] for item in self.data["issues"]},
             {
-                "男系vs女系": 425,
-                "旧宮家養子縁組": 269,
-                "立法手続き・民主主義": 228,
-                "その他": 216,
-                "愛子さま・皇族の地位": 199,
-                "女性天皇・女系天皇": 188,
+                "男系vs女系": 495,
+                "旧宮家養子縁組": 314,
+                "その他": 261,
+                "立法手続き・民主主義": 253,
+                "愛子さま・皇族の地位": 239,
+                "女性天皇・女系天皇": 214,
             },
         )
         self.assertTrue(all(item["sub"]["status"] == "reread" for item in self.data["issues"]))
@@ -85,7 +85,7 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
                 next(reason["count"] for reason in item["sub"]["items"] if reason["id"] == "__unread__")
                 for item in self.data["issues"]
             ],
-            [70, 42, 27, 41, 52, 48],
+            [140, 87, 86, 52, 92, 74],
         )
         soup = BeautifulSoup(self.html, "html.parser")
         self.assertEqual(len(soup.select('template[id^="koshitsu-tenpakai-reading-"]')), 6)

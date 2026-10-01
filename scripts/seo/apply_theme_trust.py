@@ -206,14 +206,10 @@ def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
     collection = html.escape(resolve_counts(theme["collection"], theme["id"]))
     organization_name = html.escape(organization["name"])
     observations = observations_html(theme)
-    ai_process = ""
-    if theme.get("show_ai_process", True):
-        ai_process = (
-            "    <h3>AIを使用した工程</h3>\n"
-            "    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、"
-            "要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも"
-            "使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>\n"
-        )
+    ai_process = "" if theme.get("show_ai_process") is False else """\
+    <h3>AIを使用した工程</h3>
+    <p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>
+"""
     return f"""\
 {TRUST_START}
 <aside class="article-trust" aria-labelledby="article-trust-title">
@@ -229,7 +225,8 @@ def trust_block(theme: dict[str, Any], organization: dict[str, str]) -> str:
   <div class="article-trust-method">
     <h3>SNS投稿の収集方法</h3>
     <p>{collection}</p>
-{ai_process}{observations}  </div>
+{ai_process}
+{observations}  </div>
   <p class="article-trust-caution"><strong>データの読み方:</strong> このページは世論調査ではなく、検索語と収集時点に基づくSNS投稿サンプルの分類結果です。社会全体の意見割合や事実認定を示すものではありません。</p>
   <p class="article-trust-contact">内容の訂正、引用の削除依頼、調査方法への問い合わせは、<a href="about.html#corrections">運営者情報・訂正窓口</a>をご確認ください。</p>
 </aside>
@@ -360,7 +357,7 @@ def main() -> int:
     if args.theme:
         themes = [theme for theme in themes if theme["id"] == args.theme]
         if not themes:
-            parser.error(f"未登録のテーマです: {args.theme}")
+            raise ValueError(f"unknown theme: {args.theme}")
 
     changed = 0
     for theme in themes:
@@ -381,7 +378,7 @@ def main() -> int:
             status = "would update" if args.check else "updated"
         print(f"{status} {path.relative_to(PROJECT_ROOT)}")
 
-    print(f"Validated {len(themes)} theme pages; changed={changed}")
+    print(f'Validated {len(themes)} theme pages; changed={changed}')
     return 0
 
 

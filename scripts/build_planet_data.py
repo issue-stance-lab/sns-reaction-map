@@ -778,18 +778,19 @@ def static_question(d: dict) -> str:
     return e(d["question"]) + "（" + e(d["title"]) + "）"
 
 
+def process_copy_hidden(d: dict) -> bool:
+    """制作工程の説明を表示しないテーマか。自転車の既存方針も維持する。"""
+    return bool(d.get("hide_process_copy")) or d["theme_id"] == "bike-blue-ticket"
+
+
 def static_caution(d: dict) -> str:
     t = d["totals"]
-    review_note = (
-        ""
-        if d.get("hide_process_copy")
-        else '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>'
-    )
     out = ['<p class="caution" id="caution">'
            + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
            + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
-           + review_note
+           + ('' if process_copy_hidden(d)
+              else '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>')
            + "</p>"]
     if d.get("stance_note"):
         out.append('<p class="note" id="stance-definition">' + e(d["stance_note"]) + "</p>")
@@ -875,11 +876,16 @@ def static_fallback(d: dict) -> str:
                 f'<span class="num">{j + 1}</span>{e(x["label"])}'
                 + ('' if count_free else f'<span class="n">{x["count"]}件</span>') + '</li>'
                 for j, x in enumerate(sub["items"]))
-            body += [
-                *([] if d.get("hide_process_copy") else [
+            process_heading = []
+            if not d.get("hide_process_copy"):
+                process_heading = [
                     '      <p class="sub" style="margin-top:12px">'
-                    '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'
-                ]),
+                    + ('<b>この論点の中身</b>' if d["theme_id"] == "bike-blue-ticket"
+                       else '<b>この論点の中身（編集部が本文を読んで分けたもの）</b>')
+                    + '</p>'
+                ]
+            body += [
+                *process_heading,
                 f'      <ul class="islands">{items}</ul>',
                 *(([] if count_free else [f'      <div class="note">本文確認後に追加された投稿{sub["unread_count"]}件は、本文確認の対象外です。</div>']
                    if sub.get("unread_count") else
@@ -887,7 +893,7 @@ def static_fallback(d: dict) -> str:
                    if sub.get("show_coverage_note", True) else [])),
             ]
         else:
-            if d.get("show_unreviewed_note", True) and not d.get("hide_process_copy"):
+            if d.get("show_unreviewed_note", True) and not process_copy_hidden(d):
                 body.append(f'      <div class="note">{e(sub.get("note", ""))}。<br>'
                             'AIが自動でつけた区分をここに並べることはしません。'
                             '人が読んだ結果だけをまとめにします。</div>')
@@ -978,7 +984,7 @@ def static_ocean(data: dict) -> str:
     head = ['  <section id="ocean" class="ocean" tabindex="-1">',
             '    <h3 class="sec">資料にあるのに、SNSにないこと</h3>']
     if ocean.get("ocean_status") != "complete" or not (sunk or veins):
-        if not data.get("hide_process_copy"):
+        if not process_copy_hidden(data):
             head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
                         '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
         return "\n".join(head + ['  </section>'])
@@ -987,7 +993,7 @@ def static_ocean(data: dict) -> str:
     # 「押して開いた内容」だと分かりづらいとの指摘（オーナー2026-09-19）。
     # バッジで「ここが、押して開いた内容」であることを明示する。
     head.append('    <p class="ocean-badge">🔍 資料にしかない話</p>')
-    if not data.get("hide_process_copy"):
+    if not process_copy_hidden(data):
         head.append(
             '    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
             f'（確認日 {e(ocean.get("ocean_checked_on"))}／'
@@ -996,6 +1002,14 @@ def static_ocean(data: dict) -> str:
     if sunk:
         head.append('    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
         for x in sunk:
+            sns_note = str(x["sns_note"])
+            if data["theme_id"] == "bike-blue-ticket":
+                sns_note = re.sub(
+                    r"\s*20\d{2}-\d{2}-\d{2}に今回新たに採用した\d+件を本文確認し、"
+                    r"この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。$",
+                    "",
+                    sns_note,
+                ).rstrip()
             srcs = "".join(
                 f'<li><a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
                 + (f'<span class="when">{e(src["date"])}</span>' if src.get("date") else "")
@@ -1009,7 +1023,7 @@ def static_ocean(data: dict) -> str:
                 f'<p class="count">集めた投稿での件数：<b>{x["sns_count"]}件</b>'
                 f'（意見{x["sns_base"]}件のうち）'
                 + (f'／いちばん近い論点：{e(near)}' if near else "") + '</p>'
-                f'<p class="note">{e(x["sns_note"])}</p>'
+                f'<p class="note">{e(sns_note)}</p>'
                 f'<p class="sub">一次資料</p><ul class="srclist">{srcs}</ul>'
                 '</article>')
 
@@ -1058,12 +1072,12 @@ def static_editorial(data: dict) -> str:
            '    <h3 class="sec">編集部の横断整理</h3>']
     findings = ed.get("findings") or []
     if ed.get("status") != "complete" or not findings:
-        if not data.get("hide_process_copy"):
+        if not process_copy_hidden(data):
             out.append('    <p class="sub">このテーマは、論点をまたいで言えることの整理がまだです。'
                        '書けるまで、ここは空のままにします。</p>')
         return "\n".join(out + ['  </section>'])
 
-    if not data.get("hide_process_copy"):
+    if not process_copy_hidden(data):
         out.append('    <p class="sub">論点をまたいで言えることを、編集部がまとめています。'
                    f'（{e(ed.get("checked_on"))}時点）</p>')
     for kind, heading in EDITORIAL_HEADINGS.items():
@@ -1078,23 +1092,20 @@ def static_editorial(data: dict) -> str:
 
 
 def render_page(data: dict, template: str, payload: str) -> str:
-    if data["theme_id"] == "henoko-student-accident":
-        template = template.replace("s.coverage_note+'。'", "s.coverage_note.replace(/。+$/, '')+'。'")
-        template = template.replace('  const q=[];', '  const q = D.reading_questions ? D.reading_questions.map(x=>({...x, title:esc(x.title), opts:x.opts.map(esc), ans:esc(x.ans)})) : [];\n  if (!D.reading_questions) {', 1)
-        template = template.replace('  box.innerHTML = q.map(x =>', '  }\n  box.innerHTML = q.map(x =>', 1)
-        # This sample has a large stance gap; inherited demo wording would
-        # misstate it, generalize to all SNS, and imply a human source review.
-        for old, new in (
-            ("多いのは前者で、しかも差はわずかです。", "収集した投稿では前者が多くなっています。"),
-            ("件しかないのに、これがいちばん高い山です。", "件で、強い表現の割合がいちばん高い山です。"),
-            ("どれも一次資料では決まっている話です。下に中身があります。", "一次資料に記された内容です。下に確認した範囲と出典があります。"),
-            ("資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。", "一次資料にある内容で、<b>今回収集した意見には見当たらなかった</b>ものがあります。"),
-            ("一次資料に当たった人にしか作れない問題", "一次資料を照合して作った問題"),
-            ("SNSでよく見る主張", "収集した投稿にあった主張"),
-            ("その論点の図解と、賛成・反対それぞれの投稿が読めます", "その論点の理由の内訳と、一次資料との照合結果が読めます"),
-        ):
-            template = template.replace(old, new)
-        template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
+    if data["theme_id"] == "bike-blue-ticket":
+        template = template.replace(
+            "この論点の中身（編集部が本文を読んで分けたもの）",
+            "この論点の中身",
+        )
+        template, count = re.subn(
+            r"    if \(D\.show_unreviewed_note !== false\)\{\n.*?\n    \}\n",
+            "",
+            template,
+            count=1,
+            flags=re.S,
+        )
+        if count != 1:
+            raise TemplateError("自転車の未再読説明を描画するJS位置が見つかりません")
     if data.get("hide_process_copy"):
         template = template.replace(
             "    h += '<p class=\"sub\" style=\"margin-top:12px\"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\n"
@@ -1112,6 +1123,23 @@ def render_page(data: dict, template: str, payload: str) -> str:
             '  }',
             1,
         )
+    if data["theme_id"] == "henoko-student-accident":
+        template = template.replace("s.coverage_note+'。'", "s.coverage_note.replace(/。+$/, '')+'。'")
+        template = template.replace('  const q=[];', '  const q = D.reading_questions ? D.reading_questions.map(x=>({...x, title:esc(x.title), opts:x.opts.map(esc), ans:esc(x.ans)})) : [];\n  if (!D.reading_questions) {', 1)
+        template = template.replace('  box.innerHTML = q.map(x =>', '  }\n  box.innerHTML = q.map(x =>', 1)
+        # This sample has a large stance gap; inherited demo wording would
+        # misstate it, generalize to all SNS, and imply a human source review.
+        for old, new in (
+            ("多いのは前者で、しかも差はわずかです。", "収集した投稿では前者が多くなっています。"),
+            ("件しかないのに、これがいちばん高い山です。", "件で、強い表現の割合がいちばん高い山です。"),
+            ("どれも一次資料では決まっている話です。下に中身があります。", "一次資料に記された内容です。下に確認した範囲と出典があります。"),
+            ("資料にあるのに、SNSにないことに、一次資料では争点なのに<b>SNSではほとんど誰も話していない</b>ものがあります。", "一次資料にある内容で、<b>今回収集した意見には見当たらなかった</b>ものがあります。"),
+            ("一次資料に当たった人にしか作れない問題", "一次資料を照合して作った問題"),
+            ("SNSでよく見る主張", "収集した投稿にあった主張"),
+            ("その論点の図解と、賛成・反対それぞれの投稿が読めます", "その論点の理由の内訳と、一次資料との照合結果が読めます"),
+        ):
+            template = template.replace(old, new)
+        template = template.replace("</style>", ".gans .lead{color:#0b1937}\n.chart-box svg rect.hill-hit{fill:transparent!important}\n</style>", 1)
     if data["theme_id"] in (
         "consumption-tax-cut", "koshitsu-tenpakai", "ai-copyright", "bukatsu-chiiki",
         "bike-blue-ticket", "constitutional-amendment", "elderly-license-revocation",

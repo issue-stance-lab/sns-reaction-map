@@ -16,6 +16,7 @@ from verify_claim_verdicts import (  # noqa: E402
     LEGACY_CONSTITUTIONAL,
     audit,
     canonical_claim_counts,
+    coverage_findings,
     coverage_warnings,
     public_claim_counts,
     verification_claim_counts,
@@ -66,6 +67,34 @@ class ClaimVerdictTest(unittest.TestCase):
                  mock.patch.object(vcv, "public_path", lambda theme: root / f"{theme}.json"):
                 warned = {line.split(":")[0] for line in coverage_warnings()}
         self.assertEqual(warned, {name for name, (_, expected) in cases.items() if expected})
+
+    def test_coverage_findings_only_include_themes_over_threshold(self) -> None:
+        # ダッシュボードに常時警告状態を作らないよう、COVERAGE_WARN_DAYS(30日)未満は
+        # coverage_warnings()には出ても coverage_findings()には出さない（課題99）。
+        def theme_json(checked_on: str, period_end: str) -> dict:
+            return {
+                "claim_verification": {"checked_on": checked_on},
+                "collection_period": {"start": "2026-06-27", "end": period_end},
+            }
+
+        cases = {
+            "just-under": (theme_json("2026-08-01", "2026-08-30"), False),  # 29日
+            "at-threshold": (theme_json("2026-08-01", "2026-08-31"), True),  # 30日ちょうど
+            "over": (theme_json("2026-08-01", "2026-09-15"), True),  # 45日
+            "caught-up": (theme_json("2026-09-02", "2026-09-02"), False),
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name, (payload, _) in cases.items():
+                (root / f"{name}.json").write_text(json.dumps(payload), encoding="utf-8")
+            with mock.patch.object(vcv, "SOURCES", {name: ("", "") for name in cases}), \
+                 mock.patch.object(vcv, "public_path", lambda theme: root / f"{theme}.json"):
+                findings = coverage_findings()
+        found_themes = {f["title"].split(":")[0] for f in findings}
+        self.assertEqual(found_themes, {name for name, (_, expected) in cases.items() if expected})
+        for finding in findings:
+            self.assertEqual(finding["tone"], "warn")
+            self.assertIn("課題99", finding["detail"])
 
     def test_coverage_warnings_never_change_the_exit_code(self) -> None:
         # 読み直す範囲はオーナー判断のため、警告で止めない。止める判断は課題54の残課題。

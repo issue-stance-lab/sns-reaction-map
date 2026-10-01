@@ -113,13 +113,26 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertEqual(len(soup.select('template[id^="tax-reading-"]')), 7)
         finance = soup.select_one('#tax-reading-consumption-tax-cut-finance-welfare')
         self.assertEqual(len(finance.select('[data-tax-claim]')), 3)
-        self.assertIn('理由別に分ける再読をまだ行っていません', str(finance))
+        self.assertFalse(finance.select('.tax-opinions .tax-empty'))
         effect = soup.select_one('#tax-reading-consumption-tax-cut-effect')
-        self.assertIn('資料照合は、まだ登録されていません', str(effect))
+        self.assertFalse(effect.select('.tax-evidence .tax-empty'))
         self.assertEqual(len(effect.select('[data-tax-reason]')), 5)
         source = finance.select_one('[data-tax-claim="refund"] a')
         source['href'] = 'https://example.invalid/missing'
         self.assertTrue(any('読書面の資料照合' in p for p in connected.validate(str(soup))))
+
+    def test_internal_process_and_empty_state_copy_is_absent_after_regeneration(self):
+        phrases = (
+            'AIが自動でつけた区分',
+            '人が読んだ結果だけをまとめにします',
+            '理由別に分ける再読をまだ行っていません',
+            '資料照合は、まだ登録されていません',
+        )
+        for phrase in phrases:
+            self.assertNotIn(phrase, self.page)
+        data = connected.planet_data(self.page)
+        self.assertEqual(sum(i['sub']['status'] != 'reread' for i in data['issues']), 3)
+        self.assertEqual(sum(not i['claims'] for i in data['issues']), 3)
 
     def test_reading_reason_loss_is_rejected(self):
         broken = self.page.replace('data-tax-reason="A"', 'data-missing-reason="A"')

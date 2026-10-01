@@ -50,13 +50,18 @@ HERO_IMAGE = "url('images/topics/consumption-tax-cut/consumption-tax-cut-hero.we
 
 # SEO_META / ARTICLE_JSON_LD の中身。テーマを configs/theme-seo.json に登録したあとは
 # scripts/seo/apply_theme_trust.py が同じブロックを上書き管理するので、値を揃えておく。
-HEADLINE = "消費税減税は何が論点？食料品限定と一律の賛否"
+HEADLINE = "消費税減税はいつから？食料品1％と給付・財源の現在地"
 DESCRIPTION = (
-    "消費税減税について、対象範囲、財源と社会保障、価格への効果、給付付き税額控除との比較、"
-    "事業者の実務負担、公約と政治不信の6論点とSNS上の賛否を整理します。"
+    "消費税減税は2027年4月から2年間、食料品を8％から1％へ下げる政府大綱が閣議決定済みです。"
+    "法律成立前という現在地、対象品目、財源、給付付き税額控除、メリット・デメリットとSNS上の論点を整理します。"
 )
 OGP_IMAGE = "https://sns-reaction-map.jp/images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp"
+SEARCH_ENTRY_START = "<!-- TAX_SEARCH_ENTRY_START -->"
+SEARCH_ENTRY_END = "<!-- TAX_SEARCH_ENTRY_END -->"
+SEARCH_ENTRY_CSS = '<link rel="stylesheet" href="consumption-tax-search-entry.css?v=3">'
+SEARCH_ENTRY_JS = '<script src="consumption-tax-search-entry.js?v=1" defer></script>'
 PUBLISHED_AT = "2026-07-28"
+MODIFIED_AT = "2026-09-27"
 ORGANIZATION = {
     "@type": "Organization",
     "name": "SNS反応まっぷ編集部",
@@ -959,7 +964,7 @@ def background_context() -> str:
 <p class="bg-now">法律はまだ成立していません。政府が決めたのは法案のもとになる方針（大綱）までで、これから法案を作り、臨時国会に提出して審議されます。</p>
 <h3>なぜ始まったか</h3>
 <p>物価高が続くなか、各党が消費税や物価対策としての減税・給付を公約や提言として掲げてきました。国民民主党は消費税の一律5%への引下げを、立憲民主党は食料品のゼロ税率化を提言するなど、政党によって対象・税率・実施方法は分かれていました。</p>
-<p>2026年に入り、政府・与党内でも食料品に対象を絞った引下げの検討が進み、8月5日には政府として初めて「税率1%・2年間」という具体的な方針を閣議決定しました。9月15日には、この方針をもとにした大綱が閣議決定され、期間や支援金の制度設計が固まりました。</p>
+<p>2026年に入り、政府・与党内でも食料品に対象を絞った引下げの検討が進み、8月5日には政府として初めて「税率1%・2年間」という具体的な方針を閣議決定しました。9月15日には、この方針をもとにした大綱が閣議決定され、法案化を目指す期間や支援金の内容が具体化しました。</p>
 <h3>これまでの経緯</h3>
 <ol class="bg-tl">
 {timeline}
@@ -1152,6 +1157,175 @@ def stance_glance(opinions: int, stance_counts: dict, stance_share: dict, *,
 {STANCE_GLANCE_END}"""
 
 
+def search_entry(opinions: int) -> str:
+    """検索直後の疑問を、制度段階と買い物別の税率例で短く確認できる入口UI。"""
+    return f"""{SEARCH_ENTRY_START}
+<section id="tax-brief" class="tax-brief" aria-labelledby="tax-brief-title">
+  <div class="tax-brief__inner">
+    <header class="tax-brief__head">
+      <div class="tax-brief__intro">
+        <p class="tax-brief__eyebrow"><span>30秒で確認</span> 消費税減税の入口</p>
+        <h2 id="tax-brief-title">自分の買い物は、<br><em>何％になる案？</em></h2>
+        <p>政府の大綱で示された方針と、まだ成立していない法律を分けて確認します。品目を選ぶと、対象税率と税込例が切り替わります。</p>
+      </div>
+      <nav class="tax-routes" aria-label="知りたい内容から選ぶ">
+        <a href="#tax-brief-stage"><b>いつから？</b><small>2027年4月の案</small></a>
+        <a href="#tax-case-tabs" data-tax-open="food"><b>何が対象？</b><small>食品・外食・酒類</small></a>
+        <a href="#tax-case-tabs" data-tax-open="takeout"><b>いくら変わる？</b><small>税抜1,000円の例</small></a>
+        <a href="#tax-faq"><b>財源・給付は？</b><small>短い答えから</small></a>
+      </nav>
+    </header>
+
+    <div class="tax-stage" id="tax-brief-stage" aria-label="制度の進み具合">
+      <div class="tax-stage__step is-done">大綱を閣議決定</div>
+      <div class="tax-stage__step is-current">法案の準備<span>・提出</span></div>
+      <div class="tax-stage__step">国会で成立</div>
+      <div class="tax-stage__step">2027年4月<span> 施行案</span></div>
+    </div>
+
+    <div class="tax-desk">
+      <div class="tax-tabs" id="tax-case-tabs" role="tablist" aria-label="購入方法を選ぶ">
+        <button type="button" role="tab" id="tax-tab-food" aria-controls="tax-case-panel" aria-selected="true" tabindex="0" data-tax-tab="food"><span>軽減税率対象</span>スーパーの食品</button>
+        <button type="button" role="tab" id="tax-tab-takeout" aria-controls="tax-case-panel" aria-selected="false" tabindex="-1" data-tax-tab="takeout"><span>軽減税率対象</span>持ち帰り</button>
+        <button type="button" role="tab" id="tax-tab-eatin" aria-controls="tax-case-panel" aria-selected="false" tabindex="-1" data-tax-tab="eatin"><span>対象外</span>店内飲食</button>
+        <button type="button" role="tab" id="tax-tab-alcohol" aria-controls="tax-case-panel" aria-selected="false" tabindex="-1" data-tax-tab="alcohol"><span>対象外</span>酒類</button>
+      </div>
+      <div class="tax-inspector" id="tax-case-panel" role="tabpanel" aria-labelledby="tax-tab-food" aria-live="polite">
+        <div class="tax-rate"><small>現在</small><strong id="tax-before-rate">8%</strong><span id="tax-before-label">軽減税率</span></div>
+        <div class="tax-arrow" aria-hidden="true"><i></i><span>案では</span></div>
+        <div class="tax-rate tax-rate--after"><small>政府大綱</small><strong id="tax-after-rate">1%</strong><span id="tax-after-label">2年間の政府案</span></div>
+        <div class="tax-receipt">
+          <h3>税率だけで比べた例</h3>
+          <div class="tax-receipt__line"><span>税抜</span><b>1,000円</b></div>
+          <div class="tax-receipt__line"><span>現在</span><b id="tax-before-price">1,080円</b></div>
+          <div class="tax-receipt__line"><span>大綱案</span><b id="tax-after-price">1,010円</b></div>
+          <p class="tax-receipt__delta" id="tax-price-delta">−70円</p>
+        </div>
+        <p class="tax-inspector__note" id="tax-case-note">現行の軽減税率対象となる飲食料品は、1%とする大綱です。法律はまだ成立していません。</p>
+      </div>
+      <p class="tax-desk__caution"><b>読み分けのポイント</b> 2026年9月15日に政府の大綱は閣議決定されましたが、法律は未成立です。表示額は税率だけを機械的に当てた例で、実際の販売価格を保証しません。</p>
+    </div>
+
+    <section class="tax-faq" id="tax-faq" aria-labelledby="tax-faq-title">
+      <header><p>検索でよく聞かれること</p><h2 id="tax-faq-title">短い答えから確認する</h2></header>
+      <div class="tax-faq__grid">
+        <details><summary>消費税減税はいつからですか？<span aria-hidden="true"></span></summary><div><p>政府大綱では2027年4月1日から2029年3月31日までの2年間です。ただし、2026年9月27日時点では法律はまだ成立していません。</p></div></details>
+        <details><summary>食料品の消費税は0％ですか、1％ですか？<span aria-hidden="true"></span></summary><div><p>政府大綱の税率は1％です。政府は1％相当の所得連動給付と組み合わせて「実質ゼロ化」を目指すと説明しています。別の政党提案にある0％案とは分けて確認する必要があります。</p></div></details>
+        <details><summary>外食、酒、テイクアウト、新聞は対象ですか？<span aria-hidden="true"></span></summary><div><p>現行の軽減税率対象となる飲食料品とテイクアウトは1％案の対象です。外食と酒類は対象外で10％のまま、新聞も今回の飲食料品1％案の対象外です。</p></div></details>
+        <details><summary>財源は決まっていますか？<span aria-hidden="true"></span></summary><div><p>赤字国債に頼らない原則は示されていますが、具体的な金額と内訳は今後の予算編成事項です。詳しくは<a href="#fb-consumption-tax-cut-finance-welfare">財源をめぐる賛否</a>で比較できます。</p></div></details>
+        <details><summary>給付付き税額控除とは何ですか？<span aria-hidden="true"></span></summary><div><p>所得税額から一定額を差し引き、引ききれない分を給付する考え方です。2027年度の就業者負担軽減支援金は本格制度までのつなぎで、同じ制度ではありません。</p></div></details>
+      </div>
+      <p class="tax-faq__source"><a href="https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/index.html" target="_blank" rel="noopener">内閣官房の一次資料</a> ／ <a href="#stance-glance">SNS {opinions:,}件の立場を見る</a></p>
+    </section>
+  </div>
+</section>
+{SEARCH_ENTRY_END}"""
+
+
+def apply_search_entry(html: str, opinions: int) -> str:
+    """入口UIを1組にそろえ、必要なCSS/JSをheadへ読み込む。"""
+    if SEARCH_ENTRY_START in html and SEARCH_ENTRY_END in html:
+        start = html.index(SEARCH_ENTRY_START)
+        end = html.index(SEARCH_ENTRY_END) + len(SEARCH_ENTRY_END)
+        html = html[:start] + html[end:]
+    if "<main>" not in html:
+        raise ValueError("検索入口UIを置くmain要素が見つかりません")
+    html = html.replace("<main>", "<main>\n\n" + search_entry(opinions), 1)
+    for asset in (SEARCH_ENTRY_CSS, SEARCH_ENTRY_JS):
+        if asset not in html:
+            html = html.replace("</head>", asset + "\n</head>", 1)
+    return html
+
+
+def apply_search_hero(html: str, collected: int, opinions: int) -> str:
+    """既存ページを正典データなしで部分更新するときも、ヒーローを答え先行にする。"""
+    hero_match = re.search(r'<section class="hero">.*?</section>', html, flags=re.S)
+    if not hero_match:
+        raise ValueError("検索入口に合わせるhero要素が見つかりません")
+    hero = hero_match.group(0)
+    hero, h1_count = re.subn(r"<h1>.*?</h1>", f"<h1>{HEADLINE}</h1>", hero, count=1, flags=re.S)
+    hero, question_count = re.subn(
+        r'<p class="question-line">.*?</p>',
+        '<p class="question-line">食料品8％→1％の政府案。いつから、何が対象で、法律は成立した？</p>',
+        hero,
+        count=1,
+        flags=re.S,
+    )
+    hero, lead_count = re.subn(
+        r'<p class="lead">.*?</p>',
+        f'<p class="lead">政府大綱は閣議決定済みですが、法律は未成立です。対象と税込例を先に確認し、'
+        f'その後でSNS投稿{collected}件から抽出した意見{opinions}件の賛否を比較できます。</p>',
+        hero,
+        count=1,
+        flags=re.S,
+    )
+    if (h1_count, question_count, lead_count) != (1, 1, 1):
+        raise ValueError("検索入口に合わせるheroの置換対象が揃っていません")
+    return html[:hero_match.start()] + hero + html[hero_match.end():]
+
+
+def apply_search_metadata(html: str) -> str:
+    """検索入口と同じ語でtitle・説明・Article情報をそろえる。"""
+    published_at, _modified_at = existing_dates(html)
+    html = re.sub(r"<title>.*?</title>", f"<title>{HEADLINE}｜SNS反応まっぷ</title>", html, count=1, flags=re.S)
+    seo = f"""
+  <meta name="description" content="{DESCRIPTION}">
+  <link rel="canonical" href="{PAGE_URL}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="SNS反応まっぷ">
+  <meta property="og:title" content="{HEADLINE}">
+  <meta property="og:description" content="{DESCRIPTION}">
+  <meta property="og:url" content="{PAGE_URL}">
+  <meta property="og:image" content="{OGP_IMAGE}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{HEADLINE}">
+  <meta name="twitter:description" content="{DESCRIPTION}">
+  <meta name="twitter:image" content="{OGP_IMAGE}">
+"""
+    html = replace_between(html, "<!-- SEO_META_START -->", "<!-- SEO_META_END -->", seo, keep_markers=True)
+    jsonld = json.dumps(
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": HEADLINE,
+            "description": DESCRIPTION,
+            "image": [OGP_IMAGE],
+            "mainEntityOfPage": {"@type": "WebPage", "@id": PAGE_URL},
+            "datePublished": published_at,
+            "dateModified": MODIFIED_AT,
+            "author": ORGANIZATION,
+            "publisher": ORGANIZATION,
+        },
+        ensure_ascii=False,
+        indent=2,
+    ).replace("</", "<\\/")
+    html = replace_between(
+        html,
+        "<!-- ARTICLE_JSON_LD_START -->",
+        "<!-- ARTICLE_JSON_LD_END -->",
+        f'\n  <script type="application/ld+json">\n{jsonld}\n  </script>\n',
+        keep_markers=True,
+    )
+    trust_start = html.index(ARTICLE_TRUST_START)
+    trust_end = html.index(ARTICLE_TRUST_END) + len(ARTICLE_TRUST_END)
+    trust = html[trust_start:trust_end]
+    trust, published_count = re.subn(
+        r'(<dt>公開日</dt><dd>)<time datetime="[^"]+">[^<]+</time>',
+        rf'\1<time datetime="{published_at}">{japanese_date(published_at)}</time>',
+        trust,
+        count=1,
+    )
+    trust, modified_count = re.subn(
+        r'(<dt>最終更新日</dt><dd>)<time datetime="[^"]+">[^<]+</time>',
+        rf'\1<time datetime="{MODIFIED_AT}">{japanese_date(MODIFIED_AT)}</time>',
+        trust,
+        count=1,
+    )
+    if (published_count, modified_count) != (1, 1):
+        raise ValueError("編集・分析情報の公開日・最終更新日を更新できません")
+    return html[:trust_start] + trust + html[trust_end:]
+
+
 def build(
     *,
     classified: Path | None = None,
@@ -1163,7 +1337,8 @@ def build(
     data, rows = arena_data(classified)
     period = collection_period(rows)
     html = template.read_text(encoding="utf-8")
-    published_at, modified_at = existing_dates(html)
+    published_at, _modified_at = existing_dates(html)
+    modified_at = MODIFIED_AT
 
     opinions = data["opinions"]
     relevant = data["relevant"]
@@ -1245,9 +1420,9 @@ def build(
         '<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav>'
         # h1 は apply_theme_trust.py が HEADLINE で上書きするので、最初から揃えておく
         f'<span class="badge">税・財政</span><h1>{HEADLINE}</h1>'
-        '<p class="question-line">食料品だけの減税で足りる？ 財源はどうする？</p>'
-        f'<p class="lead">収集したSNS投稿{total}件のうち、分析対象となった意見{opinions}件をAIが6つの論点に整理しました。'
-        '世論調査ではなく、SNS反応サンプルの論点比較です。</p>'
+        '<p class="question-line">食料品8％→1％の政府案。いつから、何が対象で、法律は成立した？</p>'
+        f'<p class="lead">政府大綱は閣議決定済みですが、法律は未成立です。対象と税込例を先に確認し、'
+        f'その後でSNS投稿{total}件から抽出した意見{opinions}件の賛否を比較できます。</p>'
         '<div class="thirty-summary" aria-label="議論の中心"><header class="thirty-summary-title"><h2>議論の中心</h2></header>'
         f'<ul><li class="conclusion-focus"><span class="conclusion-count"><b>{counts[top_issue]}</b>件</span>'
         f'<strong>{ISSUE_META[top_issue]["headline"]}</strong>'
@@ -1573,6 +1748,11 @@ def build(
     idx = html.index(STANCE_GLANCE_ANCHOR)
     html = html[:idx] + stance_glance(opinions, stance_counts, stance_share) + "\n\n" + html[idx:]
 
+    # --- 20. 検索意図に答える入口 -----------------------------------------
+    # 課題94の「検索語から短い比較へ入る」設計を、このテーマでは買い物別の
+    # 税率確認に置き換える。毎回main直後へ戻し、既存の長い分析UIはその後ろに残す。
+    html = apply_search_entry(html, opinions)
+
     from consumption_tax_connected import apply as connect_page, enabled as is_connected
     if connected_layout or is_connected(html):
         from refresh_planet_section import refresh
@@ -1630,6 +1810,14 @@ def verify(html: str, opinions: int) -> None:
             problems.append(f"保護タグが失われている: {token}")
     if "--topic-hero-image:" not in html:
         problems.append("--topic-hero-image が未指定（他テーマの画像にフォールバックする）")
+    if html.count(SEARCH_ENTRY_START) != 1 or html.count(SEARCH_ENTRY_END) != 1:
+        problems.append("検索入口UIのマーカーが1組でない")
+    if html.count(SEARCH_ENTRY_CSS) != 1 or html.count(SEARCH_ENTRY_JS) != 1:
+        problems.append("検索入口UIのCSS/JSが1回ずつ読み込まれていない")
+    if len(re.findall(r'data-tax-tab="(?:food|takeout|eatin|alcohol)"', html)) != 4:
+        problems.append("検索入口UIの買い物タブが4件でない")
+    if "法律はまだ成立していません" not in html:
+        problems.append("検索入口UIに法律未成立の留保がない")
 
     # 参照している画像が実在するか（論点図解・ヒーロー）
     for src in sorted(set(re.findall(r'(?:src|data-img)="(images/[^"]+)"', html))):
@@ -1800,8 +1988,8 @@ def apply_public_counts(html: str, public_theme: Path = PUBLIC_THEME) -> str:
 
     replacements = (
         (
-            r'<p class="lead">収集したSNS投稿[\d,]+件のうち、分析対象となった意見[\d,]+件をAIが6つの論点に整理しました。',
-            f'<p class="lead">収集したSNS投稿{collected}件のうち、分析対象となった意見{opinions}件をAIが6つの論点に整理しました。',
+            r'(<p class="lead">[^<]*SNS投稿)[\d,]+(件[^<]*意見)[\d,]+(件[^<]*</p>)',
+            rf'\g<1>{collected}\g<2>{opinions}\g<3>',
             "ヒーローの収集数・意見数",
         ),
         (
@@ -1859,6 +2047,11 @@ def main() -> int:
         "--background-only",
         action="store_true",
         help="「何が、どこまで進んでいるのか」セクションだけを貼り直す（潮目ウィジェットを落とさない）",
+    )
+    parser.add_argument(
+        "--search-entry-only",
+        action="store_true",
+        help="検索入口UIと答え先行のヒーローだけを公開ページに貼り直す",
     )
     parser.add_argument(
         "--issue-cards-only",
@@ -1923,6 +2116,19 @@ def main() -> int:
         html = html[:idx] + background_context() + "\n\n" + html[idx:]
         page.write_text(finish(html), encoding="utf-8")
         print(f"updated background context in {page}")
+        return 0
+
+    if args.search_entry_only:
+        page = args.output_html
+        public = json.loads(PUBLIC_THEME.read_text(encoding="utf-8"))
+        collected = int(public["collected_count"])
+        opinions = int(public["opinion_count"])
+        html = page.read_text(encoding="utf-8")
+        html = apply_search_metadata(html)
+        html = apply_search_hero(html, collected, opinions)
+        html = apply_search_entry(html, opinions)
+        page.write_text(finish(html), encoding="utf-8")
+        print(f"updated search entry in {page}")
         return 0
 
     if args.issue_cards_only:

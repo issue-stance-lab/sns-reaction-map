@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from html import escape
 
 from bs4 import BeautifulSoup
 
@@ -21,6 +22,11 @@ BRIDGE_END = "/* BIKE_CONNECTED_BRIDGE_END */"
 CSS_HREF = "bike-blue-ticket-connected.css?v=1"
 JS_SRC = "bike-blue-ticket-connected.js?v=1"
 PAGE_JS_SRC = "bike-blue-ticket-connected-page.js?v=1"
+SEARCH_ENTRY_START = "<!-- BIKE_SEARCH_ENTRY_START -->"
+SEARCH_ENTRY_END = "<!-- BIKE_SEARCH_ENTRY_END -->"
+SEARCH_ENTRY_CSS = "bike-blue-ticket-search-entry.css?v=2"
+SEARCH_ENTRY_JS = "bike-blue-ticket-search-entry.js?v=1"
+PROGRESS_LABEL = "探ったところ"
 DATA_PATTERN = re.compile(r'<script id="planet-data">window\.PLANET_DATA=(.*?);</script>', re.S)
 
 
@@ -99,8 +105,105 @@ def content_index(data: dict) -> dict:
         "issues": result,
         "background_checked_on": background["checked_on"],
         "scope_note": "理由の分類・投稿例・資料は、この論点全体の内容です。",
-        "reason_post_note": "理由の区分と個別投稿IDを結ぶ公開台帳はないため、投稿は論点全体の代表例として表示しています。",
     }
+
+
+AUDIT_SUFFIX = re.compile(
+    r"\s*20\d{2}-\d{2}-\d{2}に今回新たに採用した\d+件を本文確認し、"
+    r"この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。$"
+)
+
+
+def display_source_note(note: str) -> str:
+    """表示からだけ内部の追加確認ログを除く。PLANET_DATA は書き換えない。"""
+    return AUDIT_SUFFIX.sub("", str(note)).rstrip()
+
+
+def _remove_process_copy(source: str, data: dict) -> str:
+    """旧HTMLや他のテーマ共通ビルダーから残る自転車ページ内の説明を除く。"""
+    source = re.sub(
+        r'(<p class="lead">収集したSNS投稿[\d,]+件のうち、分析対象の意見[\d,]+件)をAIで整理し、',
+        r"\1を",
+        source,
+        count=1,
+    )
+    source = re.sub(
+        r'\s*<h3>AIを使用した工程</h3>\s*<p>.*?</p>',
+        "",
+        source,
+        count=1,
+        flags=re.S,
+    )
+    source = source.replace(
+        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>', ""
+    )
+    source = source.replace("／）", "）")
+    source = source.replace("<div>Powered by Yahooリアルタイム検索 + AI分類</div>", "")
+    source = source.replace("\n    \n    <a href=\"index.html\"", "\n    <a href=\"index.html\"")
+    source = source.replace("同じ検索語セットで取得した投稿をAIで分類しています。", "")
+    source = source.replace(
+        "この論点の中身（編集部が本文を読んで分けたもの）", "この論点の中身"
+    )
+    source = source.replace(
+        'このテーマは、まだ編集部が一次資料を読んで「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。',
+        "",
+    )
+    source = source.replace(
+        "このテーマは、論点をまたいで言えることの整理がまだです。書けるまで、ここは空のままにします。",
+        "",
+    )
+    source = source.replace(
+        "論点をまたいで言えることを、編集部がまとめています。", ""
+    )
+    source = source.replace(
+        "  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */\n",
+        "",
+    )
+    source = re.sub(
+        r"^[ \t]*p\.push\('<text[^\n]*資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの[^\n]*</text>'\);\n",
+        "",
+        source,
+        count=1,
+        flags=re.M,
+    )
+    source = source.replace(
+        "。<b>一次資料に当たった人にしか作れない問題</b>です。", ""
+    )
+    source = re.sub(
+        r'    if \(D\.show_unreviewed_note !== false\)\{\n.*?\n    \}\n',
+        "",
+        source,
+        count=1,
+        flags=re.S,
+    )
+    source = re.sub(
+        r'<p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
+        r'[^<]*AIの下読みを含む[^<]*</p>',
+        "",
+        source,
+        count=1,
+    )
+    source = re.sub(
+        r'<div class="note">[^<]*まだ編集部が投稿を1件ずつ読み直していません.*?</div>',
+        "",
+        source,
+        flags=re.S,
+    )
+
+    # Ocean の静的表示は PLANET_DATA と重複するため、そのHTML範囲だけを整える。
+    # 埋め込みJSONは再読ログの保存先としてそのまま残す。
+    ocean_start = source.find('<section id="ocean"')
+    ocean_close = source.find("</section>", ocean_start) if ocean_start >= 0 else -1
+    if ocean_start >= 0 and ocean_close >= 0:
+        ocean_end = ocean_close + len("</section>")
+        ocean_html = source[ocean_start:ocean_end]
+        for item in data.get("ocean", {}).get("sunk_continents", []):
+            note = str(item.get("sns_note") or "")
+            display_note = display_source_note(note)
+            if note != display_note:
+                ocean_html = ocean_html.replace(escape(note), escape(display_note))
+        source = source[:ocean_start] + ocean_html + source[ocean_end:]
+    return source
 
 
 def _bridge(source: str) -> str:
@@ -111,6 +214,32 @@ def _bridge(source: str) -> str:
         raise ValueError("連動表示: 山の初期化位置を一意に見つけられません")
     bridge = (ROOT / "scripts/templates/bike_blue_ticket_connected_bridge.js").read_text(encoding="utf-8")
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
+
+
+def _search_entry(source: str) -> str:
+    """題名直下の検索入口を、山なみ更新時にも同じ位置へ保つ。"""
+    template = (ROOT / "scripts/templates/bike_blue_ticket_search_entry.html").read_text(encoding="utf-8").strip()
+    block = SEARCH_ENTRY_START + "\n" + template + "\n" + SEARCH_ENTRY_END
+    if SEARCH_ENTRY_START in source or SEARCH_ENTRY_END in source:
+        if source.count(SEARCH_ENTRY_START) != 1 or source.count(SEARCH_ENTRY_END) != 1:
+            raise ValueError("検索入口: 目印が1組ではありません")
+        source = re.sub(re.escape(SEARCH_ENTRY_START) + r".*?" + re.escape(SEARCH_ENTRY_END), "", source, flags=re.S)
+    anchor = "  <main>\n"
+    if source.count(anchor) != 1:
+        raise ValueError("検索入口: ヒーロー直後のmain開始位置を一意に見つけられません")
+    source = re.sub(r"(  </svg>\n)[ \t]*\n(?=  <main>)", r"\1", source, count=1)
+    source = re.sub(re.escape(anchor) + r"[ \t]*\n", anchor, source, count=1)
+    source = source.replace(anchor, anchor + block + "\n", 1)
+    return source
+
+
+def _progress_label(source: str) -> str:
+    """操作への参加状況を表す進捗ラベルを、再生成後も維持する。"""
+    pattern = re.compile(r'(<div id="progress">\s*<span>)[^<]*(</span>)')
+    source, count = pattern.subn(r"\1" + PROGRESS_LABEL + r"\2", source, count=1)
+    if count != 1:
+        raise ValueError("進捗表示: ラベル位置を一意に見つけられません")
+    return source
 
 
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
@@ -124,6 +253,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
+    source = _search_entry(source)
+    source = _progress_label(source)
     content = render_templates(data, source, index)
     if CONTENT_START in source:
         source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), content, source, flags=re.S)
@@ -137,6 +268,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         '<script id="bike-connected-data" type="application/json">' + payload + "</script>\n"
         f'<script src="{JS_SRC}" defer></script>\n'
         f'<script src="{PAGE_JS_SRC}" defer></script>\n'
+        f'<link rel="stylesheet" href="{SEARCH_ENTRY_CSS}">\n'
+        f'<script src="{SEARCH_ENTRY_JS}" defer></script>\n'
         + END
     )
     if START in source:
@@ -145,6 +278,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
             raise ValueError("連動表示: 仕上げ処理の目印が1組ではありません")
     else:
         source = source.replace("</head>", block + "\n</head>", 1)
+    source = _remove_process_copy(source, data)
     problems = validate(source)
     if problems:
         raise ValueError("連動表示の検査に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -177,9 +311,58 @@ def validate(source: str) -> list[str]:
         problems.append("中心部分のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("ページ配置のJSが1つではありません")
+    if len(soup.select(f'link[href="{SEARCH_ENTRY_CSS}"]')) != 1:
+        problems.append("検索入口のCSSが1つではありません")
+    if len(soup.select(f'script[src="{SEARCH_ENTRY_JS}"][defer]')) != 1:
+        problems.append("検索入口のJSが1つではありません")
+    entry = soup.select("#bike-search-entry")
+    if len(entry) != 1 or entry[0].find_parent("main") is None:
+        problems.append("検索入口がmainの先頭に1つありません")
+    if len(soup.select("#section")) != 1 or not soup.select_one("#bike-search-entry a[href='#section']"):
+        problems.append("検索入口から山なみへの移動先がありません")
+    progress_label = soup.select_one("#progress > span")
+    if progress_label is None or progress_label.get_text(strip=True) != PROGRESS_LABEL:
+        problems.append(f"進捗ラベルが『{PROGRESS_LABEL}』ではありません")
     stance_buttons = {button.get("data-i") for button in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if stance_buttons != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")
+
+    # script内の保存データは除外し、初期表示・静的フォールバック・templateを検査する。
+    display_soup = BeautifulSoup(source, "html.parser")
+    for node in display_soup.select("script, style"):
+        node.decompose()
+    display_text = display_soup.get_text(" ", strip=True)
+    display_text += " " + " ".join(
+        BeautifulSoup(node.decode_contents(), "html.parser").get_text(" ", strip=True)
+        for node in soup.select("template")
+    )
+    forbidden = (
+        "AIを使用した工程",
+        "AIで整理し",
+        "AI分類。代表投稿は編集部が選定",
+        "Powered by Yahooリアルタイム検索 + AI分類",
+        "同じ検索語セットで取得した投稿をAIで分類しています。",
+        "理由の区分と個別投稿IDを結ぶ公開台帳はない",
+        "この論点に対応する資料照合は、まだ登録されていません。",
+        "AIが自動でつけた区分",
+        "人が読んだ結果だけをまとめにします",
+        "まだ編集部が投稿を1件ずつ読み直していません",
+        "AIの下読みを含む",
+        "編集部が本文を読んで分けたもの",
+        "論点をまたいで言えることを、編集部がまとめています。",
+        "今回新たに採用した",
+        "まだ編集部が一次資料を読んで",
+        "整理がまだです",
+    )
+    for phrase in forbidden:
+        if phrase in display_text:
+            problems.append("公開表示に不要な工程説明が残っています: " + phrase)
+    for phrase in (
+        "資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの",
+        "一次資料に当たった人にしか作れない問題",
+    ):
+        if phrase in source:
+            problems.append("JavaScriptの公開表示に不要な工程説明が残っています: " + phrase)
 
     for issue in data["issues"]:
         iid = issue["id"]

@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 479,
+  "duplicates": 25,
+  "new": 454,
+  "relevant": 345,
+  "opinions": 281,
+  "opinion_flag_available": true,
+  "candidate": 4734,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "ai-copyright",
+  "date": "2026-09-29",
+  "run_id": "20260929_222720",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 6.65,
+    "fetch_seconds": 72.28,
+    "classify_seconds": 4819.26
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_aicopyright_arena_hermes.py",
+      "script_sha256": "7ba1db3bf506d57933b6b12a405893a25f411b88acacda9306cccc7e87f99ee9",
+      "taxonomy_sha256": "1b2090bf40eb32d04cb49d23f12eb43cf63f8122f354fa04a9d3fcb3adb8afd2"
+    },
+    "input": {
+      "raw_sha256": "bf58152b4d46648ec8a09b8fabf499a5ab3bae4ddf9eda94535d439f390ec214",
+      "raw_records": 479,
+      "new_sha256": "f10ac88d3540a3cfae38406acf01100c88b0fd1ebc26889d2999f56eae0ef486"
+    },
+    "sources": {
+      "yahoo_realtime": 479
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "abc224654b510fd093f4650ab4e6595e01cd346dfc1c1f573c2423ad726496ed"
+    }
+  },
+  "next_collect_at": "2026-10-06"
+}

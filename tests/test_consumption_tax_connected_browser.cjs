@@ -41,8 +41,8 @@ async function checkIssue(page, issue, mode, connection) {
   assert.equal(await page.locator('#tax-content-scope').count(),1);
   assert.equal(await page.locator('#panel .tax-image-action').count(),1);
   assert.equal(await page.locator('#panel [data-tax-reason]').count(),issue.sub.items?.length || 0);
-  if (issue.sub.status !== 'reread') assert.match(await page.locator('#panel .tax-opinions').innerText(), /理由別に分ける再読をまだ行っていません/);
-  if (!connection.claim_ids.length) assert.match(await page.locator('#panel .tax-evidence').innerText(), /資料照合は、まだ登録されていません/);
+  if (issue.sub.status !== 'reread') assert.doesNotMatch(await page.locator('#panel .tax-opinions').innerText(), /再読|AIが自動/);
+  if (!connection.claim_ids.length) assert.doesNotMatch(await page.locator('#panel .tax-evidence').innerText(), /まだ登録されていません/);
   assert.doesNotMatch(await page.locator('#panel').innerText(), /NaN|Infinity/);
 }
 (async()=>{

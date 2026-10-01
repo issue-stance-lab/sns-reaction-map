@@ -108,17 +108,19 @@ async function open(browser,opts={}){
       summary.push({keyboardSelect:true,focusRetainedDuringAnimation:true});
       await context.close();
     }
-    // 未再読論点（その他・地域格差）は0件・架空の理由を出さず、空状態の断り書きだけを出す。
+    // 未再読論点（その他・地域格差）は工程説明を出さず、既存の投稿例だけを残す。
     {
       const {context,page,errors}=await open(browser);
       for(const iid of ['bukatsu-chiiki-sonota','bukatsu-chiiki-kakusa']){
         await page.evaluate(id=>window.BukatsuConnectedMap.selectIssue(id),iid);
         const text=await page.locator('#panel').innerText();
-        assert.ok(/まだ.*読み直していません|未再読|読み直し/.test(text),iid+': 未再読の断り書きが見当たらない');
+        assert.equal(/まだ.*読み直していません|AIが自動|人が読んだ結果|まだ登録されていません/.test(text),false,iid+': 工程説明が表示されている');
+        assert.match(text,/実際の投稿を読む/,iid+': 代表投稿が消えている');
+        assert.equal(await page.locator('#panel [data-bkt-post-url]').count(),2,iid+': 代表投稿の件数が変わっている');
         assert.equal(/NaN|undefined|Infinity/.test(text),false,iid+': 不正な値が表示されている');
       }
       assert.deepEqual(errors,[]);
-      summary.push({unreviewedIssuesHonest:true});
+      summary.push({mechanicalEmptyCopyRemoved:true});
       await context.close();
     }
     console.log(JSON.stringify(summary,null,2));
