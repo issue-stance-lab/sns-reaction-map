@@ -1,6 +1,8 @@
 import unittest
+import json
+from pathlib import Path
 
-from scripts.seo.apply_theme_trust import is_opinion
+from scripts.seo.apply_theme_trust import is_opinion, trust_block
 
 
 class IsOpinionTests(unittest.TestCase):
@@ -32,6 +34,23 @@ class IsOpinionTests(unittest.TestCase):
     def test_どちらにも無ければ意見ではない(self) -> None:
         self.assertFalse(is_opinion({"text": "本文だけ"}))
         self.assertFalse(is_opinion({"classification": {}}))
+
+
+class ThemeTrustCopyTests(unittest.TestCase):
+    def test_ai_process_section_is_disabled_only_for_bike(self):
+        root = Path(__file__).resolve().parents[1]
+        config = json.loads((root / "configs/theme-seo.json").read_text(encoding="utf-8"))
+        themes = {theme["id"]: theme for theme in config["themes"]}
+        organization = config["organization"]
+        bike_theme = dict(themes["bike-blue-ticket"])
+        bike_theme["collection"] = bike_theme["collection"].replace("{total}", "585").replace("{opinions}", "415")
+        other_theme = dict(themes["ai-copyright"])
+        other_theme["collection"] = other_theme["collection"].replace("{total}", "1").replace("{opinions}", "1")
+        bike = trust_block(bike_theme, organization)
+        other = trust_block(other_theme, organization)
+        self.assertNotIn("AIを使用した工程", bike)
+        self.assertIn("AIを使用した工程", other)
+        self.assertIn("世論調査ではなく", bike)
 
 
 if __name__ == "__main__":
