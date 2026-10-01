@@ -1336,3 +1336,21 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36732111991"
       - "https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261001-001
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページから、未対応やAI処理に関する利用者向けの空状態説明を削除して公開する"
+    reason: "論点・投稿・資料がある画面で、内容を増やさない制作工程の説明が読書を妨げていたため"
+    risks:
+      - "未再読3論点と資料照合なし3論点の状態はデータ内に維持し、分類・件数・投稿・資料・保存データは変更しない"
+      - "分類方法と標本の限界を示す『AI分類』『社会全体の世論調査ではありません』等の注意書きは維持する"
+    recommendation: approve
+    evidence:
+      - "対象テーマの2回連続再生成で2回目の差分なし"
+      - "消費税関連テスト40件とChromium・WebKitの3画面幅検査が成功"
+      - "公開ファイル検査1077件成功（4件skip）"
+    status: approved
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-01"
+    decision_note: "本対話で修正結果を確認後、オーナーが『公開して』と明示的に承認。"
