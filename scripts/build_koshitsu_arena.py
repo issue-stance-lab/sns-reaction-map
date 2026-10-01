@@ -519,7 +519,9 @@ def refresh_verified_planet(page: str) -> str:
     page = replace_once(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                         block, "山なみ全体", flags=re.S)
     collected = data["totals"]["collected"]
-    conditions = research_conditions_html(f"{collected:,}", data["sample_period"])
+    conditions = research_conditions_html(
+        f"{collected:,}", data["sample_period"], show_review_note=False
+    )
     return apply_research_conditions(page, conditions, "koshitsu-tenpakai")
 
 
@@ -652,38 +654,6 @@ def apply_koshitsu_hero_lead(page: str, public_theme: Path = PUBLIC_THEME) -> st
         f"収集した{collected:,}件から、意見を含む{opinions:,}件を整理しました。",
         "ヒーローのlead件数",
     )
-
-
-def apply_koshitsu_review_note(page: str) -> str:
-    """山なみのcautionパラグラフ内review-noteを、data/review-ledger.jsonの記録に合わせる。
-
-    scripts/seo/apply_review_note.py は「（取得期間: …／<span>…</span>）」という
-    旧2D形式の一文だけを対象にした正規表現で、山なみのcautionパラグラフ
-    （調査条件がRESEARCH_CONDITIONSの外・#caution内にまとまる形）にはそもそも
-    対応していない（fukushuto・henokoも同型で本来は非対応だが、台帳の期待値が
-    render_planet()の既定文言「代表投稿は編集部が選定」とたまたま一致しており
-    表面化していなかった。皇室典範はstatus=reviewedのため既定文言のままだと
-    ずれる。課題69・koshitsu標準化で発見）。
-
-    2026-09-20、課題79 C-5でkoshitsuにもRESEARCH_CONDITIONS（他7テーマにある
-    「調査条件」ボックス）を追加した結果、review-noteが#caution内と2箇所になった。
-    どちらも同じ台帳の値で揃えるべきなので、1箇所だけを想定するreplace_once ではなく
-    見つかった分だけ全部を書き換える。
-    """
-    ledger = json.loads((ROOT / "data/review-ledger.json").read_text(encoding="utf-8"))
-    entry = (ledger.get("themes") or {}).get(THEME) or {}
-    if entry.get("status") == "reviewed":
-        expected = f"AI分類。代表投稿{int(entry['samples'])}件の要旨を編集部が確認"
-    else:
-        expected = "AI分類。代表投稿は編集部が選定"
-    new_page, n = re.subn(
-        r'<span class="review-note">[^<]*</span>',
-        f'<span class="review-note">{html.escape(expected)}</span>',
-        page,
-    )
-    if n < 1:
-        raise IssueCountError("代表投稿の確認表示（review-note）: 1箇所以上必要です（0箇所）")
-    return new_page
 
 
 LANDING_IMAGE_BY_ISSUE_ID = {
@@ -823,7 +793,6 @@ def apply_koshitsu_extras(page: str) -> str:
         "詳細データテーブル",
         flags=re.S,
     )
-    page = apply_koshitsu_review_note(page)
     page = apply_koshitsu_hero_lead(page)
     page = apply_koshitsu_conclusion(page)
     page = apply_koshitsu_issue_card_counts(page)

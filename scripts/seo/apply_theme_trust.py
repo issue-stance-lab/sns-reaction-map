@@ -16,7 +16,8 @@ from urllib.parse import urljoin
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
-from consumption_tax_connected import apply as connect_page
+from consumption_tax_connected import apply as connect_consumption_tax_page
+from koshitsu_connected import apply as connect_koshitsu_page
 SEO_START = "<!-- SEO_META_START -->"
 SEO_END = "<!-- SEO_META_END -->"
 JSONLD_START = "<!-- ARTICLE_JSON_LD_START -->"
@@ -30,6 +31,12 @@ PROTECTED_TOKENS = (
     "topic-modern.js",
 )
 TOPIC_CSS_VERSION = "32"  # 2026-09-27 課題95: 全テーマの見出し字体を共通化
+
+
+def connect_page(source: str, *, topic: str) -> str:
+    """SEO再生成後も、テーマ固有の接続仕上げを最後に戻す。"""
+    source = connect_consumption_tax_page(source, topic=topic)
+    return connect_koshitsu_page(source, topic=topic)
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -332,6 +339,7 @@ def main() -> int:
     parser.add_argument("--config", default="configs/theme-seo.json")
     parser.add_argument("--site-cases", default="configs/site-cases.json")
     parser.add_argument("--docs-dir", default="docs")
+    parser.add_argument("--theme", help="指定したテーマだけを更新する")
     parser.add_argument("--check", action="store_true", help="validate and report without writing")
     parser.add_argument(
         "--observations-only",
@@ -345,8 +353,14 @@ def main() -> int:
     validate_config(config, site_cases)
     docs_dir = PROJECT_ROOT / args.docs_dir
 
+    themes = config["themes"]
+    if args.theme:
+        themes = [theme for theme in themes if theme["id"] == args.theme]
+        if not themes:
+            raise ValueError(f"unknown theme: {args.theme}")
+
     changed = 0
-    for theme in config["themes"]:
+    for theme in themes:
         path = docs_dir / theme["url"]
         if not path.is_file():
             raise FileNotFoundError(path)
@@ -364,7 +378,7 @@ def main() -> int:
             status = "would update" if args.check else "updated"
         print(f"{status} {path.relative_to(PROJECT_ROOT)}")
 
-    print(f'Validated {len(config["themes"])} theme pages; changed={changed}')
+    print(f'Validated {len(themes)} theme pages; changed={changed}')
     return 0
 
 

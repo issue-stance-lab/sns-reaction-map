@@ -57,6 +57,51 @@ def planet_data(source: str) -> dict:
     return data
 
 
+def apply_public_copy_policy(source: str) -> str:
+    """皇室ページでは、画面用データを残したまま制作工程の説明だけを出さない。"""
+    data = planet_data(source)
+    data["hide_process_copy"] = True
+    encoded = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    source = DATA_PATTERN.sub(lambda m: m.group(1) + encoded + m.group(3), source, count=1)
+
+    review = '<span class="review-note">AI分類。代表投稿は編集部が選定</span>'
+    source = source.replace("<br>" + review, "").replace("／" + review, "")
+    source = re.sub(
+        r'\s*<p class="sub" style="margin-top:12px"><b>'
+        r'この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'\s*<p class="sub">ここから下は集計ではありません。'
+        r'編集部が一次資料を読んで確かめたことだけを置いています。.*?</p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'\s*<p class="sub">論点をまたいで言えることを、編集部がまとめています。.*?</p>',
+        "",
+        source,
+    )
+    source = source.replace(
+        "    h += '<p class=\"sub\" style=\"margin-top:12px\"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\n"
+        "      + '<ul class=\"islands\">'",
+        "    h += '<ul class=\"islands\">'",
+        1,
+    )
+    source = source.replace(
+        '  } else {\n'
+        '    if (D.show_unreviewed_note !== false){\n'
+        "      h += '<div class=\"note\">'+s.note+'。<br>'\n"
+        "         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';\n"
+        '    }\n'
+        '  }',
+        '  }',
+        1,
+    )
+    return source
+
+
 def background_data() -> dict:
     """`data/verification/koshitsu-tenpakai-background.json`をそのまま返す。別コピーを持たない。"""
     path = ROOT / "data/verification/koshitsu-tenpakai-background.json"
@@ -124,7 +169,11 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
-    from scripts.koshitsu_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    try:
+        from scripts.koshitsu_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    except ModuleNotFoundError:  # scripts/seo/apply_theme_trust.py から直接実行
+        from koshitsu_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    source = apply_public_copy_policy(source)
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
@@ -159,7 +208,10 @@ def validate(source: str) -> list[str]:
     """接続表の一致・目印の対応・共有状態の配線と、論点ごとの読書面の接続を見る。"""
     if not enabled(source):
         return []
-    from scripts.koshitsu_connected_content import START as CONTENT_START, END as CONTENT_END
+    try:
+        from scripts.koshitsu_connected_content import START as CONTENT_START, END as CONTENT_END
+    except ModuleNotFoundError:  # scripts/seo/apply_theme_trust.py から直接実行
+        from koshitsu_connected_content import START as CONTENT_START, END as CONTENT_END
 
     problems = []
     soup = BeautifulSoup(source, "html.parser")
