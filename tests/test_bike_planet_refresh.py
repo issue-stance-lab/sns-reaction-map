@@ -79,8 +79,8 @@ class BikeMethodTextTests(unittest.TestCase):
 @unittest.skipUnless((ROOT / "social-samples/bike-blue-ticket_2d_classified.json").is_file(),
                      "非公開の正典が無い環境（CI）では回さない")
 class BikePlanetRefreshTests(unittest.TestCase):
-    def test_refresh_removes_dynamic_process_copy_then_is_idempotent(self):
-        """動的な工程説明を除き、次回更新以降は差分が出ないこと。
+    def test_refresh_published_page_is_clean_and_idempotent(self):
+        """公開ページに不要な工程説明がなく、次回更新以降も差分が出ないこと。
 
         論点カード（explainer-card）を削除したあとも、refresh() が旧カードの件数同期を
         呼んで止まっていた（課題69、2026-09-19）。unittestでは refresh() 自体が
@@ -89,7 +89,6 @@ class BikePlanetRefreshTests(unittest.TestCase):
         from refresh_planet_section import refresh
         old, new, failures = refresh("bike-blue-ticket")
         self.assertEqual(failures, [])
-        self.assertNotEqual(old, new)
         self.assertNotIn("資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの", new)
         self.assertNotIn("一次資料に当たった人にしか作れない問題", new)
         self.assertNotIn('id="explainer-section"', new)

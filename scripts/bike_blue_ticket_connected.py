@@ -159,9 +159,12 @@ def _remove_process_copy(source: str, data: dict) -> str:
         "  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */\n",
         "",
     )
-    source = source.replace(
-        '  p.push(\'<text x="\'+LEFT+\'" y="\'+(SEA+76)+\'" font-size="10.5" fill="#7fb3c4" opacity="0.8">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>\');\n',
+    source = re.sub(
+        r"^[ \t]*p\.push\('<text[^\n]*資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの[^\n]*</text>'\);\n",
         "",
+        source,
+        count=1,
+        flags=re.M,
     )
     source = source.replace(
         "。<b>一次資料に当たった人にしか作れない問題</b>です。", ""

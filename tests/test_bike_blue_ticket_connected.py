@@ -68,6 +68,16 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
         self.assertTrue(all("今回新たに採用した" in row["sns_note"] for row in data["ocean"]["sunk_continents"]))
         self.assertEqual([issue["sub"]["status"] for issue in data["issues"]], ["reread"] * 6)
 
+    def test_connection_removes_legacy_dynamic_process_copy(self):
+        legacy = (
+            "  /* 資料にあるのに、SNSにないこと。人が一次資料を読んで見つけたもので、立場で絞っても変わらない */\n"
+            "  p.push('<text x=\"'+LEFT+'\">資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの（立場で絞っても変わりません）</text>');\n"
+            "      + '。<b>一次資料に当たった人にしか作れない問題</b>です。</p>';\n"
+        )
+        cleaned = connected._remove_process_copy(legacy, {})
+        self.assertNotIn("人が一次資料を読んで見つけたもの", cleaned)
+        self.assertNotIn("一次資料に当たった人にしか作れない問題", cleaned)
+
     def test_all_issue_relationships_have_two_representative_posts(self):
         data = connected.planet_data(self.page)
         expected = connected.content_index(data)
