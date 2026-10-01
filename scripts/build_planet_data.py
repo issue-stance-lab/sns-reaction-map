@@ -782,7 +782,8 @@ def static_caution(d: dict) -> str:
            + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
            + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
-           + '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>'
+           + ('' if d["theme_id"] == "school-nickname-ban" else
+              '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>')
            + "</p>"]
     if d.get("stance_note"):
         out.append('<p class="note" id="stance-definition">' + e(d["stance_note"]) + "</p>")
@@ -869,8 +870,8 @@ def static_fallback(d: dict) -> str:
                 + ('' if count_free else f'<span class="n">{x["count"]}件</span>') + '</li>'
                 for j, x in enumerate(sub["items"]))
             body += [
-                '      <p class="sub" style="margin-top:12px">'
-                '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
+                *([] if count_free else ['      <p class="sub" style="margin-top:12px">'
+                '<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>']),
                 f'      <ul class="islands">{items}</ul>',
                 *(([] if count_free else [f'      <div class="note">本文確認後に追加された投稿{sub["unread_count"]}件は、本文確認の対象外です。</div>']
                    if sub.get("unread_count") else
@@ -879,9 +880,9 @@ def static_fallback(d: dict) -> str:
             ]
         else:
             if d.get("show_unreviewed_note", True):
-                body.append(f'      <div class="note">{e(sub["note"])}。<br>'
-                            'AIが自動でつけた区分をここに並べることはしません。'
-                            '人が読んだ結果だけをまとめにします。</div>')
+                process_note = ('' if count_free else '<br>AIが自動でつけた区分をここに並べることはしません。'
+                                '人が読んだ結果だけをまとめにします。')
+                body.append(f'      <div class="note">{e(sub["note"])}。{process_note}</div>')
 
         if it.get("claims"):
             srcs = []
@@ -969,18 +970,20 @@ def static_ocean(data: dict) -> str:
     head = ['  <section id="ocean" class="ocean" tabindex="-1">',
             '    <h3 class="sec">資料にあるのに、SNSにないこと</h3>']
     if ocean.get("ocean_status") != "complete" or not (sunk or veins):
-        head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
-                    '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
+        if data["theme_id"] != "school-nickname-ban":
+            head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
+                        '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
         return "\n".join(head + ['  </section>'])
 
     # すぐ下の編集部の横断整理(static_editorial)と見出し・カードが同じ見た目で、
     # 「押して開いた内容」だと分かりづらいとの指摘（オーナー2026-09-19）。
     # バッジで「ここが、押して開いた内容」であることを明示する。
     head.append('    <p class="ocean-badge">🔍 資料にしかない話</p>')
-    head.append(
-        '    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
-        f'（確認日 {e(ocean.get("ocean_checked_on"))}／'
-        f'{"編集部が本文を読んで確認" if ocean.get("ocean_reviewer_type") == "editorial_review" else "AIの下読みを含む"}）</p>')
+    if data["theme_id"] != "school-nickname-ban":
+        head.append(
+            '    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
+            f'（確認日 {e(ocean.get("ocean_checked_on"))}／'
+            f'{"編集部が本文を読んで確認" if ocean.get("ocean_reviewer_type") == "editorial_review" else "AIの下読みを含む"}）</p>')
 
     if sunk:
         head.append('    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
@@ -1047,12 +1050,14 @@ def static_editorial(data: dict) -> str:
            '    <h3 class="sec">編集部の横断整理</h3>']
     findings = ed.get("findings") or []
     if ed.get("status") != "complete" or not findings:
-        out.append('    <p class="sub">このテーマは、論点をまたいで言えることの整理がまだです。'
-                   '書けるまで、ここは空のままにします。</p>')
+        if data["theme_id"] != "school-nickname-ban":
+            out.append('    <p class="sub">このテーマは、論点をまたいで言えることの整理がまだです。'
+                       '書けるまで、ここは空のままにします。</p>')
         return "\n".join(out + ['  </section>'])
 
-    out.append('    <p class="sub">論点をまたいで言えることを、編集部がまとめています。'
-               f'（{e(ed.get("checked_on"))}時点）</p>')
+    if data["theme_id"] != "school-nickname-ban":
+        out.append('    <p class="sub">論点をまたいで言えることを、編集部がまとめています。'
+                   f'（{e(ed.get("checked_on"))}時点）</p>')
     for kind, heading in EDITORIAL_HEADINGS.items():
         rows = [f for f in findings if f["kind"] == kind]
         if not rows:

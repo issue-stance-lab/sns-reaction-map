@@ -139,12 +139,14 @@ def validate_article(
     for value in (theme["datePublished"], theme["dateModified"]):
         if f'<time datetime="{value}">' not in source:
             errors.append(f"{path.name}: visible date missing for {value}")
-    for required in (
+    required_trust = [
         config["organization"]["name"],
         "世論調査ではなく",
-        "AIを使用した工程",
         'href="about.html#corrections"',
-    ):
+    ]
+    if not theme.get("hide_internal_process_copy"):
+        required_trust.append("AIを使用した工程")
+    for required in required_trust:
         if required not in source:
             errors.append(f"{path.name}: visible trust detail missing: {required}")
     if source.count("<strong>データの集め方:</strong>"):

@@ -35,6 +35,10 @@ async function contextFor(browser, options = {}) {
       assert.equal(await page.locator('body.school-nickname-ban-connected').count(), 1);
       assert.equal(await page.locator('#progress > span').first().innerText(), '探ったところ');
       assert.equal(await page.locator('#pnum').innerText(), '1 / 17');
+      assert.doesNotMatch(
+        await page.locator('body').innerText(),
+        /AI分類。代表投稿|AIが自動でつけた区分|人が読んだ結果だけ|AIを使用した工程|収集・分類で分かったこと|Powered by Yahooリアルタイム検索/,
+      );
       await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
       await page.waitForTimeout(80);
       assert.equal(await page.locator('#pnum').innerText(), '1 / 17');
@@ -113,6 +117,10 @@ async function contextFor(browser, options = {}) {
     assert.equal(await page.locator('#issue-cards').isVisible(), true);
     assert.equal(await page.locator('#school-nickname-guide [data-school-nickname-guide-panel]').count(), 3);
     assert.equal(await page.locator('#school-nickname-guide [data-school-nickname-guide-panel]:visible').count(), 3);
+    assert.doesNotMatch(
+      await page.locator('body').innerText(),
+      /AI分類。代表投稿|AIが自動でつけた区分|人が読んだ結果だけ|この論点の中身（編集部|ここから下は集計ではありません/,
+    );
     await context.close();
     console.log(JSON.stringify({engine: engineName, widths: [1280, 375, 320], javascriptDisabled: true}));
   } finally {
