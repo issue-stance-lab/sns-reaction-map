@@ -6,6 +6,7 @@ import copy
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from bs4 import BeautifulSoup
 
@@ -89,7 +90,8 @@ class FukushutoConnectedTests(unittest.TestCase):
     def test_theme_trust_generator_does_not_restore_ai_process_copy(self):
         config = trust.load_json(ROOT / "configs/theme-seo.json")
         theme = next(item for item in config["themes"] if item["id"] == "fukushuto")
-        block = trust.trust_block(theme, config["organization"])
+        with patch.object(trust, "resolve_counts", side_effect=lambda value, _theme: value):
+            block = trust.trust_block(theme, config["organization"])
         self.assertNotIn("AIを使用した工程", block)
         self.assertNotIn("集めたデータの半分以下", block)
         self.assertIn("SNS投稿の収集方法", block)
