@@ -1059,8 +1059,8 @@ def prepare_promotion_manifest(
         "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "report": {
             "raw": report.get("raw"),
-            "new": report.get("new"),
-            "opinions": report.get("opinions"),
+            "new": publication_new_count(report),
+            "opinions": report.get("saved_wave_opinions", report.get("opinions")),
             "next_collect_at": report.get("next_collect_at"),
         },
         "files": files,

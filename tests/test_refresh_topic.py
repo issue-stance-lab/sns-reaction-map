@@ -140,11 +140,45 @@ class RefreshTopicTests(unittest.TestCase):
             self.assertEqual(public_page.read_text(encoding="utf-8"), "public")
             loaded, targets = load_promotion_manifest(root, stage, "topic", "2026-08-29", "run-1")
             self.assertEqual(loaded["manifest_sha256"], manifest["manifest_sha256"])
+            self.assertEqual(loaded["report"]["new"], 1)
+            self.assertEqual(loaded["report"]["opinions"], 1)
             self.assertEqual(targets[Path("docs/page.html")], candidate_page.resolve())
 
             candidate_page.write_text("changed after approval", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "承認後に公開候補が変わりました"):
                 load_promotion_manifest(root, stage, "topic", "2026-08-29", "run-1")
+
+    def test_promotion_manifest_uses_saved_wave_counts_when_resuming(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            stage = root / ".staging/refresh/topic/run-1"
+            write_json(stage / "cumulative-candidate.json", [classified("1")])
+            candidate_page = stage / "page.html"
+            candidate_page.write_text("candidate", encoding="utf-8")
+            (root / "THEMES.yaml").write_text(
+                "themes:\n  topic:\n    sample_file: social-samples/topic.json\n",
+                encoding="utf-8",
+            )
+
+            manifest = prepare_promotion_manifest(
+                root,
+                "topic",
+                "2026-08-29",
+                "run-1",
+                stage,
+                {
+                    "raw": 666,
+                    "new": 0,
+                    "opinions": 0,
+                    "saved_wave_new": 562,
+                    "saved_wave_opinions": 483,
+                    "next_collect_at": "2026-09-12",
+                },
+                {Path("docs/page.html"): candidate_page},
+            )
+
+            self.assertEqual(manifest["report"]["new"], 562)
+            self.assertEqual(manifest["report"]["opinions"], 483)
 
     def test_archived_resume_preserves_wave_and_filters_against_current_canonical(self):
         with tempfile.TemporaryDirectory() as directory:
