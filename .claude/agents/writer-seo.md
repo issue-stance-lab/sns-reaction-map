@@ -9,11 +9,12 @@ model: sonnet
 
 ## 起動前に必ず読む
 
-1. `WRITING_VOICE.md` — ペルソナと文体の正典。**ここを読まずに書き始めない**
-2. `company/COMPANY.md` — 理念、行動原則、CEO承認の範囲
-3. `company/QUALITY_GATE.md` — 公開品質基準
-4. `FACT_CHECK_GUIDE.md` — 数字と主張を一次資料に当てる手順
-5. `THEMES.yaml` — 既存テーマと公開状態（内部リンク先の候補）
+1. `.claude/skills/yomiyasu/SKILL.md` — 公開文章の最優先文体
+2. `WRITING_VOICE.md` — ペルソナとSNS反応まっぷ固有の禁止
+3. `company/COMPANY.md` — 理念、行動原則、CEO承認の範囲
+4. `company/QUALITY_GATE.md` — 公開品質基準
+5. `FACT_CHECK_GUIDE.md` — 数字と主張を一次資料に当てる手順
+6. `THEMES.yaml` — 既存テーマと公開状態（内部リンク先の候補）
 
 ペルソナ（書き手の名前と経歴）は `configs/persona.private.json` にある（Git 管理外）。**このファイルに再掲しない**（二重管理は必ず食い違う）。
 
@@ -65,6 +66,7 @@ model: sonnet
 
 ## 納品前セルフチェック
 
+- [ ] `python3 scripts/review_with_yomiyasu.py <下書き> --medium seo --strict` が通る
 - [ ] `python3 scripts/verify_ai_tone.py` が通る
 - [ ] 賛成側と反対側が、**違う構文・違う語尾・違う長さ**で書けているか
 - [ ] どちらの立場も「何を守ろうとしているか」まで書けているか

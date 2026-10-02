@@ -214,6 +214,7 @@ python3 .claude/skills/new-topic/scripts/check_launch.py {slug}
 続けて既存の検査を通す。
 
 ```sh
+python3 scripts/review_with_yomiyasu.py docs/{slug}-reaction-map.html --medium website --strict
 python3 scripts/verify_theme_page.py {slug} ; echo "exit=$?"
 python3 scripts/verify_top_page.py ; echo "exit=$?"
 python3 scripts/seo/validate_theme_seo.py ; echo "exit=$?"
@@ -314,6 +315,7 @@ document.getElementById('smCanvasHeat').getContext('2d').getImageData(300,300,1,
 ## 完了条件
 
 - [ ] `check_launch.py {slug}` が exit 0
+- [ ] `review_with_yomiyasu.py docs/{slug}-reaction-map.html --medium website --strict` が exit 0
 - [ ] `verify_theme_page.py {slug}` / `verify_top_page.py` が exit 0
 - [ ] ページ生成スクリプトを2回実行して差分ゼロ（`page_update_mode: adapter`）
       — 通らない場合はオーナーに手動更新になる旨を伝えた
