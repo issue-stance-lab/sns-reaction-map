@@ -41,11 +41,23 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
         records = raw
         for part in sc.get('items_path', sc['path'][:-1] + ['items']):
             records = records[part]
+        excluded = raw
+        excluded_path = sc.get('excluded_items_path', sc['path'][:-1] + ['excluded_items'])
+        try:
+            for part in excluded_path:
+                excluded = excluded[part]
+        except (KeyError, TypeError):
+            excluded = []
         actual = Counter(r['bucket'] for r in records)
         if set(actual) - set(buckets) or any(actual[k] != b['count'] for k, b in buckets.items()):
             raise ValueError('再読分類の件数と投稿記録が一致しません: ' + issue['id'])
         items = {k: {'label': b['label'], 'count': actual[k]} for k, b in buckets.items()}
-        gap = counts[issue['id']] - len(records)
+        if excluded:
+            items['__excluded__'] = {
+                'label': '本文確認で理由分類の対象外とした分',
+                'count': len(excluded),
+            }
+        gap = counts[issue['id']] - len(records) - len(excluded)
         if gap < 0:
             raise ValueError('再読記録が論点の母数を超えています: ' + issue['id'])
         if gap:
@@ -56,6 +68,14 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
             label = node.find_previous_sibling('span')
             if label is None or label.get_text(types=None) != item['label']:
                 raise ValueError('再読分類のラベルが元記録と一致しません: ' + element_id)
+        evidence = sc['file'] + ' / ' + '/'.join(sc['path'][:-1])
+        verify('tax-reason-total-' + issue['id'], f'{counts[issue["id"]]:,}件',
+               'data/public/themes/consumption-tax-cut.json / issues / ' + issue['id'])
+        verify('tax-reason-reviewed-' + issue['id'], f'{len(records) + len(excluded):,}件', evidence)
+        verify('tax-reason-classified-' + issue['id'], f'{len(records):,}件', evidence + ' / items')
+        if excluded:
+            verify('tax-reason-excluded-' + issue['id'], f'{len(excluded):,}件',
+                   evidence + ' / excluded_items')
 
     path = 'data/verification/consumption-tax-cut-veins.json'
     for item in read(path)['items']:

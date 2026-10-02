@@ -27,7 +27,10 @@ def load(data: dict, root: Path = ROOT) -> dict:
         for part in sc['items_path']:
             records = records[part]
         by_id = {r['tweet_id']: r for r in records}
-        reasons = {r['id']: r for r in issue['sub']['items'] if not r.get('unread') and r['id'] != '__unread__'}
+        reasons = {
+            r['id']: r for r in issue['sub']['items']
+            if not r.get('unread') and not r.get('excluded') and r['id'] != '__unread__'
+        }
         chosen = selection['issues'][iid]
         if set(chosen) != set(reasons):
             raise ValueError(f'理由の投稿例: 理由分類の選定が一致しません: {iid}')

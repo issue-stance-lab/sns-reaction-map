@@ -116,7 +116,7 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertFalse(finance.select('.tax-opinions .tax-empty'))
         effect = soup.select_one('#tax-reading-consumption-tax-cut-effect')
         self.assertFalse(effect.select('.tax-evidence .tax-empty'))
-        self.assertEqual(len(effect.select('[data-tax-reason]')), 5)
+        self.assertEqual(len(effect.select('[data-tax-reason]')), 6)
         source = finance.select_one('[data-tax-claim="refund"] a')
         source['href'] = 'https://example.invalid/missing'
         self.assertTrue(any('読書面の資料照合' in p for p in connected.validate(str(soup))))
@@ -243,13 +243,13 @@ class ConnectedContentTests(unittest.TestCase):
             self.assertIn('background:' + stance['color'], soup.select_one(selector)['style'])
 
     def test_reading_counts_have_original_record_provenance(self):
-        self.assertEqual(len(verified_selectors(self.page, ROOT)), 25 + 2 + 4)
+        self.assertEqual(len(verified_selectors(self.page, ROOT)), 25 + 4 + 2 + 4 + 16)
         inactive = self.page.replace(connected.START, '<!-- TAX_CONNECTED_DISABLED -->')
         self.assertEqual(verified_selectors(inactive, ROOT), {})
 
     def test_wrong_reason_count_fails_even_when_another_bucket_has_that_number(self):
-        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">513',
-                                   'tax-reason-count-consumption-tax-cut-scope-A">125')
+        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">569',
+                                   'tax-reason-count-consumption-tax-cut-scope-A">156')
         with self.assertRaisesRegex(ValueError, '数字が元記録'):
             verified_selectors(broken, ROOT)
 

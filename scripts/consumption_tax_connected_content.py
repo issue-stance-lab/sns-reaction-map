@@ -90,7 +90,18 @@ def reasons(issue: dict, examples: dict) -> str:
         return ''.join(out + ['</ul>'])
 
     items = sub["items"]
-    note = f'<p class="tax-note">論点全体{issue["count"]:,}件のうち、{sub["reread_count"]:,}件を理由別に再読しました。</p>'
+    iid = e(issue["id"])
+    note = (
+        f'<p class="tax-note">論点全体<span class="tax-reason-count" id="tax-reason-total-{iid}">{issue["count"]:,}件</span>のうち、'
+        f'<span class="tax-reason-count" id="tax-reason-reviewed-{iid}">{sub["reread_count"]:,}件</span>を本文で確認し、'
+        f'<span class="tax-reason-count" id="tax-reason-classified-{iid}">{sub.get("classified_count", sub["reread_count"]):,}件</span>を'
+        '理由別に分類しました。</p>'
+    )
+    if sub.get("excluded_count"):
+        note += (
+            f'<p class="tax-note"><span class="tax-reason-count" id="tax-reason-excluded-{iid}">{sub["excluded_count"]:,}件</span>は、'
+            '本文確認の結果、この論点の理由分類の対象外としました。</p>'
+        )
     if sub.get("unread_count"):
         note += f'<p class="tax-note">その後に増えた{sub["unread_count"]:,}件は、まだ理由別に再読していません。</p>'
     note += '<p class="tax-note tax-reasons-hint">理由を押すと、その理由の投稿例が開きます。</p>'
