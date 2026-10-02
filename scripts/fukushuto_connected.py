@@ -17,6 +17,27 @@ CSS_HREF = "fukushuto-connected.css?v=1"
 JS_SRC = "fukushuto-connected.js?v=1"
 PAGE_JS_SRC = "fukushuto-connected-page.js?v=1"
 DATA_PATTERN = re.compile(r'<script id="planet-data">window\.PLANET_DATA=(.*?);</script>', re.S)
+PROGRESS_LABEL = "探ったところ"
+PROGRESS_HELP = "質問に答える・山を押す・クイズに答えると増えます"
+MACHINE_COPY = (
+    "まだ編集部が投稿を1件ずつ読み直していません",
+    "AIが自動でつけた区分はここへ表示しません",
+    "この論点に対応する資料照合は、まだ登録されていません",
+    "AIを使用した工程",
+    "2026年8月まで、このページは集めたデータの半分以下しか使えていませんでした",
+)
+AI_PROCESS_PATTERN = re.compile(
+    r"\s*<h3>AIを使用した工程</h3>\s*"
+    r"<p>収集後の投稿について、AIを関連性・意見性の判定、論点・立場・表現強度の分類、"
+    r"要旨作成の補助に使用しています。ページ内にAI生成の図解・漫画がある場合は、"
+    r"その制作補助にも使用しています。AIによる分類には誤りや偏りが含まれる可能性があります。</p>"
+)
+OLD_BUILD_NOTE_PATTERN = re.compile(
+    r"\s*<li>2026年8月まで、このページは集めたデータの半分以下しか使えていませんでした。"
+    r"初期の分類結果が賛否のラベルを持っておらず、別の回で集めた分は比較ウィジェット専用で"
+    r"本編に入っていなかったためです。同年8月8日にすべて同じ形式へ統合し、"
+    r"累計897件・意見765件から作り直しました。</li>"
+)
 
 
 def enabled(source: str) -> bool:
@@ -98,6 +119,26 @@ def _bridge(source: str) -> str:
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
 
 
+def apply_progress_copy(source: str) -> str:
+    """操作済み地点の件数であることが伝わる副首都専用の表示へ揃える。"""
+    source, count = re.subn(
+        r'(<div id="progress"><span>)(?:読んだところ|探ったところ)(</span>)',
+        rf"\g<1>{PROGRESS_LABEL}\g<2>",
+        source,
+        count=1,
+    )
+    if count != 1:
+        raise ValueError("連動表示: 進捗表示を一意に見つけられません")
+    return source
+
+
+def remove_machine_copy(source: str) -> str:
+    """副首都ページに残った旧生成文を、再生成時にも戻らない形で除く。"""
+    source = AI_PROCESS_PATTERN.sub("", source, count=1)
+    source = OLD_BUILD_NOTE_PATTERN.sub("", source, count=1)
+    return source
+
+
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     if topic != TOPIC or not (activate or enabled(source)):
         return source
@@ -125,6 +166,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
             raise ValueError("連動表示: 仕上げ処理の目印が1組ではありません")
     else:
         source = source.replace("</head>", block + "\n</head>", 1)
+    source = apply_progress_copy(source)
+    source = remove_machine_copy(source)
     problems = validate(source)
     if problems:
         raise ValueError("連動表示の検査に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -138,6 +181,10 @@ def validate(source: str) -> list[str]:
     from scripts.fukushuto_connected_content import START as CONTENT_START
 
     problems = []
+    display_source = DATA_PATTERN.sub("", source)
+    for text in MACHINE_COPY:
+        if text in display_source:
+            problems.append("利用者向けでない説明が残っています: " + text)
     soup = BeautifulSoup(source, "html.parser")
     try:
         data = planet_data(source)
@@ -155,6 +202,16 @@ def validate(source: str) -> list[str]:
         problems.append("連動表示のCSSが1つではありません")
     if len(soup.select(f'script[src="{JS_SRC}"][defer]')) != 1 or len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("連動表示のJSが1組ではありません")
+    progress = soup.select("#progress")
+    if len(progress) != 1:
+        problems.append("操作進捗の表示が1つではありません")
+    else:
+        labels = progress[0].find_all("span", recursive=False)
+        if not labels or labels[0].get_text(strip=True) != PROGRESS_LABEL:
+            problems.append("操作進捗が「探ったところ」になっていません")
+        helper = progress[0].select_one(".how")
+        if helper is None or helper.get_text(strip=True) != PROGRESS_HELP:
+            problems.append("操作進捗の増え方の説明が一致しません")
     stance_buttons = {button.get("data-i") for button in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if stance_buttons != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")

@@ -139,14 +139,18 @@ def validate_article(
     for value in (theme["datePublished"], theme["dateModified"]):
         if f'<time datetime="{value}">' not in source:
             errors.append(f"{path.name}: visible date missing for {value}")
-    for required in (
+    required_trust_details = [
         config["organization"]["name"],
         "世論調査ではなく",
-        "AIを使用した工程",
         'href="about.html#corrections"',
-    ):
+    ]
+    if theme.get("show_ai_process", True):
+        required_trust_details.append("AIを使用した工程")
+    for required in required_trust_details:
         if required not in source:
             errors.append(f"{path.name}: visible trust detail missing: {required}")
+    if not theme.get("show_ai_process", True) and "AIを使用した工程" in source:
+        errors.append(f"{path.name}: hidden AI process detail remains")
     if source.count("<strong>データの集め方:</strong>"):
         errors.append(f"{path.name}: duplicate legacy collection-method block remains")
 

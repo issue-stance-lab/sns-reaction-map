@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-27"
+updated_at: "2026-10-02"
 
 rules:
   required_for:
@@ -951,3 +951,22 @@ items:
       標準検査（テーマページ／数字出典／トップページ／全テスト1173件／公開ファイル）と
       Chromium・WebKitの1280/375/320px・JavaScript無効検査が成功。CIの公開ファイル検査と
       Deploy to GitHub Pagesも成功し、本番URL（テーマページ・トップページとも200）で固有文言と反映を確認した。
+
+  - id: approval-20261002-001
+    department: growth-marketing
+    action: website_publication
+    summary: "副首都ページの検索入口、論点タブと山なみ連携、操作進捗表示、利用者向けでない工程説明の整理を公開する"
+    reason: "ローカル実装と実機確認を完了し、オーナーが本対話で「公開して」と明示的に承認したため"
+    risks:
+      - "ページ上部の構成と論点選択後の表示が変わるが、分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更しない"
+      - "全体テストには他テーマの正典と公開JSONの既存不一致が残るため、副首都固有検査・公開ファイル検査・CIと本番実機で公開可否を確認する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-102.md"
+      - "tests/test_fukushuto_search_entry.py"
+      - "tests/test_fukushuto_connected.py"
+      - "scripts/verify_theme_page.py fukushuto"
+    status: approved
+    requested_at: "2026-10-02"
+    decided_at: "2026-10-02"
+    decision_note: "オーナーが本対話で「公開して」と明示的に承認。mainへの統合・push前に記録した。"

@@ -67,6 +67,7 @@ try:
     from .fukushuto_issue_media import START as ISSUE_MEDIA_START
     from .fukushuto_issue_media import build_section as issue_media_section
     from .fukushuto_issue_media import inject as issue_media_inject
+    from .fukushuto_search_entry import apply as apply_search_entry
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -89,6 +90,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_issue_media import START as ISSUE_MEDIA_START  # type: ignore[no-redef]
     from fukushuto_issue_media import build_section as issue_media_section  # type: ignore[no-redef]
     from fukushuto_issue_media import inject as issue_media_inject  # type: ignore[no-redef]
+    from fukushuto_search_entry import apply as apply_search_entry  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
@@ -516,6 +518,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     # 再構成（プロトタイプ）で削除済みのため、ここでの同期は不要になった。
     page = replace_once(page, r'<li class="conclusion-focus">.*?</li>', '<li class="conclusion-focus">' + f'<span class="conclusion-count"><b>{counts[top]}</b>件</span><strong>{html.escape(str(conclusion["headline"]))}</strong><span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span></li>', "議論の中心", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?\n</section>', build_details(rows, collected, load_queries()), "詳細データ", flags=re.S)
+    page = apply_search_entry(page, total)
     return page
 
 
@@ -918,6 +921,7 @@ def build(
                 sys.path.insert(0, str(ROOT))
             from scripts.fukushuto_connected import apply as connect_page
             page = connect_page(page, topic=THEME)
+        page = apply_search_entry(page, total)
         if not check and (page != before or output is not None):
             target = Path(output) if output else html_path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -1006,6 +1010,7 @@ def build(
         "詳細データ",
         flags=re.S,
     )
+    page = apply_search_entry(page, total)
 
     for card in config["issue_counts"]["cards"]:
         card_total = sum(counts[str(issue)] for issue in card["main_issue"])
