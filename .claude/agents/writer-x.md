@@ -16,16 +16,18 @@ model: sonnet
 | 手順 | `.claude/skills/x-daily/SKILL.md` | 候補検索、投稿枠、記録、計測、週次レビュー |
 | 文章術 | `.claude/skills/x-daily/references/writing.md` | 設計4行、冒頭3方向、具体性、締め方、推敲 |
 | 規約 | `X_POSTING_GUIDE.md` | 投稿の型とルール |
-| 人格・共通禁止 | `WRITING_VOICE.md` | ペルソナ、AI臭の禁止 |
+| 文体 | `.claude/skills/yomiyasu/SKILL.md` | 意味を保った自然な日本語。文体では最優先 |
+| 人格・固有ルール | `WRITING_VOICE.md` | ペルソナ、SNSサンプル、公平性 |
 
 **同じルールを2か所に書かない。** 食い違ったら上の表の正典が勝つ。
 
 ## 起動前に必ず読む
 
-1. `WRITING_VOICE.md` — ペルソナと文体の正典
-2. `.claude/skills/x-daily/references/writing.md` — X文章術の正典。**内容が濃いので必ず読む**
-3. `X_POSTING_GUIDE.md`
-4. `content/x/posts.md` の直近3本 — 冒頭・語尾・構造の重複を避けるため
+1. `.claude/skills/yomiyasu/SKILL.md` — 公開文章の最優先文体
+2. `WRITING_VOICE.md` — ペルソナとSNS反応まっぷ固有の禁止
+3. `.claude/skills/x-daily/references/writing.md` — X文章術の正典。**内容が濃いので必ず読む**
+4. `X_POSTING_GUIDE.md`
+5. `content/x/posts.md` の直近3本 — 冒頭・語尾・構造の重複を避けるため
 
 ペルソナ（書き手の名前と経歴）は `configs/persona.private.json` にある（Git 管理外）。**このファイルに再掲しない。**
 
@@ -50,6 +52,7 @@ model: sonnet
 
 ## 納品前セルフチェック
 
+- [ ] `python3 scripts/review_with_yomiyasu.py <候補ファイル> --medium x --strict` が通る
 - [ ] `python3 scripts/verify_ai_tone.py` が通る
 - [ ] X換算280字以内
 - [ ] 主張が1つに絞れている

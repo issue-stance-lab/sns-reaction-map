@@ -5,6 +5,9 @@
 - `OPERATIONS.md` — 定例作業（何を・どの頻度で・誰が）の定義。
 - `TASK_BOARD.md` — テーマ横断の課題の索引（1課題数行）。**索引だけを読み、担当が決まった課題の詳細（`tasks/task-{番号}.md`）だけを開くこと。**全部の詳細は読み込まない。
 
+Website・note・X・SEO記事など公開文章を作成・修正するときは、依頼に書かれていなくても
+`.claude/skills/yomiyasu/SKILL.md` を読み、保存前の検査まで実行する。内部メモ・設計書・コードは対象外。
+
 担当タスクが決まってから読むもの（必要な場合のみ）:
 - `company/COMPANY.md` / `company/GOALS.yaml` — 理念・権限・方針判断が必要なとき
 - `company/departments/` 配下の該当部門文書 — 担当業務の詳細

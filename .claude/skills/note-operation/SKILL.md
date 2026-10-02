@@ -106,6 +106,12 @@ SNSの集計を扱う以上、記事に件数は必ず出る。**出し方を間
 
 ### 検査
 
+公開候補を保存する前に、依頼に明記されていなくてもよみやすを通す。
+
+```bash
+python3 scripts/review_with_yomiyasu.py <下書き> --medium note --strict
+```
+
 `scripts/verify_ai_tone.py` が、貼り付け用の本文（`*-FINAL.md` / `*-CANDIDATE.md`）に
 「◯件」が8回を超えて出ていたら落とす。記事末の注記は数えない。
 上限は `configs/ai-tone.json` の `note_counts`。

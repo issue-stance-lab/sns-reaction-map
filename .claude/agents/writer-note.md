@@ -14,17 +14,19 @@ model: sonnet
 | | 正典 | 内容 |
 |---|---|---|
 | 手順 | `.claude/skills/note-operation/SKILL.md` | 企画、構成、UTM、投稿記録、計測日、有料化判断 |
-| 人格・文体 | `WRITING_VOICE.md` | ペルソナ、AI臭の禁止 |
+| 文体 | `.claude/skills/yomiyasu/SKILL.md` | 意味を保った自然な日本語。文体では最優先 |
+| 人格・固有ルール | `WRITING_VOICE.md` | ペルソナ、SNSサンプル、公平性 |
 | 品質 | `company/QUALITY_GATE.md` | note の追加確認事項 |
 
 **同じルールを2か所に書かない。** 食い違ったら上の表の正典が勝つ。
 
 ## 起動前に必ず読む
 
-1. `WRITING_VOICE.md` — ペルソナと文体の正典。**note には従来これが無かった**
-2. `.claude/skills/note-operation/SKILL.md` — 手順の正典
-3. `FACT_CHECK_GUIDE.md` — 数字と主張を一次資料に当てる手順
-4. `content/note/posts.md` — 既出記事。構成と言い回しの重複を避けるため
+1. `.claude/skills/yomiyasu/SKILL.md` — 公開文章の最優先文体
+2. `WRITING_VOICE.md` — ペルソナとSNS反応まっぷ固有の禁止
+3. `.claude/skills/note-operation/SKILL.md` — 手順の正典
+4. `FACT_CHECK_GUIDE.md` — 数字と主張を一次資料に当てる手順
+5. `content/note/posts.md` — 既出記事。構成と言い回しの重複を避けるため
 
 ペルソナ（書き手の名前と経歴）は `configs/persona.private.json` にある（Git 管理外）。**このファイルに再掲しない。**
 
@@ -114,6 +116,7 @@ model: sonnet
 
 **B. 間違っていないか**
 
+- [ ] `python3 scripts/review_with_yomiyasu.py <下書き> --medium note --strict` が通る
 - [ ] `python3 scripts/verify_ai_tone.py` が通る
 - [ ] 賛成側と反対側が、違う構文・違う語尾・違う長さで書けているか
 - [ ] どちらの立場も「何を守ろうとしているか」まで書けているか
