@@ -1476,3 +1476,32 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36964344115"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36964344084"
       - "https://sns-reaction-map.jp/fukushuto-reaction-map.html"
+
+  - id: approval-20261002-003
+    department: growth-marketing
+    action: website_publication
+    summary: "辺野古事故ページの検索入口、論点切替と山なみ連携、操作進捗表示、工程説明の整理を公開する"
+    reason: "ローカル実装・再生成・表示確認を完了し、オーナーが本対話で「公開して」と明示的に承認したため"
+    risks:
+      - "ページ上部の構成と論点選択後の表示は変わるが、分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更しない"
+      - "検索流入の効果判定には公開後30日間のSearch Console観察が必要"
+    recommendation: approve
+    evidence:
+      - "tasks/task-105.md"
+      - "tests/test_henoko_search_entry.py"
+      - "tests/test_henoko_connected.py"
+      - "scripts/verify_theme_page.py henoko-student-accident"
+    status: completed
+    requested_at: "2026-10-02"
+    decided_at: "2026-10-02"
+    decision_note: "オーナーが本対話で「公開して」と明示的に承認。mainへのpush前に承認を確認した。"
+    completed_at: "2026-10-02"
+    result_note: >-
+      main c80e9a92で公開。全1315テスト（4件skip）、公開検査1135件（4件skip）、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番ページで検索入口、6論点タブ、
+      山なみ連携、「探ったところ」、収集594件・意見461件と分類注記を確認し、削除対象文は0件だった。
+      分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更していない。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37013852402"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37013852116"
+      - "https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html"
