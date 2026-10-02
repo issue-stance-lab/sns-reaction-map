@@ -36,8 +36,8 @@ def sources(items: list[dict]) -> str:
 def reasons(issue: dict, show_unreviewed_note: bool) -> str:
     sub = issue["sub"]
     if sub["status"] != "reread":
-        suffix = 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。' if show_unreviewed_note is not False else ''
-        return f'<p class="bkt-empty">{e(sub["note"])}。' + (f'<br>{suffix}' if suffix else '') + '</p>'
+        # 再読状態はPLANET_DATAに残すが、未対応であることだけを説明する段落は出さない。
+        return ''
     items = sub["items"]
     rows = ''.join(
         f'<li data-bkt-reason="{e(x["id"])}" '
@@ -122,10 +122,10 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             '<p data-bkt-ratio></p><p data-bkt-zero hidden></p></div>'
             f'<p class="bkt-scope-note">{e(index["scope_note"])}</p>'
         )
-        out.append(
-            '<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿">'
-            '<h3>どんな理由で語られている？</h3>' + reasons(issue, data.get("show_unreviewed_note", True))
-        )
+        reason_html = reasons(issue, data.get("show_unreviewed_note", True))
+        out.append('<div class="bkt-columns"><section class="bkt-opinions" aria-label="意見の理由と投稿">')
+        if reason_html:
+            out.append('<h3>どんな理由で語られている？</h3>' + reason_html)
         out.append(
             '<div class="bkt-posts"><h3>実際の投稿を読む</h3>'
             '<p class="bkt-note">編集部が選んだ投稿例です。この論点全体の賛否の割合を表すものではありません。</p>'
@@ -149,11 +149,9 @@ def render_templates(data: dict, source: str, index: dict) -> str:
                 f'<details class="bkt-check" data-bkt-check="{e(cid)}"><summary>{e(c["label"])}：{e(c["ask"])}</summary>'
                 f'<p id="bkt-check-note-{e(cid)}">{e(c["found"])}</p>' + sources(c["sources"]) + '</details>'
             )
-        out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
+            out.append('<h3>投稿の主張と一次資料</h3>')
             out.append(f'<p class="bkt-note">照合確認日 {e(data["ocean"]["checked_on"])}。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>')
-        else:
-            out.append('<p class="bkt-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
         for j, cid in enumerate(connection["claim_ids"]):
             c = claims[cid]
             out.append(

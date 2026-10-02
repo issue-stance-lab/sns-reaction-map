@@ -12,8 +12,17 @@ import html
 import re
 
 
-def research_conditions_html(collected_display: str, period: str) -> str:
+def research_conditions_html(
+    collected_display: str,
+    period: str,
+    *,
+    show_review_note: bool = True,
+) -> str:
     """他7テーマにある「調査条件」ボックスと同じ形のHTMLを組み立てる。"""
+    period_line = f"  （取得期間: {html.escape(period)}"
+    if show_review_note:
+        period_line += '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>'
+    period_line += "）<br>\n"
     return (
         "<!-- RESEARCH_CONDITIONS_START -->\n"
         '<aside class="research-conditions" aria-label="SNSデータの調査条件"'
@@ -22,11 +31,10 @@ def research_conditions_html(collected_display: str, period: str) -> str:
         '  <p style="max-width:1000px;margin:0 auto;">'
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected_display}件<br>\n"
-        f"  （取得期間: {html.escape(period)}／"
-        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
-        "  <strong>社会全体の世論調査ではありません。</strong></p>\n"
-        "</aside>\n"
-        "<!-- RESEARCH_CONDITIONS_END -->"
+        + period_line
+        + "  <strong>社会全体の世論調査ではありません。</strong></p>\n"
+        + "</aside>\n"
+        + "<!-- RESEARCH_CONDITIONS_END -->"
     )
 
 

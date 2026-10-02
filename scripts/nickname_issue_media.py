@@ -120,16 +120,11 @@ def build_section(public: dict) -> str:
             f'<div class="hermes-samples">{samples}</div>'
             '<a class="ic-back" href="#planet-block">↑ 地図へ戻る</a></article>'
         )
-    lead = (
-        "論点ごとに、実際の投稿を編集部が2件ずつ選びました。件数の多さや賛否の割合を"
-        "表すものではなく、それぞれの論点でどんな声が上がっているかを具体的に知るための"
-        "例です。埋め込みが表示されない場合は、リンクからXで投稿を確認してください。"
-    )
     return (
         f'{START}\n'
         f'<section class="panel" id="issue-cards">{CSS}'
         '<div class="panel-title"><h2>論点ごとのX投稿</h2></div>'
-        f"<p>{lead}</p>" + "".join(cards) + f'</section>\n{END}'
+        + "".join(cards) + f'</section>\n{END}'
     )
 
 

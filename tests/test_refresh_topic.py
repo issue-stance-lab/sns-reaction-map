@@ -18,6 +18,7 @@ from scripts.refresh_topic import (
     load_multi_promotion_manifest,
     load_pipeline_config,
     next_collection_date,
+    owner_confirmed_sample_period,
     load_promotion_manifest,
     prepare_archived_resume,
     prepare_promotion_manifest,
@@ -26,6 +27,7 @@ from scripts.refresh_topic import (
     promote,
     ensure_no_pending_wave,
     publication_schedule_fields,
+    publication_new_count,
     record_collection_schedule,
     record_pending_wave,
     validate_sets,
@@ -56,6 +58,33 @@ def classified(tweet_id: str, issue: str = "中傷動画・説明責任") -> dic
 
 
 class RefreshTopicTests(unittest.TestCase):
+    def test_publication_uses_saved_wave_count_when_resuming(self):
+        self.assertEqual(publication_new_count({"new": 0, "saved_wave_new": 60}), 60)
+        self.assertEqual(publication_new_count({"new": 12}), 12)
+
+    def test_owner_confirmed_bike_period_keeps_start_and_extends_end(self):
+        theme = {
+            "sample_period": "2026-06-27〜2026-09-12",
+            "sample_period_source": "owner_confirmed",
+        }
+
+        self.assertEqual(
+            owner_confirmed_sample_period(theme, "2026-09-28"),
+            "2026-06-27〜2026-09-28",
+        )
+
+    def test_owner_confirmed_period_rejects_unknown_or_non_owner_source(self):
+        with self.assertRaises(ValueError):
+            owner_confirmed_sample_period(
+                {"sample_period": "unknown", "sample_period_source": "owner_confirmed"},
+                "2026-09-28",
+            )
+        with self.assertRaises(ValueError):
+            owner_confirmed_sample_period(
+                {"sample_period": "2026-06-27", "sample_period_source": "generated"},
+                "2026-09-28",
+            )
+
     def test_manifest_application_uses_the_fixed_candidate_bytes(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

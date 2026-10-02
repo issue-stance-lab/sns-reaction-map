@@ -95,11 +95,10 @@
 .bukatsu-connected #modes button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
 .bukatsu-connected #planet-block #panel :focus-visible, .bukatsu-connected #list button:focus-visible { outline:3px solid var(--accent,#075ef2); outline-offset:3px; }
 @media screen {
-  /* claim-audit/issue-cards/ocean/bukatsu-checkは論点の読書面へ統合済みのため、
-     通常画面では旧位置の一覧を隠す（bukatsu-checkは2026-09-23、論点idのタグ付け
-     を追加して統合。工程1の内容確定書の未解決事項を解消）。 */
+  /* claim-audit/issue-cards/oceanは論点の読書面へ統合済みのため、通常画面では旧位置の一覧を隠す。
+     bukatsu-checkは質問文の作成・コピー・確認状況の整理に使う独立ツールとして表示する。 */
   .bukatsu-connected #bukatsu-chiiki-audit, .bukatsu-connected #issue-cards,
-  .bukatsu-connected #ocean, .bukatsu-connected #bukatsu-check { display:none; }
+  .bukatsu-connected #ocean { display:none; }
 }
 @media (max-width:760px) {
   .bukatsu-connected #planet-block #panel { padding:20px 0 0 !important; }

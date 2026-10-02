@@ -16,11 +16,17 @@ ROOT = Path(__file__).resolve().parents[1]
 TOPIC = "school-nickname-ban"
 START = "<!-- SCHOOL_NICKNAME_CONNECTED_START -->"
 END = "<!-- SCHOOL_NICKNAME_CONNECTED_END -->"
+SEARCH_START = "<!-- SCHOOL_NICKNAME_SEARCH_ENTRY_START -->"
+SEARCH_END = "<!-- SCHOOL_NICKNAME_SEARCH_ENTRY_END -->"
+FAQ_START = "<!-- SCHOOL_NICKNAME_FAQ_START -->"
+FAQ_END = "<!-- SCHOOL_NICKNAME_FAQ_END -->"
+FAQ_JSONLD_START = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_START -->"
+FAQ_JSONLD_END = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_END -->"
 BRIDGE_START = "/* SCHOOL_NICKNAME_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* SCHOOL_NICKNAME_CONNECTED_BRIDGE_END */"
-CSS_HREF = "school-nickname-connected.css?v=1"
+CSS_HREF = "school-nickname-connected.css?v=4"
 JS_SRC = "school-nickname-connected.js?v=1"
-PAGE_JS_SRC = "school-nickname-connected-page.js?v=1"
+PAGE_JS_SRC = "school-nickname-connected-page.js?v=2"
 DATA_PATTERN = re.compile(r'<script id="planet-data">window\.PLANET_DATA=(.*?);</script>', re.S)
 
 CHECK_ISSUES = {
@@ -29,6 +35,25 @@ CHECK_ISSUES = {
     "voice": ["school-nickname-ban-psychological-safety", "school-nickname-ban-individual-choice"],
     "revision": ["school-nickname-ban-school-practice", "school-nickname-ban-uniform-rule"],
 }
+
+UNWANTED_PROCESS_COPY = (
+    "AI分類。代表投稿は編集部が選定",
+    "AIが自動でつけた区分をここに並べることはしません",
+    "AIが自動でつけた区分はここへ表示しません",
+    "人が読んだ結果だけをまとめにします",
+    "この論点の中身（編集部が本文を読んで分けたもの）",
+    "ここから下は集計ではありません",
+    "このテーマは、まだ編集部が一次資料を読んで",
+    "論点をまたいで言えることを、編集部がまとめています",
+    "このテーマは、論点をまたいで言えることの整理がまだです",
+    "論点ごとに、実際の投稿を編集部が2件ずつ選びました",
+    "理由は編集部が読み直した投稿をまとめたものです",
+    "この論点を具体的に読むため、編集部が投稿内容を確認して2件を抜き出しています",
+    "AIを使用した工程",
+    "収集・分類で分かったこと",
+    "論点・立場は本文との照合を反映しています",
+    "Powered by Yahooリアルタイム検索 + Hermes分類",
+)
 
 
 def enabled(source: str) -> bool:
@@ -105,7 +130,6 @@ def content_index(data: dict) -> dict:
         "issues": result,
         "background_checked_on": background["checked_on"],
         "scope_note": "件数は収集投稿の分類結果です。理由・投稿例・資料は、この論点を読むための補助線です。",
-        "reason_post_note": "理由は編集部が読み直した投稿をまとめたものです。下の投稿は各理由から選んだ代表例で、賛否の割合を表しません。",
     }
 
 
@@ -119,21 +143,119 @@ def _bridge(source: str) -> str:
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
 
 
+def _strip_internal_process_copy(source: str) -> str:
+    """既存HTMLに残る、このテーマだけの制作工程説明を再接続時にも除く。"""
+    source = source.replace('／<span class="review-note">AI分類。代表投稿は編集部が選定</span>', "")
+    source = source.replace('<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>', "")
+    source = re.sub(
+        r'<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>\s*',
+        "",
+        source,
+    )
+    source = re.sub(r'<p class="sub">ここから下は集計ではありません。.*?</p>\s*', "", source)
+    source = re.sub(r'<p class="sub">論点をまたいで言えることを、編集部がまとめています。.*?</p>\s*', "", source)
+    source = re.sub(
+        r"\s*h \+= '<p class=\"sub\" style=\"margin-top:12px\"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\s*\n",
+        "\n",
+        source,
+    )
+    source = source.replace(
+        "         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';",
+        "         + '</div>';",
+    )
+    source = re.sub(
+        r'<p>論点ごとに、実際の投稿を編集部が2件ずつ選びました。.*?リンクからXで投稿を確認してください。</p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'\s*<h3>AIを使用した工程</h3>\s*<p>収集後の投稿について、AIを関連性・意見性の判定、.*?</p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'\s*<h3>収集・分類で分かったこと</h3>\s*<ul class="article-trust-observations">.*?</ul>',
+        "",
+        source,
+        flags=re.S,
+    )
+    source = re.sub(
+        r'<li>論点・立場は本文との照合を反映しています。表現の強さと要約はAI分類に基づき、誤りを含む可能性があります。</li>',
+        "",
+        source,
+    )
+    source = source.replace('<div>Powered by Yahooリアルタイム検索 + Hermes分類</div>', "")
+    return source
+
+
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """初回はactivate=True、以後は目印があるときだけ再生成する。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
     try:
         from scripts.school_nickname_connected_content import END as CONTENT_END
+        from scripts.school_nickname_connected_content import FAQ_END, FAQ_JSONLD_END, FAQ_JSONLD_START, FAQ_START
+        from scripts.school_nickname_connected_content import SEARCH_END, SEARCH_START
         from scripts.school_nickname_connected_content import START as CONTENT_START
-        from scripts.school_nickname_connected_content import render_templates
+        from scripts.school_nickname_connected_content import render_faq, render_faq_jsonld, render_search_entry, render_templates
     except ModuleNotFoundError:
         from school_nickname_connected_content import END as CONTENT_END  # type: ignore[no-redef]
+        from school_nickname_connected_content import FAQ_END, FAQ_JSONLD_END, FAQ_JSONLD_START, FAQ_START  # type: ignore[no-redef]
+        from school_nickname_connected_content import SEARCH_END, SEARCH_START  # type: ignore[no-redef]
         from school_nickname_connected_content import START as CONTENT_START  # type: ignore[no-redef]
-        from school_nickname_connected_content import render_templates  # type: ignore[no-redef]
+        from school_nickname_connected_content import render_faq, render_faq_jsonld, render_search_entry, render_templates  # type: ignore[no-redef]
 
     data = planet_data(source)
     index = content_index(data)
+    background = background_data()
+    source = _strip_internal_process_copy(source)
+    source = source.replace(
+        '<div id="progress"><span>読んだところ</span>',
+        '<div id="progress"><span>探ったところ</span>',
+        1,
+    )
+    source = source.replace(
+        '<span class="how">質問に答える・山を押す・クイズに答えると増えます</span>',
+        '<span class="how">論点を選ぶなど、このページで記録対象の操作をすると増えます</span>',
+        1,
+    )
+    source = re.sub(r"<title>.*?</title>", "<title>学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否｜SNS反応まっぷ</title>", source, count=1, flags=re.S)
+    # description系metaは configs/theme-seo.json と apply_theme_trust.py が正典。
+    # ここで書き換えると、公開昇格順（builder→trust）の後にbuilderを再実行した際、
+    # 信頼情報の文面を巻き戻してしまうため触らない。
+    source = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否">', source, count=1)
+    source = re.sub(r'<meta name="twitter:title" content="[^"]*">', '<meta name="twitter:title" content="学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否">', source, count=1)
+    source = re.sub(
+        r'(<!-- ARTICLE_JSON_LD_START -->.*?"headline": ")[^"]*',
+        r'\1学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否',
+        source,
+        count=1,
+        flags=re.S,
+    )
+    source = re.sub(
+        r'(<!-- ARTICLE_JSON_LD_START -->.*?"description": ")[^"]*',
+        r'\1学校のあだ名禁止は全国一律の決まり？文科省・法律資料で根拠を確認し、さん付け指導との違い、いじめ防止への期待と懸念、賛成・反対の理由をSNS意見から整理します。',
+        source,
+        count=1,
+        flags=re.S,
+    )
+    source = source.replace("<h1>学校のあだ名禁止は必要？賛成・反対の理由</h1>", "<h1>学校のあだ名禁止はなぜ？ さん付け・いじめとの関係と賛否</h1>", 1)
+
+    search_block = render_search_entry(data, background)
+    if SEARCH_START in source:
+        source = re.sub(re.escape(SEARCH_START) + r".*?" + re.escape(SEARCH_END), search_block, source, flags=re.S)
+    else:
+        source = source.replace("<!-- STANCE_GLANCE_START -->", search_block + "\n<!-- STANCE_GLANCE_START -->", 1)
+    faq_block = render_faq()
+    if FAQ_START in source:
+        source = re.sub(re.escape(FAQ_START) + r".*?" + re.escape(FAQ_END), faq_block, source, flags=re.S)
+    else:
+        source = source.replace('<section class="panel" id="related-topics">', faq_block + '\n<section class="panel" id="related-topics">', 1)
+    faq_jsonld = render_faq_jsonld()
+    if FAQ_JSONLD_START in source:
+        source = re.sub(re.escape(FAQ_JSONLD_START) + r".*?" + re.escape(FAQ_JSONLD_END), faq_jsonld, source, flags=re.S)
+    else:
+        source = source.replace("</head>", faq_jsonld + "\n</head>", 1)
     source = _bridge(source)
     content = render_templates(data, source, index)
     if CONTENT_START in source:
@@ -186,12 +308,45 @@ def validate(source: str) -> list[str]:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
     if source.count(CONTENT_START) != 1 or source.count(CONTENT_END) != 1:
         problems.append("読書面の目印が1組ではありません")
+    for start, end, label in (
+        (SEARCH_START, SEARCH_END, "検索入口"),
+        (FAQ_START, FAQ_END, "FAQ"),
+        (FAQ_JSONLD_START, FAQ_JSONLD_END, "FAQ構造化データ"),
+    ):
+        if source.count(start) != 1 or source.count(end) != 1:
+            problems.append(f"{label}の目印が1組ではありません")
+    if len(soup.select("#school-nickname-guide")) != 1 or len(soup.select("#school-nickname-faq")) != 1:
+        problems.append("検索入口またはFAQが1つではありません")
+    guide_tabs = soup.select("#school-nickname-guide [data-school-nickname-guide-tab]")
+    guide_panels = soup.select("#school-nickname-guide [data-school-nickname-guide-panel]")
+    if len(guide_tabs) != 3 or len(guide_panels) != 3:
+        problems.append("検索入口の論点タブと表示面が3組ではありません")
+    elif any(tab.get("aria-controls") != panel.get("id") for tab, panel in zip(guide_tabs, guide_panels)):
+        problems.append("検索入口の論点タブと表示面の接続が一致しません")
+    guide_issue_ids = {panel.get("data-school-nickname-issue-id") for panel in guide_panels}
+    known_issue_ids = {issue["id"] for issue in data["issues"]}
+    if guide_issue_ids != {
+        "school-nickname-ban-school-practice",
+        "school-nickname-ban-psychological-safety",
+        "school-nickname-ban-uniform-rule",
+    } or not guide_issue_ids <= known_issue_ids:
+        problems.append("検索入口から山並みマップへの論点接続が一致しません")
+    if len(soup.select("#school-nickname-faq details")) != 10:
+        problems.append("FAQが10問ではありません")
+    progress = soup.select_one("#progress")
+    if progress is None or not progress.select_one("span") or progress.select_one("span").get_text(strip=True) != "探ったところ":
+        problems.append("進捗表示が操作数に合う『探ったところ』ではありません")
+    if progress is not None and "記録対象の操作" not in progress.get_text(" ", strip=True):
+        problems.append("進捗表示に操作記録である説明がありません")
     if len(soup.select(f'link[href="{CSS_HREF}"]')) != 1:
         problems.append("連動表示のCSSが1つではありません")
     if len(soup.select(f'script[src="{JS_SRC}"][defer]')) != 1:
         problems.append("中心部分のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("ページ配置のJSが1つではありません")
+    for phrase in UNWANTED_PROCESS_COPY:
+        if phrase in source:
+            problems.append("制作工程の説明が残っています: " + phrase)
     stance_buttons = {button.get("data-i") for button in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if stance_buttons != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")

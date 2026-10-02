@@ -8,12 +8,16 @@
 from __future__ import annotations
 
 import ast
+import datetime as dt
 import json
 from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED = {"fact", "gap", "miss"}
+# この日数以上遅れたテーマは、次回の定期更新（DATA_REFRESH.md）に合わせて
+# 主張の該当件数を読み直す（課題99、オーナー決定2026-09-28）。
+COVERAGE_WARN_DAYS = 30
 LEGACY_CONSTITUTIONAL = {
     "原典にある": "fact",
     "原典とずれる": "gap",
@@ -100,8 +104,8 @@ def public_claim_counts(theme: str) -> dict[str, int]:
     return {c["id"]: c["matched_post_count"] for c in data["claim_verification"]["claims"]}
 
 
-def coverage_warnings() -> list[str]:
-    """人が読んだ範囲が、ページの母数に追いついているかを見る（警告のみ）。
+def _coverage_gaps() -> list[dict]:
+    """テーマごとに、照合の確認日が公開データの期間末よりどれだけ遅れているかを返す。
 
     ページの「意見◯◯件」は定例更新のたびに機械が数え直すが、主張ごとの該当件数は
     人が読んだ時点で止まる。片方だけ動くので、同じページに範囲の違う数字が並ぶ。
@@ -112,9 +116,8 @@ def coverage_warnings() -> list[str]:
 
     本来は公開データ契約へ「照合が対象にした期間」を持たせる（課題54の残課題）。
     それまでの暫定として、確認日 checked_on を読んだ範囲の代わりに使う。
-    読み直しの範囲はオーナー判断が要るため、ここでは止めずに警告だけ出す。
     """
-    warnings: list[str] = []
+    gaps: list[dict] = []
     for theme in SOURCES:
         data = json.loads(public_path(theme).read_text(encoding="utf-8"))
         checked_on = (data.get("claim_verification") or {}).get("checked_on")
@@ -122,11 +125,46 @@ def coverage_warnings() -> list[str]:
         if not checked_on or not period_end:
             continue
         if checked_on < period_end:
-            warnings.append(
-                f"{theme}: 照合の確認日 {checked_on} が公開データの期間末 {period_end} より前です"
-                "（増えた投稿を主張へ読み足していない可能性）"
-            )
-    return warnings
+            days = (dt.date.fromisoformat(period_end) - dt.date.fromisoformat(checked_on)).days
+            gaps.append({"theme": theme, "checked_on": checked_on, "period_end": period_end, "days": days})
+    return gaps
+
+
+def coverage_warnings() -> list[str]:
+    """人が読んだ範囲が、ページの母数に追いついているかを見る（警告のみ・全件）。
+
+    読み直しの範囲はオーナー判断が要るため、遅れの大小によらず全テーマを出す。
+    ここでは止めない（exit codeは変えない）。ダッシュボードの異常検知には
+    `coverage_findings()`（COVERAGE_WARN_DAYS以上だけに絞ったもの）を使う。
+    """
+    return [
+        f"{g['theme']}: 照合の確認日 {g['checked_on']} が公開データの期間末 {g['period_end']} より前です"
+        f"（{g['days']}日遅れ。増えた投稿を主張へ読み足していない可能性）"
+        for g in _coverage_gaps()
+    ]
+
+
+def coverage_findings() -> list[dict]:
+    """管理ダッシュボードの異常検知向け（課題99）。
+
+    `coverage_warnings()`は遅れの大小を問わず全テーマを出す（定期収集のたびに
+    必ず何件か出るため、ダッシュボードにそのまま载せると常時警告状態になり
+    読まれなくなる）。ここでは COVERAGE_WARN_DAYS 日以上遅れたテーマだけを、
+    実際に読み直しを計画すべき対象として返す。
+    """
+    return [
+        {
+            "tone": "warn",
+            "title": f"{g['theme']}: クレーム監査（主張の事実確認）が{g['days']}日遅れています",
+            "detail": (
+                f"照合の確認日 {g['checked_on']} が公開データの期間末 {g['period_end']} より"
+                f"{g['days']}日前のままです。次回の定期更新に合わせて、主張の該当件数を"
+                "読み直してください（課題99）。"
+            ),
+        }
+        for g in _coverage_gaps()
+        if g["days"] >= COVERAGE_WARN_DAYS
+    ]
 
 
 def audit_counts() -> list[str]:
@@ -181,7 +219,10 @@ def main() -> int:
     if warnings:
         print(f"警告 {len(warnings)}件: 照合が公開母数に追いついていません（終了コードは変えません）")
         print("\n".join(f"  - {w}" for w in warnings))
-        print("  読み直す範囲はオーナー判断。TASK_BOARD.md 課題54「未着手（レビュー指摘）」を参照")
+        findings = coverage_findings()
+        if findings:
+            print(f"  うち{len(findings)}件は{COVERAGE_WARN_DAYS}日以上の遅れ → 管理ダッシュボードにも表示されます（TASK_BOARD.md 課題99）")
+        print("  それ未満は経過観察。読み直す頻度・範囲の基準はTASK_BOARD.md 課題99を参照")
     else:
         print("OK: 照合の確認日が全テーマで公開データの期間末に追いついている")
     return 0

@@ -24,14 +24,13 @@ class BikeFetchHistoryRecoveryTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         data = json.loads(OUTPUT.read_text(encoding="utf-8"))
-        self.assertEqual(data["canonical"]["missing_fetched_at"], 116)
-        self.assertEqual(data["summary"], {
-            "confirmed_observation": 115,
-            "candidate_id_only": 1,
-            "unknown": 0,
-            "multiple_observation_dates": 52,
-        })
         records = json.loads(CANONICAL.read_text(encoding="utf-8"))
+        self.assertEqual(data["canonical"]["missing_fetched_at"], sum(not r.get("fetched_at") for r in records))
+        self.assertEqual(data["canonical"]["records"], len(records))
+        self.assertEqual(
+            data["summary"]["confirmed_observation"] + data["summary"]["candidate_id_only"] + data["summary"]["unknown"],
+            data["canonical"]["missing_fetched_at"],
+        )
         record_hashes = sorted(bpd.record_id_hash(record) for record in records)
         missing_hashes = sorted(
             bpd.record_id_hash(record) for record in records if not record.get("fetched_at")
@@ -95,6 +94,19 @@ class BikeFetchHistoryRecoveryTests(unittest.TestCase):
             altered.write_bytes(CANONICAL.read_bytes() + b"\n")
             with self.assertRaises(SystemExit):
                 bpd.load_fetch_history_recovery(OUTPUT, altered)
+
+    def test_recovery_builder_accepts_candidate_canonical_and_published_path(self):
+        from scripts.build_bike_fetch_history_recovery import build
+
+        value = build(
+            CANONICAL,
+            root=ROOT,
+            canonical_relative_path="social-samples/bike-blue-ticket_2d_classified.json",
+        )
+        self.assertEqual(
+            value["canonical"]["path"],
+            "social-samples/bike-blue-ticket_2d_classified.json",
+        )
 
 
 if __name__ == "__main__":

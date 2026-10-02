@@ -59,6 +59,14 @@ class ElderlyConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.PAGE_JS_SRC), 1)
         self.assertEqual(connected.validate(self.page), [])
 
+    def test_progress_label_describes_actions_not_reading(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(soup.select_one("#progress > span").get_text(strip=True), "探ったところ")
+        self.assertNotIn('<div id="progress"><span>読んだところ</span>', self.page)
+
+    def test_small_hills_keep_the_published_tap_width(self):
+        self.assertIn(f"const MIN_W={connected.MIN_HILL_WIDTH};", self.page)
+
     def test_generated_ids_are_unique_even_for_shared_claims(self):
         soup = BeautifulSoup(self.page, "html.parser")
         ids = [node.get("id") for node in soup.select("[id]")]
@@ -88,7 +96,7 @@ class ElderlyConnectedTests(unittest.TestCase):
             ):
                 self.assertEqual([node.get(attr) for node in reading.select("[" + attr + "]")], connection[key], iid + " " + key)
 
-    def test_reasons_only_show_source_registered_posts_and_unreviewed_are_explicitly_empty(self):
+    def test_reasons_only_show_source_registered_posts_and_unreviewed_note_is_suppressed(self):
         soup = BeautifulSoup(self.page, "html.parser")
         data = connected.planet_data(self.page)
         by_id = {issue["id"]: issue for issue in data["issues"]}
@@ -105,8 +113,10 @@ class ElderlyConnectedTests(unittest.TestCase):
             "elderly-license-revocation-voluntary-return",
         ):
             reading = soup.select_one("#elderly-license-revocation-reading-" + iid)
-            self.assertIsNotNone(reading.select_one(".elc-empty"), iid)
+            self.assertIsNone(reading.select_one(".elc-opinions > .elc-empty"), iid)
             self.assertIsNone(reading.select_one(".elc-reasons"), iid)
+            self.assertNotIn("まだ編集部が投稿を1件ずつ読み直していません", reading.get_text(" ", strip=True), iid)
+            self.assertNotIn("AIが自動でつけた区分", reading.get_text(" ", strip=True), iid)
 
     def test_vote_contract_is_unchanged(self):
         from scripts.refresh_adapters.elderly import VOTE_CHOICES, VOTE_TOPIC, vote_fingerprint
@@ -140,6 +150,27 @@ class ElderlyConnectedTests(unittest.TestCase):
             _, twice, failures = refresh("elderly-license-revocation", source=rebuilt)
         self.assertEqual(failures, [])
         self.assertEqual(rebuilt, twice)
+
+        regressed = self.page.replace(
+            '<div id="progress"><span>探ったところ</span>',
+            '<div id="progress"><span>読んだところ</span>',
+            1,
+        )
+        with patch("scripts.refresh_planet_section.bpd.build", return_value=data):
+            _, repaired, failures = refresh("elderly-license-revocation", source=regressed)
+        self.assertEqual(failures, [])
+        self.assertIn('<div id="progress"><span>探ったところ</span>', repaired)
+        self.assertNotIn('<div id="progress"><span>読んだところ</span>', repaired)
+
+        regressed = self.page.replace(
+            f"const MIN_W={connected.MIN_HILL_WIDTH};",
+            "const MIN_W=34;",
+            1,
+        )
+        with patch("scripts.refresh_planet_section.bpd.build", return_value=data):
+            _, repaired, failures = refresh("elderly-license-revocation", source=regressed)
+        self.assertEqual(failures, [])
+        self.assertIn(f"const MIN_W={connected.MIN_HILL_WIDTH};", repaired)
 
 
 if __name__ == "__main__":

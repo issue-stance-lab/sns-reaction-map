@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -22,7 +23,7 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
         cls.page = connected.apply(cls.original, activate=True)
 
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):
-        inactive = self.original.replace("<!-- PLANET_SECTION_START -->", "<!-- PLANET_SECTION_START_DISABLED -->")
+        inactive = self.original.replace(connected.START, "<!-- SCHOOL_NICKNAME_CONNECTED_DISABLED -->")
         self.assertEqual(connected.apply(inactive), inactive)
         other = (ROOT / "docs/ai-copyright-reaction-map.html").read_text(encoding="utf-8")
         self.assertEqual(connected.apply(other, activate=True, topic="ai-copyright"), other)
@@ -69,6 +70,66 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
         for check_id, issue_list in connected.CHECK_ISSUES.items():
             self.assertTrue(issue_list, check_id)
             self.assertTrue(set(issue_list) <= issue_ids, check_id)
+
+    def test_search_entry_and_visible_faq_are_generated_once(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(len(soup.select('link[href="school-nickname-connected.css?v=4"]')), 1)
+        self.assertNotIn("school-nickname-connected.css?v=3", self.page)
+        self.assertEqual(len(soup.select('script[src="school-nickname-connected-page.js?v=2"][defer]')), 1)
+        self.assertEqual(len(soup.select("#school-nickname-guide")), 1)
+        tabs = soup.select("#school-nickname-guide [data-school-nickname-guide-tab]")
+        panels = soup.select("#school-nickname-guide [data-school-nickname-guide-panel]")
+        self.assertEqual(len(tabs), 3)
+        self.assertEqual(len(panels), 3)
+        self.assertEqual([tab.get("aria-controls") for tab in tabs], [panel.get("id") for panel in panels])
+        self.assertEqual(
+            {panel.get("data-school-nickname-issue-id") for panel in panels},
+            {
+                "school-nickname-ban-school-practice",
+                "school-nickname-ban-psychological-safety",
+                "school-nickname-ban-uniform-rule",
+            },
+        )
+        self.assertEqual(len(soup.select("#school-nickname-guide [data-school-nickname-map-link]")), 3)
+        self.assertEqual(len(soup.select("#school-nickname-faq details")), 10)
+        self.assertLess(self.page.index("SCHOOL_NICKNAME_SEARCH_ENTRY_START"), self.page.index("STANCE_GLANCE_START"))
+        self.assertLess(self.page.index("SCHOOL_NICKNAME_FAQ_START"), self.page.index('id="related-topics"'))
+        payloads = [json.loads(node.string) for node in soup.select('script[type="application/ld+json"]')]
+        faq = next(item for item in payloads if item.get("@type") == "FAQPage")
+        article = next(item for item in payloads if item.get("@type") == "Article")
+        self.assertEqual(len(faq["mainEntity"]), 10)
+        self.assertEqual(article["headline"], "学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否")
+        self.assertEqual(
+            soup.select_one("title").get_text(strip=True),
+            "学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否｜SNS反応まっぷ",
+        )
+
+    def test_progress_label_describes_recorded_actions_not_reading(self):
+        soup = BeautifulSoup(self.page, "html.parser")
+        progress = soup.select_one("#progress")
+        self.assertIsNotNone(progress)
+        self.assertEqual(progress.select_one("span").get_text(strip=True), "探ったところ")
+        self.assertIn("記録対象の操作", progress.get_text(" ", strip=True))
+        self.assertNotIn("読んだところ", progress.get_text(" ", strip=True))
+        self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', self.page)
+        self.assertIn("const SPOTS = 2 + issues.length", self.page)
+
+    def test_internal_process_copy_is_removed_without_changing_public_data(self):
+        before = connected.planet_data(self.original)
+        after = connected.planet_data(self.page)
+        self.assertEqual(after, before)
+        for phrase in connected.UNWANTED_PROCESS_COPY:
+            self.assertNotIn(phrase, self.page)
+
+        soup = BeautifulSoup(self.page, "html.parser")
+        self.assertEqual(len(soup.select("[data-school-nickname-post-url]")), 12)
+        self.assertEqual(len(soup.select("[data-school-nickname-reason-post-url]")), 26)
+        self.assertEqual(len(after["issues"]), 6)
+        self.assertEqual(sum(issue["count"] for issue in after["issues"]), after["totals"]["opinions"])
+        self.assertIn("まだ読み直していない分", self.page)
+        self.assertIn("SNS投稿の収集方法", self.page)
+        self.assertIn("データの読み方:", self.page)
+        self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', self.page)
 
     def test_relationships_do_not_depend_on_issue_order_or_labels(self):
         data = connected.planet_data(self.page)

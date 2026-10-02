@@ -19,12 +19,7 @@
     panels.forEach(function (panel) {
       panel.hidden = panel.dataset.lensPanel !== key;
     });
-    if (options && options.focus) selected.focus();
-    try {
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        selected.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
-    } catch (_) {}
+    if (options && options.focus) selected.focus({ preventScroll: true });
   }
 
   root.classList.add('is-ready');

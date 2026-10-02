@@ -735,6 +735,11 @@ def publication_schedule_fields(next_date: str | None) -> dict[str, str | None]:
     }
 
 
+def publication_new_count(report: dict[str, Any]) -> int:
+    """再開した保存回では、再取得結果0件ではなく保存済みの新規件数を公開表示へ使う。"""
+    return int(report.get("saved_wave_new", report.get("new", 0)) or 0)
+
+
 def record_pending_wave(root: Path, topic: str, current_date: str) -> None:
     """新規のある更新回を保存したが、まだ公開していないことを台帳に残す。
 
@@ -780,6 +785,18 @@ def sample_period(rows: list[dict[str, Any]]) -> str:
     if not values or any(not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in values):
         return "unknown"
     return values[0] if min(values) == max(values) else f'"{min(values)}〜{max(values)}"'
+
+
+def owner_confirmed_sample_period(theme: dict[str, Any], current_date: str) -> str:
+    """Keep the owner-confirmed start while extending the bike collection window."""
+    period = str(theme.get("sample_period") or "")
+    match = re.fullmatch(r"(\d{4}-\d{2}-\d{2})(?:〜\d{4}-\d{2}-\d{2})?", period)
+    if theme.get("sample_period_source") != "owner_confirmed" or match is None:
+        raise ValueError(f"オーナー確認済みの取得期間を更新できません: {period!r}")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", current_date):
+        raise ValueError(f"更新日が日付形式ではありません: {current_date!r}")
+    start_date = match.group(1)
+    return start_date if start_date == current_date else f"{start_date}〜{current_date}"
 
 
 def update_seo_date(path: Path, topic: str, current_date: str) -> None:
@@ -849,11 +866,13 @@ def promote(
         # verify_sample_periods.py の owner_confirmed 検査（日付形式であること）で必ず落ちる。
         fields = {
             "updated_at": current_date,
-            "collect_delta": str(int(report["new"])),
+            "collect_delta": str(publication_new_count(report)),
             **publication_schedule_fields(next_date),
         }
         if theme.get("sample_period_source") != "owner_confirmed":
             fields["sample_period"] = sample_period(candidate)
+        elif topic == "bike-blue-ticket":
+            fields["sample_period"] = owner_confirmed_sample_period(theme, current_date)
         registry.write_text(
             _replace_theme_fields(
                 registry.read_text(encoding="utf-8"),
@@ -946,9 +965,11 @@ def prepare_public_candidate_bundle(
         shutil.copy2(source, destination)
 
     next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
-    fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), **publication_schedule_fields(next_date)}
+    fields = {"updated_at": current_date, "collect_delta": str(publication_new_count(report)), **publication_schedule_fields(next_date)}
     if theme.get("sample_period_source") != "owner_confirmed":
         fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
+    elif topic == "bike-blue-ticket":
+        fields["sample_period"] = owner_confirmed_sample_period(theme, current_date)
     registry = candidate_root / "THEMES.yaml"
     registry.write_text(_replace_theme_fields(registry.read_text(encoding="utf-8"), topic, fields), encoding="utf-8")
     update_seo_date(candidate_root / "configs" / "theme-seo.json", topic, current_date)
@@ -1165,9 +1186,11 @@ def prepare_public_candidate_bundle_multi(
             per_topic_targets[target] = destination
 
         next_date = report.get("next_collect_at") or next_collection_date(root, topic, current_date, report)
-        fields = {"updated_at": current_date, "collect_delta": str(int(report["new"])), **publication_schedule_fields(next_date)}
+        fields = {"updated_at": current_date, "collect_delta": str(publication_new_count(report)), **publication_schedule_fields(next_date)}
         if theme.get("sample_period_source") != "owner_confirmed":
             fields["sample_period"] = sample_period(read_rows(stage / "cumulative-candidate.json"))
+        elif topic == "bike-blue-ticket":
+            fields["sample_period"] = owner_confirmed_sample_period(theme, current_date)
         registry = candidate_root / "THEMES.yaml"
         registry.write_text(_replace_theme_fields(registry.read_text(encoding="utf-8"), topic, fields), encoding="utf-8")
         update_seo_date(candidate_root / "configs" / "theme-seo.json", topic, current_date)
@@ -1513,6 +1536,24 @@ def main() -> int:
             record_collection_schedule(ROOT, args.topic, args.date, report["next_collect_at"])
         else:
             record_pending_wave(ROOT, args.topic, args.date)
+    report["status"] = "archived"
+    write_json(stage / "report.json", report)
+    if args.topic == "bike-blue-ticket" and (args.promote or args.prepare_promotion or args.apply_promotion):
+        # The bike classifier intentionally retains the complete automated wave. Only a
+        # separate body-review record may decide which rows enter the canonical sample.
+        plan = stage / "review-plan.json"
+        update = ROOT / "data" / "bike-blue-ticket_editorial-updates" / f"{args.date.replace('-', '')}.json"
+        if not plan.is_file() or not update.is_file():
+            raise FileNotFoundError(
+                "自転車の公開候補には本文確認済みのreview-plan.jsonとeditorial-updateが必要です: "
+                f"{plan} / {update}"
+            )
+        try:
+            from .build_bike_refresh_candidate import build as build_bike_reviewed_candidate
+        except ImportError:
+            from build_bike_refresh_candidate import build as build_bike_reviewed_candidate
+        build_bike_reviewed_candidate(ROOT, stage, plan, update)
+        report = json.loads((stage / "report.json").read_text(encoding="utf-8"))
     report["status"] = "archived"
     write_json(stage / "report.json", report)
 

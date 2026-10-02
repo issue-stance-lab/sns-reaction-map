@@ -51,13 +51,39 @@ def _run_builder(root: Path, candidate: Path, template: Path, page: Path, data: 
 
 
 def finalize(root: Path, current_date: str) -> None:
-    """候補公開JSONから、ページの管理対象集計を貼り直す。"""
+    """候補公開JSONから、ページの管理対象集計を貼り直す。
+
+    山なみ形式の本番ページでは、旧アリーナ生成器は調査条件のみを
+    更新する。山の PLANET_DATA も同じ公開JSONから再生成し、件数と面積を
+    同じ候補版にそろえる。
+    """
     subprocess.run(
         [
             sys.executable,
             str(root / "scripts" / "build_ai_copyright_arena.py"),
             "--public-counts-only",
             "--output-html", str(root / PAGE),
+        ],
+        cwd=root,
+        check=True,
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "refresh_planet_section.py"),
+            "--topic", TOPIC,
+            "--for-docs",
+        ],
+        cwd=root,
+        check=True,
+    )
+    # 山の外にある「立場ごとの内訳」も、候補正典と公開JSONが
+    # 揃った後に貼り直す。このビルダは山なみ本体を変更しない。
+    subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "build_ai_copyright_arena.py"),
+            "--skip-issue-counts",
         ],
         cwd=root,
         check=True,

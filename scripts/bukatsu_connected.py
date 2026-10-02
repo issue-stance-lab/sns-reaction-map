@@ -25,6 +25,24 @@ BRIDGE_START = "/* BUKATSU_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* BUKATSU_CONNECTED_BRIDGE_END */"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
 
+LEGACY_UNREVIEWED_BRANCH = """  } else {
+    if (D.show_unreviewed_note !== false){
+      h += '<div class="note">'+s.note+'。<br>'
+         + 'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</div>';
+    }
+  }"""
+
+
+def strip_mechanical_explanations(source: str) -> str:
+    """部活動ページの表示から、未対応工程だけを説明する段落を外す。"""
+    source = source.replace(LEGACY_UNREVIEWED_BRANCH, "  }")
+    source = re.sub(
+        r'\s*<div class="note">本文確認後に追加された投稿[\d,]+件は、本文確認の対象外です。</div>',
+        "",
+        source,
+    )
+    return source
+
 
 def enabled(source: str) -> bool:
     return START in source
@@ -113,6 +131,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     if topic != TOPIC or not (activate or enabled(source)):
         return source
     from scripts.bukatsu_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    source = strip_mechanical_explanations(source)
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
@@ -123,7 +142,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = source.replace("</body>", content + "\n</body>", 1)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
-        START + '\n<link rel="stylesheet" href="bukatsu-connected.css?v=3">\n'
+        START + '\n<link rel="stylesheet" href="bukatsu-connected.css?v=4">\n'
         '<script id="bukatsu-connected-data" type="application/json">' + payload + '</script>\n'
         '<script src="bukatsu-connected.js?v=2" defer></script>\n'
         '<script src="bukatsu-connected-page.js?v=1" defer></script>\n' + END
@@ -163,7 +182,7 @@ def validate(source: str) -> list[str]:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")
     if source.count(CONTENT_START) != 1 or source.count(CONTENT_END) != 1:
         problems.append("読書面の目印が1組ではありません")
-    if len(soup.select('link[href="bukatsu-connected.css?v=3"]')) != 1:
+    if len(soup.select('link[href="bukatsu-connected.css?v=4"]')) != 1:
         problems.append("連動表示のCSSが1つではありません")
     for selector, label in (
         ('script[src="bukatsu-connected.js?v=2"][defer]', "ページ配置のJS"),

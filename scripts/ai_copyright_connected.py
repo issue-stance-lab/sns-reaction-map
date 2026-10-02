@@ -13,8 +13,10 @@
 必須ではない。bukatsu-chikiのように後日タグ付けする場合はtimeline側へissue_idsを足せば
 content_index()が自動で拾う。本工程の読書面は空のまま生成される）。
 
-読書面（`<template id="ai-copyright-reading-{id}">`）の生成は
-`scripts/ai_copyright_connected_content.py`が担当し、実際にdrawPanel()を差し替えて
+表紙直下の検索入口は`scripts/ai_copyright_search_entry.py`が挿入し、検索意図に合わせた
+切替・資料表示は`docs/ai-copyright-connected-page.js`が担当する。論点ごとの読書面
+（`<template id="ai-copyright-reading-{id}">`）は`scripts/ai_copyright_connected_content.py`が生成し、
+実際にdrawPanel()を差し替えて
 表示する処理・山の選択色（V05）・480msの滑らかな変化（V11）・初期表示の自動着地・
 深いリンクの名前空間統一・出典操作の計測は`scripts/templates/ai_copyright_connected_bridge.js`
 （生成HTMLへ挿入）が担当する。`docs/ai-copyright-connected.js`がバー・山・論点ボタンの
@@ -25,6 +27,7 @@ content_index()が自動で拾う。本工程の読書面は空のまま生成�
 """
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from pathlib import Path
@@ -37,10 +40,12 @@ START = "<!-- AI_COPYRIGHT_CONNECTED_START -->"
 END = "<!-- AI_COPYRIGHT_CONNECTED_END -->"
 BRIDGE_START = "/* AI_COPYRIGHT_CONNECTED_BRIDGE_START */"
 BRIDGE_END = "/* AI_COPYRIGHT_CONNECTED_BRIDGE_END */"
-CSS_HREF = "ai-copyright-connected.css?v=3"
+CSS_HREF = "ai-copyright-connected.css?v=4"
 JS_SRC = "ai-copyright-connected.js?v=1"
-PAGE_JS_SRC = "ai-copyright-connected-page.js?v=1"
+PAGE_JS_SRC = "ai-copyright-connected-page.js?v=2"
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
+PROGRESS_LABEL = "探ったところ"
+PROGRESS_HELP = "予想に答える・論点を選ぶ・資料クイズや「資料にしかない話」を開くと増えます"
 
 
 def enabled(source: str) -> bool:
@@ -120,11 +125,133 @@ def _bridge(source: str) -> str:
     return source.replace(anchor, BRIDGE_START + "\n" + bridge + "\n" + BRIDGE_END + "\n" + anchor, 1)
 
 
+def _apply_progress_copy(source: str) -> str:
+    """操作数を示すai-copyright専用の進捗表示を、生成後に正しい文言へ整える。"""
+    label_pattern = re.compile(r'(<div id="progress">\s*<span>)([^<]*)(</span>)')
+    labels = list(label_pattern.finditer(source))
+    if len(labels) != 1 or labels[0][2] not in ("読んだところ", PROGRESS_LABEL):
+        raise ValueError("進捗表示: ai-copyrightの操作数ラベルを一意に確認できません")
+    source = label_pattern.sub(lambda match: match[1] + PROGRESS_LABEL + match[3], source, count=1)
+
+    old_help = "質問に答える・山を押す・クイズに答えると増えます"
+    help_pattern = re.compile(r'(<div id="progress">.*?<span class="how">)([^<]*)(</span>)', re.S)
+    help_matches = list(help_pattern.finditer(source))
+    if len(help_matches) != 1 or help_matches[0][2] not in (old_help, PROGRESS_HELP):
+        raise ValueError("進捗表示: ai-copyrightの操作説明を確認できません")
+    return help_pattern.sub(lambda m: m[1] + PROGRESS_HELP + m[3], source, count=1)
+
+
+def _remove_public_process_copy(source: str) -> str:
+    """生成後に残る、利用者向けでない制作・再読状況の説明をai-copyrightだけから外す。
+
+    件数・未再読ラベル・分類データはPLANET_DATAに残す。ここでは本文、静的フォールバック、
+    論点選択時に実行されるJavaScriptの表示片を対象にし、他テーマには適用しない。
+    """
+    # 論点を選んだ時に使われるJavaScript内の見出し文。後続のリストは残す。
+    source = re.sub(
+        r"(?m)^\s*h \+= '<p class=\"sub\" style=\"margin-top:12px\">"
+        r"<b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\s*\n\s*\+\s*",
+        "        h += ",
+        source,
+        count=1,
+    )
+
+    # 未再読時のJS説明と、再読済み分布の追加事情テキストは、状態・件数データとは別に非表示。
+    source = re.sub(
+        r"(?s)\n  \} else \{\n    if \(D\.show_unreviewed_note !== false\)\{\n"
+        r"      h \+= '<div class=\"note\">'\+s\.note\+'。<br>'\n"
+        r"         \+ 'AIが自動でつけた区分をここに並べることはしません。"
+        r"人が読んだ結果だけをまとめにします。</div>';\n"
+        r"    \}\n  \}",
+        "\n  }",
+        source,
+        count=1,
+    )
+    ai_coverage_guard = "D.theme_id === \"ai-copyright\" || s.show_coverage_note === false ? ''"
+    if ai_coverage_guard not in source:
+        source = source.replace("s.show_coverage_note === false ? ''", ai_coverage_guard, 1)
+
+    # 生成HTML側の同じ説明。島の内訳、未読行と件数そのものは削らない。
+    patterns = (
+        r'\s*<p class="lead">収集したSNS投稿のうち、分析対象となった意見[\d,]+'
+        r'件をAIが6つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>',
+        r'／<span class="review-note">AI分類。代表投稿は編集部が選定</span>',
+        r'<span class="review-note">AI分類。代表投稿は編集部が選定</span>',
+        r'\s*<h3 class="sec">論点の一覧（図が使えないときの表示）</h3>\s*'
+        r'<p class="sub"[^>]*>このページは、お使いの環境で図を描けなかったため、'
+        r'同じ内容を一覧で表示しています。円をえらぶと、その論点の内訳へ移動します。'
+        r'円の色はいちばん多い立場です。</p>',
+        r'\s*<p class="sub" style="margin-top:12px"><b>'
+        r'この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
+        r'\s*<div class="note">本文確認後に追加された投稿\d+件は、本文確認の対象外です。</div>',
+        r'\s*<div class="note">この論点は、まだ編集部が投稿を1件ずつ読み直していません。'
+        r'<br>AIが自動でつけた区分をここに並べることはしません。'
+        r'人が読んだ結果だけをまとめにします。</div>',
+        r'\s*<p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで'
+        r'確かめたことだけを置いています。（確認日 \d{4}-\d{2}-\d{2}／'
+        r'編集部が本文を読んで確認）</p>',
+        r'\s*<h3>AIを使用した工程</h3>\s*<p>[^<]*</p>',
+        r'\s*<p class="sub">論点をまたいで言えることを、編集部がまとめています。'
+        r'（2026-09-14時点）</p>',
+        r'\s*<div>Powered by Yahooリアルタイム検索 \+ AI分類</div>',
+    )
+    for pattern in patterns:
+        source = re.sub(pattern, "", source, flags=re.S)
+    return source
+
+
+def _public_process_copy_problems(source: str) -> list[str]:
+    """通常表示・template・実行時JSに禁止した説明が戻っていないか検査する。"""
+    phrases = (
+        "まだ編集部が投稿を1件ずつ読み直していません",
+        "AIが自動でつけた区分をここに並べることはしません",
+        "人が読んだ結果だけをまとめにします",
+        "この論点の中身（編集部が本文を読んで分けたもの）",
+        "本文確認後に追加された投稿",
+        "図が使えないときの表示",
+        "このページは、お使いの環境で図を描けなかったため",
+        "AI分類。代表投稿は編集部が選定",
+        "AIを使用した工程",
+        "AIが6つの論点に整理しました",
+        "Powered by Yahooリアルタイム検索 + AI分類",
+        "論点をまたいで言えることを、編集部がまとめています。",
+        "AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。",
+        "残り" + "${s.unread_count}件は、その後に増えた分でまだ読めていません。",
+    )
+    soup = BeautifulSoup(source, "html.parser")
+    visible = BeautifulSoup(source, "html.parser")
+    for node in visible.find_all("script"):
+        if node.get("id") != "planet-data" and node.get("type") != "application/json":
+            node.decompose()
+    rendered_text = visible.get_text(" ", strip=True)
+    problems = [f"利用者向け表示に不要な説明が残っています: {phrase}" for phrase in phrases if phrase in rendered_text]
+
+    template_markup = "\n".join(str(template) for template in soup.find_all("template"))
+    for phrase in phrases:
+        if phrase in template_markup:
+            problems.append(f"template内の表示に不要な説明が残っています: {phrase}")
+
+    executable = "\n".join(
+        script.get_text()
+        for script in soup.find_all("script")
+        if script.get("id") != "planet-data" and script.get("type") != "application/json"
+    )
+    for phrase in phrases:
+        if phrase in executable:
+            problems.append(f"実行時表示に不要な説明が残っています: {phrase}")
+    if 'D.show_unreviewed_note !== false' in executable or "s.note+'。<br>'" in executable:
+        problems.append("未再読の長い説明を実行時に組み立てる処理が残っています")
+    if "残り\"+s.unread_count+\"件は、その後に増えた分でまだ読めていません。" in executable:
+        problems.append("追加分の再読状況を説明する表示処理が残っています")
+    return problems
+
+
 def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     """全更新経路の最後から呼ぶ。同じ入力では同じHTML、他テーマでは完全な無操作。"""
     if topic != TOPIC or not (activate or enabled(source)):
         return source
     from scripts.ai_copyright_connected_content import render_templates, START as CONTENT_START, END as CONTENT_END
+    from scripts.ai_copyright_search_entry import apply as apply_search_entry
     data = planet_data(source)
     index = content_index(data)
     source = _bridge(source)
@@ -133,6 +260,9 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         source = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END), lambda _: content, source, flags=re.S)
     else:
         source = source.replace("</body>", content + "\n</body>", 1)
+    source = apply_search_entry(source)
+    source = _apply_progress_copy(source)
+    source = _remove_public_process_copy(source)
     payload = json.dumps(index, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     block = (
         START + f'\n<link rel="stylesheet" href="{CSS_HREF}">\n'
@@ -160,6 +290,7 @@ def validate(source: str) -> list[str]:
     if not enabled(source):
         return []
     from scripts.ai_copyright_connected_content import START as CONTENT_START, END as CONTENT_END
+    from scripts.ai_copyright_search_entry import validate as validate_search_entry
 
     problems = []
     soup = BeautifulSoup(source, "html.parser")
@@ -181,6 +312,18 @@ def validate(source: str) -> list[str]:
         problems.append("ページ配置のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("資料タブ・年表のJSが1つではありません")
+    problems.extend(validate_search_entry(source))
+    problems.extend(_public_process_copy_problems(source))
+    progress = soup.select("#progress")
+    if len(progress) != 1:
+        problems.append("進捗表示が1つではありません")
+    else:
+        labels = progress[0].find_all("span", recursive=False)
+        if not labels or labels[0].get_text(strip=True) != PROGRESS_LABEL:
+            problems.append("進捗表示が操作数に合った『探ったところ』ではありません")
+        help_text = progress[0].select_one(".how")
+        if not help_text or help_text.get_text(strip=True) != PROGRESS_HELP:
+            problems.append("進捗表示の説明が数える操作と一致しません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタン（STANCE_GLANCE）の並びが立場データと一致しません")
@@ -212,3 +355,32 @@ def validate(source: str) -> list[str]:
         if not posts:
             problems.append(f"読書面に投稿例がありません: {iid}")
     return problems
+
+
+def main() -> int:
+    """既存ページのテーマ固有UIを、現在のテンプレート・CSS/JS版で貼り直す。"""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--write-existing-page", action="store_true",
+        help="現在のdocsページへ検索入口・進捗表示・連動表示資産を反映する",
+    )
+    args = parser.parse_args()
+    if not args.write_existing_page:
+        parser.error("--write-existing-page を指定してください")
+
+    page = ROOT / "docs/ai-copyright-reaction-map.html"
+    before = page.read_text(encoding="utf-8")
+    if not enabled(before):
+        raise SystemExit("連動表示が有効な既存ページではありません。通常のテーマ更新手順を使ってください")
+    after = apply(before)
+    problems = validate(after)
+    if problems:
+        raise SystemExit("更新後ページの検査に失敗しました:\n  - " + "\n  - ".join(problems))
+    if after != before:
+        page.write_text(after, encoding="utf-8")
+    print(("UPDATE" if after != before else "OK") + f": {page.relative_to(ROOT)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

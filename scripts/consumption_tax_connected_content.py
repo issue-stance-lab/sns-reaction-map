@@ -65,7 +65,7 @@ def reasons(issue: dict, examples: dict) -> str:
     from x_embed import embed_html
     sub = issue["sub"]
     if sub["status"] != "reread":
-        return '<p class="tax-empty">この論点では、投稿を理由別に分ける再読をまだ行っていません。</p>'
+        return ""
 
     def rows(items):
         out = ['<ul class="tax-reasons">']
@@ -151,8 +151,6 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
             out.append(f'<p class="tax-note">照合確認日 {e(data["ocean"]["checked_on"])}。収集した投稿から選んだ主張を資料と照合しています。掲載した投稿例そのものへの判定を示すものではありません。</p>')
-        else:
-            out.append('<p class="tax-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
         for j, cid in enumerate(connection["claim_ids"]):
             c = claims[cid]
             out.append(f'<details class="tax-claim" data-tax-claim="{e(cid)}"{" open" if j == 0 else ""}><summary>「{e(c["claim"])}」</summary>'

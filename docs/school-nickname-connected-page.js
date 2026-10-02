@@ -6,6 +6,22 @@
   var index=JSON.parse(document.getElementById('school-nickname-connected-data').textContent),panel=document.getElementById('panel');
   var reduce=function(){return matchMedia('(prefers-reduced-motion: reduce)').matches;};
   var esc=function(value){return String(value).replace(/[&<>"']/g,function(ch){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch];});};
+  var guideRoot=document.getElementById('school-nickname-guide');
+  if(guideRoot){
+    var guideTabs=Array.prototype.slice.call(guideRoot.querySelectorAll('[data-school-nickname-guide-tab]'));
+    var guidePanels=Array.prototype.slice.call(guideRoot.querySelectorAll('[data-school-nickname-guide-panel]'));
+    var showGuide=function(key,focus,measure){
+      guideTabs.forEach(function(tab){var selected=tab.dataset.schoolNicknameGuideTab===key;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;if(selected&&focus)tab.focus();});
+      guidePanels.forEach(function(item){item.hidden=item.dataset.schoolNicknameGuidePanel!==key;});
+      if(measure&&typeof window.gtag==='function')window.gtag('event','school_nickname_guide_view',{guide_key:key,topic_id:data.theme_id});
+    };
+    guideTabs.forEach(function(tab,position){
+      tab.addEventListener('click',function(event){showGuide(tab.dataset.schoolNicknameGuideTab,false,event.isTrusted);});
+      tab.addEventListener('keydown',function(event){var next=event.key==='ArrowRight'||event.key==='ArrowDown'?(position+1)%guideTabs.length:event.key==='ArrowLeft'||event.key==='ArrowUp'?(position+guideTabs.length-1)%guideTabs.length:event.key==='Home'?0:event.key==='End'?guideTabs.length-1:null;if(next!==null){event.preventDefault();showGuide(guideTabs[next].dataset.schoolNicknameGuideTab,true,event.isTrusted);}});
+    });
+    guideRoot.querySelectorAll('[data-school-nickname-map-link]').forEach(function(button){button.addEventListener('click',function(event){var issueId=button.dataset.schoolNicknameMapLink;if(!map||!map.selectIssue(issueId))return;if(event.isTrusted&&typeof window.gtag==='function')window.gtag('event','school_nickname_guide_map_click',{guide_key:button.closest('[data-school-nickname-guide-panel]').dataset.schoolNicknameGuidePanel,issue_id:issueId,topic_id:data.theme_id});requestAnimationFrame(function(){var target=document.getElementById('planet-block');if(target)target.scrollIntoView({block:'start',behavior:reduce()?'auto':'smooth'});});});});
+    if(guideTabs.length)showGuide(guideTabs[0].dataset.schoolNicknameGuideTab,false,false);
+  }
   var mountain=document.getElementById('planet-block').closest('.planet-panel'),background=document.getElementById('bukatsu-background');
   if(mountain&&background){
     var status=document.createElement('aside');status.className='school-nickname-status';

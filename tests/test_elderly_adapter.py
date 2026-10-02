@@ -115,6 +115,11 @@ class ElderlyAdapterTests(unittest.TestCase):
         # このテストはその安全なno-opを見る。
         source = PAGE.read_text(encoding="utf-8")
         self.assertIn("<!-- PLANET_SECTION_START -->", source)
+        source = source.replace(
+            '<div id="progress"><span>探ったところ</span>',
+            '<div id="progress"><span>読んだところ</span>',
+            1,
+        )
         public = ROOT / "data/public/themes/elderly-license-revocation.json"
         data = json.loads(public.read_text(encoding="utf-8"))
         page = apply_public_counts(source, public)
@@ -125,6 +130,8 @@ class ElderlyAdapterTests(unittest.TestCase):
         # 「調査条件」（このマップの元データ）は山なみ形式でも生きているので、
         # そちらは引き続き貼り直されることを確かめる。
         self.assertIn(f'公開投稿{data["collected_count"]}件', page)
+        self.assertIn('<div id="progress"><span>探ったところ</span>', page)
+        self.assertNotIn('<div id="progress"><span>読んだところ</span>', page)
 
 
 if __name__ == "__main__":
