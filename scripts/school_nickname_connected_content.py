@@ -11,6 +11,177 @@ from bs4 import BeautifulSoup
 ROOT = Path(__file__).resolve().parents[1]
 START = "<!-- SCHOOL_NICKNAME_CONNECTED_CONTENT_START -->"
 END = "<!-- SCHOOL_NICKNAME_CONNECTED_CONTENT_END -->"
+SEARCH_START = "<!-- SCHOOL_NICKNAME_SEARCH_ENTRY_START -->"
+SEARCH_END = "<!-- SCHOOL_NICKNAME_SEARCH_ENTRY_END -->"
+FAQ_START = "<!-- SCHOOL_NICKNAME_FAQ_START -->"
+FAQ_END = "<!-- SCHOOL_NICKNAME_FAQ_END -->"
+FAQ_JSONLD_START = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_START -->"
+FAQ_JSONLD_END = "<!-- SCHOOL_NICKNAME_FAQ_JSONLD_END -->"
+
+
+FAQS = [
+    (
+        "学校のあだ名禁止は法律で決まっていますか？",
+        "今回確認した、いじめ防止対策推進法、文部科学省の基本方針、生徒指導提要には、あだ名禁止を全国一律に求める記述は見当たりません。学校ごとの方針と、国の法律・通知は分けて確認する必要があります。",
+    ),
+    (
+        "文部科学省は、あだ名禁止や全員のさん付けを求めていますか？",
+        "今回確認した文部科学省資料には、あだ名禁止や全員のさん付けを全国一律に求める記述は見当たりません。生徒指導提要は、校則の理由を説明し、児童生徒や保護者の意見を聞きながら見直すことが望ましいとしています。",
+    ),
+    (
+        "なぜ小学校であだ名禁止が行われるのですか？",
+        "嫌な呼び方やからかいを未然に防ぐこと、性別で敬称を分けないことなどが理由として挙げられます。ただし目的や適用範囲は学校によって異なるため、その学校の説明を確認する必要があります。",
+    ),
+    (
+        "嫌なあだ名は、いじめに当たりますか？",
+        "あだ名という形式だけでは決まりません。法律は、一定の関係にある相手から影響を受け、本人が心身の苦痛を感じている行為をいじめと定義しています。冗談やふざけ合いに見えても、受け手の被害性を確認する必要があります。",
+    ),
+    (
+        "あだ名禁止と、全員をさん付けで呼ぶことは同じですか？",
+        "同じではありません。悪意ある呼び方を止める、あだ名を一律に使わない、呼び捨てを避ける、敬称をさんに統一する、という選択はそれぞれ範囲と目的が違います。",
+    ),
+    (
+        "あだ名禁止のメリットとして挙げられることは何ですか？",
+        "SNSでは、嫌な呼び方を早い段階で止めやすいことや、呼ばれる側が断りにくい状況を減らせることが期待として語られています。これは制度の効果を証明したものではなく、収集した投稿に見られた意見です。",
+    ),
+    (
+        "あだ名禁止のデメリット・懸念は何ですか？",
+        "SNSでは、親しい愛称まで失われること、表面的な禁止だけでは悪意や関係性が変わらないこと、本人の希望が置き去りになることが懸念として語られています。これも収集した投稿に見られた意見です。",
+    ),
+    (
+        "本人が希望するあだ名も禁止すべきですか？",
+        "国の資料だけから一律の答えは出せません。本人の希望を認めるか、どの場面までルールを適用するかは学校ごとの選択です。本人が嫌だと言えることと、希望する呼び方を伝えられることの両方を確認する必要があります。",
+    ),
+    (
+        "学校独自の呼び方のルールは見直せますか？",
+        "生徒指導提要は、校則を絶えず見直し、児童生徒や保護者の意見を聞く機会を設けることが望ましいとしています。まず学校の方針、対象となる場面、理由、見直しの手続きを確認します。",
+    ),
+    (
+        "このページのSNS比率は、世論調査ですか？",
+        "いいえ。特定の検索語、期間、検索サービスで収集できた公開投稿のサンプルです。全国の賛否の割合や、あだ名禁止を導入している学校の割合を表すものではありません。",
+    ),
+]
+
+
+def render_search_entry(data: dict, background: dict) -> str:
+    checked_on = background["checked_on"]
+    opinions = int(data["totals"]["opinions"])
+    issue_labels = {issue["id"]: issue["label"] for issue in data["issues"]}
+    guides = [
+        {
+            "key": "national-rule",
+            "tab": "全国の決まり",
+            "hint": "国の資料と学校の方針",
+            "kicker": "国の資料",
+            "title": "全国一律の禁止ではない",
+            "copy": "確認した法令・文科省資料には、あだ名禁止や全員のさん付けを全国一律に求める記述は見当たりません。",
+            "expectation": "共通ルールで安心をつくりたい",
+            "concern": "学校ごとの事情や説明が置き去りになる",
+            "issue_id": "school-nickname-ban-school-practice",
+        },
+        {
+            "key": "harm",
+            "tab": "嫌な呼び名",
+            "hint": "いじめと心理的安全",
+            "kicker": "いじめの判断",
+            "title": "嫌な呼び名は、いじめになりうる",
+            "copy": "冗談かどうかだけでなく、呼ばれた本人が心身の苦痛を感じているかを個別に確認します。",
+            "expectation": "嫌な呼び方を早く止め、傷つく子を減らしたい",
+            "concern": "禁止だけでは関係性や別の攻撃は変わらない",
+            "issue_id": "school-nickname-ban-psychological-safety",
+        },
+        {
+            "key": "scope",
+            "tab": "ルールの範囲",
+            "hint": "あだ名・呼び捨て・さん付け",
+            "kicker": "学校ごとの選択",
+            "title": "3つのルールは別",
+            "copy": "悪意ある呼び方を止めること、あだ名を一律禁止すること、全員をさん付けにすることは別の選択です。",
+            "expectation": "明確な線引きで呼び方のトラブルを防ぎたい",
+            "concern": "親しい愛称や本人の希望まで一律に止めたくない",
+            "issue_id": "school-nickname-ban-uniform-rule",
+        },
+    ]
+    unknown = [guide["issue_id"] for guide in guides if guide["issue_id"] not in issue_labels]
+    if unknown:
+        raise ValueError("検索入口の接続先論点がありません: " + ", ".join(unknown))
+    tabs = []
+    panels = []
+    for number, guide in enumerate(guides, 1):
+        key = guide["key"]
+        selected = number == 1
+        tabs.append(
+            f'<button class="school-nickname-guide-tab" type="button" role="tab" '
+            f'id="school-nickname-guide-tab-{e(key)}" aria-controls="school-nickname-guide-panel-{e(key)}" '
+            f'aria-selected="{str(selected).lower()}" tabindex="{0 if selected else -1}" '
+            f'data-school-nickname-guide-tab="{e(key)}"><span aria-hidden="true">{number:02d}</span>'
+            f'<b>{e(guide["tab"])}</b><small>{e(guide["hint"])}</small></button>'
+        )
+        panels.append(
+            f'<section class="school-nickname-guide-panel" role="tabpanel" '
+            f'id="school-nickname-guide-panel-{e(key)}" aria-labelledby="school-nickname-guide-tab-{e(key)}" '
+            f'data-school-nickname-guide-panel="{e(key)}" data-school-nickname-issue-id="{e(guide["issue_id"])}">'
+            '<div class="school-nickname-guide-answer">'
+            f'<p class="school-nickname-guide-panel-kicker">{e(guide["kicker"])}</p>'
+            f'<h3>{e(guide["title"])}</h3><p>{e(guide["copy"])}</p></div>'
+            '<div class="school-nickname-guide-voices" aria-label="SNSで見られた期待と懸念">'
+            '<p class="school-nickname-opinion-label">ここからはSNS上の意見</p><div>'
+            f'<article><span>期待</span><b>{e(guide["expectation"])}</b></article>'
+            f'<article><span>懸念</span><b>{e(guide["concern"])}</b></article></div></div>'
+            '<aside class="school-nickname-guide-next"><small>さらに比べる</small>'
+            f'<strong>「{e(issue_labels[guide["issue_id"]])}」の山へ</strong>'
+            '<p>この論点に寄せられた理由と代表投稿を確認できます。</p>'
+            f'<button type="button" data-school-nickname-map-link="{e(guide["issue_id"])}">山並みマップで見る ↓</button>'
+            '</aside></section>'
+        )
+    return f'''{SEARCH_START}
+<section class="panel school-nickname-search-entry" id="school-nickname-guide" aria-labelledby="school-nickname-guide-title">
+  <div class="school-nickname-guide-head">
+    <p class="school-nickname-guide-kicker">最初に知りたいこと</p>
+    <h2 id="school-nickname-guide-title">学校のあだ名禁止はなぜ？ 先に3点</h2>
+    <p>国の資料で確認できること、学校ごとに決めること、SNSで分かれている意見を混ぜずに読みます。</p>
+  </div>
+  <div class="school-nickname-guide-tabs" role="tablist" aria-label="最初に知りたい論点を選ぶ">
+    {''.join(tabs)}
+  </div>
+  <div class="school-nickname-guide-panels">
+    {''.join(panels)}
+  </div>
+  <p class="school-nickname-guide-note">論点の選択は投票ではなく、表示の切り替えです。タブを選ぶだけでは「探ったところ」には加算されません。</p>
+  <nav class="school-nickname-guide-links" aria-label="このページの読み方">
+    <a href="#planet-block">SNS {opinions:,}意見を6論点で比べる</a>
+    <a href="#school-nickname-faq">よくある質問を先に読む</a>
+  </nav>
+  <p class="school-nickname-guide-date">国の資料の確認日 {e(checked_on)}。個別校のルールの有無や導入校の割合を示すものではありません。</p>
+</section>
+{SEARCH_END}'''
+
+
+def render_faq() -> str:
+    rows = []
+    for question, answer in FAQS:
+        rows.append(f'<details><summary>{e(question)}</summary><p>{e(answer)}</p></details>')
+    return f'''{FAQ_START}
+<section class="panel school-nickname-faq" id="school-nickname-faq" aria-labelledby="school-nickname-faq-title">
+  <div class="panel-title"><h2 id="school-nickname-faq-title">よくある質問</h2><span>法律・文科省・さん付け・いじめ</span></div>
+  <p class="school-nickname-faq-lead">全国の決まりと学校ごとの運用、確認できた事実とSNS上の意見を分けて答えます。</p>
+  <div class="school-nickname-faq-list">{"".join(rows)}</div>
+  <aside class="school-nickname-safety-note"><b>今、嫌な呼び方でつらい場合</b><p>ルールへの賛否を決めるより先に、嫌だと感じていることを、保護者・先生・養護教諭など信頼できる大人へ伝えてください。このページは個別の相談窓口の代わりではありません。</p></aside>
+</section>
+{FAQ_END}'''
+
+
+def render_faq_jsonld() -> str:
+    payload = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": question, "acceptedAnswer": {"@type": "Answer", "text": answer}}
+            for question, answer in FAQS
+        ],
+    }
+    encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    return f'{FAQ_JSONLD_START}\n<script type="application/ld+json">{encoded}</script>\n{FAQ_JSONLD_END}'
 
 
 def e(value) -> str:
@@ -75,10 +246,7 @@ def reason_post_cards(rows: list[dict]) -> str:
 def reasons(issue: dict, grouped: dict[tuple[str, str], list[dict]]) -> str:
     sub = issue["sub"]
     if sub["status"] != "reread":
-        return (
-            f'<p class="school-nickname-empty">{e(sub.get("note", "理由の再読結果は未登録です"))}。'
-            "AIが自動でつけた区分はここへ表示しません。</p>"
-        )
+        return f'<p class="school-nickname-empty">{e(sub.get("note", "理由の再読結果は未登録です"))}。</p>'
     rows = []
     for item in sub["items"]:
         cards = reason_post_cards(grouped.get((issue["label"], item["id"]), []))
@@ -167,9 +335,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         out.append(
             '<div class="school-nickname-columns"><section class="school-nickname-opinions" aria-label="意見の理由と投稿">' +
             '<h3>どんな理由で語られている？</h3>' + reasons(issue, grouped_reason_posts) +
-            f'<p class="school-nickname-note">{e(index["reason_post_note"])}</p>'
             '<div class="school-nickname-posts"><h3>実際の投稿を読む</h3>'
-            '<p class="school-nickname-note">この論点を具体的に読むため、編集部が投稿内容を確認して2件を抜き出しています。分布の代表値ではありません。</p>'
             + post_examples(issue_cards_html, iid) + '</div></section>'
         )
         out.append('<aside class="school-nickname-evidence" aria-label="資料">')

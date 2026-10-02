@@ -4,6 +4,7 @@ import argparse
 import html as html_lib  # "html"は__main__ブロックがページ内容の変数名として使っているため別名にする
 import json
 import re
+import sys
 from pathlib import Path
 
 try:
@@ -73,6 +74,304 @@ ENTRY_SECTION = """<!-- BUKATSU_ENTRY_START -->
 <!-- BUKATSU_ENTRY_END -->"""
 
 
+# === 検索から来た人向けの回答入口（課題98） ===
+# 制度の結論をSNS比率より先に示す。既存の年表・制度確認・山なみを別コピーに
+# せず、詳しい説明は既存アンカーへつなぐ。休日と平日の進み方が違うことを
+# 2本のレールで見せ、全国一律の「2026年度から廃止」という誤読を防ぐ。
+SEARCH_ENTRY_START = "<!-- BUKATSU_SEARCH_ENTRY_START -->"
+SEARCH_ENTRY_END = "<!-- BUKATSU_SEARCH_ENTRY_END -->"
+SEARCH_CSS_START = "/* BUKATSU_SEARCH_ENTRY_CSS_START */"
+SEARCH_CSS_END = "/* BUKATSU_SEARCH_ENTRY_CSS_END */"
+SEARCH_FAQ_START = "<!-- BUKATSU_SEARCH_FAQ_JSONLD_START -->"
+SEARCH_FAQ_END = "<!-- BUKATSU_SEARCH_FAQ_JSONLD_END -->"
+
+PROGRESS_LABEL_PATTERN = re.compile(
+    r'(<div id="progress"><span>)(?:読んだところ|探ったところ)(</span>)'
+)
+
+SEARCH_ENTRY_CSS = f"""<style>
+{SEARCH_CSS_START}
+.bukatsu-search-entry{{width:min(1180px,calc(100% - 32px));margin:14px auto 22px;color:var(--navy)}}
+.bukatsu-search-entry__frame{{overflow:hidden;border:1px solid #cbdbe8;border-top:5px solid var(--accent);border-radius:18px;background:#fff;box-shadow:var(--topic-shadow-sm)}}
+.bukatsu-search-entry__top{{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:34px;padding:30px 34px 28px;background:linear-gradient(135deg,#fff 0%,#f2fbfd 100%)}}
+.bukatsu-search-entry__kicker{{margin:0 0 7px;color:#087d96;font-size:12px;font-weight:900;letter-spacing:.08em}}
+.bukatsu-search-entry h2{{margin:0;font-family:"Noto Serif JP",serif;font-size:clamp(23px,3vw,34px);line-height:1.45;letter-spacing:-.025em;color:#123047}}
+.bukatsu-search-entry__answer{{margin:14px 0 0;font-size:15.5px;line-height:1.95;color:#334e61}}
+.bukatsu-search-entry__answer strong{{color:#0b6680}}
+.bukatsu-search-entry__status{{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0 0;padding:0;list-style:none}}
+.bukatsu-search-entry__status li{{border:1px solid #cbdbe8;border-radius:999px;padding:5px 10px;background:#fff;font-size:11.5px;font-weight:800;color:#334e61}}
+.bukatsu-search-entry__status .is-fixed{{border-color:#98d5df;background:#e9fafc;color:#076579}}
+.bukatsu-search-entry__status .is-open{{border-color:#e5c982;background:#fff9e8;color:#775616}}
+.bukatsu-policy-rail{{align-self:center;border-left:1px solid #b8d7df;padding-left:26px}}
+.bukatsu-policy-rail__title{{margin:0 0 14px;font-size:12px;font-weight:900;letter-spacing:.06em;color:#527080}}
+.bukatsu-policy-row{{display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:center;margin:12px 0}}
+.bukatsu-policy-row__label{{font-size:13px;font-weight:900;color:#123047}}
+.bukatsu-policy-row__track{{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:62px;border:1px solid #cbdbe8;border-radius:10px;background:#fff}}
+.bukatsu-policy-row__track::before{{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed #9dbbc5}}
+.bukatsu-policy-row__phase{{position:relative;z-index:1;padding:8px 10px;font-size:11px;line-height:1.55;color:#526b78}}
+.bukatsu-policy-row__phase b{{display:block;color:#123047;font-size:11.5px}}
+.bukatsu-policy-row.is-holiday .bukatsu-policy-row__track{{background:linear-gradient(90deg,#e7f8fa,#f3fcfd)}}
+.bukatsu-policy-row.is-weekday .bukatsu-policy-row__track{{background:linear-gradient(90deg,#fff7df,#fffdf5)}}
+.bukatsu-policy-rail__note{{margin:10px 0 0;font-size:11px;line-height:1.65;color:#637d89}}
+.bukatsu-role-guide{{border-top:1px solid #d9e6ec;background:#f3f8f8}}
+.bukatsu-role-guide__head{{display:grid;grid-template-columns:250px 1fr;align-items:stretch}}
+.bukatsu-role-guide__prompt{{padding:21px 24px;background:#123047;color:#fff}}
+.bukatsu-role-guide__prompt small{{display:block;margin-bottom:5px;color:#9fe2e6;font-size:10.5px;font-weight:900;letter-spacing:.1em}}
+.bukatsu-role-guide__prompt h3{{margin:0;font-family:"Noto Serif JP",serif;font-size:19px;line-height:1.5}}
+.bukatsu-role-tabs{{display:grid;grid-template-columns:repeat(4,1fr)}}
+.bukatsu-role-tab{{position:relative;min-height:86px;border:0;border-left:1px solid rgba(255,255,255,.32);background-color:#123047;background-image:linear-gradient(180deg,rgba(8,29,45,.34),rgba(8,29,45,.76)),var(--role-image);background-position:center;background-size:cover;color:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:900;text-shadow:0 1px 5px rgba(0,0,0,.8);transition:filter .18s ease}}
+.bukatsu-role-tab[data-role=parent]{{--role-image:url("images/topics/bukatsu-chiiki/bukatsu-role-parent-v1.webp")}}
+.bukatsu-role-tab[data-role=student]{{--role-image:url("images/topics/bukatsu-chiiki/bukatsu-role-student-v1.webp")}}
+.bukatsu-role-tab[data-role=teacher]{{--role-image:url("images/topics/bukatsu-chiiki/bukatsu-role-teacher-v1.webp")}}
+.bukatsu-role-tab[data-role=coach]{{--role-image:url("images/topics/bukatsu-chiiki/bukatsu-role-community-v1.webp")}}
+.bukatsu-role-tab .mark{{display:block;margin-bottom:3px;font-family:"Noto Serif JP",serif;font-size:21px;color:inherit}}
+.bukatsu-role-tab:hover{{filter:brightness(1.12)}}
+.bukatsu-role-tab:focus-visible{{z-index:2;outline:3px solid #d9a520;outline-offset:-3px}}
+.bukatsu-role-tab[aria-selected=true]{{background-image:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.76)),var(--role-image);color:#123047;text-shadow:0 1px 3px rgba(255,255,255,.95)}}
+.bukatsu-role-tab[aria-selected=true]::after{{content:"";position:absolute;left:18px;right:18px;bottom:0;height:4px;background:#d45c45}}
+.bukatsu-role-panel{{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:26px;padding:27px 30px 29px;background:#fff}}
+.bukatsu-role-panel__kicker{{margin:0;color:#087d96;font-size:10.5px;font-weight:900;letter-spacing:.09em}}
+.bukatsu-role-panel h3{{margin:5px 0 17px;font-family:"Noto Serif JP",serif;font-size:clamp(20px,2.4vw,28px);line-height:1.5;color:#123047}}
+.bukatsu-role-facts{{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #d9e6ec}}
+.bukatsu-role-fact{{min-width:0;padding:15px 16px;border-right:1px solid #d9e6ec;background:#fff}}
+.bukatsu-role-fact:last-child{{border-right:0}}
+.bukatsu-role-fact small{{display:flex;align-items:center;gap:6px;color:#527080;font-size:10px;font-weight:900}}
+.bukatsu-role-fact small::before{{content:"";width:8px;height:8px;background:#16869a}}
+.bukatsu-role-fact.is-local small::before{{background:#d9a520}}
+.bukatsu-role-fact.is-open small::before{{background:#d45c45}}
+.bukatsu-role-fact strong{{display:block;margin-top:8px;font-size:13.5px;line-height:1.55;color:#203f52}}
+.bukatsu-role-fact p{{margin:5px 0 0;color:#637d89;font-size:11.5px;line-height:1.7}}
+.bukatsu-role-next{{align-self:stretch;padding:18px;border-left:4px solid #16869a;background:#e9f7f7}}
+.bukatsu-role-next small{{display:block;color:#087d96;font-size:10px;font-weight:900}}
+.bukatsu-role-next strong{{display:block;margin-top:5px;color:#123047;font-size:14px;line-height:1.6}}
+.bukatsu-role-next p{{margin:7px 0 13px;color:#527080;font-size:11.5px;line-height:1.7}}
+.bukatsu-role-next a{{display:inline-flex;align-items:center;min-height:42px;padding:7px 13px;background:#123047;color:#fff;text-decoration:none;font-size:11.5px;font-weight:900}}
+.bukatsu-role-guide__note{{margin:0;padding:0 30px 20px;background:#fff;color:#637d89;font-size:10.5px;line-height:1.7}}
+.bukatsu-search-entry__links{{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #d9e6ec;border-bottom:1px solid #d9e6ec;background:#fbfdfe}}
+.bukatsu-search-entry__links a{{min-width:0;padding:14px 15px;border-right:1px solid #d9e6ec;color:#0b6680;text-align:center;text-decoration:none;font-size:12.5px;font-weight:900}}
+.bukatsu-search-entry__links a:last-child{{border-right:0}}
+.bukatsu-search-entry__links a:hover{{background:#e9fafc}}
+.bukatsu-search-entry__links a:focus-visible{{outline:3px solid #d9a520;outline-offset:-3px}}
+.bukatsu-search-faq{{padding:24px 34px 26px}}
+.bukatsu-search-faq h3{{margin:0 0 13px;font-size:16px;color:#123047}}
+.bukatsu-search-faq__grid{{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}}
+.bukatsu-search-faq details{{border-top:1px solid #d9e6ec;padding:11px 0}}
+.bukatsu-search-faq summary{{cursor:pointer;font-size:13.5px;font-weight:800;color:#203f52;line-height:1.6}}
+.bukatsu-search-faq details p{{margin:8px 0 0;font-size:13px;line-height:1.8;color:#526b78}}
+.bukatsu-search-faq__source{{margin:15px 0 0;font-size:11.5px;line-height:1.7;color:#637d89}}
+.bukatsu-search-faq__source a{{color:#426778}}
+@media(max-width:820px){{
+  .bukatsu-search-entry__top{{grid-template-columns:1fr;gap:24px;padding:26px 24px 24px}}
+  .bukatsu-policy-rail{{border-left:0;border-top:1px solid #b8d7df;padding:20px 0 0}}
+  .bukatsu-role-guide__head{{grid-template-columns:1fr}}
+  .bukatsu-role-guide__prompt{{padding:17px 22px}}
+  .bukatsu-role-tabs{{display:flex;overflow-x:auto}}
+  .bukatsu-role-tab{{flex:0 0 142px;border-top:1px solid #cbdbe8}}
+  .bukatsu-role-panel{{grid-template-columns:1fr;padding:24px}}
+  .bukatsu-search-entry__links{{grid-template-columns:1fr 1fr}}
+  .bukatsu-search-entry__links a:nth-child(2){{border-right:0}}
+  .bukatsu-search-entry__links a:nth-child(-n+2){{border-bottom:1px solid #d9e6ec}}
+  .bukatsu-search-faq{{padding:22px 24px 24px}}
+  .bukatsu-search-faq__grid{{grid-template-columns:1fr}}
+}}
+@media(max-width:480px){{
+  .bukatsu-search-entry{{width:calc(100% - 24px);margin-top:8px}}
+  .bukatsu-search-entry__top{{padding:22px 18px}}
+  .bukatsu-policy-row{{grid-template-columns:46px 1fr;gap:8px}}
+  .bukatsu-policy-row__track{{min-height:72px}}
+  .bukatsu-policy-row__phase{{padding:7px 8px;font-size:10.5px}}
+  .bukatsu-role-tabs{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}}
+  .bukatsu-role-tab{{min-height:76px;min-width:0;border-top:1px solid rgba(255,255,255,.32)}}
+  .bukatsu-role-panel{{padding:22px 18px}}
+  .bukatsu-role-facts{{grid-template-columns:1fr}}
+  .bukatsu-role-fact{{border-right:0;border-bottom:1px solid #d9e6ec}}
+  .bukatsu-role-fact:last-child{{border-bottom:0}}
+  .bukatsu-role-guide__note{{padding:0 18px 18px}}
+  .bukatsu-search-faq{{padding:20px 18px 22px}}
+}}
+@media(prefers-reduced-motion:reduce){{.bukatsu-search-entry *{{scroll-behavior:auto!important;transition:none!important}}}}
+{SEARCH_CSS_END}
+</style>"""
+
+SEARCH_ENTRY_SECTION = f"""{SEARCH_ENTRY_START}
+<section class="bukatsu-search-entry" aria-labelledby="bukatsu-search-entry-title">
+  <div class="bukatsu-search-entry__frame">
+    <div class="bukatsu-search-entry__top">
+      <div>
+        <p class="bukatsu-search-entry__kicker">まず、制度の答え</p>
+        <h2 id="bukatsu-search-entry-title">部活動の地域展開（地域移行）は、いつから？</h2>
+        <p class="bukatsu-search-entry__answer"><strong>2026年度から全国一律で学校の部活動がなくなるわけではありません。</strong> 公立中学校等を主な対象に、2026〜2031年度の6年間で改革を進めます。休日は原則すべての学校部活動で地域展開の実現を目指しますが、実施時期、会費、送迎方法は自治体ごとに異なります。平日は前期の検証後に国が方針を改めて示す予定です。</p>
+        <ul class="bukatsu-search-entry__status" aria-label="決まっていることと未決定事項">
+          <li class="is-fixed">確定：主な対象は公立中学校等</li>
+          <li class="is-fixed">確定：休日を先に進める</li>
+          <li class="is-open">自治体ごと：開始日・会費・送迎</li>
+          <li class="is-open">未決定：平日の全国方針</li>
+        </ul>
+      </div>
+      <div class="bukatsu-policy-rail" aria-label="2026年度から2031年度までの休日と平日の進み方">
+        <p class="bukatsu-policy-rail__title">改革実行期間 2026 → 2031年度</p>
+        <div class="bukatsu-policy-row is-holiday">
+          <span class="bukatsu-policy-row__label">休日</span>
+          <div class="bukatsu-policy-row__track"><span class="bukatsu-policy-row__phase"><b>前期 2026〜28</b>各自治体が確実に着手</span><span class="bukatsu-policy-row__phase"><b>後期 2029〜31</b>原則すべてで実現を目指す</span></div>
+        </div>
+        <div class="bukatsu-policy-row is-weekday">
+          <span class="bukatsu-policy-row__label">平日</span>
+          <div class="bukatsu-policy-row__track"><span class="bukatsu-policy-row__phase"><b>前期 2026〜28</b>国が方法と課題を検証</span><span class="bukatsu-policy-row__phase"><b>中間評価後</b>改めて方針を決める</span></div>
+        </div>
+        <p class="bukatsu-policy-rail__note">「地域移行」は旧来の呼び方です。現在は、学校と地域が連携して活動機会を広げる意味を込めて「地域展開」が使われています。</p>
+      </div>
+    </div>
+    <section class="bukatsu-role-guide" aria-labelledby="bukatsu-role-title">
+      <header class="bukatsu-role-guide__head">
+        <div class="bukatsu-role-guide__prompt"><small>次に、自分に必要な答えへ</small><h3 id="bukatsu-role-title">あなたに近い視点は？</h3></div>
+        <div class="bukatsu-role-tabs" role="tablist" aria-label="立場を選ぶ">
+          <button class="bukatsu-role-tab" type="button" role="tab" aria-selected="true" tabindex="0" data-role="parent"><span class="mark" aria-hidden="true">家</span>保護者</button>
+          <button class="bukatsu-role-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-role="student"><span class="mark" aria-hidden="true">学</span>生徒</button>
+          <button class="bukatsu-role-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-role="teacher"><span class="mark" aria-hidden="true">校</span>教員</button>
+          <button class="bukatsu-role-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-role="coach"><span class="mark" aria-hidden="true">地</span>地域指導者</button>
+        </div>
+      </header>
+      <div class="bukatsu-role-panel" role="tabpanel" aria-live="polite">
+        <div>
+          <p class="bukatsu-role-panel__kicker" data-role-kicker>保護者向けの答え</p>
+          <h3 data-role-title>開始日・会費・送迎は、自治体の案内で確定します。</h3>
+          <div class="bukatsu-role-facts" data-role-facts>
+            <article class="bukatsu-role-fact"><small>全国で確定</small><strong>主な対象は公立中学校等</strong><p>休日から地域展開を進めます。</p></article>
+            <article class="bukatsu-role-fact is-local"><small>自治体ごと</small><strong>開始日・会費・送迎</strong><p>全国一律の金額や方法はありません。</p></article>
+            <article class="bukatsu-role-fact is-open"><small>まだ未決定</small><strong>平日の全国方針</strong><p>前期の検証後に国が改めて示します。</p></article>
+          </div>
+        </div>
+        <aside class="bukatsu-role-next">
+          <small>次に確認すること</small>
+          <strong data-role-next-title>まず自治体・学校のお知らせを確認</strong>
+          <p data-role-next-text>年度、曜日、費用、場所、送迎の5点を探してください。</p>
+          <a href="#bukatsu-check" data-role-next-link>確認項目を見る ↓</a>
+        </aside>
+      </div>
+      <p class="bukatsu-role-guide__note">視点の選択は投票ではありません。また、SNS投稿を保護者・生徒などの属性で分類する操作でもありません。一次資料から、自分に関係する確認事項を見つけやすくするための表示切り替えです。</p>
+    </section>
+    <nav class="bukatsu-search-entry__links" aria-label="知りたい内容へ移動">
+      <a href="#bukatsu-background">いつから・経緯</a>
+      <a href="#bukatsu-check">費用・送迎</a>
+      <a href="#stance-glance">メリット・問題点</a>
+      <a href="#planet-block">SNS上の意見</a>
+    </nav>
+    <div class="bukatsu-search-faq">
+      <h3>よくある疑問</h3>
+      <div class="bukatsu-search-faq__grid">
+        <details><summary>2026年度から全国の中学校で部活が廃止されますか？</summary><p>いいえ。国は公立中学校等を主な対象に、6年間で休日の地域展開を進める方針です。開始日や進め方は自治体ごとに違います。</p></details>
+        <details><summary>「地域移行」と「地域展開」は同じですか？</summary><p>同じ改革を指す文脈で使われます。国は、学校から地域へ単純に移す印象を避け、地域全体で活動機会を広げる考えを示すため「地域展開」を使っています。</p></details>
+        <details><summary>高校や私立中学校も同じ時期に変わりますか？</summary><p>全国的な地域展開の主な対象は公立中学校等です。高校や私立中学校が一律に同じ日程で変わる制度ではないため、学校や設置者の案内を確認する必要があります。</p></details>
+        <details><summary>地域クラブの月謝はいくらですか？</summary><p>全国一律の金額はありません。公的負担と参加者負担の組み合わせ、保険料、指導者謝金などが自治体・クラブごとに決まります。</p></details>
+        <details><summary>送迎は保護者が必ず担当しますか？</summary><p>全国共通の決まりはありません。活動場所と移動手段は地域の制度設計によるため、自治体や運営団体の案内を確認してください。</p></details>
+        <details><summary>教員は地域クラブで指導できますか？</summary><p>希望する教員が、学校や教育委員会の許可を得て兼職兼業として関わる仕組みがあります。勤務条件や報酬は自治体等で異なります。</p></details>
+      </div>
+      <p class="bukatsu-search-faq__source">制度の出典：<a href="https://www.mext.go.jp/sports/b_menu/houdou/jsa_00220.html" target="_blank" rel="noopener noreferrer">文部科学省・スポーツ庁 新ガイドライン（令和7年12月）</a>／<a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf" target="_blank" rel="noopener noreferrer">新ガイドラインFAQ（令和8年3月31日時点・PDF）</a></p>
+    </div>
+  </div>
+</section>
+<script>
+(()=>{{
+  const root=document.querySelector('.bukatsu-search-entry');
+  if(!root)return;
+  const guides={{
+    parent:{{kicker:'保護者向けの答え',title:'開始日・会費・送迎は、自治体の案内で確定します。',facts:[['全国で確定','主な対象は公立中学校等','休日から地域展開を進めます。','fixed'],['自治体ごと','開始日・会費・送迎','全国一律の金額や方法はありません。','local'],['まだ未決定','平日の全国方針','前期の検証後に国が改めて示します。','open']],next:['まず自治体・学校のお知らせを確認','年度、曜日、費用、場所、送迎の5点を探してください。','#bukatsu-check']}},
+    student:{{kicker:'生徒向けの答え',title:'今の部を続けられるかは、学校と地域の計画で変わります。',facts:[['全国で確定','地域でも活動機会を確保','学校以外の活動先を整える改革です。','fixed'],['自治体ごと','種目・場所・参加条件','同じ種目が近くにあるとは限りません。','local'],['競技・大会ごと','大会の参加条件','地域クラブが参加できる大会もあります。','open']],next:['学校の説明で3点を質問','種目が続くか、どこで活動するか、大会に出られるかを確認してください。','#bukatsu-check']}},
+    teacher:{{kicker:'教員向けの答え',title:'休日を先に進めますが、教員が一律に関われなくなる制度ではありません。',facts:[['全国で確定','休日を先に地域展開','2026〜31年度の改革実行期間で進めます。','fixed'],['自治体ごと','兼職兼業・報酬・勤務条件','希望して指導する場合の条件は地域で異なります。','local'],['まだ未決定','平日の全国方針','前期の実証・検証後に更新予定です。','open']],next:['教育委員会の兼職兼業ルールを確認','許可、勤務時間、報酬、事故時の責任を分けて確認してください。','#bukatsu-check']}},
+    coach:{{kicker:'地域指導者向けの答え',title:'募集・資格・報酬・保険は、運営主体ごとの条件を確認します。',facts:[['全国で確定','地域クラブの環境整備を推進','指導者確保や研修も支援対象です。','fixed'],['自治体ごと','募集・資格・報酬','全国共通の募集条件や時給ではありません。','local'],['運営主体ごと','安全管理・保険・責任','事故対応と連絡先を活動前に確認します。','open']],next:['自治体の指導者募集・認定情報へ','謝金だけでなく、研修、保険、活動場所、責任範囲を確認してください。','#bukatsu-check']}}
+  }};
+  const tabs=[...root.querySelectorAll('.bukatsu-role-tab')];
+  const render=(key,focus=false,measure=true)=>{{
+    const guide=guides[key];
+    root.querySelector('[data-role-kicker]').textContent=guide.kicker;
+    root.querySelector('[data-role-title]').textContent=guide.title;
+    root.querySelector('[data-role-facts]').innerHTML=guide.facts.map(f=>`<article class="bukatsu-role-fact is-${{f[3]}}"><small>${{f[0]}}</small><strong>${{f[1]}}</strong><p>${{f[2]}}</p></article>`).join('');
+    root.querySelector('[data-role-next-title]').textContent=guide.next[0];
+    root.querySelector('[data-role-next-text]').textContent=guide.next[1];
+    root.querySelector('[data-role-next-link]').href=guide.next[2];
+    tabs.forEach(tab=>{{const selected=tab.dataset.role===key;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;}});
+    if(focus)tabs.find(tab=>tab.dataset.role===key).focus();
+    if(measure&&typeof window.gtag==='function')window.gtag('event','bukatsu_role_view',{{role:key}});
+  }};
+  tabs.forEach((tab,index)=>{{
+    tab.addEventListener('click',()=>render(tab.dataset.role));
+    tab.addEventListener('keydown',event=>{{
+      let next=index;
+      if(event.key==='ArrowRight')next=(index+1)%tabs.length;
+      else if(event.key==='ArrowLeft')next=(index-1+tabs.length)%tabs.length;
+      else if(event.key==='Home')next=0;
+      else if(event.key==='End')next=tabs.length-1;
+      else return;
+      event.preventDefault();render(tabs[next].dataset.role,true);
+    }});
+  }});
+  render('parent',false,false);
+}})();
+</script>
+{SEARCH_ENTRY_END}"""
+
+SEARCH_FAQ_JSONLD = f"""{SEARCH_FAQ_START}
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{"@type":"Question","name":"2026年度から全国の中学校で部活が廃止されますか？","acceptedAnswer":{{"@type":"Answer","text":"いいえ。国は公立中学校等を主な対象に、2026年度から2031年度までの6年間で休日の地域展開を進める方針です。開始日や進め方は自治体ごとに異なります。"}}}},
+    {{"@type":"Question","name":"「地域移行」と「地域展開」は同じですか？","acceptedAnswer":{{"@type":"Answer","text":"同じ改革を指す文脈で使われます。国は、学校から地域へ単純に移す印象を避け、地域全体で活動機会を広げる考えを示すため、現在は地域展開という名称を使っています。"}}}},
+    {{"@type":"Question","name":"高校や私立中学校も同じ時期に変わりますか？","acceptedAnswer":{{"@type":"Answer","text":"全国的な地域展開の主な対象は公立中学校等です。高校や私立中学校が一律に同じ日程で変わる制度ではないため、学校や設置者の案内を確認する必要があります。"}}}},
+    {{"@type":"Question","name":"地域クラブの月謝はいくらですか？","acceptedAnswer":{{"@type":"Answer","text":"全国一律の金額はありません。公的負担と参加者負担の組み合わせ、保険料、指導者謝金などが自治体やクラブごとに決まります。"}}}},
+    {{"@type":"Question","name":"送迎は保護者が必ず担当しますか？","acceptedAnswer":{{"@type":"Answer","text":"全国共通の決まりはありません。活動場所と移動手段は地域の制度設計によるため、自治体や運営団体の案内を確認してください。"}}}},
+    {{"@type":"Question","name":"教員は地域クラブで指導できますか？","acceptedAnswer":{{"@type":"Answer","text":"希望する教員が、学校や教育委員会の許可を得て兼職兼業として関わる仕組みがあります。勤務条件や報酬は自治体等で異なります。"}}}}
+  ]
+}}
+</script>
+{SEARCH_FAQ_END}"""
+
+
+def apply_bukatsu_search_entry(source: str) -> str:
+    """検索回答・FAQを1組だけ、hero直後のmain先頭へ配置する。"""
+    source = re.sub(
+        re.escape(SEARCH_ENTRY_START) + r".*?" + re.escape(SEARCH_ENTRY_END),
+        "",
+        source,
+        flags=re.DOTALL,
+    )
+    source = re.sub(
+        r"<style>\s*" + re.escape(SEARCH_CSS_START) + r".*?" + re.escape(SEARCH_CSS_END) + r"\s*</style>",
+        "",
+        source,
+        flags=re.DOTALL,
+    )
+    source = re.sub(
+        re.escape(SEARCH_FAQ_START) + r".*?" + re.escape(SEARCH_FAQ_END),
+        "",
+        source,
+        flags=re.DOTALL,
+    )
+    source = re.sub(r"\n{2,}</head>", "\n</head>", source)
+    if "</head>" not in source:
+        raise ValueError("検索入口: head終了タグが見つかりません")
+    source = source.replace("</head>", SEARCH_ENTRY_CSS + "\n" + SEARCH_FAQ_JSONLD + "\n</head>", 1)
+    main = source.find("<main>")
+    if main < 0:
+        raise ValueError("検索入口: main要素が見つかりません")
+    insert_at = main + len("<main>")
+    source = source[:insert_at] + "\n\n" + SEARCH_ENTRY_SECTION + source[insert_at:]
+    if source.count(SEARCH_ENTRY_START) != 1 or source.count(SEARCH_FAQ_START) != 1:
+        raise ValueError("検索入口またはFAQ構造化データが1組ではありません")
+    return re.sub(r"\n{3,}", "\n\n", source)
+
+
+def apply_bukatsu_progress_label(source: str) -> str:
+    """操作地点の進捗を、閲覧量と誤認しないテーマ固有表現に揃える。"""
+    updated, count = PROGRESS_LABEL_PATTERN.subn(
+        r"\1探ったところ\2", source, count=1
+    )
+    if count != 1:
+        raise ValueError("部活動ページ上部の進捗表示を一意に確認できません")
+    return updated
+
+
 def _section_end(html: str, start: int) -> int:
     """Return the end offset of a section, allowing nested sections."""
     depth = 0
@@ -85,6 +384,24 @@ def _section_end(html: str, start: int) -> int:
         else:
             depth += 1
     raise ValueError("section closing tag not found")
+
+
+def apply_bukatsu_background(source: str) -> str:
+    """一次資料台帳から、既存の背景・確認事項を1組だけ更新する。"""
+    style_start = source.find("<style>\n#bukatsu-background")
+    background_start = source.find('<section class="panel" id="bukatsu-background"')
+    checklist_start = source.find('<section class="panel" id="bukatsu-check"')
+    if min(style_start, background_start, checklist_start) < 0:
+        return source
+    if not style_start < background_start < checklist_start:
+        raise ValueError("背景と確認事項の並びを一意に確認できません")
+    checklist_end = _section_end(source, checklist_start)
+    try:
+        from .build_planet_page_preview import build_background
+    except ImportError:  # python3 scripts/build_bukatsu_arena.py
+        from build_planet_page_preview import build_background  # type: ignore[no-redef]
+    current = build_background("bukatsu-chiiki")
+    return source[:style_start] + current + source[checklist_end:]
 
 
 def hero_summary_html(rows: list[dict]) -> str:
@@ -243,7 +560,8 @@ def apply_bukatsu_entry(html: str, rows: list[dict]) -> str:
     html = html.replace("Powered by Yahooリアルタイム検索 + Hermes分類", "公開投稿を収集・分類して整理")
     html = embed_hermes_samples(html)
     html = re.sub(r"\n[ \t]+\n", "\n\n", html)
-    return re.sub(r"\n{3,}", "\n\n", html)
+    html = apply_bukatsu_background(re.sub(r"\n{3,}", "\n\n", html))
+    return apply_bukatsu_progress_label(apply_bukatsu_search_entry(html))
 
 # === SM_RAW 生成 ===
 def gen_sm_raw():
@@ -373,7 +691,6 @@ EXPLAINER_SECTION = """<section class="panel explainer-section" id="explainer-se
 VOTE_SECTION = """<section class="panel" id="vote-section">
 <div class="panel-title"><h2>あなたが一番気になる「論点」は？</h2><span>SNSの声を見る前に</span></div>
 <p style="font-size:14px;color:var(--ink);line-height:1.75;margin:0 0 12px;">文部科学省が推進する「部活動の地域移行」。教員の働き方改革や少子化対策として期待される一方、費用負担や指導者不足、部活文化の喪失を懸念する声もあります。</p>
-<div style="font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:10px 14px;margin:0 0 20px;line-height:1.65;"><strong>データの集め方:</strong> Yahooリアルタイム検索からSNS投稿を取得し、AIが自動分類しました。</div>
 <div id="vote-step1"><p class="vote-step-label"><span class="step-num">1</span>あなたが最も気になる論点をタップ <span style="font-size:12px;font-weight:400;color:var(--muted)">（全2問）</span></p><div id="vote-issue-btns" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-width:900px;"></div></div>
 <div id="vote-step2" style="display:none;margin-top:4px;"><p class="vote-step-label"><span class="step-num">2</span>地域移行への賛否は？ <small class="vote-step2-helper">選ぶと結果を表示します</small></p><div id="vote-stance-btns" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;"></div></div>
 <p class="vote-storage-note" style="font-size:11px;color:var(--muted);margin:10px 0 0;">※ サイト参加者の集計であり、世論調査ではありません。回答と、24時間の重複防止用に一方向変換した接続元情報をサーバーに保存します。</p>
@@ -953,7 +1270,13 @@ def transform(html: str) -> str:
         config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
         config["research_conditions"] = load_research_conditions(CURRENT_JSON_PATH)
         rows = json.loads(CURRENT_JSON_PATH.read_text(encoding="utf-8"))
-        return apply_bukatsu_stance_glance(apply_bukatsu_entry(update_existing_html(html, rows, config), rows))
+        updated = apply_bukatsu_stance_glance(
+            apply_bukatsu_entry(update_existing_html(html, rows, config), rows)
+        )
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.bukatsu_connected import apply as connect_page
+        return connect_page(updated, topic="bukatsu-chiiki")
 
     # 1. Add CSS before </style>
     if "/* === SNS反応マップ === */" not in html:
@@ -1021,7 +1344,11 @@ def transform(html: str) -> str:
     # 4. Remove old vote2d.js script tag and its inline script
     html = html.replace('<script src="vote2d.js?v=10"></script>\n', '')
 
-    return apply_bukatsu_entry(html, [])
+    updated = apply_bukatsu_entry(html, [])
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from scripts.bukatsu_connected import apply as connect_page
+    return connect_page(updated, topic="bukatsu-chiiki")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

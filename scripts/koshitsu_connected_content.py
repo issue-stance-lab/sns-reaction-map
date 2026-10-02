@@ -33,10 +33,7 @@ def sources(items: list[dict]) -> str:
 def reasons(issue: dict) -> str:
     sub = issue["sub"]
     if sub["status"] != "reread":
-        return (
-            f'<p class="aic-empty">{e(sub["note"])}。'
-            'AIが自動でつけた区分をここに並べることはしません。人が読んだ結果だけをまとめにします。</p>'
-        )
+        return ""
     items = sub["items"]
     rows = ''.join(
         f'<li><span class="aic-reason-row"><span>{e(x["label"])}</span>'
@@ -81,7 +78,10 @@ def landing_image(fallback_html: str, icon: str, label: str) -> dict:
 
 
 def render_templates(data: dict, source: str, index: dict) -> str:
-    from scripts.koshitsu_connected import background_data
+    try:
+        from scripts.koshitsu_connected import background_data
+    except ModuleNotFoundError:  # scripts/seo/apply_theme_trust.py から直接実行
+        from koshitsu_connected import background_data
 
     soup = BeautifulSoup(source, "html.parser")
     issue_cards = soup.select_one("#issue-cards")

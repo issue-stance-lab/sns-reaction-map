@@ -52,6 +52,7 @@
 
 | 課題70: 公開中の図解を一次資料と表現ルールに照らして点検する | Codex | 2026-09-22 | 公開中70枚を全数監査。指摘した皇室典範4枚に施行予定日を追記し、学校ページの件数表示も修正して本番確認 | [archive/tasks/task-70.md](tasks/task-70.md) |
 | 課題95: 全テーマページの字体を共通化する | Codex | 2026-09-27 | 見出しをNoto Serif JP、本文・操作をNoto Sans JPへ統一。全10テーマと生成元へ反映し、本番確認 | [archive/tasks/task-95.md](tasks/task-95.md) |
+| 課題104: よみやすを公開文章の標準推敲工程へ組み込む | Codex | 2026-10-02 | note・Website・SEO・Xの公開文章によみやすを自動適用し、数字とURLの変更を防ぐ検査を追加 | [archive/tasks/task-104.md](tasks/task-104.md) |
 
 ---
 

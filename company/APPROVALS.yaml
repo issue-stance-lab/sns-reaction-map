@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-27"
+updated_at: "2026-10-02"
 
 rules:
   required_for:
@@ -32,6 +32,208 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261002-001
+    department: growth-marketing
+    action: website_publication
+    summary: "課題105の辺野古沖転覆事故ページを、検索入口・論点切替・正確な進捗表示・不要工程説明削除を含む版へ更新して公開する"
+    reason: "ローカルページで6論点の切替、山なみ連携、FAQ、表示文言を確認し、再生成・関連検査が完了したため"
+    risks:
+      - "検索向けtitle変更後の表示回数・順位・クリック率は30日間の観察が必要"
+      - "SNS投稿594件・意見461件は公開投稿サンプルであり、社会全体の世論を示さない"
+      - "事故原因や法的責任の最終結論は未確定で、一次資料の更新時に再確認が必要"
+    recommendation: approve
+    evidence:
+      - "tasks/task-105.md"
+      - "docs/henoko-student-accident-reaction-map.html"
+      - "tests/test_henoko_search_entry.py"
+      - "tests/test_henoko_connected.py"
+    status: approved
+    requested_at: "2026-10-02"
+    decided_at: "2026-10-02"
+    decision_note: "オーナーがローカル版と検査結果の報告を確認後、本対話で『公開して』と明示的に承認。件数・分類・再読状態・保存データ・代表投稿・資料・計測方法は変更しない範囲。"
+
+  - id: approval-20261001-002
+    department: growth-marketing
+    action: website_publication
+    summary: "課題100の生成AIと著作権ページから利用者向けの制作工程説明を削除し、再生成処理と検査を更新して公開する"
+    reason: "内容のないAI処理・編集工程の説明を除き、検索入口と論点・投稿・資料に読者の注意を戻すため"
+    risks:
+      - "論点・分類・件数4,734件／意見3,146件・再読状態・保存データ・代表投稿・資料・計測方法は変更しない"
+      - "最新mainのページを基準にし、公開JSON件数だけで再生成する"
+      - "テーマ固有・全体検査とCIを確認してから反映する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-100.md"
+      - "themes/ai-copyright.md（2026-10-01の削除・再生成・検査記録）"
+      - "configs/theme-seo.json（ai-copyright のAI工程表示を無効化）"
+      - "docs/ai-copyright-reaction-map.html（sha256 4545f0846b8c8e5ac644c993218a486ba76d63ac984d25aa3f6c4595b2c85510）"
+    status: completed
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-01"
+    decision_note: "オーナーが本対話で、最新mainを優先した3ファイルの競合解消と検査後の公開を明示的に指示。"
+    completed_at: "2026-10-01"
+    result_note: >-
+      main 5434b943で公開。全1,271テスト（4件skip）、公開ファイル検査1,092件（4件skip）、
+      テーマ別・全テーマ・数値出典・トップページ・SEO・更新履歴の検査が成功。
+      CI「公開ファイルの検査」36851742717とPages配信36851742568が成功。
+      本番の収集4,734件・意見3,146件、トップ20,250件・意見15,762件を確認。
+      不要な説明文は表示・template・実行時スクリプトで0件。再読状態はデータに維持。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36851742717"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36851742568"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
+
+  - id: approval-20260930-001
+    department: engineering-data
+    action: website_publication
+    summary: "生成AIと著作権テーマの2026-09-29収集回を、収集4,734件・意見3,146件の更新内容で公開する"
+    reason: "定期収集分の分類・本文条件再検索・公開候補監査がready_for_ceoとなったため"
+    risks:
+      - "Yahoo!リアルタイム検索の公開投稿サンプルであり、社会全体の世論・比率を表すものではない"
+      - "前回と今回で分類モデルが異なるため、『世論の潮目』は今回比較へ更新せず既存の8月31日→9月5日比較を維持する"
+      - "Jevの別モデル観測はAPIキー未設定でスキップしたが、運用手順上の公開停止条件ではない"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-29-ai-copyright-refresh.md"
+      - ".staging/refresh/ai-copyright/20260929_222720/promotion-manifest.json"
+      - "data/verification/updates/ai-copyright/2026-09-29/report.json"
+    status: completed
+    requested_at: "2026-09-30"
+    decided_at: "2026-09-30"
+    decision_note: "公開候補の収集・意見件数、モデル差の扱い、品質判定ready_for_ceoを提示後、オーナーが本対話で『本番反映』と明示的に承認。"
+    completed_at: "2026-09-30"
+    result_note: >-
+      main c41db48fで公開。全1252テスト（4件skip）、公開検査1074件（4件skip）、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番で累計4,734件・意見3,146件、
+      取得期間2026-06-22〜2026-09-29、トップ合計20,190件・意見15,735件を確認。
+      1280pxと375pxで横はみ出しなし、コンソールエラー0件。適用後バックアップ307ファイルの復元確認成功。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36715828285"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36715828284"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+
+  - id: approval-20260929-003
+    department: growth-marketing
+    action: website_publication
+    summary: "課題102の学校あだ名禁止ページへ検索入口・FAQを融合し、進捗表示を操作数に合う表現へ直して公開する"
+    reason: "流入がほとんどない対象ページで、全国ルール・文科省・いじめ・さん付けの検索意図へ30秒で答え、既存のSNS100意見・6論点へ接続するため"
+    risks:
+      - "検索表示・順位・クリック率は公開後30日間のSearch Console実測で確認する必要がある"
+      - "個別校の方針や導入校割合は示さず、確認した国の資料の範囲を明記する"
+      - "進捗は読了率ではなく端末内の操作済み地点数で、既存の17地点計測を維持する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-102.md"
+      - "quality/reviews/2026-09-29-school-nickname-search-entry.md"
+      - "docs/school-nickname-ban-reaction-map.html（sha256 b60b4cc031173c3cd1268207508fb986eb9967871ee637e524c08657880e9d82）"
+      - "tests/test_school_nickname_connected.py"
+      - "tests/test_school_nickname_connected_browser.cjs"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "オーナーがローカルページで入口UIと進捗表示を確認後、本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-29"
+    result_note: "main 8a6328b7で公開。全テスト1,251件、公開検査1,073件、CI、Pages配信が成功し、本番で検索入口・FAQ・『探ったところ』・接続CSS v2とHTTP 200を確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36583027076"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36583026964"
+      - "https://sns-reaction-map.jp/school-nickname-ban-reaction-map.html"
+
+  - id: approval-20260929-002
+    department: growth-marketing
+    action: website_publication
+    summary: "課題101の高齢者免許返納ページを、検索意図に合わせた入口・FAQと正確な進捗表示へ更新して公開する"
+    reason: "『免許返納は何歳から』『70歳・75歳の制度』『メリット・デメリット』『家族の話し方』へ最初の画面から答え、操作数を閲覧量と誤解させない表示にして30日間検証するため"
+    risks:
+      - "タイトル変更後の検索表示・順位・クリック率は、Search Consoleで30日間観察する必要がある"
+      - "制度内容や地域ごとの返納支援が変わった場合は、一次資料を再確認する"
+      - "進捗は閲覧量ではなく端末内に保存する操作地点数であり、表示だけを『探ったところ』へ修正した"
+    recommendation: approve
+    evidence:
+      - "tasks/task-101.md"
+      - "docs/elderly-license-revocation-reaction-map.html（sha256 4d4ee8bfc3847983132b711db9d5c4ded6968a7680ba1c0fa18b5385afcaf428）"
+      - "tests/test_elderly_search_entry.py"
+      - "tests/test_elderly_connected.py"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "オーナーがローカルプレビューと進捗計測の説明を確認後、本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-29"
+    result_note: "main b11b7f27で公開。公開検査・Pages配信が成功し、本番で新タイトル、検索入口、FAQ、『探ったところ』、専用CSSの配信を確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36580252856"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36580252904"
+      - "https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html"
+
+  - id: approval-20260929-001
+    department: engineering-data
+    action: website_publication
+    summary: "自転車青切符テーマの2026-09-28収集回を、収集585件・意見415件の更新内容で公開する"
+    reason: "定期収集分を本文確認・分類検証し、公開候補の独立品質監査がready_for_ceoとなったため"
+    risks:
+      - "公開投稿の検索サンプルであり、社会全体の世論・比率を表すものではない"
+      - "『113種類』の主張は確認できないものとしてページ上で断定を避けている"
+      - "585件中116件は取得時刻の履歴が欠けるため、確認できる期間を明記する"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-09-29-website-bike-blue-ticket-refresh.md"
+      - ".staging/refresh/bike-blue-ticket/20260928_225606_k27/promotion-manifest.json"
+      - "data/verification/updates/bike-blue-ticket/2026-09-28/report.json"
+    status: approved
+    requested_at: "2026-09-29"
+    decided_at: "2026-09-29"
+    decision_note: "独立監査のready_for_ceo判定を確認後、本対話のオーナー指示『公開して』を本番反映の明示承認として記録。"
+    completed_at: "2026-09-29"
+    result_note: "main 66695f69で公開。公開検査・Pages配信が成功し、本番テーマ頁で585件・415意見・2026-09-28を確認。トップ合計も更新済み。"
+
+  - id: approval-20260928-001
+    department: growth-marketing
+    action: website_publication
+    summary: "憲法改正ページの検索入口背景と制度確認帯をSNS反応マップと同じ横幅へ修正して公開する"
+    reason: "公開画面で2か所だけが他のセクションより横へ広がっていたため、ページ全体の中央カラムをそろえる"
+    risks:
+      - "狭い画面で余白が二重にならないよう、親カラム幅をそのまま使う"
+      - "375・820・1280・1600pxで左端と幅の一致、横スクロールなしを確認済み"
+    recommendation: approve
+    evidence:
+      - "ユーザー提供のスクリーンショット 2026-09-28 7.20.01.png"
+      - "tasks/task-94.md"
+      - "tests/test_constitutional_layout_width_browser.cjs"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: "修正内容と4画面幅の検査結果を提示後、オーナーが本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-28"
+    result_note: "main 9c154787で公開。公開検査とPages配信が成功し、本番1280px幅で入口・確認帯・SNS反応マップが左端50px・幅1180pxに一致、横スクロールなしを確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36404234192"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36404234201"
+      - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
+
+  - id: approval-20260928-002
+    department: growth-marketing
+    action: website_publication
+    summary: "憲法改正ページの4つの論点タブを、画面位置を動かさずに切り替えられるよう修正して公開する"
+    reason: "タブ選択のたびにページが自動スクロールし、読んでいる位置が変わっていたため"
+    risks:
+      - "表示内容の切替とキーボード操作は維持し、自動スクロールだけを停止する"
+      - "375・820・1280・1600pxで4タブの切替後もスクロール位置が変わらないことを確認済み"
+    recommendation: approve
+    evidence:
+      - "tasks/task-94.md"
+      - "tests/test_constitutional_layout_width_browser.cjs"
+      - "tests/test_constitutional_search_entry.py"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: "修正内容と4画面幅の検査結果を提示後、オーナーが本対話で『公開して』と明示的に承認。"
+    completed_at: "2026-09-28"
+    result_note: "main 5e55e98cで公開。全テスト1,228件、公開検査1,055件、CI、Pages配信が成功し、本番375px・1280pxで4タブを切り替えても画面位置が変わらないことを確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36418189205"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36418189287"
+      - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
   - id: approval-20260927-004
     department: growth-marketing
     action: website_publication
@@ -951,3 +1153,326 @@ items:
       標準検査（テーマページ／数字出典／トップページ／全テスト1173件／公開ファイル）と
       Chromium・WebKitの1280/375/320px・JavaScript無効検査が成功。CIの公開ファイル検査と
       Deploy to GitHub Pagesも成功し、本番URL（テーマページ・トップページとも200）で固有文言と反映を確認した。
+
+  - id: approval-20260927-005
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページへ、検索意図に答える進捗・対象別税率・レシート例・FAQのUIを追加して公開する"
+    reason: "検索需要調査で『いつから』『食料品1％』『財源』『給付付き税額控除』の需要を確認し、既存ページの答えが中盤に埋もれていたため"
+    risks:
+      - "政府大綱は閣議決定済みだが法律は未成立。両者を混同しない状態表示と注意書きを同じ画面に置く"
+      - "税込例は税率だけを機械的に当てた例であり、実際の販売価格を保証しない"
+      - "検索タイトルとページ上部を変更するため、公開後にSearch Consoleの表示・CTRを30日間計測する"
+    recommendation: approve
+    evidence:
+      - "tasks/task-96.md"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-09-27_消費税減税UI/"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話でスマホ実装画面、検索意図との対応、動的UI、検証結果、未公開であることを提示し、
+      オーナーが「良いです、公開作業開始」と明示的に承認。反映前に承認を得てから記録した。
+    completed_at: "2026-09-27"
+    result_note: >-
+      main c57f0cbbまでを公開。専用UIテスト、テーマ検査、公開ファイル1043件のローカル検査と
+      CIの公開ファイル検査、Deploy to GitHub Pagesが成功。本番ページと新CSS・JavaScriptの
+      HTTP 200、新タイトル、入口UI、法律未成立の注意書きを確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36308898702"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36308898707"
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20260927-006
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページの検索入口UIで、青背景の幅を他セクションと揃えて公開する"
+    reason: "公開後の実画面で青背景だけが全幅となり、最大1180pxの他セクションと横幅が揃っていなかったため"
+    risks:
+      - "横幅変更でレシートUIが狭くなりすぎないよう、PCは最大1180px、スマホは左右10pxの余白を確保する"
+    recommendation: approve
+    evidence:
+      - "ユーザー提供のスクリーンショット 2026-09-27 20.12.26.png"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "scripts/run_public_checks.py（公開ファイル1043件成功）"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "公開画面のスクリーンショットを示し、『青背景だけ幅が広くて他と合ってないです。修正して』と明示的に依頼。"
+    completed_at: "2026-09-27"
+    result_note: "main f9672806で公開。青背景を最大1180px、スマホを左右10px余白へ修正し、専用7件・公開1043件の検査、CI、Pages配信、本番CSS v2を確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315239625"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315239639"
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20260927-007
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページの4つの対象別タブへ、ImageGenで作成した識別用の背景画像を追加して公開する"
+    reason: "スーパーの食品・持ち帰り・店内飲食・酒類を文字だけでなく視覚でも素早く判別できるようにするため"
+    risks:
+      - "文字の可読性を損なわないよう濃紺のオーバーレイを重ね、4枚合計約61KBのWebPに圧縮する"
+      - "酒類の画像は販促表現を避け、制度説明用の落ち着いた静物写真とする"
+    recommendation: approve
+    evidence:
+      - "docs/images/topics/consumption-tax-cut/tabs/supermarket.webp"
+      - "docs/images/topics/consumption-tax-cut/tabs/takeout.webp"
+      - "docs/images/topics/consumption-tax-cut/tabs/dine-in.webp"
+      - "docs/images/topics/consumption-tax-cut/tabs/alcohol.webp"
+      - "tests/test_consumption_tax_search_entry.py（専用テスト7件成功）"
+      - "scripts/run_public_checks.py（公開ファイル1043件成功）"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: "本対話で『image2.5で作成した画像を背景として埋め込みたい』と明示的に依頼。"
+    completed_at: "2026-09-27"
+    result_note: "main 89d70d37で公開。4タブへ個別のWebP背景画像と可読性用オーバーレイを追加し、専用7件・公開1043件の検査、CI、Pages配信、本番CSS v3と4画像のHTTP 200を確認。"
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315931560"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36315931554"
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20260927-008
+    department: growth-marketing
+    action: website_publication
+    summary: "部活動の地域展開ページへ、制度回答・4視点・地域質問ツール・画像背景を統合した検索入口を公開する"
+    reason: "検索ニーズ調査とローカル画面の段階的な確認を終え、オーナーが本番反映を指示したため"
+    risks:
+      - "検索入口の追加による本文量と初期表示画像が増える。4枚の画像はWebP化し、各39〜52KBに抑えた"
+      - "地域確認の確認状態は端末へ保存せず、質問文コピーと匿名の操作イベントのみを扱う"
+      - "既存のSNS反応1,401件、7論点、山なみマップのデータと操作処理は変更しない"
+    recommendation: approve
+    evidence:
+      - "tasks/task-98.md"
+      - "tests/test_bukatsu_search_entry.py"
+      - "data/verification/bukatsu-chiiki-background.json"
+      - "docs/bukatsu-chiiki-reaction-map.html"
+    status: approved
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      本対話で4視点の画像背景、地域確認の質問文コピー、PC・スマホ表示と検査結果を提示し、
+      オーナーが「本番反映」と明示的に承認。反映前に承認を記録した。
+    completed_at: "2026-09-27"
+    result_note: >-
+      main a03c25e4で公開。標準検査、全テスト1224件、公開ファイル検査1051件、
+      GitHub Actionsの公開検査とPages配信が成功。本番ページで制度回答、4視点画像、
+      地域質問ツール、WebP画像4枚のHTTP 200、コンソールエラー0件を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36321915820"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36321915838"
+      - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
+
+  - id: approval-20260928-003
+    department: data
+    action: website_publish
+    summary: "皇室典範テーマの2026-09-27収集回を公開する（収集1,950→2,271件、意見1,525→1,776件）"
+    reason: "9/27に収集したpending_waveを本文確認・資料再照合・表示検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "分類提供元が拒否した5件は本文を1件ずつ確認し、人手確認の根拠を記録した"
+      - "主張の事実確認は公開データの期間末より14日前だが、30日未満のため運用ルール上は経過観察"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/koshitsu-tenpakai/20260927_221425/promotion-manifest.json（sha256 8fe42778…）"
+      - "quality/reviews/2026-09-28-koshitsu-refresh-review.md"
+      - "data/verification/koshitsu-tenpakai-sunk-continents.json"
+    status: approved
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: >-
+      本対話で収集・意見件数、分類エラー5件の本文確認、資料再照合、
+      PC・スマホ・JavaScript無効・印刷の検査結果を提示し、オーナーが「本番反映」と明示的に承認。
+    completed_at: "2026-09-28"
+    result_note: >-
+      main 2c8ff3eaで公開。ローカル全1228件と公開検査、GitHub Actionsの公開ファイル検査、
+      Pages配信が成功し、本番のテーマページとトップページで収集2,271件・意見1,776件を確認。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36423206158"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36423206134"
+      - "https://sns-reaction-map.jp/koshitsu-tenpakai-reaction-map.html"
+
+  - id: approval-20260928-004
+    department: growth-marketing
+    action: website_publication
+    summary: "課題100の生成AIと著作権ページに検索入口と、操作数に合った進捗表示を反映して公開する"
+    reason: "検索意図に沿う疑問選択から一次資料・既存反応マップへ同一ページ内で案内し、誤解を招く閲覧進捗表現を修正するため"
+    risks:
+      - "進捗はスクロールや閲覧時間ではなく、初回操作済み地点を数える。保存は対象テーマのlocalStorage内で、サーバー送信しない"
+      - "内閣府のプリンシプル・コードは非拘束で、受入れ事業者向けであり、法律上の一律開示義務とは区別する"
+      - "本番実ブラウザーでのキーボード切替・フォーカス表示・文化庁リンク遷移は確認済み。375px表示確認は残件"
+      - "検索流入の効果判定には公開後30日間のSearch Console観察が必要"
+    recommendation: approve
+    evidence:
+      - "tasks/task-100.md"
+      - "quality/reviews/2026-09-28-website-task100-ai-copyright.md"
+      - "docs/ai-copyright-reaction-map.html（sha256 1d617ae6b819f9922b270291d8fae290be8816eaf6fdcb29c705a92e934306bf）"
+      - "docs/ai-copyright-connected-page.js（sha256 e7d4e045a6fe7435942dcd823729d39c1ded9c97cba150838de480f46c144981）"
+    status: completed
+    requested_at: "2026-09-28"
+    decided_at: "2026-09-28"
+    decision_note: "オーナーが本対話で『公開して』と明示的に承認。独立監査の実ブラウザー確認は本番反映後に行い、品質記録を更新する。"
+    completed_at: "2026-09-29"
+    result_note: >-
+      main 2152aa09の公開後にGitHub Actionsの公開ファイル検査 #684 と Pages配信 #956 が成功。
+      全1241テスト（4件skip）、公開検査1065件（4件skip）、テーマ再生成10件・数値出典10件・
+      トップページ検査が通過。本番ページで検索疑問のEnter切替、論点タブの矢印切替、
+      フォーカス表示、文化庁リンク遷移を確認。進捗表示は「探ったところ」で、操作後も2/21。
+      375px実表示は未確認のため品質記録の残件とし、検索流入は2026-10-29にSearch Consoleで判定する。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36561793544"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36561793525"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+      - "quality/reviews/2026-09-28-website-task100-ai-copyright.md"
+
+  - id: approval-20260927-009
+    department: growth-marketing
+    action: website_publication
+    summary: "課題97の自転車青切符ページに、検索意図に沿った年齢チェック・反則金検索・短答FAQを題名直下へ追加し、本番公開する"
+    reason: "制度開始時の検索需要が落ちた後も、対象年齢・反則金・歩道・手信号・支払いなどの継続する疑問から既存の山なみマップへ案内するため"
+    risks:
+      - "反則金は主な例10件であり、全件一覧や個別事案の取締り結果を示すものではないとページ内に明記"
+      - "青切符制度の案内は一般情報で、個別事案への法的助言ではない。警察庁・東京都・e-Govの一次資料へのリンクを併記"
+      - "ページの集計件数・SNS分類・正典データは変更しない。進捗表示は閲覧量ではなく操作数を示すため『探ったところ』とする"
+    recommendation: approve
+    evidence:
+      - "tasks/task-97.md 2026-09-27『題名直下へ検索入口をローカル統合』"
+      - "docs/bike-blue-ticket-reaction-map.html の検索入口・進捗表示"
+      - "scripts/bike_blue_ticket_connected.py の再生成処理・表示検査"
+    status: completed
+    requested_at: "2026-09-27"
+    decided_at: "2026-09-27"
+    decision_note: >-
+      オーナーがチャットで「本番反映して」と明示的に指示。今回の公開対象は自転車青切符ページの
+      検索入口UIと進捗ラベル修正。承認後、標準検査と本番URLで反映を確認する。
+    completed_at: "2026-09-28"
+    result_note: >-
+      main 2f8e2989で公開。テーマ別検査・数字出典・トップページ検査、全1228テスト、公開検査1055件、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番テーマページの固有表示とトップページの
+      青切符導線を確認。課題97は2026-10-28までSearch Consoleで計測する。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36424995209"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36424994996"
+      - "https://sns-reaction-map.jp/bike-blue-ticket-reaction-map.html"
+
+  - id: approval-20260930-001
+    department: data
+    action: website_publish
+    summary: "高齢者免許返納テーマの2026-09-30定期更新を公開する（収集602→662件、意見428→455件）"
+    reason: "新規意見候補の本文確認、主張・資料項目の再照合、数値・表示・操作検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "一般的な運転マナー批判7件は高齢者政策との直接関係がないため対象外とした"
+      - "公開候補コピー内の全体検査3項目は.gitと非公開資産を含まない環境由来NGで、適用後に実作業ツリーで再検査する"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/elderly-license-revocation/20260930_222048/promotion-manifest.json（sha256 b08f0804…）"
+      - "quality/reviews/2026-09-30-elderly-license-refresh-review.md"
+      - "data/verification/updates/elderly-license-revocation/2026-09-30/"
+    status: completed
+    requested_at: "2026-09-30"
+    decided_at: "2026-09-30"
+    decision_note: >-
+      本対話で新規60件・採用意見27件、本文確認と主張再照合、PC・スマホの検査結果を提示し、
+      オーナーが「本番反映」と明示的に承認。
+    completed_at: "2026-09-30"
+    result_note: >-
+      main 159260dcで公開。全1253テスト（4件skip）、公開検査1076件（4件skip）、
+      データ復元検査、GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番テーマページで収集662件・意見455件・更新日9月30日、小さい山の最小幅56を確認し、
+      トップページで60件追加・全体20,250件・意見15,762件を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36732111941"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36732111991"
+      - "https://sns-reaction-map.jp/elderly-license-revocation-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261001-001
+    department: growth-marketing
+    action: website_publication
+    summary: "消費税減税ページから、未対応やAI処理に関する利用者向けの空状態説明を削除して公開する"
+    reason: "論点・投稿・資料がある画面で、内容を増やさない制作工程の説明が読書を妨げていたため"
+    risks:
+      - "未再読3論点と資料照合なし3論点の状態はデータ内に維持し、分類・件数・投稿・資料・保存データは変更しない"
+      - "分類方法と標本の限界を示す『AI分類』『社会全体の世論調査ではありません』等の注意書きは維持する"
+    recommendation: approve
+    evidence:
+      - "対象テーマの2回連続再生成で2回目の差分なし"
+      - "消費税関連テスト40件とChromium・WebKitの3画面幅検査が成功"
+      - "公開ファイル検査1077件成功（4件skip）"
+    status: approved
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-01"
+    decision_note: "本対話で修正結果を確認後、オーナーが『公開して』と明示的に承認。"
+    completed_at: "2026-10-01"
+    result_note: >-
+      main 6cc7ecc7で公開。全1259テスト（4件skip）、公開検査1081件（4件skip）、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番ページで対象4文が0件、
+      残す注意書き、7論点、代表投稿14件、資料照合6項目を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36812315774"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36812315588"
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+
+  - id: approval-20261002-001
+    department: data
+    action: website_publish
+    summary: "部活動の地域展開テーマの2026-10-01定期更新を公開する（収集1,726→1,865件、意見1,401→1,494件）"
+    reason: "新規139件の本文確認、資料争点の再照合、数値・表示・操作検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "分類モデルがkimi-k2.6からkimi-k2.7-codeに変わったため、今回の分類差は『世論の潮目』に表示せず前回表示を維持する"
+      - "全テーマ横断の海洋層検査は他テーマの既存未整備項目でNGだが、部活テーマに新規指摘はない"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/bukatsu-chiiki/20261001_230045/promotion-manifest.json（sha256 d0650bd5…）"
+      - "quality/reviews/2026-10-01-bukatsu-refresh-review.md"
+      - "data/verification/updates/bukatsu-chiiki/2026-10-01/"
+    status: completed
+    requested_at: "2026-10-01"
+    decided_at: "2026-10-02"
+    decision_note: >-
+      本対話で新規139件・採用意見93件、本文確認と数値・PC・スマホの検査結果を提示し、
+      オーナーが「公開して」と明示的に承認。
+    completed_at: "2026-10-02"
+    result_note: >-
+      main 47e07a9cで公開。全1287テスト（4件skip）、公開検査1107件（4件skip）、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番テーマページで収集1,865件・
+      意見1,494件・更新日10月1日・潮目9月15日→9月22日の維持を確認。
+      トップページで全体20,389件・意見15,855件を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36936913728"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36936913743"
+      - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261002-002
+    department: growth-marketing
+    action: website_publication
+    summary: "副首都ページの検索入口、論点タブと山なみ連携、操作進捗表示、利用者向けでない工程説明の整理を公開する"
+    reason: "ローカル実装と実機確認を完了し、オーナーが本対話で「公開して」と明示的に承認したため"
+    risks:
+      - "ページ上部の構成と論点選択後の表示が変わるが、分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更しない"
+      - "全体テストに失敗がある場合は、副首都固有検査・公開ファイル検査・CIと本番実機で今回差分との関係を切り分ける"
+    recommendation: approve
+    evidence:
+      - "themes/fukushuto.md"
+      - "tests/test_fukushuto_search_entry.py"
+      - "tests/test_fukushuto_connected.py"
+      - "scripts/verify_theme_page.py fukushuto"
+    status: completed
+    requested_at: "2026-10-02"
+    decided_at: "2026-10-02"
+    decision_note: "オーナーが本対話で「公開して」と明示的に承認。mainへの統合・push前に記録した。"
+    completed_at: "2026-10-02"
+    result_note: >-
+      main d4954dfaで公開。副首都関連41件、非公開データなしの公開検査1117件、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番ページで4つの論点タブ、
+      「候補地」の山への連携、操作進捗2/18への加算、削除対象文0件を確認した。
+      分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更していない。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36964344115"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36964344084"
+      - "https://sns-reaction-map.jp/fukushuto-reaction-map.html"

@@ -16,12 +16,34 @@ BRIDGE_END = "/* ELDERLY_CONNECTED_BRIDGE_END */"
 CSS_HREF = "elderly-connected.css?v=1"
 JS_SRC = "elderly-connected.js?v=1"
 PAGE_JS_SRC = "elderly-connected-page.js?v=1"
+PROGRESS_LABEL = "探ったところ"
+MIN_HILL_WIDTH = 56
 DATA_PATTERN = re.compile(r'(<script id="planet-data">window\.PLANET_DATA=)(.*?)(;</script>)', re.S)
+MIN_HILL_WIDTH_PATTERN = re.compile(r"(const MIN_W=)\d+(;\s*// 細すぎて押せない山を広げる最小幅)")
 REASON_POSTS = ROOT / "configs" / "elderly-license-reason-posts.json"
 
 
 def enabled(source: str) -> bool:
     return START in source
+
+
+def apply_progress_wording(source: str) -> str:
+    """操作地点の件数を、閲覧量と誤解させない表示にそろえる。"""
+    pattern = re.compile(r'(<div id="progress"><span>)[^<]*(</span>)')
+    source, count = pattern.subn(r"\g<1>" + PROGRESS_LABEL + r"\g<2>", source, count=1)
+    if count != 1:
+        raise ValueError("連動表示: 進捗表示を一意に見つけられません")
+    return source
+
+
+def apply_min_hill_width(source: str) -> str:
+    """部分再生成後も、公開済みの押しやすい山幅を維持する。"""
+    source, count = MIN_HILL_WIDTH_PATTERN.subn(
+        rf"\g<1>{MIN_HILL_WIDTH}\g<2>", source, count=1
+    )
+    if count != 1:
+        raise ValueError("連動表示: 山の最小幅を一意に見つけられません")
+    return source
 
 
 def planet_data(source: str) -> dict:
@@ -128,6 +150,8 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         if source.count("</head>") != 1:
             raise ValueError("連動表示: head の終端が1つではありません")
         source = source.replace("</head>", block + "\n</head>", 1)
+    source = apply_progress_wording(source)
+    source = apply_min_hill_width(source)
     problems = validate(source)
     if problems:
         raise ValueError("連動表示の検査に失敗しました:\n  - " + "\n  - ".join(problems))
@@ -160,6 +184,11 @@ def validate(source: str) -> list[str]:
         problems.append("ページ配置のJSが1つではありません")
     if len(soup.select(f'script[src="{PAGE_JS_SRC}"][defer]')) != 1:
         problems.append("資料タブ・年表のJSが1つではありません")
+    progress_label = soup.select_one("#progress > span")
+    if progress_label is None or progress_label.get_text(strip=True) != PROGRESS_LABEL:
+        problems.append("操作地点の表示が『探ったところ』になっていません")
+    if f"const MIN_W={MIN_HILL_WIDTH};" not in source:
+        problems.append(f"小さい山の最小幅が{MIN_HILL_WIDTH}ではありません")
     button_ids = {b.get("data-i") for b in soup.select("#stance-glance-buttons .sg-pick-btn")}
     if button_ids != {str(i) for i in range(len(data["stances"]))}:
         problems.append("立場ボタンの並びが立場データと一致しません")
@@ -174,6 +203,10 @@ def validate(source: str) -> list[str]:
             problems.append(f"読書面の入口が1つではありません: {iid} ({len(nodes)})")
             continue
         reading = BeautifulSoup(nodes[0].decode_contents(), "html.parser")
+        if data.get("show_unreviewed_note") is False:
+            visible_text = reading.get_text(" ", strip=True)
+            if "まだ編集部が投稿を1件ずつ読み直していません" in visible_text or "AIが自動でつけた区分" in visible_text:
+                problems.append(f"非表示設定の未再読注記が読書面へ戻っています: {iid}")
         attrs = (("claim_ids", "data-elc-claim"), ("source_only_ids", "data-elc-source-only"),
                  ("shared_concern_ids", "data-elc-concern"), ("timeline_ids", "data-elc-timeline"),
                  ("check_ids", "data-elc-check"), ("reason_ids", "data-elc-reason-posts"))

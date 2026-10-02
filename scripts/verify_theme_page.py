@@ -95,6 +95,19 @@ def _expected_review_note(root: Path, theme: str) -> str | None:
     return "AI分類。代表投稿は編集部が選定"
 
 
+def _show_review_note(root: Path, theme: str) -> bool:
+    """AI工程の表示を無効にしたテーマでは代表投稿の確認注記も求めない。"""
+    config_path = root / "configs/theme-seo.json"
+    if not config_path.exists():
+        return True
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    options = next(
+        (item for item in config.get("themes", []) if item.get("id") == theme),
+        {},
+    )
+    return options.get("show_review_note", options.get("show_ai_process") is not False)
+
+
 def _record_hashes(records: list[dict[str, Any]]) -> set[str]:
     hashes = set()
     for record in records:
@@ -831,9 +844,23 @@ def verify_theme_page(
     # かつて全11テーマが同じ「AI分類・人間による代表投稿の確認あり」を表示していたが、
     # 何を何件確認したのかの記録が無く、検証できない主張になっていた（2026-08-12）。
     expected_note = _expected_review_note(root, theme)
-    if expected_note is None:
+    if not _show_review_note(root, theme):
+        if '<span class="review-note">' not in page:
+            lines.append("OK  代表投稿の確認表示はテーマ設定により非表示")
+        else:
+            lines.append("NG  代表投稿の確認表示が非表示設定のテーマに残っている")
+            failures += 1
+    elif expected_note is None:
         lines.append("NG  代表投稿の確認表示: data/review-ledger.json に記録がない")
         failures += 1
+    elif theme == "ai-copyright" and expected_note not in page and not re.search(
+        r'<span class=["\']review-note["\']>', page
+    ):
+        if 'id="issue-cards"' in page:
+            lines.append("OK  代表投稿の確認記録は台帳に保持し、ページ上の制作説明文は省略")
+        else:
+            lines.append("NG  代表投稿の確認記録は台帳にあるが、投稿例がページにない")
+            failures += 1
     # 確認表示は <span class="review-note"> で囲む。この件数は台帳由来で正典からは
     # 導けないため、verify_number_provenance.py が「ここだけ」除外できるようにしている。
     elif f'<span class="review-note">{expected_note}</span>' in page:

@@ -76,7 +76,8 @@ def sitemap_xml(
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     for page, page_lastmod in pages:
-        loc = urljoin(base_url, page)
+        # トップは正規URL（末尾スラッシュ）に揃える。index.html で出すと canonical と食い違う
+        loc = urljoin(base_url, "" if page == "index.html" else page)
         priority = "1.0" if page == "index.html" else "0.8"
         lines.extend(["  <url>", f"    <loc>{html.escape(loc)}</loc>"])
         lastmod = page_lastmod or fallback_lastmod

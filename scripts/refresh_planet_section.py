@@ -141,6 +141,7 @@ def _sync_bukatsu_method_text(html: str, data: dict) -> str:
 
 ELDERLY_OPINION_COUNT_RE = re.compile(r"(意見と判定した)([\d,]+)(件)")
 ELDERLY_COLLECTED_COUNT_RE = re.compile(r"(取得した公開投稿)([\d,]+)(件)")
+ELDERLY_METHOD_COLLECTED_RE = re.compile(r"(収集した)([\d,]+)(件のうち意見と判定した)")
 
 
 def _sync_elderly_method_text(html: str, data: dict) -> str:
@@ -158,6 +159,8 @@ def _sync_elderly_method_text(html: str, data: dict) -> str:
     この2か所は対象に入っていなかった。2026-09-20、新規収集で収集件数も
     変わって初めて「取得した公開投稿506件」が更新されずに残る不具合として
     顕在化した（山なみ区画の外にあるのに件数を持つ箇所、他テーマと同型）。
+    検索入口のFAQ、論点別X投稿カード、編集・分析情報の収集件数も
+    山なみ区画の外にあるため、ここで同じ公開集計へそろえる。
     """
     opinions = data["totals"]["opinions"]
     collected = data["totals"]["collected"]
@@ -171,6 +174,44 @@ def _sync_elderly_method_text(html: str, data: dict) -> str:
     )
     if n != 2:
         raise SystemExit(f"「取得した公開投稿N件」の想定箇所数(2)と一致しません（elderly-license-revocation）: {n}件")
+
+    new_html, n = ELDERLY_METHOD_COLLECTED_RE.subn(
+        lambda m: f"{m.group(1)}{collected:,}{m.group(3)}", new_html
+    )
+    if n != 1:
+        raise SystemExit(f"編集・分析情報の収集件数の想定箇所数(1)と一致しません: {n}件")
+
+    for issue in data["issues"]:
+        pattern = (
+            r'(id="issue-' + re.escape(issue["id"]) + r'"><div class="ic-head">'
+            r'<h3>[^<]*</h3><span class="cnt">)[\d,]+(<small>件</small></span>)'
+        )
+        new_html, count = re.subn(
+            pattern, lambda m, value=issue["count"]: f"{m.group(1)}{value}{m.group(2)}", new_html
+        )
+        if count != 1:
+            raise SystemExit(
+                f"論点ごとのX投稿カード件数の想定箇所数(1)と一致しません（{issue['id']}）: {count}件"
+            )
+
+    new_html, n = re.subn(
+        r'(義務化をめぐる)[\d,]+(件の立場を見る)',
+        lambda m: f"{m.group(1)}{opinions:,}{m.group(2)}", new_html
+    )
+    if n != 1:
+        raise SystemExit(f"FAQの立場別内訳リンクの想定箇所数(1)と一致しません: {n}件")
+
+    issue_counts = {issue["label"]: issue["count"] for issue in data["issues"]}
+    new_html, n = re.subn(
+        r'(「地方の足・移動権」を論点とする投稿は)[\d,]+(件で、義務化・事故防止（)[\d,]+(件）に比べると)',
+        lambda m: (
+            f"{m.group(1)}{issue_counts['地方の足・移動権']:,}{m.group(2)}"
+            f"{issue_counts['義務化・事故防止']:,}{m.group(3)}"
+        ),
+        new_html,
+    )
+    if n != 1:
+        raise SystemExit(f"編集・分析情報の論点比較の想定箇所数(1)と一致しません: {n}件")
     return new_html
 
 
@@ -206,8 +247,8 @@ def _sync_bike_method_text(html: str, data: dict) -> str:
     opinions = data["totals"]["opinions"]
     other = next(issue["count"] for issue in data["issues"] if issue["key"] == "その他")
     patterns = [
-        (r'(<p class="lead">収集したSNS投稿)[\d,]+(件のうち、分析対象の意見)[\d,]+(件をAIで整理し、主要5論点)[\d,]+(件に分類し、残る)[\d,]+',
-         lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}{opinions - other}{m[4]}{other}"),
+        (r'(<p class="lead">収集したSNS投稿)[\d,]+(件のうち、分析対象の意見)[\d,]+(件)(?:をAIで整理し、|を)(主要5論点)[\d,]+(件に分類し、残る)[\d,]+',
+         lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}を{m[4]}{opinions - other}{m[5]}{other}"),
         (r'(収集した)[\d,]+(件のうち意見と判定した)[\d,]+(件を論点分析の対象にしています)',
          lambda m: f"{m[1]}{collected}{m[2]}{opinions}{m[3]}"),
     ]
@@ -216,7 +257,7 @@ def _sync_bike_method_text(html: str, data: dict) -> str:
         if count != 1:
             raise SystemExit(f"自転車の母数説明が想定箇所数(1)と一致しません: {count}件")
     html, count = re.subn(
-        r'(このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 )[\d,]+(件<br>\s*（取得期間: )[^／<]+',
+        r'(このマップの元データ:</strong> Yahooリアルタイム検索で取得した公開投稿 )[\d,]+(件<br>\s*（取得期間: )[^／<）]+',
         lambda m: f"{m[1]}{collected}{m[2]}{data['sample_period']}", html)
     if count != 1:
         raise SystemExit(f"自転車の冒頭の調査条件が想定箇所数(1)と一致しません: {count}件")
@@ -347,7 +388,11 @@ def _sync_fukushuto_method_text(html: str, data: dict) -> str:
     """
     collected = data["totals"]["collected"]
     return apply_research_conditions(
-        html, research_conditions_html(str(collected), data["sample_period"]), "fukushuto"
+        html,
+        research_conditions_html(
+            str(collected), data["sample_period"], show_review_note=False
+        ),
+        "fukushuto",
     )
 
 

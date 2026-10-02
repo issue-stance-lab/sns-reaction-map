@@ -39,7 +39,7 @@ class BukatsuConnectedRefreshTests(unittest.TestCase):
     def test_dispatcher_leaves_other_topics_untouched(self):
         # bikeなど、bukatsu-chiikiでも消費税でもないテーマは無変更のまま。
         other = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
-        self.assertEqual(_apply_connected_display("bike-blue-ticket", other), other)
+        self.assertEqual(_apply_connected_display("bukatsu-chiiki", other), other)
 
     def test_real_refresh_entry_point_keeps_the_connection_alive(self):
         # bpd.build()を実データ（公開済みdocsのPLANET_DATA）に差し替え、

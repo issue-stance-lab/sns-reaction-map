@@ -368,16 +368,13 @@ def sample_period(records: list[dict[str, Any]]) -> str:
 def build_research_conditions(collected: int, period: str) -> str:
     """調査条件（取得元・件数・期間）。
 
-    確認表示は <span class="review-note"> で囲む（apply_review_note.py が中身を
-    書き分け、verify_number_provenance.py がこの囲みだけを検査から外す）。
-    落とすと再生成で検査が落ちる。
+    このテーマでは制作工程の注記を利用者向けページへ出さない。件数と期間は残す。
     """
     return (
         '<p style="max-width:1000px;margin:0 auto;">'
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
-        f"  （取得期間: {period}／"
-        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
+        f"  （取得期間: {period}）<br>\n"
         "  <strong>社会全体の世論調査ではありません。</strong></p>"
     )
 
@@ -639,7 +636,6 @@ def build_details(rows: list[dict[str, Any]], collected: int) -> str:
         "<span>折りたたみ</span></div><details open><summary>読み方</summary><ul>"
         "<li>公開投稿を分類した結果を、論点を考えるための手がかりとして示しています。</li>"
         "<li>これは世論調査ではなく、検索語・取得時点・検索サービスの表示仕様による偏りがあります。</li>"
-        "<li>論点・立場は本文との照合を反映しています。表現の強さと要約はAI分類に基づき、誤りを含む可能性があります。</li>"
         "</ul></details></section>"
     )
 

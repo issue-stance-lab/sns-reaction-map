@@ -84,7 +84,7 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
     base["cur_label"] = _label(current_date)
     base["note"] = (
         f"比較対象：{base['prev_label']}収集分のうち意見投稿／"
-        f"{base['cur_label']}収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで分類しています。"
+        f"{base['cur_label']}収集分のうち意見投稿。"
         "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
     )
     previous = load_classified(

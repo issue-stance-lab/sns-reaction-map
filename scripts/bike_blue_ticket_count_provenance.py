@@ -11,7 +11,10 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import yaml
 
-from scripts.bike_blue_ticket_connected import START as BIKE_CONNECTED_START
+from scripts.bike_blue_ticket_connected import (
+    START as BIKE_CONNECTED_START,
+    display_source_note,
+)
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
@@ -79,7 +82,15 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
     for item in read(sunk_path)["items"]:
         verify("bike-source-topic-" + item["id"], item["topic"], sunk_path + " / " + item["id"])
         verify("bike-source-life-" + item["id"], item["life_impact"], sunk_path + " / " + item["id"])
-        verify("bike-source-note-" + item["id"], item["sns_note"] + " 確認日 " + item["checked_on"], sunk_path + " / " + item["id"])
+        verify(
+            "bike-source-note-" + item["id"],
+            display_source_note(item["sns_note"]) + " 確認日 " + item["checked_on"],
+            sunk_path + " / " + item["id"],
+        )
         if item.get("issue_bucket"):
-            verify("bike-source-note-copy-" + item["id"], item["sns_note"], sunk_path + " / " + item["id"])
+            verify(
+                "bike-source-note-copy-" + item["id"],
+                display_source_note(item["sns_note"]),
+                sunk_path + " / " + item["id"],
+            )
     return result

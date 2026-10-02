@@ -139,14 +139,16 @@ def validate_article(
     for value in (theme["datePublished"], theme["dateModified"]):
         if f'<time datetime="{value}">' not in source:
             errors.append(f"{path.name}: visible date missing for {value}")
-    required_details = [
+    required_trust = [
         config["organization"]["name"],
         "世論調査ではなく",
         'href="about.html#corrections"',
     ]
-    if theme["id"] != "henoko-student-accident":
-        required_details.append("AIを使用した工程")
-    for required in required_details:
+    if theme.get("show_ai_process") is not False:
+        required_trust.append("AIを使用した工程")
+    elif "AIを使用した工程" in source:
+        errors.append(f"{path.name}: hidden AI process detail remains")
+    for required in required_trust:
         if required not in source:
             errors.append(f"{path.name}: visible trust detail missing: {required}")
     if source.count("<strong>データの集め方:</strong>"):
@@ -255,6 +257,7 @@ def main() -> int:
         loc_node = url_node.find("sm:loc", namespace)
         lastmod_node = url_node.find("sm:lastmod", namespace)
         page = Path(urlparse(loc_node.text or "").path).name if loc_node is not None else ""
+        page = page or "index.html"  # トップは正規URL（/）で載せている
         sitemap_dates[page] = lastmod_node.text if lastmod_node is not None else None
     sitemap_paths = set(sitemap_dates)
     fixed_pages = {

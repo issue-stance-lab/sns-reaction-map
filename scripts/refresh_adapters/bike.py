@@ -23,6 +23,11 @@ PAGE = Path("docs/bike-blue-ticket-reaction-map.html")
 CONFIG = Path("configs/bike-blue-ticket-reaction-map.json")
 REREAD_RECORDS = Path("data/verification/bike-blue-ticket-reread.json")
 CLAIM_RECORDS = Path("data/verification/bike-blue-ticket-claims.json")
+EDITORIAL_REREAD = Path("data/bike-blue-ticket_issues-reread.json")
+OPPOSITION_REREAD = Path("data/bike-blue-ticket_opposition_reread.json")
+REREAD_REGISTRY = Path("data/verification/reread/bike-blue-ticket.json")
+FETCH_HISTORY_RECOVERY = Path("data/verification/bike-blue-ticket-fetch-history-recovery.json")
+SUNK_CONTINENTS = Path("data/verification/bike-blue-ticket-sunk-continents.json")
 
 # 更新回ディレクトリを持たない時代の前回収集回。2026-08-10 以降の更新回が
 # social-samples/updates/ に揃うまでの間だけ使う。
@@ -107,6 +112,20 @@ def _signature_count(path: Path) -> int:
     )
 
 
+def _tide_note(base: dict, signature_count: int) -> str:
+    note = (
+        f"比較対象：{base['prev_label']}収集分のうち賛否を含む意見投稿／"
+        f"{base['cur_label']}収集分のうち賛否を含む意見投稿。"
+        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
+    )
+    if signature_count:
+        note += (
+            f"{base['cur_label']}収集分には、同一文面のオンライン署名の貼り付けが"
+            "多数含まれており、反対側の比率を押し上げています。"
+        )
+    return note
+
+
 def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -> None:
     sys.path.insert(0, str(root / "scripts"))
     from inject_tide_widget import (  # type: ignore[import-not-found]
@@ -125,25 +144,8 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
         raise FileNotFoundError(f"今回更新回がありません: {current_wave}")
     base["prev_label"] = _label(previous_date)
     base["cur_label"] = _label(current_date)
-    note = (
-        f"比較対象：{base['prev_label']}収集分のうち賛否を含む意見投稿／"
-        f"{base['cur_label']}収集分のうち賛否を含む意見投稿。"
-        "同じ検索語セットで取得した投稿をAIで分類しています。"
-        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
-    )
     signatures = _signature_count(current_wave)
-    if signatures:
-        # 2026-08-17 に反対が77→142件へ増えた分の約半分がこれだった。
-        # 断らずに比率だけ出すと、世論が動いたように読める。
-        #
-        # ここに件数を書かないのは、更新回の本文を文字列照合して数えた値で、
-        # 数字の出所検査（分類結果の集計）から導けないため。正確な件数は STEP3 が
-        # data/verification/bike-blue-ticket-reread.json から出している。
-        note += (
-            f"{base['cur_label']}収集分には、同一文面のオンライン署名の貼り付けが"
-            "多数含まれており、反対側の比率を押し上げています。"
-        )
-    base["note"] = note
+    base["note"] = _tide_note(base, signatures)
     previous = load_classified(
         previous_path,
         base["use_relevance_filter"],
@@ -174,7 +176,8 @@ def _run(root: Path, script: str, *args: str) -> None:
 
 
 def _run_builders(
-    root: Path, candidate: Path, template: Path, output: Path, verification_dest: Path
+    root: Path, candidate: Path, template: Path, output: Path, verification_dest: Path,
+    opposition_reread: Path | None = None,
 ) -> None:
     _run(
         root,
@@ -183,14 +186,71 @@ def _run_builders(
         "--html-template", str(template),
         "--output-html", str(output),
     )
-    _run(
-        root,
+    command = [
         "build_bike_process_sections.py",
         "--input", str(candidate),
         "--html-template", str(output),
         "--output-html", str(output),
         "--verification-dest", str(verification_dest),
+    ]
+    if opposition_reread is not None:
+        command.extend(("--opposition-reread", str(opposition_reread)))
+    _run(root, *command)
+
+
+def build_unspoken_issue_review(
+    root: Path, candidate_path: Path, update_path: Path, output_path: Path
+) -> dict:
+    """Record the new sample denominator only after all newly adopted posts were reread."""
+    candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    update = json.loads(update_path.read_text(encoding="utf-8"))
+    review = update.get("unspoken_issue_review") or {}
+    adopted = [item for item in update.get("items", []) if item.get("decision") == "adopt"]
+    adopted_ids = {str(item.get("tweet_id") or "") for item in adopted}
+    reviewed_ids = set(review.get("reviewed_tweet_ids") or [])
+    if (
+        not adopted_ids or "" in adopted_ids or reviewed_ids != adopted_ids
+        or review.get("result") != "no_new_mentions"
+    ):
+        raise ValueError("未言及論点を再確認した全投稿が今回の採用投稿と一致しません")
+    by_id = {str(row.get("tweet_id") or ""): row for row in candidate}
+    newly_adopted = []
+    for item in adopted:
+        row = by_id.get(str(item["tweet_id"]))
+        if (
+            row is None
+            or row.get("is_opinion") is not True
+            or hashlib.sha256(str(row.get("text") or "").encode()).hexdigest() != item.get("text_sha256")
+        ):
+            raise ValueError(f"未言及論点の再読記録が候補本文と一致しません: {item.get('tweet_id')}")
+        newly_adopted.append(row)
+
+    source = json.loads((root / SUNK_CONTINENTS).read_text(encoding="utf-8"))
+    if len(source.get("items") or []) != 4:
+        raise ValueError("自転車の未言及論点4件の検証記録がありません")
+    population = sum(row.get("is_opinion") is True for row in candidate)
+    day = str(review.get("reviewed_at"))
+    note_suffix = (
+        f"2026-09-29に今回新たに採用した{len(newly_adopted)}件を本文確認し、"
+        "この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。"
     )
+    for item in source["items"]:
+        pattern = re.compile(str((item.get("match_rule") or {}).get("pattern") or "(?!)"), re.I)
+        matching = [row for row in newly_adopted if pattern.search(str(row.get("text") or ""))]
+        if matching:
+            raise ValueError(
+                f"未言及論点 {item.get('id')} に新規一致候補があります。件数と説明を本文確認してください"
+            )
+        old_base = int(item.get("sns_base") or 0)
+        item["sns_note"] = str(item.get("sns_note") or "").replace(f"{old_base}件", f"{population}件")
+        item["sns_note"] = f"{item['sns_note']} {note_suffix}"
+        item["sns_base"] = population
+        item["checked_on"] = day
+        item["checked_by"] = "ai_assisted"
+        item["reread_ref"] = update_path.relative_to(root).as_posix()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(source, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return source
 
 
 def _apply_connected_display(root: Path, page: Path) -> None:
@@ -239,10 +299,19 @@ def finalize(root: Path, current_date: str) -> None:
     """候補公開JSONから、ページ内の管理対象数字を貼り直す。"""
     _run(
         root,
+        "bike_issue_media.py",
+        "--write-html",
+        "--page", str(root / PAGE),
+        "--public-theme", str(root / "data" / "public" / "themes" / "bike-blue-ticket.json"),
+    )
+    _run(
+        root,
         "build_bike_arena.py",
-        "--public-counts-only",
+        "--input", str(root / "social-samples" / "bike-blue-ticket_2d_classified.json"),
+        "--html-template", str(root / PAGE),
         "--output-html", str(root / PAGE),
     )
+    _run(root, "refresh_planet_section.py", "--topic", TOPIC, "--for-docs")
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
@@ -257,16 +326,55 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     for directory in (first, second):
         directory.mkdir(parents=True, exist_ok=True)
 
+    update = root / "data" / "bike-blue-ticket_editorial-updates" / f"{current_date.replace('-', '')}.json"
+    if not update.is_file():
+        raise FileNotFoundError(f"自転車の本文確認記録がありません: {update}")
+    from scripts.build_bike_refresh_candidate import extend_opposition_map
+    from scripts.build_bike_fetch_history_recovery import build as build_fetch_history_recovery
+
+    fetch_history = build_fetch_history_recovery(
+        candidate,
+        root=root,
+        canonical_relative_path="social-samples/bike-blue-ticket_2d_classified.json",
+    )
+    first_fetch_history = first / FETCH_HISTORY_RECOVERY.name
+    second_fetch_history = second / FETCH_HISTORY_RECOVERY.name
+    first_fetch_history.write_text(json.dumps(fetch_history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    second_fetch_history.write_text(json.dumps(fetch_history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    first_sunk = first / SUNK_CONTINENTS.name
+    second_sunk = second / SUNK_CONTINENTS.name
+    build_unspoken_issue_review(root, candidate, update, first_sunk)
+    build_unspoken_issue_review(root, candidate, update, second_sunk)
+    first_opposition = first / "opposition-reread-candidate.json"
+    second_opposition = second / "opposition-reread-candidate.json"
+    extend_opposition_map(root, update, first_opposition)
+    extend_opposition_map(root, update, second_opposition)
+    first_editorial = first / "bike-blue-ticket_issues-reread.json"
+    second_editorial = second / "bike-blue-ticket_issues-reread.json"
+    _run(root, "build_bike_editorial_reread.py", "--input", str(candidate), "--output", str(first_editorial))
+    _run(root, "build_bike_editorial_reread.py", "--input", str(candidate), "--output", str(second_editorial))
+    first_registry = first / REREAD_REGISTRY.name
+    second_registry = second / REREAD_REGISTRY.name
+    from scripts.build_bike_refresh_candidate import build_verified_reread_manifest
+    build_verified_reread_manifest(
+        root, candidate, update, first_editorial, first_opposition, first_registry
+    )
+    build_verified_reread_manifest(
+        root, candidate, update, second_editorial, second_opposition, second_registry
+    )
+
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
 
-    _run_builders(root, candidate, current_page, first / "page-candidate.html", first)
+    _run_builders(root, candidate, current_page, first / "page-candidate.html", first, first_opposition)
     _apply_tide(root, first / "page-candidate.html", current_wave, current_date)
     _apply_connected_display(root, first / "page-candidate.html")
-    _run_builders(root, candidate, first / "page-candidate.html", second / "page-candidate.html", second)
+    _run_builders(root, candidate, first / "page-candidate.html", second / "page-candidate.html", second, second_opposition)
     _apply_tide(root, second / "page-candidate.html", current_wave, current_date)
     _apply_connected_display(root, second / "page-candidate.html")
 
-    for name in ("page-candidate.html", REREAD_RECORDS.name, CLAIM_RECORDS.name):
+    for name in ("page-candidate.html", REREAD_RECORDS.name, CLAIM_RECORDS.name,
+                 "bike-blue-ticket_issues-reread.json", "opposition-reread-candidate.json",
+                 REREAD_REGISTRY.name, FETCH_HISTORY_RECOVERY.name, SUNK_CONTINENTS.name):
         if _digest(first / name) != _digest(second / name):
             raise ValueError(f"自転車青切符adapterは同じ候補の2回目実行で差分が出ました: {name}")
 
@@ -288,4 +396,9 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
         REREAD_RECORDS: first / REREAD_RECORDS.name,
         CLAIM_RECORDS: first / CLAIM_RECORDS.name,
         CONFIG: _write_config(root, stage, previous_date, current_date),
+        EDITORIAL_REREAD: first_editorial,
+        OPPOSITION_REREAD: first_opposition,
+        REREAD_REGISTRY: first_registry,
+        FETCH_HISTORY_RECOVERY: first_fetch_history,
+        SUNK_CONTINENTS: first_sunk,
     }

@@ -17,7 +17,7 @@
 | 累積サンプル数 | 最新値は `data/public/catalog.json` の自動集計を参照                |
 | 形態      | 静的HTML（`docs/` を GitHub Actions（`.github/workflows/deploy.yml`）で GitHub Pages に公開） |
 | データ源    | Yahooリアルタイム検索の公開投稿                                      |
-| 分類エンジン  | Hermes（kimi-k2.6）／ OpenCode Go（minimax-m2.7）            |
+| 分類エンジン  | Hermes（kimi-k2.7-code）／ OpenCode Go（minimax-m2.7）       |
 | 投票基盤    | Supabase Edge Function（`supabase/functions/cast-vote/`） |
 | 計測      | GA4 `G-K10S4YCZFH` / AdSense `ca-pub-2542211932832864`  |
 

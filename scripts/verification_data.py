@@ -67,7 +67,15 @@ def make_verification_records(records: list[dict[str, Any]]) -> list[dict[str, A
             {
                 "record_id_hash": record_id_hash(record),
                 "classification": {
-                    field: classification.get(field)
+                    # Some themes store editorial flags (notably is_opinion) at
+                    # the row's top level while issue/stance live in the nested
+                    # classifier result. Preserve the field's canonical source
+                    # instead of silently replacing it with a missing/null value.
+                    field: (
+                        classification.get(field)
+                        if classification.get(field) is not None
+                        else record.get(field)
+                    )
                     for field in CLASSIFICATION_FIELDS
                 },
             }
