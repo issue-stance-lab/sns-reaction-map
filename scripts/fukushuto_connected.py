@@ -21,7 +21,13 @@ PROGRESS_LABEL = "探ったところ"
 PROGRESS_HELP = "質問に答える・山を押す・クイズに答えると増えます"
 MACHINE_COPY = (
     "まだ編集部が投稿を1件ずつ読み直していません",
-    "AIが自動でつけた区分はここへ表示しません",
+    "この論点の中身（編集部が本文を読んで分けたもの）",
+    "AIが自動でつけた区分",
+    "人が読んだ結果だけをまとめにします",
+    "AI分類。代表投稿は編集部が選定",
+    "同じ検索語セットで取得した投稿をAIで分類しています",
+    "AIが論点・立場・表現強度を分類",
+    "全件をAIが論点・立場・表現強度で分類",
     "この論点に対応する資料照合は、まだ登録されていません",
     "AIを使用した工程",
     "2026年8月まで、このページは集めたデータの半分以下しか使えていませんでした",
@@ -136,6 +142,44 @@ def remove_machine_copy(source: str) -> str:
     """副首都ページに残った旧生成文を、再生成時にも戻らない形で除く。"""
     source = AI_PROCESS_PATTERN.sub("", source, count=1)
     source = OLD_BUILD_NOTE_PATTERN.sub("", source, count=1)
+    source = re.sub(r'<span class="review-note">.*?</span>', "", source, flags=re.S)
+    source = source.replace("／）", "）")
+    source = re.sub(
+        r"(意見と判定した\d+件を)AIが(\d+つの論点に整理しました。)",
+        r"\1\2",
+        source,
+    )
+    source = re.sub(
+        r"(収集した\d+件のうち意見と判定した投稿。)AIが論点・立場・表現強度を分類",
+        lambda match: match.group(1).rstrip("。"),
+        source,
+    )
+    source = source.replace(
+        "全件をAIが論点・立場・表現強度で分類し、うち意見と判定した",
+        "うち意見と判定した",
+    )
+    source = source.replace(
+        "同じ検索語セットで取得した投稿をAIで分類しています。",
+        "",
+    )
+    source = source.replace(
+        "    h += '<p class=\"sub\" style=\"margin-top:12px\"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>'\n"
+        "      + '<ul class=\"islands\">'",
+        "    h += '<ul class=\"islands\">'",
+        1,
+    )
+    source = re.sub(
+        r'\s*<p class="sub" style="margin-top:12px"><b>この論点の中身（編集部が本文を読んで分けたもの）</b></p>',
+        "",
+        source,
+    )
+    source = re.sub(
+        r'  \} else \{\n    if \(D\.show_unreviewed_note !== false\)\{\n.*?\n    \}\n  \}',
+        "  }",
+        source,
+        count=1,
+        flags=re.S,
+    )
     return source
 
 

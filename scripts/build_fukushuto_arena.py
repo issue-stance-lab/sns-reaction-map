@@ -300,8 +300,7 @@ def build_insight_stats(rows: list[dict[str, Any]], collected: int) -> str:
             '    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span>'
             '<span class="insight-label">分析対象の意見</span></div>',
             f'    <strong class="insight-value">{total}<small>件</small></strong>',
-            f'    <p class="insight-note">収集した{collected}件のうち意見と判定した投稿。'
-            f"AIが論点・立場・表現強度を分類</p>",
+            f'    <p class="insight-note">収集した{collected}件のうち意見と判定した投稿</p>',
             '    <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>',
             "  </article>",
             '  <article class="stat insight-stat" data-tone="debate">',
@@ -420,7 +419,7 @@ def build_details(rows: list[dict[str, Any]], collected: int, queries: list[str]
             "<details><summary>収集クエリ</summary><ul>"
             f'<li>{html.escape(" / ".join(queries))}</li>'
             f"<li>Yahooリアルタイム検索で累計{collected}件を取得（重複除去後）。"
-            f"全件をAIが論点・立場・表現強度で分類し、うち意見と判定した{total}件を"
+            f"うち意見と判定した{total}件を"
             "マップ・論点・賛否の集計対象にしています。</li></ul></details>",
             "<details><summary>注意</summary><ul>"
             "<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>"
@@ -491,8 +490,8 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         page = apply_landing_images(page)
         page = replace_once(
             page,
-            r"公開投稿\d+件のうち、意見と判定した\d+件をAI",
-            f"公開投稿{collected}件のうち、意見と判定した{total}件をAI",
+            r"公開投稿\d+件のうち、意見と判定した\d+件を(?:AIが)?",
+            f"公開投稿{collected}件のうち、意見と判定した{total}件を",
             "リード文",
         )
         # 「論点ごとのX投稿」（#issue-cards）はこの関数が作らない後付け区間のため、
@@ -508,8 +507,9 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
             page = connect_page(page, topic=THEME)
     else:
         page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
-        page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
-        page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + '  （取得期間: ' + re.search(r'（取得期間: ([^／]+)／', page).group(1) + '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
+        page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件を{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
+        period = re.search(r'（取得期間: ([^／）]+)', page).group(1)
+        page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + f'  （取得期間: {period}）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
         page = replace_once(page, r'<section class="stats insight-stats".*?\n</section>', build_insight_stats(rows, collected), "注目ポイント", flags=re.S)
         page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し")
     # 山なみ変換後もページ外に残る「議論の中心」は、旧デザイン専用ではなく
@@ -941,7 +941,7 @@ def build(
         page,
         r'<p class="lead">.*?</p>',
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'
-        f"意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。"
+        f"意見と判定した{total}件を{len(blocks)}つの論点に整理しました。"
         "世論調査ではなく、SNS反応サンプルの論点比較です。</p>",
         "ヒーローの lead",
         flags=re.S,
@@ -967,10 +967,7 @@ def build(
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
         f"  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n"
-        # 確認表示は <span class="review-note"> で囲む（apply_review_note.py が中身を書き分け、
-        # verify_number_provenance.py がこの囲みだけを検査から外す）。落とすと再生成で検査が落ちる。
-        f'  （取得期間: {sample_period(records)}／'
-        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
+        f'  （取得期間: {sample_period(records)}）<br>\n'
         "  <strong>社会全体の世論調査ではありません。</strong></p>",
         "調査条件",
         flags=re.S,

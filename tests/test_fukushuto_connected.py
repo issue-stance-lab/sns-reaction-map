@@ -65,6 +65,8 @@ class FukushutoConnectedTests(unittest.TestCase):
         display_source = connected.DATA_PATTERN.sub("", self.page)
         for text in connected.MACHINE_COPY:
             self.assertNotIn(text, display_source)
+        self.assertNotIn('class="review-note"', display_source)
+        self.assertNotIn("D.show_unreviewed_note !== false", display_source)
 
         data = connected.planet_data(self.page)
         unread = [issue for issue in data["issues"] if issue["sub"]["status"] != "reread"]
