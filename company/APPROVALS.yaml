@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-30"
+updated_at: "2026-10-02"
 
 rules:
   required_for:
@@ -1427,3 +1427,22 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36936913743"
       - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261002-002
+    department: growth-marketing
+    action: website_publication
+    summary: "副首都ページの検索入口、論点タブと山なみ連携、操作進捗表示、利用者向けでない工程説明の整理を公開する"
+    reason: "ローカル実装と実機確認を完了し、オーナーが本対話で「公開して」と明示的に承認したため"
+    risks:
+      - "ページ上部の構成と論点選択後の表示が変わるが、分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更しない"
+      - "全体テストに失敗がある場合は、副首都固有検査・公開ファイル検査・CIと本番実機で今回差分との関係を切り分ける"
+    recommendation: approve
+    evidence:
+      - "themes/fukushuto.md"
+      - "tests/test_fukushuto_search_entry.py"
+      - "tests/test_fukushuto_connected.py"
+      - "scripts/verify_theme_page.py fukushuto"
+    status: approved
+    requested_at: "2026-10-02"
+    decided_at: "2026-10-02"
+    decision_note: "オーナーが本対話で「公開して」と明示的に承認。mainへの統合・push前に記録した。"

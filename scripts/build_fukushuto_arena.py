@@ -67,6 +67,7 @@ try:
     from .fukushuto_issue_media import START as ISSUE_MEDIA_START
     from .fukushuto_issue_media import build_section as issue_media_section
     from .fukushuto_issue_media import inject as issue_media_inject
+    from .fukushuto_search_entry import apply as apply_search_entry
 except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_taxonomy import (  # type: ignore[no-redef]
         INTENSITIES,
@@ -89,6 +90,7 @@ except ImportError:  # python3 scripts/build_fukushuto_arena.py
     from fukushuto_issue_media import START as ISSUE_MEDIA_START  # type: ignore[no-redef]
     from fukushuto_issue_media import build_section as issue_media_section  # type: ignore[no-redef]
     from fukushuto_issue_media import inject as issue_media_inject  # type: ignore[no-redef]
+    from fukushuto_search_entry import apply as apply_search_entry  # type: ignore[no-redef]
 
 THEME = "fukushuto"
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
@@ -298,8 +300,7 @@ def build_insight_stats(rows: list[dict[str, Any]], collected: int) -> str:
             '    <div class="insight-head"><span class="insight-icon" aria-hidden="true">🗣️</span>'
             '<span class="insight-label">分析対象の意見</span></div>',
             f'    <strong class="insight-value">{total}<small>件</small></strong>',
-            f'    <p class="insight-note">収集した{collected}件のうち意見と判定した投稿。'
-            f"AIが論点・立場・表現強度を分類</p>",
+            f'    <p class="insight-note">収集した{collected}件のうち意見と判定した投稿</p>',
             '    <div class="insight-meter" aria-hidden="true"><i style="width:100%"></i></div>',
             "  </article>",
             '  <article class="stat insight-stat" data-tone="debate">',
@@ -418,7 +419,7 @@ def build_details(rows: list[dict[str, Any]], collected: int, queries: list[str]
             "<details><summary>収集クエリ</summary><ul>"
             f'<li>{html.escape(" / ".join(queries))}</li>'
             f"<li>Yahooリアルタイム検索で累計{collected}件を取得（重複除去後）。"
-            f"全件をAIが論点・立場・表現強度で分類し、うち意見と判定した{total}件を"
+            f"うち意見と判定した{total}件を"
             "マップ・論点・賛否の集計対象にしています。</li></ul></details>",
             "<details><summary>注意</summary><ul>"
             "<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>"
@@ -489,8 +490,8 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
         page = apply_landing_images(page)
         page = replace_once(
             page,
-            r"公開投稿\d+件のうち、意見と判定した\d+件をAI",
-            f"公開投稿{collected}件のうち、意見と判定した{total}件をAI",
+            r"公開投稿\d+件のうち、意見と判定した\d+件を(?:AIが)?",
+            f"公開投稿{collected}件のうち、意見と判定した{total}件を",
             "リード文",
         )
         # 「論点ごとのX投稿」（#issue-cards）はこの関数が作らない後付け区間のため、
@@ -506,8 +507,9 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
             page = connect_page(page, topic=THEME)
     else:
         page = replace_once(page, r"const ISSUES = \[.*?\n  \];", build_issues(counts), "ISSUES", flags=re.S)
-        page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
-        page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + '  （取得期間: ' + re.search(r'（取得期間: ([^／]+)／', page).group(1) + '／<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
+        page = replace_once(page, r'<p class="lead">.*?</p>', f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、意見と判定した{total}件を{len(blocks)}つの論点に整理しました。世論調査ではなく、SNS反応サンプルの論点比較です。</p>', "ヒーローの lead", flags=re.S)
+        period = re.search(r'（取得期間: ([^／）]+)', page).group(1)
+        page = replace_once(page, r'<p style="max-width:1000px;margin:0 auto;">.*?</p>', '<p style="max-width:1000px;margin:0 auto;">' + '<strong style="color:var(--ink);">このマップの元データ:</strong> ' + f'Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n' + f'  （取得期間: {period}）<br>\n  <strong>社会全体の世論調査ではありません。</strong></p>', "調査条件", flags=re.S)
         page = replace_once(page, r'<section class="stats insight-stats".*?\n</section>', build_insight_stats(rows, collected), "注目ポイント", flags=re.S)
         page = replace_once(page, r'<div class="panel-title"><h2>SNS反応マップ</h2><span>[^<]*</span></div>', f'<div class="panel-title"><h2>SNS反応マップ</h2><span>意見{total}件 | セクター=論点 / 中心に近いほど冷静 / 色=賛否 | ホバーで詳細・クリックでXへ</span></div>', "マップ見出し")
     # 山なみ変換後もページ外に残る「議論の中心」は、旧デザイン専用ではなく
@@ -516,6 +518,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     # 再構成（プロトタイプ）で削除済みのため、ここでの同期は不要になった。
     page = replace_once(page, r'<li class="conclusion-focus">.*?</li>', '<li class="conclusion-focus">' + f'<span class="conclusion-count"><b>{counts[top]}</b>件</span><strong>{html.escape(str(conclusion["headline"]))}</strong><span class="conclusion-detail">{html.escape(str(conclusion["detail"]))}</span></li>', "議論の中心", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?\n</section>', build_details(rows, collected, load_queries()), "詳細データ", flags=re.S)
+    page = apply_search_entry(page, total)
     return page
 
 
@@ -918,6 +921,7 @@ def build(
                 sys.path.insert(0, str(ROOT))
             from scripts.fukushuto_connected import apply as connect_page
             page = connect_page(page, topic=THEME)
+        page = apply_search_entry(page, total)
         if not check and (page != before or output is not None):
             target = Path(output) if output else html_path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -937,7 +941,7 @@ def build(
         page,
         r'<p class="lead">.*?</p>',
         f'<p class="lead">Yahooリアルタイム検索で取得した公開投稿{collected}件のうち、'
-        f"意見と判定した{total}件をAIが{len(blocks)}つの論点に整理しました。"
+        f"意見と判定した{total}件を{len(blocks)}つの論点に整理しました。"
         "世論調査ではなく、SNS反応サンプルの論点比較です。</p>",
         "ヒーローの lead",
         flags=re.S,
@@ -963,10 +967,7 @@ def build(
         '<strong style="color:var(--ink);">このマップの元データ:</strong> '
         f"Yahooリアルタイム検索で取得した公開投稿 {collected}件<br>\n"
         f"  （うち意見と判定した{total}件を、マップ・論点・賛否の分析対象としています）<br>\n"
-        # 確認表示は <span class="review-note"> で囲む（apply_review_note.py が中身を書き分け、
-        # verify_number_provenance.py がこの囲みだけを検査から外す）。落とすと再生成で検査が落ちる。
-        f'  （取得期間: {sample_period(records)}／'
-        '<span class="review-note">AI分類。代表投稿は編集部が選定</span>）<br>\n'
+        f'  （取得期間: {sample_period(records)}）<br>\n'
         "  <strong>社会全体の世論調査ではありません。</strong></p>",
         "調査条件",
         flags=re.S,
@@ -1006,6 +1007,7 @@ def build(
         "詳細データ",
         flags=re.S,
     )
+    page = apply_search_entry(page, total)
 
     for card in config["issue_counts"]["cards"]:
         card_total = sum(counts[str(issue)] for issue in card["main_issue"])

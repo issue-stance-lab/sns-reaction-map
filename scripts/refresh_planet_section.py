@@ -388,7 +388,11 @@ def _sync_fukushuto_method_text(html: str, data: dict) -> str:
     """
     collected = data["totals"]["collected"]
     return apply_research_conditions(
-        html, research_conditions_html(str(collected), data["sample_period"]), "fukushuto"
+        html,
+        research_conditions_html(
+            str(collected), data["sample_period"], show_review_note=False
+        ),
+        "fukushuto",
     )
 
 

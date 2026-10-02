@@ -23,8 +23,6 @@ def sources(items: list[dict]) -> str:
 
 def reasons(issue: dict) -> str:
     sub = issue["sub"]
-    if sub["status"] != "reread":
-        return f'<p class="fuk-empty">{e(sub.get("note", "理由の再読結果は未登録です"))}。AIが自動でつけた区分はここへ表示しません。</p>'
     rows = "".join(
         f'<li><span class="fuk-reason-row"><span>{e(item["label"])}</span>'
         f'<b id="fuk-reason-count-{e(issue["id"])}-{e(item["id"])}">{item["count"]:,}<small>件</small></b></span>'
@@ -32,6 +30,17 @@ def reasons(issue: dict) -> str:
         for item in sub["items"]
     )
     return f'<ul class="fuk-reasons">{rows}</ul>'
+
+
+def reason_section(issue: dict, index: dict) -> str:
+    """再読済みの理由だけを表示し、未対応説明や空の見出しは作らない。"""
+    if issue["sub"]["status"] != "reread":
+        return ""
+    return (
+        '<h3>どんな理由で語られている？</h3>'
+        + reasons(issue)
+        + f'<p class="fuk-note">{e(index["reason_post_note"])}</p>'
+    )
 
 
 def post_examples(issue_cards_html: str, iid: str) -> str:
@@ -98,8 +107,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
         )
         out.append(
             '<div class="fuk-columns"><section class="fuk-opinions" aria-label="意見の理由と投稿">'
-            + '<h3>どんな理由で語られている？</h3>' + reasons(issue)
-            + f'<p class="fuk-note">{e(index["reason_post_note"])}</p>'
+            + reason_section(issue, index)
             + '<div class="fuk-posts"><h3>実際の投稿を読む</h3>'
             + '<p class="fuk-note">副首都をめぐる投稿から、論点を読み進める手がかりとして2件を選んでいます。賛否の割合ではありません。</p>'
             + post_examples(cards_html, iid) + '</div></section>'
@@ -113,11 +121,9 @@ def render_templates(data: dict, source: str, index: dict) -> str:
                 f'<details class="fuk-check" data-fuk-check="{e(check_id)}"><summary>{e(item["label"])}：{e(item["ask"])}</summary>'
                 f'<p id="fuk-check-note-{e(check_id)}">{e(item["found"])}</p>{sources(item["sources"])}</details>'
             )
-        out.append('<h3>投稿の主張と一次資料</h3>')
         if connection["claim_ids"]:
+            out.append('<h3>投稿の主張と一次資料</h3>')
             out.append(f'<p class="fuk-note">主張と資料の照合は{e(data["ocean"]["checked_on"])}時点です。投稿の正誤ではなく、投稿内の主張と一次資料の関係を示します。</p>')
-        else:
-            out.append('<p class="fuk-empty">この論点に対応する資料照合は、まだ登録されていません。</p>')
         for position, claim_id in enumerate(connection["claim_ids"]):
             claim = claims[claim_id]
             out.append(
