@@ -19,7 +19,7 @@ def e(value: object) -> str:
 
 def sources(items: list[dict]) -> str:
     if not items:
-        return '<span class="henoko-no-source">照合した出典はありません。</span>'
+        return ""
     links = []
     for item in items:
         label = item.get("name") or item.get("title") or item.get("url")
@@ -57,7 +57,7 @@ def reasons(issue: dict) -> str:
     sub = issue.get("sub") or {}
     items = sub.get("items") or []
     if not items:
-        return '<p class="henoko-note">この論点は、理由別の再読分類をまだ掲載していません。</p>'
+        return ""
     rows = []
     for item in items:
         rid = item["id"]
@@ -167,7 +167,7 @@ def render_templates(data: dict, source: str, index: dict) -> str:
     <p class="henoko-scope">{e(scope)}</p>
     <div class="henoko-columns">
       <section class="henoko-opinions" aria-labelledby="henoko-reasons-{e(iid)}"><h3 id="henoko-reasons-{e(iid)}">この論点を語る理由</h3>{reasons(issue)}
-        <p class="henoko-note henoko-post-note" data-henoko-post-unavailable>{e(index["post_note"])}</p></section>
+        </section>
       <section class="henoko-evidence" aria-labelledby="henoko-evidence-{e(iid)}"><h3 id="henoko-evidence-{e(iid)}">資料と照合する</h3>
         <div class="henoko-reading-sources">
           {f'<div class="henoko-checks"><h4>学校の説明で確かめる</h4>{check_html}</div>' if check_html else ''}

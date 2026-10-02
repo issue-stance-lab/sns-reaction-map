@@ -37,6 +37,26 @@ class HenokoConnectedTest(unittest.TestCase):
         self.assertEqual(1, self.candidate.count("henoko-connected.css?v=1"))
         self.assertEqual(1, self.candidate.count(connected.BRIDGE_START))
 
+    def test_progress_copy_describes_interactions_and_survives_regeneration(self):
+        progress = self.soup.select_one("#progress > span:first-child")
+        self.assertEqual(connected.PROGRESS_LABEL, progress.get_text(strip=True))
+        self.assertNotIn("読んだところ", self.soup.select_one("#progress").get_text(" ", strip=True))
+        self.assertIn("質問に答える・山を押す・クイズに答えると増えます", self.candidate)
+        self.assertEqual(self.candidate, connected.apply(self.candidate))
+
+    def test_progress_mechanics_remain_theme_scoped_and_unchanged(self):
+        block = self.candidate.split("/* ---------- 探査記録 ----------", 1)[1].split(
+            "/* ---------- 予想（見る前に当てる） ----------", 1
+        )[0]
+        self.assertIn("2 + issues.length", block)
+        self.assertIn("sunk_continents", block)
+        self.assertIn("D.claims", block)
+        self.assertIn("D.ocean.veins", block)
+        self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', block)
+        self.assertIn('localStorage.setItem("isa-seen-"+D.theme_id', block)
+        for viewing_signal in ("scrollY", "scrollTop", "IntersectionObserver", "timeupdate"):
+            self.assertNotIn(viewing_signal, block)
+
     def test_mountain_chart_stretches_to_stage_width(self):
         css = (ROOT / "docs/henoko-connected.css").read_text(encoding="utf-8")
         self.assertRegex(
@@ -56,8 +76,39 @@ class HenokoConnectedTest(unittest.TestCase):
             iid = issue["id"]
             template = self.soup.select_one(f"#{connected.TOPIC}-reading-{iid}")
             self.assertIsNotNone(template)
-            self.assertEqual(1, len(template.select("[data-henoko-post-unavailable]")))
+            self.assertEqual([], template.select("[data-henoko-post-unavailable]"))
             self.assertEqual([], template.select("[data-henoko-post-url], [data-henoko-post-id]"))
+
+    def test_mechanical_copy_is_removed_without_replacing_it(self):
+        for phrase in connected.BANNED_USER_COPY:
+            self.assertNotIn(phrase, self.candidate)
+        self.assertNotIn("理由別の再読分類をまだ掲載していません", self.candidate)
+        self.assertNotIn("照合した出典はありません", self.candidate)
+        self.assertNotIn("まだ一次資料との突き合わせをしていません", self.candidate)
+        self.assertNotIn("確かめるまで、ここは空のままにします", self.candidate)
+        asset = (ROOT / "docs/henoko-connected.js").read_text(encoding="utf-8")
+        self.assertNotIn("一次資料クイズは準備中です", asset)
+
+    def test_legacy_mechanical_copy_is_removed_when_reconnected(self):
+        legacy = self.candidate.replace(
+            "<h3>SNS投稿の収集方法</h3>",
+            "<h3>AIを使用した工程</h3><p>制作工程の説明</p><h3>SNS投稿の収集方法</h3>",
+            1,
+        ).replace(
+            "</ul>\n  </div>\n  <p class=\"article-trust-caution\"",
+            "<li>この回は分類モデルの切り替えと重なりました。内部事情です。</li></ul>\n  </div>\n  <p class=\"article-trust-caution\"",
+            1,
+        ).replace("（確認日 2026-09-20）", "（確認日 2026-09-20／AIの下読みを含む）", 1)
+        reconnected = connected.apply(legacy)
+        for phrase in connected.BANNED_USER_COPY:
+            self.assertNotIn(phrase, reconnected)
+
+    def test_counts_reread_state_and_sources_remain(self):
+        self.assertIn("まだ読み直していない分", self.candidate)
+        self.assertIn("未読分12件は別枠で表示しています", self.candidate)
+        self.assertIn("収集した594件のうち意見と判定した461件", self.candidate)
+        self.assertGreaterEqual(len(self.soup.select("[data-henoko-claim]")), 1)
+        self.assertGreaterEqual(len(self.soup.select(".henoko-sources a")), 1)
 
     def test_connection_order_matches_content_index(self):
         for issue in self.data["issues"]:

@@ -1,0 +1,88 @@
+.henoko-entry{
+  --entry-ink:#15343f;
+  --entry-sea:#087f99;
+  --entry-deep:#155e75;
+  --entry-fact:#167a63;
+  --entry-pending:#b47912;
+  --entry-voices:#6b5793;
+  --entry-paper:#f7fbfb;
+  --entry-line:#c8d9dc;
+  position:relative;
+  isolation:isolate;
+  padding:clamp(34px,6vw,76px) min(6vw,72px) clamp(48px,7vw,86px);
+  color:var(--entry-ink);
+  background:
+    radial-gradient(circle at 10% 4%,rgba(8,127,153,.11),transparent 24rem),
+    linear-gradient(180deg,#edf7f8 0,#f8fbfb 48%,#eef6f6 100%);
+  border-bottom:1px solid rgba(21,94,117,.16);
+}
+.henoko-entry::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.26;background:repeating-linear-gradient(0deg,transparent 0 31px,rgba(21,94,117,.13) 31px 32px)}
+.henoko-entry__inner{width:min(1180px,100%);margin:0 auto}
+.henoko-entry__header{display:grid;grid-template-columns:minmax(0,.92fr) minmax(360px,.68fr);column-gap:clamp(30px,6vw,82px);align-items:end;margin-bottom:30px;padding-left:22px;border-left:5px solid var(--entry-sea)}
+.henoko-entry__eyebrow{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:0 0 10px!important;color:var(--entry-deep)!important;font-size:12px!important;font-weight:900;letter-spacing:.08em}
+.henoko-entry__eyebrow span{padding:4px 8px;background:var(--entry-ink);color:#fff;letter-spacing:.1em}
+.henoko-entry__header h2{margin:0!important;font-family:"Noto Serif JP",serif;font-size:clamp(28px,4.3vw,48px)!important;line-height:1.25;letter-spacing:-.04em}
+.henoko-entry__header h2 em{font-style:normal;color:var(--entry-sea);text-decoration:underline;text-decoration-color:rgba(8,127,153,.2);text-decoration-thickness:8px;text-underline-offset:-4px;text-decoration-skip-ink:none}
+.henoko-entry__header>p:last-child{margin:0!important;color:#516a73;font-size:14px;line-height:1.95}
+.henoko-entry__issue-picker{margin:0 0 18px;padding:20px;border:1px solid rgba(21,94,117,.2);background:rgba(255,255,255,.72);box-shadow:0 12px 30px rgba(21,52,63,.06)}
+.henoko-entry__picker-head{display:grid;grid-template-columns:minmax(250px,.6fr) 1fr;gap:28px;align-items:end;margin-bottom:16px}
+.henoko-entry__picker-head>div>p{margin:0 0 2px!important;color:var(--entry-sea);font-size:10.5px!important;font-weight:900;letter-spacing:.12em}
+.henoko-entry__picker-head h3{margin:0;color:var(--entry-ink);font:900 22px/1.4 "Noto Serif JP",serif}
+.henoko-entry__picker-head>p{margin:0!important;color:#526a72;font-size:12.5px;line-height:1.75}
+.henoko-entry__issue-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.henoko-entry__issue-tabs button{position:relative;display:grid;grid-template-columns:30px 1fr;grid-template-rows:auto auto;column-gap:7px;align-items:center;min-width:0;padding:12px 9px;border:1px solid var(--entry-line);background:#fff;color:var(--entry-ink);font:inherit;text-align:left;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease}
+.henoko-entry__issue-tabs button>span{grid-row:1/3;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#edf6f7;font-size:16px}
+.henoko-entry__issue-tabs button b{overflow:hidden;font-size:11.5px;line-height:1.45;text-overflow:ellipsis}
+.henoko-entry__issue-tabs button small{color:#71848a;font-size:10px;font-weight:800}
+.henoko-entry__issue-tabs button:hover{transform:translateY(-2px);border-color:var(--entry-sea);box-shadow:0 8px 18px rgba(21,52,63,.08)}
+.henoko-entry__issue-tabs button[aria-selected="true"]{border-color:var(--entry-sea);background:#e7f5f6;box-shadow:inset 0 -4px 0 var(--entry-sea)}
+.henoko-entry__issue-tabs button[aria-selected="true"]::before{content:"選択中";position:absolute;right:5px;top:-8px;padding:2px 5px;background:var(--entry-sea);color:#fff;font-size:8px;font-weight:900;letter-spacing:.06em}
+.henoko-entry__issue-tabs button:focus-visible{outline:3px solid #efaa25;outline-offset:2px}
+.henoko-entry__selection{display:flex;align-items:center;gap:10px;margin:24px 0 0;color:var(--entry-ink)}
+.henoko-entry__selection span{padding:3px 7px;background:var(--entry-ink);color:#fff;font-size:9px;font-weight:900;letter-spacing:.1em}
+.henoko-entry__selection strong{font:900 18px/1.5 "Noto Serif JP",serif}
+.henoko-entry__chart{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-top:34px}
+.henoko-entry__chart::before{content:"";position:absolute;left:calc(16.666% - 1px);right:calc(16.666% - 1px);top:14px;height:2px;background:linear-gradient(90deg,var(--entry-fact),var(--entry-pending) 50%,var(--entry-voices))}
+.henoko-layer{position:relative;display:grid;grid-template-rows:auto 1fr;border:1px solid var(--entry-line);background:rgba(255,255,255,.9);box-shadow:0 14px 34px rgba(21,52,63,.08)}
+.henoko-layer::before{content:"";position:absolute;left:50%;top:-21px;width:14px;height:14px;transform:translateX(-50%);border:4px solid #edf7f8;border-radius:50%;background:var(--layer-color)}
+.henoko-layer--fact{--layer-color:var(--entry-fact)}.henoko-layer--pending{--layer-color:var(--entry-pending)}.henoko-layer--voices{--layer-color:var(--entry-voices)}
+.henoko-layer__marker{display:flex;align-items:center;justify-content:space-between;min-height:50px;padding:9px 16px;background:var(--layer-color);color:#fff}
+.henoko-layer__marker span{font:900 25px/1 "Noto Serif JP",serif;letter-spacing:-.05em}
+.henoko-layer__body{display:flex;flex-direction:column;padding:20px 20px 22px}
+.henoko-layer__status{margin:0 0 7px!important;color:var(--layer-color)!important;font-size:10.5px!important;font-weight:900;letter-spacing:.11em}
+.henoko-layer h3{margin:0 0 14px;font-family:"Noto Serif JP",serif;font-size:20px;line-height:1.45;color:var(--entry-ink)}
+.henoko-layer ul{margin:0 0 15px;padding:0;list-style:none}
+.henoko-layer li{position:relative;padding:9px 0 9px 18px;border-top:1px solid rgba(21,52,63,.12);font-size:13px;line-height:1.75}
+.henoko-layer li::before{content:"";position:absolute;left:1px;top:17px;width:7px;height:7px;border:2px solid var(--layer-color);border-radius:50%}
+.henoko-layer__body>p:not(.henoko-layer__status):not(.henoko-layer__count){margin:0 0 15px;color:#526a72;font-size:13px;line-height:1.8}
+.henoko-layer__note{padding:11px 12px;border-left:3px solid var(--entry-pending);background:#fbf5e8}
+.henoko-layer__count{display:flex;align-items:baseline;gap:7px;margin:0 0 9px!important;color:#526a72;font-size:13px}
+.henoko-layer__count b{color:var(--entry-voices);font:900 34px/1 "Noto Serif JP",serif}
+.henoko-layer a{display:flex;justify-content:space-between;gap:10px;margin-top:auto;padding-top:13px;border-top:1px dashed var(--entry-line);color:var(--entry-deep);font-size:12.5px;font-weight:900;text-decoration:none}
+.henoko-layer a:hover{text-decoration:underline}.henoko-layer a:focus-visible,.henoko-entry__routes a:focus-visible,.henoko-faq summary:focus-visible{outline:3px solid #efaa25;outline-offset:3px}
+.henoko-entry__chart.is-changing .henoko-layer__body{animation:henoko-entry-swap .28s ease both}
+@keyframes henoko-entry-swap{from{opacity:.25;transform:translateY(7px)}to{opacity:1;transform:none}}
+.henoko-entry__mountain-bridge{display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;margin:16px 0 0;padding:17px 18px;border:1px solid rgba(21,94,117,.22);background:var(--entry-ink);color:#fff}
+.henoko-entry__mountain-bridge p{margin:0 0 2px!important;color:#cce1e5;font-size:11.5px;line-height:1.6}
+.henoko-entry__mountain-bridge strong{font-size:13.5px;line-height:1.55}
+.henoko-entry__mountain-bridge button{display:flex;align-items:center;gap:8px;min-height:48px;padding:11px 17px;border:1px solid #fff;background:#fff;color:var(--entry-ink);font-family:inherit;font-size:13px;font-weight:900;line-height:1.4;cursor:pointer;transition:background .18s ease,color .18s ease,transform .18s ease}
+.henoko-entry__mountain-bridge button span{font-size:22px;color:var(--entry-sea)}
+.henoko-entry__mountain-bridge button:hover{transform:translateY(-2px);background:#dff3f5}
+.henoko-entry__mountain-bridge button:focus-visible{outline:3px solid #efaa25;outline-offset:3px}
+.henoko-entry__routes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:18px 0 0}
+.henoko-entry__routes a{position:relative;display:grid;grid-template-columns:46px 1fr;grid-template-rows:auto auto;column-gap:10px;min-height:76px;padding:13px;border:1px solid rgba(21,94,117,.2);background:rgba(255,255,255,.72);color:var(--entry-ink);text-decoration:none;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.henoko-entry__routes a::after{content:"↘";position:absolute;right:9px;top:7px;color:var(--entry-sea);font-weight:900}
+.henoko-entry__routes a:hover{transform:translateY(-2px);border-color:var(--entry-sea);box-shadow:0 10px 24px rgba(21,52,63,.1)}
+.henoko-entry__routes span{grid-row:1/3;align-self:center;display:grid;place-items:center;width:42px;height:42px;border:1px solid var(--entry-line);border-radius:50%;color:var(--entry-sea);font-size:11px;font-weight:900}
+.henoko-entry__routes b{font-size:13.5px;line-height:1.4}.henoko-entry__routes small{color:#657980;font-size:10.5px;font-weight:700}
+.henoko-faq{display:grid;grid-template-columns:230px 1fr;gap:clamp(24px,5vw,70px);margin-top:clamp(46px,7vw,82px);padding-top:24px;border-top:5px solid var(--entry-ink)}
+.henoko-faq header p{margin:0 0 7px;color:var(--entry-sea);font-size:10px;font-weight:900;letter-spacing:.12em}.henoko-faq header h2{margin:0;font:900 clamp(22px,3vw,30px)/1.45 "Noto Serif JP",serif;color:var(--entry-ink)}
+.henoko-faq__grid{border-top:1px solid var(--entry-line)}
+.henoko-faq details{border-bottom:1px solid var(--entry-line);background:rgba(255,255,255,.48)}
+.henoko-faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:17px 8px 17px 14px;color:var(--entry-ink);font-size:13.5px;font-weight:900;line-height:1.65;cursor:pointer;list-style:none}.henoko-faq summary::-webkit-details-marker{display:none}
+.henoko-faq summary span{position:relative;flex:0 0 28px;height:28px;border:1px solid var(--entry-ink);border-radius:50%}.henoko-faq summary span::before,.henoko-faq summary span::after{content:"";position:absolute;left:7px;right:7px;top:13px;height:1px;background:var(--entry-ink);transition:transform .2s ease}.henoko-faq summary span::after{transform:rotate(90deg)}.henoko-faq details[open] summary span::after{transform:none}
+.henoko-faq details>div{padding:0 54px 18px 14px}.henoko-faq details p{margin:0;color:#526a72;font-size:13px;line-height:1.9}.henoko-faq details a{color:var(--entry-deep);font-weight:800}
+@media(max-width:980px){.henoko-entry__issue-tabs{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:860px){.henoko-entry__header{grid-template-columns:1fr}.henoko-entry__header>p:last-child{margin-top:14px!important}.henoko-entry__picker-head{grid-template-columns:1fr;gap:6px}.henoko-entry__chart{grid-template-columns:1fr;padding:0}.henoko-entry__chart::before{left:20px;right:auto;top:24px;bottom:24px;width:2px;height:auto;background:linear-gradient(180deg,var(--entry-fact),var(--entry-pending) 50%,var(--entry-voices))}.henoko-layer{grid-template-columns:64px 1fr;grid-template-rows:1fr}.henoko-layer::before{display:none}.henoko-layer__marker{min-height:100%;padding:14px}.henoko-entry__mountain-bridge{grid-template-columns:1fr}.henoko-entry__mountain-bridge button{justify-content:center}.henoko-entry__routes{grid-template-columns:repeat(2,1fr)}.henoko-faq{grid-template-columns:1fr}}
+@media(max-width:560px){.henoko-entry{padding-left:14px;padding-right:14px}.henoko-entry__header{padding-left:15px}.henoko-entry__eyebrow{display:block}.henoko-entry__eyebrow span{display:inline-block;margin-bottom:6px}.henoko-entry__issue-picker{padding:15px 12px}.henoko-entry__issue-tabs{grid-template-columns:repeat(2,1fr)}.henoko-entry__issue-tabs button{grid-template-columns:26px 1fr;padding:11px 7px}.henoko-entry__issue-tabs button>span{width:26px;height:26px;font-size:14px}.henoko-entry__selection{align-items:flex-start}.henoko-layer{grid-template-columns:48px 1fr}.henoko-layer__marker{padding:10px}.henoko-layer__marker span{font-size:18px;writing-mode:vertical-rl}.henoko-layer__body{padding:18px 15px 20px}.henoko-entry__mountain-bridge{padding:15px 13px}.henoko-entry__routes{grid-template-columns:1fr}.henoko-entry__routes a{min-height:68px}.henoko-faq details>div{padding-right:18px}}
+@media(prefers-reduced-motion:reduce){.henoko-entry *{scroll-behavior:auto!important;transition:none!important}}

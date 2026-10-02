@@ -46,6 +46,10 @@ THEME = "henoko-student-accident"
 PAGE = Path("docs/henoko-student-accident-reaction-map.html")
 ARENA_DATA = Path("docs/henoko-arena-data.js")
 PUBLIC_THEME = ROOT / "data" / "public" / "themes" / f"{THEME}.json"
+SEARCH_ENTRY_START = "<!-- HENOKO_SEARCH_ENTRY_START -->"
+SEARCH_ENTRY_END = "<!-- HENOKO_SEARCH_ENTRY_END -->"
+SEARCH_OPINIONS_START = "<!-- HENOKO_SEARCH_OPINIONS -->"
+SEARCH_OPINIONS_END = "<!-- HENOKO_SEARCH_OPINIONS_END -->"
 
 # 正典の立場ラベル。ページ側は「評価／疑問／切り分け」の3方向で色分けする。
 SUPPORT = "文科省判断を支持"
@@ -699,6 +703,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     collected, total, stats, by_stance, by_intensity, by_cross = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
+    page = apply_search_entry_counts(page, total)
     by_issue = Counter({ISSUE_INDEX[name]: values.total for name, values in stats.items()})
     page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total), "詳細データ表")
     if "<!-- PLANET_SECTION_START -->" in page:
@@ -721,6 +726,25 @@ def replace_block(page: str, pattern: str, replacement: str, label: str) -> str:
     if count != 1:
         raise IssueCountError(f"{label}の差し替え位置が{count}か所見つかりました（1か所であるべき）")
     return updated
+
+
+def apply_search_entry_counts(page: str, opinions: int) -> str:
+    """検索入口のSNS件数を正典と同期し、入口ブロックの欠落も検知する。"""
+    has_start = SEARCH_ENTRY_START in page
+    has_end = SEARCH_ENTRY_END in page
+    if not has_start and not has_end:
+        return page
+    if page.count(SEARCH_ENTRY_START) != 1 or page.count(SEARCH_ENTRY_END) != 1:
+        raise IssueCountError("検索入口セクションのマーカーが1組でない")
+    start = page.index(SEARCH_ENTRY_START)
+    end = page.index(SEARCH_ENTRY_END, start) + len(SEARCH_ENTRY_END)
+    block = page[start:end]
+    pattern = re.escape(SEARCH_OPINIONS_START) + r"[\d,]+" + re.escape(SEARCH_OPINIONS_END)
+    replacement = f"{SEARCH_OPINIONS_START}{opinions:,}{SEARCH_OPINIONS_END}"
+    updated, count = re.subn(pattern, replacement, block)
+    if count != 1:
+        raise IssueCountError(f"検索入口の意見件数が1か所でない: {count}か所")
+    return page[:start] + updated + page[end:]
 
 
 def replace_number(page: str, pattern: str, values: list[int], label: str) -> str:
@@ -828,6 +852,7 @@ def build_page(
     rows = arena_rows(opinions)
     stats = {str(issue["main_issue"]): IssueStats(opinions, issue) for issue in ISSUE_DEFS}
     total = len(opinions)
+    page = apply_search_entry_counts(page, total)
 
     if "<!-- PLANET_SECTION_START -->" in page:
         page = refresh_verified_planet(page, records, opinions)

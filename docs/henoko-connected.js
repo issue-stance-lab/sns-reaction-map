@@ -56,11 +56,11 @@
       if(!reading||!evidence)return;
       if(!evidence.querySelector('.henoko-evidence-tabs')){
         var tabs=document.createElement('div'); tabs.className='henoko-evidence-tabs'; tabs.setAttribute('role','tablist');
-        tabs.innerHTML='<button type="button" data-henoko-tab="read" role="tab" aria-selected="true">資料を読む</button><button type="button" data-henoko-tab="discover" role="tab" aria-selected="false">X投稿で語られない話</button><button type="button" data-henoko-tab="quiz" role="tab" aria-selected="false">一次資料クイズ</button>';
+        tabs.innerHTML='<button type="button" data-henoko-tab="read" role="tab" aria-selected="true">資料を読む</button><button type="button" data-henoko-tab="discover" role="tab" aria-selected="false">X投稿で語られない話</button>'+((data.claims||[]).length?'<button type="button" data-henoko-tab="quiz" role="tab" aria-selected="false">一次資料クイズ</button>':'');
         evidence.insertBefore(tabs,evidence.querySelector('.henoko-reading-sources'));
         tabs.addEventListener('click',function(event){var button=event.target.closest('[data-henoko-tab]');if(button)setTab(evidence,button.dataset.henokoTab);});
       }
-      if(!evidence.querySelector('.henoko-quiz-panel')){
+      if((data.claims||[]).length&&!evidence.querySelector('.henoko-quiz-panel')){
         var quiz=document.createElement('div');quiz.className='henoko-quiz-panel';quiz.hidden=true;evidence.appendChild(quiz);buildQuiz(quiz);
       }
       setTab(evidence,evidence.dataset.henokoTab||'read');
@@ -76,7 +76,7 @@
     }
     function buildQuiz(box){
       var claims=data.claims||[], verdicts=['fact','gap','miss'];
-      if(!claims.length){box.textContent='一次資料クイズは準備中です。';return;}
+      if(!claims.length){box.remove();return;}
       var current=0,score=0;
       function paint(){
         if(current>=claims.length){box.innerHTML='<p class="henoko-quiz-score">'+score+' / '+claims.length+'問正解</p><p class="henoko-note">公開された一次資料を、投稿にあった主張と照合した結果です。</p>';return;}

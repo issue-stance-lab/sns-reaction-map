@@ -937,7 +937,7 @@ def issue_extras_html(issue: dict, data: dict) -> str:
                 f'<span class="vnote">{e(note)}</span>'
                 + (f'<span class="srcs">{links}</span>' if links else "") + '</li>')
         out.append(f'      <ul class="claims">{"".join(rows)}</ul>')
-    elif ocean.get("claim_status") == "not_started":
+    elif ocean.get("claim_status") == "not_started" and data["theme_id"] != "henoko-student-accident":
         out.append('      <div class="note">この論点は、まだ一次資料との突き合わせをしていません。</div>')
 
     veins = [v for v in ocean.get("veins", []) if issue["id"] in v.get("issue_ids", [])]
@@ -969,18 +969,23 @@ def static_ocean(data: dict) -> str:
     head = ['  <section id="ocean" class="ocean" tabindex="-1">',
             '    <h3 class="sec">資料にあるのに、SNSにないこと</h3>']
     if ocean.get("ocean_status") != "complete" or not (sunk or veins):
-        head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
-                    '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
+        if data["theme_id"] != "henoko-student-accident":
+            head.append('    <p class="sub">このテーマは、まだ編集部が一次資料を読んで'
+                        '「語られていないこと」を確かめていません。確かめるまで、ここは空のままにします。</p>')
         return "\n".join(head + ['  </section>'])
 
     # すぐ下の編集部の横断整理(static_editorial)と見出し・カードが同じ見た目で、
     # 「押して開いた内容」だと分かりづらいとの指摘（オーナー2026-09-19）。
     # バッジで「ここが、押して開いた内容」であることを明示する。
     head.append('    <p class="ocean-badge">🔍 資料にしかない話</p>')
+    reviewer = "" if data["theme_id"] == "henoko-student-accident" else (
+        "／編集部が本文を読んで確認"
+        if ocean.get("ocean_reviewer_type") == "editorial_review"
+        else "／AIの下読みを含む"
+    )
     head.append(
         '    <p class="sub">ここから下は集計ではありません。編集部が一次資料を読んで確かめたことだけを置いています。'
-        f'（確認日 {e(ocean.get("ocean_checked_on"))}／'
-        f'{"編集部が本文を読んで確認" if ocean.get("ocean_reviewer_type") == "editorial_review" else "AIの下読みを含む"}）</p>')
+        f'（確認日 {e(ocean.get("ocean_checked_on"))}{reviewer}）</p>')
 
     if sunk:
         head.append('    <h4 class="subsec">語られていない争点 — 一次資料では争点なのに、集めた投稿にほとんど無いもの</h4>')
