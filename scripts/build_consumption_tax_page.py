@@ -528,7 +528,7 @@ CLAIM_END = "<!-- CLAIM_AUDIT_END -->"
 # 起承転結の再構成（課題69、fukushutoのFACT_CHECKと同型）で、山なみ図を
 # 読んだ直後に置くよう変更した（以前は最後尾に近い「スタンス集計」の手前だった）。
 CLAIM_ANCHOR = "<!-- PLANET_SECTION_END -->"
-CHECKED_ON = "2026年8月19日"
+CHECKED_ON = "2026年10月3日"
 
 # 判定の呼び名。他テーマと同じ言い方にしないこと（verify_page_originality.py が見る）。
 VERDICT_LABEL = {
