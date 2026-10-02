@@ -1442,7 +1442,17 @@ items:
       - "tests/test_fukushuto_search_entry.py"
       - "tests/test_fukushuto_connected.py"
       - "scripts/verify_theme_page.py fukushuto"
-    status: approved
+    status: completed
     requested_at: "2026-10-02"
     decided_at: "2026-10-02"
     decision_note: "オーナーが本対話で「公開して」と明示的に承認。mainへの統合・push前に記録した。"
+    completed_at: "2026-10-02"
+    result_note: >-
+      main d4954dfaで公開。副首都関連41件、非公開データなしの公開検査1117件、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。本番ページで4つの論点タブ、
+      「候補地」の山への連携、操作進捗2/18への加算、削除対象文0件を確認した。
+      分類・件数・再読状態・代表投稿・資料・保存データ・計測方法は変更していない。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36964344115"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/36964344084"
+      - "https://sns-reaction-map.jp/fukushuto-reaction-map.html"
