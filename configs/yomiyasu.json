@@ -7,5 +7,22 @@
     "website": "共通領域を除いた見出しと編集本文を検査する",
     "seo": "Markdown本文を検査する",
     "x": "候補文面を検査する。平均文長は合否条件にしない"
+  },
+  "mechanical_checks": {
+    "_comment": "上流リンター(.claude/skills/yomiyasu/upstream)が見ない項目を scripts/review_with_yomiyasu.py が検査する。しきい値はここだけで変える。warnは完成を止め、infoは知らせるだけ。dash_chars: 公開本文で見つけたらwarn(U+2014 U+2015 U+2500 U+2013。長音記号U+30FCは対象外)。comma_warn_at / comma_info_at: 1文の読点がこの個数以上でwarn / info。sentence_warn_over: 1文がこの字数を超えたらwarn。average_info_below / average_info_above: 平均文長がこの字数未満 / 超でinfo(average_targetは目安で、メッセージに出すだけ。average_skip_mediumsの媒体は平均を見ない)。exempt_line_prefixes: この文字で始まる行は文長と読点の数に入れない(ダッシュ記号の検査は除外しない)。注記の2語は scripts/verify_ai_tone.py の「記事末の注記」と同じにしてある。見出し・表・引用・リスト・URL行・画像・HTMLも数えない。",
+    "dash_chars": ["—", "―", "─", "–"],
+    "comma_chars": ["、"],
+    "comma_warn_at": 4,
+    "comma_info_at": 3,
+    "sentence_warn_over": 80,
+    "average_target": [30, 45],
+    "average_info_below": 25,
+    "average_info_above": 55,
+    "average_skip_mediums": ["x"],
+    "exempt_line_prefixes": {
+      "画像の指示行": ["▼"],
+      "注記": ["データについて", "制度についての記述"],
+      "箇条書き": ["・"]
+    }
   }
 }

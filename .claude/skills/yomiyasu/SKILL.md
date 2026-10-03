@@ -35,6 +35,8 @@ python3 scripts/review_with_yomiyasu.py <対象ファイル> --medium <note|webs
 python3 scripts/review_with_yomiyasu.py <変更後> --original <変更前> --medium <note|website|seo|x> --strict
 ```
 
+機械で止まる項目と目視で確認する項目の一覧は、`references/sns-reaction-map.md` の「機械で止まる項目と目視で確認する項目」にある。上流のリンターはダッシュ記号、1文の読点、文の長さを見ないので、これはスクリプト側で止めている。出力の「文の長さ」の行で、平均が30〜45字の目安に近いかを人が確かめる。
+
 6. よみやす検査のあと、媒体固有の検査と `python3 scripts/verify_ai_tone.py` を実行する。
 
 警告が残った場合は最大2回まで見直す。数字・出典・URL・必要な否定対比を守るために残した指摘は、消すためだけに言い換えず、納品時に理由を報告する。
