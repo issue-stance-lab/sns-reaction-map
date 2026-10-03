@@ -1562,6 +1562,10 @@ def main() -> int:
         if not adapter_name or theme.get("page_update_mode") != "adapter":
             raise ValueError(f"{args.topic}: 更新回は保存済みですが、page adapterがないため公開できません")
         adapter = load_adapter(adapter_name)
+        review_candidate = getattr(adapter, "review_candidate", None)
+        if review_candidate is not None and not args.apply_promotion:
+            review_candidate(ROOT, stage, args.date, report)
+            write_json(stage / "report.json", report)
 
     if args.prepare_promotion:
         adapter_targets = adapter.build(ROOT, stage, args.date)

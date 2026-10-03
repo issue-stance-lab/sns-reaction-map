@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import subprocess
 import sys
@@ -16,6 +17,7 @@ from pathlib import Path
 TOPIC = "fukushuto"
 PAGE = Path("docs/fukushuto-reaction-map.html")
 CLAIM_RECORDS = Path("data/verification/fukushuto-claims.json")
+REVIEW_RECORDS = Path("data/verification/fukushuto-wave-review-20261003.json")
 # 更新回がまだ1回も無かった頃の比較対象。潮目ウィジェットの「前回」に使う。
 LEGACY_PREVIOUS_WAVE = Path("social-samples/fukushuto_hermes_cur_20260726_v2.json")
 LEGACY_PREVIOUS_DATE = "2026-07-26"
@@ -32,6 +34,50 @@ PROTECTED = (
 
 def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -> None:
+    """保存回は不変のまま、本文確認結果を公開候補だけへ適用する。"""
+    if current_date != "2026-10-03":
+        return
+    review = json.loads((root / REVIEW_RECORDS).read_text(encoding="utf-8"))
+    wave_path = stage / "classified-wave.json"
+    if review["source_sha256"] != _digest(wave_path):
+        raise ValueError("副首都の本文確認元と保存回が一致しません")
+    wave = json.loads(wave_path.read_text(encoding="utf-8"))
+    ids = [str(row["tweet_id"]) for row in wave]
+    ids_sha = hashlib.sha256("\n".join(ids).encode("utf-8")).hexdigest()
+    if review["ids_sha256"] != ids_sha or review["reviewed_count"] != len(wave):
+        raise ValueError("副首都の本文確認対象が保存回と一致しません")
+    by_id = {str(row["tweet_id"]): row for row in wave}
+    if len(by_id) != len(wave):
+        raise ValueError("副首都の保存回にID重複があります")
+    changes = review["overrides"]
+    if len({item["tweet_id"] for item in changes}) != len(changes):
+        raise ValueError("副首都の本文確認結果にID重複があります")
+    allowed = {"is_opinion", "main_issue", "stance", "article_usable", "risk", "summary", "reason"}
+    for item in changes:
+        tweet_id = item["tweet_id"]
+        if tweet_id not in by_id or not item.get("review_reason"):
+            raise ValueError(f"副首都の本文確認結果が不正です: {tweet_id}")
+        values = item["classification"]
+        if not values or set(values) - allowed:
+            raise ValueError(f"副首都の本文確認項目が不正です: {tweet_id}")
+        by_id[tweet_id]["classification"].update(values)
+    cumulative_path = stage / "cumulative-candidate.json"
+    cumulative = json.loads(cumulative_path.read_text(encoding="utf-8"))
+    cumulative_by_id = {str(row["tweet_id"]): row for row in cumulative}
+    if not set(by_id).issubset(cumulative_by_id):
+        raise ValueError("副首都の本文確認対象が累積候補にありません")
+    for tweet_id, row in by_id.items():
+        cumulative_by_id[tweet_id]["classification"] = row["classification"]
+    reviewed_wave = stage / "reviewed-wave.json"
+    reviewed_wave.write_text(json.dumps(wave, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    cumulative_path.write_text(json.dumps(cumulative, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report["automated_opinions"] = report["opinions"]
+    report["opinions"] = sum(row["classification"]["is_opinion"] is True for row in wave)
+    report["body_review"] = str(REVIEW_RECORDS)
+    report["body_review_changes"] = len(changes)
 
 
 def vote_fingerprint(html: str) -> tuple[str, tuple[str, ...], tuple[str, ...], int]:
@@ -149,7 +195,9 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
     current_page = root / PAGE
-    current_wave = root / "social-samples" / "updates" / TOPIC / current_date / "classified.json"
+    current_wave = stage / "reviewed-wave.json"
+    if not current_wave.is_file():
+        current_wave = root / "social-samples" / "updates" / TOPIC / current_date / "classified.json"
     first_page = stage / "page-candidate.html"
     second_page = stage / "idempotence" / "page-candidate.html"
     second_page.parent.mkdir(parents=True, exist_ok=True)
