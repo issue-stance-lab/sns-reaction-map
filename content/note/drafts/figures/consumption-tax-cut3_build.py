@@ -12,6 +12,8 @@ figs   : 図1・図2を content/note/drafts/images/ に書き出す（1800x1040�
 理由の型は、AIが付けた要約文（classification.summary）を、下の正規表現で機械的に分けた概数
 （1つの投稿が複数の型に入ることがある）。賛成側の「返事」と「減税がなかった場合と比べる投稿」は、
 編集部が要約を全件読んで目視で仕分けた結果を consumption-tax-cut3_hand-labels.json に残してある。
+首相発言（2026-10-01）への反応は、語句（PM_RX）で数えた30件を編集部が読んで仕分け、同じJSONの pm_remark_reaction に残した。
+データが増えて語句で数えた投稿が変わると、仕分けとの照合で止まる（増えた分を読んで足す）。
 """
 
 from __future__ import annotations
@@ -43,6 +45,11 @@ PRICE = (
     r"|値下げ(さ)?れ|値下がり(し|せ)|吸収|便乗|転嫁|店次第|届かな|届くか"
     r"|(値上げ|物価高|物価上昇|インフレ|円安|物価)(で|が|に|の中|下).{0,16}(意味|効果|実感|減税分)"
     r"|(意味|効果|実感)(が|は)?(ない|なし|薄|乏|限定|消).{0,14}(値上げ|物価高|物価上昇|インフレ)|値上げ(で|して|され|すれば|ラッシュ)"
+    # 2026-10-03の更新分（首相発言の報道後）で増えた言い回し
+    r"|値下げ(が|は|も)?(困難|不可|難し|できな|しにく)|反映(せず|されな|しな)|値下がり(しな|せず)|下がる(保証|とは思えない)|保証(でき|な)"
+    r"|(経営者|店|事業者)次第|ステルス|(コスト|原材料|仕入れ|人件費|電気代)(の)?(上昇|高騰|高).{0,14}(値下げ|効果|減税)"
+    r"|(値下げ|効果|減税).{0,10}(コスト|原材料|仕入れ|人件費|電気代)(の)?(上昇|高騰|高)"
+    r"|値上がり|値下げしない|値下がり(する|され)?(と|とは)?(思えない|しない)|物価下落せず|値上げ(が)?続き"
 )
 BACK = (
     r"(減税|消費税|財源なき|国債).{0,18}(円安|インフレ|物価高|物価上昇).{0,8}(招|加速|悪化|助長|促進|進行|誘発|押し上げ)"
@@ -59,6 +66,10 @@ REPLY = (
     r"反論|批判|反駁|論破|非難|否定論|無効論|無意味説|難癖|ネガティブ|詭弁|罠|嘘|矛盾|貶め|歪曲|反対派|反対論"
     r"|反対は|反対する|抵抗|煽り|疑問を呈|おかしい|不可解|言い訳|拡散を|主張の根拠を問い|懸念を嘲弄|疑問視|宣伝"
 )
+# 首相が日本テレビのインタビューで「引き下げ分は基本的に価格に反映される」「店の風評にも関わる」と述べたと報じられた（毎日新聞 2026-10-01 20:14 配信）
+PM_REPORT = datetime.datetime(2026, 10, 1, 20, 14, tzinfo=JST)
+PM_SINCE = datetime.datetime(2026, 10, 1, 0, 0, tzinfo=JST)
+PM_RX = r"風評|値下げ圧力|圧力|店の自由|価格設定は店|値下げ強要|恫喝"
 HAND_LABELS = Path(__file__).with_name("consumption-tax-cut3_hand-labels.json")
 SKEPTIC_QUERIES = {"消費税減税 意味ない", "消費税減税 効果", "消費税減税 反対"}
 
@@ -98,7 +109,13 @@ def dist(posts: list[dict], key: str, order: list[str]) -> dict[str, tuple[int, 
 
 def stats(op: list[dict]) -> dict:
     s: dict = {"n_opinion": len(op)}
+    fetched = sorted(p["fetched_at"][:10] for p in op)
+    s["period"] = (fetched[0], fetched[-1])  # 収集日（fetched_at）の最初と最後
     s["stance_all"] = dist(op, "stance", STANCES)
+    by_q: dict[str, list[str]] = collections.defaultdict(list)
+    for p in op:
+        by_q[p["query"]].append(p["classification"]["stance"])
+    s["by_query"] = {k: (len(v), pct(sum(1 for x in v if x == PRO), len(v))) for k, v in by_q.items()}  # 検索語ごとの賛成の割合
     s["issue_all"] = dist(op, "main_issue", ISSUES)
     s["stance_by_issue"] = {i: dist([p for p in op if p["classification"]["main_issue"] == i], "stance", STANCES) for i in ISSUES}
     s["issue_by_stance"] = {st: dist([p for p in op if p["classification"]["stance"] == st], "main_issue", ISSUES) for st in STANCES}
@@ -150,6 +167,14 @@ def stats(op: list[dict]) -> dict:
         "大綱決定前（9/16より前）": eff_line([p for p in op if posted_at(p) < CUT]),
         "大綱決定の翌日以降（9/16以降）": eff_line([p for p in op if posted_at(p) >= CUT]),
     }
+    # 首相発言への反応（日本時間の投稿日時。要約か原文に語句が出る投稿を数える）
+    since = [p for p in op if posted_at(p) >= PM_SINCE]
+    after = [p for p in op if posted_at(p) >= PM_REPORT]
+    hit = lambda ps: [p for p in ps if re.search(PM_RX, p["classification"].get("summary", "")) or re.search(PM_RX, p["text"])]
+    s["pm"] = {"since_n": len(since), "since_hit": len(hit(since)), "after_n": len(after), "after_hit": len(hit(after))}
+    pm_labels = json.loads(HAND_LABELS.read_text(encoding="utf-8"))["pm_remark_reaction"]
+    assert set(pm_labels) == {p["tweet_id"] for p in hit(since)}, "首相発言の仕分けが、語句で数えた投稿と一致しない（データが更新された）"
+    s["pm"]["read"] = dict(collections.Counter(pm_labels.values()))
     # 効果を疑う投稿の理由の型（要約文の語句判定。重複あり）
     con = [p for p in eff if p["classification"]["stance"] == CON]
     summ = lambda p: p["classification"].get("summary", "")
@@ -190,11 +215,13 @@ def stats(op: list[dict]) -> dict:
 
 
 def show(s: dict) -> None:
-    print(f"意見 n={s['n_opinion']:,}  効果の論点 n={s['n_effect']:,}  （標本: {SAMPLE.name}）")
+    print(f"意見 n={s['n_opinion']:,}  効果の論点 n={s['n_effect']:,}  収集日 {s['period'][0]}〜{s['period'][1]}  （標本: {SAMPLE.name}）")
     print("\n[全体の立場]")
     for k, (n, p) in s["stance_all"].items():
         print(f"  {k}: {n:,} ({p}%)")
     print(f"  何らかの減税を望む側（推進+条件付き）: {s['wants_some_cut'][0]:,} ({s['wants_some_cut'][1]}%)")
+    lo, hi = min(s["by_query"].items(), key=lambda kv: kv[1][1]), max(s["by_query"].items(), key=lambda kv: kv[1][1])
+    print(f"  検索語 {len(s['by_query'])}個ごとの賛成の割合: 最小 {lo[1][1]}%（「{lo[0]}」n={lo[1][0]}）〜 最大 {hi[1][1]}%（「{hi[0]}」n={hi[1][0]}）")
     print("\n[論点ごとの立場（図1）]")
     for i in ISSUES:
         n = sum(v[0] for v in s["stance_by_issue"][i].values())
@@ -206,6 +233,9 @@ def show(s: dict) -> None:
     print("\n[頑健性（効果の論点の立場と、立場ごとの『効果が主題』の割合）]")
     for k, v in s["robust"].items():
         print(f"  {k}: 全体n={v['n']:,} 効果n={v['n_effect']} 推進{v['pro']}% 反対・慎重{v['con']}% 条件付き{v['cond']}% | 効果が主題: 推進{v['effect_share_pro']}% 反対・慎重{v['effect_share_con']}%")
+    pm = s["pm"]
+    print(f"\n[首相発言への反応（日本時間）] 10/1 0時以降の意見{pm['since_n']}件のうち語句に触れる{pm['since_hit']}件 / 毎日新聞の配信(10/1 20:14)以降の意見{pm['after_n']}件のうち{pm['after_hit']}件")
+    print("  編集部が30件を読んで仕分けた結果: " + " / ".join(f"{k}{v}件" for k, v in sorted(pm["read"].items(), key=lambda kv: -kv[1])) + "（独立確認の数え方は25件前後。本文は「20件台」）")
     print(f"\n[効果の論点で同じ人を1件に絞る] n={s['eff_one_per_user']['n']} 推進{s['eff_one_per_user']['pro']}% 反対・慎重{s['eff_one_per_user']['con']}%")
     print(f"\n[効果を疑う投稿（反対・慎重×効果）n={s['n_effect_con']} が挙げた理由の型（要約文の語句判定・重複あり）]")
     for k, (n, p, u) in s["reasons"].items():
@@ -243,7 +273,7 @@ def figs(s: dict) -> None:
     bold = fm.FontProperties(fname="/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc")
     color = {PRO: "#3f7f6f", COND: "#8c7fc6", NEU: "#9aa1a8", CON: "#c8805a"}
     short = {PRO: "減税推進", COND: "条件付き賛成・政府案に不満", NEU: "中立・情報", CON: "減税反対・慎重"}
-    caption = f"データ: SNS反応まっぷ「消費税減税」公開投稿サンプル（2026-07-28〜09-24収集、意見{s['n_opinion']:,}件中）"
+    caption = f"データ: SNS反応まっぷ「消費税減税」公開投稿サンプル（収集日{s['period'][0]}〜{s['period'][1][5:]}・協定世界時、意見{s['n_opinion']:,}件中）"
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # 図1 論点ごとの立場（100%積み上げ横棒）。賛成→条件付き→反対の順に並べ、中立は右端に置く
@@ -256,6 +286,7 @@ def figs(s: dict) -> None:
         d = s["stance_all"] if issue is None else s["stance_by_issue"][issue]
         n = s["n_opinion"] if issue is None else sum(v[0] for v in d.values())
         left = 0.0
+        smalls1 = []
         if issue == EFFECT:
             ax.add_patch(plt.Rectangle((-0.5, y - 0.47), 101.0, 0.94, fill=False, ec="#b8862b", lw=2.2, zorder=0))
         for st in order1:
@@ -264,10 +295,13 @@ def figs(s: dict) -> None:
             if st == NEU:
                 # 中立・情報は棒の右端に置き、数値は右の余白に出す（幅が狭くても読める）
                 ax.text(100.9, y, f"中立 {w:.1f}%", ha="left", va="center", fontproperties=reg, fontsize=fs(10), color="#5f666d", zorder=3)
-            elif w >= 5.0:
+            elif w >= 6.0:
                 size = fs(11.5) if w >= 12.0 else (fs(9.5) if w >= 8.0 else 9.2)
                 ax.text(left + w / 2, y, f"{w:.1f}%", ha="center", va="center", color="white", fontproperties=bold, fontsize=size, zorder=3)
+            else:
+                smalls1.append((left + w / 2, f"{w:.1f}%"))  # 棒に収まらない幅（6%未満）は、棒の上に出す
             left += w
+        place_small_labels(ax, smalls1, y, 0.62, reg)
         ax.text(-2.0, y + 0.06, label, ha="right", va="center", fontproperties=bold if issue == EFFECT else reg, fontsize=fs(12.5))
         ax.text(-2.0, y - 0.24, f"{n:,}件", ha="right", va="center", fontproperties=reg, fontsize=fs(9.5), color="#666666")
     ax.set_xlim(0, 100)
