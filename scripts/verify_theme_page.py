@@ -50,7 +50,10 @@ REQUIRED_ARGUMENT_FIELDS = (
     "sources",
 )
 REQUIRED_SIDE_FIELDS = ("label", "strongest", "basis")
-MANAGED_COUNT_CLASSES = {"explainer-count", "issue-count", "hermes-issue-count", "henoko-reason-count"}
+MANAGED_COUNT_CLASSES = {
+    "explainer-count", "issue-count", "hermes-issue-count", "henoko-reason-count",
+    "tax-reason-count",
+}
 
 
 def _filled(value: Any) -> bool:

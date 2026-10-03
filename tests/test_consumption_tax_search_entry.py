@@ -64,16 +64,16 @@ class ConsumptionTaxSearchEntryTest(unittest.TestCase):
             self.assertIn(f"tabs/{filename}", css)
             self.assertTrue((ROOT / "docs" / "images" / "topics" / "consumption-tax-cut" / "tabs" / filename).is_file())
         self.assertTrue((ROOT / "docs" / "consumption-tax-search-entry.js").is_file())
-        rebuilt = apply_search_entry(apply_search_entry(self.source, 4340), 4340)
+        rebuilt = apply_search_entry(apply_search_entry(self.source, 4823), 4823)
         self.assertEqual(rebuilt.count("<!-- TAX_SEARCH_ENTRY_START -->"), 1)
         self.assertEqual(rebuilt.count("consumption-tax-search-entry.css?v=3"), 1)
 
     def test_article_metadata_matches_visible_heading(self) -> None:
         article = json.loads(self.soup.select_one('script[type="application/ld+json"]').string)
         self.assertIn("いつから", article["headline"])
-        self.assertEqual(article["dateModified"], "2026-09-27")
+        self.assertEqual(article["dateModified"], "2026-10-03")
         dates = self.soup.select(".article-trust-meta time")
-        self.assertEqual([node["datetime"] for node in dates], ["2026-07-29", "2026-09-27"])
+        self.assertEqual([node["datetime"] for node in dates], ["2026-07-29", "2026-10-03"])
 
 
 if __name__ == "__main__":

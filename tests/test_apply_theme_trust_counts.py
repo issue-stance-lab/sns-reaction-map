@@ -48,7 +48,7 @@ class ThemeTrustCopyTests(unittest.TestCase):
         ai_theme = dict(themes["ai-copyright"])
         ai_theme["collection"] = ai_theme["collection"].replace("{total}", "4734").replace("{opinions}", "3146")
         other_theme = dict(themes["consumption-tax-cut"])
-        other_theme["collection"] = other_theme["collection"].replace("{total}", "4897").replace("{opinions}", "4340")
+        other_theme["collection"] = other_theme["collection"].replace("{total}", "5459").replace("{opinions}", "4823")
         bike = trust_block(bike_theme, organization)
         ai_copyright = trust_block(ai_theme, organization)
         other = trust_block(other_theme, organization)

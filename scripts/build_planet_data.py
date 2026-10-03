@@ -189,6 +189,28 @@ def validate_reread_records(records: list[dict], buckets: dict, canonical: list[
     return set(ids)
 
 
+def validate_excluded_reread_records(records: list[dict], canonical: list[dict],
+                                     issue_key: str, included_ids: set[str]) -> set[str]:
+    """本文確認したが理由区分へ入れなかった投稿も、未読に戻さず証拠を照合する。"""
+    opinion_rows = [p for p in canonical if is_opinion_record(p)
+                    and (p.get("classification") or {}).get("main_issue") == issue_key]
+    by_id = {str(p["tweet_id"]): p for p in opinion_rows}
+    ids = [str(r.get("tweet_id") or "") for r in records]
+    if "" in ids or len(ids) != len(set(ids)):
+        raise SystemExit(f"「{issue_key}」の理由分類対象外記録にIDの欠損または重複があります。")
+    if set(ids) & included_ids:
+        raise SystemExit(f"「{issue_key}」の理由分類済みと対象外記録に同じIDがあります。")
+    if set(ids) - set(by_id):
+        raise SystemExit(f"「{issue_key}」の理由分類対象外記録に現行の対象意見ではないIDがあります。")
+    for record in records:
+        if not str(record.get("reason") or "").strip():
+            raise SystemExit(f"「{issue_key}」の理由分類対象外記録に除外理由がありません。")
+        body = by_id[str(record["tweet_id"])].get("text", "")
+        if record.get("text_sha256") != hashlib.sha256(body.encode()).hexdigest():
+            raise SystemExit(f"「{issue_key}」の理由分類対象外記録は本文指紋が一致しません。")
+    return set(ids)
+
+
 def load_reread_registry(topic: str, canonical: list[dict], *,
                          required: bool = False) -> dict | None:
     """共通台帳があるテーマは、記録の出所と現行本文の版を検査する。"""
@@ -503,6 +525,14 @@ def build(topic: str) -> dict:
             records = resolve_reread_keys(records, canonical_posts, k)
             validate_registry_membership(reread_registry, records, k)
             read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])
+            excluded_records = dig(
+                raw_full,
+                sc.get("excluded_items_path", sc["path"][:-1] + ["excluded_items"]),
+            ) if sc["path"][:-1] and sc["path"][:-1][0] in raw_full and \
+                "excluded_items" in dig(raw_full, sc["path"][:-1]) else []
+            excluded_ids = validate_excluded_reread_records(
+                excluded_records, canonical_posts, k, read_ids)
+            read_ids |= excluded_ids
             items = [{"id": bid, "label": b["label"], "count": int(b["count"])}
                      for bid, b in raw.items()]
             # 生データに立場（stance）が付いている論点だけ、理由の立場別内訳も持たせる
@@ -515,6 +545,21 @@ def build(topic: str) -> dict:
                         sk: sum(1 for r in records if r["bucket"] == x["id"] and r["stance"] == sk)
                         for sk in stance_keys
                     }
+            if excluded_records:
+                excluded_item = {
+                    "id": "__excluded__",
+                    "label": "本文確認で理由分類の対象外とした分",
+                    "count": len(excluded_records),
+                    "excluded": True,
+                }
+                if has_stance:
+                    canonical_by_id = {str(p["tweet_id"]): p for p in canonical_posts}
+                    excluded_item["by_stance"] = {
+                        sk: sum(1 for record in excluded_records
+                                if (canonical_by_id[str(record["tweet_id"])].get("classification") or {}).get("stance") == sk)
+                        for sk in stance_keys
+                    }
+                items.append(excluded_item)
             items.sort(key=lambda x: -x["count"])
             reread = len(read_ids)
             gap = counts[k] - reread
@@ -570,6 +615,13 @@ def build(topic: str) -> dict:
                 "unknown_timing_count": unknown,
                 "items": items,
             }
+            # Keep the existing payload stable for themes whose reread ledger has
+            # no explicit exclusions. The extra counters are only needed when a
+            # reviewer recorded rows that were read but intentionally not put in
+            # a reason bucket.
+            if excluded_records:
+                sub["classified_count"] = len(records)
+                sub["excluded_count"] = len(excluded_records)
             if any("classification_concern" in r for r in records):
                 sub["classification_review_pending"] = sum(
                     r.get("classification_concern", "none") != "none" for r in records)
