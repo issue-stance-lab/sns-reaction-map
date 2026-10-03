@@ -1518,9 +1518,21 @@ items:
     evidence:
       - ".staging/refresh/consumption-tax-cut/20261003_073804/quality-audit-secondary.json"
       - ".staging/refresh/consumption-tax-cut/20261003_073804/promotion-manifest.json"
-    status: approved
+    status: completed
     requested_at: "2026-10-03"
     decided_at: "2026-10-03"
     decision_note: >-
       オーナーが本対話で「公開して」と明示的に承認。
       候補SHA256: 649b02b9163611a695d7dd23d9253310d9a401a703f54c20f6da91a25274e980
+    completed_at: "2026-10-03"
+    result_note: >-
+      main 9fda2c81で公開。全1316テスト（4件skip）、公開検査1136件（4件skip）、
+      GitHub Actionsの公開ファイル検査とPages配信が成功した。
+      本番テーマページで収集5,459件・意見4,823件・更新日10月3日・
+      本文確認で理由分類の対象外とした18件の表示を確認した。
+      トップページでは全体20,951件・意見16,338件を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37082926194"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37082926208"
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
