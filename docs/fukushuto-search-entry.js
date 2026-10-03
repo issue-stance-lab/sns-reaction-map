@@ -5,6 +5,9 @@
 
   var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-fuk-entry-tab]'));
   var panels = Array.prototype.slice.call(root.querySelectorAll('[data-fuk-entry-panel]'));
+  var candidateBoard = root.querySelector('.fuk-candidate');
+  var candidateFilters = Array.prototype.slice.call(root.querySelectorAll('[data-fuk-candidate-filter]'));
+  var candidateRows = Array.prototype.slice.call(root.querySelectorAll('[data-candidate-stage]'));
 
   function track(name, parameters) {
     if (typeof window.gtag !== 'function') return;
@@ -43,6 +46,29 @@
       });
     }, 0);
     track('fukushuto_entry_mountain_open', { issue_id: issueId });
+  }
+
+  function filterCandidates(stage) {
+    var visible = 0;
+    candidateRows.forEach(function (row) {
+      row.hidden = stage !== 'all' && row.dataset.candidateStage !== stage;
+      if (!row.hidden) visible += 1;
+    });
+    candidateFilters.forEach(function (button) {
+      button.setAttribute('aria-pressed', button.dataset.fukCandidateFilter === stage ? 'true' : 'false');
+    });
+    var count = root.querySelector('#fuk-candidate-visible-count');
+    if (count) count.textContent = String(visible);
+    track('fukushuto_candidate_filter', { stage: stage, visible_regions: visible });
+  }
+
+  if (candidateBoard && candidateFilters.length && candidateRows.length) {
+    candidateBoard.classList.add('is-ready');
+    candidateFilters.forEach(function (button) {
+      button.addEventListener('click', function () {
+        filterCandidates(button.dataset.fukCandidateFilter);
+      });
+    });
   }
 
   if (tabs.length && tabs.length === panels.length) {

@@ -234,8 +234,8 @@
 <script src="fukushuto-connected.js?v=1" defer></script>
 <script src="fukushuto-connected-page.js?v=1" defer></script>
 <!-- FUKUSHUTO_CONNECTED_END -->
-<link rel="stylesheet" href="fukushuto-search-entry.css?v=2">
-<script src="fukushuto-search-entry.js?v=1" defer></script>
+<link rel="stylesheet" href="fukushuto-search-entry.css?v=3">
+<script src="fukushuto-search-entry.js?v=2" defer></script>
 </head>
 <body class="summary-on-light" style="--topic-hero-image:url('images/topics/fukushuto/fukushuto-hero.webp')">
 <div id="progress"><span>探ったところ</span><span class="track"><i id="pbar"></i></span><span class="segs" id="pseg" aria-hidden="true"></span><b id="pnum">0</b><span class="how">質問に答える・山を押す・クイズに答えると増えます</span></div><script>
@@ -337,14 +337,58 @@
     </ol>
 
     <section class="fuk-candidate" id="fukushuto-candidates" aria-labelledby="fuk-candidate-title">
-      <div class="fuk-candidate__heading"><div><p>決定状況を確認</p><h3 id="fuk-candidate-title">国の指定と、各地の動き</h3></div><p>自治体が構想を公表していても、国の指定とは別の段階です。</p></div>
-      <div class="fuk-candidate__grid">
-        <article><span class="fuk-candidate__tag">国の指定</span><strong>指定済みは0道府県</strong><p>法律は成立しましたが、指定の手続きは施行前です。</p><a href="https://laws.e-gov.go.jp/law/508AC1000000078" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-law">法律の指定手続きを確認</a></article>
-        <article><span class="fuk-candidate__tag">大阪府・大阪市</span><strong>副首都構想を公表</strong><p>大阪が目指す副首都像を示しました。国による指定はまだです。</p><a href="https://www.city.osaka.lg.jp/fukushutosuishin/page/0000679231.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-osaka">大阪の副首都構想を確認</a></article>
-        <article><span class="fuk-candidate__tag">福岡県</span><strong>指定に向けた検討体制を設置</strong><p>県が指定の実現を目指し、福岡市・北九州市とも連携しています。</p><a href="https://www.pref.fukuoka.lg.jp/contents/fukuoka-fukusyuto.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-fukuoka">福岡県の取組を確認</a></article>
-        <article><span class="fuk-candidate__tag">群馬県</span><strong>知事が立候補の意思を表明</strong><p>正式な申出には県議会の議決が必要だと説明しています。</p><a href="https://www.pref.gunma.jp/site/chiji/769457.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-gunma">群馬県知事の会見を確認</a></article>
+      <div class="fuk-candidate__heading"><div><p>指定状況を追う</p><h3 id="fuk-candidate-title">各地は、今どの段階？</h3></div><p>自治体の公表と国の指定を分けて見ます。最終確認は2026年10月3日です。</p></div>
+      <div class="fuk-candidate__national"><div><span>国の指定</span><strong>0<small>道府県</small></strong></div><p>副首都法は10月30日施行予定。現在はどの道府県も指定されていません。</p><a href="https://laws.e-gov.go.jp/law/508AC1000000078" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-law">法律の指定手続きを確認</a></div>
+      <div class="fuk-candidate__toolbar" role="group" aria-label="各地の動きを絞り込む">
+        <button type="button" data-fuk-candidate-filter="all" aria-pressed="true">すべて <span>8</span></button>
+        <button type="button" data-fuk-candidate-filter="aiming" aria-pressed="false">指定を目指す・意思表明 <span>5</span></button>
+        <button type="button" data-fuk-candidate-filter="considering" aria-pressed="false">検討・要件待ち <span>2</span></button>
+        <button type="button" data-fuk-candidate-filter="not_preparing" aria-pressed="false">単独申出の準備なし <span>1</span></button>
       </div>
-      <p class="fuk-candidate__foot">3地域は自治体の公表を確認できた例で、候補地の網羅的な一覧ではありません。今後は道府県議会の議決を経た申出、国の審査、指定という順に進みます。具体的な指定日は公表されていません。</p>
+      <p class="fuk-candidate__result" aria-live="polite"><span id="fuk-candidate-visible-count">8</span>地域を表示</p>
+      <div class="fuk-candidate__rows">
+        <article class="fuk-candidate__row" data-candidate-stage="aiming">
+          <div class="fuk-candidate__place"><h4>大阪府・大阪市</h4><span class="fuk-candidate__stage fuk-candidate__stage--aiming">構想を公表</span></div>
+          <p>府市が「大阪の副首都構想」を公表。国による指定はまだ。</p>
+          <div class="fuk-candidate__source"><time>2026年2月12日</time><a href="https://www.city.osaka.lg.jp/fukushutosuishin/page/0000679231.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-aiming">大阪市の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="aiming">
+          <div class="fuk-candidate__place"><h4>福岡県</h4><span class="fuk-candidate__stage fuk-candidate__stage--aiming">指定を目指す</span></div>
+          <p>副知事を長とする検討チームを設置し、福岡市・北九州市と連携。</p>
+          <div class="fuk-candidate__source"><time>2026年8月7日</time><a href="https://www.pref.fukuoka.lg.jp/contents/fukuoka-fukusyuto.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-aiming">福岡県の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="aiming">
+          <div class="fuk-candidate__place"><h4>愛知県・名古屋市</h4><span class="fuk-candidate__stage fuk-candidate__stage--aiming">指定を目指す</span></div>
+          <p>知事と市長が指定を目指すと表明。県市の連携協議会を開催。</p>
+          <div class="fuk-candidate__source"><time>2026年8月10日</time><a href="https://www.pref.aichi.jp/site/chiji/20260810.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-aiming">愛知県の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="aiming">
+          <div class="fuk-candidate__place"><h4>北海道・札幌市</h4><span class="fuk-candidate__stage fuk-candidate__stage--aiming">指定を目指す</span></div>
+          <p>知事と市長が国に提案・要望し、指定に向けて準備。</p>
+          <div class="fuk-candidate__source"><time>2026年8月27日</time><a href="https://www.pref.hokkaido.lg.jp/ss/ssa/270000.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-aiming">北海道の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="aiming">
+          <div class="fuk-candidate__place"><h4>群馬県</h4><span class="fuk-candidate__stage fuk-candidate__stage--aiming">知事が意思表明</span></div>
+          <p>知事が立候補の意思を表明。正式な申出には県議会の議決が必要。</p>
+          <div class="fuk-candidate__source"><time>2026年7月30日</time><a href="https://www.pref.gunma.jp/site/chiji/769457.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-aiming">群馬県の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="considering">
+          <div class="fuk-candidate__place"><h4>広島県</h4><span class="fuk-candidate__stage fuk-candidate__stage--considering">申出を検討</span></div>
+          <p>関係自治体と意見交換を開始。正式に申し出るかは今後判断。</p>
+          <div class="fuk-candidate__source"><time>2026年8月25日</time><a href="https://www.pref.hiroshima.lg.jp/site/kishakaiken/gpc-20260825.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-considering">広島県の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="considering">
+          <div class="fuk-candidate__place"><h4>宮城県・仙台市</h4><span class="fuk-candidate__stage fuk-candidate__stage--considering">要件を待って判断</span></div>
+          <p>知事は政令の内容を見てから判断する考えを示した。</p>
+          <div class="fuk-candidate__source"><time>2026年8月26日</time><a href="https://www.pref.miyagi.jp/site/chiji-kaiken/kk-260826.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-considering">宮城県の資料を見る</a></div>
+        </article>
+        <article class="fuk-candidate__row" data-candidate-stage="not_preparing">
+          <div class="fuk-candidate__place"><h4>京都府</h4><span class="fuk-candidate__stage fuk-candidate__stage--not_preparing">単独申出の準備なし</span></div>
+          <p>知事は府単独で手を挙げる準備をしていないと説明。</p>
+          <div class="fuk-candidate__source"><time>2026年7月31日</time><a href="https://www.pref.kyoto.jp/koho/kaiken/260731.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-not_preparing">京都府の資料を見る</a></div>
+        </article>
+      </div>
+      <p class="fuk-candidate__foot">掲載したのは一次資料で動きを確認した地域です。全国の網羅的な一覧や、国が認定した候補地一覧ではありません。今後は議会議決を経た申出と国の指定を確認します。</p>
     </section>
 
     <div class="fuk-topic-switcher" id="fuk-entry-switcher">

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-from scripts.fukushuto_search_entry import ENTRY_TOPICS, FAQS, apply
+from scripts.fukushuto_search_entry import CANDIDATE_REGIONS, ENTRY_TOPICS, FAQS, apply
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -57,8 +57,14 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         )
 
     def test_assets_are_loaded_once(self) -> None:
-        self.assertEqual(len(self.soup.select('link[href="fukushuto-search-entry.css?v=2"]')), 1)
-        self.assertEqual(len(self.soup.select('script[src="fukushuto-search-entry.js?v=1"][defer]')), 1)
+        self.assertEqual(len(self.soup.select('link[href="fukushuto-search-entry.css?v=3"]')), 1)
+        self.assertEqual(len(self.soup.select('script[src="fukushuto-search-entry.js?v=2"][defer]')), 1)
+
+    def test_candidate_sources_are_visible_without_filtering(self) -> None:
+        rows = self.soup.select('#fukushuto-candidates [data-candidate-stage]')
+        self.assertEqual(len(rows), len(CANDIDATE_REGIONS))
+        self.assertTrue(all(row.select_one('a[href^="https://"]') for row in rows))
+        self.assertFalse(any(row.has_attr('hidden') for row in rows))
 
     def test_entry_refresh_is_idempotent_and_updates_count(self) -> None:
         updated = apply(self.source, 2345)
