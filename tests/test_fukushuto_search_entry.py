@@ -72,6 +72,10 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         self.assertIn('要件と指定先はまだ確定していません', current)
         self.assertNotIn('10月30日に施行', current)
 
+    def test_old_legislative_stage_and_old_issue_rank_are_absent(self) -> None:
+        self.assertNotIn('衆院通過目前となりました', self.source)
+        self.assertNotIn('3番目に大きい論点が「副首都とは何か', self.source)
+
     def test_entry_refresh_is_idempotent_and_updates_count(self) -> None:
         updated = apply(self.source, 2345)
         block = updated.split("<!-- FUKUSHUTO_SEARCH_ENTRY_START -->", 1)[1].split(
