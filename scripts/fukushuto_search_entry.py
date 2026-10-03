@@ -8,7 +8,7 @@ import re
 
 START = "<!-- FUKUSHUTO_SEARCH_ENTRY_START -->"
 END = "<!-- FUKUSHUTO_SEARCH_ENTRY_END -->"
-CSS_HREF = "fukushuto-search-entry.css?v=1"
+CSS_HREF = "fukushuto-search-entry.css?v=2"
 JS_SRC = "fukushuto-search-entry.js?v=1"
 OPINION_START = "<!-- FUKUSHUTO_SEARCH_OPINIONS -->"
 OPINION_END = "<!-- FUKUSHUTO_SEARCH_OPINIONS_END -->"
@@ -29,7 +29,7 @@ FAQS = [
     ),
     (
         "首都中枢機能代替地域と副首都は同じですか？",
-        "別です。代替地域は首都中枢機能の一部を担う地域、副首都は全部または大部分を代替し、経済圏の中核も担う道府県です。法律は両者を分けています。",
+        "別です。代替地域は首都中枢機能の一部を担います。副首都はその全部または大部分を代替し、経済圏の中核も担う道府県です。法律は両者を分けています。",
     ),
     (
         "大阪都構想と副首都法は同じ制度ですか？",
@@ -130,17 +130,28 @@ def render(opinions: int) -> str:
   <div class="fuk-now__inner">
     <header class="fuk-now__header">
       <div>
-        <p class="fuk-now__eyebrow"><span>3分で分かる</span> 副首都法の現在地</p>
-        <h2 id="fuk-now-title">法律は成立。<br><em>大阪への指定は、まだ。</em></h2>
+        <p class="fuk-now__eyebrow"><span>2026年10月3日確認</span> 副首都法の現在地</p>
+        <h2 id="fuk-now-title">副首都はいつ、どこに決まる？<br><em>大阪はまだ指定されていません。</em></h2>
       </div>
-      <p>成立したのは「副首都を選び、整備するための仕組み」です。首都が移ったわけでも、候補地が決まったわけでもありません。まず制度・場所・費用を分けて見ます。</p>
+      <p>副首都法は2026年7月に成立しました。指定日は決まっておらず、大阪を含めて指定済みの道府県はありません。自治体の構想と国の指定を分けて確認できます。</p>
     </header>
 
     <ol class="fuk-status" aria-label="副首都法の進み具合">
       <li class="is-done"><span>1</span><small>2026年7月</small><strong>成立・公布</strong><p>法律の枠組みが決まった</p></li>
-      <li class="is-current" aria-current="step"><span>2</span><small>2026年10月1日現在</small><strong>施行前</strong><p>10月30日に施行</p></li>
+      <li class="is-current" aria-current="step"><span>2</span><small>2026年10月3日現在</small><strong>施行前</strong><p>10月30日に施行</p></li>
       <li><span>3</span><small>時期は未定</small><strong>指定前</strong><p>どの道府県かは未決定</p></li>
     </ol>
+
+    <section class="fuk-candidate" id="fukushuto-candidates" aria-labelledby="fuk-candidate-title">
+      <div class="fuk-candidate__heading"><div><p>決定状況を確認</p><h3 id="fuk-candidate-title">国の指定と、各地の動き</h3></div><p>自治体が構想を公表していても、国の指定とは別の段階です。</p></div>
+      <div class="fuk-candidate__grid">
+        <article><span class="fuk-candidate__tag">国の指定</span><strong>指定済みは0道府県</strong><p>法律は成立しましたが、指定の手続きは施行前です。</p><a href="https://laws.e-gov.go.jp/law/508AC1000000078" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-law">法律の指定手続きを確認</a></article>
+        <article><span class="fuk-candidate__tag">大阪府・大阪市</span><strong>副首都構想を公表</strong><p>大阪が目指す副首都像を示しました。国による指定はまだです。</p><a href="https://www.city.osaka.lg.jp/fukushutosuishin/page/0000679231.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-osaka">大阪の副首都構想を確認</a></article>
+        <article><span class="fuk-candidate__tag">福岡県</span><strong>指定に向けた検討体制を設置</strong><p>県が指定の実現を目指し、福岡市・北九州市とも連携しています。</p><a href="https://www.pref.fukuoka.lg.jp/contents/fukuoka-fukusyuto.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-fukuoka">福岡県の取組を確認</a></article>
+        <article><span class="fuk-candidate__tag">群馬県</span><strong>知事が立候補の意思を表明</strong><p>正式な申出には県議会の議決が必要だと説明しています。</p><a href="https://www.pref.gunma.jp/site/chiji/769457.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="candidate-gunma">群馬県知事の会見を確認</a></article>
+      </div>
+      <p class="fuk-candidate__foot">3地域は自治体の公表を確認できた例で、候補地の網羅的な一覧ではありません。今後は道府県議会の議決を経た申出、国の審査、指定という順に進みます。具体的な指定日は公表されていません。</p>
+    </section>
 
     <div class="fuk-topic-switcher" id="fuk-entry-switcher">
       <div class="fuk-topic-tabs" role="tablist" aria-label="知りたい論点を選ぶ">
@@ -151,14 +162,15 @@ def render(opinions: int) -> str:
       </div>
     </div>
 
-    <section class="fuk-tradeoffs" aria-labelledby="fuk-tradeoffs-title">
-      <header><p>メリット・デメリット</p><h3 id="fuk-tradeoffs-title">期待と懸念は、同じ基準で比べる</h3></header>
-      <div class="fuk-tradeoffs__grid">
-        <div><b>期待されること</b><ul><li>大災害でも政治・行政・経済の機能を続ける</li><li>東京への人口・経済機能の集中を分散する</li></ul></div>
-        <div><b>指摘される懸念</b><ul><li>候補地との同時被災や、実際の代替能力</li><li>整備費・維持費、政策の優先順位</li></ul></div>
+    <section class="fuk-problems" id="fukushuto-problems" aria-labelledby="fuk-problems-title">
+      <header><p>もう一つの入口</p><h2 id="fuk-problems-title">副首都法案の問題点は何？</h2><p>制度の目的と、なお確かめるべき点を論点ごとに並べました。</p></header>
+      <div class="fuk-problems__list">
+        <article><span>防災</span><h3>東京と同時に被災しないか</h3><p>首都機能の代替が目的です。候補地の災害リスクと、実際に機能を移せるかが問われます。</p><button type="button" data-fuk-mountain="fukushuto-disaster-preparedness">防災をめぐる意見を見る</button></article>
+        <article><span>決め方</span><h3>大阪ありきで決まらないか</h3><p>法律は大阪を指定していません。道府県の申出と国の指定を、今後の手続きで確認する必要があります。</p><button type="button" data-fuk-mountain="fukushuto-location">候補地をめぐる意見を見る</button></article>
+        <article><span>費用</span><h3>いくらかかり、何を優先するか</h3><p>今回の制度の整備総額は示されていません。4兆〜7.5兆円は過去の首都機能移転の試算です。</p><button type="button" data-fuk-mountain="fukushuto-finance">費用をめぐる意見を見る</button></article>
       </div>
-      <nav aria-label="メリットと懸念の詳しい論点"><button type="button" data-fuk-mountain="fukushuto-disaster-preparedness">防災・同時被災の山を開く</button><button type="button" data-fuk-mountain="fukushuto-priority">政策の優先順位の山を開く</button><a href="#stance-glance" data-fuk-entry-link="stances">SNS {OPINION_START}{opinions:,}{OPINION_END}件の内訳を見る</a></nav>
-      <p class="fuk-now__note">このページのSNS件数は、検索語と収集時点に基づく公開投稿の分類です。社会全体の世論調査ではありません。</p>
+      <div class="fuk-problems__sources"><a href="https://laws.e-gov.go.jp/law/508AC1000000078" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="problem-law">副首都法の条文</a><a href="https://www.mlit.go.jp/kokudokeikaku/iten/relocation/qa/qa_step4_02_01.html" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="problem-cost">過去の移転費用の試算</a><a href="#stance-glance" data-fuk-entry-link="stances">SNS {OPINION_START}{opinions:,}{OPINION_END}件の内訳</a></div>
+      <p class="fuk-problems__note">SNSの件数は収集した公開投稿の分類結果で、世論調査ではありません。</p>
     </section>
 
     <section class="fuk-faq" id="fukushuto-faq" aria-labelledby="fuk-faq-title">
@@ -177,7 +189,8 @@ def apply(source: str, opinions: int) -> str:
     """入口を挿入または更新する。何度呼んでも同じ結果になる。"""
     css = f'<link rel="stylesheet" href="{CSS_HREF}">'
     script = f'<script src="{JS_SRC}" defer></script>'
-    source = source.replace(css + "\n", "").replace(script + "\n", "")
+    source = re.sub(r'<link rel="stylesheet" href="fukushuto-search-entry\.css\?v=\d+">\n', "", source)
+    source = re.sub(r'<script src="fukushuto-search-entry\.js\?v=\d+" defer></script>\n', "", source)
     if source.count("</head>") != 1:
         raise ValueError("副首都の検索入口アセットを置くhead要素が1つではありません")
     source = source.replace("</head>", css + "\n" + script + "\n</head>", 1)

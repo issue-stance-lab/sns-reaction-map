@@ -18,10 +18,10 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         cls.soup = BeautifulSoup(cls.source, "html.parser")
 
     def test_search_intent_is_visible_in_title_and_description(self) -> None:
-        self.assertIn("副首都法とは", self.soup.title.string)
-        self.assertIn("大阪は決定", self.soup.title.string)
+        self.assertIn("いつ・どこに決まる", self.soup.title.string)
+        self.assertIn("法案の問題点", self.soup.title.string)
         description = self.soup.select_one('meta[name="description"]')["content"]
-        for phrase in ("候補地", "大阪", "メリット・デメリット", "費用"):
+        for phrase in ("指定状況", "大阪", "問題点", "費用"):
             self.assertIn(phrase, description)
 
     def test_progress_has_one_current_step_and_no_designation(self) -> None:
@@ -57,7 +57,7 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         )
 
     def test_assets_are_loaded_once(self) -> None:
-        self.assertEqual(len(self.soup.select('link[href="fukushuto-search-entry.css?v=1"]')), 1)
+        self.assertEqual(len(self.soup.select('link[href="fukushuto-search-entry.css?v=2"]')), 1)
         self.assertEqual(len(self.soup.select('script[src="fukushuto-search-entry.js?v=1"][defer]')), 1)
 
     def test_entry_refresh_is_idempotent_and_updates_count(self) -> None:
