@@ -46,10 +46,22 @@ items:
       - "quality/reviews/2026-10-03-fukushuto-independent-audit.md"
       - "quality/reviews/2026-10-03-fukushuto-audit-rebuild.md"
       - ".staging/refresh/fukushuto/20261003_150000/promotion-manifest.json"
-    status: approved
+    status: completed
     requested_at: "2026-10-03"
     decided_at: "2026-10-03"
     decision_note: "独立監査ready_for_ceoと候補ハッシュを提示後、オーナーが本対話で『承認』と明示。対象は上記manifestで固定した副首都ページの更新候補。"
+    completed_at: "2026-10-03"
+    result_note: >-
+      main d414290eで公開。副首都ページ本体とテーマJSONは承認済みmanifestのバイト列と一致。
+      同日公開済みの消費税減税データを保つため共通集計を再生成し、次回収集日の重複を解消した。
+      全1341テスト（4件skip）、公開ファイル検査1161件（4件skip）、
+      GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番トップと両テーマページの配信バイト列を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37120919944"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37120919917"
+      - "https://sns-reaction-map.jp/fukushuto-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
 
   - id: approval-20261002-001
     department: growth-marketing
