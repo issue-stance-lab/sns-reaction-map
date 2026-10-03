@@ -609,14 +609,19 @@ def build(topic: str) -> dict:
                 "show_coverage_note": sc.get("show_coverage_note", True),
                 "source_file": sc["file"],
                 "reread_count": reread,
-                "classified_count": len(records),
-                "excluded_count": len(excluded_records),
                 "unread_count": max(gap, 0),
                 "skipped_count": skipped,
                 "grown_count": grown,
                 "unknown_timing_count": unknown,
                 "items": items,
             }
+            # Keep the existing payload stable for themes whose reread ledger has
+            # no explicit exclusions. The extra counters are only needed when a
+            # reviewer recorded rows that were read but intentionally not put in
+            # a reason bucket.
+            if excluded_records:
+                sub["classified_count"] = len(records)
+                sub["excluded_count"] = len(excluded_records)
             if any("classification_concern" in r for r in records):
                 sub["classification_review_pending"] = sum(
                     r.get("classification_concern", "none") != "none" for r in records)
