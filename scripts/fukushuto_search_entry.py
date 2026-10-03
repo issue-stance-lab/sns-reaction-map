@@ -9,7 +9,7 @@ import re
 
 START = "<!-- FUKUSHUTO_SEARCH_ENTRY_START -->"
 END = "<!-- FUKUSHUTO_SEARCH_ENTRY_END -->"
-CSS_HREF = "fukushuto-search-entry.css?v=3"
+CSS_HREF = "fukushuto-search-entry.css?v=4"
 JS_SRC = "fukushuto-search-entry.js?v=2"
 OPINION_START = "<!-- FUKUSHUTO_SEARCH_OPINIONS -->"
 OPINION_END = "<!-- FUKUSHUTO_SEARCH_OPINIONS_END -->"
@@ -18,7 +18,7 @@ OPINION_END = "<!-- FUKUSHUTO_SEARCH_OPINIONS_END -->"
 FAQS = [
     (
         "副首都法は、もう成立していますか？",
-        "はい。2026年7月24日に成立し、7月31日に公布されました。2026年10月1日時点では施行前で、施行日は10月30日です。",
+        "はい。2026年7月24日に成立し、7月31日に公布されました。2026年10月3日時点では施行前です。10月30日は施行予定日として示されています。",
     ),
     (
         "副首都は大阪に決まったのですか？",
@@ -26,7 +26,7 @@ FAQS = [
     ),
     (
         "副首都は、いつ決まりますか？",
-        "具体的な指定日は示されていません。施行後、政府が基本方針や指定要件を定め、道府県が議会の議決を経て申し出た後に、指定の手続きが進みます。",
+        "指定日は示されていません。2026年10月3日に指定要件の政令・規則案が公表されましたが、要件はまだ確定していません。道府県の申出と国の指定は今後の手続きです。",
     ),
     (
         "首都中枢機能代替地域と副首都は同じですか？",
@@ -38,7 +38,7 @@ FAQS = [
     ),
     (
         "副首都の整備費は4兆〜7.5兆円ですか？",
-        "確定した総額ではありません。4兆〜7.5兆円は過去の首都機能移転の試算として国会審議で引用された数字です。今回の制度の整備総額は、2026年10月1日時点で示されていません。",
+        "確定した総額ではありません。4兆〜7.5兆円は過去の首都機能移転の試算として国会審議で引用された数字です。今回の制度の整備総額は、2026年10月3日時点で示されていません。",
     ),
 ]
 
@@ -61,7 +61,7 @@ ENTRY_TOPICS = [
         "question": "候補地は？",
         "headline": "大阪を含め、正式な指定はまだない",
         "body": "対象は都市ではなく道府県です。道府県の申出には議会の議決が必要で、国が要件に照らして指定します。",
-        "fact": "2026年10月1日の現在地",
+        "fact": "2026年10月3日の現在地",
         "points": ["指定済みの道府県はない", "大阪への決定規定はない", "具体的な指定時期も未定"],
         "cta": "「候補地」の山を開く",
     },
@@ -193,9 +193,10 @@ def render(opinions: int) -> str:
 
     <ol class="fuk-status" aria-label="副首都法の進み具合">
       <li class="is-done"><span>1</span><small>2026年7月</small><strong>成立・公布</strong><p>法律の枠組みが決まった</p></li>
-      <li class="is-current" aria-current="step"><span>2</span><small>2026年10月3日現在</small><strong>施行前</strong><p>10月30日に施行</p></li>
+      <li class="is-current" aria-current="step"><span>2</span><small>2026年10月3日現在</small><strong>要件案を公表</strong><p>10月16日まで意見募集。施行前</p></li>
       <li><span>3</span><small>時期は未定</small><strong>指定前</strong><p>どの道府県かは未決定</p></li>
     </ol>
+    <p class="fuk-now__policy-note">指定要件の政令・規則案が公表されました。要件と指定先はまだ確定していません。<a href="https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&amp;Mode=0&amp;id=060261003" target="_blank" rel="noopener noreferrer" data-fuk-entry-link="decree-proposal">意見募集の資料を見る</a></p>
 
     <section class="fuk-candidate" id="fukushuto-candidates" aria-labelledby="fuk-candidate-title">
       <div class="fuk-candidate__heading"><div><p>指定状況を追う</p><h3 id="fuk-candidate-title">各地は、今どの段階？</h3></div><p>自治体の公表と国の指定を分けて見ます。最終確認は2026年10月3日です。</p></div>
@@ -210,7 +211,7 @@ def render(opinions: int) -> str:
       <div class="fuk-candidate__rows">
 {candidate_rows}
       </div>
-      <p class="fuk-candidate__foot">掲載したのは一次資料で動きを確認した地域です。全国の網羅的な一覧や、国が認定した候補地一覧ではありません。今後は議会議決を経た申出と国の指定を確認します。</p>
+      <p class="fuk-candidate__foot">掲載したのは一次資料で動きを確認した地域です。全国の網羅的な一覧や、国が認定した候補地一覧ではありません。次は意見募集の結果と、10月末に公布予定の政府令を確認します。</p>
     </section>
 
     <div class="fuk-topic-switcher" id="fuk-entry-switcher">

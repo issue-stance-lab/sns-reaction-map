@@ -57,7 +57,7 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         )
 
     def test_assets_are_loaded_once(self) -> None:
-        self.assertEqual(len(self.soup.select('link[href="fukushuto-search-entry.css?v=3"]')), 1)
+        self.assertEqual(len(self.soup.select('link[href="fukushuto-search-entry.css?v=4"]')), 1)
         self.assertEqual(len(self.soup.select('script[src="fukushuto-search-entry.js?v=2"][defer]')), 1)
 
     def test_candidate_sources_are_visible_without_filtering(self) -> None:
@@ -65,6 +65,12 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         self.assertEqual(len(rows), len(CANDIDATE_REGIONS))
         self.assertTrue(all(row.select_one('a[href^="https://"]') for row in rows))
         self.assertFalse(any(row.has_attr('hidden') for row in rows))
+
+    def test_draft_rules_are_not_presented_as_final(self) -> None:
+        current = self.soup.select_one('#fukushuto-now').get_text(' ', strip=True)
+        self.assertIn('指定要件の政令・規則案', current)
+        self.assertIn('要件と指定先はまだ確定していません', current)
+        self.assertNotIn('10月30日に施行', current)
 
     def test_entry_refresh_is_idempotent_and_updates_count(self) -> None:
         updated = apply(self.source, 2345)
