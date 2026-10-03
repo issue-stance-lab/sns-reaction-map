@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-02"
+updated_at: "2026-10-03"
 
 rules:
   required_for:
@@ -32,6 +32,25 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261003-001
+    department: engineering-data
+    action: website_publication
+    summary: "副首都ページの2026-10-03収集回と検索入口・候補地表示を、意見2,138件の候補で公開する"
+    reason: "新規283投稿の分類・本文確認・主張件数を補正し、manifest 26aaceb6e761d761da619b2e78d2a7edb28b7f1825bc464b73623bf980d0a2fb の独立品質監査がready_for_ceoとなったため"
+    risks:
+      - "公開投稿の検索サンプルであり、社会全体の世論・比率を示さない"
+      - "前回と今回の潮目は分類モデルが異なる。オーナーの指定によりモデル差の注記を付けず通常表示する"
+      - "愛知県の候補地資料は独立監査環境からHTTP 403で本文を再確認できなかった"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-03-fukushuto-independent-audit.md"
+      - "quality/reviews/2026-10-03-fukushuto-audit-rebuild.md"
+      - ".staging/refresh/fukushuto/20261003_150000/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-03"
+    decided_at: "2026-10-03"
+    decision_note: "独立監査ready_for_ceoと候補ハッシュを提示後、オーナーが本対話で『承認』と明示。対象は上記manifestで固定した副首都ページの更新候補。"
+
   - id: approval-20261002-001
     department: growth-marketing
     action: website_publication
