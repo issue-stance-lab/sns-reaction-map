@@ -60,7 +60,7 @@ class ConstitutionalSearchEntryTest(unittest.TestCase):
     def test_article_metadata_matches_visible_heading(self) -> None:
         article = json.loads(self.soup.select_one('script[type="application/ld+json"]').string)
         self.assertIn("何が変わる", article["headline"])
-        self.assertEqual(article["dateModified"], "2026-09-26")
+        self.assertEqual(article["dateModified"], "2026-10-04")
 
     def test_faq_uses_progressive_disclosure(self) -> None:
         questions = self.soup.select("#constitutional-faq details")
