@@ -1567,3 +1567,26 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37082926208"
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261004-001
+    department: engineering-data
+    action: website_publication
+    summary: "憲法改正論議テーマの収集結果225件と意見207件をWebsiteへ公開する（累積2,228件・意見1,963件）"
+    reason: "公開候補の独立監査がready_for_ceoと判定され、オーナーが本対話で承認し、世論の潮目は分類モデルの違いを無視して通常どおり更新するよう指示したため"
+    risks:
+      - "SNS公開投稿のサンプル分析であり、社会全体の世論を示すものではない"
+      - "今回の回は分類モデルが前回回（kimi-k2.6）と異なる（kimi-k2.7-code）。潮目の変化にはモデル差が混ざる可能性がある（オーナー判断で通常更新）"
+      - "提供元AIが高リスクとして拒否した1件は、本文確認のうえ人手で判定した"
+      - "公開後の件数、表示、GitHub Actions、実サイトを確認する"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/constitutional-amendment/20261004_093728/promotion-manifest.json"
+      - "themes/constitutional-amendment.md"
+    status: approved
+    requested_at: "2026-10-04"
+    decided_at: "2026-10-04"
+    decision_note: >-
+      オーナーが本対話で「潮目はモデルの違いは無視して、通常どおり更新して」と明示して承認。
+      独立監査は潮目を前回表示のまま維持した候補（manifest 5a98d308…）で実施。
+      承認後に潮目を更新する版へ作り直し、監査済み版との差が潮目ウィジェット4か所だけであることを確認した。
+      適用する候補SHA256: b4e15e13d38df43fd3e6f909bbacb970eaea7adf29df842a3c0122a804dda20f
