@@ -1,6 +1,6 @@
 # 貼り付け用｜note「消費税減税」第2回（論点編：対象範囲と財源）
 
-作成: 2026-09-21 / 公開予定: 未定（オーナー確認待ち）
+作成: 2026-09-21 / 公開: 2026-09-29（https://note.com/sns_hanno_ma/n/ndaa743df324b）
 根拠と一次資料は `quality/research/consumption-tax-cut-primary-sources.md`（資料N・O・I-2・J中心）、
 SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` の
 `is_relevant && is_opinion` 3,890件のうち、`main_issue == "減税の対象範囲"`（885件）と
@@ -28,12 +28,11 @@ SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` �
 - [x] 数字をJSONから数え直し済み（2026-09-21時点、意見3,890件。対象範囲885件・財源511件）
 - [x] 図1（対象範囲×財源の内訳比較グラフ）作成済み: `content/note/drafts/images/consumption-tax-cut2_fig1-scope-funding.png`
 - [x] 見出し画像 作成済み（2026-09-22）: `content/note/drafts/images/consumption-tax-cut2_note-header.png`（背景写真はオーナーがGPTimage2で生成、`consumption-tax-cut2-shelf-frame.png`、文字合成はHTML/CSS＋Playwrightで実装）
-- [ ] タグ5個の選定（editorial案: #消費税減税 #消費税 #財源 #政治 #データ分析。note編集画面の候補表示を見て確定してよい）
-- [ ] マガジン「消費税減税を読む」へ追加（作成済み: https://note.com/sns_hanno_ma/m/m1c683954a55b ）
-- [ ] UTMの公開予定日を確定 → 現在は暫定で20260922。実際に投稿する日がこれと違う場合、
-      投稿前にこの日付を直してから貼り付けること（公開後の変更はGA4計測が分断される）
-- [ ] オーナーに①〜④の骨子（本ファイル冒頭のコメント）を確認してもらってから、note下書き画面へ反映する
-- [ ] オーナー確認後、下書き画面へ反映 → タグ・マガジンを設定して公開
+- [x] タグ設定（#投稿 #消費税減税 #財源 #大綱）
+- [x] マガジン「消費税減税を読む」へ追加（https://note.com/sns_hanno_ma/m/m1c683954a55b ）
+- [x] UTMは `note_taxcut2_20260922` で公開。公開日は9月29日だが、計測の分断を避けるため公開後は変更しない
+- [x] オーナー確認後、note下書き画面へ反映
+- [x] 2026年9月29日に公開
 
 ### 見出し画像の依頼（完了・`consumption-tax-cut-header-template.md` の型を継続）
 
