@@ -1582,7 +1582,7 @@ items:
     evidence:
       - ".staging/refresh/constitutional-amendment/20261004_093728/promotion-manifest.json"
       - "themes/constitutional-amendment.md"
-    status: approved
+    status: completed
     requested_at: "2026-10-04"
     decided_at: "2026-10-04"
     decision_note: >-
@@ -1590,3 +1590,14 @@ items:
       独立監査は潮目を前回表示のまま維持した候補（manifest 5a98d308…）で実施。
       承認後に潮目を更新する版へ作り直し、監査済み版との差が潮目ウィジェット4か所だけであることを確認した。
       適用する候補SHA256: b4e15e13d38df43fd3e6f909bbacb970eaea7adf29df842a3c0122a804dda20f
+    completed_at: "2026-10-04"
+    result_note: >-
+      main e8490183で公開（作業用ブランチから origin/main へ fast-forward で直接push。共有ツリーには未コミット変更があり、
+      取り込むと company/APPROVALS.yaml と docs/index.html が衝突するため触れていない）。
+      全1341テスト（4件skip）、公開検査、GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番ページで収集2,228件・意見1,963件、トップページで全体21,459件を確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37171171108"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37171171071"
+      - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
