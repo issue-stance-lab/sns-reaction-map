@@ -3,7 +3,7 @@ name: release
 description: 作業ブランチの成果を main に取り込み、GitHub Pages の本番サイトへ反映して、作業ツリーを片付けるまでの手順。「本番反映して」「公開して」「pushして」「マージして」「リリースして」「反映お願い」といった指示では必ずこのスキルを読むこと。この工程だけ手順書が無く、毎回その場の判断で進めていたため、①-m を付けない git merge を渡してオーナーの画面で vim が開き作業が止まる ②作業ツリーにしか無い非公開データを移し忘れてマージ後に検査が落ちる ③作業ツリーが古い分岐元のままで、そこで通した検査が main では通らない、という取りこぼしを繰り返している。ページを直して検査を通すところまでは OPERATIONS.md / DATA_REFRESH.md が正典で、このスキルはその後ろだけを担当する。
 ---
 
-# 本番反映（マージ → push → 公開確認 → 片付け）
+# 本番反映（共有 main の同期 → マージ → push → 公開確認 → 片付け）
 
 ## この作業は何か
 
@@ -25,6 +25,25 @@ description: 作業ブランチの成果を main に取り込み、GitHub Pages 
   CIが同じ理由で落ちているとは限らない（下記⑤.5参照）。
 
 ## 手順
+
+### ⓪ 共有 main と GitHub の main をそろえる
+
+作業ツリーでの変更を取り込む前に、共有ツリーで確認する。`git fetch` は
+GitHub 側の最新位置を取得するだけで、手元のファイルは書き換えない。
+
+```sh
+cd <共有ツリー>
+git fetch origin main
+git status --short --branch
+git rev-list --left-right --count main...origin/main
+```
+
+成功の形: `git status` に未コミットの変更がなく、最後の行が `0 0`。
+最後の行が `0 N`（N は 1 以上）なら、未コミットの変更がないことを確認してから
+`git merge --ff-only origin/main` を実行し、再び `0 0` を確認する。
+`N 0` または `N M` なら手元に GitHub にないコミットがあるため、内容を調べるまで
+マージ・push しない。未コミットの変更がある場合も、他セッションの作業として
+保護・整理してから進む。**自動で stash・破棄・上書きしない。**
 
 ### ① 作業ツリーがコミット済みか確認する
 
@@ -105,15 +124,21 @@ X投稿のテストは、分岐元が古いだけで main では通っていた�
 **作業ツリーで見た結果をそのまま報告しない。**
 
 落ちたら push しない。直して作業ツリー側でコミットし直し、②から。
+また、④から⑤の間に別セッションが `origin/main` を進めた場合は、
+再度 `git fetch origin main` して差分を確認し、最新の main で④をやり直す。
 
 ### ⑤ push する（AIが実行する）
 
 ```sh
+git fetch origin main
+git rev-list --left-right --count main...origin/main
 git log --oneline origin/main..HEAD | cat
 git push
 ```
 
-1行目で、これから送る内容を確かめてから送る。
+2行目が `N 0`（N は 1 以上）のときだけ進む。`N M` なら他の公開が先に入っている。
+最新の main を取り込んで④の検査からやり直す。3行目で、これから送る内容を
+確かめてから送る。
 成功の形: `0811403..d41564e  main -> main` のような行が出る。
 
 ### ⑤.5 実際のCI結果を確認する
@@ -168,13 +193,15 @@ git worktree remove <作業ツリー>
 `git worktree remove` が「未追跡ファイルがある」で断られたら、**消す前に②をやり直す**。
 そのツリーにしか無い非公開ファイルが残っている合図。
 
-### ⑧ 台帳を更新する
+### ⑧ 台帳を確認する
 
 公開まで行った更新なら、`THEMES.yaml` の `updated_at` / `collect_at` / `refresh_at` /
 `collect_delta` が今回の値になっているか確かめる（本来は反映前に済んでいるはず。
-ここは最後の網）。テーマ横断の課題が片付いたなら `TASK_BOARD.md` も直す
+ここは最後の網）。テーマ横断の課題が片付いたなら `TASK_BOARD.md` も反映済みか確かめる
 （**`TASK_BOARD.md`の「状態」「次にすること」は120文字上限**、
 `tests/test_task_board.py`が検査する。索引は要点だけにし詳細は`tasks/task-{番号}.md`へ）。
+不足が見つかったら専用作業ツリーで直し、③以降をやり直す。共有 main に
+未コミットの修正を残して終了しない。
 
 **`THEMES.yaml`の`updated_at`を（データ更新を伴わない）手直しだけで変えたときは、
 連鎖先3つの再生成も忘れずに**: `python3 scripts/build_data_sheet.py`
@@ -185,6 +212,21 @@ git worktree remove <作業ツリー>
 含まれない（`PRIVATE_DATA_TESTS`除外のため）ので、④で全部飛ばしていないか
 テスト名で確認すること（2026-09-19、bukatsu-chiikiのupdated_at手直しで
 この2つの再生成を忘れて発覚）。
+
+### ⑨ 終了前に共有 main と GitHub の main を照合する
+
+```sh
+cd <共有ツリー>
+git fetch origin main
+git status --short --branch
+git rev-list --left-right --count main...origin/main
+```
+
+成功の形: 未コミットの変更がなく、最後の行が `0 0`。`0 N` なら⓪と同じく、
+未コミットの変更がないことを確認して `git merge --ff-only origin/main` で更新し、
+もう一度照合する。手元にだけコミットがある、履歴が分岐している、または
+未コミットの変更がある場合は、内容を保護・調査してから終了する。
+**「公開済み」と報告するだけで終えず、共有 main の同期結果も報告する。**
 
 ## やらないこと
 
