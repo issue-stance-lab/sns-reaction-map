@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import shutil
 import subprocess
@@ -69,6 +70,25 @@ def _previous_wave(root: Path, current_date: str) -> tuple[Path, str]:
 def _label(value: str) -> str:
     _, month, day = value.split("-")
     return f"{int(month)}月{int(day)}日"
+
+
+def _report_model(report: Path) -> str | None:
+    if not report.is_file():
+        return None
+    data = json.loads(report.read_text(encoding="utf-8"))
+    return ((data.get("provenance") or {}).get("model") or {}).get("name")
+
+
+def tide_model_changed(root: Path, stage: Path, current_date: str) -> bool:
+    """前回回と今回で分類モデルが違えば True。
+
+    モデルが変わるとラベルの引き方が変わり、世論の動きとモデル差を区別できない
+    （DATA_REFRESH.md「分類モデルをまたぐ回」）。モデルが分からない回は比べない。
+    """
+    previous_path, _ = _previous_wave(root, current_date)
+    previous = _report_model(previous_path.with_name("report.json"))
+    current = _report_model(stage / "report.json")
+    return bool(previous and current and previous != current)
 
 
 def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -> None:
@@ -186,12 +206,18 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     second_page = stage / "idempotence" / "page-candidate.html"
     second_page.parent.mkdir(parents=True, exist_ok=True)
 
+    preserve_tide = tide_model_changed(root, stage, current_date)
+    if preserve_tide:
+        print("注意: 分類モデルが前回回と異なるため、「世論の潮目」は前回表示を維持します")
+
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page)
-    _apply_tide(root, first_page, current_wave, current_date)
+    if not preserve_tide:
+        _apply_tide(root, first_page, current_wave, current_date)
     _apply_connected_display(root, first_page)
     _run_builder(root, candidate, first_page, second_page)
-    _apply_tide(root, second_page, current_wave, current_date)
+    if not preserve_tide:
+        _apply_tide(root, second_page, current_wave, current_date)
     _apply_connected_display(root, second_page)
 
     if _digest(first_page) != _digest(second_page):
