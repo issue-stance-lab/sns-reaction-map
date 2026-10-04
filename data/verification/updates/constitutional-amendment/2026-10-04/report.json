@@ -8,11 +8,11 @@
   "raw": 225,
   "duplicates": 0,
   "new": 225,
-  "relevant": 224,
-  "opinions": 206,
+  "relevant": 225,
+  "opinions": 207,
   "opinion_flag_available": true,
   "candidate": 2228,
-  "classification_errors": 1,
+  "classification_errors": 0,
   "status": "validated",
   "topic": "constitutional-amendment",
   "date": "2026-10-04",
@@ -49,8 +49,16 @@
       "config_source": "config.yaml:model.default"
     },
     "output": {
-      "classified_sha256": "b92d9145c55ad2de1f1e6efdb3dcb493272ac8550140a93e8b0ad542fb608993"
+      "classified_sha256": "bb1e58055881a5f635e1f5bb5dbae99d1e9687153860d52027bd6190b9dc64c0"
     }
   },
-  "next_collect_at": "2026-10-13"
+  "next_collect_at": "2026-10-13",
+  "manual_labels": [
+    {
+      "tweet_id": "2106541570707407299",
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-04"
+    }
+  ]
 }
