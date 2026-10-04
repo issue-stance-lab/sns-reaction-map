@@ -82,6 +82,23 @@ cd <共有ツリー> && git merge --no-ff task/<ブランチ名> -m "Merge branc
 衝突したら、その場で直さずオーナーへ報告する（別セッションが同じ場所を触っている
 可能性がある）。中止は `git merge --abort`。
 
+### ③.5 非公開データをバックアップし、記録を含める
+
+マージ後の共有 main でバックアップする。バックアップは
+`company/data-backup-status.json` を更新するため、push の後に実行すると
+共有 main に未コミットの変更が残る。検査・push より前に記録をコミットする。
+
+```sh
+cd <共有ツリー>
+python3 scripts/backup_private_data.py --dest /Volumes/HD-LE-B/issue-stance-private-backups
+git add -- company/data-backup-status.json
+git commit -m "data: record verified private backup"
+```
+
+成功の形: `復元確認: OK` とコミット結果が出て、`git status --short` が空。
+`git commit` が「nothing to commit」なら記録に差分がないことを確認する。
+バックアップが失敗したら検査・push に進まない。
+
 ### ④ マージ後の main で検査を通す
 
 ```sh
@@ -182,13 +199,12 @@ until curl -sL "https://sns-reaction-map.jp/<テーマ>-reaction-map.html" \
 ### ⑦ 片付ける
 
 ```sh
-cd <共有ツリー> && python3 scripts/backup_private_data.py --dest /Volumes/HD-LE-B/issue-stance-private-backups
-git worktree remove <作業ツリー>
+cd <共有ツリー> && git worktree remove <作業ツリー>
 ```
 
-バックアップは**マージ後の main の上で取り直す**（`THEMES.yaml` と `.gitignore` を見て
-対象を決めるため、古いブランチで取ると新しい正典が漏れる）。
-成功の形: `復元確認: OK` が出る。
+バックアップと記録は③.5で済ませる。**古いブランチの上でバックアップを取らない**
+（`THEMES.yaml` と `.gitignore` を見て対象を決めるため、新しい正典が漏れる）。
+成功の形: 作業ツリーが一覧から消える。
 
 `git worktree remove` が「未追跡ファイルがある」で断られたら、**消す前に②をやり直す**。
 そのツリーにしか無い非公開ファイルが残っている合図。
