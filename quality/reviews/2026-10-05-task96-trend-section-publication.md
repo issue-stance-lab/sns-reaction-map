@@ -28,3 +28,8 @@ Search Consoleの表示は28日で2回ほどと小さく、1回の表示で結�
 貼り直しが漏れると `python3 scripts/verify_number_provenance.py consumption-tax-cut` が止める。
 
 詳細は `themes/consumption-tax-cut.md` と `DATA_REFRESH.md`（テーマページの確認項目）。
+
+## 追記（2026-10-05、同日）: 見出しに日付を足した
+
+節の各タブの見出し（H2）の末尾に「（2026年10月3日時点）」を足して公開した。更新のたびに最新の収集日へ自動で変わる。
+title と meta description には日付を入れていない。検索結果に出るタイトルへの日付は、10/27の判定後に決める。

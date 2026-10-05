@@ -114,6 +114,9 @@ class NextRoundTest(unittest.TestCase):
             self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)), 10)
             self.assertIn(f"-row-{NEW_DAY}", panel)
         self.assertIn("2026年10月10日時点", html)
+        # 見出し（H2）の末尾の日付も、右上のバッジと同じく最新の収集日になる。
+        self.assertEqual(html.count('<span class="trend-h2-date">（2026年10月10日時点）</span>'), 2)
+        self.assertNotIn("（2026年10月3日時点）", html)
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
 
     def test_extended_page_passes_recount_and_is_idempotent(self) -> None:

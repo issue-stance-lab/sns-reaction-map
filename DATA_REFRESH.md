@@ -557,6 +557,7 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 - [ ] 消費税減税だけ: 潮目の枠の中の「意見の推移」（`#consumption-tax-cut-trend`、立場・論点の2タブ）。
   手では直さない。`adapter.build` が潮目と一緒に、昇格前の累積候補（`cumulative-candidate.json`）から貼り直す
   （`scripts/build_trend_section.py`）。新しい回は表に1行、グラフに1点増え、「○年○月○日時点」も最新の収集日になる
+  - 各タブの見出し（H2）の末尾と右上のバッジの「○年○月○日時点」も、同じ呼び出しで最新の収集日になる（手では直さない）
   - 累積候補を渡さない呼び方（部分更新・テスト）でも、正典（`THEMES.yaml` の `sample_file`）から作る。
     正典も無い隔離環境では、既存の節をそのまま残す（黙って消さない）
   - `python3 scripts/verify_number_provenance.py consumption-tax-cut` が、表の各行を正典から独立に数え直して照合する。

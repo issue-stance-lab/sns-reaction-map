@@ -6,6 +6,7 @@
 """
 
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -270,6 +271,8 @@ class TabsTest(unittest.TestCase):
         self.assertNotIn('data-trend-panel="stance" hidden', section)
         self.assertIn("消費税減税の賛成・反対の割合は変わった？", section)
         self.assertIn("消費税減税で語られる論点は変わった？", section)
+        # 見出しの末尾にも最新の収集日を出す（検索結果に読まれる場所）。
+        self.assertEqual(section.count('<span class="trend-h2-date">（2026年9月8日時点）</span>'), 2)
         self.assertIn(">立場の変化<", section)
         self.assertIn(">論点の変化<", section)
         self.assertEqual(section.count("<table"), 2)
@@ -286,6 +289,12 @@ class TabsTest(unittest.TestCase):
                 trend.render_section(SLUG, stance)
         finally:
             trend.TREND_THEMES[SLUG]["short_labels"]["stance"] = original
+
+    def test_heading_date_follows_the_latest_round_and_is_plain_text(self) -> None:
+        section = self.render(False)
+        match = re.search(r'<h2 id="[^"]+">(.*?)</h2>', section)
+        text = re.sub(r"<[^>]+>", "", match.group(1))
+        self.assertEqual(text, "消費税減税の賛成・反対の割合は変わった？（2026年9月8日時点）")
 
     def test_stance_only_has_no_tabs(self) -> None:
         section = self.render(False)
