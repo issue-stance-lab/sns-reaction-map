@@ -544,5 +544,177 @@ class SectionWithEventsTest(unittest.TestCase):
         self.assertIn('"events":[]', section)
 
 
+class ShareBlockTest(unittest.TestCase):
+    def render(self) -> str:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-17", {PRO: 3, CON: 7})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write(rows, Path(tmp))
+            stance = trend.load_rounds(path, BASE, "stance")
+            issue = trend.load_rounds(path, BASE, "issue")
+            reason = trend.load_reasons(path, BASE, CON)
+        return trend.render_section(SLUG, stance, issue, reason=reason, events=[])
+
+    def test_stance_and_issue_panels_have_a_share_block_but_not_the_reason_panel(self) -> None:
+        section = self.render()
+        self.assertEqual(section.count('<details class="trend-share">'), 2)
+        reason_panel = section[section.index('data-trend-panel="reason"'):section.index("<script>")]
+        self.assertNotIn("<details", reason_panel)
+
+    def test_each_panel_offers_both_the_glance_and_the_detail_image(self) -> None:
+        section = self.render()
+        self.assertEqual(section.count('class="trend-share-item"'), 4)
+        for kind in ("stance", "issue"):
+            for variant in ("summary", "detail"):
+                name = f"consumption-tax-cut-{kind}-trend-{variant}.png"
+                self.assertIn(f'<img src="images/trend/{name}" width="1200" height="675"', section)
+                self.assertIn(f'href="images/trend/{name}" download data-trend-download="{kind}" data-variant="{variant}"', section)
+                self.assertIn(f'data-trend-copy="{kind}" data-variant="{variant}"', section)
+        # ひと目版を先に出す（貼る人が最初に見る）
+        self.assertLess(section.index("-stance-trend-summary.png"), section.index("-stance-trend-detail.png"))
+        self.assertIn("記事・Xの投稿・授業のスライド向け", section)
+        self.assertIn("資料・数字の確認向け", section)
+
+    def test_image_filename_names_the_variant_and_rejects_unknown_ones(self) -> None:
+        self.assertEqual(trend.image_filename(SLUG, "stance"), "consumption-tax-cut-stance-trend-detail.png")
+        self.assertEqual(trend.image_filename(SLUG, "issue", "summary"), "consumption-tax-cut-issue-trend-summary.png")
+        with self.assertRaises(ValueError):
+            trend.image_filename(SLUG, "stance", "huge")
+
+    def test_detail_alt_text_has_the_title_as_of_date_and_latest_numbers(self) -> None:
+        section = self.render()
+        alt = re.search(r'<img src="images/trend/consumption-tax-cut-stance-trend-detail.png"[^>]*alt="([^"]*)"', section).group(1)
+        self.assertIn("消費税減税の賛成・反対の割合は変わった？", alt)
+        self.assertIn("2026年9月17日時点", alt)
+        self.assertIn("減税推進30.0%", alt)
+        self.assertIn("減税反対・慎重70.0%", alt)
+        self.assertIn("世論調査ではありません", alt)
+
+    def test_summary_alt_text_says_what_changed_with_the_start_and_end_numbers(self) -> None:
+        import html as htmllib
+        section = self.render()
+        alt = htmllib.unescape(re.search(r'<img src="images/trend/consumption-tax-cut-stance-trend-summary.png"[^>]*alt="([^"]*)"', section).group(1))
+        self.assertIn("消費税減税に関するSNS上の意見の推移", alt)
+        self.assertIn("2026年9月17日時点", alt)
+        self.assertIn("減税推進は9月1日の50.0%から30.0%へ", alt)
+        self.assertIn("減税反対・慎重は9月1日の50.0%から70.0%へ", alt)
+        self.assertIn("世論調査ではありません", alt)
+
+    def test_embed_code_points_at_the_public_image_with_a_credit_link(self) -> None:
+        import html as htmllib
+        section = self.render()
+        codes = [htmllib.unescape(item) for item in re.findall(r'<textarea class="trend-share-code"[^>]*>(.*?)</textarea>', section, re.S)]
+        self.assertEqual(len(codes), 4)
+        page = "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+        summary_code = next(code for code in codes if "stance-trend-summary.png" in code)
+        detail_code = next(code for code in codes if "stance-trend-detail.png" in code)
+        for code in (summary_code, detail_code):
+            self.assertIn(f'<a href="{page}#consumption-tax-cut-trend-panel-stance">', code)
+            self.assertIn('width="600" height="338"', code)
+            self.assertIn(f'出典：<a href="{page}">SNS反応まっぷ</a>', code)
+            self.assertIn("世論調査ではありません", code)
+        self.assertIn('<img src="https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend-summary.png"', summary_code)
+
+    def test_embed_code_alt_is_attribute_safe(self) -> None:
+        code = trend.embed_code(SLUG, "stance", 'a"b<c>', "panel")
+        self.assertIn('alt="a&quot;b&lt;c&gt;"', code)
+
+    def test_terms_are_shown_once_next_to_the_downloads(self) -> None:
+        section = self.render()
+        self.assertEqual(section.count(trend.EMBED_TERMS), 2)  # 立場・論点のパネルに1つずつ（画像2種で共通）
+        self.assertIn("出典", trend.EMBED_TERMS)
+
+    def test_no_share_block_when_the_theme_does_not_distribute_images(self) -> None:
+        original = trend.TREND_THEMES[SLUG]["share_images"]
+        trend.TREND_THEMES[SLUG]["share_images"] = False
+        try:
+            self.assertNotIn("trend-share", self.render().replace(".trend-share", ""))
+        finally:
+            trend.TREND_THEMES[SLUG]["share_images"] = original
+
+    def test_analytics_calls_are_guarded_and_tell_the_variants_apart(self) -> None:
+        section = self.render()
+        self.assertIn('typeof gtag === "function"', section)
+        self.assertIn('"trend_image_copy"', section)
+        self.assertIn('"trend_image_download"', section)
+        self.assertIn("variant: variant", section)
+
+
+def issue_wave(day: str, counts: dict[str, int]) -> list[dict]:
+    rows = []
+    for issue, n in counts.items():
+        rows += [row(f"{day}T03:00:00.000Z", PRO, issue=issue) for _ in range(n)]
+    return rows
+
+
+class GlanceTest(unittest.TestCase):
+    """ひと目版の見出し。ぶれの範囲を超えた動きだけを言い切り、差が小さい項目を増減に見せない。"""
+
+    def glance(self, rows: list[dict], kind: str = "stance") -> dict:
+        with tempfile.TemporaryDirectory() as tmp:
+            series = trend.load_rounds(write(rows, Path(tmp)), BASE, kind)
+        labels = BASE[trend.KINDS[kind]["labels_key"]]
+        return trend.glance(SLUG, kind, series, labels)
+
+    def test_two_moves_in_opposite_directions(self) -> None:
+        rows = wave("2026-09-01", {PRO: 300, CON: 100}) + wave("2026-09-08", {PRO: 100, CON: 300})
+        info = self.glance(rows)
+        self.assertEqual(info["lines"], ["「減税推進」の割合が下がり、", "「減税反対・慎重」が上がった"])
+        self.assertEqual([item["label"] for item in info["items"]], [PRO, CON])
+        self.assertEqual(info["items"][0]["start"], 75.0)
+        self.assertEqual(info["items"][0]["end"], 25.0)
+        self.assertTrue(all(item["beyond"] for item in info["items"]))
+
+    def test_only_the_move_beyond_the_noise_is_stated(self) -> None:
+        rows = (
+            wave("2026-09-01", {PRO: 60, CON: 20, COND: 20})
+            + wave("2026-09-08", {PRO: 45, CON: 24, COND: 31})
+        )
+        info = self.glance(rows)
+        self.assertEqual([item["label"] for item in info["items"]], [PRO, COND])
+        self.assertEqual([item["beyond"] for item in info["items"]], [True, False])
+        self.assertEqual(info["lines"], ["「減税推進」の割合が下がった"])
+
+    def test_no_move_beyond_the_noise_says_no_big_change(self) -> None:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-08", {PRO: 4, CON: 6})
+        info = self.glance(rows)
+        self.assertEqual(info["lines"], ["立場の割合に、大きな変化はありません", "（最初と最新の差は、ぶれの範囲内）"])
+        self.assertNotIn("上がった", info["headline"])
+        self.assertNotIn("下がった", info["headline"])
+
+    def test_two_moves_in_the_same_direction_are_joined(self) -> None:
+        rows = (
+            wave("2026-09-01", {PRO: 10, COND: 10, CON: 40, NEUTRAL: 40})
+            + wave("2026-09-08", {PRO: 40, COND: 40, CON: 10, NEUTRAL: 10})
+        )
+        info = self.glance(rows)
+        self.assertEqual(info["lines"], [f"「{PRO}」と「{COND}」の割合が、", "どちらも上がった"])
+
+    def test_issue_headline_says_it_is_about_issues(self) -> None:
+        rows = issue_wave("2026-09-01", {SCOPE: 10, TRUST: 90}) + issue_wave("2026-09-08", {SCOPE: 90, TRUST: 10})
+        info = self.glance(rows, "issue")
+        self.assertEqual(info["lines"], [f"論点では「{SCOPE}」の割合が上がり、", f"「{TRUST}」が下がった"])
+
+    def test_issue_without_a_big_move_says_so_in_terms_of_issues(self) -> None:
+        rows = issue_wave("2026-09-01", {SCOPE: 5, TRUST: 5}) + issue_wave("2026-09-08", {SCOPE: 4, TRUST: 6})
+        self.assertEqual(self.glance(rows, "issue")["lines"][0], "論点の割合に、大きな変化はありません")
+
+    def test_only_two_items_are_picked_even_with_many_labels(self) -> None:
+        rows = wave("2026-09-01", {PRO: 10, COND: 10, CON: 40, NEUTRAL: 40}) + wave("2026-09-08", {PRO: 40, COND: 10, CON: 40, NEUTRAL: 10})
+        self.assertEqual(len(self.glance(rows)["items"]), 2)
+
+    def test_every_label_pair_is_a_valid_headline(self) -> None:
+        """どの立場・論点の組み合わせでも、文が空にならず、ラベルをそのまま含む。"""
+        for kind in ("stance", "issue"):
+            labels = BASE[trend.KINDS[kind]["labels_key"]]
+            for a in labels:
+                for b in labels:
+                    if a == b:
+                        continue
+                    lines = trend.glance_lines(kind, [{"label": a, "delta": -9.0, "beyond": True}, {"label": b, "delta": 7.0, "beyond": True}])
+                    self.assertTrue(all(lines), (a, b))
+                    self.assertIn(f"「{a}」", lines[0])
+                    self.assertIn(f"「{b}」", "".join(lines))
+
+
 if __name__ == "__main__":
     unittest.main()

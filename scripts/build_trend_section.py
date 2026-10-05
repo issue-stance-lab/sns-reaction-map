@@ -82,6 +82,8 @@ TREND_THEMES = {
         "events_file": "configs/consumption-tax-background.json",
         # 「反対・慎重の理由」タブで内訳を出す立場（inject_tide_widget.THEMES の stance_labels のどれか）。
         "focus_stance": "減税反対・慎重",
+        # 立場・論点のグラフを、単体の画像（PNG）としても配る（scripts/build_trend_images.py）。
+        "share_images": True,
         # スマホの表の見出し用（\n で折り返す）。凡例・ツールチップ・PCの表は正式名を使う。
         "short_labels": {
             "stance": ["減税推進", "条件付き\n賛成", "反対・\n慎重", "中立・\n情報"],
@@ -91,10 +93,49 @@ TREND_THEMES = {
 }
 
 REASON_TAB = "反対・慎重の理由"
+
+# 単体で配る画像（scripts/build_trend_images.py が作る）。公開URLは正式ドメイン。
+SITE_HOST = "sns-reaction-map.jp"
+SITE_URL = f"https://{SITE_HOST}/"
+IMAGE_DIR = Path("docs/images/trend")
+IMAGE_SIZE = (1200, 675)
+EMBED_SIZE = (600, 338)
+# 課題77 案5「図表・データの利用条件」。方針変更なのでオーナー（CEO）の承認が要る。承認前は公開しない。
+EMBED_TERMS = (
+    "出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。"
+    "画像の切り取りや、数字・注意書きの書き換えはしないでください。"
+)
 EVENT_DATE_RE = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
 
 Z95 = 1.96
 WINDOW_DAYS = 7
+
+
+# 画像は貼る場所で使い分ける2種類。ひと目版は、スマホのタイムラインや記事の本文幅（幅300〜600px）に
+# 縮めても読めるよう、文字を大きくして線を2本に絞る。詳細版は、資料や数字の根拠の確認向けに全項目を入れる。
+IMAGE_VARIANTS = {
+    "summary": {
+        "name": "ひと目版",
+        "use": "記事・Xの投稿・授業のスライド向け",
+        "hint": "文字を大きくし、最初と最新で差が大きい2つに絞りました。小さく表示しても読めます。",
+    },
+    "detail": {
+        "name": "詳細版",
+        "use": "資料・数字の確認向け",
+        "hint": "すべての{noun}と、各回の動きを入れた細かい図です。大きく表示して使ってください。",
+    },
+}
+
+
+def image_filename(slug: str, kind: str, variant: str = "detail") -> str:
+    """画像検索で何の図か分かるファイル名（テーマ・立場か論点・推移・種類）。"""
+    if variant not in IMAGE_VARIANTS:
+        raise ValueError(f"画像の種類が不明です: {variant}")
+    return f"{slug}-{kind}-trend-{variant}.png"
+
+
+def page_url(slug: str) -> str:
+    return SITE_URL + Path(_theme_base(slug)["html"]).name
 
 
 def _theme_base(slug: str) -> dict:
@@ -233,6 +274,49 @@ def summary(series: list[dict], labels: list[str]) -> dict:
         "median_margin": round(margin(50, median_n)),
         "recent_floor": int(math.floor(min(recent_values) * 100)) if recent_values else None,
     }
+
+
+def glance_lines(kind: str, items: list[dict]) -> list[str]:
+    """ひと目版の見出し（1〜2行）。ぶれの範囲を超えた動きだけを「上がった・下がった」と言い切る。
+
+    どちらも超えなければ変化なしと書く。差が小さい項目を、増減があったように見せない。
+    items は差が大きい順（label・delta・beyond を持つ）。
+    """
+    moved = [item for item in items if item["beyond"]]
+    prefix = "" if kind == "stance" else "論点では"
+
+    def word(item: dict, connective: bool = False) -> str:
+        up = item["delta"] > 0
+        return ("上がり" if up else "下がり") if connective else ("上がった" if up else "下がった")
+
+    if not moved:
+        axis = "立場" if kind == "stance" else "論点"
+        return [f"{axis}の割合に、大きな変化はありません", "（最初と最新の差は、ぶれの範囲内）"]
+    if len(moved) == 1:
+        return [f"{prefix}「{moved[0]['label']}」の割合が{word(moved[0])}"]
+    a, b = moved[:2]
+    if (a["delta"] > 0) == (b["delta"] > 0):
+        return [f"{prefix}「{a['label']}」と「{b['label']}」の割合が、", f"どちらも{word(a)}"]
+    return [f"{prefix}「{a['label']}」の割合が{word(a, True)}、", f"「{b['label']}」が{word(b)}"]
+
+
+def glance(slug: str, kind: str, series: list[dict], labels: list[str]) -> dict:
+    """ひと目版の画像に出す内容。最初と最新の差が大きい2項目（本文が取り上げるのと同じ2項目）と、見出しの文。"""
+    info = summary(series, labels)
+    first, last = info["first"], info["last"]
+    items = [
+        {
+            "label": label,
+            "index": labels.index(label),
+            "start": first["shares"][label],
+            "end": last["shares"][label],
+            "delta": info["deltas"][label],
+            "beyond": beyond_noise(first, last, label),
+        }
+        for label in info["movers"]
+    ]
+    lines = glance_lines(kind, items)
+    return {"items": items, "lines": lines, "headline": "".join(lines), "info": info}
 
 
 def emphasized(series: list[dict], labels: list[str]) -> list[int]:
@@ -520,6 +604,81 @@ def _reason_table(info: dict, panel_id: str) -> str:
     )
 
 
+# ------------------------------------------------------------ 画像で使う（ダウンロード・埋め込み）
+
+def image_alt(slug: str, kind: str, series: list[dict], labels: list[str], variant: str = "detail") -> str:
+    """画像の代替テキスト。最新の割合まで書く（画像検索と読み上げに効く）。"""
+    last = series[-1]
+    when = f"{jp_date(last['date'], year=True)}時点"
+    tail = "Xの投稿サンプルの分析で、世論調査ではありません。"
+    if variant == "summary":
+        info = glance(slug, kind, series, labels)
+        moves = "、".join(
+            f"{item['label']}は{jp_date(series[0]['date'])}の{pct(item['start'])}から{pct(item['end'])}へ" for item in info["items"]
+        )
+        return (
+            f"{TREND_THEMES[slug]['name']}に関するSNS上の意見の推移の折れ線グラフ（{when}）。{info['headline']}。"
+            f"{moves}。{tail}"
+        )
+    latest = "、".join(f"{label}{pct(last['shares'][label])}" for label in labels)
+    return (
+        f"{TREND_THEMES[slug]['headings'][kind]} SNS上の意見の推移の折れ線グラフ（{when}）。"
+        f"最新の割合は、{latest}。{tail}"
+    )
+
+
+def embed_code(slug: str, kind: str, alt: str, panel_id: str, variant: str = "summary") -> str:
+    """他のサイトに貼る埋め込みコード。画像に出典のリンクを付ける。"""
+    image_url = SITE_URL + str(IMAGE_DIR.relative_to("docs")) + "/" + image_filename(slug, kind, variant)
+    page = page_url(slug)
+    width, height = EMBED_SIZE
+    return (
+        f'<a href="{page}#{panel_id}"><img src="{image_url}" alt="{html.escape(alt, quote=True)}" '
+        f'width="{width}" height="{height}" style="max-width:100%;height:auto"></a>\n'
+        f'<p>出典：<a href="{page}">SNS反応まっぷ</a>（Xの投稿サンプルの分析。世論調査ではありません）</p>'
+    )
+
+
+def _share_item(slug: str, kind: str, variant: str, series: list[dict], labels: list[str], panel_id: str) -> str:
+    spec = IMAGE_VARIANTS[variant]
+    relative = str(IMAGE_DIR.relative_to("docs")) + "/" + image_filename(slug, kind, variant)  # ページからの相対パス
+    alt = image_alt(slug, kind, series, labels, variant)
+    code = embed_code(slug, kind, alt, panel_id, variant)
+    width, height = IMAGE_SIZE
+    noun = "立場" if kind == "stance" else "論点"
+    last = jp_date(series[-1]["date"], year=True)
+    return f"""<div class="trend-share-item" data-variant="{variant}">
+          <h3 class="trend-share-name">{spec["name"]}<span>{html.escape(spec["use"])}</span></h3>
+          <p class="trend-share-hint">{html.escape(spec["hint"].format(noun=noun))}</p>
+          <figure class="trend-share-fig">
+            <a href="{relative}"><img src="{relative}" width="{width}" height="{height}" loading="lazy" decoding="async" alt="{html.escape(alt, quote=True)}"></a>
+            <figcaption>PNG、{width}×{height}。{last}時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
+          </figure>
+          <div class="trend-share-actions">
+            <a class="trend-share-btn" href="{relative}" download data-trend-download="{kind}" data-variant="{variant}">画像をダウンロード</a>
+            <button type="button" class="trend-share-btn" data-trend-copy="{kind}" data-variant="{variant}">埋め込みコードをコピー</button>
+            <span class="trend-share-status" role="status" aria-live="polite"></span>
+          </div>
+          <textarea class="trend-share-code" readonly rows="5" aria-label="{spec["name"]}の埋め込みコード">{html.escape(code)}</textarea>
+        </div>"""
+
+
+def _share_block(slug: str, kind: str, series: list[dict], labels: list[str], panel_id: str) -> str:
+    if not TREND_THEMES[slug].get("share_images"):
+        return ""
+    items = "\n        ".join(_share_item(slug, kind, variant, series, labels, panel_id) for variant in IMAGE_VARIANTS)
+    return f"""<details class="trend-share">
+      <summary>このグラフを画像で使う</summary>
+      <div class="trend-share-body">
+        <p class="trend-share-lead">貼る場所に合わせて、2種類の画像があります。</p>
+        <div class="trend-share-grid">
+        {items}
+        </div>
+        <p class="trend-share-terms">{html.escape(EMBED_TERMS)}</p>
+      </div>
+    </details>"""
+
+
 def _shape_svg(shape: str, r: float) -> str:
     path = SHAPE_PATHS[shape]
     if path is None:
@@ -729,6 +888,19 @@ TREND_JS = r"""
     nodes[kind] = panel;
     if (panels[kind]) charts[kind] = chart(panel, panels[kind]);
   });
+  // 画像のダウンロード・埋め込みコードのコピー（計測つき）。計測が無くても動く。
+  const track = (name, kind, variant) => { if (typeof gtag === "function") gtag("event", name, {theme: "__SLUG__", panel: kind, variant: variant}); };
+  root.querySelectorAll("[data-trend-copy]").forEach(button => button.addEventListener("click", async () => {
+    const item = button.closest(".trend-share-item");
+    const area = item.querySelector("textarea");
+    const status = item.querySelector(".trend-share-status");
+    let ok = false;
+    try { await navigator.clipboard.writeText(area.value); ok = true; }
+    catch (error) { area.focus(); area.select(); try { ok = document.execCommand("copy"); } catch (inner) { ok = false; } }
+    status.textContent = ok ? "コピーしました" : "選択しました。コピーしてください";
+    track("trend_image_copy", button.getAttribute("data-trend-copy"), button.getAttribute("data-variant"));
+  }));
+  root.querySelectorAll("[data-trend-download]").forEach(link => link.addEventListener("click", () => track("trend_image_download", link.getAttribute("data-trend-download"), link.getAttribute("data-variant"))));
   const tabs = root.querySelectorAll("[data-trend-tab]");
   function show(kind) {
     if (!nodes[kind]) return;
@@ -796,6 +968,25 @@ def trend_css() -> str:
 .trend-table--reason thead th:first-child,.trend-table--reason thead th:nth-child(3){{text-align:left}}
 .trend-bar{{display:block;height:8px;min-width:2px;margin-bottom:3px;border-radius:0 4px 4px 0;background:#2a78d6}}
 .trend-bar-cell b{{color:#0b1d3a;font-size:14px;font-weight:900}}
+.trend-share{{margin-top:18px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}}
+.trend-share summary{{padding:12px 16px;color:#26364f;font-size:14px;font-weight:900;cursor:pointer}}
+.trend-share-body{{padding:4px 16px 16px}}
+.trend-share-lead{{margin:0 0 12px;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}}
+.trend-share-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+.trend-share-item{{min-width:0;padding:12px;border:1px solid #e1e7f0;border-radius:10px;background:#fff}}
+.trend-share-name{{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:0;font-size:16px;line-height:1.5}}
+.trend-share-name span{{color:#53647c;font-size:12px;font-weight:800}}
+.trend-share-hint{{margin:4px 0 10px;color:#4b5c74;font-size:12.5px;line-height:1.7}}
+.trend-share-fig{{margin:0}}
+.trend-share-fig img{{display:block;width:100%;height:auto;border:1px solid #e1e7f0;border-radius:8px;background:#fff}}
+.trend-share-fig figcaption{{margin-top:6px;color:#66758b;font-size:12px;line-height:1.7}}
+.trend-share-terms{{margin:14px 0 0;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}}
+.trend-share-actions{{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px}}
+.trend-share-btn{{display:inline-flex;align-items:center;min-height:38px;padding:8px 14px;border:1px solid #d9e2ef;border-radius:9px;background:#fff;color:#20314d;font:inherit;font-size:13px;font-weight:900;text-decoration:none;cursor:pointer}}
+.trend-share-btn:hover{{background:#f3f6fb}}
+.trend-share-status{{color:#047857;font-size:13px;font-weight:800}}
+.trend-share-code{{display:block;width:100%;margin-top:10px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:8px;background:#f9fbfe;color:#26364f;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}}
+@media(max-width:760px){{.trend-share-grid{{grid-template-columns:minmax(0,1fr)}}}}
 .trend-table-wrap{{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}}
 .trend-table-wrap:focus-visible{{box-shadow:0 0 0 3px #bcd0ff}}
 .trend-table{{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}}
@@ -869,6 +1060,7 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
     </div>
     {_events_block(panel_id, kind, series, labels, events)}
     {_table(series, labels, theme["short_labels"][kind], kind, panel_id)}
+    {_share_block(slug, kind, series, labels, panel_id)}
     <ul class="trend-note">{notes}</ul>
   </div>"""
     return markup, data
@@ -928,6 +1120,7 @@ def render_section(
         tabs = f'  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え">{buttons}</div>\n'
     script = (
         TREND_JS.replace("__ID__", widget_id)
+        .replace("__SLUG__", slug)
         .replace("__DATA__", json.dumps(panels, ensure_ascii=False, separators=(",", ":")))
         .replace("__SHAPES__", json.dumps(SHAPE_PATHS, separators=(",", ":")))
     )
