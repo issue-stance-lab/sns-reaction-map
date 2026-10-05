@@ -236,15 +236,22 @@
 .trend-share{margin-top:18px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}
 .trend-share summary{padding:12px 16px;color:#26364f;font-size:14px;font-weight:900;cursor:pointer}
 .trend-share-body{padding:4px 16px 16px}
+.trend-share-lead{margin:0 0 12px;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}
+.trend-share-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.trend-share-item{min-width:0;padding:12px;border:1px solid #e1e7f0;border-radius:10px;background:#fff}
+.trend-share-name{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:0;font-size:16px;line-height:1.5}
+.trend-share-name span{color:#53647c;font-size:12px;font-weight:800}
+.trend-share-hint{margin:4px 0 10px;color:#4b5c74;font-size:12.5px;line-height:1.7}
 .trend-share-fig{margin:0}
 .trend-share-fig img{display:block;width:100%;height:auto;border:1px solid #e1e7f0;border-radius:8px;background:#fff}
 .trend-share-fig figcaption{margin-top:6px;color:#66758b;font-size:12px;line-height:1.7}
-.trend-share-terms{margin:12px 0 0;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}
+.trend-share-terms{margin:14px 0 0;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}
 .trend-share-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px}
 .trend-share-btn{display:inline-flex;align-items:center;min-height:38px;padding:8px 14px;border:1px solid #d9e2ef;border-radius:9px;background:#fff;color:#20314d;font:inherit;font-size:13px;font-weight:900;text-decoration:none;cursor:pointer}
 .trend-share-btn:hover{background:#f3f6fb}
 .trend-share-status{color:#047857;font-size:13px;font-weight:800}
-.trend-share-code{display:block;width:100%;margin-top:10px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:8px;background:#fff;color:#26364f;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
+.trend-share-code{display:block;width:100%;margin-top:10px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:8px;background:#f9fbfe;color:#26364f;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
+@media(max-width:760px){.trend-share-grid{grid-template-columns:minmax(0,1fr)}}
 .trend-table-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}
 .trend-table-wrap:focus-visible{box-shadow:0 0 0 3px #bcd0ff}
 .trend-table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}
@@ -2063,18 +2070,40 @@ try {
     <details class="trend-share">
       <summary>このグラフを画像で使う</summary>
       <div class="trend-share-body">
-        <figure class="trend-share-fig">
-          <a href="images/trend/consumption-tax-cut-stance-trend.png"><img src="images/trend/consumption-tax-cut-stance-trend.png" width="1200" height="675" loading="lazy" decoding="async" alt="消費税減税の賛成・反対の割合は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税推進37.9%、条件付き賛成・政府案に不満16.4%、減税反対・慎重33.5%、中立・情報12.2%。Xの投稿サンプルの分析で、世論調査ではありません。"></a>
-          <figcaption>「消費税減税の賛成・反対の割合は変わった？」の画像です（PNG、1200×675）。2026年10月3日時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
-        </figure>
-        <p class="trend-share-terms">出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。画像の切り取りや、数字・注意書きの書き換えはしないでください。</p>
-        <div class="trend-share-actions">
-          <a class="trend-share-btn" href="images/trend/consumption-tax-cut-stance-trend.png" download data-trend-download="stance">画像をダウンロード</a>
-          <button type="button" class="trend-share-btn" data-trend-copy="stance">埋め込みコードをコピー</button>
-          <span class="trend-share-status" role="status" aria-live="polite"></span>
-        </div>
-        <textarea class="trend-share-code" readonly rows="5" aria-label="埋め込みコード">&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html#consumption-tax-cut-trend-panel-stance&quot;&gt;&lt;img src=&quot;https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend.png&quot; alt=&quot;消費税減税の賛成・反対の割合は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税推進37.9%、条件付き賛成・政府案に不満16.4%、減税反対・慎重33.5%、中立・情報12.2%。Xの投稿サンプルの分析で、世論調査ではありません。&quot; width=&quot;600&quot; height=&quot;338&quot; style=&quot;max-width:100%;height:auto&quot;&gt;&lt;/a&gt;
+        <p class="trend-share-lead">貼る場所に合わせて、2種類の画像があります。</p>
+        <div class="trend-share-grid">
+        <div class="trend-share-item" data-variant="summary">
+          <h3 class="trend-share-name">ひと目版<span>記事・Xの投稿・授業のスライド向け</span></h3>
+          <p class="trend-share-hint">文字を大きくし、最初と最新で差が大きい2つに絞りました。小さく表示しても読めます。</p>
+          <figure class="trend-share-fig">
+            <a href="images/trend/consumption-tax-cut-stance-trend-summary.png"><img src="images/trend/consumption-tax-cut-stance-trend-summary.png" width="1200" height="675" loading="lazy" decoding="async" alt="消費税減税に関するSNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。「減税推進」の割合が下がり、「減税反対・慎重」が上がった。減税推進は7月28日の48.9%から37.9%へ、減税反対・慎重は7月28日の26.6%から33.5%へ。Xの投稿サンプルの分析で、世論調査ではありません。"></a>
+            <figcaption>PNG、1200×675。2026年10月3日時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
+          </figure>
+          <div class="trend-share-actions">
+            <a class="trend-share-btn" href="images/trend/consumption-tax-cut-stance-trend-summary.png" download data-trend-download="stance" data-variant="summary">画像をダウンロード</a>
+            <button type="button" class="trend-share-btn" data-trend-copy="stance" data-variant="summary">埋め込みコードをコピー</button>
+            <span class="trend-share-status" role="status" aria-live="polite"></span>
+          </div>
+          <textarea class="trend-share-code" readonly rows="5" aria-label="ひと目版の埋め込みコード">&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html#consumption-tax-cut-trend-panel-stance&quot;&gt;&lt;img src=&quot;https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend-summary.png&quot; alt=&quot;消費税減税に関するSNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。「減税推進」の割合が下がり、「減税反対・慎重」が上がった。減税推進は7月28日の48.9%から37.9%へ、減税反対・慎重は7月28日の26.6%から33.5%へ。Xの投稿サンプルの分析で、世論調査ではありません。&quot; width=&quot;600&quot; height=&quot;338&quot; style=&quot;max-width:100%;height:auto&quot;&gt;&lt;/a&gt;
 &lt;p&gt;出典：&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html&quot;&gt;SNS反応まっぷ&lt;/a&gt;（Xの投稿サンプルの分析。世論調査ではありません）&lt;/p&gt;</textarea>
+        </div>
+        <div class="trend-share-item" data-variant="detail">
+          <h3 class="trend-share-name">詳細版<span>資料・数字の確認向け</span></h3>
+          <p class="trend-share-hint">すべての立場と、各回の動きを入れた細かい図です。大きく表示して使ってください。</p>
+          <figure class="trend-share-fig">
+            <a href="images/trend/consumption-tax-cut-stance-trend-detail.png"><img src="images/trend/consumption-tax-cut-stance-trend-detail.png" width="1200" height="675" loading="lazy" decoding="async" alt="消費税減税の賛成・反対の割合は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税推進37.9%、条件付き賛成・政府案に不満16.4%、減税反対・慎重33.5%、中立・情報12.2%。Xの投稿サンプルの分析で、世論調査ではありません。"></a>
+            <figcaption>PNG、1200×675。2026年10月3日時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
+          </figure>
+          <div class="trend-share-actions">
+            <a class="trend-share-btn" href="images/trend/consumption-tax-cut-stance-trend-detail.png" download data-trend-download="stance" data-variant="detail">画像をダウンロード</a>
+            <button type="button" class="trend-share-btn" data-trend-copy="stance" data-variant="detail">埋め込みコードをコピー</button>
+            <span class="trend-share-status" role="status" aria-live="polite"></span>
+          </div>
+          <textarea class="trend-share-code" readonly rows="5" aria-label="詳細版の埋め込みコード">&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html#consumption-tax-cut-trend-panel-stance&quot;&gt;&lt;img src=&quot;https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend-detail.png&quot; alt=&quot;消費税減税の賛成・反対の割合は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税推進37.9%、条件付き賛成・政府案に不満16.4%、減税反対・慎重33.5%、中立・情報12.2%。Xの投稿サンプルの分析で、世論調査ではありません。&quot; width=&quot;600&quot; height=&quot;338&quot; style=&quot;max-width:100%;height:auto&quot;&gt;&lt;/a&gt;
+&lt;p&gt;出典：&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html&quot;&gt;SNS反応まっぷ&lt;/a&gt;（Xの投稿サンプルの分析。世論調査ではありません）&lt;/p&gt;</textarea>
+        </div>
+        </div>
+        <p class="trend-share-terms">出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。画像の切り取りや、数字・注意書きの書き換えはしないでください。</p>
       </div>
     </details>
     <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について意見を述べた投稿です。同じ検索語のセットで集め、AIで立場を分類しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>各回の意見は<span id="consumption-tax-cut-trend-panel-stance-n-range">450〜612件</span>です。投稿の拾い方に偏りがない場合でも、割合には±4ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は6〜16日で、一定ではありません。</li><li>各回とも、投稿の84%以上は、収集日の前の7日間に書かれたものです。</li></ul>
@@ -2091,18 +2120,40 @@ try {
     <details class="trend-share">
       <summary>このグラフを画像で使う</summary>
       <div class="trend-share-body">
-        <figure class="trend-share-fig">
-          <a href="images/trend/consumption-tax-cut-issue-trend.png"><img src="images/trend/consumption-tax-cut-issue-trend.png" width="1200" height="675" loading="lazy" decoding="async" alt="消費税減税で語られる論点は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税の対象範囲29.0%、財源と社会保障7.0%、減税の効果21.4%、給付など他策との比較9.7%、事業者の実務負担5.5%、公約と政治不信27.5%。Xの投稿サンプルの分析で、世論調査ではありません。"></a>
-          <figcaption>「消費税減税で語られる論点は変わった？」の画像です（PNG、1200×675）。2026年10月3日時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
-        </figure>
-        <p class="trend-share-terms">出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。画像の切り取りや、数字・注意書きの書き換えはしないでください。</p>
-        <div class="trend-share-actions">
-          <a class="trend-share-btn" href="images/trend/consumption-tax-cut-issue-trend.png" download data-trend-download="issue">画像をダウンロード</a>
-          <button type="button" class="trend-share-btn" data-trend-copy="issue">埋め込みコードをコピー</button>
-          <span class="trend-share-status" role="status" aria-live="polite"></span>
-        </div>
-        <textarea class="trend-share-code" readonly rows="5" aria-label="埋め込みコード">&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html#consumption-tax-cut-trend-panel-issue&quot;&gt;&lt;img src=&quot;https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend.png&quot; alt=&quot;消費税減税で語られる論点は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税の対象範囲29.0%、財源と社会保障7.0%、減税の効果21.4%、給付など他策との比較9.7%、事業者の実務負担5.5%、公約と政治不信27.5%。Xの投稿サンプルの分析で、世論調査ではありません。&quot; width=&quot;600&quot; height=&quot;338&quot; style=&quot;max-width:100%;height:auto&quot;&gt;&lt;/a&gt;
+        <p class="trend-share-lead">貼る場所に合わせて、2種類の画像があります。</p>
+        <div class="trend-share-grid">
+        <div class="trend-share-item" data-variant="summary">
+          <h3 class="trend-share-name">ひと目版<span>記事・Xの投稿・授業のスライド向け</span></h3>
+          <p class="trend-share-hint">文字を大きくし、最初と最新で差が大きい2つに絞りました。小さく表示しても読めます。</p>
+          <figure class="trend-share-fig">
+            <a href="images/trend/consumption-tax-cut-issue-trend-summary.png"><img src="images/trend/consumption-tax-cut-issue-trend-summary.png" width="1200" height="675" loading="lazy" decoding="async" alt="消費税減税に関するSNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。論点では「公約と政治不信」の割合が下がり、「減税の対象範囲」が上がった。公約と政治不信は7月28日の44.1%から27.5%へ、減税の対象範囲は7月28日の15.8%から29.0%へ。Xの投稿サンプルの分析で、世論調査ではありません。"></a>
+            <figcaption>PNG、1200×675。2026年10月3日時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
+          </figure>
+          <div class="trend-share-actions">
+            <a class="trend-share-btn" href="images/trend/consumption-tax-cut-issue-trend-summary.png" download data-trend-download="issue" data-variant="summary">画像をダウンロード</a>
+            <button type="button" class="trend-share-btn" data-trend-copy="issue" data-variant="summary">埋め込みコードをコピー</button>
+            <span class="trend-share-status" role="status" aria-live="polite"></span>
+          </div>
+          <textarea class="trend-share-code" readonly rows="5" aria-label="ひと目版の埋め込みコード">&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html#consumption-tax-cut-trend-panel-issue&quot;&gt;&lt;img src=&quot;https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend-summary.png&quot; alt=&quot;消費税減税に関するSNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。論点では「公約と政治不信」の割合が下がり、「減税の対象範囲」が上がった。公約と政治不信は7月28日の44.1%から27.5%へ、減税の対象範囲は7月28日の15.8%から29.0%へ。Xの投稿サンプルの分析で、世論調査ではありません。&quot; width=&quot;600&quot; height=&quot;338&quot; style=&quot;max-width:100%;height:auto&quot;&gt;&lt;/a&gt;
 &lt;p&gt;出典：&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html&quot;&gt;SNS反応まっぷ&lt;/a&gt;（Xの投稿サンプルの分析。世論調査ではありません）&lt;/p&gt;</textarea>
+        </div>
+        <div class="trend-share-item" data-variant="detail">
+          <h3 class="trend-share-name">詳細版<span>資料・数字の確認向け</span></h3>
+          <p class="trend-share-hint">すべての論点と、各回の動きを入れた細かい図です。大きく表示して使ってください。</p>
+          <figure class="trend-share-fig">
+            <a href="images/trend/consumption-tax-cut-issue-trend-detail.png"><img src="images/trend/consumption-tax-cut-issue-trend-detail.png" width="1200" height="675" loading="lazy" decoding="async" alt="消費税減税で語られる論点は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税の対象範囲29.0%、財源と社会保障7.0%、減税の効果21.4%、給付など他策との比較9.7%、事業者の実務負担5.5%、公約と政治不信27.5%。Xの投稿サンプルの分析で、世論調査ではありません。"></a>
+            <figcaption>PNG、1200×675。2026年10月3日時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
+          </figure>
+          <div class="trend-share-actions">
+            <a class="trend-share-btn" href="images/trend/consumption-tax-cut-issue-trend-detail.png" download data-trend-download="issue" data-variant="detail">画像をダウンロード</a>
+            <button type="button" class="trend-share-btn" data-trend-copy="issue" data-variant="detail">埋め込みコードをコピー</button>
+            <span class="trend-share-status" role="status" aria-live="polite"></span>
+          </div>
+          <textarea class="trend-share-code" readonly rows="5" aria-label="詳細版の埋め込みコード">&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html#consumption-tax-cut-trend-panel-issue&quot;&gt;&lt;img src=&quot;https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend-detail.png&quot; alt=&quot;消費税減税で語られる論点は変わった？ SNS上の意見の推移の折れ線グラフ（2026年10月3日時点）。最新の割合は、減税の対象範囲29.0%、財源と社会保障7.0%、減税の効果21.4%、給付など他策との比較9.7%、事業者の実務負担5.5%、公約と政治不信27.5%。Xの投稿サンプルの分析で、世論調査ではありません。&quot; width=&quot;600&quot; height=&quot;338&quot; style=&quot;max-width:100%;height:auto&quot;&gt;&lt;/a&gt;
+&lt;p&gt;出典：&lt;a href=&quot;https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html&quot;&gt;SNS反応まっぷ&lt;/a&gt;（Xの投稿サンプルの分析。世論調査ではありません）&lt;/p&gt;</textarea>
+        </div>
+        </div>
+        <p class="trend-share-terms">出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。画像の切り取りや、数字・注意書きの書き換えはしないでください。</p>
       </div>
     </details>
     <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について意見を述べた投稿です。AIが主な論点を1つに分類しています。複数の話題に触れる投稿も、1つにだけ数えます。「その他」は除いて割合を出しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>各回の意見は<span id="consumption-tax-cut-trend-panel-issue-n-range">441〜606件</span>です。投稿の拾い方に偏りがない場合でも、割合には±4ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は6〜16日で、一定ではありません。</li><li>各回とも、投稿の83%以上は、収集日の前の7日間に書かれたものです。</li></ul>
@@ -2277,18 +2328,18 @@ try {
     if (panels[kind]) charts[kind] = chart(panel, panels[kind]);
   });
   // 画像のダウンロード・埋め込みコードのコピー（計測つき）。計測が無くても動く。
-  const track = (name, kind) => { if (typeof gtag === "function") gtag("event", name, {theme: "consumption-tax-cut", panel: kind}); };
+  const track = (name, kind, variant) => { if (typeof gtag === "function") gtag("event", name, {theme: "consumption-tax-cut", panel: kind, variant: variant}); };
   root.querySelectorAll("[data-trend-copy]").forEach(button => button.addEventListener("click", async () => {
-    const body = button.closest(".trend-share-body");
-    const area = body.querySelector("textarea");
-    const status = body.querySelector(".trend-share-status");
+    const item = button.closest(".trend-share-item");
+    const area = item.querySelector("textarea");
+    const status = item.querySelector(".trend-share-status");
     let ok = false;
     try { await navigator.clipboard.writeText(area.value); ok = true; }
     catch (error) { area.focus(); area.select(); try { ok = document.execCommand("copy"); } catch (inner) { ok = false; } }
     status.textContent = ok ? "コピーしました" : "選択しました。コピーしてください";
-    track("trend_image_copy", button.getAttribute("data-trend-copy"));
+    track("trend_image_copy", button.getAttribute("data-trend-copy"), button.getAttribute("data-variant"));
   }));
-  root.querySelectorAll("[data-trend-download]").forEach(link => link.addEventListener("click", () => track("trend_image_download", link.getAttribute("data-trend-download"))));
+  root.querySelectorAll("[data-trend-download]").forEach(link => link.addEventListener("click", () => track("trend_image_download", link.getAttribute("data-trend-download"), link.getAttribute("data-variant"))));
   const tabs = root.querySelectorAll("[data-trend-tab]");
   function show(kind) {
     if (!nodes[kind]) return;

@@ -119,8 +119,9 @@ class FontGuardTest(unittest.TestCase):
             self.assertFalse(images.fonts_available())
             with tempfile.TemporaryDirectory() as tmp:
                 series = trend.load_rounds(write(synthetic_rows(), Path(tmp)), BASE, "stance")
-            with self.assertRaises(images.FontNotFound):
-                images.render_image(SLUG, "stance", series)
+            for variant in ("summary", "detail"):
+                with self.assertRaises(images.FontNotFound):
+                    images.render_image(SLUG, "stance", series, variant)
 
     def test_only_one_of_the_two_weights_is_not_enough(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -130,6 +131,25 @@ class FontGuardTest(unittest.TestCase):
                 self.assertFalse(images.fonts_available())
 
 
+ALL = [(kind, variant) for kind in ("stance", "issue") for variant in ("summary", "detail")]
+
+
+class SummaryHelpersTest(unittest.TestCase):
+    def test_axis_always_starts_at_zero_with_a_few_ticks(self) -> None:
+        self.assertEqual(images.summary_ceiling(51.4), (60, 20))
+        self.assertEqual(images.summary_ceiling(44.1), (60, 20))
+        self.assertEqual(images.summary_ceiling(40.0), (40, 10))
+        self.assertEqual(images.summary_ceiling(29.0), (30, 10))
+        self.assertEqual(images.summary_ceiling(3.0), (10, 10))
+        for value in (3, 12.5, 29, 40, 41, 77, 99.9):
+            ceiling, step = images.summary_ceiling(value)
+            self.assertGreaterEqual(ceiling, value)
+            self.assertLessEqual(ceiling / step, 6)
+
+    def test_big_numbers_are_whole_percentages_rounded_half_up(self) -> None:
+        self.assertEqual([images._half_up(v) for v in (37.9, 33.5, 48.9, 26.6, 0.4, 99.5)], [38, 34, 49, 27, 0, 100])
+
+
 @NEEDS_FONT
 class RenderTest(unittest.TestCase):
     def setUp(self) -> None:
@@ -137,27 +157,37 @@ class RenderTest(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.source = write(synthetic_rows(), Path(self.temp.name))
 
-    def test_renders_the_shareable_size_with_metadata(self) -> None:
+    def test_renders_both_variants_at_the_shareable_size_with_metadata(self) -> None:
         paths = images.render_for(SLUG, self.source, Path(self.temp.name) / "out")
-        self.assertEqual(set(paths), {"stance", "issue"})
-        for kind, path in paths.items():
-            self.assertEqual(path.name, trend.image_filename(SLUG, kind))
+        self.assertEqual(set(paths), set(ALL))
+        for (kind, variant), path in paths.items():
+            self.assertEqual(path.name, trend.image_filename(SLUG, kind, variant))
             with Image.open(path) as image:
                 self.assertEqual(image.size, (1200, 675))
                 self.assertEqual(image.mode, "P")  # 256色のPNG
-                match = images.__dict__.get("DESCRIPTION_RE") or verify.DESCRIPTION_RE
-                found = match.fullmatch(image.info["Description"])
+                found = verify.DESCRIPTION_RE.fullmatch(image.info["Description"])
                 self.assertIsNotNone(found)
                 self.assertEqual(found.group(1), "2026-09-15")
                 self.assertEqual(found.group(2), kind)
+                self.assertEqual(found.group(3), variant)
                 self.assertEqual(image.info["Author"], "SNS反応まっぷ")
                 self.assertEqual(image.info["Source"], trend.page_url(SLUG))
+                self.assertIn(trend.IMAGE_VARIANTS[variant]["name"], image.info["Title"])
+
+    def test_both_variants_of_a_panel_carry_the_same_data_fingerprint(self) -> None:
+        paths = images.render_for(SLUG, self.source, Path(self.temp.name) / "out")
+        for kind in ("stance", "issue"):
+            digests = set()
+            for variant in ("summary", "detail"):
+                with Image.open(paths[(kind, variant)]) as image:
+                    digests.add(verify.DESCRIPTION_RE.fullmatch(image.info["Description"]).group(4))
+            self.assertEqual(len(digests), 1, kind)
 
     def test_same_input_gives_the_same_bytes(self) -> None:
         a = images.render_for(SLUG, self.source, Path(self.temp.name) / "a")
         b = images.render_for(SLUG, self.source, Path(self.temp.name) / "b")
-        for kind in a:
-            self.assertEqual(a[kind].read_bytes(), b[kind].read_bytes())
+        for key in a:
+            self.assertEqual(a[key].read_bytes(), b[key].read_bytes())
 
     def test_different_numbers_give_different_images(self) -> None:
         a = images.render_for(SLUG, self.source, Path(self.temp.name) / "a")
@@ -166,22 +196,77 @@ class RenderTest(unittest.TestCase):
         other = Path(self.temp.name) / "other"
         other.mkdir()
         b = images.render_for(SLUG, write(rows, other), Path(self.temp.name) / "b")
-        self.assertNotEqual(a["stance"].read_bytes(), b["stance"].read_bytes())
+        for variant in ("summary", "detail"):
+            self.assertNotEqual(a[("stance", variant)].read_bytes(), b[("stance", variant)].read_bytes())
 
     def test_image_is_not_blank_and_uses_the_series_colors(self) -> None:
-        path = images.render_for(SLUG, self.source, Path(self.temp.name) / "out")["stance"]
-        with Image.open(path) as image:
-            colors = {color for _, color in image.convert("RGB").getcolors(maxcolors=200000)}
-        self.assertLess(path.stat().st_size, 150_000)  # 約3分の1に収める（RGBのままだと200KB超）
-        self.assertGreater(len(colors), 50)
+        paths = images.render_for(SLUG, self.source, Path(self.temp.name) / "out")
         green = trend.KINDS["stance"]["colors"][0].lstrip("#")
         target = tuple(int(green[i:i + 2], 16) for i in (0, 2, 4))
-        self.assertTrue(any(all(abs(a - b) <= 12 for a, b in zip(color, target)) for color in colors))
+        for variant in ("summary", "detail"):
+            path = paths[("stance", variant)]
+            with Image.open(path) as image:
+                colors = {color for _, color in image.convert("RGB").getcolors(maxcolors=200000)}
+            self.assertLess(path.stat().st_size, 150_000, variant)  # RGBのままだと200KB超
+            self.assertGreater(len(colors), 50)
+            self.assertTrue(any(all(abs(a - b) <= 12 for a, b in zip(color, target)) for color in colors), variant)
+
+    def test_summary_draws_only_the_two_picked_series(self) -> None:
+        """合成データで動くのは「減税推進」と「減税反対・慎重」だけ。橙（条件付き賛成）は出ない。詳細版には出る。
+        量子化（256色）の前の画像で、色が存在するかを見る。"""
+        series = trend.load_rounds(self.source, BASE, "stance")
+        orange = trend.KINDS["stance"]["colors"][1].lstrip("#")
+        target = tuple(int(orange[i:i + 2], 16) for i in (0, 2, 4))
+
+        def has_orange(variant: str) -> bool:
+            colors = {color for _, color in images.render_image(SLUG, "stance", series, variant).getcolors(maxcolors=300000)}
+            return target in colors
+
+        self.assertFalse(has_orange("summary"))
+        self.assertTrue(has_orange("detail"))
+
+    def test_summary_text_stays_legible_when_shrunk_to_a_phone_timeline(self) -> None:
+        """幅350pxに縮めても、見出しの行が読める太さで残る（暗い画素が、見出しの帯に十分ある）。"""
+        path = images.render_for(SLUG, self.source, Path(self.temp.name) / "out")[("stance", "summary")]
+        with Image.open(path) as image:
+            small = image.convert("L").resize((350, 197), Image.LANCZOS)
+        band = small.crop((10, 28, 340, 66))  # 見出し2行の帯（原寸の y 100〜230）
+        dark = sum(1 for value in band.tobytes() if value < 110)
+        self.assertGreater(dark / (band.width * band.height), 0.12)
+
+    def test_longest_headlines_fit_at_the_minimum_font_size(self) -> None:
+        """どの組み合わせの見出しも、最小の文字サイズで画像の幅に収まる（はみ出して切れない）。"""
+        regular, bold = images.find_fonts()
+        canvas = images.Canvas(regular, bold)
+        for kind in ("stance", "issue"):
+            labels = BASE[trend.KINDS[kind]["labels_key"]]
+            for a in labels:
+                for b in labels:
+                    if a == b:
+                        continue
+                    for delta_b in (7.0, -7.0):
+                        lines = trend.glance_lines(kind, [{"label": a, "delta": -9.0, "beyond": True}, {"label": b, "delta": delta_b, "beyond": True}])
+                        for line in lines:
+                            self.assertLessEqual(canvas.text_width(line, images.HEADLINE_MIN_SIZE, True), images.WIDTH - 56 * 2, line)
+
+    def test_a_headline_that_cannot_fit_stops_instead_of_being_cut(self) -> None:
+        series = trend.load_rounds(self.source, BASE, "stance")
+        too_long = ["「" + "とても長い項目名" * 6 + "」の割合が下がった"]
+        with mock.patch.object(trend, "glance_lines", return_value=too_long):
+            with self.assertRaises(images.LayoutError):
+                images.render_image(SLUG, "stance", series, "summary")
+
+    def test_the_longest_realistic_headline_still_renders(self) -> None:
+        series = trend.load_rounds(self.source, BASE, "stance")
+        lines = [f"「{STANCES[1]}」と「{STANCES[2]}」の割合が、", "どちらも上がった"]
+        with mock.patch.object(trend, "glance_lines", return_value=lines):
+            image = images.render_image(SLUG, "stance", series, "summary")
+        self.assertEqual(image.size, (1200, 675))
 
     def test_adapter_builds_images_as_public_targets_twice_identically(self) -> None:
         stage = Path(self.temp.name) / "stage"
         targets = adapter._build_images(stage, self.source)
-        self.assertEqual(sorted(path.name for path in targets), sorted(trend.image_filename(SLUG, kind) for kind in ("stance", "issue")))
+        self.assertEqual(sorted(path.name for path in targets), sorted(trend.image_filename(SLUG, kind, variant) for kind, variant in ALL))
         self.assertTrue(all(str(path).startswith("docs/images/trend/") for path in targets))
         self.assertTrue(all(source.is_file() for source in targets.values()))
 
@@ -194,7 +279,7 @@ class RenderTest(unittest.TestCase):
             result = original(slug, source, outdir)
             calls["n"] += 1
             if calls["n"] == 2:
-                path = result["stance"]
+                path = result[("stance", "summary")]
                 path.write_bytes(path.read_bytes() + b"x")
             return result
 
@@ -221,44 +306,56 @@ class VerifyTest(unittest.TestCase):
         self.page.write_text(f"<html><body>{section}</body></html>", encoding="utf-8")
         (self.root / trend.IMAGE_DIR).mkdir(parents=True)
         for kind, series in (("stance", self.stance), ("issue", self.issue)):
-            self.write_png(kind, images.png_metadata(SLUG, kind, series))
+            for variant in ("summary", "detail"):
+                self.write_png(kind, images.png_metadata(SLUG, kind, series, variant), variant=variant)
 
-    def write_png(self, kind: str, info: PngInfo, size: tuple[int, int] = trend.IMAGE_SIZE) -> None:
-        Image.new("RGB", size, "white").save(self.root / trend.IMAGE_DIR / trend.image_filename(SLUG, kind), "PNG", pnginfo=info)
+    def write_png(self, kind: str, info: PngInfo, size: tuple[int, int] = trend.IMAGE_SIZE, variant: str = "detail") -> None:
+        Image.new("RGB", size, "white").save(self.root / trend.IMAGE_DIR / trend.image_filename(SLUG, kind, variant), "PNG", pnginfo=info)
 
     def test_passes_when_images_match_the_page(self) -> None:
         self.assertEqual(verify.check_theme(SLUG, self.root), [])
 
-    def test_missing_image_is_reported(self) -> None:
-        (self.root / trend.IMAGE_DIR / trend.image_filename(SLUG, "issue")).unlink()
-        problems = verify.check_theme(SLUG, self.root)
-        self.assertEqual(len(problems), 1)
-        self.assertIn("画像がありません", problems[0])
+    def test_missing_image_is_reported_for_each_variant(self) -> None:
+        for variant in ("summary", "detail"):
+            path = self.root / trend.IMAGE_DIR / trend.image_filename(SLUG, "issue", variant)
+            path.unlink()
+            problems = verify.check_theme(SLUG, self.root)
+            self.assertEqual(len(problems), 1, variant)
+            self.assertIn("画像がありません", problems[0])
+            self.assertIn(variant, problems[0])
+            self.write_png("issue", images.png_metadata(SLUG, "issue", self.issue, variant), variant=variant)
+        self.assertEqual(verify.check_theme(SLUG, self.root), [])
 
     def test_stale_collection_date_is_reported(self) -> None:
-        info = PngInfo()
-        description = images.png_metadata(SLUG, "stance", self.stance)  # 同じ指紋のまま日付だけ古い
-        digest = images.series_digest(STANCES, images.rounds_for_digest(self.stance, STANCES))
-        info.add_text("Description", f"asof=2026-09-08; kind=stance; sha256={digest}")
-        self.write_png("stance", info)
-        self.assertTrue(any("より古い" in p for p in verify.check_theme(SLUG, self.root)))
-        self.assertIsNotNone(description)
+        digest = images.series_digest(STANCES, images.rounds_for_digest(self.stance, STANCES))  # 同じ指紋のまま日付だけ古い
+        for variant in ("summary", "detail"):
+            info = PngInfo()
+            info.add_text("Description", f"asof=2026-09-08; kind=stance; variant={variant}; sha256={digest}")
+            self.write_png("stance", info, variant=variant)
+            problems = verify.check_theme(SLUG, self.root)
+            self.assertTrue(any("より古い" in p and variant in p for p in problems), variant)
+            self.write_png("stance", images.png_metadata(SLUG, "stance", self.stance, variant), variant=variant)
 
     def test_changed_numbers_with_the_same_date_are_reported(self) -> None:
         info = PngInfo()
-        info.add_text("Description", f"asof=2026-09-15; kind=stance; sha256={'0' * 64}")
-        self.write_png("stance", info)
+        info.add_text("Description", f"asof=2026-09-15; kind=stance; variant=summary; sha256={'0' * 64}")
+        self.write_png("stance", info, variant="summary")
         self.assertTrue(any("数字がページの数字と一致しません" in p for p in verify.check_theme(SLUG, self.root)))
 
+    def test_swapped_variants_are_reported(self) -> None:
+        """ひと目版の場所に詳細版の画像を置いたら（種類の取り違え）、止める。"""
+        self.write_png("stance", images.png_metadata(SLUG, "stance", self.stance, "detail"), variant="summary")
+        self.assertTrue(any("画像の種類" in p for p in verify.check_theme(SLUG, self.root)))
+
     def test_wrong_size_and_missing_fingerprint_are_reported(self) -> None:
-        self.write_png("stance", PngInfo(), size=(800, 400))
+        self.write_png("stance", PngInfo(), size=(800, 400), variant="summary")
         problems = verify.check_theme(SLUG, self.root)
         self.assertTrue(any("実寸" in p for p in problems))
         self.assertTrue(any("指紋" in p for p in problems))
 
     def test_page_without_the_image_reference_or_alt_date_is_reported(self) -> None:
         html = self.page.read_text(encoding="utf-8")
-        self.page.write_text(html.replace("images/trend/consumption-tax-cut-stance-trend.png", "images/trend/other.png"), encoding="utf-8")
+        self.page.write_text(html.replace("images/trend/consumption-tax-cut-stance-trend-summary.png", "images/trend/other.png"), encoding="utf-8")
         self.assertTrue(any("<img>" in p for p in verify.check_theme(SLUG, self.root)))
         # alt の中の時点だけを消す（見出し・バッジなど他の場所の時点は残す）
         self.page.write_text(re.sub(r'(alt="[^"]*?)2026年9月15日時点', r"\1（時点なし", html), encoding="utf-8")
@@ -266,7 +363,7 @@ class VerifyTest(unittest.TestCase):
 
     def test_embed_code_must_point_at_the_image_url(self) -> None:
         html = self.page.read_text(encoding="utf-8")
-        self.page.write_text(html.replace("https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend.png", "https://example.jp/x.png"), encoding="utf-8")
+        self.page.write_text(html.replace("https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend-summary.png", "https://example.jp/x.png"), encoding="utf-8")
         self.assertTrue(any("埋め込みコード" in p for p in verify.check_theme(SLUG, self.root)))
 
     def test_page_without_the_trend_data_is_reported(self) -> None:

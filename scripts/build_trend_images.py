@@ -4,6 +4,10 @@
 検索（画像検索）と、他のサイトへの埋め込み・引用で使う。ページの節（build_trend_section.py）と同じ
 データ（load_rounds の結果）から描くので、数字がページとずれない。更新のたびに adapter.build が作り直す。
 
+画像は貼る場所で使い分ける2種類（build_trend_section.IMAGE_VARIANTS）。
+- ひと目版（summary）: Xのタイムラインや記事の本文幅（幅300〜600px）に縮めても読める。見出し1つ・線2本・大きな数字
+- 詳細版（detail）: 全項目と各回の動き。資料や数字の確認で、大きく表示する前提
+
 - Pillow だけで描く（GitHub Actions に無い依存を足さない）。3倍で描いて縮小し、線と文字を滑らかにする。保存は256色のPNG（容量を約3分の1に）
 - 日本語フォントは macOS のヒラギノ角ゴシック（W3・W6）を使う。無ければ止める（□□□の画像を黙って出さない）
 - PNG の Description に、元の数字の指紋（sha256）と最新の収集日を入れる。公開側の検査
@@ -30,12 +34,14 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import build_trend_section as trend  # noqa: E402
 
 WIDTH, HEIGHT = 1200, 675
+HEADLINE_MIN_SIZE = 34  # ひと目版の見出しの下限。幅350pxに縮めても約10pxで、読める
 SCALE = 3  # 3倍で描いて LANCZOS で縮小する
 
 INK = "#0b1d3a"
 INK2 = "#26364f"
 MUTED = "#66758b"
 GRID = "#e4e9f1"
+LEADER = "#8795ab"  # 系列名への引き出し線（データの線と区別する灰色の破線）
 AXIS = "#cdd7e5"
 BLUE = "#315bd8"
 PILL = "#eaf1ff"
@@ -46,6 +52,10 @@ FONT_CANDIDATES = (
     ("/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc", "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc"),
     ("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"),
 )
+
+
+class LayoutError(RuntimeError):
+    """文字が画像に収まらないときは、切れた画像を出さず止める。"""
 
 
 class FontNotFound(RuntimeError):
@@ -155,6 +165,18 @@ class Canvas:
         fill = _rgb(color) if isinstance(color, str) else color
         self.draw.line(pts, fill=fill, width=_px(width), joint="curve")
 
+    def dashed(self, start: tuple[float, float], end: tuple[float, float], color: str, width: float, dash: float = 7, gap: float = 6) -> None:
+        """破線。データの線と見間違えない、系列名への引き出し線に使う。"""
+        length = math.hypot(end[0] - start[0], end[1] - start[1])
+        if length == 0:
+            return
+        ux, uy = (end[0] - start[0]) / length, (end[1] - start[1]) / length
+        at = 0.0
+        while at < length:
+            stop = min(at + dash, length)
+            self.line([(start[0] + ux * at, start[1] + uy * at), (start[0] + ux * stop, start[1] + uy * stop)], color, width)
+            at += dash + gap
+
     def rect(self, box: tuple[float, float, float, float], fill: str, radius: float = 0) -> None:
         x0, y0, x1, y1 = (_px(v) for v in box)
         if radius:
@@ -213,7 +235,7 @@ def image_texts(slug: str, kind: str, series: list[dict]) -> dict:
     }
 
 
-def render_image(slug: str, kind: str, series: list[dict]) -> Image.Image:
+def render_detail_image(slug: str, kind: str, series: list[dict]) -> Image.Image:
     regular, bold = find_fonts()
     spec = trend.KINDS[kind]
     texts = image_texts(slug, kind, series)
@@ -306,6 +328,159 @@ def render_image(slug: str, kind: str, series: list[dict]) -> Image.Image:
     return c.finish()
 
 
+# ------------------------------------------------------------ ひと目版
+
+def _wrap(canvas: Canvas, text: str, size: float, max_width: float, bold: bool, max_lines: int = 2) -> list[str]:
+    """幅で折り返す（日本語なので語の途中でも切る）。max_lines 行目に残りをすべて入れる（文字は欠けない）。"""
+    lines: list[str] = []
+    current = ""
+    for char in text:
+        if current and canvas.text_width(current + char, size, bold) > max_width and len(lines) < max_lines - 1:
+            lines.append(current)
+            current = char
+        else:
+            current += char
+    lines.append(current)
+    return lines
+
+
+def _half_up(value: float) -> int:
+    return trend._half_up(value)
+
+
+def summary_ceiling(max_value: float) -> tuple[int, int]:
+    """縦軸の上端と目盛りの間隔。割合なので0から始める（目盛りは多くても4〜6本）。"""
+    step = 10 if max_value <= 40 else 20
+    return max(step, math.ceil(max_value / step) * step), step
+
+
+def render_summary_image(slug: str, kind: str, series: list[dict]) -> Image.Image:
+    """ひと目版。スマホのタイムライン（幅350px前後）に縮めても、見出しと数字が読めることを基準にする。
+
+    文字は原寸1200pxで24px以上（縮小率0.29で7px。出典と注意書きだけが小さい）、見出しは約50px、数字は52px。
+    線は2本だけ。最初と最新の差が大きい2項目（ページの本文が取り上げるのと同じ2項目）を、変化の向きと一緒に見せる。
+    """
+    regular, bold = find_fonts()
+    spec = trend.KINDS[kind]
+    base = trend._theme_base(slug)
+    labels = base[spec["labels_key"]]
+    info = trend.glance(slug, kind, series, labels)
+    items = info["items"]
+    texts = image_texts(slug, kind, series)
+    name = trend.TREND_THEMES[slug]["name"]
+    first, last = series[0], series[-1]
+    c = Canvas(regular, bold)
+    mx = 56
+
+    # 上段: テーマ名つきの小見出しと、時点
+    _pill(c, mx, 30, f"{name}｜SNS上の意見の推移", 24, BLUE, PILL)
+    _pill(c, WIDTH - mx, 30, texts["asof"], 24, INK2, PILL_GREY, anchor_right=True)
+
+    # 見出し（見出しだけ読んでも、何がどう変わったか分かる）。長い項目名が2つ並ぶ文は文字を縮めて収める。
+    size = min(_fit_size(c, line, 54, WIDTH - mx * 2, HEADLINE_MIN_SIZE, True) for line in info["lines"])
+    for line in info["lines"]:
+        if c.text_width(line, size, True) > WIDTH - mx * 2:
+            raise LayoutError(f"ひと目版の見出しが画像の幅に収まりません（{HEADLINE_MIN_SIZE}pxでも）: {line}。項目名を短くするか、build_trend_section.glance_lines の文型を直す")
+    for number, line in enumerate(info["lines"]):
+        c.text(mx, 142 + number * 66, line, size, INK, bold=True)
+
+    # 説明の行（左: 何の割合か / 右: 回数）
+    unit = "意見の投稿に占める割合" if kind == "stance" else "「その他」を除く意見の投稿の割合"
+    caption = f"最初と最新の差が大きい2つ（{unit}）"
+    count = f"{len(series)}回の収集"
+    cap_size = 24
+    while cap_size > 20 and c.text_width(caption, cap_size) + 40 + c.text_width(count, cap_size) > WIDTH - mx * 2:
+        cap_size -= 1
+    c.text(mx, 260, caption, cap_size, MUTED)
+    c.text(WIDTH - mx, 260, count, cap_size, MUTED, anchor="rs")
+
+    # 作図領域（右に、系列名と最新値を直接書く場所を残す）
+    left, right = 150, 804
+    px_first, px_last = 206, 770
+    top, bottom = 296, 536
+    colors, shapes = spec["colors"], spec["shapes"]
+    ceiling, step = summary_ceiling(max(max(item["start"], item["end"], *(r["shares"][item["label"]] for r in series)) for item in items))
+    first_day, last_day = _day(first["date"]), _day(last["date"])
+
+    def x_of(date: str) -> float:
+        if last_day == first_day:
+            return (px_first + px_last) / 2
+        return px_first + (_day(date) - first_day) / (last_day - first_day) * (px_last - px_first)
+
+    def y_of(value: float) -> float:
+        return bottom - value / ceiling * (bottom - top)
+
+    for value in range(0, ceiling + 1, step):
+        c.line([(left, y_of(value)), (right, y_of(value))], GRID if value else AXIS, 1.6 if value else 2.2)
+        c.text(left - 14, y_of(value) + 8, f"{value}%", 24, MUTED, anchor="rs")
+    for date, anchor in ((first["date"], "ms"), (last["date"], "ms")):
+        month, day = (int(part) for part in date.split("-")[1:])
+        c.text(x_of(date), bottom + 36, f"{month}/{day}", 24, MUTED, anchor=anchor)
+
+    # 線（太く）と各回の小さな点。最初の点だけ大きな印にして、形でも見分けられるようにする
+    # （右端は、同じ形の印を系列名の横に付けて線でつなぐ。2本が近いと端の印が重なって読めなくなるため）
+    for item in items:
+        color = colors[item["index"]]
+        points = [(x_of(r["date"]), y_of(r["shares"][item["label"]])) for r in series]
+        c.line(points, color, 6)
+        for point in points[1:-1]:
+            c.marker("circle", point[0], point[1], 8, "#ffffff")
+            c.marker("circle", point[0], point[1], 5, color)
+    for item in items:
+        color, shape = colors[item["index"]], shapes[item["index"]]
+        c.marker(shape, x_of(first["date"]), y_of(item["start"]), 14, "#ffffff")
+        c.marker(shape, x_of(first["date"]), y_of(item["start"]), 10.5, color)
+
+    # 最初の値（高い方は点の上、低い方は点の下）
+    ordered = sorted(items, key=lambda item: -item["start"])
+    for number, item in enumerate(ordered):
+        value = f"{_half_up(item['start'])}%"
+        y = y_of(item["start"])
+        baseline = y - 26 if number == 0 else min(y + 56, bottom - 8)  # 0%の軸に重ならないようにする
+        c.text(px_first, baseline, value, 36, INK, bold=True, anchor="ms")
+
+    # 右端: 最新の値と系列名（重なる行は上下に離す）
+    label_x = px_last + 52
+    name_width = WIDTH - mx - label_x - 6
+    blocks = []
+    for item in items:
+        lines = _wrap(c, item["label"], 28, name_width - 8, True)
+        blocks.append({"item": item, "lines": lines, "height": 52 + 8 + 34 * len(lines), "top": y_of(item["end"]) - 26})
+    blocks.sort(key=lambda block: block["top"])
+    if len(blocks) == 2:
+        a, b = blocks
+        overlap = (a["top"] + a["height"] + 14) - b["top"]
+        if overlap > 0:
+            a["top"] -= overlap / 2
+            b["top"] += overlap / 2
+    for block in blocks:
+        block["top"] = min(max(block["top"], top - 22), bottom + 30 - block["height"])
+    for block in blocks:
+        item = block["item"]
+        color, shape = colors[item["index"]], shapes[item["index"]]
+        row_y = block["top"] + 26  # 値の行の中心
+        c.dashed((px_last + 6, y_of(item["end"])), (label_x - 8, row_y), LEADER, 2.2)
+        c.marker(shape, label_x + 12, row_y, 12, color)
+        c.text(label_x + 36, row_y + 19, f"{_half_up(item['end'])}%", 54, INK, bold=True)
+        for number, line in enumerate(block["lines"]):
+            c.text(label_x, row_y + 26 + 8 + 28 + number * 34, line, 28, INK2, bold=True)
+
+    # 足もと: 出典と注意書き
+    c.line([(mx, 588), (WIDTH - mx, 588)], AXIS, 1.2)
+    c.text(mx, 624, f"出典：SNS反応まっぷ（{trend.SITE_HOST}）", 28, INK, bold=True)
+    margin = info["info"]["median_margin"]
+    c.text(mx, 658, f"Xの投稿をAIで分類した割合で、世論調査ではありません。割合には±{margin}ポイント前後のぶれがあります。", 22, MUTED)
+    return c.finish()
+
+
+def render_image(slug: str, kind: str, series: list[dict], variant: str = "detail") -> Image.Image:
+    if variant == "summary":
+        return render_summary_image(slug, kind, series)
+    if variant == "detail":
+        return render_detail_image(slug, kind, series)
+    raise ValueError(f"画像の種類が不明です: {variant}")
+
+
 def _day(date: str) -> int:
     year, month, day = (int(part) for part in date.split("-"))
     import datetime as dt
@@ -313,21 +488,22 @@ def _day(date: str) -> int:
     return dt.date(year, month, day).toordinal()
 
 
-def png_metadata(slug: str, kind: str, series: list[dict]) -> PngInfo:
+def png_metadata(slug: str, kind: str, series: list[dict], variant: str = "detail") -> PngInfo:
     base = trend._theme_base(slug)
     labels = base[trend.KINDS[kind]["labels_key"]]
     texts = image_texts(slug, kind, series)
     digest = series_digest(labels, rounds_for_digest(series, labels))
     info = PngInfo()
-    info.add_text("Title", f"{texts['title']}（{texts['asof']}）")
+    suffix = trend.IMAGE_VARIANTS[variant]["name"]
+    info.add_text("Title", f"{texts['title']}（{texts['asof']}・{suffix}）")
     info.add_text("Author", "SNS反応まっぷ")
     info.add_text("Source", trend.page_url(slug))
-    info.add_text("Description", f"asof={series[-1]['date']}; kind={kind}; sha256={digest}")
+    info.add_text("Description", f"asof={series[-1]['date']}; kind={kind}; variant={variant}; sha256={digest}")
     return info
 
 
-def render_for(slug: str, source: Path, outdir: Path) -> dict[str, Path]:
-    """全タブ分の画像を outdir に作る。{kind: パス}。同じ入力なら同じバイト列になる。"""
+def render_for(slug: str, source: Path, outdir: Path) -> dict[tuple[str, str], Path]:
+    """全タブ・全種類の画像を outdir に作る。{(kind, variant): パス}。同じ入力なら同じバイト列になる。"""
     base = trend._theme_base(slug)
     outdir.mkdir(parents=True, exist_ok=True)
     result = {}
@@ -335,12 +511,13 @@ def render_for(slug: str, source: Path, outdir: Path) -> dict[str, Path]:
         if not base.get(trend.KINDS[kind]["labels_key"]):
             continue
         series = trend.load_rounds(source, base, kind)
-        image = render_image(slug, kind, series)
-        path = outdir / trend.image_filename(slug, kind)
-        # 256色にして容量を約3分の1にする（元との平均誤差は0.2未満）。毎週の更新でgitの履歴が膨らまないように。
-        indexed = image.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
-        indexed.save(path, "PNG", optimize=True, pnginfo=png_metadata(slug, kind, series))
-        result[kind] = path
+        for variant in trend.IMAGE_VARIANTS:
+            image = render_image(slug, kind, series, variant)
+            path = outdir / trend.image_filename(slug, kind, variant)
+            # 256色にして容量を小さくする（毎週の更新でgitの履歴が膨らまないように）。
+            indexed = image.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+            indexed.save(path, "PNG", optimize=True, pnginfo=png_metadata(slug, kind, series, variant))
+            result[(kind, variant)] = path
     return result
 
 
@@ -362,8 +539,8 @@ def main() -> int:
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
     source = args.source or ROOT / themes[args.topic]["sample_file"]
     outdir = ROOT / trend.IMAGE_DIR if args.apply else Path(tempfile.mkdtemp(prefix="trend-images-"))
-    for kind, path in render_for(args.topic, source, outdir).items():
-        print(f"{kind}: {path} ({path.stat().st_size:,}バイト)")
+    for (kind, variant), path in render_for(args.topic, source, outdir).items():
+        print(f"{kind}/{variant}: {path} ({path.stat().st_size:,}バイト)")
     return 0
 
 

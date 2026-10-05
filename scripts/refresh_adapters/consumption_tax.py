@@ -174,9 +174,9 @@ def _build_images(stage: Path, candidate: Path) -> dict[Path, Path]:
 
     first = render_images(TOPIC, candidate, stage / "trend-images")
     second = render_images(TOPIC, candidate, stage / "idempotence" / "trend-images")
-    for kind, path in first.items():
-        if path.read_bytes() != second[kind].read_bytes():
-            raise ValueError(f"消費税減税の推移画像（{kind}）は同じ候補の2回目実行でバイト列が変わりました")
+    for (kind, variant), path in first.items():
+        if path.read_bytes() != second[(kind, variant)].read_bytes():
+            raise ValueError(f"消費税減税の推移画像（{kind}/{variant}）は同じ候補の2回目実行でバイト列が変わりました")
     return {IMAGE_DIR / path.name: path for path in first.values()}
 
 
