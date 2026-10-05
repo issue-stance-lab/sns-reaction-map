@@ -20,11 +20,12 @@ CANONICAL = ROOT / "docs" / "topic-modern.js"
 FAB = ROOT / "docs" / "share-x-btn.js"
 LEGACY_VOTE2D = ROOT / "docs" / "vote2d.js"
 BUILDER = ROOT / "scripts" / "build_reaction_map.py"
+TREND = ROOT / "scripts" / "build_trend_section.py"  # 推移グラフの「Xで投稿する」（campaign=trend_share）
 
 # 共有URLを組み立てている全ファイル。増やしたらここにも足すこと
 SHARE_URL_SITES = (CANONICAL, FAB, LEGACY_VOTE2D, BUILDER)
 
-EXPECTED_CAMPAIGNS = {"fab_share", "vote_share"}
+EXPECTED_CAMPAIGNS = {"fab_share", "vote_share", "trend_share"}
 
 
 class ShareUtmTest(unittest.TestCase):
@@ -76,6 +77,19 @@ class ShareUtmTest(unittest.TestCase):
         """
         self.assertIn("trackShareClick('fab_share')", FAB.read_text(encoding="utf-8"))
         self.assertIn("trackShareClick('vote_share')", CANONICAL.read_text(encoding="utf-8"))
+
+    def test_trend_button_uses_its_own_campaign_through_the_shared_helper(self):
+        """推移グラフの「Xで投稿する」が、共通の buildShareUrl と trackShareClick を通り、独自のcampaignを持つこと。"""
+        text = TREND.read_text(encoding="utf-8")
+        self.assertIn("window.buildShareUrl", text)
+        self.assertIn('build(base, "trend_share")', text)
+        self.assertIn('window.trackShareClick("trend_share")', text)
+        self.assertIn("utm_source=share_button&utm_medium=social&utm_campaign=", text, "共通の関数が無いときの保険のUTM")
+        self.assertIn("intent/tweet", text)
+        self.assertNotIn("trend_share", FAB.read_text(encoding="utf-8"))
+        self.assertNotIn("trend_share", CANONICAL.read_text(encoding="utf-8"))
+        bare = re.compile(r"encodeURIComponent\(\s*(ogUrl|location\.href)\s*\)")
+        self.assertEqual(bare.findall(text), [], "推移グラフがUTMなしのURLを共有している")
 
     def test_fab_has_fallback_when_canonical_missing(self):
         """topic-modern.js が読めなかった場合もUTMが付くこと。"""
