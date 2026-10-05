@@ -935,6 +935,12 @@ class PlaybackScriptTest(unittest.TestCase):
         self.assertIn("charts[kind].replay()", text)
         self.assertIn("let pending = canAnimate;", text)
 
+    def test_narrow_screens_show_only_the_date_while_playing_so_the_line_stays_visible(self) -> None:
+        text = self.script()
+        self.assertIn("select(passed, true, geom.W < 520)", text)
+        self.assertIn('tip.classList.toggle("is-compact", !!compact)', text)
+        self.assertIn(".trend-tip.is-compact{min-width:0", trend.trend_css())
+
     def test_hovering_does_not_move_the_tooltip_while_playing(self) -> None:
         text = self.script()
         self.assertIn("geom && !playing && select(nearest(e.clientX), true)", text)

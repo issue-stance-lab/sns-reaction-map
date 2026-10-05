@@ -220,6 +220,8 @@
 .trend-end-n{fill:#66758b;font-size:11px;font-weight:700}
 .trend-tip{position:absolute;top:6px;z-index:2;min-width:190px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:12px;background:#fff;box-shadow:0 10px 28px rgba(18,35,64,.16);pointer-events:none;font-size:12px;line-height:1.5}
 .trend-tip[hidden]{display:none}
+.trend-tip.is-compact{min-width:0;padding:6px 10px;white-space:nowrap}
+.trend-tip.is-compact .trend-tip-head{margin:0!important}
 .trend-tip p{margin:0}.trend-tip-head{margin-bottom:5px!important;color:#66758b;font-weight:800}
 .trend-tip-row{display:flex;align-items:center;gap:8px;padding:1px 0}
 .trend-tip-row i{width:14px;height:2px;border-radius:2px;flex:none}
@@ -2347,7 +2349,7 @@ SNS上の意見の推移（2026年10月3日時点）。世論調査ではあり�
         geom.clipRect.setAttribute("width", geom.XD(head) + 6);
         let passed = 0;
         days.forEach((d, i) => { if (d <= head + 1e-9) passed = i; });
-        if (passed !== shownIndex) { shownIndex = passed; select(passed, true); }
+        if (passed !== shownIndex) { shownIndex = passed; select(passed, true, geom.W < 520); }
         if (elapsed < sweep + hold) frame = requestAnimationFrame(step); else finish();
       };
       frame = requestAnimationFrame(step);
@@ -2382,7 +2384,7 @@ SNS上の意見の推移（2026年10月3日時点）。世論調査ではあり�
       });
     }
 
-    function select(i, show) {
+    function select(i, show, compact) {
       active = i;
       if (!geom) return;
       const r = data.rounds[i];
@@ -2392,10 +2394,16 @@ SNS上の意見の推移（2026年10月3日時点）。世論調査ではあり�
       tip.hidden = !show;
       if (!show) return;
       tip.textContent = "";
+      tip.classList.toggle("is-compact", !!compact);   // 狭い画面の再生中は、日付と意見数だけの小さな表示（グラフを覆わない）
       const head = document.createElement("p");
       head.className = "trend-tip-head";
       head.textContent = jp(r.d) + "の収集分（意見" + r.n + "件）";
       tip.appendChild(head);
+      if (compact) {
+        const wide = tip.offsetWidth || 150;
+        tip.style.left = Math.min(Math.max(geom.X(i) - wide / 2, 0), geom.W - wide) + "px";
+        return;
+      }
       data.labels.forEach((label, s) => {
         const row = document.createElement("p");
         row.className = "trend-tip-row";
